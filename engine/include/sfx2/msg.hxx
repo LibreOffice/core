@@ -36,11 +36,6 @@ enum class SfxSlotMode {
     AUTOUPDATE      =    0x0008, // invalidated the status automatically after execute
     ASYNCHRON       =    0x0020, // via Post-Message
 
-    NORECORD        =    0x0100, // no recording
-    RECORDPERITEM   =    0x0200, // each item, one statement
-    RECORDPERSET    =    0x0400, // The whole Set is a Statement, default
-    RECORDABSOLUTE  = 0x1000000, // Recording with absolute Target
-
     METHOD          =    0x4000,
 
     FASTCALL        =    0x8000, // No test if disabled before Execute
@@ -56,7 +51,7 @@ enum class SfxSlotMode {
 
 namespace o3tl
 {
-    template<> struct typed_flags<SfxSlotMode> : is_typed_flags<SfxSlotMode, 0x17ec72cL> {};
+    template<> struct typed_flags<SfxSlotMode> : is_typed_flags<SfxSlotMode, 0x07ec02cL> {};
 }
 
 #define SFX_EXEC_STUB( aShellClass, aExecMethod) \

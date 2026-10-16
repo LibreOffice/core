@@ -354,7 +354,6 @@ interface BaseTextSelection
     [
         ExecMethod = Execute ;
         StateMethod = StateStyle ;
-        NoRecord;
         GroupId = SfxGroupId::Template ;
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]

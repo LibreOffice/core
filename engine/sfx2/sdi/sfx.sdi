@@ -24,9 +24,7 @@ SfxBoolItem _SwitchViewShell0 SID_VIEWSHELL0
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = FALSE;
     Asynchron;
 
 
@@ -44,9 +42,7 @@ SfxBoolItem _SwitchViewShell1 SID_VIEWSHELL1
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = FALSE;
     Asynchron;
 
 
@@ -64,9 +60,7 @@ SfxBoolItem _SwitchViewShell2 SID_VIEWSHELL2
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = FALSE;
     Asynchron;
 
 
@@ -84,9 +78,7 @@ SfxBoolItem _SwitchViewShell3 SID_VIEWSHELL3
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = FALSE;
     Asynchron;
 
 
@@ -104,9 +96,7 @@ SfxBoolItem _SwitchViewShell4 SID_VIEWSHELL4
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = FALSE;
     Asynchron;
 
 
@@ -124,9 +114,7 @@ SfxVoidItem Activate SID_ACTIVATE
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = TRUE,
-    RecordPerSet;
+    Container = TRUE;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -142,9 +130,7 @@ SfxBoolItem ActiveHelp SID_HELPBALLOONS
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = FALSE;
 
 
     AccelConfig = TRUE,
@@ -161,9 +147,7 @@ SfxUInt16Item ActualStyleFamily SID_STYLE_FAMILY
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = FALSE;
 
 
     AccelConfig = FALSE,
@@ -181,9 +165,7 @@ SfxStringItem NewDoc SID_NEWDOC
     ReadOnlyDoc = TRUE,
     ViewerApp = FALSE,
     Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = TRUE;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -200,9 +182,7 @@ SfxVoidItem AddBookmark SID_CREATELINK
     FastCall = TRUE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = TRUE;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -219,9 +199,7 @@ SfxStringItem AddDirect SID_NEWDOCDIRECT
     ReadOnlyDoc = TRUE,
     ViewerApp = FALSE,
     Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = TRUE;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -238,9 +216,7 @@ SfxVoidItem CharmapControl SID_CHARMAP_CONTROL
     FastCall = TRUE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = FALSE;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -256,9 +232,7 @@ SfxVoidItem AddressBookSource SID_TEMPLATE_ADDRESSBOOKSOURCE
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = TRUE;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -275,9 +249,7 @@ SfxVoidItem AddWatch SID_BASICIDE_ADDWATCH
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = TRUE;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -294,9 +266,7 @@ SfxStringItem Author SID_DOCINFO_AUTHOR
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = FALSE;
 
 
     AccelConfig = FALSE,
@@ -313,9 +283,7 @@ SfxStringItem AutoPilotMenu SID_AUTOPILOTMENU
     ReadOnlyDoc = TRUE,
     ViewerApp = FALSE,
     Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = TRUE;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -331,9 +299,7 @@ SfxVoidItem Backspace SID_BACKSPACE
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = FALSE;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -349,9 +315,7 @@ SfxVoidItem BasicBreak SID_BASICBREAK
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    NoRecord;
+    Container = TRUE;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -371,9 +335,7 @@ SfxVoidItem BasicIDEAppear SID_BASICIDE_APPEAR
     ReadOnlyDoc = TRUE,
     ViewerApp = FALSE,
     Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = TRUE;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -389,9 +351,7 @@ SfxVoidItem BasicStepInto SID_BASICSTEPINTO
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = TRUE;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -408,9 +368,7 @@ SfxVoidItem BasicStepOut SID_BASICSTEPOUT
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = TRUE;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -427,9 +385,7 @@ SfxVoidItem BasicStepOver SID_BASICSTEPOVER
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = TRUE;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -446,9 +402,7 @@ SfxVoidItem BasicStop SID_BASICSTOP
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    NoRecord;
+    Container = TRUE;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -464,9 +418,7 @@ SfxBoolItem Beamer SID_BROWSER
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = TRUE;
 
 
     AccelConfig = FALSE,
@@ -483,9 +435,7 @@ SfxVoidItem BreakPointsChanged SID_BASICIDE_BRKPNTSCHANGED
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = FALSE;
     Asynchron;
 
     AccelConfig = FALSE,
@@ -502,9 +452,7 @@ SfxStringItem BrowseBackward SID_BROWSE_BACKWARD
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = TRUE;
     Asynchron;
 
     AccelConfig = FALSE,
@@ -521,9 +469,7 @@ SfxStringItem BrowseForward SID_BROWSE_FORWARD
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = TRUE;
     Asynchron;
 
     AccelConfig = FALSE,
@@ -540,9 +486,7 @@ SfxBoolItem BrowseView SID_BROWSER_MODE
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = FALSE;
 
 
     AccelConfig = TRUE,
@@ -558,9 +502,7 @@ SfxTemplateItem CharStyle SID_STYLE_FAMILY1
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = FALSE;
 
 
     AccelConfig = FALSE,
@@ -577,9 +519,7 @@ SfxVoidItem ChooseMacro SID_BASICIDE_CHOOSEMACRO
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = TRUE;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -596,9 +536,7 @@ SfxVoidItem ClearHistory SID_CLEARHISTORY
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = FALSE;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -613,9 +551,7 @@ SfxVoidItem CloseDocs SID_CLOSEDOCS
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = TRUE;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -632,9 +568,7 @@ SfxStringItem CloseDoc SID_CLOSEDOC
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = TRUE;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -651,9 +585,7 @@ SfxVoidItem CloseWin SID_CLOSEWIN
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = TRUE;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -670,9 +602,7 @@ SfxBoolItem Closing SID_CLOSING
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = FALSE;
 
 
     AccelConfig = FALSE,
@@ -689,9 +619,7 @@ SfxStringItem Comments SID_DOCINFO_COMMENTS
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = FALSE;
 
 
     AccelConfig = FALSE,
@@ -708,9 +636,7 @@ SfxVoidItem CompareDocuments SID_DOCUMENT_COMPARE
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = FALSE;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -726,9 +652,7 @@ SfxVoidItem CompileBasic SID_BASICCOMPILE
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = TRUE;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -745,9 +669,7 @@ SfxStringItem Context SID_CONTEXT
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = FALSE;
 
 
     AccelConfig = FALSE,
@@ -764,9 +686,7 @@ SfxVoidItem Copy SID_COPY
     FastCall = FALSE,
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = FALSE;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -783,8 +703,6 @@ SfxVoidItem CreateMacro SID_BASICIDE_CREATEMACRO
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = FALSE,
@@ -802,8 +720,6 @@ SfxStringItem CurrentURL SID_CURRENT_URL
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
 
@@ -822,8 +738,6 @@ SfxVoidItem CursorEndOfScreen SID_CURSORENDOFSCREEN
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -840,8 +754,6 @@ SfxVoidItem CursorTopOfScreen SID_CURSORTOPOFSCREEN
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -857,8 +769,6 @@ SfxVoidItem Cut SID_CUT
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -875,8 +785,6 @@ SfxStringItem DefaultFilePath SID_DEFAULTFILEPATH
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -894,8 +802,6 @@ SfxStringItem DefaultFileName SID_DEFAULTFILENAME
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -913,8 +819,6 @@ SfxVoidItem Delete SID_DELETE
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -931,8 +835,6 @@ SfxVoidItem DeleteCurrent SID_BASICIDE_DELETECURRENT
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = FALSE,
@@ -950,8 +852,6 @@ SfxVoidItem DeleteStyle SID_STYLE_DELETE
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -968,8 +868,6 @@ SfxVoidItem DesignerDialog SID_STYLE_DESIGNER
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = TRUE,
@@ -986,8 +884,6 @@ SfxVoidItem DragHierarchy SID_STYLE_DRAGHIERARCHIE
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1004,8 +900,6 @@ SfxVoidItem EditDoc SID_EDITDOC
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -1023,8 +917,6 @@ SfxVoidItem ReadOnlyDoc SID_READONLYDOC
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -1042,8 +934,6 @@ SfxVoidItem EditMacro SID_BASICIDE_EDITMACRO
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = FALSE,
@@ -1061,8 +951,6 @@ SfxVoidItem EditStyle SID_STYLE_EDIT
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -1079,8 +967,6 @@ SfxVoidItem EditStyleFont SID_STYLE_FONT
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1097,8 +983,6 @@ SfxVoidItem HideStyle SID_STYLE_HIDE
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1115,8 +999,6 @@ SfxVoidItem ShowStyle SID_STYLE_SHOW
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1133,8 +1015,6 @@ SfxVoidItem ExecuteSearch FID_SEARCH_NOW
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1151,8 +1031,6 @@ SfxVoidItem RepeatSearch SID_BASICIDE_REPEAT_SEARCH
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -1170,8 +1048,6 @@ SfxBoolItem ExtendedHelp SID_EXTENDEDHELP
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = TRUE,
@@ -1189,8 +1065,6 @@ SfxStringItem FileName SID_FILE_NAME
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -1208,8 +1082,6 @@ SfxStringItem FocusUrlBox SID_FOCUSURLBOX
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1226,8 +1098,6 @@ SfxTemplateItem FrameStyle SID_STYLE_FAMILY3
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -1244,8 +1114,6 @@ SfxStringItem FullName SID_DOCFULLNAME
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -1261,8 +1129,6 @@ SfxVoidItem CommandPopup SID_COMMAND_POPUP
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
 
@@ -1280,8 +1146,6 @@ SfxBoolItem FullScreen SID_WIN_FULLSCREEN
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
 
@@ -1300,8 +1164,6 @@ SfxVoidItem ZoomPageWidth SID_ZOOM_PAGE_WIDTH
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
 
@@ -1321,8 +1183,6 @@ SfxVoidItem ZoomOptimal SID_ZOOM_OPTIMAL
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
 
@@ -1342,8 +1202,6 @@ SfxVoidItem ZoomPage SID_ZOOM_ENTIRE_PAGE
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
 
@@ -1363,8 +1221,6 @@ SfxVoidItem Zoom200Percent SID_ZOOM_200_PERCENT
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
 
@@ -1384,8 +1240,6 @@ SfxVoidItem Zoom150Percent SID_ZOOM_150_PERCENT
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
 
@@ -1405,8 +1259,6 @@ SfxVoidItem Zoom100Percent SID_ZOOM_100_PERCENT
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
 
@@ -1426,8 +1278,6 @@ SfxVoidItem Zoom75Percent SID_ZOOM_75_PERCENT
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
 
@@ -1446,8 +1296,6 @@ SfxVoidItem Zoom50Percent SID_ZOOM_50_PERCENT
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
 
@@ -1466,8 +1314,6 @@ SfxVoidItem GetFrameWindow SID_FILLFRAME
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -1484,8 +1330,6 @@ SfxVoidItem GoDown SID_CURSORDOWN
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = FALSE,
@@ -1502,8 +1346,6 @@ SfxVoidItem GoDownBlock SID_CURSORPAGEDOWN
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = FALSE,
@@ -1520,8 +1362,6 @@ SfxVoidItem GoDownBlockSel SID_CURSORPAGEDOWN_SEL
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = FALSE,
@@ -1538,8 +1378,6 @@ SfxVoidItem GoDownSel SID_CURSORDOWN_SEL
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = FALSE,
@@ -1556,8 +1394,6 @@ SfxVoidItem GoLeft SID_CURSORLEFT
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = FALSE,
@@ -1573,8 +1409,6 @@ SfxVoidItem GoLeftBlockSel SID_CURSORPAGELEFT_SEL
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = FALSE,
@@ -1591,8 +1425,6 @@ SfxVoidItem GoLeftSel SID_CURSORLEFT_SEL
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = FALSE,
@@ -1609,8 +1441,6 @@ SfxVoidItem GoRight SID_CURSORRIGHT
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = FALSE,
@@ -1627,8 +1457,6 @@ SfxVoidItem GoRightSel SID_CURSORRIGHT_SEL
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = FALSE,
@@ -1645,8 +1473,6 @@ SfxVoidItem GoToEndOfData SID_CURSORENDOFFILE
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = FALSE,
@@ -1663,8 +1489,6 @@ SfxVoidItem GoToEndOfDataSel SID_CURSORENDOFFILE_SEL
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = FALSE,
@@ -1681,8 +1505,6 @@ SfxVoidItem GoToEndOfRow SID_CURSOREND
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = FALSE,
@@ -1699,8 +1521,6 @@ SfxVoidItem GoToEndOfRowSel SID_CURSOREND_SEL
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = FALSE,
@@ -1717,8 +1537,6 @@ SfxVoidItem GoToStart SID_CURSORTOPOFFILE
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = FALSE,
@@ -1735,8 +1553,6 @@ SfxVoidItem GoToStartOfRow SID_CURSORHOME
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = FALSE,
@@ -1753,8 +1569,6 @@ SfxVoidItem GoToStartOfRowSel SID_CURSORHOME_SEL
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = FALSE,
@@ -1771,8 +1585,6 @@ SfxVoidItem GoToStartSel SID_CURSORTOPOFFILE_SEL
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = FALSE,
@@ -1789,8 +1601,6 @@ SfxVoidItem GoUp SID_CURSORUP
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = FALSE,
@@ -1807,8 +1617,6 @@ SfxVoidItem GoUpBlock SID_CURSORPAGEUP
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = FALSE,
@@ -1825,8 +1633,6 @@ SfxVoidItem GoUpBlockSel SID_CURSORPAGEUP_SEL
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = FALSE,
@@ -1843,8 +1649,6 @@ SfxVoidItem GoUpSel SID_CURSORUP_SEL
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = FALSE,
@@ -1861,8 +1665,6 @@ SfxVoidItem HelpIndex SID_HELPINDEX
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -1879,8 +1681,6 @@ SfxBoolItem HelpTip SID_HELPTIPS
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -1897,8 +1697,6 @@ SfxVoidItem BasicIDEZoom SID_BASICIDE_CURRENT_ZOOM
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = FALSE,
@@ -1916,8 +1714,6 @@ SfxVoidItem HideCurPage SID_BASICIDE_HIDECURPAGE
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = FALSE,
@@ -1935,8 +1731,6 @@ SfxBoolItem HyperlinkDialog SID_HYPERLINK_DIALOG
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = TRUE,
@@ -1954,8 +1748,6 @@ SfxVoidItem InsertDoc SID_INSERTDOC
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -1979,8 +1771,6 @@ SfxVoidItem InsertObjectFloatingFrame SID_INSERT_FLOATINGFRAME
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -1998,8 +1788,6 @@ SfxBoolItem IsLoading SID_DOC_LOADING
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -2017,8 +1805,6 @@ SfxBoolItem IsLoadingImages SID_IMG_LOADING
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -2036,8 +1822,6 @@ SfxBoolItem PrintOut SID_PRINTOUT
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2054,8 +1838,6 @@ SfxVoidItem JumpToMark SID_JUMPTOMARK
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2072,8 +1854,6 @@ SfxStringItem Keywords SID_DOCINFO_KEYWORDS
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -2091,8 +1871,6 @@ SfxStringItem LibLoaded SID_BASICIDE_LIBLOADED
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2109,8 +1887,6 @@ SfxStringItem LibRemoved SID_BASICIDE_LIBREMOVED
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2127,8 +1903,6 @@ SfxStringItem LibSelect SID_BASICIDE_LIBSELECTED
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2145,8 +1919,6 @@ SfxStringItem LibSelector SID_BASICIDE_LIBSELECTOR
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -2164,8 +1936,6 @@ SfxVoidItem LoadBasic SID_BASICLOAD
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -2183,8 +1953,6 @@ SfxStringItem Logout SID_LOGOUT
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = FALSE,
@@ -2203,8 +1971,6 @@ SfxScriptOrganizerItem ScriptOrganizer SID_SCRIPTORGANIZER
     ViewerApp = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2222,8 +1988,6 @@ SfxScriptOrganizerItem MacroOrganizer SID_MACROORGANIZER
     ViewerApp = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2240,8 +2004,6 @@ SfxBoolItem ShowLines SID_SHOWLINES
     ReadOnlyDoc = TRUE,
     Toggle = TRUE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2257,8 +2019,6 @@ SfxVoidItem ToggleComment SID_TOGGLE_COMMENT
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2275,8 +2035,6 @@ SfxVoidItem RunMacro SID_RUNMACRO
     ViewerApp = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2293,8 +2051,6 @@ SfxVoidItem MacroManager SID_MACROMANAGER
     ViewerApp = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2310,8 +2066,6 @@ SfxVoidItem GotoLine SID_GOTOLINE
     ReadOnlyDoc = TRUE,
     Toggle = TRUE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2328,8 +2082,6 @@ SfxVoidItem MacroDialog SID_BASICCHOOSER
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2345,8 +2097,6 @@ SfxVoidItem MatchGroup SID_BASICIDE_MATCHGROUP
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -2363,8 +2113,6 @@ SfxVoidItem MergeDocuments SID_DOCUMENT_MERGE
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2381,8 +2129,6 @@ SfxUInt16Item MetricUnit SID_ATTR_METRIC
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -2399,8 +2145,6 @@ SfxBoolItem Modified SID_MODIFIED
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -2418,8 +2162,6 @@ SfxBoolItem ModifiedStatus SID_DOC_MODIFIED
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -2437,8 +2179,6 @@ SfxVoidItem ModuleDialog SID_BASICIDE_MODULEDLG
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -2456,8 +2196,6 @@ SfxVoidItem NameChangedOnTab SID_BASICIDE_NAMECHANGEDONTAB
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = FALSE,
@@ -2474,8 +2212,6 @@ SfxBoolItem Navigator SID_NAVIGATOR
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = TRUE,
@@ -2491,8 +2227,6 @@ SfxBoolItem QuickFind SID_QUICKFIND
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2507,8 +2241,6 @@ SfxBoolItem InfoBar SID_INFOBAR
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -2524,8 +2256,6 @@ SfxBoolItem Sidebar SID_SIDEBAR
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
 
@@ -2542,8 +2272,6 @@ SfxBoolItem Menubar SID_MENUBAR
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = FALSE,
@@ -2560,8 +2288,6 @@ SfxVoidItem RestoreEditingView SID_RESTORE_EDITING_VIEW
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = TRUE,
@@ -2579,8 +2305,6 @@ SfxVoidItem NewDialog SID_BASICIDE_NEWDIALOG
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = FALSE,
@@ -2598,8 +2322,6 @@ SfxVoidItem NewModule SID_BASICIDE_NEWMODULE
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = FALSE,
@@ -2616,8 +2338,6 @@ SfxVoidItem NewStyle SID_STYLE_NEW
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2634,8 +2354,6 @@ SfxVoidItem NewWindow SID_NEWWINDOW
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -2652,8 +2370,6 @@ SfxVoidItem ObjectBrowser SID_BASICIDE_OBJECT_BROWSER
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -2671,8 +2387,6 @@ SfxVoidItem ObjectCatalog SID_BASICIDE_OBJCAT
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -2690,8 +2404,6 @@ SfxVoidItem WatchWindow SID_BASICIDE_WATCH
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -2709,8 +2421,6 @@ SfxVoidItem StackWindow SID_BASICIDE_STACK
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -2727,8 +2437,6 @@ SfxVoidItem ObjectMenue SID_OBJECT
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
 
@@ -2747,8 +2455,6 @@ SfxVoidItem Open SID_OPENDOC
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -2765,8 +2471,6 @@ SfxVoidItem OpenRemote SID_OPENREMOTE
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -2783,8 +2487,6 @@ SfxVoidItem SignPDF SID_SIGNPDF
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -2801,8 +2503,6 @@ SfxVoidItem WebHtml SID_WEBHTML
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -2820,8 +2520,6 @@ SfxVoidItem OpenHyperlink SID_OPENHYPERLINK
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = FALSE,
@@ -2839,8 +2537,6 @@ SfxStringItem DocInfoTitle SID_DOCINFO_TITLE
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -2859,8 +2555,6 @@ SfxVoidItem OpenTemplate SID_OPENTEMPLATE
     ViewerApp = FALSE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -2877,8 +2571,6 @@ SfxVoidItem CheckOut SID_CHECKOUT
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -2895,8 +2587,6 @@ SfxVoidItem CancelCheckOut SID_CANCELCHECKOUT
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -2913,8 +2603,6 @@ SfxVoidItem CheckIn SID_CHECKIN
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -2932,8 +2620,6 @@ SfxStringItem OpenUrl SID_OPENURL
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = FALSE,
@@ -2951,8 +2637,6 @@ SfxVoidItem Options SID_OPTIONS
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -2968,8 +2652,6 @@ SfxVoidItem TemplateManager SID_TEMPLATE_MANAGER
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = FALSE,
@@ -2987,8 +2669,6 @@ SfxTemplateItem PageStyle SID_STYLE_FAMILY4
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -3006,8 +2686,6 @@ SfxTemplateItem ParaStyle SID_STYLE_FAMILY2
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -3025,8 +2703,6 @@ SfxVoidItem Paste SID_PASTE
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3043,8 +2719,6 @@ SvxClipboardFormatItem ClipboardFormatItems SID_CLIPBOARD_FORMAT_ITEMS
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3061,8 +2735,6 @@ SfxVoidItem PasteSpecial SID_PASTE_SPECIAL
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -3079,8 +2751,6 @@ SfxVoidItem PasteOnlyText SID_PASTE_ONLY_TEXT
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3096,8 +2766,6 @@ SfxVoidItem PasteOnlyFormula SID_PASTE_ONLY_FORMULA
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3113,8 +2781,6 @@ SfxVoidItem PasteOnlyValue SID_PASTE_ONLY_VALUE
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3130,8 +2796,6 @@ SfxVoidItem PasteTransposed SID_PASTE_TRANSPOSED
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3147,8 +2811,6 @@ SfxVoidItem PasteAsLink SID_PASTE_AS_LINK
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3164,8 +2826,6 @@ SfxVoidItem PasteTextImportDialog SID_PASTE_TEXTIMPORT_DIALOG
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3181,8 +2841,6 @@ SfxStringItem DocPath SID_DOCPATH
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -3200,8 +2858,6 @@ SfxVoidItem Print SID_PRINTDOC
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -3219,8 +2875,6 @@ SfxVoidItem PrintDefault SID_PRINTDOCDIRECT
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -3238,8 +2892,6 @@ SfxStringItem Printer SID_PRINTER_NAME
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
 
@@ -3258,8 +2910,6 @@ SfxVoidItem PrinterSetup SID_SETUPPRINTER
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -3277,8 +2927,6 @@ SfxBoolItem PrintPreview SID_PRINTPREVIEW
     ReadOnlyDoc = TRUE,
     Toggle = TRUE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
 
@@ -3297,8 +2945,6 @@ SfxVoidItem SetDocumentProperties SID_DOCINFO
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3315,8 +2961,6 @@ SfxStringItem Quit SID_QUITAPP
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -3334,8 +2978,6 @@ SfxBoolItem ReadOnly SID_DOC_READONLY
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -3353,8 +2995,6 @@ SfxStringItem Redo SID_REDO
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3370,8 +3010,6 @@ SfxBoolItem DocumentRepair SID_DOC_REPAIR
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
 
@@ -3389,8 +3027,6 @@ SfxBoolItem Reload SID_RELOAD
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -3408,8 +3044,6 @@ SfxVoidItem RemoveWatch SID_BASICIDE_REMOVEWATCH
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = FALSE,
@@ -3427,8 +3061,6 @@ SfxVoidItem RenameCurrent SID_BASICIDE_RENAMECURRENT
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = FALSE,
@@ -3446,8 +3078,6 @@ SfxVoidItem Repaint SID_REPAINT
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = FALSE,
@@ -3464,8 +3094,6 @@ SfxStringItem Repeat SID_REPEAT
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3482,8 +3110,6 @@ SfxBoolItem RubyDialog SID_RUBY_DIALOG
     ReadOnlyDoc = FALSE,
     Toggle = TRUE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = TRUE,
@@ -3501,8 +3127,6 @@ SfxVoidItem RunBasic SID_BASICRUN
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -3518,9 +3142,7 @@ SfxVoidItem SaveSimple SID_SAVESIMPLE
     ReadOnlyDoc = FALSE,
     ViewerApp = FALSE,
     Toggle = FALSE,
-    Container = TRUE,
-    RecordAbsolute = FALSE,
-    NoRecord;
+    Container = TRUE;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3537,8 +3159,6 @@ SfxStringItem Save SID_SAVEDOC
     ViewerApp = FALSE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -3557,8 +3177,6 @@ SfxVoidItem SaveAll SID_SAVEDOCS
     ViewerApp = FALSE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3576,8 +3194,6 @@ SfxStringItem SaveAs SID_SAVEASDOC
     ViewerApp = FALSE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3594,8 +3210,6 @@ SfxStringItem SaveAsRemote SID_SAVEASREMOTE
     ViewerApp = FALSE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3613,8 +3227,6 @@ SfxVoidItem SaveAsTemplate SID_DOCTEMPLATE
     ViewerApp = FALSE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3633,8 +3245,6 @@ SfxVoidItem SaveACopy SID_SAVEACOPY
     ViewerApp = FALSE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3651,8 +3261,6 @@ SfxVoidItem SaveBasicAs SID_BASICSAVEAS
     ViewerApp = FALSE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -3671,8 +3279,6 @@ SfxVoidItem ExportDialog SID_EXPORT_DIALOG
     ViewerApp = FALSE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -3690,8 +3296,6 @@ SfxVoidItem ImportDialog SID_IMPORT_DIALOG
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -3709,8 +3313,6 @@ SfxBoolItem Saved SID_DOC_SAVED
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -3728,8 +3330,6 @@ SfxVoidItem SbxDeleted SID_BASICIDE_SBXDELETED
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3746,8 +3346,6 @@ SfxVoidItem SbxInserted SID_BASICIDE_SBXINSERTED
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3764,8 +3362,6 @@ SfxVoidItem SbxRenamed SID_BASICIDE_SBXRENAMED
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3782,8 +3378,6 @@ SfxVoidItem ScrollBodyPageDown SID_MAIL_SCROLLBODY_PAGEDOWN
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -3798,8 +3392,6 @@ SfxBoolItem FocusToFindbar SID_SEARCH
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3816,8 +3408,6 @@ SfxBoolItem SearchDialog SID_SEARCH_DLG
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3834,8 +3424,6 @@ SfxUInt16Item SearchOptions SID_SEARCH_OPTIONS
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -3853,8 +3441,6 @@ SvxSearchItem SearchProperties SID_SEARCH_ITEM
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -3872,8 +3458,6 @@ SfxVoidItem SelectAll SID_SELECTALL
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -3890,8 +3474,6 @@ SfxVoidItem SendFax FN_FAX
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -3909,8 +3491,6 @@ SfxStringItem SendMail SID_MAIL_SENDDOC
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -3928,8 +3508,6 @@ SfxStringItem SendMailDocAsPDF SID_MAIL_SENDDOCASPDF
     ViewerApp = FALSE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -3946,8 +3524,6 @@ SfxStringItem SendViaBluetooth SID_BLUETOOTH_SENDDOC
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -3966,8 +3542,6 @@ SfxStringItem SendMailDocAsFormat SID_MAIL_SENDDOCASFORMAT
     ViewerApp = FALSE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
         AccelConfig = FALSE,
@@ -3985,8 +3559,6 @@ SfxStringItem SendMailDocAsMS SID_MAIL_SENDDOCASMS
     ViewerApp = FALSE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -4004,8 +3576,6 @@ SfxStringItem SendMailDocAsOOo SID_MAIL_SENDDOCASOOO
     ViewerApp = FALSE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -4023,8 +3593,6 @@ SfxVoidItem SetOptions SID_SETOPTIONS
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = FALSE,
@@ -4042,8 +3610,6 @@ SfxBoolItem ShowPopups SID_SHOWPOPUPS
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -4061,8 +3627,6 @@ SfxVoidItem ShowSbx SID_BASICIDE_SHOWSBX
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = FALSE,
@@ -4080,8 +3644,6 @@ SfxBoolItem SourceView SID_SOURCEVIEW
     ReadOnlyDoc = TRUE,
     Toggle = TRUE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = TRUE,
@@ -4099,8 +3661,6 @@ SfxBoolItem StatusBarVisible SID_TOGGLESTATUSBAR
     ReadOnlyDoc = TRUE,
     Toggle = TRUE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = TRUE,
@@ -4118,8 +3678,6 @@ SfxStringItem StatusGetDate SID_BASICIDE_STAT_DATE
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -4137,8 +3695,6 @@ SfxStringItem StatusGetPosition SID_BASICIDE_STAT_POS
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -4156,8 +3712,6 @@ SfxStringItem StatusGetTitle SID_BASICIDE_STAT_TITLE
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -4175,8 +3729,6 @@ SfxVoidItem StoreAllModuleSources SID_BASICIDE_STOREALLMODULESOURCES
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4193,8 +3745,6 @@ SfxVoidItem StoreModuleSource SID_BASICIDE_STOREMODULESOURCE
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4209,8 +3759,6 @@ SfxVoidItem StyleEndPreview SID_STYLE_END_PREVIEW
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    NoRecord;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4226,8 +3774,6 @@ SfxVoidItem StylePreview SID_STYLE_PREVIEW
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    NoRecord;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4243,8 +3789,6 @@ SfxVoidItem SidebarDeck SID_SIDEBAR_DECK
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = FALSE,
@@ -4260,8 +3804,6 @@ SfxTemplateItem StyleApply SID_STYLE_APPLY
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4278,8 +3820,6 @@ SfxVoidItem StyleNewByExample SID_STYLE_NEW_BY_EXAMPLE
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4296,8 +3836,6 @@ SfxVoidItem StyleUpdateByExample SID_STYLE_UPDATE_BY_EXAMPLE
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4314,8 +3852,6 @@ SfxBoolItem StyleWatercanMode SID_STYLE_WATERCAN
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -4332,8 +3868,6 @@ SfxVoidItem ClassificationApply SID_CLASSIFICATION_APPLY
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4353,8 +3887,6 @@ SfxWatermarkItem Watermark SID_WATERMARK
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4370,8 +3902,6 @@ SfxUInt16Item SwitchViewShell SID_VIEWSHELL
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
 
@@ -4389,8 +3919,6 @@ SfxTemplateItem ListStyle SID_STYLE_FAMILY5
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -4407,8 +3935,6 @@ SfxTemplateItem TableStyle SID_STYLE_FAMILY6
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -4425,8 +3951,6 @@ SfxStringItem Title SID_DOCTITLE
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -4443,8 +3967,6 @@ SfxVoidItem ToggleBreakPoint SID_BASICIDE_TOGGLEBRKPNT
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -4465,8 +3987,6 @@ SfxVoidItem BasicIDEShowWindow SID_BASICIDE_SHOWWINDOW
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4483,8 +4003,6 @@ SfxStringItem Undo SID_UNDO
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4500,8 +4018,6 @@ SfxBoolItem FormatPaintbrush SID_FORMATPAINTBRUSH ( SfxBoolItem PersistentCopy S
       ReadOnlyDoc = FALSE,
       Toggle = FALSE,
       Container = FALSE,
-      RecordAbsolute = FALSE,
-      RecordPerSet;
 
       AccelConfig = FALSE,
       MenuConfig = TRUE,
@@ -4518,8 +4034,6 @@ SfxUInt16Item UndoCount SID_ATTR_UNDO_COUNT
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -4537,8 +4051,6 @@ SfxVoidItem UpdateAllModuleSources SID_BASICIDE_UPDATEALLMODULESOURCES
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4555,8 +4067,6 @@ SfxVoidItem UpdateModuleSource SID_BASICIDE_UPDATEMODULESOURCE
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4573,8 +4083,6 @@ SfxVoidItem ManageBreakPoints SID_BASICIDE_MANAGEBRKPNTS
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -4592,8 +4100,6 @@ SfxVoidItem ToggleBreakPointEnabled SID_BASICIDE_TOGGLEBRKPNTENABLED
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -4610,8 +4116,6 @@ SfxVoidItem VersionDialog SID_VERSION
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    NoRecord;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -4628,8 +4132,6 @@ SfxUInt16Item Signature SID_SIGNATURE
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    NoRecord;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -4646,8 +4148,6 @@ SfxUInt16Item MacroSignature SID_MACRO_SIGNATURE
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    NoRecord;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -4665,8 +4165,6 @@ SfxBoolItem ViewDataSourceBrowser SID_VIEW_DATA_SOURCE_BROWSER
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = TRUE,
@@ -4683,8 +4181,6 @@ SfxVoidItem ZoomPlus SID_ZOOM_IN
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4701,8 +4197,6 @@ SfxVoidItem ZoomNext SID_ZOOM_NEXT
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4719,8 +4213,6 @@ SfxVoidItem ZoomMinus SID_ZOOM_OUT
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4737,8 +4229,6 @@ SfxVoidItem ZoomPrevious SID_ZOOM_PREV
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4755,8 +4245,6 @@ SfxVoidItem ZoomToolBox SID_ZOOM_TOOLBOX
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -4775,8 +4263,6 @@ SfxVoidItem ExportTo SID_EXPORTDOC
     ViewerApp = FALSE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4794,8 +4280,6 @@ SfxVoidItem ExportToPDF SID_EXPORTDOCASPDF
     ViewerApp = FALSE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4813,8 +4297,6 @@ SfxVoidItem ExportDirectToPDF SID_DIRECTEXPORTDOCASPDF
     ViewerApp = FALSE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4831,8 +4313,6 @@ SfxVoidItem ExportToEPUB SID_EXPORTDOCASEPUB
     ViewerApp = FALSE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4849,8 +4329,6 @@ SfxVoidItem ExportDirectToEPUB SID_DIRECTEXPORTDOCASEPUB
     ViewerApp = FALSE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4867,8 +4345,6 @@ SfxVoidItem RedactDoc SID_REDACTDOC
     ViewerApp = FALSE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4885,8 +4361,6 @@ SfxVoidItem AutoRedactDoc SID_AUTOREDACTDOC
     ViewerApp = FALSE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4902,8 +4376,6 @@ SfxImageItem ImageOrientation SID_IMAGE_ORIENTATION
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -4920,8 +4392,6 @@ SfxVoidItem ShowLicense SID_SHOW_LICENSE
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4938,8 +4408,6 @@ SfxVoidItem ShowCredits SID_SHOW_CREDITS
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4956,8 +4424,6 @@ SfxVoidItem CheckPLZ SID_OFFICE_CHECK_PLZ
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -4974,8 +4440,6 @@ SfxVoidItem AutoPilotAddressDataSource SID_ADDRESS_DATA_SOURCE
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -4993,8 +4457,6 @@ SfxVoidItem InsertBusinessCard FN_BUSINESS_CARD
     ViewerApp = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = FALSE,
@@ -5013,8 +4475,6 @@ SfxVoidItem InsertLabels FN_LABEL
     ViewerApp = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -5033,8 +4493,6 @@ SfxVoidItem NewXForms FN_XFORMS_INIT
     ViewerApp = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = FALSE,
@@ -5053,8 +4511,6 @@ SfxVoidItem NewPresentation SID_NEWSD
     ViewerApp = FALSE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = TRUE,
@@ -5071,8 +4527,6 @@ SfxVoidItem BibliographyComponent SID_COMP_BIBLIOGRAPHY
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5089,8 +4543,6 @@ SfxVoidItem AutoCorrectDlg SID_AUTO_CORRECT_DLG
     ViewerApp = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5106,8 +4558,6 @@ SfxVoidItem TerminateInplaceActivation SID_TERMINATE_INPLACEACTIVATION
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -5122,8 +4572,6 @@ SfxVoidItem RecentFileList SID_RECENTFILELIST
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = TRUE,
@@ -5139,8 +4587,6 @@ SfxVoidItem ToolbarMode SID_TOOLBAR_MODE
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = TRUE,
@@ -5156,8 +4602,6 @@ SfxVoidItem AvailableToolbars SID_AVAILABLE_TOOLBARS
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = TRUE,
@@ -5173,8 +4617,6 @@ SfxVoidItem AVMediaPlayer SID_AVMEDIA_PLAYER
     ReadOnlyDoc = TRUE,
     Toggle = TRUE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5194,8 +4636,6 @@ SfxVoidItem InsertAVMedia SID_INSERT_AVMEDIA
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5212,8 +4652,6 @@ SfxVoidItem OptionsSecurityDialog SID_OPTIONS_SECURITY
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = TRUE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5229,8 +4667,6 @@ SfxVoidItem ActivateStyleApply SID_ACTIVATE_STYLE_APPLY
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -5248,8 +4684,6 @@ SfxBoolItem DockingWindow0 SID_DOCKWIN_0
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -5267,8 +4701,6 @@ SfxBoolItem DockingWindow1 SID_DOCKWIN_1
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -5286,8 +4718,6 @@ SfxBoolItem DockingWindow2 SID_DOCKWIN_2
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -5305,8 +4735,6 @@ SfxBoolItem DockingWindow3 SID_DOCKWIN_3
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -5324,8 +4752,6 @@ SfxBoolItem DockingWindow4 SID_DOCKWIN_4
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -5343,8 +4769,6 @@ SfxBoolItem DockingWindow5 SID_DOCKWIN_5
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -5362,8 +4786,6 @@ SfxBoolItem DockingWindow6 SID_DOCKWIN_6
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -5381,8 +4803,6 @@ SfxBoolItem DockingWindow7 SID_DOCKWIN_7
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -5400,8 +4820,6 @@ SfxBoolItem DockingWindow8 SID_DOCKWIN_8
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -5419,8 +4837,6 @@ SfxBoolItem DockingWindow9 SID_DOCKWIN_9
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
 
     AccelConfig = FALSE,
@@ -5438,8 +4854,6 @@ SfxVoidItem PasteUnformatted SID_PASTE_UNFORMATTED
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
     AccelConfig = TRUE,
@@ -5458,8 +4872,6 @@ SfxVoidItem ThesaurusFromContext SID_THES
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = TRUE,
@@ -5476,8 +4888,6 @@ SvxZoomItem Zoom SID_ATTR_ZOOM
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
     Asynchron;
 
 
@@ -5495,8 +4905,6 @@ SfxBoolItem DevelopmentToolsDockingWindow SID_DEVELOPMENT_TOOLS_DOCKING_WINDOW
     ViewerApp = FALSE,
     Toggle = TRUE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -5511,8 +4919,6 @@ SfxVoidItem InspectSelectedObject SID_INSPECT_SELECTED_OBJECT
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5528,8 +4934,6 @@ SfxVoidItem UnicodeNotationToggle SID_UNICODE_NOTATION_TOGGLE
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = FALSE,
@@ -5545,8 +4949,6 @@ SfxBoolItem ToolbarLock SID_TOOLBAR_LOCK
     ReadOnlyDoc = TRUE,
     Toggle = TRUE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = FALSE,
     MenuConfig = FALSE,
@@ -5562,8 +4964,6 @@ SfxVoidItem WidgetTestDialog SID_WIDGET_TEST_DIALOG
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5579,8 +4979,6 @@ SfxVoidItem ChangeTheme FN_CHANGE_THEME
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     AccelConfig = TRUE,
     MenuConfig = TRUE,
@@ -5596,8 +4994,6 @@ SfxVoidItem InvertBackground FN_INVERT_BACKGROUND
     ReadOnlyDoc = TRUE,
     Toggle = FALSE,
     Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
 
     GroupId = SfxGroupId::Application;
 ]

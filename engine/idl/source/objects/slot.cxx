@@ -25,9 +25,7 @@
 
 
 SvMetaSlot::SvMetaSlot()
-    : aRecordPerSet( true )
-    , aRecordAbsolute( false )
-    , pNextSlot(nullptr)
+    : pNextSlot(nullptr)
     , nListPos(0)
     , aReadOnlyDoc ( true )
     , aViewerApp ( true )
@@ -36,8 +34,6 @@ SvMetaSlot::SvMetaSlot()
 
 SvMetaSlot::SvMetaSlot( SvMetaType * pType )
     : SvMetaAttribute( pType )
-    , aRecordPerSet( true )
-    , aRecordAbsolute( false )
     , pNextSlot(nullptr)
     , nListPos(0)
     , aReadOnlyDoc ( true )
@@ -113,36 +109,6 @@ bool SvMetaSlot::GetAsynchron() const
         return aAsynchron;
     return static_cast<SvMetaSlot *>(GetRef())->GetAsynchron();
 }
-bool SvMetaSlot::GetRecordPerItem() const
-{
-    // Record- PerItem, No, PerSet and Manual are exclusive
-    if( !GetRef() || aRecordPerItem.IsSet() || aNoRecord.IsSet()
-      || aRecordPerSet.IsSet() )
-        return aRecordPerItem;
-    return static_cast<SvMetaSlot *>(GetRef())->GetRecordPerItem();
-}
-bool SvMetaSlot::GetRecordPerSet() const
-{
-    // Record- PerItem, No, PerSet and Manual are exclusive
-    if( !GetRef() || aRecordPerItem.IsSet() || aNoRecord.IsSet()
-      || aRecordPerSet.IsSet() )
-        return aRecordPerSet;
-    return static_cast<SvMetaSlot *>(GetRef())->GetRecordPerSet();
-}
-bool SvMetaSlot::GetNoRecord() const
-{
-    // Record- PerItem, No, PerSet and Manual are exclusive
-    if( !GetRef() || aRecordPerItem.IsSet() || aNoRecord.IsSet()
-      || aRecordPerSet.IsSet()  )
-        return aNoRecord;
-    return static_cast<SvMetaSlot *>(GetRef())->GetNoRecord();
-}
-bool SvMetaSlot::GetRecordAbsolute() const
-{
-    if( !GetRef() || aRecordAbsolute.IsSet() )
-        return aRecordAbsolute;
-    return static_cast<SvMetaSlot *>(GetRef())->GetRecordAbsolute();
-}
 bool SvMetaSlot::GetMenuConfig() const
 {
     if( aMenuConfig.IsSet() || !GetRef() ) return aMenuConfig;
@@ -183,20 +149,6 @@ void SvMetaSlot::ReadAttributesSvIdl( SvIdlDataBase & rBase,
     aToggle.ReadSvIdl( SvHash_Toggle(), rInStm );
     aAutoUpdate.ReadSvIdl( SvHash_AutoUpdate(), rInStm );
     aAsynchron.ReadSvIdl( SvHash_Asynchron(), rInStm );
-    aRecordAbsolute.ReadSvIdl( SvHash_RecordAbsolute(), rInStm );
-
-    if( aRecordPerItem.ReadSvIdl( SvHash_RecordPerItem(), rInStm ) )
-    {
-        SetRecordPerItem( aRecordPerItem );
-    }
-    if( aRecordPerSet.ReadSvIdl( SvHash_RecordPerSet(), rInStm ) )
-    {
-        SetRecordPerSet( aRecordPerSet );
-    }
-    if( aNoRecord.ReadSvIdl( SvHash_NoRecord(), rInStm ) )
-    {
-        SetNoRecord( aNoRecord );
-    }
 
     aMenuConfig.ReadSvIdl( SvHash_MenuConfig(), rInStm );
     aToolBoxConfig.ReadSvIdl( SvHash_ToolBoxConfig(), rInStm );
@@ -490,14 +442,6 @@ void SvMetaSlot::WriteSlot( std::string_view rShellName, sal_uInt16 nCount,
         rOutStm.WriteOString( MakeSlotName( SvHash_AutoUpdate() ) ).WriteChar( '|' );
     if( GetAsynchron() )
         rOutStm.WriteOString( MakeSlotName( SvHash_Asynchron() ) ).WriteChar( '|' );
-    if( GetRecordPerItem() )
-        rOutStm.WriteOString( MakeSlotName( SvHash_RecordPerItem() ) ).WriteChar( '|' );
-    if( GetRecordPerSet() )
-        rOutStm.WriteOString( MakeSlotName( SvHash_RecordPerSet() ) ).WriteChar( '|' );
-    if( GetNoRecord() )
-        rOutStm.WriteOString( MakeSlotName( SvHash_NoRecord() ) ).WriteChar( '|' );
-    if( GetRecordAbsolute() )
-        rOutStm.WriteOString( MakeSlotName( SvHash_RecordAbsolute() ) ).WriteChar( '|' );
     if( GetMenuConfig() )
         rOutStm.WriteOString( MakeSlotName( SvHash_MenuConfig() ) ).WriteChar( '|' );
     if( GetToolBoxConfig() )

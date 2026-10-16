@@ -391,26 +391,6 @@ void SvIdlParser::ReadSlotAttribute( SvMetaSlot& rSlot )
     ReadIfBoolAttribute(rSlot.aToggle, SvHash_Toggle() );
     ReadIfBoolAttribute(rSlot.aAutoUpdate, SvHash_AutoUpdate() );
     ReadIfBoolAttribute(rSlot.aAsynchron, SvHash_Asynchron() );
-    ReadIfBoolAttribute(rSlot.aRecordAbsolute, SvHash_RecordAbsolute() );
-
-    if( ReadIfBoolAttribute(rSlot.aRecordPerItem, SvHash_RecordPerItem()) )
-    {
-        if (rSlot.aRecordPerSet.IsSet() || rSlot.aNoRecord.IsSet())
-            throw SvParseException(rInStm, "conflicting attributes"_ostr);
-        rSlot.SetRecordPerItem( rSlot.aRecordPerItem );
-    }
-    if( ReadIfBoolAttribute(rSlot.aRecordPerSet, SvHash_RecordPerSet() ) )
-    {
-        if (rSlot.aRecordPerItem.IsSet() || rSlot.aNoRecord.IsSet())
-            throw SvParseException(rInStm, "conflicting attributes"_ostr);
-        rSlot.SetRecordPerSet( rSlot.aRecordPerSet );
-    }
-    if( ReadIfBoolAttribute(rSlot.aNoRecord, SvHash_NoRecord() ) )
-    {
-        if (rSlot.aRecordPerItem.IsSet() || rSlot.aRecordPerSet.IsSet())
-            throw SvParseException(rInStm, "conflicting attributes"_ostr);
-        rSlot.SetNoRecord( rSlot.aNoRecord );
-    }
 
     ReadIfBoolAttribute(rSlot.aMenuConfig, SvHash_MenuConfig() );
     ReadIfBoolAttribute(rSlot.aToolBoxConfig, SvHash_ToolBoxConfig() );

@@ -30,10 +30,6 @@ struct SvGlobalHashNames
     SvStringHashEntry* MM_Toggle;
     SvStringHashEntry* MM_AutoUpdate;
     SvStringHashEntry* MM_Asynchron;
-    SvStringHashEntry* MM_RecordPerSet;
-    SvStringHashEntry* MM_RecordPerItem;
-    SvStringHashEntry* MM_NoRecord;
-    SvStringHashEntry* MM_RecordAbsolute;
     SvStringHashEntry* MM_enum;
     SvStringHashEntry* MM_UINT16;
     SvStringHashEntry* MM_INT16;
@@ -91,10 +87,6 @@ HASH_INLINE(shell)
 HASH_INLINE(Toggle)
 HASH_INLINE(AutoUpdate)
 HASH_INLINE(Asynchron)
-HASH_INLINE(RecordPerItem)
-HASH_INLINE(RecordPerSet)
-HASH_INLINE(NoRecord)
-HASH_INLINE(RecordAbsolute)
 HASH_INLINE(enum)
 HASH_INLINE(UINT16)
 HASH_INLINE(INT16)

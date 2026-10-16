@@ -77,8 +77,6 @@ char const * const SyntaxStrings[] = {
 "\t\tFastCall",
 "\t\tGroupId        = Identifier",
 "\t\tReadOnlyDoc*",
-"\t\tRecordPerSet*, RecordPerItem, NoRecord",
-"\t\tRecordAbsolute",
 "\t\tStateMethod    = Identifier",
 "\t\tAsynchron",
 "\t\tToggle",

@@ -34,11 +34,6 @@ public:
 
     SvBOOL           aAsynchron;
 
-    SvBOOL           aRecordPerItem;// exclusive
-    SvBOOL           aRecordPerSet;
-    SvBOOL           aNoRecord;
-    SvBOOL           aRecordAbsolute;
-
     SvBOOL           aMenuConfig;
     SvBOOL           aToolBoxConfig;
     SvBOOL           aAccelConfig;
@@ -59,25 +54,6 @@ public:
     bool            IsVariable() const;
     bool            IsMethod() const;
 
-    void    SetRecordPerItem( bool bSet )
-            {
-                aRecordPerItem = bSet;
-                if( bSet )
-                    aRecordPerSet = aNoRecord = false;
-            }
-    void    SetRecordPerSet( bool bSet )
-            {
-                aRecordPerSet = bSet;
-                if( bSet )
-                    aRecordPerItem = aNoRecord = false;
-            }
-    void    SetNoRecord( bool bSet )
-            {
-                aNoRecord = bSet;
-                if( bSet )
-                    aRecordPerItem = aRecordPerSet = false;
-            }
-
 public:
             SvMetaSlot();
             SvMetaSlot( SvMetaType * pType );
@@ -90,11 +66,6 @@ public:
     bool                GetAutoUpdate() const;
 
     bool                GetAsynchron() const;
-
-    bool                GetRecordPerItem() const;
-    bool                GetRecordPerSet() const;
-    bool                GetNoRecord() const;
-    bool                GetRecordAbsolute() const;
 
     bool                GetMenuConfig() const;
     bool                GetToolBoxConfig() const;
