@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-13 14:06+0200\n"
-"PO-Revision-Date: 2026-10-14 12:57+0000\n"
+"PO-Revision-Date: 2026-10-16 10:34+0000\n"
 "Last-Translator: Stephan Paternotte <stephan-"
 "p@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/collabora-online/"
@@ -8007,8 +8007,8 @@ msgid ""
 "Document has been changed in storage. What would you like to do with your "
 "unsaved changes?"
 msgstr ""
-"Document is gewijzigd tijdens opslag. Wat zou wilt u doen met uw niet-"
-"opgeslagen wijzigingen?"
+"Document is gewijzigd tijdens opslag. Wat wilt u doen met uw niet-opgeslagen "
+"wijzigingen?"
 
 #: src/app/Socket.ts:2072
 msgid "Server is now reachable. We have to refresh the page now."
@@ -8211,7 +8211,7 @@ msgstr ""
 
 #: src/errormessages.ts:39
 msgid "Your session will end in {time}. Refresh the page to continue."
-msgstr "Je sessie loopt over {time} af. Vernieuw de pagina om door te gaan."
+msgstr "Uw sessie loopt over {time} af. Vernieuw de pagina om door te gaan."
 
 #: src/errormessages.ts:42
 msgid ""
