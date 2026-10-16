@@ -76,5 +76,5 @@ def build(rid, page, dest, labels, height=760):
 
 if __name__ == "__main__":
     rid, page, dest = sys.argv[1], int(sys.argv[2]), sys.argv[3]
-    build(rid, page, dest, ["LibreOffice (reference)", "XRay.Office", "WASM viewer"])
+    build(rid, page, dest, ["LibreOffice (reference)", "X-Ray.Office", "WASM viewer"])
     print(dest)

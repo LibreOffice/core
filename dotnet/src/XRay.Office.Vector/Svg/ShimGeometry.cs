@@ -7,11 +7,11 @@ using ShimPathCommand = ShimSkiaSharp.PathCommand;
 namespace XRay.Office.Vector.Svg;
 
 /// <summary>
-/// Converts <c>ShimSkiaSharp</c>'s geometry into XRay.Office's.
+/// Converts <c>ShimSkiaSharp</c>'s geometry into X-Ray.Office's.
 /// </summary>
 /// <remarks>
 /// <para>
-/// The shim states everything in <c>float</c> SVG user units; XRay.Office states everything in
+/// The shim states everything in <c>float</c> SVG user units; X-Ray.Office states everything in
 /// integer EMUs. The conversion happens here and nowhere else, which is the point: a scale
 /// factor applied in two places is a scale factor applied twice, and that is the single most
 /// common way vector import comes out at the wrong size.
@@ -60,10 +60,10 @@ internal static class ShimGeometry
         Point(Math.Min(rect.Left, rect.Right), Math.Min(rect.Top, rect.Bottom)),
         Point(Math.Max(rect.Left, rect.Right), Math.Max(rect.Top, rect.Bottom)));
 
-    /// <summary>A shim colour as an XRay.Office colour.</summary>
+    /// <summary>A shim colour as an X-Ray.Office colour.</summary>
     public static Colour Colour(SKColor colour) => new(colour.Red, colour.Green, colour.Blue, colour.Alpha);
 
-    /// <summary>A shim floating-point colour as an XRay.Office colour.</summary>
+    /// <summary>A shim floating-point colour as an X-Ray.Office colour.</summary>
     /// <remarks>
     /// The gradient shaders state their stops as <see cref="SKColorF"/> rather than
     /// <see cref="SKColor"/>, so the channels arrive as 0-to-1 floats and have to be rounded
@@ -76,7 +76,7 @@ internal static class ShimGeometry
         => (byte)Math.Clamp(Math.Round(value * 255.0), 0, 255);
 
     /// <summary>
-    /// A shim matrix as an XRay.Office transform.
+    /// A shim matrix as an X-Ray.Office transform.
     /// </summary>
     /// <remarks>
     /// The translation is converted to EMUs and the linear part is not, matching

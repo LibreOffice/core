@@ -379,7 +379,7 @@ public static class PdfAnalysis
     /// semantics the shell version got at by column position, and the lesson that cost is worth
     /// keeping: <c>pdffonts</c>'s <c>emb</c> column is <c>$(NF-4)</c>, not <c>$(NF-3)</c>, because
     /// the row ends <c>emb sub uni object id</c> — reading <c>NF-3</c> gets <c>sub</c> instead, and
-    /// it happens to agree only for a font whose type name is a single field. Every font XRay.Office
+    /// it happens to agree only for a font whose type name is a single field. Every font X-Ray.Office
     /// writes is "TrueType", one field, so that check tested nothing about our own output until it
     /// was corrected. Nothing here parses a column, and that is the point.
     /// </para>

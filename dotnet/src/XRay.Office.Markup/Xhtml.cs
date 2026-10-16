@@ -3,19 +3,19 @@ using System.Xml.Linq;
 namespace XRay.Office.Markup;
 
 /// <summary>
-/// The vocabulary the XRay.Office XHTML writer emits, and the helpers both stages share.
+/// The vocabulary the X-Ray.Office XHTML writer emits, and the helpers both stages share.
 /// </summary>
 /// <remarks>
 /// <para>
-/// XRay.Office's XHTML is deliberately <em>semantic</em>: headings, lists, tables with
+/// X-Ray.Office's XHTML is deliberately <em>semantic</em>: headings, lists, tables with
 /// <c>colspan</c>/<c>rowspan</c>, <c>em</c>/<c>strong</c>, <c>a[href]</c>, and sectioning
-/// elements for the things only XRay.Office extracts. It is not modelled on LibreOffice's own
+/// elements for the things only X-Ray.Office extracts. It is not modelled on LibreOffice's own
 /// XHTML export, which is presentation-oriented — inline CSS, <c>span</c> wrappers, absolutely
 /// positioned <c>div</c>s — and reproduces a rendering rather than a structure. That export is
 /// used as an <em>oracle</em> for structure in the fidelity tests, never as a target.
 /// </para>
 /// <para>
-/// XRay.Office-specific meaning is carried on <c>class</c> and <c>data-</c> attributes rather
+/// X-Ray.Office-specific meaning is carried on <c>class</c> and <c>data-</c> attributes rather
 /// than on invented element names, so the output stays ordinary XHTML that any HTML consumer
 /// can read while still round-tripping into Markdown without guessing.
 /// </para>

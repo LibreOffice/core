@@ -704,7 +704,7 @@ internal static class SheetTextLayout
         // fit, nor hashes a number, nor drops the characters it cannot show. It turns the text
         // about the cell's bottom-left corner and lets it run out of the cell, which is the whole
         // point of a 45-degree column heading. Measured on `sheet-rich-text.xlsx`: the reference
-        // draws all fifteen characters of "Slanted heading" and XRay.Office drew eleven, and on the
+        // draws all fifteen characters of "Slanted heading" and X-Ray.Office drew eleven, and on the
         // .xls — whose columns LibreOffice's BIFF import makes a shade narrower — nine.
         if (format.IsRotated) area = area.Unclipped();
 

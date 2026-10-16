@@ -8,7 +8,7 @@ namespace XRay.Office.Spreadsheets;
 
 /// <summary>
 /// Reads spreadsheets: XLSX and its variants, XLSB, legacy XLS, ODS and CSV.
-/// The XRay.Office counterpart of LibreOffice Calc.
+/// The X-Ray.Office counterpart of LibreOffice Calc.
 /// </summary>
 /// <remarks>
 /// <para>

@@ -77,7 +77,7 @@ public sealed class FootnoteComparisonTests : IDisposable
     // document's defaults. A note the file sets in Carlito at 10 pt with no indent renders in Liberation Serif
     // with a 340-twip hanging indent, which moves every word of every note line. Confirmed on a hand-written
     // three-line RTF as well as on the corpus files, so it is not an artefact of how these were exported.
-    // XRay.Office reads what the file says; `FootnoteReadingTests` checks it structurally instead. DOC has no
+    // X-Ray.Office reads what the file says; `FootnoteReadingTests` checks it structurally instead. DOC has no
     // such problem — LibreOffice's WW8 import keeps the note's formatting, so both files are compared here.
     public void EveryNoteSitsAtTheFootOfItsOwnPage(string fileName)
     {

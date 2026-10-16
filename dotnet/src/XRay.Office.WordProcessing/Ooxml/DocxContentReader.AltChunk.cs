@@ -114,7 +114,7 @@ public sealed partial class DocxContentReader
             _diagnostics.Add(new Diagnostic(
                 DiagnosticSeverity.Warning, "PL2120",
                 $"The document embeds a chunk (w:altChunk) holding {Describe(format)}, which is "
-                + "not a format XRay.Office reads; its content is not extracted.",
+                + "not a format X-Ray.Office reads; its content is not extracted.",
                 new DiagnosticLocation(part.Name)));
             return;
         }

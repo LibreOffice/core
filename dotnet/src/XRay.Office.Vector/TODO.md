@@ -472,7 +472,7 @@ end of a *legitimate* file — not a malformed one.
       `PL6031`.
 - [ ] **A pattern brush's tile size is assumed to be 96 pixels to the inch.** A GDI pattern
       brush tiles in *device* pixels and a display list has none, so something has to choose.
-      96 is what the rest of XRay.Office assumes a nominal pixel is; a pattern-filled shape will
+      96 is what the rest of X-Ray.Office assumes a nominal pixel is; a pattern-filled shape will
       therefore be right in colour and possibly wrong in scale.
 
 ## EMF — done

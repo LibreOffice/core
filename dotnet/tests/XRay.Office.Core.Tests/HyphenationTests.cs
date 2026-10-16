@@ -177,7 +177,7 @@ public class HyphenationTests
     {
         Assert.SkipUnless(
             Directory.Exists(Path.Combine(Extensions, "dict-fr")),
-            $"no Hunspell dictionaries at {Extensions}; they are not shipped with XRay.Office");
+            $"no Hunspell dictionaries at {Extensions}; they are not shipped with X-Ray.Office");
 
         string? before = Environment.GetEnvironmentVariable(Hyphenators.Variable);
 

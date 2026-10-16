@@ -103,7 +103,7 @@ public static class XhtmlWriter
         Meta("author", metadata.Author);
         Meta("description", metadata.Description);
         Meta("keywords", metadata.Keywords.Count == 0 ? null : string.Join(", ", metadata.Keywords));
-        Meta("generator", "XRay.Office");
+        Meta("generator", "X-Ray.Office");
         return head;
 
         void Meta(string name, string? value)
@@ -572,7 +572,7 @@ public static class XhtmlWriter
             if (cell.RowSpan > 1)
                 element.SetAttributeValue("rowspan", cell.RowSpan.ToString(CultureInfo.InvariantCulture));
 
-            // A spreadsheet cell's formula is something only XRay.Office has: LibreOffice's XHTML
+            // A spreadsheet cell's formula is something only X-Ray.Office has: LibreOffice's XHTML
             // export writes the cached result and nothing else. Kept on the XHTML because this
             // stage is the lossless one; Markdown drops it.
             if (cell.Formula is { Length: > 0 } formula)

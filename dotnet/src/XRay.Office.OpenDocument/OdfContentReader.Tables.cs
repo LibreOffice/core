@@ -22,7 +22,7 @@ namespace XRay.Office.OpenDocument;
 public sealed partial class OdfContentReader
 {
     /// <summary>
-    /// The widest row XRay.Office materialises. Matches Calc's own column limit, so no real
+    /// The widest row X-Ray.Office materialises. Matches Calc's own column limit, so no real
     /// spreadsheet is truncated by it.
     /// </summary>
     public const int MaxColumns = 16384;
@@ -97,7 +97,7 @@ public sealed partial class OdfContentReader
         _reportedTableTruncation = true;
         _diagnostics.Add(new Diagnostic(
             DiagnosticSeverity.Warning, "PL2030",
-            $"A table declares more {what} than XRay.Office materialises; the excess has been "
+            $"A table declares more {what} than X-Ray.Office materialises; the excess has been "
             + "dropped. This is a guard against repeat counts that describe an empty sheet's "
             + "full extent rather than its content."));
     }

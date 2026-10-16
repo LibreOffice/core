@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render every document of a corpus track with one XRay.Office build.
+"""Render every document of a corpus track with one X-Ray.Office build.
 
     render-track.py <corpus-root> <glob> <outdir> [workers]
 

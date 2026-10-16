@@ -25,7 +25,7 @@ namespace XRay.Office.Fidelity.Tests;
 /// <para>
 /// Single-line because LibreOffice 24.2 breaks a justified paragraph's lines differently from the same
 /// text left ragged — measured: a line that holds twenty-one words ragged holds nineteen justified, though
-/// the ragged line ends well inside the margin. Whatever the rule is, it is not the greedy break XRay.Office
+/// the ragged line ends well inside the margin. Whatever the rule is, it is not the greedy break X-Ray.Office
 /// and Writer agree on everywhere else, and a multi-line paragraph would compare words on different lines.
 /// One line per paragraph removes the question and leaves exactly what this test is for: how far the
 /// alignment moved each word. The deviation is recorded in the library's TODO.

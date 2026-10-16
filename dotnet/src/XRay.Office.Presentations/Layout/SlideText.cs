@@ -104,7 +104,7 @@ public sealed record SlideTextBody
     /// <c>a:normAutofit/@lnSpcReduction</c> is modelled nowhere at all, which is deliberate: the
     /// same handler does not read it either — the <c>normAutofit</c> case reads
     /// <c>XML_fontScale</c> and nothing else — so a body carrying one must lay out exactly as a
-    /// body that does not. XRay.Office did apply it, and it was worth 20 per cent of a line on the
+    /// body that does not. X-Ray.Office did apply it, and it was worth 20 per cent of a line on the
     /// one shape in <c>slides/batch-001</c> that states it: the subtitle of
     /// <c>BMFE-06-03 (Gerflor) Smoke Density and Toxicity.pptx</c> shrank its lines, so the
     /// fit search thought the text nearly fitted unshrunk and drew it at 20 pt where the
@@ -210,7 +210,7 @@ public sealed record SlideTextBody
     /// is absent from the reference too. The test really is "not <c>textNoShape</c>".
     /// </para>
     /// <para>
-    /// <strong>XRay.Office now draws the curves.</strong> <see cref="WarpPreset"/> and
+    /// <strong>X-Ray.Office now draws the curves.</strong> <see cref="WarpPreset"/> and
     /// <see cref="WarpAdjustments"/> are handed to
     /// <see cref="XRay.Office.Ooxml.DrawingML.Fontwork"/>, which builds the warped outlines, and
     /// <c>SlideFontwork</c> replaces the whole shape with them — its own fill, pen and shadow

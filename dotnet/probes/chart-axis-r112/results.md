@@ -61,7 +61,7 @@ python3 probes/chart-axis-r112/freeze-055.py /tmp/probe
 SOURCE_DATE_EPOCH=1700000000 XRay.Office.Cli render --outdir /tmp/ours /tmp/probe/055_static*.xlsx
 ```
 
-| variant | 26.2.4.2 | XRay.Office |
+| variant | 26.2.4.2 | X-Ray.Office |
 |---|---|---|
 | as authored | 38 labels, 30-day, turned, `5 Apr`…`19 Apr` | 15 labels, 10-day, upright, `5 Apr`…`23 Aug` |
 | **`static2023`** | **15, 10-day, upright, `5 Apr`…`23 Aug`** | 15, 10-day, upright, `5 Apr`…`23 Aug` |
@@ -113,7 +113,7 @@ on the same UTC day:
 |---|---:|
 | 26.2.4.2, as authored | **1045** |
 | 26.2.4.2, `static2023` and `static2026` (identical) | **934** |
-| XRay.Office, all three | **960** |
+| X-Ray.Office, all three | **960** |
 
 * **+111** is the confound: 23 extra date-axis labels the union range gives the reference. Not
   recoverable here.

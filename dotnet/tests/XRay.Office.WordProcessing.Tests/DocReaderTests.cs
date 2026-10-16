@@ -114,7 +114,7 @@ public class DocReaderTests
                 .Where(p => p.ListMarker is not null)];
 
         // The label exists nowhere in the file: a paragraph names a list instance and a level, and
-        // the reader counts. So these are what XRay.Office computed from the LSTF/LVL/LFO tables.
+        // the reader counts. So these are what X-Ray.Office computed from the LSTF/LVL/LFO tables.
         items.ShouldContain(p => p.ListMarker == "•"
                                  && p.GetText().Contains("First bullet", StringComparison.Ordinal));
         items.ShouldContain(p => p.ListMarker == "◦"

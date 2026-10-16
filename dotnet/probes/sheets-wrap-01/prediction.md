@@ -15,7 +15,7 @@ sets `wrapText="1"`. Calc's OOXML import (`sc/source/filter/oox/worksheethelper.
 `insertHyperlink`) turns each such string cell into an **edit cell holding one
 `SvxURLField`** — a single `EE_FEATURE_FIELD` feature character in the content node.
 
-## The seat in XRay.Office
+## The seat in X-Ray.Office
 
 `dotnet/src/XRay.Office.Spreadsheets/Layout/SheetTextLayout.cs:420`
 

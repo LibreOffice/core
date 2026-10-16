@@ -1,6 +1,6 @@
 # slides-paint-01 — prediction, committed before measuring
 
-Written after reading code only (LibreOffice C++ at 27.2.0.0.alpha0+ for intent, XRay.Office C# for
+Written after reading code only (LibreOffice C++ at 27.2.0.0.alpha0+ for intent, X-Ray.Office C# for
 what we do) and after locating the six decks on disk. **No corpus census, no render, no `soffice`
 run, no PDF read has happened yet.** Environment checked: `check-env.sh` green, LibreOffice
 **26.2.4.2** 620(Build:2), Carlito/Caladea/Liberation/DejaVu all resolving.

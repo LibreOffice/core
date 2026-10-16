@@ -146,8 +146,8 @@ Rendering the Pilot Logbook with fix 1a alone leaves the axis exactly as it was.
 
 The brief's test — "the reference sets 848 glyphs at 45° and our PDF contains zero `Tm` operators"
 — **cannot be run as stated on our own output.** LibreOffice turns text with the *text* matrix
-(`Tm`); XRay.Office turns it with the *CTM* (`cm`, `SheetChart.cs:132-152`). A `Tm`-only count scores
-a correctly rotated XRay.Office page as zero. My first pass did exactly that and read a working fix
+(`Tm`); X-Ray.Office turns it with the *CTM* (`cm`, `SheetChart.cs:132-152`). A `Tm`-only count scores
+a correctly rotated X-Ray.Office page as zero. My first pass did exactly that and read a working fix
 as a no-op. `tm-rotation-scan.py` counts both, and was checked against the reference first, where
 it returns 848/33 to the digit.
 

@@ -5,7 +5,7 @@ namespace XRay.Office.OpenDocument.Styles;
 /// <summary>What kind of value a <c>number:</c> data style formats.</summary>
 public enum OdfDataStyleKind
 {
-    /// <summary>Not a data style XRay.Office recognises.</summary>
+    /// <summary>Not a data style X-Ray.Office recognises.</summary>
     Unknown = 0,
 
     /// <summary><c>number:number-style</c>.</summary>

@@ -564,7 +564,7 @@ internal static class OdsDrawings
 
         if (Attribute(image, OdfNamespaces.XLink, "href") is { Length: > 0 } href)
         {
-            // A path with a scheme points outside the package; XRay.Office does not fetch those.
+            // A path with a scheme points outside the package; X-Ray.Office does not fetch those.
             if (href.Contains("://", StringComparison.Ordinal)) return default;
 
             string part = href.StartsWith("./", StringComparison.Ordinal) ? href[2..] : href;

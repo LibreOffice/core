@@ -18,7 +18,7 @@ Prediction, written and committed before any of this was measured:
   `tools::PolyPolygon` outlines. **What reaches the PDF is filled paths with no glyph and no
   `ToUnicode`.**
 
-XRay.Office read `a:prstTxWarp` nowhere at all — `grep -rn warp dotnet/src` was three unrelated
+X-Ray.Office read `a:prstTxWarp` nowhere at all — `grep -rn warp dotnet/src` was three unrelated
 hits — so a warped body went through the ordinary text path and its glyphs landed in the text
 layer.
 

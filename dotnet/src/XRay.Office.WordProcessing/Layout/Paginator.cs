@@ -474,7 +474,7 @@ public sealed record PaginationOptions
     /// filter nor either ODF one. Measured rather than read off, on one authored document converted to
     /// all five spellings and rendered by the installed 26.2.4.2 — DOCX and DOC draw 144.000 pt
     /// (exactly 2 in, and unchanged when the column is halved from 481.890 pt to 255.118 pt), while
-    /// FODT, ODT <em>and RTF</em> all draw 25.0 % of whatever the column is. XRay.Office routes RTF
+    /// FODT, ODT <em>and RTF</em> all draw 25.0 % of whatever the column is. X-Ray.Office routes RTF
     /// through <see cref="Word"/>, so folding this into that preset would have moved the one format
     /// that must not move. See <c>probes/fidelity-b-01/separator-probe.py</c>.
     /// </para>

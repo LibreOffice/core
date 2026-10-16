@@ -77,7 +77,7 @@ public sealed class OdfMasterPage
     /// </summary>
     public IReadOnlyList<XElement> Shapes { get; }
 
-    /// <summary>The underlying element, for content XRay.Office does not model yet.</summary>
+    /// <summary>The underlying element, for content X-Ray.Office does not model yet.</summary>
     public XElement Element { get; }
 
     /// <summary>

@@ -17,7 +17,7 @@ namespace XRay.Office.Text.Tests;
 /// <para>
 /// Carlito and Caladea are the metric-compatible substitutes for Calibri and Cambria, and the
 /// Liberation family for Arial, Times New Roman and Courier New. Those substitutions are the whole
-/// reason XRay.Office can match LibreOffice's line breaks on an OOXML document, so they are also the
+/// reason X-Ray.Office can match LibreOffice's line breaks on an OOXML document, so they are also the
 /// right faces to test the reader against. A machine without them skips rather than fails: these
 /// tests are about the reader, and checking the environment is <c>check-env.sh</c>'s job.
 /// </para>

@@ -12,7 +12,7 @@ namespace XRay.Office.OpenDocument.Styles;
 /// </remarks>
 public enum OdfStyleFamily
 {
-    /// <summary>Not a family XRay.Office recognises.</summary>
+    /// <summary>Not a family X-Ray.Office recognises.</summary>
     Unknown = 0,
 
     /// <summary>Paragraph styles.</summary>

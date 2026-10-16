@@ -7,7 +7,7 @@ using Shouldly;
 namespace XRay.Office.Fidelity.Tests;
 
 /// <summary>
-/// Compares the slides XRay.Office draws against the slides LibreOffice draws, in its own PDF.
+/// Compares the slides X-Ray.Office draws against the slides LibreOffice draws, in its own PDF.
 /// </summary>
 /// <remarks>
 /// <para>

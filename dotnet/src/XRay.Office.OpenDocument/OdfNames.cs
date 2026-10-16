@@ -14,7 +14,7 @@ public static class OdfNames
     /// Style names are referenced from attributes that must be valid XML names, so ODF
     /// escapes any character that is not — a space, a bracket, an ampersand — as an
     /// underscore, the character's hex code point, and another underscore. LibreOffice
-    /// reverses this on import, and so does XRay.Office: the escaping is an artefact of the
+    /// reverses this on import, and so does X-Ray.Office: the escaping is an artefact of the
     /// serialisation, not part of the style's identity, and reporting
     /// <c>Heading_20_1</c> to a caller looking for "Heading 1" would be needlessly hostile.
     /// </para>

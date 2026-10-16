@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Render every document under a directory with both LibreOffice and XRay.Office, and
+# Render every document under a directory with both LibreOffice and X-Ray.Office, and
 # report whether the two PDFs agree.
 #
 #   corpus-parity.sh <dir> [outdir]

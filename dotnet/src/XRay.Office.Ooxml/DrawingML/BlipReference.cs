@@ -40,7 +40,7 @@ public static class BlipReference
     /// <summary>What a blip offers to draw.</summary>
     /// <param name="RelationshipId">
     /// The relationship naming the part to draw, or null when the blip names nothing
-    /// embedded — a linked picture, which XRay.Office never fetches.
+    /// embedded — a linked picture, which X-Ray.Office never fetches.
     /// </param>
     /// <param name="IsVector">
     /// True when <paramref name="RelationshipId"/> is the SVG rather than the raster.

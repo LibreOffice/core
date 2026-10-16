@@ -62,4 +62,4 @@ added here is inherited by every consumer.
       formats do at every conversion boundary; a systematic half-unit bias would show up as
       one-pixel drift everywhere.
 - [ ] Should `IDocument` expose the raw container for callers wanting embedded objects
-      XRay.Office does not interpret? Useful, but it leaks a layer.
+      X-Ray.Office does not interpret? Useful, but it leaks a layer.

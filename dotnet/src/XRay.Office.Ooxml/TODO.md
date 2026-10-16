@@ -14,7 +14,7 @@ Reference: `research/04-impress.md` section B (DrawingML in most depth);
       version of this that gets forgotten in one place and yields a silently empty document.
 - [x] `mc:AlternateContent`: pick the highest-fidelity branch understood, fall back
       otherwise. Done, and resolved in place at load so nothing downstream sees the element. A
-      choice wins only when every namespace its `Requires` names is one XRay.Office can read,
+      choice wins only when every namespace its `Requires` names is one X-Ray.Office can read,
       because the fallback exists precisely for the case where the choice cannot be. Walking
       both branches is the bug this prevents: a text box's text extracted twice.
 - [x] Metadata from all three `docProps` parts (`OoxmlMetadata`), shared by all three families.

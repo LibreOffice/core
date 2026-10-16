@@ -93,7 +93,7 @@ public sealed class SlideTextAreaGridComparisonTests : IDisposable
         ours.Count.ShouldBe(3, "boxes drawn");
         theirs.Count.ShouldBe(3, "boxes the reference drew");
 
-        // Ours as literals first, so this is a test of XRay.Office rather than of LibreOffice:
+        // Ours as literals first, so this is a test of X-Ray.Office rather than of LibreOffice:
         // a comparison against the reference alone passes whatever we draw.
         ours[0].X.ShouldBe(72.000, TolerancePoints, "box one: rounds down");
         ours[1].X.ShouldBe(144.028, TolerancePoints, "box two: rounds up");

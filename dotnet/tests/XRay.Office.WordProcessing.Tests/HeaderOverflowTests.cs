@@ -21,7 +21,7 @@ namespace XRay.Office.WordProcessing.Tests;
 /// </para>
 /// <para>
 /// Measured on <c>words/batch-017/docx/AWR OPS-AOC 044 …docx</c>, whose three-row header table needs
-/// 77 pt of a 67 pt top margin: LibreOffice starts page two's body at 98.2 pt and XRay.Office started it
+/// 77 pt of a 67 pt top margin: LibreOffice starts page two's body at 98.2 pt and X-Ray.Office started it
 /// at 70.5 pt, overlapping the header by most of its height and fitting two extra rows on every page.
 /// </para>
 /// </remarks>

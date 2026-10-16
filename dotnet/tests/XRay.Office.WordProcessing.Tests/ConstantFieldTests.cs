@@ -48,7 +48,7 @@ public sealed class ConstantFieldTests
     /// </summary>
     /// <remarks>
     /// The lenient half of the rule, and the reason <c>ConstantFields.FileName</c> is nullable rather
-    /// than defaulted to something: XRay.Office reads streams as readily as files, and a stale name is
+    /// than defaulted to something: X-Ray.Office reads streams as readily as files, and a stale name is
     /// closer to what a reader saw than an empty footer is.
     /// </remarks>
     [Fact]

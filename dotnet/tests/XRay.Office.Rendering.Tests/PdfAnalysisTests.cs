@@ -97,7 +97,7 @@ public sealed class PdfAnalysisTests
     /// This is the check the shell version got wrong for a long time by reading
     /// <c>pdffonts</c>'s column <c>NF-3</c> instead of <c>NF-4</c> — which reads <c>sub</c>, and
     /// happens to agree only for a font whose type name is more than one field. Every face
-    /// XRay.Office writes is "TrueType", one field, so the gate's unembedded check tested nothing
+    /// X-Ray.Office writes is "TrueType", one field, so the gate's unembedded check tested nothing
     /// about our own output at all. Stated here as a property of the file rather than of a column.
     /// </remarks>
     [Fact]

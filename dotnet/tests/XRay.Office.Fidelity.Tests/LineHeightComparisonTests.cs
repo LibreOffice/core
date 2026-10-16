@@ -19,7 +19,7 @@ namespace XRay.Office.Fidelity.Tests;
 /// </para>
 /// <para>
 /// It is also the number a font gives several conflicting answers to, so it cannot be checked by
-/// reading a field. The check here is end-to-end and independent of XRay.Office: LibreOffice renders
+/// reading a field. The check here is end-to-end and independent of X-Ray.Office: LibreOffice renders
 /// three single-spaced lines to PDF, the baselines are measured out of the PDF, and the distance
 /// between them is compared with what <see cref="LineSpacing"/> derived from the same font file. If
 /// the precedence between <c>hhea</c>, <c>usWin*</c> and the typographic metrics were wrong, this is
@@ -108,7 +108,7 @@ public sealed class LineHeightComparisonTests : IDisposable
     /// The distance between consecutive baselines LibreOffice renders, in points.
     /// </summary>
     /// <remarks>
-    /// Measured from the PDF rather than from anything XRay.Office produced, so the comparison is
+    /// Measured from the PDF rather than from anything X-Ray.Office produced, so the comparison is
     /// against LibreOffice's own output. Three lines rather than two: two give one measurement and no
     /// way to notice that the first line is placed differently from the rest, which it is — the top of
     /// the first line sits at the margin while every later one is placed relative to its predecessor.

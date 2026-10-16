@@ -16,7 +16,7 @@ namespace XRay.Office.Presentations.Tests;
 /// plain text boxes — one shape per box height, an <c>a:normAutofit</c> on each, a throwaway
 /// shape first so nothing measures the reference's shared-outliner state leak — converted by
 /// <c>soffice --convert-to pdf</c>, with the drawn em size read back out of the content stream's
-/// <c>Tf</c> operator. Across 227 such boxes at 25, 32 and 40 pt in four faces, XRay.Office agrees
+/// <c>Tf</c> operator. Across 227 such boxes at 25, 32 and 40 pt in four faces, X-Ray.Office agrees
 /// with the reference on 225; across a further 66 that wrap and space their lines at 80 per cent
 /// (<c>research/probes/slides-r15</c>), on 62.
 /// </para>

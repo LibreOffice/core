@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Render the corpus to PDF with the XRay.Office CLI.
+"""Render the corpus to PDF with the X-Ray.Office CLI.
 
-XRay.Office exits 0 only when every file rendered; 65 means the format is not laid
+X-Ray.Office exits 0 only when every file rendered; 65 means the format is not laid
 out yet, 1 means the file could not be read. Both are recorded as-is: an engine
 that declines a document is a result, not an error to hide.
 """

@@ -47,7 +47,7 @@ Gothic` and `MS PGothic` come back DejaVu Sans here and would not for CJK text.
   side is a byte scan and gives false positives, which is the safe direction for deciding what to
   re-render.
 - `renderours.sh` — renders our side only for a list of corpus documents and reports pages and
-  extractable words. The reference does not move for an XRay.Office-only change, so this compares
+  extractable words. The reference does not move for an X-Ray.Office-only change, so this compares
   two of our own binaries in a fraction of a sweep.
 - `affcmp.py` — joins two `renderours.sh` runs to the reference column of a `batch-check.sh`
   sweep and says, per document, whether it moved closer.

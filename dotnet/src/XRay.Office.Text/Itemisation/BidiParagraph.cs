@@ -41,7 +41,7 @@ public readonly record struct BidiRun(int Start, int Length, byte Level)
 /// </para>
 /// <para>
 /// It is here rather than delegated because LibreOffice delegates to ICU
-/// (<c>ubidi_setPara</c>, <c>vcl/source/text/ImplLayoutArgs.cxx</c>) and XRay.Office has no ICU to
+/// (<c>ubidi_setPara</c>, <c>vcl/source/text/ImplLayoutArgs.cxx</c>) and X-Ray.Office has no ICU to
 /// delegate to. The property tables are read from ICU's own data, so the input to the algorithm is
 /// the same even though the code is not.
 /// </para>

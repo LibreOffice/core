@@ -4,7 +4,7 @@
 references were used throughout and they agree on every figure below except where the table says
 otherwise: the distro's **24.2.7.2** at `/usr/bin/soffice`, and the TDF tarball's **26.2.4.2** at
 `/opt/libreoffice26.2` with its bundled Latin faces moved aside (`fc-match "DejaVu Sans"` resolves to
-DejaVu and `fc-match Calibri` to Carlito). XRay.Office at `agent/words-draw2`, base `e152bc0b2`.*
+DejaVu and `fc-match Calibri` to Carlito). X-Ray.Office at `agent/words-draw2`, base `e152bc0b2`.*
 
 ## Why this exists
 

@@ -59,7 +59,7 @@ internal static partial class FontSubsetter
 
     /// <summary>True when the native harfbuzz library is present and exposes the subsetter.</summary>
     /// <remarks>
-    /// Probed once. XRay.Office has to keep producing a PDF where the native library is
+    /// Probed once. X-Ray.Office has to keep producing a PDF where the native library is
     /// missing: a PDF that names a font it did not embed still holds the right text at the
     /// right pen positions, where a <see cref="DllNotFoundException"/> is no PDF at all.
     /// </remarks>

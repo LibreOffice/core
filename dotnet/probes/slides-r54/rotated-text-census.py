@@ -2,7 +2,7 @@
 """How much rotated text does the reference draw that we draw upright?
 
 **The obvious version of this is wrong and its first cut was.** LibreOffice rotates text by
-writing a rotated `Tm` inside `BT ... ET`; XRay.Office rotates it by pushing a rotated `cm` on
+writing a rotated `Tm` inside `BT ... ET`; X-Ray.Office rotates it by pushing a rotated `cm` on
 the graphics state and then writing an upright `Tm` (or none at all). A census that looks only
 at `Tm` therefore reports that we draw *no* rotated text anywhere — 18832 operators to nought —
 when in fact we rotate through the other operator on many pages. On

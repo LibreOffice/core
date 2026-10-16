@@ -7,7 +7,7 @@ using Shouldly;
 namespace XRay.Office.Fidelity.Tests;
 
 /// <summary>
-/// Compares the cell text XRay.Office draws with the cell text LibreOffice draws, run for run.
+/// Compares the cell text X-Ray.Office draws with the cell text LibreOffice draws, run for run.
 /// </summary>
 /// <remarks>
 /// <para>
@@ -20,7 +20,7 @@ namespace XRay.Office.Fidelity.Tests;
 /// <para>
 /// <strong>The corpus document has no header or footer, deliberately.</strong> Calc recomputes a
 /// dynamic band's height from the text in it and floors the result at the declared height
-/// (<c>UpdateHFHeight</c>, <c>sc/source/ui/view/printfun.cxx:846</c>), which XRay.Office does not do
+/// (<c>UpdateHFHeight</c>, <c>sc/source/ui/view/printfun.cxx:846</c>), which X-Ray.Office does not do
 /// yet; on a workbook with a header that is worth 1.3 pt of vertical offset on every row of every
 /// page, and it would swamp everything this file is about. Switching the bands off in the document
 /// is what makes the comparison a comparison of cell text.
@@ -39,7 +39,7 @@ namespace XRay.Office.Fidelity.Tests;
 /// SpreadsheetML forms: the page's left margin lands 21 twips further right — its ODS render
 /// starts the first column's text at 57.685 pt and its XLS render at 58.677 pt — and its columns
 /// come out 0.06% narrower, 230.17 pt across the first four against 230.40. Both are LibreOffice
-/// reading the file rather than XRay.Office drawing it, and neither changes the page count. The
+/// reading the file rather than X-Ray.Office drawing it, and neither changes the page count. The
 /// second has a knock-on worth naming: a shrink-to-fit scale is an integer percentage of the
 /// available width, so a column a fraction narrower shrinks to 85% where the other two formats
 /// shrink to 87%, and a clipped string keeps one character fewer. The XLS therefore takes the run
@@ -244,7 +244,7 @@ public sealed class SheetTextComparisonTests : IDisposable
     /// <para>
     /// Rotated cells live on the corpus document's second sheet and are dropped here, because the
     /// two renderers express a turned run differently — LibreOffice writes a text matrix and
-    /// XRay.Office a transform around an ordinary pen — so <see cref="PdfTextRuns"/> sees one and
+    /// X-Ray.Office a transform around an ordinary pen — so <see cref="PdfTextRuns"/> sees one and
     /// not the other. That the rotation was <em>read</em> is asserted in
     /// <c>XRay.Office.Spreadsheets.Tests</c>, where it needs no rendering at all.
     /// </para>

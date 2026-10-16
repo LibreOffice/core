@@ -100,7 +100,7 @@ public class RtfReaderTests
                 .Where(p => p.ListMarker is not null)];
 
         // RTF is the one format that writes the rendered label out, in a {\listtext} group. So
-        // these are what the writer displayed rather than what XRay.Office computed — including the
+        // these are what the writer displayed rather than what X-Ray.Office computed — including the
         // nested bullet, whose code point arrives with a question-mark fallback beside it.
         items.ShouldContain(p => p.ListMarker == "•"
                                  && p.GetText().Contains("First bullet", StringComparison.Ordinal));
@@ -275,7 +275,7 @@ public class RtfReaderTests
     {
         // \trhdr marks a row that repeats at the top of every page the table spans. LibreOffice's own
         // RTF export omits it, so this is the only way to cover it — and worth covering, because the
-        // alternative is reporting a header count XRay.Office never established.
+        // alternative is reporting a header count X-Ray.Office never established.
         IDocument document = OpenLiteral(
             @"{\rtf1\ansi\pard\intbl" +
             @"\trowd\trhdr\cellx1000\cellx2000 A\cell B\cell\row" +

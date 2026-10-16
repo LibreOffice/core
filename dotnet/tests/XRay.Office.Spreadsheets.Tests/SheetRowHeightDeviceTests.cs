@@ -46,7 +46,7 @@ namespace XRay.Office.Spreadsheets.Tests;
 /// The expected heights are LibreOffice 24.2.7.2's own, read from its flat-ODF round trip of this
 /// same file: 0.1783, 0.3311, 0.2071, 0.3936, 0.4146, 0.4634, 0.5799 and 0.6110 inches. Every row
 /// here reproduces one of them to the twip. Note what is <em>not</em> different: a PDF of the same
-/// strings shows LibreOffice drawing them at XRay.Office's advances to within a quarter point over
+/// strings shows LibreOffice drawing them at X-Ray.Office's advances to within a quarter point over
 /// four hundred, so this is the measuring device and not the face.
 /// </para>
 /// </remarks>

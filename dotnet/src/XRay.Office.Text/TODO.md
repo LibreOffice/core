@@ -66,9 +66,9 @@ Reference: `research/06-rendering.md` section B; `research/05-infrastructure.md`
       installed covers leaves one line in the list and not a thousand.
 - [ ] The platform half of the fallback chain. LibreOffice asks fontconfig first, with the missing
       characters as a charset (`vcl/unx/generic/fontmanager/fontconfig.cxx`), and only falls back to
-      the generic list when that fails. XRay.Office has only the second half, deliberately — see the
+      the generic list when that fails. X-Ray.Office has only the second half, deliberately — see the
       fontconfig note above — but it means a machine whose administrator configured a fallback gets
-      XRay.Office's answer rather than LibreOffice's. Worth revisiting only with a way to read
+      X-Ray.Office's answer rather than LibreOffice's. Worth revisiting only with a way to read
       fontconfig's *configuration* rather than to call its matcher.
 
 ## Metrics — hand-rolled OpenType reader
@@ -179,7 +179,7 @@ breaker could not have: 7,944 generated cases checked against ICU's own answers.
       halves in different faces.
 - [x] Format control characters are cut out rather than shaped, which is `ImplLayoutArgs::AddRun`
       splitting on `IsControlChar` (`vcl/source/text/ImplLayoutArgs.cxx`). One departure, recorded
-      as a decision: LibreOffice also removes U+0001–U+001F and XRay.Office keeps them, because the tab
+      as a decision: LibreOffice also removes U+0001–U+001F and X-Ray.Office keeps them, because the tab
       is in that range and its width is resolved by the line filler rather than by the shaper.
 - [x] **The no-op case is a genuine no-op, measured.** A Latin paragraph produces exactly one
       sub-run and reaches HarfBuzz in the identical call — same `ShapingOptions` instance, no script
@@ -219,7 +219,7 @@ breaker could not have: 7,944 generated cases checked against ICU's own answers.
       characterised without its source — "‫ا" at paragraph level 1 is 1 1 to ICU and 3 3 by the
       rules, and "‭ا" at level 0 is 0 0 to ICU and 2 2 by the rules. Their *reordering* agrees, which
       is what renders, so the test holds them to that and not to the levels. It matters little in
-      practice: no format XRay.Office reads emits an embedding or an isolate, so the characters only
+      practice: no format X-Ray.Office reads emits an embedding or an isolate, so the characters only
       arrive when an author typed one. Closing it wants ICU's `ubidi.cpp`, which is not in this tree
       (`external/icu` is a tarball recipe, not the source).
 - [ ] Writer's *font* script runs, which are a different and coarser partition from the shaper's.
@@ -228,7 +228,7 @@ breaker could not have: 7,944 generated cases checked against ICU's own answers.
       paragraph's Western, Asian and CTL *font attributes*. Measured: a space is `WEAK` there by an
       explicit special case (bug 102975) and an opening parenthesis is `LATIN` because it is in the
       Basic Latin block, so "‏שלום (abc) עולם" gets a Writer portion boundary at the bracket that no
-      UAX #24 itemisation has. XRay.Office's readers resolve one face per run and never look at the
+      UAX #24 itemisation has. X-Ray.Office's readers resolve one face per run and never look at the
       CJK or CTL font attributes, so there is nothing yet for this to choose between; it belongs
       with whichever reader starts honouring `w:rFonts/@w:cs` and `style:font-name-complex`.
 - [x] Drawing right-to-left text — the levels are consumed now. `PageDrawing` cuts a line's runs at
@@ -247,7 +247,7 @@ breaker could not have: 7,944 generated cases checked against ICU's own answers.
       is a scan for the bidi classes that could raise a level, and a paragraph that fails it is never
       itemised at all: the runs are drawn exactly as they were, one per line for plain prose. The
       comparison asserts it from the other side too — LibreOffice draws the Latin paragraph as one
-      portion, and so must XRay.Office.
+      portion, and so must X-Ray.Office.
 - [x] Aligning a right-to-left paragraph, in `ParagraphLayouter.LeftOf`. A mirror rather than a
       special case, which is what Writer does: it lays a right-to-left frame out as though it were
       left to right and reflects the rectangle when it paints — `SwTextFrame::SwitchLTRtoRTL`,
@@ -383,7 +383,7 @@ gaps:
       right-to-left paragraph against the **left** margin — and rewrites the attribute on export, so
       the same document round-tripped through `.odt` comes back saying `end` where it said `right`.
       The physical spellings mean the same thing in every version, which is why the corpus document
-      uses them and why its round-tripped `.odt` is deliberately not in the corpus. XRay.Office follows
+      uses them and why its round-tripped `.odt` is deliberately not in the corpus. X-Ray.Office follows
       the specification and 26.2: `start` is the start edge.
 - [x] Contextual spacing, which needs **both** paragraphs to ask for it — that is what keeps a list
       tight while still leaving a gap before it.

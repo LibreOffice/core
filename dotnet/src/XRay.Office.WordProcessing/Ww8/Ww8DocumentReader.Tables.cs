@@ -24,7 +24,7 @@ namespace XRay.Office.WordProcessing.Ww8;
 public sealed partial class Ww8DocumentReader
 {
     /// <summary>
-    /// The widest row XRay.Office materialises. Word's own limit is 63 columns, and a row declaring
+    /// The widest row X-Ray.Office materialises. Word's own limit is 63 columns, and a row declaring
     /// more is malformed.
     /// </summary>
     public const int MaxTableColumns = 63;

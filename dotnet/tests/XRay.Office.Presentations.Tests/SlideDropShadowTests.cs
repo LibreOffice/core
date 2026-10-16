@@ -14,7 +14,7 @@ namespace XRay.Office.Presentations.Tests;
 /// <remarks>
 /// <para>
 /// A shadow is the shape drawn again — offset, with every colour replaced by one, behind itself
-/// (<c>svx/source/sdr/primitive2d/sdrdecompositiontools.cxx:860</c>). Nothing in XRay.Office drew
+/// (<c>svx/source/sdr/primitive2d/sdrdecompositiontools.cxx:860</c>). Nothing in X-Ray.Office drew
 /// one at all until this, on either the OOXML or the binary side, and the gap is easy to
 /// under-rate from a word count: on <c>slides/batch-016/ppt/pres_ioc_phuket.ppt</c> the reference
 /// draws "National" fourteen times where we drew it seven, seven <em>pairs</em> 6.01 pt apart in

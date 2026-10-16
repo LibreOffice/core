@@ -183,7 +183,7 @@ internal static class BiffErrors
     public const byte Number = 0x24;
     public const byte NotAvailable = 0x2A;
 
-    /// <summary>The XRay.Office equivalent of a BIFF error code.</summary>
+    /// <summary>The X-Ray.Office equivalent of a BIFF error code.</summary>
     /// <remarks>
     /// An unrecognised code becomes <see cref="Core.Extraction.CellError.Unknown"/> rather
     /// than being dropped: the cell is still in error, and saying so is more useful than

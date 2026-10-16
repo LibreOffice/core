@@ -14,11 +14,11 @@ namespace XRay.Office.Fidelity.Tests;
 /// A separate file from <c>ExtractionComparisonTests</c> because the reference has to be built
 /// differently. The default CSV filter covers the <em>first sheet only</em>, which is useless
 /// for a four-sheet workbook, so these tests drive the filter with an explicit option string
-/// that selects every sheet and a tab delimiter — the same shape XRay.Office produces, which
+/// that selects every sheet and a tab delimiter — the same shape X-Ray.Office produces, which
 /// removes the comma-versus-tab noise from the diff entirely.
 /// </para>
 /// <para>
-/// The assertion stays one-sided: nothing the reference found may be missing, but XRay.Office
+/// The assertion stays one-sided: nothing the reference found may be missing, but X-Ray.Office
 /// finding more is expected. It finds exactly two more things here, and both are deliberate —
 /// a cell comment and a hidden sheet, neither of which any LibreOffice export includes.
 /// </para>
@@ -56,7 +56,7 @@ public class XlsxExtractionComparisonTests : IDisposable
     /// <remarks>
     /// The filter writes one file per sheet, named <c>&lt;stem&gt;-&lt;sheet name&gt;.csv</c>,
     /// and the directory listing is alphabetical rather than in workbook order — so the order
-    /// is rebuilt from the sheet names XRay.Office read rather than taken from the file system.
+    /// is rebuilt from the sheet names X-Ray.Office read rather than taken from the file system.
     /// </remarks>
     private string Reference(string corpusName, IEnumerable<string> sheetNames)
     {

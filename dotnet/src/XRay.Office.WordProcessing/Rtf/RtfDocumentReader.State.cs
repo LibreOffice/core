@@ -19,7 +19,7 @@ public sealed partial class RtfDocumentReader
         /// <summary>Document content.</summary>
         Body = 0,
 
-        /// <summary>Content XRay.Office does not read: a picture's bytes, a private extension.</summary>
+        /// <summary>Content X-Ray.Office does not read: a picture's bytes, a private extension.</summary>
         Skip,
 
         /// <summary>The font table, read for its character sets.</summary>
@@ -91,7 +91,7 @@ public sealed partial class RtfDocumentReader
         /// <em>is</em> dispatched — including the ones that end the document's first run.
         /// </para>
         /// <para>
-        /// XRay.Office still reads nothing out of either table, so this behaves as <see cref="Skip"/>
+        /// X-Ray.Office still reads nothing out of either table, so this behaves as <see cref="Skip"/>
         /// everywhere text or paragraphs are concerned. What it carries is the right to close the
         /// settings window: see <see cref="_firstRunSeen"/>.
         /// </para>

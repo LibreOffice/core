@@ -16,7 +16,7 @@ namespace XRay.Office.Vector.Metafiles;
 /// <remarks>
 /// <para>
 /// A metafile's text records are the one place where the format hands over a problem the rest
-/// of XRay.Office has already solved: a family name, a weight, a slant and eight-bit bytes in
+/// of X-Ray.Office has already solved: a family name, a weight, a slant and eight-bit bytes in
 /// some code page. Answering them through <c>XRay.Office.Text</c> — the same substitution table
 /// and the same HarfBuzz as body text — is what makes a label inside an embedded picture agree
 /// with the paragraph beside it about what "Arial" is, and it is the same argument

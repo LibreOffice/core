@@ -2,7 +2,7 @@ using XRay.Office.Core.Formats;
 
 namespace XRay.Office.Core;
 
-/// <summary>Base class for every exception XRay.Office raises deliberately.</summary>
+/// <summary>Base class for every exception X-Ray.Office raises deliberately.</summary>
 public class OfficeException : Exception
 {
     /// <summary>Creates the exception.</summary>
@@ -13,7 +13,7 @@ public class OfficeException : Exception
 }
 
 /// <summary>
-/// The document's format is not one XRay.Office can read.
+/// The document's format is not one X-Ray.Office can read.
 /// </summary>
 public sealed class UnsupportedFormatException : OfficeException
 {
@@ -31,7 +31,7 @@ public sealed class UnsupportedFormatException : OfficeException
 /// The document is damaged badly enough that lenient parsing could not recover it.
 /// </summary>
 /// <remarks>
-/// XRay.Office repairs what it can and records the rest as
+/// X-Ray.Office repairs what it can and records the rest as
 /// <see cref="Diagnostics.Diagnostic"/>s, so this is reserved for genuinely
 /// unreadable input — a truncated container, an unparseable directory — rather than
 /// for ordinary specification violations.

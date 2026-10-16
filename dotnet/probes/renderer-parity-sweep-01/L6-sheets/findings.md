@@ -184,7 +184,7 @@ fault.
 
 **Documents:** #136 `Application_Compliance_Checklist_5_Apr_2021.xlsx`.
 
-**What the pages show.** `cases.md` reads this as "XRay.Office prints three things the reference
+**What the pages show.** `cases.md` reads this as "X-Ray.Office prints three things the reference
 leaves off a printed sheet: the column letters, the row numbers, and the cell comments". At
 200 dpi that reading is wrong in an instructive way: **both engines print the headings.** The
 reference's are 8 px tall and sit inside their strip; ours are 40 px tall and cover the first

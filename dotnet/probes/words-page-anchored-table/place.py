@@ -1,7 +1,7 @@
 """Where a page-anchored positioned table goes, and what happens when it is taller than the page.
 
 `Case-Study-Heathrow-Airport.docx` states `w:tblpPr w:horzAnchor="page" w:tblpX="705"
-w:vertAnchor="text" w:tblpY="662"` on a table that runs to three pages. XRay.Office honours neither
+w:vertAnchor="text" w:tblpY="662"` on a table that runs to three pages. X-Ray.Office honours neither
 offset: `DocxLayoutSource.PositionedLeftEdge` excludes `horzAnchor="page"`, and
 `Paginator.PlaceFloatedTable` drops the whole `w:tblpPr` for a table taller than the body.
 

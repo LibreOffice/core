@@ -233,7 +233,7 @@ public class PptxReaderTests
         // A deck records its slide count in app.xml as Slides, and LibreOffice's PPTX export
         // writes no such element at all — the same gap the ODP path found in meta.xml. Counting
         // the slides ourselves and reporting the result as metadata would misrepresent the file:
-        // DocumentStatistics is what the authoring application recorded, not what XRay.Office can
+        // DocumentStatistics is what the authoring application recorded, not what X-Ray.Office can
         // derive.
         document.Metadata.Statistics!.SlideCount.ShouldBeNull();
         document.Metadata.Statistics!.PageCount.ShouldBeNull();

@@ -97,7 +97,7 @@ public sealed class SlideAutofitDeviceGridComparisonTests : IDisposable
             double plainPoints = plain / Mm100PerPoint;
             double autofittedPoints = autofitted / Mm100PerPoint;
 
-            // Ours as literals first, so this tests XRay.Office rather than LibreOffice: comparing
+            // Ours as literals first, so this tests X-Ray.Office rather than LibreOffice: comparing
             // only against the reference passes whatever the two of us happen to agree on.
             Pitch(ours, page, left: 20).ShouldBe(plainPoints, TolerancePoints, $"plain {points} pt");
             Pitch(ours, page, left: 380)

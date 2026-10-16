@@ -407,7 +407,7 @@ public sealed class TableComparisonTests : IDisposable
     /// </summary>
     /// <remarks>
     /// Sorted rather than taken as poppler gives them, because poppler reads a table column by column: it
-    /// emits every word of the first column, then every word of the second. XRay.Office draws cell by cell in
+    /// emits every word of the first column, then every word of the second. X-Ray.Office draws cell by cell in
     /// row order. Neither is wrong and neither is the other, so both are put in the same order — down the
     /// page, then across it — before they are compared.
     /// </remarks>

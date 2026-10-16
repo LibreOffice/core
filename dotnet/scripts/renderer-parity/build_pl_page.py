@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render the XRay.Office-vs-LibreOffice difference catalogue to one HTML file."""
+"""Render the X-Ray.Office-vs-LibreOffice difference catalogue to one HTML file."""
 import json, pathlib
 
 BENCH = pathlib.Path("/data/bench")

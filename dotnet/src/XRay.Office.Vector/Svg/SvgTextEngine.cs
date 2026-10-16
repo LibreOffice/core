@@ -9,7 +9,7 @@ using ShimSkiaSharp;
 namespace XRay.Office.Vector.Svg;
 
 /// <summary>
-/// Resolves and shapes SVG text through XRay.Office's own font stack.
+/// Resolves and shapes SVG text through X-Ray.Office's own font stack.
 /// </summary>
 /// <remarks>
 /// <para>

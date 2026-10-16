@@ -5,7 +5,7 @@ namespace XRay.Office.Core.Formats;
 /// application owns it, and how it presents itself to the outside world.
 /// </summary>
 /// <remarks>
-/// This is the XRay.Office equivalent of a LibreOffice type/filter registry entry
+/// This is the X-Ray.Office equivalent of a LibreOffice type/filter registry entry
 /// (<c>filter/source/config/fragments/types/*.xcu</c>). The authoritative table
 /// this is derived from lives in <c>dotnet/research/01-formats-and-detection.md</c>.
 /// </remarks>
@@ -36,20 +36,20 @@ public sealed record FormatInfo
     public bool IsTemplate { get; init; }
 
     /// <summary>
-    /// True when the format is able to carry macros. XRay.Office never executes
+    /// True when the format is able to carry macros. X-Ray.Office never executes
     /// them; this exists so callers can surface the risk.
     /// </summary>
     public bool CanCarryMacros { get; init; }
 
     /// <summary>
-    /// True when XRay.Office can read the format. Formats are listed in the
+    /// True when X-Ray.Office can read the format. Formats are listed in the
     /// catalogue before they are implemented, so this starts out false.
     /// </summary>
     public bool IsReadSupported { get; init; }
 }
 
 /// <summary>
-/// The registry of every format XRay.Office knows about.
+/// The registry of every format X-Ray.Office knows about.
 /// </summary>
 public interface IFormatCatalogue
 {

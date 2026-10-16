@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Reproduce, outside XRay.Office, the transparent-bitmap merge of one TICAP blip.
+"""Reproduce, outside X-Ray.Office, the transparent-bitmap merge of one TICAP blip.
 
 The question round 94 left is a PATH question: do `TICAPCapability_Final.xls`'s paired
 SRCAND blits reach a metafile reader at all?  This answers it by decoding the two DIBs

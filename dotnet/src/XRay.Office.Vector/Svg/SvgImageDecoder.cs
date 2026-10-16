@@ -12,11 +12,11 @@ using Svg.Skia;
 namespace XRay.Office.Vector.Svg;
 
 /// <summary>
-/// Decodes SVG and SVGZ into the XRay.Office display list.
+/// Decodes SVG and SVGZ into the X-Ray.Office display list.
 /// </summary>
 /// <remarks>
 /// <para>
-/// SVG is the one vector format XRay.Office does not parse itself. <c>Svg.SceneGraph</c> plus
+/// SVG is the one vector format X-Ray.Office does not parse itself. <c>Svg.SceneGraph</c> plus
 /// <c>Svg.Model</c> already implement the CSS cascade, the path grammar, gradients, clip
 /// paths, masks and filters, and — crucially — compile them to a device-independent canvas
 /// command list rather than to pixels. Hand-rolling that would have bought no fidelity, since
@@ -25,7 +25,7 @@ namespace XRay.Office.Vector.Svg;
 /// <c>Directory.Packages.props</c> for the licence position.
 /// </para>
 /// <para>
-/// What XRay.Office keeps for itself is the three things a library cannot be trusted with in a
+/// What X-Ray.Office keeps for itself is the three things a library cannot be trusted with in a
 /// document parser: the security posture (<see cref="SvgAssetLoader"/>), the work bound
 /// (<see cref="SvgExpansionGuard"/> and <see cref="VectorLimits"/>), and the size rule
 /// (<see cref="SvgViewport"/>, which differs from the library's and follows LibreOffice's).
@@ -90,7 +90,7 @@ public sealed class SvgImageDecoder : IVectorImageDecoder
                 return Failed(diagnostics, "PL6001", "An SVG contains a cyclic <use> reference; it was not drawn.");
 
             case SvgExpansionGuard.Verdict.TooDeep:
-                return Failed(diagnostics, "PL6001", "An SVG nests elements more deeply than XRay.Office will read.");
+                return Failed(diagnostics, "PL6001", "An SVG nests elements more deeply than X-Ray.Office will read.");
 
             default:
                 break;

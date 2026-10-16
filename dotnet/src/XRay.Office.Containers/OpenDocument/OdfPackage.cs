@@ -11,7 +11,7 @@ namespace XRay.Office.Containers.OpenDocument;
 /// <remarks>
 /// The <c>mimetype</c> entry is the authoritative statement of what the document is.
 /// LibreOffice cross-checks it against the manifest's root media type and throws on a
-/// mismatch; XRay.Office records a diagnostic and prefers <c>mimetype</c> instead, so that
+/// mismatch; X-Ray.Office records a diagnostic and prefers <c>mimetype</c> instead, so that
 /// slightly malformed files still read. There is no upside to refusing a document whose two
 /// self-descriptions merely disagree.
 /// </remarks>

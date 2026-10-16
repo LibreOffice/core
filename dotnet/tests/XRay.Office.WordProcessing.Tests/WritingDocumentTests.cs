@@ -9,7 +9,7 @@ namespace XRay.Office.WordProcessing.Tests;
 /// <remarks>
 /// Document order is what makes "before", "after" and "inside" answerable without walking the tree,
 /// and layout, bookmarks and tracked changes all ask those questions constantly. Style chains are the
-/// fourth implementation of parent-chain resolution in XRay.Office — the ODF, DOCX and WW8 readers each
+/// fourth implementation of parent-chain resolution in X-Ray.Office — the ODF, DOCX and WW8 readers each
 /// have one over their own encoding — so this one exists to be the single version layout uses.
 /// </remarks>
 public class WritingDocumentTests

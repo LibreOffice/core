@@ -13,7 +13,7 @@ namespace XRay.Office.OpenDocument.Styles;
 /// </remarks>
 public enum OdfPropertyKind
 {
-    /// <summary>Not a property set XRay.Office recognises.</summary>
+    /// <summary>Not a property set X-Ray.Office recognises.</summary>
     Unknown = 0,
 
     /// <summary>Character formatting: <c>style:text-properties</c>.</summary>

@@ -37,7 +37,7 @@ public readonly record struct PdfPath(
 /// <para>
 /// <strong>On-curve points only, and that is the whole design.</strong> Both writers approximate
 /// an arc with cubics and they do not choose the same number of them — LibreOffice emits three
-/// per quarter turn where XRay.Office emits one — so the control points are not comparable and the
+/// per quarter turn where X-Ray.Office emits one — so the control points are not comparable and the
 /// segment counts are not either. The points a curve <em>passes through</em> are, and for a
 /// polygon they are the vertices outright. So a straight-edged preset compares vertex for vertex
 /// and a curved one compares by its bounding box and its own on-curve points.
@@ -126,7 +126,7 @@ public static partial class PdfPaths
     /// </summary>
     /// <remarks>
     /// LibreOffice writes a closed polygon's start point twice — once to begin and once before
-    /// the <c>h</c> — and XRay.Office writes it once. Both draw the same hexagon; without this a
+    /// the <c>h</c> — and X-Ray.Office writes it once. Both draw the same hexagon; without this a
     /// vertex-for-vertex comparison reports seven against six and says nothing about the shape.
     /// </remarks>
     private static void Close(List<(double X, double Y)> points, int start)

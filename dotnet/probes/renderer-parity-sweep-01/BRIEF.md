@@ -1,7 +1,7 @@
-# Shared brief — XRay.Office fidelity fix investigation
+# Shared brief — X-Ray.Office fidelity fix investigation
 
 You are one of eight agents working in parallel on the same finding: a sweep of all
-946 documents in `theolivenbaum/sample-files` rendered by XRay.Office and by headless
+946 documents in `theolivenbaum/sample-files` rendered by X-Ray.Office and by headless
 LibreOffice found **192 documents that do not match**. Each of you owns one lane.
 
 ## The one rule that keeps eight agents from colliding
@@ -67,7 +67,7 @@ needs, and I will sequence it.
   Use `--outdir` (not `-o`). Assert it produced output before comparing anything —
   a glob that silently picked up the reference once reported a fabricated match.
 - Your rendered pairs are at `/data/bench/pairs-view/NNN.jpg`, LibreOffice left,
-  XRay.Office right, at reading resolution. **Look at them.** The numbers say a page is
+  X-Ray.Office right, at reading resolution. **Look at them.** The numbers say a page is
   wrong; only the image says what is wrong.
 
 ## Read before you start
@@ -82,7 +82,7 @@ must not re-derive, in particular:
   output. `dotnet/TODO.raster-ceiling.md`.
 
 Six documents in the sweep are tagged `lo-broken`: the **reference** is the broken
-rendering and XRay.Office is correct. If one is in your lane, confirm it and file it —
+rendering and X-Ray.Office is correct. If one is in your lane, confirm it and file it —
 do not chase it.
 
 ## Scope

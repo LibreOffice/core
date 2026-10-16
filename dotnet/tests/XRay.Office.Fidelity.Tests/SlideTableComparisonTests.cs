@@ -62,7 +62,7 @@ public sealed class SlideTableComparisonTests : IDisposable
 
         // The cheapest assertion in the suite and the one no per-shape comparison makes:
         // deck-features.pptx has four slides and three pages, because its fourth is hidden and
-        // LibreOffice's PDF export leaves a hidden slide out. XRay.Office laid all four out until
+        // LibreOffice's PDF export leaves a hidden slide out. X-Ray.Office laid all four out until
         // this was measured.
         ours.Count.ShouldBe(theirs.Count, $"{fileName}: page count");
     }

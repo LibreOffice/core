@@ -1,10 +1,10 @@
 <Project>
 
   <!--
-    Central package version management for the XRay.Office solution.
+    Central package version management for the X-Ray.Office solution.
     Individual projects use <PackageReference Include="X" /> with no Version attribute.
 
-    Before adding a dependency to a src/ library, check two things. XRay.Office ships as
+    Before adding a dependency to a src/ library, check two things. X-Ray.Office ships as
     redistributable NuGet libraries, so every transitive dependency's licence becomes our
     users' problem, and any build-time gate becomes their build's problem too.
 
@@ -75,7 +75,7 @@
       The Svg.Skia family, minus Svg.Skia itself. Svg.SceneGraph and Svg.Model parse
       SVG (CSS via ExCSS, gradients, clip paths, masks, filters) and build a scene,
       which ShimSkiaSharp represents as a device-independent canvas-command list.
-      XRay.Office translates those commands into its own IDrawingSink.
+      X-Ray.Office translates those commands into its own IDrawingSink.
 
       Two properties make this work where a rasterising SVG library would not:
 
@@ -125,7 +125,7 @@
     <!-- Rasterising reference PDFs in-process (pdfium) so the fidelity harness
          does not require poppler-utils on the machine. -->
     <PackageVersion Include="PDFtoImage" Version="5.3.0" />
-    <!-- Reading the Markdown XRay.Office emits back, in XRay.Office.Markup.Tests. An escaping bug
+    <!-- Reading the Markdown X-Ray.Office emits back, in XRay.Office.Markup.Tests. An escaping bug
          leaves every character present, so a text diff cannot see it and only a parser can:
          the round-trip is the test, and it needs a CommonMark/GFM implementation that is not
          ours. BSD-2-Clause, pure managed, no native assets, no build-time gate. Test-only —

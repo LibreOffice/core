@@ -79,7 +79,7 @@ public sealed record VectorLimits
     /// </summary>
     /// <remarks>
     /// Checked at every command the translator records, so it bounds the half of the work
-    /// XRay.Office drives. It cannot interrupt the third-party parser, which is precisely why
+    /// X-Ray.Office drives. It cannot interrupt the third-party parser, which is precisely why
     /// <see cref="MaxExpandedNodes"/> has to bound that half up front instead.
     /// </remarks>
     public TimeSpan TimeLimit { get; init; } = TimeSpan.FromSeconds(10);

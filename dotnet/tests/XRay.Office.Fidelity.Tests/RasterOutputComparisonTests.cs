@@ -10,7 +10,7 @@ using SkiaSharp;
 namespace XRay.Office.Fidelity.Tests;
 
 /// <summary>
-/// Compares a page XRay.Office rasterises against the same page LibreOffice rasterises.
+/// Compares a page X-Ray.Office rasterises against the same page LibreOffice rasterises.
 /// </summary>
 /// <remarks>
 /// <para>

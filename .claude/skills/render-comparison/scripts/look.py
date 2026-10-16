@@ -159,7 +159,7 @@ def ours(src: pathlib.Path, work: pathlib.Path) -> pathlib.Path:
     run([str(exe), "render", str(src), "--format", "pdf", "--outdir", str(out)])
     got = list(out.glob("*.pdf"))
     if not got:
-        sys.exit(f"XRay.Office produced no rendering for {src}")
+        sys.exit(f"X-Ray.Office produced no rendering for {src}")
     return got[0]
 
 

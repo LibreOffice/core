@@ -25,7 +25,7 @@ namespace XRay.Office.Presentations.Tests;
 /// Measured on the installed 26.2.4.2 with <c>text-warp-deck.pptx</c>, which is authored for
 /// this and holds the same three words three times: plain, <c>textNoShape</c>, and
 /// <c>textArchUp</c>. The reference's PDF contains the phrase <strong>twice</strong> and
-/// answers the third box with 3 fill operators over 187 curves. XRay.Office drew it three times,
+/// answers the third box with 3 fill operators over 187 curves. X-Ray.Office drew it three times,
 /// and on <c>FAAAIandtheArtandScienceofV&amp;Vfinal.pptx</c> that was the whole of a 1189-against
 /// -1133 word failure: 28 words a page on two pages, five labels of 48 characters, tokenised
 /// per glyph because each warped box is also rotated.

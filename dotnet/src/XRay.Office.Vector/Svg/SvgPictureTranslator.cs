@@ -73,7 +73,7 @@ internal sealed class SvgPictureTranslator
 
         if (depth > _limits.MaxNestingDepth)
         {
-            Report("PL6010", "An SVG nested pictures more deeply than XRay.Office will follow.");
+            Report("PL6010", "An SVG nested pictures more deeply than X-Ray.Office will follow.");
             IsTruncated = true;
             return;
         }
@@ -145,7 +145,7 @@ internal sealed class SvgPictureTranslator
                     break;
 
                 default:
-                    Report("PL6011", $"An SVG produced a drawing command XRay.Office does not translate ({command.GetType().Name}).");
+                    Report("PL6011", $"An SVG produced a drawing command X-Ray.Office does not translate ({command.GetType().Name}).");
                     break;
             }
         }
@@ -169,7 +169,7 @@ internal sealed class SvgPictureTranslator
     {
         if (operation == SKClipOperation.Difference)
         {
-            Report("PL6012", "An SVG subtracted a region from its clip; XRay.Office intersects clips only.");
+            Report("PL6012", "An SVG subtracted a region from its clip; X-Ray.Office intersects clips only.");
             return;
         }
 
@@ -182,7 +182,7 @@ internal sealed class SvgPictureTranslator
         {
             if (operation == SKClipOperation.Difference)
             {
-                Report("PL6012", "An SVG subtracted a region from its clip; XRay.Office intersects clips only.");
+                Report("PL6012", "An SVG subtracted a region from its clip; X-Ray.Office intersects clips only.");
             }
             return;
         }
@@ -220,7 +220,7 @@ internal sealed class SvgPictureTranslator
             }
             else if (clips.Any(element => HasGeometry(element.Clip)))
             {
-                Report("PL6023", "An SVG clipped one member of a clip-path union; XRay.Office clipped none of them.");
+                Report("PL6023", "An SVG clipped one member of a clip-path union; X-Ray.Office clipped none of them.");
             }
         }
 
@@ -300,7 +300,7 @@ internal sealed class SvgPictureTranslator
             && (Math.Abs(command.Source.Width - command.Image.Width) > 0.5f
                 || Math.Abs(command.Source.Height - command.Image.Height) > 0.5f))
         {
-            Report("PL6013", "An SVG drew part of an image; XRay.Office drew the whole of it.");
+            Report("PL6013", "An SVG drew part of an image; X-Ray.Office drew the whole of it.");
         }
 
         _list.DrawImage(RasterImage.Encoded(bytes), destination, Alpha(command.Paint));
@@ -393,7 +393,7 @@ internal sealed class SvgPictureTranslator
         // The library normally expands <textPath> into one positioned draw per glyph and this
         // command never appears; when it does, the text is placed at the path's start rather
         // than dropped, because a missing wordmark is worse than an unbent one.
-        Report("PL6014", "An SVG placed text on a path; XRay.Office drew it straight from the path's start.");
+        Report("PL6014", "An SVG placed text on a path; X-Ray.Office drew it straight from the path's start.");
 
         DocPoint start = command.Path?.Commands?.OfType<MoveToPathCommand>().FirstOrDefault() is { } move
             ? ShimGeometry.Point(move.X + command.HOffset, move.Y + command.VOffset)
@@ -435,7 +435,7 @@ internal sealed class SvgPictureTranslator
     {
         if (paint.Style == SKPaintStyle.Stroke)
         {
-            Report("PL6015", "An SVG stroked its text; XRay.Office filled it with the stroke's colour instead.");
+            Report("PL6015", "An SVG stroked its text; X-Ray.Office filled it with the stroke's colour instead.");
         }
 
         return Fill(paint) ?? Paint.Solid(Colour.Black);
@@ -447,12 +447,12 @@ internal sealed class SvgPictureTranslator
     {
         if (paint.ColorFilter is not null || paint.ImageFilter is not null)
         {
-            Report("PL6016", "An SVG applied a filter effect; XRay.Office drew the unfiltered shape.");
+            Report("PL6016", "An SVG applied a filter effect; X-Ray.Office drew the unfiltered shape.");
         }
 
         if (paint.BlendMode is not SKBlendMode.SrcOver and not SKBlendMode.Src)
         {
-            Report("PL6017", $"An SVG used the '{paint.BlendMode}' blend mode; XRay.Office composited it normally.");
+            Report("PL6017", $"An SVG used the '{paint.BlendMode}' blend mode; X-Ray.Office composited it normally.");
         }
 
         switch (paint.Shader)
@@ -495,11 +495,11 @@ internal sealed class SvgPictureTranslator
                     Same(conical.Start, conical.End) ? null : conical.Start);
 
             case PictureShader:
-                Report("PL6019", "An SVG filled a shape with a pattern; XRay.Office left it unfilled.");
+                Report("PL6019", "An SVG filled a shape with a pattern; X-Ray.Office left it unfilled.");
                 return null;
 
             case { } other:
-                Report("PL6020", $"An SVG used a '{other.GetType().Name}' fill XRay.Office does not express.");
+                Report("PL6020", $"An SVG used a '{other.GetType().Name}' fill X-Ray.Office does not express.");
                 return null;
 
             case null:
@@ -557,7 +557,7 @@ internal sealed class SvgPictureTranslator
 
         if (paint.IsStrokeNonScaling)
         {
-            Report("PL6022", "An SVG asked for a non-scaling stroke; XRay.Office scaled it with the shape.");
+            Report("PL6022", "An SVG asked for a non-scaling stroke; X-Ray.Office scaled it with the shape.");
         }
 
         IReadOnlyList<Length>? dashes = null;

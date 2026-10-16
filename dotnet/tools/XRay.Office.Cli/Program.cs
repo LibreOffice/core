@@ -10,7 +10,7 @@ namespace XRay.Office.Cli;
 /// </summary>
 /// <remarks>
 /// Serves two audiences: humans inspecting documents, and the fidelity-comparison skills in
-/// <c>.claude/skills/</c>, which use it as the XRay.Office side of a side-by-side against
+/// <c>.claude/skills/</c>, which use it as the X-Ray.Office side of a side-by-side against
 /// headless LibreOffice.
 /// <para>
 /// Argument parsing is hand-rolled rather than using System.CommandLine. The surface is a
@@ -180,7 +180,7 @@ internal static class Program
         List<string> flags = [];
         if (r.IsEncrypted) flags.Add("encrypted (a password is needed to read it)");
         if (r.IsTemplate == true) flags.Add("template");
-        if (r.CanCarryMacros == true) flags.Add("can carry macros (XRay.Office never executes them)");
+        if (r.CanCarryMacros == true) flags.Add("can carry macros (X-Ray.Office never executes them)");
         if (flags.Count > 0) Console.WriteLine($"{indent}flags       {string.Join("; ", flags)}");
 
         Console.WriteLine($"{indent}readable    {(r.IsReadSupported ? "yes" : "not yet implemented")}");

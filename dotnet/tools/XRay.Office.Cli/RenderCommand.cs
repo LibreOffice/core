@@ -13,7 +13,7 @@ namespace XRay.Office.Cli;
 /// </summary>
 /// <remarks>
 /// <para>
-/// The XRay.Office side of the <c>render-comparison</c> skill, so its output layout is part
+/// The X-Ray.Office side of the <c>render-comparison</c> skill, so its output layout is part
 /// of that skill's contract. The skill's own example is
 /// <c>xray-office render --dpi 150 --outdir /tmp/actual document.docx</c> followed by a
 /// comparison pointed straight at <c>/tmp/actual</c>, so a single input writes

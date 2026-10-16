@@ -186,7 +186,7 @@ public sealed partial class OdtLayoutSource
     /// True when the file states nothing, because the setting then keeps the application's configured
     /// <c>AddSpacing</c>, whose shipped default is <c>true</c>
     /// (<c>officecfg/registry/schema/org/openoffice/Office/Compatibility.xcs</c>). That is the ODF
-    /// behaviour XRay.Office already had; what it did not have is the other branch, which a document
+    /// behaviour X-Ray.Office already had; what it did not have is the other branch, which a document
     /// converted from a Word file always carries.
     /// </para>
     /// <para>
@@ -309,7 +309,7 @@ public sealed partial class OdtLayoutSource
     /// True when the file states nothing, because the application's shipped <c>AddSpacingAtPages</c>
     /// default is <c>true</c>
     /// (<c>officecfg/registry/schema/org/openoffice/Office/Compatibility.xcs</c>:47,
-    /// <c>DocumentSettingManager.cxx</c>:131). XRay.Office previously assumed the opposite for ODF, which
+    /// <c>DocumentSettingManager.cxx</c>:131). X-Ray.Office previously assumed the opposite for ODF, which
     /// put the first line of a document whose first paragraph has space-before too high by exactly that
     /// spacing.
     /// </para>
@@ -746,7 +746,7 @@ public sealed partial class OdtLayoutSource
                     or "tracked-changes" or "deletion" or "insertion")
             {
                 // A deletion's content is inside a change region and is not part of the text a reader
-                // sees, so it is skipped rather than walked — the same decision every one of XRay.Office's
+                // sees, so it is skipped rather than walked — the same decision every one of X-Ray.Office's
                 // extraction readers makes.
                 if (name is not ("tracked-changes" or "deletion")) Walk(child, into, depth + 1);
                 continue;

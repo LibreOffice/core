@@ -1,6 +1,6 @@
 # fidelity-b-01 — three of the twelve, shipped and measured
 
-Round: Fidelity-B, an *implementation* round on the twelve genuine XRay.Office defects
+Round: Fidelity-B, an *implementation* round on the twelve genuine X-Ray.Office defects
 `dotnet/probes/fidelity-01/results.md` classified out of the 40 Fidelity failures. Worktree
 `/c/sandbox/workdir/wt-fid-b`, branch `wt-fid-b`, base `63d5290aacf`.
 
@@ -141,7 +141,7 @@ RTF is not one of them: `sw/source/writerfilter/filter/WriterFilter.cxx:338` set
 `ContinuousEndnotes` under a comment reading *"options that are valid for the DOCX format"*,
 `sw/source/filter/ww8/ww8par.cxx:2050` sets `CONTINUOUS_ENDNOTES` for DOC, and a grep of the whole
 tree finds no third setter — `RtfFilter::setTargetDocument` sets only
-`UndocumentedWriterfilterHack`. **XRay.Office routes DOCX, DOC and RTF through the same
+`UndocumentedWriterfilterHack`. **X-Ray.Office routes DOCX, DOC and RTF through the same
 `PaginationOptions.Word` preset**, so folding this into that preset — which is the obvious place —
 would have given RTF a separator LibreOffice does not draw for it and broken
 `NoteSeparatorComparisonTests.TheRtfSeparatorGapIsExactlyTheShorterNoteLines`, which was green and

@@ -8,7 +8,7 @@ namespace XRay.Office.Core.Numbering;
 /// </summary>
 /// <remarks>
 /// <para>
-/// Every format XRay.Office reads generates list labels the same way — a counter per level, run
+/// Every format X-Ray.Office reads generates list labels the same way — a counter per level, run
 /// through a per-level format — and they agree on which formats exist: decimal, upper and lower
 /// roman, upper and lower alphabetic. ODF spells them <c>1 i I a A</c> and
 /// WordprocessingML spells them <c>decimal lowerRoman upperRoman lowerLetter upperLetter</c>,

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Render every probe through XRay.Office into <outdir>/ours, beside the reference
+# Render every probe through X-Ray.Office into <outdir>/ours, beside the reference
 # half `refrender.sh` wrote, so the two can be compared without re-rendering the
 # reference (nothing in `dotnet/src` can reach `soffice`).
 #

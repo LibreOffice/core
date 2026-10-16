@@ -14,7 +14,7 @@ namespace XRay.Office.WordProcessing.Tests;
 /// identical in every one: an inserted phrase and a deleted phrase in the same sentence.
 /// </para>
 /// <para>
-/// XRay.Office extracts the document as the changes leave it: the insertion is content, the deletion is
+/// X-Ray.Office extracts the document as the changes leave it: the insertion is content, the deletion is
 /// not. Deleted text is still in the file — that is what makes the change reversible — so emitting it
 /// puts words into the extraction that the document does not say, which is worse than the alternative
 /// for every use extraction has. LibreOffice's own text filter does the opposite, because it renders

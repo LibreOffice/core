@@ -32,7 +32,7 @@ public sealed record SheetHtmlOptions
     public string? Title { get; init; }
 
     /// <summary>What to name in the generator meta element.</summary>
-    public string Generator { get; init; } = "XRay.Office";
+    public string Generator { get; init; } = "X-Ray.Office";
 
     /// <summary>How a reader moves between the sheets. Defaults to the reference's index.</summary>
     public SheetHtmlNavigation Navigation { get; init; } = SheetHtmlNavigation.Overview;

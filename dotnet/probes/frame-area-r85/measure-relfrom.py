@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Where the red band lands, per fixture, through both references and through XRay.Office.
+"""Where the red band lands, per fixture, through both references and through X-Ray.Office.
 
 The band is the only red ink on the page, so its rectangle separates cleanly from the body
 line and from the running heads without any assumption about how wide or how dark it is.

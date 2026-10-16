@@ -18,7 +18,7 @@ placeholders. Delete each placeholder as real tests arrive in that project.
       verified: output-name collisions, one user profile per concurrent process, PNG export
       giving only page 1, and font substitution deciding fidelity.
 - [ ] `CheckFontEnvironment` — assert Calibri→Carlito and Cambria→Caladea up front. Without
-      them every OOXML comparison is meaningless, and the failure looks like an XRay.Office
+      them every OOXML comparison is meaningless, and the failure looks like an X-Ray.Office
       layout bug.
 - [x] `Corpus` helper: locates `tests/corpus/` by walking up from the test assembly, so the
       files live in one place instead of being copied into every project's output.

@@ -1987,7 +1987,7 @@ internal static class DocxFrames
     /// <para>
     /// Drawing the box instead puts three sides on the page that are not in the file, which is
     /// what this path did: measured on an authored one-line document, LibreOffice drew a red
-    /// diagonal and XRay.Office a red rectangle. The VML and Escher front ends already model it —
+    /// diagonal and X-Ray.Office a red rectangle. The VML and Escher front ends already model it —
     /// see <see cref="Layout.PageFrame.IsLine"/> — so only the DrawingML reading was missing.
     /// </para>
     /// <para>

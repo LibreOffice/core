@@ -18,7 +18,7 @@ namespace XRay.Office.WordProcessing.Rtf;
 public static class RtfReader
 {
     /// <summary>
-    /// The largest RTF document XRay.Office will buffer.
+    /// The largest RTF document X-Ray.Office will buffer.
     /// </summary>
     /// <remarks>
     /// RTF is read whole rather than streamed, because its state machine can be sent back to an
@@ -86,7 +86,7 @@ public static class RtfReader
             {
                 throw new MalformedDocumentException(
                     $"The document is larger than the {MaxDocumentBytes / (1024 * 1024)} MB "
-                    + "XRay.Office will buffer for RTF.");
+                    + "X-Ray.Office will buffer for RTF.");
             }
 
             byte[] exact = new byte[stream.Length - stream.Position];

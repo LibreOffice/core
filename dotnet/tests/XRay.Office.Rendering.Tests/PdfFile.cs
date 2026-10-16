@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 namespace XRay.Office.Rendering.Tests;
 
 /// <summary>
-/// Reads back a PDF XRay.Office wrote, far enough to assert things about it.
+/// Reads back a PDF X-Ray.Office wrote, far enough to assert things about it.
 /// </summary>
 /// <remarks>
 /// <para>

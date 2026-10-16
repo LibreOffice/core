@@ -23,7 +23,7 @@ namespace XRay.Office.Fidelity.Tests;
 /// the reference means.
 /// </para>
 /// <para>
-/// That is the opposite of what XRay.Office <em>extracts</em>, deliberately and permanently.
+/// That is the opposite of what X-Ray.Office <em>extracts</em>, deliberately and permanently.
 /// Extraction says what the changes leave: the insertion is content and the deletion is not, because
 /// deleted text is still in the file and emitting it invents content the document does not say.
 /// LibreOffice's text filter emits it because that filter renders the document as a reader sees it,
@@ -164,12 +164,12 @@ public sealed class TrackedChangeComparisonTests : IDisposable
     }
 
     /// <summary>
-    /// The reference's own text keeps the deletion; XRay.Office's does not, and that is deliberate.
+    /// The reference's own text keeps the deletion; X-Ray.Office's does not, and that is deliberate.
     /// </summary>
     /// <remarks>
     /// Recorded as a *paired* assertion rather than as a tolerance in the extraction comparison,
     /// because the difference is not an error margin: it is one phrase, present in one output and
-    /// absent from the other for a reason each side is right about. What XRay.Office now adds is that
+    /// absent from the other for a reason each side is right about. What X-Ray.Office now adds is that
     /// the phrase is not lost — it is on the <see cref="WritingChange"/> with the name of the person
     /// who removed it.
     /// </remarks>

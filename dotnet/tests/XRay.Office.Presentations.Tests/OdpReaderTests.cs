@@ -143,7 +143,7 @@ public class OdpReaderTests
         // Impress recomputes meta:document-statistic on save and writes only an object count,
         // so a deck legitimately records no slide count at all. Counting the slides ourselves
         // and reporting the result as metadata would misrepresent the file: DocumentStatistics
-        // is what the authoring application recorded, not what XRay.Office can derive.
+        // is what the authoring application recorded, not what X-Ray.Office can derive.
         document.Metadata.Statistics!.SlideCount.ShouldBeNull();
         document.Metadata.Statistics!.PageCount.ShouldBeNull();
 

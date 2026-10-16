@@ -8,7 +8,7 @@ using Shouldly;
 namespace XRay.Office.Fidelity.Tests;
 
 /// <summary>
-/// Compares XRay.Office extraction against LibreOffice's own text export.
+/// Compares X-Ray.Office extraction against LibreOffice's own text export.
 /// </summary>
 /// <remarks>
 /// <para>
@@ -20,8 +20,8 @@ namespace XRay.Office.Fidelity.Tests;
 /// </para>
 /// <para>
 /// The assertion is deliberately one-sided: nothing the reference found may be missing from
-/// the XRay.Office extraction, but XRay.Office finding <em>more</em> is expected and correct. The
-/// reference filters drop headers, footers, comments, notes and shape text, and XRay.Office
+/// the X-Ray.Office extraction, but X-Ray.Office finding <em>more</em> is expected and correct. The
+/// reference filters drop headers, footers, comments, notes and shape text, and X-Ray.Office
 /// keeps all five.
 /// </para>
 /// </remarks>
@@ -70,7 +70,7 @@ public class ExtractionComparisonTests : IDisposable
     }
 
     /// <summary>
-    /// Tokens a document's reference output contains that XRay.Office deliberately does not
+    /// Tokens a document's reference output contains that X-Ray.Office deliberately does not
     /// produce, with the reason.
     /// </summary>
     /// <remarks>
@@ -83,7 +83,7 @@ public class ExtractionComparisonTests : IDisposable
         // LibreOffice numbers this document's single footnote 0 rather than 1. It is a
         // LibreOffice import quirk, not a difference of opinion: with the section-level
         // w:footnotePr removed from the same file LibreOffice renders 1, and on a minimal DOCX
-        // carrying one footnote and no footnote properties at all both LibreOffice and XRay.Office
+        // carrying one footnote and no footnote properties at all both LibreOffice and X-Ray.Office
         // render 1. ECMA-376 §17.11.17 puts the default w:numStart at 1, so 1 is what the file
         // says. Copying the quirk is explicitly a non-goal.
         // The same quirk shows in the RTF conversion of the same document, where LibreOffice
@@ -95,7 +95,7 @@ public class ExtractionComparisonTests : IDisposable
 
         // The words of a deleted phrase. LibreOffice's text filter renders the document as a reader
         // sees it, and its default is to show change marks — so text a tracked change removed appears
-        // in the reference. XRay.Office extracts the document as the changes leave it, because deleted
+        // in the reference. X-Ray.Office extracts the document as the changes leave it, because deleted
         // text is still in the file and emitting it puts words into the extraction that the document
         // does not say. All four readers agree on this; TrackedChangeTests pins it.
         "revisions.rtf" or "revisions.doc" or "revisions.docx" or "revisions.odt"
@@ -103,10 +103,10 @@ public class ExtractionComparisonTests : IDisposable
 
         // A page number of zero. The text filter runs without a layout, so it expands PAGE to 0 —
         // measured: its export of this document says "Page 0 of 1" for the DOCX, the ODT and the
-        // RTF, while its *rendering* of all four says "Page 1 of 1". XRay.Office reports the result
+        // RTF, while its *rendering* of all four says "Page 1 of 1". X-Ray.Office reports the result
         // the file caches, which is 1 in three of the four and therefore agrees with the page rather
         // than with the filter. The ODT is the exception and passes here by coincidence: LibreOffice's
-        // ODF export caches 0, so the file, the filter and XRay.Office all say 0 while the page says 1.
+        // ODF export caches 0, so the file, the filter and X-Ray.Office all say 0 while the page says 1.
         // The DOC needs no entry at all — LibreOffice's WW8 import keeps the cached 1.
         "bookmark-field.rtf" or "bookmark-field.docx"
             => new HashSet<string>(StringComparer.Ordinal) { "0" },
@@ -120,7 +120,7 @@ public class ExtractionComparisonTests : IDisposable
         //
         // where 24.2.7.2 emits the single paragraph the file has. The file is checked in and says
         // it once — one `<text:p>After the tables.</text:p>` after the second `<table:table>` — so
-        // this is the reference inventing content, not XRay.Office dropping it, and copying it is
+        // this is the reference inventing content, not X-Ray.Office dropping it, and copying it is
         // explicitly a non-goal. It reproduces through all five conversions of the same content,
         // which is what says it is the export filter and not any one import.
         //
@@ -166,13 +166,13 @@ public class ExtractionComparisonTests : IDisposable
                             .Where(m => !allowed.Contains(m.Token))];
 
         missing.ShouldBeEmpty(
-            "content the reference filter found is absent from the XRay.Office extraction: "
+            "content the reference filter found is absent from the X-Ray.Office extraction: "
             + string.Join(", ", missing.Select(m => $"'{m.Token}' x{m.Missing}")));
 
         // Similarity is well below 1 by design here and the shortfall is accounted for: list
         // indentation, the filter's substituted bullet characters, tables rendered one cell per
         // line rather than as tab-separated rows, and the headers, footers, notes, comments and
-        // shape text the filter drops and XRay.Office keeps.
+        // shape text the filter drops and X-Ray.Office keeps.
         TextComparer.Similarity(reference, actual).ShouldBeGreaterThan(0.85);
     }
 
@@ -208,7 +208,7 @@ public class ExtractionComparisonTests : IDisposable
         RequireLibreOffice();
 
         // The CSV filter covers the first sheet only, and these workbooks have exactly one.
-        // Comparison is per token so that the filter's commas and XRay.Office's tabs agree.
+        // Comparison is per token so that the filter's commas and X-Ray.Office's tabs agree.
         string reference = Reference(name);
         string actual = Extract(name);
 
@@ -225,7 +225,7 @@ public class ExtractionComparisonTests : IDisposable
         string actual = Extract("sheet-features.ods");
 
         // The CSV filter writes a currency cell as its raw number (4.5), while the file's own
-        // cached display text — what Calc actually shows, and what XRay.Office reports — is
+        // cached display text — what Calc actually shows, and what X-Ray.Office reports — is
         // "£4.50". So the formatted cells legitimately differ and only the unformatted content
         // is compared here.
         IReadOnlyList<(string Token, int Missing)> missing =

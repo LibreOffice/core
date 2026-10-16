@@ -15,7 +15,7 @@ namespace XRay.Office.Presentations.Tests;
 /// <remarks>
 /// <para>
 /// <strong>Why this path exists.</strong> A modern Office writes the diagram already laid out
-/// into a <c>diagramDrawing</c> part and XRay.Office reads that — exactly and cheaply. Office 2007
+/// into a <c>diagramDrawing</c> part and X-Ray.Office reads that — exactly and cheaply. Office 2007
 /// wrote none, because the drawing vocabulary's namespace is dated 2008 and the files predate
 /// it, and LibreOffice's own import fixtures have theirs removed by hand so that the evaluator
 /// is what gets tested. Measured over <c>sd/qa/unit/data/pptx</c>: 66 decks carry a diagram and

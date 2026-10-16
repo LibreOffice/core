@@ -10,7 +10,7 @@ using Shouldly;
 namespace XRay.Office.Fidelity.Tests;
 
 /// <summary>
-/// Checks that XRay.Office breaks a paragraph's lines where LibreOffice breaks them.
+/// Checks that X-Ray.Office breaks a paragraph's lines where LibreOffice breaks them.
 /// </summary>
 /// <remarks>
 /// <para>
@@ -23,7 +23,7 @@ namespace XRay.Office.Fidelity.Tests;
 /// <para>
 /// LibreOffice lays the paragraph out into a PDF at a known text width; the words' bounding boxes are
 /// read back out of the PDF and grouped into lines by their vertical position, which gives the words
-/// LibreOffice put on each line. XRay.Office fills the same text at the same width and the two line
+/// LibreOffice put on each line. X-Ray.Office fills the same text at the same width and the two line
 /// divisions are compared.
 /// </para>
 /// <para>
@@ -35,7 +35,7 @@ namespace XRay.Office.Fidelity.Tests;
 /// design units narrower than the two glyphs apart.
 /// </para>
 /// <para>
-/// Where they can still legitimately differ: XRay.Office does not split a run into script sub-runs the
+/// Where they can still legitimately differ: X-Ray.Office does not split a run into script sub-runs the
 /// way LibreOffice does, so a paragraph mixing Latin with a complex script may shape differently;
 /// there is no bidi reordering; and there is no hyphenation, which needs a dictionary. The paragraphs
 /// here are single-script and left-aligned, and the documents switch hyphenation off, so none of the
@@ -101,7 +101,7 @@ public sealed class LineBreakPositionTests : IDisposable
         + "Wavy Tokyo, Yves Tavy, and AVAST Ye. Then Tywyn, Avon Way, Yew Tavern, Toy Wave.")]
     public void KerningTurnedOffOnBothSidesStillAgrees(string paragraph)
     {
-        // The other half of the same claim. Writer's `style:letter-kerning="false"` and XRay.Office's
+        // The other half of the same claim. Writer's `style:letter-kerning="false"` and X-Ray.Office's
         // DisableKerning have to mean the same thing, or a document that switches kerning off would
         // reflow.
         ParagraphsAgree(paragraph, sizePoints: 12, kerning: false);
@@ -148,13 +148,13 @@ public sealed class LineBreakPositionTests : IDisposable
         actual.Count.ShouldBe(
             reference.Count,
             $"line count differs.\n  LibreOffice:\n    {string.Join("\n    ", reference)}"
-            + $"\n  XRay.Office:\n    {string.Join("\n    ", actual)}");
+            + $"\n  X-Ray.Office:\n    {string.Join("\n    ", actual)}");
 
         for (int i = 0; i < reference.Count; i++)
         {
             actual[i].ShouldBe(
                 reference[i],
-                $"line {i + 1} differs.\n  LibreOffice: {reference[i]}\n  XRay.Office:   {actual[i]}");
+                $"line {i + 1} differs.\n  LibreOffice: {reference[i]}\n  X-Ray.Office:   {actual[i]}");
         }
     }
 
@@ -305,7 +305,7 @@ public sealed class LineBreakPositionTests : IDisposable
         return lines;
     }
 
-    /// <summary>The words XRay.Office puts on each line, in the same form.</summary>
+    /// <summary>The words X-Ray.Office puts on each line, in the same form.</summary>
     private static List<string> XRayOfficeLines(
         string paragraph, OpenTypeFace face, double sizePoints, bool kerning)
     {
@@ -334,7 +334,7 @@ public sealed class LineBreakPositionTests : IDisposable
     /// No indents, no hyphenation and no justification. Each would change where a line breaks, and the
     /// point here is to compare the measurement rather than the styling — a justified paragraph breaks
     /// in the same places but at different word spacing, and hyphenation adds break opportunities that
-    /// need a dictionary XRay.Office does not have.
+    /// need a dictionary X-Ray.Office does not have.
     /// </remarks>
     private static string Document(string paragraph, double sizePoints, bool kerning)
     {

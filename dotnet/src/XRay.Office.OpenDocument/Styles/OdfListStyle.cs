@@ -282,7 +282,7 @@ public sealed class OdfListStyle
     /// <param name="format">
     /// The <c>style:num-format</c>. Anything other than the five formats ODF defines falls
     /// back to decimal rather than being dropped — an unrecognised format is far more
-    /// likely to be a native numbering XRay.Office has not implemented than a reason to
+    /// likely to be a native numbering X-Ray.Office has not implemented than a reason to
     /// render no label at all.
     /// </param>
     /// <param name="letterSynchronised">

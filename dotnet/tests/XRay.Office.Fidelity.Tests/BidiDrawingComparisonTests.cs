@@ -19,11 +19,11 @@ namespace XRay.Office.Fidelity.Tests;
 /// </para>
 /// <para>
 /// The comparison is "every one of LibreOffice's pens is one of ours" rather than the converse, and
-/// the asymmetry is the same one the itemisation comparison documents: XRay.Office splits at every
+/// the asymmetry is the same one the itemisation comparison documents: X-Ray.Office splits at every
 /// UAX #24 script boundary and Writer at its own three coarse font classes
 /// (<c>i18nutil/source/utility/scriptclass.cxx</c>), so a space between Latin and Hebrew starts a
 /// sub-run here that Writer keeps inside its Hebrew portion. Ours are therefore finer, and what can
-/// be asserted exactly is that every boundary Writer <em>does</em> draw at is one XRay.Office draws at
+/// be asserted exactly is that every boundary Writer <em>does</em> draw at is one X-Ray.Office draws at
 /// too, at the same pen.
 /// </para>
 /// <para>
@@ -94,7 +94,7 @@ public sealed class BidiDrawingComparisonTests : IDisposable
 
                 pens.Any(pen => Math.Abs(pen - at) <= TolerancePoints).ShouldBeTrue(
                     $"line {line + 1}: LibreOffice starts a portion {at:F2} pt along it, "
-                    + $"where XRay.Office draws runs at {string.Join(", ", pens.Select(p => $"{p:F2}"))}");
+                    + $"where X-Ray.Office draws runs at {string.Join(", ", pens.Select(p => $"{p:F2}"))}");
                 compared++;
             }
         }
@@ -173,10 +173,10 @@ public sealed class BidiDrawingComparisonTests : IDisposable
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, LibreOfficeRunner.UnavailableReason);
 
         // The no-op, against the reference rather than against ourselves: LibreOffice draws the
-        // Latin paragraph as one portion and so must XRay.Office. A run split at a boundary it does
+        // Latin paragraph as one portion and so must X-Ray.Office. A run split at a boundary it does
         // not need loses the shaping context across it and measures very slightly wide.
         ReferenceLines()[0].Count.ShouldBe(1, "LibreOffice draws the Latin line as one portion");
-        DrawnLines()[0].Count.ShouldBe(1, "and so does XRay.Office");
+        DrawnLines()[0].Count.ShouldBe(1, "and so does X-Ray.Office");
     }
 
     /// <summary>The reference PDF's portions, grouped into lines by their baseline.</summary>
@@ -203,7 +203,7 @@ public sealed class BidiDrawingComparisonTests : IDisposable
         return lines;
     }
 
-    /// <summary>The glyph runs XRay.Office draws, grouped into lines by their baseline.</summary>
+    /// <summary>The glyph runs X-Ray.Office draws, grouped into lines by their baseline.</summary>
     /// <remarks>
     /// Through the whole document rather than through a hand-built paragraph, because what is being
     /// compared includes the reader's answer about the paragraph's direction and the page's own
@@ -237,7 +237,7 @@ public sealed class BidiDrawingComparisonTests : IDisposable
         return lines;
     }
 
-    /// <summary>The paragraphs' text, in order, as XRay.Office read it.</summary>
+    /// <summary>The paragraphs' text, in order, as X-Ray.Office read it.</summary>
     private static IEnumerable<string> Texts()
     {
         using IDocument document = Open(Corpus.Require("bidi-drawing.fodt"));

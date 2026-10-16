@@ -149,5 +149,5 @@ public sealed record PdfRenderOptions
     public IPdfFontProvider? FontProvider { get; init; }
 
     /// <summary>What the file names as its producer.</summary>
-    public string Producer { get; init; } = "XRay.Office";
+    public string Producer { get; init; } = "X-Ray.Office";
 }

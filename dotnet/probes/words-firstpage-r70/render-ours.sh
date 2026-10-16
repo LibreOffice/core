@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Render the words track with one XRay.Office CLI into one directory.
+# Render the words track with one X-Ray.Office CLI into one directory.
 #   render-ours.sh <cli> <outdir> <path-list> [workers]
 # `words-ink-r67/render-ours.sh` with its list and root as arguments rather than baked in.
 set -uo pipefail

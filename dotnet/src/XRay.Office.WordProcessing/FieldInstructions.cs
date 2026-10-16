@@ -9,7 +9,7 @@ namespace XRay.Office.WordProcessing;
 /// <remarks>
 /// <para>
 /// A field is a small program: an instruction, and the result the writing application last computed
-/// for it. XRay.Office keeps the result, because that is what a reader saw — but a hyperlink's
+/// for it. X-Ray.Office keeps the result, because that is what a reader saw — but a hyperlink's
 /// <em>target</em> appears only in the instruction, so that one field has to be understood rather
 /// than skipped.
 /// </para>
@@ -133,7 +133,7 @@ public static class FieldInstructions
     /// <para>
     /// A <c>FILENAME</c> carrying <c>\p</c> asks for the full path
     /// (<c>DomainMapper_Impl.cxx</c>:8296, <c>FilenameDisplayFormat::FULL</c>) and is deliberately left
-    /// at its cache: XRay.Office reads streams as readily as files and keeps only the leaf name, so
+    /// at its cache: X-Ray.Office reads streams as readily as files and keeps only the leaf name, so
     /// substituting there would draw a shorter string than the reference rather than a different one.
     /// </para>
     /// </remarks>

@@ -8,7 +8,7 @@ namespace XRay.Office.Core.Documents;
 /// </summary>
 /// <remarks>
 /// <para>
-/// XRay.Office separates <em>reading</em> a document from <em>using</em> it. An
+/// X-Ray.Office separates <em>reading</em> a document from <em>using</em> it. An
 /// <see cref="IDocumentReader"/> turns bytes into an <see cref="IDocument"/>; from
 /// there, callers either extract content (<see cref="Extraction"/>) or lay it out
 /// and render it (<see cref="IPaginatedDocument"/>).
@@ -41,7 +41,7 @@ public interface IDocument : IDisposable
     Extraction.ContentDocument Content { get; }
 
     /// <summary>
-    /// Non-fatal problems encountered while reading. XRay.Office is deliberately
+    /// Non-fatal problems encountered while reading. X-Ray.Office is deliberately
     /// lenient — real-world files violate their own specifications constantly —
     /// so a successful read can still report diagnostics.
     /// </summary>

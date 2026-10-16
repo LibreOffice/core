@@ -12,7 +12,7 @@
       development and the fidelity-comparison skills. PackAsTool stays so that
       `dotnet pack -p:IsPackable=true` still produces a working `xray-office` global tool.
     -->
-    <Description>Command-line front end for XRay.Office. Used by humans and by the LibreOffice fidelity-comparison skills.</Description>
+    <Description>Command-line front end for X-Ray.Office. Used by humans and by the LibreOffice fidelity-comparison skills.</Description>
     <IsPackable>false</IsPackable>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>xray-office</ToolCommandName>
@@ -34,7 +34,7 @@
       The PDF reader behind `analyze`, and the tool's only package dependency.
 
       It is here rather than in a src/ library on purpose. `analyze` reads PDFs, which is the one
-      thing XRay.Office does not do — the libraries write them — so a reader belongs to the tool that
+      thing X-Ray.Office does not do — the libraries write them — so a reader belongs to the tool that
       compares output, not to the shipped surface. Nothing under src/ gains a dependency.
 
       The dependency is not free and is taken deliberately: Program.cs notes that argument parsing

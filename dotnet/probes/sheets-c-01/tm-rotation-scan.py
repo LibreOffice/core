@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 """How much rotated text a PDF holds, counted whichever way the producer expresses it.
 
-LibreOffice turns text with the *text matrix* (`Tm`) and XRay.Office turns it with the *CTM*
+LibreOffice turns text with the *text matrix* (`Tm`) and X-Ray.Office turns it with the *CTM*
 (`cm`), so counting one of them alone reads the other producer as drawing nothing rotated.
 That is exactly the trap this script exists to avoid: a first pass that counted `Tm` only
-scored a correctly-rotated XRay.Office page as zero.
+scored a correctly-rotated X-Ray.Office page as zero.
 """
 import re, sys, zlib, math, collections
 

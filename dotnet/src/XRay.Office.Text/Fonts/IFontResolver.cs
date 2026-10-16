@@ -8,7 +8,7 @@ namespace XRay.Office.Text.Fonts;
 /// </summary>
 /// <remarks>
 /// <para>
-/// This is the single largest source of divergence between XRay.Office output and any
+/// This is the single largest source of divergence between X-Ray.Office output and any
 /// reference renderer, so it is deliberately pluggable and deliberately explicit
 /// about what it did.
 /// </para>

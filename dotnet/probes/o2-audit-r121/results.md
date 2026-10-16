@@ -297,7 +297,7 @@ NOT WORK / nil-reach table (O66, O67). Nothing was deleted; `~~N14~~` gained a c
 |---|---|
 | `banner-geometry.py` | the `#00007E` rectangle on phuket p26 with its paint operator, over any number of renders → `banner-geometry.tsv` |
 | `xls-blip-reach.py` | a BIFF workbook's Escher blip store and every shape's `pib`/`pictureId`/flags → `ticap-blip-reach.txt` |
-| `ticap-blip-merge.py` | decodes one blip's SRCAND + SRCPAINT DIBs, merges them outside XRay.Office, compares against our own image and `/SMask` |
+| `ticap-blip-merge.py` | decodes one blip's SRCAND + SRCPAINT DIBs, merges them outside X-Ray.Office, compares against our own image and `/SMask` |
 | `metafile-base-rate.py` | C9's denominator behind r94's `srcand-census.tsv` → `metafile-base-rate.txt` |
 | `oleobj-census.py` | `p:oleObj` on corpus slides, with the frame and the stated `imgW`/`imgH` → `oleobj-census.tsv` |
 | `ole-transform.py` | the non-unit `cm` a page emits and the origin divergence of every shared text record → `ole-transform.txt` |

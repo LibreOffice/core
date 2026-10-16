@@ -638,7 +638,7 @@ internal sealed class XlsxSheetReader(XlsxFile file, List<Diagnostic> diagnostic
         _reportedTruncation = true;
         _diagnostics.Add(new Diagnostic(
             DiagnosticSeverity.Warning, "PL2145",
-            $"A sheet addresses more {what} than XRay.Office materialises; the excess has been "
+            $"A sheet addresses more {what} than X-Ray.Office materialises; the excess has been "
             + "dropped. This is a guard against a sheet that addresses its full extent rather "
             + "than its content."));
     }

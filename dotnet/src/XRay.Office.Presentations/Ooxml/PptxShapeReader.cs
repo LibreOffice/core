@@ -17,7 +17,7 @@ namespace XRay.Office.Presentations.Ooxml;
 /// </para>
 /// <para>
 /// Groups are descended into and shapes with text bodies are read. LibreOffice's own HTML export
-/// loses both, so a comparison against it shows XRay.Office finding text the reference does not —
+/// loses both, so a comparison against it shows X-Ray.Office finding text the reference does not —
 /// that is the reference being lossy, not this being wrong, and it is the same deliberate
 /// improvement the ODP path already makes.
 /// </para>

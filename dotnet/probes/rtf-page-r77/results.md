@@ -178,7 +178,7 @@ five gained and two lost.
 BoldOblique}.ttf` and `DejaVuSerifCondensed-{,Bold,Italic,BoldItalic}.ttf`. **This system has no
 condensed face at all** (`fc-list | grep -ci condensed` → 0), and `fonts-dejavu-core` carries no
 DejaVu Serif italic, so where a fallback run wants italic DejaVu Serif the tarball answers
-`DejaVuSerifCondensed-Italic` and a stock machine -- and XRay.Office -- synthesise an oblique of
+`DejaVuSerifCondensed-Italic` and a stock machine -- and X-Ray.Office -- synthesise an oblique of
 `DejaVuSerif`, which is about **15% wider**.
 
 Censused with `faces.py` over the four converted columns, counting documents whose *reference*

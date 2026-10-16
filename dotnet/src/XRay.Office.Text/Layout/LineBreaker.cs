@@ -177,7 +177,7 @@ public sealed class LineBreaker : ILineBreaker
     /// </summary>
     /// <remarks>
     /// <c>SA</c> is the interesting case. It marks scripts that need a dictionary to break — Thai,
-    /// Lao, Khmer — and XRay.Office has none, so its letters become AL and its combining marks CM. The
+    /// Lao, Khmer — and X-Ray.Office has none, so its letters become AL and its combining marks CM. The
     /// consequence is honest and worth stating: Thai text gets no intra-word breaks, exactly as any
     /// implementation without a Thai dictionary produces, rather than breaking in the wrong places.
     /// </remarks>

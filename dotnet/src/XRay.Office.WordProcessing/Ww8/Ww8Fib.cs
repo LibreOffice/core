@@ -31,7 +31,7 @@ public sealed class Ww8Fib
     /// </summary>
     /// <remarks>
     /// Word 6 and Word 95 use a different sprm numbering and a different FIB layout, so they are
-    /// rejected rather than misread. LibreOffice supports them; XRay.Office reports them as
+    /// rejected rather than misread. LibreOffice supports them; X-Ray.Office reports them as
     /// unsupported until it does too.
     /// </remarks>
     public const ushort MinimumVersion = 193;
@@ -243,7 +243,7 @@ public sealed class Ww8Fib
 /// <remarks>
 /// Named rather than numbered at the call sites, because the array is positional and an
 /// off-by-one silently reads a different table — which then parses as garbage rather than
-/// failing. Only the tables XRay.Office reads are listed; the array has well over a hundred slots.
+/// failing. Only the tables X-Ray.Office reads are listed; the array has well over a hundred slots.
 /// </remarks>
 public enum Ww8FibTable
 {

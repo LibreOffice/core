@@ -707,7 +707,7 @@ public sealed class Ww8Numbering
         int position = 4 + (count * OverrideSize);
         for (int i = 0; i < count; i++)
         {
-            // Each instance's data begins with a four-byte field XRay.Office does not use, but which
+            // Each instance's data begins with a four-byte field X-Ray.Office does not use, but which
             // still has to be stepped over.
             if (position + 4 > plfLfo.Length) return;
             position += 4;

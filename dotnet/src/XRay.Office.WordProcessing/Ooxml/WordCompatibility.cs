@@ -4,7 +4,7 @@ using System.Xml.Linq;
 namespace XRay.Office.WordProcessing.Ooxml;
 
 /// <summary>
-/// The compatibility options in <c>settings.xml</c>, and which of them XRay.Office acts on.
+/// The compatibility options in <c>settings.xml</c>, and which of them X-Ray.Office acts on.
 /// </summary>
 /// <remarks>
 /// <para>
@@ -63,7 +63,7 @@ namespace XRay.Office.WordProcessing.Ooxml;
 ///     <c>PaginationOptions.KeepsSpacingAtTopOfPage</c>, but LibreOffice does not read either —
 ///     neither appears in <c>SettingsTable::lcl_sprm</c> — and measured on a twenty-paragraph
 ///     document with 20 pt of space-before, adding either changes nothing at all. Wiring them
-///     would move XRay.Office away from the only reference there is.
+///     would move X-Ray.Office away from the only reference there is.
 ///     </description>
 ///   </item>
 ///   <item>

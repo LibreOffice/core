@@ -34,7 +34,7 @@ public class SlideTablePlacementTests
     /// </summary>
     /// <remarks>
     /// A grown row is the one measurement here that depends on a <em>line height</em> rather than
-    /// on the file's own numbers, and XRay.Office's is 0.028 pt per line short of LibreOffice's —
+    /// on the file's own numbers, and X-Ray.Office's is 0.028 pt per line short of LibreOffice's —
     /// the rounding described in <c>SlideTextLayout.Rounded</c>. Two lines of it puts the bottom
     /// of that table 0.04 pt out.
     /// </remarks>

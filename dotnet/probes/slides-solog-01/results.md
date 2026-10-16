@@ -79,7 +79,7 @@ whole token to a new line and break it there. On page 8 the reference leaves
 fidelity difference — recorded in §6 as an open finding — but it moves no words, it only moves
 where `pdftotext` decides one token ends.
 
-**Consequence for the scoreboard.** No change to XRay.Office can manufacture those 15 tokens: they
+**Consequence for the scoreboard.** No change to X-Ray.Office can manufacture those 15 tokens: they
 exist because the reference's PDF says something ours does not need to say. The row belongs with
 `TODO.raster-ceiling.md`'s 37 as a documented ceiling rather than as a failure. Re-running the
 gate after both fixes confirms it: `15/15 pages, 670/685 words, verdict words`, unchanged.

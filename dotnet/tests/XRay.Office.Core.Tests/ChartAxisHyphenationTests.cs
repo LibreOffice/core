@@ -147,7 +147,7 @@ public class ChartAxisHyphenationTests
 
         Assert.SkipUnless(
             File.Exists(French),
-            $"no French Hunspell dictionary at {French}; it is not shipped with XRay.Office");
+            $"no French Hunspell dictionary at {French}; it is not shipped with X-Ray.Office");
 
         HyphenationPatterns patterns =
             HyphenationPatterns.ReadFile(French)

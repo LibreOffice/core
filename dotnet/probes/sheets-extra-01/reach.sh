@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Reach of the ST_Xstring fix: which of the corpus's 534 documents XRay.Office renders differently
+# Reach of the ST_Xstring fix: which of the corpus's 534 documents X-Ray.Office renders differently
 # after it.
 #
 #   reach.sh <before-cli> <after-cli> <outdir> [workers]

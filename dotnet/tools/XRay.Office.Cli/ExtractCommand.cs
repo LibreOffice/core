@@ -13,7 +13,7 @@ namespace XRay.Office.Cli;
 /// The <c>extract</c> and <c>metadata</c> subcommands.
 /// </summary>
 /// <remarks>
-/// These are the XRay.Office side of the <c>extraction-comparison</c> skill, so the output
+/// These are the X-Ray.Office side of the <c>extraction-comparison</c> skill, so the output
 /// layout is part of its contract: with <c>--outdir</c>, each input produces
 /// <c>&lt;stem&gt;.txt</c> in that directory, which is what the skill's
 /// <c>compare-text.py</c> is pointed at. The other formats extend that rather than changing
@@ -286,7 +286,7 @@ internal static class ExtractCommand
               text      Paragraph text in document order; the structure thrown away
               json      A structural summary: sections, headings, counts
               xhtml     Semantic XHTML — headings, lists, tables with colspan/rowspan,
-                        em/strong, links, and the flows only XRay.Office extracts
+                        em/strong, links, and the flows only X-Ray.Office extracts
               markdown  GitHub-Flavored Markdown, transformed from that XHTML. Tables
                         with spans or nesting fall back to an HTML table, which GFM
                         has no syntax for

@@ -9,7 +9,7 @@ namespace XRay.Office.Presentations;
 
 /// <summary>
 /// Reads presentations: PPTX and its variants, legacy PPT, and ODP.
-/// The XRay.Office counterpart of LibreOffice Impress.
+/// The X-Ray.Office counterpart of LibreOffice Impress.
 /// </summary>
 /// <remarks>
 /// <para>

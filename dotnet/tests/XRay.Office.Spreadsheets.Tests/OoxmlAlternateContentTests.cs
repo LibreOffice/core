@@ -5,7 +5,7 @@ using Shouldly;
 namespace XRay.Office.Spreadsheets.Tests;
 
 /// <summary>
-/// Which branch of an <c>mc:AlternateContent</c> XRay.Office takes, and why the extended-chart
+/// Which branch of an <c>mc:AlternateContent</c> X-Ray.Office takes, and why the extended-chart
 /// case is the one exception to "a choice we cannot read loses to the fallback".
 /// </summary>
 /// <remarks>

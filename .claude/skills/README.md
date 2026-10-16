@@ -1,12 +1,12 @@
-# Skills for developing XRay.Office
+# Skills for developing X-Ray.Office
 
-Six skills covering development of the [XRay.Office](../../dotnet/) C# libraries against
+Six skills covering development of the [X-Ray.Office](../../dotnet/) C# libraries against
 headless LibreOffice as the reference implementation.
 
 | Skill | Use it when |
 |---|---|
 | [`libreoffice-reference`](libreoffice-reference/) | You need ground truth: reference PDFs, per-page PNGs, or reference text from a document. Also when `soffice --convert-to` misbehaves. |
-| [`render-comparison`](render-comparison/) | Comparing an XRay.Office rendering against the reference, and working out *why* it differs. |
+| [`render-comparison`](render-comparison/) | Comparing an X-Ray.Office rendering against the reference, and working out *why* it differs. |
 | [`page-vision`](page-vision/) | Actually *looking* at a page: getting it in front of a reader at a resolution where the defect survives, delegating the reading to an uncontaminated reviewer, and knowing what a visual reading can and cannot establish. |
 | [`extraction-comparison`](extraction-comparison/) | Comparing extracted text. Also the right first step for a visual bug — parsing bugs are far cheaper to find in text than in pixels. |
 | [`office-corpus`](office-corpus/) | Building or curating test documents. |
@@ -26,7 +26,7 @@ most time:
   `Error: source file could not be loaded`.
 - **Wrong font substitution.** If Calibri resolves to DejaVu Sans rather than Carlito,
   advance widths change, so line breaks change, so pagination changes — and every page after
-  the first differs for a reason that has nothing to do with XRay.Office.
+  the first differs for a reason that has nothing to do with X-Ray.Office.
 
 ## Scripts
 

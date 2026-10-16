@@ -1,11 +1,11 @@
 ---
 name: office-corpus
-description: Build and manage the XRay.Office test corpus of office documents. Use when you need test files in specific formats (docx/doc/xlsx/xls/pptx/ppt/odt/ods/odp and variants), when adding a regression case for a bug, when a fidelity test needs a document exercising a particular feature, or when deciding whether a document belongs in the repository.
+description: Build and manage the X-Ray.Office test corpus of office documents. Use when you need test files in specific formats (docx/doc/xlsx/xls/pptx/ppt/odt/ods/odp and variants), when adding a regression case for a bug, when a fidelity test needs a document exercising a particular feature, or when deciding whether a document belongs in the repository.
 ---
 
-# Building the XRay.Office test corpus
+# Building the X-Ray.Office test corpus
 
-XRay.Office must read every format LibreOffice's Writer, Calc and Impress do, so testing
+X-Ray.Office must read every format LibreOffice's Writer, Calc and Impress do, so testing
 needs documents in all of them. This skill covers producing them, organising them, and
 knowing what not to commit.
 

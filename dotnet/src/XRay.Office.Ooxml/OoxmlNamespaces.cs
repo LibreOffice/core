@@ -152,7 +152,7 @@ public static class OoxmlNamespaces
         };
 
     /// <summary>
-    /// The extension namespaces XRay.Office understands well enough to prefer an
+    /// The extension namespaces X-Ray.Office understands well enough to prefer an
     /// <c>mc:Choice</c> that requires them over the <c>mc:Fallback</c> beside it.
     /// </summary>
     /// <remarks>

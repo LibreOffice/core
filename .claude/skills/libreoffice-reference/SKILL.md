@@ -1,11 +1,11 @@
 ---
 name: libreoffice-reference
-description: Produce reference renderings and text extractions from documents using headless LibreOffice (soffice). Use whenever you need ground-truth output for a .docx/.doc/.xlsx/.xls/.pptx/.ppt/.odt/.ods/.odp file — reference PDFs, per-page PNG images, or reference text — or when an XRay.Office output needs something to be compared against. Also use when a soffice --convert-to invocation misbehaves (missing output, wrong page count, blank pages, silently overwritten files).
+description: Produce reference renderings and text extractions from documents using headless LibreOffice (soffice). Use whenever you need ground-truth output for a .docx/.doc/.xlsx/.xls/.pptx/.ppt/.odt/.ods/.odp file — reference PDFs, per-page PNG images, or reference text — or when an X-Ray.Office output needs something to be compared against. Also use when a soffice --convert-to invocation misbehaves (missing output, wrong page count, blank pages, silently overwritten files).
 ---
 
 # Producing reference output with headless LibreOffice
 
-LibreOffice is the oracle for XRay.Office. This skill covers driving an **installed**
+LibreOffice is the oracle for X-Ray.Office. This skill covers driving an **installed**
 `soffice` binary in headless mode to generate ground truth.
 
 **Do not build LibreOffice from this repository's C++ sources.** A full build takes hours
@@ -40,7 +40,7 @@ It checks four things, in order of how badly each will mislead you:
    differences. Office documents ask for Calibri, Cambria, Arial and Times New Roman.
    If those resolve to DejaVu faces, advance widths change, so line breaks change, so
    pagination changes, and *every page after the first diverges* — which looks exactly
-   like an XRay.Office layout bug but is not one.
+   like an X-Ray.Office layout bug but is not one.
 
    ```bash
    apt-get install -y --no-install-recommends \
@@ -222,7 +222,7 @@ output file exists and fails if it does not.
 ## What is *not* worth chasing
 
 LibreOffice is the reference, but it is not correct by definition. It has its own import
-bugs, and in a handful of areas XRay.Office may legitimately differ. Before treating a
-difference as an XRay.Office defect, sanity-check the reference PDF: if LibreOffice itself
+bugs, and in a handful of areas X-Ray.Office may legitimately differ. Before treating a
+difference as an X-Ray.Office defect, sanity-check the reference PDF: if LibreOffice itself
 rendered the document wrongly, matching it exactly is not the goal. Record such cases as
 known deviations rather than bugs.

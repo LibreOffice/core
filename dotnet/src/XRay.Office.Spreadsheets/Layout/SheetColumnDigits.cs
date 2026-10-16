@@ -111,7 +111,7 @@ public readonly record struct SheetDigitRun(
 /// fonts. LibreOffice does resolve early — <c>UnitConverter::finalizeImport</c>
 /// (<c>sc/source/filter/oox/unitconverter.cxx:113</c>) asks the document's reference device for
 /// the widest of <c>'0'</c>–<c>'9'</c> and every column width is a length from then on — but it
-/// has a document with a device attached and XRay.Office has a reader with a stream. So the readers
+/// has a document with a device attached and X-Ray.Office has a reader with a stream. So the readers
 /// carry the digits and the font's name, both free, and <see cref="SheetLayout.Grid"/> resolves
 /// them the first time anything asks for the geometry.
 /// </para>

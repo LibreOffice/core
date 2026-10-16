@@ -126,7 +126,7 @@ public sealed class FrameFontworkTests
     }
 
     /// <summary>
-    /// A warp XRay.Office cannot draw still takes the text out of the flow.
+    /// A warp X-Ray.Office cannot draw still takes the text out of the flow.
     /// </summary>
     /// <remarks>
     /// The reference has already emptied the frame by the time it decides what the curves look

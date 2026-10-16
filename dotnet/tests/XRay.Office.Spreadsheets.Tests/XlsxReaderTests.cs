@@ -67,7 +67,7 @@ public class XlsxReaderTests
         using IDocument document = Open("sheet-ooxml-features.xlsx");
         ContentSection hidden = Sheet(document, "Hidden");
 
-        // LibreOffice's own CSV and PDF exports drop a hidden sheet entirely. XRay.Office keeps
+        // LibreOffice's own CSV and PDF exports drop a hidden sheet entirely. X-Ray.Office keeps
         // it and flags it, because a caller indexing content wants it and a caller reproducing
         // what a reader sees can check the flag.
         hidden.IsHidden.ShouldBeTrue();

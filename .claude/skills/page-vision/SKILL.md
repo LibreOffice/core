@@ -227,7 +227,7 @@ separate images answer badly.
   arrangement for portrait pages, and stacking is higher for 16:9 slides. `--layout auto`
   computes this. Note this cuts against the older advice to always stack — stacking is right
   when you need the same region to land under itself, and it costs resolution to get that.
-- **It labels the halves inside the image** — blue band "OURS (PAPERLESS)" on the left/top,
+- **It labels the halves inside the image** — blue band "OURS (X-RAY.OFFICE)" on the left/top,
   orange "REFERENCE (LIBREOFFICE)" on the right/bottom. A reviewer told which side is which
   only in the prompt will occasionally report them the wrong way round, and a swapped reading
   inverts the sign of every conclusion in it. The label travels with the pixels.

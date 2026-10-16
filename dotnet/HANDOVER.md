@@ -1,4 +1,4 @@
-# XRay.Office — parity work handover
+# X-Ray.Office — parity work handover
 
 Hand this whole file to the new session as its opening prompt. It is written to be read once,
 top to bottom, before anything is run.
@@ -7,7 +7,7 @@ top to bottom, before anything is run.
 
 ## 1. What the project is
 
-**XRay.Office** is a pure C#/.NET library set for content extraction and headless rendering of
+**X-Ray.Office** is a pure C#/.NET library set for content extraction and headless rendering of
 office documents. It lives in `dotnet/` inside a LibreOffice checkout at
 `/c/sandbox/workdir/libreoffice-core`.
 
@@ -46,7 +46,7 @@ for raster, HarfBuzzSharp for shaping, a hand-rolled OpenType reader in `XRay.Of
 
 ## 2. The standing goal
 
-> Implement and validate the XRay.Office library by testing against each of the respective batches
+> Implement and validate the X-Ray.Office library by testing against each of the respective batches
 > of test files, batch by batch. When done with a batch always retest the previous batch to
 > validate no regressions. Use agents to parallelise the work according to the strategy for
 > parallel work. Each agent should focus on a library (word, slides, sheets) and could also focus

@@ -11,7 +11,7 @@ namespace XRay.Office.WordProcessing.Tests;
 /// </summary>
 /// <remarks>
 /// The corpus document embeds three at once — a DOCX, an RTF and an HTML fragment — because the
-/// interesting behaviour is the mixture. Two of the three are formats XRay.Office reads and are
+/// interesting behaviour is the mixture. Two of the three are formats X-Ray.Office reads and are
 /// spliced into the host at the position of their placeholder; the third is not, and has to stay
 /// a diagnostic rather than becoming silence.
 /// </remarks>
@@ -46,7 +46,7 @@ public class AltChunkTests
     }
 
     /// <summary>
-    /// A chunk in a format XRay.Office does not read stays a diagnostic.
+    /// A chunk in a format X-Ray.Office does not read stays a diagnostic.
     /// </summary>
     /// <remarks>
     /// HTML and plain text are the two content types <c>w:altChunk</c> was invented for and

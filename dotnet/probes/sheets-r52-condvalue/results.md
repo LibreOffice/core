@@ -230,7 +230,7 @@ census row above is why that test exists.
 Round 51 left the hypothesis *a legend whose series carry no `c:tx` loses its entries, and a legend
 with no entries draws nothing*. Tested by authoring two copies of `057_Simple_balance_sheet`
 differing in **one thing** — a `<c:tx><c:v>…</c:v></c:tx>` on each of its two series — and
-rendering both through `soffice` and through XRay.Office:
+rendering both through `soffice` and through X-Ray.Office:
 
 | variant | reference legend | our legend |
 |---|---|---|

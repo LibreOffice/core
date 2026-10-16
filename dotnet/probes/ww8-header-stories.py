@@ -3,7 +3,7 @@
 and the grpfIhdt LibreOffice would synthesise from them.
 
 Reads only the FIB, PlcfSed (section count), PlcfHdd (story CPs) and the piece table out
-of the OLE2 streams, so it is independent of XRay.Office entirely.
+of the OLE2 streams, so it is independent of X-Ray.Office entirely.
 
 Story order within a section, which is also bit order in grpfIhdt (1 << k):
     0 header even, 1 header odd, 2 footer even, 3 footer odd, 4 header first, 5 footer first

@@ -11,7 +11,7 @@ namespace XRay.Office.WordProcessing;
 
 /// <summary>
 /// Reads word-processing documents: DOCX and its variants, legacy DOC, RTF, and ODT.
-/// The XRay.Office counterpart of LibreOffice Writer.
+/// The X-Ray.Office counterpart of LibreOffice Writer.
 /// </summary>
 /// <remarks>
 /// <para>

@@ -4,7 +4,7 @@ Reference binary: `/opt/libreoffice26.2/program/soffice` → **LibreOffice 26.2.
 `0229ac93fcf0d7cbc6376066c6f35021cef002dc`. (`/usr/bin/soffice` is 24.2.7.2 and is not the
 target.) The C++ tree read here is `/home/user/libreoffice-core` at **27.2.0.0.alpha0+**, which
 is *not* that binary's source. **[src]** marks a reading of the C++ tree, **[c#]** a reading of
-XRay.Office's own source, and **[bin]** a measurement against 26.2.4.2's own output.
+X-Ray.Office's own source, and **[bin]** a measurement against 26.2.4.2's own output.
 
 This round ran no build, no test and no `xray-office render`; it is a measurement and reading
 round only. Everything marked **[bin]** is read out of PDFs already on disk — round 146's

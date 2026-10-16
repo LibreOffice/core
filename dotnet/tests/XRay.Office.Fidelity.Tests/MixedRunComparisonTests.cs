@@ -105,7 +105,7 @@ public sealed class MixedRunComparisonTests : IDisposable
             List<PdfTextRun> expected = expectedLines[line];
             List<DrawnGlyphRun> actual = actualLines[line];
 
-            // A line's trailing space is drawn by LibreOffice and not by XRay.Office — it has no ink and it
+            // A line's trailing space is drawn by LibreOffice and not by X-Ray.Office — it has no ink and it
             // hangs past the margin — and LibreOffice puts it either at the end of the last run or, when
             // the space belongs to a different run from the text before it, in a run of its own. So the
             // reference may carry runs this does not, but only at the end of a line and only whitespace.
@@ -129,7 +129,7 @@ public sealed class MixedRunComparisonTests : IDisposable
 
     /// <summary>Compares one drawn run against the reference's.</summary>
     /// <param name="expected">The run as LibreOffice's PDF positions it.</param>
-    /// <param name="actual">The run as XRay.Office drew it.</param>
+    /// <param name="actual">The run as X-Ray.Office drew it.</param>
     /// <param name="where">How to name this run in a failure.</param>
     /// <param name="endsLine">
     /// True for the last run on its line, where the reference may show one glyph more: the trailing space.
@@ -217,7 +217,7 @@ public sealed class MixedRunComparisonTests : IDisposable
         // test quietly asserting nothing: the tall line really is spaced differently from a plain one.
         before.ShouldBeGreaterThan(16.0, $"{fileName}: the tall line is not actually taller");
 
-        // And XRay.Office puts the same two gaps in the same places, which the run-by-run comparison already
+        // And X-Ray.Office puts the same two gaps in the same places, which the run-by-run comparison already
         // proves for every line — this states the specific consequence so a regression names itself.
         RecordingDrawingSink sink = Record(path);
         List<double> drawn = [.. sink.Pages

@@ -35,7 +35,7 @@ public static class OlePropertySetReader
     public const string DocumentSummaryInformationStreamName = "\u0005DocumentSummaryInformation";
 
     /// <summary>
-    /// The largest property-set stream XRay.Office will read.
+    /// The largest property-set stream X-Ray.Office will read.
     /// </summary>
     /// <remarks>
     /// Metadata is small by nature, and every property in a set is addressed by an offset the file
@@ -192,7 +192,7 @@ public static class OlePropertySetReader
         /// <summary>The document's keywords, as one string.</summary>
         public const int Keywords = 5;
 
-        /// <summary>The document's comments, which XRay.Office maps to its description.</summary>
+        /// <summary>The document's comments, which X-Ray.Office maps to its description.</summary>
         public const int Comments = 6;
 
         /// <summary>The template the document was created from.</summary>
@@ -284,7 +284,7 @@ public static class OlePropertySetReader
             for (int i = 0; i < sections; i++)
             {
                 // Each entry is a 16-byte FMTID followed by the section's offset. The FMTID says
-                // which property set the section belongs to, which XRay.Office does not need to
+                // which property set the section belongs to, which X-Ray.Office does not need to
                 // check: the stream it came from already says that.
                 int offset = BinaryPrimitives.ReadInt32LittleEndian(span[(28 + (20 * i) + 16)..]);
                 if (offset < 0 || offset >= span.Length) continue;
@@ -545,7 +545,7 @@ public static class OlePropertySetReader
         }
     }
 
-    /// <summary>The <c>[MS-OLEPS]</c> variant type tags XRay.Office decodes.</summary>
+    /// <summary>The <c>[MS-OLEPS]</c> variant type tags X-Ray.Office decodes.</summary>
     private static class VariantType
     {
         /// <summary>A signed 16-bit integer.</summary>

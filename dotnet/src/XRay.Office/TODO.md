@@ -1,4 +1,4 @@
-# XRay.Office (facade) — TODO
+# X-Ray.Office (facade) — TODO
 
 The one-line entry point: sniff a file and dispatch to the right reader.
 

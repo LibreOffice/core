@@ -36,8 +36,8 @@ a *structured* `number:number-style` instead, so nothing in `Numbers/` applies t
 Measured against LibreOffice 24.2.7.2's own all-sheets CSV export of
 `features/sheet-ooxml-features.xlsx` (tab-delimited, sheet index `-1`): token similarity
 0.98, and the **only** difference across four sheets is the cell comment, which that filter
-drops and XRay.Office deliberately keeps. Every displayed value was also checked against the
-text layer of the reference PDF. LibreOffice omits the hidden sheet from both, and XRay.Office
+drops and X-Ray.Office deliberately keeps. Every displayed value was also checked against the
+text layer of the reference PDF. LibreOffice omits the hidden sheet from both, and X-Ray.Office
 extracts it flagged — the second deliberate difference.
 
 Traps that cost time, recorded so they are not rediscovered:
@@ -80,7 +80,7 @@ Not yet, and why:
   workbook's locale and neither reader can, so a German workbook using bare id 14 extracts as
   `M/D/YYYY` from an XLSX and `DD/MM/YYYY` from an XLS rather than `DD.MM.YYYY` from either.
   It only bites files that use a built-in id *without* declaring the code, which LibreOffice
-  never writes and Excel does constantly. Fixing it needs locale infrastructure XRay.Office does
+  never writes and Excel does constantly. Fixing it needs locale infrastructure X-Ray.Office does
   not have — and only then would the two tables be worth merging.
 - **`General` is fifteen significant digits, not column-width dependent.** Calc's `General`
   picks between fixed and scientific by how many characters fit in the column
@@ -1358,7 +1358,7 @@ faces is satisfied by truncating unless the fraction carries past a threshold in
 Carlito 12 pt is 121.64 → 121 and DejaVu Sans 12 pt is 152.70 → 153 — and a threshold fitted to
 nine points, two of which are the only ones that discriminate, is a fudge until a corpus says
 otherwise. So the corpus was asked, and cheaply: **the reference side does not move for a
-XRay.Office-only change**, so rendering our side alone over all 171 and joining the reference column
+X-Ray.Office-only change**, so rendering our side alone over all 171 and joining the reference column
 of an existing sweep answers it in one pass. The harness was validated first by reproducing that
 sweep's 135/114/144 with zero rows differing.
 
@@ -2275,7 +2275,7 @@ length rather than a count). The readers build that and the default font's *name
 the geometry. Nothing on the extraction path asks, so `xray-office extract` still pays for no font,
 which is the rule in `dotnet/CLAUDE.md` that made this look bigger than it is. LibreOffice resolves
 early instead (`UnitConverter::finalizeImport`, `sc/source/filter/oox/unitconverter.cxx:113`) because
-it has a document with a reference device attached where XRay.Office has a reader with a stream.
+it has a document with a reference device attached where X-Ray.Office has a reader with a stream.
 The grid is still materialised eagerly at the 111 fallback, so a caller that never resolves gets
 exactly what it got before.
 
@@ -2692,7 +2692,7 @@ CSV export, for the reason recorded further down:
 - `features/sheet-ooxml-features.xlsx` still matches the reference PDF's text layer on every
   displayed value across all four sheets — `£4.50`, `£85.50`, `63.5%`, `#DIV/0!`, `1.23E+04`,
   `72.5 kg`, `-1,234.50`, `2 1/4`, `30 July 2026` — plus the hidden sheet and the comment,
-  which LibreOffice's export drops and XRay.Office deliberately keeps.
+  which LibreOffice's export drops and X-Ray.Office deliberately keeps.
 - `features/xls-features.xls` likewise, with the same two documented exceptions: the boolean,
   and the `###` LibreOffice draws for a timestamp too wide for its column.
 
@@ -3250,7 +3250,7 @@ each to none, with no page count and no word count moving.
 **Deliberate deviations, all narrow.**
 
 - **A rotated cell is drawn but not compared.** Calc turns the text about the cell's bottom-left
-  corner and writes it with a PDF text matrix; XRay.Office writes a transform around an ordinary pen,
+  corner and writes it with a PDF text matrix; X-Ray.Office writes a transform around an ordinary pen,
   which `PdfTextRuns` cannot read. So the corpus document keeps its turned cells on a second sheet
   and the reading of the angle is asserted without rendering. Stacked text (Excel's rotation 255,
   ODF's `style:direction="ttb"`) draws one character per line, centred.
@@ -3281,14 +3281,14 @@ Not yet, and why:
   off (`SetClipMarks`, `output2.cxx:3371`) and reserves room for it in the clip rectangle. It is a
   screen decoration that its PDF export does not emit, so reproducing it would be a difference.
 
-Two measured differences that are **LibreOffice reading the file**, not XRay.Office drawing it, and
+Two measured differences that are **LibreOffice reading the file**, not X-Ray.Office drawing it, and
 both are recorded here because they look like rendering bugs:
 
 - **LibreOffice's own BIFF import gives a workbook a different geometry from its ODF and
   SpreadsheetML forms.** Converting `sheet-cell-text.fods` to all three and rendering each with
   `soffice`: the ODS and XLSX put the first column's text at 57.685 pt and the XLS at 58.677 pt — a
   page margin 21 twips further right — and the XLS's first four columns span 230.17 pt against
-  230.40. XRay.Office agrees with the ODS and XLSX in both. It has a knock-on worth naming: a
+  230.40. X-Ray.Office agrees with the ODS and XLSX in both. It has a knock-on worth naming: a
   shrink-to-fit scale is an integer percentage of the available width, so LibreOffice shrinks the
   XLS's cell to 85% where it shrinks the other two to 87%, and clips one character more. Page
   counts are unaffected, which is why `SheetPaginationComparisonTests` never saw it.

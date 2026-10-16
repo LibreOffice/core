@@ -1,4 +1,4 @@
-# XRay.Office — master plan
+# X-Ray.Office — master plan
 
 Status: **Phases 0-2 complete; Phase 2.5 complete; Phase 3 well advanced.** Every format in
 scope for extraction reads — `odt ott fodt docx docm dotx dotm doc dot rtf`,
@@ -258,7 +258,7 @@ The part that decides whether rendering can ever match.
 - [ ] Vertical text.
 - [x] Paragraph layout: alignment, justification, tabs, indents, spacing, line spacing.
 
-**Exit criterion — met for word processing.** For a text-heavy document XRay.Office breaks lines
+**Exit criterion — met for word processing.** For a text-heavy document X-Ray.Office breaks lines
 where LibreOffice breaks them, in all four formats, which is what made every page-level
 comparison after it meaningful. It was worth as much as expected: nearly every bug found since
 was found because a page comparison put a word a measurable distance from where it belonged.
@@ -288,10 +288,10 @@ not in one of the three family libraries, because it serves all three and the la
 sideways dependency that would need.
 
 - [x] Stage one: a **semantic** XHTML writer serving all three families through the one tree.
-      LibreOffice's own export was used as an oracle and never as a target — XRay.Office emits `h1`–`h6`,
+      LibreOffice's own export was used as an oracle and never as a target — X-Ray.Office emits `h1`–`h6`,
       `ul`/`ol`/`li`, `table`/`thead`/`tr`/`th`/`td` with `colspan`/`rowspan`, `em`/`strong`/`s`/`u`/
       `sup`/`sub`/`code`, `a[href]`, `blockquote`, `img`, and `section`/`aside`/`header`/`footer` for
-      the flows only XRay.Office extracts. XRay.Office-specific meaning rides on `class` and `data-`
+      the flows only X-Ray.Office extracts. X-Ray.Office-specific meaning rides on `class` and `data-`
       attributes rather than on invented elements, so the result stays ordinary XHTML.
 - [x] Stage two: **XHTML → Markdown**, a pure transformation. `MarkdownWriter.FromXhtml` takes no
       `MarkupOptions` at all, deliberately: every option is consumed while walking the content tree, so
@@ -324,7 +324,7 @@ sideways dependency that would need.
 **How it was verified, and what the reference turned out to be worth.** The premise held: LibreOffice
 has no Markdown export filter but does export XHTML for all three families, and being well-formed XML
 it is parsed rather than scraped. **Measured across eleven word-processing documents — ODT, FODT,
-DOCX, DOC and RTF — XRay.Office and LibreOffice agree exactly on every heading's level, every list
+DOCX, DOC and RTF — X-Ray.Office and LibreOffice agree exactly on every heading's level, every list
 item's nesting depth, every table cell's row, column, `colspan` and `rowspan`, and every external
 hyperlink target.**
 
@@ -369,8 +369,8 @@ land: fill in an image's `src` once raster decode gives it a target, and add `sh
 `sheet-csv.csv` to the round-trip corpus once those readers exist — they are deliberately absent rather
 than skipped, because a skip would go on reporting itself long after it stopped being true.
 
-**Non-goal: reading Markdown.** XRay.Office reads office formats; Markdown is an output projection, and
-adding it as an input format would be scope XRay.Office has said no to.
+**Non-goal: reading Markdown.** X-Ray.Office reads office formats; Markdown is an output projection, and
+adding it as an input format would be scope X-Ray.Office has said no to.
 
 ## Phase 3 — Rendering
 
@@ -1149,7 +1149,7 @@ exactly, and it is the reason an ODF chart needs no layout heuristic at all.
       own six chart documents — the only oracle that can see a chart at all, since the Writer text
       filter, the Calc CSV filter and `impress_html_Export` all drop one entirely — where every
       word the reference draws as content is also extracted, in all six. The differences both ways
-      are accounted for by name and there are exactly two kinds. XRay.Office reports the eight cached
+      are accounted for by name and there are exactly two kinds. X-Ray.Office reports the eight cached
       values the reference does not, because the chart has no `c:dLbls` and LibreOffice draws them
       as bar *lengths*; the reference draws the value axis' ticks (`0 20 … 180` for the ODF pair,
       `0 50 … 200` for the round-tripped PPTX) which are in no file and which only an axis-scale
@@ -1411,7 +1411,7 @@ arrive as blip *fills* on ordinary shapes.
       fragments imported into it, one `createXShapes` over the pair
       (`presentationfragmenthandler.cxx:246-296`) — so a logo on either is drawn under every slide
       using that layout. Rare and not negligible: 6 of the 389 decks in `sd/qa/unit/data/pptx`
-      carry such a shape with text and XRay.Office lost the text on all of them.
+      carry such a shape with text and X-Ray.Office lost the text on all of them.
       **`showMasterSp` looked like the discriminator and is not.** None of the six states it. The
       file that made it look like a visibility question, `slide-sections.pptx`, parks its master's
       three text boxes off the page — y = 6 959 601 on a 6 858 000 slide, x = −2 250 002,
@@ -1461,7 +1461,7 @@ in either `content.xml`. So the ODF path already draws diagrams, as shapes, and 
 
 Recorded rather than reproduced. Where LibreOffice renders a document wrongly, copying the
 defect is explicitly a non-goal; each entry here is a place the comparison harness allows a
-difference on purpose, with the evidence that XRay.Office is the one following the format.
+difference on purpose, with the evidence that X-Ray.Office is the one following the format.
 
 Per-library lists, each with its measurements: layout's in
 `src/XRay.Office.WordProcessing/TODO.md` (the two twips LibreOffice's PDF export adds to every
@@ -1472,7 +1472,7 @@ at the end of a wrapped line not drawn).
 
 **Footnote numbering with a section-level `w:footnotePr`.** In
 `tests/corpus/features/word-features.docx`, LibreOffice 24.2.7.2 numbers the single footnote 0;
-XRay.Office numbers it 1. ECMA-376 §17.11.17 puts the default `w:numStart` at 1, and the quirk is
+X-Ray.Office numbers it 1. ECMA-376 §17.11.17 puts the default `w:numStart` at 1, and the quirk is
 LibreOffice's: removing the section-level `w:footnotePr` from the same file makes LibreOffice
 render 1, and on a minimal DOCX with one footnote and no footnote properties at all the two
 agree on 1. Allowed by name in `ExtractionComparisonTests.KnownDeviations`.

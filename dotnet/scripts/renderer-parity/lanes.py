@@ -121,7 +121,7 @@ def main():
             lines += [
               f"### #{c['rank']:03d} · {c['name']}",
               f"- corpus path: `{c['dir']}/{c['name']}`",
-              f"- rendered pair (LibreOffice left, XRay.Office right): "
+              f"- rendered pair (LibreOffice left, X-Ray.Office right): "
               f"`/data/bench/pairs-view/{c['rank']:03d}.jpg`",
               f"- reference PDF `/data/bench/lo/{c['id']}/out.pdf` · "
               f"ours `/data/bench/pl/{c['id']}/out.pdf`" if "id" in c else "",

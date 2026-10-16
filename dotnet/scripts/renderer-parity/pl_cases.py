@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Every document where XRay.Office does not match the LibreOffice reference.
+"""Every document where X-Ray.Office does not match the LibreOffice reference.
 
 Writes two things per document: a high-resolution JPEG for reading (the defect has
 to survive to be diagnosed) and a compact WebP for embedding in the report. The

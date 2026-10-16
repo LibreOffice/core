@@ -35,7 +35,7 @@ internal sealed partial class PptxSlideLayout
     /// <para>
     /// The picture is normally inside an <c>mc:Fallback</c>, because the <c>mc:Choice</c> beside
     /// it needs VML to place the object and states its position as a <c>@spid</c> into the
-    /// slide's VML drawing instead of carrying a picture at all. XRay.Office does not read VML in
+    /// slide's VML drawing instead of carrying a picture at all. X-Ray.Office does not read VML in
     /// a deck, so <see cref="OoxmlXml"/> has already chosen the fallback by the time this runs —
     /// which is exactly the branch that has the picture. A frame whose chosen branch has no
     /// picture draws nothing, as it did before.

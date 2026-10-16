@@ -80,7 +80,7 @@ public static class OdfChart
 
         string target = href.Trim();
 
-        // Anything with a scheme points outside the package, and XRay.Office never fetches those.
+        // Anything with a scheme points outside the package, and X-Ray.Office never fetches those.
         if (target.Contains("://", StringComparison.Ordinal)) return null;
         if (target.StartsWith("./", StringComparison.Ordinal)) target = target[2..];
         target = target.TrimEnd('/');

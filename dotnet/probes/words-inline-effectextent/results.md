@@ -4,7 +4,7 @@
 references were used throughout and they agree on every figure below: the distro's **24.2.7.2** at
 `/usr/bin/soffice`, and the TDF tarball's **26.2.4.2** at `/opt/libreoffice26.2` with its 33 duplicate
 metric-compatible fonts moved aside. `fc-match "DejaVu Sans"` resolves to DejaVu and `fc-match Calibri`
-to Carlito. XRay.Office at `claude/renderer-comparison-artifact-m1g0wy`.*
+to Carlito. X-Ray.Office at `claude/renderer-comparison-artifact-m1g0wy`.*
 
 ## Why this exists
 
@@ -46,14 +46,14 @@ aObjBoundRect.AddTop( - nULSpaceUpper );
 aObjBoundRect.AddHeight( nULSpaceLower );
 ```
 
-So on an unrotated inline drawing the effect extent is simply **room on the line**, and XRay.Office read
+So on an unrotated inline drawing the effect extent is simply **room on the line**, and X-Ray.Office read
 none of it.
 
 ## The measurement
 
 `make-fixture.py` builds minimal DOCX fixtures: a 12 pt `TOPLINE`, a paragraph holding one 144 × 50.4 pt
 black inline shape, a 12 pt `BOTLINE`. `measure.py` renders each through both references and through
-XRay.Office and reports the gap between the two text lines, plus the drawn box's own band.
+X-Ray.Office and reports the gap between the two text lines, plus the drawn box's own band.
 
 Gap between `TOPLINE` and `BOTLINE`, in points:
 
@@ -263,7 +263,7 @@ under test, not only its numbers.
 
 ## Horizontally — and this is where the section above was wrong by omission
 
-*Measured 2026-09-06, same container, same two references, XRay.Office at `agent/draw-inline`.*
+*Measured 2026-09-06, same container, same two references, X-Ray.Office at `agent/draw-inline`.*
 
 Every fixture above varies `t` and `b` only. `make-x-fixture.py` varies `l` and `r`, on the same
 144 x 50.4 pt shape laid across a line as `LEFT` + drawing + `RIGHT` on a landscape page, and

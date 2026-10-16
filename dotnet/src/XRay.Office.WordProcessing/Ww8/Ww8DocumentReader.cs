@@ -70,7 +70,7 @@ public sealed partial class Ww8DocumentReader
     /// The document's own file name, or null when it was read from a nameless stream.
     /// </summary>
     /// <remarks>
-    /// Only a <c>FILENAME</c> field wants it. Null is a real answer rather than a gap — XRay.Office reads
+    /// Only a <c>FILENAME</c> field wants it. Null is a real answer rather than a gap — X-Ray.Office reads
     /// streams as readily as files — and the field falls back to its cached result there, which is the
     /// lenient reading and better than drawing nothing.
     /// </remarks>
@@ -668,7 +668,7 @@ public readonly record struct Ww8Range(int Start, int End)
 /// <param name="Body">The main text.</param>
 /// <param name="Footnotes">Every footnote's text, end to end.</param>
 /// <param name="Headers">The header, footer and note-separator stories.</param>
-/// <param name="Macros">Macro text, which XRay.Office never reads as content.</param>
+/// <param name="Macros">Macro text, which X-Ray.Office never reads as content.</param>
 /// <param name="Comments">Every comment's text, end to end.</param>
 /// <param name="Endnotes">Every endnote's text, end to end.</param>
 /// <param name="TextBoxes">Text-box text.</param>

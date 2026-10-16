@@ -68,7 +68,7 @@ public sealed class SheetPaginationComparisonTests : IDisposable
 
         actual.ShouldBe(
             reference,
-            $"{name}: page count differs — XRay.Office {actual}, LibreOffice {reference}");
+            $"{name}: page count differs — X-Ray.Office {actual}, LibreOffice {reference}");
     }
 
     [Theory]
@@ -103,7 +103,7 @@ public sealed class SheetPaginationComparisonTests : IDisposable
             first.Text.ShouldBe(
                 expected,
                 $"{name}: page {at + 1} starts at a different cell."
-                + $"\n  LibreOffice: {first.Text}\n  XRay.Office:   {expected}");
+                + $"\n  LibreOffice: {first.Text}\n  X-Ray.Office:   {expected}");
         }
     }
 

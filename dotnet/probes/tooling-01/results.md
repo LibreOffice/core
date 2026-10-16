@@ -81,7 +81,7 @@ gate's own one-liner gives 984 / 999.
 - **A stream/`byte[]` API.** The reader takes a path. The gate compares files on disk and the
   test-only cases that want otherwise can write a temp file; a second entry point is surface with no
   caller.
-- **Putting the reader in a `src/` library.** XRay.Office *writes* PDFs; nothing under `src/` reads
+- **Putting the reader in a `src/` library.** X-Ray.Office *writes* PDFs; nothing under `src/` reads
   one, so a reader there would add a dependency to redistributable libraries to serve a tool. It
   lives in `XRay.Office.Cli`, whose only package reference it is.
 - **`pdfminer.six`, or any second extractor, as an arbiter.** Recorded because the previous round

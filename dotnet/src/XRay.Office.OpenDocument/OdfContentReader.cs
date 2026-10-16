@@ -1091,7 +1091,7 @@ public sealed partial class OdfContentReader
                 // landing wherever the object was anchored. See ReadChart.
                 if (name == "object" && ReadChart(shape)) break;
 
-                // Everything else here is a placeholder for content XRay.Office does not read
+                // Everything else here is a placeholder for content X-Ray.Office does not read
                 // during extraction: a slide preview, or an embedded object whose own document
                 // would have to be opened. Recorded as a graphic so the caller knows something
                 // is there.
@@ -1204,7 +1204,7 @@ public sealed partial class OdfContentReader
     /// </summary>
     /// <remarks>
     /// An internal reference is a package-relative path, usually written <c>./Pictures/…</c>
-    /// or <c>Pictures/…</c>. Anything with a scheme points outside the package: XRay.Office
+    /// or <c>Pictures/…</c>. Anything with a scheme points outside the package: X-Ray.Office
     /// never fetches those, both because extraction must not make network requests and
     /// because doing so on untrusted input is an SSRF.
     /// </remarks>

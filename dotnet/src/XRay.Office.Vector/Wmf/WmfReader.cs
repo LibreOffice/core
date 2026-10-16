@@ -956,7 +956,7 @@ internal sealed class WmfReader
                 // Not modelled, but the handle must still be consumed or every later select is
                 // off by one.
                 _context.Objects.Add(UnsupportedGraphicsObject.Instance);
-                Warn("PL6031", "A WMF created a bitmap or brush object XRay.Office does not model.");
+                Warn("PL6031", "A WMF created a bitmap or brush object X-Ray.Office does not model.");
                 break;
 
             case WmfRecordType.TextOut:
@@ -1006,7 +1006,7 @@ internal sealed class WmfReader
 
             case WmfRecordType.FrameRegion:
             case WmfRecordType.InvertRegion:
-                Warn("PL6031", $"A WMF used the {function} record, which XRay.Office does not draw.");
+                Warn("PL6031", $"A WMF used the {function} record, which X-Ray.Office does not draw.");
                 break;
 
             case WmfRecordType.DibBitBlt:
@@ -1049,7 +1049,7 @@ internal sealed class WmfReader
             case WmfRecordType.FloodFill:
             case WmfRecordType.ExtFloodFill:
             case WmfRecordType.DrawText:
-                Warn("PL6031", $"A WMF used the {function} record, which XRay.Office does not draw.");
+                Warn("PL6031", $"A WMF used the {function} record, which X-Ray.Office does not draw.");
                 break;
 
             default:
@@ -1272,7 +1272,7 @@ internal sealed class WmfReader
         }
 
         // A pattern brush tiles in device pixels, and a display list has none. The tile is sized
-        // at 96 pixels to the inch — the same assumption the rest of XRay.Office makes about a
+        // at 96 pixels to the inch — the same assumption the rest of X-Ray.Office makes about a
         // nominal pixel — so the pattern's scale is at least consistent with everything else.
         DocSize size = new(
             Length.FromPixels(tile.Width, 96),
@@ -1483,7 +1483,7 @@ internal sealed class WmfReader
         {
             // No bitmap at all: the raster operation is meant to combine the destination with the
             // brush, which a display list cannot express.
-            Warn("PL6033", "A WMF blitted with no source bitmap, which XRay.Office cannot reproduce.");
+            Warn("PL6033", "A WMF blitted with no source bitmap, which X-Ray.Office cannot reproduce.");
             return;
         }
 
@@ -1491,7 +1491,7 @@ internal sealed class WmfReader
 
         if (DeviceIndependentBitmap.Read(payload.Span) is not { } bitmap)
         {
-            Warn("PL6031", "A WMF carried a bitmap in a form XRay.Office cannot read.");
+            Warn("PL6031", "A WMF carried a bitmap in a form X-Ray.Office cannot read.");
             return;
         }
 
@@ -1516,7 +1516,7 @@ internal sealed class WmfReader
 
         if (noSource || destWidth == 0 || destHeight == 0)
         {
-            Warn("PL6033", "A WMF blitted with no source bitmap, which XRay.Office cannot reproduce.");
+            Warn("PL6033", "A WMF blitted with no source bitmap, which X-Ray.Office cannot reproduce.");
             return;
         }
 
@@ -1527,7 +1527,7 @@ internal sealed class WmfReader
         if (DeviceIndependentBitmap.ReadDeviceDependent(
                 Span(end), 10, _context.TextColour, _context.BackgroundColour) is not { } bitmap)
         {
-            Warn("PL6031", "A WMF carried a device-dependent bitmap XRay.Office cannot read.");
+            Warn("PL6031", "A WMF carried a device-dependent bitmap X-Ray.Office cannot read.");
             return;
         }
 
@@ -1567,7 +1567,7 @@ internal sealed class WmfReader
 
         if (DeviceIndependentBitmap.Read(payload.Span) is not { } bitmap)
         {
-            Warn("PL6031", "A WMF carried a bitmap in a form XRay.Office cannot read.");
+            Warn("PL6031", "A WMF carried a bitmap in a form X-Ray.Office cannot read.");
             return;
         }
 

@@ -10,7 +10,7 @@ Prediction written and committed after the baseline sweep and before any diagnos
 `prediction.md`, commit `e324e07899c`.
 
 **Two defects, both localised by measurement rather than by reading, and the second is not a
-XRay.Office defect at all — it is a stored figure that stopped reproducing.** The words track goes
+X-Ray.Office defect at all — it is a stored figure that stopped reproducing.** The words track goes
 from 173 to **174 of 200**, and the two documents the brief named go from **+18 to −2** and from
 **+23 to +1**. Σ|page error| over the whole track falls from **92 to 50**; Σ|word error| from 4672
 to 4174. Reach is **11 of 200** renderings, 1 verdict won and **0 lost**.

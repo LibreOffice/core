@@ -14,7 +14,7 @@ using Shouldly;
 namespace XRay.Office.Fidelity.Tests;
 
 /// <summary>
-/// Checks that the page geometry XRay.Office reads is the geometry LibreOffice renders.
+/// Checks that the page geometry X-Ray.Office reads is the geometry LibreOffice renders.
 /// </summary>
 /// <remarks>
 /// <para>
@@ -57,7 +57,7 @@ public sealed class PageGeometryComparisonTests : IDisposable
         "Extraction and rendering are separate paths through the library, because extraction is the "
         + "common case and must not pay for fonts, layout or a rasteriser it never uses.";
 
-    /// <summary>The corpus files, one source document exported to every format XRay.Office reads.</summary>
+    /// <summary>The corpus files, one source document exported to every format X-Ray.Office reads.</summary>
     private static readonly string[] EveryFormat =
     [
         "page-geometry.fodt", "page-geometry.odt", "page-geometry.docx",
@@ -183,7 +183,7 @@ public sealed class PageGeometryComparisonTests : IDisposable
             reference.Count,
             $"{fileName}: line count differs at a text width of {page.TextWidth.Points:F2} pt."
             + $"\n  LibreOffice:\n    {string.Join("\n    ", reference)}"
-            + $"\n  XRay.Office:\n    {string.Join("\n    ", actual)}");
+            + $"\n  X-Ray.Office:\n    {string.Join("\n    ", actual)}");
 
         for (int i = 0; i < reference.Count; i++)
         {

@@ -64,7 +64,7 @@ public sealed class DocumentPaginationTests : IDisposable
 
         actual.Count.ShouldBe(
             reference.Count,
-            $"{fileName}: page count differs — XRay.Office {actual.Count}, "
+            $"{fileName}: page count differs — X-Ray.Office {actual.Count}, "
             + $"LibreOffice {reference.Count}");
 
         for (int i = 0; i < reference.Count; i++)
@@ -77,7 +77,7 @@ public sealed class DocumentPaginationTests : IDisposable
             got.ShouldBe(
                 expected,
                 $"{fileName}: page {i + 1} starts differently."
-                + $"\n  LibreOffice: {expected}\n  XRay.Office:   {got}");
+                + $"\n  LibreOffice: {expected}\n  X-Ray.Office:   {got}");
         }
     }
 
@@ -206,7 +206,7 @@ public sealed class DocumentPaginationTests : IDisposable
     private static IReadOnlyList<PageParagraph> Paragraphs(IDocument document)
         => [.. Paginate(document).Paragraphs];
 
-    /// <summary>The words on each page XRay.Office produced, in order.</summary>
+    /// <summary>The words on each page X-Ray.Office produced, in order.</summary>
     /// <remarks>
     /// Taken from each line's own character range rather than from the paragraph's text, so a page
     /// starting mid-paragraph is compared against the words that are actually on it.

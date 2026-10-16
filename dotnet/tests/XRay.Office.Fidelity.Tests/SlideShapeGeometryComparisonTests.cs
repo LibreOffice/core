@@ -7,7 +7,7 @@ using Shouldly;
 namespace XRay.Office.Fidelity.Tests;
 
 /// <summary>
-/// Compares the preset shapes, dashes and markers XRay.Office draws against LibreOffice's.
+/// Compares the preset shapes, dashes and markers X-Ray.Office draws against LibreOffice's.
 /// </summary>
 /// <remarks>
 /// <para>

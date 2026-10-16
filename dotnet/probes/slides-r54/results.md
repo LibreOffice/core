@@ -190,7 +190,7 @@ down** on our side. Confirmed by a second instrument: on page 99 the reference's
 carries **101 rotated `Tm`** and ours carries **one `cm`, not rotated, and no rotated `Tm` at all**.
 
 **The obvious census of this is wrong and its first cut was.** LibreOffice rotates text by writing a
-rotated `Tm` inside `BT … ET`; XRay.Office rotates it by pushing a rotated `cm` and writing an upright
+rotated `Tm` inside `BT … ET`; X-Ray.Office rotates it by pushing a rotated `cm` and writing an upright
 `Tm` or none. A `Tm`-only census reports that we draw *no* rotated text anywhere — **18832
 operators to nought** — which is false: on page 8 we write 5 rotated `cm` against the reference's 77
 rotated `Tm`, and both reviewers independently described that page's rotated spine captions as

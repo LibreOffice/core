@@ -7,7 +7,7 @@ using Shouldly;
 namespace XRay.Office.Fidelity.Tests;
 
 /// <summary>
-/// Compares the PDF XRay.Office writes against the PDF LibreOffice writes, operator for operator.
+/// Compares the PDF X-Ray.Office writes against the PDF LibreOffice writes, operator for operator.
 /// </summary>
 /// <remarks>
 /// <para>

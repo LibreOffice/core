@@ -34,7 +34,7 @@ namespace XRay.Office.Spreadsheets.Tests;
 /// </para>
 /// <para>
 /// Checked against LibreOffice 24.2.7.2's own PDF for this fixture, whose three boxes break after
-/// "decides", "every" and "every" respectively — which is what XRay.Office now produces, with the
+/// "decides", "every" and "every" respectively — which is what X-Ray.Office now produces, with the
 /// whole layout-preserved text layer identical.
 /// </para>
 /// </remarks>

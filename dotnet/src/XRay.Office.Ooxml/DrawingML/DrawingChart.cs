@@ -155,7 +155,7 @@ public static class DrawingChart
     /// the other. <see cref="Number"/> is what a caller computing with the chart wants;
     /// <see cref="Text"/> is the literal from <c>c:v</c>, which is the closest thing to
     /// "displayed" available here — running the value through <c>c:formatCode</c> would need a
-    /// number formatter, and the only one XRay.Office has lives in <c>XRay.Office.Spreadsheets</c>,
+    /// number formatter, and the only one X-Ray.Office has lives in <c>XRay.Office.Spreadsheets</c>,
     /// above this library.
     /// </remarks>
     private readonly record struct Point(double? Number, string? Text);

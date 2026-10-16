@@ -113,7 +113,7 @@ public class TableStructureTests
     public void RtfLosesTheHeaderRowBecauseLibreOfficeDoesNotWriteIt()
     {
         // Not a defect in the reader: LibreOffice's RTF export omits \trhdr for this document, so the
-        // file does not say the row repeats. XRay.Office reports what the file says rather than what the
+        // file does not say the row repeats. X-Ray.Office reports what the file says rather than what the
         // document it came from said. The reader does honour \trhdr — see
         // RtfReaderTests.ARepeatingHeaderRowComesFromTrhdr.
         using IDocument document = Open("tables.rtf");

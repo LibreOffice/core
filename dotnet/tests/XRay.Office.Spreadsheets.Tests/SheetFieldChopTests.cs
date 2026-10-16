@@ -66,7 +66,7 @@ public sealed class SheetFieldChopTests
     /// A hyperlinked URL wraps, and its breaks land mid-token rather than after a solidus.
     /// </summary>
     /// <remarks>
-    /// This is the defect the fixture was written for. XRay.Office drew the whole URL on one clipped
+    /// This is the defect the fixture was written for. X-Ray.Office drew the whole URL on one clipped
     /// line, which cost <c>Published_Issuances_2024.xlsx</c> the second line of all 22 of its rows
     /// and 22 extractable words. The three lines below are character for character what
     /// LibreOffice draws.
@@ -89,7 +89,7 @@ public sealed class SheetFieldChopTests
     /// </summary>
     /// <remarks>
     /// Deliberately weaker than the linked assertion. Where the *plain* path puts its last two
-    /// breaks is a separate question from this one — XRay.Office and LibreOffice already disagree by
+    /// breaks is a separate question from this one — X-Ray.Office and LibreOffice already disagree by
     /// one break there, ours cutting after the hyphen of <c>M-</c> where the reference cuts before
     /// the <c>M</c> — and pinning it here would tie this test to a defect it is not about.
     /// </remarks>

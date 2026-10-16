@@ -3,7 +3,7 @@ namespace XRay.Office.Core.Formats;
 /// <summary>
 /// Which application a document belongs to, mirroring LibreOffice's split into
 /// Writer / Calc / Impress. Draw, Math and Base are deliberately out of scope
-/// for XRay.Office.
+/// for X-Ray.Office.
 /// </summary>
 public enum DocumentFamily
 {
@@ -44,7 +44,7 @@ public enum ContainerKind
 }
 
 /// <summary>
-/// Every file format XRay.Office recognises.
+/// Every file format X-Ray.Office recognises.
 /// </summary>
 /// <remarks>
 /// <para>
@@ -56,7 +56,7 @@ public enum ContainerKind
 /// Macro-enabled variants (<c>.docm</c>, <c>.xlsm</c>, <c>.pptm</c>) are distinct
 /// members even though their payload parses identically to the non-macro variant,
 /// because callers routinely need to report or filter on "this file can carry
-/// macros". XRay.Office never executes macros.
+/// macros". X-Ray.Office never executes macros.
 /// </para>
 /// </remarks>
 public enum DocumentFormat

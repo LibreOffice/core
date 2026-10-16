@@ -66,7 +66,7 @@ for line in GATE.read_text().splitlines():
         cross = verdict(rp, p26, rg, g26)
     rows.append((rel, ext, op, rp, p26, og, rg, g26, v24, v26, cross))
 
-print("# ours = XRay.Office @ 2f4709c08; ref24 = /usr/bin/soffice 24.2.7.2;")
+print("# ours = X-Ray.Office @ 2f4709c08; ref24 = /usr/bin/soffice 24.2.7.2;")
 print("# ref26 = /opt/libreoffice26.2 26.2.4.2 with the 8 Latin duplicate faces moved aside")
 print("# fonts: Carlito+Caladea+Liberation+DejaVu installed; XRAY_OFFICE_BUNDLED_FONTS unset")
 print("# verdict rule = batch-check.sh 2026-09-05 (pages, then max(2%,15) alnum chars)")

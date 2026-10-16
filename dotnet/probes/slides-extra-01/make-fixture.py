@@ -86,10 +86,10 @@ def scheme():
             '<a:schemeClr val="phClr"/></a:solidFill><a:prstDash val="solid"/></a:ln>')
     fill = '<a:solidFill><a:schemeClr val="phClr"/></a:solidFill>'
     return f'''<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<a:theme {NS} name="XRay.Office"><a:themeElements>
-<a:clrScheme name="XRay.Office">{colours}</a:clrScheme>
-<a:fontScheme name="XRay.Office">{fonts}</a:fontScheme>
-<a:fmtScheme name="XRay.Office">
+<a:theme {NS} name="X-Ray.Office"><a:themeElements>
+<a:clrScheme name="X-Ray.Office">{colours}</a:clrScheme>
+<a:fontScheme name="X-Ray.Office">{fonts}</a:fontScheme>
+<a:fmtScheme name="X-Ray.Office">
 <a:fillStyleLst>{fill}{fill}{fill}</a:fillStyleLst>
 <a:lnStyleLst>{line}{line}{line}</a:lnStyleLst>
 <a:effectStyleLst><a:effectStyle><a:effectLst/></a:effectStyle>

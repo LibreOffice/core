@@ -1,11 +1,26 @@
-# XRay.Office — working notes
+# X-Ray.Office — working notes
 
-XRay.Office is a **pure C# / .NET** library set for content extraction and headless
+X-Ray.Office is a **pure C# / .NET** library set for content extraction and headless
 rendering of the file formats LibreOffice's Writer, Calc and Impress support.
 
 It lives in the `dotnet/` subdirectory of a LibreOffice source checkout. The surrounding
 C++ tree is **reference material, not a build dependency** — we read it to learn how the
 formats behave, and we run an installed `soffice` to generate ground truth.
+
+**It is X-Ray.Office, part of the [X-Ray](https://github.com/curiosity-ai/x-ray) family, and it was
+called Paperless until it joined.** Package ids are hyphenated (`X-Ray.Office`,
+`X-Ray.Office.Core`, ...); projects, assemblies and namespaces are not (`XRay.Office.Core`). In
+prose the product is "X-Ray.Office"; `XRay.Office` is a code identifier. Environment variables are
+`XRAY_OFFICE_*` and the CLI is `xray-office`. Older probe write-ups, branch names and fixture text
+still say Paperless: the fixtures' text is what the tests assert, so leave it.
+
+**Packaging.** Every library under `src/` is packable; `Directory.Build.props` derives its
+`PackageId`, packs `assets/README.package.md` and `assets/logo.png`, and sets the licence
+(MPL-2.0; `XRay.Office.Text` widens it for the bundled fonts). The facade `X-Ray.Office` references
+every other library, so installing it brings the set. Tests, the test kit, the CLI and probes are
+not packable. `.devops/build-x-ray-office-nuget.yml` publishes all thirteen in one run at one CalVer
+version on a change to `dotnet/` on `master`; a library added under `src/` must be added to its
+lists, and to the facade's references.
 
 ## Scope
 
@@ -15,7 +30,7 @@ spreadsheets (`xlsx xlsm xltx xltm xlsb xls xlt ods ots fods csv`), presentation
 OpenOffice.org 1.x forms (`sxw sxc sxi`).
 
 **Out of scope.** Draw, Math and Base. Do not add them. Also: writing/export of any
-format (XRay.Office reads), macro execution (never — XRay.Office only reports that macros are
+format (X-Ray.Office reads), macro execution (never — X-Ray.Office only reports that macros are
 *present*), and editing.
 
 ## Absolute rules
@@ -1953,7 +1968,7 @@ in a face **36% narrower** than anything else here: every line that fits for it 
 else, and the page is not comparable line for line.
 
 Measured on `words/done-013/doc/omrIMInterpretiveGuideLine.doc`: the tarball embeds
-`LiberationSansNarrow` and `LiberationSansNarrow-Bold`, while **24.2.7.2 and XRay.Office both embed
+`LiberationSansNarrow` and `LiberationSansNarrow-Bold`, while **24.2.7.2 and X-Ray.Office both embed
 DejaVu Sans and DejaVu Sans-Bold** and agree with each other, line for line, to **0.1 pt on 30 of
 the 31 lines of page 1**. Against the tarball the same page disagrees everywhere from the title
 down. **49 of the corpus's documents name a Narrow family** — sheets 25, words 22, slides 2 — so
@@ -1969,7 +1984,7 @@ came back once already.
 remain in the directory. Confirmed on the witness: 26.2.4.2 renders
 `omrIMInterpretiveGuideLine.doc` in **DejaVu Sans and Liberation Sans**, with no narrow face
 anywhere — *Arial* still reaching Liberation Sans, which is right, and *Arial Narrow* now reaching
-DejaVu Sans, which is what the system and XRay.Office both answer. **Any 26.2 figure taken on one of
+DejaVu Sans, which is what the system and X-Ray.Office both answer. **Any 26.2 figure taken on one of
 the 49 Narrow-naming documents before this date is suspect** — but *only* those 49, and the blast
 radius is smaller than it sounds. Measured immediately afterwards on the `.odp` column of
 `probes/odf-gate-01/`: a freshly rendered reference reproduces the banked reference **302 of 302**
@@ -2047,7 +2062,7 @@ it is worth 268 → **52** run differences and 322.07 → **1.60 pt** worst orig
 not exist in 24.2.** Measured on three hand-built DOCX naming one uninstalled family, differing
 only in what `word/fontTable.xml` declares, with the Latin Noto aside:
 
-| `w:family` | 24.2.7.2 | 26.2.4.2 | XRay.Office |
+| `w:family` | 24.2.7.2 | 26.2.4.2 | X-Ray.Office |
 |---|---|---|---|
 | *(no font table)* | DejaVu Sans | **DejaVu Serif** | DejaVu Serif |
 | `roman` | DejaVu Sans | **DejaVu Serif** | DejaVu Serif |
@@ -3972,7 +3987,7 @@ comparison.
 families.** `/opt/libreoffice26.2/share/fonts/truetype` ships 136 faces, among them Carlito,
 Caladea, Liberation and DejaVu — *different builds* from the system's: Caladea-Regular is 58 964
 bytes bundled against 81 600 installed, Carlito-Regular 635 996 against 628 032, and all differ by
-md5. LibreOffice reads its own; XRay.Office reads the system's through its own OpenType reader; so
+md5. LibreOffice reads its own; X-Ray.Office reads the system's through its own OpenType reader; so
 the two stacks measure different files and every advance width diverges. Moving the 45 duplicates
 aside takes 36 failures to 31, which confirms the mechanism and also shows it is **not the whole
 story** — the remaining gap is the tarball's other bundled libraries (its own HarfBuzz, ICU and

@@ -8,7 +8,7 @@ to keep both answers reproducible in one command, because each one alone is conv
     Row 8 has 140.00 pt of room left on page 3 and a declared floor of 4965 twips (248.25 pt).
     LibreOffice leaves the 140 pt blank and moves the row whole. Lower that one number and nothing
     else, and LibreOffice breaks the row again: page 3 goes from 337 tokens to 432 — which is
-    exactly what XRay.Office produces with the floor ignored. The flip is sharp, between **4250 and
+    exactly what X-Ray.Office produces with the floor ignored. The flip is sharp, between **4250 and
     4300 twips**, and that boundary is *not* the room (2800 twips).
 
     Those two figures are `pdftotext` split on whitespace. `batch-check.sh` reads the same pages as

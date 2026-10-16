@@ -21,7 +21,7 @@ namespace XRay.Office.WordProcessing.Tests;
 /// This exists as a structural test rather than only a rendering comparison because RTF cannot have one.
 /// LibreOffice's own RTF import drops the character and paragraph formatting stated inside a footnote group
 /// and falls back to the document's defaults — a note the file sets in Carlito at 10 pt renders in Liberation
-/// Serif, with a hanging indent the file does not ask for. XRay.Office reads what the file says, so a
+/// Serif, with a hanging indent the file does not ask for. X-Ray.Office reads what the file says, so a
 /// word-position comparison against LibreOffice would fail on a note that was read correctly. What can still
 /// be checked is everything below: that the note is there, that it hangs off the right paragraph, that it is
 /// numbered by counting rather than by believing the file, and that its body reads correctly.

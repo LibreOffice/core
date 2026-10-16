@@ -7,7 +7,7 @@ Written and committed **before** rendering our own side of
 
 The brief's gate row: `pages 26/26  words 2120/2010  verdict: words` — we draw **+110**.
 
-From the banked reference alone (no XRay.Office render yet):
+From the banked reference alone (no X-Ray.Office render yet):
 
 - `/c/sandbox/workdir/refpdfs-26.2.4.2-fonts/slides/8_P-Pavese_…__pptx.pdf`, 26 pages,
   2010 letter-or-digit words / **2199 raw** `pdftotext | wc -w`.

@@ -6,7 +6,7 @@ references were used throughout and they agree on every figure below: the distro
 metric-compatible faces, its Latin Noto, its DejaVu Condensed and its `LiberationSansNarrow` all in
 the `.duplicates-aside/`, `.noto-aside/` and `.condensed-aside/` directories the rulebook describes.
 `fc-match "DejaVu Sans"` resolves to DejaVu, `fc-match Calibri` to Carlito and `fc-match Cambria` to
-Caladea. XRay.Office at `agent/framearea`, base `6a6f18d9a`; corpus `/home/user/sample-files`, 947
+Caladea. X-Ray.Office at `agent/framearea`, base `6a6f18d9a`; corpus `/home/user/sample-files`, 947
 paths in `MANIFEST.tsv`.*
 
 ---

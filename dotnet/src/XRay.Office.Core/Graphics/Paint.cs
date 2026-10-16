@@ -10,7 +10,7 @@ namespace XRay.Office.Core.Graphics;
 /// <remarks>
 /// <para>
 /// Deliberately narrower than what the source formats express. LibreOffice supports
-/// hatch and pattern fills as first-class kinds (<c>XFillStyleItem</c>); XRay.Office
+/// hatch and pattern fills as first-class kinds (<c>XFillStyleItem</c>); X-Ray.Office
 /// resolves those into a tiled <see cref="BitmapPaint"/> or an explicit set of
 /// stroked lines, so <b>backends still have four cases instead of seven</b>.
 /// </para>

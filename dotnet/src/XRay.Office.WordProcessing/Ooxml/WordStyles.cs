@@ -12,7 +12,7 @@ namespace XRay.Office.WordProcessing.Ooxml;
 /// </remarks>
 public enum WordStyleType
 {
-    /// <summary>Not a type XRay.Office recognises.</summary>
+    /// <summary>Not a type X-Ray.Office recognises.</summary>
     Unknown = 0,
 
     /// <summary>A paragraph style, referenced by <c>w:pStyle</c>.</summary>

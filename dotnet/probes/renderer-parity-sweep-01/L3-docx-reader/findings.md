@@ -351,7 +351,7 @@ That is a narrower defect than the one being fixed, and it is not in this lane's
 
 #139 `PI-doc.-no.-2E-Technical-Review-Report`: "The footer's tab stops are not honoured:
 the reference spaces `Page 5 of 12`, `Version 1` and `Last saved…` across the page,
-XRay.Office runs them together as `Page 5 of 12Version 1Last saved…`."
+X-Ray.Office runs them together as `Page 5 of 12Version 1Last saved…`."
 
 ### What the document actually contains
 
@@ -573,9 +573,9 @@ a *double* line in Writer, not a dashed one.
 ### What the pages show
 
 - #010 `Case-Study-Heathrow-Airport` — "The reference draws a green double-rule page border
-  around the whole sheet; XRay.Office draws none."
+  around the whole sheet; X-Ray.Office draws none."
 - #043 `AFS-050-004-F2_0i` — "The reference draws a thin border around the whole page;
-  XRay.Office draws none."
+  X-Ray.Office draws none."
 
 ### What the document actually contains
 

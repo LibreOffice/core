@@ -855,7 +855,7 @@ internal sealed class EmfReader
             case EmfRecordType.FrameRgn:
             case EmfRecordType.InvertRgn:
             case EmfRecordType.ExtFloodFill:
-                Warn("PL6031", $"An EMF used the {type} record, which XRay.Office does not draw.");
+                Warn("PL6031", $"An EMF used the {type} record, which X-Ray.Office does not draw.");
                 break;
 
             default:
@@ -1108,7 +1108,7 @@ internal sealed class EmfReader
         }
 
         // A pattern brush tiles in device pixels and a display list has none; 96 to the inch is
-        // the nominal pixel the rest of XRay.Office assumes.
+        // the nominal pixel the rest of X-Ray.Office assumes.
         Store(handle, new MetafileBrush(
             BrushStyle.DibPattern,
             _context.TextColour,
@@ -1796,7 +1796,7 @@ internal sealed class EmfReader
 
         if (Dib(start, end, headerOffset, headerBytes, bitsOffset, bitsBytes) is not { } bitmap)
         {
-            Warn("PL6031", "An EMF carried a bitmap in a form XRay.Office cannot read.");
+            Warn("PL6031", "An EMF carried a bitmap in a form X-Ray.Office cannot read.");
             return;
         }
 
@@ -1838,7 +1838,7 @@ internal sealed class EmfReader
 
         if (Dib(start, end, headerOffset, headerBytes, bitsOffset, bitsBytes) is not { } bitmap)
         {
-            Warn("PL6031", "An EMF carried a bitmap in a form XRay.Office cannot read.");
+            Warn("PL6031", "An EMF carried a bitmap in a form X-Ray.Office cannot read.");
             return;
         }
 
@@ -1880,7 +1880,7 @@ internal sealed class EmfReader
 
         if (Dib(start, end, headerOffset, headerBytes, bitsOffset, bitsBytes) is not { } bitmap)
         {
-            Warn("PL6031", "An EMF carried a bitmap in a form XRay.Office cannot read.");
+            Warn("PL6031", "An EMF carried a bitmap in a form X-Ray.Office cannot read.");
             return;
         }
 
@@ -2133,7 +2133,7 @@ internal sealed class EmfReader
         Warn(
             "PL6033",
             $"An EMF blitted with no source bitmap under raster operation 0x{rop:X8}, which "
-                + "XRay.Office cannot reproduce.");
+                + "X-Ray.Office cannot reproduce.");
     }
 
     /// <summary>The two pieces of a DIB the record points at, spliced back together.</summary>

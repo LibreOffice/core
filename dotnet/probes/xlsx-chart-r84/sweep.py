@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render a list of workbooks through XRay.Office and through the reference, and score
+"""Render a list of workbooks through X-Ray.Office and through the reference, and score
 each pair by the gate's own rule.
 
 One output directory per *document*, keyed on an MD5 of its path — the trap

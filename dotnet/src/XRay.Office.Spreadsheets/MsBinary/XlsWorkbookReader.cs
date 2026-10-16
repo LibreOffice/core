@@ -926,7 +926,7 @@ internal sealed class XlsWorkbookReader
             _reportedFormat = true;
             _diagnostics.Add(new Diagnostic(
                 DiagnosticSeverity.Warning, "PL2324",
-                $"The number format \"{parsed.Code}\" uses a construct XRay.Office does not "
+                $"The number format \"{parsed.Code}\" uses a construct X-Ray.Office does not "
                 + "reproduce, so the text of the cells using it may differ from what the "
                 + "authoring application showed."));
         }

@@ -107,7 +107,7 @@ public static partial class PdfStrokes
         {
             // Up to the end of the stroke rather than to its start, because the two writers put
             // the operator on opposite sides of the pen width: LibreOffice sets the colour before
-            // the `q … w`, and XRay.Office's own PDF writer sets it inside the same group, after it.
+            // the `q … w`, and X-Ray.Office's own PDF writer sets it inside the same group, after it.
             // Stopping at the start of the match attributes our colour to the *next* stroke and
             // reports the first one black, which looks exactly like a colour bug and is not one.
             while (next < colours.Count && colours[next].At < match.Index + match.Length)

@@ -1,4 +1,4 @@
-<title>Where XRay.Office Differs</title>
+<title>Where X-Ray.Office Differs</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@500;600&display=swap">
@@ -220,11 +220,11 @@ footer { margin-top: 56px; padding-top: 20px; border-top: var(--rule); font-size
 
 <header class="top">
   <div class="wrap">
-    <div class="eyebrow">XRay.Office vs. headless LibreOffice &middot; every document that does not match &middot; revised</div>
-    <h1>Where XRay.Office Differs</h1>
+    <div class="eyebrow">X-Ray.Office vs. headless LibreOffice &middot; every document that does not match &middot; revised</div>
+    <h1>Where X-Ray.Office Differs</h1>
     <p class="lede">
       All 946 documents in the sample corpus were rendered twice &mdash; once by headless
-      LibreOffice, once by XRay.Office &mdash; and compared page by page at 150&nbsp;dpi.
+      LibreOffice, once by X-Ray.Office &mdash; and compared page by page at 150&nbsp;dpi.
       754 came out clean. These are the other <b>192</b>: every one that shows a pixel defect
       or paginates differently, worst first, each with the divergent page side by side and a
       reading of what actually went wrong.
@@ -242,7 +242,7 @@ footer { margin-top: 56px; padding-top: 20px; border-top: var(--rule); font-size
       <br><br>
       <b>Revised twice, and the second pass needed no reference at all.</b> An eight-lane
       source investigation moved <b>29</b> cases out of the defect list entirely &mdash; they
-      are reference-version divergences, where XRay.Office is correct for the LibreOffice the
+      are reference-version divergences, where X-Ray.Office is correct for the LibreOffice the
       project develops against and this sweep's reference is a release behind &mdash; re-tagged
       <b>3</b> as the reference's fault and <b>corrected 11 readings</b> the measurements
       disproved. A second pass then re-checked the catalogue against evidence that is a
@@ -262,7 +262,7 @@ footer { margin-top: 56px; padding-top: 20px; border-top: var(--rule); font-size
   <div class="sechead">
     <h2>How to read this</h2>
     <p>
-      Each entry shows <b>LibreOffice on the left, XRay.Office on the right</b>, at the page where
+      Each entry shows <b>LibreOffice on the left, X-Ray.Office on the right</b>, at the page where
       the two diverge most. The order is severity: documents with a pixel defect first, ranked by
       how badly the worst page's structure diverges, then the documents whose pages match but
       whose page counts do not. Every reading below is a description of what the two images show
@@ -442,17 +442,17 @@ function buildCard(c) {
   head.append(chips);
   box.append(head);
   box.append(el("div", "pairlabels",
-    "<span>LibreOffice &mdash; reference</span><span>XRay.Office</span>"));
+    "<span>LibreOffice &mdash; reference</span><span>X-Ray.Office</span>"));
   const img = el("img", "pairimg");
   img.src = c.image;
   img.loading = "lazy";
   img.decoding = "async";
-  img.alt = `${c.name}, page ${c.page}: LibreOffice on the left, XRay.Office on the right`;
+  img.alt = `${c.name}, page ${c.page}: LibreOffice on the left, X-Ray.Office on the right`;
   box.append(img);
   if (c.version_divergence) {
     box.append(el("div", "verdict-note vd",
       "<b>Not a defect &mdash; a reference-version divergence.</b> " + c.version_divergence
-      + " XRay.Office is calibrated against LibreOffice 26.2.4.2; this sweep's reference is "
+      + " X-Ray.Office is calibrated against LibreOffice 26.2.4.2; this sweep's reference is "
       + "24.2.7.2."));
   }
   if (c.retag) {
@@ -533,19 +533,19 @@ render();
 {
   const notes = [
     ["The reference is a release behind the code under test &mdash; and that explains 29 of these",
-     "This sweep's ground truth is <b>LibreOffice 24.2.7.2</b>; XRay.Office is developed against "
+     "This sweep's ground truth is <b>LibreOffice 24.2.7.2</b>; X-Ray.Office is developed against "
      + "<b>26.2.4.2</b>, and 63 of 534 documents change reference page count across that gap. "
      + "So a rule the tree implements <em>correctly</em> for 26.2 shows up here as a defect. "
      + "The proof is cleanest on slides, where the autofit table records a 20.013/20.409&nbsp;pt "
-     + "pair measured on 26.2.4.2, XRay.Office draws exactly that pair, and this reference draws "
+     + "pair measured on 26.2.4.2, X-Ray.Office draws exactly that pair, and this reference draws "
      + "21.005/21.005; and on spreadsheets, where our page counts for the three documents known "
      + "to have moved are 449, 88 and 201 &mdash; the 26.2 answers, exactly. A 26.2 binary is not "
      + "installable on this image, so the sweep keeps 24.2 and marks the divergences rather than "
      + "quietly re-baselining onto a third version."],
     ["It is not a bug list",
      "Several documents appear here more than once over: one wrong measurement early in a page shifts everything after it, so a single defect can mark five pages divergent and three documents from the same template can share one cause. Read it as a list of <em>documents that differ</em>, not of distinct defects."],
-    ["Six of these are LibreOffice's failures, not XRay.Office's",
-     "On six documents the reference is the broken rendering &mdash; a timeline whose header columns LibreOffice drops, a slide whose text it overlaps, a deck whose tables it renders as an empty page &mdash; and XRay.Office draws them correctly. They are listed because the measurement is against LibreOffice, and they are tagged <em>reference at fault</em> so they can be filtered out."],
+    ["Six of these are LibreOffice's failures, not X-Ray.Office's",
+     "On six documents the reference is the broken rendering &mdash; a timeline whose header columns LibreOffice drops, a slide whose text it overlaps, a deck whose tables it renders as an empty page &mdash; and X-Ray.Office draws them correctly. They are listed because the measurement is against LibreOffice, and they are tagged <em>reference at fault</em> so they can be filtered out."],
     ["Only the first five pages of each document were compared",
      "3,243 page pairs out of 28,366 reference pages. Page counts are compared in full, which is why several entries here are page-count-only: their first five pages match and the document still ends at a different length."],
     ["The readings describe the images, not the code",

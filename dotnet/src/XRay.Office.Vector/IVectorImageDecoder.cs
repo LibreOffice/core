@@ -4,7 +4,7 @@ using XRay.Office.Core.Graphics;
 namespace XRay.Office.Vector;
 
 /// <summary>
-/// Decodes an embedded vector image into XRay.Office drawing commands.
+/// Decodes an embedded vector image into X-Ray.Office drawing commands.
 /// </summary>
 /// <remarks>
 /// <para>

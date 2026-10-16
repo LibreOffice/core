@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Generate a minimal test corpus covering every format XRay.Office targets, using
+# Generate a minimal test corpus covering every format X-Ray.Office targets, using
 # headless LibreOffice to fan each source document out across its format family.
 #
 # Every output gets a unique stem, because soffice names output after the input stem

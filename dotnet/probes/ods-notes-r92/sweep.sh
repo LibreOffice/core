@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Prove that XRay.Office renders a corpus batch the way LibreOffice does.
+# Prove that X-Ray.Office renders a corpus batch the way LibreOffice does.
 #
 #   batch-check.sh <corpus-root> <batch-glob> [outdir] [workers]
 #
@@ -130,7 +130,7 @@ mkdir -p "$OUT/ours" "$OUT/ref"
 #   * It does not strip an enumerated set of code points, which is the obvious fix and is
 #     wrong twice over: the set would be fitted to the documents in hand, and it does not even
 #     work — measured on the slides track, the reference writes its Wingdings bullets at
-#     U+F06E/U+F06C/U+F0D8/U+F0A7 and XRay.Office writes the same glyphs at
+#     U+F06E/U+F06C/U+F0D8/U+F0A7 and X-Ray.Office writes the same glyphs at
 #     U+E439/U+E5CD/U+E46F/U+E437. A list built from one side strips nothing on the other.
 #   * It does not drop short tokens. A numbering label (`1.`, `iv.`, `a)`) carries a digit or
 #     a letter and stays a word on both sides; the probe above reads 76 for a numbered list
@@ -267,7 +267,7 @@ one() {  # one <index>
       # emb, sub, uni and a two-field object id, so `emb` is NF-4 and not NF-3. Counting from
       # NF-3 reads `sub` instead, and it happens to give the right answer only for a font whose
       # type name is two or three fields — "Type 1", "Type 1C", "CID Type 0C". Every font
-      # XRay.Office writes is "TrueType", one field, so this check tested nothing about our own
+      # X-Ray.Office writes is "TrueType", one field, so this check tested nothing about our own
       # output until it was corrected; measured on a PDF embedding ten faces and naming an
       # eleventh, which it scored as zero unembedded.
       un=$(pdffonts "$o" 2>/dev/null | tail -n +3 | awk 'NF>=8 && $(NF-4)=="no"' | wc -l)

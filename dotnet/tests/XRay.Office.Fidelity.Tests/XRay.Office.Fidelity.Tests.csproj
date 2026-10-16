@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <Description>Fidelity harness: compares XRay.Office extraction and rendering against headless LibreOffice reference output.</Description>
+    <Description>Fidelity harness: compares X-Ray.Office extraction and rendering against headless LibreOffice reference output.</Description>
     <OutputType>Exe</OutputType>
   </PropertyGroup>
 

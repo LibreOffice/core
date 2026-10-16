@@ -668,7 +668,7 @@ internal sealed class SheetPageDrawing(SheetLayout sheet, SheetPagePlacement pla
     /// merge covers are dropped by every reader, so they look exactly like empty ones. Overflowing
     /// through them draws a string that Calc cuts short — measured on <c>sheet-features.ods</c>,
     /// where the reference shortens "Second row of pair" to "Second row of p" at the edge of the
-    /// two-row merge beside it and XRay.Office drew all of it.
+    /// two-row merge beside it and X-Ray.Office drew all of it.
     /// </para>
     /// </remarks>
     private SheetTextContext ContextFor(ColumnBand band) => new(

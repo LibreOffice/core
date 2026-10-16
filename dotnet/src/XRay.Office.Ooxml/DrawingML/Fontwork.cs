@@ -151,7 +151,7 @@ public static class Fontwork
     /// </summary>
     /// <remarks>
     /// <c>fontworkhelpers.cxx:173-179</c>. It is conditional on the shape <em>not</em> having come
-    /// from a binary WordArt object, which for the two importers XRay.Office reads means: a Writer
+    /// from a binary WordArt object, which for the two importers X-Ray.Office reads means: a Writer
     /// text box always takes it (<c>WpsContext.cxx:989</c> passes <c>bFromWordArt</c> false), a
     /// slide shape takes it unless the file marks the shape <c>PROP_FromWordArt</c>.
     /// </remarks>

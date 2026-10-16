@@ -51,7 +51,7 @@ do not read a band label as a difficulty claim on real files.
 **The ordering has since validated itself.** Sweeping all 21 words batches produced a match
 rate that falls almost monotonically with batch number — 9/10 and 8/10 in the first
 batches, 0/10 and 1/10 in the last three. The score is computed from LibreOffice's own
-output and knows nothing about XRay.Office, so that gradient is evidence the metric measures
+output and knows nothing about X-Ray.Office, so that gradient is evidence the metric measures
 real difficulty rather than an artefact of how the corpus was assembled. It also means a
 batch number is a usable progress estimate: reaching batch *n* is worth more than *n*/21.
 

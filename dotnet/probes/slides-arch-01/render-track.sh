@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Render the whole slides track with XRay.Office into $1, reproducibly.
+# Render the whole slides track with X-Ray.Office into $1, reproducibly.
 set -uo pipefail
 OUT="$1"; CLI="$2"
 mkdir -p "$OUT"

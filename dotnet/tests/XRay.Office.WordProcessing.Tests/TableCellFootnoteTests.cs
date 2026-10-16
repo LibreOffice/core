@@ -13,7 +13,7 @@ namespace XRay.Office.WordProcessing.Tests;
 /// <para>
 /// LibreOffice makes no distinction at all between a note cited from body text and one cited from a cell:
 /// the note hangs on the page frame the citing text frame sits in, whatever chain of cell and table frames
-/// lies between them. XRay.Office read the note, numbered it and then dropped it — the paginator gathered
+/// lies between them. X-Ray.Office read the note, numbered it and then dropped it — the paginator gathered
 /// notes on the <c>PageParagraph</c> branch of the top-level flow only, and nothing walked the cells of a
 /// placed table.
 /// </para>

@@ -29,7 +29,7 @@ namespace XRay.Office.Spreadsheets.Ooxml;
 /// resizes when the grid does; <c>xdr:oneCellAnchor</c> states the top left as a cell and the
 /// size as a length, so it moves and keeps its size; <c>xdr:absoluteAnchor</c> states a position
 /// on the sheet and ignores the grid entirely. All three write their offsets and extents in EMUs,
-/// which is the one place SpreadsheetML uses the same unit XRay.Office does.
+/// which is the one place SpreadsheetML uses the same unit X-Ray.Office does.
 /// </para>
 /// <para>
 /// <strong><c>editAs</c> decides which of the three a two-cell anchor really is</strong>, and it

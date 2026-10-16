@@ -72,7 +72,7 @@ public static class TextComparer
     /// </summary>
     /// <remarks>
     /// Whitespace-delimited, with commas and tabs also treated as separators so that the CSV
-    /// filter's <c>a,b,c</c> and XRay.Office's tab-separated row yield the same tokens. Tokens
+    /// filter's <c>a,b,c</c> and X-Ray.Office's tab-separated row yield the same tokens. Tokens
     /// made entirely of punctuation are dropped: the reference filters substitute their own
     /// list markers — a hyphen for a bullet, a question mark for a character the export
     /// encoding cannot represent — and chasing those is chasing the filter, not a bug.
@@ -99,8 +99,8 @@ public static class TextComparer
     /// The reference tokens that do not appear in the actual text, with their shortfall.
     /// </summary>
     /// <remarks>
-    /// This is the assertion that means something: XRay.Office extracting <em>more</em> than the
-    /// reference is usually correct, but anything the reference found and XRay.Office did not is
+    /// This is the assertion that means something: X-Ray.Office extracting <em>more</em> than the
+    /// reference is usually correct, but anything the reference found and X-Ray.Office did not is
     /// content that went missing. Counts are compared, not just presence, so losing one of
     /// three occurrences of a word is still caught.
     /// </remarks>

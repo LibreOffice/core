@@ -165,7 +165,7 @@ public sealed class ThemedTablePartComparisonTests : IDisposable
     /// The nine twin shapes' painted colours, in document order.
     /// </summary>
     /// <remarks>
-    /// From LibreOffice's own render rather than from XRay.Office's, so that the expectations are
+    /// From LibreOffice's own render rather than from X-Ray.Office's, so that the expectations are
     /// the reference's numbers and not this library's. They are, in order: accent1; accent1 with
     /// <c>lumMod</c> 74902; accent1 lightened 40%; accent3 lightened 80%; background2 darkened
     /// 50%; accent2; accent2 darkened 25%; accent4 lightened 60%; accent5.

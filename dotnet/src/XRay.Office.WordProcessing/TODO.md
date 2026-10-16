@@ -99,7 +99,7 @@ indexes or resolvable style chains.
       `ExtractionComparisonTests.KnownDeviations`: LibreOffice's **text filter** expands `PAGE` to 0,
       because it runs without a layout. Measured on `bookmark-field.*` — its text export says "Page 0
       of 1" for the DOCX, the ODT and the RTF while its *rendering* of all four says "Page 1 of 1".
-      XRay.Office reports the cached result, so it agrees with the page in three of the four; the ODT
+      X-Ray.Office reports the cached result, so it agrees with the page in three of the four; the ODT
       is the one where the file itself caches 0, and it agrees with the filter there by coincidence.
       WW8's field PLCF is deliberately not read. Its `flt` numbering — `ww8par5.cxx`'s `aWW8FieldTab`,
       where 33 is PAGE, 37 PAGEREF and 31 and 32 DATE and TIME — says the same thing as the instruction
@@ -380,7 +380,7 @@ Order chosen so each is verifiable before the next gets harder.
       document-level `w:widowControl` over ten straddle positions of a six-line paragraph; and
       `compatibilityMode` 14 against 15 on justified text, which lays out identically to the hundredth
       of a point despite `JustifyLinesWithShrinking` hanging off it.
-- [x] `w:altChunk`, read when the embedded part is a format XRay.Office reads and reported when it is
+- [x] `w:altChunk`, read when the embedded part is a format X-Ray.Office reads and reported when it is
       not. The element is a placeholder with an `r:id` and nothing else, pointing at a *complete file*
       inside the package, so the reading is exactly "run the reader again on another part and splice
       the result in": the chunk's body blocks become the host's at the placeholder's position, its
@@ -447,7 +447,7 @@ Order chosen so each is verifiable before the next gets harder.
       anything other than Word tends to write, and a `w:themeColor` with no `w:val` at all is legal.
       **A deliberate divergence from LibreOffice, measured on `theme-colours.docx`:** its five themed
       runs state the reference three ways, and LibreOffice paints the one with a cached `w:val` in the
-      theme colour and the four without one in *black*, because `mnColor` defaults to zero. XRay.Office
+      theme colour and the four without one in *black*, because `mnColor` defaults to zero. X-Ray.Office
       resolves them, which is what Word does. That is also why the transform chain is verified through
       shape fills rather than run colours — a `w:color` cannot be checked against LibreOffice at all.
       `w:clrSchemeMapping` in `settings.xml` is read as the colour map, since it is `a:clrMap` under
@@ -475,7 +475,7 @@ Order chosen so each is verifiable before the next gets harder.
       exactly with the reference: accent1 darkened 25% #376092, lightened 40% #95B3D7, accent3
       lightened 80% #EBF1DE, background2 darkened 50% #948A54, accent2 #C0504D and darkened 25%
       #953735, accent4 lightened 60% #CCC1DA, accent5 #4BACC6. Word's own picker labels the first of
-      those 365F91; LibreOffice and XRay.Office both give 376092, which is the one-unit-per-channel
+      those 365F91; LibreOffice and X-Ray.Office both give 376092, which is the one-unit-per-channel
       rounding already measured across the 271 combinations in LibreOffice's test data.
       **The trap that cost the time: a themed border cannot survive a conversion.** LibreOffice's
       DOCX *export* round-trips `w:shd`'s `w:themeFill` verbatim through the grab bag — down to
@@ -1086,7 +1086,7 @@ is read and verified, so what remains is the filling of pages rather than the me
 - [x] **An EMF, WMF, EMF+ or SVG blip draws.** `PageFrame` gained a `Lazy<VectorImage>?` beside its
       `RasterImage?` and `PageDrawing` prefers it; `EmbeddedPicture.Read` answers a `FramePicture`, which
       is the pair, and all four front ends thread that one value instead of two nullable fields. `PL2370`
-      survives with a narrower meaning — a vector format XRay.Office has *no decoder for*, which today is a
+      survives with a narrower meaning — a vector format X-Ray.Office has *no decoder for*, which today is a
       PICT and a StarView metafile and nothing else.
       **It needed nothing in `XRay.Office.Core`, and the reason is worth stating rather than an interface
       being written.** `VectorImage` already is the abstraction a frame wants: `Draw(IDrawingSink, DocRect)`
@@ -1684,7 +1684,7 @@ is read and verified, so what remains is the filling of pages rather than the me
       - **A `w:gridSpan` row in a width-less table.** Its own separator is zero, so its divider is left where
         the table's *first* column boundary is and LibreOffice draws the spanning cell **one** column wide
         rather than two — the last row of `table-autofit.docx` before the spanning row was taken out of it.
-        XRay.Office's model is one grid and a span per cell, which cannot say "this row's divider is somewhere
+        X-Ray.Office's model is one grid and a span per cell, which cannot say "this row's divider is somewhere
         else", so honouring it means per-row column positions. RTF escapes the whole thing by stating a short
         row as a row with fewer `\cellx` edges, and ODF gets it right outright.
       - **The moved divider lands three twips from Writer's.** `NewSetTabCols` converts a divider through the
@@ -1693,7 +1693,7 @@ is read and verified, so what remains is the filling of pages rather than the me
         Only visible on a partly-stated grid, and the test carries a 0.2 pt bound for that one case with the
         reason written beside it.
       - That document also exposes something unrelated: an 11.5 pt column is 5.8 pt wide inside its padding,
-        and LibreOffice breaks its text *per character* to fit. XRay.Office has no emergency character
+        and LibreOffice breaks its text *per character* to fit. X-Ray.Office has no emergency character
         breaking, so it draws one overlong line where the reference draws five — a `XRay.Office.Text` line
         breaking matter rather than a table one, which is why that file is compared for its column widths and
         not for its pens.
@@ -1802,7 +1802,7 @@ is read and verified, so what remains is the filling of pages rather than the me
       than here: LibreOffice's RTF import drops the character and paragraph formatting stated inside a
       `{\*\footnote …}` group and falls back to the document's defaults — a note the file sets in Carlito at
       10 pt with no indent renders in Liberation Serif with a 340-twip hanging indent. Reproduced on a
-      hand-written three-line RTF, so it is not an artefact of the corpus export. XRay.Office reads what the
+      hand-written three-line RTF, so it is not an artefact of the corpus export. X-Ray.Office reads what the
       file says; `FootnoteReadingTests` checks the notes structurally instead, and `tests/corpus/README.md`
       records the measurement. DOC has no such problem: its notes are compared word for word and pen for pen.
       **Bisected, since the sentence above was too broad to be true.** A note stating `\f1` with nothing else
@@ -2158,7 +2158,7 @@ is read and verified, so what remains is the filling of pages rather than the me
     single scale factor reproduces the set — so this is left as a per-size constant of at most a twip. It
     shifts every baseline of one size equally and does not accumulate, which is what makes it tolerable.
   - It aligns a **start-aligned right-to-left paragraph against the left margin**, because the
-    installed reference is 24.2 and `ParagraphAdjust::START` arrived in 26.2. XRay.Office follows the
+    installed reference is 24.2 and `ParagraphAdjust::START` arrived in 26.2. X-Ray.Office follows the
     specification and the newer LibreOffice and puts it against the right, so any comparison of a
     right-to-left paragraph has to state its alignment physically — `fo:text-align="right"`, `\qr`,
     `w:jc w:val="start"` — or it is comparing two versions rather than two engines. The corpus
@@ -2179,7 +2179,7 @@ is read and verified, so what remains is the filling of pages rather than the me
   recorded answer. Left alone deliberately: the recorded answer is the one the reference corpus was
   scored against, and changing it on the strength of a different container would move 29 `.doc`
   documents that round 55 measured. It is the whole of the residual on `lorem-ipsum.rtf`-shaped
-  files: with the font forced to one both engines resolve identically, XRay.Office reproduces
+  files: with the font forced to one both engines resolve identically, X-Ray.Office reproduces
   LibreOffice's page **exactly** — 504 words, first baseline 72.4 pt, last 687.6 pt, one page.
 
 - **An anchored shape's *paragraph* can be in the wrong place even when the shape is not.**
@@ -2221,7 +2221,7 @@ is read and verified, so what remains is the filling of pages rather than the me
     `SdrObjCustomShape` when `onEndElement` runs, so its first guard fails and the member keeps its
     text. Both organogram templates in `words/chartset-005` are that case and cost two words each
     until group members were excluded.
-  - **A warp XRay.Office cannot draw still leaves no text**, because the reference has already emptied
+  - **A warp X-Ray.Office cannot draw still leaves no text**, because the reference has already emptied
     the frame by then. That settles the disagreement the slides side had been carrying: both
     families now draw the curves where they can and nothing where they cannot.
   - **`wp:effectExtent` moves a warped shape and not an unwarped one's text**, which is the one

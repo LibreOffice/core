@@ -14,7 +14,7 @@ namespace XRay.Office.Text.Fonts;
 /// LibreOffice asks the platform first — <c>FcFontSetMatch</c> with the missing characters as a
 /// charset, in <c>vcl/unx/generic/font/fontconfig.cxx</c> — and falls back to a hard-coded list of
 /// families only when that answers nothing
-/// (<c>PhysicalFontCollection::GetGlyphFallbackFont</c>, <c>:231-291</c>). XRay.Office asks them in
+/// (<c>PhysicalFontCollection::GetGlyphFallbackFont</c>, <c>:231-291</c>). X-Ray.Office asks them in
 /// the same order, and the platform half is modelled from the machine's own fontconfig
 /// configuration rather than from the font files: see <see cref="FontconfigPreferences"/>, which
 /// records the measurement showing that this answer cannot be derived from the fonts.

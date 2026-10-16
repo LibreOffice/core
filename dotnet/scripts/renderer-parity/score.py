@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Score both candidate renderers against the LibreOffice reference.
 
-Rasterises the reference and the XRay.Office PDF at the same DPI, loads the WASM
+Rasterises the reference and the X-Ray.Office PDF at the same DPI, loads the WASM
 viewer's captured PNGs, resizes anything that does not already match the
 reference page's pixel box, and writes one JSON per document.
 
@@ -63,7 +63,7 @@ def score_document(row: dict) -> dict:
     out["reference"] = {"status": "ok", "pages": ref_pages}
     compare_n = min(ref_pages, MAX_PAGES)
 
-    # ---- XRay.Office: its own PDF, rasterised at the reference's DPI ------------
+    # ---- X-Ray.Office: its own PDF, rasterised at the reference's DPI ------------
     pl_doc, pl_pages = engine_pages_pl(rid)
     pl = {"pages": pl_pages, "status": "ok" if pl_doc else "no-output", "page_metrics": []}
     if pl_doc:

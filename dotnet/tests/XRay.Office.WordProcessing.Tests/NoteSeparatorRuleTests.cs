@@ -20,7 +20,7 @@ namespace XRay.Office.WordProcessing.Tests;
 /// neither its RTF filter nor either of its ODF filters sets.
 /// </para>
 /// <para>
-/// <b>The RTF row is the point of this file.</b> XRay.Office routes DOCX, DOC <em>and RTF</em> through
+/// <b>The RTF row is the point of this file.</b> X-Ray.Office routes DOCX, DOC <em>and RTF</em> through
 /// <see cref="PaginationOptions.Word"/>, so the obvious place to put this rule is that preset — and doing
 /// so would silently give RTF a separator LibreOffice does not draw for it. The five spellings here are
 /// one document, so the assertion is not "these numbers are plausible" but "the same content is ruled two

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Render each fixture through a LibreOffice binary and through XRay.Office, and
+"""Render each fixture through a LibreOffice binary and through X-Ray.Office, and
 report the y of TOPLINE, the shape's ink band, and the y of BOTLINE."""
 import subprocess, sys, os, re, glob
 

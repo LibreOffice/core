@@ -223,7 +223,7 @@ public sealed class LibreOfficeRunner : IDisposable
 
     /// <summary>
     /// Extracts a document's text using LibreOffice's own plain-text export, for
-    /// comparison against XRay.Office extraction.
+    /// comparison against X-Ray.Office extraction.
     /// </summary>
     /// <remarks>
     /// The filter differs by family — plain text for word processing, CSV for
@@ -277,7 +277,7 @@ public sealed class LibreOfficeRunner : IDisposable
     /// Specifically, that the metric-compatible substitutes are installed: Calibri must
     /// resolve to Carlito and Cambria to Caladea, not to a DejaVu face. Without them,
     /// every OOXML document reflows and every page after the first diverges — a failure
-    /// that looks like an XRay.Office layout bug but is not one.
+    /// that looks like an X-Ray.Office layout bug but is not one.
     /// </remarks>
     /// <remarks>
     /// Static because font resolution is a property of the machine's fontconfig setup rather

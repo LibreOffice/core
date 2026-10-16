@@ -7,7 +7,7 @@ public enum DiagnosticSeverity
     Information = 0,
 
     /// <summary>
-    /// The file violates its specification, or uses something XRay.Office does not
+    /// The file violates its specification, or uses something X-Ray.Office does not
     /// implement yet. Output is usable but may differ from a reference renderer.
     /// </summary>
     Warning,
@@ -24,7 +24,7 @@ public enum DiagnosticSeverity
 /// </summary>
 /// <remarks>
 /// Real-world office files break their own specifications constantly, so throwing
-/// on every irregularity would make XRay.Office useless. Instead readers repair what
+/// on every irregularity would make X-Ray.Office useless. Instead readers repair what
 /// they can, skip what they cannot, and record what happened here. Callers that
 /// need strictness can inspect this list and decide for themselves.
 /// </remarks>

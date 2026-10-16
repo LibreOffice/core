@@ -18,7 +18,7 @@ namespace XRay.Office.Fidelity.Tests;
 /// already laid out as ordinary DrawingML shapes. LibreOffice prefers that fifth part and
 /// evaluates the layout algorithms only when it is missing or empty
 /// (<c>oox/source/drawingml/diagram/diagram.cxx:701</c>,
-/// <c>bCreate = pShape-&gt;getExtDrawings().empty()</c>). XRay.Office does the same, so on a
+/// <c>bCreate = pShape-&gt;getExtDrawings().empty()</c>). X-Ray.Office does the same, so on a
 /// document that carries one the two renderers are drawing the same shape tree and every
 /// coordinate should agree.
 /// </para>
@@ -207,7 +207,7 @@ public sealed class SlideDiagramComparisonTests : IDisposable
     /// <remarks>
     /// <para>
     /// <strong>A measured divergence lives here.</strong> A baked shape may state its text area
-    /// as <c>dsp:txXfrm</c>, and XRay.Office honours it directly because a text rectangle is a
+    /// as <c>dsp:txXfrm</c>, and X-Ray.Office honours it directly because a text rectangle is a
     /// parameter of its text layout. LibreOffice cannot: <c>Transform2DContext</c>
     /// (<c>oox/source/drawingml/transform2dcontext.cxx:296-391</c>) says in its own comment that
     /// it "cannot change the text area rectangle directly, because currently we depend on the
@@ -223,7 +223,7 @@ public sealed class SlideDiagramComparisonTests : IDisposable
     /// LibreOffice's own corpus: 286 carry a <c>dsp:txXfrm</c>, and 273 of those — 95% — use one
     /// of the fourteen. The fixture's three labelled shapes are an ellipse, a roundRect and a
     /// rect, all implemented, so this comparison is exact. The remaining 5% are documents where
-    /// XRay.Office will place a label where PowerPoint does and LibreOffice will not;
+    /// X-Ray.Office will place a label where PowerPoint does and LibreOffice will not;
     /// <c>sd/qa/unit/data/pptx/tdf149551_SmartArt_Gear.pptx</c> is one, on a <c>gear9</c>.
     /// </para>
     /// </remarks>

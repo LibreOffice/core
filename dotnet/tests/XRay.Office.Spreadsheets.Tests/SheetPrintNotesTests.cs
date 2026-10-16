@@ -26,7 +26,7 @@ namespace XRay.Office.Spreadsheets.Tests;
 /// <para>
 /// The fixture is LibreOffice 24.2.7.2's own <c>--convert-to xls</c> of a hand-authored flat ODS,
 /// so the <c>NOTE</c>, <c>OBJ</c> and <c>TXO</c> records are the ones LibreOffice itself writes.
-/// Its reference PDF is two pages — one of cells, one of notes — and XRay.Office's
+/// Its reference PDF is two pages — one of cells, one of notes — and X-Ray.Office's
 /// layout-preserved text layer is identical to it.
 /// </para>
 /// <para>

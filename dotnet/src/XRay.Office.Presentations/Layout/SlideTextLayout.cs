@@ -333,7 +333,7 @@ public static partial class SlideTextLayout
     /// carries four empty paragraphs after its three bullets: the reference fits that text at
     /// 25 pt, and moving three of those empty paragraphs into the middle of the body makes the
     /// same LibreOffice fit it at 21 pt with nine-tenths line spacing — which is exactly what
-    /// XRay.Office produced for the untouched deck while it measured every paragraph.
+    /// X-Ray.Office produced for the untouched deck while it measured every paragraph.
     /// </para>
     /// <para>
     /// [24.2.7-audit: VERIFIED 2026-08-21, round slides-r53 — probed against the

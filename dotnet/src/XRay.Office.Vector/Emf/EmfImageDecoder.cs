@@ -4,7 +4,7 @@ using XRay.Office.Vector.Metafiles;
 namespace XRay.Office.Vector.Emf;
 
 /// <summary>
-/// Decodes enhanced metafiles into the XRay.Office display list.
+/// Decodes enhanced metafiles into the X-Ray.Office display list.
 /// </summary>
 /// <remarks>
 /// <para>

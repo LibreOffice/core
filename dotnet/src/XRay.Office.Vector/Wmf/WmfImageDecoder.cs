@@ -6,7 +6,7 @@ using XRay.Office.Vector.Metafiles;
 namespace XRay.Office.Vector.Wmf;
 
 /// <summary>
-/// Decodes Windows Metafiles into the XRay.Office display list.
+/// Decodes Windows Metafiles into the X-Ray.Office display list.
 /// </summary>
 /// <remarks>
 /// <para>

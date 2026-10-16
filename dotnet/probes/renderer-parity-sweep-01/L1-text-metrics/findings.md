@@ -18,7 +18,7 @@ documents have no line-breaking fault of any kind and their divergence is vertic
 
 Every measurement below was taken from the PDFs in `/data/bench/lo/` and `/data/bench/pl/`.
 The reference half carries `Producer: LibreOffice 24.2`, and `soffice --version` in this
-container is **24.2.7.2**. The XRay.Office tree is developed against **26.2.4.2** —
+container is **24.2.7.2**. The X-Ray.Office tree is developed against **26.2.4.2** —
 `dotnet/CLAUDE.md`:546 says so, `dotnet/TODO.24-2-7-audit.md` is the list of 50 sites whose
 calibration moved with it, and `dotnet/probes/fidelity-01/results.md`:38-39 records 40 of
 550 fidelity cases changing verdict across the version alone.
@@ -215,7 +215,7 @@ a different em size from the reference's — almost always by exactly **one poin
 
 and :87 *"Measured against the installed 26.2.4.2, not read out of the tree."*
 
-So XRay.Office deliberately implements **26.2.4.2's** autofit ladder and this sweep's
+So X-Ray.Office deliberately implements **26.2.4.2's** autofit ladder and this sweep's
 reference is the **24.2.7.2** bisection it replaced. Two different search procedures landing
 one ladder step apart is exactly the ±1 pt signature measured. **Ours is right for the
 project's reference binary; the sweep's reference PDFs are from the superseded one.** Do not

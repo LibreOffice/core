@@ -583,7 +583,7 @@ family as RC-7. **L2's.**
 
 **Document: #157.** Not this lane's file.
 
-The case note: *"The connector between the two boxes loses its arrowhead — XRay.Office draws the
+The case note: *"The connector between the two boxes loses its arrowhead — X-Ray.Office draws the
 shaft as a plain rule."* The machinery to draw one exists and is used by PPTX —
 `XRay.Office.Presentations/Layout/SlideLineEnds.cs`, driven from `PptxSlideLayout.cs:914-915`
 and `:1920-1935` off `a:headEnd`/`a:tailEnd`, applied at `:637`. The legacy binary path never

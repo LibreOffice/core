@@ -637,7 +637,7 @@ internal static class OdfParagraphFormats
     /// leaves the vertical modes alone: <c>rl-tb</c> is the right-to-left paragraph every Hebrew and
     /// Arabic document is made of, and <c>tb-rl</c> and <c>tb-lr</c> are vertical text, which is a
     /// separate matter and not yet laid out at all. <c>page</c> means "whatever the page says", which
-    /// resolves to left to right for every page geometry XRay.Office reads.
+    /// resolves to left to right for every page geometry X-Ray.Office reads.
     /// </para>
     /// <para>
     /// Through the style chain like everything else here, which is not incidental: LibreOffice's own

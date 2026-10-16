@@ -38,7 +38,7 @@ namespace XRay.Office.Text.Shaping;
 /// </list>
 /// <para>
 /// The face's bytes are handed over whole and HarfBuzz parses the sfnt itself. That is deliberate: it
-/// reads <c>GSUB</c> and <c>GPOS</c>, which XRay.Office's own reader does not, and letting each side
+/// reads <c>GSUB</c> and <c>GPOS</c>, which X-Ray.Office's own reader does not, and letting each side
 /// parse the file it was given avoids the two disagreeing about which face of a collection they are
 /// looking at.
 /// </para>
@@ -63,7 +63,7 @@ public sealed class HarfBuzzShaper : ITextShaper, IDisposable
     /// True when the native harfbuzz library is present and loadable.
     /// </summary>
     /// <remarks>
-    /// Probed once by asking harfbuzz for something trivial. XRay.Office has to keep working where the
+    /// Probed once by asking harfbuzz for something trivial. X-Ray.Office has to keep working where the
     /// native library is missing — an unshaped document is a document with slightly wrong line breaks,
     /// where a <c>DllNotFoundException</c> is no document at all.
     /// </remarks>

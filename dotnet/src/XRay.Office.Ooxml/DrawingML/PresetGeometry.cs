@@ -19,7 +19,7 @@ namespace XRay.Office.Ooxml.DrawingML;
 /// LibreOffice stores the same definitions as generated data tables
 /// (<c>oox/source/drawingml/customshapepresetdata.cxx</c>) and evaluates them with one
 /// shared engine (<c>EnhancedCustomShape2d</c>) that also serves the ODF and legacy
-/// binary syntaxes. XRay.Office should follow that structure: port the data tables
+/// binary syntaxes. X-Ray.Office should follow that structure: port the data tables
 /// mechanically, then write one evaluator all three front ends feed into. See
 /// <c>dotnet/research/04-impress.md</c> section A.
 /// </para>

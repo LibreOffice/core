@@ -1,7 +1,7 @@
 # slides-sym-01 — prediction, committed before any measurement of the fix
 
 Written after reading `dotnet/probes/slides-solog-01/results.md`, `oox/source/drawingml/textrun.cxx`
-and the XRay.Office slides reader/layout, and after two things that are **results, not predictions**
+and the X-Ray.Office slides reader/layout, and after two things that are **results, not predictions**
 and are recorded here so the scoring is honest about what was already known:
 
 - **R0.** `XRay.Office.Fidelity.Tests` baseline on this worktree, measured before any edit:

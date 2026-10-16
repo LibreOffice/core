@@ -212,7 +212,7 @@ least three things, and the two largest are not the same thing at all:
   `.odt`.** See below. Together they are 128 of the column's 363 remaining pages of error.
 - **`195584360` (22 / 51) is a third thing again** and this round does not move it.
 
-**"The `.odt` spelling is a control … both spellings go through the same XRay.Office layout engine
+**"The `.odt` spelling is a control … both spellings go through the same X-Ray.Office layout engine
 and only the reader differs."** True, and the brief's own caution against assuming a shared cause
 is the more useful half. On `FAA 2025-26 Holdover Tables` the reference draws its `.odt` in 167
 pages and its `.rtf` in 233 — a 40% difference on bytes it exported itself — while our two

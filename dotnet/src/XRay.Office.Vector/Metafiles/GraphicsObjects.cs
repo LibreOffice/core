@@ -207,7 +207,7 @@ public sealed record MetafileRegion(GraphicsPath Path, DocRect Bounds, int Recta
     public bool IsRectangular => RectangleCount <= 1;
 }
 
-/// <summary>A created object whose kind XRay.Office does not model, so that its handle is still consumed.</summary>
+/// <summary>A created object whose kind X-Ray.Office does not model, so that its handle is still consumed.</summary>
 /// <remarks>
 /// Handles are assigned by position in the object table, so an unrecognised
 /// <c>CreateBitmap</c> that consumed no slot would shift every handle after it and repaint the

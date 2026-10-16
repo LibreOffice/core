@@ -31,7 +31,7 @@ last-resort answer.
 | `fc-match ZzzNoSuchFamily` | DejaVu Sans |
 | `soffice` 24.2.7.2 (distro) | **DejaVu Sans** |
 | `/opt/libreoffice26.2/program/soffice` 26.2.4.2 (TDF tarball) | **Noto Sans** |
-| XRay.Office | DejaVu Sans |
+| X-Ray.Office | DejaVu Sans |
 
 ## What it means
 

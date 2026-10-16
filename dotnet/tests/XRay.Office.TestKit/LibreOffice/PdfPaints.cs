@@ -9,7 +9,7 @@ namespace XRay.Office.TestKit.LibreOffice;
 /// <param name="PageIndex">Which page it is on, counted from zero.</param>
 /// <param name="Type">
 /// The PDF shading type: 1 function-based, 2 axial, 3 radial. LibreOffice writes 2 for a
-/// linear or axial gradient and 1 for anything else; XRay.Office writes 2 and 3.
+/// linear or axial gradient and 1 for anything else; X-Ray.Office writes 2 and 3.
 /// </param>
 /// <param name="Coords">
 /// The <c>/Coords</c> array as written: four numbers for an axial shading (the two ends of the
@@ -162,7 +162,7 @@ public static partial class PdfPaints
     /// <remarks>
     /// The nearest preceding <c>re</c> that is used as a clip rather than filled, with any
     /// translation-only <c>cm</c> between the enclosing <c>q</c> and it applied. Both writers
-    /// produce one of exactly two shapes — XRay.Office states the rectangle in page coordinates
+    /// produce one of exactly two shapes — X-Ray.Office states the rectangle in page coordinates
     /// and LibreOffice translates first and states it at the origin — and a translation is all
     /// that separates them.
     /// </remarks>

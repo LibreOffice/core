@@ -66,7 +66,7 @@ public static class EscherBlips
     private static bool IsVector(ushort type) => type is 0xF01A or 0xF01B or 0xF01C;
 
     /// <summary>
-    /// The two whose bytes are worth extracting, which is the two XRay.Office has a decoder for.
+    /// The two whose bytes are worth extracting, which is the two X-Ray.Office has a decoder for.
     /// </summary>
     /// <remarks>
     /// PICT shares the metafile header and is left with no bytes on purpose: nothing here reads one,

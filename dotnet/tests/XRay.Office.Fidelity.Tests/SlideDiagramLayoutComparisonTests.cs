@@ -14,7 +14,7 @@ namespace XRay.Office.Fidelity.Tests;
 /// This is the only honest check available for the evaluator. A diagram with a baked drawing can
 /// be checked against the picture in its own package; one without has no picture in it at all,
 /// so the only thing to compare against is another implementation running the same program over
-/// the same data — and LibreOffice's is the one XRay.Office's is ported from
+/// the same data — and LibreOffice's is the one X-Ray.Office's is ported from
 /// (<c>oox/source/drawingml/diagram/</c>).
 /// </para>
 /// <para>
@@ -141,7 +141,7 @@ public sealed class SlideDiagramLayoutComparisonTests : IDisposable
     /// through a <c>primFontSz</c> constraint, and this fixture deliberately does not — its runs
     /// state 14 pt themselves, so both renderers use it and the comparison measures placement
     /// rather than the size negotiation. A fixture that let the constraint decide would instead
-    /// measure LibreOffice's shrink-to-fit, which XRay.Office does not implement.
+    /// measure LibreOffice's shrink-to-fit, which X-Ray.Office does not implement.
     /// </remarks>
     [Fact]
     public void EveryLabelIsDrawnWhereLibreOfficeDrawsIt()

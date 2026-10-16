@@ -99,7 +99,7 @@ public sealed record SheetPrintSetup
     /// what <c>ScStyleSheet::GetItemSet</c> puts in a fresh page style
     /// (<c>sc/source/core/data/stlsheet.cxx:148-215</c>). The paper size there is
     /// <c>SvxPaperInfo::GetDefaultPaperSize()</c> and therefore locale-dependent — Letter in
-    /// an American locale — which XRay.Office cannot reproduce without locale infrastructure it
+    /// an American locale — which X-Ray.Office cannot reproduce without locale infrastructure it
     /// does not have, so A4 is used and the difference is recorded in the module's TODO.
     /// </remarks>
     public static SheetPrintSetup Default { get; } = new();

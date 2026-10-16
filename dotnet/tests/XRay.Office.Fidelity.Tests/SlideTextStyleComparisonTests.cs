@@ -123,7 +123,7 @@ public sealed class SlideTextStyleComparisonTests : IDisposable
     /// <para>
     /// Shape 6 of this deck is a plain text box with no <c>p:style</c>, over a master
     /// <c>p:otherStyle</c> stating magenta at every level, and the deck states no
-    /// <c>p:defaultTextStyle</c> at all. LibreOffice draws it black. XRay.Office resolved the
+    /// <c>p:defaultTextStyle</c> at all. LibreOffice draws it black. X-Ray.Office resolved the
     /// magenta until round eighteen and the divergence was recorded as deliberate; it was a
     /// defect, and the fixture that shows it is <c>slide-other-style.pptx</c> below, because
     /// this deck cannot — its <c>otherStyle</c> states 18 pt and the fallback is also 18 pt.
@@ -161,7 +161,7 @@ public sealed class SlideTextStyleComparisonTests : IDisposable
     /// <para>
     /// <strong>Our resolution is asserted as literals and the reference's is compared against
     /// them</strong>, rather than the reference alone: a test that only reads LibreOffice's PDF
-    /// passes whatever XRay.Office does, which is the shape of assurance this suite is meant not
+    /// passes whatever X-Ray.Office does, which is the shape of assurance this suite is meant not
     /// to have.
     /// </para>
     /// </remarks>

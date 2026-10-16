@@ -124,7 +124,7 @@ public static class OoxmlXml
     /// and one that walks neither loses it entirely.
     /// </para>
     /// <para>
-    /// A choice is preferred when every namespace its <c>Requires</c> names is one XRay.Office
+    /// A choice is preferred when every namespace its <c>Requires</c> names is one X-Ray.Office
     /// can actually read, because the fallback exists precisely for the case where the choice
     /// cannot be.
     /// </para>

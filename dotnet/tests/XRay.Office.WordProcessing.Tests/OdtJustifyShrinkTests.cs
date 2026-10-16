@@ -62,7 +62,7 @@ public sealed class OdtJustifyShrinkTests
     /// <para>
     /// <b>The fixtures are LibreOffice-written files with one item changed, and that is not
     /// tidiness.</b> A minimal hand-authored flat ODF carrying this one config item is read
-    /// correctly by XRay.Office and ignored outright by 26.2.4.2: forty such probes over twenty page
+    /// correctly by X-Ray.Office and ignored outright by 26.2.4.2: forty such probes over twenty page
     /// widths gave byte-identical renderings with the item true and false. The same item inside a
     /// real file's full <c>ooo:configuration-settings</c> set decides the break at nine of
     /// thirty-six widths.

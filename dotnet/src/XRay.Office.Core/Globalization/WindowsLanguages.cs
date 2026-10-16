@@ -12,7 +12,7 @@ namespace XRay.Office.Core.Globalization;
 /// </para>
 /// <para>
 /// The table is generated from LibreOffice's own <c>i18nlangtag</c> data, in the order LibreOffice
-/// consults its three tables and honouring its override marks — so XRay.Office answers what LibreOffice
+/// consults its three tables and honouring its override marks — so X-Ray.Office answers what LibreOffice
 /// answers, which is what makes a comparison against it meaningful. Getting the mapping only mostly
 /// right is worse than it sounds: a wrong tag silently mislabels a document's language for spell
 /// checking and locale-dependent number formatting, and nothing about the output looks wrong

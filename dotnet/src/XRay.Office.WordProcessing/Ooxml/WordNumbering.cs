@@ -112,7 +112,7 @@ public sealed class WordNumberingLevel
 public sealed class WordNumbering
 {
     /// <summary>
-    /// The level count WordprocessingML defines. Fixed by the format, not a limit XRay.Office
+    /// The level count WordprocessingML defines. Fixed by the format, not a limit X-Ray.Office
     /// chose.
     /// </summary>
     public const int LevelCount = 9;

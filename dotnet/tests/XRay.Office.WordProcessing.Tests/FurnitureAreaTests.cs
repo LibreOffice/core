@@ -19,7 +19,7 @@ namespace XRay.Office.WordProcessing.Tests;
 /// (<c>SectionPropertyMap::PrepareHeaderFooterProperties</c>, <c>PropertyMap.cxx:1148</c>).
 /// </para>
 /// <para>
-/// XRay.Office used to return an empty rectangle for that case, and a flow laid out into an empty
+/// X-Ray.Office used to return an empty rectangle for that case, and a flow laid out into an empty
 /// rectangle is no flow at all — so the header's lines, the footer's lines, and every frame anchored in
 /// either vanished. On the corpus that lost a running head from all six pages of a document whose
 /// pagination was otherwise exact.

@@ -20,9 +20,9 @@ namespace XRay.Office.WordProcessing.Tests;
 /// <c>line</c>, and frequently a zero extent in one dimension.
 /// </para>
 /// <para>
-/// XRay.Office drew the rectangle instead, which puts three sides on the page that are not in the
+/// X-Ray.Office drew the rectangle instead, which puts three sides on the page that are not in the
 /// file. Measured against 24.2.7.2 on the document these fixtures are reduced from: a red
-/// 2 × 1 inch line shape, drawn by LibreOffice as a diagonal and by XRay.Office as a box. The VML
+/// 2 × 1 inch line shape, drawn by LibreOffice as a diagonal and by X-Ray.Office as a box. The VML
 /// and Escher front ends already modelled it — <see cref="PageFrame.IsLine"/> — so this is the
 /// DrawingML reading catching up with them rather than new drawing code.
 /// </para>

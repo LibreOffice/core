@@ -102,7 +102,7 @@ public readonly record struct PositionedGlyph(ushort GlyphId, DocPoint Offset, L
 /// <remarks>
 /// This is the outcome of font resolution, not a request for it. The requested
 /// family is kept in <see cref="RequestedFamily"/> because the substitution that
-/// happened is the single biggest cause of rendering divergence between XRay.Office
+/// happened is the single biggest cause of rendering divergence between X-Ray.Office
 /// and any reference renderer, and diagnosing that requires knowing what was asked
 /// for as well as what was used.
 /// </remarks>

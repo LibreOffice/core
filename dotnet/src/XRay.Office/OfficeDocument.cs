@@ -7,7 +7,7 @@ using XRay.Office.Core.Formats;
 namespace XRay.Office;
 
 /// <summary>
-/// The one-line entry point to XRay.Office: hand it a file, get back a document.
+/// The one-line entry point to X-Ray.Office: hand it a file, get back a document.
 /// </summary>
 /// <remarks>
 /// <para>

@@ -57,7 +57,7 @@ public class ThemedTablePartTests
         // w:themeFillShade="BF" is Word's "darker 25%", and it is a lumMod of 74902 in HSL
         // rather than a DrawingML a:shade — which would give a much darker 3A5F8B here. Word's
         // own picker labels this swatch 365F91; LibreOffice paints 376092 for the same chain and
-        // XRay.Office agrees with LibreOffice, which is the one-unit-per-channel rounding
+        // X-Ray.Office agrees with LibreOffice, which is the one-unit-per-channel rounding
         // difference already measured across the 271 combinations in its test data.
         cells[1].Shading.ShouldBe(Colour.FromRgb(0x376092));
 

@@ -156,7 +156,7 @@ public sealed class TextHints
     /// </summary>
     /// <remarks>
     /// In order so a caller can apply them one after another and let the last win, which is the same
-    /// shape every one of XRay.Office's format readers already uses for style resolution.
+    /// shape every one of X-Ray.Office's format readers already uses for style resolution.
     /// </remarks>
     public List<TextHint> At(int position)
     {

@@ -677,7 +677,7 @@ internal sealed partial class PptxSlideLayout
     /// Measured on <c>slides/batch-002/pptx/iaeg_work_group_leader_updates.pptx</c>, an
     /// organisation chart whose eight working-group boxes sit in a group filled
     /// <c>bg2 lumMod 90000</c>: two state that colour outright and six say <c>a:grpFill</c>, so
-    /// the reference draws eight tan boxes and XRay.Office drew two. Eight of the slides corpus's
+    /// the reference draws eight tan boxes and X-Ray.Office drew two. Eight of the slides corpus's
     /// 112 PPTX decks use the element on a slide.
     /// </para>
     /// </remarks>

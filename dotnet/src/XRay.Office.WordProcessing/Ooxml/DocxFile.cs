@@ -71,7 +71,7 @@ public sealed class DocxFile : IDisposable
             // Reported rather than loaded. A document that carries its own copy of a face is
             // exactly the one where matching the family by name gives different metrics, and
             // therefore different line breaks and a different page count — so a caller comparing
-            // XRay.Office's pagination against the file's own is entitled to know.
+            // X-Ray.Office's pagination against the file's own is entitled to know.
             _diagnostics.Add(new Diagnostic(
                 DiagnosticSeverity.Information, "PL2112",
                 "The document embeds its own font files for "

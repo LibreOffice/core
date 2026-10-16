@@ -47,7 +47,7 @@ namespace XRay.Office.Spreadsheets.Layout;
 /// and runs 2.3% wide while 10 pt is set at 13 and runs 2.5% narrow. And the paper is the column
 /// width times <c>nPPTX</c>, which <see cref="OutputFactor"/> has divided and <c>nPPTY</c> has not.
 /// Neither is visible in the drawn page — LibreOffice draws the same text at the same advances
-/// XRay.Office does, measured off its own PDF — and only the row it reserved for it disagrees.
+/// X-Ray.Office does, measured off its own PDF — and only the row it reserved for it disagrees.
 /// </para>
 /// <para>
 /// A <em>turned</em> cell is measured by <see cref="RotatedHeight"/>, whose branch of

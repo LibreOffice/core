@@ -9,7 +9,7 @@ that were missing above it, each of which cost this project a round to learn the
 
 **1. Comparability comes before scoring.** The 26.2.4.2 tarball ships its own
 `NotoSans-Regular.ttf` and `NotoSerif-Regular.ttf`, so for any family the system lacks it
-resolves to Noto where the distro binary and XRay.Office both resolve to DejaVu. An ink figure
+resolves to Noto where the distro binary and X-Ray.Office both resolve to DejaVu. An ink figure
 taken across that gap measures the font, not the renderer -- two agents independently spent
 hours on `2017-04-27-Lease-Transition-Records-Checklist` before one of them read the faces out
 of the PDFs and found the comparison was void. So the faces are compared *first*, and a

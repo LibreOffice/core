@@ -164,7 +164,7 @@ public sealed class SheetEmptyPageTests
     /// </para>
     /// <para>
     /// Measured on <c>fy20-may20-sep20.xlsx</c>, which repeats row 1 and whose column F reaches
-    /// only row 76: LibreOffice prints two pages of the second column band and XRay.Office printed
+    /// only row 76: LibreOffice prints two pages of the second column band and X-Ray.Office printed
     /// 103 blank ones, 233 pages against 96.
     /// </para>
     /// </remarks>
@@ -228,7 +228,7 @@ public sealed class SheetEmptyPageTests
     /// <para>
     /// Measured on <c>Bulletin-37-Appendix-2-immediate-detriment-data-request.xlsx</c>, whose
     /// columns I to P carry a style on every cell of rows 1 to 15 and nothing else: LibreOffice
-    /// drops that column band entirely and prints five pages where XRay.Office printed six.
+    /// drops that column band entirely and prints five pages where X-Ray.Office printed six.
     /// </para>
     /// </remarks>
     [Fact]

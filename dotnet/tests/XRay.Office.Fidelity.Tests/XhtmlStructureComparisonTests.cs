@@ -10,7 +10,7 @@ using Shouldly;
 namespace XRay.Office.Fidelity.Tests;
 
 /// <summary>
-/// Compares the structure of XRay.Office's XHTML against LibreOffice's own XHTML export.
+/// Compares the structure of X-Ray.Office's XHTML against LibreOffice's own XHTML export.
 /// </summary>
 /// <remarks>
 /// <para>
@@ -31,7 +31,7 @@ namespace XRay.Office.Fidelity.Tests;
 /// </para>
 /// <para>
 /// <b>Measured: the three families are not equally useful as oracles.</b> The Writer export is
-/// fully semantic and agrees with XRay.Office on headings, list nesting, table grids and links.
+/// fully semantic and agrees with X-Ray.Office on headings, list nesting, table grids and links.
 /// The Calc and Impress exports are not: Calc emits a bare <c>table</c> with no sheet name and
 /// no headings at all, and Impress emits one absolutely positioned <c>div</c> per slide with no
 /// heading anywhere. So Writer is compared on everything and the other two only on what they
@@ -215,14 +215,14 @@ public class XhtmlStructureComparisonTests : IDisposable
     /// Items are counted rather than <c>ul</c>/<c>ol</c> elements, and only those with text,
     /// because the two writers structure the same list differently in two ways that are both
     /// correct. LibreOffice hangs a nested list off a wrapper <c>li</c> of its own
-    /// (<c>&lt;ul&gt;&lt;li&gt;&lt;ul&gt;…</c>) where XRay.Office puts it inside the item it
+    /// (<c>&lt;ul&gt;&lt;li&gt;&lt;ul&gt;…</c>) where X-Ray.Office puts it inside the item it
     /// belongs to; counting the wrappers would report a difference that is not one.
     /// </para>
     /// <para>
     /// Items whose content is a heading are skipped, and that is the second deliberate
     /// difference. Word attaches its heading styles to an outline list, so in a DOCX every
     /// heading is also a list item — LibreOffice's export wraps them in <c>li</c> accordingly and
-    /// XRay.Office emits the heading alone. Both keep the heading's level, which
+    /// X-Ray.Office emits the heading alone. Both keep the heading's level, which
     /// <see cref="EveryHeadingKeepsItsLevel"/> asserts separately.
     /// </para>
     /// </remarks>
@@ -262,7 +262,7 @@ public class XhtmlStructureComparisonTests : IDisposable
     /// </summary>
     /// <remarks>
     /// The reference renders the marker into the item as a floated <c>span</c> and closes it
-    /// with <c>span.odfLiEnd</c>; XRay.Office parks the marker on a <c>data-marker</c> attribute
+    /// with <c>span.odfLiEnd</c>; X-Ray.Office parks the marker on a <c>data-marker</c> attribute
     /// instead, since it is not text the document contains. Left in, every reference item would
     /// read "•First bullet" and no item would ever match.
     /// </remarks>
@@ -320,7 +320,7 @@ public class XhtmlStructureComparisonTests : IDisposable
                 int column = 0;
                 foreach (XElement cell in rows[r].Elements())
                 {
-                    // th and td together: XRay.Office marks a declared header row with th, which
+                    // th and td together: X-Ray.Office marks a declared header row with th, which
                     // the reference does not do at all — it writes td throughout and puts the
                     // heading-ness in a class. That is a difference of vocabulary, not of grid.
                     if (cell.Name.LocalName is not ("td" or "th")) continue;

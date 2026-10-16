@@ -155,7 +155,7 @@ public sealed class Ww8FontTable
     /// </summary>
     /// <remarks>
     /// Only the primary name. An entry may carry an alternate to fall back to, which is the document's
-    /// own substitution suggestion — XRay.Office resolves substitutions through LibreOffice's table
+    /// own substitution suggestion — X-Ray.Office resolves substitutions through LibreOffice's table
     /// instead, so honouring this one would introduce a second and different answer.
     /// </remarks>
     public string? Name(int index)

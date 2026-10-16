@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # renderours.sh <list> <outdir> — render our side only for each listed corpus document,
 # and report pages and extractable words. The reference does not move for a
-# XRay.Office-only change, so this is enough to compare two of our own binaries.
+# X-Ray.Office-only change, so this is enough to compare two of our own binaries.
 set -u
 LIST="$1"; OUT="$2"
 ROOT=/workspace/sample-files

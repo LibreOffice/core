@@ -10,7 +10,7 @@ namespace XRay.Office.Text.Fonts;
 /// <para>
 /// Hand-rolled rather than taken from a library, deliberately. Deriving a line height needs raw
 /// access to <c>hhea</c>, <c>OS/2</c> and a specific bit of <c>fsSelection</c>, and needs to apply
-/// XRay.Office's own precedence between them rather than whatever a library decided — and that
+/// X-Ray.Office's own precedence between them rather than whatever a library decided — and that
 /// precedence is the single most visible way two renderers diverge on identical input
 /// (<c>research/06-rendering.md</c> section B.4).
 /// </para>

@@ -7,7 +7,7 @@ using Shouldly;
 namespace XRay.Office.Fidelity.Tests;
 
 /// <summary>
-/// Compares the slides XRay.Office draws from a <em>binary</em> PowerPoint deck against the slides
+/// Compares the slides X-Ray.Office draws from a <em>binary</em> PowerPoint deck against the slides
 /// LibreOffice draws from the same file.
 /// </summary>
 /// <remarks>
@@ -24,7 +24,7 @@ namespace XRay.Office.Fidelity.Tests;
 /// every preset shape as a vertex array whose coordinates are references into a formula table,
 /// <em>and</em> writes the geometry box those formulas are evaluated in as zero — so its own
 /// importer resolves all four of that slide's triangles to a single point and its PDF draws
-/// <c>72 468 m 72 468 l 72 468 l h f*</c> four times. XRay.Office draws their bounding rectangles,
+/// <c>72 468 m 72 468 l 72 468 l h f*</c> four times. X-Ray.Office draws their bounding rectangles,
 /// which is in the right place in the right colour with the wrong outline, and is strictly more
 /// than the reference manages. Comparing the two would assert that drawing nothing is correct.
 /// </para>
@@ -119,7 +119,7 @@ public sealed class PptSlideRenderComparisonTests : IDisposable
         Assert.SkipUnless(LibreOfficeRunner.IsAvailable, LibreOfficeRunner.UnavailableReason);
 
         // shape-geometry-ppt.ppt alone. slides-ppt.ppt's master carries a footer and a
-        // slide-number placeholder, which LibreOffice renders onto every slide and XRay.Office does
+        // slide-number placeholder, which LibreOffice renders onto every slide and X-Ray.Office does
         // not draw at all — a master's own shapes are not yet placed on the slides under it, on
         // any of the three paths — so its run counts differ for a reason this comparison is not
         // about. The four text boxes here cover what it is about: the two inset spellings, a

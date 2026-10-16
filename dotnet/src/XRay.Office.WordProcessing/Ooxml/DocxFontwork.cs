@@ -86,7 +86,7 @@ internal static class DocxFontwork
 
         // From here the reference has taken the text out of the frame, whether or not this can
         // draw the curves that replace it. Everything below therefore answers `Suppressed` rather
-        // than nothing, so that a warp XRay.Office cannot draw still leaves the text layer — which
+        // than nothing, so that a warp X-Ray.Office cannot draw still leaves the text layer — which
         // is what the reference's own output does, and what the slides side already did.
         if (first is null) return Suppressed;
 
@@ -279,7 +279,7 @@ internal static class DocxFontwork
 /// <param name="LineWidth">The pen's width.</param>
 /// <param name="SuppressesText">
 /// Whether the reference would have taken this body's text out of the frame, which it does for
-/// every warped rectangle whether or not the warp is one XRay.Office can draw. It is the flag that
+/// every warped rectangle whether or not the warp is one X-Ray.Office can draw. It is the flag that
 /// keeps the two families' fallbacks the same: a warp neither side can draw leaves no text on
 /// either, as the reference leaves none.
 /// </param>

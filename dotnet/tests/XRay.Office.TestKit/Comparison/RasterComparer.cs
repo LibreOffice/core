@@ -1,7 +1,7 @@
 namespace XRay.Office.TestKit.Comparison;
 
 /// <summary>
-/// Compares an XRay.Office rendering against a LibreOffice reference rendering.
+/// Compares an X-Ray.Office rendering against a LibreOffice reference rendering.
 /// </summary>
 /// <remarks>
 /// <para>
@@ -23,7 +23,7 @@ public static class RasterComparer
     /// <summary>
     /// Compares two PNG images of the same page.
     /// </summary>
-    /// <param name="actualPng">The XRay.Office rendering.</param>
+    /// <param name="actualPng">The X-Ray.Office rendering.</param>
     /// <param name="expectedPng">The LibreOffice reference rendering.</param>
     public static RasterComparison Compare(ReadOnlySpan<byte> actualPng, ReadOnlySpan<byte> expectedPng)
         => throw new NotImplementedException();
@@ -62,7 +62,7 @@ public static class RasterComparer
 /// </param>
 /// <param name="InkCoverageDelta">
 /// The difference in non-white pixel fraction between the two images. Strongly negative
-/// means XRay.Office drew less than it should have, which usually means something was
+/// means X-Ray.Office drew less than it should have, which usually means something was
 /// skipped outright — an unsupported shape type, or a vector image that failed to decode.
 /// </param>
 public readonly record struct RasterComparison(

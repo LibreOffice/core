@@ -140,7 +140,7 @@ public sealed class FrameComparisonTests : IDisposable
     /// </summary>
     /// <remarks>
     /// A guard on the comparison above rather than a second measurement of the same thing. That test
-    /// compares XRay.Office against LibreOffice and would pass just as happily if a future change made both
+    /// compares X-Ray.Office against LibreOffice and would pass just as happily if a future change made both
     /// sides draw an unwrapped document — if, say, the frame stopped being read at all and the reference
     /// were regenerated from a document that had lost it. This says what the document is <em>for</em>: the
     /// page holds lines at two distinct starts, 4 cm apart, and the indented ones are a contiguous run.
@@ -571,7 +571,7 @@ public sealed class FrameComparisonTests : IDisposable
                 .Where(run => Math.Abs(run.FontSize - BodyPoints) < 0.01)
                 .Select(run => new Line(run.PageIndex, run.X, run.Y)));
 
-    /// <summary>The body's lines as XRay.Office drew them.</summary>
+    /// <summary>The body's lines as X-Ray.Office drew them.</summary>
     private static List<Line> Drawn(string path)
     {
         RecordingDrawingSink sink = Record(path);

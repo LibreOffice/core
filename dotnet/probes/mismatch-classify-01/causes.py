@@ -160,7 +160,7 @@ for line in SRC.read_text().splitlines():
         print(f"no cause for {base}", file=sys.stderr)
     rows.append(f + [cause, note])
 
-print("# The 87 documents the whole-corpus gate scored MISMATCH at XRay.Office 2f4709c08.")
+print("# The 87 documents the whole-corpus gate scored MISMATCH at X-Ray.Office 2f4709c08.")
 print("# ours   = XRay.Office.Cli @ 2f4709c08, XRAY_OFFICE_BUNDLED_FONTS unset (installed faces win)")
 print("# ref24  = /usr/bin/soffice, LibreOffice 24.2.7.2 420(Build:2) - what batch-check.sh measures")
 print("# ref26  = /opt/libreoffice26.2/program/soffice, LibreOffice 26.2.4.2 0229ac93fcf0d7cb,")

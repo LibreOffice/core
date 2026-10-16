@@ -96,7 +96,7 @@ public sealed class SlideAutofitParagraphSpaceComparisonTests : IDisposable
 
         Assert.SkipWhen(theirs.Count == 0, "pdftotext is not available; install poppler-utils");
 
-        // Ours as literals first, so this is a test of XRay.Office rather than of LibreOffice: a
+        // Ours as literals first, so this is a test of X-Ray.Office rather than of LibreOffice: a
         // comparison against the reference alone passes whatever we happen to draw.
         //
         // These are 26.2.4.2's answers, which is the reference this tree is developed against,

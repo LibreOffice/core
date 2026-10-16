@@ -27,7 +27,7 @@
 
     <!--
       The CLI, for PdfAnalysisTests. `xray-office analyze` reads PDFs back, which is the one thing no
-      src/ library does — XRay.Office writes them — so the reader lives in the tool and is tested from
+      src/ library does — X-Ray.Office writes them — so the reader lives in the tool and is tested from
       the project that produces the files it reads. Referencing an exe project is fine: the test
       host takes its own entry point and the reference contributes a library.
     -->

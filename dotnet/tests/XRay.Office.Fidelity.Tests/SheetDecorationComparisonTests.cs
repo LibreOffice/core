@@ -124,7 +124,7 @@ public sealed class SheetDecorationComparisonTests : IDisposable
         found.Count.ShouldBe(
             expected.Count,
             $"{name}: {found.Count} borders against LibreOffice's {expected.Count}"
-            + $"\n  LibreOffice: {Describe(expected)}\n  XRay.Office:   {Describe(found)}");
+            + $"\n  LibreOffice: {Describe(expected)}\n  X-Ray.Office:   {Describe(found)}");
 
         double offset = VerticalOffset(name, expected[0].FromY, found[0].FromY);
 
@@ -258,7 +258,7 @@ public sealed class SheetDecorationComparisonTests : IDisposable
     /// </summary>
     /// <remarks>
     /// Removed because a glyph run written with per-glyph kerning adjustments — which is what
-    /// XRay.Office's PDF writer produces from a shaped run — makes <c>pdftotext</c> report every
+    /// X-Ray.Office's PDF writer produces from a shaped run — makes <c>pdftotext</c> report every
     /// letter as its own word with a <em>zero-width</em> box, so neither the gaps nor the widths
     /// can be used to put them back together. The trap cost an hour: the header was placed
     /// correctly and matched LibreOffice's own PDF to two decimal places, and a word-by-word

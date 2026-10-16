@@ -10,7 +10,7 @@ Page counts: reference 312, ours 314.
 - **Reference side — sound.** All `[bin]` numbers for LibreOffice come from
   `/opt/libreoffice26.2/program/soffice`, 26.2.4.2 (PDF `Producer` confirms it). `/usr/bin/soffice`
   (24.2.7.2) was never used. Nothing below about the reference needs re-measuring.
-- **Our side — Sep-17 build, NOT HEAD.** Every `[bin]` number attributed to XRay.Office was measured
+- **Our side — Sep-17 build, NOT HEAD.** Every `[bin]` number attributed to X-Ray.Office was measured
   with `dotnet/tools/XRay.Office.Cli/bin/Release/net10.0/linux-x64/XRay.Office.Cli`, mtime
   **2026-09-17 06:33**. HEAD is `bccfeb64b` (2026-09-20). **Three commits touched
   `Layout/TableLayouter.cs` after that binary was built**, all of them in this exact area:

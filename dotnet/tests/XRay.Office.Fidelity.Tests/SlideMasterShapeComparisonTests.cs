@@ -21,7 +21,7 @@ namespace XRay.Office.Fidelity.Tests;
 /// This was an open question for a long time and the numbers made it look marginal: only six of
 /// the 389 decks in <c>sd/qa/unit/data/pptx</c> carry a master <c>p:sp</c> with no <c>p:ph</c> and
 /// non-empty text, and three of those carry only the <c>&#8249;#&#8250;</c> slide-number glyph. It
-/// is not marginal, because on the four real ones LibreOffice draws the text and XRay.Office drew
+/// is not marginal, because on the four real ones LibreOffice draws the text and X-Ray.Office drew
 /// nothing: <c>master-slides.pptx</c>'s "Copyright © SUSE", <c>cshapes.pptx</c>'s Novell
 /// strapline and <c>tdf149865.pptx</c>'s "Copyright © SUSE 2021" were simply lost.
 /// </para>
@@ -64,7 +64,7 @@ public sealed class SlideMasterShapeComparisonTests : IDisposable
     }
 
     /// <summary>
-    /// Every run LibreOffice draws, XRay.Office draws, at the same pen and the same size.
+    /// Every run LibreOffice draws, X-Ray.Office draws, at the same pen and the same size.
     /// </summary>
     /// <remarks>
     /// Five runs on two slides: the first slide's own title and body, its layout's strapline and

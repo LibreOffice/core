@@ -64,7 +64,7 @@ background rectangle is drawn at `119.083 … 719.660` × `92.58 … 516.983` in
 content range really does begin 142.7 pt left of the chart page, and 0.951 of an 8 pt label is the
 7.609 pt the PDF states.
 
-**XRay.Office already has the machinery.** `ChartLayout.Place` composes at `plot.Space` and calls
+**X-Ray.Office already has the machinery.** `ChartLayout.Place` composes at `plot.Space` and calls
 `Stretch(drawing, own, frame)`, which carries the residual `sx/sy` on `ChartLabel.Stretch` for each
 consumer to fold into its own transform. The one thing missing is that LibreOffice's `from`
 rectangle is the *drawn extent* and ours is the chart's page. Implementing it is a change to

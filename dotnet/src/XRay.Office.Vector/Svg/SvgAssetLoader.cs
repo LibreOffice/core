@@ -86,7 +86,7 @@ internal sealed class SvgAssetLoader : ISvgAssetLoader, ISvgImageAssetLoader, IS
             _diagnostics.Add(new Diagnostic(
                 DiagnosticSeverity.Warning,
                 "PL6004",
-                $"An SVG referenced an external image ('{uri.Scheme}:'); XRay.Office resolves no reference outside the document."));
+                $"An SVG referenced an external image ('{uri.Scheme}:'); X-Ray.Office resolves no reference outside the document."));
             return null!;
         }
 
@@ -97,7 +97,7 @@ internal sealed class SvgAssetLoader : ISvgAssetLoader, ISvgImageAssetLoader, IS
     public List<TypefaceSpan> FindTypefaces(string? text, SKPaint? paintPreferredTypeface)
     {
         // One span for the whole run: per-character fallback would need the library to hand
-        // back several faces, and XRay.Office resolves fallback inside its own shaper instead.
+        // back several faces, and X-Ray.Office resolves fallback inside its own shaper instead.
         if (string.IsNullOrEmpty(text)) return [];
 
         return [new TypefaceSpan(text, _text.Measure(text, paintPreferredTypeface), paintPreferredTypeface?.Typeface)];
@@ -121,7 +121,7 @@ internal sealed class SvgAssetLoader : ISvgAssetLoader, ISvgImageAssetLoader, IS
     }
 
     /// <summary>
-    /// Text as an outline, which XRay.Office does not produce.
+    /// Text as an outline, which X-Ray.Office does not produce.
     /// </summary>
     /// <remarks>
     /// The library asks for this only when text is used as a clip path or a mask. Returning an
@@ -137,7 +137,7 @@ internal sealed class SvgAssetLoader : ISvgAssetLoader, ISvgImageAssetLoader, IS
             _diagnostics.Add(new Diagnostic(
                 DiagnosticSeverity.Warning,
                 "PL6005",
-                "An SVG used text as a clip path or mask; XRay.Office does not convert glyphs to outlines."));
+                "An SVG used text as a clip path or mask; X-Ray.Office does not convert glyphs to outlines."));
         }
 
         return new SKPath();

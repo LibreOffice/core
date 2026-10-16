@@ -188,7 +188,7 @@ public class DrawingTextBodyTests
 
         // The cached a:t is what a reader saw. LibreOffice's HTML export writes its own
         // unresolved "<number>" placeholder here instead, which is the one place the reference
-        // is further from the file than XRay.Office is.
+        // is further from the file than X-Ray.Office is.
         paragraphs.Single().GetText().ShouldBe("7\n");
     }
 

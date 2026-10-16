@@ -1,4 +1,4 @@
-"""Ink between an XRay.Office rendering and 26.2.4.2's, per document, over every shared page.
+"""Ink between an X-Ray.Office rendering and 26.2.4.2's, per document, over every shared page.
 
 Ink is the mean absolute grey difference at 30 dpi, page for page, reported as the mean over
 pages and as the worst page — the same measure as `probes/words-apo-table/inkcheck.py`, from

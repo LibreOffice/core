@@ -42,7 +42,7 @@ The reference's own lines, read from its PDF:
 | 5 | `alpha bravo …`, plain | `alpha bravo charlie delta echo` ⏐ `foxtrot golf hotel india juliet kilo` ⏐ `lima` |
 | 6 | `alpha bravo …`, **linked** | `alpha bravo charlie delta echo foxtr` ⏐ `ot golf hotel india juliet kilo lima` |
 
-XRay.Office before the fix drew rows 1, 3 and 5 exactly as above and rows 2, 4 and 6 as **one
+X-Ray.Office before the fix drew rows 1, 3 and 5 exactly as above and rows 2, 4 and 6 as **one
 unbroken line each**.
 
 ## The rule

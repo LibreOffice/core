@@ -33,7 +33,7 @@ genuine ODF rather than hand-built.
 `FAAAIandtheArtandScienceofV&Vfinal.pptx` converted to `.odp` carries **8 `draw:text-path="true"`
 shapes** on slides 13 and 14 — the four dial labels twice, `fontwork-arch-up-curve` and
 `fontwork-arch-down-curve`, with `draw:text-path-scale="shape"` and `draw:modifiers` in WordArt
-units. Before this round XRay.Office read `draw:enhanced-geometry` for the shape but knew nothing
+units. Before this round X-Ray.Office read `draw:enhanced-geometry` for the shape but knew nothing
 about text-path mode, so it laid the labels out as ordinary text: overlapping, unwarped, and
 tokenised per glyph by the rotation.
 

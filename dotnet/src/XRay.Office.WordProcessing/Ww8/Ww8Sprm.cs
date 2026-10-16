@@ -64,7 +64,7 @@ public readonly record struct Ww8Sprm(ushort Identifier, ReadOnlyMemory<byte> Op
 /// </remarks>
 public static class Ww8SprmReader
 {
-    /// <summary>The sprm ids XRay.Office acts on.</summary>
+    /// <summary>The sprm ids X-Ray.Office acts on.</summary>
     /// <remarks>
     /// Named rather than written as numbers at the call sites: the ids are dense and adjacent, so a
     /// mistyped digit silently reads a different property — <c>0x0836</c> is italic and

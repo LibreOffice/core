@@ -997,7 +997,7 @@ public sealed partial class DocxContentReader
 
         foreach (XElement blip in drawing.Descendants(XName.Get("blip", OoxmlNamespaces.DrawingML)))
         {
-            // r:embed names a part in the package; r:link points outside it, and XRay.Office never
+            // r:embed names a part in the package; r:link points outside it, and X-Ray.Office never
             // follows an external reference.
             string? embedId = blip.Attribute(XName.Get("embed", OoxmlNamespaces.Relationships))?.Value;
             yield return new ContentImage

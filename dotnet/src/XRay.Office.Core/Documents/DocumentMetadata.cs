@@ -65,7 +65,7 @@ public sealed record DocumentMetadata
     /// <summary>
     /// Statistics as recorded in the file — page, word and character counts.
     /// These are the counts the authoring application last computed and can be
-    /// stale or absent; they are not recomputed by XRay.Office.
+    /// stale or absent; they are not recomputed by X-Ray.Office.
     /// </summary>
     public DocumentStatistics? Statistics { get; init; }
 

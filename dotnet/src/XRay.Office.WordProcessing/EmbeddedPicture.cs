@@ -31,7 +31,7 @@ namespace XRay.Office.WordProcessing;
 /// The two lists are allowed to differ, and one difference is intended: this one also recognises the
 /// vector formats, which the decoder has no reason to name because it cannot decode any of them.
 /// <see cref="Vector"/> is now asked only after <c>VectorImages.For</c> has declined, so in a healthy
-/// document its only answer is a format XRay.Office has no decoder for.
+/// document its only answer is a format X-Ray.Office has no decoder for.
 /// </para>
 /// </remarks>
 internal static class EmbeddedPicture
@@ -50,7 +50,7 @@ internal static class EmbeddedPicture
     /// <para>
     /// An unrecognised blob and an empty part both give nothing, and the first leaves a
     /// <see cref="Diagnostic"/> behind. <c>PL2370</c> survives with a narrower meaning: it is now a
-    /// vector format XRay.Office has <em>no decoder for</em> — a PICT or a StarView metafile — rather than
+    /// vector format X-Ray.Office has <em>no decoder for</em> — a PICT or a StarView metafile — rather than
     /// "vector import is not implemented". Nothing rather than an exception in every case: a picture
     /// that cannot be drawn is a page that still has its text, its tables and every other shape on it,
     /// which is the leniency rule the whole library reads by.
@@ -85,7 +85,7 @@ internal static class EmbeddedPicture
         {
             diagnostics?.Add(new Diagnostic(
                 DiagnosticSeverity.Information, "PL2370",
-                $"A {vector} picture was found and has not been drawn: XRay.Office has no decoder for "
+                $"A {vector} picture was found and has not been drawn: X-Ray.Office has no decoder for "
                 + "that format, so the frame reserves its room and stays empty.",
                 where is null ? null : new DiagnosticLocation(where)));
 

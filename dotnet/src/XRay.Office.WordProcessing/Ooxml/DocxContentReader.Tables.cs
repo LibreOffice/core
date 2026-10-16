@@ -21,7 +21,7 @@ namespace XRay.Office.WordProcessing.Ooxml;
 /// </remarks>
 public sealed partial class DocxContentReader
 {
-    /// <summary>The widest row XRay.Office materialises, matching Word's own column limit.</summary>
+    /// <summary>The widest row X-Ray.Office materialises, matching Word's own column limit.</summary>
     public const int MaxTableColumns = 63;
 
     private void ReadTable(XElement table, ContentNode target)

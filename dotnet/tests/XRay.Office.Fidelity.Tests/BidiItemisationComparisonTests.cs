@@ -101,7 +101,7 @@ public sealed class BidiItemisationComparisonTests : IDisposable
     /// <summary>The paragraphs of <c>bidi.fodt</c>, in order, and the direction each is declared in.</summary>
     /// <remarks>
     /// Repeated here rather than read out of the document because the reference is LibreOffice's
-    /// rendering of it, not XRay.Office's reading of it: a bug in the ODF reader would otherwise make
+    /// rendering of it, not X-Ray.Office's reading of it: a bug in the ODF reader would otherwise make
     /// this test compare the wrong text and pass.
     /// </remarks>
     private static readonly (string Text, BidiDirection Direction)[] Paragraphs =

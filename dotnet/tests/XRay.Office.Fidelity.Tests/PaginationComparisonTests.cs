@@ -389,7 +389,7 @@ public sealed class PaginationComparisonTests : IDisposable
 
         pages.Count.ShouldBe(
             rendered.Count,
-            $"page count differs for {odfProperties}: XRay.Office {pages.Count}, "
+            $"page count differs for {odfProperties}: X-Ray.Office {pages.Count}, "
             + $"LibreOffice {rendered.Count}");
 
         // Which paragraph starts each page is the thing a reader would notice, and the thing every
@@ -402,7 +402,7 @@ public sealed class PaginationComparisonTests : IDisposable
             actual.ShouldBe(
                 expected,
                 $"{odfProperties}: page {i + 1} starts differently."
-                + $"\n  LibreOffice: {expected}\n  XRay.Office:   {actual}");
+                + $"\n  LibreOffice: {expected}\n  X-Ray.Office:   {actual}");
         }
     }
 
@@ -541,7 +541,7 @@ public sealed class PaginationComparisonTests : IDisposable
     /// <remarks>
     /// No headers, footers, orphan or widow control, so the only thing deciding a page break is how much
     /// text fits — which is what the comparison is about. Writer's own defaults for orphans and widows
-    /// are switched off explicitly, since inheriting them would compare XRay.Office's unconstrained
+    /// are switched off explicitly, since inheriting them would compare X-Ray.Office's unconstrained
     /// pagination against Writer's constrained one.
     /// </remarks>
     private static string Document(string paragraphProperties)

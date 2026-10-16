@@ -54,7 +54,7 @@ public sealed record VectorImage
     /// The rectangle of <see cref="Content"/>'s coordinate space that fills a destination.
     /// </summary>
     /// <remarks>
-    /// In EMUs, like every other length in XRay.Office, even though the source format states it
+    /// In EMUs, like every other length in X-Ray.Office, even though the source format states it
     /// in its own units — SVG user units, an EMF's logical units. Converting once here, at the
     /// boundary, is what keeps the rest of the pipeline from having to know which format the
     /// picture came from.

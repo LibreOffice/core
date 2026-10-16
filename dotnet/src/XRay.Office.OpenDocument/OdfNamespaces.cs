@@ -80,7 +80,7 @@ public static class OdfNamespaces
     /// <summary>The <c>form</c> namespace, holding control definitions.</summary>
     public const string Form = "urn:oasis:names:tc:opendocument:xmlns:form:1.0";
 
-    /// <summary>The <c>script</c> namespace. XRay.Office reads macros as data and never runs them.</summary>
+    /// <summary>The <c>script</c> namespace. X-Ray.Office reads macros as data and never runs them.</summary>
     public const string Script = "urn:oasis:names:tc:opendocument:xmlns:script:1.0";
 
     /// <summary>

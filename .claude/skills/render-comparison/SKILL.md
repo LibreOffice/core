@@ -1,9 +1,9 @@
 ---
 name: render-comparison
-description: Compare an XRay.Office rendering of a document against the LibreOffice reference rendering, and diagnose what the differences mean. Use when checking rendering fidelity, investigating why a rendered page looks wrong, reviewing an XRay.Office rendering change for regressions, or establishing/updating golden reference images. Covers choosing a comparison metric, reading diff images, and telling a layout bug apart from a drawing bug.
+description: Compare an X-Ray.Office rendering of a document against the LibreOffice reference rendering, and diagnose what the differences mean. Use when checking rendering fidelity, investigating why a rendered page looks wrong, reviewing an X-Ray.Office rendering change for regressions, or establishing/updating golden reference images. Covers choosing a comparison metric, reading diff images, and telling a layout bug apart from a drawing bug.
 ---
 
-# Comparing an XRay.Office rendering against LibreOffice
+# Comparing an X-Ray.Office rendering against LibreOffice
 
 Generate reference output with the **libreoffice-reference** skill first; this skill is
 about comparing against it and interpreting the result.
@@ -157,7 +157,7 @@ The comparison tool is pure Python with no third-party dependencies — it decod
 
 A DPI mismatch, or a page-size misread, makes every metric meaningless. The tool reports
 `DIMENSION MISMATCH` and stops rather than producing a number that looks like a fidelity
-score but is not. When you see it, fix the geometry first: it means XRay.Office read the
+score but is not. When you see it, fix the geometry first: it means X-Ray.Office read the
 page dimensions wrongly, which is its own bug and a more fundamental one.
 
 ## The metrics, and which one to trust
@@ -170,7 +170,7 @@ the failure modes.
 | `differing_fraction` | Fraction of pixels off by more than a tolerance | Trend over time. Noisy: antialiasing alone moves it |
 | `mean_abs_error` | Mean per-channel difference across the page | A single "how close overall" number. Diluted by whitespace, and **biased by colour quantisation** — see below |
 | `max_tile_error` | Worst mean error in any 32x32 tile | Catching a badly wrong *small* area a page average would hide. Same bias |
-| `ink_delta` | Difference in non-white pixel fraction | **Strongly negative ⇒ XRay.Office drew too little.** Something was skipped outright: an unsupported shape, a vector image that failed to decode |
+| `ink_delta` | Difference in non-white pixel fraction | **Strongly negative ⇒ X-Ray.Office drew too little.** Something was skipped outright: an unsupported shape, a vector image that failed to decode |
 | `shifted_tiles` | Tiles matching the reference well, but at an offset | **The cascade detector.** Non-zero ⇒ content *moved*, so suspect layout — font metrics, margins, line breaking — not drawing |
 | `row_profile_shift` | Vertical offset best aligning the two ink-per-row profiles | Confirms a whole-page vertical shift and quantifies it |
 
@@ -182,7 +182,7 @@ the failure modes.
 | `ink_delta` strongly negative, `shifted_tiles` ≈ 0 | Content missing. Look for an unimplemented feature |
 | `ink_delta` ≈ 0, `shifted_tiles` high | Reflow cascade. Everything is drawn but positioned wrongly. Find the *first* divergence down the page — the rest is downstream of it |
 | `max_tile_error` high, `mean_abs_error` low | One small region badly wrong. Usually a colour, a border or one shape |
-| `ink_delta` strongly positive | XRay.Office drew something extra: a debug artefact, a wrongly-visible element, or a fill that should have been transparent |
+| `ink_delta` strongly positive | X-Ray.Office drew something extra: a debug artefact, a wrongly-visible element, or a fill that should have been transparent |
 | Everything huge, page 1 included | Not a detail bug. Wrong page size, wrong background, or a failed load |
 
 ### Set `REF_SOFFICE` before any of this
@@ -198,7 +198,7 @@ and `LO26`. Full note in `libreoffice-reference/SKILL.md`.
 `differing_fraction` and `differing_tiles` apply `DIFF_TOLERANCE`; `mean_abs_error` and
 `max_tile_error` do not, and on a shaded page they are non-zero when the truth is zero.
 
-**The cause is the two writers' decimal precision, and neither renderer is wrong.** XRay.Office
+**The cause is the two writers' decimal precision, and neither renderer is wrong.** X-Ray.Office
 emits `0.502 0.502 0.502 rg` for grey 128 and 26.2.4.2 emits `0.5019607843 …`. The rasteriser
 resolves a literal at or below `v/255` to **`v − 1`** — measured on six one-literal PDFs
 (`dotnet/probes/inkmetric-r178/quantise.py`), including the exact `0.50196078431372549`, which
@@ -323,7 +323,7 @@ changed — usually a LibreOffice upgrade. Regenerate deliberately, never silent
 
 ## Diff images
 
-`--diff-dir` writes, per page, a side-by-side triptych: reference, XRay.Office output, and a
+`--diff-dir` writes, per page, a side-by-side triptych: reference, X-Ray.Office output, and a
 difference map with differing pixels highlighted.
 
 **Look at these.** A number says a page is wrong; the image says *which part*, which is
@@ -338,7 +338,7 @@ Once a page differs, narrow it down before theorising:
    origin is on an earlier page.
 2. **Bisect the document.** Delete content until the difference disappears. The last
    removal is where the problem lives.
-3. **Check the fonts actually used.** Ask XRay.Office which face it resolved each request
+3. **Check the fonts actually used.** Ask X-Ray.Office which face it resolved each request
    to and compare with what LibreOffice used. A silent substitution difference explains
    most mysterious reflows — run `check-env.sh` from the libreoffice-reference skill.
 4. **Compare text before pixels.** If extracted text already differs, the bug is in
@@ -352,7 +352,7 @@ Once a page differs, narrow it down before theorising:
    xray-office render /tmp/rt/problem.fodt --format pdf --outdir /tmp/rt
    ```
 
-   LibreOffice has now done the reading and XRay.Office only the layout. If the round-tripped
+   LibreOffice has now done the reading and X-Ray.Office only the layout. If the round-tripped
    file renders correctly, **the defect is in our reader** and the layout engine is
    exonerated; if it renders wrong the same way, the reverse. This localised a WW8 bug in a
    single step that had survived two rounds of layout theorising — blank paragraphs being
@@ -791,7 +791,7 @@ grep -o 'style:column-width="[^"]*"' /tmp/rt/book.fods | head
 ```
 
 Worked example. A column width in SpreadsheetML is a count of digits of the workbook's
-default font, and XRay.Office had the twips-per-digit figure hardcoded. Measuring the *pitch*
+default font, and X-Ray.Office had the twips-per-digit figure hardcoded. Measuring the *pitch*
 of the two renderings gave 137 twips per digit; the flat-ODF export gave 886.2, 6591.2,
 1389.0 and 1182.1 twips against digit counts of 6.664, 49.555, 10.441 and 8.887 — **133.0,
 four times over**. The 3% discrepancy was a separate fit-to-page zoom difference, and
@@ -1024,6 +1024,6 @@ not re-derive the reach from the same grep.
 
 Keep the reference version with the numbers — `soffice --version`. LibreOffice's layout
 changes between releases, so a comparison is only reproducible against a stated version.
-When a difference is genuinely LibreOffice's own import bug rather than an XRay.Office
-defect, record it as a known deviation with a note, instead of contorting XRay.Office to
+When a difference is genuinely LibreOffice's own import bug rather than an X-Ray.Office
+defect, record it as a known deviation with a note, instead of contorting X-Ray.Office to
 reproduce it.

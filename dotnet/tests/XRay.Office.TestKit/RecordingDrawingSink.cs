@@ -81,7 +81,7 @@ public sealed class RecordingDrawingSink : IDrawingSink
     /// A path's bounding box, which is all a comparison needs of the shapes drawn so far.
     /// </summary>
     /// <remarks>
-    /// Everything XRay.Office fills today is a rectangle — a separator rule, a cell's shading — so the bounds
+    /// Everything X-Ray.Office fills today is a rectangle — a separator rule, a cell's shading — so the bounds
     /// are the shape rather than an approximation of it. A curve would be flattened to its control points'
     /// extent, which is wrong for a curve and honest about being a test harness rather than a rasteriser.
     /// </remarks>

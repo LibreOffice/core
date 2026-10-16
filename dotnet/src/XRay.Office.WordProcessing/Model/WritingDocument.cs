@@ -177,7 +177,7 @@ public sealed class WritingStyles
     /// </summary>
     /// <remarks>
     /// Outermost first so a caller can apply them in order and let the nearest win — the same shape
-    /// every one of XRay.Office's readers already uses, over four different encodings of the same idea.
+    /// every one of X-Ray.Office's readers already uses, over four different encodings of the same idea.
     /// The family's default style comes first of all when the chain does not reach it, since that is
     /// what a style with no parent still inherits from. Cycle-guarded: a parent loop is malformed but
     /// does occur, and this walks a chain built from untrusted input.

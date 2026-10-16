@@ -592,7 +592,7 @@ public sealed partial class RtfDocumentReader
                 return;
             case "object" or "objdata" or "result":
                 // An embedded object: its data is binary and its \result is a rendering of
-                // something XRay.Office does not open during extraction.
+                // something X-Ray.Office does not open during extraction.
                 state.Destination = RtfDestination.Skip;
                 return;
             case "bkmkstart":

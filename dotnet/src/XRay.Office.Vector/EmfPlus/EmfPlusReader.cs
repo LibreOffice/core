@@ -546,7 +546,7 @@ internal sealed class EmfPlusReader
                 break;
 
             default:
-                Warn("PL6031", $"An EMF+ used record type 0x{(ushort)type:X4}, which XRay.Office does not draw.");
+                Warn("PL6031", $"An EMF+ used record type 0x{(ushort)type:X4}, which X-Ray.Office does not draw.");
                 break;
         }
     }
@@ -620,7 +620,7 @@ internal sealed class EmfPlusReader
                 {
                     Warn(
                         "PL6039",
-                        "An EMF+ carried a metafile as an image, which XRay.Office does not replay "
+                        "An EMF+ carried a metafile as an image, which X-Ray.Office does not replay "
                             + "inside another metafile.");
                 }
 
@@ -1861,7 +1861,7 @@ internal sealed class EmfPlusReader
         {
             Warn(
                 "PL6039",
-                "An EMF+ carried a metafile as an image more deeply than XRay.Office will follow; "
+                "An EMF+ carried a metafile as an image more deeply than X-Ray.Office will follow; "
                     + "the nested picture was not drawn.");
             return null;
         }

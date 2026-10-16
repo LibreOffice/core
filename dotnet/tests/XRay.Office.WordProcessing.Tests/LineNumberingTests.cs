@@ -14,7 +14,7 @@ namespace XRay.Office.WordProcessing.Tests;
 /// <remarks>
 /// <para>
 /// <c>w:sectPr/w:lnNumType</c>, which Writer holds as one document-wide <c>SwLineNumberInfo</c> however
-/// many sections state it. XRay.Office drew nothing at all: one corpus document,
+/// many sections state it. X-Ray.Office drew nothing at all: one corpus document,
 /// <c>xx_SETIS_PWS_template_10.19.22.docx</c>, asks for numbering and was short by about 45 words on each
 /// of its 15 pages — 548 in all, which is very nearly the whole of its word deficit.
 /// </para>

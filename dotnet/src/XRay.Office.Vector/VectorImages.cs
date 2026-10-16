@@ -26,7 +26,7 @@ public static class VectorImages
     private static readonly IVectorImageDecoder[] Registered =
         [new SvgImageDecoder(), new WmfImageDecoder(), new EmfImageDecoder()];
 
-    /// <summary>Every decoder XRay.Office has.</summary>
+    /// <summary>Every decoder X-Ray.Office has.</summary>
     public static IReadOnlyList<IVectorImageDecoder> Decoders => Registered;
 
     /// <summary>The decoder that recognises these bytes, or null.</summary>
@@ -42,7 +42,7 @@ public static class VectorImages
     }
 
     /// <summary>
-    /// True when a media type names a vector picture XRay.Office can decode.
+    /// True when a media type names a vector picture X-Ray.Office can decode.
     /// </summary>
     /// <remarks>
     /// For the reader that has a part's declared type but not yet its bytes, and wants to

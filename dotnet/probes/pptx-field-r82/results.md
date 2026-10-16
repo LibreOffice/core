@@ -150,7 +150,7 @@ boundary, and the sheets track is not this round's.
 `PPT_PST_TxInteractiveInfoAtom`'s text range (`filter/source/msfilter/svdfppt.cxx`:6936), splits
 it across the `PPTCharPropSet`s the range covers (`:7069`, `:7090`) and forces the underline bit
 on each (`:7054-7056`) — so the legacy path is the same rule as DrawingML's, reached through
-`m_aHyperList` instead of a relationship. **XRay.Office's `.ppt` reader has no
+`m_aHyperList` instead of a relationship. **X-Ray.Office's `.ppt` reader has no
 `InteractiveInfo`/`ExHyperlink` handling of any kind** — `git grep` finds none of those record
 names under `dotnet/src` — so a `.ppt` hyperlink is currently neither a field, nor blue, nor
 underlined. Reach, counted by scanning every `.ppt` for a record header of type 4063 — a byte-pattern

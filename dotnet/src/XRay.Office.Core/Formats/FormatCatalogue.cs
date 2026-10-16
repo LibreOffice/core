@@ -3,7 +3,7 @@ using System.Collections.Frozen;
 namespace XRay.Office.Core.Formats;
 
 /// <summary>
-/// The built-in registry of every format XRay.Office knows about.
+/// The built-in registry of every format X-Ray.Office knows about.
 /// </summary>
 /// <remarks>
 /// Derived from LibreOffice's own type registry
@@ -174,7 +174,7 @@ public sealed class FormatCatalogue : IFormatCatalogue
             "PowerPoint 2007-365 Show", read: true),
         // '.ppsm' is not a registered extension anywhere in LibreOffice's type registry
         // (see research doc section 10, read: true), but the content type exists and Excel/PowerPoint
-        // do produce such files, so XRay.Office recognises it by content type.
+        // do produce such files, so X-Ray.Office recognises it by content type.
         New(DocumentFormat.Ppsm, DocumentFamily.Presentation, ContainerKind.Zip, "ppsm",
             "application/vnd.ms-powerpoint.slideshow.macroEnabled.12",
             "PowerPoint 2007-365 Show (macro-enabled)", macros: true, read: true),

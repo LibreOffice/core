@@ -3,7 +3,7 @@
 Seven documents, briefed as two clusters of "we draw content the reference does not". One
 cluster is ours and is fixed; the other is a reference import defect that was closed two rounds
 ago; two of the seven documents are not `extra` failures at all. Two further defects were found
-on the way, one of them in the measuring apparatus rather than in XRay.Office.
+on the way, one of them in the measuring apparatus rather than in X-Ray.Office.
 
 Environment: LibreOffice **26.2.4.2**, Carlito/Caladea/Liberation/DejaVu all resolving,
 `pdftotext` 26.01.0, `SOURCE_DATE_EPOCH=1700000000` on every render. References reused from
@@ -253,7 +253,7 @@ the blindness CLAUDE.md warns the gate has, and it took two people looking at a 
 
 The brief says `ABCD-FE-01-00` "draws ~40 OMML equation tokens on page 7 where the reference
 draws no ink at all". The ink claim is right and the page claim is not — the reference draws 200
-words on that page. But the cause is not an XRay.Office defect and not a LibreOffice one:
+words on that page. But the cause is not an X-Ray.Office defect and not a LibreOffice one:
 
 ```
 dpkg -l | grep libreoffice   →  writer, calc, impress, draw, base-core, core … and no math

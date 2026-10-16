@@ -3,7 +3,7 @@
 *Measured 2026-09-06 in the container described at the top of `dotnet/CLAUDE.md`. **Both** installed
 references were used and they agree on every figure below to the last digit: the distro's **24.2.7.2**
 at `/usr/bin/soffice` and the TDF tarball's **26.2.4.2** at `/opt/libreoffice26.2` with its bundled
-Latin faces moved aside. XRay.Office at `agent/words-draw2`, base `e152bc0b2`.*
+Latin faces moved aside. X-Ray.Office at `agent/words-draw2`, base `e152bc0b2`.*
 
 ## Why this exists
 

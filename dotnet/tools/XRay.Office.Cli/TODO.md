@@ -1,7 +1,7 @@
 # XRay.Office.Cli — TODO
 
 The `xray-office` command. Two audiences: humans inspecting documents, and the comparison
-skills using it as the XRay.Office side of a side-by-side against LibreOffice.
+skills using it as the X-Ray.Office side of a side-by-side against LibreOffice.
 
 `identify`, `extract`, `metadata` and `render` work; `convert` and `diagnose` print usage
 and are not wired up.

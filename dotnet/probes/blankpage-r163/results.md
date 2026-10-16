@@ -11,7 +11,7 @@ Every claim below is marked `[src]` (read from a file) or `[bin]` (measured from
 
 ## 1. The divergence, confirmed and corrected
 
-| | reference 26.2.4.2 | XRay.Office |
+| | reference 26.2.4.2 | X-Ray.Office |
 |---|---|---|
 | pages | **16** | **14** |
 
@@ -130,7 +130,7 @@ the empty paragraph is pushed off page 6 is each engine's remaining slack:
 | | flips at | page count below / above |
 |---|---|---|
 | reference 26.2.4.2 | **8.50 pt** | 15 → 16 |
-| XRay.Office | **16.75 pt** | 14 → 15 |
+| X-Ray.Office | **16.75 pt** | 14 → 15 |
 
 `[bin]` **Difference: 8.25 pt — the same 8.240 pt measured on the page.** The fitting rule is therefore
 *identical*; only the content height differs. The real document supplies 10.008 pt of inherited
@@ -202,7 +202,7 @@ attribute changed, so it needs no such validation.
 
 `NN` plain paragraphs, then a paragraph holding only `<w:br w:type="page"/>`, then `AFTER`.
 
-| NN | reference | XRay.Office |
+| NN | reference | X-Ray.Office |
 |---|---|---|
 | 24–26 | 2 pages, no blank | 2 pages, no blank |
 | **27** | **3 pages, page 2 blank** | **3 pages, page 2 blank** |

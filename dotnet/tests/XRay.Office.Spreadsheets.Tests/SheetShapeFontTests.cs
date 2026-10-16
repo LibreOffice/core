@@ -28,7 +28,7 @@ namespace XRay.Office.Spreadsheets.Tests;
 /// first naming its face indirectly, the second naming Times New Roman outright. Checked against
 /// LibreOffice 24.2.7.2's own PDF for it, which embeds <c>Carlito-Regular</c>,
 /// <c>LiberationSerif</c> and <c>LiberationSans</c> and wraps each box after "the" and "run"
-/// respectively — the same three faces and the same two breaks XRay.Office now produces.
+/// respectively — the same three faces and the same two breaks X-Ray.Office now produces.
 /// </para>
 /// <para>
 /// Measured on <c>SSRO_Quarterly_Statistical_Bulletin_Q3201617_DATA.xlsx</c>, whose methodology

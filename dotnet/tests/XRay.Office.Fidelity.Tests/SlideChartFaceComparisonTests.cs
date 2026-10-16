@@ -165,7 +165,7 @@ public sealed partial class SlideChartFaceComparisonTests : IDisposable
         double theirs = DigitAdvance(
             PdfWords.Read(_libreOffice.ConvertToPdf(Corpus.Require(deck), _workDirectory)));
 
-        // Ours against the literal first, so this tests XRay.Office rather than an agreement.
+        // Ours against the literal first, so this tests X-Ray.Office rather than an agreement.
         ours.ShouldBe(MonospacedDigitAdvance, 0.1, "our digit advance");
 
         // And the reference's against the two candidates rather than against a literal, because the

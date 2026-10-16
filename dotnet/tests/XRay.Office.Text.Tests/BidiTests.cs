@@ -206,7 +206,7 @@ public sealed class BidiTests
     /// Two assertions, because the two are worth different amounts. The <em>reordering</em> is what
     /// renders, and it is required of every case without exception. The <em>levels</em> are required
     /// of every case that contains no explicit directional formatting character — which is every case
-    /// that could come out of a document, since no format XRay.Office reads emits an embedding or an
+    /// that could come out of a document, since no format X-Ray.Office reads emits an embedding or an
     /// isolate. Of the 7,944 cases, 72 hold an unterminated or leading embedding, override or
     /// isolate, and on those ICU short-circuits to a flat level in a way that could not be
     /// characterised without its source. Their reordering agrees regardless, which is why they are
@@ -249,7 +249,7 @@ public sealed class BidiTests
                 orderFailures.Add(
                     $"{where}: ICU orders {string.Join(" ", Reorder(expected))} "
                     + $"from levels {string.Join(" ", expected)}, "
-                    + $"XRay.Office {string.Join(" ", Reorder(actual))} "
+                    + $"X-Ray.Office {string.Join(" ", Reorder(actual))} "
                     + $"from levels {string.Join(" ", actual)}");
             }
 
@@ -260,7 +260,7 @@ public sealed class BidiTests
             {
                 levelFailures.Add(
                     $"{where}: ICU {string.Join(" ", expected)}, "
-                    + $"XRay.Office {string.Join(" ", actual)}");
+                    + $"X-Ray.Office {string.Join(" ", actual)}");
             }
         }
 

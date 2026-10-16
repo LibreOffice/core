@@ -1,6 +1,6 @@
 ---
 name: extraction-comparison
-description: Compare XRay.Office text/content extraction against headless LibreOffice's own text export, and interpret the differences. Use when validating extraction correctness for any office format, investigating missing or garbled extracted text, checking encoding handling in legacy binary formats, or deciding whether an extraction difference is a real bug. Also the right first step when a rendering differs, since parsing bugs are far easier to find in text than in pixels.
+description: Compare X-Ray.Office text/content extraction against headless LibreOffice's own text export, and interpret the differences. Use when validating extraction correctness for any office format, investigating missing or garbled extracted text, checking encoding handling in legacy binary formats, or deciding whether an extraction difference is a real bug. Also the right first step when a rendering differs, since parsing bugs are far easier to find in text than in pixels.
 ---
 
 # Comparing extraction against LibreOffice
@@ -46,8 +46,8 @@ opinionated. Know the limits before treating a difference as a defect.
 
 Two consequences worth stating plainly:
 
-- **An XRay.Office extraction that finds *more* than the reference is usually correct, not
-  wrong.** Headers, comments, notes and shape text are things XRay.Office deliberately
+- **An X-Ray.Office extraction that finds *more* than the reference is usually correct, not
+  wrong.** Headers, comments, notes and shape text are things X-Ray.Office deliberately
   extracts and these filters deliberately drop. Compare the intersection; do not chase
   parity on what the reference cannot express.
 - **For multi-sheet spreadsheets the CSV reference is nearly useless.** Use the reference
@@ -74,12 +74,12 @@ Nothing is case-folded and no punctuation is stripped: those would hide real bug
 | Symptom | Likely cause |
 |---|---|
 | Similarity ~1.0, tiny diffs | Match. Check the diff is only whitespace/padding |
-| XRay.Office has *extra* content | Usually correct — headers, comments, notes, shape text the filter drops. Verify by eye, do not "fix" |
-| XRay.Office *missing* a contiguous block | An unhandled structure: a table, a text box, a section, a nested field |
+| X-Ray.Office has *extra* content | Usually correct — headers, comments, notes, shape text the filter drops. Verify by eye, do not "fix" |
+| X-Ray.Office *missing* a contiguous block | An unhandled structure: a table, a text box, a section, a nested field |
 | Text present but mangled into wrong characters | **Encoding.** Legacy DOC/XLS/PPT store text in a codepage chosen by the file; if the codepage was misread every non-ASCII character is wrong. Check the codepage record before suspecting the parser |
 | Right characters, wrong order | Reading order: a table traversed column-major, or shapes in z-order rather than position order |
 | Paragraphs merged or split | Paragraph-boundary detection. In DOC/WW8 this often means the piece table was mishandled |
-| Empty output from XRay.Office, reference fine | Format detection failed, or the reader threw. Check `identify` first |
+| Empty output from X-Ray.Office, reference fine | Format detection failed, or the reader threw. Check `identify` first |
 
 ### Encoding problems specifically
 
@@ -121,5 +121,5 @@ bug**, however much it looks like one. Chase it in layout and drawing, not in th
 
 Metadata comes from three unrelated systems — ODF `meta.xml`, OOXML `docProps/*`, and the
 OLE summary-information property sets — so compare it separately and per-field. A missing
-field is often "the format never recorded it", not a bug: XRay.Office leaves unrecorded
+field is often "the format never recorded it", not a bug: X-Ray.Office leaves unrecorded
 fields null precisely so that "absent" stays distinguishable from "empty".

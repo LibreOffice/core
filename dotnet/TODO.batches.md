@@ -318,15 +318,15 @@ are off by 3 or more.
 
 Worth recording because the agents caught both by measuring rather than by reading:
 
-- **The VCL table was already there.** I briefed "XRay.Office resolves through fontconfig
-  alone; LibreOffice consults `VCL.xcu` first". XRay.Office already had the chains and already
+- **The VCL table was already there.** I briefed "X-Ray.Office resolves through fontconfig
+  alone; LibreOffice consults `VCL.xcu` first". X-Ray.Office already had the chains and already
   walked them first. The defect was one layer down — it carried only *half* of each entry,
   dropping `FontType`, so once a chain named nothing installed (the common case on Linux,
   where all fourteen of Tahoma's candidates are absent) the shape was guessed from the family
   name. Face agreement with LibreOffice went 6/55 → 47/55.
 - **And the fallback direction was backwards.** Verifying against the installed `soffice`
   rather than its source showed LibreOffice's answer for an unknown family *is* fontconfig's;
-  XRay.Office was the one hard-coding a serif/Liberation list. Reading the source alone would
+  X-Ray.Office was the one hard-coding a serif/Liberation list. Reading the source alone would
   have produced a confident, well-cited, wrong fix.
 
 `A_320.doc`'s in-cell pitch was the third measurement-right-cause-wrong case: no
@@ -1894,7 +1894,7 @@ so the two cases can be told apart when someone does it.
 
 **A hole in the gate found on the way.** `batch-check.sh`'s third check is
 `pdffonts … | awk '$(NF-3)=="no"'`, which reads the `sub` column rather than `emb` for a row whose
-type is a single word. Every font XRay.Office writes is `TrueType`, one word — so **the font
+type is a single word. Every font X-Ray.Office writes is `TrueType`, one word — so **the font
 embedding check has never tested our own output**. It fires correctly for `Type 1`, `Type 1C` and
 `CID Type 0C`, whose names are two or three fields. Worth fixing in the script rather than in a
 document.
@@ -2491,7 +2491,7 @@ satisfied by truncating unless the fraction carries past a threshold somewhere i
 Carlito 12 pt is 121.64 → 121, DejaVu Sans 12 pt is 152.70 → 153 — but only two of the nine
 discriminate and there is no mechanism behind the constant, so on its own that is a fudge fitted
 to two points. The corpus is what settles it, and the measurement is cheap because **the reference
-side does not move for an XRay.Office-only change**: render our side alone over all 171 and join the
+side does not move for an X-Ray.Office-only change**: render our side alone over all 171 and join the
 existing reference column. The harness was checked first by reproducing the previous sweep's
 135/114/144 with *zero* rows differing, and the change then gave **136, 113, 145** with six
 documents moved and every one improved — `dragon-175066A.xlsx` 14 pages to 13 and into parity, and
@@ -5671,7 +5671,7 @@ placeholder, which name no style either — takes `getDefaultTextStyle()`: the p
 **The mechanism had been correctly cited for two rounds and recorded as a deliberate divergence.**
 `src/XRay.Office.Presentations/TODO.md` had the *other* route to it — `SlidePersist::createXShapes`
 looping `for (int i = 0; i < 4; i++)` over a switch whose `case 4` is the style `p:otherStyle`
-parses into, so the loop stops one short — beside the note that "XRay.Office does apply it … which
+parses into, so the loop stops one short — beside the note that "X-Ray.Office does apply it … which
 is what the file says and what PowerPoint shows".
 
 What was missing was a document that could tell the readings apart. `deck-text-style.pptx` cannot:
@@ -5763,7 +5763,7 @@ locked the defect in.
 
 **One test as first written could not fail.** `APlainTextBoxTakesThePresentationsDefaultTextStyle`
 began by asserting only what `Drawn()` returns, which is LibreOffice's PDF — a test of the
-reference, passing whatever XRay.Office does. It now asserts our resolved size and colour as
+reference, passing whatever X-Ray.Office does. It now asserts our resolved size and colour as
 literals and compares the reference against those.
 
 ### What the next round should take, in order
@@ -9429,7 +9429,7 @@ of them.
 
 ### Four are the raster ceiling, and the review found them independently
 
-The reviewer flagged three documents as *"XRay.Office renders it better, false positive"* and a
+The reviewer flagged three documents as *"X-Ray.Office renders it better, false positive"* and a
 fourth as *"looks exactly the same, check whether the word count is misleading"*. **All four are
 already on `TODO.raster-ceiling.md`.** That list is built from an observable signature — the
 reference draws a raster where we extract materially more words — and a reader with no access to
@@ -11597,7 +11597,7 @@ and does it by copying (`sw/source/writerfilter/dmapper/PropertyMap.cxx`:1118-11
 mechanism — the reference binary is 24.2.7.2 and the tree is a development branch).
 
 **Not implemented, deliberately**, per CLAUDE.md's rule to record a reference import defect rather
-than contort XRay.Office into reproducing it — and pinned by `SectionInheritedHeaderTests` rather than
+than contort X-Ray.Office into reproducing it — and pinned by `SectionInheritedHeaderTests` rather than
 left in a report, so a later round that wants it has to delete a test that explains why not.
 
 The cost is stated rather than hidden. `probes/words-r43/table-only-header-census.py`: **3 of the
@@ -12737,7 +12737,7 @@ the same row whose absence from the series cache caused the axis defect. One fix
    *always* resolved against the live sheet — its 615 labels already reached `autoRotate45`. The
    shared-root story was wrong.
 2. **The `Tm` test the brief specified cannot be run on our output at all.** LibreOffice turns text
-   with the **text matrix**, XRay.Office with the **CTM** (`cm`), so a `Tm`-only count scores a
+   with the **text matrix**, X-Ray.Office with the **CTM** (`cm`), so a `Tm`-only count scores a
    working fix as **zero**. The round made exactly that error on its first pass and caught it.
    Counting both: 45° matrices **0 before, 6 after**, against the reference's 848. *An instrument
    that can only see one renderer's idiom will report the other's success as failure* — and this
@@ -12837,13 +12837,13 @@ Merged `wt-fidelity`. **No source or test file changed**, so the ten non-Fidelit
 
 550 discovered, 510 + 40, 0 skipped — **the total never moved, only the split**. At `0fb6d41e0`,
 the commit the handover records green on 24.2.7.2, today's environment gives **40/510/550 with a
-byte-identical failing set**. No XRay.Office code change caused any of the 40.
+byte-identical failing set**. No X-Ray.Office code change caused any of the 40.
 
 ### But "environment" is not "we are right", and that is the round's value
 
 | class | count |
 |---|---:|
-| **genuine XRay.Office defects** | **12** |
+| **genuine X-Ray.Office defects** | **12** |
 | the reference's own behaviour | 26 |
 | unexplained | 2 |
 
@@ -13082,7 +13082,7 @@ style's** line height.
 **Both "establish, don't assume" points in the brief mattered, and one would have caused a
 regression.** The rule is **DOCX and DOC, and *not* RTF**: one authored document in five spellings
 against the installed 26.2.4.2 gives DOCX and DOC a 144.000 pt separator at a 481.890 pt column
-*and* at 255.118 pt, while FODT, ODT **and RTF** each draw 25.0% of theirs. XRay.Office routes RTF
+*and* at 255.118 pt, while FODT, ODT **and RTF** each draw 25.0% of theirs. X-Ray.Office routes RTF
 through `PaginationOptions.Word`, so the obvious implementation — switch on "is this a Word
 format" — **would have broken a currently-green test**. Hence a separate flag, verified by
 reintroduction in both directions.
@@ -15617,7 +15617,7 @@ a second instrument confirmed it: the reference's page 99 carries **101 rotated 
 carries none.
 
 `rotated-text-census.py`, **whose first cut was wrong in an instructive way and says so** — the two
-stacks rotate through different operators, LibreOffice with a rotated `Tm` and XRay.Office with a
+stacks rotate through different operators, LibreOffice with a rotated `Tm` and X-Ray.Office with a
 rotated `cm`, so a `Tm`-only count reports 18832 rotated operators to nought — gives:
 **73 of 302 documents draw rotated text on either side; 1097 blocks ours to 1905 the reference's;
 and 197 pages where the reference rotates text and we rotate none.** NAS alone is 307 of the

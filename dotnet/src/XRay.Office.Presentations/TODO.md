@@ -182,7 +182,7 @@ resolved **per text level** for list styles (`lvlXpPr`).
       visible on a shape that states it twice — hence `deck-text-style.pptx`, whose seven text
       boxes each state it at a different rung. Measured against LibreOffice's own render, strongest
       first: the run's `a:rPr`, the paragraph's `a:defRPr`, the body's `a:lstStyle`, **the shape
-      style**, then everything inherited. The five that LibreOffice and XRay.Office can both answer
+      style**, then everything inherited. The five that LibreOffice and X-Ray.Office can both answer
       agree exactly — #4F81BD, #00B050, #9BBB59, #FF7F00 and #953735, the last being accent2 under a
       `lumMod` of 75%, resolved by the shared chain rather than by a second implementation of it.
       It carries a typeface as well as a colour: `a:fontRef idx="minor"` is the theme's minor Latin
@@ -206,7 +206,7 @@ resolved **per text level** for list styles (`lvlXpPr`).
       with `for (int i = 0; i < 4; i++)` over a switch whose `case 4` *is* the standard style that
       `p:otherStyle` parses into (`oox/source/ppt/slidepersist.cxx`:315). The loop stops one short,
       so the style is read, stored and never used; `case 5`, the subtitle style, is unreachable for
-      the same reason. XRay.Office did apply it — the deck's sixth shape resolved to the magenta the
+      the same reason. X-Ray.Office did apply it — the deck's sixth shape resolved to the magenta the
       master states where LibreOffice draws black — and that divergence was recorded here as
       deliberate, on the grounds that the file says magenta and PowerPoint shows it.
       **Round eighteen retired that: it was a defect, and `deck-text-style.pptx` could not show
@@ -236,7 +236,7 @@ every tie. `PptxTextStyles.For` concatenates in the same order, for the same rea
 **`<p:ph>` with no `type` is `obj`, not `body`.** ECMA-376 gives `CT_Placeholder/@type` a default
 of `body`; LibreOffice reads `obj` (`oox/source/ppt/pptshapecontext.cxx:68`). Not a hypothetical
 divergence: LibreOffice's own PPTX export writes a bare `<p:ph/>` for every outline placeholder
-it emits, so it is in the first deck anyone round-trips through Impress. XRay.Office follows
+it emits, so it is in the first deck anyone round-trips through Impress. X-Ray.Office follows
 LibreOffice — the point of the exercise is agreeing with the reference — and the two mostly land
 in the same place anyway, since `obj`'s fallback match type *is* `body`. The related trap: `idx`
 may be `4294967295` (`SAL_MAX_UINT32`, an unsigned −1), meaning "inherit nothing"; read into a
@@ -282,7 +282,7 @@ Measured over all 389 decks in `sd/qa/unit/data/pptx/`: resolving the chain chan
 them, always by gaining emphasis, never by losing text. Every change was checked against
 LibreOffice's own PDF text layer and every one agrees — `bnc904423.pptx`'s three lines, whose
 `p:txStyles` states the boldness once for the whole deck; `ShapeLineProperties.pptx`'s two bold
-lines, where the third line is *not* bold in the reference and XRay.Office correctly leaves it
+lines, where the third line is *not* bold in the reference and X-Ray.Office correctly leaves it
 alone; `tdf95932.pptx`, `tdf120028.pptx`, `tdf132282.pptx`, `tdf114848.pptx`,
 `slide-sections.pptx` and `bnc870233_1.pptx`, whose test text is literally labelled "Red, bold"
 and "Blue, italic".
@@ -291,10 +291,10 @@ and "Blue, italic".
 between two items is still an `a:p` and still inherits the level's bullet. Emitting it produced a
 stray `a.` after the last real item of `sd/qa/unit/data/pptx/NumberedList-12ab-ab-34.pptx`, whose
 expected rendering LibreOffice's own layout test spells out
-(`sd/qa/unit/layout-tests.cxx:270-292`): `1 2 a b — a b — 3 4`. With the rule in place XRay.Office
+(`sd/qa/unit/layout-tests.cxx:270-292`): `1 2 a b — a b — 3 4`. With the rule in place X-Ray.Office
 reproduces that sequence exactly, **including** the outer list resuming at 3 — which
 LibreOffice's HTML *export* gets wrong, restarting at 1. The clearest case in the corpus of the
-reference filter, rather than XRay.Office, being the lossy party.
+reference filter, rather than X-Ray.Office, being the lossy party.
 
 **A merged table cell is positioned by ordinal, not by accumulated span.** A row always holds one
 `a:tc` per grid column; the covered ones are written out carrying `hMerge`/`vMerge` rather than
@@ -638,7 +638,7 @@ them rather than gathered into a map first.
 - **A bullet the paragraph does not state falls through to the master.** The mask's low four bits
   are the *bullet flags*; a paragraph whose mask does not include bit 0 has said nothing about
   whether it draws one. `fdo68594.ppt` gained the four bullets it was missing (the reference PDF
-  shows five, XRay.Office had one) and `indent_multiple_spacings.ppt` its three.
+  shows five, X-Ray.Office had one) and `indent_multiple_spacings.ppt` its three.
 
 Net effect over those 33 decks: 172 changed lines, all of them gains, none a loss of text. The
 emphasis changes were checked against LibreOffice's own PDF — `tdf168786.ppt`'s rows of
@@ -776,12 +776,12 @@ text at all. The PDF text layer is the usable reference.
 | `slides-ppt.ppt` | 1.0000 | Blank-line padding the PDF layer puts between text frames |
 | `ppt-features.ppt` | 0.7000 | Four things, all of them the reference being narrower |
 
-For `ppt-features.ppt` the differences are: the `• ` markers XRay.Office emits because a bullet
+For `ppt-features.ppt` the differences are: the `• ` markers X-Ray.Office emits because a bullet
 is text a reader sees and it exists nowhere in the file's runs (the ODF path does the same);
 the speaker notes, which are not on a printed slide; the hidden slide's text, which PDF export
-excludes by design and XRay.Office extracts and flags; and line breaks — the reference wraps
+excludes by design and X-Ray.Office extracts and flags; and line breaks — the reference wraps
 "Text in a custom shape" across two rendered lines and "A plain text box with an emphasised
-word." across three, and orders two side-by-side frames by position where XRay.Office uses
+word." across three, and orders two side-by-side frames by position where X-Ray.Office uses
 document order. None is a defect.
 
 ## Measuring PPTX extraction
@@ -789,25 +789,25 @@ document order. None is a defect.
 The reference is `impress_html_Export`, and it is lossy in ways that make a raw diff alarming.
 Measured over the 45 richest of the 389 decks in `sd/qa/unit/data/pptx/` (normalising the marker
 spelling, non-breaking spaces and cell separators described below), **37 contain every line the
-reference produces**; the eight that do not reduce to four named causes, none of them an XRay.Office
+reference produces**; the eight that do not reduce to four named causes, none of them an X-Ray.Office
 defect:
 
 - **Five decks: `<number>`.** The reference emits its own unresolved page-number placeholder where
-  the deck has an `a:fld` slide-number field. XRay.Office emits the cached `a:t` — `1`, `2`, `3` —
+  the deck has an `a:fld` slide-number field. X-Ray.Office emits the cached `a:t` — `1`, `2`, `3` —
   which is what a reader actually saw. The one place the reference is further from the file than
-  XRay.Office is.
+  X-Ray.Office is.
 - **One deck: a Private Use Area bullet.** `tdf169524.pptx`'s markers come out of the reference as
   U+F06C and U+F02D — Wingdings code points, meaningless outside that font.
   `OutlineNumbers.NormaliseBullet` substitutes U+2022, as the ODP path already does.
 - **One deck: marker spelling.** LibreOffice's HTML export writes the marker glued to the text and
-  doubles the suffix (`1..Outer, one`); XRay.Office writes `1. `.
+  doubles the suffix (`1..Outer, one`); X-Ray.Office writes `1. `.
 - **One deck: a literal tab inside a run.** `tdf120028.pptx` has a `\t` inside an `a:t`; the export
-  renders it as a run of non-breaking spaces. XRay.Office keeps the tab.
+  renders it as a run of non-breaking spaces. X-Ray.Office keeps the tab.
 
-Going the other way, XRay.Office finds text the reference drops on **30 of the 45** — grouped shapes,
+Going the other way, X-Ray.Office finds text the reference drops on **30 of the 45** — grouped shapes,
 plain text boxes, WordArt, SmartArt — which is the same deliberate improvement the ODP path
 makes, not a difference to reconcile. `group.pptx` is the extreme: the reference emits nothing at
-all, XRay.Office 35 lines, every one of them from the slide's own `p:spTree`.
+all, X-Ray.Office 35 lines, every one of them from the slide's own `p:spTree`.
 
 Two reference artefacts worth knowing before chasing them:
 
@@ -927,7 +927,7 @@ Two reference artefacts worth knowing before chasing them:
 - [x] PPT (binary), through `MsBinary/PptSlideLayout.cs` into the same `LaidOutSlide` the other
       two produce. What is *not* done on this path alone: a picture's raster, and a master's own
       shapes — `slides-ppt.ppt`'s master carries a footer and a slide-number placeholder that
-      LibreOffice draws onto every slide and XRay.Office draws on none, which is the same open
+      LibreOffice draws onto every slide and X-Ray.Office draws on none, which is the same open
       question the other two paths have and is why that deck's text runs are not compared.
 - [x] **Paragraph spacing above the first paragraph and below the last**, in the *shared*
       layouter. EditEngine adds neither (`editeng/source/editeng/impedit2.cxx:4791-4802`), and
@@ -1802,7 +1802,7 @@ the other end.
 
 **`dsp:txXfrm`, and the one place this deliberately departs from LibreOffice.** A baked shape may
 state its text area as an offset and extent in the *diagram's* coordinates, overriding both the
-preset's built-in rectangle and a `custGeom`'s `a:rect`. XRay.Office honours it directly, because a
+preset's built-in rectangle and a `custGeom`'s `a:rect`. X-Ray.Office honours it directly, because a
 text rectangle is a parameter of its text layout. LibreOffice cannot: `Transform2DContext`
 (`oox/source/drawingml/transform2dcontext.cxx:296-391`) says in its own comment that it "cannot
 change the text area rectangle directly, because currently we depend on the geometry definition of
@@ -1813,7 +1813,7 @@ one for **fourteen** presets and returns false for the rest, dropping the `dsp:t
 Measured, so the size of the divergence is known rather than assumed: of the 469 baked shapes,
 286 carry a `dsp:txXfrm` and **273 of those — 95% — use one of the fourteen**, where LibreOffice's
 indents land the text block on exactly the stated rectangle and the two agree. The other 13 are
-where XRay.Office will put a label where PowerPoint does and LibreOffice will not;
+where X-Ray.Office will put a label where PowerPoint does and LibreOffice will not;
 `sd/qa/unit/data/pptx/tdf149551_SmartArt_Gear.pptx` is one, on a `gear9`, and the visible effect is
 that its 20 pt "Three" fits on one line for LibreOffice and wraps for us.
 
@@ -1983,7 +1983,7 @@ that reads a slide's.
       format (`diagramlayoutatoms.cxx:1723-1728`), which is what makes a `primFontSz` of 65 an
       *upper bound* rather than a size. Verified on a probe deck of **227 plain text boxes** —
       one shape per box height from 8 to 100 pt at 25, 32 and 40 pt, one line and two, in four
-      faces — where XRay.Office now draws the reference's size on **225**. See the two entries below
+      faces — where X-Ray.Office now draws the reference's size on **225**. See the two entries below
       for what it did to the diagram decks, which is less than the probe suggests and for a reason
       that is not the fit's. Across the 37, pairing every drawn run with the reference's nearest,
       the summed size error falls from **1202.2 pt to 327.5 pt** and the worst single run from
@@ -2021,7 +2021,7 @@ that reads a slide's.
       direction and stops short. `smartart-vertical-block-list.pptx` draws 30 pt where the
       reference draws 27, and 65 where it draws 56; `smartart-font-size.pptx` draws 37 to 36;
       `smartart-org-chart.pptx` 15 to 16. The search is not the suspect — the box it is given is.
-      For that deck's tallest node XRay.Office measures a text box **85.948 pt** tall, and for
+      For that deck's tallest node X-Ray.Office measures a text box **85.948 pt** tall, and for
       LibreOffice to shrink 65 pt to 56 there its box must be under **66.98**; for the two-line
       node ours is 71.349 and its must be under 65.78. Nearly 20 pt on one shape is not rounding,
       and it is the same quantity the `dsp:txXfrm` note above is about. Fix the rectangle before
