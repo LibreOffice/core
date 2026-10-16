@@ -7302,6 +7302,74 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testStyleNamedStructureTypes)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aRoles20.indexOf("H7="));
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testImpressTableSpans)
+{
+    // a table with a header row, a cell that spans two columns and one that spans two rows
+    loadFromFile(u"table-span.fodp");
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+
+    vcl::filter::PDFObjectElement* pTable = nullptr;
+    for (auto* pObject : aDocument.GetObjects())
+    {
+        auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
+        if (pType && pType->GetValue() == "Table")
+            pTable = pObject;
+    }
+    CPPUNIT_ASSERT(pTable);
+
+    // the cells of each row, with their spans
+    OStringBuffer aCells;
+    auto pRows = dynamic_cast<vcl::filter::PDFArrayElement*>(pTable->Lookup("K"_ostr));
+    CPPUNIT_ASSERT(pRows);
+    for (auto* pRowElement : pRows->GetElements())
+    {
+        auto pRow = dynamic_cast<vcl::filter::PDFReferenceElement*>(pRowElement);
+        CPPUNIT_ASSERT(pRow);
+        CPPUNIT_ASSERT(pRow->LookupObject());
+        auto pCells
+            = dynamic_cast<vcl::filter::PDFArrayElement*>(pRow->LookupObject()->Lookup("K"_ostr));
+        CPPUNIT_ASSERT(pCells);
+        for (auto* pCellElement : pCells->GetElements())
+        {
+            auto pCell = dynamic_cast<vcl::filter::PDFReferenceElement*>(pCellElement);
+            CPPUNIT_ASSERT(pCell);
+            CPPUNIT_ASSERT(pCell->LookupObject());
+            auto pType = dynamic_cast<vcl::filter::PDFNameElement*>(
+                pCell->LookupObject()->Lookup("S"_ostr));
+            CPPUNIT_ASSERT(pType);
+            aCells.append(pType->GetValue());
+            // the Layout attributes and the Table ones are each a dictionary of their own
+            std::vector<vcl::filter::PDFDictionaryElement*> aAttributes;
+            vcl::filter::PDFElement* pA = pCell->LookupObject()->Lookup("A"_ostr);
+            if (auto pDictionary = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pA))
+                aAttributes.push_back(pDictionary);
+            else if (auto pArray = dynamic_cast<vcl::filter::PDFArrayElement*>(pA))
+                for (auto* pElement : pArray->GetElements())
+                    if (auto pOwner = dynamic_cast<vcl::filter::PDFDictionaryElement*>(pElement))
+                        aAttributes.push_back(pOwner);
+            for (auto* pAttributes : aAttributes)
+            {
+                for (const OString& rSpan : { "ColSpan"_ostr, "RowSpan"_ostr })
+                    if (auto pValue = dynamic_cast<vcl::filter::PDFNumberElement*>(
+                            pAttributes->LookupElement(rSpan)))
+                        aCells.append("/" + rSpan + OString::number(pValue->GetValue()));
+            }
+            aCells.append(" ");
+        }
+        aCells.append("| ");
+    }
+
+    // Without the fix the merged cells had no span and each covered cell was an empty TD:
+    // "TH TH TH | TD TD TD | TD TD TD | TD TD TD | ".
+    CPPUNIT_ASSERT_EQUAL("TH TH TH | TD TD/ColSpan2 | TD/RowSpan2 TD TD | TD TD | "_ostr,
+                         aCells.makeStringAndClear());
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();

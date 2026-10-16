@@ -354,7 +354,8 @@ namespace sdr::contact
                                     aRetvalForShadow.append(xCellReference);
                                 }
                             }
-                            if (isTaggedPDF && pPage)
+                            // a cell covered by a merged cell is part of that one, and gets no element
+                            if (isTaggedPDF && pPage && !(xCurrentCell.is() && xCurrentCell->isMerged()))
                             {
                                 // heuristic: if there's a special formatting on
                                 // first row, assume that it's a header row
@@ -368,7 +369,11 @@ namespace sdr::contact
                                         pPage->IsMasterPage(),
                                         false,
                                         false,
-                                        std::move(cell)) };
+                                        std::move(cell),
+                                        nullptr,
+                                        nullptr,
+                                        xCurrentCell.is() ? xCurrentCell->getColumnSpan() : 1,
+                                        xCurrentCell.is() ? xCurrentCell->getRowSpan() : 1) };
                             }
                             row.append(cell);
                         }
