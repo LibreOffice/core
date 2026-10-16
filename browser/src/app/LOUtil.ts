@@ -400,19 +400,27 @@ class LOUtil {
 	// is line work alone, so the dark one is the mask whenever it exists.
 	public static publishIconURL(element: HTMLImageElement, url: string): void {
 		if (!url || !url.endsWith('.svg')) return;
-		const lightURL = url.replace(/(^|\/)images\/dark\//, '$1images/');
+		const lightURL = LOUtil.lightIconURL(url);
 		LOUtil.setIconMaskURL(element, lightURL);
 		element.classList.add('icon-maskable');
 		LOUtil.followForcedColors();
 
 		if (!window.matchMedia?.('(forced-colors: active)').matches) return;
-		const darkURL = lightURL.replace(/(^|\/)images\//, '$1images/dark/');
+		const darkURL = LOUtil.darkIconURL(lightURL);
 		const probe = new Image();
 		probe.addEventListener('load', function () {
 			if (element.style.getPropertyValue('--icon-url').includes(lightURL))
 				LOUtil.setIconMaskURL(element, darkURL);
 		});
 		probe.src = darkURL;
+	}
+
+	private static lightIconURL(url: string): string {
+		return url.replace(/(^|\/)images\/dark\//, '$1images/');
+	}
+
+	private static darkIconURL(lightURL: string): string {
+		return lightURL.replace(/(^|\/)images\//, '$1images/dark/');
 	}
 
 	private static setIconMaskURL(element: HTMLImageElement, url: string): void {
