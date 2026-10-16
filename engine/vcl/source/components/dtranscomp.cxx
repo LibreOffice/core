@@ -26,6 +26,7 @@
 #include <tools/debug.hxx>
 #include <vcl/svapp.hxx>
 
+#include <kitdragsource.hxx>
 #include <svdata.hxx>
 #include <salinst.hxx>
 
@@ -196,11 +197,19 @@ class GenericDragSource : public ::comphelper::WeakComponentImplHelper<
             datatransfer::dnd::XDragSource,
             XInitialization,
             css::lang::XServiceInfo
-            >
+            >, public KitDragSource
 {
+    // The data and the listener of the drag that runs in a kit process, both empty while none
+    // runs.
     cpo::uno::Reference<css::datatransfer::XTransferable> m_xTrans;
+    cpo::uno::Reference<css::datatransfer::dnd::XDragSourceListener> m_xListener;
 public:
     GenericDragSource() {}
+
+    // KitDragSource
+    cpo::uno::Reference<css::datatransfer::XTransferable> getKitDragTransferable() override
+    { return m_xTrans; }
+    void endKitDrag(sal_Int8 nDropAction) override;
 
     // XDragSource
     virtual bool    isDragImageSupported() override;
@@ -249,7 +258,9 @@ void GenericDragSource::startDrag( const datatransfer::dnd::DragGestureEvent&,
                                    )
 {
     if (comphelper::COKit::isActive()) {
+        endKitDrag(datatransfer::dnd::DNDConstants::ACTION_NONE);
         m_xTrans = rTrans;
+        m_xListener = listener;
         return;
     }
 
@@ -257,6 +268,19 @@ void GenericDragSource::startDrag( const datatransfer::dnd::DragGestureEvent&,
     aEv.DropAction = datatransfer::dnd::DNDConstants::ACTION_COPY;
     aEv.DropSuccess = false;
     listener->dragDropEnd( aEv );
+}
+
+void GenericDragSource::endKitDrag(sal_Int8 nDropAction)
+{
+    Reference<datatransfer::dnd::XDragSourceListener> xListener = std::move(m_xListener);
+    m_xTrans.clear();
+    if (!xListener.is())
+        return;
+
+    datatransfer::dnd::DragSourceDropEvent aEv;
+    aEv.DropAction = nDropAction;
+    aEv.DropSuccess = nDropAction != datatransfer::dnd::DNDConstants::ACTION_NONE;
+    xListener->dragDropEnd(aEv);
 }
 
 void GenericDragSource::initialize( const Sequence< Any >& )

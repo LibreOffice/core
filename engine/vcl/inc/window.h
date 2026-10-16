@@ -178,6 +178,8 @@ struct ImplFrameData
 
     bool                mbInternalDragGestureRecognizer;
     bool                mbDragging;
+    /// Whether the running kit drag has entered the drop target of the mouse-down window.
+    bool                mbKitDragEntered;
     /// The pointer of the mouse-down window before a kit drag set a drag pointer on it, or empty
     /// while no kit drag pointer is set.
     std::optional<PointerStyle> moPointerBeforeKitDrag;

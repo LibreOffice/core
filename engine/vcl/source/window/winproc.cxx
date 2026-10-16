@@ -57,7 +57,9 @@
 #include <window.h>
 #include <helpwin.hxx>
 #include <brdwin.hxx>
+#include <kitdragsource.hxx>
 
+#include <com/sun/star/datatransfer/XTransferable.hpp>
 #include <com/sun/star/datatransfer/dnd/DNDConstants.hpp>
 #include <com/sun/star/datatransfer/dnd/XDragSource.hpp>
 #include <com/sun/star/awt/MouseEvent.hpp>
@@ -72,13 +74,26 @@ namespace
 class GenericDropTargetDropContext
     : public ::cppu::WeakImplHelper<css::datatransfer::dnd::XDropTargetDropContext>
 {
+    // The DNDConstants action the drop target accepted, or ACTION_NONE when it rejected the drop.
+    sal_Int8 mnAcceptedAction = css::datatransfer::dnd::DNDConstants::ACTION_NONE;
+    bool mbSuccess = false;
+
 public:
     GenericDropTargetDropContext() {}
 
+    // The DNDConstants action the drop carried out, or ACTION_NONE when nothing was dropped.
+    sal_Int8 getDropAction() const
+    {
+        return mbSuccess ? mnAcceptedAction : css::datatransfer::dnd::DNDConstants::ACTION_NONE;
+    }
+
     // XDropTargetDropContext
-    virtual void acceptDrop(sal_Int8 /*dragOperation*/) override {}
-    virtual void rejectDrop() override {}
-    virtual void dropComplete(bool /*success*/) override {}
+    virtual void acceptDrop(sal_Int8 dragOperation) override { mnAcceptedAction = dragOperation; }
+    virtual void rejectDrop() override
+    {
+        mnAcceptedAction = css::datatransfer::dnd::DNDConstants::ACTION_NONE;
+    }
+    virtual void dropComplete(bool success) override { mbSuccess = success; }
 };
 
 class GenericDropTargetDragContext
@@ -112,15 +127,27 @@ PointerStyle ImplKitDragPointer(sal_Int8 nAcceptedAction)
     return PointerStyle::NotAllowed;
 }
 
-// Ends a kit drag and gives the mouse-down window back the pointer it had before the drag.
-void ImplEndKitDrag(ImplFrameData* pFrameData)
+// The drag source of the frame when it runs its drags inside the kit process, or null.
+vcl::KitDragSource* ImplGetKitDragSource(const ImplFrameData* pFrameData)
 {
-    pFrameData->mbStartDragCalled = pFrameData->mbDragging = false;
-    if (!pFrameData->moPointerBeforeKitDrag)
-        return;
-    if (pFrameData->mpMouseDownWin)
-        pFrameData->mpMouseDownWin->SetPointer(*pFrameData->moPointerBeforeKitDrag);
-    pFrameData->moPointerBeforeKitDrag.reset();
+    return dynamic_cast<vcl::KitDragSource*>(pFrameData->mxDragSource.get());
+}
+
+// Ends a kit drag, gives the mouse-down window back the pointer it had before the drag, and tells
+// the drag source the DNDConstants action the drop carried out, ACTION_NONE when nothing was
+// dropped.
+void ImplEndKitDrag(ImplFrameData* pFrameData,
+                    sal_Int8 nDropAction = css::datatransfer::dnd::DNDConstants::ACTION_NONE)
+{
+    pFrameData->mbStartDragCalled = pFrameData->mbDragging = pFrameData->mbKitDragEntered = false;
+    if (pFrameData->moPointerBeforeKitDrag)
+    {
+        if (pFrameData->mpMouseDownWin)
+            pFrameData->mpMouseDownWin->SetPointer(*pFrameData->moPointerBeforeKitDrag);
+        pFrameData->moPointerBeforeKitDrag.reset();
+    }
+    if (vcl::KitDragSource* pDragSource = ImplGetKitDragSource(pFrameData))
+        pDragSource->endKitDrag(nDropAction);
 }
 }
 
@@ -913,10 +940,31 @@ bool ImplKitHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, NotifyEventType
             return false;
         }
 
-        xDropTarget->fireDragOverEvent(xDropTargetDragContext, nAction, aWinPos.X(), aWinPos.Y(),
-                                       (css::datatransfer::dnd::DNDConstants::ACTION_COPY
+        const sal_Int8 nSourceActions = css::datatransfer::dnd::DNDConstants::ACTION_COPY
                                         | css::datatransfer::dnd::DNDConstants::ACTION_MOVE
-                                        | css::datatransfer::dnd::DNDConstants::ACTION_LINK));
+                                        | css::datatransfer::dnd::DNDConstants::ACTION_LINK;
+        if (pFrameData->mbKitDragEntered)
+        {
+            xDropTarget->fireDragOverEvent(xDropTargetDragContext, nAction, aWinPos.X(),
+                                           aWinPos.Y(), nSourceActions);
+        }
+        else
+        {
+            // The first move of the drag enters the drop target with the formats of the dragged
+            // data, so the target can tell which drops it accepts.
+            pFrameData->mbKitDragEntered = true;
+            cpo::uno::Sequence<css::datatransfer::DataFlavor> aFlavors;
+            if (vcl::KitDragSource* pDragSource = ImplGetKitDragSource(pFrameData))
+            {
+                cpo::uno::Reference<css::datatransfer::XTransferable> xTransfer
+                    = pDragSource->getKitDragTransferable();
+                if (xTransfer.is())
+                    aFlavors = xTransfer->getTransferDataFlavors();
+            }
+            xDropTarget->fireDragEnterEvent(xDropTargetDragContext, nAction, aWinPos.X(),
+                                            aWinPos.Y(), nSourceActions, aFlavors);
+        }
+
 
         if (!pFrameData->moPointerBeforeKitDrag)
             pFrameData->moPointerBeforeKitDrag = pDragWin->GetPointer();
@@ -930,7 +978,9 @@ bool ImplKitHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, NotifyEventType
         pFrameData->mbDragging)
     {
         cpo::uno::Reference<css::datatransfer::XTransferable> xTransfer;
-        cpo::uno::Reference<css::datatransfer::dnd::XDropTargetDropContext> xDropTargetDropContext =
+        if (vcl::KitDragSource* pDragSource = ImplGetKitDragSource(pFrameData))
+            xTransfer = pDragSource->getKitDragTransferable();
+        rtl::Reference<GenericDropTargetDropContext> xDropTargetDropContext =
             new GenericDropTargetDropContext();
         rtl::Reference<DNDListenerContainer> xDropTarget(
             pDragWin->ImplGetWindowImpl()->mxDNDListenerContainer);
@@ -949,7 +999,7 @@ bool ImplKitHandleMouseEvent(const VclPtr<vcl::Window>& xWindow, NotifyEventType
                                     | css::datatransfer::dnd::DNDConstants::ACTION_LINK),
                                    xTransfer);
 
-        ImplEndKitDrag(pFrameData);
+        ImplEndKitDrag(pFrameData, xDropTargetDropContext->getDropAction());
         return true;
     }
 
