@@ -4108,6 +4108,7 @@ void SwXTextDocument::postMouseEvent(COKitMouseEventType eType, int nX, int nY, 
     KitMouseEventData aMouseEventData(eType, Point(nX, nY), nCount,
                                       MouseEventModifiers::SIMPLECLICK,
                                       nButtons, nModifier);
+    aMouseEventData.mbKitDrag = true;
     KitHelper::postMouseEventAsync(&rEditWin, aMouseEventData);
 }
 

@@ -23,6 +23,7 @@
 #include <sot/exchange.hxx>
 #include <sot/formats.hxx>
 #include <sfx2/bindings.hxx>
+#include <comphelper/kit.hxx>
 #include <vcl/commandevent.hxx>
 #include <osl/diagnose.h>
 
@@ -68,6 +69,12 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
         || !SwViewOption::IsAllowDragDropText())
         return;
 
+    // In a kit process a read-only view starts no drag. The process holds one drag for all its
+    // views, so a view starts none while another view's drag runs.
+    if (comphelper::COKit::isActive()
+        && (m_rView.IsKitReadOnlyView() || SwModule::get()->m_pDragDrop))
+        return;
+
     SwWrtShell &rSh = m_rView.GetWrtShell();
     if( rSh.GetDrawView() )
     {
@@ -89,6 +96,10 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
     if (!bInSelect && rSh.TestCurrPam(aDocPos, true))
         //We are not selecting and aren't at a selection
         bStartDragging = true;
+    // In a kit process only a press inside the text selection starts a drag. The client moves
+    // frames and drawing objects itself.
+    else if (comphelper::COKit::isActive())
+        return;
     // Several selected fly frames move by the frame drag alone, as the drag and drop copy
     // handles one fly frame.
     else if ( !g_bFrameDrag && rSh.IsSelFrameMode() &&
@@ -166,7 +177,18 @@ void SwEditWin::StartExecuteDrag()
     if( !g_bExecuteDrag || m_bIsInDrag )
         return;
 
+    // A kit process drags only a text selection. The client moves frames and drawing objects
+    // itself.
+    const bool bKit = comphelper::COKit::isActive();
+    if (bKit && m_rView.GetWrtShell().IsSelFrameMode())
+        return;
+
     m_bIsInDrag = true;
+
+    // A kit process has no system drag-and-drop loop. The kit mouse handling turns the following
+    // mouse moves into drag-over events and the button release into the drop.
+    if (bKit)
+        LocalStartDrag();
 
     rtl::Reference<SwTransferable> pTransfer = new SwTransferable( m_rView.GetWrtShell() );
 
@@ -363,13 +385,14 @@ sal_Int8 SwEditWin::AcceptDrop( const AcceptDropEvent& rEvt )
 
     // If the cursor is near the inner boundary
     // we attempt to scroll towards the desired direction.
+    // A kit client scrolls its own view while a drag nears its edge.
     tools::Rectangle aWin(Point(), GetOutputSizePixel());
     const int nMargin = 10;
     aWin.AdjustLeft(nMargin );
     aWin.AdjustTop(nMargin );
     aWin.AdjustRight( -nMargin );
     aWin.AdjustBottom( -nMargin );
-    if(!aWin.Contains(aPixPt)) {
+    if (!comphelper::COKit::isActive() && !aWin.Contains(aPixPt)) {
         static sal_uInt64 last_tick = 0;
         sal_uInt64 current_tick = tools::Time::GetSystemTicks();
         if((current_tick-last_tick) > 500) {
