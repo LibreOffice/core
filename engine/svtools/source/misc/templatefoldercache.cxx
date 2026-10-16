@@ -30,6 +30,7 @@
 #include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/util/theOfficeInstallationDirectories.hpp>
 #include <ucbhelper/content.hxx>
+#include <o3tl/safeint.hxx>
 #include <osl/diagnose.h>
 #include <rtl/ref.hxx>
 #include <salhelper/simplereferenceobject.hxx>
@@ -262,6 +263,26 @@ namespace svt
     };
 
 
+    /** reads the number of URL entries which follow in the stream
+
+        Every entry takes at least the 16 bit length of its URL string, so a count which does not
+        fit into the rest of the stream comes from a truncated or corrupt cache file. In that case
+        the stream is put into an error state and 0 is returned.
+    */
+    sal_Int32 readEntryCount( SvStream& _rStorage )
+    {
+        sal_Int32 nCount = 0;
+        _rStorage.ReadInt32( nCount );
+        if ( !_rStorage.good() || nCount < 0
+             || o3tl::make_unsigned( nCount ) > _rStorage.remainingSize() / sizeof( sal_uInt16 ) )
+        {
+            _rStorage.SetError( SVSTREAM_FILEFORMAT_ERROR );
+            return 0;
+        }
+        return nCount;
+    }
+
+
     struct StoreContentURL : public StorageHelper
     {
         uno::Reference< util::XOfficeInstallationDirectories > m_xOfficeInstDirs;
@@ -341,6 +362,9 @@ namespace svt
 
         void operator() ( TemplateContent& _rContent ) const
         {
+            if ( !m_rStorage.good() )
+                return;
+
             // store the info about this content
             util::DateTime aModDate;
             m_rStorage >> aModDate;
@@ -348,13 +372,12 @@ namespace svt
 
             // store the info about the children
             // the number
-            sal_Int32 nChildren = 0;
-            m_rStorage.ReadInt32( nChildren );
+            sal_Int32 nChildren = readEntryCount( m_rStorage );
             TemplateFolderContent& rChildren = _rContent.getSubContents();
             rChildren.resize( 0 );
             rChildren.reserve( nChildren );
             // initialize them with their (local) names
-            while ( nChildren-- )
+            while ( nChildren-- && m_rStorage.good() )
             {
                 OUString sURL = m_rStorage.ReadUniOrByteString();
                 sURL = m_xOfficeInstDirs->makeAbsoluteURL( sURL );
@@ -665,11 +688,10 @@ namespace svt
 
         // the root directories
         // their number
-        sal_Int32 nRootDirectories = 0;
-        m_pCacheStream->ReadInt32( nRootDirectories );
+        sal_Int32 nRootDirectories = readEntryCount( *m_pCacheStream );
         // init empty TemplateContents with the URLs
         m_aPreviousState.reserve( nRootDirectories );
-        while ( nRootDirectories-- )
+        while ( nRootDirectories-- && m_pCacheStream->good() )
         {
             OUString sURL = m_pCacheStream->ReadUniOrByteString();
             // #116281# Keep office installation relocatable. Never store
@@ -686,7 +708,9 @@ namespace svt
             ReadFolderContent( *m_pCacheStream, getOfficeInstDirs() )
         );
 
-        DBG_ASSERT( !m_pCacheStream->GetErrorCode(), "TemplateFolderCacheImpl::readPreviousState: unknown error during reading the state cache!" );
+        // a damaged cache is no error, it just means the templates need to be re-scanned
+        if ( m_pCacheStream->GetErrorCode() )
+            return false;
 
         // normalize the array (which basically means "sort it")
         normalize( m_aPreviousState );
