@@ -587,6 +587,7 @@ class MouseControl extends CanvasSectionObject {
 		that is no longer wanted.
 	*/
 	onDragCancel(): void {
+		DropCaretSection.hide();
 		this.stopCarrying(false);
 		this.hideShapeDragPreview();
 		this.stopSelectingText();
@@ -649,6 +650,7 @@ class MouseControl extends CanvasSectionObject {
 		this.stopSelectingText();
 
 		this.hideShapeDragPreview();
+		DropCaretSection.hide();
 
 		if (this.mouseDownSent) {
 			this.postCoreMouseEvent(

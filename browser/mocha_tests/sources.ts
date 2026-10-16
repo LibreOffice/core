@@ -236,6 +236,7 @@
 /// <reference path="../src/canvas/sections/OtherViewCursorSection.ts" />
 /// <reference path="../src/canvas/sections/ShapeLockLabelSection.tsx" />
 /// <reference path="../src/canvas/sections/ShapeLockCalloutSection.tsx" />
+/// <reference path="../src/canvas/sections/DropCaretSection.ts" />
 /// <reference path="../src/canvas/sections/TooltipAnchorSection.ts" />
 /// <reference path="../src/canvas/sections/RulerSpacerSection.ts" />
 /// <reference path="../src/layer/vector/CEventsHandler.ts" />

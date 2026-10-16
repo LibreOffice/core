@@ -658,6 +658,7 @@ COOL_JS_LST =\
 	src/canvas/sections/OtherViewCellCursorSection.ts \
 	src/canvas/sections/FormFieldButton.ts \
 	src/canvas/sections/OtherViewCursorSection.ts \
+	src/canvas/sections/DropCaretSection.ts \
 	src/layer/vector/CEventsHandler.ts \
 	src/layer/vector/CPointSet.ts \
 	src/layer/vector/CPath.ts \

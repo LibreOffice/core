@@ -1,5 +1,11 @@
 @media (forced-colors: active) {
 
+	/* The drop caret keeps its shape and takes the system highlight color. */
+	.text-drop-caret {
+		forced-color-adjust: none;
+		--drop-caret-color: Highlight;
+	}
+
 	/* Active notebookbar tab: box-shadow is stripped, use border-bottom */
 	.ui-tab.selected.notebookbar,
 	.main-nav.hasnotebookbar .ui-tabs > .ui-tab.selected.notebookbar {

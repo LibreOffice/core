@@ -3,7 +3,7 @@
  * window.L.CanvasTileLayer is a layer with canvas based rendering.
  */
 
-/* global app JSDialog CanvasSectionContainer GraphicSelection CanvasOverlay CursorHeaderSection $ _ CPolyUtil CPolygon Cursor UNOKey cool OtherViewCellCursorSection RenderManager SplitSection TextSelections CellSelectionMarkers URLPopUpSection CalcValidityDropDown DocumentBase CellCursorSection FormFieldButton TextCursorSection CStyleData CSelections CReferences OtherViewGraphicSelectionSection ShapeLockLabelSection ShapeLockCalloutSection CompareChangesLabelSection AnimatedGifManager ViewState RenderGeometrySection LocalCaret */
+/* global app JSDialog CanvasSectionContainer GraphicSelection CanvasOverlay CursorHeaderSection $ _ CPolyUtil CPolygon Cursor UNOKey cool OtherViewCellCursorSection RenderManager SplitSection TextSelections CellSelectionMarkers URLPopUpSection CalcValidityDropDown DocumentBase CellCursorSection FormFieldButton TextCursorSection CStyleData CSelections CReferences OtherViewGraphicSelectionSection ShapeLockLabelSection ShapeLockCalloutSection CompareChangesLabelSection AnimatedGifManager ViewState RenderGeometrySection LocalCaret DropCaretSection */
 
 function clamp(num, min, max)
 {
@@ -1812,14 +1812,26 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	},
 
 	_onInvalidateCursorMsg: function (textMsg) {
-		// The local caret stays while predicted edits are ahead of this update.
 		textMsg = textMsg.substring('invalidatecursor:'.length + 1);
 		var obj = JSON.parse(textMsg);
+		var recCursor = this._getEditCursorRectangle(obj);
+
+		// While a selection is dragged over the document, the cursor marks where it would land,
+		// and the caret of the view stays where it is, so this update is none of its own.
+		if (recCursor !== undefined && obj.dropPosition) {
+			DropCaretSection.showAt(new cool.SimpleRectangle(
+				recCursor.getTopLeft().x, recCursor.getTopLeft().y,
+				recCursor.getSize().x, recCursor.getSize().y));
+			return;
+		}
+		DropCaretSection.hide();
+
+		// The local caret stays while predicted edits are ahead of this update.
 		const keepPredictedCaret = RenderManager.keepPredictedCaret(obj);
 		// The server's selection that waited for this caret update.
 		for (const held of LocalCaret.takeHeld())
 			this._onSelectionMessage(held);
-		var recCursor = this._getEditCursorRectangle(obj);
+
 		if (recCursor === undefined || this.persistCursorPositionInWriter) {
 			this.persistCursorPositionInWriter = false;
 			return;

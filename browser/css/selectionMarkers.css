@@ -27,6 +27,32 @@ html[data-bg-theme='dark'] .cursor-handler {
 	background-image: url('images/dark/cursor-handler.svg');
 }
 
+/* The caret that marks where a dragged selection would land: a bar with a small
+   triangle at each end, so it stands apart from the blinking text caret. */
+.text-drop-caret {
+	--drop-caret-color: var(--color-primary);
+	background-color: var(--drop-caret-color);
+}
+
+.text-drop-caret::before,
+.text-drop-caret::after {
+	content: '';
+	position: absolute;
+	left: -3px;
+	border-left: 4px solid transparent;
+	border-right: 4px solid transparent;
+}
+
+.text-drop-caret::before {
+	top: -2px;
+	border-top: 5px solid var(--drop-caret-color);
+}
+
+.text-drop-caret::after {
+	bottom: -2px;
+	border-bottom: 5px solid var(--drop-caret-color);
+}
+
 .html-object-section {
 	display: block;
 	position: absolute;
