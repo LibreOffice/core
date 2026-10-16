@@ -490,6 +490,36 @@ class RenderGeometrySection extends CanvasSectionObject {
 	}
 
 	/// The box that object takes up on the page, in twips. Nothing where it says no place.
+	/*
+		The box an object drawn by that mapping takes up after a change that turns or shears it,
+		from the box it took up before. The box round the box turned along would be larger than
+		the object, and larger again with every further step of a key held down, so the box is
+		laid round the mapping as the change leaves it, with the room it had round the mapping
+		before kept on each side, such as half the width of its outline.
+	*/
+	private static boxTurnedWith(
+		box: cool.Range2D,
+		mapping: cool.Matrix2D,
+		change: cool.Matrix2D,
+	): cool.Range2D {
+		const cornersOf = (through: cool.Matrix2D) =>
+			cool.Range2D.fromPoints([
+				through.apply(0, 0),
+				through.apply(1, 0),
+				through.apply(1, 1),
+				through.apply(0, 1),
+			]);
+		const before = cornersOf(mapping);
+		const after = cornersOf(mapping.then(change));
+
+		return new cool.Range2D(
+			after.minX - Math.max(0, before.minX - box.minX),
+			after.minY - Math.max(0, before.minY - box.minY),
+			after.maxX + Math.max(0, box.maxX - before.maxX),
+			after.maxY + Math.max(0, box.maxY - before.maxY),
+		);
+	}
+
 	private static boxOfTheObject(
 		object: cool.SlideObject,
 	): cool.Range2D | undefined {
@@ -538,6 +568,11 @@ class RenderGeometrySection extends CanvasSectionObject {
 		was a step or two ago until the next answer.
 	*/
 	private static pending: Map<number, PendingChange[]> = new Map();
+
+	/// Whether a change laid over that object here still waits for the engine's answer.
+	public static awaitsAnAnswer(objectId: number): boolean {
+		return RenderGeometrySection.pending.has(objectId);
+	}
 
 	/*
 		Takes up an answer from the engine for the objects it replaced: the ones named, or every
@@ -723,12 +758,15 @@ class RenderGeometrySection extends CanvasSectionObject {
 
 		const box = RenderGeometrySection.boxOfTheObject(object);
 		if (box) {
-			const reached = cool.Range2D.fromPoints([
-				matrix.apply(box.minX, box.minY),
-				matrix.apply(box.maxX, box.minY),
-				matrix.apply(box.maxX, box.maxY),
-				matrix.apply(box.minX, box.maxY),
-			]);
+			const reached =
+				mapping && (Math.abs(matrix.b) > 1e-9 || Math.abs(matrix.c) > 1e-9)
+					? RenderGeometrySection.boxTurnedWith(box, mapping, matrix)
+					: cool.Range2D.fromPoints([
+							matrix.apply(box.minX, box.minY),
+							matrix.apply(box.maxX, box.minY),
+							matrix.apply(box.maxX, box.maxY),
+							matrix.apply(box.minX, box.maxY),
+						]);
 
 			object.x = reached.minX;
 			object.y = reached.minY;

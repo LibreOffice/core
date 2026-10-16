@@ -1045,53 +1045,36 @@ abstract class SelectionSection extends CanvasSectionObject {
 	}
 
 	/*
-		The four places the band round that object goes through, in twips, in the order they go
-		round it. For the object that is itself selected they are the places the framing handles
-		stand on, so its band follows a drag as they do; for one of several selected objects they
-		are the corners of its box with the running drag laid over them, which does the same, as
-		they are for a diagram whose first object is selected; for a group holding what is
-		selected they are the corners of the box that group takes up.
+		The four places the band round that group or diagram goes through, in twips, in the order
+		they go round it: the corners of the upright box round its frame. For the one that is
+		selected that frame is the selection's, the dashed one the handles stand on; for a group
+		holding what is selected it is the group's own mapping. So the band is upright and holds
+		the frame, however that is turned.
 	*/
 	private surroundPlaces(objectId: number): cool.SimplePoint[] {
 		const objects = this.selectedObjects();
+		const frame =
+			objects.length === 1 && objects[0] === objectId
+				? this.squareNow()
+				: RenderGeometrySection.transformOf(objectId);
 
-		if (objects.length === 1 && objects[0] === objectId) {
-			const framing = ['1', '3', '8', '6']
-				.map((kind: string) =>
-					this.handles().find(
-						(handle: SelectionHandle) => handle.kind === kind,
-					),
-				)
-				.filter((handle): handle is SelectionHandle => handle !== undefined)
-				.map(
-					(handle: SelectionHandle) =>
-						new cool.SimplePoint(handle.point.x, handle.point.y),
-				);
-
-			if (framing.length === 4) return framing;
-		}
-
-		const box = this.boxAround(
-			RenderGeometrySection.theOnesThatDraw([objectId]),
-		);
+		// Without a mapping of its own the band goes round the boxes of what it holds.
+		const box = frame
+			? cool.Range2D.fromPoints([
+					frame.apply(0, 0),
+					frame.apply(1, 0),
+					frame.apply(1, 1),
+					frame.apply(0, 1),
+				])
+			: this.boxAround(RenderGeometrySection.theOnesThatDraw([objectId]));
 		if (!box) return [];
 
-		const corners = [
-			new cool.Point(box.minX, box.minY),
-			new cool.Point(box.maxX, box.minY),
-			new cool.Point(box.maxX, box.maxY),
-			new cool.Point(box.minX, box.maxY),
+		return [
+			new cool.SimplePoint(box.minX, box.minY),
+			new cool.SimplePoint(box.maxX, box.minY),
+			new cool.SimplePoint(box.maxX, box.maxY),
+			new cool.SimplePoint(box.minX, box.maxY),
 		];
-		// A diagram whose first object is selected takes the drag as well, since that object
-		// stands for the diagram and a drag of it carries the whole diagram.
-		const drag = RenderGeometrySection.standingFor(objects).includes(objectId)
-			? this.interaction?.ghostTransformation()
-			: null;
-
-		return corners.map((corner: cool.Point) => {
-			const at = drag ? drag.apply(corner.x, corner.y) : corner;
-			return new cool.SimplePoint(at.x, at.y);
-		});
 	}
 
 	/*
@@ -1212,8 +1195,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 	/*
 		Draws the band round one group or diagram: two rounded paths, the inner one through the
 		places the band goes round and the outer one that much further out, with the space between
-		them filled. Where the band goes round what is selected those places follow whatever is
-		being done to it, so the band turns with a turn and grows with a scale while a drag runs.
+		them filled.
 
 		Everything it is drawn with comes from the one color of its kind: the fill runs from the
 		darker of that color through it to the lighter, and both bounds are drawn in the darker.
@@ -1270,8 +1252,14 @@ abstract class SelectionSection extends CanvasSectionObject {
 		this.context.stroke();
 	}
 
-	/// Draws a band for every group the selection sits in, the outermost first.
+	/*
+		Draws a band for every group the selection sits in, the outermost first. While a drag
+		runs there is none, as there are no buttons beside it then: the band stands where the
+		objects stand once the drag is over.
+	*/
 	private drawTheSurrounds(): void {
+		if (this.isDragged()) return;
+
 		const holding = this.surroundObjects();
 		if (!holding.length) return;
 
@@ -2226,25 +2214,71 @@ abstract class SelectionSection extends CanvasSectionObject {
 	private square: cool.Matrix2D | null = null;
 
 	public squareNow(): cool.Matrix2D | undefined {
+		// After a change that turned or sheared several objects or a group, and until the engine
+		// has answered for all it touched, the frame is their upright box, made afresh each time.
+		if (this.frameFollowsTheObjects) {
+			if (this.isWaitingForTheEngine()) {
+				const box = this.uprightBoxOfTheObjects();
+				return box ? cool.Matrix2D.fromRange(box) : undefined;
+			}
+			this.frameFollowsTheObjects = false;
+			this.square = null;
+		}
 		if (this.square) return this.square;
 
 		const objects = this.selectedObjects();
 		if (!objects.length) return undefined;
 
+		// One object or one group is framed by its own mapping from the engine, several objects
+		// by the upright box round them.
 		if (objects.length === 1) {
 			this.square = RenderGeometrySection.transformOf(objects[0]);
 			return this.square ?? undefined;
 		}
 
-		const box = this.boxAround(RenderGeometrySection.theOnesThatDraw(objects));
-		if (!box || !box.width || !box.height) return undefined;
+		const box = this.uprightBoxOfTheObjects();
+		this.square = box ? cool.Matrix2D.fromRange(box) : null;
+		return this.square ?? undefined;
+	}
 
-		this.square = cool.Matrix2D.fromRange(box);
-		return this.square;
+	/// The upright box round the objects that draw for the selection, in twips, or nothing where
+	/// it has no size.
+	private uprightBoxOfTheObjects(): cool.Range2D | undefined {
+		const box = this.boxAround(
+			RenderGeometrySection.theOnesThatDraw(this.selectedObjects()),
+		);
+		return box && box.width && box.height ? box : undefined;
 	}
 
 	public forgetTheSquare(): void {
 		this.square = null;
+		this.frameFollowsTheObjects = false;
+	}
+
+	/*
+		Whether the frame of several objects or a group is the upright box round them, after a
+		change that turned or sheared them, until the engine has answered for it.
+	*/
+	private frameFollowsTheObjects: boolean = false;
+
+	/// Whether a change laid on here still waits for the engine's answer for anything it touched:
+	/// the objects that draw and the groups above them.
+	private isWaitingForTheEngine(): boolean {
+		return RenderGeometrySection.theOnesAChangeTouches(
+			this.selectedObjects(),
+		).some((objectId: number) =>
+			RenderGeometrySection.awaitsAnAnswer(objectId),
+		);
+	}
+
+	/*
+		Whether that change leaves the frame upright rather than taking it along: where it turns
+		or shears several objects or a group, rather than only moving, scaling or mirroring them
+		along the page's own axes.
+	*/
+	private keepsAnUprightFrame(matrix: cool.Matrix2D | null): boolean {
+		if (!matrix || this.isOneObject()) return false;
+		return Math.abs(matrix.b) > 1e-9 || Math.abs(matrix.c) > 1e-9;
 	}
 
 	/*
@@ -2256,9 +2290,18 @@ abstract class SelectionSection extends CanvasSectionObject {
 		if (!matrix) return;
 		if (!SelectionSection.withinReason(this.selectedObjects(), matrix)) return;
 
-		// The square goes through the change along with the objects.
+		/*
+			The square goes through the change along with the objects. Several objects or a group
+			keep an upright frame, though: after a change that turns or shears them it is the
+			upright box round the objects, as their band is, until the engine has answered and the
+			square is made from what it says.
+		*/
+		const keepsUpright = this.keepsAnUprightFrame(matrix);
 		const square = this.squareNow();
-		if (square) this.square = square.then(matrix);
+		if (keepsUpright) {
+			this.frameFollowsTheObjects = true;
+			this.square = null;
+		} else if (square) this.square = square.then(matrix);
 
 		/*
 			The change goes to the objects that draw, and to the groups above them as well: a
@@ -2284,6 +2327,9 @@ abstract class SelectionSection extends CanvasSectionObject {
 				this.connectorsAwaitingAnswer.add(connectorId);
 			this.tellWhoStandsIn();
 		}
+
+		// The handles are laid on that upright frame at once.
+		if (keepsUpright) this.known = this.handlesOfTheGroups();
 
 		app.sectionContainer?.requestReDraw();
 	}
@@ -2841,10 +2887,13 @@ abstract class SelectionSection extends CanvasSectionObject {
 	public keepWhatItDid(interaction: SelectionInteraction): void {
 		// A crop is named against the picture as the engine gave it, and so are the handles it
 		// moves: the ones worked out from that picture, not the ones a crop before it moved.
-		this.known = interaction.handles(
-			interaction.isACrop() ? this.handlesOfTheGroups() : this.known,
-		);
-		this.leaveTheChangeOnTheObjects(interaction.ghostTransformation());
+		// Several objects or a group turned or sheared get their upright frame, not the drag's.
+		const ghost = interaction.ghostTransformation();
+		if (!this.keepsAnUprightFrame(ghost))
+			this.known = interaction.handles(
+				interaction.isACrop() ? this.handlesOfTheGroups() : this.known,
+			);
+		this.leaveTheChangeOnTheObjects(ghost);
 
 		const window = interaction.transformation();
 		const objectId = this.selectedObjects()[0];
