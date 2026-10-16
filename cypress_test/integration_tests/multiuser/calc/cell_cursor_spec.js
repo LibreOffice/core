@@ -22,8 +22,13 @@ describe(['tagmultiuser'], 'Check cell cursor and view behavior', function() {
 
 			// first view goes somewhere in the middle of a sheet: A400
 			cy.cSetActiveFrame('#iframe1');
+			cy.getFrameWindow().then((win1) => {
+				helper.processToIdle(win1);
+			});
 
-			cy.cGet(helper.addressInputSelector).type('{selectAll}A400{enter}');
+			// The address input is disabled while the document loads.
+			cy.cGet(helper.addressInputSelector).should('not.be.disabled')
+				.type('{selectAll}A400{enter}');
 			desktopHelper.assertScrollbarPosition('vertical', 400, 670);
 			cy.cGet('#sc_input_window .ui-custom-textarea-text-layer').click();
 			cy.cGet('#sc_input_window .ui-custom-textarea-text-layer').type('some text{enter}');
@@ -70,7 +75,10 @@ describe(['tagmultiuser'], 'Check cell cursor and view behavior', function() {
 		// first view goes somewhere in the middle of a sheet
 		cy.cSetActiveFrame('#iframe1');
 		cy.getFrameWindow().then((win1) => {
-			cy.cGet(helper.addressInputSelector).type('{selectAll}A400{enter}');
+			// The address input is disabled while the document loads.
+			helper.processToIdle(win1);
+			cy.cGet(helper.addressInputSelector).should('not.be.disabled')
+				.type('{selectAll}A400{enter}');
 			desktopHelper.assertScrollbarPosition('vertical', 400, 500);
 			calcHelper.clickOnFirstCell(true, false, 'A400');
 			helper.typeIntoDocument('abc{enter}');
