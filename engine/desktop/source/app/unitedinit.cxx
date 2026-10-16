@@ -17,11 +17,34 @@
 #error(this should only be compiled when in ENABLE_UNITEDLIBS)
 #endif
 
+#if defined(LINUX)
+
 // This function runs automatically when the library is loaded.
 // [-loplugin:external] [-loplugin:unreffun]
 void __attribute__((constructor)) united_library_init(void)
 {
     osl_setUnitedLibsActive();
 }
+
+#elif defined(_WIN32)
+
+// on Windows, we would normally use a DllMain, but we already
+// have one of those in sal/osl/w32/dllentry.cxx,
+// so use a more complicated approach that hooks into the CRT.
+
+void UnitedLibsInit()
+{
+    osl_setUnitedLibsActive();
+}
+
+// Register the function pointer into the CRT initialization segment
+#pragma section(".CRT$XCU", read)
+__declspec(allocate(".CRT$XCU")) void (*pMyLibraryInit)() = UnitedLibsInit;
+
+#else
+
+#error(no support for --enable-unitedlilbs on this platform yet)
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

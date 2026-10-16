@@ -39,6 +39,22 @@
     as a WIN32 HANDLE (which is also a 32-bit value)
 */
 
+#if ENABLE_UNITEDLIBS
+
+static bool g_UnitedLibActive { false };
+
+void osl_setUnitedLibsActive()
+{
+    g_UnitedLibActive = true;
+}
+
+bool osl_isUnitedLibActive()
+{
+    return g_UnitedLibActive;
+}
+
+#endif
+
 oslModule osl_loadModule(rtl_uString *strModuleName, sal_Int32 /*nRtldMode*/ )
 {
 #if OSL_DEBUG_LEVEL < 2
@@ -52,6 +68,24 @@ oslModule osl_loadModule(rtl_uString *strModuleName, sal_Int32 /*nRtldMode*/ )
 
     if ( osl_File_E_None != nError )
         Module = OUString::unacquired(&strModuleName);
+
+#if ENABLE_UNITEDLIBS
+    if (g_UnitedLibActive)
+    {
+#ifndef NDEBUG
+        if(Module.indexOf(SAL_MODULENAME("unitedlo")) == -1)
+        {
+            SAL_WARN("sal", "we are in unitedlib mode, but something is trying to load stuff from outside unitedlib, " << Module);
+            assert(false && "unitedlib load from outside error");
+        }
+#else
+        // Even in a release build, I would rather have a hard abort than have to debug extremely weird issues
+        // caused by loading libunited and other modules in the same process.
+        if(Module.indexOf(SAL_MODULENAME("unitedlo")) == -1)
+            std::abort();
+#endif
+    }
+#endif
 
     HMODULE h = LoadLibraryW(o3tl::toW(Module.getStr()));
 
@@ -89,6 +123,24 @@ oslModule osl_loadModuleAscii(const char *pModuleName, sal_Int32 )
 
     SAL_INFO( "sal.osl", "osl_loadModule: " << pModuleName );
     OSL_ASSERT(pModuleName);
+
+#if ENABLE_UNITEDLIBS
+    if (g_UnitedLibActive)
+    {
+#ifndef NDEBUG
+        if(strstr(pModuleName, SAL_MODULENAME("unitedlo")) == nullptr)
+        {
+            SAL_WARN("sal", "we are in unitedlib mode, but something is trying to load stuff from outside unitedlib, " << pModuleName);
+            assert(false && "unitedlib load from outside error");
+        }
+#else
+        // Even in a release build, I would rather have a hard abort than have to debug extremely weird issues
+        // caused by loading libunited and other modules in the same process.
+        if(strstr(pModuleName, SAL_MODULENAME("unitedlo")) == nullptr)
+            std::abort();
+#endif
+    }
+#endif
 
     HMODULE h = LoadLibraryA(pModuleName);
     if (h == nullptr)
