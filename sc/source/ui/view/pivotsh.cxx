@@ -146,6 +146,7 @@ void ScPivotShell::GetState( SfxItemSet& rSet )
     ScDocument& rDoc = pDocSh->GetDocument();
     bool bDisable = pDocSh->IsReadOnly() || rDoc.GetChangeTrack();
     bool bFilterDisable = bDisable;
+    bool bRefreshDisable = bDisable;
     if (!bDisable)
     {
         SCCOL nTab = pViewShell->GetViewData().CurrentTabForData();
@@ -154,7 +155,10 @@ void ScPivotShell::GetState( SfxItemSet& rSet )
         {
             bDisable = true;
             if (!pTabProt->isOptionEnabled(ScTableProtection::PIVOT_TABLES))
+            {
                 bFilterDisable = true;
+                bRefreshDisable = true;
+            }
         }
     }
 
@@ -164,7 +168,14 @@ void ScPivotShell::GetState( SfxItemSet& rSet )
     {
         switch (nWhich)
         {
+            // tdf#168389: we want to be able to refresh pivot table
+            // even if we're on a protected sheet
             case SID_PIVOT_RECALC:
+            {
+                if( bRefreshDisable )
+                    rSet.DisableItem( nWhich );
+            }
+            break;
             case SID_PIVOT_KILL:
             case SID_PIVOT_CALCFIELD:
             {
