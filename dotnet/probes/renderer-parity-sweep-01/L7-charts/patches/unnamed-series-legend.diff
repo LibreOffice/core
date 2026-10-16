@@ -1,0 +1,166 @@
+# PREREQUISITE: apply patches/series-name-from-range.diff FIRST.
+# This patch extends the SeriesName(...) helper that patch introduces; on a pristine tree it
+# fails `patch -p1 --dry-run` because its context does not exist yet. Order: series-name-from-range,
+# then this. The other six diffs in this directory apply standalone, in any order.
+--- a/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChartPlot.cs
++++ b/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChartPlot.cs
+@@ -1,4 +1,5 @@
+ using System.Globalization;
++using System.Text.RegularExpressions;
+ using System.Text;
+ using System.Xml.Linq;
+ using XRay.Office.Core.Charts;
+@@ -1163,7 +1164,8 @@
+                 theme, automatic.Styles);
+ 
+             series.Add(new ChartSeries(
+-                SeriesName(Child(element, "tx"), ranges),
++                SeriesName(Child(element, "tx"), ranges)
++                ?? GeneratedSeriesName(valueSource, ranges),
+                 numbers,
+                 SuppressesFill(properties) ? null : FillOf(properties, theme) ?? autoFill,
+                 SuppressesLine(properties) ? null : LineOf(properties, theme) ?? autoLine,
+@@ -2444,6 +2446,143 @@
+     }
+ 
+     /// <summary>
++    /// The name a Calc-hosted series with no <c>c:tx</c> at all is given — <c>Column C</c>.
++    /// </summary>
++    /// <remarks>
++    /// <para>
++    /// <strong>An unnamed series is not a series without a legend entry.</strong>
++    /// <c>DataSeries::getLabelForRole</c> falls through to
++    /// <c>xValueSeq-&gt;generateLabel(LabelOrigin_SHORT_SIDE)</c> when the label sequence is
++    /// absent or empty (<c>chart2/source/model/main/DataSeries.cxx:641-672</c>), and Calc answers
++    /// it: <c>ScChart2DataSequence::generateLabel</c> sums the columns and rows of every range
++    /// token, labels along the short side, and <c>GenerateLabelStrings</c> writes
++    /// <c>ScResId(STR_COLUMN) + " " + &lt;column letter&gt;</c> or
++    /// <c>ScResId(STR_ROW) + " " + &lt;1-based row&gt;</c>
++    /// (<c>sc/source/ui/unoobj/chart2uno.cxx:3147-3243</c>). Equal counts return an empty
++    /// sequence and therefore no name.
++    /// </para>
++    /// <para>
++    /// Measured on <c>057_Simple_balance_sheet_Use_this_template_e2d4cbb2.xlsx</c>, whose two
++    /// <c>c:ser</c> state a <c>c:spPr</c>, a <c>c:cat</c> and a <c>c:val</c> and no <c>c:tx</c>:
++    /// the reference draws a two-entry legend reading <c>Column C</c> and <c>Column D</c> — its
++    /// value ranges are unions of six column-C and column-D fragments, twenty rows against six
++    /// columns — and we drew no legend at all.
++    /// </para>
++    /// <para>
++    /// <strong>Gated on there being a resolver, which is the Calc host and only Calc.</strong>
++    /// A deck's or a document's sequences are <c>CachedDataSequence</c>s, whose
++    /// <c>generateLabel</c> returns an empty sequence, so the reference names those series by
++    /// another route entirely (<c>lcl_getDataSequenceLabel</c> over the values) and never by this
++    /// one. Firing it without a resolver would invent legends on every unnamed pptx series.
++    /// </para>
++    /// <para>
++    /// The strings are LibreOffice's localized <c>STR_COLUMN</c>/<c>STR_ROW</c>, in the en-US
++    /// resource this project's reference binary runs under — the same standing caveat
++    /// <see cref="DrawingChartTitle.DiagramTitle"/> carries.
++    /// </para>
++    /// </remarks>
++    private static string? GeneratedSeriesName(XElement? values, ChartRangeResolver? ranges)
++    {
++        if (ranges is null || values is null) return null;
++        if (FormulaOf(values) is not { } formula) return null;
++
++        int columns = 0;
++        int rows = 0;
++        string? firstColumn = null;
++        int firstRow = -1;
++
++        foreach ((string Column, int Row, string EndColumn, int EndRow) area in Areas(formula))
++        {
++            columns += ColumnNumber(area.EndColumn) - ColumnNumber(area.Column) + 1;
++            rows += area.EndRow - area.Row + 1;
++
++            firstColumn ??= area.Column;
++            if (firstRow < 0) firstRow = area.Row;
++        }
++
++        if (firstColumn is null || firstRow < 0) return null;
++
++        // LabelOrigin_SHORT_SIDE: label along whichever side is shorter, and nothing at all when
++        // the two are equal.
++        if (rows > columns) return "Column " + firstColumn;
++        if (columns > rows) return "Row " + firstRow.ToString(CultureInfo.InvariantCulture);
++
++        return null;
++    }
++
++    /// <summary>Every A1 area in a <c>c:f</c>, sheet qualifiers and unions included.</summary>
++    /// <remarks>
++    /// <para>
++    /// <c>AccumulateRangeSize</c> walks the token list a formula parsed into; this reads the same
++    /// areas straight out of the text, which is all the two figures it feeds need. A reference
++    /// this cannot read contributes nothing, exactly as an unresolvable token does.
++    /// </para>
++    /// <para>
++    /// The sheet qualifier is cut off before the pattern runs, because a name such as
++    /// <c>Q1Data</c> reads as the cell <c>Q1</c> otherwise. A union's members are separated at the
++    /// commas the file writes them with.
++    /// </para>
++    /// </remarks>
++    private static IEnumerable<(string Column, int Row, string EndColumn, int EndRow)> Areas(
++        string formula)
++    {
++        foreach (string member in formula.Trim('(', ')').Split(','))
++        {
++            int qualifier = member.LastIndexOf('!');
++            string area = qualifier >= 0 ? member[(qualifier + 1)..] : member;
++
++            foreach ((string, int, string, int) found in AreasIn(area)) yield return found;
++        }
++    }
++
++    /// <summary>The areas in one member of a union, its sheet qualifier already cut off.</summary>
++    private static IEnumerable<(string Column, int Row, string EndColumn, int EndRow)> AreasIn(
++        string area)
++    {
++        foreach (Match match in AreaPattern.Matches(area))
++        {
++            string column = match.Groups[1].Value.ToUpperInvariant();
++            string endColumn = match.Groups[3].Success
++                ? match.Groups[3].Value.ToUpperInvariant()
++                : column;
++
++            if (!int.TryParse(
++                    match.Groups[2].Value, NumberStyles.None, CultureInfo.InvariantCulture,
++                    out int row))
++            {
++                continue;
++            }
++
++            int endRow = row;
++            if (match.Groups[4].Success
++                && !int.TryParse(
++                    match.Groups[4].Value, NumberStyles.None, CultureInfo.InvariantCulture,
++                    out endRow))
++            {
++                continue;
++            }
++
++            yield return (column, row, endColumn, endRow);
++        }
++    }
++
++    /// <summary>One A1 area: <c>$B$6</c> or <c>$B$6:$C$11</c>, dollars optional.</summary>
++    private static readonly Regex AreaPattern = new(
++        @"\$?([A-Za-z]{1,3})\$?([0-9]{1,7})(?::\$?([A-Za-z]{1,3})\$?([0-9]{1,7}))?",
++        RegexOptions.CultureInvariant);
++
++    /// <summary>A column letter's 1-based number.</summary>
++    private static int ColumnNumber(string letters)
++    {
++        int number = 0;
++
++        foreach (char letter in letters)
++            number = (number * 26) + (letter - 'A' + 1);
++
++        return number;
++    }
++
++    /// <summary>
+     /// A series' name: its live cells where the caller can reach them, else its cached points.
+     /// </summary>
+     /// <remarks>

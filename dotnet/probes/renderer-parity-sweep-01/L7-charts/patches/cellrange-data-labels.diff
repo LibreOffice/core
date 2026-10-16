@@ -1,0 +1,169 @@
+--- a/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChartPlot.cs
++++ b/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChartPlot.cs
+@@ -1189,7 +1189,8 @@
+                 LineCap = CapOf(properties),
+                 Label = WithSource(LabelOf(seriesLabels, groupLabel, kind, office2007), sourceFormat),
+                 PointLabels = PointLabelsOf(
+-                    seriesLabels, numbers.Length, groupLabel, kind, sourceFormat, office2007),
++                    seriesLabels, numbers.Length, groupLabel, kind, sourceFormat, office2007,
++                    DataLabelsRangeOf(element)),
+                 AxisIndex = axisIndex,
+                 Trendlines = TrendlinesOf(element, theme, office2007),
+                 SizeValues = sizes,
+@@ -1498,7 +1499,8 @@
+         ChartDataLabel? inherited,
+         ChartPlotKind kind,
+         NumberFormatCode? source,
+-        bool office2007)
++        bool office2007,
++        IReadOnlyList<string?>? dataLabelsRange = null)
+     {
+         if (labels is null) return null;
+ 
+@@ -1513,12 +1515,127 @@
+             points ??= new ChartDataLabel?[Math.Max(count, index + 1)];
+             if (index >= points.Length) continue;
+ 
+-            points[index] = WithSource(LabelOf(point, seriesLevel, kind, office2007), source);
++            ChartDataLabel? read =
++                WithSource(LabelOf(point, seriesLevel, kind, office2007), source);
++
++            points[index] = WithCellRange(read, point, index, dataLabelsRange);
+         }
+ 
+         return points;
+     }
+ 
++    /// <summary>The Office extension a <c>CELLRANGE</c> field's text actually comes from.</summary>
++    /// <remarks><c>{02D57815-91ED-43cb-92C2-25804820EDAC}</c>'s namespace.</remarks>
++    private const string Chart2012 = "http://schemas.microsoft.com/office/drawing/2012/chart";
++
++    /// <summary>
++    /// A series' data-label range — the strings a <c>CELLRANGE</c> field stands for, by point.
++    /// </summary>
++    /// <remarks>
++    /// <para>
++    /// <strong>A <c>CELLRANGE</c> field's own <c>a:t</c> is the placeholder and never the
++    /// answer.</strong> Excel writes the literal <c>[CELLRANGE]</c> there and puts the text in
++    /// <c>c:ser/c:extLst/c:ext/c15:datalabelsRange/c15:dlblRangeCache</c>, keyed by point index.
++    /// <c>SeriesConverter::createDataSeries</c> reads exactly that —
++    /// <c>mrModel.mrParent.mpLabelsSource-&gt;mxDataSeq-&gt;maData.find(mrModel.mnIndex)</c>, then
++    /// <c>xCustomLabel-&gt;setString(oaLabelText)</c>
++    /// (<c>oox/source/drawingml/chart/seriesconverter.cxx:366-410</c>), with
++    /// <c>mpLabelsSource</c> bound at <c>seriescontext.cxx:461</c>.
++    /// </para>
++    /// <para>
++    /// Measured on <c>047_Date_tracker_Gantt_chart_bf34f3a8.xlsx</c>: nine data labels reading
++    /// <c>[CELLRANGE]</c> against a reference that reads <c>Activity 1</c> … <c>Activity 7</c>,
++    /// <c>Today</c> and <c>Milestone 1</c> — the cache is in the file and was never opened.
++    /// </para>
++    /// <para>
++    /// The cache and not the resolver, deliberately: the converter reads the parsed
++    /// <c>DataSequenceModel::maData</c> map, which is the <c>c15:dlblRangeCache</c> the file
++    /// carries, and never asks the data provider for those cells.
++    /// </para>
++    /// </remarks>
++    private static IReadOnlyList<string?>? DataLabelsRangeOf(XElement series)
++    {
++        XName cache = XName.Get("dlblRangeCache", Chart2012);
++        XElement? found = null;
++
++        foreach (XElement extension in Children(Child(series, "extLst"), "ext"))
++        {
++            found = extension
++                .Descendants(cache)
++                .FirstOrDefault();
++
++            if (found is not null) break;
++        }
++
++        if (found is null) return null;
++
++        int declared = Drawing.Number(Child(found, "ptCount"), "val") ?? -1;
++
++        foreach (XElement point in found.Descendants(Name("pt")))
++            declared = Math.Max(declared, (Drawing.Number(point, "idx") ?? -1) + 1);
++
++        int count = Math.Clamp(declared, 0, MaxPointCount);
++        if (count == 0) return null;
++
++        string?[] text = new string?[count];
++
++        foreach (XElement point in found.Descendants(Name("pt")))
++        {
++            int index = Drawing.Number(point, "idx") ?? -1;
++            if (index < 0 || index >= count) continue;
++
++            text[index] = Child(point, "v")?.Value;
++        }
++
++        return text;
++    }
++
++    /// <summary>
++    /// One point's label with its <c>CELLRANGE</c> fields resolved against the series' range.
++    /// </summary>
++    /// <remarks>
++    /// Gated on <c>c15:showDataLabelsRange</c>, which is what <c>DataLabelContext</c> parses into
++    /// <c>mobShowDataLabelsRange</c> (<c>seriescontext.cxx:134-139</c>) and what
++    /// <c>seriesconverter.cxx:368</c> tests before it looks the text up at all. Without a value
++    /// for this point the placeholder stands, exactly as the source leaves
++    /// <c>oaLabelText.value_or("")</c> unset when the map has no entry.
++    /// </remarks>
++    private static ChartDataLabel? WithCellRange(
++        ChartDataLabel? label,
++        XElement point,
++        int index,
++        IReadOnlyList<string?>? dataLabelsRange)
++    {
++        if (label?.Parts is not { Count: > 0 } parts) return label;
++        if (dataLabelsRange is null || index >= dataLabelsRange.Count) return label;
++        if (dataLabelsRange[index] is not { } resolved) return label;
++
++        bool shown = Child(Child(point, "extLst"), "ext")
++                         ?.Descendants(XName.Get("showDataLabelsRange", Chart2012))
++                         .Any(flag => flag.Attribute("val")?.Value is not ("0" or "false"))
++                     ?? false;
++
++        if (!shown) return label;
++
++        List<ChartLabelPart> rewritten = new(parts.Count);
++        bool changed = false;
++
++        foreach (ChartLabelPart part in parts)
++        {
++            if (part.Field == ChartLabelField.CellRange)
++            {
++                rewritten.Add(part with { Text = resolved });
++                changed = true;
++            }
++            else
++            {
++                rewritten.Add(part);
++            }
++        }
++
++        return changed ? label with { Parts = rewritten } : label;
++    }
++
+     /// <summary>
+     /// A custom label's runs, or null when the label states no template.
+     /// </summary>
+--- a/dotnet/src/XRay.Office.Core/Charts/ChartDataLabel.cs
++++ b/dotnet/src/XRay.Office.Core/Charts/ChartDataLabel.cs
+@@ -77,7 +77,14 @@
+ /// <param name="Field">What it stands for.</param>
+ /// <param name="Text">
+ /// Its literal text, which for a field is the placeholder and is used only when the field cannot
+-/// be resolved — a <see cref="ChartLabelField.CellRange"/>, whose cached string is all there is.
++/// be resolved.
++/// <para>
++/// <strong>A <see cref="ChartLabelField.CellRange"/> is not such a field, and reading it as one
++/// draws the placeholder.</strong> Its <c>a:t</c> is the literal <c>[CELLRANGE]</c>; the text it
++/// stands for is in the series' <c>c15:datalabelsRange/c15:dlblRangeCache</c>, by point index, and
++/// the reader substitutes it there before the label is composed. See
++/// <c>DrawingChartPlot.DataLabelsRangeOf</c>.
++/// </para>
+ /// </param>
+ public readonly record struct ChartLabelPart(ChartLabelField Field, string Text);
+ 

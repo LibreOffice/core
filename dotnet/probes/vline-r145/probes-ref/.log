@@ -1,0 +1,1 @@
+convert /home/user/libreoffice-core/dotnet/probes/vline-r145/probes/group-pt.docx as a Writer document -> /home/user/libreoffice-core/dotnet/probes/vline-r145/probes-ref/group-pt.pdf using filter : writer_pdf_Export

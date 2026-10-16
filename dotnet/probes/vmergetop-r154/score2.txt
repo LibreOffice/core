@@ -1,0 +1,49 @@
+44 movers scored; spans that moved between the legs: 17427
+  of those, CLOSER to 26.2.4.2 16563, FURTHER 859, level 5
+  documents net better 28, net worse 11, net level 5
+
+    moved  closer further  document
+     6458    6394      64  FAA 2025-26 Holdover Tables.docx
+     5739    5623     116  24-25_FAA_Holdover_Tables.docx
+     1955    1853     102  d97cdeea9a38-FAA 2025-26 Holdover Tables.rtf
+     1011     913      95  9a0dd0c6025a-24-25_FAA_Holdover_Tables.rtf
+      381     381       0  150_5300_13_chg8.doc
+      334     334       0  DOA_Template_Form_Type_Certification_Programme.docx
+      135     135       0  4373cd432be7-P200904290238_0238_51880.rtf
+      116     106      10  approvals-and-standardisation-organisation-approvals-docs-pa
+      116     104      10  B11. TE.CAO.00129  Experience  logbook.docx
+       91      91       0  EHEST-SMS-Safety-Management-Manual-V2.docx
+       49      49       0  9d289f4d021d-EHEST-SMS-Safety-Management-Manual-V2.rtf
+       41      41       0  150-5370-10H.docx
+       40      40       0  ed07ce5f44c7-t_TEMPforInvProgs.rtf
+       40      40       0  t_TEMPforInvProgs.docx
+       30      30       0  048_Visual_Product_Roadmap_Template_Quality_Layout_f38f7aee.
+       29      29       0  1610e3230af2-049_Visual_Product_Roadmap_Template_Simple_Form
+       29      29       0  049_Visual_Product_Roadmap_Template_Simple_Format_4af26e4f.d
+       25      25       0  0a06a7b3742f-044_Visual_Product_Roadmap_Template_Editable_Fo
+       25      25       0  044_Visual_Product_Roadmap_Template_Editable_Format_c232a2c0
+       68      42      26  FO.FCTOA_.000129 Application for activities related to FSTD.
+       15      15       0  045_Visual_Product_Roadmap_Template_Excellent_Format_e364063
+      161      86      75  6ba268b84b01-150_5300_13_chg12.rtf
+       39      23      16  b1eeaf9dec9c-150_5300_13_chg10.rtf
+        7       7       0  be08258af317-A1. EASA Form 2.rtf
+        7       7       0  1_tpr_template__from_fy14_.docx
+        3       3       0  ffc95e0819d4-047_Visual_Product_Roadmap_Template_Professiona
+        3       3       0  047_Visual_Product_Roadmap_Template_Professional_Layout_2ff4
+        2       2       0  c7164e021fe7-foca_form_1.rtf
+        0       0       0  1ef46e226af0-JEMIT_Template.rtf
+        0       0       0  49befd6540a9-150-5370-10H.rtf
+        0       0       0  4d161b99e91b-FO.FCTOA_.000129 Application for activities rel
+        0       0       0  681b81943f79-DOA_Template_Form_Type_Certification_Programme.
+        0       0       0  JEMIT_Template.docx
+        2       0       2  410a0fe0dba2-B11. TE.CAO.00129  Experience  logbook.rtf
+        2       0       2  fa86e47856dd-approvals-and-standardisation-organisation-appr
+      165      81      84  e3fcd2815598-150_5300_13_chg8.rtf
+        4       0       4  dd515c324f94-1_tpr_template__from_fy14_.rtf
+        6       0       6  a3cc62ed5e23-237287_0486190101_0486190101_geolink2neu.rtf
+       15       0      15  6f1bffd21d03-045_Visual_Product_Roadmap_Template_Excellent_F
+       99      40      59  P200904290238_0238_51880.doc
+       28       0      28  4985240899d4-048_Visual_Product_Roadmap_Template_Quality_Lay
+       52      10      42  150_5300_13_chg10.doc
+       44       0      44  A1. EASA Form 2.docx
+       61       2      59  150_5300_13_chg12.doc

@@ -1,0 +1,11 @@
+document	runs	non-black	italic	colours
+2012-GA-Survey-Chapter-5-Tables-16Dec2013-V2.xls	1	0	0	
+2012-GA-Survey-Chapter-6-Tables-16Dec2013-V2.xls	1	0	0	
+EHEST-Pre-departure-checklist-Rev.-1-06-12-2016.xls	172	30	0	#FF0000×20 #00FF00×10
+PC1000.xls	17	12	0	#FF0000×9 #0000FF×3
+SIL_TDB605.xls	14	0	0	
+SIL_TDB609.xls	19	0	0	
+TICAPCapability_Final.xls	35	0	0	
+TOGAF9-Tool-ConfReqts-CSQ.xls	1	1	0	#FF0000×1
+apron-area.xls	3	0	0	
+TOTAL runs 263  non-black 43  italic 0  documents-with-nonblack 3

@@ -1,0 +1,13 @@
+ours  centre (408.74, 464.81)  radius 100.01
+   M1; Actual; 93; 17%        lines 1  box   79.69 x  12.21  centre (  511.55,  559.56)  d  139.81  outside
+   M5; Actual; 121; 23%       lines 2  box   65.46 x  23.46  centre (  362.48,  495.99)  d   55.79  INSIDE
+   M2; Actual; 100; 19%       lines 2  box   65.46 x  23.46  centre (  472.39,  460.87)  d   63.77  INSIDE
+   M4; Actual; 114; 21%       lines 2  box   65.46 x  23.46  centre (  357.32,  446.66)  d   54.53  INSIDE
+   M3; Actual; 107; 20%       lines 2  box   65.46 x  23.46  centre (  438.10,  400.85)  d   70.38  outside
+
+ref   centre (408.84, 464.74)  radius 99.78
+   M1; Actual; 93; 17%        lines 1  box   79.66 x  12.21  centre (  511.54,  559.25)  d  139.57  outside
+   M5; Actual; 121; 23%       lines 2  box   65.43 x  23.43  centre (  362.63,  495.85)  d   55.71  INSIDE
+   M2; Actual; 100; 19%       lines 2  box   65.43 x  23.43  centre (  472.39,  460.80)  d   63.67  INSIDE
+   M4; Actual; 114; 21%       lines 2  box   65.43 x  23.43  centre (  357.48,  446.60)  d   54.47  INSIDE
+   M3; Actual; 107; 20%       lines 2  box   65.43 x  23.43  centre (  438.17,  400.95)  d   70.21  outside

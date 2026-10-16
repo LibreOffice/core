@@ -1,0 +1,118 @@
+distinct manifest paths read: 946
+
+family   text-chart bestFitPie biff-charts
+sheets           90          7          7
+slides           67          5          0
+words            10          2          1
+
+best-fit pie documents (OOXML), by family and manifest status:
+  sheets done     sheets/chartset-002/xlsx/003_advanced_excel_pie.xlsx                                         1
+  sheets done     sheets/chartset-002/xlsx/011_advanced_excel_pie.xlsx                                         1
+  sheets done     sheets/chartset-002/xlsx/027_advanced_excel_pie.xlsx                                         1
+  sheets done     sheets/chartset-004/xlsx/019_advanced_excel_pie.xlsx                                         1
+  sheets done     sheets/chartset-006/xlsx/005_Contextures_chart_sample_6e279b08.xlsx                          3
+  sheets done     sheets/chartset-007/xlsm/003_Contextures_chart_sample_9bda2719.xlsm                          1
+  sheets open     sheets/chartset-004/xlsx/microsoft_learn_multi_chart_examples.xlsx                           1
+  slides done     slides/done-007/pptx/bitesize-writing-a-report.pptx                                          1
+  slides done     slides/done-011/pptx/3495.pptx                                                               1
+  slides open     slides/chartset-005/pptx/076_Hexadonut_Charts_for_PowerPoint_and_Google_Slides_2b879835.pptx 6
+  slides open     slides/chartset-006/pptx/031_Alarm_Clock_Pie-Chart_for_PowerPoint_and_Google_Slides_0b185a05.pptx 2
+  slides open     slides/chartset-012/pptx/061_Four-Stage_Serpentine_Chart_05699efe.pptx                       8
+  words  done     words/chartset-001/docx/pie-chart-result.docx                                                1
+  words  done     words/chartset-001/docx/pie-chart-template.docx                                              1
+
+sheets documents with a text-bearing chart, by manifest status:
+   done     76
+   open     14
+
+sheets documents with a text-bearing chart, listed:
+  done     sheets/chartset-001/xlsx/001_advanced_excel_bar.xlsx                                         1
+  done     sheets/chartset-001/xlsx/002_advanced_excel_line.xlsx                                        1
+  done     sheets/chartset-001/xlsx/005_advanced_excel_area.xlsx                                        1
+  done     sheets/chartset-001/xlsx/006_advanced_excel_scatter.xlsx                                     1
+  done     sheets/chartset-001/xlsx/016_advanced_excel_radar.xlsx                                       1
+  done     sheets/chartset-001/xlsx/022_advanced_excel_scatter.xlsx                                     1
+  done     sheets/chartset-001/xlsx/025_advanced_excel_bar.xlsx                                         1
+  done     sheets/chartset-001/xlsx/028_advanced_excel_doughnut.xlsx                                    1
+  done     sheets/chartset-001/xlsx/032_advanced_excel_radar.xlsx                                       1
+  done     sheets/chartset-001/xlsx/033_advanced_excel_bar.xlsx                                         1
+  done     sheets/chartset-002/xlsx/003_advanced_excel_pie.xlsx                                         1
+  done     sheets/chartset-002/xlsx/007_advanced_excel_bubble.xlsx                                      1
+  done     sheets/chartset-002/xlsx/011_advanced_excel_pie.xlsx                                         1
+  done     sheets/chartset-002/xlsx/012_advanced_excel_doughnut.xlsx                                    1
+  done     sheets/chartset-002/xlsx/013_advanced_excel_area.xlsx                                        1
+  done     sheets/chartset-002/xlsx/021_advanced_excel_area.xlsx                                        1
+  done     sheets/chartset-002/xlsx/026_advanced_excel_line.xlsx                                        1
+  done     sheets/chartset-002/xlsx/027_advanced_excel_pie.xlsx                                         1
+  done     sheets/chartset-002/xlsx/030_advanced_excel_scatter.xlsx                                     1
+  done     sheets/chartset-002/xlsx/034_advanced_excel_line.xlsx                                        1
+  done     sheets/chartset-003/xlsx/004_advanced_excel_doughnut.xlsx                                    1
+  done     sheets/chartset-003/xlsx/008_advanced_excel_radar.xlsx                                       1
+  done     sheets/chartset-003/xlsx/014_advanced_excel_scatter.xlsx                                     1
+  done     sheets/chartset-003/xlsx/015_advanced_excel_bubble.xlsx                                      1
+  done     sheets/chartset-003/xlsx/017_advanced_excel_bar.xlsx                                         1
+  done     sheets/chartset-003/xlsx/018_advanced_excel_line.xlsx                                        1
+  done     sheets/chartset-003/xlsx/020_advanced_excel_doughnut.xlsx                                    1
+  done     sheets/chartset-003/xlsx/024_advanced_excel_radar.xlsx                                       1
+  done     sheets/chartset-003/xlsx/029_advanced_excel_area.xlsx                                        1
+  done     sheets/chartset-003/xlsx/031_advanced_excel_bubble.xlsx                                      1
+  done     sheets/chartset-004/xlsx/009_advanced_excel_bar.xlsx                                         1
+  done     sheets/chartset-004/xlsx/010_advanced_excel_line.xlsx                                        1
+  done     sheets/chartset-004/xlsx/019_advanced_excel_pie.xlsx                                         1
+  done     sheets/chartset-004/xlsx/023_advanced_excel_bubble.xlsx                                      1
+  done     sheets/chartset-004/xlsx/DynamicBubbleChart.xlsx                                             1
+  done     sheets/chartset-005/xlsx/004_Contextures_chart_sample_de7c0671.xlsx                          1
+  done     sheets/chartset-005/xlsx/022_Pareto_Chart_Template_-_Pareto_Analysis_in_Excel_with_Pareto_Diagram_82b5a874.xlsx 1
+  done     sheets/chartset-006/xlsx/005_Contextures_chart_sample_6e279b08.xlsx                          6
+  done     sheets/chartset-006/xlsx/006_Contextures_chart_sample_afa23b53.xlsx                          1
+  done     sheets/chartset-006/xlsx/044_Cash_flow_forecast_Use_this_template_b8fa1f35.xlsx              1
+  done     sheets/chartset-006/xlsx/052_Manufacturing_output_chart_88570318.xlsx                        1
+  done     sheets/chartset-006/xlsx/061_Regional_sales_chart_cb9eb690.xlsx                              1
+  done     sheets/chartset-007/xlsm/003_Contextures_chart_sample_9bda2719.xlsm                          2
+  done     sheets/chartset-007/xlsx/037_Personal_money_tracker_a57957bb.xlsx                            2
+  done     sheets/chartset-007/xlsx/040_Blood_pressure_tracker_872b6833.xlsx                            1
+  done     sheets/chartset-007/xlsx/050_Financial_vision_d44241e1.xlsx                                  1
+  done     sheets/chartset-008/xlsx/008_Contextures_chart_sample_7ea7a1d7.xlsx                          1
+  done     sheets/chartset-008/xlsx/021_Control_Chart_Template_-_Create_Control_Charts_in_Excel_fd3b1a5d.xlsx 4
+  done     sheets/chartset-008/xlsx/023_Waterfall_Chart_Template_for_Excel_349f7689.xlsx                2
+  done     sheets/chartset-008/xlsx/034_Personal_net_worth_calculator_f7b8fb57.xlsx                     2
+  done     sheets/chartset-008/xlsx/046_Cost_analysis_with_Pareto_chart_7db5ef69.xlsx                   1
+  done     sheets/chartset-009/xlsx/018_Weight_Loss_Chart_-_Free_Printable_Weight_Loss_Charts_and_Weight_Log_3337bd0a.xlsx 2
+  done     sheets/chartset-009/xlsx/029_Annual_budget_Use_this_template_30324a97.xlsx                   3
+  done     sheets/chartset-009/xlsx/041_Business_budget_ef942467.xlsx                                   1
+  done     sheets/chartset-009/xlsx/056_Quarterly_sale_report_baa6bb0d.xlsx                             1
+  done     sheets/chartset-011/xlsx/010_Contextures_chart_sample_e6ea06a3.xlsx                          1
+  done     sheets/chartset-011/xlsx/028_Budget_summary_report_4aeefd13.xlsx                             3
+  done     sheets/chartset-011/xlsx/042_Business_monthly_budget_4e4d092f.xlsx                           1
+  done     sheets/chartset-011/xlsx/060_Monthly_company_budget_47b2a99a.xlsx                            1
+  done     sheets/chartset-012/xlsx/002_Contextures_chart_sample_f605e7bc.xlsx                          3
+  done     sheets/chartset-012/xlsx/012_Contextures_chart_sample_9900da76.xlsx                          1
+  done     sheets/chartset-012/xlsx/013_Contextures_chart_sample_21b98e22.xlsx                          2
+  done     sheets/chartset-012/xlsx/026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx     4
+  done     sheets/chartset-012/xlsx/036_Simple_to-do_list_Use_this_template_ba44373b.xlsx               2
+  done     sheets/chartset-013/xlsx/001_Contextures_chart_sample_b089bc34.xlsx                          1
+  done     sheets/chartset-013/xlsx/019_Free_Blood_Sugar_Chart_for_Excel_-_Track_Your_Blood_Sugar_Level_36f4a782.xlsx 3
+  done     sheets/chartset-013/xlsx/031_Business_expense_budget_f3a46278.xlsx                           2
+  done     sheets/chartset-013/xlsx/032_Business_expenses_budget_d377eaab.xlsx                          2
+  done     sheets/chartset-013/xlsx/033_Event_planning_tracker_Use_this_template_f29a848e.xlsx          2
+  done     sheets/chartset-013/xlsx/035_Project_plan_for_law_firms_aa2d4462.xlsx                        2
+  done     sheets/chartset-013/xlsx/043_Buy_a_car_vs._rideshare_ff07c7e6.xlsx                           1
+  done     sheets/chartset-013/xlsx/049_Expenses_calculator_c351f3d0.xlsx                               1
+  done     sheets/chartset-014/xlsx/027_Simple_personal_cash_flow_statement_675c6584.xlsx               4
+  done     sheets/chartset-014/xlsx/038_Baby_growth_chart_bb9cd672.xlsx                                 1
+  done     sheets/chartset-014/xlsx/039_Baby_growth_tracker_e295ae56.xlsx                               1
+  done     sheets/done-010/xlsx/Keywords_Mapping_Graphs_and_Charts.xlsx                                 11
+  open     sheets/chartset-004/xlsx/microsoft_learn_multi_chart_examples.xlsx                           5
+  open     sheets/chartset-007/xlsx/058_Social_media_engagement_data_cfa1cb18.xlsx                      1
+  open     sheets/chartset-007/xlsx/063_Sales_pipeline_aec57013.xlsx                                    1
+  open     sheets/chartset-008/xlsx/055_Project_timeline_with_milestones_Use_this_template_546cecc0.xlsx 1
+  open     sheets/chartset-009/xlsx/053_Personal_asset_inventory_5446d84b.xlsx                          1
+  open     sheets/chartset-010/xlsx/047_Date_tracker_Gantt_chart_bf34f3a8.xlsx                          1
+  open     sheets/chartset-010/xlsx/062_Run_chart_cb7476ea.xlsx                                         1
+  open     sheets/chartset-010/xlsx/065_Weight_loss_tracker_ff1c89af.xlsx                               1
+  open     sheets/chartset-011/xlsx/030_Basic_balance_sheet_Use_this_template_10ed9144.xlsx             2
+  open     sheets/chartset-011/xlsx/057_Simple_balance_sheet_Use_this_template_e2d4cbb2.xlsx            1
+  open     sheets/chartset-013/xlsx/059_Milestone_and_task_project_timeline_Use_this_template_24f1e8f1.xlsx 1
+  open     sheets/chartset-014/xlsx/045_Check_register_with_chart_4becb8a0.xlsx                         1
+  open     sheets/chartset-014/xlsx/048_Expense_trends_budget_18d1e8ba.xlsx                             1
+  open     sheets/chartset-014/xlsx/064_Small_business_cash_flow_Use_this_template_0a640756.xlsx        1

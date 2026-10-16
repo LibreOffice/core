@@ -1,0 +1,4 @@
+lab-50         '1X'   size 12.00  width  14.664  x   56.800 ..   71.464
+lab-ctl24      '1'    size 24.00  width  12.000  x   56.800 ..   68.800
+lab-ctl24      'X'    size 12.00  width   8.664  x   68.800 ..   77.464
+lab-none       '1X'   size 12.00  width  14.664  x   56.800 ..   71.464

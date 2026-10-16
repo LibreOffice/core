@@ -1,0 +1,23 @@
+=== tests/XRay.Office.Containers.Tests/XRay.Office.Containers.Tests.csproj
+Passed!  - Failed:     0, Passed:   109, Skipped:     0, Total:   109, Duration: 245 ms - XRay.Office.Containers.Tests.dll (net10.0)
+=== tests/XRay.Office.Core.Tests/XRay.Office.Core.Tests.csproj
+Passed!  - Failed:     0, Passed:   573, Skipped:     0, Total:   573, Duration: 606 ms - XRay.Office.Core.Tests.dll (net10.0)
+=== tests/XRay.Office.Fidelity.Tests/XRay.Office.Fidelity.Tests.csproj
+Failed!  - Failed:    10, Passed:   542, Skipped:     0, Total:   552, Duration: 2 m 1 s - XRay.Office.Fidelity.Tests.dll (net10.0)
+=== tests/XRay.Office.Markup.Tests/XRay.Office.Markup.Tests.csproj
+Passed!  - Failed:     0, Passed:   259, Skipped:     0, Total:   259, Duration: 1 s - XRay.Office.Markup.Tests.dll (net10.0)
+=== tests/XRay.Office.OpenDocument.Tests/XRay.Office.OpenDocument.Tests.csproj
+Passed!  - Failed:     0, Passed:   160, Skipped:     0, Total:   160, Duration: 247 ms - XRay.Office.OpenDocument.Tests.dll (net10.0)
+=== tests/XRay.Office.Presentations.Tests/XRay.Office.Presentations.Tests.csproj
+Passed!  - Failed:     0, Passed:  1136, Skipped:     0, Total:  1136, Duration: 32 s - XRay.Office.Presentations.Tests.dll (net10.0)
+=== tests/XRay.Office.Rendering.Tests/XRay.Office.Rendering.Tests.csproj
+Passed!  - Failed:     0, Passed:   164, Skipped:     0, Total:   164, Duration: 3 s - XRay.Office.Rendering.Tests.dll (net10.0)
+=== tests/XRay.Office.Spreadsheets.Tests/XRay.Office.Spreadsheets.Tests.csproj
+Passed!  - Failed:     0, Passed:  1346, Skipped:     0, Total:  1346, Duration: 4 s - XRay.Office.Spreadsheets.Tests.dll (net10.0)
+=== tests/XRay.Office.TestKit/XRay.Office.TestKit.csproj
+=== tests/XRay.Office.Text.Tests/XRay.Office.Text.Tests.csproj
+Passed!  - Failed:     0, Passed:   728, Skipped:     0, Total:   728, Duration: 7 s - XRay.Office.Text.Tests.dll (net10.0)
+=== tests/XRay.Office.Vector.Tests/XRay.Office.Vector.Tests.csproj
+Passed!  - Failed:     0, Passed:   309, Skipped:     0, Total:   309, Duration: 1 s - XRay.Office.Vector.Tests.dll (net10.0)
+=== tests/XRay.Office.WordProcessing.Tests/XRay.Office.WordProcessing.Tests.csproj
+Passed!  - Failed:     0, Passed:  1938, Skipped:     0, Total:  1938, Duration: 43 s - XRay.Office.WordProcessing.Tests.dll (net10.0)

@@ -1,0 +1,20 @@
+stated	before	after	ref	document
+23	23	23	23	052_Organogram_Template_Colorful_Flow_Chart_cba9fbfe.docx
+14	14	14	14	053_Organogram_Template_Creative_Theme_21657a3d.docx
+8	8	8	8	057_Organogram_Template_Vertical_Colorful_Theme_724b143c.docx
+4	4	4	4	025_Unit_Circle_Chart_Cos_and_Sin_Model_1ed01892.docx
+8	8	8	8	030_Unit_Circle_Chart_Points_System_23b5ef07.docx
+4	8	8	8	042_Visual_Product_Roadmap_Template_Colored_Background_89385cf
+4	4	4	4	026_Unit_Circle_Chart_Four_Quadrants_09bf3ed1.docx
+6	6	6	6	032_Venn_Diagram_Template_Brown_Theme_d5b549f0.docx
+5	5	5	5	056_Organogram_Template_Square_Theme_38f373d4.docx
+25	0	25	25	067_Work_Breakdown_Structure_Template_Gray_Theme_89f8be8b.docx
+24	24	24	26	022_Unit_Circle_Chart_Circle_A_and_B_19dbf275.docx
+3	3	3	3	040_Venn_Diagram_Template_Three_Circle_80f32f5e.docx
+4	0	0	4	061_Nursing_Concept_Map_Template_fb9816f0.docx
+3	3	3	3	031_Venn_Diagram_Template_Blue_Theme_a9e417b8.docx
+28	28	28	28	055_Organogram_Template_Horizontal_Structure_28a7e725.docx
+6	6	6	6	1_tpr_template__from_fy14_.docx
+8	39	39	14	ABCD-SDE-23-00 - Avionic System Description - 17.02.16 - v1.do
+
+177 stated; markers drawn: 183 before, 208 after, 189 by the reference

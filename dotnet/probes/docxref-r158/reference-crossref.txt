@@ -1,0 +1,8 @@
+__RefHeading__1234_567890:  .
+__RefNumPara__1234_567890:  .
+_Toc12345:  .
+_Ref999:  .
+Target for __RefHeading__1234_567890
+Target for __RefNumPara__1234_567890
+Target for _Toc12345
+Target for _Ref999

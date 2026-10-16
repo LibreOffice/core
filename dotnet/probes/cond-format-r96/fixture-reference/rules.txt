@@ -1,0 +1,17 @@
+== sheet-cf-blank-cells
+  target Rules.A1:Rules.A5
+    <calcext:condition calcext:apply-style-name="ConditionalStyle_1" calcext:value="formula-is(LEN(TRIM([.A1]))=0)" calcext:base-cell-address="Rules.A1"/>
+  target Rules.A1:Rules.A5
+    <calcext:condition calcext:apply-style-name="ConditionalStyle_2" calcext:value="formula-is(LEN(TRIM([.A1]))>0)" calcext:base-cell-address="Rules.A1"/>
+== sheet-cf-contains-text
+  target Rules.A1:Rules.A6
+    <calcext:condition calcext:apply-style-name="ConditionalStyle_1" calcext:value="contains-text("ope")" calcext:base-cell-address="Rules.A1"/>
+== sheet-cf-duplicate-values
+  target Rules.A1:Rules.A8
+    <calcext:condition calcext:apply-style-name="ConditionalStyle_1" calcext:value="duplicate" calcext:base-cell-address="Rules.A1"/>
+== sheet-cf-ends-with
+  target Rules.A1:Rules.A4
+    <calcext:condition calcext:apply-style-name="ConditionalStyle_1" calcext:value="ends-with("closed")" calcext:base-cell-address="Rules.A1"/>
+== sheet-cf-multi-range-anchor
+  target Rules.B3:Rules.B3 Rules.A5:Rules.A5
+    <calcext:condition calcext:apply-style-name="ConditionalStyle_1" calcext:value="formula-is([.$B1]="hit")" calcext:base-cell-address="Rules.A5"/>

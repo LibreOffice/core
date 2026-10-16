@@ -1,0 +1,35 @@
+leg A, documents stating chart markup
+  OOXML chart part          169
+  .xls  BIFF CHCHART          7
+  .ppt  OLE  CHCHART          7
+  union                     183
+leg B, documents the reference resolves to a chart
+  <chart:chart chart:class> 182
+
+A minus B (1):
+    slides/done-007/ppt/71393_pp7.ppt
+B minus A (0):
+
+per-type document counts, markup leg
+  c:barChart                77
+  c:lineChart               32
+  c:scatterChart            23
+  c:pieChart                18
+  c:doughnutChart           15
+  c:areaChart               12
+  c:bubbleChart             10
+  CHBAR                      8
+  c:radarChart               6
+  CHBAR.vertical             6
+  CHSCATTER                  5
+  CHSCATTER.plain            5
+  c:pie3DChart               3
+  CHLINE                     3
+  c:ofPieChart               2
+  cx:clusteredColumn         2
+  cx:paretoLine              2
+  CHAREA                     2
+  CHBAR.horizontal           2
+  CHPIE                      1
+  CHPIE.solid                1
+  CHBAR.stacked              1

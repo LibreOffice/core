@@ -1,0 +1,18 @@
+# O13's reach, measured with .claude/skills/render-comparison/scripts/pdf-image-diff.py against
+# the banked 26.2.4.2 renderings in /home/user/gate-orig-r83/ref.  `sum|ink|%` adds the per-page
+# |ink|% over every page of the document; `MAJOR` counts the pages the tool calls MAJOR.
+# base = 95629cbd3 with the PptSlideLayout hunk reverted; head = the hunk in place.
+# Nothing else differs between the two binaries.
+document	leg	sum|ink|%	pages	MAJOR
+8.16_AOD_FINAL_Provider_Training_Presentation_9_2009	base	20.34	94	2
+8.16_AOD_FINAL_Provider_Training_Presentation_9_2009	head	 4.56	94	1
+pres_ioc_phuket						base	 4.70	26	2
+pres_ioc_phuket						head	 2.96	26	1
+
+# Per page, the only pages that moved at all in either document:
+#   AOD      page 59   16.04 -> 0.26   MAJOR cleared   (the arch, type 144, plain black fill)
+#   phuket   page 26    1.97 -> 0.23   MAJOR cleared   (the plain-text warp, type 136, fillType 5)
+# No page of either document is worse at head.
+#
+# The brief this round was handed placed the phuket shape on page 1 and priced it at 0.01.
+# Page 1 is 0.01 in BOTH legs and does not move; the shape is on page 26 and is worth 1.97.

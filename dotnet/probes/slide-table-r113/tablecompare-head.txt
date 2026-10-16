@@ -1,0 +1,12 @@
+doc	pages	ink_leg	ink_ref	items_leg	items_ref	mean_dy	max_dy	unpaired
+2015-Civil-Rights-Website-training.pdf	94/94	3077.5	15104.6	842	878	2.183	291.430	31
+Thailand17.pdf	54/54	119871.7	80065.4	445	243	4.101	392.940	6
+architecture6.pdf	31/31	84076.2	84665.0	112	112	0.016	0.120	6
+concepts-surrounding-cloud-computing-carolyn	36/36	4388.4	5324.7	11	18	0.173	6.350	3
+iep-amount-frequency-for-webinar.pdf	39/39	57651.1	61621.8	130	132	8.509	353.890	4
+joint_user_outcomes_michael_fullerton_29.06.	20/20	6725.5	7105.2	25	28	1.861	170.050	3
+outlook_of_nigerian_pension_sector.pdf	12/12	37279.7	37830.4	117	106	9.971	331.060	4
+pods05.pdf	60/60	174375.1	112256.7	813	812	5.665	280.350	18
+pres_ioc_phuket.pdf	26/26	113069.5	103566.4	117	128	0.000	0.000	26
+undp_presentation_revised_17_may.pdf	22/22	20721.6	21677.1	94	172	0.848	117.020	12
+TOTAL	ink 621236.5 vs 529217.3	items 2706 vs 2629	worst dy 392.940	unpaired pages 113

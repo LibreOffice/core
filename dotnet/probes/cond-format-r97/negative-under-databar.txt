@@ -1,0 +1,9 @@
+dataBar rules 9 in 6 documents
+numeric cells they cover: 75; NEGATIVE: 0
+  015_Free_Gantt_Chart_Template_for_Excel_414e86bf.xlsx    #ff0000 rectangles in 26.2.4.2's own PDF: 0
+  036_Simple_to-do_list_Use_this_template_ba44373b.xlsx    #ff0000 rectangles in 26.2.4.2's own PDF: 0
+  066_Agile_Gantt_chart_08f9de45.xlsx                      #ff0000 rectangles in 26.2.4.2's own PDF: 0
+  076_Inventory_list_accessibility_guide_Use_this_template #ff0000 rectangles in 26.2.4.2's own PDF: 0
+  085_Simple_Gantt_chart_d65b8377.xlsx                     #ff0000 rectangles in 26.2.4.2's own PDF: 0
+  088_To-do_list_with_progress_tracker_Use_this_template_8 #ff0000 rectangles in 26.2.4.2's own PDF: 0
+COL_LIGHTRED bars the reference draws anywhere in the family: 0

@@ -1,0 +1,24 @@
+occurrences by namespace : {'style': 350}
+base rate, text:span     : 210828
+documents off the identity: 18
+
+  --   {'99': 12}                         0126226bc58c-SPA-06_mcar_part-6_and_IS_v2.9
+MOVED  {'99': 2, '95': 1}                 195389b8c6c6-Annex-10-to-the-Aircraft-Maintenance-Specialist-Certification-R
+  --   {'86': 1}                          1ef46e226af0-JEMIT_Template
+  --   {'99': 1}                          2df5a30320b3-Allegiant_Company_Profile_with_History
+MOVED  {'99': 6}                          404b8cb5cec3-SWDD-template
+MOVED  {'103': 1, '99': 1, '98': 2, '96': 4c44defb9273-Regulations Governing the Status, Basic Rights and Duties of Of
+MOVED  {'105': 8}                         5ee4fec55c91-BID_ACKNOWLEDGEMENT_FORM_FOR_A320
+MOVED  {'96': 2, '99': 2}                 66cd4750ab46-ESPN-R - MCF - Manual - Ed1.0 - For Publication
+MOVED  {'99': 5, '108': 1, '101': 1}      7be9cfcc7637-OM template for non-complex NCC operators_August 2016
+MOVED  {'99': 2, '95': 1}                 9a283dc56300-ESPN-R - MCF - RA - Ed1
+MOVED  {'107': 1, '102': 1, '106': 1, '10 ae2db2175f3d-091_Business_Case_Template_Complete_Guide_cb91a140
+  --   {'99': 7}                          bc17eefecac9-DRX-Ascend System Course Description
+MOVED  {'99': 5}                          d8c1eba8d845-AAC-AD-No-2021-01-Boeing-737-8-and-737-9-MAX
+MOVED  {'98': 4, '99': 6}                 e6a30de46c19-19-06 Assistive Technology TAB Final - 508
+MOVED  {'99': 13, '112': 1}               e93e7e131d5f-AWR OPS-AOC 044 Statement of Compliance RVSM  Rev 04 01 Feb 202
+MOVED  {'99': 2, '131': 1}                ed07ce5f44c7-t_TEMPforInvProgs
+  --   {'90': 1}                          f30b3e8d2d1e-mde087077~283
+MOVED  {'105': 4}                         fed5bf270427-AW-104D-RVSM-Aircraft-Approval-Checklist.pdf
+
+movers the census did not predict: []

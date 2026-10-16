@@ -1,0 +1,14 @@
+# Summed |ink|% per document against the banked 26.2.4.2 reference (/home/user/gate-orig-r83/ref),
+# for the seven renderings that changed by a byte between the round's base and this fix.
+# Both legs rendered from /home/user/wt-slidesink at 725bbbfd2 (+/- the three-file diff), obj/bin
+# cleared on the base leg, SOURCE_DATE_EPOCH=1700000000 on both, one output directory per document.
+# The other 940 of 947 are byte-identical.  2026-09-11, round 94.
+id	pages	ink_before	ink_after	delta	pages_gate	glyphs_gate	max px delta (100 dpi RGB)
+3492__pptx	22	3.59	3.08	-0.51	22/22	6833/6833	255 on page 19
+EG1_dsrc tech__ppt	26	10.74	10.74	+0.00	26/26	11126/11126	0 -- pixel-identical
+EHEST-SMS-Safety-Management-Manual-V2__docx	82	16.59	16.59	+0.00	82/82	105478/105478	255 on page 34, 115 sampled pixels
+FAA_Form_337__ppt	67	13.81	8.49	-5.32	67/67	29445/29445	255 on pages 2 and 67
+JEMIT_Template__docx	4	0.91	0.91	+0.00	4/4	8656/8656	64 on page 3, 42 pixels at 100 dpi
+airbus-pdf-information-package_v1-4__docx	9	1.18	1.18	+0.00	9/9	6443/6443	2 -- antialiasing
+outlook_of_nigerian_pension_sector__ppt	12	1.85	1.85	+0.00	12/12	5802/5802	1 -- antialiasing
+TOTAL		48.67	42.84	-5.83			

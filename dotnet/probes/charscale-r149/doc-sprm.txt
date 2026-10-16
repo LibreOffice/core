@@ -1,0 +1,9 @@
+none.doc                                 chpx   1   sprmCCharScale NONE   style hits 0
+s0.doc                                   chpx   1   sprmCCharScale fc2048..2078=100(2b)   style hits 0
+s100.doc                                 chpx   1   sprmCCharScale fc2048..2078=100(2b)   style hits 0
+s130.doc                                 chpx   1   sprmCCharScale fc2048..2078=130(2b)   style hits 0
+s60.doc                                  chpx   1   sprmCCharScale fc2048..2078=60(2b)   style hits 0
+s900.doc                                 chpx   1   sprmCCharScale fc2048..2078=100(2b)   style hits 0
+s99.doc                                  chpx   1   sprmCCharScale fc2048..2078=99(2b)   style hits 0
+sbare.doc                                chpx   1   sprmCCharScale fc2048..2078=100(2b)   style hits 0
+sneg.doc                                 chpx   1   sprmCCharScale fc2048..2078=100(2b)   style hits 0

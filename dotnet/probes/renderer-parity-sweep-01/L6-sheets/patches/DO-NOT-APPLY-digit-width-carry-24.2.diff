@@ -1,0 +1,32 @@
+# DO NOT APPLY unless the project's reference binary is pinned back to LibreOffice 24.2.7.2.
+#
+# This is a version divergence, not a defect. `DigitWidthCarry` is an environment-calibration
+# constant whose own remarks record that it was 0.67 for 24.2.7.2 and was moved to 0.57 for
+# 26.2.4.2, and that the two windows do not overlap. This sweep's reference is 24.2.7.2, so
+# against *that* binary 0.57 is wrong and 0.67 is right; against the binary the tree is
+# developed on, the reverse. Applying this re-tunes the tree to the older reference.
+#
+# Measured here on the installed 24.2.7.2 with a one-cell probe (Calibri, col width 40):
+#   Calibri 12 pt  reference 4840 twips (d=121)   ours 4880 (d=122)   <- the divergence
+#   Calibri 11 pt  reference 4440 twips (d=111)   ours 4440 (d=111)   <- agrees either way
+# Effect on this lane: sectors-defense-and-aerospace.xlsx 449 pages -> 227, matching the
+# 24.2.7.2 reference exactly. It is the only document in the lane whose default font lands in
+# the (0.57, 0.67] window; a census of the other 18 xlsx cases found none.
+diff --git a/dotnet/src/XRay.Office.Spreadsheets/Layout/SheetFonts.cs b/dotnet/src/XRay.Office.Spreadsheets/Layout/SheetFonts.cs
+--- a/dotnet/src/XRay.Office.Spreadsheets/Layout/SheetFonts.cs
++++ b/dotnet/src/XRay.Office.Spreadsheets/Layout/SheetFonts.cs
+@@ -231,13 +231,13 @@
+     /// <c>sectors-defense-and-aerospace.xlsx</c> is 40 columns wide in Calibri 12, where one twip
+     /// per digit is 2 pt per column and the difference between two reference columns needing
+     /// 488.07 pt of a 487.73 pt page and two of ours needing 484.0 pt. That is one column per
+     /// page against two, and 227 pages against 449.
+     /// </para>
+     /// </remarks>
+-    private const double DigitWidthCarry = 0.57;
++    private const double DigitWidthCarry = 0.67;
+ 
+     /// <summary>
+     /// What one digit of a workbook's default font is worth, in twips.
+     /// </summary>
+     /// <remarks>
+     /// <para>

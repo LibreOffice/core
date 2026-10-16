@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  A draw:frame written with svg:width and no svg:height.
+
+  Both lengths are optional on draw:frame (ODF 1.3 §10.4.2) and Writer leaves the height off a
+  frame that grows to its text — the shape a text box or a framed table has after "autofit
+  height". What it writes instead is the floor, on the box:
+
+      <draw:frame svg:width="8cm"><draw:text-box fo:min-height="0in">…</draw:text-box>
+
+  A reader that needs both lengths to place a frame drops this one, and everything inside it
+  goes with it — silently, because a page with no frame on it looks like a page whose author
+  put none there.
+
+  BOXED is inside such a frame; PLAIN is ordinary body text, so a reading that lost the frame
+  keeps one of the two words and looks like a document rather than like a failure.
+
+  Ground truth is 26.2.4.2's own PDF of this file, read with pdftotext -bbox: PLAIN at
+  yMin 56.7289 — the 2 cm top margin — and BOXED at 85.5589, which is that plus the frame's
+  own svg:y of 1 cm.
+-->
+<office:document
+    xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+    xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+    xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+    xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+    xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+    xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:meta>
+  <dc:title>Paperless frame with no stated height</dc:title>
+  <dc:subject>A draw:frame that states svg:width alone grows to its text instead of vanishing</dc:subject>
+ </office:meta>
+ <office:automatic-styles>
+  <style:page-layout style:name="PL">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="15cm"
+       fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"/>
+  </style:page-layout>
+  <style:style style:name="fr1" style:family="graphic">
+   <style:graphic-properties style:wrap="none" style:vertical-pos="from-top"
+       style:vertical-rel="paragraph" style:horizontal-pos="from-left"
+       style:horizontal-rel="paragraph" fo:padding="0cm" fo:border="none"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:styles>
+  <style:style style:name="Body" style:family="paragraph">
+   <style:paragraph-properties fo:text-align="start" fo:text-indent="0cm" fo:hyphenate="false"
+       fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%"
+       fo:orphans="0" fo:widows="0"/>
+   <style:text-properties style:font-name="Carlito" fo:font-family="Carlito" fo:font-size="11pt"
+       fo:language="en" fo:country="GB"/>
+  </style:style>
+ </office:styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="PL"/>
+ </office:master-styles>
+ <office:body><office:text>
+   <text:p text:style-name="Body">PLAIN<draw:frame draw:style-name="fr1" draw:name="AutoBox"
+       text:anchor-type="paragraph" svg:x="0cm" svg:y="1cm" svg:width="8cm" draw:z-index="0">
+     <draw:text-box fo:min-height="0in">
+      <text:p text:style-name="Body">BOXED</text:p>
+     </draw:text-box>
+    </draw:frame></text:p>
+ </office:text></office:body>
+</office:document>

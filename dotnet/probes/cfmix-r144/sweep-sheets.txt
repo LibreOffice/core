@@ -1,0 +1,22 @@
+documents scored: 307
+failed on either leg: 0
+byte-identical: 294
+moved: 13
+   cell-hatch+expression-rule               10
+   cell-hatch                               1
+   dxf-hatch+cell-hatch+expression-rule     1
+   dxf-hatch+cell-hatch                     1
+
+cell-hatch+expression-rule sheets/chartset-006/xlsx/044_Cash_flow_forecast_Use_this_template_b8fa1f35.xlsx
+cell-hatch+expression-rule sheets/chartset-006/xlsx/088_To-do_list_with_progress_tracker_Use_this_template_8c438912.xlsx
+cell-hatch+expression-rule sheets/chartset-007/xlsx/040_Blood_pressure_tracker_872b6833.xlsx
+cell-hatch       sheets/chartset-007/xlsx/063_Sales_pipeline_aec57013.xlsx
+cell-hatch+expression-rule sheets/chartset-007/xlsx/083_Project_tracker_Use_this_template_b38d057c.xlsx
+cell-hatch+expression-rule sheets/chartset-009/xlsx/015_Free_Gantt_Chart_Template_for_Excel_414e86bf.xlsx
+cell-hatch+expression-rule sheets/chartset-009/xlsx/024_Free_Kids_Chore_Chart_Template_ad74bb34.xlsx
+dxf-hatch+cell-hatch+expression-rule sheets/chartset-010/xlsx/072_Gantt_project_planner_dde00e33.xlsx
+cell-hatch+expression-rule sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx
+cell-hatch+expression-rule sheets/chartset-013/xlsx/019_Free_Blood_Sugar_Chart_for_Excel_-_Track_Your_Blood_Sugar_Level_36f4a782.xlsx
+cell-hatch+expression-rule sheets/chartset-014/xlsx/027_Simple_personal_cash_flow_statement_675c6584.xlsx
+dxf-hatch+cell-hatch sheets/chartset-014/xlsx/064_Small_business_cash_flow_Use_this_template_0a640756.xlsx
+cell-hatch+expression-rule sheets/done-003/xlsx/VOR Candidate Discontinuance List 2026-01-08.xlsx

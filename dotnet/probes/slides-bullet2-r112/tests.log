@@ -1,0 +1,44 @@
+=== Containers
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:   109, Skipped:     0, Total:   109, Duration: 198 ms - XRay.Office.Containers.Tests.dll (net10.0)
+=== Core
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:   573, Skipped:     0, Total:   573, Duration: 607 ms - XRay.Office.Core.Tests.dll (net10.0)
+=== Markup
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:   259, Skipped:     0, Total:   259, Duration: 1 s - XRay.Office.Markup.Tests.dll (net10.0)
+=== OpenDocument
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:   160, Skipped:     0, Total:   160, Duration: 279 ms - XRay.Office.OpenDocument.Tests.dll (net10.0)
+=== Rendering
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:   164, Skipped:     0, Total:   164, Duration: 4 s - XRay.Office.Rendering.Tests.dll (net10.0)
+=== Spreadsheets
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:  1352, Skipped:     0, Total:  1352, Duration: 4 s - XRay.Office.Spreadsheets.Tests.dll (net10.0)
+=== Text
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:   728, Skipped:     0, Total:   728, Duration: 7 s - XRay.Office.Text.Tests.dll (net10.0)
+=== Vector
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:   309, Skipped:     0, Total:   309, Duration: 1 s - XRay.Office.Vector.Tests.dll (net10.0)
+=== WordProcessing
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:  1938, Skipped:     0, Total:  1938, Duration: 39 s - XRay.Office.WordProcessing.Tests.dll (net10.0)
+=== Presentations
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:  1180, Skipped:     0, Total:  1180, Duration: 35 s - XRay.Office.Presentations.Tests.dll (net10.0)
+   at InvokeStub_JustificationShrinkComparisonTests.TheParagraphBreaksWhereLibreOfficeBreaksIt(Object, Span`1)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+
+Failed!  - Failed:    10, Passed:   542, Skipped:     0, Total:   552, Duration: 2 m 14 s - XRay.Office.Fidelity.Tests.dll (net10.0)

@@ -1,0 +1,23 @@
+# census.py over the 243 .xlsx/.xlsm of the sheets track (307 documents; the other 64 are .xls)
+# $ python3 census.py xlsx-list.txt
+
+xlsx/xlsm carrying both cellXfs and cellStyleXfs: 243   (skipped 0 of 243)
+effectively differing: 3
+
+== Published_Issuances_2024.xlsx   (Normal is cellStyleXfs[0])
+   alignment  cellXfs[0]={'horizontal': 'left', 'vertical': 'top'}  Normal={}
+   cells taking the sheet default: 0 of 166 stated cells
+   full-width <col> (overrides the sheet default): [('sheet1.xml', '5')]
+
+== jobs-bulletin-51-22-december-2025.xlsx   (Normal is cellStyleXfs[0])
+   fontId     cellXfs[0]=1  Normal=0
+        cellXfs[0] font: Calibri 11pt
+        Normal     font: Calibri 11pt colour=FF000000 family=2
+   cells taking the sheet default: 0 of 476 stated cells
+
+== sectors-defense-and-aerospace.xlsx   (Normal is cellStyleXfs[0])
+   fontId     cellXfs[0]=3  Normal=0
+        cellXfs[0] font: Calibri 12pt colour=FF000000
+        Normal     font: Calibri 12pt colour=FF000000
+   alignment  cellXfs[0]={'vertical': 'top', 'wrapText': '1'}  Normal={}
+   cells taking the sheet default: 0 of 1907 stated cells

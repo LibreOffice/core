@@ -1,0 +1,9 @@
+# Regenerate with `build.py` then `sweep.sh`; never commit either.
+# The fixtures are 1.3 MB of DOCX derived from a corpus document and are exactly
+# reproducible, and the fodt they convert to is 20 MB. What is worth keeping is the
+# measurement they produce, which is `heights.txt`.
+fixtures/
+fodt/
+__pycache__/
+*.pdf
+*.png

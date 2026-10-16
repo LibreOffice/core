@@ -1,0 +1,14 @@
+ours   margin  522.00 (reference  525.10)  lines   340 paired   294  flush  115 (reference  108 over the paired)  agree 256/294
+other  margin  522.00 (reference  525.10)  lines   340 paired   294  flush  142 (reference  108 over the paired)  agree 274/294
+
+18 paired lines change flushness between the two legs; 18 of them end up agreeing with the reference and 0 do not
+  ref=True  leg1=False leg2=True   'scientific constants, is zero with subscript formatting, not a lowerca'
+  ref=True  leg1=False leg2=True   'In American English, commas and periods are located inside quotation'
+  ref=True  leg1=False leg2=True   'marks; semicolons and colons are located outside quotation marks.'
+  ref=True  leg1=False leg2=True   'Question and exclamation marks are located within quotation marks'
+  ref=True  leg1=False leg2=True   'at the end of a sentence is punctuated outside of the closing parenthe'
+  ref=True  leg1=False leg2=True   '(like this). (A parenthetical sentence is punctuated within the'
+  ref=True  leg1=False leg2=True   'A graph within a graph is an “inset,” not an “insert.” The word'
+  ref=True  leg1=False leg2=True   '“alternatively” is preferred to the word “alternately” (unless you rea'
+  ref=True  leg1=False leg2=True   'Do not use the word “essentially” to mean “approximately” or'
+  ref=True  leg1=False leg2=True   'In the title, if the words “that uses” can accurately replace the word'

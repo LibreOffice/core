@@ -1,0 +1,42 @@
+--- a/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChartPlot.cs
++++ b/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChartPlot.cs
+@@ -2467,6 +2467,25 @@
+     {
+         if (source is null) return ([], []);
+ 
++        // A multi-level cache before *everything*, the resolver included, and that ordering is
++        // the whole of this branch.
++        //
++        // <strong>A c:multiLvlStrRef's c:f names a rectangle, and the resolver hands back its
++        // cells as one flat run.</strong> The reference does not read them that way:
++        // ExplicitCategoriesProvider builds one category per *row* and stacks the columns as the
++        // levels of its label, so a two-column, eight-row range is eight categories with a
++        // two-line name each — not sixteen categories. ChartRangeValues carries no shape, so the
++        // rectangle cannot be recovered from it, and the c15-free c:multiLvlStrCache Excel wrote
++        // is the only source in the file that states the level structure at all.
++        //
++        // Measured on 040_Blood_pressure_tracker_872b6833.xlsx, whose c:cat is
++        // 'BLOOD PRESSURE DATA'!$C$12:$D$19 with an eight-point, two-level cache: resolving the
++        // range gave sixteen categories — AM, 11/6/2022, PM, 11/6/2022, … — so the axis drew
++        // sixteen slots of which eight were empty and every label was a level rather than a
++        // category. The reference draws eight, each reading AM (or PM) over its date.
++        if (Child(Child(source, "multiLvlStrRef"), "multiLvlStrCache") is { } levelled)
++            return ReadMultiLevel(levelled);
++
+         // An *empty* resolved sequence is a real answer — a range every cell of which is an
+         // Excel table's totals row — and must not fall through to the cache. See
+         // ChartRangeResolver for the two states a resolver distinguishes.
+@@ -2476,13 +2495,6 @@
+             return ([.. live.Text], [.. live.Numbers]);
+         }
+ 
+-        // A multi-level cache before the flat ones, because it must not be walked as one: its
+-        // c:lvl elements each restart at idx 0 and the flat walk below lets every level overwrite
+-        // the one before it, so the last level written wins and a three-level category comes out
+-        // as its outermost level alone.
+-        if (Child(Child(source, "multiLvlStrRef"), "multiLvlStrCache") is { } levelled)
+-            return ReadMultiLevel(levelled);
+-
+         XElement? cache =
+             Child(Child(source, "strRef"), "strCache")
+             ?? Child(source, "strLit")

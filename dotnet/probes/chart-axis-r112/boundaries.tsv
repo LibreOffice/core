@@ -1,0 +1,17 @@
+# 26.2.4.2 on 027_Simple_personal_cash_flow_statement, page 6, chart44 (the savings chart).
+# Only the value axis' c:numFmt/@formatCode differs between rows; everything else is the file.
+# `first3 pad` is the suffix on the ticks below 5000, which at the reference's own 2000-step
+# interval are exactly ticks 0, 1 and 2. `rest pad` is the suffix on every tick from 6000 up.
+# label widths at the drawn 5.1 pt: "$0" 6.51, "$4,000" 17.91, one "X" 3.51, "WWWWWWWW" 28.1
+variant	first3 pad	rest pad	labels drawn	step	turned
+k0	-	-	8	2000	yes
+k1	X	-	4	5000	no
+k2	XX	-	4	5000	no
+k3	XXX	-	4	5000	no
+k4	XXXX	-	4	5000	no
+k5	XXXXX	-	4	5000	no
+k6	XXXXXX	-	4	5000	no
+k7	XXXXXXX	-	4	5000	no
+k8	XXXXXXXX	-	3	10000	no
+lateWide	-	WWWWWWWW	8	2000	yes
+earlyWide	WWWWWWWW	-	3	10000	no

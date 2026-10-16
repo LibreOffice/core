@@ -1,0 +1,43 @@
+alle einzeln.xlsx	Pivot	pivotTable1.xml	worksheet	ref=A4:I1013	cells=9090	face=0 class=0 size=0 colour=0 fill=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	Summary	pivotTable1.xml	worksheet	ref=A3:B22	cells=40	face=0 class=0 size=0 colour=0 fill=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	Literature Mapping	pivotTable2.xml	worksheet	ref=A3:B16	cells=28	face=0 class=0 size=0 colour=0 fill=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	SABSA Skills Mapping	pivotTable3.xml	worksheet	ref=A3:B15	cells=26	face=0 class=0 size=0 colour=0 fill=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Skills Mapping	pivotTable4.xml	worksheet	ref=A3:B13	cells=22	face=0 class=0 size=0 colour=0 fill=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping EA	pivotTable5.xml	worksheet	ref=A4:B17	cells=28	face=0 class=0 size=0 colour=0 fill=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping ESA	pivotTable6.xml	worksheet	ref=A4:B21	cells=36	face=0 class=0 size=0 colour=0 fill=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping BA	pivotTable7.xml	worksheet	ref=A4:B13	cells=20	face=0 class=0 size=0 colour=0 fill=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping SA	pivotTable8.xml	worksheet	ref=A4:B13	cells=20	face=0 class=0 size=0 colour=0 fill=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping AA	pivotTable9.xml	worksheet	ref=A4:B16	cells=26	face=0 class=0 size=0 colour=0 fill=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping DA	pivotTable10.xml	worksheet	ref=A4:B7	cells=8	face=0 class=0 size=0 colour=0 fill=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping TA	pivotTable11.xml	worksheet	ref=A4:B18	cells=30	face=0 class=0 size=0 colour=0 fill=0
+DynamicBubbleChart.xlsx	Chart	pivotTable1.xml	worksheet	ref=A29:E41	cells=65	face=0 class=0 size=0 colour=0 fill=0
+049_Expenses_calculator_c351f3d0.xlsx	Personal Expenses Data	pivotTable1.xml	worksheet	ref=B3:G11	cells=54	face=0 class=0 size=0 colour=0 fill=0
+007_Contextures_chart_sample_667d8e47.xlsm	CityPivot	pivotTable1.xml	worksheet	ref=B2:H10	cells=63	face=0 class=0 size=0 colour=0 fill=0
+037_Personal_money_tracker_a57957bb.xlsx	Monthly summary	pivotTable1.xml	worksheet	ref=B19:F37	cells=95	face=1 class=1 size=5 colour=1 fill=0
+037_Personal_money_tracker_a57957bb.xlsx	Chart data	pivotTable22.xml	worksheet	ref=B3:F11	cells=45	face=0 class=0 size=5 colour=0 fill=0
+033_Event_planning_tracker_Use_this_template_f29a848e.xlsx	PROJECT TOTALS	pivotTable1.xml	worksheet	ref=B5:N11	cells=91	face=0 class=91 size=91 colour=78 fill=0
+035_Project_plan_for_law_firms_aa2d4462.xlsx	PROJECT TOTALS	pivotTable1.xml	worksheet	ref=B5:N11	cells=91	face=0 class=1 size=0 colour=0 fill=0
+027_Simple_personal_cash_flow_statement_675c6584.xlsx	Annual cash flow	pivotTable3.xml	external	ref=X10:Y22	cells=26	face=0 class=0 size=0 colour=0 fill=0
+027_Simple_personal_cash_flow_statement_675c6584.xlsx	Annual cash flow	pivotTable22.xml	external	ref=U10:V29	cells=40	face=0 class=0 size=0 colour=0 fill=0
+027_Simple_personal_cash_flow_statement_675c6584.xlsx	Annual cash flow	pivotTable13.xml	external	ref=AA10:AB16	cells=14	face=0 class=0 size=0 colour=0 fill=0
+027_Simple_personal_cash_flow_statement_675c6584.xlsx	Annual cash flow	pivotTable44.xml	external	ref=R10:S17	cells=16	face=0 class=0 size=0 colour=0 fill=0
+026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx	Annual cash flow	pivotTable3.xml	external	ref=R9:S16	cells=16	face=0 class=0 size=0 colour=16 fill=16
+026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx	Annual cash flow	pivotTable22.xml	external	ref=X9:Y21	cells=26	face=0 class=0 size=0 colour=26 fill=26
+026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx	Annual cash flow	pivotTable13.xml	external	ref=U9:V28	cells=40	face=0 class=0 size=0 colour=40 fill=40
+026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx	Annual cash flow	pivotTable44.xml	external	ref=AA9:AB15	cells=14	face=0 class=0 size=0 colour=14 fill=14
+053_Personal_asset_inventory_5446d84b.xlsx	Assets	pivotTable1.xml	external	ref=H23:I30	cells=16	face=0 class=0 size=0 colour=16 fill=16
+
+ranges=28 cells=10086
+  face    differs in     1 of 10086 cells  (0.01 %)
+  class   differs in    93 of 10086 cells  (0.92 %)
+  size    differs in   101 of 10086 cells  (1.00 %)
+  colour  differs in   191 of 10086 cells  (1.89 %)
+  fill    differs in   112 of 10086 cells  (1.11 %)
+worksheet-cached ranges only (the ones a grid is generated for): ranges=19 cells=9878
+  face    differs in     1 of  9878 cells  (0.01 %)
+  class   differs in    93 of  9878 cells  (0.94 %)
+  size    differs in   101 of  9878 cells  (1.02 %)
+  colour  differs in    79 of  9878 cells  (0.80 %)
+  fill    differs in     0 of  9878 cells  (0.00 %)
+
+no workbook gives cellXfs[0] and the `Normal` cellStyleXf different values here

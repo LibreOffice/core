@@ -1,0 +1,225 @@
+--- a/dotnet/src/XRay.Office.Core/Charts/ChartAxisLabels.cs
++++ b/dotnet/src/XRay.Office.Core/Charts/ChartAxisLabels.cs
+@@ -59,11 +59,22 @@
+ /// How deep the labels are, measured away from the axis — which is what the plot rectangle has to
+ /// give up for them.
+ /// </param>
++/// <param name="Texts">
++/// The labels as they are to be <em>drawn</em> — with the line breaks the arrangement put in them
++/// — or null when none of them wrapped and the caller's own strings stand.
++/// <para>
++/// <strong>A wrapped label is a different shape from the string it came from, and until this was
++/// carried the arrangement measured the string.</strong> An axis whose labels may break gets one
++/// tick's worth of width per label and wraps inside it; measuring the unwrapped run instead finds
++/// a collision that is not there and thins the axis out. See <see cref="ChartAxisLabels"/>.
++/// </para>
++/// </param>
+ public readonly record struct ChartAxisLabelLayout(
+     double Rotation,
+     int Rhythm,
+     bool Staggered,
+-    Length Reserved);
++    Length Reserved,
++    IReadOnlyList<string?>? Texts = null);
+ 
+ /// <summary>
+ /// Decides whether an axis' labels are rotated, thinned or staggered, and how deep they end up.
+@@ -152,16 +163,6 @@
+         int count = Math.Min(texts.Count, centres.Count);
+         if (count == 0) return new ChartAxisLabelLayout(rotation, 1, false, Length.Zero);
+ 
+-        // The shape each label sits in, insets included — what collides is the shape and not the
+-        // text, exactly as everything else this file reserves room for.
+-        DocSize[] boxes = new DocSize[count];
+-        for (int at = 0; at < count; at++)
+-        {
+-            boxes[at] = texts[at] is { Length: > 0 } text
+-                ? Shape(measurer, text, size, bold)
+-                : default;
+-        }
+-
+         Length spacing = Spacing(centres, count);
+ 
+         for (int attempt = 0; attempt < MaximumAttempts; attempt++)
+@@ -180,6 +181,25 @@
+                 continue;
+             }
+ 
++            // With line breaking still on and the labels upright, each one is laid out inside
++            // `TextMaximumFrameWidth` — one tick's worth of axis less the 5% — and wraps at its
++            // word boundaries. That is the shape `doesOverlap` intersects and the shape the axis
++            // reserves room for, and it is *not* the single-line run: `ACCOUNT MANAGER` set on
++            // one line is nearly two ticks wide and set on two is under one.
++            //
++            // Measured on 033_Event_planning_tracker_Use_this_template_f29a848e.xlsx, whose six
++            // category names are all two words: the reference draws all six on two lines each and
++            // we drew three, having found a collision between runs it never laid out.
++            IReadOnlyList<string?>? wrapped =
++                lineBreak && rotation == 0.0 && spacing > Length.Zero
++                    ? Wrap(texts, count, spacing * (staggered ? 2.0 : 1.0) * WrapFraction,
++                           size, measurer, bold)
++                    : null;
++
++            // The shape each label sits in, insets included — what collides is the shape and not
++            // the text, exactly as everything else this file reserves room for.
++            DocSize[] boxes = Boxes(wrapped ?? texts, count, size, measurer, bold);
++
+             // canAutoAdjustLabelPlacement, VCartesianAxis.cxx:1478-1495 — and it deliberately
+             // does *not* test the arrangement, which is why an OOXML axis whose staggering is
+             // turned off may still be rotated.
+@@ -190,7 +210,8 @@
+             {
+                 return new ChartAxisLabelLayout(
+                     rotation, rhythm, staggered,
+-                    Depth(boxes, count, rhythm, staggered, rotation));
++                    Depth(boxes, count, rhythm, staggered, rotation),
++                    wrapped);
+             }
+ 
+             if (canAdjust)
+@@ -205,9 +226,102 @@
+             rhythm++;
+         }
+ 
++        bool lastStaggered = stagger is ChartLabelStagger.Even or ChartLabelStagger.Odd;
++
+         return new ChartAxisLabelLayout(
+-            rotation, rhythm, stagger is ChartLabelStagger.Even or ChartLabelStagger.Odd,
+-            Depth(boxes, count, rhythm, false, rotation));
++            rotation, rhythm, lastStaggered,
++            Depth(
++                Boxes(texts, count, size, measurer, bold), count, rhythm, false, rotation));
++    }
++
++    /// <summary>The shape each label sits in.</summary>
++    private static DocSize[] Boxes(
++        IReadOnlyList<string?> texts, int count, Length size, ChartText measurer, bool bold)
++    {
++        DocSize[] boxes = new DocSize[count];
++
++        for (int at = 0; at < count; at++)
++        {
++            boxes[at] = at < texts.Count && texts[at] is { Length: > 0 } text
++                ? Shape(measurer, text, size, bold)
++                : default;
++        }
++
++        return boxes;
++    }
++
++    /// <summary>
++    /// The labels broken at word boundaries to fit a width, or null when none of them needs it.
++    /// </summary>
++    /// <remarks>
++    /// <para>
++    /// The greedy fill a text shape does: words are added to the current line while they fit and a
++    /// new line is started when the next one does not.
++    /// </para>
++    /// <para>
++    /// <strong>Only a blank is a break opportunity here, where <see cref="Words"/> also splits at
++    /// a hyphen and a slash</strong>, and the difference is deliberate: <see cref="Words"/>
++    /// measures runs and never rebuilds the string, while this rewrites the label, and a
++    /// hyphen-split rebuilt with a space would turn <c>Oct-12</c> into <c>Oct- 12</c>. Splitting
++    /// on the blank alone round-trips exactly. The cost is a hyphenated label that the reference
++    /// wraps and this leaves on one line, which is the conservative direction: it can only find a
++    /// collision the reference does not, never hide one it does.
++    /// </para>
++    /// <para>
++    /// A word wider than the whole limit is left on a line of its own rather than broken inside
++    /// itself: <see cref="Wraps"/> has already run at this point and turned line breaking off for
++    /// exactly that case, so reaching here with one means the arrangement is not going to wrap at
++    /// all.
++    /// </para>
++    /// </remarks>
++    private static IReadOnlyList<string?>? Wrap(
++        IReadOnlyList<string?> texts,
++        int count,
++        Length limit,
++        Length size,
++        ChartText measurer,
++        bool bold)
++    {
++        if (limit <= Length.Zero) return null;
++
++        string?[]? wrapped = null;
++
++        for (int at = 0; at < count; at++)
++        {
++            if (at >= texts.Count || texts[at] is not { Length: > 0 } text) continue;
++            if (measurer.Measure(text, size, bold).Width <= limit) continue;
++
++            string[] words = text.Split(' ');
++            if (words.Length < 2) continue;
++
++            System.Text.StringBuilder built = new();
++            string line = string.Empty;
++
++            foreach (string word in words)
++            {
++                string candidate = line.Length == 0 ? word : line + " " + word;
++
++                if (line.Length > 0 && measurer.Measure(candidate, size, bold).Width > limit)
++                {
++                    if (built.Length > 0) built.Append('\n');
++                    built.Append(line);
++                    line = word;
++                    continue;
++                }
++
++                line = candidate;
++            }
++
++            if (built.Length > 0) built.Append('\n');
++            built.Append(line);
++
++            if (built.Length == text.Length) continue;
++
++            wrapped ??= [.. texts.Take(count)];
++            wrapped[at] = built.ToString();
++        }
++
++        return wrapped;
+     }
+ 
+     /// <summary>The smallest gap between two consecutive ticks.</summary>
+@@ -458,5 +572,21 @@
+     /// </para>
+     /// </remarks>
+     private static DocSize Shape(ChartText measurer, string text, Length size, bool bold = false)
+-        => measurer.Measure(text, size, bold);
++    {
++        if (text.AsSpan().IndexOf('\n') < 0) return measurer.Measure(text, size, bold);
++
++        // A wrapped label is as wide as its widest line and as deep as the sum of them, which is
++        // what a text shape with auto-grow-height comes out as.
++        Length width = Length.Zero;
++        Length height = Length.Zero;
++
++        foreach (string line in text.Split('\n'))
++        {
++            DocSize one = measurer.Measure(line, size, bold);
++            if (one.Width > width) width = one.Width;
++            height += one.Height;
++        }
++
++        return new DocSize(width, height);
++    }
+ }
+--- a/dotnet/src/XRay.Office.Core/Charts/ChartLayout.cs
++++ b/dotnet/src/XRay.Office.Core/Charts/ChartLayout.cs
+@@ -1961,6 +1961,15 @@
+ 
+                 label = ChartDataLabel.WriteCategory(plot.Categories[at], plot.CategoryFormat);
+                 centre = CategoryAt(plot, at, categories);
++
++                // The arrangement may have broken this label onto two lines to make it fit its
++                // slot. Drawing the unwrapped string in a rectangle reserved for the wrapped one
++                // puts it back over its neighbours; see ChartAxisLabelLayout.Texts.
++                if (layout.Texts is { } arrangedTexts && at < arrangedTexts.Count
++                    && arrangedTexts[at] is { Length: > 0 } broken)
++                {
++                    label = broken;
++                }
+             }
+ 
+             if (label is not { Length: > 0 } text) continue;

@@ -1,0 +1,20 @@
+workbooks with both tables: 242   (skipped 0)
+differing: 6
+   jobs-bulletin-51-22-december-2025.xlsx 
+     cellXfs[0]= (('_align', None), ('_prot', None), ('borderId', '0'), ('fillId', '0'), ('fontId', '1'), ('numFmtId', '0')) 
+     Normal    = (('_align', None), ('_prot', None), ('borderId', '0'), ('fillId', '0'), ('fontId', '0'), ('numFmtId', '0'))
+   essd-16-3433-2024-t02.xlsx 
+     cellXfs[0]= (('_align', (('horizontal', 'general'), ('shrinkToFit', 'false'), ('textRotation', '0'), ('vertical', 'bottom'), ('wrapText', 'false'))), ('_prot', None), ('borderId', '0'), ('fillId', '0'), ('fontId', '0'), ('numFmtId', '0')) 
+     Normal    = (('_align', None), ('_prot', None), ('borderId', '0'), ('fillId', '0'), ('fontId', '0'), ('numFmtId', '0'))
+   Published_Issuances_2024.xlsx 
+     cellXfs[0]= (('_align', (('horizontal', 'left'), ('vertical', 'top'))), ('_prot', None), ('borderId', '0'), ('fillId', '0'), ('fontId', '0'), ('numFmtId', '0')) 
+     Normal    = (('_align', None), ('_prot', None), ('borderId', '0'), ('fillId', '0'), ('fontId', '0'), ('numFmtId', '0'))
+   sectors-defense-and-aerospace.xlsx 
+     cellXfs[0]= (('_align', (('vertical', 'top'), ('wrapText', '1'))), ('_prot', None), ('borderId', '0'), ('fillId', '0'), ('fontId', '3'), ('numFmtId', '0')) 
+     Normal    = (('_align', None), ('_prot', None), ('borderId', '0'), ('fillId', '0'), ('fontId', '0'), ('numFmtId', '0'))
+   esurf-12-135-2024-t01.xlsx 
+     cellXfs[0]= (('_align', (('horizontal', 'general'), ('shrinkToFit', 'false'), ('textRotation', '0'), ('vertical', 'bottom'), ('wrapText', 'false'))), ('_prot', None), ('borderId', '0'), ('fillId', '0'), ('fontId', '0'), ('numFmtId', '0')) 
+     Normal    = (('_align', None), ('_prot', None), ('borderId', '0'), ('fillId', '0'), ('fontId', '0'), ('numFmtId', '0'))
+   ans_mappings_of_eccairs_terms.xlsx 
+     cellXfs[0]= (('_align', (('readingOrder', '0'), ('shrinkToFit', '0'), ('vertical', 'bottom'), ('wrapText', '0'))), ('_prot', None), ('borderId', '0'), ('fillId', '0'), ('fontId', '0'), ('numFmtId', '0')) 
+     Normal    = (('_align', None), ('_prot', None), ('borderId', '0'), ('fillId', '0'), ('fontId', '0'), ('numFmtId', '0'))

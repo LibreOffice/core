@@ -1,0 +1,113 @@
+# gillikin_online_user_mtg_2010.ppt page 2 -- the shrink-to-fit walk, before and after.
+#
+# Emitted by a temporary diagnostic in SlideAutofit.Solve, gated on XRAY_OFFICE_FIT_DUMP and
+# removed before the commit; every figure is a hundredth of a millimetre.
+#
+#   box   the height the walk compares against -- area.Height + 1
+#   ntp   TotalToLastNonEmpty, which is what the comparison uses
+#   sb    the paragraph's space above, after the row's spacing scale
+#
+# The reference draws this page unscaled at 34 pt with 0.9 paragraph spacing, i.e. at
+# constScaleLevels row {1.000, 0.900}. Its own drawn baselines give the block 11 232 units
+# when the percentage space is read off each paragraph's FIRST portion and 11 169 when it is
+# read off the LAST -- against a box of 11 177.
+#
+# BEFORE (runs[0].Size): row {1.000,0.900} measures 11 232 > 11 177, so the walk falls through
+# to {0.925,0.900} and the slide is drawn 31 pt.
+#
+# AFTER  (runs[^1].Size): the same row measures 11 168 <= 11 177 and the slide is drawn 34 pt,
+# which is the reference's answer. The three paragraph spaces that move are 300 -> 318 (a
+# paragraph ending in a 36 pt run) and 300 -> 212 twice (two ending in a 24 pt run).
+
+FIT box=11177 font=1 spacing=1 ntp=11352 total=12580 paras=6 lines=9 [David Gillikin: Online Update Loren Fran]
+    para h=1438 sb=0 sa=0 lines=1 1438/1438  [David Gillikin: Online Update ]
+    para h=1738 sb=300 sa=0 lines=1 1438/1438  [Loren Frant: MedlinePlus & Go ]
+    para h=3262 sb=300 sa=0 lines=2 1438/1438,1524/1524  [Maria Collins: DOCLINE & the E]
+    para h=1738 sb=300 sa=0 lines=1 1438/1438  [Questions]
+    para h=3176 sb=300 sa=0 lines=3 1438/1438,1438/1438,1016/1016  [Presentations will be posted o]
+    para h=1228 sb=212 sa=0 lines=1 1016/1016  []
+FIT box=11177 font=1 spacing=0.9 ntp=11232 total=12438 paras=6 lines=9 [David Gillikin: Online Update Loren Fran]
+    para h=1438 sb=0 sa=0 lines=1 1438/1438  [David Gillikin: Online Update ]
+    para h=1708 sb=270 sa=0 lines=1 1438/1438  [Loren Frant: MedlinePlus & Go ]
+    para h=3232 sb=270 sa=0 lines=2 1438/1438,1524/1524  [Maria Collins: DOCLINE & the E]
+    para h=1708 sb=270 sa=0 lines=1 1438/1438  [Questions]
+    para h=3146 sb=270 sa=0 lines=3 1438/1438,1438/1438,1016/1016  [Presentations will be posted o]
+    para h=1206 sb=190 sa=0 lines=1 1016/1016  []
+
+FIT box=11177 font=1 spacing=1 ntp=11282 total=12510 paras=6 lines=9 [David Gillikin: Online Update Loren Fran]
+    para h=1438 sb=0 sa=0 lines=1 1438/1438  [David Gillikin: Online Update ]
+    para h=1738 sb=300 sa=0 lines=1 1438/1438  [Loren Frant: MedlinePlus & Go ]
+    para h=3280 sb=318 sa=0 lines=2 1438/1438,1524/1524  [Maria Collins: DOCLINE & the E]
+    para h=1738 sb=300 sa=0 lines=1 1438/1438  [Questions]
+    para h=3088 sb=212 sa=0 lines=3 1438/1438,1438/1438,1016/1016  [Presentations will be posted o]
+    para h=1228 sb=212 sa=0 lines=1 1016/1016  []
+FIT box=11177 font=1 spacing=0.9 ntp=11168 total=12374 paras=6 lines=9 [David Gillikin: Online Update Loren Fran]
+    para h=1438 sb=0 sa=0 lines=1 1438/1438  [David Gillikin: Online Update ]
+    para h=1708 sb=270 sa=0 lines=1 1438/1438  [Loren Frant: MedlinePlus & Go ]
+    para h=3248 sb=286 sa=0 lines=2 1438/1438,1524/1524  [Maria Collins: DOCLINE & the E]
+    para h=1708 sb=270 sa=0 lines=1 1438/1438  [Questions]
+    para h=3066 sb=190 sa=0 lines=3 1438/1438,1438/1438,1016/1016  [Presentations will be posted o]
+    para h=1206 sb=190 sa=0 lines=1 1016/1016  []
+# 26.2.4.2's own drawn baselines on gillikin page 2, and ours, read out of the two PDFs.
+# 'size  x  y  font  text', y the Td/Tm baseline pymupdf reports for the span.
+
+=== 26.2.4.2, reading the .ppt ===
+# rt/gillikin_online_user_mtg_2010/direct/in.pdf page 2  mediabox=Rect(0.0, 0.0, 720.0, 540.0)
+  42.009  x=   43.20 y=   67.49  LiberationSans               'Presentations'
+  33.987  x=   55.19 y=  152.02  OpenSymbol                   '\uf06e'
+  33.987  x=   82.21 y=  157.55  LiberationSans               'David Gillikin: Online Update '
+  33.987  x=   55.19 y=  200.44  OpenSymbol                   '\uf06e'
+  33.987  x=   82.21 y=  205.96  LiberationSans               'Loren Frant: MedlinePlus & Go Local'
+  33.987  x=   55.19 y=  249.31  OpenSymbol                   '\uf06e'
+  33.987  x=   82.21 y=  254.83  LiberationSans               'Maria Collins: DOCLINE & the '
+  36.000  x=   82.21 y=  297.64  LiberationSans               'Emergency Access Initiative '
+  33.987  x=   55.19 y=  340.92  OpenSymbol                   '\uf06e'
+  33.987  x=   82.21 y=  346.45  LiberationSans               'Questions'
+  33.987  x=   55.19 y=  387.07  OpenSymbol                   '\uf06e'
+  33.987  x=   82.21 y=  392.60  LiberationSans               'Presentations will be posted on the '
+  33.987  x=   82.21 y=  433.36  LiberationSans-Italic        'NLM Technical Bulletin'
+  33.987  x=  429.51 y=  433.36  LiberationSans               ': '
+  24.009  x=  448.38 y=  433.36  LiberationSans               'http://www.nlm.nih.'
+  24.009  x=   82.21 y=  467.32  LiberationSans               'gov/pubs/techbull/tb.html'
+  11.991  x=  669.26 y=  521.52  DejaVuSerif                  '2'
+
+=== this tree at the base commit, reading the .ppt ===
+# rt/gillikin_online_user_mtg_2010/ours-ppt/in.pdf page 2  mediabox=Rect(0.0, 0.0, 720.0, 540.0)
+  42.009  x=   43.20 y=   67.49  LiberationSans               'Presentations'
+  31.436  x=   55.19 y=  150.72  OpenSymbol                   '\ue439'
+  31.011  x=   82.19 y=  154.60  LiberationSans               'David Gillikin: Online Update'
+  31.436  x=   55.19 y=  195.59  OpenSymbol                   '\ue439'
+  31.011  x=   82.19 y=  199.47  LiberationSans               'Loren Frant: MedlinePlus & Go Local'
+  31.436  x=   55.19 y=  240.46  OpenSymbol                   '\ue439'
+  31.011  x=   82.19 y=  244.35  LiberationSans               'Maria Collins: DOCLINE & the'
+  32.995  x=   82.19 y=  283.55  LiberationSans               'Emergency Access Initiative'
+  31.436  x=   55.19 y=  324.94  OpenSymbol                   '\ue439'
+  31.011  x=   82.19 y=  328.82  LiberationSans               'Questions'
+  31.436  x=   55.19 y=  369.81  OpenSymbol                   '\ue439'
+  31.011  x=   82.19 y=  373.69  LiberationSans               'Presentations will be posted on the '
+  31.011  x=  571.78 y=  373.69  LiberationSans-Italic        'NLM'
+  31.011  x=   82.19 y=  410.91  LiberationSans-Italic        'Technical Bulletin'
+  31.011  x=  322.39 y=  410.91  LiberationSans               ': '
+  21.997  x=  339.62 y=  410.91  LiberationSans               'http://www.nlm.nih.gov/pubs/tec'
+  21.997  x=   82.19 y=  432.91  LiberationSans               'hbull/tb.html'
+  11.991  x=  669.28 y=  521.52  DejaVuSerif                  '2'
+
+=== this tree with the change, reading the .ppt ===
+# rt/gillikin_online_user_mtg_2010/dmp/in.pdf page 2  mediabox=Rect(0.0, 0.0, 720.0, 540.0)
+  42.009  x=   43.20 y=   67.49  LiberationSans               'Presentations'
+  33.987  x=   55.19 y=  152.05  OpenSymbol                   '\ue439'
+  33.987  x=   82.19 y=  157.55  LiberationSans               'David Gillikin: Online Update'
+  33.987  x=   55.19 y=  200.47  OpenSymbol                   '\ue439'
+  33.987  x=   82.19 y=  205.97  LiberationSans               'Loren Frant: MedlinePlus & Go Local'
+  33.987  x=   55.19 y=  249.34  OpenSymbol                   '\ue439'
+  33.987  x=   82.19 y=  254.83  LiberationSans               'Maria Collins: DOCLINE & the'
+  36.000  x=   82.19 y=  297.64  LiberationSans               'Emergency Access Initiative'
+  33.987  x=   55.19 y=  340.95  OpenSymbol                   '\ue439'
+  33.987  x=   82.19 y=  346.45  LiberationSans               'Questions'
+  33.987  x=   55.19 y=  387.10  OpenSymbol                   '\ue439'
+  33.987  x=   82.19 y=  392.60  LiberationSans               'Presentations will be posted on the'
+  33.987  x=   82.19 y=  433.36  LiberationSans-Italic        'NLM Technical Bulletin'
+  33.987  x=  426.65 y=  433.36  LiberationSans               ': '
+  24.009  x=  445.53 y=  433.36  LiberationSans               'http://www.nlm.nih.'
+  24.009  x=   82.19 y=  457.37  LiberationSans               'gov/pubs/techbull/tb.html'
+  11.991  x=  669.28 y=  521.52  DejaVuSerif                  '2'

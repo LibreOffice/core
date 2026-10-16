@@ -1,0 +1,10 @@
+# 26.2.4.2's own assembled format code for each of the fixture's six styles, taken from
+# its HTML export: `sdnum` is "<language>;<system>;<format code>", and the third field is
+# the string SvNumberFormatter holds after CreateAndInsert has prepended the conditions.
+sdnum	assembled_code
+1033;0;#,##0" ";[RED](#,##0)	#,##0" ";[RED](#,##0)
+1033;0;0.0	0.0
+1033;0;0.00	0.00
+1033;0;[>0]0.0;[<0][RED]-0.0;[BLUE]0.0	[>0]0.0;[<0][RED]-0.0;[BLUE]0.0
+1033;0;[>0]_(* #,##0_);[<0]_(* (#,##0);_(* "-"_);_(@_)	[>0]_(* #,##0_);[<0]_(* (#,##0);_(* "-"_);_(@_)
+1033;0;[>=100]"big "0;[<0]"neg "0;0.0	[>=100]"big "0;[<0]"neg "0;0.0

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  A right-to-left *section*: two columns on a page layout whose style:writing-mode is rl-tb.
+
+  A section's direction is a separate statement from its paragraphs', and the one thing it
+  changes that can be seen on a page is which column is filled first. So the paragraph here
+  is deliberately left to right and plain Latin — everything about this document except the
+  page layout is ordinary, and the only question it asks is which side the text starts on.
+
+  Measured: LibreOffice draws the first line at 319 pt on this A4 page, which is the
+  right-hand column of the two.
+-->
+<office:document
+    xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+    xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+    xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+    xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+    office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:automatic-styles>
+  <style:page-layout style:name="PL">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+       fo:margin-left="2.5cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"
+       style:writing-mode="rl-tb">
+    <style:columns fo:column-count="2" fo:column-gap="1cm"/>
+   </style:page-layout-properties>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles><style:master-page style:name="Standard" style:page-layout-name="PL"/></office:master-styles>
+ <office:styles>
+  <style:style style:name="Body" style:family="paragraph">
+   <style:paragraph-properties fo:text-align="left" fo:text-indent="0cm" fo:hyphenate="false"
+       fo:margin-top="0cm" fo:margin-bottom="0.2cm" fo:line-height="100%"
+       fo:orphans="0" fo:widows="0" style:writing-mode="lr-tb"/>
+   <style:text-properties style:font-name="DejaVu Sans" fo:font-family="DejaVu Sans" fo:font-size="12pt"
+       style:font-name-complex="DejaVu Sans" style:font-family-complex="DejaVu Sans"
+       style:font-size-complex="12pt" style:letter-kerning="true"
+       fo:language="en" fo:country="GB"/>
+  </style:style>
+ </office:styles>
+ <office:body><office:text>
+   <text:p text:style-name="Body">aaa bbb ccc ddd eee fff ggg hhh iii jjj aaa bbb ccc ddd eee fff ggg hhh iii jjj aaa bbb ccc ddd eee fff ggg hhh iii jjj aaa bbb ccc ddd eee fff ggg hhh iii jjj</text:p>
+ </office:text></office:body>
+</office:document>

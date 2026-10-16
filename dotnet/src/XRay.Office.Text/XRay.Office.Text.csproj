@@ -1,0 +1,46 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Font resolution and metrics, text shaping, Unicode line breaking and paragraph layout. Shared by every document type. Part of X-Ray.Office, a pure C# port of LibreOffice's document import and rendering; install the X-Ray.Office package for the whole set.</Description>
+    <!--
+      Wider than the MPL-2.0 every other package declares, because this package also carries the
+      28 bundled faces under Fonts/Bundled/: Carlito and Liberation are SIL OFL 1.1, Caladea is
+      Apache-2.0, DejaVu is the Bitstream Vera licence (its changes public domain). The licence of
+      each was read out of the face's own name table; see Fonts/Bundled/README.md, packed beside them.
+    -->
+    <PackageLicenseExpression>MPL-2.0 AND OFL-1.1 AND Apache-2.0 AND Bitstream-Vera</PackageLicenseExpression>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="HarfBuzzSharp" />
+    <PackageReference Include="HarfBuzzSharp.NativeAssets.Linux" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\XRay.Office.Core\XRay.Office.Core.csproj" />
+  </ItemGroup>
+
+  <!--
+    The metric-compatible faces travel with the library. Content rather than an embedded
+    resource, because everything that draws a face opens a path: embedding them would mean
+    extracting 17 MB to a temporary directory on first use to arrive where copying them
+    beside the assembly already is. See Fonts/BundledFonts.cs and Fonts/Bundled/README.md.
+  -->
+  <ItemGroup>
+    <!--
+      Forward slashes: an MSBuild glob written with backslashes does not expand on Linux, and
+      it fails silently. The build stays green and the output directory simply has no fonts.
+      TargetPath rather than Link, because Link is the IDE's display path while TargetPath is
+      what decides where a copied file lands.
+    -->
+    <Content Include="Fonts/Bundled/*.ttf"
+             TargetPath="fonts/%(Filename)%(Extension)"
+             CopyToOutputDirectory="PreserveNewest"
+             Pack="true"
+             PackagePath="contentFiles/any/any/fonts" />
+    <!-- The fonts' licence table, at the package root rather than among the content files so that
+         it is not copied into every consumer's output directory. -->
+    <None Include="Fonts/Bundled/README.md" Pack="true" PackagePath="fonts/README.md" />
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,267 @@
+diff --git a/dotnet/src/XRay.Office.Ooxml/DrawingML/CustomShapeGeometry.cs b/dotnet/src/XRay.Office.Ooxml/DrawingML/CustomShapeGeometry.cs
+--- a/dotnet/src/XRay.Office.Ooxml/DrawingML/CustomShapeGeometry.cs
++++ b/dotnet/src/XRay.Office.Ooxml/DrawingML/CustomShapeGeometry.cs
+@@ -47,7 +47,78 @@
+     /// <param name="TextRectangle">
+     /// The rectangle <c>a:rect</c> names, or the whole bounding box when the shape states none.
+     /// </param>
+-    public readonly record struct Geometry(GraphicsPath Outline, DocRect TextRectangle);
++    /// <param name="Subpaths">
++    /// The same outline split back into the subpaths it was built from, each carrying the fill mode
++    /// and the stroke flag its own <c>a:path</c> stated. Null for a geometry built by a caller that
++    /// has no subpaths to report, in which case <see cref="FillOutline"/> is the whole outline.
++    /// </param>
++    public readonly record struct Geometry(
++        GraphicsPath Outline,
++        DocRect TextRectangle,
++        IReadOnlyList<PresetSubpath>? Subpaths = null)
++    {
++        /// <summary>
++        /// The part of the outline that is filled: every subpath except those stating
++        /// <c>fill="none"</c>.
++        /// </summary>
++        /// <remarks>
++        /// <para>
++        /// <strong>Filling <see cref="Outline"/> instead draws a solid blob where the file states a
++        /// line.</strong> Every connector preset — <c>bentConnector1</c> to <c>5</c>,
++        /// <c>curvedConnector1</c> to <c>5</c>, <c>straightConnector1</c>, <c>line</c> — is one open
++        /// subpath declaring <c>fill="none"</c>, and a shape carrying one still takes a fill from
++        /// its <c>a:fillRef</c>. LibreOffice honours the flag: <c>Path2D::getFillMode</c> feeds
++        /// <c>EnhancedCustomShape2d::CreateSubPath</c>, which pushes a subpath whose mode is
++        /// <c>NONE</c> into the stroke-only list
++        /// (<c>svx/source/customshapes/EnhancedCustomShape2d.cxx</c>).
++        /// </para>
++        /// <para>
++        /// Composed on demand rather than stored, because the caller that fills a shape asks once
++        /// and the caller that only strokes it never asks at all.
++        /// </para>
++        /// </remarks>
++        public GraphicsPath FillOutline
++        {
++            get
++            {
++                if (Subpaths is not { Count: > 0 } subpaths) return Outline;
++
++                GraphicsPath filled = new();
++                foreach (PresetSubpath subpath in subpaths)
++                {
++                    if (subpath.Fill != PresetPathFill.None) Append(filled, subpath.Outline);
++                }
++
++                return filled;
++            }
++        }
++
++        /// <summary>
++        /// The part of the outline that is stroked: every subpath except those stating
++        /// <c>stroke="false"</c>.
++        /// </summary>
++        /// <remarks>
++        /// The shading faces of the presets that fake a third dimension — <c>cube</c>, <c>can</c>,
++        /// <c>bevel</c> and the rest — are filled and not stroked, so stroking the whole outline
++        /// rules every one of them and turns a solid into a wireframe. 84 of the table's 320
++        /// subpaths say so.
++        /// </remarks>
++        public GraphicsPath StrokeOutline
++        {
++            get
++            {
++                if (Subpaths is not { Count: > 0 } subpaths) return Outline;
++
++                GraphicsPath stroked = new();
++                foreach (PresetSubpath subpath in subpaths)
++                {
++                    if (subpath.Stroke) Append(stroked, subpath.Outline);
++                }
++
++                return stroked;
++            }
++        }
++    }
+ 
+     /// <summary>
+     /// Evaluates a preset by name.
+@@ -114,10 +185,15 @@
+                 if (Command(command) is { } read) commands.Add(read);
+             }
+ 
++            // `fill` and `stroke` are attributes of the subpath, not of the shape: an a:custGeom
++            // states them exactly as the preset table does, and a shape whose one path says
++            // fill="none" is a line however solid its a:solidFill.
+             paths.Add(new PresetPath(
+                 Drawing.Attribute(path, "w") ?? "0",
+                 Drawing.Attribute(path, "h") ?? "0",
+-                commands));
++                commands,
++                Drawing.Attribute(path, "fill") ?? "norm",
++                Drawing.Attribute(path, "stroke") is not ("0" or "false")));
+         }
+ 
+         return paths.Count == 0
+@@ -212,6 +288,7 @@
+         }
+ 
+         GraphicsPath outline = new();
++        List<PresetSubpath> subpaths = [];
+         DocPoint current = default;
+         DocPoint start = default;
+ 
+@@ -224,15 +301,63 @@
+             double scaleX = width > 0 ? size.Width.Emu / width : 1.0;
+             double scaleY = height > 0 ? size.Height.Emu / height : 1.0;
+ 
++            // Emitted once into the subpath and then copied into the combined outline, so that the
++            // pen state a subpath leaves behind still carries into the next one -- which is what
++            // `current` and `start` being declared outside this loop has always meant.
++            GraphicsPath own = new();
+             foreach (PresetCommand command in path.Commands)
+             {
+-                Emit(command, outline, values, scaleX, scaleY, ref current, ref start);
++                Emit(command, own, values, scaleX, scaleY, ref current, ref start);
+             }
++
++            subpaths.Add(new PresetSubpath(own, FillMode(path.Fill), path.Stroke));
++            Append(outline, own);
+         }
+ 
+-        return new Geometry(outline, TextRectangle(shape, values, size));
++        return new Geometry(outline, TextRectangle(shape, values, size), subpaths);
++    }
++
++    /// <summary>Copies one path's commands onto the end of another.</summary>
++    /// <remarks>
++    /// <see cref="GraphicsPath"/> has no append of its own and does not need one: a path is a
++    /// command list, and re-emitting the commands is exact. Declared on the enclosing class rather
++    /// than on <see cref="Geometry"/> so that both it and the evaluator can reach it.
++    /// </remarks>
++    private static void Append(GraphicsPath into, GraphicsPath from)
++    {
++        foreach (PathCommand command in from.Commands)
++        {
++            switch (command.Verb)
++            {
++                case PathVerb.MoveTo: into.MoveTo(command.Point); break;
++                case PathVerb.LineTo: into.LineTo(command.Point); break;
++                case PathVerb.CubicTo:
++                    into.CubicTo(command.Control1, command.Control2, command.Point);
++                    break;
++                case PathVerb.Close: into.Close(); break;
++                default: break;
++            }
++        }
+     }
+ 
++    /// <summary>The <c>a:path/@fill</c> value as the mode it names.</summary>
++    /// <remarks>
++    /// The four shading modes are kept rather than folded into <see cref="PresetPathFill.Normal"/>
++    /// because they are a real instruction — <c>darken</c> and its neighbours tell a face of a
++    /// pseudo-3D preset to take the shape's fill at a different lightness, which is how a
++    /// <c>cube</c> gets three tones out of one colour. A caller that does not implement them
++    /// treats them as normal and draws what it drew before.
++    /// </remarks>
++    private static PresetPathFill FillMode(string? fill) => fill switch
++    {
++        "none" => PresetPathFill.None,
++        "lighten" => PresetPathFill.Lighten,
++        "lightenLess" => PresetPathFill.LightenLess,
++        "darken" => PresetPathFill.Darken,
++        "darkenLess" => PresetPathFill.DarkenLess,
++        _ => PresetPathFill.Normal,
++    };
++
+     private static DocRect TextRectangle(
+         PresetShape shape, Dictionary<string, double> values, DocSize size)
+     {
+@@ -761,7 +886,45 @@
+ /// <param name="Width">The space's width, or "0" for the shape's own.</param>
+ /// <param name="Height">Its height.</param>
+ /// <param name="Commands">Its commands, in order.</param>
+-public sealed record PresetPath(string Width, string Height, IReadOnlyList<PresetCommand> Commands);
++/// <param name="Fill">
++/// Its <c>a:path/@fill</c>, verbatim; <c>"norm"</c> when the source states none.
++/// </param>
++/// <param name="Stroke">Its <c>a:path/@stroke</c>; true when the source states none.</param>
++public sealed record PresetPath(
++    string Width,
++    string Height,
++    IReadOnlyList<PresetCommand> Commands,
++    string Fill = "norm",
++    bool Stroke = true);
++
++/// <summary>What a subpath does with the shape's fill.</summary>
++public enum PresetPathFill
++{
++    /// <summary>The shape's own fill, unmodified. <c>a:path/@fill</c> absent or <c>norm</c>.</summary>
++    Normal = 0,
++
++    /// <summary>Not filled at all. Every connector preset is this.</summary>
++    None,
++
++    /// <summary>The shape's fill, lightened.</summary>
++    Lighten,
++
++    /// <summary>The shape's fill, lightened less.</summary>
++    LightenLess,
++
++    /// <summary>The shape's fill, darkened.</summary>
++    Darken,
++
++    /// <summary>The shape's fill, darkened less.</summary>
++    DarkenLess,
++}
++
++/// <summary>One evaluated subpath, with what its own <c>a:path</c> said to do with it.</summary>
++/// <param name="Outline">The subpath, in the shape's own coordinates.</param>
++/// <param name="Fill">What it does with the shape's fill.</param>
++/// <param name="Stroke">Whether it is stroked.</param>
++public readonly record struct PresetSubpath(
++    GraphicsPath Outline, PresetPathFill Fill, bool Stroke);
+ 
+ /// <summary>One preset shape's definition.</summary>
+ /// <param name="Name">Its <c>a:prstGeom/@prst</c> name.</param>
+diff --git a/dotnet/src/XRay.Office.Ooxml/DrawingML/PresetShapeGeometry.cs b/dotnet/src/XRay.Office.Ooxml/DrawingML/PresetShapeGeometry.cs
+--- a/dotnet/src/XRay.Office.Ooxml/DrawingML/PresetShapeGeometry.cs
++++ b/dotnet/src/XRay.Office.Ooxml/DrawingML/PresetShapeGeometry.cs
+@@ -54,10 +54,14 @@
+         List<PresetCommand> commands = [];
+         string pathWidth = "0";
+         string pathHeight = "0";
++        string pathFill = "norm";
++        bool pathStroke = true;
+ 
+         void FlushPath()
+         {
+-            if (commands.Count > 0) paths.Add(new PresetPath(pathWidth, pathHeight, commands));
++            if (commands.Count > 0)
++                paths.Add(new PresetPath(pathWidth, pathHeight, commands, pathFill, pathStroke));
++
+             commands = [];
+         }
+ 
+@@ -71,6 +75,10 @@
+             guides = [];
+             rectangle = null;
+             paths = [];
++            pathWidth = "0";
++            pathHeight = "0";
++            pathFill = "norm";
++            pathStroke = true;
+         }
+ 
+         while (reader.ReadLine() is { } line)
+@@ -114,6 +122,15 @@
+                     string[] fields = rest.Split(' ');
+                     pathWidth = fields.Length > 0 ? fields[0] : "0";
+                     pathHeight = fields.Length > 1 ? fields[1] : "0";
++
++                    // Fields three and four are the subpath's own fill mode and whether it is
++                    // stroked, both written as "-" when the source states nothing. They were
++                    // reduced into the table with the rest of the record and then dropped here,
++                    // which is why every subpath was filled and stroked alike: 96 of the 320
++                    // subpaths in the table say `fill="none"` -- every connector among them -- and
++                    // 84 say `stroke="false"`.
++                    pathFill = fields.Length > 2 && fields[2] != "-" ? fields[2] : "norm";
++                    pathStroke = fields.Length <= 3 || fields[3] != "false";
+                     break;
+                 }
+ 

@@ -1,0 +1,99 @@
+diff --git a/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.Tables.cs b/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.Tables.cs
+--- a/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.Tables.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.Tables.cs
+@@ -477,10 +477,26 @@
+ 
+             _tableStyleRun = _styles.TableStyleRunProperties(styleId, conditions);
+ 
++            // Read before the cell, because the cell's paragraphs are read inside `ReadCell` and a
++            // continuation cell's must not count in their lists — see `_inCoveredCell`.
++            VerticalMerge merge = Merge(cellProperties);
++            bool outerCovered = _inCoveredCell;
++            _inCoveredCell = outerCovered || merge == VerticalMerge.Continue;
++
++            List<PageBlock> cellBlocks;
++            try
++            {
++                cellBlocks = ReadCell(child);
++            }
++            finally
++            {
++                _inCoveredCell = outerCovered;
++            }
++
+             cells.Add(new PendingCell(
+                 new PageTableCell
+                 {
+-                    Blocks = ReadCell(child),
++                    Blocks = cellBlocks,
+                     Column = column,
+                     ColumnSpan = span,
+                     Padding = Padding(Word.Child(cellProperties, "tcMar"), tablePadding),
+@@ -489,7 +505,7 @@
+                     Shading = Shading(cellProperties)
+                               ?? ConditionalShading(styleId, conditions),
+                 },
+-                Merge(cellProperties),
++                merge,
+                 OwnBorders(cellProperties)));
+ 
+             // By the span, because DOCX writes no placeholder for a swallowed column.
+@@ -1277,6 +1293,41 @@
+             ? value
+             : null;
+ 
++    /// <summary>
++    /// True while the walk is inside a cell covered by a vertical merge above it, whose paragraphs are
++    /// read but never drawn.
++    /// </summary>
++    /// <remarks>
++    /// <para>
++    /// <see cref="Resolved"/> drops a <c>w:vMerge</c> continuation cell outright, so nothing it holds
++    /// reaches the page — but its paragraphs have already been read by then, and reading a numbered
++    /// paragraph <em>advances that list's counter</em>. The counter is the only thing that escapes a
++    /// cell that is not drawn, and it escapes into the numbers of every list item after it.
++    /// </para>
++    /// <para>
++    /// LibreOffice states the same rule from the other end: setting a cell's <c>VerticalMerge</c>
++    /// property walks every text node in the cell and clears its counted-in-list flag
++    /// (<c>sw/source/core/unocore/unotbl.cxx</c>:978-990, <em>"Hack to allow clearing of numbering from
++    /// the paragraphs in the merged cells"</em>), so a numbered paragraph in a covered cell neither
++    /// shows a number nor advances the count.
++    /// </para>
++    /// <para>
++    /// Measured on <c>B11. TE.CAO.00129 Experience logbook.docx</c>, whose ID column carries sixteen
++    /// paragraphs at <c>w:numId="16"</c>, three of them empty and in <c>w:vMerge</c> continuation cells
++    /// (table 2, rows 8, 17 and 18). The reference numbers the other thirteen 1 to 13; without this
++    /// the three covered ones consume 8, 10 and 11 and the visible column reads 1–7, 9, 12–16. The same
++    /// three-line shape mis-numbers <c>FO.FCTOA_.000129</c>'s activity sections 3.1, 3.3, 3.4, 3.6,
++    /// 3.12 against the reference's 3.1 to 3.5.
++    /// </para>
++    /// <para>
++    /// Only <em>continuation</em> cells, not the restart that begins the merge: the reference numbers
++    /// a heading in a <c>w:vMerge w:val="restart"</c> cell normally — <c>FO.FCTOA_.000129</c> prints
++    /// "2.1.1 Name and Address" and "3.1 Audit of Management …" from restart cells — because that cell
++    /// is the one that is drawn.
++    /// </para>
++    /// </remarks>
++    private bool _inCoveredCell;
++
+     /// <summary>Which part of a vertical merge a cell is.</summary>
+     private enum VerticalMerge
+     {
+diff --git a/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.Lists.cs b/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.Lists.cs
+--- a/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.Lists.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.Lists.cs
+@@ -53,7 +53,12 @@
+ 
+         // Advanced whether or not the level draws anything, so that a level formatted `none` still
+         // counts — a numbered heading that shows no number is still the third heading.
+-        string? drawn = _numbering.Advance(numId, level);
++        //
++        // The exception is a paragraph in a cell covered by a vertical merge: it is not drawn at all,
++        // and LibreOffice clears its counted-in-list flag for exactly that reason
++        // (`sw/source/core/unocore/unotbl.cxx`:978-990). Not counted, so not advanced and not labelled;
++        // `drawn` stays null and the branch below returns the paragraph's own first-line indent.
++        string? drawn = _inCoveredCell ? null : _numbering.Advance(numId, level);
+ 
+         XElement? levelProperties = definition.ParagraphProperties;
+         XElement? indent = Word.Child(levelProperties, "ind");

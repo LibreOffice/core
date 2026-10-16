@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Hand-authored. Three slides, each one bulleted item in a 14cm box at 16pt
+     Liberation Sans, differing only in the list level that labels it:
+
+       1  text:bullet-char="&#xF0FC;" style:font-name="Wingdings" fo:color="#9bbb59"
+       2  the same slot, with style:use-window-font-color="true" instead of a colour
+       3  text:bullet-char="&#x25CF;" fo:font-family="OpenSymbol", which is no slot
+
+     A Private Use Area character means nothing outside the face that defines it, so a
+     reader that hands it to a renderer draws .notdef and one that collapses it to U+2022
+     draws a dot. LibreOffice does neither: Wingdings is not installed on Linux, so
+     `ConvertChar` substitutes OpenSymbol and recodes the slot through `aWingDingsTab`
+     (`unotools/source/misc/fontcvt.cxx`:185, 1325) to the StarSymbol code point holding
+     the same picture. Slot F0FC is a check mark, and its recode is U+E4C2.
+
+     The colour is the level's own and is a separate reading: `fo:color` on the level's
+     `style:text-properties`, with `style:use-window-font-color="true"` meaning the item's
+     own colour instead. DrawingML's `a:buClr` is the same property and the deck reader has
+     read it since it was written.
+
+     The `style:font-charset="x-symbol"` on the Wingdings declaration is load-bearing and
+     is why the file carries an `office:font-face-decls` at all: without it 26.2.4.2 sends
+     the request to fontconfig, which answers DejaVu Sans, and draws the raw slot there.
+     13 of the converted corpus's 302 `.odp` declare `x-symbol` on a recodeable family and
+     4 declare one without it.
+
+     Verified against LibreOffice 26.2.4.2. Its PDF of this file draws, from the font
+     OpenSymbol:
+
+       1  U+F0FC at 14.40pt in #9bbb59
+       2  U+F0FC at 14.40pt in #000000
+       3  U+25CF at  7.20pt in #000000
+
+     The code point in that PDF is the slot the file states, because LibreOffice recodes
+     at draw time and writes the original into its ToUnicode; this tree recodes at layout
+     time, so it names U+E4C2 for the first two. The glyphs are the same; a 600 dpi crop
+     of the two renderings of `redac-sas-201509-asisp-research.odp` page 7 is
+     byte-identical, and the sizes and colours are what this fixture pins.
+-->
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.presentation"><office:font-face-decls><style:font-face style:name="Wingdings" svg:font-family="Wingdings" style:font-pitch="variable" style:font-charset="x-symbol"/><style:font-face style:name="OpenSymbol" svg:font-family="OpenSymbol" style:font-pitch="variable" style:font-charset="x-symbol"/></office:font-face-decls><office:styles><style:style style:name="standard" style:family="graphic"><style:graphic-properties draw:fill="none" draw:stroke="none"/><style:text-properties fo:font-size="16pt" fo:font-family="Liberation Sans"/></style:style><style:style style:name="P0" style:family="paragraph"><style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0cm"/><style:text-properties fo:font-size="16pt" fo:font-family="Liberation Sans"/></style:style></office:styles><office:automatic-styles><text:list-style style:name="Lcolour"><text:list-level-style-bullet text:level="1" text:bullet-char="&#xF0FC;"><style:list-level-properties text:min-label-width="1cm"/><style:text-properties style:font-name="Wingdings" fo:color="#9bbb59" fo:font-size="90%"/></text:list-level-style-bullet></text:list-style><text:list-style style:name="Lplain"><text:list-level-style-bullet text:level="1" text:bullet-char="&#xF0FC;"><style:list-level-properties text:min-label-width="1cm"/><style:text-properties style:font-name="Wingdings" style:use-window-font-color="true" fo:font-size="90%"/></text:list-level-style-bullet></text:list-style><text:list-style style:name="Lsymbol"><text:list-level-style-bullet text:level="1" text:bullet-char="&#x25CF;"><style:list-level-properties text:min-label-width="1cm"/><style:text-properties fo:font-family="OpenSymbol" style:use-window-font-color="true" fo:font-size="45%"/></text:list-level-style-bullet></text:list-style><style:style style:name="gr" style:family="graphic" style:parent-style-name="standard"><style:graphic-properties draw:fill="none" draw:stroke="none" draw:auto-grow-height="false" draw:auto-grow-width="false" fo:padding-top="0cm" fo:padding-bottom="0cm" fo:padding-left="0cm" fo:padding-right="0cm"/></style:style><style:style style:name="T16" style:family="text"><style:text-properties fo:font-size="16pt" fo:font-family="Liberation Sans"/></style:style></office:automatic-styles><office:body><office:presentation><draw:page draw:name="colour" draw:master-page-name=""><draw:frame draw:style-name="gr" draw:text-style-name="P0" draw:layer="layout" svg:width="14cm" svg:height="4cm" svg:x="1cm" svg:y="1cm"><draw:text-box><text:list text:style-name="Lcolour"><text:list-item><text:p text:style-name="P0"><text:span text:style-name="T16">Alpha</text:span></text:p></text:list-item></text:list></draw:text-box></draw:frame></draw:page><draw:page draw:name="plain" draw:master-page-name=""><draw:frame draw:style-name="gr" draw:text-style-name="P0" draw:layer="layout" svg:width="14cm" svg:height="4cm" svg:x="1cm" svg:y="1cm"><draw:text-box><text:list text:style-name="Lplain"><text:list-item><text:p text:style-name="P0"><text:span text:style-name="T16">Alpha</text:span></text:p></text:list-item></text:list></draw:text-box></draw:frame></draw:page><draw:page draw:name="symbol" draw:master-page-name=""><draw:frame draw:style-name="gr" draw:text-style-name="P0" draw:layer="layout" svg:width="14cm" svg:height="4cm" svg:x="1cm" svg:y="1cm"><draw:text-box><text:list text:style-name="Lsymbol"><text:list-item><text:p text:style-name="P0"><text:span text:style-name="T16">Alpha</text:span></text:p></text:list-item></text:list></draw:text-box></draw:frame></draw:page></office:presentation></office:body></office:document>

@@ -1,0 +1,12 @@
+51 .ppt, 12044 live slide shapes
+1691 state fFitShapeToText, in 38 documents; 1348 of those hold a ClientTextbox
+  FAA_Form_337.ppt                                          242 /  242 with text
+  Thailand17.ppt                                            129 /  129 with text
+  pods05.ppt                                                146 /  126 with text
+  Aerospace_Journey_of_Flight_Chapter_BCB1637572DA6.ppt     117 /  117 with text
+  Fundamentals_Module_1_basics.ppt                          165 /  107 with text
+  71393_pp7.ppt                                             170 /   87 with text
+  introduction_to_bea_tuxedo.ppt                             48 /   47 with text
+  ws_prod-g-doc-Events-2008-February-5-NATO-activities.ppt  116 /   46 with text
+  8.16_AOD_FINAL_Provider_Training_Presentation_9_2009.ppt   40 /   40 with text
+  W3_Case_Study_of_a_Tsunami_Warning_Simulation_Exercise_E   38 /   38 with text

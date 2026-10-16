@@ -1,0 +1,11 @@
+2012-GA-Survey-Chapter-5-Tables-16Dec2013-V2.xls	charts=1	chfonts=9	families=['Arial']	global=['Arial']	axesset=['Arial']
+2012-GA-Survey-Chapter-6-Tables-16Dec2013-V2.xls	charts=1	chfonts=8	families=['Arial']	global=['Arial']	axesset=['Arial']
+EHEST-Pre-departure-checklist-Rev.-1-06-12-2016.xls	charts=9	chfonts=54	families=['Calibri']	global=['Calibri', 'Calibri', 'Calibri']	axesset=['Calibri', 'Calibri', 'Calibri']
+TOGAF9-Tool-ConfReqts-CSQ.xls	charts=1	chfonts=10	families=['Calibri']	global=['Calibri']	axesset=['Calibri']
+Template Pilot Logbook JAR-FCL V3.0.xls	charts=2	chfonts=16	families=['Arial']	global=['Arial', 'Arial']	axesset=['Arial', 'Arial']
+orbus_togaf_tool_csq.xls	charts=1	chfonts=10	families=['Arial']	global=['Arial']	axesset=['Arial']
+
+--- OLE2 workbooks scanned: 61
+--- with >=1 chart substream: 6  (total substreams 15)
+--- with >=1 resolvable CHFONT: 6
+--- charts where global default font != axes-set default font: 0

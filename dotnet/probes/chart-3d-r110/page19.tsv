@@ -1,0 +1,9 @@
+leg	kind	detail	x0	y0	x1	y1
+ppt-direct	PATH	fs items=55	148.6	358.1	229.4	388.9
+ppt-direct	PATH	fs items=362	53.3	390.9	234.8	446.3
+ppt-direct	PATH	fs items=309	53.3	359.8	234.8	422.0
+ppt-direct	IMAGE	961x64	0.0	-0.0	705.6	48.0
+ppt-direct	IMAGE	961x39	0.0	499.7	705.6	529.0
+via-flat-odp	IMAGE	961x64	0.0	-0.0	705.6	48.0
+via-flat-odp	IMAGE	961x39	0.0	499.7	705.6	529.0
+via-flat-odp	IMAGE	635x155	40.1	344.9	242.3	397.9

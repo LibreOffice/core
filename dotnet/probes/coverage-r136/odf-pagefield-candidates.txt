@@ -1,0 +1,24 @@
+Converted `.odt` (/home/user/corpus-odf/words, 338 files) holding a `text:page-number` or
+`text:page-count` field inside a `draw:frame` in a `style:header` or `style:footer` -- the ODF
+shape of the "PAGE field inside a header/footer text box" population the page-field round is
+working.  18 of 338.  This is a CANDIDATE list, not a positive one: it says where to look, not
+that any of them freezes.
+
+1228841571067_2009_TPPT_13__2007_TPPT_102__R-108535759.odt
+1257259179492_2007_TPPT_102_Supporting_Doc_2-434003080.odt
+135.odt
+150_5300_13_chg10.odt
+150_5300_13_chg12.odt
+150_5300_13_chg8.odt
+1_tpr_template__from_fy14_.odt
+5709.16 ch.40_mgfinal.odt
+762.odt
+A320SimNotes.odt
+FMRBullletinB-28.odt
+HC-Bulletin-template.odt
+JEMIT_Template.odt
+PAT-047 - Architecture and Detailed Design Assessment.odt
+PES-Technical-Report-Template_Jan_2019.odt
+RMI_Document_Repository_Public-Reprts_GettingOffOil.odt
+SWDD-template.odt
+loi_format_letter_of_intent-a-320-214-a330.odt

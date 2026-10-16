@@ -1,0 +1,50 @@
+arm            left-shape spans (top..bottom width text)     
+ovf40-absent   NO TEXT DRAWN
+ovf40-clip     NO TEXT DRAWN
+ovf40-overflow NO TEXT DRAWN
+q04            42.493..55.286 w234.6 'Title: ___'
+q08            51.393..64.186 w27.6 'Title:'
+q10            NO TEXT DRAWN
+q12            NO TEXT DRAWN
+q14            NO TEXT DRAWN
+q16            NO TEXT DRAWN
+s16-b          43.443..56.236 w234.6 'Title: ___'
+s16-ctr        42.243..55.036 w234.6 'Title: ___'
+s16-t          41.043..53.836 w234.6 'Title: ___'
+s16-tall       41.043..53.836 w234.6 'Title: ___'
+s18-b          43.443..56.236 w234.6 'Title: ___'
+s18-ctr        42.843..55.636 w234.6 'Title: ___'
+s18-t          42.243..55.036 w234.6 'Title: ___'
+s18-tall       42.243..55.036 w234.6 'Title: ___'
+s19-b          43.443..56.236 w234.6 'Title: ___'
+s19-ctr        43.093..55.886 w234.6 'Title: ___'
+s19-t          42.793..55.586 w234.6 'Title: ___'
+s19-tall       42.793..55.586 w234.6 'Title: ___'
+s20-b          43.443..56.236 w234.6 'Title: ___'
+s20-ctr        43.393..56.186 w234.6 'Title: ___'
+s20-t          43.393..56.186 w234.6 'Title: ___'
+s20-tall       43.393..56.186 w234.6 'Title: ___'
+s21-b          43.993..56.786 w234.6 'Title: ___'
+s21-ctr        43.993..56.786 w234.6 'Title: ___'
+s21-t          43.993..56.786 w234.6 'Title: ___'
+s21-tall       43.993..56.786 w234.6 'Title: ___'
+s22-b          44.543..57.336 w31.1 'Title: '
+s22-ctr        44.543..57.336 w31.1 'Title: '
+s22-t          44.543..57.336 w31.1 'Title: '
+s22-tall       44.543..57.336 w234.6 'Title: ___'
+s24-b          45.743..58.536 w31.1 'Title: '
+s24-ctr        45.743..58.536 w31.1 'Title: '
+s24-t          45.743..58.536 w31.1 'Title: '
+s24-tall       45.743..58.536 w234.6 'Title: ___'
+s28-b          48.043..60.836 w27.6 'Title:'
+s28-ctr        48.043..60.836 w27.6 'Title:'
+s28-t          48.043..60.836 w27.6 'Title:'
+s28-tall       48.043..60.836 w234.6 'Title: ___'
+s32-b          50.393..63.186 w27.6 'Title:'
+s32-ctr        50.393..63.186 w27.6 'Title:'
+s32-t          50.393..63.186 w27.6 'Title:'
+s32-tall       50.393..63.186 w234.6 'Title: ___'
+s40-b          NO TEXT DRAWN
+s40-ctr        NO TEXT DRAWN
+s40-t          NO TEXT DRAWN
+s40-tall       55.043..67.836 w234.6 'Title: ___'

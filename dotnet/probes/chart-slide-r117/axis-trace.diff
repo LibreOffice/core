@@ -1,0 +1,88 @@
+diff --git a/dotnet/src/XRay.Office.Core/Charts/ChartAxisLabels.cs b/dotnet/src/XRay.Office.Core/Charts/ChartAxisLabels.cs
+index 8e7738ff2..87e60a52c 100644
+--- a/dotnet/src/XRay.Office.Core/Charts/ChartAxisLabels.cs
++++ b/dotnet/src/XRay.Office.Core/Charts/ChartAxisLabels.cs
+@@ -246,6 +246,8 @@ public static class ChartAxisLabels
+ 
+         Length spacing = Spacing(centres, count);
+ 
++        AxisTrace(texts, count, spacing, stated, size, measurer, bold, vertical);
++
+         for (int attempt = 0; attempt < MaximumAttempts; attempt++)
+         {
+             bool staggered = stagger is ChartLabelStagger.Even or ChartLabelStagger.Odd;
+@@ -310,6 +312,7 @@ public static class ChartAxisLabels
+                 || !Collides(
+                     boxes, centres, count, rhythm, staggered, rotation, vertical, reserve))
+             {
++                ResultTrace(vertical, spacing, stated, rotation, rhythm, staggered, wrapped, attempt, lineBreak);
+                 return new ChartAxisLabelLayout(
+                     rotation, rhythm, staggered,
+                     Depth(boxes, count, rhythm, staggered, rotation, vertical),
+@@ -923,4 +926,66 @@ public static class ChartAxisLabels
+ 
+         return new DocSize(width, height);
+     }
++
++    private static void AxisTrace(
++        IReadOnlyList<string?> texts, int count, Length spacing, ChartAxisText stated,
++        Length size, ChartText measurer, bool bold, bool vertical)
++    {
++        if (Environment.GetEnvironmentVariable("XRAY_OFFICE_AXIS_TRACE") is null) return;
++
++        System.Text.StringBuilder sb = new();
++
++        for (int at = 0; at < count; at++)
++        {
++            if (texts[at] is not { Length: > 0 } text) continue;
++            if (!text.Contains(' ')) continue;
++
++            string[] parts = text.Split(' ', StringSplitOptions.RemoveEmptyEntries);
++            if (parts.Length < 2) continue;
++
++            double whole = measurer.Measure(text, size, bold).Width.Points;
++            double widest = 0.0, sum = 0.0;
++            foreach (string w in parts)
++            {
++                double x = measurer.Measure(w, size, bold).Width.Points;
++                sum += x;
++                if (x > widest) widest = x;
++            }
++
++            sb.Append("AXTRACE\t")
++              .Append(vertical ? 'V' : 'H').Append('\t')
++              .Append(spacing.Points.ToString("F4", System.Globalization.CultureInfo.InvariantCulture)).Append('\t')
++              .Append(size.Points.ToString("F4", System.Globalization.CultureInfo.InvariantCulture)).Append('\t')
++              .Append(bold ? 1 : 0).Append('\t')
++              .Append(stated.LineBreakAllowed ? 1 : 0).Append('\t')
++              .Append(stated.OverlapAllowed ? 1 : 0).Append('\t')
++              .Append(stated.Rotation.ToString("F4", System.Globalization.CultureInfo.InvariantCulture)).Append('\t')
++              .Append(count).Append('\t')
++              .Append(at).Append('\t')
++              .Append(parts.Length).Append('\t')
++              .Append(whole.ToString("F4", System.Globalization.CultureInfo.InvariantCulture)).Append('\t')
++              .Append(widest.ToString("F4", System.Globalization.CultureInfo.InvariantCulture)).Append('\t')
++              .Append((sum - widest).ToString("F4", System.Globalization.CultureInfo.InvariantCulture)).Append('\t')
++              .Append(text.Replace('\t', ' ').Replace('\n', ' '))
++              .Append('\n');
++        }
++
++        if (sb.Length > 0) Console.Error.Write(sb.ToString());
++    }
++
++    private static void ResultTrace(
++        bool vertical, Length spacing, ChartAxisText stated, double rotation, int rhythm,
++        bool staggered, IReadOnlyList<string?>? wrapped, int attempt, bool lineBreak)
++    {
++        if (Environment.GetEnvironmentVariable("XRAY_OFFICE_AXIS_TRACE") is null) return;
++        int broke = 0;
++        if (wrapped is not null)
++            foreach (string? w in wrapped) if (w is not null && w.Contains('\n')) broke++;
++        Console.Error.Write(string.Format(
++            System.Globalization.CultureInfo.InvariantCulture,
++            "AXRESULT\t{0}\t{1:F4}\t{2}\t{3}\t{4}\t{5:F4}\t{6}\t{7}\t{8}\t{9}\n",
++            vertical ? "V" : "H", spacing.Points, stated.LineBreakAllowed ? 1 : 0,
++            stated.OverlapAllowed ? 1 : 0, stated.Rotation.ToString("F4", System.Globalization.CultureInfo.InvariantCulture),
++            rotation, rhythm, staggered ? 1 : 0, broke, attempt));
++    }
+ }

@@ -1,0 +1,29 @@
+x14 conditionalFormatting blocks seen: 26; x14:cfRule types: {'dataBar': 9, 'iconSet': 18}
+documents scanned (OPC spreadsheets): 244  (sniffed, lying extension: 1)
+  sniffed: /home/user/sample-files/sheets/done-010/xls/Special-Procedures_2025-07-10.xls
+worksheets parsed: 809
+expression rules: 601  accepted: 483  refused: 118
+  from x14 extLst: 0 (refused 0)
+documents with expression rules: 34
+documents with refused rules: 23
+refused rules that can actually paint: 115
+  in documents: ['sheets/chartset-006/xlsx/044_Cash_flow_forecast_Use_this_template_b8fa1f35.xlsx', 'sheets/chartset-006/xlsx/088_To-do_list_with_progress_tracker_Use_this_template_8c438912.xlsx', 'sheets/chartset-007/xlsx/037_Personal_money_tracker_a57957bb.xlsx', 'sheets/chartset-007/xlsx/040_Blood_pressure_tracker_872b6833.xlsx', 'sheets/chartset-007/xlsx/082_Project_to_do_list_28f80082.xlsx', 'sheets/chartset-007/xlsx/083_Project_tracker_Use_this_template_b38d057c.xlsx', 'sheets/chartset-008/xlsx/023_Waterfall_Chart_Template_for_Excel_349f7689.xlsx', 'sheets/chartset-009/xlsx/015_Free_Gantt_Chart_Template_for_Excel_414e86bf.xlsx', 'sheets/chartset-009/xlsx/024_Free_Kids_Chore_Chart_Template_ad74bb34.xlsx', 'sheets/chartset-009/xlsx/085_Simple_Gantt_chart_d65b8377.xlsx', 'sheets/chartset-010/xlsx/047_Date_tracker_Gantt_chart_bf34f3a8.xlsx', 'sheets/chartset-010/xlsx/072_Gantt_project_planner_dde00e33.xlsx', 'sheets/chartset-011/xlsx/028_Budget_summary_report_4aeefd13.xlsx', 'sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx', 'sheets/chartset-011/xlsx/071_Four-week_project_timeline_Use_this_template_4f05db49.xlsx', 'sheets/chartset-012/xlsx/036_Simple_to-do_list_Use_this_template_ba44373b.xlsx', 'sheets/chartset-013/xlsx/019_Free_Blood_Sugar_Chart_for_Excel_-_Track_Your_Blood_Sugar_Level_36f4a782.xlsx', 'sheets/chartset-014/xlsx/027_Simple_personal_cash_flow_statement_675c6584.xlsx', 'sheets/chartset-014/xlsx/038_Baby_growth_chart_bb9cd672.xlsx', 'sheets/chartset-014/xlsx/039_Baby_growth_tracker_e295ae56.xlsx', 'sheets/done-003/xlsx/VOR Candidate Discontinuance List 2026-01-08.xlsx', 'sheets/done-011/xlsx/Application_Compliance_Checklist_5_Apr_2021.xlsx', 'sheets/table-001/xlsx/FAA-2019-0995-0002_attachment_2.xlsx']
+  of those, whose formula contains #REF! (the reference cannot evaluate it either): 18
+  can-paint and free of #REF!: 97 covering 53558 cells in 21 documents
+refused rules containing #REF!: 18 in 3 documents, 1901 cells
+refused cells covered (sum of sqref areas): 60341
+refused cells covered, can-paint rules only: 55459
+hidden/veryHidden sheet refused rules: 0
+refused rules missing/invalid dxf paint: 3
+refused rules whose sqref misses the value-bearing range: 2
+refused rules whose sqref misses the walked extent: 1
+refused rules on a sheet that states a print area: 22
+refused rules whose sqref misses a stated print area: 0
+refused rules with formula count != 1: 0
+refused rules with no usable dxfId: 0
+
+function set, un-expanded: ABS, AND, COLUMN, EOMONTH, ISBLANK, ISERROR, LEN, MID, MOD, NOT, ROUNDDOWN, ROW, TODAY, _XLFN.ISFORMULA
+function set, after defined-name expansion: ABS, AND, COLUMN, EOMONTH, INT, ISBLANK, ISERROR, LEN, MEDIAN, MID, MOD, NOT, ROUNDDOWN, ROW, TODAY, _XLFN.ISFORMULA
+defined names referenced directly by a rule: Actual, ActualBeyond, Cash_Minimum, FlagPercent, MaxDiastolic, MaxSystolic, PercentComplete, PercentCompleteBeyond, Plan, period_selected, task_end, task_progress, task_start, valHEnd, valHStart
+further names reached transitively: PeriodInActual, PeriodInPlan
+unresolved names: 

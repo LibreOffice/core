@@ -1,0 +1,557 @@
+<title>Where X-Ray.Office Differs</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@500;600&display=swap">
+<style>
+:root {
+  color-scheme: light;
+  --ground:    #eef0f3;
+  --surface:   #ffffff;
+  --surface-2: #f7f8fa;
+  --line:      #d9dde3;
+  --line-soft: #e6e9ee;
+  --ink:       #14171c;
+  --ink-2:     #4a545f;
+  --ink-3:     #78838f;
+  --ref:       #2b3138;
+  --pl:        #2a78d6;
+  --pl-soft:   #e2edfb;
+  --sev-1:     #b3261e;   /* severe   */
+  --sev-2:     #a8570f;   /* major    */
+  --sev-3:     #8a6d16;   /* moderate */
+  --sev-4:     #4a545f;   /* minor    */
+  --sev-1-bg:  #fbe6e4;
+  --sev-2-bg:  #fbeee0;
+  --sev-3-bg:  #f7f2dd;
+  --sev-4-bg:  #eef0f3;
+  --ok:        #14804a;
+  --ok-bg:     #e3f3ea;
+  --shadow:    0 1px 2px rgba(20,23,28,.05), 0 8px 24px -16px rgba(20,23,28,.35);
+  --rule:      1px solid var(--line);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --ground:    #101319;
+    --surface:   #171b22;
+    --surface-2: #1d222a;
+    --line:      #2b323c;
+    --line-soft: #232932;
+    --ink:       #eef1f5;
+    --ink-2:     #a8b3c0;
+    --ink-3:     #7d8895;
+    --ref:       #cbd3dc;
+    --pl:        #3987e5;
+    --pl-soft:   #16273c;
+    --sev-1:     #e97a72;
+    --sev-2:     #dd9a55;
+    --sev-3:     #cbb44e;
+    --sev-4:     #a8b3c0;
+    --sev-1-bg:  #331a18;
+    --sev-2-bg:  #33240f;
+    --sev-3-bg:  #2c280f;
+    --sev-4-bg:  #232932;
+    --ok:        #3fbb7d;
+    --ok-bg:     #12291d;
+    --shadow:    0 1px 2px rgba(0,0,0,.4), 0 10px 28px -18px rgba(0,0,0,.9);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ground:    #101319;
+  --surface:   #171b22;
+  --surface-2: #1d222a;
+  --line:      #2b323c;
+  --line-soft: #232932;
+  --ink:       #eef1f5;
+  --ink-2:     #a8b3c0;
+  --ink-3:     #7d8895;
+  --ref:       #cbd3dc;
+  --pl:        #3987e5;
+  --pl-soft:   #16273c;
+  --sev-1:     #e97a72;
+  --sev-2:     #dd9a55;
+  --sev-3:     #cbb44e;
+  --sev-4:     #a8b3c0;
+  --sev-1-bg:  #331a18;
+  --sev-2-bg:  #33240f;
+  --sev-3-bg:  #2c280f;
+  --sev-4-bg:  #232932;
+  --ok:        #3fbb7d;
+  --ok-bg:     #12291d;
+  --shadow:    0 1px 2px rgba(0,0,0,.4), 0 10px 28px -18px rgba(0,0,0,.9);
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0; background: var(--ground); color: var(--ink);
+  font-family: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  font-size: 15px; line-height: 1.6; -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 1180px; margin: 0 auto; padding: 0 24px 96px; }
+h1, h2, h3 { font-family: "IBM Plex Serif", ui-serif, Georgia, serif; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(30px, 4.4vw, 46px); font-weight: 600; letter-spacing: -.02em; line-height: 1.1; }
+h2 { font-size: 24px; font-weight: 600; letter-spacing: -.01em; }
+p { margin: 0; }
+code { font-family: "IBM Plex Mono", ui-monospace, Menlo, monospace; font-size: .92em; }
+em { font-style: italic; }
+.eyebrow {
+  font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 500;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--ink-3);
+}
+
+header.top { border-bottom: var(--rule); background: var(--surface); margin-bottom: 36px; }
+header.top .wrap { padding-top: 44px; padding-bottom: 32px; display: grid; gap: 18px; }
+.lede { color: var(--ink-2); font-size: 17px; max-width: 70ch; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px 30px; padding-top: 8px;
+         border-top: 1px solid var(--line-soft); margin-top: 4px; }
+.fact { display: flex; align-items: baseline; gap: 8px; }
+.fact b { font-family: "IBM Plex Mono", monospace; font-size: 15px; font-weight: 600;
+          font-variant-numeric: tabular-nums; }
+.fact span { font-size: 12.5px; color: var(--ink-3); }
+
+
+.revision {
+  border-left: 3px solid var(--ok); background: var(--ok-bg); color: var(--ink-2);
+  padding: 13px 16px; font-size: 14px; border-radius: 0 3px 3px 0; max-width: 76ch;
+}
+.revision b { color: var(--ink); }
+
+section { margin-top: 44px; }
+.sechead { display: grid; gap: 8px; margin-bottom: 18px; max-width: 76ch; }
+.sechead p { color: var(--ink-2); }
+
+.panels { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
+.panel { background: var(--surface); border: var(--rule); border-radius: 4px;
+         box-shadow: var(--shadow); padding: 20px 22px; }
+.panel h3 { font-family: "IBM Plex Sans", sans-serif; font-size: 14px; margin-bottom: 3px; }
+.panel .cap { font-size: 12.5px; color: var(--ink-3); margin-bottom: 12px; }
+
+.classrow { display: grid; grid-template-columns: minmax(120px, 12em) 1fr 2.6em;
+            align-items: center; gap: 12px; padding: 5px 0; font-size: 13px; }
+.classrow + .classrow { border-top: 1px solid var(--line-soft); }
+.classlabel { color: var(--ink-2); }
+.classtrack { height: 10px; background: var(--surface-2); border-radius: 3px; overflow: hidden; }
+.classfill { height: 100%; background: var(--pl); border-radius: 3px; }
+.classnum { text-align: right; font-family: "IBM Plex Mono", monospace;
+            font-variant-numeric: tabular-nums; color: var(--ink-2); }
+
+.famgrid { display: grid; gap: 0; }
+.famrow { display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+          padding: 8px 0; border-bottom: 1px solid var(--line-soft); font-size: 13.5px; }
+.famrow:last-child { border-bottom: 0; }
+.famrow span { color: var(--ink-2); }
+.famrow b { font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums;
+            font-weight: 500; }
+
+/* ---------- controls ---------- */
+.controls {
+  position: sticky; top: 0; z-index: 20; background: var(--ground);
+  padding: 12px 0 10px; border-bottom: var(--rule); margin-bottom: 20px;
+}
+.ctlrow { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center; }
+.ctlrow + .ctlrow { margin-top: 8px; }
+.ctllabel { font-family: "IBM Plex Mono", monospace; font-size: 10.5px; letter-spacing: .1em;
+            text-transform: uppercase; color: var(--ink-3); margin-right: 2px; min-width: 4.6em; }
+.chipbtn {
+  font: 500 12.5px/1 "IBM Plex Sans", sans-serif; color: var(--ink-2); background: var(--surface);
+  border: var(--rule); border-radius: 3px; padding: 7px 11px; cursor: pointer;
+}
+.chipbtn[aria-pressed="true"] { background: var(--ink); color: var(--ground); border-color: var(--ink); }
+.chipbtn:focus-visible { outline: 2px solid var(--pl); outline-offset: 2px; }
+#search {
+  font: 400 13px/1 "IBM Plex Sans", sans-serif; color: var(--ink); background: var(--surface);
+  border: var(--rule); border-radius: 3px; padding: 8px 11px; min-width: 220px; flex: 1;
+}
+#search:focus-visible { outline: 2px solid var(--pl); outline-offset: 1px; }
+#count { font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--ink-3);
+         margin-left: auto; font-variant-numeric: tabular-nums; }
+
+
+.chip.sev0 { background: var(--ok-bg); color: var(--ok); }
+.verdict-note { padding: 11px 18px; font-size: 13.5px; border-top: 1px solid var(--line-soft); }
+.verdict-note.vd { background: var(--ok-bg); color: var(--ok); }
+.verdict-note.lo { background: var(--pl-soft); color: var(--pl); }
+.verdict-note.cz { background: var(--sev-2-bg); color: var(--sev-2); }
+.verdict-note.vf { background: var(--surface-2); color: var(--ink-2); font-size: 12.5px; }
+.verdict-note.fx { background: var(--ok-bg); color: var(--ok); }
+.wasnote { display: block; margin-top: 8px; padding-top: 8px;
+           border-top: 1px dashed var(--line); color: var(--ink-3); font-size: 12.5px; }
+
+/* ---------- case cards ---------- */
+.case { background: var(--surface); border: var(--rule); border-radius: 4px;
+        box-shadow: var(--shadow); overflow: hidden; margin-bottom: 18px; }
+.case .head { padding: 14px 18px 12px; display: grid; gap: 9px; border-bottom: var(--rule); }
+.titleline { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; }
+.rank { font-family: "IBM Plex Mono", monospace; font-size: 12px; color: var(--ink-3);
+        font-variant-numeric: tabular-nums; }
+.titleline b { font-size: 14.5px; font-weight: 600; word-break: break-word; }
+.where { font-family: "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--ink-3);
+         word-break: break-all; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { font-family: "IBM Plex Mono", monospace; font-size: 11px; padding: 3px 8px;
+        border-radius: 2px; background: var(--surface-2); color: var(--ink-2);
+        border: 1px solid var(--line-soft); font-variant-numeric: tabular-nums; }
+.chip.sev { border-color: transparent; font-weight: 500; }
+.chip.sev1 { background: var(--sev-1-bg); color: var(--sev-1); }
+.chip.sev2 { background: var(--sev-2-bg); color: var(--sev-2); }
+.chip.sev3 { background: var(--sev-3-bg); color: var(--sev-3); }
+.chip.sev4 { background: var(--sev-4-bg); color: var(--sev-4); }
+.chip.tag { background: transparent; border-color: var(--line); color: var(--ink-3); }
+.pairlabels { display: grid; grid-template-columns: 1fr 1fr;
+  font-family: "IBM Plex Mono", monospace; font-size: 10.5px; letter-spacing: .09em;
+  text-transform: uppercase; color: var(--ink-3); border-bottom: 1px solid var(--line-soft); }
+.pairlabels span { padding: 7px 18px; }
+.pairlabels span + span { border-left: 1px solid var(--line-soft); }
+.pairimg { display: block; width: 100%; height: auto; background: var(--surface-2); }
+.read { padding: 13px 18px 15px; font-size: 13.5px; color: var(--ink-2);
+        border-top: 1px solid var(--line-soft); max-width: 96ch; }
+.read code { background: var(--surface-2); padding: 1px 4px; border-radius: 2px; }
+
+.notes { display: grid; gap: 1px; background: var(--line); border: var(--rule);
+         border-radius: 4px; overflow: hidden; }
+.note { background: var(--surface); padding: 16px 20px; display: grid; gap: 5px; }
+.note h3 { font-family: "IBM Plex Sans", sans-serif; font-size: 13.5px; }
+.note p { font-size: 13.5px; color: var(--ink-2); }
+#empty { display: none; padding: 40px 0; text-align: center; color: var(--ink-3); font-size: 14px; }
+footer { margin-top: 56px; padding-top: 20px; border-top: var(--rule); font-size: 12.5px; color: var(--ink-3); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="eyebrow">X-Ray.Office vs. headless LibreOffice &middot; every document that does not match &middot; revised</div>
+    <h1>Where X-Ray.Office Differs</h1>
+    <p class="lede">
+      All 946 documents in the sample corpus were rendered twice &mdash; once by headless
+      LibreOffice, once by X-Ray.Office &mdash; and compared page by page at 150&nbsp;dpi.
+      754 came out clean. These are the other <b>192</b>: every one that shows a pixel defect
+      or paginates differently, worst first, each with the divergent page side by side and a
+      reading of what actually went wrong.
+    </p>
+    <div class="revision">
+      <b>Since this sweep, 26 fixes have landed and every document below is
+      accounted for.</b> 11 are measurably fixed against the same banked reference, 29 are
+      reference-version divergences, 9 are the reference's own fault, and the remaining 143 are
+      open with a named cause rather than a symptom &mdash; the largest being the advance-width
+      divergence, which is architectural. Two root causes found here had no patch and were fixed
+      directly: anchored frames painted in document order instead of by <code>relativeHeight</code>,
+      which made five documents look like they had lost content they were in fact drawing; and an
+      unset page zoom read as 1% rather than 100%, which drew a spreadsheet's header and footer at
+      0.120&nbsp;pt. <b>The pairs below are the sweep's renderings and are not re-rendered.</b>
+      <br><br>
+      <b>Revised twice, and the second pass needed no reference at all.</b> An eight-lane
+      source investigation moved <b>29</b> cases out of the defect list entirely &mdash; they
+      are reference-version divergences, where X-Ray.Office is correct for the LibreOffice the
+      project develops against and this sweep's reference is a release behind &mdash; re-tagged
+      <b>3</b> as the reference's fault and <b>corrected 11 readings</b> the measurements
+      disproved. A second pass then re-checked the catalogue against evidence that is a
+      statement about <em>our own output</em> &mdash; what our PDF's content stream holds, in
+      what order it paints, at what size &mdash; which is as true of 26.2 as of 24.2. That
+      found <b>one cause behind five separate readings</b> (content drawn, then painted over),
+      corrected <b>3</b> more, and <b>upheld 7</b>. Every correction carries its original text
+      beneath it.
+    </div>
+    <div class="facts" id="facts"></div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section id="how">
+  <div class="sechead">
+    <h2>How to read this</h2>
+    <p>
+      Each entry shows <b>LibreOffice on the left, X-Ray.Office on the right</b>, at the page where
+      the two diverge most. The order is severity: documents with a pixel defect first, ranked by
+      how badly the worst page's structure diverges, then the documents whose pages match but
+      whose page counts do not. Every reading below is a description of what the two images show
+      &mdash; not a diagnosis of the code behind it.
+    </p>
+  </div>
+  <div class="panels">
+    <div class="panel">
+      <h3>What the divergences are</h3>
+      <div class="cap">A document can appear in several classes. Derived from the readings, not from the metrics.</div>
+      <div id="classchart"></div>
+    </div>
+    <div class="panel">
+      <h3>Where they fall</h3>
+      <div class="cap">Documents not matching, against the size of each category.</div>
+      <div class="famgrid" id="famgrid"></div>
+      <div class="cap" style="margin: 14px 0 8px">Severity, by the worst page's structural similarity</div>
+      <div class="famgrid" id="sevgrid"></div>
+    </div>
+  </div>
+</section>
+
+<section id="list">
+  <div class="sechead">
+    <h2>The 192</h2>
+  </div>
+  <div class="controls">
+    <div class="ctlrow">
+      <span class="ctllabel">Category</span>
+      <div id="famfilter" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+      <input id="search" type="search" placeholder="Filter by file name or by what went wrong&hellip;"
+             aria-label="Filter cases">
+      <span id="count"></span>
+    </div>
+    <div class="ctlrow">
+      <span class="ctllabel">Defect</span>
+      <div id="tagfilter" style="display:flex;gap:6px;flex-wrap:wrap"></div>
+    </div>
+  </div>
+  <div id="cases"></div>
+  <div id="empty">Nothing matches those filters.</div>
+</section>
+
+<section id="caveats">
+  <div class="sechead"><h2>What this list is not</h2></div>
+  <div class="notes" id="caveats-list"></div>
+</section>
+
+<footer>
+  946 documents &middot; 28,366 reference pages &middot; first five pages of each compared, page counts
+  compared in full. LibreOffice 24.2.7.2 headless at 150&nbsp;dpi is the reference throughout;
+  a divergence from it is a divergence from the reference, not necessarily from Microsoft Office.
+</footer>
+</main>
+
+<script>
+const CASES = /*__CASES__*/;
+const FAM = { docs: "Documents", sheets: "Spreadsheets", slides: "Presentations" };
+const TAGLABEL = {
+  "version-divergence": "version divergence",
+  "paint-order": "paint order",
+  "fixed": "fixed since",
+  "reflow": "reflow / geometry",
+  "content-missing": "content missing",
+  "field-values": "field values",
+  "text-style": "text styling",
+  "pagination": "page count",
+  "overlap-clip": "overlap / clipping",
+  "table-rules": "rules &amp; borders",
+  "list-markers": "list markers",
+  "missing-graphics": "graphics missing",
+  "chart": "charts",
+  "shape-fallback": "shape fallback",
+  "lo-broken": "reference at fault",
+};
+const el = (t, c, h) => { const n = document.createElement(t); if (c) n.className = c;
+                          if (h !== undefined) n.innerHTML = h; return n; };
+
+function severity(c) {
+  if (c.version_divergence) return { rank: 6, cls: "sev0", label: "not a defect" };
+  if (c.tags.includes("lo-broken")) return { rank: 6, cls: "sev0", label: "reference at fault" };
+  if (c.kind === "pagination") return { rank: 5, cls: "sev4", label: "page count only" };
+  const s = c.worst.ssim;
+  if (s < 0.50) return { rank: 1, cls: "sev1", label: "severe" };
+  if (s < 0.65) return { rank: 2, cls: "sev2", label: "major" };
+  if (s < 0.80) return { rank: 3, cls: "sev3", label: "moderate" };
+  return { rank: 4, cls: "sev4", label: "minor" };
+}
+CASES.forEach((c) => { c.sev = severity(c); });
+
+/* ---------------- masthead ---------------- */
+{
+  const byFam = {};
+  for (const c of CASES) byFam[c.family] = (byFam[c.family] ?? 0) + 1;
+  const facts = [
+    ["946", "documents rendered"],
+    ["754", "matched"],
+    [String(CASES.length), "did not"],
+    [String(CASES.filter((c) => c.kind === "pixel").length), "with a pixel defect"],
+    [String(CASES.filter((c) => c.kind === "pagination").length), "page count only"],
+  ];
+  const host = document.getElementById("facts");
+  for (const [b, s] of facts) host.append(el("div", "fact", `<b>${b}</b><span>${s}</span>`));
+}
+
+/* ---------------- class chart ---------------- */
+{
+  const counts = {};
+  for (const c of CASES) for (const t of c.tags) counts[t] = (counts[t] ?? 0) + 1;
+  const rows = Object.entries(counts).sort((a, b) => b[1] - a[1]);
+  const max = rows[0][1];
+  const host = document.getElementById("classchart");
+  for (const [tag, n] of rows) {
+    const row = el("div", "classrow");
+    row.append(el("div", "classlabel", TAGLABEL[tag] ?? tag));
+    const track = el("div", "classtrack");
+    const fill = el("div", "classfill");
+    fill.style.width = (n / max * 100) + "%";
+    track.append(fill);
+    row.append(track);
+    row.append(el("div", "classnum", String(n)));
+    host.append(row);
+  }
+}
+
+/* ---------------- family + severity tallies ---------------- */
+{
+  const TOTAL = { docs: 337, sheets: 307, slides: 302 };
+  const byFam = {};
+  for (const c of CASES) byFam[c.family] = (byFam[c.family] ?? 0) + 1;
+  const host = document.getElementById("famgrid");
+  for (const f of ["docs", "sheets", "slides"]) {
+    host.append(el("div", "famrow",
+      `<span>${FAM[f]}</span><b>${byFam[f] ?? 0} <span style="color:var(--ink-3)">of ${TOTAL[f]}</span></b>`));
+  }
+  const sev = {};
+  for (const c of CASES) sev[c.sev.label] = (sev[c.sev.label] ?? 0) + 1;
+  const shost = document.getElementById("sevgrid");
+  for (const k of ["not a defect", "reference at fault", "severe", "major", "moderate",
+                   "minor", "page count only"]) {
+    if (!sev[k]) continue;
+    shost.append(el("div", "famrow", `<span>${k}</span><b>${sev[k]}</b>`));
+  }
+}
+
+/* ---------------- filters + list ---------------- */
+const state = { fam: "all", tag: "all", q: "" };
+const host = document.getElementById("cases");
+const countEl = document.getElementById("count");
+const emptyEl = document.getElementById("empty");
+
+function buildCard(c) {
+  const box = el("div", "case");
+  const head = el("div", "head");
+  head.append(el("div", "titleline",
+    `<span class="rank">#${String(c.rank).padStart(3, "0")}</span>`
+    + `<b>${c.name}</b>`
+    + `<span class="where">${c.dir} &middot; page ${c.page} of ${c.ref_pages}</span>`));
+  const chips = el("div", "chips");
+  chips.append(el("span", "chip sev " + c.sev.cls, c.sev.label));
+  chips.append(el("span", "chip", FAM[c.family] + " &middot; ." + c.ext));
+  if (c.kind === "pixel") {
+    chips.append(el("span", "chip", "SSIM " + c.worst.ssim.toFixed(3)));
+    chips.append(el("span", "chip", "MAE " + c.worst.mae.toFixed(3)));
+    // 99 is the clamp the comparator applies when the reference page has no ink
+    // at all; printing it as a ratio would read as a measurement.
+    const ir = Number(c.worst.ink_ratio);
+    chips.append(el("span", "chip", ir >= 99 ? "ink &gt; 10&times; ref"
+                                             : "ink &times;" + ir.toFixed(2)));
+    chips.append(el("span", "chip", `${c.defect_pages} of ${c.compared} pages`));
+  }
+  if (c.page_delta !== 0) {
+    chips.append(el("span", "chip",
+      `pages ${c.engine_pages} vs ${c.ref_pages}`));
+  }
+  for (const t of c.tags) chips.append(el("span", "chip tag", TAGLABEL[t] ?? t));
+  head.append(chips);
+  box.append(head);
+  box.append(el("div", "pairlabels",
+    "<span>LibreOffice &mdash; reference</span><span>X-Ray.Office</span>"));
+  const img = el("img", "pairimg");
+  img.src = c.image;
+  img.loading = "lazy";
+  img.decoding = "async";
+  img.alt = `${c.name}, page ${c.page}: LibreOffice on the left, X-Ray.Office on the right`;
+  box.append(img);
+  if (c.version_divergence) {
+    box.append(el("div", "verdict-note vd",
+      "<b>Not a defect &mdash; a reference-version divergence.</b> " + c.version_divergence
+      + " X-Ray.Office is calibrated against LibreOffice 26.2.4.2; this sweep's reference is "
+      + "24.2.7.2."));
+  }
+  if (c.retag) {
+    box.append(el("div", "verdict-note lo",
+      "<b>Reference at fault.</b> " + c.retag + "."));
+  }
+  if (c.outcome === "fixed") {
+    box.append(el("div", "verdict-note fx",
+      "<b>Fixed since this sweep.</b> " + c.outcome_why
+      + ". The pair above is the sweep's rendering, not this one."));
+  }
+  if (c.paint_order) {
+    box.append(el("div", "verdict-note cz",
+      "<b>Cause: paint order.</b> The pixels read as missing content, but "
+      + c.paint_order
+      + " Confirmed three ways \u2014 stream order, a uniformly flat patch where the text "
+      + "should be, and the crop beside the reference's."));
+  }
+  if (c.verified) {
+    box.append(el("div", "verdict-note vf",
+      "<b>Reading verified.</b> " + c.verified + "."));
+  }
+  box.append(el("div", "read", c.analysis));
+  return box;
+}
+
+function render() {
+  const q = state.q.trim().toLowerCase();
+  const shown = CASES.filter((c) =>
+    (state.fam === "all" || c.family === state.fam)
+    && (state.tag === "all" || c.tags.includes(state.tag))
+    && (!q || c.name.toLowerCase().includes(q) || c.dir.toLowerCase().includes(q)
+        || c.analysis.toLowerCase().includes(q)
+        || (c.version_divergence ?? "").toLowerCase().includes(q)
+        || (c.retag ?? "").toLowerCase().includes(q)
+        || (c.paint_order ?? "").toLowerCase().includes(q)
+        || (c.outcome_why ?? "").toLowerCase().includes(q)));
+  host.replaceChildren(...shown.map(buildCard));
+  countEl.textContent = `${shown.length} of ${CASES.length}`;
+  emptyEl.style.display = shown.length ? "none" : "block";
+}
+
+{
+  const fams = [["all", "All"], ["docs", FAM.docs], ["sheets", FAM.sheets], ["slides", FAM.slides]];
+  const fhost = document.getElementById("famfilter");
+  for (const [key, label] of fams) {
+    const b = el("button", "chipbtn", label);
+    b.setAttribute("aria-pressed", String(key === "all"));
+    b.addEventListener("click", () => {
+      state.fam = key;
+      [...fhost.children].forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+      render();
+    });
+    fhost.append(b);
+  }
+  const counts = {};
+  for (const c of CASES) for (const t of c.tags) counts[t] = (counts[t] ?? 0) + 1;
+  const thost = document.getElementById("tagfilter");
+  const entries = [["all", "All", CASES.length],
+                   ...Object.entries(counts).sort((a, b) => b[1] - a[1])
+                     .map(([t, n]) => [t, TAGLABEL[t] ?? t, n])];
+  for (const [key, label, n] of entries) {
+    const b = el("button", "chipbtn", `${label} <span style="opacity:.6">${n}</span>`);
+    b.setAttribute("aria-pressed", String(key === "all"));
+    b.addEventListener("click", () => {
+      state.tag = key;
+      [...thost.children].forEach((x) => x.setAttribute("aria-pressed", String(x === b)));
+      render();
+    });
+    thost.append(b);
+  }
+  const s = document.getElementById("search");
+  s.addEventListener("input", () => { state.q = s.value; render(); });
+}
+render();
+
+/* ---------------- caveats ---------------- */
+{
+  const notes = [
+    ["The reference is a release behind the code under test &mdash; and that explains 29 of these",
+     "This sweep's ground truth is <b>LibreOffice 24.2.7.2</b>; X-Ray.Office is developed against "
+     + "<b>26.2.4.2</b>, and 63 of 534 documents change reference page count across that gap. "
+     + "So a rule the tree implements <em>correctly</em> for 26.2 shows up here as a defect. "
+     + "The proof is cleanest on slides, where the autofit table records a 20.013/20.409&nbsp;pt "
+     + "pair measured on 26.2.4.2, X-Ray.Office draws exactly that pair, and this reference draws "
+     + "21.005/21.005; and on spreadsheets, where our page counts for the three documents known "
+     + "to have moved are 449, 88 and 201 &mdash; the 26.2 answers, exactly. A 26.2 binary is not "
+     + "installable on this image, so the sweep keeps 24.2 and marks the divergences rather than "
+     + "quietly re-baselining onto a third version."],
+    ["It is not a bug list",
+     "Several documents appear here more than once over: one wrong measurement early in a page shifts everything after it, so a single defect can mark five pages divergent and three documents from the same template can share one cause. Read it as a list of <em>documents that differ</em>, not of distinct defects."],
+    ["Six of these are LibreOffice's failures, not X-Ray.Office's",
+     "On six documents the reference is the broken rendering &mdash; a timeline whose header columns LibreOffice drops, a slide whose text it overlaps, a deck whose tables it renders as an empty page &mdash; and X-Ray.Office draws them correctly. They are listed because the measurement is against LibreOffice, and they are tagged <em>reference at fault</em> so they can be filtered out."],
+    ["Only the first five pages of each document were compared",
+     "3,243 page pairs out of 28,366 reference pages. Page counts are compared in full, which is why several entries here are page-count-only: their first five pages match and the document still ends at a different length."],
+    ["The readings describe the images, not the code",
+     "Each note says what the two renderings show. Where it names a mechanism &mdash; a field resolving to its stored value, a numbering counter advancing on unnumbered rows &mdash; that is the reading the image supports, and the next step is to check it in the source, not to act on it."],
+  ];
+  const host2 = document.getElementById("caveats-list");
+  for (const [h, p] of notes) host2.append(el("div", "note", `<h3>${h}</h3><p>${p}</p>`));
+}
+</script>

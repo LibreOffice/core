@@ -1,0 +1,8 @@
+deep   ref  arm A: baselines [54.5, 80.0, 105.5, 131.0] pitches [25.5, 25.5, 25.5]
+deep   ref  arm B: baselines [54.5, 80.0, 99.5, 122.0] pitches [25.5, 19.5, 22.5]
+deep   ours arm A: baselines [54.5, 80.0, 105.5, 131.0] pitches [25.5, 25.5, 25.5]
+deep   ours arm B: baselines [54.5, 80.0, 99.5, 122.0] pitches [25.5, 19.5, 22.5]
+deep2  ref  arm A: baselines [54.5, 80.0, 105.5, 131.0] pitches [25.5, 25.5, 25.5]
+deep2  ref  arm B: baselines [54.5, 77.0, 99.5, 122.0] pitches [22.5, 22.5, 22.5]
+deep2  ours arm A: baselines [54.5, 80.0, 105.5, 131.0] pitches [25.5, 25.5, 25.5]
+deep2  ours arm B: baselines [54.5, 77.0, 99.5, 122.0] pitches [22.5, 22.5, 22.5]

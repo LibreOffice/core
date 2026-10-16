@@ -1,0 +1,9 @@
+# The witness's title, line for line, in points. 26.2.4.2's spans include the
+# trailing space of every line but the last, which this tree's do not -- hence
+# the flat ~6.4 pt on lines 1-4 and 0.03 on line 5.
+line	before	after	reference
+Regulations Governing the	316.58	303.40	309.77
+Status, Basic Rights and Duties	(broke after "and")	351.93	358.79
+of Officials other than	(began with "Duties")	248.22	254.57
+Secretariat Officials, and	294.24	281.94	288.30
+Experts on Mission	227.56	218.09	218.06

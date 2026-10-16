@@ -1,0 +1,40 @@
+== centring
+243 workbooks scanned
+  horizontalCentered: 170 sheets in 73 documents
+  verticalCentered: 11 sheets in 9 documents
+  either: 73 documents
+
+== separators
+worksheet shape text bodies: 615 in 47 documents
+  holding a line separator in an a:t: 19 bodies, 9 documents, 38 separators
+    sheets/chartset-004/xlsx/DynamicBubbleChart.xlsx
+    sheets/chartset-006/xlsx/070_Equipment_inventory_list_Use_this_template_fd524c8a.xlsx
+    sheets/chartset-007/xlsx/037_Personal_money_tracker_a57957bb.xlsx
+    sheets/chartset-007/xlsx/054_Problem_analysis_with_Pareto_chart_11058329.xlsx
+    sheets/chartset-008/xlsx/051_Manufacturer_defect_analysis_53db27ea.xlsx
+    sheets/chartset-013/xlsx/049_Expenses_calculator_c351f3d0.xlsx
+    sheets/done-004/xlsx/Part_375_Operators.xlsx
+    sheets/done-005/xlsx/Part_129_Operators.xlsx
+    sheets/done-008/xlsx/TDA_Smoke-Detectors.xlsx
+
+== shapebox
+shapes           644 shapes in  49 documents
+xdr:style        583 shapes in  36 documents
+a:ln             454 shapes in  46 documents
+fill             421 shapes in  32 documents
+line-noFill      233 shapes in   0 documents
+line             205 shapes in  21 documents
+noFill            29 shapes in   9 documents
+
+presets: [('rect', 206), ('roundRect', 106), ('round1Rect', 28), ('ellipse', 24), ('star5', 22), ('smileyFace', 22), ('heart', 22), ('cloud', 22), ('pie', 22), ('sun', 22), ('lightningBolt', 22), ('irregularSeal1', 22), ('verticalScroll', 22), ('flowChartDelay', 15), ('round2SameRect', 7), ('diamond', 6), ('pentagon', 6), ('snip2DiagRect', 6), ('triangle', 4), ('hexagon', 4), ('plus', 4), ('homePlate', 4), ('snip1Rect', 3), ('accentCallout1', 3), ('trapezoid', 2), ('parallelogram', 2), ('octagon', 2), ('rightBrace', 1)]
+colour references: [('fill:sysClr', 242), ('line:schemeClr', 181), ('fill:schemeClr', 151), ('fill:prstClr', 19), ('line:prstClr', 19), ('fill:srgbClr', 9), ('line:sysClr', 4), ('line:srgbClr', 1)]
+
+== overflow
+vertOverflow="clip"     589 bodies in  37 documents
+horzOverflow="clip"     509 bodies in  34 documents
+horzOverflow="overflow"    7 bodies in  34 documents
+vertOverflow="overflow"    7 bodies in  37 documents
+
+No body states horzOverflow without vertOverflow, so reading the horizontal attribute
+could not change one corpus document even if LibreOffice read it. It does not.
+

@@ -1,0 +1,10 @@
+ref/
+ours/
+base/
+*.pdf
+*.png
+__pycache__/
+toc-righttab.docx
+fine-ref/
+fine-ours/
+toc-fine.docx

@@ -1,0 +1,285 @@
+diff --git a/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.AutoSpacing.cs b/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.AutoSpacing.cs
+--- a/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.AutoSpacing.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.AutoSpacing.cs
+@@ -51,7 +51,11 @@
+         ArgumentNullException.ThrowIfNull(blocks);
+         if (!collapsesSpacing) return;
+ 
+-        SuppressWithinList(blocks);
++        // One walk in document order, cells included, because LibreOffice's own memory of "the last
++        // numbered paragraph" is reader-global and survives a cell boundary. Walking each cell as its
++        // own little flow was the defect: a list that runs to the end of a cell never met the
++        // unnumbered paragraph that hands its margin back, so every such list closed up.
++        new ListRun().Walk(blocks);
+ 
+         // The flow's own first paragraph, and then every cell's edges, which the walk reaches through
+         // the tables. A flow beginning with a table has no first paragraph of its own: the paragraph
+@@ -60,124 +64,186 @@
+         {
+             blocks[0] = new Ww8LayoutBlock(WithoutSpaceBefore(first));
+         }
+-
+-        for (int i = 0; i < blocks.Count; i++)
+-        {
+-            if (blocks[i].Table is { } table) blocks[i] = new Ww8LayoutBlock(WithCellEdges(table));
+-        }
+     }
+ 
+-    /// <summary>The same rules over one table's cells, and over any table nested in them.</summary>
+-    private static Ww8LayoutTable WithCellEdges(Ww8LayoutTable table)
++    /// <summary>
++    /// The run of numbered paragraphs the walk is inside, and where its margin has to be given back.
++    /// </summary>
++    /// <remarks>
++    /// <para>
++    /// LibreOffice zeroes both auto margins of every numbered paragraph and then gives the lower one
++    /// back to whichever item turned out to be the last, by remembering the previous numbered
++    /// paragraph and restoring its lower margin when the rule changes or the numbering stops
++    /// (<c>SwWW8ImplReader::FinalizeTextNode</c>, <c>ww8par.cxx</c>:2627-2673). The memory is a member
++    /// of the reader, not of a cell, which is why this is one walk rather than one per flow.
++    /// </para>
++    /// <para>
++    /// <strong>A cell's last paragraph is zeroed but never remembered.</strong>
++    /// <c>WW8TabDesc::SetPamInCell</c> (<c>ww8par2.cxx</c>:2908-2934) forces that paragraph's lower
++    /// spacing to nought on the way into the next cell, so the item the restore lands on is the one
++    /// before it. Measured against LibreOffice's own flat-ODF export of <c>FlightLaws.doc</c>, whose
++    /// four-bullet <em>Ground Mode</em> cell puts <c>fo:margin-bottom="0.1945in"</c> on the
++    /// <em>third</em> bullet and nought on the fourth, and likewise on the ninth of ten in
++    /// <em>Flight Mode</em>, the second of three in <em>Flare Mode</em> and the first of the two that
++    /// close the <em>Protections</em> cell. Six groups, six agreements. A list run that ends inside a
++    /// cell — because a heading follows it there — keeps the ordinary rule and gives the margin to its
++    /// own last item.
++    /// </para>
++    /// <para>
++    /// The claim this replaces was that <c>FlightLaws.doc</c> holds empty paragraphs in its cells that
++    /// we drop. It holds none: between <c>Is active until shortly after liftoff.</c> and
++    /// <c>After touchdown, …</c> the piece table has a single <c>U+000D</c>, and the gap the reference
++    /// draws there is this margin.
++    /// </para>
++    /// </remarks>
++    private sealed class ListRun
+     {
+-        List<Ww8LayoutRow> rows = new(table.Rows.Count);
++        /// <summary>
++        /// Always the HTML value: every caller is already behind the <c>CollapsesSpacing</c> test,
++        /// which is the same condition <c>GetParagraphAutoSpace</c> branches on to choose between the
++        /// two.
++        /// </summary>
++        private static readonly Length AutoSpacing =
++            Length.FromTwips(Ww8LayoutFormat.HtmlAutoSpacingTwips);
++
++        /// <summary>The list the remembered paragraph belongs to, or nought for none.</summary>
++        private int _rule;
+ 
+-        foreach (Ww8LayoutRow row in table.Rows)
+-        {
+-            List<Ww8LayoutCell> cells = new(row.Cells.Count);
++        /// <summary>The list holding the remembered paragraph, so its margin can be given back.</summary>
++        private List<Ww8LayoutBlock>? _remembered;
+ 
+-            foreach (Ww8LayoutCell cell in row.Cells)
+-            {
+-                List<Ww8LayoutBlock> blocks = [.. cell.Blocks];
++        /// <summary>Where in that list it sits.</summary>
++        private int _at = -1;
+ 
+-                SuppressWithinList(blocks);
+-
+-                // "The first paragraph in a cell with upper autospacing has upper spacing set to 0", and
+-                // the last with lower autospacing likewise — LibreOffice's own comments, and its own
+-                // ordering: both run after the list rules and so overrule them.
+-                if (blocks.Count > 0 && blocks[0].Paragraph is { HasAutoSpaceBefore: true } head)
++        /// <summary>Walks a run of blocks in document order, recursing into any table among them.</summary>
++        internal void Walk(List<Ww8LayoutBlock> blocks)
++        {
++            for (int index = 0; index < blocks.Count; index++)
++            {
++                if (blocks[index].Table is { } table)
+                 {
+-                    blocks[0] = new Ww8LayoutBlock(WithoutSpaceBefore(head));
++                    blocks[index] = new Ww8LayoutBlock(Table(table));
++                    continue;
+                 }
+ 
+-                if (blocks.Count > 0 && blocks[^1].Paragraph is { HasAutoSpaceAfter: true } tail)
+-                {
+-                    blocks[^1] = new Ww8LayoutBlock(WithoutSpaceAfter(tail));
+-                }
++                if (blocks[index].Paragraph is not { } paragraph) continue;
++
++                // Nothing at this level is a cell's last paragraph, so every one of them is eligible
++                // to be remembered.
++                Item(blocks, index, paragraph, remember: true);
++            }
++        }
++
++        /// <summary>One table's cells, in document order, with the cell edges applied to each.</summary>
++        private Ww8LayoutTable Table(Ww8LayoutTable table)
++        {
++            List<Ww8LayoutRow> rows = new(table.Rows.Count);
+ 
+-                for (int i = 0; i < blocks.Count; i++)
++            foreach (Ww8LayoutRow row in table.Rows)
++            {
++                List<Ww8LayoutCell> cells = new(row.Cells.Count);
++
++                foreach (Ww8LayoutCell cell in row.Cells)
+                 {
+-                    if (blocks[i].Table is { } nested)
++                    List<Ww8LayoutBlock> blocks = [.. cell.Blocks];
++
++                    for (int index = 0; index < blocks.Count; index++)
+                     {
+-                        blocks[i] = new Ww8LayoutBlock(WithCellEdges(nested));
++                        if (blocks[index].Table is { } nested)
++                        {
++                            blocks[index] = new Ww8LayoutBlock(Table(nested));
++                            continue;
++                        }
++
++                        if (blocks[index].Paragraph is not { } paragraph) continue;
++
++                        // A paragraph a cell mark ended is zeroed like any other and then left
++                        // alone: `SetPamInCell` has already forced its lower spacing to nought, so it
++                        // neither consults nor becomes the memory and the restore lands on the item
++                        // before it.
++                        Item(blocks, index, paragraph, remember: index != blocks.Count - 1);
+                     }
+-                }
+ 
+-                cells.Add(cell with { Blocks = blocks });
+-            }
++                    // "The first paragraph in a cell with upper autospacing has upper spacing set to
++                    // 0", and the last with lower autospacing likewise — LibreOffice's own comments,
++                    // and its own ordering: both run after the list rules and so overrule them.
++                    if (blocks.Count > 0 && blocks[0].Paragraph is { HasAutoSpaceBefore: true } head)
++                    {
++                        blocks[0] = new Ww8LayoutBlock(WithoutSpaceBefore(head));
++                    }
+ 
+-            rows.Add(row with { Cells = cells });
+-        }
++                    if (blocks.Count > 0 && blocks[^1].Paragraph is { HasAutoSpaceAfter: true } tail)
++                    {
++                        blocks[^1] = new Ww8LayoutBlock(WithoutSpaceAfter(tail));
++                    }
+ 
+-        return table with { Rows = rows };
+-    }
++                    cells.Add(cell with { Blocks = blocks });
++                }
+ 
+-    /// <summary>
+-    /// Closes up the auto margins between two items of one list.
+-    /// </summary>
+-    /// <remarks>
+-    /// <para>
+-    /// Word draws no auto space inside a list and one after it, which LibreOffice reaches by zeroing
+-    /// both margins of every numbered paragraph and then giving the margin back to whichever item turned
+-    /// out to be the last — it remembers the previous numbered paragraph and restores its lower margin
+-    /// when the rule changes or the numbering stops (<c>ww8par.cxx</c>:2627-2673).
+-    /// </para>
+-    /// <para>
+-    /// The restoration is unconditional on the remembered paragraph's own flags, as it is there: a
+-    /// paragraph only becomes the remembered one by having had an auto margin in the first place.
+-    /// </para>
+-    /// </remarks>
+-    private static void SuppressWithinList(List<Ww8LayoutBlock> blocks)
+-    {
+-        // Always the HTML value: every caller is already behind the `CollapsesSpacing` test, which is
+-        // the same condition `GetParagraphAutoSpace` branches on to choose between the two.
+-        Length autoSpacing = Length.FromTwips(Ww8LayoutFormat.HtmlAutoSpacingTwips);
++                rows.Add(row with { Cells = cells });
++            }
+ 
+-        int previousRule = 0;
+-        int previous = -1;
++            return table with { Rows = rows };
++        }
+ 
+-        for (int i = 0; i < blocks.Count; i++)
++        /// <summary>
++        /// <c>FinalizeTextNode</c>'s three branches over one paragraph.
++        /// </summary>
++        /// <param name="blocks">The list the paragraph sits in, rewritten in place.</param>
++        /// <param name="index">Where in it.</param>
++        /// <param name="paragraph">The paragraph itself.</param>
++        /// <param name="remember">
++        /// False for a cell's last paragraph, which LibreOffice's cell rule has already settled.
++        /// </param>
++        private void Item(
++            List<Ww8LayoutBlock> blocks, int index, Ww8LayoutParagraph paragraph, bool remember)
+         {
+-            if (blocks[i].Paragraph is not { } paragraph)
+-            {
+-                // A table breaks the run of paragraphs without ending the list the way a plain
+-                // paragraph does, so the remembered item is simply forgotten rather than restored.
+-                previousRule = 0;
+-                previous = -1;
+-                continue;
+-            }
+-
+             int rule = paragraph.ListRule;
+ 
+             if (rule != 0 && (paragraph.HasAutoSpaceBefore || paragraph.HasAutoSpaceAfter))
+             {
+                 if (paragraph.HasAutoSpaceAfter) paragraph = WithoutSpaceAfter(paragraph);
+-                if (previousRule != 0 && paragraph.HasAutoSpaceBefore)
++                if (_rule != 0 && paragraph.HasAutoSpaceBefore)
+                 {
+                     paragraph = WithoutSpaceBefore(paragraph);
+                 }
+ 
+-                blocks[i] = new Ww8LayoutBlock(paragraph);
++                blocks[index] = new Ww8LayoutBlock(paragraph);
+ 
+-                if (rule != previousRule && previous >= 0)
+-                {
+-                    blocks[previous] = new Ww8LayoutBlock(
+-                        WithSpaceAfter(blocks[previous].Paragraph!.Value, autoSpacing));
+-                }
++                if (!remember) return;
+ 
+-                previous = i;
+-                previousRule = rule;
+-                continue;
++                if (rule != _rule) Restore();
++
++                _remembered = blocks;
++                _at = index;
++                _rule = rule;
++                return;
+             }
+ 
+-            if (rule == 0 && previous >= 0)
++            if (!remember) return;
++
++            // The numbering stopped, so whichever item was last regains the margin that separates the
++            // list from what follows it. The restoration is unconditional on the remembered
++            // paragraph's own flags, as it is there: a paragraph only becomes the remembered one by
++            // having had an auto margin in the first place.
++            if (rule == 0) Restore();
++
++            _remembered = null;
++            _at = -1;
++            _rule = rule;
++        }
++
++        /// <summary>Hands the margin back to the remembered item, and forgets it.</summary>
++        private void Restore()
++        {
++            if (_remembered is { } list && _at >= 0 && _at < list.Count
++                && list[_at].Paragraph is { } item)
+             {
+-                blocks[previous] = new Ww8LayoutBlock(
+-                    WithSpaceAfter(blocks[previous].Paragraph!.Value, autoSpacing));
++                list[_at] = new Ww8LayoutBlock(WithSpaceAfter(item, AutoSpacing));
+             }
+ 
+-            previous = -1;
+-            previousRule = rule;
++            _remembered = null;
++            _at = -1;
+         }
+     }
+ 

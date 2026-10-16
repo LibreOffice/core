@@ -1,0 +1,12 @@
+# 26.2.4.2's own assembled format code for the fixture's four styles and for
+# `084_Service_invoice`, taken from its HTML export: `sdnum` is
+# "<language>;<system>;<format code>" and the third field is what SvNumberFormatter holds.
+source	assembled_code
+sheet-odf-numfmt-padding.ods	* #,##0
+sheet-odf-numfmt-padding.ods	0.00
+sheet-odf-numfmt-padding.ods	[>0]_(* #,##0_);[<0]_(* (#,##0);_(* "-"_);_(@_)
+sheet-odf-numfmt-padding.ods	[>0]_-* #,##0.00" "_€_-;[<0]-* #,##0.00" "_€_-;_-* -??" "_€_-;_-@_-
+084_Service_invoice	0.000%
+084_Service_invoice	M/D/YYYY
+084_Service_invoice	[>0]_("$"* #,##0.00_);[<0]_("$"* (#,##0.00);_("$"* -??_);_(@_)
+084_Service_invoice	[>0]_(* #,##0.00_);[<0]_(* (#,##0.00);_(* -??_);_(@_)

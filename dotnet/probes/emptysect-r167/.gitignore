@@ -1,0 +1,16 @@
+# Renders and conversions: regenerate with `build.py` and the reference. The measurement
+# worth keeping is `sections.txt`, which is the file's own section table.
+ref/
+ours/
+fx-ref/
+fx-ours/
+dc-ref/
+dc-ours/
+doc/
+rt/
+rt-ref/
+rt-ours/
+*.pdf
+*.fodt
+*.json
+__pycache__/

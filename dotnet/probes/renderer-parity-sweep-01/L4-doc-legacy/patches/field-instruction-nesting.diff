@@ -1,0 +1,181 @@
+diff --git a/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.Content.cs b/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.Content.cs
+--- a/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.Content.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.Content.cs
+@@ -128,7 +128,7 @@
+ 
+                 case Special.FieldBegin:
+                     state.FieldDepth++;
+-                    state.InFieldInstruction = true;
++                    state.FieldInstructions.Push(true);
+                     state.Instruction.Clear();
+                     // A hyperlink around a nested field keeps its target for the inner field's
+                     // result too, so the outer target is stacked rather than overwritten.
+@@ -136,7 +136,11 @@
+                     continue;
+ 
+                 case Special.FieldSeparator:
+-                    state.InFieldInstruction = false;
++                    // This field's instruction ends here; an enclosing field's does not. Popping and
++                    // pushing rather than clearing a single flag is the whole of the fix — see
++                    // <see cref="WalkState.FieldInstructions"/>.
++                    if (state.FieldInstructions.Count > 0) state.FieldInstructions.Pop();
++                    state.FieldInstructions.Push(false);
+                     // Where the cached result begins, which is the half of a field a reader saw.
+                     state.FieldResultOffset = OffsetIn(state);
+                     state.FieldResultStart = _marks.At(state.FieldResultOffset);
+@@ -152,7 +156,9 @@
+ 
+                 case Special.FieldEnd:
+                     if (state.FieldDepth > 0) state.FieldDepth--;
+-                    state.InFieldInstruction = false;
++                    // Restores the enclosing field's half rather than declaring the walk out of every
++                    // instruction: a TC field's instruction resumes after each nested SEQ closes.
++                    if (state.FieldInstructions.Count > 0) state.FieldInstructions.Pop();
+                     FlushRun(state);
+                     RecordField(state);
+                     state.CurrentHyperlink = state.Hyperlinks.Count > 0 ? state.Hyperlinks.Pop() : null;
+@@ -710,7 +716,37 @@
+         public Ww8ParagraphFormat ParagraphFormat { get; set; }
+ 
+         public int FieldDepth { get; set; }
+-        public bool InFieldInstruction { get; set; }
++
++        /// <summary>
++        /// One entry per open field, innermost last: true while that field is still in its
++        /// instruction.
++        /// </summary>
++        /// <remarks>
++        /// <para>
++        /// A single flag was wrong and the corpus says how. <c>150_5300_13_chg8.doc</c> writes each of
++        /// its headings as a <c>TC</c> field with no separator of its own and five <c>SEQ</c> fields
++        /// nested inside its instruction, each of which <em>has</em> one:
++        /// <c>U+0013 tc  \l 2 "  U+0013 seq level0 \r307 \*arabic U+0014 307 U+0015 . … U+0015</c>.
++        /// Clearing one flag at the inner field's <c>U+0015</c> declared the walk out of the outer
++        /// field's instruction too, so the rest of the <c>TC</c>'s code — <c>. RUNWAY OBJECT FREE
++        /// AREA"</c>, quotation mark and all — was emitted as body text on every numbered heading in
++        /// the document.
++        /// </para>
++        /// <para>
++        /// The innermost field decides, not "any enclosing field is in its instruction". A nested
++        /// field's cached result <em>is</em> drawn inside an outer instruction, because LibreOffice
++        /// inserts it through the field machinery rather than through the character reader that
++        /// <c>m_bIgnoreText</c> gates (<c>SwWW8ImplReader::ReadChars</c>,
++        /// <c>sw/source/filter/ww8/ww8par.cxx</c>:3395, against <c>Read_Field</c>'s own insertion).
++        /// It is what puts the second <c>307</c> in the reference's <c>307. OBJECT FREE AREA307.</c>
++        /// </para>
++        /// </remarks>
++        public Stack<bool> FieldInstructions { get; } = new();
++
++        /// <summary>Whether the innermost open field is still in its instruction.</summary>
++        public bool InFieldInstruction
++            => FieldInstructions.Count > 0 && FieldInstructions.Peek();
++
+         public StringBuilder Instruction { get; } = new();
+         public string? CurrentHyperlink { get; set; }
+         public Stack<string?> Hyperlinks { get; } = new();
+diff --git a/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.Layout.cs b/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.Layout.cs
+--- a/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.Layout.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.Layout.cs
+@@ -625,14 +625,33 @@
+         List<int> positions = [];
+         int start = 0;
+ 
+-        // How many fields deep the walk is inside an *instruction*. A field's text holds both halves —
+-        // the instruction and the cached result — separated by a U+0014, and only the second is shown.
+-        int instruction = 0;
+-
+-        // The fields the walk is inside, innermost last, by type. Separate from `instruction`, which
+-        // counts only the hidden half: a shape sits in the *result*, where `instruction` is already
+-        // back to nought and the field is still open. Nested fields are why it is a stack and not a
+-        // single value — `IsInlineEscherHack` asks about the innermost one alone.
++        // One entry per open field, innermost last: true while that field is still in its own
++        // *instruction*. A field's text holds both halves — the instruction and the cached result —
++        // separated by a U+0014, and only the second is shown.
++        //
++        // A counter was wrong here and the corpus says how. `150_5300_13_chg8.doc` writes each numbered
++        // heading as a TC field with no separator of its own, holding five SEQ fields inside its
++        // instruction that each *have* one:
++        //
++        //     U+0013 tc  \l 2 " U+0013 seq level0 \r307 \*arabic U+0014 307 U+0015 . … U+0015
++        //
++        // A counter decremented at both a U+0014 and a U+0015 is decremented twice for a nested field
++        // it was only incremented once for, so the inner field's end declared the walk out of the
++        // *outer* field's instruction: `. RUNWAY OBJECT FREE AREA"` was drawn on every heading, and the
++        // inner SEQ's own result was suppressed instead. Measured against the reference's
++        // `307. OBJECT FREE AREA307.` on page 4 of that document, and on `chg10` and `chg12` with it.
++        //
++        // The innermost field decides, not "any enclosing field is in an instruction": a nested field's
++        // cached result *is* drawn inside an outer instruction, because LibreOffice inserts it through
++        // the field machinery rather than through the character reader `m_bIgnoreText` gates
++        // (`SwWW8ImplReader::ReadChars`, `ww8par.cxx`:3395). That is what puts the second `307` in the
++        // reference's heading.
++        Stack<bool> fieldInstructions = new();
++
++        // The fields the walk is inside, innermost last, by type. Separate from `fieldInstructions`,
++        // which describes only the hidden half: a shape sits in the *result*, where the field is still
++        // open. Nested fields are why it is a stack and not a single value — `IsInlineEscherHack` asks
++        // about the innermost one alone.
+         (Ww8FieldTypes fieldTypes, int fieldBase) = FieldTypesOf(body);
+         Stack<int> openFields = new();
+ 
+@@ -645,7 +664,7 @@
+         List<Layout.PageFieldSpan> pageFields = [];
+ 
+         // How many enclosing fields had their result replaced by a computed one, and which they were.
+-        // A count for the same reason `instruction` is one — fields nest, and the result of an outer
++        // A count for the same reason the field stack is one — fields nest, and the result of an outer
+         // field can contain a whole inner field whose characters are equally not to be drawn — with the
+         // stack beside it so that the right field's end is the one that stops the suppression.
+         int computed = 0;
+@@ -676,7 +695,8 @@
+             // keeping the instruction puts the literal word "SHAPE" into the sentence — measured on
+             // `picture-flow.doc`, where it made our word count 191 against the reference's 190. The
+             // markers themselves are handled below and carry no width either way.
+-            if (instruction > 0 && character is not (Special.FieldBegin or Special.FieldSeparator
++            if (fieldInstructions.Count > 0 && fieldInstructions.Peek()
++                && character is not (Special.FieldBegin or Special.FieldSeparator
+                 or Special.FieldEnd or ParagraphMark or Special.SectionMark or CellMark))
+             {
+                 continue;
+@@ -754,7 +774,7 @@
+                 case Special.FieldBegin:
+                     // Nested fields are legal and Word writes them — a hyperlink around a cross
+                     // reference is two — so this counts rather than toggling.
+-                    instruction++;
++                    fieldInstructions.Push(true);
+                     openFields.Push(fieldTypes.At(position - fieldBase) ?? 0);
+                     replacedFields.Push(false);
+                     fieldResults.Push(-1);
+@@ -762,9 +782,11 @@
+ 
+                 case Special.FieldSeparator:
+                 {
+-                    // The instruction ends and the cached result begins. A field with no separator has
+-                    // no result, and its instruction stays hidden until its end.
+-                    if (instruction > 0) instruction--;
++                    // The instruction ends and the cached result begins — for *this* field. A field
++                    // with no separator has no result, and its instruction stays hidden until its end,
++                    // which is why the entry is replaced rather than popped.
++                    if (fieldInstructions.Count > 0) fieldInstructions.Pop();
++                    fieldInstructions.Push(false);
+ 
+                     if (fieldResults.Count > 0)
+                     {
+@@ -774,7 +796,7 @@
+ 
+                     // The one point at which a computed field can be written: the instruction has been
+                     // read, so the field's type is known, and the result it is replacing starts here.
+-                    if (instruction == 0
++                    if (fieldInstructions.Count == 1
+                         && computed == 0
+                         && openFields.Count > 0
+                         && openFields.Peek() == Ww8FieldTypes.FileName
+@@ -792,7 +814,7 @@
+ 
+                 case Special.FieldEnd:
+                 {
+-                    if (instruction > 0) instruction--;
++                    if (fieldInstructions.Count > 0) fieldInstructions.Pop();
+                     int closed = openFields.Count > 0 ? openFields.Pop() : 0;
+                     int resultAt = fieldResults.Count > 0 ? fieldResults.Pop() : -1;
+ 

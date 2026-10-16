@@ -1,0 +1,64 @@
+--- a/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChartPlot.cs
++++ b/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChartPlot.cs
+@@ -1163,7 +1163,7 @@
+                 theme, automatic.Styles);
+ 
+             series.Add(new ChartSeries(
+-                DrawingChartText.Label(Child(element, "tx")),
++                SeriesName(Child(element, "tx"), ranges),
+                 numbers,
+                 SuppressesFill(properties) ? null : FillOf(properties, theme) ?? autoFill,
+                 SuppressesLine(properties) ? null : LineOf(properties, theme) ?? autoLine,
+@@ -2441,6 +2441,52 @@
+         }
+ 
+         return DrawingChartText.Label(tx);
++    }
++
++    /// <summary>
++    /// A series' name: its live cells where the caller can reach them, else its cached points.
++    /// </summary>
++    /// <remarks>
++    /// <para>
++    /// <strong>A <c>c:tx/c:strRef</c> need not carry a <c>c:strCache</c> at all</strong>, and a
++    /// reader that only looks at the cache then leaves the series unnamed — which drops the
++    /// <em>whole legend</em>, because a legend is built from the entries that have a name.
++    /// Measured on <c>microsoft_learn_multi_chart_examples.xlsx</c>, whose five charts state
++    /// <c>&lt;tx&gt;&lt;strRef&gt;&lt;f&gt;'Examples'!B4&lt;/f&gt;&lt;/strRef&gt;&lt;/tx&gt;</c>
++    /// and no cache anywhere in the part: the reference draws <c>Product A/B/C</c> beside its
++    /// line, column and area charts and we drew no legend on any of the three.
++    /// </para>
++    /// <para>
++    /// The order is <see cref="ReadSequence"/>'s and for the same reason — the <c>c:f</c> wins and
++    /// the cache is the fallback, because <c>ExcelChartConverter::createDataSequence</c> resolves
++    /// the formula and falls back to the cached data only when there is no formula
++    /// (<c>sc/source/filter/oox/excelchartconverter.cxx:76-105</c>). With no resolver, which is
++    /// every host but Calc, this is exactly the cache-only reader it was.
++    /// </para>
++    /// <para>
++    /// Several cells join with one space, which is <see cref="DrawingChartText.Label"/>'s rule and
++    /// <c>datasourceconverter.cxx:50-73</c>'s.
++    /// </para>
++    /// </remarks>
++    private static string? SeriesName(XElement? tx, ChartRangeResolver? ranges)
++    {
++        if (tx is null) return null;
++
++        if (ranges is not null && FormulaOf(tx) is { } formula && ranges(formula) is { } live)
++        {
++            System.Text.StringBuilder joined = new();
++
++            foreach (string? cell in live.Text)
++            {
++                if (cell is not { Length: > 0 }) continue;
++                if (joined.Length > 0) joined.Append(' ');
++                joined.Append(cell);
++            }
++
++            if (joined.Length > 0) return joined.ToString();
++        }
++
++        return DrawingChartText.Label(tx);
+     }
+ 
+     /// <summary>Reads a data sequence: its live cells where the caller can reach them, else its

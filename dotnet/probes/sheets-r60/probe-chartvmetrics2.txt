@@ -1,0 +1,85 @@
+A. line pitch inside one chart text shape
+face              stated    drawn     pitch  pitch/em top-fixed
+Carlito             6.00     5.99     7.490    1.2504     1.780
+Carlito             8.00     8.00     9.730    1.2162     1.190
+Carlito            10.00    10.01    11.230    1.1219     0.590
+Carlito            11.00    11.00    13.460    1.2236     0.320
+Carlito            12.00    11.99    14.220    1.1860     0.000
+Carlito            14.00    13.99    17.220    1.2309    -0.590
+Carlito            16.00    15.89    19.450    1.2240    -1.190
+Carlito            18.00    18.01    21.720    1.2060    -1.810
+Carlito            20.00    19.99    24.680    1.2346    -2.410
+Carlito            24.00    23.89    29.180    1.2214    -3.590
+Carlito            28.00    27.90    33.670    1.2068    -4.780
+Carlito            32.00    31.89    39.660    1.2437    -5.990
+Carlito            40.00    39.89    47.860    1.1998    -8.360
+Liberation Sans     6.00     5.99     6.730    1.1235     1.790
+Liberation Sans     8.00     8.00     8.990    1.1238     1.190
+Liberation Sans    10.00    10.01    11.230    1.1219     0.590
+Liberation Sans    11.00    11.00    12.720    1.1564     0.320
+Liberation Sans    12.00    11.99    12.720    1.0609     0.000
+Liberation Sans    14.00    13.99    15.720    1.1237    -0.590
+Liberation Sans    16.00    15.89    17.220    1.0837    -1.190
+Liberation Sans    18.00    18.01    20.190    1.1210    -1.810
+Liberation Sans    20.00    19.99    22.450    1.1231    -2.400
+Liberation Sans    24.00    23.89    26.940    1.1277    -3.590
+Liberation Sans    28.00    27.90    30.680    1.0996    -4.780
+Liberation Sans    32.00    31.89    35.910    1.1261    -5.990
+Liberation Sans    40.00    39.89    44.130    1.1063    -8.360
+Liberation Serif    6.00     5.99     6.730    1.1235     1.790
+Liberation Serif    8.00     8.00     8.990    1.1238     1.190
+Liberation Serif   10.00    10.01    11.230    1.1219     0.590
+Liberation Serif   11.00    11.00    11.960    1.0873     0.310
+Liberation Serif   12.00    11.99    12.720    1.0609     0.000
+Liberation Serif   14.00    13.99    15.720    1.1237    -0.590
+Liberation Serif   16.00    15.89    17.960    1.1303    -1.190
+Liberation Serif   18.00    18.01    19.450    1.0800    -1.810
+Liberation Serif   20.00    19.99    22.450    1.1231    -2.400
+Liberation Serif   24.00    23.89    26.940    1.1277    -3.590
+Liberation Serif   28.00    27.90    30.680    1.0996    -4.780
+Liberation Serif   32.00    31.89    35.170    1.1029    -5.990
+Liberation Serif   40.00    39.89    43.400    1.0880    -8.370
+
+B. first baseline of a one-line CENTER label, against the stated size
+  Carlito          dy1/ds = -0.3354 em   per-anchor: -0.3356 -0.3355 -0.3354 -0.3352 -0.3352
+      at  6.00 pt: h = 1.2504  =>  a = h/2 - slope = 0.9606
+      at  8.00 pt: h = 1.2162  =>  a = h/2 - slope = 0.9435
+      at 10.00 pt: h = 1.1219  =>  a = h/2 - slope = 0.8963
+      at 11.00 pt: h = 1.2236  =>  a = h/2 - slope = 0.9472
+      at 12.00 pt: h = 1.1860  =>  a = h/2 - slope = 0.9284
+      at 14.00 pt: h = 1.2309  =>  a = h/2 - slope = 0.9508
+      at 16.00 pt: h = 1.2240  =>  a = h/2 - slope = 0.9474
+      at 18.00 pt: h = 1.2060  =>  a = h/2 - slope = 0.9384
+      at 20.00 pt: h = 1.2346  =>  a = h/2 - slope = 0.9527
+      at 24.00 pt: h = 1.2214  =>  a = h/2 - slope = 0.9461
+      at 28.00 pt: h = 1.2068  =>  a = h/2 - slope = 0.9388
+      at 32.00 pt: h = 1.2437  =>  a = h/2 - slope = 0.9572
+      at 40.00 pt: h = 1.1998  =>  a = h/2 - slope = 0.9353
+  Liberation Sans  dy1/ds = -0.3427 em   per-anchor: -0.3427 -0.3427 -0.3427 -0.3426 -0.3425
+      at  6.00 pt: h = 1.1235  =>  a = h/2 - slope = 0.9045
+      at  8.00 pt: h = 1.1238  =>  a = h/2 - slope = 0.9046
+      at 10.00 pt: h = 1.1219  =>  a = h/2 - slope = 0.9036
+      at 11.00 pt: h = 1.1564  =>  a = h/2 - slope = 0.9209
+      at 12.00 pt: h = 1.0609  =>  a = h/2 - slope = 0.8731
+      at 14.00 pt: h = 1.1237  =>  a = h/2 - slope = 0.9045
+      at 16.00 pt: h = 1.0837  =>  a = h/2 - slope = 0.8845
+      at 18.00 pt: h = 1.1210  =>  a = h/2 - slope = 0.9032
+      at 20.00 pt: h = 1.1231  =>  a = h/2 - slope = 0.9042
+      at 24.00 pt: h = 1.1277  =>  a = h/2 - slope = 0.9065
+      at 28.00 pt: h = 1.0996  =>  a = h/2 - slope = 0.8925
+      at 32.00 pt: h = 1.1261  =>  a = h/2 - slope = 0.9057
+      at 40.00 pt: h = 1.1063  =>  a = h/2 - slope = 0.8958
+  Liberation Serif dy1/ds = -0.3381 em   per-anchor: -0.3381 -0.3381 -0.3381 -0.3380 -0.3380
+      at  6.00 pt: h = 1.1235  =>  a = h/2 - slope = 0.8999
+      at  8.00 pt: h = 1.1238  =>  a = h/2 - slope = 0.9000
+      at 10.00 pt: h = 1.1219  =>  a = h/2 - slope = 0.8990
+      at 11.00 pt: h = 1.0873  =>  a = h/2 - slope = 0.8817
+      at 12.00 pt: h = 1.0609  =>  a = h/2 - slope = 0.8685
+      at 14.00 pt: h = 1.1237  =>  a = h/2 - slope = 0.8999
+      at 16.00 pt: h = 1.1303  =>  a = h/2 - slope = 0.9032
+      at 18.00 pt: h = 1.0800  =>  a = h/2 - slope = 0.8781
+      at 20.00 pt: h = 1.1231  =>  a = h/2 - slope = 0.8996
+      at 24.00 pt: h = 1.1277  =>  a = h/2 - slope = 0.9019
+      at 28.00 pt: h = 1.0996  =>  a = h/2 - slope = 0.8879
+      at 32.00 pt: h = 1.1029  =>  a = h/2 - slope = 0.8895
+      at 40.00 pt: h = 1.0880  =>  a = h/2 - slope = 0.8821

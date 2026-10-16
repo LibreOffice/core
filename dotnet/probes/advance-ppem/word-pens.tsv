@@ -1,0 +1,55 @@
+# pdf-width-quantisation. Measured 2026-09-06
+# 24.2.7.2: /usr/bin/soffice -> LibreOffice 24.2.7.2 420(Build:2)
+# 26.2.4.2: /opt/libreoffice26.2/program/soffice -> LibreOffice 26.2.4.2 0229ac93fcf0d7cbc6376066c6f35021cef002dc
+# ours: /home/user/wt-advance/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
+# fonts: system /usr/share/fonts, the tarball's Latin duplicates and Latin Noto aside
+
+## paginated.docx
+# the reference's declared /Widths against the face's own hmtx
+binary	face	glyphs	mean_declared_deficit_per_mille	all_truncated
+24.2.7.2	Carlito-Bold	15	0.6549	True
+24.2.7.2	Carlito-Regular	35	0.5669	True
+26.2.4.2	Carlito-Bold	15	0.6549	True
+26.2.4.2	Carlito-Regular	35	0.5669	True
+# where each word of the first line starts, in points
+word	24.2.7.2	26.2.4.2	ours
+Section	70.950	70.950	70.850
+1.	106.293	106.260	106.224
+kerning	117.117	117.095	117.063
+advance	152.779	152.746	152.765
+rasteriser	192.258	192.181	192.280
+layout	236.775	236.665	236.833
+ligature	266.948	266.827	267.024
+layout	303.226	303.083	303.327
+common	333.399	333.245	333.518
+advance	375.364	375.210	375.520
+add	414.854	414.645	415.035
+pay	434.159	433.928	434.350
+because	452.463	452.243	452.660
+separate	491.568	491.304	491.783
+
+## list-label-overrun.docx
+# the reference's declared /Widths against the face's own hmtx
+binary	face	glyphs	mean_declared_deficit_per_mille	all_truncated
+24.2.7.2	Carlito-Regular	26	0.4820	True
+26.2.4.2	Carlito-Regular	26	0.4820	True
+# where each word of the first line starts, in points
+word	24.2.7.2	26.2.4.2	ours
+A	56.800	56.800	56.700
+label	65.644	65.633	65.552
+wider	89.679	89.635	89.609
+than	117.608	117.542	117.571
+its	140.598	140.510	140.570
+stop.	153.578	153.479	153.568
+
+## tabbed.docx
+# the reference's declared /Widths against the face's own hmtx
+binary	face	glyphs	mean_declared_deficit_per_mille	all_truncated
+24.2.7.2	Carlito-Regular	48	0.5543	True
+26.2.4.2	Carlito-Regular	48	0.5543	True
+# where each word of the first line starts, in points
+word	24.2.7.2	26.2.4.2	ours
+Aa	70.950	70.950	70.850
+Bb	106.400	106.400	106.300
+Cc	141.850	141.850	141.750
+Dd	177.300	177.300	177.200

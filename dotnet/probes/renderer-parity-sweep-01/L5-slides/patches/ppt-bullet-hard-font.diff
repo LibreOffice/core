@@ -1,0 +1,108 @@
+diff --git a/dotnet/src/XRay.Office.Presentations/MsBinary/PptTextBody.cs b/dotnet/src/XRay.Office.Presentations/MsBinary/PptTextBody.cs
+index 0000000..0000000 100644
+--- a/dotnet/src/XRay.Office.Presentations/MsBinary/PptTextBody.cs
++++ b/dotnet/src/XRay.Office.Presentations/MsBinary/PptTextBody.cs
+@@ -56,11 +56,20 @@
+     private const uint StatesBulletHardColour = 0x0000_0004;
+ 
+     /// <summary>
++    /// The mask bit for <c>PPT_ParaAttr_BuHardFont</c>, which says whether the paragraph itself
++    /// decided that its bullet's face is stated rather than inherited from its text.
++    /// </summary>
++    private const uint StatesBulletHardFont = 0x0000_0002;
++
++    /// <summary>
+     /// <c>PPT_ParaAttr_BuHardColor</c>'s bit within the bullet-flags word — the second, counting
+     /// from <c>PPT_ParaAttr_BulletOn</c> at bit zero.
+     /// </summary>
+     private const ushort BulletHardColourFlag = 0x0004;
+ 
++    /// <summary><c>PPT_ParaAttr_BuHardFont</c>'s bit within the same word — the first.</summary>
++    private const ushort BulletHardFontFlag = 0x0002;
++
+     /// <summary>The mask bits a character run sets for its face, size and colour.</summary>
+     private const uint StatesFontIndex = 0x0001_0000;
+     private const uint StatesFontHeight = 0x0002_0000;
+@@ -188,7 +197,7 @@
+             MasterUnits(textOffset),
+             MasterUnits(bulletOffset) - MasterUnits(textOffset),
+             Language: null,
+-            Marker: Marker(properties, level, scheme, fonts, runs))
++            Marker: Marker(properties, level, scheme, fonts, runs, TextFontAt(run, characters, start)))
+         {
+             // Every binary paragraph, unconditionally -- and that is a measurement rather than a
+             // reading. `PPTParagraphObj::ApplyTo` puts the SvxLineSpacingItem (and with it
+@@ -254,7 +263,8 @@
+         PptParagraphLevel level,
+         PptColourScheme scheme,
+         PptFontTable fonts,
+-        List<SlideTextRun> runs)
++        List<SlideTextRun> runs,
++        ushort textFont)
+     {
+         bool bulleted = properties.HasBullet ?? level.HasBullet;
+         if (!bulleted || runs.Count == 0) return null;
+@@ -262,7 +272,28 @@
+         char character = properties.BulletCharacter
+                          ?? (level.BulletCharacter != 0 ? (char)level.BulletCharacter : '•');
+ 
+-        ushort font = properties.States(StatesBulletFont) ? properties.BulletFont : level.BulletFont;
++        // The face word is only the bullet's face when a separate flag says so, and the flag is
++        // PPT_ParaAttr_BuHardFont -- the exact counterpart of the BuHardColor rule below, and read
++        // the same way: the paragraph's own flag when its mask names it, otherwise the master
++        // level's. With the flag clear the word means nothing and the bullet is drawn in
++        // <em>the face of the first character of the text it labels</em>
++        // (<c>PPTParagraphObj::GetAttrib</c>, <c>svdfppt.cxx:5918-5942</c>, both the hard and the
++        // inherited branch: "it is the font used which assigned to the first character of the
++        // following text").
++        //
++        // Measured on <c>slides/done-014/ppt/Aerospace_Journey_of_Flight_Chapter_*.ppt</c> page 5,
++        // whose Body master level states <c>buFlags=1</c> -- BulletOn and nothing else -- beside a
++        // <c>buFont</c> of 0, Times New Roman. The reference draws every bullet on the page from
++        // <b>Liberation Sans</b>, the face of the Arial text beside it; we took the level's word at
++        // face value and drew them from Liberation Serif.
++        bool hardFont = properties.States(StatesBulletHardFont)
++            ? (properties.BulletFlags & BulletHardFontFlag) != 0
++            : (level.BulletFlags & BulletHardFontFlag) != 0;
++
++        ushort font = hardFont
++            ? properties.States(StatesBulletFont) ? properties.BulletFont : level.BulletFont
++            : textFont;
++
+         ushort height = properties.States(StatesBulletHeight)
+             ? properties.BulletHeight
+             : level.BulletHeight;
+@@ -301,6 +332,33 @@
+     }
+ 
+     /// <summary>
++    /// The typeface index in force at a paragraph's first character.
++    /// </summary>
++    /// <remarks>
++    /// What a bullet with no hard face of its own is drawn in. The character run covering the
++    /// paragraph's first character when it states a face, and the level's otherwise — which is
++    /// <c>PPTParagraphObj::GetAttrib</c>'s own pair of alternatives for
++    /// <c>PPT_ParaAttr_BulletFont</c> (<c>svdfppt.cxx:5929-5941</c>).
++    /// </remarks>
++    private static ushort TextFontAt(PptTextRun run, PptCharacterLevel level, int start)
++    {
++        int position = 0;
++
++        foreach (PptCharacterRun character in run.Characters)
++        {
++            int runEnd = position + character.Length;
++            if (start >= position && start < runEnd)
++            {
++                return character.States(StatesFontIndex) ? character.FontIndex : level.FontIndex;
++            }
++
++            position = runEnd;
++        }
++
++        return level.FontIndex;
++    }
++
++    /// <summary>
+     /// The runs covering a paragraph, each resolved against the master's level for what it does
+     /// not state.
+     /// </summary>

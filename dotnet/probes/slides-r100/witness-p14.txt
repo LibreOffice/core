@@ -1,0 +1,50 @@
+Inducement-to-Insurance-Business.ppt page 14 -- round 100's O34 witness.
+
+26.2.4.2's own flat-ODP of the file gives the title frame
+   <draw:frame presentation:style-name="pr21" svg:width="25.4cm" svg:height="7.509cm"
+               svg:x="4.233cm" svg:y="3.117cm" presentation:class="title">
+   pr21: draw:textarea-vertical-align="bottom"  draw:auto-grow-height="false"
+         fo:padding-top="0.127cm" fo:padding-bottom="0.127cm"
+and the page is 33.87 x 19.05 cm = 960 x 540 pt, so the title's text area runs from
+PDF y 448.05 down to 242.49 -- 205.6 pt tall.  Its paragraph is 9 wrapped lines of 28 pt
+at fo:line-height="90%" plus one empty line whose span states 54 pt, ~330 pt of block.
+
+The reference's topmost baseline is 107.1 pt ABOVE the text area's top edge and 15.2 pt
+above the top of the PAGE, and its lowest is 12.4 pt BELOW the bottom of the page.
+26.2.4.2 neither clips the block to the shape nor shrinks it nor drops a line.
+
+ ref size   26.2.4.2       base       head  head-ref
+   28.006    555.194    583.228    555.165    -0.029
+   28.006    555.194    583.228    555.165    -0.029
+   28.006    555.194    583.228    555.165    -0.029
+   28.006    524.948    552.983    524.920    -0.028
+   28.006    494.702    522.737    494.674    -0.028
+   28.006    464.457    492.491    464.428    -0.029
+   28.006    434.211    462.246    434.183    -0.028
+   28.006    403.965    432.000    403.937    -0.028
+   28.006    373.720    401.754    373.691    -0.029
+   28.006    343.474    371.509    343.446    -0.028
+   28.006    313.228    318.813    313.200    -0.028
+   20.013    271.502    271.474    271.474    -0.028
+   20.013    271.502    271.474    271.474    -0.028
+   20.013    254.693    254.665    254.665    -0.028
+   20.013    237.883    237.855    237.855    -0.028
+   20.013    221.074    221.046    221.046    -0.028
+   20.013    204.265    204.236    204.236    -0.029
+   20.013    187.455    187.427    187.427    -0.028
+   20.013    165.657    165.628    165.628    -0.029
+   20.013    148.847    148.819    148.819    -0.028
+   20.013    132.038    132.009    132.009    -0.029
+   20.013    110.239    110.211    110.211    -0.028
+   20.013     93.430     93.402     93.402    -0.028
+   20.013     76.620     76.592     76.592    -0.028
+   20.013     54.822     54.794     54.794    -0.028
+   20.013     38.013     37.984     37.984    -0.029
+   20.013     21.203     21.175     21.175    -0.028
+   20.013      4.394      4.365      4.365    -0.029
+   20.013    -12.416    -12.444    -12.444    -0.028
+
+All 29 shows agree to 0.03 pt at the head, where the base drew every 28 pt line
+28.03 pt higher -- one whole line further off the top of the page.  The block is
+bottom-anchored, so a taller block grows upward: the base measured the last text
+line at the 54 pt of the line break that ends it, and 26.2.4.2 skips that portion.

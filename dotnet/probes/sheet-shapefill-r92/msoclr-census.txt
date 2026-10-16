@@ -1,0 +1,11 @@
+    35    6 docs  fill scheme idx=80        18-02RD301_ILS_components_Master_9-13-18.xls, Hazard Analysis Template.xls, RMP 2011-2014 and Inventory.xls, T0A0D0000090006XLSE.xls, TICAPCapability_Final.xls, Template Pilot Logbook JAR-FCL V3.0.xls
+    29    3 docs  line scheme idx=64        EHEST-Pre-departure-checklist-Rev.-1-06-12-2016.xls, PC1000.xls, TICAPCapability_Final.xls
+    12    4 docs  fill literal              18-02RD301_ILS_components_Master_9-13-18.xls, AIM_OPR_LIST.xls, Background_Declaration_Template.xls, orbus_togaf_tool_csq.xls
+    11    2 docs  fill scheme idx=67        EHEST-Pre-departure-checklist-Rev.-1-06-12-2016.xls, PC1000.xls
+     6    5 docs  fill scheme idx=78        014_Contextures_chart_sample_991ecfc5.xls, EHEST-Pre-departure-checklist-Rev.-1-06-12-2016.xls, TOGAF9-Tool-ConfReqts-CSQ.xls, Template Pilot Logbook JAR-FCL V3.0.xls, orbus_togaf_tool_csq.xls
+     4    1 docs  fill scheme idx=9         PC1000.xls
+     3    1 docs  fill scheme idx=65        TICAPCapability_Final.xls
+     2    1 docs  line scheme idx=77        Template Pilot Logbook JAR-FCL V3.0.xls
+     2    1 docs  line literal              orbus_togaf_tool_csq.xls
+     1    1 docs  fill scheme idx=43        PC1000.xls
+     1    1 docs  fill scheme idx=22        TICAPCapability_Final.xls

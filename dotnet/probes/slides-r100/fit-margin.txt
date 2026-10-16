@@ -1,0 +1,47 @@
+How close the autofit search is to taking the next row down, on
+RESPA_-_Section_8_Webinar.ppt -- the register's named next O15 instrument.
+
+A temporary dump in SlideAutofit.Solve (since removed) printed, for every autofitted
+shape, the box height it fits against and the block height it measures at every one of
+constScaleLevels' twelve rows.  `margin` is available minus the height of the row the
+search settles on: how much taller our measured block would have to be for the reference's
+answer -- one row lower, one point smaller -- to be ours.  Hundredths of a millimetre.
+
+  margin  available  unscaled         row   height
+       7       9964     12016    0.85/0.8     9957
+     165       9964     10516   0.925/0.9     9799
+     234       9964     13296   0.775/0.8     9730
+     271       9964     11462    0.85/0.9     9693
+     275       9964     11850    0.85/0.9     9689
+     463       9964     12838    0.85/0.9     9501
+     476       9964     11092    0.85/0.9     9488
+     516       9964     11940    0.85/0.9     9448
+     532       9964     12905    0.85/0.9     9432
+     575       6635      7876    0.85/0.9     6060
+     640       9964     10808   0.925/0.9     9324
+     985       9964     10724   0.925/0.9     8979
+     986       9964     14176   0.775/0.8     8978
+    1145       9964     11229    0.85/0.9     8819
+    1252       9964     10448   0.925/0.9     8712
+    1288       9964     11264    0.85/0.9     8676
+    1487       9964     11060    0.85/0.9     8477
+    1547       9964     10248   0.925/0.9     8417
+    1667       9964     11964   0.925/0.9     8297
+       -       9964      8808    unscaled        0
+       -       9964      5776    unscaled        0
+       -       9964      7384    unscaled        0
+       -       9964      8216    unscaled        0
+       -       9964      7112    unscaled        0
+       -       9964      9300    unscaled        0
+       -       9964      6944    unscaled        0
+       -       9964      7792    unscaled        0
+       -       9964      9352    unscaled        0
+       -       9964      9944    unscaled        0
+       -       9964      9637    unscaled        0
+       -       9964      7792    unscaled        0
+       -      10921      8216    unscaled        0
+
+19 of the document's 32 autofitted shapes are scaled at all.
+The tightest margin is 7 hundredths of a millimetre -- 0.20 pt on a block of
+9957, 0.07 % -- so one row of constScaleLevels is decided there by less than a fifth of a
+point of measured block height.  That is the size of what O15 has left, on this document.

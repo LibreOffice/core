@@ -1,0 +1,50 @@
+===== Containers =====
+Test run for /home/user/wt-sheetdraw/dotnet/tests/XRay.Office.Containers.Tests/bin/Debug/net10.0/linux-x64/XRay.Office.Containers.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:   109, Skipped:     0, Total:   109, Duration: 247 ms - XRay.Office.Containers.Tests.dll (net10.0)
+===== Core =====
+Test run for /home/user/wt-sheetdraw/dotnet/tests/XRay.Office.Core.Tests/bin/Debug/net10.0/linux-x64/XRay.Office.Core.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:   544, Skipped:     0, Total:   544, Duration: 1 s - XRay.Office.Core.Tests.dll (net10.0)
+===== Markup =====
+Test run for /home/user/wt-sheetdraw/dotnet/tests/XRay.Office.Markup.Tests/bin/Debug/net10.0/linux-x64/XRay.Office.Markup.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:   259, Skipped:     0, Total:   259, Duration: 3 s - XRay.Office.Markup.Tests.dll (net10.0)
+===== OpenDocument =====
+Test run for /home/user/wt-sheetdraw/dotnet/tests/XRay.Office.OpenDocument.Tests/bin/Debug/net10.0/linux-x64/XRay.Office.OpenDocument.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:   160, Skipped:     0, Total:   160, Duration: 719 ms - XRay.Office.OpenDocument.Tests.dll (net10.0)
+===== Presentations =====
+Test run for /home/user/wt-sheetdraw/dotnet/tests/XRay.Office.Presentations.Tests/bin/Debug/net10.0/linux-x64/XRay.Office.Presentations.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:  1081, Skipped:     0, Total:  1081, Duration: 44 s - XRay.Office.Presentations.Tests.dll (net10.0)
+===== Rendering =====
+Test run for /home/user/wt-sheetdraw/dotnet/tests/XRay.Office.Rendering.Tests/bin/Debug/net10.0/linux-x64/XRay.Office.Rendering.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:   164, Skipped:     0, Total:   164, Duration: 4 s - XRay.Office.Rendering.Tests.dll (net10.0)
+===== Spreadsheets =====
+Test run for /home/user/wt-sheetdraw/dotnet/tests/XRay.Office.Spreadsheets.Tests/bin/Debug/net10.0/linux-x64/XRay.Office.Spreadsheets.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:  1308, Skipped:     0, Total:  1308, Duration: 4 s - XRay.Office.Spreadsheets.Tests.dll (net10.0)
+===== Text =====
+Test run for /home/user/wt-sheetdraw/dotnet/tests/XRay.Office.Text.Tests/bin/Debug/net10.0/linux-x64/XRay.Office.Text.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:   728, Skipped:     0, Total:   728, Duration: 8 s - XRay.Office.Text.Tests.dll (net10.0)
+===== Vector =====
+Test run for /home/user/wt-sheetdraw/dotnet/tests/XRay.Office.Vector.Tests/bin/Debug/net10.0/linux-x64/XRay.Office.Vector.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:   309, Skipped:     0, Total:   309, Duration: 1 s - XRay.Office.Vector.Tests.dll (net10.0)
+===== WordProcessing =====
+Test run for /home/user/wt-sheetdraw/dotnet/tests/XRay.Office.WordProcessing.Tests/bin/Debug/net10.0/linux-x64/XRay.Office.WordProcessing.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:  1938, Skipped:     0, Total:  1938, Duration: 1 m 3 s - XRay.Office.WordProcessing.Tests.dll (net10.0)

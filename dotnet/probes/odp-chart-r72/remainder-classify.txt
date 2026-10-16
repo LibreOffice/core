@@ -1,0 +1,53 @@
+=== slides/ceiling-001/odp/OnTrac_StarCertificationProgram-3Day.odp
+pages ours 15 ref 15
+  page  9  ref   250  ours   543   +293   ref images  2 ours  1   ref small fills    0 ours    0   our rotated lines   0
+  page 10  ref   150  ours  1333  +1183   ref images  2 ours  1   ref small fills    0 ours    0   our rotated lines   0
+=== slides/ceiling-002/odp/16 - UTM - (NASA).odp
+pages ours 37 ref 37
+  page  1  ref   194  ours   155    -39   ref images  4 ours  5   ref small fills    0 ours    0   our rotated lines   0
+  page  7  ref   898  ours  1490   +592   ref images  5 ours 42   ref small fills    0 ours   14   our rotated lines   0
+  page 29  ref     2  ours   550   +548   ref images  2 ours 14   ref small fills    0 ours   10   our rotated lines   0
+=== slides/ceiling-002/odp/8_P-Pavese_AIRBUS-ATB-journee-CRATB.odp
+pages ours 26 ref 26
+  page  5  ref   296  ours   530   +234   ref images  1 ours  0   ref small fills    0 ours   12   our rotated lines   0
+  page  6  ref   683  ours   952   +269   ref images  1 ours  0   ref small fills    0 ours   12   our rotated lines   0
+  page  8  ref   147  ours   131    -16   ref images  1 ours  1   ref small fills    0 ours    0   our rotated lines   0
+  page 16  ref   577  ours   662    +85   ref images  0 ours  0   ref small fills  122 ours    6   our rotated lines  36
+=== slides/ceiling-002/odp/Demick_JetBlue.odp
+pages ours 10 ref 10
+  page  4  ref   355  ours   451    +96   ref images 37550 ours 15807   ref small fills  170 ours   66   our rotated lines  23
+  page  5  ref   354  ours   426    +72   ref images 37550 ours 15807   ref small fills  210 ours   81   our rotated lines  27
+  page  6  ref   286  ours   232    -54   ref images 37550 ours 15807   ref small fills   16 ours   32   our rotated lines   1
+  page  7  ref   397  ours   407    +10   ref images 37550 ours 15807   ref small fills  156 ours   52   our rotated lines  23
+  page  8  ref   367  ours   331    -36   ref images 37550 ours 15807   ref small fills   16 ours   24   our rotated lines   2
+=== slides/chartset-008/odp/038_Competitive_Advantage_Card_for_PowerPoint_and_Google_Slides_373720f6.odp
+pages ours 3 ref 3
+  page  1  ref   684  ours   752    +68   ref images  1 ours  2   ref small fills   75 ours   11   our rotated lines   5
+  page  2  ref   684  ours   752    +68   ref images  1 ours  2   ref small fills   75 ours   11   our rotated lines   5
+=== slides/done-001/odp/Statement of Work presentation.odp
+pages ours 10 ref 10
+  page  3  ref    98  ours   118    +20   ref images  0 ours  0   ref small fills    0 ours    0   our rotated lines  14
+=== slides/done-002/odp/medicines_bulletin_february_2023_final.odp
+pages ours 1 ref 1
+  page  1  ref  3093  ours  2951   -142   ref images  5 ours  5   ref small fills    0 ours    0   our rotated lines   0
+=== slides/done-004/odp/0335fab9-79f0-4944-b92c-f223837ca2d8.odp
+pages ours 12 ref 12
+  page  6  ref   707  ours   612    -95   ref images  0 ours  0   ref small fills    0 ours    0   our rotated lines   0
+=== slides/done-005/odp/manufacturing_process_simulation_working_group_overview_2023.odp
+pages ours 7 ref 7
+  page  2  ref  1193  ours  1328   +135   ref images  1 ours  1   ref small fills    0 ours    0   our rotated lines   0
+=== slides/done-012/odp/Sean Monogue.odp
+pages ours 15 ref 15
+  page  3  ref   283  ours   257    -26   ref images  1 ours 22   ref small fills   24 ours    2   our rotated lines   0
+  page  8  ref   586  ours   494    -92   ref images  0 ours 21   ref small fills   24 ours    2   our rotated lines   0
+=== slides/done-014/odp/redac-sas-201509-asisp-research.odp
+pages ours 45 ref 45
+  page  2  ref   695  ours   476   -219   ref images  1 ours  1   ref small fills    0 ours    0   our rotated lines   0
+  page  7  ref  1193  ours   844   -349   ref images  2 ours  2   ref small fills    0 ours    0   our rotated lines   0
+  page 19  ref   635  ours   632     -3   ref images  1 ours  1   ref small fills    0 ours    0   our rotated lines   0
+  page 21  ref   464  ours   460     -4   ref images  1 ours  1   ref small fills    0 ours    0   our rotated lines   0
+=== slides/done-014/odp/vvsummit2022-Research-Roadmap-and-the-UML-3-Operational-Integration-Assessment.odp
+pages ours 33 ref 33
+=== slides/metrics-001/odp/Ramp Up Campaign - French.odp
+pages ours 6 ref 6
+  page  2  ref   246  ours   224    -22   ref images  1 ours  1   ref small fills    0 ours    0   our rotated lines   0

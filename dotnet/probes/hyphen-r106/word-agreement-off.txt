@@ -1,0 +1,25 @@
+word	len	reference	ours
+Quality	7	turned(text 5)	upright	DIFFERS
+Service	7	upright	upright	
+Thoughts	8	upright	upright	
+Strength	8	upright	upright	
+Splashed	8	upright	upright	
+Stretched	9	upright	upright	
+Strengths	9	upright	upright	
+Scratched	9	upright	upright	
+Straights	9	upright	upright	
+Screeched	9	turned(text 5)	upright	DIFFERS
+Squelched	9	turned(text 5)	upright	DIFFERS
+Marketing	9	turned(text 5)	upright	DIFFERS
+Efficiency	10	turned(text 5)	upright	DIFFERS
+Reputation	10	turned(outlined 77)	upright	DIFFERS
+Governance	10	turned(outlined 82)	turned(text 5)	
+Throughput	10	turned(outlined 82)	turned(text 5)	
+Excellence	10	turned(text 5)	upright	DIFFERS
+Resilience	10	turned(text 5)	upright	DIFFERS
+Stringency	10	turned(text 5)	upright	DIFFERS
+Consumption	11	turned(outlined 82)	turned(text 5)	
+Streamlined	11	turned(outlined 87)	turned(text 5)	
+Breakthrough	12	turned(outlined 92)	turned(text 5)	
+
+agree 13 of 22

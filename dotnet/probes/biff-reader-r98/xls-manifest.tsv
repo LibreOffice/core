@@ -1,0 +1,65 @@
+family	batch	path	ext	score	source	previous_batch	status	kind
+sheets	ceiling-001	sheets/ceiling-001/xls/Template Pilot Logbook JAR-FCL V3.0.xls	xls	691.4	xls/Template Pilot Logbook JAR-FCL V3.0.xls	batch-010	open	ceiling
+sheets	done-001	sheets/done-001/xls/REDAC_SCHEDULE_RPD_135.xls	xls	55.8	xls/REDAC_SCHEDULE_RPD_135.xls	batch-001	done	
+sheets	done-001	sheets/done-001/xls/Airplanes-MTOW.xls	xls	65.7	xls/Airplanes-MTOW.xls	batch-001	done	
+sheets	done-001	sheets/done-001/xls/RPD 155 REDAC SCHEDULE 2014-04-02.xls	xls	66.7	xls/RPD 155 REDAC SCHEDULE 2014-04-02.xls	batch-001	done	
+sheets	done-002	sheets/done-002/xls/P1636e.xls	xls	69.4	xls/P1636e.xls	batch-002	done	
+sheets	done-002	sheets/done-002/xls/2012-GA-Survey-Chapter-5-Tables-16Dec2013-V2.xls	xls	73.1	xls/2012-GA-Survey-Chapter-5-Tables-16Dec2013-V2.xls	batch-002	done	
+sheets	done-002	sheets/done-002/xls/REDAC_SCHEDULE_RPD_137.xls	xls	73.6	xls/REDAC_SCHEDULE_RPD_137.xls	batch-002	done	
+sheets	done-002	sheets/done-002/xls/2012-GA-Survey-Chapter-6-Tables-16Dec2013-V2.xls	xls	86.2	xls/2012-GA-Survey-Chapter-6-Tables-16Dec2013-V2.xls	batch-002	done	
+sheets	done-003	sheets/done-003/xls/RPA-Budgets-FY-17-19-20.xls	xls	87.1	xls/RPA-Budgets-FY-17-19-20.xls	batch-003	done	
+sheets	done-003	sheets/done-003/xls/programs contact list as of 07-01-10.xls	xls	93.2	xls/programs contact list as of 07-01-10.xls	batch-003	done	
+sheets	done-003	sheets/done-003/xls/4-12-Kings-Attachment-13-Application-Architecture-Security-Requirements.xls	xls	100.2	xls/4-12-Kings-Attachment-13-Application-Architecture-Security-Requirements.xls	batch-003	done	
+sheets	done-003	sheets/done-003/xls/disclosures_ecm.xls	xls	108.5	xls/disclosures_ecm.xls	batch-003	done	
+sheets	done-003	sheets/done-003/xls/NPA_21_21_Sentenced_Comments.xls	xls	111.5	xls/NPA_21_21_Sentenced_Comments.xls	batch-003	done	
+sheets	done-004	sheets/done-004/xls/permit-applications-determined-july-2015.xls	xls	117.7	xls/permit-applications-determined-july-2015.xls	batch-004	done	
+sheets	done-004	sheets/done-004/xls/NorwegianXPensionXFundXanalysisXexportsXandXLAWS-1.xls	xls	138.8	xls/NorwegianXPensionXFundXanalysisXexportsXandXLAWS-1.xls	batch-004	done	
+sheets	done-004	sheets/done-004/xls/flying-log-passenger-23rd-september-2014.xls	xls	166.3	xls/flying-log-passenger-23rd-september-2014.xls	batch-004	done	
+sheets	done-005	sheets/done-005/xls/SectorAdvisoryGroupandStrategyBoards.xls	xls	188.8	xls/SectorAdvisoryGroupandStrategyBoards.xls	batch-005	done	
+sheets	done-005	sheets/done-005/xls/cy10_primary_enplanements.xls	xls	188.9	xls/cy10_primary_enplanements.xls	batch-005	done	
+sheets	done-005	sheets/done-005/xls/Background_Declaration_Template.xls	xls	205.3	xls/Background_Declaration_Template.xls	batch-005	done	
+sheets	done-005	sheets/done-005/xls/Praktikastellen_-_chinesischsprachiger_Kulturraum.xls	xls	208.2	xls/Praktikastellen_-_chinesischsprachiger_Kulturraum.xls	batch-005	done	
+sheets	done-005	sheets/done-005/xls/apron-area.xls	xls	216.6	xls/apron-area.xls	batch-005	done	
+sheets	done-006	sheets/done-006/xls/WG7_NCWF_Skills_Table.XLS	xls	223.4	xls/WG7_NCWF_Skills_Table.XLS	batch-006	done	
+sheets	done-006	sheets/done-006/xls/Hazard Analysis Template.xls	xls	224.7	xls/Hazard Analysis Template.xls	batch-006	done	
+sheets	done-006	sheets/done-006/xls/ZenithAviation_AuctionList.xls	xls	224.9	xls/ZenithAviation_AuctionList.xls	batch-006	done	
+sheets	done-007	sheets/done-007/xls/CSA_CCM_v1.2.xls	xls	276.0	xls/CSA_CCM_v1.2.xls	batch-007	done	
+sheets	done-007	sheets/done-007/xls/ACRONYM.xls	xls	333.1	xls/ACRONYM.xls	batch-008	done	
+sheets	done-008	sheets/done-008/xls/Liste-Zertifizierung-ChemKlimaschutzV-RPT.xls	xls	366.6	xls/Liste-Zertifizierung-ChemKlimaschutzV-RPT.xls	batch-008	done	
+sheets	done-008	sheets/done-008/xls/data_20121018181533.xls	xls	389.6	xls/data_20121018181533.xls	batch-008	done	
+sheets	done-009	sheets/done-009/xls/6f9e605c-fded-11e3-bd0e-00144feab7de.xls	xls	443.8	xls/6f9e605c-fded-11e3-bd0e-00144feab7de.xls	batch-009	done	
+sheets	done-009	sheets/done-009/xls/cy01_state.xls	xls	559.5	xls/cy01_state.xls	batch-010	done	
+sheets	done-009	sheets/done-009/xls/INDEX_Digital_Transformation_Toolkits.xls	xls	563.9	xls/INDEX_Digital_Transformation_Toolkits.xls	batch-010	done	
+sheets	done-009	sheets/done-009/xls/EHEST-Pre-departure-checklist-Rev.-1-06-12-2016.xls	xls	584.3	xls/EHEST-Pre-departure-checklist-Rev.-1-06-12-2016.xls	batch-010	done	
+sheets	done-010	sheets/done-010/xls/PC1000.xls	xls	591.9	xls/PC1000.xls	batch-010	done	
+sheets	done-010	sheets/done-010/xls/TOGAF9-Tool-ConfReqts-CSQ.xls	xls	636.3	xls/TOGAF9-Tool-ConfReqts-CSQ.xls	batch-010	done	
+sheets	done-010	sheets/done-010/xls/cy06_primary_np_comm.xls	xls	653.9	xls/cy06_primary_np_comm.xls	batch-010	done	
+sheets	done-010	sheets/done-010/xls/RMP 2011-2014 and Inventory.xls	xls	712.4	xls/RMP 2011-2014 and Inventory.xls	batch-011	done	
+sheets	done-010	sheets/done-010/xls/Special-Procedures_2025-07-10.xls	xls	758.8	xls/Special-Procedures_2025-07-10.xls	batch-011	done	
+sheets	done-011	sheets/done-011/xls/T0A0D0000090006XLSE.xls	xls	769.2	xls/T0A0D0000090006XLSE.xls	batch-011	done	
+sheets	done-011	sheets/done-011/xls/List of EQS securities_0.xls	xls	775.3	xls/List of EQS securities_0.xls	batch-011	done	
+sheets	done-011	sheets/done-011/xls/SIL_TDB605.xls	xls	933.6	xls/SIL_TDB605.xls	batch-012	done	
+sheets	done-012	sheets/done-012/xls/SIL_TDB609.xls	xls	1039.4	xls/SIL_TDB609.xls	batch-013	done	
+sheets	done-012	sheets/done-012/xls/NPIAS_2007_App_A.xls	xls	1104.9	xls/NPIAS_2007_App_A.xls	batch-013	done	
+sheets	done-012	sheets/done-012/xls/npias_2009_appA.xls	xls	1154.2	xls/npias_2009_appA.xls	batch-013	done	
+sheets	done-013	sheets/done-013/xls/ECA Sinters.xls	xls	1249.8	xls/ECA Sinters.xls	batch-013	done	
+sheets	done-013	sheets/done-013/xls/aircraft_analysis_2016-04-27.xls	xls	1276.0	xls/aircraft_analysis_2016-04-27.xls	batch-014	done	
+sheets	done-013	sheets/done-013/xls/fy2011-aip-grants.xls	xls	1361.4	xls/fy2011-aip-grants.xls	batch-014	done	
+sheets	done-013	sheets/done-013/xls/18-02RD301_ILS_components_Master_9-13-18.xls	xls	1447.6	xls/18-02RD301_ILS_components_Master_9-13-18.xls	batch-014	done	
+sheets	done-013	sheets/done-013/xls/fy2010-aip-grants.xls	xls	1488.2	xls/fy2010-aip-grants.xls	batch-014	done	
+sheets	done-013	sheets/done-013/xls/capa-liste-nse-1.xls	xls	1547.9	xls/capa-liste-nse-1.xls	batch-014	done	
+sheets	done-014	sheets/done-014/xls/TICAPCapability_Final.xls	xls	1764.9	xls/TICAPCapability_Final.xls	batch-014	done	
+sheets	done-014	sheets/done-014/xls/NPIAS_App_A.xls	xls	1875.0	xls/NPIAS_App_A.xls	batch-015	done	
+sheets	done-014	sheets/done-014/xls/UASEventsNov2014-Aug2015.xls	xls	1978.3	xls/UASEventsNov2014-Aug2015.xls	batch-015	done	
+sheets	done-014	sheets/done-014/xls/7-memento-2015-transports-aeriens-b.xls	xls	2285.7	xls/7-memento-2015-transports-aeriens-b.xls	batch-016	done	
+sheets	done-015	sheets/done-015/xls/PA_Delaware.xls	xls	3020.0	xls/PA_Delaware.xls	batch-016	done	
+sheets	done-015	sheets/done-015/xls/underlying-holdings-emea-en_gb-monthly-holdings-state-street-emu-esg-screened-index-equity-fund.xls	xls	3037.6	xls/underlying-holdings-emea-en_gb-monthly-holdings-state-street-emu-esg-screened-index-equity-fund.xls	batch-016	done	
+sheets	done-015	sheets/done-015/xls/activespecs.xls	xls	3111.0	xls/activespecs.xls	batch-016	done	
+sheets	done-015	sheets/done-015/xls/laufende-nip-vorhaben-hyland.xls	xls	3474.3	xls/laufende-nip-vorhaben-hyland.xls	batch-016	done	
+sheets	done-015	sheets/done-015/xls/AIM_OPR_LIST.xls	xls	5232.9	xls/AIM_OPR_LIST.xls	batch-017	done	
+sheets	done-016	sheets/done-016/xls/environment-edb-docs-edb-emissions-databank.xls	xls	7755.1	xls/environment-edb-docs-edb-emissions-databank.xls	batch-017	done	
+sheets	missing-001	sheets/missing-001/xls/orbus_togaf_tool_csq.xls	xls	14431.4	xls/orbus_togaf_tool_csq.xls	batch-017	done	
+sheets	pagination-001	sheets/pagination-001/xls/grants-2005.xls	xls	2229.5	xls/grants-2005.xls	batch-015	done	
+sheets	pagination-001	sheets/pagination-001/xls/CIS_Debian_Linux_8_Benchmark_v1.0.0.xls	xls	4722.5	xls/CIS_Debian_Linux_8_Benchmark_v1.0.0.xls	batch-017	done	
+sheets	chartset-006	sheets/chartset-006/xls/011_Contextures_chart_sample_599b4392.xls	xls	134.0	officechartexamples[contextures-vertex42]:excel/011_Contextures_chart_sample_599b4392.xls		done	
+sheets	chartset-006	sheets/chartset-006/xls/014_Contextures_chart_sample_991ecfc5.xls	xls	107.3	officechartexamples[contextures-vertex42]:excel/014_Contextures_chart_sample_991ecfc5.xls		open	text

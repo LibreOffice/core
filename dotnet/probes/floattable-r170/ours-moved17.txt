@@ -1,0 +1,19 @@
+ours	float	flow	oursG	floatG	flowG	agrees	document
+warning: The `fitz` API is deprecated and will be removed in future. Use `import pymupdf` instead.
+1	1	1	19	19	10	float	084_Printable_Graph_Paper_Template_Editable_Layout_d66c6820.docx
+1	1	1	433	432	352	neither	018_Project_Timeline_Template_Editable_Format_e1cf1df5.docx
+2	2	1	190	188	171	neither	012_Project_Timeline_Template_Black_and_Brown_Theme_35c76550.docx
+1	1	1	626	625	556	neither	016_Project_Timeline_Template_Complete_Guide_7d36d09c.docx
+1	1	2	400	400	324	float	017_Project_Timeline_Template_Customizable_Format_5d5ca2e8.docx
+1	1	1	14	14	9	float	082_Printable_Graph_Paper_Template_Colored_Background_9092cf9b.docx
+1	1	1	309	308	292	neither	020_Project_Timeline_Template_Modern_Theme_0c215d87.docx
+2	2	1	203	203	186	float	015_Project_Timeline_Template_Colored_Background_6434b0e8.docx
+1	1	1	312	312	258	float	013_Project_Timeline_Template_Blue_Background_4ea3475e.docx
+1	1	1	832	832	210	float	011_Project_Timeline_Template_Beautiful_Theme_2336e680.docx
+4	4	4	6385	6385	6365	float	PAT-047 - Architecture and Detailed Design Assessment.docx
+2	2	2	3566	3570	3537	neither	part-147_approval list_20230119.docx
+32	32	31	59010	59010	59047	float	5709.16 ch.40_mgfinal.docx
+17	17	18	9907	9910	9953	neither	system_design__technical_architecture_template.docx
+5	5	7	2967	2967	2977	float	HC-Bulletin-template.docx
+166	165	166	270063	270009	270055	neither	OM template for non-complex NCC operators_August 2016.docx
+28	29	36	39524	39830	41705	neither	CRIF - SpÃ©cification technique - Socle applicatif.docx

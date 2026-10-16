@@ -1,0 +1,9 @@
+PC1000.xls, filled paths by colour
+  ours base   whole document: {'#FFFFFF': 22, '#FFFF99': 9}
+  ours after  whole document: {'#DFDFDF': 18, '#FFFF99': 9, '#FFFFFF': 4}
+  26.2.4.2    whole document: {'#FFFF99': 9, '#FFFFFF': 4, '#DFDFDF': 1}
+
+page 10 alone (the page the hatch is on):
+  ours base   {'#FFFFFF': 21}
+  ours after  {'#DFDFDF': 18, '#FFFFFF': 3}
+  26.2.4.2    {'#FFFFFF': 3, '#DFDFDF': 1}

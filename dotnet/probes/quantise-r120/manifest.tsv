@@ -1,0 +1,271 @@
+label	face	size	kind
+Q0	Liberation Sans	6	single
+Q1	Liberation Sans	6	double
+Q2	Liberation Sans	6	strike
+Q3	Liberation Sans	7	single
+Q4	Liberation Sans	7	double
+Q5	Liberation Sans	7	strike
+Q6	Liberation Sans	8	single
+Q7	Liberation Sans	8	double
+Q8	Liberation Sans	8	strike
+Q9	Liberation Sans	9	single
+Q10	Liberation Sans	9	double
+Q11	Liberation Sans	9	strike
+Q12	Liberation Sans	10	single
+Q13	Liberation Sans	10	double
+Q14	Liberation Sans	10	strike
+Q15	Liberation Sans	11	single
+Q16	Liberation Sans	11	double
+Q17	Liberation Sans	11	strike
+Q18	Liberation Sans	12	single
+Q19	Liberation Sans	12	double
+Q20	Liberation Sans	12	strike
+Q21	Liberation Sans	14	single
+Q22	Liberation Sans	14	double
+Q23	Liberation Sans	14	strike
+Q24	Liberation Sans	16	single
+Q25	Liberation Sans	16	double
+Q26	Liberation Sans	16	strike
+Q27	Liberation Sans	18	single
+Q28	Liberation Sans	18	double
+Q29	Liberation Sans	18	strike
+Q30	Liberation Sans	20	single
+Q31	Liberation Sans	20	double
+Q32	Liberation Sans	20	strike
+Q33	Liberation Sans	24	single
+Q34	Liberation Sans	24	double
+Q35	Liberation Sans	24	strike
+Q36	Liberation Sans	28	single
+Q37	Liberation Sans	28	double
+Q38	Liberation Sans	28	strike
+Q39	Liberation Sans	36	single
+Q40	Liberation Sans	36	double
+Q41	Liberation Sans	36	strike
+Q42	Liberation Sans	48	single
+Q43	Liberation Sans	48	double
+Q44	Liberation Sans	48	strike
+Q45	Liberation Serif	6	single
+Q46	Liberation Serif	6	double
+Q47	Liberation Serif	6	strike
+Q48	Liberation Serif	7	single
+Q49	Liberation Serif	7	double
+Q50	Liberation Serif	7	strike
+Q51	Liberation Serif	8	single
+Q52	Liberation Serif	8	double
+Q53	Liberation Serif	8	strike
+Q54	Liberation Serif	9	single
+Q55	Liberation Serif	9	double
+Q56	Liberation Serif	9	strike
+Q57	Liberation Serif	10	single
+Q58	Liberation Serif	10	double
+Q59	Liberation Serif	10	strike
+Q60	Liberation Serif	11	single
+Q61	Liberation Serif	11	double
+Q62	Liberation Serif	11	strike
+Q63	Liberation Serif	12	single
+Q64	Liberation Serif	12	double
+Q65	Liberation Serif	12	strike
+Q66	Liberation Serif	14	single
+Q67	Liberation Serif	14	double
+Q68	Liberation Serif	14	strike
+Q69	Liberation Serif	16	single
+Q70	Liberation Serif	16	double
+Q71	Liberation Serif	16	strike
+Q72	Liberation Serif	18	single
+Q73	Liberation Serif	18	double
+Q74	Liberation Serif	18	strike
+Q75	Liberation Serif	20	single
+Q76	Liberation Serif	20	double
+Q77	Liberation Serif	20	strike
+Q78	Liberation Serif	24	single
+Q79	Liberation Serif	24	double
+Q80	Liberation Serif	24	strike
+Q81	Liberation Serif	28	single
+Q82	Liberation Serif	28	double
+Q83	Liberation Serif	28	strike
+Q84	Liberation Serif	36	single
+Q85	Liberation Serif	36	double
+Q86	Liberation Serif	36	strike
+Q87	Liberation Serif	48	single
+Q88	Liberation Serif	48	double
+Q89	Liberation Serif	48	strike
+Q90	Liberation Mono	6	single
+Q91	Liberation Mono	6	double
+Q92	Liberation Mono	6	strike
+Q93	Liberation Mono	7	single
+Q94	Liberation Mono	7	double
+Q95	Liberation Mono	7	strike
+Q96	Liberation Mono	8	single
+Q97	Liberation Mono	8	double
+Q98	Liberation Mono	8	strike
+Q99	Liberation Mono	9	single
+Q100	Liberation Mono	9	double
+Q101	Liberation Mono	9	strike
+Q102	Liberation Mono	10	single
+Q103	Liberation Mono	10	double
+Q104	Liberation Mono	10	strike
+Q105	Liberation Mono	11	single
+Q106	Liberation Mono	11	double
+Q107	Liberation Mono	11	strike
+Q108	Liberation Mono	12	single
+Q109	Liberation Mono	12	double
+Q110	Liberation Mono	12	strike
+Q111	Liberation Mono	14	single
+Q112	Liberation Mono	14	double
+Q113	Liberation Mono	14	strike
+Q114	Liberation Mono	16	single
+Q115	Liberation Mono	16	double
+Q116	Liberation Mono	16	strike
+Q117	Liberation Mono	18	single
+Q118	Liberation Mono	18	double
+Q119	Liberation Mono	18	strike
+Q120	Liberation Mono	20	single
+Q121	Liberation Mono	20	double
+Q122	Liberation Mono	20	strike
+Q123	Liberation Mono	24	single
+Q124	Liberation Mono	24	double
+Q125	Liberation Mono	24	strike
+Q126	Liberation Mono	28	single
+Q127	Liberation Mono	28	double
+Q128	Liberation Mono	28	strike
+Q129	Liberation Mono	36	single
+Q130	Liberation Mono	36	double
+Q131	Liberation Mono	36	strike
+Q132	Liberation Mono	48	single
+Q133	Liberation Mono	48	double
+Q134	Liberation Mono	48	strike
+Q135	Carlito	6	single
+Q136	Carlito	6	double
+Q137	Carlito	6	strike
+Q138	Carlito	7	single
+Q139	Carlito	7	double
+Q140	Carlito	7	strike
+Q141	Carlito	8	single
+Q142	Carlito	8	double
+Q143	Carlito	8	strike
+Q144	Carlito	9	single
+Q145	Carlito	9	double
+Q146	Carlito	9	strike
+Q147	Carlito	10	single
+Q148	Carlito	10	double
+Q149	Carlito	10	strike
+Q150	Carlito	11	single
+Q151	Carlito	11	double
+Q152	Carlito	11	strike
+Q153	Carlito	12	single
+Q154	Carlito	12	double
+Q155	Carlito	12	strike
+Q156	Carlito	14	single
+Q157	Carlito	14	double
+Q158	Carlito	14	strike
+Q159	Carlito	16	single
+Q160	Carlito	16	double
+Q161	Carlito	16	strike
+Q162	Carlito	18	single
+Q163	Carlito	18	double
+Q164	Carlito	18	strike
+Q165	Carlito	20	single
+Q166	Carlito	20	double
+Q167	Carlito	20	strike
+Q168	Carlito	24	single
+Q169	Carlito	24	double
+Q170	Carlito	24	strike
+Q171	Carlito	28	single
+Q172	Carlito	28	double
+Q173	Carlito	28	strike
+Q174	Carlito	36	single
+Q175	Carlito	36	double
+Q176	Carlito	36	strike
+Q177	Carlito	48	single
+Q178	Carlito	48	double
+Q179	Carlito	48	strike
+Q180	Caladea	6	single
+Q181	Caladea	6	double
+Q182	Caladea	6	strike
+Q183	Caladea	7	single
+Q184	Caladea	7	double
+Q185	Caladea	7	strike
+Q186	Caladea	8	single
+Q187	Caladea	8	double
+Q188	Caladea	8	strike
+Q189	Caladea	9	single
+Q190	Caladea	9	double
+Q191	Caladea	9	strike
+Q192	Caladea	10	single
+Q193	Caladea	10	double
+Q194	Caladea	10	strike
+Q195	Caladea	11	single
+Q196	Caladea	11	double
+Q197	Caladea	11	strike
+Q198	Caladea	12	single
+Q199	Caladea	12	double
+Q200	Caladea	12	strike
+Q201	Caladea	14	single
+Q202	Caladea	14	double
+Q203	Caladea	14	strike
+Q204	Caladea	16	single
+Q205	Caladea	16	double
+Q206	Caladea	16	strike
+Q207	Caladea	18	single
+Q208	Caladea	18	double
+Q209	Caladea	18	strike
+Q210	Caladea	20	single
+Q211	Caladea	20	double
+Q212	Caladea	20	strike
+Q213	Caladea	24	single
+Q214	Caladea	24	double
+Q215	Caladea	24	strike
+Q216	Caladea	28	single
+Q217	Caladea	28	double
+Q218	Caladea	28	strike
+Q219	Caladea	36	single
+Q220	Caladea	36	double
+Q221	Caladea	36	strike
+Q222	Caladea	48	single
+Q223	Caladea	48	double
+Q224	Caladea	48	strike
+Q225	DejaVu Sans	6	single
+Q226	DejaVu Sans	6	double
+Q227	DejaVu Sans	6	strike
+Q228	DejaVu Sans	7	single
+Q229	DejaVu Sans	7	double
+Q230	DejaVu Sans	7	strike
+Q231	DejaVu Sans	8	single
+Q232	DejaVu Sans	8	double
+Q233	DejaVu Sans	8	strike
+Q234	DejaVu Sans	9	single
+Q235	DejaVu Sans	9	double
+Q236	DejaVu Sans	9	strike
+Q237	DejaVu Sans	10	single
+Q238	DejaVu Sans	10	double
+Q239	DejaVu Sans	10	strike
+Q240	DejaVu Sans	11	single
+Q241	DejaVu Sans	11	double
+Q242	DejaVu Sans	11	strike
+Q243	DejaVu Sans	12	single
+Q244	DejaVu Sans	12	double
+Q245	DejaVu Sans	12	strike
+Q246	DejaVu Sans	14	single
+Q247	DejaVu Sans	14	double
+Q248	DejaVu Sans	14	strike
+Q249	DejaVu Sans	16	single
+Q250	DejaVu Sans	16	double
+Q251	DejaVu Sans	16	strike
+Q252	DejaVu Sans	18	single
+Q253	DejaVu Sans	18	double
+Q254	DejaVu Sans	18	strike
+Q255	DejaVu Sans	20	single
+Q256	DejaVu Sans	20	double
+Q257	DejaVu Sans	20	strike
+Q258	DejaVu Sans	24	single
+Q259	DejaVu Sans	24	double
+Q260	DejaVu Sans	24	strike
+Q261	DejaVu Sans	28	single
+Q262	DejaVu Sans	28	double
+Q263	DejaVu Sans	28	strike
+Q264	DejaVu Sans	36	single
+Q265	DejaVu Sans	36	double
+Q266	DejaVu Sans	36	strike
+Q267	DejaVu Sans	48	single
+Q268	DejaVu Sans	48	double
+Q269	DejaVu Sans	48	strike

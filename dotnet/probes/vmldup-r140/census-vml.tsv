@@ -1,0 +1,8 @@
+element	top_level	top_level_sized	group_member	group_member_kept
+arc	0	0	0	0
+curve	0	0	0	0
+image	0	0	0	0
+line	150	0	715	0
+polyline	0	0	0	0
+# documents with a top-level widened element: 36
+# documents with one inside a v:group:        25

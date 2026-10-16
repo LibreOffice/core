@@ -1,0 +1,32 @@
+sum|err| (thou)  face                                     file
+           16.6  DejaVuSerif-Bold                         /usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf
+          394.9  DejaVuSans-Bold                          /usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf
+          814.4  DejaVuSerif                              /usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf
+          820.0  DejaVuMathTeXGyre-Regular                /opt/libreoffice26.2/share/fonts/truetype/DejaVuMathTeXGyre.ttf
+          878.0  NotoSerifHebrew-Bold                     /opt/libreoffice26.2/share/fonts/truetype/NotoSerifHebrew-Bold.ttf
+          878.0  NotoSerifLao-Bold                        /opt/libreoffice26.2/share/fonts/truetype/NotoSerifLao-Bold.ttf
+          882.0  NotoSerifArmenian-Bold                   /opt/libreoffice26.2/share/fonts/truetype/NotoSerifArmenian-Bold.ttf
+          882.0  NotoSerifGeorgian-Bold                   /opt/libreoffice26.2/share/fonts/truetype/NotoSerifGeorgian-Bold.ttf
+          917.0  NotoNaskhArabic-Bold                     /opt/libreoffice26.2/share/fonts/truetype/NotoNaskhArabic-Bold.ttf
+          985.5  DejaVuSans                               /usr/share/fonts/truetype/dejavu/DejaVuSans.ttf
+          986.0  NotoSansArmenian-Bold                    /opt/libreoffice26.2/share/fonts/truetype/NotoSansArmenian-Bold.ttf
+          986.0  NotoSansLisu-Bold                        /opt/libreoffice26.2/share/fonts/truetype/NotoSansLisu-Bold.ttf
+
+per-glyph, best face: DejaVuSerif-Bold
+ ch   target     face    diff
+'C'    794.0    795.9     1.9
+'o'    666.0    667.0     1.0
+'m'   1057.0   1058.1     1.1
+'p'    698.0    699.2     1.2
+'e'    635.0    636.2     1.2
+'t'    461.0    461.9     0.9
+'i'    379.0    379.9     0.9
+'v'    580.0    581.1     1.1
+' '    347.0    348.1     1.1
+'A'    775.0    775.9     0.9
+'d'    698.0    699.2     1.2
+'a'    647.0    647.9     0.9
+'n'    726.0    727.1     1.1
+'g'    698.0    699.2     1.2
+'r'    526.0    526.9     0.9
+'–'    500.0    500.0     0.0

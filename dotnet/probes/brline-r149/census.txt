@@ -1,0 +1,20 @@
+# base rate
+docx-family documents read            271
+live w:txbxContent bodies            1642
+paragraphs inside them               2944
+<w:br/> inside them                   319  in 13 documents
+... whose run size DIFFERS from the paragraph mark     265  in 7 documents
+shape bodies holding at least one such break          112  of 1642
+  ... of those, fixed-height and measurable           112
+  ... whose EXTRA height alone exceeds the box         12
+  ... of THOSE, ones that hold any text at all          12  (259 characters)
+characters inside the 112 differing bodies           1137
+
+# the differing population, per document
+065_Work_Breakdown_Structure_Template_Blue_Theme_2b207f62.docx  96 breaks  mark/run 28/4         extra +1340.9 pt  smallest inner 71.2 pt   bodies 19, forced over 2
+066_Work_Breakdown_Structure_Template_Colored_Background_c27ff  56 breaks  mark/run 32/4         extra  +912.6 pt  smallest inner 34.7 pt   bodies 28, forced over 0
+067_Work_Breakdown_Structure_Template_Gray_Theme_89f8be8b.docx  62 breaks  mark/run 32/4,44/4    extra +1024.3 pt  smallest inner 46.6 pt   bodies 26, forced over 5
+068_Work_Breakdown_Structure_Template_Green_Theme_63e69ed8.doc  33 breaks  mark/run 18/16,32/16  extra   +46.6 pt  smallest inner 43.0 pt   bodies 33, forced over 0
+069_Work_Breakdown_Structure_Template_Professional_Format_1e02   4 breaks  mark/run 28/22,48/4   extra   +80.3 pt  smallest inner 49.3 pt   bodies 2, forced over 1
+084_Printable_Graph_Paper_Template_Editable_Layout_d66c6820.do   6 breaks  mark/run 22/4         extra   +62.9 pt  smallest inner 20.3 pt   bodies 2, forced over 2
+086_Printable_Graph_Paper_Template_Gray_Theme_7300e5d7.docx      8 breaks  mark/run 22/4         extra   +83.8 pt  smallest inner 25.4 pt   bodies 2, forced over 2

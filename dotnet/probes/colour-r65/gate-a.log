@@ -1,0 +1,18 @@
+measuring /home/user/wt-colour/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
+# words = tokens carrying at least one Unicode letter or digit; rawwords = pdftotext | wc -w
+# NOT comparable to any scoreboard recorded before 2026-08-13 — see dotnet/probes/gate-01/results.md
+path	ext	pages	words	fonts	unemb	verdict	rawwords
+sheets/chartset-013/xlsx/001_Contextures_chart_sample_b089bc34.xlsx	xlsx	15/11	881/860	4/4	0	pages	897/866	3874/3851
+sheets/chartset-013/xlsx/019_Free_Blood_Sugar_Chart_for_Excel_-_Track_Your_Blood_Sugar_Level_36f4a782.xlsx	xlsx	9/9	870/872	6/6	0	match	916/918	3664/3660
+sheets/chartset-013/xlsx/031_Business_expense_budget_f3a46278.xlsx	xlsx	8/8	1447/1457	2/3	0	match	1447/1457	7699/7699
+sheets/chartset-013/xlsx/032_Business_expenses_budget_d377eaab.xlsx	xlsx	4/4	823/823	4/4	0	match	1639/1640	4873/4873
+sheets/chartset-013/xlsx/033_Event_planning_tracker_Use_this_template_f29a848e.xlsx	xlsx	3/3	509/574	4/5	0	words	510/575	2720/2650
+sheets/chartset-013/xlsx/035_Project_plan_for_law_firms_aa2d4462.xlsx	xlsx	4/4	735/744	6/7	0	match	744/753	3923/3879
+sheets/chartset-013/xlsx/043_Buy_a_car_vs._rideshare_ff07c7e6.xlsx	xlsx	7/7	326/325	2/2	0	match	336/335	1440/1437
+sheets/chartset-013/xlsx/049_Expenses_calculator_c351f3d0.xlsx	xlsx	4/4	332/332	5/5	0	match	334/334	1558/1548
+sheets/chartset-013/xlsx/059_Milestone_and_task_project_timeline_Use_this_template_24f1e8f1.xlsx	xlsx	3/3	387/389	4/4	0	match	394/396	1935/1935
+sheets/chartset-013/xlsx/087_Simple_personal_budget_3cf9b1af.xlsx	xlsx	3/3	657/657	1/1	0	match	657/657	2856/2856
+
+BATCHES sheets/chartset-013
+TOTAL 10  MATCH 8  MISMATCH 2  REF-CANNOT-RENDER 0
+TSV /home/user/wt-colour/dotnet/probes/colour-r65/gate-a/parity.tsv

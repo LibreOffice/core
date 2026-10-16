@@ -1,0 +1,10 @@
+
+banked 307  reswept 307  compared 307
+MATCH before 257  after 258
+
+verdict changed: 2
+   pages,words -> match         pages 3/2->2/2  glyphs 680/645->643/645  sheets/chartset-010/xlsx/062_Run_chart_cb7476ea.xlsx
+   pages,words -> words         pages 4/3->3/3  glyphs 2207/1877->2185/1877  sheets/chartset-011/xlsx/057_Simple_balance_sheet_Use_this_template_e2d4cbb2.xlsx
+
+same verdict, numbers moved: 1
+         match                pages 186/186->186/186  glyphs 278872/278866->278872/278868  sheets/done-013/xlsx/alle einzeln.xlsx

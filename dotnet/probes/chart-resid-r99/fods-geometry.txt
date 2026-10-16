@@ -1,0 +1,14 @@
+<draw:frame draw:z-index="0" draw:name="Chart 1" draw:style-name="gr3" draw:text-style-name="P3" svg:width="8.9209in" svg:height="5.6874in" svg:x="0.3961in" svg:y="0.0209in">
+<draw:frame draw:z-index="0" draw:name="Chart 1" draw:style-name="gr3" draw:text-style-name="P3" svg:width="11.263in" svg:height="5.6874in" svg:x="0.3961in" svg:y="0.0209in">
+<chart:chart svg:width="22.66cm" svg:height="14.447cm" xlink:href=".." xlink:type="simple" chart:class="chart:area" chart:style-name="ch1">
+<chart:chart svg:width="28.609cm" svg:height="14.447cm" xlink:href=".." xlink:type="simple" chart:class="chart:area" chart:style-name="ch1">
+<chart:plot-area chart:style-name="ch4" svg:x="1.192cm" svg:y="1.418cm" svg:width="18.454cm" svg:height="12.147cm">
+<chart:plot-area chart:style-name="ch4" svg:x="1.192cm" svg:y="1.418cm" svg:width="23.623cm" svg:height="12.147cm">
+<chart:legend chart:legend-position="end" svg:x="19.324cm" svg:y="5.546cm" style:legend-expansion="high" chart:style-name="ch3"/>
+<chart:legend chart:legend-position="end" svg:x="23.883cm" svg:y="7.161cm" style:legend-expansion="high" chart:style-name="ch3"/>
+<chart:title svg:x="9.561cm" svg:y="0.423cm" chart:style-name="ch2">
+<chart:title svg:x="9.982cm" svg:y="13.441cm" chart:style-name="ch2">
+<chart:title svg:x="0.13cm" svg:y="8.492cm" chart:style-name="ch7">
+<chart:title svg:x="12.535cm" svg:y="0.423cm" chart:style-name="ch2">
+<chart:title svg:x="12.566cm" svg:y="13.441cm" chart:style-name="ch2">
+<chart:title svg:x="0.011cm" svg:y="8.492cm" chart:style-name="ch7">

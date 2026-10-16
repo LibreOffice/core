@@ -1,0 +1,303 @@
+id	ourchars	refchars	equal	prefix	ourwords	refwords	jaccard	firstdiff
+001_1-2-3_Horizontal_Hierarchy_39795b4d__pptx	1307	1307	SAME	1307	246	284	1.0000	
+001_advanced_powerpoint_bar__pptx	347	347	DIFF	127	62	62	1.0000	'ActualPlanM4M3M2M1020406080100Sourcepatt' | 'PlanActualM4M3M2M1020406080100Sourcepatt'
+002_10-Point_Dual_Hub_Comparison_4ee242c9__pptx	473	473	SAME	473	88	126	1.0000	
+002_advanced_powerpoint_column__pptx	348	348	SAME	348	63	63	1.0000	
+003_2-Circle_Venn_Diagram_7ab74e5c__pptx	807	809	DIFF	748	146	178	0.9975	'QuestionsorNeedHelp?VisitourFAQ:www.pres' | 'esQuestionsorNeedHelp?VisitourFAQ:www.pr'
+003_advanced_powerpoint_line__pptx	346	346	SAME	346	62	62	1.0000	
+004_2-Stage_Vertical_Funnel_Diagram_for_PowerPoint_593f4c80__pptx	353	353	SAME	353	70	69	1.0000	
+004_advanced_powerpoint_pie__pptx	318	318	SAME	318	52	52	1.0000	
+005_2-Step_Funnel_On_left_With_Text_767f0490__pptx	490	490	SAME	490	93	93	1.0000	
+005_advanced_powerpoint_doughnut__pptx	319	319	SAME	319	52	52	1.0000	
+006_2-Way_Horizontal_Hierarchy_for_PowerPoint_and_Google_Slides_7c1e5084__pptx	655	655	SAME	655	124	162	1.0000	
+006_advanced_powerpoint_area__pptx	341	341	SAME	341	61	61	1.0000	
+007_3_Circles_Diagram_for_PowerPoint_dac9f170__pptx	1448	1448	SAME	1448	269	293	1.0000	
+007_advanced_powerpoint_scatter__pptx	295	295	SAME	295	42	42	1.0000	
+008_3-Circle_Venn_Diagram_024a12c5__pptx	1155	1157	DIFF	1096	216	248	0.9983	'QuestionsorNeedHelp?VisitourFAQ:www.pres' | 'esQuestionsorNeedHelp?VisitourFAQ:www.pr'
+008_advanced_powerpoint_bubble__pptx	297	297	SAME	297	42	42	1.0000	
+009_3-Circle_Venn_PowerPoint_Diagram_2e59baa9__pptx	716	716	DIFF	231	136	136	1.0000	'ipsumLoremipsumdolorsitametcras.Ametnami' | 'Loremipsumdoloripsumsitametcras.Ametnami'
+009_advanced_powerpoint_bar__pptx	352	352	DIFF	132	63	63	1.0000	'ActualPlanM4M3M2M1020406080100Sourcepatt' | 'PlanActualM4M3M2M1020406080100Sourcepatt'
+010605Vul__ppt	5990	5989	DIFF	481	960	944	0.9915	'-evolutionoftheEarlyWarningSystem•Novemb' | 'evolutionoftheEarlyWarningSystem•Novembe'
+010_3-Group_Hierarchy_for_PowerPoint_and_Google_Slides_20476ce0__pptx	749	749	SAME	749	144	174	1.0000	
+010_advanced_powerpoint_column__pptx	346	346	SAME	346	61	61	1.0000	
+011_3-Stage_Vertical_Funnel_Diagram_for_PowerPoint_10ce23dd__pptx	365	365	SAME	365	75	74	1.0000	
+011_advanced_powerpoint_line__pptx	341	341	SAME	341	61	61	1.0000	
+012_3-Step_Hexagons_Puzzle_Diagram_for_PowerPoint_982482b5__pptx	1363	1363	SAME	1363	268	296	1.0000	
+012_advanced_powerpoint_pie__pptx	326	326	SAME	326	53	53	1.0000	
+013_3-Step_Segmented_Cycle_Process_5232f82d__pptx	1173	1173	SAME	1173	218	256	1.0000	
+013_advanced_powerpoint_doughnut__pptx	315	315	SAME	315	52	52	1.0000	
+014_3D_Radial_Block_List_for_PowerPoint_and_Google_Slides_0773075e__pptx	2337	2337	SAME	2337	430	450	1.0000	
+014_advanced_powerpoint_area__pptx	343	343	SAME	343	61	61	1.0000	
+015_4-Option_Color_Wheel_Diagram_df7e4b8f__pptx	1489	1489	SAME	1489	280	318	1.0000	
+015_advanced_powerpoint_scatter__pptx	296	296	SAME	296	42	42	1.0000	
+016_4-Position_Org_Chart_1d3640b6__pptx	779	779	SAME	779	132	156	1.0000	
+016_advanced_powerpoint_bubble__pptx	300	300	SAME	300	43	43	1.0000	
+017_4-Stage_Vertical_Funnel_Diagram_for_PowerPoint_61e7bde5__pptx	377	377	SAME	377	80	79	1.0000	
+017_advanced_powerpoint_bar__pptx	352	352	DIFF	132	62	62	1.0000	'ActualPlanM4M3M2M1020406080100Sourcepatt' | 'PlanActualM4M3M2M1020406080100Sourcepatt'
+018_4-Step_Hexagons_Puzzle_Diagram_for_PowerPoint_19957cce__pptx	1757	1757	SAME	1757	350	378	1.0000	
+018_advanced_powerpoint_column__pptx	342	342	SAME	342	61	61	1.0000	
+019_4-Step_Segmented_Cycle_Process_2ff93c19__pptx	1493	1493	SAME	1493	280	318	1.0000	
+019_advanced_powerpoint_line__pptx	344	344	SAME	344	61	61	1.0000	
+020_5-Option_Color_Wheel_Diagram_104ea3b0__pptx	1655	1655	SAME	1655	316	354	1.0000	
+020_advanced_powerpoint_pie__pptx	318	318	SAME	318	52	52	1.0000	
+021_5-Position_Org_Chart_cb042559__pptx	799	799	SAME	799	136	160	1.0000	
+021_advanced_powerpoint_doughnut__pptx	322	322	SAME	322	52	52	1.0000	
+022_5-Step_Hexagons_Puzzle_Diagram_for_PowerPoint_eda9895e__pptx	2151	2151	DIFF	21	432	454	1.0000	'iagramLoremIpsumLoremIpsumLoremipsumdolo' | 'LoremiagIpsumramLoremIpsumLoremipsumdolo'
+022_advanced_powerpoint_area__pptx	342	342	SAME	342	61	61	1.0000	
+023_5-Step_Progress_Cards_91d5ff57__pptx	1217	1217	SAME	1217	240	274	1.0000	
+023_advanced_powerpoint_scatter__pptx	297	297	SAME	297	42	42	1.0000	
+024_5-Step_Segmented_Cycle_Process_c8ca37ef__pptx	1813	1813	SAME	1813	342	380	1.0000	
+024_advanced_powerpoint_bubble__pptx	299	299	SAME	299	42	42	1.0000	
+025_6-Option_Color_Wheel_Diagram_27e1c74d__pptx	2129	2129	SAME	2129	404	442	1.0000	
+025_advanced_powerpoint_bar__pptx	336	336	DIFF	116	61	61	1.0000	'ActualPlanM4M3M2M1020406080100Sourcepatt' | 'PlanActualM4M3M2M1020406080100Sourcepatt'
+026_6-Part_Hexagon_Radial_Diagram_b8ca3f40__pptx	1047	1047	SAME	1047	216	260	1.0000	
+026_advanced_powerpoint_column__pptx	345	345	SAME	345	61	61	1.0000	
+027_6-Point_Dual_Hub_Comparison_13f9af30__pptx	471	471	SAME	471	88	124	1.0000	
+027_advanced_powerpoint_line__pptx	339	339	SAME	339	61	61	1.0000	
+028_8-Point_Dual_Hub_Comparison_d6c5dde5__pptx	471	471	SAME	471	88	124	1.0000	
+028_advanced_powerpoint_pie__pptx	318	318	SAME	318	52	52	1.0000	
+029_8-Step_Neumorphic_Cycle_Diagram_b9b75044__pptx	1593	1595	DIFF	1534	340	384	0.9987	'QuestionsorNeedHelp?VisitourFAQ:www.pres' | 'esQuestionsorNeedHelp?VisitourFAQ:www.pr'
+029_advanced_powerpoint_doughnut__pptx	318	318	SAME	318	52	52	1.0000	
+02_REDAC_New ATM briefing _March 2017v2__pptx	5036	5036	SAME	5036	759	759	1.0000	
+030_Abstract_Petal_Diagram_71aa5e3a__pptx	1409	1411	DIFF	1350	266	303	0.9986	'QuestionsorNeedHelp?VisitourFAQ:www.pres' | 'esQuestionsorNeedHelp?VisitourFAQ:www.pr'
+030_advanced_powerpoint_area__pptx	340	340	SAME	340	61	61	1.0000	
+031_Alarm_Clock_Pie-Chart_for_PowerPoint_and_Google_Slides_0b185a05__pptx	1939	1939	SAME	1939	358	382	1.0000	
+031_advanced_powerpoint_scatter__pptx	291	291	SAME	291	42	42	1.0000	
+032_BCG_Growth-Share_Matrix_560d0485__pptx	1185	1185	SAME	1185	276	344	1.0000	
+032_advanced_powerpoint_bubble__pptx	297	297	SAME	297	42	42	1.0000	
+0335fab9-79f0-4944-b92c-f223837ca2d8__ppt	4816	4819	DIFF	544	612	616	0.9994	'FacilitationMentoringDiagnosisoflearning' | 'MentoringDiagnosisSupportRehabilitationM'
+033_Battery_Percentage_Chart_c99c24b5__pptx	1181	1181	SAME	1181	222	266	1.0000	
+033_advanced_powerpoint_bar__pptx	341	341	DIFF	121	61	61	1.0000	'ActualPlanM4M3M2M1020406080100Sourcepatt' | 'PlanActualM4M3M2M1020406080100Sourcepatt'
+034_Central_Idea_Hub_Diagram_8258e6ad__pptx	793	793	SAME	793	168	210	1.0000	
+035_Chemistry_Column_PowerPoint_Chart_45bf8a76__pptx	1498	1518	DIFF	31	289	325	0.9868	'LoremIpsumLoremIpsumLoremipsumdolorsitam' | 'ChartTitleLoremIpsumLoremipsumdolorsitam'
+036_Chevron_Process_Cards_3c8f0ea1__pptx	777	777	SAME	777	160	190	1.0000	
+037_Circle_Matrix_Framework_44bc5218__pptx	1527	1529	DIFF	1468	286	321	0.9987	'QuestionsorNeedHelp?VisitourFAQ:www.pres' | 'esQuestionsorNeedHelp?VisitourFAQ:www.pr'
+038_Competitive_Advantage_Card_for_PowerPoint_and_Google_Slides_373720f6__pptx	1597	1645	DIFF	191	244	288	0.9708	'807085756045Creatingnewideas,products,or' | '908070756045Creatingnewideas,products,or'
+039_Consumer_Decision_Journey_for_PowerPoint_319207e1__pptx	570	570	SAME	570	86	86	1.0000	
+040_Crab_Diagram_for_PowerPoint_and_Google_Slides_13d38ff3__pptx	657	657	SAME	657	116	142	1.0000	
+041_Crosswise_Quadrant_Diagram_ea8bdf52__pptx	1365	1367	DIFF	1306	254	294	0.9985	'QuestionsorNeedHelp?VisitourFAQ:www.pres' | 'esQuestionsorNeedHelp?VisitourFAQ:www.pr'
+042_Diamond_Hub_Infographic_a60cfaa1__pptx	1485	1485	SAME	1485	282	322	1.0000	
+043_Dual_Horizontal_Hierarchy_for_PowerPoint_and_Google_Slides_5074b09e__pptx	701	701	SAME	701	124	164	1.0000	
+044_Dual_Mind_Spark_Chart_for_PowerPoint_a83f890a__pptx	2687	2687	SAME	2687	483	534	1.0000	
+045_Dual-Segment_Quadrant_14a57221__pptx	1557	1559	DIFF	1498	292	334	0.9987	'QuestionsorNeedHelp?VisitourFAQ:www.pres' | 'esQuestionsorNeedHelp?VisitourFAQ:www.pr'
+046_Eight-Point_Strategic_Compass_35ee62de__pptx	919	921	DIFF	860	194	234	0.9978	'QuestionsorNeedHelp?VisitourFAQ:www.pres' | 'esQuestionsorNeedHelp?VisitourFAQ:www.pr'
+047_Female_Radar_Brain_for_PowerPoint_and_Google_Slides_c2a541f6__pptx	2881	2879	DIFF	945	536	592	0.9993	'-Driven)–SlideTemplateLoremIpsumLoremips' | 'Driven)–SlideTemplateLoremIpsumLoremipsu'
+048_Five-Arrows_Converging_Cycle_bb192e27__pptx	1669	1671	DIFF	1610	310	342	0.9988	'QuestionsorNeedHelp?VisitourFAQ:www.pres' | 'esQuestionsorNeedHelp?VisitourFAQ:www.pr'
+049_Five-Block_Hub_Spoke_42ee8593__pptx	1415	1417	DIFF	1356	264	286	0.9986	'QuestionsorNeedHelp?VisitourFAQ:www.pres' | 'esQuestionsorNeedHelp?VisitourFAQ:www.pr'
+050_Five-Point_Radial_Hub_00793e08__pptx	797	797	SAME	797	164	192	1.0000	
+051_Five-Stage_Zigzag_Timeline_2bd39be9__pptx	823	823	SAME	823	160	194	1.0000	
+052_Flame_Percentage_Chart_d27d49c4__pptx	1503	1503	SAME	1503	286	324	1.0000	
+053_Flow_Wave_Process_9c0082f4__pptx	939	939	SAME	939	200	232	1.0000	
+054_Flowchart_Board_Game_for_PowerPoint_and_Google_Slides_1b047962__pptx	1003	1003	SAME	1003	180	208	1.0000	
+055_Four_Pillar_Hierarchy_for_PowerPoint_and_Google_Slides_6b42ed18__pptx	1793	1793	SAME	1793	334	362	1.0000	
+056_Four-Block_Hub_Spoke_134b89d1__pptx	1175	1177	DIFF	1116	218	242	0.9983	'QuestionsorNeedHelp?VisitourFAQ:www.pres' | 'esQuestionsorNeedHelp?VisitourFAQ:www.pr'
+057_Four-Branch_Diagram_for_PowerPoint_and_Google_Slides_ddf5d27c__pptx	831	831	SAME	831	148	180	1.0000	
+058_Four-Direction_Divergence_Diagram_for_PowerPoint_and_Google_Slides_9838e28d__pptx	1497	1497	SAME	1497	272	318	1.0000	
+059_Four-Part_Concept_Puzzle_30cea7e5__pptx	3081	3083	DIFF	3022	569	641	0.9994	'QuestionsorNeedHelp?VisitourFAQ:www.pres' | 'esQuestionsorNeedHelp?VisitourFAQ:www.pr'
+060_Four-Part_Radial_Core_Diagram_40d6614e__pptx	1429	1429	SAME	1429	290	330	1.0000	
+061_Four-Stage_Serpentine_Chart_05699efe__pptx	407	409	DIFF	348	70	114	0.9951	'QuestionsorNeedHelp?VisitourFAQ:www.pres' | 'esQuestionsorNeedHelp?VisitourFAQ:www.pr'
+062_Four-Step_Growth_Staircase_8a3ef338__pptx	1039	1039	SAME	1039	198	234	1.0000	
+063_Four-Step_Infinity_Loop_3480185b__pptx	601	601	SAME	601	126	154	1.0000	
+064_Four-Step_Success_Cycle_30c0a917__pptx	745	745	SAME	745	150	176	1.0000	
+065_Fourfold_Ribbon_Rings_for_PowerPoint_and_Google_Slides_39687419__pptx	1473	1473	SAME	1473	272	298	1.0000	
+066_Free_PowerPoint_Layered_Funnel_Process_c0b380ec__pptx	3135	3135	SAME	3135	580	580	1.0000	
+067_Free_PowerPoint_Layered_Funnel_Process_4_Stages_4deb9647__pptx	2520	2520	SAME	2520	464	464	1.0000	
+068_Funnel_Diagram_for_PowerPoint_with_2_Steps_437e4ba7__pptx	66	66	DIFF	35	10	10	0.8333	'tep1Step2www.presentationgo.com' | 'TEP1STEP2www.presentationgo.com'
+069_Funnel_Diagram_for_PowerPoint_with_3_Steps_f96396fc__pptx	71	71	DIFF	35	12	12	0.7750	'tep1Step2Step3www.presentationgo.com' | 'TEP1STEP2STEP3www.presentationgo.com'
+070_Funnel_Diagram_for_PowerPoint_with_4_Steps_975f1642__pptx	76	76	DIFF	35	14	14	0.7273	'tep1Step2Step3Step4www.presentationgo.co' | 'TEP1STEP2STEP3STEP4www.presentationgo.co'
+071_Funnel_Diagram_for_PowerPoint_with_5_Steps_5ceacdec__pptx	81	81	DIFF	35	16	16	0.6875	'tep1Step2Step3Step4Step5www.presentation' | 'TEP1STEP2STEP3STEP4STEP5www.presentation'
+072_Gear_Pie_Chart_for_PowerPoint_and_Google_Slides_d464d3a0__pptx	415	415	DIFF	36	92	114	1.0000	'15203525252010402030LoremIpsum4020Label1' | '40152035251025202030LoremIpsum4020Label1'
+073_Halo_Radial_for_PowerPoint_and_Google_Slides_4bd0918b__pptx	1455	1455	SAME	1455	270	292	1.0000	
+074_Hashtag_Matrix_246eb8d9__pptx	1335	1337	DIFF	1276	244	276	0.9985	'QuestionsorNeedHelp?VisitourFAQ:www.pres' | 'esQuestionsorNeedHelp?VisitourFAQ:www.pr'
+075_Heart_Arc_Radial_for_PowerPoint_and_Google_Slides_a27a3021__pptx	1085	1085	DIFF	256	210	238	1.0000	'ipsumdolorsitamet,nibhest.Amagnamaecenas' | 'IpsumLoremIpsumLoremipsumdolorsitamet,ni'
+076_Hexadonut_Charts_for_PowerPoint_and_Google_Slides_2b879835__pptx	1163	1163	SAME	1163	214	246	1.0000	
+077_Horizontal_Org_Chart_for_PowerPoint_and_Google_Slides_8cf07020__pptx	1025	1025	SAME	1025	202	232	1.0000	
+078_Horizontal_Pyramid_Org_Chart_for_PowerPoint_and_Google_Slides_70ea115a__pptx	1179	1179	SAME	1179	208	244	1.0000	
+079_Horizontal_Relationships_for_PowerPoint_and_Google_Slides_a3d35f63__pptx	771	771	SAME	771	142	176	1.0000	
+080214-Intl-pol-frameworks-and-their-implications-for-Africa-ISS-workshop__ppt	4729	4731	DIFF	3185	815	815	0.9996	'6.5(the2003UKEnergyWhitePapersaysthatwen' | '-6.5(the2003UKEnergyWhitePapersaysthatwe'
+080_Infographic_Cycle_Venn_Diagram_for_PowerPoint_2e3cdb7f__pptx	1476	1476	DIFF	47	275	309	1.0000	'oremipsumdolorsitamet,nibhest.Amagnamaec' | 'OREMIPSUMLoremipsumdolorsitamet,nibhest.'
+081_Infographic_Funnel_w_3_Stages_for_PowerPoint_28e26b31__pptx	2110	2110	SAME	2110	397	437	1.0000	
+082_Infographic_Funnel_with_4_Stages_for_PowerPoint_72d4f125__pptx	2110	2110	SAME	2110	393	433	1.0000	
+083_Infographic_Hexagon_Cluster_for_PowerPoint_and_Google_Slides_ef811a12__pptx	1085	1085	SAME	1085	204	244	1.0000	
+084_Infographic_Hierarchy_Tree_for_PowerPoint_fda8141c__pptx	1166	1166	SAME	1166	213	253	1.0000	
+085_Infographic_Org_Chart_for_PowerPoint_5_Blocks_3870252f__pptx	314	314	SAME	314	49	85	1.0000	
+086_Infographic_Org_Chart_for_PowerPoint_6_Blocks_f9086d83__pptx	334	334	SAME	334	53	89	1.0000	
+087_Infographic_Organization_Chart_for_PowerPoint_and_Google_Slides_2d951912__pptx	4031	4031	SAME	4031	750	798	1.0000	
+088_Infographic_Quadrant_Pie_Chart_7b1e8abd__pptx	1507	1509	DIFF	1448	288	333	0.9987	'QuestionsorNeedHelp?VisitourFAQ:www.pres' | 'esQuestionsorNeedHelp?VisitourFAQ:www.pr'
+089_Infographic_Radial_Matrix_for_PowerPoint_and_Google_Slides_eb0550f2__pptx	1525	1525	SAME	1525	282	322	1.0000	
+090_Infographic_Radial_for_PowerPoint_and_Google_Slides_16a69891__pptx	649	649	SAME	649	112	144	1.0000	
+091_Infographic_Radial_for_PowerPoint_and_Google_Slides_c6909fa6__pptx	2177	2177	SAME	2177	422	454	1.0000	
+092_Infographic_Tree_Diagram_for_PowerPoint_and_Google_Slides_d721fa00__pptx	1369	1369	SAME	1369	278	316	1.0000	
+093_Insightful_Zoom_Chart_22b5464e__pptx	1923	1925	DIFF	1864	354	388	0.9990	'QuestionsorNeedHelp?VisitourFAQ:www.pres' | 'esQuestionsorNeedHelp?VisitourFAQ:www.pr'
+094_Intersecting_Teardrops_for_PowerPoint_and_Google_Slides_ff43aedb__pptx	1477	1477	SAME	1477	270	308	1.0000	
+095_Interwoven_Bars_e5aa46c2__pptx	1481	1483	DIFF	1422	284	314	0.9987	'QuestionsorNeedHelp?VisitourFAQ:www.pres' | 'esQuestionsorNeedHelp?VisitourFAQ:www.pr'
+096_Lab_Flask_Charts_for_PowerPoint_and_Google_Slides_91e3cbb5__pptx	1059	1059	SAME	1059	192	216	1.0000	
+097_Labeled_Organization_Chart_for_PowerPoint_and_Google_Slides_f24fa592__pptx	1291	1291	SAME	1291	238	276	1.0000	
+098_Leaning_Cards_Process_dadb3738__pptx	1027	1027	SAME	1027	210	242	1.0000	
+099_Light_Bulb_SWOT_for_PowerPoint_and_Google_Slides_554a1e33__pptx	1467	1467	SAME	1467	272	292	1.0000	
+1-secretariat__ppt	1132	1132	SAME	1132	150	150	1.0000	
+10. Drawings, circuit diagrams and schematics__pptx	8715	8715	DIFF	80	1501	1502	1.0000	'8.Constructioninformationanddataprincipl' | 'PowerPointn8.Constructioninformationandd'
+100_Lime_and_Lemon_Data-Driven_Chart_for_PowerPoint_d7bb4a44__pptx	2148	2148	DIFF	45	422	495	1.0000	'151151412202011151214www.presentationgo.' | '201511514201211151214www.presentationgo.'
+111006 COMSTAC STOWG Aero spaceports IFG__pptx	1747	1747	SAME	1747	267	267	1.0000	
+1200-Assigning-Club-officers__pptx	996	996	DIFF	237	162	165	1.0000	'USCURRENTClubServiceAdministrationCommun' | 'CURREUSNTClubServiceAdministrationCommun'
+16 - UTM - (NASA)__pptx	15764	14571	DIFF	711	2454	2260	0.9041	'ationalandRegionalSecurityProtectingkeya' | 'ATIONALANDREGIONALSECURITYProtectingkeya'
+171128IPAP__pptx	26406	26424	DIFF	114	4640	4670	0.9844	'\ue4c2Policycontext\ue4c2Coreobjectives\ue4c2Selectedac' | '\uf0fcPolicycontext\uf0fcCoreobjectives\uf0fcSelectedac'
+1_Country-Updates_DRC_English__pptx	4544	4545	DIFF	1057	780	782	0.9998	'13%TestedforHIV79%TBVH+7%NotificationMDR' | '\u200b13%TestedforHIV79%TBVH+7%NotificationMD'
+2014BSA_Sunday_Killion__pptx	19138	19138	DIFF	824	3619	3559	1.0000	'30Source:ISM60Jan-1465Jan-13Jan-12Jan-11' | 'Source:ISM60Jan-1465Jan-13Jan-12Jan-11Ja'
+2015-Civil-Rights-Website-training__ppt	36896	36906	DIFF	264	6116	6119	0.9788	'\ue439CivilRightsAct(VI&VII)\ue439RehabilitationAc' | '\uf06eCivilRightsAct(VI&VII)\uf06eRehabilitationAc'
+23-session-2-pptx__pptx	1915	1915	DIFF	43	304	304	0.9742	'\ue340\ue340\ue340\ue340\ue340\ue340\ue340\ue340UnderstandWhytheStateisImplement' | '\uf061\uf061\uf061\uf061\uf061\uf061\uf061\uf061UnderstandWhytheStateisImplement'
+30-04-2021 merged NDoH and NICD_Presentation HBV BD meeting 05May2021_1__pptx	8143	8144	DIFF	2864	1359	1361	0.9999	'AFRICA-2018_NICD-Bulletin-Vol17-Iss2-Oct' | '-AFRICA-2018_NICD-Bulletin-Vol17-Iss2-Oc'
+3492__pptx	7072	7072	DIFF	355	1268	1266	0.9994	'OverviewofSafetyatLandingHulllossandsign' | 'NumberofAccidentsOverviewofSafetyatLandi'
+3495__pptx	4585	4585	DIFF	324	747	747	0.9806	'\ue12c\ue12c\ue12cIncursionsandexcursionsingeneral.Past' | '\uf0b7\uf0b7\uf0b7Incursionsandexcursionsingeneral.Past'
+429_BLISc 2019 IInd Sem.  PAPER-7 UNIT 3__pptx	18518	18517	DIFF	187	3126	3125	0.9923	'▶DocumentDeliveryService(DDS)isactuallyc' | '\uf075DocumentDeliveryService(DDS)isactuallyc'
+5b_upasana_dasgupta_-_liability_and_registration__pptx	5221	5220	DIFF	219	954	956	0.9850	'\ue108Directlyassociatedwiththesustainabledev' | '\uf02aDirectlyassociatedwiththesustainabledev'
+7-Zulkefli_Part147n66_IKMAS__pptx	5808	5772	DIFF	0	941	973	0.9907	'ACADEMICQUALIFICATION•MScinEngineeringBu' | 'ZULKEFLIBINHJHARUNUniKLMIATACADEMICQUALI'
+71393_pp7__ppt	13018	13018	DIFF	99	2151	2151	0.9702	'\ue437EBUinthenutshell\ue437Broadcastvs.telecom\ue437Po' | '\uf06cEBUinthenutshell\uf06cBroadcastvs.telecom\uf06cPo'
+8.16_AOD_FINAL_Provider_Training_Presentation_9_2009__ppt	23410	23413	DIFF	84	4310	4311	0.9853	'\ue49eTheInSystsystemwillbeupgradedinOctober2' | '\uf0d8TheInSystsystemwillbeupgradedinOctober2'
+8_P-Pavese_AIRBUS-ATB-journee-CRATB__pptx	11312	10796	DIFF	584	2122	2010	0.9473	'Merciàvous!•61/67donnaientdesavisextra-h' | '•61/67donnaientdesavisextra-hospitaliers'
+97936__pptx	6953	6953	SAME	6953	1267	1267	1.0000	
+AATF-Fact-Sheet-2025__pptx	5062	5062	DIFF	1976	853	848	1.0000	'$5.20perpassengerpersegment;indexedtothe' | 'TaxonflightsbetweenthecontinentalUnitedS'
+ANG C-1 ATC-TO Core Program - HF REDAC briefing September 7 2016__pptx	11942	11942	SAME	11942	1885	1885	1.0000	
+Aerospace_Journey_of_Flight_Chapter_BCB1637572DA6__ppt	10807	10805	DIFF	2018	1885	1885	0.9998	'Poorpress,Noenthusiasm•Nogov’tinterestun' | 'Nogov’tinterestuntilT.RooseveltEurope•Fr'
+Airport Planning 09112013__ppt	3719	3719	SAME	3719	629	629	1.0000	
+Architecture__ppt	4846	4848	DIFF	3470	846	845	0.9996	'anappropriateexperientialeffectforthenat' | '-anappropriateexperientialeffectforthena'
+B2B-Center-Readiness-and-Student-Retention__pptx	8133	8109	DIFF	437	1351	1348	0.9970	'AttractiveBulletinBoardsthatTeach•••••••' | '••••••••AttractiveBulletinBoardsthatTeac'
+BHCA Part II webinar #2 - 10.2020__pptx	7670	7519	DIFF	2880	1408	1405	0.9782	'5.Willtheplansrequirecostsharing?—Thisva' | '4.Willtheplansrequirecostsharing?—Thisva'
+BMFE-06-03 (Gerflor) Smoke Density and Toxicity__pptx	3798	3798	DIFF	2984	732	732	0.9974	'CITPNL:globalindexsatoxicityfor8gases,wi' | 'globalindexsatoxicityfor8gases,withacomp'
+BUS-Chapter 05__ppt	12728	12736	DIFF	3898	2126	2134	0.9981	'attractive,reliable,businesssolutionthat' | '-attractive,reliable,businesssolutiontha'
+BasicMed_AME_Presentation__pptx	5112	5112	DIFF	279	870	870	0.9930	'\ue49e14CFRPart68•14CFRPart67hasnotchangedand' | '\uf0d814CFRPart68•14CFRPart67hasnotchangedand'
+Boeing 737 Max - Group 5__pptx	28	28	SAME	28	7	7	1.0000	
+COMSTAC_11_5_2021am_2__pptx	16769	16770	DIFF	8157	2741	2741	0.9999	'sitereviewscommencingJan2022ASTCommercia' | '-sitereviewscommencingJan2022ASTCommerci'
+Copy of Full deck with references Promotion of Outside Interests at Work final(1)__pptx	18314	18313	DIFF	5954	3114	3118	0.9999	'theGovernment”(e.g.,teleworking)for•41CF' | 'fortheGovernment”(e.g.,teleworking)•41CF'
+County ACHS Presentaion Webinar 8-16-16 Peg__pptx	7980	7980	DIFF	3099	1325	1326	1.0000	'8/16/2016Note:ProviderOneSecurityisonlya' | 'Note:ProviderOneSecurityisonlyabletoassi'
+Course Selection 2025-26 Current Grade 09__pptx	3412	3412	SAME	3412	694	694	1.0000	
+Curriculum-Schematic-E22-11052025__pptx	7476	7488	DIFF	59	1119	1134	0.9984	'22Summer20227/21-9/6/20227weeksSummer202' | '-22Summer20227/21-9/6/20227weeksSummer20'
+DOE Interactive Exercise Presentation draft rev 2__pptx	2976	2976	DIFF	38	573	574	1.0000	'18thAnnualFAAV&VSummitSep28,2023Copyrigh' | 'th18AnnualFAAV&VSummitSep28,2023Copyrigh'
+Definitions commodity chains__pptx	1665	1665	SAME	1665	261	261	1.0000	
+Demick_JetBlue__pptx	3865	3458	DIFF	61	812	608	0.8859	'\ue570FoundedinFebruary1998asalowcostcarrier.' | '\uf097FoundedinFebruary1998asalowcostcarrier.'
+DoIRD Meeting 16JAN14 v1-1__pptx	6133	6132	DIFF	244	1075	1075	0.9979	'1993:Sevendeaths,includingschoolchildren' | '••••1993:Sevendeaths,includingschoolchil'
+EG1_dsrc tech__ppt	11617	11617	DIFF	139	2034	2034	0.9824	'\ue439Context:\ue440EFCDirective2004/52/EC\ue440Workont' | '\uf06eContext:EFCDirective2004/52/EC\uf075Workonth'
+Employment-Based_I-485__ppt	14065	14070	DIFF	21	2516	2516	0.9781	'485,ApplicationtoRegisterPermanentReside' | '-485,ApplicationtoRegisterPermanentResid'
+Ensemble-pour-l-amelioration-de-la-securite-de-lac-AIRBUS__pptx	3625	3625	DIFF	0	627	627	0.9923	'28/06/2016AnnamariaBACCO,MaurySECKAirbus' | '13/08/2026AnnamariaBACCO,MaurySECKAirbus'
+FAAAIandtheArtandScienceofV&Vfinal__pptx	6170	6170	DIFF	555	1135	1133	0.9994	'\ue63fWhatfactorshavedrivensuccessofMLoverlas' | '\uf084WhatfactorshavedrivensuccessofMLoverlas'
+FAA_Form_337__ppt	30890	30893	DIFF	174	5550	5614	0.9908	'❶FAAForm337`s,&whentocompletethem❶Proced' | '\uf0b6FAAForm337`s,&whentocompletethem\uf0b7Proced'
+FIT26-Presentation-Airservices-Update__pptx	1337	1337	SAME	1337	221	221	1.0000	
+FIT26-Presentation-PR-Briefing-Debrief-Airbus__pptx	7645	7645	SAME	7645	1441	1443	1.0000	
+Framing Europe__ppt	12012	12012	DIFF	87	2237	2237	0.9906	'\ue439“Framesareorganizingprinciplesthatareso' | '\uf06e“Framesareorganizingprinciplesthatareso'
+Fundamentals_Module_1_basics__ppt	6901	6789	DIFF	521	1135	1089	0.9818	'oversightComplianceisintegraltosafetyman' | 'complianceComplianceisintegraltosafetyma'
+G-InvoicingKeithJarboe__pptx	7325	7325	DIFF	2406	1078	1080	1.0000	'invoice/G-InvoicingSystemIntegrationGuid' | '-invoice/G-InvoicingSystemIntegrationGui'
+HENTZEN_COMPOSITE_MATERIALS_IN_THE_AEROSPACE_INDUSTRY__pptx	1970	1970	SAME	1970	320	321	1.0000	
+ITE106-Chapter 4__ppt	17079	17079	DIFF	6802	3139	3139	1.0000	'mailaccount.•Further,discussionlistsneed' | '-mailaccount.•Further,discussionlistsnee'
+Inducement-to-Insurance-Business__ppt	13362	13315	DIFF	106	2587	2577	0.9963	'TitleInsuranceandRealEstateProfessionals' | 'RealEstateProfessionals(RESPA/IDOI)FAQIn'
+Intersil_Italy_CAN_Bus_Transceiver_Presentation_Final__pptx	18990	18946	DIFF	1025	3434	3435	0.9976	'ISL72027SEHISL72028SEHListenMode&Loopbac' | 'ListenMode&Loopback41D2ListenMode&SplitT'
+Item 6b - UNSD - Dissemination through APIs__pptx	2535	2535	SAME	2535	421	421	1.0000	
+JesuitAssocOfStudentPersonnel__ppt	7687	7686	DIFF	2405	1179	1177	0.9999	'include-•2PanelReports•3Brochures•Planni' | '•2include-PanelReports•3BrochuresPlannin'
+John_Broggio__RSS_Campion_event_John_Broggio__pptx	7145	7146	DIFF	557	1171	1172	0.9999	'indicators/nhs-outcomes-framework/curren' | '-indicators/nhs-outcomes-framework/curre'
+Lepore__ppt	11225	11241	DIFF	1561	1812	1822	0.9975	'-buildingmeasurestoencourageresponsiblea' | 'buildingmeasurestoencourageresponsibleac'
+Liturgical-Commission-2025-Convention-Presentation__pptx	1927	1926	DIFF	693	344	344	0.9995	'●AllParishessingasacongregation,ledbyach' | 'AllParishessingasacongregation,ledbyacho'
+N2_E_Maestroni_Swarm_COP__pptx	30827	29765	DIFF	3381	5285	5126	0.9650	'8.IdentificationofFOSgenericconstraints:' | '7.IdentificationofFOSgenericconstraints:'
+NAS-Infrastructure-Roadmaps-HSI__pptx	9266	9266	DIFF	2024	1415	1415	1.0000	'Human-SystemSafety/HumanFactorsRiskAsses' | '1131FAASystemSafetyGuidance:Developmento'
+NAS-Infrastructure-Roadmaps-Weather__pptx	12543	12543	DIFF	2135	2119	2120	1.0000	'IARD1355TDWR2028202920302031203220332034' | '202820292030203120322033203420352036+203'
+NAS-Infrastructure-Roadmaps-v16.0__pptx	110351	110235	DIFF	2012	18884	18850	0.9978	'TFMSS3(IARD)-DP111911CSS-FD(IID)-DP1074F' | '1CSS-FD(IID)-DP10741TFMSS3(IARD)-DP11191'
+NCW-2024-Guide-__pptx	1257	1257	DIFF	19	211	215	1.0000	'Events(4th-8thMarch)ResourceguideNCWVirt' | '(4th-8thMarch)ResourceguideEventsNCWVirt'
+NWD-GLA-Community-Outreach-Day-Oct-2025__pptx	4146	4104	DIFF	885	644	638	0.9894	'FindaJobYouLove–withSuccessfulMums–July2' | 'OfficialNWDResourcesAllnewNWDWebsite:Org'
+OnTrac_StarCertificationProgram-3Day__pptx	8089	6473	DIFF	2753	1326	1030	0.7872	'\ue441SupervisoryConduct\ue441BehavioursLeadersNee' | '2.PERFORMANCEMEASUREMENT\uf076WhyPerformanceM'
+PAL Block Intro 2023__pptx	8748	8748	DIFF	1210	1461	1463	0.9975	'5.SubmitcoursecompletionformsbyJune26th6' | '4.SubmitcoursecompletionformsbyJune26th4'
+PRM_training__pptx	11043	11032	DIFF	116	2154	2156	0.9963	'-procedures@faa.govREV1:Graphicsenhanced' | 'procedures@faa.govREV1:Graphicsenhancedp'
+Presentation - Identify Components of the Airport (1)__pptx	3089	3089	DIFF	146	554	554	0.9808	'\ue49eMostrunwaysaremadewithasphalt,concrete,' | '\uf0d8Mostrunwaysaremadewithasphalt,concrete,'
+REDAC Briefing_SSIT_CARA_08132014.ppt__pptx	2787	2787	DIFF	1609	462	462	1.0000	'Shortfalls••••••••PlannedRemovalofRWSLsU' | '••PlannedRemovalofRWSLsUseofRunwaysasTax'
+REDAC HF briefing Sep 2016_LARD_ATC_TO_FE_v2__pptx	13192	13192	DIFF	10754	2119	2119	1.0000	'Details:examinationofhowthesystemisdesig' | 'examinationofhowthesystemisdesignedtodet'
+REDAC briefing March12-13-2014jemvbFINAL.ppt__pptx	16711	16712	DIFF	643	2587	2584	0.9967	'\ue49ePlandevelopedtobeupdatedinFY14toidentif' | '\uf0d8PlandevelopedtobeupdatedinFY14toidentif'
+RESPA_-_Section_8_Webinar__ppt	14015	14023	DIFF	161	2569	2578	0.9753	'\ue57aEnactedin1974.(12USC2601-2617)\ue57aPurposew' | '\uf0a1Enactedin1974.(12USC2601-2617)\uf0a1Purposew'
+ROK-PI Climate Bulletin - Edition 2017-06__pptx	2396	2396	SAME	2396	409	409	1.0000	
+RPA P4 - Advanced Material__pptx	9227	9216	DIFF	4654	1477	1479	0.9986	'3055•End•10Dec.201625•5:20pm•Start45•10D' | '1Temperature◦C0-1A7-TC-154.5"A4-TC-100.5'
+RRM-training-syllabus-Chapter-3-Teamwork-TC-Towing-Incident-Analysis-Dec-2009__ppt	14493	14546	DIFF	203	2475	2576	0.9962	'Canada-YYZAir•Mr.MarkShankland,Mgr.Acrft' | 'AirCanada-YYZ•Mr.MarkShankland,Mgr.Acrft'
+Ramp Up Campaign - French__pptx	2627	2627	DIFF	1657	437	437	1.0000	'ConscientRendez-vouscomptequevoscompéten' | 'FamilierPrenezletemps:leschosespeuventne'
+Reporting_responsibilities_matrix__pptx	323084	323084	SAME	323084	57743	57743	1.0000	
+SRDMG(16)024_60 GHz onboard airplanes__pptx	10737	10736	DIFF	680	1862	1862	0.9999	'••••••Linkbudgetmodelingforradioastronom' | 'Linkbudgetmodelingforradioastronomyiscom'
+Sean Monogue__pptx	5195	5194	DIFF	417	817	817	0.9830	'\ue439Createdin1987.\ue439Voluntarypoliticalarrang' | '\uf06eCreatedin1987.\uf06eVoluntarypoliticalarrang'
+Sector_Skills_Insights_Advanced_Manufacturing_summary_slide_pack__pptx	24625	24560	DIFF	417	4587	4666	0.9974	'-basedbusinesssolutionsthathavebeenusedb' | 'basedbusinesssolutionsthathavebeenusedby'
+Session 21- The option to expand & abandon__pptx	4495	4495	DIFF	89	885	885	0.9863	'\ue228\ue228\ue228Takingaprojecttodaymayallowafirmtocon' | '\uf06e\uf06e\uf06eAswathDamodaranTakingaprojecttodaymay'
+Session-1-Presentation-Reporting-Forms-Form-12-final__pptx	6466	6462	DIFF	234	1131	1124	0.9941	'\ue46fComplianceReport\ue46fAnnualInformationRetur' | '\uf0a7ComplianceReport\uf0a7AnnualInformationRetur'
+Snowbirds_High_Show__pptx	8387	8387	DIFF	1404	1871	1871	0.9998	'Thisisapermittedmanoeuvrewiththeapproval' | 'Snowbirds1-9,inCanadaGooseformationflyto'
+Stakeholders-v08052017 - v5__pptx	3604	3601	DIFF	322	538	547	0.9992	'2017May-AugSep-DecREQUIREMENTSJan-AprBUI' | 'MayAugSepDecREQUIREMENTS2017Jan-AprBUILD'
+Statement of Work presentation__pptx	1344	1312	DIFF	194	227	224	0.9587	'HAVEPROJECTTEAMREVIEWKEEPITSIMPLEBESPECI' | 'STEPBYSTEPBESPECIFIC,explainmutualexpect'
+Structural Testing__pptx	22352	22216	DIFF	262	4362	4340	0.9924	'\ue10bAirbusA3203CaseStudy\ue10bAirbusA320•Launche' | '\uf02dAirbusA3203CaseStudy\uf02dAirbusA320•Launche'
+Sylva%20introduction%20session__pptx	5939	5939	DIFF	51	1064	1467	0.9963	'AfundamentalsteptoTelcoCloud&Edgehomogen' | '2024AfundamentalsteptoTelcoCloud&sustain'
+Tax factsheet 2022 (1)__pptx	14035	14188	DIFF	2874	2834	2869	0.9892	'NameoftheallowanceWhatistakingintoaccoun' | '7NameoftheallowanceWhatistakingintoaccou'
+Technical_Report_Elements[1]__pptx	7988	8020	DIFF	513	1425	1430	0.9960	'proposals•technicalreports•regulations•p' | 'technicalreports•proposals•progressrepor'
+Thailand17__ppt	15656	15135	DIFF	1751	2736	2625	0.9667	'EarthquakeDepthEarthquakeLocation<100kmU' | 'FrequencyofEachTypeofBulletin(basedonlas'
+Trust Fund Excise Taxes Structure__pptx	915	915	SAME	915	169	169	1.0000	
+W3_Case_Study_of_a_Tsunami_Warning_Simulation_Exercise_Ed__ppt	5164	4643	DIFF	1630	900	812	0.8991	'EarthquakeDepthEarthquakeLocation<100kmU' | 'NeedToTestStandardOperatingProcedures(SO'
+WC_Update-Aug03__ppt	3020	3020	DIFF	641	452	452	1.0000	'BulletinBd-AncillaryServices-CongestionM' | 'ReliabilityCoordinationCenters••Bulletin'
+WiGr_2021W_1_Angebot-Nachfrage-Elastizität-211017-171222__pptx	15000	13710	DIFF	4199	2154	1958	0.9126	'Betriebssysteme:MicrosoftSchienennetzeSt' | '••••Betriebssysteme:MicrosoftSchienennet'
+Wildlife for REDAC September 11__pptx	9630	9630	DIFF	4505	1557	1535	0.9967	'\ue46f\ue46f\ue46fRadarData(3Dposition,time,velocity,bi' | '\uf0a7\uf0a7\uf0a7RadarData(3Dposition,time,velocity,bi'
+[Christophe]NLP_reseau_inge_stat__pptx	4904	4905	DIFF	759	884	885	0.9933	'\ue4c2Nonconformity(NC):“freetext”fromSAPdata' | '\uf0fcNonconformity(NC):“freetext”fromSAPdata'
+_1___Opatrny_Ales_United_Kingdom_business_opportunities_final__pptx	9772	9775	DIFF	3157	1614	1620	0.9997	'•••••••••Anew£23billionfundfor"innovatio' | 'Anew£23billionfundfor"innovationandinfra'
+airbus-powerpoint-presentation-2019-20-without-video_diy_2019-20__pptx	4534	4534	DIFF	372	871	879	0.9965	'\ue49ehelpAirbuswhentransportingaidor,\ue49eprovid' | '\uf0d8helpAirbuswhentransportingaidor,\uf0d8provid'
+architecture6__ppt	11048	11035	DIFF	77	1926	2544	0.9845	'\ue47aArchitecturaldesigndecisions\ue47aArchitectu' | '\uf0b2Architecturaldesigndecisions\uf0b2Architectu'
+attendance-updates-for-governors__pptx	17781	17803	DIFF	44	3047	3055	0.9978	'•PublishedFeb2024Guidance–AppliesandStat' | '–AppliesandStatutoryfromSept•PublishedFe'
+bar_chart__pptx	132	132	SAME	132	25	25	1.0000	
+berlin__ppt	7801	7813	DIFF	438	1365	1375	0.9957	'•Adistributedsystemarchitecture:••••Noce' | 'Node•Adistributedsystemarchitecture:•Noc'
+bitesize-writing-a-report__pptx	4004	4004	DIFF	2999	655	658	1.0000	'UraniumProduction2015Figure1:Figure1:Ura' | 'Figure1:UraniumProduction2015Figure1:Ura'
+c_291533__pptx	6105	6115	DIFF	43	1104	1105	0.9919	'8/13/20191Agenda••••TransportationDMVAWo' | '08/13/20261Agenda••••TransportationDMVAW'
+chapter_4_0__pptx	19434	19434	DIFF	146	3175	3175	0.9877	'Describeanoverallframeworkforprojectinte' | '\uf07dDescribeanoverallframeworkforprojectint'
+combo_bar_line_chart__pptx	221	221	DIFF	173	42	42	1.0000	'500000Q1Q2Q3Q4NorthRegionSouthRegionProf' | '05000Q1Q2Q3Q40NorthRegionSouthRegionProf'
+concepts-surrounding-cloud-computing-carolyn-kranz-and-rich-prem-gb-seattle-2011__ppt	14157	14098	DIFF	159	2458	2463	0.9944	'•UncertaintyofTaxApplication–Theadventof' | 'UncertaintyofTaxApplication–Theadventoft'
+dhs-293364__pptx	20458	20496	DIFF	151	3617	3618	0.9861	'4/24/2017MinnesotaDepartmentofHumanServi' | '08/13/2026MinnesotaDepartmentofHumanServ'
+diapo_6_fees_vous_etes_poctdoct_exterieur_a_luniv_v2_0_1__pptx	600	600	SAME	600	92	92	1.0000	
+ev122_jj-liew-tort-of-bribery-webinar__pptx	7086	7085	DIFF	522	1374	1374	0.9853	'\ue46fBriber\ue46fBribee\ue46fClaimant/PrincipalWhatisa' | '\uf0a7Briber\uf0a7Bribee\uf0a7Claimant/PrincipalWhatisa'
+fishbone-diagram-template-ppt-1__pptx	913	913	SAME	913	189	189	1.0000	
+flying-by-numbers-presentation__pptx	2491	2491	DIFF	816	546	547	1.0000	'2xsxCL/2Where:L=lift;forlevelflightthise' | 'xsxCL/22Where:L=lift;forlevelflightthise'
+gfopportunitiesforlinkagespres_2010_en__ppt	10863	10867	DIFF	4312	1647	1654	0.9985	'-basedSRH-HIVinterventionsandadvocacy.•A' | 'basedSRH-HIVinterventionsandadvocacy.•Ad'
+ghgp-supply-chain-initiative_20100323_wri__pptx	23317	23318	DIFF	172	3895	3896	0.9931	'\ue46fGrowingPracticeofGHGManagementintheSupp' | '\uf0a7GrowingPracticeofGHGManagementintheSupp'
+gillikin_online_user_mtg_2010__ppt	8332	8332	DIFF	175	1291	1292	0.9646	'\ue439DavidGillikin:OnlineUpdate\ue439LorenFrant:M' | '\uf06eDavidGillikin:OnlineUpdate\uf06eLorenFrant:M'
+hofman__ppt	3071	3075	DIFF	1590	450	450	0.9987	'ched,June2002erpaWorkshopsPlaceMonthYear' | 'erpaWorkshopsLaunched,June2002PlaceMonth'
+iaeg_work_group_leader_updates__pptx	523	523	SAME	523	90	90	1.0000	
+iep-amount-frequency-for-webinar__ppt	9579	9579	DIFF	265	1678	1691	0.9855	'\ue439Chooseanaudiosource\ue439Makesurethevolumeon' | '\uf06eChooseanaudiosource\uf06eMakesurethevolumeon'
+introduction_to_bea_tuxedo__ppt	10992	10819	DIFF	112	1785	1767	0.9843	'•OracleDBAIndependentconsultant–ex-Peopl' | 'OracleDBAIndependentconsultantex-PeopleS'
+iris07.12.12__pptx	5010	5010	SAME	5010	881	881	1.0000	
+item_3-environmental_process_briefing__pptx	1827	1827	DIFF	564	296	296	0.9880	'\ue472Order7400.2KProceduresforHandlingAirspa' | '\uf0aaOrder7400.2KProceduresforHandlingAirspa'
+joint_user_outcomes_michael_fullerton_29.06.12__ppt	10258	10258	DIFF	352	1917	1918	0.9818	'\ue570TheRoyalBoroughofKensingtonandChelsea(R' | '\uf097TheRoyalBoroughofKensingtonandChelsea(R'
+line_chart__pptx	116	116	SAME	116	23	23	1.0000	
+manufacturing_process_simulation_working_group_overview_2023__pptx	5008	4947	DIFF	514	726	714	0.9878	'•MonthlyonlinemeetingsviaWebEx•Chair–Sjo' | 'MonthlyonlinemeetingsviaWebEx•Chair–Sjoe'
+medicines_bulletin_february_2023_final__pptx	3223	3223	SAME	3223	534	535	1.0000	
+nabiyeleul_1_aviation_service_28_july_2020__pptx	3282	3282	DIFF	1	554	554	0.7434	'ebinaron:SkillsforEconomicdiversificatio' | 'EBINARON:SKILLSFORECONOMICDIVERSIFICATIO'
+order-of-worship-ppt-revised-2018__pptx	5621	5621	DIFF	766	1139	1139	0.9926	'\ue43cThePrelude\ue43cTheProcessional\ue43cDoxology\ue43cThe' | '\uf071ThePrelude\uf071TheProcessional\uf071Doxology\uf071The'
+outlook_of_nigerian_pension_sector__ppt	6044	6044	DIFF	148	1021	1021	0.9739	'♦HighlightsoftheNigerianPensionScheme♦Im' | '\uf0a8HighlightsoftheNigerianPensionScheme\uf0a8Im'
+passiv__pptx	7209	7200	DIFF	1052	1199	1197	0.9831	'ErPosition2wurdeimRestaurantwurdenEndean' | 'Position2ErwurdeEndeimRestaurantwurdenan'
+pods05__ppt	11585	11579	DIFF	188	1882	1884	0.9822	'\ue46fEmacs\ue46fGrep\ue46fIDE:integratedprogramdevelop' | '\uf0a7Emacs\uf0a7Grep\uf0a7IDE:integratedprogramdevelop'
+policy-pesentation__ppt	2443	2443	DIFF	66	389	389	0.9366	'\ue437USDCInvolvementBeganin1997\ue437GRASPetition' | '\uf06cUSDCInvolvementBeganin1997\uf06cGRASPetition'
+pres_ioc_phuket__ppt	6333	6339	DIFF	116	992	1518	0.9744	'\ue471Establishedin1960,partofUNESCO\ue471Purposei' | '\uf0a9Establishedin1960,partofUNESCO\uf0a9Purposei'
+redac-fullComm-201705-EE-FRs-briefing__pptx	2353	2353	DIFF	95	374	374	0.9806	'\ue570February28–March1,2017Meeting\ue570Focus:Rev' | '\uf097February28–March1,2017Meeting\uf097Focus:Rev'
+redac-nasops-201503-RIRP-portfolio-update__pptx	16018	16018	DIFF	2892	2762	2762	0.9995	'•JRCmeeting6/19/2013determinedthatLCGSno' | 'JRCmeeting6/19/2013determinedthatLCGSnot'
+redac-sas-201403-ppt-portfolio-rev-sim__pptx	13740	13741	DIFF	742	2006	2014	0.9928	'\ue49eContinuedOperationalSafety(COS)-Assessa' | '\uf0d8ContinuedOperationalSafety(COS)-Assessa'
+redac-sas-201509-asisp-research__pptx	19741	19741	DIFF	174	3124	3130	0.9894	'\ue42cMigrationtoNetwork-centricArchitectures' | '\uf051MigrationtoNetwork-centricArchitectures'
+redac-sas-201703-hf-research-division__pptx	5108	5109	DIFF	699	713	713	0.9998	'•Pilots,airtrafficcontrollers,technicalo' | '–AVSRE&DRequirementsProcessforFlightDeck'
+scatter_chart__pptx	230	110	DIFF	54	46	46	0.4407	'[CELLRANGE]9<YAxisTitle>87[CELLRANGE]6[C' | 'C9<YAxisTitle>87A6ACB5CB4DB3D2A10234D56<'
+schematicplay__pptx	11834	11835	DIFF	1856	2111	2126	0.9992	'\ue570Childrenneedtofeelsupportedwithinanurtu' | '\uf097Childrenneedtofeelsupportedwithinanurtu'
+schematicplaymar21__pptx	11812	11814	DIFF	1847	2103	2121	0.9992	'\ue570Childrenneedtofeelsupportedwithinanurtu' | '\uf097Childrenneedtofeelsupportedwithinanurtu'
+section_1_our_rights_presentation__pptx	24171	24176	DIFF	626	4135	4144	0.9981	'\ue49eNew(unmapped)andpartiallynew(partiallym' | '\uf0d8New(unmapped)andpartiallynew(partiallym'
+servicedesk-plus-overviewfinal__pptx	11718	11717	DIFF	2711	1805	1805	0.9924	'®helpdesk+change+asset+ProjectIncidentma' | 'helpdesk+change+asset+ProjectIncidentman'
+social-media-app-bulletin-january__pptx	4127	4127	SAME	4127	788	788	1.0000	
+solog_orientation_august_2019__pptx	4756	4758	DIFF	882	670	685	0.9992	'ENGINEERINGGraduateacademics:DerinUral,P' | 'Graduateacademics:DerinUral,Ph.D.,Profes'
+southern-classic-kennesaw-state-university-final__pptx	12261	12242	DIFF	412	2217	2270	0.9941	'ClosingPricePessimisticBaselineOptimisti' | '$35.00$30.006666666666666666667-1b-1b-1r'
+stacked_area_chart__pptx	178	178	DIFF	102	29	29	1.0000	'OnlineSalesIn-StoreSales2000015000100005' | 'In-StoreSalesOnlineSales2000015000100005'
+stacked_bar_chart__pptx	177	177	DIFF	101	29	29	1.0000	'OnlineSalesIn-StoreSales2000015000100005' | 'In-StoreSalesOnlineSales2000015000100005'
+undp_presentation_revised_17_may__ppt	11053	11181	DIFF	153	1814	1836	0.9836	'•UNDP’sPosition•UNDPMandate,Structure,an' | 'I.UNDP’sPositionII.UNDPMandate,Structure'
+vv_summit_SAIC-PRESENTATION_FAA-V&V-Summit_508c__pptx	3709	3711	DIFF	1356	648	649	0.9995	'PDCASAICPROPRIETARYINFORMATIONI©SAIC.ALL' | 'SAICPROPRIETARYINFORMATIONIPDCA©SAIC.ALL'
+vvsummit2022-Research-Roadmap-and-the-UML-3-Operational-Integration-Assessment__pptx	8624	8624	DIFF	298	1281	1281	1.0000	'→→→Bywayofhigh-level…RequirementsAssumpt' | 'Bywayofhigh-level…→Requirements→Assumpti'
+vvsummit2022-SAIC-PRESENTATION__pptx	3709	3711	DIFF	1356	648	649	0.9995	'PDCASAICPROPRIETARYINFORMATIONI©SAIC.ALL' | 'SAICPROPRIETARYINFORMATIONIPDCA©SAIC.ALL'
+wells08_basic__ppt	5987	6008	DIFF	77	986	995	0.9932	'•ChapterKeyPoints•TheMediaIndustry•Basic' | 'I.ChapterKeyPointsII.TheMediaIndustryIII'
+wopanets-innovationdays-06-16__pptx	3785	3785	DIFF	152	563	563	0.9869	'\ue49e\ue49e\ue49e\ue49e\ue49e\ue49e•Mixed-criticalitydatadeliveryMult' | '\uf0d8\uf0d8\uf0d8\uf0d8\uf0d8\uf0d8Mixed-criticalitydatadeliveryMulti'
+ws_prod-g-doc-Events-2007-Approval-of-Flight-Conditions-RM-NAA-16032007__ppt	4903	4900	DIFF	147	743	743	0.9744	'\ue42cApplicationforApprovalofFlightCondition' | '\uf051ApplicationforApprovalofFlightCondition'
+ws_prod-g-doc-Events-2007-Privileges__ppt	4352	4328	DIFF	511	799	799	0.9931	'Slide2EuropeanAviationSafetyAgencyPrivil' | '2SlideEuropeanAviationSafetyAgencyPrivil'
+ws_prod-g-doc-Events-2007-may-presentation-PtF-background-+-principles__ppt	5358	5265	DIFF	121	909	909	0.9782	'\ue50cWelcome\ue50cBackground\ue50cSomemajorprincipleso' | '-Welcome-Background-Somemajorprincipleso'
+ws_prod-g-doc-Events-2007-november-IACA-presentation-at-EASA-Fuel-Tank-Safety-Training-Seminar__ppt	2993	2993	SAME	2993	555	555	1.0000	
+ws_prod-g-doc-Events-2007-september-M.017-(French)-France__ppt	35670	35492	DIFF	147	6215	6215	0.9939	'\ue5cdLe20Novembre2003laCommissionEuropéennea' | 'Le20Novembre2003laCommissionEuropéenneaa'
+ws_prod-g-doc-Events-2007-september-MDM.032-(ENGLISH)-CZ__ppt	15332	15189	DIFF	222	2662	2662	0.9850	'\ue5cdGeneralpresentationoftheA-NPA\ue5cdUsefuldef' | 'GeneralpresentationoftheA-NPAUsefuldefin'
+ws_prod-g-doc-Events-2008-February-5-NATO-activities__ppt	2263	2263	DIFF	607	447	453	1.0000	'rsitsctomestFINASA&atDareksnLiMedicalOth' | 'seshineurtcteichnksrALimtateasDSy&HumaFa'
+ws_prod-g-doc-Events-Part-M-presentation__ppt	10907	10860	DIFF	213	1844	1845	0.9897	'Slide3EuropeanAviationSafetyAgencyEASA:R' | '3SlideEuropeanAviationSafetyAgencyEASA:R'
+ws_prod-g-doc-Events-industrymeeting18112004-Aercap__ppt	7237	7237	DIFF	70	1250	1271	0.9787	'\ue46f\ue46f\ue46f\ue46f\ue46f\ue46f\ue46f\ue46fToday’sObjectivesIntroductiontoA' | '\uf0a7\uf0a7\uf0a7\uf0a7\uf0a7\uf0a7\uf0a7\uf0a7Today’sObjectivesIntroductiontoA'
+ws_prod-g-doc-Events-industrymeeting18112004-European-Safety-Strategy-Initiative__ppt	1957	1911	DIFF	272	332	332	0.9765	'\ue5cdRecoveredfrom2001,SARs&Oilprices\ue5cdLowcos' | 'Recoveredfrom2001,SARs&OilpricesLowcosta'
+ws_prod-g-doc-Events-r-6.-ESM__ppt	11866	11867	DIFF	8171	1951	1951	0.9989	'housebythemanufacturer•designers,workers' | '-housebythemanufacturer•designers,worker'

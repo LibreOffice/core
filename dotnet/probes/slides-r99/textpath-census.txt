@@ -1,0 +1,6 @@
+draw:text-path="true" in /home/user/r97-slides/fodp-all (26.2.4.2, all 51 .ppt)
+
+8.16_AOD_FINAL_Provider_Training_Presentation_9_2009.fodp  gr123  fontwork-arch-up-curve   fill=solid    image=-            repeat=-
+pres_ioc_phuket.fodp                                       gr75   fontwork-plain-text      fill=bitmap   image=Bitmap_20_1  repeat=stretch
+
+2 text-path shapes, in 2 of the 51 .ppt

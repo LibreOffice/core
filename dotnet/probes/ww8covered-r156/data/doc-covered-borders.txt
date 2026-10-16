@@ -1,0 +1,20 @@
+18 arms
+arm   lower-left cell        style          border-top            border(all)
+MBB   table-cell             Table1.A1      -                     1pt solid #000000
+MBN   table-cell             Table2.A1      -                     1pt solid #000000
+MBA   table-cell             Table3.A1      -                     1pt solid #000000
+MNB   table-cell             Table4.A2      none                  -
+MNN   table-cell             Table5.A2      none                  -
+MNA   table-cell             Table6.A2      none                  -
+MAB   table-cell             Table7.A2      none                  -
+MAN   table-cell             Table8.A2      none                  -
+MAA   table-cell             Table9.A2      none                  -
+VBB   covered-table-cell     Table10.A1     -                     1pt solid #000000
+VBN   covered-table-cell     Table11.A1     -                     1pt solid #000000
+VBA   covered-table-cell     Table12.A1     -                     1pt solid #000000
+VNB   covered-table-cell     Table13.A1     -                     1pt solid #000000
+VNN   covered-table-cell     Table14.A1     -                     1pt solid #000000
+VNA   covered-table-cell     Table15.A1     -                     1pt solid #000000
+VAB   covered-table-cell     Table16.A1     -                     1pt solid #000000
+VAN   covered-table-cell     Table17.A1     -                     1pt solid #000000
+VAA   covered-table-cell     Table18.A1     -                     1pt solid #000000

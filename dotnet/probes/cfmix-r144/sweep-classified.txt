@@ -1,0 +1,15 @@
+cfexpr(1)                        sheets/chartset-006/xlsx/044_Cash_flow_forecast_Use_this_template_b8fa1f35.xlsx
+cfexpr(1)                        sheets/chartset-006/xlsx/088_To-do_list_with_progress_tracker_Use_this_template_8c438912.xlsx
+cfexpr(2)                        sheets/chartset-007/xlsx/040_Blood_pressure_tracker_872b6833.xlsx
+hatch-cell                       sheets/chartset-007/xlsx/063_Sales_pipeline_aec57013.xlsx
+cfexpr(2)                        sheets/chartset-007/xlsx/083_Project_tracker_Use_this_template_b38d057c.xlsx
+cfexpr(4)                        sheets/chartset-009/xlsx/015_Free_Gantt_Chart_Template_for_Excel_414e86bf.xlsx
+cfexpr(2)                        sheets/chartset-009/xlsx/024_Free_Kids_Chore_Chart_Template_ad74bb34.xlsx
+hatch-dxf+hatch-cell+cfexpr(10)  sheets/chartset-010/xlsx/072_Gantt_project_planner_dde00e33.xlsx
+cfexpr(42)                       sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx
+cfexpr(4)                        sheets/chartset-013/xlsx/019_Free_Blood_Sugar_Chart_for_Excel_-_Track_Your_Blood_Sugar_Level_36f4a782.xlsx
+cfexpr(12)                       sheets/chartset-014/xlsx/027_Simple_personal_cash_flow_statement_675c6584.xlsx
+hatch-dxf+hatch-cell             sheets/chartset-014/xlsx/064_Small_business_cash_flow_Use_this_template_0a640756.xlsx
+cfexpr(8)                        sheets/done-003/xlsx/VOR Candidate Discontinuance List 2026-01-08.xlsx
+
+movers: 13   unexplained: 0

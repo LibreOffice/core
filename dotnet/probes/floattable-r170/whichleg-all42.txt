@@ -1,0 +1,44 @@
+vsFloat	nF	vsFlow	nW	nearer	document
+warning: The `fitz` API is deprecated and will be removed in future. Use `import pymupdf` instead.
+25.68	951	26.76	951	float	ABCD-FE-01-00 Flight Envelope - v1 08.03.16.docx
+51.56	55	56.32	52	float	AW-104D-RVSM-Aircraft-Approval-Checklist.pdf.docx
+2.91	2	329.89	2	float	083_Printable_Graph_Paper_Template_Customizable_Format_55ff93a3.docx
+0.17	3	0.10	1	FLOW	084_Printable_Graph_Paper_Template_Editable_Layout_d66c6820.docx
+16.70	2	0.10	1	FLOW	085_Printable_Graph_Paper_Template_Excellent_Format_4bcae89a.docx
+0.11	12	37.34	12	float	087_Printable_Graph_Paper_Template_Green_Theme_0c14ea04.docx
+0.10	2	133.60	2	float	081_Printable_Graph_Paper_Template_Blue_Theme_629316cb.docx
+68.86	76	107.92	66	float	018_Project_Timeline_Template_Editable_Format_e1cf1df5.docx
+2.37	4	691.29	4	float	080_Printable_Graph_Paper_Template_Black_Theme_6b066be1.docx
+1.68	2	695.25	2	float	089_Printable_Graph_Paper_Template_Simlpe_Format_3aff1c88.docx
+19.45	33	121.70	31	float	012_Project_Timeline_Template_Black_and_Brown_Theme_35c76550.docx
+64.40	104	103.13	94	float	016_Project_Timeline_Template_Complete_Guide_7d36d09c.docx
+0.83	56	68.55	47	float	017_Project_Timeline_Template_Customizable_Format_5d5ca2e8.docx
+0.90	20	0.86	20	FLOW	041_Visual_Product_Roadmap_Template_Blank_Format_63a3e010.docx
+6.43	61	33.28	61	float	042_Visual_Product_Roadmap_Template_Colored_Background_89385cfb.docx
+5.46	3	679.32	2	float	082_Printable_Graph_Paper_Template_Colored_Background_9092cf9b.docx
+21.52	46	111.71	44	float	020_Project_Timeline_Template_Modern_Theme_0c215d87.docx
+15.49	30	140.31	28	float	015_Project_Timeline_Template_Colored_Background_6434b0e8.docx
+0.34	63	116.45	58	float	013_Project_Timeline_Template_Blue_Background_4ea3475e.docx
+0.10	40	28.19	40	float	047_Visual_Product_Roadmap_Template_Professional_Layout_2ff4499e.docx
+0.11	126	189.57	29	float	011_Project_Timeline_Template_Beautiful_Theme_2336e680.docx
+11.32	196	15.88	201	float	461249.docx
+0.86	304	14.83	290	float	PAT-047 - Architecture and Detailed Design Assessment.docx
+0.64	377	86.65	327	float	part-147_approval list_20230119.docx
+11.66	195	11.75	195	float	ECSS-E-ST-50-16C-Annex-A(30September2021).docx
+12.20	613	12.25	613	float	draft-variation-notice-airbus-bm3965ia-v006-vs-comments.docx
+52.42	124	70.85	126	float	Case-Study-Heathrow-Airport.docx
+0.43	1157	143.57	771	float	5709.16 ch.40_mgfinal.docx
+78.47	292	0.21	292	FLOW	slcc-architecture-uu-architecture.docx
+25.86	588	42.37	594	float	AFS-050-004-F2_0i.docx
+22.55	395	20.34	395	FLOW	JEMIT_Template.docx
+1.78	445	70.38	38	float	system_design__technical_architecture_template.docx
+13.83	146	9.65	64	FLOW	HC-Bulletin-template.docx
+16.47	412	23.35	405	float	PES-Technical-Report-Template_Jan_2019.docx
+3.62	1959	4.15	1959	float	ABCD-SDE-23-00 - Avionic System Description - 17.02.16 - v1.docx
+23.81	820	25.07	820	float	ABCD-WB-08-00 Weight and Balance Report - v1 08.03.16.docx
+5.09	7274	11.08	6179	float	OM template for non-complex NCC operators_August 2016.docx
+1.35	1955	0.86	1954	FLOW	33004.docx
+85.13	68	82.44	69	FLOW	May 25 bulletin focus on carers in the workplace.docx
+34.09	668	67.21	211	float	CRIF - SpÃ©cification technique - Socle applicatif.docx
+1.51	5198	1.74	5198	float	ESPN-R - MCF - RA - Ed1.docx
+52.98	19751	52.93	19751	FLOW	FAA 2025-26 Holdover Tables.docx

@@ -1,0 +1,41 @@
+O25's two numbers, and O15's census page, measured side by side.
+
+Read out of each PDF's own content stream with pdf-ops.py, whose text position comes from the
+Td/TD/Tm/T* operators and NOT from a glyph or ink bounding box -- pdftotext -bbox reports an ink
+box derived from the font descriptor and a flat per-face offset out of it is an artefact of the
+instrument, not a baseline. pdf-ops.py y is measured up from the page bottom; the register's
+figures are measured down from the top, and the page is 540 pt tall.
+
+== 2015-Civil-Rights-Website-training.ppt page 2 -- the register's witness bullet
+
+  side     font                            size      y (up)    y (down)
+  ours     DAAAAA+OpenSymbol             17.770     364.990     175.010
+  ours     BAAAAA+DejaVuSans-Bold        29.990     357.080     182.920
+  ours     DAAAAA+OpenSymbol             17.770     289.080     250.920
+  ours     DAAAAA+OpenSymbol             17.770     213.170     326.830
+  ours     DAAAAA+OpenSymbol             17.770     137.250     402.750
+  ours     DAAAAA+OpenSymbol             17.770      68.510     471.490
+  ref      FAAAAA+OpenSymbol             17.800     364.340     175.660
+  ref      CAAAAA+DejaVuSans-Bold        29.990     357.080     182.920
+  ref      FAAAAA+OpenSymbol             17.800     288.430     251.570
+  ref      FAAAAA+OpenSymbol             17.800     212.510     327.490
+  ref      FAAAAA+OpenSymbol             17.800     136.600     403.400
+  ref      FAAAAA+OpenSymbol             17.800      67.860     472.140
+
+  Five OpenSymbol bullets, ours 17.773 pt and the reference's 17.802 -- 627 and 628 hundredths
+  of a millimetre, one unit of the model's own quantisation step. The first sits at 175.011 from
+  the top against 175.663: 0.652 pt, and the same 0.652 on all five.
+
+  The body text beside them is 29.99 pt at an IDENTICAL baseline on both sides. So the size
+  difference and the baseline difference are separately measurable and neither explains the
+  other: 0.652 pt is twenty-two times 0.029 pt.
+
+== and the same document's page in the dominant-size census is page 22, not page 2
+
+  page  2   dominant size 29.99 both sides  -- agrees, and is NOT in the 19-page census
+  page 22   ours 17.01 (90 alnum) against the reference's 14.00 (92 alnum)  -- IS in it
+
+  So the register's witness bullet and the dominant-size census are not the same phenomenon and
+  never could have been: they are different pages of the same deck, and page 2's dominant size
+  agrees. Three separable facts, not one -- a one-unit bullet size, a 0.65 pt bullet baseline,
+  and a whole-point body size on another page.

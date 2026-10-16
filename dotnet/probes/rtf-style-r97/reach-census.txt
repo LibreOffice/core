@@ -1,0 +1,28 @@
+338 .rtf scanned
+12 apply a name this round adds; 13 apply one already modelled; 23 either
+
+   10  before    'heading 1'
+    6  before    'heading 2'
+    5  Standard  'footer'
+    5  Standard  'header'
+    5  before    'heading 4'
+    4  before    'heading 3'
+    2  before    'Body Text'
+    2  Standard  'toc 1'
+    1  Caption   'Figure'
+    1  Standard  'Heading'
+    1  Caption   'Text'
+    1  before    'heading 5'
+    1  before    'heading 8'
+    1  before    'heading 9'
+    1  Standard  'toc 2'
+    1  Standard  'toc 3'
+
+  'Figure': 231164_SystemDesignDocument.rtf
+  'Heading': CSCRS_Technical-Report-Documentation-Page-with-instructions.rtf
+  'Text': bulletin.rtf
+  'footer': 231164_SystemDesignDocument.rtf, Regulations Governing the Status, Basic Rights and Duties of Officials other than Secretariat Officials, and Experts on Mission.rtf, Sol PJ14-03-04 Solution Contextual.rtf, hdss-bulletin-issue-285-25-june-2025.rtf, mde087077~283.rtf
+  'header': 150-5370-10H.rtf, 19-06 Assistive Technology TAB Final - 508.rtf, AC-150-5370-10G-updated-201604.rtf, ECSS-E-ST-50-16C-Annex-A(30September2021).rtf, Regulations Governing the Status, Basic Rights and Duties of Officials other than Secretariat Officials, and Experts on Mission.rtf
+  'toc 1': 231164_SystemDesignDocument.rtf, report-template.rtf
+  'toc 2': 231164_SystemDesignDocument.rtf
+  'toc 3': 231164_SystemDesignDocument.rtf

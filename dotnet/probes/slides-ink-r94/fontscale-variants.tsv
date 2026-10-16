@@ -1,0 +1,31 @@
+# Does 26.2.4.2 honour a:normAutofit/@fontScale?  Ten one-attribute variants of two corpus
+# decks, rendered through /opt/libreoffice26.2/program/soffice (LibreOffice 26.2.4.2, the five
+# tarball font confounds aside), drawn Tf sizes read out of the reference's own PDF.
+# 2026-09-11, round 94.  fontscale-variants.py is the script.
+#
+# 171128IPAP.pptx, slide 31, whose own element is <a:normAutofit fontScale="90000"/> and which
+# states no lnSpcReduction anywhere in the deck.
+deck	slide	variant	drawn Tf sizes on that page
+171128IPAP.pptx	31	stated-90000 (the file's own)	14.003:2 18:14 29.991:1
+171128IPAP.pptx	31	absent (bare <a:normAutofit/>)	14.003:2 18:14 29.991:1
+171128IPAP.pptx	31	stated-50000	14.003:2 18:14 29.991:1
+171128IPAP.pptx	31	stated-25000	14.003:2 18:14 29.991:1
+171128IPAP.pptx	31	no-normAutofit (element removed)	14.003:2 18:14 32.003:2
+171128IPAP.pptx	31	fs90000-lnSpc10000	14.003:2 18:14 29.991:1
+171128IPAP.pptx	31	fs50000-lnSpc10000	14.003:2 18:14 29.991:1
+171128IPAP.pptx	31	fs25000-lnSpc10000	14.003:2 18:14 29.991:1
+171128IPAP.pptx	31	fs100000-lnSpc10000	14.003:2 18:14 29.991:1
+171128IPAP.pptx	31	fs25000-lnSpc50000	14.003:2 18:14 29.991:1
+#
+# NWD-GLA-Community-Outreach-Day-Oct-2025.pptx, slide 5, patching the element that already
+# states BOTH attributes: <a:normAutofit fontScale="25000" lnSpcReduction="20000"/>.
+NWD-GLA-...pptx	5	stated-90000	10.006:1 13.011:8 14.995:3 40.989:1
+NWD-GLA-...pptx	5	absent	10.006:1 13.011:8 14.995:3 40.989:1
+NWD-GLA-...pptx	5	stated-50000	10.006:1 13.011:8 14.995:3 40.989:1
+NWD-GLA-...pptx	5	stated-25000 (the file's own value)	10.006:1 13.011:8 14.995:3 40.989:1
+NWD-GLA-...pptx	5	no-normAutofit (element removed)	10.006:1 40.989:1 51.987:35 60.009:8
+NWD-GLA-...pptx	5	fs90000-lnSpc10000	10.006:1 13.011:8 14.995:3 40.989:1
+NWD-GLA-...pptx	5	fs50000-lnSpc10000	10.006:1 13.011:8 14.995:3 40.989:1
+NWD-GLA-...pptx	5	fs25000-lnSpc10000	10.006:1 13.011:8 14.995:3 40.989:1
+NWD-GLA-...pptx	5	fs100000-lnSpc10000	10.006:1 13.011:8 14.995:3 40.989:1
+NWD-GLA-...pptx	5	fs25000-lnSpc50000	10.006:1 13.011:8 14.995:3 40.989:1

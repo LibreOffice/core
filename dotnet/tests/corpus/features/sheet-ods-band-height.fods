@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Six sheets differing only in what their page layout says about the header (or footer) band,
+  so that Calc's rule for it — max(fo:min-height, textHeight + gap) — can be asserted term by
+  term.
+
+  Calc's own arithmetic is `rParam.nHeight = nMaxHeight + rParam.nDistance` followed by
+  `if (rParam.nHeight < rParam.nManHeight) rParam.nHeight = rParam.nManHeight`
+  (ScPrintFunc::UpdateHFHeight, sc/source/ui/view/printfun.cxx:838 and :848-849), with
+  fo:min-height reaching nManHeight through ATTR_PAGE_SIZE (:666, :683) and the header's
+  fo:margin-bottom reaching nDistance through ATTR_ULSPACE (:898).
+
+  Grows     min 0.75 cm, gap 1 cm, one unstyled line.  Text wins: 11.14 + 28.35 = 39.49 pt.
+  Declared  min 2 cm, gap 1 cm, one unstyled line.     The minimum wins: 56.69 pt.
+  Fixed     svg:height 0.2 cm, gap 0.25 cm.            Not dynamic at all: 5.67 pt, not 18.2.
+  Sized     min 0.1 cm, gap 1 cm, a 24 pt span.        The span's own line: 26.78 + 28.35.
+  Floor     min 0.1 cm, gap 1 cm, a 6 pt span.         The default cell font's line, because
+                                                       the two empty areas beside it are each
+                                                       one empty paragraph of it: 11.14 + 28.35.
+  Footed    footer min 0.1 cm, fo:margin-top 1 cm.     The same rule on the other band.
+
+  Every figure is read off LibreOffice 26.2.4.2's own rendering of the same six page layouts,
+  as the shift of the first printed cell row against a seventh with no band at all —
+  dotnet/probes/ods-band-r75/, where the same numbers appear as the `gap_1cm`, `min_2cm`,
+  `fix_0.2cm`, `font_LiberationSans_24` and `font_LiberationSans_6` probes.
+-->
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+ xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+ xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+ xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+ xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+ xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+ office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+ <office:font-face-decls>
+  <style:font-face style:name="Liberation Sans" svg:font-family="&apos;Liberation Sans&apos;"
+   style:font-family-generic="swiss"/>
+ </office:font-face-decls>
+ <office:styles>
+  <style:default-style style:family="table-cell">
+   <style:text-properties style:font-name="Liberation Sans" fo:font-size="10pt"/>
+  </style:default-style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="co1" style:family="table-column">
+   <style:table-column-properties style:column-width="5cm"/>
+  </style:style>
+  <style:style style:name="ro1" style:family="table-row">
+   <style:table-row-properties style:row-height="0.5cm" style:use-optimal-row-height="false"/>
+  </style:style>
+  <style:style style:name="big" style:family="text">
+   <style:text-properties style:font-name="Liberation Sans" fo:font-size="24pt"/>
+  </style:style>
+  <style:style style:name="small" style:family="text">
+   <style:text-properties style:font-name="Liberation Sans" fo:font-size="6pt"/>
+  </style:style>
+  <style:style style:name="tGrows" style:family="table" style:master-page-name="mGrows"/>
+  <style:style style:name="tDeclared" style:family="table" style:master-page-name="mDeclared"/>
+  <style:style style:name="tFixed" style:family="table" style:master-page-name="mFixed"/>
+  <style:style style:name="tSized" style:family="table" style:master-page-name="mSized"/>
+  <style:style style:name="tFloor" style:family="table" style:master-page-name="mFloor"/>
+  <style:style style:name="tFooted" style:family="table" style:master-page-name="mFooted"/>
+  <style:page-layout style:name="pGrows">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+    fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"/>
+   <style:header-style>
+    <style:header-footer-properties fo:min-height="0.75cm" fo:margin-left="0cm"
+     fo:margin-right="0cm" fo:margin-bottom="1cm"/>
+   </style:header-style>
+  </style:page-layout>
+  <style:page-layout style:name="pDeclared">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+    fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"/>
+   <style:header-style>
+    <style:header-footer-properties fo:min-height="2cm" fo:margin-left="0cm"
+     fo:margin-right="0cm" fo:margin-bottom="1cm"/>
+   </style:header-style>
+  </style:page-layout>
+  <style:page-layout style:name="pFixed">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+    fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"/>
+   <style:header-style>
+    <style:header-footer-properties svg:height="0.2cm" fo:margin-left="0cm"
+     fo:margin-right="0cm" fo:margin-bottom="0.25cm"/>
+   </style:header-style>
+  </style:page-layout>
+  <style:page-layout style:name="pSized">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+    fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"/>
+   <style:header-style>
+    <style:header-footer-properties fo:min-height="0.1cm" fo:margin-left="0cm"
+     fo:margin-right="0cm" fo:margin-bottom="1cm"/>
+   </style:header-style>
+  </style:page-layout>
+  <style:page-layout style:name="pFloor">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+    fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"/>
+   <style:header-style>
+    <style:header-footer-properties fo:min-height="0.1cm" fo:margin-left="0cm"
+     fo:margin-right="0cm" fo:margin-bottom="1cm"/>
+   </style:header-style>
+  </style:page-layout>
+  <style:page-layout style:name="pFooted">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+    fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"/>
+   <style:footer-style>
+    <style:header-footer-properties fo:min-height="0.1cm" fo:margin-left="0cm"
+     fo:margin-right="0cm" fo:margin-top="1cm"/>
+   </style:footer-style>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="mGrows" style:page-layout-name="pGrows">
+   <style:header><text:p>GROWS</text:p></style:header>
+  </style:master-page>
+  <style:master-page style:name="mDeclared" style:page-layout-name="pDeclared">
+   <style:header><text:p>DECLARED</text:p></style:header>
+  </style:master-page>
+  <style:master-page style:name="mFixed" style:page-layout-name="pFixed">
+   <style:header><text:p>FIXED</text:p></style:header>
+  </style:master-page>
+  <style:master-page style:name="mSized" style:page-layout-name="pSized">
+   <style:header><text:p><text:span text:style-name="big">SIZED</text:span></text:p></style:header>
+  </style:master-page>
+  <style:master-page style:name="mFloor" style:page-layout-name="pFloor">
+   <style:header><text:p><text:span text:style-name="small">FLOOR</text:span></text:p></style:header>
+  </style:master-page>
+  <style:master-page style:name="mFooted" style:page-layout-name="pFooted">
+   <style:footer><text:p>FOOTED</text:p></style:footer>
+  </style:master-page>
+ </office:master-styles>
+ <office:body>
+  <office:spreadsheet>
+   <table:table table:name="Grows" table:style-name="tGrows">
+    <table:table-column table:style-name="co1"/>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string"><text:p>R1</text:p></table:table-cell>
+    </table:table-row>
+   </table:table>
+   <table:table table:name="Declared" table:style-name="tDeclared">
+    <table:table-column table:style-name="co1"/>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string"><text:p>R1</text:p></table:table-cell>
+    </table:table-row>
+   </table:table>
+   <table:table table:name="Fixed" table:style-name="tFixed">
+    <table:table-column table:style-name="co1"/>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string"><text:p>R1</text:p></table:table-cell>
+    </table:table-row>
+   </table:table>
+   <table:table table:name="Sized" table:style-name="tSized">
+    <table:table-column table:style-name="co1"/>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string"><text:p>R1</text:p></table:table-cell>
+    </table:table-row>
+   </table:table>
+   <table:table table:name="Floor" table:style-name="tFloor">
+    <table:table-column table:style-name="co1"/>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string"><text:p>R1</text:p></table:table-cell>
+    </table:table-row>
+   </table:table>
+   <table:table table:name="Footed" table:style-name="tFooted">
+    <table:table-column table:style-name="co1"/>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string"><text:p>R1</text:p></table:table-cell>
+    </table:table-row>
+   </table:table>
+  </office:spreadsheet>
+ </office:body>
+</office:document>

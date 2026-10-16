@@ -1,0 +1,12 @@
+base	documents 51	match 49	page counts differing 0	sum |glyph distance| 1307	sum |ink|% 250.28	MAJOR pages 65
+head	documents 51	match 49	page counts differing 0	sum |glyph distance| 1307	sum |ink|% 244.13	MAJOR pages 63
+renderings whose bytes changed: 7
+document                                                base ink  head ink       d  glyph base/head/ref  major
+RESPA_-_Section_8_Webinar                                   4.12      2.53   -1.59  13293/13293/13293  0->0
+joint_user_outcomes_michael_fullerton_29.06.12              3.59      2.57   -1.02  9836/9836/9836  2->1
+gillikin_online_user_mtg_2010                               7.77      6.83   -0.94  7753/7753/7753  1->1
+0335fab9-79f0-4944-b92c-f223837ca2d8                        1.72      0.91   -0.81  4499/4499/4499  0->0
+iep-amount-frequency-for-webinar                            3.82      3.05   -0.77  9154/9154/9154  0->0
+introduction_to_bea_tuxedo                                  5.63      4.92   -0.71  9931/9931/9893  3->2
+gfopportunitiesforlinkagespres_2010_en                      4.23      3.92   -0.31  10371/10371/10371  1->1
+total ink change over the movers: -6.15

@@ -1,0 +1,10 @@
+document                                                          ref       before        after  verdict
+SPA-11_mcar_part-11_v2.9                                     49p 70763   49p  70937   49p  70763  match -> match
+Sample_SQMS_Program                                          61p 86680   61p  86734   61p  86680  match -> match
+SPA-06_mcar_part-6_and_IS_v2.9                               85p142938   85p 143116   85p 142938  match -> match
+02_mcar_part-2_and_IS_v2.10                                 312p414481  314p 421243  313p 414531  pages -> pages
+FRE-03_mcar_part-3_and_IS_v2.9                               76p124706   76p 125011   76p 124737  match -> match
+OM template for non-complex NCC operators_August 2016       165p270009  166p 270077  166p 270063  pages -> pages
+SPA-02_mcar_part-2_and_IS_v2.9                              266p479154  268p 485953  266p 479214  pages -> match
+24-25_FAA_Holdover_Tables                                   155p299583  155p 300664  154p 299532  match -> pages
+FAA 2025-26 Holdover Tables                                 167p335603  167p 336847  167p 335623  match -> match

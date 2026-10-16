@@ -1,0 +1,72 @@
+page	y0	y1	x0	x1	w	font	size	text
+0	48.79	69.74	46.12	253.79	207.67	DejaVuSans-Bold	18.00	First Up Consultants
+0	39.58	81.49	465.29	502.83	37.55	DejaVuSans	36.00	IN
+0	84.14	95.79	46.12	123.90	77.78	DejaVuSans-Bold	10.01	12 Beacon St.
+0	99.14	110.79	46.12	148.64	102.52	DejaVuSans-Bold	10.01	Boston, MA 98765
+0	114.13	125.78	46.12	175.27	129.15	DejaVuSans-Bold	10.01	Phone: (516) 555-0135
+0	144.13	155.77	46.12	89.03	42.91	DejaVuSans-Bold	10.01	BILL TO
+0	144.13	155.77	396.14	454.26	58.12	DejaVuSans-Bold	10.01	INVOICE #
+0	159.12	170.77	46.12	120.23	74.11	DejaVuSans	10.01	Jordan Mitchell
+0	159.12	170.77	396.14	424.00	27.86	DejaVuSans-Bold	10.01	2034
+0	174.12	185.76	46.12	130.13	84.01	DejaVuSans	10.01	Khusa Marketing
+0	189.11	200.76	46.12	126.09	79.97	DejaVuSans	10.01	123 Main Street
+0	189.11	200.76	396.14	474.15	78.01	DejaVuSans-Bold	10.01	CUSTOMER ID
+0	204.11	215.75	46.12	139.65	93.53	DejaVuSans	10.01	Seattle, WA 87654
+0	204.11	215.75	396.14	417.03	20.89	DejaVuSans-Bold	10.01	564
+0	219.10	230.75	46.12	124.36	78.24	DejaVuSans	10.01	(954) 555-0190
+0	234.10	245.74	46.12	155.78	109.66	DejaVuSans	10.01	jordan@example.com
+0	266.33	277.97	46.12	122.00	75.88	DejaVuSans-Bold	10.01	DESCRIPTION
+0	266.33	277.97	357.06	379.63	22.57	DejaVuSans-Bold	10.01	QTY
+0	266.33	277.97	411.60	475.07	63.47	DejaVuSans-Bold	10.01	UNIT PRICE
+0	285.80	297.45	46.12	102.11	56.00	DejaVuSans	10.01	Service fee
+0	285.80	297.45	365.16	371.53	6.36	DejaVuSans	10.01	1
+0	285.80	297.45	388.31	499.68	111.37	DejaVuSans	10.01	200.00
+0	305.27	316.92	46.12	168.00	121.88	DejaVuSans	10.01	Labor: 5 hours at $75/hr
+0	305.27	316.92	365.16	371.53	6.36	DejaVuSans	10.01	5
+0	305.27	316.92	388.32	499.69	111.37	DejaVuSans	10.01	75.00
+0	324.75	336.40	46.12	144.38	98.26	DejaVuSans	10.01	New client discount
+0	324.75	336.40	390.05	499.68	109.63	DejaVuSans	10.01	(50.00)
+0	577.91	589.56	110.21	278.85	168.64	DejaVuSans-Bold	10.01	Thank you for your business!
+0	577.91	589.56	360.79	413.86	53.06	DejaVuSans	10.01	SUBTOTAL
+0	597.39	609.03	360.79	410.02	49.23	DejaVuSans	10.01	TAX RATE
+0	616.86	628.51	360.79	380.61	19.81	DejaVuSans	10.01	TAX
+0	636.98	657.93	360.79	426.04	65.25	DejaVuSans-Bold	18.00	TOTAL
+0	708.16	719.81	175.13	476.22	301.09	DejaVuSans	10.01	If you have any questions about this invoice, please contact
+0	727.64	739.28	170.56	480.75	310.19	DejaVuSans-Bold	10.01	Cora Thomas at (516) 555-0135 or cora@example.com.
+1	39.58	81.49	38.18	149.64	111.46	DejaVuSans	36.00	VOICE
+1	144.13	155.77	46.12	75.83	29.71	DejaVuSans-Bold	10.01	DATE
+1	159.12	170.77	46.12	102.17	56.06	DejaVuSans-Bold	10.01	9/17/2026
+1	189.11	200.76	46.12	84.64	38.52	DejaVuSans-Bold	10.01	TERMS
+1	204.11	215.75	46.12	143.40	97.28	DejaVuSans-Bold	10.01	Due upon receipt
+1	266.33	277.97	68.55	118.08	49.53	DejaVuSans-Bold	10.01	AMOUNT
+1	285.80	297.45	38.29	149.66	111.37	DejaVuSans	10.01	200.00
+1	305.27	316.92	38.29	149.66	111.37	DejaVuSans	10.01	375.00
+1	324.75	336.40	40.03	149.66	109.63	DejaVuSans	10.01	(50.00)
+1	344.22	355.87	37.88	149.68	111.80	DejaVuSans	10.01	-
+1	363.70	375.34	37.88	149.68	111.80	DejaVuSans	10.01	-
+1	383.17	394.82	37.88	149.68	111.80	DejaVuSans	10.01	-
+1	402.64	414.29	37.88	149.68	111.80	DejaVuSans	10.01	-
+1	422.12	433.77	37.88	149.68	111.80	DejaVuSans	10.01	-
+1	441.59	453.24	37.88	149.68	111.80	DejaVuSans	10.01	-
+1	461.07	472.71	37.88	149.68	111.80	DejaVuSans	10.01	-
+1	480.54	492.19	37.88	149.68	111.80	DejaVuSans	10.01	-
+1	500.01	511.66	37.88	149.68	111.80	DejaVuSans	10.01	-
+1	519.49	531.14	37.88	149.68	111.80	DejaVuSans	10.01	-
+1	538.96	550.61	37.88	149.68	111.80	DejaVuSans	10.01	-
+1	558.44	570.08	37.88	149.68	111.80	DejaVuSans	10.01	-
+1	577.91	589.56	38.29	149.66	111.37	DejaVuSans	10.01	525.00
+1	597.39	609.03	111.49	149.63	38.14	DejaVuSans	10.01	4.250%
+1	616.86	628.51	38.30	149.67	111.37	DejaVuSans	10.01	22.31
+1	636.98	657.93	42.59	149.65	107.06	DejaVuSans-Bold	18.00	$  547.31
+2	101.01	114.97	51.39	320.64	269.25	DejaVuSans-Bold	11.99	INVOICE TEMPLATES BY VERTEX42.COM
+2	115.82	128.62	51.39	419.24	367.85	DejaVuSans	11.00	https://www.vertex42.com/ExcelTemplates/invoice-templates.html
+2	157.83	181.12	51.39	228.56	177.17	DejaVuSans-Bold	20.01	About Vertex42
+2	185.44	198.24	51.39	518.51	467.11	DejaVuSans	11.00	Vertex42.com provides over 300 professionally designed spreadsheet templates for
+2	198.25	211.06	51.39	524.37	472.98	DejaVuSans	11.00	business, home, and education - most of which are free to download. Their collection
+2	211.07	223.87	51.39	516.99	465.60	DejaVuSans	11.00	includes a variety of calendars, planners, and schedules as well as personal finance
+2	223.88	236.68	51.39	422.78	371.38	DejaVuSans	11.00	spreadsheets for budgeting, debt reduction, and loan amortization.
+2	267.84	280.65	51.39	512.63	461.24	DejaVuSans	11.00	Businesses will find invoices, time sheets, inventory trackers, financial statements,
+2	280.66	293.46	51.39	508.87	457.48	DejaVuSans	11.00	and project planning templates. Teachers and students will find resources such as
+2	293.47	306.27	51.39	518.56	467.17	DejaVuSans	11.00	class schedules, grade books, and attendance sheets. Organize your family life with
+2	306.28	319.08	51.39	529.05	477.66	DejaVuSans	11.00	meal planners, checklists, and exercise logs. Each template is thoroughly researched,
+2	319.09	331.90	51.39	471.93	420.53	DejaVuSans	11.00	refined, and improved over time through feedback from thousands of users.

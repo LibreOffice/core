@@ -1,0 +1,30 @@
+The four pages round 110 called "not size questions", measured page by page against the banked
+26.2.4.2 renderings in /home/user/gate-orig-r83/ref.  Counts are WHOLE PAGE alphanumerics,
+images and drawing operations from pymupdf -- round 110's figures were `sizes.py`'s
+dominant-SIZE bucket, which is why "548 against 358" reads as text presence and is not.
+
+  page                                   ref alnum  ours   ref imgs  ours imgs  ref draws  ours draws
+  Thailand17 8                                  92    592          2          1          2         180
+  W3_Case_Study... 10                           92    592          1          0          3         181
+  Fundamentals_Module_1_basics 6                92    210          6        565          6         165
+  Thailand17 11                                595    595          3          3         72          71
+
+THREE OF THE FOUR ARE THE RASTER CEILING, and the sign is the one that register describes: the
+reference draws a PICTURE where we draw the picture's own text.  On Thailand17 8 and
+W3_Case_Study 10 -- the same slide in two decks -- the reference's whole page is the title drawn
+twice plus two images, and this tree decodes the pasted metafile and draws its table as 592 real
+alphanumeric characters over 180 drawing operations.  Neither deck has an ObjectPool, so it is a
+pasted metafile rather than an OLE object.  `Fundamentals_Module_1_basics` 6 is the same shape
+with a chart.  OUR OUTPUT IS THE SEARCHABLE ONE and the gate scores it as failure; these belong
+in `dotnet/TODO.raster-ceiling.md`'s class and not in a size statistic.
+
+THE FOURTH IS A SIZE QUESTION AFTER ALL, and a live one.  `Thailand17` 11 draws 595 alphanumeric
+characters on both sides -- every character, in the same table cells -- and differs only in the
+size a SUBSET of the cells is drawn at:
+
+  26.2.4.2   548 characters at 11.99 pt, 47 at 24.01
+  this tree  358 characters at 11.00 pt, 190 at 11.99, 47 at 24.01
+
+So 358 characters of a `.ppt` table are shrunk by a point where the reference does not shrink
+them, cell by cell rather than block by block.  It is a table-cell autofit question and it keeps
+a seat; round 110's reading of it as "text presence the other way" is withdrawn.

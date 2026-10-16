@@ -1,0 +1,55 @@
+# of the rows that pass in their original spelling and fail as .rtf
+  38  list-label
+  34  unclassified
+   8  positioned-table
+   7  list-label+positioned-table
+   3  list-label+turned-cell
+   3  list-label+positioned-table+turned-cell
+   2  positioned-table+turned-cell
+   1  turned-cell
+
+# the residual, by what its numbers say
+pages	glyphs	pagedir	textdir	words	probes	path
+169/148	189432/189432	long	same	pages	sbknone,sect,columns,keepn,clvmgf	words/done-016/rtf/Annex-10-to-the-Aircraft-Maintenance-Specialist-Certification-Rule-GCAA.rtf
+19/7	11595/10066	long	long	pages,words	sbknone,sect,keepn,shape,pict,field	words/done-014/rtf/PK_FlugzeugeStricken.rtf
+6/4	6038/6038	long	same	pages	sbknone,keepn	words/done-002/rtf/prison-population-bulletin-june.rtf
+24/26	10452/9957	short	long	pages,words	sbknone,keepn,shape,field	words/drawingset-001/rtf/WordArt_Shapes_Arrows_Catalog1.rtf
+2/1	406/406	long	same	pages	sbknone,keepn,shape,pict,clvmgf,field	words/chartset-007/rtf/049_Visual_Product_Roadmap_Template_Simple_Format_4af26e4f.rtf
+1/2	189/189	short	same	pages	sbknone,keepn,shape,pict	words/chartset-007/rtf/094_Business_Case_Template_Decent_Layout_e7722f2b.rtf
+2/1	80/98	long	short	pages,words	sbknone,keepn,shape,pict,field	words/chartset-009/rtf/037_Venn_Diagram_Template_Four_Circle_764829a0.rtf
+1/2	1081/680	short	long	pages,words	sbknone,columns,keepn,shape,pict,field	words/chartset-010/rtf/028_Unit_Circle_Chart_Optimized_Graph_83d9c756.rtf
+2/1	100/263	long	short	pages,words	sbknone,keepn,shape,pict,field	words/chartset-010/rtf/090_Business_Case_Template_Blue_Theme_108ff0f1.rtf
+1/2	235/235	short	same	pages	sbknone,keepn,shape,pict	words/chartset-012/rtf/096_Business_Case_Template_Editable_Layout_41fe0bc0.rtf
+2/1	151/170	long	short	pages,words	sbknone,keepn,shape,pict,field	words/chartset-013/rtf/038_Venn_Diagram_Template_Off_White_and_Blue_Theme_9dff385e.rtf
+2/1	1862/1780	long	long	pages,words	sbknone,keepn,shape,field	words/done-001/rtf/Pre-Application_Letter_of_Intent_Example.rtf
+12/13	19253/19253	short	same	pages	sbknone,keepn	words/done-003/rtf/II.1.2_Hypoxia.rtf
+5/4	3625/3607	long	same	pages	sbknone,keepn,shape,pict,field	words/done-008/rtf/FAA-2017-0628-0002_attachment_1.rtf
+12/11	14396/14300	long	same	pages	sbknone,keepn,shape,pict,field	words/done-013/rtf/1228841571067_2009_TPPT_13__2007_TPPT_102__R-108535759.rtf
+1/1	389/253	same	long	words	sbknone,keepn,pict	words/chartset-001/rtf/clustered-column-result.rtf
+1/1	200/121	same	long	words	sbknone,keepn,pict	words/chartset-001/rtf/clustered-column-template.rtf
+1/1	234/157	same	long	words	sbknone,keepn,pict	words/chartset-001/rtf/pie-chart-result.rtf
+1/1	73/57	same	long	words	sbknone,keepn,pict	words/chartset-001/rtf/pie-chart-template.rtf
+1/1	12/201	same	short	words	sbknone,keepn,shape,pict,field	words/chartset-006/rtf/093_Business_Case_Template_Customizable_Layout_510c25e7.rtf
+1/1	520/571	same	short	words	sbknone,columns,keepn,shape,pict,field	words/chartset-007/rtf/025_Unit_Circle_Chart_Cos_and_Sin_Model_1ed01892.rtf
+1/1	82/331	same	short	words	sbknone,keepn,shape,pict,field	words/chartset-009/rtf/019_Project_Timeline_Template_Excellent_Layout_4ee62967.rtf
+1/1	1395/1019	same	long	words	sbknone,columns,keepn,shape,pict,field	words/chartset-009/rtf/027_Unit_Circle_Chart_Graphical_Chart_5462a579.rtf
+1/1	322/367	same	short	words	sbknone,columns,keepn,shape,pict,field	words/chartset-009/rtf/030_Unit_Circle_Chart_Points_System_23b5ef07.rtf
+1/1	449/519	same	short	words	sbknone,columns,keepn,shape,pict,field	words/chartset-010/rtf/023_Unit_Circle_Chart_Circular_Percentage_790f7b75.rtf
+1/1	245/290	same	short	words	sbknone,columns,keepn,shape,pict,field	words/chartset-010/rtf/026_Unit_Circle_Chart_Four_Quadrants_09bf3ed1.rtf
+1/1	50/112	same	short	words	sbknone,keepn,shape,pict,clvmgf,field	words/chartset-010/rtf/067_Work_Breakdown_Structure_Template_Gray_Theme_89f8be8b.rtf
+1/1	764/1047	same	short	words	sbknone,columns,keepn,shape,pict,field	words/chartset-011/rtf/022_Unit_Circle_Chart_Circle_A_and_B_19dbf275.rtf
+1/1	562/512	same	long	words	sbknone,columns,keepn,shape,pict,field	words/chartset-011/rtf/029_Unit_Circle_Chart_Pie_Theme_8a922142.rtf
+1/1	41/1099	same	short	words	sbknone,keepn,shape,pict,field	words/chartset-011/rtf/043_Visual_Product_Roadmap_Template_Customizable_Format_ee0fe5b1.rtf
+1/1	449/517	same	short	words	sbknone,columns,keepn,shape,pict,field	words/chartset-012/rtf/021_Unit_Circle_Chart_3D_Pie_Chart_404247ab.rtf
+1/1	413/517	same	short	words	sbknone,columns,keepn,shape,pict,field	words/chartset-012/rtf/024_Unit_Circle_Chart_Colorful_Circles_7c92601e.rtf
+1/1	220/348	same	short	words	sbknone,keepn,shape,pict	words/chartset-012/rtf/095_Business_Case_Template_Easy_Format_61de7128.rtf
+2/2	537/733	same	short	words	sbknone,keepn,shape,pict,field	words/done-014/rtf/fleetfastfacts16nov2023.rtf
+
+# residual by shape (page direction, text direction)
+  13  pages same  text short
+   6  pages same  text long
+   5  pages long  text same
+   3  pages short text same
+   3  pages long  text short
+   2  pages long  text long
+   2  pages short text long

@@ -1,0 +1,341 @@
+# ours: XRay.Office.Cli from this worktree; ref: /opt/libreoffice26.2 26.2.4.2, eight Latin duplicate faces aside; corpus /home/user/sample-files words track
+# abs_ink = sum of pdf-image-diff.py's per-page UNSIGNED |ink|%; rank on this
+id	pages_ours	pages_ref	abs_ink	signed_ink	major	worst_page	worst_ink	dwords	note
+FAA 2025-26 Holdover Tables__docx	167	167	341.86	328.47	43	127	13.12	18	
+24-25_FAA_Holdover_Tables__docx	155	155	334.19	323.39	42	109	13.98	35	
+AC-150-5370-10G-updated-201604__docx	696	696	113.17	101.46	178	5	3.02	30	unscoreable-font:DejaVuSans-Bold|DejaVuSerifCondensed-BoldItalic
+150-5370-10H__docx	727	727	109.22	96.19	726	7	3.21	34	font-note:FreeSerif|
+PES-Technical-Report-Template_Jan_2019__docx	14	14	35.91	32.13	12	2	8.88	2	
+150_5335_5a__doc	64	64	21.46	17.34	7	13	2.78	79	
+EHEST-SMS-Safety-Management-Manual-V2__docx	82	82	20.07	16.54	7	64	3.38	48	font-note:|DejaVuSansCondensed-BoldOblique,DejaVuSansCondensed-Oblique
+hdss-bulletin-issue-285-25-june-2025__docx	10	10	17.98	11.48	6	9	4.23	56	
+Case-Study-Heathrow-Airport__docx	3	3	14.70	14.05	3	1	11.55	0	
+AirbusCallouts__doc	24	24	13.05	9.06	3	2	3.35	-3	font-note:|DejaVuSansCondensed-BoldOblique,DejaVuSansCondensed-Oblique
+CRIF - SpÃ©cification technique - Socle applicatif__docx	28	28	12.93	6.34	2	3	1.71	-5	unscoreable-font:DejaVuSans,DejaVuSans-Bold|LiberationSansNarrow,LiberationSansNarrow-Bold,Unifont
+UG.CAO.00006 Foreign Part 145 approvals - User Guide for Applicants & Approval Holders__docx	29	29	11.52	9.10	4	13	3.85	288	font-note:|DejaVuSansCondensed-BoldOblique,DejaVuSansCondensed-Oblique
+t_TEMPforInvProgs__docx	26	26	11.11	5.88	5	22	3.06	0	
+part-145-approval list (1)__docx	8	8	11.07	3.16	6	3	2.93	-2	unscoreable-font:DejaVuSerif|DejaVuSerifCondensed-Italic
+RMI_Document_Repository_Public-Reprts_GettingOffOil__doc	6	6	10.85	9.86	2	2	7.58	0	
+AFS-050-004-F2_0i__docx	8	8	10.82	10.33	3	8	3.00	-2	unscoreable-font:DejaVuSans,DejaVuSans-Bold|DejaVuSerif-Bold
+docs-quality-MA.IMS.00001-Integrated-Management-System-manual__docx	44	44	10.48	6.73	2	30	2.77	-7	font-note:|DejaVuSansCondensed-Oblique
+HC-Bulletin-template__docx	5	5	10.45	9.95	2	2	7.02	0	unscoreable-font:LiberationSerif,LiberationSerif-Bold|DejaVuSansCondensed-Oblique,LiberationSans,LiberationSans-Bold
+231164_SystemDesignDocument__docx	28	28	9.62	8.06	1	11	0.81	-4	unscoreable-font:DejaVuSans,DejaVuSans-Bold|LiberationSansNarrow,LiberationSansNarrow-Bold
+PK_FlugzeugeStricken__doc	7	7	8.78	7.63	3	2	6.52	-14	
+150_5300_13_chg12__doc	31	31	8.16	6.02	1	25	1.85	-23	font-note:LiberationSans|
+762__doc	23	23	7.67	1.80	8	8	2.37	-1	font-note:|DejaVuSansCondensed-BoldOblique
+part-145-approval list 2025__docx	7	7	7.67	2.93	4	7	1.56	-2	unscoreable-font:DejaVuSerif|DejaVuSerifCondensed-Italic
+33004__docx	47	47	7.65	5.85	1	41	0.47	10	font-note:|DejaVuSansCondensed-Oblique
+ABCD-WB-08-00 Weight and Balance Report - v1 08.03.16__docx	12	12	7.40	6.83	3	12	3.71	-76	unscoreable-font:FreeSerif|LiberationSerif,LiberationSerif-Italic
+ESPN-R - MCF - RA - Ed1__docx	58	58	7.20	4.64	13	4	1.01	-39	
+May 25 bulletin focus on carers in the workplace__docx	4	4	6.80	2.76	3	3	3.87	0	
+195584360__docx	20	20	6.67	2.34	4	14	1.53	1	
+review-welsh-government-communications-mister-peter-mandelson__docx	14	14	6.27	5.04	5	14	2.41	0	font-note:|DejaVuSansCondensed-Oblique
+omrIMInterpretiveGuideLine__doc	2	2	5.88	1.92	2	1	3.28	-6	unscoreable-font:DejaVuSans,DejaVuSans-Bold|LiberationSansNarrow,LiberationSansNarrow-Bold
+gpp-pr-top-7-office-markets-4q-2023__docx	4	4	5.16	5.13	1	2	4.72	-7	font-note:|DejaVuSansCondensed-Oblique
+Regulations Governing the Status, Basic Rights and Duties of Officials other than Secretariat Officials, and Experts on Mission__docx	18	18	4.92	4.05	1	6	0.47	-2	unscoreable-font:DejaVuSans-Bold,DejaVuSerif-Bold|DejaVuSansCondensed-BoldOblique,OpenSymbol
+016_Project_Timeline_Template_Complete_Guide_7d36d09c__docx	1	1	4.69	4.63	1	1	4.69	0	
+TE.CAO.00125 Foreign Part 145 approvals - OJT Logbook__docx	15	15	4.48	3.47	1	5	0.72	-2	font-note:|DejaVuSansCondensed-BoldOblique,DejaVuSansCondensed-Oblique
+UG.CAO.00133 Foreign Part 145 approvals - Language__docx	18	18	4.47	2.93	3	10	1.07	7	font-note:|DejaVuSansCondensed-BoldOblique
+644730BRI0mna000BOX361539B00public0__doc	5	5	4.29	3.99	1	1	1.95	-1	font-note:|DejaVuSerifCondensed-BoldItalic,DejaVuSerifCondensed-Italic
+CP-ETSO template_v2020__doc	6	6	4.17	2.48	2	6	1.27	-1	font-note:|DejaVuSansCondensed-Oblique,LiberationSans-Bold
+bulletin__docx	14	14	4.15	1.98	2	7	2.44	0	
+1_tpr_template__from_fy14___docx	8	8	4.07	3.92	1	8	3.68	-2	
+Annex-10-to-the-Aircraft-Maintenance-Specialist-Certification-Rule-GCAA__docx	148	148	3.97	3.55	3	50	0.43	0	
+A_320__doc	118	118	3.80	2.99	1	112	0.39	1	
+029_Unit_Circle_Chart_Pie_Theme_8a922142__docx	1	1	3.76	3.76	1	1	3.76	-1	
+028_Unit_Circle_Chart_Optimized_Graph_83d9c756__docx	1	1	3.59	3.10	1	1	3.59	-11	
+1228841571067_2009_TPPT_13__2007_TPPT_102__R-108535759__doc	12	12	3.58	3.14	2	6	1.24	0	unscoreable-font:DejaVuSerif|WenQuanYiZenHei
+Wales_Office_Quarter_4_Ministerial_Transparency_Return__doc	6	6	3.56	3.56	1	3	3.38	0	
+027_Unit_Circle_Chart_Graphical_Chart_5462a579__docx	1	1	3.35	3.35	1	1	3.35	1	
+Sample_SQMS_Program__docx	61	61	3.28	2.89	0	55	0.47	-1	
+ESPN-R - MCF - Manual - Ed1.0 - For Publication__docx	35	35	3.12	2.94	1	11	1.05	8	
+RNW167A-150428__doc	9	9	3.06	2.73	2	8	0.71	0	
+A1. EASA Form 2__docx	7	7	2.80	2.24	1	7	1.41	3	font-note:|DejaVuSerif
+A320SimNotes__doc	42	42	2.79	2.04	2	16	0.40	-73	font-note:|LiberationMono-Bold,LiberationMono-BoldItalic,LiberationMono-Italic
+DOA_Template_Form_Type_Certification_Programme__docx	20	20	2.77	1.54	3	18	0.84	8	font-note:|DejaVuSansCondensed-Oblique
+012_Project_Timeline_Template_Black_and_Brown_Theme_35c76550__docx	2	2	2.68	2.34	1	1	2.67	0	font-note:|DejaVuSerifCondensed-BoldItalic
+system_design__technical_architecture_template__docx	17	17	2.64	1.67	0	9	0.33	0	
+023_Unit_Circle_Chart_Circular_Percentage_790f7b75__docx	1	1	2.62	2.61	1	1	2.62	0	
+report-template__docx	20	20	2.56	2.11	2	14	0.61	-13	
+Sol PJ14-03-04 Solution Contextual__docx	5	5	2.49	1.16	0	1	1.32	-4	font-note:|Caladea-Bold
+Agile_Arc_SysDes__docx	20	20	2.42	1.08	1	1	1.40	-1	
+AAC-AD-No-2021-01-Boeing-737-8-and-737-9-MAX__doc	20	20	2.38	1.66	1	17	0.70	0	font-note:|OpenSymbol
+014_Project_Timeline_Template_Blue_and_Green_Theme_a8311fa1__docx	1	1	2.37	1.85	1	1	2.37	0	
+ABCD-SDE-23-00 - Avionic System Description - 17.02.16 - v1__docx	29	29	2.31	1.47	0	1	0.49	0	
+RobertQ_Service__doc	4	4	2.29	1.82	3	3	0.84	0	
+090_Business_Case_Template_Blue_Theme_108ff0f1__docx	1	1	2.23	2.23	1	1	2.23	0	
+081_Printable_Graph_Paper_Template_Blue_Theme_629316cb__docx	1	1	2.01	2.01	1	1	2.01	0	font-note:Carlito-Regular|
+5709.16 ch.40_mgfinal__docx	32	32	1.99	1.96	1	2	0.83	35	
+066_Work_Breakdown_Structure_Template_Colored_Background_c27ff248__docx	1	1	1.93	0.14	1	1	1.93	0	font-note:|DejaVuSans
+1257259179492_2007_TPPT_102_Supporting_Doc_2-434003080__doc	9	9	1.92	1.50	1	5	0.55	-4	font-note:|WenQuanYiZenHei
+healthcare-reform-nsa-provider-bulletin__docx	5	5	1.92	1.91	1	5	0.94	0	
+手机免提系统TSB__doc	3	3	1.88	1.23	2	2	1.22	3	font-note:LiberationSans-Bold,LiberationSerif-Bold|
+PAT-047 - Architecture and Detailed Design Assessment__docx	4	4	1.80	1.65	0	2	0.72	0	
+045_Visual_Product_Roadmap_Template_Excellent_Format_e364063c__docx	1	1	1.76	1.70	1	1	1.76	0	
+2013_11__doc	8	8	1.72	1.22	2	4	0.51	0	
+079_Storyboard_Template_Simple_Format_81653703__docx	1	1	1.67	1.67	1	1	1.67	0	
+100_Business_Case_Template_Modern_Format_ff9e7282__docx	5	5	1.63	0.94	1	3	0.41	-3	
+19-06 Assistive Technology TAB Final - 508__docx	8	8	1.52	1.49	1	5	0.37	0	
+FlightLaws__doc	4	4	1.51	1.37	0	2	1.09	-1	font-note:|DejaVuSansCondensed-BoldOblique
+067_Work_Breakdown_Structure_Template_Gray_Theme_89f8be8b__docx	1	1	1.50	0.29	0	1	1.50	0	font-note:|DejaVuSans
+Form-SM-76A-_-CAR-OPS-2A-Instruments-and-Equipment-Compliance-Statement-_-11__docx	3	3	1.50	1.05	1	1	0.84	0	font-note:|DejaVuSerifCondensed-Italic
+monthly-content-feeder__docx	18	18	1.50	0.70	0	8	0.43	0	font-note:|DejaVuSerif
+technical-architecture__docx	8	8	1.49	1.03	1	8	0.51	6	font-note:|LiberationSansNarrow
+065_Work_Breakdown_Structure_Template_Blue_Theme_2b207f62__docx	1	1	1.45	0.13	0	1	1.45	-13	
+091_Business_Case_Template_Complete_Guide_cb91a140__docx	5	5	1.45	1.10	0	1	0.48	0	
+2024-12_Comlux_opens_Maintenance_and_Service_Center_in_Dubai__docx	3	3	1.40	1.40	0	3	0.59	0	unscoreable-font:DejaVuSans,DejaVuSans-Bold|LiberationSans-Italic
+073_Storyboard_Template_Easy_to_Use_44ce05fc__docx	1	1	1.39	0.36	1	1	1.39	0	
+084_Printable_Graph_Paper_Template_Editable_Layout_d66c6820__docx	1	1	1.35	1.35	1	1	1.35	-2	font-note:Carlito-Regular|
+PI-doc.-no.-2E-Technical-Review-Report__docx	12	12	1.33	1.25	0	4	0.52	-2	font-note:DejaVuSerif-Bold|
+461249__docx	5	5	1.31	0.68	0	4	0.57	2	
+092_Business_Case_Template_Convenient_Format_00786cce__docx	7	7	1.27	1.26	0	2	0.28	-1	
+361400CSLegislation1RF01PUBLIC1__doc	35	35	1.27	0.78	1	33	0.44	-5	
+021_Unit_Circle_Chart_3D_Pie_Chart_404247ab__docx	1	1	1.26	1.26	1	1	1.26	0	unscoreable-font:Carlito-Regular|Carlito-Bold
+015_Project_Timeline_Template_Colored_Background_6434b0e8__docx	2	2	1.23	0.80	1	1	1.23	0	
+airbus-pdf-information-package_v1-4__docx	9	9	1.18	0.98	0	9	0.40	0	
+exhibit-06---technical-architecture-template__docx	8	8	1.14	0.43	0	4	0.81	6	font-note:|DejaVuSansCondensed-Oblique,LiberationSansNarrow
+xx_SETIS_PWS_template_10.19.22__docx	15	15	1.12	0.94	0	9	0.40	-1	
+B11. TE.CAO.00129  Experience  logbook__docx	6	6	1.10	0.60	0	6	0.50	2	unscoreable-font:DejaVuSans|DejaVuSans-Bold
+049_Visual_Product_Roadmap_Template_Simple_Format_4af26e4f__docx	1	1	1.08	0.04	1	1	1.08	0	
+FO.FCTOA.00010 Application for a Part-ORA ATO Approval__docx	16	16	1.06	0.96	0	8	0.38	1	font-note:|LiberationSerif
+draft-variation-notice-airbus-bm3965ia-v006-vs-comments__docx	9	9	1.06	0.57	0	3	0.85	-1	
+077_Storyboard_Template_Pink_and_Blue_Theme_805e82ab__docx	1	1	1.05	1.04	0	1	1.05	0	
+2ca950374241722b8ea7c132dfce63ae__doc	3	3	1.02	0.67	0	2	0.40	-3	
+ECSS-E-ST-50-16C-Annex-A(30September2021)__docx	4	4	0.99	0.86	1	3	0.40	0	font-note:|DejaVuSerifCondensed-BoldItalic,DejaVuSerifCondensed-Italic
+WordArt_Shapes_Arrows_Catalog1__docx	52	52	0.99	0.86	0	45	0.15	0	
+1603642410-MoM-CASCOM-06-2020-draft04__docx	9	9	0.92	0.71	0	3	0.34	0	
+JEMIT_Template__docx	4	4	0.91	0.46	1	3	0.35	-11	font-note:|DejaVuSans-Bold
+FO.FCTOA_.000129 Application for activities related to FSTD__docx	6	6	0.90	0.87	0	6	0.58	6	unscoreable-font:DejaVuSans|DejaVuSerif
+AWR OPS-AOC 044 Statement of Compliance RVSM  Rev 04 01 Feb 2024__docx	15	15	0.89	0.71	0	6	0.22	1	font-note:DejaVuSerif,FreeSerif|
+opic 5--Case Studies Movie and Aviation Industries__doc	5	5	0.88	0.88	0	4	0.26	0	
+093_Business_Case_Template_Customizable_Layout_510c25e7__docx	1	1	0.87	0.87	0	1	0.87	0	
+approvals-and-standardisation-organisation-approvals-docs-part-145-annex-B-B11.-TE.CAO.00129-Foreign-Part-145-approvals---Experience--logbook__docx	6	6	0.86	0.47	0	6	0.39	-2	font-note:|DejaVuSansCondensed-BoldOblique,DejaVuSansCondensed-Oblique
+018_Project_Timeline_Template_Editable_Format_e1cf1df5__docx	1	1	0.84	0.76	1	1	0.84	0	
+051_Organogram_Template_Basic_Theme_e6464d06__docx	1	1	0.82	0.66	0	1	0.82	0	
+069_Work_Breakdown_Structure_Template_Professional_Format_1e02dce1__docx	1	1	0.81	0.49	1	1	0.81	-9	
+135__doc	14	14	0.81	0.64	0	9	0.16	1	font-note:|LiberationSerif
+dragon1-enterprise-architecture-document-example-v0.1d__docx	13	13	0.79	0.78	0	4	0.36	-5	font-note:|LiberationSansNarrow
+tibs_guidelines_2__docx	13	13	0.77	0.46	0	5	0.19	0	font-note:|DejaVuSerifCondensed-BoldItalic
+002_Free_Genogram_Diagram_Template_Customizable_Format_2219584b__docx	1	1	0.75	0.61	1	1	0.75	2	
+AW-104D-RVSM-Aircraft-Approval-Checklist.pdf__docx	2	2	0.74	0.05	1	1	0.70	6	font-note:|LiberationSans-BoldItalic
+fleetfastfacts16nov2023__docx	1	1	0.74	0.02	1	1	0.74	0	font-note:|LiberationSans-Bold
+044_Visual_Product_Roadmap_Template_Editable_Format_c232a2c0__docx	1	1	0.72	0.61	0	1	0.72	-1	
+055_Organogram_Template_Horizontal_Structure_28a7e725__docx	1	1	0.71	0.35	1	1	0.71	0	
+075_Storyboard_Template_Fillable_Format_7fa01641__docx	1	1	0.71	0.45	0	1	0.71	0	
+f445896eb008d14c1746fc37d412dc22__docx	15	15	0.68	0.51	0	6	0.18	0	
+020_advanced_word_chart_report__docx	1	1	0.67	0.26	0	1	0.67	0	
+technical report template__docx	10	10	0.67	0.14	1	1	0.63	0	
+032_advanced_word_chart_report__docx	1	1	0.65	0.24	0	1	0.65	0	
+008_advanced_word_chart_report__docx	1	1	0.63	0.22	0	1	0.63	0	
+P200904290238_0238_51880__doc	3	3	0.63	0.63	2	2	0.29	0	
+011_Project_Timeline_Template_Beautiful_Theme_2336e680__docx	1	1	0.61	0.61	1	1	0.61	0	
+03_Technical_Report_(progress)_template__docx	10	10	0.61	0.59	0	3	0.20	1	unscoreable-font:DejaVuSerif-Bold|DejaVuSerifCondensed-BoldItalic
+b053-19__docx	2	2	0.58	0.15	0	1	0.50	0	font-note:|DejaVuSansCondensed-BoldOblique,DejaVuSansCondensed-Oblique
+043_Visual_Product_Roadmap_Template_Customizable_Format_ee0fe5b1__docx	1	1	0.57	0.50	1	1	0.57	0	
+047_Visual_Product_Roadmap_Template_Professional_Layout_2ff4499e__docx	1	1	0.57	0.24	1	1	0.57	0	
+061_Nursing_Concept_Map_Template_fb9816f0__docx	1	1	0.57	0.37	1	1	0.57	0	
+part-147_approval list_20230119__docx	2	2	0.56	0.54	0	1	0.31	-3	
+003_advanced_word_chart_report__docx	1	1	0.55	0.12	0	1	0.55	0	
+008_Free_Genogram_Diagram_Template_Green_and_Yellow_Theme_9017c1a8__docx	1	1	0.55	0.32	1	1	0.55	0	
+024_advanced_word_chart_report__docx	1	1	0.55	0.14	0	1	0.55	0	
+048_Visual_Product_Roadmap_Template_Quality_Layout_f38f7aee__docx	1	1	0.55	0.54	0	1	0.55	0	
+019_advanced_word_chart_report__docx	1	1	0.54	0.11	0	1	0.54	0	
+025_advanced_word_chart_report__docx	1	1	0.54	0.13	0	1	0.54	0	
+pie-chart-result__docx	1	1	0.54	0.54	0	1	0.54	0	
+007_advanced_word_chart_report__docx	1	1	0.53	0.10	0	1	0.53	0	
+013_advanced_word_chart_report__docx	1	1	0.53	0.11	0	1	0.53	0	
+015_advanced_word_chart_report__docx	1	1	0.53	0.10	0	1	0.53	0	
+030_advanced_word_chart_report__docx	1	1	0.53	0.11	0	1	0.53	0	
+031_advanced_word_chart_report__docx	1	1	0.53	0.09	0	1	0.53	0	
+easa-regulations-update-20__docx	22	22	0.53	0.40	2	4	0.18	0	
+009_advanced_word_chart_report__docx	1	1	0.52	0.11	0	1	0.52	0	
+012_advanced_word_chart_report__docx	1	1	0.52	0.11	0	1	0.52	0	
+042_Visual_Product_Roadmap_Template_Colored_Background_89385cfb__docx	1	1	0.52	0.32	1	1	0.52	0	
+001_advanced_word_chart_report__docx	1	1	0.51	0.10	0	1	0.51	0	
+006_advanced_word_chart_report__docx	1	1	0.51	0.10	0	1	0.51	0	
+018_advanced_word_chart_report__docx	1	1	0.51	0.10	0	1	0.51	0	
+019_Project_Timeline_Template_Excellent_Layout_4ee62967__docx	1	1	0.51	0.49	1	1	0.51	0	
+2024-2nd-quarter-case-summaries__doc	10	10	0.51	0.40	0	10	0.32	0	font-note:|DejaVuSerifCondensed-Italic
+006_Free_Genogram_Diagram_Template_Fillable_Format_7ca08541__docx	1	1	0.50	0.49	1	1	0.50	0	
+021_advanced_word_chart_report__docx	1	1	0.50	0.09	0	1	0.50	0	
+004_advanced_word_chart_report__docx	1	1	0.49	0.08	0	1	0.49	0	
+016_advanced_word_chart_report__docx	1	1	0.49	0.08	0	1	0.49	0	
+022_advanced_word_chart_report__docx	1	1	0.49	0.08	0	1	0.49	0	
+027_advanced_word_chart_report__docx	1	1	0.49	0.06	0	1	0.49	0	
+033_advanced_word_chart_report__docx	1	1	0.49	0.08	0	1	0.49	0	
+059_Disease_Concept_Map_Template_4acf63f2__docx	1	1	0.49	0.12	0	1	0.49	0	
+07-04__doc	3	3	0.49	0.45	0	1	0.19	0	
+20110608_psp__docx	3	3	0.49	0.45	1	1	0.32	0	
+SWDD-template__docx	6	6	0.49	0.46	4	4	0.14	1	font-note:|DejaVuSerifCondensed-BoldItalic
+010_advanced_word_chart_report__docx	1	1	0.48	0.07	0	1	0.48	0	
+028_advanced_word_chart_report__docx	1	1	0.48	0.07	0	1	0.48	0	
+A380MaenPressRel__doc	3	3	0.48	0.20	0	3	0.35	-2	font-note:|DejaVuSerifCondensed-BoldItalic,DejaVuSerifCondensed-Italic
+010_Free_Genogram_Diagram_Template_Yellow_Theme_6ee4f818__docx	1	1	0.47	0.40	0	1	0.47	0	
+1528364855__doc	3	3	0.47	0.46	0	3	0.26	0	
+te.iors.00048-002 SUP Questionnaire__docx	4	4	0.47	0.33	0	3	0.26	0	
+050_Visual_Product_Roadmap_Template_Yellow_and_Blue_Theme_49b50744__docx	1	1	0.46	0.45	1	1	0.46	0	
+SFSP_2013-02_Bulletin__doc	4	4	0.46	0.42	0	4	0.16	0	
+020_Project_Timeline_Template_Modern_Theme_0c215d87__docx	1	1	0.45	0.43	0	1	0.45	0	
+026_Unit_Circle_Chart_Four_Quadrants_09bf3ed1__docx	1	1	0.45	0.20	0	1	0.45	0	unscoreable-font:DejaVuSerif|DejaVuSerifCondensed-Italic
+041_Visual_Product_Roadmap_Template_Blank_Format_63a3e010__docx	1	1	0.45	0.45	1	1	0.45	0	
+097_Business_Case_Template_Elegant_Layout_3ba9cbf2__docx	2	2	0.44	0.16	1	1	0.44	0	
+046_Visual_Product_Roadmap_Template_Fillable_Format_582acab0__docx	1	1	0.42	0.42	1	1	0.42	0	
+056_Organogram_Template_Square_Theme_38f373d4__docx	1	1	0.42	0.42	0	1	0.42	0	
+2013-op12-Annex III - Curriculum Vitae__doc	3	3	0.42	0.22	2	3	0.18	0	font-note:|DejaVuSansCondensed-Oblique,LiberationSerif
+005_Free_Genogram_Diagram_Template_Excellent_layout_f5f185d0__docx	1	1	0.40	0.39	0	1	0.40	0	
+026_advanced_word_chart_report__docx	1	1	0.40	0.01	0	1	0.40	0	
+078_Storyboard_Template_Pink_and_Gray_Theme_ea89553f__docx	1	1	0.40	0.40	0	1	0.40	0	
+10795__doc	4	4	0.39	0.31	0	3	0.18	-4	font-note:|OpenSymbol
+slcc-architecture-uu-architecture__docx	4	4	0.39	0.32	0	3	0.20	0	
+014_advanced_word_chart_report__docx	1	1	0.38	0.03	0	1	0.38	0	
+017_Project_Timeline_Template_Customizable_Format_5d5ca2e8__docx	1	1	0.38	0.09	0	1	0.38	0	
+120509coss__doc	25	25	0.38	0.35	0	19	0.07	0	
+002_advanced_word_chart_report__docx	1	1	0.37	0.04	0	1	0.37	0	
+300502-Mecenat-Airbus-Simusante_CHU-Amiens-Picardie__doc	1	1	0.36	0.33	0	1	0.36	0	
+technical-report-template__docx	7	7	0.36	0.30	0	2	0.17	-21	unscoreable-font:FreeSerif|DejaVuSerifCondensed-Italic,LiberationSerif,LiberationSerif-Italic,OpenSymbol
+2015-April-SWIM_Users_Forum-Q&A__docx	5	5	0.35	0.35	0	2	0.16	1	
+UAS-SGI_waiver_approval_request_form__docx	2	2	0.35	0.34	0	2	0.25	0	
+011_advanced_word_chart_report__docx	1	1	0.32	0.14	0	1	0.32	0	
+023_advanced_word_chart_report__docx	1	1	0.32	0.13	0	1	0.32	0	
+060_Human_Body_Concept_Map_Template_ac872cfb__docx	1	1	0.32	0.25	0	1	0.32	0	
+062_Vocabulary_Concept_Map_Template_2f7c1c09__docx	1	1	0.32	0.32	1	1	0.32	0	
+005_advanced_word_chart_report__docx	1	1	0.31	0.13	0	1	0.31	0	
+017_advanced_word_chart_report__docx	1	1	0.31	0.13	0	1	0.31	0	
+029_advanced_word_chart_report__docx	1	1	0.31	0.13	0	1	0.31	0	
+064_Foot_Reflexology_Chart_Customizable_Format_79b7db06__docx	1	1	0.30	0.30	1	1	0.30	0	
+007_Free_Genogram_Diagram_Template_Green_and_Purple_Theme_8d2ba829__docx	1	1	0.29	0.23	0	1	0.29	0	
+024_Unit_Circle_Chart_Colorful_Circles_7c92601e__docx	1	1	0.29	0.21	0	1	0.29	0	
+DEP2008-1900__doc	4	4	0.29	0.20	0	3	0.20	0	font-note:OpenSymbol|
+f111__doc	11	11	0.29	0.21	0	10	0.09	0	font-note:|DejaVuSansCondensed-Oblique
+FG-AI4NDM-TR-skeleton_template__docx	5	5	0.28	0.15	0	3	0.18	1	
+Reid__doc	4	4	0.28	0.06	0	3	0.14	0	font-note:|LiberationSerif
+001_Free_Genogram_Diagram_Template_Blue_and_Gray_Theme_7c9e01a7__docx	1	1	0.27	0.20	0	1	0.27	0	
+057_Organogram_Template_Vertical_Colorful_Theme_724b143c__docx	1	1	0.26	0.25	1	1	0.26	0	
+mde087077~283__docx	4	4	0.26	0.00	0	1	0.26	0	
+009_Free_Genogram_Diagram_Template_Handy_Format_4bb900f0__docx	1	1	0.25	0.24	0	1	0.25	0	
+072_Storyboard_Template_Colored_Theme_28524a15__docx	1	1	0.25	0.25	0	1	0.25	0	
+f2_registro_de_aprovacao_com_pbcs_EN__docx	2	2	0.24	0.13	0	1	0.14	2	font-note:OpenSymbol|
+004_Free_Genogram_Diagram_Template_Editable_Format_b82b6152__docx	1	1	0.23	0.22	1	1	0.23	0	
+058_Organogram_Template_With_Picture_Theme_44b79368__docx	1	1	0.23	0.23	1	1	0.23	0	
+FMRBullletinB-28__doc	2	2	0.22	0.01	1	2	0.22	0	
+Pre-Application_Letter_of_Intent_Example__docx	1	1	0.22	0.18	0	1	0.22	0	
+final-technical-report-template__docx	6	6	0.22	0.20	0	1	0.08	0	
+030_Unit_Circle_Chart_Points_System_23b5ef07__docx	1	1	0.20	0.18	0	1	0.20	0	
+003__doc	5	5	0.19	0.19	0	1	0.15	0	
+b050-19__docx	3	3	0.19	0.13	0	1	0.09	0	font-note:|DejaVuSansCondensed-BoldOblique,DejaVuSansCondensed-Oblique
+025_Unit_Circle_Chart_Cos_and_Sin_Model_1ed01892__docx	1	1	0.18	0.17	0	1	0.18	0	
+054_Organogram_Template_Grey_Vertical_Theme_b2dbd9a8__docx	1	1	0.18	0.18	0	1	0.18	0	
+Press release_EUREKA labels ITEA 3 Cluster__docx	2	2	0.18	0.16	0	2	0.16	14	
+info-bulletin-601__doc	6	6	0.18	0.16	0	3	0.04	0	
+private-hire-operators-licensed__docx	2	2	0.18	0.15	0	1	0.10	0	
+038_Venn_Diagram_Template_Off_White_and_Blue_Theme_9dff385e__docx	1	1	0.17	0.11	0	1	0.17	0	unscoreable-font:DejaVuSans,DejaVuSans-Bold|LiberationSansNarrow,LiberationSansNarrow-Bold
+052_Organogram_Template_Colorful_Flow_Chart_cba9fbfe__docx	1	1	0.17	0.09	0	1	0.17	0	
+316r_a_e__doc	14	14	0.17	0.12	0	3	0.06	-1	
+316r_a_f__doc	14	14	0.17	0.14	0	11	0.05	-3	
+SDL_FSDO_Part91_LOA_Checklist__docx	2	2	0.17	0.07	0	2	0.14	0	
+form_1123_application_form_rvsm_spa__docx	3	3	0.17	0.14	0	1	0.10	0	
+022_Unit_Circle_Chart_Circle_A_and_B_19dbf275__docx	1	1	0.16	0.15	0	1	0.16	0	
+096_Business_Case_Template_Editable_Layout_41fe0bc0__docx	1	1	0.16	0.16	0	1	0.16	0	
+4400-91_Proposal_To_Lease_Space_10-2024__docx	6	6	0.16	0.11	0	5	0.05	0	
+PM-apeech-Handover-of-New-Airbus-Aircraft-for-Fiji-Airways-Dec.-15th__docx	5	5	0.16	0.08	0	2	0.08	0	font-note:|DejaVuSansCondensed-Oblique
+foca_form_1__doc	3	3	0.16	0.16	0	1	0.11	0	
+62599_FRANCE-BRAZIL- Air France Flight 447 crash__docx	18	18	0.15	0.09	0	1	0.06	0	
+Service-Bulletin-SDFNR5-April-25-2023-FNR-TRANSMISSION-LUBRICATION__docx	1	1	0.15	0.15	0	1	0.15	0	
+063_Foot_Reflexology_Chart_Complete_Guide_cf5ed992__docx	1	1	0.14	0.14	1	1	0.14	0	
+068_Work_Breakdown_Structure_Template_Green_Theme_63e69ed8__docx	1	1	0.14	0.10	0	1	0.14	-1	font-note:|DejaVuSans
+071_Storyboard_Template_Cartoon_Theme_ae113de2__docx	1	1	0.14	0.05	0	1	0.14	0	
+098_Business_Case_Template_Fillable_Layout_d0c5410e__docx	1	1	0.14	0.01	0	1	0.14	0	
+Technical_Issue_Report_Form__docx	2	2	0.14	0.09	0	1	0.14	0	
+template---tpr-technical-progress-report-with-guidance__docx	7	7	0.13	0.08	0	6	0.05	-2	unscoreable-font:DejaVuSerif|DejaVuSans,DejaVuSansCondensed-Oblique
+003_Free_Genogram_Diagram_Template_Easy_Format_60eb6e42__docx	1	1	0.12	0.12	0	1	0.12	0	
+FAA-2017-0628-0002_attachment_1__docx	4	4	0.12	0.11	0	1	0.09	0	
+Lessons-Learned-Bulletin-Dorset-version-to-IIRG-V5__docx	3	3	0.12	0.08	0	1	0.04	0	
+easa-form-1__docx	5	5	0.12	0.02	0	1	0.09	0	
+AUWG min 4-3-24 final__docx	2	2	0.11	0.09	0	1	0.11	0	
+Company-profile-2022-EN__docx	5	5	0.11	0.07	0	1	0.04	-1	font-note:|DejaVuSans
+Leadership Information Article__docx	3	3	0.11	0.07	0	1	0.06	0	
+certification-flight-standards-doc-oeb-supporting-documents-tgl-TGL26-section-5-REV10__doc	8	8	0.10	0.05	0	7	0.05	0	
+clustered-column-result__docx	1	1	0.09	0.02	0	1	0.09	0	
+053_Organogram_Template_Creative_Theme_21657a3d__docx	1	1	0.08	0.08	0	1	0.08	0	
+085_Printable_Graph_Paper_Template_Excellent_Format_4bcae89a__docx	1	1	0.08	0.08	0	1	0.08	0	
+086_Printable_Graph_Paper_Template_Gray_Theme_7300e5d7__docx	1	1	0.08	0.08	0	1	0.08	-2	font-note:Carlito-Regular|
+Contract_Check_Pilot_Sample_LOA__docx	4	4	0.08	0.06	0	1	0.05	0	
+070_Storyboard_Template_Blank_Format_fc41673a__docx	1	1	0.07	0.04	0	1	0.07	0	unscoreable-font:DejaVuSerif-Bold|DejaVuSerifCondensed-BoldItalic
+CSCRS_Technical-Report-Documentation-Page-with-instructions__docx	2	2	0.07	0.02	0	1	0.07	0	
+Software Architecture Document Template__docx	3	3	0.07	0.05	0	1	0.07	0	
+089_Printable_Graph_Paper_Template_Simlpe_Format_3aff1c88__docx	1	1	0.06	0.02	0	1	0.06	0	
+09__docx	2	2	0.06	0.06	0	1	0.06	0	
+PUR-0012-UTAS-GRAMS-SPA-Template-1-25-2024__doc	6	6	0.06	0.02	0	2	0.03	0	
+clustered-column-template__docx	1	1	0.06	0.00	0	1	0.06	0	
+Checklist for TC STC ETSO data packages to FAA_TIP rev 5__docx	3	3	0.05	0.04	0	1	0.03	0	
+013_Project_Timeline_Template_Blue_Background_4ea3475e__docx	1	1	0.04	0.04	0	1	0.04	0	
+035_Venn_Diagram_Template_Editable_Format_966dff5f__docx	1	1	0.04	0.03	0	1	0.04	0	
+074_Storyboard_Template_Editable_Design_132436d1__docx	1	1	0.04	0.04	0	1	0.04	0	
+loi_format_letter_of_intent-a-320-214-a330__doc	10	10	0.04	0.02	0	9	0.03	0	font-note:|LiberationSerif-Bold
+pie-chart-template__docx	1	1	0.04	0.04	0	1	0.04	0	
+Allegiant_Company_Profile_with_History__docx	3	3	0.03	0.02	0	1	0.03	0	
+Bull01-06-Reserve Training Standards__doc	6	6	0.03	0.02	0	3	0.03	0	
+How-to-Write-an-Architecture-Document-for-a-Technology-Service__docx	3	3	0.03	0.01	0	2	0.02	0	
+Interview-mit-Manfred1-Müller__docx	2	2	0.03	0.03	0	1	0.02	0	
+LHD-230-application-for-the-approval-of-an-aircraftr__doc	2	2	0.03	0.03	0	1	0.02	0	
+Technical Report and Technical Update Guidelines__docx	4	4	0.03	0.00	0	3	0.03	0	
+Temp16__doc	2	2	0.03	0.03	0	1	0.02	0	
+Theft-Restitution-Letter-Vancouver-ASC-2005__doc	1	1	0.03	0.01	0	1	0.03	0	
+eTAR_External_Web_tool_Tip_Sheet_mh__docx	4	4	0.03	0.03	0	4	0.03	2	font-note:DejaVuSans|
+032_Venn_Diagram_Template_Brown_Theme_d5b549f0__docx	1	1	0.02	0.02	0	1	0.02	0	
+076_Storyboard_Template_Gray_Theme_1e5fd5e5__docx	1	1	0.02	0.00	0	1	0.02	0	
+082_Printable_Graph_Paper_Template_Colored_Background_9092cf9b__docx	1	1	0.02	0.02	0	1	0.02	0	
+087_Printable_Graph_Paper_Template_Green_Theme_0c14ea04__docx	2	2	0.02	0.02	0	1	0.02	0	
+095_Business_Case_Template_Easy_Format_61de7128__docx	1	1	0.02	0.01	0	1	0.02	0	
+1528039320__docx	1	1	0.02	0.02	0	1	0.02	0	
+DRX-Ascend System Course Description__docx	2	2	0.02	0.02	0	1	0.01	0	
+Writing a technical report (SCE subject guide)__docx	4	4	0.02	0.01	0	1	0.01	0	
+healthcare-reform-nsa-consumer-bulletin__docx	4	4	0.02	0.00	0	1	0.01	0	
+johnson_hall_service_log.pdf__docx	1	1	0.02	0.02	0	1	0.02	0	unscoreable-font:DejaVuSans|LiberationSansNarrow
+031_Venn_Diagram_Template_Blue_Theme_a9e417b8__docx	1	1	0.01	0.00	0	1	0.01	-1	
+037_Venn_Diagram_Template_Four_Circle_764829a0__docx	1	1	0.01	0.00	0	1	0.01	0	
+040_Venn_Diagram_Template_Three_Circle_80f32f5e__docx	1	1	0.01	0.01	0	1	0.01	0	
+080_Printable_Graph_Paper_Template_Black_Theme_6b066be1__docx	1	1	0.01	0.01	0	1	0.01	0	
+0c662f5c948a7d81d32ffd833c5cc59421a5f522__docx	1	1	0.01	0.00	0	1	0.01	-1	
+1244277 1 Comment__doc	2	2	0.01	0.01	0	1	0.01	0	
+FAA-High-Level-Org-Chart__docx	3	3	0.01	0.01	0	2	0.01	0	
+License App Instructions 2-22__docx	3	3	0.01	0.00	0	3	0.01	0	
+advert-for-draft-decision-airbus-epr-bm3965ia-v006__doc	2	2	0.01	0.01	0	1	0.01	0	
+cacs-206-1751218225__docx	2	2	0.01	0.01	0	1	0.01	0	
+chapter 12__doc	12	12	0.01	0.00	0	7	0.01	0	
+s33song-beverlyactproductionofdocuments__docx	2	2	0.01	0.00	0	1	0.01	0	
+technical-memo-format__docx	5	5	0.01	0.00	0	2	0.01	0	unscoreable-font:DejaVuSerif-Bold|DejaVuSerifCondensed-BoldItalic
+033_Venn_Diagram_Template_Colored_Theme_2aea6697__docx	1	1	0.00	0.00	0	1	0.00	0	
+034_Venn_Diagram_Template_Customizable_Format_d14642b7__docx	1	1	0.00	0.00	0	1	0.00	0	
+036_Venn_Diagram_Template_Fillable_Layout_3ffbba36__docx	1	1	0.00	0.00	0	1	0.00	0	
+039_Venn_Diagram_Template_Simple_Format_6f82661d__docx	1	1	0.00	0.00	0	1	0.00	0	
+083_Printable_Graph_Paper_Template_Customizable_Format_55ff93a3__docx	1	1	0.00	0.00	0	1	0.00	0	
+088_Printable_Graph_Paper_Template_Quality_layout_33051f6e__docx	1	1	0.00	0.00	0	1	0.00	0	
+094_Business_Case_Template_Decent_Layout_e7722f2b__docx	1	1	0.00	0.00	0	1	0.00	0	
+099_Business_Case_Template_Gray_Theme_ac3edbf4__docx	1	1	0.00	0.00	0	1	0.00	0	
+1245685 1 Comment__doc	1	1	0.00	0.00	0	1	0.00	0	
+191216_Lesefassung_Nachtflugregelung__docx	3	3	0.00	0.00	0	1	0.00	0	
+96-3-clement-data__doc	7	7	0.00	0.00	0	1	0.00	0	
+BID_ACKNOWLEDGEMENT_FORM_FOR_A320__docx	2	2	0.00	0.00	0	1	0.00	0	
+CMTA_Airport_Transportation__docx	1	1	0.00	0.00	0	1	0.00	0	
+FAA-2013-0422-0009_attachment_1__doc	7	7	0.00	0.00	0	1	0.00	0	
+GLACIERBG.ETT__doc	1	1	0.00	0.00	0	1	0.00	0	
+II.1.2_Hypoxia__doc	13	13	0.00	0.00	0	1	0.00	0	
+LENTOBUSSIAIKATAULU.-31.10.-31.12.2022__doc	1	1	0.00	0.00	0	1	0.00	0	
+Sample_PAO-PSO_91-113_Letter__docx	1	1	0.00	0.00	0	1	0.00	0	
+congregationalhistories_ky_2023__doc	1	1	0.00	0.00	0	1	0.00	0	
+lk03_17__docx	2	2	0.00	0.00	0	1	0.00	0	
+prison-population-bulletin-june__doc	4	4	0.00	0.00	0	1	0.00	0	
+template-technical-report__docx	10	10	0.00	0.00	0	1	0.00	0	
+02_mcar_part-2_and_IS_v2.10__docx	314	200	-	-	-	-	-	1248	unscoreable-font:Carlito-Regular,DejaVuSans,DejaVuSans-Bold|LiberationSansNarrow,LiberationSansNarrow-Bold,LiberationSansNarrow-Italic;pages-differ
+1447__doc	4	3	-	-	-	-	-	0	font-note:|DejaVuSerifCondensed-BoldItalic,DejaVuSerifCondensed-Italic;pages-differ
+150_5300_13_chg10__doc	77	78	-	-	-	-	-	618	pages-differ
+150_5300_13_chg8__doc	18	17	-	-	-	-	-	152	pages-differ
+237287_0486190101_0486190101_geolink2neu__doc	8	4	-	-	-	-	-	46	unscoreable-font:DejaVuSans,DejaVuSans-Bold|LiberationSansNarrow,LiberationSansNarrow-Bold;pages-differ
+ABCD-FE-01-00 Flight Envelope - v1 08.03.16__docx	14	16	-	-	-	-	-	-206	unscoreable-font:FreeSerif|LiberationSerif,LiberationSerif-Italic,OpenSymbol;pages-differ
+FRE-03_mcar_part-3_and_IS_v2.9__docx	76	61	-	-	-	-	-	316	unscoreable-font:DejaVuSans,DejaVuSans-Bold|Carlito-Bold,Carlito-Regular,LiberationSansNarrow,LiberationSansNarrow-Bold,LiberationSansNarrow-Italic;pages-differ
+OM template for non-complex NCC operators_August 2016__docx	166	165	-	-	-	-	-	151	pages-differ
+SPA-02_mcar_part-2_and_IS_v2.9__docx	268	205	-	-	-	-	-	908	unscoreable-font:Carlito-Regular,DejaVuSans,DejaVuSans-Bold|LiberationSansNarrow,LiberationSansNarrow-Bold,LiberationSansNarrow-BoldItalic,LiberationSansNarrow-Italic;pages-differ
+SPA-06_mcar_part-6_and_IS_v2.9__docx	85	64	-	-	-	-	-	463	unscoreable-font:DejaVuSans,DejaVuSans-Bold|LiberationSansNarrow,LiberationSansNarrow-Bold,LiberationSansNarrow-BoldItalic,LiberationSansNarrow-Italic;pages-differ
+SPA-11_mcar_part-11_v2.9__docx	49	39	-	-	-	-	-	156	unscoreable-font:Carlito-Regular,DejaVuSans,DejaVuSans-Bold|LiberationSansNarrow,LiberationSansNarrow-Bold,LiberationSansNarrow-Italic;pages-differ
+absrc-pac-01-info-note-en__doc	6	7	-	-	-	-	-	-1	pages-differ

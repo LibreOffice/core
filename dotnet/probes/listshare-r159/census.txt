@@ -1,0 +1,15 @@
+326	6	SPA-02_mcar_part-2_and_IS_v2.9.docx
+326	6	02_mcar_part-2_and_IS_v2.10.docx
+106	1	FAA 2025-26 Holdover Tables.docx
+94	1	24-25_FAA_Holdover_Tables.docx
+68	3	SPA-11_mcar_part-11_v2.9.docx
+61	5	FRE-03_mcar_part-3_and_IS_v2.9.docx
+51	5	SPA-06_mcar_part-6_and_IS_v2.9.docx
+4	2	PI-doc.-no.-2E-Technical-Review-Report.docx
+4	1	OM template for non-complex NCC operators_August 2016.docx
+3	1	Sample_SQMS_Program.docx
+2	2	231164_SystemDesignDocument.docx
+2	1	t_TEMPforInvProgs.docx
+2	1	system_design__technical_architecture_template.docx
+2	1	report-template.docx
+# 271 documents, 14 where a used abstract carries more than one used instance

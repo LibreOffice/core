@@ -1,0 +1,2 @@
+86 renderings compared with the date masked, 0 differ
+86 documents: the 33 columned-section .odt documents' .docx/.doc originals and their .rtf twins, plus ten .ods and ten .odp

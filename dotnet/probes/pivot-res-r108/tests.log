@@ -1,0 +1,32 @@
+=== XRay.Office.Containers.Tests
+Passed!  - Failed:     0, Passed:   109, Skipped:     0, Total:   109, Duration: 343 ms - XRay.Office.Containers.Tests.dll (net10.0)
+=== XRay.Office.Core.Tests
+Passed!  - Failed:     0, Passed:   560, Skipped:     0, Total:   560, Duration: 1 s - XRay.Office.Core.Tests.dll (net10.0)
+=== XRay.Office.Markup.Tests
+Passed!  - Failed:     0, Passed:   259, Skipped:     0, Total:   259, Duration: 1 s - XRay.Office.Markup.Tests.dll (net10.0)
+=== XRay.Office.OpenDocument.Tests
+Passed!  - Failed:     0, Passed:   160, Skipped:     0, Total:   160, Duration: 379 ms - XRay.Office.OpenDocument.Tests.dll (net10.0)
+=== XRay.Office.Presentations.Tests
+Passed!  - Failed:     0, Passed:  1101, Skipped:     0, Total:  1101, Duration: 1 m 5 s - XRay.Office.Presentations.Tests.dll (net10.0)
+=== XRay.Office.Rendering.Tests
+Passed!  - Failed:     0, Passed:   164, Skipped:     0, Total:   164, Duration: 7 s - XRay.Office.Rendering.Tests.dll (net10.0)
+=== XRay.Office.Spreadsheets.Tests
+Passed!  - Failed:     0, Passed:  1323, Skipped:     0, Total:  1323, Duration: 7 s - XRay.Office.Spreadsheets.Tests.dll (net10.0)
+=== XRay.Office.Text.Tests
+Passed!  - Failed:     0, Passed:   728, Skipped:     0, Total:   728, Duration: 12 s - XRay.Office.Text.Tests.dll (net10.0)
+=== XRay.Office.Vector.Tests
+Passed!  - Failed:     0, Passed:   309, Skipped:     0, Total:   309, Duration: 2 s - XRay.Office.Vector.Tests.dll (net10.0)
+=== XRay.Office.WordProcessing.Tests
+Passed!  - Failed:     0, Passed:  1938, Skipped:     0, Total:  1938, Duration: 1 m 5 s - XRay.Office.WordProcessing.Tests.dll (net10.0)
+=== XRay.Office.Fidelity.Tests
+[xUnit.net 00:00:08.47]     XRay.Office.Fidelity.Tests.SheetDrawingComparisonTests.APictureIsDrawnWhereLibreOfficeDrawsIt(name: "sheet-rich-text.xlsx") [FAIL]
+[xUnit.net 00:00:51.89]     XRay.Office.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(fileName: "list-label-overrun.doc") [FAIL]
+[xUnit.net 00:00:53.85]     XRay.Office.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(fileName: "list-label-overrun.fodt") [FAIL]
+[xUnit.net 00:00:55.84]     XRay.Office.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(fileName: "list-label-overrun.docx") [FAIL]
+[xUnit.net 00:00:57.89]     XRay.Office.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(fileName: "list-label-overrun.odt") [FAIL]
+[xUnit.net 00:01:16.63]     XRay.Office.Fidelity.Tests.JustificationShrinkComparisonTests.TheParagraphBreaksWhereLibreOfficeBreaksIt(document: "justify-shrink-2013.docx") [FAIL]
+[xUnit.net 00:01:16.84]     XRay.Office.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(fileName: "paginated.fodt") [FAIL]
+[xUnit.net 00:01:18.96]     XRay.Office.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(fileName: "paginated.doc") [FAIL]
+[xUnit.net 00:01:21.09]     XRay.Office.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(fileName: "paginated.docx") [FAIL]
+[xUnit.net 00:01:24.01]     XRay.Office.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(fileName: "paginated.rtf") [FAIL]
+Failed!  - Failed:    10, Passed:   542, Skipped:     0, Total:   552, Duration: 3 m 11 s - XRay.Office.Fidelity.Tests.dll (net10.0)

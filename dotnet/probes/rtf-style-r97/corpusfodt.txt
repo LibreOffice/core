@@ -1,0 +1,13 @@
+=== 231164_SystemDesignDocument.rtf, chain through Figure ===
+   1x  Figure>Caption>Standard size=12pt@Figure ital=- weight=bold@Caption above=0.0835in@Figure below=0in@Figure keep=always@Figure align=left@Figure
+
+=== bulletin.rtf, chain through Text ===
+   7x  P23>Text>Caption>Standard size=11pt@Text ital=- weight=bold@Caption above=0in@P23 below=0in@P23 keep=- align=left@Text
+   4x  P23>Text>Caption>Standard size=11pt@Text ital=- weight=bold@direct above=0in@P23 below=0in@P23 keep=- align=left@Text
+   2x  P27>Text>Caption>Standard size=11pt@Text ital=- weight=bold@P27 above=0in@P27 below=0in@P27 keep=- align=left@Text
+   2x  P40>Text>Caption>Standard size=11pt@Text ital=- weight=bold@P40 above=0in@P40 below=0in@P40 keep=- align=left@Text
+   1x  P39>Text>Caption>Standard size=11pt@Text ital=- weight=bold@P39 above=0in@P39 below=0in@P39 keep=- align=left@Text
+   1x  P43>Text>Caption>Standard size=10pt@P43 ital=italic@P43 weight=bold@Caption above=0in@P43 below=0in@P43 keep=- align=left@Text
+
+=== CSCRS_Technical-Report-Documentation-Page-with-instructions.rtf, chain through Heading ===
+   1x  P1>Heading>Standard size=12pt@Heading ital=- weight=bold@Heading above=0in@P1 below=0in@P1 keep=- align=center@Heading

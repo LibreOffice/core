@@ -1,0 +1,8 @@
+pages scored on all three legs: 1534
+base  pages differing >0.15pt  19  documents  15  total |size error|   71.10  same-alnum  13  of those we draw larger  12
+head  pages differing >0.15pt  17  documents  13  total |size error|   66.06  same-alnum  12  of those we draw larger  11
+fixed by the change: 2   newly wrong: 0
+pages whose dominant size moved between base and head: 3
+   FAA_Form_337__ppt p66: ref 32.99 base 36.0 head 33.0
+   JesuitAssocOfStudentPersonnel__ppt p24: ref 13.01 base 17.01 head 15.99
+   ws_prod-g-doc-Events-r-6.-ESM__ppt p21: ref 18.99 base 20.01 head 18.99

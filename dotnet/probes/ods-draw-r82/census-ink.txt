@@ -1,0 +1,33 @@
+32 documents hold an inked shape in a cell
+  32 shapes   120 paras  custom-shape     sheets/chartset-014/ods/016_Free_Organizational_Chart_Template_-_Company_Organization_Chart_db913144.ods
+  16 shapes    74 paras  custom-shape     sheets/done-009/ods/EHEST-Pre-departure-checklist-Rev.-1-06-12-2016.ods
+  14 shapes    14 paras  custom-shape     sheets/chartset-014/ods/076_Inventory_list_accessibility_guide_Use_this_template_f43dab19.ods
+   9 shapes     9 paras  custom-shape     sheets/chartset-014/ods/017_Timeline_Templates_for_Excel_b88faee6.ods
+   6 shapes     6 paras  custom-shape     sheets/chartset-011/ods/028_Budget_summary_report_4aeefd13.ods
+   4 shapes    12 paras  custom-shape     sheets/chartset-007/ods/037_Personal_money_tracker_a57957bb.ods
+   4 shapes     4 paras  custom-shape     sheets/chartset-009/ods/041_Business_budget_ef942467.ods
+   4 shapes     4 paras  custom-shape     sheets/chartset-012/ods/068_Blue_inventory_list_Use_this_template_f9908489.ods
+   4 shapes     9 paras  custom-shape     sheets/done-010/ods/PC1000.ods
+   3 shapes     9 paras  custom-shape     sheets/chartset-006/ods/070_Equipment_inventory_list_Use_this_template_fd524c8a.ods
+   3 shapes     9 paras  custom-shape     sheets/chartset-013/ods/049_Expenses_calculator_c351f3d0.ods
+   3 shapes     4 paras  custom-shape     sheets/done-004/ods/Foreign_SA-CAT-I_and_CAT-II-III_Pub_0.ods
+   3 shapes     4 paras  custom-shape     sheets/done-010/ods/Special-Procedures_2025-07-10.ods
+   3 shapes    17 paras  custom-shape     sheets/done-012/ods/SIL_TDB609.ods
+   3 shapes    82 paras  custom-shape     sheets/done-014/ods/TICAPCapability_Final.ods
+   2 shapes     2 paras  custom-shape     sheets/chartset-007/ods/083_Project_tracker_Use_this_template_b38d057c.ods
+   2 shapes     2 paras  custom-shape     sheets/chartset-009/ods/081_Project_performance_report_Use_this_template_be2468b3.ods
+   2 shapes     2 paras  custom-shape     sheets/chartset-010/ods/079_Org_charts_visual_248d1dcf.ods
+   2 shapes     2 paras  custom-shape     sheets/chartset-012/ods/009_Contextures_chart_sample_adcb3f6c.ods
+   2 shapes    12 paras  custom-shape     sheets/chartset-013/ods/035_Project_plan_for_law_firms_aa2d4462.ods
+   2 shapes    13 paras  custom-shape     sheets/done-005/ods/apron-area.ods
+   2 shapes    11 paras  custom-shape     sheets/done-006/ods/SSRO_Quarterly_Statistical_Bulletin_Q3201617_DATA.ods
+   2 shapes    14 paras  custom-shape     sheets/done-011/ods/SIL_TDB605.ods
+   2 shapes    14 paras  custom-shape     sheets/pagination-001/ods/SIL_TDB648.ods
+   1 shapes     3 paras  custom-shape     sheets/chartset-004/ods/DynamicBubbleChart.ods
+   1 shapes     1 paras  custom-shape     sheets/done-002/ods/2012-GA-Survey-Chapter-5-Tables-16Dec2013-V2.ods
+   1 shapes     1 paras  custom-shape     sheets/done-002/ods/2012-GA-Survey-Chapter-6-Tables-16Dec2013-V2.ods
+   1 shapes     1 paras  custom-shape     sheets/done-003/ods/Air_Boss_Master_List.ods
+   1 shapes     6 paras  custom-shape     sheets/done-005/ods/arp-sop-300-Exhibit-A-Table-Templates.ods
+   1 shapes     2 paras  custom-shape     sheets/done-006/ods/AFS-400_Contacts.ods
+   1 shapes     1 paras  custom-shape     sheets/done-008/ods/Computer and Software Services_50 State Comparison.ods
+   1 shapes     1 paras  custom-shape     sheets/done-010/ods/TOGAF9-Tool-ConfReqts-CSQ.ods

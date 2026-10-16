@@ -1,0 +1,198 @@
+# DO NOT APPLY WITHOUT THE DECISION THIS PATCH DEPENDS ON.
+#
+# This is a RETARGET, not a fix. `SlideAutofit`'s twelve `constScaleLevels` rows and its 0.250
+# floor are a correct, deliberate port of LibreOffice **26.2.4.2** (round slides-r52,
+# `dotnet/probes/slides-r52/results.md`). The `soffice` installed in THIS container, and the one
+# that wrote every reference PDF under /data/bench/lo/, is **24.2.7.2** — whose autofit answers a
+# 2.5 per-cent font grid with no floor, measured on 36 probe decks in
+# `/data/bench/fix-lanes/L5-slides/probe/fit/`.
+#
+# Applying this makes the tree agree with THIS sweep's reference and disagree with the project's.
+# It will fail `SlideAutofitTests`, `SlideMarkerScaleTests` and the two
+# `SlideAutofit*ComparisonTests` fidelity suites, all of which pin 26.2.4.2 answers, and those
+# would have to move with it. The alternative — re-render the reference bank at 26.2.4.2 — leaves
+# the tree alone and re-scores 25 of this lane's 35 documents instead. That choice is above this
+# lane; see findings.md, root cause A.
+diff --git a/dotnet/src/XRay.Office.Presentations/Layout/SlideAutofit.cs b/dotnet/src/XRay.Office.Presentations/Layout/SlideAutofit.cs
+index 0000000..0000000 100644
+--- a/dotnet/src/XRay.Office.Presentations/Layout/SlideAutofit.cs
++++ b/dotnet/src/XRay.Office.Presentations/Layout/SlideAutofit.cs
+@@ -74,85 +74,109 @@
+ public static partial class SlideTextLayout
+ {
+     /// <summary>
+-    /// The twelve <c>(font, spacing)</c> rows the fit may answer with, in the order it tries them.
++    /// The <c>(font, spacing)</c> scales the fit may answer with, in the order it tries them.
+     /// </summary>
+     /// <remarks>
+     /// <para>
+-    /// <c>constScaleLevels</c>, <c>editeng/source/editeng/impedit3.cxx</c>:286. The search formats
+-    /// once unscaled, and if that overflows walks this table from the top and keeps the
+-    /// <strong>first</strong> row that fits — so the answer is one of eleven font scales and never
+-    /// anything between them, and each font scale carries its own line-spacing scale.
+-    /// </para>
+-    /// <para>
+-    /// <strong>Measured against the installed 26.2.4.2, not read out of the tree.</strong>
+-    /// 36 one-slide decks, one variable — box height 60…480 pt — each in its own file so the
+-    /// reference's shared-outliner state leak cannot reach it, a single 40 pt paragraph in a
+-    /// 360 pt box (<c>dotnet/probes/slides-r52/make-fit-probe.py</c>). The nine distinct sizes the
+-    /// reference draws are exactly <c>40 ×</c> the first nine rows and nothing else, the spacing
+-    /// beside them is 0.90 above 0.85 and 0.80 at and below it, and <em>both</em> 0.850 rows
+-    /// appear: a 228 pt box takes <c>{0.850, 0.900}</c> and a 216 pt box <c>{0.850, 0.800}</c>.
+-    /// </para>
+-    /// <para>
+-    /// <strong>Row 0 is not a no-op.</strong> Its font scale is one and its spacing scale is 0.9,
+-    /// so the reference's first answer to an overflow is to tighten the leading and the paragraph
+-    /// spacing at full size — which is the other half of "the text sizes are different": at a
+-    /// 168 pt box both sides draw 28 pt and the reference's baseline pitch is 26.90 against our
+-    /// 33.62.
+-    /// </para>
+-    /// <para>
+-    /// This replaces the bisection of 24.2.7.2 that stood here for thirty rounds. That search
+-    /// snapped its candidates to a tenth of a point of the body's own character height and kept
+-    /// the closest fit at or above one, which is why it could answer with any whole point at all;
+-    /// on the grid above it agreed with 26.2.4.2 on 13 of 36 boxes. Its <c>GridFontHeightPoints</c>
+-    /// — the body's largest run height taken through hundredths of a millimetre, worth 33 of 33
+-    /// probe boxes against a round twelve's 27 — was a property of that grid and has gone with it.
+-    /// </para>
+-    /// <para>
+-    /// The 50 unit slack the 24.2 comparison allowed
+-    /// (<c>aCurrentTextBoxSize.extendBy(0, -50)</c>) has gone too, and that is measured rather
+-    /// than inferred from the function's disappearance: stepping the box 330…340 pt at one point,
+-    /// the reference stops scaling at <strong>exactly 336</strong> and scales at 335, where
+-    /// 1.417 pt of slack would have put the boundary at 334.
++    /// <strong>The twelve <c>constScaleLevels</c> rows this replaces are 26.2.4.2's, and the
++    /// installed <c>soffice</c> is 24.2.7.2.</strong> This file's own warning — "check which
++    /// version wrote the reference before porting anything out of this tree" — is the one that
++    /// fired. The table was measured against 26.2.4.2 in round slides-r52; the corpus's reference
++    /// PDFs in this container were written by <b>24.2.7.2</b>, whose autofit is not a walk down a
++    /// twelve-row table and does not stop at a quarter.
++    /// </para>
++    /// <para>
++    /// Measured 2026-09-02 against the installed binary, on 36 single-slide decks differing only
++    /// in the text box height — 60…480 pt in 12 pt steps, one 40 pt Liberation Sans paragraph
++    /// under <c>a:normAutofit</c> with zero insets, one slide per file so the reference's
++    /// shared-outliner state leak cannot reach it. The nine distinct sizes it draws are
++    /// <b>22, 25, 29, 32, 33, 34, 35, 37, 40</b>, which is 40 × <c>0.550, 0.625, 0.725, 0.800,
++    /// 0.825, 0.850, 0.875, 0.925, 1.000</c>. Four of the nine — <c>0.725, 0.800, 0.825,
++    /// 0.875</c> — are <em>not rows of the old table and cannot be produced by it at any
++    /// rounding</em>, which is what identifies the answer set as a 2.5 per-cent grid rather than a
++    /// twelve-row walk.
++    /// </para>
++    /// <para>
++    /// Confirmed on the corpus, where the reference's scale is always a grid step and ours is
++    /// always a table row. <c>slides/done-006/ppt/Lepore.ppt</c> page 2 draws its 24 pt body at
++    /// <b>21.005 pt</b> and its bullets at 21.005; we draw <b>20.013</b> and <b>20.409</b> — which
++    /// is, to three decimals, the pair this file records as having been measured
++    /// <em>on 26.2.4.2</em>. <c>berlin.ppt</c> page 5 is 25 against our 24,
++    /// <c>BUS-Chapter 05.ppt</c> page 2 is 27 against our 26, and each of those references is one
++    /// grid step above the table row we take.
++    /// </para>
++    /// <para>
++    /// <strong>The spacing column is dropped, and that is the deliberate half of this.</strong>
++    /// 24.2.7.2 does tighten leading — 8 of the 36 probe boxes come back at 0.9 or 0.8 of their
++    /// natural pitch — but <b>never at full font size</b>: no box answers <c>{1.000, 0.900}</c>,
++    /// which is the row the old table tries first and therefore the row the corpus hits most. It
++    /// is not a cosmetic difference, because a line-spacing scale moves a line's height and not
++    /// its text height, and a bullet is centred on the text height inside the line's
++    /// (<see cref="SlideTextLayout"/>'s <c>EmitMarker</c>): on
++    /// <c>slides/done-008/pptx/G-InvoicingKeithJarboe.pptx</c> page 2 that row puts every bullet
++    /// <b>3.104 pt</b> above its own first line where the reference puts it <b>0.964</b>, which is
++    /// the "bullet glyphs sit high" this round sees on four unrelated decks. Reproducing
++    /// <em>which</em> boxes take a spacing scale needs 24.2.7.2's own search, whose source is not
++    /// in this tree and which is not guessed at here — so the grid reproduces the font dimension
++    /// exactly and leaves the leading alone, rather than keeping a row the reference is measured
++    /// never to answer.
++    /// </para>
++    /// <para>
++    /// <strong>And there is no floor.</strong> The walk runs to 0.025 rather than stopping at
++    /// 0.250:
++    /// <c>slides/done-005/pptx/manufacturing_process_simulation_working_group_overview_2023.pptx</c>
++    /// page 2 holds 48 pt and 16 pt runs in one body and the reference draws them at <b>9.014</b>
++    /// and <b>3.005 pt</b> — a scale of 0.1875, well under the floor — while we stop at 0.250,
++    /// draw 12 pt, and overrun the bottom of the slide. The floor is 26.2.4.2's last
++    /// <c>constScaleLevels</c> row and is a fact about that table, not about the fit.
+     /// </para>
+     /// </remarks>
+-    private static readonly (double Font, double Spacing)[] FitLevels =
+-    [
+-        (1.000, 0.900),
+-        (0.925, 0.900),
+-        (0.850, 0.900),
+-        (0.850, 0.800),
+-        (0.775, 0.800),
+-        (0.700, 0.800),
+-        (0.625, 0.800),
+-        (0.550, 0.800),
+-        (0.475, 0.800),
+-        (0.400, 0.800),
+-        (0.325, 0.800),
+-        (0.250, 0.800),
+-    ];
++    private static readonly (double Font, double Spacing)[] FitLevels = BuildFitLevels();
+ 
+-    /// <summary>The smallest font scale a fit may answer with; below it the reference gives up.</summary>
++    /// <summary>The grid the reference's font scale lands on: one fortieth, 2.5 per cent.</summary>
++    private const double Step = 0.025;
++
++    /// <summary>How many steps of <see cref="Step"/> make an unscaled body.</summary>
++    private const int Steps = 40;
++
++    /// <summary>The grid, largest first.</summary>
+     /// <remarks>
++    /// 0.975 down to 0.025. The unscaled case is tried before the walk begins, so 1.000 is not a
++    /// row: <c>Solve</c> answers it with <c>Scaling.None</c>, which also leaves the run sizes off
++    /// the whole-point rounding a fitted body takes.
++    /// </remarks>
++    private static (double Font, double Spacing)[] BuildFitLevels()
++    {
++        (double Font, double Spacing)[] levels = new (double, double)[Steps - 1];
++
++        for (int step = Steps - 1; step >= 1; step--)
++        {
++            levels[Steps - 1 - step] = (step * Step, 1.0);
++        }
++
++        return levels;
++    }
++
++    /// <summary>The smallest font scale the walk reaches.</summary>
++    /// <remarks>
++    /// <para>
++    /// <strong>24.2.7.2 has no floor, and the 0.250 that stood here was 26.2.4.2's last
++    /// <c>constScaleLevels</c> row rather than a property of the fit.</strong> Measured on
++    /// <c>slides/done-005/pptx/manufacturing_process_simulation_working_group_overview_2023.pptx</c>
++    /// page 2, whose body states 48 pt: the reference draws it at <b>9.014 pt</b> and its 16 pt
++    /// sibling run at <b>3.005</b>, a scale of 0.1875. Stopping at a quarter drew 12 pt and ran
++    /// the last four bullets off the bottom of the slide.
++    /// </para>
+     /// <para>
+-    /// <strong>An autofitted body never shrinks past a quarter — it overflows instead.</strong>
+-    /// <see cref="FitLevels"/>' last row is <c>{0.250, 0.800}</c> and the walk stops there whether
+-    /// or not the text fits, so a placeholder holding far more text than it has room for is drawn
+-    /// at a quarter size and allowed to run past its own bottom edge.
+-    /// </para>
+-    /// <para>
+-    /// That is not merely "too small" for the search this replaced; it was <em>nothing</em>. The
+-    /// bisection's interval was <c>[0, 1]</c> and a body overflowing twentyfold drove it into the
+-    /// thousandths, where <see cref="Scaling.Scaled"/>'s rounding to a whole point rounds the em
+-    /// to <strong>0</strong> and the page receives no text-showing operator for the body at all.
+-    /// Measured on <c>NWD-GLA-Community-Outreach-Day-Oct-2025.pptx</c>, whose slides 5, 6 and 12
+-    /// each put seventeen paragraphs of 52–88 pt text in a 1152128 EMU (90.7 pt) subtitle: we drew
+-    /// the title and nothing else, where 26.2.4.2 draws the body at stated × 0.250 exactly —
+-    /// 60 pt → 15, 52 → 13, 88 → 22, 72 → 18, 77 → 19 (<c>/F 18.992 Tf</c> in its page 12 stream).
+-    /// The table reproduces all seven of those sizes through our own metrics, which is the sense
+-    /// in which it subsumes the clamp rather than contradicting it.
++    /// The walk still stops somewhere, and it stops at one grid step: a body overflowing
++    /// twentyfold otherwise drives the scale into the thousandths, where
++    /// <see cref="Scaling.Scaled"/>'s rounding to a whole point rounds the em to <b>0</b> and the
++    /// page receives no text-showing operator for the body at all — measured on
++    /// <c>NWD-GLA-Community-Outreach-Day-Oct-2025.pptx</c>, whose slides 5, 6 and 12 put seventeen
++    /// paragraphs of 52–88 pt text in a 90.7 pt subtitle.
+     /// </para>
+     /// </remarks>
+-    private const double FitFloor = 0.250;
++    private const double FitFloor = Step;
+ 
+     /// <summary>
+     /// How a fit's answer is applied to a body: a font multiplier and a line-spacing multiplier.

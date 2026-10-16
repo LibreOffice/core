@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document
+    xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+    xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+    xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+    xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+    xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+    xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:meta>
+  <dc:title>Paperless floating frames in four wrap modes</dc:title>
+  <dc:subject>Left, top-and-bottom, run-through and dynamic, one frame each and far enough apart not to interact</dc:subject>
+ </office:meta>
+ <office:automatic-styles>
+  <style:page-layout style:name="PL">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+       fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"/>
+  </style:page-layout>
+  <style:style style:name="FrLeft" style:family="graphic">
+   <style:graphic-properties style:wrap="left" style:number-wrapped-paragraphs="no-limit"
+       style:vertical-pos="from-top" style:vertical-rel="paragraph"
+       style:horizontal-pos="from-left" style:horizontal-rel="paragraph"
+       fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm"
+       fo:padding="0cm" fo:border="none" draw:fill="none"/>
+  </style:style>
+  <style:style style:name="FrTop" style:family="graphic">
+   <style:graphic-properties style:wrap="none" style:number-wrapped-paragraphs="no-limit"
+       style:vertical-pos="from-top" style:vertical-rel="paragraph"
+       style:horizontal-pos="from-left" style:horizontal-rel="paragraph"
+       fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm"
+       fo:padding="0cm" fo:border="none" draw:fill="none"/>
+  </style:style>
+  <style:style style:name="FrThrough" style:family="graphic">
+   <style:graphic-properties style:wrap="run-through" style:number-wrapped-paragraphs="no-limit"
+       style:vertical-pos="from-top" style:vertical-rel="paragraph"
+       style:horizontal-pos="from-left" style:horizontal-rel="paragraph"
+       fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm"
+       fo:padding="0cm" fo:border="none" draw:fill="none"/>
+  </style:style>
+  <style:style style:name="FrBest" style:family="graphic">
+   <style:graphic-properties style:wrap="dynamic" style:number-wrapped-paragraphs="no-limit"
+       style:vertical-pos="from-top" style:vertical-rel="paragraph"
+       style:horizontal-pos="from-left" style:horizontal-rel="paragraph"
+       fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm"
+       fo:padding="0cm" fo:border="none" draw:fill="none"/>
+  </style:style>
+  <style:style style:name="FrameText" style:family="paragraph">
+   <style:paragraph-properties fo:text-align="start" fo:text-indent="0cm" fo:hyphenate="false"
+       fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%"/>
+   <style:text-properties style:font-name="Carlito" fo:font-family="Carlito" fo:font-size="9pt"
+       fo:language="en" fo:country="GB"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:styles>
+  <style:style style:name="Body" style:family="paragraph">
+   <style:paragraph-properties fo:text-align="start" fo:text-indent="0cm" fo:hyphenate="false"
+       fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%"
+       fo:orphans="0" fo:widows="0"/>
+   <style:text-properties style:font-name="Carlito" fo:font-family="Carlito" fo:font-size="11pt"
+       fo:language="en" fo:country="GB"/>
+  </style:style>
+ </office:styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="PL"/>
+ </office:master-styles>
+ <office:body><office:text>
+   <text:p text:style-name="Body">Paragraph 01. kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph.</text:p>
+   <text:p text:style-name="Body"><draw:frame draw:style-name="FrLeft" draw:name="Left" text:anchor-type="paragraph" svg:x="13cm" svg:y="0cm" svg:width="4cm" svg:height="2cm" draw:z-index="0"><draw:text-box><text:p text:style-name="FrameText">Left.</text:p></draw:text-box></draw:frame>Paragraph 02. kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph.</text:p>
+   <text:p text:style-name="Body">Paragraph 03. kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph.</text:p>
+   <text:p text:style-name="Body">Paragraph 04. kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph.</text:p>
+   <text:p text:style-name="Body">Paragraph 05. kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph.</text:p>
+   <text:p text:style-name="Body"><draw:frame draw:style-name="FrTop" draw:name="TopBottom" text:anchor-type="paragraph" svg:x="6.5cm" svg:y="0cm" svg:width="4cm" svg:height="2cm" draw:z-index="1"><draw:text-box><text:p text:style-name="FrameText">TopBottom.</text:p></draw:text-box></draw:frame>Paragraph 06. kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph.</text:p>
+   <text:p text:style-name="Body">Paragraph 07. kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph.</text:p>
+   <text:p text:style-name="Body">Paragraph 08. kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph.</text:p>
+   <text:p text:style-name="Body">Paragraph 09. kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph.</text:p>
+   <text:p text:style-name="Body"><draw:frame draw:style-name="FrThrough" draw:name="Through" text:anchor-type="paragraph" svg:x="0cm" svg:y="0cm" svg:width="4cm" svg:height="2cm" draw:z-index="2"><draw:text-box><text:p text:style-name="FrameText">Through.</text:p></draw:text-box></draw:frame>Paragraph 10. kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph.</text:p>
+   <text:p text:style-name="Body">Paragraph 11. kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph.</text:p>
+   <text:p text:style-name="Body">Paragraph 12. kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph.</text:p>
+   <text:p text:style-name="Body">Paragraph 13. kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph.</text:p>
+   <text:p text:style-name="Body"><draw:frame draw:style-name="FrBest" draw:name="Optimal" text:anchor-type="paragraph" svg:x="1cm" svg:y="0cm" svg:width="4cm" svg:height="2cm" draw:z-index="3"><draw:text-box><text:p text:style-name="FrameText">Optimal.</text:p></draw:text-box></draw:frame>Paragraph 14. kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph.</text:p>
+   <text:p text:style-name="Body">Paragraph 15. kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph.</text:p>
+   <text:p text:style-name="Body">Paragraph 16. kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph.</text:p>
+   <text:p text:style-name="Body">Paragraph 17. kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph.</text:p>
+   <text:p text:style-name="Body">Paragraph 18. kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph kerning advance rasteriser layout ligature common separate margin extraction library paths arithmetic rendering together baseline filling compounds measurement pagination glyph.</text:p>
+ </office:text></office:body>
+</office:document>

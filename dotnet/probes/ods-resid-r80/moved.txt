@@ -1,0 +1,37 @@
+before {'match': 233, 'ours-failed': 1, 'pages': 27, 'pages,words': 10, 'words': 36} TOTAL 307
+after {'match': 254, 'ours-failed': 1, 'pages': 6, 'pages,words': 9, 'words': 37} TOTAL 307
+
+gained 21, lost 0, moved without a verdict change 8
+
+== GAINED
+EASA-IFP-145Scope(WEB)_ALL_ValidF145SOA_2022-12-16-04-31-58_0.ods	pages -> match	pages 111/114 -> 114/114	glyphs 188829/188791 -> 188829/188791
+EASA-IFP-WEBLISTNOODATA-ListsofForeignapprovals(WEB)_NewChart_2022-08-05-03-31-32.ods	pages -> match	pages 18/19 -> 19/19	glyphs 31382/31376 -> 31382/31376
+june_2025_published.ods	pages -> match	pages 14/15 -> 15/15	glyphs 90883/90883 -> 90883/90883
+National-Finalists-2024-1.ods	pages -> match	pages 24/27 -> 27/27	glyphs 27258/27258 -> 27258/27258
+wiley-cancelled-title-list.ods	pages -> match	pages 58/60 -> 60/60	glyphs 56700/56700 -> 56700/56700
+airports_6.ods	pages -> match	pages 18/17 -> 17/17	glyphs 58944/58811 -> 58811/58811
+Aviation_Abbreviations.ods	pages -> match	pages 86/94 -> 94/94	glyphs 92850/92850 -> 92850/92850
+FY2023-AIP-grants.ods	pages -> match	pages 30/33 -> 33/33	glyphs 352619/353363 -> 353363/353363
+SIL_TDB605.ods	pages -> match	pages 48/44 -> 44/44	glyphs 18616/18693 -> 18616/18693
+aircraft_analysis-2018-06.ods	pages -> match	pages 38/42 -> 42/42	glyphs 38379/38379 -> 38379/38379
+CSJU List of Recipients of funds 2013-2020.ods	pages -> match	pages 93/95 -> 95/95	glyphs 270622/270627 -> 270629/270627
+SIL_TDB609.ods	pages -> match	pages 54/50 -> 50/50	glyphs 22541/22688 -> 22541/22688
+FY2021-AIP-grants.ods	pages -> match	pages 51/57 -> 57/57	glyphs 597433/598285 -> 598285/598285
+afn-afn-20250801-fy25-jan25-mar25.ods	pages -> match	pages 282/270 -> 270/270	glyphs 409037/409299 -> 409037/409299
+seihon_zassi_kikou_20221215.ods	pages -> match	pages 76/84 -> 84/84	glyphs 302093/302717 -> 302717/302717
+tk-syllabus-comparison-document-v5.ods	pages -> match	pages 852/855 -> 855/855	glyphs 1225768/1225755 -> 1225789/1225755
+EASA-IFP-147Scope_WEB__ALL_Valid147SoA_2024-11-28-11-16-31.ods	pages -> match	pages 83/94 -> 94/94	glyphs 182618/182586 -> 182618/182586
+Laser Report 2024 FOIA __Oct (1).ods	pages -> match	pages 486/506 -> 506/506	glyphs 588642/588374 -> 588642/588374
+ans_mappings_of_eccairs_terms.ods	pages -> match	pages 170/179 -> 179/179	glyphs 184643/184799 -> 184827/184799
+CIS_Debian_Linux_8_Benchmark_v1.0.0.ods	pages -> match	pages 88/61 -> 61/61	glyphs 76633/76210 -> 76633/76210
+SIL_TDB648.ods	pages -> match	pages 92/88 -> 88/88	glyphs 30809/30888 -> 30809/30888
+
+== MOVED
+070_Equipment_inventory_list_Use_this_template_fd524c8a.ods	words -> words	pages 1/1 -> 1/1	glyphs 1211/1028 -> 1175/1028
+047_Date_tracker_Gantt_chart_bf34f3a8.ods	match -> match	pages 8/8 -> 8/8	glyphs 3551/3538 -> 3556/3538
+Part_375_Operators.ods	pages,words -> words	pages 17/19 -> 19/19	glyphs 11849/12221 -> 11849/12221
+Part_129_Operators.ods	pages -> pages	pages 20/23 -> 22/23	glyphs 19223/19595 -> 19223/19595
+arp-sop-300-Exhibit-A-Table-Templates.ods	pages,words -> pages,words	pages 17/11 -> 15/11	glyphs 18968/19784 -> 19011/19784
+SSRO_Quarterly_Statistical_Bulletin_Q3201617_DATA.ods	pages,words -> pages,words	pages 7/4 -> 11/4	glyphs 1244/2779 -> 1244/2779
+EHEST-Pre-departure-checklist-Rev.-1-06-12-2016.ods	pages,words -> pages,words	pages 22/24 -> 27/24	glyphs 34403/39744 -> 34403/39744
+Special-Procedures_2025-07-10.ods	pages -> pages	pages 20/22 -> 21/22	glyphs 153843/153843 -> 153843/153843

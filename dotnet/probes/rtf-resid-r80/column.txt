@@ -1,0 +1,25 @@
+before match=257 page-exact=276 sum|dpages|=436 sum|dglyphs|=164675 of 336
+after  match=259 page-exact=278 sum|dpages|=363 sum|dglyphs|=161238 of 336
+
+GAINED 3
+    317/318   ->   318/318          pages -> match        02_mcar_part-2_and_IS_v2.10
+     20/21    ->    21/21           pages -> match        231164_SystemDesignDocument
+     22/21    ->    21/21           pages -> match        AAC-AD-No-2021-01-Boeing-737-8-and-737-9-MAX
+
+LOST 1
+     47/47    ->    46/47           match -> pages        SPA-11_mcar_part-11_v2.9
+
+page count moved on 12 documents
+  closer 8, further 4
+    651 ->   702 (ref   746) 150-5370-10H
+    644 ->   665 (ref   667) AC-150-5370-10G-updated-201604
+    162 ->   156 (ref   223) 24-25_FAA_Holdover_Tables
+    166 ->   169 (ref   233) FAA 2025-26 Holdover Tables
+     73 ->    71 (ref    70) FRE-03_mcar_part-3_and_IS_v2.9
+    164 ->   166 (ref   171) OM template for non-complex NCC operators_August 2016
+    317 ->   318 (ref   318) 02_mcar_part-2_and_IS_v2.10
+     20 ->    21 (ref    21) 231164_SystemDesignDocument
+     31 ->    32 (ref    29) 5709.16 ch.40_mgfinal
+     22 ->    21 (ref    21) AAC-AD-No-2021-01-Boeing-737-8-and-737-9-MAX
+    273 ->   272 (ref   274) SPA-02_mcar_part-2_and_IS_v2.9
+     47 ->    46 (ref    47) SPA-11_mcar_part-11_v2.9

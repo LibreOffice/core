@@ -1,0 +1,35 @@
+path	expression_rules_accepted	refused	cells_under_a_refused_rule	formulas
+sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	0	42	28146	AND(#REF!="High Risk",I$7>=#REF!,I$7<=#R | AND(#REF!="Low Risk",I$7>=#REF!,I$7<=#RE | AND(#REF!="Med Risk",I$7>=#REF!,I$7<=#RE | AND(#REF!="On Track",I$7>=#REF!
+sheets/chartset-010/xlsx/072_Gantt_project_planner_dde00e33.xlsx	0	10	12606	Actual | ActualBeyond | H$4=period_selected | MOD(COLUMN(),2) | MOD(COLUMN(),2)=0 | PercentComplete | PercentCompleteBeyond | Plan | TRUE
+sheets/chartset-009/xlsx/015_Free_Gantt_Chart_Template_for_Excel_414e86bf.xlsx	0	4	6272	AND($E8<=K$6,ROUNDDOWN(($F8-$E8+1)*$H8,0 | AND(NOT(ISBLANK($E8)),$E8<=K$6,$F8>=K$6) | K$6=TODAY()
+sheets/chartset-009/xlsx/085_Simple_Gantt_chart_d65b8377.xlsx	0	9	4928	AND(TODAY()>=I$5, TODAY()<J$5) | AND(task_end>=I$5,task_start<J$5) | AND(task_start<=I$5,ROUNDDOWN((task_end-
+sheets/chartset-014/xlsx/027_Simple_personal_cash_flow_statement_675c6584.xlsx	0	12	1994	(MOD(ROW(),2)<>0)*($B12<>"Income") | (MOD(ROW(),2)<>0)*($B12="Income") | (MOD(ROW(),2)<>0)*($B5="Income") | (MOD(ROW(),2)=0)*($B12<>"Income") | (MOD(ROW(),2)=0)
+sheets/chartset-013/xlsx/019_Free_Blood_Sugar_Chart_for_Excel_-_Track_Your_Blood_Sugar_Level_36f4a782.xlsx	0	4	1540	AND(C30>0,C30<$B$5) | ISERROR(G30)
+sheets/table-001/xlsx/FAA-2019-0995-0002_attachment_2.xlsx	0	2	1520	AND(MID($C5,1,7)="MISSING",$G5="") | MID($C5,1,7)="MISSING"
+sheets/done-003/xlsx/VOR Candidate Discontinuance List 2026-01-08.xlsx	0	8	1419	MOD(ROW(),2)=0
+sheets/done-011/xlsx/Application_Compliance_Checklist_5_Apr_2021.xlsx	30	2	1048	#REF!="N/A"
+sheets/chartset-008/xlsx/023_Waterfall_Chart_Template_for_Excel_349f7689.xlsx	0	8	228	ISERROR(D27) | ISERROR(D36) | ISERROR(J27) | ISERROR(K28) | ISERROR(K38) | ISERROR(L27) | ISERROR(L28)
+sheets/chartset-011/xlsx/028_Budget_summary_report_4aeefd13.xlsx	0	1	186	_xlfn.ISFORMULA(C6)
+sheets/chartset-009/xlsx/024_Free_Kids_Chore_Chart_Template_ad74bb34.xlsx	0	2	162	MOD(ROW(),2)=0
+sheets/chartset-011/xlsx/071_Four-week_project_timeline_Use_this_template_4f05db49.xlsx	3	2	56	E$7=TODAY()
+sheets/chartset-007/xlsx/082_Project_to_do_list_28f80082.xlsx	0	1	54	AND($C8>=valHStart, $C8<=valHEnd)
+sheets/chartset-012/xlsx/036_Simple_to-do_list_Use_this_template_ba44373b.xlsx	2	1	42	AND($D6<>"",$D6<TODAY())
+sheets/chartset-006/xlsx/088_To-do_list_with_progress_tracker_Use_this_template_8c438912.xlsx	0	1	40	AND($G3=0,$G3<>"")
+sheets/chartset-014/xlsx/038_Baby_growth_chart_bb9cd672.xlsx	0	1	20	ISERROR(F5)
+sheets/chartset-014/xlsx/039_Baby_growth_tracker_e295ae56.xlsx	0	1	20	ISERROR(F5)
+sheets/chartset-007/xlsx/083_Project_tracker_Use_this_template_b38d057c.xlsx	0	2	18	(ABS((K5-G5))/G5)>FlagPercent | (ABS((L5-H5))/H5)>FlagPercent
+sheets/chartset-007/xlsx/040_Blood_pressure_tracker_872b6833.xlsx	0	2	16	E12>MaxSystolic | F12>MaxDiastolic
+sheets/chartset-010/xlsx/047_Date_tracker_Gantt_chart_bf34f3a8.xlsx	0	1	13	#REF!<=TODAY()+7
+sheets/chartset-006/xlsx/044_Cash_flow_forecast_Use_this_template_b8fa1f35.xlsx	0	1	12	C8<Cash_Minimum
+sheets/chartset-007/xlsx/037_Personal_money_tracker_a57957bb.xlsx	2	1	1	AND($B$22>=0.25,$B$22<0.5)
+sheets/done-015/xlsx/tk-syllabus-comparison-document-v5.xlsx	3	0	0	
+sheets/done-016/xlsx/TK-Syllabus-Comparison-Document-v2.xlsx	413	0	0	
+sheets/chartset-005/xlsx/074_Idea_planner_bacaa123.xlsx	2	0	0	
+sheets/chartset-007/xlsx/050_Financial_vision_d44241e1.xlsx	4	0	0	
+sheets/chartset-009/xlsx/075_Idea_planner_tasks_f44ebd73.xlsx	3	0	0	
+sheets/chartset-009/xlsx/081_Project_performance_report_Use_this_template_be2468b3.xlsx	6	0	0	
+sheets/chartset-010/xlsx/069_Blue_modern_balance_sheet_Use_this_template_6b4d70d3.xlsx	6	0	0	
+sheets/chartset-010/xlsx/078_Modern_inventory_list_Use_this_template_41abd5bf.xlsx	4	0	0	
+sheets/chartset-011/xlsx/077_Inventory_list_with_highlighting_Use_this_template_36d8d57a.xlsx	2	0	0	
+sheets/chartset-012/xlsx/068_Blue_inventory_list_Use_this_template_f9908489.xlsx	1	0	0	
+sheets/chartset-014/xlsx/076_Inventory_list_accessibility_guide_Use_this_template_f43dab19.xlsx	2	0	0	

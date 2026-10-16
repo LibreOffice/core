@@ -1,0 +1,96 @@
+make-break-probe.py -> break-probe.pptx, converted to .ppt by 26.2.4.2, then rendered
+by 26.2.4.2 and by this tree at round 100's base and head.  Baselines in PDF page
+coordinates, topmost first.  The 0.028 pt the two writers differ by is in every row.
+
+S= 18 BREAK  ref=[462.019, 440.419]
+           base=[461.991, 440.391] ok
+           head=[461.991, 440.391] ok
+S= 18 BLANK  ref=[462.019, 440.192]
+           base=[461.991, 440.164] ok
+           head=[461.991, 440.164] ok
+S= 18 RUN    ref=[462.019, 440.192]
+           base=[461.991, 440.164] ok
+           head=[461.991, 440.164] ok
+S= 18 TWICE  ref=[222.038, 178.838]
+           base=[222.009, 178.809] ok
+           head=[222.009, 178.809] ok
+S= 18 TAIL   ref=[222.038, 178.611]
+           base=[222.009, 178.583] ok
+           head=[222.009, 178.583] ok
+S= 24 BREAK  ref=[462.019, 440.419]
+           base=[455.981, 433.191] DIFFERS
+           head=[461.991, 440.391] ok
+S= 24 BLANK  ref=[456.009, 432.992]
+           base=[455.981, 432.964] ok
+           head=[455.981, 432.964] ok
+S= 24 RUN    ref=[456.009, 432.992]
+           base=[455.981, 432.964] ok
+           head=[455.981, 432.964] ok
+S= 24 TWICE  ref=[222.038, 171.638]
+           base=[216.0, 164.409] DIFFERS
+           head=[222.009, 171.609] ok
+S= 24 TAIL   ref=[222.038, 171.411]
+           base=[216.0, 164.183] DIFFERS
+           head=[222.009, 171.383] ok
+S= 28 BREAK  ref=[462.019, 440.419]
+           base=[451.984, 428.372] DIFFERS
+           head=[461.991, 440.391] ok
+S= 28 BLANK  ref=[452.013, 428.173]
+           base=[451.984, 428.145] ok
+           head=[451.984, 428.145] ok
+S= 28 RUN    ref=[452.013, 428.173]
+           base=[451.984, 428.145] ok
+           head=[451.984, 428.145] ok
+S= 28 TWICE  ref=[222.038, 166.819]
+           base=[212.003, 154.772] DIFFERS
+           head=[222.009, 166.791] ok
+S= 28 TAIL   ref=[222.038, 166.592]
+           base=[212.003, 154.545] DIFFERS
+           head=[222.009, 166.564] ok
+S= 36 BREAK  ref=[462.019, 440.419]
+           base=[443.991, 418.791] DIFFERS
+           head=[461.991, 440.391] ok
+S= 36 BLANK  ref=[444.019, 418.592]
+           base=[443.991, 418.564] ok
+           head=[443.991, 418.564] ok
+S= 36 RUN    ref=[444.019, 418.592]
+           base=[443.991, 418.564] ok
+           head=[443.991, 418.564] ok
+S= 36 TWICE  ref=[222.038, 157.238]
+           base=[204.009, 135.609] DIFFERS
+           head=[222.009, 157.209] ok
+S= 36 TAIL   ref=[222.038, 157.011]
+           base=[204.009, 135.383] DIFFERS
+           head=[222.009, 156.983] ok
+S= 54 BREAK  ref=[462.019, 440.419]
+           base=[425.991, 397.191] DIFFERS
+           head=[461.991, 440.391] ok
+S= 54 BLANK  ref=[426.019, 396.992]
+           base=[425.991, 396.964] ok
+           head=[425.991, 396.964] ok
+S= 54 RUN    ref=[426.019, 396.992]
+           base=[425.991, 396.964] ok
+           head=[425.991, 396.964] ok
+S= 54 TWICE  ref=[222.038, 135.638]
+           base=[186.009, 92.409] DIFFERS
+           head=[222.009, 135.609] ok
+S= 54 TAIL   ref=[222.038, 135.411]
+           base=[186.009, 92.183] DIFFERS
+           head=[222.009, 135.383] ok
+S= 72 BREAK  ref=[462.019, 440.419]
+           base=[407.991, 375.591] DIFFERS
+           head=[461.991, 440.391] ok
+S= 72 BLANK  ref=[408.019, 375.392]
+           base=[407.991, 375.364] ok
+           head=[407.991, 375.364] ok
+S= 72 RUN    ref=[408.019, 375.392]
+           base=[407.991, 375.364] ok
+           head=[407.991, 375.364] ok
+S= 72 TWICE  ref=[222.038, 114.038]
+           base=[168.009, 49.209] DIFFERS
+           head=[222.009, 114.009] ok
+S= 72 TAIL   ref=[222.038, 113.811]
+           base=[168.009, 48.983] DIFFERS
+           head=[222.009, 113.783] ok
+
+cells beyond 0.10 pt of 26.2.4.2:  base 15 of 30,  head 0 of 30

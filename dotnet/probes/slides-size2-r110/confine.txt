@@ -1,0 +1,5 @@
+column    docs  rendered  bytes moved  pages moved  alnum moved  failed b/h
+ppt         51        51           14            0            0 0/    0
+pptx       251       251            0            0            0 0/    0
+odp        302       302           12            0            0 0/    0
+TOTAL      604       604           26            0            0

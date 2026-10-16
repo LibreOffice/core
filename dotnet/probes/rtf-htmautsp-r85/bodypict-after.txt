@@ -1,0 +1,9 @@
+probe                         ref     ours   ref ours  agree
+q-par-noword                 61.8     61.8   sum  sum  yes
+q-par                        61.8     61.8   sum  sum  yes
+q-pict-noword                61.8     61.8   sum  sum  yes
+q-pict                       61.8     61.8   sum  sum  yes
+q-pictpar-noword             61.8     61.8   sum  sum  yes
+q-pictpar                    61.8     61.8   sum  sum  yes
+
+agree 6 of 6

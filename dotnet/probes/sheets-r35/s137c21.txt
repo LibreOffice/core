@@ -1,0 +1,1 @@
+CAT.IDE.A.170/CAT.IDE.H.170 ‘Flight crew interphone system’; AMC1 CAT.IDE.A.170/CAT.IDE.H.170; CAT.IDE.A.175/CAT.IDE.H.175 ‘Crew member interphone system’; AMC1; CAT.IDE.A.175/CAT.IDE.H.175; CAT.IDE.A.180/CAT.IDE.H.180 ‘Public address system’; AMC1 CAT.IDE.A.180/CAT.IDE.H.180

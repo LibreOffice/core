@@ -1,0 +1,6 @@
+document                                             pages ref/ours      before     after   
+150-5370-10H                                         746/746             23.0532   22.9818   better
+19-06 Assistive Technology TAB Final - 508           8/8               24.3159   24.3159   level
+231164_SystemDesignDocument                          21/21              13.5668   13.5668   level
+AC-150-5370-10G-updated-201604                       667/665             17.1045   16.8734   better
+bulletin                                             15/15               3.7463    1.7038   better

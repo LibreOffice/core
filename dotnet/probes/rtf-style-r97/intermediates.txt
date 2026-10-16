@@ -1,0 +1,9 @@
+style                      after an RTF import                                              after a native ODF import
+Standard                   parent=None font-size=10pt                                       parent=None
+Heading                    parent=Standard font-size=14pt margin-top=0.1665in margin-bottom=0.0835in parent=Standard font-size=14pt margin-top=0.1665in margin-bottom=0.0835in
+Caption                    parent=Standard font-size=12pt font-style=italic margin-top=0.0835in margin-bottom=0.0835in number-lines=false parent=Standard font-size=12pt font-style=italic margin-top=0.0835in margin-bottom=0.0835in number-lines=false
+Figure                     -                                                                parent=Caption
+Index                      parent=Standard number-lines=false                               parent=Standard number-lines=false
+Header_20_and_20_Footer    parent=Standard                                                  parent=Standard tabs=3.3465in:center,6.6929in:right number-lines=false
+Header                     parent=Header_20_and_20_Footer                                   parent=Header_20_and_20_Footer tabs=3.3465in:center,6.6929in:right number-lines=false
+Text_20_body               parent=Standard margin-top=0in margin-bottom=0.0972in            parent=Standard margin-top=0in margin-bottom=0.0972in

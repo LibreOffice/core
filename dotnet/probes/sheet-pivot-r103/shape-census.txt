@@ -1,0 +1,27 @@
+Escher shape containers in the 64 .xls of /home/user/sample-files/sheets, per workbook:
+  shapes  autoMargin  groupFlag  childAnchor  document
+4	1	2	0	011_Contextures_chart_sample_599b4392.xls
+6	1	5	0	014_Contextures_chart_sample_991ecfc5.xls
+2	0	1	0	2012-GA-Survey-Chapter-5-Tables-16Dec2013-V2.xls
+2	0	1	0	2012-GA-Survey-Chapter-6-Tables-16Dec2013-V2.xls
+4	3	1	0	disclosures_ecm.xls
+2	0	1	0	permit-applications-determined-july-2015.xls
+8	6	2	0	Background_Declaration_Template.xls
+65	58	7	31	apron-area.xls
+5	4	1	0	Liste-Zertifizierung-ChemKlimaschutzV-RPT.xls
+49	23	25	13	EHEST-Pre-departure-checklist-Rev.-1-06-12-2016.xls
+50	0	13	0	INDEX_Digital_Transformation_Toolkits.xls
+15	7	3	0	PC1000.xls
+17	10	7	0	TOGAF9-Tool-ConfReqts-CSQ.xls
+56	34	22	0	SIL_TDB605.xls
+8	7	1	0	T0A0D0000090006XLSE.xls
+57	35	22	0	SIL_TDB609.xls
+2	0	1	0	npias_2009_appA.xls
+62	61	1	0	18-02RD301_ILS_components_Master_9-13-18.xls
+2	0	1	0	capa-liste-nse-1.xls
+23	17	5	0	TICAPCapability_Final.xls
+9	2	7	0	AIM_OPR_LIST.xls
+10	9	1	0	activespecs.xls
+13	12	1	0	laufende-nip-vorhaben-hyland.xls
+18	9	7	0	orbus_togaf_tool_csq.xls
+TOTAL shapes=489 autoMargin=299 groupFlag=138 childAnchor=44

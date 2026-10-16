@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <Description>Spreadsheet documents (the LibreOffice Calc equivalent): XLSX/XLSM/XLTX/XLTM/XLSB, XLS/XLT, ODS/OTS/FODS, CSV. Includes the formula engine and cell rendering. Part of X-Ray.Office, a pure C# port of LibreOffice's document import and rendering; install the X-Ray.Office package for the whole set.</Description>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- The width-dependent General rendering and the two device-unit roundings are decisions no
+         document demonstrates one at a time — a cell shows one string, and the roundings differ
+         by a hundredth of a millimetre each — so the tests reach them directly. -->
+    <InternalsVisibleTo Include="XRay.Office.Spreadsheets.Tests" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\XRay.Office.Core\XRay.Office.Core.csproj" />
+    <ProjectReference Include="..\XRay.Office.Containers\XRay.Office.Containers.csproj" />
+    <ProjectReference Include="..\XRay.Office.Text\XRay.Office.Text.csproj" />
+    <ProjectReference Include="..\XRay.Office.Vector\XRay.Office.Vector.csproj" />
+    <ProjectReference Include="..\XRay.Office.Ooxml\XRay.Office.Ooxml.csproj" />
+    <ProjectReference Include="..\XRay.Office.OpenDocument\XRay.Office.OpenDocument.csproj" />
+    <ProjectReference Include="..\XRay.Office.MsBinary\XRay.Office.MsBinary.csproj" />
+  </ItemGroup>
+
+</Project>

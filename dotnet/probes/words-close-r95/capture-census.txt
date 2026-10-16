@@ -1,0 +1,22 @@
+DOCX-family documents scanned: 272
+kind                   wrap-through   count  documents
+draw-group                    False       2          2
+draw-group                     True      35         13
+draw-shape                    False       2          2
+draw-shape                     True     559         70
+draw-shape+text               False      52         29
+draw-shape+text                True     715         93
+fly-ole                       False       5          5
+fly-picture                   False      16         13
+fly-picture                    True     185        124
+other                         False       1          1
+vml-draw-shape                 True    2526         99
+vml-draw-shape+text            True    1887        128
+vml-fly-picture                True      70         25
+
+The two readings differ only on a draw object with no text box that is not wrap-through:
+  4 objects in 4 documents
+    001_Free_Genogram_Diagram_Template_Blue_and_Gray_Theme_7c9e01a7.docx
+    002_Free_Genogram_Diagram_Template_Customizable_Format_2219584b.docx
+    022_Unit_Circle_Chart_Circle_A_and_B_19dbf275.docx
+    041_Visual_Product_Roadmap_Template_Blank_Format_63a3e010.docx

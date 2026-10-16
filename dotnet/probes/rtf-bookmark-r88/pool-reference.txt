@@ -1,0 +1,14 @@
+p_bodytext_20   10.0 LiberationSerif        x=72.1   above=11.55   below=11.55  
+p_bodytext_28   14.0 LiberationSerif        x=72.1   above=16.16   below=11.49  
+p_caption_20    10.0 LiberationSerif        x=72.1   above=11.55   below=11.55  
+p_caption_28    14.0 LiberationSerif        x=72.1   above=16.16   below=11.49  
+p_h4_20         14.0 LiberationSerif        x=72.1   above=28.16   below=17.49  
+p_h4_28         14.0 LiberationSerif        x=72.1   above=28.16   below=17.49  
+p_quote_20      12.0 LiberationSerif        x=72.1   above=13.83   below=11.52  
+p_quote_28      12.0 LiberationSerif        x=72.1   above=13.83   below=11.52  
+p_subtitle_20   14.0 LiberationSerif        x=72.1   above=28.16   below=17.49  
+p_subtitle_28   14.0 LiberationSerif        x=72.1   above=28.16   below=17.49  
+p_title_20      14.0 LiberationSerif        x=72.1   above=28.16   below=17.49  
+p_title_28      14.0 LiberationSerif        x=72.1   above=28.16   below=17.49  
+p_widget_20     12.0 LiberationSerif        x=72.1   above=13.83   below=11.52  
+p_widget_28     12.0 LiberationSerif        x=72.1   above=13.83   below=11.52  

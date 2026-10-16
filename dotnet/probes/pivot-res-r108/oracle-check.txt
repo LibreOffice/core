@@ -1,0 +1,43 @@
+alle einzeln.xlsx	Pivot	pivotTable1.xml	edges agree=30250 MISS=0 EXTRA=0 WRONG=0	styles agree=6060 miss=0 extra=0 wrong=0	indent miss=0 extra=0	
+TOTAL	alle einzeln.xlsx	agree=30250 MISS=0 EXTRA=0 WRONG=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	Summary	pivotTable1.xml	edges agree=95 MISS=0 EXTRA=0 WRONG=0	styles agree=20 miss=0 extra=0 wrong=0	indent miss=0 extra=0	
+Keywords_Mapping_Graphs_and_Charts.xlsx	Literature Mapping	pivotTable2.xml	edges agree=71 MISS=0 EXTRA=0 WRONG=0	styles agree=14 miss=0 extra=0 wrong=0	indent miss=0 extra=0	
+Keywords_Mapping_Graphs_and_Charts.xlsx	SABSA Skills Mapping	pivotTable3.xml	edges agree=67 MISS=0 EXTRA=0 WRONG=0	styles agree=13 miss=0 extra=0 wrong=0	indent miss=0 extra=0	
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Skills Mapping	pivotTable4.xml	edges agree=59 MISS=0 EXTRA=0 WRONG=0	styles agree=11 miss=0 extra=0 wrong=0	indent miss=0 extra=0	
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping EA	pivotTable5.xml	edges agree=75 MISS=0 EXTRA=0 WRONG=0	styles agree=14 miss=0 extra=0 wrong=0	indent miss=0 extra=0	
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping ESA	pivotTable6.xml	edges agree=91 MISS=0 EXTRA=0 WRONG=0	styles agree=18 miss=0 extra=0 wrong=0	indent miss=0 extra=0	
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping BA	pivotTable7.xml	edges agree=59 MISS=0 EXTRA=0 WRONG=0	styles agree=10 miss=0 extra=0 wrong=0	indent miss=0 extra=0	
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping SA	pivotTable8.xml	edges agree=59 MISS=0 EXTRA=0 WRONG=0	styles agree=10 miss=0 extra=0 wrong=0	indent miss=0 extra=0	
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping AA	pivotTable9.xml	edges agree=67 MISS=0 EXTRA=0 WRONG=0	styles agree=13 miss=0 extra=0 wrong=0	indent miss=0 extra=0	
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping DA	pivotTable10.xml	edges agree=31 MISS=0 EXTRA=0 WRONG=0	styles agree=4 miss=0 extra=0 wrong=0	indent miss=0 extra=0	
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping TA	pivotTable11.xml	edges agree=75 MISS=0 EXTRA=0 WRONG=0	styles agree=15 miss=0 extra=0 wrong=0	indent miss=0 extra=0	
+TOTAL	Keywords_Mapping_Graphs_and_Charts.xlsx	agree=749 MISS=0 EXTRA=0 WRONG=0
+DynamicBubbleChart.xlsx	Chart	pivotTable1.xml	edges agree=296 MISS=0 EXTRA=0 WRONG=0	styles agree=60 miss=0 extra=0 wrong=0	indent miss=0 extra=0	
+TOTAL	DynamicBubbleChart.xlsx	agree=296 MISS=0 EXTRA=0 WRONG=0
+049_Expenses_calculator_c351f3d0.xlsx	Personal Expenses Data	pivotTable1.xml	edges agree=94 MISS=0 EXTRA=0 WRONG=0	styles agree=23 miss=0 extra=0 wrong=0	indent miss=0 extra=0	
+TOTAL	049_Expenses_calculator_c351f3d0.xlsx	agree=94 MISS=0 EXTRA=0 WRONG=0
+007_Contextures_chart_sample_667d8e47.xlsm	CityPivot	pivotTable1.xml	edges agree=120 MISS=0 EXTRA=0 WRONG=0	styles agree=18 miss=0 extra=0 wrong=0	indent miss=0 extra=0	
+TOTAL	007_Contextures_chart_sample_667d8e47.xlsm	agree=120 MISS=0 EXTRA=0 WRONG=0
+037_Personal_money_tracker_a57957bb.xlsx	Monthly summary	pivotTable1.xml	edges agree=206 MISS=0 EXTRA=0 WRONG=0	styles agree=41 miss=0 extra=0 wrong=0	indent miss=0 extra=0	
+037_Personal_money_tracker_a57957bb.xlsx	Chart data	pivotTable22.xml	edges agree=87 MISS=0 EXTRA=0 WRONG=0	styles agree=21 miss=0 extra=0 wrong=0	indent miss=0 extra=0	
+TOTAL	037_Personal_money_tracker_a57957bb.xlsx	agree=293 MISS=0 EXTRA=0 WRONG=0
+033_Event_planning_tracker_Use_this_template_f29a848e.xlsx	PROJECT TOTALS	pivotTable1.xml	edges agree=105 MISS=0 EXTRA=0 WRONG=0	styles agree=30 miss=0 extra=0 wrong=0	indent miss=0 extra=0	
+TOTAL	033_Event_planning_tracker_Use_this_template_f29a848e.xlsx	agree=105 MISS=0 EXTRA=0 WRONG=0
+035_Project_plan_for_law_firms_aa2d4462.xlsx	PROJECT TOTALS	pivotTable1.xml	edges agree=105 MISS=0 EXTRA=0 WRONG=0	styles agree=30 miss=0 extra=0 wrong=0	indent miss=0 extra=0	
+TOTAL	035_Project_plan_for_law_firms_aa2d4462.xlsx	agree=105 MISS=0 EXTRA=0 WRONG=0
+027_Simple_personal_cash_flow_statement_675c6584.xlsx	Annual cash flow	pivotTable3.xml	DECLINED	cache is not a worksheet range
+027_Simple_personal_cash_flow_statement_675c6584.xlsx	Annual cash flow	pivotTable22.xml	DECLINED	cache is not a worksheet range
+027_Simple_personal_cash_flow_statement_675c6584.xlsx	Annual cash flow	pivotTable13.xml	DECLINED	cache is not a worksheet range
+027_Simple_personal_cash_flow_statement_675c6584.xlsx	Annual cash flow	pivotTable44.xml	DECLINED	cache is not a worksheet range
+TOTAL	027_Simple_personal_cash_flow_statement_675c6584.xlsx	agree=0 MISS=0 EXTRA=0 WRONG=0
+026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx	Annual cash flow	pivotTable3.xml	DECLINED	cache is not a worksheet range
+026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx	Annual cash flow	pivotTable22.xml	DECLINED	cache is not a worksheet range
+026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx	Annual cash flow	pivotTable13.xml	DECLINED	cache is not a worksheet range
+026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx	Annual cash flow	pivotTable44.xml	DECLINED	cache is not a worksheet range
+TOTAL	026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx	agree=0 MISS=0 EXTRA=0 WRONG=0
+053_Personal_asset_inventory_5446d84b.xlsx	Assets	pivotTable1.xml	DECLINED	cache is not a worksheet range
+TOTAL	053_Personal_asset_inventory_5446d84b.xlsx	agree=0 MISS=0 EXTRA=0 WRONG=0
+fixture.xlsx	Hidden	pivotTable1.xml	edges agree=33 MISS=0 EXTRA=0 WRONG=0	styles agree=7 miss=0 extra=0 wrong=0	indent miss=0 extra=0	
+fixture.xlsx	Packed	pivotTable2.xml	edges agree=69 MISS=0 EXTRA=0 WRONG=0	styles agree=11 miss=0 extra=0 wrong=0	indent miss=0 extra=0	
+fixture.xlsx	Cleared	pivotTable3.xml	edges agree=33 MISS=0 EXTRA=0 WRONG=0	styles agree=7 miss=0 extra=0 wrong=0	indent miss=0 extra=0	
+TOTAL	fixture.xlsx	agree=135 MISS=0 EXTRA=0 WRONG=0

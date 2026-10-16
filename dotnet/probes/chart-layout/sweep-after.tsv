@@ -1,0 +1,949 @@
+# validation: 947 of 947 verdicts reproduced
+path	pages	words	fonts	unemb	verdict	rawwords	glyphs	was
+sheets/ceiling-001/xls/Template Pilot Logbook JAR-FCL V3.0.xls	38/38	1584/1531	4/4	0	words	1591/1610	5756/5643	words
+sheets/ceiling-001/xlsx/2017-04-27-Lease-Transition-Records-Checklist-FINAL-1.xlsx	5/5	2323/2323	2/2	0	match	2364/2364	13250/13250	match
+sheets/ceiling-001/xlsx/2020-01-29-Lease-Transition-Records-Checklist-FINAL-1.xlsx	5/5	2323/2323	2/2	0	match	2364/2364	13250/13250	match
+sheets/ceiling-001/xlsx/EASA-IFP-145Scope(WEB)_ALL_ValidF145SOA_2022-12-16-04-31-58_0.xlsx	114/114	32249/34639	1/1	0	match	32445/34835	188829/189051	match
+sheets/ceiling-001/xlsx/EASA-IFP-WEBLISTNOODATA-ListsofForeignapprovals(WEB)_NewChart_2022-08-05-03-31-32.xlsx	19/19	4931/5171	1/1	0	match	4994/5234	31382/31379	match
+sheets/chartset-001/xlsx/001_advanced_excel_bar.xlsx	3/3	142/142	3/3	0	match	142/142	472/472	match
+sheets/chartset-001/xlsx/002_advanced_excel_line.xlsx	3/3	142/142	3/3	0	match	142/142	466/466	match
+sheets/chartset-001/xlsx/005_advanced_excel_area.xlsx	3/3	137/137	3/3	0	match	137/137	447/447	match
+sheets/chartset-001/xlsx/006_advanced_excel_scatter.xlsx	3/3	129/129	3/3	0	match	129/129	420/420	match
+sheets/chartset-001/xlsx/016_advanced_excel_radar.xlsx	3/3	124/124	3/3	0	match	124/124	422/422	match
+sheets/chartset-001/xlsx/022_advanced_excel_scatter.xlsx	3/3	129/129	3/3	0	match	129/129	422/422	match
+sheets/chartset-001/xlsx/025_advanced_excel_bar.xlsx	3/3	140/140	3/3	0	match	140/140	440/440	match
+sheets/chartset-001/xlsx/028_advanced_excel_doughnut.xlsx	3/3	113/113	3/3	0	match	113/113	374/374	match
+sheets/chartset-001/xlsx/032_advanced_excel_radar.xlsx	3/3	121/121	3/3	0	match	121/121	412/412	match
+sheets/chartset-001/xlsx/033_advanced_excel_bar.xlsx	3/3	139/139	3/3	0	match	139/139	454/454	match
+sheets/chartset-002/xlsx/003_advanced_excel_pie.xlsx	3/3	143/142	3/3	0	match	143/142	479/473	match
+sheets/chartset-002/xlsx/007_advanced_excel_bubble.xlsx	3/3	127/127	3/3	0	match	127/127	418/418	match
+sheets/chartset-002/xlsx/011_advanced_excel_pie.xlsx	3/3	140/138	3/3	0	match	140/140	457/452	match
+sheets/chartset-002/xlsx/012_advanced_excel_doughnut.xlsx	3/3	116/116	3/3	0	match	116/116	400/400	match
+sheets/chartset-002/xlsx/013_advanced_excel_area.xlsx	3/3	137/137	3/3	0	match	137/137	433/433	match
+sheets/chartset-002/xlsx/021_advanced_excel_area.xlsx	3/3	137/137	3/3	0	match	137/137	455/455	match
+sheets/chartset-002/xlsx/026_advanced_excel_line.xlsx	3/3	136/136	3/3	0	match	136/136	454/454	match
+sheets/chartset-002/xlsx/027_advanced_excel_pie.xlsx	3/3	140/138	3/3	0	match	140/140	451/445	match
+sheets/chartset-002/xlsx/030_advanced_excel_scatter.xlsx	3/3	130/130	3/3	0	match	130/130	421/421	match
+sheets/chartset-002/xlsx/034_advanced_excel_line.xlsx	3/3	137/137	3/3	0	match	137/137	465/465	match
+sheets/chartset-003/xlsx/004_advanced_excel_doughnut.xlsx	3/3	113/113	3/3	0	match	113/113	375/375	match
+sheets/chartset-003/xlsx/008_advanced_excel_radar.xlsx	3/3	121/121	3/3	0	match	121/121	415/415	match
+sheets/chartset-003/xlsx/014_advanced_excel_scatter.xlsx	3/3	130/130	3/3	0	match	130/130	432/432	match
+sheets/chartset-003/xlsx/015_advanced_excel_bubble.xlsx	3/3	128/128	3/3	0	match	128/128	428/428	match
+sheets/chartset-003/xlsx/017_advanced_excel_bar.xlsx	3/3	143/143	3/3	0	match	143/143	488/488	match
+sheets/chartset-003/xlsx/018_advanced_excel_line.xlsx	3/3	136/136	3/3	0	match	136/136	447/447	match
+sheets/chartset-003/xlsx/020_advanced_excel_doughnut.xlsx	3/3	113/113	3/3	0	match	113/113	374/374	match
+sheets/chartset-003/xlsx/024_advanced_excel_radar.xlsx	3/3	121/121	3/3	0	match	121/121	423/423	match
+sheets/chartset-003/xlsx/029_advanced_excel_area.xlsx	3/3	137/137	3/3	0	match	137/137	444/444	match
+sheets/chartset-003/xlsx/031_advanced_excel_bubble.xlsx	3/3	127/127	3/3	0	match	127/127	404/404	match
+sheets/chartset-004/xlsx/009_advanced_excel_bar.xlsx	3/3	147/147	3/3	0	match	147/147	495/495	match
+sheets/chartset-004/xlsx/010_advanced_excel_line.xlsx	3/3	137/137	3/3	0	match	137/137	461/461	match
+sheets/chartset-004/xlsx/019_advanced_excel_pie.xlsx	3/3	140/139	3/3	0	match	140/139	476/470	match
+sheets/chartset-004/xlsx/023_advanced_excel_bubble.xlsx	3/3	127/127	3/3	0	match	127/127	425/425	match
+sheets/chartset-004/xlsx/DynamicBubbleChart.xlsx	5/5	339/357	3/3	0	words	341/359	1723/1803	words
+sheets/chartset-004/xlsx/microsoft_learn_multi_chart_examples.xlsx	5/5	231/227	3/3	0	words	231/227	839/858	words
+sheets/chartset-005/xlsx/004_Contextures_chart_sample_de7c0671.xlsx	4/4	216/223	2/2	0	words	219/226	879/900	words
+sheets/chartset-005/xlsx/022_Pareto_Chart_Template_-_Pareto_Analysis_in_Excel_with_Pareto_Diagram_82b5a874.xlsx	2/2	190/191	2/2	0	match	204/205	941/937	match
+sheets/chartset-005/xlsx/067_Basic_invoice_Use_this_template_1d35c3e9.xlsx	1/1	75/75	2/2	0	match	75/75	405/405	match
+sheets/chartset-005/xlsx/073_Graph_paper_6e1a30eb.xlsx	4/4	76/76	2/2	0	match	76/76	371/371	match
+sheets/chartset-005/xlsx/074_Idea_planner_bacaa123.xlsx	1/1	106/106	2/2	0	match	106/106	562/562	match
+sheets/chartset-005/xlsx/091_Volunteer_Sign_Up_Sheet_Template_Colored_Background_2cb58d01.xlsx	1/1	62/62	2/2	0	match	64/64	258/258	match
+sheets/chartset-005/xlsx/093_Volunteer_Sign_Up_Sheet_Template_Customizable_Format_3a4d6b58.xlsx	2/2	120/120	1/1	0	match	120/120	592/592	match
+sheets/chartset-005/xlsx/095_Volunteer_Sign_Up_Sheet_Template_Fillable_Format_b3330009.xlsx	1/1	293/293	2/2	0	match	294/294	1784/1784	match
+sheets/chartset-005/xlsx/096_Volunteer_Sign_Up_Sheet_Template_Green_Theme_b4f1809d.xlsx	2/2	178/178	1/1	0	match	179/179	1072/1072	match
+sheets/chartset-005/xlsx/098_Volunteer_Sign_Up_Sheet_Template_Simple_Layout_080a06a1.xlsx	1/1	293/293	2/2	0	match	344/344	1593/1593	match
+sheets/chartset-006/xls/011_Contextures_chart_sample_599b4392.xls	4/4	159/196	4/4	0	words	165/202	1099/1477	words
+sheets/chartset-006/xls/014_Contextures_chart_sample_991ecfc5.xls	3/3	96/108	4/4	0	words	99/120	537/561	words
+sheets/chartset-006/xlsx/005_Contextures_chart_sample_6e279b08.xlsx	8/8	300/303	2/2	0	match	307/311	1456/1456	match
+sheets/chartset-006/xlsx/006_Contextures_chart_sample_afa23b53.xlsx	5/5	169/168	2/2	0	match	170/169	822/815	match
+sheets/chartset-006/xlsx/044_Cash_flow_forecast_Use_this_template_b8fa1f35.xlsx	5/5	438/438	1/1	0	match	638/642	2332/2336	match
+sheets/chartset-006/xlsx/052_Manufacturing_output_chart_88570318.xlsx	1/1	198/197	2/2	0	match	198/197	477/482	match
+sheets/chartset-006/xlsx/061_Regional_sales_chart_cb9eb690.xlsx	1/1	107/106	2/2	0	match	108/107	423/424	match
+sheets/chartset-006/xlsx/070_Equipment_inventory_list_Use_this_template_fd524c8a.xlsx	1/1	230/189	4/4	0	words	230/189	1128/943	words
+sheets/chartset-006/xlsx/088_To-do_list_with_progress_tracker_Use_this_template_8c438912.xlsx	1/1	69/69	2/2	0	match	71/70	324/314	match
+sheets/chartset-006/xlsx/089_Vintage_inventory_list_Use_this_template_f616cac0.xlsx	1/1	56/56	2/2	0	match	56/56	236/236	match
+sheets/chartset-007/xlsm/003_Contextures_chart_sample_9bda2719.xlsm	6/6	300/317	2/2	0	words	309/327	1426/1507	words
+sheets/chartset-007/xlsx/037_Personal_money_tracker_a57957bb.xlsx	5/5	512/508	4/5	0	match	516/512	2522/2505	match
+sheets/chartset-007/xlsx/040_Blood_pressure_tracker_872b6833.xlsx	1/1	169/164	2/2	0	words	170/165	737/711	words
+sheets/chartset-007/xlsx/050_Financial_vision_d44241e1.xlsx	1/1	75/75	2/2	0	match	76/76	400/400	match
+sheets/chartset-007/xlsx/054_Problem_analysis_with_Pareto_chart_11058329.xlsx	1/1	61/87	2/3	0	words	62/88	299/429	words
+sheets/chartset-007/xlsx/058_Social_media_engagement_data_cfa1cb18.xlsx	1/1	200/194	2/2	0	match	200/194	476/481	match
+sheets/chartset-007/xlsx/063_Sales_pipeline_aec57013.xlsx	1/1	39/39	3/2	0	match	39/39	179/179	match
+sheets/chartset-007/xlsx/082_Project_to_do_list_28f80082.xlsx	2/2	237/237	2/2	0	match	243/243	1128/1127	match
+sheets/chartset-007/xlsx/083_Project_tracker_Use_this_template_b38d057c.xlsx	2/2	194/194	2/2	0	match	194/194	935/926	match
+sheets/chartset-007/xlsx/090_Weekly_time_sheet_Use_this_template_0499cc43.xlsx	1/1	114/114	2/2	0	match	114/114	570/569	match
+sheets/chartset-008/xlsx/008_Contextures_chart_sample_7ea7a1d7.xlsx	5/5	175/175	3/3	0	match	176/176	807/807	match
+sheets/chartset-008/xlsx/021_Control_Chart_Template_-_Create_Control_Charts_in_Excel_fd3b1a5d.xlsx	5/5	919/921	4/4	0	match	926/930	3695/3695	match
+sheets/chartset-008/xlsx/023_Waterfall_Chart_Template_for_Excel_349f7689.xlsx	5/5	872/877	4/4	0	match	879/884	3661/3642	match
+sheets/chartset-008/xlsx/034_Personal_net_worth_calculator_f7b8fb57.xlsx	7/7	161/161	3/3	0	match	199/199	1069/1069	match
+sheets/chartset-008/xlsx/046_Cost_analysis_with_Pareto_chart_7db5ef69.xlsx	1/1	160/156	3/3	0	match	160/157	629/625	match
+sheets/chartset-008/xlsx/051_Manufacturer_defect_analysis_53db27ea.xlsx	1/1	69/95	2/3	0	words	70/96	320/450	words
+sheets/chartset-008/xlsx/055_Project_timeline_with_milestones_Use_this_template_546cecc0.xlsx	2/2	274/296	2/2	0	words	274/296	1211/1045	words
+sheets/chartset-008/xlsx/092_Volunteer_Sign_Up_Sheet_Template_Complete_Guide_31fe4d22.xlsx	1/1	119/119	2/2	0	match	120/120	782/782	match
+sheets/chartset-008/xlsx/094_Volunteer_Sign_Up_Sheet_Template_Editable_Format_6711b281.xlsx	1/1	163/163	2/2	0	match	164/164	832/832	match
+sheets/chartset-008/xlsx/099_Volunteer_Sign_Up_Sheet_Template_Stylish_Format_c0cc35a6.xlsx	1/1	187/187	2/2	0	match	188/188	1054/1054	match
+sheets/chartset-009/xlsx/015_Free_Gantt_Chart_Template_for_Excel_414e86bf.xlsx	8/8	1986/1986	3/3	0	match	2025/2025	8640/8640	match
+sheets/chartset-009/xlsx/018_Weight_Loss_Chart_-_Free_Printable_Weight_Loss_Charts_and_Weight_Log_3337bd0a.xlsx	10/10	960/958	2/2	0	match	1005/1003	4812/4808	match
+sheets/chartset-009/xlsx/024_Free_Kids_Chore_Chart_Template_ad74bb34.xlsx	3/3	188/188	4/4	0	match	195/195	1153/1153	match
+sheets/chartset-009/xlsx/029_Annual_budget_Use_this_template_30324a97.xlsx	2/2	309/308	4/2	0	words	309/308	943/914	words
+sheets/chartset-009/xlsx/041_Business_budget_ef942467.xlsx	4/4	230/230	2/2	0	match	230/230	1359/1359	match
+sheets/chartset-009/xlsx/053_Personal_asset_inventory_5446d84b.xlsx	4/2	59/45	3/2	0	pages,words	59/45	266/226	pages,words
+sheets/chartset-009/xlsx/056_Quarterly_sale_report_baa6bb0d.xlsx	4/4	137/135	3/2	0	match	250/248	642/629	match
+sheets/chartset-009/xlsx/075_Idea_planner_tasks_f44ebd73.xlsx	1/1	89/105	2/2	0	match	94/108	503/504	match
+sheets/chartset-009/xlsx/081_Project_performance_report_Use_this_template_be2468b3.xlsx	2/2	554/554	3/3	0	match	568/568	2032/2032	match
+sheets/chartset-009/xlsx/085_Simple_Gantt_chart_d65b8377.xlsx	3/3	659/659	4/4	0	match	661/661	3043/3056	match
+sheets/chartset-010/xlsx/047_Date_tracker_Gantt_chart_bf34f3a8.xlsx	5/8	657/833	4/4	0	pages,words	657/843	3058/3366	pages,words
+sheets/chartset-010/xlsx/062_Run_chart_cb7476ea.xlsx	2/2	218/218	4/4	0	match	219/219	643/645	pages,words
+sheets/chartset-010/xlsx/065_Weight_loss_tracker_ff1c89af.xlsx	2/2	73/63	3/2	0	words	73/63	334/308	words
+sheets/chartset-010/xlsx/069_Blue_modern_balance_sheet_Use_this_template_6b4d70d3.xlsx	4/4	174/174	2/2	0	match	176/176	1091/1091	match
+sheets/chartset-010/xlsx/072_Gantt_project_planner_dde00e33.xlsx	1/1	283/283	5/5	0	match	285/285	780/780	match
+sheets/chartset-010/xlsx/078_Modern_inventory_list_Use_this_template_41abd5bf.xlsx	1/1	306/306	1/1	0	match	318/318	1073/1073	match
+sheets/chartset-010/xlsx/079_Org_charts_visual_248d1dcf.xlsx	3/3	285/285	3/2	0	match	289/289	1828/1828	match
+sheets/chartset-010/xlsx/084_Service_invoice_Use_this_template_c92b43dc.xlsx	3/3	212/212	2/2	0	match	215/215	1232/1231	match
+sheets/chartset-010/xlsx/086_Simple_grey_invoice_Use_this_template_063b3773.xlsx	1/1	102/102	5/5	0	match	102/102	468/467	match
+sheets/chartset-010/xlsx/100_Volunteer_Sign_Up_Sheet_Template_Tabular_Format_0975f34e.xlsx	1/1	129/129	2/2	0	match	132/132	687/687	match
+sheets/chartset-011/xlsm/007_Contextures_chart_sample_667d8e47.xlsm	7/7	477/480	3/3	0	match	480/483	1836/1849	match
+sheets/chartset-011/xlsx/010_Contextures_chart_sample_e6ea06a3.xlsx	6/6	179/179	4/4	0	match	180/180	1044/1044	match
+sheets/chartset-011/xlsx/028_Budget_summary_report_4aeefd13.xlsx	4/4	532/532	6/6	0	match	541/541	3038/3038	match
+sheets/chartset-011/xlsx/030_Basic_balance_sheet_Use_this_template_10ed9144.xlsx	8/8	291/275	4/4	0	words	291/275	1727/1644	words
+sheets/chartset-011/xlsx/042_Business_monthly_budget_4e4d092f.xlsx	4/4	268/268	2/2	0	words	269/269	1453/1567	words
+sheets/chartset-011/xlsx/057_Simple_balance_sheet_Use_this_template_e2d4cbb2.xlsx	3/3	454/278	2/2	0	words	457/281	2185/1877	pages,words
+sheets/chartset-011/xlsx/060_Monthly_company_budget_47b2a99a.xlsx	4/4	281/281	2/2	0	match	282/282	1659/1659	match
+sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	5/5	930/930	2/2	0	match	934/934	3021/3065	match
+sheets/chartset-011/xlsx/071_Four-week_project_timeline_Use_this_template_4f05db49.xlsx	1/1	107/107	3/3	0	match	107/107	400/401	match
+sheets/chartset-011/xlsx/077_Inventory_list_with_highlighting_Use_this_template_36d8d57a.xlsx	1/1	323/323	1/1	0	match	323/323	1058/1058	match
+sheets/chartset-012/xlsx/002_Contextures_chart_sample_f605e7bc.xlsx	8/8	519/531	4/4	0	words	547/559	1953/1998	words
+sheets/chartset-012/xlsx/009_Contextures_chart_sample_adcb3f6c.xlsx	12/12	223/229	5/5	0	match	236/243	1269/1289	match
+sheets/chartset-012/xlsx/012_Contextures_chart_sample_9900da76.xlsx	6/6	130/130	4/4	0	match	131/131	648/648	match
+sheets/chartset-012/xlsx/013_Contextures_chart_sample_21b98e22.xlsx	7/7	169/170	4/4	0	match	176/177	830/837	match
+sheets/chartset-012/xlsx/020_Free_Blood_Pressure_Chart_and_Printable_Blood_Pressure_Log_8f8dcc39.xlsx	6/6	133/142	4/4	0	words	138/147	987/1038	words
+sheets/chartset-012/xlsx/026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx	11/11	1547/1535	2/2	0	match	1547/1535	7935/7852	match
+sheets/chartset-012/xlsx/036_Simple_to-do_list_Use_this_template_ba44373b.xlsx	4/4	77/78	1/1	0	match	77/78	354/354	match
+sheets/chartset-012/xlsx/068_Blue_inventory_list_Use_this_template_f9908489.xlsx	4/4	339/349	2/2	0	words	343/353	1141/1196	words
+sheets/chartset-012/xlsx/080_Profit_and_loss_income_statement_3566dae9.xlsx	3/3	1185/1185	3/3	0	match	1230/1230	3633/3633	match
+sheets/chartset-012/xlsx/097_Volunteer_Sign_Up_Sheet_Template_Professional_Format_075d06ed.xlsx	1/1	141/141	3/3	0	match	142/142	941/941	match
+sheets/chartset-013/xlsx/001_Contextures_chart_sample_b089bc34.xlsx	15/15	881/939	4/4	0	words	897/945	3874/4120	words
+sheets/chartset-013/xlsx/019_Free_Blood_Sugar_Chart_for_Excel_-_Track_Your_Blood_Sugar_Level_36f4a782.xlsx	9/9	870/872	6/6	0	match	916/918	3664/3660	match
+sheets/chartset-013/xlsx/031_Business_expense_budget_f3a46278.xlsx	8/8	1447/1457	2/2	0	match	1447/1457	7699/7699	match
+sheets/chartset-013/xlsx/032_Business_expenses_budget_d377eaab.xlsx	4/4	823/823	4/4	0	match	1640/1639	4873/4873	match
+sheets/chartset-013/xlsx/033_Event_planning_tracker_Use_this_template_f29a848e.xlsx	3/3	509/489	4/3	0	words	510/490	2720/2783	words
+sheets/chartset-013/xlsx/035_Project_plan_for_law_firms_aa2d4462.xlsx	4/4	735/746	6/6	0	words	744/755	3923/3751	words
+sheets/chartset-013/xlsx/043_Buy_a_car_vs._rideshare_ff07c7e6.xlsx	7/7	326/325	2/2	0	match	336/335	1440/1437	match
+sheets/chartset-013/xlsx/049_Expenses_calculator_c351f3d0.xlsx	4/4	332/332	5/5	0	match	334/334	1558/1548	match
+sheets/chartset-013/xlsx/059_Milestone_and_task_project_timeline_Use_this_template_24f1e8f1.xlsx	3/3	387/389	4/4	0	match	394/396	1935/1935	match
+sheets/chartset-013/xlsx/087_Simple_personal_budget_3cf9b1af.xlsx	3/3	657/657	1/1	0	match	657/657	2856/2856	match
+sheets/chartset-014/xlsx/016_Free_Organizational_Chart_Template_-_Company_Organization_Chart_db913144.xlsx	4/4	202/202	2/2	0	match	209/209	1419/1419	match
+sheets/chartset-014/xlsx/017_Timeline_Templates_for_Excel_b88faee6.xlsx	3/3	182/187	4/4	0	words	184/189	969/989	words
+sheets/chartset-014/xlsx/025_Printable_Reward_Charts_for_Kids_-_Reward_Chart_Template_aabacd93.xlsx	5/5	118/118	4/4	0	match	123/123	713/713	match
+sheets/chartset-014/xlsx/027_Simple_personal_cash_flow_statement_675c6584.xlsx	10/10	1548/1561	4/4	0	match	1548/1565	7994/7949	match
+sheets/chartset-014/xlsx/038_Baby_growth_chart_bb9cd672.xlsx	2/2	186/186	3/4	0	match	186/186	554/554	match
+sheets/chartset-014/xlsx/039_Baby_growth_tracker_e295ae56.xlsx	2/2	189/190	4/4	0	match	189/190	583/583	match
+sheets/chartset-014/xlsx/045_Check_register_with_chart_4becb8a0.xlsx	1/1	114/119	4/2	0	words	145/150	736/764	words
+sheets/chartset-014/xlsx/048_Expense_trends_budget_18d1e8ba.xlsx	14/14	915/881	4/4	0	words	915/881	4088/3986	words
+sheets/chartset-014/xlsx/064_Small_business_cash_flow_Use_this_template_0a640756.xlsx	7/7	511/517	3/3	0	match	511/517	1801/1766	match
+sheets/chartset-014/xlsx/076_Inventory_list_accessibility_guide_Use_this_template_f43dab19.xlsx	9/9	1114/1090	3/2	0	words	1125/1095	4949/4782	words
+sheets/done-001/xls/Airplanes-MTOW.xls	6/6	871/871	1/1	0	match	871/871	4501/4501	match
+sheets/done-001/xls/REDAC_SCHEDULE_RPD_135.xls	1/1	171/171	3/3	0	match	204/204	486/486	match
+sheets/done-001/xls/RPD 155 REDAC SCHEDULE 2014-04-02.xls	1/1	139/139	3/3	0	match	157/158	492/492	match
+sheets/done-001/xlsx/16424782563923.xlsx	3/3	843/843	2/2	0	match	843/843	4546/4546	match
+sheets/done-001/xlsx/ExampleWhiteListData.xlsx	6/6	819/819	1/1	0	match	821/821	5326/5326	match
+sheets/done-001/xlsx/FMMO_NMPF_37C.xlsx	1/1	215/213	2/2	0	words	218/216	1327/1299	words
+sheets/done-001/xlsx/Geo_Abschlussarbeiten.xlsx	3/3	635/635	2/2	0	match	636/636	4734/4734	match
+sheets/done-001/xlsx/Patent Index 2024 - Top 100 applicants 2024.xlsx	1/1	441/441	2/2	0	match	444/444	1627/1627	match
+sheets/done-001/xlsx/einvoice-summary-worksheet.xlsx	2/2	107/107	2/2	0	match	298/298	589/589	match
+sheets/done-001/xlsx/oltl-bulletin-59-26-03-ptr-sc-registration-form-for-oltl-approved-software.xlsx	2/2	84/84	2/2	0	match	86/86	477/477	match
+sheets/done-002/xls/2012-GA-Survey-Chapter-5-Tables-16Dec2013-V2.xls	3/3	495/501	4/3	0	match	529/537	2447/2459	match
+sheets/done-002/xls/2012-GA-Survey-Chapter-6-Tables-16Dec2013-V2.xls	5/5	624/636	4/3	0	match	627/643	2986/3010	match
+sheets/done-002/xls/P1636e.xls	2/2	344/344	2/2	0	match	344/344	1514/1515	match
+sheets/done-002/xls/REDAC_SCHEDULE_RPD_137.xls	2/2	497/497	3/3	0	match	612/612	1697/1697	match
+sheets/done-002/xlsx/(5000021142)-(subc0226)-criminology-subject-collection-list.xlsx	3/3	596/596	2/2	0	match	604/604	4732/4732	match
+sheets/done-002/xlsx/AIRBUS_station_evaluation_checklist_v2.xlsx	1/1	527/527	2/2	0	match	544/544	2854/2854	match
+sheets/done-002/xlsx/Chicago.List.2025.xlsx	3/3	1332/1347	2/2	0	match	1333/1348	8751/8811	match
+sheets/done-002/xlsx/Upload__hvv_Linie_150_2023.XLSX	1/1	237/237	1/1	0	match	237/237	932/932	match
+sheets/done-002/xlsx/WEBSITE-RESOURCE-LIST-by-CATEGORY-4-6-18-341pm.xlsx	1/1	521/521	2/2	0	match	538/538	3226/3226	match
+sheets/done-002/xlsx/e-pass-contact-details-template.xlsx	4/4	27/27	1/1	0	match	27/27	147/147	match
+sheets/done-003/xls/4-12-Kings-Attachment-13-Application-Architecture-Security-Requirements.xls	6/6	1503/1503	2/2	0	match	1515/1515	9774/9774	match
+sheets/done-003/xls/NPA_21_21_Sentenced_Comments.xls	2/2	966/974	3/3	0	match	974/982	4593/4646	match
+sheets/done-003/xls/RPA-Budgets-FY-17-19-20.xls	4/4	667/667	2/2	0	match	1041/1043	4050/4050	match
+sheets/done-003/xls/disclosures_ecm.xls	1/1	3517/3517	3/3	0	match	3534/3534	19226/19226	match
+sheets/done-003/xls/programs contact list as of 07-01-10.xls	3/3	943/943	2/2	0	match	949/949	3789/3789	match
+sheets/done-003/xlsx/00514292.xlsx	9/9	834/835	3/3	0	match	845/846	4256/4256	match
+sheets/done-003/xlsx/Air_Boss_Master_List.xlsx	5/5	522/525	2/2	0	match	524/527	2821/2847	match
+sheets/done-003/xlsx/Bulletin-37-Appendix-2-immediate-detriment-data-request.xlsx	5/5	524/524	3/3	0	match	541/541	2979/2979	match
+sheets/done-003/xlsx/VOR Candidate Discontinuance List 2026-01-08.xlsx	7/7	1558/1558	2/2	0	match	1558/1558	8012/8012	match
+sheets/done-003/xlsx/redac-sas-201503-fy17-research-portfolio.xlsx	2/2	734/734	5/5	0	match	755/755	4715/4715	match
+sheets/done-004/xls/NorwegianXPensionXFundXanalysisXexportsXandXLAWS-1.xls	8/8	729/755	3/3	0	words	734/760	4209/4361	words
+sheets/done-004/xls/flying-log-passenger-23rd-september-2014.xls	7/7	4031/4029	2/2	0	match	4038/4036	24191/24179	match
+sheets/done-004/xls/permit-applications-determined-july-2015.xls	1/1	1315/1315	2/2	0	match	1323/1323	8052/8052	match
+sheets/done-004/xlsx/EU_145s_with_TCCA_approval_-_31.01.2025.xlsx	14/14	2442/2442	1/1	0	match	2464/2464	16960/16960	match
+sheets/done-004/xlsx/Estero Rotary Awards.xlsx	2/2	212/212	2/2	0	match	213/213	1221/1221	match
+sheets/done-004/xlsx/Foreign_SA-CAT-I_and_CAT-II-III_Pub_0.xlsx	16/16	1494/1495	3/3	0	match	1503/1504	7846/7846	match
+sheets/done-004/xlsx/List-of-Members-August-2017.xlsx	10/10	1674/1674	2/2	0	match	1702/1702	10305/10305	match
+sheets/done-004/xlsx/Part_375_Operators.xlsx	19/19	2188/2190	3/3	0	match	2195/2197	12221/12221	match
+sheets/done-004/xlsx/Travel-Cost-Estimate-Calculator.xlsx	3/3	193/193	3/3	0	match	201/201	1024/1024	match
+sheets/done-004/xlsx/UAE Type Accepted Aircraft Models.xlsx	6/6	760/760	2/2	0	match	761/761	3934/3934	match
+sheets/done-005/xls/Background_Declaration_Template.xls	25/25	180/180	3/3	0	match	181/181	853/853	match
+sheets/done-005/xls/Praktikastellen_-_chinesischsprachiger_Kulturraum.xls	34/34	1761/1769	2/2	0	match	1820/1828	12112/12164	match
+sheets/done-005/xls/SectorAdvisoryGroupandStrategyBoards.xls	7/7	2400/2400	2/2	0	match	2431/2431	15407/15407	match
+sheets/done-005/xls/apron-area.xls	3/3	417/417	3/2	0	match	431/431	1814/1814	match
+sheets/done-005/xls/cy10_primary_enplanements.xls	12/12	5263/5263	2/2	0	match	5280/5280	23129/23129	match
+sheets/done-005/xlsx/National-Reports.xlsx	6/6	1225/1225	2/2	0	match	1276/1276	7475/7475	match
+sheets/done-005/xlsx/Part_129_Operators.xlsx	23/23	4270/4272	2/2	0	match	4275/4277	19595/19595	match
+sheets/done-005/xlsx/arp-sop-300-Exhibit-A-Table-Templates.xlsx	11/11	3664/3669	2/2	0	words	3735/3740	19533/19978	words
+sheets/done-005/xlsx/esurf-12-135-2024-t01.xlsx	1/1	123/124	1/1	0	match	123/124	658/658	match
+sheets/done-005/xlsx/june_2025_published.xlsx	15/15	12936/12936	2/2	0	match	13191/13191	90883/90883	match
+sheets/done-006/xls/Hazard Analysis Template.xls	3/3	679/679	4/4	0	match	682/682	3309/3313	match
+sheets/done-006/xls/WG7_NCWF_Skills_Table.XLS	44/44	8511/8514	2/2	0	match	8532/8536	60901/60914	match
+sheets/done-006/xls/ZenithAviation_AuctionList.xls	33/33	6621/6621	2/2	0	match	6626/6626	34246/34246	match
+sheets/done-006/xlsx/AFS-400_Contacts.xlsx	48/48	6247/6246	2/2	0	match	6376/6375	43685/43685	match
+sheets/done-006/xlsx/Infotabelle_WLAN im Flugzeug.xlsx	4/4	363/395	2/2	0	words	411/443	2025/2234	words
+sheets/done-006/xlsx/Performance.xlsx	13/13	2123/2156	4/4	0	words	2137/2170	7270/7439	words
+sheets/done-006/xlsx/Published_Issuances_2024.xlsx	1/1	479/457	4/4	0	words	481/459	4294/4064	words
+sheets/done-006/xlsx/SSRO_Quarterly_Statistical_Bulletin_Q3201617_DATA.xlsx	4/4	538/549	4/5	0	match	538/550	2798/2849	match
+sheets/done-006/xlsx/dragon-175066A.xlsx	13/13	7330/7329	5/5	0	match	8152/8152	53149/53149	match
+sheets/done-006/xlsx/register-changes-in-may-2024---adujsted.xlsx	10/10	784/784	2/2	0	match	798/798	4782/4782	match
+sheets/done-007/xls/ACRONYM.xls	69/69	9840/9840	2/2	0	match	9851/9851	61586/61586	match
+sheets/done-007/xls/CSA_CCM_v1.2.xls	13/13	15667/15662	2/2	0	match	15924/15919	73416/73399	match
+sheets/done-007/xlsx/114339-PROP-P127508-PUBLIC-PPCRNARCPPforPublication.xlsx	21/21	2329/2329	3/3	0	match	2371/2372	14213/14213	match
+sheets/done-007/xlsx/National-Finalists-2024-1.xlsx	30/30	4155/4155	3/3	0	match	4184/4184	27258/27258	match
+sheets/done-007/xlsx/SLSA_Directory_031423.xlsx	10/10	5768/5790	3/3	0	match	5880/5902	28238/28339	match
+sheets/done-007/xlsx/ecopy of 2016 statistical bulletin_public finance statistics_final.xlsx	17/17	5368/5404	7/6	0	match	5701/5758	25528/25548	match
+sheets/done-007/xlsx/essd-16-3433-2024-t02.xlsx	4/4	431/943	1/1	0	words	439/955	2346/5403	words
+sheets/done-007/xlsx/hdss-bulletin-index-2019-2022.xlsx	24/24	3611/3626	3/3	0	match	3796/3811	18341/18407	match
+sheets/done-007/xlsx/jobs-bulletin-51-22-december-2025.xlsx	12/12	1807/1817	4/4	0	match	1884/1896	10033/10093	match
+sheets/done-007/xlsx/wiley-cancelled-title-list.xlsx	60/60	7582/7582	2/2	0	match	7706/7706	56700/56700	match
+sheets/done-008/xls/Liste-Zertifizierung-ChemKlimaschutzV-RPT.xls	5/5	1332/1332	2/2	0	match	1364/1364	8783/8638	match
+sheets/done-008/xls/data_20121018181533.xls	57/57	12480/12480	2/2	0	match	12483/12483	57017/57017	match
+sheets/done-008/xlsx/2015-19 top 25 Arms producing companies data - to upload on website - FINAL_edit.xlsx	19/19	2913/3223	3/3	0	words	2949/3259	12974/14433	words
+sheets/done-008/xlsx/Company_Seniority_Date_Calculator.xlsx	12/12	2909/3042	7/7	0	words	2982/3117	16107/16725	words
+sheets/done-008/xlsx/Computer and Software Services_50 State Comparison.xlsx	26/26	2800/2801	3/3	0	match	2818/2819	13368/13369	match
+sheets/done-008/xlsx/RVSM_Non_approved_list_2025_84c0b3f4ac.xlsx	2/2	431/431	2/2	0	match	445/445	2205/2206	match
+sheets/done-008/xlsx/TDA_Smoke-Detectors.xlsx	28/28	3766/3769	5/5	0	match	3788/3791	18138/18141	match
+sheets/done-008/xlsx/airports_6.xlsx	17/17	11039/11039	1/1	0	match	11053/11053	58811/58811	match
+sheets/done-008/xlsx/commander-authorisation-tasks-spreadsheet-october-2025.xlsx	23/23	13078/13077	3/3	0	match	13490/13490	65750/65750	match
+sheets/done-008/xlsx/template-ECSPR-notifications.xlsx	26/26	288/288	4/4	0	match	290/290	1288/1288	match
+sheets/done-009/xls/6f9e605c-fded-11e3-bd0e-00144feab7de.xls	16/16	7331/7331	5/5	0	match	7418/7418	32400/32397	match
+sheets/done-009/xls/EHEST-Pre-departure-checklist-Rev.-1-06-12-2016.xls	24/24	8293/8347	7/6	0	match	8326/8382	39462/39768	match
+sheets/done-009/xls/INDEX_Digital_Transformation_Toolkits.xls	24/24	1957/1957	3/3	0	match	1988/1988	14956/14956	match
+sheets/done-009/xls/cy01_state.xls	36/36	20444/20441	2/2	0	match	20557/20554	84656/84648	match
+sheets/done-009/xlsx/Aviation_Abbreviations.xlsx	94/94	15677/15677	4/4	0	match	15701/15701	92850/92850	match
+sheets/done-009/xlsx/Data-Architecture-Tool-Fit-Assessment-Template.xlsx	22/22	2218/2220	5/5	0	match	2229/2231	10489/10492	match
+sheets/done-009/xlsx/PBN Matrix NAAs (V01).xlsx	25/25	5549/5531	6/6	0	match	5583/5566	28329/28210	match
+sheets/done-009/xlsx/RegChangeReport.xlsx	12/12	3124/3110	4/4	0	match	3157/3142	17685/17685	match
+sheets/done-009/xlsx/State-Medicaid-Payment-Policies-for-Medicare-Cost-Sharing.xlsx	18/18	40279/40275	3/3	0	match	40679/40683	233524/233718	match
+sheets/done-009/xlsx/sistem-rekod-markah-srm-_-rekod-master.xlsx	31/31	5854/5879	6/6	0	words	5857/5882	15175/16300	words
+sheets/done-010/xls/PC1000.xls	13/13	848/863	5/5	0	match	855/873	3783/3855	match
+sheets/done-010/xls/RMP 2011-2014 and Inventory.xls	38/38	18396/18395	4/4	0	match	18595/18594	98381/98381	match
+sheets/done-010/xls/Special-Procedures_2025-07-10.xls	22/22	27923/27926	3/3	0	match	28748/28751	153843/153843	match
+sheets/done-010/xls/TOGAF9-Tool-ConfReqts-CSQ.xls	28/28	23617/23518	5/4	0	match	24205/24097	156426/155747	match
+sheets/done-010/xls/cy06_primary_np_comm.xls	11/11	7074/7074	2/2	0	match	7089/7089	30224/30224	match
+sheets/done-010/xlsx/AFCforPtF-Digital-Certificate-Publication-Report.xlsx	111/111	29739/29739	1/1	0	match	29859/29859	188348/188348	match
+sheets/done-010/xlsx/AMOC-Digital-Certificate-Publication-Report.xlsx	148/148	36605/36597	1/1	0	match	37280/37273	228293/228293	match
+sheets/done-010/xlsx/DOE-C2M2-V1.1-to-DOE-C2M2-V2.1 (1.1.0).xlsx	91/91	15616/15617	5/5	0	match	15622/15623	94829/94845	match
+sheets/done-010/xlsx/Keywords_Mapping_Graphs_and_Charts.xlsx	46/46	4579/4519	2/2	0	match	4847/4814	27293/27200	match
+sheets/done-010/xlsx/NAARMO_Mexico_RVSM_Approvals.xlsx	16/16	6790/6790	4/4	0	match	6792/6792	33195/33195	match
+sheets/done-011/xls/List of EQS securities_0.xls	104/104	33008/33008	2/2	0	match	33117/33117	154930/154929	match
+sheets/done-011/xls/SIL_TDB605.xls	44/44	4037/4129	8/8	0	words	4044/4136	18688/19131	words
+sheets/done-011/xls/T0A0D0000090006XLSE.xls	162/162	40379/40382	4/3	0	match	40693/40697	234421/234443	match
+sheets/done-011/xlsx/2023-qhp-form-and-rate-combined-checklist-final.xlsx	100/100	13940/14004	3/3	0	match	14082/14148	72749/73077	match
+sheets/done-011/xlsx/Application_Compliance_Checklist_5_Apr_2021.xlsx	14/14	17622/17659	7/8	0	match	17776/17814	95713/95929	match
+sheets/done-011/xlsx/Application_for_authorisation_as_crowdfunding_service_provider.xlsx	48/48	6223/6223	2/2	0	match	6245/6245	33597/33601	match
+sheets/done-011/xlsx/Capability_List_9-14-2022_Dallas_Combined-Aircraft_Manuf_unsorted.xlsx	147/147	29796/29796	1/1	0	match	29922/29922	146864/146864	match
+sheets/done-011/xlsx/FY2023-AIP-grants.xlsx	33/33	51045/51045	2/2	0	match	92201/91849	353363/353363	match
+sheets/done-011/xlsx/aircraft_analysis-2018-06.xlsx	42/42	7193/7193	2/2	0	match	7217/7217	38379/38381	match
+sheets/done-011/xlsx/links-2026.xlsx	45/45	2829/2829	2/2	0	match	2863/2863	16080/16080	match
+sheets/done-012/xls/NPIAS_2007_App_A.xls	128/128	39764/39763	2/2	0	match	39806/39805	170540/170532	match
+sheets/done-012/xls/SIL_TDB609.xls	50/50	5138/5229	8/8	0	match	5146/5237	22685/23126	match
+sheets/done-012/xls/npias_2009_appA.xls	73/73	49713/49693	2/2	0	match	49846/49827	201534/201413	match
+sheets/done-012/xlsx/2025_Active_Civil_Airmen_Statistics_FINAL.xlsx	35/35	13332/13378	7/7	0	match	13491/13547	57434/57744	match
+sheets/done-012/xlsx/CSJU List of Recipients of funds 2013-2020.xlsx	97/96	46489/46489	5/5	0	pages	58662/58662	270623/270627	pages
+sheets/done-012/xlsx/Copy of EASA-IFP-WEBLISTNOODATA-ListsofBASAapprovals(WEB)_ListofValidUSBASAorganisations_2023-01-13-04-33-14.xlsx	245/245	28183/28183	1/1	0	match	28967/28967	185963/185964	match
+sheets/done-012/xlsx/EASA-IFP-WEBLISTNOODATA-ListsofBASAapprovals_WEB__ListofValidBASAorganisations_2025-01-20-08-56-36.xlsx	254/254	29790/29790	1/1	0	match	30582/30582	196537/196537	match
+sheets/done-012/xlsx/MinCh-Digital-Certificate-Publication-Report.xlsx	179/179	111971/112057	1/1	0	match	112752/112839	711781/711781	match
+sheets/done-012/xlsx/atspp_pay_tables.xlsx	101/101	12929/12929	4/4	0	match	13068/13068	58995/58995	match
+sheets/done-012/xlsx/certification-type-certificates-docs-tcdns-databases-MAdB-Rotorcraft-14-28112013.xlsx	82/82	13193/13237	2/2	0	match	13267/13311	61958/62113	match
+sheets/done-013/xls/18-02RD301_ILS_components_Master_9-13-18.xls	166/166	52477/53103	3/3	0	match	53360/53360	152726/155230	match
+sheets/done-013/xls/ECA Sinters.xls	163/163	38306/38610	2/2	0	match	38450/38754	187470/189339	match
+sheets/done-013/xls/aircraft_analysis_2016-04-27.xls	46/46	11676/11657	2/3	0	match	14546/14524	61420/61280	match
+sheets/done-013/xls/capa-liste-nse-1.xls	108/108	20202/20206	4/4	0	match	22740/22744	128329/128329	match
+sheets/done-013/xls/fy2010-aip-grants.xls	100/100	49881/49881	2/2	0	match	62696/63452	264109/264109	match
+sheets/done-013/xls/fy2011-aip-grants.xls	93/93	43201/43201	2/2	0	match	52158/54488	229395/229395	match
+sheets/done-013/xlsx/FY2021-AIP-grants.xlsx	58/58	89300/89297	3/3	0	match	156605/156662	598427/598427	match
+sheets/done-013/xlsx/afn-afn-20250801-fy25-jan25-mar25.xlsx	270/270	72796/72839	2/2	0	match	73728/73736	409031/409268	match
+sheets/done-013/xlsx/alle einzeln.xlsx	186/186	64184/64184	3/3	0	match	64184/64187	278872/278866	match
+sheets/done-013/xlsx/fy20-may20-sep20.xlsx	96/96	51303/51317	2/2	0	match	51822/51837	290332/290414	match
+sheets/done-014/xls/7-memento-2015-transports-aeriens-b.xls	190/191	27537/28495	6/6	0	pages,words	28062/29033	118434/123230	pages,words
+sheets/done-014/xls/NPIAS_App_A.xls	124/124	33612/33612	7/7	0	match	33646/33646	160573/160573	match
+sheets/done-014/xls/TICAPCapability_Final.xls	17/17	4907/4897	10/10	0	match	4946/4936	27834/27777	match
+sheets/done-014/xls/UASEventsNov2014-Aug2015.xls	523/523	64025/63731	1/1	0	match	64682/64387	323358/320886	match
+sheets/done-014/xlsx/6880ac7361ca1b99a9230811_ST Capability List Rev.16 - Web.xlsx	217/217	88842/88842	3/3	0	match	122980/122980	656421/656421	match
+sheets/done-014/xlsx/Aircraft_Database.xlsx	134/134	16356/16505	4/4	0	words	16421/16570	77978/81831	words
+sheets/done-014/xlsx/MajCh-Digital-Certificate-Publication-Report.xlsx	328/328	66906/66898	1/1	0	match	67270/67262	436144/436115	match
+sheets/done-014/xlsx/edb-emissions-databank v27-NewFormat (web).xlsx	368/368	76243/76294	4/4	0	match	76662/76713	281080/281274	match
+sheets/done-014/xlsx/fm-provider-service-measures.xlsx	38/38	21352/21341	4/4	0	match	21527/21515	134559/134484	match
+sheets/done-014/xlsx/seihon_zassi_kikou_20221215.xlsx	84/84	48256/48257	3/3	0	match	49284/49285	302709/302717	match
+sheets/done-015/xls/AIM_OPR_LIST.xls	229/229	22015/22006	4/4	0	match	22109/22100	127237/127224	match
+sheets/done-015/xls/PA_Delaware.xls	122/122	135663/135663	1/1	0	match	135663/135663	580602/580602	match
+sheets/done-015/xls/activespecs.xls	266/266	46582/46585	1/1	0	match	49602/49605	280094/280104	match
+sheets/done-015/xls/laufende-nip-vorhaben-hyland.xls	18/18	6461/6461	2/2	0	match	6584/6584	49565/49508	match
+sheets/done-015/xls/underlying-holdings-emea-en_gb-monthly-holdings-state-street-emu-esg-screened-index-equity-fund.xls	15/15	4982/4985	1/1	0	match	4988/4991	23826/23825	match
+sheets/done-015/xlsx/EASA_PRODUCT_LIST_-_ALL.xlsx	264/264	96133/96133	2/2	0	match	103268/103268	484245/484245	match
+sheets/done-015/xlsx/Global_Market_Forecast_2016-2035_Airbus_Data_Set.xlsx	567/567	73403/73403	4/4	0	match	75609/75609	305549/305549	match
+sheets/done-015/xlsx/certification-type-certificates-docs-tcdns-databases-MAdB-Light-Prop-14-28112013.xlsx	343/343	36722/36722	1/1	0	match	36728/36728	230379/230379	match
+sheets/done-015/xlsx/flightstandards-doc-Cross-reference-table_version02.xlsx	464/464	61197/61181	6/6	0	match	68613/68600	335655/335554	match
+sheets/done-015/xlsx/tk-syllabus-comparison-document-v5.xlsx	855/855	234649/234649	5/5	0	match	235282/235286	1225772/1225827	match
+sheets/done-016/xls/environment-edb-docs-edb-emissions-databank.xls	195/195	63959/64142	4/4	0	match	65426/65605	236613/237212	match
+sheets/done-016/xlsx/EASA-IFP-147Scope_WEB__ALL_Valid147SoA_2024-11-28-11-16-31.xlsx	92/92	28349/28374	1/1	0	match	29878/29903	182618/182586	match
+sheets/done-016/xlsx/Laser Report 2024 FOIA __Oct (1).xlsx	506/506	116952/116272	1/1	0	match	116955/116275	588642/588025	match
+sheets/done-016/xlsx/RCO_VOR_Master_List_082824.xlsx	80/80	14896/15521	2/2	0	words	14897/15524	60644/63199	words
+sheets/done-016/xlsx/STC_WebList.xlsx	4372/4372	1284972/1285937	2/2	0	match	1293969/1294964	8158263/8158248	match
+sheets/done-016/xlsx/TK-Syllabus-Comparison-Document-v2.xlsx	1235/1235	255734/255878	5/5	0	match	258726/258870	1311172/1311644	match
+sheets/extra-001/xlsx/FY2018_Q4_UAS_Sightings.xlsx	302/302	55795/55834	1/1	0	match	56458/56497	277758/277982	match
+sheets/metrics-001/xlsx/ans_mappings_of_eccairs_terms.xlsx	191/191	27894/27997	7/7	0	match	28080/28183	184827/186252	match
+sheets/missing-001/xls/orbus_togaf_tool_csq.xls	75/75	46839/48061	5/5	0	words	47109/48331	299335/306037	words
+sheets/pagination-001/xls/CIS_Debian_Linux_8_Benchmark_v1.0.0.xls	88/109	8965/16723	2/2	0	pages,words	9295/17503	49864/90659	pages,words
+sheets/pagination-001/xls/grants-2005.xls	201/220	34032/34902	2/2	0	pages,words	35021/36003	179245/184708	pages,words
+sheets/pagination-001/xlsx/ODs-February-2022-Airbus-Commercial-Aircraft.xlsx	175/175	15707/15715	3/3	0	match	16962/16970	44881/44889	match
+sheets/pagination-001/xlsx/SIL_TDB648.xlsx	90/88	7498/7652	6/6	0	pages,words	7525/7679	30893/31552	pages,words
+sheets/pagination-001/xlsx/sectors-defense-and-aerospace.xlsx	449/227	22986/23038	2/1	0	pages	23953/24001	139163/139190	pages
+sheets/table-001/xlsx/FAA-2019-0995-0002_attachment_2.xlsx	33/33	9995/10015	6/6	0	match	10225/10245	47021/47071	match
+sheets/unstable-001/xlsx/fse_identification_form.xlsx	3/3	440/440	3/3	0	match	443/443	2283/2282	match
+slides/ceiling-001/ppt/Fundamentals_Module_1_basics.ppt	26/26	1138/1089	5/5	0	match	1225/1175	6589/6471	match
+slides/ceiling-001/ppt/RRM-training-syllabus-Chapter-3-Teamwork-TC-Towing-Incident-Analysis-Dec-2009.ppt	27/27	2477/2479	8/8	0	match	2666/2667	13921/13959	match
+slides/ceiling-001/ppt/Thailand17.ppt	54/54	2713/2625	8/9	0	words	2919/2826	14880/14380	words
+slides/ceiling-001/ppt/W3_Case_Study_of_a_Tsunami_Warning_Simulation_Exercise_Ed.ppt	20/20	900/812	6/6	0	words	955/862	4973/4473	words
+slides/ceiling-001/ppt/architecture6.ppt	31/31	1926/1926	5/5	0	match	2011/2011	10724/10724	match
+slides/ceiling-001/pptx/7-Zulkefli_Part147n66_IKMAS.pptx	18/18	968/952	7/7	0	match	1031/1021	5520/5593	match
+slides/ceiling-001/pptx/N2_E_Maestroni_Swarm_COP.pptx	30/30	5147/5127	4/4	0	match	5314/5295	28100/28136	words
+slides/ceiling-001/pptx/OnTrac_StarCertificationProgram-3Day.pptx	15/15	1324/1030	8/7	0	words	1414/1116	7709/6233	words
+slides/ceiling-001/pptx/Sylva%20introduction%20session.pptx	15/15	1064/1064	7/7	0	match	1152/1152	5700/5700	match
+slides/ceiling-001/pptx/solog_orientation_august_2019.pptx	15/15	670/674	6/6	0	match	730/736	4393/4393	match
+slides/ceiling-002/ppt/pres_ioc_phuket.ppt	26/26	994/999	9/9	0	match	1033/1040	6090/6090	match
+slides/ceiling-002/pptx/16 - UTM - (NASA).pptx	37/37	2453/2260	11/11	0	words	2657/2447	15126/13981	words
+slides/ceiling-002/pptx/8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx	26/26	2135/2021	11/11	0	words	2328/2210	10424/9949	words
+slides/ceiling-002/pptx/Demick_JetBlue.pptx	10/10	812/608	4/4	0	words	836/631	3519/3179	words
+slides/ceiling-002/pptx/WiGr_2021W_1_Angebot-Nachfrage-Elastizität-211017-171222.pptx	51/51	1956/1954	8/7	0	match	2127/2127	13011/13007	match
+slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx	23/23	2221/2240	7/7	0	match	2315/2334	10979/10946	match
+slides/chartset-001/pptx/008_advanced_powerpoint_bubble.pptx	1/1	42/42	3/3	0	match	48/48	284/284	match
+slides/chartset-001/pptx/015_advanced_powerpoint_scatter.pptx	1/1	42/42	3/3	0	match	48/48	283/283	match
+slides/chartset-001/pptx/016_advanced_powerpoint_bubble.pptx	1/1	43/43	3/3	0	match	49/49	287/287	match
+slides/chartset-001/pptx/031_advanced_powerpoint_scatter.pptx	1/1	42/42	3/3	0	match	48/48	278/278	match
+slides/chartset-001/pptx/bar_chart.pptx	1/1	25/25	2/2	0	match	25/25	131/131	match
+slides/chartset-001/pptx/combo_bar_line_chart.pptx	1/1	42/42	2/2	0	match	42/42	219/219	match
+slides/chartset-001/pptx/line_chart.pptx	1/1	23/23	2/2	0	match	23/23	113/113	match
+slides/chartset-001/pptx/scatter_chart.pptx	1/1	46/46	1/1	0	match	46/46	105/105	match
+slides/chartset-001/pptx/stacked_area_chart.pptx	1/1	29/29	2/2	0	match	29/29	174/174	match
+slides/chartset-001/pptx/stacked_bar_chart.pptx	1/1	29/29	2/2	0	match	29/29	173/173	match
+slides/chartset-002/pptx/001_advanced_powerpoint_bar.pptx	1/1	62/62	4/4	0	match	68/68	334/334	match
+slides/chartset-002/pptx/006_advanced_powerpoint_area.pptx	1/1	61/61	4/4	0	match	67/67	328/328	match
+slides/chartset-002/pptx/007_advanced_powerpoint_scatter.pptx	1/1	42/42	3/3	0	match	48/48	282/282	match
+slides/chartset-002/pptx/014_advanced_powerpoint_area.pptx	1/1	61/61	4/4	0	match	67/67	330/330	match
+slides/chartset-002/pptx/017_advanced_powerpoint_bar.pptx	1/1	62/62	4/4	0	match	68/68	339/339	match
+slides/chartset-002/pptx/023_advanced_powerpoint_scatter.pptx	1/1	42/42	3/3	0	match	48/48	283/283	match
+slides/chartset-002/pptx/024_advanced_powerpoint_bubble.pptx	1/1	42/42	3/3	0	match	48/48	286/286	match
+slides/chartset-002/pptx/030_advanced_powerpoint_area.pptx	1/1	61/61	4/4	0	match	67/67	327/327	match
+slides/chartset-002/pptx/032_advanced_powerpoint_bubble.pptx	1/1	42/42	3/3	0	match	48/48	284/284	match
+slides/chartset-002/pptx/033_advanced_powerpoint_bar.pptx	1/1	61/61	4/4	0	match	67/67	328/328	match
+slides/chartset-003/pptx/002_advanced_powerpoint_column.pptx	1/1	63/63	4/4	0	match	69/69	335/335	match
+slides/chartset-003/pptx/003_advanced_powerpoint_line.pptx	1/1	62/62	4/4	0	match	68/68	332/332	match
+slides/chartset-003/pptx/005_advanced_powerpoint_doughnut.pptx	1/1	52/52	4/4	0	match	58/58	301/301	match
+slides/chartset-003/pptx/009_advanced_powerpoint_bar.pptx	1/1	63/63	4/4	0	match	69/69	339/339	match
+slides/chartset-003/pptx/010_advanced_powerpoint_column.pptx	1/1	61/61	4/4	0	match	67/67	332/332	match
+slides/chartset-003/pptx/011_advanced_powerpoint_line.pptx	1/1	61/61	4/4	0	match	67/67	328/328	match
+slides/chartset-003/pptx/012_advanced_powerpoint_pie.pptx	1/1	53/53	4/4	0	match	59/59	308/308	match
+slides/chartset-003/pptx/019_advanced_powerpoint_line.pptx	1/1	61/61	4/4	0	match	67/67	331/331	match
+slides/chartset-003/pptx/027_advanced_powerpoint_line.pptx	1/1	61/61	4/4	0	match	67/67	326/326	match
+slides/chartset-003/pptx/028_advanced_powerpoint_pie.pptx	1/1	52/52	4/4	0	match	58/58	300/300	match
+slides/chartset-004/pptx/004_advanced_powerpoint_pie.pptx	1/1	52/52	4/4	0	match	58/58	300/300	match
+slides/chartset-004/pptx/013_advanced_powerpoint_doughnut.pptx	1/1	52/52	4/4	0	match	58/58	297/297	match
+slides/chartset-004/pptx/018_advanced_powerpoint_column.pptx	1/1	61/61	4/4	0	match	67/67	329/329	match
+slides/chartset-004/pptx/020_advanced_powerpoint_pie.pptx	1/1	52/52	4/4	0	match	58/58	300/300	match
+slides/chartset-004/pptx/021_advanced_powerpoint_doughnut.pptx	1/1	52/52	4/4	0	match	58/58	304/304	match
+slides/chartset-004/pptx/022_advanced_powerpoint_area.pptx	1/1	61/61	4/4	0	match	67/67	329/329	match
+slides/chartset-004/pptx/025_advanced_powerpoint_bar.pptx	1/1	61/61	4/4	0	match	67/67	323/323	match
+slides/chartset-004/pptx/026_advanced_powerpoint_column.pptx	1/1	61/61	4/4	0	match	67/67	332/332	match
+slides/chartset-004/pptx/029_advanced_powerpoint_doughnut.pptx	1/1	52/52	4/4	0	match	58/58	300/300	match
+slides/chartset-005/pptx/004_2-Stage_Vertical_Funnel_Diagram_for_PowerPoint_593f4c80.pptx	1/1	70/69	3/3	0	match	70/69	340/340	match
+slides/chartset-005/pptx/005_2-Step_Funnel_On_left_With_Text_767f0490.pptx	1/1	93/93	3/3	0	match	93/93	470/470	match
+slides/chartset-005/pptx/006_2-Way_Horizontal_Hierarchy_for_PowerPoint_and_Google_Slides_7c1e5084.pptx	3/3	124/126	5/3	0	match	126/128	645/645	match
+slides/chartset-005/pptx/011_3-Stage_Vertical_Funnel_Diagram_for_PowerPoint_10ce23dd.pptx	1/1	75/74	3/3	0	match	75/74	352/352	match
+slides/chartset-005/pptx/068_Funnel_Diagram_for_PowerPoint_with_2_Steps_437e4ba7.pptx	1/1	10/10	3/3	0	match	10/10	63/63	match
+slides/chartset-005/pptx/069_Funnel_Diagram_for_PowerPoint_with_3_Steps_f96396fc.pptx	1/1	12/12	3/3	0	match	12/12	68/68	match
+slides/chartset-005/pptx/070_Funnel_Diagram_for_PowerPoint_with_4_Steps_975f1642.pptx	1/1	14/14	3/3	0	match	14/14	73/73	match
+slides/chartset-005/pptx/071_Funnel_Diagram_for_PowerPoint_with_5_Steps_5ceacdec.pptx	1/1	16/16	3/3	0	match	16/16	78/78	match
+slides/chartset-005/pptx/076_Hexadonut_Charts_for_PowerPoint_and_Google_Slides_2b879835.pptx	3/3	214/216	4/3	0	match	216/218	1101/1101	match
+slides/chartset-005/pptx/084_Infographic_Hierarchy_Tree_for_PowerPoint_fda8141c.pptx	3/3	213/215	5/3	0	match	213/215	1128/1128	match
+slides/chartset-006/pptx/001_1-2-3_Horizontal_Hierarchy_39795b4d.pptx	3/3	246/248	4/3	0	match	248/250	1247/1247	match
+slides/chartset-006/pptx/007_3_Circles_Diagram_for_PowerPoint_dac9f170.pptx	3/3	269/271	4/3	0	match	269/271	1378/1378	match
+slides/chartset-006/pptx/017_4-Stage_Vertical_Funnel_Diagram_for_PowerPoint_61e7bde5.pptx	1/1	80/79	3/3	0	match	80/79	364/364	match
+slides/chartset-006/pptx/031_Alarm_Clock_Pie-Chart_for_PowerPoint_and_Google_Slides_0b185a05.pptx	3/3	358/360	4/3	0	match	360/362	1865/1865	match
+slides/chartset-006/pptx/043_Dual_Horizontal_Hierarchy_for_PowerPoint_and_Google_Slides_5074b09e.pptx	3/3	124/126	5/3	0	match	126/128	693/693	match
+slides/chartset-006/pptx/044_Dual_Mind_Spark_Chart_for_PowerPoint_a83f890a.pptx	4/4	483/486	4/3	0	match	486/489	2628/2628	match
+slides/chartset-006/pptx/055_Four_Pillar_Hierarchy_for_PowerPoint_and_Google_Slides_6b42ed18.pptx	3/3	334/336	4/3	0	match	336/338	1705/1705	match
+slides/chartset-006/pptx/077_Horizontal_Org_Chart_for_PowerPoint_and_Google_Slides_8cf07020.pptx	3/3	202/204	5/3	0	match	204/206	961/961	match
+slides/chartset-006/pptx/094_Intersecting_Teardrops_for_PowerPoint_and_Google_Slides_ff43aedb.pptx	3/3	270/272	5/3	0	match	272/274	1405/1405	match
+slides/chartset-006/pptx/099_Light_Bulb_SWOT_for_PowerPoint_and_Google_Slides_554a1e33.pptx	3/3	272/274	4/3	0	match	274/276	1395/1395	match
+slides/chartset-007/pptx/035_Chemistry_Column_PowerPoint_Chart_45bf8a76.pptx	3/3	293/293	4/3	0	match	293/293	1462/1462	match
+slides/chartset-007/pptx/039_Consumer_Decision_Journey_for_PowerPoint_319207e1.pptx	1/1	86/86	4/4	0	match	88/88	554/554	match
+slides/chartset-007/pptx/047_Female_Radar_Brain_for_PowerPoint_and_Google_Slides_c2a541f6.pptx	4/4	536/539	5/3	0	match	539/542	2720/2720	match
+slides/chartset-007/pptx/054_Flowchart_Board_Game_for_PowerPoint_and_Google_Slides_1b047962.pptx	3/3	180/182	4/3	0	match	182/184	967/967	match
+slides/chartset-007/pptx/057_Four-Branch_Diagram_for_PowerPoint_and_Google_Slides_ddf5d27c.pptx	3/3	148/150	4/3	0	match	150/152	805/805	match
+slides/chartset-007/pptx/083_Infographic_Hexagon_Cluster_for_PowerPoint_and_Google_Slides_ef811a12.pptx	3/3	204/206	5/3	0	match	206/208	1037/1037	match
+slides/chartset-007/pptx/090_Infographic_Radial_for_PowerPoint_and_Google_Slides_16a69891.pptx	3/3	112/114	5/3	0	match	114/116	625/625	match
+slides/chartset-007/pptx/091_Infographic_Radial_for_PowerPoint_and_Google_Slides_c6909fa6.pptx	3/3	422/424	4/3	0	match	424/426	2073/2073	match
+slides/chartset-007/pptx/092_Infographic_Tree_Diagram_for_PowerPoint_and_Google_Slides_d721fa00.pptx	3/3	278/280	5/3	0	match	280/282	1293/1293	match
+slides/chartset-007/pptx/096_Lab_Flask_Charts_for_PowerPoint_and_Google_Slides_91e3cbb5.pptx	3/3	192/194	4/3	0	match	194/196	1009/1009	match
+slides/chartset-008/pptx/009_3-Circle_Venn_PowerPoint_Diagram_2e59baa9.pptx	2/2	136/136	5/4	0	match	136/136	692/692	match
+slides/chartset-008/pptx/012_3-Step_Hexagons_Puzzle_Diagram_for_PowerPoint_982482b5.pptx	3/3	268/270	5/3	0	match	268/270	1307/1307	match
+slides/chartset-008/pptx/018_4-Step_Hexagons_Puzzle_Diagram_for_PowerPoint_19957cce.pptx	3/3	350/352	5/3	0	match	350/352	1685/1685	match
+slides/chartset-008/pptx/038_Competitive_Advantage_Card_for_PowerPoint_and_Google_Slides_373720f6.pptx	3/3	250/252	4/4	0	match	252/254	1585/1585	match
+slides/chartset-008/pptx/040_Crab_Diagram_for_PowerPoint_and_Google_Slides_13d38ff3.pptx	3/3	116/118	5/3	0	match	118/120	633/633	match
+slides/chartset-008/pptx/058_Four-Direction_Divergence_Diagram_for_PowerPoint_and_Google_Slides_9838e28d.pptx	3/3	272/274	4/3	0	match	274/276	1423/1423	match
+slides/chartset-008/pptx/065_Fourfold_Ribbon_Rings_for_PowerPoint_and_Google_Slides_39687419.pptx	3/3	272/274	4/3	0	match	274/276	1401/1401	match
+slides/chartset-008/pptx/072_Gear_Pie_Chart_for_PowerPoint_and_Google_Slides_d464d3a0.pptx	3/3	92/94	4/3	0	match	94/96	407/407	match
+slides/chartset-008/pptx/078_Horizontal_Pyramid_Org_Chart_for_PowerPoint_and_Google_Slides_70ea115a.pptx	3/3	208/210	4/3	0	match	210/212	1155/1155	match
+slides/chartset-008/pptx/100_Lime_and_Lemon_Data-Driven_Chart_for_PowerPoint_d7bb4a44.pptx	5/5	422/426	4/3	0	match	428/432	2032/2032	match
+slides/chartset-009/pptx/015_4-Option_Color_Wheel_Diagram_df7e4b8f.pptx	3/3	281/280	5/5	0	match	286/285	1413/1413	match
+slides/chartset-009/pptx/020_5-Option_Color_Wheel_Diagram_104ea3b0.pptx	3/3	317/316	5/5	0	match	322/321	1569/1569	match
+slides/chartset-009/pptx/022_5-Step_Hexagons_Puzzle_Diagram_for_PowerPoint_eda9895e.pptx	3/3	432/434	5/3	0	match	432/434	2063/2063	match
+slides/chartset-009/pptx/025_6-Option_Color_Wheel_Diagram_27e1c74d.pptx	3/3	405/404	5/5	0	match	410/409	2021/2021	match
+slides/chartset-009/pptx/030_Abstract_Petal_Diagram_71aa5e3a.pptx	3/3	267/266	5/5	0	match	272/271	1337/1336	match
+slides/chartset-009/pptx/033_Battery_Percentage_Chart_c99c24b5.pptx	3/3	223/222	5/5	0	match	228/227	1117/1117	match
+slides/chartset-009/pptx/037_Circle_Matrix_Framework_44bc5218.pptx	3/3	287/286	5/5	0	match	292/291	1455/1454	match
+slides/chartset-009/pptx/052_Flame_Percentage_Chart_d27d49c4.pptx	3/3	287/286	5/5	0	match	292/291	1421/1421	match
+slides/chartset-009/pptx/075_Heart_Arc_Radial_for_PowerPoint_and_Google_Slides_a27a3021.pptx	3/3	210/212	5/3	0	match	212/214	1029/1029	match
+slides/chartset-009/pptx/087_Infographic_Organization_Chart_for_PowerPoint_and_Google_Slides_2d951912.pptx	4/4	750/753	5/3	0	match	750/753	3855/3855	match
+slides/chartset-010/pptx/002_10-Point_Dual_Hub_Comparison_4ee242c9.pptx	3/3	89/88	5/5	0	match	94/93	445/445	match
+slides/chartset-010/pptx/027_6-Point_Dual_Hub_Comparison_13f9af30.pptx	3/3	89/88	5/5	0	match	94/93	443/443	match
+slides/chartset-010/pptx/028_8-Point_Dual_Hub_Comparison_d6c5dde5.pptx	3/3	89/88	5/5	0	match	94/93	443/443	match
+slides/chartset-010/pptx/041_Crosswise_Quadrant_Diagram_ea8bdf52.pptx	3/3	255/254	5/5	0	match	260/259	1301/1300	match
+slides/chartset-010/pptx/042_Diamond_Hub_Infographic_a60cfaa1.pptx	3/3	283/282	5/5	0	match	288/287	1403/1403	match
+slides/chartset-010/pptx/045_Dual-Segment_Quadrant_14a57221.pptx	3/3	293/292	5/5	0	match	298/297	1483/1482	match
+slides/chartset-010/pptx/048_Five-Arrows_Converging_Cycle_bb192e27.pptx	3/3	311/310	5/5	0	match	316/315	1589/1588	match
+slides/chartset-010/pptx/063_Four-Step_Infinity_Loop_3480185b.pptx	3/3	127/126	5/5	0	match	132/131	573/573	match
+slides/chartset-010/pptx/093_Insightful_Zoom_Chart_22b5464e.pptx	3/3	355/354	5/5	0	match	360/359	1831/1830	match
+slides/chartset-010/pptx/095_Interwoven_Bars_e5aa46c2.pptx	3/3	285/284	5/5	0	match	290/289	1409/1408	match
+slides/chartset-011/pptx/010_3-Group_Hierarchy_for_PowerPoint_and_Google_Slides_20476ce0.pptx	3/3	144/146	5/3	0	match	146/148	715/715	match
+slides/chartset-011/pptx/026_6-Part_Hexagon_Radial_Diagram_b8ca3f40.pptx	3/3	217/216	5/5	0	match	222/221	987/987	match
+slides/chartset-011/pptx/034_Central_Idea_Hub_Diagram_8258e6ad.pptx	3/3	169/168	5/5	0	match	174/173	747/747	match
+slides/chartset-011/pptx/046_Eight-Point_Strategic_Compass_35ee62de.pptx	3/3	195/194	5/5	0	match	200/199	877/876	match
+slides/chartset-011/pptx/051_Five-Stage_Zigzag_Timeline_2bd39be9.pptx	3/3	161/160	5/5	0	match	166/165	781/781	match
+slides/chartset-011/pptx/053_Flow_Wave_Process_9c0082f4.pptx	3/3	211/200	5/5	0	match	216/205	889/889	match
+slides/chartset-011/pptx/060_Four-Part_Radial_Core_Diagram_40d6614e.pptx	3/3	291/290	5/5	0	match	296/295	1349/1349	match
+slides/chartset-011/pptx/062_Four-Step_Growth_Staircase_8a3ef338.pptx	3/3	199/198	5/5	0	match	204/203	979/979	match
+slides/chartset-011/pptx/097_Labeled_Organization_Chart_for_PowerPoint_and_Google_Slides_f24fa592.pptx	3/3	238/240	5/3	0	match	240/242	1237/1237	match
+slides/chartset-011/pptx/098_Leaning_Cards_Process_dadb3738.pptx	3/3	211/210	5/5	0	match	216/215	967/967	match
+slides/chartset-012/pptx/003_2-Circle_Venn_Diagram_7ab74e5c.pptx	3/3	147/146	5/5	0	match	152/151	769/768	match
+slides/chartset-012/pptx/008_3-Circle_Venn_Diagram_024a12c5.pptx	3/3	217/216	5/5	0	match	222/221	1097/1096	match
+slides/chartset-012/pptx/013_3-Step_Segmented_Cycle_Process_5232f82d.pptx	3/3	219/218	5/5	0	match	224/223	1113/1113	match
+slides/chartset-012/pptx/061_Four-Stage_Serpentine_Chart_05699efe.pptx	3/3	71/70	5/5	0	match	76/75	397/396	match
+slides/chartset-012/pptx/064_Four-Step_Success_Cycle_30c0a917.pptx	3/3	151/150	5/5	0	match	156/155	701/701	match
+slides/chartset-012/pptx/067_Free_PowerPoint_Layered_Funnel_Process_4_Stages_4deb9647.pptx	4/4	464/464	4/4	0	match	488/488	2392/2392	match
+slides/chartset-012/pptx/073_Halo_Radial_for_PowerPoint_and_Google_Slides_4bd0918b.pptx	3/3	270/272	4/3	0	match	272/274	1383/1383	match
+slides/chartset-012/pptx/074_Hashtag_Matrix_246eb8d9.pptx	3/3	245/244	5/5	0	match	250/249	1271/1270	match
+slides/chartset-012/pptx/080_Infographic_Cycle_Venn_Diagram_for_PowerPoint_2e3cdb7f.pptx	3/3	275/277	4/3	0	match	275/277	1406/1406	match
+slides/chartset-012/pptx/089_Infographic_Radial_Matrix_for_PowerPoint_and_Google_Slides_eb0550f2.pptx	3/3	282/284	5/3	0	match	284/286	1453/1453	match
+slides/chartset-013/pptx/014_3D_Radial_Block_List_for_PowerPoint_and_Google_Slides_0773075e.pptx	3/3	430/432	5/3	0	match	432/434	2249/2249	match
+slides/chartset-013/pptx/016_4-Position_Org_Chart_1d3640b6.pptx	3/3	132/134	4/3	0	match	134/136	745/745	match
+slides/chartset-013/pptx/023_5-Step_Progress_Cards_91d5ff57.pptx	3/3	241/240	5/5	0	match	246/245	1155/1155	match
+slides/chartset-013/pptx/032_BCG_Growth-Share_Matrix_560d0485.pptx	3/3	277/312	5/5	0	match	290/325	1153/1153	match
+slides/chartset-013/pptx/049_Five-Block_Hub_Spoke_42ee8593.pptx	3/3	265/264	5/5	0	match	272/271	1333/1332	match
+slides/chartset-013/pptx/050_Five-Point_Radial_Hub_00793e08.pptx	3/3	165/164	5/5	0	match	170/169	755/755	match
+slides/chartset-013/pptx/056_Four-Block_Hub_Spoke_134b89d1.pptx	3/3	219/218	5/5	0	match	226/225	1107/1106	match
+slides/chartset-013/pptx/066_Free_PowerPoint_Layered_Funnel_Process_c0b380ec.pptx	5/5	580/580	4/4	0	match	610/610	2975/2975	match
+slides/chartset-013/pptx/079_Horizontal_Relationships_for_PowerPoint_and_Google_Slides_a3d35f63.pptx	3/3	142/144	4/3	0	match	144/146	745/745	match
+slides/chartset-013/pptx/088_Infographic_Quadrant_Pie_Chart_7b1e8abd.pptx	3/3	289/288	5/5	0	match	294/293	1435/1434	match
+slides/chartset-014/pptx/019_4-Step_Segmented_Cycle_Process_2ff93c19.pptx	3/3	281/280	5/5	0	match	286/285	1417/1417	match
+slides/chartset-014/pptx/021_5-Position_Org_Chart_cb042559.pptx	3/3	136/138	4/3	0	match	138/140	765/765	match
+slides/chartset-014/pptx/024_5-Step_Segmented_Cycle_Process_c8ca37ef.pptx	3/3	343/342	5/5	0	match	348/347	1721/1721	match
+slides/chartset-014/pptx/029_8-Step_Neumorphic_Cycle_Diagram_b9b75044.pptx	3/3	341/340	5/5	0	match	346/345	1503/1502	match
+slides/chartset-014/pptx/036_Chevron_Process_Cards_3c8f0ea1.pptx	3/3	161/160	5/5	0	match	166/165	737/737	match
+slides/chartset-014/pptx/059_Four-Part_Concept_Puzzle_30cea7e5.pptx	6/6	570/569	6/6	0	match	594/593	2961/2960	match
+slides/chartset-014/pptx/081_Infographic_Funnel_w_3_Stages_for_PowerPoint_28e26b31.pptx	3/3	397/399	5/3	0	match	397/399	2006/2006	match
+slides/chartset-014/pptx/082_Infographic_Funnel_with_4_Stages_for_PowerPoint_72d4f125.pptx	3/3	393/395	5/3	0	match	393/395	1990/1990	match
+slides/chartset-014/pptx/085_Infographic_Org_Chart_for_PowerPoint_5_Blocks_3870252f.pptx	3/3	49/51	5/3	0	match	49/51	304/304	match
+slides/chartset-014/pptx/086_Infographic_Org_Chart_for_PowerPoint_6_Blocks_f9086d83.pptx	3/3	53/55	5/3	0	match	53/55	324/324	match
+slides/done-001/ppt/WC_Update-Aug03.ppt	11/11	452/452	2/2	0	match	519/519	2874/2874	match
+slides/done-001/ppt/policy-pesentation.ppt	16/16	389/389	3/3	0	match	478/478	2288/2288	match
+slides/done-001/ppt/wells08_basic.ppt	27/27	986/995	4/4	0	match	1172/1171	5741/5762	match
+slides/done-001/pptx/111006 COMSTAC STOWG Aero spaceports IFG.pptx	8/8	267/267	2/2	0	match	309/309	1647/1647	match
+slides/done-001/pptx/BMFE-06-03 (Gerflor) Smoke Density and Toxicity.pptx	6/6	732/732	4/4	0	match	794/794	3547/3547	match
+slides/done-001/pptx/Definitions commodity chains.pptx	4/4	261/261	2/2	0	match	279/279	1556/1556	match
+slides/done-001/pptx/Statement of Work presentation.pptx	10/10	227/228	3/3	0	match	233/234	1286/1286	match
+slides/done-001/pptx/Trust Fund Excise Taxes Structure.pptx	1/1	169/169	2/2	0	match	189/189	868/868	match
+slides/done-001/pptx/fishbone-diagram-template-ppt-1.pptx	1/1	189/189	2/2	0	match	197/197	882/882	match
+slides/done-001/pptx/iaeg_work_group_leader_updates.pptx	1/1	90/90	4/4	0	match	91/91	505/505	match
+slides/done-002/ppt/080214-Intl-pol-frameworks-and-their-implications-for-Africa-ISS-workshop.ppt	18/18	815/814	4/4	0	match	838/837	4473/4473	match
+slides/done-002/ppt/gfopportunitiesforlinkagespres_2010_en.ppt	27/27	1652/1652	7/7	0	match	1722/1722	10371/10371	match
+slides/done-002/ppt/ws_prod-g-doc-Events-2007-Approval-of-Flight-Conditions-RM-NAA-16032007.ppt	14/14	743/743	5/6	0	match	823/823	4659/4659	match
+slides/done-002/ppt/ws_prod-g-doc-Events-2007-may-presentation-PtF-background-+-principles.ppt	20/20	909/909	3/3	0	match	1025/932	5043/5043	match
+slides/done-002/ppt/ws_prod-g-doc-Events-2007-november-IACA-presentation-at-EASA-Fuel-Tank-Safety-Training-Seminar.ppt	10/10	555/555	3/3	0	match	587/587	2925/2925	match
+slides/done-002/ppt/ws_prod-g-doc-Events-Part-M-presentation.ppt	30/30	1844/1844	3/3	0	match	1923/1877	10489/10489	match
+slides/done-002/pptx/Curriculum-Schematic-E22-11052025.pptx	12/12	1131/1119	5/5	0	match	1319/1307	6925/6925	match
+slides/done-002/pptx/dhs-293364.pptx	39/39	3618/3618	8/7	0	match	3827/3820	19661/19700	match
+slides/done-002/pptx/diapo_6_fees_vous_etes_poctdoct_exterieur_a_luniv_v2_0_1.pptx	1/1	92/92	3/3	0	match	98/98	558/558	match
+slides/done-002/pptx/medicines_bulletin_february_2023_final.pptx	1/1	534/536	4/4	0	match	545/547	3093/3093	match
+slides/done-003/ppt/010605Vul.ppt	21/21	947/944	6/6	0	match	1092/1089	5746/5746	match
+slides/done-003/ppt/Inducement-to-Insurance-Business.ppt	22/22	2587/2577	4/5	0	match	2598/2589	12942/12899	match
+slides/done-003/ppt/outlook_of_nigerian_pension_sector.ppt	12/12	1021/1021	5/6	0	match	1118/1118	5802/5802	match
+slides/done-003/ppt/ws_prod-g-doc-Events-2007-Privileges.ppt	15/15	799/799	5/5	0	match	842/818	4160/4160	match
+slides/done-003/ppt/ws_prod-g-doc-Events-2007-september-M.017-(French)-France.ppt	55/55	6215/6215	3/3	0	match	6471/6292	33915/33915	match
+slides/done-003/ppt/ws_prod-g-doc-Events-2007-september-MDM.032-(ENGLISH)-CZ.ppt	38/38	2662/2662	4/4	0	match	2855/2712	14835/14835	match
+slides/done-003/pptx/02_REDAC_New ATM briefing _March 2017v2.pptx	6/6	759/759	5/5	0	match	805/805	4920/4920	match
+slides/done-003/pptx/97936.pptx	15/15	1267/1267	5/5	0	match	1353/1353	6561/6561	match
+slides/done-003/pptx/NCW-2024-Guide-.pptx	1/1	211/214	4/4	0	match	222/226	1181/1181	match
+slides/done-003/pptx/ev122_jj-liew-tort-of-bribery-webinar.pptx	24/24	1374/1374	5/4	0	match	1449/1449	6738/6738	match
+slides/done-004/ppt/0335fab9-79f0-4944-b92c-f223837ca2d8.ppt	12/12	612/615	3/3	0	match	658/661	4499/4472	match
+slides/done-004/ppt/undp_presentation_revised_17_may.ppt	22/22	1839/1844	7/7	0	match	1930/1935	10590/10597	match
+slides/done-004/ppt/ws_prod-g-doc-Events-industrymeeting18112004-European-Safety-Strategy-Initiative.ppt	10/10	332/332	4/4	0	match	389/343	1884/1884	match
+slides/done-004/pptx/DOE Interactive Exercise Presentation draft rev 2.pptx	10/10	573/575	5/5	0	match	654/657	2744/2744	match
+slides/done-004/pptx/Item 6b - UNSD - Dissemination through APIs.pptx	10/10	421/421	3/3	0	match	453/453	2420/2420	match
+slides/done-004/pptx/Liturgical-Commission-2025-Convention-Presentation.pptx	9/9	344/344	2/2	0	match	396/395	1837/1837	match
+slides/done-004/pptx/Session 21- The option to expand & abandon.pptx	12/12	885/876	5/5	0	match	968/959	4268/4256	match
+slides/done-004/pptx/attendance-updates-for-governors.pptx	30/30	3047/3055	7/7	0	match	3219/3227	17282/17298	match
+slides/done-004/pptx/ghgp-supply-chain-initiative_20100323_wri.pptx	52/52	3895/3896	10/9	0	match	4130/4131	22442/22442	match
+slides/done-004/pptx/redac-fullComm-201705-EE-FRs-briefing.pptx	8/8	374/374	4/4	0	match	384/384	2268/2268	match
+slides/done-005/ppt/ITE106-Chapter 4.ppt	47/47	3139/3139	7/7	0	match	3294/3294	16509/16509	match
+slides/done-005/ppt/berlin.ppt	29/29	1365/1376	2/4	0	match	1530/1530	7392/7403	match
+slides/done-005/ppt/pods05.ppt	60/60	1877/1882	10/10	0	match	2081/2076	10682/10676	match
+slides/done-005/ppt/ws_prod-g-doc-Events-industrymeeting18112004-Aercap.ppt	12/12	1271/1271	3/3	0	match	1345/1345	6950/6950	match
+slides/done-005/pptx/5b_upasana_dasgupta_-_liability_and_registration.pptx	15/15	955/965	3/3	0	match	1007/1016	5024/5090	match
+slides/done-005/pptx/ANG C-1 ATC-TO Core Program - HF REDAC briefing September 7 2016.pptx	19/19	1885/1885	6/5	0	match	2007/2007	11586/11586	match
+slides/done-005/pptx/NAS-Infrastructure-Roadmaps-HSI.pptx	9/9	1415/1415	5/5	0	match	1469/1448	9027/9027	match
+slides/done-005/pptx/NAS-Infrastructure-Roadmaps-Weather.pptx	11/11	2121/2120	4/4	0	match	2153/2152	12083/12083	match
+slides/done-005/pptx/c_291533.pptx	19/19	1104/1104	7/7	0	match	1158/1158	5904/5913	match
+slides/done-005/pptx/manufacturing_process_simulation_working_group_overview_2023.pptx	7/7	726/728	4/4	0	match	769/771	4793/4868	match
+slides/done-006/ppt/Lepore.ppt	20/20	1816/1822	5/5	0	match	1942/1948	10753/10767	match
+slides/done-006/ppt/ws_prod-g-doc-Events-r-6.-ESM.ppt	25/25	1951/1951	4/6	0	match	2120/2120	11330/11330	match
+slides/done-006/pptx/Course Selection 2025-26 Current Grade 09.pptx	10/10	694/694	3/3	0	match	698/698	3343/3343	match
+slides/done-006/pptx/Ensemble-pour-l-amelioration-de-la-securite-de-lac-AIRBUS.pptx	9/9	627/627	4/4	0	match	652/652	3451/3451	match
+slides/done-006/pptx/REDAC HF briefing Sep 2016_LARD_ATC_TO_FE_v2.pptx	18/18	2119/2119	6/6	0	match	2223/2223	12620/12620	match
+slides/done-006/pptx/Stakeholders-v08052017 - v5.pptx	13/13	545/538	7/7	0	match	612/608	3388/3388	match
+slides/done-006/pptx/iris07.12.12.pptx	21/21	871/882	9/9	0	match	927/939	4795/4795	match
+slides/done-006/pptx/nabiyeleul_1_aviation_service_28_july_2020.pptx	9/9	554/554	4/4	0	match	604/604	3146/3146	match
+slides/done-006/pptx/social-media-app-bulletin-january.pptx	4/4	788/788	4/4	0	match	792/792	4001/4001	match
+slides/done-006/pptx/wopanets-innovationdays-06-16.pptx	15/15	563/563	3/3	0	match	626/626	3625/3625	match
+slides/done-007/ppt/1-secretariat.ppt	10/10	150/150	3/3	0	match	216/216	1034/1034	match
+slides/done-007/ppt/71393_pp7.ppt	39/39	2151/2151	6/6	0	match	2373/2373	12475/12475	match
+slides/done-007/ppt/introduction_to_bea_tuxedo.ppt	40/40	1767/1769	7/7	0	match	1966/1833	9931/9893	match
+slides/done-007/ppt/joint_user_outcomes_michael_fullerton_29.06.12.ppt	20/20	1917/1917	7/7	0	match	2012/2012	9836/9836	match
+slides/done-007/pptx/10. Drawings, circuit diagrams and schematics.pptx	23/23	1501/1501	4/4	0	match	1520/1520	8444/8444	match
+slides/done-007/pptx/BHCA Part II webinar #2 - 10.2020.pptx	21/21	1408/1403	6/6	0	match	1454/1448	7358/7216	match
+slides/done-007/pptx/Boeing 737 Max - Group 5.pptx	2/2	7/7	1/1	0	match	7/7	27/27	match
+slides/done-007/pptx/PAL Block Intro 2023.pptx	20/20	1461/1461	7/6	0	match	1562/1562	8225/8225	match
+slides/done-007/pptx/bitesize-writing-a-report.pptx	15/15	654/655	5/5	0	match	705/706	3791/3791	match
+slides/done-007/pptx/flying-by-numbers-presentation.pptx	10/10	545/547	7/8	0	match	575/577	2379/2379	match
+slides/done-008/ppt/8.16_AOD_FINAL_Provider_Training_Presentation_9_2009.ppt	94/94	4311/4312	6/6	0	match	4521/4521	22481/22481	match
+slides/done-008/ppt/EG1_dsrc tech.ppt	26/26	2034/2034	6/6	0	match	2178/2178	11132/11132	match
+slides/done-008/ppt/Framing Europe.ppt	24/24	2237/2237	4/4	0	match	2300/2301	11542/11542	match
+slides/done-008/ppt/RESPA_-_Section_8_Webinar.ppt	35/35	2573/2575	5/5	0	match	2762/2764	13293/13293	match
+slides/done-008/ppt/concepts-surrounding-cloud-computing-carolyn-kranz-and-rich-prem-gb-seattle-2011.ppt	36/36	2459/2460	5/5	0	match	2636/2568	13459/13459	match
+slides/done-008/pptx/AATF-Fact-Sheet-2025.pptx	9/9	853/855	8/8	0	match	899/901	4611/4611	match
+slides/done-008/pptx/FIT26-Presentation-Airservices-Update.pptx	11/11	221/221	4/4	0	match	241/241	1295/1295	match
+slides/done-008/pptx/G-InvoicingKeithJarboe.pptx	13/13	1078/1078	5/5	0	match	1175/1175	6968/6968	match
+slides/done-008/pptx/ROK-PI Climate Bulletin - Edition 2017-06.pptx	2/2	409/409	3/3	0	match	416/416	2332/2332	match
+slides/done-008/pptx/item_3-environmental_process_briefing.pptx	12/12	296/296	4/4	0	match	334/334	1765/1765	match
+slides/done-009/ppt/Airport Planning 09112013.ppt	9/9	629/629	6/6	0	match	656/656	3591/3591	match
+slides/done-009/ppt/Employment-Based_I-485.ppt	42/42	2516/2516	3/3	0	match	2709/2709	13353/13353	match
+slides/done-009/ppt/iep-amount-frequency-for-webinar.ppt	39/39	1678/1680	6/6	0	match	1760/1762	9154/9154	match
+slides/done-009/pptx/30-04-2021 merged NDoH and NICD_Presentation HBV BD meeting 05May2021_1.pptx	18/18	1359/1360	8/7	0	match	1446/1446	7644/7644	match
+slides/done-009/pptx/COMSTAC_11_5_2021am_2.pptx	39/39	2741/2741	4/4	0	match	2858/2858	16225/16225	match
+slides/done-009/pptx/FIT26-Presentation-PR-Briefing-Debrief-Airbus.pptx	9/9	1441/1444	3/3	0	match	1533/1536	7273/7273	match
+slides/done-009/pptx/HENTZEN_COMPOSITE_MATERIALS_IN_THE_AEROSPACE_INDUSTRY.pptx	12/12	320/320	3/3	0	match	344/344	1868/1868	match
+slides/done-009/pptx/[Christophe]NLP_reseau_inge_stat.pptx	17/17	884/885	5/5	0	match	988/989	4532/4532	match
+slides/done-009/pptx/airbus-powerpoint-presentation-2019-20-without-video_diy_2019-20.pptx	38/38	871/876	7/7	0	match	919/924	4394/4394	match
+slides/done-009/pptx/redac-sas-201403-ppt-portfolio-rev-sim.pptx	14/14	2006/2015	8/8	0	match	2186/2207	13014/13014	match
+slides/done-010/ppt/BUS-Chapter 05.ppt	50/50	2126/2134	5/5	0	match	2342/2342	12354/12362	match
+slides/done-010/pptx/BasicMed_AME_Presentation.pptx	18/18	870/870	4/4	0	match	939/939	4930/4930	match
+slides/done-010/pptx/Copy of Full deck with references Promotion of Outside Interests at Work final(1).pptx	33/33	3114/3115	7/7	0	match	3248/3250	17384/17378	match
+slides/done-010/pptx/DoIRD Meeting 16JAN14 v1-1.pptx	15/15	1075/1075	6/6	0	match	1142/1142	5886/5886	match
+slides/done-010/pptx/John_Broggio__RSS_Campion_event_John_Broggio.pptx	25/25	1171/1172	3/3	0	match	1245/1246	6867/6867	match
+slides/done-010/pptx/REDAC Briefing_SSIT_CARA_08132014.ppt.pptx	14/14	462/462	4/3	0	match	521/521	2664/2664	match
+slides/done-010/pptx/Sector_Skills_Insights_Advanced_Manufacturing_summary_slide_pack.pptx	24/24	4587/4605	6/6	0	match	4691/4707	23961/23961	match
+slides/done-010/pptx/Tax factsheet 2022 (1).pptx	27/27	2834/2866	5/5	0	match	2913/2946	13494/13637	match
+slides/done-010/pptx/passiv.pptx	21/21	1199/1199	9/8	0	match	1306/1305	6725/6716	match
+slides/done-010/pptx/section_1_our_rights_presentation.pptx	30/30	4135/4151	7/7	0	match	4245/4261	22132/22194	match
+slides/done-011/pptx/171128IPAP.pptx	40/40	4664/4662	9/10	0	match	4895/4893	25455/25433	match
+slides/done-011/pptx/1_Country-Updates_DRC_English.pptx	16/16	782/782	5/5	0	match	846/846	4281/4281	match
+slides/done-011/pptx/23-session-2-pptx.pptx	16/16	304/304	4/4	0	match	333/333	1836/1836	match
+slides/done-011/pptx/3492.pptx	22/22	1268/1266	5/6	0	match	1320/1320	6835/6833	match
+slides/done-011/pptx/3495.pptx	26/26	747/747	4/4	0	match	807/807	4375/4375	match
+slides/done-011/pptx/B2B-Center-Readiness-and-Student-Retention.pptx	33/33	1351/1348	6/6	0	match	1558/1555	7792/7768	match
+slides/done-011/pptx/NAS-Infrastructure-Roadmaps-v16.0.pptx	137/137	18847/15087	6/6	0	words	19299/15449	107016/87559	words
+slides/done-011/pptx/Session-1-Presentation-Reporting-Forms-Form-12-final.pptx	15/15	1131/1130	8/6	0	match	1162/1160	6267/6271	match
+slides/done-011/pptx/_1___Opatrny_Ales_United_Kingdom_business_opportunities_final.pptx	25/25	1614/1628	6/6	0	match	1818/1832	8990/8990	match
+slides/done-011/pptx/order-of-worship-ppt-revised-2018.pptx	28/28	1139/1139	6/5	0	match	1212/1212	5302/5302	match
+slides/done-012/ppt/JesuitAssocOfStudentPersonnel.ppt	31/31	1179/1178	6/6	0	match	1340/1338	7310/7310	match
+slides/done-012/ppt/gillikin_online_user_mtg_2010.ppt	40/40	1291/1291	5/5	0	match	1468/1468	7753/7753	match
+slides/done-012/pptx/429_BLISc 2019 IInd Sem.  PAPER-7 UNIT 3.pptx	20/20	3125/3126	6/6	0	match	3225/3226	17627/17627	match
+slides/done-012/pptx/County ACHS Presentaion Webinar 8-16-16 Peg.pptx	26/26	1325/1325	7/6	0	match	1394/1394	7599/7599	match
+slides/done-012/pptx/Intersil_Italy_CAN_Bus_Transceiver_Presentation_Final.pptx	39/39	3460/3416	7/7	0	match	3854/3809	17994/17958	match
+slides/done-012/pptx/REDAC briefing March12-13-2014jemvbFINAL.ppt.pptx	25/25	2587/2584	8/8	0	match	2788/2786	15773/15773	match
+slides/done-012/pptx/SRDMG(16)024_60 GHz onboard airplanes.pptx	26/26	1862/1862	7/7	0	match	1931/1931	10312/10312	match
+slides/done-012/pptx/Sean Monogue.pptx	15/15	818/818	4/4	0	match	891/891	4950/4950	match
+slides/done-012/pptx/vv_summit_SAIC-PRESENTATION_FAA-V&V-Summit_508c.pptx	19/19	649/648	5/4	0	match	707/706	3573/3573	match
+slides/done-012/pptx/vvsummit2022-SAIC-PRESENTATION.pptx	19/19	649/648	5/4	0	match	707/706	3573/3573	match
+slides/done-013/ppt/2015-Civil-Rights-Website-training.ppt	94/94	6117/6118	12/11	0	match	6579/6581	34818/34818	match
+slides/done-013/ppt/FAA_Form_337.ppt	67/67	5546/5612	15/15	0	match	5752/5839	29462/29447	match
+slides/done-013/ppt/hofman.ppt	13/13	450/450	3/4	0	match	503/503	2945/2945	match
+slides/done-013/ppt/ws_prod-g-doc-Events-2008-February-5-NATO-activities.ppt	13/13	447/453	4/4	0	match	510/516	2163/2163	match
+slides/done-013/pptx/2014BSA_Sunday_Killion.pptx	50/50	3559/3559	8/8	0	match	3702/3702	17188/17188	match
+slides/done-013/pptx/PRM_training.pptx	22/22	2159/2152	7/7	0	match	2195/2185	10593/10578	match
+slides/done-013/pptx/Structural Testing.pptx	89/89	4335/4339	12/12	0	match	4987/5005	20360/20360	match
+slides/done-013/pptx/chapter_4_0.pptx	54/54	3175/3175	7/7	0	match	3340/3340	18883/18883	match
+slides/done-013/pptx/redac-sas-201703-hf-research-division.pptx	13/13	713/713	3/3	0	match	784/784	4879/4879	match
+slides/done-013/pptx/schematicplaymar21.pptx	21/21	2103/2119	4/5	0	match	2121/2137	11470/11470	match
+slides/done-014/ppt/Aerospace_Journey_of_Flight_Chapter_BCB1637572DA6.ppt	26/26	1885/1885	3/3	0	match	2156/2156	10159/10159	match
+slides/done-014/pptx/Presentation - Identify Components of the Airport (1).pptx	12/12	554/554	6/6	0	match	591/591	2992/2992	match
+slides/done-014/pptx/Reporting_responsibilities_matrix.pptx	268/268	57742/57708	3/3	0	match	57917/57883	308444/308318	match
+slides/done-014/pptx/Snowbirds_High_Show.pptx	41/41	1871/1869	5/5	0	match	1916/1924	8049/8049	match
+slides/done-014/pptx/Technical_Report_Elements[1].pptx	39/39	1425/1430	5/5	0	match	1477/1482	7648/7679	match
+slides/done-014/pptx/redac-nasops-201503-RIRP-portfolio-update.pptx	46/46	2765/2761	11/9	0	match	2918/2916	15420/15418	match
+slides/done-014/pptx/redac-sas-201509-asisp-research.pptx	45/45	3127/3120	12/12	0	match	3303/3297	19094/19031	match
+slides/done-014/pptx/schematicplay.pptx	21/21	2111/2125	4/5	0	match	2128/2143	11490/11490	match
+slides/done-014/pptx/servicedesk-plus-overviewfinal.pptx	66/66	1805/1820	8/3	0	match	1904/1919	11471/11471	match
+slides/done-014/pptx/vvsummit2022-Research-Roadmap-and-the-UML-3-Operational-Integration-Assessment.pptx	33/33	1281/1281	5/5	1	unembedded	1361/1360	8377/8377	unembedded
+slides/done-015/ppt/Architecture.ppt	29/29	845/845	4/4	0	match	867/867	4696/4696	match
+slides/done-015/pptx/1200-Assigning-Club-officers.pptx	16/16	163/162	7/7	0	match	171/170	960/960	match
+slides/done-015/pptx/RPA P4 - Advanced Material.pptx	20/20	1477/1479	6/6	0	match	1640/1642	8749/8744	match
+slides/done-015/pptx/Wildlife for REDAC September 11.pptx	41/41	1534/1535	11/11	0	match	1641/1642	9160/9160	match
+slides/extra-001/pptx/FAAAIandtheArtandScienceofV&Vfinal.pptx	30/30	1135/1137	6/6	0	match	1221/1223	5868/5868	match
+slides/metrics-001/pptx/Ramp Up Campaign - French.pptx	6/6	437/419	4/2	0	words	465/445	2536/2418	words
+slides/missing-001/pptx/NWD-GLA-Community-Outreach-Day-Oct-2025.pptx	13/13	644/576	3/3	0	words	705/629	3998/3623	words
+words/ceiling-001/doc/150_5300_13_chg8.doc	18/18	8658/8518	8/6	0	match	8712/8579	41766/41329	match
+words/ceiling-001/docx/ABCD-FE-01-00 Flight Envelope - v1 08.03.16.docx	14/15	3835/3733	6/5	0	pages,words	3880/3786	18420/17751	pages,words
+words/ceiling-001/docx/AW-104D-RVSM-Aircraft-Approval-Checklist.pdf.docx	2/2	141/135	3/4	0	match	153/147	772/764	match
+words/chartset-001/docx/002_advanced_word_chart_report.docx	1/1	96/96	4/4	0	match	102/102	536/536	match
+words/chartset-001/docx/008_advanced_word_chart_report.docx	1/1	94/94	4/4	0	match	100/100	534/534	match
+words/chartset-001/docx/014_advanced_word_chart_report.docx	1/1	94/94	4/4	0	match	100/100	531/531	match
+words/chartset-001/docx/020_advanced_word_chart_report.docx	1/1	94/94	4/4	0	match	100/100	530/530	match
+words/chartset-001/docx/026_advanced_word_chart_report.docx	1/1	94/94	4/4	0	match	100/100	533/533	match
+words/chartset-001/docx/032_advanced_word_chart_report.docx	1/1	94/94	4/4	0	match	100/100	534/534	match
+words/chartset-001/docx/clustered-column-result.docx	1/1	68/68	2/2	0	match	68/68	389/389	match
+words/chartset-001/docx/clustered-column-template.docx	1/1	37/37	2/2	0	match	37/37	200/200	match
+words/chartset-001/docx/pie-chart-result.docx	1/1	40/40	2/2	0	match	40/40	234/234	match
+words/chartset-001/docx/pie-chart-template.docx	1/1	9/9	2/2	0	match	9/9	73/73	match
+words/chartset-002/docx/005_advanced_word_chart_report.docx	1/1	94/94	4/4	0	match	100/100	529/529	match
+words/chartset-002/docx/006_advanced_word_chart_report.docx	1/1	94/94	4/4	0	match	100/100	529/529	match
+words/chartset-002/docx/011_advanced_word_chart_report.docx	1/1	94/94	4/4	0	match	100/100	530/530	match
+words/chartset-002/docx/015_advanced_word_chart_report.docx	1/1	94/94	4/4	0	match	100/100	532/532	match
+words/chartset-002/docx/017_advanced_word_chart_report.docx	1/1	95/95	4/4	0	match	101/101	540/540	match
+words/chartset-002/docx/021_advanced_word_chart_report.docx	1/1	94/94	4/4	0	match	100/100	532/532	match
+words/chartset-002/docx/023_advanced_word_chart_report.docx	1/1	94/94	4/4	0	match	100/100	532/532	match
+words/chartset-002/docx/029_advanced_word_chart_report.docx	1/1	94/94	4/4	0	match	100/100	528/528	match
+words/chartset-002/docx/030_advanced_word_chart_report.docx	1/1	94/94	4/4	0	match	100/100	528/528	match
+words/chartset-002/docx/033_advanced_word_chart_report.docx	1/1	94/94	4/4	0	match	100/100	529/529	match
+words/chartset-003/docx/001_advanced_word_chart_report.docx	1/1	95/95	4/4	0	match	101/101	535/535	match
+words/chartset-003/docx/003_advanced_word_chart_report.docx	1/1	95/95	4/4	0	match	101/101	534/534	match
+words/chartset-003/docx/004_advanced_word_chart_report.docx	1/1	94/94	4/4	0	match	100/100	530/530	match
+words/chartset-003/docx/007_advanced_word_chart_report.docx	1/1	94/94	4/4	0	match	100/100	531/531	match
+words/chartset-003/docx/009_advanced_word_chart_report.docx	1/1	96/96	4/4	0	match	102/102	540/540	match
+words/chartset-003/docx/016_advanced_word_chart_report.docx	1/1	95/95	4/4	0	match	101/101	537/537	match
+words/chartset-003/docx/019_advanced_word_chart_report.docx	1/1	94/94	4/4	0	match	100/100	533/533	match
+words/chartset-003/docx/025_advanced_word_chart_report.docx	1/1	94/94	4/4	0	match	100/100	524/524	match
+words/chartset-003/docx/027_advanced_word_chart_report.docx	1/1	94/94	4/4	0	match	100/100	528/528	match
+words/chartset-003/docx/028_advanced_word_chart_report.docx	1/1	94/94	4/4	0	match	100/100	530/530	match
+words/chartset-004/docx/010_advanced_word_chart_report.docx	1/1	94/94	4/4	0	match	100/100	533/533	match
+words/chartset-004/docx/012_advanced_word_chart_report.docx	1/1	95/95	4/4	0	match	101/101	538/538	match
+words/chartset-004/docx/013_advanced_word_chart_report.docx	1/1	94/94	4/4	0	match	100/100	525/525	match
+words/chartset-004/docx/018_advanced_word_chart_report.docx	1/1	94/94	4/4	0	match	100/100	530/530	match
+words/chartset-004/docx/022_advanced_word_chart_report.docx	1/1	94/94	4/4	0	match	100/100	530/530	match
+words/chartset-004/docx/024_advanced_word_chart_report.docx	1/1	94/94	4/4	0	match	100/100	536/536	match
+words/chartset-004/docx/031_advanced_word_chart_report.docx	1/1	94/94	4/4	0	match	100/100	527/527	match
+words/chartset-005/docx/003_Free_Genogram_Diagram_Template_Easy_Format_60eb6e42.docx	1/1	29/29	2/2	0	match	29/29	120/120	match
+words/chartset-005/docx/005_Free_Genogram_Diagram_Template_Excellent_layout_f5f185d0.docx	1/1	2/2	1/1	0	match	2/2	8/8	match
+words/chartset-005/docx/036_Venn_Diagram_Template_Fillable_Layout_3ffbba36.docx	1/1	13/13	2/2	0	match	15/15	61/61	match
+words/chartset-005/docx/052_Organogram_Template_Colorful_Flow_Chart_cba9fbfe.docx	1/1	42/42	1/1	0	match	42/42	178/178	match
+words/chartset-005/docx/053_Organogram_Template_Creative_Theme_21657a3d.docx	1/1	32/32	1/1	0	match	32/32	138/138	match
+words/chartset-005/docx/054_Organogram_Template_Grey_Vertical_Theme_b2dbd9a8.docx	1/1	36/36	1/1	0	match	36/36	154/154	match
+words/chartset-005/docx/083_Printable_Graph_Paper_Template_Customizable_Format_55ff93a3.docx	1/1	3/3	1/1	0	match	4/4	14/14	match
+words/chartset-005/docx/084_Printable_Graph_Paper_Template_Editable_Layout_d66c6820.docx	1/1	2/4	2/1	0	match	2/6	10/19	match
+words/chartset-005/docx/085_Printable_Graph_Paper_Template_Excellent_Format_4bcae89a.docx	1/1	4/4	1/1	0	match	6/6	19/19	match
+words/chartset-005/docx/087_Printable_Graph_Paper_Template_Green_Theme_0c14ea04.docx	2/1	14/12	2/2	0	pages	16/14	37/27	pages
+words/chartset-006/docx/001_Free_Genogram_Diagram_Template_Blue_and_Gray_Theme_7c9e01a7.docx	1/1	43/43	2/2	0	match	43/43	176/176	match
+words/chartset-006/docx/002_Free_Genogram_Diagram_Template_Customizable_Format_2219584b.docx	1/1	88/86	2/2	0	match	88/86	303/304	match
+words/chartset-006/docx/033_Venn_Diagram_Template_Colored_Theme_2aea6697.docx	1/1	13/13	1/1	0	match	16/16	63/63	match
+words/chartset-006/docx/057_Organogram_Template_Vertical_Colorful_Theme_724b143c.docx	1/1	36/36	2/2	0	match	36/36	202/202	match
+words/chartset-006/docx/081_Printable_Graph_Paper_Template_Blue_Theme_629316cb.docx	1/1	5/5	2/1	0	match	8/8	25/25	match
+words/chartset-006/docx/086_Printable_Graph_Paper_Template_Gray_Theme_7300e5d7.docx	1/1	2/4	2/1	0	match	2/6	10/19	match
+words/chartset-006/docx/088_Printable_Graph_Paper_Template_Quality_layout_33051f6e.docx	1/1	2/2	1/1	0	match	2/2	10/10	match
+words/chartset-006/docx/093_Business_Case_Template_Customizable_Layout_510c25e7.docx	1/1	34/34	2/2	0	match	34/34	201/201	match
+words/chartset-006/docx/097_Business_Case_Template_Elegant_Layout_3ba9cbf2.docx	2/1	54/54	3/3	0	pages	54/54	276/276	pages
+words/chartset-006/docx/099_Business_Case_Template_Gray_Theme_ac3edbf4.docx	1/1	45/45	1/1	0	match	45/45	294/294	match
+words/chartset-007/docx/009_Free_Genogram_Diagram_Template_Handy_Format_4bb900f0.docx	1/1	44/44	3/3	0	match	44/44	170/170	match
+words/chartset-007/docx/018_Project_Timeline_Template_Editable_Format_e1cf1df5.docx	1/1	108/108	2/2	0	match	108/108	422/422	match
+words/chartset-007/docx/025_Unit_Circle_Chart_Cos_and_Sin_Model_1ed01892.docx	1/1	141/141	3/3	0	match	157/141	607/607	match
+words/chartset-007/docx/034_Venn_Diagram_Template_Customizable_Format_d14642b7.docx	1/1	13/13	1/1	0	match	16/16	63/63	match
+words/chartset-007/docx/049_Visual_Product_Roadmap_Template_Simple_Format_4af26e4f.docx	1/1	61/61	2/2	0	match	62/62	406/406	match
+words/chartset-007/docx/058_Organogram_Template_With_Picture_Theme_44b79368.docx	1/1	16/16	1/1	0	match	16/16	74/74	match
+words/chartset-007/docx/074_Storyboard_Template_Editable_Design_132436d1.docx	1/1	19/19	3/3	0	match	51/51	170/170	match
+words/chartset-007/docx/080_Printable_Graph_Paper_Template_Black_Theme_6b066be1.docx	1/1	6/6	1/1	0	match	9/9	27/27	match
+words/chartset-007/docx/089_Printable_Graph_Paper_Template_Simlpe_Format_3aff1c88.docx	1/1	2/2	1/1	0	match	4/4	10/10	match
+words/chartset-007/docx/094_Business_Case_Template_Decent_Layout_e7722f2b.docx	1/1	29/29	2/2	0	match	29/29	189/189	match
+words/chartset-008/docx/004_Free_Genogram_Diagram_Template_Editable_Format_b82b6152.docx	1/1	37/37	3/3	0	match	37/37	145/145	match
+words/chartset-008/docx/006_Free_Genogram_Diagram_Template_Fillable_Format_7ca08541.docx	1/1	53/53	3/3	0	match	53/53	203/203	match
+words/chartset-008/docx/010_Free_Genogram_Diagram_Template_Yellow_Theme_6ee4f818.docx	1/1	77/77	3/3	0	match	77/77	318/318	match
+words/chartset-008/docx/012_Project_Timeline_Template_Black_and_Brown_Theme_35c76550.docx	2/2	49/49	2/2	0	match	56/56	201/201	match
+words/chartset-008/docx/016_Project_Timeline_Template_Complete_Guide_7d36d09c.docx	1/1	159/159	3/3	0	match	159/159	633/633	match
+words/chartset-008/docx/035_Venn_Diagram_Template_Editable_Format_966dff5f.docx	1/1	39/39	2/2	0	match	40/40	142/142	match
+words/chartset-008/docx/046_Visual_Product_Roadmap_Template_Fillable_Format_582acab0.docx	1/1	93/93	2/2	0	match	99/99	591/591	match
+words/chartset-008/docx/092_Business_Case_Template_Convenient_Format_00786cce.docx	7/7	1025/1026	2/2	0	match	1027/1028	5699/5699	match
+words/chartset-008/docx/098_Business_Case_Template_Fillable_Layout_d0c5410e.docx	1/1	89/89	2/2	0	match	89/89	458/458	match
+words/chartset-008/docx/100_Business_Case_Template_Modern_Format_ff9e7282.docx	5/5	98/102	2/2	0	match	100/104	512/512	match
+words/chartset-009/docx/007_Free_Genogram_Diagram_Template_Green_and_Purple_Theme_8d2ba829.docx	1/1	34/34	3/3	0	match	34/34	137/137	match
+words/chartset-009/docx/017_Project_Timeline_Template_Customizable_Format_5d5ca2e8.docx	1/1	89/89	3/3	0	match	89/89	470/470	match
+words/chartset-009/docx/019_Project_Timeline_Template_Excellent_Layout_4ee62967.docx	1/1	95/95	2/2	0	match	100/100	331/331	match
+words/chartset-009/docx/027_Unit_Circle_Chart_Graphical_Chart_5462a579.docx	1/1	379/378	3/3	0	match	379/378	1557/1557	match
+words/chartset-009/docx/030_Unit_Circle_Chart_Points_System_23b5ef07.docx	1/1	114/114	3/3	0	match	124/118	403/403	match
+words/chartset-009/docx/037_Venn_Diagram_Template_Four_Circle_764829a0.docx	1/1	20/20	1/1	0	match	20/20	98/98	match
+words/chartset-009/docx/041_Visual_Product_Roadmap_Template_Blank_Format_63a3e010.docx	1/1	30/30	2/2	0	match	33/33	124/124	match
+words/chartset-009/docx/042_Visual_Product_Roadmap_Template_Colored_Background_89385cfb.docx	1/1	85/86	3/3	0	match	87/88	487/487	match
+words/chartset-009/docx/077_Storyboard_Template_Pink_and_Blue_Theme_805e82ab.docx	1/1	6/6	3/3	0	match	32/32	33/33	match
+words/chartset-009/docx/082_Printable_Graph_Paper_Template_Colored_Background_9092cf9b.docx	1/1	3/3	1/1	0	match	6/6	14/14	match
+words/chartset-010/docx/020_Project_Timeline_Template_Modern_Theme_0c215d87.docx	1/1	109/109	2/2	0	match	122/122	316/316	match
+words/chartset-010/docx/023_Unit_Circle_Chart_Circular_Percentage_790f7b75.docx	1/1	107/107	3/3	0	match	107/107	550/550	match
+words/chartset-010/docx/026_Unit_Circle_Chart_Four_Quadrants_09bf3ed1.docx	1/1	99/99	4/3	0	match	153/153	418/418	match
+words/chartset-010/docx/028_Unit_Circle_Chart_Optimized_Graph_83d9c756.docx	1/1	317/305	3/3	0	match	317/305	1220/1218	match
+words/chartset-010/docx/032_Venn_Diagram_Template_Brown_Theme_d5b549f0.docx	1/1	43/43	1/1	0	match	43/43	195/195	match
+words/chartset-010/docx/051_Organogram_Template_Basic_Theme_e6464d06.docx	1/1	23/23	2/2	0	match	23/23	60/60	match
+words/chartset-010/docx/056_Organogram_Template_Square_Theme_38f373d4.docx	1/1	56/56	1/1	0	match	56/56	235/235	match
+words/chartset-010/docx/066_Work_Breakdown_Structure_Template_Colored_Background_c27ff248.docx	1/1	54/54	1/1	0	match	54/54	255/255	match
+words/chartset-010/docx/067_Work_Breakdown_Structure_Template_Gray_Theme_89f8be8b.docx	1/1	37/37	1/1	0	match	37/37	237/237	match
+words/chartset-010/docx/090_Business_Case_Template_Blue_Theme_108ff0f1.docx	1/1	41/41	2/2	0	match	47/47	263/263	match
+words/chartset-011/docx/015_Project_Timeline_Template_Colored_Background_6434b0e8.docx	2/2	50/50	4/4	0	match	54/54	211/211	match
+words/chartset-011/docx/022_Unit_Circle_Chart_Circle_A_and_B_19dbf275.docx	1/1	195/195	4/4	0	match	219/219	1047/1047	match
+words/chartset-011/docx/029_Unit_Circle_Chart_Pie_Theme_8a922142.docx	1/1	113/114	3/2	0	match	113/114	568/568	match
+words/chartset-011/docx/039_Venn_Diagram_Template_Simple_Format_6f82661d.docx	1/1	35/35	2/2	0	match	38/38	161/161	match
+words/chartset-011/docx/040_Venn_Diagram_Template_Three_Circle_80f32f5e.docx	1/1	52/52	3/3	0	match	61/61	240/240	match
+words/chartset-011/docx/043_Visual_Product_Roadmap_Template_Customizable_Format_ee0fe5b1.docx	1/1	184/184	3/3	0	match	186/186	1099/1099	match
+words/chartset-011/docx/061_Nursing_Concept_Map_Template_fb9816f0.docx	1/1	21/21	3/2	0	match	23/23	150/150	match
+words/chartset-011/docx/064_Foot_Reflexology_Chart_Customizable_Format_79b7db06.docx	1/1	41/41	1/1	0	match	41/41	184/184	match
+words/chartset-011/docx/065_Work_Breakdown_Structure_Template_Blue_Theme_2b207f62.docx	1/1	28/29	2/2	0	match	28/29	172/185	match
+words/chartset-011/docx/068_Work_Breakdown_Structure_Template_Green_Theme_63e69ed8.docx	1/1	85/85	2/2	0	match	86/86	493/493	match
+words/chartset-012/docx/008_Free_Genogram_Diagram_Template_Green_and_Yellow_Theme_9017c1a8.docx	1/1	70/70	3/3	0	match	70/70	295/295	match
+words/chartset-012/docx/013_Project_Timeline_Template_Blue_Background_4ea3475e.docx	1/1	98/98	3/3	0	match	100/100	312/312	match
+words/chartset-012/docx/021_Unit_Circle_Chart_3D_Pie_Chart_404247ab.docx	1/1	107/107	3/2	0	match	107/107	549/549	match
+words/chartset-012/docx/024_Unit_Circle_Chart_Colorful_Circles_7c92601e.docx	1/1	105/105	2/2	0	match	105/105	557/557	words
+words/chartset-012/docx/031_Venn_Diagram_Template_Blue_Theme_a9e417b8.docx	1/1	54/55	3/3	0	match	63/64	250/249	match
+words/chartset-012/docx/044_Visual_Product_Roadmap_Template_Editable_Format_c232a2c0.docx	1/1	66/67	3/3	0	match	66/67	263/271	match
+words/chartset-012/docx/050_Visual_Product_Roadmap_Template_Yellow_and_Blue_Theme_49b50744.docx	1/1	214/215	4/4	0	match	215/216	1282/1288	match
+words/chartset-012/docx/055_Organogram_Template_Horizontal_Structure_28a7e725.docx	1/1	67/66	1/1	0	match	68/67	402/402	match
+words/chartset-012/docx/095_Business_Case_Template_Easy_Format_61de7128.docx	1/1	56/56	2/2	0	match	74/74	348/348	match
+words/chartset-012/docx/096_Business_Case_Template_Editable_Layout_41fe0bc0.docx	1/1	34/34	2/2	0	match	40/40	235/235	match
+words/chartset-013/docx/038_Venn_Diagram_Template_Off_White_and_Blue_Theme_9dff385e.docx	1/1	40/41	3/2	0	match	42/43	180/180	match
+words/chartset-013/docx/047_Visual_Product_Roadmap_Template_Professional_Layout_2ff4499e.docx	1/1	51/51	3/3	0	match	55/55	224/225	match
+words/chartset-013/docx/048_Visual_Product_Roadmap_Template_Quality_Layout_f38f7aee.docx	1/1	61/61	2/2	0	match	62/62	402/402	match
+words/chartset-013/docx/059_Disease_Concept_Map_Template_4acf63f2.docx	1/1	19/19	2/2	0	match	19/19	130/130	match
+words/chartset-013/docx/060_Human_Body_Concept_Map_Template_ac872cfb.docx	1/1	29/29	2/2	0	match	29/29	138/138	match
+words/chartset-013/docx/069_Work_Breakdown_Structure_Template_Professional_Format_1e02dce1.docx	1/1	108/108	1/1	0	match	110/110	298/298	match
+words/chartset-013/docx/072_Storyboard_Template_Colored_Theme_28524a15.docx	1/1	43/43	2/2	0	match	64/64	197/197	match
+words/chartset-013/docx/073_Storyboard_Template_Easy_to_Use_44ce05fc.docx	1/1	46/46	3/3	0	match	57/54	210/210	match
+words/chartset-013/docx/075_Storyboard_Template_Fillable_Format_7fa01641.docx	1/1	61/61	3/3	0	match	109/109	316/316	match
+words/chartset-013/docx/091_Business_Case_Template_Complete_Guide_cb91a140.docx	5/5	586/590	3/3	0	match	628/632	3134/3134	match
+words/chartset-014/docx/011_Project_Timeline_Template_Beautiful_Theme_2336e680.docx	1/1	158/158	4/4	0	match	158/158	885/885	match
+words/chartset-014/docx/014_Project_Timeline_Template_Blue_and_Green_Theme_a8311fa1.docx	1/1	168/168	3/3	0	match	168/168	820/820	match
+words/chartset-014/docx/045_Visual_Product_Roadmap_Template_Excellent_Format_e364063c.docx	1/1	42/42	3/3	0	match	47/47	235/235	match
+words/chartset-014/docx/062_Vocabulary_Concept_Map_Template_2f7c1c09.docx	1/1	11/11	2/1	0	match	11/11	76/76	match
+words/chartset-014/docx/063_Foot_Reflexology_Chart_Complete_Guide_cf5ed992.docx	1/1	75/75	2/2	0	match	75/75	402/402	match
+words/chartset-014/docx/070_Storyboard_Template_Blank_Format_fc41673a.docx	1/1	8/8	2/2	0	match	44/44	42/42	match
+words/chartset-014/docx/071_Storyboard_Template_Cartoon_Theme_ae113de2.docx	1/1	21/21	2/2	0	match	41/41	141/141	match
+words/chartset-014/docx/076_Storyboard_Template_Gray_Theme_1e5fd5e5.docx	1/1	2/2	3/3	0	match	32/32	10/10	match
+words/chartset-014/docx/078_Storyboard_Template_Pink_and_Gray_Theme_ea89553f.docx	1/1	54/54	3/3	0	match	84/84	253/253	match
+words/chartset-014/docx/079_Storyboard_Template_Simple_Format_81653703.docx	1/1	24/24	2/2	0	match	45/45	144/144	match
+words/done-001/doc/FAA-2013-0422-0009_attachment_1.doc	7/7	1845/1845	1/1	0	match	1907/1907	9308/9308	match
+words/done-001/doc/GLACIERBG.ETT.doc	1/1	408/408	3/3	0	match	411/411	2397/2397	match
+words/done-001/doc/LENTOBUSSIAIKATAULU.-31.10.-31.12.2022.doc	1/1	104/104	3/3	0	match	128/128	716/716	match
+words/done-001/doc/advert-for-draft-decision-airbus-epr-bm3965ia-v006.doc	2/2	385/385	3/3	0	match	387/387	2104/2104	match
+words/done-001/doc/foca_form_1.doc	3/3	1672/1672	2/2	0	match	1687/1687	8518/8518	match
+words/done-001/docx/CMTA_Airport_Transportation.docx	1/1	255/255	2/2	0	match	260/260	1305/1305	match
+words/done-001/docx/Pre-Application_Letter_of_Intent_Example.docx	1/1	350/350	2/2	0	match	350/350	1780/1780	match
+words/done-001/docx/Sample_PAO-PSO_91-113_Letter.docx	1/1	307/307	2/2	0	match	317/317	1629/1629	match
+words/done-001/docx/Service-Bulletin-SDFNR5-April-25-2023-FNR-TRANSMISSION-LUBRICATION.docx	1/1	297/297	3/3	0	match	300/300	1223/1223	match
+words/done-001/docx/private-hire-operators-licensed.docx	2/2	237/237	2/2	0	match	239/239	1417/1417	match
+words/done-002/doc/Bull01-06-Reserve Training Standards.doc	6/6	1482/1482	2/2	0	match	1483/1483	7948/7948	match
+words/done-002/doc/FMRBullletinB-28.doc	2/2	461/461	3/3	0	match	461/461	2835/2835	match
+words/done-002/doc/prison-population-bulletin-june.doc	4/4	1425/1425	2/2	0	match	1440/1440	6038/6038	match
+words/done-002/docx/AUWG min 4-3-24 final.docx	2/2	647/647	2/2	0	match	649/649	3463/3463	match
+words/done-002/docx/CSCRS_Technical-Report-Documentation-Page-with-instructions.docx	2/2	719/719	3/3	0	match	720/720	3936/3936	match
+words/done-002/docx/FAA-High-Level-Org-Chart.docx	3/3	673/673	4/4	0	match	812/812	4204/4204	match
+words/done-002/docx/Interview-mit-Manfred1-Müller.docx	2/2	801/801	2/2	0	match	805/805	4744/4744	match
+words/done-002/docx/easa-form-1.docx	5/5	1421/1421	2/2	0	match	1434/1434	7489/7489	match
+words/done-002/docx/lk03_17.docx	2/2	367/367	2/2	0	match	373/373	1931/1931	match
+words/done-002/docx/s33song-beverlyactproductionofdocuments.docx	2/2	571/571	3/3	0	match	572/572	3227/3227	match
+words/done-003/doc/10795.doc	4/4	853/857	3/4	0	match	860/864	5424/5428	match
+words/done-003/doc/96-3-clement-data.doc	7/7	1469/1469	4/4	0	match	1513/1513	10193/10193	match
+words/done-003/doc/DEP2008-1900.doc	4/4	998/998	5/4	0	match	1011/1011	5335/5335	match
+words/done-003/doc/II.1.2_Hypoxia.doc	13/13	3729/3732	2/2	0	match	3738/3741	19253/19253	match
+words/done-003/doc/Temp16.doc	2/2	669/669	3/3	0	match	671/671	3431/3431	match
+words/done-003/docx/191216_Lesefassung_Nachtflugregelung.docx	3/3	907/906	4/4	0	match	910/909	5435/5435	match
+words/done-003/docx/2015-April-SWIM_Users_Forum-Q&A.docx	5/5	1701/1700	4/4	0	match	1705/1704	8333/8333	match
+words/done-003/docx/DRX-Ascend System Course Description.docx	2/2	475/475	4/4	0	match	512/512	2950/2950	match
+words/done-003/docx/Technical_Issue_Report_Form.docx	2/2	341/341	4/4	0	match	406/406	1922/1922	match
+words/done-003/docx/mde087077~283.docx	4/4	987/987	3/3	0	match	997/997	5806/5806	match
+words/done-004/doc/07-04.doc	3/3	1069/1066	5/5	0	match	1078/1075	5485/5473	match
+words/done-004/doc/2ca950374241722b8ea7c132dfce63ae.doc	3/3	949/949	4/4	0	match	1051/1051	5118/5118	match
+words/done-004/doc/RobertQ_Service.doc	4/4	547/547	2/2	0	match	587/587	2735/2735	match
+words/done-004/doc/opic 5--Case Studies Movie and Aviation Industries.doc	5/5	1194/1194	5/5	0	match	1196/1196	5293/5293	match
+words/done-004/docx/1528039320.docx	1/1	289/289	2/2	0	match	292/292	1790/1790	match
+words/done-004/docx/461249.docx	5/5	1671/1669	4/4	0	match	1710/1708	8911/8911	match
+words/done-004/docx/How-to-Write-an-Architecture-Document-for-a-Technology-Service.docx	3/3	953/953	3/3	0	match	960/960	5482/5482	match
+words/done-004/docx/License App Instructions 2-22.docx	3/3	1002/1002	4/4	0	match	1036/1036	5737/5737	match
+words/done-004/docx/PAT-047 - Architecture and Detailed Design Assessment.docx	4/4	1081/1081	6/6	0	match	1094/1094	6385/6385	match
+words/done-004/docx/Software Architecture Document Template.docx	3/3	589/589	5/5	0	match	604/604	3390/3390	match
+words/done-005/doc/316r_a_e.doc	14/14	4372/4374	4/4	0	match	4417/4419	24142/24160	match
+words/done-005/doc/316r_a_f.doc	14/14	4581/4585	4/4	0	match	4631/4635	25168/25186	match
+words/done-005/doc/Theft-Restitution-Letter-Vancouver-ASC-2005.doc	1/1	262/262	2/2	0	match	265/265	1319/1319	match
+words/done-005/doc/loi_format_letter_of_intent-a-320-214-a330.doc	10/10	3346/3346	4/5	0	match	3372/3372	16753/16753	match
+words/done-005/docx/2024-12_Comlux_opens_Maintenance_and_Service_Center_in_Dubai.docx	3/3	668/668	4/3	0	match	672/672	3631/3631	match
+words/done-005/docx/BID_ACKNOWLEDGEMENT_FORM_FOR_A320.docx	2/2	294/295	3/3	0	match	310/311	1529/1529	match
+words/done-005/docx/Technical Report and Technical Update Guidelines.docx	4/4	1205/1205	5/5	0	match	1251/1251	6716/6716	match
+words/done-005/docx/f445896eb008d14c1746fc37d412dc22.docx	15/16	5453/5453	3/3	0	pages	5657/5657	27066/27066	pages
+words/done-005/docx/healthcare-reform-nsa-consumer-bulletin.docx	4/4	1701/1701	5/5	0	match	1711/1711	8645/8645	match
+words/done-005/docx/part-147_approval list_20230119.docx	2/2	732/735	5/5	0	match	755/758	3563/3570	match
+words/done-006/doc/003.doc	5/4	984/984	3/3	0	pages	999/999	5761/5761	pages
+words/done-006/doc/1244277 1 Comment.doc	2/2	389/389	5/5	0	match	393/393	1745/1745	match
+words/done-006/doc/LHD-230-application-for-the-approval-of-an-aircraftr.doc	2/2	774/774	3/3	0	match	781/779	4383/4383	match
+words/done-006/doc/P200904290238_0238_51880.doc	3/3	308/308	4/4	0	match	312/312	1921/1921	match
+words/done-006/doc/Wales_Office_Quarter_4_Ministerial_Transparency_Return.DOC	6/6	941/941	4/4	0	match	955/955	5642/5642	match
+words/done-006/docx/62599_FRANCE-BRAZIL- Air France Flight 447 crash.docx	18/18	6133/6133	2/2	0	match	6166/6166	30134/30134	match
+words/done-006/docx/SDL_FSDO_Part91_LOA_Checklist.docx	2/2	424/424	3/3	0	match	430/430	2375/2375	match
+words/done-006/docx/cacs-206-1751218225.docx	2/2	347/347	3/3	0	match	348/348	1925/1925	match
+words/done-006/docx/healthcare-reform-nsa-provider-bulletin.docx	5/5	1936/1936	7/7	0	match	1980/1980	11209/11209	match
+words/done-006/docx/technical-memo-format.docx	5/5	1812/1812	5/5	0	match	1846/1846	9300/9300	match
+words/done-007/doc/RNW167A-150428.doc	9/9	1767/1767	5/5	0	match	1770/1770	9336/9336	match
+words/done-007/doc/chapter 12.doc	12/12	3671/3671	4/4	0	match	3683/3683	18868/18868	match
+words/done-007/doc/congregationalhistories_ky_2023.doc	1/1	247/247	3/3	0	match	252/252	1579/1579	match
+words/done-007/docx/09.docx	2/2	463/463	4/4	0	match	463/463	2608/2608	match
+words/done-007/docx/0c662f5c948a7d81d32ffd833c5cc59421a5f522.docx	1/1	397/400	4/4	0	match	417/420	2004/2004	match
+words/done-007/docx/Press release_EUREKA labels ITEA 3 Cluster.docx	2/2	827/813	3/3	0	match	843/828	4331/4264	match
+words/done-007/docx/final-technical-report-template.docx	6/6	1123/1129	6/6	0	match	1136/1142	6153/6153	match
+words/done-007/docx/johnson_hall_service_log.pdf.docx	1/1	274/274	6/6	0	match	317/317	1364/1364	match
+words/done-007/docx/technical-report-template.docx	7/7	728/715	3/2	0	match	738/725	3860/3815	match
+words/done-007/docx/template-technical-report.docx	10/10	837/837	3/3	0	match	859/859	4363/4363	match
+words/done-008/doc/1245685 1 Comment.doc	1/1	326/326	7/7	0	match	327/327	1619/1619	match
+words/done-008/doc/2024-2nd-quarter-case-summaries.doc	10/10	5675/5675	4/4	0	match	5677/5677	28056/28056	match
+words/done-008/doc/FlightLaws.doc	4/4	1073/1074	5/5	0	match	1132/1133	5533/5533	match
+words/done-008/doc/PUR-0012-UTAS-GRAMS-SPA-Template-1-25-2024.doc	6/6	1027/1027	4/4	0	match	1083/1083	6234/6234	match
+words/done-008/docx/4400-91_Proposal_To_Lease_Space_10-2024.docx	6/6	3280/3280	5/5	0	match	3304/3304	16850/16850	match
+words/done-008/docx/ECSS-E-ST-50-16C-Annex-A(30September2021).docx	4/4	670/670	4/4	0	match	691/691	3613/3613	match
+words/done-008/docx/FAA-2017-0628-0002_attachment_1.docx	4/4	638/638	5/5	0	match	641/641	3614/3614	match
+words/done-008/docx/Lessons-Learned-Bulletin-Dorset-version-to-IIRG-V5.docx	3/3	1531/1531	4/4	0	match	1553/1553	8111/8111	match
+words/done-008/docx/UAS-SGI_waiver_approval_request_form.docx	2/2	489/489	3/3	0	match	513/513	2731/2731	match
+words/done-008/docx/draft-variation-notice-airbus-bm3965ia-v006-vs-comments.docx	9/9	1498/1499	3/3	0	match	1536/1537	8104/8104	match
+words/done-009/doc/2013-op12-Annex III - Curriculum Vitae.doc	3/3	332/332	2/3	0	match	359/359	2004/2004	match
+words/done-009/doc/237287_0486190101_0486190101_geolink2neu.doc	8/8	1430/1430	4/4	0	match	1605/1605	9990/9990	match
+words/done-009/doc/A380MaenPressRel.doc	3/3	770/770	6/6	0	match	789/790	3944/3944	match
+words/done-009/doc/CP-ETSO template_v2020.DOC	6/6	1110/1111	5/6	0	match	1135/1136	6448/6448	match
+words/done-009/doc/certification-flight-standards-doc-oeb-supporting-documents-tgl-TGL26-section-5-REV10.doc	8/8	1221/1221	4/4	0	match	1268/1268	6269/6269	match
+words/done-009/docx/Case-Study-Heathrow-Airport.docx	3/3	1184/1184	6/6	0	match	1216/1216	6461/6461	match
+words/done-009/docx/Contract_Check_Pilot_Sample_LOA.docx	4/4	1324/1324	6/6	0	match	1336/1336	7205/7205	match
+words/done-009/docx/SWDD-template.docx	6/6	1078/1079	6/6	0	match	1079/1080	5833/5833	match
+words/done-009/docx/form_1123_application_form_rvsm_spa.docx	3/3	578/578	5/5	0	match	638/638	3321/3321	match
+words/done-009/docx/technical report template.docx	10/10	845/858	4/4	0	match	846/859	4095/4095	match
+words/done-010/doc/1528364855.doc	3/3	1072/1072	4/5	0	match	1103/1104	6219/6219	match
+words/done-010/doc/361400CSLegislation1RF01PUBLIC1.doc	35/35	12615/12621	4/4	0	match	12642/12648	68170/68170	match
+words/done-010/doc/f111.doc	11/11	3347/3347	6/6	0	match	3392/3392	18181/18181	match
+words/done-010/docx/195584360.docx	20/20	7842/7845	5/5	0	match	8011/8014	45562/45562	match
+words/done-010/docx/5709.16 ch.40_mgfinal.docx	32/32	9856/9820	4/4	0	match	10069/10033	59010/59010	match
+words/done-010/docx/Checklist for TC STC ETSO data packages to FAA_TIP rev 5.docx	3/3	1102/1102	4/4	0	match	1102/1102	6062/6062	match
+words/done-010/docx/FG-AI4NDM-TR-skeleton_template.docx	5/5	434/434	7/7	0	match	439/439	2037/2029	match
+words/done-010/docx/PM-apeech-Handover-of-New-Airbus-Aircraft-for-Fiji-Airways-Dec.-15th.docx	5/5	582/582	4/4	0	match	584/584	2742/2742	match
+words/done-010/docx/Writing a technical report (SCE subject guide).docx	4/4	1221/1221	8/8	0	match	1267/1267	6403/6403	match
+words/done-010/docx/te.iors.00048-002 SUP Questionnaire.docx	4/4	620/620	2/2	0	match	640/640	3627/3627	match
+words/done-011/doc/135.doc	14/14	5262/5256	7/7	0	match	5319/5311	26659/26620	match
+words/done-011/doc/AAC-AD-No-2021-01-Boeing-737-8-and-737-9-MAX.doc	20/20	7453/7453	6/7	0	match	7512/7512	38764/38764	pages
+words/done-011/docx/Company-profile-2022-EN.docx	5/5	1170/1170	5/5	0	match	1211/1212	5630/5630	match
+words/done-011/docx/b053-19.docx	2/2	491/491	2/2	0	match	493/493	2916/2916	match
+words/done-011/docx/eTAR_External_Web_tool_Tip_Sheet_mh.docx	4/4	930/928	4/3	0	match	936/934	4604/4579	match
+words/done-011/docx/f2_registro_de_aprovacao_com_pbcs_EN.docx	2/2	456/454	6/4	0	match	461/458	2293/2286	match
+words/done-011/docx/monthly-content-feeder.docx	18/18	5890/5890	9/9	0	match	6021/6021	34555/34555	match
+words/done-011/docx/part-145-approval list (1).docx	8/8	1590/1592	5/5	0	match	1616/1618	8409/8415	match
+words/done-011/docx/part-145-approval list 2025.docx	7/7	1454/1455	5/5	0	match	1477/1478	7822/7822	match
+words/done-011/docx/tibs_guidelines_2.docx	13/13	3143/3144	8/8	0	match	3168/3169	16450/16450	match
+words/done-012/doc/AirbusCallouts.doc	24/24	8455/8461	5/5	0	match	9159/9164	43584/43584	match
+words/done-012/doc/RMI_Document_Repository_Public-Reprts_GettingOffOil.doc	6/6	2729/2730	5/5	0	match	2731/2732	14617/14617	match
+words/done-012/docx/19-06 Assistive Technology TAB Final - 508.docx	8/8	3240/3240	8/8	0	match	3267/3267	18195/18195	match
+words/done-012/docx/20110608_psp.docx	3/3	671/671	4/4	0	match	679/679	4704/4704	match
+words/done-012/docx/FO.FCTOA_.000129 Application for activities related to FSTD.docx	6/6	1690/1684	6/5	0	match	1719/1712	9023/8979	match
+words/done-012/docx/Leadership Information Article.docx	3/3	1452/1452	4/4	0	match	1460/1460	8107/8107	match
+words/done-012/docx/b050-19.docx	3/3	872/872	4/4	0	match	874/874	4882/4882	match
+words/done-012/docx/bulletin.docx	14/14	3253/3253	5/5	0	match	3292/3292	17036/17036	match
+words/done-012/docx/slcc-architecture-uu-architecture.docx	4/4	1205/1205	7/7	0	match	1236/1236	6328/6328	match
+words/done-012/docx/technical-architecture.docx	8/8	1116/1120	10/9	0	match	1138/1141	6960/6961	match
+words/done-013/doc/1228841571067_2009_TPPT_13__2007_TPPT_102__R-108535759.doc	12/12	2797/2803	5/5	0	match	2797/2803	14396/14396	match
+words/done-013/doc/1257259179492_2007_TPPT_102_Supporting_Doc_2-434003080.doc	9/9	2120/2124	4/4	0	match	2158/2163	10122/10122	match
+words/done-013/doc/Reid.doc	4/4	1553/1553	5/6	0	match	1570/1570	8425/8425	match
+words/done-013/doc/omrIMInterpretiveGuideLine.doc	2/2	376/382	4/4	0	words	377/383	2319/2370	words
+words/done-013/docx/Form-SM-76A-_-CAR-OPS-2A-Instruments-and-Equipment-Compliance-Statement-_-11.docx	3/3	615/620	7/7	0	match	627/632	3393/3393	match
+words/done-013/docx/SPA-11_mcar_part-11_v2.9.docx	49/49	13956/13952	3/3	0	match	13983/13983	70937/70763	match
+words/done-013/docx/Sol PJ14-03-04 Solution Contextual.docx	5/5	2067/2071	5/6	0	match	2105/2109	11366/11366	match
+words/done-013/docx/easa-regulations-update-20.docx	22/22	2738/2738	5/5	0	match	2844/2844	14939/14939	match
+words/done-013/docx/gpp-pr-top-7-office-markets-4q-2023.docx	4/4	1067/1066	5/3	0	match	1101/1100	5669/5669	match
+words/done-013/docx/hdss-bulletin-issue-285-25-june-2025.docx	10/10	3585/3528	7/7	0	match	3648/3591	19889/19647	match
+words/done-014/doc/300502-Mecenat-Airbus-Simusante_CHU-Amiens-Picardie.doc	1/1	332/332	4/4	0	match	338/337	1887/1887	match
+words/done-014/doc/644730BRI0mna000BOX361539B00public0.doc	5/5	2328/2328	7/7	0	match	2339/2339	12838/12838	match
+words/done-014/doc/PK_FlugzeugeStricken.doc	7/7	1394/1408	7/7	0	match	1441/1452	10002/10066	match
+words/done-014/docx/1603642410-MoM-CASCOM-06-2020-draft04.docx	9/9	4469/4469	8/8	0	match	4604/4604	24054/24054	match
+words/done-014/docx/1_tpr_template__from_fy14_.docx	8/8	3563/3563	10/10	0	match	3579/3579	19095/19095	match
+words/done-014/docx/231164_SystemDesignDocument.docx	28/28	6558/6592	6/6	0	match	6693/6739	38956/38925	match
+words/done-014/docx/AFS-050-004-F2_0i.docx	8/8	2226/2228	10/9	0	match	2382/2384	13442/13442	match
+words/done-014/docx/Regulations Governing the Status, Basic Rights and Duties of Officials other than Secretariat Officials, and Experts on Mission.docx	18/18	6393/6395	5/4	0	match	6450/6452	33613/33604	match
+words/done-014/docx/exhibit-06---technical-architecture-template.docx	8/8	1092/1079	12/11	0	match	1103/1088	6774/6775	match
+words/done-014/docx/fleetfastfacts16nov2023.docx	1/1	120/120	4/5	0	match	129/129	635/635	match
+words/done-015/doc/2013_11.doc	8/8	2607/2613	9/9	0	match	2629/2638	13594/13594	match
+words/done-015/doc/SFSP_2013-02_Bulletin.doc	4/4	935/942	6/6	0	match	957/965	5106/5136	match
+words/done-015/docx/03_Technical_Report_(progress)_template.docx	10/10	1410/1408	6/6	0	match	1431/1429	7403/7403	match
+words/done-015/docx/Agile_Arc_SysDes.docx	20/20	5736/5737	11/11	0	match	5821/5822	33897/33905	match
+words/done-015/docx/DOA_Template_Form_Type_Certification_Programme.docx	20/20	5373/5362	5/5	0	match	5452/5441	28542/28545	match
+words/done-015/docx/JEMIT_Template.docx	4/4	1616/1628	9/10	0	match	1686/1698	8656/8677	match
+words/done-015/docx/PI-doc.-no.-2E-Technical-Review-Report.docx	12/12	1792/1794	10/8	0	match	1939/1942	9882/9882	match
+words/done-015/docx/Sample_SQMS_Program.docx	61/61	15966/15975	9/9	0	match	16251/16260	86734/86680	match
+words/done-015/docx/airbus-pdf-information-package_v1-4.docx	9/9	1299/1303	7/7	0	match	1342/1346	6448/6448	match
+words/done-015/docx/system_design__technical_architecture_template.docx	17/17	1720/1748	6/6	0	match	1789/1817	9907/9910	match
+words/done-016/doc/120509coss.doc	25/25	7179/7179	7/7	0	match	7228/7228	38126/38126	match
+words/done-016/doc/150_5335_5a.doc	64/63	19140/19081	9/8	0	pages	19331/19271	95749/95814	pages
+words/done-016/docx/AC-150-5370-10G-updated-201604.docx	696/697	280590/280576	13/11	0	pages	285214/285201	1432510/1432534	pages
+words/done-016/docx/Allegiant_Company_Profile_with_History.docx	3/3	1153/1153	3/3	0	match	1156/1156	6588/6588	match
+words/done-016/docx/Annex-10-to-the-Aircraft-Maintenance-Specialist-Certification-Rule-GCAA.docx	148/148	35041/35041	5/4	0	match	35311/35311	189432/189432	match
+words/done-016/docx/HC-Bulletin-template.docx	5/5	462/462	7/7	0	match	521/524	2967/2967	match
+words/done-016/docx/PES-Technical-Report-Template_Jan_2019.docx	14/14	2665/2662	8/8	0	match	2739/2737	13435/13433	match
+words/done-016/docx/SPA-06_mcar_part-6_and_IS_v2.9.docx	85/85	27413/27422	5/5	0	match	27425/27445	143116/142938	match
+words/done-016/docx/TE.CAO.00125 Foreign Part 145 approvals - OJT Logbook.docx	15/15	2790/2795	6/6	0	match	3173/3178	15282/15282	match
+words/done-016/docx/dragon1-enterprise-architecture-document-example-v0.1d.docx	13/13	1636/1642	9/8	0	match	1658/1664	10179/10179	match
+words/done-016/docx/t_TEMPforInvProgs.docx	26/26	5020/5047	6/6	0	match	5071/5117	27737/27737	match
+words/drawingset-001/docx/WordArt_Shapes_Arrows_Catalog1.docx	52/52	1972/1972	4/4	0	match	2468/2468	11390/11390	match
+words/extra-001/doc/762.doc	23/23	4121/4122	8/8	0	match	4145/4146	22603/22603	match
+words/extra-001/doc/info-bulletin-601.doc	6/6	1302/1302	5/5	0	match	1320/1320	6913/6913	match
+words/extra-001/docx/ABCD-SDE-23-00 - Avionic System Description - 17.02.16 - v1.docx	29/29	8402/8426	8/8	0	match	8532/8558	43746/43748	match
+words/extra-001/docx/ABCD-WB-08-00 Weight and Balance Report - v1 08.03.16.docx	12/12	2635/2611	7/6	0	match	2673/2651	13015/12781	match
+words/extra-001/docx/UG.CAO.00006 Foreign Part 145 approvals - User Guide for Applicants & Approval Holders.docx	29/29	7685/7403	9/9	0	words	7839/7556	42116/40732	words
+words/extra-001/docx/UG.CAO.00133 Foreign Part 145 approvals - Language.docx	18/18	3674/3668	5/5	0	match	3769/3763	20689/20685	match
+words/metrics-001/doc/A320SimNotes.doc	42/42	13846/13919	7/10	0	match	15004/14999	67430/67512	match
+words/metrics-001/doc/手机免提系统TSB.doc	3/2	98/91	8/7	0	pages	102/94	1189/1172	pages
+words/metrics-001/docx/02_mcar_part-2_and_IS_v2.10.docx	314/312	80524/80518	4/4	0	pages	81128/81129	421243/414481	pages
+words/metrics-001/docx/AWR OPS-AOC 044 Statement of Compliance RVSM  Rev 04 01 Feb 2024.docx	15/15	2126/2125	8/6	0	match	2266/2259	11073/11071	match
+words/metrics-001/docx/FRE-03_mcar_part-3_and_IS_v2.9.docx	76/76	24703/24703	2/2	0	match	25800/25801	125011/124706	match
+words/metrics-001/docx/OM template for non-complex NCC operators_August 2016.docx	166/165	51824/51826	8/8	0	pages	52851/52865	270077/270009	pages
+words/metrics-001/docx/SPA-02_mcar_part-2_and_IS_v2.9.docx	268/266	94902/94850	4/4	0	pages	94915/94877	485953/479178	pages
+words/metrics-001/docx/review-welsh-government-communications-mister-peter-mandelson.docx	14/14	3017/3015	6/6	0	match	3052/3053	14961/14961	match
+words/missing-001/docx/33004.docx	47/47	11973/11968	15/14	0	match	12152/12146	60488/60488	match
+words/missing-001/docx/May 25 bulletin focus on carers in the workplace.docx	4/4	521/521	3/3	0	match	538/537	2721/2721	match
+words/missing-001/docx/xx_SETIS_PWS_template_10.19.22.docx	15/15	4922/4918	6/6	0	match	4979/4976	25252/25211	match
+words/missing-002/docx/CRIF - SpÃ©cification technique - Socle applicatif.docx	28/29	6590/6618	10/10	0	pages	7034/7068	39524/39783	pages
+words/pagination-001/doc/1447.doc	4/3	959/959	5/5	0	pages	962/962	5153/5153	pages
+words/pagination-001/doc/A_320.doc	118/150	18593/18809	4/4	0	pages	19005/19221	88958/90539	pages
+words/pagination-001/docx/24-25_FAA_Holdover_Tables.docx	155/141	67146/66827	9/9	0	pages	71175/70915	300664/298427	pages
+words/pagination-001/docx/ESPN-R - MCF - Manual - Ed1.0 - For Publication.docx	35/35	9405/9433	7/5	0	match	9515/9543	49388/49328	match
+words/pagination-001/docx/ESPN-R - MCF - RA - Ed1.docx	58/59	12128/12209	8/8	0	pages	12250/12331	65676/66102	pages
+words/pagination-001/docx/FAA 2025-26 Holdover Tables.docx	167/154	74849/74566	10/10	0	pages	79465/79182	336754/334493	pages
+words/pagination-001/docx/FO.FCTOA.00010 Application for a Part-ORA ATO Approval.docx	16/16	4514/4513	6/7	0	match	4579/4578	23321/23316	match
+words/pagination-001/docx/report-template.docx	20/20	3013/3025	4/4	0	match	3020/3032	15322/15434	match
+words/pagination-001/docx/template---tpr-technical-progress-report-with-guidance.docx	7/8	1840/1841	8/8	0	pages	1885/1886	9713/9713	pages
+words/pagination-002/doc/150_5300_13_chg12.doc	31/33	12657/12696	10/7	0	pages	12727/12764	61921/61920	pages
+words/pagination-002/doc/absrc-pac-01-info-note-en.doc	6/7	1302/1302	5/5	0	pages	1325/1325	6872/6874	pages
+words/pagination-002/docx/docs-quality-MA.IMS.00001-Integrated-Management-System-manual.docx	44/44	12206/12233	6/6	0	match	12556/12587	73624/73618	match
+words/pagination-003/docx/150-5370-10H.docx	727/721	292681/292603	15/13	0	pages	298749/298672	1508484/1508153	pages
+words/pagination-003/docx/EHEST-SMS-Safety-Management-Manual-V2.docx	82/82	19270/19222	8/8	0	match	19718/19670	105494/105180	match
+words/table-001/doc/150_5300_13_chg10.doc	77/76	23727/23322	10/8	0	pages	23946/23515	117451/116063	pages
+words/table-001/docx/A1. EASA Form 2.docx	7/7	2208/2205	4/4	0	match	2243/2240	11547/11527	match
+words/table-001/docx/B11. TE.CAO.00129  Experience  logbook.docx	6/6	1249/1256	6/6	0	match	1277/1285	6685/6685	match
+words/table-001/docx/approvals-and-standardisation-organisation-approvals-docs-part-145-annex-B-B11.-TE.CAO.00129-Foreign-Part-145-approvals---Experience--logbook.docx	6/6	1095/1097	6/6	0	match	1115/1117	5747/5747	match

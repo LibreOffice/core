@@ -1,0 +1,177 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  XRay.Office.Core -> /home/user/wt-pivotfmt/dotnet/src/XRay.Office.Core/bin/Debug/net10.0/XRay.Office.Core.dll
+  XRay.Office.Markup -> /home/user/wt-pivotfmt/dotnet/src/XRay.Office.Markup/bin/Debug/net10.0/XRay.Office.Markup.dll
+  XRay.Office.Text -> /home/user/wt-pivotfmt/dotnet/src/XRay.Office.Text/bin/Debug/net10.0/XRay.Office.Text.dll
+  XRay.Office.Containers -> /home/user/wt-pivotfmt/dotnet/src/XRay.Office.Containers/bin/Debug/net10.0/XRay.Office.Containers.dll
+  XRay.Office.Rendering -> /home/user/wt-pivotfmt/dotnet/src/XRay.Office.Rendering/bin/Debug/net10.0/XRay.Office.Rendering.dll
+  XRay.Office.Vector -> /home/user/wt-pivotfmt/dotnet/src/XRay.Office.Vector/bin/Debug/net10.0/XRay.Office.Vector.dll
+  XRay.Office.Ooxml -> /home/user/wt-pivotfmt/dotnet/src/XRay.Office.Ooxml/bin/Debug/net10.0/XRay.Office.Ooxml.dll
+  XRay.Office.MsBinary -> /home/user/wt-pivotfmt/dotnet/src/XRay.Office.MsBinary/bin/Debug/net10.0/XRay.Office.MsBinary.dll
+  XRay.Office.OpenDocument -> /home/user/wt-pivotfmt/dotnet/src/XRay.Office.OpenDocument/bin/Debug/net10.0/XRay.Office.OpenDocument.dll
+  XRay.Office.Presentations -> /home/user/wt-pivotfmt/dotnet/src/XRay.Office.Presentations/bin/Debug/net10.0/XRay.Office.Presentations.dll
+  XRay.Office.Spreadsheets -> /home/user/wt-pivotfmt/dotnet/src/XRay.Office.Spreadsheets/bin/Debug/net10.0/XRay.Office.Spreadsheets.dll
+  XRay.Office.WordProcessing -> /home/user/wt-pivotfmt/dotnet/src/XRay.Office.WordProcessing/bin/Debug/net10.0/XRay.Office.WordProcessing.dll
+  XRay.Office -> /home/user/wt-pivotfmt/dotnet/src/XRay.Office/bin/Debug/net10.0/XRay.Office.dll
+  XRay.Office.TestKit -> /home/user/wt-pivotfmt/dotnet/tests/XRay.Office.TestKit/bin/Debug/net10.0/XRay.Office.TestKit.dll
+  XRay.Office.Fidelity.Tests -> /home/user/wt-pivotfmt/dotnet/tests/XRay.Office.Fidelity.Tests/bin/Debug/net10.0/linux-x64/XRay.Office.Fidelity.Tests.dll
+Test run for /home/user/wt-pivotfmt/dotnet/tests/XRay.Office.Fidelity.Tests/bin/Debug/net10.0/linux-x64/XRay.Office.Fidelity.Tests.dll (.NETCoreApp,Version=v10.0)
+A total of 1 test files matched the specified pattern.
+[xUnit.net 00:00:12.09]     XRay.Office.Fidelity.Tests.SheetDrawingComparisonTests.APictureIsDrawnWhereLibreOfficeDrawsIt(name: "sheet-rich-text.xlsx") [FAIL]
+  Failed XRay.Office.Fidelity.Tests.SheetDrawingComparisonTests.APictureIsDrawnWhereLibreOfficeDrawsIt(name: "sheet-rich-text.xlsx") [885 ms]
+  Error Message:
+   Shouldly.ShouldAssertException : mine.Box.Width
+    should be within
+0.1d
+    of
+94.904d
+    but was
+95.074d
+
+Additional Info:
+    sheet-rich-text.xlsx: picture 1 on page 3: width
+  Stack Trace:
+     at XRay.Office.Fidelity.Tests.SheetDrawingComparisonTests.APictureIsDrawnWhereLibreOfficeDrawsIt(String name) in /home/user/wt-pivotfmt/dotnet/tests/XRay.Office.Fidelity.Tests/SheetDrawingComparisonTests.cs:line 108
+   at InvokeStub_SheetDrawingComparisonTests.APictureIsDrawnWhereLibreOfficeDrawsIt(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithOneArg(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:49.99]     XRay.Office.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(fileName: "paginated.docx") [FAIL]
+  Failed XRay.Office.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(fileName: "paginated.docx") [1 s]
+  Error Message:
+   Shouldly.ShouldAssertException : => Math.Abs(actual.Points - expectedPoints)
+    should be less than or equal to
+0.5d
+    but was
+0.519755905511829d
+
+Additional Info:
+    paginated.docx: page 1, line 1 ("Section 1. kerning advance rasteriser layout ligature layout common advance add pay because separate"): right: 530.423 pt drawn, 529.903 pt rendered
+  Stack Trace:
+     at XRay.Office.Fidelity.Tests.PageDrawingComparisonTests.Close(Length actual, Double expectedPoints, String what) in /home/user/wt-pivotfmt/dotnet/tests/XRay.Office.Fidelity.Tests/PageDrawingComparisonTests.cs:line 244
+   at XRay.Office.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(String fileName) in /home/user/wt-pivotfmt/dotnet/tests/XRay.Office.Fidelity.Tests/PageDrawingComparisonTests.cs:line 127
+   at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+[xUnit.net 00:00:51.05]     XRay.Office.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(fileName: "paginated.fodt") [FAIL]
+  Failed XRay.Office.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(fileName: "paginated.fodt") [1 s]
+  Error Message:
+   Shouldly.ShouldAssertException : => Math.Abs(actual.Points - expectedPoints)
+    should be less than or equal to
+0.5d
+    but was
+0.519755905511829d
+
+Additional Info:
+    paginated.fodt: page 1, line 1 ("Section 1. kerning advance rasteriser layout ligature layout common advance add pay because separate"): right: 530.423 pt drawn, 529.903 pt rendered
+  Stack Trace:
+     at XRay.Office.Fidelity.Tests.PageDrawingComparisonTests.Close(Length actual, Double expectedPoints, String what) in /home/user/wt-pivotfmt/dotnet/tests/XRay.Office.Fidelity.Tests/PageDrawingComparisonTests.cs:line 244
+   at XRay.Office.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(String fileName) in /home/user/wt-pivotfmt/dotnet/tests/XRay.Office.Fidelity.Tests/PageDrawingComparisonTests.cs:line 127
+   at InvokeStub_PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(Object, Span`1)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:52.06]     XRay.Office.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(fileName: "paginated.doc") [FAIL]
+  Failed XRay.Office.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(fileName: "paginated.doc") [1 s]
+  Error Message:
+   Shouldly.ShouldAssertException : => Math.Abs(actual.Points - expectedPoints)
+    should be less than or equal to
+0.5d
+    but was
+0.519755905511829d
+
+Additional Info:
+    paginated.doc: page 1, line 1 ("Section 1. kerning advance rasteriser layout ligature layout common advance add pay because separate"): right: 530.423 pt drawn, 529.903 pt rendered
+  Stack Trace:
+     at XRay.Office.Fidelity.Tests.PageDrawingComparisonTests.Close(Length actual, Double expectedPoints, String what) in /home/user/wt-pivotfmt/dotnet/tests/XRay.Office.Fidelity.Tests/PageDrawingComparisonTests.cs:line 244
+   at XRay.Office.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(String fileName) in /home/user/wt-pivotfmt/dotnet/tests/XRay.Office.Fidelity.Tests/PageDrawingComparisonTests.cs:line 127
+   at InvokeStub_PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(Object, Span`1)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:00:53.05]     XRay.Office.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(fileName: "paginated.rtf") [FAIL]
+  Failed XRay.Office.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(fileName: "paginated.rtf") [988 ms]
+  Error Message:
+   Shouldly.ShouldAssertException : => Math.Abs(actual.Points - expectedPoints)
+    should be less than or equal to
+0.5d
+    but was
+0.519755905511829d
+
+Additional Info:
+    paginated.rtf: page 1, line 1 ("Section 1. kerning advance rasteriser layout ligature layout common advance add pay because separate"): right: 530.423 pt drawn, 529.903 pt rendered
+  Stack Trace:
+     at XRay.Office.Fidelity.Tests.PageDrawingComparisonTests.Close(Length actual, Double expectedPoints, String what) in /home/user/wt-pivotfmt/dotnet/tests/XRay.Office.Fidelity.Tests/PageDrawingComparisonTests.cs:line 244
+   at XRay.Office.Fidelity.Tests.PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(String fileName) in /home/user/wt-pivotfmt/dotnet/tests/XRay.Office.Fidelity.Tests/PageDrawingComparisonTests.cs:line 127
+   at InvokeStub_PageDrawingComparisonTests.EveryLineIsDrawnWhereLibreOfficeDrawsIt(Object, Span`1)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:01:26.53]     XRay.Office.Fidelity.Tests.JustificationShrinkComparisonTests.TheParagraphBreaksWhereLibreOfficeBreaksIt(document: "justify-shrink-2013.docx") [FAIL]
+  Failed XRay.Office.Fidelity.Tests.JustificationShrinkComparisonTests.TheParagraphBreaksWhereLibreOfficeBreaksIt(document: "justify-shrink-2013.docx") [1 s]
+  Error Message:
+   Shouldly.ShouldAssertException : Math.Abs(ours[i] - reference[i])
+    should be less than or equal to
+1.5d
+    but was
+30.50205511811025d
+
+Additional Info:
+    justify-shrink-2013.docx line 5 ends at 83.20 pt against LibreOffice's 113.70 pt
+  Stack Trace:
+     at XRay.Office.Fidelity.Tests.JustificationShrinkComparisonTests.TheParagraphBreaksWhereLibreOfficeBreaksIt(String document) in /home/user/wt-pivotfmt/dotnet/tests/XRay.Office.Fidelity.Tests/JustificationShrinkComparisonTests.cs:line 99
+   at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+[xUnit.net 00:01:37.34]     XRay.Office.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(fileName: "list-label-overrun.fodt") [FAIL]
+  Failed XRay.Office.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(fileName: "list-label-overrun.fodt") [895 ms]
+  Error Message:
+   Shouldly.ShouldAssertException : Math.Abs(drawn[i].Left - (rendered[i].Left - PdfPenOffsetPoints))
+    should be less than or equal to
+0.1d
+    but was
+0.1287086614173205d
+
+Additional Info:
+    list-label-overrun.fodt: word 4 ("than") starts at 117.571 pt drawn, 117.442 pt rendered
+  Stack Trace:
+     at XRay.Office.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(String fileName) in /home/user/wt-pivotfmt/dotnet/tests/XRay.Office.Fidelity.Tests/TabStopComparisonTests.cs:line 167
+   at System.RuntimeMethodHandle.InvokeMethod(ObjectHandleOnStack target, Void** arguments, ObjectHandleOnStack sig, BOOL isConstructor, ObjectHandleOnStack result)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+[xUnit.net 00:01:38.20]     XRay.Office.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(fileName: "list-label-overrun.doc") [FAIL]
+[xUnit.net 00:01:39.36]     XRay.Office.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(fileName: "list-label-overrun.odt") [FAIL]
+  Failed XRay.Office.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(fileName: "list-label-overrun.doc") [858 ms]
+  Error Message:
+   Shouldly.ShouldAssertException : Math.Abs(drawn[i].Left - (rendered[i].Left - PdfPenOffsetPoints))
+    should be less than or equal to
+0.1d
+    but was
+0.1287086614173205d
+
+Additional Info:
+    list-label-overrun.doc: word 4 ("than") starts at 117.571 pt drawn, 117.442 pt rendered
+  Stack Trace:
+     at XRay.Office.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(String fileName) in /home/user/wt-pivotfmt/dotnet/tests/XRay.Office.Fidelity.Tests/TabStopComparisonTests.cs:line 167
+   at InvokeStub_TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(Object, Span`1)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed XRay.Office.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(fileName: "list-label-overrun.odt") [1 s]
+  Error Message:
+   Shouldly.ShouldAssertException : Math.Abs(drawn[i].Left - (rendered[i].Left - PdfPenOffsetPoints))
+    should be less than or equal to
+0.1d
+    but was
+0.1287086614173205d
+
+Additional Info:
+    list-label-overrun.odt: word 4 ("than") starts at 117.571 pt drawn, 117.442 pt rendered
+  Stack Trace:
+     at XRay.Office.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(String fileName) in /home/user/wt-pivotfmt/dotnet/tests/XRay.Office.Fidelity.Tests/TabStopComparisonTests.cs:line 167
+   at InvokeStub_TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(Object, Span`1)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+[xUnit.net 00:01:40.43]     XRay.Office.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(fileName: "list-label-overrun.docx") [FAIL]
+  Failed XRay.Office.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(fileName: "list-label-overrun.docx") [1 s]
+  Error Message:
+   Shouldly.ShouldAssertException : Math.Abs(drawn[i].Left - (rendered[i].Left - PdfPenOffsetPoints))
+    should be less than or equal to
+0.1d
+    but was
+0.1287086614173205d
+
+Additional Info:
+    list-label-overrun.docx: word 4 ("than") starts at 117.571 pt drawn, 117.442 pt rendered
+  Stack Trace:
+     at XRay.Office.Fidelity.Tests.TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(String fileName) in /home/user/wt-pivotfmt/dotnet/tests/XRay.Office.Fidelity.Tests/TabStopComparisonTests.cs:line 167
+   at InvokeStub_TabStopComparisonTests.AListLabelsTabAdvancesToLibreOfficesStop(Object, Span`1)
+   at System.Reflection.RuntimeMethodInfo.Invoke(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+
+Failed!  - Failed:    10, Passed:   542, Skipped:     0, Total:   552, Duration: 1 m 59 s - XRay.Office.Fidelity.Tests.dll (net10.0)

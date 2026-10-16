@@ -1,0 +1,23 @@
+338 files; 13 hold one of these styles, unresolved and used
+  Body Text: 2 documents, 2 entries
+  heading 1: 10 documents, 10 entries
+  heading 2: 6 documents, 6 entries
+  heading 3: 4 documents, 4 entries
+  heading 4: 5 documents, 5 entries
+  heading 5: 1 documents, 1 entries
+  heading 8: 1 documents, 1 entries
+  heading 9: 1 documents, 1 entries
+
+  03_Technical_Report_(progress)_template.rtf: heading 1, heading 2
+  231164_SystemDesignDocument.rtf: heading 1, heading 2, heading 3, heading 4, heading 5
+  24-25_FAA_Holdover_Tables.rtf: heading 1, heading 4
+  CRIF - SpÃ©cification technique - Socle applicatif.rtf: Body Text, heading 1
+  EHEST-SMS-Safety-Management-Manual-V2.rtf: heading 2
+  FAA 2025-26 Holdover Tables.rtf: heading 1, heading 4
+  PAT-047 - Architecture and Detailed Design Assessment.rtf: heading 1
+  PES-Technical-Report-Template_Jan_2019.rtf: heading 8, heading 9
+  Press release_EUREKA labels ITEA 3 Cluster.rtf: Body Text
+  Sample_SQMS_Program.rtf: heading 1, heading 2, heading 3, heading 4
+  final-technical-report-template.rtf: heading 1
+  hdss-bulletin-issue-285-25-june-2025.rtf: heading 1, heading 2, heading 3, heading 4
+  template---tpr-technical-progress-report-with-guidance.rtf: heading 1, heading 2, heading 3

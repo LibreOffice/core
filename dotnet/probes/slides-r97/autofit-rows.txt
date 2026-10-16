@@ -1,0 +1,22 @@
+document                                             page   ours    ref  chars      stated  ourRow  refRow
+Fundamentals_Module_1_basics__ppt                       6   7.08  32.00  87/44      -- no (size, row, row) triple --
+W3_Case_Study_of_a_Tsunami_Warning_Simulation_Exerci   10  16.68  24.01  500/92        24  0.700  1.000
+Thailand17__ppt                                         8  16.68  24.01  500/92        24  0.700  1.000
+JesuitAssocOfStudentPersonnel__ppt                     24  17.01  13.01  equal         17  1.000  0.775
+2015-Civil-Rights-Website-training__ppt                22  17.01  14.00  90/92         17  1.000  0.850
+FAA_Form_337__ppt                                      66  36.00  32.99  equal         36  1.000  0.925
+gillikin_online_user_mtg_2010__ppt                      2  31.01  33.99  equal         34  0.925  1.000
+gfopportunitiesforlinkagespres_2010_en__ppt            27  28.01  25.99  equal         28  1.000  0.925
+ws_prod-g-doc-Events-2007-september-M.017-(French)-F   16  17.01  14.99  equal         18  0.925  0.850
+pods05__ppt                                            32  11.00   9.01  equal         11  1.000  0.850
+pods05__ppt                                            33  11.00   9.01  equal         11  1.000  0.850
+gfopportunitiesforlinkagespres_2010_en__ppt            25  29.00  27.01  equal         29  1.000  0.925
+RRM-training-syllabus-Chapter-3-Teamwork-TC-Towing-I   16  20.01  18.99  equal         20  1.000  0.925
+ws_prod-g-doc-Events-2007-september-M.017-(French)-F   14  20.01  18.99  equal         20  1.000  0.925
+ws_prod-g-doc-Events-r-6.-ESM__ppt                     21  20.01  18.99  412/373       20  1.000  0.925
+RESPA_-_Section_8_Webinar__ppt                         18  20.01  18.99  equal         20  1.000  0.925
+Thailand17__ppt                                        11  11.00  11.99  358/548       12  0.925  1.000
+joint_user_outcomes_michael_fullerton_29.06.12__ppt    20  11.99  11.00  equal         12  1.000  0.925
+ws_prod-g-doc-Events-Part-M-presentation__ppt          21  18.00  17.01  equal         18  1.000  0.925
+
+18 of 19 rows are one stated size and two rows of constScaleLevels

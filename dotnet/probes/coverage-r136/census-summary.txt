@@ -1,0 +1,61 @@
+
+by extension
+                            never     of   share  vs corpus
+  docx                         75    272   27.6%      0.80x
+  pptx                        128    251   51.0%      1.47x
+  xlsx                         89    241   36.9%      1.07x
+  doc                          15     66   22.7%      0.66x
+  xls                          14     64   21.9%      0.63x
+  ppt                           7     51   13.7%      0.40x
+  xlsm                          0      2    0.0%      0.00x
+  ALL                         328    947   34.6%
+
+by track
+                            never     of   share  vs corpus
+  words                        90    338   26.6%      0.77x
+  sheets                      103    307   33.6%      0.97x
+  slides                      135    302   44.7%      1.29x
+  ALL                         328    947   34.6%
+
+by batch family
+                            never     of   share  vs corpus
+  done                        117    461   25.4%      0.73x
+  chartset                    208    412   50.5%      1.46x
+  ceiling                       2     23    8.7%      0.25x
+  pagination                    0     19    0.0%      0.00x
+  metrics                       0     10    0.0%      0.00x
+  extra                         0      8    0.0%      0.00x
+  missing                       1      6   16.7%      0.48x
+  table                         0      5    0.0%      0.00x
+  unstable                      0      1    0.0%      0.00x
+  chart                         0      1    0.0%      0.00x
+  drawingset                    0      1    0.0%      0.00x
+  ALL                         328    947   34.6%
+
+by manifest status
+                            never     of   share  vs corpus
+  done                        244    803   30.4%      0.88x
+  open                         84    144   58.3%      1.68x
+  ALL                         328    947   34.6%
+
+by manifest kind
+                            never     of   share  vs corpus
+  (none)                      244    802   30.4%      0.88x
+  ceiling                      55     69   79.7%      2.30x
+  text                         27     61   44.3%      1.28x
+  pagination                    1      7   14.3%      0.41x
+  metrics                       0      3    0.0%      0.00x
+  unstable                      0      2    0.0%      0.00x
+  chart                         0      1    0.0%      0.00x
+  extra                         0      1    0.0%      0.00x
+  missing                       1      1  100.0%      2.89x
+  ALL                         328    947   34.6%
+
+by the reference's page count
+                            never     of   share  vs corpus
+  10-49                        46    246   18.7%      0.54x
+  1 page                      106    238   44.5%      1.29x
+  2-3                         126    214   58.9%      1.70x
+  4-9                          43    157   27.4%      0.79x
+  50+                           7     92    7.6%      0.22x
+  ALL                         328    947   34.6%

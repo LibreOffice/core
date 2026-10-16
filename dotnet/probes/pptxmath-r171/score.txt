@@ -1,0 +1,5 @@
+pages	refPages	glyphs	refGlyphs	spans	refSpans	paired	mean|dx|	mean|dy|	deck
+warning: The `fitz` API is deprecated and will be removed in future. Use `import pymupdf` instead.
+51	51	13011	13007	936	936	923	0.52	0.94	WiGr_2021W_1_Angebot-Nachfrage-Elastizität-211017-171222.pptx
+89	89	20363	20363	1850	1853	1817	3.11	0.71	Structural Testing.pptx
+20	20	8749	8744	577	576	558	4.67	1.73	RPA P4 - Advanced Material.pptx

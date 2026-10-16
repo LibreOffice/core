@@ -1,0 +1,6 @@
+confine.sh over confine.list, both legs with SOURCE_DATE_EPOCH=1700000000, obj/ and bin/ cleared per leg.
+words originals 338, their .rtf twins 338, 10 .ods, 10 .odp, slides 302, sheets 307.
+
+1305 compared byte for byte, 0 differ
+
+Every PDF of both legs and of both .odt sweeps ends in %%EOF: 1305/1305, 1305/1305, 338/338, 338/338.

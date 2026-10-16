@@ -1,0 +1,45 @@
+alle einzeln.xlsx	Pivot	pivotTable1.xml	ref=A4:I1013	cells=9090	face merge=9090 clear=9090  class merge=9090 clear=9090  size merge=9090 clear=9090  colour merge=9090 clear=9090  fill merge=9090 clear=9090
+Keywords_Mapping_Graphs_and_Charts.xlsx	Summary	pivotTable1.xml	ref=A3:B22	cells=40	face merge=40 clear=40  class merge=40 clear=40  size merge=40 clear=40  colour merge=40 clear=40  fill merge=40 clear=40
+Keywords_Mapping_Graphs_and_Charts.xlsx	Literature Mapping	pivotTable2.xml	ref=A3:B16	cells=28	face merge=28 clear=28  class merge=28 clear=28  size merge=28 clear=28  colour merge=28 clear=28  fill merge=28 clear=28
+Keywords_Mapping_Graphs_and_Charts.xlsx	SABSA Skills Mapping	pivotTable3.xml	ref=A3:B15	cells=26	face merge=26 clear=26  class merge=26 clear=26  size merge=26 clear=26  colour merge=26 clear=26  fill merge=26 clear=26
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Skills Mapping	pivotTable4.xml	ref=A3:B13	cells=22	face merge=22 clear=22  class merge=22 clear=22  size merge=22 clear=22  colour merge=22 clear=22  fill merge=22 clear=22
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping EA	pivotTable5.xml	ref=A4:B17	cells=28	face merge=28 clear=28  class merge=28 clear=28  size merge=28 clear=28  colour merge=28 clear=28  fill merge=28 clear=28
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping ESA	pivotTable6.xml	ref=A4:B21	cells=36	face merge=36 clear=36  class merge=36 clear=36  size merge=36 clear=36  colour merge=36 clear=36  fill merge=36 clear=36
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping BA	pivotTable7.xml	ref=A4:B13	cells=20	face merge=20 clear=20  class merge=20 clear=20  size merge=20 clear=20  colour merge=20 clear=20  fill merge=20 clear=20
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping SA	pivotTable8.xml	ref=A4:B13	cells=20	face merge=20 clear=20  class merge=20 clear=20  size merge=20 clear=20  colour merge=20 clear=20  fill merge=20 clear=20
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping AA	pivotTable9.xml	ref=A4:B16	cells=26	face merge=26 clear=26  class merge=26 clear=26  size merge=26 clear=26  colour merge=26 clear=26  fill merge=26 clear=26
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping DA	pivotTable10.xml	ref=A4:B7	cells=8	face merge=8 clear=8  class merge=8 clear=8  size merge=8 clear=8  colour merge=8 clear=8  fill merge=8 clear=8
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping TA	pivotTable11.xml	ref=A4:B18	cells=30	face merge=30 clear=30  class merge=30 clear=30  size merge=30 clear=30  colour merge=30 clear=30  fill merge=30 clear=30
+DynamicBubbleChart.xlsx	Chart	pivotTable1.xml	ref=A29:E41	cells=65	face merge=65 clear=65  class merge=65 clear=65  size merge=65 clear=65  colour merge=65 clear=65  fill merge=65 clear=65
+049_Expenses_calculator_c351f3d0.xlsx	Personal Expenses Data	pivotTable1.xml	ref=B3:G11	cells=54	face merge=54 clear=54  class merge=15 clear=15  size merge=54 clear=54  colour merge=54 clear=54  fill merge=54 clear=54
+      C4 class ours-states=False ref=None (default swiss)
+      D4 class ours-states=False ref=None (default swiss)
+      E4 class ours-states=False ref=None (default swiss)
+      F4 class ours-states=False ref=None (default swiss)
+007_Contextures_chart_sample_667d8e47.xlsm	CityPivot	pivotTable1.xml	ref=B2:H10	cells=63	face merge=63 clear=63  class merge=63 clear=63  size merge=63 clear=63  colour merge=63 clear=63  fill merge=63 clear=63
+037_Personal_money_tracker_a57957bb.xlsx	Monthly summary	pivotTable1.xml	ref=B19:F37	cells=95	face merge=94 clear=95  class merge=94 clear=95  size merge=93 clear=92  colour merge=94 clear=95  fill merge=95 clear=95
+      B19 face ours-states=True ref=Calibri (default Calibri)
+      B19 class ours-states=True ref=swiss (default swiss)
+      B19 size ours-states=True ref=11pt (default 11pt)
+      B19 colour ours-states=True ref=#000000 (default #000000)
+037_Personal_money_tracker_a57957bb.xlsx	Chart data	pivotTable22.xml	ref=B3:F11	cells=45	face merge=45 clear=45  class merge=45 clear=45  size merge=43 clear=42  colour merge=45 clear=45  fill merge=45 clear=45
+      B4 size ours-states=True ref=11pt (default 11pt)
+      F4 size ours-states=True ref=11pt (default 11pt)
+033_Event_planning_tracker_Use_this_template_f29a848e.xlsx	PROJECT TOTALS	pivotTable1.xml	ref=B5:N11	cells=91	face merge=91 clear=91  class merge=89 clear=2  size merge=89 clear=2  colour merge=18 clear=86  fill merge=2 clear=2
+      B5 class ours-states=True ref=swiss (default swiss)
+      B5 size ours-states=True ref=None (default None)
+      C5 fill ours-states=False ref=transparent (default None)
+      D5 fill ours-states=False ref=transparent (default None)
+035_Project_plan_for_law_firms_aa2d4462.xlsx	PROJECT TOTALS	pivotTable1.xml	ref=B5:N11	cells=91	face merge=91 clear=91  class merge=90 clear=91  size merge=91 clear=91  colour merge=91 clear=91  fill merge=91 clear=91
+      B5 class ours-states=True ref=swiss (default swiss)
+
+property    cells      merge      clear
+face         9878       9877       9878
+class        9878       9835       9750
+size         9878       9872       9783
+colour       9878       9804       9873
+fill         9878       9789       9789
+
+font         9878       9835       9750   (face and class together: a face named without its declared
+                                           generic class is a different font to resolve, so the two are
+                                           one property and are scored as one)

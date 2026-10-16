@@ -1,0 +1,7 @@
+integer sizes 8..48, any pair            :  1442 /  1640 =  87.9% admit a (size, row, row) triple
+integer sizes 8..48, pairs within 4 pt   :   220 /   308 =  71.4% admit a (size, row, row) triple
+integer sizes 8..48, pairs within 2 pt   :    74 /   158 =  46.8% admit a (size, row, row) triple
+
+The 19 rows are all within 3 pt of each other bar two. Against a null of about 71%,
+"18 of 19 admit one" is not evidence for the autofit reading -- the fit is close to
+vacuous and autofit-rows.txt should be read as a description, not as a measurement.

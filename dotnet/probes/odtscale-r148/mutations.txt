@@ -1,0 +1,7 @@
+# Each row: a one-line mutation of the round's diff, and which tests must go red.
+# Applied with sed against a `.before` copy, rebuilt, run, restored with cp + touch.
+#
+# M1  ScaleIn never reads the attribute (the whole of the reader half)
+# M2  the scale is the stated percentage rather than TextWidthScale's twip grid
+# M3  the varies-predicate does not list WidthPerCent (the uniform-paragraph fold)
+# M4  PageRun is built without the run's own WidthPerCent

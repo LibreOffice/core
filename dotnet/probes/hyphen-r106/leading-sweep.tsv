@@ -1,0 +1,19 @@
+first	second	reference	ours_on	ours_off
+A	Efficiency	turned	upright	upright	DIFFERS
+A	Quality	upright	upright	upright	
+A	Service	upright	upright	upright	
+Co	Efficiency	turned	turned	upright	
+Co	Quality	upright	upright	upright	
+Co	Service	upright	upright	upright	
+Cost	Efficiency	turned	turned	upright	
+Cost	Quality	turned	turned	upright	
+Cost	Service	upright	turned	upright	DIFFERS
+Costlier	Efficiency	turned	turned	upright	
+Costlier	Quality	upright	upright	upright	
+Costlier	Service	upright	upright	upright	
+Costly	Efficiency	turned	turned	upright	
+Costly	Quality	upright	upright	upright	
+Costly	Service	upright	turned	upright	DIFFERS
+
+agree with hyphenator ON  12 of 15
+agree with hyphenator OFF 9 of 15

@@ -1,0 +1,13 @@
+variant              model (fodt)                       rendering
+029-asis             (no of-pie in the model)           3 group(s) of filled marks: 73 at x 318-318, 20 at x 358-358, 49 at x 511-511
+029-swap-to-bar      (no of-pie in the model)           3 group(s) of filled marks: 73 at x 318-318, 20 at x 358-358, 49 at x 511-511
+029-no-explosion     loext:sub-pie="true" loext:split-position="2" 4 group(s) of filled marks: 97 at x 264-283, 1 at x 348-348, 19 at x 543-543, 22 at x 589-589
+029-no-dPt           (no of-pie in the model)           3 group(s) of filled marks: 2 at x 316-316, 1 at x 357-357, 1 at x 513-513
+029-neither          loext:sub-pie="true" loext:split-position="2" 4 group(s) of filled marks: 2 at x 264-283, 1 at x 348-348, 1 at x 543-543, 1 at x 589-589
+029-neither-bar      loext:sub-bar="true" loext:split-position="2" 3 group(s) of filled marks: 2 at x 260-279, 1 at x 342-342, 2 at x 612-612
+029-neither-n5       loext:sub-pie="true" loext:split-position="2" 5 group(s) of filled marks: 1 at x 218-218, 2 at x 259-268, 1 at x 348-348, 1 at x 543-543, 1 at x 603-603
+029-neither-n7       loext:sub-pie="true" loext:split-position="2" 4 group(s) of filled marks: 3 at x 218-243, 3 at x 317-348, 1 at x 543-543, 1 at x 601-601
+028-asis             loext:sub-bar="true" loext:split-position="2" 3 group(s) of filled marks: 7 at x 158-167, 8 at x 211-248, 2 at x 440-440
+028-swap-to-pie      loext:sub-pie="true" loext:split-position="2" 4 group(s) of filled marks: 7 at x 111-123, 8 at x 184-235, 1 at x 420-420, 1 at x 477-477
+028-no-dPt           loext:sub-bar="true" loext:split-position="2" 3 group(s) of filled marks: 7 at x 158-167, 8 at x 211-248, 2 at x 440-440
+028-explode          (no of-pie in the model)           3 group(s) of filled marks: 4 at x 204-207, 10 at x 255-355, 2 at x 391-391

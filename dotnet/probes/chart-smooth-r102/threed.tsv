@@ -1,0 +1,7 @@
+document	kind	images over the frame	vector paths inside it (items)	verdict
+words/chartset-001/docx/pie-chart-template.docx	3-D pie (c:pie3DChart)	791x602/DCTDecode 190.0x144.6pt	none	RASTER
+words/chartset-001/docx/pie-chart-result.docx	3-D pie (c:pie3DChart)	791x602/DCTDecode 190.0x144.6pt	[5, 5, 5, 5, 5, 5]	RASTER
+words/chartset-012/docx/021_Unit_Circle_Chart_3D_Pie_Chart_404247ab.docx	3-D pie (c:pie3DChart)	1370x732/DCTDecode 522.3x278.8pt	none	RASTER
+sheets/done-010/xls/TOGAF9-Tool-ConfReqts-CSQ.xls	3-D bar (BIFF CH3D)	1528x656/FlateDecode 423.8x181.8pt	none	RASTER
+sheets/missing-001/xls/orbus_togaf_tool_csq.xls	3-D bar (BIFF CH3D)	1099x197/DCTDecode 264.0x47.2pt	none	RASTER
+slides/done-004/ppt/undp_presentation_revised_17_may.ppt	3-D pie (OLE Excel.Sheet.8)	none	[362, 309, 55, 4, 4, 1]	VECTOR

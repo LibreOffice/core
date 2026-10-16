@@ -1,0 +1,15 @@
+== style
+583 styled shapes; 497 of them also state a fill of their own
+a:fillRef idx : [('1', 295), ('2', 274), ('0', 10), ('3', 4)]
+  resolves to : [('solidFill', 295), ('gradFill', 278), ('none', 10)]
+a:lnRef   idx : [('2', 290), ('1', 274), ('0', 14), ('3', 5)]
+  theme line w: [('9525', 274), ('25400', 187), ('12700', 99), ('none', 14), ('38100', 5), ('15875', 4)]
+== kinds
+sp                       447 in  37 documents
+in-group:sp              174 in   6 documents
+pic                      143 in  55 documents
+graphicFrame             138 in  90 documents
+in-group:pic              85 in   3 documents
+grpSp                     36 in   8 documents
+cxnSp                     31 in   2 documents
+in-group:grpSp            21 in   5 documents

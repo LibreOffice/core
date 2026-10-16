@@ -1,0 +1,18 @@
+/c/sandbox/workdir/scratch-r61-sheets/base/parity.tsv: 307 manifest paths, MATCH 279 of 307
+    match          279
+    words          23
+    pages,words    5
+/c/sandbox/workdir/scratch-r61-sheets/after/parity.tsv: 307 manifest paths, MATCH 281 of 307
+    match          281
+    words          21
+    pages,words    5
+
+per-document movement (before -> after), split by which side moved:
+  words    -> match    chartset-002/xlsx/003_advanced_excel_pie.xlsx                    OURS words 139->145
+  match    -> match    chartset-002/xlsx/011_advanced_excel_pie.xlsx                    OURS words 137->142
+  words    -> match    chartset-002/xlsx/027_advanced_excel_pie.xlsx                    OURS words 136->142
+  match    -> match    chartset-004/xlsx/019_advanced_excel_pie.xlsx                    OURS words 140->142
+  pages,words -> pages,words chartset-010/xlsx/047_Date_tracker_Gantt_chart_bf34f3a8.xlsx     REF words 822->842
+  match    -> match    done-009/xlsx/PBN Matrix NAAs (V01).xlsx                         REF words 5549->5537
+  match    -> match    pagination-001/xlsx/SIL_TDB648.xlsx                              REF words 7496->7499
+  match    -> match    table-001/xlsx/FAA-2019-0995-0002_attachment_2.xlsx              REF words 9995->9990

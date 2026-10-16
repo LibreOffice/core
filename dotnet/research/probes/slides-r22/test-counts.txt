@@ -1,0 +1,11 @@
+Core             Failed:     0, Passed:   247, Skipped:     0
+Containers       Failed:     0, Passed:   109, Skipped:     0
+Text             Failed:     0, Passed:   240, Skipped:     0
+Vector           Failed:     0, Passed:   291, Skipped:     0
+Rendering        Failed:     0, Passed:   119, Skipped:     0
+Markup           Failed:     0, Passed:   259, Skipped:     0
+OpenDocument     Failed:     0, Passed:   125, Skipped:     0
+WordProcessing   Failed:     0, Passed:   619, Skipped:     0
+Spreadsheets     Failed:     0, Passed:   483, Skipped:     0
+Presentations    Failed:     0, Passed:   528, Skipped:     0
+Fidelity         Failed:     0, Passed:   550, Skipped:     0

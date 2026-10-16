@@ -1,0 +1,119 @@
+sweep-base               signed   1360.08  |ink|   1680.10  major   438  over 163 documents
+sweep-grid               signed   1357.76  |ink|   1677.66  major   438  over 163 documents
+
+114 documents moved on |ink| or major pages
+  68 better, 46 worse; 5.39 won against 2.95 lost
+     -0.83  |ink|    69.80 ->    68.97   major   6 ->   6   Reporting_responsibilities_matrix__pptx
+     -0.79  |ink|   277.82 ->   277.03   major  66 ->  66   NAS-Infrastructure-Roadmaps-v16.0__pptx
+     -0.33  |ink|    15.47 ->    15.14   major   8 ->   8   FAA_Form_337__ppt
+     -0.25  |ink|    24.88 ->    24.63   major  10 ->   9   Framing Europe__ppt
+     -0.23  |ink|     5.41 ->     5.18   major   2 ->   2   Lepore__ppt
+     -0.19  |ink|     8.81 ->     8.62   major   1 ->   1   Employment-Based_I-485__ppt
+     -0.18  |ink|     7.30 ->     7.12   major   2 ->   2   redac-nasops-201503-RIRP-portfolio-update__pptx
+     -0.17  |ink|    10.52 ->    10.35   major   2 ->   2   RRM-training-syllabus-Chapter-3-Teamwork-TC-Towing-Incident-Analysis-Dec-2009__ppt
+     -0.17  |ink|     8.62 ->     8.45   major   4 ->   4   WiGr_2021W_1_Angebot-Nachfrage-Elastizität-211017-171222__pptx
+     -0.16  |ink|     4.82 ->     4.66   major   0 ->   0   schematicplay__pptx
+     -0.15  |ink|     4.78 ->     4.63   major   0 ->   0   schematicplaymar21__pptx
+     -0.15  |ink|    12.48 ->    12.33   major   2 ->   2   section_1_our_rights_presentation__pptx
+     -0.14  |ink|     0.96 ->     0.82   major   0 ->   0   iris07.12.12__pptx
+     -0.10  |ink|    17.40 ->    17.30   major   6 ->   6   171128IPAP__pptx
+     -0.09  |ink|     4.36 ->     4.27   major   0 ->   0   attendance-updates-for-governors__pptx
+     -0.09  |ink|     2.33 ->     2.24   major   0 ->   0   02_REDAC_New ATM briefing _March 2017v2__pptx
+     -0.08  |ink|    10.46 ->    10.38   major   1 ->   1   berlin__ppt
+     -0.08  |ink|    32.30 ->    32.22   major  13 ->  13   8.16_AOD_FINAL_Provider_Training_Presentation_9_2009__ppt
+     -0.07  |ink|    24.44 ->    24.37   major   5 ->   5   16 - UTM - (NASA)__pptx
+     -0.07  |ink|     1.98 ->     1.91   major   0 ->   0   429_BLISc 2019 IInd Sem.  PAPER-7 UNIT 3__pptx
+     -0.07  |ink|     4.03 ->     3.96   major   0 ->   0   Inducement-to-Insurance-Business__ppt
+     -0.06  |ink|    12.48 ->    12.42   major   3 ->   3   County ACHS Presentaion Webinar 8-16-16 Peg__pptx
+     -0.06  |ink|     5.84 ->     5.78   major   0 ->   0   REDAC HF briefing Sep 2016_LARD_ATC_TO_FE_v2__pptx
+     -0.06  |ink|     1.52 ->     1.46   major   0 ->   0   5b_upasana_dasgupta_-_liability_and_registration__pptx
+     -0.05  |ink|     2.27 ->     2.22   major   0 ->   0   ws_prod-g-doc-Events-2007-Approval-of-Flight-Conditions-RM-NAA-16032007__ppt
+     -0.05  |ink|     3.46 ->     3.41   major   1 ->   1   redac-sas-201403-ppt-portfolio-rev-sim__pptx
+     -0.05  |ink|    62.96 ->    62.91   major  18 ->  18   Thailand17__ppt
+     -0.04  |ink|    67.34 ->    67.30   major   1 ->   1   N2_E_Maestroni_Swarm_COP__pptx
+     -0.04  |ink|     7.27 ->     7.23   major   0 ->   0   080214-Intl-pol-frameworks-and-their-implications-for-Africa-ISS-workshop__ppt
+     -0.04  |ink|     3.52 ->     3.48   major   3 ->   3   7-Zulkefli_Part147n66_IKMAS__pptx
+     -0.03  |ink|     9.06 ->     9.03   major   0 ->   0   iep-amount-frequency-for-webinar__ppt
+     -0.03  |ink|     4.49 ->     4.46   major   1 ->   1   vv_summit_SAIC-PRESENTATION_FAA-V&V-Summit_508c__pptx
+     -0.03  |ink|     4.48 ->     4.45   major   1 ->   1   vvsummit2022-SAIC-PRESENTATION__pptx
+     -0.03  |ink|     1.43 ->     1.40   major   0 ->   0   ANG C-1 ATC-TO Core Program - HF REDAC briefing September 7 2016__pptx
+     -0.03  |ink|     2.30 ->     2.27   major   0 ->   0   Tax factsheet 2022 (1)__pptx
+     -0.02  |ink|     5.19 ->     5.17   major   0 ->   0   FAAAIandtheArtandScienceofV&Vfinal__pptx
+     -0.02  |ink|     3.13 ->     3.11   major   1 ->   1   redac-sas-201703-hf-research-division__pptx
+     -0.02  |ink|     3.50 ->     3.48   major   1 ->   1   NAS-Infrastructure-Roadmaps-HSI__pptx
+     -0.02  |ink|    19.41 ->    19.39   major   7 ->   7   2014BSA_Sunday_Killion__pptx
+     -0.02  |ink|     9.94 ->     9.92   major   3 ->   3   71393_pp7__ppt
+     -0.02  |ink|    13.12 ->    13.10   major   5 ->   5   architecture6__ppt
+     -0.02  |ink|     3.93 ->     3.91   major   6 ->   6   passiv__pptx
+     -0.01  |ink|    56.29 ->    56.28   major   6 ->   6   Wildlife for REDAC September 11__pptx
+     -0.01  |ink|     3.87 ->     3.86   major   1 ->   1   97936__pptx
+     -0.01  |ink|     1.94 ->     1.93   major   2 ->   2   Session-1-Presentation-Reporting-Forms-Form-12-final__pptx
+     -0.01  |ink|     2.53 ->     2.52   major   0 ->   0   c_291533__pptx
+     -0.01  |ink|     1.08 ->     1.07   major   0 ->   0   BasicMed_AME_Presentation__pptx
+     -0.01  |ink|     1.68 ->     1.67   major   0 ->   0   Sean Monogue__pptx
+     -0.01  |ink|     0.13 ->     0.12   major   0 ->   0   Trust Fund Excise Taxes Structure__pptx
+     -0.01  |ink|     0.34 ->     0.33   major   0 ->   0   iaeg_work_group_leader_updates__pptx
+     -0.01  |ink|     0.67 ->     0.66   major   0 ->   0   ws_prod-g-doc-Events-2007-november-IACA-presentation-at-EASA-Fuel-Tank-Safety-Training-Seminar__ppt
+     -0.01  |ink|    15.36 ->    15.35   major   3 ->   3   3492__pptx
+     -0.01  |ink|     3.77 ->     3.76   major   1 ->   1   BMFE-06-03 (Gerflor) Smoke Density and Toxicity__pptx
+     -0.01  |ink|     8.70 ->     8.69   major   3 ->   3   Fundamentals_Module_1_basics__ppt
+     -0.01  |ink|     7.43 ->     7.42   major   3 ->   3   G-InvoicingKeithJarboe__pptx
+     -0.01  |ink|     9.28 ->     9.27   major   2 ->   2   JesuitAssocOfStudentPersonnel__ppt
+     -0.01  |ink|     4.43 ->     4.42   major   2 ->   2   John_Broggio__RSS_Campion_event_John_Broggio__pptx
+     -0.01  |ink|     6.91 ->     6.90   major   0 ->   0   RESPA_-_Section_8_Webinar__ppt
+     -0.01  |ink|    11.06 ->    11.05   major   3 ->   3   RPA P4 - Advanced Material__pptx
+     -0.01  |ink|     8.14 ->     8.13   major   3 ->   3   introduction_to_bea_tuxedo__ppt
+     -0.01  |ink|    15.22 ->    15.21   major   1 ->   1   pres_ioc_phuket__ppt
+     -0.01  |ink|    12.77 ->    12.76   major   1 ->   1   servicedesk-plus-overviewfinal__pptx
+     -0.01  |ink|     4.60 ->     4.59   major   0 ->   0   ws_prod-g-doc-Events-2007-september-MDM.032-(ENGLISH)-CZ__ppt
+     -0.01  |ink|     3.24 ->     3.23   major   2 ->   2   0335fab9-79f0-4944-b92c-f223837ca2d8__ppt
+     -0.01  |ink|     4.16 ->     4.15   major   0 ->   0   COMSTAC_11_5_2021am_2__pptx
+     -0.01  |ink|     5.78 ->     5.77   major   2 ->   2   PRM_training__pptx
+     -0.01  |ink|    10.05 ->    10.04   major   3 ->   3   Sector_Skills_Insights_Advanced_Manufacturing_summary_slide_pack__pptx
+     -0.01  |ink|    21.94 ->    21.93   major   8 ->   8   southern-classic-kennesaw-state-university-final__pptx
+     +0.01  |ink|    16.87 ->    16.88   major   5 ->   5   8_P-Pavese_AIRBUS-ATB-journee-CRATB__pptx
+     +0.01  |ink|    15.58 ->    15.59   major  15 ->  15   Aerospace_Journey_of_Flight_Chapter_BCB1637572DA6__ppt
+     +0.01  |ink|    16.38 ->    16.39   major   4 ->   4   pods05__ppt
+     +0.01  |ink|     9.02 ->     9.03   major   3 ->   3   3495__pptx
+     +0.01  |ink|     2.42 ->     2.43   major   1 ->   1   PAL Block Intro 2023__pptx
+     +0.01  |ink|     2.05 ->     2.06   major   0 ->   0   Statement of Work presentation__pptx
+     +0.01  |ink|     1.00 ->     1.01   major   0 ->   0   WC_Update-Aug03__ppt
+     +0.01  |ink|     0.56 ->     0.57   major   0 ->   0   NWD-GLA-Community-Outreach-Day-Oct-2025__pptx
+     +0.01  |ink|     1.32 ->     1.33   major   0 ->   0   Session 21- The option to expand & abandon__pptx
+     +0.01  |ink|     0.45 ->     0.46   major   0 ->   0   medicines_bulletin_february_2023_final__pptx
+     +0.01  |ink|     2.49 ->     2.50   major   3 ->   3   AATF-Fact-Sheet-2025__pptx
+     +0.01  |ink|     3.07 ->     3.08   major   2 ->   2   bitesize-writing-a-report__pptx
+     +0.01  |ink|    18.96 ->    18.97   major   0 ->   0   Snowbirds_High_Show__pptx
+     +0.01  |ink|    11.59 ->    11.60   major   4 ->   4   ws_prod-g-doc-Events-2008-February-5-NATO-activities__ppt
+     +0.02  |ink|     9.06 ->     9.08   major   2 ->   2   EG1_dsrc tech__ppt
+     +0.02  |ink|    14.16 ->    14.18   major   5 ->   5   NAS-Infrastructure-Roadmaps-Weather__pptx
+     +0.02  |ink|     9.87 ->     9.89   major   3 ->   3   order-of-worship-ppt-revised-2018__pptx
+     +0.02  |ink|    16.04 ->    16.06   major   2 ->   2   vvsummit2022-Research-Roadmap-and-the-UML-3-Operational-Integration-Assessment__pptx
+     +0.02  |ink|    20.18 ->    20.20   major   2 ->   2   ws_prod-g-doc-Events-2007-september-M.017-(French)-France__ppt
+     +0.02  |ink|     1.14 ->     1.16   major   0 ->   0   1_Country-Updates_DRC_English__pptx
+     +0.03  |ink|    20.92 ->    20.95   major   7 ->   7   ghgp-supply-chain-initiative_20100323_wri__pptx
+     +0.03  |ink|     0.13 ->     0.16   major   0 ->   0   Liturgical-Commission-2025-Convention-Presentation__pptx
+     +0.03  |ink|     1.09 ->     1.12   major   2 ->   2   23-session-2-pptx__pptx
+     +0.03  |ink|     4.94 ->     4.97   major   0 ->   0   10. Drawings, circuit diagrams and schematics__pptx
+     +0.03  |ink|     2.25 ->     2.28   major   1 ->   1   DoIRD Meeting 16JAN14 v1-1__pptx
+     +0.03  |ink|     4.47 ->     4.50   major   1 ->   1   REDAC briefing March12-13-2014jemvbFINAL.ppt__pptx
+     +0.03  |ink|     2.17 ->     2.20   major   0 ->   0   manufacturing_process_simulation_working_group_overview_2023__pptx
+     +0.03  |ink|     3.68 ->     3.71   major   2 ->   2   ws_prod-g-doc-Events-Part-M-presentation__ppt
+     +0.03  |ink|    12.75 ->    12.78   major  10 ->  10   flying-by-numbers-presentation__pptx
+     +0.04  |ink|     2.77 ->     2.81   major   0 ->   0   BHCA Part II webinar #2 - 10.2020__pptx
+     +0.04  |ink|     5.03 ->     5.07   major   1 ->   1   joint_user_outcomes_michael_fullerton_29.06.12__ppt
+     +0.05  |ink|    17.33 ->    17.38   major   6 ->   6   undp_presentation_revised_17_may__ppt
+     +0.05  |ink|     6.07 ->     6.12   major   0 ->   0   30-04-2021 merged NDoH and NICD_Presentation HBV BD meeting 05May2021_1__pptx
+     +0.06  |ink|     6.73 ->     6.79   major   2 ->   2   BUS-Chapter 05__ppt
+     +0.06  |ink|    14.91 ->    14.97   major   4 ->   5   Intersil_Italy_CAN_Bus_Transceiver_Presentation_Final__pptx
+     +0.07  |ink|     7.48 ->     7.55   major   2 ->   2   redac-sas-201509-asisp-research__pptx
+     +0.08  |ink|     5.92 ->     6.00   major   2 ->   2   Copy of Full deck with references Promotion of Outside Interests at Work final(1)__pptx
+     +0.09  |ink|    10.95 ->    11.04   major   4 ->   4   gillikin_online_user_mtg_2010__ppt
+     +0.13  |ink|    13.59 ->    13.72   major   6 ->   6   Architecture__ppt
+     +0.13  |ink|     0.97 ->     1.10   major   0 ->   0   wopanets-innovationdays-06-16__pptx
+     +0.13  |ink|     6.92 ->     7.05   major   2 ->   2   wells08_basic__ppt
+     +0.14  |ink|    33.20 ->    33.34   major  11 ->  11   2015-Civil-Rights-Website-training__ppt
+     +0.24  |ink|    10.70 ->    10.94   major   5 ->   5   Structural Testing__pptx
+     +0.35  |ink|    17.29 ->    17.64   major   3 ->   3   B2B-Center-Readiness-and-Student-Retention__pptx
+     +0.35  |ink|     5.58 ->     5.93   major   2 ->   2   _1___Opatrny_Ales_United_Kingdom_business_opportunities_final__pptx
+     +0.41  |ink|    15.28 ->    15.69   major   1 ->   1   chapter_4_0__pptx

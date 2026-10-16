@@ -1,0 +1,2480 @@
+# XRay.Office.WordProcessing — TODO
+
+The Writer equivalent: DOCX/DOC/RTF/ODT and variants. Extraction plus paginated layout.
+
+All four front ends build **one** document model consumed by **one** layout engine — the
+same arrangement LibreOffice uses, where the DOCX, DOC and RTF importers all build the same
+`SwDoc`. That keeps layout, the expensive half, written once.
+
+Reference: `research/02-writer.md` — model, layout engine, and all four importers.
+
+## Document model
+
+In `Model/`, distinct from the extraction tree in `XRay.Office.Core` and built by a separate pass —
+extraction is the common case and must not pay for interval-tagged formatting, document-order
+indexes or resolvable style chains.
+
+- [x] A **tree** rather than `SwNodes`' flat array of paired start and end markers. The research
+      notes say the markers exist because LibreOffice's node array is also its edit buffer and its
+      undo unit, and that a conventional tree is semantically equivalent and the natural C# shape
+      (`research/02-writer.md` section A.2).
+- [x] **Document order** kept anyway, since that is what the flat array is really for: layout,
+      bookmarks, cross-references and tracked changes all ask "before", "after" and "inside". Each
+      node carries its own index and its subtree's end, so containment is two integer comparisons.
+      Assigned once when the tree is finished, not maintained per append.
+- [x] Paragraph text as one string with the character formatting as **interval-tagged hints**, not
+      as a split-run list. Overlapping formatting is the normal case — a bold range, a language
+      range and a hyperlink each start where the user put them — and runs force every overlap to
+      split every run that crosses it, so three pairwise overlaps become seven fragments that
+      correspond to nothing the document said.
+- [x] The resolution order between hint kinds, which is load-bearing: direct formatting must beat a
+      character style and a link's own formatting must beat the style too, or a hyperlink inside a
+      styled run loses its colour. `TextHintKind`'s declaration order *is* that order.
+- [x] Placeholder characters for what occupies a position without being text — a field, a note or
+      comment anchor, an as-character frame. They count towards a paragraph's length, because every
+      offset in the document is counted against the same string; they are not in its text.
+- [x] What an edit does to the hints across it: text typed inside a bold range is bold, text typed
+      immediately before it is not, and an anchor never stretches because its width is the one
+      character it stands for.
+- [x] Positions and ranges as node-plus-offset, never an offset into a whole-document string.
+      Ranges normalise on construction, so a selection made backwards is the same range as one made
+      forwards.
+- [x] Style model with parent-chain resolution, one pool per family — ODF documents routinely have a
+      paragraph style and a character style both called `Standard`, and resolving across families
+      would take one style's parent from the other's chain. Cycle-guarded; the family's defaults lead
+      a chain that does not reach them.
+- [x] Tables: rows, cells, spans, nested tables, and the column-edge grid the spans index into
+- [x] Lists and numbering with multi-level definitions and restart semantics — **for extraction and now
+      for layout too**. The definitions themselves still live in each reader rather than in the model, which
+      is the part of this item that is deliberately unfinished: nothing above the readers has yet needed to
+      ask what a list is, only what it draws.
+      This was the largest group in the whole-corpus sweep and it was one bug seen six times, not six bugs.
+      Every reader computed the label already and none of them had anywhere to put it: `PageParagraph`
+      carried no label, so `Paginator` measured none and `PageDrawing` drew none. All six rows closed
+      together — `text-features.{odt,fodt}` 149/154 → 154/154 and `word-features.{doc,docx,dotx,rtf}`
+      149–150/154–155 → 154–155/154–155. What it cost is described under the layout engine's
+      **list labels** item, which is where the fix is.
+- [x] **Page geometry**, in `Model/PageGeometry.cs`, read from all four formats and verified against
+      LibreOffice's own rendering. The interesting part is that the formats do not mean the same thing
+      by "top margin": Word's `w:top` is the distance to the first line of *body* text with the header
+      living above it, while ODF's `fo:margin-top` is the distance to the top of the *header*. The model
+      stores the body's, because that is the number pagination needs, and each reader converts — so the
+      ODF reader adds the header's extent where the Word readers take the value as given. Reading ODF's
+      value as the body's margin puts every line on the page too high by the height of a header.
+- [x] The ODF header height, whose two spellings behave differently in a way the attribute names do not
+      suggest: `svg:height` is fixed, honoured exactly, and *absorbs* the spacing below it, while
+      `fo:min-height` makes the height dynamic — LibreOffice maps it to `HeaderIsDynamicHeight` and then
+      sizes the frame to its content, so a header declaring 6 mm around one 12 pt line renders 4.9 mm
+      and the spacing is added on top. Settled by rendering both and measuring, not by reading the
+      specification.
+- [ ] The dynamic-height case exactly. It needs the header's content laid out before the page it sits
+      on is known, so the declared minimum plus spacing is used instead — the same approximation
+      LibreOffice's own DOC exporter falls back to and calls "totally nonoptimum, but the best we can
+      do". It errs towards leaving too much room, so body text starts slightly low rather than
+      overlapping the header.
+- [x] Which section each paragraph belongs to, resolved by the layout pass in all four formats — see the
+      layout section below for how differently the four say it. The *model* still records only the
+      geometries, since the extraction tree has no place to hang a section index on.
+- [ ] Headers and footers as page furniture in the *document model*. `WritingSection` has the slots and
+      the fallback rules — first page, even page, default, with a default header appearing on a first
+      page that asked for nothing else — but nothing populates them, because the flows are built by the
+      extraction pass and the model pass that would connect them is not written. Layout does not wait for
+      this: it reads the furniture itself, through the same walk the body uses.
+- [x] **Fields — both the definition and the cached result**, in `WritingField`. The result stays
+      preferred by default because it is what a reference renderer draws: nothing headless can compute
+      `PAGE` before it has paginated, and recomputing `DATE` would stop reproducing the file at all.
+      The definition is what the result cannot tell you — a hyperlink's target is in the instruction and
+      nowhere else, and a page number reading "4" says nothing about whether it was a field or a typed
+      digit. The four spellings share only their meaning: DOCX's `w:fldChar` state machine *and* its
+      one-element `w:fldSimple` (Word writes whichever it likes, so a reader that knows one finds half
+      the page numbers), RTF's `\fldinst` beside `\fldrslt`, WW8's `U+0013 U+0014 U+0015` in the
+      character stream, and ODF's typed elements, which are **not an instruction string at all** — so
+      an ODF field's `Instruction` is null and its `Kind` carries the whole of its meaning.
+      `FieldInstructions` grew the name-to-kind map the three instruction formats share and
+      `OdtMarkSink` maps element names onto the same `WritingFieldKind`. Measured over one document in
+      four formats: the same three fields, the same kinds, the same ranges and the same results — with
+      one difference that is in the file rather than in the reading of it, LibreOffice's ODF export
+      caching a page number of **0** where the other three cache 1.
+      That surfaced a second difference, named rather than tolerated and now in
+      `ExtractionComparisonTests.KnownDeviations`: LibreOffice's **text filter** expands `PAGE` to 0,
+      because it runs without a layout. Measured on `bookmark-field.*` — its text export says "Page 0
+      of 1" for the DOCX, the ODT and the RTF while its *rendering* of all four says "Page 1 of 1".
+      X-Ray.Office reports the cached result, so it agrees with the page in three of the four; the ODT
+      is the one where the file itself caches 0, and it agrees with the filter there by coincidence.
+      WW8's field PLCF is deliberately not read. Its `flt` numbering — `ww8par5.cxx`'s `aWW8FieldTab`,
+      where 33 is PAGE, 37 PAGEREF and 31 and 32 DATE and TIME — says the same thing as the instruction
+      sitting beside it in the same character stream, and one mapping shared by three formats cannot
+      disagree with itself the way two mappings could.
+- [x] **The two fields a paginating renderer must recompute**, in `Layout/PageFields.cs`. The item
+      above is right that a *reader* keeps the cached result; it is wrong as a description of what
+      reaches the page. `PAGE` and `NUMPAGES` are the pair whose cache describes the document the
+      producer had rather than the one being laid out, and until this existed a nine-page footer
+      printed the same number nine times — measured on `batch-010/195584360.docx`, which printed
+      "Page 10" on all twenty of its pages. The readers record where the cached result *sits*
+      (`PageParagraph.Fields`) and `PageFurnitureSet` substitutes before `FlowLayouter` sees the
+      blocks, because the new number has a different advance and has to take part in line breaking.
+      The sequence is the section's — `w:pgNumType/@w:fmt`, `sprmSNfcPgn`, `style:num-format` — with
+      a DOCX field's own `\*` picture switch overriding it. Measured reach: 104 of the 200 corpus
+      word documents changed. **Three things are deliberately not done**: `NUMPAGES` (the total is
+      not known while the running head is laid out), `PAGE` in body text (circular — the page a
+      paragraph lands on depends on the paragraphs before it), and RTF, whose layout path does not
+      carry the spans.
+- [x] **Bookmarks as ranges**, from all four formats, over the model's own node-plus-offset positions.
+      Each format pairs the two halves by something different and only two by the name: DOCX by `w:id`,
+      ODF and RTF by the name, WW8 by an index one table holds into the other. **`PlcfBkf` and `PlcfBkl`
+      are not parallel arrays** — a start's four-byte record is an index *into* the end table, so
+      bookmark `i` ends at `PlcfBkl[record(i)]` (`ww8scan.cxx`, `WW8PLCFx_Book::GetLen`). Pairing by
+      ordinal agrees for every document whose bookmarks neither nest nor overlap, which is most of
+      them, so that mistake survives every simple test and mangles exactly the documents that use
+      bookmarks seriously.
+      The trap that actually cost the time is the other half of the same structure. Firing starts and
+      ends as an ordered stream of events needs an order, and **no order works**: two adjacent
+      bookmarks want the first's end before the second's start, while a *zero-length* bookmark wants
+      its own start before its own end — and both pairs sit at the same character position. LibreOffice
+      hits the same wall and says so above `WW8PLCFx_Book::advance` ("the case of `][` … `][` is not
+      solved yet"). So the walk remembers *where each position landed* and the ranges are built
+      afterwards, which has no order to get wrong. The corpus's point bookmark is precisely the one
+      that vanishes otherwise, and it vanished.
+      A collapsed range is a legitimate bookmark rather than a malformed one — ODF spells it as a
+      single `text:bookmark` — and is what a cross-reference target usually is.
+- [ ] Floating frames with anchoring (paragraph, character, as-character, page) and wrap mode. An
+      as-character anchor is a hint over a placeholder; the other three need a per-page anchor model.
+- [x] **Tracked changes with their author, their timestamp and their words.** All four readers still
+      *resolve* a change — an insertion is content and a deletion is not — and `TrackedChangeTests`
+      still pins the four agreeing on that. What is new is the record beside it: `WritingChange` carries
+      the kind, the range, the author, the date and the text. The text is the load-bearing member and
+      the reason the range is not enough: a deletion's words are deliberately absent from the extracted
+      paragraph, so its range is *empty*, collapsed onto the position they were removed from, and
+      without the words the record would say that somebody deleted something somewhere.
+      Four encodings of one idea: `w:ins`/`w:del` with `w:author` and an optional `w:date`; WW8's
+      `sprmCFRMarkIns`/`sprmCFRMarkDel` with **separate** author and date sprms per direction
+      (`0x4804`/`0x6805` against `0x4863`/`0x6864` — reading the insertion's author for a deletion names
+      the wrong person, and `ww8par4.cxx`'s `Read_CRevisionMark` says they must sit at the same
+      character position); RTF's `\revised`/`\deleted` toggles indexing a **zero-based** `{\*\revtbl}`
+      whose conventional first entry is `Unknown`; and ODF's hoisted `text:changed-region`, reached from
+      the body by an id, which is why ODF gets deletions right without the reader doing anything.
+      **WW8's `DTTM` is not packed tight.** Six bits of minute and five of hour do end at bit 11, but
+      the month starts at bit 16 and the year at 20 — LibreOffice's own comment gives masks
+      (`0x000F0000`, `0x1FF00000`) rather than widths for exactly that reason. Shifting by the widths
+      reads a bit of the day as the month's low bit, and `revisions.doc`'s 1970-01-01 comes back as
+      2040-02-01. It decodes to a plausible date, which is what makes it survive a glance.
+      Measured, and worth knowing before trusting a round trip: the source RTF says `\revdttm0`, "no
+      date", and LibreOffice's own exporters disagree about it. Its ODF and DOC exports both write the
+      Unix epoch; its DOCX export omits `w:date` altogether. So two of the four report 1970-01-01 and
+      two report nothing, from one source document.
+- [ ] Fields — store both the definition and the cached result. The cached result is what a
+      reference renderer shows, so prefer it by default. The hint kind exists; the definitions do not.
+- [ ] Bookmarks and cross-references
+- [ ] Floating frames with anchoring (paragraph, character, as-character, page) and wrap mode, in the
+      *document model*. Layout has them — `Layout/PageFrame.cs` holds the anchor, the two position origins,
+      the wrap and the frame's own blocks, and all four anchor kinds are read — but the tree has no node for
+      one, so a caller walking the model still cannot find a frame. The as-character case is the one that
+      needs the model rather than the layout: it is a hint over a placeholder and takes room on a line, which
+      is a paragraph's business.
+- [ ] Tracked changes (redlines) with their author and timestamp. The hint kinds exist and the
+      readers currently resolve changes rather than recording them.
+- [ ] Importers that build this model. All four build the extraction tree today, and all four now also
+      produce the flat paragraph-plus-format sequence the paginator takes — which turned out to be what
+      layout actually needed, and is much less than this model holds. The tree itself still has no
+      importer, and what would use it is the run-level formatting that drawing needs.
+      The marks pass is the closest thing to one, and deliberately not the thing itself: it materialises
+      a `WritingParagraph` only where a mark needs a position to point at, and fills in its text when
+      the paragraph closes. So a document with three bookmarks builds three paragraphs and a document
+      with none builds none, which is what lets it run inside the extraction walk rather than beside it.
+      The document order those paragraphs carry is taken where a paragraph *begins* rather than where it
+      ends, so that a footnote's paragraphs — which finish before the paragraph anchoring them — do not
+      sort in front of it.
+
+## Importers
+
+Order chosen so each is verifiable before the next gets harder.
+
+### ODT — extraction done
+- [x] `content.xml` text content; automatic and named styles via `XRay.Office.OpenDocument`
+- [x] Tables, lists, frames, sections, fields, notes, comments, and the master pages'
+      headers and footers — the last four are things LibreOffice's own text filter drops, so
+      extracting them is a deliberate improvement rather than a difference to reconcile
+- [x] `ott` templates and flat `fodt`, through the same reader
+- [x] Tracked changes: a change region is hoisted out of the body by ODF itself, so a deletion is
+      absent from the text without the reader having to skip it — which is why all four formats
+      agree. The regions themselves are now read as well, through `OdtMarkSink`: what is left at the
+      position is an empty element naming a region by id, so recording who changed what is a lookup
+      rather than a walk, and a deletion's words come out of the region's own `text:p` children.
+- [x] Bookmarks and fields, through the same sink. `OdfContentReader` gained an `IOdfMarkSink` hook
+      because the walk knows *where* the marks are and nothing about what they mean, while the
+      word-processing layer knows the reverse and sits above it in the dependency order. Null for
+      Calc and Impress, so neither pays for it.
+- [x] Layout: `OdtLayoutSource` walks `content.xml` a second time and resolves each paragraph's format
+      through the style chain that was already built. The translations that needed care: `fo:line-height`
+      carries a percentage *or* a length and the length means exact; `fo:font-family` is CSS syntax, so a
+      real document says `'Liberation Serif', 'Times New Roman', serif` and passing that whole string to
+      a resolver matches nothing; `style:font-name` names a font-face declaration rather than a family
+      and is what LibreOffice writes most of the time; `fo:keep-with-next` is `always` against `auto`
+      rather than a boolean; and the default size is ten points, not twelve.
+- [x] ODF's own text-for-layout problem: runs of spaces, tabs and line breaks are elements, so taking the
+      descendant text nodes alone loses every one of them — `text:s` above all, which is how any run of
+      two or more spaces is written.
+- [x] `draw:frame`, read into the layout engine's frame model: the element carries the anchor and the
+      geometry and its *graphic style* carries everything that decides how text behaves near it, so reading
+      the element alone gives a frame in the right place that no text avoids. The style is resolved up its
+      parent chain, because LibreOffice writes a per-frame automatic style whose parent is the named `Frame`
+      style and the wrap can be on either.
+      Two of ODF's spellings are traps and both are written down where they are read. `style:wrap="none"`
+      means no text *beside* the frame — the text goes above and below it — and ODF's word for "ignore it"
+      is `run-through`; reading `none` as "no wrapping" leaves text running across the frame. And
+      `style:horizontal-pos="from-left"` is the only value that uses `svg:x` at all: `left`, `center` and
+      `right` align against whatever `style:horizontal-rel` names and ignore the coordinate.
+      A frame's own text goes through `ReadFlow`, the same walk a header takes, so a frame containing a
+      table needs nothing of its own. This also fixed a bug that predates frames: a `draw:frame` inside a
+      `text:p` fell through the run walker's default case, which walked *into* the text box and spliced the
+      frame's words into the middle of the sentence it floats beside.
+- [x] `draw:image` read for its bytes, in `OpenDocument/OdfPictures.cs`: a package entry named by
+      `xlink:href`, or base64 in `office:binary-data`. The href wins over the inline data — see the layout
+      engine's picture item, and the `data:` URI that follows from it.
+- [x] **The document's `Wrap` is recorded even where nothing may use it.** LibreOffice's `.odt` export of
+      `picture-anchor.fodt` inherits `style:wrap="dynamic"` from the built-in `Graphics` style onto a frame
+      anchored `as-char`, and Writer keeps that and ignores it: `SwTextFly::GetTop` asserts outright that it
+      is never called for a `SwFlyInContentFrame` (`sw/source/core/text/txtfly.cxx:777`). So the reader
+      stays faithful to the file and `FrameLayout` enforces the rule, rather than the reader normalising
+      `Wrap` to `Through` for an as-character anchor. Worth stating because the test that first asserted it
+      the other way round looked right: "an as-character frame is never an obstacle" is true, and it is a
+      statement about layout rather than about what a document is allowed to say.
+- [x] **A comment is not body text**, and the trap is one word long: it is `office:annotation`, not
+      `text:annotation`. The layout walk dispatches on the `text:` namespace first and had the case for it
+      under there, where it could never fire, so the generic branch below descended into the comment and
+      spliced its author, its timestamp and its body into the sentence it is anchored in. Silent in a
+      packaged `.odt`, where the elements abut and the words fuse into their neighbours; visible in the same
+      document saved flat, where the pretty-printer's newlines separate them — which is why
+      `text-features.odt` rendered 152 words and `text-features-flat.fodt` 155 against the same reference's
+      154, and why a *disagreement between two packagings of one document* was the sharper clue than either
+      number. Both went to 149, and the whole of the remaining five was the list labels; both are now 154.
+- [x] **The list level's indents, which are not the paragraph's.** ODF is the one format of the four whose
+      list paragraphs carry no indent of their own: `List_20_Bullet` states none, and the quarter inch every
+      item is set in comes from the level's `style:list-level-properties`. So `text-features.odt` laid its
+      whole list out flush with the left margin at 56.7 pt where LibreOffice draws the text at 74.8 and the
+      label at 56.8. Read in `OpenDocument/OdtLayoutSource.Lists.cs`.
+      **ODF says the geometry two ways and the attribute names conceal it.** The label-alignment mode has
+      `fo:margin-left` and `fo:text-indent` inside a `style:list-level-label-alignment` child, which is what
+      a reader looks for because those are the names a paragraph style uses. The older
+      label-width-and-position mode — which is what LibreOffice writes for levels 1 and 2 of its own
+      `ListBullet` and `ListNumber` styles, and therefore what this document uses — says
+      `text:space-before` and `text:min-label-width` instead, and the mapping is
+      `left-margin = space + width, first-line = -width` (`xmloff/source/style/xmlnumi.cxx:433`). Reading
+      only the first spelling leaves every list in a LibreOffice-written `.odt` at the margin, and the file
+      contains no attribute whose absence says so.
+- [x] **`TabsRelativeToIndent`, which decides what a tab stop's position is measured from.**
+      `SwTextFormatter::NewTabPortion` takes the tab origin as
+      `m_pFrame->getFrameArea().Left() + (bTabsRelativeToIndent ? GetTabLeft() : 0)`
+      (`sw/source/core/text/txttab.cxx`:94-98, `#i24363#`), where `GetTabLeft()` is the paragraph's own
+      text-left margin (`SwTextNode::GetLeftMarginForTabCalculation`, `ndtxt.cxx`:3573-3593), and the same
+      flag moves `nLeftMarginTabPos`, the position the hanging-indent overrule falls back to
+      (`txttab.cxx`:222-285, `#i115705#`). **Absent means true** — `mbTabRelativeToIndent(true)`,
+      `DocumentSettingManager.cxx`:80 — and every Word-family importer sets it false: `ww8par.cxx`:1951
+      for a `.doc`, `DomainMapper`'s own constructor for DOCX and RTF
+      (`sw/source/writerfilter/dmapper/DomainMapper.cxx`:128-132). This tree's three Word readers each
+      set `ParagraphFormat.TabsRelativeToIndent` false by hand; **the ODF reader never set it at all**, so
+      every `.odt` LibreOffice exported from a Word file — which states the flag in `settings.xml`, all
+      338 of the converted corpus — laid its tabs out by Writer's native rule instead. The reach is
+      narrower than that census: the two rules differ only for a paragraph holding both a tab and a
+      non-zero left indent, which is **38 of the 338, 3728 paragraphs**. `A_320.odt` holds 1041 of them
+      and went **134 pages against 26.2.4.2's 118 to 118 of 118**, glyphs 89754 → 88938 against 88958,
+      with its own `.doc` spelling page- and glyph-exact throughout as the control.
+      `probes/odt-page-r87/results.md`; `OdtTabSettingsTests`.
+
+### DOCX — extraction done
+- [x] `document.xml` body; `styles.xml`; `numbering.xml`; parts located by relationship with
+      the conventional name only as a fallback
+- [x] Style resolution across every layer, with **ECMA-376 §17.7.3's toggle rule**: bold set by
+      both the paragraph style and the character style comes out *off*, while direct formatting
+      is absolute. This is the single most common way a DOCX reader gets emphasis wrong; the
+      four cases are pinned by `WordToggleTests` and were verified against LibreOffice's HTML
+      export, where bold is visible.
+- [x] Numbering: `w:abstractNum` definitions against `w:num` instances, level overrides,
+      `w:lvlText` templates, `w:isLgl`, style-linked lists, and the `numId` of zero that means
+      "not numbered"
+- [x] Fields: the `w:fldChar` state machine, so the instruction is skipped and the cached result
+      kept. `w:fldSimple` too.
+- [x] Tracked changes: `w:ins` content read, `w:del`/`w:delText` skipped — deleted text is still
+      in the file and emitting it invents content. All four readers agree on this;
+      `TrackedChangeTests` pins it over one document converted to all four formats. Both wrappers are
+      now *recorded* as well, with `w:author` and the `w:date` that LibreOffice omits whenever the
+      source stated none.
+- [x] Bookmarks, paired by `w:id` and named by the `w:name` on the start alone — the same key
+      LibreOffice's `DomainMapper_Impl::StartOrEndBookmark` uses, and not the name, which a document
+      assembled from several may repeat. They appear at block level as well as inside a paragraph,
+      where the position taken is the end of the paragraph before.
+- [x] Headers/footers (only the parts a section names), footnotes/endnotes with computed
+      citations, comments with their author
+- [x] `w:drawing` and legacy `w:pict`: images recorded, text boxes hoisted into their own
+      section, and the DrawingML/VML pair read once rather than twice — and, in `Ooxml/DocxPictures.cs`,
+      the bytes behind `a:blip/@r:embed` as well. The relationship scope is the trap; it is written down
+      under the layout engine's picture item.
+- [x] `w:drawing` read for *layout* as well: `wp:anchor` states the same two facts per axis ODF does — an
+      origin and either an offset in EMUs or an edge to align against — and the wrap in a way that needs
+      saying out loud. It is which of five sibling **elements** is present, and two of the five are named
+      the opposite of what they do: `wp:wrapNone` is the mode where text runs *through* the frame, and
+      `wp:wrapTopAndBottom` is what ODF spells `none`. Only `wp:wrapSquare` carries a side, in `wrapText`.
+      `wp:inline` is read as an as-character frame with no wrap, so an inline picture is recorded rather
+      than misplaced.
+- [x] **`w:br w:type="page"` is a deferred page break, not a line break.** A `w:br` is three things wearing
+      one name and the reader drew all three as a line break, so `word-features.docx` was one page where the
+      reference is two — while the *same document* as `.doc` and `.rtf` paginated correctly, because those
+      two state the break as a property of the paragraph that follows (`sprmPFPageBreakBefore`, `\pagebb`)
+      and nothing had to be deferred. LibreOffice turns the OOXML form back into the DOC's own U+000C
+      (`OOXMLBreakHandler::~OOXMLBreakHandler`, `writerfilter/ooxml/Handler.cxx:246`) and then defers it,
+      applying it to the next paragraph as `BreakType_PAGE_BEFORE` (`dmapper/DomainMapper.cxx:4379`); this
+      does the same, into `ParagraphFormat.StartsNewPage`. `word-features.docx` is now 2/2 pages and
+      150/155 words, the same bucket as its `.rtf` sibling.
+      Two limits, both LibreOffice's own behaviour in one direction and not the other. A break in a note
+      body or a text box is dropped rather than deferred, which is what `DomainMapper.cxx:4376` does by
+      testing the footnote, shape and comment contexts — here it falls out of putting the pending flag back
+      after the nested flows are read. And a break with text *after* it in the same paragraph still moves
+      the whole paragraph rather than splitting it; Writer splits (`m_bIsSplitPara`), and splitting here
+      would rebase every offset the paragraph carries — its notes, its frames, its bookmarks. No corpus
+      document has one, because neither Word nor LibreOffice writes one.
+- [ ] `w:br w:type="column"` is still drawn as a line break. The model has `StartsNewPage` and no column
+      equivalent, and Writer's `BreakType_COLUMN_BEFORE` would need one on `ParagraphFormat` plus a
+      column-advance in `Paginator`.
+- [ ] `wp:effectExtent`, and the reason it is unread is a measurement rather than a principle. LibreOffice
+      folds it into the wrap margins (`GraphicImport.cxx`, the `WrapTextMode_PARALLEL` branch:
+      `m_nRightMargin += aMSOBaseLeftTop.X + aMSOBaseSize.Width - (aLOBoundRect.X + aLOBoundRect.Width)`,
+      which for an unrotated shape comes to the effect extent). Adding it *horizontally* moves the wrapped
+      lines the right way by a twip; adding it *vertically* raises the hole's top edge by a twip too, and
+      on the corpus document that makes the line above the frame touch it and narrows one line more than
+      LibreOffice does. A whole line in the wrong place is a worse error than a twip, so neither half is
+      applied and the DOCX comparison runs two twips wider than the ODF one instead.
+- [ ] `ADD_VERTICAL_FLY_OFFSETS`, which the OOXML import turns on and this engine does not read at all.
+      Measured while building `frame-parallel`: LibreOffice's own DOCX export of that document narrows one
+      line fewer than its ODF form does — the last line of the paragraph *above* the frame is divided in
+      ODF and left whole in DOCX. The flag is why. It makes `CalcFlyWidth` grow the line's rectangle by the
+      text frame's upper margin before intersecting it (`itrform2.cxx:2956`, `SubTop`) and adds
+      `GetLowerMarginForFlyIntersect` at the bottom, so a Word document decides "does this line touch the
+      frame" against a taller strip than a Writer document does. Nothing in the corpus turns on it in a way
+      that is currently compared, which is why `frame-parallel` is kept in its two ODF forms only — but any
+      DOCX with a frame whose top lands mid-paragraph will differ by one line until this is read.
+- [x] Tables: `w:gridSpan`, and `w:vMerge`'s top-and-continuation encoding turned into a row
+      span, which needs the rows drafted before they are materialised
+- [x] `settings.xml` compatibility flags, in `WordCompatibility` — and **one** of them, which is the
+      finding rather than a shortfall. `w:compat` carries about eighty flags and which ones matter is a
+      measurement, not a reading of the schema, so each candidate was checked by rendering the same
+      document with and without it and comparing where LibreOffice put the words.
+      `w:doNotExpandShiftReturn` is the one that moves text and is now wired: a justified line ended by
+      a `w:br` stops being stretched, and its last word goes from 538.75 pt — hard against the right
+      margin — to 154.0 pt where the words naturally end. LibreOffice reads the same flag into
+      `DoNotJustifyLinesWithManualBreak` (`DomainMapper_Impl.cxx`:10160). Only the drawing changes, so
+      `ManualBreakJustification` is applied to a finished layout rather than threaded into the line
+      filler, which is what makes it a twenty-line change instead of a change to the break loop.
+      Two more were already wired and are now read through the same type:
+      `w:doNotUseHTMLParagraphAutoSpacing` (whether two paragraphs' spacings add) and the
+      `compatibilityMode` setting (the table-indent rule at 15 and above).
+      **The trap is that a flag can look inert because of the font.** `w:noLeading` turns off external
+      leading and is invisible with Carlito, whose declared line gap is zero — the first measurement of
+      it said "no change". With Liberation Serif at 11 pt it moves the first baseline from 66.95 pt to
+      66.50 pt and every line after it by the same amount again. It is measured and *not* wired,
+      because the line gap enters through `XRay.Office.Text`'s line-metric derivation, which is shared
+      with the other three readers and both other families; suppressing it needs a metric option there.
+      Measured and genuinely inert, each recorded in `WordCompatibility` with what was tried:
+      `w:suppressTopSpacing` and `w:suppressSpacingAtTopOfPage` (LibreOffice does not read either —
+      neither appears in `SettingsTable::lcl_sprm` — and adding them to a twenty-paragraph document
+      with 20 pt of space-before changed nothing); `w:noColumnBalance`; `w:usePrinterMetrics`; the
+      document-level `w:widowControl` over ten straddle positions of a six-line paragraph; and
+      `compatibilityMode` 14 against 15 on justified text, which lays out identically to the hundredth
+      of a point despite `JustifyLinesWithShrinking` hanging off it.
+- [x] `w:altChunk`, read when the embedded part is a format X-Ray.Office reads and reported when it is
+      not. The element is a placeholder with an `r:id` and nothing else, pointing at a *complete file*
+      inside the package, so the reading is exactly "run the reader again on another part and splice
+      the result in": the chunk's body blocks become the host's at the placeholder's position, its
+      notes and comments are hoisted alongside the host's, and its headers and footers are dropped as
+      Word drops them — page furniture belongs to whatever owns the page and a chunk owns none.
+      The format is **sniffed, not taken from the part's content type**. An `altChunk`'s declared type
+      is wrong often enough that Word ignores it too; `alt-chunk.docx` declares its RTF chunk through a
+      loose `Default` extension mapping and its DOCX chunk through an `Override`, and both read the
+      same way because neither declaration is consulted.
+      HTML and plain text — the two content types the element was invented for — are not
+      word-processing formats this library claims, so they keep the diagnostic. That matters more than
+      for most unread constructs: what goes missing is a whole document rather than a property of one.
+      The depth guard is thread-static rather than an instance field, because the recursion does not
+      run through the reader object — a nested chunk is read by a whole new one, built by
+      `WordProcessingReader`, so nothing an instance holds reaches it. A package embedding itself is
+      well-formed, since the relationship is by part name.
+- [x] Layout: `DocxLayoutSource` walks `document.xml` a second time. OOXML's unit traps, each written
+      down where it is read: `w:sz` is half-points, so reading it as points halves every document;
+      `w:spacing`'s `auto` rule counts two-hundred-and-fortieths of a line rather than a percentage;
+      `w:hanging` is a positive number meaning a negative indent; `w:start` and `w:left` are the same
+      attribute under two names; and `w:rFonts` names four families at once, of which Latin text wants
+      the ASCII one. Deleted text and field instructions are skipped, since both are in the file and
+      neither is on the page.
+- [x] `fontTable.xml`, in `WordFontTable`. Still not needed for layout — `w:rFonts` names the family
+      directly — and nothing here changes a measurement. What it holds that is available nowhere else
+      is the two inputs a *substitution* would take: the embedded-font relationships, and the PANOSE
+      bytes beside `w:altName`, `w:family` and `w:pitch` (which is what LibreOffice's own
+      `dmapper/FontTable.cxx` reads it for). A document embedding its own copy of a face is precisely
+      the one where matching by name gives different metrics, hence different line breaks and a
+      different page count, so that is now a diagnostic (`PL2112`) rather than silence.
+      The bytes are not decoded. An ODTTF is only a TrueType file XORed against the sixteen bytes of
+      its `w:fontKey`, so decoding is cheap — but `w:subsetted="1"`, which is how real files spell it
+      rather than `"true"`, means the face holds only the glyphs the document uses and cannot serve as
+      a substitute for the family. Loading it usefully means loading it *only* for the runs that name
+      it, which is a font-resolution change rather than a reader change.
+      The duplicate-name case is real rather than defensive: LibreOffice's own DOCX export writes two
+      `Symbol` entries into `word-features.docx`, so the by-name index is first-wins instead of an
+      indexer that would throw on that file. Its export also writes no PANOSE at all, which is why the
+      PANOSE coverage is pinned on a hand-written document.
+- [x] **Theme colours**, `w:color w:themeColor` with `w:themeTint`/`w:themeShade`. The resolution
+      itself is DrawingML's and lives in `XRay.Office.Ooxml/DrawingML` — see `XRay.Office.Ooxml/TODO.md`
+      for the transform chain and how it was verified. What is Word-specific is here, in
+      `WordThemeColour`, and it is two things.
+      **Word's tint and shade are not DrawingML's tint and shade.** They are hexadecimal bytes acting
+      on *luminance in HSL*, where `a:tint` and `a:shade` act on gamma-decoded components.
+      `w:themeTint="99"` becomes `lumMod` 60000 with `lumOff` 40000, and `w:themeShade="BF"` becomes
+      `lumMod` 74902 with no offset. LibreOffice states this outright — "MS Office uses themeTint and
+      themeShade on the luminance in a HSL color space, see 2.1.72 in [MS-OI29500]. That is different
+      from OOXML specification" (`oox/source/drawingml/fontworkhelpers.cxx`:1588) — and does the
+      conversion at `oox/source/shape/WpsContext.cxx`:424. Reading them as the identically named
+      DrawingML transforms is the trap, because `a:tint` counts *towards* the original from white: 0x99
+      is the Word UI's "lighter 40%" and would come out as a 60% tint, which is much paler, on every
+      themed run in the document at once.
+      **A cached `w:val` beside the reference wins.** It is what LibreOffice renders — `DomainMapper.cxx`:2676
+      puts it straight into `PROP_CHAR_COLOR` and keeps the theme reference only for round-tripping —
+      and it is exact against Word. Measured over the 271 distinct combinations of scheme colour and
+      modifier in the DOCX files of LibreOffice's own test data, resolving from the theme instead
+      reproduces Word's cache exactly 140 times and within one unit per channel 117 more; the residual
+      one unit is LibreOffice's rounding rather than a different answer. The 14 that differ by more are
+      documents whose theme was replaced without Word rewriting the cache — `n779642.docx` has the same
+      `text2` swapped both ways — which is what makes "prefer the cache" a choice rather than an
+      optimisation, since Word itself would show the recomputed colour there.
+      So the theme is the fallback, and not a rare one: `w:val="auto"` beside a `w:themeColor` is what
+      anything other than Word tends to write, and a `w:themeColor` with no `w:val` at all is legal.
+      **A deliberate divergence from LibreOffice, measured on `theme-colours.docx`:** its five themed
+      runs state the reference three ways, and LibreOffice paints the one with a cached `w:val` in the
+      theme colour and the four without one in *black*, because `mnColor` defaults to zero. X-Ray.Office
+      resolves them, which is what Word does. That is also why the transform chain is verified through
+      shape fills rather than run colours — a `w:color` cannot be checked against LibreOffice at all.
+      `w:clrSchemeMapping` in `settings.xml` is read as the colour map, since it is `a:clrMap` under
+      different attribute names. Every file measured carries the identity, so it moves nothing yet; the
+      swapped case is pinned by a unit test instead.
+- [x] **Themed colours on the table**: `w:shd`'s `w:themeFill`, and `w:tblBorders`/`w:tcBorders`'
+      `w:themeColor`. The recorded blocker was structural rather than a missing parse — `Shading`
+      and `Borders` in `DocxLayoutSource.Tables` were `static` and so could not reach the theme the
+      source already held — and making them instance methods was the whole of the fix.
+      **`w:shd` carries two themed colours and they are not the pair a reader expects.**
+      `w:themeFill` is the *background*, the colour a cell appears in; `w:themeColor` on the same
+      element is the *pattern's foreground*, which shows only through a `w:val` naming a pattern. It
+      is the only element in WordprocessingML with two, and it is why `WordThemeColour.Read` takes
+      the four attribute names as parameters. Resolving the fill from `w:themeColor` compiles,
+      resolves, and paints a believable colour out of the wrong slot.
+      **LibreOffice resolves neither, so the measurement is indirect.** Measured on the new
+      hand-written `theme-table.docx`: of six shaded cells it fills the *one* with a cached
+      `w:fill` and leaves the other five unpainted, and of five bordered rows it strokes the one
+      with a cached `w:color` in that colour and the other four in **black**. `CellColorHandler`
+      takes the colour straight from `w:fill` (`dmapper/CellColorHandler.cxx`:113) and keeps
+      `w:themeFill` only as a grab-bag entry for round-tripping, exactly as `DomainMapper` does with
+      `w:color`. So every themed cell and border in the document is paired with an inline shape
+      stating the equivalent DrawingML chain — a `w:themeFillShade="BF"` is a `lumMod` of 74902 —
+      which LibreOffice *does* resolve, through `oox/source/drawingml/color.cxx`. All eleven agree
+      exactly with the reference: accent1 darkened 25% #376092, lightened 40% #95B3D7, accent3
+      lightened 80% #EBF1DE, background2 darkened 50% #948A54, accent2 #C0504D and darkened 25%
+      #953735, accent4 lightened 60% #CCC1DA, accent5 #4BACC6. Word's own picker labels the first of
+      those 365F91; LibreOffice and X-Ray.Office both give 376092, which is the one-unit-per-channel
+      rounding already measured across the 271 combinations in LibreOffice's test data.
+      **The trap that cost the time: a themed border cannot survive a conversion.** LibreOffice's
+      DOCX *export* round-trips `w:shd`'s `w:themeFill` verbatim through the grab bag — down to
+      lower-casing `BF` to `bf` — but writes a themed border out as a literal `w:color="000000"`,
+      losing the reference entirely. A corpus document built by converting one is therefore half a
+      test that looks like a whole one, which is why this file is hand-written.
+      A themed `w:tblBorders` reaches a cell only through the *last* row, and that is the reference's
+      rule rather than this reader's: `w:tblBorders`' `top`, `bottom`, `start` and `end` are the
+      table's outer edges and the interior is `w:insideH`/`w:insideV`, which is still a per-position
+      rule this reader does not have.
+- [ ] Themed colours on `w:u`. The reader is one more call to the same `WordThemeColour.Read`; what
+      is missing is anywhere for the answer to go. `WordCharacterFormat` reports `IsUnderlined` as a
+      flag, `PageRun` carries no decoration at all, and `PageDrawing` strokes no underline — so an
+      underline colour today would be a value nothing could ever be measured against, which is the
+      one kind of reader this project will not add. Three lines the day the renderer draws one.
+
+### DOC (WW8) — extraction done
+- [x] FIB; the text streams; `0Table` vs `1Table` chosen by `fWhichTblStm`. The FIB's
+      offset-and-length array is positional and its indexes are easy to get wrong by three:
+      `fcPlcfLst` is 73, not 70 — verified against LibreOffice's own `Ww8Fib::Ww8Fib`, which
+      seeks to `0x2DA` for the field at index 72.
+- [x] **The piece table**: a position is turned into a byte offset through it, never by
+      arithmetic, so a fast-saved document reads in logical order rather than scrambled.
+      Compressed pieces decode in the document's code page with WW8's sixteen fixed overrides.
+- [x] PLCF structures, with the record size passed explicitly — a PLCF read as though it had no
+      data records takes its record bytes for positions, which point anywhere and yield stories
+      full of unrelated text
+- [x] CHPX/PAPX sprm decoding, including the `0xD608` two-byte-length exception; FKP pages with
+      the paragraph index's thirteen-byte stride
+- [x] The `STSH` stylesheet, with **both** UPXs per style: a paragraph style carries a CHPX half
+      as well as a PAPX half, and that half is how a heading style makes its runs bold. The
+      style name's length prefix is two bytes; read as one, every name comes back shifted eight
+      bits and arrives as CJK rather than as nothing.
+- [x] Character formatting resolved paragraph style → character style → direct, with the
+      character style found in a first pass over the exception: the sprm naming it sits in the
+      same grpprl as the direct formatting it must not override.
+- [x] List tables (`LSTF`/`LVL`/`LFO`): labels are computed, since the file stores none. The
+      level a placeholder stands for comes from the *character value* at its offset, not from
+      the offset's slot — producers pack `rgbxchNums` from zero rather than indexing it by
+      level, and LibreOffice reads the character for the same reason.
+      The `LVL` array also lies **outside** `lcbPlfLst`, so honouring the declared length finds
+      every list's header and none of its levels.
+- [x] Subdocuments: the eight ranges in CP space, the header PLCF's six leading separator
+      stories, and the terminating paragraph mark that ends every story rather than opening a
+      paragraph in it (LibreOffice reads `nLen - 1` for the same reason)
+- [x] Comments with their author: `GrpXstAtnOwners` is a bare array of strings rather than a
+      string table, and `ibst` follows a fixed 22 bytes of initials
+- [x] Metadata from the OLE property sets, via the shared reader in `XRay.Office.MsBinary` —
+      including the `FILETIME` that carries an elapsed time rather than an instant
+- [x] Codepage handling from the FIB language id
+- [x] Tables: `sprmTDefTable`'s column edges and cell descriptors, and `sprmTTableHeader` for
+      repeated header rows. A horizontal merge is expressed *either* by a cell's flags or by
+      geometry alone — Word writes the flags, LibreOffice writes neither — so the span comes from
+      the table's column grid as well as from the cell, exactly as in RTF. The geometry lives on
+      the row-*end* paragraph, whose properties are cleared as soon as it is finished, so it has
+      to be handed to the row rather than read back from the walk.
+- [x] Hyperlink targets from the `HYPERLINK` field instruction, through the parser the RTF reader
+      shares. The target is in the instruction and nowhere else; the cached result says only what
+      the link looked like.
+- [x] Tracked changes: `sprmCFRMarkDel` text is skipped, so the extraction says what the changes
+      leave rather than what they removed. `TrackedChangeTests` pins all four readers agreeing. The
+      change itself is recorded from the resolved character format — WW8 states a revision as a run
+      property rather than as a wrapper, so one begins where the flag turns on and ends where it turns
+      off or its author changes — with the author from `SttbfRMark` and the date from a `DTTM`.
+- [x] Bookmarks from `SttbfBkmk`/`PlcfBkf`/`PlcfBkl`, and the two ways that structure is easy to get
+      wrong; see the document-model section.
+- [x] Word 95 and earlier: a different FIB and a different sprm numbering, so it is rejected
+      rather than misread
+- [x] Layout: a second walk over the body range, resolving the layout sprms through the same style chain
+      the content pass uses. The paragraph's properties are found from its **mark's** position, not its
+      first character's — looking up the first character finds the *previous* paragraph's properties and
+      formats the whole document one paragraph out of step.
+- [x] The font table (`SttbfFfn`), which `sprmCRgFtc0` indexes. Two offsets decide whether it reads at
+      all: the first entry starts **four** bytes in, not two, because the count is followed by the string
+      table's extra-data length; and each name sits after PANOSE *and* the twenty-four-byte font
+      signature, so skipping only PANOSE reads the signature as UTF-16 and yields a plausible-looking
+      string of CJK. Starting two bytes early finds no fonts at all, which shows up as every paragraph
+      laid out in a substituted face.
+- [ ] The `Dop`, for `fDontUseHTMLAutoSpacing` — which is what LibreOffice's importer reads into
+      `PARA_SPACE_MAX` and therefore decides whether two paragraphs' spacings add or the larger wins. The
+      DOC path defaults to adding, which matches every document LibreOffice itself wrote.
+- [x] **Escher drawings**, through the shared reader in `XRay.Office.MsBinary`. Word's half is the
+      `PlcSpaMom`/`PlcSpaHdr` table of 26-byte `FSPA` records — the FIB's slots 40 and 41 — which ties a
+      character position to a shape id, its rectangle in twips, its two position origins and its wrap; the
+      shape itself is found by that id in the Office Art blob at `fcDggInfo`. `fspa.nwr` and `fspa.nwrk`
+      are indeed the two numbers RTF's `\shpwr` and `\shpwrk` carry, and only `nwr` 2 and 4 consult `nwrk`
+      at all (`ww8graf.cxx:2729`) — a shape whose `nwr` is 1 or 3 usually carries a stale `nwrk` that would
+      otherwise decide its wrap.
+      Three things that cost time, in the order they will:
+      **The blob is not a run of sibling records.** It is the `DggContainer` and then one *Word drawing*
+      per subdocument, and a Word drawing is a single label byte — 0 for the body, 1 for the headers — and
+      then the `DgContainer`. LibreOffice allows for it by advancing one byte and re-reading the header
+      (`msdffimp.cxx:5997`, whose comment calls it "trying to get a one-hit wonder"). Walking the blob as
+      records reads that byte plus three of the next header as a record type and finds no shapes at all,
+      which looks exactly like a document that has none.
+      **`posrelh` and its three siblings are in the *tertiary* property table**, `msofbtUDefProp`, not the
+      shape's own, and they override the `FSPA`'s `nbx`/`nby` only when *present* — zero is a meaningful
+      origin, the page's printable area, so comparing against zero moves every shape that relies on the
+      `FSPA` to the page margin. LibreOffice makes the same distinction with a `std::optional`
+      (`ww8graf.cxx:2316`). `posh`/`posv` beside them are the alignment: 0 means "at the stated offset" and
+      1 to 5 name an edge, at which point the `FSPA` coordinate is not used at all — `picture-anchor.doc`
+      states `posh` 2, centred, while still carrying the 3685 twips its box last sat at.
+      **A shape's rectangle is the path its outline runs along, not its bounding box.** Writer keeps text
+      clear of the bounding box, so half the line width has to be added to the wrap distance. Measured on
+      `frame-wrap.doc`: LibreOffice draws the shape's right edge at 170.05 pt, exactly the 3401 twips the
+      `FSPA` states, and resumes the body text at 179.55 pt — 3591. The 190-twip gap is 181 + 7 + 2, where
+      181 is the drawing layer's default `dxWrapDistLeft`/`Right` of 114935 EMU (`ww8par.cxx:1001`, and
+      **not** the 0.2 cm the RTF importer supplies for the same absent property), 7 is half a 15-twip line,
+      and 2 is what the same document's ODF form also shows. Leaving the half-line out lands the wrapped
+      lines 0.35 pt short — which sounds negligible and is not: the DOC wraps seven lines where the ODF
+      wraps eight, because those fractions decide whether the fourth line's box clears the frame's top, and
+      it clears it by 0.14 pt.
+      The frame model, placement and wrap are entirely reused — `FrameLayout`, `FrameResolution`,
+      `FrameObstacles` — so this was reading and nothing else. `DocFrameComparisonTests` compares
+      `frame-wrap.doc` against LibreOffice's own rendering at a tenth of a point, for the body's line starts
+      and for the position of the frame's own text.
+- [x] **A drawing anchor is reported for what it is.** Neither special character describes itself and both
+      can mean either thing, so the answer is two lookups away in each case. A `U+0008` is resolved through
+      the `FSPA` at its position and then through the shape, because a floating *picture* is a shape too. A
+      `U+0001` is resolved through the `PICF` at `sprmCPicLocation` — in the `Data` stream when the document
+      has one and in `WordDocument` when it does not, at the same stated offset either way — whose mapping
+      mode `0x64` or `0x66` says the bytes after the header are an Escher shape rather than a metafile
+      (`ww8graf2.cxx:524`).
+      Stopping at the mapping mode is the trap, and it is a double one. Every inline picture LibreOffice's
+      own DOC export writes is mode `0x64`, so reading that as "a drawing, not a picture" reports no images
+      for a document full of them. But the shape's *type* is not the answer either: LibreOffice exports a
+      text box as a `SHAPE` field whose cached result is a `U+0008` for the shape **and** a `U+0001` for a
+      shape of type `mso_sptPictureFrame` with no property record at all — an empty placeholder. Only the
+      `pib` property naming a real blip separates them, which is what is now tested. LibreOffice's own round
+      trip of `word-features.doc` agrees: one `draw:frame`, no `draw:image`.
+      This replaced a heuristic that skipped every `U+0001` inside a field. Skipping a field's
+      *instruction* is still right and load-bearing, for a different reason: a `HYPERLINK` field's
+      instruction characters carry a `sprmCPicLocation` pointing at the link's own data in the `Data`
+      stream, which parses as a `PICF` with mapping mode 0 and would be reported as a picture.
+- [x] **The same walk again, for the bytes.** `Ww8Blips.cs` reads the blip store and
+      `Ww8DocumentReader.Drawings.cs` resolves a shape's `pib` through it, so a DOC picture reaches layout
+      still encoded. See the picture item under the layout engine for the four places the bytes can be and
+      the two fields that are not what they look like.
+- [ ] Shapes anchored in a **header or footer**. `PlcSpaHdr` is read and its positions rebased onto the
+      header subdocument, and a header shape's text is taken from `PlcfHdrtxbxTxt` rather than the body's
+      table. The *layout* half is no longer the obstacle it was: a frame a header paragraph carries is now
+      placed, and `frame-in-header.{fodt,odt}` pins it against LibreOffice. What is unverified is the DOC
+      reading path itself, and it is unverifiable from the corpus — LibreOffice's DOC export writes
+      `lcbPlcSpaHdr` 0 for every document in it, so this still needs a document built for it rather than
+      merely written.
+- [ ] The `#i36649#` alignment rewrites (`ww8graf.cxx:2445`). Word's "flush left against the page" does not
+      mean what it says — LibreOffice converts it to "offset by minus the shape's width from the page's
+      *text area*" — and its "flush right against the page" becomes an offset from the right page border.
+      Neither is reachable from the corpus, whose shapes state offsets or a centring, and guessing at them
+      would put a shape a margin's width from where it belongs.
+- [ ] Contour wrap. `nwr` 4 and 5 ask for a wrap round the shape's own outline, from the
+      `pWrapPolygonVertices` property; they are read as the square wrap their `nwrk` names, which is the
+      same hole with straight sides and the same approximation the DOCX reader makes for `wp:wrapTight`.
+- [x] Section descriptors (`PlcfSed`): the page setup. Two levels of indirection, both easy to get
+      wrong — the PLCF's twelve-byte records hold an offset that points into the *WordDocument* stream
+      rather than the table stream it was read from, and it points at a length-prefixed grpprl rather
+      than a structure. The sprm ids come from LibreOffice's `sprmids.hxx`, which states each operand's
+      size on the same line; two of them invite an off-by-one, since `sprmSCcolumns` holds the column
+      count *minus one* and `sprmSBOrientation` uses Word's `DM_*` numbering where 1 is portrait, so a
+      plain truth test makes every portrait page landscape.
+- [x] Which slot each header story fills, for the layout pass: the six stories per section, in DOC's
+      own order — even header, odd header, even footer, odd footer, first header, first footer, after
+      the six separator stories that are not furniture at all. The *odd* one is the default slot, since
+      a first page is a right-hand page. Word writes all six whether the section uses them or not, so an
+      empty story is what distinguishes "no header" from "an empty header"; filling the slot anyway
+      draws a blank line on every page.
+- [ ] Connecting those stories to the section that names them in the *model*, which needs the
+      six-per-section indexing carried through `WritingSection.Headers` rather than only into layout.
+- [x] Nested tables: `sprmPItap` for the depth, and the detail that makes them readable at all —
+      only the *outermost* table separates cells with U+0007. A nested table reuses the paragraph
+      mark and says what it means with `sprmPFInnerTableCell` and `sprmPFInnerTtp`, so a reader that
+      treats every carriage return as merely a paragraph puts a nested table's whole contents into
+      one cell.
+- [x] `sprmTDefTable`'s length field is the operand's length **plus one**, not plus two: it counts
+      itself as one byte rather than the two it occupies. Subtracting two loses the operand's last
+      byte and desynchronises the rest of the grpprl, so every sprm after a table definition decodes
+      as something else — which for a table means the repeat-header flag and the shading that follow
+      it. LibreOffice notes the same quirk at `ww8scan.cxx`'s `L_VAR2`.
+
+### RTF — extraction done
+- [x] Byte-level tokeniser: groups, control words with parameters, control symbols, `\'hh`
+      escapes, and the three details that bite — one space after a control word is its
+      delimiter, a bare newline is *ignored*, and a backslash before a newline is `\par`
+- [x] Destination handling, including skipping an unknown `\*` destination whole. RTF puts
+      private extensions in the same syntax as content, so recursing hopefully emits binary
+      picture data as text.
+- [x] Character encoding: `\ansicpg`, per-font `\fcharset`, and `\uN` with its code-page
+      fallback skipped per `\ucN`. Not skipping the fallback doubles every non-ASCII character.
+- [x] Flows: footnotes with counted marks, annotations with their author, headers, footers and
+      shape text
+- [x] Tables, including the merge LibreOffice writes with **no flag at all** — the span has to
+      be derived from the table's column grid of `\cellx` edges, because `\clmgf`/`\clmrg` are
+      absent from LibreOffice's output
+- [x] Fields: `\fldinst` skipped, `\fldrslt` kept, and `HYPERLINK "…"` parsed out of the
+      instruction, since RTF has no hyperlink markup. The instruction is now kept rather than only
+      inspected, and the `\fldrslt` group's extent is what the field's range is
+- [x] Tracked changes and bookmarks. `{\*\revtbl}` is read rather than skipped, since `\revauth`
+      indexes it and without it a change is recorded against a number; it is **zero-based** and its
+      conventional first entry is `Unknown`, so treating it as one-based names the wrong person for
+      every change and nobody for the last. `\deleted` now routes its group to a destination that
+      *collects* the text instead of one that drops it — nothing more of it reaches the document, and
+      the words are the whole of a deletion's record. `{\*\bkmkstart}`/`{\*\bkmkend}` pair by name,
+      which is the one format where the name is also the key
+- [x] Metadata from `{\info}`, whose timestamps are groups of numeric control words
+- [x] Embedded pictures recorded as graphics without decoding the bytes — and now read for layout as
+      well, bytes and all, in `Rtf/RtfDocumentReader.Pictures.cs`. See the picture item under the layout
+      engine for what `\binN` costs a tokeniser that does not know about it.
+- [x] `{\shp}` shapes read as floating frames: `\shpleft` and its three companions give the rectangle in
+      twips, `\shpwr` and `\shpwrk` the wrap, and the `{\sp{\sn name}{\sv value}}` pairs — Escher's
+      property table written out as text — give the origin and the distances from text. Those pairs sit
+      inside `{\*\shpinst}`, an ignorable destination the reader skips whole, so `\sn` and `\sv` are read
+      as destinations of their own; without them a file LibreOffice wrote has no origin at all, since its
+      export writes `\shpbxignore` and states `posrelh` instead.
+      `\shpwr`'s numbering is RTF's own and two of its five values invite a swap: 3 is *through*, meaning a
+      rectangular hole the text flows into, and 5 is *none*, meaning the shape is ignored.
+- [x] **A shape that states no `dxWrapDist*` gets 0.2 cm on every side**, which is LibreOffice's default and
+      not the specification's 0.125 inch. Measured both ways on the same file: the corpus RTF's wrapped
+      lines start 114 twips past the shape's own right edge with the property absent, and 1 twip past it
+      with `{\sp{\sn dxWrapDistLeft}{\sv 0}}` and its three siblings added. So "stated zero" and "said
+      nothing" are different answers and the reader keeps them apart.
+- [ ] The inset LibreOffice gives a shape's own **text**: 17 twips horizontally and 15 vertically over and
+      above what the file asks for. The corpus RTF states `dxTextLeft` and its three siblings as zero and
+      LibreOffice still draws the frame's first line at 57.55, 119.80 where the shape's corner is 56.70,
+      110.50. So `frame-wrap.rtf` is compared for its wrap — which is exact to a twip — and not for the
+      position of the text inside the frame.
+- [x] Nested tables: `\itap` for the depth, `\nestcell`/`\nestrow` for the inner ends, and
+      `{\*\nesttableprops}` — the one ignorable destination that must **not** be skipped, since it
+      holds the inner row's geometry and its end. `{\nonesttables …}` beside it is a plain-text
+      approximation for readers that cannot nest, and reading both duplicates every nested cell.
+      A nested row's definition arrives *after* its cells, so the declarations are matched to cells
+      when the row closes rather than as each cell ends.
+- [x] `\trhdr` header rows. LibreOffice's own export omits it, so this is covered by a hand-written
+      document rather than by the corpus.
+- [x] The full LCID table, now generated into `XRay.Office.Core.Globalization.WindowsLanguages` from
+      LibreOffice's `i18nlangtag` data and shared with the DOC reader
+- [x] Layout: the formatting is recorded **as the content walk closes each paragraph**, not by a second
+      pass. RTF is a token stream with nothing to revisit — re-reading it would mean running the whole
+      state machine again, encoding and destinations included, and the two runs could then disagree. The
+      properties themselves translate through the DOC's own `Ww8LayoutFormat`, because RTF states them
+      the same way: twips, a size in half-points, and a `\sl` whose sign and `\slmult` companion choose
+      between a multiple, a minimum and a fixed height.
+- [x] Font family names from the font table, which the reader previously discarded because extraction
+      never needs them — a run's font does not change its text. A name can arrive in several text chunks
+      and ends at a semicolon, so it is accumulated rather than assigned.
+- [x] **A style named after one of Word's headings whose `\sbasedon` does not resolve keeps Writer's own
+      pool parent, which is 14 pt, 12 pt above, 6 pt below and keep-with-next.** Round 80 established that
+      a forward `\sbasedon` — a style based on one declared later in the same `{\stylesheet}` — is dropped,
+      because `getStyleName` (`rtfdocumentimpl.cxx`:873-885) turns the index into a name where the word is
+      dispatched (`rtfdispatchvalue.cxx`:131-134) and a style not yet read has no name to give. What it did
+      not have is what the importer does *instead*: `StyleSheetTable::ApplyStyleSheets`
+      (`dmapper/StyleSheetTable.cxx`:1099-1121) converts the entry's name through `ConvertStyleName`
+      (`:1620-1660`) and, where Writer already has a style of that name, reuses it, resets its own
+      properties and **leaves its parent alone** — the branch that would clear it needs
+      `m_bHasImportedDefaultParaProps`, which only an OOXML `w:docDefaults` sets (`:653-667`). `Heading 4`'s
+      parent is `Heading`, and `SwPoolFormatId::COLL_HEADLINE_BASE`
+      (`sw/source/core/doc/DocumentStylePoolManager.cxx`:768-819) states `PT_14` at `:809`,
+      `SvxULSpaceItem(PT_12, PT_6)` at `:810` and `SvxFormatKeepItem(true)` at `:814`; the per-level
+      percentages of `aHeadlineSizes` (`:107-115`) do **not** arrive with them, so all nine levels answer
+      14 pt. A `\sbasedon` that resolves replaces that parent (`:1156-1169`), and a style stating its own
+      `\fs` still reaches its paragraphs with neither — the round-80 rule. Reach **17 of the 338 converted
+      `.rtf`**; `.rtf` gate **259 → 260 of 336**, `Sample_SQMS_Program` 60/77 → 77/77, and on
+      `24-25_FAA_Holdover_Tables` it is 37 of the 67 pages. `probes/rtf-holdover-r87/results.md` §2.
+      **`Title` and `Subtitle` joined it in round 88 and `Body Text` and `caption` did not**, which is one
+      rule and not four: `GetPoolParent` (`sw/source/core/doc/poolfmt.cxx`:279-289) gives every
+      `COLL_DOC_BITS` id but `COLL_HEADLINE_BASE` that style for a parent, so the two document-title
+      styles answer *Heading*'s 14 pt and 12/6 rather than the 28 pt bold centring and 18 pt their own
+      pool entries state; `COLL_LABEL` and `COLL_TEXT` have `COLL_STANDARD` for a parent, so `caption`
+      and `Body Text` inherit the document's own `Normal` entry — 10 pt under `\fs20` and 14 under
+      `\fs28`, measured both ways. **Reach for the implemented half is nil** — excluding
+      the stylesheet from the "used" set, which round 87's census did not, `Title` and `Subtitle` are
+      declared and never applied in the two documents that hold them, `Body Text` is 2 of 338 and
+      `caption` 0; the nine headings' own reach is 17 → **12** under the same correction.
+      `probes/rtf-bookmark-r88/results.md` §4.
+      **The *Standard* half landed in round 95, and it is a reference rather than a constant**:
+      `PoolFormattingOf` could only answer a formatting, so it is now `PoolParentOf` answering
+      `{None, Heading, Standard}` and the `\sbasedon` walk continues into style 0, which RTF fixes as
+      the default style (`rtfdispatchflag.cxx`:600-614). Its reach is **nil and the reason is a second
+      rule** — both of the two documents that apply `Body Text` state an `\fs` on the entry itself, and
+      a style's own `\fs` reaches no paragraph, so 12 pt is right on both. Eight probes at the
+      reference, 8 of 8. The six names that reach *Standard* through an intermediate pool style —
+      `header`, `footer`, `toc 1`-`toc 3`, a bare `Heading`, `Figure` — are **left**, because those
+      intermediates have properties of their own that the import does not reset.
+      `probes/words-close-r95/results.md` §2.
+- [x] **`REF` expands from the bookmark, and the RTF import hands the bookmarks the wrong names.** RTF
+      sends a bookmark half's *name* before its *id* (`lcl_getBookmarkProperties`,
+      `rtfdocumentimpl.cxx`:224-236, whose comment says the name "should be sent first"; the halves at
+      `:2735-2764`). `DomainMapper_Impl::SetBookmarkName` (`DomainMapper_Impl.cxx`:9426-9447) is written
+      for OOXML's opposite order — `w:bookmarkStart` states `w:id` then `w:name` — so it looks up
+      `m_sCurrentBkmkId`, *the previously opened start*, and writes the incoming name onto **that**,
+      reaching `m_sCurrentBkmkName` only when the map misses. Every name therefore lands one bookmark
+      early. A bookmark that ends up spanning into another node makes
+      `SwGetRefFieldType::FindAnchor` answer `*pEnd = -1` (`reffld.cxx`:1588) and
+      `SwGetRefField::UpdateField` read that as *to the end of the paragraph* (`:604-607`), so
+      `REF _Ref107225632 \h` draws `Table 48: Snowfall Intensities as a Function of Prevailing Visibility`
+      where the file's `\fldrslt` says `Table 48` and the `.odt` twin draws `Table 48`. Reproduced in
+      three lines of RTF by `probes/rtf-holdover-r87/genbookmarks.py`; two starts alone come out as two
+      bookmarks called `R1` and `R1 Copy 1`. **Reach is 11 of the 338 `.rtf`** and two of them are the
+      holdover pair, which state 332 and 365 `REF` fields; substituting the reference's expansions by hand
+      takes `24-25_FAA_Holdover_Tables` from 158 pages to **219 against the reference's 223**, with the
+      alphanumeric distance at 0.80 %. It moves no gate verdict on its own, which is why it was left in
+      round 87. `probes/rtf-holdover-r87/results.md` §1.
+      **Built in round 88, and it is worth more than that estimate.** `RtfBookmarkRotation` is the naming
+      and `RtfReferenceFields` the expansion; `24-25_FAA_Holdover_Tables` goes **158 → 221 pages against
+      223** and 6.71 % → **0.33 %** on alphanumeric characters, drawing the long caption 253 times against
+      the reference's 253. The rotation is verified against 26.2.4.2 on ten probes, **27 of 28 predictions
+      exact**. Two shape notes: a document stating a `REF` is **read twice**, because a `REF` may name a
+      bookmark the walk has not reached and rewriting a closed paragraph would rebase every offset counted
+      against it; and the *"Error: Reference source not found"* the reference draws for a name nobody holds
+      is deliberately not reproduced, at a measured cost of two occurrences in the eleven documents.
+      `probes/rtf-bookmark-r88/results.md`.
+
+## Layout engine
+
+Only after extraction is solid and `XRay.Office.Text` breaks lines correctly. Line breaking now agrees
+with Writer's — see `XRay.Office.Text/TODO.md` — and the page geometry every break is measured against
+is read and verified, so what remains is the filling of pages rather than the measuring of lines.
+
+- [x] **List labels**, in `Layout/ListLabel.cs`, `Layout/PageContent.cs` and `Layout/PageDrawing.cs`, with
+      one reader-side file each in `OpenDocument/OdtLayoutSource.Lists.cs` and
+      `Ooxml/DocxLayoutSource.Lists.cs` and a few lines apiece in the DOC and RTF paths.
+      **The bug was that nothing above the readers had anywhere to put a label.** All four readers had been
+      computing `1.`, `a)` and `◦` correctly since they were written — extraction reported them and the
+      corpus tests pinned them — but `PageParagraph` carried only text, so a label could not be measured or
+      drawn even in principle. That is why the shortfall appeared six times at once across four formats and
+      two packagings and why all six closed in one change: 197 of 223 sweep rows matched before, 203 after.
+      **Why the label is beside the paragraph's text and not in it.** Writer makes the label a *portion* at
+      the head of the first line (`SwTextFormatter::NewNumberPortion`, `sw/source/core/text/txtfld.cxx:506`)
+      so that it takes part in the line's measurement. Doing that here would mean splicing characters into
+      `PageParagraph.Text`, and every offset a paragraph carries — its notes, its frames, its bookmarks — is
+      counted against that string, so a label of two characters would rebase all of them. Instead the label
+      hangs beside the text and pays for itself through `PageParagraph.Format`, whose getter widens the
+      declared first-line indent by the label's advance. That single place is deliberate: five separate call
+      sites lay a paragraph out, and one measuring against a different first-line indent from the one it is
+      drawn against puts a paragraph's own words in two places.
+      **The advance is `SwNumberPortion::Format` (`sw/source/core/text/porfld.cxx:607`) reduced to its
+      result**: in label-width-and-position mode the portion stretches to the paragraph's left margin, which
+      is the negated hanging indent; in label-alignment mode it is the label's own width with a tab carrying
+      the text on to the level's stop; and in both the floor is `m_nFixWidth + m_nMinDist`, which is what
+      stops `viii.` from being written over by the text it labels.
+      **The trap, and it cost an hour.** `text-features.odt`'s "Continuation paragraph of item two" is the
+      second `text:p` of a list item: it draws no label but it is still *in* the list. Giving it the level's
+      indents whole put it at 56.7 pt where LibreOffice draws 74.8 — hanging into the space where a number
+      it does not have would have gone. `SwTextNode::GetFirstLineOfsWithNum`
+      (`sw/source/core/txtnode/ndtxt.cxx:3469`) applies the numbering's first-line offset only to a node
+      that `IsCountedInList`, while `GetLeftMarginWithNum` applies the left margin unconditionally — so an
+      unlabelled paragraph in a list takes half of its level's geometry and not the other half. The same
+      shape catches DOCX's `w:numId="0"` continuation paragraphs, and the fix is one line in each reader.
+      Measured on `text-features.odt` against LibreOffice's own PDF: level-one labels at 56.7 against 56.8
+      and their text at 74.7 against 74.8; level two at 74.7/92.7 against 74.8/92.8. The remaining tenth of
+      a point is the page's left margin, which was already off by that much before any of this.
+      **A second trap, found much later and only by looking at the rendered PDF's fonts.** A label
+      is the one piece of a word-processing page whose `FontReference` is built somewhere other
+      than the run walk — it carries its own face, so it carries its own reference — and three of
+      the four readers never set it. `PageLabel.Font` existed and only `OdtLayoutSource.Lists` filled
+      it in; DOCX, DOC and RTF left it null, so `PageDrawing` fell back to
+      `Reference(label.Face)`, which names the face's *family* where `FileFontProvider` expects the
+      resolver's key — the font file's path. The consequence is invisible to everything this file
+      records: the label is in the right place, in the right size, with the right glyph advances,
+      and the PDF carries **no font program for it at all**. Measured with `pdffonts` on
+      `word-features.docx`: six faces `emb yes` and the labels' `LiberationSerif` and `OpenSymbol`
+      `emb no`; the same two on `.dotx`, `LiberationSerif` on `.doc`, `LiberationSans` on `.rtf`.
+      A reader draws those as tofu or as whatever it happens to have under the name. The fix is
+      one line per reader — DOC and RTF set the label in the paragraph's own face and already had
+      its reference to hand; DOCX's `LabelFace` may resolve a *different* family for a bullet
+      level, so it now returns the face and the reference together. Held by
+      `tests/XRay.Office.Rendering.Tests/PdfFontEmbeddingTests.cs`, whose `AListLabelIsDrawnFromAnEmbeddedFace`
+      runs over all four readers with ODT as the control that already passed.
+- [x] **Pagination**: fill a page, split what does not fit, continue. Verified against LibreOffice on a
+      sixty-paragraph document at three line spacings, comparing which paragraph starts each page — the
+      assertion that catches every upstream measurement error, since a wrong advance width moves a line
+      break, a moved line break changes a line count, and a changed line count moves a page break.
+- [x] Paragraph splitting across pages, keep-together, keep-with-next (as a chain, so three headings in
+      a row all move together), and orphan and widow counts. Each turns "fill until full" into "fill
+      until full, then reconsider", and the reconsidering is what moves whole paragraphs.
+- [x] The constraint that cannot be honoured is overridden rather than obeyed: a keep-together
+      paragraph taller than a page splits, because placing nothing page after page is a hang and not a
+      layout.
+- [x] **The first line on a page loses the space above its text.** Found by this test and not by the
+      four line-spacing tests, which all pass either way — the space line spacing adds sits above the
+      text, so putting it below leaves every baseline pitch identical and every paragraph height wrong.
+      A 200%-spaced A4 page holds twenty-five lines with the rule and twenty-four without, and every
+      break after the first then falls somewhere else.
+- [x] **The leading above a paragraph's first line belongs to the paragraph above it**, in
+      `Layout/ParagraphLeading.cs`. The item above says where the space goes within a line; this says
+      which paragraph is charged for it, and the two are separate questions with different evidence.
+      Writer's answer is stated twice over. `SwTextFormatter::CalcRealHeight` guards the whole
+      inter-line-spacing switch with `if( !IsParaLine() )` and explains itself on the line above:
+      *"Note: for the _first_ line the line spacing of the previous paragraph is applied in
+      SwFlowFrame::CalcUpperSpace()"* (`sw/source/core/text/itrform2.cxx`:2424). And `CalcUpperSpace`
+      adds `nPrevLineSpacing` to the gap in **both** of its branches — the one that sums the two
+      paragraph spacings and the one that takes their maximum (`flowfrm.cxx`:1656 and :1722) — where
+      that value is `GetHeightOfLastLine() × prop / 100 − GetHeightOfLastLine()`
+      (`GetSpacingValuesOfFrame`, `frmtool.cxx`:4064 → `SwTextFrame::GetLineSpace`, `txtfrm.cxx`:3996).
+      So the percentage is taken against the height of the **previous** paragraph's **last** line, not
+      against the paragraph's own first.
+      **Why it survived every comparison this project runs.** Between two paragraphs at the same spacing
+      the two readings give the same answer: the leading one paragraph withholds is the leading the next
+      hands back, so every baseline lands where it did and the block is the same height. It is visible
+      only where the spacing or the size changes across a paragraph boundary, and then only as an
+      *absolute* baseline — a pitch comparison cancels it exactly, and a word box cannot see it at all
+      because a box top already carries the font's ascent. It took the PDF backend reading the content
+      stream to find it.
+      Measured on the seven 16 pt headings of `paginated.*`, in all four formats: LibreOffice puts
+      37.200 pt between the last body baseline and the heading's and 20.450 pt after it, and this engine
+      put 35.250 and 22.400 — the same 57.650 pt block, split 1.95 pt differently, which is 0.15 of the
+      body's 269-twip line. With the rule the heading's baseline lands at 395.300 pt against
+      LibreOffice's 395.301, and every baseline of `paginated.*` in all four formats now agrees
+      absolutely to 0.051 pt, the constant this project already lives with. Nothing else moved: no page
+      break, no line break, no other document in the corpus.
+      Two consequences worth keeping. A paragraph's first line is now stripped of its leading *always*
+      rather than only at the top of a page — the top-of-page rule is the same rule reached a second way,
+      since `CalcUpperSpace` never reaches its line-spacing term when `GetPrevFrameForUpperSpaceCalc_`
+      finds no previous frame, which at the top of a page or a column it does not. And a table hands no
+      leading down: `GetSpacingValuesOfFrame` reports a line spacing only for a text frame.
+      Pinned by `ParagraphLeadingComparisonTests`, which compares absolute baselines rather than pitches
+      and asserts each half of a size change on its own.
+- [x] `PaginationOptions` for the two places Word and Writer disagree and the file says which by a
+      compatibility flag rather than by a property: whether a paragraph keeps its space-before at the
+      top of a page, and whether space-before collapses against the previous space-after or adds to it.
+- [x] Header and footer frames beside the body, laid out per slot and cached — most pages of a document
+      share one header, and shaping its text again per page would be the largest single cost of
+      paginating a long one. `PageFurnitureSet` holds them, `PageGeometry.HeaderArea`/`FooterArea` say
+      where they go, and `Paginator` places one of each on every page by the section's slot rules. All
+      four formats reach it, each through the walk its body already uses — and each names its slots
+      differently: DOCX by `w:type`, RTF by the suffix on `\header` (where `\headerr` is the *default*
+      slot rather than a third one), DOC by the position of a story in the header subdocument, ODF by
+      `style:header-left` for what everything else calls even.
+- [x] Where a footer's first line goes, which the two families genuinely disagree about — five points
+      apart on A4, so it is not a rounding matter. Word bottom-aligns the footer: its *last* line sits
+      at `pageHeight - w:footer`, and a second line grows upwards. ODF top-aligns it below the body: its
+      *first* line sits the footer style's own spacing below where body text stops, and a second line
+      grows downwards. `PageGeometry.FooterOffset` carries the ODF answer and null means the Word rule;
+      both were measured against LibreOffice's rendering of the same one-line footer in each format.
+- [x] **Floating frames inside the body**, with rectangular text wrap. A frame is a rectangle of content
+      anchored somewhere in the text that body text flows round, and the wrap is the half that changes
+      layout: a line beside a frame breaks earlier than the same line above it.
+      `ILineObstacles` is the interface, and it is deliberately thin — `ParagraphLayouter` knows a line's top
+      and height *within its paragraph* and nothing about which frames are anchored where, so the same filler
+      serves a header, a cell and a page body. It is asked once per line, which is exactly what
+      `SwTextFormatter::CalcFlyWidth` does with `SwTextFly::GetFrame`.
+      What was ported rather than guessed, each measured against LibreOffice's rendering of a 4 × 3 cm frame
+      on an A4 page with 2 cm margins:
+      - **The wrap side widens the rectangle** rather than choosing between two of them.
+        `SwTextFly::AnchoredObjToRect` calls `CalcRightMargin` for a left wrap and `CalcLeftMargin` for a
+        right one, so "text on the left only" is expressed as a frame reaching the end margin; top-and-bottom
+        does both, which is what leaves a line nowhere to go and drops it below the frame.
+      - **A line whose box merely touches the frame's top edge is already narrowed.** A frame anchored at the
+        top of paragraph two narrows the *last line of paragraph one*, whose box bottom is exactly the
+        frame's top — both are 2210 twips. Writer's rectangles are inclusive and the fly-portion arithmetic
+        adds a twip back, so the hole is one twip larger than the geometry on every side; that is also why
+        text resumes 3402 rather than 3401 twips along from a frame 2268 twips wide at 1134. Getting this
+        wrong is a whole line in the wrong place, not a rounding.
+      - **The optimal wrap is decided per frame from the room on each side**, per
+        `SwTextFly::GetSurroundForTextWrap`: a side with less than 2 cm for the text is not wrapped on at
+        all, a frame wider than 1.5 cm loses its narrower side outright, and a frame with room on neither
+        side wraps on *both* rather than on neither — Writer prefers the mode that gives the same answer on
+        a re-layout.
+      - **Wrap spacing widens the hole without moving the frame** (`GetObjRectWithSpaces`). Measured: the
+        same frame given `fo:margin-top="0.5cm"` starts narrowing lines one line earlier, and one 11 pt line
+        is 269 twips against the margin's 283.
+- [x] **Pagination is a bounded loop rather than one pass** once a frame is present, because the dependency
+      is circular: where a frame goes depends on where its anchor paragraph landed, and that paragraph's
+      lines depend on the hole the frame makes in them. Writer resolves the same circularity by formatting
+      the anchored objects and the text they affect in turn until neither moves (`SwObjectFormatter`); this
+      lays the whole document out again, up to four times, which converges on the second pass whenever the
+      frames stay on the page they started on.
+      The convergence test is the subtle part and cost a wrong page: it compares the *obstructed paragraphs'
+      own tops* as well as the frame rectangles. The frames can settle while the text has not — a paragraph
+      below one that grew by wrapping starts lower than the previous pass believed, and its lines were
+      measured against the frame at the height it used to be. Comparing only the rectangles declares victory
+      with the paragraph after the frame still wrapped round nothing.
+- [x] **Two stretches on one line**, which is what a `parallel` wrap round a frame touching neither margin
+      needs: Writer fills the gap left of the frame, inserts a fly portion, and carries on filling to the
+      right of it, so one baseline carries two runs of text. This engine took the leftmost free interval and
+      left the rest, which made every crossed line short and gave the paragraph lines it should not have had.
+      **A `LineBox` is now one *stretch* rather than one line.** Every stretch of a line carries the line's
+      geometry — the same top, height, baseline and leading — and all but the last set `SharesLineWithNext`.
+      That one flag is what tells whoever stacks boxes to advance once per line rather than once per box, and
+      what stops a page break falling between the text left of a frame and the text right of it
+      (`Paginator.Fit` counts by line and `WholeLines` backs an orphan or widow count off to a line's start).
+      Two boxes rather than a list of stretches inside one box, because a stretch *is* a line as far as
+      every consumer is concerned: the drawing path, the note anchors and the flow layouter each got the
+      second stretch for nothing, where a nested list would have needed all three taught about it.
+      **`ILineObstacles` needed nothing added, which is the point.** Writer's second `CalcFlyWidth` call is
+      the same question asked from further along the line (`itrform2.cxx:2911`, called again from
+      `BuildPortions` once the pen is past the fly portion), so a continuation is `SpaceFor` with the wanted
+      stretch starting at the far edge of the one already taken. Two answers are refused: one carrying a
+      descent, which is the line running out of room rather than continuing beside the frame, and one under
+      `MINLAY` — 23 twips, `sw/inc/swtypes.hxx` — because the filler hands an over-long word a whole line
+      and a sliver beside a frame would be drawn straight across it.
+      Measured on a new corpus document, `frame-parallel.{fodt,odt}`: a 4 cm frame 6.5 cm into a 17 cm
+      measure. LibreOffice divides seven lines and starts each right-hand stretch at 354.50 pt where the
+      frame's own right edge is 354.33 — the one twip of the inclusive rectangle plus the tenth of a point
+      the PDF export adds. Both forms now agree to a tenth of a point on all eighteen line starts, all
+      eighteen baselines and every stretch.
+      **The trap, and it cost an hour**: LibreOffice's PDF export draws a line's *trailing blank* as a
+      portion of its own, one glyph wide, out at the right margin. So the rightmost pen on an ordinary
+      unwrapped line is 538.45 pt and says nothing about where a stretch begins — a comparison has to look
+      for each stretch among the line's pens rather than compare the two lists.
+      What is deliberately not done: alignment and justification are applied per stretch rather than across
+      the line. Writer treats the fly portion as fixed glue inside one line and distributes the rest over the
+      whole of it, which differs for a centred or justified paragraph beside a frame. No corpus document has
+      one, and the difference is invisible for start-aligned text.
+- [ ] **Contour wrap.** `wp:wrapTight` and `wp:wrapThrough`, DOC's `nwr` 4 and 5, and ODF's
+      `style:wrap-contour` are all read as the square wrap their side attribute names — the same hole with
+      straight sides. Exact for a rectangle, which is every shape in the corpus, and wrong for anything else.
+      Writer builds the outline once per object and caches it (`SwContourCache::ContourRect`,
+      `sw/source/core/text/txtfly.cxx:207`): a `TextRanger` over the shape's `TakeXorPoly`/`TakeContour`, or
+      over the fly's own `GetContour` for a picture — which *loads the graphic*, since a picture's contour is
+      derived from its raster. It is then asked per line, `GetTextRanges(aRange)` for the strip the line
+      occupies, and that returns **a list of interval boundaries** rather than one rectangle;
+      `ContourRect` walks it from `nXPos` — the pen — to the interval that applies.
+      So the shape of the question is now available: that is the same "which free interval starts at or
+      after this pen" that a `parallel` wrap round a frame clear of both margins needed, and a line of
+      several stretches is what a concave outline produces every time. What is still missing is the
+      *polygon*: `PageFrame` carries a rectangle and no geometry at all, so there is nothing to intersect a
+      strip against. The readers have the source data — DOC's `pWrapPolygonVertices`, DOCX's
+      `wp:wrapPolygon`, ODF's `draw:contour-polygon` — and a picture's derived contour needs the decoded
+      raster, which is a separate unstarted item. This is the largest of the four and the only one whose
+      cost is dominated by something other than layout.
+- [ ] **A top-and-bottom frame anchored to the paragraph it pushes down.** Self-referential, and Writer
+      settles it one line lower than this does: measured on `frame-wrap-modes.fodt`, LibreOffice keeps the
+      anchor paragraph's first line above the frame and starts the band below it, where this drops the
+      whole paragraph. The loop is the frame's position depending on a paragraph whose own position the
+      frame decides, and the bounded relayout converges on the other answer. The three modes that leave a
+      side open have no such degeneracy, since the paragraph does not move.
+- [x] **Frames anchored in a table cell, a header, a footer or a footnote are placed.** They were dropped:
+      the resolution pass walked the body's blocks and took a frame's page from the line that starts its
+      paragraph, and a cell's paragraphs have no such line, so the frame was read correctly and then thrown
+      away. It now walks each finished page's *flows* as well — and one walk covers all four, because
+      `PlacedFlow` is one type for a header, a footer, a cell and a footnote.
+      **An anchored object belongs to the page however deeply its anchor is nested**, which is not a
+      simplification but what Writer does, and `frame-in-header.fodt` proves it: a 3 cm frame anchored in a
+      running head hangs past the header area, and LibreOffice divides the first four *body* lines round it.
+      So a flow's frames join the page's list and become obstacles for the body's text exactly as a body
+      frame does. Both ODF forms now agree with LibreOffice on every line of that document.
+      The flow's own rectangle is what a paragraph-, column- or text-area-relative origin resolves against
+      inside a flow, and it is exact rather than approximate: LibreOffice draws `frame-in-cell.fodt`'s frame
+      at 73.70 pt, which is the table's left edge at 56.70 plus the cell's 0.1 cm padding plus the frame's
+      own 0.5 cm offset and nothing else.
+      The early-out moved with it. `Paginate` used to scan the *blocks* for a frame and return before ever
+      resolving one; a document whose only frame is in a cell or a header has no such block, so it returned
+      early on exactly the documents this fixes. It now resolves once and returns if that found nothing.
+      Two traps, both in building the corpus rather than in the code. `style:header-style` is a child of
+      `style:page-layout`, **not** of `style:page-layout-properties`; nesting it inside cost a document whose
+      header LibreOffice read and this engine did not, which looks exactly like a reader bug. And a cell
+      border is not neutral: a 0.5 pt border put the cell's content top half a point from LibreOffice's, which
+      landed on the frame's measured position, so the corpus cell states `fo:border="none"`.
+- [ ] **A frame in a cell or a header does not narrow that flow's own text.** The other half of the item
+      above, and the visible one: LibreOffice starts `frame-in-cell.fodt`'s cell text at 158.90 pt and drops
+      it back to 59.65 below the frame, where this leaves it at the cell's left edge and draws the frame over
+      it. Obstacles reach a paragraph through `Paginator._obstacles`, which is keyed on a *body block index*;
+      a cell's and a header's paragraphs go through `FlowLayouter`, which is handed none. The shape of the
+      fix is a `Func<Length, ILineObstacles?>` on `FlowLayouter.LayOut` taking the paragraph's top within the
+      flow — the flow knows that as it stacks — threaded through `TableLayouter` and `PageFurnitureSet`, and
+      then the frame's position and the cell's height become circular in the same way the body's already are,
+      so the bounded relayout has to cover the flows too. Four files, three of them shared.
+- [x] **Pictures, in all four formats: read, placed and drawn.** A `PageFrame` carries a `RasterImage` in
+      the bytes the file stored and `PageDrawing` hands it to `IDrawingSink.DrawImage`. All ten corpus
+      pictures reach the PDF — `picture-anchor.{fodt,odt,docx,doc,rtf}` one each and `picture-flow.*` two
+      each, checked with `pdfimages -list` rather than by eye.
+      The four state the same picture in four unrelated ways and only the last of them is honest about the
+      format:
+      - **ODF** names a package entry in `draw:image/@xlink:href`, or inlines base64 in
+        `office:binary-data`. The two are mutually exclusive and **the href wins**, which is why a `data:`
+        URI in `xlink:href` is accepted and silently ignored — reproduced rather than repaired, so a
+        hand-written fixture behaves here as it does in LibreOffice, and `picture-anchor.fodt` therefore has
+        to use `office:binary-data`.
+      - **DOCX** resolves `a:blip/@r:embed` through the *part's own* relationships. **Relationship ids are
+        scoped to the part that uses them**, and this is the trap that costs an hour: `rId1` in
+        `document.xml` and `rId1` in `header1.xml` are different relationships in different `.rels` files
+        and Word numbers both from one, so a resolver looking only at the main document answers a header's
+        logo with whatever `document.xml` calls `rId1` — usually `styles.xml`, which sniffs as no picture
+        at all, so the frame stays empty and nothing says why. `DocxPictures.Scope` is what the reader sets
+        as it walks into a header, a footer or a note part.
+      - **RTF** writes `{\pict}` with the payload as hexadecimal by default and raw after `\binN`. The
+        `\bin` half belongs to the *tokeniser*: the N bytes after the delimiter are anything at all, and a
+        PNG's signature contains `\x1A` while its IDAT data contains braces about one byte in sixty-four,
+        so a picture read as text unbalances the document within a few kilobytes and loses everything after
+        it. LibreOffice's own RTF export also puts a picture inside a shape —
+        `{\field{\*\fldinst SHAPE }{\fldrslt{\shp …}}}` with `shapeType 75` and the bitmap in
+        `{\sp{\sn pib}{\sv {\pict …}}}` — and does that for an *as-character* picture too, so the round
+        trip loses the anchoring and a reader looking only for a bare `{\pict}` finds every picture Word
+        wrote and none of LibreOffice's.
+      - **DOC** goes `sprmCPicLocation` → the `PICF` in the `Data` stream → the `SpContainer` after it →
+        its `pib` → the blip store. Three things there are not guessable. The `PICF`'s `mx`/`my` are in
+        **tenths of a percent** (`ww8struc.hxx:457`), so an unscaled picture states 1000 and a reader
+        taking whole percent draws everything ten times too large. A blip record begins with **one or two**
+        sixteen-byte checksums and only the low bit of its instance field says which
+        (`SvxMSDffManager::GetBLIPDirect`, `filter/source/msfilter/msdffimp.cxx`); reading one where there
+        are two puts sixteen bytes of MD4 in front of the picture. And the bytes are usually **not** in the
+        blip store at all: the entry carries a `foDelay` into the `Data` stream, and LibreOffice tries the
+        `WordDocument` stream after it — "there is a second chance", `msdffimp.cxx:6465` — which for
+        `picture-flow.doc` is where the picture actually is, at offset 6717 of a 6835-byte stream while the
+        `Data` stream is 118 bytes long. An inline picture adds a fourth place: its own lone `msofbtBSE`
+        immediately after the shape container, with no `OfficeArtBStoreContainer` in the drawing group at
+        all, which is what `picture-anchor.doc` has.
+- [x] **Nothing on the reading path decodes.** `EmbeddedPicture.Read` sniffs the bytes, wraps them with
+      `RasterImage.Encoded` and stops; `RasterImageDecoder.Ensure` in `XRay.Office.Rendering` decodes when a
+      backend wants pixels, and a PDF backend passing a JPEG through to `DCTDecode` never decodes at all.
+      The signature table is a near-duplicate of `RasterImageDecoder.Sniff`'s **on purpose**: that method
+      lives beside the Skia decoder it guards, and referencing it would put a codec on the extraction path.
+      The pixel size is read from the header instead — PNG's `IHDR` at a fixed offset, GIF's and BMP's
+      likewise, and a walk over a JPEG's segments for the first start-of-frame — which is exactly what
+      LibreOffice separates `GraphicDescriptor` (`vcl/source/filter/graphicfilter2.cxx:63`) out to do.
+      Sniffing rather than believing the label matters in all four: a `.png` part holding a JPEG is common,
+      OPC requires a content type and producers still get it wrong, and RTF's own exporters mislabel blips.
+- [x] **An EMF, WMF, EMF+ or SVG blip draws.** `PageFrame` gained a `Lazy<VectorImage>?` beside its
+      `RasterImage?` and `PageDrawing` prefers it; `EmbeddedPicture.Read` answers a `FramePicture`, which
+      is the pair, and all four front ends thread that one value instead of two nullable fields. `PL2370`
+      survives with a narrower meaning — a vector format X-Ray.Office has *no decoder for*, which today is a
+      PICT and a StarView metafile and nothing else.
+      **It needed nothing in `XRay.Office.Core`, and the reason is worth stating rather than an interface
+      being written.** `VectorImage` already is the abstraction a frame wants: `Draw(IDrawingSink, DocRect)`
+      plus an intrinsic size, immutable and replayable, decoded once. A Core interface would have had
+      exactly those two members and one implementation, on the far side of a dependency the layering
+      already permits — `XRay.Office.Vector` sits beside `XRay.Office.Text` under Core and above nothing that
+      reads a document, and this library already referenced it.
+      Measured, both PDFs rasterised at `pdftoppm -r 150` and compared with `render-comparison`:
+
+      | Fixture | Before | After |
+      |---|---|---|
+      | `svg-picture.odt` / `.docx` | 7/8 words | **8/8**, `mae 0.0007` / `0.0009`, `ink_ratio 1.028` / `1.025` |
+      | `wmf-picture.odt` / `.docx` | 6/8 words | **8/8**, `mae 0.0005` / `0.0007`, `ink_ratio 1.003` / `1.001` |
+      | `emf-picture.odt` / `.docx` | 0/2 words | **2/2**, `mae 0.0037`, `ink_ratio 1.208` |
+      | `vector-picture-text.rtf` | new | 9/9, `mae 0.0044`, `ink_ratio 1.080` |
+
+      The EMF rows' `ink_ratio` is not a defect here and the diff image says so: the residue is the
+      gradient bar and the dashed polyline that `emf-shapes.emf` states and **LibreOffice's own EMF import
+      does not draw** — checked by converting the bare `.emf` with `soffice` and getting the same missing
+      bar. The WMF rows are the ones to watch for a regression, because `1.001` leaves nowhere to hide.
+- [x] **The vector is decoded when something draws it, not when the document is read**, and the
+      measurement is the reason. On this tree the *first* `VectorImages.Decode` in a process costs
+      **1044 ms** for a WMF carrying one text run, 381 ms for an EMF+ and 67 ms for a text-free EMF,
+      against **0.08–0.21 ms** once warm — nearly all of the first one is resolving and loading faces
+      through `XRay.Office.Text`. DOCX and ODT read their pictures only when a layout source asks, but **RTF
+      and DOC read theirs while parsing the document**, which is the extraction path, so an eager decode
+      there would have put a second of font work on a caller that wanted the words. A `Lazy<VectorImage>`
+      is the whole of the fix: it defers, it caches, and the per-part caches the readers already keep mean
+      a logo on forty pages still decodes once. `VectorFrameTests.NothingIsDecodedWhileTheDocumentIsRead`
+      pins it with `IsValueCreated`.
+- [x] **A DOCX `a:blip` may carry an SVG beside its raster, and the SVG is what to draw.**
+      `BlipReference.Choose` is now called instead of reading `r:embed`: an `asvg:svgBlip` inside the
+      `{96DAC541-7B7A-43D3-8B79-37D633B846F1}` extension names the vector and `r:embed` the fallback.
+      Both are kept — `PageFrame.Image` beside `PageFrame.Vector` is *only* this case — so a decode that
+      comes back empty draws the raster rather than nothing, which is what the fallback is in the file
+      for. Measured on `svg-picture.docx`: 769 bytes of SVG against a 3 803-byte PNG.
+- [x] **A DOC's metafile blip is deflate-compressed and the raster ones are not**, which is the single
+      thing that made the Escher path work. `Ww8Blips` used to drop a vector blip's bytes; it now reads
+      the **34-byte `OfficeArtMetafileHeader`** — `cbSize`, `rcBounds`, `ptSize`, `cbSave`, `compression`,
+      `filter` — and inflates what follows. A raster blip has *one* tag byte in the same place.
+      `SvxMSDffManager::GetBLIPDirect` sets its ZCodec for the EMF, WMF and PICT cases and for no other
+      (`msdffimp.cxx:6518-6549`) and does it unconditionally, never reading the `compression` byte; the
+      byte is honoured here because the format states it and `0xFE` legitimately means stored, with a
+      fall-back to the raw bytes when the stream will not inflate. Measured on LibreOffice's own DOC
+      export: 892 bytes of EMF arrive as 262 bytes of deflate behind the header, so a reader that skipped
+      the header and not the compression finds neither a placeable magic nor a `METAHEADER` and declines
+      the picture as an unrecognised blob — which reads as a corrupt document and is not one.
+- [x] **A DOC's as-character picture came back floating, and the cause was a field rather than a
+      picture.** Found by `vector-picture-text.doc`, LibreOffice's own DOC export of three as-character
+      pictures, all three of which decoded and drew and all three of which overlapped the paragraph after
+      them because none reached `FrameAnchor.AsCharacter`. The row read OK in the sweep throughout — 1/1
+      pages, 13/13 words — which is exactly the kind of defect a word count cannot see.
+      **The earlier diagnosis here was wrong, and re-measuring is what found the real one.** It said the
+      `Data` stream held one valid `PICF` where a raster version held one per picture, and concluded that
+      LibreOffice wrote the other two somewhere only the `FSPA` table reaches. The stream holds **three**,
+      at 0, 120 and 240, every one of them `cb=118 cbHeader=68 mm=0x64`. Nothing was missing.
+      What is actually in the text is the pair **`U+0008 U+0001`** — the "canvas field" shape LibreOffice's
+      own comment names (`ww8par.cxx:3599`, "normally in the canvas field, the code is 0x8 0x1") — and the
+      `U+0008` has a full `FSPA` describing a floating shape. The only thing in the document that
+      contradicts that `FSPA` is one byte in the `PlcFld`: all three shapes sit inside a field of type
+      **95, `SHAPE`**, and `SwWW8ImplReader::IsInlineEscherHack` (`ww8par.hxx:1737`) is exactly "the
+      innermost open field is a `SHAPE`". `ProcessEscherAlign` then anchors the shape `FLY_AS_CHAR`
+      instead of `FLY_AT_CHAR` (`ww8graf.cxx:2355`). So a reader that never opens the field table has an
+      `FSPA` and no reason to distrust it, and every picture written this way comes back floating.
+      `Ww8FieldTypes` reads the `PlcFld` — a plain `Ww8Plcf` of two-byte records, `FLD.ch` in the low five
+      bits and the type in the second byte of a begin — and the layout walk keeps a stack of open field
+      types beside the instruction depth it already kept. The two counters are **not** the same: the
+      instruction depth drops at the separator and a shape sits in the *result*, where the field is still
+      open and the depth is already back to nought.
+      Three details cost time and are worth keeping:
+      - **The vertical orientation is the half `ProcessEscherAlign` does not replace.** It forces the
+        horizontal to `CENTER`/`FRAME` and leaves the vertical exactly as stated (`ww8graf.cxx:2436-2439`).
+        These shapes state `posrelv` 3 — relative to the line — with `posv` 0 and an `FSPA` top of nought,
+        which `aToLineVertOriTab` maps to `VertOrientation::NONE`, `GetRelPosToBase` resolves to nought,
+        and `SwFlyCntPortion::SetBase` turns into an **ascent of nought**: the object hangs entirely below
+        the baseline and raises the line's descent instead of its ascent. Applying the ordinary
+        as-character rule — bottom on the baseline — instead moved `word-features.doc`'s anchor line from
+        455.51 to 477.71, 22 pt of page moved by one frame.
+      - **The anchor characters have to go, and only when something was made of them.** LibreOffice
+        inserts a character for a `U+0001` only when the graphic *fails* (`if (!pResult) cInsert = ' '`,
+        `ww8par.cxx:3637`), and for the `U+0001` of a `U+0008 U+0001` pair inside a `SHAPE` field it takes
+        neither branch — it reads one character ahead, finds no second `U+0001`, and leaves `cInsert` at
+        nought. Keeping them cost 18.67 pt of `.notdef` in the middle of `word-features.doc`'s sentence,
+        invisible for as long as the box was misplaced far to the left and exactly the width by which the
+        sentence overshot once the box was put in the right place. A comment's `U+0005` makes no frame and
+        so keeps its placeholder, which is what the mark tables index it by.
+      - **A trap.** The pair means one shape and two characters, so a reader that treats `U+0001` as "a
+        picture" and `U+0008` as "a drawing" finds two objects where the document has one. Only the
+        `U+0008` carries the `FSPA`; the `U+0001`'s `SpContainer` has no `pib` at all, which is why
+        `IsPictureShape` already declined it and why the count came out right by accident.
+      Measured against LibreOffice's own PDF: `vector-picture-text.doc` now agrees on every word to within
+      1.24 pt, where before the three pictures reserved no room at all and each drew over the paragraph
+      after it. Still 1/1 pages and 13/13 words, as it was throughout.
+- [ ] **LibreOffice's RTF export rasterises every picture.** Measured on the same source: converting it to
+      `.rtf` writes `\pngblip` for the WMF and for the EMF, where the DOC export keeps both byte for byte.
+      So `vector-picture-text.rtf` is **hand-written**, with `\wmetafile8` and `\emfblip` and the two
+      metafiles as hex — a fixture that went through LibreOffice would exercise neither control word. Both
+      words are then ignored anyway: the sniff decides, because RTF exporters mislabel blips routinely.
+- [ ] **A rotated picture is not expressible.** `IDrawingSink.DrawImage` takes a rectangle rather than a
+      matrix, so `a:xfrm/@rot`, `draw:transform="rotate(…)"` and DOC's `sprmPicRotation` are recorded and
+      not applied. Deliberate: changing the IR for it would touch every backend and every family, and the
+      slide reader reached the same conclusion. A crop needs no such change — a crop is a larger
+      destination rectangle clipped to the outline, and the drawing model already has clipping.
+- [x] **As-character frames take room on their line**, and the room is both wide and tall. Writer's
+      `SwFlyCntPortion` (`sw/source/core/text/porfly.cxx`) is a line *portion* carrying the frame's own
+      width and height, which is a different mechanism from the wrap: it changes what a line measures, not
+      what it may use. `Text/Layout/MeasuredParagraph.cs` now takes an `InlineObject` list and folds it into
+      the two places a line is decided — the prefix widths and `HeightOf`.
+      **A boundary, not a character.** The item this replaces predicted that a reader would have to emit an
+      anchor character for a fixed advance to apply to. It does not, and the reason is worth keeping: three
+      of the four formats put no character in the text for an inline picture at all, so inventing one would
+      shift every offset the same reader recorded beside it — a note's citation, a bookmark, a comment's
+      anchor. An `InlineObject` occupies the *boundary* before character `n` instead, and the whole of the
+      width rule is `prefix[i] += width for i > n`. That gives the two edge cases for free: a line ending at
+      the boundary does not pay for the object, so a picture too wide for the room left moves to the next
+      line whole; and a paragraph whose only content is a picture is an empty text with an object at nought
+      and a line running nought to nought, which is what every RTF logo looks like.
+      **The height rule is one line.** An as-character object rests its bottom on the baseline, so it raises
+      the line's *ascent* and nothing else; `Max(height, ascent + descent)` — already there, and already
+      `SwLineLayout::CalcLine`'s rule — grows the box to hold it. Measured against LibreOffice's PDF of
+      `picture-anchor.fodt`: a 1 cm picture on a 12 pt Liberation Serif line gives ascent 28.35 where the
+      text alone gives 10.69, and a line 31.46 pt tall where the text alone gives 13.80. Before this, the
+      first line sat at the top margin and the reference sat 17.66 pt lower; the picture also drew over the
+      words after it, which started 28.35 pt too early — 186.34 against the reference's 214.80. Both now
+      agree to 0.11 pt, which is the constant offset the whole page carries.
+      **The runs are cut at the boundary, in both passes.** The pen accumulates across a stretch's runs, so
+      text after a picture starts where the run before it ended plus the picture's width — which needs a run
+      to end there. `MeasuredParagraph.Split` and `PageDrawing.AroundObjects` make the same cut for that
+      reason, and it has to be the *same* cut: a run shaped whole and drawn in halves measures very slightly
+      differently, which is enough to move a line break. The existing note on `InVisualOrder` pays the same
+      cost for the same reason.
+      **The baseline is a default and no longer the only answer.** `InlineObject.Ascent` says how much of
+      an object stands above the baseline and defaults to all of it, which is the ordinary inline picture
+      and keeps every number above unchanged. Writer's rule is more general and the two ends of it are
+      both real: `SwFlyCntPortion::SetBase` asks `SwAsCharAnchoredObjectPosition` for a position relative
+      to the baseline, turns a *negative* one into the portion's ascent, and leaves the ascent at nought
+      for anything else so the object hangs below the line and grows its descent instead. A DOC shape set
+      in a line by a `SHAPE` field is the second case; see the item on that below for the measurement.
+      What is still not done: ODF's `style:vertical-rel="baseline"` with `vertical-pos` of `middle` or
+      `top`, and DOCX's equivalents, are read into the frame and not resolved to an ascent. No corpus
+      document has one. The three alignments Writer resolves against the line's own ascent and descent —
+      `LINE_TOP`, `LINE_CENTER`, `LINE_BOTTOM` — could not be resolved by a reader in any case: they need
+      the line, and a frame is built long before there is one.
+- [x] **`word-features.doc`'s box was placed at its paragraph's corner, and the frame was never floating
+      in the first place.** It drew at 56.70 pt where LibreOffice draws 134.00, on top of the sentence it
+      belongs after. Settled, and the way it was settled is the point: **the previous item here proposed
+      the wrong shape of fix, and following it would have changed shared layout code for nothing.**
+      That item read the document as a *floating* frame anchored at a character and set within its anchor's
+      line, and concluded that the missing piece was a line filler in `XRay.Office.Text` that could split a
+      line around a mid-line obstacle rather than end it — because `FrameObstacles.SpaceFor` ends a line at
+      an obstacle starting after the line's own start, which is right for a paragraph-anchored frame and
+      would be wrong here. Every measurement in it reproduced. The conclusion did not follow from them.
+      The box is **as-character**, by the same `SHAPE` field rule as the pictures above: its shape sits in
+      a field of type 95 at cp 666–677, so `IsInlineEscherHack` holds and `ProcessEscherAlign` gives it
+      `FLY_AS_CHAR`. The item recorded that the shape *is* inside such a field, tried the anchor, saw the
+      anchor line move from 455.51 to 477.71, and inferred that LibreOffice's DOC import must therefore
+      not take the hack. It does. What it also does — and what the experiment was missing — is honour the
+      shape's vertical orientation, which for `posrelv` 3 / `posv` 0 / top 0 resolves to an ascent of
+      nought: the box hangs below the line instead of resting on the baseline. With that, the whole thing
+      falls out with no obstacle logic at all.
+      Measured against LibreOffice's own PDF, after: the box's own text at 134.01 against 134.00, "Before
+      the box." at 56.70 against 56.80, and **"After the box." at 306.40 against 306.54, on the same line**
+      — where the sweep's 22 pt of vertical error and 18.67 pt of horizontal came from the two things the
+      obstacle theory could not have reached, the vertical orientation and the anchor characters. 154/154
+      words and 2/2 pages throughout.
+      **The lesson, since it cost a full attempt-and-revert:** the measurements were right and the model
+      built from them was wrong, and the thing that distinguished them was reading `ww8graf.cxx` far
+      enough to find what `ProcessEscherAlign` leaves alone rather than what it replaces.
+      `PageFrame.HorizontalOrigin.Character` is still unresolved by `FrameLayout.Place` for a genuinely
+      floating frame — `Place` works from a `Placement`, which is the paragraph's first line — and no
+      corpus document now depends on it, so it stays open below rather than being closed by this.
+- [ ] **A genuinely floating character-origin frame is still placed at its paragraph's corner.**
+      `PageFrame.HorizontalOrigin` has a `Character` member and four readers set it; `FrameLayout.Place`
+      resolves it to the column, because a character origin needs the anchor's own line and its offset
+      along it and `Place` only has the paragraph's first line. The machinery exists —
+      `FrameLayout.HangInline` already asks `PageDrawing.OffsetOnLine` for exactly this. What kept this
+      item open until now was `word-features.doc`, and that document turned out to be an as-character
+      frame rather than a floating one, so **there is no longer a corpus document that demonstrates the
+      defect**. That is the reason to leave it rather than to guess: a fix with nothing to measure against
+      would be re-measured by every frame-wrap test and validated by none of them.
+- [x] **A frame can hold a chart, which is the third thing after a picture and a display list.** Writer was
+      the one family that never drew one, and what was missing was not a reader: `DrawingChart` and
+      `OdfChart` are family-blind by design and both already worked. `PageFrame` gained `Chart` and
+      `ChartFontFamily`, `Layout/FrameChart.cs` paints a laid-out `ChartPlot` straight into the sink the
+      way `SheetChart` does, and `PageDrawing.DrawFrame` gained one branch. `DocxPictures` resolves
+      `c:chart/@r:id` against the part the drawing sits in and `OdfPictures` calls `OdfChart.Locate`.
+      Measured over LibreOffice's `chart2/qa/extras/data/docx/` and `odt/`, 82 documents: total absolute
+      word error **3671 → 1390** and exact matches **0 → 10**; before it, every one of the 82 drew a
+      chart of no words at all.
+      **Those two numbers are a correction, and the exact-match one is a large correction.** The commit
+      that did this work claimed 3689 → 1348 and **0 → 27**. Re-measured from scratch against freshly
+      generated references, the totals reproduce to within about 1% — 3671 and 1390, which is ordinary
+      drift between two runs — and the exact-match count does not reproduce at all. It is 10, of which
+      seven are DOCX (`doughnut-chart-labels`, `doughnutChart`, `fdo74115_WallGradientFill`,
+      `fdo78290_Scatter_Chart_Marker_x`, `pieChartRotation`, `scatter-chart-text-x-values`, `tdf134255`)
+      and three ODT (`chart`, `tdf135366_data_label_export`, `testPieChartWallLineStyle`). A total error
+      that more than halves is the claim that survived; "27 of 82 land exactly" is not one anything here
+      supports.
+      **The trap that most likely produced it, because it is set for this exact data set.** `docx/` and
+      `odt/` both contain a file called `chart`, and `soffice --convert-to pdf` names its output after the
+      input *stem*, so converting both sets into one directory silently leaves one `chart.pdf` — the
+      second conversion overwrites the first. The corpus sweep's header warns about this for the nine
+      pairs it holds; `chart2/qa` has a tenth, in a directory nobody thought of as a corpus. Every
+      measurement in this item was taken with `ref/docx/` and `ref/odt/` kept apart.
+      **The order of a frame's children is what an ODT gets wrong first.** ODF writes a chart as a
+      `draw:object` followed by a `draw:image` of it, alternatives in decreasing order of preference, and
+      the reader must ask for the object first — looking at the picture first is exactly what recorded
+      every chart in every ODS as a plain picture and then painted nothing, all 82 of those replacement
+      streams being `VCLMTF`. `chart-bar-text.odt` carries 22 kB of one and is the corpus's guard for it.
+      **The face is per family and cannot ride on the model.** `ChartPlot` carries type sizes and no
+      family. Measured with `pdffonts` on LibreOffice's own PDFs, `odt/chart.odt` embeds Liberation Sans
+      and `docx/chart.docx` embeds Carlito from the same chart, because an OOXML chart takes the theme's
+      minor latin face and an ODF chart the office default — so the family sits on `PageFrame` beside the
+      plot, read as the first literal `a:latin/@typeface` in the chart part, then the theme's minor latin,
+      then Calibri. **A typeface beginning with a plus is a reference and not a name**: of the 69 DOCX
+      chart parts, 22 say `+mn-lt` and 11 state a real face, so taking `+mn-lt` as a family would measure
+      a third of the set in a fallback.
+      **The trap that cost the time here is not in the code.** `chart2/qa/extras/data/` lives in the
+      LibreOffice checkout and *not* in the `dotnet` worktree, so every sweep must be run with the
+      checkout as the working directory; run from `dotnet/` the shell glob does not expand, the CLI is
+      handed a path that does not exist, and the sweep prints a clean table of `0/0` rows that reads as a
+      catastrophic regression. It happened twice in one session.
+- [ ] **Several as-character objects at one boundary draw on top of each other, and the boundary rule is
+      why.** `testMultipleChart.docx` and `testMultiplechartembeddings.docx` each hold **three** inline
+      charts in a *single paragraph with no text at all* — three `w:drawing` runs, 432 pt wide by 252,
+      345 and 345 pt tall — and draw as one chart on one page where LibreOffice draws three on two
+      (26 words against 134). Nothing is wrong with the reading: all three parts resolve and all three
+      frames arrive.
+      An `InlineObject` occupies the *boundary* before character `n`, which is the right model and is
+      argued for at length above — three of the four formats put no character in the text for an inline
+      picture, so inventing one would shift every offset a reader recorded beside it. The consequence
+      here is that an empty paragraph gives every one of its objects the boundary **0**, and the width
+      rule is `prefix[i] += width for i > n` over a prefix table with a single entry, so none of the
+      three widths counts, the line runs 0 to 0, and `HangInline` asks `OffsetOnLine` for offset 0 three
+      times and gets the same answer three times.
+      Fixing it needs a line's extent to include the objects sitting at its *end* boundary, which is the
+      one thing the current rule deliberately excludes — that exclusion is what makes a picture too wide
+      for the room left move to the next line whole, and it is load-bearing for every other inline
+      picture in the corpus. So this is a change to how a line's width is decided rather than a reader
+      fix, and it should be measured with those two documents and `picture-anchor.fodt` together, since
+      the second is the case the current rule was measured against.
+- [ ] **Section frames** (`text:section`, `w:sectPr`-less regions with their own indents). Untouched; the item
+      it used to share with floating frames is now only this.
+- [x] Several sections in one document. `PageBlock.SectionIndex` says which section a block belongs to and
+      the paginator switches paper size, margins, breaking width and furniture at the boundary — and lays
+      each block out at *its own* section's width, since a paragraph in a landscape section breaks where
+      landscape says it does. `WritingSection.Break` decides whether the change costs a page: three of the
+      four kinds start one and continuous deliberately does not.
+- [x] Which section each block belongs to, per format. Three of the four delimit sections by position:
+      DOCX by the `w:sectPr` inside the properties of the paragraph that *ends* a section, so the counter
+      advances after the paragraph rather than before. ODF delimits nothing at all — a paragraph reaches its
+      page description through its style's `style:master-page-name`, followed up the parent chain, and a
+      paragraph naming one *starts a page* on that master. An empty name is not an absent one: ODF writes
+      `style:master-page-name=""` to cancel a master a parent style named.
+- [x] DOC's and RTF's section boundaries, which are as different from each other as either is from ODF's.
+      RTF marks only section *ends* with `\sect` and its last section has none at all, so counting the
+      marks is the whole of it. DOC delimits by position: the `PlcfSed`'s own positions are the section
+      ends in character space, so which section a paragraph is in is a lookup rather than a count. Their
+      break kinds are `\sbk*` and `sprmSBkc`, whose numbering is Word's own — 0 column, 1 continuous, 2
+      page, 3 even, 4 odd, which is not the order the concepts are usually listed in.
+- [x] Furniture per section in all four formats. DOC keeps six header stories *per section*, so a section's
+      own six start six further along for each section before it. RTF writes a header in the preamble of the
+      section it belongs to and a section stating none inherits the previous one's, since `\sectd` resets
+      the geometry and leaves the running heads alone.
+- [x] **A column section break**, `SectionBreak.NewColumn`: RTF's `\sbkcol`, OOXML's `nextColumn` and
+      `sprmSBkc` of 0, which previously all read as continuous. The rule is Word's rather than the obvious one,
+      and LibreOffice's own importer states it outright: *"Word 2013+ seems to treat a section column break as
+      a page break all the time. It always acts like a page break if there are no columns, or a different
+      number of columns"* (`dmapper/PropertyMap.cxx`). So the kind becomes a page break unless the section has
+      two or more columns and the same count as the one before it. Measured: a three-section document whose
+      middle section is `\sbkcol` renders as three pages, where reading the kind as continuous gives one.
+      The one case that stays a true column break follows **Word rather than LibreOffice**, deliberately:
+      LibreOffice's own code marks that branch broken (tdf#135343, "completely broken, producing a no-column
+      section that starts on a new page"), so it cannot be compared against and matching it would mean
+      reproducing a bug it has a ticket for.
+      Two pre-existing bugs surfaced with it, both about ending a page in a multi-column section rather than
+      ending a column — the difference is invisible until a section is only part way through its columns:
+      a section *break* would put the next section beside the last one instead of after it, and the final
+      flush would advance to column two and never write the last page at all. A document ending part way
+      through column one of a two-column section silently lost its last page.
+- [x] **All four formats reach the layout engine**, and all four paginate a five-page document the way
+      LibreOffice does — same page count, same words on every page, verified against its own rendering of
+      each format. `DocumentPaginationTests` is the test that proves the links are connected rather than
+      each one working alone.
+- [x] The one place the formats genuinely disagree, found by measuring rather than by reading a
+      specification: whether two paragraphs' spacings add or the larger wins. LibreOffice adds for ODF,
+      DOC and RTF, and takes the larger for DOCX — the same source document exported four ways puts its
+      41st line 5.65 pt lower in three of them, which is exactly one paragraph space-after. For DOCX the
+      answer is read from the file (`w:doNotUseHTMLParagraphAutoSpacing`); for DOC it needs the `Dop`.
+- [x] **Per-run formatting**, for ODF. A paragraph carries `PageRun`s when its formatting varies and none
+      when it does not, which keeps plain prose on the single-face path — a paragraph split into runs it
+      does not need loses the shaping context at each boundary and measures very slightly wide. The line
+      filler measures across the runs, the line's height and ascent come from the runs on it, and each run
+      draws with its own face, size and colour.
+- [x] The line's height is the maxima taken three ways, not the tallest run's: `SwLineLayout::CalcLine`
+      accumulates height, ascent and descent independently and finishes with
+      `if (nMaxDescent > Height() - mnAscent) Height(nMaxDescent + mnAscent)`. Taking the tallest run's
+      ascent agrees whenever one run is tallest in every direction — two sizes of one family — and
+      disagrees the moment a line mixes families, since one face can own the ascent and another the descent.
+- [x] ODF measures are rounded to whole twips as they are read, because Writer's core unit is twips and
+      `SvXMLUnitConverter` converts straight into it: 2.5 cm is 1417.32 twips and LibreOffice keeps 1417.
+      The same file read into Calc or Draw keeps 1/100 mm instead, which is why the rounding lives beside
+      the Writer readers rather than in `XRay.Office.OpenDocument`.
+- [x] Two ODF font-size quirks, both measured rather than read: nothing stating a size renders at **12 pt**
+      (the item pool's default), and `fo:font-size="150%"` is 150% of *that* rather than of the enclosing
+      text or of the style's parent — a 150% span inside an 11 pt paragraph renders at 18 pt, and a 150%
+      style parented on a 20 pt one still renders at 18. A percentage arrives as `CharPropHeight` and
+      `SvxFontHeightItem` resolves it against the height the item set holds at that moment, which for a
+      style being built up from nothing is the pool default; so nested percentages do not compound either.
+- [x] **Per-run formatting for all four formats.** Each reader states runs its own way and each produces
+      the same `PageRun` list: an ODF `text:span` cascade, a `w:rPr` on a `w:r` with the toggle rule, a WW8
+      CHPX with its character style, and RTF's loose control words snapshotted as the text is appended.
+      Verified against LibreOffice run by run for the same document exported four ways.
+- [x] Every format's run colour, which meant new readers in two of them: RTF's `\colortbl` and `\cf`, and
+      WW8's `sprmCIco` palette and `sprmCCv` COLORREF. Both had a trap. The RTF table is zero-based and its
+      conventional first entry is the *automatic* colour rather than black, so an off-by-one draws a
+      red word silver. And a COLORREF is `0x00bbggrr`, so the outer bytes have to be swapped —
+      LibreOffice does it with `BGRToRGB`.
+- [x] Two WW8 bugs the run walk exposed, both in code the content pass shares. A run's character style is
+      named by a sprm *inside* its CHPX, so a reader that decodes only the exception finds no emphasis at
+      all in a document LibreOffice wrote — its DOC export states emphasis as a character style. And
+      `istd` 0 is *Normal*, not "no character style": WW8 keeps paragraph and character styles in one
+      table, so resolving index zero as a run's style lays the document's default font size over the
+      paragraph's own and turns every run of an 11 pt paragraph into a 12 pt one.
+- [x] Tables as grids. `PageTable` is a block beside `PageParagraph`, and a cell is a `PlacedFlow` — the
+      same type a header is, because a cell is the same thing: paragraphs stacked in a rectangle whose
+      width decides their line breaks. `TableLayouter` resolves the circularity in two passes, since a
+      cell's height needs its width, a row's height needs its cells, and a cell's rectangle needs the row
+      heights. A cell spanning rows charges its height to the *last* row it covers, so a merge does not
+      make its first row as tall as itself.
+- [x] Tables spanning page breaks, with header-row repetition. A row moves whole rather than being cut,
+      which is Writer's behaviour and not Word's, and the heading rows are placed again at the top of each
+      continuation. Because the cells are laid out once relative to the table's own top-left, both are a
+      shift rather than a re-layout — a long table is not shaped once per page it touches. Verified in all
+      four formats against a sixty-row table that crosses a page break: same page count, same words on each
+      page, heading row repeated, every line start within a tenth of a point.
+- [x] DOCX's grid, which expresses the same two facts differently from ODF's and so is a separate set of
+      mistakes to avoid. A horizontal merge is `w:gridSpan` with **no placeholder** for the columns it
+      swallows, so the next cell starts at column plus span — the opposite of ODF's covered cells. A
+      vertical merge is `w:vMerge`, a state rather than a count: `restart` opens one and a bare `w:vMerge`
+      continues it, so a row span has to be counted by looking down the following rows and the rows must
+      all be read before any span is known. And cell padding is stated twice, `w:tblCellMar` for the table
+      and `w:tcMar` per cell, overriding **per side** — LibreOffice writes a `w:tcMar` holding only the
+      side that differs, so taking the element as all four zeroes the other three.
+- [x] RTF's `\cellx` edges, which the extraction pass already resolves into a grid — including the merges
+      LibreOffice writes with no flag at all. What was missing was the per-cell *layout* paragraph lists,
+      and the reason they were empty is worth recording: `\cell` closes a paragraph through a call that
+      passed no group state, and without the state a paragraph reaches the content tree but never the
+      layout pass. So a cell's text extracted and did not draw.
+- [x] **`\clpadl` is the top margin and `\clpadt` the left.** Top and left are swapped; bottom and right
+      are not. LibreOffice's own importer does this deliberately — "Top and left is swapped, that's what
+      Word does", `rtfdispatchvalue.cxx`, `RTFKeyword::CLPADL` — so it is the specification's reading of
+      those two words that is wrong, Word being what defines RTF in practice. `\trpadd*` maps straight
+      through, so the two spellings of one quantity disagree about which side is which. Caught by
+      measurement: LibreOffice exports 0.6 cm of left padding as `\clpadt340` and then renders it on the
+      left.
+- [x] DOC's `sprmTDefTable` edges, reusing the extraction pass's own `AssignColumns` and
+      `ResolveVerticalMerges` — a cell draft now carries both a content list and a layout list, so the hard
+      part is resolved once and whichever walk built the draft fills its own half.
+- [x] **A PAPX whose `cb` is zero is `2 × cb'` bytes, not `2 × cb' − 1`.** A non-zero `cb` means
+      `2 × cb − 1`, which is always odd, so a grpprl of *even* length must use the second form — which is
+      half of them. Subtracting one there as well loses the PAPX's last byte, and a sprm walk that is one
+      byte short at the end silently drops whichever sprm was last. Nothing looks corrupt: every sprm
+      before it decodes perfectly and the document merely lacks one property. It cost a table cell its
+      padding, and was found only because that cell's text was 14 points from where LibreOffice put it.
+- [x] `sprmTCellPadding` and `sprmTCellPaddingDefault`, whose six-byte operands look identical and are
+      not. The fourth byte is an `Fts` size type in the specific form, which must be 3, and nothing at all
+      in the default form — LibreOffice's `ProcessSpacing` skips it as "unknown" and never tests it, so
+      requiring 3 there rejects every default a real document writes. Each entry states one value and the
+      sides it applies to, so a uniform table carries **four** of them; keeping only the last leaves three
+      sides at Word's 108 twips.
+- [x] **Cell shading**, for ODF, DOCX and RTF, drawn and compared against LibreOffice's own fills. It covers
+      the whole cell rectangle, padding included — measured: LibreOffice fills 56.7 to 141.75 pt for a cell
+      whose column runs 56.7 to 141.8, so the fill covers the cell and stops half a border short of the next.
+      `fo:background-color`, `w:shd`'s `w:fill` and `\clcbpat`; null rather than white for "no shading", because
+      the two differ. Three details worth keeping:
+      - **`w:fill`, not `w:color`.** The latter is the *pattern's* foreground and only shows through a `w:val`
+        that is not `clear` or `nil`; reading it gives the wrong colour on every ordinary shaded cell. RTF has
+        the same pair, `\clcbpat` and `\clcfpat`, and the same trap.
+      - **A reference can paint one shade twice.** LibreOffice's DOCX render fills each shaded cell in the
+        corpus document at identical coordinates twice, where its ODF render fills it once — so the comparison
+        is of *distinct* rectangles, or the same document passes in one format and fails in the other for a
+        reason unrelated to where anything went.
+      - Every shade before any text, rather than each cell's shade before its own text: a shade is opaque, so a
+        cell whose content overflows would otherwise have that overflow painted over by its neighbour's fill.
+- [x] Cell shading for **DOC**, which was a bigger read than the other three because the document states it
+      twice over and the two disagree. Both arrive on the row-end paragraph, indexed by cell:
+      - **`sprmTDefTableShd80` (0xD609)** is two bytes per cell — five bits of foreground palette index, five
+        of background, six of pattern. **`sprmTDefTableShd` (0xD612)** is ten bytes per cell — a `COLORREF`
+        foreground, a `COLORREF` background and a sixteen-bit pattern — and arrives as **three** sprms, the
+        2nd (0xD616) starting at cell 22 and the 3rd (0xD60C) at cell 44, because a sprm's operand carries one
+        length byte and 63 cells of ten bytes do not fit in it. The ids are not in that order, and
+        `sprmTDefTableShdRaw` (0xD670) sits beside them in every file and is *not* read — LibreOffice ignores
+        it too.
+      - **The newer form wins per cell, not per row**, each entry tested against automatic —
+        LibreOffice's `SetTabShades`. Measured on the corpus document: the newer says `#CCCCCC`, which is what
+        it was written with, and the older can only say Word's nearest palette entry, `#C0C0C0`. A pixel
+        comparison would not have noticed; a unit test on the colour does.
+      - **A shade is a *pattern*, and what shows is its background** — the same trap as `w:fill` against
+        `w:color`, but as arithmetic rather than as a choice: the colour is the two blended in the pattern's
+        own proportion, so pattern 0 (clear) is the background alone and pattern 1 (solid) the foreground
+        alone. Reading the foreground shades every ordinary grey cell **black**, because an automatic
+        foreground is black. The whole 62-entry `eMSGrayScale` table is ported, since a 25 % pattern is a real
+        blend and no colour either side states.
+      - A `COLORREF` is `0xTTBBGGRR` — blue first, and the fourth byte a flag rather than an alpha, `0xFF`
+        meaning automatic. Reading it as ARGB gives a transparent black for every automatic colour and swaps
+        red for blue in every other. An automatic *background* under a clear pattern is **no shading**, which
+        is why the value stays nullable all the way to `PageTableCell.Shading`.
+- [x] **Cell borders**, for ODF: read, drawn *consolidated*, and compared against LibreOffice's own strokes —
+      axis, position, both ends and thickness, every one within a tenth of a point. What had to be right:
+      - **One stroke per grid line, not four per cell.** Five horizontals for a four-row table and one vertical
+        per column boundary, built by grouping the cells' edges onto the line they sit on and merging the runs
+        that touch. Drawing twelve short segments would be right on the page and incomparable against the
+        reference — which is the whole reason this needed a `PdfStrokes` reader before it could be attempted.
+      - **A vertical stops where its boundary stops.** The corpus table's last row spans two columns, so that
+        column's stroke is shorter than the rest — and it falls out of the merge rather than being special-cased.
+      - **A grid line runs through the centre of its border**, and each stroke **overshoots by half its width at
+        both ends**, which is what makes two perpendicular borders meet rather than leaving a notch.
+      - **A border takes space**, and the arithmetic is per row rather than per table: a row owns *half* of each
+        of the two grid lines it sits between, so a row 18.95 pt tall gains 0.5 pt from two 0.5 pt borders. And
+        the table's **first** grid line sits half a border below its top edge, which is one shift of the whole
+        table and was the last 0.25 pt of disagreement.
+      - Width and colour, no style: a style is a rasteriser's problem and no two formats agree on the set, while
+        a dashed border at the right width in the right place is far closer than none — and the width is the half
+        that moves text.
+- [x] Cell borders for **DOCX and RTF** as well, each with its own trap:
+      - **DOCX writes `w:start` and `w:end`, not `w:left` and `w:right`.** OOXML has both — the logical pair is
+        the ISO spelling and the physical pair the legacy one — and LibreOffice's export uses the logical names,
+        so a reader that knew only `w:left` finds *no vertical borders at all* and draws five strokes where the
+        reference draws nine. Both are read, logical first.
+      - **`w:sz` is in eighths of a point**, the one OOXML measurement that is neither twips nor half-points.
+      - **RTF states a border in two halves**: `\clbrdrl` and friends *select* a side, and the `\brdrw`,
+        `\brdrcf` and `\brdrnone` words that follow describe whichever was last selected. So the selection is
+        state between control words rather than an argument to one. `\brdrw` is in twips — three formats, three
+        units for one quantity.
+      - ODF's own trap, for the record: `none` is a *value* meaning there is no border, so it beats the
+        `fo:border` shorthand rather than falling through to it.
+- [x] The **table's own left edge** in DOCX and RTF, which is what had kept those two out of the border
+      comparison, and — found on the way — a second rule that had nothing to do with the origin. Both are now
+      in the comparison, every stroke within 0.05 pt of LibreOffice's.
+      - **Writer positions a table by the centre of its left border; Word positions it by the border's outer
+        edge.** So a Word-family reader has to add half the first cell's left border to whatever indent the
+        file states. `DomainMapperTableHandler::endTableGetTableStyle`, in the block commented "Table position
+        in Office is computed in 2 different ways" — "Writer starts a table in the middle of the border, Word
+        starts a table at the left edge of the border, so emulate that by adding the half the width". Measured
+        on the corpus table's first vertical: DOCX states `w:tblInd w:w="-5"` with a 0.5 pt border and renders
+        at 56.70 pt where taking the indent literally laid it out at 56.45; RTF states `\trleft0` and renders
+        at 57.00 where it had been laid out at 56.70. A quarter and a third of a point, and the same rule
+        underneath both — RTF's `\trleft` becomes `w:tblInd` in `rtfdocumentimpl.cxx` and the two share
+        dmapper from there. The **third** of a point is the trap: it looks like a different constant and is
+        the same half-border, differing only because RTF's number was 0 where DOCX's was −5.
+      - **Word 2007 to 2010 measured the indent to the cell's *text* instead**, and subtracted rather than
+        added: `tblInd − max(halfBorder, first cell's left padding)`. The same function picks between the two
+        on `compatibilityMode`, which is a `w:compatSetting` in Microsoft's namespace rather than `w:`; 15 and
+        above is the modern rule, and **an absent setting means the old one** (`GetWordCompatibilityMode`
+        returns −1, and every caller asks whether it is below 15). Nested tables always take the modern rule
+        whatever the mode, with the indent floored at zero first. Not academic: the corpus table rewritten to
+        mode 12 renders 3.00 pt further left, because its cells are padded 55 twips.
+      - **A Word table also joins its grid lines differently**, which is a *drawing* rule rather than a
+        reading one and was found twice over — once here and once from the DOC side, independently. It has an
+        item of its own below; what matters here is that it is not part of the origin, and that fixing the
+        origin without it still leaves four assertions failing.
+      - Checked past the corpus, since a fix that was really "subtract a quarter point" would pass one
+        document and fail the next: a table indented 567 twips and a bordered table nested inside a cell, both
+        converted to DOCX and RTF, agree with LibreOffice to 0.05 pt. Worth knowing that the corpus does not
+        cover this by itself — every other table document carries an *empty* `w:tcBorders`, so its border
+        width is zero and the origin rule moves nothing. `table-borders.*` is the only file that would notice
+        a regression.
+- [x] Cell borders for **DOC**, compared against LibreOffice's own strokes like ODF's — the same nine, within
+      0.06 pt on every axis, extent, width and colour. A border reaches a cell three ways and all three had to
+      be read, because a document uses all three at once:
+      - **The twenty-byte cell descriptor inside `sprmTDefTable`** already carries four BRCs: two bytes of
+        flags, two reserved, then top, left, bottom, right, four bytes each. That is the base, and it is what
+        the merge-flag reader was already walking past.
+      - **`sprmTSetBrc` names a *range* of cells and a mask of sides**: `itcFirst`, `itcLim`, a side mask
+        (1 top, 2 left, 4 bottom, 8 right — WW8's order again), then the BRC. So a uniform four-cell row is
+        four sprms, one per side, and not sixteen. `sprmTSetBrc80` (0xD620) carries a 4-byte BRC and
+        `sprmTSetBrc` (0xD62F) an 8-byte one; both appear, and the later wins. A BRC whose type is zero is
+        still a change — it *clears* the descriptor's border rather than being ignored.
+      - **`sprmTTableBorders` (0xD605 old, 0xD613 new) states six defaults**, the outline's four plus the
+        inside horizontal and inside vertical, and fills in any side no cell mentioned. Which of the six
+        depends on where the cell sits. The corpus document does not use it — LibreOffice's export states
+        every cell's four sides — but **Word writes almost nothing else**, so without it a Word-authored table
+        has no borders at all. Untested against a reference for want of a Word-written corpus file.
+      - **`dptLineWidth` is eighths of a point**: four is half a point, ten twips. Four formats, and now
+        three units for one quantity — a length in ODF, eighths in DOCX and DOC, twips in RTF. And the *type*
+        is not only a style: `DetermineBorderProperties` makes a triple line five times its nominal width
+        (three and four-and-a-half at the two smallest sizes) and a wave 45 twips more. Ported. What is not
+        ported is `ConvertBorderWidthFromWord`, which then doubles a thick border and triples a double one
+        for drawing — so a compound style comes out at the width Word *reserves* for it rather than the width
+        LibreOffice draws it.
+      - **A nil BRC is not an absent one.** Nil is 0xFFFF in the two width bytes (0xFFFFFFFF in the newer
+        form) and means "no border here"; type 0 means "nothing said", and only the second falls through to
+        the defaults. `ico` 0 and a `COLORREF` of `0xFF000000` are both Word's automatic, which for a border
+        is **black** and not the text colour — LibreOffice's `GetLineIndex`, "no AUTO for borders as yet".
+- [x] **A Word table joins its grid lines differently from a Writer one**, which is the difference that keeps
+      `table-borders.doc` from matching until it is applied — nothing to do with reading the BRCs. Writer runs
+      every line the full width and lets the ends overlap by half a pen; Word shortens an **inner** line by the
+      **whole** width of the outer line it meets. Measured: the DOC and DOCX renders both run their inner
+      horizontals 56.95 to 538.35 where the ODF render runs them 56.45 to 538.85, and the two inner verticals
+      start 0.5 pt lower. LibreOffice keeps this as `DocumentSettingId::TABLE_ROW_KEEP`, set by all three Word
+      filters and by no other, and reads it in `SwTabFramePainter::FindStylesForLine`. It is now
+      `PageTable.JoinsBordersLikeWord`, set by all three Word-family readers. Worth recording that it was
+      found *twice, independently* — once from the DOCX/RTF side and once from the DOC side — which is the
+      strongest evidence available that it is the rule and not a coincidence of one format's export.
+- [x] A table inside a cell, in all four formats. A cell holds *blocks* rather than paragraphs and
+      `FlowLayouter` places a table among its lines, so a cell's content is exactly what a header's is —
+      which is what made this a small change rather than a second layout path. The subtle part is that a
+      nested table's cells carry page coordinates while a flow's lines carry flow-relative ones, so moving a
+      cell has to move the tables inside it explicitly; forgetting it leaves the inner table near the page's
+      top-left corner, where the pre-layout pass built it.
+- [x] The two binary formats' nesting, which they express through the *paragraph* rather than the markup:
+      `sprmPItap` and `\itap` give a depth, and an inner table's cells end at paragraph marks rather than
+      at U+0007. So the depth cannot be read off the character — U+0007 always means the outermost table,
+      while a paragraph mark means whichever level its own sprms name, and `sprmPFInnerTableCell` implies at
+      least level two whatever the depth sprm says. Both assemblers now keep one open table per level and
+      append a finished inner one to the cell of the level enclosing it, innermost first.
+- [x] A table inside a header, in **all four formats**. `PageFurnitureSet` holds blocks rather than paragraphs
+      and `ReadFlow` takes the same walk a cell does, so the layouter — which could always place one — is
+      finally given one. What it buys is the two-part running head: one cell hard left and another hard right,
+      on one line, which is how a running head is usually built. Dropping the table is not the harmless
+      simplification it looks like, and that is the measured part: its paragraphs would stack as loose lines,
+      giving the header a height no table has and pushing the body text down by the difference on **every**
+      page. Verified against LibreOffice in all five files, positions and body offset alike.
+      The two binary-family readers needed their *recording* changed rather than their layout, and RTF needed
+      one thing more that is worth remembering: a header flow now has somewhere to put blocks, so the test for
+      "is this flow laid out at all" had to stop meaning "is this the body". It had been guarding the *cell*
+      path too, which meant a table in a running head closed normally and simply held nothing — a table with
+      no cells draws no text and reports no error.
+- [x] **Exact row heights**, in all four formats — the one row height that really is a height rather than a
+      floor. `PageTableRow.HasExactHeight` says which, and the layouter then takes the stated height as the
+      row's whatever its content, so the rows below it move up. Measured: a 0.8 cm exact row whose content
+      needs 32.6 pt renders 22.70 pt, which moves every row after it.
+      Three of the four formats say it by a **sign** rather than by a word: RTF's `\trrh` and WW8's
+      `sprmTDyaRowHeight` are both "at least" when positive and exact when negative, so the parameter has to
+      be kept signed — taking its magnitude, which both readers did, turns every exact row into a minimum.
+      ODF distinguishes `style:row-height` from `style:min-row-height` by the attribute name, and a row stating
+      both means the floor: a minimum the content may exceed is the weaker claim.
+      This also uncovered a bug that had been silent since row heights were first read: DOCX's `w:trHeight`
+      carries `w:val`, not the `w:w` a `w:tblWidth` carries, so it was being read with the width helper and
+      coming back as nothing. For an "at least" height that is invisible — a zero floor is no floor — and it
+      only surfaced when the same value became an exact height and produced a zero-height row.
+      `sprmTDyaRowHeight` (0x9407) is newly read; the WW8 reader had not been reading row heights at all.
+- [x] **Fitting a table to the page when its columns state no widths** — and the finding is that this item
+      described the wrong algorithm, which is worth more than the code that came of it. The measurement in it
+      was real: a three-column table with every column style stripped renders at 160.6, 107.1 and 214.1 pt.
+      The reading of it was not. **Those widths are not sized to their content, and nothing about them is.**
+      Move the one long paragraph from the third column to the second, or delete it outright, and they do not
+      shift by a twip; do the same to the DOCX spelling and it is equally inert. Writer owns exactly one
+      content-measuring table layout — `SwHTMLTableLayout`, whose `AutoLayoutPass1` calls
+      `SwTextNode::GetMinMaxSize` per cell (`sw/source/core/doc/htmltbl.cxx`:500) — and the only thing that
+      ever installs it is the HTML filter: `SwTable::SetHTMLTableLayout` is called from
+      `sw/source/filter/html/htmltab.cxx`:2469 and from nowhere else in the tree. So a table read from ODF,
+      DOCX, RTF or DOC has no such layout and never measures a character. There is no min/max content width
+      to port, no circularity to resolve, and the cost worry the item opened with does not arise.
+      What does decide the widths is arithmetic on the *declared* grid, and the two families disagree so
+      completely that the same table is a different shape in each. `Layout/TableColumnFit.cs` holds both;
+      `PageTable.ColumnFit` is null for a table that declares its grid, so nothing that states its widths goes
+      anywhere near this.
+      - **ODF, with an orientation and a width: the ratio 3:2:4, and it is a bug being ported deliberately.**
+        A column stating no `style:column-width` arrives as `MINLAY` — 23 twips — flagged *relative*
+        (`xmltbli.cxx`:693). `SwXMLTableContext::MakeTable_`'s absolute branch (`xmltbli.cxx`:2354) then gives
+        each relative column `width × remaining / totalRelative` while decrementing `remaining` and never
+        `totalRelative`, so three equal columns come out 1/3, 2/9, 4/9 and four come out 16:12:9:27. Verified
+        for both: a four-column version renders 120.45, 90.35, 67.75, 203.25 pt, which is 16:12:9:27 of the
+        text width to within a twip. The last relative column takes the remainder outright, which is why one
+        or two columns come out right and three do not — the bug is invisible until the third.
+      - **The same file without `table:align` renders 54 pt differently at the third column**, and that is the
+        trap that cost the most time here: with no alignment the table is `HoriOrientation::FULL`, and
+        `MakeTable` then sets `m_nWidth = MAX_WIDTH` with the importer's own comment "Even if a size is
+        specified, it will be ignored!" (`xmltbli.cxx`:2551). So a *stated* `style:width` is discarded, the
+        relative branch runs instead, and the three columns come out equal. Two documents differing by one
+        attribute, one ratio apart. `table:align`'s mapping is `aXMLTableAlignMap`
+        (`sw/source/filter/xml/xmlithlp.cxx`:307), where `margins` is `FULL` as well.
+      - The relative branch's own subtlety, measured: absolute columns are restated as relative ones pegged so
+        that the *narrowest* of them is worth what the narrowest already-relative column is. So a width-less
+        column beside a 3 cm and a 5 cm one comes out exactly as wide as the 3 cm — 131.9, 131.9, 218.0 pt on
+        A4, predicted from the source and then measured.
+      - **Word states no widths at all — it states relative separators against a table that starts equal.**
+        `DomainMapperTableManager::endOfRowAction` turns the grid into `TableColumnSeparator`s out of 10000
+        (`DomainMapperTableManager.cxx`:735) and the table is built with equal columns before they are
+        applied. `SwTable::NewSetTabCols` then records a divider's move only
+        `if( nOldPos != nNewPos && nNewPos > 0 && nOldPos > 0 )` (`swtable.cxx`:1195) — **a separator of zero
+        is dropped, not applied** — so an unsized column's divider stays where the equal division put it. A
+        grid of all zeroes therefore moves nothing and the table is equal; a grid of `0, 2835, 5102` moves
+        only the second divider and renders 160.6, 11.5 and 309.7 pt, where reading the grid proportionally
+        would give 0, 172.1 and 309.7. RTF's `\cellx0` reaches the same code through `rtfdocumentimpl.cxx`
+        and renders identically.
+      - Compared against LibreOffice run for run in `TableAutoLayoutComparisonTests`, every pen within a tenth
+        of a point, plus the widths themselves written down as constants so that a change to the distribution
+        has to argue with a number. The corpus files are **hand-written and have to be**: round-tripping
+        `table-autofit.fodt` through `soffice --convert-to fodt` writes `style:column-width="2.2306in"` where
+        the source said nothing, so a converted file is a fully-declared grid testing nothing.
+- [ ] Two residuals from the fitting above, both measured and both small.
+      - **A `w:gridSpan` row in a width-less table.** Its own separator is zero, so its divider is left where
+        the table's *first* column boundary is and LibreOffice draws the spanning cell **one** column wide
+        rather than two — the last row of `table-autofit.docx` before the spanning row was taken out of it.
+        X-Ray.Office's model is one grid and a span per cell, which cannot say "this row's divider is somewhere
+        else", so honouring it means per-row column positions. RTF escapes the whole thing by stating a short
+        row as a row with fewer `\cellx` edges, and ODF gets it right outright.
+      - **The moved divider lands three twips from Writer's.** `NewSetTabCols` converts a divider through the
+        table's stored *wish* width with `lcl_MulDiv64` rather than scaling the separator against the table's
+        width, and the two round apart: 309.85 pt against LibreOffice's 309.7 on `table-autofit-partial.docx`.
+        Only visible on a partly-stated grid, and the test carries a 0.2 pt bound for that one case with the
+        reason written beside it.
+      - That document also exposes something unrelated: an 11.5 pt column is 5.8 pt wide inside its padding,
+        and LibreOffice breaks its text *per character* to fit. X-Ray.Office has no emergency character
+        breaking, so it draws one overlong line where the reference draws five — a `XRay.Office.Text` line
+        breaking matter rather than a table one, which is why that file is compared for its column widths and
+        not for its pens.
+- [ ] **DOC cannot state a width-less table**, so it is the one format the fitting does not cover, and the
+      reason is the format rather than the reader. WW8 keeps a table's geometry in `sprmTDefTable`'s
+      `rgdxaCenter`, an edge list that is not optional and has no "unset" spelling, and LibreOffice's own DOC
+      export always writes real edges — so no corpus file can be produced by conversion either. What a
+      degenerate DOC does today is drop the table, which is what it did before; whether Word's own filter
+      (`ww8par2.cxx`, not dmapper) then divides equally is untested for want of a file to test it with.
+- [ ] Floating objects and text wrap, including contour wrap
+- [x] Floating objects and rectangular text wrap — see the frames item above for what was measured. Contour
+      wrap and the two-segments-per-line case are still open and are listed there too.- [x] Footnote **placement**, which is the half that changes pagination rather than appearance. The note
+      area takes its room out of the body's, so a page with notes holds less text — and adding a note can
+      push the line that cites it onto the next page, which removes the note again. That is a feedback loop
+      and not a second pass, and the paginator resolves it by trying the unconstrained line count and
+      shortening until it holds: each step removes a line and so can only remove notes, which is why it
+      terminates.
+
+      The geometry is measured rather than guessed, from `footnotes.fodt` rendered at A4 with 2 cm margins:
+
+      - **The note area is bottom-aligned inside the body text area.** The last note line's box bottom
+        coincides with the body area's bottom to a fiftieth of a point — 785.23 against 785.2. That is
+        exactly what `FlowLayouter` does with a null `offsetFromTop`, the rule a Word footer follows, so
+        placing the area needed no new machinery.
+      - Note lines break at the **full body width**, not a column's and not an indented one.
+      - A note paragraph's line height is its own style's: 12.20 pt for the 10 pt note against 13.42 pt for
+        the 11 pt body in the corpus document.
+
+- [x] Footnote **reading**, for ODF. A note is a body of blocks plus the character offset of its anchor.
+      The bodies are read *after* the citing paragraph's own walk rather than during it, because reading one
+      recurses into the paragraph reader — doing it mid-walk numbers a note cited inside note one as note two.
+- [x] The **citation**, which is two things and neither is in the file. LibreOffice draws the number twice:
+      as a superscript run at the anchor in the sentence, and again at the start of the note's first line,
+      where it fuses with the first word — its rendering reads `1Note 2 text alpha bravo charlie.`. And it
+      **renumbers**, ignoring `text:note-citation` and counting in document order, which turns a document's
+      stated citations of 2 and 5 into 1 and 2. Both are now produced, and the corpus document states 2 and
+      5 deliberately so that a reader taking the file at its word fails.
+- [x] `style:text-position`, which is what makes the citation superscript, and `PageRun.Rise` to carry it.
+      The rise moves the run's origin rather than its glyphs, so the pen along the baseline carries on
+      unchanged — a raised run advances the line as if it were not raised. `super` and `sub` are ±33% of the
+      font size, LibreOffice's automatic values; the size half of the attribute is deliberately left to
+      `SizeIn`, which already walks the cascade multiplying percentages, so that a span stating both does not
+      have it applied twice.
+- [x] Footnote reading for **DOCX**, whose note store is `footnotes.xml`/`endnotes.xml`, keyed by the `w:id`
+      a `w:footnoteReference` carries. Two things differ from ODF and both were measured:
+      - The note body **marks where its own citation goes**, with a `<w:footnoteRef/>` in its first
+        paragraph, so the number is emitted there rather than prepended. Anywhere else in that paragraph and
+        it would be, since a note can begin with a tab.
+      - That citation is nonetheless **not formatted by the file**. LibreOffice exports the run around it
+        with the character style `FootnoteCharacters` and an *empty* `w:rPr`, leaving the superscript to a
+        built-in style the file never defines. So the citation falls back to the same 58%-size, 33%-rise
+        default the ODF reader applies; a reader taking the file at its word draws the number full size on
+        the baseline, where it fuses with the note's first word and the comparison reads
+        `2Note 5` against LibreOffice's `2 Note 5`.
+      `w:vertAlign` supplies `PageRun.Rise` for the anchor's own citation, which *is* stated — the run in
+      the sentence carries `superscript` properly.
+- [x] Footnote reading for **RTF**, whose note is a `{\*\footnote …}` group sitting *inside* the sentence,
+      immediately after the `\chftn` that cites it. So the note is finished before the paragraph carrying it
+      is, which is the opposite of every other format: the body is collected onto the flow and the paragraph
+      claims it when it closes. Three details are RTF's own:
+      - The anchor's offset has to be taken at the `\chftn`, before the group opens — by then the reader has
+        pushed a flow of its own and the citing paragraph is no longer the current one.
+      - The note body opens with a **second** `\chftn` repeating the same number. Extraction deliberately
+        drops it (the note's section already carries the number as its name), so layout takes it from a
+        separate `LayoutPrefix` on the flow — the one place the layout text differs from the extracted text
+        by more than a character's identity.
+      - An endnote is a `\footnote` group whose *first* control word is `\ftnalt`. LibreOffice peeks seven
+        bytes ahead in the stream to see it; reading the flag when the tokeniser reaches it says the same.
+- [x] **`Escapement`**, and it is worth reading before touching a superscript. The rise is a percentage of
+      the font's **height** — ascent plus descent plus line gap — not of its em size, which for a Latin face
+      is about 22% smaller. Reading it as the em size puts a citation 0.7 pt low at eleven point, seven times
+      the tolerance a comparison runs at, and no word-box test can see it: a box top carries the font's
+      ascent, so a rise and a size change are indistinguishable from boxes alone. Measured off the PDF
+      content stream at two sizes, where it comes out exact both times — an eleven-point citation is raised
+      4.40 pt and a ten-point one 4.00 pt, which is 33% of Carlito's height truncated to whole twips. The
+      size is 58% of the em, also snapped to twips, which is why LibreOffice draws 6.4 pt and not 6.38.
+      Both halves now live in one place and each reader hands it the face, because the face is what the
+      percentage is of. Two bugs fell out of writing it down: ODF's `style:text-position="super 58%"` and
+      DOCX's `w:vertAlign` were shrinking nothing at all, so both drew their anchors full size.
+- [x] The **asymmetry between the two citations**, which is measured rather than assumed. Writer has two
+      built-in character styles and they do not agree: `Footnote Anchor` carries an automatic superscript and
+      `Footnote Characters` carries *nothing* — `DocumentStylePoolManager.cxx` falls straight through for the
+      latter. So the number in the sentence is raised and shrunk, and the number at the head of the note is
+      full size on the note's own baseline. LibreOffice renders ODF exactly that way. A DOCX gets a raised one
+      anyway, because its file names `FootnoteCharacters` on the run and LibreOffice's import gives that style
+      the shift; an RTF gets one because the note-body `\chftn` inherits the `\super` still in force from the
+      anchor's group. So all three are right for three different reasons.
+- [x] Footnote reading for **DOC**, which turned out the cleanest of the four once the tables were found. Two
+      PLCFs make a note: `PlcffndRef` gives the body positions of the references and `PlcffndTxt` the extents
+      of their texts in the footnote subdocument, with the *n*th reference owning the *n*th text. The endnote
+      pair is the same arrangement over a different subdocument — and that pairing is the *only* thing that
+      tells the two kinds apart, because the reference character in the body is the same U+0002 for both.
+      Three things fell out pleasingly:
+      - The citation is emitted **at the reference's own position** rather than as a synthetic run, so the
+        CHPX covering that character governs it — and Word writes the mark with a character style carrying
+        `sprmCIss`, which is what makes it superscript. No default needed anywhere.
+      - The mark at the head of a note is the same U+0002, so the note body's number needs no separate
+        mechanism: reading a note's range with the citing number in hand is enough, and only a reference in
+        the *body* advances the counter.
+      - A note's text lives in a different subdocument than the body, so a note cannot contain its own
+        reference and the recursion is bounded by the ranges themselves.
+      `sprmCIss` (0x2A48) is now read into `Ww8LayoutFormat.Escapement`; its companion `sprmCHpsPos` (0x4845)
+      states a half-point offset outright and is still unread, so a document using one gets no shift rather
+      than a wrong one.
+- [ ] RTF footnotes cannot be compared against LibreOffice's *rendering*, and the reason is upstream rather
+      than here: LibreOffice's RTF import drops the character and paragraph formatting stated inside a
+      `{\*\footnote …}` group and falls back to the document's defaults — a note the file sets in Carlito at
+      10 pt with no indent renders in Liberation Serif with a 340-twip hanging indent. Reproduced on a
+      hand-written three-line RTF, so it is not an artefact of the corpus export. X-Ray.Office reads what the
+      file says; `FootnoteReadingTests` checks the notes structurally instead, and `tests/corpus/README.md`
+      records the measurement. DOC has no such problem: its notes are compared word for word and pen for pen.
+      **Bisected, since the sentence above was too broad to be true.** A note stating `\f1` with nothing else
+      keeps its face; the same note with a `\sN` in front of it loses the style's font *and* the direct one.
+      So the trigger is the style reference, not the group: three hand-written RTFs differing only in whether
+      the note paragraph names a style, rendered by the same `soffice`. `footnotes.rtf` names `\s26`, whose
+      own definition is `\f4\fs20` — Carlito at ten point — and restates `\f4\fs20` directly beside it, and
+      LibreOffice renders neither. What it renders instead is its built-in Footnote style, which is `\s27` in
+      that file: `\fi-340\li340\fs20` with the font inherited from `Normal`, which is `\f3`, Liberation Serif.
+      The size survives; only the face and the indent are lost.
+      This is what made `footnotes.rtf`'s **note separator** look like a bug of ours, and it is not one. The
+      rule is drawn from where the notes landed — 0.1 cm above the first note's line box — and the note area
+      is bottom-aligned in the body's rectangle, so a shorter note line raises the whole area and the rule
+      with it. Liberation Serif is 11.55 pt a line at ten point where Carlito is 12.20, 13 twips; two notes,
+      26 twips, 1.30 pt — against the 1.286 pt the rule differs by, the remainder being the sub-twip rounding
+      of the bottom alignment. Every input to the separator's arithmetic other than the note height is
+      identical, and the other four formats of the same document agree with LibreOffice to a hundredth of a
+      point. `NoteSeparatorComparisonTests` pins both halves: that LibreOffice's RTF rendering draws the
+      notes in a font resource its own body does not use while its ODF rendering of the same document uses
+      one throughout, and that the separator's whole disagreement is accounted for by the shorter lines.
+      It fails if either stops being true — including if LibreOffice fixes its import, at which point
+      `footnotes.rtf` can rejoin the fill comparison.
+- [x] **Note numbering the document states**, in `NoteNumbering`: the sequence and the start value, per class,
+      read from all four formats. The defaults stay what LibreOffice does when a file says nothing — footnotes
+      1, 2, 3 and endnotes i, ii, iii. What each format says and how it lies:
+      - **ODF**'s `text:notes-configuration` states the format *by example* — `style:num-format="I"` is the
+        literal numeral, not a name — and its `text:start-value` is an **offset, not the first number**. A
+        document stating 7 renders VIII and IX, because LibreOffice maps the attribute to
+        `SwFootnoteInfo::nFootnoteOffset` and adds one. Measured; a reader taking it at face value is out by
+        one on every citation.
+      - **OOXML** names the format (`w:numFmt w:val="upperRoman"`) and its `w:numStart` *is* the first number.
+      - **RTF** puts the sequence in the control word itself — one word per format, `\ftnnar` through
+        `\ftnnchi`, doubled with an `a` prefix for the endnotes — and `\ftnstart` is one-based.
+      - **DOC** packs it into the DOP three ways: `nFootnote` at 0x02 and `nEdn` at 0x34 above two bits of
+        restart rule, and both sequence codes four bits each in one word at 0x36. The `MSONFC` order has a
+        trap in it: **upper** roman is 1 and lower roman is 2, so assuming the lower-case form comes first
+        gives I where the document says i.
+      Word's `chicago` sequence is modelled too, since it is the one format that is not an arithmetic
+      progression — the fifth mark is `**` rather than a fifth symbol.
+- [x] Note numbering **restarts**, the *rule*: read from all four formats into `NoteRestart` and carried on
+      `PageNote` beside `Placement`, which is the same kind of thing — a property of the note's class that only
+      pagination can act on. `note-restart.*` is the corpus case, and building it first settled the shape of the
+      problem: all four formats keep the rule through LibreOffice's own export and all four then render
+      *identically*, page one citing 1, 2, 3, 4 and page two citing 1, 2, 3, 4 again.
+      Three findings, each of which would otherwise have been a wrong guess:
+      - **There are three restart kinds, not four.** Writer's `SwFootnoteNum` is exactly
+        `FTNNUM_DOC`/`FTNNUM_CHAPTER`/`FTNNUM_PAGE` (`ftninfo.hxx:92`), and every importer folds a
+        per-*section* restart onto the chapter one — WW8 through
+        `{ FTNNUM_DOC, FTNNUM_CHAPTER, FTNNUM_PAGE, FTNNUM_DOC }` (`ww8par.cxx:5064`), OOXML's `eachSect`
+        (`docxattributeoutput.cxx:9329`) and RTF's `\ftnrestart` (`rtfexport.cxx:970`). A fourth member would
+        model something no reference implementation round-trips.
+      - **WW8's own comment contradicts its own code.** `ww8scan.hxx:1624` documents `rncFootnote` as
+        "1 section, 2 page"; the mapping array reads 1 as *chapter*. The comment describes Word's field, the
+        array what Writer does with it. The bits cost nothing to read, incidentally — they are the two the DOP
+        reader was already shifting past to reach the start value, in the same word at 0x02 and at 0x34.
+      - **RTF's endnote set is one word short rather than a mirror.** `\ftnrstcont`, `\ftnrestart` and
+        `\ftnrstpg` have `a`-prefixed twins for only the first two: there is no `\aftnrstpg`, because an endnote
+        does not restart per page. A reader assuming the mirror would be inventing a keyword.
+- [x] Note numbering restarts, the *application* — assigning the numbers, which is pagination's half and is
+      genuinely circular: a note's number under a restart is its position within its page, the citation's width
+      depends on that number, and where the citing line breaks depends on the width. **Writer has an answer and
+      it is not a fixed point**, which is the correction to the note that used to stand here:
+      - It numbers per page as a pass over pages that already exist — `SwRootFrame::UpdateFootnoteNums`
+        (`ftnfrm.cxx:971`) runs only for `FTNNUM_PAGE` and walks the finished page frames, and
+        `SwPageFrame::UpdateFootnoteNum` (`ftnfrm.cxx:2564`) counts one page's notes and assigns 1..n.
+      - The loop is real: `SwTextFootnote::SetNumber` (`atrftn.cxx:362`) invalidates the citing text node *and*
+        every text node of the note's own body, so a renumber can rebreak the line that cites it.
+      - And Writer **damps rather than iterating**. `flowfrm.cxx:2268` renumbers both pages the moment a note
+        moves between them, and `txtftn.cxx:560` then validates the frame under the comment
+        *"We break the oscillation"* — accepting a layout one iteration stale rather than chasing a fixed point
+        that need not exist.
+      So the shape is: paginate with the document-order numbering, renumber per page over the finished pages,
+      re-lay out once, and stop. The corpus document deliberately holds four notes to a page so that every
+      citation stays one digit wide — the numbering can be got right before the width feedback is, and a second
+      document with ten notes on a page is what would exercise the rest.
+      **Done, in `Layout/NoteRenumbering.cs`, exactly that shape.** What writing it turned up:
+      - **A renumbering is a text edit, not a number.** The number is nowhere in this engine as a number: all
+        four readers emit it into the text twice, as a superscript at the anchor and again at the head of the
+        note, because that is what LibreOffice draws. So the pass rewrites paragraphs — text, runs, frame
+        anchors and the offsets of the notes after it — which is also why the width feedback is real rather
+        than theoretical, and why doing it once and stopping is the only terminating answer.
+      - **`PageNote` had to learn three things** it did not carry: the class's whole `NoteNumbering` (the
+        restart alone cannot say what sequence to write the new number in), the citation as read, and where
+        that citation sits inside the note's own body. The last is not zero in DOCX and is in the other three:
+        ODF and RTF have no number in the note at all and the reader prepends it, WW8 puts it at the U+0002
+        that heads the note's range, and a DOCX marks the place with a `w:footnoteRef` — which a note
+        beginning with a tab puts at one. Searching the note's text for the citation instead would find
+        whatever the note happens to say first.
+      - **The rewritten blocks have to reach the caller**, which is the part that would have been silently
+        half-right: pagination indexes lines into a block list the reader still holds, so rewriting the
+        paragraphs and returning the old list draws the numbering the document was read with. Each page now
+        names its own list and `Paginator.Blocks` reports it, so both halves agree.
+      - Guarded on `NoteRenumbering.Applies`, so every document whose notes do not restart per page — which
+        is all of the corpus but one — pays a single walk over its blocks and takes no second pagination.
+      Verified against LibreOffice in all four formats: `NoteRestartComparisonTests` asserts page one citing
+      1, 2, 3, 4 and page two citing 1, 2, 3, 4 again, at the anchor *and* at the head of the note, and then
+      that the text drawn is character for character LibreOffice's. Before the pass, page two cited 5, 6, 7, 8.
+      What is still open is the width feedback the corpus deliberately does not exercise: a page whose tenth
+      note becomes its first goes from `10` to `1` and the citing line rebreaks. The single re-layout picks
+      that up; whether a *second* renumbering would then be needed is precisely what Writer refuses to chase,
+      so the behaviour is right and the case is untested for want of a document with ten notes on a page.
+- [x] **The separator rule above the notes**, drawn and compared — and the interesting part is that it turned
+      out to be comparable at all. The old note here said it could not be, that it needed the rasteriser first
+      because a text comparison sees no lines. That was the wrong conclusion from a true premise: `pdftotext`
+      sees no lines, but the PDF's **content stream** does, and LibreOffice writes the rule as an explicit
+      closed rectangle. `PdfFills` reads them, so a rule is now compared at the same tenth of a point as
+      everything else — and every constant in it is measured rather than assumed:
+      - a quarter of the text width (56.7 to 177.15 pt on an A4 page with 2 cm margins, so 120.45 of 481.89),
+      - half a point thick,
+      - left aligned at the text area's left edge,
+      - and 0.1 cm above the first note's line box.
+      **Filled rather than stroked**, which matters: a stroke is centred on its path, so the same coordinates
+      stroked would put half the thickness on the wrong side of the line. LibreOffice fills a closed rectangle
+      and so does this.
+      The same reasoning applies to everything else drawn that is not text, so this unblocks more than itself —
+      see the cell-borders item, which no longer has to wait for a rasteriser either.
+- [x] **Endnotes**, which are the same thing to read as a footnote and a different thing to place: a footnote
+      takes its room out of the page that cites it, and an endnote takes none at all. Measured — LibreOffice
+      leaves the citing page holding every body paragraph and puts the notes at the top of a fresh page after
+      the last of them, in the body's own text area. So it is an ordinary pagination of an ordinary flow, done
+      by recursion rather than a second implementation: the notes get page breaks, headers and footers exactly
+      as body text does, because on those pages they *are* body text.
+      Three things had to change with it:
+      - `LaidOutPage.Blocks`, because an endnote page's lines index into the endnote flow rather than the
+        body's block list. Without it an endnote page draws the body's first paragraphs at the endnotes' line
+        lengths, which looks like a layout bug and is an indexing one.
+      - **Two numbering sequences, formatted differently.** LibreOffice cites footnotes 1, 2, 3 and endnotes
+        i, ii, iii, and the corpus document renders "i" and "ii" both in the sentence and at the head of the
+        note. A single counter gets both the numbers and the numerals wrong.
+      - In RTF the class is only knowable by **peeking**: the `\ftnalt` that marks an endnote is inside the
+        `{\*\footnote …}` group, which comes *after* the `\chftn` where the citation has to be numbered and
+        appended. LibreOffice's own importer peeks seven bytes ahead for exactly this; the reader now looks in
+        the same short window.
+- [x] **Note placement read apart from note class**, in `NotePlacement`. An endnote is not always at the end
+      of the document and the exception is not exotic: LibreOffice's own WW8 export writes the DOP's `epc` as
+      zero, "collect at the end of the section", so a document round-tripped through DOC has its endnotes in
+      the page-bottom note area instead of on pages of their own. Read from all four — RTF's
+      `\aenddoc`/`\aendsec`, OOXML's `w:pos`, the DOP's `epc`, and ODF's `text:footnotes-position` (which
+      exists for footnotes only; ODF cannot move its endnotes off the end of the document at all). The
+      paginator now places by position rather than by class, which turned `endnotes.doc` from a documented
+      divergence into a compared case: one page rather than two, notes at the foot.
+      One trap worth naming, because it produced the only failure: a reader building a fresh `NoteNumbering`
+      from a document's stated format and start value silently loses the class's *default placement*, so a
+      document declaring a configuration purely to set a start value has its endnotes moved to the foot of the
+      page. The fallback's placement has to be carried through explicitly.
+- [ ] Section-end endnotes on a section spanning **more than one page**. Writer collects them on the section's
+      last page; this places them at the foot of the page that cites them, which is the same thing for a
+      one-page section — the case LibreOffice's own DOC export produces and the one the corpus verifies — and
+      not for a longer one. Doing it properly is the footnote feedback loop at section granularity: which page
+      is last is not known until the section is full, and reserving the notes' room changes which page that is.
+- [x] **Right-to-left paragraphs**, read from all four formats and mirrored by the layouter — the
+      levels the itemiser resolves are consumed now, so a mixed Latin/Hebrew line draws its runs in
+      visual order and a right-to-left paragraph starts at the right margin with its indents on the
+      right. The layout half is written up in `XRay.Office.Text/TODO.md`; what belongs here is that
+      **three of the four formats disagree about what their own alignment words mean**, and each
+      disagreement is one line of code and one measurement:
+      - ODF's `fo:text-align` `left`/`right` are page **sides** and its `start`/`end` are edges, so
+        `left` is the *end* of an `rl-tb` paragraph. Confirmed by LibreOffice's own conversion: the
+        same paragraph exported to OOXML comes back as `w:jc w:val="end"`.
+      - OOXML's are **edges** throughout — `w:jc w:val="left"` is the older spelling of `start` and
+        means the right margin beside `w:bidi`. LibreOffice swaps them on import, "Paragraph
+        justification reverses its meaning in an RTL context"
+        (`sw/source/writerfilter/dmapper/DomainMapper.cxx:2176`).
+      - RTF's `\ql` and `\qr` are sides again, and that is not a guess: writerfilter takes RTF's
+        justification literally where it swaps OOXML's — `bUseLiteralDirection = IsRTFImport()`,
+        `DomainMapper.cxx:1803`.
+      - WW8 carries **both kinds**, which is the trap: `sprmPJc` (0x2461) is bidi-relative and
+        `sprmPJc80` (0x2403) is absolute, so the same byte means opposite edges depending on which
+        sprm stated it. `SwWW8ImplReader::Read_Justify` spells it out —
+        `sw/source/filter/ww8/ww8par6.cxx:4805`, "tdf#121110: Jc80 justify is absolute, not
+        bidi-relative". `Ww8LayoutFormat` carries which one spoke.
+      The indents need no such care in any of them: `fo:margin-left`, `w:ind w:start` and `\li` are
+      all the *start* indent, which is why a paragraph indented 3 cm is drawn 3 cm from the right.
+      `w:rtl` on a run is deliberately **not** read, and that is measured rather than lazy:
+      LibreOffice's importer discards it outright (`case NS_ooxml::LN_EG_RPrBase_rtl: break;`,
+      `DomainMapper.cxx:2511`) and resolves direction from the text against the paragraph's `w:bidi`,
+      so honouring it would put runs where Writer does not.
+- [x] **Right-to-left sections**, which are a different statement from their paragraphs' and do one
+      visible thing: the section fills its **rightmost column first**. Measured — a two-column A4
+      page whose ODF page layout says `style:writing-mode="rl-tb"` has LibreOffice drawing its first
+      line at 319 pt, the right-hand column, with the margins unmoved. Read from `w:sectPr/w:bidi`,
+      the page layout's writing mode, and `sprmSFBiDi` (0x3228, `sw/source/filter/ww8/sprmids.hxx:588`
+      — the paragraph's own `sprmPFBiDi` is 0x2441 at line 429 of the same header, and the two are
+      easy to confuse in a table where every name looks alike).
+      Three formats and not four: **LibreOffice's RTF export drops it**, writing `\cols2` and no
+      `\rtlsect` at all, so a document round-tripped through RTF loses its section direction. The
+      control word is still read, since another producer may write it and LibreOffice's own importer
+      maps it (`sw/source/writerfilter/rtftok/rtfdispatchflag.cxx:653`).
+- [ ] Tabs in a right-to-left paragraph. `TabRuler` measures from the paragraph's start edge and the
+      drawing lays its stretches out left to right, so a tabbed right-to-left line advances the wrong
+      way. It is not a mirror of the line: Writer resolves a tab against the *frame's* direction and
+      keeps the stops where the ruler puts them, so the stretch between two stops reads right to left
+      while the stops themselves march left to right. Nothing in the corpus exercises it yet.
+- [ ] The itemisation is redone per line when a paragraph reorders — `PageDrawing.Pieces` resolves the
+      whole paragraph's bidi for every line it draws, because what reaches a page is a
+      `PageParagraph` and its line boxes rather than the `MeasuredParagraph` the layout built. Cheap
+      today (only paragraphs that could reorder pay, and each is one linear pass) and the obvious fix
+      is to carry the measured paragraph onto the page, which is a bigger change than this was.
+- [ ] Mirroring anything else a right-to-left section might mirror. Only the column order is done,
+      because only the column order was measurable: the margins stayed put in the reference, and
+      whether a table's columns or a page's furniture mirror is untested — a table in a right-to-left
+      section is the case to measure next, since Writer has `sprmTFBiDi` for exactly that.
+- [ ] Vertical writing modes, which are a separate matter and deliberately untouched. Nothing was
+      learned here that shortens them: they are not a mirror but a rotation, so the line box's height
+      becomes its advance and every rectangle in the paginator changes meaning. `style:writing-mode`
+      already reports `tb-rl` and `tb-lr` and both are read as left to right, which draws horizontal
+      text rather than nothing.
+- [x] **Emit to `IDrawingSink`**: one glyph run per line, positioned at its baseline, with glyph ids and
+      per-glyph advances rather than characters — a backend must not re-shape, since layout already
+      committed to these advances when it decided where the lines broke. The run carries the resolved
+      `FontReference` so a PDF backend embeds the face the document was laid out against rather than the
+      one it asked for, and the text plus cluster map so extracted text and a `ToUnicode` map are correct.
+- [x] Verified against LibreOffice's own rendering for all four formats, comparing a display list rather
+      than pixels: each line's drawn origin against the first word's left edge, its summed advances
+      against the last word's right edge, and the baseline pitch against the rendered line pitch. An image
+      comparison answers "does it look the same", which is weaker and much harder to attribute — a
+      baseline a point out and a wrong glyph look equally different.
+- [x] And, for a mixed-formatting document, against the PDF's own text operators rather than against
+      `pdftotext`'s word boxes. LibreOffice writes one `BT … ET` block per portion — per line, split again
+      at every formatting change — which is exactly what a glyph run is, so the comparison needs no
+      grouping and reads a *baseline* rather than a box top. Word boxes cannot do this: poppler groups
+      them by vertical position, which puts a 22 pt word on an 11 pt line into a line of its own and
+      scrambles the reading order of precisely the documents worth checking.
+
+- [x] **Justification**, which stretches a line rather than shifting it: the slack divided over the line's
+      blanks, in hundredths of a twip and truncated, exactly as `SwTextAdjuster::CalcNewBlock` computes
+      `nGluePortionWidth / nGluePortion`. It lands on each blank's own advance, where Writer's kern array
+      puts it, so a run stays one draw call and its glyph positions stay self-consistent.
+- [x] **Mandatory breaks**, which the line filler previously ignored — it treated every UAX #14 opportunity
+      as optional, so a manual line break in a line that still fitted did nothing at all and two of the
+      document's lines shared one of the page's. `ILineBreaker` now answers which breaks are required, and
+      a required break also has no width: the separator is trimmed from the line's visible text, or the
+      line would stretch by one glyph too little and draw a `.notdef` box at its end.
+- [x] **Tab stops**, all four alignments. A tab is the one character whose width is not a property of the
+      font — it is the distance to the next stop — so one walk (`TabRuler`) serves both the measuring and
+      the drawing, and a line is split at its tabs when it is drawn. A left stop puts the following text's
+      start on it, a right stop its end, a centre stop its middle and a decimal stop its separator; a stop
+      that cannot hold what follows is skipped rather than drawn backwards over the column before it.
+- [x] The stops themselves, for ODF and DOCX. Both state them as a list that *replaces* the style's rather
+      than adding to it, so the innermost layer declaring one wins whole. Two per-format traps: ODF's
+      default interval is **1.25 cm**, not the half inch Word uses — measured, a tab in a paragraph with no
+      stops lands 709 twips along — and its `style:type="char"` is only a decimal stop when `style:char`
+      names a separator, behaving as a right stop otherwise, which is what LibreOffice renders.
+- [x] Tab stops for DOC and RTF too, so all four formats now advance a tab to the same place. WW8's
+      `sprmPChgTabsPapx` states a *change* rather than a list — a count of positions to delete, a count to
+      add, and then one descriptor byte each — so applying the style chain and then the direct formatting in
+      order is what turns it into a list. RTF states the kind *before* the position (`\tqr\tx5000`), so the
+      kind is held and consumed by the `\tx` that follows.
+- [x] The `Dop`, at last: its `dxaTab` is where a DOC's default tab interval lives, and reading it was the
+      only way the DOC agreed with the other three — LibreOffice writes 709 twips into a DOC it exported
+      from an ODF document, not Word's 720, so assuming either constant is wrong. It is FIB entry **31**,
+      two before the piece table's 33. The same record's `fDontUseHTMLAutoSpacing` now answers whether the
+      two paragraph spacings collapse, which was the last thing the DOC path had hard-coded.
+- [ ] A justified **right-to-left** line whose stretch `ManualBreakJustification` removes keeps the
+      position it was given while it was still stretched, so it hangs at the left margin instead of
+      returning to the start edge. It needs three things at once to appear — right to left, justified,
+      and a DOCX carrying `w:doNotExpandShiftReturn` — and closing it means the suppression knowing
+      the room the line was given, which is per line once frames are in play.
+- [ ] A justified line that also holds a tab is left ragged. Writer stops justifying at a centre, right or
+      decimal tab and gives each stretch between tabs its own space-add, which is a per-stretch answer where
+      the engine has one per line; stretching the blanks anyway would move text out of the columns the tabs
+      put it in, which is the more visible error.
+- [ ] A decimal stop aligns on the last `.` or `,` in the stretch rather than on the character the document
+      named. `TabStop` would need to carry it; ODF states it as `style:char` and OOXML does not state it at
+      all, so the two would disagree about a `1.234,56`.
+
+## Known deviations, measured
+
+- **[DONE, one half] A `draw:frame` whose stated height is a *floor* is grown to its own text.**
+  ODF states Writer's three fly height kinds by which attribute carries the length:
+  `fo:min-height` on the `draw:text-box` sets `bMinHeight` and therefore `SizeType::MIN`, and
+  `svg:height` on the `draw:frame` sets `SizeType::FIX`
+  (`xmloff/source/text/XMLTextFrameContext.cxx`:997-1010 and :655-661). **Both write the same
+  variable and the box's attributes are read first** (:1113-1116), so a frame stating both keeps
+  `svg:height` as the floor and still grows — no corpus document does, but that is the rule rather
+  than the corpus's coincidence, and it is why `GrowsToContent` asks about the box rather than
+  about the absence of a height.
+
+  The arithmetic is `SwFlyFrame::Format` (`sw/source/core/layout/fly.cxx`:1549-1570) in its own
+  order: the content height, raised to the stated minimum less the insets, raised again to
+  `MINFLY` (23 twips, `sw/inc/swtypes.hxx`:59), and the insets added back — so **the stated
+  minimum is a floor for the whole frame, insets included**. Measured over eighteen one-attribute
+  probes against 26.2.4.2 (`probes/odt-frame-r75/`): the content measure is the **ink extent**
+  and not the advance, because a text frame's area carries its own upper space and its lower space
+  is only ever realised as the upper space of what follows it — so **every paragraph's
+  space-before counts, the first included, and the last paragraph's space-after does not**.
+
+  `.odt` **261 → 264 of 338** at `0e54dba0a`, 12 renderings moved, four verdicts gained and one
+  lost; the original words track is byte-identical on all 338. The lost row is
+  `047_Visual_Product_Roadmap_Template_Professional_Layout`, and it is not this rule's defect:
+  its frame holds a table whose first column is `loext:writing-mode="bt-lr"`, which we draw one
+  glyph per line, so the cell and therefore the frame come out far too tall. 13 of the 338
+  converted `.odt` state a vertical writing mode, 92 occurrences.
+
+  **The probes had to name a parent style before they measured anything.** A `draw:frame` whose
+  `draw:style-name` names an automatic graphic style with *no parent* is imported as a drawing
+  shape rather than a Writer fly (`XMLTextFrameContext.cxx`:1374-1394, *"#i51726#"*, and
+  :1500-1507), and a shape ignores `fo:min-height` outright — which reads exactly like the
+  reference ignoring the attribute. LibreOffice's own exporter always names `Frame`.
+
+- [ ] **The other half is fly splitting, and it is worth 13 rows.** A frame taller than the room
+      left on its page draws its tail off the sheet. Measured with `xray-office extract` against the
+      render over the 50 documents holding a growing frame
+      (`probes/odt-frame-r75/overflow.tsv`): **13 of the 50 draw materially less than they hold**,
+      every one of them a currently failing row — `ESPN-R - MCF - RA - Ed1` draws 43028 of the
+      58948 it holds against the reference's 65952, `Case-Study-Heathrow-Airport` 2159 of 6445
+      against 6461.
+
+      What the reference does is *split* the fly, and the two behaviours are one attribute apart.
+      Measured on 60 paragraphs in a paragraph-anchored frame on A4: with
+      `loext:may-break-between-pages="true"` the fly is cut at the body's bottom, 52 lines on page
+      one and 8 on page two, and the body resumes below the second fragment; with it false the fly
+      stays whole, runs from y 14.36 to 828.56 on an 841.89 pt sheet — captured onto the *page*
+      rather than the body — and the whole body moves to page two. The seat is
+      `SwFlyFrame::IsFlySplitAllowed` (`fly.cxx`:689-737), the deadline is `GetFlyAnchorBottom`
+      (`fly.cxx`:114-162) read at `Format`:1576-1596, and the continuation is a `SwFlowFrame`
+      follow chain (`SwFrame::GetNextFlyLeaf`, `flycnt.cxx`:1576). `IsFlySplitAllowed` is
+      consulted from 46 places in `sw/source/core`.
+
+      **Two of the three pieces are local and the third is the reason this is architectural.**
+      Reading the flag and its refusals is local to `OdfFrames`/`PageFrame`; cutting the flow at a
+      deadline is the rule `FlowLayouter.Truncated` already implements. What is not local is
+      putting the continuation on the following pages: in this engine a page exists because a
+      *block* overflowed onto it — `Paginator.EmitPage` is reached only from the block loop — and
+      a fly's obstacles are keyed by the page its **anchor paragraph starts on**, built per block
+      index from `obstaclesByPage[placement.Index]` and consulted in that one page's coordinates.
+      A paragraph that spills onto page N+1 never sees page N+1's obstacles, and a fly fragment on
+      a page no body text has reached has nothing to obstruct. **The seat is
+      `FrameResolution.ObstaclesFor(int block)` and `Paginator._obstacles`**: the obstacle set has
+      to become per *page*, consulted for whichever page each line lands on. That is a change to
+      the line filler's contract, on the track whose gate is page counts.
+
+- Two of LibreOffice's numbers are reproduced by construction rather than derived, and both are recorded
+  here so a future comparison does not mistake them for bugs:
+  - Its PDF export adds **two twips** to every pen position horizontally and nothing vertically. With left
+    margins of 1 cm, 2.5 cm and 5 cm it lays the body out at 567, 1417 and 2835 twips — its own RTF export
+    says so — and its PDF puts the first pen at 28.45, 70.95 and 141.85 pt. Additive, not a scale.
+  - It breaks a **justified** paragraph's lines differently from the same text left ragged. Measured on a
+    corpus document holding both: a line that takes twenty-one words ragged takes nineteen justified,
+    though the ragged line ends well inside the margin. The greedy break the two agree on everywhere else
+    is evidently not what 24.2 does for justified text, and the C++ tree here is a newer version than the
+    installed binary — its word-spacing and shrinking machinery does not describe what 24.2.7 did. So the
+    justification comparison uses lines fixed by a manual break, where the words cannot move, and the
+    break rule itself is left as it is: agreeing with Writer on ragged text and on where justified text
+    *would* break by the same rule.
+  - It measures a line about **0.15%** wider than HarfBuzz does — twelve twips on a 395 pt line. Invisible
+    to a direct comparison, because `pdftotext`'s own quantisation is larger, and visible in justification
+    only because the slack is divided over the blanks: 0.7 twips of stretch each.
+  - Its font ascents and line heights differ from scaling the design metrics by **up to one twip**, because
+    VCL rounds them through the reference device. For 11 pt Carlito the design metrics give an ascent of
+    209.47 twips and it uses 210; at 9 pt they give 171.39 and it uses 171; at 18 pt the line height is
+    439.45 and it uses 440. Eight of twelve sizes tested agree exactly, four differ by one twip, and no
+    single scale factor reproduces the set — so this is left as a per-size constant of at most a twip. It
+    shifts every baseline of one size equally and does not accumulate, which is what makes it tolerable.
+  - It aligns a **start-aligned right-to-left paragraph against the left margin**, because the
+    installed reference is 24.2 and `ParagraphAdjust::START` arrived in 26.2. X-Ray.Office follows the
+    specification and the newer LibreOffice and puts it against the right, so any comparison of a
+    right-to-left paragraph has to state its alignment physically — `fo:text-align="right"`, `\qr`,
+    `w:jc w:val="start"` — or it is comparing two versions rather than two engines. The corpus
+    document says so in its own comment.
+- **The Word-family font fallback is environment-specific, and the rule here encodes one
+  environment.** `WordFallbackClass` states that DOCX, DOC and RTF answer DejaVu Serif for a family
+  nobody has, because `SvxFontItem`'s family defaults to `FAMILY_ROMAN` and
+  `FontConfigManager::Substitute` appends `"serif"` to the pre-match. Measured on a **second**
+  container — LibreOffice 24.2.7.2, a 67-font set with the metric-alias configuration installed —
+  every one of those answers is different: an RTF naming `Helvetica` renders in **Liberation Sans**,
+  one naming `Courier` in **Liberation Mono**, and an unknown family in **DejaVu Sans**. The
+  mechanism is visible in `fc-match` itself: there `fc-match "Helvetica:serif"` answers Liberation
+  Sans, so fontconfig's own metric alias beats the appended generic and the chain is what the binary
+  ends up using. On the reference environment it evidently does not.
+  So the two measurements are both right about their own machines and the rule cannot be a constant.
+  Deciding it needs the pre-match modelled as a *query* — the name plus the generic, asked of the
+  installed configuration, which is what `FontconfigPreferences` already reads — rather than a
+  recorded answer. Left alone deliberately: the recorded answer is the one the reference corpus was
+  scored against, and changing it on the strength of a different container would move 29 `.doc`
+  documents that round 55 measured. It is the whole of the residual on `lorem-ipsum.rtf`-shaped
+  files: with the font forced to one both engines resolve identically, X-Ray.Office reproduces
+  LibreOffice's page **exactly** — 504 words, first baseline 72.4 pt, last 687.6 pt, one page.
+
+- **An anchored shape's *paragraph* can be in the wrong place even when the shape is not.**
+  On a flowchart document of 27 `wp:anchor` shapes positioned `relativeFrom="paragraph"`, every
+  shape's `x` and `width` match the reference exactly and every `y` is 20-33 pt low, growing down
+  the page. The offsets are read correctly, so what differs is where the anchoring paragraphs sit —
+  a cascade from line heights, not a frame-positioning bug. Worth attacking from the paragraph side
+  (the document is CJK, so its empty paragraphs' line heights are the suspect) rather than from the
+  anchor side.
+
+- **[DONE] WordArt text warp (`a:prstTxWarp`) is drawn as warped outlines.** A body whose
+  `wps:bodyPr` carries a `prstTxWarp` other than `textNoShape` becomes a Fontwork custom shape in
+  LibreOffice — `WpsContext::onEndElement` (`oox/source/shape/WpsContext.cxx:936-1025`) takes the text
+  out of the frame, `FontworkHelpers::putCustomShapeIntoTextPathMode` puts the shape into text-path
+  mode, and `EnhancedCustomShapeEngine::render2` then *replaces the whole shape* with what
+  `svx/source/customshapes/EnhancedCustomShapeFontWork.cxx` builds: filled curves carrying no glyph
+  and no `ToUnicode`. `DocxFontwork` reproduces all of it, through `XRay.Office.Ooxml.DrawingML.Fontwork`.
+
+  Measured on `WordArt_Shapes_Arrows_Catalog1.docx` (24 warped shapes, one per preset, pages 17-21
+  of 52), 100 dpi mean absolute grey difference against 26.2.4.2:
+
+  | pages | 17 | 18 | 19 | 20 | 21 | document, 52 pages |
+  |---|---:|---:|---:|---:|---:|---:|
+  | before | 7.31 | 19.83 | 18.41 | 16.93 | 15.66 | 3.748 |
+  | after | **0.47** | **0.55** | **0.50** | **0.48** | **0.39** | **2.292** |
+
+  Words 2492 → **2468**, which is the reference's own count exactly, and 52/52 pages throughout.
+  Against 24.2.7.2 the after column is 0.39 / 0.52 / 0.51 / 0.52 / 0.37. Full write-up, including
+  the `wp:effectExtent` finding below, in `dotnet/probes/words-fontwork/results.md`.
+
+  Four things about it are worth carrying forward:
+
+  - **Twenty of the twenty-four presets ignore the run's font size completely.** They are envelope
+    warps: the text's own ink box is normalised to the unit square and mapped between two rails, so
+    a 25 pt run fills a 72 pt shape. Only `textArchUp`, `textArchDown`, `textCircle` and `textButton`
+    keep the stated size, and then only by shrinking it until the line fits along the curve.
+  - **The reference converts only a plain rectangle**, `sType != "ooxml-rect"`
+    (`WpsContext.cxx:966-970`), and only a *top-level* shape: a group member is not yet an
+    `SdrObjCustomShape` when `onEndElement` runs, so its first guard fails and the member keeps its
+    text. Both organogram templates in `words/chartset-005` are that case and cost two words each
+    until group members were excluded.
+  - **A warp X-Ray.Office cannot draw still leaves no text**, because the reference has already emptied
+    the frame by then. That settles the disagreement the slides side had been carrying: both
+    families now draw the curves where they can and nothing where they cannot.
+  - **`wp:effectExtent` moves a warped shape and not an unwarped one's text**, which is the one
+    open thread. See the entry two below.
+
+- **Binary DOC/PPT Escher WordArt reaches 5 shapes across 4 documents, and is not worth writing.**
+  Censused by scanning every `.doc .dot .ppt .pot .pps .xls .xlt .rtf` for an `msofbtSp` record
+  whose instance is in the WordArt shape-type range 136-175: `135.doc` 1, `644730BRI…public0.doc`
+  2, `8.16_AOD_FINAL_Provider_Training_Presentation_9_2009.ppt` 1 (type 144), `pres_ioc_phuket.ppt`
+  1. DOCX VML holds 15 and DrawingML 29 on the words side, so this is the smallest of the three
+  paths — and all four documents sit at 8.25, 23.29, 3.75 and 4.58 mean ink for reasons that have
+  nothing to do with WordArt, so one shape each would be invisible even implemented.
+
+  **It also settles the two knobs this round was briefed to expect from the VML side.**
+  `oox/source/vml/vmlformatting.cxx:966-975` writes `ScaleX` and `SameLetterHeights` as literal
+  `false` for every `v:textpath`, so they are unreachable from OOXML VML by construction; and the
+  binary path, which does read them (`msdffimp.cxx:2516-2600`, bits 0x40 and 0x80 of
+  `DFF_Prop_gtextFStrikethrough`), finds them **clear on all five shapes**, none of which hard-sets
+  `DFF_Prop_gtextFStretch` either. There is no document in this corpus, in any format, that would
+  render differently if `SameLetterHeights` were implemented.
+
+- **CFF/OTTO faces reach nothing WordArt resolves to, so no Type 2 interpreter is written.**
+  Installed set: **45 TrueType `glyf`, 11 CFF, 8 Type 1**, and every CFF face is Loma or a Unifont
+  variant. Every family named in a part carrying a real warp — Arial, Perpetua Titling MT, Kristen
+  ITC, Times New Roman, Calibri, Arial Black, Corpid E1s SCd Regular, Papyrus, Informal Roman —
+  resolves to a `glyf` face. `GlyphOutlines` answering null for a CFF face therefore costs this
+  corpus nothing. Both censuses are reproducible with
+  `dotnet/probes/fontwork-reach/census.py`; the second depends on the installed font set and
+  should be re-run before it is relied on in another container.
+
+- **[DONE] All forty `ST_TextShapeType` warps are implemented.** The previous round left eight,
+  on a rule worth keeping — *a table transcribed for a preset no document states is a transcription
+  nothing checks* — and the corpus still states none of them. What changed is that a fixture now
+  checks them: `fontwork-presets-{default,adjusted}.docx`, one shape per value authored into the
+  WordArt catalogue's own container, with reference PDFs from both binaries. Nine-page mean
+  absolute grey difference **2.584 → 0.603**, no page above 0.93, extracted words 228/228 and
+  10/10 `WORDART` tokens throughout.
+
+  **Five of the eight needed nothing but their tables, which is not what the standing note said.**
+  A `*Pour` shape is two concentric arcs with the text fitted into the ring between them, drawn
+  with the same `0xA304`/`0xA504` the arch family already used; `mso-spt142` is `0xa604 0xa504`.
+  Only `mso-spt143` needed a path builder — `ANGLEELLIPSE`, `0xA2` with a count in thirds
+  (`svx/source/svdraw/svdoashp.cxx:124-133`), taking the `bIsFromBinaryImport` arm of
+  `EnhancedCustomShape2d.cxx:2178-2286` where the second angle is a swing rather than an end, and
+  which the reference special-cases by that very name at line 2255 because its angles are plain
+  degrees where every other binary user of the opcode states 1/65536ths.
+
+  The catalogue renders **byte-identically** to the build before it, 0.0000 maximum per-page
+  difference over all 52 pages, which is the check that the shared evaluator was not disturbed.
+  Write-up in `dotnet/probes/words-fontwork-presets/results.md`.
+
+- **[DONE] VML WordArt (`v:textpath` on a `#_x0000_t136`) is drawn as warped outlines too.**
+  A `v:shape` naming a WordArt shape type becomes a Fontwork custom shape with no conversion step:
+  `oox/source/vml/vmlshape.cxx:1329` hands the number straight to
+  `SdrObjCustomShape::MergeDefaultAttributes`, which resolves it through
+  `EnhancedCustomShapeTypeNames` into the same LibreOffice type names `FontworkPresets` is keyed by,
+  and `TextpathModel::pushToPropMap` (`oox/source/vml/vmlformatting.cxx:962-1057`) puts it into
+  text-path mode. `DocxVmlFontwork` reproduces it.
+
+  The corpus holds **15 of them across 5 documents**, every one a diagonal `EASA Example Documents`
+  or `DRAFT` watermark in a `word/headerN.xml`, and none inside an `mc:Fallback`. 100 dpi mean
+  absolute grey difference over the whole document, before → after:
+
+  | document | against 24.2.7.2 | against 26.2.4.2 |
+  |---|---|---|
+  | `ABCD-FE-01-00 Flight Envelope` | 11.698 → **11.341** | 15.210 → **14.855** |
+  | `ABCD-SDE-23-00 Avionic System Description` | 5.364 → **5.003** | 6.050 → **5.694** |
+  | `ABCD-WB-08-00 Weight and Balance` | 7.081 → **6.738** | 8.515 → **8.197** |
+  | `DOA_Template_Form_Type_Certification_Programme` | 11.322 → *11.602* | 10.960 → *11.239* |
+  | `technical-architecture` | 4.976 → **4.590** | 5.884 → **5.499** |
+
+  Words and pages are unchanged everywhere: the whole `words/*` track sweeps 311/338 before and
+  after with **not one row of `parity.tsv` different**. Full write-up in
+  `dotnet/probes/words-vml-fontwork/results.md`.
+
+  Three things about it worth carrying forward:
+
+  - **The declared height is thrown away and remeasured from the text**
+    (`vmlformatting.cxx:1041-1056`), unless `trim="t"`, which nothing states. `DOA_Template` states
+    `height:53pt` and the reference imports 57.5; `technical-architecture` states 247.45 pt for the
+    five letters of `DRAFT` and the reference imports 138. Reproducing the ratio from `hhea`'s
+    ascender less its descender over the design advances lands within **0.9%** on five probed
+    (family, string) pairs.
+  - **`gtextFSameHeights` and `gtextFStretch` are *not* reachable from OOXML VML**, contrary to what
+    this round was briefed to expect. `vmlformatting.cxx:966-975` writes `ScaleX` and
+    `SameLetterHeights` as literal `false` for every `v:textpath`, whatever the shape type. They are
+    reachable only from binary Escher, `msdffimp.cxx:2516-2600`.
+  - **`rotation` is read for a WordArt shape and for nothing else**, deliberately: the words track
+    states it on **347** VML shapes across **34** documents and turning all of them is its own round.
+    Fifteen of the 347 are these watermarks, all at `rotation:315`.
+
+- **[DONE] `RelOrientation::PAGE_PRINT_AREA` runs from the header frame's bottom to the footer
+  frame's top, not from `w:top` to `w:bottom`.** Closed in `dccc5be0a` with
+  `probes/words-margin-print-area/`; the area is `LaidOutPage.BodyArea`, which is the same quantity
+  `Paginator.PushedDownBy` and `PulledUpBy` already move. `SwAnchoredObjectPosition::GetVertAlignmentValues`
+  (`sw/source/core/objectpositioning/anchoredobjectposition.cxx`:336-364) is one seat and
+  `SwToContentAnchoredObjectPosition::CalcPosition` (`tocntntanchoredobjectposition.cxx`:597-616,
+  through `SwPageFrame::PrtWithoutHeaderAndFooter()`) is the other.
+
+  **Re-measured at `6a6f18d9a` in `probes/frame-area-r85/`**: 8 of 8 fixtures agree with *both*
+  installed references within the 0.25 pt raster quantum, and
+  `DOA_Template_Form_Type_Certification_Programme` scores **9.891** against 26.2.4.2 — 1.348 below
+  the 11.239 the watermark round regressed it to and **1.069 below the 10.960 it regressed it from**.
+  All five of that round's documents are now below both of its stored figures. The 6.6 pt and 34.7 pt
+  figures above are from a tree three fixes old and do not reproduce; neither does the 16.56 pt that
+  replaced them.
+
+- **[DONE] `wp:effectExtent`'s *left* edge moves an inline drawing and its right edge does not.**
+  Closed with `probes/words-inline-effectextent/` §*Horizontally* — `make-x-fixture.py` and
+  `measure-x.py`, which the earlier fixtures never exercised because they varied `t` and `b` only.
+  `PageFrame.InlineOffset` is `(EffectExtent.Left, 0)` for an upright drawing;
+  `SwAsCharAnchoredObjectPosition::CalcPosition`
+  (`sw/source/core/objectpositioning/ascharanchoredobjectposition.cxx`:129-133) adjusts by
+  `nLRSpaceLeft` and by `nULSpaceUpper` alike, and only the vertical half is lost again when
+  `SwTextBoxHelper` fails to carry it to a `wps:txbx`'s TextBox fly — which is why
+  `PageFrame.InlineInkOffset` is a second rectangle rather than part of the first.
+
+  **Re-measured at `6a6f18d9a` in `probes/frame-area-r85/`**: 8 of 8 horizontal fixtures agree with
+  both references, and on `WordArt_Shapes_Arrows_Catalog1.docx` the drawn ink columns agree with
+  26.2.4.2 on **52 of 52 pages** at 200 dpi. The 229.68..359.64 quoted above does not reproduce.
+
+- **A `relativeFrom` naming a margin *band* is read now, and the wider capture rule it exposed is
+  left with its seat.** `topMargin`, `bottomMargin`, `leftMargin`, `rightMargin`, `insideMargin` and
+  `outsideMargin` had all been read as the page or the margin area. They are six different
+  rectangles — `PositionHandler::lcl_attribute`
+  (`sw/source/writerfilter/dmapper/GraphicHelpers.cxx`:57-135), and VML's own crossed-over mapping at
+  `oox/source/vml/vmlshape.cxx`:616-700 — and this tree agreed with 26.2.4.2 on **10 of 34** fixtures
+  before and on **34 of 34** after. `probes/frame-area-r85/`.
+
+  **The capture is closed, and it took three facts rather than one.** `mbDoNotCaptureAnchoredObj`
+  is `bConsidered && !mbFollowTextFlow && DO_NOT_CAPTURE_DRAW_OBJS_ON_PAGE`, and `bConsidered` is
+  `bWrapThrough && !bTextBox` for a fly but `bWrapThrough || !bTextBox` for a draw object
+  (`anchoredobjectposition.cxx`:125-144) — so a picture and a shape carrying a text box are captured
+  unless they wrap through and **a shape with no text box never is**, which "wrap-through and
+  nothing else" got wrong. The area narrows from the sheet to the page **body** under
+  `compatibilityMode` 15 at every vertical relation but `PAGE_FRAME` and `PAGE_PRINT_AREA`
+  (:552-573) — and **only where `mpAnchorFrame->FindBodyFrame()` finds a body frame whose upper is
+  that page** (:568-573), which a header, a footer and a footnote anchor have not. That last is the
+  half two rounds were missing, and it is the whole of why the wide rule was net worse:
+  `b053-19` and `Case-Study-Heathrow-Airport` each carry one `wrapTight` picture in
+  `word/header1.xml`, and clamping those into the body cost 8.25 and 1.09 of mean page ink.
+
+  Measured on 26.2.4.2 over 93 one-attribute fixtures — three object kinds × five wraps × six
+  positions — the tree goes from **79 to 91 of 93** (two unscoreable, a `pic:pic` in a header part
+  that names no relationship, drawn by neither side). Corpus reach is **4 of 947 renderings and 0
+  of 676 converted words**, no page and no glyph moving on any of the four.
+  `probes/words-close-r95/`.
+
+  **`bCheckBottom = !DoesObjFollowsTextFlow()` was named here as the likely missing half, recorded as
+  refuted, and the refutation was one writerfilter seat short. It is implemented now, for an embedded
+  object.** The census this paragraph used to carry — `IsFollowingTextFlow`'s pool default is **false**
+  (`sw/source/core/bastyp/init.cxx`:437) and its per-object writes are gated on the anchor being inside
+  a table (`GraphicImport.cxx`:1316-1318, :1859-1861, `OOXMLFastContextHandler.cxx`:1879-1883) — is
+  true of every seat it names and misses **`DomainMapper_Impl.cxx`:9792**, which sets the property on a
+  `SwXTextEmbeddedObject` straight from `layoutInCell` with no `IsInTable()` test at all. A chart's
+  `a:graphicData` becomes a `com.sun.star.drawing.OLE2Shape` (`oox/source/drawingml/shape.cxx`:348-358)
+  and `PopShapeContext` replaces it with exactly that embedded object (`:5096-5112`), so **every
+  anchored chart in a DOCX follows the text flow** unless it states `layoutInCell="0"` — and
+  `m_bLayoutInCell` is initialised *true* (`GraphicImport.cxx`:340), so an absent attribute follows it
+  too.
+
+  `GetVertEnvironmentLayoutFrame` (`environmentofanchoredobject.cxx`:64-95) then resolves to the page
+  **body** frame rather than the page, and four things follow: a `PAGE_FRAME` offset is measured from
+  the body's top (`tocntntanchoredobjectposition.cxx`:590-596); the object is captured although its
+  wrap would exempt it; and it is captured in the **sheet**, because the `compatibilityMode` 15
+  narrowing needs `rPageAlignLayFrame.IsPageFrame()` and a body frame is not one (:562-566). The
+  horizontal is untouched — that walk stops at a cell, a fly or a page and has no body frame in it.
+
+  **The `bCheckBottom` this paragraph named is a fourth consequence that was implemented and then
+  refuted by the corpus, and the reason is worth more than the rule.** The expression is real, at :457,
+  :678 and :718 — and the offset arm has a *fourth* `AdjustVertRelPos` call, at :810-813, which omits
+  the argument and takes its `= true` default (`anchoredobjectposition.hxx`:185-192). That is the path
+  an offset which does not fit its upper's print area takes, and it is the one a page-relative chart
+  reaches. `027_Unit_Circle_Chart_Graphical_Chart` settles it: 470.30 pt of chart at a body base of
+  156.95 + 111.65 would reach 738.90 on a 595.30 pt landscape page and 26.2.4.2 draws its top at
+  **125.00**, which is `595.30 - 470.30`. Skipping the correction drew it at 268.60 and cost that
+  document 9.48 -> 28.42 `diff%`. **The source reading was right and had one call site fewer than the
+  source.**
+
+  Measured on eight fixtures identical but for whether the anchored object is a `wps:wsp` or a
+  `c:chart`: 26.2.4.2 draws the shape at **180.00** at every margin and the chart at **252.35** with
+  `w:top="1440"`, **324.35** with `w:top="2880"` and **180.35** with `layoutInCell="0"`, and this tree
+  reproduces **8 of 8** within the two writers' own 0.36 pt border-origin constant. `PageFrame.FollowsTextFlow`,
+  `FrameLayout.Place`, `DocxFrames.FollowsTextFlow`, `FrameFollowsTextFlowTests`; `probes/pagev-r192/`.
+
+  **Confinement: 2 of the words track's 337 renderings move and 335 are byte-identical**, and the two
+  are exactly the two documents whose chart states `relativeFrom="page"` -- the three stating `margin`
+  do not move by a byte, `PAGE_PRINT_AREA` resolving to the body either way. `027` goes 9.48 ->
+  **4.61** worst-page `diff%` and draws its chart at 470.30 against 26.2.4.2's 470.30 exactly; `028`
+  goes 16.78 -> **14.18** and 247.49 against 247.85. `|ink|%` rises on both (0.56 -> 0.73 and 3.32 ->
+  3.60), which is the sign to expect: it is signed per region before the page's absolute value, so a
+  frame moving *into* place cancels less than one sitting 72 pt away. **No gate column can see any of
+  it** -- a frame's position adds no alphanumeric character and no page. And `028` is scored against
+  its *authored* reference now rather than against the `v-incell0` control `probes/ofpie-r190` used:
+  a control built to remove a defect stops being a control once the defect is fixed.
+
+  **Two halves are still open and both are bounded.** The **in-table** capture is unmodelled: there the
+  object is held in its **cell** (`anchoredobjectposition.cxx`:576-591), an area this tree does not
+  have — 552 of the corpus's 6055 positioned objects are inside a `w:tbl`, in 40 of 272 documents, and
+  **none of the 5 embedded-object anchors is one of them** (`probes/words-seat-r94/`,
+  `probes/pagev-r192/census-embedded.py`). And `PAGE_PRINT_AREA_TOP` shares `PAGE_FRAME`'s branch in
+  both places the C++ decides this, so the same substitution is its rule too; it is left because no
+  corpus DOCX pairs a `topMargin` relation with an embedded object and the band's height under
+  following is unmeasured.
+
+  **What is left is not the capture.** Two of the three `Unit_Circle` documents are worse against
+  26.2.4.2 with the frame in the right place, and the frame provably *is* in the right place: each
+  chart is 682 pt wide on a 595 pt page, so `ImplAdjustHoriRelPos` saturates at x = 0 and three
+  different stated offsets give one rendering on both sides. The 32 pt their data labels sit right
+  of the reference's is `ChartLayout`'s own fit. `probes/words-close-r95/results.md` §1.5.
+
+- **`wp14:sizeRelH` and `wp14:sizeRelV` are unread, and the reach is three documents.** 1873
+  `sizeRel*` elements in 146 of the 272 corpus DOCX, of which exactly **three carry a non-zero
+  percentage**: a width on `ABCD-FE-01-00 Flight Envelope` and a height on `HC-Bulletin-template` and
+  `fleetfastfacts16nov2023`. `GraphicImport.cxx`:1455-1480 is the seat, and it maps a *relative
+  size*'s `topMargin` to `PAGE_PRINT_AREA_BOTTOM` rather than to `_TOP` — read that before
+  implementing it rather than after.
+
+- **`w14:textFill`, `w14:textOutline` and `w14:shadow` on a run are correctly ignored, and that is a
+  measurement rather than an omission.** The same catalogue states 104 `w14:textFill` (102 of them
+  gradients), 348 `w14:textOutline` and 96 `w14:shadow` on ordinary unwarped runs. LibreOffice's DOCX
+  import draws none of them: its pages 3-6 hold seven gradient-text shapes each and score **0.00**
+  unaccounted ink against ours, which draws the run's plain `w:color`. A round tempted to wire these up
+  by reading the markup would move 63 shapes away from the reference, not towards it.
+
+- [ ] A rasteriser and a PDF writer. `XRay.Office.Rendering`'s two backends are still stubs; the display
+      list they consume is now real, which is the half that had to come first.
+
+## Open questions
+
+- [x] **Tracked changes: render as accepted, or show change marks?** Settled by measuring.
+      LibreOffice shows the **marks**, in all four formats, so `LayoutOptions.AcceptTrackedChanges`
+      defaulting to `false` is right. Its PDF of `revisions.*` carries the deleted phrase struck
+      through (`0 3.1 m 80.2 3.1 l S` at 0.7 pt), the insertion underlined in the author's colour
+      (`0 -1.4 m 89.6 -1.4 l S`), and a **change bar** — one vertical stroke at x = 49.65 pt on an
+      A4 page whose text starts at 56.7, running the height of one 12 pt line.
+      `TrackedChangeComparisonTests` pins all three. Two details worth keeping:
+      - The change bar is what a comparison can actually check, because the other two marks are
+        emitted *inside a text matrix* and their coordinates are relative to the run rather than to the
+        page. It also needs its own stroke reader: `PdfStrokes` pairs a stroke with the pen width
+        stated beside it, which is how a table border is written, and a change bar restates no width —
+        it inherits the 0.1 pt default set once at the top of the page.
+      - The author colour differs between the DOC render and the other three, and the mechanism is
+        worth knowing before reading anything into a colour. LibreOffice colours a redline by its
+        author's *index* (`swmodul1.cxx`, `lcl_GetAuthorColor`, `nPos % 9`), and the WW8 importer
+        pre-registers every name in `SttbfRMark` (`ww8par.cxx`, `ReadRevMarkAuthorStrTabl`) — including
+        the `Unknown` placeholder at index 0 — while the other three register an author the first time
+        a change names one. So one author is slot 1 from a DOC and slot 0 from the same document as
+        DOCX, RTF or ODT.
+- [ ] Honouring that flag. The default is now known to be right and **nothing reads it**: layout
+      accepts the changes whichever way it is set, since the layout walks skip deleted text alongside
+      the content walks. Showing marks needs the deleted text kept in the flow, a strike-through and an
+      underline over it, and a change bar per changed line in the margin — which is a per-line margin
+      decoration and the first thing layout would draw outside the text area.
+- [ ] How much compatibility-flag behaviour is worth implementing? There are dozens; only
+      some matter visually.

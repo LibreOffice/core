@@ -1,0 +1,41 @@
+arm                  what                   26.2.4.2             ours
+box-heading-then-plain obstacle            p1 x  79.30      p1 x  79.20
+box-heading-then-plain heading             p1 x 307.85      p1 x 307.72
+box-heading-then-plain body                p1 x 235.20      p1 x 235.10
+
+box-heading-then-toc obstacle            p1 x  79.30      p1 x  79.20
+box-heading-then-toc heading             p1 x 307.85      p1 x 307.72
+box-heading-then-toc index               p1 x 235.20      p1 x 235.10
+
+box-plain-after      obstacle            p1 x  79.30      p1 x  79.20
+box-plain-after      body                p1 x 235.20      p1 x 235.10
+
+box-plain-long       obstacle            p1 x  79.30      p1 x  79.20
+box-plain-long       body                p1 x 235.20      p1 x 235.10
+
+box-plain-tabbed     obstacle            p1 x  79.30      p1 x  79.20
+box-plain-tabbed     body                p1 x 235.20      p1 x 235.10
+
+box-toc-after        obstacle            p1 x  79.30      p1 x  79.20
+box-toc-after        index               p1 x 235.20      p1 x 235.10
+
+box-toc-long         obstacle            p1 x  79.30      p1 x  79.20
+box-toc-long         index               p1 x 235.20      p1 x 235.10
+
+box-toc-tabbed       obstacle            p1 x  79.30      p1 x  79.20
+box-toc-tabbed       index               p1 x 235.20      p1 x 235.10
+
+heading-then-plain   obstacle            p1 x  71.90      p1 x  71.80
+heading-then-plain   heading             p1 x 229.70      p1 x  72.00  <--
+heading-then-plain   body                p1 x 229.70      p1 x  72.00  <--
+
+heading-then-toc     obstacle            p1 x  71.90      p1 x  71.80
+heading-then-toc     heading             p1 x 229.70      p1 x  72.00  <--
+heading-then-toc     index               p1 x 229.70      p1 x  72.00  <--
+
+plain-after          obstacle            p1 x  71.90      p1 x  71.80
+plain-after          body                p1 x 229.70      p1 x  72.00  <--
+
+toc-after            obstacle            p1 x  71.90      p1 x  71.80
+toc-after            index               p1 x 229.70      p1 x  72.00  <--
+

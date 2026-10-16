@@ -1,0 +1,172 @@
+label	face	size	kind	group	tabtwips	page	x0	x1	rx	nrules	cover	contiguous	spans
+L000	Liberation Serif	8	under	span	0	1	56.69	73.58		2	22.22	0	56.69-73.58;236.69-242.03
+L001	Liberation Serif	8	under	span	0	1	56.69	73.58		2	22.22	0	56.69-73.58;309.89-315.23
+L002	Liberation Serif	8	under	span	0	1	56.69	73.58		2	22.22	0	56.69-73.58;382.94-388.28
+L003	Liberation Serif	8	under	span	0	1	56.69	73.58		2	22.22	0	56.69-73.58;456.24-461.58
+L004	Liberation Serif	8	over	span	0	1	56.69	73.58		0	0.00	0	
+L005	Liberation Serif	8	over	span	0	1	56.69	73.58		0	0.00	0	
+L006	Liberation Serif	8	over	span	0	1	56.69	73.58		0	0.00	0	
+L007	Liberation Serif	8	over	span	0	1	56.69	73.58		0	0.00	0	
+L008	Liberation Serif	8	strike	span	0	1	56.69	73.58		2	22.22	0	56.69-73.58;236.69-242.03
+L009	Liberation Serif	8	strike	span	0	1	56.69	73.58		2	22.22	0	56.69-73.58;309.89-315.23
+L010	Liberation Serif	8	strike	span	0	1	56.69	73.58		2	22.22	0	56.69-73.58;382.94-388.28
+L011	Liberation Serif	8	strike	span	0	1	56.69	73.28		2	21.93	0	56.69-73.28;456.24-461.58
+L012	Liberation Serif	10	under	span	0	1	56.69	77.80		2	27.78	0	56.69-77.80;236.69-243.36
+L013	Liberation Serif	10	under	span	0	1	56.69	77.80		2	27.78	0	56.69-77.80;309.89-316.56
+L014	Liberation Serif	10	under	span	0	1	56.69	77.80		2	27.78	0	56.69-77.80;382.94-389.61
+L015	Liberation Serif	10	under	span	0	1	56.69	77.80		2	27.78	0	56.69-77.80;456.24-462.91
+L016	Liberation Serif	10	over	span	0	1	56.69	77.80		0	0.00	0	
+L017	Liberation Serif	10	over	span	0	1	56.69	77.80		0	0.00	0	
+L018	Liberation Serif	10	over	span	0	1	56.69	77.80		0	0.00	0	
+L019	Liberation Serif	10	over	span	0	1	56.69	77.80		0	0.00	0	
+L020	Liberation Serif	10	strike	span	0	1	56.69	77.80		2	27.78	0	56.69-77.80;236.69-243.36
+L021	Liberation Serif	10	strike	span	0	1	56.69	77.80		2	27.78	0	56.69-77.80;309.89-316.56
+L022	Liberation Serif	10	strike	span	0	1	56.69	77.80		2	27.78	0	56.69-77.80;382.94-389.61
+L023	Liberation Serif	10	strike	span	0	1	56.69	77.80		2	27.78	0	56.69-77.80;456.24-462.91
+L024	Liberation Serif	14	under	span	0	1	56.69	86.25		2	38.89	0	56.69-86.24;236.69-246.03
+L025	Liberation Serif	14	under	span	0	1	56.69	86.25		2	38.89	0	56.69-86.24;309.89-319.23
+L026	Liberation Serif	14	under	span	0	1	56.69	86.25		2	38.89	0	56.69-86.24;382.94-392.28
+L027	Liberation Serif	14	under	span	0	1	56.69	86.25		2	38.89	0	56.69-86.24;456.24-465.58
+L028	Liberation Serif	14	over	span	0	1	56.69	86.25		0	0.00	0	
+L029	Liberation Serif	14	over	span	0	2	56.69	86.25		0	0.00	0	
+L030	Liberation Serif	14	over	span	0	2	56.69	86.25		0	0.00	0	
+L031	Liberation Serif	14	over	span	0	2	56.69	86.25		0	0.00	0	
+L032	Liberation Serif	14	strike	span	0	2	56.69	86.25		2	38.89	0	56.69-86.24;236.69-246.03
+L033	Liberation Serif	14	strike	span	0	2	56.69	86.25		2	38.89	0	56.69-86.24;309.89-319.23
+L034	Liberation Serif	14	strike	span	0	2	56.69	86.25		2	38.89	0	56.69-86.24;382.94-392.28
+L035	Liberation Serif	14	strike	span	0	2	56.69	86.25		2	38.89	0	56.69-86.24;456.24-465.58
+L036	Liberation Sans	8	under	span	0	2	56.69	74.48		2	23.57	0	56.69-74.49;236.69-242.47
+L037	Liberation Sans	8	under	span	0	2	56.69	74.48		2	23.57	0	56.69-74.49;309.89-315.67
+L038	Liberation Sans	8	under	span	0	2	56.69	74.48		2	23.57	0	56.69-74.49;382.94-388.72
+L039	Liberation Sans	8	under	span	0	2	56.69	74.48		2	23.57	0	56.69-74.49;456.24-462.02
+L040	Liberation Sans	8	over	span	0	2	56.69	74.48		0	0.00	0	
+L041	Liberation Sans	8	over	span	0	2	56.69	74.48		0	0.00	0	
+L042	Liberation Sans	8	over	span	0	2	56.69	74.48		0	0.00	0	
+L043	Liberation Sans	8	over	span	0	2	56.69	74.48		0	0.00	0	
+L044	Liberation Sans	8	strike	span	0	2	56.69	74.48		2	23.57	0	56.69-74.49;236.69-242.47
+L045	Liberation Sans	8	strike	span	0	2	56.69	74.48		2	23.57	0	56.69-74.49;309.89-315.67
+L046	Liberation Sans	8	strike	span	0	2	56.69	74.48		2	23.57	0	56.69-74.49;382.94-388.72
+L047	Liberation Sans	8	strike	span	0	2	56.69	74.48		2	23.57	0	56.69-74.49;456.24-462.02
+L048	Liberation Sans	10	under	span	0	2	56.69	78.93		2	29.47	0	56.69-78.94;236.69-243.91
+L049	Liberation Sans	10	under	span	0	2	56.69	78.93		2	29.47	0	56.69-78.94;309.89-317.11
+L050	Liberation Sans	10	under	span	0	2	56.69	78.93		2	29.47	0	56.69-78.94;382.94-390.16
+L051	Liberation Sans	10	under	span	0	2	56.69	78.93		2	29.47	0	56.69-78.94;456.24-463.46
+L052	Liberation Sans	10	over	span	0	2	56.69	78.93		0	0.00	0	
+L053	Liberation Sans	10	over	span	0	2	56.69	78.93		0	0.00	0	
+L054	Liberation Sans	10	over	span	0	2	56.69	78.93		0	0.00	0	
+L055	Liberation Sans	10	over	span	0	2	56.69	78.93		0	0.00	0	
+L056	Liberation Sans	10	strike	span	0	2	56.69	78.93		2	29.47	0	56.69-78.94;236.69-243.91
+L057	Liberation Sans	10	strike	span	0	3	56.69	78.93		2	29.47	0	56.69-78.94;309.89-317.11
+L058	Liberation Sans	10	strike	span	0	3	56.69	78.93		2	29.47	0	56.69-78.94;382.94-390.16
+L059	Liberation Sans	10	strike	span	0	3	56.69	78.93		2	29.47	0	56.69-78.94;456.24-463.46
+L060	Liberation Sans	14	under	span	0	3	56.69	87.83		2	41.25	0	56.69-87.84;236.69-246.80
+L061	Liberation Sans	14	under	span	0	3	56.69	87.83		2	41.25	0	56.69-87.84;309.89-320.00
+L062	Liberation Sans	14	under	span	0	3	56.69	87.83		2	41.25	0	56.69-87.84;382.94-393.05
+L063	Liberation Sans	14	under	span	0	3	56.69	87.83		2	41.25	0	56.69-87.84;456.24-466.35
+L064	Liberation Sans	14	over	span	0	3	56.69	87.83		0	0.00	0	
+L065	Liberation Sans	14	over	span	0	3	56.69	87.83		0	0.00	0	
+L066	Liberation Sans	14	over	span	0	3	56.69	87.83		0	0.00	0	
+L067	Liberation Sans	14	over	span	0	3	56.69	87.83		0	0.00	0	
+L068	Liberation Sans	14	strike	span	0	3	56.69	87.83		2	41.25	0	56.69-87.84;236.69-246.80
+L069	Liberation Sans	14	strike	span	0	3	56.69	87.83		2	41.25	0	56.69-87.84;309.89-320.00
+L070	Liberation Sans	14	strike	span	0	3	56.69	87.83		2	41.25	0	56.69-87.84;382.94-393.05
+L071	Liberation Sans	14	strike	span	0	3	56.69	87.83		2	41.25	0	56.69-87.84;456.24-466.35
+L072	Carlito	8	under	span	0	3	56.69	72.22		2	19.87	0	56.69-72.22;236.69-241.04
+L073	Carlito	8	under	span	0	3	56.69	72.22		2	19.87	0	56.69-72.22;309.89-314.24
+L074	Carlito	8	under	span	0	3	56.69	72.22		2	19.87	0	56.69-72.22;382.94-387.29
+L075	Carlito	8	under	span	0	3	56.69	72.22		2	19.87	0	56.69-72.22;456.24-460.59
+L076	Carlito	8	over	span	0	3	56.69	72.22		0	0.00	0	
+L077	Carlito	8	over	span	0	3	56.69	72.22		0	0.00	0	
+L078	Carlito	8	over	span	0	3	56.69	72.22		0	0.00	0	
+L079	Carlito	8	over	span	0	3	56.69	72.22		0	0.00	0	
+L080	Carlito	8	strike	span	0	3	56.69	72.22		2	19.87	0	56.69-72.22;236.69-241.04
+L081	Carlito	8	strike	span	0	3	56.69	72.22		2	19.87	0	56.69-72.22;309.89-314.24
+L082	Carlito	8	strike	span	0	3	56.69	72.22		2	19.87	0	56.69-72.22;382.94-387.29
+L083	Carlito	8	strike	span	0	3	56.69	72.22		2	19.87	0	56.69-72.22;456.24-460.59
+L084	Carlito	10	under	span	0	4	56.69	76.10		2	24.84	0	56.69-76.10;236.69-242.12
+L085	Carlito	10	under	span	0	4	56.69	76.10		2	24.84	0	56.69-76.10;309.89-315.32
+L086	Carlito	10	under	span	0	4	56.69	76.10		2	24.84	0	56.69-76.10;382.94-388.37
+L087	Carlito	10	under	span	0	4	56.69	76.10		2	24.84	0	56.69-76.10;456.24-461.67
+L088	Carlito	10	over	span	0	4	56.69	76.10		0	0.00	0	
+L089	Carlito	10	over	span	0	4	56.69	76.10		0	0.00	0	
+L090	Carlito	10	over	span	0	4	56.69	76.10		0	0.00	0	
+L091	Carlito	10	over	span	0	4	56.69	76.10		0	0.00	0	
+L092	Carlito	10	strike	span	0	4	56.69	76.10		2	24.84	0	56.69-76.10;236.69-242.12
+L093	Carlito	10	strike	span	0	4	56.69	76.10		2	24.84	0	56.69-76.10;309.89-315.32
+L094	Carlito	10	strike	span	0	4	56.69	76.10		2	24.84	0	56.69-76.10;382.94-388.37
+L095	Carlito	10	strike	span	0	4	56.69	76.10		2	24.84	0	56.69-76.10;456.24-461.67
+L096	Carlito	14	under	span	0	4	56.69	83.87		2	34.77	0	56.69-83.87;236.69-244.29
+L097	Carlito	14	under	span	0	4	56.69	83.87		2	34.77	0	56.69-83.87;309.89-317.49
+L098	Carlito	14	under	span	0	4	56.69	83.87		2	34.77	0	56.69-83.87;382.94-390.54
+L099	Carlito	14	under	span	0	4	56.69	83.87		2	34.77	0	56.69-83.87;456.24-463.84
+L100	Carlito	14	over	span	0	4	56.69	83.87		0	0.00	0	
+L101	Carlito	14	over	span	0	4	56.69	83.87		0	0.00	0	
+L102	Carlito	14	over	span	0	4	56.69	83.87		0	0.00	0	
+L103	Carlito	14	over	span	0	4	56.69	83.87		0	0.00	0	
+L104	Carlito	14	strike	span	0	4	56.69	83.87		2	34.77	0	56.69-83.87;236.69-244.29
+L105	Carlito	14	strike	span	0	4	56.69	83.87		2	34.77	0	56.69-83.87;309.89-317.49
+L106	Carlito	14	strike	span	0	4	56.69	83.87		2	34.77	0	56.69-83.87;382.94-390.54
+L107	Carlito	14	strike	span	0	4	56.69	83.87		2	34.77	0	56.69-83.87;456.24-463.84
+L108	DejaVu Sans	8	under	span	0	4	56.69	76.41		2	25.29	0	56.69-76.42;236.69-242.25
+L109	DejaVu Sans	8	under	span	0	4	56.69	76.41		2	25.29	0	56.69-76.42;309.89-315.45
+L110	DejaVu Sans	8	under	span	0	5	56.69	76.41		2	25.29	0	56.69-76.42;382.94-388.50
+L111	DejaVu Sans	8	under	span	0	5	56.69	76.41		2	25.29	0	56.69-76.42;456.24-461.80
+L112	DejaVu Sans	8	over	span	0	5	56.69	76.41		0	0.00	0	
+L113	DejaVu Sans	8	over	span	0	5	56.69	76.41		0	0.00	0	
+L114	DejaVu Sans	8	over	span	0	5	56.69	76.41		0	0.00	0	
+L115	DejaVu Sans	8	over	span	0	5	56.69	76.41		0	0.00	0	
+L116	DejaVu Sans	8	strike	span	0	5	56.69	76.41		2	25.29	0	56.69-76.42;236.69-242.25
+L117	DejaVu Sans	8	strike	span	0	5	56.69	76.41		2	25.29	0	56.69-76.42;309.89-315.45
+L118	DejaVu Sans	8	strike	span	0	5	56.69	76.41		2	25.29	0	56.69-76.42;382.94-388.50
+L119	DejaVu Sans	8	strike	span	0	5	56.69	76.41		2	25.29	0	56.69-76.42;456.24-461.80
+L120	DejaVu Sans	10	under	span	0	5	56.69	81.34		2	31.61	0	56.69-81.35;236.69-243.64
+L121	DejaVu Sans	10	under	span	0	5	56.69	81.34		2	31.61	0	56.69-81.35;309.89-316.84
+L122	DejaVu Sans	10	under	span	0	5	56.69	81.34		2	31.61	0	56.69-81.35;382.94-389.89
+L123	DejaVu Sans	10	under	span	0	5	56.69	81.34		2	31.61	0	56.69-81.35;456.24-463.19
+L124	DejaVu Sans	10	over	span	0	5	56.69	81.34		0	0.00	0	
+L125	DejaVu Sans	10	over	span	0	5	56.69	81.34		0	0.00	0	
+L126	DejaVu Sans	10	over	span	0	5	56.69	81.34		0	0.00	0	
+L127	DejaVu Sans	10	over	span	0	5	56.69	81.34		0	0.00	0	
+L128	DejaVu Sans	10	strike	span	0	5	56.69	81.34		2	31.61	0	56.69-81.35;236.69-243.64
+L129	DejaVu Sans	10	strike	span	0	5	56.69	81.34		2	31.61	0	56.69-81.35;309.89-316.84
+L130	DejaVu Sans	10	strike	span	0	5	56.69	81.34		2	31.61	0	56.69-81.35;382.94-389.89
+L131	DejaVu Sans	10	strike	span	0	5	56.69	81.34		2	31.61	0	56.69-81.35;456.24-463.19
+L132	DejaVu Sans	14	under	span	0	5	56.69	91.20		2	44.25	0	56.69-91.21;236.69-246.42
+L133	DejaVu Sans	14	under	span	0	5	56.69	91.20		2	44.25	0	56.69-91.21;309.89-319.62
+L134	DejaVu Sans	14	under	span	0	5	56.69	91.20		2	44.25	0	56.69-91.21;382.94-392.67
+L135	DejaVu Sans	14	under	span	0	5	56.69	91.20		2	44.25	0	56.69-91.21;456.24-465.97
+L136	DejaVu Sans	14	over	span	0	5	56.69	91.20		0	0.00	0	
+L137	DejaVu Sans	14	over	span	0	5	56.69	91.20		0	0.00	0	
+L138	DejaVu Sans	14	over	span	0	6	56.69	91.20		0	0.00	0	
+L139	DejaVu Sans	14	over	span	0	6	56.69	91.20		0	0.00	0	
+L140	DejaVu Sans	14	strike	span	0	6	56.69	91.20		2	44.25	0	56.69-91.21;236.69-246.42
+L141	DejaVu Sans	14	strike	span	0	6	56.69	91.20		2	44.25	0	56.69-91.21;309.89-319.62
+L142	DejaVu Sans	14	strike	span	0	6	56.69	91.20		2	44.25	0	56.69-91.21;382.94-392.67
+L143	DejaVu Sans	14	strike	span	0	6	56.69	91.20		2	44.25	0	56.69-91.21;456.24-465.97
+L144	Liberation Serif	10	under	skip	0	6	56.69	77.80		2	27.78	0	56.69-77.80;309.89-316.56
+L145	Liberation Serif	10	over	skip	0	6	56.69	77.80		0	0.00	0	
+L146	Liberation Serif	10	strike	skip	0	6	56.69	77.80		2	27.78	0	56.69-77.80;309.89-316.56
+L147	Liberation Sans	10	under	skip	0	6	56.69	78.93		2	29.47	0	56.69-78.94;309.89-317.11
+L148	Liberation Sans	10	over	skip	0	6	56.69	78.93		0	0.00	0	
+L149	Liberation Sans	10	strike	skip	0	6	56.69	78.93		2	29.47	0	56.69-78.94;309.89-317.11
+L150	Carlito	10	under	skip	0	6	56.69	76.10		2	24.84	0	56.69-76.10;309.89-315.32
+L151	Carlito	10	over	skip	0	6	56.69	76.10		0	0.00	0	
+L152	Carlito	10	strike	skip	0	6	56.69	76.10		2	24.84	0	56.69-76.10;309.89-315.32
+L153	DejaVu Sans	10	under	skip	0	6	56.69	81.34		2	31.61	0	56.69-81.35;309.89-316.84
+L154	DejaVu Sans	10	over	skip	0	6	56.69	81.34		0	0.00	0	
+L155	DejaVu Sans	10	strike	skip	0	6	56.69	81.34		2	31.61	0	56.69-81.35;309.89-316.84
+L156	Liberation Mono	10	under	mono	30	6	56.69	124.19	124.19	2	66.01	0	56.69-116.70;118.19-124.19
+L157	Liberation Mono	10	under	mono	90	6	56.69	127.19	127.19	2	66.01	0	56.69-116.70;121.19-127.19
+L158	Liberation Mono	10	under	mono	119	6	56.69	128.64	128.64	2	66.01	0	56.69-116.70;122.64-128.64
+L159	Liberation Mono	10	under	mono	121	6	56.69	128.74	128.74	2	66.01	0	56.69-116.70;122.74-128.74
+L160	Liberation Mono	10	under	mono	180	6	56.69	116.69		2	66.01	0	56.69-116.70;125.69-131.69
+L161	Liberation Mono	10	under	mono	361	6	56.69	116.69		2	66.01	0	56.69-116.70;134.74-140.74
+L162	Liberation Sans	10	under	cliff	54	6	59.39	67.17		1	7.78	1	59.39-67.17
+L163	Liberation Sans	10	under	cliff	55	6	59.44	67.22		1	7.78	1	59.44-67.22
+L164	Liberation Sans	10	under	cliff	56	6	59.49	67.27		1	7.78	1	59.49-67.27
+L165	Liberation Sans	10	under	cliff	57	7	59.54	67.32		1	7.78	1	59.54-67.32
+L166	Liberation Mono	10	under	resid	200	7	66.69	72.69		1	6.00	1	66.69-72.69
+L167	Liberation Mono	10	under	resid	260	7	69.69	75.69		1	6.00	1	69.69-75.69
+L168	Liberation Mono	10	under	resid	340	7	73.69	79.69		1	6.00	1	73.69-79.69
+L169	Liberation Mono	10	under	resid	460	7	79.69	85.69		1	6.00	1	79.69-85.69
+L170	Liberation Mono	10	under	resid	580	7	85.69	91.69		1	6.00	1	85.69-91.69

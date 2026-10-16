@@ -1,0 +1,25 @@
+307 rows swept, 307 in the bank for "sheets"
+reference half re-derived and equal on 307 of 307
+
+verdicts now : {'match': 261, 'pages': 2, 'pages,words': 6, 'words': 38}
+verdicts bank: {'match': 257, 'pages': 2, 'pages,words': 8, 'words': 40}
+
+5 verdicts moved
+   pages,words -> match        pages 3/2->2/2 glyphs 680/645->643/645  sheets/chartset-010/xlsx/062_Run_chart_cb7476ea.xlsx
+   pages,words -> words        pages 4/3->3/3 glyphs 2207/1877->2185/1877  sheets/chartset-011/xlsx/057_Simple_balance_sheet_Use_this_template_e2d4cbb2.xlsx
+         words -> match        pages 4/4->4/4 glyphs 1141/1196->1199/1196  sheets/chartset-012/xlsx/068_Blue_inventory_list_Use_this_template_f9908489.xlsx
+         words -> match        pages 14/14->14/14 glyphs 4088/3986->3999/3986  sheets/chartset-014/xlsx/048_Expense_trends_budget_18d1e8ba.xlsx
+         words -> match        pages 9/9->9/9 glyphs 4949/4782->4793/4782  sheets/chartset-014/xlsx/076_Inventory_list_accessibility_guide_Use_this_template_f43dab19.xlsx
+
+11 documents where our own glyph count moved at all
+    -124  1128/943 -> 1004/943  [words -> words]  sheets/chartset-006/xlsx/070_Equipment_inventory_list_Use_this_template_fd524c8a.xlsx
+     -46  2522/2505 -> 2476/2505  [match -> match]  sheets/chartset-007/xlsx/037_Personal_money_tracker_a57957bb.xlsx
+      +6  636/629 -> 642/629  [match -> match]  sheets/chartset-009/xlsx/056_Quarterly_sale_report_baa6bb0d.xlsx
+     -37  680/645 -> 643/645  [pages,words -> match]  sheets/chartset-010/xlsx/062_Run_chart_cb7476ea.xlsx
+      +4  1723/1644 -> 1727/1644  [words -> words]  sheets/chartset-011/xlsx/030_Basic_balance_sheet_Use_this_template_10ed9144.xlsx
+     -22  2207/1877 -> 2185/1877  [pages,words -> words]  sheets/chartset-011/xlsx/057_Simple_balance_sheet_Use_this_template_e2d4cbb2.xlsx
+     +58  1141/1196 -> 1199/1196  [words -> match]  sheets/chartset-012/xlsx/068_Blue_inventory_list_Use_this_template_f9908489.xlsx
+     -89  4088/3986 -> 3999/3986  [words -> match]  sheets/chartset-014/xlsx/048_Expense_trends_budget_18d1e8ba.xlsx
+    -156  4949/4782 -> 4793/4782  [words -> match]  sheets/chartset-014/xlsx/076_Inventory_list_accessibility_guide_Use_this_template_f43dab19.xlsx
+     +44  39462/39768 -> 39506/39768  [match -> match]  sheets/done-009/xls/EHEST-Pre-departure-checklist-Rev.-1-06-12-2016.xls
+   -2504  155230/155230 -> 152726/155230  [match -> match]  sheets/done-013/xls/18-02RD301_ILS_components_Master_9-13-18.xls

@@ -1,0 +1,2132 @@
+[
+ {
+  "rank": 1,
+  "name": "CSJU List of Recipients of funds 2013-2020.xlsx",
+  "family": "sheets",
+  "tags": [
+   "reflow",
+   "pagination"
+  ],
+  "bucket": "open",
+  "why": "page count only"
+ },
+ {
+  "rank": 2,
+  "name": "047_Date_tracker_Gantt_chart_bf34f3a8.xlsx",
+  "family": "sheets",
+  "tags": [
+   "chart",
+   "pagination"
+  ],
+  "bucket": "open",
+  "why": "charts -- data labels, legend keys, axis wrapping, series z order"
+ },
+ {
+  "rank": 3,
+  "name": "AAC-AD-No-2021-01-Boeing-737-8-and-737-9-MAX.doc",
+  "family": "docs",
+  "tags": [
+   "reflow",
+   "pagination"
+  ],
+  "bucket": "open",
+  "why": "page count only"
+ },
+ {
+  "rank": 4,
+  "name": "150_5300_13_chg8.doc",
+  "family": "docs",
+  "tags": [
+   "field-values",
+   "table-rules"
+  ],
+  "bucket": "fixed",
+  "why": "SSIM 0.396 -> 0.513 against the same reference"
+ },
+ {
+  "rank": 5,
+  "name": "150_5300_13_chg10.doc",
+  "family": "docs",
+  "tags": [
+   "table-rules",
+   "reflow",
+   "pagination"
+  ],
+  "bucket": "open",
+  "why": "table rules and shading"
+ },
+ {
+  "rank": 6,
+  "name": "UG.CAO.00006 Foreign Part 145 approvals - User Guide for Applicants & Approval Holders.docx",
+  "family": "docs",
+  "tags": [
+   "field-values"
+  ],
+  "bucket": "open",
+  "why": "field values: a field read but not recalculated, or resolved differently"
+ },
+ {
+  "rank": 7,
+  "name": "150_5300_13_chg12.doc",
+  "family": "docs",
+  "tags": [
+   "reflow",
+   "pagination"
+  ],
+  "bucket": "open",
+  "why": "page count only"
+ },
+ {
+  "rank": 8,
+  "name": "hdss-bulletin-issue-285-25-june-2025.docx",
+  "family": "docs",
+  "tags": [
+   "table-rules",
+   "content-missing"
+  ],
+  "bucket": "open",
+  "why": "table rules and shading"
+ },
+ {
+  "rank": 9,
+  "name": "084_Printable_Graph_Paper_Template_Editable_Layout_d66c6820.docx",
+  "family": "docs",
+  "tags": [
+   "content-missing"
+  ],
+  "bucket": "open",
+  "why": "content we do not draw"
+ },
+ {
+  "rank": 10,
+  "name": "Case-Study-Heathrow-Airport.docx",
+  "family": "docs",
+  "tags": [
+   "field-values",
+   "table-rules",
+   "overlap-clip",
+   "reflow",
+   "pagination"
+  ],
+  "bucket": "open",
+  "why": "field values: a field read but not recalculated, or resolved differently"
+ },
+ {
+  "rank": 11,
+  "name": "19-06 Assistive Technology TAB Final - 508.docx",
+  "family": "docs",
+  "tags": [
+   "reflow",
+   "pagination"
+  ],
+  "bucket": "open",
+  "why": "page count only"
+ },
+ {
+  "rank": 12,
+  "name": "airports_6.xlsx",
+  "family": "sheets",
+  "tags": [
+   "field-values",
+   "content-missing",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "field values: a field read but not recalculated, or resolved differently"
+ },
+ {
+  "rank": 13,
+  "name": "PAT-047 - Architecture and Detailed Design Assessment.docx",
+  "family": "docs",
+  "tags": [
+   "table-rules",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "table rules and shading"
+ },
+ {
+  "rank": 14,
+  "name": "015_Project_Timeline_Template_Colored_Background_6434b0e8.docx",
+  "family": "docs",
+  "tags": [
+   "shape-fallback",
+   "chart",
+   "content-missing"
+  ],
+  "bucket": "open",
+  "why": "charts -- data labels, legend keys, axis wrapping, series z order"
+ },
+ {
+  "rank": 15,
+  "name": "FAA 2025-26 Holdover Tables.docx",
+  "family": "docs",
+  "tags": [
+   "reflow",
+   "pagination"
+  ],
+  "bucket": "open",
+  "why": "page count only"
+ },
+ {
+  "rank": 16,
+  "name": "644730BRI0mna000BOX361539B00public0.doc",
+  "family": "docs",
+  "tags": [
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "reflow: the advance-width divergence (architectural -- see dotnet/CLAUDE.md)"
+ },
+ {
+  "rank": 17,
+  "name": "healthcare-reform-nsa-provider-bulletin.docx",
+  "family": "docs",
+  "tags": [
+   "reflow",
+   "pagination"
+  ],
+  "bucket": "open",
+  "why": "page count only"
+ },
+ {
+  "rank": 18,
+  "name": "24-25_FAA_Holdover_Tables.docx",
+  "family": "docs",
+  "tags": [
+   "pagination"
+  ],
+  "bucket": "open",
+  "why": "page count only"
+ },
+ {
+  "rank": 19,
+  "name": "2024-12_Comlux_opens_Maintenance_and_Service_Center_in_Dubai.docx",
+  "family": "docs",
+  "tags": [
+   "text-style",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "character styling"
+ },
+ {
+  "rank": 20,
+  "name": "1528039320.docx",
+  "family": "docs",
+  "tags": [
+   "overlap-clip"
+  ],
+  "bucket": "open",
+  "why": "overlap and clipping"
+ },
+ {
+  "rank": 21,
+  "name": "RMI_Document_Repository_Public-Reprts_GettingOffOil.doc",
+  "family": "docs",
+  "tags": [
+   "text-style",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "character styling"
+ },
+ {
+  "rank": 22,
+  "name": "EHEST-Pre-departure-checklist-Rev.-1-06-12-2016.xls",
+  "family": "sheets",
+  "tags": [
+   "chart",
+   "overlap-clip"
+  ],
+  "bucket": "open",
+  "why": "charts -- data labels, legend keys, axis wrapping, series z order"
+ },
+ {
+  "rank": 23,
+  "name": "RNW167A-150428.doc",
+  "family": "docs",
+  "tags": [
+   "table-rules",
+   "reflow",
+   "pagination"
+  ],
+  "bucket": "open",
+  "why": "table rules and shading"
+ },
+ {
+  "rank": 24,
+  "name": "060_Human_Body_Concept_Map_Template_ac872cfb.docx",
+  "family": "docs",
+  "tags": [
+   "paint-order",
+   "reflow"
+  ],
+  "bucket": "fixed",
+  "why": "text drawn and then painted over: 16 blocks -> 0; SSIM 0.510 -> 0.942"
+ },
+ {
+  "rank": 25,
+  "name": "SFSP_2013-02_Bulletin.doc",
+  "family": "docs",
+  "tags": [
+   "list-markers",
+   "table-rules",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "list markers -- custom bullets and numbering the reader does not reach"
+ },
+ {
+  "rank": 26,
+  "name": "081_Printable_Graph_Paper_Template_Blue_Theme_629316cb.docx",
+  "family": "docs",
+  "tags": [
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "reflow: the advance-width divergence (architectural -- see dotnet/CLAUDE.md)"
+ },
+ {
+  "rank": 27,
+  "name": "Form-SM-76A-_-CAR-OPS-2A-Instruments-and-Equipment-Compliance-Statement-_-11.docx",
+  "family": "docs",
+  "tags": [
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "reflow: the advance-width divergence (architectural -- see dotnet/CLAUDE.md)"
+ },
+ {
+  "rank": 28,
+  "name": "02_mcar_part-2_and_IS_v2.10.docx",
+  "family": "docs",
+  "tags": [
+   "table-rules",
+   "text-style",
+   "content-missing",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "table rules and shading"
+ },
+ {
+  "rank": 29,
+  "name": "B11. TE.CAO.00129  Experience  logbook.docx",
+  "family": "docs",
+  "tags": [
+   "lo-broken",
+   "list-markers",
+   "field-values"
+  ],
+  "bucket": "LibreOffice bug",
+  "why": "our output is correct; the reference prints a frozen cached page field"
+ },
+ {
+  "rank": 30,
+  "name": "429_BLISc 2019 IInd Sem.  PAPER-7 UNIT 3.pptx",
+  "family": "slides",
+  "tags": [
+   "version-divergence",
+   "missing-graphics",
+   "list-markers",
+   "reflow"
+  ],
+  "bucket": "version mismatch",
+  "why": "slide autofit: the ladder is a correct port of 26.2.4.2; 24.2.7.2 answers a 2.5% font grid this table cannot produce"
+ },
+ {
+  "rank": 31,
+  "name": "1447.doc",
+  "family": "docs",
+  "tags": [
+   "reflow",
+   "pagination"
+  ],
+  "bucket": "open",
+  "why": "page count only"
+ },
+ {
+  "rank": 32,
+  "name": "2013_11.doc",
+  "family": "docs",
+  "tags": [
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "reflow: the advance-width divergence (architectural -- see dotnet/CLAUDE.md)"
+ },
+ {
+  "rank": 33,
+  "name": "\u624b\u673a\u514d\u63d0\u7cfb\u7edfTSB.doc",
+  "family": "docs",
+  "tags": [
+   "list-markers",
+   "reflow",
+   "pagination"
+  ],
+  "bucket": "open",
+  "why": "list markers -- custom bullets and numbering the reader does not reach"
+ },
+ {
+  "rank": 34,
+  "name": "1603642410-MoM-CASCOM-06-2020-draft04.docx",
+  "family": "docs",
+  "tags": [
+   "field-values",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "field values: a field read but not recalculated, or resolved differently"
+ },
+ {
+  "rank": 35,
+  "name": "approvals-and-standardisation-organisation-approvals-docs-part-145-annex-B-B11.-TE.CAO.00129-Foreign-Part-145-approvals---Experience--logbook.docx",
+  "family": "docs",
+  "tags": [
+   "field-values"
+  ],
+  "bucket": "open",
+  "why": "field values: a field read but not recalculated, or resolved differently"
+ },
+ {
+  "rank": 36,
+  "name": "AC-150-5370-10G-updated-201604.docx",
+  "family": "docs",
+  "tags": [
+   "field-values",
+   "text-style",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "field values: a field read but not recalculated, or resolved differently"
+ },
+ {
+  "rank": 37,
+  "name": "EHEST-SMS-Safety-Management-Manual-V2.docx",
+  "family": "docs",
+  "tags": [
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "reflow: the advance-width divergence (architectural -- see dotnet/CLAUDE.md)"
+ },
+ {
+  "rank": 38,
+  "name": "4400-91_Proposal_To_Lease_Space_10-2024.docx",
+  "family": "docs",
+  "tags": [
+   "field-values",
+   "overlap-clip",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "field values: a field read but not recalculated, or resolved differently"
+ },
+ {
+  "rank": 39,
+  "name": "A320SimNotes.doc",
+  "family": "docs",
+  "tags": [
+   "text-style",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "character styling"
+ },
+ {
+  "rank": 40,
+  "name": "CRIF - Sp\u00c3\u00a9cification technique - Socle applicatif.docx",
+  "family": "docs",
+  "tags": [
+   "field-values",
+   "overlap-clip",
+   "pagination"
+  ],
+  "bucket": "open",
+  "why": "field values: a field read but not recalculated, or resolved differently"
+ },
+ {
+  "rank": 41,
+  "name": "part-147_approval list_20230119.docx",
+  "family": "docs",
+  "tags": [
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "reflow: the advance-width divergence (architectural -- see dotnet/CLAUDE.md)"
+ },
+ {
+  "rank": 42,
+  "name": "150_5335_5a.doc",
+  "family": "docs",
+  "tags": [
+   "field-values"
+  ],
+  "bucket": "open",
+  "why": "field values: a field read but not recalculated, or resolved differently"
+ },
+ {
+  "rank": 43,
+  "name": "AFS-050-004-F2_0i.docx",
+  "family": "docs",
+  "tags": [
+   "table-rules",
+   "text-style",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "table rules and shading"
+ },
+ {
+  "rank": 44,
+  "name": "2015-April-SWIM_Users_Forum-Q&A.docx",
+  "family": "docs",
+  "tags": [
+   "overlap-clip",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "overlap and clipping"
+ },
+ {
+  "rank": 45,
+  "name": "P200904290238_0238_51880.doc",
+  "family": "docs",
+  "tags": [
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "reflow: the advance-width divergence (architectural -- see dotnet/CLAUDE.md)"
+ },
+ {
+  "rank": 46,
+  "name": "mde087077~283.docx",
+  "family": "docs",
+  "tags": [
+   "text-style",
+   "overlap-clip",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "overlap and clipping"
+ },
+ {
+  "rank": 47,
+  "name": "Sector_Skills_Insights_Advanced_Manufacturing_summary_slide_pack.pptx",
+  "family": "slides",
+  "tags": [
+   "version-divergence",
+   "reflow"
+  ],
+  "bucket": "version mismatch",
+  "why": "slide autofit: the ladder is a correct port of 26.2.4.2; 24.2.7.2 answers a 2.5% font grid this table cannot produce"
+ },
+ {
+  "rank": 48,
+  "name": "ESPN-R - MCF - Manual - Ed1.0 - For Publication.docx",
+  "family": "docs",
+  "tags": [
+   "field-values"
+  ],
+  "bucket": "open",
+  "why": "field values: a field read but not recalculated, or resolved differently"
+ },
+ {
+  "rank": 49,
+  "name": "BMFE-06-03 (Gerflor) Smoke Density and Toxicity.pptx",
+  "family": "slides",
+  "tags": [
+   "missing-graphics",
+   "overlap-clip",
+   "content-missing",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "a drawing we do not draw: watermarks, anchored artwork, picture bullets"
+ },
+ {
+  "rank": 50,
+  "name": "gpp-pr-top-7-office-markets-4q-2023.docx",
+  "family": "docs",
+  "tags": [
+   "text-style"
+  ],
+  "bucket": "open",
+  "why": "character styling"
+ },
+ {
+  "rank": 51,
+  "name": "HC-Bulletin-template.docx",
+  "family": "docs",
+  "tags": [
+   "missing-graphics",
+   "field-values",
+   "overlap-clip",
+   "content-missing"
+  ],
+  "bucket": "open",
+  "why": "a drawing we do not draw: watermarks, anchored artwork, picture bullets"
+ },
+ {
+  "rank": 52,
+  "name": "absrc-pac-01-info-note-en.doc",
+  "family": "docs",
+  "tags": [
+   "pagination"
+  ],
+  "bucket": "open",
+  "why": "page count only"
+ },
+ {
+  "rank": 53,
+  "name": "ws_prod-g-doc-Events-2007-september-M.017-(French)-France.ppt",
+  "family": "slides",
+  "tags": [
+   "list-markers",
+   "field-values",
+   "content-missing",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "list markers -- custom bullets and numbering the reader does not reach"
+ },
+ {
+  "rank": 54,
+  "name": "1528364855.doc",
+  "family": "docs",
+  "tags": [
+   "content-missing"
+  ],
+  "bucket": "open",
+  "why": "content we do not draw"
+ },
+ {
+  "rank": 55,
+  "name": "Demick_JetBlue.pptx",
+  "family": "slides",
+  "tags": [
+   "chart",
+   "content-missing"
+  ],
+  "bucket": "open",
+  "why": "charts -- data labels, legend keys, axis wrapping, series z order"
+ },
+ {
+  "rank": 56,
+  "name": "manufacturing_process_simulation_working_group_overview_2023.pptx",
+  "family": "slides",
+  "tags": [
+   "version-divergence",
+   "overlap-clip"
+  ],
+  "bucket": "version mismatch",
+  "why": "slide autofit: the ladder is a correct port of 26.2.4.2; 24.2.7.2 answers a 2.5% font grid this table cannot produce"
+ },
+ {
+  "rank": 57,
+  "name": "089_Printable_Graph_Paper_Template_Simlpe_Format_3aff1c88.docx",
+  "family": "docs",
+  "tags": [
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "reflow: the advance-width divergence (architectural -- see dotnet/CLAUDE.md)"
+ },
+ {
+  "rank": 58,
+  "name": "080_Printable_Graph_Paper_Template_Black_Theme_6b066be1.docx",
+  "family": "docs",
+  "tags": [
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "reflow: the advance-width divergence (architectural -- see dotnet/CLAUDE.md)"
+ },
+ {
+  "rank": 59,
+  "name": "07-04.doc",
+  "family": "docs",
+  "tags": [
+   "table-rules"
+  ],
+  "bucket": "open",
+  "why": "table rules and shading"
+ },
+ {
+  "rank": 60,
+  "name": "f111.doc",
+  "family": "docs",
+  "tags": [
+   "text-style",
+   "content-missing"
+  ],
+  "bucket": "fixed",
+  "why": "SSIM 0.595 -> 0.650 against the same reference"
+ },
+ {
+  "rank": 61,
+  "name": "fleetfastfacts16nov2023.docx",
+  "family": "docs",
+  "tags": [
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "reflow: the advance-width divergence (architectural -- see dotnet/CLAUDE.md)"
+ },
+ {
+  "rank": 62,
+  "name": "019_Project_Timeline_Template_Excellent_Layout_4ee62967.docx",
+  "family": "docs",
+  "tags": [
+   "paint-order",
+   "missing-graphics",
+   "shape-fallback",
+   "content-missing"
+  ],
+  "bucket": "fixed",
+  "why": "text drawn and then painted over: 5 blocks -> 0; SSIM 0.597 -> 0.596"
+ },
+ {
+  "rank": 63,
+  "name": "JEMIT_Template.docx",
+  "family": "docs",
+  "tags": [
+   "content-missing"
+  ],
+  "bucket": "open",
+  "why": "content we do not draw"
+ },
+ {
+  "rank": 64,
+  "name": "09.docx",
+  "family": "docs",
+  "tags": [
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "reflow: the advance-width divergence (architectural -- see dotnet/CLAUDE.md)"
+ },
+ {
+  "rank": 65,
+  "name": "1228841571067_2009_TPPT_13__2007_TPPT_102__R-108535759.doc",
+  "family": "docs",
+  "tags": [
+   "text-style"
+  ],
+  "bucket": "open",
+  "why": "character styling"
+ },
+ {
+  "rank": 66,
+  "name": "atspp_pay_tables.xlsx",
+  "family": "sheets",
+  "tags": [
+   "table-rules",
+   "content-missing",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "table rules and shading"
+ },
+ {
+  "rank": 67,
+  "name": "195584360.docx",
+  "family": "docs",
+  "tags": [
+   "field-values",
+   "table-rules"
+  ],
+  "bucket": "open",
+  "why": "field values: a field read but not recalculated, or resolved differently"
+ },
+ {
+  "rank": 68,
+  "name": "OM template for non-complex NCC operators_August 2016.docx",
+  "family": "docs",
+  "tags": [
+   "field-values",
+   "reflow",
+   "pagination"
+  ],
+  "bucket": "open",
+  "why": "field values: a field read but not recalculated, or resolved differently"
+ },
+ {
+  "rank": 69,
+  "name": "085_Printable_Graph_Paper_Template_Excellent_Format_4bcae89a.docx",
+  "family": "docs",
+  "tags": [
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "reflow: the advance-width divergence (architectural -- see dotnet/CLAUDE.md)"
+ },
+ {
+  "rank": 70,
+  "name": "5709.16 ch.40_mgfinal.docx",
+  "family": "docs",
+  "tags": [
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "reflow: the advance-width divergence (architectural -- see dotnet/CLAUDE.md)"
+ },
+ {
+  "rank": 71,
+  "name": "2015-Civil-Rights-Website-training.ppt",
+  "family": "slides",
+  "tags": [
+   "version-divergence",
+   "list-markers",
+   "reflow"
+  ],
+  "bucket": "version mismatch",
+  "why": "slide autofit: the ladder is a correct port of 26.2.4.2; 24.2.7.2 answers a 2.5% font grid this table cannot produce"
+ },
+ {
+  "rank": 72,
+  "name": "316r_a_f.doc",
+  "family": "docs",
+  "tags": [
+   "list-markers",
+   "field-values"
+  ],
+  "bucket": "open",
+  "why": "list markers -- custom bullets and numbering the reader does not reach"
+ },
+ {
+  "rank": 73,
+  "name": "231164_SystemDesignDocument.docx",
+  "family": "docs",
+  "tags": [
+   "field-values",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "field values: a field read but not recalculated, or resolved differently"
+ },
+ {
+  "rank": 74,
+  "name": "1257259179492_2007_TPPT_102_Supporting_Doc_2-434003080.doc",
+  "family": "docs",
+  "tags": [
+   "text-style"
+  ],
+  "bucket": "open",
+  "why": "character styling"
+ },
+ {
+  "rank": 75,
+  "name": "UG.CAO.00133 Foreign Part 145 approvals - Language.docx",
+  "family": "docs",
+  "tags": [
+   "field-values",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "field values: a field read but not recalculated, or resolved differently"
+ },
+ {
+  "rank": 76,
+  "name": "redac-fullComm-201705-EE-FRs-briefing.pptx",
+  "family": "slides",
+  "tags": [
+   "missing-graphics",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "a drawing we do not draw: watermarks, anchored artwork, picture bullets"
+ },
+ {
+  "rank": 77,
+  "name": "loi_format_letter_of_intent-a-320-214-a330.doc",
+  "family": "docs",
+  "tags": [
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "reflow: the advance-width divergence (architectural -- see dotnet/CLAUDE.md)"
+ },
+ {
+  "rank": 78,
+  "name": "foca_form_1.doc",
+  "family": "docs",
+  "tags": [
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "reflow: the advance-width divergence (architectural -- see dotnet/CLAUDE.md)"
+ },
+ {
+  "rank": 79,
+  "name": "SRDMG(16)024_60 GHz onboard airplanes.pptx",
+  "family": "slides",
+  "tags": [
+   "version-divergence",
+   "missing-graphics",
+   "list-markers"
+  ],
+  "bucket": "version mismatch",
+  "why": "slide autofit: the ladder is a correct port of 26.2.4.2; 24.2.7.2 answers a 2.5% font grid this table cannot produce"
+ },
+ {
+  "rank": 80,
+  "name": "FlightLaws.doc",
+  "family": "docs",
+  "tags": [
+   "content-missing"
+  ],
+  "bucket": "open",
+  "why": "content we do not draw"
+ },
+ {
+  "rank": 81,
+  "name": "300502-Mecenat-Airbus-Simusante_CHU-Amiens-Picardie.doc",
+  "family": "docs",
+  "tags": [
+   "missing-graphics",
+   "text-style",
+   "content-missing",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "a drawing we do not draw: watermarks, anchored artwork, picture bullets"
+ },
+ {
+  "rank": 82,
+  "name": "TK-Syllabus-Comparison-Document-v2.xlsx",
+  "family": "sheets",
+  "tags": [
+   "overlap-clip",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "overlap and clipping"
+ },
+ {
+  "rank": 83,
+  "name": "Intersil_Italy_CAN_Bus_Transceiver_Presentation_Final.pptx",
+  "family": "slides",
+  "tags": [
+   "version-divergence",
+   "reflow"
+  ],
+  "bucket": "version mismatch",
+  "why": "slide autofit: the ladder is a correct port of 26.2.4.2; 24.2.7.2 answers a 2.5% font grid this table cannot produce"
+ },
+ {
+  "rank": 84,
+  "name": "Ramp Up Campaign - French.pptx",
+  "family": "slides",
+  "tags": [
+   "overlap-clip",
+   "lo-broken"
+  ],
+  "bucket": "LibreOffice bug",
+  "why": "the reference is the one at fault; our output is correct"
+ },
+ {
+  "rank": 85,
+  "name": "ECSS-E-ST-50-16C-Annex-A(30September2021).docx",
+  "family": "docs",
+  "tags": [
+   "table-rules",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "table rules and shading"
+ },
+ {
+  "rank": 86,
+  "name": "RESPA_-_Section_8_Webinar.ppt",
+  "family": "slides",
+  "tags": [
+   "version-divergence",
+   "list-markers",
+   "reflow"
+  ],
+  "bucket": "version mismatch",
+  "why": "slide autofit: the ladder is a correct port of 26.2.4.2; 24.2.7.2 answers a 2.5% font grid this table cannot produce"
+ },
+ {
+  "rank": 87,
+  "name": "review-welsh-government-communications-mister-peter-mandelson.docx",
+  "family": "docs",
+  "tags": [
+   "text-style",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "character styling"
+ },
+ {
+  "rank": 88,
+  "name": "003.doc",
+  "family": "docs",
+  "tags": [
+   "pagination"
+  ],
+  "bucket": "open",
+  "why": "page count only"
+ },
+ {
+  "rank": 89,
+  "name": "33004.docx",
+  "family": "docs",
+  "tags": [
+   "text-style",
+   "content-missing",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "character styling"
+ },
+ {
+  "rank": 90,
+  "name": "docs-quality-MA.IMS.00001-Integrated-Management-System-manual.docx",
+  "family": "docs",
+  "tags": [
+   "text-style"
+  ],
+  "bucket": "open",
+  "why": "character styling"
+ },
+ {
+  "rank": 91,
+  "name": "b053-19.docx",
+  "family": "docs",
+  "tags": [
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "reflow: the advance-width divergence (architectural -- see dotnet/CLAUDE.md)"
+ },
+ {
+  "rank": 92,
+  "name": "FO.FCTOA.00010 Application for a Part-ORA ATO Approval.docx",
+  "family": "docs",
+  "tags": [
+   "field-values"
+  ],
+  "bucket": "open",
+  "why": "field values: a field read but not recalculated, or resolved differently"
+ },
+ {
+  "rank": 93,
+  "name": "AWR OPS-AOC 044 Statement of Compliance RVSM  Rev 04 01 Feb 2024.docx",
+  "family": "docs",
+  "tags": [
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "reflow: the advance-width divergence (architectural -- see dotnet/CLAUDE.md)"
+ },
+ {
+  "rank": 94,
+  "name": "018_Project_Timeline_Template_Editable_Format_e1cf1df5.docx",
+  "family": "docs",
+  "tags": [
+   "content-missing",
+   "lo-broken"
+  ],
+  "bucket": "LibreOffice bug",
+  "why": "the reference is the one at fault; our output is correct"
+ },
+ {
+  "rank": 95,
+  "name": "016_Project_Timeline_Template_Complete_Guide_7d36d09c.docx",
+  "family": "docs",
+  "tags": [
+   "chart",
+   "lo-broken"
+  ],
+  "bucket": "LibreOffice bug",
+  "why": "the reference is the one at fault; our output is correct"
+ },
+ {
+  "rank": 96,
+  "name": "chapter_4_0.pptx",
+  "family": "slides",
+  "tags": [
+   "missing-graphics",
+   "list-markers",
+   "content-missing",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "a drawing we do not draw: watermarks, anchored artwork, picture bullets"
+ },
+ {
+  "rank": 97,
+  "name": "How-to-Write-an-Architecture-Document-for-a-Technology-Service.docx",
+  "family": "docs",
+  "tags": [
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "reflow: the advance-width divergence (architectural -- see dotnet/CLAUDE.md)"
+ },
+ {
+  "rank": 98,
+  "name": "alle einzeln.xlsx",
+  "family": "sheets",
+  "tags": [
+   "table-rules"
+  ],
+  "bucket": "open",
+  "why": "table rules and shading"
+ },
+ {
+  "rank": 99,
+  "name": "joint_user_outcomes_michael_fullerton_29.06.12.ppt",
+  "family": "slides",
+  "tags": [
+   "version-divergence",
+   "missing-graphics",
+   "list-markers",
+   "reflow"
+  ],
+  "bucket": "version mismatch",
+  "why": "slide autofit: the ladder is a correct port of 26.2.4.2; 24.2.7.2 answers a 2.5% font grid this table cannot produce"
+ },
+ {
+  "rank": 100,
+  "name": "Wildlife for REDAC September 11.pptx",
+  "family": "slides",
+  "tags": [
+   "version-divergence",
+   "missing-graphics"
+  ],
+  "bucket": "version mismatch",
+  "why": "the corner-to-linear gradient branch was removed in round 59 on 26.2 evidence; six arms on the installed 24.2.7.2 reproduce its condition exactly"
+ },
+ {
+  "rank": 101,
+  "name": "May 25 bulletin focus on carers in the workplace.docx",
+  "family": "docs",
+  "tags": [
+   "version-divergence",
+   "reflow",
+   "pagination"
+  ],
+  "bucket": "version mismatch",
+  "why": "<code>SystemFontResolver</code>'s family ordering was measured on 26.2.4.2; 24.2 draws Liberation Sans for a swiss-classed Helvetica where we draw DejaVu"
+ },
+ {
+  "rank": 102,
+  "name": "CP-ETSO template_v2020.DOC",
+  "family": "docs",
+  "tags": [
+   "text-style",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "character styling"
+ },
+ {
+  "rank": 103,
+  "name": "berlin.ppt",
+  "family": "slides",
+  "tags": [
+   "version-divergence",
+   "list-markers",
+   "reflow"
+  ],
+  "bucket": "version mismatch",
+  "why": "slide autofit: the ladder is a correct port of 26.2.4.2; 24.2.7.2 answers a 2.5% font grid this table cannot produce"
+ },
+ {
+  "rank": 104,
+  "name": "BHCA Part II webinar #2 - 10.2020.pptx",
+  "family": "slides",
+  "tags": [
+   "version-divergence",
+   "reflow"
+  ],
+  "bucket": "version mismatch",
+  "why": "slide autofit: the ladder is a correct port of 26.2.4.2; 24.2.7.2 answers a 2.5% font grid this table cannot produce"
+ },
+ {
+  "rank": 105,
+  "name": "flightstandards-doc-Cross-reference-table_version02.xlsx",
+  "family": "sheets",
+  "tags": [
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "reflow: the advance-width divergence (architectural -- see dotnet/CLAUDE.md)"
+ },
+ {
+  "rank": 106,
+  "name": "Regulations Governing the Status, Basic Rights and Duties of Officials other than Secretariat Officials, and Experts on Mission.docx",
+  "family": "docs",
+  "tags": [
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "reflow: the advance-width divergence (architectural -- see dotnet/CLAUDE.md)"
+ },
+ {
+  "rank": 107,
+  "name": "PK_FlugzeugeStricken.doc",
+  "family": "docs",
+  "tags": [
+   "table-rules",
+   "content-missing",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "table rules and shading"
+ },
+ {
+  "rank": 108,
+  "name": "10795.doc",
+  "family": "docs",
+  "tags": [
+   "field-values",
+   "content-missing",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "field values: a field read but not recalculated, or resolved differently"
+ },
+ {
+  "rank": 109,
+  "name": "programs contact list as of 07-01-10.xls",
+  "family": "sheets",
+  "tags": [
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "reflow: the advance-width divergence (architectural -- see dotnet/CLAUDE.md)"
+ },
+ {
+  "rank": 110,
+  "name": "dhs-293364.pptx",
+  "family": "slides",
+  "tags": [
+   "version-divergence",
+   "field-values",
+   "overlap-clip",
+   "reflow"
+  ],
+  "bucket": "version mismatch",
+  "why": "slide autofit: the ladder is a correct port of 26.2.4.2; 24.2.7.2 answers a 2.5% font grid this table cannot produce"
+ },
+ {
+  "rank": 111,
+  "name": "template---tpr-technical-progress-report-with-guidance.docx",
+  "family": "docs",
+  "tags": [
+   "list-markers",
+   "pagination"
+  ],
+  "bucket": "open",
+  "why": "list markers -- custom bullets and numbering the reader does not reach"
+ },
+ {
+  "rank": 112,
+  "name": "191216_Lesefassung_Nachtflugregelung.docx",
+  "family": "docs",
+  "tags": [
+   "text-style"
+  ],
+  "bucket": "open",
+  "why": "character styling"
+ },
+ {
+  "rank": 113,
+  "name": "RRM-training-syllabus-Chapter-3-Teamwork-TC-Towing-Incident-Analysis-Dec-2009.ppt",
+  "family": "slides",
+  "tags": [
+   "version-divergence",
+   "text-style"
+  ],
+  "bucket": "version mismatch",
+  "why": "slide autofit: the ladder is a correct port of 26.2.4.2; 24.2.7.2 answers a 2.5% font grid this table cannot produce"
+ },
+ {
+  "rank": 114,
+  "name": "013_Project_Timeline_Template_Blue_Background_4ea3475e.docx",
+  "family": "docs",
+  "tags": [
+   "paint-order",
+   "missing-graphics",
+   "shape-fallback",
+   "chart",
+   "content-missing"
+  ],
+  "bucket": "fixed",
+  "why": "text drawn and then painted over: 6 blocks -> 5; SSIM 0.663 -> 0.657"
+ },
+ {
+  "rank": 115,
+  "name": "FO.FCTOA_.000129 Application for activities related to FSTD.docx",
+  "family": "docs",
+  "tags": [
+   "list-markers",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "list markers -- custom bullets and numbering the reader does not reach"
+ },
+ {
+  "rank": 116,
+  "name": "f445896eb008d14c1746fc37d412dc22.docx",
+  "family": "docs",
+  "tags": [
+   "table-rules",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "table rules and shading"
+ },
+ {
+  "rank": 117,
+  "name": "03_Technical_Report_(progress)_template.docx",
+  "family": "docs",
+  "tags": [
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "reflow: the advance-width divergence (architectural -- see dotnet/CLAUDE.md)"
+ },
+ {
+  "rank": 118,
+  "name": "Employment-Based_I-485.ppt",
+  "family": "slides",
+  "tags": [
+   "version-divergence",
+   "list-markers"
+  ],
+  "bucket": "version mismatch",
+  "why": "slide autofit: the ladder is a correct port of 26.2.4.2; 24.2.7.2 answers a 2.5% font grid this table cannot produce"
+ },
+ {
+  "rank": 119,
+  "name": "County ACHS Presentaion Webinar 8-16-16 Peg.pptx",
+  "family": "slides",
+  "tags": [
+   "version-divergence",
+   "reflow"
+  ],
+  "bucket": "version mismatch",
+  "why": "slide autofit: the ladder is a correct port of 26.2.4.2; 24.2.7.2 answers a 2.5% font grid this table cannot produce"
+ },
+ {
+  "rank": 120,
+  "name": "7-Zulkefli_Part147n66_IKMAS.pptx",
+  "family": "slides",
+  "tags": [
+   "overlap-clip"
+  ],
+  "bucket": "open",
+  "why": "overlap and clipping"
+ },
+ {
+  "rank": 121,
+  "name": "Allegiant_Company_Profile_with_History.docx",
+  "family": "docs",
+  "tags": [
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "reflow: the advance-width divergence (architectural -- see dotnet/CLAUDE.md)"
+ },
+ {
+  "rank": 122,
+  "name": "Lepore.ppt",
+  "family": "slides",
+  "tags": [
+   "version-divergence",
+   "reflow"
+  ],
+  "bucket": "version mismatch",
+  "why": "slide autofit: the ladder is a correct port of 26.2.4.2; 24.2.7.2 answers a 2.5% font grid this table cannot produce"
+ },
+ {
+  "rank": 123,
+  "name": "TE.CAO.00125 Foreign Part 145 approvals - OJT Logbook.docx",
+  "family": "docs",
+  "tags": [
+   "field-values",
+   "text-style",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "field values: a field read but not recalculated, or resolved differently"
+ },
+ {
+  "rank": 124,
+  "name": "G-InvoicingKeithJarboe.pptx",
+  "family": "slides",
+  "tags": [
+   "version-divergence",
+   "list-markers"
+  ],
+  "bucket": "version mismatch",
+  "why": "slide autofit: the ladder is a correct port of 26.2.4.2; 24.2.7.2 answers a 2.5% font grid this table cannot produce"
+ },
+ {
+  "rank": 125,
+  "name": "ev122_jj-liew-tort-of-bribery-webinar.pptx",
+  "family": "slides",
+  "tags": [
+   "version-divergence",
+   "text-style",
+   "reflow"
+  ],
+  "bucket": "version mismatch",
+  "why": "slide autofit: the ladder is a correct port of 26.2.4.2; 24.2.7.2 answers a 2.5% font grid this table cannot produce"
+ },
+ {
+  "rank": 126,
+  "name": "Aerospace_Journey_of_Flight_Chapter_BCB1637572DA6.ppt",
+  "family": "slides",
+  "tags": [
+   "missing-graphics",
+   "list-markers",
+   "reflow"
+  ],
+  "bucket": "fixed",
+  "why": "SSIM 0.682 -> 0.900 against the same reference"
+ },
+ {
+  "rank": 127,
+  "name": "commander-authorisation-tasks-spreadsheet-october-2025.xlsx",
+  "family": "sheets",
+  "tags": [
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "reflow: the advance-width divergence (architectural -- see dotnet/CLAUDE.md)"
+ },
+ {
+  "rank": 128,
+  "name": "BUS-Chapter 05.ppt",
+  "family": "slides",
+  "tags": [
+   "version-divergence",
+   "list-markers",
+   "reflow"
+  ],
+  "bucket": "version mismatch",
+  "why": "slide autofit: the ladder is a correct port of 26.2.4.2; 24.2.7.2 answers a 2.5% font grid this table cannot produce"
+ },
+ {
+  "rank": 129,
+  "name": "iep-amount-frequency-for-webinar.ppt",
+  "family": "slides",
+  "tags": [
+   "overlap-clip",
+   "reflow"
+  ],
+  "bucket": "fixed",
+  "why": "SSIM 0.690 -> 0.851 against the same reference"
+ },
+ {
+  "rank": 130,
+  "name": "AATF-Fact-Sheet-2025.pptx",
+  "family": "slides",
+  "tags": [
+   "overlap-clip",
+   "lo-broken"
+  ],
+  "bucket": "LibreOffice bug",
+  "why": "the reference is the one at fault; our output is correct"
+ },
+ {
+  "rank": 131,
+  "name": "2017-04-27-Lease-Transition-Records-Checklist-FINAL-1.xlsx",
+  "family": "sheets",
+  "tags": [
+   "overlap-clip"
+  ],
+  "bucket": "open",
+  "why": "overlap and clipping"
+ },
+ {
+  "rank": 132,
+  "name": "DoIRD Meeting 16JAN14 v1-1.pptx",
+  "family": "slides",
+  "tags": [
+   "version-divergence",
+   "text-style",
+   "reflow"
+  ],
+  "bucket": "version mismatch",
+  "why": "slide autofit: the ladder is a correct port of 26.2.4.2; 24.2.7.2 answers a 2.5% font grid this table cannot produce"
+ },
+ {
+  "rank": 133,
+  "name": "A1. EASA Form 2.docx",
+  "family": "docs",
+  "tags": [
+   "lo-broken",
+   "list-markers",
+   "field-values"
+  ],
+  "bucket": "LibreOffice bug",
+  "why": "our output is correct; the reference prints a frozen cached page field"
+ },
+ {
+  "rank": 134,
+  "name": "Capability_List_9-14-2022_Dallas_Combined-Aircraft_Manuf_unsorted.xlsx",
+  "family": "sheets",
+  "tags": [
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "reflow: the advance-width divergence (architectural -- see dotnet/CLAUDE.md)"
+ },
+ {
+  "rank": 135,
+  "name": "2020-01-29-Lease-Transition-Records-Checklist-FINAL-1.xlsx",
+  "family": "sheets",
+  "tags": [
+   "overlap-clip",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "overlap and clipping"
+ },
+ {
+  "rank": 136,
+  "name": "Application_Compliance_Checklist_5_Apr_2021.xlsx",
+  "family": "sheets",
+  "tags": [
+   "missing-graphics"
+  ],
+  "bucket": "fixed",
+  "why": "SSIM 0.701 -> 0.722 against the same reference"
+ },
+ {
+  "rank": 137,
+  "name": "undp_presentation_revised_17_may.ppt",
+  "family": "slides",
+  "tags": [
+   "list-markers"
+  ],
+  "bucket": "open",
+  "why": "list markers -- custom bullets and numbering the reader does not reach"
+ },
+ {
+  "rank": 138,
+  "name": "30-04-2021 merged NDoH and NICD_Presentation HBV BD meeting 05May2021_1.pptx",
+  "family": "slides",
+  "tags": [
+   "version-divergence",
+   "list-markers"
+  ],
+  "bucket": "version mismatch",
+  "why": "slide autofit: the ladder is a correct port of 26.2.4.2; 24.2.7.2 answers a 2.5% font grid this table cannot produce"
+ },
+ {
+  "rank": 139,
+  "name": "PI-doc.-no.-2E-Technical-Review-Report.docx",
+  "family": "docs",
+  "tags": [
+   "field-values"
+  ],
+  "bucket": "open",
+  "why": "field values: a field read but not recalculated, or resolved differently"
+ },
+ {
+  "rank": 140,
+  "name": "Company-profile-2022-EN.docx",
+  "family": "docs",
+  "tags": [
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "reflow: the advance-width divergence (architectural -- see dotnet/CLAUDE.md)"
+ },
+ {
+  "rank": 141,
+  "name": "088_Printable_Graph_Paper_Template_Quality_layout_33051f6e.docx",
+  "family": "docs",
+  "tags": [
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "reflow: the advance-width divergence (architectural -- see dotnet/CLAUDE.md)"
+ },
+ {
+  "rank": 142,
+  "name": "DOA_Template_Form_Type_Certification_Programme.docx",
+  "family": "docs",
+  "tags": [
+   "missing-graphics",
+   "text-style",
+   "content-missing"
+  ],
+  "bucket": "open",
+  "why": "a drawing we do not draw: watermarks, anchored artwork, picture bullets"
+ },
+ {
+  "rank": 143,
+  "name": "762.doc",
+  "family": "docs",
+  "tags": [
+   "table-rules",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "table rules and shading"
+ },
+ {
+  "rank": 144,
+  "name": "WEBSITE-RESOURCE-LIST-by-CATEGORY-4-6-18-341pm.xlsx",
+  "family": "sheets",
+  "tags": [
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "reflow: the advance-width divergence (architectural -- see dotnet/CLAUDE.md)"
+ },
+ {
+  "rank": 145,
+  "name": "form_1123_application_form_rvsm_spa.docx",
+  "family": "docs",
+  "tags": [
+   "table-rules",
+   "text-style",
+   "overlap-clip",
+   "content-missing"
+  ],
+  "bucket": "open",
+  "why": "table rules and shading"
+ },
+ {
+  "rank": 146,
+  "name": "065_Weight_loss_tracker_ff1c89af.xlsx",
+  "family": "sheets",
+  "tags": [
+   "text-style"
+  ],
+  "bucket": "open",
+  "why": "character styling"
+ },
+ {
+  "rank": 147,
+  "name": "Inducement-to-Insurance-Business.ppt",
+  "family": "slides",
+  "tags": [
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "reflow: the advance-width divergence (architectural -- see dotnet/CLAUDE.md)"
+ },
+ {
+  "rank": 148,
+  "name": "050_Visual_Product_Roadmap_Template_Yellow_and_Blue_Theme_49b50744.docx",
+  "family": "docs",
+  "tags": [
+   "paint-order",
+   "shape-fallback",
+   "content-missing"
+  ],
+  "bucket": "fixed",
+  "why": "text drawn and then painted over: 17 blocks -> 1; SSIM 0.732 -> 0.733"
+ },
+ {
+  "rank": 149,
+  "name": "Liturgical-Commission-2025-Convention-Presentation.pptx",
+  "family": "slides",
+  "tags": [
+   "version-divergence",
+   "reflow"
+  ],
+  "bucket": "version mismatch",
+  "why": "slide autofit: the ladder is a correct port of 26.2.4.2; 24.2.7.2 answers a 2.5% font grid this table cannot produce"
+ },
+ {
+  "rank": 150,
+  "name": "part-145-approval list (1).docx",
+  "family": "docs",
+  "tags": [
+   "table-rules",
+   "text-style"
+  ],
+  "bucket": "open",
+  "why": "table rules and shading"
+ },
+ {
+  "rank": 151,
+  "name": "SDL_FSDO_Part91_LOA_Checklist.docx",
+  "family": "docs",
+  "tags": [
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "reflow: the advance-width divergence (architectural -- see dotnet/CLAUDE.md)"
+ },
+ {
+  "rank": 152,
+  "name": "043_Visual_Product_Roadmap_Template_Customizable_Format_ee0fe5b1.docx",
+  "family": "docs",
+  "tags": [
+   "shape-fallback",
+   "content-missing"
+  ],
+  "bucket": "open",
+  "why": "preset shape geometry: a sub-path's own fill/stroke, chevrons and ellipses"
+ },
+ {
+  "rank": 153,
+  "name": "SIL_TDB648.xlsx",
+  "family": "sheets",
+  "tags": [
+   "missing-graphics",
+   "table-rules",
+   "content-missing"
+  ],
+  "bucket": "open",
+  "why": "a drawing we do not draw: watermarks, anchored artwork, picture bullets"
+ },
+ {
+  "rank": 154,
+  "name": "097_Business_Case_Template_Elegant_Layout_3ba9cbf2.docx",
+  "family": "docs",
+  "tags": [
+   "overlap-clip",
+   "lo-broken"
+  ],
+  "bucket": "LibreOffice bug",
+  "why": "the reference is the one at fault; our output is correct"
+ },
+ {
+  "rank": 155,
+  "name": "Wales_Office_Quarter_4_Ministerial_Transparency_Return.DOC",
+  "family": "docs",
+  "tags": [
+   "table-rules",
+   "overlap-clip",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "table rules and shading"
+ },
+ {
+  "rank": 156,
+  "name": "FAA_Form_337.ppt",
+  "family": "slides",
+  "tags": [
+   "version-divergence",
+   "list-markers",
+   "content-missing"
+  ],
+  "bucket": "version mismatch",
+  "why": "slide autofit: the ladder is a correct port of 26.2.4.2; 24.2.7.2 answers a 2.5% font grid this table cannot produce"
+ },
+ {
+  "rank": 157,
+  "name": "outlook_of_nigerian_pension_sector.ppt",
+  "family": "slides",
+  "tags": [
+   "shape-fallback",
+   "table-rules"
+  ],
+  "bucket": "open",
+  "why": "preset shape geometry: a sub-path's own fill/stroke, chevrons and ellipses"
+ },
+ {
+  "rank": 158,
+  "name": "033_Event_planning_tracker_Use_this_template_f29a848e.xlsx",
+  "family": "sheets",
+  "tags": [
+   "chart",
+   "content-missing"
+  ],
+  "bucket": "open",
+  "why": "charts -- data labels, legend keys, axis wrapping, series z order"
+ },
+ {
+  "rank": 159,
+  "name": "DEP2008-1900.doc",
+  "family": "docs",
+  "tags": [
+   "list-markers",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "list markers -- custom bullets and numbering the reader does not reach"
+ },
+ {
+  "rank": 160,
+  "name": "093_Business_Case_Template_Customizable_Layout_510c25e7.docx",
+  "family": "docs",
+  "tags": [
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "reflow: the advance-width divergence (architectural -- see dotnet/CLAUDE.md)"
+ },
+ {
+  "rank": 161,
+  "name": "040_Blood_pressure_tracker_872b6833.xlsx",
+  "family": "sheets",
+  "tags": [
+   "field-values",
+   "chart",
+   "text-style",
+   "content-missing"
+  ],
+  "bucket": "open",
+  "why": "charts -- data labels, legend keys, axis wrapping, series z order"
+ },
+ {
+  "rank": 162,
+  "name": "NAS-Infrastructure-Roadmaps-v16.0.pptx",
+  "family": "slides",
+  "tags": [
+   "lo-broken"
+  ],
+  "bucket": "LibreOffice bug",
+  "why": "the reference is the one at fault; our output is correct"
+ },
+ {
+  "rank": 163,
+  "name": "sectors-defense-and-aerospace.xlsx",
+  "family": "sheets",
+  "tags": [
+   "version-divergence",
+   "text-style",
+   "content-missing"
+  ],
+  "bucket": "version mismatch",
+  "why": "column digit width: <code>DigitWidthCarry</code> is 0.57 for 26.2.4.2 and 0.67 for 24.2.7.2; our 449 pages is the 26.2 answer exactly"
+ },
+ {
+  "rank": 164,
+  "name": "RobertQ_Service.doc",
+  "family": "docs",
+  "tags": [
+   "table-rules",
+   "overlap-clip",
+   "content-missing"
+  ],
+  "bucket": "open",
+  "why": "table rules and shading"
+ },
+ {
+  "rank": 165,
+  "name": "DynamicBubbleChart.xlsx",
+  "family": "sheets",
+  "tags": [
+   "chart",
+   "content-missing"
+  ],
+  "bucket": "open",
+  "why": "charts -- data labels, legend keys, axis wrapping, series z order"
+ },
+ {
+  "rank": 166,
+  "name": "microsoft_learn_multi_chart_examples.xlsx",
+  "family": "sheets",
+  "tags": [
+   "chart",
+   "content-missing"
+  ],
+  "bucket": "fixed",
+  "why": "SSIM 0.771 -> 0.800 against the same reference"
+ },
+ {
+  "rank": 167,
+  "name": "020_Project_Timeline_Template_Modern_Theme_0c215d87.docx",
+  "family": "docs",
+  "tags": [
+   "shape-fallback",
+   "content-missing"
+  ],
+  "bucket": "open",
+  "why": "preset shape geometry: a sub-path's own fill/stroke, chevrons and ellipses"
+ },
+ {
+  "rank": 168,
+  "name": "Item 6b - UNSD - Dissemination through APIs.pptx",
+  "family": "slides",
+  "tags": [
+   "version-divergence",
+   "list-markers",
+   "reflow"
+  ],
+  "bucket": "version mismatch",
+  "why": "slide autofit: the ladder is a correct port of 26.2.4.2; 24.2.7.2 answers a 2.5% font grid this table cannot produce"
+ },
+ {
+  "rank": 169,
+  "name": "077_Storyboard_Template_Pink_and_Blue_Theme_805e82ab.docx",
+  "family": "docs",
+  "tags": [
+   "missing-graphics",
+   "shape-fallback",
+   "content-missing"
+  ],
+  "bucket": "open",
+  "why": "preset shape geometry: a sub-path's own fill/stroke, chevrons and ellipses"
+ },
+ {
+  "rank": 170,
+  "name": "FY2021-AIP-grants.xlsx",
+  "family": "sheets",
+  "tags": [
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "reflow: the advance-width divergence (architectural -- see dotnet/CLAUDE.md)"
+ },
+ {
+  "rank": 171,
+  "name": "section_1_our_rights_presentation.pptx",
+  "family": "slides",
+  "tags": [
+   "version-divergence",
+   "reflow"
+  ],
+  "bucket": "version mismatch",
+  "why": "slide autofit: the ladder is a correct port of 26.2.4.2; 24.2.7.2 answers a 2.5% font grid this table cannot produce"
+ },
+ {
+  "rank": 172,
+  "name": "02_REDAC_New ATM briefing _March 2017v2.pptx",
+  "family": "slides",
+  "tags": [
+   "list-markers",
+   "text-style"
+  ],
+  "bucket": "open",
+  "why": "list markers -- custom bullets and numbering the reader does not reach"
+ },
+ {
+  "rank": 173,
+  "name": "045_Visual_Product_Roadmap_Template_Excellent_Format_e364063c.docx",
+  "family": "docs",
+  "tags": [
+   "paint-order",
+   "missing-graphics",
+   "shape-fallback",
+   "chart",
+   "content-missing"
+  ],
+  "bucket": "fixed",
+  "why": "text drawn and then painted over: 1 blocks -> 0; SSIM 0.779 -> 0.781"
+ },
+ {
+  "rank": 174,
+  "name": "essd-16-3433-2024-t02.xlsx",
+  "family": "sheets",
+  "tags": [
+   "overlap-clip",
+   "content-missing"
+  ],
+  "bucket": "open",
+  "why": "overlap and clipping"
+ },
+ {
+  "rank": 175,
+  "name": "028_Unit_Circle_Chart_Optimized_Graph_83d9c756.docx",
+  "family": "docs",
+  "tags": [
+   "lo-broken",
+   "chart",
+   "overlap-clip"
+  ],
+  "bucket": "LibreOffice bug",
+  "why": "a bar-of-pie chart: we draw the secondary bar and all sixteen legend entries; LibreOffice 24.2 predates of-pie support"
+ },
+ {
+  "rank": 176,
+  "name": "PES-Technical-Report-Template_Jan_2019.docx",
+  "family": "docs",
+  "tags": [
+   "missing-graphics",
+   "content-missing"
+  ],
+  "bucket": "open",
+  "why": "a drawing we do not draw: watermarks, anchored artwork, picture bullets"
+ },
+ {
+  "rank": 177,
+  "name": "Hazard Analysis Template.xls",
+  "family": "sheets",
+  "tags": [
+   "text-style",
+   "content-missing",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "character styling"
+ },
+ {
+  "rank": 178,
+  "name": "flying-by-numbers-presentation.pptx",
+  "family": "slides",
+  "tags": [
+   "missing-graphics",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "a drawing we do not draw: watermarks, anchored artwork, picture bullets"
+ },
+ {
+  "rank": 179,
+  "name": "SPA-02_mcar_part-2_and_IS_v2.9.docx",
+  "family": "docs",
+  "tags": [
+   "table-rules",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "table rules and shading"
+ },
+ {
+  "rank": 180,
+  "name": "FY2023-AIP-grants.xlsx",
+  "family": "sheets",
+  "tags": [
+   "overlap-clip"
+  ],
+  "bucket": "open",
+  "why": "overlap and clipping"
+ },
+ {
+  "rank": 181,
+  "name": "Agile_Arc_SysDes.docx",
+  "family": "docs",
+  "tags": [
+   "field-values",
+   "reflow"
+  ],
+  "bucket": "open",
+  "why": "field values: a field read but not recalculated, or resolved differently"
+ },
+ {
+  "rank": 182,
+  "name": "A_320.doc",
+  "family": "docs",
+  "tags": [
+   "field-values",
+   "table-rules",
+   "reflow",
+   "pagination"
+  ],
+  "bucket": "open",
+  "why": "field values: a field read but not recalculated, or resolved differently"
+ },
+ {
+  "rank": 183,
+  "name": "CIS_Debian_Linux_8_Benchmark_v1.0.0.xls",
+  "family": "sheets",
+  "tags": [
+   "version-divergence",
+   "reflow"
+  ],
+  "bucket": "version mismatch",
+  "why": "our 88 pages is the 26.2.4.2 reference's own count; 24.2 gives 109"
+ },
+ {
+  "rank": 184,
+  "name": "grants-2005.xls",
+  "family": "sheets",
+  "tags": [
+   "version-divergence",
+   "pagination"
+  ],
+  "bucket": "version mismatch",
+  "why": "our 201 pages is the 26.2.4.2 reference's own count; 24.2 gives 220"
+ },
+ {
+  "rank": 185,
+  "name": "150-5370-10H.docx",
+  "family": "docs",
+  "tags": [
+   "reflow",
+   "pagination"
+  ],
+  "bucket": "open",
+  "why": "page count only"
+ },
+ {
+  "rank": 186,
+  "name": "053_Personal_asset_inventory_5446d84b.xlsx",
+  "family": "sheets",
+  "tags": [
+   "missing-graphics",
+   "chart",
+   "pagination"
+  ],
+  "bucket": "open",
+  "why": "charts -- data labels, legend keys, axis wrapping, series z order"
+ },
+ {
+  "rank": 187,
+  "name": "062_Run_chart_cb7476ea.xlsx",
+  "family": "sheets",
+  "tags": [
+   "field-values",
+   "text-style"
+  ],
+  "bucket": "open",
+  "why": "field values: a field read but not recalculated, or resolved differently"
+ },
+ {
+  "rank": 188,
+  "name": "057_Simple_balance_sheet_Use_this_template_e2d4cbb2.xlsx",
+  "family": "sheets",
+  "tags": [
+   "chart",
+   "overlap-clip",
+   "content-missing"
+  ],
+  "bucket": "open",
+  "why": "charts -- data labels, legend keys, axis wrapping, series z order"
+ },
+ {
+  "rank": 189,
+  "name": "7-memento-2015-transports-aeriens-b.xls",
+  "family": "sheets",
+  "tags": [
+   "field-values",
+   "pagination"
+  ],
+  "bucket": "open",
+  "why": "field values: a field read but not recalculated, or resolved differently"
+ },
+ {
+  "rank": 190,
+  "name": "ABCD-FE-01-00 Flight Envelope - v1 08.03.16.docx",
+  "family": "docs",
+  "tags": [
+   "missing-graphics",
+   "field-values",
+   "content-missing",
+   "pagination"
+  ],
+  "bucket": "open",
+  "why": "a drawing we do not draw: watermarks, anchored artwork, picture bullets"
+ },
+ {
+  "rank": 191,
+  "name": "087_Printable_Graph_Paper_Template_Green_Theme_0c14ea04.docx",
+  "family": "docs",
+  "tags": [
+   "content-missing",
+   "pagination"
+  ],
+  "bucket": "open",
+  "why": "content we do not draw"
+ },
+ {
+  "rank": 192,
+  "name": "ESPN-R - MCF - RA - Ed1.docx",
+  "family": "docs",
+  "tags": [
+   "field-values",
+   "pagination"
+  ],
+  "bucket": "open",
+  "why": "field values: a field read but not recalculated, or resolved differently"
+ }
+]

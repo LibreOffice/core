@@ -1,0 +1,13 @@
+variant	labels	first	last	step_days
+base	38	5 Apr	19 Apr	30
+major5	38	5 Apr	19 Apr	30
+major40	29	5 Apr	29 Apr	40
+nomajor	44	5 Apr	27 Apr	26
+lastdate45100	38	5 Apr	19 Apr	30
+ptcount13	38	5 Apr	19 Apr	30
+nobar	0	-	-	None
+noline	0	-	-	None
+shift1000	38	5 Apr	19 Apr	30
+range2x	38	5 Apr	19 Apr	30
+range10x	38	5 Apr	19 Apr	30
+rangehalf	38	5 Apr	19 Apr	30

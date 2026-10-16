@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Text inside a Writer document's drawing shapes, in the three shapes a real ODF file uses.
+
+  A draw:frame keeps its text in a draw:text-box child. A draw:custom-shape does not: its
+  paragraphs are children of the shape itself (ODF 1.3 §10.6.2 lets every shape element take
+  <text:p>* directly), and a reader looking only for the box finds none and draws the shape
+  empty. That is silent — the shape is still placed, filled and stroked, so nothing on the page
+  says a paragraph is missing.
+
+  Three placements, chosen because each fails differently:
+
+   * ALPHA is a top-level custom shape at svg:x = 4cm. It exercises the shape's own paragraph.
+   * BRAVO and CHARLIE are inside a draw:g. A group states no svg:width, so a reader that asks
+     for one drops the whole group; and a group's children are not independently anchored — the
+     group is the object in the text and their svg:x/svg:y are coordinates in its space. Their
+     graphic style is derived from the named "Frame" style, which here says
+     style:horizontal-pos="center" and style:vertical-pos="top" exactly as LibreOffice's own
+     export writes it. A reader that lets the child's inherited default win over the group's
+     from-left/from-top discards both coordinates and stacks every shape of the group at the top
+     centre of the page.
+   * DELTA states no svg:x or svg:y at all: it is placed by draw:transform, which is what a
+     turned shape carries. Its translation is 12cm across and 9cm down.
+
+  The wrap is run-through throughout, so none of this moves a line of body text.
+-->
+<office:document
+    xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+    xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+    xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+    xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+    xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+    xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+    office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:automatic-styles>
+  <style:page-layout style:name="PL">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+       fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles><style:master-page style:name="Standard" style:page-layout-name="PL"/></office:master-styles>
+ <office:styles>
+  <style:style style:name="Body" style:family="paragraph">
+   <style:paragraph-properties fo:text-align="left" fo:text-indent="0cm" fo:hyphenate="false"
+       fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%"/>
+   <style:text-properties style:font-name="DejaVu Sans" fo:font-family="DejaVu Sans"
+       fo:font-size="12pt" style:letter-kerning="true" fo:language="en" fo:country="GB"/>
+  </style:style>
+  <!--
+    Centred, which is what LibreOffice's own export writes for a shape's paragraph: the shape's
+    default SdrTextHorzAdjust is BLOCK, which sets the outliner's minimum paper width to the
+    shape's own (svx/source/svdraw/svdoashp.cxx:2673-2676), so it is the *paragraph's* alignment
+    that decides where the label sits inside its box, and a real file states it.
+  -->
+  <style:style style:name="Label" style:family="paragraph">
+   <style:paragraph-properties fo:text-align="center" fo:text-indent="0cm" fo:hyphenate="false"
+       fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%"/>
+   <style:text-properties style:font-name="DejaVu Sans" fo:font-family="DejaVu Sans"
+       fo:font-size="10pt" style:letter-kerning="true" fo:language="en" fo:country="GB"/>
+  </style:style>
+  <!-- The named style LibreOffice derives every drawing object's automatic style from. -->
+  <style:style style:name="Frame" style:family="graphic">
+   <style:graphic-properties style:wrap="parallel" style:horizontal-pos="center"
+       style:horizontal-rel="paragraph" style:vertical-pos="top" style:vertical-rel="paragraph"/>
+  </style:style>
+  <!-- The anchored objects: a shape and a group, both positioned from the top left. -->
+  <style:style style:name="anchored" style:family="graphic" style:parent-style-name="Frame">
+   <style:graphic-properties style:wrap="run-through" style:horizontal-pos="from-left"
+       style:horizontal-rel="paragraph" style:vertical-pos="from-top" style:vertical-rel="paragraph"
+       draw:stroke="none" draw:fill="none"/>
+  </style:style>
+  <!-- A group member: fill and stroke only, placement inherited from the named style. -->
+  <style:style style:name="member" style:family="graphic" style:parent-style-name="Frame">
+   <style:graphic-properties draw:stroke="none" draw:fill="none"/>
+  </style:style>
+ </office:styles>
+ <office:body><office:text>
+   <text:p text:style-name="Body">Body text on the first line.<draw:custom-shape
+       text:anchor-type="char" draw:name="Alpha box" draw:style-name="anchored"
+       draw:text-style-name="Label" svg:x="4cm" svg:y="1cm" svg:width="5cm" svg:height="1cm"
+       ><text:p text:style-name="Label">ALPHA</text:p></draw:custom-shape><draw:g
+       text:anchor-type="char" draw:name="Pair" draw:style-name="anchored"
+       ><draw:custom-shape draw:name="Bravo box" draw:style-name="member"
+         draw:text-style-name="Label" svg:x="1cm" svg:y="5cm" svg:width="4cm" svg:height="1cm"
+         ><text:p text:style-name="Label">BRAVO</text:p></draw:custom-shape><draw:custom-shape
+         draw:name="Charlie box" draw:style-name="member" draw:text-style-name="Label"
+         svg:x="11cm" svg:y="5cm" svg:width="4cm" svg:height="1cm"
+         ><text:p text:style-name="Label">CHARLIE</text:p></draw:custom-shape></draw:g><draw:custom-shape
+       text:anchor-type="char" draw:name="Delta box" draw:style-name="anchored"
+       draw:text-style-name="Label" svg:width="4cm" svg:height="1cm"
+       draw:transform="translate (12cm 9cm)"
+       ><text:p text:style-name="Label">DELTA</text:p></draw:custom-shape></text:p>
+ </office:text></office:body>
+</office:document>

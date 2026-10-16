@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Five cells for the two layers of escaping the HTML export has to get right, and for the one
+  format whose name decides a cell's type.
+
+    A1  text holding a quote, a backslash and a slash
+    A2  a currency style whose symbol is a pound sign
+    A3  a date style whose separators are slashes
+    A4  a number style holding quoted literal text
+    A5  a boolean
+
+  The answers below are read out of LibreOffice 24.2.7.2's own HTML export of this file, not
+  reasoned about. What they establish:
+
+    sdnum carries the compiled format code raw, HTML-escaped and nothing more:
+      A2  sdnum="1033;0;&quot;£&quot;#,##0.00"
+      A3  sdnum="1033;0;MM/DD/YYYY"
+      A4  sdnum="1033;0;&quot;USD &quot;#,##0.00"
+
+    the two data-sheets-* attributes carry it as JSON inside that HTML, so it is escaped twice:
+      A1  data-sheets-value  ... &quot;he said \&quot;hi\&quot; a\\b and a\/b&quot;}
+      A2  data-sheets-numberformat  ... \&quot;£\&quot;#,##0.00
+      A3  data-sheets-numberformat  ... MM\/DD\/YYYY
+      A4  data-sheets-numberformat  ... \&quot;USD \&quot;#,##0.00
+
+    and a boolean is the one format that names itself:
+      A5  sdnum="1033;0;BOOLEAN", data-sheets-value type 4, and NO data-sheets-numberformat
+
+  A3 is also the fixture for the compiler underneath: the reference writes MM/DD/YYYY, so an ODF
+  number:text holding a lone separator is left bare in a date style rather than quoted. Quoting
+  it would give MM"/"DD"/"YYYY, which renders the same and states something different.
+--><office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+                 xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+                 xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+                 xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+                 xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+                 xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0"
+                 xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2"
+                 office:version="1.3"
+                 office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+  <office:styles>
+    <number:currency-style style:name="NPound">
+      <number:text>£</number:text>
+      <number:number number:decimal-places="2" number:min-decimal-places="2"
+                     number:min-integer-digits="1" number:grouping="true"/>
+    </number:currency-style>
+    <number:date-style style:name="NSlash">
+      <number:month number:style="long"/>
+      <number:text>/</number:text>
+      <number:day number:style="long"/>
+      <number:text>/</number:text>
+      <number:year number:style="long"/>
+    </number:date-style>
+    <number:number-style style:name="NQuoted">
+      <number:text>USD </number:text>
+      <number:number number:decimal-places="2" number:min-decimal-places="2"
+                     number:min-integer-digits="1" number:grouping="true"/>
+    </number:number-style>
+    <number:boolean-style style:name="NBool">
+      <number:boolean/>
+    </number:boolean-style>
+    <style:style style:name="CPound" style:family="table-cell" style:data-style-name="NPound"/>
+    <style:style style:name="CSlash" style:family="table-cell" style:data-style-name="NSlash"/>
+    <style:style style:name="CQuoted" style:family="table-cell" style:data-style-name="NQuoted"/>
+    <style:style style:name="CBool" style:family="table-cell" style:data-style-name="NBool"/>
+  </office:styles>
+  <office:body>
+    <office:spreadsheet>
+      <table:table table:name="Escaping">
+        <table:table-column/>
+        <table:table-row>
+          <table:table-cell office:value-type="string">
+            <text:p>he said "hi" a\b and a/b</text:p>
+          </table:table-cell>
+        </table:table-row>
+        <table:table-row>
+          <table:table-cell table:style-name="CPound" office:value-type="float" office:value="7"/>
+        </table:table-row>
+        <table:table-row>
+          <table:table-cell table:style-name="CSlash" office:value-type="date"
+                            office:date-value="2023-03-15"/>
+        </table:table-row>
+        <table:table-row>
+          <table:table-cell table:style-name="CQuoted" office:value-type="float"
+                            office:value="12.5"/>
+        </table:table-row>
+        <table:table-row>
+          <table:table-cell table:style-name="CBool" office:value-type="boolean"
+                            office:boolean-value="true"/>
+        </table:table-row>
+      </table:table>
+    </office:spreadsheet>
+  </office:body>
+</office:document>

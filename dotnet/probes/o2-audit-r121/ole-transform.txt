@@ -1,0 +1,13 @@
+### NAS-Infrastructure-Roadmaps-Weather.pptx page 11 -- p:oleObj Excel.Sheet.12, frame 888.0 x 251.4 pt
+ours	non-unit scale cm ops: 1.3151 x 1.3134 (x1)
+ref	non-unit scale cm ops: none
+text records	ours 87	ref 87
+drawn size	ours [8.9973]	ref [9.01]
+origin divergence pt	max 0.053	mean 0.030	median 0.031
+
+### RPA P4 - Advanced Material.pptx page 3 -- p:oleObj Excel.Sheet.8, frame 641.7 x 300.6 pt
+ours	non-unit scale cm ops: 6 x 6 (x2099); 0.0312 x 0.0312 (x1); 0.379 x 0.3791 (x1)
+ref	non-unit scale cm ops: none
+text records	ours 64	ref 64
+drawn size	ours [6.8238]	ref [6.802]
+origin divergence pt	max 0.030	mean 0.022	median 0.022

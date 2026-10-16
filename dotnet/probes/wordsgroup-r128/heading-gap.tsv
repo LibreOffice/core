@@ -1,0 +1,11 @@
+probe	what it varies	ours gap pt	26.2.4.2 gap pt	note
+gapA-as-authored	style after=120, direct after=0	0.34	0.35	control: no TOC field
+gapB-style-after	style after=120, no direct override	6.34	6.35	control: what the style gives
+gapH-toc-t-switch	gapA + TOC \h \z \t "Heading 2,1,Heading 3,2"	0.34	6.35	the reference loses the direct pPr
+gapI-toc-o-switch	gapA + TOC \o "1-3" \h \z	0.34	0.35	an \o TOC does not fire
+gapJ-toc-t-other	gapA + TOC \h \z \t "Heading 2,1"	0.34	0.35	a \t that does not name the style does not fire
+
+probe	what it varies	observed
+gapK-direct-jc	gapH + direct w:jc="left" on the heading	ours left at x 57.55, y 57.90; 26.2.4.2 centred at x 74.80, y 69.04
+gapL-direct-before	gapH + direct w:spacing before=360	ours 18 pt before (y 87.04); 26.2.4.2 none (y 69.04)
+gapM-after-240	gapH with direct after=240	ours 12.34 pt gap; 26.2.4.2 6.35, the style value

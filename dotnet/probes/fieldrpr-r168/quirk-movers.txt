@@ -1,0 +1,29 @@
+/home/user/sample-files/words/ceiling-001/docx/ABCD-FE-01-00 Flight Envelope - v1 08.03.16.docx
+/home/user/sample-files/words/done-002/docx/AUWG min 4-3-24 final.docx
+/home/user/sample-files/words/done-003/docx/DRX-Ascend System Course Description.docx
+/home/user/sample-files/words/done-004/docx/PAT-047 - Architecture and Detailed Design Assessment.docx
+/home/user/sample-files/words/done-006/docx/healthcare-reform-nsa-provider-bulletin.docx
+/home/user/sample-files/words/done-008/docx/4400-91_Proposal_To_Lease_Space_10-2024.docx
+/home/user/sample-files/words/done-008/docx/UAS-SGI_waiver_approval_request_form.docx
+/home/user/sample-files/words/done-010/docx/5709.16 ch.40_mgfinal.docx
+/home/user/sample-files/words/done-010/docx/Checklist for TC STC ETSO data packages to FAA_TIP rev 5.docx
+/home/user/sample-files/words/done-010/docx/FG-AI4NDM-TR-skeleton_template.docx
+/home/user/sample-files/words/done-011/docx/tibs_guidelines_2.docx
+/home/user/sample-files/words/done-012/docx/b050-19.docx
+/home/user/sample-files/words/done-013/docx/Form-SM-76A-_-CAR-OPS-2A-Instruments-and-Equipment-Compliance-Statement-_-11.docx
+/home/user/sample-files/words/done-015/docx/Agile_Arc_SysDes.docx
+/home/user/sample-files/words/done-015/docx/DOA_Template_Form_Type_Certification_Programme.docx
+/home/user/sample-files/words/done-015/docx/PI-doc.-no.-2E-Technical-Review-Report.docx
+/home/user/sample-files/words/done-015/docx/airbus-pdf-information-package_v1-4.docx
+/home/user/sample-files/words/done-015/docx/system_design__technical_architecture_template.docx
+/home/user/sample-files/words/done-016/docx/HC-Bulletin-template.docx
+/home/user/sample-files/words/done-016/docx/t_TEMPforInvProgs.docx
+/home/user/sample-files/words/extra-001/docx/ABCD-WB-08-00 Weight and Balance Report - v1 08.03.16.docx
+/home/user/sample-files/words/metrics-001/docx/OM template for non-complex NCC operators_August 2016.docx
+/home/user/sample-files/words/missing-001/docx/33004.docx
+/home/user/sample-files/words/missing-002/docx/CRIF - SpÃ©cification technique - Socle applicatif.docx
+/home/user/sample-files/words/pagination-001/docx/24-25_FAA_Holdover_Tables.docx
+/home/user/sample-files/words/pagination-001/docx/ESPN-R - MCF - Manual - Ed1.0 - For Publication.docx
+/home/user/sample-files/words/pagination-001/docx/ESPN-R - MCF - RA - Ed1.docx
+/home/user/sample-files/words/pagination-001/docx/FAA 2025-26 Holdover Tables.docx
+/home/user/sample-files/words/pagination-001/docx/report-template.docx

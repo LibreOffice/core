@@ -1,0 +1,104 @@
+document	catAx_parts	cached_categories	multiword_labels	longest_word	chart_part_langs	catAx_subtree_langs	non_ascii_labels	sample_labels
+sheets/chartset-001/xlsx/001_advanced_excel_bar.xlsx	1	36	0	3	-	-	0	M1 | M2 | M3 | M4 | M5
+sheets/chartset-001/xlsx/002_advanced_excel_line.xlsx	1	36	0	3	-	-	0	M1 | M2 | M3 | M4 | M5
+sheets/chartset-001/xlsx/005_advanced_excel_area.xlsx	1	36	0	3	-	-	0	M1 | M2 | M3 | M4 | M5
+sheets/chartset-001/xlsx/016_advanced_excel_radar.xlsx	1	18	0	2	-	-	0	M1 | M2 | M3 | M4 | M5
+sheets/chartset-001/xlsx/025_advanced_excel_bar.xlsx	1	36	0	3	-	-	0	M1 | M2 | M3 | M4 | M5
+sheets/chartset-001/xlsx/032_advanced_excel_radar.xlsx	1	18	0	2	-	-	0	M1 | M2 | M3 | M4 | M5
+sheets/chartset-001/xlsx/033_advanced_excel_bar.xlsx	1	36	0	3	-	-	0	M1 | M2 | M3 | M4 | M5
+sheets/chartset-002/xlsx/013_advanced_excel_area.xlsx	1	36	0	3	-	-	0	M1 | M2 | M3 | M4 | M5
+sheets/chartset-002/xlsx/021_advanced_excel_area.xlsx	1	36	0	3	-	-	0	M1 | M2 | M3 | M4 | M5
+sheets/chartset-002/xlsx/026_advanced_excel_line.xlsx	1	36	0	3	-	-	0	M1 | M2 | M3 | M4 | M5
+sheets/chartset-002/xlsx/034_advanced_excel_line.xlsx	1	36	0	3	-	-	0	M1 | M2 | M3 | M4 | M5
+sheets/chartset-003/xlsx/008_advanced_excel_radar.xlsx	1	18	0	2	-	-	0	M1 | M2 | M3 | M4 | M5
+sheets/chartset-003/xlsx/017_advanced_excel_bar.xlsx	1	36	0	3	-	-	0	M1 | M2 | M3 | M4 | M5
+sheets/chartset-003/xlsx/018_advanced_excel_line.xlsx	1	36	0	3	-	-	0	M1 | M2 | M3 | M4 | M5
+sheets/chartset-003/xlsx/024_advanced_excel_radar.xlsx	1	18	0	2	-	-	0	M1 | M2 | M3 | M4 | M5
+sheets/chartset-003/xlsx/029_advanced_excel_area.xlsx	1	36	0	3	-	-	0	M1 | M2 | M3 | M4 | M5
+sheets/chartset-004/xlsx/009_advanced_excel_bar.xlsx	1	36	0	3	-	-	0	M1 | M2 | M3 | M4 | M5
+sheets/chartset-004/xlsx/010_advanced_excel_line.xlsx	1	36	0	3	-	-	0	M1 | M2 | M3 | M4 | M5
+sheets/chartset-004/xlsx/microsoft_learn_multi_chart_examples.xlsx	3	0	0	0	-	-	0	
+sheets/chartset-005/xlsx/004_Contextures_chart_sample_de7c0671.xlsx	1	63	21	2	en-US	en-US	0	W | L | W | L | W
+sheets/chartset-005/xlsx/022_Pareto_Chart_Template_-_Pareto_Analysis_in_Excel_with_Pareto_Diagram_82b5a874.xlsx	2	54	54	5	en-US	en-US	0	Cause # 1 | Cause # 2 | Cause # 3 | Cause # 4 | Cause # 5
+sheets/chartset-006/xlsx/005_Contextures_chart_sample_6e279b08.xlsx	2	8	0	7	-	-	0	North | East | Central | West | North
+sheets/chartset-006/xlsx/052_Manufacturing_output_chart_88570318.xlsx	1	24	0	5	en-US	en-US	0	44973 | 44974 | 44975 | 44976 | 44977
+sheets/chartset-006/xlsx/061_Regional_sales_chart_cb9eb690.xlsx	1	96	0	3	en-US	-	0	JAN | FEB | MAR | APR | MAY
+sheets/chartset-007/xlsm/003_Contextures_chart_sample_9bda2719.xlsm	1	11	0	4	en-US	en-US	0	Ann | Bob | Cal | Dee | Ed
+sheets/chartset-007/xlsx/037_Personal_money_tracker_a57957bb.xlsx	2	19	0	4	en-US	en-US	0	Feb | Mar | Apr | May | Jun
+sheets/chartset-007/xlsx/040_Blood_pressure_tracker_872b6833.xlsx	2	64	0	9	en-US	en-US	0	AM | PM | AM | PM | AM
+sheets/chartset-007/xlsx/050_Financial_vision_d44241e1.xlsx	1	0	0	0	en-US	en-US	0	
+sheets/chartset-007/xlsx/058_Social_media_engagement_data_cfa1cb18.xlsx	1	24	0	5	en-US	en-US	0	44977 | 44978 | 44979 | 44980 | 44981
+sheets/chartset-007/xlsx/063_Sales_pipeline_aec57013.xlsx	1	0	0	0	en-US	-	0	
+sheets/chartset-008/xlsx/008_Contextures_chart_sample_7ea7a1d7.xlsx	1	8	0	10	en-US	-	0	Business | Families | Government | Jobs | Business
+sheets/chartset-008/xlsx/021_Control_Chart_Template_-_Create_Control_Charts_in_Excel_fd3b1a5d.xlsx	4	400	0	2	en-US	en-US	0	1 | 2 | 3 | 4 | 5
+sheets/chartset-008/xlsx/023_Waterfall_Chart_Template_for_Excel_349f7689.xlsx	2	96	80	6	en-US	-	0	START | Delta 1 | Delta 2 | Middle Column | Delta 3
+sheets/chartset-008/xlsx/034_Personal_net_worth_calculator_f7b8fb57.xlsx	2	0	0	0	en-US	-	0	
+sheets/chartset-008/xlsx/046_Cost_analysis_with_Pareto_chart_7db5ef69.xlsx	2	20	10	13	en-US	en-US	0	Parts and materials | Manufacturing equipment | Salaries | Maintenance | Office lease
+sheets/chartset-008/xlsx/055_Project_timeline_with_milestones_Use_this_template_546cecc0.xlsx	1	26	13	12	en-US	-	0	Project start | Project initiation | Requirements gathering | Design phase | Development kickoff
+sheets/chartset-009/xlsx/029_Annual_budget_Use_this_template_30324a97.xlsx	3	41	0	14	en-US	en-US	0	Income | Expenses | Children | Debt | Dining
+sheets/chartset-009/xlsx/041_Business_budget_ef942467.xlsx	1	6	4	9	en-US	en-US	0	Income | Personnel expenses | Operating expenses | Income | Personnel expenses
+sheets/chartset-009/xlsx/053_Personal_asset_inventory_5446d84b.xlsx	1	6	0	7	en-US	en-US	0	Car | Bonds | Stocks | Savings | 401k
+sheets/chartset-009/xlsx/056_Quarterly_sale_report_baa6bb0d.xlsx	1	30	22	9	en-US	en-US	0	Baby doll | Kite | Bouncy ball | Model airplane | Dollhouse
+sheets/chartset-011/xlsx/010_Contextures_chart_sample_e6ea06a3.xlsx	1	14	14	9	-	-	0	Create budget template | Send tempate to managers | Managers complete dept budgets | Collect completed budgets | Compile dept results
+sheets/chartset-011/xlsx/028_Budget_summary_report_4aeefd13.xlsx	3	32	26	11	en-US	en-US	0	Long-term liabilities | Accounts payable | Property, plant, and equipment | Inventory | Accounts receivable
+sheets/chartset-011/xlsx/030_Basic_balance_sheet_Use_this_template_10ed9144.xlsx	2	42	32	12	en-US	en-US	0	Accounts payable | Accrued wages | Accrued compensation | Income taxes payable | Unearned revenue
+sheets/chartset-011/xlsx/042_Business_monthly_budget_4e4d092f.xlsx	1	6	4	9	en-US	en-US	0	Income | Personnel expenses | Operating expenses | Income | Personnel expenses
+sheets/chartset-011/xlsx/057_Simple_balance_sheet_Use_this_template_e2d4cbb2.xlsx	1	40	28	12	en-US	en-US	0	Cash | Investments | Inventories | Accounts receivable | Pre-paid expenses
+sheets/chartset-011/xlsx/060_Monthly_company_budget_47b2a99a.xlsx	1	4	0	9	en-US	en-US	0	ESTIMATED | ACTUAL | ESTIMATED | ACTUAL
+sheets/chartset-012/xlsx/012_Contextures_chart_sample_9900da76.xlsx	1	12	0	5	-	-	0	East | West | North | South | East
+sheets/chartset-012/xlsx/013_Contextures_chart_sample_21b98e22.xlsx	2	15	0	5	-	-	0	East | West | North | South | East
+sheets/chartset-012/xlsx/026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx	4	40	19	19	en-US	en-US	0	Other 1 | Other 2 | Garbage | Vehicle tax/fees | Insurance
+sheets/chartset-012/xlsx/036_Simple_to-do_list_Use_this_template_ba44373b.xlsx	2	4	2	8	en-US	en-US	0	Next Week | This Week | Tomorrow | Today
+sheets/chartset-013/xlsx/031_Business_expense_budget_f3a46278.xlsx	2	8	6	15	en-US	en-US	0	Employee costs | Office costs | Marketing costs | Training/travel | Employee costs
+sheets/chartset-013/xlsx/032_Business_expenses_budget_d377eaab.xlsx	2	32	8	9	en-US	en-US	0	 January  |  February  |  March  |  April  |  May 
+sheets/chartset-013/xlsx/033_Event_planning_tracker_Use_this_template_f29a848e.xlsx	2	24	24	10	en-US	en-US	0	ACCOUNT MANAGER | PROJECT MANAGER | STRATEGY MANAGER | DESIGN SPECIALIST | EVENT STAFF
+sheets/chartset-013/xlsx/035_Project_plan_for_law_firms_aa2d4462.xlsx	2	24	24	12	en-US	en-US	0	GENERAL PARTNER | BUSINESS LAWYER | DEFENSE LITIGATOR | INTELLECTUAL PROPERTY LAWYER | BANKRUPTCY LAWYER
+sheets/chartset-013/xlsx/043_Buy_a_car_vs._rideshare_ff07c7e6.xlsx	1	12	6	9	en-US	en-US	0	Buy a car | Rideshare | Buy a car | Rideshare | Buy a car
+sheets/chartset-013/xlsx/049_Expenses_calculator_c351f3d0.xlsx	1	24	0	3	en-US	en-US	0	Mar | Apr | May | Jun | Jul
+sheets/chartset-014/xlsx/027_Simple_personal_cash_flow_statement_675c6584.xlsx	4	40	17	19	en-US	en-US	0	Other 1 | Other 2 | Garbage | Vehicle Tax/Fees | Insurance
+sheets/chartset-014/xlsx/038_Baby_growth_chart_bb9cd672.xlsx	2	160	160	6	en-US	en-US	0	At birth | 4 days | 7 days | 11 days | 14 days
+sheets/chartset-014/xlsx/039_Baby_growth_tracker_e295ae56.xlsx	2	160	160	6	en-US	en-US	0	At birth | 4 days | 7 days | 11 days | 14 days
+sheets/chartset-014/xlsx/045_Check_register_with_chart_4becb8a0.xlsx	1	7	1	10	en-US	en-US	0	Mortgage | Credit card | Groceries | Investment | Utilities
+sheets/chartset-014/xlsx/048_Expense_trends_budget_18d1e8ba.xlsx	1	60	0	3	en-US	-	0	Jan | Feb | Mar | Apr | May
+sheets/chartset-014/xlsx/064_Small_business_cash_flow_Use_this_template_0a640756.xlsx	1	26	0	9	en-US	en-US	0	Beginning | Jan-xx | Feb-xx | Mar-xx | Apr-xx
+sheets/done-010/xlsx/Keywords_Mapping_Graphs_and_Charts.xlsx	11	120	113	15	en-GB;en-US	en-US	0	Risk Management & Governance | CyBOK Introduction | Web & Mobile Security | Law & Regulation | Security Operations & Incident Management
+slides/ceiling-001/pptx/N2_E_Maestroni_Swarm_COP.pptx	1	110	110	13	en-GB;en-US	-	0	LEOP [0000] | OBC Status Check [1100] | MMU Status Check [1200] | S-Band Status Check [1400] | S-Band Toggle Check [1410]
+slides/ceiling-002/pptx/8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx	3	20	11	15	en-US;fr-FR	fr-FR	4	Thérapeutique | Examens complémentaires | Thérapeutique | Examens complémentaires | [08 h ; 10 h[
+slides/ceiling-002/pptx/Demick_JetBlue.pptx	8	400	0	6	en-US	en-US	0	2006 | 2007 | 2008 | 2009 | 2010
+slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx	18	299	17	11	en-US	en-US	0	2016 | 2017E | 2020E | DAL | AAL
+slides/chartset-001/pptx/bar_chart.pptx	1	16	0	8	en-US;ja-JP	ja-JP	0	January | February | March | April | January
+slides/chartset-001/pptx/combo_bar_line_chart.pptx	2	24	0	2	en-US;ja-JP	ja-JP	0	Q1 | Q2 | Q3 | Q4 | Q1
+slides/chartset-001/pptx/line_chart.pptx	1	12	0	2	en-US;ja-JP	ja-JP	0	Q1 | Q2 | Q3 | Q4 | Q1
+slides/chartset-001/pptx/stacked_area_chart.pptx	1	12	0	8	en-US;ja-JP	ja-JP	0	January | February | March | April | May
+slides/chartset-001/pptx/stacked_bar_chart.pptx	1	12	0	8	en-US;ja-JP	ja-JP	0	January | February | March | April | May
+slides/chartset-002/pptx/001_advanced_powerpoint_bar.pptx	1	16	0	2	en-US	en-US	0	M1 | M2 | M3 | M4 | M5
+slides/chartset-002/pptx/006_advanced_powerpoint_area.pptx	1	16	0	2	en-US	en-US	0	M1 | M2 | M3 | M4 | M5
+slides/chartset-002/pptx/014_advanced_powerpoint_area.pptx	1	16	0	2	en-US	en-US	0	M1 | M2 | M3 | M4 | M5
+slides/chartset-002/pptx/017_advanced_powerpoint_bar.pptx	1	16	0	2	en-US	en-US	0	M1 | M2 | M3 | M4 | M5
+slides/chartset-002/pptx/030_advanced_powerpoint_area.pptx	1	16	0	2	en-US	en-US	0	M1 | M2 | M3 | M4 | M5
+slides/chartset-002/pptx/033_advanced_powerpoint_bar.pptx	1	16	0	2	en-US	en-US	0	M1 | M2 | M3 | M4 | M5
+slides/chartset-003/pptx/002_advanced_powerpoint_column.pptx	1	16	0	2	en-US	en-US	0	M1 | M2 | M3 | M4 | M5
+slides/chartset-003/pptx/003_advanced_powerpoint_line.pptx	1	16	0	2	en-US	en-US	0	M1 | M2 | M3 | M4 | M5
+slides/chartset-003/pptx/009_advanced_powerpoint_bar.pptx	1	16	0	2	en-US	en-US	0	M1 | M2 | M3 | M4 | M5
+slides/chartset-003/pptx/010_advanced_powerpoint_column.pptx	1	16	0	2	en-US	en-US	0	M1 | M2 | M3 | M4 | M5
+slides/chartset-003/pptx/011_advanced_powerpoint_line.pptx	1	16	0	2	en-US	en-US	0	M1 | M2 | M3 | M4 | M5
+slides/chartset-003/pptx/019_advanced_powerpoint_line.pptx	1	16	0	2	en-US	en-US	0	M1 | M2 | M3 | M4 | M5
+slides/chartset-003/pptx/027_advanced_powerpoint_line.pptx	1	16	0	2	en-US	en-US	0	M1 | M2 | M3 | M4 | M5
+slides/chartset-004/pptx/018_advanced_powerpoint_column.pptx	1	16	0	2	en-US	en-US	0	M1 | M2 | M3 | M4 | M5
+slides/chartset-004/pptx/022_advanced_powerpoint_area.pptx	1	16	0	2	en-US	en-US	0	M1 | M2 | M3 | M4 | M5
+slides/chartset-004/pptx/025_advanced_powerpoint_bar.pptx	1	16	0	2	en-US	en-US	0	M1 | M2 | M3 | M4 | M5
+slides/chartset-004/pptx/026_advanced_powerpoint_column.pptx	1	16	0	2	en-US	en-US	0	M1 | M2 | M3 | M4 | M5
+slides/chartset-006/pptx/044_Dual_Mind_Spark_Chart_for_PowerPoint_a83f890a.pptx	3	24	24	8	en-US	-	0	Category 1 | Category 2 | Category 1 | Category 2 | Category 1
+slides/chartset-007/pptx/035_Chemistry_Column_PowerPoint_Chart_45bf8a76.pptx	2	32	32	8	en-US	-	0	Category 1 | Category 2 | Category 3 | Category 4 | Category 1
+slides/chartset-007/pptx/047_Female_Radar_Brain_for_PowerPoint_and_Google_Slides_c2a541f6.pptx	2	16	0	5	en-US	-	0	one | two | three | four | five
+slides/chartset-007/pptx/096_Lab_Flask_Charts_for_PowerPoint_and_Google_Slides_91e3cbb5.pptx	6	12	12	8	en-US	-	0	Category 1 | Category 1 | Category 1 | Category 1 | Category 1
+slides/chartset-008/pptx/038_Competitive_Advantage_Card_for_PowerPoint_and_Google_Slides_373720f6.pptx	2	20	16	10	en-US	en-US	0	Product Quality | Innovation | Brand Reputation | Cost Efficiency | Customer Service
+slides/chartset-009/pptx/033_Battery_Percentage_Chart_c99c24b5.pptx	6	12	12	8	en-US	-	0	Category 1 | Category 1 | Category 1 | Category 1 | Category 1
+slides/chartset-009/pptx/052_Flame_Percentage_Chart_d27d49c4.pptx	8	16	16	8	en-US	-	0	Category 1 | Category 1 | Category 1 | Category 1 | Category 1
+slides/done-010/pptx/Sector_Skills_Insights_Advanced_Manufacturing_summary_slide_pack.pptx	1	4	2	13	en-US	en-US	0	Whole economy | Manufacturing  | Whole economy | Manufacturing 
+slides/done-011/pptx/171128IPAP.pptx	7	444	0	10	en-US;en-ZA	en-US;en-ZA	0	2016 | 2017 | 2018 | 2019 | 2020
+slides/done-011/pptx/1_Country-Updates_DRC_English.pptx	3	32	0	4	en-US	en-US	0	2018 | 2019 | 2020 | 2021 | 2022
+slides/done-011/pptx/3492.pptx	3	17	0	5	en-US	-	0	Total | Total | 2010 | 2011 | 2012
+slides/done-012/pptx/Intersil_Italy_CAN_Bus_Transceiver_Presentation_Final.pptx	1	18	0	3	en-US	en-US	0	100 | 200 | 300 | 400 | 500
+words/chartset-001/docx/clustered-column-result.docx	1	18	3	9	en-US	en-US	0	Brazil | Vietnam | Colombia | Indonesia | Honduras
+words/chartset-001/docx/clustered-column-template.docx	1	3	0	16	en-US	en-US	0	{{prod.country}} | {{prod.country}} | {{prod.country}}

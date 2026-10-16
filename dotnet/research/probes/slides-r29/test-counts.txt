@@ -1,0 +1,38 @@
+Every test project run individually on the round's final tree (ea29d2d11), rebuilt after the last
+defect-reintroduction cycle so that --no-build measures the clean source and not the defect.
+Counts compared against the known-good line at 281685d90.
+
+project           known-good   this round
+Core                     256          264   +8 : 6 axis-label visibility, 1 secondary axis
+                                              title, 1 bottom title against a legend
+Containers               109          109
+Text                     240          240
+Vector                   291          291
+Rendering                119          119
+Markup                   259          259
+OpenDocument             125          125
+WordProcessing           683          683
+Spreadsheets             545          545
+Presentations            535          538   +3 : 2 for c:tickLblPos, 1 for the rotation sign
+Fidelity                 550          550   0 skipped
+
+Failed: 0 everywhere. Fidelity reports 0 skipped, so the LibreOffice-backed project covered its
+23 files rather than sitting out.
+
+The first full run of this list was NOT green — Core came back 263 of 264 — and that is the
+finding it exists for. The reintroduction cycle's `git checkout --` had discarded the
+bottom-title fix along with the defect it was undoing, and the commit that followed carried only
+the test. Nothing else in the round's own working notes would have caught it: the source read as
+finished and the sweep in flight at the time was measuring a snapshot taken from the same tree.
+
+Reintroduction cycles, each watched failing on its own:
+  A  the OOXML reader ignores c:tickLblPos      TickLabelPositionNoneHidesTheLabelsAndKeeps...
+  B  hidden category labels still reserve       HiddenCategoryLabelsGiveBackEverythingButThe...,
+                                                TheBottomEdgeKeepsHalfAValueLabelWhenThe...
+  C  the bottom band adds instead of taking     TheBottomEdgeKeepsHalfAValueLabelWhenThe...
+     the deeper of the two
+  D  hidden category labels are drawn           HiddenCategoryLabelsAreNotDrawn
+  E  hidden value labels are drawn              HiddenValueLabelsAreNotDrawn
+  F  the rotation is not negated                TheValueAxisTitleIsTurnedAnticlockwise
+  G  the secondary axis title is not drawn      ASecondaryValueAxisTitleIsDrawnAgainstTheFarEdge
+  H  the bottom title measures from the frame   TheCategoryAxisTitleClearsABottomLegend

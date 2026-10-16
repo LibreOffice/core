@@ -1,0 +1,138 @@
+warning: The `fitz` API is deprecated and will be removed in future. Use `import pymupdf` instead.
+moved	bPages	aPages	rPages	bGlyphs	aGlyphs	rGlyphs	before	after	bInk	aInk	document
+ 	15	15	16	18500	18500	18491	pages	pages	nan	nan	ABCD-FE-01-00 Flight Envelope - v1 08.03.16.docx
+ 	2	2	2	772	772	764	match	match	nan	nan	AW-104D-RVSM-Aircraft-Approval-Checklist.pdf.docx
+ 	1	1	1	120	120	120	match	match	nan	nan	003_Free_Genogram_Diagram_Template_Easy_Format_60eb6e42.docx
+ 	1	1	1	7	7	7	match	match	nan	nan	005_Free_Genogram_Diagram_Template_Excellent_layout_f5f185d0.docx
+ 	1	1	1	61	61	61	match	match	nan	nan	036_Venn_Diagram_Template_Fillable_Layout_3ffbba36.docx
+ 	1	1	1	178	178	178	match	match	nan	nan	052_Organogram_Template_Colorful_Flow_Chart_cba9fbfe.docx
+ 	1	1	1	138	138	138	match	match	nan	nan	053_Organogram_Template_Creative_Theme_21657a3d.docx
+ 	1	1	1	154	154	154	match	match	nan	nan	054_Organogram_Template_Grey_Vertical_Theme_b2dbd9a8.docx
+ 	1	1	1	14	14	14	match	match	nan	nan	083_Printable_Graph_Paper_Template_Customizable_Format_55ff93a3.docx
+ 	1	1	1	19	19	19	match	match	nan	nan	084_Printable_Graph_Paper_Template_Editable_Layout_d66c6820.docx
+ 	1	1	1	19	19	19	match	match	nan	nan	085_Printable_Graph_Paper_Template_Excellent_Format_4bcae89a.docx
+ 	1	1	1	176	176	176	match	match	nan	nan	001_Free_Genogram_Diagram_Template_Blue_and_Gray_Theme_7c9e01a7.docx
+ 	1	1	1	303	303	303	match	match	nan	nan	002_Free_Genogram_Diagram_Template_Customizable_Format_2219584b.docx
+ 	1	1	1	63	63	63	match	match	nan	nan	033_Venn_Diagram_Template_Colored_Theme_2aea6697.docx
+ 	1	1	1	194	194	194	match	match	nan	nan	057_Organogram_Template_Vertical_Colorful_Theme_724b143c.docx
+ 	1	1	1	19	19	19	match	match	nan	nan	086_Printable_Graph_Paper_Template_Gray_Theme_7300e5d7.docx
+*	1	1	1	201	201	201	match	match	0.00	0.01	093_Business_Case_Template_Customizable_Layout_510c25e7.docx
+*	2	2	2	276	276	276	match	match	0.06	0.06	097_Business_Case_Template_Elegant_Layout_3ba9cbf2.docx
+ 	1	1	1	170	170	170	match	match	nan	nan	009_Free_Genogram_Diagram_Template_Handy_Format_4bb900f0.docx
+ 	1	1	1	433	433	432	match	match	nan	nan	018_Project_Timeline_Template_Editable_Format_e1cf1df5.docx
+ 	1	1	1	607	607	607	match	match	nan	nan	025_Unit_Circle_Chart_Cos_and_Sin_Model_1ed01892.docx
+ 	1	1	1	63	63	63	match	match	nan	nan	034_Venn_Diagram_Template_Customizable_Format_d14642b7.docx
+ 	1	1	1	399	399	399	match	match	nan	nan	049_Visual_Product_Roadmap_Template_Simple_Format_4af26e4f.docx
+ 	1	1	1	66	66	66	match	match	nan	nan	058_Organogram_Template_With_Picture_Theme_44b79368.docx
+ 	1	1	1	170	170	170	match	match	nan	nan	074_Storyboard_Template_Editable_Design_132436d1.docx
+ 	1	1	1	27	27	27	match	match	nan	nan	080_Printable_Graph_Paper_Template_Black_Theme_6b066be1.docx
+ 	1	1	1	10	10	10	match	match	nan	nan	089_Printable_Graph_Paper_Template_Simlpe_Format_3aff1c88.docx
+ 	1	1	1	143	143	143	match	match	nan	nan	004_Free_Genogram_Diagram_Template_Editable_Format_b82b6152.docx
+ 	1	1	1	201	201	201	match	match	nan	nan	006_Free_Genogram_Diagram_Template_Fillable_Format_7ca08541.docx
+ 	1	1	1	317	317	317	match	match	nan	nan	010_Free_Genogram_Diagram_Template_Yellow_Theme_6ee4f818.docx
+ 	2	2	2	190	190	188	match	match	nan	nan	012_Project_Timeline_Template_Black_and_Brown_Theme_35c76550.docx
+ 	1	1	1	626	626	625	match	match	nan	nan	016_Project_Timeline_Template_Complete_Guide_7d36d09c.docx
+ 	1	1	1	142	142	142	match	match	nan	nan	035_Venn_Diagram_Template_Editable_Format_966dff5f.docx
+ 	1	1	1	583	583	583	match	match	nan	nan	046_Visual_Product_Roadmap_Template_Fillable_Format_582acab0.docx
+*	1	1	1	458	458	458	match	match	0.11	0.11	098_Business_Case_Template_Fillable_Layout_d0c5410e.docx
+ 	1	1	1	137	137	137	match	match	nan	nan	007_Free_Genogram_Diagram_Template_Green_and_Purple_Theme_8d2ba829.docx
+ 	1	1	1	400	400	400	match	match	nan	nan	017_Project_Timeline_Template_Customizable_Format_5d5ca2e8.docx
+ 	1	1	1	318	318	318	match	match	nan	nan	019_Project_Timeline_Template_Excellent_Layout_4ee62967.docx
+ 	1	1	1	1557	1557	1557	match	match	nan	nan	027_Unit_Circle_Chart_Graphical_Chart_5462a579.docx
+ 	1	1	1	403	403	403	match	match	nan	nan	030_Unit_Circle_Chart_Points_System_23b5ef07.docx
+ 	1	1	1	98	98	98	match	match	nan	nan	037_Venn_Diagram_Template_Four_Circle_764829a0.docx
+ 	1	1	1	116	116	116	match	match	nan	nan	041_Visual_Product_Roadmap_Template_Blank_Format_63a3e010.docx
+ 	1	1	1	480	480	480	match	match	nan	nan	042_Visual_Product_Roadmap_Template_Colored_Background_89385cfb.docx
+ 	1	1	1	33	33	33	match	match	nan	nan	077_Storyboard_Template_Pink_and_Blue_Theme_805e82ab.docx
+ 	1	1	1	14	14	14	match	match	nan	nan	082_Printable_Graph_Paper_Template_Colored_Background_9092cf9b.docx
+ 	1	1	1	309	309	308	match	match	nan	nan	020_Project_Timeline_Template_Modern_Theme_0c215d87.docx
+ 	1	1	1	545	545	545	match	match	nan	nan	023_Unit_Circle_Chart_Circular_Percentage_790f7b75.docx
+ 	1	1	1	413	413	413	match	match	nan	nan	026_Unit_Circle_Chart_Four_Quadrants_09bf3ed1.docx
+ 	1	1	1	1220	1220	1218	match	match	nan	nan	028_Unit_Circle_Chart_Optimized_Graph_83d9c756.docx
+ 	1	1	1	195	195	195	match	match	nan	nan	032_Venn_Diagram_Template_Brown_Theme_d5b549f0.docx
+ 	1	1	1	49	49	49	match	match	nan	nan	051_Organogram_Template_Basic_Theme_e6464d06.docx
+ 	1	1	1	235	235	235	match	match	nan	nan	056_Organogram_Template_Square_Theme_38f373d4.docx
+*	1	1	1	255	246	246	match	match	0.05	0.02	066_Work_Breakdown_Structure_Template_Colored_Background_c27ff248.docx
+*	1	1	1	237	237	237	match	match	0.04	0.07	067_Work_Breakdown_Structure_Template_Gray_Theme_89f8be8b.docx
+*	1	1	1	263	263	263	match	match	2.30	2.30	090_Business_Case_Template_Blue_Theme_108ff0f1.docx
+ 	2	2	2	203	203	203	match	match	nan	nan	015_Project_Timeline_Template_Colored_Background_6434b0e8.docx
+ 	1	1	1	1047	1047	1047	match	match	nan	nan	022_Unit_Circle_Chart_Circle_A_and_B_19dbf275.docx
+ 	1	1	1	568	568	568	match	match	nan	nan	029_Unit_Circle_Chart_Pie_Theme_8a922142.docx
+ 	1	1	1	161	161	161	match	match	nan	nan	039_Venn_Diagram_Template_Simple_Format_6f82661d.docx
+ 	1	1	1	231	231	231	match	match	nan	nan	040_Venn_Diagram_Template_Three_Circle_80f32f5e.docx
+ 	1	1	1	1087	1087	1087	match	match	nan	nan	043_Visual_Product_Roadmap_Template_Customizable_Format_ee0fe5b1.docx
+ 	1	1	1	120	120	120	match	match	nan	nan	061_Nursing_Concept_Map_Template_fb9816f0.docx
+ 	1	1	1	153	153	153	match	match	nan	nan	064_Foot_Reflexology_Chart_Customizable_Format_79b7db06.docx
+*	1	1	1	185	179	179	match	match	0.10	0.03	065_Work_Breakdown_Structure_Template_Blue_Theme_2b207f62.docx
+*	1	1	1	493	475	475	glyphs	match	0.05	0.02	068_Work_Breakdown_Structure_Template_Green_Theme_63e69ed8.docx
+ 	1	1	1	293	293	293	match	match	nan	nan	008_Free_Genogram_Diagram_Template_Green_and_Yellow_Theme_9017c1a8.docx
+ 	1	1	1	312	312	312	match	match	nan	nan	013_Project_Timeline_Template_Blue_Background_4ea3475e.docx
+ 	1	1	1	549	549	549	match	match	nan	nan	021_Unit_Circle_Chart_3D_Pie_Chart_404247ab.docx
+ 	1	1	1	552	552	552	match	match	nan	nan	024_Unit_Circle_Chart_Colorful_Circles_7c92601e.docx
+ 	1	1	1	241	241	240	match	match	nan	nan	031_Venn_Diagram_Template_Blue_Theme_a9e417b8.docx
+ 	1	1	1	263	263	263	match	match	nan	nan	044_Visual_Product_Roadmap_Template_Editable_Format_c232a2c0.docx
+ 	1	1	1	1253	1253	1253	match	match	nan	nan	050_Visual_Product_Roadmap_Template_Yellow_and_Blue_Theme_49b50744.docx
+ 	1	1	1	298	298	300	match	match	nan	nan	055_Organogram_Template_Horizontal_Structure_28a7e725.docx
+*	1	1	1	348	348	348	match	match	0.05	0.04	095_Business_Case_Template_Easy_Format_61de7128.docx
+ 	1	1	1	180	180	180	match	match	nan	nan	038_Venn_Diagram_Template_Off_White_and_Blue_Theme_9dff385e.docx
+ 	1	1	1	218	218	218	match	match	nan	nan	047_Visual_Product_Roadmap_Template_Professional_Layout_2ff4499e.docx
+ 	1	1	1	402	402	402	match	match	nan	nan	048_Visual_Product_Roadmap_Template_Quality_Layout_f38f7aee.docx
+ 	1	1	1	102	102	102	match	match	nan	nan	059_Disease_Concept_Map_Template_4acf63f2.docx
+ 	1	1	1	138	138	138	match	match	nan	nan	060_Human_Body_Concept_Map_Template_ac872cfb.docx
+*	1	1	1	298	298	298	match	match	0.06	0.07	069_Work_Breakdown_Structure_Template_Professional_Format_1e02dce1.docx
+ 	1	1	1	197	197	197	match	match	nan	nan	072_Storyboard_Template_Colored_Theme_28524a15.docx
+ 	1	1	1	205	205	205	match	match	nan	nan	073_Storyboard_Template_Easy_to_Use_44ce05fc.docx
+ 	1	1	1	316	316	316	match	match	nan	nan	075_Storyboard_Template_Fillable_Format_7fa01641.docx
+ 	1	1	1	832	832	832	match	match	nan	nan	011_Project_Timeline_Template_Beautiful_Theme_2336e680.docx
+ 	1	1	1	812	812	812	match	match	nan	nan	014_Project_Timeline_Template_Blue_and_Green_Theme_a8311fa1.docx
+ 	1	1	1	235	235	235	match	match	nan	nan	045_Visual_Product_Roadmap_Template_Excellent_Format_e364063c.docx
+ 	1	1	1	66	66	66	match	match	nan	nan	062_Vocabulary_Concept_Map_Template_2f7c1c09.docx
+ 	1	1	1	397	397	397	match	match	nan	nan	063_Foot_Reflexology_Chart_Complete_Guide_cf5ed992.docx
+ 	1	1	1	42	42	42	match	match	nan	nan	070_Storyboard_Template_Blank_Format_fc41673a.docx
+ 	1	1	1	141	141	141	match	match	nan	nan	071_Storyboard_Template_Cartoon_Theme_ae113de2.docx
+ 	1	1	1	10	10	10	match	match	nan	nan	076_Storyboard_Template_Gray_Theme_1e5fd5e5.docx
+ 	1	1	1	253	253	253	match	match	nan	nan	078_Storyboard_Template_Pink_and_Gray_Theme_ea89553f.docx
+ 	1	1	1	142	142	142	match	match	nan	nan	079_Storyboard_Template_Simple_Format_81653703.docx
+ 	1	1	1	1780	1780	1780	match	match	nan	nan	Pre-Application_Letter_of_Intent_Example.docx
+*	1	1	1	2004	2004	2004	match	match	0.00	0.00	0c662f5c948a7d81d32ffd833c5cc59421a5f522.docx
+ 	2	2	2	4264	4264	4264	match	match	nan	nan	Press release_EUREKA labels ITEA 3 Cluster.docx
+ 	4	4	4	3614	3614	3614	match	match	nan	nan	FAA-2017-0628-0002_attachment_1.docx
+ 	3	3	3	8111	8111	8111	match	match	nan	nan	Lessons-Learned-Bulletin-Dorset-version-to-IIRG-V5.docx
+*	6	6	6	5833	5833	5833	match	match	0.02	0.02	SWDD-template.docx
+ 	5	5	5	2037	2037	2029	match	match	nan	nan	FG-AI4NDM-TR-skeleton_template.docx
+ 	4	4	4	4604	4604	4579	match	match	nan	nan	eTAR_External_Web_tool_Tip_Sheet_mh.docx
+ 	8	8	8	18195	18195	18195	match	match	nan	nan	19-06 Assistive Technology TAB Final - 508.docx
+ 	3	3	3	4704	4704	4704	match	match	nan	nan	20110608_psp.docx
+ 	6	6	6	9023	9023	8979	match	match	nan	nan	FO.FCTOA_.000129 Application for activities related to FSTD.docx
+ 	4	4	4	5669	5669	5669	match	match	nan	nan	gpp-pr-top-7-office-markets-4q-2023.docx
+ 	10	10	10	19699	19699	19647	match	match	nan	nan	hdss-bulletin-issue-285-25-june-2025.docx
+ 	9	9	9	24054	24054	24054	match	match	nan	nan	1603642410-MoM-CASCOM-06-2020-draft04.docx
+ 	8	8	8	19095	19095	19095	match	match	nan	nan	1_tpr_template__from_fy14_.docx
+ 	18	18	18	33617	33617	33604	match	match	nan	nan	Regulations Governing the Status, Basic Rights and Duties of Officials other than Secretariat Officials, and Experts on Mission.docx
+ 	8	8	8	6774	6774	6775	match	match	nan	nan	exhibit-06---technical-architecture-template.docx
+ 	1	1	1	635	635	635	match	match	nan	nan	fleetfastfacts16nov2023.docx
+ 	10	10	10	7403	7403	7403	match	match	nan	nan	03_Technical_Report_(progress)_template.docx
+ 	20	20	20	33897	33897	33905	match	match	nan	nan	Agile_Arc_SysDes.docx
+ 	20	20	20	28542	28542	28545	match	match	nan	nan	DOA_Template_Form_Type_Certification_Programme.docx
+*	4	4	4	8667	8667	8668	match	match	0.22	0.22	JEMIT_Template.docx
+ 	12	12	12	9882	9882	9882	match	match	nan	nan	PI-doc.-no.-2E-Technical-Review-Report.docx
+ 	9	9	9	6448	6448	6448	match	match	nan	nan	airbus-pdf-information-package_v1-4.docx
+ 	17	17	17	9907	9907	9910	match	match	nan	nan	system_design__technical_architecture_template.docx
+ 	5	5	5	2967	2967	2967	match	match	nan	nan	HC-Bulletin-template.docx
+ 	14	14	14	13435	13435	13433	match	match	nan	nan	PES-Technical-Report-Template_Jan_2019.docx
+ 	85	85	85	142938	142938	142938	match	match	nan	nan	SPA-06_mcar_part-6_and_IS_v2.9.docx
+ 	15	15	15	15282	15282	15282	match	match	nan	nan	TE.CAO.00125 Foreign Part 145 approvals - OJT Logbook.docx
+ 	29	29	29	43746	43746	43748	match	match	nan	nan	ABCD-SDE-23-00 - Avionic System Description - 17.02.16 - v1.docx
+ 	12	12	12	13015	13015	13015	match	match	nan	nan	ABCD-WB-08-00 Weight and Balance Report - v1 08.03.16.docx
+ 	29	29	29	41545	41545	40732	match	match	nan	nan	UG.CAO.00006 Foreign Part 145 approvals - User Guide for Applicants & Approval Holders.docx
+ 	18	18	18	20689	20689	20679	match	match	nan	nan	UG.CAO.00133 Foreign Part 145 approvals - Language.docx
+ 	76	76	76	124706	124706	124706	match	match	nan	nan	FRE-03_mcar_part-3_and_IS_v2.9.docx
+*	47	47	47	60488	60488	60488	match	match	1.07	1.07	33004.docx
+ 	44	44	44	73778	73778	73651	match	match	nan	nan	docs-quality-MA.IMS.00001-Integrated-Management-System-manual.docx
+ 	7	7	7	11547	11547	11527	match	match	nan	nan	A1. EASA Form 2.docx
+ 	6	6	6	6685	6685	6666	match	match	nan	nan	B11. TE.CAO.00129  Experience  logbook.docx
+
+131 documents; 14 renderings moved
+  of the movers: 4 better against 26.2.4.2, 2 worse, 8 level
+  gate: 129 match before, 130 after
+  summed |ink| over the movers: 4.14 -> 4.04

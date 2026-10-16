@@ -1,0 +1,16 @@
+
+# totals
+#   note/boxes           47
+#   note/colour          104
+#   note/italic          0
+#   note/plausible       47
+#   note/runs            104
+#   shape/boxes          108
+#   shape/colour         48
+#   shape/italic         0
+#   shape/plausible      108
+#   shape/runs           263
+# documents with a shape-path run stating a colour:
+#   EHEST-Pre-departure-checklist-Rev.-1-06-12-2016.xls        colour 35   boxes 85
+#   PC1000.xls                                                 colour 12   boxes 10
+#   TOGAF9-Tool-ConfReqts-CSQ.xls                              colour 1    boxes 1

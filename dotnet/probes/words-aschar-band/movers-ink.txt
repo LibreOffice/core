@@ -1,0 +1,11 @@
+document                                             abs_before abs_after    delta
+120509coss__doc                                          8.58     0.38    -8.20
+150_5300_13_chg10__doc                                   0.00     0.00    +0.00
+150_5300_13_chg12__doc                                   7.35     8.16    +0.81
+150_5335_5a__doc                                        26.45    21.46    -4.99
+AAC-AD-No-2021-01-Boeing-737-8-and-737-9-MAX__doc        2.40     2.38    -0.02
+PUR-0012-UTAS-GRAMS-SPA-Template-1-25-2024__doc          0.28     0.06    -0.22
+RobertQ_Service__doc                                     3.78     2.29    -1.49
+SFSP_2013-02_Bulletin__doc                               0.91     0.46    -0.45
+absrc-pac-01-info-note-en__doc                           0.00     0.00    +0.00
+chapter 12__doc                                          0.06     0.01    -0.05

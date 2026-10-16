@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document
+    xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+    xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+    xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+    xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+    xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:meta>
+  <dc:title>Paperless table across pages</dc:title>
+  <dc:subject>A table that crosses two page breaks, with a repeating heading row</dc:subject>
+ </office:meta>
+ <office:automatic-styles>
+  <style:page-layout style:name="PL">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+       fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"/>
+  </style:page-layout>
+  <style:style style:name="Grid" style:family="table">
+   <style:table-properties style:width="17cm" fo:margin-left="0cm"
+       fo:margin-top="0cm" fo:margin-bottom="0cm" table:align="left"/>
+  </style:style>
+  <style:style style:name="Half" style:family="table-column">
+   <style:table-column-properties style:column-width="8.5cm"/>
+  </style:style>
+  <style:style style:name="Cell" style:family="table-cell">
+   <style:table-cell-properties fo:padding="0.1cm" style:vertical-align="top"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:styles>
+  <style:style style:name="Body" style:family="paragraph">
+   <style:paragraph-properties fo:text-align="start" fo:text-indent="0cm" fo:hyphenate="false"
+       fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%"
+       fo:orphans="0" fo:widows="0"/>
+   <style:text-properties style:font-name="Carlito" fo:font-family="Carlito" fo:font-size="11pt"
+       fo:language="en" fo:country="GB"/>
+  </style:style>
+ </office:styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="PL"/>
+ </office:master-styles>
+ <office:body><office:text>
+   <text:p text:style-name="Body">Preamble before the long table.</text:p>
+   <table:table table:name="Grid" table:style-name="Grid">
+    <table:table-column table:style-name="Half" table:number-columns-repeated="2"/>
+    <table:table-header-rows>
+     <table:table-row>
+      <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Heading left</text:p></table:table-cell>
+      <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Heading right</text:p></table:table-cell>
+     </table:table-row>
+    </table:table-header-rows>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 01 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 01 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 02 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 02 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 03 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 03 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 04 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 04 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 05 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 05 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 06 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 06 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 07 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 07 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 08 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 08 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 09 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 09 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 10 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 10 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 11 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 11 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 12 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 12 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 13 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 13 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 14 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 14 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 15 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 15 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 16 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 16 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 17 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 17 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 18 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 18 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 19 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 19 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 20 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 20 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 21 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 21 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 22 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 22 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 23 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 23 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 24 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 24 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 25 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 25 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 26 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 26 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 27 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 27 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 28 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 28 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 29 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 29 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 30 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 30 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 31 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 31 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 32 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 32 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 33 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 33 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 34 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 34 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 35 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 35 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 36 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 36 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 37 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 37 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 38 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 38 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 39 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 39 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 40 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 40 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 41 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 41 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 42 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 42 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 43 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 43 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 44 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 44 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 45 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 45 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 46 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 46 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 47 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 47 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 48 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 48 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 49 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 49 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 50 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 50 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 51 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 51 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 52 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 52 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 53 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 53 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 54 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 54 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 55 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 55 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 56 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 56 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 57 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 57 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 58 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 58 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 59 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 59 right</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 60 left</text:p></table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string"><text:p text:style-name="Body">Row 60 right</text:p></table:table-cell>
+    </table:table-row>
+   </table:table>
+   <text:p text:style-name="Body">Afterword following the long table.</text:p>
+  </office:text></office:body>
+</office:document>

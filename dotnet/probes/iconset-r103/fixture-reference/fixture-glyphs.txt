@@ -1,0 +1,32 @@
+# Which colibre asset 26.2.4.2 draws in each fixture cell, and where.
+#
+# Every 16x16 image was extracted from the reference's own PDF with its soft mask applied and
+# identified by SHA-1 of the composited RGBA pixels against the same seven assets the corpus
+# renderings carry (see reference-glyphs.txt). The box is the image's placement rectangle: at
+# 100% print scale it is the cell's own 11 pt font height, square, which is what
+# `drawIconSets` (`sc/source/ui/view/output.cxx`:960-989) computes from `ATTR_FONT_HEIGHT`.
+#
+# Regenerate: fixture-paint.py for the PDFs, then this identification.
+== sheet-cf-icon-set-symbols
+  cross-red    x   53.89-  64.89 y   74.44-  85.44  11.00 x 11.00
+  cross-red    x   53.89-  64.89 y   89.32- 100.32  11.00 x 11.00
+  excl-amber   x   53.89-  64.89 y  104.20- 115.20  11.00 x 11.00
+  tick-green   x   53.89-  64.89 y  119.08- 130.08  11.00 x 11.00
+  tick-green   x   53.89-  64.89 y  133.97- 144.96  11.00 x 11.00
+== sheet-cf-icon-set-x14-custom
+  diamond      x   53.89-  64.89 y   89.32- 100.32  11.00 x 11.00
+  diamond      x   53.89-  64.89 y  104.20- 115.20  11.00 x 11.00
+  flag-red     x   53.89-  64.89 y  119.08- 130.08  11.00 x 11.00
+  flag-red     x   53.89-  64.89 y  133.97- 144.96  11.00 x 11.00
+== sheet-cf-icon-set-reverse
+  flag-green   x   53.89-  64.89 y   74.44-  85.44  11.00 x 11.00
+  flag-green   x   53.89-  64.89 y   89.32- 100.32  11.00 x 11.00
+  flag-amber   x   53.89-  64.89 y  104.20- 115.20  11.00 x 11.00
+  flag-red     x   53.89-  64.89 y  119.08- 130.08  11.00 x 11.00
+  flag-red     x   53.89-  64.89 y  133.97- 144.96  11.00 x 11.00
+== sheet-cf-icon-set-formula
+  flag-red     x   53.89-  64.89 y   74.44-  85.44  11.00 x 11.00
+  flag-red     x   53.89-  64.89 y   89.32- 100.32  11.00 x 11.00
+  flag-amber   x   53.89-  64.89 y  104.20- 115.20  11.00 x 11.00
+  flag-green   x   53.89-  64.89 y  119.08- 130.08  11.00 x 11.00
+  flag-green   x   53.89-  64.89 y  133.97- 144.96  11.00 x 11.00

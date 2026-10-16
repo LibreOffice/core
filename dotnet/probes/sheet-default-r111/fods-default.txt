@@ -1,0 +1,91 @@
+# 26.2.4.2's own resolved 'Default' cell style for each of the six, out of --convert-to fods.
+# $ /opt/libreoffice26.2/program/soffice --headless --convert-to fods --outdir <d> <workbook>
+# The question each answers: is the Default cell style built from cellXfs[0] or from the
+# cellStyleXfs entry the Normal cellStyle names?
+
+===== jobs-bulletin-51-22-december-2025
+<style:style style:name="Default" style:family="table-cell">
+   <style:table-cell-properties style:rotation-align="none" style:vertical-align="bottom"/>
+   <style:text-properties fo:color="#000000" style:font-name="Calibri" fo:font-family="Calibri" style:font-family-generic="swiss" fo:font-size="11pt" style:font-size-asian="11pt" style:font-size-complex="11pt"/>
+  </style:style>
+===== sectors-defense-and-aerospace
+<style:style style:name="Default" style:family="table-cell">
+   <style:table-cell-properties style:rotation-align="none" style:vertical-align="bottom"/>
+   <style:text-properties fo:color="#000000" style:font-name="Calibri" fo:font-family="Calibri" fo:font-size="12pt" style:font-size-asian="12pt" style:font-size-complex="12pt"/>
+  </style:style>
+===== Published_Issuances_2024
+<style:style style:name="Default" style:family="table-cell">
+   <style:table-cell-properties style:rotation-align="none" style:vertical-align="bottom"/>
+   <style:text-properties fo:color="#000000" style:font-name="Times New Roman1" fo:font-family="&apos;Times New Roman&apos;" style:font-name-complex="Times New Roman1" style:font-family-complex="&apos;Times New Roman&apos;"/>
+  </style:style>
+===== esurf-12-135-2024-t01
+<style:style style:name="Default" style:family="table-cell">
+   <style:table-cell-properties style:rotation-align="none" style:vertical-align="bottom"/>
+   <style:text-properties fo:color="#000000" style:font-name="Calibri" fo:font-family="Calibri" fo:font-size="11pt" style:font-size-asian="11pt" style:font-size-complex="11pt"/>
+  </style:style>
+===== essd-16-3433-2024-t02
+<style:style style:name="Default" style:family="table-cell">
+   <style:table-cell-properties style:rotation-align="none" style:vertical-align="bottom"/>
+   <style:text-properties fo:color="#000000" style:font-name="Calibri" fo:font-family="Calibri" fo:font-size="11pt" style:font-size-asian="11pt" style:font-size-complex="11pt"/>
+  </style:style>
+===== ans_mappings_of_eccairs_terms
+<style:style style:name="Default" style:family="table-cell">
+   <style:table-cell-properties style:rotation-align="none" style:vertical-align="bottom"/>
+   <style:text-properties fo:color="#000000" style:font-name="Arial" fo:font-family="Arial" style:font-name-complex="Arial" style:font-family-complex="Arial"/>
+  </style:style>
+
+# And which cells the reference actually resolved to that style:
+# $ python3 fods-default-cells.py <fods>
+
+===== jobs-bulletin-51-22-december-2025.fods
+  Recruit - Weekly Jobs Bulletin           non-empty on Default:    0   
+===== sectors-defense-and-aerospace.fods
+  Key                                      non-empty on Default:    0   
+  A1                                       non-empty on Default:    0   
+  A2                                       non-empty on Default:    0   
+  B1                                       non-empty on Default:    0   
+  B2                                       non-empty on Default:    0   
+  B3                                       non-empty on Default:    0   
+  B4                                       non-empty on Default:    0   
+  C1                                       non-empty on Default:    0   
+  C2                                       non-empty on Default:    0   
+  C3                                       non-empty on Default:    0   
+  C4                                       non-empty on Default:    0   
+  C5                                       non-empty on Default:    0   
+  C6                                       non-empty on Default:    0   
+===== Published_Issuances_2024.fods
+===== esurf-12-135-2024-t01.fods
+  Worksheet                                non-empty on Default:    0   
+===== essd-16-3433-2024-t02.fods
+  Worksheet 1                              non-empty on Default:    0   
+  Worksheet                                non-empty on Default:    0   
+===== ans_mappings_of_eccairs_terms.fods
+  event type x factor                      non-empty on Default:    0   
+  event type x attribute                   non-empty on Default:    0   
+  event type x attribute frequent          non-empty on Default:    0   
+  uniset attributes                        non-empty on Default:    0   
+  uniset attributes frequent               non-empty on Default:    0   
+  uniset factors                           non-empty on Default:    0   
+  _other                                   non-empty on Default:    0   
+
+# The authored fixture, re-measured this round (tests/corpus/regression/pivot-default-style.xlsx):
+# Normal = Liberation Sans 11 black; cellXfs[0] = Liberation Serif 18 red; cellXfs[1] = Liberation Mono 8 bold green.
+# $ python3 ../pivot-fmt-r110/fods-face.py pivot-default-style.fods Plain A1:C1 A7:C7 A13:C13
+
+Default: face=Liberation Sans1  size=11pt  colour=#000000  weight=None  fill=None
+
+Plain  A1:C1
+  A1:face=Liberation Mono,size=8pt,colour=#00a000,weight=bold,fill=#ffff00  B1:face=Liberation Mono,size=8pt,colour=#00a000,weight=bold,fill=#ffff00  C1:face=Liberation Mono,size=8pt,colour=#00a000,weight=bold,fill=#ffff00
+
+Plain  A7:C7
+  A7:face=Liberation Serif,size=18pt,colour=#ff0000,weight=normal  B7:face=Liberation Serif,size=18pt,colour=#ff0000,weight=normal  C7:face=Liberation Serif,size=18pt,colour=#ff0000,weight=normal
+
+Plain  A13:C13
+  A13:=  B13:=  C13:=
+
+cells=9
+  face    resolved to the Default value in 3 of 9
+  size    resolved to the Default value in 3 of 9
+  colour  resolved to the Default value in 3 of 9
+  weight  resolved to the Default value in 3 of 9
+  fill    resolved to the Default value in 6 of 9

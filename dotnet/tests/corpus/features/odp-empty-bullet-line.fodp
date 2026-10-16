@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Hand-authored. Six slides differing only in what an EMPTY paragraph between two 20pt
+     bulleted items has for a bullet, and at what line spacing.
+
+       1 bullet80    empty, level 1 is a bullet at 100%,  fo:line-height="80%"
+       2 text80      the same paragraph holding "x"       (the control)
+       3 nobullet80  empty, level 1 is text:list-level-style-number, num-format=""
+       4 big80       empty, the bullet at 200%
+       5 bullet100   empty, the bullet at 100%,           fo:line-height="100%"
+       6 dejavu80    empty, the bullet at 100% in DejaVu Sans rather than Liberation Sans
+
+     The question each answers is how tall the line of an EMPTY paragraph is when its level
+     carries a bullet. ImpEditEngine::CreateAndInsertEmptyLine ends by raising such a line to
+     the height of Outliner::GetBulletArea() when the box is the taller of the two, halving the
+     difference into the ascent (editeng/source/editeng/impedit3.cxx:1974-1985). That block sits
+     AFTER the line-spacing arms, so a proportional spacing below 100% cannot shrink the line
+     past the box and the box does not scale with the percentage; and the box is the bullet
+     font's own ascent plus descent (Outliner::ImplGetBulletSize sets ImpCalcBulletFont on the
+     reference device and reads GetTextHeight back, outliner.cxx:1315-1355).
+
+     No bullet is DRAWN on any of these empty paragraphs, on either side. The box survives
+     because Outliner::GetNumberFormat asks the paragraph depth and the numbering rule and never
+     EE_PARA_BULLETSTATE, which is also why slide 3, whose level is SVX_NUM_NUMBER_NONE, has a
+     box of no height and is not floored.
+
+     Verified against LibreOffice 26.2.4.2. Its PDF of this file draws AAA at 100.40 pt from the
+     page top on every slide but slide 5, where it is 105.05, and BBB at:
+
+       1  141.93      pitch 41.53   floored: the box is 787 where 1.2 x 20pt x 0.8 is 678
+       2  138.84      pitch 38.44   the control, an "x" in the middle paragraph, not floored
+       3  138.81      pitch 38.41   no numbering format, so no box
+       4  164.38      pitch 63.98   the box at 200% is 1576
+       5  153.07      pitch 48.02   at 100% the line is 847 already, taller than the box
+       6  142.89      pitch 42.49   DejaVu Sans (1901+483)/2048 against (1854+434)/2048
+
+     The same file converted to .pptx by the same binary and rendered back answers a pitch of
+     38.43 on slides 1, 3, 4 AND 6: the floor is gone from every one of them, because the
+     OOXML importer sets an empty paragraph NumberingLevel to -1 rather than only clearing the
+     bullet state (oox/source/drawingml/textparagraph.cxx:192-196). Slide 5 is unchanged. That
+     is the control for SlideParagraph.EmptyKeepsMarkerLevel, and it is a measurement.
+
+     office:font-face-decls is not decoration: without it style:font-name resolves to nothing
+     and 26.2.4.2 draws the bullet from its own default face, which moved slides 1 and 4 by 34
+     and 68 hundredths of a millimetre and cost a first cut of this file. -->
+<office:document
+  xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+  xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+  xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+  xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+  xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0"
+  xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+  xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+  office:version="1.3"
+  office:mimetype="application/vnd.oasis.opendocument.presentation">
+ <office:font-face-decls>
+  <style:font-face style:name="Liberation Sans" svg:font-family="&apos;Liberation Sans&apos;"/>
+  <style:font-face style:name="DejaVu Sans" svg:font-family="&apos;DejaVu Sans&apos;"/>
+ </office:font-face-decls>
+ <office:styles>
+  <draw:layer-set>
+   <draw:layer draw:name="layout"/>
+   <draw:layer draw:name="background"/>
+   <draw:layer draw:name="backgroundobjects"/>
+   <draw:layer draw:name="controls"/>
+   <draw:layer draw:name="measurelines"/>
+  </draw:layer-set>
+ </office:styles>
+ <office:automatic-styles>
+  <style:page-layout style:name="PL1">
+   <style:page-layout-properties fo:page-width="25.4cm" fo:page-height="19.05cm"
+       style:print-orientation="landscape" fo:margin-top="0cm" fo:margin-bottom="0cm"
+       fo:margin-left="0cm" fo:margin-right="0cm"/>
+  </style:page-layout>
+  <style:style style:name="dp1" style:family="drawing-page">
+   <style:drawing-page-properties draw:fill="none"/>
+  </style:style>
+  <style:style style:name="gr1" style:family="graphic">
+   <style:graphic-properties draw:stroke="none" draw:fill="none"
+       draw:auto-grow-height="false" draw:auto-grow-width="false"
+       draw:textarea-vertical-align="top" fo:wrap-option="wrap"
+       fo:padding-top="0cm" fo:padding-bottom="0cm"
+       fo:padding-left="0cm" fo:padding-right="0cm"/>
+  </style:style>
+  <style:style style:name="PTS" style:family="paragraph">
+   <style:paragraph-properties style:font-independent-line-spacing="true"/>
+  </style:style>
+  <style:style style:name="P80" style:family="paragraph">
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0cm"
+       fo:line-height="80%" fo:margin-left="1cm" fo:text-indent="-1cm"/>
+   <style:text-properties fo:font-size="20pt" style:font-name="Liberation Sans"/>
+  </style:style>
+  <style:style style:name="P100" style:family="paragraph">
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0cm"
+       fo:line-height="100%" fo:margin-left="1cm" fo:text-indent="-1cm"/>
+   <style:text-properties fo:font-size="20pt" style:font-name="Liberation Sans"/>
+  </style:style>
+  <style:style style:name="T20" style:family="text">
+   <style:text-properties fo:font-size="20pt" style:font-name="Liberation Sans"/>
+  </style:style>
+  <text:list-style style:name="LB">
+   <text:list-level-style-bullet text:level="1" text:bullet-char="•">
+    <style:list-level-properties text:min-label-width="1cm"/>
+    <style:text-properties style:font-name="Liberation Sans" fo:font-size="100%"/>
+   </text:list-level-style-bullet>
+  </text:list-style>
+  <text:list-style style:name="LBIG">
+   <text:list-level-style-bullet text:level="1" text:bullet-char="•">
+    <style:list-level-properties text:min-label-width="1cm"/>
+    <style:text-properties style:font-name="Liberation Sans" fo:font-size="200%"/>
+   </text:list-level-style-bullet>
+  </text:list-style>
+  <text:list-style style:name="LDJV">
+   <text:list-level-style-bullet text:level="1" text:bullet-char="•">
+    <style:list-level-properties text:min-label-width="1cm"/>
+    <style:text-properties style:font-name="DejaVu Sans" fo:font-size="100%"/>
+   </text:list-level-style-bullet>
+  </text:list-style>
+  <text:list-style style:name="LNONE">
+   <text:list-level-style-number text:level="1" style:num-format="">
+    <style:list-level-properties text:min-label-width="1cm"/>
+    <style:text-properties fo:font-size="100%"/>
+   </text:list-level-style-number>
+  </text:list-style>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Default" style:page-layout-name="PL1" draw:style-name="dp1"/>
+ </office:master-styles>
+ <office:body>
+  <office:presentation>
+   <draw:page draw:name="bullet80" draw:style-name="dp1" draw:master-page-name="Default">
+    <draw:frame draw:style-name="gr1" draw:text-style-name="PTS" draw:name="box" draw:layer="layout"
+        svg:x="2cm" svg:y="3cm" svg:width="18cm" svg:height="12cm">
+     <draw:text-box>
+      <text:list text:style-name="LB">
+       <text:list-item>
+        <text:p text:style-name="P80"><text:span text:style-name="T20">AAA</text:span></text:p>
+       </text:list-item>
+      </text:list>
+      <text:list text:style-name="LB">
+       <text:list-item>
+        <text:p text:style-name="P80"><text:span text:style-name="T20"/></text:p>
+       </text:list-item>
+      </text:list>
+      <text:list text:style-name="LB">
+       <text:list-item>
+        <text:p text:style-name="P80"><text:span text:style-name="T20">BBB</text:span></text:p>
+       </text:list-item>
+      </text:list>
+     </draw:text-box>
+    </draw:frame>
+   </draw:page>
+   <draw:page draw:name="text80" draw:style-name="dp1" draw:master-page-name="Default">
+    <draw:frame draw:style-name="gr1" draw:text-style-name="PTS" draw:name="box" draw:layer="layout"
+        svg:x="2cm" svg:y="3cm" svg:width="18cm" svg:height="12cm">
+     <draw:text-box>
+      <text:list text:style-name="LB">
+       <text:list-item>
+        <text:p text:style-name="P80"><text:span text:style-name="T20">AAA</text:span></text:p>
+       </text:list-item>
+      </text:list>
+      <text:list text:style-name="LB">
+       <text:list-item>
+        <text:p text:style-name="P80"><text:span text:style-name="T20">x</text:span></text:p>
+       </text:list-item>
+      </text:list>
+      <text:list text:style-name="LB">
+       <text:list-item>
+        <text:p text:style-name="P80"><text:span text:style-name="T20">BBB</text:span></text:p>
+       </text:list-item>
+      </text:list>
+     </draw:text-box>
+    </draw:frame>
+   </draw:page>
+   <draw:page draw:name="nobullet80" draw:style-name="dp1" draw:master-page-name="Default">
+    <draw:frame draw:style-name="gr1" draw:text-style-name="PTS" draw:name="box" draw:layer="layout"
+        svg:x="2cm" svg:y="3cm" svg:width="18cm" svg:height="12cm">
+     <draw:text-box>
+      <text:list text:style-name="LB">
+       <text:list-item>
+        <text:p text:style-name="P80"><text:span text:style-name="T20">AAA</text:span></text:p>
+       </text:list-item>
+      </text:list>
+      <text:list text:style-name="LNONE">
+       <text:list-item>
+        <text:p text:style-name="P80"><text:span text:style-name="T20"/></text:p>
+       </text:list-item>
+      </text:list>
+      <text:list text:style-name="LB">
+       <text:list-item>
+        <text:p text:style-name="P80"><text:span text:style-name="T20">BBB</text:span></text:p>
+       </text:list-item>
+      </text:list>
+     </draw:text-box>
+    </draw:frame>
+   </draw:page>
+   <draw:page draw:name="big80" draw:style-name="dp1" draw:master-page-name="Default">
+    <draw:frame draw:style-name="gr1" draw:text-style-name="PTS" draw:name="box" draw:layer="layout"
+        svg:x="2cm" svg:y="3cm" svg:width="18cm" svg:height="12cm">
+     <draw:text-box>
+      <text:list text:style-name="LB">
+       <text:list-item>
+        <text:p text:style-name="P80"><text:span text:style-name="T20">AAA</text:span></text:p>
+       </text:list-item>
+      </text:list>
+      <text:list text:style-name="LBIG">
+       <text:list-item>
+        <text:p text:style-name="P80"><text:span text:style-name="T20"/></text:p>
+       </text:list-item>
+      </text:list>
+      <text:list text:style-name="LB">
+       <text:list-item>
+        <text:p text:style-name="P80"><text:span text:style-name="T20">BBB</text:span></text:p>
+       </text:list-item>
+      </text:list>
+     </draw:text-box>
+    </draw:frame>
+   </draw:page>
+   <draw:page draw:name="bullet100" draw:style-name="dp1" draw:master-page-name="Default">
+    <draw:frame draw:style-name="gr1" draw:text-style-name="PTS" draw:name="box" draw:layer="layout"
+        svg:x="2cm" svg:y="3cm" svg:width="18cm" svg:height="12cm">
+     <draw:text-box>
+      <text:list text:style-name="LB">
+       <text:list-item>
+        <text:p text:style-name="P100"><text:span text:style-name="T20">AAA</text:span></text:p>
+       </text:list-item>
+      </text:list>
+      <text:list text:style-name="LB">
+       <text:list-item>
+        <text:p text:style-name="P100"><text:span text:style-name="T20"/></text:p>
+       </text:list-item>
+      </text:list>
+      <text:list text:style-name="LB">
+       <text:list-item>
+        <text:p text:style-name="P100"><text:span text:style-name="T20">BBB</text:span></text:p>
+       </text:list-item>
+      </text:list>
+     </draw:text-box>
+    </draw:frame>
+   </draw:page>
+   <draw:page draw:name="dejavu80" draw:style-name="dp1" draw:master-page-name="Default">
+    <draw:frame draw:style-name="gr1" draw:text-style-name="PTS" draw:name="box" draw:layer="layout"
+        svg:x="2cm" svg:y="3cm" svg:width="18cm" svg:height="12cm">
+     <draw:text-box>
+      <text:list text:style-name="LB">
+       <text:list-item>
+        <text:p text:style-name="P80"><text:span text:style-name="T20">AAA</text:span></text:p>
+       </text:list-item>
+      </text:list>
+      <text:list text:style-name="LDJV">
+       <text:list-item>
+        <text:p text:style-name="P80"><text:span text:style-name="T20"/></text:p>
+       </text:list-item>
+      </text:list>
+      <text:list text:style-name="LB">
+       <text:list-item>
+        <text:p text:style-name="P80"><text:span text:style-name="T20">BBB</text:span></text:p>
+       </text:list-item>
+      </text:list>
+     </draw:text-box>
+    </draw:frame>
+   </draw:page>
+  </office:presentation>
+ </office:body>
+</office:document>

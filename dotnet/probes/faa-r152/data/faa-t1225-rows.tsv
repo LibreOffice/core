@@ -1,0 +1,34 @@
+row	trHeight	hRule	tops	bottoms	text
+0	283		single/8,single/8,single/8,single/8,single/8,single/8	single/8,-,-,-,single/8,single/8	Fluid NameType of Glycol1Expiry2(y-m-d)Dilution(flui
+1	227		single/8,-,-,-,single/8,single/8,single/8,nil/None	single/8,-,-,-,-,-,single/8,single/8	middle speed aerodynamic test6high speed aerodynamic
+2	450		single/8,-,-,-,-,-,nil/None,nil/None,nil/None,nil/None	single/8,-,-,-,single/8,single/8,single/8,single/8,-,-	Manufacturer MethodAlternate MethodManufacturer Meth
+3	227		single/8,-,-,-,nil/None,nil/None,nil/None,nil/None,nil/None,nil/None,-,-	single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8	°C°F°C°F
+4	315		single/8	single/8	Cryotech Deicing Technology
+5	227		single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8	-,-,-,-,-,-,-,-,-,-,-	Polar Guard® AdvancePG27-06-01100/0Not tested11-30.5
+6	227		-,-,-,single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8	-,-,-,-,-,-,-,-,-,-,-	75/25Not tested11-14711 600 (f)9 750 (a)38 000 (c)No
+7	227		-,-,-,single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8	-,-,-,-,-,-,-,-,-,-,-	50/50Not tested11-3.52680 (a)Not Available1948 000 (
+8	227		single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8	-,-,-,-,-,-,-,-,-,-,-	Polar Guard® XtendPG27-06-01100/0Not tested11-29-206
+9	227		-,-,-,single/8,single/8,single/8	-,-,-,-,-,-	75/25Dilution Not ApplicableDilution Not Applicable
+10	227		-,-,-,single/8,single/8,single/8	-,-,-,-,-,-	50/50Dilution Not ApplicableDilution Not Applicable
+11	315		single/8	single/8	Dow Inc.
+12	227		nil/None,nil/None,nil/None,nil/None,single/8,nil/None,nil/None,nil/None,nil/None,nil/None,nil/None	single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8	UCAR ENDURANCE™ EG106 ADF/AAFEG27-06-01100/0Not test
+13	227		nil/None,nil/None,nil/None,nil/None,single/8,single/8	single/8,single/8,single/8,single/8,single/8,single/8	75/25Dilution Not ApplicableDilution Not Applicable
+14	227		nil/None,nil/None,nil/None,nil/None,single/8,single/8	single/8,single/8,single/8,single/8,single/8,single/8	50/50Dilution Not ApplicableDilution Not Applicable
+15	227		nil/None,nil/None,nil/None,nil/None,single/8,nil/None,nil/None,nil/None,nil/None,nil/None,nil/None	single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8	UCAR™ FLIGHTGUARD™ AD-49PG27-06-01100/0Not tested11-
+16	227		nil/None,nil/None,nil/None,nil/None,single/8,single/8	single/8,single/8,single/8,single/8,single/8,single/8	75/25Dilution Not ApplicableDilution Not Applicable
+17	227		nil/None,nil/None,nil/None,nil/None,single/8,single/8	single/8,single/8,single/8,single/8,single/8,single/8	50/50Dilution Not ApplicableDilution Not Applicable
+18	315		single/8	single/8	ESSPO CHEMICALS D.O.O.
+19	227		single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8	-,-,-,-,-,-,-,-,-,-,-	Nordwing PG4PG27-06-01100/0Not tested11-30-2211 550 
+20	227		-,-,-,single/8,single/8,single/8	-,-,-,-,-,-	75/25Dilution Not ApplicableDilution Not Applicable
+21	227		-,-,-,single/8,single/8,single/8	-,-,-,-,-,-	50/50Dilution Not ApplicableDilution Not Applicable
+22	315		single/8	single/8	Inland Technologies Inc.
+23	227		nil/None,nil/None,nil/None,nil/None,single/8,nil/None,nil/None,nil/None,nil/None,nil/None,nil/None	single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8	ECO-SHIELD®PG24-10-289100/0Not tested11-25.5-1411 05
+24	227		nil/None,nil/None,nil/None,nil/None,single/8,single/8	single/8,single/8,single/8,single/8,single/8,single/8	75/25Dilution Not ApplicableDilution Not Applicable
+25	227		nil/None,nil/None,nil/None,nil/None,single/8,single/8	single/8,single/8,single/8,single/8,single/8,single/8	50/50Dilution Not ApplicableDilution Not Applicable
+26	315		single/8	single/8	JSC RCP Nordix
+27	227		nil/None,nil/None,nil/None,nil/None,single/8,nil/None,nil/None,nil/None,nil/None,nil/None,nil/None	single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8	Defrost ECO 4PG23-08-129100/0Not tested11-25.5-149 8
+28	227		nil/None,nil/None,nil/None,nil/None,single/8,single/8	single/8,single/8,single/8,single/8,single/8,single/4	75/25Dilution Not ApplicableDilution Not Applicable
+29	227		nil/None,nil/None,nil/None,nil/None,single/8,single/4	single/8,single/8,single/8,single/8,single/8,single/8	50/50Dilution Not ApplicableDilution Not Applicable
+30	227		nil/None,nil/None,nil/None,nil/None,single/8,nil/None,nil/None,nil/None,nil/None,nil/None,nil/None	single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8,single/8	Defrost NORTH 4EG23-06-019100/0Not tested11-26-152 5
+31	227		nil/None,nil/None,nil/None,nil/None,single/8,single/8	single/8,single/8,single/8,single/8,single/8,single/4	75/25Dilution Not ApplicableDilution Not Applicable
+32	227		nil/None,nil/None,nil/None,nil/None,single/8,single/4	single/8,single/8,single/8,single/8,single/8,single/8	50/50Dilution Not ApplicableDilution Not Applicable

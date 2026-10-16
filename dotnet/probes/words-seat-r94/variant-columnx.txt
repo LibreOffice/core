@@ -1,0 +1,56 @@
+### plain-margins
+26.2.4.2   plain-margins.pdf
+       72.10     6 spans
+      108.10    40 spans
+      315.10    39 spans
+before     plain-margins.pdf
+       72.00    46 spans
+      324.00    39 spans
+after      plain-margins.pdf
+       72.00     6 spans
+      108.00    40 spans
+      315.00    39 spans
+### nested-margins
+26.2.4.2   nested-margins.pdf
+       72.10     6 spans
+      108.10    40 spans
+      315.10    35 spans
+before     nested-margins.pdf
+       72.00    46 spans
+      324.00    35 spans
+after      nested-margins.pdf
+       72.00     6 spans
+      108.00    40 spans
+      315.00    35 spans
+### toc-margins
+26.2.4.2   toc-margins.pdf
+       72.10     6 spans
+      108.10    40 spans
+      315.10    35 spans
+before     toc-margins.pdf
+       72.00    46 spans
+      324.00    35 spans
+after      toc-margins.pdf
+       72.00     6 spans
+      108.00    40 spans
+      315.00    35 spans
+### base
+26.2.4.2   base.pdf
+       72.10    35 spans
+      324.10    28 spans
+before     base.pdf
+       72.00    35 spans
+      324.00    28 spans
+after      base.pdf
+       72.00    35 spans
+      324.00    28 spans
+### plain
+26.2.4.2   plain.pdf
+       72.10    37 spans
+      324.10    31 spans
+before     plain.pdf
+       72.00    37 spans
+      324.00    31 spans
+after      plain.pdf
+       72.00    37 spans
+      324.00    31 spans

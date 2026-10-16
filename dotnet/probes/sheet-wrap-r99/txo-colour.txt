@@ -1,0 +1,15 @@
+
+# totals
+#   note/boxes         47
+#   note/colour        104
+#   note/italic        0
+#   note/runs          104
+#   shape/boxes        108
+#   shape/colour       53
+#   shape/italic       0
+#   shape/runs         263
+# documents with a shape-path run stating colour or italic:
+#   EHEST-Pre-departure-checklist-Rev.-1-06-12-2016.xls          colour 40   italic 0    boxes 85
+#   PC1000.xls                                                   colour 12   italic 0    boxes 10
+#   TOGAF9-Tool-ConfReqts-CSQ.xls                                colour 1    italic 0    boxes 1
+#   -> 3 documents

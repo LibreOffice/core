@@ -1,0 +1,29 @@
+doc	section	kind	ownFurniture	hasPageBreak	verdict
+Press release_EUREKA labels ITEA 3 Cluster.docx	1	continuous	1	0	dropped
+Press release_EUREKA labels ITEA 3 Cluster.docx	2	continuous	1	0	dropped
+b053-19.docx	1	continuous	1	1	lands-at-break
+b050-19.docx	1	continuous	1	1	lands-at-break
+hdss-bulletin-issue-285-25-june-2025.docx	1	continuous	1	0	dropped
+hdss-bulletin-issue-285-25-june-2025.docx	2	continuous	0	1	dropped
+Regulations Governing the Status, Basic Rights and Duties of Officials other than Secretariat Officials, and Experts on Mission.docx	1	continuous	0	1	dropped
+Regulations Governing the Status, Basic Rights and Duties of Officials other than Secretariat Officials, and Experts on Mission.docx	2	continuous	1	1	lands-at-break
+JEMIT_Template.docx	1	continuous	0	0	dropped
+JEMIT_Template.docx	2	continuous	0	0	dropped
+JEMIT_Template.docx	3	continuous	0	0	dropped
+JEMIT_Template.docx	4	continuous	0	0	dropped
+JEMIT_Template.docx	5	continuous	0	0	dropped
+Annex-10-to-the-Aircraft-Maintenance-Specialist-Certification-Rule-GCAA.docx	37	continuous	0	0	dropped
+Annex-10-to-the-Aircraft-Maintenance-Specialist-Certification-Rule-GCAA.docx	38	continuous	0	0	dropped
+Annex-10-to-the-Aircraft-Maintenance-Specialist-Certification-Rule-GCAA.docx	47	continuous	0	0	dropped
+Annex-10-to-the-Aircraft-Maintenance-Specialist-Certification-Rule-GCAA.docx	48	continuous	0	0	dropped
+Annex-10-to-the-Aircraft-Maintenance-Specialist-Certification-Rule-GCAA.docx	53	continuous	0	0	dropped
+Annex-10-to-the-Aircraft-Maintenance-Specialist-Certification-Rule-GCAA.docx	54	continuous	0	0	dropped
+Annex-10-to-the-Aircraft-Maintenance-Specialist-Certification-Rule-GCAA.docx	55	continuous	0	0	dropped
+Annex-10-to-the-Aircraft-Maintenance-Specialist-Certification-Rule-GCAA.docx	56	continuous	0	0	dropped
+Annex-10-to-the-Aircraft-Maintenance-Specialist-Certification-Rule-GCAA.docx	115	continuous	0	0	dropped
+Annex-10-to-the-Aircraft-Maintenance-Specialist-Certification-Rule-GCAA.docx	116	continuous	0	0	dropped
+ABCD-SDE-23-00 - Avionic System Description - 17.02.16 - v1.docx	1	continuous	0	0	dropped
+ABCD-SDE-23-00 - Avionic System Description - 17.02.16 - v1.docx	2	continuous	1	1	lands-at-break
+report-template.docx	2	continuous	1	0	dropped
+template---tpr-technical-progress-report-with-guidance.docx	2	continuous	0	0	dropped
+# docx scanned 272; documents with a non-first continuous section 10; sections dropped 23; sections landing at a break 4

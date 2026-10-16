@@ -1,0 +1,12 @@
+probe                  below-ours  below-ref   delta  above-ours  above-ref   delta
+band-bare-nolabels          25.24      12.45   12.79       45.66      45.18    0.48
+band-bare-nothing           25.24      12.45   12.79       12.48      12.47    0.01
+band-bare-notitle           25.24      25.15    0.09       12.48      12.44    0.04
+band-bare                   25.24      25.15    0.09       45.66      45.18    0.48
+band-cats-12                25.24      25.15    0.09       45.66      45.18    0.48
+band-cats-26                54.18      46.24    7.94       45.66      45.18    0.48
+band-full-b                 75.01      75.18   -0.17       45.66      45.18    0.48
+band-labels-07              21.84      21.41    0.43       43.96      45.18   -1.22
+band-labels-14              29.74      30.39   -0.65       47.91      45.18    2.73
+band-nocattitle             47.51      47.34    0.17       45.66      45.21    0.45
+band-noleg                  52.75      52.98   -0.23       45.66      45.18    0.48

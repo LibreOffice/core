@@ -1,0 +1,112 @@
+== OOXML c:/cx: markup, distinct documents (den. 766 docx+xlsx+pptx+xlsm)
+  c:barChart                77 docs  146 parts
+  c:lineChart               32 docs   54 parts
+  @barDir_bar               25 docs   38 parts
+  c:scatterChart            23 docs   28 parts
+  @scatterStyle_line        22 docs   27 parts
+  @grouping_stacked         20 docs   22 parts
+  c:pieChart                18 docs   43 parts
+  c:doughnutChart           15 docs   23 parts
+  @holeSize                 15 docs   23 parts
+  c:areaChart               12 docs   12 parts
+  @smooth_1                 11 docs   14 parts
+  c:bubbleChart             10 docs   10 parts
+  @grouping_pctstk           7 docs   27 parts
+  c:radarChart               6 docs    7 parts
+  c:pie3DChart               3 docs    3 parts
+  c:ofPieChart               2 docs    2 parts
+  cx:clusteredColumn         2 docs    2 parts
+  cx:paretoLine              2 docs    2 parts
+  @ofPieType_bar             1 docs    1 parts
+  @radarStyle_filled         1 docs    2 parts
+
+== OOXML documents holding any chart part, by ext
+  docx    10
+  pptx    67
+  xlsm     1
+  xlsx    91
+
+== reference-resolved chart:class (corpus-odf, LibreOffice 26.2.4.2 export)
+  class:chart:bar                                           93 docs
+  series-class:chart:bar                                    85 docs
+  @solid_type                                               61 docs
+  @symbol_type                                              57 docs
+  series-class:chart:circle                                 39 docs
+  series-class:chart:line                                   34 docs
+  @vertical_true                                            27 docs
+  class:chart:circle                                        24 docs
+  series-class:chart:scatter                                22 docs
+  class:chart:line                                          22 docs
+  @stacked_true                                             20 docs
+  class:chart:scatter                                       18 docs
+  class:chart:ring                                          15 docs
+  class:chart:area                                          14 docs
+  series-class:chart:area                                   14 docs
+  @interpolation                                            12 docs
+  @percentage_true                                           7 docs
+  @three_d_true                                              6 docs
+  class:chart:bubble                                         6 docs
+  series-class:chart:bubble                                  6 docs
+  class:chart:radar                                          5 docs
+  series-class:chart:radar                                   5 docs
+  class:ooo:com.sun.star.chart2.ClusteredColumnChartType     2 docs
+  series-class:chart:add-in                                  2 docs
+  class:chart:filled-radar                                   1 docs
+  series-class:chart:filled-radar                            1 docs
+
+== reference-resolved diagram class by source ext
+  class:chart:area                                         pptx    5
+  class:chart:area                                         xls     2
+  class:chart:area                                         xlsx    7
+  class:chart:bar                                          docx    2
+  class:chart:bar                                          ppt     3
+  class:chart:bar                                          pptx   34
+  class:chart:bar                                          xls     5
+  class:chart:bar                                          xlsm    1
+  class:chart:bar                                          xlsx   48
+  class:chart:bubble                                       pptx    1
+  class:chart:bubble                                       xlsx    5
+  class:chart:circle                                       docx    6
+  class:chart:circle                                       ppt     1
+  class:chart:circle                                       pptx   10
+  class:chart:circle                                       xlsm    1
+  class:chart:circle                                       xlsx    6
+  class:chart:filled-radar                                 pptx    1
+  class:chart:line                                         ppt     3
+  class:chart:line                                         pptx    9
+  class:chart:line                                         xlsx   10
+  class:chart:radar                                        pptx    1
+  class:chart:radar                                        xlsx    4
+  class:chart:ring                                         docx    1
+  class:chart:ring                                         pptx    9
+  class:chart:ring                                         xlsx    5
+  class:chart:scatter                                      docx    1
+  class:chart:scatter                                      ppt     3
+  class:chart:scatter                                      pptx    5
+  class:chart:scatter                                      xlsx    9
+  class:ooo:com.sun.star.chart2.ClusteredColumnChartType   xlsx    2
+
+== BIFF chart-type records in .xls (den. 64)
+  CHTYPEGROUP              9 docs
+  CHCHART                  7 docs
+  CHBAR                    5 docs
+  CHBAR.vertical           3 docs
+  CHAREA                   2 docs
+  CHBAR.horizontal         2 docs
+  CHSCATTER                1 docs
+  CHSCATTER.plain          1 docs
+
+== OLE-embedded charts in .ppt (den. 51)
+  CHCHART                                          7 docs
+  CHTYPEGROUP                                      7 docs
+  clsid:00020821-0000-0000-C000-000000000046       6 docs
+  CHSCATTER                                        4 docs
+  CHSCATTER.plain                                  4 docs
+  CHLINE                                           3 docs
+  CHBAR                                            3 docs
+  CHBAR.vertical                                   3 docs
+  clsid:00020820-0000-0000-C000-000000000046       2 docs
+  CHPIE                                            1 docs
+  CHPIE.solid                                      1 docs
+  clsid:00020803-0000-0000-C000-000000000046       1 docs
+  CHBAR.stacked                                    1 docs

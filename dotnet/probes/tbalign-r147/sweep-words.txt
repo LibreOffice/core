@@ -1,0 +1,32 @@
+documents scored: 337
+failed on either leg: 0
+byte-identical: 314
+moved: 23
+
+the reference draws a mixed-width boundary in: 49
+   of those, moved: 21
+   of those, did NOT move: 28
+moved WITHOUT one (unexplained): 2
+      words/table-001/docx/approvals-and-standardisation-organisation-approvals-docs-part-145-annex-B-B11.-TE.CAO.00129-Foreign-Part-145-approvals---Experience--logbook.docx
+      words/table-001/docx/B11. TE.CAO.00129  Experience  logbook.docx
+
+     206 mixed boundaries  words/pagination-003/docx/150-5370-10H.docx
+     112 mixed boundaries  words/pagination-001/docx/ESPN-R - MCF - RA - Ed1.docx
+      41 mixed boundaries  words/table-001/docx/A1. EASA Form 2.docx
+      20 mixed boundaries  words/done-015/docx/DOA_Template_Form_Type_Certification_Programme.docx
+      20 mixed boundaries  words/done-016/doc/150_5335_5a.doc
+      18 mixed boundaries  words/done-016/docx/AC-150-5370-10G-updated-201604.docx
+      18 mixed boundaries  words/table-001/doc/150_5300_13_chg10.doc
+      15 mixed boundaries  words/ceiling-001/docx/ABCD-FE-01-00 Flight Envelope - v1 08.03.16.docx
+       7 mixed boundaries  words/done-012/docx/FO.FCTOA_.000129 Application for activities related to FSTD.docx
+       7 mixed boundaries  words/pagination-001/docx/FAA 2025-26 Holdover Tables.docx
+       6 mixed boundaries  words/pagination-001/docx/24-25_FAA_Holdover_Tables.docx
+       4 mixed boundaries  words/done-010/doc/1528364855.doc
+       4 mixed boundaries  words/extra-001/docx/UG.CAO.00133 Foreign Part 145 approvals - Language.docx
+       2 mixed boundaries  words/done-004/docx/PAT-047 - Architecture and Detailed Design Assessment.docx
+       2 mixed boundaries  words/extra-001/docx/ABCD-SDE-23-00 - Avionic System Description - 17.02.16 - v1.docx
+       2 mixed boundaries  words/missing-001/docx/xx_SETIS_PWS_template_10.19.22.docx
+       1 mixed boundaries  words/done-006/doc/LHD-230-application-for-the-approval-of-an-aircraftr.doc
+       1 mixed boundaries  words/done-011/docx/part-145-approval list 2025.docx
+       1 mixed boundaries  words/done-011/docx/part-145-approval list (1).docx
+       1 mixed boundaries  words/done-015/docx/airbus-pdf-information-package_v1-4.docx

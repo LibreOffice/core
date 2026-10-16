@@ -1,0 +1,17 @@
+workbooks scanned 243
+type                    rules  docs  w/dxfId  dxfdocs
+containsText              927     5      927        5
+expression                601    34      601       34
+cellIs                    123    18      123       18
+containsBlanks             99     1       99        1
+colorScale                 43    38        0        0
+duplicateValues            20     5       20        5
+dataBar                     9     6        0        0
+endsWith                    5     1        5        1
+notContainsBlanks           3     2        3        2
+iconSet                     2     2        0        0
+multi-range sqref blocks: 224  where componentwise-min != GetTopLeftCorner: 15 [('044_Cash_flow_forecast_Use_this_template_b8fa1f35.xlsx', 'C19:N20 C56:N57 C49:O49 O12:O20 O24:O48 O51:O57'), ('Application_Compliance_Checklist_5_Apr_2021.xlsx', 'G443:G444 D491 G446:G490 G377'), ('flightstandards-doc-Cross-reference-table_version02.xlsx', 'I415:K415 B389:C389 A396 E381 A379:A380 G373:I373 I412 G380:'), ('flightstandards-doc-Cross-reference-table_version02.xlsx', 'B530:B531 E526:E530 B522:E522 E514:E516 B511 B512:C512 A507:'), ('flightstandards-doc-Cross-reference-table_version02.xlsx', 'A700 H693 G719 E698:E708 G696:G697 G698:H698 A702:A708 D702:')]
+text-rule operator/text census:
+   ('containsText', 'containsText', 'text') 926
+   ('endsWith', 'endsWith', 'text') 5
+   ('containsText', None, 'text') 1

@@ -1,0 +1,11 @@
+# the same rule OUTSIDE a shape, over the same 271 documents
+page-body paragraphs                163342
+<w:br/> in them                       4770
+... run size differs from the mark     132   in 28 documents
+
+# /home/user/corpus-odf/odt   337 files on disk
+    documents read 337, <text:span> 210828 (base rate), <text:line-break> 5130 in 100 documents, of which 177 inside a <draw:frame> in 13 documents
+# /home/user/corpus-odf/ods   307 files on disk
+    documents read 307, <text:span> 37195 (base rate), <text:line-break> 40 in 4 documents, of which 30 inside a <draw:frame> in 2 documents
+# /home/user/corpus-odf/odp   0 files on disk
+    ABSENT -- 0 occurrences and 0 base-rate tokens, which is the tell

@@ -1,0 +1,9 @@
+kind               count    with p with ink     chars   docs
+frame                377       225        0         0    129
+custom-shape         371       371       91     25015     44
+a                     72        72       31       536     24
+control               72         0        0         0      5
+g                     44        44        5       124     10
+connector             31        31        0         0      2
+line                  17        17        0         0      1
+# 307 documents scanned

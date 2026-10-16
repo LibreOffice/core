@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  A draw:frame whose height is a floor its own text grows past.
+
+  ODF states Writer's three fly height kinds by which attribute carries the length:
+  fo:min-height on the draw:text-box is SwFrameSize::Minimum and svg:height on the
+  draw:frame is SwFrameSize::Fixed (xmloff/source/text/XMLTextFrameContext.cxx:997-1010
+  and :655-661).  A minimum frame is made as tall as everything it holds and then floored
+  at the stated number — SwFlyFrame::Format, sw/source/core/layout/fly.cxx:1549-1570 — so
+  it pushes the text below it down and can begin a page.
+
+  The frame's automatic graphic style names a PARENT style on purpose.  A draw:frame whose
+  automatic style has no parent is imported as a drawing shape rather than as a Writer text
+  frame (XMLTextFrameContext.cxx:1374-1394, "#i51726#", and :1500-1507), and a shape fits
+  itself to its text by a different rule that ignores fo:min-height entirely.  Every
+  height-less draw:frame LibreOffice's own exporter writes names a parent.
+
+  GROWS holds three lines and a floor of nought, so its height is its text's.
+  FLOORED holds one line and a floor of 3cm, so its height is the floor.
+  AFTER-A and AFTER-B are body paragraphs each frame has to push down.
+
+  Ground truth is 26.2.4.2's own PDF of this file, read with pdftotext -bbox; the numbers
+  are in OdtFrameGrowthTests.
+-->
+<office:document
+    xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+    xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+    xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+    xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+    xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+    xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:meta>
+  <dc:title>Paperless frame grown to its text</dc:title>
+  <dc:subject>A draw:text-box fo:min-height is a floor, not a height</dc:subject>
+ </office:meta>
+ <office:styles>
+  <style:style style:name="Body" style:family="paragraph">
+   <style:paragraph-properties fo:text-align="start" fo:text-indent="0cm" fo:hyphenate="false"
+       fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%"
+       fo:orphans="0" fo:widows="0"/>
+   <style:text-properties style:font-name="Carlito" fo:font-family="Carlito" fo:font-size="11pt"
+       fo:language="en" fo:country="GB"/>
+  </style:style>
+  <style:style style:name="Frame" style:family="graphic">
+   <style:graphic-properties text:anchor-type="paragraph" svg:x="0cm" svg:y="0cm"
+       fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm"
+       style:wrap="none" style:vertical-pos="top" style:vertical-rel="paragraph"
+       style:horizontal-pos="from-left" style:horizontal-rel="paragraph"
+       draw:fill="none" fo:padding="0cm" fo:border="none"/>
+  </style:style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:page-layout style:name="PL">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+       fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"/>
+  </style:page-layout>
+  <style:style style:name="fr1" style:family="graphic" style:parent-style-name="Frame">
+   <style:graphic-properties style:wrap="none" style:vertical-pos="from-top"
+       style:vertical-rel="paragraph" style:horizontal-pos="from-left"
+       style:horizontal-rel="paragraph" fo:padding="0cm" fo:border="none"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="PL"/>
+ </office:master-styles>
+ <office:body><office:text>
+   <text:p text:style-name="Body"><draw:frame draw:style-name="fr1" draw:name="GrowsBox"
+       text:anchor-type="paragraph" svg:x="0cm" svg:y="0cm" svg:width="8cm" draw:z-index="0">
+     <draw:text-box fo:min-height="0cm">
+      <text:p text:style-name="Body">GROWSONE</text:p>
+      <text:p text:style-name="Body">GROWSTWO</text:p>
+      <text:p text:style-name="Body">GROWSTHREE</text:p>
+     </draw:text-box>
+    </draw:frame>ANCHORA</text:p>
+   <text:p text:style-name="Body">AFTERA</text:p>
+   <text:p text:style-name="Body"><draw:frame draw:style-name="fr1" draw:name="FlooredBox"
+       text:anchor-type="paragraph" svg:x="0cm" svg:y="0cm" svg:width="8cm" draw:z-index="1">
+     <draw:text-box fo:min-height="3cm">
+      <text:p text:style-name="Body">FLOORED</text:p>
+     </draw:text-box>
+    </draw:frame>ANCHORB</text:p>
+   <text:p text:style-name="Body">AFTERB</text:p>
+ </office:text></office:body>
+</office:document>

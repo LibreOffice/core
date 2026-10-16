@@ -1,0 +1,7 @@
+# 4 tiles in head2/apron-area.pdf, 4 in apron-area.fods
+obj 3	=	Bitmap_20_1	#969696 #969696 #ffffff #ffffff #ffffff #ffffff #ffffff #969696
+obj 5	=	Bitmap_20_2	#969696 #969696 #ffffff #ffffff #969696 #969696 #ffffff #ffffff
+obj 7	=	Bitmap_20_3	#808080 #808080 #ffffff #ffffff #ffffff #ffffff #ffffff #808080
+obj 9	=	Bitmap_20_4	#808080 #808080 #ffffff #ffffff #808080 #808080 #ffffff #ffffff
+# alpha ours   0.349 0.4 0.502 0.6
+# alpha ref    35% 35% 40% 40% 50% 50% 60% 60%

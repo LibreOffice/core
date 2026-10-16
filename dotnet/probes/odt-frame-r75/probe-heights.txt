@@ -1,0 +1,19 @@
+probe                    pages frame line 1    body 1  pg   vs a-2para
+a-2para                      1       57.259    98.709   1       +0.000
+b-4para                      1       57.259   126.309   1      +27.600
+c-2para-after12pt            1       57.259   110.709   1      +12.000
+d-4para-after12pt            1       57.259   162.309   1      +63.600
+e-2para-pad10pt              1       67.259   118.709   1      +20.000
+f-2para-border3pt            1       60.209   104.609   1       +5.900
+g-2para-pad10-bord3          1       70.209   124.609   1      +25.900
+h-2para-minh3in              1       57.259   287.009   1     +188.300
+i-2para-minh3in-pad10        1       67.259   287.009   1     +188.300
+j-1para-minh0                1       57.259    84.909   1      -13.800
+k-0para-minh0                1            -    84.909   1      -13.800
+l-2para-noborder             1       57.209    98.609   1       -0.100
+m-2para-minh0.2in            1       57.259    98.709   1       +0.000
+n-60para-split               2       57.259   181.509   2      +82.800
+o-60para-nosplit             2       14.359    71.009   2      -27.700
+p-2para-8pt                  1       57.259    98.709   1       +0.000
+q-2para-before12pt           1       69.259   122.709   1      +24.000
+r-4para-before12pt           1       69.259   174.309   1      +75.600

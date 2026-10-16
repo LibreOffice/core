@@ -1,0 +1,89 @@
+RESPA_-_Section_8_Webinar.ppt page 18, the register's own next O15 witness, at four legs.
+
+The outline placeholder is seven 24 pt paragraphs with 6 pt above and below, in a box whose text
+area is 9963 hundredths of a millimetre; the autofit search fits against 9964 (tools::Rectangle
+counts both edges).  The last paragraph is a URL carrying an InteractiveInfo whose exHyperlinkId
+is 30.
+
+The .ppt leg draws 18.992; the flat-ODP leg -- 26.2.4.2 reading back its own export of the same
+document -- draws 20.013, which is this tree's base answer.  So the divergence is not in the
+autofit arithmetic: it is that the .ppt leg makes no hyperlink FIELD of that URL, its spill line
+therefore counts in the height the search measures, and the block is one 847-unit line taller
+than ours was.  See results.md sections 1 and 2.
+
+== 26.2.4.2, the .ppt
+   DejaVuSans         43.994    52.923     417.26
+   OpenSymbol         17.093    52.923    346.904
+   DejaVuSans         18.992    76.932    345.685
+   DejaVuSans         18.992    76.932    322.894
+   OpenSymbol         17.093    52.923    291.742
+   DejaVuSans         18.992    76.932    290.523
+   OpenSymbol         17.093    52.923     259.37
+   DejaVuSans         18.992    76.932    258.151
+   OpenSymbol         17.093    52.923    226.998
+   DejaVuSans         18.992    76.932     225.78
+   OpenSymbol         12.813   102.416    200.438
+   DejaVuSans         14.003   123.676    199.587
+   DejaVuSans         14.003   123.676    182.778
+   OpenSymbol         17.093    52.923    152.617
+   DejaVuSans         18.992    76.932    151.398
+   OpenSymbol         17.093    52.923    120.246
+   DejaVuSans         18.992    76.932    119.027
+   DejaVuSans         18.992    76.932     96.236
+== 26.2.4.2, its OWN flat ODP of the same file
+   DejaVuSans         43.994    52.923     417.26
+   OpenSymbol         18.794    52.923    349.087
+   DejaVuSans         20.013    76.932    344.665
+   DejaVuSans         20.013    76.932    323.065
+   OpenSymbol         18.794    52.923    295.115
+   DejaVuSans         20.013    76.932    290.693
+   OpenSymbol         18.794    52.923    262.743
+   DejaVuSans         20.013    76.932    258.321
+   OpenSymbol         18.794    52.923    230.372
+   DejaVuSans         20.013    76.932     225.95
+   OpenSymbol         14.088   102.416    203.216
+   DejaVuSans         14.995   123.676    199.928
+   DejaVuSans         14.995   123.676    183.713
+   OpenSymbol         18.794    52.923    156.132
+   DejaVuSans         20.013    76.932     151.71
+   OpenSymbol         18.794    52.923    123.761
+   DejaVuSans         20.013    76.932    119.339
+   DejaVuSans         20.013    76.932     97.739
+== this tree, base
+   DejaVuSans        43.9937    52.951   417.2598
+   OpenSymbol        18.7654    52.951   346.6772
+   DejaVuSans        20.0126    76.951   344.6362
+   DejaVuSans        20.0126    76.951   320.6268
+   OpenSymbol        18.7654    52.951   287.8866
+   DejaVuSans        20.0126    76.951   285.8457
+   OpenSymbol        18.7654    52.951   253.1055
+   DejaVuSans        20.0126    76.951   251.0646
+   OpenSymbol        18.7654    52.951   218.3244
+   DejaVuSans        20.0126    76.951   216.2835
+   OpenSymbol        14.0882   102.451    189.326
+   DejaVuSans        14.9953   123.701    187.852
+   DejaVuSans        14.9953   123.701    169.852
+   OpenSymbol        18.7654    52.951   138.1039
+   DejaVuSans        20.0126    76.951    136.063
+   OpenSymbol        18.7654    52.951   103.3228
+   DejaVuSans        20.0126    76.951   101.2819
+   DejaVuSans        20.0126    76.951    81.2693
+== this tree, head
+   DejaVuSans        43.9937    52.951   417.2598
+   OpenSymbol        17.1213    52.951   346.9039
+   DejaVuSans        18.9921    76.951   345.6567
+   DejaVuSans        18.9921    76.951   322.8661
+   OpenSymbol        17.1213    52.951   291.7417
+   DejaVuSans        18.9921    76.951   290.4945
+   OpenSymbol        17.1213    52.951   259.3701
+   DejaVuSans        18.9921    76.951   258.1228
+   OpenSymbol        17.1213    52.951   226.9984
+   DejaVuSans        18.9921    76.951   225.7512
+   OpenSymbol        12.8409   102.451   200.4094
+   DejaVuSans        14.0031   123.701   199.5591
+   DejaVuSans        14.0031   123.701   182.7496
+   OpenSymbol        17.1213    52.951   152.6173
+   DejaVuSans        18.9921    76.951   151.3701
+   OpenSymbol        17.1213    52.951   120.2457
+   DejaVuSans        18.9921    76.951   118.9984
+   DejaVuSans        18.9921    76.951    96.2079

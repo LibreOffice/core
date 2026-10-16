@@ -1,0 +1,42 @@
+# 26.2.4.2's own resolved view of every corpus dataBar rule.
+# soffice --convert-to fods of the six documents that state one, 2026-09-11.
+# Each rule's <calcext:data-bar> element and its two formatting entries.
+#
+# What this establishes, and what no fixture can: all NINE rules come back with
+# min-length=10 max-length=90 against extensions that state minLength=0 maxLength=100,
+# and NONE states an axis-position -- so every corpus bar is the AUTOMATIC arm, in which
+# GetDataBarInfo reads neither length. See results.md section 2 arms (1) and (2).
+
+=== 015_Free_Gantt_Chart_Template_for_Excel_414e86bf
+    <calcext:data-bar calcext:gradient="false" calcext:min-length="10" calcext:max-length="90" calcext:negative-color="#ff0000" calcext:positive-color="#a6a6a6" calcext:axis-color="#000000">
+        <calcext:formatting-entry calcext:value="0" calcext:type="number"/>
+        <calcext:formatting-entry calcext:value="1" calcext:type="number"/>
+=== 036_Simple_to-do_list_Use_this_template_ba44373b
+    <calcext:data-bar calcext:gradient="false" calcext:show-value="false" calcext:min-length="10" calcext:max-length="90" calcext:negative-color="#4dd2a7" calcext:positive-color="#e8542c" calcext:axis-color="#000000">
+        <calcext:formatting-entry calcext:value="0" calcext:type="number"/>
+        <calcext:formatting-entry calcext:value="1" calcext:type="number"/>
+=== 066_Agile_Gantt_chart_08f9de45
+    <calcext:data-bar calcext:gradient="false" calcext:min-length="10" calcext:max-length="90" calcext:negative-color="#ff0000" calcext:positive-color="#20a472" calcext:axis-color="#000000">
+        <calcext:formatting-entry calcext:value="0" calcext:type="number"/>
+        <calcext:formatting-entry calcext:value="1" calcext:type="number"/>
+    <calcext:data-bar calcext:gradient="false" calcext:min-length="10" calcext:max-length="90" calcext:negative-color="#ff0000" calcext:positive-color="#20a472" calcext:axis-color="#000000">
+        <calcext:formatting-entry calcext:value="0" calcext:type="number"/>
+        <calcext:formatting-entry calcext:value="1" calcext:type="number"/>
+    <calcext:data-bar calcext:gradient="false" calcext:min-length="10" calcext:max-length="90" calcext:negative-color="#ff0000" calcext:positive-color="#93e2ff" calcext:axis-color="#000000">
+        <calcext:formatting-entry calcext:value="0" calcext:type="number"/>
+        <calcext:formatting-entry calcext:value="1" calcext:type="number"/>
+=== 076_Inventory_list_accessibility_guide_Use_this_template_f43dab19
+    <calcext:data-bar calcext:gradient="false" calcext:min-length="10" calcext:max-length="90" calcext:negative-color="#ff0000" calcext:positive-color="#d9d9d9" calcext:axis-color="#000000">
+        <calcext:formatting-entry calcext:value="0" calcext:type="auto-minimum"/>
+        <calcext:formatting-entry calcext:value="0" calcext:type="auto-maximum"/>
+    <calcext:data-bar calcext:gradient="false" calcext:min-length="10" calcext:max-length="90" calcext:negative-color="#ff0000" calcext:positive-color="#989494" calcext:axis-color="#000000">
+        <calcext:formatting-entry calcext:value="0" calcext:type="auto-minimum"/>
+        <calcext:formatting-entry calcext:value="0" calcext:type="auto-maximum"/>
+=== 085_Simple_Gantt_chart_d65b8377
+    <calcext:data-bar calcext:gradient="false" calcext:min-length="10" calcext:max-length="90" calcext:negative-color="#ff0000" calcext:positive-color="#ffffff" calcext:axis-color="#000000">
+        <calcext:formatting-entry calcext:value="0" calcext:type="number"/>
+        <calcext:formatting-entry calcext:value="1" calcext:type="number"/>
+=== 088_To-do_list_with_progress_tracker_Use_this_template_8c438912
+    <calcext:data-bar calcext:gradient="false" calcext:min-length="10" calcext:max-length="90" calcext:negative-color="#ff0000" calcext:positive-color="#bfa9b7" calcext:axis-color="#000000">
+        <calcext:formatting-entry calcext:value="0" calcext:type="auto-minimum"/>
+        <calcext:formatting-entry calcext:value="0" calcext:type="auto-maximum"/>

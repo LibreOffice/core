@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document
+  xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+  xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+  xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+  xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+  xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0"
+  xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+  xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+  xmlns:xlink="http://www.w3.org/1999/xlink"
+  office:version="1.3"
+  office:mimetype="application/vnd.oasis.opendocument.presentation">
+ <office:styles>
+  <draw:gradient draw:name="LinearRedBlue" draw:display-name="LinearRedBlue"
+      draw:style="linear" draw:start-color="#ff0000" draw:end-color="#0000ff"
+      draw:start-intensity="100%" draw:end-intensity="100%"
+      draw:angle="0deg" draw:border="0%"/>
+  <draw:gradient draw:name="AxialGreenYellow" draw:display-name="AxialGreenYellow"
+      draw:style="axial" draw:start-color="#008000" draw:end-color="#ffff00"
+      draw:start-intensity="100%" draw:end-intensity="100%"
+      draw:angle="900deg" draw:border="0%"/>
+  <draw:gradient draw:name="RadialCyanBlack" draw:display-name="RadialCyanBlack"
+      draw:style="radial" draw:start-color="#00c0c0" draw:end-color="#101010"
+      draw:start-intensity="100%" draw:end-intensity="100%"
+      draw:angle="0deg" draw:border="0%"
+      draw:cx="50%" draw:cy="50%"/>
+  <draw:fill-image draw:name="Checkers" draw:display-name="Checkers"
+      xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"
+      ><office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAAgAAAAICAIAAABLbSncAAAAHElEQVR42mN4kMMARwJaWXDEQEUJZA6yIipKAABK8D4Bh3kj6gAAAABJRU5ErkJggg==</office:binary-data></draw:fill-image>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="gpLinear" style:family="graphic">
+   <style:graphic-properties draw:fill="gradient" draw:fill-gradient-name="LinearRedBlue"
+       draw:stroke="none"/>
+  </style:style>
+  <style:style style:name="gpAxial" style:family="graphic">
+   <style:graphic-properties draw:fill="gradient" draw:fill-gradient-name="AxialGreenYellow"
+       draw:stroke="none"/>
+  </style:style>
+  <style:style style:name="gpRadial" style:family="graphic">
+   <style:graphic-properties draw:fill="gradient" draw:fill-gradient-name="RadialCyanBlack"
+       draw:stroke="none"/>
+  </style:style>
+  <style:style style:name="gpBitmap" style:family="graphic">
+   <style:graphic-properties draw:fill="bitmap" draw:fill-image-name="Checkers"
+       style:repeat="repeat" draw:fill-image-width="1cm" draw:fill-image-height="1cm"
+       draw:stroke="none"/>
+  </style:style>
+  <style:style style:name="gpPicture" style:family="graphic">
+   <style:graphic-properties draw:stroke="none" draw:fill="none"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:body>
+  <office:presentation>
+   <draw:page draw:name="fills">
+    <draw:rect draw:style-name="gpLinear" draw:layer="layout"
+        svg:x="2cm" svg:y="2cm" svg:width="8cm" svg:height="5cm"/>
+    <draw:rect draw:style-name="gpAxial" draw:layer="layout"
+        svg:x="14cm" svg:y="2cm" svg:width="8cm" svg:height="5cm"/>
+    <draw:rect draw:style-name="gpRadial" draw:layer="layout"
+        svg:x="2cm" svg:y="9cm" svg:width="8cm" svg:height="5cm"/>
+    <draw:rect draw:style-name="gpBitmap" draw:layer="layout"
+        svg:x="14cm" svg:y="9cm" svg:width="8cm" svg:height="5cm"/>
+   </draw:page>
+   <draw:page draw:name="picture">
+    <draw:frame draw:style-name="gpPicture" draw:layer="layout"
+        svg:x="4cm" svg:y="3cm" svg:width="8cm" svg:height="6cm">
+     <draw:image xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"
+         ><office:binary-data>iVBORw0KGgoAAAANSUhEUgAAABAAAAAMCAIAAADkharWAAAAQklEQVR42mM4ICBAEmIAYgUfA4UIA4UUA4UCA4UaA4UOA4UpBgoLDBTWGCjsMFA4YqBwwUDhjoHCC4NRDUNbA0kIACDKrXk66HNhAAAAAElFTkSuQmCC</office:binary-data></draw:image>
+    </draw:frame>
+   </draw:page>
+  </office:presentation>
+ </office:body>
+</office:document>

@@ -1,0 +1,2039 @@
+page	diff%	ink%	|ink|%	regions	verdict
+1	2.76	0.03	0.04	38	shifted
+2	15.67	0.02	0.03	19	shifted
+3	0.36	0.00	0.00	16	ok
+4	0.00	0.00	0.00	1	ok
+5	14.58	0.05	0.05	23	shifted
+6	1.98	0.87	0.93	61	MAJOR
+				middle-centre: ink missing from ours — a graphic, glyphs or a fill (2.90% of page, x 0.55-0.66, y 0.04-0.90)
+				middle-right: a solid area drawn differently (2.08% of page, x 0.84-0.86, y 0.04-0.90)
+				middle-centre: marks displaced or reshaped (0.70% of page, x 0.17-0.53, y 0.56-0.59)
+				middle-left: marks displaced or reshaped (1.33% of page, x 0.17-0.45, y 0.28-0.42)
+				top-centre: marks displaced or reshaped (2.17% of page, x 0.17-0.55, y 0.10-0.21)
+				top-centre: marks displaced or reshaped (0.71% of page, x 0.38-0.55, y 0.21-0.27)
+7	2.58	0.72	0.79	64	shifted
+8	1.39	0.75	0.79	48	MAJOR
+				middle-centre: ink missing from ours — a graphic, glyphs or a fill (3.05% of page, x 0.58-0.67, y 0.04-0.95)
+				middle-right: a solid area drawn differently (2.21% of page, x 0.84-0.86, y 0.04-0.96)
+				bottom-left: marks displaced or reshaped (0.14% of page, x 0.17-0.23, y 0.78-0.81)
+				top-left: marks displaced or reshaped (0.14% of page, x 0.18-0.26, y 0.15-0.17)
+				middle-centre: marks displaced or reshaped (0.09% of page, x 0.39-0.44, y 0.60-0.61)
+				bottom-left: marks displaced or reshaped (0.04% of page, x 0.29-0.31, y 0.70-0.71)
+9	3.00	0.22	0.22	48	shifted
+10	1.92	0.03	0.03	71	ok
+11	2.94	0.02	0.03	77	shifted
+12	1.60	0.53	0.53	72	MAJOR
+				middle-centre: ink we draw that the reference does not (3.02% of page, x 0.61-0.66, y 0.04-0.95)
+				middle-right: a solid area drawn differently (2.21% of page, x 0.84-0.86, y 0.04-0.96)
+				bottom-centre: marks displaced or reshaped (0.05% of page, x 0.48-0.50, y 0.76-0.78)
+				top-centre: marks displaced or reshaped (0.05% of page, x 0.41-0.43, y 0.04-0.06)
+				top-centre: marks displaced or reshaped (0.18% of page, x 0.39-0.45, y 0.22-0.25)
+				top-centre: marks displaced or reshaped (0.07% of page, x 0.36-0.40, y 0.04-0.06)
+13	15.10	0.04	0.05	19	shifted
+14	7.40	0.13	0.14	64	shifted
+15	19.03	0.06	0.07	9	shifted
+16	24.78	0.01	0.05	10	shifted
+17	24.99	0.13	0.18	7	shifted
+18	17.25	0.05	0.06	8	shifted
+19	23.73	0.26	0.28	4	shifted
+20	20.98	6.77	6.77	2	MAJOR
+				middle-centre: ink missing from ours — a graphic, glyphs or a fill (48.90% of page, x 0.14-0.86, y 0.04-0.95)
+				top-right: marks displaced or reshaped (0.08% of page, x 0.70-0.74, y 0.23-0.26)
+21	17.08	0.14	0.15	3	shifted
+22	22.65	0.34	0.34	1	shifted
+23	14.93	0.23	0.48	10	shifted
+24	2.12	0.00	0.01	63	shifted
+25	1.90	0.85	0.90	69	ok
+26	1.75	0.91	0.95	86	ok
+27	2.71	0.10	0.11	68	shifted
+28	1.82	6.64	6.65	66	MAJOR
+				middle-centre: ink missing from ours — a graphic, glyphs or a fill (6.79% of page, x 0.14-0.86, y 0.04-0.96)
+				middle-left: marks displaced or reshaped (0.21% of page, x 0.23-0.36, y 0.42-0.43)
+				middle-left: marks displaced or reshaped (0.08% of page, x 0.17-0.22, y 0.42-0.43)
+				bottom-centre: marks displaced or reshaped (0.17% of page, x 0.45-0.52, y 0.83-0.86)
+				middle-centre: marks displaced or reshaped (0.28% of page, x 0.41-0.54, y 0.63-0.66)
+				top-centre: marks displaced or reshaped (0.15% of page, x 0.44-0.52, y 0.21-0.24)
+29	5.82	0.01	0.01	42	shifted
+30	1.59	0.02	0.02	74	ok
+31	1.74	0.02	0.04	75	ok
+32	2.03	0.09	0.10	69	shifted
+33	2.33	6.37	6.38	77	MAJOR
+				middle-centre: ink missing from ours — a graphic, glyphs or a fill (7.72% of page, x 0.14-0.86, y 0.04-0.96)
+				top-centre: marks displaced or reshaped (0.46% of page, x 0.39-0.55, y 0.09-0.12)
+				bottom-centre: marks displaced or reshaped (0.04% of page, x 0.52-0.54, y 0.77-0.78)
+				top-centre: marks displaced or reshaped (0.04% of page, x 0.50-0.52, y 0.04-0.06)
+				middle-left: marks displaced or reshaped (0.08% of page, x 0.27-0.31, y 0.35-0.36)
+				middle-centre: marks displaced or reshaped (0.11% of page, x 0.41-0.48, y 0.59-0.61)
+34	2.11	0.81	0.88	86	shifted
+35	2.24	0.82	0.87	76	shifted
+36	0.83	0.07	0.07	2	ok
+37	14.06	7.20	7.20	22	MAJOR
+				the whole page: ink missing from ours — a graphic, glyphs or a fill (43.01% of page, x 0.06-0.94, y 0.04-0.96)
+				middle-left: marks displaced or reshaped (0.10% of page, x 0.30-0.34, y 0.33-0.36)
+				top-left: marks displaced or reshaped (0.04% of page, x 0.20-0.23, y 0.28-0.29)
+				top-centre: marks displaced or reshaped (0.14% of page, x 0.29-0.37, y 0.30-0.33)
+				top-centre: marks displaced or reshaped (0.31% of page, x 0.26-0.42, y 0.17-0.19)
+				top-centre: marks displaced or reshaped (0.19% of page, x 0.30-0.40, y 0.14-0.16)
+38	1.40	0.05	0.05	49	ok
+39	1.68	0.47	0.48	60	MAJOR
+				middle-right: ink we draw that the reference does not (2.17% of page, x 0.65-0.70, y 0.04-0.92)
+				middle-right: a solid area drawn differently (2.13% of page, x 0.92-0.94, y 0.04-0.92)
+				bottom-left: marks displaced or reshaped (0.43% of page, x 0.08-0.21, y 0.77-0.83)
+				bottom-left: marks displaced or reshaped (0.18% of page, x 0.27-0.34, y 0.77-0.80)
+				middle-left: marks displaced or reshaped (1.50% of page, x 0.07-0.44, y 0.33-0.43)
+				top-centre: marks displaced or reshaped (0.82% of page, x 0.23-0.45, y 0.04-0.10)
+40	1.78	0.05	0.05	76	ok
+41	2.91	0.03	0.04	66	shifted
+42	1.87	0.06	0.06	70	ok
+43	3.03	0.19	0.20	65	shifted
+44	1.82	0.05	0.05	77	ok
+45	16.24	7.16	7.17	23	MAJOR
+				the whole page: ink missing from ours — a graphic, glyphs or a fill (49.52% of page, x 0.06-0.94, y 0.04-0.96)
+				top-left: marks displaced or reshaped (0.40% of page, x 0.16-0.25, y 0.15-0.21)
+				top-left: marks displaced or reshaped (0.11% of page, x 0.28-0.34, y 0.22-0.25)
+				top-centre: marks displaced or reshaped (0.07% of page, x 0.45-0.49, y 0.06-0.08)
+				top-centre: marks displaced or reshaped (0.08% of page, x 0.40-0.44, y 0.09-0.10)
+				top-left: marks displaced or reshaped (0.15% of page, x 0.17-0.24, y 0.22-0.26)
+46	6.83	7.30	7.30	58	MAJOR
+				the whole page: ink missing from ours — a graphic, glyphs or a fill (17.04% of page, x 0.06-0.94, y 0.04-0.96)
+				top-left: marks displaced or reshaped (1.81% of page, x 0.11-0.37, y 0.04-0.21)
+				bottom-centre: marks displaced or reshaped (0.08% of page, x 0.40-0.46, y 0.76-0.78)
+				middle-left: marks displaced or reshaped (0.41% of page, x 0.09-0.23, y 0.58-0.64)
+				top-left: marks displaced or reshaped (0.04% of page, x 0.26-0.28, y 0.04-0.06)
+				top-centre: marks displaced or reshaped (0.05% of page, x 0.40-0.43, y 0.04-0.06)
+47	18.88	0.15	0.15	1	shifted
+48	23.21	0.25	0.25	4	shifted
+49	24.55	0.16	0.16	5	shifted
+50	18.44	0.32	0.32	1	shifted
+51	23.26	7.14	7.14	4	MAJOR
+				the whole page: ink missing from ours — a graphic, glyphs or a fill (65.91% of page, x 0.06-0.94, y 0.04-0.96)
+				middle-right: marks displaced or reshaped (0.04% of page, x 0.74-0.77, y 0.38-0.40)
+				middle-right: marks displaced or reshaped (0.04% of page, x 0.71-0.73, y 0.38-0.40)
+				middle-right: marks displaced or reshaped (0.04% of page, x 0.77-0.80, y 0.38-0.40)
+52	21.09	7.44	7.44	6	MAJOR
+				the whole page: ink missing from ours — a graphic, glyphs or a fill (59.63% of page, x 0.06-0.94, y 0.04-0.96)
+				middle-centre: marks displaced or reshaped (0.04% of page, x 0.47-0.49, y 0.37-0.39)
+				middle-right: marks displaced or reshaped (0.04% of page, x 0.74-0.77, y 0.37-0.39)
+				middle-right: marks displaced or reshaped (0.04% of page, x 0.71-0.73, y 0.37-0.39)
+				middle-right: marks displaced or reshaped (0.04% of page, x 0.77-0.80, y 0.37-0.39)
+				middle-right: marks displaced or reshaped (0.04% of page, x 0.84-0.86, y 0.37-0.39)
+53	18.67	7.14	7.14	16	MAJOR
+				the whole page: ink missing from ours — a graphic, glyphs or a fill (56.43% of page, x 0.06-0.94, y 0.04-0.96)
+				bottom-right: marks displaced or reshaped (0.04% of page, x 0.74-0.77, y 0.66-0.68)
+				bottom-right: marks displaced or reshaped (0.04% of page, x 0.71-0.73, y 0.66-0.68)
+				bottom-right: marks displaced or reshaped (0.04% of page, x 0.77-0.80, y 0.66-0.68)
+				middle-centre: marks displaced or reshaped (0.04% of page, x 0.62-0.64, y 0.37-0.38)
+				middle-right: marks displaced or reshaped (0.04% of page, x 0.74-0.77, y 0.37-0.38)
+54	22.99	0.08	0.08	1	shifted
+55	16.66	6.46	6.53	8	MAJOR
+				the whole page: marks displaced or reshaped (51.28% of page, x 0.06-0.94, y 0.04-0.96)
+				top-left: marks displaced or reshaped (1.35% of page, x 0.06-0.46, y 0.04-0.08)
+				middle-centre: a solid area drawn differently (0.29% of page, x 0.29-0.45, y 0.34-0.36)
+				bottom-centre: marks displaced or reshaped (0.05% of page, x 0.42-0.45, y 0.86-0.87)
+				bottom-centre: marks displaced or reshaped (0.05% of page, x 0.35-0.38, y 0.88-0.89)
+				bottom-centre: marks displaced or reshaped (0.05% of page, x 0.38-0.41, y 0.86-0.87)
+56	2.30	0.12	0.13	72	shifted
+57	1.62	0.05	0.06	93	ok
+58	1.68	0.05	0.05	64	ok
+59	1.77	0.05	0.06	65	ok
+60	2.07	7.06	7.06	69	MAJOR
+				the whole page: ink we draw that the reference does not (6.36% of page, x 0.07-0.94, y 0.04-0.95)
+				middle-left: marks displaced or reshaped (1.30% of page, x 0.17-0.30, y 0.30-0.46)
+				top-centre: marks displaced or reshaped (0.04% of page, x 0.39-0.41, y 0.16-0.17)
+				bottom-left: marks displaced or reshaped (0.66% of page, x 0.07-0.32, y 0.71-0.75)
+				bottom-left: marks displaced or reshaped (0.17% of page, x 0.20-0.27, y 0.91-0.94)
+				top-left: marks displaced or reshaped (0.07% of page, x 0.08-0.11, y 0.04-0.07)
+61	6.63	0.14	0.14	43	shifted
+62	1.71	0.05	0.06	80	ok
+63	1.81	0.05	0.06	83	ok
+64	1.78	0.09	0.10	74	ok
+65	2.09	6.99	7.00	86	MAJOR
+				the whole page: ink we draw that the reference does not (6.00% of page, x 0.07-0.94, y 0.04-0.96)
+				bottom-centre: marks displaced or reshaped (0.08% of page, x 0.42-0.47, y 0.74-0.76)
+				bottom-left: marks displaced or reshaped (1.25% of page, x 0.07-0.43, y 0.70-0.80)
+				top-centre: marks displaced or reshaped (0.67% of page, x 0.30-0.45, y 0.13-0.19)
+				top-left: marks displaced or reshaped (0.11% of page, x 0.30-0.36, y 0.20-0.21)
+				top-centre: marks displaced or reshaped (0.05% of page, x 0.34-0.37, y 0.26-0.27)
+66	1.58	0.05	0.06	67	ok
+67	1.86	0.49	0.50	70	MAJOR
+				middle-right: ink we draw that the reference does not (2.24% of page, x 0.65-0.70, y 0.04-0.95)
+				middle-right: a solid area drawn differently (2.19% of page, x 0.92-0.94, y 0.04-0.95)
+				bottom-left: marks displaced or reshaped (0.06% of page, x 0.24-0.26, y 0.89-0.92)
+				top-centre: marks displaced or reshaped (0.07% of page, x 0.37-0.41, y 0.04-0.06)
+				bottom-left: marks displaced or reshaped (1.23% of page, x 0.07-0.44, y 0.71-0.76)
+				top-centre: marks displaced or reshaped (0.29% of page, x 0.32-0.43, y 0.04-0.09)
+68	0.20	0.01	0.01	7	ok
+69	12.61	0.37	0.37	41	shifted
+70	5.14	0.03	0.45	59	shifted
+71	2.86	0.05	0.13	74	shifted
+72	1.11	0.04	0.04	92	ok
+73	1.30	0.03	0.04	99	ok
+74	1.87	0.02	0.02	84	ok
+75	1.00	0.00	0.00	87	ok
+76	1.41	0.01	0.03	97	ok
+77	2.29	0.10	0.10	93	shifted
+78	1.87	0.06	0.06	102	ok
+79	2.57	0.03	0.05	84	shifted
+80	1.90	0.04	0.04	50	ok
+81	4.13	0.21	0.22	45	shifted
+82	1.41	0.00	0.01	77	ok
+83	2.68	0.10	0.12	78	shifted
+84	1.76	0.03	0.04	105	ok
+85	1.49	0.00	0.01	85	ok
+86	1.20	0.03	0.04	99	ok
+87	4.06	0.19	0.23	69	shifted
+88	3.00	0.18	0.19	66	shifted
+89	2.09	0.04	0.09	109	shifted
+90	1.66	0.06	0.06	88	ok
+91	3.02	0.17	0.17	52	shifted
+92	2.05	0.06	0.06	91	shifted
+93	1.51	0.02	0.02	90	ok
+94	1.43	0.01	0.01	92	ok
+95	1.51	0.02	0.02	76	ok
+96	1.36	0.01	0.02	95	ok
+97	1.85	0.14	0.15	79	ok
+98	3.14	0.15	0.16	84	shifted
+99	1.53	0.00	0.00	121	ok
+100	1.66	0.00	0.00	110	ok
+101	1.13	0.00	0.00	93	ok
+102	1.64	0.00	0.01	78	ok
+103	1.08	0.00	0.00	116	ok
+104	1.33	0.00	0.00	98	ok
+105	1.38	0.04	0.04	77	ok
+106	1.86	0.02	0.09	104	ok
+107	2.05	0.08	0.09	91	shifted
+108	1.69	0.01	0.01	88	ok
+109	1.57	0.04	0.04	80	ok
+110	2.10	0.08	0.08	89	shifted
+111	0.94	0.00	0.00	98	ok
+112	0.79	0.00	0.01	85	ok
+113	0.52	0.00	0.00	64	ok
+114	9.45	0.06	0.06	23	shifted
+115	1.24	0.05	0.09	50	ok
+116	1.83	0.10	0.10	32	ok
+117	1.04	0.02	0.02	64	ok
+118	0.79	0.02	0.03	37	ok
+119	1.78	0.02	0.03	54	ok
+120	1.15	0.01	0.01	57	ok
+121	1.15	0.00	0.00	59	ok
+122	0.96	0.00	0.00	61	ok
+123	1.22	0.03	0.03	62	ok
+124	2.57	0.08	0.10	45	shifted
+125	1.31	0.01	0.02	19	ok
+126	1.80	0.01	0.01	57	ok
+127	1.57	0.01	0.01	47	ok
+128	1.41	0.00	0.00	52	ok
+129	1.20	0.00	0.00	50	ok
+130	0.98	0.00	0.00	46	ok
+131	0.94	0.00	0.00	44	ok
+132	1.93	0.03	0.03	40	ok
+133	1.05	0.00	0.00	56	ok
+134	0.97	0.03	0.03	51	ok
+135	0.98	0.00	0.00	62	ok
+136	1.32	0.00	0.01	44	ok
+137	1.12	0.00	0.01	54	ok
+138	1.50	0.00	0.00	54	ok
+139	0.84	0.00	0.00	48	ok
+140	1.63	0.00	0.00	58	ok
+141	1.41	0.00	0.00	55	ok
+142	1.52	0.05	0.06	40	ok
+143	1.56	0.01	0.01	66	ok
+144	1.42	0.00	0.00	77	ok
+145	1.72	0.00	0.00	70	ok
+146	1.00	0.00	0.00	66	ok
+147	1.30	0.01	0.01	58	ok
+148	1.04	0.00	0.00	66	ok
+149	1.37	0.00	0.00	64	ok
+150	1.43	0.00	0.00	55	ok
+151	1.64	0.03	0.03	66	ok
+152	1.14	0.02	0.02	60	ok
+153	1.84	0.01	0.01	48	ok
+154	1.23	0.00	0.00	59	ok
+155	1.08	0.01	0.01	72	ok
+156	1.27	0.00	0.00	65	ok
+157	1.15	0.00	0.00	55	ok
+158	0.73	0.00	0.00	36	ok
+159	3.44	0.22	0.23	10	shifted
+160	0.68	0.02	0.02	13	ok
+161	0.64	0.01	0.01	6	ok
+162	0.44	0.00	0.00	1	ok
+163	0.44	0.00	0.00	1	ok
+164	0.75	0.00	0.00	1	ok
+165	0.44	0.00	0.00	1	ok
+166	0.43	0.00	0.00	1	ok
+167	0.46	0.00	0.00	2	ok
+168	0.60	0.01	0.01	1	ok
+169	0.77	0.01	0.01	3	ok
+170	0.60	0.00	0.00	1	ok
+171	0.79	0.00	0.00	5	ok
+172	0.42	0.00	0.00	1	ok
+173	0.61	0.00	0.00	2	ok
+174	0.45	0.00	0.00	1	ok
+175	0.42	0.00	0.00	1	ok
+176	0.59	0.00	0.00	1	ok
+177	0.82	0.02	0.02	12	ok
+178	0.49	0.00	0.00	7	ok
+179	0.60	0.01	0.01	2	ok
+180	0.45	0.00	0.00	4	ok
+181	0.49	0.00	0.00	7	ok
+182	0.63	0.01	0.01	4	ok
+183	0.76	0.00	0.00	1	ok
+184	0.45	0.00	0.00	1	ok
+185	0.61	0.00	0.00	1	ok
+186	0.59	0.00	0.00	1	ok
+187	0.62	0.01	0.01	4	ok
+188	0.65	0.02	0.02	10	ok
+189	0.60	0.00	0.00	1	ok
+190	0.76	0.00	0.00	1	ok
+191	0.45	0.00	0.00	1	ok
+192	0.61	0.00	0.00	1	ok
+193	0.45	0.00	0.00	1	ok
+194	0.45	0.00	0.00	1	ok
+195	0.45	0.00	0.00	4	ok
+196	0.61	0.01	0.01	3	ok
+197	0.44	0.00	0.00	1	ok
+198	0.61	0.00	0.00	1	ok
+199	0.46	0.00	0.00	1	ok
+200	0.44	0.00	0.00	1	ok
+201	0.45	0.00	0.00	1	ok
+202	0.44	0.00	0.00	1	ok
+203	0.31	0.00	0.00	1	ok
+204	1.97	0.13	0.14	72	ok
+205	3.24	0.57	0.58	70	shifted
+206	2.46	0.32	0.33	66	MAJOR
+				middle-right: marks displaced or reshaped (1.39% of page, x 0.62-0.89, y 0.29-0.38)
+				top-right: ink missing from ours — a graphic, glyphs or a fill (0.44% of page, x 0.62-0.76, y 0.06-0.10)
+				middle-right: ink missing from ours — a graphic, glyphs or a fill (0.52% of page, x 0.62-0.76, y 0.50-0.55)
+				top-centre: marks displaced or reshaped (0.77% of page, x 0.44-0.63, y 0.18-0.25)
+				middle-centre: marks displaced or reshaped (0.04% of page, x 0.38-0.40, y 0.60-0.62)
+				bottom-right: marks displaced or reshaped (0.05% of page, x 0.72-0.75, y 0.78-0.80)
+207	2.48	0.18	0.19	68	MAJOR
+				top-right: ink missing from ours — a graphic, glyphs or a fill (0.74% of page, x 0.62-0.76, y 0.06-0.13)
+				top-centre: marks displaced or reshaped (1.74% of page, x 0.08-0.90, y 0.27-0.33)
+				middle-centre: marks displaced or reshaped (2.20% of page, x 0.27-0.63, y 0.52-0.64)
+				middle-centre: marks displaced or reshaped (0.10% of page, x 0.55-0.62, y 0.47-0.49)
+				bottom-centre: marks displaced or reshaped (0.05% of page, x 0.60-0.62, y 0.77-0.79)
+				middle-right: marks displaced or reshaped (0.13% of page, x 0.72-0.75, y 0.37-0.42)
+208	2.91	0.49	0.49	70	MAJOR
+				bottom-right: ink missing from ours — a graphic, glyphs or a fill (2.61% of page, x 0.62-0.89, y 0.63-0.78)
+				middle-centre: marks displaced or reshaped (2.16% of page, x 0.08-0.90, y 0.38-0.49)
+				top-centre: marks displaced or reshaped (0.59% of page, x 0.42-0.63, y 0.23-0.28)
+				middle-centre: marks displaced or reshaped (0.05% of page, x 0.55-0.57, y 0.58-0.60)
+				top-centre: marks displaced or reshaped (0.12% of page, x 0.43-0.46, y 0.30-0.35)
+				bottom-centre: a solid area drawn differently (0.20% of page, x 0.52-0.62, y 0.83-0.85)
+209	2.70	0.58	0.58	74	MAJOR
+				bottom-right: ink missing from ours — a graphic, glyphs or a fill (1.85% of page, x 0.62-0.89, y 0.68-0.80)
+				middle-right: ink missing from ours — a graphic, glyphs or a fill (1.64% of page, x 0.62-0.89, y 0.36-0.46)
+				bottom-centre: marks displaced or reshaped (0.36% of page, x 0.40-0.63, y 0.83-0.85)
+				middle-centre: marks displaced or reshaped (0.18% of page, x 0.54-0.63, y 0.52-0.55)
+				middle-centre: marks displaced or reshaped (0.26% of page, x 0.47-0.60, y 0.61-0.63)
+				bottom-centre: marks displaced or reshaped (0.09% of page, x 0.43-0.48, y 0.86-0.88)
+210	5.56	0.95	0.96	55	MAJOR
+				bottom-right: ink missing from ours — a graphic, glyphs or a fill (2.15% of page, x 0.62-0.89, y 0.82-0.93)
+				middle-right: marks displaced or reshaped (3.57% of page, x 0.62-0.89, y 0.36-0.58)
+				top-centre: marks displaced or reshaped (2.57% of page, x 0.13-0.89, y 0.26-0.36)
+				bottom-centre: marks displaced or reshaped (0.45% of page, x 0.45-0.63, y 0.73-0.76)
+				middle-centre: marks displaced or reshaped (0.66% of page, x 0.31-0.54, y 0.56-0.61)
+				bottom-left: marks displaced or reshaped (0.09% of page, x 0.13-0.19, y 0.73-0.75)
+211	4.03	0.90	0.92	77	MAJOR
+				middle-right: ink missing from ours — a graphic, glyphs or a fill (1.87% of page, x 0.62-0.89, y 0.45-0.56)
+				top-right: ink missing from ours — a graphic, glyphs or a fill (1.87% of page, x 0.62-0.89, y 0.06-0.18)
+				middle-right: marks displaced or reshaped (0.94% of page, x 0.62-0.89, y 0.62-0.68)
+				bottom-right: marks displaced or reshaped (0.51% of page, x 0.62-0.76, y 0.73-0.78)
+				middle-centre: marks displaced or reshaped (1.06% of page, x 0.13-0.76, y 0.38-0.41)
+				middle-centre: marks displaced or reshaped (0.22% of page, x 0.48-0.60, y 0.54-0.56)
+212	2.52	0.51	0.52	78	MAJOR
+				top-right: ink missing from ours — a graphic, glyphs or a fill (1.41% of page, x 0.62-0.89, y 0.11-0.19)
+				middle-right: ink missing from ours — a graphic, glyphs or a fill (1.16% of page, x 0.62-0.89, y 0.31-0.38)
+				middle-right: marks displaced or reshaped (0.50% of page, x 0.62-0.76, y 0.41-0.46)
+				middle-centre: marks displaced or reshaped (1.19% of page, x 0.37-0.63, y 0.61-0.71)
+				bottom-centre: marks displaced or reshaped (0.30% of page, x 0.48-0.60, y 0.68-0.71)
+				top-centre: marks displaced or reshaped (0.46% of page, x 0.46-0.61, y 0.18-0.23)
+213	2.21	0.40	0.41	66	shifted
+214	2.01	0.33	0.34	96	MAJOR
+				top-right: ink missing from ours — a graphic, glyphs or a fill (0.68% of page, x 0.62-0.76, y 0.06-0.12)
+				middle-centre: ink missing from ours — a graphic, glyphs or a fill (0.79% of page, x 0.57-0.76, y 0.43-0.48)
+				bottom-right: marks displaced or reshaped (0.50% of page, x 0.62-0.76, y 0.85-0.90)
+				middle-centre: marks displaced or reshaped (1.13% of page, x 0.13-0.60, y 0.36-0.40)
+				middle-centre: marks displaced or reshaped (0.07% of page, x 0.55-0.59, y 0.65-0.67)
+				top-left: a solid area drawn differently (0.26% of page, x 0.13-0.30, y 0.25-0.27)
+215	1.72	0.19	0.21	74	MAJOR
+				bottom-right: ink missing from ours — a graphic, glyphs or a fill (0.73% of page, x 0.62-0.76, y 0.73-0.80)
+				middle-right: marks displaced or reshaped (0.50% of page, x 0.62-0.76, y 0.43-0.48)
+				bottom-centre: a solid area drawn differently (1.29% of page, x 0.08-0.90, y 0.91-0.92)
+				top-centre: marks displaced or reshaped (1.15% of page, x 0.34-0.61, y 0.27-0.33)
+				middle-centre: marks displaced or reshaped (0.05% of page, x 0.59-0.61, y 0.35-0.36)
+				middle-centre: marks displaced or reshaped (0.44% of page, x 0.43-0.58, y 0.35-0.41)
+216	4.60	1.11	1.12	49	MAJOR
+				bottom-right: ink missing from ours — a graphic, glyphs or a fill (4.15% of page, x 0.62-0.89, y 0.62-0.88)
+				top-right: ink missing from ours — a graphic, glyphs or a fill (0.45% of page, x 0.62-0.76, y 0.22-0.26)
+				middle-centre: marks displaced or reshaped (1.13% of page, x 0.22-0.63, y 0.33-0.38)
+				middle-centre: marks displaced or reshaped (0.17% of page, x 0.50-0.61, y 0.41-0.42)
+				middle-left: marks displaced or reshaped (0.16% of page, x 0.13-0.21, y 0.33-0.36)
+				top-centre: marks displaced or reshaped (1.43% of page, x 0.37-0.60, y 0.06-0.18)
+217	3.33	0.68	0.72	62	MAJOR
+				top-right: a fill or background shading the reference has and we do not (1.83% of page, x 0.62-0.76, y 0.22-0.36)
+				middle-right: a fill or background shading the reference has and we do not (0.91% of page, x 0.62-0.76, y 0.37-0.44)
+				middle-centre: marks displaced or reshaped (1.56% of page, x 0.08-0.90, y 0.49-0.53)
+				bottom-right: marks displaced or reshaped (0.22% of page, x 0.63-0.75, y 0.72-0.76)
+				bottom-right: marks displaced or reshaped (0.22% of page, x 0.63-0.75, y 0.86-0.89)
+				middle-centre: marks displaced or reshaped (1.80% of page, x 0.08-0.90, y 0.59-0.71)
+218	4.77	1.20	1.21	67	MAJOR
+				bottom-right: ink missing from ours — a graphic, glyphs or a fill (3.24% of page, x 0.62-0.89, y 0.74-0.93)
+				middle-right: ink missing from ours — a graphic, glyphs or a fill (3.19% of page, x 0.62-0.89, y 0.41-0.58)
+				top-centre: marks displaced or reshaped (0.45% of page, x 0.40-0.62, y 0.23-0.27)
+				top-centre: marks displaced or reshaped (0.20% of page, x 0.48-0.60, y 0.20-0.22)
+				top-centre: marks displaced or reshaped (0.08% of page, x 0.51-0.55, y 0.27-0.29)
+				top-right: marks displaced or reshaped (0.09% of page, x 0.72-0.75, y 0.16-0.20)
+219	1.41	0.07	0.08	85	ok
+220	3.58	0.83	0.84	57	MAJOR
+				top-right: ink missing from ours — a graphic, glyphs or a fill (3.32% of page, x 0.62-0.89, y 0.16-0.36)
+				bottom-right: ink missing from ours — a graphic, glyphs or a fill (1.20% of page, x 0.62-0.89, y 0.75-0.82)
+				bottom-centre: marks displaced or reshaped (2.19% of page, x 0.09-0.76, y 0.65-0.71)
+				bottom-centre: marks displaced or reshaped (0.22% of page, x 0.49-0.62, y 0.72-0.74)
+				bottom-centre: marks displaced or reshaped (0.12% of page, x 0.39-0.42, y 0.81-0.86)
+				middle-centre: marks displaced or reshaped (0.06% of page, x 0.52-0.55, y 0.41-0.43)
+221	5.76	1.63	1.63	27	MAJOR
+				bottom-right: ink missing from ours — a graphic, glyphs or a fill (7.39% of page, x 0.62-0.89, y 0.47-0.90)
+				top-centre: marks displaced or reshaped (0.08% of page, x 0.58-0.63, y 0.27-0.29)
+				top-centre: marks displaced or reshaped (0.05% of page, x 0.59-0.62, y 0.06-0.08)
+				top-centre: marks displaced or reshaped (0.09% of page, x 0.49-0.55, y 0.28-0.29)
+				top-centre: marks displaced or reshaped (0.07% of page, x 0.43-0.46, y 0.31-0.33)
+				top-centre: marks displaced or reshaped (0.08% of page, x 0.38-0.42, y 0.27-0.29)
+222	7.45	2.41	2.43	33	MAJOR
+				middle-centre: ink missing from ours — a graphic, glyphs or a fill (9.15% of page, x 0.45-0.89, y 0.06-0.61)
+				bottom-right: ink missing from ours — a graphic, glyphs or a fill (0.52% of page, x 0.62-0.76, y 0.78-0.83)
+				bottom-centre: marks displaced or reshaped (1.29% of page, x 0.13-0.60, y 0.71-0.78)
+				middle-centre: marks displaced or reshaped (0.16% of page, x 0.47-0.54, y 0.62-0.65)
+				bottom-centre: marks displaced or reshaped (0.36% of page, x 0.48-0.63, y 0.67-0.70)
+				bottom-centre: marks displaced or reshaped (0.04% of page, x 0.56-0.59, y 0.71-0.73)
+223	7.73	1.92	1.93	35	MAJOR
+				middle-right: ink missing from ours — a graphic, glyphs or a fill (7.03% of page, x 0.62-0.89, y 0.22-0.62)
+				bottom-centre: marks displaced or reshaped (4.33% of page, x 0.08-0.90, y 0.73-0.91)
+				top-left: a solid area drawn differently (0.43% of page, x 0.13-0.40, y 0.21-0.23)
+				top-centre: marks displaced or reshaped (0.10% of page, x 0.56-0.62, y 0.13-0.15)
+				top-centre: marks displaced or reshaped (0.18% of page, x 0.46-0.57, y 0.19-0.21)
+				bottom-centre: marks displaced or reshaped (0.30% of page, x 0.43-0.57, y 0.65-0.70)
+224	5.18	1.38	1.38	26	MAJOR
+				bottom-right: ink missing from ours — a graphic, glyphs or a fill (5.44% of page, x 0.62-0.89, y 0.54-0.87)
+				top-right: marks displaced or reshaped (1.62% of page, x 0.62-0.89, y 0.06-0.17)
+				top-centre: marks displaced or reshaped (0.08% of page, x 0.59-0.63, y 0.30-0.33)
+				bottom-centre: marks displaced or reshaped (0.13% of page, x 0.45-0.51, y 0.82-0.84)
+				top-left: marks displaced or reshaped (0.08% of page, x 0.22-0.25, y 0.23-0.26)
+				top-centre: a solid area drawn differently (0.25% of page, x 0.43-0.56, y 0.25-0.27)
+225	1.57	0.02	0.03	101	ok
+226	1.97	0.00	0.01	93	ok
+227	2.08	0.33	0.33	100	MAJOR
+				bottom-right: ink missing from ours — a graphic, glyphs or a fill (1.43% of page, x 0.62-0.89, y 0.65-0.73)
+				bottom-right: marks displaced or reshaped (0.50% of page, x 0.62-0.76, y 0.85-0.91)
+				middle-centre: marks displaced or reshaped (0.72% of page, x 0.45-0.62, y 0.57-0.64)
+				middle-left: marks displaced or reshaped (0.18% of page, x 0.17-0.25, y 0.57-0.62)
+				bottom-centre: marks displaced or reshaped (0.16% of page, x 0.52-0.61, y 0.80-0.82)
+				middle-centre: marks displaced or reshaped (0.04% of page, x 0.52-0.55, y 0.46-0.47)
+228	1.66	0.26	0.26	65	ok
+229	4.40	0.97	0.97	37	MAJOR
+				bottom-centre: marks displaced or reshaped (5.52% of page, x 0.08-0.90, y 0.68-0.92)
+				top-right: ink missing from ours — a graphic, glyphs or a fill (0.76% of page, x 0.62-0.76, y 0.14-0.21)
+				middle-centre: marks displaced or reshaped (2.33% of page, x 0.36-0.63, y 0.34-0.47)
+				top-left: marks displaced or reshaped (0.04% of page, x 0.23-0.25, y 0.28-0.30)
+				top-left: marks displaced or reshaped (0.07% of page, x 0.27-0.31, y 0.11-0.13)
+				top-left: marks displaced or reshaped (0.05% of page, x 0.19-0.21, y 0.08-0.10)
+230	1.86	0.32	0.33	74	ok
+231	1.45	0.12	0.14	76	MAJOR
+				top-right: ink missing from ours — a graphic, glyphs or a fill (0.44% of page, x 0.62-0.76, y 0.06-0.10)
+				bottom-right: marks displaced or reshaped (0.51% of page, x 0.62-0.76, y 0.71-0.76)
+				middle-centre: marks displaced or reshaped (0.30% of page, x 0.52-0.63, y 0.56-0.61)
+				bottom-centre: marks displaced or reshaped (0.19% of page, x 0.53-0.60, y 0.80-0.83)
+				bottom-centre: marks displaced or reshaped (1.21% of page, x 0.13-0.55, y 0.85-0.92)
+				middle-centre: marks displaced or reshaped (0.06% of page, x 0.55-0.59, y 0.59-0.61)
+232	1.39	0.05	0.09	55	ok
+233	6.95	0.56	1.15	50	MAJOR
+				bottom-centre: marks displaced or reshaped (10.52% of page, x 0.08-0.90, y 0.71-0.93)
+				top-right: ink missing from ours — a graphic, glyphs or a fill (1.39% of page, x 0.62-0.89, y 0.06-0.14)
+				middle-centre: marks displaced or reshaped (2.89% of page, x 0.08-0.90, y 0.37-0.47)
+				top-centre: marks displaced or reshaped (2.29% of page, x 0.08-0.90, y 0.22-0.29)
+				middle-right: marks displaced or reshaped (0.50% of page, x 0.62-0.76, y 0.53-0.58)
+				top-centre: marks displaced or reshaped (0.81% of page, x 0.41-0.61, y 0.13-0.20)
+234	20.23	1.07	1.13	3	shifted
+235	7.01	2.03	2.04	32	MAJOR
+				middle-right: ink missing from ours — a graphic, glyphs or a fill (5.98% of page, x 0.62-0.89, y 0.19-0.57)
+				bottom-right: ink missing from ours — a graphic, glyphs or a fill (3.36% of page, x 0.62-0.89, y 0.75-0.92)
+				middle-right: marks displaced or reshaped (0.50% of page, x 0.62-0.76, y 0.60-0.66)
+				top-centre: marks displaced or reshaped (0.52% of page, x 0.42-0.62, y 0.11-0.16)
+				top-centre: marks displaced or reshaped (0.12% of page, x 0.54-0.59, y 0.06-0.09)
+				middle-centre: marks displaced or reshaped (0.46% of page, x 0.28-0.43, y 0.56-0.62)
+236	3.11	0.65	0.67	70	MAJOR
+				middle-right: ink missing from ours — a graphic, glyphs or a fill (1.12% of page, x 0.62-0.76, y 0.31-0.40)
+				top-right: marks displaced or reshaped (1.62% of page, x 0.62-0.89, y 0.06-0.17)
+				middle-right: marks displaced or reshaped (0.50% of page, x 0.62-0.76, y 0.57-0.62)
+				bottom-right: marks displaced or reshaped (0.51% of page, x 0.62-0.76, y 0.77-0.83)
+				bottom-centre: marks displaced or reshaped (2.06% of page, x 0.08-0.90, y 0.85-0.91)
+				bottom-right: the same marks in a different colour (0.27% of page, x 0.77-0.88, y 0.78-0.81)
+237	2.10	0.31	0.35	86	MAJOR
+				middle-right: ink missing from ours — a graphic, glyphs or a fill (1.48% of page, x 0.62-0.89, y 0.38-0.48)
+				top-right: marks displaced or reshaped (0.50% of page, x 0.62-0.76, y 0.10-0.15)
+				top-right: the same marks in a different colour (0.26% of page, x 0.77-0.88, y 0.10-0.13)
+				middle-right: marks displaced or reshaped (0.23% of page, x 0.62-0.76, y 0.52-0.54)
+				middle-left: a solid area drawn differently (0.40% of page, x 0.13-0.37, y 0.52-0.54)
+				middle-centre: marks displaced or reshaped (0.04% of page, x 0.55-0.57, y 0.49-0.50)
+238	2.09	0.31	0.34	59	MAJOR
+				top-right: ink missing from ours — a graphic, glyphs or a fill (1.63% of page, x 0.56-0.89, y 0.06-0.15)
+				top-right: marks displaced or reshaped (0.51% of page, x 0.61-0.76, y 0.25-0.30)
+				top-right: the same marks in a different colour (0.26% of page, x 0.77-0.88, y 0.25-0.28)
+				top-centre: marks displaced or reshaped (0.49% of page, x 0.40-0.59, y 0.16-0.20)
+				middle-centre: marks displaced or reshaped (0.05% of page, x 0.36-0.38, y 0.58-0.60)
+				top-centre: marks displaced or reshaped (0.05% of page, x 0.57-0.60, y 0.28-0.30)
+239	1.61	0.06	0.08	71	ok
+240	3.87	0.96	0.99	55	MAJOR
+				middle-right: ink missing from ours — a graphic, glyphs or a fill (4.13% of page, x 0.62-0.89, y 0.36-0.60)
+				top-right: ink missing from ours — a graphic, glyphs or a fill (0.68% of page, x 0.62-0.76, y 0.06-0.12)
+				top-right: a fill of the wrong colour (0.24% of page, x 0.77-0.88, y 0.06-0.08)
+				bottom-centre: marks displaced or reshaped (1.12% of page, x 0.33-0.61, y 0.76-0.82)
+				top-centre: marks displaced or reshaped (0.05% of page, x 0.56-0.59, y 0.25-0.27)
+				top-centre: marks displaced or reshaped (0.07% of page, x 0.41-0.45, y 0.20-0.21)
+241	1.14	0.01	0.01	75	ok
+242	0.85	0.01	0.01	70	ok
+243	1.62	0.00	0.01	49	ok
+244	0.98	0.01	0.01	42	ok
+245	1.17	0.03	0.03	58	ok
+246	3.37	0.50	0.54	52	MAJOR
+				middle-right: ink missing from ours — a graphic, glyphs or a fill (2.53% of page, x 0.56-0.89, y 0.58-0.71)
+				bottom-centre: marks displaced or reshaped (3.97% of page, x 0.13-0.76, y 0.73-0.83)
+				bottom-right: a fill of the wrong colour (0.24% of page, x 0.77-0.88, y 0.73-0.75)
+				middle-centre: marks displaced or reshaped (0.49% of page, x 0.49-0.61, y 0.46-0.52)
+				top-centre: marks displaced or reshaped (1.43% of page, x 0.31-0.62, y 0.21-0.32)
+				top-centre: marks displaced or reshaped (0.55% of page, x 0.42-0.59, y 0.13-0.20)
+247	6.84	1.78	1.80	40	MAJOR
+				middle-right: ink missing from ours — a graphic, glyphs or a fill (5.02% of page, x 0.62-0.89, y 0.29-0.59)
+				bottom-right: ink missing from ours — a graphic, glyphs or a fill (3.83% of page, x 0.62-0.89, y 0.64-0.86)
+				middle-right: the same marks in a different colour (0.27% of page, x 0.77-0.88, y 0.54-0.57)
+				middle-centre: marks displaced or reshaped (0.05% of page, x 0.53-0.56, y 0.58-0.59)
+				top-centre: marks displaced or reshaped (0.15% of page, x 0.44-0.48, y 0.16-0.21)
+				top-centre: marks displaced or reshaped (0.05% of page, x 0.34-0.36, y 0.23-0.24)
+248	9.73	2.46	2.49	9	MAJOR
+				middle-right: ink missing from ours — a graphic, glyphs or a fill (12.61% of page, x 0.62-0.89, y 0.06-0.77)
+				bottom-right: ink missing from ours — a graphic, glyphs or a fill (0.52% of page, x 0.62-0.76, y 0.82-0.87)
+				top-right: a fill of the wrong colour (0.25% of page, x 0.77-0.88, y 0.21-0.23)
+				bottom-centre: marks displaced or reshaped (1.26% of page, x 0.13-0.60, y 0.75-0.84)
+				bottom-centre: marks displaced or reshaped (0.05% of page, x 0.39-0.42, y 0.77-0.78)
+				bottom-left: marks displaced or reshaped (0.23% of page, x 0.28-0.37, y 0.75-0.78)
+249	1.84	0.06	0.07	57	ok
+250	3.09	0.51	0.59	75	MAJOR
+				middle-right: ink missing from ours — a graphic, glyphs or a fill (3.46% of page, x 0.62-0.89, y 0.52-0.73)
+				middle-centre: marks displaced or reshaped (1.53% of page, x 0.08-0.90, y 0.34-0.39)
+				bottom-right: the same marks in a different colour (0.26% of page, x 0.77-0.88, y 0.68-0.71)
+				bottom-centre: marks displaced or reshaped (1.02% of page, x 0.37-0.60, y 0.74-0.81)
+				top-centre: marks displaced or reshaped (0.14% of page, x 0.53-0.60, y 0.26-0.29)
+				top-left: marks displaced or reshaped (0.04% of page, x 0.29-0.31, y 0.16-0.18)
+251	0.54	0.01	0.01	30	ok
+252	1.66	0.04	0.04	45	ok
+253	2.88	0.26	0.26	57	shifted
+254	1.96	0.02	0.08	46	ok
+255	2.24	0.06	0.06	41	shifted
+256	2.27	0.29	0.29	47	shifted
+257	2.46	0.20	0.21	68	shifted
+258	4.64	0.59	0.59	56	shifted
+259	3.01	0.34	0.35	56	shifted
+260	2.38	0.23	0.24	46	shifted
+261	2.38	0.24	0.24	52	shifted
+262	1.07	0.03	0.03	72	ok
+263	1.36	0.07	0.07	41	ok
+264	1.54	0.05	0.05	45	ok
+265	1.56	0.03	0.04	41	ok
+266	3.97	0.52	0.52	43	shifted
+267	1.01	0.01	0.01	29	ok
+268	3.08	0.38	0.38	46	shifted
+269	6.11	0.79	0.79	32	shifted
+270	5.28	0.79	0.80	22	shifted
+271	6.57	1.59	1.59	31	MAJOR
+				middle-centre: a fill of the wrong colour (8.54% of page, x 0.21-0.69, y 0.36-0.56)
+				top-centre: a fill of the wrong colour (5.38% of page, x 0.21-0.70, y 0.23-0.34)
+				middle-centre: marks displaced or reshaped (8.79% of page, x 0.08-0.88, y 0.06-0.91)
+				bottom-centre: marks displaced or reshaped (0.08% of page, x 0.37-0.41, y 0.67-0.69)
+				middle-centre: marks displaced or reshaped (0.17% of page, x 0.57-0.66, y 0.62-0.64)
+				top-centre: marks displaced or reshaped (0.21% of page, x 0.61-0.68, y 0.08-0.12)
+272	4.96	1.21	1.21	41	MAJOR
+				bottom-centre: the same marks in a different colour (11.65% of page, x 0.21-0.70, y 0.52-0.84)
+				top-centre: the same marks in a different colour (2.14% of page, x 0.21-0.70, y 0.06-0.13)
+				middle-centre: marks displaced or reshaped (3.09% of page, x 0.08-0.88, y 0.06-0.88)
+				top-centre: marks displaced or reshaped (0.04% of page, x 0.63-0.65, y 0.20-0.21)
+				top-centre: marks displaced or reshaped (0.15% of page, x 0.59-0.67, y 0.31-0.33)
+				middle-centre: marks displaced or reshaped (0.40% of page, x 0.32-0.40, y 0.31-0.41)
+273	2.00	0.04	0.04	77	ok
+274	2.15	0.05	0.05	69	shifted
+275	1.84	0.13	0.13	76	ok
+276	1.45	0.08	0.08	53	ok
+277	3.97	0.41	0.41	34	shifted
+278	2.08	0.18	0.18	59	shifted
+279	1.17	0.03	0.03	63	ok
+280	1.48	0.06	0.07	38	ok
+281	4.75	0.57	0.57	32	shifted
+282	19.83	0.36	0.36	2	shifted
+283	6.04	0.87	0.87	30	shifted
+284	1.92	0.18	0.18	46	ok
+285	1.78	0.17	0.17	45	ok
+286	2.46	0.19	0.19	43	shifted
+287	1.67	0.02	0.03	54	ok
+288	3.90	0.53	0.53	40	shifted
+289	0.80	0.03	0.03	19	ok
+290	1.14	0.03	0.03	52	ok
+291	1.31	0.03	0.03	19	ok
+292	1.14	0.03	0.03	16	ok
+293	0.68	0.03	0.03	13	ok
+294	2.86	0.26	0.26	40	shifted
+295	6.60	1.67	1.67	29	MAJOR
+				bottom-centre: the same marks in a different colour (8.04% of page, x 0.20-0.70, y 0.64-0.84)
+				middle-centre: the same marks in a different colour (8.14% of page, x 0.20-0.70, y 0.39-0.64)
+				middle-centre: a fill of the wrong colour (3.94% of page, x 0.20-0.70, y 0.29-0.38)
+				middle-centre: marks displaced or reshaped (3.10% of page, x 0.08-0.88, y 0.06-0.86)
+				top-centre: marks displaced or reshaped (0.72% of page, x 0.55-0.70, y 0.06-0.15)
+				top-centre: marks displaced or reshaped (0.09% of page, x 0.50-0.55, y 0.08-0.10)
+296	8.30	1.26	1.26	22	MAJOR
+				top-centre: the same marks in a different colour (13.96% of page, x 0.20-0.69, y 0.14-0.48)
+				middle-centre: a fill of the wrong colour (10.97% of page, x 0.21-0.70, y 0.49-0.74)
+				top-centre: a fill of the wrong colour (3.14% of page, x 0.21-0.69, y 0.06-0.13)
+				middle-right: a solid area drawn differently (1.87% of page, x 0.82-0.84, y 0.06-0.91)
+				bottom-centre: a solid area drawn differently (0.24% of page, x 0.52-0.65, y 0.75-0.77)
+				bottom-centre: marks displaced or reshaped (0.06% of page, x 0.45-0.49, y 0.87-0.89)
+297	1.99	0.05	0.05	55	ok
+298	2.86	0.62	0.63	49	shifted
+299	0.38	0.01	0.01	8	ok
+300	1.39	3.48	3.48	12	MAJOR
+				middle-left: marks displaced or reshaped (2.72% of page, x 0.08-0.57, y 0.06-0.89)
+				top-left: a solid area drawn differently (0.26% of page, x 0.26-0.29, y 0.09-0.15)
+				top-left: a solid area drawn differently (0.29% of page, x 0.30-0.34, y 0.08-0.15)
+				top-centre: marks displaced or reshaped (0.13% of page, x 0.52-0.55, y 0.12-0.16)
+				top-centre: marks displaced or reshaped (0.20% of page, x 0.39-0.43, y 0.09-0.14)
+				top-left: marks displaced or reshaped (0.21% of page, x 0.17-0.21, y 0.09-0.14)
+301	0.69	0.00	0.00	9	ok
+302	0.83	0.01	0.01	4	ok
+303	0.99	0.00	0.00	1	ok
+304	0.64	0.02	0.02	5	ok
+305	0.52	0.01	0.01	10	ok
+306	0.53	0.01	0.01	14	ok
+307	0.51	0.01	0.01	10	ok
+308	0.51	0.00	0.01	9	ok
+309	0.67	0.01	0.01	6	ok
+310	0.48	0.00	0.00	1	ok
+311	0.65	4.00	4.00	1	MAJOR
+				middle-left: ink we draw that the reference does not (2.64% of page, x 0.08-0.57, y 0.06-0.92)
+312	0.65	3.79	3.79	4	MAJOR
+				middle-left: ink we draw that the reference does not (2.54% of page, x 0.08-0.57, y 0.06-0.88)
+				bottom-left: marks displaced or reshaped (0.04% of page, x 0.18-0.20, y 0.70-0.71)
+				middle-left: marks displaced or reshaped (0.04% of page, x 0.18-0.20, y 0.62-0.63)
+				bottom-left: marks displaced or reshaped (0.04% of page, x 0.18-0.20, y 0.74-0.76)
+313	0.81	0.01	0.01	3	ok
+314	0.52	0.00	0.00	7	ok
+315	0.59	3.62	3.62	1	MAJOR
+				middle-left: ink we draw that the reference does not (2.49% of page, x 0.08-0.57, y 0.06-0.85)
+316	0.44	0.00	0.00	7	ok
+317	0.49	0.01	0.01	13	ok
+318	0.51	0.01	0.01	16	ok
+319	0.71	0.05	0.05	22	ok
+320	0.63	3.78	3.78	8	MAJOR
+				middle-left: ink we draw that the reference does not (2.54% of page, x 0.08-0.57, y 0.06-0.88)
+				middle-left: marks displaced or reshaped (0.04% of page, x 0.18-0.20, y 0.61-0.62)
+				bottom-left: marks displaced or reshaped (0.04% of page, x 0.18-0.20, y 0.67-0.69)
+				top-left: marks displaced or reshaped (0.04% of page, x 0.18-0.20, y 0.06-0.08)
+				top-left: marks displaced or reshaped (0.04% of page, x 0.23-0.25, y 0.06-0.08)
+				middle-left: marks displaced or reshaped (0.04% of page, x 0.18-0.20, y 0.54-0.56)
+321	0.66	0.00	0.00	1	ok
+322	0.82	0.00	0.00	1	ok
+323	0.48	0.00	0.00	2	ok
+324	0.43	0.00	0.00	3	ok
+325	0.64	0.00	0.00	4	ok
+326	0.46	0.00	0.00	2	ok
+327	0.45	0.00	0.00	1	ok
+328	0.64	0.00	0.00	1	ok
+329	1.89	0.15	0.15	7	ok
+330	4.63	3.71	3.72	3	MAJOR
+				middle-left: ink missing from ours — a graphic, glyphs or a fill (19.77% of page, x 0.08-0.57, y 0.06-0.88)
+				top-left: marks displaced or reshaped (0.04% of page, x 0.18-0.20, y 0.06-0.08)
+				top-centre: marks displaced or reshaped (0.04% of page, x 0.40-0.42, y 0.06-0.08)
+331	0.56	0.01	0.01	18	ok
+332	0.65	0.02	0.02	7	ok
+333	0.44	0.00	0.00	4	ok
+334	0.49	0.00	0.00	2	ok
+335	0.47	0.00	0.00	1	ok
+336	0.49	0.01	0.01	13	ok
+337	0.45	0.00	0.00	1	ok
+338	0.44	0.00	0.00	1	ok
+339	0.45	0.00	0.00	1	ok
+340	0.38	0.00	0.00	1	ok
+341	0.42	0.00	0.00	1	ok
+342	0.50	0.01	0.01	9	ok
+343	0.66	3.75	3.75	9	MAJOR
+				middle-left: ink we draw that the reference does not (2.51% of page, x 0.08-0.57, y 0.06-0.86)
+				bottom-left: marks displaced or reshaped (0.04% of page, x 0.18-0.20, y 0.73-0.74)
+				top-left: marks displaced or reshaped (0.04% of page, x 0.18-0.20, y 0.29-0.31)
+				middle-left: marks displaced or reshaped (0.04% of page, x 0.18-0.20, y 0.33-0.34)
+				middle-left: marks displaced or reshaped (0.04% of page, x 0.18-0.20, y 0.39-0.41)
+				bottom-left: marks displaced or reshaped (0.04% of page, x 0.18-0.20, y 0.68-0.69)
+344	0.53	0.01	0.01	9	ok
+345	0.61	3.75	3.75	1	MAJOR
+				middle-left: ink we draw that the reference does not (2.54% of page, x 0.08-0.57, y 0.06-0.88)
+346	0.63	0.01	0.01	4	ok
+347	0.19	0.00	0.00	1	ok
+348	1.48	0.00	0.00	101	ok
+349	1.72	0.01	0.05	95	ok
+350	26.96	0.34	0.34	36	shifted
+351	1.49	0.08	0.08	91	ok
+352	5.37	1.35	1.35	60	MAJOR
+				top-right: ink missing from ours — a graphic, glyphs or a fill (2.98% of page, x 0.73-0.90, y 0.06-0.27)
+				middle-centre: marks displaced or reshaped (3.16% of page, x 0.08-0.90, y 0.32-0.44)
+				middle-right: marks displaced or reshaped (0.56% of page, x 0.73-0.90, y 0.64-0.69)
+				middle-right: marks displaced or reshaped (0.59% of page, x 0.73-0.90, y 0.54-0.61)
+				bottom-right: marks displaced or reshaped (0.64% of page, x 0.73-0.90, y 0.79-0.86)
+				middle-centre: marks displaced or reshaped (0.05% of page, x 0.63-0.66, y 0.50-0.52)
+353	0.39	0.00	0.00	22	ok
+354	0.42	0.00	0.02	22	ok
+355	9.20	0.02	0.04	11	shifted
+356	0.38	0.01	0.01	23	ok
+357	0.74	0.08	0.10	16	ok
+358	1.58	0.00	0.00	79	ok
+359	1.18	0.00	0.05	57	ok
+360	25.48	0.17	0.17	26	shifted
+361	1.36	0.02	0.03	61	ok
+362	4.78	0.54	0.54	34	shifted
+363	1.48	0.03	0.03	8	ok
+364	0.81	0.00	0.00	1	ok
+365	7.91	0.06	0.06	1	shifted
+366	0.63	0.00	0.00	2	ok
+367	0.64	0.01	0.01	7	ok
+368	5.31	1.46	1.46	69	MAJOR
+				bottom-right: a fill or background shading the reference has and we do not (5.64% of page, x 0.68-0.86, y 0.54-0.88)
+				bottom-centre: marks displaced or reshaped (0.24% of page, x 0.28-0.40, y 0.88-0.92)
+				bottom-centre: marks displaced or reshaped (0.10% of page, x 0.64-0.69, y 0.87-0.88)
+				top-right: a solid area drawn differently (0.22% of page, x 0.79-0.82, y 0.21-0.29)
+				top-right: marks displaced or reshaped (0.57% of page, x 0.69-0.86, y 0.06-0.12)
+				top-centre: marks displaced or reshaped (0.20% of page, x 0.29-0.37, y 0.29-0.33)
+369	2.97	0.27	0.27	83	MAJOR
+				bottom-right: ink missing from ours — a graphic, glyphs or a fill (0.53% of page, x 0.68-0.86, y 0.76-0.80)
+				bottom-centre: marks displaced or reshaped (2.08% of page, x 0.08-0.86, y 0.84-0.92)
+				middle-left: marks displaced or reshaped (1.58% of page, x 0.14-0.50, y 0.57-0.67)
+				middle-centre: marks displaced or reshaped (0.07% of page, x 0.61-0.65, y 0.57-0.58)
+				middle-centre: marks displaced or reshaped (2.44% of page, x 0.14-0.63, y 0.30-0.44)
+				top-centre: marks displaced or reshaped (0.17% of page, x 0.54-0.63, y 0.31-0.33)
+370	15.54	1.29	1.29	20	MAJOR
+				top-right: a fill or background shading the reference has and we do not (3.36% of page, x 0.66-0.86, y 0.06-0.25)
+				middle-centre: marks displaced or reshaped (30.45% of page, x 0.08-0.86, y 0.37-0.90)
+				middle-right: ink missing from ours — a graphic, glyphs or a fill (0.81% of page, x 0.68-0.86, y 0.33-0.38)
+				bottom-centre: a solid area drawn differently (1.23% of page, x 0.08-0.86, y 0.91-0.92)
+				bottom-left: marks displaced or reshaped (0.08% of page, x 0.10-0.13, y 0.83-0.85)
+				top-left: marks displaced or reshaped (0.11% of page, x 0.20-0.24, y 0.23-0.27)
+371	24.24	1.56	1.56	6	MAJOR
+				top-centre: marks displaced or reshaped (15.59% of page, x 0.08-0.86, y 0.06-0.30)
+				bottom-centre: a solid area drawn differently (26.66% of page, x 0.08-0.86, y 0.54-0.92)
+				middle-centre: a solid area drawn differently (11.64% of page, x 0.08-0.86, y 0.31-0.48)
+				middle-centre: the same marks in a different colour (2.32% of page, x 0.08-0.86, y 0.49-0.53)
+				top-right: a solid area drawn differently (0.29% of page, x 0.70-0.84, y 0.06-0.08)
+				top-left: marks displaced or reshaped (0.05% of page, x 0.10-0.13, y 0.06-0.08)
+372	23.43	0.20	1.06	16	shifted
+373	29.29	1.90	1.90	2	MAJOR
+				middle-centre: marks displaced or reshaped (58.58% of page, x 0.08-0.86, y 0.06-0.94)
+				top-left: marks displaced or reshaped (0.05% of page, x 0.11-0.13, y 0.06-0.08)
+374	23.10	2.18	2.18	11	MAJOR
+				middle-centre: marks displaced or reshaped (46.35% of page, x 0.08-0.86, y 0.06-0.92)
+				top-right: a solid area drawn differently (0.29% of page, x 0.70-0.84, y 0.16-0.18)
+				bottom-right: a solid area drawn differently (0.29% of page, x 0.70-0.83, y 0.69-0.71)
+				middle-right: marks displaced or reshaped (0.18% of page, x 0.74-0.83, y 0.64-0.66)
+				top-left: marks displaced or reshaped (0.05% of page, x 0.11-0.13, y 0.16-0.18)
+				middle-left: marks displaced or reshaped (0.05% of page, x 0.11-0.13, y 0.64-0.66)
+375	29.59	0.44	0.46	8	shifted
+376	1.06	0.00	0.01	116	ok
+377	4.47	1.29	1.29	60	MAJOR
+				bottom-right: a fill or background shading the reference has and we do not (2.02% of page, x 0.68-0.86, y 0.64-0.76)
+				top-right: a fill or background shading the reference has and we do not (2.03% of page, x 0.68-0.86, y 0.14-0.26)
+				middle-right: ink missing from ours — a graphic, glyphs or a fill (1.32% of page, x 0.68-0.86, y 0.31-0.42)
+				bottom-centre: marks displaced or reshaped (0.05% of page, x 0.64-0.67, y 0.74-0.76)
+				bottom-centre: marks displaced or reshaped (0.07% of page, x 0.53-0.57, y 0.83-0.84)
+				bottom-right: marks displaced or reshaped (0.05% of page, x 0.79-0.82, y 0.77-0.79)
+378	2.66	0.24	0.29	76	MAJOR
+				bottom-right: a fill or background shading the reference has and we do not (1.13% of page, x 0.68-0.86, y 0.70-0.77)
+				middle-centre: marks displaced or reshaped (5.44% of page, x 0.14-0.68, y 0.28-0.47)
+				middle-centre: marks displaced or reshaped (0.11% of page, x 0.61-0.68, y 0.50-0.52)
+				middle-centre: marks displaced or reshaped (0.67% of page, x 0.40-0.57, y 0.54-0.59)
+				middle-centre: marks displaced or reshaped (0.06% of page, x 0.34-0.37, y 0.60-0.62)
+				top-centre: marks displaced or reshaped (0.08% of page, x 0.33-0.37, y 0.28-0.29)
+379	3.61	0.35	0.51	64	MAJOR
+				bottom-right: a fill or background shading the reference has and we do not (1.07% of page, x 0.68-0.86, y 0.86-0.91)
+				middle-right: ink missing from ours — a graphic, glyphs or a fill (0.87% of page, x 0.68-0.86, y 0.54-0.61)
+				bottom-centre: marks displaced or reshaped (1.66% of page, x 0.08-0.86, y 0.67-0.74)
+				top-centre: marks displaced or reshaped (1.73% of page, x 0.08-0.86, y 0.28-0.33)
+				top-centre: a solid area drawn differently (0.57% of page, x 0.33-0.60, y 0.18-0.20)
+				top-centre: marks displaced or reshaped (1.24% of page, x 0.14-0.65, y 0.21-0.27)
+380	12.51	0.08	0.08	33	shifted
+381	4.44	1.02	1.03	77	MAJOR
+				bottom-right: ink missing from ours — a graphic, glyphs or a fill (2.39% of page, x 0.68-0.86, y 0.65-0.81)
+				bottom-right: a fill or background shading the reference has and we do not (1.70% of page, x 0.68-0.86, y 0.85-0.94)
+				top-centre: marks displaced or reshaped (1.68% of page, x 0.14-0.69, y 0.17-0.28)
+				middle-centre: marks displaced or reshaped (0.10% of page, x 0.47-0.52, y 0.40-0.42)
+				middle-centre: marks displaced or reshaped (0.71% of page, x 0.41-0.68, y 0.45-0.48)
+				middle-left: marks displaced or reshaped (0.36% of page, x 0.14-0.29, y 0.37-0.40)
+382	2.72	0.44	0.45	91	MAJOR
+				middle-right: ink missing from ours — a graphic, glyphs or a fill (0.85% of page, x 0.68-0.86, y 0.45-0.52)
+				top-right: ink missing from ours — a graphic, glyphs or a fill (0.85% of page, x 0.68-0.86, y 0.06-0.13)
+				middle-right: ink missing from ours — a graphic, glyphs or a fill (0.53% of page, x 0.68-0.86, y 0.36-0.40)
+				top-centre: marks displaced or reshaped (2.20% of page, x 0.08-0.86, y 0.27-0.35)
+				middle-centre: a solid area drawn differently (0.22% of page, x 0.58-0.69, y 0.42-0.44)
+				middle-centre: marks displaced or reshaped (0.86% of page, x 0.44-0.65, y 0.60-0.67)
+383	1.67	0.02	0.02	93	ok
+384	2.94	0.59	0.59	89	MAJOR
+				top-right: ink missing from ours — a graphic, glyphs or a fill (2.66% of page, x 0.68-0.86, y 0.18-0.38)
+				middle-centre: marks displaced or reshaped (1.77% of page, x 0.35-0.69, y 0.45-0.53)
+				top-centre: marks displaced or reshaped (0.07% of page, x 0.63-0.67, y 0.06-0.08)
+				bottom-centre: marks displaced or reshaped (0.11% of page, x 0.56-0.62, y 0.84-0.86)
+				bottom-centre: marks displaced or reshaped (0.11% of page, x 0.52-0.57, y 0.73-0.75)
+				top-centre: marks displaced or reshaped (0.15% of page, x 0.56-0.63, y 0.08-0.11)
+385	4.38	0.83	0.86	54	shifted
+386	2.58	0.27	0.28	72	MAJOR
+				bottom-right: ink missing from ours — a graphic, glyphs or a fill (1.14% of page, x 0.68-0.86, y 0.86-0.93)
+				middle-centre: marks displaced or reshaped (2.71% of page, x 0.30-0.69, y 0.27-0.44)
+				top-centre: marks displaced or reshaped (3.45% of page, x 0.26-0.69, y 0.09-0.26)
+				middle-centre: marks displaced or reshaped (2.72% of page, x 0.14-0.65, y 0.49-0.72)
+				middle-left: marks displaced or reshaped (0.05% of page, x 0.26-0.28, y 0.34-0.36)
+				middle-centre: marks displaced or reshaped (0.06% of page, x 0.35-0.39, y 0.64-0.66)
+387	6.90	2.02	2.02	51	MAJOR
+				middle-right: a fill or background shading the reference has and we do not (2.22% of page, x 0.68-0.86, y 0.50-0.63)
+				middle-centre: marks displaced or reshaped (5.20% of page, x 0.08-0.86, y 0.23-0.46)
+				top-right: a fill or background shading the reference has and we do not (1.45% of page, x 0.68-0.86, y 0.06-0.15)
+				bottom-left: marks displaced or reshaped (0.20% of page, x 0.26-0.32, y 0.82-0.88)
+				middle-centre: marks displaced or reshaped (0.04% of page, x 0.46-0.48, y 0.46-0.47)
+				bottom-centre: marks displaced or reshaped (0.23% of page, x 0.34-0.42, y 0.83-0.87)
+388	0.05	0.00	0.00	9	ok
+389	0.88	0.09	0.09	18	ok
+390	0.92	0.02	0.02	22	ok
+391	4.03	0.19	0.20	21	MAJOR
+				bottom-left: ink we draw that the reference does not (0.60% of page, x 0.08-0.42, y 0.75-0.77)
+				top-left: a fill of the wrong colour (0.70% of page, x 0.10-0.23, y 0.16-0.22)
+				middle-left: a solid area drawn differently (2.82% of page, x 0.08-0.42, y 0.43-0.52)
+				top-left: a fill of the wrong colour (0.29% of page, x 0.10-0.23, y 0.06-0.08)
+				top-left: a fill of the wrong colour (0.29% of page, x 0.10-0.23, y 0.13-0.15)
+				top-left: a fill of the wrong colour (0.29% of page, x 0.10-0.23, y 0.10-0.12)
+392	7.43	0.19	0.94	15	MAJOR
+				middle-left: a fill or background shading we draw and the reference does not (2.35% of page, x 0.08-0.42, y 0.54-0.62)
+				middle-left: a fill or background shading the reference has and we do not (2.30% of page, x 0.08-0.42, y 0.63-0.70)
+				top-left: a solid area drawn differently (3.26% of page, x 0.08-0.42, y 0.09-0.20)
+				middle-left: marks displaced or reshaped (1.64% of page, x 0.08-0.42, y 0.38-0.43)
+				middle-left: marks displaced or reshaped (1.62% of page, x 0.08-0.42, y 0.31-0.37)
+				top-left: a solid area drawn differently (2.76% of page, x 0.08-0.42, y 0.21-0.30)
+393	7.31	0.44	0.46	20	MAJOR
+				bottom-left: a fill or background shading we draw and the reference does not (3.22% of page, x 0.08-0.42, y 0.84-0.94)
+				middle-left: a solid area drawn differently (5.50% of page, x 0.08-0.42, y 0.36-0.53)
+				top-left: marks displaced or reshaped (1.12% of page, x 0.08-0.42, y 0.27-0.31)
+				top-left: marks displaced or reshaped (0.11% of page, x 0.18-0.23, y 0.20-0.21)
+				top-left: marks displaced or reshaped (0.11% of page, x 0.18-0.23, y 0.25-0.26)
+				middle-left: marks displaced or reshaped (0.11% of page, x 0.18-0.23, y 0.33-0.35)
+394	8.76	0.47	1.69	16	MAJOR
+				top-left: a fill or background shading the reference has and we do not (2.90% of page, x 0.08-0.42, y 0.06-0.15)
+				bottom-left: a fill or background shading the reference has and we do not (1.83% of page, x 0.08-0.42, y 0.72-0.78)
+				bottom-left: a fill or background shading we draw and the reference does not (2.34% of page, x 0.08-0.42, y 0.64-0.71)
+				middle-left: a fill or background shading we draw and the reference does not (1.27% of page, x 0.08-0.42, y 0.44-0.48)
+				middle-left: a fill or background shading the reference has and we do not (1.20% of page, x 0.08-0.42, y 0.51-0.54)
+				bottom-left: a solid area drawn differently (1.45% of page, x 0.08-0.42, y 0.89-0.94)
+395	6.73	0.08	0.09	18	shifted
+396	10.14	0.11	1.07	18	MAJOR
+				top-left: a fill or background shading the reference has and we do not (1.00% of page, x 0.08-0.42, y 0.30-0.32)
+				top-left: a fill or background shading the reference has and we do not (1.07% of page, x 0.08-0.42, y 0.19-0.22)
+				middle-left: a solid area drawn differently (2.60% of page, x 0.08-0.42, y 0.33-0.41)
+				top-left: a fill or background shading we draw and the reference does not (1.07% of page, x 0.08-0.42, y 0.26-0.29)
+				middle-left: a fill or background shading the reference has and we do not (1.13% of page, x 0.08-0.42, y 0.41-0.45)
+				top-left: a fill or background shading we draw and the reference does not (1.00% of page, x 0.08-0.42, y 0.16-0.19)
+397	0.17	0.00	0.00	28	ok
+398	0.45	0.05	0.05	25	ok
+399	0.29	0.02	0.02	22	ok
+400	0.55	0.04	0.04	33	ok
+401	4.47	0.01	0.01	24	shifted
+402	0.53	0.06	0.06	29	ok
+403	0.43	0.02	0.04	31	ok
+404	0.59	0.00	0.00	26	ok
+405	0.31	0.03	0.03	23	ok
+406	0.67	0.06	0.06	22	ok
+407	0.24	0.02	0.02	26	ok
+408	1.02	0.14	0.14	21	ok
+409	0.01	0.00	0.00	2	ok
+410	4.67	0.55	0.56	39	shifted
+411	2.20	0.11	0.11	26	shifted
+412	13.52	0.92	0.93	13	shifted
+413	24.08	0.80	0.80	3	shifted
+414	21.72	0.82	0.93	5	shifted
+415	26.92	0.74	0.74	1	shifted
+416	23.81	0.56	0.72	9	shifted
+417	24.39	0.39	0.46	5	shifted
+418	0.66	0.02	0.02	16	ok
+419	3.86	0.48	0.48	32	shifted
+420	2.87	0.15	0.15	56	shifted
+421	2.82	0.36	0.36	67	shifted
+422	11.05	0.11	0.11	37	shifted
+423	3.46	0.38	0.38	59	shifted
+424	2.59	0.31	0.31	48	shifted
+425	1.46	0.00	0.00	29	ok
+426	1.89	0.19	0.19	27	ok
+427	3.51	0.27	0.27	36	shifted
+428	1.61	0.13	0.13	28	ok
+429	5.62	0.87	0.87	24	shifted
+430	0.08	0.00	0.00	6	ok
+431	0.56	0.01	0.01	16	ok
+432	0.15	0.00	0.00	3	ok
+433	1.89	0.08	0.09	17	ok
+434	3.61	0.09	0.30	14	shifted
+435	3.28	0.09	0.09	12	shifted
+436	4.26	0.25	0.70	18	MAJOR
+				bottom-left: a fill or background shading the reference has and we do not (1.85% of page, x 0.08-0.47, y 0.89-0.94)
+				bottom-left: the same marks in a different colour (1.82% of page, x 0.08-0.47, y 0.72-0.78)
+				middle-left: a fill or background shading we draw and the reference does not (0.54% of page, x 0.08-0.47, y 0.49-0.50)
+				top-left: the same marks in a different colour (2.03% of page, x 0.08-0.47, y 0.06-0.15)
+				bottom-left: marks displaced or reshaped (1.72% of page, x 0.08-0.47, y 0.79-0.85)
+				middle-left: the same marks in a different colour (1.22% of page, x 0.08-0.47, y 0.51-0.54)
+437	3.07	0.13	0.14	9	shifted
+438	4.54	0.35	1.05	24	MAJOR
+				bottom-left: a fill or background shading the reference has and we do not (1.72% of page, x 0.08-0.47, y 0.89-0.93)
+				middle-left: a fill or background shading we draw and the reference does not (1.11% of page, x 0.08-0.47, y 0.38-0.41)
+				middle-left: a fill or background shading we draw and the reference does not (0.54% of page, x 0.08-0.47, y 0.50-0.51)
+				middle-left: a fill or background shading we draw and the reference does not (0.54% of page, x 0.08-0.47, y 0.33-0.34)
+				middle-left: a fill or background shading the reference has and we do not (0.54% of page, x 0.08-0.47, y 0.35-0.36)
+				middle-left: a fill or background shading the reference has and we do not (0.54% of page, x 0.08-0.47, y 0.37-0.38)
+439	0.00	0.00	0.00	0	ok
+440	0.04	0.01	0.01	10	ok
+441	0.02	0.00	0.00	3	ok
+442	0.30	0.00	0.00	8	ok
+443	2.22	0.14	0.14	6	shifted
+444	0.03	0.00	0.00	6	ok
+445	0.15	0.00	0.00	4	ok
+446	0.28	0.00	0.00	3	ok
+447	0.01	0.00	0.00	3	ok
+448	0.31	0.00	0.00	7	ok
+449	0.00	0.00	0.00	1	ok
+450	0.18	0.01	0.01	8	ok
+451	0.00	0.00	0.00	0	ok
+452	1.15	0.00	0.00	87	ok
+453	2.83	0.06	0.09	92	shifted
+454	4.91	0.26	0.26	57	shifted
+455	5.18	0.22	0.22	66	shifted
+456	4.90	0.27	0.27	75	shifted
+457	15.44	0.40	0.41	52	shifted
+458	29.78	0.67	0.67	10	shifted
+459	37.99	0.47	0.47	3	shifted
+460	43.00	0.44	0.45	7	shifted
+461	31.29	0.61	0.61	2	shifted
+462	17.87	1.27	1.27	1	MAJOR
+				middle-centre: marks displaced or reshaped (41.40% of page, x 0.08-0.90, y 0.06-0.67)
+463	0.62	0.02	0.02	16	ok
+464	0.57	1.31	1.31	21	MAJOR
+				middle-left: ink we draw that the reference does not (2.22% of page, x 0.09-0.25, y 0.06-0.93)
+				middle-left: marks displaced or reshaped (0.05% of page, x 0.18-0.21, y 0.38-0.40)
+				middle-left: marks displaced or reshaped (0.05% of page, x 0.18-0.21, y 0.41-0.43)
+				middle-left: marks displaced or reshaped (0.05% of page, x 0.18-0.21, y 0.45-0.46)
+				middle-left: marks displaced or reshaped (0.05% of page, x 0.18-0.21, y 0.48-0.50)
+				bottom-left: marks displaced or reshaped (0.05% of page, x 0.18-0.21, y 0.73-0.75)
+465	1.01	0.08	0.08	13	ok
+466	0.78	0.03	0.03	16	ok
+467	0.88	0.07	0.07	13	ok
+468	4.27	0.09	0.09	7	shifted
+469	9.37	0.17	0.17	3	shifted
+470	12.05	0.24	0.24	1	shifted
+471	16.15	0.09	0.09	2	shifted
+472	8.84	0.24	0.24	2	shifted
+473	4.18	0.25	0.25	1	shifted
+474	1.09	0.00	0.00	41	ok
+475	1.35	0.13	0.13	35	ok
+476	4.15	0.45	0.46	41	shifted
+477	3.90	0.42	0.43	61	shifted
+478	4.47	0.59	0.59	54	shifted
+479	10.51	0.27	1.10	20	MAJOR
+				bottom-centre: a solid area drawn differently (5.40% of page, x 0.08-0.92, y 0.87-0.94)
+				bottom-centre: ink we draw that the reference does not (1.39% of page, x 0.08-0.92, y 0.74-0.77)
+				bottom-centre: ink missing from ours — a graphic, glyphs or a fill (1.39% of page, x 0.08-0.92, y 0.77-0.80)
+				bottom-centre: ink we draw that the reference does not (1.44% of page, x 0.08-0.92, y 0.81-0.83)
+				bottom-centre: ink missing from ours — a graphic, glyphs or a fill (1.44% of page, x 0.08-0.92, y 0.84-0.86)
+				middle-centre: marks displaced or reshaped (4.16% of page, x 0.08-0.92, y 0.45-0.51)
+480	24.73	0.48	1.07	14	MAJOR
+				bottom-centre: a fill or background shading we draw and the reference does not (3.83% of page, x 0.08-0.92, y 0.88-0.92)
+				top-centre: marks displaced or reshaped (3.57% of page, x 0.08-0.92, y 0.06-0.13)
+				top-centre: ink we draw that the reference does not (1.39% of page, x 0.08-0.92, y 0.15-0.17)
+				top-centre: marks displaced or reshaped (2.92% of page, x 0.08-0.92, y 0.30-0.34)
+				top-centre: a solid area drawn differently (8.33% of page, x 0.08-0.92, y 0.18-0.29)
+				middle-centre: a solid area drawn differently (21.86% of page, x 0.08-0.92, y 0.35-0.65)
+481	32.28	0.77	2.37	8	MAJOR
+				bottom-centre: a solid area drawn differently (35.30% of page, x 0.08-0.92, y 0.48-0.93)
+				middle-centre: marks displaced or reshaped (6.71% of page, x 0.08-0.92, y 0.34-0.44)
+				top-centre: marks displaced or reshaped (2.65% of page, x 0.08-0.92, y 0.06-0.12)
+				middle-centre: ink missing from ours — a graphic, glyphs or a fill (1.39% of page, x 0.08-0.92, y 0.45-0.47)
+				top-centre: a solid area drawn differently (8.09% of page, x 0.08-0.92, y 0.12-0.23)
+				top-centre: a solid area drawn differently (6.92% of page, x 0.08-0.92, y 0.24-0.34)
+482	42.24	0.18	0.25	2	shifted
+483	23.77	0.34	2.82	7	MAJOR
+				middle-centre: a fill of the wrong colour (9.58% of page, x 0.08-0.92, y 0.42-0.55)
+				middle-centre: a fill or background shading we draw and the reference does not (6.06% of page, x 0.08-0.92, y 0.33-0.41)
+				bottom-centre: ink we draw that the reference does not (2.62% of page, x 0.08-0.92, y 0.65-0.69)
+				middle-centre: marks displaced or reshaped (6.40% of page, x 0.08-0.92, y 0.56-0.65)
+				top-centre: marks displaced or reshaped (6.84% of page, x 0.08-0.92, y 0.23-0.32)
+				bottom-centre: a solid area drawn differently (17.73% of page, x 0.08-0.92, y 0.70-0.94)
+484	15.01	0.80	1.55	5	shifted
+485	1.34	0.55	0.55	7	ok
+486	0.47	0.38	0.38	3	ok
+487	0.72	0.04	0.04	15	ok
+488	0.66	0.02	0.02	3	ok
+489	0.68	0.05	0.05	11	ok
+490	2.68	0.10	0.10	1	shifted
+491	5.86	0.24	0.25	7	shifted
+492	7.16	0.25	0.25	3	shifted
+493	7.95	0.06	0.06	5	shifted
+494	6.18	0.27	0.31	4	shifted
+495	6.10	1.22	1.23	4	MAJOR
+				middle-left: marks displaced or reshaped (15.48% of page, x 0.08-0.54, y 0.06-0.67)
+				middle-left: marks displaced or reshaped (0.04% of page, x 0.09-0.12, y 0.33-0.35)
+				middle-left: marks displaced or reshaped (0.04% of page, x 0.18-0.21, y 0.33-0.35)
+				middle-left: marks displaced or reshaped (0.04% of page, x 0.14-0.16, y 0.33-0.35)
+496	2.99	0.08	0.08	59	shifted
+497	3.44	0.18	0.19	83	shifted
+498	3.08	1.52	1.52	83	MAJOR
+				middle-right: ink we draw that the reference does not (4.11% of page, x 0.68-0.88, y 0.06-0.92)
+				top-left: marks displaced or reshaped (0.11% of page, x 0.17-0.22, y 0.20-0.22)
+				middle-centre: marks displaced or reshaped (2.00% of page, x 0.14-0.62, y 0.62-0.71)
+				bottom-centre: marks displaced or reshaped (1.24% of page, x 0.43-0.71, y 0.76-0.83)
+				top-centre: marks displaced or reshaped (0.30% of page, x 0.40-0.50, y 0.17-0.21)
+				middle-centre: marks displaced or reshaped (0.04% of page, x 0.60-0.62, y 0.64-0.66)
+499	3.02	0.01	0.04	85	shifted
+500	1.81	0.02	0.02	71	ok
+501	0.31	0.01	0.01	10	ok
+502	0.46	0.03	0.03	14	ok
+503	0.35	0.04	0.04	11	ok
+504	0.37	0.01	0.01	15	ok
+505	0.24	0.01	0.01	11	ok
+506	2.22	0.01	0.04	58	shifted
+507	2.85	0.12	0.13	59	shifted
+508	1.80	0.13	0.13	58	ok
+509	1.91	0.02	0.03	61	ok
+510	1.28	0.02	0.03	55	ok
+511	1.19	0.00	0.00	6	ok
+512	0.59	0.00	0.00	3	ok
+513	0.43	0.00	0.00	1	ok
+514	0.70	0.00	0.00	1	ok
+515	0.50	1.70	1.70	1	MAJOR
+				middle-left: marks displaced or reshaped (2.17% of page, x 0.08-0.45, y 0.06-0.79)
+516	4.07	0.10	0.11	50	shifted
+517	7.38	0.05	0.16	47	shifted
+518	3.28	0.01	0.02	84	shifted
+519	3.25	0.04	0.04	73	shifted
+520	5.99	0.16	0.16	50	shifted
+521	2.76	0.00	0.03	92	shifted
+522	16.57	0.07	0.07	41	shifted
+523	3.43	0.04	0.05	88	shifted
+524	3.64	0.01	0.05	73	shifted
+525	3.28	0.02	0.05	87	shifted
+526	2.61	0.01	0.09	81	shifted
+527	2.92	0.03	0.03	92	shifted
+528	2.36	0.00	0.03	95	shifted
+529	3.33	0.09	0.11	79	shifted
+530	3.67	0.07	0.12	68	shifted
+531	2.51	0.02	0.03	87	shifted
+532	2.20	0.09	0.10	79	shifted
+533	0.30	0.00	0.00	28	ok
+534	0.25	0.01	0.01	8	ok
+535	0.26	0.03	0.03	6	ok
+536	0.14	0.00	0.00	5	ok
+537	0.02	0.00	0.00	4	ok
+538	0.20	0.00	0.02	7	ok
+539	0.14	0.00	0.00	6	ok
+540	3.94	0.01	0.03	8	shifted
+541	0.04	0.00	0.00	7	ok
+542	0.13	0.01	0.01	4	ok
+543	0.25	0.01	0.01	7	ok
+544	0.24	0.00	0.02	11	ok
+545	0.14	0.00	0.00	8	ok
+546	0.35	0.01	0.01	11	ok
+547	0.46	0.03	0.03	12	ok
+548	0.33	0.02	0.02	11	ok
+549	0.16	0.00	0.00	10	ok
+550	0.11	0.01	0.01	7	ok
+551	0.02	0.00	0.00	4	ok
+552	1.46	0.05	0.05	44	ok
+553	2.47	0.26	0.26	27	shifted
+554	1.66	0.00	0.01	74	ok
+555	0.96	0.00	0.00	63	ok
+556	1.11	0.01	0.04	51	ok
+557	1.40	0.01	0.01	67	ok
+558	12.50	0.07	0.07	32	shifted
+559	1.14	0.00	0.00	68	ok
+560	1.70	0.02	0.02	59	ok
+561	2.00	0.03	0.03	72	ok
+562	1.89	0.02	0.08	76	ok
+563	1.68	0.01	0.01	70	ok
+564	2.37	0.08	0.09	72	shifted
+565	2.78	0.18	0.19	68	shifted
+566	2.53	0.12	0.13	66	shifted
+567	1.42	0.00	0.00	80	ok
+568	2.74	0.18	0.21	65	shifted
+569	0.67	0.00	0.00	25	ok
+570	0.78	0.00	0.00	4	ok
+571	0.19	0.01	0.01	6	ok
+572	0.16	0.00	0.00	1	ok
+573	0.00	0.00	0.00	0	ok
+574	0.16	0.01	0.01	1	ok
+575	0.16	0.00	0.00	1	ok
+576	2.89	0.09	0.25	5	MAJOR
+				bottom-left: a solid area drawn differently (1.29% of page, x 0.08-0.53, y 0.90-0.93)
+				bottom-left: a fill or background shading the reference has and we do not (0.62% of page, x 0.08-0.53, y 0.85-0.86)
+				bottom-left: a fill or background shading we draw and the reference does not (0.62% of page, x 0.08-0.53, y 0.87-0.88)
+				bottom-left: a solid area drawn differently (6.42% of page, x 0.08-0.53, y 0.66-0.82)
+				middle-left: a solid area drawn differently (4.56% of page, x 0.08-0.53, y 0.54-0.66)
+577	0.00	0.00	0.00	0	ok
+578	0.16	0.01	0.01	1	ok
+579	0.32	0.01	0.01	2	ok
+580	0.18	0.01	0.01	5	ok
+581	0.16	0.00	0.00	1	ok
+582	0.35	0.00	0.00	2	ok
+583	0.37	0.01	0.01	7	ok
+584	0.34	0.01	0.01	7	ok
+585	0.16	0.00	0.00	1	ok
+586	0.02	0.00	0.00	4	ok
+587	0.00	0.00	0.00	0	ok
+588	1.58	0.03	0.03	93	ok
+589	1.35	0.05	0.06	113	ok
+590	1.75	0.04	0.05	100	ok
+591	1.73	0.00	0.01	81	ok
+592	1.49	0.01	0.01	86	ok
+593	1.06	0.00	0.00	84	ok
+594	1.34	0.03	0.03	118	ok
+595	1.99	0.09	0.12	97	ok
+596	2.26	0.07	0.08	95	shifted
+597	1.87	0.08	0.08	95	ok
+598	1.52	0.00	0.01	98	ok
+599	1.91	0.02	0.03	119	ok
+600	1.77	0.01	0.01	125	ok
+601	2.48	0.01	0.05	83	shifted
+602	1.78	0.10	0.10	113	ok
+603	2.05	0.01	0.02	90	shifted
+604	4.42	0.41	0.43	56	shifted
+605	30.54	0.44	0.44	1	shifted
+606	2.25	0.05	0.05	103	shifted
+607	1.76	0.03	0.04	95	ok
+608	1.78	0.05	0.05	115	ok
+609	0.93	0.01	0.01	64	ok
+610	1.50	0.00	0.04	82	ok
+611	0.29	0.00	0.00	11	ok
+612	0.01	0.00	0.00	0	ok
+613	0.12	0.00	0.00	1	ok
+614	0.01	0.00	0.00	1	ok
+615	0.01	0.00	0.00	1	ok
+616	0.02	0.00	0.00	3	ok
+617	0.04	0.00	0.00	8	ok
+618	0.13	0.00	0.00	1	ok
+619	0.29	0.00	0.00	11	ok
+620	0.22	0.01	0.01	6	ok
+621	0.05	0.00	0.00	5	ok
+622	0.13	0.00	0.00	1	ok
+623	0.14	0.00	0.00	2	ok
+624	0.26	0.02	0.02	6	ok
+625	0.13	0.00	0.00	1	ok
+626	0.26	0.00	0.00	13	ok
+627	1.31	0.17	0.17	12	MAJOR
+				bottom-left: a fill or background shading we draw and the reference does not (1.57% of page, x 0.08-0.41, y 0.89-0.94)
+				top-left: a solid area drawn differently (0.24% of page, x 0.16-0.18, y 0.06-0.17)
+				top-left: marks displaced or reshaped (0.12% of page, x 0.16-0.18, y 0.24-0.29)
+				middle-left: a solid area drawn differently (0.51% of page, x 0.08-0.40, y 0.57-0.58)
+				bottom-left: marks displaced or reshaped (0.53% of page, x 0.08-0.40, y 0.71-0.73)
+				middle-left: marks displaced or reshaped (0.04% of page, x 0.16-0.18, y 0.32-0.34)
+628	9.80	0.20	0.20	5	shifted
+629	0.26	0.01	0.01	3	ok
+630	0.19	0.00	0.00	7	ok
+631	0.07	0.00	0.00	12	ok
+632	0.09	0.00	0.00	1	ok
+633	0.00	0.00	0.00	0	ok
+634	1.84	0.00	0.00	66	ok
+635	0.86	0.00	0.00	71	ok
+636	1.54	0.00	0.00	63	ok
+637	1.77	0.00	0.00	72	ok
+638	1.95	0.01	0.01	63	ok
+639	1.23	0.00	0.01	95	ok
+640	0.71	0.00	0.00	63	ok
+641	0.82	0.00	0.00	50	ok
+642	1.74	0.00	0.01	56	ok
+643	1.43	0.02	0.03	72	ok
+644	1.75	0.01	0.01	81	ok
+645	2.03	0.01	0.04	77	shifted
+646	1.76	0.01	0.02	94	ok
+647	2.47	0.05	0.09	59	shifted
+648	1.21	0.00	0.01	62	ok
+649	2.19	0.00	0.00	76	shifted
+650	5.04	0.42	0.43	65	shifted
+651	30.12	0.49	0.49	1	shifted
+652	2.03	0.01	0.01	84	shifted
+653	1.66	0.00	0.01	85	ok
+654	1.29	0.00	0.00	69	ok
+655	2.02	0.01	0.01	66	shifted
+656	1.72	0.00	0.01	54	ok
+657	0.86	0.00	0.00	9	ok
+658	0.02	0.00	0.00	6	ok
+659	0.18	0.00	0.00	7	ok
+660	0.00	0.00	0.00	0	ok
+661	0.02	0.00	0.00	6	ok
+662	0.12	0.02	0.02	27	ok
+663	0.02	0.00	0.00	6	ok
+664	0.15	0.00	0.00	1	ok
+665	0.31	0.00	0.00	2	ok
+666	0.19	0.01	0.01	8	ok
+667	0.03	0.00	0.00	6	ok
+668	0.15	0.00	0.00	1	ok
+669	0.15	0.00	0.00	1	ok
+670	0.33	0.02	0.02	7	ok
+671	0.17	0.00	0.00	6	ok
+672	0.22	0.00	0.00	14	ok
+673	1.18	0.17	0.17	36	MAJOR
+				bottom-left: a fill or background shading we draw and the reference does not (1.28% of page, x 0.08-0.51, y 0.89-0.92)
+				bottom-left: a solid area drawn differently (0.68% of page, x 0.08-0.51, y 0.92-0.94)
+				bottom-left: marks displaced or reshaped (0.84% of page, x 0.08-0.51, y 0.71-0.73)
+				middle-left: marks displaced or reshaped (0.09% of page, x 0.23-0.26, y 0.41-0.44)
+				middle-left: marks displaced or reshaped (0.09% of page, x 0.28-0.30, y 0.41-0.44)
+				middle-centre: marks displaced or reshaped (0.08% of page, x 0.42-0.44, y 0.41-0.44)
+674	5.05	0.24	0.84	32	MAJOR
+				bottom-left: ink missing from ours — a graphic, glyphs or a fill (1.77% of page, x 0.08-0.51, y 0.83-0.88)
+				top-left: ink we draw that the reference does not (0.77% of page, x 0.08-0.51, y 0.25-0.27)
+				middle-left: marks displaced or reshaped (8.02% of page, x 0.08-0.51, y 0.45-0.68)
+				top-left: a fill or background shading the reference has and we do not (0.59% of page, x 0.08-0.51, y 0.28-0.29)
+				top-left: marks displaced or reshaped (0.75% of page, x 0.08-0.51, y 0.21-0.24)
+				middle-left: a solid area drawn differently (2.73% of page, x 0.08-0.51, y 0.30-0.37)
+675	0.31	0.01	0.01	2	ok
+676	0.15	0.00	0.00	1	ok
+677	0.00	0.00	0.00	0	ok
+678	0.10	0.02	0.02	25	ok
+679	0.02	0.00	0.00	0	ok
+680	5.69	0.08	0.09	48	shifted
+681	3.78	0.16	0.18	88	shifted
+682	8.27	0.16	0.24	64	MAJOR
+				top-centre: the same marks in a different colour (9.64% of page, x 0.12-0.70, y 0.08-0.32)
+				bottom-right: ink missing from ours — a graphic, glyphs or a fill (0.49% of page, x 0.69-0.86, y 0.85-0.88)
+				bottom-centre: the same marks in a different colour (3.14% of page, x 0.08-0.86, y 0.77-0.84)
+				middle-centre: the same marks in a different colour (10.57% of page, x 0.08-0.86, y 0.32-0.65)
+				top-right: a fill of the wrong colour (0.29% of page, x 0.71-0.84, y 0.23-0.25)
+				bottom-left: marks displaced or reshaped (0.18% of page, x 0.13-0.24, y 0.91-0.92)
+683	2.74	0.00	0.02	90	shifted
+684	3.05	0.11	0.12	80	MAJOR
+				top-right: ink missing from ours — a graphic, glyphs or a fill (0.49% of page, x 0.69-0.86, y 0.21-0.25)
+				middle-centre: marks displaced or reshaped (3.32% of page, x 0.08-0.86, y 0.35-0.45)
+				bottom-centre: the same marks in a different colour (3.06% of page, x 0.12-0.70, y 0.82-0.91)
+				top-centre: the same marks in a different colour (1.30% of page, x 0.12-0.65, y 0.15-0.20)
+				top-centre: marks displaced or reshaped (0.95% of page, x 0.37-0.69, y 0.11-0.15)
+				top-centre: marks displaced or reshaped (0.06% of page, x 0.64-0.68, y 0.06-0.08)
+685	7.36	0.08	0.08	42	shifted
+686	2.05	0.07	0.08	103	shifted
+687	1.92	0.06	0.10	84	MAJOR
+				bottom-right: a fill or background shading the reference has and we do not (0.46% of page, x 0.69-0.86, y 0.70-0.72)
+				middle-centre: marks displaced or reshaped (5.18% of page, x 0.19-0.70, y 0.27-0.44)
+				middle-centre: marks displaced or reshaped (1.09% of page, x 0.42-0.71, y 0.63-0.68)
+				middle-centre: marks displaced or reshaped (0.67% of page, x 0.50-0.69, y 0.53-0.60)
+				top-centre: marks displaced or reshaped (0.25% of page, x 0.58-0.69, y 0.21-0.24)
+				top-centre: marks displaced or reshaped (0.06% of page, x 0.60-0.63, y 0.15-0.17)
+688	3.01	0.30	0.33	80	MAJOR
+				bottom-right: ink missing from ours — a graphic, glyphs or a fill (1.73% of page, x 0.69-0.86, y 0.77-0.90)
+				middle-centre: marks displaced or reshaped (1.73% of page, x 0.13-0.64, y 0.37-0.47)
+				bottom-centre: the same marks in a different colour (1.17% of page, x 0.13-0.58, y 0.87-0.91)
+				bottom-centre: a solid area drawn differently (0.47% of page, x 0.28-0.57, y 0.73-0.75)
+				middle-left: marks displaced or reshaped (0.79% of page, x 0.13-0.42, y 0.56-0.61)
+				middle-centre: marks displaced or reshaped (0.18% of page, x 0.53-0.62, y 0.46-0.48)
+689	2.34	0.01	0.03	91	shifted
+690	2.77	0.22	0.25	91	MAJOR
+				middle-right: a fill or background shading the reference has and we do not (0.98% of page, x 0.69-0.86, y 0.31-0.37)
+				bottom-centre: marks displaced or reshaped (1.35% of page, x 0.13-0.63, y 0.66-0.74)
+				middle-centre: marks displaced or reshaped (0.70% of page, x 0.37-0.70, y 0.42-0.45)
+				bottom-centre: the same marks in a different colour (2.71% of page, x 0.12-0.68, y 0.82-0.91)
+				bottom-centre: marks displaced or reshaped (0.08% of page, x 0.64-0.69, y 0.83-0.84)
+				bottom-centre: marks displaced or reshaped (0.08% of page, x 0.64-0.68, y 0.76-0.78)
+691	4.11	0.06	0.08	93	shifted
+692	2.28	0.01	0.02	78	shifted
+693	3.16	0.02	0.04	74	shifted
+694	2.82	0.02	0.04	80	shifted
+695	1.43	0.01	0.01	80	ok
+696	0.37	0.00	0.00	10	ok
+697	0.14	0.01	0.01	3	ok
+698	0.55	0.00	0.00	8	ok
+699	0.05	0.00	0.00	13	ok
+700	0.28	0.00	0.02	12	ok
+701	0.13	0.00	0.00	3	ok
+702	0.24	0.01	0.01	14	ok
+703	0.25	0.01	0.01	8	ok
+704	0.15	0.02	0.02	7	ok
+705	0.35	0.00	0.00	12	ok
+706	0.13	0.01	0.01	18	ok
+707	0.07	0.00	0.00	15	ok
+708	0.09	0.00	0.00	11	ok
+709	0.29	0.00	0.00	18	ok
+710	0.08	0.00	0.00	16	ok
+711	0.03	0.00	0.00	6	ok
+712	1.58	0.00	0.00	42	ok
+713	0.73	0.06	0.06	74	ok
+714	1.04	0.00	0.00	29	ok
+715	0.84	0.00	0.00	87	ok
+716	1.19	0.01	0.07	57	ok
+717	1.06	0.00	0.00	31	ok
+718	1.57	0.03	0.04	90	ok
+719	1.16	0.03	0.03	86	ok
+720	2.08	0.12	0.13	83	shifted
+721	0.60	0.00	0.00	64	ok
+722	1.04	0.09	0.09	98	ok
+723	0.70	0.00	0.00	106	ok
+724	0.92	0.00	0.00	74	ok
+725	1.23	0.00	0.00	114	ok
+726	0.72	0.00	0.00	104	ok
+727	0.66	0.00	0.00	105	ok
+728	0.71	0.00	0.00	3	ok
+729	0.02	0.00	0.00	0	ok
+730	0.26	0.01	0.01	2	ok
+731	0.00	0.00	0.00	0	ok
+732	0.14	0.01	0.01	1	ok
+733	0.12	0.00	0.00	1	ok
+734	0.14	0.00	0.00	1	ok
+735	0.02	0.00	0.00	0	ok
+736	0.03	0.00	0.00	0	ok
+737	0.00	0.00	0.00	0	ok
+738	0.02	0.00	0.00	0	ok
+739	0.00	0.00	0.00	0	ok
+740	0.00	0.00	0.00	0	ok
+741	0.24	0.00	0.00	2	ok
+742	0.00	0.00	0.00	0	ok
+743	0.00	0.00	0.00	0	ok
+744	1.98	0.01	0.03	58	ok
+745	5.18	0.00	0.08	46	shifted
+746	4.85	0.05	0.11	66	shifted
+747	3.89	0.00	0.07	52	shifted
+748	4.40	0.04	0.06	53	shifted
+749	2.74	0.03	0.04	74	shifted
+750	3.48	0.02	0.04	84	shifted
+751	2.63	0.00	0.05	63	shifted
+752	2.28	0.00	0.04	72	shifted
+753	3.17	0.01	0.02	78	shifted
+754	5.75	0.09	0.10	57	MAJOR
+				middle-right: a fill or background shading the reference has and we do not (0.47% of page, x 0.73-0.89, y 0.33-0.36)
+				middle-centre: a fill of the wrong colour (4.72% of page, x 0.14-0.74, y 0.47-0.56)
+				middle-centre: the same marks in a different colour (5.32% of page, x 0.14-0.73, y 0.57-0.67)
+				bottom-centre: the same marks in a different colour (1.73% of page, x 0.14-0.65, y 0.82-0.88)
+				top-centre: the same marks in a different colour (2.90% of page, x 0.14-0.74, y 0.18-0.30)
+				top-right: marks displaced or reshaped (0.22% of page, x 0.74-0.88, y 0.25-0.27)
+755	2.95	0.01	0.05	76	shifted
+756	4.54	0.03	0.04	63	shifted
+757	9.50	0.19	0.19	36	shifted
+758	6.94	0.02	0.07	29	shifted
+759	5.90	0.02	0.13	40	shifted
+760	2.90	0.09	0.09	26	shifted
+761	2.25	0.00	0.03	53	shifted
+762	2.36	0.01	0.01	54	shifted
+763	6.06	0.05	0.08	32	shifted
+764	5.38	0.01	0.11	48	shifted
+765	12.56	0.39	0.39	16	shifted
+766	10.36	0.03	0.23	26	shifted
+767	3.39	0.01	0.05	62	shifted
+768	5.34	0.08	0.15	39	shifted
+769	3.36	0.14	0.15	67	shifted
+770	4.74	0.05	0.10	53	shifted
+771	4.24	0.10	0.12	61	shifted
+772	3.51	0.05	0.06	57	shifted
+773	0.33	0.00	0.00	32	ok
+774	0.36	0.01	0.03	28	ok
+775	0.34	0.02	0.02	38	ok
+776	0.34	0.01	0.01	27	ok
+777	0.27	0.01	0.01	33	ok
+778	0.18	0.00	0.00	33	ok
+779	0.28	0.00	0.00	37	ok
+780	0.17	0.00	0.00	29	ok
+781	0.29	0.00	0.00	33	ok
+782	0.17	0.00	0.00	31	ok
+783	0.23	0.01	0.01	23	ok
+784	0.24	0.00	0.00	36	ok
+785	0.14	0.00	0.00	27	ok
+786	0.12	0.00	0.00	11	ok
+787	0.48	0.00	0.00	10	ok
+788	0.46	0.00	0.00	10	ok
+789	0.59	0.00	0.00	11	ok
+790	0.26	0.00	0.00	8	ok
+791	0.46	0.00	0.00	13	ok
+792	0.13	0.00	0.00	22	ok
+793	0.18	0.01	0.01	25	ok
+794	0.03	0.00	0.00	6	ok
+795	0.23	0.03	0.03	10	ok
+796	0.22	0.01	0.01	29	ok
+797	0.26	0.02	0.02	26	ok
+798	0.40	0.03	0.03	37	ok
+799	0.39	0.03	0.03	30	ok
+800	0.38	0.03	0.03	32	ok
+801	0.54	0.02	0.13	32	MAJOR
+				bottom-left: a fill or background shading the reference has and we do not (0.42% of page, x 0.08-0.38, y 0.79-0.80)
+				bottom-left: marks displaced or reshaped (0.82% of page, x 0.08-0.38, y 0.74-0.78)
+				top-left: a fill of the wrong colour (0.56% of page, x 0.09-0.22, y 0.30-0.34)
+				middle-left: marks displaced or reshaped (0.23% of page, x 0.12-0.18, y 0.39-0.44)
+				middle-left: marks displaced or reshaped (0.11% of page, x 0.12-0.16, y 0.49-0.53)
+				middle-left: marks displaced or reshaped (0.11% of page, x 0.12-0.16, y 0.63-0.66)
+802	1.84	0.01	0.01	70	ok
+803	1.74	0.03	0.07	56	ok
+804	1.91	0.14	0.14	54	ok
+805	1.25	0.06	0.06	74	ok
+806	1.59	0.05	0.05	59	ok
+807	1.55	0.01	0.01	63	ok
+808	1.33	0.00	0.02	73	ok
+809	1.11	0.00	0.00	56	ok
+810	1.29	0.00	0.00	66	ok
+811	1.95	0.00	0.00	64	ok
+812	0.96	0.03	0.03	47	ok
+813	1.27	0.00	0.00	71	ok
+814	0.88	0.00	0.00	65	ok
+815	0.25	0.00	0.00	29	ok
+816	0.08	0.00	0.00	18	ok
+817	0.05	0.00	0.00	14	ok
+818	0.06	0.00	0.00	18	ok
+819	0.03	0.00	0.00	8	ok
+820	0.10	0.00	0.00	18	ok
+821	1.09	0.00	0.00	43	ok
+822	1.59	0.08	0.08	67	ok
+823	0.14	0.00	0.00	16	ok
+824	1.47	0.19	0.19	19	ok
+825	1.37	0.04	0.04	72	ok
+826	2.16	0.20	0.21	49	shifted
+827	2.93	0.18	0.18	51	shifted
+828	1.83	0.12	0.12	55	ok
+829	3.14	0.22	0.22	50	shifted
+830	2.82	0.10	0.10	56	shifted
+831	0.61	0.00	0.00	6	ok
+832	0.05	0.00	0.01	7	ok
+833	0.04	0.01	0.01	8	ok
+834	0.02	0.00	0.00	5	ok
+835	0.02	0.00	0.00	5	ok
+836	0.00	0.00	0.00	0	ok
+837	0.00	0.00	0.00	0	ok
+838	0.00	0.00	0.00	0	ok
+839	0.00	0.00	0.00	0	ok
+840	0.00	0.00	0.00	0	ok
+841	0.00	0.00	0.00	0	ok
+842	0.00	0.00	0.00	0	ok
+843	0.00	0.00	0.00	0	ok
+844	0.00	0.00	0.00	0	ok
+845	0.00	0.00	0.00	0	ok
+846	0.00	0.00	0.00	0	ok
+847	0.00	0.00	0.00	0	ok
+848	0.00	0.00	0.00	0	ok
+849	0.00	0.00	0.00	0	ok
+850	0.00	0.00	0.00	0	ok
+851	0.02	0.00	0.00	5	ok
+852	0.00	0.00	0.00	0	ok
+853	0.06	0.01	0.01	12	ok
+854	0.02	0.00	0.00	4	ok
+855	0.02	0.00	0.00	4	ok
+856	0.03	0.00	0.00	7	ok
+857	0.04	0.01	0.01	8	ok
+858	0.03	0.01	0.01	5	ok
+859	0.23	0.07	0.08	7	ok
+860	0.97	0.00	0.00	47	ok
+861	0.64	0.00	0.00	61	ok
+862	0.75	0.00	0.00	78	ok
+863	5.19	0.02	0.02	46	shifted
+864	0.56	0.00	0.00	62	ok
+865	0.93	0.00	0.00	80	ok
+866	0.54	0.00	0.00	69	ok
+867	0.86	0.00	0.00	56	ok
+868	0.88	0.00	0.00	70	ok
+869	1.19	0.00	0.00	56	ok
+870	0.40	0.00	0.00	50	ok
+871	7.34	0.23	0.28	36	MAJOR
+				bottom-centre: ink we draw that the reference does not (1.64% of page, x 0.08-0.80, y 0.68-0.71)
+				bottom-centre: a solid area drawn differently (13.67% of page, x 0.08-0.80, y 0.71-0.93)
+				top-centre: marks displaced or reshaped (0.17% of page, x 0.48-0.58, y 0.21-0.23)
+				top-left: marks displaced or reshaped (0.28% of page, x 0.28-0.37, y 0.21-0.26)
+				top-centre: marks displaced or reshaped (0.12% of page, x 0.50-0.54, y 0.29-0.33)
+				top-centre: marks displaced or reshaped (0.07% of page, x 0.60-0.63, y 0.06-0.08)
+872	19.00	0.25	0.44	8	shifted
+873	13.46	0.21	0.21	3	shifted
+874	16.69	0.08	0.10	7	shifted
+875	12.26	0.25	0.65	6	shifted
+876	12.30	0.78	0.78	46	shifted
+877	15.16	0.87	0.87	2	shifted
+878	3.35	0.05	0.09	58	shifted
+879	4.14	0.02	0.02	54	shifted
+880	1.77	0.00	0.00	83	ok
+881	1.77	0.00	0.01	69	ok
+882	3.25	0.02	0.02	43	shifted
+883	1.25	0.00	0.00	58	ok
+884	2.25	0.01	0.02	72	shifted
+885	1.53	0.01	0.02	56	ok
+886	0.95	0.00	0.00	72	ok
+887	1.52	0.00	0.00	47	ok
+888	0.87	0.00	0.00	65	ok
+889	1.86	0.00	0.04	64	ok
+890	1.35	0.02	0.02	70	ok
+891	0.90	0.00	0.00	72	ok
+892	7.51	0.36	0.36	61	shifted
+893	20.64	0.36	0.39	4	shifted
+894	1.14	0.00	0.01	81	ok
+895	1.64	0.01	0.02	71	ok
+896	1.19	0.04	0.04	58	ok
+897	0.00	0.00	0.00	0	ok
+898	0.56	0.02	0.02	41	ok
+899	0.21	0.01	0.01	42	ok
+900	0.26	0.04	0.04	45	ok
+901	2.09	0.06	0.06	32	shifted
+902	0.17	0.00	0.00	42	ok
+903	0.22	0.02	0.02	47	ok
+904	0.14	0.00	0.00	36	ok
+905	0.37	0.01	0.01	48	ok
+906	0.20	0.00	0.00	51	ok
+907	0.45	0.00	0.00	39	ok
+908	1.72	0.51	0.51	40	MAJOR
+				top-left: a fill or background shading the reference has and we do not (1.99% of page, x 0.08-0.23, y 0.21-0.35)
+				middle-centre: marks displaced or reshaped (0.05% of page, x 0.33-0.35, y 0.63-0.65)
+				bottom-centre: marks displaced or reshaped (0.05% of page, x 0.33-0.35, y 0.79-0.80)
+				top-centre: marks displaced or reshaped (0.05% of page, x 0.33-0.35, y 0.06-0.08)
+				bottom-centre: marks displaced or reshaped (0.05% of page, x 0.33-0.35, y 0.70-0.72)
+				bottom-centre: marks displaced or reshaped (0.05% of page, x 0.33-0.35, y 0.74-0.75)
+909	4.53	0.14	0.68	36	MAJOR
+				middle-left: a fill or background shading the reference has and we do not (1.16% of page, x 0.08-0.23, y 0.39-0.47)
+				bottom-left: a solid area drawn differently (3.09% of page, x 0.08-0.51, y 0.80-0.87)
+				bottom-left: ink we draw that the reference does not (0.91% of page, x 0.08-0.51, y 0.68-0.71)
+				bottom-left: a fill or background shading the reference has and we do not (0.86% of page, x 0.08-0.51, y 0.77-0.79)
+				bottom-left: a solid area drawn differently (1.61% of page, x 0.08-0.51, y 0.71-0.76)
+				bottom-left: a solid area drawn differently (0.68% of page, x 0.08-0.51, y 0.92-0.93)
+910	9.32	0.00	0.55	36	MAJOR
+				middle-left: ink we draw that the reference does not (0.85% of page, x 0.08-0.51, y 0.44-0.46)
+				middle-left: ink missing from ours — a graphic, glyphs or a fill (0.91% of page, x 0.08-0.51, y 0.41-0.43)
+				bottom-left: ink missing from ours — a graphic, glyphs or a fill (0.91% of page, x 0.08-0.51, y 0.68-0.70)
+				bottom-left: marks displaced or reshaped (2.09% of page, x 0.08-0.51, y 0.71-0.78)
+				middle-left: marks displaced or reshaped (3.25% of page, x 0.08-0.51, y 0.48-0.57)
+				bottom-left: marks displaced or reshaped (5.19% of page, x 0.08-0.51, y 0.79-0.93)
+911	3.56	0.06	0.90	13	MAJOR
+				bottom-left: ink we draw that the reference does not (0.86% of page, x 0.08-0.51, y 0.77-0.79)
+				bottom-left: ink missing from ours — a graphic, glyphs or a fill (0.91% of page, x 0.08-0.51, y 0.74-0.76)
+				middle-left: ink we draw that the reference does not (0.91% of page, x 0.08-0.51, y 0.53-0.55)
+				top-left: a fill or background shading we draw and the reference does not (0.86% of page, x 0.08-0.51, y 0.17-0.19)
+				top-left: ink missing from ours — a graphic, glyphs or a fill (1.13% of page, x 0.08-0.51, y 0.12-0.16)
+				middle-left: marks displaced or reshaped (3.19% of page, x 0.08-0.51, y 0.24-0.42)
+912	4.69	0.01	0.27	11	MAJOR
+				top-left: a solid area drawn differently (5.83% of page, x 0.08-0.51, y 0.25-0.39)
+				bottom-left: ink we draw that the reference does not (0.91% of page, x 0.08-0.51, y 0.80-0.82)
+				top-centre: marks displaced or reshaped (0.07% of page, x 0.33-0.36, y 0.19-0.21)
+				top-centre: marks displaced or reshaped (0.07% of page, x 0.33-0.36, y 0.13-0.15)
+				top-centre: marks displaced or reshaped (0.06% of page, x 0.33-0.36, y 0.06-0.08)
+				top-left: marks displaced or reshaped (0.05% of page, x 0.14-0.17, y 0.06-0.08)
+913	3.27	0.21	0.48	18	MAJOR
+				bottom-left: marks displaced or reshaped (2.31% of page, x 0.08-0.51, y 0.73-0.81)
+				middle-left: a fill or background shading we draw and the reference does not (0.86% of page, x 0.08-0.51, y 0.54-0.56)
+				middle-left: ink missing from ours — a graphic, glyphs or a fill (0.91% of page, x 0.08-0.51, y 0.49-0.51)
+				middle-left: a solid area drawn differently (1.55% of page, x 0.08-0.51, y 0.37-0.41)
+				middle-centre: marks displaced or reshaped (0.07% of page, x 0.33-0.36, y 0.33-0.35)
+				middle-left: a solid area drawn differently (1.55% of page, x 0.08-0.51, y 0.60-0.64)
+914	3.91	0.31	0.52	12	shifted
+915	2.16	0.23	0.35	5	shifted
+916	0.99	0.00	0.00	7	ok
+917	1.40	0.21	0.21	26	MAJOR
+				middle-left: a fill or background shading the reference has and we do not (0.92% of page, x 0.08-0.23, y 0.54-0.61)
+				middle-centre: marks displaced or reshaped (0.05% of page, x 0.33-0.35, y 0.60-0.61)
+				bottom-centre: marks displaced or reshaped (0.05% of page, x 0.33-0.35, y 0.78-0.80)
+				bottom-left: marks displaced or reshaped (0.76% of page, x 0.08-0.51, y 0.81-0.83)
+				middle-left: marks displaced or reshaped (0.61% of page, x 0.22-0.36, y 0.30-0.36)
+				bottom-centre: marks displaced or reshaped (0.05% of page, x 0.33-0.35, y 0.73-0.75)
+918	0.15	0.00	0.00	39	ok
+919	1.46	0.41	0.41	30	MAJOR
+				bottom-left: ink missing from ours — a graphic, glyphs or a fill (1.94% of page, x 0.08-0.36, y 0.65-0.77)
+				middle-centre: marks displaced or reshaped (0.05% of page, x 0.33-0.35, y 0.51-0.53)
+				bottom-centre: marks displaced or reshaped (0.05% of page, x 0.33-0.35, y 0.85-0.87)
+				middle-centre: marks displaced or reshaped (0.05% of page, x 0.33-0.35, y 0.57-0.59)
+				top-centre: marks displaced or reshaped (0.05% of page, x 0.33-0.35, y 0.25-0.27)
+				bottom-centre: marks displaced or reshaped (0.05% of page, x 0.33-0.35, y 0.75-0.77)
+920	4.97	1.14	1.14	34	MAJOR
+				middle-left: a fill or background shading the reference has and we do not (2.93% of page, x 0.08-0.23, y 0.44-0.64)
+				bottom-left: marks displaced or reshaped (3.01% of page, x 0.08-0.51, y 0.82-0.93)
+				middle-left: marks displaced or reshaped (0.76% of page, x 0.08-0.51, y 0.37-0.39)
+				top-centre: marks displaced or reshaped (0.05% of page, x 0.33-0.35, y 0.20-0.21)
+				top-centre: marks displaced or reshaped (0.05% of page, x 0.33-0.35, y 0.23-0.25)
+				bottom-centre: marks displaced or reshaped (0.04% of page, x 0.33-0.35, y 0.82-0.84)
+921	0.12	0.00	0.00	33	ok
+922	0.66	0.00	0.00	45	ok
+923	0.53	0.04	0.06	28	ok
+924	0.18	0.00	0.00	38	ok
+925	0.96	0.27	0.27	29	MAJOR
+				middle-left: ink missing from ours — a graphic, glyphs or a fill (1.21% of page, x 0.08-0.23, y 0.48-0.59)
+				bottom-centre: marks displaced or reshaped (0.05% of page, x 0.33-0.35, y 0.83-0.85)
+				top-centre: marks displaced or reshaped (0.05% of page, x 0.33-0.35, y 0.23-0.24)
+				top-centre: marks displaced or reshaped (0.05% of page, x 0.33-0.35, y 0.06-0.08)
+				middle-left: marks displaced or reshaped (0.08% of page, x 0.27-0.31, y 0.49-0.50)
+				top-centre: marks displaced or reshaped (0.05% of page, x 0.33-0.35, y 0.18-0.19)
+926	2.83	0.80	0.82	34	MAJOR
+				middle-left: a fill or background shading the reference has and we do not (2.05% of page, x 0.08-0.23, y 0.49-0.64)
+				bottom-left: ink missing from ours — a graphic, glyphs or a fill (1.20% of page, x 0.08-0.23, y 0.67-0.78)
+				top-left: the same marks in a different colour (0.53% of page, x 0.08-0.23, y 0.24-0.30)
+				top-left: marks displaced or reshaped (0.43% of page, x 0.24-0.35, y 0.24-0.30)
+				bottom-left: marks displaced or reshaped (0.22% of page, x 0.25-0.32, y 0.74-0.79)
+				bottom-left: marks displaced or reshaped (0.09% of page, x 0.27-0.31, y 0.84-0.86)
+927	0.55	0.00	0.03	42	ok
+928	1.01	0.12	0.15	55	MAJOR
+				top-left: ink missing from ours — a graphic, glyphs or a fill (0.72% of page, x 0.08-0.23, y 0.16-0.23)
+				top-left: marks displaced or reshaped (0.99% of page, x 0.08-0.51, y 0.27-0.32)
+				middle-left: marks displaced or reshaped (0.13% of page, x 0.25-0.31, y 0.62-0.66)
+				top-left: marks displaced or reshaped (0.10% of page, x 0.30-0.35, y 0.11-0.15)
+				middle-left: marks displaced or reshaped (0.37% of page, x 0.25-0.35, y 0.34-0.39)
+				bottom-left: marks displaced or reshaped (0.15% of page, x 0.14-0.17, y 0.82-0.88)
+929	1.05	0.22	0.22	52	MAJOR
+				bottom-left: ink missing from ours — a graphic, glyphs or a fill (0.98% of page, x 0.08-0.23, y 0.67-0.75)
+				middle-left: marks displaced or reshaped (0.17% of page, x 0.25-0.31, y 0.35-0.40)
+				bottom-left: marks displaced or reshaped (0.13% of page, x 0.25-0.31, y 0.67-0.70)
+				top-left: marks displaced or reshaped (0.10% of page, x 0.14-0.17, y 0.13-0.17)
+				top-left: marks displaced or reshaped (0.10% of page, x 0.14-0.17, y 0.25-0.28)
+				top-left: marks displaced or reshaped (0.09% of page, x 0.30-0.33, y 0.13-0.17)
+930	4.11	0.31	0.31	27	MAJOR
+				bottom-left: a fill or background shading the reference has and we do not (1.62% of page, x 0.08-0.51, y 0.88-0.92)
+				top-left: marks displaced or reshaped (0.51% of page, x 0.08-0.23, y 0.10-0.17)
+				bottom-left: a solid area drawn differently (5.12% of page, x 0.08-0.51, y 0.75-0.87)
+				middle-left: marks displaced or reshaped (1.06% of page, x 0.08-0.51, y 0.30-0.37)
+				middle-left: marks displaced or reshaped (0.14% of page, x 0.30-0.35, y 0.47-0.53)
+				middle-left: marks displaced or reshaped (0.09% of page, x 0.18-0.21, y 0.47-0.51)
+931	9.84	0.26	0.26	11	MAJOR
+				top-left: a fill or background shading we draw and the reference does not (1.53% of page, x 0.08-0.51, y 0.06-0.10)
+				bottom-left: a solid area drawn differently (6.89% of page, x 0.08-0.51, y 0.75-0.93)
+				middle-left: a solid area drawn differently (4.38% of page, x 0.08-0.51, y 0.47-0.58)
+				middle-left: a solid area drawn differently (1.55% of page, x 0.08-0.51, y 0.42-0.46)
+				middle-left: a solid area drawn differently (2.94% of page, x 0.08-0.51, y 0.60-0.68)
+				bottom-left: a solid area drawn differently (1.60% of page, x 0.08-0.51, y 0.70-0.74)
+932	0.16	0.00	0.00	45	ok
+933	1.25	0.14	0.15	49	MAJOR
+				bottom-left: ink missing from ours — a graphic, glyphs or a fill (0.73% of page, x 0.08-0.23, y 0.84-0.92)
+				top-left: marks displaced or reshaped (0.29% of page, x 0.10-0.21, y 0.11-0.15)
+				middle-left: the same marks in a different colour (0.28% of page, x 0.10-0.21, y 0.58-0.61)
+				bottom-left: marks displaced or reshaped (0.91% of page, x 0.08-0.51, y 0.88-0.94)
+				top-centre: marks displaced or reshaped (0.29% of page, x 0.36-0.50, y 0.20-0.22)
+				middle-centre: marks displaced or reshaped (0.29% of page, x 0.36-0.50, y 0.60-0.62)
+934	2.74	0.51	0.51	36	shifted
+935	2.79	0.80	0.80	7	MAJOR
+				top-left: a fill or background shading the reference has and we do not (3.40% of page, x 0.08-0.23, y 0.06-0.28)
+				top-centre: marks displaced or reshaped (0.05% of page, x 0.33-0.35, y 0.06-0.08)
+				top-centre: marks displaced or reshaped (0.05% of page, x 0.33-0.35, y 0.21-0.23)
+				top-left: marks displaced or reshaped (0.04% of page, x 0.27-0.29, y 0.06-0.08)
+				top-left: marks displaced or reshaped (0.04% of page, x 0.27-0.29, y 0.13-0.15)
+				top-left: marks displaced or reshaped (0.04% of page, x 0.27-0.29, y 0.21-0.23)
+936	1.44	0.00	0.00	81	ok
+937	1.19	0.00	0.00	66	ok
+938	1.60	0.01	0.01	51	ok
+939	6.82	0.02	0.02	48	shifted
+940	2.32	0.00	0.01	65	shifted
+941	1.74	0.00	0.00	57	ok
+942	1.97	0.00	0.00	73	ok
+943	2.39	0.01	0.01	50	shifted
+944	2.71	0.00	0.01	60	shifted
+945	3.92	0.02	0.05	55	shifted
+946	3.02	0.03	0.04	42	shifted
+947	10.40	0.21	0.22	49	shifted
+948	21.28	0.03	0.44	10	MAJOR
+				bottom-centre: marks displaced or reshaped (3.45% of page, x 0.08-0.90, y 0.71-0.76)
+				bottom-centre: ink missing from ours — a graphic, glyphs or a fill (1.41% of page, x 0.08-0.90, y 0.68-0.70)
+				middle-centre: marks displaced or reshaped (30.58% of page, x 0.08-0.90, y 0.13-0.57)
+				bottom-centre: marks displaced or reshaped (9.47% of page, x 0.08-0.90, y 0.79-0.93)
+				top-left: marks displaced or reshaped (0.05% of page, x 0.27-0.30, y 0.06-0.08)
+				top-left: marks displaced or reshaped (0.05% of page, x 0.27-0.30, y 0.10-0.12)
+949	9.00	0.20	1.02	6	MAJOR
+				bottom-centre: marks displaced or reshaped (25.46% of page, x 0.08-0.90, y 0.53-0.93)
+				top-centre: ink we draw that the reference does not (1.37% of page, x 0.08-0.90, y 0.17-0.20)
+				top-centre: ink missing from ours — a graphic, glyphs or a fill (1.42% of page, x 0.08-0.90, y 0.30-0.33)
+				top-centre: ink missing from ours — a graphic, glyphs or a fill (1.41% of page, x 0.08-0.90, y 0.12-0.15)
+				top-left: marks displaced or reshaped (0.15% of page, x 0.24-0.31, y 0.24-0.26)
+				top-left: marks displaced or reshaped (0.05% of page, x 0.27-0.30, y 0.06-0.08)
+950	12.49	0.02	0.90	5	shifted
+951	16.05	0.53	0.63	2	shifted
+952	7.74	0.32	0.33	9	shifted
+953	1.25	0.33	0.75	5	MAJOR
+				top-centre: ink we draw that the reference does not (1.37% of page, x 0.08-0.90, y 0.24-0.26)
+				top-centre: ink missing from ours — a graphic, glyphs or a fill (1.37% of page, x 0.08-0.90, y 0.16-0.18)
+				middle-centre: ink missing from ours — a graphic, glyphs or a fill (1.41% of page, x 0.08-0.90, y 0.33-0.36)
+				bottom-centre: marks displaced or reshaped (3.07% of page, x 0.08-0.90, y 0.65-0.76)
+				top-left: marks displaced or reshaped (0.05% of page, x 0.27-0.30, y 0.06-0.08)
+954	0.33	0.00	0.00	4	ok
+955	1.12	0.01	0.01	24	ok
+956	1.94	0.00	0.00	66	ok
+957	2.14	0.00	0.00	72	shifted
+958	4.38	0.01	0.01	72	shifted
+959	1.70	0.00	0.00	75	ok
+960	1.83	0.00	0.00	42	ok
+961	2.59	0.03	0.09	52	shifted
+962	1.34	0.00	0.00	83	ok
+963	2.42	0.01	0.01	69	shifted
+964	1.72	0.02	0.03	90	ok
+965	2.46	0.01	0.06	72	shifted
+966	1.39	0.02	0.04	67	ok
+967	1.64	0.01	0.02	68	ok
+968	8.31	0.43	0.44	65	shifted
+969	24.39	0.40	0.71	3	shifted
+970	2.55	0.01	0.02	27	shifted
+971	1.29	0.00	0.00	55	ok
+972	1.61	0.05	0.05	68	ok
+973	0.72	0.00	0.00	15	ok
+974	1.12	0.00	0.00	19	ok
+975	0.03	0.00	0.00	8	ok
+976	0.03	0.00	0.00	11	ok
+977	1.40	0.10	0.47	12	MAJOR
+				bottom-centre: a fill or background shading we draw and the reference does not (0.76% of page, x 0.08-0.63, y 0.73-0.74)
+				bottom-centre: a fill or background shading we draw and the reference does not (0.76% of page, x 0.08-0.63, y 0.87-0.88)
+				bottom-centre: a fill or background shading the reference has and we do not (0.76% of page, x 0.08-0.63, y 0.89-0.90)
+				bottom-centre: a solid area drawn differently (1.58% of page, x 0.08-0.64, y 0.90-0.93)
+				bottom-centre: marks displaced or reshaped (1.80% of page, x 0.08-0.63, y 0.75-0.79)
+				top-centre: marks displaced or reshaped (0.04% of page, x 0.37-0.39, y 0.12-0.13)
+978	0.03	0.00	0.00	13	ok
+979	0.01	0.00	0.00	3	ok
+980	0.00	0.00	0.00	0	ok
+981	0.21	0.00	0.00	6	ok
+982	0.03	0.00	0.00	10	ok
+983	0.24	0.00	0.00	14	ok
+984	0.05	0.00	0.00	17	ok
+985	2.28	0.11	0.32	19	shifted
+986	5.35	0.27	1.41	16	MAJOR
+				bottom-centre: marks displaced or reshaped (5.45% of page, x 0.08-0.64, y 0.82-0.93)
+				middle-centre: marks displaced or reshaped (1.76% of page, x 0.08-0.63, y 0.48-0.52)
+				middle-centre: ink missing from ours — a graphic, glyphs or a fill (1.12% of page, x 0.08-0.63, y 0.53-0.55)
+				bottom-centre: a fill or background shading the reference has and we do not (0.76% of page, x 0.08-0.63, y 0.68-0.69)
+				bottom-centre: a fill or background shading we draw and the reference does not (0.76% of page, x 0.08-0.63, y 0.71-0.72)
+				bottom-centre: a fill or background shading we draw and the reference does not (0.76% of page, x 0.08-0.63, y 0.73-0.74)
+987	1.54	0.09	0.68	10	MAJOR
+				top-centre: a fill or background shading the reference has and we do not (0.76% of page, x 0.08-0.63, y 0.12-0.13)
+				top-centre: a fill or background shading we draw and the reference does not (0.76% of page, x 0.08-0.63, y 0.17-0.18)
+				top-centre: a fill or background shading the reference has and we do not (0.76% of page, x 0.08-0.63, y 0.30-0.31)
+				bottom-centre: a solid area drawn differently (1.58% of page, x 0.08-0.64, y 0.90-0.93)
+				bottom-centre: marks displaced or reshaped (0.83% of page, x 0.08-0.63, y 0.77-0.79)
+				bottom-centre: marks displaced or reshaped (0.84% of page, x 0.08-0.63, y 0.74-0.76)
+988	2.43	0.00	0.20	2	shifted
+989	2.03	0.41	0.61	10	MAJOR
+				bottom-centre: ink missing from ours — a graphic, glyphs or a fill (3.28% of page, x 0.08-0.64, y 0.73-0.81)
+				middle-centre: marks displaced or reshaped (0.81% of page, x 0.08-0.63, y 0.54-0.56)
+				middle-centre: marks displaced or reshaped (0.82% of page, x 0.08-0.63, y 0.49-0.51)
+				top-left: marks displaced or reshaped (0.04% of page, x 0.20-0.22, y 0.06-0.08)
+				middle-centre: marks displaced or reshaped (1.59% of page, x 0.08-0.63, y 0.42-0.46)
+				top-centre: marks displaced or reshaped (1.59% of page, x 0.08-0.63, y 0.12-0.16)
+990	2.36	0.49	0.68	7	MAJOR
+				bottom-centre: the same marks in a different colour (3.25% of page, x 0.08-0.64, y 0.84-0.93)
+				bottom-centre: a fill or background shading we draw and the reference does not (0.76% of page, x 0.08-0.63, y 0.76-0.77)
+				bottom-centre: a fill or background shading the reference has and we do not (0.76% of page, x 0.08-0.63, y 0.77-0.78)
+				bottom-centre: a fill or background shading we draw and the reference does not (0.76% of page, x 0.08-0.63, y 0.82-0.83)
+				middle-centre: marks displaced or reshaped (4.08% of page, x 0.08-0.63, y 0.46-0.55)
+				middle-centre: marks displaced or reshaped (1.59% of page, x 0.08-0.63, y 0.59-0.63)
+991	0.85	0.57	0.76	4	MAJOR
+				bottom-centre: the same marks in a different colour (3.64% of page, x 0.08-0.64, y 0.65-0.76)
+				top-centre: a fill or background shading the reference has and we do not (0.76% of page, x 0.08-0.63, y 0.16-0.17)
+				top-centre: a fill or background shading we draw and the reference does not (0.76% of page, x 0.08-0.63, y 0.24-0.25)
+				middle-centre: a fill or background shading the reference has and we do not (0.76% of page, x 0.08-0.63, y 0.33-0.34)
+992	0.21	0.01	0.01	1	ok
+993	0.40	0.00	0.00	3	ok
+994	0.00	0.00	0.00	0	ok
+995	0.00	0.00	0.00	1	ok
+996	1.63	0.09	0.10	6	ok
+997	0.00	0.00	0.00	0	ok
+998	0.61	0.01	0.01	5	ok
+999	0.22	0.01	0.01	7	ok
+1000	0.02	0.00	0.00	7	ok
+1001	0.04	0.00	0.00	11	ok
+1002	0.06	0.01	0.01	18	ok
+1003	0.43	0.00	0.02	10	ok
+1004	0.23	0.01	0.01	11	ok
+1005	0.08	0.00	0.00	23	ok
+1006	2.37	0.18	0.19	14	shifted
+1007	5.70	0.29	1.24	20	MAJOR
+				top-centre: marks displaced or reshaped (1.40% of page, x 0.08-0.63, y 0.06-0.10)
+				bottom-centre: a solid area drawn differently (1.63% of page, x 0.08-0.64, y 0.90-0.93)
+				bottom-centre: a fill or background shading the reference has and we do not (0.76% of page, x 0.08-0.63, y 0.70-0.71)
+				bottom-centre: a fill or background shading we draw and the reference does not (0.76% of page, x 0.08-0.63, y 0.72-0.73)
+				bottom-centre: a fill or background shading the reference has and we do not (0.76% of page, x 0.08-0.63, y 0.75-0.76)
+				bottom-centre: a fill or background shading we draw and the reference does not (0.76% of page, x 0.08-0.63, y 0.77-0.78)
+1008	0.03	0.00	0.00	10	ok
+1009	0.23	0.01	0.01	6	ok
+1010	0.47	0.02	0.02	21	ok
+1011	0.04	0.01	0.01	8	ok
+1012	1.38	0.00	0.00	77	ok
+1013	1.25	0.00	0.01	67	ok
+1014	1.20	0.01	0.01	59	ok
+1015	1.79	0.03	0.03	75	ok
+1016	3.10	0.03	0.04	26	shifted
+1017	2.19	0.01	0.02	102	shifted
+1018	1.88	0.01	0.03	49	ok
+1019	1.94	0.01	0.05	62	ok
+1020	3.11	0.05	0.05	47	shifted
+1021	1.15	0.00	0.00	59	ok
+1022	1.73	0.01	0.03	61	ok
+1023	4.27	0.01	0.06	58	shifted
+1024	1.55	0.01	0.01	70	ok
+1025	1.96	0.03	0.05	64	ok
+1026	4.72	0.15	0.29	53	shifted
+1027	26.90	0.68	1.13	2	shifted
+1028	27.32	0.07	0.07	1	shifted
+1029	23.91	0.25	0.25	2	shifted
+1030	20.75	0.50	0.50	1	shifted
+1031	1.17	0.00	0.01	107	ok
+1032	16.37	0.01	0.04	22	shifted
+1033	1.74	0.02	0.02	46	ok
+1034	2.41	0.01	0.02	87	shifted
+1035	1.89	0.02	0.04	69	ok
+1036	2.14	0.01	0.01	65	shifted
+1037	27.83	0.01	0.01	10	shifted
+1038	1.80	0.01	0.01	84	ok
+1039	1.68	0.00	0.08	89	ok
+1040	1.69	0.03	0.03	58	ok
+1041	7.39	0.14	0.14	42	shifted
+1042	4.10	0.14	0.16	60	shifted
+1043	1.84	0.02	0.03	83	ok
+1044	1.61	0.03	0.03	79	ok
+1045	2.02	0.02	0.04	54	shifted
+1046	1.81	0.00	0.00	77	ok
+1047	2.50	0.02	0.02	65	shifted
+1048	2.07	0.07	0.07	61	shifted
+1049	1.00	0.06	0.06	13	ok
+1050	0.42	0.00	0.00	9	ok
+1051	0.28	0.00	0.00	13	ok
+1052	0.12	0.00	0.00	6	ok
+1053	0.51	0.01	0.02	14	ok
+1054	1.22	0.19	0.24	10	MAJOR
+				middle-left: a fill or background shading the reference has and we do not (0.60% of page, x 0.08-0.25, y 0.38-0.41)
+				top-left: a fill of the wrong colour (0.47% of page, x 0.08-0.25, y 0.14-0.16)
+				middle-left: the same marks in a different colour (0.52% of page, x 0.08-0.25, y 0.60-0.64)
+				top-left: marks displaced or reshaped (0.31% of page, x 0.26-0.38, y 0.12-0.16)
+				middle-left: marks displaced or reshaped (0.31% of page, x 0.26-0.38, y 0.59-0.62)
+				bottom-left: marks displaced or reshaped (0.83% of page, x 0.08-0.53, y 0.72-0.76)
+1055	0.03	0.00	0.00	2	ok
+1056	0.41	0.00	0.04	11	ok
+1057	0.24	0.01	0.01	10	ok
+1058	0.21	0.00	0.00	3	ok
+1059	0.01	0.00	0.00	1	ok
+1060	0.83	0.24	0.24	2	MAJOR
+				bottom-left: ink missing from ours — a graphic, glyphs or a fill (1.33% of page, x 0.08-0.39, y 0.71-0.77)
+				bottom-centre: marks displaced or reshaped (0.05% of page, x 0.35-0.38, y 0.77-0.79)
+1061	0.40	0.01	0.01	5	ok
+1062	0.16	0.00	0.00	19	ok
+1063	0.63	0.07	0.11	15	MAJOR
+				middle-left: ink missing from ours — a graphic, glyphs or a fill (0.53% of page, x 0.08-0.25, y 0.46-0.50)
+				bottom-left: the same marks in a different colour (0.53% of page, x 0.08-0.25, y 0.71-0.75)
+				middle-centre: marks displaced or reshaped (0.08% of page, x 0.35-0.38, y 0.48-0.51)
+				middle-left: marks displaced or reshaped (0.08% of page, x 0.16-0.18, y 0.61-0.65)
+				middle-centre: marks displaced or reshaped (0.05% of page, x 0.35-0.38, y 0.32-0.34)
+				bottom-centre: marks displaced or reshaped (0.05% of page, x 0.35-0.38, y 0.69-0.71)
+1064	1.52	0.11	0.18	6	ok
+1065	10.64	0.20	0.52	4	shifted
+1066	11.16	0.22	0.51	2	shifted
+1067	6.67	0.08	1.14	7	MAJOR
+				middle-left: a fill or background shading we draw and the reference does not (1.78% of page, x 0.08-0.53, y 0.34-0.38)
+				bottom-left: a fill or background shading the reference has and we do not (1.68% of page, x 0.08-0.53, y 0.69-0.73)
+				top-left: a solid area drawn differently (9.63% of page, x 0.08-0.53, y 0.09-0.33)
+				bottom-left: a solid area drawn differently (2.56% of page, x 0.08-0.53, y 0.75-0.81)
+				bottom-left: marks displaced or reshaped (1.06% of page, x 0.08-0.53, y 0.83-0.88)
+				bottom-left: a solid area drawn differently (1.57% of page, x 0.08-0.53, y 0.89-0.93)
+1068	8.51	0.41	2.26	8	MAJOR
+				top-left: a fill or background shading we draw and the reference does not (2.53% of page, x 0.08-0.53, y 0.16-0.22)
+				middle-left: a solid area drawn differently (6.20% of page, x 0.08-0.53, y 0.58-0.73)
+				top-left: a fill or background shading the reference has and we do not (2.46% of page, x 0.08-0.53, y 0.26-0.32)
+				middle-left: a fill or background shading we draw and the reference does not (1.74% of page, x 0.08-0.53, y 0.40-0.44)
+				top-left: a fill or background shading the reference has and we do not (2.60% of page, x 0.08-0.53, y 0.09-0.15)
+				middle-left: a fill or background shading the reference has and we do not (1.68% of page, x 0.08-0.53, y 0.53-0.57)
+1069	0.35	0.01	0.03	3	ok
+1070	9.02	0.10	0.12	8	shifted
+1071	4.27	0.29	0.29	19	shifted
+1072	0.05	0.00	0.00	8	ok
+1073	0.34	0.03	0.03	13	ok
+1074	0.67	0.05	0.05	11	ok
+1075	14.14	0.03	0.14	5	shifted
+1076	0.27	0.00	0.00	16	ok
+1077	0.71	0.01	0.08	15	MAJOR
+				top-left: a fill or background shading the reference has and we do not (0.50% of page, x 0.08-0.25, y 0.18-0.21)
+				bottom-left: a fill of the wrong colour (0.47% of page, x 0.08-0.25, y 0.90-0.93)
+				bottom-left: marks displaced or reshaped (0.31% of page, x 0.26-0.38, y 0.88-0.92)
+				top-left: marks displaced or reshaped (0.34% of page, x 0.26-0.38, y 0.16-0.21)
+				middle-left: marks displaced or reshaped (0.06% of page, x 0.31-0.33, y 0.32-0.34)
+				bottom-left: marks displaced or reshaped (0.06% of page, x 0.31-0.33, y 0.75-0.77)
+1078	1.47	0.23	0.25	9	ok
+1079	3.02	0.04	0.04	12	shifted
+1080	0.19	0.00	0.00	8	ok
+1081	0.58	0.08	0.08	19	ok
+1082	0.49	0.00	0.03	19	ok
+1083	2.66	0.74	0.74	11	MAJOR
+				top-left: a fill or background shading the reference has and we do not (2.97% of page, x 0.08-0.25, y 0.16-0.33)
+				middle-left: marks displaced or reshaped (0.91% of page, x 0.08-0.53, y 0.33-0.40)
+				top-left: marks displaced or reshaped (0.06% of page, x 0.31-0.33, y 0.17-0.20)
+				middle-left: marks displaced or reshaped (0.08% of page, x 0.16-0.18, y 0.45-0.49)
+				bottom-left: marks displaced or reshaped (0.08% of page, x 0.16-0.18, y 0.80-0.83)
+				bottom-left: marks displaced or reshaped (0.08% of page, x 0.16-0.18, y 0.87-0.90)
+1084	0.81	0.24	0.24	16	MAJOR
+				bottom-left: a fill or background shading the reference has and we do not (1.00% of page, x 0.08-0.25, y 0.87-0.92)
+				middle-centre: marks displaced or reshaped (0.08% of page, x 0.35-0.38, y 0.32-0.35)
+				top-left: marks displaced or reshaped (0.08% of page, x 0.16-0.18, y 0.30-0.33)
+				bottom-left: marks displaced or reshaped (0.08% of page, x 0.16-0.18, y 0.76-0.80)
+				bottom-left: marks displaced or reshaped (0.08% of page, x 0.16-0.18, y 0.81-0.85)
+				top-centre: marks displaced or reshaped (0.05% of page, x 0.35-0.38, y 0.13-0.15)
+1085	2.72	0.76	0.76	14	MAJOR
+				bottom-left: ink missing from ours — a graphic, glyphs or a fill (2.05% of page, x 0.08-0.25, y 0.61-0.79)
+				top-left: a fill or background shading the reference has and we do not (1.00% of page, x 0.08-0.25, y 0.06-0.12)
+				bottom-left: the same marks in a different colour (0.52% of page, x 0.08-0.25, y 0.80-0.84)
+				bottom-left: a solid area drawn differently (0.71% of page, x 0.08-0.53, y 0.91-0.92)
+				top-centre: marks displaced or reshaped (0.05% of page, x 0.35-0.38, y 0.12-0.13)
+				bottom-centre: marks displaced or reshaped (0.05% of page, x 0.35-0.38, y 0.78-0.80)
+1086	0.86	0.07	0.10	9	ok
+1087	0.04	0.00	0.00	3	ok
+1088	0.88	0.00	0.00	34	ok
+1089	0.82	0.00	0.00	51	ok
+1090	0.71	0.00	0.00	57	ok
+1091	1.22	0.03	0.03	43	ok
+1092	1.68	0.01	0.04	28	ok
+1093	0.29	0.00	0.00	27	ok
+1094	1.66	0.02	0.03	70	ok
+1095	1.37	0.01	0.04	60	ok
+1096	0.47	0.00	0.00	5	ok
+1097	0.06	0.00	0.00	6	ok
+1098	2.14	0.14	0.15	31	shifted
+1099	2.24	0.01	0.04	43	shifted
+1100	0.94	0.01	0.01	40	ok
+1101	0.99	0.01	0.01	61	ok
+1102	2.75	0.23	0.28	33	shifted
+1103	21.49	0.08	0.56	4	shifted
+1104	20.73	0.43	0.93	2	shifted
+1105	16.07	0.02	1.55	2	shifted
+1106	17.94	0.92	2.07	4	MAJOR
+				middle-centre: a solid area drawn differently (12.03% of page, x 0.08-0.92, y 0.58-0.73)
+				top-centre: marks displaced or reshaped (12.74% of page, x 0.08-0.91, y 0.06-0.24)
+				middle-centre: a fill or background shading the reference has and we do not (3.33% of page, x 0.08-0.91, y 0.53-0.57)
+				middle-centre: marks displaced or reshaped (12.72% of page, x 0.08-0.91, y 0.26-0.44)
+1107	0.68	0.00	0.00	45	ok
+1108	15.48	0.07	0.07	17	shifted
+1109	2.03	0.01	0.03	60	shifted
+1110	1.27	0.00	0.01	59	ok
+1111	1.22	0.01	0.01	34	ok
+1112	0.73	0.00	0.00	60	ok
+1113	25.51	0.10	0.10	11	shifted
+1114	1.05	0.00	0.00	63	ok
+1115	1.14	0.03	0.04	73	ok
+1116	0.99	0.03	0.03	50	ok
+1117	5.96	0.11	0.11	48	shifted
+1118	1.57	0.05	0.05	37	ok
+1119	1.48	0.02	0.03	77	ok
+1120	1.40	0.02	0.03	70	ok
+1121	1.32	0.03	0.03	49	ok
+1122	1.80	0.01	0.02	41	ok
+1123	1.50	0.00	0.01	56	ok
+1124	1.71	0.09	0.09	52	ok
+1125	0.45	0.04	0.04	11	ok
+1126	1.36	0.10	0.11	4	ok
+1127	0.60	0.00	0.00	1	ok
+1128	0.46	0.00	0.00	1	ok
+1129	0.77	0.01	0.01	1	ok
+1130	0.54	0.01	0.01	1	ok
+1131	0.47	0.00	0.00	1	ok
+1132	0.46	0.00	0.00	1	ok
+1133	0.63	0.02	0.02	1	ok
+1134	0.60	0.00	0.00	1	ok
+1135	0.31	0.00	0.00	1	ok
+1136	0.40	0.00	0.00	3	ok
+1137	0.79	0.01	0.01	1	ok
+1138	0.41	0.00	0.00	1	ok
+1139	0.47	0.00	0.00	1	ok
+1140	0.93	0.09	0.09	3	ok
+1141	5.19	0.53	0.53	2	shifted
+1142	5.80	0.02	0.02	1	shifted
+1143	3.52	0.12	0.13	4	shifted
+1144	5.09	0.83	0.84	3	shifted
+1145	0.47	0.00	0.00	1	ok
+1146	4.02	0.10	0.10	1	shifted
+1147	0.63	0.02	0.02	5	ok
+1148	0.47	0.00	0.00	1	ok
+1149	0.44	0.00	0.00	1	ok
+1150	0.38	0.00	0.00	1	ok
+1151	7.45	0.12	0.12	1	shifted
+1152	0.43	0.00	0.00	1	ok
+1153	0.45	0.00	0.00	1	ok
+1154	0.63	0.00	0.01	3	ok
+1155	1.98	0.10	0.10	1	ok
+1156	0.48	0.00	0.00	2	ok
+1157	0.63	0.01	0.01	1	ok
+1158	0.62	0.02	0.02	1	ok
+1159	0.62	0.02	0.02	3	ok
+1160	0.47	0.00	0.00	2	ok
+1161	0.64	0.02	0.02	3	ok
+1162	0.81	0.01	0.02	2	ok
+1163	0.14	0.00	0.00	1	ok
+1164	2.46	0.02	0.04	77	shifted
+1165	2.44	0.01	0.01	86	shifted
+1166	3.80	0.02	0.02	77	shifted
+1167	2.95	0.03	0.04	75	shifted
+1168	3.77	0.05	0.05	61	shifted
+1169	2.29	0.01	0.02	99	shifted
+1170	1.71	0.00	0.01	105	ok
+1171	2.05	0.01	0.01	84	shifted
+1172	1.67	0.01	0.02	79	ok
+1173	2.44	0.01	0.03	92	shifted
+1174	2.69	0.06	0.07	83	shifted
+1175	2.50	0.05	0.06	91	shifted
+1176	2.49	0.03	0.03	87	shifted
+1177	4.49	0.01	0.08	78	shifted
+1178	0.75	0.00	0.00	38	ok
+1179	0.92	0.00	0.00	78	ok
+1180	1.03	0.00	0.00	83	ok
+1181	1.54	0.03	0.03	78	ok
+1182	1.02	0.00	0.00	74	ok
+1183	1.54	0.00	0.00	67	ok
+1184	1.17	0.00	0.00	82	ok
+1185	1.26	0.00	0.00	93	ok
+1186	2.14	0.01	0.02	76	shifted
+1187	1.29	0.00	0.00	68	ok
+1188	2.15	0.00	0.00	88	shifted
+1189	1.16	0.02	0.02	72	ok
+1190	1.18	0.00	0.00	84	ok
+1191	1.63	0.00	0.00	109	ok
+1192	1.43	0.02	0.03	82	ok
+1193	0.41	0.00	0.00	42	ok
+1194	0.87	0.00	0.00	8	ok
+1195	0.01	0.00	0.00	2	ok
+1196	0.40	0.01	0.01	9	ok
+1197	0.03	0.00	0.00	7	ok
+1198	0.39	0.00	0.00	5	ok
+1199	0.03	0.00	0.00	8	ok
+1200	0.01	0.00	0.00	3	ok
+1201	0.21	0.00	0.00	8	ok
+1202	0.02	0.00	0.00	6	ok
+1203	0.21	0.00	0.00	9	ok
+1204	0.21	0.01	0.01	8	ok
+1205	0.02	0.00	0.00	6	ok
+1206	0.06	0.00	0.00	11	ok
+1207	0.23	0.01	0.01	8	ok
+1208	0.02	0.00	0.00	4	ok
+1209	1.29	0.02	0.03	67	ok
+1210	1.26	0.08	0.08	79	ok
+1211	0.61	0.00	0.00	107	ok
+1212	1.04	0.00	0.00	124	ok
+1213	3.66	0.53	0.54	55	MAJOR
+				middle-centre: ink missing from ours — a graphic, glyphs or a fill (3.29% of page, x 0.52-0.79, y 0.31-0.47)
+				middle-centre: marks displaced or reshaped (0.82% of page, x 0.52-0.78, y 0.52-0.59)
+				bottom-left: marks displaced or reshaped (3.36% of page, x 0.12-0.51, y 0.73-0.93)
+				top-centre: marks displaced or reshaped (0.17% of page, x 0.41-0.46, y 0.17-0.21)
+				top-left: marks displaced or reshaped (0.27% of page, x 0.29-0.35, y 0.23-0.29)
+				middle-centre: marks displaced or reshaped (0.05% of page, x 0.47-0.50, y 0.65-0.67)
+1214	3.54	0.31	0.34	70	MAJOR
+				top-centre: a fill or background shading the reference has and we do not (1.14% of page, x 0.52-0.79, y 0.28-0.32)
+				bottom-centre: ink missing from ours — a graphic, glyphs or a fill (0.92% of page, x 0.52-0.79, y 0.73-0.78)
+				middle-centre: marks displaced or reshaped (1.15% of page, x 0.52-0.78, y 0.38-0.44)
+				bottom-centre: a solid area drawn differently (0.78% of page, x 0.52-0.66, y 0.80-0.86)
+				bottom-right: the same marks in a different colour (0.19% of page, x 0.68-0.77, y 0.81-0.83)
+				top-left: the same marks in a different colour (1.11% of page, x 0.12-0.52, y 0.06-0.10)
+1215	1.94	0.25	0.26	84	ok
+1216	3.47	0.18	0.20	76	MAJOR
+				top-centre: ink missing from ours — a graphic, glyphs or a fill (0.92% of page, x 0.52-0.79, y 0.18-0.22)
+				top-centre: marks displaced or reshaped (1.15% of page, x 0.52-0.78, y 0.28-0.33)
+				bottom-left: the same marks in a different colour (2.36% of page, x 0.12-0.51, y 0.84-0.91)
+				middle-left: marks displaced or reshaped (3.20% of page, x 0.12-0.50, y 0.52-0.77)
+				bottom-centre: a fill of the wrong colour (0.29% of page, x 0.52-0.66, y 0.67-0.69)
+				top-left: marks displaced or reshaped (0.57% of page, x 0.12-0.33, y 0.23-0.28)
+1217	1.14	0.13	0.14	17	ok
+1218	0.97	0.02	0.02	43	ok
+1219	0.75	0.05	0.06	50	ok
+1220	0.63	0.00	0.00	64	ok
+1221	0.80	0.00	0.00	53	ok
+1222	2.32	0.27	0.27	21	shifted
+1223	1.65	0.19	0.19	49	ok
+1224	1.14	0.08	0.08	31	ok
+1225	0.99	0.09	0.09	37	ok
+1226	0.84	0.09	0.09	12	ok
+1227	1.77	0.01	0.01	2	ok
+1228	0.87	0.00	0.00	2	ok
+1229	0.91	0.00	0.00	2	ok
+1230	1.03	0.00	0.00	1	ok
+1231	0.91	0.00	0.00	2	ok
+1232	1.01	0.00	0.00	1	ok
+1233	1.03	0.00	0.00	1	ok
+1234	1.03	0.00	0.00	1	ok
+1235	0.21	0.00	0.00	2	ok
+
+1235 pages, 142 with major differences
+images in /tmp/tmp8dr5jlma

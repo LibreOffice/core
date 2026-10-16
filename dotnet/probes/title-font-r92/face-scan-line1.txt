@@ -1,0 +1,32 @@
+sum|err| (thou)  face                                     file
+           14.2  DejaVuSans-Bold                          /usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf
+          391.0  DejaVuSerif-Bold                         /usr/share/fonts/truetype/dejavu/DejaVuSerif-Bold.ttf
+          940.7  DejaVuSerif                              /usr/share/fonts/truetype/dejavu/DejaVuSerif.ttf
+          946.0  DejaVuMathTeXGyre-Regular                /opt/libreoffice26.2/share/fonts/truetype/DejaVuMathTeXGyre.ttf
+          970.0  NotoSerifHebrew-Bold                     /opt/libreoffice26.2/share/fonts/truetype/NotoSerifHebrew-Bold.ttf
+          970.0  NotoSerifLao-Bold                        /opt/libreoffice26.2/share/fonts/truetype/NotoSerifLao-Bold.ttf
+          974.0  NotoSerifArmenian-Bold                   /opt/libreoffice26.2/share/fonts/truetype/NotoSerifArmenian-Bold.ttf
+          974.0  NotoSerifGeorgian-Bold                   /opt/libreoffice26.2/share/fonts/truetype/NotoSerifGeorgian-Bold.ttf
+          996.0  Rubik-BoldItalic                         /opt/libreoffice26.2/share/fonts/truetype/Rubik-BoldItalic.ttf
+         1009.0  NotoNaskhArabic-Bold                     /opt/libreoffice26.2/share/fonts/truetype/NotoNaskhArabic-Bold.ttf
+         1023.9  DejaVuSans                               /usr/share/fonts/truetype/dejavu/DejaVuSans.ttf
+         1044.0  Rubik-Bold                               /opt/libreoffice26.2/share/fonts/truetype/Rubik-Bold.ttf
+
+per-glyph, best face: DejaVuSans-Bold
+ ch   target     face    diff
+'C'    733.0    733.9     0.9
+'o'    686.0    687.0     1.0
+'m'   1041.0   1042.0     1.0
+'p'    715.0    715.8     0.8
+'e'    678.0    678.2     0.2
+'t'    477.0    478.0     1.0
+'i'    342.0    342.8     0.8
+'v'    650.0    651.9     1.9
+' '    347.0    348.1     1.1
+'A'    773.0    773.9     0.9
+'d'    715.0    715.8     0.8
+'a'    674.0    674.8     0.8
+'n'    711.0    711.9     0.9
+'g'    715.0    715.8     0.8
+'r'    492.0    493.2     1.2
+'–'    500.0    500.0     0.0

@@ -1,0 +1,4 @@
+BIFF workbooks scanned: 63
+CF records: 187
+  pattern  0: 157 records in 5 documents
+  pattern  1:   3 records in 1 documents

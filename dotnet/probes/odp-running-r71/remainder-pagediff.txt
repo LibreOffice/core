@@ -1,0 +1,168 @@
+# /home/user/corpus-odf/slides/ceiling-001/odp/OnTrac_StarCertificationProgram-3Day.odp
+pages ours 15 ref 15
+alnum ours 7709 ref 6233  (+1476)
+page     ours      ref    delta   imgO   imgR
+   1      181      181       +0      9     15
+   3      527      527       +0      0      6
+   4      707      707       +0      0     10
+   7      593      593       +0      0     14
+   8      314      314       +0      0      4
+   9      543      250     +293      0      4
+  10     1333      150    +1183      0      4
+  11      220      220       +0      2      5
+
+# /home/user/corpus-odf/slides/ceiling-002/odp/16 - UTM - (NASA).odp
+pages ours 37 ref 37
+alnum ours 15082 ref 13981  (+1101)
+page     ours      ref    delta   imgO   imgR
+   1      155      194      -39      5      7
+   2      220      220       +0      5      6
+   3      159      159       +0      5      8
+   4       78       78       +0      3      4
+   5      326      326       +0      2      6
+   7     1490      898     +592     76     10
+  11      718      718       +0      2      8
+  12      236      236       +0      6     12
+
+# /home/user/corpus-odf/slides/ceiling-002/odp/8_P-Pavese_AIRBUS-ATB-journee-CRATB.odp
+pages ours 26 ref 26
+alnum ours 10377 ref 9914  (+463)
+page     ours      ref    delta   imgO   imgR
+   2      268      268       +0      4      7
+   3      329      319      +10      1      2
+   5      530      296     +234      0      2
+   6      952      683     +269      0      2
+   8      131      147      -16      1      1
+  15      349      438      -89      0      0
+  16      632      577      +55      0      0
+
+# /home/user/corpus-odf/slides/ceiling-002/odp/Demick_JetBlue.odp
+pages ours 10 ref 10
+alnum ours 2897 ref 3179  (-282)
+page     ours      ref    delta   imgO   imgR
+   1       44       44       +0      1      5
+   2      328      328       +0  15805  37552
+   3      492      492       +0  15805  37552
+   4      311      355      -44  15805  37552
+   5      426      354      +72  15805  37552
+   6      232      286      -54  15805  37552
+   7      217      397     -180  15805  37552
+   8      291      367      -76  15805  37552
+
+# /home/user/corpus-odf/slides/chartset-001/odp/combo_bar_line_chart.odp
+pages ours 1 ref 1
+alnum ours 166 ref 219  (-53)
+page     ours      ref    delta   imgO   imgR
+   1      166      219      -53      0      0
+
+# /home/user/corpus-odf/slides/chartset-001/odp/scatter_chart.odp
+pages ours 1 ref 1
+alnum ours 83 ref 105  (-22)
+page     ours      ref    delta   imgO   imgR
+   1       83      105      -22      0      0
+
+# /home/user/corpus-odf/slides/chartset-008/odp/038_Competitive_Advantage_Card_for_PowerPoint_and_Google_Slides_373720f6.odp
+pages ours 3 ref 3
+alnum ours 1585 ref 1449  (+136)
+page     ours      ref    delta   imgO   imgR
+   1      752      684      +68      2      2
+   2      752      684      +68      2      2
+
+# /home/user/corpus-odf/slides/done-001/odp/Statement of Work presentation.odp
+pages ours 10 ref 10
+alnum ours 1286 ref 1255  (+31)
+page     ours      ref    delta   imgO   imgR
+   3      118       87      +31      0      0
+
+# /home/user/corpus-odf/slides/done-002/odp/medicines_bulletin_february_2023_final.odp
+pages ours 1 ref 1
+alnum ours 2902 ref 3093  (-191)
+page     ours      ref    delta   imgO   imgR
+   1     2902     3093     -191      5      9
+
+# /home/user/corpus-odf/slides/done-004/odp/0335fab9-79f0-4944-b92c-f223837ca2d8.odp
+pages ours 12 ref 12
+alnum ours 4404 ref 4499  (-95)
+page     ours      ref    delta   imgO   imgR
+   1      163      163       +0      2      4
+   5      179      179       +0      2      4
+   6      612      707      -95      0      0
+
+# /home/user/corpus-odf/slides/done-005/odp/manufacturing_process_simulation_working_group_overview_2023.odp
+pages ours 7 ref 7
+alnum ours 4868 ref 4733  (+135)
+page     ours      ref    delta   imgO   imgR
+   1       74       74       +0      3      2
+   2     1328     1193     +135      1      1
+   7      768      768       +0      2      3
+
+# /home/user/corpus-odf/slides/done-012/odp/Sean Monogue.odp
+pages ours 15 ref 15
+alnum ours 4803 ref 4950  (-147)
+page     ours      ref    delta   imgO   imgR
+   1      161      161       +0      0      1
+   3      250      283      -33      1      1
+   8      472      586     -114      0      0
+  15      167      167       +0      0      2
+
+# /home/user/corpus-odf/slides/done-013/odp/schematicplaymar21.odp
+pages ours 21 ref 21
+alnum ours 11122 ref 11470  (-348)
+page     ours      ref    delta   imgO   imgR
+   1       62       62       +0      2      4
+   2       92       92       +0      3     10
+   3      570      570       +0      0      3
+   5      435      435       +0      1      3
+   7      915     1263     -348      0      0
+   9      328      328       +0      4     12
+  10      685      685       +0      3     13
+  12      528      528       +0      3      9
+
+# /home/user/corpus-odf/slides/done-014/odp/redac-sas-201509-asisp-research.odp
+pages ours 45 ref 45
+alnum ours 18520 ref 19095  (-575)
+page     ours      ref    delta   imgO   imgR
+   2      476      695     -219      1      1
+   4      302      302       +0      3      7
+   7      844     1193     -349      2      2
+  11      310      310       +0      2      3
+  12      238      238       +0      2      3
+  14      149      149       +0     27     48
+  22      424      424       +0     14     35
+  41      490      490       +0      4      5
+
+# /home/user/corpus-odf/slides/done-014/odp/schematicplay.odp
+pages ours 21 ref 21
+alnum ours 11142 ref 11490  (-348)
+page     ours      ref    delta   imgO   imgR
+   1       62       62       +0      2      4
+   2       92       92       +0      3     10
+   3      579      579       +0      0      3
+   5      435      435       +0      1      3
+   7      915     1263     -348      0      0
+   9      328      328       +0      4     12
+  10      685      685       +0      3     13
+  12      528      528       +0      3      9
+
+# /home/user/corpus-odf/slides/done-014/odp/vvsummit2022-Research-Roadmap-and-the-UML-3-Operational-Integration-Assessment.odp
+pages ours 33 ref 33
+alnum ours 8377 ref 8377  (+0)
+page     ours      ref    delta   imgO   imgR
+   3      160      160       +0      3      4
+   4      256      256       +0      3      4
+   5      246      246       +0      4      5
+   7      149      149       +0      2     26
+   8      176      176       +0      2     28
+   9      443      443       +0      4     33
+  10      455      455       +0      4     33
+  11      107      107       +0      2      6
+
+# /home/user/corpus-odf/slides/metrics-001/odp/Ramp Up Campaign - French.odp
+pages ours 6 ref 6
+alnum ours 2414 ref 2536  (-122)
+page     ours      ref    delta   imgO   imgR
+   2      208      246      -38      1      1
+   3      928      968      -40      0      0
+   4      887      903      -16      1      2
+   5      359      387      -28      1      2
+

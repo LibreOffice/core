@@ -1,0 +1,5 @@
+ref page 1: 16 drawings
+ref page 2: 4 drawings
+ref TOTAL drawings: 20
+ours page 1: 0 drawings
+ours TOTAL drawings: 0

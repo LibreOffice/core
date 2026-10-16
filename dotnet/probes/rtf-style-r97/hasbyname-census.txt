@@ -1,0 +1,110 @@
+338 .rtf scanned; 84 distinct names applied without a resolvable \sbasedon
+17 of them reach an existing Writer paragraph style; 17 have COLL_STANDARD somewhere above
+
+ docs  name                       route      Writer style           pool chain
+  333  'Normal'                   map        Standard               COLL_STANDARD
+   10  'heading 1'                map        Heading 1              COLL_HEADLINE1 > COLL_HEADLINE_BASE > COLL_STANDARD
+    6  'heading 2'                map        Heading 2              COLL_HEADLINE2 > COLL_HEADLINE_BASE > COLL_STANDARD
+    5  'footer'                   map        Footer                 COLL_FOOTER > COLL_HEADERFOOTER > COLL_STANDARD
+    5  'header'                   map        Header                 COLL_HEADER > COLL_HEADERFOOTER > COLL_STANDARD
+    5  'heading 4'                map        Heading 4              COLL_HEADLINE4 > COLL_HEADLINE_BASE > COLL_STANDARD
+    4  'heading 3'                map        Heading 3              COLL_HEADLINE3 > COLL_HEADLINE_BASE > COLL_STANDARD
+    2  'Body Text'                map        Text body              COLL_TEXT > COLL_STANDARD
+    2  'toc 1'                    map        Contents 1             COLL_TOX_CNTNT1 > COLL_REGISTER_BASE > COLL_STANDARD
+    1  'Figure'                   hasByName  Figure                 COLL_LABEL_FIGURE > COLL_LABEL > COLL_STANDARD
+    1  'Heading'                  hasByName  Heading                COLL_HEADLINE_BASE > COLL_STANDARD
+    1  'Text'                     hasByName  Text                   COLL_LABEL_FRAME > COLL_LABEL > COLL_STANDARD
+    1  'heading 5'                map        Heading 5              COLL_HEADLINE5 > COLL_HEADLINE_BASE > COLL_STANDARD
+    1  'heading 8'                map        Heading 8              COLL_HEADLINE8 > COLL_HEADLINE_BASE > COLL_STANDARD
+    1  'heading 9'                map        Heading 9              COLL_HEADLINE9 > COLL_HEADLINE_BASE > COLL_STANDARD
+    1  'toc 2'                    map        Contents 2             COLL_TOX_CNTNT2 > COLL_REGISTER_BASE > COLL_STANDARD
+    1  'toc 3'                    map        Contents 3             COLL_TOX_CNTNT3 > COLL_REGISTER_BASE > COLL_STANDARD
+
+335 of the 338 documents apply at least one name that reaches COLL_STANDARD through Writer's own style
+
+  'heading 2': 03_Technical_Report_(progress)_template.rtf, 231164_SystemDesignDocument.rtf, EHEST-SMS-Safety-Management-Manual-V2.rtf, Sample_SQMS_Program.rtf, hdss-bulletin-issue-285-25-june-2025.rtf, template---tpr-technical-progress-report-with-guidance.rtf
+  'footer': 231164_SystemDesignDocument.rtf, Regulations Governing the Status, Basic Rights and Duties of Officials other than Secretariat Officials, and Experts on Mission.rtf, Sol PJ14-03-04 Solution Contextual.rtf, hdss-bulletin-issue-285-25-june-2025.rtf, mde087077~283.rtf
+  'header': 150-5370-10H.rtf, 19-06 Assistive Technology TAB Final - 508.rtf, AC-150-5370-10G-updated-201604.rtf, ECSS-E-ST-50-16C-Annex-A(30September2021).rtf, Regulations Governing the Status, Basic Rights and Duties of Officials other than Secretariat Officials, and Experts on Mission.rtf
+  'heading 4': 231164_SystemDesignDocument.rtf, 24-25_FAA_Holdover_Tables.rtf, FAA 2025-26 Holdover Tables.rtf, Sample_SQMS_Program.rtf, hdss-bulletin-issue-285-25-june-2025.rtf
+  'heading 3': 231164_SystemDesignDocument.rtf, Sample_SQMS_Program.rtf, hdss-bulletin-issue-285-25-june-2025.rtf, template---tpr-technical-progress-report-with-guidance.rtf
+  'Body Text': CRIF - SpÃ©cification technique - Socle applicatif.rtf, Press release_EUREKA labels ITEA 3 Cluster.rtf
+  'toc 1': 231164_SystemDesignDocument.rtf, report-template.rtf
+  'Figure': 231164_SystemDesignDocument.rtf
+  'Heading': CSCRS_Technical-Report-Documentation-Page-with-instructions.rtf
+  'Text': bulletin.rtf
+  'heading 5': 231164_SystemDesignDocument.rtf
+  'heading 8': PES-Technical-Report-Template_Jan_2019.rtf
+  'heading 9': PES-Technical-Report-Template_Jan_2019.rtf
+  'toc 2': 231164_SystemDesignDocument.rtf
+  'toc 3': 231164_SystemDesignDocument.rtf
+
+names that reach no Writer paragraph style at all:
+   24  'Default'                  hasByName  -> 'Default'
+   17  'No Spacing'               hasByName  -> 'No Spacing'
+    2  'Document 1'               hasByName  -> 'Document 1'
+    2  'FAA_Outline L1 (a)'       hasByName  -> 'FAA_Outline L1 (a)'
+    2  'items and standards'      hasByName  -> 'items and standards'
+    1  '05 Paragraph style'       hasByName  -> '05 Paragraph style'
+    1  'AC Masthead - Subject Line' hasByName  -> 'AC Masthead - Subject Line'
+    1  'Act'                      hasByName  -> 'Act'
+    1  'Annex1'                   hasByName  -> 'Annex1'
+    1  'Back Matter Heading'      hasByName  -> 'Back Matter Heading'
+    1  'Body'                     hasByName  -> 'Body'
+    1  'Body 1'                   hasByName  -> 'Body 1'
+    1  'Body A'                   hasByName  -> 'Body A'
+    1  'Bodytext'                 hasByName  -> 'Bodytext'
+    1  'Bullet (under text)'      hasByName  -> 'Bullet (under text)'
+    1  'Caption:Annex Table'      hasByName  -> 'Caption:Annex Table'
+    1  'Document subtitle'        hasByName  -> 'Document subtitle'
+    1  'Document title'           hasByName  -> 'Document title'
+    1  'Engineer note bottom'     hasByName  -> 'Engineer note bottom'
+    1  'Engineer note top'        hasByName  -> 'Engineer note top'
+    1  'Engineer note top big'    hasByName  -> 'Engineer note top big'
+    1  'FSM Chapter Title'        hasByName  -> 'FSM Chapter Title'
+    1  'FSM Introduction Paragraph' hasByName  -> 'FSM Introduction Paragraph'
+    1  'FSM Paragraph'            hasByName  -> 'FSM Paragraph'
+    1  'FSM TOC Title'            hasByName  -> 'FSM TOC Title'
+    1  'Feedback Form - Checkbox 1' hasByName  -> 'Feedback Form - Checkbox 1'
+    1  'Feedback Form - Checkbox 2' hasByName  -> 'Feedback Form - Checkbox 2'
+    1  'Feedback Form - Checkbox 3' hasByName  -> 'Feedback Form - Checkbox 3'
+    1  'Feedback Form - Checkbox 4' hasByName  -> 'Feedback Form - Checkbox 4'
+    1  'Feedback Form - Checkbox 5' hasByName  -> 'Feedback Form - Checkbox 5'
+    1  'Feedback Form - Checkbox Instruction' hasByName  -> 'Feedback Form - Checkbox Instruction'
+    1  'Feedback Form - Checkbox Lead-in' hasByName  -> 'Feedback Form - Checkbox Lead-in'
+    1  'Feedback Form - Checkbox Response' hasByName  -> 'Feedback Form - Checkbox Response'
+    1  'Feedback Form - Instructions' hasByName  -> 'Feedback Form - Instructions'
+    1  'Footer1'                  hasByName  -> 'Footer1'
+    1  'Front Matter Header'      hasByName  -> 'Front Matter Header'
+    1  'Header & Footer'          hasByName  -> 'Header & Footer'
+    1  'Header1'                  hasByName  -> 'Header1'
+    1  'Hoofdtekst'               hasByName  -> 'Hoofdtekst'
+    1  'List Bulleted 2'          hasByName  -> 'List Bulleted 2'
+    1  'List Paragraph'           hasByName  -> 'List Paragraph'
+    1  'List Paragraph 2'         hasByName  -> 'List Paragraph 2'
+    1  'Normal (Web)'             hasByName  -> 'Normal (Web)'
+    1  'Normal Text'              hasByName  -> 'Normal Text'
+    1  'Normal1'                  hasByName  -> 'Normal1'
+    1  'PDD_Heading'              hasByName  -> 'PDD_Heading'
+    1  'Paragraph Spacer 10'      hasByName  -> 'Paragraph Spacer 10'
+    1  'Paragraph Spacer 6'       hasByName  -> 'Paragraph Spacer 6'
+    1  'Regular'                  hasByName  -> 'Regular'
+    1  'Section break first page' hasByName  -> 'Section break first page'
+    1  'TRD page style only'      hasByName  -> 'TRD page style only'
+    1  'Table Head'               hasByName  -> 'Table Head'
+    1  'Table Head KWN'           hasByName  -> 'Table Head KWN'
+    1  'Table Style 2 A'          hasByName  -> 'Table Style 2 A'
+    1  'Table text'               hasByName  -> 'Table text'
+    1  'Table:Footnote'           hasByName  -> 'Table:Footnote'
+    1  'Table:cellLEFT'           hasByName  -> 'Table:cellLEFT'
+    1  'Table_Text'               hasByName  -> 'Table_Text'
+    1  'Text indented'            hasByName  -> 'Text indented'
+    1  'Title 3'                  hasByName  -> 'Title 3'
+    1  'certificateHeading'       hasByName  -> 'certificateHeading'
+    1  'list:level1'              hasByName  -> 'list:level1'
+    1  'loe:hdr'                  hasByName  -> 'loe:hdr'
+    1  'normal1'                  hasByName  -> 'normal1'
+    1  'paragraph'                hasByName  -> 'paragraph'
+    1  'table copy'               hasByName  -> 'table copy'
+    1  'tcs:ric'                  hasByName  -> 'tcs:ric'
+
+0 names the UI-spelling rule would have added and FillUIName rejects: none

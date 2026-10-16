@@ -1,0 +1,5 @@
+pages 4 4
+  arm A: ref rules [44.1, 56.3, 81.8] lower 25.5   ours [44.05, 56.25, 81.75] lower 25.5  DIFFERS
+  arm B: ref rules [44.1, 54.3, 77.8] lower 23.5   ours [44.05, 54.25, 77.75] lower 23.5  DIFFERS
+  arm C: ref rules [44.1, 56.3, 78.8] lower 22.5   ours [44.05, 56.25, 78.75] lower 22.5  DIFFERS
+  arm D: ref rules [44.1, 54.3, 79.8] lower 25.5   ours [44.05, 54.25, 79.75] lower 25.5  DIFFERS

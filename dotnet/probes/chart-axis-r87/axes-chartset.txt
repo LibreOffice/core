@@ -1,0 +1,70 @@
+DIFFER	004_Contextures_chart_sample_de7c0671__xlsx.pdf
+    p0 x~76.9
+      ours ('300', '250', '200', '150', '100', '50', '0')
+      ref  ('160', '140', '120', '100', '80', '60', '40', '20', '0')
+DIFFER	006_Contextures_chart_sample_afa23b53__xlsx.pdf
+    p1 x~341.8
+      ours ('800', '700', '600', '500', '400', '300', '200', '100', '0')
+      ref  ('400', '350', '300', '250', '200', '150', '100', '50', '0')
+DIFFER	014_Contextures_chart_sample_991ecfc5__xls.pdf
+    p0 x~439.8
+      ours ('100.0%', '90.0%', '80.0%', '70.0%', '60.0%', '50.0%', '40.0%', '30.0%', '20.0%', '10.0%', '0.0%')
+      ref  None
+    p0 x~516.3
+      ours None
+      ref  ('100.0%', '90.0%', '80.0%', '70.0%', '60.0%', '50.0%', '40.0%', '30.0%', '20.0%', '10.0%', '0.0%')
+DIFFER	017_4-Stage_Vertical_Funnel_Diagram_for_PowerPoint_61e7bde5__pptx.pdf
+    p0 x~506.7
+      ours None
+      ref  ('1', '2', '3', '4')
+DIFFER	023_Waterfall_Chart_Template_for_Excel_349f7689__xlsx.pdf
+    p0 x~105.2
+      ours ('25000', '20000', '15000', '10000', '5000', '0', '-5000')
+      ref  ('8000', '7000', '6000', '5000', '4000', '3000', '2000', '1000', '0', '-1000', '-2000')
+    p1 x~148.2
+      ours ('7000', '6000', '5000', '4000', '3000', '2000', '1000', '0', '-1000', '-2000')
+      ref  None
+DIFFER	044_Cash_flow_forecast_Use_this_template_b8fa1f35__xlsx.pdf
+    p3 x~-2.3
+      ours ('0', '0', '0', '0', '0', '0', '0', '0', '0', '0')
+      ref  None
+DIFFER	047_Date_tracker_Gantt_chart_bf34f3a8__xlsx.pdf
+    p2 x~149.1
+      ours ('1', '2', '3', '4', '5', '6')
+      ref  None
+    p2 x~214.4
+      ours ('1', '1', '1', '1', '1', '1')
+      ref  None
+    p3 x~92.9
+      ours ('1', '2', '3', '4', '5', '6', '7', '8', '9')
+      ref  None
+    p3 x~90.1
+      ours ('10', '11', '12')
+      ref  None
+    p5 x~149.0
+      ours None
+      ref  ('1', '2', '3', '4', '5', '6')
+    p5 x~214.3
+      ours None
+      ref  ('1', '1', '1', '1', '1', '1')
+    p6 x~92.9
+      ours None
+      ref  ('1', '2', '3', '4', '5', '6', '7', '8', '9')
+    p6 x~90.1
+      ours None
+      ref  ('10', '11', '12')
+DIFFER	048_Expense_trends_budget_18d1e8ba__xlsx.pdf
+    p1 x~77.2
+      ours ('500', '450', '400', '350', '300', '250', '200', '150', '100', '50')
+      ref  ('500', '400', '300', '200', '100')
+DIFFER	microsoft_learn_multi_chart_examples__xlsx.pdf
+    p1 x~442.5
+      ours ('20', '15', '10', '5', '0')
+      ref  None
+    p2 x~396.3
+      ours ('100', '90', '80', '70', '60', '50', '40', '30', '20', '10', '0')
+      ref  ('100', '80', '60', '40', '20', '0')
+    p2 x~6.3
+      ours ('30', '25', '20', '15', '10', '5', '0')
+      ref  None
+TOTAL differ 9  none 275  same 128

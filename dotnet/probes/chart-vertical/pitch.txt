@@ -1,0 +1,149 @@
+track   binary    face               sz  hpx    pitch  pixel law     err    exact     err
+slides  24.2.7.2  Liberation Sans     7    9    7.511      7.512  -0.001    8.049  -0.538
+slides  26.2.4.2  Liberation Sans     7    9    7.511      7.512  -0.001    8.049  -0.538
+slides  24.2.7.2  Liberation Sans     8   11    9.013      9.014  -0.001    9.199  -0.186
+slides  26.2.4.2  Liberation Sans     8   11    9.013      9.014  -0.001    9.199  -0.186
+slides  24.2.7.2  Liberation Sans     9   12   10.488     10.488  -0.001   10.349  +0.138
+slides  26.2.4.2  Liberation Sans     9   12   10.488     10.488  -0.001   10.349  +0.138
+slides  24.2.7.2  Liberation Sans    10   13   11.253     11.254  -0.001   11.499  -0.246
+slides  26.2.4.2  Liberation Sans    10   13   11.252     11.254  -0.001   11.499  -0.247
+slides  24.2.7.2  Liberation Sans    11   15   12.755     12.756  -0.001   12.649  +0.106
+slides  26.2.4.2  Liberation Sans    11   15   12.755     12.756  -0.001   12.649  +0.106
+slides  24.2.7.2  Liberation Sans    12   16   12.755     12.756  -0.001   13.799  -1.044
+slides  26.2.4.2  Liberation Sans    12   16   12.755     12.756  -0.001   13.799  -1.044
+slides  24.2.7.2  Liberation Sans    13   17   14.257     14.258  -0.001   14.949  -0.692
+slides  26.2.4.2  Liberation Sans    13   17   14.257     14.258  -0.001   14.949  -0.692
+slides  24.2.7.2  Liberation Sans    14   19   15.760     15.761  -0.001   16.099  -0.339
+slides  26.2.4.2  Liberation Sans    14   19   15.760     15.761  -0.001   16.099  -0.339
+slides  24.2.7.2  Liberation Sans    16   21   17.261     17.263  -0.001   18.398  -1.137
+slides  26.2.4.2  Liberation Sans    16   21   17.262     17.263  -0.001   18.398  -1.137
+slides  24.2.7.2  Liberation Sans    18   24   20.238     20.239  -0.001   20.698  -0.460
+slides  26.2.4.2  Liberation Sans    18   24   20.238     20.239  -0.001   20.698  -0.460
+slides  24.2.7.2  Liberation Sans    20   27   22.505     22.507  -0.002   22.998  -0.493
+slides  26.2.4.2  Liberation Sans    20   27   22.505     22.507  -0.002   22.998  -0.493
+slides  24.2.7.2  Liberation Sans    24   32   27.012     27.014  -0.002   27.598  -0.586
+slides  26.2.4.2  Liberation Sans    24   32   27.012     27.014  -0.002   27.598  -0.586
+slides  24.2.7.2  Liberation Serif    7    9    7.511      7.512  -0.001    8.049  -0.538
+slides  26.2.4.2  Liberation Serif    7    9    7.511      7.512  -0.001    8.049  -0.538
+slides  24.2.7.2  Liberation Serif    8   11    9.013      9.014  -0.001    9.199  -0.186
+slides  26.2.4.2  Liberation Serif    8   11    9.013      9.014  -0.001    9.199  -0.186
+slides  24.2.7.2  Liberation Serif    9   12   10.488     10.488  -0.001   10.349  +0.138
+slides  26.2.4.2  Liberation Serif    9   12   10.488     10.488  -0.001   10.349  +0.138
+slides  24.2.7.2  Liberation Serif   10   13   11.253     11.254  -0.001   11.499  -0.246
+slides  26.2.4.2  Liberation Serif   10   13   11.252     11.254  -0.001   11.499  -0.247
+slides  24.2.7.2  Liberation Serif   11   15   11.989     11.991  -0.001   12.649  -0.659
+slides  26.2.4.2  Liberation Serif   11   15   11.989     11.991  -0.001   12.649  -0.659
+slides  24.2.7.2  Liberation Serif   12   16   12.755     12.756  -0.001   13.799  -1.044
+slides  26.2.4.2  Liberation Serif   12   16   12.755     12.756  -0.001   13.799  -1.044
+slides  24.2.7.2  Liberation Serif   13   17   14.257     14.258  -0.001   14.949  -0.692
+slides  26.2.4.2  Liberation Serif   13   17   14.257     14.258  -0.001   14.949  -0.692
+slides  24.2.7.2  Liberation Serif   14   19   15.760     15.761  -0.001   16.099  -0.339
+slides  26.2.4.2  Liberation Serif   14   19   15.760     15.761  -0.001   16.099  -0.339
+slides  24.2.7.2  Liberation Serif   16   21   17.998     18.000  -0.002   18.398  -0.400
+slides  26.2.4.2  Liberation Serif   16   21   17.999     18.000  -0.001   18.398  -0.400
+slides  24.2.7.2  Liberation Serif   18   24   19.501     19.502  -0.001   20.698  -1.197
+slides  26.2.4.2  Liberation Serif   18   24   19.501     19.502  -0.002   20.698  -1.198
+slides  24.2.7.2  Liberation Serif   20   27   22.505     22.507  -0.002   22.998  -0.493
+slides  26.2.4.2  Liberation Serif   20   27   22.505     22.507  -0.002   22.998  -0.493
+slides  24.2.7.2  Liberation Serif   24   32   27.012     27.014  -0.002   27.598  -0.586
+slides  26.2.4.2  Liberation Serif   24   32   27.012     27.014  -0.002   27.598  -0.586
+slides  24.2.7.2  Carlito             7    9    8.248      8.249  -0.001    8.545  -0.297
+slides  26.2.4.2  Carlito             7    9    8.249      8.249  -0.000    8.545  -0.296
+slides  24.2.7.2  Carlito             8   11    9.750      9.751  -0.001    9.766  -0.016
+slides  26.2.4.2  Carlito             8   11    9.750      9.751  -0.001    9.766  -0.015
+slides  24.2.7.2  Carlito             9   12   10.488     10.488  -0.001   10.986  -0.499
+slides  26.2.4.2  Carlito             9   12   10.488     10.488  -0.001   10.986  -0.499
+slides  24.2.7.2  Carlito            10   13   11.253     11.254  -0.001   12.207  -0.954
+slides  26.2.4.2  Carlito            10   13   11.252     11.254  -0.001   12.207  -0.955
+slides  24.2.7.2  Carlito            11   15   13.492     13.493  -0.001   13.428  +0.064
+slides  26.2.4.2  Carlito            11   15   13.492     13.493  -0.001   13.428  +0.064
+slides  24.2.7.2  Carlito            12   16   14.257     14.258  -0.001   14.648  -0.391
+slides  26.2.4.2  Carlito            12   16   14.257     14.258  -0.001   14.648  -0.391
+slides  24.2.7.2  Carlito            13   17   15.760     15.761  -0.001   15.869  -0.110
+slides  26.2.4.2  Carlito            13   17   15.759     15.761  -0.002   15.869  -0.110
+slides  24.2.7.2  Carlito            14   19   17.262     17.263  -0.001   17.090  +0.172
+slides  26.2.4.2  Carlito            14   19   17.262     17.263  -0.001   17.090  +0.172
+slides  24.2.7.2  Carlito            16   21   19.501     19.502  -0.001   19.531  -0.030
+slides  26.2.4.2  Carlito            16   21   19.501     19.502  -0.001   19.531  -0.030
+slides  24.2.7.2  Carlito            18   24   21.768     21.770  -0.002   21.973  -0.204
+slides  26.2.4.2  Carlito            18   24   21.768     21.770  -0.002   21.973  -0.205
+slides  24.2.7.2  Carlito            20   27   24.744     24.746  -0.002   24.414  +0.330
+slides  26.2.4.2  Carlito            20   27   24.745     24.746  -0.002   24.414  +0.330
+slides  24.2.7.2  Carlito            24   32   29.251     29.254  -0.003   29.297  -0.046
+slides  26.2.4.2  Carlito            24   32   29.251     29.254  -0.002   29.297  -0.045
+words   24.2.7.2  Liberation Sans     7    9    7.507      7.512  -0.004    8.049  -0.542
+words   26.2.4.2  Liberation Sans     7    9    7.507      7.512  -0.005    8.049  -0.542
+words   24.2.7.2  Liberation Sans     8   11    9.009      9.014  -0.006    9.199  -0.191
+words   26.2.4.2  Liberation Sans     8   11    9.008      9.014  -0.006    9.199  -0.191
+words   24.2.7.2  Liberation Sans     9   12   10.481     10.488  -0.007   10.349  +0.132
+words   26.2.4.2  Liberation Sans     9   12   10.481     10.488  -0.007   10.349  +0.132
+words   24.2.7.2  Liberation Sans    10   13   11.247     11.254  -0.007   11.499  -0.253
+words   26.2.4.2  Liberation Sans    10   13   11.247     11.254  -0.007   11.499  -0.253
+words   24.2.7.2  Liberation Sans    11   15   12.748     12.756  -0.008   12.649  +0.099
+words   26.2.4.2  Liberation Sans    11   15   12.748     12.756  -0.008   12.649  +0.099
+words   24.2.7.2  Liberation Sans    12   16   12.748     12.756  -0.008   13.799  -1.051
+words   26.2.4.2  Liberation Sans    12   16   12.748     12.756  -0.008   13.799  -1.051
+words   24.2.7.2  Liberation Sans    13   17   14.250     14.258  -0.009   14.949  -0.699
+words   26.2.4.2  Liberation Sans    13   17   14.249     14.258  -0.009   14.949  -0.699
+words   24.2.7.2  Liberation Sans    14   19   15.750     15.761  -0.010   16.099  -0.348
+words   26.2.4.2  Liberation Sans    14   19   15.750     15.761  -0.010   16.099  -0.348
+words   24.2.7.2  Liberation Sans    16   21   17.252     17.263  -0.010   18.398  -1.146
+words   26.2.4.2  Liberation Sans    16   21   17.252     17.263  -0.011   18.398  -1.146
+words   24.2.7.2  Liberation Sans    18   24   20.226     20.239  -0.013   20.698  -0.472
+words   26.2.4.2  Liberation Sans    18   24   20.227     20.239  -0.012   20.698  -0.471
+words   24.2.7.2  Liberation Sans    20   27   22.493     22.507  -0.014   22.998  -0.505
+words   26.2.4.2  Liberation Sans    20   27   22.493     22.507  -0.014   22.998  -0.505
+words   24.2.7.2  Liberation Sans    24   32   26.997     27.014  -0.017   27.598  -0.601
+words   26.2.4.2  Liberation Sans    24   32   26.997     27.014  -0.017   27.598  -0.601
+words   24.2.7.2  Liberation Serif    7    9    7.507      7.512  -0.004    8.049  -0.542
+words   26.2.4.2  Liberation Serif    7    9    7.507      7.512  -0.005    8.049  -0.542
+words   24.2.7.2  Liberation Serif    8   11    9.009      9.014  -0.006    9.199  -0.191
+words   26.2.4.2  Liberation Serif    8   11    9.008      9.014  -0.006    9.199  -0.191
+words   24.2.7.2  Liberation Serif    9   12   10.481     10.488  -0.007   10.349  +0.132
+words   26.2.4.2  Liberation Serif    9   12   10.481     10.488  -0.007   10.349  +0.132
+words   24.2.7.2  Liberation Serif   10   13   11.247     11.254  -0.007   11.499  -0.253
+words   26.2.4.2  Liberation Serif   10   13   11.247     11.254  -0.007   11.499  -0.253
+words   24.2.7.2  Liberation Serif   11   15   11.983     11.991  -0.008   12.649  -0.666
+words   26.2.4.2  Liberation Serif   11   15   11.983     11.991  -0.008   12.649  -0.666
+words   24.2.7.2  Liberation Serif   12   16   12.748     12.756  -0.008   13.799  -1.051
+words   26.2.4.2  Liberation Serif   12   16   12.748     12.756  -0.008   13.799  -1.051
+words   24.2.7.2  Liberation Serif   13   17   14.250     14.258  -0.009   14.949  -0.699
+words   26.2.4.2  Liberation Serif   13   17   14.249     14.258  -0.009   14.949  -0.699
+words   24.2.7.2  Liberation Serif   14   19   15.750     15.761  -0.010   16.099  -0.348
+words   26.2.4.2  Liberation Serif   14   19   15.750     15.761  -0.010   16.099  -0.348
+words   24.2.7.2  Liberation Serif   16   21   17.989     18.000  -0.011   18.398  -0.409
+words   26.2.4.2  Liberation Serif   16   21   17.988     18.000  -0.012   18.398  -0.410
+words   24.2.7.2  Liberation Serif   18   24   19.490     19.502  -0.012   20.698  -1.208
+words   26.2.4.2  Liberation Serif   18   24   19.490     19.502  -0.012   20.698  -1.208
+words   24.2.7.2  Liberation Serif   20   27   22.493     22.507  -0.014   22.998  -0.505
+words   26.2.4.2  Liberation Serif   20   27   22.493     22.507  -0.014   22.998  -0.505
+words   24.2.7.2  Liberation Serif   24   32   26.997     27.014  -0.017   27.598  -0.601
+words   26.2.4.2  Liberation Serif   24   32   26.997     27.014  -0.017   27.598  -0.601
+words   24.2.7.2  Carlito             7    9    8.243      8.249  -0.005    8.545  -0.301
+words   26.2.4.2  Carlito             7    9    8.243      8.249  -0.005    8.545  -0.301
+words   24.2.7.2  Carlito             8   11    9.745      9.751  -0.006    9.766  -0.021
+words   26.2.4.2  Carlito             8   11    9.745      9.751  -0.006    9.766  -0.021
+words   24.2.7.2  Carlito             9   12   10.481     10.488  -0.007   10.986  -0.505
+words   26.2.4.2  Carlito             9   12   10.481     10.488  -0.007   10.986  -0.505
+words   24.2.7.2  Carlito            10   13   11.247     11.254  -0.007   12.207  -0.961
+words   26.2.4.2  Carlito            10   13   11.247     11.254  -0.007   12.207  -0.961
+words   24.2.7.2  Carlito            11   15   13.484     13.493  -0.008   13.428  +0.057
+words   26.2.4.2  Carlito            11   15   13.484     13.493  -0.008   13.428  +0.057
+words   24.2.7.2  Carlito            12   16   14.249     14.258  -0.009   14.648  -0.399
+words   26.2.4.2  Carlito            12   16   14.249     14.258  -0.009   14.648  -0.399
+words   24.2.7.2  Carlito            13   17   15.750     15.761  -0.010   15.869  -0.119
+words   26.2.4.2  Carlito            13   17   15.751     15.761  -0.010   15.869  -0.118
+words   24.2.7.2  Carlito            14   19   17.252     17.263  -0.011   17.090  +0.162
+words   26.2.4.2  Carlito            14   19   17.252     17.263  -0.011   17.090  +0.162
+words   24.2.7.2  Carlito            16   21   19.490     19.502  -0.012   19.531  -0.041
+words   26.2.4.2  Carlito            16   21   19.490     19.502  -0.012   19.531  -0.041
+words   24.2.7.2  Carlito            18   24   21.757     21.770  -0.014   21.973  -0.216
+words   26.2.4.2  Carlito            18   24   21.756     21.770  -0.014   21.973  -0.216
+words   24.2.7.2  Carlito            20   27   24.731     24.746  -0.015   24.414  +0.317
+words   26.2.4.2  Carlito            20   27   24.731     24.746  -0.016   24.414  +0.316
+words   24.2.7.2  Carlito            24   32   29.235     29.254  -0.019   29.297  -0.062
+words   26.2.4.2  Carlito            24   32   29.235     29.254  -0.019   29.297  -0.062
+
+pixel law within 0.05 pt on 144 of 144 cases
+worst |pitch - pixel law| = 0.019 pt;  worst |pitch - exact scaling| = 1.208 pt
+worst within-label spread of the two gaps = 0.0010 pt

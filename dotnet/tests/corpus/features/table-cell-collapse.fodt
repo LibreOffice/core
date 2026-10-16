@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  The control for sheet-cell-verbatim-text.fods: a *word-processing* table cell is read by
+  xmloff's text import, which applies ODF's own white-space rule — leading and trailing white
+  space is dropped, a run of it collapses to one space, and a raw newline is white space rather
+  than a line break. Only Calc's filter reads a cell's text:p verbatim
+  (sc/source/filter/xml/celltextparacontext.cxx:36-39), so the two families genuinely answer
+  differently and a change that simply stopped collapsing would be wrong here.
+
+  Cell A1 states "  Alpha\nBravo   Charlie  " across three source lines and reads as
+  "Alpha Bravo Charlie".
+-->
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+ xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+ xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+ xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+ xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+ office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:body>
+  <office:text>
+   <table:table table:name="T1">
+    <table:table-column table:number-columns-repeated="1"/>
+    <table:table-row>
+     <table:table-cell office:value-type="string"><text:p>  Alpha
+Bravo   Charlie  </text:p></table:table-cell>
+    </table:table-row>
+   </table:table>
+  </office:text>
+ </office:body>
+</office:document>

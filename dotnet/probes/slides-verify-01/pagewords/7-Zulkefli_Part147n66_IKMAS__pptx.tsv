@@ -1,0 +1,25 @@
+# pages ours=18 ref=18
+page	ow	rw	dw	oraw	rraw	ochar	rchar	conly_o	conly_r	1tok_o	1tok_r	oonly	ronly
+1	88	80	8	107	94	579	543	45	9	19	14	&((.000228::AAGHIIKKLLMMSTTUUaddeeiimnnnnw–••	Wcchkrrrs
+2	24	24	0	24	24	189	189	0	0	0	0		
+3	85	93	-8	99	107	403	403	0	0	18	27		
+4	121	153	-32	125	157	470	470	0	0	23	46		
+5	32	32	0	34	34	267	267	0	0	2	2		
+6	5	5	0	5	5	28	28	0	0	0	0		
+7	7	7	0	7	7	53	53	0	0	0	0		
+8	9	9	0	9	9	52	52	0	0	0	0		
+9	39	39	0	41	41	250	250	0	0	3	3		
+10	113	113	0	117	117	855	855	0	0	8	8		
+11	2	2	0	2	2	12	12	0	0	0	0		
+12	110	110	0	114	114	765	765	0	0	6	6		
+13	41	41	0	48	48	221	221	0	0	8	8		
+14	2	2	0	2	2	12	12	0	0	0	0		
+15	115	115	0	117	117	763	763	0	0	3	3		
+16	41	41	0	49	49	232	232	0	0	9	9		
+17	96	96	0	98	98	605	605	0	0	2	2		
+18	11	11	0	11	11	52	52	0	0	0	0		
+# TOTAL gate ours=941 ref=973 delta=-32
+# TOTAL chars ours=5808 ref=5772 delta=36
+# chars ours-only=45 ref-only=9
+# ours-only: nx4 0x3 Ax2 Mx2 Ix2 Ux2 Lx2 Tx2 •x2 ix2 ex2 (x2 Kx2 2x2 dx2 :x2 Sx1 ax1 mx1 &x1 wx1 Hx1 Gx1 –x1 .x1 
+# ref-only : rx3 cx2 sx1 hx1 Wx1 kx1 

@@ -1,0 +1,52 @@
+# indent-twip-rounding: an OOXML indent of 2 levels = 6 spaces of the default font. Measured 2026-09-06
+# 24.2.7.2: /usr/bin/soffice -> LibreOffice 24.2.7.2 420(Build:2)
+# 26.2.4.2: /opt/libreoffice26.2/program/soffice -> LibreOffice 26.2.4.2 0229ac93fcf0d7cbc6376066c6f35021cef002dc
+# fonts: system /usr/share/fonts, the tarball's Latin duplicates and Latin Noto aside
+# fc-match Arial -> LiberationSans-Regular.ttf: "Liberation Sans" "Regular"
+# ours: /home/user/wt-advance/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
+binary	size_pt	space_twips	floor_pt	round_pt	measured_pt	matches
+24.2.7.2	8	44.453	13.200	13.200	13.181	floor (undecided)
+26.2.4.2	8	44.453	13.200	13.200	13.181	floor (undecided)
+ours	8	44.453	13.200	13.200	13.181	floor (undecided)
+24.2.7.2	9	50.010	15.000	15.000	14.995	floor (undecided)
+26.2.4.2	9	50.010	15.000	15.000	14.995	floor (undecided)
+ours	9	50.010	15.000	15.000	14.995	floor (undecided)
+24.2.7.2	10	55.566	16.500	16.800	16.498	floor
+26.2.4.2	10	55.566	16.500	16.800	16.781	round
+ours	10	55.566	16.500	16.800	16.781	round
+24.2.7.2	11	61.123	18.300	18.300	18.284	floor (undecided)
+26.2.4.2	11	61.123	18.300	18.300	18.284	floor (undecided)
+ours	11	61.123	18.300	18.300	18.284	floor (undecided)
+24.2.7.2	12	66.680	19.800	20.100	19.786	floor
+26.2.4.2	12	66.680	19.800	20.100	20.098	round
+ours	12	66.680	19.800	20.100	20.098	round
+24.2.7.2	13	72.236	21.600	21.600	21.600	floor (undecided)
+26.2.4.2	13	72.236	21.600	21.600	21.600	floor (undecided)
+ours	13	72.236	21.600	21.600	21.600	floor (undecided)
+24.2.7.2	14	77.793	23.100	23.400	23.386	round
+26.2.4.2	14	77.793	23.100	23.400	23.386	round
+ours	14	77.793	23.100	23.400	23.386	round
+24.2.7.2	15	83.350	24.900	24.900	24.888	floor (undecided)
+26.2.4.2	15	83.350	24.900	24.900	24.888	floor (undecided)
+ours	15	83.350	24.900	24.900	24.888	floor (undecided)
+24.2.7.2	16	88.906	26.400	26.700	26.702	round
+26.2.4.2	16	88.906	26.400	26.700	26.702	round
+ours	16	88.906	26.400	26.700	26.674	round
+24.2.7.2	18	100.020	30.000	30.000	29.991	floor (undecided)
+26.2.4.2	18	100.020	30.000	30.000	29.991	floor (undecided)
+ours	18	100.020	30.000	30.000	29.991	floor (undecided)
+24.2.7.2	20	111.133	33.300	33.300	33.307	floor (undecided)
+26.2.4.2	20	111.133	33.300	33.300	33.307	floor (undecided)
+ours	20	111.133	33.300	33.300	33.279	floor (undecided)
+24.2.7.2	24	133.359	39.900	39.900	39.884	floor (undecided)
+26.2.4.2	24	133.359	39.900	39.900	39.884	floor (undecided)
+ours	24	133.359	39.900	39.900	39.883	floor (undecided)
+24.2.7.2	28	155.586	46.500	46.800	46.800	round
+26.2.4.2	28	155.586	46.500	46.800	46.800	round
+ours	28	155.586	46.500	46.800	46.800	round
+24.2.7.2	30	166.699	49.800	50.100	50.088	round
+26.2.4.2	30	166.699	49.800	50.100	50.088	round
+ours	30	166.699	49.800	50.100	50.088	round
+24.2.7.2	36	200.039	60.000	60.000	59.981	floor (undecided)
+26.2.4.2	36	200.039	60.000	60.000	59.981	floor (undecided)
+ours	36	200.039	60.000	60.000	59.981	floor (undecided)

@@ -1,0 +1,34 @@
+scanned 550, stating a pivot table 21
+   1 pivotTable /home/user/sample-files/sheets/chartset-004/xlsx/DynamicBubbleChart.xlsx
+   2 pivotTable /home/user/sample-files/sheets/chartset-007/xlsx/037_Personal_money_tracker_a57957bb.xlsx
+   1 pivotTable /home/user/sample-files/sheets/chartset-009/xlsx/053_Personal_asset_inventory_5446d84b.xlsx
+   1 pivotTable /home/user/sample-files/sheets/chartset-011/xlsm/007_Contextures_chart_sample_667d8e47.xlsm
+   4 pivotTable /home/user/sample-files/sheets/chartset-012/xlsx/026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx
+   1 pivotTable /home/user/sample-files/sheets/chartset-013/xlsx/033_Event_planning_tracker_Use_this_template_f29a848e.xlsx
+   1 pivotTable /home/user/sample-files/sheets/chartset-013/xlsx/035_Project_plan_for_law_firms_aa2d4462.xlsx
+   1 pivotTable /home/user/sample-files/sheets/chartset-013/xlsx/049_Expenses_calculator_c351f3d0.xlsx
+   4 pivotTable /home/user/sample-files/sheets/chartset-014/xlsx/027_Simple_personal_cash_flow_statement_675c6584.xlsx
+   11 pivotTable /home/user/sample-files/sheets/done-010/xlsx/Keywords_Mapping_Graphs_and_Charts.xlsx
+   1 pivotTable /home/user/sample-files/sheets/done-013/xlsx/alle einzeln.xlsx
+   ods-pilot    /home/user/corpus-odf/sheets/chartset-004/ods/DynamicBubbleChart.ods
+   ods-pilot    /home/user/corpus-odf/sheets/chartset-007/ods/037_Personal_money_tracker_a57957bb.ods
+   ods-pilot    /home/user/corpus-odf/sheets/chartset-011/ods/007_Contextures_chart_sample_667d8e47.ods
+   ods-pilot    /home/user/corpus-odf/sheets/chartset-013/ods/033_Event_planning_tracker_Use_this_template_f29a848e.ods
+   ods-pilot    /home/user/corpus-odf/sheets/chartset-013/ods/035_Project_plan_for_law_firms_aa2d4462.ods
+   ods-pilot    /home/user/corpus-odf/sheets/chartset-013/ods/049_Expenses_calculator_c351f3d0.ods
+   ods-pilot    /home/user/corpus-odf/sheets/done-010/ods/Keywords_Mapping_Graphs_and_Charts.ods
+   ods-pilot    /home/user/corpus-odf/sheets/done-010/ods/TOGAF9-Tool-ConfReqts-CSQ.ods
+   ods-pilot    /home/user/corpus-odf/sheets/done-013/ods/alle einzeln.ods
+   ods-pilot    /home/user/corpus-odf/sheets/missing-001/ods/orbus_togaf_tool_csq.ods
+
+fods                                                       styles occurs bordered
+007_Contextures_chart_sample_667d8e47.fods                     21     33       33
+026_Monthly_cash_flow_statement_Use_this_template_8aaebea1      0      0        0
+027_Simple_personal_cash_flow_statement_675c6584.fods           0      0        0
+033_Event_planning_tracker_Use_this_template_f29a848e.fods     19     85       85
+035_Project_plan_for_law_firms_aa2d4462.fods                   23     79       57
+037_Personal_money_tracker_a57957bb.fods                       35    133      125
+049_Expenses_calculator_c351f3d0.fods                          27     27       27
+053_Personal_asset_inventory_5446d84b.fods                      0      0        0
+DynamicBubbleChart.fods                                        11     78       78
+Keywords_Mapping_Graphs_and_Charts.fods                         9    111      111

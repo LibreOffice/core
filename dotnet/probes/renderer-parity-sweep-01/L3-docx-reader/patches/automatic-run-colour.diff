@@ -1,0 +1,47 @@
+diff --git a/dotnet/src/XRay.Office.WordProcessing/Ooxml/WordThemeColour.cs b/dotnet/src/XRay.Office.WordProcessing/Ooxml/WordThemeColour.cs
+--- a/dotnet/src/XRay.Office.WordProcessing/Ooxml/WordThemeColour.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Ooxml/WordThemeColour.cs
+@@ -62,11 +62,42 @@
+     /// <c>w:themeColor</c> is what a document written by anything other than Word tends to
+     /// carry, and a <c>w:themeColor</c> with no <c>w:val</c> at all is legal.
+     /// </para>
++    /// <para>
++    /// <b>What <c>w:val="auto"</c> means on a run, when nothing else is there to resolve.</b> It is not
++    /// "say nothing" — it is a colour, the automatic one, and it <em>overrides</em> whatever the layers
++    /// below would have given. LibreOffice reads it that way without a branch: the tokenizer hands
++    /// <c>auto</c> across as <c>COL_AUTO</c> and <c>DomainMapper.cxx</c>:2676 inserts it into
++    /// <c>PROP_CHAR_COLOR</c> like any other value, so a run in a blue paragraph style that states
++    /// <c>&lt;w:color w:val="auto"/&gt;</c> is drawn black.
++    /// </para>
++    /// <para>
++    /// Returning null there instead is the bug this closes: null means "this layer states nothing", so
++    /// the resolution fell through to the paragraph style and every such run came out in the style's
++    /// colour. Measured on <c>AFS-050-004-F2_0i.docx</c>, whose header states
++    /// <c>&lt;w:pStyle w:val="Title3"/&gt;</c> (<c>w:color w:val="0000FF"</c>) and then eighteen runs
++    /// carrying <c>&lt;w:color w:val="auto"/&gt;</c>, and on <c>form_1123_application_form_rvsm_spa</c>,
++    /// whose "Belgian Civil Aviation Authority" is a <c>Heading5</c> run with the same override.
++    /// </para>
++    /// <para>
++    /// Only here, and deliberately not in the six-argument overload: <c>w:shd</c>'s <c>w:fill="auto"</c>
++    /// means <em>no</em> fill, and answering black there would paint every automatically-shaded cell.
++    /// </para>
+     /// </remarks>
+     /// <param name="element">The <c>w:color</c> element, or null.</param>
+     /// <param name="theme">The document's theme, or null when it has none.</param>
+     public static Colour? Read(XElement? element, DrawingTheme? theme)
+-        => Read(element, theme, "val", "themeColor", "themeTint", "themeShade");
++    {
++        if (element is null) return null;
++
++        if (Read(element, theme, "val", "themeColor", "themeTint", "themeShade") is { } resolved)
++        {
++            return resolved;
++        }
++
++        // Nothing resolved, so either the element states nothing at all or it states `auto` with no
++        // theme reference beside it. Only the second is a colour.
++        return Word.Attribute(element, "val") == "auto" ? Colour.Black : null;
++    }
+ 
+     /// <summary>
+     /// The same, for the elements that spell the four attributes differently.

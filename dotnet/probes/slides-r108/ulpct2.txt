@@ -1,0 +1,236 @@
+# percentages pinned by this document's own single-size paragraphs:
+#   010605Vul                                                    []
+#   0335fab9-79f0-4944-b92c-f223837ca2d8                         [20]
+#   080214-Intl-pol-frameworks-and-their-implications-for-Africa [20, 50]
+#   1-secretariat                                                [20]
+#   2015-Civil-Rights-Website-training                           [16, 17, 20, 27, 30, 40, 50, 54, 64, 70, 75, 80, 100, 134]
+#   71393_pp7                                                    [24, 27, 50, 70, 90, 100]
+#   8.16_AOD_FINAL_Provider_Training_Presentation_9_2009         [5, 20, 50]
+#   Aerospace_Journey_of_Flight_Chapter_BCB1637572DA6            [50]
+#   Airport Planning 09112013                                    [20, 50]
+#   Architecture                                                 [20, 50]
+#   BUS-Chapter 05                                               [50]
+#   EG1_dsrc tech                                                [20, 50, 80, 200]
+#   Employment-Based_I-485                                       [20, 50]
+#   FAA_Form_337                                                 [16, 20, 23, 30]
+#   Framing Europe                                               [20, 50]
+#   Fundamentals_Module_1_basics                                 [20, 25, 30, 50]
+#   ITE106-Chapter 4                                             [20]
+#   Inducement-to-Insurance-Business                             [20, 25, 32, 40]
+#   JesuitAssocOfStudentPersonnel                                [20, 27, 40, 50]
+#   Lepore                                                       [20, 50]
+#   RESPA_-_Section_8_Webinar                                    [20]
+#   RRM-training-syllabus-Chapter-3-Teamwork-TC-Towing-Incident- [20, 30, 50]
+#   Thailand17                                                   [20, 30, 35, 48, 50, 100]
+#   W3_Case_Study_of_a_Tsunami_Warning_Simulation_Exercise_Ed    [20, 23, 50, 100]
+#   WC_Update-Aug03                                              [20, 50]
+#   architecture6                                                [10, 12, 20, 24]
+#   berlin                                                       [20, 50]
+#   concepts-surrounding-cloud-computing-carolyn-kranz-and-rich- [15, 20, 50]
+#   gfopportunitiesforlinkagespres_2010_en                       [20, 32]
+#   gillikin_online_user_mtg_2010                                [15, 19, 20, 22, 25, 30, 36]
+#   hofman                                                       [20, 50]
+#   iep-amount-frequency-for-webinar                             [30]
+#   introduction_to_bea_tuxedo                                   [20, 40, 50, 70]
+#   joint_user_outcomes_michael_fullerton_29.06.12               [20, 26]
+#   outlook_of_nigerian_pension_sector                           [16, 18, 20, 23, 27, 36, 44, 50, 63, 88, 98, 110, 126, 176]
+#   pods05                                                       [10, 20, 30]
+#   policy-pesentation                                           [20]
+#   pres_ioc_phuket                                              [20, 23, 30]
+#   undp_presentation_revised_17_may                             [10, 20]
+#   wells08_basic                                                [20]
+#   ws_prod-g-doc-Events-2007-Approval-of-Flight-Conditions-RM-N [20, 30]
+#   ws_prod-g-doc-Events-2007-Privileges                         [20]
+#   ws_prod-g-doc-Events-2007-may-presentation-PtF-background-+- [20]
+#   ws_prod-g-doc-Events-2007-november-IACA-presentation-at-EASA [20]
+#   ws_prod-g-doc-Events-2007-september-M.017-(French)-France    [20]
+#   ws_prod-g-doc-Events-2007-september-MDM.032-(ENGLISH)-CZ     [20]
+#   ws_prod-g-doc-Events-2008-February-5-NATO-activities         [20, 25, 29, 38, 40, 47, 50]
+#   ws_prod-g-doc-Events-Part-M-presentation                     [20]
+#   ws_prod-g-doc-Events-industrymeeting18112004-Aercap          [20]
+#   ws_prod-g-doc-Events-industrymeeting18112004-European-Safety [20, 50]
+#   ws_prod-g-doc-Events-r-6.-ESM                                [20, 32, 50]
+# multi-size paragraphs scored: 178
+#   admitted by first   :   44   (24.7 %)
+#   admitted by last    :  147   (82.6 %)
+#   admitted by largest :   61   (34.3 %)
+
+document                                  mm100  first   last largest  admitted-by
+1-secretariat                               247   32.0   28.0    32.0  last
+1-secretariat                               247   32.0   28.0    32.0  last
+1-secretariat                               247   32.0   28.0    32.0  last
+1-secretariat                               247   32.0   28.0    32.0  last
+2015-Civil-Rights-Website-training          247   28.0   28.0    28.0  first,last,largest
+2015-Civil-Rights-Website-training          212   28.0   24.0    28.0  last
+2015-Civil-Rights-Website-training          247   28.0   10.0    28.0  first,largest
+2015-Civil-Rights-Website-training          988   28.0   28.0    28.0  first,last,largest
+2015-Civil-Rights-Website-training          141   18.0   16.0    18.0  last
+2015-Civil-Rights-Website-training          212   40.0   24.0    40.0  last
+2015-Civil-Rights-Website-training          176   10.0   20.0    20.0  first,last,largest
+2015-Civil-Rights-Website-training          176   24.0   20.0    24.0  first,last,largest
+2015-Civil-Rights-Website-training          176   28.0   20.0    28.0  last
+2015-Civil-Rights-Website-training          176   28.0   20.0    28.0  last
+2015-Civil-Rights-Website-training          882   40.0   40.0    54.0  first,last
+2015-Civil-Rights-Website-training          159   16.0   18.0    18.0  last,largest
+2015-Civil-Rights-Website-training           88   12.0   10.0    14.0  first,last
+8.16_AOD_FINAL_Provider_Training_Present     44   24.0   20.0    24.0  last
+8.16_AOD_FINAL_Provider_Training_Present     44   15.0   20.0    20.0  last,largest
+8.16_AOD_FINAL_Provider_Training_Present    176   28.0   20.0    28.0  last
+8.16_AOD_FINAL_Provider_Training_Present    159   14.0   18.0    18.0  last,largest
+8.16_AOD_FINAL_Provider_Training_Present    176   14.0   20.0    20.0  last,largest
+8.16_AOD_FINAL_Provider_Training_Present    141   12.0   16.0    16.0  last,largest
+8.16_AOD_FINAL_Provider_Training_Present    159   16.0   18.0    18.0  last,largest
+8.16_AOD_FINAL_Provider_Training_Present    176   22.0   20.0    22.0  last
+8.16_AOD_FINAL_Provider_Training_Present    176   36.0   20.0    36.0  last
+8.16_AOD_FINAL_Provider_Training_Present    159   21.0   18.0    21.0  last
+8.16_AOD_FINAL_Provider_Training_Present    141   18.0   16.0    18.0  last
+8.16_AOD_FINAL_Provider_Training_Present    159   20.0   18.0    20.0  last
+8.16_AOD_FINAL_Provider_Training_Present    176   20.0   20.0    24.0  first,last
+8.16_AOD_FINAL_Provider_Training_Present    176   18.0   20.0    20.0  last,largest
+8.16_AOD_FINAL_Provider_Training_Present    123   20.0   14.0    20.0  last
+8.16_AOD_FINAL_Provider_Training_Present    141   20.0   16.0    20.0  last
+8.16_AOD_FINAL_Provider_Training_Present    176   20.0   20.0    24.0  first,last
+8.16_AOD_FINAL_Provider_Training_Present    141   18.0   16.0    18.0  last
+Aerospace_Journey_of_Flight_Chapter_BCB1    838   34.0   38.0    38.0  last,largest
+Aerospace_Journey_of_Flight_Chapter_BCB1    750   30.0   34.0    34.0  last,largest
+Architecture                                529   22.0   24.0    24.0  last,largest
+Architecture                                529   22.0   24.0    24.0  last,largest
+EG1_dsrc tech                               176    4.0    4.0 4.30000019073486  -none-
+EG1_dsrc tech                               159    3.5    4.0     4.0  -none-
+EG1_dsrc tech                               159    3.5    4.0     4.0  -none-
+EG1_dsrc tech                               159    3.5    4.0     4.0  -none-
+EG1_dsrc tech                               159    3.5    4.0     4.0  -none-
+EG1_dsrc tech                               159    4.0    4.0    10.0  -none-
+EG1_dsrc tech                               159   10.0    4.0    10.0  -none-
+EG1_dsrc tech                               159    4.0    4.0     4.0  -none-
+EG1_dsrc tech                               159    4.0    4.0     4.0  -none-
+EG1_dsrc tech                               159    4.0    4.0     4.0  -none-
+EG1_dsrc tech                               159    3.5    4.0     4.0  -none-
+EG1_dsrc tech                               159    3.5    4.0     4.0  -none-
+EG1_dsrc tech                               159    3.5    4.0     4.0  -none-
+EG1_dsrc tech                               159    3.5    4.0     4.0  -none-
+EG1_dsrc tech                               159    3.5    4.0     4.0  -none-
+EG1_dsrc tech                               159    3.5    4.0     4.0  -none-
+EG1_dsrc tech                               159    3.5    4.0     4.0  -none-
+EG1_dsrc tech                               159    3.5    4.0     4.0  -none-
+EG1_dsrc tech                               159    3.5    4.0     4.0  -none-
+EG1_dsrc tech                               159    3.5    4.0     4.0  -none-
+EG1_dsrc tech                               159    3.5    4.0     4.0  -none-
+EG1_dsrc tech                               159    3.5    4.0     4.0  -none-
+EG1_dsrc tech                               159    3.5    4.0     4.0  -none-
+EG1_dsrc tech                               159    3.5    4.0     4.0  -none-
+EG1_dsrc tech                               159    3.5    4.0     4.0  -none-
+EG1_dsrc tech                               159    4.0    3.5     4.0  -none-
+Employment-Based_I-485                      185   21.0   21.0    21.0  first,last,largest
+Employment-Based_I-485                      185   21.0   21.0    21.0  first,last,largest
+Employment-Based_I-485                      185   21.0   21.0    21.0  first,last,largest
+Employment-Based_I-485                      212   24.0   24.0    28.0  first,last
+FAA_Form_337                                282   36.0   36.0    44.0  -none-
+FAA_Form_337                                159   28.0   18.0    28.0  last
+FAA_Form_337                                176   18.0   20.0    20.0  last,largest
+FAA_Form_337                                247   28.0   28.0    28.0  first,last,largest
+FAA_Form_337                                282   36.0   40.0    40.0  last,largest
+FAA_Form_337                                176   20.0   20.0    24.0  first,last
+FAA_Form_337                                247   28.0   28.0    32.0  first,last
+FAA_Form_337                                370   28.0   28.0    40.0  first,last
+FAA_Form_337                                238   10.0   18.0    18.0  last,largest
+FAA_Form_337                                247   24.0   28.0    28.0  last,largest
+FAA_Form_337                                370   28.0   28.0    44.0  first,last
+FAA_Form_337                                388   24.0   44.0    44.0  last,largest
+FAA_Form_337                                423   28.0   32.0    32.0  last,largest
+FAA_Form_337                                476   36.0   54.0    54.0  first,last,largest
+Framing Europe                              159   24.0   18.0    24.0  last
+Framing Europe                              159   24.0   18.0    24.0  last
+Framing Europe                              159   24.0   18.0    24.0  last
+Framing Europe                              159   28.0   18.0    28.0  last
+Framing Europe                              159   28.0   18.0    28.0  last
+Framing Europe                              176   24.0   20.0    24.0  last
+Fundamentals_Module_1_basics                309   16.0   14.0    16.0  last
+Fundamentals_Module_1_basics                212   28.0   24.0    28.0  last
+Fundamentals_Module_1_basics                397   16.0   18.0    18.0  last,largest
+Inducement-to-Insurance-Business            353   50.0   22.0    50.0  -none-
+JesuitAssocOfStudentPersonnel               212   20.0   24.0    24.0  last,largest
+Lepore                                      159   20.0   18.0    20.0  last
+RRM-training-syllabus-Chapter-3-Teamwork    529   28.0   24.0    28.0  last
+RRM-training-syllabus-Chapter-3-Teamwork    617   24.0   28.0    28.0  last,largest
+RRM-training-syllabus-Chapter-3-Teamwork    529   24.0   24.0    28.0  first,last
+RRM-training-syllabus-Chapter-3-Teamwork    529   24.0   24.0    28.0  first,last
+RRM-training-syllabus-Chapter-3-Teamwork    529   28.0   24.0    28.0  last
+RRM-training-syllabus-Chapter-3-Teamwork    529   28.0   24.0    28.0  last
+RRM-training-syllabus-Chapter-3-Teamwork    529   28.0   24.0    28.0  last
+RRM-training-syllabus-Chapter-3-Teamwork    529   28.0   24.0    28.0  last
+RRM-training-syllabus-Chapter-3-Teamwork    529   20.0   24.0    24.0  last,largest
+RRM-training-syllabus-Chapter-3-Teamwork    441   24.0   20.0    24.0  last
+RRM-training-syllabus-Chapter-3-Teamwork    617   24.0   28.0    28.0  last,largest
+RRM-training-syllabus-Chapter-3-Teamwork    529   20.0   24.0    24.0  last,largest
+RRM-training-syllabus-Chapter-3-Teamwork    529   28.0   24.0    28.0  last
+RRM-training-syllabus-Chapter-3-Teamwork    617   20.0   28.0    28.0  last,largest
+Thailand17                                  318   28.0   24.0    28.0  last
+gfopportunitiesforlinkagespres_2010_en      212   28.0   26.0    28.0  -none-
+gfopportunitiesforlinkagespres_2010_en      132   29.0   15.0    29.0  last
+gfopportunitiesforlinkagespres_2010_en      132   29.0   15.0    29.0  last
+gfopportunitiesforlinkagespres_2010_en      132   29.0   15.0    29.0  last
+gfopportunitiesforlinkagespres_2010_en      141   29.0   16.0    29.0  last
+gfopportunitiesforlinkagespres_2010_en      141   29.0   16.0    29.0  last
+gfopportunitiesforlinkagespres_2010_en      132   22.0   15.0    22.0  last
+gfopportunitiesforlinkagespres_2010_en      132   22.0   15.0    25.0  last
+gfopportunitiesforlinkagespres_2010_en      132   22.0   15.0    22.0  last
+gfopportunitiesforlinkagespres_2010_en      132   22.0   15.0    22.0  last
+gfopportunitiesforlinkagespres_2010_en      132   22.0   15.0    22.0  last
+gfopportunitiesforlinkagespres_2010_en      132   22.0   15.0    22.0  last
+gfopportunitiesforlinkagespres_2010_en      212   28.0   24.0    28.0  last
+gfopportunitiesforlinkagespres_2010_en      212   28.0   24.0    28.0  last
+gfopportunitiesforlinkagespres_2010_en      212   28.0   24.0    28.0  last
+gillikin_online_user_mtg_2010               265   32.0   20.0    32.0  first,last,largest
+gillikin_online_user_mtg_2010               318   34.0   36.0    36.0  last,largest
+gillikin_online_user_mtg_2010               212   34.0   24.0    34.0  last
+gillikin_online_user_mtg_2010               194   24.0   22.0    24.0  last
+gillikin_online_user_mtg_2010               194   24.0   22.0    24.0  last
+gillikin_online_user_mtg_2010               291   24.0   22.0    24.0  last
+gillikin_online_user_mtg_2010               291   24.0   22.0    24.0  last
+gillikin_online_user_mtg_2010               212   28.0   24.0    28.0  last
+gillikin_online_user_mtg_2010               247   28.0   28.0    28.0  first,last,largest
+gillikin_online_user_mtg_2010               318   24.0   24.0    24.0  first,last,largest
+gillikin_online_user_mtg_2010               247   28.0   28.0    28.0  first,last,largest
+gillikin_online_user_mtg_2010               247   28.0   28.0    28.0  first,last,largest
+gillikin_online_user_mtg_2010               247   28.0   28.0    28.0  first,last,largest
+gillikin_online_user_mtg_2010               176   24.0   20.0    24.0  last
+gillikin_online_user_mtg_2010               176   24.0   20.0    24.0  last
+gillikin_online_user_mtg_2010               176   24.0   20.0    24.0  last
+gillikin_online_user_mtg_2010               265   20.0   20.0    20.0  first,last,largest
+gillikin_online_user_mtg_2010               265   20.0   20.0    20.0  first,last,largest
+gillikin_online_user_mtg_2010               265   20.0   20.0    20.0  first,last,largest
+gillikin_online_user_mtg_2010               185   17.0   14.0    17.0  first,last,largest
+gillikin_online_user_mtg_2010               185   17.0   14.0    17.0  first,last,largest
+gillikin_online_user_mtg_2010               185   17.0   14.0    17.0  first,last,largest
+gillikin_online_user_mtg_2010               176   24.0   20.0    24.0  last
+gillikin_online_user_mtg_2010               212    9.0   16.0    19.0  last
+gillikin_online_user_mtg_2010               476   38.0   36.0    38.0  last
+gillikin_online_user_mtg_2010               229   28.0   26.0    28.0  last
+gillikin_online_user_mtg_2010               176   24.0   20.0    24.0  last
+gillikin_online_user_mtg_2010               194   22.0   22.0    22.0  first,last,largest
+gillikin_online_user_mtg_2010               229   28.0   26.0    28.0  last
+gillikin_online_user_mtg_2010               476   38.0   36.0    38.0  last
+gillikin_online_user_mtg_2010               344   28.0   26.0    28.0  last
+gillikin_online_user_mtg_2010               265   24.0   20.0    24.0  first,last,largest
+gillikin_online_user_mtg_2010               291   22.0   22.0    22.0  first,last,largest
+gillikin_online_user_mtg_2010               344   28.0   26.0    28.0  last
+gillikin_online_user_mtg_2010               229   28.0   26.0    28.0  last
+gillikin_online_user_mtg_2010               476   38.0   36.0    38.0  last
+gillikin_online_user_mtg_2010               344   28.0   26.0    28.0  last
+outlook_of_nigerian_pension_sector          309   14.0   14.0    18.0  first,last
+outlook_of_nigerian_pension_sector          776   18.0   20.0    20.0  first,last,largest
+outlook_of_nigerian_pension_sector          141   12.0   10.0    12.0  first,largest
+pods05                                      370   28.0   28.0    28.0  first,last,largest
+ws_prod-g-doc-Events-2007-Privileges        176   24.0   20.0    24.0  last
+ws_prod-g-doc-Events-2007-september-M.01    176   18.0   20.0    20.0  last,largest
+ws_prod-g-doc-Events-2007-september-M.01    159   16.0   18.0    18.0  last,largest
+ws_prod-g-doc-Events-2007-september-MDM.     88   20.0   10.0    20.0  last
+ws_prod-g-doc-Events-2007-september-MDM.    141   14.0   16.0    16.0  last,largest
+ws_prod-g-doc-Events-2008-February-5-NAT    309   14.0   14.0    14.0  first,last,largest
+ws_prod-g-doc-Events-2008-February-5-NAT    309   14.0   14.0    14.0  first,last,largest
+ws_prod-g-doc-Events-Part-M-presentation    212   20.0   24.0    24.0  last,largest
+ws_prod-g-doc-Events-industrymeeting1811    159   16.0   18.0    18.0  last,largest
+ws_prod-g-doc-Events-industrymeeting1811     88   10.0   10.0    18.0  first,last
+ws_prod-g-doc-Events-industrymeeting1811     88   10.0   10.0    18.0  first,last
+ws_prod-g-doc-Events-r-6.-ESM               212   20.0   24.0    24.0  last,largest

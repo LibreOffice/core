@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  A sheet padded to its full extent with repeat counts, which is what Calc's own ODF export
+  writes at the end of every sheet.
+
+  The last row element declares table:number-rows-repeated="1048576" and holds a cell declaring
+  table:number-columns-repeated="16384", both naming a styled (white-filled) cell rather than the
+  default one. The product is seventeen billion cells; a reader that expands the two counts
+  materialises them.
+
+  Calc does not. ScXMLTableRowContext clamps the row repeat to the sheet's own row count
+  (sc/source/filter/xml/xmlrowi.cxx:73-82) and ScXMLTableRowCellContext clamps the column repeat
+  to its column count (xmlcelli.cxx:186-195); the block is then recorded as a single ScRange
+  (xmlcelli.cxx:1368-1377), merged per style name into an ScRangeList and applied over ranges,
+  and the store underneath is a run array. So the repeat is honoured up to the sheet's bounds
+  rather than ignored, and it costs one entry.
+
+  Three things this document is arranged to prove, in the order they can go wrong:
+
+  * The padding's format reaches the sheet's last row and last column. A reader that drops a
+    repeat past some internal cap answers the sheet default there instead.
+  * It does not reach the *printed* area. The block is one run of a million visually equal rows,
+    and ScAttrArray::GetLastVisibleAttr ignores every run of SC_VISATTR_STOP = 84 equal rows or
+    more below the last data cell (attarray.cxx:1920, 1967-1969) — which is the whole reason a
+    white-filled padding block, which IS visible by ScPatternAttr::CalcVisible's test
+    (patattr.cxx:1584-1612), does not paginate every sheet to row 1048576.
+  * A repeat that legitimately describes a handful of cells still materialises them: rows 2 to 4
+    carry a two-column run in "cesmall", and all six of those cells state it.
+-->
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+ xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+ xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+ xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+ xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+ office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+ <office:automatic-styles>
+  <style:style style:name="co1" style:family="table-column">
+   <style:table-column-properties style:column-width="2.5cm"/>
+  </style:style>
+  <style:style style:name="ro1" style:family="table-row">
+   <style:table-row-properties style:row-height="0.45cm" style:use-optimal-row-height="false"/>
+  </style:style>
+  <style:style style:name="cepad" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties fo:background-color="#ffffff"/>
+  </style:style>
+  <style:style style:name="cesmall" style:family="table-cell" style:parent-style-name="Default">
+   <style:table-cell-properties fo:background-color="#ffd966"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+    fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"
+    style:print-orientation="portrait"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Default" style:page-layout-name="pm1"/>
+ </office:master-styles>
+ <office:body>
+  <office:spreadsheet>
+   <table:table table:name="Padded">
+    <table:table-column table:style-name="co1" table:number-columns-repeated="3"/>
+    <table:table-column table:style-name="co1" table:number-columns-repeated="16381"/>
+    <table:table-row table:style-name="ro1"><table:table-cell office:value-type="string"><text:p>Region</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>Units</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>Price</text:p></table:table-cell><table:table-cell table:style-name="cepad" table:number-columns-repeated="16381"/></table:table-row>
+    <table:table-row table:style-name="ro1" table:number-rows-repeated="3"><table:table-cell table:style-name="cesmall" table:number-columns-repeated="2"/><table:table-cell table:number-columns-repeated="1"/><table:table-cell table:style-name="cepad" table:number-columns-repeated="16381"/></table:table-row>
+    <table:table-row table:style-name="ro1" table:number-rows-repeated="1048576"><table:table-cell table:number-columns-repeated="3"/><table:table-cell table:style-name="cepad" table:number-columns-repeated="16384"/></table:table-row>
+   </table:table>
+  </office:spreadsheet>
+ </office:body>
+</office:document>

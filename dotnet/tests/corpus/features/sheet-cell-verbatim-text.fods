@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Calc takes a cell's own text exactly as the file writes it, and the other two ODF
+  applications do not.
+
+  A spreadsheet cell's paragraphs are read by Calc's own filter rather than by xmloff's text
+  import, and ScXMLCellTextParaContext::characters appends what it is handed with no
+  normalisation at all (sc/source/filter/xml/celltextparacontext.cxx:36-39). So leading,
+  trailing and repeated spaces survive, and — the half that moves a page — a raw U+000A inside
+  a text:p is a paragraph break rather than white space:
+  ScXMLTableRowCellContext::PushParagraphEnd hands such a string to the EditEngine because
+  ScStringUtil::isMultiline is a search for \n or \r (stringutil.cxx:426-429,
+  xmlcelli.cxx:625-629), and the EditEngine splits at each separator.
+
+  That is not a hypothetical spelling. LibreOffice's own conversion to .ods writes a multi-line
+  cell exactly this way, with no text:line-break anywhere in the file: 659 such paragraphs in
+  16 of the 307 converted .ods, 361 of them in CIS_Debian_Linux_8_Benchmark_v1.0.0.ods, whose
+  rendering was missing half its characters because every one of those cells lost every line
+  after the first.
+
+  Column B does not wrap, so nothing here can be broken for width and every line below is a
+  paragraph. LibreOffice 26.2.4.2's own PDF of this file, read with PyMuPDF:
+
+    plain      ABC                     one line
+    lead       '  ABC'                 one line, and wider than `plain` by two spaces
+    trail      'ABC  '                 one line, the same width as `lead`
+    inner      'A   B'                 one line, three spaces kept
+    newline    ABC / DEF               two lines
+    crlf       ABC / DEF               two lines: CRLF is one break, not two. Written as
+                                       &#13;&#10; because an XML parser normalises a literal
+                                       CRLF in content to LF before any importer sees it, so
+                                       the pair only survives as character references.
+    nlindent   ABC / '  DEF'           two lines, the second keeping its two spaces
+-->
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+ xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+ xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+ xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+ xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+ office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+ <office:automatic-styles>
+  <style:style style:name="co1" style:family="table-column">
+   <style:table-column-properties style:column-width="5cm"/>
+  </style:style>
+  <style:style style:name="ro1" style:family="table-row">
+   <style:table-row-properties style:row-height="1cm" style:use-optimal-row-height="false"/>
+  </style:style>
+  <style:style style:name="ceFlat" style:family="table-cell">
+   <style:table-cell-properties fo:wrap-option="no-wrap" style:vertical-align="top"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+    fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"
+    style:print-orientation="portrait"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Default" style:page-layout-name="pm1"/>
+ </office:master-styles>
+ <office:body>
+  <office:spreadsheet>
+   <table:table table:name="Probe">
+    <table:table-column table:style-name="co1" table:number-columns-repeated="2"/>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string"><text:p>plain</text:p></table:table-cell>
+     <table:table-cell table:style-name="ceFlat" office:value-type="string"><text:p>ABC</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string"><text:p>lead</text:p></table:table-cell>
+     <table:table-cell table:style-name="ceFlat" office:value-type="string"><text:p>  ABC</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string"><text:p>trail</text:p></table:table-cell>
+     <table:table-cell table:style-name="ceFlat" office:value-type="string"><text:p>ABC  </text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string"><text:p>inner</text:p></table:table-cell>
+     <table:table-cell table:style-name="ceFlat" office:value-type="string"><text:p>A   B</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string"><text:p>newline</text:p></table:table-cell>
+     <table:table-cell table:style-name="ceFlat" office:value-type="string"><text:p>ABC
+DEF</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string"><text:p>crlf</text:p></table:table-cell>
+     <table:table-cell table:style-name="ceFlat" office:value-type="string"><text:p>ABC&#13;&#10;DEF</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string"><text:p>nlindent</text:p></table:table-cell>
+     <table:table-cell table:style-name="ceFlat" office:value-type="string"><text:p>ABC
+  DEF</text:p></table:table-cell>
+    </table:table-row>
+   </table:table>
+  </office:spreadsheet>
+ </office:body>
+</office:document>

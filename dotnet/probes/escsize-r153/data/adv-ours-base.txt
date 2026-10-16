@@ -1,0 +1,37 @@
+base_pt	base_tw	measured_tw	trunc	roundtw	tenth	verdict
+4.0	80	46.000	46	46	46	trunc,roundtw,tenth
+4.5	90	52.000	52	52	52	trunc,roundtw,tenth
+5.0	100	58.000	58	58	58	trunc,roundtw,tenth
+5.5	110	64.000	63	64	64	roundtw,tenth	*
+6.0	120	70.000	69	70	70	roundtw,tenth	*
+6.5	130	75.000	75	75	76	trunc,roundtw	*
+7.0	140	81.000	81	81	82	trunc,roundtw	*
+7.5	150	87.000	87	87	88	trunc,roundtw	*
+8.0	160	93.000	92	93	92	roundtw	*
+8.5	170	99.000	98	99	98	roundtw	*
+9.0	180	104.000	104	104	104	trunc,roundtw,tenth
+9.5	190	110.000	110	110	110	trunc,roundtw,tenth
+10.0	200	116.000	116	116	116	trunc,roundtw,tenth
+10.5	210	122.000	121	122	122	roundtw,tenth	*
+11.0	220	128.000	127	128	128	roundtw,tenth	*
+11.5	230	133.000	133	133	134	trunc,roundtw	*
+12.0	240	139.000	139	139	140	trunc,roundtw	*
+12.5	250	145.000	145	145	146	trunc,roundtw	*
+13.0	260	151.000	150	151	150	roundtw	*
+13.5	270	157.000	156	157	156	roundtw	*
+14.0	280	162.000	162	162	162	trunc,roundtw,tenth
+14.5	290	168.000	168	168	168	trunc,roundtw,tenth
+15.0	300	174.000	174	174	174	trunc,roundtw,tenth
+15.5	310	180.000	179	180	180	roundtw,tenth	*
+16.0	320	186.000	185	186	186	roundtw,tenth	*
+16.5	330	191.000	191	191	192	trunc,roundtw	*
+17.0	340	197.000	197	197	198	trunc,roundtw	*
+17.5	350	203.000	203	203	204	trunc,roundtw	*
+18.0	360	209.000	208	209	208	roundtw	*
+18.5	370	215.000	214	215	214	roundtw	*
+19.0	380	220.000	220	220	220	trunc,roundtw,tenth
+19.5	390	226.000	226	226	226	trunc,roundtw,tenth
+20.0	400	232.000	232	232	232	trunc,roundtw,tenth
+
+all sizes:        trunc 21/33  roundtw 33/33  tenth 18/33
+discriminating:   trunc 9/21  roundtw 21/21  tenth 6/21

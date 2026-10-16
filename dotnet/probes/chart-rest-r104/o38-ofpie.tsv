@@ -1,0 +1,37 @@
+variant	model	drawn	connector_lines	wedge_paths	wedge_centres	plain_rects
+029-pie-n3	pie split=2	plain pie	0	3	3	6
+029-bar-n3	bar split=2	plain pie	0	3	3	6
+029-pie-n4	pie split=2	of-pie	2	5	5	6
+029-bar-n4	bar split=2	of-pie	2	3	3	6
+029-pie-n5	pie split=2	of-pie	2	6	6	6
+029-bar-n5	bar split=2	of-pie	2	4	4	6
+029-pie-n6	pie split=2	of-pie	2	7	7	6
+029-bar-n6	bar split=2	of-pie	2	5	5	6
+029-pie-n7	pie split=2	of-pie	2	8	8	6
+029-bar-n7	bar split=2	of-pie	2	6	6	6
+029-pie-n8	pie split=2	of-pie	2	9	9	6
+029-bar-n8	bar split=2	of-pie	2	7	7	6
+029-pie-n10	pie split=2	of-pie	2	11	11	6
+029-bar-n10	bar split=2	of-pie	2	9	9	6
+029-pie-n12	pie split=2	of-pie	2	13	13	6
+029-bar-n12	bar split=2	of-pie	2	11	11	6
+029-pie-n16	pie split=2	of-pie	2	17	17	6
+029-bar-n16	bar split=2	of-pie	2	15	15	6
+029-pie-n20	pie split=2	of-pie	2	21	21	6
+029-bar-n20	bar split=2	of-pie	2	19	19	6
+028-pie-n4	pie split=2	?129	129	0	0	9
+028-bar-n4	bar split=2	?129	129	0	0	9
+028-pie-n8	pie split=2	?129	129	0	0	9
+028-bar-n8	bar split=2	?129	129	0	0	9
+028-pie-n16	pie split=2	?297	297	17	17	9
+028-bar-n16	bar split=2	?297	297	15	15	9
+029-pie-n8-split1	pie split=1	of-pie	2	9	9	6
+029-bar-n8-split1	bar split=1	of-pie	2	8	8	6
+029-pie-n8-split2	pie split=2	of-pie	2	9	9	6
+029-bar-n8-split2	bar split=2	of-pie	2	7	7	6
+029-pie-n8-split3	pie split=3	of-pie	2	9	9	6
+029-bar-n8-split3	bar split=3	of-pie	2	6	6	6
+029-pie-n8-split5	pie split=5	of-pie	2	9	9	6
+029-bar-n8-split5	bar split=5	of-pie	2	4	4	6
+029-asis	none	plain pie	0	0	0	6
+028-asis	bar split=2	?297	297	15	14	9

@@ -1,0 +1,12 @@
+shaped	custom	pictures	track	document	presets
+30	0	41	pptx	redac-sas-201703-hf-research-division.pptx	roundRect:30
+14	0	35	pptx	schematicplaymar21.pptx	roundRect:14
+14	0	35	pptx	schematicplay.pptx	roundRect:14
+6	0	82	pptx	Wildlife for REDAC September 11.pptx	roundRect:5,round2DiagRect:1
+4	0	6	docx	075_Storyboard_Template_Fillable_Format_7fa01641.docx	ellipse:4
+4	0	5	docx	079_Storyboard_Template_Simple_Format_81653703.docx	ellipse:4
+3	0	100	pptx	16 - UTM - (NASA).pptx	roundRect:2,ellipse:1
+2	0	13	pptx	southern-classic-kennesaw-state-university-final.pptx	round2SameRect:2
+1	0	6	pptx	social-media-app-bulletin-january.pptx	roundRect:1
+# documents with a shaped picture: 9  docx=2  pptx=7
+# presets: roundRect=66  ellipse=9  round2SameRect=2  round2DiagRect=1

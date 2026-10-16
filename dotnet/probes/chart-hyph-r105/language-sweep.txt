@@ -1,0 +1,17 @@
+26.2.4.2, all five categories set to one label, only the a:defRPr @lang varied.
+Rendered with /opt/libreoffice26.2/program/soffice --convert-to pdf; classified by classify.py.
+
+  variant              dictionary installed?   26.2.4.2 draws
+  eff_none   (no @lang)      (falls back)      ROTATED 45 deg, outlined
+  eff_en-US                  yes               ROTATED 45 deg, outlined
+  eff_en-GB                  yes               ROTATED 45 deg, outlined
+  eff_fr-FR                  yes               ROTATED 45 deg, outlined
+  eff_es-ES                  yes               ROTATED 45 deg, outlined
+  eff_de-DE                  NO                upright, wrapped: "Cost " / "Efficiency"
+  eff_ru-RU                  NO                upright, wrapped: "Cost " / "Efficiency"
+  eff_zxx                    NO                upright, wrapped: "Cost " / "Efficiency"
+
+  str_* (Cost Stretched, no hyphenation point in any of the four dictionaries)
+    every one of the eight                     upright, wrapped: "Cost " / "Stretched"
+
+Not one glyph, advance or line count differs across the eff_* row.  Only the locale does.

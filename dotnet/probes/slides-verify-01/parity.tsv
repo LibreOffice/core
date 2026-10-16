@@ -1,0 +1,18 @@
+# words = tokens carrying at least one Unicode letter or digit; rawwords = pdftotext | wc -w
+# NOT comparable to any scoreboard recorded before 2026-08-13 — see dotnet/probes/gate-01/results.md
+path	ext	pages	words	fonts	unemb	verdict	rawwords
+slides/ceiling-001/ppt/Fundamentals_Module_1_basics.ppt	ppt	26/26	1135/1089	5/5	0	words	1234/1180
+slides/ceiling-001/ppt/RRM-training-syllabus-Chapter-3-Teamwork-TC-Towing-Incident-Analysis-Dec-2009.ppt	ppt	27/27	2475/2576	8/8	0	words	2664/2764
+slides/ceiling-001/ppt/Thailand17.ppt	ppt	54/54	2736/2625	8/9	0	words	2850/2826
+slides/ceiling-001/ppt/W3_Case_Study_of_a_Tsunami_Warning_Simulation_Exercise_Ed.ppt	ppt	20/20	900/812	6/6	0	words	948/862
+slides/ceiling-001/ppt/architecture6.ppt	ppt	31/31	1926/2544	5/5	0	words	2011/2642
+slides/ceiling-001/pptx/7-Zulkefli_Part147n66_IKMAS.pptx	pptx	18/18	941/973	7/7	0	words	1009/1036
+slides/ceiling-001/pptx/N2_E_Maestroni_Swarm_COP.pptx	pptx	30/30	5285/5126	4/4	0	words	5469/5294
+slides/ceiling-001/pptx/OnTrac_StarCertificationProgram-3Day.pptx	pptx	15/15	1326/1030	8/7	0	words	1416/1116
+slides/ceiling-001/pptx/Sylva%20introduction%20session.PPTX	pptx	15/15	1064/1467	7/7	0	words	1152/1562
+slides/ceiling-001/pptx/Sylva%20introduction%20session.pptx	pptx	15/15	1064/1467	7/7	0	words	1152/1562
+slides/ceiling-001/pptx/solog_orientation_august_2019.pptx	pptx	15/15	670/685	6/6	0	words	730/746
+slides/ceiling-002/ppt/pres_ioc_phuket.ppt	ppt	26/26	992/1518	9/9	0	words	1031/1594
+slides/ceiling-002/pptx/16 - UTM - (NASA).pptx	pptx	37/37	2454/2260	11/11	0	words	2658/2447
+slides/ceiling-002/pptx/Demick_JetBlue.pptx	pptx	10/10	812/608	4/4	0	words	855/631
+slides/ceiling-002/pptx/WiGr_2021W_1_Angebot-Nachfrage-Elastizität-211017-171222.pptx	pptx	51/51	2154/1958	9/7	0	words	2340/2137

@@ -1,0 +1,7 @@
+  matched b/a mean|dx| before     after  within .1pt  unique mean|dx| unique   document
+  1338/1338            15.249    15.249   548/548        913          16.049   150_5300_13_chg10__odt.pdf
+   664/664             21.333    21.333   190/190        447          20.078   150_5300_13_chg12__odt.pdf
+   374/374              9.012     9.012   110/110        227           6.055   150_5300_13_chg8__odt.pdf
+    54/54              10.023     7.729     8/8           52           7.844   644730BRI0mna000BOX361539B00public0__odt.pdf  BETTER
+    47/50              16.374     3.967    11/20          49           4.046   手机免提系统TSB__odt.pdf  BETTER
+TOTAL matched 2477/2480  mean |dx| before 15.846 pt after 15.546 pt  within 0.1 pt 867 -> 876

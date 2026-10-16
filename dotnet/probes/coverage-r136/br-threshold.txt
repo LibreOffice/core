@@ -1,0 +1,23 @@
+086_Printable_Graph_Paper_Template_Gray_Theme: how many of the four 2 pt <w:br/> runs each
+text box keeps, against where this tree then puts the single line of text, and whether it
+draws it at all.  The box is 32.65 pt tall, `anchor="ctr"`, tIns = bIns = 3.6 pt, so the
+inner height is 25.45 pt.  26.2.4.2 keeps all four and draws the text at y 42.5-55.3.
+
+  breaks kept   this tree draws            our "Title:" ink top
+  -----------   ------------------------   --------------------
+      0         yes                        37.1
+      1         yes                        44.5
+      2         NO                         --
+      3         NO                         --
+      4         NO                         --      (the document as authored)
+
+One break moves a vertically centred single line down by half the line it adds, so the line
+this tree gives an empty <w:br/> line is 2 x 7.4 = 14.8 pt.  The same four breaks cost
+26.2.4.2 10.8 pt in all -- 2.7 pt each, which is the run's own 2 pt at the paragraph's 1.35
+spacing.  14.8 pt is 11 pt at that spacing, and 11 pt is what the paragraph MARK states,
+the break run's own `w:sz="4"` being ignored.
+
+Control on the second half, that the drop is the height and nothing else: with all four
+breaks kept and the shape's `cy` raised from 414655 to 1414655 EMU and nothing else
+changed, this tree draws the text (ink top 104.0).  So the text is not lost in the reader;
+it is discarded by the layout when the body exceeds the box.

@@ -1,0 +1,18 @@
+documents scored on both legs: 51 of 51
+sum |ink|% over all 51:  base 252.21   head 252.82   (+0.61)
+MAJOR pages:                       base 66       head 66
+documents whose ink moved: 13   improved 9   worsened 4
+
+    -1.00      8.49 ->    7.49   FAA_Form_337.ppt
+    -0.65      5.31 ->    4.66   ws_prod-g-doc-Events-r-6.-ESM.ppt
+    -0.15      6.80 ->    6.65   JesuitAssocOfStudentPersonnel.ppt
+    -0.07      4.77 ->    4.70   pres_ioc_phuket.ppt
+    -0.05     20.42 ->   20.37   8.16_AOD_FINAL_Provider_Training_Presentation_9_2009.ppt
+    -0.04      0.45 ->    0.41   ws_prod-g-doc-Events-2007-november-IACA-presentation-at-EASA-Fuel-Tank-Safety-Training-Seminar.ppt
+    -0.04      7.77 ->    7.73   gillikin_online_user_mtg_2010.ppt
+    -0.02      1.72 ->    1.70   0335fab9-79f0-4944-b92c-f223837ca2d8.ppt
+    -0.01      2.98 ->    2.97   Aerospace_Journey_of_Flight_Chapter_BCB1637572DA6.ppt
+    +0.01      3.50 ->    3.51   joint_user_outcomes_michael_fullerton_29.06.12.ppt
+    +0.01      1.38 ->    1.39   Fundamentals_Module_1_basics.ppt
+    +0.85     20.66 ->   21.51   2015-Civil-Rights-Website-training.ppt
+    +1.77      3.24 ->    5.01   Inducement-to-Insurance-Business.ppt

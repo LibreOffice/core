@@ -1,0 +1,13 @@
+171128IPAP                                   charts  9 skipped 0 |err| L   0.11 B   0.21 R   0.29 T   0.06  total     0.66
+1_Country-Updates_DRC_English                charts  3 skipped 0 |err| L   9.47 B   7.91 R  15.29 T   0.20  total    32.87
+3492                                         charts  3 skipped 1 |err| L  11.97 B   0.81 R   0.07 T   0.71  total    13.56
+8_P-Pavese_AIRBUS-ATB-journee-CRATB          charts  6 skipped 0 |err| L   9.41 B  33.61 R   2.09 T   5.83  total    50.95
+Demick_JetBlue                               charts  5 skipped 0 |err| L  24.97 B  76.80 R  17.16 T   3.22  total   122.15
+FAAAIandtheArtandScienceofV&Vfinal           charts  1 skipped 0 |err| L   4.45 B   3.73 R   0.12 T   0.33  total     8.63
+RPA P4 - Advanced Material                   charts  1 skipped 0 |err| L   0.00 B   0.01 R   0.00 T   0.00  total     0.02
+flying-by-numbers-presentation               charts  1 skipped 0 |err| L  17.42 B   4.65 R   0.07 T   0.21  total    22.34
+southern-classic-kennesaw-state-university-f charts  8 skipped 13 |err| L  27.23 B  81.53 R  59.68 T   0.65  total   169.09
+
+37 charts measured, 24 skipped (no gridline rectangle in ours)
+total |error|  L 105.04  B 209.24  R 94.79  T 11.20   all 420.27
+mean per edge 2.84 pt

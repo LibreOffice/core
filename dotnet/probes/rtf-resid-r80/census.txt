@@ -1,0 +1,4 @@
+338 documents under /home/user/corpus-odf/words
+  state \htmautsp                                   308
+  a style inherits an alignment or a space before   328
+  a \sbasedon names a style not yet defined         20

@@ -1,0 +1,18 @@
+document	net	pages_as_is	pages_flat	spans_as_is	spans_flat	spans_moved	verdict
+SPA-06_mcar_part-6_and_IS_v2.9	12	88	88	5609	5609	0	IDENTICAL
+Annex-10-to-the-Aircraft-Maintenance-Specialist-Certification-Rule-GCAA	1100	148	148	19702	19702	3	moves
+JEMIT_Template	1	4	4	427	427	0	IDENTICAL
+Allegiant_Company_Profile_with_History	1	3	3	102	102	0	IDENTICAL
+SWDD-template	35	6	6	242	242	0	IDENTICAL
+Regulations Governing the Status, Basic Rights and Duties of Officials other than Secretariat Officials, and Experts on Mission	80	4	4	47	47	23	moves
+BID_ACKNOWLEDGEMENT_FORM_FOR_A320	19	3	3	85	85	4	moves
+ESPN-R - MCF - Manual - Ed1.0 - For Publication	14	42	42	2329	2312	2082	moves
+OM template for non-complex NCC operators_August 2016	39	171	171	8951	8948	8944	moves
+ESPN-R - MCF - RA - Ed1	94	46	46	4430	4415	3887	moves
+091_Business_Case_Template_Complete_Guide_cb91a140	54	5	5	196	135	151	moves
+DRX-Ascend System Course Description	7	2	2	135	135	0	IDENTICAL
+AAC-AD-No-2021-01-Boeing-737-8-and-737-9-MAX	9	21	21	992	992	5	moves
+19-06 Assistive Technology TAB Final - 508	10	8	8	350	332	45	moves
+AWR OPS-AOC 044 Statement of Compliance RVSM  Rev 04 01 Feb 2024	36	10	10	977	977	5	moves
+t_TEMPforInvProgs	8	25	25	2137	2132	2136	moves
+mde087077~283	1	4	4	157	157	0	IDENTICAL

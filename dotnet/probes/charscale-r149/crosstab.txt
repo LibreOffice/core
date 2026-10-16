@@ -1,0 +1,26 @@
+stems rtf 337  odt 337  shared 337
+stem	rtf_net	odt_net	document
+0126226bc58c	12	12	SPA-06_mcar_part-6_and_IS_v2.9.rtf
+195389b8c6c6	1100	3	Annex-10-to-the-Aircraft-Maintenance-Specialist-Certification-Rule-GCAA.rtf
+1ef46e226af0	1	1	JEMIT_Template.rtf
+2df5a30320b3	1	1	Allegiant_Company_Profile_with_History.rtf
+404b8cb5cec3	35	6	SWDD-template.rtf
+4c44defb9273	80	12	Regulations Governing the Status, Basic Rights and Duties of Officials other than Secretariat Officials, and Experts on Mission.rtf
+5ee4fec55c91	19	8	BID_ACKNOWLEDGEMENT_FORM_FOR_A320.rtf
+66cd4750ab46	14	4	ESPN-R - MCF - Manual - Ed1.0 - For Publication.rtf
+7be9cfcc7637	39	7	OM template for non-complex NCC operators_August 2016.rtf
+9a283dc56300	94	3	ESPN-R - MCF - RA - Ed1.rtf
+ae2db2175f3d	54	10	091_Business_Case_Template_Complete_Guide_cb91a140.rtf
+bc17eefecac9	7	7	DRX-Ascend System Course Description.rtf
+d8c1eba8d845	9	5	AAC-AD-No-2021-01-Boeing-737-8-and-737-9-MAX.rtf
+e6a30de46c19	10	10	19-06 Assistive Technology TAB Final - 508.rtf
+e93e7e131d5f	36	14	AWR OPS-AOC 044 Statement of Compliance RVSM  Rev 04 01 Feb 2024.rtf
+ed07ce5f44c7	8	3	t_TEMPforInvProgs.rtf
+f30b3e8d2d1e	1	1	mde087077~283.rtf
+fed5bf270427	0	4	AW-104D-RVSM-Aircraft-Approval-Checklist.pdf.rtf
+
+documents stating one in rtf : 17
+documents stating one in odt : 18
+in both                      : 17
+rtf only                     : 0
+odt only                     : 1

@@ -1,0 +1,4 @@
+# words = tokens carrying at least one Unicode letter or digit; rawwords = pdftotext | wc -w
+# NOT comparable to any scoreboard recorded before 2026-08-13 — see dotnet/probes/gate-01/results.md
+path	ext	pages	words	fonts	unemb	verdict	rawwords
+slides/missing-001/pptx/NWD-GLA-Community-Outreach-Day-Oct-2025.pptx	pptx	13/13	644/638	4/3	0	match	705/698

@@ -1,0 +1,1 @@
+convert /home/user/libreoffice-core/dotnet/probes/tablerow-r146/fixtures/height.docx as a Writer document -> /home/user/libreoffice-core/dotnet/probes/tablerow-r146/out/height.pdf using filter : writer_pdf_Export

@@ -1,0 +1,13 @@
+# words = tokens carrying at least one Unicode letter or digit; rawwords = pdftotext | wc -w
+# NOT comparable to any scoreboard recorded before 2026-08-13 — see dotnet/probes/gate-01/results.md
+path	ext	pages	words	fonts	unemb	verdict	rawwords
+slides/batch-002/ppt/080214-Intl-pol-frameworks-and-their-implications-for-Africa-ISS-workshop.ppt	ppt	18/18	815/815	6/4	0	match	838/871
+slides/batch-002/ppt/gfopportunitiesforlinkagespres_2010_en.ppt	ppt	27/27	1647/1654	8/7	0	match	1722/1724
+slides/batch-002/ppt/ws_prod-g-doc-Events-2007-Approval-of-Flight-Conditions-RM-NAA-16032007.ppt	ppt	14/14	743/743	3/5	0	match	823/820
+slides/batch-002/ppt/ws_prod-g-doc-Events-2007-may-presentation-PtF-background-+-principles.ppt	ppt	20/20	909/909	3/3	0	match	1025/932
+slides/batch-002/ppt/ws_prod-g-doc-Events-2007-november-IACA-presentation-at-EASA-Fuel-Tank-Safety-Training-Seminar.ppt	ppt	10/10	555/555	3/3	0	match	587/587
+slides/batch-002/ppt/ws_prod-g-doc-Events-Part-M-presentation.ppt	ppt	30/30	1844/1845	3/3	0	match	1925/1878
+slides/batch-002/pptx/Curriculum-Schematic-E22-11052025.pptx	pptx	12/12	1119/1134	5/5	0	match	1307/1322
+slides/batch-002/pptx/diapo_6_fees_vous_etes_poctdoct_exterieur_a_luniv_v2_0_1.pptx	pptx	1/1	92/92	3/3	0	match	98/98
+slides/batch-002/pptx/iaeg_work_group_leader_updates.pptx	pptx	1/1	90/90	4/4	0	match	91/91
+slides/batch-002/pptx/medicines_bulletin_february_2023_final.pptx	pptx	1/1	534/535	3/4	0	match	545/546

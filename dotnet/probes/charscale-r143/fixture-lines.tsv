@@ -1,0 +1,13 @@
+# `features/words-style-char-scale.docx` rendered by both, in points. Arms A-C
+# are one line each; arm D is the scaled style over eighteen words and arm E is
+# the same words unscaled. Before the fix arm D broke into the same THREE lines
+# as arm E, each exactly 0.6 of it.
+arm	text	ours	26.2.4.2
+A style states w:w=60	Hamburgefonstiv 12345	140.386	140.270
+B run states w:w=60	Hamburgefonstiv 12345	140.386	140.270
+C neither	Hamburgefonstiv 12345	233.976	233.832
+D scaled, line 1	alpha … mike	431.957	434.895
+D scaled, line 2	november oscar papa quebec romeo	207.130	206.899
+E unscaled, line 1	alpha … hotel	457.896	463.464
+E unscaled, line 2	india … papa	465.960	471.850
+E unscaled, line 3	quebec romeo	135.288	135.144

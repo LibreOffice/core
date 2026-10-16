@@ -1,0 +1,4 @@
+measure	before	after	reference
+pages	18	18	18
+alphanumeric characters	33617	33617	33604
+mean |dx| of matched spans about the median	0.365	0.205	0 (780 matched)

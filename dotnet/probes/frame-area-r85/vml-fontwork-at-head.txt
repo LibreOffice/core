@@ -1,0 +1,108 @@
+
+=== ABCD-FE-01-00 Flight Envelope - v1 08.03.16.docx
+    pages  24.2 15  26.2 16  ours 14
+    words  24.2 3786  26.2 4229  ours 3880
+    page   1  ink24   7.50  ink26   8.01  words    61 /    61 /    61
+    page   2  ink24   2.95  ink26   2.37  words   313 /   313 /   313
+    page   3  ink24   7.99  ink26   8.02  words   113 /    97 /    97
+    page   4  ink24   3.54  ink26   9.25  words   277 /   292 /   279
+    page   5  ink24   4.11  ink26   4.50  words   437 /   437 /   438
+    page   6  ink24   7.40  ink26   8.65  words   369 /   415 /   377
+    page   7  ink24   9.73  ink26  10.04  words   201 /    15 /   238
+    page   8  ink24  11.94  ink26  19.54  words   252 /   401 /   288
+    page   9  ink24   9.24  ink26  23.96  words   302 /   344 /   317
+    page  10  ink24  17.86  ink26  30.74  words   180 /   353 /   418
+    page  11  ink24  17.11  ink26  13.63  words   276 /   215 /   165
+    page  12  ink24  18.28  ink26  28.33  words   112 /   280 /   328
+    page  13  ink24  24.84  ink26  17.39  words   331 /   112 /   330
+    page  14  ink24  19.35  ink26  21.46  words   330 /   331 /   231
+    MEAN   ink24 11.560  ink26 14.706  over 14 pages
+
+=== ABCD-SDE-23-00 - Avionic System Description - 17.02.16 - v1.docx
+    pages  24.2 29  26.2 29  ours 29
+    words  24.2 8558  26.2 8548  ours 8532
+    page   1  ink24   6.69  ink26   7.08  words    63 /    63 /    63
+    page   2  ink24   2.03  ink26   1.85  words   251 /   252 /   251
+    page   3  ink24  11.72  ink26  11.77  words   151 /   127 /   127
+    page   4  ink24   3.99  ink26   4.39  words   453 /   454 /   453
+    page   5  ink24   2.89  ink26   3.28  words   399 /   399 /   399
+    page   6  ink24   0.65  ink26   0.48  words    78 /    79 /    78
+    page   7  ink24   2.12  ink26   2.43  words   199 /   199 /   199
+    page   8  ink24   9.72  ink26  10.79  words   726 /   727 /   726
+    page   9  ink24   7.60  ink26   8.57  words   605 /   605 /   605
+    page  10  ink24   5.77  ink26   5.67  words   429 /   430 /   429
+    page  11  ink24  11.78  ink26  11.85  words   105 /   105 /   105
+    page  12  ink24   7.51  ink26   3.96  words   208 /   209 /   208
+    page  13  ink24   1.31  ink26   1.45  words   199 /   199 /   199
+    page  14  ink24   1.54  ink26   1.60  words   229 /   230 /   229
+    page  15  ink24   1.87  ink26   2.17  words   250 /   250 /   250
+    page  16  ink24   2.34  ink26   2.35  words   188 /   189 /   188
+    page  17  ink24   6.23  ink26   1.67  words   212 /   207 /   212
+    page  18  ink24   0.90  ink26  19.99  words   197 /   203 /   196
+    page  19  ink24   1.79  ink26   1.97  words   224 /   224 /   224
+    page  20  ink24   3.34  ink26   3.88  words   284 /   285 /   284
+    page  21  ink24   0.34  ink26   0.34  words    29 /    29 /    29
+    page  22  ink24   4.20  ink26   4.58  words   426 /   427 /   426
+    page  23  ink24   3.17  ink26   3.09  words   289 /   289 /   289
+    page  24  ink24   5.03  ink26   5.82  words   471 /   472 /   471
+    page  25  ink24   4.83  ink26   5.41  words   392 /   392 /   391
+    page  26  ink24  14.36  ink26  14.57  words   283 /   284 /   282
+    page  27  ink24   3.34  ink26   3.75  words   471 /   471 /   472
+    page  28  ink24   3.39  ink26   3.82  words   476 /   477 /   476
+    page  29  ink24   2.28  ink26   2.53  words   271 /   271 /   271
+    MEAN   ink24  4.577  ink26  5.211  over 29 pages
+
+=== ABCD-WB-08-00 Weight and Balance Report - v1 08.03.16.docx
+    pages  24.2 12  26.2 12  ours 12
+    words  24.2 2651  26.2 2772  ours 2673
+    page   1  ink24   7.59  ink26   8.10  words    64 /    64 /    64
+    page   2  ink24   3.38  ink26   3.49  words   306 /   306 /   305
+    page   3  ink24   1.98  ink26   5.80  words   136 /   137 /   136
+    page   4  ink24   2.04  ink26   3.58  words   132 /   146 /   140
+    page   5  ink24   6.02  ink26   6.23  words   271 /   270 /   269
+    page   6  ink24   4.44  ink26   6.59  words   394 /   426 /   396
+    page   7  ink24   3.85  ink26   4.23  words   369 /   383 /   377
+    page   8  ink24  10.74  ink26   8.73  words   261 /   295 /   273
+    page   9  ink24   2.44  ink26   2.65  words   131 /   131 /   131
+    page  10  ink24  19.21  ink26  16.40  words   202 /   228 /   214
+    page  11  ink24  22.19  ink26  21.13  words   282 /   169 /   295
+    page  12  ink24   6.08  ink26  10.77  words   103 /   217 /    73
+    MEAN   ink24  7.497  ink26  8.142  over 12 pages
+
+=== DOA_Template_Form_Type_Certification_Programme.docx
+    pages  24.2 20  26.2 20  ours 20
+    words  24.2 5441  26.2 5444  ours 5452
+    page   1  ink24  11.68  ink26  11.21  words   312 /   312 /   312
+    page   2  ink24   4.42  ink26   3.99  words    22 /    22 /    22
+    page   3  ink24  10.75  ink26  10.32  words   153 /   155 /   158
+    page   4  ink24   3.47  ink26   3.04  words    48 /    49 /    50
+    page   5  ink24  10.49  ink26   9.17  words   309 /   309 /   309
+    page   6  ink24   5.59  ink26   5.15  words   152 /   152 /   152
+    page   7  ink24  12.39  ink26  11.53  words   421 /   421 /   421
+    page   8  ink24  11.71  ink26  11.22  words   438 /   438 /   438
+    page   9  ink24  15.44  ink26  13.91  words   469 /   469 /   473
+    page  10  ink24  10.78  ink26   9.92  words   348 /   348 /   348
+    page  11  ink24   9.93  ink26   9.50  words   236 /   236 /   236
+    page  12  ink24   9.36  ink26   8.86  words   371 /   371 /   371
+    page  13  ink24   3.76  ink26   3.30  words    76 /    76 /    76
+    page  14  ink24  13.96  ink26  10.17  words   280 /   280 /   280
+    page  15  ink24  10.92  ink26  10.58  words   259 /   259 /   259
+    page  16  ink24  12.81  ink26  12.32  words   225 /   225 /   225
+    page  17  ink24   2.86  ink26   2.43  words    34 /    34 /    34
+    page  18  ink24   9.82  ink26   9.18  words   361 /   361 /   409
+    page  19  ink24  20.35  ink26  22.36  words   476 /   476 /   428
+    page  20  ink24  20.09  ink26  19.66  words   451 /   451 /   451
+    MEAN   ink24 10.529  ink26  9.891  over 20 pages
+
+=== technical-architecture.docx
+    pages  24.2 8  26.2 8  ours 8
+    words  24.2 1141  26.2 1130  ours 1138
+    page   1  ink24   0.44  ink26   0.46  words    26 /    26 /    26
+    page   2  ink24   0.97  ink26   1.00  words   224 /   224 /   224
+    page   3  ink24   2.32  ink26   0.48  words    53 /    60 /    69
+    page   4  ink24   4.48  ink26   3.17  words   148 /   130 /   130
+    page   5  ink24   1.71  ink26   1.79  words   329 /   329 /   329
+    page   6  ink24   2.16  ink26   0.98  words    95 /    95 /    95
+    page   7  ink24  21.47  ink26  21.46  words   237 /   237 /   212
+    page   8  ink24   2.84  ink26   2.83  words    29 /    29 /    53
+    MEAN   ink24  4.549  ink26  4.021  over 8 pages

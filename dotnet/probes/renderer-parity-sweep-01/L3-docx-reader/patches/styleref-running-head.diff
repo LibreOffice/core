@@ -1,0 +1,27 @@
+diff --git a/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs b/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs
+--- a/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs
+@@ -942,6 +942,23 @@
+     /// <param name="name">The style the field named.</param>
+     private string? StyleReferenceText(string name)
+     {
++        // Not in a running head, where this map cannot answer. A header is read once per section, after
++        // the body walk has finished (`OoxmlWordDocument.Layout` calls `source.Read(body)` before
++        // `Paginated`), so `_styleText` holds the *last* paragraph in each style in the whole document
++        // — an answer that is right on at most one page and wrong on all the others. Writer resolves a
++        // STYLEREF from the field's own position instead, scanning backwards from it
++        // (`SwGetRefFieldType::FindAnchorRefStyleOther`), which for a running head means "the heading
++        // in force on this page" and is a different answer on every page.
++        //
++        // Measured on `231164_SystemDesignDocument.docx`: the reference's running head reads
++        // "List of Figures", "Introduction", "General Overview and Design Guidelines/Approach" on
++        // pages 3, 4 and 5; this map answers "List of Tables" and "External Interfaces" — the last
++        // front-matter heading and the last `Heading 2` — on all of them. Declining leaves the
++        // producer's cached result, which is the stated policy of this method ("a wrong substitution is
++        // worse than a stale one") and is what Word wrote for the page the field was last laid out on.
++        // Closing this properly needs a per-page substitution like `PageFields`; see findings.md.
++        if (InHeaderFooter) return null;
++
+         if (_styleText.Count == 0) return null;
+         if (_styleText.TryGetValue(name, out string? byId)) return byId;
+ 

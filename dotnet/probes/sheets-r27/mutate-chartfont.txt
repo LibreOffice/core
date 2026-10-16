@@ -1,0 +1,11 @@
+=== baseline (clean tree)
+clean                                                      Failed:     0, Passed:     9
+1. CHFONT never read                                       Failed:     8, Passed:     1
+2. the FONT buffer not handed to Build                     Failed:     8, Passed:     1
+3. the first CHFONT wins, no default-text order            Failed:     3, Passed:     6
+4. the axes-set default outranks the global one            Failed:     1, Passed:     8
+5. any CHFONT taken as the open default text               Failed:     1, Passed:     8
+6. a CHDEFAULTTEXT id kept until a CHTEXT arrives          Failed:     1, Passed:     8
+7. the FONT buffer indexed by record ordinal               Failed:     1, Passed:     8
+=== rebuilding clean
+Build succeeded.

@@ -1,0 +1,4 @@
+arm A: ref row heights [25.5, 76.5]
+        ours [25.5, 67.5]   DIFFERS
+arm B: ref row heights [25.5, 67.5]
+        ours [25.5, 67.5]   

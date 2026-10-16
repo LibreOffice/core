@@ -1,0 +1,25 @@
+# 26.2.4.2's own renderings, /home/user/gate-orig-r83/ref
+# 10 corpus documents state an iconSet rule; 7 of them draw an icon.
+
+041_Business_budget_ef942467                               0  (none)
+042_Business_monthly_budget_4e4d092f                       0  (none)
+066_Agile_Gantt_chart_08f9de45                            27  6246434f64a7 x9, dbb047b02069 x18
+069_Blue_modern_balance_sheet_Use_this_template_6b4d70d3   2  f8365039aff6 x1, f892a0427061 x1
+075_Idea_planner_tasks_f44ebd73                            4  43175f417030 x1, 5da002bf1b32 x1, e604cb94bfd8 x2
+076_Inventory_list_accessibility_guide_Use_this_template   2  f892a0427061 x2
+077_Inventory_list_with_highlighting_Use_this_template_3  12  f892a0427061 x12
+078_Modern_inventory_list_Use_this_template_41abd5bf      12  f892a0427061 x12
+088_To-do_list_with_progress_tracker_Use_this_template_8   1  5da002bf1b32 x1
+sistem-rekod-markah-srm-_-rekod-master                     0  (none)
+
+total icons 60, distinct assets 7
+
+# nearest icon-theme asset, by mean absolute channel difference out of 255,
+# with the best any OTHER theme manages on the same image beside it
+43175f417030   0.062  images_colibre.zip  sc/res/icon-set-symbols1-exclamation-mark.png   next theme 19.693  images_elementary.zip
+5da002bf1b32   0.051  images_colibre.zip  sc/res/icon-set-symbols1-check.png   next theme 32.866  images_karasa_jaga.zip
+6246434f64a7   0.008  images_colibre.zip  sc/res/icon-set-flags-yellow.png   next theme 35.640  images_colibre_dark.zip
+dbb047b02069   0.029  images_colibre.zip  sc/res/icon-set-shapes-diamond.png   next theme 25.410  images_elementary.zip
+e604cb94bfd8   0.064  images_colibre.zip  sc/res/icon-set-symbols1-cross.png   next theme 28.457  images_elementary.zip
+f8365039aff6   0.010  images_colibre.zip  sc/res/icon-set-flags-green.png   next theme 45.092  images_colibre_dark.zip
+f892a0427061   0.007  images_colibre.zip  sc/res/icon-set-flags-red.png   next theme 39.787  images_colibre_dark.zip

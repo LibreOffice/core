@@ -1,0 +1,32 @@
+O46's four pages through round 108's four-leg instrument, all four legs measured this round.
+
+  leg                                     page 8   page 14   page 15   page 16
+  26.2.4.2 reading the .ppt                15.99     18.99     18.99     14.99
+  26.2.4.2 reading its own flat ODP        15.99     18.99     18.99     14.99
+  this tree reading that flat ODP          15.99     20.01     18.99     15.00
+  this tree reading the .ppt, base         15.00     20.01     17.01     17.01
+  this tree reading the .ppt, head         15.99     20.01     18.99     17.01
+
+The round trip is FAITHFUL on all four pages -- 26.2.4.2 answers the same size reading the
+file and reading its own ODP of it -- so the instrument is usable here, unlike on the two
+pages of section 5.
+
+  page  8  fixed.
+  page 15  fixed.
+  page 14  LAYOUT: both readers hand this tree 20.01 on identical input where the reference
+           answers 18.99.  Not an import defect and not the picture bullet.
+  page 16  IMPORT: this tree's ODP answer is the reference's (15.00 against 14.99, inside the
+           0.15 pt band) and its .ppt answer is 17.01.  Still a .ppt reader defect, and the
+           label-width residual below is the candidate.
+
+Bullet placement on page 8, read out of the two PDFs rather than inferred (pymupdf
+get_image_info, top-left corner and drawn size in points):
+
+  26.2.4.2   43.1,128.4  43.1,164.7  43.1,317.5  43.1,348.7  43.1,379.8  43.1,432.5   17.86 x 17.86
+  this tree  43.1,128.5  43.1,164.7  43.1,317.5  43.1,348.7  43.1,379.9  43.1,432.5   17.86 x 17.86
+
+Residual on the same page, unchanged by this round and present at the base as well: the
+reference starts the bulleted body text at x = 85.10 and this tree at 70.09, on both legs.
+43.09 + 0.953 cm = 70.09 and 43.09 + 1.482 cm = 85.10, and both figures are min-label-widths
+the deck's own list styles state -- so it is which level's label width is resolved, not the
+picture's width.  Its own residual; see section 6.

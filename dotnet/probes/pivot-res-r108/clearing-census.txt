@@ -1,0 +1,63 @@
+# merge base: what the cell states (the behaviour before this round)
+alle einzeln.xlsx	Pivot	pivotTable1.xml	cells=9117 stated=0 align-differs=0 indent-differs=0
+TOTAL	alle einzeln.xlsx	cells=9117 stated=0 align-differs=0 indent-differs=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	Summary	pivotTable1.xml	cells=44 stated=19 align-differs=0 indent-differs=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	Literature Mapping	pivotTable2.xml	cells=32 stated=13 align-differs=0 indent-differs=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	SABSA Skills Mapping	pivotTable3.xml	cells=30 stated=12 align-differs=0 indent-differs=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Skills Mapping	pivotTable4.xml	cells=26 stated=10 align-differs=0 indent-differs=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping EA	pivotTable5.xml	cells=34 stated=13 align-differs=0 indent-differs=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping ESA	pivotTable6.xml	cells=42 stated=17 align-differs=0 indent-differs=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping BA	pivotTable7.xml	cells=26 stated=9 align-differs=0 indent-differs=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping SA	pivotTable8.xml	cells=26 stated=9 align-differs=0 indent-differs=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping AA	pivotTable9.xml	cells=30 stated=12 align-differs=0 indent-differs=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping DA	pivotTable10.xml	cells=12 stated=3 align-differs=0 indent-differs=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping TA	pivotTable11.xml	cells=34 stated=14 align-differs=0 indent-differs=0
+TOTAL	Keywords_Mapping_Graphs_and_Charts.xlsx	cells=336 stated=131 align-differs=0 indent-differs=0
+DynamicBubbleChart.xlsx	Chart	pivotTable1.xml	cells=78 stated=1 align-differs=1 indent-differs=0
+TOTAL	DynamicBubbleChart.xlsx	cells=78 stated=1 align-differs=1 indent-differs=0
+049_Expenses_calculator_c351f3d0.xlsx	Personal Expenses Data	pivotTable1.xml	cells=54 stated=54 align-differs=0 indent-differs=7
+TOTAL	049_Expenses_calculator_c351f3d0.xlsx	cells=54 stated=54 align-differs=0 indent-differs=7
+007_Contextures_chart_sample_667d8e47.xlsm	CityPivot	pivotTable1.xml	cells=63 stated=6 align-differs=0 indent-differs=0
+TOTAL	007_Contextures_chart_sample_667d8e47.xlsm	cells=63 stated=6 align-differs=0 indent-differs=0
+037_Personal_money_tracker_a57957bb.xlsx	Monthly summary	pivotTable1.xml	cells=95 stated=27 align-differs=6 indent-differs=0
+037_Personal_money_tracker_a57957bb.xlsx	Chart data	pivotTable22.xml	cells=45 stated=7 align-differs=0 indent-differs=0
+TOTAL	037_Personal_money_tracker_a57957bb.xlsx	cells=140 stated=34 align-differs=6 indent-differs=0
+033_Event_planning_tracker_Use_this_template_f29a848e.xlsx	PROJECT TOTALS	pivotTable1.xml	cells=91 stated=91 align-differs=73 indent-differs=91
+TOTAL	033_Event_planning_tracker_Use_this_template_f29a848e.xlsx	cells=91 stated=91 align-differs=73 indent-differs=91
+035_Project_plan_for_law_firms_aa2d4462.xlsx	PROJECT TOTALS	pivotTable1.xml	cells=91 stated=13 align-differs=1 indent-differs=0
+TOTAL	035_Project_plan_for_law_firms_aa2d4462.xlsx	cells=91 stated=13 align-differs=1 indent-differs=0
+TOTAL	027_Simple_personal_cash_flow_statement_675c6584.xlsx	cells=0 stated=0 align-differs=0 indent-differs=0
+TOTAL	026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx	cells=0 stated=0 align-differs=0 indent-differs=0
+TOTAL	053_Personal_asset_inventory_5446d84b.xlsx	cells=0 stated=0 align-differs=0 indent-differs=0
+
+# merge base: the sheet's default cellXf (--cleared, what this round ships)
+alle einzeln.xlsx	Pivot	pivotTable1.xml	cells=9117 stated=0 align-differs=0 indent-differs=0
+TOTAL	alle einzeln.xlsx	cells=9117 stated=0 align-differs=0 indent-differs=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	Summary	pivotTable1.xml	cells=44 stated=19 align-differs=0 indent-differs=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	Literature Mapping	pivotTable2.xml	cells=32 stated=13 align-differs=0 indent-differs=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	SABSA Skills Mapping	pivotTable3.xml	cells=30 stated=12 align-differs=0 indent-differs=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Skills Mapping	pivotTable4.xml	cells=26 stated=10 align-differs=0 indent-differs=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping EA	pivotTable5.xml	cells=34 stated=13 align-differs=0 indent-differs=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping ESA	pivotTable6.xml	cells=42 stated=17 align-differs=0 indent-differs=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping BA	pivotTable7.xml	cells=26 stated=9 align-differs=0 indent-differs=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping SA	pivotTable8.xml	cells=26 stated=9 align-differs=0 indent-differs=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping AA	pivotTable9.xml	cells=30 stated=12 align-differs=0 indent-differs=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping DA	pivotTable10.xml	cells=12 stated=3 align-differs=0 indent-differs=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping TA	pivotTable11.xml	cells=34 stated=14 align-differs=0 indent-differs=0
+TOTAL	Keywords_Mapping_Graphs_and_Charts.xlsx	cells=336 stated=131 align-differs=0 indent-differs=0
+DynamicBubbleChart.xlsx	Chart	pivotTable1.xml	cells=78 stated=1 align-differs=0 indent-differs=0
+TOTAL	DynamicBubbleChart.xlsx	cells=78 stated=1 align-differs=0 indent-differs=0
+049_Expenses_calculator_c351f3d0.xlsx	Personal Expenses Data	pivotTable1.xml	cells=54 stated=54 align-differs=0 indent-differs=0
+TOTAL	049_Expenses_calculator_c351f3d0.xlsx	cells=54 stated=54 align-differs=0 indent-differs=0
+007_Contextures_chart_sample_667d8e47.xlsm	CityPivot	pivotTable1.xml	cells=63 stated=6 align-differs=0 indent-differs=0
+TOTAL	007_Contextures_chart_sample_667d8e47.xlsm	cells=63 stated=6 align-differs=0 indent-differs=0
+037_Personal_money_tracker_a57957bb.xlsx	Monthly summary	pivotTable1.xml	cells=95 stated=27 align-differs=0 indent-differs=0
+037_Personal_money_tracker_a57957bb.xlsx	Chart data	pivotTable22.xml	cells=45 stated=7 align-differs=0 indent-differs=0
+TOTAL	037_Personal_money_tracker_a57957bb.xlsx	cells=140 stated=34 align-differs=0 indent-differs=0
+033_Event_planning_tracker_Use_this_template_f29a848e.xlsx	PROJECT TOTALS	pivotTable1.xml	cells=91 stated=91 align-differs=0 indent-differs=0
+TOTAL	033_Event_planning_tracker_Use_this_template_f29a848e.xlsx	cells=91 stated=91 align-differs=0 indent-differs=0
+035_Project_plan_for_law_firms_aa2d4462.xlsx	PROJECT TOTALS	pivotTable1.xml	cells=91 stated=13 align-differs=0 indent-differs=0
+TOTAL	035_Project_plan_for_law_firms_aa2d4462.xlsx	cells=91 stated=13 align-differs=0 indent-differs=0
+TOTAL	027_Simple_personal_cash_flow_statement_675c6584.xlsx	cells=0 stated=0 align-differs=0 indent-differs=0
+TOTAL	026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx	cells=0 stated=0 align-differs=0 indent-differs=0
+TOTAL	053_Personal_asset_inventory_5446d84b.xlsx	cells=0 stated=0 align-differs=0 indent-differs=0

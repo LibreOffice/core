@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  A wrapping cell in a column narrower than its own margins draws nothing at all.
+
+  Only a wrapping cell is given a paper: DrawEditParam::calcPaperSize sets the EditEngine's paper
+  to rAlignRect.GetWidth() - nLeftM - nRightM and is called only under if (rParam.mbBreak)
+  (sc/source/ui/view/output2.cxx:2684-2700), while a cell that does not wrap keeps the initial
+  Size(1000000, 1000000). A column narrower than the two margins therefore gives a wrapping cell a
+  negative paper; ImpEditEngine::calculateMaxLineWidth clamps that to one unit
+  (editeng/source/editeng/impedit3.cxx:530-545) so every character takes a line of its own, and
+  none of those lines meets the cell's own rectangle, so DrawText_ToRectangle strips the portions
+  and returns without emitting any (impedit3.cxx:3408-3440).
+
+  Four cells, differing in one property each. LibreOffice 26.2.4.2's own PDF of this file:
+
+    A1  wrapping,  0.05 cm column   nothing drawn
+    B1  wrapping,  4 cm column      "CONTROL" drawn
+    A2  no wrap,   0.05 cm column   "SPILLED" drawn, clipped by the occupied B2
+    B2  no wrap,   4 cm column      "BLOCKER" drawn
+
+  A2 is the control that says this is the wrap flag and not the column width: the same narrow
+  column draws its text when the cell does not wrap.
+-->
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+ xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+ xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+ xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+ xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+ office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+ <office:automatic-styles>
+  <style:style style:name="coNarrow" style:family="table-column">
+   <style:table-column-properties style:column-width="0.05cm"/>
+  </style:style>
+  <style:style style:name="coWide" style:family="table-column">
+   <style:table-column-properties style:column-width="4cm"/>
+  </style:style>
+  <style:style style:name="ro1" style:family="table-row">
+   <style:table-row-properties style:row-height="0.45cm"/>
+  </style:style>
+  <style:style style:name="ceWrap" style:family="table-cell">
+   <style:table-cell-properties fo:wrap-option="wrap" style:vertical-align="middle"/>
+  </style:style>
+  <style:style style:name="ceFlat" style:family="table-cell">
+   <style:table-cell-properties fo:wrap-option="no-wrap" style:vertical-align="middle"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+    fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"
+    style:print-orientation="portrait"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Default" style:page-layout-name="pm1"/>
+ </office:master-styles>
+ <office:body>
+  <office:spreadsheet>
+   <table:table table:name="Probe">
+    <table:table-column table:style-name="coNarrow"/>
+    <table:table-column table:style-name="coWide"/>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="ceWrap" office:value-type="string"><text:p>NARROW</text:p></table:table-cell>
+     <table:table-cell table:style-name="ceWrap" office:value-type="string"><text:p>CONTROL</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="ceFlat" office:value-type="string"><text:p>SPILLED</text:p></table:table-cell>
+     <table:table-cell table:style-name="ceFlat" office:value-type="string"><text:p>BLOCKER</text:p></table:table-cell>
+    </table:table-row>
+   </table:table>
+  </office:spreadsheet>
+ </office:body>
+</office:document>

@@ -1,0 +1,7 @@
+measuring /home/user/cli-r185/XRay.Office.Cli
+reference /opt/libreoffice26.2/program/soffice -- LibreOffice 26.2.4.2 0229ac93fcf0d7cbc6376066c6f35021cef002dc
+documents: 337
+TOTAL 337  MATCH 329  REF-CANNOT-RENDER 0
+ABS-INK 431.83 (unsigned |ink|%, a track total)  SIGNED-INK 312.11 (ink%, direction)  MAJOR PAGES 170  over 329 documents
+WORST PAGE 6.42 (unsigned |ink|%, RANKS) on words/done-014/doc/PK_FlugzeugeStricken.doc
+TSV /home/user/r185sweep/parity.tsv  /home/user/r185sweep/ink.tsv

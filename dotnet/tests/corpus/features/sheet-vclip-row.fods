@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Where Calc stops formatting a wrapping cell's lines, and why the ones it stops at are not in
+  its PDF's text layer at all.
+
+  THIS IS NOT A CLIP.  `ScOutputData::DrawEditStandard` calls
+  `EnableSkipOutsideFormat(meVerJust==Top || meVerJust==Standard)` (output2.cxx:3115) and the
+  EditEngine then refuses to *format* the lines past the paper height
+  (`ImpEditEngine::CreateLines`, impedit3.cxx:1801-1806), with a coarser guard one level up
+  (impedit3.cxx:676-680) that drops a whole paragraph whose first line would start past it.
+  So those lines are never laid out, never drawn, and never reach the text layer — which is
+  what makes this the one rule on the cell-text path that a word count can see.
+
+  The paper height is the cell's own, `rAlignRect.GetHeight() - nTopM - nBottomM`
+  (`calcPaperSize`, output2.cxx:2684-2700), and `calcPaperSize` is called only under
+  `if (rParam.mbBreak)`: a cell that does not wrap keeps the initial Size(1000000, 1000000)
+  and is never truncated however many hard breaks it holds.
+
+  One 4 cm column on A4 with 2 cm margins, Liberation Sans 10 pt, whose pitch here is 11.20 pt.
+  ODF's default cell margin is 0.035 cm a side, so the paper height is the row height less
+  1.98 pt.  Every figure below is read off LibreOffice 26.2.4.2's own output for this file.
+
+  row 1  a  1 cm, wrap, valign TOP.      paper 26.37 pt = 2.35 pitches.  4 lines, a001..a016.
+                                          The minimum: "Format at least two lines though"
+                                          (impedit3.cxx:1799) is four counted from outside.
+  row 2  b  58 pt, wrap, valign TOP.      paper 56.02 pt = 5.002 pitches.  6 lines, b001..b024.
+                                          The comparison is strict, so an exact multiple gets
+                                          one line more than the multiple — ceil would say 5.
+  row 3  c  3 cm, wrap, valign TOP.       paper 83.06 pt = 7.42 pitches.  8 lines, c001..c032.
+  row 4  d  1 cm, wrap, valign BOTTOM.    NOT truncated: 15 lines, all 60 tokens.  The guard
+                                          names Top and Standard and nothing else.
+  row 5  e  1 cm, wrap, valign MIDDLE.    NOT truncated: 15 lines, all 60 tokens.
+  row 6  f  1 cm, NO WRAP, twenty hard-break paragraphs.  All 20 drawn: no wrap, no paper.
+  row 7  g  1 cm, wrap, TOP, six one-line paragraphs.  3 drawn — the paragraph guard, which
+                                          gives no paragraph after the first the four-line
+                                          allowance.
+  row 8  h  1 cm, wrap, valign UNSTATED (Standard).  Truncated to 4 lines, h001..h016, and
+                                          still placed from the bottom of the row.
+  row 9  i  3 cm, wrap, TOP, three tokens.  The control: one line, nothing dropped.
+-->
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+ xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+ xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+ xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+ xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+ office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+ <office:automatic-styles>
+  <style:style style:name="co1" style:family="table-column">
+   <style:table-column-properties style:column-width="4cm"/></style:style>
+  <style:style style:name="roM1" style:family="table-row">
+   <style:table-row-properties style:row-height="1cm" style:use-optimal-row-height="false"/></style:style>
+  <style:style style:name="roM3" style:family="table-row">
+   <style:table-row-properties style:row-height="3cm" style:use-optimal-row-height="false"/></style:style>
+  <style:style style:name="roExact" style:family="table-row">
+   <style:table-row-properties style:row-height="58pt" style:use-optimal-row-height="false"/></style:style>
+  <style:style style:name="ceTop" style:family="table-cell">
+   <style:table-cell-properties fo:wrap-option="wrap" style:vertical-align="top"/>
+   <style:text-properties style:font-name="Liberation Sans" fo:font-size="10pt"/></style:style>
+  <style:style style:name="ceBottom" style:family="table-cell">
+   <style:table-cell-properties fo:wrap-option="wrap" style:vertical-align="bottom"/>
+   <style:text-properties style:font-name="Liberation Sans" fo:font-size="10pt"/></style:style>
+  <style:style style:name="ceMiddle" style:family="table-cell">
+   <style:table-cell-properties fo:wrap-option="wrap" style:vertical-align="middle"/>
+   <style:text-properties style:font-name="Liberation Sans" fo:font-size="10pt"/></style:style>
+  <style:style style:name="ceStd" style:family="table-cell">
+   <style:table-cell-properties fo:wrap-option="wrap"/>
+   <style:text-properties style:font-name="Liberation Sans" fo:font-size="10pt"/></style:style>
+  <style:style style:name="ceNoWrap" style:family="table-cell">
+   <style:table-cell-properties fo:wrap-option="no-wrap" style:vertical-align="top"/>
+   <style:text-properties style:font-name="Liberation Sans" fo:font-size="10pt"/></style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+    fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"
+    style:print-orientation="portrait"/></style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles><style:master-page style:name="Default" style:page-layout-name="pm1"/></office:master-styles>
+ <office:body><office:spreadsheet><table:table table:name="VClip">
+    <table:table-column table:style-name="co1"/>
+    <table:table-row table:style-name="roM1">
+     <table:table-cell table:style-name="ceTop" office:value-type="string"><text:p>a001 a002 a003 a004 a005 a006 a007 a008 a009 a010 a011 a012 a013 a014 a015 a016 a017 a018 a019 a020 a021 a022 a023 a024 a025 a026 a027 a028 a029 a030 a031 a032 a033 a034 a035 a036 a037 a038 a039 a040 a041 a042 a043 a044 a045 a046 a047 a048 a049 a050 a051 a052 a053 a054 a055 a056 a057 a058 a059 a060</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="roExact">
+     <table:table-cell table:style-name="ceTop" office:value-type="string"><text:p>b001 b002 b003 b004 b005 b006 b007 b008 b009 b010 b011 b012 b013 b014 b015 b016 b017 b018 b019 b020 b021 b022 b023 b024 b025 b026 b027 b028 b029 b030 b031 b032 b033 b034 b035 b036 b037 b038 b039 b040 b041 b042 b043 b044 b045 b046 b047 b048 b049 b050 b051 b052 b053 b054 b055 b056 b057 b058 b059 b060</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="roM3">
+     <table:table-cell table:style-name="ceTop" office:value-type="string"><text:p>c001 c002 c003 c004 c005 c006 c007 c008 c009 c010 c011 c012 c013 c014 c015 c016 c017 c018 c019 c020 c021 c022 c023 c024 c025 c026 c027 c028 c029 c030 c031 c032 c033 c034 c035 c036 c037 c038 c039 c040 c041 c042 c043 c044 c045 c046 c047 c048 c049 c050 c051 c052 c053 c054 c055 c056 c057 c058 c059 c060</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="roM1">
+     <table:table-cell table:style-name="ceBottom" office:value-type="string"><text:p>d001 d002 d003 d004 d005 d006 d007 d008 d009 d010 d011 d012 d013 d014 d015 d016 d017 d018 d019 d020 d021 d022 d023 d024 d025 d026 d027 d028 d029 d030 d031 d032 d033 d034 d035 d036 d037 d038 d039 d040 d041 d042 d043 d044 d045 d046 d047 d048 d049 d050 d051 d052 d053 d054 d055 d056 d057 d058 d059 d060</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="roM1">
+     <table:table-cell table:style-name="ceMiddle" office:value-type="string"><text:p>e001 e002 e003 e004 e005 e006 e007 e008 e009 e010 e011 e012 e013 e014 e015 e016 e017 e018 e019 e020 e021 e022 e023 e024 e025 e026 e027 e028 e029 e030 e031 e032 e033 e034 e035 e036 e037 e038 e039 e040 e041 e042 e043 e044 e045 e046 e047 e048 e049 e050 e051 e052 e053 e054 e055 e056 e057 e058 e059 e060</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="roM1">
+     <table:table-cell table:style-name="ceNoWrap" office:value-type="string"><text:p>f001</text:p><text:p>f002</text:p><text:p>f003</text:p><text:p>f004</text:p><text:p>f005</text:p><text:p>f006</text:p><text:p>f007</text:p><text:p>f008</text:p><text:p>f009</text:p><text:p>f010</text:p><text:p>f011</text:p><text:p>f012</text:p><text:p>f013</text:p><text:p>f014</text:p><text:p>f015</text:p><text:p>f016</text:p><text:p>f017</text:p><text:p>f018</text:p><text:p>f019</text:p><text:p>f020</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="roM1">
+     <table:table-cell table:style-name="ceTop" office:value-type="string"><text:p>g001</text:p><text:p>g002</text:p><text:p>g003</text:p><text:p>g004</text:p><text:p>g005</text:p><text:p>g006</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="roM1">
+     <table:table-cell table:style-name="ceStd" office:value-type="string"><text:p>h001 h002 h003 h004 h005 h006 h007 h008 h009 h010 h011 h012 h013 h014 h015 h016 h017 h018 h019 h020 h021 h022 h023 h024 h025 h026 h027 h028 h029 h030 h031 h032 h033 h034 h035 h036 h037 h038 h039 h040 h041 h042 h043 h044 h045 h046 h047 h048 h049 h050 h051 h052 h053 h054 h055 h056 h057 h058 h059 h060</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="roM3">
+     <table:table-cell table:style-name="ceTop" office:value-type="string"><text:p>i001 i002 i003</text:p></table:table-cell>
+    </table:table-row>
+   </table:table></office:spreadsheet></office:body>
+</office:document>

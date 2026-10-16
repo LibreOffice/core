@@ -1,0 +1,9 @@
+# Renders: regenerate with `build.py` and the reference.
+ref/
+ours/
+*.pdf
+*.fodt
+__pycache__/
+doc/
+dref/
+dours/

@@ -1,0 +1,25 @@
+The six documents 26.2.4.2 actually splits, and what this tree drew before and after.
+
+document                                                          ref   ref unsplit   ours before    ours after
+012_Project_Timeline_Template_Black_and_Brown_Theme_35c7       2p/201        1p/201        1p/201        2p/201
+015_Project_Timeline_Template_Colored_Background_6434b0e       2p/211        1p/211        1p/211        2p/211
+part-147_approval list_20230119                               2p/3570       2p/3161       2p/3161       2p/3563
+Case-Study-Heathrow-Airport                                   3p/6461       1p/2159       1p/2159       3p/6461
+OM template for non-complex NCC operators_August 2016     165p/268604   165p/268550   166p/268604   166p/268658
+ESPN-R - MCF - RA - Ed1                                     58p/65952     40p/42875     41p/42993     58p/65615
+
+and the fourteen it does not:
+  ABCD-FE-01-00 Flight Envelope - v1 08.03.16              ref 16p/18544  unsplit 16p/18544  ours now 15/16 18558/18544  [pages]
+  AW-104D-RVSM-Aircraft-Approval-Checklist.pdf             ref 2p/764  unsplit 2p/764  ours now 2/2 660/764  [words]
+  018_Project_Timeline_Template_Editable_Format_e1cf1df5   ref 1p/421  unsplit 1p/421  ours now 1/1 442/421  [words]
+  016_Project_Timeline_Template_Complete_Guide_7d36d09c    ref 1p/633  unsplit 1p/633  ours now 1/1 653/633  [words]
+  011_Project_Timeline_Template_Beautiful_Theme_2336e680   ref 1p/885  unsplit 1p/885  ours now 1/1 993/885  [words]
+  5709.16 ch.40_mgfinal                                    ref 32p/58978  unsplit 32p/58978  ours now 33/32 59252/58978  [pages]
+  AFS-050-004-F2_0i                                        ref 8p/13442  unsplit 8p/13442  ours now 8/8 13442/13442  [match]
+  2013_11                                                  ref 8p/13594  unsplit 8p/13594  ours now 8/8 13192/13594  [words]
+  JEMIT_Template                                           ref 4p/8677  unsplit 4p/8677  ours now 6/4 8860/8677  [pages,words]
+  ABCD-SDE-23-00 - Avionic System Description - 17.02.16 - ref 29p/43748  unsplit 29p/43748  ours now 30/29 46862/43748  [pages,words]
+  ABCD-WB-08-00 Weight and Balance Report - v1 08.03.16    ref 12p/13015  unsplit 12p/13015  ours now 12/12 13338/13015  [words]
+  手机免提系统TSB                                                ref 3p/1189  unsplit 3p/1189  ours now 2/3 1173/1189  [pages]
+  May 25 bulletin focus on carers in the workplace         ref 4p/2721  unsplit 4p/2721  ours now 4/4 2384/2721  [words]
+  FAA 2025-26 Holdover Tables                              ref 167p/335613  unsplit 167p/335613  ours now 168/167 335768/335613  [pages]

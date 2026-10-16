@@ -1,0 +1,26 @@
+distinct manifest paths read: 946
+
+family       titled bestFitPie biff-charts
+sheets           62          7          7
+slides           14          5          0
+words             3          2          1
+
+best-fit pie documents (OOXML), by family and manifest status:
+  sheets done     sheets/chartset-002/xlsx/011_advanced_excel_pie.xlsx                                         1
+  sheets done     sheets/chartset-004/xlsx/019_advanced_excel_pie.xlsx                                         1
+  sheets done     sheets/chartset-006/xlsx/005_Contextures_chart_sample_6e279b08.xlsx                          3
+  sheets done     sheets/chartset-007/xlsm/003_Contextures_chart_sample_9bda2719.xlsm                          1
+  sheets open     sheets/chartset-002/xlsx/003_advanced_excel_pie.xlsx                                         1
+  sheets open     sheets/chartset-002/xlsx/027_advanced_excel_pie.xlsx                                         1
+  sheets open     sheets/chartset-004/xlsx/microsoft_learn_multi_chart_examples.xlsx                           1
+  slides done     slides/done-007/pptx/bitesize-writing-a-report.pptx                                          1
+  slides done     slides/done-011/pptx/3495.pptx                                                               1
+  slides open     slides/chartset-005/pptx/076_Hexadonut_Charts_for_PowerPoint_and_Google_Slides_2b879835.pptx 6
+  slides open     slides/chartset-006/pptx/031_Alarm_Clock_Pie-Chart_for_PowerPoint_and_Google_Slides_0b185a05.pptx 2
+  slides open     slides/chartset-012/pptx/061_Four-Stage_Serpentine_Chart_05699efe.pptx                       8
+  words  done     words/chartset-001/docx/pie-chart-result.docx                                                1
+  words  done     words/chartset-001/docx/pie-chart-template.docx                                              1
+
+sheets documents with a titled chart, by manifest status:
+   done     54
+   open     8

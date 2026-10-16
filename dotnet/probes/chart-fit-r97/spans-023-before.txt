@@ -1,0 +1,21 @@
+ours 18 spans, reference 17
+      dx       dy    ours x    ref x    ours y    ref y  text
+   -0.13    -0.04    184.02   184.15     73.85    73.88  Unit Circle
+                   ours only                                  Chart
+   41.98     6.58    308.03   266.05    229.17   222.59  4th Qtr
+   41.96     6.61    320.34   278.38    246.43   239.81  9%
+   32.51    12.65    233.18   200.67    276.20   263.55  3rd Qtr
+   32.40    12.68    241.88   209.48    293.46   280.78  10%
+   66.15    30.98    498.09   431.95    418.19   387.21  1st Qtr
+   28.56    31.84    201.40   172.84    424.80   392.95  2nd Qtr
+   66.07    31.02    505.76   439.68    435.46   404.44  59%
+   28.56    31.88    211.46   182.90    442.06   410.18  23%
+   -0.08    -0.00     36.72    36.80    650.49   650.49  Lorem ipsum dolor sit amet. Cum cumque deserunt quo dolor il
+   -0.08    -0.00     36.72    36.80    664.29   664.29  nesciunt veniam. Est velit quibusdam et ducimus fuga ut faci
+   -0.08    -0.00     36.72    36.80    678.09   678.09  qui quia maxime. Qui nesciunt voluptas hic beatae adipisci e
+   -0.08    -0.00     36.72    36.80    691.89   691.89  dolores qui nulla asperiores qui doloribus repellendus?
+   -0.08    -0.00     36.72    36.80    713.69   713.69  Et dolor obcaecati ut veniam voluptates aut laboriosam deser
+   -0.08    -0.00     36.72    36.80    727.49   727.49  maiores dolorem aased repellendus modi ad aperiam tempora. E
+   -0.08    -0.00     36.72    36.80    741.29   741.29  quod qui delectus perspiciatis. Ea autem esse quo quia debit
+   -0.08    -0.00     36.72    36.80    755.09   755.09  aspernatur.
+worst |dx| or |dy| over paired spans: 66.15 pt

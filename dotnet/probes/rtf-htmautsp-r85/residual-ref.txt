@@ -1,0 +1,9 @@
+         probe     A->B     B->C  rule
+r-colortbl-row    62.65    14.65  sum
+    r-colortbl    62.65    14.65  sum
+ r-fonttbl-row    62.65    14.65  sum
+     r-fonttbl    62.65    14.65  sum
+    r-mini-row    61.80    13.80  sum
+        r-mini    61.80    13.80  sum
+  r-styles-row    62.65    14.65  sum
+      r-styles    38.65    14.65  max

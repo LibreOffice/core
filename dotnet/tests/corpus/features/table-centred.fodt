@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+ xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+ xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+ xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+ xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+ office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:automatic-styles>
+  <style:style style:name="Tw" style:family="table">
+   <style:table-properties style:width="9in" table:align="center"/>
+  </style:style>
+  <style:style style:name="Tw.A" style:family="table-column">
+   <style:table-column-properties style:column-width="3in"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:body>
+  <office:text>
+   <text:p>A table wider than the text area. Centred, its overflow is shared between the two
+    margins and every column stays on the paper; left where an indent puts it, the right-hand
+    columns fall off the page and their text neither draws nor extracts.</text:p>
+   <table:table table:name="Wide" table:style-name="Tw">
+    <table:table-column table:style-name="Tw.A" table:number-columns-repeated="3"/>
+    <table:table-row>
+     <table:table-cell office:value-type="string"><text:p>left</text:p></table:table-cell>
+     <table:table-cell office:value-type="string"><text:p>middle</text:p></table:table-cell>
+     <table:table-cell office:value-type="string"><text:p>right</text:p></table:table-cell>
+    </table:table-row>
+   </table:table>
+   <text:p>After the table.</text:p>
+  </office:text>
+ </office:body>
+</office:document>

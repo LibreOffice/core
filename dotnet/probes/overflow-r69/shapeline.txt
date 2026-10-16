@@ -1,0 +1,25 @@
+face                 size lines    pitch  +leading  asc+desc  720 dpi
+Carlito-Regular      7.99     5    9.750     9.753     9.753    9.694
+DejaVuSans           7.99     6    9.296     9.301     9.301    9.298
+LiberationSans       7.99     5    8.930     9.188     8.926    8.901
+LiberationSerif      7.99     5    8.843     9.188     8.848    8.787
+Carlito-Regular     11.00     6   13.436    13.428    13.428   13.493
+DejaVuSans          11.00     8   12.813    12.805    12.805   12.813
+LiberationSans      11.00     7   12.303    12.649    12.289   12.302
+LiberationSerif     11.00     6   12.188    12.649    12.182   12.217
+Carlito-Regular     15.99    10   19.502    19.519    19.519   19.502
+DejaVuSans          15.99    13   18.596    18.613    18.613   18.709
+LiberationSans      15.99    12   17.858    18.387    17.864   17.915
+LiberationSerif     15.99    11   17.688    18.387    17.708   17.802
+Carlito-Regular     24.01    14   29.310    29.309    29.309   29.310
+DejaVuSans          24.01    17   27.949    27.949    27.949   28.006
+LiberationSans      24.01    14   26.844    27.609    26.824   26.816
+LiberationSerif     24.01    13   26.589    27.609    26.589   26.589
+Carlito-Regular     15.99    10   19.502    19.519    19.519   19.502
+Carlito-Regular     24.01    14   29.310    29.309    29.309   29.310
+DejaVuSans          24.01    17   27.949    27.949    27.949   28.006
+
+19 boxes scored; mean |error| in points:
+  +leading   0.2369
+  720 dpi    0.0345
+  asc+desc   0.0081

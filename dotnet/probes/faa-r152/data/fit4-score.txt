@@ -1,0 +1,27 @@
+k	refW	oursW	diff
+1	399	400	+1
+2	501	503	+2
+3	603	607	+4
+4	706	710	+4
+6	910	917	+7
+8	1117	1124	+7
+12	1531	1538	+7
+16	1945	1952	+7
+
+per-"19" advance from the slope, and the superscript size it implies:
+  k 1->16  ref   103.0667 tw   size 4.63302 pt    57.913 % of 8 pt
+  k 1->16  ours  103.4667 tw   size 4.65100 pt    58.138 % of 8 pt
+  k 2->16  ref   103.1429 tw   size 4.63645 pt    57.956 % of 8 pt
+  k 2->16  ours  103.5000 tw   size 4.65250 pt    58.156 % of 8 pt
+  k 4->16  ref   103.2500 tw   size 4.64126 pt    58.016 % of 8 pt
+  k 4->16  ours  103.5000 tw   size 4.65250 pt    58.156 % of 8 pt
+  k 8->16  ref   103.5000 tw   size 4.65250 pt    58.156 % of 8 pt
+  k 8->16  ours  103.5000 tw   size 4.65250 pt    58.156 % of 8 pt
+
+predicted W(k) for candidate reference sizes (base "i " = 80 tw, margins 216):
+  4.6000: [399, 501, 603, 706, 910, 1115, 1524, 1934]
+  4.6325: [400, 503, 606, 709, 915, 1121, 1533, 1945]
+  4.6400: [400, 503, 606, 709, 916, 1122, 1535, 1948]
+  4.6500: [400, 503, 607, 710, 917, 1124, 1538, 1952]
+  observed ref : [399, 501, 603, 706, 910, 1117, 1531, 1945]
+  observed ours: [400, 503, 607, 710, 917, 1124, 1538, 1952]

@@ -1,0 +1,39 @@
+variant	labels	first	last	step_days
+base	38	5 Apr	19 Apr	30
+dates_plus1000	15	30 Dec	19 May	10
+dates_2x	38	5 Apr	19 Apr	30
+dates_10x	38	5 Apr	24 Apr	40
+dates_flat	38	5 Apr	19 Apr	30
+durations_10x	38	5 Apr	19 Apr	30
+durations_zero	0	-	-	None
+milestones_100	38	5 Apr	19 Apr	30
+names_5x	38	5 Apr	19 Apr	30
+barcat_dates	38	5 Apr	19 Apr	30
+ranges_to_32	38	5 Apr	19 Apr	30
+ranges_to_40	38	5 Apr	19 Apr	30
+labelsize_2400	19	5 Apr	20 Mar	60
+labelsize_600	57	5 Apr	29 Apr	20
+crossbetween_between	38	5 Apr	19 Apr	30
+no_basetimeunit	38	5 Apr	19 Apr	30
+no_errbars	38	5 Apr	19 Apr	30
+bar_no_ser	0	-	-	None
+bar_same_axes	0	-	-	None
+line_no_ser	0	-	-	None
+dates_minus3000	42	17 Jan	9 Apr	100
+dates_minus10000	41	18 Nov	18 Nov	274
+dates_plus3000	41	15 May	5 Nov	50
+year_2023	15	5 Apr	23 Aug	10
+year_2030	44	5 Apr	28 Apr	60
+year_2026	38	5 Apr	19 Apr	30
+only_4_5)_2026	15	5 Apr	23 Aug	10
+only_4_24)_2026	15	5 Apr	23 Aug	10
+only_5_1)_2026	15	5 Apr	23 Aug	10
+only_5_15)_2026	15	5 Apr	23 Aug	10
+only_6_15)_2026	15	5 Apr	23 Aug	10
+only_6_30)_2026	15	5 Apr	23 Aug	10
+only_7_15)_2026	15	5 Apr	23 Aug	10
+only_7_30)_2026	15	5 Apr	23 Aug	10
+only_8_11)_2026	15	5 Apr	23 Aug	10
+only_8_23)_2026	15	5 Apr	23 Aug	10
+only_8_31)_2026	15	5 Apr	23 Aug	10
+bar_cat_dropped	38	5 Apr	19 Apr	30

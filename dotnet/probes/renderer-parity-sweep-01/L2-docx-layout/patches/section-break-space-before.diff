@@ -1,0 +1,59 @@
+--- a/dotnet/src/XRay.Office.WordProcessing/Layout/Paginator.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Layout/Paginator.cs
+@@ -1379,27 +1379,39 @@
+             // which takes the space back on every page but the first from Word 2013 onwards, so at
+             // `compatibilityMode` 15 an explicit break keeps nothing either.
+             //
+-            // A section break is the carve-out `IsCollapseUpper` states and neither rule above catches:
+-            // it declines "after applying a new page style (but do it after page breaks)", and
+-            // `SectionPropertyMap::CloseSectionGroup` gives every page-starting section a page style of
+-            // its own, so the paragraph that opens one carries a `RES_PAGEDESC` and keeps its space
+-            // whatever the compatibility mode says. Note the break itself is what matters, not the
+-            // paragraph: the `w:sectPr` sits on the paragraph *above*, so `StartsNewPage` is false here.
++            // A section break is the third way onto a new page, and it is *not* a carve-out from
++            // `CollapsesUpperAtPageTop`: it tracks the compatibility mode exactly as the other two
++            // explicit breaks do. Note the break itself is what matters, not the paragraph — the
++            // `w:sectPr` sits on the paragraph *above*, so `StartsNewPage` is false here, which is why
++            // the section clause is written separately and then gated by the same flag.
+             //
+-            // Measured on sixteen synthetics carrying 20 pt of space-before over a 10 pt space-after,
+-            // at `compatibilityMode` 15 and 12, with and without `w:titlePg`, and with and without a
+-            // portrait-to-landscape change across the break. A `w:br w:type="page"` and a
+-            // `w:pageBreakBefore` both track the mode — 91.4 pt at 12, 81.4 pt at 15 — and we already
+-            // agree with the reference on all eight. A `nextPage` break puts the line at 91.4 pt in
+-            // **all eight**, mode and geometry alike, where we put it at 81.4. This supersedes the note
+-            // on `CollapsesUpperAtPageTop` claiming a plain section break sets no page description and
+-            // collapses like any other; that was measured against 24.2.7.2.
++            // Measured on nine synthetics carrying 20 pt of space-before, first line of page two under a
++            // 72 pt top margin, against the installed **LibreOffice 24.2.7.2**: a plain `nextPage` break,
++            // one that turns the page landscape, and one that adds `w:titlePg`, each at
++            // `compatibilityMode` 15, 12 and none.
++            //
++            //     kind        mode 15   mode 12   no compatSetting
++            //     plain         72.03     92.03     92.03
++            //     landscape     72.03     92.03     92.03
++            //     titlePg       72.03     92.03     92.03
++            //
++            // We read 92.44 in all nine. So the geometry change and `w:titlePg` are both inert and the
++            // mode is the whole rule — the same answer `w:pageBreakBefore` and `w:br w:type="page"` give,
++            // where we already agree (72.35 at 15, 92.35 at 14, 12 and none).
++            //
++            // **The unconditional section clause this replaces was calibrated against LibreOffice
++            // 26.2.4.2**, where a `nextPage` break does keep the space at every mode. 24.2.7.2 does not
++            // have that behaviour, so on a 24.2 reference the clause paid 20 pt into the top of every
++            // page that opens a section — 36 sections in each FAA Holdover Tables document, 83 in
++            // `150-5370-10H.docx`.
+             bool keepsSpaceHere =
+                 column == 0
+                 && (pages.Count == 0
+-                    || (paragraph.Format.StartsNewPage && !_options.CollapsesUpperAtPageTop)
+-                    || (pageIsSectionFirst
+-                        && geometry.Break is not (SectionBreak.Continuous or SectionBreak.NewColumn)));
++                    || (!_options.CollapsesUpperAtPageTop
++                        && (paragraph.Format.StartsNewPage
++                            || (pageIsSectionFirst
++                                && geometry.Break is not (
++                                    SectionBreak.Continuous or SectionBreak.NewColumn)))));
+ 
+             Length ownSpaceAbove = Length.Zero;
+             Length spaceAbove = lineIndex == 0

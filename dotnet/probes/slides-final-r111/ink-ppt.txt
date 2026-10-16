@@ -1,0 +1,9 @@
+ws_prod-g-doc-Events-2007-may-presentation-PtF-background-+-principles	MOVED	2.09	0	0.64	0
+ws_prod-g-doc-Events-Part-M-presentation	MOVED	1.86	1	2.09	1
+ws_prod-g-doc-Events-2007-Privileges	MOVED	2.43	4	2.23	4
+ws_prod-g-doc-Events-2007-september-M.017-(French)-France	MOVED	20.08	2	17.50	2
+ws_prod-g-doc-Events-2007-september-MDM.032-(ENGLISH)-CZ	MOVED	4.44	0	2.21	0
+ws_prod-g-doc-Events-industrymeeting18112004-European-Safety-Strategy-Initiative	MOVED	7.59	2	6.80	3
+introduction_to_bea_tuxedo	MOVED	4.92	2	3.42	2
+concepts-surrounding-cloud-computing-carolyn-kranz-and-rich-prem-gb-seattle-2011	MOVED	4.53	0	3.77	0
+INKDONE

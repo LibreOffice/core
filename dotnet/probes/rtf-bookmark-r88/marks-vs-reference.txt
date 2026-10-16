@@ -1,0 +1,31 @@
+a_single       marks   OK   predicted [('B1', (0, 0), (0, 9))]
+a_single       REF B1             OK  predicted 'Alpha one'
+b_sequential   marks   OK   predicted [('B1', (0, 0), (0, 9)), ('B2', (0, 14), (0, 22))]
+b_sequential   REF B1             OK  predicted 'Alpha one'
+b_sequential   REF B2             OK  predicted 'Beta two'
+c_nested       marks   OK   predicted [('B', (0, 6), (0, 11)), ('B Copy 1', (0, 0), (0, 16))]
+c_nested       REF A              OK  predicted 'Error: Reference source not found'
+c_nested       REF B              OK  predicted 'inner'
+d_overlap      marks   OK   predicted [('A', (0, 6), (0, 17)), ('B', (0, 0), (0, 12))]
+d_overlap      REF A              OK  predicted 'middle last'
+d_overlap      REF B              OK  predicted 'first middle'
+e_two          marks   OK   predicted [('R1', (0, 0), (0, 8)), ('R1 Copy 1', (0, 0), (0, 23))]
+e_two          REF R1             OK  predicted 'Table 48'
+e_two          REF T3             OK  predicted 'Error: Reference source not found'
+f_five         marks   OK   predicted [('R1', (0, 0), (0, 28)), ('R2', (0, 0), (0, 0)), ('T1', (0, 0), (0, 8)), ('T2', (0, 0), (0, 0)), ('T3', (0, 0), (0, 0))]
+f_five         REF R1             OK  predicted 'Table 48: Caption Words Here'
+f_five         REF T1             OK  predicted 'Table 48'
+f_five         REF T2             OK  predicted ''
+f_five         REF T3             OK  predicted ''
+f_five         REF R2             OK  predicted ''
+g_crosspara    marks   OK   predicted [('A', (0, 0), (1, 11))]
+g_crosspara    REF A              OK  predicted 'first para'
+h_point        marks   OK   predicted [('A', (0, 0), (0, 0))]
+h_point        REF A              OK  predicted ''
+i_missing      marks   OK   predicted [('B', (0, 6), (0, 11)), ('B Copy 1', (0, 0), (0, 16))]
+i_missing      REF A              OK  predicted 'Error: Reference source not found'
+j_crossref     marks   BAD  predicted [('__RefHeading___Toc1', (0, 0), (0, 0))]
+                       reference [('__RefHeading___Toc1', (0, 0), (0, 17))]
+j_crossref     REF __RefHeading   OK  predicted 'Heading text here'
+
+27 of 28 predictions match 26.2.4.2

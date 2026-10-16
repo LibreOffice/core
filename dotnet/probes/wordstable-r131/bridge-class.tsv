@@ -1,0 +1,23 @@
+ident	page	band_y	gap_x0	gap_x1	gap_pt	verdict	detail
+review-welsh-government-communications-mister-peter-mandelson__docx	6	72.00	129.02	296.92	167.90	border	top edge of r6c1,r6c2; 2 of 2 state top=none
+review-welsh-government-communications-mister-peter-mandelson__docx	7	72.00	129.02	296.92	167.90	border	top edge of r12c1,r12c2; 2 of 2 state top=none
+review-welsh-government-communications-mister-peter-mandelson__docx	8	72.00	129.02	296.92	167.90	border	top edge of r20c1,r20c2; 2 of 2 state top=none
+review-welsh-government-communications-mister-peter-mandelson__docx	10	72.25	129.02	296.92	167.90	border	top edge of r31c1,r31c2; 2 of 2 state top=none
+review-welsh-government-communications-mister-peter-mandelson__docx	10	721.60	129.02	296.92	167.90	border	top edge of r34c1,r34c2,r35c1,r35c2; 4 of 4 state top=none
+review-welsh-government-communications-mister-peter-mandelson__docx	11	72.00	129.02	296.92	167.90	border	top edge of r35c1,r35c2; 2 of 2 state top=none
+review-welsh-government-communications-mister-peter-mandelson__docx	12	72.25	129.02	296.92	167.90	border	top edge of r38c1,r38c2; 2 of 2 state top=none
+review-welsh-government-communications-mister-peter-mandelson__docx	13	72.00	129.02	296.92	167.90	border	top edge of r41c1,r41c2; 2 of 2 state top=none
+review-welsh-government-communications-mister-peter-mandelson__docx	14	72.00	129.02	296.92	167.90	border	top edge of r45c1,r45c2; 2 of 2 state top=none
+195584360__docx	9	220.35	230.33	321.97	91.65	text	no cell edge on this band
+150_5335_5a__doc	22	380.32	307.27	344.28	37.02	text	no cell edge on this band
+150_5335_5a__doc	28	577.38	360.77	426.08	65.30	text	a cell edge is on this band (r8c3,r9c3) but the hole does not align to a column boundary
+150_5335_5a__doc	30	278.88	360.70	422.25	61.55	text	a cell edge is on this band (r8c4,r9c4) but the hole does not align to a column boundary
+150_5335_5a__doc	39	278.88	221.82	488.02	266.20	text	a cell edge is on this band (r8c2,r8c3,r8c4,r8c5,r8c6,r9c2,r9c3,r9c4,r9c5,r9c6) but the hole does not align to a column boundary
+150_5335_5a__doc	57	306.48	246.45	478.95	232.50	text	a cell edge is on this band (r9c2,r9c3,r9c4,r9c5,r10c2,r10c3,r10c4,r10c5) but the hole does not align to a column boundary
+1_tpr_template__from_fy14___docx	8	403.25	652.97	693.38	40.41	text	no cell edge on this band
+1_tpr_template__from_fy14___docx	8	425.25	136.54	161.12	24.57	text	no cell edge on this band
+1_tpr_template__from_fy14___docx	8	231.75	394.57	425.07	30.50	text	no cell edge on this band
+1_tpr_template__from_fy14___docx	8	248.55	121.28	151.78	30.50	text	no cell edge on this band
+TE.CAO.00125 Foreign Part 145 approvals - OJT Logbook__docx	3	464.17	345.60	359.30	13.70	border	top edge of r3c2,r4c2; 2 of 2 state top=none
+template---tpr-technical-progress-report-with-guidance__docx	6	382.90	632.89	654.08	21.19	text	no cell edge on this band
+template---tpr-technical-progress-report-with-guidance__docx	6	429.00	102.62	135.21	32.59	text	a cell edge is on this band (r3c0,r3c1,r5c0,r5c1) but the hole does not align to a column boundary

@@ -1,0 +1,11 @@
+# 26.2.4.2 and XRay.Office on 055_Project_timeline_with_milestones and three one-edit variants.
+# `glyphs` is batch-check.sh's column 9 (alphanumeric characters, whole document).
+# The reference render is the same UTC day as ours throughout (2026-09-12).
+variant	who	axis labels	step	turned	first	last	glyphs
+as-authored	26.2.4.2	38	30 d	yes	5 Apr	19 Apr	1045
+as-authored	XRay.Office	15	10 d	no	5 Apr	23 Aug	960
+static2023	26.2.4.2	15	10 d	no	5 Apr	23 Aug	934
+static2023	XRay.Office	15	10 d	no	5 Apr	23 Aug	960
+static2026	26.2.4.2	15	10 d	no	5 Apr	23 Aug	934
+static2026	XRay.Office	15	10 d	no	5 Apr	23 Aug	960
+cache40000	26.2.4.2	41	5 mo	no	6 Jul	6 Mar	-

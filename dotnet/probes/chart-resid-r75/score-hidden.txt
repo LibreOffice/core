@@ -1,0 +1,24 @@
+=== 053_Personal_asset_inventory_5446d84b
+pages      ref 2  before 4  after 4
+alnum      ref 188  before 260  after 251
+mean ink   before 3.0970  after 2.6957
+worst page before 5.4226  after 4.6837
+  page   1    0.7714 ->   0.7076   -0.0639
+  page   2    5.4226 ->   4.6837   -0.7389
+=== 026_Monthly_cash_flow_statement_Use_this_template_8aaebea1
+pages      ref 11  before 11  after 11
+alnum      ref 7852  before 7935  after 7864
+mean ink   before 1.0218  after 0.7569
+worst page before 6.5183  after 3.6043
+  page   7    6.5183 ->   3.6043   -2.9140
+=== 027_Simple_personal_cash_flow_statement_675c6584
+pages      ref 10  before 10  after 10
+alnum      ref 7949  before 7994  after 7932
+mean ink   before 1.7501  after 1.6412
+worst page before 5.2679  after 4.9489
+  page   6    5.2679 ->   4.1787   -1.0891
+=== 055_Project_timeline_with_milestones_Use_this_template_546cecc0
+pages      ref 2  before 2  after 2
+alnum      ref 1043  before 958  after 958
+mean ink   before 1.9003  after 1.9003
+worst page before 3.6169  after 3.6169

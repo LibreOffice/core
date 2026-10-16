@@ -1,0 +1,31 @@
+path	ext	stream	feature
+sheets/ceiling-001/xls/Template Pilot Logbook JAR-FCL V3.0.xls	xls	Workbook	CHAREA
+sheets/ceiling-001/xls/Template Pilot Logbook JAR-FCL V3.0.xls	xls	Workbook	CHCHART
+sheets/ceiling-001/xls/Template Pilot Logbook JAR-FCL V3.0.xls	xls	Workbook	CHTYPEGROUP
+sheets/done-002/xls/2012-GA-Survey-Chapter-5-Tables-16Dec2013-V2.xls	xls	Workbook	CHBAR
+sheets/done-002/xls/2012-GA-Survey-Chapter-5-Tables-16Dec2013-V2.xls	xls	Workbook	CHBAR.horizontal
+sheets/done-002/xls/2012-GA-Survey-Chapter-5-Tables-16Dec2013-V2.xls	xls	Workbook	CHCHART
+sheets/done-002/xls/2012-GA-Survey-Chapter-5-Tables-16Dec2013-V2.xls	xls	Workbook	CHTYPEGROUP
+sheets/done-002/xls/2012-GA-Survey-Chapter-6-Tables-16Dec2013-V2.xls	xls	Workbook	CHBAR
+sheets/done-002/xls/2012-GA-Survey-Chapter-6-Tables-16Dec2013-V2.xls	xls	Workbook	CHBAR.horizontal
+sheets/done-002/xls/2012-GA-Survey-Chapter-6-Tables-16Dec2013-V2.xls	xls	Workbook	CHCHART
+sheets/done-002/xls/2012-GA-Survey-Chapter-6-Tables-16Dec2013-V2.xls	xls	Workbook	CHTYPEGROUP
+sheets/done-009/xls/EHEST-Pre-departure-checklist-Rev.-1-06-12-2016.xls	xls	Workbook	CHAREA
+sheets/done-009/xls/EHEST-Pre-departure-checklist-Rev.-1-06-12-2016.xls	xls	Workbook	CHCHART
+sheets/done-009/xls/EHEST-Pre-departure-checklist-Rev.-1-06-12-2016.xls	xls	Workbook	CHTYPEGROUP
+sheets/done-010/xls/TOGAF9-Tool-ConfReqts-CSQ.xls	xls	Workbook	CHBAR
+sheets/done-010/xls/TOGAF9-Tool-ConfReqts-CSQ.xls	xls	Workbook	CHBAR.vertical
+sheets/done-010/xls/TOGAF9-Tool-ConfReqts-CSQ.xls	xls	Workbook	CHCHART
+sheets/done-010/xls/TOGAF9-Tool-ConfReqts-CSQ.xls	xls	Workbook	CHTYPEGROUP
+sheets/missing-001/xls/orbus_togaf_tool_csq.xls	xls	Workbook	CHBAR
+sheets/missing-001/xls/orbus_togaf_tool_csq.xls	xls	Workbook	CHBAR.vertical
+sheets/missing-001/xls/orbus_togaf_tool_csq.xls	xls	Workbook	CHCHART
+sheets/missing-001/xls/orbus_togaf_tool_csq.xls	xls	Workbook	CHTYPEGROUP
+slides/done-005/ppt/berlin.ppt	ppt	PowerPoint Document	CHTYPEGROUP
+slides/done-005/ppt/pods05.ppt	ppt	PowerPoint Document	CHTYPEGROUP
+sheets/chartset-006/xls/014_Contextures_chart_sample_991ecfc5.xls	xls	Workbook	CHBAR
+sheets/chartset-006/xls/014_Contextures_chart_sample_991ecfc5.xls	xls	Workbook	CHBAR.vertical
+sheets/chartset-006/xls/014_Contextures_chart_sample_991ecfc5.xls	xls	Workbook	CHCHART
+sheets/chartset-006/xls/014_Contextures_chart_sample_991ecfc5.xls	xls	Workbook	CHSCATTER
+sheets/chartset-006/xls/014_Contextures_chart_sample_991ecfc5.xls	xls	Workbook	CHSCATTER.plain
+sheets/chartset-006/xls/014_Contextures_chart_sample_991ecfc5.xls	xls	Workbook	CHTYPEGROUP

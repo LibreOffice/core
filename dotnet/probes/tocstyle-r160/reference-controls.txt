@@ -1,0 +1,3 @@
+F-other-level      style=P1               margin-bottom=0in
+H-outline-switch   style=P1               margin-bottom=0in
+L-no-toc           style=P1               margin-bottom=0in

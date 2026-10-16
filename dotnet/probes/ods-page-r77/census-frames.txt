@@ -1,0 +1,25 @@
+Infotabelle_WLAN im Flugzeug.ods {'cell-child': 1}
+SSRO_Quarterly_Statistical_Bulletin_Q3201617_DATA.ods {'cell-child': 2}
+Computer and Software Services_50 State Comparison.ods {'cell-child': 1}
+TDA_Smoke-Detectors.ods {'cell-child': 1}
+Data-Architecture-Tool-Fit-Assessment-Template.ods {'cell-child': 6}
+EHEST-Pre-departure-checklist-Rev.-1-06-12-2016.ods {'cell-child': 10, 'group': 5, 'in-group': 0}
+INDEX_Digital_Transformation_Toolkits.ods {'cell-child': 107}
+State-Medicaid-Payment-Policies-for-Medicare-Cost-Sharing.ods {'cell-child': 1}
+Keywords_Mapping_Graphs_and_Charts.ods {'cell-child': 11}
+PC1000.ods {'cell-child': 1}
+Special-Procedures_2025-07-10.ods {'anchor': 1, 'in-anchor': 0}
+TOGAF9-Tool-ConfReqts-CSQ.ods {'cell-child': 1}
+Application_Compliance_Checklist_5_Apr_2021.ods {'cell-child': 6, 'anchor': 10, 'in-anchor': 10}
+CSJU List of Recipients of funds 2013-2020.ods {'cell-child': 8}
+npias_2009_appA.ods {'cell-child': 1}
+capa-liste-nse-1.ods {'cell-child': 1}
+Aircraft_Database.ods {'cell-child': 4}
+TICAPCapability_Final.ods {'cell-child': 2}
+fm-provider-service-measures.ods {'cell-child': 8}
+Global_Market_Forecast_2016-2035_Airbus_Data_Set.ods {'cell-child': 1}
+orbus_togaf_tool_csq.ods {'cell-child': 1}
+SIL_TDB648.ods {'cell-child': 2, 'group': 10, 'in-group': 72}
+FAA-2019-0995-0002_attachment_2.ods {'cell-child': 7}
+fse_identification_form.ods {'cell-child': 2}
+--- 147 documents {'cell-child': 386, 'anchor': 148, 'in-anchor': 33, 'group': 44, 'in-group': 89}

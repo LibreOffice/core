@@ -1,0 +1,39 @@
+scored 33 movers on BASELINE
+  mean |dy| per span, median over the documents:  13.9080 pt  ->    3.4348 pt
+  closer 19   further 4   level 10
+  page count: closer to the reference on 0, further on 0
+
+     before     after    ref  base  head  document
+    54.8490   13.0490      1     1     1  7f1796abe7b0-086_Printable_Graph_Paper_Template_Gray
+    42.4491    1.9009      1     1     1  7f1796abe7b0-086_Printable_Graph_Paper_Template_Gray
+   309.8277  278.8411      1     1     1  065_Work_Breakdown_Structure_Template_Blue_Theme_2b2
+    31.8333    2.5768      1     1     1  067_Work_Breakdown_Structure_Template_Gray_Theme_89f
+    30.7163    2.3044      1     1     1  066_Work_Breakdown_Structure_Template_Colored_Backgr
+    19.7998    0.0008      1     1     1  bbb02c46cf50-084_Printable_Graph_Paper_Template_Edit
+    15.6500    0.0008      1     1     1  bbb02c46cf50-084_Printable_Graph_Paper_Template_Edit
+    37.9498   25.6454      1     1     1  d6168b20c968-065_Work_Breakdown_Structure_Template_B
+    31.6637   22.5191      1     1     1  340d56617eed-067_Work_Breakdown_Structure_Template_G
+    27.7250   22.5333      1     1     1  89831eebe720-069_Work_Breakdown_Structure_Template_P
+    25.9912   25.1318      1     1     1  069_Work_Breakdown_Structure_Template_Professional_F
+     0.4946    0.0734      6     6     6  b5433f11b464-PUR-0012-UTAS-GRAMS-SPA-Template-1-25-2
+     4.5160    4.2061      6     6     6  b5433f11b464-PUR-0012-UTAS-GRAMS-SPA-Template-1-25-2
+     0.3303    0.0330      6     6     6  PUR-0012-UTAS-GRAMS-SPA-Template-1-25-2024.doc
+     0.3459    0.1644      2     2     2  097_Business_Case_Template_Elegant_Layout_3ba9cbf2.d
+     0.1822    0.0007      2     2     2  17ddb50d9338-097_Business_Case_Template_Elegant_Layo
+   123.0232  122.9732      5     5     5  d7d79af88c4d-100_Business_Case_Template_Modern_Forma
+     7.5067    7.4607      5     5     5  d7d79af88c4d-100_Business_Case_Template_Modern_Forma
+     3.9988    3.9546      5     5     5  100_Business_Case_Template_Modern_Format_ff9e7282.do
+     0.0008    0.0008      1     1     1  084_Printable_Graph_Paper_Template_Editable_Layout_d
+     3.7894    3.7894      1     1     1  068669ebccb5-068_Work_Breakdown_Structure_Template_G
+    17.0879   17.0879      1     1     1  340d56617eed-067_Work_Breakdown_Structure_Template_G
+    22.1907   22.1907      1     1     1  8101fa609feb-066_Work_Breakdown_Structure_Template_C
+     0.0646    0.0646      1     1     1  89831eebe720-069_Work_Breakdown_Structure_Template_P
+   182.2030  182.2030      1     1     1  d6168b20c968-065_Work_Breakdown_Structure_Template_B
+     0.0009    0.0009      1     1     1  086_Printable_Graph_Paper_Template_Gray_Theme_7300e5
+     0.0791    0.0803      2     2     2  part-147_approval list_20230119.docx
+     0.5807    0.5820      2     2     2  d6c91a8ddb2b-part-147_approval list_20230119.rtf
+     0.1515    0.1535      2     2     2  d6c91a8ddb2b-part-147_approval list_20230119.odt
+     3.2530    3.4348      2     1     1  17ddb50d9338-097_Business_Case_Template_Elegant_Layo
+     2.3683    3.0553      1     1     1  068_Work_Breakdown_Structure_Template_Green_Theme_63
+    21.3510   22.5385      1     1     1  068669ebccb5-068_Work_Breakdown_Structure_Template_G
+    13.9080   22.2426      1     1     1  8101fa609feb-066_Work_Breakdown_Structure_Template_C

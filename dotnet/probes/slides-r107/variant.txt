@@ -1,0 +1,30 @@
+# The pods05 escapement variant, run against /opt/libreoffice26.2/program/soffice (26.2.4.2).
+#
+#   soffice --convert-to fodp pods05.ppt                 -> pods05.fodp
+#   sed 's/text-position="-25% 58%"/text-position="0% 58%"/g'    -> pods05-noesc.fodp
+#   sed 's/text-position="-25% 58%"/text-position="-25% 100%"/g' -> pods05-p100.fodp
+#   soffice --convert-to pdf   <each>
+#   probes/slides-r107/sizes.py <each>.pdf
+#
+# The deck states 12 runs at -25% 58%, 2 at 30% 58% and 35 at 0% 100% (no escapement).
+#
+# Page 32 is the page the round trip is faithful on: the flat-ODP re-render agrees with the
+# direct .ppt -> pdf reference character for character (9.01 pt over 30 alphanumerics).  Page 33
+# is NOT faithful under the round trip -- 11.0 against the direct render's 9.01 -- so it carries
+# no part of this experiment.
+#
+# leg                        page 32 dominant size / alnum   page 33 (round-trip only)
+# --------------------------------------------------------------------------------------
+# direct .ppt reference        9.01 / 30                       9.01 / 60
+# fodp round trip, unchanged   9.01 / 30                      11.0  / 60   <- p33 unfaithful
+# offset removed  (0% 58%)    11.0  / 30                      13.01 / 60
+# shrink removed  (-25% 100%)  9.01 / 36                      11.0  / 72
+#
+# Reading, on page 32 alone:
+#   * removing the DROP and keeping the shrink moves the reference from 9.01 to 11.0, which is
+#     exactly the size this tree drew before the change.  The drop is the cause.
+#   * removing the SHRINK and keeping the drop leaves it at 9.01.  The extra descent that
+#     proportion 100 produces (445 hundredths against 361 at 28 pt) does not cross a
+#     constScaleLevels row.
+#   * the alnum count rises under the -25% 100% variant because the subscript glyphs are then
+#     the same size as the body text and join the dominant-size bucket.  It is not a size move.

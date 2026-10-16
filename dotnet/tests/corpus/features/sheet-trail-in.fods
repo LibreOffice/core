@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  The mirror image of sheet-lead-in.fods, and the direction that survives into a PDF.
+
+  Four columns, of which A, B and C fit one page and D does not, so D is a page of its own.
+  Every string here is RIGHT-aligned and lives in column D, so each spills leftwards — back
+  towards page 1 — rather than rightwards.
+
+  Row 1's string is long enough that its output area, widened through the empty cells to its
+  left, reaches into page 1's band. LibreOffice draws it on page 1 as well as on page 2: the
+  lookahead that finds it runs at nX == mnX2 and carries no bTaggedPDF guard
+  (output2.cxx:1660-1678), unlike the walk to the left of mnX1 at :1541-1543.
+
+  Row 2's string is short. It fits column D, none of it reaches page 1, and LibreOffice draws
+  nothing for it there. Rows 1 and 2 differ in nothing but the length of one string, so a
+  renderer cannot satisfy both by choosing one side.
+
+  Row 3 has the same long string as row 1 but an occupied cell in column C. The leftward walk
+  stops at the first cell that is not free, so the output area never leaves column D and page 1
+  must show nothing of it — the condition that keeps a long string from being written over its
+  neighbour.
+
+  A right-aligned overflow costs no columns at the right-hand end (MaybeAddExtraColumn,
+  table1.cxx:2264-2276), so the printed block is not widened and the sheet is two pages.
+-->
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+ xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+ xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+ xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+ xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+ office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+ <office:automatic-styles>
+  <style:style style:name="co1" style:family="table-column">
+   <style:table-column-properties style:column-width="6cm"/>
+  </style:style>
+  <style:style style:name="co2" style:family="table-column">
+   <style:table-column-properties style:column-width="2cm"/>
+  </style:style>
+  <style:style style:name="ceR" style:family="table-cell">
+   <style:paragraph-properties fo:text-align="end"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+    fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"
+    style:print-orientation="portrait"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Default" style:page-layout-name="pm1"/>
+ </office:master-styles>
+ <office:body>
+  <office:spreadsheet>
+   <table:table table:name="Probe">
+    <table:table-column table:style-name="co1"/>
+    <table:table-column table:style-name="co1"/>
+    <table:table-column table:style-name="co2"/>
+    <table:table-column table:style-name="co1"/>
+    <table:table-row>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ceR" office:value-type="string"><text:p>REACHES a very long right aligned string in column D that runs a long way back past the start of column D and into whatever lies before it</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="ceR" office:value-type="string"><text:p>SHORTD2</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell office:value-type="string"><text:p>GUARDC3</text:p></table:table-cell>
+     <table:table-cell table:style-name="ceR" office:value-type="string"><text:p>BLOCKED a very long right aligned string in column D that runs a long way back past the start of column D and into whatever lies before it</text:p></table:table-cell>
+    </table:table-row>
+   </table:table>
+  </office:spreadsheet>
+ </office:body>
+</office:document>

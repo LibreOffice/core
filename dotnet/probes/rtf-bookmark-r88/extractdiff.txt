@@ -1,0 +1,11 @@
+FAA 2025-26 Holdover Tables.rtf                                        CHANGED
+24-25_FAA_Holdover_Tables.rtf                                          CHANGED
+ABCD-FE-01-00 Flight Envelope - v1 08.03.16.rtf                        same
+ABCD-SDE-23-00 - Avionic System Description - 17.02.16 - v1.rtf        same
+ABCD-WB-08-00 Weight and Balance Report - v1 08.03.16.rtf              same
+report-template.rtf                                                    same
+Agile_Arc_SysDes.rtf                                                   same
+FG-AI4NDM-TR-skeleton_template.rtf                                     same
+ECSS-E-ST-50-16C-Annex-A(30September2021).rtf                          same
+PI-doc.-no.-2E-Technical-Review-Report.rtf                             same
+PAT-047 - Architecture and Detailed Design Assessment.rtf              same

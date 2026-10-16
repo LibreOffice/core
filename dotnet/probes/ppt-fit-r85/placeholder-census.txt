@@ -1,0 +1,4 @@
+Architecture.ppt                         placeholder=None shapetype=0 fitShapeToText=True  x2
+Fundamentals_Module_1_basics.ppt         placeholder=None shapetype=0 fitShapeToText=False  x25
+Fundamentals_Module_1_basics.ppt         placeholder=None shapetype=0 fitShapeToText=True  x28
+total 55

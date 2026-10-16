@@ -1,0 +1,74 @@
+slides-r99/tfy.py finds a PDF's pages by scanning every `N 0 obj` and testing a
+700-byte window for /Type /Page.  The window runs past `endobj` into the next object
+whenever objects are packed tightly, so a dictionary that is not a page is read as one
+and takes the FOLLOWING object's /Contents.  Every per-page pairing after the first such
+artefact is then off by one or more, and the two legs need not be off by the same amount.
+
+A: the 51 banked 26.2.4.2 reference PDFs (poppler-written).
+   tfy    23   real    21   010605Vul__ppt.pdf
+   tfy    14   real    12   0335fab9-79f0-4944-b92c-f223837ca2d8__ppt.pdf
+   tfy    20   real    18   080214-Intl-pol-frameworks-and-their-implications-for-Africa-ISS-workshop__ppt.pdf
+   tfy    96   real    94   2015-Civil-Rights-Website-training__ppt.pdf
+   tfy    41   real    39   71393_pp7__ppt.pdf
+   tfy    96   real    94   8.16_AOD_FINAL_Provider_Training_Presentation_9_2009__ppt.pdf
+   tfy    12   real     9   Airport Planning 09112013__ppt.pdf
+   tfy    53   real    50   BUS-Chapter 05__ppt.pdf
+   tfy    44   real    42   Employment-Based_I-485__ppt.pdf
+   tfy    69   real    67   FAA_Form_337__ppt.pdf
+   tfy    27   real    26   Fundamentals_Module_1_basics__ppt.pdf
+   tfy    50   real    47   ITE106-Chapter 4__ppt.pdf
+   tfy    25   real    22   Inducement-to-Insurance-Business__ppt.pdf
+   tfy    33   real    31   JesuitAssocOfStudentPersonnel__ppt.pdf
+   tfy    23   real    20   Lepore__ppt.pdf
+   tfy    37   real    35   RESPA_-_Section_8_Webinar__ppt.pdf
+   tfy    29   real    27   RRM-training-syllabus-Chapter-3-Teamwork-TC-Towing-Incident-Analysis-Dec-2009__ppt.pdf
+   tfy    57   real    54   Thailand17__ppt.pdf
+   tfy    23   real    20   W3_Case_Study_of_a_Tsunami_Warning_Simulation_Exercise_Ed__ppt.pdf
+   tfy    14   real    11   WC_Update-Aug03__ppt.pdf
+   tfy    32   real    29   berlin__ppt.pdf
+   tfy    39   real    36   concepts-surrounding-cloud-computing-carolyn-kranz-and-rich-prem-gb-seattle-2011__ppt.pdf
+   tfy    29   real    27   gfopportunitiesforlinkagespres_2010_en__ppt.pdf
+   tfy    42   real    40   gillikin_online_user_mtg_2010__ppt.pdf
+   tfy    16   real    13   hofman__ppt.pdf
+   tfy    41   real    39   iep-amount-frequency-for-webinar__ppt.pdf
+   tfy    43   real    40   introduction_to_bea_tuxedo__ppt.pdf
+   tfy    23   real    20   joint_user_outcomes_michael_fullerton_29.06.12__ppt.pdf
+   tfy    15   real    12   outlook_of_nigerian_pension_sector__ppt.pdf
+   tfy    63   real    60   pods05__ppt.pdf
+   tfy    18   real    16   policy-pesentation__ppt.pdf
+   tfy    28   real    26   pres_ioc_phuket__ppt.pdf
+   tfy    25   real    22   undp_presentation_revised_17_may__ppt.pdf
+   tfy    30   real    27   wells08_basic__ppt.pdf
+   tfy    17   real    14   ws_prod-g-doc-Events-2007-Approval-of-Flight-Conditions-RM-NAA-16032007__ppt.pdf
+   tfy    18   real    15   ws_prod-g-doc-Events-2007-Privileges__ppt.pdf
+   tfy    23   real    20   ws_prod-g-doc-Events-2007-may-presentation-PtF-background-+-principles__ppt.pdf
+   tfy    13   real    10   ws_prod-g-doc-Events-2007-november-IACA-presentation-at-EASA-Fuel-Tank-Safety-Training-Seminar__ppt.pdf
+   tfy    57   real    55   ws_prod-g-doc-Events-2007-september-M.017-(French)-France__ppt.pdf
+   tfy    41   real    38   ws_prod-g-doc-Events-2007-september-MDM.032-(ENGLISH)-CZ__ppt.pdf
+   tfy    15   real    13   ws_prod-g-doc-Events-2008-February-5-NATO-activities__ppt.pdf
+   tfy    32   real    30   ws_prod-g-doc-Events-Part-M-presentation__ppt.pdf
+   tfy    14   real    12   ws_prod-g-doc-Events-industrymeeting18112004-Aercap__ppt.pdf
+   tfy    13   real    10   ws_prod-g-doc-Events-industrymeeting18112004-European-Safety-Strategy-Initiative__ppt.pdf
+   tfy    28   real    25   ws_prod-g-doc-Events-r-6.-ESM__ppt.pdf
+   45 of 51 miscounted
+
+B: renderings of ours that still exist in /home/user/r100-work (probe decks).
+   tfy    34   real    16   /home/user/r100-work/probe/base-fit/bullet-fit.pdf
+   tfy    14   real     6   /home/user/r100-work/probe/base-ppt/break-probe.pdf
+   tfy    50   real    24   /home/user/r100-work/probe/bours2/bullet-probe.pdf
+   tfy    50   real    24   /home/user/r100-work/probe/bpours/bullet-probe.pdf
+   tfy    27   real    24   /home/user/r100-work/probe/bpref/bullet-probe.pdf
+   tfy    27   real    24   /home/user/r100-work/probe/bref/bullet-probe.pdf
+   tfy    34   real    16   /home/user/r100-work/probe/fours/bullet-fit.pdf
+   tfy    34   real    16   /home/user/r100-work/probe/fours2/bullet-fit.pdf
+   tfy    34   real    16   /home/user/r100-work/probe/fpours/bullet-fit.pdf
+   tfy    19   real    16   /home/user/r100-work/probe/fpref/bullet-fit.pdf
+   tfy    19   real    16   /home/user/r100-work/probe/fref/bullet-fit.pdf
+   tfy    14   real     6   /home/user/r100-work/probe/ourppt/break-probe.pdf
+   tfy     9   real     6   /home/user/r100-work/probe/refppt/break-probe.pdf
+   13 of 13 miscounted
+
+tfz.py enumerates through the real page tree (PyMuPDF) and tracks `cm` as well as the
+text matrix, which tfy.py does not -- 26.2.4.2's own PDFs place an underline with
+`q 1 0 0 1 x y cm ... Q` and a writer that positioned text that way would be reported
+at y = 0.

@@ -1,0 +1,196 @@
+# ours   = XRay.Office.Cli @ f4b8c38255a92caf1f05cc8acdf8d8288a5ceac4 + this round
+# ref    = /opt/libreoffice26.2/program/soffice, LibreOffice 26.2.4.2 (TDF tarball)
+# fonts  = system fontconfig; ALL FOUR tarball confounds moved aside on 2026-09-07 --
+#          Carlito/Caladea/Liberation/DejaVu duplicates, the Latin Noto, and the four
+#          LiberationSansNarrow. 38 faces in .duplicates-aside, 71 left in the directory.
+#          fc-match "DejaVu Sans" -> DejaVuSans.ttf. fc-list | grep -i narrow is empty.
+# rule   = batch-check.sh of 2026-09-05: page count, then alphanumeric characters within
+#          max(2%, 15), then unembedded fonts.
+# corpus = /home/user/corpus-odf
+# note   = the reference half here reproduces probes/odf-gate-01/rows.tsv's ref columns on
+#          302 of 302 .odp rows, pages and glyphs, so the Narrow move did not touch them.
+path	pages	before_glyphs	after_glyphs	before_verdict	after_verdict	master_alnum	display_none	running_alnum	ooxml_verdict	ooxml_glyphs	cause
+slides/ceiling-001/odp/Fundamentals_Module_1_basics.odp	27	5615/6471	6577/6471	words	match	999	0	0	match	6589/6471	master-background-objects (closed)
+slides/ceiling-001/odp/OnTrac_StarCertificationProgram-3Day.odp	15	7576/6233	7740/6233	words	words	187	0	0	words	7709/6233	shared with the OOXML reader
+slides/ceiling-001/odp/solog_orientation_august_2019.odp	15	4281/4393	4281/4393	words	words	915	77	0	match	4393/4393	master background partly closed, residual elsewhere
+slides/ceiling-002/odp/8_P-Pavese_AIRBUS-ATB-journee-CRATB.odp	26	10319/9914	10319/9914	words	words	0	0	2	words	10424/9949	shared with the OOXML reader
+slides/ceiling-002/odp/Demick_JetBlue.odp	10	2897/3179	2897/3179	words	words	0	3	0	words	3519/3179	shared with the OOXML reader
+slides/chartset-001/odp/combo_bar_line_chart.odp	1	166/219	166/219	words	words	0	0	0	match	219/219	other, ODF reader
+slides/chartset-001/odp/scatter_chart.odp	1	83/105	83/105	words	words	0	0	0	match	105/105	other, ODF reader
+slides/chartset-005/odp/004_2-Stage_Vertical_Funnel_Diagram_for_PowerPoint_593f4c80.odp	1	320/340	340/340	words	match	20	0	0	match	340/340	master-background-objects (closed)
+slides/chartset-005/odp/005_2-Step_Funnel_On_left_With_Text_767f0490.odp	1	450/470	470/470	words	match	20	0	0	match	470/470	master-background-objects (closed)
+slides/chartset-005/odp/006_2-Way_Horizontal_Hierarchy_for_PowerPoint_and_Google_Slides_7c1e5084.odp	3	524/645	645/645	words	match	121	0	0	match	645/645	master-background-objects (closed)
+slides/chartset-005/odp/011_3-Stage_Vertical_Funnel_Diagram_for_PowerPoint_10ce23dd.odp	1	332/352	352/352	words	match	20	0	0	match	352/352	master-background-objects (closed)
+slides/chartset-005/odp/068_Funnel_Diagram_for_PowerPoint_with_2_Steps_437e4ba7.odp	1	43/63	63/63	words	match	20	0	0	match	63/63	master-background-objects (closed)
+slides/chartset-005/odp/069_Funnel_Diagram_for_PowerPoint_with_3_Steps_f96396fc.odp	1	48/68	68/68	words	match	20	0	0	match	68/68	master-background-objects (closed)
+slides/chartset-005/odp/070_Funnel_Diagram_for_PowerPoint_with_4_Steps_975f1642.odp	1	53/73	73/73	words	match	20	0	0	match	73/73	master-background-objects (closed)
+slides/chartset-005/odp/071_Funnel_Diagram_for_PowerPoint_with_5_Steps_5ceacdec.odp	1	58/78	78/78	words	match	20	0	0	match	78/78	master-background-objects (closed)
+slides/chartset-005/odp/076_Hexadonut_Charts_for_PowerPoint_and_Google_Slides_2b879835.odp	3	980/1101	1101/1101	words	match	121	0	0	match	1101/1101	master-background-objects (closed)
+slides/chartset-005/odp/084_Infographic_Hierarchy_Tree_for_PowerPoint_fda8141c.odp	3	1022/1128	1128/1128	words	match	106	0	0	match	1128/1128	master-background-objects (closed)
+slides/chartset-006/odp/001_1-2-3_Horizontal_Hierarchy_39795b4d.odp	3	1126/1247	1247/1247	words	match	121	0	0	match	1247/1247	master-background-objects (closed)
+slides/chartset-006/odp/007_3_Circles_Diagram_for_PowerPoint_dac9f170.odp	3	1272/1378	1378/1378	words	match	106	0	0	match	1378/1378	master-background-objects (closed)
+slides/chartset-006/odp/017_4-Stage_Vertical_Funnel_Diagram_for_PowerPoint_61e7bde5.odp	1	344/364	364/364	words	match	20	0	0	match	364/364	master-background-objects (closed)
+slides/chartset-006/odp/031_Alarm_Clock_Pie-Chart_for_PowerPoint_and_Google_Slides_0b185a05.odp	3	1744/1865	1865/1865	words	match	121	0	0	match	1865/1865	master-background-objects (closed)
+slides/chartset-006/odp/043_Dual_Horizontal_Hierarchy_for_PowerPoint_and_Google_Slides_5074b09e.odp	3	572/693	693/693	words	match	121	0	0	match	693/693	master-background-objects (closed)
+slides/chartset-006/odp/044_Dual_Mind_Spark_Chart_for_PowerPoint_a83f890a.odp	4	2487/2628	2628/2628	words	match	141	0	0	match	2628/2628	master-background-objects (closed)
+slides/chartset-006/odp/055_Four_Pillar_Hierarchy_for_PowerPoint_and_Google_Slides_6b42ed18.odp	3	1584/1705	1705/1705	words	match	121	0	0	match	1705/1705	master-background-objects (closed)
+slides/chartset-006/odp/077_Horizontal_Org_Chart_for_PowerPoint_and_Google_Slides_8cf07020.odp	3	840/961	961/961	words	match	121	0	0	match	961/961	master-background-objects (closed)
+slides/chartset-006/odp/094_Intersecting_Teardrops_for_PowerPoint_and_Google_Slides_ff43aedb.odp	3	1284/1405	1405/1405	words	match	121	0	0	match	1405/1405	master-background-objects (closed)
+slides/chartset-006/odp/099_Light_Bulb_SWOT_for_PowerPoint_and_Google_Slides_554a1e33.odp	3	1274/1395	1395/1395	words	match	121	0	0	match	1395/1395	master-background-objects (closed)
+slides/chartset-007/odp/035_Chemistry_Column_PowerPoint_Chart_45bf8a76.odp	3	1368/1462	1462/1462	words	match	114	0	0	match	1462/1462	master-background-objects (closed)
+slides/chartset-007/odp/039_Consumer_Decision_Journey_for_PowerPoint_319207e1.odp	1	534/554	554/554	words	match	20	0	0	match	554/554	master-background-objects (closed)
+slides/chartset-007/odp/047_Female_Radar_Brain_for_PowerPoint_and_Google_Slides_c2a541f6.odp	4	2579/2720	2720/2720	words	match	141	0	0	match	2720/2720	master-background-objects (closed)
+slides/chartset-007/odp/054_Flowchart_Board_Game_for_PowerPoint_and_Google_Slides_1b047962.odp	3	846/967	967/967	words	match	121	0	0	match	967/967	master-background-objects (closed)
+slides/chartset-007/odp/057_Four-Branch_Diagram_for_PowerPoint_and_Google_Slides_ddf5d27c.odp	3	684/805	805/805	words	match	121	0	0	match	805/805	master-background-objects (closed)
+slides/chartset-007/odp/083_Infographic_Hexagon_Cluster_for_PowerPoint_and_Google_Slides_ef811a12.odp	3	916/1037	1037/1037	words	match	121	0	0	match	1037/1037	master-background-objects (closed)
+slides/chartset-007/odp/090_Infographic_Radial_for_PowerPoint_and_Google_Slides_16a69891.odp	3	504/625	625/625	words	match	121	0	0	match	625/625	master-background-objects (closed)
+slides/chartset-007/odp/091_Infographic_Radial_for_PowerPoint_and_Google_Slides_c6909fa6.odp	3	1952/2073	2073/2073	words	match	121	0	0	match	2073/2073	master-background-objects (closed)
+slides/chartset-007/odp/092_Infographic_Tree_Diagram_for_PowerPoint_and_Google_Slides_d721fa00.odp	3	1172/1293	1293/1293	words	match	121	0	0	match	1293/1293	master-background-objects (closed)
+slides/chartset-007/odp/096_Lab_Flask_Charts_for_PowerPoint_and_Google_Slides_91e3cbb5.odp	3	888/1009	1009/1009	words	match	121	0	0	match	1009/1009	master-background-objects (closed)
+slides/chartset-008/odp/009_3-Circle_Venn_PowerPoint_Diagram_2e59baa9.odp	2	652/692	692/692	words	match	40	0	0	match	692/692	master-background-objects (closed)
+slides/chartset-008/odp/012_3-Step_Hexagons_Puzzle_Diagram_for_PowerPoint_982482b5.odp	3	1186/1307	1307/1307	words	match	121	0	0	match	1307/1307	master-background-objects (closed)
+slides/chartset-008/odp/018_4-Step_Hexagons_Puzzle_Diagram_for_PowerPoint_19957cce.odp	3	1564/1685	1685/1685	words	match	121	0	0	match	1685/1685	master-background-objects (closed)
+slides/chartset-008/odp/038_Competitive_Advantage_Card_for_PowerPoint_and_Google_Slides_373720f6.odp	3	1464/1449	1585/1449	match	words	121	0	0	match	1585/1585	regressed: another ODF defect crossed the band
+slides/chartset-008/odp/040_Crab_Diagram_for_PowerPoint_and_Google_Slides_13d38ff3.odp	3	512/633	633/633	words	match	121	0	0	match	633/633	master-background-objects (closed)
+slides/chartset-008/odp/058_Four-Direction_Divergence_Diagram_for_PowerPoint_and_Google_Slides_9838e28d.odp	3	1302/1423	1423/1423	words	match	121	0	0	match	1423/1423	master-background-objects (closed)
+slides/chartset-008/odp/065_Fourfold_Ribbon_Rings_for_PowerPoint_and_Google_Slides_39687419.odp	3	1280/1401	1401/1401	words	match	121	0	0	match	1401/1401	master-background-objects (closed)
+slides/chartset-008/odp/072_Gear_Pie_Chart_for_PowerPoint_and_Google_Slides_d464d3a0.odp	3	286/407	407/407	words	match	121	0	0	match	407/407	master-background-objects (closed)
+slides/chartset-008/odp/078_Horizontal_Pyramid_Org_Chart_for_PowerPoint_and_Google_Slides_70ea115a.odp	3	1034/1155	1155/1155	words	match	121	0	0	match	1155/1155	master-background-objects (closed)
+slides/chartset-008/odp/100_Lime_and_Lemon_Data-Driven_Chart_for_PowerPoint_d7bb4a44.odp	5	1871/2032	2032/2032	words	match	161	0	0	match	2032/2032	master-background-objects (closed)
+slides/chartset-009/odp/015_4-Option_Color_Wheel_Diagram_df7e4b8f.odp	3	1324/1413	1413/1413	words	match	89	0	0	match	1413/1413	master-background-objects (closed)
+slides/chartset-009/odp/020_5-Option_Color_Wheel_Diagram_104ea3b0.odp	3	1480/1569	1569/1569	words	match	89	0	0	match	1569/1569	master-background-objects (closed)
+slides/chartset-009/odp/022_5-Step_Hexagons_Puzzle_Diagram_for_PowerPoint_eda9895e.odp	3	1942/2063	2063/2063	words	match	121	0	0	match	2063/2063	master-background-objects (closed)
+slides/chartset-009/odp/025_6-Option_Color_Wheel_Diagram_27e1c74d.odp	3	1932/2021	2021/2021	words	match	89	0	0	match	2021/2021	master-background-objects (closed)
+slides/chartset-009/odp/030_Abstract_Petal_Diagram_71aa5e3a.odp	3	1214/1335	1337/1335	words	match	123	0	0	match	1337/1336	master-background-objects (closed)
+slides/chartset-009/odp/033_Battery_Percentage_Chart_c99c24b5.odp	3	1028/1117	1117/1117	words	match	89	0	0	match	1117/1117	master-background-objects (closed)
+slides/chartset-009/odp/037_Circle_Matrix_Framework_44bc5218.odp	3	1332/1453	1455/1453	words	match	123	0	0	match	1455/1454	master-background-objects (closed)
+slides/chartset-009/odp/052_Flame_Percentage_Chart_d27d49c4.odp	3	1332/1421	1421/1421	words	match	89	0	0	match	1421/1421	master-background-objects (closed)
+slides/chartset-009/odp/075_Heart_Arc_Radial_for_PowerPoint_and_Google_Slides_a27a3021.odp	3	908/1029	1029/1029	words	match	121	0	0	match	1029/1029	master-background-objects (closed)
+slides/chartset-009/odp/087_Infographic_Organization_Chart_for_PowerPoint_and_Google_Slides_2d951912.odp	4	3714/3855	3855/3855	words	match	141	0	0	match	3855/3855	master-background-objects (closed)
+slides/chartset-010/odp/002_10-Point_Dual_Hub_Comparison_4ee242c9.odp	3	356/445	445/445	words	match	89	0	0	match	445/445	master-background-objects (closed)
+slides/chartset-010/odp/027_6-Point_Dual_Hub_Comparison_13f9af30.odp	3	354/443	443/443	words	match	89	0	0	match	443/443	master-background-objects (closed)
+slides/chartset-010/odp/028_8-Point_Dual_Hub_Comparison_d6c5dde5.odp	3	354/443	443/443	words	match	89	0	0	match	443/443	master-background-objects (closed)
+slides/chartset-010/odp/041_Crosswise_Quadrant_Diagram_ea8bdf52.odp	3	1212/1299	1301/1299	words	match	89	0	0	match	1301/1300	master-background-objects (closed)
+slides/chartset-010/odp/042_Diamond_Hub_Infographic_a60cfaa1.odp	3	1314/1403	1403/1403	words	match	89	0	0	match	1403/1403	master-background-objects (closed)
+slides/chartset-010/odp/045_Dual-Segment_Quadrant_14a57221.odp	3	1394/1481	1483/1481	words	match	89	0	0	match	1483/1482	master-background-objects (closed)
+slides/chartset-010/odp/048_Five-Arrows_Converging_Cycle_bb192e27.odp	3	1500/1587	1589/1587	words	match	89	0	0	match	1589/1588	master-background-objects (closed)
+slides/chartset-010/odp/063_Four-Step_Infinity_Loop_3480185b.odp	3	484/573	573/573	words	match	89	0	0	match	573/573	master-background-objects (closed)
+slides/chartset-010/odp/093_Insightful_Zoom_Chart_22b5464e.odp	3	1742/1829	1831/1829	words	match	89	0	0	match	1831/1830	master-background-objects (closed)
+slides/chartset-010/odp/095_Interwoven_Bars_e5aa46c2.odp	3	1320/1407	1409/1407	words	match	89	0	0	match	1409/1408	master-background-objects (closed)
+slides/chartset-011/odp/010_3-Group_Hierarchy_for_PowerPoint_and_Google_Slides_20476ce0.odp	3	774/715	895/715	words	words	121	0	0	match	715/715	master background partly closed, residual elsewhere
+slides/chartset-011/odp/026_6-Part_Hexagon_Radial_Diagram_b8ca3f40.odp	3	898/987	987/987	words	match	89	0	0	match	987/987	master-background-objects (closed)
+slides/chartset-011/odp/034_Central_Idea_Hub_Diagram_8258e6ad.odp	3	658/747	747/747	words	match	89	0	0	match	747/747	master-background-objects (closed)
+slides/chartset-011/odp/046_Eight-Point_Strategic_Compass_35ee62de.odp	3	788/875	877/875	words	match	89	0	0	match	877/876	master-background-objects (closed)
+slides/chartset-011/odp/051_Five-Stage_Zigzag_Timeline_2bd39be9.odp	3	692/781	781/781	words	match	89	0	0	match	781/781	master-background-objects (closed)
+slides/chartset-011/odp/053_Flow_Wave_Process_9c0082f4.odp	3	800/889	889/889	words	match	89	0	0	match	889/889	master-background-objects (closed)
+slides/chartset-011/odp/060_Four-Part_Radial_Core_Diagram_40d6614e.odp	3	1260/1349	1349/1349	words	match	89	0	0	match	1349/1349	master-background-objects (closed)
+slides/chartset-011/odp/062_Four-Step_Growth_Staircase_8a3ef338.odp	3	890/979	979/979	words	match	89	0	0	match	979/979	master-background-objects (closed)
+slides/chartset-011/odp/097_Labeled_Organization_Chart_for_PowerPoint_and_Google_Slides_f24fa592.odp	3	1116/1237	1237/1237	words	match	121	0	0	match	1237/1237	master-background-objects (closed)
+slides/chartset-011/odp/098_Leaning_Cards_Process_dadb3738.odp	3	878/967	967/967	words	match	89	0	0	match	967/967	master-background-objects (closed)
+slides/chartset-012/odp/003_2-Circle_Venn_Diagram_7ab74e5c.odp	3	680/767	769/767	words	match	89	0	0	match	769/768	master-background-objects (closed)
+slides/chartset-012/odp/008_3-Circle_Venn_Diagram_024a12c5.odp	3	1008/1095	1097/1095	words	match	89	0	0	match	1097/1096	master-background-objects (closed)
+slides/chartset-012/odp/013_3-Step_Segmented_Cycle_Process_5232f82d.odp	3	1024/1113	1113/1113	words	match	89	0	0	match	1113/1113	master-background-objects (closed)
+slides/chartset-012/odp/061_Four-Stage_Serpentine_Chart_05699efe.odp	3	308/395	397/395	words	match	89	0	0	match	397/396	master-background-objects (closed)
+slides/chartset-012/odp/064_Four-Step_Success_Cycle_30c0a917.odp	3	612/701	701/701	words	match	89	0	0	match	701/701	master-background-objects (closed)
+slides/chartset-012/odp/067_Free_PowerPoint_Layered_Funnel_Process_4_Stages_4deb9647.odp	4	2312/2392	2392/2392	words	match	80	0	0	match	2392/2392	master-background-objects (closed)
+slides/chartset-012/odp/073_Halo_Radial_for_PowerPoint_and_Google_Slides_4bd0918b.odp	3	1262/1383	1383/1383	words	match	121	0	0	match	1383/1383	master-background-objects (closed)
+slides/chartset-012/odp/074_Hashtag_Matrix_246eb8d9.odp	3	1182/1269	1271/1269	words	match	89	0	0	match	1271/1270	master-background-objects (closed)
+slides/chartset-012/odp/080_Infographic_Cycle_Venn_Diagram_for_PowerPoint_2e3cdb7f.odp	3	1300/1406	1406/1406	words	match	106	0	0	match	1406/1406	master-background-objects (closed)
+slides/chartset-012/odp/089_Infographic_Radial_Matrix_for_PowerPoint_and_Google_Slides_eb0550f2.odp	3	1332/1453	1453/1453	words	match	121	0	0	match	1453/1453	master-background-objects (closed)
+slides/chartset-013/odp/014_3D_Radial_Block_List_for_PowerPoint_and_Google_Slides_0773075e.odp	3	2128/2249	2249/2249	words	match	121	0	0	match	2249/2249	master-background-objects (closed)
+slides/chartset-013/odp/016_4-Position_Org_Chart_1d3640b6.odp	3	624/745	745/745	words	match	121	0	0	match	745/745	master-background-objects (closed)
+slides/chartset-013/odp/023_5-Step_Progress_Cards_91d5ff57.odp	3	1066/1155	1155/1155	words	match	89	0	0	match	1155/1155	master-background-objects (closed)
+slides/chartset-013/odp/032_BCG_Growth-Share_Matrix_560d0485.odp	3	1064/1153	1153/1153	words	match	89	0	0	match	1153/1153	master-background-objects (closed)
+slides/chartset-013/odp/049_Five-Block_Hub_Spoke_42ee8593.odp	3	1244/1331	1333/1331	words	match	89	0	0	match	1333/1332	master-background-objects (closed)
+slides/chartset-013/odp/050_Five-Point_Radial_Hub_00793e08.odp	3	666/755	755/755	words	match	89	0	0	match	755/755	master-background-objects (closed)
+slides/chartset-013/odp/056_Four-Block_Hub_Spoke_134b89d1.odp	3	1018/1105	1107/1105	words	match	89	0	0	match	1107/1106	master-background-objects (closed)
+slides/chartset-013/odp/066_Free_PowerPoint_Layered_Funnel_Process_c0b380ec.odp	5	2875/2975	2975/2975	words	match	100	0	0	match	2975/2975	master-background-objects (closed)
+slides/chartset-013/odp/079_Horizontal_Relationships_for_PowerPoint_and_Google_Slides_a3d35f63.odp	3	624/745	745/745	words	match	121	0	0	match	745/745	master-background-objects (closed)
+slides/chartset-013/odp/088_Infographic_Quadrant_Pie_Chart_7b1e8abd.odp	3	1312/1433	1435/1433	words	match	123	0	0	match	1435/1434	master-background-objects (closed)
+slides/chartset-014/odp/019_4-Step_Segmented_Cycle_Process_2ff93c19.odp	3	1328/1417	1417/1417	words	match	89	0	0	match	1417/1417	master-background-objects (closed)
+slides/chartset-014/odp/021_5-Position_Org_Chart_cb042559.odp	3	644/765	765/765	words	match	121	0	0	match	765/765	master-background-objects (closed)
+slides/chartset-014/odp/024_5-Step_Segmented_Cycle_Process_c8ca37ef.odp	3	1632/1721	1721/1721	words	match	89	0	0	match	1721/1721	master-background-objects (closed)
+slides/chartset-014/odp/029_8-Step_Neumorphic_Cycle_Diagram_b9b75044.odp	3	1414/1501	1503/1501	words	match	89	0	0	match	1503/1502	master-background-objects (closed)
+slides/chartset-014/odp/036_Chevron_Process_Cards_3c8f0ea1.odp	3	648/737	737/737	words	match	89	0	0	match	737/737	master-background-objects (closed)
+slides/chartset-014/odp/059_Four-Part_Concept_Puzzle_30cea7e5.odp	6	2872/2959	2961/2959	words	match	89	0	0	match	2961/2960	master-background-objects (closed)
+slides/chartset-014/odp/081_Infographic_Funnel_w_3_Stages_for_PowerPoint_28e26b31.odp	3	1900/2006	2006/2006	words	match	106	0	0	match	2006/2006	master-background-objects (closed)
+slides/chartset-014/odp/082_Infographic_Funnel_with_4_Stages_for_PowerPoint_72d4f125.odp	3	1884/1990	1990/1990	words	match	106	0	0	match	1990/1990	master-background-objects (closed)
+slides/chartset-014/odp/085_Infographic_Org_Chart_for_PowerPoint_5_Blocks_3870252f.odp	3	198/304	304/304	words	match	106	0	0	match	304/304	master-background-objects (closed)
+slides/chartset-014/odp/086_Infographic_Org_Chart_for_PowerPoint_6_Blocks_f9086d83.odp	3	218/324	324/324	words	match	106	0	0	match	324/324	master-background-objects (closed)
+slides/done-001/odp/111006 COMSTAC STOWG Aero spaceports IFG.odp	8	1546/1647	1546/1647	words	words	0	0	98	match	1647/1647	master running objects (open)
+slides/done-001/odp/BMFE-06-03 (Gerflor) Smoke Density and Toxicity.odp	6	3453/3547	3477/3547	words	match	24	0	0	match	3547/3547	master-background-objects (closed)
+slides/done-001/odp/Definitions commodity chains.odp	4	1326/1556	1326/1556	words	words	0	0	0	match	1556/1556	other, ODF reader
+slides/done-001/odp/Statement of Work presentation.odp	10	1286/1255	1286/1255	words	words	0	12	0	match	1286/1286	other, ODF reader
+slides/done-001/odp/Trust Fund Excise Taxes Structure.odp	1	839/868	868/868	words	match	102	14	0	match	868/868	master-background-objects (closed)
+slides/done-002/odp/dhs-293364.odp	39	17374/19700	17382/19700	words	words	8	0	78	match	19661/19700	master running objects (open)
+slides/done-002/odp/medicines_bulletin_february_2023_final.odp	1	2902/3093	2902/3093	words	words	0	0	0	match	3093/3093	other, ODF reader
+slides/done-002/odp/ws_prod-g-doc-Events-2007-Approval-of-Flight-Conditions-RM-NAA-16032007.odp	14	3644/4659	4542/4659	words	words	898	0	26	match	4659/4659	master running objects (open)
+slides/done-002/odp/ws_prod-g-doc-Events-2007-may-presentation-PtF-background-+-principles.odp	20	4126/5043	4658/5043	words	words	532	1	360	match	5043/5043	master running objects (open)
+slides/done-002/odp/ws_prod-g-doc-Events-2007-november-IACA-presentation-at-EASA-Fuel-Tank-Safety-Training-Seminar.odp	10	2664/2925	2664/2925	words	words	0	0	270	match	2925/2925	master running objects (open)
+slides/done-002/odp/ws_prod-g-doc-Events-Part-M-presentation.odp	30	9370/10489	10098/10489	words	words	728	1	60	match	10489/10489	master running objects (open)
+slides/done-003/odp/02_REDAC_New ATM briefing _March 2017v2.odp	6	4681/4920	4945/4920	words	match	293	2	0	match	4920/4920	master-background-objects (closed)
+slides/done-003/odp/97936.odp	15	6317/6561	6541/6561	words	match	240	3	28	match	6561/6561	master-background-objects (closed)
+slides/done-003/odp/ev122_jj-liew-tort-of-bribery-webinar.odp	24	5594/6738	5594/6738	words	words	0	0	0	match	6738/6738	other, ODF reader
+slides/done-003/odp/outlook_of_nigerian_pension_sector.odp	12	5403/5802	5491/5802	words	words	88	202	319	match	5802/5802	master running objects (open)
+slides/done-003/odp/ws_prod-g-doc-Events-2007-Privileges.odp	15	3230/4160	3622/4160	words	words	392	1	476	match	4160/4160	master running objects (open)
+slides/done-003/odp/ws_prod-g-doc-Events-2007-september-M.017-(French)-France.odp	55	27639/33915	29151/33915	words	words	1512	1	990	match	33915/33915	master running objects (open)
+slides/done-003/odp/ws_prod-g-doc-Events-2007-september-MDM.032-(ENGLISH)-CZ.odp	42	11337/14835	12373/14835	words	words	1148	1	756	match	14835/14835	master running objects (open)
+slides/done-004/odp/0335fab9-79f0-4944-b92c-f223837ca2d8.odp	12	4404/4499	4404/4499	words	words	0	0	0	match	4499/4472	other, ODF reader
+slides/done-004/odp/DOE Interactive Exercise Presentation draft rev 2.odp	10	2717/2744	2811/2744	match	words	94	0	0	match	2744/2744	regressed: another ODF defect crossed the band
+slides/done-004/odp/Item 6b - UNSD - Dissemination through APIs.odp	10	2368/2420	2368/2420	words	words	0	0	0	match	2420/2420	other, ODF reader
+slides/done-004/odp/Liturgical-Commission-2025-Convention-Presentation.odp	9	1319/1804	1319/1804	words	words	0	0	0	match	1837/1837	other, ODF reader
+slides/done-004/odp/Session 21- The option to expand & abandon.odp	12	4073/4268	4289/4268	words	match	252	0	0	match	4268/4256	master-background-objects (closed)
+slides/done-004/odp/undp_presentation_revised_17_may.odp	22	10323/10556	10449/10556	words	match	1116	8	42	match	10590/10597	master-background-objects (closed)
+slides/done-004/odp/ws_prod-g-doc-Events-industrymeeting18112004-European-Safety-Strategy-Initiative.odp	10	1432/1884	1684/1884	words	words	252	1	180	match	1884/1884	master running objects (open)
+slides/done-005/odp/5b_upasana_dasgupta_-_liability_and_registration.odp	15	3675/5024	3675/5024	words	words	0	12	30	match	5024/5090	master running objects (open)
+slides/done-005/odp/ANG C-1 ATC-TO Core Program - HF REDAC briefing September 7 2016.odp	19	10804/11586	11661/11586	words	match	886	2	0	match	11586/11586	master-background-objects (closed)
+slides/done-005/odp/ITE106-Chapter 4.odp	47	16077/16509	16077/16509	words	words	0	0	0	match	16509/16509	other, ODF reader
+slides/done-005/odp/NAS-Infrastructure-Roadmaps-HSI.odp	9	8082/9027	9003/9027	words	match	921	0	0	match	9027/9027	master-background-objects (closed)
+slides/done-005/odp/NAS-Infrastructure-Roadmaps-Weather.odp	11	10906/12083	12081/12083	words	match	1175	0	0	match	12083/12083	master-background-objects (closed)
+slides/done-005/odp/berlin.odp	29	7246/7403	7246/7403	words	words	0	0	0	match	7392/7403	other, ODF reader
+slides/done-005/odp/manufacturing_process_simulation_working_group_overview_2023.odp	7	2912/4733	2984/4733	words	words	72	0	12	match	4793/4868	master running objects (open)
+slides/done-005/odp/ws_prod-g-doc-Events-industrymeeting18112004-Aercap.odp	12	6548/6938	6548/6938	words	words	0	0	410	match	6950/6950	master running objects (open)
+slides/done-006/odp/Course Selection 2025-26 Current Grade 09.odp	10	3214/3343	3214/3343	words	words	0	6	0	match	3343/3343	other, ODF reader
+slides/done-006/odp/Ensemble-pour-l-amelioration-de-la-securite-de-lac-AIRBUS.odp	9	2934/3451	3456/3451	words	match	654	30	0	match	3451/3451	master-background-objects (closed)
+slides/done-006/odp/Lepore.odp	20	9601/10767	10770/10767	words	match	1529	0	0	match	10753/10767	master-background-objects (closed)
+slides/done-006/odp/REDAC HF briefing Sep 2016_LARD_ATC_TO_FE_v2.odp	18	12124/12620	12696/12620	words	match	601	2	0	match	12620/12620	master-background-objects (closed)
+slides/done-006/odp/Stakeholders-v08052017 - v5.odp	13	3279/3388	3409/3388	words	match	130	0	0	match	3388/3388	master-background-objects (closed)
+slides/done-006/odp/social-media-app-bulletin-january.odp	4	3849/4001	4001/4001	words	match	152	0	0	match	4001/4001	master-background-objects (closed)
+slides/done-006/odp/ws_prod-g-doc-Events-r-6.-ESM.odp	25	8139/11330	11289/11330	words	match	3150	0	50	match	11330/11330	master-background-objects (closed)
+slides/done-007/odp/10. Drawings, circuit diagrams and schematics.odp	23	6650/8444	8444/8444	words	match	1794	0	0	match	8444/8444	master-background-objects (closed)
+slides/done-007/odp/BHCA Part II webinar #2 - 10.2020.odp	21	6835/7216	7020/7216	words	words	563	1	0	match	7358/7216	master background partly closed, residual elsewhere
+slides/done-007/odp/introduction_to_bea_tuxedo.odp	40	8029/9893	8029/9893	words	words	0	0	1862	match	9931/9893	master running objects (open)
+slides/done-008/odp/EG1_dsrc tech.odp	45	10057/11132	10057/11132	words	words	0	1	836	match	11132/11132	master running objects (open)
+slides/done-009/odp/30-04-2021 merged NDoH and NICD_Presentation HBV BD meeting 05May2021_1.odp	18	7098/7644	7098/7644	words	words	0	2	0	match	7644/7644	other, ODF reader
+slides/done-009/odp/Airport Planning 09112013.odp	9	3100/3591	3631/3591	words	match	531	0	0	match	3591/3591	master-background-objects (closed)
+slides/done-009/odp/COMSTAC_11_5_2021am_2.odp	39	13849/16225	16332/16225	words	match	6539	21	0	match	16225/16225	master-background-objects (closed)
+slides/done-009/odp/FIT26-Presentation-PR-Briefing-Debrief-Airbus.odp	9	6699/7273	6699/7273	words	words	0	7	581	match	7273/7273	master running objects (open)
+slides/done-009/odp/HENTZEN_COMPOSITE_MATERIALS_IN_THE_AEROSPACE_INDUSTRY.odp	12	1758/1868	1758/1868	words	words	0	0	0	match	1868/1868	other, ODF reader
+slides/done-009/odp/redac-sas-201403-ppt-portfolio-rev-sim.odp	14	12607/13014	13013/13014	words	match	435	2	0	match	13014/13014	master-background-objects (closed)
+slides/done-010/odp/BasicMed_AME_Presentation.odp	18	4382/4930	5006/4930	words	match	659	26	0	match	4930/4930	master-background-objects (closed)
+slides/done-010/odp/DoIRD Meeting 16JAN14 v1-1.odp	15	5047/5886	5047/5886	words	words	0	0	0	match	5886/5886	other, ODF reader
+slides/done-010/odp/REDAC Briefing_SSIT_CARA_08132014.ppt.odp	14	2405/2664	2422/2664	words	words	17	0	192	match	2664/2664	master running objects (open)
+slides/done-010/odp/Sector_Skills_Insights_Advanced_Manufacturing_summary_slide_pack.odp	24	20834/23899	20834/23899	words	words	0	0	38	match	23961/23961	master running objects (open)
+slides/done-010/odp/Tax factsheet 2022 (1).odp	27	13297/13637	13750/13637	words	match	547	9	0	match	13494/13637	master-background-objects (closed)
+slides/done-011/odp/1_Country-Updates_DRC_English.odp	16	2989/4281	4269/4281	words	match	1280	0	16	match	4281/4281	master-background-objects (closed)
+slides/done-011/odp/3492.odp	22	4617/6833	6990/6833	words	words	2430	25	0	match	6835/6833	master background partly closed, residual elsewhere
+slides/done-011/odp/B2B-Center-Readiness-and-Student-Retention.odp	33	7108/7768	7729/7768	words	match	759	0	0	match	7792/7768	master-background-objects (closed)
+slides/done-011/odp/NAS-Infrastructure-Roadmaps-v16.0.odp	137	91644/106980	106925/106980	words	match	15689	0	4	words	107016/87559	master-background-objects (closed)
+slides/done-012/odp/429_BLISc 2019 IInd Sem.  PAPER-7 UNIT 3.odp	20	17057/17627	17057/17627	words	words	0	1	0	match	17627/17627	other, ODF reader
+slides/done-012/odp/County ACHS Presentaion Webinar 8-16-16 Peg.odp	26	7297/7599	7297/7599	words	words	0	0	50	match	7599/7599	master running objects (open)
+slides/done-012/odp/Intersil_Italy_CAN_Bus_Transceiver_Presentation_Final.odp	39	15900/17949	15914/17949	words	words	14	6	806	match	17994/17958	master running objects (open)
+slides/done-012/odp/SRDMG(16)024_60 GHz onboard airplanes.odp	26	8696/10312	9571/10312	words	words	950	0	0	match	10312/10312	master background partly closed, residual elsewhere
+slides/done-012/odp/Sean Monogue.odp	15	4803/4950	4803/4950	words	words	0	1	0	match	4950/4950	other, ODF reader
+slides/done-012/odp/vv_summit_SAIC-PRESENTATION_FAA-V&V-Summit_508c.odp	19	2631/3573	3621/3573	words	match	1045	8	0	match	3573/3573	master-background-objects (closed)
+slides/done-012/odp/vvsummit2022-SAIC-PRESENTATION.odp	19	2631/3573	3621/3573	words	match	1045	8	0	match	3573/3573	master-background-objects (closed)
+slides/done-013/odp/chapter_4_0.odp	54	17954/18883	18643/18883	words	match	689	16	0	match	18883/18883	master-background-objects (closed)
+slides/done-013/odp/redac-sas-201703-hf-research-division.odp	14	4484/4879	4874/4879	words	match	1512	12	0	match	4879/4879	master-background-objects (closed)
+slides/done-013/odp/schematicplaymar21.odp	21	9820/11470	11122/11470	words	words	2247	40	0	match	11470/11470	master background partly closed, residual elsewhere
+slides/done-014/odp/redac-nasops-201503-RIRP-portfolio-update.odp	46	14209/15418	15636/15418	words	match	1584	3	0	match	15420/15418	master-background-objects (closed)
+slides/done-014/odp/redac-sas-201509-asisp-research.odp	45	18489/19095	18489/19095	words	words	0	0	82	match	19094/19031	master running objects (open)
+slides/done-014/odp/schematicplay.odp	21	9840/11490	11142/11490	words	words	2247	40	0	match	11490/11490	master background partly closed, residual elsewhere
+slides/done-014/odp/vvsummit2022-Research-Roadmap-and-the-UML-3-Operational-Integration-Assessment.odp	33	8113/8377	8113/8377	words,unembedded	words,unembedded	0	0	0	unembedded	8377/8377	shared with the OOXML reader
+slides/done-015/odp/RPA P4 - Advanced Material.odp	20	8067/8744	8664/8744	words	match	2086	22	26	match	8749/8744	master-background-objects (closed)
+slides/done-015/odp/Wildlife for REDAC September 11.odp	41	8351/9160	9499/9160	words	words	4024	12	2	match	9160/9160	master running objects (open)
+slides/metrics-001/odp/Ramp Up Campaign - French.odp	6	2414/2536	2414/2536	words	words	0	0	0	words	2536/2418	shared with the OOXML reader
+slides/missing-001/odp/NWD-GLA-Community-Outreach-Day-Oct-2025.odp	13	3127/3957	3231/3957	words	words	104	0	0	words	3998/3623	shared with the OOXML reader

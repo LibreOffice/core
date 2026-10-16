@@ -1,0 +1,314 @@
+# ours   = XRay.Office.Cli @ f4b8c38255a92caf1f05cc8acdf8d8288a5ceac4 (base, before this round)
+# ref    = /opt/libreoffice26.2/program/soffice, LibreOffice 26.2.4.2 (TDF tarball)
+# fonts  = system fontconfig; ALL FOUR tarball confounds moved aside on 2026-09-07 --
+#          Carlito/Caladea/Liberation/DejaVu duplicates, the Latin Noto, and the four
+#          LiberationSansNarrow. 38 faces in .duplicates-aside, 71 left in the directory.
+#          fc-match "DejaVu Sans" -> DejaVuSans.ttf. fc-list | grep -i narrow is empty.
+# rule   = batch-check.sh of 2026-09-05: page count, then alphanumeric characters within
+#          max(2%, 15), then unembedded fonts.
+# corpus = /home/user/corpus-odf
+# note   = the reference half here reproduces probes/odf-gate-01/rows.tsv's ref columns on
+#          302 of 302 .odp rows, pages and glyphs, so the Narrow move did not touch them.
+path	ext	pages	words	fonts	unemb	verdict	rawwords	glyphs
+slides/ceiling-001/odp/7-Zulkefli_Part147n66_IKMAS.odp	odp	18/18	952/949	7/7	0	match	1015/1017	5545/5547
+slides/ceiling-001/odp/Fundamentals_Module_1_basics.odp	odp	26/26	979/1089	5/6	0	words	1070/1180	5615/6471
+slides/ceiling-001/odp/N2_E_Maestroni_Swarm_COP.odp	odp	30/30	5144/5152	4/6	0	match	5317/5325	28373/28279
+slides/ceiling-001/odp/OnTrac_StarCertificationProgram-3Day.odp	odp	15/15	1284/1030	8/7	0	words	1389/1116	7576/6233
+slides/ceiling-001/odp/RRM-training-syllabus-Chapter-3-Teamwork-TC-Towing-Incident-Analysis-Dec-2009.odp	odp	27/27	2461/2576	8/8	0	match	2648/2764	13826/13959
+slides/ceiling-001/odp/Sylva%20introduction%20session.odp	odp	15/15	944/1527	7/8	0	match	1032/1623	5604/5700
+slides/ceiling-001/odp/Thailand17.odp	odp	54/54	2641/2625	9/9	0	match	2840/2826	14356/14380
+slides/ceiling-001/odp/W3_Case_Study_of_a_Tsunami_Warning_Simulation_Exercise_Ed.odp	odp	20/20	812/812	6/6	0	match	862/862	4473/4473
+slides/ceiling-001/odp/architecture6.odp	odp	31/31	1926/2544	5/5	0	match	2011/2642	10857/10715
+slides/ceiling-001/odp/solog_orientation_august_2019.odp	odp	15/15	658/685	6/7	0	words	717/746	4281/4393
+slides/ceiling-002/odp/16 - UTM - (NASA).odp	odp	37/37	2251/2260	12/11	0	match	2437/2447	13991/13981
+slides/ceiling-002/odp/8_P-Pavese_AIRBUS-ATB-journee-CRATB.odp	odp	26/26	2105/2010	11/11	0	words	2280/2199	10319/9914
+slides/ceiling-002/odp/Demick_JetBlue.odp	odp	10/10	619/608	4/4	0	words	641/631	2897/3179
+slides/ceiling-002/odp/WiGr_2021W_1_Angebot-Nachfrage-Elastizität-211017-171222.odp	odp	51/51	1898/1955	7/7	0	match	2069/2134	12908/13007
+slides/ceiling-002/odp/pres_ioc_phuket.odp	odp	26/26	1008/1515	9/9	0	match	1081/1591	6080/6089
+slides/chart-001/odp/southern-classic-kennesaw-state-university-final.odp	odp	23/23	2254/2268	8/7	0	match	2347/2379	10999/10946
+slides/chartset-001/odp/008_advanced_powerpoint_bubble.odp	odp	1/1	42/42	3/3	0	match	48/48	284/284
+slides/chartset-001/odp/015_advanced_powerpoint_scatter.odp	odp	1/1	42/42	3/3	0	match	48/48	283/283
+slides/chartset-001/odp/016_advanced_powerpoint_bubble.odp	odp	1/1	43/43	3/3	0	match	49/49	287/287
+slides/chartset-001/odp/031_advanced_powerpoint_scatter.odp	odp	1/1	42/42	3/3	0	match	48/48	278/278
+slides/chartset-001/odp/bar_chart.odp	odp	1/1	25/25	1/2	0	match	25/25	131/131
+slides/chartset-001/odp/combo_bar_line_chart.odp	odp	1/1	28/42	1/2	0	words	28/42	166/219
+slides/chartset-001/odp/line_chart.odp	odp	1/1	23/23	1/2	0	match	23/23	113/113
+slides/chartset-001/odp/scatter_chart.odp	odp	1/1	25/46	1/1	0	words	25/46	83/105
+slides/chartset-001/odp/stacked_area_chart.odp	odp	1/1	29/29	1/2	0	match	29/29	174/174
+slides/chartset-001/odp/stacked_bar_chart.odp	odp	1/1	29/29	1/2	0	match	29/29	173/173
+slides/chartset-002/odp/001_advanced_powerpoint_bar.odp	odp	1/1	62/62	4/4	0	match	68/68	334/334
+slides/chartset-002/odp/006_advanced_powerpoint_area.odp	odp	1/1	61/61	4/4	0	match	67/67	328/328
+slides/chartset-002/odp/007_advanced_powerpoint_scatter.odp	odp	1/1	42/42	3/3	0	match	48/48	282/282
+slides/chartset-002/odp/014_advanced_powerpoint_area.odp	odp	1/1	61/61	4/4	0	match	67/67	330/330
+slides/chartset-002/odp/017_advanced_powerpoint_bar.odp	odp	1/1	62/62	4/4	0	match	68/68	339/339
+slides/chartset-002/odp/023_advanced_powerpoint_scatter.odp	odp	1/1	42/42	3/3	0	match	48/48	283/283
+slides/chartset-002/odp/024_advanced_powerpoint_bubble.odp	odp	1/1	42/42	3/3	0	match	48/48	286/286
+slides/chartset-002/odp/030_advanced_powerpoint_area.odp	odp	1/1	61/61	4/4	0	match	67/67	327/327
+slides/chartset-002/odp/032_advanced_powerpoint_bubble.odp	odp	1/1	42/42	3/3	0	match	48/48	284/284
+slides/chartset-002/odp/033_advanced_powerpoint_bar.odp	odp	1/1	61/61	4/4	0	match	67/67	328/328
+slides/chartset-003/odp/002_advanced_powerpoint_column.odp	odp	1/1	63/63	4/4	0	match	69/69	335/335
+slides/chartset-003/odp/003_advanced_powerpoint_line.odp	odp	1/1	62/62	4/4	0	match	68/68	332/332
+slides/chartset-003/odp/005_advanced_powerpoint_doughnut.odp	odp	1/1	52/52	4/4	0	match	58/58	301/301
+slides/chartset-003/odp/009_advanced_powerpoint_bar.odp	odp	1/1	63/63	4/4	0	match	69/69	339/339
+slides/chartset-003/odp/010_advanced_powerpoint_column.odp	odp	1/1	61/61	4/4	0	match	67/67	332/332
+slides/chartset-003/odp/011_advanced_powerpoint_line.odp	odp	1/1	61/61	4/4	0	match	67/67	328/328
+slides/chartset-003/odp/012_advanced_powerpoint_pie.odp	odp	1/1	53/53	4/4	0	match	59/59	308/308
+slides/chartset-003/odp/019_advanced_powerpoint_line.odp	odp	1/1	61/61	4/4	0	match	67/67	331/331
+slides/chartset-003/odp/027_advanced_powerpoint_line.odp	odp	1/1	61/61	4/4	0	match	67/67	326/326
+slides/chartset-003/odp/028_advanced_powerpoint_pie.odp	odp	1/1	52/52	4/4	0	match	58/58	300/300
+slides/chartset-004/odp/004_advanced_powerpoint_pie.odp	odp	1/1	52/52	4/4	0	match	58/58	300/300
+slides/chartset-004/odp/013_advanced_powerpoint_doughnut.odp	odp	1/1	52/52	4/4	0	match	58/58	297/297
+slides/chartset-004/odp/018_advanced_powerpoint_column.odp	odp	1/1	61/61	4/4	0	match	67/67	329/329
+slides/chartset-004/odp/020_advanced_powerpoint_pie.odp	odp	1/1	52/52	4/4	0	match	58/58	300/300
+slides/chartset-004/odp/021_advanced_powerpoint_doughnut.odp	odp	1/1	52/52	4/4	0	match	58/58	304/304
+slides/chartset-004/odp/022_advanced_powerpoint_area.odp	odp	1/1	61/61	4/4	0	match	67/67	329/329
+slides/chartset-004/odp/025_advanced_powerpoint_bar.odp	odp	1/1	61/61	4/4	0	match	67/67	323/323
+slides/chartset-004/odp/026_advanced_powerpoint_column.odp	odp	1/1	61/61	4/4	0	match	67/67	332/332
+slides/chartset-004/odp/029_advanced_powerpoint_doughnut.odp	odp	1/1	52/52	4/4	0	match	58/58	300/300
+slides/chartset-005/odp/004_2-Stage_Vertical_Funnel_Diagram_for_PowerPoint_593f4c80.odp	odp	1/1	68/69	3/3	0	words	68/69	320/340
+slides/chartset-005/odp/005_2-Step_Funnel_On_left_With_Text_767f0490.odp	odp	1/1	92/93	3/3	0	words	92/93	450/470
+slides/chartset-005/odp/006_2-Way_Horizontal_Hierarchy_for_PowerPoint_and_Google_Slides_7c1e5084.odp	odp	3/3	110/162	3/3	0	words	112/164	524/645
+slides/chartset-005/odp/011_3-Stage_Vertical_Funnel_Diagram_for_PowerPoint_10ce23dd.odp	odp	1/1	73/74	3/3	0	words	73/74	332/352
+slides/chartset-005/odp/068_Funnel_Diagram_for_PowerPoint_with_2_Steps_437e4ba7.odp	odp	1/1	9/10	2/3	0	words	9/10	43/63
+slides/chartset-005/odp/069_Funnel_Diagram_for_PowerPoint_with_3_Steps_f96396fc.odp	odp	1/1	11/12	2/3	0	words	11/12	48/68
+slides/chartset-005/odp/070_Funnel_Diagram_for_PowerPoint_with_4_Steps_975f1642.odp	odp	1/1	13/14	2/3	0	words	13/14	53/73
+slides/chartset-005/odp/071_Funnel_Diagram_for_PowerPoint_with_5_Steps_5ceacdec.odp	odp	1/1	15/16	2/3	0	words	15/16	58/78
+slides/chartset-005/odp/076_Hexadonut_Charts_for_PowerPoint_and_Google_Slides_2b879835.odp	odp	3/3	200/246	3/3	0	words	202/248	980/1101
+slides/chartset-005/odp/084_Infographic_Hierarchy_Tree_for_PowerPoint_fda8141c.odp	odp	3/3	202/253	3/3	0	words	202/253	1022/1128
+slides/chartset-006/odp/001_1-2-3_Horizontal_Hierarchy_39795b4d.odp	odp	3/3	232/284	3/3	0	words	234/286	1126/1247
+slides/chartset-006/odp/007_3_Circles_Diagram_for_PowerPoint_dac9f170.odp	odp	3/3	258/293	3/3	0	words	258/293	1272/1378
+slides/chartset-006/odp/017_4-Stage_Vertical_Funnel_Diagram_for_PowerPoint_61e7bde5.odp	odp	1/1	78/79	3/3	0	words	78/79	344/364
+slides/chartset-006/odp/031_Alarm_Clock_Pie-Chart_for_PowerPoint_and_Google_Slides_0b185a05.odp	odp	3/3	344/382	4/3	0	words	346/384	1744/1865
+slides/chartset-006/odp/043_Dual_Horizontal_Hierarchy_for_PowerPoint_and_Google_Slides_5074b09e.odp	odp	3/3	110/164	3/3	0	words	112/166	572/693
+slides/chartset-006/odp/044_Dual_Mind_Spark_Chart_for_PowerPoint_a83f890a.odp	odp	4/4	468/534	3/3	0	words	471/537	2487/2628
+slides/chartset-006/odp/055_Four_Pillar_Hierarchy_for_PowerPoint_and_Google_Slides_6b42ed18.odp	odp	3/3	320/362	3/3	0	words	322/364	1584/1705
+slides/chartset-006/odp/077_Horizontal_Org_Chart_for_PowerPoint_and_Google_Slides_8cf07020.odp	odp	3/3	188/232	3/3	0	words	190/234	840/961
+slides/chartset-006/odp/094_Intersecting_Teardrops_for_PowerPoint_and_Google_Slides_ff43aedb.odp	odp	3/3	256/308	3/3	0	words	258/310	1284/1405
+slides/chartset-006/odp/099_Light_Bulb_SWOT_for_PowerPoint_and_Google_Slides_554a1e33.odp	odp	3/3	258/292	3/3	0	words	260/294	1274/1395
+slides/chartset-007/odp/035_Chemistry_Column_PowerPoint_Chart_45bf8a76.odp	odp	3/3	284/325	4/3	0	words	284/325	1368/1462
+slides/chartset-007/odp/039_Consumer_Decision_Journey_for_PowerPoint_319207e1.odp	odp	1/1	85/86	4/4	0	words	87/88	534/554
+slides/chartset-007/odp/047_Female_Radar_Brain_for_PowerPoint_and_Google_Slides_c2a541f6.odp	odp	4/4	521/592	3/3	0	words	524/599	2579/2720
+slides/chartset-007/odp/054_Flowchart_Board_Game_for_PowerPoint_and_Google_Slides_1b047962.odp	odp	3/3	166/208	3/3	0	words	168/210	846/967
+slides/chartset-007/odp/057_Four-Branch_Diagram_for_PowerPoint_and_Google_Slides_ddf5d27c.odp	odp	3/3	134/180	3/3	0	words	136/182	684/805
+slides/chartset-007/odp/083_Infographic_Hexagon_Cluster_for_PowerPoint_and_Google_Slides_ef811a12.odp	odp	3/3	190/244	3/3	0	words	192/246	916/1037
+slides/chartset-007/odp/090_Infographic_Radial_for_PowerPoint_and_Google_Slides_16a69891.odp	odp	3/3	98/144	3/3	0	words	100/146	504/625
+slides/chartset-007/odp/091_Infographic_Radial_for_PowerPoint_and_Google_Slides_c6909fa6.odp	odp	3/3	408/454	3/3	0	words	410/456	1952/2073
+slides/chartset-007/odp/092_Infographic_Tree_Diagram_for_PowerPoint_and_Google_Slides_d721fa00.odp	odp	3/3	264/316	3/3	0	words	266/318	1172/1293
+slides/chartset-007/odp/096_Lab_Flask_Charts_for_PowerPoint_and_Google_Slides_91e3cbb5.odp	odp	3/3	178/216	4/3	0	words	180/218	888/1009
+slides/chartset-008/odp/009_3-Circle_Venn_PowerPoint_Diagram_2e59baa9.odp	odp	2/2	134/136	4/4	0	words	134/136	652/692
+slides/chartset-008/odp/012_3-Step_Hexagons_Puzzle_Diagram_for_PowerPoint_982482b5.odp	odp	3/3	254/296	3/3	0	words	254/296	1186/1307
+slides/chartset-008/odp/018_4-Step_Hexagons_Puzzle_Diagram_for_PowerPoint_19957cce.odp	odp	3/3	336/378	3/3	0	words	336/378	1564/1685
+slides/chartset-008/odp/038_Competitive_Advantage_Card_for_PowerPoint_and_Google_Slides_373720f6.odp	odp	3/3	284/270	5/4	0	match	286/272	1464/1449
+slides/chartset-008/odp/040_Crab_Diagram_for_PowerPoint_and_Google_Slides_13d38ff3.odp	odp	3/3	102/142	3/3	0	words	104/144	512/633
+slides/chartset-008/odp/058_Four-Direction_Divergence_Diagram_for_PowerPoint_and_Google_Slides_9838e28d.odp	odp	3/3	258/318	3/3	0	words	260/320	1302/1423
+slides/chartset-008/odp/065_Fourfold_Ribbon_Rings_for_PowerPoint_and_Google_Slides_39687419.odp	odp	3/3	258/298	3/3	0	words	260/300	1280/1401
+slides/chartset-008/odp/072_Gear_Pie_Chart_for_PowerPoint_and_Google_Slides_d464d3a0.odp	odp	3/3	78/114	3/3	0	words	80/116	286/407
+slides/chartset-008/odp/078_Horizontal_Pyramid_Org_Chart_for_PowerPoint_and_Google_Slides_70ea115a.odp	odp	3/3	194/244	3/3	0	words	196/246	1034/1155
+slides/chartset-008/odp/100_Lime_and_Lemon_Data-Driven_Chart_for_PowerPoint_d7bb4a44.odp	odp	5/5	406/495	4/3	0	words	412/501	1871/2032
+slides/chartset-009/odp/015_4-Option_Color_Wheel_Diagram_df7e4b8f.odp	odp	3/3	264/316	5/5	0	words	267/321	1324/1413
+slides/chartset-009/odp/020_5-Option_Color_Wheel_Diagram_104ea3b0.odp	odp	3/3	300/352	5/5	0	words	303/357	1480/1569
+slides/chartset-009/odp/022_5-Step_Hexagons_Puzzle_Diagram_for_PowerPoint_eda9895e.odp	odp	3/3	418/454	3/3	0	words	418/454	1942/2063
+slides/chartset-009/odp/025_6-Option_Color_Wheel_Diagram_27e1c74d.odp	odp	3/3	388/440	5/5	0	words	391/445	1932/2021
+slides/chartset-009/odp/030_Abstract_Petal_Diagram_71aa5e3a.odp	odp	3/3	246/302	3/5	0	words	248/307	1214/1335
+slides/chartset-009/odp/033_Battery_Percentage_Chart_c99c24b5.odp	odp	3/3	206/264	5/5	0	words	209/269	1028/1117
+slides/chartset-009/odp/037_Circle_Matrix_Framework_44bc5218.odp	odp	3/3	266/320	3/5	0	words	268/325	1332/1453
+slides/chartset-009/odp/052_Flame_Percentage_Chart_d27d49c4.odp	odp	3/3	270/322	5/5	0	words	273/327	1332/1421
+slides/chartset-009/odp/075_Heart_Arc_Radial_for_PowerPoint_and_Google_Slides_a27a3021.odp	odp	3/3	196/238	3/3	0	words	198/240	908/1029
+slides/chartset-009/odp/087_Infographic_Organization_Chart_for_PowerPoint_and_Google_Slides_2d951912.odp	odp	4/4	735/798	3/3	0	words	735/798	3714/3855
+slides/chartset-010/odp/002_10-Point_Dual_Hub_Comparison_4ee242c9.odp	odp	3/3	72/124	5/5	0	words	75/129	356/445
+slides/chartset-010/odp/027_6-Point_Dual_Hub_Comparison_13f9af30.odp	odp	3/3	72/122	5/5	0	words	75/127	354/443
+slides/chartset-010/odp/028_8-Point_Dual_Hub_Comparison_d6c5dde5.odp	odp	3/3	72/122	5/5	0	words	75/127	354/443
+slides/chartset-010/odp/041_Crosswise_Quadrant_Diagram_ea8bdf52.odp	odp	3/3	238/292	5/5	0	words	241/297	1212/1299
+slides/chartset-010/odp/042_Diamond_Hub_Infographic_a60cfaa1.odp	odp	3/3	266/320	5/5	0	words	269/325	1314/1403
+slides/chartset-010/odp/045_Dual-Segment_Quadrant_14a57221.odp	odp	3/3	276/332	5/5	0	words	279/337	1394/1481
+slides/chartset-010/odp/048_Five-Arrows_Converging_Cycle_bb192e27.odp	odp	3/3	294/340	5/5	0	words	297/345	1500/1587
+slides/chartset-010/odp/063_Four-Step_Infinity_Loop_3480185b.odp	odp	3/3	110/152	5/5	0	words	113/157	484/573
+slides/chartset-010/odp/093_Insightful_Zoom_Chart_22b5464e.odp	odp	3/3	338/386	5/5	0	words	341/391	1742/1829
+slides/chartset-010/odp/095_Interwoven_Bars_e5aa46c2.odp	odp	3/3	268/312	5/5	0	words	271/317	1320/1407
+slides/chartset-011/odp/010_3-Group_Hierarchy_for_PowerPoint_and_Google_Slides_20476ce0.odp	odp	3/3	166/174	3/3	0	words	168/176	774/715
+slides/chartset-011/odp/026_6-Part_Hexagon_Radial_Diagram_b8ca3f40.odp	odp	3/3	200/258	5/5	0	words	203/263	898/987
+slides/chartset-011/odp/034_Central_Idea_Hub_Diagram_8258e6ad.odp	odp	3/3	152/208	5/5	0	words	155/213	658/747
+slides/chartset-011/odp/046_Eight-Point_Strategic_Compass_35ee62de.odp	odp	3/3	178/232	5/5	0	words	181/237	788/875
+slides/chartset-011/odp/051_Five-Stage_Zigzag_Timeline_2bd39be9.odp	odp	3/3	144/192	5/5	0	words	147/197	692/781
+slides/chartset-011/odp/053_Flow_Wave_Process_9c0082f4.odp	odp	3/3	194/220	5/5	0	words	197/225	800/889
+slides/chartset-011/odp/060_Four-Part_Radial_Core_Diagram_40d6614e.odp	odp	3/3	274/328	5/5	0	words	277/333	1260/1349
+slides/chartset-011/odp/062_Four-Step_Growth_Staircase_8a3ef338.odp	odp	3/3	182/232	5/5	0	words	185/237	890/979
+slides/chartset-011/odp/097_Labeled_Organization_Chart_for_PowerPoint_and_Google_Slides_f24fa592.odp	odp	3/3	224/276	3/3	0	words	226/278	1116/1237
+slides/chartset-011/odp/098_Leaning_Cards_Process_dadb3738.odp	odp	3/3	194/240	5/5	0	words	197/245	878/967
+slides/chartset-012/odp/003_2-Circle_Venn_Diagram_7ab74e5c.odp	odp	3/3	130/176	5/5	0	words	133/181	680/767
+slides/chartset-012/odp/008_3-Circle_Venn_Diagram_024a12c5.odp	odp	3/3	200/246	5/5	0	words	203/251	1008/1095
+slides/chartset-012/odp/013_3-Step_Segmented_Cycle_Process_5232f82d.odp	odp	3/3	202/254	5/5	0	words	205/259	1024/1113
+slides/chartset-012/odp/061_Four-Stage_Serpentine_Chart_05699efe.odp	odp	3/3	54/112	5/5	0	words	57/117	308/395
+slides/chartset-012/odp/064_Four-Step_Success_Cycle_30c0a917.odp	odp	3/3	134/174	5/5	0	words	137/179	612/701
+slides/chartset-012/odp/067_Free_PowerPoint_Layered_Funnel_Process_4_Stages_4deb9647.odp	odp	4/4	460/464	4/4	0	words	484/488	2312/2392
+slides/chartset-012/odp/073_Halo_Radial_for_PowerPoint_and_Google_Slides_4bd0918b.odp	odp	3/3	256/292	3/3	0	words	258/294	1262/1383
+slides/chartset-012/odp/074_Hashtag_Matrix_246eb8d9.odp	odp	3/3	228/274	5/5	0	words	231/279	1182/1269
+slides/chartset-012/odp/080_Infographic_Cycle_Venn_Diagram_for_PowerPoint_2e3cdb7f.odp	odp	3/3	264/309	3/3	0	words	264/309	1300/1406
+slides/chartset-012/odp/089_Infographic_Radial_Matrix_for_PowerPoint_and_Google_Slides_eb0550f2.odp	odp	3/3	268/322	3/3	0	words	270/324	1332/1453
+slides/chartset-013/odp/014_3D_Radial_Block_List_for_PowerPoint_and_Google_Slides_0773075e.odp	odp	3/3	416/450	3/3	0	words	418/452	2128/2249
+slides/chartset-013/odp/016_4-Position_Org_Chart_1d3640b6.odp	odp	3/3	118/156	3/3	0	words	120/158	624/745
+slides/chartset-013/odp/023_5-Step_Progress_Cards_91d5ff57.odp	odp	3/3	224/272	5/5	0	words	227/277	1066/1155
+slides/chartset-013/odp/032_BCG_Growth-Share_Matrix_560d0485.odp	odp	3/3	196/342	5/5	0	words	207/355	1064/1153
+slides/chartset-013/odp/049_Five-Block_Hub_Spoke_42ee8593.odp	odp	3/3	248/284	5/5	0	words	253/291	1244/1331
+slides/chartset-013/odp/050_Five-Point_Radial_Hub_00793e08.odp	odp	3/3	148/190	5/5	0	words	151/195	666/755
+slides/chartset-013/odp/056_Four-Block_Hub_Spoke_134b89d1.odp	odp	3/3	202/240	5/5	0	words	207/247	1018/1105
+slides/chartset-013/odp/066_Free_PowerPoint_Layered_Funnel_Process_c0b380ec.odp	odp	5/5	575/580	4/4	0	words	605/610	2875/2975
+slides/chartset-013/odp/079_Horizontal_Relationships_for_PowerPoint_and_Google_Slides_a3d35f63.odp	odp	3/3	128/176	3/3	0	words	130/178	624/745
+slides/chartset-013/odp/088_Infographic_Quadrant_Pie_Chart_7b1e8abd.odp	odp	3/3	268/332	3/5	0	words	270/337	1312/1433
+slides/chartset-014/odp/019_4-Step_Segmented_Cycle_Process_2ff93c19.odp	odp	3/3	264/316	5/5	0	words	267/321	1328/1417
+slides/chartset-014/odp/021_5-Position_Org_Chart_cb042559.odp	odp	3/3	122/160	3/3	0	words	124/162	644/765
+slides/chartset-014/odp/024_5-Step_Segmented_Cycle_Process_c8ca37ef.odp	odp	3/3	326/378	5/5	0	words	329/383	1632/1721
+slides/chartset-014/odp/029_8-Step_Neumorphic_Cycle_Diagram_b9b75044.odp	odp	3/3	324/382	5/5	0	words	327/387	1414/1501
+slides/chartset-014/odp/036_Chevron_Process_Cards_3c8f0ea1.odp	odp	3/3	144/188	5/5	0	words	147/193	648/737
+slides/chartset-014/odp/059_Four-Part_Concept_Puzzle_30cea7e5.odp	odp	6/6	553/639	6/6	0	words	575/663	2872/2959
+slides/chartset-014/odp/081_Infographic_Funnel_w_3_Stages_for_PowerPoint_28e26b31.odp	odp	3/3	386/437	3/3	0	words	386/439	1900/2006
+slides/chartset-014/odp/082_Infographic_Funnel_with_4_Stages_for_PowerPoint_72d4f125.odp	odp	3/3	382/433	3/3	0	words	382/435	1884/1990
+slides/chartset-014/odp/085_Infographic_Org_Chart_for_PowerPoint_5_Blocks_3870252f.odp	odp	3/3	38/85	2/3	0	words	38/87	198/304
+slides/chartset-014/odp/086_Infographic_Org_Chart_for_PowerPoint_6_Blocks_f9086d83.odp	odp	3/3	42/89	2/3	0	words	42/91	218/324
+slides/done-001/odp/111006 COMSTAC STOWG Aero spaceports IFG.odp	odp	8/8	244/267	2/2	0	words	285/309	1546/1647
+slides/done-001/odp/BMFE-06-03 (Gerflor) Smoke Density and Toxicity.odp	odp	6/6	706/732	4/4	0	words	768/794	3453/3547
+slides/done-001/odp/Definitions commodity chains.odp	odp	4/4	218/261	2/2	0	words	236/279	1326/1556
+slides/done-001/odp/Statement of Work presentation.odp	odp	10/10	226/224	3/3	0	words	239/229	1286/1255
+slides/done-001/odp/Trust Fund Excise Taxes Structure.odp	odp	1/1	166/169	2/2	0	words	186/189	839/868
+slides/done-001/odp/WC_Update-Aug03.odp	odp	11/11	442/452	2/2	0	match	509/519	2862/2874
+slides/done-001/odp/fishbone-diagram-template-ppt-1.odp	odp	1/1	189/189	2/2	0	match	197/197	882/882
+slides/done-001/odp/iaeg_work_group_leader_updates.odp	odp	1/1	88/90	4/4	0	match	88/91	497/505
+slides/done-001/odp/policy-pesentation.odp	odp	16/16	389/389	3/3	0	match	478/478	2288/2288
+slides/done-001/odp/wells08_basic.odp	odp	27/27	942/995	4/4	0	match	1100/1171	5671/5762
+slides/done-002/odp/080214-Intl-pol-frameworks-and-their-implications-for-Africa-ISS-workshop.odp	odp	18/18	815/814	4/4	0	match	871/870	4473/4473
+slides/done-002/odp/Curriculum-Schematic-E22-11052025.odp	odp	12/12	1131/1134	5/5	0	match	1319/1322	6925/6925
+slides/done-002/odp/dhs-293364.odp	odp	39/39	3162/3618	7/7	0	words	3360/3827	17374/19700
+slides/done-002/odp/diapo_6_fees_vous_etes_poctdoct_exterieur_a_luniv_v2_0_1.odp	odp	1/1	92/92	3/3	0	match	98/98	558/558
+slides/done-002/odp/gfopportunitiesforlinkagespres_2010_en.odp	odp	27/27	1647/1654	7/7	0	match	1717/1724	10366/10371
+slides/done-002/odp/medicines_bulletin_february_2023_final.odp	odp	1/1	500/535	4/4	0	words	510/546	2902/3093
+slides/done-002/odp/ws_prod-g-doc-Events-2007-Approval-of-Flight-Conditions-RM-NAA-16032007.odp	odp	14/14	601/743	5/7	0	words	686/820	3644/4659
+slides/done-002/odp/ws_prod-g-doc-Events-2007-may-presentation-PtF-background-+-principles.odp	odp	20/20	755/909	3/4	0	words	778/932	4126/5043
+slides/done-002/odp/ws_prod-g-doc-Events-2007-november-IACA-presentation-at-EASA-Fuel-Tank-Safety-Training-Seminar.odp	odp	10/10	495/555	3/3	0	words	527/587	2664/2925
+slides/done-002/odp/ws_prod-g-doc-Events-Part-M-presentation.odp	odp	30/30	1654/1845	3/6	0	words	1693/1878	9370/10489
+slides/done-003/odp/010605Vul.odp	odp	21/21	947/944	6/6	0	match	1093/1091	5746/5746
+slides/done-003/odp/02_REDAC_New ATM briefing _March 2017v2.odp	odp	6/6	726/759	5/5	0	words	772/805	4681/4920
+slides/done-003/odp/97936.odp	odp	15/15	1210/1267	5/5	0	words	1296/1353	6317/6561
+slides/done-003/odp/Inducement-to-Insurance-Business.odp	odp	22/22	2558/2577	5/5	0	match	2569/2589	12820/12899
+slides/done-003/odp/NCW-2024-Guide-.odp	odp	1/1	206/215	4/4	0	match	217/226	1158/1181
+slides/done-003/odp/ev122_jj-liew-tort-of-bribery-webinar.odp	odp	24/24	1139/1374	4/4	0	words	1205/1449	5594/6738
+slides/done-003/odp/outlook_of_nigerian_pension_sector.odp	odp	12/12	944/1021	5/8	0	words	1041/1118	5403/5802
+slides/done-003/odp/ws_prod-g-doc-Events-2007-Privileges.odp	odp	15/15	617/799	5/6	0	words	636/818	3230/4160
+slides/done-003/odp/ws_prod-g-doc-Events-2007-september-M.017-(French)-France.odp	odp	55/55	5130/6215	3/6	0	words	5206/6291	27639/33915
+slides/done-003/odp/ws_prod-g-doc-Events-2007-september-MDM.032-(ENGLISH)-CZ.odp	odp	38/38	2029/2662	4/6	0	words	2079/2712	11337/14835
+slides/done-004/odp/0335fab9-79f0-4944-b92c-f223837ca2d8.odp	odp	12/12	610/616	3/3	0	words	661/667	4404/4499
+slides/done-004/odp/DOE Interactive Exercise Presentation draft rev 2.odp	odp	10/10	544/574	5/5	0	match	616/655	2717/2744
+slides/done-004/odp/Item 6b - UNSD - Dissemination through APIs.odp	odp	10/10	411/421	3/3	0	words	443/453	2368/2420
+slides/done-004/odp/Liturgical-Commission-2025-Convention-Presentation.odp	odp	9/9	239/336	2/2	0	words	277/387	1319/1804
+slides/done-004/odp/Session 21- The option to expand & abandon.odp	odp	12/12	849/885	5/5	0	words	932/967	4073/4268
+slides/done-004/odp/attendance-updates-for-governors.odp	odp	30/30	3052/3055	7/8	0	match	3224/3227	17309/17298
+slides/done-004/odp/ghgp-supply-chain-initiative_20100323_wri.odp	odp	52/52	3740/3896	9/9	0	match	3970/4131	22005/22442
+slides/done-004/odp/redac-fullComm-201705-EE-FRs-briefing.odp	odp	8/8	374/374	4/4	0	match	403/384	2268/2268
+slides/done-004/odp/undp_presentation_revised_17_may.odp	odp	22/22	1784/1835	7/9	0	words	1903/1956	10323/10556
+slides/done-004/odp/ws_prod-g-doc-Events-industrymeeting18112004-European-Safety-Strategy-Initiative.odp	odp	10/10	248/332	3/5	0	words	259/343	1432/1884
+slides/done-005/odp/5b_upasana_dasgupta_-_liability_and_registration.odp	odp	15/15	689/955	3/3	0	words	727/1005	3675/5024
+slides/done-005/odp/ANG C-1 ATC-TO Core Program - HF REDAC briefing September 7 2016.odp	odp	19/19	1769/1885	5/5	0	words	1891/2007	10804/11586
+slides/done-005/odp/ITE106-Chapter 4.odp	odp	47/47	3002/3140	7/7	0	words	3153/3295	16077/16509
+slides/done-005/odp/NAS-Infrastructure-Roadmaps-HSI.odp	odp	9/9	1250/1415	4/6	0	words	1298/1469	8082/9027
+slides/done-005/odp/NAS-Infrastructure-Roadmaps-Weather.odp	odp	11/11	1957/2120	2/4	0	words	1981/2152	10906/12083
+slides/done-005/odp/berlin.odp	odp	29/29	1338/1375	3/6	0	words	1489/1530	7246/7403
+slides/done-005/odp/c_291533.odp	odp	19/19	1104/1105	7/7	0	match	1158/1159	5998/5913
+slides/done-005/odp/manufacturing_process_simulation_working_group_overview_2023.odp	odp	7/7	430/714	3/4	0	words	456/756	2912/4733
+slides/done-005/odp/pods05.odp	odp	60/60	1959/1884	10/11	0	match	2151/2078	10641/10676
+slides/done-005/odp/ws_prod-g-doc-Events-industrymeeting18112004-Aercap.odp	odp	12/12	1191/1269	3/5	0	words	1255/1343	6548/6938
+slides/done-006/odp/Course Selection 2025-26 Current Grade 09.odp	odp	10/10	669/694	3/4	0	words	673/698	3214/3343
+slides/done-006/odp/Ensemble-pour-l-amelioration-de-la-securite-de-lac-AIRBUS.odp	odp	9/9	549/627	4/4	0	words	568/652	2934/3451
+slides/done-006/odp/Lepore.odp	odp	20/20	1647/1822	5/5	0	words	1773/1948	9601/10767
+slides/done-006/odp/REDAC HF briefing Sep 2016_LARD_ATC_TO_FE_v2.odp	odp	18/18	2060/2119	7/6	0	words	2164/2223	12124/12620
+slides/done-006/odp/Stakeholders-v08052017 - v5.odp	odp	13/13	522/541	7/8	0	words	587/611	3279/3388
+slides/done-006/odp/iris07.12.12.odp	odp	21/21	869/881	9/9	0	match	926/938	4718/4795
+slides/done-006/odp/nabiyeleul_1_aviation_service_28_july_2020.odp	odp	9/9	556/554	4/5	0	match	607/604	3170/3146
+slides/done-006/odp/social-media-app-bulletin-january.odp	odp	4/4	757/788	4/4	0	words	757/792	3849/4001
+slides/done-006/odp/wopanets-innovationdays-06-16.odp	odp	15/15	563/563	3/3	0	match	626/626	3685/3625
+slides/done-006/odp/ws_prod-g-doc-Events-r-6.-ESM.odp	odp	25/25	1501/1951	3/6	0	words	1645/2120	8139/11330
+slides/done-007/odp/1-secretariat.odp	odp	10/10	150/150	3/4	0	match	216/216	1034/1034
+slides/done-007/odp/10. Drawings, circuit diagrams and schematics.odp	odp	23/23	1223/1502	3/4	0	words	1242/1521	6650/8444
+slides/done-007/odp/71393_pp7.odp	odp	39/39	2157/2151	6/6	0	match	2379/2373	12475/12475
+slides/done-007/odp/BHCA Part II webinar #2 - 10.2020.odp	odp	21/21	1311/1404	6/6	0	words	1355/1449	6835/7216
+slides/done-007/odp/Boeing 737 Max - Group 5.odp	odp	2/2	7/7	1/1	0	match	7/7	27/27
+slides/done-007/odp/PAL Block Intro 2023.odp	odp	20/20	1447/1463	6/6	0	match	1548/1564	8211/8225
+slides/done-007/odp/bitesize-writing-a-report.odp	odp	15/15	652/657	5/6	0	match	703/708	3771/3791
+slides/done-007/odp/flying-by-numbers-presentation.odp	odp	10/10	536/547	7/8	0	match	566/577	2353/2379
+slides/done-007/odp/introduction_to_bea_tuxedo.odp	odp	40/40	1549/1767	7/7	0	words	1616/1831	8029/9893
+slides/done-007/odp/joint_user_outcomes_michael_fullerton_29.06.12.odp	odp	20/20	1899/1918	7/8	0	match	2009/2016	9738/9836
+slides/done-008/odp/8.16_AOD_FINAL_Provider_Training_Presentation_9_2009.odp	odp	94/94	4347/4311	7/6	0	match	4641/4542	22585/22481
+slides/done-008/odp/AATF-Fact-Sheet-2025.odp	odp	9/9	847/848	8/8	0	match	901/894	4611/4611
+slides/done-008/odp/EG1_dsrc tech.odp	odp	26/26	1834/2034	6/6	0	words	1978/2178	10057/11132
+slides/done-008/odp/FIT26-Presentation-Airservices-Update.odp	odp	11/11	221/221	4/4	0	match	241/241	1295/1295
+slides/done-008/odp/Framing Europe.odp	odp	24/24	2237/2237	4/4	0	match	2300/2301	11542/11542
+slides/done-008/odp/G-InvoicingKeithJarboe.odp	odp	13/13	1077/1080	5/5	0	match	1174/1177	6967/6968
+slides/done-008/odp/RESPA_-_Section_8_Webinar.odp	odp	35/35	2545/2573	5/6	0	match	2734/2765	13154/13293
+slides/done-008/odp/ROK-PI Climate Bulletin - Edition 2017-06.odp	odp	2/2	407/409	3/3	0	match	414/416	2330/2332
+slides/done-008/odp/concepts-surrounding-cloud-computing-carolyn-kranz-and-rich-prem-gb-seattle-2011.odp	odp	36/36	2428/2463	6/5	0	match	2536/2571	13420/13459
+slides/done-008/odp/item_3-environmental_process_briefing.odp	odp	12/12	296/296	4/4	0	match	334/334	1765/1765
+slides/done-009/odp/30-04-2021 merged NDoH and NICD_Presentation HBV BD meeting 05May2021_1.odp	odp	18/18	1267/1361	7/7	0	words	1349/1448	7098/7644
+slides/done-009/odp/Airport Planning 09112013.odp	odp	9/9	554/629	6/6	0	words	581/656	3100/3591
+slides/done-009/odp/COMSTAC_11_5_2021am_2.odp	odp	39/39	2312/2741	4/4	0	words	2403/2858	13849/16225
+slides/done-009/odp/Employment-Based_I-485.odp	odp	42/42	2455/2516	3/4	0	match	2647/2709	13194/13353
+slides/done-009/odp/FIT26-Presentation-PR-Briefing-Debrief-Airbus.odp	odp	9/9	1336/1443	4/3	0	words	1400/1535	6699/7273
+slides/done-009/odp/HENTZEN_COMPOSITE_MATERIALS_IN_THE_AEROSPACE_INDUSTRY.odp	odp	12/12	304/320	3/4	0	words	327/344	1758/1868
+slides/done-009/odp/[Christophe]NLP_reseau_inge_stat.odp	odp	17/17	899/885	5/5	0	match	1017/989	4600/4532
+slides/done-009/odp/airbus-powerpoint-presentation-2019-20-without-video_diy_2019-20.odp	odp	38/38	853/880	6/7	0	match	901/928	4340/4394
+slides/done-009/odp/iep-amount-frequency-for-webinar.odp	odp	39/39	1681/1691	6/6	0	match	1763/1774	9314/9154
+slides/done-009/odp/redac-sas-201403-ppt-portfolio-rev-sim.odp	odp	14/14	1959/2014	8/8	0	words	2137/2205	12607/13014
+slides/done-010/odp/BUS-Chapter 05.odp	odp	50/50	2070/2134	3/6	0	match	2277/2342	12213/12362
+slides/done-010/odp/BasicMed_AME_Presentation.odp	odp	18/18	799/870	5/4	0	words	868/939	4382/4930
+slides/done-010/odp/Copy of Full deck with references Promotion of Outside Interests at Work final(1).odp	odp	33/33	3047/3118	7/7	0	match	3180/3252	17155/17384
+slides/done-010/odp/DoIRD Meeting 16JAN14 v1-1.odp	odp	15/15	920/1075	6/6	0	words	981/1142	5047/5886
+slides/done-010/odp/John_Broggio__RSS_Campion_event_John_Broggio.odp	odp	25/25	1171/1172	4/3	0	match	1245/1246	6971/6867
+slides/done-010/odp/REDAC Briefing_SSIT_CARA_08132014.ppt.odp	odp	14/14	411/462	2/3	0	words	469/521	2405/2664
+slides/done-010/odp/Sector_Skills_Insights_Advanced_Manufacturing_summary_slide_pack.odp	odp	24/24	3990/4666	6/6	0	words	4070/4771	20834/23899
+slides/done-010/odp/Tax factsheet 2022 (1).odp	odp	27/27	2786/2869	4/5	0	words	2866/2949	13297/13637
+slides/done-010/odp/passiv.odp	odp	21/21	1165/1198	8/8	0	match	1269/1304	6596/6716
+slides/done-010/odp/section_1_our_rights_presentation.odp	odp	30/30	4044/4144	7/9	0	match	4150/4254	21811/22132
+slides/done-011/odp/171128IPAP.odp	odp	40/40	4601/4670	9/10	0	match	4827/4897	25148/25433
+slides/done-011/odp/1_Country-Updates_DRC_English.odp	odp	16/16	555/782	5/5	0	words	619/846	2989/4281
+slides/done-011/odp/23-session-2-pptx.odp	odp	16/16	304/304	4/4	0	match	333/333	1836/1836
+slides/done-011/odp/3492.odp	odp	22/22	879/1266	5/6	0	words	894/1320	4617/6833
+slides/done-011/odp/3495.odp	odp	26/26	727/747	4/4	0	match	787/807	4342/4375
+slides/done-011/odp/B2B-Center-Readiness-and-Student-Retention.odp	odp	33/33	1233/1348	6/6	0	words	1440/1555	7108/7768
+slides/done-011/odp/NAS-Infrastructure-Roadmaps-v16.0.odp	odp	137/137	16390/18850	5/7	0	words	16863/19302	91644/106980
+slides/done-011/odp/Session-1-Presentation-Reporting-Forms-Form-12-final.odp	odp	15/15	1119/1131	6/9	0	match	1150/1161	6262/6267
+slides/done-011/odp/_1___Opatrny_Ales_United_Kingdom_business_opportunities_final.odp	odp	25/25	1687/1627	6/6	0	match	1941/1831	9037/8990
+slides/done-011/odp/order-of-worship-ppt-revised-2018.odp	odp	28/28	1139/1139	5/6	0	match	1212/1212	5347/5302
+slides/done-012/odp/429_BLISc 2019 IInd Sem.  PAPER-7 UNIT 3.odp	odp	20/20	3022/3125	6/6	0	words	3117/3225	17057/17627
+slides/done-012/odp/County ACHS Presentaion Webinar 8-16-16 Peg.odp	odp	26/26	1253/1326	6/6	0	words	1321/1395	7297/7599
+slides/done-012/odp/Intersil_Italy_CAN_Bus_Transceiver_Presentation_Final.odp	odp	39/39	3126/3415	7/8	0	words	3411/3808	15900/17949
+slides/done-012/odp/JesuitAssocOfStudentPersonnel.odp	odp	31/31	1171/1177	6/6	0	match	1332/1339	7268/7310
+slides/done-012/odp/REDAC briefing March12-13-2014jemvbFINAL.ppt.odp	odp	25/25	2584/2584	9/8	0	match	2786/2786	15891/15773
+slides/done-012/odp/SRDMG(16)024_60 GHz onboard airplanes.odp	odp	26/26	1563/1862	7/7	0	words	1627/1931	8696/10312
+slides/done-012/odp/Sean Monogue.odp	odp	15/15	794/818	4/5	0	words	866/891	4803/4950
+slides/done-012/odp/gillikin_online_user_mtg_2010.odp	odp	40/40	1291/1292	5/5	0	match	1470/1469	7901/7753
+slides/done-012/odp/vv_summit_SAIC-PRESENTATION_FAA-V&V-Summit_508c.odp	odp	19/19	465/648	4/6	0	words	505/706	2631/3573
+slides/done-012/odp/vvsummit2022-SAIC-PRESENTATION.odp	odp	19/19	465/648	4/6	0	words	505/706	2631/3573
+slides/done-013/odp/2014BSA_Sunday_Killion.odp	odp	50/50	3493/3559	8/8	0	match	3630/3702	16859/17188
+slides/done-013/odp/2015-Civil-Rights-Website-training.odp	odp	94/94	5999/6120	12/13	0	match	6459/6586	34484/34818
+slides/done-013/odp/FAA_Form_337.odp	odp	67/67	5563/5614	14/17	0	match	5793/5844	29612/29447
+slides/done-013/odp/PRM_training.odp	odp	22/22	2159/2152	7/9	0	match	2193/2189	10593/10565
+slides/done-013/odp/Structural Testing.odp	odp	89/89	4234/4340	12/14	0	match	4869/5001	20133/20360
+slides/done-013/odp/chapter_4_0.odp	odp	54/54	3035/3175	7/7	0	words	3248/3340	17954/18883
+slides/done-013/odp/hofman.odp	odp	13/13	450/450	3/4	0	match	504/503	2941/2945
+slides/done-013/odp/redac-sas-201703-hf-research-division.odp	odp	13/13	661/713	4/3	0	words	732/784	4484/4879
+slides/done-013/odp/schematicplaymar21.odp	odp	21/21	1831/2121	5/5	0	words	1846/2139	9820/11470
+slides/done-013/odp/ws_prod-g-doc-Events-2008-February-5-NATO-activities.odp	odp	13/13	449/453	4/4	0	match	512/516	2163/2163
+slides/done-014/odp/Aerospace_Journey_of_Flight_Chapter_BCB1637572DA6.odp	odp	26/26	1833/1885	3/3	0	match	2104/2156	10012/10159
+slides/done-014/odp/Presentation - Identify Components of the Airport (1).odp	odp	12/12	551/554	6/6	0	match	588/591	2974/2992
+slides/done-014/odp/Reporting_responsibilities_matrix.odp	odp	268/268	57734/57742	3/3	0	match	57909/57917	309292/308444
+slides/done-014/odp/Snowbirds_High_Show.odp	odp	41/41	1869/1871	5/5	0	match	1923/1925	8047/8049
+slides/done-014/odp/Technical_Report_Elements[1].odp	odp	39/39	1404/1430	5/5	0	match	1457/1482	7539/7679
+slides/done-014/odp/redac-nasops-201503-RIRP-portfolio-update.odp	odp	46/46	2607/2761	10/9	0	words	2761/2916	14209/15418
+slides/done-014/odp/redac-sas-201509-asisp-research.odp	odp	45/45	3006/3127	12/12	0	words	3180/3304	18489/19095
+slides/done-014/odp/schematicplay.odp	odp	21/21	1839/2126	4/5	0	words	1853/2143	9840/11490
+slides/done-014/odp/servicedesk-plus-overviewfinal.odp	odp	66/66	1820/1805	3/8	0	match	1919/1903	11471/11471
+slides/done-014/odp/vvsummit2022-Research-Roadmap-and-the-UML-3-Operational-Integration-Assessment.odp	odp	33/33	1225/1281	5/5	1	words,unembedded	1297/1361	8113/8377
+slides/done-015/odp/1200-Assigning-Club-officers.odp	odp	16/16	167/162	7/7	0	match	175/170	956/960
+slides/done-015/odp/Architecture.odp	odp	29/29	846/845	4/4	0	match	868/867	4696/4696
+slides/done-015/odp/RPA P4 - Advanced Material.odp	odp	20/20	1374/1479	6/6	0	words	1537/1642	8067/8744
+slides/done-015/odp/Wildlife for REDAC September 11.odp	odp	41/41	1477/1535	11/11	0	words	1584/1642	8351/9160
+slides/extra-001/odp/FAAAIandtheArtandScienceofV&Vfinal.odp	odp	30/30	1126/1133	6/6	0	match	1212/1219	5793/5868
+slides/metrics-001/odp/Ramp Up Campaign - French.odp	odp	6/6	418/437	2/4	0	words	445/465	2414/2536
+slides/missing-001/odp/NWD-GLA-Community-Outreach-Day-Oct-2025.odp	odp	13/13	527/638	3/3	0	words	578/698	3127/3957

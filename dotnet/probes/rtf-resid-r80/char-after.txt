@@ -1,0 +1,32 @@
+probe            ref                                    ours                                    same?
+control-none      12.00  118.69 LiberationSerif           12.00  119.00 LiberationSerif           
+inh-b             12.00  124.90 LiberationSerif-Bold WF   12.00  125.02 LiberationSerif-Bold WF   
+inh-caps          12.00  154.21 LiberationSerif      W    12.00  154.34 LiberationSerif      W    
+inh-f1            12.00  118.69 LiberationSerif           12.00  119.00 LiberationSerif           
+inh-f2            12.00  118.69 LiberationSerif           12.00  119.00 LiberationSerif           
+inh-fs36          18.00  178.00 LiberationSerif      SW   18.00  178.51 LiberationSerif      SW   
+inh-i             12.00  115.10 LiberationSerif-Italic WF   12.00  115.66 LiberationSerif-Italic WF   
+inh-ul            12.00  118.69 LiberationSerif           12.00  119.00 LiberationSerif           
+own-b             12.00  118.69 LiberationSerif           12.00  119.00 LiberationSerif           
+own-caps          12.00  154.21 LiberationSerif      W    12.00  154.34 LiberationSerif      W    
+own-f1            12.00  118.69 LiberationSerif           12.00  119.00 LiberationSerif           
+own-f2            12.00  118.69 LiberationSerif           12.00  119.00 LiberationSerif           
+own-fs36          12.00  118.69 LiberationSerif           12.00  119.00 LiberationSerif           
+own-i             12.00  118.69 LiberationSerif           12.00  119.00 LiberationSerif           
+own-ul            12.00  118.69 LiberationSerif           12.00  119.00 LiberationSerif           
+s0-b              12.00  124.90 LiberationSerif-Bold WF   12.00  125.02 LiberationSerif-Bold WF   
+s0-caps           12.00  154.21 LiberationSerif      W    12.00  154.34 LiberationSerif      W    
+s0-f1             12.00  118.69 LiberationSerif           12.00  119.00 LiberationSerif           
+s0-f2             12.00  118.69 LiberationSerif           12.00  119.00 LiberationSerif           
+s0-fs36           18.00  178.00 LiberationSerif      SW   18.00  178.51 LiberationSerif      SW   
+s0-i              12.00  115.10 LiberationSerif-Italic WF   12.00  115.66 LiberationSerif-Italic WF   
+s0-ul             12.00  118.69 LiberationSerif           12.00  119.00 LiberationSerif           
+zero-b            12.00  118.69 LiberationSerif           12.00  119.00 LiberationSerif           
+zero-caps         12.00  154.21 LiberationSerif      W    12.00  154.34 LiberationSerif      W    
+zero-f1           12.00  118.69 LiberationSerif           12.00  119.00 LiberationSerif           
+zero-f2           12.00  118.69 LiberationSerif           12.00  119.00 LiberationSerif           
+zero-fs36         12.00  118.69 LiberationSerif           12.00  119.00 LiberationSerif           
+zero-i            12.00  118.69 LiberationSerif           12.00  119.00 LiberationSerif           
+zero-ul           12.00  118.69 LiberationSerif           12.00  119.00 LiberationSerif           
+
+agree 29 of 29

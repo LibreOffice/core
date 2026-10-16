@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Three ways a picture is fastened to an ODF sheet that the cell-children walk cannot see.
+
+  Row 1 (A1)  a draw:frame inside a draw:g          — a group; ODF gives it no rectangle of its
+                                                      own, so the child's svg:x is measured from
+                                                      the anchor cell exactly as if it were the
+                                                      cell's own child
+  Row 3 (A3)  a draw:frame inside a draw:a          — a hyperlink, which ODF states as a wrapper
+                                                      element rather than as an attribute
+  Row 5 (A5)  a draw:frame stating draw:transform   — how every ODF application writes a turned
+                                                      object: no svg:x, no svg:y, and svg:width /
+                                                      svg:height still the shape's own untuned
+                                                      size. rotate(0.5235987755982988) is 30
+                                                      degrees, and the bounding box of a
+                                                      2in x 1in frame turned 30 degrees is
+                                                      2.2321in x 1.8660in.
+
+  Censused over the 307 converted .ods: 89 frames sit inside a draw:g — 72 of them in
+  SIL_TDB648.ods, which renders 88 pages against our 60 without them — and 33 inside a draw:a,
+  across thirteen documents.
+
+  LibreOffice 26.2.4.2's own PDF of this file draws the three pictures at, in points from the
+  page's top-left:
+
+    InGroup   74.69, 74.67  to  146.69, 110.67
+    InLink    74.69, 182.67 to  146.69, 218.67
+    Turned   128.69, 272.67 to  289.39, 407.03    (160.70 x 134.36, the turned box)
+
+  The picture is eight by four pixels with its top-left quadrant black and the rest red, so the
+  turn has a direction a rendering can be read for: on both sides the black quadrant is at the
+  lower left of the parallelogram.
+-->
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+ xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+ xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+ xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+ xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+ xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+ xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+ xmlns:xlink="http://www.w3.org/1999/xlink"
+ office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+ <office:automatic-styles>
+  <style:style style:name="co1" style:family="table-column">
+   <style:table-column-properties style:column-width="3in"/>
+  </style:style>
+  <style:style style:name="ro1" style:family="table-row">
+   <style:table-row-properties style:row-height="1.5in" style:use-optimal-row-height="false"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+    fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"
+    style:print-orientation="portrait"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Default" style:page-layout-name="pm1"/>
+ </office:master-styles>
+ <office:body>
+  <office:spreadsheet>
+   <table:table table:name="Probe">
+    <table:table-column table:style-name="co1"/>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string"><text:p>grouped</text:p><draw:g draw:name="Group 1"><draw:frame draw:name="InGroup" svg:x="0.25in" svg:y="0.25in" svg:width="1in" svg:height="0.5in"><draw:image draw:mime-type="image/png"><office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAAgAAAAECAIAAAA8r+mnAAAAF0lEQVR4nGNgQAJ3NDTgiAGnBDKHKAkAbSAcIe8d6pgAAAAASUVORK5CYII=</office:binary-data></draw:image></draw:frame></draw:g></table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string"><text:p>linked</text:p><draw:a xlink:href="https://example.invalid/"><draw:frame draw:name="InLink" svg:x="0.25in" svg:y="0.25in" svg:width="1in" svg:height="0.5in"><draw:image draw:mime-type="image/png"><office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAAgAAAAECAIAAAA8r+mnAAAAF0lEQVR4nGNgQAJ3NDTgiAGnBDKHKAkAbSAcIe8d6pgAAAAASUVORK5CYII=</office:binary-data></draw:image></draw:frame></draw:a></table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string"><text:p>turned</text:p><draw:frame draw:name="Turned" svg:width="2in" svg:height="1in" draw:transform="rotate (0.5235987755982988) translate (1in 1in)"><draw:image draw:mime-type="image/png"><office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAAgAAAAECAIAAAA8r+mnAAAAF0lEQVR4nGNgQAJ3NDTgiAGnBDKHKAkAbSAcIe8d6pgAAAAASUVORK5CYII=</office:binary-data></draw:image></draw:frame></table:table-cell>
+    </table:table-row>
+   </table:table>
+  </office:spreadsheet>
+ </office:body>
+</office:document>

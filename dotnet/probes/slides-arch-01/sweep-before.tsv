@@ -1,0 +1,71 @@
+# words = tokens carrying at least one Unicode letter or digit; rawwords = pdftotext | wc -w
+# NOT comparable to any scoreboard recorded before 2026-08-13 — see dotnet/probes/gate-01/results.md
+path	ext	pages	words	fonts	unemb	verdict	rawwords
+slides/batch-001/ppt/WC_Update-Aug03.ppt	ppt	11/11	452/452	2/2	0	match	519/519
+slides/batch-001/ppt/policy-pesentation.ppt	ppt	16/16	389/389	3/3	0	match	478/478
+slides/batch-001/ppt/wells08_basic.ppt	ppt	27/27	986/995	4/4	0	match	1172/1171
+slides/batch-001/pptx/111006 COMSTAC STOWG Aero spaceports IFG.pptx	pptx	8/8	267/267	2/2	0	match	309/309
+slides/batch-001/pptx/BMFE-06-03 (Gerflor) Smoke Density and Toxicity.pptx	pptx	6/6	732/732	4/4	0	match	794/794
+slides/batch-001/pptx/Definitions commodity chains.pptx	pptx	4/4	261/261	2/2	0	match	279/279
+slides/batch-001/pptx/Statement of Work presentation.pptx	pptx	10/10	227/224	3/3	0	match	233/229
+slides/batch-001/pptx/Trust Fund Excise Taxes Structure.pptx	pptx	1/1	169/169	2/2	0	match	189/189
+slides/batch-001/pptx/fishbone-diagram-template-ppt-1.pptx	pptx	1/1	189/189	2/2	0	match	197/197
+slides/batch-002/ppt/080214-Intl-pol-frameworks-and-their-implications-for-Africa-ISS-workshop.ppt	ppt	18/18	815/815	6/4	0	match	838/871
+slides/batch-002/ppt/gfopportunitiesforlinkagespres_2010_en.ppt	ppt	27/27	1647/1654	8/7	0	match	1722/1724
+slides/batch-002/ppt/ws_prod-g-doc-Events-2007-Approval-of-Flight-Conditions-RM-NAA-16032007.ppt	ppt	14/14	743/743	3/5	0	match	823/820
+slides/batch-002/ppt/ws_prod-g-doc-Events-2007-may-presentation-PtF-background-+-principles.ppt	ppt	20/20	909/909	3/3	0	match	1025/932
+slides/batch-002/ppt/ws_prod-g-doc-Events-2007-november-IACA-presentation-at-EASA-Fuel-Tank-Safety-Training-Seminar.ppt	ppt	10/10	555/555	3/3	0	match	587/587
+slides/batch-002/ppt/ws_prod-g-doc-Events-Part-M-presentation.ppt	ppt	30/30	1844/1845	3/3	0	match	1925/1878
+slides/batch-002/pptx/Curriculum-Schematic-E22-11052025.pptx	pptx	12/12	1119/1134	5/5	0	match	1307/1322
+slides/batch-002/pptx/diapo_6_fees_vous_etes_poctdoct_exterieur_a_luniv_v2_0_1.pptx	pptx	1/1	92/92	3/3	0	match	98/98
+slides/batch-002/pptx/iaeg_work_group_leader_updates.pptx	pptx	1/1	90/90	4/4	0	match	91/91
+slides/batch-002/pptx/medicines_bulletin_february_2023_final.pptx	pptx	1/1	534/535	3/4	0	match	545/546
+slides/batch-003/ppt/010605Vul.ppt	ppt	21/21	960/944	8/6	0	match	1094/1089
+slides/batch-003/ppt/Inducement-to-Insurance-Business.ppt	ppt	22/22	2587/2577	4/5	0	match	2598/2589
+slides/batch-003/ppt/outlook_of_nigerian_pension_sector.ppt	ppt	12/12	1021/1021	6/6	0	match	1119/1118
+slides/batch-003/ppt/ws_prod-g-doc-Events-2007-Privileges.ppt	ppt	15/15	799/799	5/5	0	match	842/818
+slides/batch-003/ppt/ws_prod-g-doc-Events-2007-september-MDM.032-(ENGLISH)-CZ.ppt	ppt	38/38	2662/2662	4/4	0	match	2855/2712
+slides/batch-003/pptx/02_REDAC_New ATM briefing _March 2017v2.pptx	pptx	6/6	759/759	4/5	0	match	805/805
+slides/batch-003/pptx/97936.pptx	pptx	15/15	1267/1267	4/5	0	match	1353/1353
+slides/batch-003/pptx/NCW-2024-Guide-.pptx	pptx	1/1	211/215	4/4	0	match	222/226
+slides/batch-003/pptx/dhs-293364.pptx	pptx	39/39	3617/3618	8/7	0	match	3826/3827
+slides/batch-003/pptx/ev122_jj-liew-tort-of-bribery-webinar.pptx	pptx	24/24	1374/1374	5/4	0	match	1449/1449
+slides/batch-004/ppt/undp_presentation_revised_17_may.ppt	ppt	22/22	1814/1836	7/7	0	match	1882/1957
+slides/batch-004/ppt/ws_prod-g-doc-Events-2007-september-M.017-(French)-France.ppt	ppt	55/55	6215/6215	3/3	0	match	6471/6291
+slides/batch-004/ppt/ws_prod-g-doc-Events-industrymeeting18112004-European-Safety-Strategy-Initiative.ppt	ppt	10/10	332/332	4/4	0	match	389/343
+slides/batch-004/pptx/DOE Interactive Exercise Presentation draft rev 2.pptx	pptx	10/10	573/574	5/5	0	match	650/655
+slides/batch-004/pptx/Item 6b - UNSD - Dissemination through APIs.pptx	pptx	10/10	421/421	4/3	0	match	453/453
+slides/batch-004/pptx/Liturgical-Commission-2025-Convention-Presentation.pptx	pptx	9/9	344/344	2/2	0	match	395/395
+slides/batch-004/pptx/Session 21- The option to expand & abandon.pptx	pptx	12/12	885/885	5/5	0	match	968/967
+slides/batch-004/pptx/ghgp-supply-chain-initiative_20100323_wri.pptx	pptx	52/52	3895/3896	10/9	0	match	4130/4131
+slides/batch-004/pptx/redac-fullComm-201705-EE-FRs-briefing.pptx	pptx	8/8	374/374	4/4	0	match	384/384
+slides/batch-004/pptx/solog_orientation_august_2019.pptx	pptx	15/15	670/685	5/6	0	words	730/746
+slides/batch-005/ppt/0335fab9-79f0-4944-b92c-f223837ca2d8.ppt	ppt	12/12	612/616	3/3	0	match	658/667
+slides/batch-005/ppt/berlin.ppt	ppt	29/29	1365/1375	3/4	0	match	1524/1530
+slides/batch-005/ppt/ws_prod-g-doc-Events-industrymeeting18112004-Aercap.ppt	ppt	12/12	1250/1271	4/3	0	match	1345/1345
+slides/batch-005/pptx/5b_upasana_dasgupta_-_liability_and_registration.pptx	pptx	15/15	965/956	3/3	0	match	1016/1006
+slides/batch-005/pptx/ANG C-1 ATC-TO Core Program - HF REDAC briefing September 7 2016.pptx	pptx	19/19	1885/1885	5/5	0	match	2007/2007
+slides/batch-005/pptx/NAS-Infrastructure-Roadmaps-Weather.pptx	pptx	11/11	2119/2120	4/4	0	match	2151/2152
+slides/batch-005/pptx/attendance-updates-for-governors.pptx	pptx	30/30	3047/3055	7/7	0	match	3219/3227
+slides/batch-005/pptx/c_291533.pptx	pptx	19/19	1104/1105	7/7	0	match	1158/1159
+slides/batch-005/pptx/manufacturing_process_simulation_working_group_overview_2023.pptx	pptx	7/7	728/714	5/4	0	match	771/756
+slides/batch-006/ppt/ITE106-Chapter 4.ppt	ppt	47/47	3139/3139	8/7	0	match	3294/3294
+slides/batch-006/ppt/Lepore.ppt	ppt	20/20	1812/1822	5/5	0	match	1942/1948
+slides/batch-006/ppt/pods05.ppt	ppt	60/60	1882/1884	10/10	0	match	2086/2078
+slides/batch-006/ppt/ws_prod-g-doc-Events-r-6.-ESM.ppt	ppt	25/25	1951/1951	5/6	0	match	2120/2120
+slides/batch-006/pptx/Course Selection 2025-26 Current Grade 09.pptx	pptx	10/10	694/694	2/3	0	match	698/698
+slides/batch-006/pptx/NAS-Infrastructure-Roadmaps-HSI.pptx	pptx	9/9	1415/1415	5/5	0	match	1469/1469
+slides/batch-006/pptx/Stakeholders-v08052017 - v5.pptx	pptx	13/13	538/547	6/7	0	match	605/617
+slides/batch-006/pptx/iris07.12.12.pptx	pptx	21/21	881/881	9/9	0	match	938/938
+slides/batch-006/pptx/social-media-app-bulletin-january.pptx	pptx	4/4	788/788	4/4	0	match	792/792
+slides/batch-006/pptx/wopanets-innovationdays-06-16.pptx	pptx	15/15	563/563	3/3	0	match	626/619
+slides/batch-007/ppt/1-secretariat.ppt	ppt	10/10	150/150	2/3	0	match	210/216
+slides/batch-007/ppt/architecture6.ppt	ppt	31/31	1926/2544	5/5	0	words	2011/2642
+slides/batch-007/ppt/introduction_to_bea_tuxedo.ppt	ppt	40/40	1785/1767	7/7	0	match	1984/1831
+slides/batch-007/pptx/Boeing 737 Max - Group 5.pptx	pptx	2/2	7/7	1/1	0	match	7/7
+slides/batch-007/pptx/Ensemble-pour-l-amelioration-de-la-securite-de-lac-AIRBUS.pptx	pptx	9/9	627/627	4/4	0	match	652/652
+slides/batch-007/pptx/PAL Block Intro 2023.pptx	pptx	20/20	1461/1463	7/6	0	match	1562/1564
+slides/batch-007/pptx/REDAC HF briefing Sep 2016_LARD_ATC_TO_FE_v2.pptx	pptx	18/18	2119/2119	5/6	0	match	2223/2223
+slides/batch-007/pptx/bitesize-writing-a-report.pptx	pptx	15/15	650/658	7/5	0	match	701/709
+slides/batch-007/pptx/flying-by-numbers-presentation.pptx	pptx	10/10	546/547	7/7	0	match	576/577
+slides/batch-007/pptx/nabiyeleul_1_aviation_service_28_july_2020.pptx	pptx	9/9	554/554	4/4	0	match	604/604

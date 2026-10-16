@@ -1,0 +1,295 @@
+diff --git a/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8FieldTypes.cs b/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8FieldTypes.cs
+--- a/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8FieldTypes.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8FieldTypes.cs
+@@ -56,6 +56,16 @@
+     /// </remarks>
+     public const int CurrentPage = 33;
+ 
++    /// <summary>The legacy <c>FORMCHECKBOX</c>, whose square is drawn inside its own instruction.</summary>
++    /// <remarks>
++    /// 71, <c>Read_F_FormCheckBox</c>'s slot in <c>aWW8FieldTab</c> (<c>ww8par5.cxx</c>:918). The one
++    /// field type this walk has to know before it has read a separator, because there is no separator:
++    /// Word writes the control as <c>U+0013 " FORMCHECKBOX " U+0001 U+0015</c>, so the placeholder that
++    /// stands for the box is the last character of the field's <em>code</em>. LibreOffice reads it at
++    /// exactly that offset — <c>if (rStr[pF-&gt;nLCode-1]==0x01)</c>, <c>ww8par3.cxx</c>:191.
++    /// </remarks>
++    public const int FormCheckBox = 71;
++
+     /// <summary>The <c>NUMPAGES</c> field: how many pages the document has.</summary>
+     /// <remarks>
+     /// 26, the first of the three <c>Read_F_Num</c> slots (26 <c>NUMPAGES</c>, 27 <c>NUMWORDS</c>,
+diff --git a/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.Layout.cs b/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.Layout.cs
+--- a/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.Layout.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.Layout.cs
+@@ -135,6 +135,17 @@
+         public bool HasAutoSpaceAfter { get; init; }
+ 
+         /// <summary>
++        /// The legacy <c>FORMCHECKBOX</c> squares in the paragraph, by the offset each stands at.
++        /// </summary>
++        /// <remarks>
++        /// Not a frame, because nothing in the file says how big the square is: Writer sizes it from
++        /// the line's own text height, which only a resolved face can give. So the walk records where
++        /// each one is and the layout source builds the frame — the same division the DOCX reader
++        /// makes in <c>DocxLayoutSource.CheckBoxFrame</c>.
++        /// </remarks>
++        public IReadOnlyList<Ww8LayoutCheckBox>? CheckBoxes { get; init; }
++
++        /// <summary>
+         /// Where a <c>PAGE</c> or <c>NUMPAGES</c> field's cached result sits in <see cref="Text"/>.
+         /// </summary>
+         /// <remarks>
+@@ -663,6 +674,10 @@
+         Stack<int> fieldResults = new();
+         List<Layout.PageFieldSpan> pageFields = [];
+ 
++        // The FORMCHECKBOX squares in the paragraph being built. Beside `pageFields` because they are
++        // the same kind of thing — something the walk found at an offset that only the layout can size.
++        List<Ww8LayoutCheckBox> checkBoxes = [];
++
+         // How many enclosing fields had their result replaced by a computed one, and which they were.
+         // A count for the same reason the field stack is one — fields nest, and the result of an outer
+         // field can contain a whole inner field whose characters are equally not to be drawn — with the
+@@ -695,7 +710,17 @@
+             // keeping the instruction puts the literal word "SHAPE" into the sentence — measured on
+             // `picture-flow.doc`, where it made our word count 191 against the reference's 190. The
+             // markers themselves are handled below and carry no width either way.
+-            if (fieldInstructions.Count > 0 && fieldInstructions.Peek()
++            // The one placeholder that has to survive an instruction. A FORMCHECKBOX is written
++            // `U+0013 " FORMCHECKBOX " U+0001 U+0015` — no separator, so its square is the last
++            // character of the field's *code*, and LibreOffice reads it at exactly that offset
++            // (`rStr[pF->nLCode-1] == 0x01`, ww8par3.cxx:191). Dropping it with the rest of the
++            // instruction is what left 37 squares off `1528364855.doc` and 58 off `f111.doc`.
++            bool isCheckBoxPlaceholder = character == Special.Picture
++                && openFields.Count > 0
++                && openFields.Peek() == Ww8FieldTypes.FormCheckBox;
++
++            if (!isCheckBoxPlaceholder
++                && fieldInstructions.Count > 0 && fieldInstructions.Peek()
+                 && character is not (Special.FieldBegin or Special.FieldSeparator
+                 or Special.FieldEnd or ParagraphMark or Special.SectionMark or CellMark))
+             {
+@@ -895,6 +920,16 @@
+                 }
+ 
+                 case Special.Picture or Special.DrawnObject or Special.AnnotationReference:
++                    // A checkbox takes room on its line as well as putting a square on the page — the
++                    // portion is as wide as it is tall — so it gets an anchor character like any other
++                    // as-character frame. Recorded before the emit, so the offset is the anchor's own.
++                    if (isCheckBoxPlaceholder)
++                    {
++                        checkBoxes.Add(new Ww8LayoutCheckBox(current.Length, IsCheckedBox(position)));
++                        Emit(current, positions, AnchorCharacter, position);
++                        continue;
++                    }
++
+                     // Collected before the character is considered, so that the frame's offset is where
+                     // the anchor sits rather than one past it — which is what an as-character frame
+                     // needs and what a character origin measures from.
+@@ -963,6 +998,7 @@
+                     Notes = _pendingNotes.Count == 0 ? null : [.. _pendingNotes],
+                     Frames = _pendingFrames.Count == 0 ? null : [.. _pendingFrames],
+                     Fields = pageFields.Count == 0 ? null : [.. pageFields],
++                    CheckBoxes = checkBoxes.Count == 0 ? null : [.. checkBoxes],
+                 };
+ 
+             // The U+000C above this paragraph was a hard page break rather than a section boundary, so
+@@ -986,6 +1022,7 @@
+             current.Clear();
+             positions.Clear();
+             pageFields.Clear();
++            checkBoxes.Clear();
+ 
+             // A field still open across the paragraph mark loses its result start with the builder it
+             // pointed into; its cached result stays, which is what it was before this existed.
+diff --git a/dotnet/src/XRay.Office.WordProcessing/Ww8/DocReader.cs b/dotnet/src/XRay.Office.WordProcessing/Ww8/DocReader.cs
+--- a/dotnet/src/XRay.Office.WordProcessing/Ww8/DocReader.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Ww8/DocReader.cs
+@@ -695,9 +695,11 @@
+                 Runs = runs,
+                 Fields = paragraph.Fields ?? [],
+                 Notes = NotesOf(fonts, paragraph.Notes),
+-                Frames = FramesOf(
+-                    fonts, paragraph.Frames, paragraph.TextFrames, WidthFor(paragraph),
+-                    paragraph.IsInTable),
++                Frames = WithCheckBoxes(
++                    FramesOf(
++                        fonts, paragraph.Frames, paragraph.TextFrames, WidthFor(paragraph),
++                        paragraph.IsInTable),
++                    fonts, paragraph, face),
+             });
+         }
+ 
+@@ -710,6 +712,80 @@
+     }
+ 
+     /// <summary>
++    /// Adds the square each legacy <c>FORMCHECKBOX</c> in the paragraph puts on its line.
++    /// </summary>
++    /// <remarks>
++    /// <para>
++    /// <c>SwFieldFormCheckboxPortion::Format</c> (<c>sw/source/core/text/portxt.cxx</c>:1492) sets the
++    /// portion's width and height to <c>rInf.GetTextHeight()</c> and its ascent to
++    /// <c>rInf.GetAscent()</c> — "the width of the checkbox portion is the same as its height since
++    /// it's a square and that size depends on the font size" — and
++    /// <c>SwTextPaintInfo::DrawCheckBox</c> (<c>inftxt.cxx</c>:1247) strokes that rectangle deflated by
++    /// 25 twips a side, plus both diagonals when it is ticked. The same geometry the DOCX side already
++    /// draws, and the measurement that pinned it is recorded on
++    /// <c>DocxLayoutSource.CheckBoxFrame</c>: the square follows the run's text height and nothing the
++    /// field declares.
++    /// </para>
++    /// <para>
++    /// The run under the anchor decides the face, not the paragraph: a form's boxes are regularly set
++    /// in a face of their own, and the square is as tall as the line it sits on.
++    /// </para>
++    /// </remarks>
++    private static List<PageFrame> WithCheckBoxes(
++        List<PageFrame> frames,
++        LayoutFonts fonts,
++        Ww8DocumentReader.Ww8LayoutParagraph paragraph,
++        OpenTypeFace face)
++    {
++        if (paragraph.CheckBoxes is not { Count: > 0 } boxes) return frames;
++
++        foreach (Ww8DocumentReader.Ww8LayoutCheckBox box in boxes)
++        {
++            OpenTypeFace boxFace = face;
++            Length size = paragraph.Size;
++
++            foreach (Ww8DocumentReader.Ww8LayoutRun run in paragraph.Runs ?? [])
++            {
++                if (box.Offset < run.Start || box.Offset >= run.End) continue;
++
++                if (fonts.Face(run.FamilyName ?? paragraph.FamilyName, run.Weight, run.IsItalic)
++                    is { } resolved)
++                {
++                    boxFace = resolved;
++                }
++
++                if (run.Size > Length.Zero) size = run.Size;
++                break;
++            }
++
++            LineMetrics metrics =
++                LineSpacing.Resolve(boxFace, fonts.Metrics, WriterLineBox.LeadingAboveText);
++            Length side = metrics.ScaledLineHeight(size);
++            if (side <= CheckBoxInset + CheckBoxInset) continue;
++
++            frames.Add(new PageFrame
++            {
++                Size = new Core.Geometry.DocSize(side, side),
++                Anchor = FrameAnchor.AsCharacter,
++                AnchorOffset = box.Offset,
++                InlineAscent = metrics.ScaledAscent(size),
++                BorderColour = Colour.Black,
++                BorderWidth = CheckBoxStroke,
++                BorderInset = CheckBoxInset,
++                IsCrossed = box.IsChecked,
++            });
++        }
++
++        return frames;
++    }
++
++    /// <summary>How far inside the portion the box is stroked — <c>DrawCheckBox</c>'s own 25 twips.</summary>
++    private static readonly Length CheckBoxInset = Length.FromTwips(25);
++
++    /// <summary>The hairline the reference strokes it with — the 0.1 pt its PDF writer sets for a nought-width pen.</summary>
++    private static readonly Length CheckBoxStroke = Length.FromPoints(0.1);
++
++    /// <summary>
+     /// The label a list item draws, or null when it draws none.
+     /// </summary>
+     /// <remarks>
+diff --git a/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.FormFields.cs b/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.FormFields.cs
+new file mode 100644
+--- /dev/null
++++ b/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8DocumentReader.FormFields.cs
+@@ -0,0 +1,87 @@
++using System.Buffers.Binary;
++
++namespace XRay.Office.WordProcessing.Ww8;
++
++/// <content>
++/// Legacy form fields. Only one of them draws: the <c>FORMCHECKBOX</c> square.
++/// </content>
++/// <remarks>
++/// <para>
++/// Word writes the control as <c>U+0013 " FORMCHECKBOX " U+0001 U+0015</c> — a field with no
++/// separator and no cached result, whose <c>U+0001</c> placeholder therefore sits inside the
++/// <em>instruction</em>. A walk that drops everything between a field's start and its separator drops
++/// the box with it, which is what left every square off <c>1528364855.doc</c> (37 fields) and
++/// <c>f111.doc</c> (58). Neither document has a single one with a <c>U+0014</c> in it, and the boxes
++/// that <em>do</em> come out of <c>1528364855.doc</c> today are literal <c>U+25A1</c> characters in
++/// the text rather than fields at all — which is why the same page shows some and not others.
++/// </para>
++/// <para>
++/// The square's size is the line's text height and not anything the field states, exactly as it is on
++/// the DOCX side: <c>SwFieldFormCheckboxPortion::Format</c> (<c>sw/source/core/text/portxt.cxx</c>:1492)
++/// sets width and height to <c>rInf.GetTextHeight()</c>. So the <c>hps</c> in the <c>FFData</c> is read
++/// by nothing here, the same way <c>w:checkBox/w:size</c> is inert — see
++/// <c>DocxLayoutSource.CheckBoxFrame</c>, whose measurement settled it.
++/// </para>
++/// </remarks>
++public sealed partial class Ww8DocumentReader
++{
++    /// <summary>
++    /// How much of the <c>Data</c> stream a picture header takes before the <c>FFData</c> begins.
++    /// </summary>
++    /// <remarks>
++    /// A <c>WW8_PIC</c>, which <c>ImportFormulaControl</c> reads whole before handing the stream to
++    /// <c>WW8FormulaControl::FormulaRead</c> (<c>ww8par3.cxx</c>:2088-2096). Fixed rather than taken
++    /// from the header's own <c>cbHeader</c>, because that is what LibreOffice does.
++    /// </remarks>
++    private const int PictureHeaderLength = 68;
++
++    /// <summary>The <c>iRes</c> that means "no result is stored, show the default".</summary>
++    /// <remarks><c>if (iRes != 25) mnChecked = iRes;</c>, <c>ww8par3.cxx</c>:2181.</remarks>
++    private const int UnstatedResult = 25;
++
++    /// <summary>Whether the checkbox whose placeholder sits at a character position is ticked.</summary>
++    /// <remarks>
++    /// The <c>FFData</c> is in the <c>Data</c> stream at the placeholder's own
++    /// <c>sprmCPicLocation</c>, behind a picture header. Everything unreadable answers "not ticked":
++    /// an empty square is what the box looks like when the file says nothing, and the alternative —
++    /// declining to draw it — is the defect this exists to fix.
++    /// </remarks>
++    private bool IsCheckedBox(int position)
++    {
++        if (PictureLocation(position) is not { } offset) return false;
++        if (offset < 0 || offset > _pictures.Length - PictureHeaderLength - 10) return false;
++
++        ReadOnlySpan<byte> picture = _pictures.AsSpan(offset);
++        if (BinaryPrimitives.ReadInt32LittleEndian(picture) <= MinimumPictureLength) return false;
++
++        ReadOnlySpan<byte> data = picture[PictureHeaderLength..];
++
++        // "An unsigned integer that MUST be 0xFFFFFFFF" — the FFData's own header.
++        if (BinaryPrimitives.ReadUInt32LittleEndian(data) != 0xFFFFFFFF) return false;
++
++        int result = (data[4] & 0x7C) >> 2;
++        if (result != UnstatedResult) return result != 0;
++
++        // The default sits after the two flag bytes, the two counts and the control's name.
++        int at = 10;
++        if (!SkipString(data, ref at)) return false;
++
++        return at + 2 <= data.Length && BinaryPrimitives.ReadUInt16LittleEndian(data[at..]) != 0;
++    }
++
++    /// <summary>Steps over one <c>Xstz</c>: a count, that many characters, and a terminator.</summary>
++    private static bool SkipString(ReadOnlySpan<byte> data, ref int at)
++    {
++        if (at < 0 || at + 2 > data.Length) return false;
++
++        int characters = BinaryPrimitives.ReadUInt16LittleEndian(data[at..]);
++        at += 2 + ((characters + 1) * 2);
++
++        return at >= 0 && at <= data.Length;
++    }
++
++    /// <summary>A legacy form checkbox, and where in the paragraph's text its square sits.</summary>
++    /// <param name="Offset">The anchor character it stands behind.</param>
++    /// <param name="IsChecked">Whether the box is ticked, from the <c>FFData</c>'s <c>iRes</c>.</param>
++    public readonly record struct Ww8LayoutCheckBox(int Offset, bool IsChecked);
++}

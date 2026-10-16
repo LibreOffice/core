@@ -1,0 +1,46 @@
+rows        163 -> 163
+word gate   151/163 -> 151/163
+ink%        1265.33 -> 1263.67
+|ink|%      1584.92 -> 1583.49
+major pages 430 -> 428   over 163 / 163 documents
+
+|ink|% moved on 9 documents: 5 better (-1.82), 4 worse (+0.39)
+     -0.69  slides/batch-010/pptx/southern-classic-kennesaw-state-university-final.pptx
+     -0.51  slides/batch-012/pptx/1_Country-Updates_DRC_English.pptx
+     -0.46  slides/batch-012/pptx/3495.pptx
+     -0.15  slides/batch-017/pptx/RPA P4 - Advanced Material.pptx
+     -0.01  slides/batch-013/pptx/3492.pptx
+     +0.01  slides/batch-007/pptx/bitesize-writing-a-report.pptx
+     +0.03  slides/batch-011/pptx/Sector_Skills_Insights_Advanced_Manufacturing_summary_slide_pack.pptx
+     +0.04  slides/batch-017/pptx/Demick_JetBlue.pptx
+     +0.31  slides/batch-011/pptx/171128IPAP.pptx
+  ...
+     +0.31  slides/batch-011/pptx/171128IPAP.pptx
+     +0.04  slides/batch-017/pptx/Demick_JetBlue.pptx
+     +0.03  slides/batch-011/pptx/Sector_Skills_Insights_Advanced_Manufacturing_summary_slide_pack.pptx
+     +0.01  slides/batch-007/pptx/bitesize-writing-a-report.pptx
+     -0.01  slides/batch-013/pptx/3492.pptx
+     -0.15  slides/batch-017/pptx/RPA P4 - Advanced Material.pptx
+     -0.46  slides/batch-012/pptx/3495.pptx
+     -0.51  slides/batch-012/pptx/1_Country-Updates_DRC_English.pptx
+
+verdicts changed: 0
+
+per batch (before -> after / total)
+  batch-001   9 ->  9 /  9
+  batch-002  10 -> 10 / 10
+  batch-003  10 -> 10 / 10
+  batch-004  10 -> 10 / 10
+  batch-005   9 ->  9 /  9
+  batch-006  10 -> 10 / 10
+  batch-007  10 -> 10 / 10
+  batch-008   9 ->  9 / 10
+  batch-009   9 ->  9 / 10
+  batch-010   8 ->  8 / 10
+  batch-011  10 -> 10 / 10
+  batch-012   8 ->  8 / 10
+  batch-013  10 -> 10 / 10
+  batch-014   7 ->  7 / 10
+  batch-015  10 -> 10 / 10
+  batch-016   8 ->  8 / 10
+  batch-017   4 ->  4 /  5

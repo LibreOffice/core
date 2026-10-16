@@ -1,0 +1,21 @@
+ODT, the 337 converted .odt in /home/user/corpus-odf/odt:
+  style:text-scale occurrences  350 in 22 documents
+  loext:text-scale occurrences    0   (the extension spelling does not occur; the
+                                       specification's spelling is the one LibreOffice writes)
+  values   100% 239, 99% 64, 105% 14, 98% 6, 130% 4, 96% 3, 104% 3, 101% 3, 95% 2, 103% 2
+  NOT 100%: 111 occurrences in 18 documents
+  base rate: 210828 text:span elements
+
+RTF: NOT CENSUSED. The converted .rtf column does not exist in this container --
+  /home/user/corpus-odf holds `odt` (337) and `ods` (307) and nothing else, although
+  dotnet/CLAUDE.md describes it as 1285 files including rtf 338 and odp 302. A glob over the
+  absent directory returns zero occurrences AND zero base-rate tokens, which is the tell: a
+  census whose base rate is nil has measured nothing at all. Re-converting the column is about
+  forty minutes of `soffice` and is what this needs.
+
+WW8 (.doc), from ww8-census.tsv:
+  sprmCCharScale (0x4852) in a CHPX: 8 runs in 1 of 66 documents, every value 99
+  in a style:                        0
+  base rate: 61366 CHPX runs
+  raw 0x4852 byte pairs anywhere in the streams: 185 (an upper bound, and 23x the live count --
+  a byte-pattern scan of a WW8 stream is not a census)

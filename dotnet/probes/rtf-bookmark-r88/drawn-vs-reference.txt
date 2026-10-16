@@ -1,0 +1,36 @@
+== a_single
+  ours: Alpha one|[B1] Alpha one ;||
+  ref : Alpha one|[B1] Alpha one ;||
+== b_sequential
+  ours: Alpha one and Beta two|[B1] Alpha one ;|[B2] Beta two ;||
+  ref : Alpha one and Beta two|[B1] Alpha one ;|[B2] Beta two ;||
+== c_nested
+  ours: outer inner tail|[A] CACHED ;|[B] inner ;||
+  ref : outer inner tail|[A] Error: Reference source not found ;|[B] inner ;||
+== d_overlap
+  ours: first middle last|[A] middle last ;|[B] first middle ;||
+  ref : first middle last|[A] middle last ;|[B] first middle ;||
+== e_two
+  ours: Table 48: Caption Words|[R1] Table 48 ;|[T3] CACHED ;||
+  ref : Table 48: Caption Words|[R1] Table 48 ;|[T3] Error: Reference source not found ;||
+== f_five
+  ours: Table 48: Caption Words Here|[R1] Table 48: Caption Words Here ;|[T1] Table 48 ;|[T2] ;|[T3] ;|[R2] ;||
+  ref : Table 48: Caption Words Here|[R1] Table 48: Caption Words Here ;|[T1] Table 48 ;|[T2] ;|[T3] ;|[R2] ;||
+== g_crosspara
+  ours: first para|second para|[A] first para ;||
+  ref : first para|second para|[A] first para ;||
+== h_point
+  ours: Alpha one|[A] ;||
+  ref : Alpha one|[A] ;||
+== i_missing
+  ours: outer inner tail|[A] CACHED ;||
+  ref : outer inner tail|[A] Error: Reference source not found ;||
+== j_crossref
+  ours: Heading text here|[__RefHeading___Toc1] Heading text here ;||
+  ref : Heading text here|[__RefHeading___Toc1] Heading text here ;||
+== k_nested
+  ours: first second|[A] CACHED ;||
+  ref : first second|[A] Error: Reference source not found ;||
+== l_control
+  ours: first second|[A] first ;||
+  ref : first second|[A] first ;||

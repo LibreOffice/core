@@ -1,0 +1,4 @@
+  matched b/a mean|dx| before     after  within .1pt  unique mean|dx| unique   document
+   374/374              9.103     9.012   109/110        227           6.055   150_5300_13_chg8__odt.pdf  BETTER
+   162/166              9.110     0.335   117/125        156           0.350   absrc-pac-01-info-note-en__odt.pdf  BETTER
+TOTAL matched 536/540  mean |dx| before 9.105 pt after 6.345 pt  within 0.1 pt 226 -> 235

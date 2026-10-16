@@ -1,0 +1,340 @@
+# ours = fresh render; ref columns = banked from gate-odf-rows.tsv (odf-gate-01)
+path	ext	pages	words	fonts	unemb	verdict	rawwords	glyphs
+words/ceiling-001/rtf/150_5300_13_chg8.rtf	rtf	17/19	7133/8595	7/6	0	pages,words	7179/8656	34230/41729
+words/ceiling-001/rtf/ABCD-FE-01-00 Flight Envelope - v1 08.03.16.rtf	rtf	14/14	4033/3747	10/8	0	words	4217/3814	18384/17751
+words/ceiling-001/rtf/AW-104D-RVSM-Aircraft-Approval-Checklist.pdf.rtf	rtf	2/2	135/129	3/6	0	match	147/141	737/729
+words/chartset-001/rtf/002_advanced_word_chart_report.rtf	rtf	1/1	96/96	4/4	0	match	102/102	536/536
+words/chartset-001/rtf/008_advanced_word_chart_report.rtf	rtf	1/1	94/94	4/4	0	match	100/100	534/534
+words/chartset-001/rtf/014_advanced_word_chart_report.rtf	rtf	1/1	94/94	4/4	0	match	100/100	531/531
+words/chartset-001/rtf/020_advanced_word_chart_report.rtf	rtf	1/1	94/94	4/4	0	match	100/100	530/530
+words/chartset-001/rtf/026_advanced_word_chart_report.rtf	rtf	1/1	94/94	4/4	0	match	100/100	533/533
+words/chartset-001/rtf/032_advanced_word_chart_report.rtf	rtf	1/1	94/94	4/4	0	match	100/100	534/534
+words/chartset-001/rtf/clustered-column-result.rtf	rtf	1/1	68/44	2/2	0	words	68/44	389/253
+words/chartset-001/rtf/clustered-column-template.rtf	rtf	1/1	37/16	2/2	0	words	37/16	200/121
+words/chartset-001/rtf/pie-chart-result.rtf	rtf	1/1	40/24	2/2	0	words	40/24	234/157
+words/chartset-001/rtf/pie-chart-template.rtf	rtf	1/1	9/6	2/2	0	words	9/6	73/57
+words/chartset-002/rtf/005_advanced_word_chart_report.rtf	rtf	1/1	94/94	4/4	0	match	100/100	529/529
+words/chartset-002/rtf/006_advanced_word_chart_report.rtf	rtf	1/1	94/94	4/4	0	match	100/100	529/529
+words/chartset-002/rtf/011_advanced_word_chart_report.rtf	rtf	1/1	94/94	4/4	0	match	100/100	530/530
+words/chartset-002/rtf/015_advanced_word_chart_report.rtf	rtf	1/1	94/94	4/4	0	match	100/100	532/532
+words/chartset-002/rtf/017_advanced_word_chart_report.rtf	rtf	1/1	95/95	4/4	0	match	101/101	540/540
+words/chartset-002/rtf/021_advanced_word_chart_report.rtf	rtf	1/1	94/94	4/4	0	match	100/100	532/532
+words/chartset-002/rtf/023_advanced_word_chart_report.rtf	rtf	1/1	94/94	4/4	0	match	100/100	532/532
+words/chartset-002/rtf/029_advanced_word_chart_report.rtf	rtf	1/1	94/94	4/4	0	match	100/100	528/528
+words/chartset-002/rtf/030_advanced_word_chart_report.rtf	rtf	1/1	94/94	4/4	0	match	100/100	528/528
+words/chartset-002/rtf/033_advanced_word_chart_report.rtf	rtf	1/1	94/94	4/4	0	match	100/100	529/529
+words/chartset-003/rtf/001_advanced_word_chart_report.rtf	rtf	1/1	95/95	4/4	0	match	101/101	535/535
+words/chartset-003/rtf/003_advanced_word_chart_report.rtf	rtf	1/1	95/95	4/4	0	match	101/101	534/534
+words/chartset-003/rtf/004_advanced_word_chart_report.rtf	rtf	1/1	94/94	4/4	0	match	100/100	530/530
+words/chartset-003/rtf/007_advanced_word_chart_report.rtf	rtf	1/1	94/94	4/4	0	match	100/100	531/531
+words/chartset-003/rtf/009_advanced_word_chart_report.rtf	rtf	1/1	96/96	4/4	0	match	102/102	540/540
+words/chartset-003/rtf/016_advanced_word_chart_report.rtf	rtf	1/1	95/95	4/4	0	match	101/101	537/537
+words/chartset-003/rtf/019_advanced_word_chart_report.rtf	rtf	1/1	94/94	4/4	0	match	100/100	533/533
+words/chartset-003/rtf/025_advanced_word_chart_report.rtf	rtf	1/1	94/94	4/4	0	match	100/100	524/524
+words/chartset-003/rtf/027_advanced_word_chart_report.rtf	rtf	1/1	94/94	4/4	0	match	100/100	528/528
+words/chartset-003/rtf/028_advanced_word_chart_report.rtf	rtf	1/1	94/94	4/4	0	match	100/100	530/530
+words/chartset-004/rtf/010_advanced_word_chart_report.rtf	rtf	1/1	94/94	4/4	0	match	100/100	533/533
+words/chartset-004/rtf/012_advanced_word_chart_report.rtf	rtf	1/1	95/95	4/4	0	match	101/101	538/538
+words/chartset-004/rtf/013_advanced_word_chart_report.rtf	rtf	1/1	94/94	4/4	0	match	100/100	525/525
+words/chartset-004/rtf/018_advanced_word_chart_report.rtf	rtf	1/1	94/94	4/4	0	match	100/100	530/530
+words/chartset-004/rtf/022_advanced_word_chart_report.rtf	rtf	1/1	94/94	4/4	0	match	100/100	530/530
+words/chartset-004/rtf/024_advanced_word_chart_report.rtf	rtf	1/1	94/94	4/4	0	match	100/100	536/536
+words/chartset-004/rtf/031_advanced_word_chart_report.rtf	rtf	1/1	94/94	4/4	0	match	100/100	527/527
+words/chartset-005/rtf/003_Free_Genogram_Diagram_Template_Easy_Format_60eb6e42.rtf	rtf	1/1	1/1	1/1	0	match	1/1	8/8
+words/chartset-005/rtf/005_Free_Genogram_Diagram_Template_Excellent_layout_f5f185d0.rtf	rtf	1/1	2/2	1/1	0	match	2/2	8/8
+words/chartset-005/rtf/036_Venn_Diagram_Template_Fillable_Layout_3ffbba36.rtf	rtf	1/1	13/13	2/2	0	match	15/15	61/61
+words/chartset-005/rtf/052_Organogram_Template_Colorful_Flow_Chart_cba9fbfe.rtf	rtf	1/1	0/0	0/0	0	match	0/0	0/0
+words/chartset-005/rtf/053_Organogram_Template_Creative_Theme_21657a3d.rtf	rtf	1/1	0/0	0/0	0	match	0/0	0/0
+words/chartset-005/rtf/054_Organogram_Template_Grey_Vertical_Theme_b2dbd9a8.rtf	rtf	1/1	0/0	0/0	0	match	0/0	0/0
+words/chartset-005/rtf/083_Printable_Graph_Paper_Template_Customizable_Format_55ff93a3.rtf	rtf	1/1	3/3	1/1	0	match	4/4	14/14
+words/chartset-005/rtf/084_Printable_Graph_Paper_Template_Editable_Layout_d66c6820.rtf	rtf	1/1	4/4	1/1	0	match	7/6	19/19
+words/chartset-005/rtf/085_Printable_Graph_Paper_Template_Excellent_Format_4bcae89a.rtf	rtf	1/1	4/4	2/1	0	match	6/6	19/19
+words/chartset-005/rtf/087_Printable_Graph_Paper_Template_Green_Theme_0c14ea04.rtf	rtf	1/1	12/12	2/2	0	match	14/14	27/27
+words/chartset-006/rtf/001_Free_Genogram_Diagram_Template_Blue_and_Gray_Theme_7c9e01a7.rtf	rtf	1/1	7/7	2/2	0	match	7/7	32/32
+words/chartset-006/rtf/002_Free_Genogram_Diagram_Template_Customizable_Format_2219584b.rtf	rtf	1/1	5/4	1/1	0	match	5/4	8/7
+words/chartset-006/rtf/033_Venn_Diagram_Template_Colored_Theme_2aea6697.rtf	rtf	1/1	13/13	1/1	0	match	16/16	63/63
+words/chartset-006/rtf/057_Organogram_Template_Vertical_Colorful_Theme_724b143c.rtf	rtf	1/1	0/0	0/0	0	match	0/0	0/0
+words/chartset-006/rtf/081_Printable_Graph_Paper_Template_Blue_Theme_629316cb.rtf	rtf	1/1	5/5	2/2	0	match	8/8	25/25
+words/chartset-006/rtf/086_Printable_Graph_Paper_Template_Gray_Theme_7300e5d7.rtf	rtf	1/1	4/4	1/1	0	match	6/6	19/19
+words/chartset-006/rtf/088_Printable_Graph_Paper_Template_Quality_layout_33051f6e.rtf	rtf	1/1	2/2	1/1	0	match	2/2	10/10
+words/chartset-006/rtf/093_Business_Case_Template_Customizable_Layout_510c25e7.rtf	rtf	1/1	34/34	2/2	0	match	34/34	201/201
+words/chartset-006/rtf/097_Business_Case_Template_Elegant_Layout_3ba9cbf2.rtf	rtf	2/2	54/54	3/3	0	match	54/54	276/276
+words/chartset-006/rtf/099_Business_Case_Template_Gray_Theme_ac3edbf4.rtf	rtf	1/1	45/45	1/1	0	match	45/45	294/294
+words/chartset-007/rtf/009_Free_Genogram_Diagram_Template_Handy_Format_4bb900f0.rtf	rtf	1/1	2/1	1/1	0	match	2/1	8/7
+words/chartset-007/rtf/018_Project_Timeline_Template_Editable_Format_e1cf1df5.rtf	rtf	1/1	106/12	2/2	0	words	106/12	407/73
+words/chartset-007/rtf/025_Unit_Circle_Chart_Cos_and_Sin_Model_1ed01892.rtf	rtf	1/1	105/105	2/2	0	match	105/105	571/571
+words/chartset-007/rtf/034_Venn_Diagram_Template_Customizable_Format_d14642b7.rtf	rtf	1/1	13/13	1/1	0	match	16/16	63/63
+words/chartset-007/rtf/049_Visual_Product_Roadmap_Template_Simple_Format_4af26e4f.rtf	rtf	1/1	61/61	2/2	0	match	62/62	406/406
+words/chartset-007/rtf/058_Organogram_Template_With_Picture_Theme_44b79368.rtf	rtf	1/1	0/0	0/0	0	match	0/0	0/0
+words/chartset-007/rtf/074_Storyboard_Template_Editable_Design_132436d1.rtf	rtf	1/1	7/7	2/2	0	match	10/10	32/32
+words/chartset-007/rtf/080_Printable_Graph_Paper_Template_Black_Theme_6b066be1.rtf	rtf	1/1	6/6	1/1	0	match	9/9	27/27
+words/chartset-007/rtf/089_Printable_Graph_Paper_Template_Simlpe_Format_3aff1c88.rtf	rtf	1/1	2/2	1/1	0	match	4/4	10/10
+words/chartset-007/rtf/094_Business_Case_Template_Decent_Layout_e7722f2b.rtf	rtf	1/2	29/29	2/2	0	pages	29/29	189/189
+words/chartset-008/rtf/004_Free_Genogram_Diagram_Template_Editable_Format_b82b6152.rtf	rtf	1/1	7/7	3/3	0	match	7/7	25/25
+words/chartset-008/rtf/006_Free_Genogram_Diagram_Template_Fillable_Format_7ca08541.rtf	rtf	1/1	53/53	3/3	0	match	53/53	203/203
+words/chartset-008/rtf/010_Free_Genogram_Diagram_Template_Yellow_Theme_6ee4f818.rtf	rtf	1/1	5/5	2/2	0	match	5/5	11/11
+words/chartset-008/rtf/012_Project_Timeline_Template_Black_and_Brown_Theme_35c76550.rtf	rtf	1/1	35/8	1/1	0	words	35/8	124/53
+words/chartset-008/rtf/016_Project_Timeline_Template_Complete_Guide_7d36d09c.rtf	rtf	1/1	161/12	3/2	0	words	161/12	631/75
+words/chartset-008/rtf/035_Venn_Diagram_Template_Editable_Format_966dff5f.rtf	rtf	1/1	39/39	2/2	0	match	40/40	142/142
+words/chartset-008/rtf/046_Visual_Product_Roadmap_Template_Fillable_Format_582acab0.rtf	rtf	1/1	92/92	2/2	0	match	97/97	588/588
+words/chartset-008/rtf/092_Business_Case_Template_Convenient_Format_00786cce.rtf	rtf	8/8	1025/1026	2/2	0	match	1027/1028	5699/5699
+words/chartset-008/rtf/098_Business_Case_Template_Fillable_Layout_d0c5410e.rtf	rtf	1/1	89/89	2/2	0	match	89/89	458/458
+words/chartset-008/rtf/100_Business_Case_Template_Modern_Format_ff9e7282.rtf	rtf	5/5	98/101	2/2	0	match	100/103	512/512
+words/chartset-009/rtf/007_Free_Genogram_Diagram_Template_Green_and_Purple_Theme_8d2ba829.rtf	rtf	1/1	34/34	3/3	0	match	34/34	137/137
+words/chartset-009/rtf/017_Project_Timeline_Template_Customizable_Format_5d5ca2e8.rtf	rtf	1/1	86/89	3/3	0	match	86/89	470/470
+words/chartset-009/rtf/019_Project_Timeline_Template_Excellent_Layout_4ee62967.rtf	rtf	1/1	96/95	2/2	0	match	101/100	332/331
+words/chartset-009/rtf/027_Unit_Circle_Chart_Graphical_Chart_5462a579.rtf	rtf	1/1	321/187	3/2	0	words	321/187	1395/1019
+words/chartset-009/rtf/030_Unit_Circle_Chart_Points_System_23b5ef07.rtf	rtf	1/1	78/78	2/2	0	match	80/80	367/367
+words/chartset-009/rtf/037_Venn_Diagram_Template_Four_Circle_764829a0.rtf	rtf	1/1	20/20	1/1	0	match	20/20	98/98
+words/chartset-009/rtf/041_Visual_Product_Roadmap_Template_Blank_Format_63a3e010.rtf	rtf	1/1	30/29	2/2	0	match	33/30	124/124
+words/chartset-009/rtf/042_Visual_Product_Roadmap_Template_Colored_Background_89385cfb.rtf	rtf	2/1	31/31	3/3	0	pages	33/33	185/185
+words/chartset-009/rtf/077_Storyboard_Template_Pink_and_Blue_Theme_805e82ab.rtf	rtf	1/1	4/3	2/2	0	match	6/5	20/15
+words/chartset-009/rtf/082_Printable_Graph_Paper_Template_Colored_Background_9092cf9b.rtf	rtf	1/1	3/3	1/1	0	match	6/6	14/14
+words/chartset-010/rtf/020_Project_Timeline_Template_Modern_Theme_0c215d87.rtf	rtf	1/1	58/12	2/2	0	words	58/12	186/51
+words/chartset-010/rtf/023_Unit_Circle_Chart_Circular_Percentage_790f7b75.rtf	rtf	1/1	105/95	3/2	0	words	105/95	543/519
+words/chartset-010/rtf/026_Unit_Circle_Chart_Four_Quadrants_09bf3ed1.rtf	rtf	1/1	53/53	1/2	0	match	53/53	290/290
+words/chartset-010/rtf/028_Unit_Circle_Chart_Optimized_Graph_83d9c756.rtf	rtf	1/2	311/127	3/2	0	pages,words	313/127	1172/680
+words/chartset-010/rtf/032_Venn_Diagram_Template_Brown_Theme_d5b549f0.rtf	rtf	1/1	44/43	1/1	0	match	44/43	196/195
+words/chartset-010/rtf/051_Organogram_Template_Basic_Theme_e6464d06.rtf	rtf	1/1	0/0	0/0	0	match	0/0	0/0
+words/chartset-010/rtf/056_Organogram_Template_Square_Theme_38f373d4.rtf	rtf	1/1	2/2	1/1	0	match	2/2	8/8
+words/chartset-010/rtf/066_Work_Breakdown_Structure_Template_Colored_Background_c27ff248.rtf	rtf	1/1	10/10	1/2	0	match	10/10	79/70
+words/chartset-010/rtf/067_Work_Breakdown_Structure_Template_Gray_Theme_89f8be8b.rtf	rtf	1/1	17/18	1/2	0	match	17/18	112/112
+words/chartset-010/rtf/090_Business_Case_Template_Blue_Theme_108ff0f1.rtf	rtf	1/1	41/41	2/2	0	match	47/47	263/263
+words/chartset-011/rtf/015_Project_Timeline_Template_Colored_Background_6434b0e8.rtf	rtf	1/1	49/13	4/2	0	words	53/17	211/84
+words/chartset-011/rtf/022_Unit_Circle_Chart_Circle_A_and_B_19dbf275.rtf	rtf	1/1	195/195	3/3	0	match	195/195	1047/1047
+words/chartset-011/rtf/029_Unit_Circle_Chart_Pie_Theme_8a922142.rtf	rtf	1/1	95/94	2/1	0	match	95/94	517/512
+words/chartset-011/rtf/039_Venn_Diagram_Template_Simple_Format_6f82661d.rtf	rtf	1/1	35/35	2/2	0	match	38/38	161/161
+words/chartset-011/rtf/040_Venn_Diagram_Template_Three_Circle_80f32f5e.rtf	rtf	1/1	51/61	2/3	0	words	61/73	242/285
+words/chartset-011/rtf/043_Visual_Product_Roadmap_Template_Customizable_Format_ee0fe5b1.rtf	rtf	1/1	184/184	3/3	0	match	186/186	1099/1099
+words/chartset-011/rtf/061_Nursing_Concept_Map_Template_fb9816f0.rtf	rtf	1/1	21/21	2/2	0	match	23/23	150/150
+words/chartset-011/rtf/064_Foot_Reflexology_Chart_Customizable_Format_79b7db06.rtf	rtf	1/1	41/41	1/1	0	match	41/41	184/184
+words/chartset-011/rtf/065_Work_Breakdown_Structure_Template_Blue_Theme_2b207f62.rtf	rtf	1/1	14/14	2/3	0	match	14/14	80/85
+words/chartset-011/rtf/068_Work_Breakdown_Structure_Template_Green_Theme_63e69ed8.rtf	rtf	1/1	19/19	2/2	0	match	19/19	135/135
+words/chartset-012/rtf/008_Free_Genogram_Diagram_Template_Green_and_Yellow_Theme_9017c1a8.rtf	rtf	1/1	4/4	2/2	0	match	4/4	10/10
+words/chartset-012/rtf/013_Project_Timeline_Template_Blue_Background_4ea3475e.rtf	rtf	1/1	98/98	3/3	0	match	100/100	312/312
+words/chartset-012/rtf/021_Unit_Circle_Chart_3D_Pie_Chart_404247ab.rtf	rtf	1/1	104/95	2/1	0	words	104/95	541/517
+words/chartset-012/rtf/024_Unit_Circle_Chart_Colorful_Circles_7c92601e.rtf	rtf	1/1	95/95	1/1	0	match	95/95	517/517
+words/chartset-012/rtf/031_Venn_Diagram_Template_Blue_Theme_a9e417b8.rtf	rtf	1/1	51/61	2/3	0	words	61/73	242/285
+words/chartset-012/rtf/044_Visual_Product_Roadmap_Template_Editable_Format_c232a2c0.rtf	rtf	1/1	54/53	3/3	0	match	54/53	227/219
+words/chartset-012/rtf/050_Visual_Product_Roadmap_Template_Yellow_and_Blue_Theme_49b50744.rtf	rtf	1/1	215/215	4/4	0	match	216/216	1288/1288
+words/chartset-012/rtf/055_Organogram_Template_Horizontal_Structure_28a7e725.rtf	rtf	1/1	0/0	0/0	0	match	0/0	0/0
+words/chartset-012/rtf/095_Business_Case_Template_Easy_Format_61de7128.rtf	rtf	1/1	56/56	2/2	0	match	74/74	348/348
+words/chartset-012/rtf/096_Business_Case_Template_Editable_Layout_41fe0bc0.rtf	rtf	1/2	34/34	2/2	0	pages	40/40	235/235
+words/chartset-013/rtf/038_Venn_Diagram_Template_Off_White_and_Blue_Theme_9dff385e.rtf	rtf	1/1	38/38	2/3	0	match	40/40	170/170
+words/chartset-013/rtf/047_Visual_Product_Roadmap_Template_Professional_Layout_2ff4499e.rtf	rtf	1/1	43/43	2/2	0	match	44/44	182/183
+words/chartset-013/rtf/048_Visual_Product_Roadmap_Template_Quality_Layout_f38f7aee.rtf	rtf	2/2	61/61	2/2	0	match	62/62	402/402
+words/chartset-013/rtf/059_Disease_Concept_Map_Template_4acf63f2.rtf	rtf	1/1	21/19	2/2	0	match	21/19	141/130
+words/chartset-013/rtf/060_Human_Body_Concept_Map_Template_ac872cfb.rtf	rtf	1/1	30/29	2/2	0	match	30/29	148/138
+words/chartset-013/rtf/069_Work_Breakdown_Structure_Template_Professional_Format_1e02dce1.rtf	rtf	1/1	18/18	1/1	0	match	20/20	127/127
+words/chartset-013/rtf/072_Storyboard_Template_Colored_Theme_28524a15.rtf	rtf	1/1	0/0	0/0	0	match	0/0	0/0
+words/chartset-013/rtf/073_Storyboard_Template_Easy_to_Use_44ce05fc.rtf	rtf	1/1	0/0	0/0	0	match	0/0	0/0
+words/chartset-013/rtf/075_Storyboard_Template_Fillable_Format_7fa01641.rtf	rtf	1/1	0/0	0/0	0	match	0/0	0/0
+words/chartset-013/rtf/091_Business_Case_Template_Complete_Guide_cb91a140.rtf	rtf	5/5	586/586	3/3	0	match	631/628	3134/3134
+words/chartset-014/rtf/011_Project_Timeline_Template_Beautiful_Theme_2336e680.rtf	rtf	1/1	194/167	4/4	0	words	194/167	1065/930
+words/chartset-014/rtf/014_Project_Timeline_Template_Blue_and_Green_Theme_a8311fa1.rtf	rtf	1/1	168/168	3/3	0	match	168/168	820/820
+words/chartset-014/rtf/045_Visual_Product_Roadmap_Template_Excellent_Format_e364063c.rtf	rtf	1/1	43/42	3/3	0	match	48/47	242/235
+words/chartset-014/rtf/062_Vocabulary_Concept_Map_Template_2f7c1c09.rtf	rtf	1/1	11/11	1/1	0	match	11/11	76/76
+words/chartset-014/rtf/063_Foot_Reflexology_Chart_Complete_Guide_cf5ed992.rtf	rtf	1/1	75/75	2/2	0	match	75/75	402/402
+words/chartset-014/rtf/070_Storyboard_Template_Blank_Format_fc41673a.rtf	rtf	1/1	0/0	0/0	0	match	0/0	0/0
+words/chartset-014/rtf/071_Storyboard_Template_Cartoon_Theme_ae113de2.rtf	rtf	1/1	4/3	2/2	0	match	6/5	20/15
+words/chartset-014/rtf/076_Storyboard_Template_Gray_Theme_1e5fd5e5.rtf	rtf	1/1	2/2	1/1	0	match	2/2	10/10
+words/chartset-014/rtf/078_Storyboard_Template_Pink_and_Gray_Theme_ea89553f.rtf	rtf	1/1	0/0	0/0	0	match	0/0	0/0
+words/chartset-014/rtf/079_Storyboard_Template_Simple_Format_81653703.rtf	rtf	1/1	4/4	2/2	0	match	5/5	20/20
+words/done-001/rtf/CMTA_Airport_Transportation.rtf	rtf	1/1	255/255	2/3	0	match	260/260	1305/1305
+words/done-001/rtf/FAA-2013-0422-0009_attachment_1.rtf	rtf	7/7	1845/1845	1/1	0	match	1907/1907	9308/9308
+words/done-001/rtf/GLACIERBG.ETT.rtf	rtf	1/1	408/408	3/3	0	match	411/411	2397/2397
+words/done-001/rtf/LENTOBUSSIAIKATAULU.-31.10.-31.12.2022.rtf	rtf	1/1	104/104	4/4	0	match	128/128	716/716
+words/done-001/rtf/Pre-Application_Letter_of_Intent_Example.rtf	rtf	2/1	362/350	2/2	0	pages,words	362/350	1862/1780
+words/done-001/rtf/Sample_PAO-PSO_91-113_Letter.rtf	rtf	1/1	307/307	3/2	0	match	317/317	1629/1629
+words/done-001/rtf/Service-Bulletin-SDFNR5-April-25-2023-FNR-TRANSMISSION-LUBRICATION.rtf	rtf	1/1	297/297	3/4	0	match	300/300	1223/1223
+words/done-001/rtf/advert-for-draft-decision-airbus-epr-bm3965ia-v006.rtf	rtf	2/2	385/385	2/3	0	match	387/387	2104/2104
+words/done-001/rtf/foca_form_1.rtf	rtf	3/3	1672/1671	3/3	0	match	1687/1686	8518/8518
+words/done-001/rtf/private-hire-operators-licensed.rtf	rtf	2/2	237/237	2/2	0	match	239/239	1417/1417
+words/done-002/rtf/AUWG min 4-3-24 final.rtf	rtf	2/2	647/647	2/2	0	match	649/649	3463/3463
+words/done-002/rtf/Bull01-06-Reserve Training Standards.rtf	rtf	6/6	1482/1482	3/2	0	match	1483/1483	7948/7948
+words/done-002/rtf/CSCRS_Technical-Report-Documentation-Page-with-instructions.rtf	rtf	2/2	719/719	3/5	0	match	720/720	3936/3936
+words/done-002/rtf/FAA-High-Level-Org-Chart.rtf	rtf	3/3	673/673	3/4	0	match	812/812	4204/4204
+words/done-002/rtf/FMRBullletinB-28.rtf	rtf	2/2	461/461	3/3	0	match	461/461	2835/2835
+words/done-002/rtf/Interview-mit-Manfred1-Müller.rtf	rtf	2/2	801/801	2/2	0	match	805/805	4744/4744
+words/done-002/rtf/easa-form-1.rtf	rtf	5/5	1421/1421	3/3	0	match	1434/1434	7489/7489
+words/done-002/rtf/lk03_17.rtf	rtf	2/2	367/367	2/2	0	match	373/373	1931/1931
+words/done-002/rtf/prison-population-bulletin-june.rtf	rtf	6/4	1425/1425	2/2	0	pages	1440/1440	6038/6038
+words/done-002/rtf/s33song-beverlyactproductionofdocuments.rtf	rtf	2/2	571/571	3/3	0	match	572/572	3227/3227
+words/done-003/rtf/10795.rtf	rtf	4/4	857/857	5/6	0	match	864/864	5428/5428
+words/done-003/rtf/191216_Lesefassung_Nachtflugregelung.rtf	rtf	3/3	905/907	4/4	0	match	908/910	5435/5435
+words/done-003/rtf/2015-April-SWIM_Users_Forum-Q&A.rtf	rtf	5/5	1701/1700	4/4	0	match	1705/1704	8333/8333
+words/done-003/rtf/96-3-clement-data.rtf	rtf	7/7	1469/1469	4/6	0	match	1513/1513	10193/10193
+words/done-003/rtf/DEP2008-1900.rtf	rtf	3/3	973/973	4/5	0	match	986/986	5168/5168
+words/done-003/rtf/DRX-Ascend System Course Description.rtf	rtf	2/2	475/475	3/4	0	match	512/512	2950/2950
+words/done-003/rtf/II.1.2_Hypoxia.rtf	rtf	12/13	3730/3729	2/2	0	pages	3739/3738	19253/19253
+words/done-003/rtf/Technical_Issue_Report_Form.rtf	rtf	2/2	341/341	4/4	0	match	406/406	1922/1922
+words/done-003/rtf/Temp16.rtf	rtf	2/2	670/669	3/4	0	match	672/671	3438/3431
+words/done-003/rtf/mde087077~283.rtf	rtf	4/4	978/978	3/3	0	match	988/988	5746/5746
+words/done-004/rtf/07-04.rtf	rtf	3/3	1069/1069	5/5	0	match	1078/1078	5485/5485
+words/done-004/rtf/1528039320.rtf	rtf	1/2	289/312	3/4	0	pages,words	292/315	1790/1916
+words/done-004/rtf/2ca950374241722b8ea7c132dfce63ae.rtf	rtf	3/3	949/951	4/4	0	match	1043/1050	5118/5118
+words/done-004/rtf/461249.rtf	rtf	5/5	1671/1669	4/4	0	match	1710/1708	8911/8911
+words/done-004/rtf/How-to-Write-an-Architecture-Document-for-a-Technology-Service.rtf	rtf	3/3	953/953	1/3	0	match	960/960	5482/5482
+words/done-004/rtf/License App Instructions 2-22.rtf	rtf	3/3	1002/1002	3/4	0	match	1036/1036	5737/5737
+words/done-004/rtf/PAT-047 - Architecture and Detailed Design Assessment.rtf	rtf	4/4	1040/1041	5/8	0	match	1053/1054	6139/6137
+words/done-004/rtf/RobertQ_Service.rtf	rtf	4/4	547/547	2/2	0	match	587/587	2735/2735
+words/done-004/rtf/Software Architecture Document Template.rtf	rtf	3/3	589/589	4/5	0	match	604/604	3390/3390
+words/done-004/rtf/opic 5--Case Studies Movie and Aviation Industries.rtf	rtf	5/5	1194/1194	5/5	0	match	1196/1196	5293/5293
+words/done-005/rtf/2024-12_Comlux_opens_Maintenance_and_Service_Center_in_Dubai.rtf	rtf	3/3	668/668	3/3	0	match	672/672	3631/3631
+words/done-005/rtf/316r_a_e.rtf	rtf	14/14	4373/4373	5/4	0	match	4418/4418	24160/24160
+words/done-005/rtf/316r_a_f.rtf	rtf	14/14	4582/4584	5/4	0	match	4632/4634	25186/25186
+words/done-005/rtf/BID_ACKNOWLEDGEMENT_FORM_FOR_A320.rtf	rtf	3/3	294/295	4/3	0	match	310/311	1529/1529
+words/done-005/rtf/Technical Report and Technical Update Guidelines.rtf	rtf	4/4	1206/1205	4/7	0	match	1252/1251	6716/6716
+words/done-005/rtf/Theft-Restitution-Letter-Vancouver-ASC-2005.rtf	rtf	1/1	262/262	2/2	0	match	265/265	1319/1319
+words/done-005/rtf/f445896eb008d14c1746fc37d412dc22.rtf	rtf	15/15	5453/5453	3/3	0	match	5658/5657	27066/27066
+words/done-005/rtf/healthcare-reform-nsa-consumer-bulletin.rtf	rtf	4/4	1701/1701	5/5	0	match	1711/1711	8645/8645
+words/done-005/rtf/loi_format_letter_of_intent-a-320-214-a330.rtf	rtf	10/10	3347/3346	4/5	0	match	3373/3372	16753/16752
+words/done-005/rtf/part-147_approval list_20230119.rtf	rtf	2/2	723/725	4/5	0	match	746/748	3494/3498
+words/done-006/rtf/003.rtf	rtf	5/4	984/984	2/3	0	pages	998/999	5761/5761
+words/done-006/rtf/1244277 1 Comment.rtf	rtf	2/2	389/389	5/5	0	match	393/393	1745/1745
+words/done-006/rtf/62599_FRANCE-BRAZIL- Air France Flight 447 crash.rtf	rtf	21/16	6133/6132	2/2	0	pages	6167/6165	30134/30134
+words/done-006/rtf/LHD-230-application-for-the-approval-of-an-aircraftr.rtf	rtf	2/2	774/774	2/4	0	match	781/779	4383/4383
+words/done-006/rtf/P200904290238_0238_51880.rtf	rtf	3/3	300/300	4/4	0	match	304/304	1873/1873
+words/done-006/rtf/SDL_FSDO_Part91_LOA_Checklist.rtf	rtf	2/2	424/424	4/3	0	match	430/430	2375/2375
+words/done-006/rtf/Wales_Office_Quarter_4_Ministerial_Transparency_Return.rtf	rtf	7/6	947/941	4/4	0	pages	962/955	5691/5642
+words/done-006/rtf/cacs-206-1751218225.rtf	rtf	2/2	347/347	2/3	0	match	348/348	1925/1925
+words/done-006/rtf/healthcare-reform-nsa-provider-bulletin.rtf	rtf	6/5	1943/1936	6/7	0	pages	1988/1980	11257/11209
+words/done-006/rtf/technical-memo-format.rtf	rtf	5/5	1812/1812	5/6	0	match	1846/1846	9300/9300
+words/done-007/rtf/09.rtf	rtf	2/2	463/463	5/4	0	match	463/463	2608/2608
+words/done-007/rtf/0c662f5c948a7d81d32ffd833c5cc59421a5f522.rtf	rtf	1/1	397/398	6/4	0	match	417/418	2004/2004
+words/done-007/rtf/Press release_EUREKA labels ITEA 3 Cluster.rtf	rtf	2/2	777/777	3/5	0	match	785/785	4106/4106
+words/done-007/rtf/RNW167A-150428.rtf	rtf	9/9	1767/1767	5/5	0	match	1770/1770	9336/9336
+words/done-007/rtf/chapter 12.rtf	rtf	12/12	3671/3671	4/4	0	match	3683/3683	18868/18868
+words/done-007/rtf/congregationalhistories_ky_2023.rtf	rtf	1/1	247/247	3/3	0	match	252/252	1579/1579
+words/done-007/rtf/final-technical-report-template.rtf	rtf	6/6	1117/1123	6/6	0	match	1130/1136	6153/6153
+words/done-007/rtf/johnson_hall_service_log.pdf.rtf	rtf	1/1	274/274	6/6	0	match	317/317	1364/1364
+words/done-007/rtf/technical-report-template.rtf	rtf	7/7	747/749	4/5	0	match	766/767	3860/3860
+words/done-007/rtf/template-technical-report.rtf	rtf	10/10	837/837	2/4	0	match	859/859	4363/4363
+words/done-008/rtf/1245685 1 Comment.rtf	rtf	1/1	326/326	7/6	0	match	327/327	1619/1619
+words/done-008/rtf/2024-2nd-quarter-case-summaries.rtf	rtf	10/10	5675/5675	4/5	0	match	5677/5677	28056/28056
+words/done-008/rtf/4400-91_Proposal_To_Lease_Space_10-2024.rtf	rtf	6/7	3267/3291	5/7	0	pages	3291/3315	16806/16891
+words/done-008/rtf/ECSS-E-ST-50-16C-Annex-A(30September2021).rtf	rtf	4/4	670/669	4/8	0	match	691/690	3613/3613
+words/done-008/rtf/FAA-2017-0628-0002_attachment_1.rtf	rtf	5/4	641/635	4/5	0	pages	644/638	3661/3607
+words/done-008/rtf/FlightLaws.rtf	rtf	4/4	1073/1074	3/6	0	match	1132/1133	5533/5533
+words/done-008/rtf/Lessons-Learned-Bulletin-Dorset-version-to-IIRG-V5.rtf	rtf	3/3	1501/1501	3/4	0	match	1523/1523	7946/7946
+words/done-008/rtf/PUR-0012-UTAS-GRAMS-SPA-Template-1-25-2024.rtf	rtf	6/6	1027/1027	4/5	0	match	1083/1083	6234/6234
+words/done-008/rtf/UAS-SGI_waiver_approval_request_form.rtf	rtf	3/3	493/493	5/3	0	match	517/514	2750/2750
+words/done-008/rtf/draft-variation-notice-airbus-bm3965ia-v006-vs-comments.rtf	rtf	9/9	1468/1499	4/5	0	words	1506/1537	7871/8101
+words/done-009/rtf/2013-op12-Annex III - Curriculum Vitae.rtf	rtf	3/3	332/333	3/4	0	match	359/360	2004/2004
+words/done-009/rtf/237287_0486190101_0486190101_geolink2neu.rtf	rtf	6/4	1402/1384	5/5	0	pages	1575/1555	9846/9702
+words/done-009/rtf/A380MaenPressRel.rtf	rtf	3/3	770/771	6/8	0	match	789/790	3944/3944
+words/done-009/rtf/CP-ETSO template_v2020.rtf	rtf	6/6	1111/1111	5/8	0	match	1136/1136	6448/6448
+words/done-009/rtf/Case-Study-Heathrow-Airport.rtf	rtf	3/3	1184/1184	5/6	0	match	1216/1216	6461/6461
+words/done-009/rtf/Contract_Check_Pilot_Sample_LOA.rtf	rtf	4/4	1324/1324	5/6	0	match	1336/1336	7205/7213
+words/done-009/rtf/SWDD-template.rtf	rtf	6/6	1079/1066	8/9	0	match	1080/1067	5833/5833
+words/done-009/rtf/certification-flight-standards-doc-oeb-supporting-documents-tgl-TGL26-section-5-REV10.rtf	rtf	10/8	1275/1221	5/6	0	pages,words	1326/1268	6572/6253
+words/done-009/rtf/form_1123_application_form_rvsm_spa.rtf	rtf	3/3	578/578	6/8	0	match	638/638	3321/3321
+words/done-009/rtf/technical report template.rtf	rtf	8/8	837/837	4/3	0	match	838/838	4068/4068
+words/done-010/rtf/1528364855.rtf	rtf	3/3	1070/1072	5/5	0	match	1101/1103	6219/6219
+words/done-010/rtf/195584360.rtf	rtf	22/51	7866/8213	4/5	0	pages,words	8035/8382	45714/47918
+words/done-010/rtf/361400CSLegislation1RF01PUBLIC1.rtf	rtf	36/35	12627/12618	4/4	0	pages	12654/12645	68249/68170
+words/done-010/rtf/5709.16 ch.40_mgfinal.rtf	rtf	31/29	9783/8844	4/4	0	pages,words	9994/8995	58768/52691
+words/done-010/rtf/Checklist for TC STC ETSO data packages to FAA_TIP rev 5.rtf	rtf	3/3	1102/1102	5/5	0	match	1102/1102	6062/6062
+words/done-010/rtf/FG-AI4NDM-TR-skeleton_template.rtf	rtf	5/5	405/433	7/7	0	match	410/438	2043/2029
+words/done-010/rtf/PM-apeech-Handover-of-New-Airbus-Aircraft-for-Fiji-Airways-Dec.-15th.rtf	rtf	5/5	582/582	4/5	0	match	584/584	2742/2742
+words/done-010/rtf/Writing a technical report (SCE subject guide).rtf	rtf	4/4	1221/1221	5/8	0	match	1267/1267	6403/6403
+words/done-010/rtf/f111.rtf	rtf	11/11	3347/3347	5/7	0	match	3392/3392	18181/18181
+words/done-010/rtf/te.iors.00048-002 SUP Questionnaire.rtf	rtf	3/4	588/620	2/2	0	pages,words	607/640	3426/3627
+words/done-011/rtf/135.rtf	rtf	14/14	5259/5261	6/7	0	match	5316/5316	26650/26620
+words/done-011/rtf/AAC-AD-No-2021-01-Boeing-737-8-and-737-9-MAX.rtf	rtf	21/21	7451/7454	6/7	0	match	7510/7513	38766/38766
+words/done-011/rtf/Company-profile-2022-EN.rtf	rtf	5/5	1170/1171	2/6	0	match	1212/1213	5630/5630
+words/done-011/rtf/b053-19.rtf	rtf	2/2	491/491	2/4	0	match	493/493	2916/2916
+words/done-011/rtf/eTAR_External_Web_tool_Tip_Sheet_mh.rtf	rtf	4/4	930/928	5/3	0	match	936/934	4604/4579
+words/done-011/rtf/f2_registro_de_aprovacao_com_pbcs_EN.rtf	rtf	2/2	448/448	6/4	0	match	453/453	2255/2255
+words/done-011/rtf/monthly-content-feeder.rtf	rtf	18/18	5890/5890	7/9	0	match	6021/6021	34555/34555
+words/done-011/rtf/part-145-approval list (1).rtf	rtf	8/8	1522/1529	5/5	0	match	1534/1541	8044/8072
+words/done-011/rtf/part-145-approval list 2025.rtf	rtf	7/7	1401/1401	5/5	0	match	1412/1412	7528/7528
+words/done-011/rtf/tibs_guidelines_2.rtf	rtf	13/13	3146/3143	6/9	0	match	3171/3168	16450/16450
+words/done-012/rtf/19-06 Assistive Technology TAB Final - 508.rtf	rtf	8/8	3262/3240	7/8	0	match	3289/3267	18195/18195
+words/done-012/rtf/20110608_psp.rtf	rtf	4/3	678/671	4/4	0	pages	687/679	4772/4704
+words/done-012/rtf/AirbusCallouts.rtf	rtf	25/25	8469/8470	4/7	0	match	9173/9174	43670/43670
+words/done-012/rtf/FO.FCTOA_.000129 Application for activities related to FSTD.rtf	rtf	6/7	1660/1728	9/8	0	pages,words	1689/1757	9023/9261
+words/done-012/rtf/Leadership Information Article.rtf	rtf	4/4	1452/1452	3/4	0	match	1460/1460	8107/8107
+words/done-012/rtf/RMI_Document_Repository_Public-Reprts_GettingOffOil.rtf	rtf	8/6	2733/2729	6/8	0	pages	2734/2731	14619/14617
+words/done-012/rtf/b050-19.rtf	rtf	3/3	873/873	4/6	0	match	875/875	4882/4882
+words/done-012/rtf/bulletin.rtf	rtf	15/15	3254/3257	4/8	0	match	3293/3297	17038/17038
+words/done-012/rtf/slcc-architecture-uu-architecture.rtf	rtf	4/4	1205/1205	6/7	0	match	1236/1236	6328/6328
+words/done-012/rtf/technical-architecture.rtf	rtf	8/8	1069/1095	12/14	0	match	1088/1115	6772/6820
+words/done-013/rtf/1228841571067_2009_TPPT_13__2007_TPPT_102__R-108535759.rtf	rtf	12/11	2800/2788	5/5	0	pages	2800/2789	14396/14300
+words/done-013/rtf/1257259179492_2007_TPPT_102_Supporting_Doc_2-434003080.rtf	rtf	9/9	2120/2124	4/4	0	match	2158/2163	10122/10122
+words/done-013/rtf/Form-SM-76A-_-CAR-OPS-2A-Instruments-and-Equipment-Compliance-Statement-_-11.rtf	rtf	3/3	597/597	8/9	0	match	609/609	3322/3322
+words/done-013/rtf/Reid.rtf	rtf	4/4	1553/1553	5/6	0	match	1570/1570	8425/8425
+words/done-013/rtf/SPA-11_mcar_part-11_v2.9.rtf	rtf	50/43	13906/13832	4/6	0	pages	13925/13849	70790/70418
+words/done-013/rtf/Sol PJ14-03-04 Solution Contextual.rtf	rtf	5/6	2068/2082	4/6	0	pages	2106/2121	11366/11414
+words/done-013/rtf/easa-regulations-update-20.rtf	rtf	22/19	2738/2717	5/5	0	pages	2844/2817	14939/14843
+words/done-013/rtf/gpp-pr-top-7-office-markets-4q-2023.rtf	rtf	4/4	1067/1067	2/4	0	match	1101/1101	5669/5669
+words/done-013/rtf/hdss-bulletin-issue-285-25-june-2025.rtf	rtf	11/10	3515/3528	5/10	0	pages	3578/3591	19655/19647
+words/done-013/rtf/omrIMInterpretiveGuideLine.rtf	rtf	2/2	367/361	5/6	0	match	368/362	2253/2253
+words/done-014/rtf/1603642410-MoM-CASCOM-06-2020-draft04.rtf	rtf	9/9	4469/4469	6/8	0	match	4604/4604	24054/24054
+words/done-014/rtf/1_tpr_template__from_fy14_.rtf	rtf	10/10	3363/3481	9/10	0	words	3378/3497	18035/18672
+words/done-014/rtf/231164_SystemDesignDocument.rtf	rtf	24/20	6498/6419	5/9	0	pages	6632/6555	38561/38259
+words/done-014/rtf/300502-Mecenat-Airbus-Simusante_CHU-Amiens-Picardie.rtf	rtf	1/1	332/332	4/4	0	match	338/337	1887/1887
+words/done-014/rtf/644730BRI0mna000BOX361539B00public0.rtf	rtf	4/4	2323/2324	8/10	0	match	2331/2332	12817/12817
+words/done-014/rtf/AFS-050-004-F2_0i.rtf	rtf	8/8	2233/2212	9/8	0	match	2389/2339	13442/13442
+words/done-014/rtf/PK_FlugzeugeStricken.rtf	rtf	7/7	1408/1408	7/7	0	match	1452/1452	10066/10066
+words/done-014/rtf/Regulations Governing the Status, Basic Rights and Duties of Officials other than Secretariat Officials, and Experts on Mission.rtf	rtf	11/4	6362/174	4/4	0	pages,words	6417/175	33430/1000
+words/done-014/rtf/exhibit-06---technical-architecture-template.rtf	rtf	8/10	1057/1142	12/15	0	pages,words	1065/1147	6601/7118
+words/done-014/rtf/fleetfastfacts16nov2023.rtf	rtf	2/2	137/137	4/5	0	match	146/146	733/733
+words/done-015/rtf/03_Technical_Report_(progress)_template.rtf	rtf	11/11	1389/1340	9/9	0	words	1410/1360	7367/6978
+words/done-015/rtf/2013_11.rtf	rtf	8/9	2607/2633	7/9	0	pages	2629/2655	13594/13826
+words/done-015/rtf/Agile_Arc_SysDes.rtf	rtf	24/20	5634/5630	12/10	0	pages	5719/5715	33606/33437
+words/done-015/rtf/DOA_Template_Form_Type_Certification_Programme.rtf	rtf	25/19	5124/5335	4/6	0	pages,words	5201/5414	27446/28467
+words/done-015/rtf/JEMIT_Template.rtf	rtf	5/4	1643/1625	9/10	0	pages	1711/1693	8773/8679
+words/done-015/rtf/PI-doc.-no.-2E-Technical-Review-Report.rtf	rtf	10/10	1784/1687	8/10	0	words	1932/1835	9832/9461
+words/done-015/rtf/SFSP_2013-02_Bulletin.rtf	rtf	4/4	942/942	5/6	0	match	965/965	5136/5136
+words/done-015/rtf/Sample_SQMS_Program.rtf	rtf	60/77	15405/16072	6/9	0	pages,words	15680/16352	85167/87329
+words/done-015/rtf/airbus-pdf-information-package_v1-4.rtf	rtf	9/9	1131/1131	5/9	0	match	1173/1173	5613/5613
+words/done-015/rtf/system_design__technical_architecture_template.rtf	rtf	12/11	1661/1675	6/6	0	pages	1725/1738	9695/9652
+words/done-016/rtf/120509coss.rtf	rtf	25/25	7179/7179	6/7	0	match	7228/7228	38126/38126
+words/done-016/rtf/150_5335_5a.rtf	rtf	64/65	19014/18946	8/8	0	pages	19202/19151	95214/95111
+words/done-016/rtf/AC-150-5370-10G-updated-201604.rtf	rtf	650/667	280036/280090	11/12	0	pages	284656/284713	1429476/1430537
+words/done-016/rtf/Allegiant_Company_Profile_with_History.rtf	rtf	3/3	1153/1154	3/4	0	match	1156/1157	6588/6588
+words/done-016/rtf/Annex-10-to-the-Aircraft-Maintenance-Specialist-Certification-Rule-GCAA.rtf	rtf	169/148	35100/35041	7/4	0	pages	35331/35311	189432/189432
+words/done-016/rtf/HC-Bulletin-template.rtf	rtf	5/1	454/18	6/3	0	pages,words	516/18	2947/95
+words/done-016/rtf/PES-Technical-Report-Template_Jan_2019.rtf	rtf	13/17	2647/2675	10/9	0	pages	2718/2752	13373/13464
+words/done-016/rtf/SPA-06_mcar_part-6_and_IS_v2.9.rtf	rtf	88/66	27321/26968	2/6	0	pages	27337/26983	142129/140688
+words/done-016/rtf/TE.CAO.00125 Foreign Part 145 approvals - OJT Logbook.rtf	rtf	17/26	1938/2401	5/9	0	pages,words	2306/2782	10089/13132
+words/done-016/rtf/dragon1-enterprise-architecture-document-example-v0.1d.rtf	rtf	13/13	1608/1619	9/11	0	match	1627/1638	9975/9975
+words/done-016/rtf/t_TEMPforInvProgs.rtf	rtf	27/-	4917/-	8/-	0	no-bank	4964/-	27606/-
+words/drawingset-001/rtf/WordArt_Shapes_Arrows_Catalog1.rtf	rtf	24/26	1802/1713	6/6	0	pages,words	2268/2141	10452/9957
+words/extra-001/rtf/762.rtf	rtf	21/24	4171/4162	8/9	0	pages	4196/4187	22599/22605
+words/extra-001/rtf/ABCD-SDE-23-00 - Avionic System Description - 17.02.16 - v1.rtf	rtf	41/41	9026/9000	12/10	0	match	9157/9120	48122/47800
+words/extra-001/rtf/ABCD-WB-08-00 Weight and Balance Report - v1 08.03.16.rtf	rtf	12/12	2730/2652	9/7	0	match	2791/2693	13135/12934
+words/extra-001/rtf/UG.CAO.00006 Foreign Part 145 approvals - User Guide for Applicants & Approval Holders.rtf	rtf	30/-	6643/-	7/-	0	no-bank	6767/-	36073/-
+words/extra-001/rtf/UG.CAO.00133 Foreign Part 145 approvals - Language.rtf	rtf	18/-	2943/-	4/-	0	ref-failed	3016/-	16461/-
+words/extra-001/rtf/info-bulletin-601.rtf	rtf	7/6	1309/1302	4/5	0	pages	1327/1320	6921/6913
+words/metrics-001/rtf/02_mcar_part-2_and_IS_v2.10.rtf	rtf	318/202	80555/79325	3/5	0	pages	81165/79819	414406/415245
+words/metrics-001/rtf/A320SimNotes.rtf	rtf	41/-	13950/-	6/-	0	no-bank	15034/-	67510/-
+words/metrics-001/rtf/AWR OPS-AOC 044 Statement of Compliance RVSM  Rev 04 01 Feb 2024.rtf	rtf	11/10	1974/2035	9/7	0	pages,words	2114/2169	10465/10701
+words/metrics-001/rtf/FRE-03_mcar_part-3_and_IS_v2.9.rtf	rtf	76/67	24584/24455	3/6	0	pages	25674/25544	123910/124295
+words/metrics-001/rtf/OM template for non-complex NCC operators_August 2016.rtf	rtf	164/171	51473/51439	6/11	0	pages	52503/52469	269919/270393
+words/metrics-001/rtf/SPA-02_mcar_part-2_and_IS_v2.9.rtf	rtf	273/-	94888/-	2/-	0	no-bank	94903/-	479025/-
+words/metrics-001/rtf/review-welsh-government-communications-mister-peter-mandelson.rtf	rtf	14/14	3017/3017	6/7	0	match	3046/3046	14961/14961
+words/metrics-001/rtf/手机免提系统TSB.rtf	rtf	2/3	78/96	8/6	0	pages	81/100	1172/1189
+words/missing-001/rtf/33004.rtf	rtf	49/47	11846/11924	13/16	0	pages	12036/12102	60339/60265
+words/missing-001/rtf/May 25 bulletin focus on carers in the workplace.rtf	rtf	5/4	435/521	3/4	0	pages,words	448/538	2281/2721
+words/missing-001/rtf/xx_SETIS_PWS_template_10.19.22.rtf	rtf	15/-	4369/-	4/-	0	no-bank	4425/-	23630/-
+words/missing-002/rtf/CRIF - SpÃ©cification technique - Socle applicatif.rtf	rtf	28/28	6232/6116	6/12	0	words	6576/6404	37030/35523
+words/pagination-001/rtf/1447.rtf	rtf	4/-	959/-	5/-	0	no-bank	962/-	5153/-
+words/pagination-001/rtf/24-25_FAA_Holdover_Tables.rtf	rtf	143/223	66944/70542	9/11	0	pages,words	70973/74628	298589/321294
+words/pagination-001/rtf/A_320.rtf	rtf	124/134	18572/18534	3/5	0	pages	18984/18946	88854/88733
+words/pagination-001/rtf/ESPN-R - MCF - Manual - Ed1.0 - For Publication.rtf	rtf	34/42	9101/9574	7/8	0	pages,words	9208/9707	47962/49405
+words/pagination-001/rtf/ESPN-R - MCF - RA - Ed1.rtf	rtf	52/-	10882/-	9/-	0	no-bank	11005/-	58733/-
+words/pagination-001/rtf/FAA 2025-26 Holdover Tables.rtf	rtf	156/233	74763/78431	9/13	0	pages,words	79420/83050	334655/358857
+words/pagination-001/rtf/FO.FCTOA.00010 Application for a Part-ORA ATO Approval.rtf	rtf	15/16	4400/4510	5/7	0	pages,words	4456/4575	22598/23291
+words/pagination-001/rtf/report-template.rtf	rtf	12/12	3003/2997	5/4	0	match	3010/3005	15342/15341
+words/pagination-001/rtf/template---tpr-technical-progress-report-with-guidance.rtf	rtf	9/-	1768/-	7/-	0	no-bank	1813/-	9344/-
+words/pagination-002/rtf/150_5300_13_chg12.rtf	rtf	33/-	12684/-	9/-	0	no-bank	12752/-	62062/-
+words/pagination-002/rtf/absrc-pac-01-info-note-en.rtf	rtf	6/7	1289/1306	5/5	0	pages	1312/1328	6873/6901
+words/pagination-002/rtf/docs-quality-MA.IMS.00001-Integrated-Management-System-manual.rtf	rtf	42/-	10581/-	5/-	0	ref-failed	10857/-	62755/-
+words/pagination-003/rtf/150-5370-10H.rtf	rtf	642/746	291492/292703	13/17	0	pages	297553/298784	1501430/1504839
+words/pagination-003/rtf/EHEST-SMS-Safety-Management-Manual-V2.rtf	rtf	82/81	19240/19190	10/18	0	pages	19688/19637	105242/105000
+words/table-001/rtf/150_5300_13_chg10.rtf	rtf	57/77	18614/23368	7/9	0	pages,words	18771/23571	90076/116045
+words/table-001/rtf/A1. EASA Form 2.rtf	rtf	7/-	1947/-	6/-	0	no-bank	1975/-	10060/-
+words/table-001/rtf/B11. TE.CAO.00129  Experience  logbook.rtf	rtf	7/8	991/1062	5/6	0	pages,words	1013/1095	5104/5537
+words/table-001/rtf/approvals-and-standardisation-organisation-approvals-docs-part-145-annex-B-B11.-TE.CAO.00129-Foreign-Part-145-approvals---Experience--logbook.rtf	rtf	7/8	975/1162	6/10	0	pages,words	994/1186	5108/6130

@@ -1,0 +1,14 @@
+distinct manifest paths read: 946
+
+family   A: chart with no chartSpace spPr   B: dLbls stating a text colour     BIFF (undecoded)
+sheets    10 documents /   23 parts                22 documents /   40 parts          64
+slides     2 documents /    5 parts                49 documents /   93 parts          51
+words      1 documents /    1 parts                 7 documents /    7 parts          66
+
+frame — sheets, by manifest status:
+   done     9
+   open     1
+
+colour — sheets, by manifest status:
+   done     14
+   open     8

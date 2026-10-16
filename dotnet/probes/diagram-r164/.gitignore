@@ -1,0 +1,8 @@
+# Rendered output: regenerate with sweep.sh, never commit.
+ref/
+ours/
+png/
+profile/
+fixtures-out/
+*.pdf
+*.png

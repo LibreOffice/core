@@ -1,0 +1,42 @@
+DOCX-family documents scanned: 272, carrying an absolutely positioned object: 170
+objects: 6055   of them inside a w:tbl: 552   documents with one: 40
+    104/161  042_Visual_Product_Roadmap_Template_Colored_Background_89385cfb.docx
+     60/179  ABCD-SDE-23-00 - Avionic System Description - 17.02.16 - v1.docx
+     52/59   048_Visual_Product_Roadmap_Template_Quality_Layout_f38f7aee.docx
+     49/49   015_Project_Timeline_Template_Colored_Background_6434b0e8.docx
+     42/43   020_Project_Timeline_Template_Modern_Theme_0c215d87.docx
+     40/69   045_Visual_Product_Roadmap_Template_Excellent_Format_e364063c.docx
+     25/25   012_Project_Timeline_Template_Black_and_Brown_Theme_35c76550.docx
+     24/55   041_Visual_Product_Roadmap_Template_Blank_Format_63a3e010.docx
+     22/107  017_Project_Timeline_Template_Customizable_Format_5d5ca2e8.docx
+     20/21   1_tpr_template__from_fy14_.docx
+     13/19   HC-Bulletin-template.docx
+     12/12   template---tpr-technical-progress-report-with-guidance.docx
+     12/35   018_Project_Timeline_Template_Editable_Format_e1cf1df5.docx
+     12/33   016_Project_Timeline_Template_Complete_Guide_7d36d09c.docx
+      9/9    B11. TE.CAO.00129  Experience  logbook.docx
+      7/7    A1. EASA Form 2.docx
+      4/10   AW-104D-RVSM-Aircraft-Approval-Checklist.pdf.docx
+      4/7    OM template for non-complex NCC operators_August 2016.docx
+      4/5    086_Printable_Graph_Paper_Template_Gray_Theme_7300e5d7.docx
+      3/3    Sol PJ14-03-04 Solution Contextual.docx
+      3/45   ABCD-WB-08-00 Weight and Balance Report - v1 08.03.16.docx
+      3/47   ABCD-FE-01-00 Flight Envelope - v1 08.03.16.docx
+      3/3    085_Printable_Graph_Paper_Template_Excellent_Format_4bcae89a.docx
+      2/4    johnson_hall_service_log.pdf.docx
+      2/2    slcc-architecture-uu-architecture.docx
+      2/2    20110608_psp.docx
+      2/7    DOA_Template_Form_Type_Certification_Programme.docx
+      2/2    SPA-06_mcar_part-6_and_IS_v2.9.docx
+      2/2    May 25 bulletin focus on carers in the workplace.docx
+      2/2    CRIF - SpÃ©cification technique - Socle applicatif.docx
+      2/9    082_Printable_Graph_Paper_Template_Colored_Background_9092cf9b.docx
+      1/1    1528039320.docx
+      1/1    4400-91_Proposal_To_Lease_Space_10-2024.docx
+      1/1    form_1123_application_form_rvsm_spa.docx
+      1/1    te.iors.00048-002 SUP Questionnaire.docx
+      1/5    FO.FCTOA_.000129 Application for activities related to FSTD.docx
+      1/3    t_TEMPforInvProgs.docx
+      1/1    AWR OPS-AOC 044 Statement of Compliance RVSM  Rev 04 01 Feb 2024.docx
+      1/2    097_Business_Case_Template_Elegant_Layout_3ba9cbf2.docx
+      1/1    094_Business_Case_Template_Decent_Layout_e7722f2b.docx

@@ -1,0 +1,9 @@
+003_Free_Genogram_Diagram_Template_Easy_Format_60eb6e42__docx: pages ref 1 before 1 after 1
+  page   1  ink before  1.371  after  0.521  delta  -0.850
+  MEAN      ink before  1.371  after  0.521  delta  -0.850  over 1 pages
+004_Free_Genogram_Diagram_Template_Editable_Format_b82b6152__docx: pages ref 1 before 1 after 1
+  page   1  ink before  2.237  after  0.800  delta  -1.437
+  MEAN      ink before  2.237  after  0.800  delta  -1.437  over 1 pages
+008_Free_Genogram_Diagram_Template_Green_and_Yellow_Theme_9017c1a8__docx: pages ref 1 before 1 after 1
+  page   1  ink before  3.021  after  2.378  delta  -0.643
+  MEAN      ink before  3.021  after  2.378  delta  -0.643  over 1 pages

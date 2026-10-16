@@ -1,0 +1,20 @@
+023_Unit_Circle_Chart_Circular_Percentage, one attribute of the chart anchor at a time.
+26.2.4.2 and this tree at HEAD, word positions read with `pdftotext -bbox`.
+
+variant       n    min x    max x   mean x   md5 of the content
+26.2.4.2
+  base      107    36.80   531.73   262.76   0c35b4efc5ff
+  offset    107    36.80   531.73   262.76   0c35b4efc5ff
+  page      107    36.80   531.73   262.76   0c35b4efc5ff
+  wrapnone  107    36.80   531.73   260.26   914ed236c06d
+ours
+  base      107    36.73   532.18   267.65   0b83c1e43be7
+  offset    107    36.73   532.18   267.65   0b83c1e43be7
+  page      107    36.73   532.18   267.65   0b83c1e43be7
+  wrapnone  107    36.73   532.18   260.42   fc96898986fb
+
+`base`, `offset` (-221.35 pt -> -100 pt) and `page` (relativeFrom margin -> page) give
+IDENTICAL text on both sides: the chart is 682.1 pt wide on a 595.3 pt page, so
+ImplAdjustHoriRelPos corrects the right edge to 595.3-682.1 = -86.8 and then the left edge
+to 0, and the clamp SATURATES -- the stated offset cannot reach the drawn position at all.
+`wrapnone` differs on both sides, which is the control that says the instrument is live.

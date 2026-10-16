@@ -1,0 +1,9 @@
+A /tmp/claude-0/-home-user/bb4a221c-b846-5451-ba79-f27935c68360/scratchpad/sweep/base-orig/rows.tsv
+B /tmp/claude-0/-home-user/bb4a221c-b846-5451-ba79-f27935c68360/scratchpad/sweep/head2-orig/rows.tsv
+rows: A 307, B 307, shared 307, A-only 0, B-only 0
+excluded (failed on either side in either run): 0
+comparable rows: 307
+match: A 294, B 294
+verdicts gained: 0
+verdicts lost: 0
+rows whose columns moved at all: 0

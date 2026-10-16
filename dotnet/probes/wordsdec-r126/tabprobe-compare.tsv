@@ -1,0 +1,172 @@
+label	face	size	kind	group	tabtwips	ref_cover	ours_cover	delta	ref_bridged	ours_bridged	verdict
+L000	Liberation Serif	8	under	span	0	185.30	185.34	0.04	1	1	agree
+L001	Liberation Serif	8	under	span	0	258.50	258.54	0.04	1	1	agree
+L002	Liberation Serif	8	under	span	0	331.55	331.59	0.04	1	1	agree
+L003	Liberation Serif	8	under	span	0	404.80	404.89	0.09	1	1	agree
+L004	Liberation Serif	8	over	span	0	185.30	0.00	-185.30	1	0	DIFFER
+L005	Liberation Serif	8	over	span	0	258.50	0.00	-258.50	1	0	DIFFER
+L006	Liberation Serif	8	over	span	0	331.55	0.00	-331.55	1	0	DIFFER
+L007	Liberation Serif	8	over	span	0	404.80	0.00	-404.80	1	0	DIFFER
+L008	Liberation Serif	8	strike	span	0	185.30	185.34	0.04	1	1	agree
+L009	Liberation Serif	8	strike	span	0	258.50	258.54	0.04	1	1	agree
+L010	Liberation Serif	8	strike	span	0	331.55	331.59	0.04	1	1	agree
+L011	Liberation Serif	8	strike	span	0	404.80	404.89	0.09	1	1	agree
+L012	Liberation Serif	10	under	span	0	186.60	186.67	0.07	1	1	agree
+L013	Liberation Serif	10	under	span	0	259.80	259.87	0.07	1	1	agree
+L014	Liberation Serif	10	under	span	0	332.85	332.92	0.07	1	1	agree
+L015	Liberation Serif	10	under	span	0	406.10	406.22	0.12	1	1	agree
+L016	Liberation Serif	10	over	span	0	186.60	0.00	-186.60	1	0	DIFFER
+L017	Liberation Serif	10	over	span	0	259.80	0.00	-259.80	1	0	DIFFER
+L018	Liberation Serif	10	over	span	0	332.85	0.00	-332.85	1	0	DIFFER
+L019	Liberation Serif	10	over	span	0	406.10	0.00	-406.10	1	0	DIFFER
+L020	Liberation Serif	10	strike	span	0	186.60	186.67	0.07	1	1	agree
+L021	Liberation Serif	10	strike	span	0	259.80	259.87	0.07	1	1	agree
+L022	Liberation Serif	10	strike	span	0	332.85	332.92	0.07	1	1	agree
+L023	Liberation Serif	10	strike	span	0	406.10	406.22	0.12	1	1	agree
+L024	Liberation Serif	14	under	span	0	189.30	189.34	0.04	1	1	agree
+L025	Liberation Serif	14	under	span	0	262.50	262.54	0.04	1	1	agree
+L026	Liberation Serif	14	under	span	0	335.55	335.59	0.04	1	1	agree
+L027	Liberation Serif	14	under	span	0	408.80	408.89	0.09	1	1	agree
+L028	Liberation Serif	14	over	span	0	189.30	0.00	-189.30	1	0	DIFFER
+L029	Liberation Serif	14	over	span	0	262.50	0.00	-262.50	1	0	DIFFER
+L030	Liberation Serif	14	over	span	0	335.55	0.00	-335.55	1	0	DIFFER
+L031	Liberation Serif	14	over	span	0	408.80	0.00	-408.80	1	0	DIFFER
+L032	Liberation Serif	14	strike	span	0	189.30	189.34	0.04	1	1	agree
+L033	Liberation Serif	14	strike	span	0	262.50	262.54	0.04	1	1	agree
+L034	Liberation Serif	14	strike	span	0	335.55	335.59	0.04	1	1	agree
+L035	Liberation Serif	14	strike	span	0	408.80	408.89	0.09	1	1	agree
+L036	Liberation Sans	8	under	span	0	185.70	185.78	0.08	1	1	agree
+L037	Liberation Sans	8	under	span	0	258.90	258.98	0.08	1	1	agree
+L038	Liberation Sans	8	under	span	0	331.95	332.03	0.08	1	1	agree
+L039	Liberation Sans	8	under	span	0	405.20	405.33	0.13	1	1	agree
+L040	Liberation Sans	8	over	span	0	185.70	0.00	-185.70	1	0	DIFFER
+L041	Liberation Sans	8	over	span	0	258.90	0.00	-258.90	1	0	DIFFER
+L042	Liberation Sans	8	over	span	0	331.95	0.00	-331.95	1	0	DIFFER
+L043	Liberation Sans	8	over	span	0	405.20	0.00	-405.20	1	0	DIFFER
+L044	Liberation Sans	8	strike	span	0	185.70	185.78	0.08	1	1	agree
+L045	Liberation Sans	8	strike	span	0	258.90	258.98	0.08	1	1	agree
+L046	Liberation Sans	8	strike	span	0	331.95	332.03	0.08	1	1	agree
+L047	Liberation Sans	8	strike	span	0	405.20	405.33	0.13	1	1	agree
+L048	Liberation Sans	10	under	span	0	187.20	187.22	0.02	1	1	agree
+L049	Liberation Sans	10	under	span	0	260.40	260.42	0.02	1	1	agree
+L050	Liberation Sans	10	under	span	0	333.45	333.47	0.02	1	1	agree
+L051	Liberation Sans	10	under	span	0	406.70	406.77	0.07	1	1	agree
+L052	Liberation Sans	10	over	span	0	187.20	0.00	-187.20	1	0	DIFFER
+L053	Liberation Sans	10	over	span	0	260.40	0.00	-260.40	1	0	DIFFER
+L054	Liberation Sans	10	over	span	0	333.45	0.00	-333.45	1	0	DIFFER
+L055	Liberation Sans	10	over	span	0	406.70	0.00	-406.70	1	0	DIFFER
+L056	Liberation Sans	10	strike	span	0	187.20	187.22	0.02	1	1	agree
+L057	Liberation Sans	10	strike	span	0	260.40	260.42	0.02	1	1	agree
+L058	Liberation Sans	10	strike	span	0	333.45	333.47	0.02	1	1	agree
+L059	Liberation Sans	10	strike	span	0	406.70	406.77	0.07	1	1	agree
+L060	Liberation Sans	14	under	span	0	190.10	190.11	0.01	1	1	agree
+L061	Liberation Sans	14	under	span	0	263.30	263.31	0.01	1	1	agree
+L062	Liberation Sans	14	under	span	0	336.35	336.36	0.01	1	1	agree
+L063	Liberation Sans	14	under	span	0	409.60	409.66	0.06	1	1	agree
+L064	Liberation Sans	14	over	span	0	190.10	0.00	-190.10	1	0	DIFFER
+L065	Liberation Sans	14	over	span	0	263.30	0.00	-263.30	1	0	DIFFER
+L066	Liberation Sans	14	over	span	0	336.35	0.00	-336.35	1	0	DIFFER
+L067	Liberation Sans	14	over	span	0	409.60	0.00	-409.60	1	0	DIFFER
+L068	Liberation Sans	14	strike	span	0	190.10	190.11	0.01	1	1	agree
+L069	Liberation Sans	14	strike	span	0	263.30	263.31	0.01	1	1	agree
+L070	Liberation Sans	14	strike	span	0	336.35	336.36	0.01	1	1	agree
+L071	Liberation Sans	14	strike	span	0	409.60	409.66	0.06	1	1	agree
+L072	Carlito	8	under	span	0	184.30	184.34	0.04	1	1	agree
+L073	Carlito	8	under	span	0	257.50	257.54	0.04	1	1	agree
+L074	Carlito	8	under	span	0	330.55	330.59	0.04	1	1	agree
+L075	Carlito	8	under	span	0	403.80	403.89	0.09	1	1	agree
+L076	Carlito	8	over	span	0	184.30	0.00	-184.30	1	0	DIFFER
+L077	Carlito	8	over	span	0	257.50	0.00	-257.50	1	0	DIFFER
+L078	Carlito	8	over	span	0	330.55	0.00	-330.55	1	0	DIFFER
+L079	Carlito	8	over	span	0	403.80	0.00	-403.80	1	0	DIFFER
+L080	Carlito	8	strike	span	0	184.30	184.34	0.04	1	1	agree
+L081	Carlito	8	strike	span	0	257.50	257.54	0.04	1	1	agree
+L082	Carlito	8	strike	span	0	330.55	330.59	0.04	1	1	agree
+L083	Carlito	8	strike	span	0	403.80	403.89	0.09	1	1	agree
+L084	Carlito	10	under	span	0	185.40	185.43	0.03	1	1	agree
+L085	Carlito	10	under	span	0	258.60	258.63	0.03	1	1	agree
+L086	Carlito	10	under	span	0	331.65	331.68	0.03	1	1	agree
+L087	Carlito	10	under	span	0	404.90	404.98	0.08	1	1	agree
+L088	Carlito	10	over	span	0	185.40	0.00	-185.40	1	0	DIFFER
+L089	Carlito	10	over	span	0	258.60	0.00	-258.60	1	0	DIFFER
+L090	Carlito	10	over	span	0	331.65	0.00	-331.65	1	0	DIFFER
+L091	Carlito	10	over	span	0	404.90	0.00	-404.90	1	0	DIFFER
+L092	Carlito	10	strike	span	0	185.40	185.43	0.03	1	1	agree
+L093	Carlito	10	strike	span	0	258.60	258.63	0.03	1	1	agree
+L094	Carlito	10	strike	span	0	331.65	331.68	0.03	1	1	agree
+L095	Carlito	10	strike	span	0	404.90	404.98	0.08	1	1	agree
+L096	Carlito	14	under	span	0	187.60	187.60	0.00	1	1	agree
+L097	Carlito	14	under	span	0	260.80	260.80	0.00	1	1	agree
+L098	Carlito	14	under	span	0	333.85	333.85	0.00	1	1	agree
+L099	Carlito	14	under	span	0	407.10	407.15	0.05	1	1	agree
+L100	Carlito	14	over	span	0	187.60	0.00	-187.60	1	0	DIFFER
+L101	Carlito	14	over	span	0	260.80	0.00	-260.80	1	0	DIFFER
+L102	Carlito	14	over	span	0	333.85	0.00	-333.85	1	0	DIFFER
+L103	Carlito	14	over	span	0	407.10	0.00	-407.10	1	0	DIFFER
+L104	Carlito	14	strike	span	0	187.60	187.60	0.00	1	1	agree
+L105	Carlito	14	strike	span	0	260.80	260.80	0.00	1	1	agree
+L106	Carlito	14	strike	span	0	333.85	333.85	0.00	1	1	agree
+L107	Carlito	14	strike	span	0	407.10	407.15	0.05	1	1	agree
+L108	DejaVu Sans	8	under	span	0	185.50	185.56	0.06	1	1	agree
+L109	DejaVu Sans	8	under	span	0	258.70	258.76	0.06	1	1	agree
+L110	DejaVu Sans	8	under	span	0	331.75	331.81	0.06	1	1	agree
+L111	DejaVu Sans	8	under	span	0	405.00	405.11	0.11	1	1	agree
+L112	DejaVu Sans	8	over	span	0	185.50	0.00	-185.50	1	0	DIFFER
+L113	DejaVu Sans	8	over	span	0	258.70	0.00	-258.70	1	0	DIFFER
+L114	DejaVu Sans	8	over	span	0	331.75	0.00	-331.75	1	0	DIFFER
+L115	DejaVu Sans	8	over	span	0	405.00	0.00	-405.00	1	0	DIFFER
+L116	DejaVu Sans	8	strike	span	0	185.50	185.56	0.06	1	1	agree
+L117	DejaVu Sans	8	strike	span	0	258.70	258.76	0.06	1	1	agree
+L118	DejaVu Sans	8	strike	span	0	331.75	331.81	0.06	1	1	agree
+L119	DejaVu Sans	8	strike	span	0	405.00	405.11	0.11	1	1	agree
+L120	DejaVu Sans	10	under	span	0	186.90	186.95	0.05	1	1	agree
+L121	DejaVu Sans	10	under	span	0	260.10	260.15	0.05	1	1	agree
+L122	DejaVu Sans	10	under	span	0	333.15	333.20	0.05	1	1	agree
+L123	DejaVu Sans	10	under	span	0	406.40	406.50	0.10	1	1	agree
+L124	DejaVu Sans	10	over	span	0	186.90	0.00	-186.90	1	0	DIFFER
+L125	DejaVu Sans	10	over	span	0	260.10	0.00	-260.10	1	0	DIFFER
+L126	DejaVu Sans	10	over	span	0	333.15	0.00	-333.15	1	0	DIFFER
+L127	DejaVu Sans	10	over	span	0	406.40	0.00	-406.40	1	0	DIFFER
+L128	DejaVu Sans	10	strike	span	0	186.90	186.95	0.05	1	1	agree
+L129	DejaVu Sans	10	strike	span	0	260.10	260.15	0.05	1	1	agree
+L130	DejaVu Sans	10	strike	span	0	333.15	333.20	0.05	1	1	agree
+L131	DejaVu Sans	10	strike	span	0	406.40	406.50	0.10	1	1	agree
+L132	DejaVu Sans	14	under	span	0	189.70	189.73	0.03	1	1	agree
+L133	DejaVu Sans	14	under	span	0	262.90	262.93	0.03	1	1	agree
+L134	DejaVu Sans	14	under	span	0	335.95	335.98	0.03	1	1	agree
+L135	DejaVu Sans	14	under	span	0	409.20	409.28	0.08	1	1	agree
+L136	DejaVu Sans	14	over	span	0	189.70	0.00	-189.70	1	0	DIFFER
+L137	DejaVu Sans	14	over	span	0	262.90	0.00	-262.90	1	0	DIFFER
+L138	DejaVu Sans	14	over	span	0	335.95	0.00	-335.95	1	0	DIFFER
+L139	DejaVu Sans	14	over	span	0	409.20	0.00	-409.20	1	0	DIFFER
+L140	DejaVu Sans	14	strike	span	0	189.70	189.73	0.03	1	1	agree
+L141	DejaVu Sans	14	strike	span	0	262.90	262.93	0.03	1	1	agree
+L142	DejaVu Sans	14	strike	span	0	335.95	335.98	0.03	1	1	agree
+L143	DejaVu Sans	14	strike	span	0	409.20	409.28	0.08	1	1	agree
+L144	Liberation Serif	10	under	skip	0	27.70	259.87	232.17	0	1	DIFFER
+L145	Liberation Serif	10	over	skip	0	27.70	0.00	-27.70	0	0	DIFFER
+L146	Liberation Serif	10	strike	skip	0	27.70	259.87	232.17	0	1	DIFFER
+L147	Liberation Sans	10	under	skip	0	29.40	260.42	231.02	0	1	DIFFER
+L148	Liberation Sans	10	over	skip	0	29.40	0.00	-29.40	0	0	DIFFER
+L149	Liberation Sans	10	strike	skip	0	29.40	260.42	231.02	0	1	DIFFER
+L150	Carlito	10	under	skip	0	24.80	258.63	233.83	0	1	DIFFER
+L151	Carlito	10	over	skip	0	24.80	0.00	-24.80	0	0	DIFFER
+L152	Carlito	10	strike	skip	0	24.80	258.63	233.83	0	1	DIFFER
+L153	DejaVu Sans	10	under	skip	0	31.50	260.15	228.65	0	1	DIFFER
+L154	DejaVu Sans	10	over	skip	0	31.50	0.00	-31.50	0	0	DIFFER
+L155	DejaVu Sans	10	strike	skip	0	31.50	260.15	228.65	0	1	DIFFER
+L156	Liberation Mono	10	under	mono	30	66.00	66.01	0.01	0	0	agree
+L157	Liberation Mono	10	under	mono	90	66.00	66.01	0.01	0	0	agree
+L158	Liberation Mono	10	under	mono	119	66.00	66.01	0.01	0	0	agree
+L159	Liberation Mono	10	under	mono	121	72.05	72.05	0.00	1	1	agree
+L160	Liberation Mono	10	under	mono	180	75.00	75.00	0.00	1	1	agree
+L161	Liberation Mono	10	under	mono	361	84.05	84.05	0.00	1	1	agree
+L162	Liberation Sans	10	under	cliff	54	7.70	7.78	0.08	1	1	agree
+L163	Liberation Sans	10	under	cliff	55	10.45	10.53	0.08	1	1	agree
+L164	Liberation Sans	10	under	cliff	56	10.50	10.58	0.08	1	1	agree
+L165	Liberation Sans	10	under	cliff	57	10.55	10.63	0.08	1	1	agree
+L166	Liberation Mono	10	under	resid	200	16.00	16.00	0.00	1	1	agree
+L167	Liberation Mono	10	under	resid	260	19.00	19.00	0.00	1	1	agree
+L168	Liberation Mono	10	under	resid	340	23.00	23.00	0.00	1	1	agree
+L169	Liberation Mono	10	under	resid	460	29.00	29.00	0.00	1	1	agree
+L170	Liberation Mono	10	under	resid	580	35.00	35.00	0.00	1	1	agree

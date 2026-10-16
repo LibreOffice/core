@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Hand-authored. Two slides carrying the SAME paragraph in a box of the same shape. They
+     differ in how that box is turned:
+
+       1  "turned"  - a 2 x 16 cm custom shape rotated a quarter turn clockwise by its own
+          draw:transform, with draw:text-rotate-angle="90" on its enhanced geometry turning the
+          text back. On the page the shape is 16 cm wide and 2 cm tall and reads horizontally.
+       2  "upright" - the same 16 x 2 cm box stated directly, with no rotation of either kind.
+
+     This is the shape LibreOffice's own ODF export writes for a wide, short text box that a
+     PowerPoint deck stated as a rotated shape, and it is the pair that pins two separate
+     readings:
+
+       * draw:text-rotate-angle is the text's own rotation inside the shape and composes with
+         the shape's. xmloff/source/draw/ximpcustomshape.cxx:917 puts it in the geometry item as
+         TextRotateAngle; SdrObjCustomShape::GetExtraTextRotation (svx/source/svdraw/svdoashp.cxx
+         :486-514) answers it and ViewContactOfSdrObjCustomShape
+         (svx/source/sdr/contact/viewcontactofsdrobjcustomshape.cxx:171-191) rotates the text box
+         by it before the shape's own matrix is applied.
+
+       * The padding does the swapping, and the layout box does NOT. LibreOffice writes a turned
+         shape's insets in the text's own orientation, so a 2 cm wide shape carries a NEGATIVE
+         left and right padding that widens its text area past the shape, and a tall positive
+         top and bottom padding that narrows it. SdrTextObj::AdjustRectToTextDistance
+         (svx/source/svdraw/svdotext.cxx:577-618) adds them to the anchor rectangle and
+         SdrObjCustomShape::TakeTextRect takes that rectangle's width as the wrapping limit. Here
+         2 - 6.75 - 6.75 gives 15.5 cm across and 16 - 7.2 - 7.2 gives 1.6 cm down.
+
+     Verified against LibreOffice 26.2.4.2, which draws the two slides IDENTICALLY: both
+     paragraphs horizontal (span direction 1, 0), broken after "onto a second line", the first
+     line spanning x 92.10 .. 491.02 pt on slide 1 and 92.13 .. 491.04 on slide 2, both at
+     y 97.74. Read out of its PDF. That the turned slide and the upright one agree to three
+     hundredths of a point is the whole assertion: the pair is a control on itself. -->
+<office:document
+  xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+  xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+  xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+  xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+  xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0"
+  xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+  xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+  office:version="1.3"
+  office:mimetype="application/vnd.oasis.opendocument.presentation">
+ <office:styles>
+  <draw:layer-set>
+   <draw:layer draw:name="layout"/>
+   <draw:layer draw:name="background"/>
+   <draw:layer draw:name="backgroundobjects"/>
+   <draw:layer draw:name="controls"/>
+   <draw:layer draw:name="measurelines"/>
+  </draw:layer-set>
+ </office:styles>
+ <office:automatic-styles>
+  <style:page-layout style:name="PL1">
+   <style:page-layout-properties fo:page-width="25.4cm" fo:page-height="19.05cm"
+       style:print-orientation="landscape" fo:margin-top="0cm" fo:margin-bottom="0cm"
+       fo:margin-left="0cm" fo:margin-right="0cm"/>
+  </style:page-layout>
+  <style:style style:name="dp1" style:family="drawing-page">
+   <style:drawing-page-properties draw:fill="none"/>
+  </style:style>
+  <style:style style:name="grTurned" style:family="graphic">
+   <style:graphic-properties draw:stroke="none" draw:fill="none"
+       draw:auto-grow-height="false" draw:auto-grow-width="false"
+       draw:textarea-vertical-align="middle" fo:wrap-option="wrap"
+       draw:fit-to-size="false" style:shrink-to-fit="false"
+       fo:padding-top="7.2cm" fo:padding-bottom="7.2cm"
+       fo:padding-left="-6.75cm" fo:padding-right="-6.75cm"/>
+  </style:style>
+  <style:style style:name="grUpright" style:family="graphic">
+   <style:graphic-properties draw:stroke="none" draw:fill="none"
+       draw:auto-grow-height="false" draw:auto-grow-width="false"
+       draw:textarea-vertical-align="middle" fo:wrap-option="wrap"
+       draw:fit-to-size="false" style:shrink-to-fit="false"
+       fo:padding-top="0.2cm" fo:padding-bottom="0.2cm"
+       fo:padding-left="0.25cm" fo:padding-right="0.25cm"/>
+  </style:style>
+  <style:style style:name="P1" style:family="paragraph">
+   <style:paragraph-properties fo:line-height="100%" fo:text-align="start"/>
+   <style:text-properties fo:font-size="14pt" style:font-name="Liberation Sans"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Default" style:page-layout-name="PL1" draw:style-name="dp1"/>
+ </office:master-styles>
+ <office:body>
+  <office:presentation>
+   <draw:page draw:name="turned" draw:style-name="dp1" draw:master-page-name="Default">
+    <draw:custom-shape draw:style-name="grTurned" draw:name="turned box" draw:layer="layout"
+        svg:width="2cm" svg:height="16cm"
+        draw:transform="rotate (-1.5707963267949) translate (19cm 3cm)">
+     <text:p text:style-name="P1">A wide band of running text that has to break onto a second line before it reaches the end of the box it is drawn in.</text:p>
+     <draw:enhanced-geometry draw:text-areas="0 0 ?f3 ?f2" svg:viewBox="0 0 0 0"
+         draw:text-rotate-angle="90" draw:type="ooxml-rect"
+         draw:enhanced-path="M 0 0 L ?f3 0 ?f3 ?f2 0 ?f2 Z N">
+      <draw:equation draw:name="f2" draw:formula="logheight"/>
+      <draw:equation draw:name="f3" draw:formula="logwidth"/>
+     </draw:enhanced-geometry>
+    </draw:custom-shape>
+   </draw:page>
+   <draw:page draw:name="upright" draw:style-name="dp1" draw:master-page-name="Default">
+    <draw:custom-shape draw:style-name="grUpright" draw:name="upright box" draw:layer="layout"
+        svg:width="16cm" svg:height="2cm" svg:x="3cm" svg:y="3cm">
+     <text:p text:style-name="P1">A wide band of running text that has to break onto a second line before it reaches the end of the box it is drawn in.</text:p>
+     <draw:enhanced-geometry draw:text-areas="0 0 ?f3 ?f2" svg:viewBox="0 0 0 0"
+         draw:type="ooxml-rect"
+         draw:enhanced-path="M 0 0 L ?f3 0 ?f3 ?f2 0 ?f2 Z N">
+      <draw:equation draw:name="f2" draw:formula="logheight"/>
+      <draw:equation draw:name="f3" draw:formula="logwidth"/>
+     </draw:enhanced-geometry>
+    </draw:custom-shape>
+   </draw:page>
+  </office:presentation>
+ </office:body>
+</office:document>

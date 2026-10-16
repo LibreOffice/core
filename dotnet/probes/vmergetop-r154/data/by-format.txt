@@ -1,0 +1,4 @@
+ext       moved   closer  further   documents better/worse
+doc         593      433      160   1 / 3
+docx      13156    12884      270   15 / 1
+rtf        3678     3246      429   12 / 7

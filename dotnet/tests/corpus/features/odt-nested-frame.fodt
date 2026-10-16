@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  A shape anchored inside another frame's own text is still drawn.
+
+  An anchored object belongs to the page however deeply its anchor is nested - Writer places a
+  frame anchored in a header, a footnote or a table cell on the page's own sorted object list,
+  and one anchored inside a text frame's content is no different.  Paperless resolved the
+  body's frames, the furniture's and every table cell's, and stopped there: a frame's own
+  content was deliberately not walked, so a shape inside a text box was read, measured, and
+  never placed.
+
+  The outer frame's automatic graphic style names a PARENT style on purpose.  A draw:frame
+  whose automatic style has no parent is imported as a drawing shape rather than as a Writer
+  text frame (xmloff/source/text/XMLTextFrameContext.cxx:1374-1394, "#i51726#", and
+  :1500-1507), and a shape is a different object with different rules.
+
+  OUTER is the frame's own text.  INNER is a draw:custom-shape anchored to the character
+  after it, offset far enough down and across to be told apart from it.
+
+  Ground truth is 26.2.4.2's own PDF of this file, read with pdftotext -bbox; the numbers are
+  in OdtNestedFrameTests.
+-->
+<office:document
+    xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+    xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+    xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+    xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+    xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+    xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:meta>
+  <dc:title>Paperless frame inside a frame</dc:title>
+ </office:meta>
+ <office:styles>
+  <style:style style:name="Body" style:family="paragraph">
+   <style:paragraph-properties fo:text-align="start" fo:text-indent="0cm" fo:hyphenate="false"
+       fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%"
+       fo:orphans="0" fo:widows="0"/>
+   <style:text-properties style:font-name="Carlito" fo:font-family="Carlito" fo:font-size="11pt"
+       fo:language="en" fo:country="GB"/>
+  </style:style>
+  <style:style style:name="Frame" style:family="graphic">
+   <style:graphic-properties text:anchor-type="paragraph" svg:x="0cm" svg:y="0cm"
+       fo:margin-left="0cm" fo:margin-right="0cm" fo:margin-top="0cm" fo:margin-bottom="0cm"
+       style:wrap="none" style:vertical-pos="top" style:vertical-rel="paragraph"
+       style:horizontal-pos="from-left" style:horizontal-rel="paragraph"
+       draw:fill="none" fo:padding="0cm" fo:border="none"/>
+  </style:style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:page-layout style:name="PL">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+       fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"/>
+  </style:page-layout>
+  <style:style style:name="fr1" style:family="graphic" style:parent-style-name="Frame">
+   <style:graphic-properties style:wrap="none" style:vertical-pos="from-top"
+       style:vertical-rel="paragraph" style:horizontal-pos="from-left"
+       style:horizontal-rel="paragraph" fo:padding="0cm" fo:border="none"/>
+  </style:style>
+  <style:style style:name="gr1" style:family="graphic" style:parent-style-name="Frame">
+   <style:graphic-properties style:wrap="run-through" style:run-through="foreground"
+       style:vertical-pos="from-top" style:vertical-rel="paragraph"
+       style:horizontal-pos="from-left" style:horizontal-rel="paragraph"
+       draw:auto-grow-height="false" fo:padding="0cm" fo:border="none"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="PL"/>
+ </office:master-styles>
+ <office:body>
+  <office:text>
+   <text:p text:style-name="Body">
+    <draw:frame draw:style-name="fr1" draw:name="Outer" text:anchor-type="paragraph"
+        svg:x="0cm" svg:y="0cm" svg:width="12cm" draw:z-index="0">
+     <draw:text-box fo:min-height="0cm">
+      <text:p text:style-name="Body">OUTER<draw:custom-shape draw:style-name="gr1"
+          draw:name="Inner" text:anchor-type="char" draw:z-index="1"
+          svg:x="4cm" svg:y="2cm" svg:width="5cm" svg:height="1cm"
+          draw:text-style-name="Body">
+        <text:p text:style-name="Body">INNER</text:p>
+       </draw:custom-shape></text:p>
+     </draw:text-box>
+    </draw:frame>ANCHOR</text:p>
+   <text:p text:style-name="Body">AFTER</text:p>
+  </office:text>
+ </office:body>
+</office:document>

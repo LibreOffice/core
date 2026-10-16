@@ -1,0 +1,16 @@
+# The eleven documents whose glyph count differs between the banked gate (2f4709c08) and
+# round 69's sweep, re-rendered at the round's BASE commit ddb05e4e5 to separate this round's
+# effect from the two commits that landed between the bank and the base.
+# ours = XRay.Office.Cli at ddb05e4e5, sources restored with `git checkout --`, XRAY_OFFICE_BUNDLED_FONTS unset
+# columns: path  pages  glyphs
+sheets/chartset-006/xlsx/070_Equipment_inventory_list_Use_this_template_fd524c8a.xlsx	1	1128
+sheets/chartset-007/xlsx/037_Personal_money_tracker_a57957bb.xlsx	5	2534
+sheets/chartset-009/xlsx/056_Quarterly_sale_report_baa6bb0d.xlsx	4	642
+sheets/chartset-010/xlsx/062_Run_chart_cb7476ea.xlsx	2	643
+sheets/chartset-011/xlsx/030_Basic_balance_sheet_Use_this_template_10ed9144.xlsx	8	1727
+sheets/chartset-011/xlsx/057_Simple_balance_sheet_Use_this_template_e2d4cbb2.xlsx	3	2185
+sheets/chartset-012/xlsx/068_Blue_inventory_list_Use_this_template_f9908489.xlsx	4	1199
+sheets/chartset-014/xlsx/048_Expense_trends_budget_18d1e8ba.xlsx	14	4088
+sheets/chartset-014/xlsx/076_Inventory_list_accessibility_guide_Use_this_template_f43dab19.xlsx	9	4793
+sheets/done-009/xls/EHEST-Pre-departure-checklist-Rev.-1-06-12-2016.xls	24	39462
+sheets/done-013/xls/18-02RD301_ILS_components_Master_9-13-18.xls	166	152726

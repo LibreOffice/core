@@ -1,0 +1,20 @@
+Our half of both corpora, rendered at 4ac492420 and again at this round's HEAD, obj/bin cleared
+per leg, the restore done with `cp` and an explicit `touch`, both legs under SOURCE_DATE_EPOCH,
+and every PDF checked for `%%EOF` before being compared.  `movers.py`.
+
+The reference halves are the banked /home/user/gate-orig-r83/ref (947) and
+/home/user/gate-odf-r80/ref (1272, of which 338 .odt and 336 .rtf); neither was re-rendered.
+
+=== /home/user/sample-files, 947 documents (words 338, slides 302, sheets 307)
+947 renderings compared, 4 differ, 0 on one side only
+   before    after    delta  document
+   12.089   12.663   +0.575  021_Unit_Circle_Chart_3D_Pie_Chart_404247ab__docx.pdf
+   10.718   16.424   +5.706  023_Unit_Circle_Chart_Circular_Percentage_790f7b75__docx.pdf
+   12.396   11.265   -1.131  027_Unit_Circle_Chart_Graphical_Chart_5462a579__docx.pdf
+    4.979    4.978   -0.000  ABCD-SDE-23-00 - Avionic System Description - 17.02.16 - v1__docx.pdf
+   40.182   45.331   +5.149  TOTAL over the movers
+
+=== /home/user/corpus-odf/words, 676 documents (.odt 338, .rtf 338)
+676 renderings compared, 0 differ, 0 on one side only
+   before    after    delta  document
+    0.000    0.000   +0.000  TOTAL over the movers

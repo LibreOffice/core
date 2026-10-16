@@ -1,0 +1,24 @@
+SLICE room=297.8 rowTop=0.0 drawn=0.0 cells=1 nestedSpans=1 candidates=1
+    nested span 0.0..658.0
+    candidates: 658.0
+    -> chosen=none height=0.0
+SLICE room=26.4 rowTop=0.0 drawn=0.0 cells=1 nestedSpans=1 candidates=1
+    nested span 0.0..1126.4
+    candidates: 1126.4
+    -> chosen=none height=0.0
+SLICE room=697.9 rowTop=0.0 drawn=0.0 cells=1 nestedSpans=1 candidates=1
+    nested span 0.0..1126.4
+    candidates: 1126.4
+    -> chosen=none height=0.0
+SLICE room=297.8 rowTop=0.0 drawn=0.0 cells=1 nestedSpans=1 candidates=1
+    nested span 0.0..658.0
+    candidates: 658.0
+    -> chosen=none height=0.0
+SLICE room=26.4 rowTop=0.0 drawn=0.0 cells=1 nestedSpans=1 candidates=1
+    nested span 0.0..1145.6
+    candidates: 1145.6
+    -> chosen=none height=0.0
+SLICE room=697.9 rowTop=0.0 drawn=0.0 cells=1 nestedSpans=1 candidates=1
+    nested span 0.0..1145.6
+    candidates: 1145.6
+    -> chosen=none height=0.0

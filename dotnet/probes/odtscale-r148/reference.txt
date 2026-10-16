@@ -1,0 +1,11 @@
+none     width   83.712 pt   right edge  538.712   'Hamburgefonstiv'
+s100     width   83.712 pt   right edge  538.712   'Hamburgefonstiv'
+s130     width  108.810 pt   right edge  538.710   'Hamburgefonstiv'
+s60      width   50.205 pt   right edge  538.705   'Hamburgefonstiv'
+s99      width   82.594 pt   right edge  538.644   'Hamburgefonstiv'
+
+none     ratio to the unscaled arm 1.00000
+s100     ratio to the unscaled arm 1.00000
+s130     ratio to the unscaled arm 1.29981
+s60      ratio to the unscaled arm 0.59974
+s99      ratio to the unscaled arm 0.98665

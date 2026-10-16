@@ -1,0 +1,24 @@
+# ours = XRay.Office.Cli at this round s three commits, on /home/user/corpus-odf
+# ref  = /opt/libreoffice26.2/program/soffice, LibreOffice 26.2.4.2 (TDF tarball), all four
+#        font confounds aside; reference columns reused from probes/odp-master-r70/ref.tsv,
+#        which reproduced probes/odf-gate-01 on 302 of 302.
+# rule = batch-check.sh of 2026-09-05: pages, then alphanumeric characters within max(2%, 15),
+#        then unembedded fonts. Every glyph column is ours/ref.
+path	at_base	after_running	after_autofit	after_blur	verdict	cause	note
+slides/ceiling-001/odp/OnTrac_StarCertificationProgram-3Day.odp	7740/6233	7709/6233	7709/6233	7709/6233	words	raster ceiling	draw:object-ole whose ObjectReplacements is an EMF; 26.2.4.2 draws a JPEG on pages 9-10 (4 images to our 0) and we replay the metafile as searchable text. Ours is the better output.
+slides/ceiling-002/odp/16 - UTM - (NASA).odp	14165/13981	14119/13981	15082/13981	15082/13981	words	raster ceiling	the same, pages 7 and 29; page 29 is 550 characters ours against 2. Was inside the band before the autofit fix and is outside it after, because the fit drew more of what the reference draws as a picture.
+slides/ceiling-002/odp/8_P-Pavese_AIRBUS-ATB-journee-CRATB.odp	10319/9914	10306/9914	10377/9914	10377/9914	words	raster ceiling + residual	pages 5 and 6 are the raster ceiling (ref 2 images each, ours 0, +234 and +269); pages 8, 15 and 16 are a separate text difference of -16, -89 and +55.
+slides/ceiling-002/odp/Demick_JetBlue.odp	2897/3179	2897/3179	2897/3179	2897/3179	words	other, ODF reader	text short on pages 4, 6, 7 and 8 and long on 5, with no image-count split. Unclassified.
+slides/chartset-001/odp/combo_bar_line_chart.odp	166/219	166/219	166/219	166/219	words	ODF chart reader	the reference draws a secondary value axis (a second 0-45000 scale) and the category labels Q1..Q4; we draw neither.
+slides/chartset-001/odp/scatter_chart.odp	83/105	83/105	83/105	83/105	words	ODF chart reader	the reference draws the x axis' numeric labels 2..10 and the four data-point labels A..D; we draw neither.
+slides/chartset-008/odp/038_Competitive_Advantage_Card_for_PowerPoint_and_Google_Slides_373720f6.odp	1585/1449	1585/1449	1585/1449	1585/1449	words	ODF chart reader	we draw a radar chart's rotated category labels (Product Quality, Cost Efficiency, ...) that the reference does not, +68 on each of two pages.
+slides/done-001/odp/Statement of Work presentation.odp	1286/1255	1286/1255	1286/1255	1286/1255	words	other, ODF reader	one page, +31. Unclassified.
+slides/done-002/odp/medicines_bulletin_february_2023_final.odp	2902/3093	2902/3093	2902/3093	2902/3093	words	other, ODF reader	one page, -191, with 9 reference images to our 5.
+slides/done-004/odp/0335fab9-79f0-4944-b92c-f223837ca2d8.odp	4404/4499	4404/4499	4404/4499	4404/4499	words	other, ODF reader	one page, -95, no image split.
+slides/done-005/odp/manufacturing_process_simulation_working_group_overview_2023.odp	2984/4733	2990/4733	4868/4733	4868/4733	words	autofit level	page 2 is +135 after the shrink-to-fit fix and was -1032 before it: our fit lands one constScaleLevels row shallower than 26.2.4.2 on a 48pt outline body.
+slides/done-012/odp/Sean Monogue.odp	4803/4950	4803/4950	4803/4950	4803/4950	words	other, ODF reader	pages 3 (-33) and 8 (-114).
+slides/done-013/odp/schematicplaymar21.odp	11122/11470	11122/11470	11122/11470	11122/11470	words	overflow off the page bottom	page 7 only, -348. The body is a draw:custom-shape stating draw:auto-grow-height='true' and style:shrink-to-fit='false'; nothing reads auto-grow-height, and our lines run past the sheet where 26.2.4.2's fit.
+slides/done-014/odp/redac-sas-201509-asisp-research.odp	18489/19095	18555/19095	18646/19095	18520/19095	words	other, ODF reader	pages 2 (-219) and 7 (-349); the master running objects are drawn correctly now.
+slides/done-014/odp/schematicplay.odp	11142/11490	11142/11490	11142/11490	11142/11490	words	overflow off the page bottom	the twin of schematicplaymar21; the same page 7 and the same -348.
+slides/done-014/odp/vvsummit2022-Research-Roadmap-and-the-UML-3-Operational-Integration-Assessment.odp	8113/8377	7981/8377	8377/8377	8377/8377	unembedded	CFF embedding	glyphs are now exact, 8377 of 8377; the row fails on `unembedded` alone. One CFF face (Unifont) that PdfFontCatalogue.IsCompactFontFormat declines to embed -- already recorded in dotnet/CLAUDE.md.
+slides/metrics-001/odp/Ramp Up Campaign - French.odp	2414/2536	2414/2536	2414/2536	2414/2536	words	other, ODF reader	-122 spread over pages 2, 3, 4 and 5; fails as .pptx too.

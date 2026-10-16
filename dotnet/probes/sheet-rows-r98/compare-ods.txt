@@ -1,0 +1,7 @@
+comparable rows: 60 of 60 (excluded for a failure on either side in either run: 0)
+base match 49, head match 50
+
+rows that moved:
+  sistem-rekod-markah-srm-_-rekod-master.ods              
+      base pages 22/26      verdict pages        glyphs 16180/16180
+      head pages 26/26      verdict match        glyphs 16180/16180

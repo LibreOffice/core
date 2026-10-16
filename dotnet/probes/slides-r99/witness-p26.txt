@@ -1,0 +1,51 @@
+pres_ioc_phuket.ppt page 26 -- the three white boxes and the text in the O15 witness,
+read out of each PDF's own content stream. base = HEAD 1acd84bea, head = this round.
+
+== white fills, page 26 (x0, y0)-(x1, y1) with y measured up from the page bottom
+-- 26.2.4.2
+fill  p26  (    0.00,    0.03)-(  719.97,  540.00) #FFFFFF [f*]
+fill  p26  (   83.96,  369.38)-(  654.01,  462.02) #FFFFFF [f*]
+fill  p26  (  521.97,   94.59)-(  720.00,  216.03) #FFFFFF [f*]
+fill  p26  (   17.97,   93.43)-(  222.01,  204.04) #FFFFFF [f*]
+-- base
+fill  p26  (   84.00,  380.23)-(  654.00,  462.00) #FFFFFF [f]
+fill  p26  (  522.00,  105.42)-(  720.00,  216.00) #FFFFFF [f]
+fill  p26  (   18.00,   93.41)-(  222.00,  204.00) #FFFFFF [f]
+-- head
+fill  p26  (   84.00,  369.40)-(  654.00,  462.00) #FFFFFF [f]
+fill  p26  (  522.00,   94.59)-(  720.00,  216.00) #FFFFFF [f]
+fill  p26  (   18.00,   93.41)-(  222.00,  204.00) #FFFFFF [f]
+
+  gr78, the O15 witness:   ref 92.64   base 81.77   head 92.60
+  the right-hand box:      ref 121.44  base 110.58  head 121.41
+  the left-hand box:       ref 110.61  base 110.59  head 110.59
+
+== the text of gr78, whose last line carries a 28 pt trailing space
+-- 26.2.4.2
+text  p26  (  160.89,  433.22)  24.01pt         IAAAAA+DejaVuSans-Bold         24 glyphs in 5 show(s)
+text  p26  (  159.79,  434.32)  24.01pt         IAAAAA+DejaVuSans-Bold         24 glyphs in 5 show(s)
+text  p26  (   92.67,  409.75)  18.99pt         HAAAAA+LiberationSans-BoldIt   63 glyphs in 35 show(s)
+text  p26  (   91.87,  410.54)  18.99pt         HAAAAA+LiberationSans-BoldIt   63 glyphs in 35 show(s)
+text  p26  (  289.05,  377.94)  18.99pt         HAAAAA+LiberationSans-BoldIt   15 glyphs in 9 show(s)
+text  p26  (  288.25,  378.74)  18.99pt         HAAAAA+LiberationSans-BoldIt   15 glyphs in 9 show(s)
+text  p26  (  441.27,  377.43)  28.01pt         IAAAAA+DejaVuSans-Bold          1 glyphs in 1 show(s)
+-- base
+text  p26  (  162.31,  433.20)  24.01pt         HAAAAA+DejaVuSans-Bold         24 glyphs in 3 show(s)
+text  p26  (  161.21,  434.30)  24.01pt         HAAAAA+DejaVuSans-Bold         24 glyphs in 3 show(s)
+text  p26  (   92.58,  409.71)  18.99pt         GAAAAA+LiberationSans-BoldIt   62 glyphs in 2 show(s)
+text  p26  (   91.78,  410.51)  18.99pt         GAAAAA+LiberationSans-BoldIt   62 glyphs in 2 show(s)
+text  p26  (  293.99,  386.92)  18.99pt         GAAAAA+LiberationSans-BoldIt   15 glyphs in 2 show(s)
+text  p26  (  293.19,  387.72)  18.99pt         GAAAAA+LiberationSans-BoldIt   15 glyphs in 2 show(s)
+text  p26  (  559.77,  187.21)  24.01pt         HAAAAA+DejaVuSans-Bold          7 glyphs in 1 show(s)
+-- head
+text  p26  (  162.31,  433.20)  24.01pt         HAAAAA+DejaVuSans-Bold         24 glyphs in 3 show(s)
+text  p26  (  161.21,  434.30)  24.01pt         HAAAAA+DejaVuSans-Bold         24 glyphs in 3 show(s)
+text  p26  (   92.58,  409.71)  18.99pt         GAAAAA+LiberationSans-BoldIt   62 glyphs in 2 show(s)
+text  p26  (   91.78,  410.51)  18.99pt         GAAAAA+LiberationSans-BoldIt   62 glyphs in 2 show(s)
+text  p26  (  293.99,  377.91)  18.99pt         GAAAAA+LiberationSans-BoldIt   15 glyphs in 2 show(s)
+text  p26  (  293.19,  378.71)  18.99pt         GAAAAA+LiberationSans-BoldIt   15 glyphs in 2 show(s)
+text  p26  (  559.77,  187.21)  24.01pt         HAAAAA+DejaVuSans-Bold          7 glyphs in 1 show(s)
+
+The reference draws 63 glyphs on the wrapped line where we draw 62 -- the break blank --
+and a one-glyph 28.01 pt show at the end of the last line, which is the trailing space.
+Its third baseline is 377.94; ours was 386.92 and is now 377.91.

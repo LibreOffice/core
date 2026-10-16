@@ -1,0 +1,3 @@
+shapes stating a transform, no svg:x and an end cell: 2 in 2 documents
+    1  done-004/ods/Foreign_SA-CAT-I_and_CAT-II-III_Pub_0.ods
+    1  done-010/ods/Special-Procedures_2025-07-10.ods

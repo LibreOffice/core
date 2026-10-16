@@ -1,0 +1,27 @@
+The whole slide corpus at both legs, SOURCE_DATE_EPOCH=1700000000 pinned inside confine.py.
+51 .ppt and 251 .pptx from /home/user/sample-files, 302 .odp from /home/user/corpus-odf.
+
+ppt	documents 51	rendered both legs 51	failed 0	MOVED 20	page counts differing 0	alphanumeric counts differing 0
+   moved	BUS-Chapter 05__ppt
+   moved	Employment-Based_I-485__ppt
+   moved	JesuitAssocOfStudentPersonnel__ppt
+   moved	Thailand17__ppt
+   moved	W3_Case_Study_of_a_Tsunami_Warning_Simulation_Exercise_Ed__ppt
+   moved	berlin__ppt
+   moved	concepts-surrounding-cloud-computing-carolyn-kranz-and-rich-prem-gb-seattle-2011__ppt
+   moved	introduction_to_bea_tuxedo__ppt
+   moved	outlook_of_nigerian_pension_sector__ppt
+   moved	pods05__ppt
+   moved	pres_ioc_phuket__ppt
+   moved	undp_presentation_revised_17_may__ppt
+   moved	wells08_basic__ppt
+   moved	ws_prod-g-doc-Events-2007-Privileges__ppt
+   moved	ws_prod-g-doc-Events-2007-may-presentation-PtF-background-+-principles__ppt
+   moved	ws_prod-g-doc-Events-2007-september-M.017-(French)-France__ppt
+   moved	ws_prod-g-doc-Events-2007-september-MDM.032-(ENGLISH)-CZ__ppt
+   moved	ws_prod-g-doc-Events-Part-M-presentation__ppt
+   moved	ws_prod-g-doc-Events-industrymeeting18112004-European-Safety-Strategy-Initiative__ppt
+   moved	ws_prod-g-doc-Events-r-6.-ESM__ppt
+pptx	documents 251	rendered both legs 251	failed 0	MOVED 0	page counts differing 0	alphanumeric counts differing 0
+odp	documents 302	rendered both legs 302	failed 0	MOVED 0	page counts differing 0	alphanumeric counts differing 0
+TOTAL	{'docs': 604, 'both': 604, 'moved': 20, 'pages': 0, 'alnum': 0, 'failed': 0}

@@ -1,0 +1,77 @@
+base	prop	meas_tw	trunc	roundtw	tenth	verdict
+11.0	25	54.976	55	55	56	trunc,roundtw	*
+11.0	33	71.968	72	73	72	trunc,tenth	*
+11.0	41	89.993	90	90	90	trunc,roundtw,tenth
+11.0	45	98.984	99	99	100	trunc,roundtw	*
+11.0	49	106.985	107	108	108	trunc	*
+11.0	51	112.020	112	112	112	trunc,roundtw,tenth
+11.0	53	115.975	116	117	116	trunc,tenth	*
+11.0	57	124.966	125	125	126	trunc,roundtw	*
+11.0	58	126.989	127	128	128	trunc	*
+11.0	59	129.011	129	130	130	trunc	*
+11.0	61	134.001	134	134	134	trunc,roundtw,tenth
+11.0	63	138.002	138	139	138	trunc,tenth	*
+11.0	67	146.992	147	147	148	trunc,roundtw	*
+11.0	71	155.982	156	156	156	trunc,roundtw,tenth
+11.0	73	160.028	160	161	160	trunc,tenth	*
+11.0	77	169.018	169	169	170	trunc,roundtw	*
+11.0	79	173.019	173	174	174	trunc	*
+11.0	83	182.009	182	183	182	trunc,tenth	*
+11.0	87	191.000	191	191	192	trunc,roundtw	*
+11.0	89	195.001	195	196	196	trunc	*
+11.0	91	199.990	200	200	200	trunc,roundtw,tenth
+11.0	93	204.036	204	205	204	trunc,tenth	*
+11.0	97	213.026	213	213	214	trunc,roundtw	*
+11.0	99	216.982	217	218	218	trunc	*
+13.0	25	65.000	65	65	66	trunc,roundtw	*
+13.0	33	85.004	85	86	86	trunc	*
+13.0	41	105.996	106	107	106	trunc,tenth	*
+13.0	45	116.964	117	117	118	trunc,roundtw	*
+13.0	49	126.989	127	127	128	trunc,roundtw	*
+13.0	51	132.023	132	133	132	trunc,tenth	*
+13.0	53	137.013	137	138	138	trunc	*
+13.0	57	148.026	148	148	148	trunc,roundtw,tenth
+13.0	58	150.004	150	151	150	trunc,tenth	*
+13.0	59	152.971	153	153	154	trunc,roundtw	*
+13.0	61	158.005	158	159	158	trunc,tenth	*
+13.0	63	162.995	163	164	164	trunc	*
+13.0	67	174.008	174	174	174	trunc,roundtw,tenth
+13.0	71	183.987	184	185	184	trunc,tenth	*
+13.0	73	188.977	189	190	190	trunc	*
+13.0	77	199.990	200	200	200	trunc,roundtw,tenth
+13.0	79	204.980	205	205	206	trunc,roundtw	*
+13.0	83	215.004	215	216	216	trunc	*
+13.0	87	225.972	226	226	226	trunc,roundtw,tenth
+13.0	89	231.007	231	231	232	trunc,roundtw	*
+13.0	91	235.997	236	237	236	trunc,tenth	*
+13.0	93	240.986	241	242	242	trunc	*
+13.0	97	251.999	252	252	252	trunc,roundtw,tenth
+13.0	99	257.034	257	257	258	trunc,roundtw	*
+40.0	25	dropped (no digit span)
+40.0	33	dropped (no digit span)
+40.0	41	dropped (no digit span)
+40.0	45	dropped (no digit span)
+40.0	49	dropped (no digit span)
+40.0	51	dropped (no digit span)
+40.0	53	dropped (no digit span)
+40.0	57	dropped (no digit span)
+40.0	58	dropped (no digit span)
+40.0	59	dropped (no digit span)
+40.0	61	dropped (no digit span)
+40.0	63	dropped (no digit span)
+40.0	67	dropped (no digit span)
+40.0	71	dropped (no digit span)
+40.0	73	dropped (no digit span)
+40.0	77	dropped (no digit span)
+40.0	79	dropped (no digit span)
+40.0	83	dropped (no digit span)
+40.0	87	dropped (no digit span)
+40.0	89	dropped (no digit span)
+40.0	91	dropped (no digit span)
+40.0	93	dropped (no digit span)
+40.0	97	dropped (no digit span)
+40.0	99	dropped (no digit span)
+
+scored 48, dropped 24
+all:            trunc 48/48  roundtw 24/48  tenth 22/48
+discriminating: trunc 38/38  roundtw 14/38  tenth 12/38

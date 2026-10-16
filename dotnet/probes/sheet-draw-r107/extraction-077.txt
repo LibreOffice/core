@@ -1,0 +1,50 @@
+# xray-office extract --format text, 077_Inventory_list_with_highlighting
+# base 1545 characters, head 1557 characters
+# and 26.2.4.2's own --convert-to csv of the same workbook, rows 6-8
+
+--- base.txt	2026-09-12 02:22:12.871812902 +0000
++++ head2.txt	2026-09-12 02:22:13.655812948 +0000
+@@ -5,25 +5,25 @@
+ 	For reorder	Inventory ID	Name	Description	Unit price	Quantity 
+ in stock	Inventory value	Reorder level	Reorder time in days	Quantity 
+ in reorder	Discontinued?
+-		IN0001	Item 1	Desc 1	$51.00	25	$1,275	29	13	50
+-		IN0002	Item 2	Desc 2	$93.00	132	$12,276	231	4	50
++	1	IN0001	Item 1	Desc 1	$51.00	25	$1,275	29	13	50
++	1	IN0002	Item 2	Desc 2	$93.00	132	$12,276	231	4	50
+ 	0	IN0003	Item 3	Desc 3	$57.00	151	$8,607	114	11	150
+ 	0	IN0004	Item 4	Desc 4	$19.00	186	$3,534	158	6	50
+ 	0	IN0005	Item 5	Desc 5	$75.00	62	$4,650	39	12	50
+-		IN0006	Item 6	Desc 6	$11.00	5	$55	9	13	150
++	1	IN0006	Item 6	Desc 6	$11.00	5	$55	9	13	150
+ 	0	IN0007	Item 7	Desc 7	$56.00	58	$3,248	109	7	100	Yes
+-		IN0008	Item 8	Desc 8	$38.00	101	$3,838	162	3	100
++	1	IN0008	Item 8	Desc 8	$38.00	101	$3,838	162	3	100
+ 	0	IN0009	Item 9	Desc 9	$59.00	122	$7,198	82	3	150
+-		IN0010	Item 10	Desc 10	$50.00	175	$8,750	283	8	150
+-		IN0011	Item 11	Desc 11	$59.00	176	$10,384	229	1	100
+-		IN0012	Item 12	Desc 12	$18.00	22	$396	36	12	50
+-		IN0013	Item 13	Desc 13	$26.00	72	$1,872	102	9	100
+-		IN0014	Item 14	Desc 14	$42.00	62	$2,604	83	2	100
++	1	IN0010	Item 10	Desc 10	$50.00	175	$8,750	283	8	150
++	1	IN0011	Item 11	Desc 11	$59.00	176	$10,384	229	1	100
++	1	IN0012	Item 12	Desc 12	$18.00	22	$396	36	12	50
++	1	IN0013	Item 13	Desc 13	$26.00	72	$1,872	102	9	100
++	1	IN0014	Item 14	Desc 14	$42.00	62	$2,604	83	2	100
+ 	0	IN0015	Item 15	Desc 15	$32.00	46	$1,472	23	15	50
+-		IN0016	Item 16	Desc 16	$90.00	96	$8,640	180	3	50
++	1	IN0016	Item 16	Desc 16	$90.00	96	$8,640	180	3	50
+ 	0	IN0017	Item 17	Desc 17	$97.00	57	$5,529	98	12	50	Yes
+-		IN0018	Item 18	Desc 18	$12.00	6	$72	7	13	50
+-		IN0019	Item 19	Desc 19	$82.00	143	$11,726	164	12	150
++	1	IN0018	Item 18	Desc 18	$12.00	6	$72	7	13	50
++	1	IN0019	Item 19	Desc 19	$82.00	143	$11,726	164	12	150
+ 	0	IN0020	Item 20	Desc 20	$16.00	124	$1,984	113	14	50
+ 	0	IN0021	Item 21	Desc 21	$19.00	112	$2,128	75	11	50
+ 	0	IN0022	Item 22	Desc 22	$24.00	182	$4,368	132	15	150
+
+--- 26.2.4.2 csv ---
+in stock",Inventory value,Reorder level,Reorder time in days,"Quantity 
+in reorder",Discontinued?,
+,1,IN0001,Item 1,Desc 1,51,25,1275,29,13,50,,
+,1,IN0002,Item 2,Desc 2,93,132,12276,231,4,50,,

@@ -1,0 +1,17 @@
+# The DISCARDED first pass of the conversion census: adjustValue 3000, 8000 and 15000, square box
+# only. 15000 is outside the 0-10800 an Escher one-handle preset's own SvxMSDffHandle declares, and
+# DrawingML pins `a` at 50000 where the reference does not, so the third column is measuring the
+# clamp. It certified 11 of 105 where the corrected pass certifies 22 in a square box; these are
+# the eleven that moved, each correct at 3000 and 8000 and wrong only at 15000.
+mso_spt	preset	chamfer_3000	chamfer_8000	chamfer_15000
+2	roundRect	0.0003	0.0009	0.0388
+9	hexagon	0.0001	0.0000	0.0469
+10	octagon	0.0001	0.0000	0.0792
+11	plus	0.0002	0.0000	0.1075
+21	plaque	0.0003	0.0009	0.0910
+22	can	0.0007	0.0008	0.0403
+23	donut	0.0013	0.0011	0.0214
+57	noSmoking	0.0013	0.0063	0.0406
+85	leftBracket	0.0025	0.0069	0.0397
+86	rightBracket	0.0025	0.0069	0.0397
+185	bracketPair	0.0003	0.0010	0.0414

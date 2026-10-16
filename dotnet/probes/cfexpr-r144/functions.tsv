@@ -1,0 +1,17 @@
+function	occurrences	documents	cells_covered	occurrences_expanded	documents_expanded	cells_covered_expanded	can_paint_rules	can_paint_cells	doc_list
+AND	57	9	38444	57	9	38444	56	35756	sheets/chartset-006/xlsx/088_To-do_list_with_progress_tracker_Use_this_template_8c438912.xlsx; sheets/chartset-007/xlsx/037_Personal_money_tracker_a57957bb.xlsx; sheets/chartset-007/xlsx/082_Project_to_do_list_28f80082.xlsx; sheets/chartset-009/xlsx/015_Free_Gantt_Chart_Template_for_Excel_414e86bf.xlsx; sheets/chartset-009/xlsx/085_Simple_Gantt_chart_d65b8377.xlsx; sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx; sheets/chartset-012/xlsx/036_Simple_to-do_list_Use_this_template_ba44373b.xlsx; sheets/chartset-013/xlsx/019_Free_Blood_Sugar_Chart_for_Excel_-_Track_Your_Blood_Sugar_Level_36f4a782.xlsx; sheets/table-001/xlsx/FAA-2019-0995-0002_attachment_2.xlsx
+TODAY	14	6	10079	14	6	10079	8	5263	sheets/chartset-009/xlsx/015_Free_Gantt_Chart_Template_for_Excel_414e86bf.xlsx; sheets/chartset-009/xlsx/085_Simple_Gantt_chart_d65b8377.xlsx; sheets/chartset-010/xlsx/047_Date_tracker_Gantt_chart_bf34f3a8.xlsx; sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx; sheets/chartset-011/xlsx/071_Four-week_project_timeline_Use_this_template_4f05db49.xlsx; sheets/chartset-012/xlsx/036_Simple_to-do_list_Use_this_template_ba44373b.xlsx
+MEDIAN	0	0	0	7	1	7800	5	7800	sheets/chartset-010/xlsx/072_Gantt_project_planner_dde00e33.xlsx
+MOD	24	4	6695	24	4	6695	24	6695	sheets/chartset-009/xlsx/024_Free_Kids_Chore_Chart_Template_ad74bb34.xlsx; sheets/chartset-010/xlsx/072_Gantt_project_planner_dde00e33.xlsx; sheets/chartset-014/xlsx/027_Simple_personal_cash_flow_statement_675c6584.xlsx; sheets/done-003/xlsx/VOR Candidate Discontinuance List 2026-01-08.xlsx
+LEN	6	1	4536	6	1	4536	6	4536	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx
+ROW	22	3	3575	22	3	3575	22	3575	sheets/chartset-009/xlsx/024_Free_Kids_Chore_Chart_Template_ad74bb34.xlsx; sheets/chartset-014/xlsx/027_Simple_personal_cash_flow_statement_675c6584.xlsx; sheets/done-003/xlsx/VOR Candidate Discontinuance List 2026-01-08.xlsx
+ROUNDDOWN	5	2	3136	5	2	3136	5	3136	sheets/chartset-009/xlsx/015_Free_Gantt_Chart_Template_for_Excel_414e86bf.xlsx; sheets/chartset-009/xlsx/085_Simple_Gantt_chart_d65b8377.xlsx
+COLUMN	2	1	3120	2	1	3120	2	3120	sheets/chartset-010/xlsx/072_Gantt_project_planner_dde00e33.xlsx
+INT	0	0	0	2	1	3120	2	3120	sheets/chartset-010/xlsx/072_Gantt_project_planner_dde00e33.xlsx
+ISBLANK	1	1	2016	1	1	2016	1	2016	sheets/chartset-009/xlsx/015_Free_Gantt_Chart_Template_for_Excel_414e86bf.xlsx
+NOT	1	1	2016	1	1	2016	1	2016	sheets/chartset-009/xlsx/015_Free_Gantt_Chart_Template_for_Excel_414e86bf.xlsx
+ISERROR	12	4	1654	12	4	1654	12	1654	sheets/chartset-008/xlsx/023_Waterfall_Chart_Template_for_Excel_349f7689.xlsx; sheets/chartset-013/xlsx/019_Free_Blood_Sugar_Chart_for_Excel_-_Track_Your_Blood_Sugar_Level_36f4a782.xlsx; sheets/chartset-014/xlsx/038_Baby_growth_chart_bb9cd672.xlsx; sheets/chartset-014/xlsx/039_Baby_growth_tracker_e295ae56.xlsx
+MID	2	1	1520	2	1	1520	2	1520	sheets/table-001/xlsx/FAA-2019-0995-0002_attachment_2.xlsx
+EOMONTH	18	1	426	18	1	426	9	426	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx
+_XLFN.ISFORMULA	1	1	186	1	1	186	1	186	sheets/chartset-011/xlsx/028_Budget_summary_report_4aeefd13.xlsx
+ABS	2	1	18	2	1	18	2	18	sheets/chartset-007/xlsx/083_Project_tracker_Use_this_template_b38d057c.xlsx

@@ -1,0 +1,25 @@
+probe                         ref     ours   ref ours  agree
+m-nosuper-norow-noword       61.8     61.8   sum  sum  yes
+m-nosuper-norow              37.8     37.8   max  max  yes
+m-nosuper-row-noword         61.8     61.8   sum  sum  yes
+m-nosuper-row                37.8     37.8   max  max  yes
+m-super-norow-noword         61.8     61.8   sum  sum  yes
+m-super-norow                61.8     61.8   sum  sum  yes
+m-super-row-noword           61.8     61.8   sum  sum  yes
+m-super-row                  61.8     61.8   sum  sum  yes
+m-superheader-noword         61.8     61.8   sum  sum  yes
+m-superheader                37.8     37.8   max  max  yes
+m-superstyle-noword          61.8     61.8   sum  sum  yes
+m-superstyle                 37.8     37.8   max  max  yes
+x-nosuper-norow-noword      62.65    62.65   sum  sum  yes
+x-nosuper-norow             38.65    38.65   max  max  yes
+x-nosuper-row-noword        62.65    62.65   sum  sum  yes
+x-nosuper-row               38.65    38.65   max  max  yes
+x-plain-row-noword          62.65    62.65   sum  sum  yes
+x-plain-row                 38.65    38.65   max  max  yes
+x-super-norow-noword        38.65    62.65   max  sum  NO
+x-super-norow               38.65    62.65   max  sum  NO
+x-super-row-noword          62.65    62.65   sum  sum  yes
+x-super-row                 62.65    62.65   sum  sum  yes
+
+agree 20 of 22

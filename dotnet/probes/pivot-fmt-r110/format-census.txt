@@ -1,0 +1,15 @@
+alle einzeln.xlsx	-	no <format> in any pivot part
+Keywords_Mapping_Graphs_and_Charts.xlsx	-	no <format> in any pivot part
+DynamicBubbleChart.xlsx	pivotTable1.xml	formats=1 dxfId=1 stating=1 [align]	applyNumberFormats=0 applyBorderFormats=0 applyFontFormats=0 applyPatternFormats=0 applyAlignmentFormats=0
+049_Expenses_calculator_c351f3d0.xlsx	pivotTable1.xml	formats=23 dxfId=23 stating=23 [fill;font]	applyNumberFormats=0 applyBorderFormats=0 applyFontFormats=0 applyPatternFormats=0 applyAlignmentFormats=0
+007_Contextures_chart_sample_667d8e47.xlsm	pivotTable1.xml	formats=1 dxfId=1 stating=1 [align]	applyNumberFormats=0 applyBorderFormats=0 applyFontFormats=0 applyPatternFormats=0 applyAlignmentFormats=0
+037_Personal_money_tracker_a57957bb.xlsx	pivotTable1.xml	formats=14 dxfId=14 stating=14 [align;font;numfmt]	applyNumberFormats=0 applyBorderFormats=0 applyFontFormats=0 applyPatternFormats=0 applyAlignmentFormats=0
+037_Personal_money_tracker_a57957bb.xlsx	pivotTable22.xml	formats=9 dxfId=9 stating=9 [font;numfmt]	applyNumberFormats=0 applyBorderFormats=0 applyFontFormats=0 applyPatternFormats=0 applyAlignmentFormats=0
+033_Event_planning_tracker_Use_this_template_f29a848e.xlsx	pivotTable1.xml	formats=84 dxfId=84 stating=84 [align;border;fill;font;numfmt]	applyNumberFormats=0 applyBorderFormats=0 applyFontFormats=0 applyPatternFormats=0 applyAlignmentFormats=0
+035_Project_plan_for_law_firms_aa2d4462.xlsx	pivotTable1.xml	formats=18 dxfId=18 stating=18 [align;font,fill,border,align,numfmt,prot;numfmt]	applyNumberFormats=0 applyBorderFormats=0 applyFontFormats=0 applyPatternFormats=0 applyAlignmentFormats=0
+027_Simple_personal_cash_flow_statement_675c6584.xlsx	-	no <format> in any pivot part
+026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx	pivotTable13.xml	formats=24 dxfId=24 stating=24 [fill;font]	applyNumberFormats=0 applyBorderFormats=0 applyFontFormats=0 applyPatternFormats=0 applyAlignmentFormats=0
+026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx	pivotTable22.xml	formats=24 dxfId=24 stating=24 [fill;font]	applyNumberFormats=0 applyBorderFormats=0 applyFontFormats=0 applyPatternFormats=0 applyAlignmentFormats=0
+026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx	pivotTable3.xml	formats=24 dxfId=24 stating=24 [fill;font]	applyNumberFormats=0 applyBorderFormats=0 applyFontFormats=0 applyPatternFormats=0 applyAlignmentFormats=0
+026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx	pivotTable44.xml	formats=24 dxfId=24 stating=24 [fill;font]	applyNumberFormats=0 applyBorderFormats=0 applyFontFormats=0 applyPatternFormats=0 applyAlignmentFormats=0
+053_Personal_asset_inventory_5446d84b.xlsx	pivotTable1.xml	formats=40 dxfId=40 stating=40 [fill;font]	applyNumberFormats=0 applyBorderFormats=0 applyFontFormats=0 applyPatternFormats=0 applyAlignmentFormats=0

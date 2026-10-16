@@ -1,0 +1,19 @@
+# What the gate's silence over the eight merges 531e9a1f3..2f4709c08 is hiding, if anything.
+# Twelve documents the chart and fonts rounds touched, scored by ink against 26.2.4.2.
+# Measured 2026-09-06, tree at agent/aacpage; reference binary and font set as in movers.tsv.
+# The first six are from probes/chart-text-metafile/reach.tsv (the slides and words half that
+# the 96 dpi chart device moved); the next four are probes/fonts-r65/movers.txt; the last two
+# are two of the four .doc whose face set moved at 91ef6cf5e.
+path	ourpages	refpages	inkmean	inkworst	worstpage
+slides/ceiling-001/pptx/N2_E_Maestroni_Swarm_COP.pptx	30	30	3.98	39.53	7
+slides/done-011/pptx/171128IPAP.pptx	40	40	5.31	14.08	40
+slides/chartset-001/pptx/008_advanced_powerpoint_bubble.pptx	1	1	0.26	0.26	1
+words/chartset-001/docx/pie-chart-template.docx	1	1	0.34	0.34	1
+slides/done-007/pptx/flying-by-numbers-presentation.pptx	10	10	6.51	15.18	4
+slides/ceiling-002/pptx/Demick_JetBlue.pptx	10	10	11.26	23.49	5
+words/done-015/docx/PI-doc.-no.-2E-Technical-Review-Report.docx	12	12	3.89	19.57	4
+words/done-016/docx/AC-150-5370-10G-updated-201604.docx	696	696	2.10	29.50	435
+words/pagination-001/docx/ESPN-R - MCF - Manual - Ed1.0 - For Publication.docx	35	35	1.55	6.61	5
+words/pagination-003/docx/150-5370-10H.docx	727	727	2.37	33.35	310
+words/done-010/doc/f111.doc	11	11	0.98	2.31	5
+words/done-009/doc/A380MaenPressRel.doc	3	3	3.29	7.05	2

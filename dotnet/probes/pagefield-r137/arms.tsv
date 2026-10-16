@@ -1,0 +1,19 @@
+arm	origin	drawing	container	part	reference 26.2.4.2	reference 24.2.7.2	ours
+A1. EASA Form 2.docx	corpus, unmodified	wpg:wgp group, anchored	w:tbl cell	footer1	FROZEN at cache 6, all 7 pages	not measured	1..7
+B11. TE.CAO.00129  Experience  logbook.docx	corpus, unmodified	wpg:wgp group, anchored	w:tbl cell	footer1	FROZEN at cache 3, all 6 pages	not measured	1..6
+approvals-...-B11.-TE.CAO.00129-...-logbook.docx	corpus, unmodified	no drawing; field is a plain run	w:tbl cell	footer1	1..6	not measured	1..6
+easa-B2-untable.docx	mutation of A1. EASA Form 2	wpg:wgp group, anchored	moved out of the table, direct child of w:ftr	footer1	1..7	not measured	not measured
+logbook-B-untable.docx	mutation of B11. logbook	wpg:wgp group, anchored	moved out of the table, direct child of w:ftr	footer1	1..6	not measured	not measured
+ug133-C-wrapped.docx	mutation of UG.CAO.00133 (works unmodified)	wpg:wgp group, anchored	wrapped in a new one-cell w:tbl	footer1	FROZEN at cache 1, all 18 pages	not measured	not measured
+t125-C-wrapped.docx	mutation of TE.CAO.00125 (works unmodified)	wpg:wgp group, anchored	wrapped in a new one-cell w:tbl, all three footers	footer1/2/3	FROZEN at each footer's own cache	not measured	not measured
+sysdes-C-wrapped.docx	mutation of system_design__technical_architecture_template	bare wps textbox, anchored, NO group	wrapped in a new one-cell w:tbl	footer1	2..17, unchanged from the unmodified document	not measured	not measured
+sde-C-wrapped.docx	mutation of ABCD-SDE-23-00	bare wps textbox, anchored, NO group	wrapped in a new one-cell w:tbl	footer3	1..29, unchanged	not measured	not measured
+syn-plain-para.docx	synthetic	bare wps textbox, anchored	plain footer paragraph	footer1	1..4	not measured	1..4
+syn-plain-table.docx	synthetic	bare wps textbox, anchored	footer table cell	footer1	1..4	not measured	1..4
+syn-group-para.docx	synthetic	wpg:wgp group, anchored	plain footer paragraph	footer1	1..4	1..4	1..4
+syn-group-table.docx	synthetic	wpg:wgp group, anchored	footer table cell	footer1	FROZEN at cache 2, all 4 pages	FROZEN at cache 2, all 4 pages	1..4
+syn-body-group-para.docx	synthetic	wpg:wgp group, anchored	plain body paragraph	document body	field survives import (fodt)	not measured	not measured
+syn-body-group-table.docx	synthetic	wpg:wgp group, anchored	body table cell	document body	field DROPPED at import (fodt)	not measured	not measured
+syn-body-plain-table.docx	synthetic	bare wps textbox, anchored	body table cell	document body	field survives import (fodt)	not measured	not measured
+syn-group-para-FILENAME.docx	synthetic	wpg:wgp group, anchored, FILENAME field	plain footer paragraph	footer1	field survives import (fodt)	not measured	not measured
+syn-group-table-FILENAME.docx	synthetic	wpg:wgp group, anchored, FILENAME field	footer table cell	footer1	field DROPPED at import (fodt)	not measured	not measured

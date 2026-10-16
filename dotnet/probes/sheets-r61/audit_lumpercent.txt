@@ -1,0 +1,11 @@
+case       bright      meanR    meanG    meanB
+zero            0    234.447  213.926  234.444
+w70000      70000    251.842  248.718  251.841
+w70999      70999    251.842  248.718  251.841
+w69500      69500    250.795  246.624  250.794
+w71000      71000    251.117  247.268  251.116
+
+70999 renders as 70000 (truncation) : True
+69500 renders as 70000 (rounding)   : False
+71000 renders as 70000 (control, must be False): False
+0     renders as 70000 (control, must be False): False

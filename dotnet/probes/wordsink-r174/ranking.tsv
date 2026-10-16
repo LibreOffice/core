@@ -1,0 +1,339 @@
+warning: The `fitz` API is deprecated and will be removed in future. Use `import pymupdf` instead.
+pixelD	perPage	meanD	MAJOR	pages	aligned	verdict	oursG	refG	document
+1128.68	4.243	34.90	165	266	0.81	match	479214	479154	SPA-02_mcar_part-2_and_IS_v2.9.docx
+690.96	4.458	321.27	87	155	0.19	pages	299532	299583	24-25_FAA_Holdover_Tables.docx
+552.63	0.760	45.65	45	727	0.91	match	1508484	1508422	150-5370-10H.docx
+516.50	0.742	49.16	42	696	0.92	match	1432510	1432447	AC-150-5370-10G-updated-201604.docx
+419.25	5.375	71.95	72	78	0.36	pages	119052	116092	150_5300_13_chg10.doc
+397.69	2.381	93.02	55	167	0.29	pages	335456	335603	FAA 2025-26 Holdover Tables.docx
+278.59	9.606	28.10	28	29	0.66	pages	39524	39830	CRIF - SpÃ©cification technique - Socle applicatif.docx
+255.36	1.548	22.43	37	165	0.87	pages	270063	270009	OM template for non-complex NCC operators_August 2016.docx
+223.28	0.716	25.57	64	312	0.99	match	414481	414481	02_mcar_part-2_and_IS_v2.10.docx
+208.56	2.744	8.17	29	76	0.92	match	124706	124706	FRE-03_mcar_part-3_and_IS_v2.9.docx
+177.03	4.023	3.63	42	44	0.50	match	73778	73651	docs-quality-MA.IMS.00001-Integrated-Management-System-manual.docx
+164.51	2.006	3.66	38	82	0.83	match	105317	105180	EHEST-SMS-Safety-Management-Manual-V2.docx
+164.08	5.658	2.26	23	29	0.38	match	41545	40732	UG.CAO.00006 Foreign Part 145 approvals - User Guide for Applicants & Approval Holders.docx
+159.37	2.490	8.69	34	64	0.80	match	95782	95838	150_5335_5a.doc
+143.21	8.951	15.97	12	16	0.56	pages	18500	18491	ABCD-FE-01-00 Flight Envelope - v1 08.03.16.docx
+128.53	18.362	9.77	7	7	0.00	pages	6872	6875	absrc-pac-01-info-note-en.doc
+125.23	1.473	4.63	29	85	0.96	match	142938	142938	SPA-06_mcar_part-6_and_IS_v2.9.docx
+116.44	3.756	3.75	24	31	0.61	match	62170	61920	150_5300_13_chg12.doc
+96.20	5.659	9.95	17	17	0.47	pages	41702	41298	150_5300_13_chg8.doc
+89.36	3.723	1.80	20	24	0.92	match	43584	43584	AirbusCallouts.doc
+88.24	3.394	4.67	18	26	0.65	match	27737	27737	t_TEMPforInvProgs.docx
+81.54	4.077	3.71	17	20	0.50	match	45562	45562	195584360.docx
+80.39	4.020	0.65	17	20	0.95	match	38764	38764	AAC-AD-No-2021-01-Boeing-737-8-and-737-9-MAX.doc
+70.80	3.933	1.04	14	18	0.33	match	20689	20679	UG.CAO.00133 Foreign Part 145 approvals - Language.docx
+70.77	3.077	1.38	11	23	0.87	match	22603	22603	762.doc
+61.49	0.521	5.50	12	118	1.00	match	88958	88958	A_320.doc
+54.65	1.115	4.55	16	49	0.98	match	70763	70763	SPA-11_mcar_part-11_v2.9.docx
+54.27	4.522	2.94	12	12	0.75	match	14396	14396	1228841571067_2009_TPPT_13__2007_TPPT_102__R-108535759.doc
+52.23	3.264	0.42	11	16	0.12	match	23321	23316	FO.FCTOA.00010 Application for a Part-ORA ATO Approval.docx
+51.25	5.694	1.41	9	9	1.00	match	9336	9336	RNW167A-150428.doc
+48.63	4.863	1.66	6	10	0.70	match	19699	19647	hdss-bulletin-issue-285-25-june-2025.docx
+48.31	0.326	59.56	3	148	1.00	match	189432	189432	Annex-10-to-the-Aircraft-Maintenance-Specialist-Certification-Rule-GCAA.docx
+44.92	2.995	2.74	10	15	0.07	match	15282	15282	TE.CAO.00125 Foreign Part 145 approvals - OJT Logbook.docx
+44.41	2.220	1.34	16	20	0.90	match	28542	28545	DOA_Template_Form_Type_Certification_Programme.docx
+44.28	5.535	1.17	6	8	0.75	match	18195	18195	19-06 Assistive Technology TAB Final - 508.docx
+41.74	4.638	1.22	9	9	0.89	match	10122	10122	1257259179492_2007_TPPT_102_Supporting_Doc_2-434003080.doc
+41.57	5.939	6.12	6	7	1.00	match	10002	10065	PK_FlugzeugeStricken.doc
+40.91	0.974	1.11	9	42	0.88	match	67430	67512	A320SimNotes.doc
+39.04	1.116	0.51	12	35	1.00	match	68170	68170	361400CSLegislation1RF01PUBLIC1.doc
+34.35	0.731	0.72	10	47	0.91	match	60488	60488	33004.docx
+33.57	1.679	1.68	8	20	0.90	match	33897	33905	Agile_Arc_SysDes.docx
+33.09	4.728	1.61	6	7	1.00	match	11547	11527	A1. EASA Form 2.docx
+32.27	1.113	0.69	7	29	0.93	match	43746	43748	ABCD-SDE-23-00 - Avionic System Description - 17.02.16 - v1.docx
+31.90	2.279	0.29	5	14	0.93	match	26670	26620	135.doc
+30.80	6.160	1.73	5	5	0.80	match	12838	12820	644730BRI0mna000BOX361539B00public0.doc
+27.51	4.585	0.83	5	6	0.50	match	14617	14617	RMI_Document_Repository_Public-Reprts_GettingOffOil.doc
+25.37	3.172	1.06	5	8	1.00	match	13594	13594	2013_11.doc
+25.23	2.102	4.44	6	12	0.67	match	13015	13015	ABCD-WB-08-00 Weight and Balance Report - v1 08.03.16.docx
+24.97	0.431	4.36	3	58	0.95	match	65676	65952	ESPN-R - MCF - RA - Ed1.docx
+24.36	3.045	1.13	7	8	0.62	match	8415	8415	part-145-approval list (1).docx
+23.83	4.765	1.53	4	5	0.80	match	11209	11209	healthcare-reform-nsa-provider-bulletin.docx
+23.74	0.742	1.84	2	32	0.00	match	59010	59010	5709.16 ch.40_mgfinal.docx
+23.29	5.823	0.21	3	4	0.75	match	5136	5136	SFSP_2013-02_Bulletin.doc
+22.58	1.613	2.48	7	14	0.86	match	14961	14961	review-welsh-government-communications-mister-peter-mandelson.docx
+22.38	0.895	0.71	6	25	1.00	match	38126	38126	120509coss.doc
+21.13	3.521	3.23	6	6	0.67	match	6448	6448	CP-ETSO template_v2020.DOC
+20.31	0.333	1.12	0	61	0.08	match	86680	86680	Sample_SQMS_Program.docx
+20.21	2.526	3.29	4	8	0.12	match	13442	13442	AFS-050-004-F2_0i.docx
+20.11	5.028	0.05	4	4	0.50	match	5424	5428	10795.doc
+20.03	4.006	9.81	5	5	0.80	match	2967	2967	HC-Bulletin-template.docx
+20.01	0.572	1.71	1	35	0.97	match	49388	49328	ESPN-R - MCF - Manual - Ed1.0 - For Publication.docx
+19.72	3.944	0.60	5	5	0.80	match	8911	8911	461249.docx
+19.64	0.702	3.06	5	28	1.00	match	38956	38925	231164_SystemDesignDocument.docx
+19.39	4.847	0.22	4	4	0.50	match	8667	8668	JEMIT_Template.docx
+19.00	4.751	2.63	3	4	0.75	match	2721	2721	May 25 bulletin focus on carers in the workplace.docx
+18.41	2.045	0.15	8	9	0.00	match	24054	24054	1603642410-MoM-CASCOM-06-2020-draft04.docx
+17.86	5.953	0.26	3	3	0.67	match	5485	5485	07-04.doc
+17.47	2.496	0.68	4	7	0.71	match	7822	7822	part-145-approval list 2025.docx
+17.22	1.230	4.39	3	14	1.00	match	13435	13433	PES-Technical-Report-Template_Jan_2019.docx
+15.08	5.027	0.31	2	3	1.00	match	6461	6461	Case-Study-Heathrow-Airport.docx
+14.33	3.583	0.26	3	4	0.75	match	5669	5669	gpp-pr-top-7-office-markets-4q-2023.docx
+14.19	0.788	0.96	3	18	1.00	match	33617	33604	Regulations Governing the Status, Basic Rights and Duties of Officials other than Secretariat Officials, and Experts on Mission.docx
+14.05	4.682	0.27	3	3	1.00	match	5118	5118	2ca950374241722b8ea7c132dfce63ae.doc
+13.69	2.282	4.50	2	6	1.00	match	5642	5642	Wales_Office_Quarter_4_Ministerial_Transparency_Return.DOC
+13.67	0.804	4.79	2	17	1.00	match	9907	9910	system_design__technical_architecture_template.docx
+13.45	4.482	1.11	3	3	0.67	match	3631	3631	2024-12_Comlux_opens_Maintenance_and_Service_Center_in_Dubai.docx
+13.35	0.890	0.52	3	15	0.93	match	25252	25234	xx_SETIS_PWS_template_10.19.22.docx
+13.30	2.216	1.06	4	6	0.17	match	9023	8979	FO.FCTOA_.000129 Application for activities related to FSTD.docx
+13.26	0.947	1.00	2	14	0.93	match	17036	17036	bulletin.docx
+12.65	1.054	0.40	3	12	0.92	match	9882	9882	PI-doc.-no.-2E-Technical-Review-Report.docx
+12.60	4.202	0.67	3	3	0.67	match	1921	1921	P200904290238_0238_51880.doc
+12.50	0.833	0.24	7	15	1.00	match	27066	27066	f445896eb008d14c1746fc37d412dc22.docx
+11.54	1.282	0.38	3	9	0.89	match	8104	8104	draft-variation-notice-airbus-bm3965ia-v006-vs-comments.docx
+11.41	2.851	0.62	2	4	1.00	match	3613	3613	ECSS-E-ST-50-16C-Annex-A(30September2021).docx
+10.87	1.087	0.00	1	10	1.00	match	16753	16753	loi_format_letter_of_intent-a-320-214-a330.doc
+10.84	1.205	1.06	3	9	1.00	match	6448	6448	airbus-pdf-information-package_v1-4.docx
+10.65	2.663	0.02	4	4	1.00	match	5533	5533	FlightLaws.doc
+10.35	3.449	0.84	2	3	1.00	match	1189	1189	手机免提系统TSB.doc
+10.10	0.673	0.53	2	15	1.00	match	11073	11071	AWR OPS-AOC 044 Statement of Compliance RVSM  Rev 04 01 Feb 2024.docx
+9.99	0.908	0.18	2	11	1.00	match	18181	18181	f111.doc
+9.81	0.545	0.01	0	18	1.00	match	30134	30134	62599_FRANCE-BRAZIL- Air France Flight 447 crash.docx
+9.60	1.921	1.73	4	5	1.00	match	11366	11366	Sol PJ14-03-04 Solution Contextual.docx
+9.58	1.197	0.81	2	8	0.88	match	6960	6990	technical-architecture.docx
+8.84	1.105	0.39	2	8	1.00	match	19095	19095	1_tpr_template__from_fy14_.docx
+8.74	2.186	0.15	3	4	0.75	match	5335	5335	DEP2008-1900.doc
+8.13	8.127	0.09	1	1	1.00	match	1887	1887	300502-Mecenat-Airbus-Simusante_CHU-Amiens-Picardie.doc
+8.09	4.047	0.01	1	2	1.00	match	2608	2608	09.docx
+7.92	0.566	0.08	2	14	1.00	match	25168	25186	316r_a_f.doc
+7.82	0.434	0.10	0	18	0.89	match	34555	34555	monthly-content-feeder.docx
+7.54	3.770	0.02	1	2	1.00	match	2916	2916	b053-19.docx
+7.51	1.878	0.39	4	4	0.00	match	6385	6385	PAT-047 - Architecture and Detailed Design Assessment.docx
+7.39	0.528	0.08	1	14	1.00	match	24142	24160	316r_a_e.doc
+7.33	0.367	1.31	2	20	0.95	match	15321	15424	report-template.docx
+7.27	1.212	0.02	1	6	1.00	match	5833	5833	SWDD-template.docx
+6.79	1.698	0.00	3	4	1.00	match	8425	8425	Reid.doc
+6.18	1.544	1.62	2	4	1.00	match	2735	2735	RobertQ_Service.doc
+5.97	5.973	2.54	1	1	1.00	match	1220	1218	028_Unit_Circle_Chart_Optimized_Graph_83d9c756.docx
+5.71	0.571	0.01	0	10	1.00	match	28056	28056	2024-2nd-quarter-case-summaries.doc
+5.60	5.601	4.81	1	1	1.00	match	626	625	016_Project_Timeline_Template_Complete_Guide_7d36d09c.docx
+5.17	1.722	0.09	1	3	1.00	match	4882	4882	b050-19.docx
+5.16	1.031	0.10	2	5	1.00	match	8333	8333	2015-April-SWIM_Users_Forum-Q&A.docx
+4.97	4.973	4.63	1	1	1.00	match	549	549	021_Unit_Circle_Chart_3D_Pie_Chart_404247ab.docx
+4.85	0.693	0.01	0	7	1.00	match	10193	10193	96-3-clement-data.doc
+4.82	1.608	0.20	3	3	1.00	match	6219	6218	1528364855.doc
+4.45	0.342	1.15	0	13	1.00	match	16450	16450	tibs_guidelines_2.docx
+4.29	1.432	0.14	2	3	1.00	match	4704	4704	20110608_psp.docx
+4.26	4.262	2.30	1	1	1.00	match	263	263	090_Business_Case_Template_Blue_Theme_108ff0f1.docx
+4.26	0.710	0.11	1	6	1.00	match	16850	16850	4400-91_Proposal_To_Lease_Space_10-2024.docx
+4.03	1.008	0.04	1	4	1.00	match	5806	5806	mde087077~283.docx
+3.99	0.182	0.64	0	22	1.00	match	14939	14939	easa-regulations-update-20.docx
+3.78	0.378	0.38	1	10	0.70	match	7403	7403	03_Technical_Report_(progress)_template.docx
+3.76	1.882	0.00	1	2	1.00	match	2835	2835	FMRBullletinB-28.doc
+3.69	0.615	0.19	1	6	1.00	match	6685	6666	B11. TE.CAO.00129  Experience  logbook.docx
+3.69	1.230	0.04	2	3	1.00	match	8518	8518	foca_form_1.doc
+3.64	0.606	0.36	0	6	1.00	match	6913	6913	info-bulletin-601.doc
+3.53	0.294	0.01	0	12	1.00	match	18868	18868	chapter 12.doc
+3.49	1.747	0.05	1	2	1.00	match	772	764	AW-104D-RVSM-Aircraft-Approval-Checklist.pdf.docx
+3.46	3.456	0.03	1	1	1.00	match	635	635	fleetfastfacts16nov2023.docx
+3.42	0.263	0.01	0	13	1.00	match	19253	19253	II.1.2_Hypoxia.doc
+3.25	1.084	0.05	1	3	1.00	match	8107	8107	Leadership Information Article.docx
+3.23	0.403	0.12	1	8	1.00	match	6269	6269	certification-flight-standards-doc-oeb-supporting-documents-tgl-TGL26-section-5-REV10.doc
+3.19	3.194	0.10	1	1	1.00	match	534	534	032_advanced_word_chart_report.docx
+3.19	3.189	0.10	1	1	1.00	match	534	534	008_advanced_word_chart_report.docx
+3.19	0.455	0.01	1	7	1.00	match	3860	3860	technical-report-template.docx
+3.18	3.178	0.10	1	1	1.00	match	530	530	020_advanced_word_chart_report.docx
+3.18	3.176	0.10	1	1	1.00	match	536	536	002_advanced_word_chart_report.docx
+3.17	3.171	0.10	1	1	1.00	match	533	533	026_advanced_word_chart_report.docx
+3.17	0.396	1.87	0	8	1.00	match	6774	6775	exhibit-06---technical-architecture-template.docx
+3.15	0.451	0.14	1	7	1.00	match	9713	9713	template---tpr-technical-progress-report-with-guidance.docx
+3.15	3.152	0.10	1	1	1.00	match	531	531	014_advanced_word_chart_report.docx
+3.11	0.311	0.02	1	10	1.00	match	4095	4095	technical report template.docx
+2.90	0.581	0.06	1	5	1.00	match	2742	2742	PM-apeech-Handover-of-New-Airbus-Aircraft-for-Fiji-Airways-Dec.-15th.docx
+2.83	1.416	0.65	1	2	1.00	match	203	203	015_Project_Timeline_Template_Colored_Background_6434b0e8.docx
+2.77	2.765	0.66	1	1	1.00	match	1557	1557	027_Unit_Circle_Chart_Graphical_Chart_5462a579.docx
+2.64	2.642	0.06	1	1	1.00	match	98	98	037_Venn_Diagram_Template_Four_Circle_764829a0.docx
+2.63	2.628	0.32	1	1	1.00	match	480	480	042_Visual_Product_Roadmap_Template_Colored_Background_89385cfb.docx
+2.61	0.652	0.40	0	4	0.25	match	3627	3627	te.iors.00048-002 SUP Questionnaire.docx
+2.56	0.427	0.15	0	6	0.50	match	5747	5747	approvals-and-standardisation-organisation-approvals-docs-part-145-annex-B-B11.-TE.CAO.00129-Foreign-Part-145-approvals---Experience--logbook.docx
+2.53	0.633	0.00	1	4	1.00	match	5153	5153	1447.doc
+2.46	0.492	0.33	0	5	1.00	match	512	512	100_Business_Case_Template_Modern_Format_ff9e7282.docx
+2.42	0.485	0.06	0	5	1.00	match	5630	5630	Company-profile-2022-EN.docx
+2.38	0.795	0.03	0	3	1.00	match	8111	8111	Lessons-Learned-Bulletin-Dorset-version-to-IIRG-V5.docx
+2.34	0.586	0.01	1	4	0.75	match	7205	7205	Contract_Check_Pilot_Sample_LOA.docx
+2.32	0.387	0.02	0	6	1.00	match	6234	6234	PUR-0012-UTAS-GRAMS-SPA-Template-1-25-2024.doc
+2.32	0.774	0.31	1	3	0.33	match	3321	3321	form_1123_application_form_rvsm_spa.docx
+2.24	0.281	0.30	0	8	1.00	match	9990	9990	237287_0486190101_0486190101_geolink2neu.doc
+2.19	2.191	0.01	1	1	1.00	match	205	205	073_Storyboard_Template_Easy_to_Use_44ce05fc.docx
+2.17	2.166	0.84	1	1	1.00	match	433	432	018_Project_Timeline_Template_Editable_Format_e1cf1df5.docx
+2.08	1.039	1.23	1	2	1.00	match	190	188	012_Project_Timeline_Template_Black_and_Brown_Theme_35c76550.docx
+2.03	0.406	0.09	0	5	0.80	match	7489	7489	easa-form-1.docx
+1.99	0.664	0.02	0	3	0.00	match	6062	6062	Checklist for TC STC ETSO data packages to FAA_TIP rev 5.docx
+1.94	0.968	0.18	1	2	1.00	match	4383	4383	LHD-230-application-for-the-approval-of-an-aircraftr.doc
+1.83	0.458	0.11	0	4	1.00	match	6328	6328	slcc-architecture-uu-architecture.docx
+1.81	1.806	1.58	1	1	1.00	match	235	235	045_Visual_Product_Roadmap_Template_Excellent_Format_e364063c.docx
+1.78	0.444	0.00	0	4	1.00	match	8645	8645	healthcare-reform-nsa-consumer-bulletin.docx
+1.77	0.355	0.08	0	5	1.00	match	5761	5761	003.doc
+1.77	0.136	0.07	0	13	1.00	match	10179	10179	dragon1-enterprise-architecture-document-example-v0.1d.docx
+1.75	0.877	0.00	1	2	1.00	match	3463	3463	AUWG min 4-3-24 final.docx
+1.74	0.872	0.02	1	2	1.00	match	2950	2950	DRX-Ascend System Course Description.docx
+1.69	1.686	0.03	1	1	1.00	match	533	533	019_advanced_word_chart_report.docx
+1.68	1.681	0.03	1	1	1.00	match	531	531	007_advanced_word_chart_report.docx
+1.68	1.680	0.03	1	1	1.00	match	527	527	031_advanced_word_chart_report.docx
+1.68	0.335	0.00	0	5	1.00	match	9300	9300	technical-memo-format.docx
+1.67	1.670	0.04	1	1	1.00	match	535	535	001_advanced_word_chart_report.docx
+1.65	0.411	0.10	0	4	1.00	match	3614	3614	FAA-2017-0628-0002_attachment_1.docx
+1.64	1.642	0.07	1	1	1.00	match	537	537	016_advanced_word_chart_report.docx
+1.64	1.642	0.07	1	1	1.00	match	533	533	010_advanced_word_chart_report.docx
+1.64	1.637	0.04	1	1	1.00	match	525	525	013_advanced_word_chart_report.docx
+1.64	1.636	0.08	1	1	1.00	match	530	530	004_advanced_word_chart_report.docx
+1.63	1.632	0.04	1	1	1.00	match	524	524	025_advanced_word_chart_report.docx
+1.63	1.626	0.07	1	1	1.00	match	530	530	022_advanced_word_chart_report.docx
+1.62	1.621	0.08	1	1	1.00	match	530	530	028_advanced_word_chart_report.docx
+1.60	1.604	0.04	1	1	1.00	match	530	530	018_advanced_word_chart_report.docx
+1.60	1.598	0.04	1	1	1.00	match	538	538	012_advanced_word_chart_report.docx
+1.59	1.593	0.04	1	1	1.00	match	536	536	024_advanced_word_chart_report.docx
+1.59	1.589	0.04	1	1	1.00	match	529	529	006_advanced_word_chart_report.docx
+1.59	1.589	0.06	1	1	1.00	match	25	25	081_Printable_Graph_Paper_Template_Blue_Theme_629316cb.docx
+1.58	1.585	0.04	1	1	1.00	match	528	528	030_advanced_word_chart_report.docx
+1.58	0.225	0.01	0	7	1.00	match	9308	9308	FAA-2013-0422-0009_attachment_1.doc
+1.56	0.781	0.03	1	2	1.00	match	3431	3431	Temp16.doc
+1.56	1.559	0.04	1	1	1.00	match	540	540	009_advanced_word_chart_report.docx
+1.55	1.554	0.04	1	1	1.00	match	534	534	003_advanced_word_chart_report.docx
+1.53	1.531	0.04	1	1	1.00	match	532	532	021_advanced_word_chart_report.docx
+1.53	1.530	0.04	1	1	1.00	match	532	532	015_advanced_word_chart_report.docx
+1.53	1.529	0.04	1	1	1.00	match	529	529	033_advanced_word_chart_report.docx
+1.53	1.527	0.04	1	1	1.00	match	528	528	027_advanced_word_chart_report.docx
+1.47	0.294	0.10	0	5	0.80	match	2037	2029	FG-AI4NDM-TR-skeleton_template.docx
+1.43	0.476	0.00	0	3	1.00	match	3390	3390	Software Architecture Document Template.docx
+1.43	0.714	0.00	0	2	1.00	match	4744	4744	Interview-mit-Manfred1-Müller.docx
+1.43	0.475	0.00	0	3	1.00	match	5482	5482	How-to-Write-an-Architecture-Document-for-a-Technology-Service.docx
+1.42	0.142	0.14	0	10	1.00	match	4363	4363	template-technical-report.docx
+1.41	0.235	0.00	0	6	1.00	match	7948	7948	Bull01-06-Reserve Training Standards.doc
+1.41	1.407	0.07	1	1	1.00	match	540	540	017_advanced_word_chart_report.docx
+1.39	1.394	0.07	1	1	1.00	match	532	532	023_advanced_word_chart_report.docx
+1.39	1.387	0.07	1	1	1.00	match	528	528	029_advanced_word_chart_report.docx
+1.38	1.380	0.07	1	1	1.00	match	530	530	011_advanced_word_chart_report.docx
+1.38	1.380	0.07	1	1	1.00	match	529	529	005_advanced_word_chart_report.docx
+1.38	0.459	0.18	0	3	1.00	match	3393	3393	Form-SM-76A-_-CAR-OPS-2A-Instruments-and-Equipment-Compliance-Statement-_-11.docx
+1.28	0.426	0.00	0	3	1.00	match	5737	5737	License App Instructions 2-22.docx
+1.27	0.254	0.54	0	5	1.00	match	5293	5293	opic 5--Case Studies Movie and Aviation Industries.doc
+1.25	1.252	0.00	1	1	1.00	match	1619	1619	1245685 1 Comment.doc
+1.18	0.294	0.00	0	4	1.00	match	6403	6403	Writing a technical report (SCE subject guide).docx
+1.17	1.172	0.08	1	1	1.00	match	568	568	029_Unit_Circle_Chart_Pie_Theme_8a922142.docx
+1.16	1.162	0.02	1	1	1.00	match	246	246	066_Work_Breakdown_Structure_Template_Colored_Background_c27ff248.docx
+1.15	0.577	0.00	0	2	1.00	match	3227	3227	s33song-beverlyactproductionofdocuments.docx
+1.14	0.190	0.01	0	6	1.00	match	6153	6153	final-technical-report-template.docx
+1.11	1.111	0.08	1	1	1.00	match	309	308	020_Project_Timeline_Template_Modern_Theme_0c215d87.docx
+1.11	1.107	0.00	1	1	1.00	match	1780	1780	Pre-Application_Letter_of_Intent_Example.docx
+1.10	0.550	0.40	0	2	0.50	match	3566	3570	part-147_approval list_20230119.docx
+1.08	1.085	0.03	1	1	1.00	match	237	237	067_Work_Breakdown_Structure_Template_Gray_Theme_89f8be8b.docx
+1.02	0.509	0.15	0	2	0.50	match	2293	2286	f2_registro_de_aprovacao_com_pbcs_EN.docx
+0.99	0.199	0.12	0	5	1.00	match	3134	3134	091_Business_Case_Template_Complete_Guide_cb91a140.docx
+0.99	0.493	0.07	0	2	1.00	match	2370	2370	omrIMInterpretiveGuideLine.doc
+0.98	0.983	0.03	0	1	1.00	match	179	179	065_Work_Breakdown_Structure_Template_Blue_Theme_2b207f62.docx
+0.96	0.240	0.03	0	4	1.00	match	6716	6716	Technical Report and Technical Update Guidelines.docx
+0.96	0.957	0.26	0	1	1.00	match	303	303	002_Free_Genogram_Diagram_Template_Customizable_Format_2219584b.docx
+0.96	0.957	0.80	0	1	1.00	match	263	263	044_Visual_Product_Roadmap_Template_Editable_Format_c232a2c0.docx
+0.96	0.478	0.18	0	2	0.50	match	2375	2375	SDL_FSDO_Part91_LOA_Checklist.docx
+0.95	0.954	0.11	0	1	1.00	match	458	458	098_Business_Case_Template_Fillable_Layout_d0c5410e.docx
+0.95	0.475	0.13	0	2	0.50	match	4264	4264	Press release_EUREKA labels ITEA 3 Cluster.docx
+0.94	0.940	0.00	0	1	1.00	match	116	116	041_Visual_Product_Roadmap_Template_Blank_Format_63a3e010.docx
+0.89	0.222	0.01	0	4	1.00	match	4604	4579	eTAR_External_Web_tool_Tip_Sheet_mh.docx
+0.89	0.886	0.02	0	1	1.00	match	403	403	030_Unit_Circle_Chart_Points_System_23b5ef07.docx
+0.87	0.869	0.29	0	1	1.00	match	234	234	pie-chart-result.docx
+0.83	0.828	0.67	0	1	1.00	match	33	33	077_Storyboard_Template_Pink_and_Blue_Theme_805e82ab.docx
+0.83	0.828	0.07	0	1	1.00	match	298	298	069_Work_Breakdown_Structure_Template_Professional_Format_1e02dce1.docx
+0.80	0.267	0.00	0	3	1.00	match	6588	6588	Allegiant_Company_Profile_with_History.docx
+0.79	0.394	0.16	0	2	1.00	match	2731	2731	UAS-SGI_waiver_approval_request_form.docx
+0.78	0.260	0.00	0	3	1.00	match	4204	4204	FAA-High-Level-Org-Chart.docx
+0.77	0.256	0.00	0	3	0.67	match	5435	5435	191216_Lesefassung_Nachtflugregelung.docx
+0.74	0.739	0.56	0	1	1.00	match	138	138	060_Human_Body_Concept_Map_Template_ac872cfb.docx
+0.69	0.344	0.18	0	2	1.00	match	1925	1925	cacs-206-1751218225.docx
+0.67	0.222	0.16	0	3	1.00	match	2004	2004	2013-op12-Annex III - Curriculum Vitae.doc
+0.66	0.661	0.03	0	1	1.00	match	607	607	025_Unit_Circle_Chart_Cos_and_Sin_Model_1ed01892.docx
+0.65	0.652	0.06	0	1	1.00	match	293	293	008_Free_Genogram_Diagram_Template_Green_and_Yellow_Theme_9017c1a8.docx
+0.65	0.649	0.00	0	1	1.00	match	400	400	017_Project_Timeline_Template_Customizable_Format_5d5ca2e8.docx
+0.63	0.628	0.00	0	1	1.00	match	413	413	026_Unit_Circle_Chart_Four_Quadrants_09bf3ed1.docx
+0.62	0.617	0.17	0	1	1.00	match	235	235	096_Business_Case_Template_Editable_Layout_41fe0bc0.docx
+0.61	0.088	0.12	0	7	1.00	match	5699	5699	092_Business_Case_Template_Convenient_Format_00786cce.docx
+0.60	0.604	0.04	0	1	1.00	match	1319	1319	Theft-Restitution-Letter-Vancouver-ASC-2005.doc
+0.59	0.589	0.00	0	1	1.00	match	2004	2004	0c662f5c948a7d81d32ffd833c5cc59421a5f522.docx
+0.59	0.587	0.38	0	1	1.00	match	552	552	024_Unit_Circle_Chart_Colorful_Circles_7c92601e.docx
+0.58	0.291	0.03	0	2	1.00	match	3936	3936	CSCRS_Technical-Report-Documentation-Page-with-instructions.docx
+0.57	0.285	0.15	0	2	1.00	match	1922	1922	Technical_Issue_Report_Form.docx
+0.56	0.561	0.20	0	1	1.00	match	316	316	075_Storyboard_Template_Fillable_Format_7fa01641.docx
+0.56	0.559	0.00	0	1	1.00	match	1223	1223	Service-Bulletin-SDFNR5-April-25-2023-FNR-TRANSMISSION-LUBRICATION.docx
+0.56	0.279	0.31	0	2	1.00	match	1745	1745	1244277 1 Comment.doc
+0.54	0.182	0.01	0	3	1.00	match	3944	3944	A380MaenPressRel.doc
+0.54	0.543	0.30	0	1	1.00	match	102	102	059_Disease_Concept_Map_Template_4acf63f2.docx
+0.52	0.521	0.27	0	1	1.00	match	253	253	078_Storyboard_Template_Pink_and_Gray_Theme_ea89553f.docx
+0.51	0.514	0.00	0	1	1.00	match	2397	2397	GLACIERBG.ETT.doc
+0.51	0.128	0.02	0	4	1.00	match	6038	6038	prison-population-bulletin-june.doc
+0.50	0.496	0.10	0	1	1.00	match	312	312	013_Project_Timeline_Template_Blue_Background_4ea3475e.docx
+0.48	0.483	0.28	0	1	1.00	match	545	545	023_Unit_Circle_Chart_Circular_Percentage_790f7b75.docx
+0.48	0.479	0.05	0	1	1.00	match	298	300	055_Organogram_Template_Horizontal_Structure_28a7e725.docx
+0.45	0.226	0.00	0	2	1.00	match	2104	2104	advert-for-draft-decision-airbus-epr-bm3965ia-v006.doc
+0.45	0.447	0.01	0	1	1.00	match	10	10	089_Printable_Graph_Paper_Template_Simlpe_Format_3aff1c88.docx
+0.43	0.217	0.06	0	2	1.00	match	276	276	097_Business_Case_Template_Elegant_Layout_3ba9cbf2.docx
+0.43	0.430	0.02	0	1	1.00	match	27	27	080_Printable_Graph_Paper_Template_Black_Theme_6b066be1.docx
+0.42	0.423	0.04	0	1	1.00	match	142	142	079_Storyboard_Template_Simple_Format_81653703.docx
+0.41	0.203	0.03	0	2	0.50	match	1529	1529	BID_ACKNOWLEDGEMENT_FORM_FOR_A320.docx
+0.37	0.367	0.02	0	1	1.00	match	475	475	068_Work_Breakdown_Structure_Template_Green_Theme_63e69ed8.docx
+0.37	0.184	0.02	0	2	1.00	match	1417	1417	private-hire-operators-licensed.docx
+0.34	0.337	0.22	0	1	1.00	match	197	197	072_Storyboard_Template_Colored_Theme_28524a15.docx
+0.33	0.335	0.00	0	1	1.00	match	317	317	010_Free_Genogram_Diagram_Template_Yellow_Theme_6ee4f818.docx
+0.33	0.334	0.00	0	1	1.00	match	716	716	LENTOBUSSIAIKATAULU.-31.10.-31.12.2022.doc
+0.33	0.334	0.04	0	1	1.00	match	19	19	084_Printable_Graph_Paper_Template_Editable_Layout_d66c6820.docx
+0.33	0.326	0.05	0	1	1.00	match	1087	1087	043_Visual_Product_Roadmap_Template_Customizable_Format_ee0fe5b1.docx
+0.31	0.309	0.01	0	1	1.00	match	19	19	085_Printable_Graph_Paper_Template_Excellent_Format_4bcae89a.docx
+0.29	0.293	0.01	0	1	1.00	match	1253	1253	050_Visual_Product_Roadmap_Template_Yellow_and_Blue_Theme_49b50744.docx
+0.29	0.288	0.00	0	1	1.00	match	1629	1629	Sample_PAO-PSO_91-113_Letter.docx
+0.28	0.283	0.03	0	1	0.00	match	1364	1364	johnson_hall_service_log.pdf.docx
+0.28	0.282	0.08	0	1	1.00	match	812	812	014_Project_Timeline_Template_Blue_and_Green_Theme_a8311fa1.docx
+0.26	0.262	0.04	0	1	1.00	match	218	218	047_Visual_Product_Roadmap_Template_Professional_Layout_2ff4499e.docx
+0.26	0.261	0.00	0	1	1.00	match	176	176	001_Free_Genogram_Diagram_Template_Blue_and_Gray_Theme_7c9e01a7.docx
+0.26	0.257	0.03	0	1	1.00	match	120	120	061_Nursing_Concept_Map_Template_fb9816f0.docx
+0.24	0.243	0.07	0	1	1.00	match	402	402	048_Visual_Product_Roadmap_Template_Quality_Layout_f38f7aee.docx
+0.24	0.243	0.03	0	1	1.00	match	170	170	009_Free_Genogram_Diagram_Template_Handy_Format_4bb900f0.docx
+0.24	0.120	0.00	0	2	1.00	match	1931	1931	lk03_17.docx
+0.24	0.236	0.04	0	1	1.00	match	120	120	003_Free_Genogram_Diagram_Template_Easy_Format_60eb6e42.docx
+0.23	0.228	0.00	0	1	1.00	match	10	10	088_Printable_Graph_Paper_Template_Quality_layout_33051f6e.docx
+0.23	0.226	0.09	0	1	1.00	match	195	195	032_Venn_Diagram_Template_Brown_Theme_d5b549f0.docx
+0.22	0.225	0.02	0	1	1.00	match	14	14	082_Printable_Graph_Paper_Template_Colored_Background_9092cf9b.docx
+0.22	0.220	0.01	0	1	1.00	match	389	389	clustered-column-result.docx
+0.22	0.216	0.08	0	1	1.00	match	399	399	049_Visual_Product_Roadmap_Template_Simple_Format_4af26e4f.docx
+0.19	0.194	0.00	0	1	1.00	match	42	42	070_Storyboard_Template_Blank_Format_fc41673a.docx
+0.19	0.190	0.01	0	1	1.00	match	49	49	051_Organogram_Template_Basic_Theme_e6464d06.docx
+0.17	0.173	0.00	0	1	1.00	match	1305	1305	CMTA_Airport_Transportation.docx
+0.17	0.165	0.01	0	1	1.00	match	137	137	007_Free_Genogram_Diagram_Template_Green_and_Purple_Theme_8d2ba829.docx
+0.16	0.161	0.00	0	1	1.00	match	1579	1579	congregationalhistories_ky_2023.doc
+0.16	0.158	0.02	0	1	1.00	match	154	154	054_Organogram_Template_Grey_Vertical_Theme_b2dbd9a8.docx
+0.15	0.152	0.02	0	1	0.00	match	832	832	011_Project_Timeline_Template_Beautiful_Theme_2336e680.docx
+0.15	0.150	0.00	0	1	1.00	match	1047	1047	022_Unit_Circle_Chart_Circle_A_and_B_19dbf275.docx
+0.14	0.144	0.07	0	1	1.00	match	318	318	019_Project_Timeline_Template_Excellent_Layout_4ee62967.docx
+0.14	0.143	0.01	0	1	1.00	match	143	143	004_Free_Genogram_Diagram_Template_Editable_Format_b82b6152.docx
+0.14	0.142	0.03	0	1	1.00	match	7	7	005_Free_Genogram_Diagram_Template_Excellent_layout_f5f185d0.docx
+0.14	0.141	0.02	0	1	1.00	match	141	141	071_Storyboard_Template_Cartoon_Theme_ae113de2.docx
+0.14	0.139	0.00	0	1	1.00	match	10	10	076_Storyboard_Template_Gray_Theme_1e5fd5e5.docx
+0.14	0.139	0.02	0	1	1.00	match	200	200	clustered-column-template.docx
+0.14	0.137	0.02	0	1	1.00	match	1790	1790	1528039320.docx
+0.13	0.133	0.28	0	1	1.00	match	180	180	038_Venn_Diagram_Template_Off_White_and_Blue_Theme_9dff385e.docx
+0.13	0.132	0.01	0	1	1.00	match	231	231	040_Venn_Diagram_Template_Three_Circle_80f32f5e.docx
+0.12	0.124	0.06	0	1	1.00	match	194	194	057_Organogram_Template_Vertical_Colorful_Theme_724b143c.docx
+0.12	0.120	0.01	0	1	1.00	match	142	142	035_Venn_Diagram_Template_Editable_Format_966dff5f.docx
+0.12	0.118	0.00	0	1	1.00	match	66	66	058_Organogram_Template_With_Picture_Theme_44b79368.docx
+0.11	0.111	0.08	0	1	1.00	match	201	201	006_Free_Genogram_Diagram_Template_Fillable_Format_7ca08541.docx
+0.11	0.111	0.05	0	1	1.00	match	153	153	064_Foot_Reflexology_Chart_Customizable_Format_79b7db06.docx
+0.09	0.086	0.01	0	1	1.00	match	583	583	046_Visual_Product_Roadmap_Template_Fillable_Format_582acab0.docx
+0.08	0.084	0.00	0	1	1.00	match	235	235	056_Organogram_Template_Square_Theme_38f373d4.docx
+0.08	0.083	0.01	0	1	1.00	match	178	178	052_Organogram_Template_Colorful_Flow_Chart_cba9fbfe.docx
+0.08	0.082	0.01	0	1	1.00	match	66	66	062_Vocabulary_Concept_Map_Template_2f7c1c09.docx
+0.08	0.081	0.00	0	1	1.00	match	14	14	083_Printable_Graph_Paper_Template_Customizable_Format_55ff93a3.docx
+0.08	0.079	0.07	0	1	1.00	match	241	240	031_Venn_Diagram_Template_Blue_Theme_a9e417b8.docx
+0.08	0.079	0.01	0	1	1.00	match	397	397	063_Foot_Reflexology_Chart_Complete_Guide_cf5ed992.docx
+0.08	0.039	0.00	0	2	1.00	match	37	37	087_Printable_Graph_Paper_Template_Green_Theme_0c14ea04.docx
+0.07	0.071	0.05	0	1	1.00	match	189	189	094_Business_Case_Template_Decent_Layout_e7722f2b.docx
+0.07	0.069	0.01	0	1	1.00	match	19	19	086_Printable_Graph_Paper_Template_Gray_Theme_7300e5d7.docx
+0.07	0.066	0.01	0	1	1.00	match	161	161	039_Venn_Diagram_Template_Simple_Format_6f82661d.docx
+0.06	0.064	0.05	0	1	1.00	match	294	294	099_Business_Case_Template_Gray_Theme_ac3edbf4.docx
+0.06	0.062	0.04	0	1	1.00	match	348	348	095_Business_Case_Template_Easy_Format_61de7128.docx
+0.06	0.058	0.03	0	1	1.00	match	73	73	pie-chart-template.docx
+0.06	0.058	0.01	0	1	1.00	match	138	138	053_Organogram_Template_Creative_Theme_21657a3d.docx
+0.05	0.053	0.02	0	1	1.00	match	170	170	074_Storyboard_Template_Editable_Design_132436d1.docx
+0.03	0.027	0.01	0	1	1.00	match	201	201	093_Business_Case_Template_Customizable_Layout_510c25e7.docx
+0.02	0.022	0.03	0	1	1.00	match	63	63	033_Venn_Diagram_Template_Colored_Theme_2aea6697.docx
+0.02	0.019	0.00	0	1	1.00	match	61	61	036_Venn_Diagram_Template_Fillable_Layout_3ffbba36.docx
+0.02	0.018	0.04	0	1	1.00	match	63	63	034_Venn_Diagram_Template_Customizable_Format_d14642b7.docx

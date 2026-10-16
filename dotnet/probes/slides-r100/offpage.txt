@@ -1,0 +1,14 @@
+ref   shows  33549   baseline above the page   10   below it   81   (91, 0.27%)   in 10 of 51 documents
+ours  shows  32183   baseline above the page   10   below it   35   (45, 0.14%)   in 7 of 51 documents
+
+   2015-Civil-Rights-Website-training                           ref   16   ours   15
+   8.16_AOD_FINAL_Provider_Training_Presentation_9_2009         ref    1   ours    1
+   FAA_Form_337                                                 ref    4   ours    5
+   Inducement-to-Insurance-Business                             ref   15   ours   15
+   RRM-training-syllabus-Chapter-3-Teamwork-TC-Towing-Incident- ref    0   ours    1
+   architecture6                                                ref    1   ours    0
+   berlin                                                       ref    2   ours    2
+   introduction_to_bea_tuxedo                                   ref   38   ours    0
+   pods05                                                       ref    5   ours    0
+   pres_ioc_phuket                                              ref    2   ours    0
+   undp_presentation_revised_17_may                             ref    7   ours    6

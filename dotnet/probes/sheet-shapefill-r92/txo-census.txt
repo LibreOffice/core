@@ -1,0 +1,15 @@
+155 text boxes with text in 17 .xls; 522 formatting runs
+62 of them state more than the opening run, in 13 documents:
+  18-02RD301_ILS_components_Master_9-13-18.xls
+  AIM_OPR_LIST.xls
+  Background_Declaration_Template.xls
+  EHEST-Pre-departure-checklist-Rev.-1-06-12-2016.xls
+  Hazard Analysis Template.xls
+  PC1000.xls
+  RMP 2011-2014 and Inventory.xls
+  SIL_TDB605.xls
+  SIL_TDB609.xls
+  T0A0D0000090006XLSE.xls
+  TICAPCapability_Final.xls
+  apron-area.xls
+  orbus_togaf_tool_csq.xls

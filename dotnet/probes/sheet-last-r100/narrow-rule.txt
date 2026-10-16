@@ -1,0 +1,25 @@
+22 narrow.list
+DynamicBubbleChart__xlsx	4.55	5	2
+036_Simple_to-do_list_Use_this_template_ba44373b__xlsx	0.44	4	1
+043_Buy_a_car_vs._rideshare_ff07c7e6__xlsx	2.95	7	3
+TOGAF9-Tool-ConfReqts-CSQ__xls	12.92	28	1
+DOE-C2M2-V1.1-to-DOE-C2M2-V2.1 (1.1.0)__xlsx	5.19	91	2
+2023-qhp-form-and-rate-combined-checklist-final__xlsx	3.18	100	4
+7-memento-2015-transports-aeriens-b__xls	0.70	9	0
+Global_Market_Forecast_2016-2035_Airbus_Data_Set__xlsx	0.19	567	1
+orbus_togaf_tool_csq__xls	45.72	75	20
+ODs-February-2022-Airbus-Commercial-Aircraft__xlsx	4.62	175	4
+fse_identification_form__xlsx	0.25	3	0
+DynamicBubbleChart__ods	3.20	5	2
+036_Simple_to-do_list_Use_this_template_ba44373b__ods	12.86	4	4
+043_Buy_a_car_vs._rideshare_ff07c7e6__ods	4.14	7	4
+DOE-C2M2-V1.1-to-DOE-C2M2-V2.1 (1.1.0)__ods	5.18	91	2
+TOGAF9-Tool-ConfReqts-CSQ__ods	9.04	28	0
+2023-qhp-form-and-rate-combined-checklist-final__ods	3.66	95	8
+7-memento-2015-transports-aeriens-b__ods	13.84	190	4
+Global_Market_Forecast_2016-2035_Airbus_Data_Set__ods	0.08	567	1
+orbus_togaf_tool_csq__ods	60.26	75	22
+ODs-February-2022-Airbus-Commercial-Aircraft__ods	4.57	175	3
+fse_identification_form__ods	0.38	3	0
+
+[exited with code 0]

@@ -1,0 +1,137 @@
+fixture                  who          x        y    right   bottom
+h-column-0               24.2     72.00    300.00    112.00    320.00
+h-column-0               26.2     72.00    300.00    112.00    320.00
+h-column-0               ours     72.00    300.00    112.00    320.00
+
+h-insidemargin-0         24.2      0.00    300.00     40.00    320.00
+h-insidemargin-0         26.2      0.00    300.00     40.00    320.00
+h-insidemargin-0         ours      0.00    300.00     40.00    320.00
+
+h-leftmargin-0           24.2      0.00    300.00     40.00    320.00
+h-leftmargin-0           26.2      0.00    300.00     40.00    320.00
+h-leftmargin-0           ours      0.00    300.00     40.00    320.00
+
+h-leftmargin-centre      24.2     16.00    300.00     56.00    320.00
+h-leftmargin-centre      26.2     16.00    300.00     56.00    320.00
+h-leftmargin-centre      ours    277.75    300.00    317.75    320.00
+
+h-leftmargin-right       24.2     32.00    300.00     72.00    320.00
+h-leftmargin-right       26.2     32.00    300.00     72.00    320.00
+h-leftmargin-right       ours    555.25    300.00    595.25    320.00
+
+h-margin-0               24.2     72.00    300.00    112.00    320.00
+h-margin-0               26.2     72.00    300.00    112.00    320.00
+h-margin-0               ours     72.00    300.00    112.00    320.00
+
+h-outsidemargin-0        24.2     72.00    300.00    112.00    320.00
+h-outsidemargin-0        26.2     72.00    300.00    112.00    320.00
+h-outsidemargin-0        ours      0.00    300.00     40.00    320.00
+
+h-outsidemargin-right    24.2    483.25    300.00    523.25    320.00
+h-outsidemargin-right    26.2    483.25    300.00    523.25    320.00
+h-outsidemargin-right    ours    555.25    300.00    595.25    320.00
+
+h-page-0                 24.2      0.00    300.00     40.00    320.00
+h-page-0                 26.2      0.00    300.00     40.00    320.00
+h-page-0                 ours      0.00    300.00     40.00    320.00
+
+h-rightmargin-0          24.2    523.25    300.00    563.25    320.00
+h-rightmargin-0          26.2    523.25    300.00    563.25    320.00
+h-rightmargin-0          ours      0.00    300.00     40.00    320.00
+
+h-rightmargin-centre     24.2    539.25    300.00    579.25    320.00
+h-rightmargin-centre     26.2    539.25    300.00    579.25    320.00
+h-rightmargin-centre     ours    277.75    300.00    317.75    320.00
+
+h-rightmargin-left       24.2    523.25    300.00    563.25    320.00
+h-rightmargin-left       26.2    523.25    300.00    563.25    320.00
+h-rightmargin-left       ours      0.00    300.00     40.00    320.00
+
+h-rightmargin-right      24.2    555.25    300.00    595.25    320.00
+h-rightmargin-right      26.2    555.25    300.00    595.25    320.00
+h-rightmargin-right      ours    555.25    300.00    595.25    320.00
+
+m-h-innermargin-0        24.2    523.25    300.00    563.25    320.00
+m-h-innermargin-0        26.2    523.25    300.00    563.25    320.00
+m-h-innermargin-0        ours     72.00    300.00    112.00    320.00
+
+m-h-leftmargin-0         24.2      0.00    300.00     40.00    320.00
+m-h-leftmargin-0         26.2      0.00    300.00     40.00    320.00
+m-h-leftmargin-0         ours     72.00    300.00    112.00    320.00
+
+m-h-margin-0             24.2     72.00    300.00    112.00    320.00
+m-h-margin-0             26.2     72.00    300.00    112.00    320.00
+m-h-margin-0             ours     72.00    300.00    112.00    320.00
+
+m-h-outermargin-0        24.2      0.00    300.00     40.00    320.00
+m-h-outermargin-0        26.2      0.00    300.00     40.00    320.00
+m-h-outermargin-0        ours     72.00    300.00    112.00    320.00
+
+m-h-rightmargin-0        24.2    523.25    300.00    563.25    320.00
+m-h-rightmargin-0        26.2    523.25    300.00    563.25    320.00
+m-h-rightmargin-0        ours     72.00    300.00    112.00    320.00
+
+m-v-bottommargin-0       24.2      0.00    770.00     40.00    790.00
+m-v-bottommargin-0       26.2      0.00    770.00     40.00    790.00
+m-v-bottommargin-0       ours      0.00     72.00     40.00     92.00
+
+m-v-margin-0             24.2      0.00     72.00     40.00     92.00
+m-v-margin-0             26.2      0.00     72.00     40.00     92.00
+m-v-margin-0             ours      0.00     72.00     40.00     92.00
+
+m-v-topmargin-0          24.2      0.00      0.00     40.00     20.00
+m-v-topmargin-0          26.2      0.00      0.00     40.00     20.00
+m-v-topmargin-0          ours      0.00     72.00     40.00     92.00
+
+m-v-topmargin-36         24.2      0.00     36.00     40.00     56.00
+m-v-topmargin-36         26.2      0.00     36.00     40.00     56.00
+m-v-topmargin-36         ours      0.00    108.00     40.00    128.00
+
+v-bottommargin-0         24.2    100.00    770.00    160.00    790.00
+v-bottommargin-0         26.2    100.00    770.00    160.00    790.00
+v-bottommargin-0         ours    100.00     72.00    160.00     92.00
+
+v-bottommargin-36        24.2    100.00    806.00    160.00    826.00
+v-bottommargin-36        26.2    100.00    806.00    160.00    826.00
+v-bottommargin-36        ours    100.00    108.00    160.00    128.00
+
+v-bottommargin-bottom    24.2    100.00    821.75    160.00    841.75
+v-bottommargin-bottom    26.2    100.00    821.75    160.00    841.75
+v-bottommargin-bottom    ours    100.00    750.00    160.00    770.00
+
+v-bottommargin-centre    24.2    100.00    796.00    160.00    816.00
+v-bottommargin-centre    26.2    100.00    796.00    160.00    816.00
+v-bottommargin-centre    ours    100.00    411.00    160.00    431.00
+
+v-bottommargin-top       24.2    100.00    770.00    160.00    790.00
+v-bottommargin-top       26.2    100.00    770.00    160.00    790.00
+v-bottommargin-top       ours    100.00     72.00    160.00     92.00
+
+v-margin-0               24.2    100.00     72.00    160.00     92.00
+v-margin-0               26.2    100.00     72.00    160.00     92.00
+v-margin-0               ours    100.00     72.00    160.00     92.00
+
+v-page-0                 24.2    100.00      0.00    160.00     20.00
+v-page-0                 26.2    100.00      0.00    160.00     20.00
+v-page-0                 ours    100.00      0.00    160.00     20.00
+
+v-topmargin-0            24.2    100.00      0.00    160.00     20.00
+v-topmargin-0            26.2    100.00      0.00    160.00     20.00
+v-topmargin-0            ours    100.00     72.00    160.00     92.00
+
+v-topmargin-36           24.2    100.00     36.00    160.00     56.00
+v-topmargin-36           26.2    100.00     36.00    160.00     56.00
+v-topmargin-36           ours    100.00    108.00    160.00    128.00
+
+v-topmargin-bottom       24.2    100.00     52.00    160.00     72.00
+v-topmargin-bottom       26.2    100.00     52.00    160.00     72.00
+v-topmargin-bottom       ours    100.00    750.00    160.00    770.00
+
+v-topmargin-centre       24.2    100.00     26.00    160.00     46.00
+v-topmargin-centre       26.2    100.00     26.00    160.00     46.00
+v-topmargin-centre       ours    100.00    411.00    160.00    431.00
+
+v-topmargin-top          24.2    100.00      0.00    160.00     20.00
+v-topmargin-top          26.2    100.00      0.00    160.00     20.00
+v-topmargin-top          ours    100.00     72.00    160.00     92.00
+

@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+ xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+ xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+ xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+ xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+ office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.graphics">
+ <office:automatic-styles>
+  <style:page-layout style:name="PM1"><style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"/></style:page-layout>
+  <style:style style:name="dp1" style:family="drawing-page"/>
+  <style:style style:name="gr1" style:family="graphic"><style:graphic-properties draw:fill="none" draw:stroke="solid" svg:stroke-width="0.02cm"/></style:style>
+ </office:automatic-styles>
+ <office:master-styles><style:master-page style:name="M1" style:page-layout-name="PM1" draw:style-name="dp1"/></office:master-styles>
+ <office:body><office:drawing>
+  <draw:page draw:name="p1" draw:master-page-name="M1">
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="1cm" svg:y="1cm"><draw:enhanced-geometry draw:type="round-rectangle"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="31cm" svg:y="1cm"><draw:enhanced-geometry draw:type="ellipse"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="61cm" svg:y="1cm"><draw:enhanced-geometry draw:type="diamond"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="91cm" svg:y="1cm"><draw:enhanced-geometry draw:type="isosceles-triangle"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="121cm" svg:y="1cm"><draw:enhanced-geometry draw:type="right-triangle"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="151cm" svg:y="1cm"><draw:enhanced-geometry draw:type="parallelogram"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="181cm" svg:y="1cm"><draw:enhanced-geometry draw:type="trapezoid"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="211cm" svg:y="1cm"><draw:enhanced-geometry draw:type="hexagon"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="241cm" svg:y="1cm"><draw:enhanced-geometry draw:type="octagon"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="271cm" svg:y="1cm"><draw:enhanced-geometry draw:type="cross"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="301cm" svg:y="1cm"><draw:enhanced-geometry draw:type="star5"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="331cm" svg:y="1cm"><draw:enhanced-geometry draw:type="right-arrow"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="361cm" svg:y="1cm"><draw:enhanced-geometry draw:type="pentagon-right"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="391cm" svg:y="1cm"><draw:enhanced-geometry draw:type="cube"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="421cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt17"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="451cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt18"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="481cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt19"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="511cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt20"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="541cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt21"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="571cm" svg:y="1cm"><draw:enhanced-geometry draw:type="can"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="601cm" svg:y="1cm"><draw:enhanced-geometry draw:type="ring"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="631cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt32"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="661cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt33"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="691cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt34"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="721cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt35"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="751cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt36"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="781cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt37"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="811cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt38"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="841cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt39"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="871cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt40"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="901cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt41"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="931cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt42"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="961cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt43"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="991cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt44"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="1021cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt45"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="1051cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt46"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="1081cm" svg:y="1cm"><draw:enhanced-geometry draw:type="line-callout-1"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="1111cm" svg:y="1cm"><draw:enhanced-geometry draw:type="line-callout-2"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="1141cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt49"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="1171cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt50"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="1201cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt51"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="1231cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt52"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="1261cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt53"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="1291cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt54"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="1321cm" svg:y="1cm"><draw:enhanced-geometry draw:type="chevron"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="1351cm" svg:y="1cm"><draw:enhanced-geometry draw:type="pentagon"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="1381cm" svg:y="1cm"><draw:enhanced-geometry draw:type="forbidden"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="1411cm" svg:y="1cm"><draw:enhanced-geometry draw:type="star8"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="1441cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt59"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="1471cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt60"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="1501cm" svg:y="1cm"><draw:enhanced-geometry draw:type="rectangular-callout"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="1531cm" svg:y="1cm"><draw:enhanced-geometry draw:type="round-rectangular-callout"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="1561cm" svg:y="1cm"><draw:enhanced-geometry draw:type="round-callout"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="1591cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt64"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="1621cm" svg:y="1cm"><draw:enhanced-geometry draw:type="paper"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="1651cm" svg:y="1cm"><draw:enhanced-geometry draw:type="left-arrow"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="1681cm" svg:y="1cm"><draw:enhanced-geometry draw:type="down-arrow"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="1711cm" svg:y="1cm"><draw:enhanced-geometry draw:type="up-arrow"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="1741cm" svg:y="1cm"><draw:enhanced-geometry draw:type="left-right-arrow"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="1771cm" svg:y="1cm"><draw:enhanced-geometry draw:type="up-down-arrow"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="1801cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt71"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="1831cm" svg:y="1cm"><draw:enhanced-geometry draw:type="bang"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="1861cm" svg:y="1cm"><draw:enhanced-geometry draw:type="lightning"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="1891cm" svg:y="1cm"><draw:enhanced-geometry draw:type="heart"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="1921cm" svg:y="1cm"><draw:enhanced-geometry draw:type="quad-arrow"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="1951cm" svg:y="1cm"><draw:enhanced-geometry draw:type="left-arrow-callout"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="1981cm" svg:y="1cm"><draw:enhanced-geometry draw:type="right-arrow-callout"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="2011cm" svg:y="1cm"><draw:enhanced-geometry draw:type="up-arrow-callout"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="2041cm" svg:y="1cm"><draw:enhanced-geometry draw:type="down-arrow-callout"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="2071cm" svg:y="1cm"><draw:enhanced-geometry draw:type="left-right-arrow-callout"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="2101cm" svg:y="1cm"><draw:enhanced-geometry draw:type="up-down-arrow-callout"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="2131cm" svg:y="1cm"><draw:enhanced-geometry draw:type="quad-arrow-callout"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="2161cm" svg:y="1cm"><draw:enhanced-geometry draw:type="quad-bevel"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="2191cm" svg:y="1cm"><draw:enhanced-geometry draw:type="left-bracket"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="2221cm" svg:y="1cm"><draw:enhanced-geometry draw:type="right-bracket"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="2251cm" svg:y="1cm"><draw:enhanced-geometry draw:type="left-brace"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="2281cm" svg:y="1cm"><draw:enhanced-geometry draw:type="right-brace"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="2311cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt89"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="2341cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt90"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="2371cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt91"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="2401cm" svg:y="1cm"><draw:enhanced-geometry draw:type="star24"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="2431cm" svg:y="1cm"><draw:enhanced-geometry draw:type="striped-right-arrow"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="2461cm" svg:y="1cm"><draw:enhanced-geometry draw:type="notched-right-arrow"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="2491cm" svg:y="1cm"><draw:enhanced-geometry draw:type="block-arc"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="2521cm" svg:y="1cm"><draw:enhanced-geometry draw:type="smiley"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="2551cm" svg:y="1cm"><draw:enhanced-geometry draw:type="vertical-scroll"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="2581cm" svg:y="1cm"><draw:enhanced-geometry draw:type="horizontal-scroll"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="2611cm" svg:y="1cm"><draw:enhanced-geometry draw:type="circular-arrow"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="2641cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt101"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="2671cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt102"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="2701cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt103"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="2731cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt104"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="2761cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt105"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="2791cm" svg:y="1cm"><draw:enhanced-geometry draw:type="cloud-callout"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="2821cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt107"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="2851cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt108"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="2881cm" svg:y="1cm"><draw:enhanced-geometry draw:type="flowchart-process"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="2911cm" svg:y="1cm"><draw:enhanced-geometry draw:type="flowchart-decision"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="2941cm" svg:y="1cm"><draw:enhanced-geometry draw:type="flowchart-data"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="2971cm" svg:y="1cm"><draw:enhanced-geometry draw:type="flowchart-predefined-process"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="3001cm" svg:y="1cm"><draw:enhanced-geometry draw:type="flowchart-internal-storage"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="3031cm" svg:y="1cm"><draw:enhanced-geometry draw:type="flowchart-document"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="3061cm" svg:y="1cm"><draw:enhanced-geometry draw:type="flowchart-multidocument"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="3091cm" svg:y="1cm"><draw:enhanced-geometry draw:type="flowchart-terminator"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="3121cm" svg:y="1cm"><draw:enhanced-geometry draw:type="flowchart-preparation"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="3151cm" svg:y="1cm"><draw:enhanced-geometry draw:type="flowchart-manual-input"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="3181cm" svg:y="1cm"><draw:enhanced-geometry draw:type="flowchart-manual-operation"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="3211cm" svg:y="1cm"><draw:enhanced-geometry draw:type="flowchart-connector"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="3241cm" svg:y="1cm"><draw:enhanced-geometry draw:type="flowchart-card"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="3271cm" svg:y="1cm"><draw:enhanced-geometry draw:type="flowchart-punched-tape"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="3301cm" svg:y="1cm"><draw:enhanced-geometry draw:type="flowchart-summing-junction"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="3331cm" svg:y="1cm"><draw:enhanced-geometry draw:type="flowchart-or"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="3361cm" svg:y="1cm"><draw:enhanced-geometry draw:type="flowchart-collate"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="3391cm" svg:y="1cm"><draw:enhanced-geometry draw:type="flowchart-sort"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="3421cm" svg:y="1cm"><draw:enhanced-geometry draw:type="flowchart-extract"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="3451cm" svg:y="1cm"><draw:enhanced-geometry draw:type="flowchart-merge"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="3481cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt129"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="3511cm" svg:y="1cm"><draw:enhanced-geometry draw:type="flowchart-stored-data"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="3541cm" svg:y="1cm"><draw:enhanced-geometry draw:type="flowchart-sequential-access"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="3571cm" svg:y="1cm"><draw:enhanced-geometry draw:type="flowchart-magnetic-disk"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="3601cm" svg:y="1cm"><draw:enhanced-geometry draw:type="flowchart-direct-access-storage"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="3631cm" svg:y="1cm"><draw:enhanced-geometry draw:type="flowchart-display"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="3661cm" svg:y="1cm"><draw:enhanced-geometry draw:type="flowchart-delay"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="3691cm" svg:y="1cm"><draw:enhanced-geometry draw:type="flowchart-alternate-process"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="3721cm" svg:y="1cm"><draw:enhanced-geometry draw:type="flowchart-off-page-connector"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="3751cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt178"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="3781cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt179"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="3811cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt180"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="3841cm" svg:y="1cm"><draw:enhanced-geometry draw:type="line-callout-3"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="3871cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt182"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="3901cm" svg:y="1cm"><draw:enhanced-geometry draw:type="sun"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="3931cm" svg:y="1cm"><draw:enhanced-geometry draw:type="moon"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="3961cm" svg:y="1cm"><draw:enhanced-geometry draw:type="bracket-pair"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="3991cm" svg:y="1cm"><draw:enhanced-geometry draw:type="brace-pair"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="4021cm" svg:y="1cm"><draw:enhanced-geometry draw:type="star4"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="4051cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt188"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="4081cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt189"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="4111cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt190"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="4141cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt191"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="4171cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt192"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="4201cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt193"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="4231cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt194"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="4261cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt195"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="4291cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt196"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="4321cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt197"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="4351cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt198"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="4381cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt199"/></draw:custom-shape>
+   <draw:custom-shape draw:style-name="gr1" svg:width="4cm" svg:height="4cm" svg:x="4411cm" svg:y="1cm"><draw:enhanced-geometry draw:type="mso-spt200"/></draw:custom-shape>
+  </draw:page>
+ </office:drawing></office:body>
+</office:document>

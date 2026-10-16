@@ -1,0 +1,35 @@
+# faces scanned	150
+CBDT/CBLC	1
+CFF	29
+glyf	120
+#
+CFF	/opt/libreoffice26.2/share/fonts/truetype/DavidCLM-Bold.otf
+CFF	/opt/libreoffice26.2/share/fonts/truetype/DavidCLM-BoldItalic.otf
+CFF	/opt/libreoffice26.2/share/fonts/truetype/DavidCLM-Medium.otf
+CFF	/opt/libreoffice26.2/share/fonts/truetype/DavidCLM-MediumItalic.otf
+CFF	/opt/libreoffice26.2/share/fonts/truetype/FrankRuehlCLM-Bold.otf
+CFF	/opt/libreoffice26.2/share/fonts/truetype/FrankRuehlCLM-BoldOblique.otf
+CFF	/opt/libreoffice26.2/share/fonts/truetype/FrankRuehlCLM-Medium.otf
+CFF	/opt/libreoffice26.2/share/fonts/truetype/FrankRuehlCLM-MediumOblique.otf
+CFF	/opt/libreoffice26.2/share/fonts/truetype/FrankRuhlHofshi-Bold.otf
+CFF	/opt/libreoffice26.2/share/fonts/truetype/FrankRuhlHofshi-Regular.otf
+CFF	/opt/libreoffice26.2/share/fonts/truetype/MiriamCLM-Bold.otf
+CFF	/opt/libreoffice26.2/share/fonts/truetype/MiriamCLM-Book.otf
+CFF	/opt/libreoffice26.2/share/fonts/truetype/MiriamLibre-Bold.otf
+CFF	/opt/libreoffice26.2/share/fonts/truetype/MiriamLibre-Regular.otf
+CFF	/opt/libreoffice26.2/share/fonts/truetype/NachlieliCLM-Bold.otf
+CFF	/opt/libreoffice26.2/share/fonts/truetype/NachlieliCLM-BoldOblique.otf
+CFF	/opt/libreoffice26.2/share/fonts/truetype/NachlieliCLM-Light.otf
+CFF	/opt/libreoffice26.2/share/fonts/truetype/NachlieliCLM-LightOblique.otf
+CFF	/usr/share/fonts/opentype/tlwg/Loma-Bold.otf
+CFF	/usr/share/fonts/opentype/tlwg/Loma-BoldOblique.otf
+CFF	/usr/share/fonts/opentype/tlwg/Loma-Oblique.otf
+CFF	/usr/share/fonts/opentype/tlwg/Loma.otf
+CFF	/usr/share/fonts/opentype/unifont/unifont.otf
+CFF	/usr/share/fonts/opentype/unifont/unifont_csur.otf
+CFF	/usr/share/fonts/opentype/unifont/unifont_jp.otf
+CFF	/usr/share/fonts/opentype/unifont/unifont_jp_sample.otf
+CFF	/usr/share/fonts/opentype/unifont/unifont_sample.otf
+CFF	/usr/share/fonts/opentype/unifont/unifont_upper.otf
+CFF	/usr/share/fonts/opentype/unifont/unifont_upper_sample.otf
+CBDT/CBLC	/usr/share/fonts/truetype/noto/NotoColorEmoji.ttf

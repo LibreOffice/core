@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Where Calc clips a cell's painted text.  Eleven 3 cm columns on 21 cm paper with 2 cm margins,
+  so five columns (15 cm) fit a page and the printed block on page 1 runs 56.693 to 481.890 pt.
+
+  The rule is ScOutputData::AdjustAreaParamClipRect (sc/source/ui/view/output2.cxx:2928-2954),
+  which trims the output area to [mnScrX, mnScrX + mnScrW] and *sets* mbLeftClip/mbRightClip when
+  it has to.  LayoutStrings reads bHClip from those flags afterwards (:2038-2039), so the trim
+  turns a clip on for a cell whose text fitted the room it was given perfectly well.
+
+  Every expectation below is read off LibreOffice 26.2.4.2's own content stream for this file.
+
+  Row 1  ZAAA, a long LEFT-aligned string in A with every cell right of it free.  The area is
+         widened through the empty neighbours until the missing width is absorbed, which carries
+         it past the block.  Reference clip: 56.693..481.890.
+  Row 3  ZBBB, the same anchored in E, the last column of page 1, so the widening crosses the
+         page boundary at the first step.  Reference clip: 396.850..481.889 — the block's edge,
+         not column F's.
+  Row 5  ZCCC, a merged C5:H5 straddling the boundary with its text CENTRED, so the align
+         rectangle itself sticks out and the text is placed near its middle, well right of the
+         block.  Reference clip: 226.772..481.890 on page 1, and 56.693..311.754 on page 2, where
+         the same merge is drawn from its true origin off the left of the paper.
+  Row 7  ZDDD, a long string in C with D occupied: the ordinary blocked overflow, whose clip is
+         column C's own right edge.  Reference clip: 226.772..311.755.  The control that keeps a
+         rule which simply clipped everything to the block from passing.
+  Row 9  ZEEE, a short string that fits its column.  No clip at all.
+
+  Every row's token is unique, so pdftotext says which run landed where and the ink extent per
+  band says where each was cut.  The text layer is *not* cut — the reference keeps every glyph of
+  ZCCC behind its clip, which is why this whole class of defect is invisible to a word count.
+-->
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+ xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+ xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+ xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+ xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+ office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+ <office:automatic-styles>
+  <style:style style:name="co1" style:family="table-column">
+   <style:table-column-properties style:column-width="3cm"/>
+  </style:style>
+  <style:style style:name="ceC" style:family="table-cell">
+   <style:paragraph-properties fo:text-align="center"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+    fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"
+    style:print-orientation="portrait"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Default" style:page-layout-name="pm1"/>
+ </office:master-styles>
+ <office:body>
+  <office:spreadsheet>
+   <table:table table:name="Probe">
+    <table:table-column table:style-name="co1" table:number-columns-repeated="11"/>
+    <table:table-row>
+     <table:table-cell office:value-type="string"><text:p>ZAAA a plain left aligned string anchored in column A which is far too long for one three centimetre column and runs on through every empty neighbour it can find</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row/>
+    <table:table-row>
+     <table:table-cell table:number-columns-repeated="4"/>
+     <table:table-cell office:value-type="string"><text:p>ZBBB anchored in the last column of page one and far too long for it</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row/>
+    <table:table-row>
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="ceC" table:number-columns-spanned="6" table:number-rows-spanned="1" office:value-type="string"><text:p>ZCCC centred in a merge straddling the break</text:p></table:table-cell>
+     <table:covered-table-cell table:number-columns-repeated="5"/>
+    </table:table-row>
+    <table:table-row/>
+    <table:table-row>
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell office:value-type="string"><text:p>ZDDD blocked by its neighbour and cut at its own column edge</text:p></table:table-cell>
+     <table:table-cell office:value-type="string"><text:p>STOP</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row/>
+    <table:table-row>
+     <table:table-cell office:value-type="string"><text:p>ZEEE fits</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:number-columns-repeated="10"/>
+     <table:table-cell office:value-type="string"><text:p>ZEDGE</text:p></table:table-cell>
+    </table:table-row>
+   </table:table>
+  </office:spreadsheet>
+ </office:body>
+</office:document>

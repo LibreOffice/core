@@ -1,0 +1,115 @@
+slides-size2-r110 — the single-variable series at 26.2.4.2
+
+Every table below is 26.2.4.2's own PDF of a flat ODP it produced itself, edited in ONE place
+and rendered back through the same binary; `render2.sh <fodp> <tag>` builds both halves
+(26.2.4.2 and this tree's CLI) and `slides-r108/spans.py` reads the baselines out.
+
+WITNESS
+  /home/user/sample-files/slides/done-012/ppt/JesuitAssocOfStudentPersonnel.ppt
+  soffice --convert-to fodp, then draw:page 24 cut out into a one-slide file (base.fodp).
+  The cut reproduces the disagreement exactly:  ref 13.01/150   ours 15.99/150.
+
+1. THE FIT'S ANSWER IS QUANTISED, SO THE SHRINK IS TURNED OFF FIRST
+   style:shrink-to-fit="true" -> "false" on pr13, everything else untouched. Both sides then
+   draw 20.01 and the comparison becomes a continuous baseline pitch.
+
+   ref  baselines  243.61  295.11  343.50  395.01  446.51  502.10
+   ours baselines  243.61  292.00  340.38  388.77  437.16  489.63
+
+   The FIRST baseline agrees exactly. The gap that spans the empty paragraph inside a
+   text:list-item is 51.50 pt in the reference and 48.39 in this tree; the gap that spans the
+   empty paragraph in a text:list-header of list style L8 is 48.39 in BOTH.
+
+2. IT IS EMPTINESS, NOT THE PARAGRAPH STYLE
+   v6  the four in-item empty <text:p P43> given style P44        ref unchanged 51.50 / 48.39
+   v9  the one in-header empty <text:p P44> given style P43       ref unchanged 51.50 / 48.39
+   v10 the four in-item empties given the text "x"                ref == ours on every baseline
+   So the two styles are interchangeable and a paragraph holding one character is not floored.
+
+3. THE FLOOR DOES NOT SCALE WITH THE LINE SPACING          (m-sz20 cut down to AAA/empty/BBB)
+   h_text and h_item are hundredths of a millimetre, recovered from the two gaps.
+
+      p     leg     gap1     gap2   h_text   h_item
+    100     ref   2046.1   2045.8    846.9    847.2
+    100    ours   2046.1   2045.8    846.9    847.2
+     95     ref   1961.1   1961.1    804.5    804.5
+     95    ours   1961.1   1961.1    804.5    804.5
+     90     ref   1900.8   1876.1    762.0    786.7
+     90    ours   1875.7   1876.1    762.0    761.7
+     85     ref   1859.1   1791.1    719.5    787.6
+     80     ref   1816.8   1707.1    677.5    787.3
+     70     ref   1732.1   1537.1    592.5    787.6
+     60     ref   1647.1   1368.1    508.0    787.1
+     50     ref   1562.8   1199.1    423.5    787.3
+     (ours, at every p at or below 90, gives h_item = h_text.)
+
+   The reference's empty line stands at a CONSTANT 787 from 90 % downwards and follows the text
+   line at 95 and 100. 787 is Liberation Sans' (1854+434)/2048 at 20 pt.
+
+4. IT IS THE BULLET'S BOX, AND THE STRUCTURE ONLY MATTERS THROUGH THE LEVEL   (p=80, sz=20)
+   gap AAA->BBB, the reference:
+     sA  empty as the second <text:p> of a <text:list-item>                51.50   floored
+     sC  empty as its own <text:list-item> (a bullet IS drawn)             51.50   floored
+     sE  empty as a <text:list-header> of L23  (level 1 = bullet)          51.50   floored
+     sB  empty as a <text:list-header> of L8   (level 1 = number, num-format="")   48.39  not
+     sD  empty as a bare <text:p> outside every list                       48.39   not
+     sF  two empty paragraphs in one item                                  78.80   both floored
+   L23 level 1 is a text:list-level-style-bullet; L8's is a text:list-level-style-number with an
+   empty style:num-format, which is SVX_NUM_NUMBER_NONE and a box of no height.
+
+5. THE BOX IS THE BULLET FONT'S OWN ASCENT PLUS DESCENT                      (sA, p=80, sz=20)
+     b50      level's fo:font-size 100% -> 50%     ref 48.39   floor gone (box 394 < line 678)
+     b200     level's fo:font-size 100% -> 200%    ref 73.96   box 1576  = the face at 40 pt
+     bdejavu  style:font-name Arial -> DejaVu Sans ref 52.47   box  821  = (1901+483)/2048 x 20pt
+   Arial resolves to Liberation Sans, whose box is 788.
+
+6. THE SIZE SWEEP, WHICH SAYS IT IS PROPORTIONAL TO THE EM       (m-sz10/20/28/40, p=80)
+     size   ref gap1   ours gap1   difference   (1854+434)/2048 - 1.2x0.8, in em
+       10      30.75       29.19         1.56   0.1572 em = 1.57
+       20      51.50       48.39         3.11                 3.14
+       28      68.09       63.75         4.34                 4.40
+       40      93.01       86.74         6.27                 6.29
+   gap2, which spans the unfloored in-header empty, is identical on both sides at all four.
+
+7. THE OOXML CONTROL — A MEASUREMENT, NOT A READING
+   tests/corpus/features/odp-empty-bullet-line.fodp converted to .pptx by 26.2.4.2 and rendered
+   back by it. AAA->BBB pitch, ODF original against the .pptx of the same six slides:
+
+     slide            ODF      .pptx
+     1 bullet80      41.53      38.43
+     2 text80        38.44      38.43
+     3 nobullet80    38.41      38.43
+     4 big80         63.98      38.43
+     5 bullet100     48.02      48.02
+     6 dejavu80      42.49      38.43
+
+   The floor is gone from every OOXML slide, the 200 % bullet included. That is
+   oox/source/drawingml/textparagraph.cxx:192-196 setting NumberingLevel to -1 where
+   filter/source/msfilter/svdfppt.cxx:2363-2366 clears only EE_PARA_BULLETSTATE.
+
+8. THE FIXTURE, VERIFIED AGAINST 26.2.4.2 AND AGAINST THIS TREE AT HEAD
+   tests/corpus/features/odp-empty-bullet-line.fodp — all six slides agree to 0.00 pt.
+     page 1 ref AAA=100.40 BBB=141.93 | ours 100.40 141.93
+     page 2 ref AAA=100.40 x=119.62 BBB=138.84 | ours 100.40 119.62 138.84
+     page 3 ref AAA=100.40 BBB=138.81 | ours 100.40 138.81
+     page 4 ref AAA=100.40 BBB=164.38 | ours 100.40 164.38
+     page 5 ref AAA=105.05 BBB=153.07 | ours 105.05 153.07
+     page 6 ref AAA=100.40 BBB=142.89 | ours 100.40 142.89
+   At the base commit slides 1, 4 and 6 fail and 2, 3, 5 pass, which is the asymmetry the test
+   is for.
+
+9. THE OTHER TWO PAGES OF THE LAYOUT GROUP, MEASURED AND NOT FIXED
+   ws_prod-g-doc-Events-2007-september-M.017-(French)-France.ppt page 14, shrink turned off:
+     ref  text at x=85.10 (level 1) and 115.09 (level 2), NO text bullet drawn
+     ours OpenSymbol U+E5CD at 31.011 pt beside 20.013 pt text, text at 70.09 and 101.59
+   26.2.4.2's own flat ODP of the deck gives its outline levels
+   text:list-level-style-image — a PICTURE bullet — on Default-outline1/2 and on L6/L8/L9/L11/
+   L15/L16, and pages 8, 14, 15 and 16 all use one. At head this tree reading that same ODP
+   answers 15.99, 20.01, 18.99 and 15.0 against the reference's 15.99, 18.99, 18.99 and 14.99:
+   three of the four right on the reference's own model and wrong on the .ppt, so the cause is
+   the import of the picture bullet and not the layout.
+
+   RRM-training-syllabus-…-Dec-2009.ppt page 16, shrink turned off: both sides draw 20.01 and
+   the FIRST baselines agree, but the reference's lines are wider and wrap earlier — its
+   'M r. Warren M aines' and 'M ishap' come back from pymupdf with a gap after every capital M,
+   i.e. the reference is drawing those portions separately. A width question, not a height one.

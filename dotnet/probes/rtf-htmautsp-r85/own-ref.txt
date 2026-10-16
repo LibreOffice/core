@@ -1,0 +1,6 @@
+         probe     A->B     B->C  rule
+     o00266229    38.65    14.65  max
+     o00266680   (marks found: [] -- unreadable)
+     o00266968   (marks found: [] -- unreadable)
+     o00311626   (marks found: [] -- unreadable)
+     o00313259    62.65    14.65  sum

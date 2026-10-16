@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Hand-authored. A master page carrying four kinds of shape, so that one deck separates
+     every rule about what a slide inherits from its master:
+
+       * "Global Widget Corporation" - a background object on the page: drawn under every
+         slide that names the master.
+       * "Parked off the sheet" - a background object whose svg:y puts it past the page's
+         19.05cm: laid out, and gone at the media box, exactly as on the OOXML side.
+       * "Click to edit the title style of the master" - the master's own title presentation
+         object: never drawn on a slide, because a presentation object on a master is
+         invisible whenever the visualised page is not the master itself
+         (sd/source/core/sdpage.cxx:2986-2991).
+       * "Marked drawooo display none" - drawooo:display="none", so Printable is false and it
+         reaches no page (xmloff/source/draw/ximpshap.cxx:840-844).
+       * The third slide's drawing-page style states
+         presentation:background-objects-visible="false", so it inherits none of them.
+       * The fourth and fifth slides each carry their own presentation:class="footer" frame,
+         with presentation:display-footer="false" and "true" respectively. 26.2.4.2 draws
+         BOTH, which is the control on a rule that was implemented and withdrawn: those
+         settings govern the master's running objects while they are drawn as a slide's
+         background, not the slide's own copy of the frame.
+
+     Two things this file needs that a reader would not guess, both established by rendering
+     it through 26.2.4.2 and watching them fail:
+
+       * office:styles must declare a draw:layer-set. Without it LibreOffice discards every
+         shape on the master page and substitutes the stock layout, so the deck silently
+         tests nothing.
+       * the title frame must name a *presentation*-family style. Given draw:style-name
+         instead, the importer demotes it to an ordinary text frame - it is then not a
+         presentation object at all, and the reference draws the prompt on every slide.
+
+     Verified against LibreOffice 26.2.4.2, whose PDF of this file reads, page by page:
+       1  Global Widget Corporation | First slide of its own
+       2  Global Widget Corporation | Second slide of its own
+       3  Third slide of its own
+       4  Global Widget Corporation | Fourth slide of its own | Footer the fourth page turns off
+       5  Global Widget Corporation | Fifth slide of its own  | Footer the fifth page turns on
+     and nothing else: not the parked shape, not the display="none" shape, not the title
+     prompt. -->
+<office:document
+  xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+  xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+  xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+  xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+  xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0"
+  xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+  xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+  office:version="1.3"
+  xmlns:drawooo="http://openoffice.org/2010/draw"
+  office:mimetype="application/vnd.oasis.opendocument.presentation">
+ <office:styles>
+  <draw:layer-set>
+   <draw:layer draw:name="layout"/>
+   <draw:layer draw:name="background"/>
+   <draw:layer draw:name="backgroundobjects"/>
+   <draw:layer draw:name="controls"/>
+   <draw:layer draw:name="measurelines"/>
+  </draw:layer-set>
+ </office:styles>
+ <office:automatic-styles>
+  <style:page-layout style:name="PL1">
+   <style:page-layout-properties fo:page-width="25.4cm" fo:page-height="19.05cm"
+       style:print-orientation="landscape" fo:margin-top="0cm" fo:margin-bottom="0cm"
+       fo:margin-left="0cm" fo:margin-right="0cm"/>
+  </style:page-layout>
+  <style:style style:name="dp1" style:family="drawing-page">
+   <style:drawing-page-properties draw:fill="none"/>
+  </style:style>
+  <style:style style:name="dp2" style:family="drawing-page">
+   <style:drawing-page-properties draw:fill="none"
+       presentation:background-objects-visible="false"/>
+  </style:style>
+  <style:style style:name="gr1" style:family="graphic">
+   <style:graphic-properties draw:stroke="none" draw:fill="none"/>
+  </style:style>
+  <style:style style:name="pr1" style:family="presentation">
+   <style:graphic-properties draw:stroke="none" draw:fill="none"/>
+  </style:style>
+  <style:style style:name="dp3" style:family="drawing-page">
+   <style:drawing-page-properties draw:fill="none" presentation:display-footer="false"/>
+  </style:style>
+  <style:style style:name="dp4" style:family="drawing-page">
+   <style:drawing-page-properties draw:fill="none" presentation:display-footer="true"/>
+  </style:style>
+  <style:style style:name="P1" style:family="paragraph">
+   <style:text-properties fo:font-size="18pt"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Default" style:page-layout-name="PL1" draw:style-name="dp1">
+   <draw:frame draw:style-name="gr1" draw:name="strapline" draw:layer="backgroundobjects"
+       svg:x="1cm" svg:y="1cm" svg:width="20cm" svg:height="1.5cm">
+    <draw:text-box><text:p text:style-name="P1">Global Widget Corporation</text:p></draw:text-box>
+   </draw:frame>
+   <draw:frame draw:style-name="gr1" draw:name="parked" draw:layer="backgroundobjects"
+       svg:x="1cm" svg:y="20cm" svg:width="20cm" svg:height="1.5cm">
+    <draw:text-box><text:p text:style-name="P1">Parked off the sheet</text:p></draw:text-box>
+   </draw:frame>
+   <draw:custom-shape draw:style-name="gr1" draw:name="not printed" draw:layer="backgroundobjects"
+       drawooo:display="none"
+       svg:x="1cm" svg:y="10cm" svg:width="20cm" svg:height="1.5cm">
+    <text:p text:style-name="P1">Marked drawooo display none</text:p>
+    <draw:enhanced-geometry draw:type="rectangle"
+        draw:enhanced-path="M 0 0 L 21600 0 21600 21600 0 21600 0 0 Z N"/>
+   </draw:custom-shape>
+   <draw:frame presentation:style-name="pr1" draw:layer="backgroundobjects"
+       svg:x="1cm" svg:y="3cm" svg:width="20cm" svg:height="3cm"
+       presentation:class="title" presentation:user-transformed="true">
+    <draw:text-box><text:p>Click to edit the title style of the master</text:p></draw:text-box>
+   </draw:frame>
+  </style:master-page>
+ </office:master-styles>
+ <office:body>
+  <office:presentation>
+   <draw:page draw:name="first" draw:style-name="dp1" draw:master-page-name="Default">
+    <draw:frame draw:style-name="gr1" draw:name="body one" draw:layer="layout"
+        svg:x="2cm" svg:y="8cm" svg:width="20cm" svg:height="3cm">
+     <draw:text-box><text:p text:style-name="P1">First slide of its own</text:p></draw:text-box>
+    </draw:frame>
+   </draw:page>
+   <draw:page draw:name="second" draw:style-name="dp1" draw:master-page-name="Default">
+    <draw:frame draw:style-name="gr1" draw:name="body two" draw:layer="layout"
+        svg:x="2cm" svg:y="8cm" svg:width="20cm" svg:height="3cm">
+     <draw:text-box><text:p text:style-name="P1">Second slide of its own</text:p></draw:text-box>
+    </draw:frame>
+   </draw:page>
+   <draw:page draw:name="third" draw:style-name="dp2" draw:master-page-name="Default">
+    <draw:frame draw:style-name="gr1" draw:name="body three" draw:layer="layout"
+        svg:x="2cm" svg:y="8cm" svg:width="20cm" svg:height="3cm">
+     <draw:text-box><text:p text:style-name="P1">Third slide of its own</text:p></draw:text-box>
+    </draw:frame>
+   </draw:page>
+   <draw:page draw:name="fourth" draw:style-name="dp3" draw:master-page-name="Default">
+    <draw:frame draw:style-name="gr1" draw:name="body four" draw:layer="layout"
+        svg:x="2cm" svg:y="8cm" svg:width="20cm" svg:height="3cm">
+     <draw:text-box><text:p text:style-name="P1">Fourth slide of its own</text:p></draw:text-box>
+    </draw:frame>
+    <draw:frame presentation:style-name="pr1" draw:layer="layout" presentation:class="footer"
+        svg:x="2cm" svg:y="13cm" svg:width="20cm" svg:height="1.5cm">
+     <draw:text-box><text:p text:style-name="P1">Footer the fourth page turns off</text:p></draw:text-box>
+    </draw:frame>
+   </draw:page>
+   <draw:page draw:name="fifth" draw:style-name="dp4" draw:master-page-name="Default">
+    <draw:frame draw:style-name="gr1" draw:name="body five" draw:layer="layout"
+        svg:x="2cm" svg:y="8cm" svg:width="20cm" svg:height="3cm">
+     <draw:text-box><text:p text:style-name="P1">Fifth slide of its own</text:p></draw:text-box>
+    </draw:frame>
+    <draw:frame presentation:style-name="pr1" draw:layer="layout" presentation:class="footer"
+        svg:x="2cm" svg:y="13cm" svg:width="20cm" svg:height="1.5cm">
+     <draw:text-box><text:p text:style-name="P1">Footer the fifth page turns on</text:p></draw:text-box>
+    </draw:frame>
+   </draw:page>
+  </office:presentation>
+ </office:body>
+</office:document>

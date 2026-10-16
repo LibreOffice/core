@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  A cell's trailing empty paragraph is a line of its row's height, and the rule has to hold for a
+  cell in one format and for one in several — Calc measures both through the same EditEngine, whose
+  paragraph count is the importer's and includes the empty one after a trailing break.
+
+  Five rows in an 8 cm wrapping column, all in Calibri 11 so that no line is on the 256-twip floor
+  and nothing in them is wide enough to wrap of its own accord. Rows 1 and 3 hold the same
+  characters as rows 0 and 2 with one empty paragraph added at the end; rows 0 and 2 are the
+  controls that must not move, and row 4 is the single-line control.
+
+  LibreOffice 26.2.4.2's own flat-ODF export of this file states, as style:row-height:
+
+    row 0  Alpha / Bravo                       one format    0.3937in   566.93 twips
+    row 1  Alpha / Bravo / (empty)             one format    0.5799in   835.06 twips
+    row 2  Alpha / Bravo                       two spans     0.3937in   566.93 twips
+    row 3  Alpha / Bravo / (empty)             two spans     0.5799in   835.06 twips
+    row 4  tail                                one format    0.2071in   298.22 twips
+
+  So the empty paragraph is worth exactly one line either way, and the rich cell answers the same
+  number as the plain one. Before dotnet/probes/sheet-wrap-r99 this tree gave row 3 the 567 of
+  row 2: the layouter ends a paragraph on its break and never opens the empty one after it, so the
+  count came out one short for a rich cell and right for a plain one.
+-->
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+ xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+ xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+ xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+ xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+ xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+ office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+ <office:font-face-decls>
+  <style:font-face style:name="Calibri" svg:font-family="Calibri"
+   style:font-family-generic="swiss" style:font-pitch="variable"/>
+ </office:font-face-decls>
+ <office:automatic-styles>
+  <style:style style:name="co1" style:family="table-column">
+   <style:table-column-properties style:column-width="8cm"/>
+  </style:style>
+  <style:style style:name="ro1" style:family="table-row">
+   <style:table-row-properties style:use-optimal-row-height="true"/>
+  </style:style>
+  <style:style style:name="ceWrap" style:family="table-cell">
+   <style:table-cell-properties fo:wrap-option="wrap" style:vertical-align="top"/>
+   <style:text-properties style:font-name="Calibri" fo:font-size="11pt"/>
+  </style:style>
+  <style:style style:name="T1" style:family="text">
+   <style:text-properties style:font-name="Calibri" fo:font-size="11pt" fo:font-weight="bold"/>
+  </style:style>
+  <style:style style:name="T2" style:family="text">
+   <style:text-properties style:font-name="Calibri" fo:font-size="11pt"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+    fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"
+    style:print-orientation="portrait"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Default" style:page-layout-name="pm1"/>
+ </office:master-styles>
+ <office:body>
+  <office:spreadsheet>
+   <table:table table:name="Probe">
+    <table:table-column table:style-name="co1" table:number-columns-repeated="2"/>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="ceWrap" office:value-type="string"><text:p>Alpha</text:p><text:p>Bravo</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="ceWrap" office:value-type="string"><text:p>Alpha</text:p><text:p>Bravo</text:p><text:p/></table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="ceWrap" office:value-type="string"><text:p><text:span text:style-name="T1">Alpha</text:span></text:p><text:p><text:span text:style-name="T2">Bravo</text:span></text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="ceWrap" office:value-type="string"><text:p><text:span text:style-name="T1">Alpha</text:span></text:p><text:p><text:span text:style-name="T2">Bravo</text:span></text:p><text:p><text:span text:style-name="T2"/></text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="ceWrap" office:value-type="string"><text:p>tail</text:p></table:table-cell>
+    </table:table-row>
+   </table:table>
+  </office:spreadsheet>
+ </office:body>
+</office:document>

@@ -1,0 +1,103 @@
+documents opened as OPC spreadsheets: 244
+iconSet: main-namespace rules 2 in 2 documents; x14 extensions of those 0; x14-only rules 18 in 8 documents
+union of documents: 10   intersection: 0   total rules: 20
+
+icon sets named, by rule:
+  3Flags               9
+  3Stars               6
+  3Symbols             2
+  3TrafficLights1      2
+  3Symbols2            1
+
+041_Business_budget_ef942467.xlsx | xl/worksheets/sheet22.xml | x14-only | sqref 'G6:G7' | priority 10 | set 3Flags
+    attrs {'iconSet': '3Flags', 'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '0'), ('num', '0')]
+    icons [('3Flags', '0'), ('NoIcons', '0'), ('NoIcons', '0')]
+041_Business_budget_ef942467.xlsx | xl/worksheets/sheet31.xml | x14-only | sqref 'G7:G9' | priority 10 | set 3Flags
+    attrs {'iconSet': '3Flags', 'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '0'), ('num', '0')]
+    icons [('3Flags', '0'), ('NoIcons', '0'), ('NoIcons', '0')]
+041_Business_budget_ef942467.xlsx | xl/worksheets/sheet44.xml | x14-only | sqref 'G7:G26' | priority 2 | set 3Flags
+    attrs {'iconSet': '3Flags', 'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '0'), ('num', '0')]
+    icons [('3Flags', '0'), ('NoIcons', '0'), ('NoIcons', '0')]
+042_Business_monthly_budget_4e4d092f.xlsx | xl/worksheets/sheet22.xml | x14-only | sqref 'G4:G6' | priority 8 | set 3Flags
+    attrs {'iconSet': '3Flags', 'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '0'), ('num', '0')]
+    icons [('3Flags', '0'), ('NoIcons', '0'), ('NoIcons', '0')]
+042_Business_monthly_budget_4e4d092f.xlsx | xl/worksheets/sheet31.xml | x14-only | sqref 'G6:G8' | priority 9 | set 3Flags
+    attrs {'iconSet': '3Flags', 'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '0'), ('num', '0')]
+    icons [('3Flags', '0'), ('NoIcons', '0'), ('NoIcons', '0')]
+042_Business_monthly_budget_4e4d092f.xlsx | xl/worksheets/sheet44.xml | x14-only | sqref 'G6:G25' | priority 2 | set 3Flags
+    attrs {'iconSet': '3Flags', 'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '0'), ('num', '0')]
+    icons [('3Flags', '0'), ('NoIcons', '0'), ('NoIcons', '0')]
+066_Agile_Gantt_chart_08f9de45.xlsx | xl/worksheets/sheet22.xml | x14-only | sqref 'I10:BL35' | priority 6 | set 3Stars
+    attrs {'iconSet': '3Stars', 'showValue': '0', 'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '1'), ('num', '2')]
+    icons [('NoIcons', '0'), ('3Flags', '1'), ('3Signs', '0')]
+066_Agile_Gantt_chart_08f9de45.xlsx | xl/worksheets/sheet22.xml | x14-only | sqref 'I36:BL36' | priority 12 | set 3Stars
+    attrs {'iconSet': '3Stars', 'showValue': '0', 'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '1'), ('num', '2')]
+    icons [('NoIcons', '0'), ('3Flags', '1'), ('3Signs', '0')]
+066_Agile_Gantt_chart_08f9de45.xlsx | xl/worksheets/sheet31.xml | x14-only | sqref 'I10:BL35' | priority 6 | set 3Stars
+    attrs {'iconSet': '3Stars', 'showValue': '0', 'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '1'), ('num', '2')]
+    icons [('NoIcons', '0'), ('3Flags', '1'), ('3Signs', '0')]
+066_Agile_Gantt_chart_08f9de45.xlsx | xl/worksheets/sheet31.xml | x14-only | sqref 'I36:BL36' | priority 12 | set 3Stars
+    attrs {'iconSet': '3Stars', 'showValue': '0', 'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '1'), ('num', '2')]
+    icons [('NoIcons', '0'), ('3Flags', '1'), ('3Signs', '0')]
+066_Agile_Gantt_chart_08f9de45.xlsx | xl/worksheets/sheet44.xml | x14-only | sqref 'I10:BL35' | priority 6 | set 3Stars
+    attrs {'iconSet': '3Stars', 'showValue': '0', 'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '1'), ('num', '2')]
+    icons [('NoIcons', '0'), ('3Flags', '1'), ('3Signs', '0')]
+066_Agile_Gantt_chart_08f9de45.xlsx | xl/worksheets/sheet44.xml | x14-only | sqref 'I36:BL36' | priority 12 | set 3Stars
+    attrs {'iconSet': '3Stars', 'showValue': '0', 'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '1'), ('num', '2')]
+    icons [('NoIcons', '0'), ('3Flags', '1'), ('3Signs', '0')]
+069_Blue_modern_balance_sheet_Use_this_template_6b4d70d3.xlsx | xl/worksheets/sheet13.xml | x14-only | sqref 'C12' | priority 4 | set 3Flags
+    attrs {'iconSet': '3Flags', 'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '$C$11'), ('num', '$C$11')]
+    icons [('3Flags', '0'), ('3Flags', '2'), ('3Flags', '0')]
+069_Blue_modern_balance_sheet_Use_this_template_6b4d70d3.xlsx | xl/worksheets/sheet13.xml | x14-only | sqref 'D12' | priority 8 | set 3Flags
+    attrs {'iconSet': '3Flags', 'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '$D$11'), ('num', '$D$11')]
+    icons [('3Flags', '0'), ('3Flags', '2'), ('3Flags', '0')]
+075_Idea_planner_tasks_f44ebd73.xlsx | xl/worksheets/sheet1.xml | main | sqref 'F7:F10' | priority 18 | set 3Symbols2
+    attrs {'iconSet': '3Symbols2'}
+    cfvo  [('percent', '0'), ('num', '0'), ('num', '1')]
+    icons []
+076_Inventory_list_accessibility_guide_Use_this_template_f43dab19.xlsx | xl/worksheets/sheet24.xml | x14-only | sqref 'K6:K16' | priority 25 | set 3Flags
+    attrs {'iconSet': '3Flags', 'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '0'), ('num', '1')]
+    icons [('NoIcons', '0'), ('NoIcons', '0'), ('3Flags', '0')]
+077_Inventory_list_with_highlighting_Use_this_template_36d8d57a.xlsx | xl/worksheets/sheet11.xml | x14-only | sqref 'B6:B30' | priority 9 | set 3TrafficLights1
+    attrs {'showValue': '0', 'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '-1'), ('num', '1')]
+    icons [('NoIcons', '0'), ('NoIcons', '0'), ('3Flags', '0')]
+078_Modern_inventory_list_Use_this_template_41abd5bf.xlsx | xl/worksheets/sheet11.xml | x14-only | sqref 'B6:B30' | priority 79 | set 3TrafficLights1
+    attrs {'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '0'), ('num', '1')]
+    icons [('NoIcons', '0'), ('NoIcons', '0'), ('3Flags', '0')]
+088_To-do_list_with_progress_tracker_Use_this_template_8c438912.xlsx | xl/worksheets/sheet11.xml | x14-only | sqref 'H3:H7' | priority 10 | set 3Symbols
+    attrs {'iconSet': '3Symbols', 'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '0'), ('num', '1')]
+    icons [('NoIcons', '0'), ('NoIcons', '0'), ('3Symbols', '2')]
+sistem-rekod-markah-srm-_-rekod-master.xlsx | xl/worksheets/sheet1.xml | main | sqref 'C46' | priority 1 | set 3Symbols
+    attrs {'iconSet': '3Symbols'}
+    cfvo  [('percent', '0'), ('percent', '33'), ('percent', '67')]
+    icons []
+
+documents (union):
+  x14       /home/user/sample-files/sheets/chartset-006/xlsx/088_To-do_list_with_progress_tracker_Use_this_template_8c438912.xlsx
+  x14       /home/user/sample-files/sheets/chartset-009/xlsx/041_Business_budget_ef942467.xlsx
+  main      /home/user/sample-files/sheets/chartset-009/xlsx/075_Idea_planner_tasks_f44ebd73.xlsx
+  x14       /home/user/sample-files/sheets/chartset-010/xlsx/069_Blue_modern_balance_sheet_Use_this_template_6b4d70d3.xlsx
+  x14       /home/user/sample-files/sheets/chartset-010/xlsx/078_Modern_inventory_list_Use_this_template_41abd5bf.xlsx
+  x14       /home/user/sample-files/sheets/chartset-011/xlsx/042_Business_monthly_budget_4e4d092f.xlsx
+  x14       /home/user/sample-files/sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx
+  x14       /home/user/sample-files/sheets/chartset-011/xlsx/077_Inventory_list_with_highlighting_Use_this_template_36d8d57a.xlsx
+  x14       /home/user/sample-files/sheets/chartset-014/xlsx/076_Inventory_list_accessibility_guide_Use_this_template_f43dab19.xlsx
+  main      /home/user/sample-files/sheets/done-009/xlsx/sistem-rekod-markah-srm-_-rekod-master.xlsx

@@ -1,0 +1,8 @@
+/home/user/sample-files/sheets/chartset-006/xls/011_Contextures_chart_sample_599b4392.xls
+/home/user/sample-files/sheets/chartset-006/xls/014_Contextures_chart_sample_991ecfc5.xls
+/home/user/sample-files/sheets/done-005/xls/Praktikastellen_-_chinesischsprachiger_Kulturraum.xls
+/home/user/sample-files/sheets/done-011/xls/SIL_TDB605.xls
+/home/user/sample-files/sheets/done-012/xls/SIL_TDB609.xls
+/home/user/sample-files/sheets/done-013/xls/capa-liste-nse-1.xls
+/home/user/sample-files/sheets/done-014/xls/7-memento-2015-transports-aeriens-b.xls
+/home/user/sample-files/sheets/missing-001/xls/orbus_togaf_tool_csq.xls

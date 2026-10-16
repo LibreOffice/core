@@ -1,0 +1,9 @@
+# Renderings and the generated fixtures, all reproducible from the scripts beside them.
+ours/
+ref/
+faa/
+conv/
+conv-ours/
+conv-ref/
+*.docx
+ours-base/

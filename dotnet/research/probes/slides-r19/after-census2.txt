@@ -1,0 +1,52 @@
+
+pages compared                             4199  over 163 documents
+  dominant size agrees                     3519
+  differs, within 1% — the mm100 grid      25
+  differs, same sizes cut up differently   133
+  differs, the reference draws far less    62   raster ceiling
+  differs, its size is off the mm100 grid  135   metafile text
+  differs, and neither explains it         325   over 96 documents
+
+worst documents:
+    22  2015-Civil-Rights-Website-training__ppt
+    16  ITE106-Chapter 4__ppt
+    10  RESPA_-_Section_8_Webinar__ppt
+     9  2014BSA_Sunday_Killion__pptx
+     9  NAS-Infrastructure-Roadmaps-v16.0__pptx
+     9  RRM-training-syllabus-Chapter-3-Teamwork-TC-Towing-Incident-Analysis-Dec-2009__ppt
+     8  71393_pp7__ppt
+     8  Architecture__ppt
+     8  dhs-293364__pptx
+     8  gfopportunitiesforlinkagespres_2010_en__ppt
+     8  ws_prod-g-doc-Events-Part-M-presentation__ppt
+     8  ws_prod-g-doc-Events-r-6.-ESM__ppt
+     6  8.16_AOD_FINAL_Provider_Training_Presentation_9_2009__ppt
+     6  REDAC Briefing_SSIT_CARA_08132014.ppt__pptx
+     6  pods05__ppt
+     5  010605Vul__ppt
+     5  Demick_JetBlue__pptx
+     5  Intersil_Italy_CAN_Bus_Transceiver_Presentation_Final__pptx
+     5  JesuitAssocOfStudentPersonnel__ppt
+     5  Lepore__ppt
+
+commonest (ours, ref) pairs:
+    12  ours   18.99  ref   20.01   ratio 0.9490
+    11  ours   24.01  ref   22.99   ratio 1.0444
+     9  ours   27.01  ref   28.01   ratio 0.9643
+     8  ours   17.01  ref   18.00   ratio 0.9450
+     7  ours   20.01  ref   18.99   ratio 1.0537
+     7  ours   15.00  ref   15.99   ratio 0.9381
+     7  ours   18.00  ref   18.99   ratio 0.9479
+     7  ours   25.99  ref   25.00   ratio 1.0396
+     7  ours   10.01  ref    7.99   ratio 1.2528
+     6  ours   22.00  ref   22.99   ratio 0.9569
+     5  ours   18.00  ref   17.01   ratio 1.0582
+     5  ours   22.99  ref   24.01   ratio 0.9575
+     5  ours   10.01  ref    9.89   ratio 1.0121
+     4  ours   11.00  ref   11.99   ratio 0.9174
+     4  ours   22.99  ref   22.00   ratio 1.0450
+     4  ours   17.01  ref   15.99   ratio 1.0638
+     4  ours   15.99  ref   18.00   ratio 0.8883
+     4  ours    9.01  ref   24.01   ratio 0.3753
+     4  ours    4.99  ref   32.00   ratio 0.1559
+     4  ours    4.99  ref   15.99   ratio 0.3121

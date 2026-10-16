@@ -1,0 +1,71 @@
+diff --git a/dotnet/src/XRay.Office.Spreadsheets/MsBinary/BiffRecords.cs b/dotnet/src/XRay.Office.Spreadsheets/MsBinary/BiffRecords.cs
+--- a/dotnet/src/XRay.Office.Spreadsheets/MsBinary/BiffRecords.cs
++++ b/dotnet/src/XRay.Office.Spreadsheets/MsBinary/BiffRecords.cs
+@@ -80,6 +80,21 @@
+     /// <summary>The workbooks a 3D reference can name; <c>0x0401</c> means this one.</summary>
+     public const ushort SupBook = 0x01AE;
+ 
++    /// <summary>Opens one saved custom view's copy of a sheet's settings.</summary>
++    /// <remarks>
++    /// <c>EXC_ID_USERSVIEWBEGIN</c>, <c>sc/source/filter/inc/xlconst.hxx:226</c>. Everything
++    /// between this and <see cref="UsersViewEnd"/> is one entry of Excel's "Custom Views" list —
++    /// its own <c>HEADER</c>, <c>FOOTER</c>, <c>SETUP</c>, margins, page breaks and filters — and
++    /// none of it is the sheet's own setting. LibreOffice ignores the whole block
++    /// (<c>ImportExcel8::Read</c>, <c>sc/source/filter/excel/read.cxx:952-966</c>,
++    /// <c>#i39464#</c>: "Otherwise view settings and filters are loaded multiple times").
++    /// </remarks>
++    public const ushort UsersViewBegin = 0x01AA;
++
++    /// <summary>Closes a custom view's block.</summary>
++    /// <remarks><c>EXC_ID_USERSVIEWEND</c>, the same header.</remarks>
++    public const ushort UsersViewEnd = 0x01AB;
++
+     /// <summary>The table a formula's <c>ixti</c> indexes into.</summary>
+     public const ushort ExternSheet = 0x0017;
+     public const ushort Window2 = 0x023E;
+diff --git a/dotnet/src/XRay.Office.Spreadsheets/MsBinary/XlsWorkbookReader.cs b/dotnet/src/XRay.Office.Spreadsheets/MsBinary/XlsWorkbookReader.cs
+--- a/dotnet/src/XRay.Office.Spreadsheets/MsBinary/XlsWorkbookReader.cs
++++ b/dotnet/src/XRay.Office.Spreadsheets/MsBinary/XlsWorkbookReader.cs
+@@ -1628,10 +1628,42 @@
+         // sheet's. Counting depth is what keeps the inner EOF from ending the sheet early.
+         int depth = 0;
+ 
++        // **A saved custom view repeats the sheet's whole page-settings block, and reading it
++        // overwrites the sheet's own.** `USERSVIEWBEGIN`/`USERSVIEWEND` bracket one entry of
++        // Excel's Custom Views list; LibreOffice skips every record between them
++        // (`ImportExcel8::Read`, `sc/source/filter/excel/read.cxx:952-966`, `#i39464#`) and this
++        // did not, so the *last* view's `HEADER`, `FOOTER`, `SETUP` and margins won.
++        //
++        // Measured on `programs contact list as of 07-01-10.xls`, whose single `CONTACTS`
++        // substream holds six `HEADER` records — its own, then one per custom view. The sheet's
++        // own is `&C&"Arial,Bold"&16 PROGRAMS CONTACTS`; the last view's is
++        // `&C&"Arial,Bold"&16APF-100 PROGRAM CONTACTS`, which is what this printed and the
++        // reference does not. Two further corpus workbooks carry the same shape
++        // (`CSA_CCM_v1.2.xls`, four views; `ECA Sinters.xls`, two), and in both the views also
++        // repeat `SETUP` — paper size, scale and orientation — so this is a pagination input and
++        // not only a string.
++        bool inCustomView = false;
++
+         while (_stream.MoveNext())
+         {
+             ushort id = _stream.RecordId;
+ 
++            if (id == BiffRecords.UsersViewBegin)
++            {
++                inCustomView = true;
++                continue;
++            }
++
++            if (id == BiffRecords.UsersViewEnd)
++            {
++                inCustomView = false;
++                continue;
++            }
++
++            // Skipped wholesale, exactly as `read.cxx` does: the block can hold a `BOF`/`EOF`
++            // pair of its own, so the depth counter must not see it either.
++            if (inCustomView) continue;
++
+             if (BiffRecords.IsBof(id))
+             {
+                 // Except when it is the chart the OBJ just before it declared, which is read

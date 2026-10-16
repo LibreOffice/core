@@ -1,0 +1,4 @@
+ref arm A pitches [25.5, 25.5, 25.5]
+ref arm B pitches [22.5, 22.5, 22.5]
+ours arm A pitches [25.5, 25.5, 25.5]
+ours arm B pitches [22.5, 22.5, 22.5]

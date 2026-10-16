@@ -1,0 +1,60 @@
+diff --git a/dotnet/src/XRay.Office.Presentations/Layout/SlideTextLayout.cs b/dotnet/src/XRay.Office.Presentations/Layout/SlideTextLayout.cs
+index 0000000..0000000 100644
+--- a/dotnet/src/XRay.Office.Presentations/Layout/SlideTextLayout.cs
++++ b/dotnet/src/XRay.Office.Presentations/Layout/SlideTextLayout.cs
+@@ -560,6 +560,33 @@
+             text = OutlineNumbers.NormaliseBullet(marker.Text);
+         }
+ 
++        // A marker whose face has no glyph for it falls back exactly as a run does.
++        //
++        // <strong>A marker resolves on its own path and never asked.</strong> The run path hands
++        // `SlideFonts.Fallback` to the shared layouter (`ItemisationOptions.GlyphFallback`, below),
++        // so a character Carlito cannot draw is drawn from something that can; this method shapes
++        // its one character against whatever `Resolve` answered and draws `.notdef` when that face
++        // does not hold it -- which for a face that declines to draw a missing-glyph box is
++        // nothing at all, and the marker simply vanishes. It is invisible to every text
++        // comparison, because the recoded code point still reaches the PDF with a ToUnicode.
++        //
++        // It bites hardest on a *recoded* symbol slot, because the recode's target is chosen from
++        // LibreOffice's table rather than from OpenSymbol's coverage and the two do not agree.
++        // Measured on `slides/done-013/ppt/FAA_Form_337.ppt` page 4: five Monotype Sorts slots
++        // 0xB6-0xBA recode to U+2776-U+277A (`aMonotypeSortsTab`'s F0B0 block), OpenSymbol has a
++        // glyph for none of the five, and the reference draws all five circled numerals out of
++        // <b>DejaVu Sans</b> -- its page's /F1 -- while we drew five .notdefs and no marker at all.
++        // The same holds for `Wingdings 2` slot 0xF4, which recodes to the Private Use U+E5CD that
++        // no installed face has.
++        if (First(text) is { } wanted
++            && face is { } resolved
++            && !resolved.HasGlyphFor(wanted)
++            && fonts.Fallback.FallbackFor(wanted, weight, italic) is { } substitute)
++        {
++            face = substitute;
++            reference = fonts.Fallback.ReferenceFor(substitute, italic) ?? reference;
++        }
++
+         // The marker shrinks with the text it labels: the fit scales the whole outliner, and a
+         // bullet left at its authored size on a node scaled to a third overwhelms its own line.
+         //
+@@ -623,6 +650,21 @@
+     /// existed.
+     /// </para>
+     /// </remarks>
++    /// <summary>The first code point of a marker's text, or null when it has none.</summary>
++    /// <remarks>
++    /// A marker is one character in every case the readers produce -- a <c>a:buChar</c> slot, a
++    /// PPT <c>bulletChar</c>, or a generated number's first digit -- and only the first decides
++    /// whether the face can draw it, which is the question a fallback answers.
++    /// </remarks>
++    private static int? First(string text)
++    {
++        if (text.Length == 0) return null;
++
++        return char.IsHighSurrogate(text[0]) && text.Length > 1 && char.IsLowSurrogate(text[1])
++            ? char.ConvertToUtf32(text[0], text[1])
++            : text[0];
++    }
++
+     private static string? Recoded(SlideMarker marker, FontReference? reference)
+     {
+         if (marker is not { IsSymbol: true, Text.Length: 1 }) return null;

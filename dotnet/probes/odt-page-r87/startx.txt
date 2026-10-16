@@ -1,0 +1,71 @@
+ matched  meanΔx before     after  within 0.1pt before/after   document
+   11573          4.049     3.979         1860/1871           02_mcar_part-2_and_IS_v2.10__odt.pdf  BETTER
+     290          2.730     2.712           85/86             03_Technical_Report_(progress)_template__odt.p  BETTER
+     133          1.040     0.404          125/124            07-04__odt.pdf  BETTER
+      94          0.103     0.103           79/79             091_Business_Case_Template_Complete_Guide_cb91
+     122          0.101     0.101          104/106            092_Business_Case_Template_Convenient_Format_0
+     161          0.514     0.329          119/121            10795__odt.pdf  BETTER
+   29262          0.217     0.213        22195/22233          150-5370-10H__odt.pdf
+    2973         38.687    39.965          752/764            150_5300_13_chg10__odt.pdf  WORSE
+    1343         27.893    27.888          211/211            150_5300_13_chg12__odt.pdf
+     878         17.008    17.008           74/74             150_5300_13_chg8__odt.pdf
+    2535         19.252    19.181          595/617            150_5335_5a__odt.pdf  BETTER
+     433          0.738     0.703          174/174            1_tpr_template__from_fy14___odt.pdf  BETTER
+     677          0.101     0.101          613/618            231164_SystemDesignDocument__odt.pdf
+   15433          0.374     0.374          526/526            24-25_FAA_Holdover_Tables__odt.pdf
+     477          0.477     0.109          424/432            316r_a_f__odt.pdf  BETTER
+    1367          0.404     0.404          990/991            33004__odt.pdf
+    1049          0.146     0.101          989/991            361400CSLegislation1RF01PUBLIC1__odt.pdf  BETTER
+     927          0.101     0.101          899/901            5709.16 ch.40_mgfinal__odt.pdf
+     328          1.877     1.694          155/155            A1. EASA Form 2__odt.pdf  BETTER
+    1831          1.783     1.781          796/797            A320SimNotes__odt.pdf
+     663          2.840     0.143          521/525            AAC-AD-No-2021-01-Boeing-737-8-and-737-9-MAX__  BETTER
+   27126          0.568     0.543        21242/21303          AC-150-5370-10G-updated-201604__odt.pdf  BETTER
+     585          0.864     0.863          127/127            AWR OPS-AOC 044 Statement of Compliance RVSM  
+    6697          2.549     0.177         1207/2130           A_320__odt.pdf  BETTER
+     546          0.425     0.426          400/399            Agile_Arc_SysDes__odt.pdf
+   19571          0.104     0.104         7416/7419           Annex-10-to-the-Aircraft-Maintenance-Specialis
+     700          1.332     0.115          244/297            CRIF - SpÃ©cification technique - Socle applic  BETTER
+     116          0.124     0.124           74/74             Checklist for TC STC ETSO data packages to FAA
+    1242          1.009     0.995          416/435            DOA_Template_Form_Type_Certification_Programme  BETTER
+    2712          0.615     0.606          690/713            EHEST-SMS-Safety-Management-Manual-V2__odt.pdf  BETTER
+    1367          0.735     0.108          469/487            ESPN-R - MCF - Manual - Ed1.0 - For Publicatio  BETTER
+    4686          0.266     0.228          941/946            ESPN-R - MCF - RA - Ed1__odt.pdf  BETTER
+   17944          0.403     0.403          605/605            FAA 2025-26 Holdover Tables__odt.pdf
+      89          0.147     0.147           54/55             FG-AI4NDM-TR-skeleton_template__odt.pdf
+     756          3.983     3.889          242/243            FO.FCTOA.00010 Application for a Part-ORA ATO   BETTER
+    3634          0.541     0.528          427/447            FRE-03_mcar_part-3_and_IS_v2.9__odt.pdf  BETTER
+     110          1.496     0.763           60/60             License App Instructions 2-22__odt.pdf  BETTER
+    6078          3.048     2.948         3547/3642           OM template for non-complex NCC operators_Augu  BETTER
+     269          1.980     1.899          227/227            PES-Technical-Report-Template_Jan_2019__odt.pd  BETTER
+     137         13.169     9.658           50/53             Regulations Governing the Status, Basic Rights  BETTER
+      96          0.803     0.162           63/67             SFSP_2013-02_Bulletin__odt.pdf  BETTER
+   12478          1.606     1.535         1931/1937           SPA-02_mcar_part-2_and_IS_v2.9__odt.pdf  BETTER
+    3903          0.789     0.771          773/790            SPA-06_mcar_part-6_and_IS_v2.9__odt.pdf  BETTER
+    2227          2.309     2.240          561/611            SPA-11_mcar_part-11_v2.9__odt.pdf  BETTER
+     134         13.585     2.868           74/79             SWDD-template__odt.pdf  BETTER
+    1660          3.149     3.109         1172/1172           Sample_SQMS_Program__odt.pdf  BETTER
+      55          0.907     0.107           38/38             UAS-SGI_waiver_approval_request_form__odt.pdf  BETTER
+     742          0.518     0.500          528/561            UG.CAO.00006 Foreign Part 145 approvals - User  BETTER
+     603          1.674     1.592          111/132            UG.CAO.00133 Foreign Part 145 approvals - Lang  BETTER
+     245          1.181     0.538          163/177            absrc-pac-01-info-note-en__odt.pdf  BETTER
+     402          0.369     0.368          265/265            airbus-pdf-information-package_v1-4__odt.pdf
+     206          1.641     1.641           48/48             approvals-and-standardisation-organisation-app
+     389          0.076     0.076          378/378            bulletin__odt.pdf
+     230          0.482     0.482          203/203            dragon1-enterprise-architecture-document-examp
+     146          0.223     0.114          123/125            easa-form-1__odt.pdf  BETTER
+      43          2.409     2.409           23/23             f2_registro_de_aprovacao_com_pbcs_EN__odt.pdf
+     130          0.105     0.104          116/122            final-technical-report-template__odt.pdf
+     123          0.401     0.118           89/91             foca_form_1__odt.pdf  BETTER
+     346          1.222     1.371           54/52             hdss-bulletin-issue-285-25-june-2025__odt.pdf  WORSE
+     315          0.343     0.325          217/224            loi_format_letter_of_intent-a-320-214-a330__od  BETTER
+     166          5.896     0.100           85/85             opic 5--Case Studies Movie and Aviation Indust  BETTER
+     335          0.634     0.098          263/263            report-template__odt.pdf  BETTER
+     186          0.282     0.258          132/160            system_design__technical_architecture_template  BETTER
+     691          3.404     3.266          447/455            t_TEMPforInvProgs__odt.pdf  BETTER
+     125          0.191     0.189          110/110            technical report template__odt.pdf
+     143          0.480     0.480          120/120            technical-architecture__odt.pdf
+     250          1.710     1.442          134/140            template---tpr-technical-progress-report-with-  BETTER
+     389          0.193     0.192          238/242            tibs_guidelines_2__odt.pdf
+     811          0.220     0.192          417/417            xx_SETIS_PWS_template_10.19.22__odt.pdf  BETTER
+TOTAL matched 194483/195977  mean |dx| before 2.061 pt  after 1.952 pt  within 0.1 pt 79600 -> 81145

@@ -1,0 +1,8 @@
+absent       width   83.712   ratio 1.00000   'Hamburgefonstiv'
+hundred      width   83.712   ratio 1.00000   'Hamburgefonstiv'
+ninetynine   width   82.594   ratio 0.98665   'Hamburgefonstiv'
+sixty        width   50.205   ratio 0.59974   'Hamburgefonstiv'
+onethirty    width  108.810   ratio 1.29981   'Hamburgefonstiv'
+plain        width   86.712   ratio 1.03584   'Hamburgefonstiv '
+span         width   50.206   ratio 0.59974   'Hamburgefonstiv'
+span         ratio to the absent arm 0.59974

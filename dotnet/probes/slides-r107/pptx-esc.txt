@@ -1,0 +1,32 @@
+# Regression check for the escapement line box on the 251-document .pptx column.
+#
+# FixedCellBox can only change an answer for a line carrying a non-zero escapement, so the
+# census below is the reachable set.  esccensus.py counts a:rPr/@baseline values that are
+# neither absent nor "0".
+#
+#   scanned 251   with escapement 33   base rate 13.1%      (esc-pptx.txt lists them)
+#
+# Those 33 were then rendered by probes/slides-r107/sweep-ours.sh at base (95629cbd3) and at
+# head, and compared on the gate's own columns:
+#
+#   renderings whose md5 changed at all           7 of 33
+#   documents whose PAGE COUNT changed            0
+#   documents whose ALPHANUMERIC COUNT changed    0   <- the gate's verdict column
+#
+# The seven that moved, sum |ink|% against /home/user/gate-orig-r83/ref, base -> head:
+#
+#   WiGr_2021W_1_Angebot-Nachfrage-Elastizitat-211017-171222   4.86 -> 4.83   MAJOR 1 -> 1
+#   BMFE-06-03 (Gerflor) Smoke Density and Toxicity            3.82 -> 3.84   MAJOR 2 -> 2
+#   ghgp-supply-chain-initiative_20100323_wri                  4.12 -> 4.12   MAJOR 4 -> 4
+#   flying-by-numbers-presentation                             3.94 -> 3.87   MAJOR 10 -> 10
+#   Intersil_Italy_CAN_Bus_Transceiver_Presentation_Final     15.26 -> 15.17  MAJOR 8 -> 8
+#   Structural Testing                                         5.30 -> 5.30   MAJOR 3 -> 3
+#   Wildlife for REDAC September 11                            7.68 -> 7.68   MAJOR 4 -> 4
+#
+# Net -0.17 |ink|% over seven documents and no MAJOR page gained or lost: the .pptx column is
+# neutral, neither a gain nor a regression.
+#
+# pods05.ppt, the one .ppt the change reaches, over the same instrument:
+#   sum |ink|%  7.20 -> 6.78   MAJOR 3 -> 3
+# so the change moves the registered size statistic (size-summary.txt) and a little ink, but
+# clears no MAJOR page.

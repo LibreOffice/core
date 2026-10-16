@@ -1,0 +1,4 @@
+document                                                      htmautsp     super  destination
+150-5370-10H.rtf                                                266199    222775  list/listlevel
+
+338 .rtf, 308 state the word, 1 have a live \super before it

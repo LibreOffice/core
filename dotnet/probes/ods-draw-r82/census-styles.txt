@@ -1,0 +1,38 @@
+   137 draw:stroke
+   137 draw:fill
+   137 draw:textarea-horizontal-align
+   137 draw:textarea-vertical-align
+   137 draw:auto-grow-height
+   137 fo:min-height
+   137 fo:min-width
+   137 fo:padding-top
+   137 fo:padding-bottom
+   137 fo:padding-left
+   137 fo:padding-right
+   137 fo:wrap-option
+   137 loext:decorative
+   117 mpatible:1.0:stroke-width
+   104 draw:fit-to-size
+   104 style:shrink-to-fit
+    99 draw:fill-color
+    95 style:overflow-behavior
+    79 mpatible:1.0:stroke-color
+    76 mpatible:1.0:stroke-linecap
+    74 draw:shadow-color
+    41 draw:shadow
+    41 draw:shadow-offset-x
+    41 draw:shadow-offset-y
+    41 draw:shadow-opacity
+    41 loext:shadow-blur
+    32 draw:fill-gradient-name
+    15 draw:stroke-linejoin
+     6 loext:fill-use-slide-background
+     1 style:writing-mode
+
+draw:auto-grow-height {'false': 136, 'true': 1}
+draw:fit-to-size {'false': 104}
+draw:textarea-horizontal-align {'justify': 135, 'center': 2}
+draw:textarea-vertical-align {'top': 94, 'middle': 41, 'justify': 2}
+fo:wrap-option {'wrap': 129, 'no-wrap': 8}
+style:overflow-behavior {'clip': 95}
+style:shrink-to-fit {'false': 104}

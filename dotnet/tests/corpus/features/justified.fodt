@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document
+    xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+    xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+    xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+    xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+    office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:automatic-styles>
+  <style:page-layout style:name="PL">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+       fo:margin-left="2.5cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles><style:master-page style:name="Standard" style:page-layout-name="PL"/></office:master-styles>
+ <office:styles>
+  <style:style style:name="Ragged" style:family="paragraph">
+   <style:paragraph-properties fo:text-align="start" fo:text-indent="0cm"
+       fo:hyphenate="false" fo:margin-top="0cm" fo:margin-bottom="0.2cm" fo:line-height="100%"
+       fo:orphans="0" fo:widows="0"/>
+   <style:text-properties style:font-name="Carlito" fo:font-family="Carlito" fo:font-size="11pt"
+       fo:language="en" fo:country="GB"/>
+  </style:style>
+  <style:style style:name="Stretched" style:family="paragraph">
+   <style:paragraph-properties fo:text-align="justify" fo:text-indent="0cm"
+       fo:hyphenate="false" fo:margin-top="0cm" fo:margin-bottom="0.2cm" fo:line-height="100%"
+       fo:orphans="0" fo:widows="0"/>
+   <style:text-properties style:font-name="Carlito" fo:font-family="Carlito" fo:font-size="11pt"
+       fo:language="en" fo:country="GB"/>
+  </style:style>
+  <style:style style:name="Centred" style:family="paragraph">
+   <style:paragraph-properties fo:text-align="center" fo:text-indent="0cm"
+       fo:hyphenate="false" fo:margin-top="0cm" fo:margin-bottom="0.2cm" fo:line-height="100%"
+       fo:orphans="0" fo:widows="0"/>
+   <style:text-properties style:font-name="Carlito" fo:font-family="Carlito" fo:font-size="11pt"
+       fo:language="en" fo:country="GB"/>
+  </style:style>
+  <style:style style:name="Trailing" style:family="paragraph">
+   <style:paragraph-properties fo:text-align="end" fo:text-indent="0cm"
+       fo:hyphenate="false" fo:margin-top="0cm" fo:margin-bottom="0.2cm" fo:line-height="100%"
+       fo:orphans="0" fo:widows="0"/>
+   <style:text-properties style:font-name="Carlito" fo:font-family="Carlito" fo:font-size="11pt"
+       fo:language="en" fo:country="GB"/>
+  </style:style>
+ </office:styles>
+ <office:body><office:text>
+   <text:p text:style-name="Stretched">Extraordinarily longwinded polysyllabic constructions overwhelming considerably<text:line-break/>End</text:p>
+   <text:p text:style-name="Stretched">The measurement of a line of text decides where that line has to break, and so it decides<text:line-break/>End</text:p>
+   <text:p text:style-name="Stretched">It is a truth that the width of a line of set text is not the sum of the widths of its own bits<text:line-break/>End</text:p>
+   <text:p text:style-name="Stretched">Unremarkable circumlocutions notwithstanding considerable reservations regarding<text:line-break/>End</text:p>
+   <text:p text:style-name="Centred">Centred alpha beta sigma</text:p>
+   <text:p text:style-name="Trailing">Trailing alpha beta tau</text:p>
+   <text:p text:style-name="Ragged">Extraordinarily longwinded polysyllabic constructions overwhelming considerably<text:line-break/>End</text:p>
+   <text:p text:style-name="Ragged">The measurement of a line of text decides where that line has to break, and so it decides<text:line-break/>End</text:p>
+   <text:p text:style-name="Ragged">It is a truth that the width of a line of set text is not the sum of the widths of its own bits<text:line-break/>End</text:p>
+   <text:p text:style-name="Ragged">Unremarkable circumlocutions notwithstanding considerable reservations regarding<text:line-break/>End</text:p>
+   <text:p text:style-name="Ragged">Centred alpha beta sigma</text:p>
+   <text:p text:style-name="Ragged">Trailing alpha beta tau</text:p>
+ </office:text></office:body>
+</office:document>

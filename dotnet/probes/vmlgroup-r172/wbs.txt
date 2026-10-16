@@ -1,0 +1,5 @@
+/home/user/sample-files/words/chartset-010/docx/066_Work_Breakdown_Structure_Template_Colored_Background_c27ff248.docx
+/home/user/sample-files/words/chartset-010/docx/067_Work_Breakdown_Structure_Template_Gray_Theme_89f8be8b.docx
+/home/user/sample-files/words/chartset-011/docx/065_Work_Breakdown_Structure_Template_Blue_Theme_2b207f62.docx
+/home/user/sample-files/words/chartset-011/docx/068_Work_Breakdown_Structure_Template_Green_Theme_63e69ed8.docx
+/home/user/sample-files/words/chartset-013/docx/069_Work_Breakdown_Structure_Template_Professional_Format_1e02dce1.docx

@@ -1,0 +1,16 @@
+scored 13 of the 81 movers
+  median |dx| over all of them :   0.100 pt  ->    0.100 pt
+  within 0.1 pt of 26.2.4.2    : 8  ->  8
+  closer 0   further 0   level 13
+
+     0.100 ->    0.100  ( 72 spans)  5ee4fec55c91-BID_ACKNOWLEDGEMENT_FORM_FOR_A320.rtf
+     0.100 ->    0.100  (19607 spans)  195389b8c6c6-Annex-10-to-the-Aircraft-Maintenance-Specialist-Cer
+     0.100 ->    0.100  (188 spans)  404b8cb5cec3-SWDD-template.rtf
+     0.100 ->    0.100  ( 39 spans)  4c44defb9273-Regulations Governing the Status, Basic Rights and 
+     0.100 ->    0.100  ( 89 spans)  66cd4750ab46-ESPN-R - MCF - Manual - Ed1.0 - For Publication.rtf
+     0.100 ->    0.100  (1147 spans)  7be9cfcc7637-OM template for non-complex NCC operators_August 20
+  ...
+     0.100 ->    0.100  (123 spans)  e6a30de46c19-19-06 Assistive Technology TAB Final - 508.rtf
+     0.100 ->    0.100  (600 spans)  e93e7e131d5f-AWR OPS-AOC 044 Statement of Compliance RVSM  Rev 0
+     0.100 ->    0.100  (1554 spans)  ed07ce5f44c7-t_TEMPforInvProgs.rtf
+     0.100 ->    0.100  (885 spans)  AAC-AD-No-2021-01-Boeing-737-8-and-737-9-MAX.doc

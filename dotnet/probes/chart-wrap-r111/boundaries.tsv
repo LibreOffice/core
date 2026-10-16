@@ -1,0 +1,32 @@
+# Round 111, O43. Every row is one continuous sweep of `038_Competitive_Advantage_Card`'s chart
+# frame width by probes/chart-wrap-r111/paper.py against /opt/libreoffice26.2/program/soffice,
+# labels retagged de-DE (r105's hyphenator switch), Carlito, category-axis font size in `size`.
+# `pitch_lo` is the calibrated pitch of the last TURNED (or last k-token) frame and `pitch_hi`
+# that of the first UPRIGHT (or first k+1-token) frame, so the boundary is in (pitch_lo, pitch_hi].
+# Calibration: pitch = 1.511780e-5 x cx at 5 categories (r110 §1.1) and 9.4494e-6 x cx at 8,
+# each confirmed on this round's own upright rows to better than 0.01 pt.
+kind	cats	size	label	measured	need_pt	pitch_lo	pitch_hi	fraction_lo	fraction_hi
+paper	5	11	zz nnn x5	line1 2->3 tokens	49.438	52.003	52.464	0.94232	0.95067
+paper	5	11	zz nnn x5	line1 3->4 tokens	69.713	73.178	73.632	0.94677	0.95265
+paper	5	11	zz nnn x5	line2 2->3 words	58.282	61.074	61.528	0.94724	0.95428
+paper	8	11	zz nnn x5	line1 2->3 tokens	49.438	51.972	52.154	0.94793	0.95124
+restart	5	11	iiii nnnnnnnn	upright from	47.285	52.912	53.517	0.88355	0.89365
+restart	5	11	oo nnnnnnnn	upright from	47.285	53.215	53.517	0.88355	0.88857
+restart	5	11	ooo nnnnnnnn	upright from	47.285	53.819	54.122	0.87368	0.87860
+restart	5	11	iiiiiiii nnnnnnnn	upright from	47.285	54.122	54.726	0.86402	0.87368
+restart	5	11	oooo nnnnnnnn	upright from	47.285	54.424	54.726	0.86402	0.86883
+restart	5	11	ooooo nnnnnnnn	upright from	47.285	54.726	55.331	0.85457	0.86402
+restart	5	11	iiiiiiiiiiii nnnnnnnn	upright from	47.285	55.331	55.936	0.84532	0.85457
+restart	5	11	oooooo nnnnnnnn	upright from	47.285	55.634	55.936	0.84532	0.84993
+restart	5	11	oooooooo nnnnnnnn	still turned at	47.285	55.936	NA	NA	0.84532
+restart	5	11	ooo ooo nnnnnnnn	upright from	47.285	55.936	56.541	0.83630	0.84532
+restart	5	11	ooo nnnnnnnn zz	upright from	47.285	54.726	55.331	0.85457	0.86402
+restart	5	11	nnnnnnnn ooo	upright from	47.285	52.912	54.424	0.86885	0.89365
+restart	5	11	ooo nnnnnnn	upright from	41.375	47.243	47.621	0.86885	0.87580
+restart	5	11	ooo nnnnnnnnnn	upright from	59.106	66.896	67.274	0.87859	0.88355
+restart	5	11	ooo nnnnnnnnnnnn	upright from	70.928	80.061	80.502	0.88107	0.88592
+restart	5	8	ooo nnnnnnnn	upright from	34.676	39.432	39.760	0.87214	0.87939
+restart	5	14	ooo nnnnnnnn	upright from	59.895	68.484	68.811	0.87042	0.87458
+restart	8	11	ooo nnnnnnnn	upright from	47.285	52.444	52.721	0.89689	0.90163
+restart	5	11	oo nnnnn	upright from	29.553	33.669	33.953	0.87039	0.87773
+restart	8	11	oo nnnnn	upright from	29.553	32.879	33.162	0.89123	0.89890

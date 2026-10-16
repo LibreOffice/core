@@ -1,0 +1,9 @@
+documents scored: 337
+failed on either leg: 0
+byte-identical: 335
+moved: 2
+   syscolour+vline-live               1
+   vline-live                         1
+
+syscolour+vline-live               words/done-015/docx/JEMIT_Template.docx
+vline-live                         words/missing-001/docx/33004.docx

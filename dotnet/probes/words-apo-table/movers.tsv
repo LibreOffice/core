@@ -1,0 +1,14 @@
+# ink against 26.2.4.2 before and after the fix, for every .doc whose rendering moved.
+# Measured 2026-09-06 in /home/user/wt-aac at agent/aacpage over base 2f4709c08.
+# before = /home/user/gate-2f47/ours, the parent's whole-corpus gate at 2f4709c08.
+# after  = /home/user/wt-aac/sweep-words/ours, this round's words sweep.
+# reference = /opt/libreoffice26.2/program/soffice 26.2.4.2 with its Latin metric duplicates
+#   and its Latin NotoSans/NotoSerif moved aside; system fonts /usr/share/fonts.
+# ink = mean absolute grey difference at 30 dpi, page for page; inkmean is the mean over the
+#   pages the two share, inkworst the worst such page.
+path	pagesbefore	pagesafter	pagesref	inkbefore	inkafter	worstbefore	worstafter
+words/done-015/doc/2013_11.doc	8	8	8	15.41	14.94	44.51	40.71
+words/done-009/doc/237287_0486190101_0486190101_geolink2neu.doc	8	8	4	23.72	21.82	28.93	27.02
+words/done-011/doc/AAC-AD-No-2021-01-Boeing-737-8-and-737-9-MAX.doc	21	20	20	22.93	10.51	33.72	22.54
+words/done-009/doc/CP-ETSO template_v2020.DOC	6	6	6	14.30	11.02	23.83	22.25
+words/metrics-001/doc/手机免提系统TSB.doc	3	3	3	14.27	9.48	24.68	14.10

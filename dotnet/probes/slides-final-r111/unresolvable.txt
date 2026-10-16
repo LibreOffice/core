@@ -1,0 +1,23 @@
+The two pages the four-leg instrument cannot resolve, RE-VERIFIED this round rather than
+inherited.  Three renders per document with 26.2.4.2: the .ppt to PDF, the .ppt to flat ODP,
+that ODP to PDF; dominant drawn size and its alphanumeric count from `slides-r107/sizes.py`.
+
+  document                                 page   26.2.4.2 reading      26.2.4.2 reading
+                                                  the .ppt              its own flat ODP
+  2015-Civil-Rights-Website-training         22   14.0  / 92 alnum      14.99 / 90 alnum
+  gfopportunitiesforlinkagespres_2010_en     27   25.99 / 262 alnum     28.01 / 262 alnum
+
+Both move by a full `constScaleLevels` row, so the claim holds: on these two pages the reference
+does not agree with itself across its own round trip, and every leg of the instrument that runs
+through the ODP is measuring a different document from the one under test.  The ODF
+single-variable method round 110 used cannot be run on them at all.
+
+This is a TERMINAL STATE for the instrument rather than a diagnosis.  For the record, on
+`gfopportunitiesforlinkagespres_2010_en` 27 this tree answers 28.01 -- the reference's own
+ODP answer exactly -- and on `2015-Civil-Rights-Website-training` 22 it answers 17.01 against
+14.0 and 14.99.
+
+Control, and the reason this section is not simply "the round trip is unreliable": on the four
+O46 pages of `ws_prod-...-M.017-(French)-France.ppt` the same three renders agree with each
+other exactly (15.99 / 18.99 / 18.99 / 14.99 both ways), so the round trip is faithful where it
+is faithful and the two pages above are specific.

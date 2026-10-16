@@ -1,0 +1,22 @@
+A /tmp/claude-0/-home-user/bb4a221c-b846-5451-ba79-f27935c68360/scratchpad/sweep/base-ods/rows.tsv
+B /tmp/claude-0/-home-user/bb4a221c-b846-5451-ba79-f27935c68360/scratchpad/sweep/head2-ods/rows.tsv
+rows: A 307, B 307, shared 307, A-only 0, B-only 0
+excluded (failed on either side in either run): 11
+   done-010/ods/Keywords_Mapping_Graphs_and_Charts.ods	A=ref-failed	B=ref-failed
+   done-010/ods/RMP 2011-2014 and Inventory.ods	A=ref-failed	B=ref-failed
+   done-010/ods/cy06_primary_np_comm.ods	A=ref-failed	B=ref-failed
+   done-011/ods/Application_for_authorisation_as_crowdfunding_service_provider.ods	A=ref-failed	B=ref-failed
+   done-011/ods/Capability_List_9-14-2022_Dallas_Combined-Aircraft_Manuf_unsorted.ods	A=ref-failed	B=ref-failed
+   done-011/ods/FY2023-AIP-grants.ods	A=ref-failed	B=ref-failed
+   done-011/ods/List of EQS securities_0.ods	A=ref-failed	B=ref-failed
+   done-011/ods/SIL_TDB605.ods	A=ref-failed	B=ref-failed
+   done-011/ods/links-2026.ods	A=ref-failed	B=ref-failed
+   done-012/ods/NPIAS_2007_App_A.ods	A=ref-failed	B=ref-failed
+   done-013/ods/ECA Sinters.ods	A=ref-failed	B=ref-failed
+comparable rows: 296
+match: A 266, B 267
+verdicts gained: 1
+   + chartset-014/ods/017_Timeline_Templates_for_Excel_b88faee6.ods	pages -> match	pages 2/3 -> 3/3	glyphs 969/969 -> 969/969
+verdicts lost: 0
+rows whose columns moved at all: 1
+   ~ chartset-014/ods/017_Timeline_Templates_for_Excel_b88faee6.ods	pages -> match	pages 2/3 -> 3/3	glyphs 969/969 -> 969/969

@@ -1,0 +1,43 @@
+Which font height sizes a picture bullet's box: three variants, measured, none of which is right
+on both decks.
+
+The quantity is `nFontHeight` in
+    nHeight = round( nFontHeight * 0.2540 * nBulletHeight )        svdfppt.cxx:3455
+and the two candidates are the paragraph's own first portion (what
+`GetNumberFormat(..., pParaObj, ...)` reads at :3705-3708) and the master char level's height at
+that depth (what `PPTStyleSheet`'s constructor passes at :4409-4419 for the rule a paragraph
+keeps when `nHardCount` is zero).
+
+  variant                                    France p8 bullet   Part-M p21 bullets   France 8/15   Part-M 21
+  V1  paragraph's first portion              17.86 pt  =  ref   20.10 / 14.26        15.99 / 18.99 = ref   18.0
+  V2  master char level                      31.24 pt           31.24 / 19.02 = ref  15.0  / 17.01        17.01 = ref
+  V3  V1 when nHardCount != 0, else V2       31.24 pt           31.24 / 19.02        15.0  / 17.01        17.01
+
+  26.2.4.2                                   17.86 pt           31.24 / 19.02        15.99 / 18.99        17.01
+
+V3 is the source's own rule as far as this reader can evaluate it -- the seven `GetAttrib` calls
+`GetNumberFormat` sums, mask 0x5F1: BulletOn, BulletChar, BulletFont, BulletHeight, BulletColor,
+TextOfs, BulletOfs -- and it behaves as V2 on BOTH decks, because France's page-8 paragraphs
+state none of the seven.  Their masks, traced out of this reader: 0x00001800, 0x00001801 and
+0x00001000, i.e. LineFeed, Alignment and (on one) BulletOn.  So the reference takes the
+paragraph's portion on a paragraph whose seven attributes are soft, which `nHardCount` alone
+cannot explain.
+
+What is left is one of the two terms of `PPTParagraphObj::GetAttrib` this reader cannot evaluate
+-- a destination instance of TSS_Type::Unknown, and the comparison of the source instance's
+master level against the destination instance's (svdfppt.cxx:6060-6137).  The same pair is
+already recorded as unevaluable against `SlideParagraph.LineSpacingStated`.
+
+V1 is kept: it is what the paragraph overload literally reads, it is exact on the deck this seat
+is about (six bullets, position and size), and it is the variant that moves the registered
+statistic.  Its cost is `ws_prod-g-doc-Events-Part-M-presentation` page 21.
+
+The traced paragraph masks and heights, for whoever takes this next (PPT_TRACE=1 on a throwaway
+build; the trace is not committed):
+
+  France   kind=Body depth=0 paraMask=0x00001800 portion=16 master=28   (x37)
+           kind=Body depth=0 paraMask=0x00001801 portion=16 master=28   (x25)
+           kind=Body depth=1 paraMask=0x00001000 portion=16 master=24   (x34)
+  Part-M   kind=Body depth=0 paraMask=0x00000000 portion=20 master=28   (x17)
+           kind=Body depth=0 paraMask=0x00000001 portion=20 master=28   (x11)
+           kind=Body depth=1 paraMask=0x00001092 portion=18 master=24   (x6)

@@ -1,0 +1,33 @@
+tfy.py validated against an independent reader before it was used for anything.
+
+== pdf-ops.py dump, page 2 of our rendering of 2015-Civil-Rights-Website-training.ppt
+text  p2   (  688.50,   18.88)  14.00pt         AAAAAA+DejaVuSans               1 glyphs in 1 show(s)
+text  p2   (  136.06,  420.38)  43.99pt         AAAAAA+DejaVuSans              23 glyphs in 3 show(s)
+text  p2   (   91.19,  364.99)  17.77pt         DAAAAA+OpenSymbol               1 glyphs in 1 show(s)
+text  p2   (  118.19,  357.08)  29.99pt         BAAAAA+DejaVuSans-Bold         27 glyphs in 1 show(s)
+text  p2   (   91.19,  289.08)  17.77pt         DAAAAA+OpenSymbol               1 glyphs in 1 show(s)
+text  p2   (  118.19,  281.17)  29.99pt         BAAAAA+DejaVuSans-Bold         32 glyphs in 1 show(s)
+text  p2   (   91.19,  213.17)  17.77pt         DAAAAA+OpenSymbol               1 glyphs in 1 show(s)
+text  p2   (  118.19,  205.26)  29.99pt         BAAAAA+DejaVuSans-Bold         22 glyphs in 1 show(s)
+text  p2   (   91.19,  137.25)  17.77pt         DAAAAA+OpenSymbol               1 glyphs in 1 show(s)
+text  p2   (  118.19,  129.34)  29.99pt         BAAAAA+DejaVuSans-Bold         31 glyphs in 1 show(s)
+text  p2   (   91.19,   68.51)  17.77pt         DAAAAA+OpenSymbol               1 glyphs in 1 show(s)
+text  p2   (  118.19,   60.60)  29.99pt         BAAAAA+DejaVuSans-Bold         23 glyphs in 1 show(s)
+
+== tfy.py, the same page: font, size, baseline measured up from the page bottom
+out/2015-Civil-Rights-Website-training.pdf	2	AAAAAA+DejaVuSans	14.0031	18.8787
+out/2015-Civil-Rights-Website-training.pdf	2	AAAAAA+DejaVuSans	43.9937	420.378
+out/2015-Civil-Rights-Website-training.pdf	2	DAAAAA+OpenSymbol	17.7732	364.989
+out/2015-Civil-Rights-Website-training.pdf	2	BAAAAA+DejaVuSans-Bold	29.9906	357.0803
+out/2015-Civil-Rights-Website-training.pdf	2	DAAAAA+OpenSymbol	17.7732	289.0772
+out/2015-Civil-Rights-Website-training.pdf	2	BAAAAA+DejaVuSans-Bold	29.9906	281.1685
+out/2015-Civil-Rights-Website-training.pdf	2	DAAAAA+OpenSymbol	17.7732	213.1654
+out/2015-Civil-Rights-Website-training.pdf	2	BAAAAA+DejaVuSans-Bold	29.9906	205.2567
+out/2015-Civil-Rights-Website-training.pdf	2	DAAAAA+OpenSymbol	17.7732	137.2535
+out/2015-Civil-Rights-Website-training.pdf	2	BAAAAA+DejaVuSans-Bold	29.9906	129.3449
+out/2015-Civil-Rights-Website-training.pdf	2	DAAAAA+OpenSymbol	17.7732	68.5134
+out/2015-Civil-Rights-Website-training.pdf	2	BAAAAA+DejaVuSans-Bold	29.9906	60.6047
+
+Twelve shows, the same twelve sizes and the same twelve baselines to the last digit
+printed -- 364.99 / 357.08 / 289.08 ... in both.  The page is 540 pt tall, so the
+register's figures, which are measured down from the top, are 540 minus these.

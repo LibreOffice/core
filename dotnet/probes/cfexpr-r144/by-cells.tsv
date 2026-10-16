@@ -1,0 +1,119 @@
+cells	document	sheet	sheet_state	origin	sqref	formula	hits_value_range	hits_walked_range	hits_print_area	dxf_paints	can_paint
+2688	sheets/chartset-009/xlsx/085_Simple_Gantt_chart_d65b8377.xlsx	Project schedule	visible	main	I4:BL31 I21:BL25 I15:BL19 I9:BL13 I27:BL31	AND(TODAY()>=I$5, TODAY()<J$5)	yes	yes	n/a	no	no
+2128	sheets/chartset-009/xlsx/015_Free_Gantt_Chart_Template_for_Excel_414e86bf.xlsx	GanttChart	visible	main	K6:BN43	K$6=TODAY()	yes	yes	yes	no	no
+2016	sheets/chartset-009/xlsx/015_Free_Gantt_Chart_Template_for_Excel_414e86bf.xlsx	GanttChart	visible	main	K8:BN43	AND($E8<=K$6,ROUNDDOWN(($F8-$E8+1)*$H8,0)+$E8-1>=K$6)	yes	yes	yes	yes	yes
+2016	sheets/chartset-009/xlsx/015_Free_Gantt_Chart_Template_for_Excel_414e86bf.xlsx	GanttChart	visible	main	K8:BN43	AND(NOT(ISBLANK($E8)),$E8<=K$6,$F8>=K$6)	yes	yes	yes	yes	yes
+1680	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Color	visible	main	I7:BL36	AND(TODAY()>=I$7,TODAY()<J$7)	yes	yes	n/a	yes	yes
+1680	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Dark	visible	main	I7:BL36	AND(TODAY()>=I$7,TODAY()<J$7)	yes	yes	n/a	yes	yes
+1680	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Light	visible	main	I7:BL36	AND(TODAY()>=I$7,TODAY()<J$7)	yes	yes	n/a	yes	yes
+1560	sheets/chartset-010/xlsx/072_Gantt_project_planner_dde00e33.xlsx	Project Planner	visible	main	H5:BO30	PercentComplete	yes	yes	n/a	yes	yes
+1560	sheets/chartset-010/xlsx/072_Gantt_project_planner_dde00e33.xlsx	Project Planner	visible	main	H5:BO30	PercentCompleteBeyond	yes	yes	n/a	yes	yes
+1560	sheets/chartset-010/xlsx/072_Gantt_project_planner_dde00e33.xlsx	Project Planner	visible	main	H5:BO30	Actual	yes	yes	n/a	yes	yes
+1560	sheets/chartset-010/xlsx/072_Gantt_project_planner_dde00e33.xlsx	Project Planner	visible	main	H5:BO30	ActualBeyond	yes	yes	n/a	yes	yes
+1560	sheets/chartset-010/xlsx/072_Gantt_project_planner_dde00e33.xlsx	Project Planner	visible	main	H5:BO30	Plan	yes	yes	n/a	yes	yes
+1560	sheets/chartset-010/xlsx/072_Gantt_project_planner_dde00e33.xlsx	Project Planner	visible	main	H5:BO30	H$4=period_selected	yes	yes	n/a	yes	yes
+1560	sheets/chartset-010/xlsx/072_Gantt_project_planner_dde00e33.xlsx	Project Planner	visible	main	H5:BO30	MOD(COLUMN(),2)	yes	yes	n/a	yes	yes
+1560	sheets/chartset-010/xlsx/072_Gantt_project_planner_dde00e33.xlsx	Project Planner	visible	main	H5:BO30	MOD(COLUMN(),2)=0	yes	yes	n/a	yes	yes
+1456	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Color	visible	main	I10:BL35	"AND($C10=""Low Risk"",I$7>=$F10,I$7<=$F10+$G10-1)"	yes	yes	n/a	yes	yes
+1456	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Color	visible	main	I10:BL35	"AND($C10=""High Risk"",I$7>=$F10,I$7<=$F10+$G10-1)"	yes	yes	n/a	yes	yes
+1456	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Color	visible	main	I10:BL35	"AND($C10=""On Track"",I$7>=$F10,I$7<=$F10+$G10-1)"	yes	yes	n/a	yes	yes
+1456	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Color	visible	main	I10:BL35	"AND($C10=""Med Risk"",I$7>=$F10,I$7<=$F10+$G10-1)"	yes	yes	n/a	yes	yes
+1456	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Color	visible	main	I10:BL35	AND(LEN($C10)=0,I$7>=$F10,I$7<=$F10+$G10-1)	yes	yes	n/a	yes	yes
+1456	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Dark	visible	main	I10:BL35	"AND($C10=""Low Risk"",I$7>=$F10,I$7<=$F10+$G10-1)"	yes	yes	n/a	yes	yes
+1456	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Dark	visible	main	I10:BL35	"AND($C10=""High Risk"",I$7>=$F10,I$7<=$F10+$G10-1)"	yes	yes	n/a	yes	yes
+1456	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Dark	visible	main	I10:BL35	"AND($C10=""On Track"",I$7>=$F10,I$7<=$F10+$G10-1)"	yes	yes	n/a	yes	yes
+1456	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Dark	visible	main	I10:BL35	"AND($C10=""Med Risk"",I$7>=$F10,I$7<=$F10+$G10-1)"	yes	yes	n/a	yes	yes
+1456	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Dark	visible	main	I10:BL35	AND(LEN($C10)=0,I$7>=$F10,I$7<=$F10+$G10-1)	yes	yes	n/a	yes	yes
+1456	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Light	visible	main	I10:BL35	"AND($C10=""Low Risk"",I$7>=$F10,I$7<=$F10+$G10-1)"	yes	yes	n/a	yes	yes
+1456	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Light	visible	main	I10:BL35	"AND($C10=""High Risk"",I$7>=$F10,I$7<=$F10+$G10-1)"	yes	yes	n/a	yes	yes
+1456	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Light	visible	main	I10:BL35	"AND($C10=""On Track"",I$7>=$F10,I$7<=$F10+$G10-1)"	yes	yes	n/a	yes	yes
+1456	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Light	visible	main	I10:BL35	"AND($C10=""Med Risk"",I$7>=$F10,I$7<=$F10+$G10-1)"	yes	yes	n/a	yes	yes
+1456	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Light	visible	main	I10:BL35	AND(LEN($C10)=0,I$7>=$F10,I$7<=$F10+$G10-1)	yes	yes	n/a	yes	yes
+1140	sheets/table-001/xlsx/FAA-2019-0995-0002_attachment_2.xlsx	ACC list	visible	main	G5:R99	"AND(MID($C5,1,7)=""MISSING"",$G5="""")"	yes	yes	yes	yes	yes
+1047	sheets/done-011/xlsx/Application_Compliance_Checklist_5_Apr_2021.xlsx	Sample Compliance Document List	visible	main	A377:D377 J377:AA377 A443:C443 J443:AA443 J445:AA490 L444:AA444 A445:C491 A444:B444 D490 L491:AA491	"#REF!=""N/A"""	yes	yes	n/a	yes	yes
+980	sheets/done-003/xlsx/VOR Candidate Discontinuance List 2026-01-08.xlsx	Discontinued VORs	visible	main	A5:E200	MOD(ROW(),2)=0	yes	yes	n/a	yes	yes
+693	sheets/chartset-013/xlsx/019_Free_Blood_Sugar_Chart_for_Excel_-_Track_Your_Blood_Sugar_Level_36f4a782.xlsx	Chart	visible	main	G30:O106	ISERROR(G30)	yes	yes	yes	yes	yes
+693	sheets/chartset-013/xlsx/019_Free_Blood_Sugar_Chart_for_Excel_-_Track_Your_Blood_Sugar_Level_36f4a782.xlsx	Example	visible	main	G30:O106	ISERROR(G30)	yes	yes	yes	yes	yes
+645	sheets/chartset-014/xlsx/027_Simple_personal_cash_flow_statement_675c6584.xlsx	Monthly cash flow	visible	main	B5:P47	"(MOD(ROW(),2)<>0)*($B5=""Income"")"	yes	yes	n/a	yes	yes
+645	sheets/chartset-014/xlsx/027_Simple_personal_cash_flow_statement_675c6584.xlsx	Monthly cash flow	visible	main	B5:P47	"(MOD(ROW(),2)=0)*($B5=""Income"")"	yes	yes	n/a	yes	yes
+380	sheets/table-001/xlsx/FAA-2019-0995-0002_attachment_2.xlsx	ACC list	visible	main	C5:F99	"MID($C5,1,7)=""MISSING"""	yes	yes	yes	yes	yes
+356	sheets/done-003/xlsx/VOR Candidate Discontinuance List 2026-01-08.xlsx	VOR Candidate Disc List	visible	main	A5:D93	MOD(ROW(),2)=0	yes	yes	n/a	yes	yes
+280	sheets/chartset-009/xlsx/085_Simple_Gantt_chart_d65b8377.xlsx	Project schedule	visible	main	I15:BL19	AND(task_start<=I$5,ROUNDDOWN((task_end-task_start+1)*task_progress,0)+task_start-1>=I$5)	yes	yes	n/a	yes	yes
+280	sheets/chartset-009/xlsx/085_Simple_Gantt_chart_d65b8377.xlsx	Project schedule	visible	main	I15:BL19	AND(task_end>=I$5,task_start<J$5)	yes	yes	n/a	yes	yes
+280	sheets/chartset-009/xlsx/085_Simple_Gantt_chart_d65b8377.xlsx	Project schedule	visible	main	I21:BL25	AND(task_start<=I$5,ROUNDDOWN((task_end-task_start+1)*task_progress,0)+task_start-1>=I$5)	yes	yes	n/a	yes	yes
+280	sheets/chartset-009/xlsx/085_Simple_Gantt_chart_d65b8377.xlsx	Project schedule	visible	main	I21:BL25	AND(task_end>=I$5,task_start<J$5)	yes	yes	n/a	yes	yes
+280	sheets/chartset-009/xlsx/085_Simple_Gantt_chart_d65b8377.xlsx	Project schedule	visible	main	I27:BL31	AND(task_start<=I$5,ROUNDDOWN((task_end-task_start+1)*task_progress,0)+task_start-1>=I$5)	yes	yes	n/a	yes	yes
+280	sheets/chartset-009/xlsx/085_Simple_Gantt_chart_d65b8377.xlsx	Project schedule	visible	main	I27:BL31	AND(task_end>=I$5,task_start<J$5)	yes	yes	n/a	yes	yes
+280	sheets/chartset-009/xlsx/085_Simple_Gantt_chart_d65b8377.xlsx	Project schedule	visible	main	I9:BL13	AND(task_start<=I$5,ROUNDDOWN((task_end-task_start+1)*task_progress,0)+task_start-1>=I$5)	yes	yes	n/a	yes	yes
+280	sheets/chartset-009/xlsx/085_Simple_Gantt_chart_d65b8377.xlsx	Project schedule	visible	main	I9:BL13	AND(task_end>=I$5,task_start<J$5)	yes	yes	n/a	yes	yes
+186	sheets/chartset-011/xlsx/028_Budget_summary_report_4aeefd13.xlsx	Budget summary	visible	main	C6:H17 C20:H30 C33:H36 C39:H42	_xlfn.ISFORMULA(C6)	yes	yes	n/a	yes	yes
+132	sheets/chartset-014/xlsx/027_Simple_personal_cash_flow_statement_675c6584.xlsx	Daily cash flow	visible	main	D12:F55	"(MOD(ROW(),2)=0)*($B12<>""Income"")"	yes	yes	n/a	yes	yes
+132	sheets/chartset-014/xlsx/027_Simple_personal_cash_flow_statement_675c6584.xlsx	Daily cash flow	visible	main	D12:F55	"(MOD(ROW(),2)=0)*($B12=""Income"")"	yes	yes	n/a	yes	yes
+112	sheets/chartset-009/xlsx/015_Free_Gantt_Chart_Template_for_Excel_414e86bf.xlsx	GanttChart	visible	main	K6:BN7	K$6=TODAY()	yes	yes	yes	yes	yes
+109	sheets/chartset-008/xlsx/023_Waterfall_Chart_Template_for_Excel_349f7689.xlsx	Waterfall2	visible	main	M27:N38 D27:K27 D28:J38	ISERROR(D27)	yes	yes	yes	yes	yes
+88	sheets/chartset-014/xlsx/027_Simple_personal_cash_flow_statement_675c6584.xlsx	Daily cash flow	visible	main	B12:C55	"(MOD(ROW(),2)<>0)*($B12=""Income"")"	yes	yes	n/a	yes	yes
+88	sheets/chartset-014/xlsx/027_Simple_personal_cash_flow_statement_675c6584.xlsx	Daily cash flow	visible	main	B12:C55	"(MOD(ROW(),2)=0)*($B12=""Income"")"	yes	yes	n/a	yes	yes
+81	sheets/chartset-009/xlsx/024_Free_Kids_Chore_Chart_Template_ad74bb34.xlsx	BW	visible	main	B5:J13	MOD(ROW(),2)=0	yes	yes	yes	yes	yes
+81	sheets/chartset-009/xlsx/024_Free_Kids_Chore_Chart_Template_ad74bb34.xlsx	ChoreChart	visible	main	B5:J13	MOD(ROW(),2)=0	yes	yes	yes	yes	yes
+77	sheets/chartset-013/xlsx/019_Free_Blood_Sugar_Chart_for_Excel_-_Track_Your_Blood_Sugar_Level_36f4a782.xlsx	Chart	visible	main	C30:C106	AND(C30>0,C30<$B$5)	yes	yes	yes	yes	yes
+77	sheets/chartset-013/xlsx/019_Free_Blood_Sugar_Chart_for_Excel_-_Track_Your_Blood_Sugar_Level_36f4a782.xlsx	Example	visible	main	C30:C106	AND(C30>0,C30<$B$5)	yes	yes	yes	yes	yes
+70	sheets/chartset-008/xlsx/023_Waterfall_Chart_Template_for_Excel_349f7689.xlsx	Waterfall1	visible	main	K27:K35 D27:I35 D38:I38 K38	ISERROR(D27)	yes	yes	yes	yes	yes
+66	sheets/chartset-010/xlsx/072_Gantt_project_planner_dde00e33.xlsx	Project Planner	visible	main	B31:BO31	TRUE	no	no	n/a	no	no
+65	sheets/done-003/xlsx/VOR Candidate Discontinuance List 2026-01-08.xlsx	Discontinued VORs	visible	main	A204:E216	MOD(ROW(),2)=0	yes	yes	n/a	yes	yes
+60	sheets/chartset-010/xlsx/072_Gantt_project_planner_dde00e33.xlsx	Project Planner	visible	main	H4:BO4	H$4=period_selected	yes	yes	n/a	yes	yes
+56	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Color	visible	main	I36:BL36	"AND(#REF!=""Low Risk"",I$7>=#REF!,I$7<=#REF!+#REF!-1)"	yes	yes	n/a	yes	yes
+56	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Color	visible	main	I36:BL36	"AND(#REF!=""High Risk"",I$7>=#REF!,I$7<=#REF!+#REF!-1)"	yes	yes	n/a	yes	yes
+56	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Color	visible	main	I36:BL36	"AND(#REF!=""On Track"",I$7>=#REF!,I$7<=#REF!+#REF!-1)"	yes	yes	n/a	yes	yes
+56	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Color	visible	main	I36:BL36	"AND(#REF!=""Med Risk"",I$7>=#REF!,I$7<=#REF!+#REF!-1)"	yes	yes	n/a	yes	yes
+56	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Color	visible	main	I36:BL36	AND(LEN(#REF!)=0,I$7>=#REF!,I$7<=#REF!+#REF!-1)	yes	yes	n/a	yes	yes
+56	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Color	visible	main	I6:BL6	AND(I$7<=EOMONTH($I$7,1),I$7>EOMONTH($I$7,0))	yes	yes	n/a	yes	yes
+56	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Dark	visible	main	I36:BL36	"AND(#REF!=""Low Risk"",I$7>=#REF!,I$7<=#REF!+#REF!-1)"	yes	yes	n/a	yes	yes
+56	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Dark	visible	main	I36:BL36	"AND(#REF!=""High Risk"",I$7>=#REF!,I$7<=#REF!+#REF!-1)"	yes	yes	n/a	yes	yes
+56	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Dark	visible	main	I36:BL36	"AND(#REF!=""On Track"",I$7>=#REF!,I$7<=#REF!+#REF!-1)"	yes	yes	n/a	yes	yes
+56	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Dark	visible	main	I36:BL36	"AND(#REF!=""Med Risk"",I$7>=#REF!,I$7<=#REF!+#REF!-1)"	yes	yes	n/a	yes	yes
+56	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Dark	visible	main	I36:BL36	AND(LEN(#REF!)=0,I$7>=#REF!,I$7<=#REF!+#REF!-1)	yes	yes	n/a	yes	yes
+56	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Dark	visible	main	I6:BL6	AND(I$7<=EOMONTH($I$7,1),I$7>EOMONTH($I$7,0))	yes	yes	n/a	yes	yes
+56	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Light	visible	main	I36:BL36	"AND(#REF!=""Low Risk"",I$7>=#REF!,I$7<=#REF!+#REF!-1)"	yes	yes	n/a	yes	yes
+56	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Light	visible	main	I36:BL36	"AND(#REF!=""High Risk"",I$7>=#REF!,I$7<=#REF!+#REF!-1)"	yes	yes	n/a	yes	yes
+56	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Light	visible	main	I36:BL36	"AND(#REF!=""On Track"",I$7>=#REF!,I$7<=#REF!+#REF!-1)"	yes	yes	n/a	yes	yes
+56	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Light	visible	main	I36:BL36	"AND(#REF!=""Med Risk"",I$7>=#REF!,I$7<=#REF!+#REF!-1)"	yes	yes	n/a	yes	yes
+56	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Light	visible	main	I36:BL36	AND(LEN(#REF!)=0,I$7>=#REF!,I$7<=#REF!+#REF!-1)	yes	yes	n/a	yes	yes
+56	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Light	visible	main	I6:BL6	AND(I$7<=EOMONTH($I$7,1),I$7>EOMONTH($I$7,0))	yes	yes	n/a	yes	yes
+55	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Color	visible	main	J6:BL6	AND(J$7<=EOMONTH($I$7,2),J$7>EOMONTH($I$7,0),J$7>EOMONTH($I$7,1))	yes	yes	n/a	yes	yes
+55	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Dark	visible	main	J6:BL6	AND(J$7<=EOMONTH($I$7,2),J$7>EOMONTH($I$7,0),J$7>EOMONTH($I$7,1))	yes	yes	n/a	yes	yes
+55	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Light	visible	main	J6:BL6	AND(J$7<=EOMONTH($I$7,2),J$7>EOMONTH($I$7,0),J$7>EOMONTH($I$7,1))	yes	yes	n/a	yes	yes
+54	sheets/chartset-007/xlsx/082_Project_to_do_list_28f80082.xlsx	To Do List	visible	main	B8:G16	AND($C8>=valHStart, $C8<=valHEnd)	yes	yes	yes	yes	yes
+44	sheets/chartset-014/xlsx/027_Simple_personal_cash_flow_statement_675c6584.xlsx	Daily cash flow	visible	main	D12:D55	"(MOD(ROW(),2)<>0)*($B12<>""Income"")"	yes	yes	n/a	yes	yes
+44	sheets/chartset-014/xlsx/027_Simple_personal_cash_flow_statement_675c6584.xlsx	Daily cash flow	visible	main	D12:D55	"(MOD(ROW(),2)<>0)*($B12=""Income"")"	yes	yes	n/a	yes	yes
+44	sheets/chartset-014/xlsx/027_Simple_personal_cash_flow_statement_675c6584.xlsx	Daily cash flow	visible	main	E12:E55	"(MOD(ROW(),2)<>0)*($B12<>""Income"")"	yes	yes	n/a	yes	yes
+44	sheets/chartset-014/xlsx/027_Simple_personal_cash_flow_statement_675c6584.xlsx	Daily cash flow	visible	main	E12:E55	"(MOD(ROW(),2)<>0)*($B12=""Income"")"	yes	yes	n/a	yes	yes
+44	sheets/chartset-014/xlsx/027_Simple_personal_cash_flow_statement_675c6584.xlsx	Daily cash flow	visible	main	F12:F55	"(MOD(ROW(),2)<>0)*($B12<>""Income"")"	yes	yes	n/a	yes	yes
+44	sheets/chartset-014/xlsx/027_Simple_personal_cash_flow_statement_675c6584.xlsx	Daily cash flow	visible	main	F12:F55	"(MOD(ROW(),2)<>0)*($B12=""Income"")"	yes	yes	n/a	yes	yes
+42	sheets/chartset-012/xlsx/036_Simple_to-do_list_Use_this_template_ba44373b.xlsx	To-do list	visible	main	D6:F19	"AND($D6<>"""",$D6<TODAY())"	yes	yes	yes	yes	yes
+40	sheets/chartset-006/xlsx/088_To-do_list_with_progress_tracker_Use_this_template_8c438912.xlsx	To-Do List	visible	main	B3:I7	"AND($G3=0,$G3<>"""")"	yes	yes	n/a	yes	yes
+31	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Color	visible	main	I6:AM6	I$7<=EOMONTH($I$7,0)	yes	yes	n/a	yes	yes
+31	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Dark	visible	main	I6:AM6	I$7<=EOMONTH($I$7,0)	yes	yes	n/a	yes	yes
+31	sheets/chartset-011/xlsx/066_Agile_Gantt_chart_08f9de45.xlsx	Light	visible	main	I6:AM6	I$7<=EOMONTH($I$7,0)	yes	yes	n/a	yes	yes
+28	sheets/chartset-011/xlsx/071_Four-week_project_timeline_Use_this_template_4f05db49.xlsx	Project timeline	visible	main	E6:AF6	E$7=TODAY()	yes	yes	n/a	yes	yes
+28	sheets/chartset-011/xlsx/071_Four-week_project_timeline_Use_this_template_4f05db49.xlsx	Project timeline	visible	main	E7:AF7	E$7=TODAY()	yes	yes	n/a	yes	yes
+20	sheets/chartset-014/xlsx/038_Baby_growth_chart_bb9cd672.xlsx	Growth data	visible	main	F5:F24	ISERROR(F5)	yes	yes	n/a	yes	yes
+20	sheets/chartset-014/xlsx/039_Baby_growth_tracker_e295ae56.xlsx	Growth data	visible	main	F5:F24	ISERROR(F5)	yes	yes	n/a	yes	yes
+14	sheets/chartset-008/xlsx/023_Waterfall_Chart_Template_for_Excel_349f7689.xlsx	Waterfall1	visible	main	K36:K37 D36:I37	ISERROR(D36)	yes	yes	yes	yes	yes
+13	sheets/chartset-010/xlsx/047_Date_tracker_Gantt_chart_bf34f3a8.xlsx	Gantt Chart	visible	main	C2:O2	#REF!<=TODAY()+7	no	yes	n/a	yes	yes
+12	sheets/chartset-006/xlsx/044_Cash_flow_forecast_Use_this_template_b8fa1f35.xlsx	Cash flow forecast	visible	main	C8:N8	C8<Cash_Minimum	yes	yes	n/a	yes	yes
+12	sheets/chartset-008/xlsx/023_Waterfall_Chart_Template_for_Excel_349f7689.xlsx	Waterfall1	visible	main	J27:J38	ISERROR(J27)	yes	yes	yes	yes	yes
+10	sheets/chartset-008/xlsx/023_Waterfall_Chart_Template_for_Excel_349f7689.xlsx	Waterfall2	visible	main	K28:K37	ISERROR(K28)	yes	yes	yes	yes	yes
+10	sheets/chartset-008/xlsx/023_Waterfall_Chart_Template_for_Excel_349f7689.xlsx	Waterfall2	visible	main	L28:L37	ISERROR(L28)	yes	yes	yes	yes	yes
+9	sheets/chartset-007/xlsx/083_Project_tracker_Use_this_template_b38d057c.xlsx	Project tracker	visible	main	K5:K13	(ABS((K5-G5))/G5)>FlagPercent	yes	yes	n/a	yes	yes
+9	sheets/chartset-007/xlsx/083_Project_tracker_Use_this_template_b38d057c.xlsx	Project tracker	visible	main	L5:L13	(ABS((L5-H5))/H5)>FlagPercent	yes	yes	n/a	yes	yes
+8	sheets/chartset-007/xlsx/040_Blood_pressure_tracker_872b6833.xlsx	BLOOD PRESSURE DATA	visible	main	E12:E19	E12>MaxSystolic	yes	yes	n/a	yes	yes
+8	sheets/chartset-007/xlsx/040_Blood_pressure_tracker_872b6833.xlsx	BLOOD PRESSURE DATA	visible	main	F12:F19	F12>MaxDiastolic	yes	yes	n/a	yes	yes
+5	sheets/done-003/xlsx/VOR Candidate Discontinuance List 2026-01-08.xlsx	Discontinued VORs	visible	main	A202:E202	MOD(ROW(),2)=0	yes	yes	n/a	yes	yes
+4	sheets/done-003/xlsx/VOR Candidate Discontinuance List 2026-01-08.xlsx	Discontinued VORs	visible	main	A201:D201	MOD(ROW(),2)=0	yes	yes	n/a	yes	yes
+4	sheets/done-003/xlsx/VOR Candidate Discontinuance List 2026-01-08.xlsx	Discontinued VORs	visible	main	A203:D203	MOD(ROW(),2)=0	yes	yes	n/a	yes	yes
+4	sheets/done-003/xlsx/VOR Candidate Discontinuance List 2026-01-08.xlsx	Discontinued VORs	visible	main	A217:D217	MOD(ROW(),2)=0	yes	yes	n/a	yes	yes
+2	sheets/chartset-008/xlsx/023_Waterfall_Chart_Template_for_Excel_349f7689.xlsx	Waterfall2	visible	main	K38:L38	ISERROR(K38)	yes	yes	yes	yes	yes
+1	sheets/chartset-007/xlsx/037_Personal_money_tracker_a57957bb.xlsx	Cash summary	visible	main	B22	AND($B$22>=0.25,$B$22<0.5)	yes	yes	n/a	yes	yes
+1	sheets/chartset-008/xlsx/023_Waterfall_Chart_Template_for_Excel_349f7689.xlsx	Waterfall2	visible	main	L27	ISERROR(L27)	yes	yes	yes	yes	yes
+1	sheets/done-003/xlsx/VOR Candidate Discontinuance List 2026-01-08.xlsx	Discontinued VORs	visible	main	E217	MOD(ROW(),2)=0	yes	yes	n/a	yes	yes
+1	sheets/done-011/xlsx/Application_Compliance_Checklist_5_Apr_2021.xlsx	Sample Compliance Document List	visible	main	I491	"#REF!=""N/A"""	yes	yes	n/a	yes	yes

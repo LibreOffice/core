@@ -1,0 +1,18 @@
+measuring /home/user/wt-colour/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
+# words = tokens carrying at least one Unicode letter or digit; rawwords = pdftotext | wc -w
+# NOT comparable to any scoreboard recorded before 2026-08-13 — see dotnet/probes/gate-01/results.md
+path	ext	pages	words	fonts	unemb	verdict	rawwords
+slides/done-014/ppt/Aerospace_Journey_of_Flight_Chapter_BCB1637572DA6.ppt	ppt	26/26	1885/1885	3/3	0	match	2156/2156	10159/10159
+slides/done-014/pptx/Presentation - Identify Components of the Airport (1).pptx	pptx	12/12	554/554	6/6	0	match	591/591	2992/2992
+slides/done-014/pptx/Reporting_responsibilities_matrix.pptx	pptx	268/268	57742/57742	3/3	0	match	57917/57917	308444/308444
+slides/done-014/pptx/Snowbirds_High_Show.pptx	pptx	41/41	1871/1871	5/5	0	match	1916/1925	8049/8049
+slides/done-014/pptx/Technical_Report_Elements[1].pptx	pptx	39/39	1425/1430	5/5	0	match	1477/1482	7648/7679
+slides/done-014/pptx/redac-nasops-201503-RIRP-portfolio-update.pptx	pptx	46/46	2765/2762	11/9	0	match	2918/2917	15420/15418
+slides/done-014/pptx/redac-sas-201509-asisp-research.pptx	pptx	45/45	3127/3130	12/12	0	match	3303/3307	19094/19094
+slides/done-014/pptx/schematicplay.pptx	pptx	21/21	2111/2126	4/5	0	match	2128/2143	11490/11490
+slides/done-014/pptx/servicedesk-plus-overviewfinal.pptx	pptx	66/66	1805/1805	8/8	0	match	1904/1903	11471/11471
+slides/done-014/pptx/vvsummit2022-Research-Roadmap-and-the-UML-3-Operational-Integration-Assessment.pptx	pptx	33/33	1281/1281	5/5	1	unembedded	1361/1361	8377/8377
+
+BATCHES slides/done-014
+TOTAL 10  MATCH 9  MISMATCH 1  REF-CANNOT-RENDER 0
+TSV /home/user/wt-colour/dotnet/probes/colour-r65/gate-slides-done-014/parity.tsv

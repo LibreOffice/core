@@ -1,0 +1,8 @@
+.................................................................................................................................................................................................................................................................................................................................................
+documents read                            337
+  a_excl  >=1 mixed boundary                18 docs     286 boundaries
+  base    >=1 one-width column boundary     50 docs    1970 boundaries
+  a_all   (no length floor)                 19 docs     293 boundaries
+  ml      (mixed-lines semantics)           21 docs     296 boundaries
+  ml_groups (its base)                     286 docs   30198 groups
+  b_thick (shape b, thickness enforced)     15 docs      47 boundaries

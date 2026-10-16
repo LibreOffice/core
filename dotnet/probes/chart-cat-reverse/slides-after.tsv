@@ -1,0 +1,304 @@
+# validation: 302 of 302 verdicts reproduced
+path	pages	words	fonts	unemb	verdict	rawwords	glyphs	was
+slides/ceiling-001/ppt/Fundamentals_Module_1_basics.ppt	26/26	1138/1089	5/5	0	match	1225/1175	6589/6471	match
+slides/ceiling-001/ppt/RRM-training-syllabus-Chapter-3-Teamwork-TC-Towing-Incident-Analysis-Dec-2009.ppt	27/27	2477/2479	8/8	0	match	2666/2667	13921/13959	match
+slides/ceiling-001/ppt/Thailand17.ppt	54/54	2713/2625	8/9	0	words	2919/2826	14880/14380	words
+slides/ceiling-001/ppt/W3_Case_Study_of_a_Tsunami_Warning_Simulation_Exercise_Ed.ppt	20/20	900/812	6/6	0	words	955/862	4973/4473	words
+slides/ceiling-001/ppt/architecture6.ppt	31/31	1926/1926	5/5	0	match	2011/2011	10724/10724	match
+slides/ceiling-001/pptx/7-Zulkefli_Part147n66_IKMAS.pptx	18/18	968/952	7/7	0	match	1031/1021	5520/5593	match
+slides/ceiling-001/pptx/N2_E_Maestroni_Swarm_COP.pptx	30/30	5296/5127	4/4	0	words	5480/5295	29088/28136	words
+slides/ceiling-001/pptx/OnTrac_StarCertificationProgram-3Day.pptx	15/15	1324/1030	8/7	0	words	1414/1116	7709/6233	words
+slides/ceiling-001/pptx/Sylva%20introduction%20session.pptx	15/15	1064/1064	7/7	0	match	1152/1152	5700/5700	match
+slides/ceiling-001/pptx/solog_orientation_august_2019.pptx	15/15	670/674	6/6	0	match	730/736	4393/4393	match
+slides/ceiling-002/ppt/pres_ioc_phuket.ppt	26/26	994/999	9/9	0	match	1033/1040	6090/6090	match
+slides/ceiling-002/pptx/16 - UTM - (NASA).pptx	37/37	2453/2260	11/11	0	words	2657/2447	15126/13981	words
+slides/ceiling-002/pptx/8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx	26/26	2135/2021	11/11	0	words	2328/2210	10424/9949	words
+slides/ceiling-002/pptx/Demick_JetBlue.pptx	10/10	812/608	4/4	0	words	836/631	3519/3179	words
+slides/ceiling-002/pptx/WiGr_2021W_1_Angebot-Nachfrage-Elastizität-211017-171222.pptx	51/51	1956/1954	8/7	0	match	2127/2127	13011/13007	match
+slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx	23/23	2221/2240	7/7	0	match	2315/2334	10979/10946	match
+slides/chartset-001/pptx/008_advanced_powerpoint_bubble.pptx	1/1	42/42	3/3	0	match	48/48	284/284	match
+slides/chartset-001/pptx/015_advanced_powerpoint_scatter.pptx	1/1	42/42	3/3	0	match	48/48	283/283	match
+slides/chartset-001/pptx/016_advanced_powerpoint_bubble.pptx	1/1	43/43	3/3	0	match	49/49	287/287	match
+slides/chartset-001/pptx/031_advanced_powerpoint_scatter.pptx	1/1	42/42	3/3	0	match	48/48	278/278	match
+slides/chartset-001/pptx/bar_chart.pptx	1/1	25/25	2/2	0	match	25/25	131/131	match
+slides/chartset-001/pptx/combo_bar_line_chart.pptx	1/1	42/42	2/2	0	match	42/42	219/219	match
+slides/chartset-001/pptx/line_chart.pptx	1/1	23/23	2/2	0	match	23/23	113/113	match
+slides/chartset-001/pptx/scatter_chart.pptx	1/1	46/46	1/1	0	match	46/46	105/105	match
+slides/chartset-001/pptx/stacked_area_chart.pptx	1/1	29/29	2/2	0	match	29/29	174/174	match
+slides/chartset-001/pptx/stacked_bar_chart.pptx	1/1	29/29	2/2	0	match	29/29	173/173	match
+slides/chartset-002/pptx/001_advanced_powerpoint_bar.pptx	1/1	62/62	4/4	0	match	68/68	334/334	match
+slides/chartset-002/pptx/006_advanced_powerpoint_area.pptx	1/1	61/61	4/4	0	match	67/67	328/328	match
+slides/chartset-002/pptx/007_advanced_powerpoint_scatter.pptx	1/1	42/42	3/3	0	match	48/48	282/282	match
+slides/chartset-002/pptx/014_advanced_powerpoint_area.pptx	1/1	61/61	4/4	0	match	67/67	330/330	match
+slides/chartset-002/pptx/017_advanced_powerpoint_bar.pptx	1/1	62/62	4/4	0	match	68/68	339/339	match
+slides/chartset-002/pptx/023_advanced_powerpoint_scatter.pptx	1/1	42/42	3/3	0	match	48/48	283/283	match
+slides/chartset-002/pptx/024_advanced_powerpoint_bubble.pptx	1/1	42/42	3/3	0	match	48/48	286/286	match
+slides/chartset-002/pptx/030_advanced_powerpoint_area.pptx	1/1	61/61	4/4	0	match	67/67	327/327	match
+slides/chartset-002/pptx/032_advanced_powerpoint_bubble.pptx	1/1	42/42	3/3	0	match	48/48	284/284	match
+slides/chartset-002/pptx/033_advanced_powerpoint_bar.pptx	1/1	61/61	4/4	0	match	67/67	328/328	match
+slides/chartset-003/pptx/002_advanced_powerpoint_column.pptx	1/1	63/63	4/4	0	match	69/69	335/335	match
+slides/chartset-003/pptx/003_advanced_powerpoint_line.pptx	1/1	62/62	4/4	0	match	68/68	332/332	match
+slides/chartset-003/pptx/005_advanced_powerpoint_doughnut.pptx	1/1	52/52	4/4	0	match	58/58	301/301	match
+slides/chartset-003/pptx/009_advanced_powerpoint_bar.pptx	1/1	63/63	4/4	0	match	69/69	339/339	match
+slides/chartset-003/pptx/010_advanced_powerpoint_column.pptx	1/1	61/61	4/4	0	match	67/67	332/332	match
+slides/chartset-003/pptx/011_advanced_powerpoint_line.pptx	1/1	61/61	4/4	0	match	67/67	328/328	match
+slides/chartset-003/pptx/012_advanced_powerpoint_pie.pptx	1/1	53/53	4/4	0	match	59/59	308/308	match
+slides/chartset-003/pptx/019_advanced_powerpoint_line.pptx	1/1	61/61	4/4	0	match	67/67	331/331	match
+slides/chartset-003/pptx/027_advanced_powerpoint_line.pptx	1/1	61/61	4/4	0	match	67/67	326/326	match
+slides/chartset-003/pptx/028_advanced_powerpoint_pie.pptx	1/1	52/52	4/4	0	match	58/58	300/300	match
+slides/chartset-004/pptx/004_advanced_powerpoint_pie.pptx	1/1	52/52	4/4	0	match	58/58	300/300	match
+slides/chartset-004/pptx/013_advanced_powerpoint_doughnut.pptx	1/1	52/52	4/4	0	match	58/58	297/297	match
+slides/chartset-004/pptx/018_advanced_powerpoint_column.pptx	1/1	61/61	4/4	0	match	67/67	329/329	match
+slides/chartset-004/pptx/020_advanced_powerpoint_pie.pptx	1/1	52/52	4/4	0	match	58/58	300/300	match
+slides/chartset-004/pptx/021_advanced_powerpoint_doughnut.pptx	1/1	52/52	4/4	0	match	58/58	304/304	match
+slides/chartset-004/pptx/022_advanced_powerpoint_area.pptx	1/1	61/61	4/4	0	match	67/67	329/329	match
+slides/chartset-004/pptx/025_advanced_powerpoint_bar.pptx	1/1	61/61	4/4	0	match	67/67	323/323	match
+slides/chartset-004/pptx/026_advanced_powerpoint_column.pptx	1/1	61/61	4/4	0	match	67/67	332/332	match
+slides/chartset-004/pptx/029_advanced_powerpoint_doughnut.pptx	1/1	52/52	4/4	0	match	58/58	300/300	match
+slides/chartset-005/pptx/004_2-Stage_Vertical_Funnel_Diagram_for_PowerPoint_593f4c80.pptx	1/1	70/69	3/3	0	match	70/69	340/340	match
+slides/chartset-005/pptx/005_2-Step_Funnel_On_left_With_Text_767f0490.pptx	1/1	93/93	3/3	0	match	93/93	470/470	match
+slides/chartset-005/pptx/006_2-Way_Horizontal_Hierarchy_for_PowerPoint_and_Google_Slides_7c1e5084.pptx	3/3	124/126	5/3	0	match	126/128	645/645	match
+slides/chartset-005/pptx/011_3-Stage_Vertical_Funnel_Diagram_for_PowerPoint_10ce23dd.pptx	1/1	75/74	3/3	0	match	75/74	352/352	match
+slides/chartset-005/pptx/068_Funnel_Diagram_for_PowerPoint_with_2_Steps_437e4ba7.pptx	1/1	10/10	3/3	0	match	10/10	63/63	match
+slides/chartset-005/pptx/069_Funnel_Diagram_for_PowerPoint_with_3_Steps_f96396fc.pptx	1/1	12/12	3/3	0	match	12/12	68/68	match
+slides/chartset-005/pptx/070_Funnel_Diagram_for_PowerPoint_with_4_Steps_975f1642.pptx	1/1	14/14	3/3	0	match	14/14	73/73	match
+slides/chartset-005/pptx/071_Funnel_Diagram_for_PowerPoint_with_5_Steps_5ceacdec.pptx	1/1	16/16	3/3	0	match	16/16	78/78	match
+slides/chartset-005/pptx/076_Hexadonut_Charts_for_PowerPoint_and_Google_Slides_2b879835.pptx	3/3	214/216	4/3	0	match	216/218	1101/1101	match
+slides/chartset-005/pptx/084_Infographic_Hierarchy_Tree_for_PowerPoint_fda8141c.pptx	3/3	213/215	5/3	0	match	213/215	1128/1128	match
+slides/chartset-006/pptx/001_1-2-3_Horizontal_Hierarchy_39795b4d.pptx	3/3	246/248	4/3	0	match	248/250	1247/1247	match
+slides/chartset-006/pptx/007_3_Circles_Diagram_for_PowerPoint_dac9f170.pptx	3/3	269/271	4/3	0	match	269/271	1378/1378	match
+slides/chartset-006/pptx/017_4-Stage_Vertical_Funnel_Diagram_for_PowerPoint_61e7bde5.pptx	1/1	80/79	3/3	0	match	80/79	364/364	match
+slides/chartset-006/pptx/031_Alarm_Clock_Pie-Chart_for_PowerPoint_and_Google_Slides_0b185a05.pptx	3/3	358/360	4/3	0	match	360/362	1865/1865	match
+slides/chartset-006/pptx/043_Dual_Horizontal_Hierarchy_for_PowerPoint_and_Google_Slides_5074b09e.pptx	3/3	124/126	5/3	0	match	126/128	693/693	match
+slides/chartset-006/pptx/044_Dual_Mind_Spark_Chart_for_PowerPoint_a83f890a.pptx	4/4	483/486	4/3	0	match	486/489	2628/2628	match
+slides/chartset-006/pptx/055_Four_Pillar_Hierarchy_for_PowerPoint_and_Google_Slides_6b42ed18.pptx	3/3	334/336	4/3	0	match	336/338	1705/1705	match
+slides/chartset-006/pptx/077_Horizontal_Org_Chart_for_PowerPoint_and_Google_Slides_8cf07020.pptx	3/3	202/204	5/3	0	match	204/206	961/961	match
+slides/chartset-006/pptx/094_Intersecting_Teardrops_for_PowerPoint_and_Google_Slides_ff43aedb.pptx	3/3	270/272	5/3	0	match	272/274	1405/1405	match
+slides/chartset-006/pptx/099_Light_Bulb_SWOT_for_PowerPoint_and_Google_Slides_554a1e33.pptx	3/3	272/274	4/3	0	match	274/276	1395/1395	match
+slides/chartset-007/pptx/035_Chemistry_Column_PowerPoint_Chart_45bf8a76.pptx	3/3	293/293	4/3	0	match	293/293	1462/1462	match
+slides/chartset-007/pptx/039_Consumer_Decision_Journey_for_PowerPoint_319207e1.pptx	1/1	86/86	4/4	0	match	88/88	554/554	match
+slides/chartset-007/pptx/047_Female_Radar_Brain_for_PowerPoint_and_Google_Slides_c2a541f6.pptx	4/4	536/539	5/3	0	match	539/542	2720/2720	match
+slides/chartset-007/pptx/054_Flowchart_Board_Game_for_PowerPoint_and_Google_Slides_1b047962.pptx	3/3	180/182	4/3	0	match	182/184	967/967	match
+slides/chartset-007/pptx/057_Four-Branch_Diagram_for_PowerPoint_and_Google_Slides_ddf5d27c.pptx	3/3	148/150	4/3	0	match	150/152	805/805	match
+slides/chartset-007/pptx/083_Infographic_Hexagon_Cluster_for_PowerPoint_and_Google_Slides_ef811a12.pptx	3/3	204/206	5/3	0	match	206/208	1037/1037	match
+slides/chartset-007/pptx/090_Infographic_Radial_for_PowerPoint_and_Google_Slides_16a69891.pptx	3/3	112/114	5/3	0	match	114/116	625/625	match
+slides/chartset-007/pptx/091_Infographic_Radial_for_PowerPoint_and_Google_Slides_c6909fa6.pptx	3/3	422/424	4/3	0	match	424/426	2073/2073	match
+slides/chartset-007/pptx/092_Infographic_Tree_Diagram_for_PowerPoint_and_Google_Slides_d721fa00.pptx	3/3	278/280	5/3	0	match	280/282	1293/1293	match
+slides/chartset-007/pptx/096_Lab_Flask_Charts_for_PowerPoint_and_Google_Slides_91e3cbb5.pptx	3/3	192/194	4/3	0	match	194/196	1009/1009	match
+slides/chartset-008/pptx/009_3-Circle_Venn_PowerPoint_Diagram_2e59baa9.pptx	2/2	136/136	5/4	0	match	136/136	692/692	match
+slides/chartset-008/pptx/012_3-Step_Hexagons_Puzzle_Diagram_for_PowerPoint_982482b5.pptx	3/3	268/270	5/3	0	match	268/270	1307/1307	match
+slides/chartset-008/pptx/018_4-Step_Hexagons_Puzzle_Diagram_for_PowerPoint_19957cce.pptx	3/3	350/352	5/3	0	match	350/352	1685/1685	match
+slides/chartset-008/pptx/038_Competitive_Advantage_Card_for_PowerPoint_and_Google_Slides_373720f6.pptx	3/3	250/252	4/4	0	match	252/254	1585/1585	match
+slides/chartset-008/pptx/040_Crab_Diagram_for_PowerPoint_and_Google_Slides_13d38ff3.pptx	3/3	116/118	5/3	0	match	118/120	633/633	match
+slides/chartset-008/pptx/058_Four-Direction_Divergence_Diagram_for_PowerPoint_and_Google_Slides_9838e28d.pptx	3/3	272/274	4/3	0	match	274/276	1423/1423	match
+slides/chartset-008/pptx/065_Fourfold_Ribbon_Rings_for_PowerPoint_and_Google_Slides_39687419.pptx	3/3	272/274	4/3	0	match	274/276	1401/1401	match
+slides/chartset-008/pptx/072_Gear_Pie_Chart_for_PowerPoint_and_Google_Slides_d464d3a0.pptx	3/3	92/94	4/3	0	match	94/96	407/407	match
+slides/chartset-008/pptx/078_Horizontal_Pyramid_Org_Chart_for_PowerPoint_and_Google_Slides_70ea115a.pptx	3/3	208/210	4/3	0	match	210/212	1155/1155	match
+slides/chartset-008/pptx/100_Lime_and_Lemon_Data-Driven_Chart_for_PowerPoint_d7bb4a44.pptx	5/5	422/426	4/3	0	match	428/432	2032/2032	match
+slides/chartset-009/pptx/015_4-Option_Color_Wheel_Diagram_df7e4b8f.pptx	3/3	281/280	5/5	0	match	286/285	1413/1413	match
+slides/chartset-009/pptx/020_5-Option_Color_Wheel_Diagram_104ea3b0.pptx	3/3	317/316	5/5	0	match	322/321	1569/1569	match
+slides/chartset-009/pptx/022_5-Step_Hexagons_Puzzle_Diagram_for_PowerPoint_eda9895e.pptx	3/3	432/434	5/3	0	match	432/434	2063/2063	match
+slides/chartset-009/pptx/025_6-Option_Color_Wheel_Diagram_27e1c74d.pptx	3/3	405/404	5/5	0	match	410/409	2021/2021	match
+slides/chartset-009/pptx/030_Abstract_Petal_Diagram_71aa5e3a.pptx	3/3	267/266	5/5	0	match	272/271	1337/1336	match
+slides/chartset-009/pptx/033_Battery_Percentage_Chart_c99c24b5.pptx	3/3	223/222	5/5	0	match	228/227	1117/1117	match
+slides/chartset-009/pptx/037_Circle_Matrix_Framework_44bc5218.pptx	3/3	287/286	5/5	0	match	292/291	1455/1454	match
+slides/chartset-009/pptx/052_Flame_Percentage_Chart_d27d49c4.pptx	3/3	287/286	5/5	0	match	292/291	1421/1421	match
+slides/chartset-009/pptx/075_Heart_Arc_Radial_for_PowerPoint_and_Google_Slides_a27a3021.pptx	3/3	210/212	5/3	0	match	212/214	1029/1029	match
+slides/chartset-009/pptx/087_Infographic_Organization_Chart_for_PowerPoint_and_Google_Slides_2d951912.pptx	4/4	750/753	5/3	0	match	750/753	3855/3855	match
+slides/chartset-010/pptx/002_10-Point_Dual_Hub_Comparison_4ee242c9.pptx	3/3	89/88	5/5	0	match	94/93	445/445	match
+slides/chartset-010/pptx/027_6-Point_Dual_Hub_Comparison_13f9af30.pptx	3/3	89/88	5/5	0	match	94/93	443/443	match
+slides/chartset-010/pptx/028_8-Point_Dual_Hub_Comparison_d6c5dde5.pptx	3/3	89/88	5/5	0	match	94/93	443/443	match
+slides/chartset-010/pptx/041_Crosswise_Quadrant_Diagram_ea8bdf52.pptx	3/3	255/254	5/5	0	match	260/259	1301/1300	match
+slides/chartset-010/pptx/042_Diamond_Hub_Infographic_a60cfaa1.pptx	3/3	283/282	5/5	0	match	288/287	1403/1403	match
+slides/chartset-010/pptx/045_Dual-Segment_Quadrant_14a57221.pptx	3/3	293/292	5/5	0	match	298/297	1483/1482	match
+slides/chartset-010/pptx/048_Five-Arrows_Converging_Cycle_bb192e27.pptx	3/3	311/310	5/5	0	match	316/315	1589/1588	match
+slides/chartset-010/pptx/063_Four-Step_Infinity_Loop_3480185b.pptx	3/3	127/126	5/5	0	match	132/131	573/573	match
+slides/chartset-010/pptx/093_Insightful_Zoom_Chart_22b5464e.pptx	3/3	355/354	5/5	0	match	360/359	1831/1830	match
+slides/chartset-010/pptx/095_Interwoven_Bars_e5aa46c2.pptx	3/3	285/284	5/5	0	match	290/289	1409/1408	match
+slides/chartset-011/pptx/010_3-Group_Hierarchy_for_PowerPoint_and_Google_Slides_20476ce0.pptx	3/3	144/146	5/3	0	match	146/148	715/715	match
+slides/chartset-011/pptx/026_6-Part_Hexagon_Radial_Diagram_b8ca3f40.pptx	3/3	217/216	5/5	0	match	222/221	987/987	match
+slides/chartset-011/pptx/034_Central_Idea_Hub_Diagram_8258e6ad.pptx	3/3	169/168	5/5	0	match	174/173	747/747	match
+slides/chartset-011/pptx/046_Eight-Point_Strategic_Compass_35ee62de.pptx	3/3	195/194	5/5	0	match	200/199	877/876	match
+slides/chartset-011/pptx/051_Five-Stage_Zigzag_Timeline_2bd39be9.pptx	3/3	161/160	5/5	0	match	166/165	781/781	match
+slides/chartset-011/pptx/053_Flow_Wave_Process_9c0082f4.pptx	3/3	211/200	5/5	0	match	216/205	889/889	match
+slides/chartset-011/pptx/060_Four-Part_Radial_Core_Diagram_40d6614e.pptx	3/3	291/290	5/5	0	match	296/295	1349/1349	match
+slides/chartset-011/pptx/062_Four-Step_Growth_Staircase_8a3ef338.pptx	3/3	199/198	5/5	0	match	204/203	979/979	match
+slides/chartset-011/pptx/097_Labeled_Organization_Chart_for_PowerPoint_and_Google_Slides_f24fa592.pptx	3/3	238/240	5/3	0	match	240/242	1237/1237	match
+slides/chartset-011/pptx/098_Leaning_Cards_Process_dadb3738.pptx	3/3	211/210	5/5	0	match	216/215	967/967	match
+slides/chartset-012/pptx/003_2-Circle_Venn_Diagram_7ab74e5c.pptx	3/3	147/146	5/5	0	match	152/151	769/768	match
+slides/chartset-012/pptx/008_3-Circle_Venn_Diagram_024a12c5.pptx	3/3	217/216	5/5	0	match	222/221	1097/1096	match
+slides/chartset-012/pptx/013_3-Step_Segmented_Cycle_Process_5232f82d.pptx	3/3	219/218	5/5	0	match	224/223	1113/1113	match
+slides/chartset-012/pptx/061_Four-Stage_Serpentine_Chart_05699efe.pptx	3/3	71/70	5/5	0	match	76/75	397/396	match
+slides/chartset-012/pptx/064_Four-Step_Success_Cycle_30c0a917.pptx	3/3	151/150	5/5	0	match	156/155	701/701	match
+slides/chartset-012/pptx/067_Free_PowerPoint_Layered_Funnel_Process_4_Stages_4deb9647.pptx	4/4	464/464	4/4	0	match	488/488	2392/2392	match
+slides/chartset-012/pptx/073_Halo_Radial_for_PowerPoint_and_Google_Slides_4bd0918b.pptx	3/3	270/272	4/3	0	match	272/274	1383/1383	match
+slides/chartset-012/pptx/074_Hashtag_Matrix_246eb8d9.pptx	3/3	245/244	5/5	0	match	250/249	1271/1270	match
+slides/chartset-012/pptx/080_Infographic_Cycle_Venn_Diagram_for_PowerPoint_2e3cdb7f.pptx	3/3	275/277	4/3	0	match	275/277	1406/1406	match
+slides/chartset-012/pptx/089_Infographic_Radial_Matrix_for_PowerPoint_and_Google_Slides_eb0550f2.pptx	3/3	282/284	5/3	0	match	284/286	1453/1453	match
+slides/chartset-013/pptx/014_3D_Radial_Block_List_for_PowerPoint_and_Google_Slides_0773075e.pptx	3/3	430/432	5/3	0	match	432/434	2249/2249	match
+slides/chartset-013/pptx/016_4-Position_Org_Chart_1d3640b6.pptx	3/3	132/134	4/3	0	match	134/136	745/745	match
+slides/chartset-013/pptx/023_5-Step_Progress_Cards_91d5ff57.pptx	3/3	241/240	5/5	0	match	246/245	1155/1155	match
+slides/chartset-013/pptx/032_BCG_Growth-Share_Matrix_560d0485.pptx	3/3	277/312	5/5	0	match	290/325	1153/1153	match
+slides/chartset-013/pptx/049_Five-Block_Hub_Spoke_42ee8593.pptx	3/3	265/264	5/5	0	match	272/271	1333/1332	match
+slides/chartset-013/pptx/050_Five-Point_Radial_Hub_00793e08.pptx	3/3	165/164	5/5	0	match	170/169	755/755	match
+slides/chartset-013/pptx/056_Four-Block_Hub_Spoke_134b89d1.pptx	3/3	219/218	5/5	0	match	226/225	1107/1106	match
+slides/chartset-013/pptx/066_Free_PowerPoint_Layered_Funnel_Process_c0b380ec.pptx	5/5	580/580	4/4	0	match	610/610	2975/2975	match
+slides/chartset-013/pptx/079_Horizontal_Relationships_for_PowerPoint_and_Google_Slides_a3d35f63.pptx	3/3	142/144	4/3	0	match	144/146	745/745	match
+slides/chartset-013/pptx/088_Infographic_Quadrant_Pie_Chart_7b1e8abd.pptx	3/3	289/288	5/5	0	match	294/293	1435/1434	match
+slides/chartset-014/pptx/019_4-Step_Segmented_Cycle_Process_2ff93c19.pptx	3/3	281/280	5/5	0	match	286/285	1417/1417	match
+slides/chartset-014/pptx/021_5-Position_Org_Chart_cb042559.pptx	3/3	136/138	4/3	0	match	138/140	765/765	match
+slides/chartset-014/pptx/024_5-Step_Segmented_Cycle_Process_c8ca37ef.pptx	3/3	343/342	5/5	0	match	348/347	1721/1721	match
+slides/chartset-014/pptx/029_8-Step_Neumorphic_Cycle_Diagram_b9b75044.pptx	3/3	341/340	5/5	0	match	346/345	1503/1502	match
+slides/chartset-014/pptx/036_Chevron_Process_Cards_3c8f0ea1.pptx	3/3	161/160	5/5	0	match	166/165	737/737	match
+slides/chartset-014/pptx/059_Four-Part_Concept_Puzzle_30cea7e5.pptx	6/6	570/569	6/6	0	match	594/593	2961/2960	match
+slides/chartset-014/pptx/081_Infographic_Funnel_w_3_Stages_for_PowerPoint_28e26b31.pptx	3/3	397/399	5/3	0	match	397/399	2006/2006	match
+slides/chartset-014/pptx/082_Infographic_Funnel_with_4_Stages_for_PowerPoint_72d4f125.pptx	3/3	393/395	5/3	0	match	393/395	1990/1990	match
+slides/chartset-014/pptx/085_Infographic_Org_Chart_for_PowerPoint_5_Blocks_3870252f.pptx	3/3	49/51	5/3	0	match	49/51	304/304	match
+slides/chartset-014/pptx/086_Infographic_Org_Chart_for_PowerPoint_6_Blocks_f9086d83.pptx	3/3	53/55	5/3	0	match	53/55	324/324	match
+slides/done-001/ppt/WC_Update-Aug03.ppt	11/11	452/452	2/2	0	match	519/519	2874/2874	match
+slides/done-001/ppt/policy-pesentation.ppt	16/16	389/389	3/3	0	match	478/478	2288/2288	match
+slides/done-001/ppt/wells08_basic.ppt	27/27	986/995	4/4	0	match	1172/1171	5741/5762	match
+slides/done-001/pptx/111006 COMSTAC STOWG Aero spaceports IFG.pptx	8/8	267/267	2/2	0	match	309/309	1647/1647	match
+slides/done-001/pptx/BMFE-06-03 (Gerflor) Smoke Density and Toxicity.pptx	6/6	732/732	4/4	0	match	794/794	3547/3547	match
+slides/done-001/pptx/Definitions commodity chains.pptx	4/4	261/261	2/2	0	match	279/279	1556/1556	match
+slides/done-001/pptx/Statement of Work presentation.pptx	10/10	227/228	3/3	0	match	233/234	1286/1286	match
+slides/done-001/pptx/Trust Fund Excise Taxes Structure.pptx	1/1	169/169	2/2	0	match	189/189	868/868	match
+slides/done-001/pptx/fishbone-diagram-template-ppt-1.pptx	1/1	189/189	2/2	0	match	197/197	882/882	match
+slides/done-001/pptx/iaeg_work_group_leader_updates.pptx	1/1	90/90	4/4	0	match	91/91	505/505	match
+slides/done-002/ppt/080214-Intl-pol-frameworks-and-their-implications-for-Africa-ISS-workshop.ppt	18/18	815/814	4/4	0	match	838/837	4473/4473	match
+slides/done-002/ppt/gfopportunitiesforlinkagespres_2010_en.ppt	27/27	1652/1652	7/7	0	match	1722/1722	10371/10371	match
+slides/done-002/ppt/ws_prod-g-doc-Events-2007-Approval-of-Flight-Conditions-RM-NAA-16032007.ppt	14/14	743/743	5/6	0	match	823/823	4659/4659	match
+slides/done-002/ppt/ws_prod-g-doc-Events-2007-may-presentation-PtF-background-+-principles.ppt	20/20	909/909	3/3	0	match	1025/932	5043/5043	match
+slides/done-002/ppt/ws_prod-g-doc-Events-2007-november-IACA-presentation-at-EASA-Fuel-Tank-Safety-Training-Seminar.ppt	10/10	555/555	3/3	0	match	587/587	2925/2925	match
+slides/done-002/ppt/ws_prod-g-doc-Events-Part-M-presentation.ppt	30/30	1844/1844	3/3	0	match	1923/1877	10489/10489	match
+slides/done-002/pptx/Curriculum-Schematic-E22-11052025.pptx	12/12	1131/1119	5/5	0	match	1319/1307	6925/6925	match
+slides/done-002/pptx/dhs-293364.pptx	39/39	3618/3618	8/7	0	match	3827/3820	19661/19700	match
+slides/done-002/pptx/diapo_6_fees_vous_etes_poctdoct_exterieur_a_luniv_v2_0_1.pptx	1/1	92/92	3/3	0	match	98/98	558/558	match
+slides/done-002/pptx/medicines_bulletin_february_2023_final.pptx	1/1	534/536	4/4	0	match	545/547	3093/3093	match
+slides/done-003/ppt/010605Vul.ppt	21/21	947/944	6/6	0	match	1092/1089	5746/5746	match
+slides/done-003/ppt/Inducement-to-Insurance-Business.ppt	22/22	2587/2577	4/5	0	match	2598/2589	12942/12899	match
+slides/done-003/ppt/outlook_of_nigerian_pension_sector.ppt	12/12	1021/1021	5/6	0	match	1118/1118	5802/5802	match
+slides/done-003/ppt/ws_prod-g-doc-Events-2007-Privileges.ppt	15/15	799/799	5/5	0	match	842/818	4160/4160	match
+slides/done-003/ppt/ws_prod-g-doc-Events-2007-september-M.017-(French)-France.ppt	55/55	6215/6215	3/3	0	match	6471/6292	33915/33915	match
+slides/done-003/ppt/ws_prod-g-doc-Events-2007-september-MDM.032-(ENGLISH)-CZ.ppt	38/38	2662/2662	4/4	0	match	2855/2712	14835/14835	match
+slides/done-003/pptx/02_REDAC_New ATM briefing _March 2017v2.pptx	6/6	759/759	5/5	0	match	805/805	4920/4920	match
+slides/done-003/pptx/97936.pptx	15/15	1267/1267	5/5	0	match	1353/1353	6561/6561	match
+slides/done-003/pptx/NCW-2024-Guide-.pptx	1/1	211/214	4/4	0	match	222/226	1181/1181	match
+slides/done-003/pptx/ev122_jj-liew-tort-of-bribery-webinar.pptx	24/24	1374/1374	5/4	0	match	1449/1449	6738/6738	match
+slides/done-004/ppt/0335fab9-79f0-4944-b92c-f223837ca2d8.ppt	12/12	612/615	3/3	0	match	658/661	4499/4472	match
+slides/done-004/ppt/undp_presentation_revised_17_may.ppt	22/22	1839/1844	7/7	0	match	1930/1935	10590/10597	match
+slides/done-004/ppt/ws_prod-g-doc-Events-industrymeeting18112004-European-Safety-Strategy-Initiative.ppt	10/10	332/332	4/4	0	match	389/343	1884/1884	match
+slides/done-004/pptx/DOE Interactive Exercise Presentation draft rev 2.pptx	10/10	573/575	5/5	0	match	654/657	2744/2744	match
+slides/done-004/pptx/Item 6b - UNSD - Dissemination through APIs.pptx	10/10	421/421	3/3	0	match	453/453	2420/2420	match
+slides/done-004/pptx/Liturgical-Commission-2025-Convention-Presentation.pptx	9/9	344/344	2/2	0	match	396/395	1837/1837	match
+slides/done-004/pptx/Session 21- The option to expand & abandon.pptx	12/12	885/876	5/5	0	match	968/959	4268/4256	match
+slides/done-004/pptx/attendance-updates-for-governors.pptx	30/30	3047/3055	7/7	0	match	3219/3227	17282/17298	match
+slides/done-004/pptx/ghgp-supply-chain-initiative_20100323_wri.pptx	52/52	3895/3896	10/9	0	match	4130/4131	22442/22442	match
+slides/done-004/pptx/redac-fullComm-201705-EE-FRs-briefing.pptx	8/8	374/374	4/4	0	match	384/384	2268/2268	match
+slides/done-005/ppt/ITE106-Chapter 4.ppt	47/47	3139/3139	7/7	0	match	3294/3294	16509/16509	match
+slides/done-005/ppt/berlin.ppt	29/29	1365/1376	2/4	0	match	1530/1530	7392/7403	match
+slides/done-005/ppt/pods05.ppt	60/60	1877/1882	10/10	0	match	2081/2076	10682/10676	match
+slides/done-005/ppt/ws_prod-g-doc-Events-industrymeeting18112004-Aercap.ppt	12/12	1271/1271	3/3	0	match	1345/1345	6950/6950	match
+slides/done-005/pptx/5b_upasana_dasgupta_-_liability_and_registration.pptx	15/15	955/965	3/3	0	match	1007/1016	5024/5090	match
+slides/done-005/pptx/ANG C-1 ATC-TO Core Program - HF REDAC briefing September 7 2016.pptx	19/19	1885/1885	6/5	0	match	2007/2007	11586/11586	match
+slides/done-005/pptx/NAS-Infrastructure-Roadmaps-HSI.pptx	9/9	1415/1415	5/5	0	match	1469/1448	9027/9027	match
+slides/done-005/pptx/NAS-Infrastructure-Roadmaps-Weather.pptx	11/11	2121/2120	4/4	0	match	2153/2152	12083/12083	match
+slides/done-005/pptx/c_291533.pptx	19/19	1104/1104	7/7	0	match	1158/1158	5904/5913	match
+slides/done-005/pptx/manufacturing_process_simulation_working_group_overview_2023.pptx	7/7	726/728	4/4	0	match	769/771	4793/4868	match
+slides/done-006/ppt/Lepore.ppt	20/20	1816/1822	5/5	0	match	1942/1948	10753/10767	match
+slides/done-006/ppt/ws_prod-g-doc-Events-r-6.-ESM.ppt	25/25	1951/1951	4/6	0	match	2120/2120	11330/11330	match
+slides/done-006/pptx/Course Selection 2025-26 Current Grade 09.pptx	10/10	694/694	3/3	0	match	698/698	3343/3343	match
+slides/done-006/pptx/Ensemble-pour-l-amelioration-de-la-securite-de-lac-AIRBUS.pptx	9/9	627/627	4/4	0	match	652/652	3451/3451	match
+slides/done-006/pptx/REDAC HF briefing Sep 2016_LARD_ATC_TO_FE_v2.pptx	18/18	2119/2119	6/6	0	match	2223/2223	12620/12620	match
+slides/done-006/pptx/Stakeholders-v08052017 - v5.pptx	13/13	545/538	7/7	0	match	612/608	3388/3388	match
+slides/done-006/pptx/iris07.12.12.pptx	21/21	871/882	9/9	0	match	927/939	4795/4795	match
+slides/done-006/pptx/nabiyeleul_1_aviation_service_28_july_2020.pptx	9/9	554/554	4/4	0	match	604/604	3146/3146	match
+slides/done-006/pptx/social-media-app-bulletin-january.pptx	4/4	788/788	4/4	0	match	792/792	4001/4001	match
+slides/done-006/pptx/wopanets-innovationdays-06-16.pptx	15/15	563/563	3/3	0	match	626/626	3625/3625	match
+slides/done-007/ppt/1-secretariat.ppt	10/10	150/150	3/3	0	match	216/216	1034/1034	match
+slides/done-007/ppt/71393_pp7.ppt	39/39	2151/2151	6/6	0	match	2373/2373	12475/12475	match
+slides/done-007/ppt/introduction_to_bea_tuxedo.ppt	40/40	1767/1769	7/7	0	match	1966/1833	9931/9893	match
+slides/done-007/ppt/joint_user_outcomes_michael_fullerton_29.06.12.ppt	20/20	1917/1917	7/7	0	match	2012/2012	9836/9836	match
+slides/done-007/pptx/10. Drawings, circuit diagrams and schematics.pptx	23/23	1501/1501	4/4	0	match	1520/1520	8444/8444	match
+slides/done-007/pptx/BHCA Part II webinar #2 - 10.2020.pptx	21/21	1408/1403	6/6	0	match	1454/1448	7358/7216	match
+slides/done-007/pptx/Boeing 737 Max - Group 5.pptx	2/2	7/7	1/1	0	match	7/7	27/27	match
+slides/done-007/pptx/PAL Block Intro 2023.pptx	20/20	1461/1461	7/6	0	match	1562/1562	8225/8225	match
+slides/done-007/pptx/bitesize-writing-a-report.pptx	15/15	654/655	5/5	0	match	705/706	3791/3791	match
+slides/done-007/pptx/flying-by-numbers-presentation.pptx	10/10	545/547	7/8	0	match	575/577	2379/2379	match
+slides/done-008/ppt/8.16_AOD_FINAL_Provider_Training_Presentation_9_2009.ppt	94/94	4311/4312	6/6	0	match	4521/4521	22481/22481	match
+slides/done-008/ppt/EG1_dsrc tech.ppt	26/26	2034/2034	6/6	0	match	2178/2178	11132/11132	match
+slides/done-008/ppt/Framing Europe.ppt	24/24	2237/2237	4/4	0	match	2300/2301	11542/11542	match
+slides/done-008/ppt/RESPA_-_Section_8_Webinar.ppt	35/35	2573/2575	5/5	0	match	2762/2764	13293/13293	match
+slides/done-008/ppt/concepts-surrounding-cloud-computing-carolyn-kranz-and-rich-prem-gb-seattle-2011.ppt	36/36	2459/2460	5/5	0	match	2636/2568	13459/13459	match
+slides/done-008/pptx/AATF-Fact-Sheet-2025.pptx	9/9	853/855	8/8	0	match	899/901	4611/4611	match
+slides/done-008/pptx/FIT26-Presentation-Airservices-Update.pptx	11/11	221/221	4/4	0	match	241/241	1295/1295	match
+slides/done-008/pptx/G-InvoicingKeithJarboe.pptx	13/13	1078/1078	5/5	0	match	1175/1175	6968/6968	match
+slides/done-008/pptx/ROK-PI Climate Bulletin - Edition 2017-06.pptx	2/2	409/409	3/3	0	match	416/416	2332/2332	match
+slides/done-008/pptx/item_3-environmental_process_briefing.pptx	12/12	296/296	4/4	0	match	334/334	1765/1765	match
+slides/done-009/ppt/Airport Planning 09112013.ppt	9/9	629/629	6/6	0	match	656/656	3591/3591	match
+slides/done-009/ppt/Employment-Based_I-485.ppt	42/42	2516/2516	3/3	0	match	2709/2709	13353/13353	match
+slides/done-009/ppt/iep-amount-frequency-for-webinar.ppt	39/39	1678/1680	6/6	0	match	1760/1762	9154/9154	match
+slides/done-009/pptx/30-04-2021 merged NDoH and NICD_Presentation HBV BD meeting 05May2021_1.pptx	18/18	1359/1360	8/7	0	match	1446/1446	7644/7644	match
+slides/done-009/pptx/COMSTAC_11_5_2021am_2.pptx	39/39	2741/2741	4/4	0	match	2858/2858	16225/16225	match
+slides/done-009/pptx/FIT26-Presentation-PR-Briefing-Debrief-Airbus.pptx	9/9	1441/1444	3/3	0	match	1533/1536	7273/7273	match
+slides/done-009/pptx/HENTZEN_COMPOSITE_MATERIALS_IN_THE_AEROSPACE_INDUSTRY.pptx	12/12	320/320	3/3	0	match	344/344	1868/1868	match
+slides/done-009/pptx/[Christophe]NLP_reseau_inge_stat.pptx	17/17	884/885	5/5	0	match	988/989	4532/4532	match
+slides/done-009/pptx/airbus-powerpoint-presentation-2019-20-without-video_diy_2019-20.pptx	38/38	871/876	7/7	0	match	919/924	4394/4394	match
+slides/done-009/pptx/redac-sas-201403-ppt-portfolio-rev-sim.pptx	14/14	2006/2015	8/8	0	match	2186/2207	13014/13014	match
+slides/done-010/ppt/BUS-Chapter 05.ppt	50/50	2126/2134	5/5	0	match	2342/2342	12354/12362	match
+slides/done-010/pptx/BasicMed_AME_Presentation.pptx	18/18	870/870	4/4	0	match	939/939	4930/4930	match
+slides/done-010/pptx/Copy of Full deck with references Promotion of Outside Interests at Work final(1).pptx	33/33	3114/3115	7/7	0	match	3248/3250	17384/17378	match
+slides/done-010/pptx/DoIRD Meeting 16JAN14 v1-1.pptx	15/15	1075/1075	6/6	0	match	1142/1142	5886/5886	match
+slides/done-010/pptx/John_Broggio__RSS_Campion_event_John_Broggio.pptx	25/25	1171/1172	3/3	0	match	1245/1246	6867/6867	match
+slides/done-010/pptx/REDAC Briefing_SSIT_CARA_08132014.ppt.pptx	14/14	462/462	4/3	0	match	521/521	2664/2664	match
+slides/done-010/pptx/Sector_Skills_Insights_Advanced_Manufacturing_summary_slide_pack.pptx	24/24	4587/4605	6/6	0	match	4691/4707	23961/23961	match
+slides/done-010/pptx/Tax factsheet 2022 (1).pptx	27/27	2834/2866	5/5	0	match	2913/2946	13494/13637	match
+slides/done-010/pptx/passiv.pptx	21/21	1199/1199	9/8	0	match	1306/1305	6725/6716	match
+slides/done-010/pptx/section_1_our_rights_presentation.pptx	30/30	4135/4151	7/7	0	match	4245/4261	22132/22194	match
+slides/done-011/pptx/171128IPAP.pptx	40/40	4664/4662	9/10	0	match	4895/4893	25455/25433	match
+slides/done-011/pptx/1_Country-Updates_DRC_English.pptx	16/16	782/782	5/5	0	match	846/846	4281/4281	match
+slides/done-011/pptx/23-session-2-pptx.pptx	16/16	304/304	4/4	0	match	333/333	1836/1836	match
+slides/done-011/pptx/3492.pptx	22/22	1268/1266	5/6	0	match	1320/1320	6835/6833	match
+slides/done-011/pptx/3495.pptx	26/26	747/747	4/4	0	match	807/807	4375/4375	match
+slides/done-011/pptx/B2B-Center-Readiness-and-Student-Retention.pptx	33/33	1351/1348	6/6	0	match	1558/1555	7792/7768	match
+slides/done-011/pptx/NAS-Infrastructure-Roadmaps-v16.0.pptx	137/137	18847/15087	6/6	0	words	19299/15449	107016/87559	words
+slides/done-011/pptx/Session-1-Presentation-Reporting-Forms-Form-12-final.pptx	15/15	1131/1130	8/6	0	match	1162/1160	6267/6271	match
+slides/done-011/pptx/_1___Opatrny_Ales_United_Kingdom_business_opportunities_final.pptx	25/25	1614/1628	6/6	0	match	1818/1832	8990/8990	match
+slides/done-011/pptx/order-of-worship-ppt-revised-2018.pptx	28/28	1139/1139	6/5	0	match	1212/1212	5302/5302	match
+slides/done-012/ppt/JesuitAssocOfStudentPersonnel.ppt	31/31	1179/1178	6/6	0	match	1340/1338	7310/7310	match
+slides/done-012/ppt/gillikin_online_user_mtg_2010.ppt	40/40	1291/1291	5/5	0	match	1468/1468	7753/7753	match
+slides/done-012/pptx/429_BLISc 2019 IInd Sem.  PAPER-7 UNIT 3.pptx	20/20	3125/3126	6/6	0	match	3225/3226	17627/17627	match
+slides/done-012/pptx/County ACHS Presentaion Webinar 8-16-16 Peg.pptx	26/26	1325/1325	7/6	0	match	1394/1394	7599/7599	match
+slides/done-012/pptx/Intersil_Italy_CAN_Bus_Transceiver_Presentation_Final.pptx	39/39	3460/3416	7/7	0	match	3854/3809	17994/17958	match
+slides/done-012/pptx/REDAC briefing March12-13-2014jemvbFINAL.ppt.pptx	25/25	2587/2584	8/8	0	match	2788/2786	15773/15773	match
+slides/done-012/pptx/SRDMG(16)024_60 GHz onboard airplanes.pptx	26/26	1862/1862	7/7	0	match	1931/1931	10312/10312	match
+slides/done-012/pptx/Sean Monogue.pptx	15/15	818/818	4/4	0	match	891/891	4950/4950	match
+slides/done-012/pptx/vv_summit_SAIC-PRESENTATION_FAA-V&V-Summit_508c.pptx	19/19	649/648	5/4	0	match	707/706	3573/3573	match
+slides/done-012/pptx/vvsummit2022-SAIC-PRESENTATION.pptx	19/19	649/648	5/4	0	match	707/706	3573/3573	match
+slides/done-013/ppt/2015-Civil-Rights-Website-training.ppt	94/94	6117/6118	12/11	0	match	6579/6581	34818/34818	match
+slides/done-013/ppt/FAA_Form_337.ppt	67/67	5546/5612	15/15	0	match	5752/5839	29462/29447	match
+slides/done-013/ppt/hofman.ppt	13/13	450/450	3/4	0	match	503/503	2945/2945	match
+slides/done-013/ppt/ws_prod-g-doc-Events-2008-February-5-NATO-activities.ppt	13/13	447/453	4/4	0	match	510/516	2163/2163	match
+slides/done-013/pptx/2014BSA_Sunday_Killion.pptx	50/50	3559/3559	8/8	0	match	3702/3702	17188/17188	match
+slides/done-013/pptx/PRM_training.pptx	22/22	2159/2152	7/7	0	match	2195/2185	10593/10578	match
+slides/done-013/pptx/Structural Testing.pptx	89/89	4335/4339	12/12	0	match	4987/5005	20360/20360	match
+slides/done-013/pptx/chapter_4_0.pptx	54/54	3175/3175	7/7	0	match	3340/3340	18883/18883	match
+slides/done-013/pptx/redac-sas-201703-hf-research-division.pptx	13/13	713/713	3/3	0	match	784/784	4879/4879	match
+slides/done-013/pptx/schematicplaymar21.pptx	21/21	2103/2119	4/5	0	match	2121/2137	11470/11470	match
+slides/done-014/ppt/Aerospace_Journey_of_Flight_Chapter_BCB1637572DA6.ppt	26/26	1885/1885	3/3	0	match	2156/2156	10159/10159	match
+slides/done-014/pptx/Presentation - Identify Components of the Airport (1).pptx	12/12	554/554	6/6	0	match	591/591	2992/2992	match
+slides/done-014/pptx/Reporting_responsibilities_matrix.pptx	268/268	57742/57708	3/3	0	match	57917/57883	308444/308318	match
+slides/done-014/pptx/Snowbirds_High_Show.pptx	41/41	1871/1869	5/5	0	match	1916/1924	8049/8049	match
+slides/done-014/pptx/Technical_Report_Elements[1].pptx	39/39	1425/1430	5/5	0	match	1477/1482	7648/7679	match
+slides/done-014/pptx/redac-nasops-201503-RIRP-portfolio-update.pptx	46/46	2765/2761	11/9	0	match	2918/2916	15420/15418	match
+slides/done-014/pptx/redac-sas-201509-asisp-research.pptx	45/45	3127/3120	12/12	0	match	3303/3297	19094/19031	match
+slides/done-014/pptx/schematicplay.pptx	21/21	2111/2125	4/5	0	match	2128/2143	11490/11490	match
+slides/done-014/pptx/servicedesk-plus-overviewfinal.pptx	66/66	1805/1820	8/3	0	match	1904/1919	11471/11471	match
+slides/done-014/pptx/vvsummit2022-Research-Roadmap-and-the-UML-3-Operational-Integration-Assessment.pptx	33/33	1281/1281	5/5	1	unembedded	1361/1360	8377/8377	unembedded
+slides/done-015/ppt/Architecture.ppt	29/29	845/845	4/4	0	match	867/867	4696/4696	match
+slides/done-015/pptx/1200-Assigning-Club-officers.pptx	16/16	163/162	7/7	0	match	171/170	960/960	match
+slides/done-015/pptx/RPA P4 - Advanced Material.pptx	20/20	1477/1479	6/6	0	match	1640/1642	8749/8744	match
+slides/done-015/pptx/Wildlife for REDAC September 11.pptx	41/41	1534/1535	11/11	0	match	1641/1642	9160/9160	match
+slides/extra-001/pptx/FAAAIandtheArtandScienceofV&Vfinal.pptx	30/30	1135/1137	6/6	0	match	1221/1223	5868/5868	match
+slides/metrics-001/pptx/Ramp Up Campaign - French.pptx	6/6	437/419	4/2	0	words	465/445	2536/2418	words
+slides/missing-001/pptx/NWD-GLA-Community-Outreach-Day-Oct-2025.pptx	13/13	644/576	3/3	0	words	705/629	3998/3623	words

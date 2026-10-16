@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  A list whose level sets its label bigger than the item's text, which is what makes the
+  item's *first* line taller than its second.
+
+  Writer's label is an ordinary portion at the head of the first line (SwNumberPortion, built
+  by SwTextFormatter::NewNumberPortion, sw/source/core/text/txtfld.cxx:506), so
+  SwLineLayout::CalcLine folds its ascent and height into the line's maxima exactly as it does
+  for a run of text. A renderer that measures only the item's own runs makes every line of the
+  item the same height and loses the difference.
+
+  Both halves are here on purpose:
+
+    * the level names a character style (text:style-name="LabelBig") that states an absolute
+      fo:font-size, which is how LibreOffice's own WW8 import writes a .doc list level whose
+      grpprlChpx carries an sprmCHps — and the level's own fo:font-size percentage, the other
+      ODF spelling, is deliberately absent so that the named style is the only way to find it;
+
+    * each item runs to two lines, so a comparison can see that the first line grew and the
+      second did not.
+
+  Liberation Serif throughout, at 11 pt for the text and 22 pt for the label, so the two line
+  boxes are far enough apart that no rounding rule could explain the difference: 2355/2048 of
+  11 pt is 12.65 pt and of 22 pt is 25.30.
+-->
+<office:document
+    xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+    xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+    xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+    xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+    office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:automatic-styles>
+  <style:page-layout style:name="PL">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+       fo:margin-left="2.5cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles><style:master-page style:name="Standard" style:page-layout-name="PL"/></office:master-styles>
+ <office:styles>
+  <style:style style:name="Body" style:family="paragraph">
+   <style:paragraph-properties fo:text-align="start" fo:text-indent="0cm" fo:hyphenate="false"
+       fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%"
+       fo:orphans="0" fo:widows="0"/>
+   <style:text-properties style:font-name="Liberation Serif" fo:font-family="Liberation Serif"
+       fo:font-size="11pt" style:letter-kerning="true" fo:language="en" fo:country="GB"/>
+  </style:style>
+
+  <!--
+    The label's own character formatting, reached through the level's text:style-name. Only the
+    size is stated: a family here would be the symbol-font case, which is a different feature and
+    would hide this one behind a font substitution.
+  -->
+  <style:style style:name="LabelBig" style:family="text">
+   <style:text-properties fo:font-size="22pt"/>
+  </style:style>
+
+  <text:list-style style:name="BigLabels">
+   <text:list-level-style-number text:level="1" text:style-name="LabelBig"
+       style:num-suffix="." style:num-format="1">
+    <style:list-level-properties text:list-level-position-and-space-mode="label-alignment">
+     <style:list-level-label-alignment text:label-followed-by="listtab"
+         text:list-tab-stop-position="1.27cm" fo:text-indent="-1.27cm" fo:margin-left="1.27cm"/>
+    </style:list-level-properties>
+   </text:list-level-style-number>
+  </text:list-style>
+ </office:styles>
+ <office:body>
+  <office:text>
+   <text:p text:style-name="Body">Before the list, so a comparison has a line of ordinary pitch to measure the list against.</text:p>
+   <text:list text:style-name="BigLabels">
+    <text:list-item>
+     <text:p text:style-name="Body">The first item is written long enough that it has to break onto a second line, because the whole point of the fixture is that the first line of the item is taller than the second one is.</text:p>
+    </text:list-item>
+    <text:list-item>
+     <text:p text:style-name="Body">The second item is the same shape as the first, so that a renderer getting the label's size right once by accident still has to get it right twice.</text:p>
+    </text:list-item>
+   </text:list>
+   <text:p text:style-name="Body">After the list, so that anything the list did to the pitch stops here.</text:p>
+  </office:text>
+ </office:body>
+</office:document>

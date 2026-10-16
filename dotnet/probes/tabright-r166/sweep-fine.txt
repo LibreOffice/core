@@ -1,0 +1,7 @@
+arm     title               last fitting              first failing
+ref        44  right  980 (edge  491.00)  right 1000 (edge  490.00)
+ref        50  right  840 (edge  498.00)  right  860 (edge  497.00)
+ref        56              none in range  right    0 (edge  540.00)
+ours       44  right  980 (edge  491.00)  right 1000 (edge  490.00)
+ours       50  right  620 (edge  509.00)  right  640 (edge  508.00)
+ours       56              none in range  right    0 (edge  540.00)

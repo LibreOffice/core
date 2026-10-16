@@ -1,0 +1,96 @@
+--- a/dotnet/src/XRay.Office.Core/Charts/ChartLayout.cs
++++ b/dotnet/src/XRay.Office.Core/Charts/ChartLayout.cs
+@@ -973,7 +973,7 @@
+         }
+ 
+         AddTitles(plot, frame, area, DiagramAreaOf(plot, frame, measurer), measurer, labels);
+-        AddLegend(plot, frame, area, measurer, boxes, lines, labels);
++        AddLegend(plot, frame, area, measurer, boxes, lines, labels, shapes);
+ 
+         return new ChartDrawing(
+             area, boxes, lines, labels, shapes, DiagramAreaOf(plot, frame, measurer));
+@@ -3346,7 +3346,8 @@
+         ChartText measurer,
+         List<ChartBox> boxes,
+         List<ChartLine> lines,
+-        List<ChartLabel> labels)
++        List<ChartLabel> labels,
++        List<ChartShape> shapes)
+     {
+         if (plot.Legend == ChartLegendPosition.None) return;
+ 
+@@ -3417,6 +3418,28 @@
+                         entry.Width,
+                         entry.Dash,
+                         entry.Cap));
++
++                    // And the series' own symbol on top of it, centred in the key.
++                    // VLegendSymbolFactory::createSymbol's Line arm draws the rule and *then*
++                    // createSymbol2D at the key's centre, at min(keyWidth, keyHeight), whenever
++                    // the series carries a symbol — and it paints it in the series' colour for
++                    // both fill and border: "take series color as fill color … border of symbols
++                    // always same as fill color"
++                    // (chart2/source/view/main/VLegendSymbolFactory.cxx:115-155). Drawing only the
++                    // rule loses the secondary encoding the reference gives every marked line
++                    // series; measured on Demick_JetBlue.pptx page 4, whose three keys carry a
++                    // square, a diamond and a down-arrow.
++                    if (entry.Marker is not ChartMarker.None)
++                    {
++                        Length symbol = Smaller(box.Key.Width, box.Key.Height);
++
++                        shapes.Add(Marker(
++                            entry.Marker,
++                            new DocPoint(columnX + (box.Key.Width / 2), middle),
++                            entry.MarkerSize ?? symbol,
++                            sample,
++                            sample));
++                    }
+                 }
+                 else
+                 {
+@@ -3517,7 +3540,8 @@
+ 
+             entries.Add(new LegendEntry(
+                 name, series.Fill, series.Line, series.LineWidth,
+-                DrawsLineKey(plot, series), series.DashPattern, series.LineCap));
++                DrawsLineKey(plot, series), series.DashPattern, series.LineCap,
++                series.Marker, series.MarkerSize));
+         }
+ 
+         // A horizontal bar chart, and a chart stacked in Y beside a side legend, list their
+@@ -3537,6 +3561,15 @@
+     /// <param name="IsLine">Whether the sample is a line rather than a filled box.</param>
+     /// <param name="Dash">The sample line's dash array, or null for solid.</param>
+     /// <param name="Cap">The sample line's cap, which is what makes a dotted key dotted.</param>
++    /// <param name="Marker">
++    /// The symbol drawn over a line sample, or <see cref="ChartMarker.None"/>. Only a line key
++    /// carries one: <c>VLegendSymbolFactory::createSymbol</c> reads the explicit symbol on its
++    /// <c>LegendSymbolStyle::Line</c> arm alone.
++    /// </param>
++    /// <param name="MarkerSize">
++    /// The symbol's stated size, or null to take the key's own square extent — which is what the
++    /// source does, <c>min(rEntryKeyAspectRatio.Width, rEntryKeyAspectRatio.Height)</c>.
++    /// </param>
+     private readonly record struct LegendEntry(
+         string Name,
+         Colour? Fill,
+@@ -3544,7 +3577,9 @@
+         Length Width,
+         bool IsLine,
+         IReadOnlyList<Length>? Dash,
+-        LineCap Cap = LineCap.Butt);
++        LineCap Cap = LineCap.Butt,
++        ChartMarker Marker = ChartMarker.None,
++        Length? MarkerSize = null);
+ 
+     /// <summary>
+     /// Whether a series' legend key is a line sample rather than a filled box.
+@@ -3797,6 +3832,8 @@
+     /// <summary>The larger of two lengths.</summary>
+     private static Length Larger(Length one, Length other) => one > other ? one : other;
+ 
++    private static Length Smaller(Length one, Length other) => one < other ? one : other;
++
+     /// <summary>The width of the widest value-axis label.</summary>
+     private static Length WidestValueLabel(
+         ChartScaleResult scale,

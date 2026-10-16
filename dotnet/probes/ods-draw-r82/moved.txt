@@ -1,0 +1,38 @@
+before {'match': 251, 'ours-failed': 3, 'pages': 6, 'pages,words': 10, 'words': 37} TOTAL 307
+after {'match': 267, 'ours-failed': 1, 'pages': 6, 'pages,words': 3, 'words': 30} TOTAL 307
+
+gained 16, lost 0, moved without a verdict change 14
+
+== GAINED
+070_Equipment_inventory_list_Use_this_template_fd524c8a.ods	words -> match	pages 1/1 -> 1/1	glyphs 1175/1028 -> 1036/1028
+026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.ods	words -> match	pages 11/11 -> 11/11	glyphs 7571/7852 -> 7896/7852
+035_Project_plan_for_law_firms_aa2d4462.ods	words -> match	pages 4/4 -> 4/4	glyphs 3482/3879 -> 3879/3879
+027_Simple_personal_cash_flow_statement_675c6584.ods	pages,words -> match	pages 11/10 -> 10/10	glyphs 7585/7949 -> 7981/7949
+Foreign_SA-CAT-I_and_CAT-II-III_Pub_0.ods	pages,words -> match	pages 17/16 -> 16/16	glyphs 7005/7846 -> 7846/7846
+Part_375_Operators.ods	words -> match	pages 19/19 -> 19/19	glyphs 11849/12221 -> 12221/12221
+Part_129_Operators.ods	pages -> match	pages 22/23 -> 23/23	glyphs 19223/19595 -> 19595/19595
+apron-area.ods	words -> match	pages 3/3 -> 3/3	glyphs 1726/1814 -> 1814/1814
+arp-sop-300-Exhibit-A-Table-Templates.ods	pages,words -> match	pages 15/11 -> 11/11	glyphs 19011/19784 -> 19526/19784
+SSRO_Quarterly_Statistical_Bulletin_Q3201617_DATA.ods	pages,words -> match	pages 11/4 -> 4/4	glyphs 1244/2779 -> 2798/2779
+TDA_Smoke-Detectors.ods	words -> match	pages 28/28 -> 28/28	glyphs 17766/18137 -> 18138/18137
+EHEST-Pre-departure-checklist-Rev.-1-06-12-2016.ods	pages,words -> match	pages 27/24 -> 24/24	glyphs 34403/39744 -> 40106/39744
+PC1000.ods	words -> match	pages 13/13 -> 13/13	glyphs 3667/3831 -> 3831/3831
+certification-type-certificates-docs-tcdns-databases-MAdB-Light-Prop-14-28112013.ods	ours-failed -> match	pages -/343 -> 343/343	glyphs -/230379 -> 230379/230379
+Laser Report 2024 FOIA __Oct (1).ods	ours-failed -> match	pages -/506 -> 506/506	glyphs -/588374 -> 588642/588374
+STC_WebList.ods	pages,words -> match	pages /4372 -> 4372/4372	glyphs 0/8158209 -> 8158263/8158209
+
+== MOVED
+DynamicBubbleChart.ods	match -> match	pages 5/5 -> 5/5	glyphs 1720/1728 -> 1726/1728
+037_Personal_money_tracker_a57957bb.ods	match -> match	pages 4/4 -> 4/4	glyphs 2446/2443 -> 2459/2443
+081_Project_performance_report_Use_this_template_be2468b3.ods	match -> match	pages 2/2 -> 2/2	glyphs 2034/2032 -> 2040/2032
+009_Contextures_chart_sample_adcb3f6c.ods	match -> match	pages 9/9 -> 9/9	glyphs 1257/1243 -> 1243/1243
+068_Blue_inventory_list_Use_this_template_f9908489.ods	match -> match	pages 4/4 -> 4/4	glyphs 1189/1199 -> 1209/1199
+049_Expenses_calculator_c351f3d0.ods	match -> match	pages 4/4 -> 4/4	glyphs 1526/1548 -> 1548/1548
+017_Timeline_Templates_for_Excel_b88faee6.ods	pages,words -> pages	pages 2/3 -> 2/3	glyphs 800/969 -> 969/969
+076_Inventory_list_accessibility_guide_Use_this_template_f43dab19.ods	words -> words	pages 9/9 -> 9/9	glyphs 4927/4782 -> 4932/4782
+Air_Boss_Master_List.ods	match -> match	pages 5/5 -> 5/5	glyphs 2775/2820 -> 2820/2820
+AFS-400_Contacts.ods	match -> match	pages 48/48 -> 48/48	glyphs 43746/43685 -> 43685/43685
+SIL_TDB605.ods	match -> match	pages 44/44 -> 44/44	glyphs 18616/18693 -> 18691/18693
+SIL_TDB609.ods	match -> match	pages 50/50 -> 50/50	glyphs 22541/22688 -> 22690/22688
+TICAPCapability_Final.ods	words -> words	pages 17/17 -> 17/17	glyphs 21721/27777 -> 24781/27777
+SIL_TDB648.ods	match -> match	pages 88/88 -> 88/88	glyphs 30809/30888 -> 30884/30888

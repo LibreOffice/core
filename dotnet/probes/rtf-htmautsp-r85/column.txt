@@ -1,0 +1,11 @@
+before match=258 page-exact=278 sum|dpages|=363 sum|dglyphs|=161396 of 336
+after  match=259 page-exact=279 sum|dpages|=319 sum|dglyphs|=164119 of 336
+
+GAINED 1
+    702/746   ->   746/746          pages -> match        150-5370-10H
+
+LOST 0
+
+page count moved on 1 documents
+  closer 1, further 0
+    702 ->   746 (ref   746) 150-5370-10H

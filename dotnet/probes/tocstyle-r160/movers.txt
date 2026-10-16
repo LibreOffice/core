@@ -1,0 +1,7 @@
+document                                                          ref       before        after  verdict
+SPA-11_mcar_part-11_v2.9                                     49p 70763   49p  70763   49p  70781  match -> match
+hdss-bulletin-issue-285-25-june-2025                         10p 19647   10p  19699   10p  19699  match -> match
+SPA-06_mcar_part-6_and_IS_v2.9                               85p142938   85p 142938   85p 142942  match -> match
+OM template for non-complex NCC operators_August 2016       165p270009  166p 270063  166p 270086  pages -> pages
+24-25_FAA_Holdover_Tables                                   155p299583  154p 299532  155p 299605  pages -> match
+FAA 2025-26 Holdover Tables                                 167p335603  167p 335623  167p 335623  match -> match

@@ -1,0 +1,23 @@
+A more than the cache: Table 7 .
+B into the next paragraph: half one .
+C a collapsed bookmark:  .
+D a collapsed cross-reference:  .
+E a line break inside: Line one Line two .
+F a numbering field inside: Figure 1 .
+G the two hyphens: softhyphen and non-breaking .
+H a tab inside: before after .
+I no such bookmark: Error: Reference source not found .
+J the page switch: below .
+K a page reference: 1 .
+L the compact form: Table 7 .
+caption Table 7 tail
+first half one
+half two after
+point  bookmark
+Heading text here
+Line one
+Line two
+Figure 1
+softhyphen and non‑breaking
+before
+after

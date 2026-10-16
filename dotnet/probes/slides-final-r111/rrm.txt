@@ -1,0 +1,57 @@
+`RRM-training-syllabus-...-Dec-2009` page 16: the reference measures in DejaVu Serif and draws
+DejaVu Sans.  Round 110's "separate portions accumulating rounding" is refuted.
+
+The line is ONE text object, ONE font and ONE size on the reference's side --
+    BT 34.214 455.216 Td /F1 25.994 Tf [<3B>-162<02>-67<210733>-40<18>15 ... ] TJ ET
+-- so there are no portions to accumulate anything.  The gap pymupdf reports after each capital
+M is the TJ adjustment -162, which is 0.162 em, 4.211 pt at 25.994 pt.
+
+Per-character cells, read off the reference's own PDF (pymupdf rawdict, advance / size):
+
+  char      drawn advance (em)     cell the layout gave it (em)
+  M              0.862                      1.024
+  r              0.411                      0.478
+  a              0.612                      0.597
+  e              0.615                      0.593
+  n              0.633                      0.643
+  i              0.277                      0.320
+  s              0.520                      0.515
+  W              0.988                      1.028
+  .              0.318                      0.318
+
+The drawn column is DejaVu Sans' hmtx.  The cell column is DejaVu Serif's, to <= 0.002 em on
+nine of nine, searched over every installed face -- the next-best face is 0.32 em away in total:
+
+  DejaVuSerif.ttf   1.024 0.478 0.596 0.592 0.644 0.320 0.513 1.028 0.318   total error 0.0051
+  DejaVuSans.ttf    0.863 0.411 0.613 0.615 0.634 0.278 0.521 0.989 0.318   total error 0.3235
+
+The document's run states `style:font-name="Book Antiqua"` at 28 pt and the deck files
+Book Antiqua as family class ROMAN, and on this machine
+
+  fc-match "Book Antiqua"          DejaVuSans.ttf     <- what 26.2.4.2 DRAWS
+  fc-match "Book Antiqua,serif"    DejaVuSerif.ttf    <- what 26.2.4.2 MEASURED
+
+which is exactly the seventh confound `dotnet/CLAUDE.md` already records: the declared family
+class survives into editeng's measurement and `FontAttribute` has no field for it, so
+`getVclFontFromFontAttribute` rebuilds the font at FAMILY_DONTKNOW before the draw layer paints
+it (drawinglayer/source/primitive2d/textlayoutdevice.cxx:416-448).
+
+This tree draws AND measures DejaVu Sans -- M at 0.863 em on both -- so its line is narrower,
+it wraps later, its block is shorter and the fit lands one `constScaleLevels` row higher: 20.01
+against the reference's 18.99.  OUR OUTPUT IS THE SELF-CONSISTENT ONE.  Reproducing the
+reference here would mean laying text out in a face it does not draw.
+
+Reach on this column, upper bound (a named face, not necessarily one a page uses):
+`fontclass.py` reads every FontEntityAtom of the 51 .ppt, takes the family class out of
+lfPitchAndFamily's high nibble, and compares `fc-match <name>` with `fc-match <name>,<generic>`:
+
+  'Wingdings 2'    (serif)      draws DejaVuSans           measures DejaVuSerif       9 documents
+  'Times'          (serif)      draws LiberationSerif      measures DejaVuSerif       4
+  'Book Antiqua'   (serif)      draws DejaVuSans           measures DejaVuSerif       3
+  'Helvetica'      (sans)       draws LiberationSans       measures DejaVuSans        2
+  'UBSHeadline'    (serif)      draws DejaVuSans           measures DejaVuSerif       1
+  'Lucida Console' (monospace)  draws DejaVuSans           measures DejaVuSansMono    1
+  'MS Mincho'      (monospace)  draws DejaVuSans           measures DejaVuSansMono    1
+  'Perpetua'       (serif)      draws DejaVuSans           measures DejaVuSerif       1
+
+  22 of the 51 .ppt name at least one such face.

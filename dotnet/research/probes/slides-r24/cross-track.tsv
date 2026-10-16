@@ -1,0 +1,26 @@
+# Cross-track reach of round twenty-four, measured by rendering rather than by censusing.
+#
+# The *weight* half cannot reach the other two tracks — SheetChart and FrameChart take the
+# argument and drop it, in code, with a comment. The *size* defaults and the title wrap can:
+# both are model values every consumer honours.
+#
+# Every document outside the slides track that holds a chart at all, found by scanning for an
+# OOXML chart part and, in the binary files, for a BIFF BOF with dt=0x0020:
+#
+#   words   1 document   ABCD-FE-01-00 Flight Envelope - v1 08.03.16.docx   1 part, untitled
+#   sheets  1 document   Keywords_Mapping_Graphs_and_Charts.xlsx           11 parts, all titled
+#   sheets  6 documents  .xls with a chart substream                        (listed below)
+#
+# Rendered with the round's CLI and with 7b3704e59's, SOURCE_DATE_EPOCH set, byte-compared:
+# 6 byte-identical, 2 changed. Against soffice's own PDF of the two that changed:
+document	base_ink	base_absink	base_major	after_ink	after_absink	after_major
+words/batch-020/docx/ABCD-FE-01-00 Flight Envelope - v1 08.03.16.docx	0.00	0.00	0	0.00	0.00	0
+sheets/batch-010/xlsx/Keywords_Mapping_Graphs_and_Charts.xlsx	12.27	23.49	10	12.32	23.50	10
+#
+# The six .xls that hold a chart substream and did not move:
+#   sheets/batch-002/xls/2012-GA-Survey-Chapter-5-Tables-16Dec2013-V2.xls
+#   sheets/batch-002/xls/2012-GA-Survey-Chapter-6-Tables-16Dec2013-V2.xls
+#   sheets/batch-010/xls/EHEST-Pre-departure-checklist-Rev.-1-06-12-2016.xls
+#   sheets/batch-010/xls/TOGAF9-Tool-ConfReqts-CSQ.xls
+#   sheets/batch-010/xls/Template Pilot Logbook JAR-FCL V3.0.xls
+#   sheets/batch-017/xls/orbus_togaf_tool_csq.xls

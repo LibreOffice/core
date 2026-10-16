@@ -1,0 +1,13 @@
+# Renders and sweeps: regenerate with the build scripts, `sweep.sh` and `sweep-quirks.sh`.
+# What is worth keeping is `arms.txt` (the per-arm table), `results.md`, and the two
+# document lists the censuses produced.
+ref/
+ours/
+ours-q/
+sweep/
+crif/
+*.pdf
+*.fodt
+*.docx
+*.log
+__pycache__/

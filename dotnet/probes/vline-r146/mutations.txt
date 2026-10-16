@@ -1,0 +1,11 @@
+=== M1: the endpoints are normalised into a rectangle instead of left as stated
+  Failed XRay.Office.WordProcessing.Tests.VmlLineExtentTests.ALineWhoseXDecreasesIsNotDrawnAndOneWhoseYDecreasesIs 
+Failed!  - Failed:     1, Passed:  2024, Skipped:     0, Total:  2025, Duration: 43 s - XRay.Office.WordProcessing.Tests.dll (net10.0)
+
+=== M2: a bare endpoint number is read as a point, which is what Css does
+  Failed XRay.Office.WordProcessing.Tests.VmlLineExtentTests.ABareNumberIsAPixelAtNinetySixDotsPerInchAndNotAPoint 
+Failed!  - Failed:     1, Passed:  2024, Skipped:     0, Total:  2025, Duration: 37 s - XRay.Office.WordProcessing.Tests.dll (net10.0)
+
+=== M3: a system colour name is not resolved (the state before this round)
+  Failed XRay.Office.WordProcessing.Tests.VmlLineExtentTests.ASystemColourNameResolvesRatherThanPaintingNothing 
+Failed!  - Failed:     1, Passed:  2024, Skipped:     0, Total:  2025, Duration: 39 s - XRay.Office.WordProcessing.Tests.dll (net10.0)

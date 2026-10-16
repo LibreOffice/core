@@ -1,0 +1,6 @@
+         probe     A->B     B->C  rule
+   c-afterpict    62.65    14.65  sum
+    c-afterrow    62.65    14.65  sum
+ c-beforefield    62.65    14.65  sum
+  c-beforepict    62.65    14.65  sum
+   c-beforerow    62.65    14.65  sum

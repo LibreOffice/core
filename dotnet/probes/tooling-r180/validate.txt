@@ -1,0 +1,25 @@
+== 1. the page-alignment screen ==
+expected	got	first	document
+0	0	-	Annex-10-to-the — aligned; quantisation only
+0	0	-	f445896e — aligned
+1	1	293	02_mcar_part-2_and_IS_v2.10 — aligned after r175
+37	37	111	SPA-02_mcar_part-2_and_IS_v2.9 — equal page counts, content offset
+49	49	73	24-25_FAA_Holdover — one word-parity page lost
+
+== 2 and 3. the metric set ==
+--- one grey level over half the page ---
+   differing_fraction   0.0
+   mean_abs_error       0.00196078431372549
+   max_tile_error       0.00392156862745098
+   differing_tiles      0
+   shifted_tiles        0
+   ink_delta            0.0
+   MATCH - no pixel differs past the tolerance. The residual mean of 0.50/255 is colour quantisation across a flat fill, not a rendering difference; do not rank on it.
+--- a 20x20 block moved 40 px ---
+   differing_fraction   0.02
+   mean_abs_error       0.01003921568627451
+   max_tile_error       0.12549019607843137
+   differing_tiles      6
+   shifted_tiles        1
+   ink_delta            0.0
+   DIFFERS - no single signature dominates; inspect the diff image.

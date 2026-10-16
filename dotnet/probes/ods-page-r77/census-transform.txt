@@ -1,0 +1,14 @@
+051_Manufacturer_defect_analysis_53db27ea.ods {'transform': 1, 'transform-frame': 1}
+056_Quarterly_sale_report_baa6bb0d.ods {'transform': 3, 'transform-frame': 3}
+071_Four-week_project_timeline_Use_this_template_4f05db49.ods {'transform': 1, 'transform-frame': 1}
+036_Simple_to-do_list_Use_this_template_ba44373b.ods {'transform': 7}
+016_Free_Organizational_Chart_Template_-_Company_Organization_Chart_db913144.ods {'transform': 15}
+025_Printable_Reward_Charts_for_Kids_-_Reward_Chart_Template_aabacd93.ods {'transform': 132}
+038_Baby_growth_chart_bb9cd672.ods {'transform': 49}
+039_Baby_growth_tracker_e295ae56.ods {'transform': 49}
+076_Inventory_list_accessibility_guide_Use_this_template_f43dab19.ods {'transform': 4, 'transform-frame': 4}
+Foreign_SA-CAT-I_and_CAT-II-III_Pub_0.ods {'transform': 1}
+Special-Procedures_2025-07-10.ods {'transform': 1}
+TOGAF9-Tool-ConfReqts-CSQ.ods {'transform': 1}
+SIL_TDB648.ods {'transform': 72, 'transform-frame': 72}
+--- 13 documents {'transform': 336, 'transform-frame': 81}

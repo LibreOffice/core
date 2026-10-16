@@ -1,0 +1,58 @@
+p_bodyindent_plain_20        12.0 .. above=13.83   below=11.52   |   12.0 .. above=13.83   below=11.52    
+p_bodyindent_plain_28        12.0 .. above=13.83   below=11.52   |   12.0 .. above=13.83   below=11.52    
+p_bodyindent_withcap_20      12.0 .. above=13.83   below=11.52   |   12.0 .. above=13.83   below=11.52    
+p_bodyindent_withcap_28      12.0 .. above=13.83   below=11.52   |   12.0 .. above=13.83   below=11.52    
+p_comment_plain_20           10.0 .. above=11.55   below=11.55   |   10.0 .. above=11.55   below=11.55    
+p_comment_plain_28           14.0 .. above=16.16   below=11.49   |   14.0 .. above=16.16   below=11.49    
+p_comment_withcap_20         10.0 .. above=11.55   below=11.55   |   10.0 .. above=11.55   below=11.55    
+p_comment_withcap_28         14.0 .. above=16.16   below=11.49   |   14.0 .. above=16.16   below=11.49    
+p_drawing_plain_20           12.0 i. above=19.83   below=17.52   |   12.0 i. above=19.83   below=17.52    
+p_drawing_plain_28           12.0 i. above=19.83   below=17.52   |   12.0 i. above=19.83   below=17.52    
+p_drawing_withcap_20         10.0 .b above=11.55   below=11.55   |   10.0 .b above=11.55   below=11.55    
+p_drawing_withcap_28         10.0 .b above=11.55   below=11.55   |   10.0 .b above=11.55   below=11.55    
+p_figure_plain_20            12.0 i. above=19.83   below=17.52   |   12.0 i. above=19.83   below=17.52    
+p_figure_plain_28            12.0 i. above=19.83   below=17.52   |   12.0 i. above=19.83   below=17.52    
+p_figure_withcap_20          10.0 .b above=11.55   below=11.55   |   10.0 .b above=11.55   below=11.55    
+p_figure_withcap_28          10.0 .b above=11.55   below=11.55   |   10.0 .b above=11.55   below=11.55    
+p_footercap_plain_20         10.0 .. above=11.55   below=11.55   |   10.0 .. above=11.55   below=11.55    
+p_footercap_plain_28         14.0 .. above=16.16   below=11.49   |   14.0 .. above=16.16   below=11.49    
+p_footercap_withcap_20       10.0 .. above=11.55   below=11.55   |   10.0 .. above=11.55   below=11.55    
+p_footercap_withcap_28       14.0 .. above=16.16   below=11.49   |   14.0 .. above=16.16   below=11.49    
+p_headercap_plain_20         10.0 .. above=11.55   below=11.55   |   10.0 .. above=11.55   below=11.55    
+p_headercap_plain_28         14.0 .. above=16.16   below=11.49   |   14.0 .. above=16.16   below=11.49    
+p_headercap_withcap_20       10.0 .. above=11.55   below=11.55   |   10.0 .. above=11.55   below=11.55    
+p_headercap_withcap_28       14.0 .. above=16.16   below=11.49   |   14.0 .. above=16.16   below=11.49    
+p_illustration_plain_20      12.0 i. above=19.83   below=17.52   |   12.0 i. above=19.83   below=17.52    
+p_illustration_plain_28      12.0 i. above=19.83   below=17.52   |   12.0 i. above=19.83   below=17.52    
+p_illustration_withcap_20    10.0 .b above=11.55   below=11.55   |   10.0 .b above=11.55   below=11.55    
+p_illustration_withcap_28    10.0 .b above=11.55   below=11.55   |   10.0 .b above=11.55   below=11.55    
+p_index1_plain_20            10.0 .. above=11.55   below=11.55   |   10.0 .. above=11.55   below=11.55    
+p_index1_plain_28            14.0 .. above=16.16   below=11.49   |   14.0 .. above=16.16   below=11.49    
+p_index1_withcap_20          10.0 .. above=11.55   below=11.55   |   10.0 .. above=11.55   below=11.55    
+p_index1_withcap_28          14.0 .. above=16.16   below=11.49   |   14.0 .. above=16.16   below=11.49    
+p_listindent_plain_20        10.0 .. above=11.55   below=20.25   |   12.0 .. above=13.83   below=11.52      <-- differs
+p_listindent_plain_28        14.0 .. above=16.16   below=20.89   |   12.0 .. above=13.83   below=11.52      <-- differs
+p_listindent_withcap_20      10.0 .. above=11.55   below=20.25   |   12.0 .. above=13.83   below=11.52      <-- differs
+p_listindent_withcap_28      14.0 .. above=16.16   below=20.89   |   12.0 .. above=13.83   below=11.52      <-- differs
+p_marginalia_plain_20        12.0 .. above=13.83   below=11.52   |   12.0 .. above=13.83   below=11.52    
+p_marginalia_plain_28        12.0 .. above=13.83   below=11.52   |   12.0 .. above=13.83   below=11.52    
+p_marginalia_withcap_20      12.0 .. above=13.83   below=11.52   |   12.0 .. above=13.83   below=11.52    
+p_marginalia_withcap_28      12.0 .. above=13.83   below=11.52   |   12.0 .. above=13.83   below=11.52    
+p_signature_plain_20         10.0 .. above=11.55   below=11.55   |   10.0 .. above=11.55   below=11.55    
+p_signature_plain_28         14.0 .. above=16.16   below=11.49   |   14.0 .. above=16.16   below=11.49    
+p_signature_withcap_20       10.0 .. above=11.55   below=11.55   |   10.0 .. above=11.55   below=11.55    
+p_signature_withcap_28       14.0 .. above=16.16   below=11.49   |   14.0 .. above=16.16   below=11.49    
+p_tablelabel_plain_20        12.0 i. above=19.83   below=17.52   |   12.0 i. above=19.83   below=17.52    
+p_tablelabel_plain_28        12.0 i. above=19.83   below=17.52   |   12.0 i. above=19.83   below=17.52    
+p_tablelabel_withcap_20      10.0 .b above=11.55   below=11.55   |   10.0 .b above=11.55   below=11.55    
+p_tablelabel_withcap_28      10.0 .b above=11.55   below=11.55   |   10.0 .b above=11.55   below=11.55    
+p_text_plain_20              12.0 i. above=19.83   below=17.52   |   12.0 i. above=19.83   below=17.52    
+p_text_plain_28              12.0 i. above=19.83   below=17.52   |   12.0 i. above=19.83   below=17.52    
+p_text_withcap_20            10.0 .b above=11.55   below=11.55   |   10.0 .b above=11.55   below=11.55    
+p_text_withcap_28            10.0 .b above=11.55   below=11.55   |   10.0 .b above=11.55   below=11.55    
+p_tocupper_plain_20          10.0 .. above=11.55   below=11.55   |   10.0 .. above=11.55   below=11.55    
+p_tocupper_plain_28          14.0 .. above=16.16   below=11.49   |   14.0 .. above=16.16   below=11.49    
+p_tocupper_withcap_20        10.0 .. above=11.55   below=11.55   |   10.0 .. above=11.55   below=11.55    
+p_tocupper_withcap_28        14.0 .. above=16.16   below=11.49   |   14.0 .. above=16.16   below=11.49    
+
+52 agree, 4 differ, of 56

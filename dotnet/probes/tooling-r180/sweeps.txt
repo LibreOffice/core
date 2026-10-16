@@ -1,0 +1,19 @@
+# track-ink-sweep.sh over words/done-005, same tree, same corpus, only the reference varying
+
+## PATH (24.2.7.2)
+TOTAL 10  MATCH 9  REF-CANNOT-RENDER 0
+ABS-INK 8.55  SIGNED-INK 4.79  MAJOR PAGES 5  over 9 documents
+
+## REF_SOFFICE=/opt/libreoffice26.2 (26.2.4.2)
+TOTAL 10  MATCH 10  REF-CANNOT-RENDER 0
+pages  abs_ink  major  drift  
+14     0.17     0      0      316r_a_e.doc
+14     0.17     0      0      316r_a_f.doc
+1      0.03     0      0      Theft-Restitution-Letter-Vancouver-ASC-2005.
+10     0.04     0      0      loi_format_letter_of_intent-a-320-214-a330.d
+3      1.40     0      1      /2024-12_Comlux_opens_Maintenance_and_Servic
+2      0.00     0      0      /BID_ACKNOWLEDGEMENT_FORM_FOR_A320.docx
+4      0.11     0      0      /Technical Report and Technical Update Guide
+15     0.31     0      0      /f445896eb008d14c1746fc37d412dc22.docx
+4      0.02     0      0      /healthcare-reform-nsa-consumer-bulletin.doc
+2      0.44     1      1      /part-147_approval list_20230119.docx

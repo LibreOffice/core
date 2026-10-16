@@ -1,0 +1,12 @@
+family         ext      moved      of
+ods-column     ods         81     307
+odt-column     odt          0     337
+sheets         xls          0      64
+sheets         xlsm         0       2
+sheets         xlsx         0     241
+slides         ppt          0      51
+slides         pptx         0     251
+words          doc          0      66
+words          docx         0     271
+
+total 81 of 1590 moved, 1509 byte-identical

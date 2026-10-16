@@ -1,0 +1,4 @@
+# documents: 51   missing: 0
+pres_ioc_phuket.ppt	sp@56168	type=136	text-path type	gtextUNICODE=yes
+8.16_AOD_FINAL_Provider_Training_Presentation_9_2009.ppt	sp@368539	type=144	text-path type	gtextUNICODE=yes
+# shapes with fGtext: 2   in 136..175: 2   outside: 0

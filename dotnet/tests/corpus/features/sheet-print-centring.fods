@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  style:table-centering: Calc's "centre the printed block on the page", horizontally, vertically or
+  both. ODF spells it the American way and it is not ours to anglicise; this project's British house
+  style makes `style:table-centring` the natural spelling, it matches nothing in any real file, and
+  a reader asking for it silently never centres anything. That was the whole of seat O100.
+
+  [src] xmloff/source/core/xmltoken.cxx:1992 interns the token; PageMasterStyleMap.cxx:97-98 maps
+  the ONE attribute onto BOTH PROP_CenterHorizontally and PROP_CenterVertically with
+  MID_FLAG_MERGE_ATTRIBUTE, its value being horizontal, vertical or both;
+  ScPrintFunc::PrintPage (sc/source/ui/view/printfun.cxx:2144-2191) then adds half the slack to the
+  left and top space, UNCLAMPED, so an over-wide block hangs off both edges instead of being left
+  aligned.
+
+  Four sheets, each with its own master page, differing in that one attribute and nothing else. One
+  4 cm column on a 21 cm page with 2 cm margins gives a 17 cm printable width, so the slack is 13 cm
+  and half of it is 6.5 cm = 184.252 pt, predicted with no free parameter.
+
+  LibreOffice 26.2.4.2 draws the four arms at (probes/odscentre-r150/reference.txt):
+
+    none         x  57.685   y  57.276
+    horizontal   x 241.937   y  57.276      dx +184.252, exactly 6.5 cm
+    vertical     x  57.685   y 415.121      dy +357.845
+    both         x 241.937   y 415.121
+
+  `none` is the control: an absent attribute must leave the block where the margins put it.
+-->
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+ xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+ xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+ xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+ xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+ office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+ <office:automatic-styles>
+  <style:style style:name="co1" style:family="table-column">
+   <style:table-column-properties style:column-width="4cm"/>
+  </style:style>
+  <style:style style:name="ro1" style:family="table-row">
+   <style:table-row-properties style:row-height="0.45cm"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+    fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"
+    style:print-orientation="portrait"/>
+  </style:page-layout>
+  <style:style style:name="ta1" style:family="table" style:master-page-name="mp1">
+   <style:table-properties table:display="true"/>
+  </style:style>
+  <style:page-layout style:name="pm2">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+    fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"
+    style:print-orientation="portrait" style:table-centering="horizontal"/>
+  </style:page-layout>
+  <style:style style:name="ta2" style:family="table" style:master-page-name="mp2">
+   <style:table-properties table:display="true"/>
+  </style:style>
+  <style:page-layout style:name="pm3">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+    fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"
+    style:print-orientation="portrait" style:table-centering="vertical"/>
+  </style:page-layout>
+  <style:style style:name="ta3" style:family="table" style:master-page-name="mp3">
+   <style:table-properties table:display="true"/>
+  </style:style>
+  <style:page-layout style:name="pm4">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+    fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"
+    style:print-orientation="portrait" style:table-centering="both"/>
+  </style:page-layout>
+  <style:style style:name="ta4" style:family="table" style:master-page-name="mp4">
+   <style:table-properties table:display="true"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="mp1" style:page-layout-name="pm1"/>
+  <style:master-page style:name="mp2" style:page-layout-name="pm2"/>
+  <style:master-page style:name="mp3" style:page-layout-name="pm3"/>
+  <style:master-page style:name="mp4" style:page-layout-name="pm4"/>
+ </office:master-styles>
+ <office:body>
+  <office:spreadsheet>
+   <table:table table:name="none" table:style-name="ta1">
+    <table:table-column table:style-name="co1"/>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string"><text:p>none</text:p></table:table-cell>
+    </table:table-row>
+   </table:table>
+   <table:table table:name="horizontal" table:style-name="ta2">
+    <table:table-column table:style-name="co1"/>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string"><text:p>horizontal</text:p></table:table-cell>
+    </table:table-row>
+   </table:table>
+   <table:table table:name="vertical" table:style-name="ta3">
+    <table:table-column table:style-name="co1"/>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string"><text:p>vertical</text:p></table:table-cell>
+    </table:table-row>
+   </table:table>
+   <table:table table:name="both" table:style-name="ta4">
+    <table:table-column table:style-name="co1"/>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string"><text:p>both</text:p></table:table-cell>
+    </table:table-row>
+   </table:table>
+  </office:spreadsheet>
+ </office:body>
+</office:document>

@@ -1,0 +1,492 @@
+--- a/dotnet/src/XRay.Office.Core/Charts/ChartLayout.cs
++++ b/dotnet/src/XRay.Office.Core/Charts/ChartLayout.cs
+@@ -96,12 +96,18 @@
+ 
+ /// <summary>One filled rectangle — a bar, a legend key, the plot area's wall.</summary>
+ /// <param name="Bounds">Where it goes.</param>
+-/// <param name="Fill">Its fill, or null when it is outline only.</param>
++/// <param name="Fill">
++/// Its fill, or null when it is outline only. A <see cref="Paint"/> rather than a
++/// <see cref="Graphics.Colour"/> because a chart's own two backdrops — its chart area and its
++/// plot area's wall — may be a <c>a:pattFill</c>, which LibreOffice draws as a hatch. Every
++/// other box a chart emits is solid, so the widening costs those a <see cref="Paint.Solid"/>
++/// and nothing else.
++/// </param>
+ /// <param name="Line">Its outline colour, or null when it has none.</param>
+ /// <param name="LineWidth">The outline's width.</param>
+ public readonly record struct ChartBox(
+     DocRect Bounds,
+-    Colour? Fill,
++    Paint? Fill,
+     Colour? Line = null,
+     Length LineWidth = default);
+ 
+@@ -5070,7 +5076,7 @@
+                             rowY + (box.RowHeight - box.Key.Height) / 2,
+                             box.Key.Width,
+                             box.Key.Height),
+-                        entry.Fill,
++                        entry.Fill is { } key ? Paint.Solid(key) : null,
+                         entry.Line,
+                         entry.Width));
+                 }
+--- a/dotnet/src/XRay.Office.Core/Charts/ChartPlot.cs
++++ b/dotnet/src/XRay.Office.Core/Charts/ChartPlot.cs
+@@ -1020,7 +1020,26 @@
+     /// <remarks>See <see cref="LabelColour"/>.</remarks>
+     public Colour LegendColour { get; init; } = Colour.Black;
+ 
+-    public Colour? Background { get; init; }
++    /// <summary>
++    /// The chart area's own fill — <c>c:chartSpace/c:spPr</c> — or null when it draws none.
++    /// </summary>
++    /// <remarks>
++    /// <para>
++    /// A <see cref="Paint"/> rather than a <see cref="Graphics.Colour"/> because a chart may state
++    /// <c>a:pattFill</c> here, and LibreOffice draws a pattern fill as a hatch:
++    /// <c>028_Unit_Circle_Chart_Optimized_Graph.docx</c> states
++    /// <c>&lt;a:pattFill prst="dkDnDiag"&gt;</c> with an <c>lt1 lumMod 95%</c> foreground, and
++    /// 26.2.4.2 draws <strong>295 of that page's 298 strokes</strong> in <c>#F2F2F2</c> to make it.
++    /// </para>
++    /// <para>
++    /// <strong>A gradient still collapses to one colour here, and that is a limit rather than a
++    /// reading.</strong> <c>DrawingGradient.Paint</c> needs the rectangle it fills and the reader
++    /// has none — a chart's frame is decided at layout time — so an <c>a:gradFill</c> backdrop
++    /// keeps the stop nearest the middle, as every chart fill has since <c>FillOf</c> was written.
++    /// Its reach is one corpus chart part, <c>Intersil_Italy_CAN_Bus_Transceiver_Presentation_Final.pptx</c>'s.
++    /// </para>
++    /// </remarks>
++    public Paint? Background { get; init; }
+ 
+     /// <summary>
+     /// The frame the chart draws around its whole area, or null when it draws none.
+@@ -1389,7 +1408,12 @@
+     public string? TitleFamily { get; init; }
+ 
+     /// <summary>The plot area's fill — DrawingML's wall — or null.</summary>
+-    public Colour? PlotBackground { get; init; }
++    /// <remarks>
++    /// A <see cref="Paint"/> for the same reason as <see cref="Background"/>, and with the same
++    /// gradient limit. <c>065_Weight_loss_tracker.xlsx</c> is the corpus witness on this half:
++    /// <c>c:plotArea/c:spPr</c> states <c>&lt;a:pattFill prst="wdDnDiag"&gt;</c>.
++    /// </remarks>
++    public Paint? PlotBackground { get; init; }
+ 
+     /// <summary>
+     /// How the value axis' major gridlines are painted, or null when it has none.
+--- a/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChartPlot.cs
++++ b/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChartPlot.cs
+@@ -346,9 +346,9 @@
+             CategoryAxisCrossing = CrossingOf(axes.Domain ?? axes.Category),
+             CategoryCrossesAt = CrossesAt(axes.Domain ?? axes.Category),
+             Legend = LegendOf(Child(chart, "legend")),
+-            Background = FillOf(Child(chartSpace, "spPr"), theme)
+-                         ?? DrawingChartAutoFormat.FrameFillOf(
+-                                automatic.Style, ChartAutoFrame.ChartSpace, theme),
++            Background = BackdropOf(Child(chartSpace, "spPr"), theme)
++                         ?? Solid(DrawingChartAutoFormat.FrameFillOf(
++                                automatic.Style, ChartAutoFrame.ChartSpace, theme)),
+             Border = LineOf(Child(chartSpace, "spPr"), theme)
+                      ?? (automaticChartAreaLine && !SuppressesLine(Child(chartSpace, "spPr"))
+                          ? AutomaticChartAreaLine
+@@ -360,9 +360,9 @@
+                     && !SuppressesLine(Child(chartSpace, "spPr"))
+                     ? AutomaticChartAreaLineWidth
+                     : Length.Zero,
+-            PlotBackground = FillOf(Child(plotArea, "spPr"), theme)
+-                             ?? DrawingChartAutoFormat.FrameFillOf(
+-                                    automatic.Style, ChartAutoFrame.PlotArea, theme),
++            PlotBackground = BackdropOf(Child(plotArea, "spPr"), theme)
++                             ?? Solid(DrawingChartAutoFormat.FrameFillOf(
++                                    automatic.Style, ChartAutoFrame.PlotArea, theme)),
+             ValueGrid = GridOf(axes.Value, theme, automatic),
+             CategoryGrid = GridOf(axes.Category, theme, automatic)
+                            ?? GridOf(axes.Domain, theme, automatic),
+@@ -2393,6 +2393,34 @@
+         return DrawingChartAutoFormat.LineWidth(emu * relative / 100);
+     }
+ 
++    /// <summary>A colour as a paint, or null when there is no colour.</summary>
++    private static Paint? Solid(Colour? colour)
++        => colour is { } resolved ? Paint.Solid(resolved) : null;
++
++    /// <summary>
++    /// A backdrop's fill — the chart area's or the plot area's — as a paint rather than a colour.
++    /// </summary>
++    /// <remarks>
++    /// <para>
++    /// The two backdrops are the only chart fills that may be a hatch, so they are the only ones
++    /// that need a <see cref="Paint"/>. LibreOffice approximates <c>a:pattFill</c>'s
++    /// fifty-four preset bitmaps with a hatch — <c>oox/inc/drawingml/hatchmap.hxx</c> — and draws
++    /// it as stroked lines over an optional background; <see cref="DrawingHatch"/> is that map and
++    /// is shared with every shape that states one.
++    /// </para>
++    /// <para>
++    /// Everything else falls through to <see cref="FillOf"/>, so an <c>a:solidFill</c> answers the
++    /// colour it always did and an <c>a:gradFill</c> still collapses to the stop nearest its
++    /// middle. That collapse is deliberate here and is a limit of the *model*, not of the reader:
++    /// a real gradient needs the rectangle it fills and a chart's frame is not known until layout.
++    /// </para>
++    /// </remarks>
++    /// <param name="properties">The <c>c:spPr</c>, or null.</param>
++    /// <param name="theme">The theme its colours resolve against.</param>
++    private static Paint? BackdropOf(XElement? properties, DrawingTheme? theme)
++        => DrawingHatch.Read(Drawing.Child(properties, "pattFill"), theme)
++           ?? Solid(FillOf(properties, theme));
++
+     /// <summary>A shape property bag's solid fill, or null when it has none.</summary>
+     /// <remarks>
+     /// <para>
+--- a/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChartex.cs
++++ b/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChartex.cs
+@@ -47,6 +47,15 @@
+ /// </remarks>
+ public static class DrawingChartex
+ {
++    /// <summary>A colour as a paint, or null when there is no colour.</summary>
++    /// <remarks>
++    /// <c>ChartPlot.Background</c> and <c>ChartPlot.PlotBackground</c> are paints because a
++    /// DrawingML chart may state a hatch there; this format states a colour, so the widening
++    /// costs it one wrapper and changes nothing it draws.
++    /// </remarks>
++    private static Paint? Solid(Colour? colour)
++        => colour is { } resolved ? Paint.Solid(resolved) : null;
++
+     /// <summary>The <c>a:graphicData/@uri</c> that identifies a chartex chart in a frame.</summary>
+     /// <remarks>Identical to the chartex namespace, as OOXML does for every payload.</remarks>
+     public const string ChartUri = OoxmlNamespaces.ExtendedChart;
+@@ -131,9 +140,10 @@
+ 
+             // `cx:spPr` on the chart space, which both witnesses state as `a:noFill` — so the
+             // chart area is transparent and only the plot rectangle is painted.
+-            Background = FillOf(Child(chartSpace, "spPr"), theme),
+-            PlotBackground = FillOf(Child(Child(region, "plotSurface"), "spPr"), theme)
+-                             ?? Colour.White,
++            Background = Solid(FillOf(Child(chartSpace, "spPr"), theme)),
++            PlotBackground = Solid(
++                                 FillOf(Child(Child(region, "plotSurface"), "spPr"), theme))
++                             ?? Paint.Solid(Colour.White),
+         };
+     }
+ 
+--- a/dotnet/src/XRay.Office.WordProcessing/Layout/FrameChart.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Layout/FrameChart.cs
+@@ -57,7 +57,9 @@
+             if (filled.Bounds.Width <= Length.Zero || filled.Bounds.Height <= Length.Zero) continue;
+ 
+             GraphicsPath path = GraphicsPath.Rectangle(filled.Bounds);
+-            if (filled.Fill is { } fill) sink.FillPath(path, Paint.Solid(fill));
++            // Through `Hatching.Fill`: a chart's own backdrop may be an `a:pattFill`,
++            // which LibreOffice draws as stroked hairlines over an optional background.
++            if (filled.Fill is { } fill) Hatching.Fill(path, InTwips(fill), sink);
+             if (filled.Line is { } line) sink.StrokePath(path, Pen(line, filled.LineWidth));
+         }
+ 
+@@ -223,6 +225,41 @@
+                 runs[at].At(new DocPoint(x, top + (line * at) + ascent)), Paint.Solid(label.Colour));
+         }
+     }
++
++    /// <summary>
++    /// A hatch whose distance Writer reads as twips, which is what it draws.
++    /// </summary>
++    /// <remarks>
++    /// <para>
++    /// <strong>A hatch's distance is a number, and the drawing layer it lands in decides the
++    /// unit.</strong> DrawingML states a preset and <c>oox/inc/drawingml/hatchmap.hxx</c> maps it
++    /// onto a <c>drawing::Hatch</c> whose <c>Distance</c> is hundredths of a millimetre; a Writer
++    /// document's drawing layer works in <strong>twips</strong>, so the number arrives
++    /// unconverted and one hundredth of a millimetre is drawn as one twip — 2540/1440 = 1.7639
++    /// times as far apart.
++    /// </para>
++    /// <para>
++    /// Measured on 26.2.4.2 rather than derived, over four one-attribute variants of
++    /// <c>028_Unit_Circle_Chart_Optimized_Graph.docx</c>'s <c>a:pattFill/@prst</c>
++    /// (<c>probes/charthatch-r191/</c>), reading the drawn spacing off the page's own strokes:
++    /// <c>dkDnDiag</c> states 50 and draws 88.4, <c>wdDnDiag</c> 100 and 176.3, <c>ltHorz</c> 50
++    /// and 88.4, <c>dkHorz</c> 25 and 45.9 — a flat 1.76 to 1.77 with no dependence on the angle.
++    /// <strong>The other two tracks do not do it</strong>, which is what makes this the unit
++    /// rather than the chart: on <c>slide-pattern-fill.pptx</c> this tree already draws 112, 70,
++    /// 70, 70 and 28 hairlines against 26.2.4.2's 115, 71, 71, 70 and 28, and on
++    /// <c>065_Weight_loss_tracker.xlsx</c>'s hatched wall the reference draws 238 lines where the
++    /// stated distance predicts 219 — both 1.0 within the measurement, not 1.76.
++    /// </para>
++    /// <para>
++    /// Applied here, on the chart's own backdrop, because that is where it is measured. Whether a
++    /// plain Writer shape's hatch takes it too is untested and no corpus <c>.docx</c> carries one.
++    /// </para>
++    /// </remarks>
++    /// <param name="fill">The paint, hatch or not.</param>
++    private static Paint InTwips(Paint fill)
++        => fill is HatchPaint hatch
++            ? hatch with { Distance = Length.FromEmu(hatch.Distance.Emu * 2540 / 1440) }
++            : fill;
+ }
+ 
+ /// <summary>
+--- a/dotnet/src/XRay.Office.Core/Graphics/Hatching.cs
++++ b/dotnet/src/XRay.Office.Core/Graphics/Hatching.cs
+@@ -135,4 +135,93 @@
+                 new DocPoint(Length.FromEmu((long)(px + (dx * along))), Length.FromEmu((long)(py + (dy * along)))));
+         }
+     }
++
++    /// <summary>
++    /// Fills an outline with a paint, expanding a hatch into the commands a sink understands.
++    /// </summary>
++    /// <remarks>
++    /// <para>
++    /// A hatch is the one <see cref="Paint"/> kind no backend implements, so it has to be expanded
++    /// at the last point that still knows the shape's own outline — and it has to be expanded in
++    /// <em>one</em> place, for the reason the note on this class gives. Every caller that paints a
++    /// <see cref="Paint"/> onto an <see cref="IDrawingSink"/> and may be handed a hatch comes
++    /// here: slide shapes, and a chart's own two backdrops on all three tracks.
++    /// </para>
++    /// <para>
++    /// Clipped to the outline rather than intersected with it, because a hatch fills a rounded
++    /// rectangle and a chevron as readily as a box and the segments <see cref="Lines"/> produces
++    /// span the outline's whole bounding box. The background goes down first, when the hatch has
++    /// one, exactly as <c>FillHatchPrimitive2D</c> decomposes it.
++    /// </para>
++    /// </remarks>
++    /// <param name="outline">The region to fill.</param>
++    /// <param name="fill">The paint.</param>
++    /// <param name="sink">Where to draw.</param>
++    public static void Fill(GraphicsPath outline, Paint fill, IDrawingSink sink)
++    {
++        ArgumentNullException.ThrowIfNull(outline);
++        ArgumentNullException.ThrowIfNull(fill);
++        ArgumentNullException.ThrowIfNull(sink);
++
++        if (fill is not HatchPaint hatch)
++        {
++            sink.FillPath(outline, fill);
++            return;
++        }
++
++        if (hatch.Background is { } background) sink.FillPath(outline, Paint.Solid(background));
++
++        Stroke pen = new(Paint.Solid(hatch.LineColour), Length.Zero);
++
++        sink.Save();
++        try
++        {
++            sink.ClipPath(outline);
++
++            foreach ((DocPoint from, DocPoint to) in Lines(BoxOf(outline), hatch))
++            {
++                sink.StrokePath(new GraphicsPath().MoveTo(from).LineTo(to), pen);
++            }
++        }
++        finally
++        {
++            sink.Restore();
++        }
++    }
++
++    /// <summary>The bounding box of a path's own points.</summary>
++    /// <remarks>
++    /// Control points included, which overstates a curved outline's box slightly and is right
++    /// here: the hatch is clipped to the outline, so a box that is too large costs a few segments
++    /// the clip discards and a box that is too small leaves a corner unhatched.
++    /// </remarks>
++    private static DocRect BoxOf(GraphicsPath path)
++    {
++        long left = long.MaxValue, top = long.MaxValue;
++        long right = long.MinValue, bottom = long.MinValue;
++
++        foreach (PathCommand command in path.Commands)
++        {
++            if (command.Verb == PathVerb.Close) continue;
++
++            foreach (DocPoint point in command.Verb == PathVerb.CubicTo
++                         ? (ReadOnlySpan<DocPoint>)
++                           [command.Point, command.Control1, command.Control2]
++                         : (ReadOnlySpan<DocPoint>)[command.Point])
++            {
++                left = Math.Min(left, point.X.Emu);
++                top = Math.Min(top, point.Y.Emu);
++                right = Math.Max(right, point.X.Emu);
++                bottom = Math.Max(bottom, point.Y.Emu);
++            }
++        }
++
++        return right <= left || bottom <= top
++            ? DocRect.Empty
++            : new DocRect(
++                Length.FromEmu(left),
++                Length.FromEmu(top),
++                Length.FromEmu(right - left),
++                Length.FromEmu(bottom - top));
++    }
+ }
+--- a/dotnet/src/XRay.Office.OpenDocument/OdfChartPlot.cs
++++ b/dotnet/src/XRay.Office.OpenDocument/OdfChartPlot.cs
+@@ -37,6 +37,15 @@
+ /// </remarks>
+ public static class OdfChartPlot
+ {
++    /// <summary>A colour as a paint, or null when there is no colour.</summary>
++    /// <remarks>
++    /// <c>ChartPlot.Background</c> and <c>ChartPlot.PlotBackground</c> are paints because a
++    /// DrawingML chart may state a hatch there; this format states a colour, so the widening
++    /// costs it one wrapper and changes nothing it draws.
++    /// </remarks>
++    private static Paint? Solid(Colour? colour)
++        => colour is { } resolved ? Paint.Solid(resolved) : null;
++
+     /// <summary>How many series or categories are read from one chart.</summary>
+     /// <remarks>
+     /// A local table's <c>table:number-columns-repeated</c> is unbounded in an untrusted file and
+@@ -320,9 +329,9 @@
+             ValueLabelsVisible = Labelled(valueAxis, styles),
+             CategoryLabelsVisible = Labelled(categoryAxis, styles),
+             Legend = LegendOf(Child(chart, OdfNamespaces.Chart, "legend")),
+-            Background = styles.Fill(Attribute(chart, OdfNamespaces.Chart, "style-name")),
+-            PlotBackground = styles.Fill(
+-                Attribute(Child(plotArea, OdfNamespaces.Chart, "wall"), OdfNamespaces.Chart, "style-name")),
++            Background = Solid(styles.Fill(Attribute(chart, OdfNamespaces.Chart, "style-name"))),
++            PlotBackground = Solid(styles.Fill(
++                Attribute(Child(plotArea, OdfNamespaces.Chart, "wall"), OdfNamespaces.Chart, "style-name"))),
+             ValueGrid = GridOf(valueAxis, styles),
+             CategoryGrid = GridOf(categoryAxis, styles),
+             TitleSize = styles.FontSize(
+--- a/dotnet/src/XRay.Office.Spreadsheets/Layout/SheetChart.cs
++++ b/dotnet/src/XRay.Office.Spreadsheets/Layout/SheetChart.cs
+@@ -87,7 +87,9 @@
+             if (filled.Bounds.Width <= Length.Zero || filled.Bounds.Height <= Length.Zero) continue;
+ 
+             GraphicsPath path = GraphicsPath.Rectangle(filled.Bounds);
+-            if (filled.Fill is { } fill) sink.FillPath(path, Paint.Solid(fill));
++            // Through `Hatching.Fill`: a chart's own backdrop may be an `a:pattFill`,
++            // which LibreOffice draws as stroked hairlines over an optional background.
++            if (filled.Fill is { } fill) Hatching.Fill(path, fill, sink);
+             if (filled.Line is { } line) sink.StrokePath(path, Pen(line, filled.LineWidth));
+         }
+ 
+--- a/dotnet/src/XRay.Office.Presentations/Layout/SlideChart.cs
++++ b/dotnet/src/XRay.Office.Presentations/Layout/SlideChart.cs
+@@ -69,7 +69,9 @@
+                     AffineTransform.Concat(
+                         AffineTransform.Translation(box.Bounds.X.Emu, box.Bounds.Y.Emu), placement),
+                     box.Bounds.Size),
+-                Fill = box.Fill is { } fill ? Paint.Solid(fill) : null,
++                // Already a Paint: a chart's own backdrop may be a hatch, and
++                // `SlideDrawing` expands one when it paints the shape.
++                Fill = box.Fill,
+                 Line = box.Line is { } line ? Pen(line, box.LineWidth) : null,
+             });
+         }
+--- a/dotnet/src/XRay.Office.Presentations/Layout/SlideDrawing.cs
++++ b/dotnet/src/XRay.Office.Presentations/Layout/SlideDrawing.cs
+@@ -136,74 +136,15 @@
+     /// rectangle and a chevron as readily as a box and the segments
+     /// <see cref="Hatching.Lines"/> produces span the outline's whole bounding box.
+     /// </para>
++    /// <para>
++    /// <strong>The expansion itself is <see cref="Hatching.Fill"/>, in Core.</strong> A chart's own
++    /// backdrop may be a hatch too and a chart is drawn on all three tracks, so a copy here would
++    /// have been the third — which is the duplication <see cref="Hatching"/>'s own note describes
++    /// as how the two existing expansions came to disagree.
++    /// </para>
+     /// </remarks>
+     private static void Fill(GraphicsPath outline, Paint fill, IDrawingSink sink)
+-    {
+-        if (fill is not HatchPaint hatch)
+-        {
+-            sink.FillPath(outline, fill);
+-            return;
+-        }
+-
+-        if (hatch.Background is { } background)
+-        {
+-            sink.FillPath(outline, Paint.Solid(background));
+-        }
+-
+-        Stroke pen = new(Paint.Solid(hatch.LineColour), Length.Zero);
+-
+-        sink.Save();
+-        try
+-        {
+-            sink.ClipPath(outline);
+-
+-            foreach ((DocPoint from, DocPoint to) in Hatching.Lines(Bounds(outline), hatch))
+-            {
+-                sink.StrokePath(new GraphicsPath().MoveTo(from).LineTo(to), pen);
+-            }
+-        }
+-        finally
+-        {
+-            sink.Restore();
+-        }
+-    }
+-
+-    /// <summary>The bounding box of a path's own points.</summary>
+-    /// <remarks>
+-    /// Control points included, which overstates a curved outline's box slightly and is right
+-    /// here: the hatch is clipped to the outline, so a box that is too large costs a few
+-    /// segments the clip discards and a box that is too small leaves a corner unhatched.
+-    /// </remarks>
+-    private static DocRect Bounds(GraphicsPath path)
+-    {
+-        bool any = false;
+-        Length left = default, top = default, right = default, bottom = default;
+-
+-        foreach (PathCommand command in path.Commands)
+-        {
+-            if (command.Verb == PathVerb.Close) continue;
+-
+-            foreach (DocPoint point in command.Verb == PathVerb.CubicTo
+-                         ? (ReadOnlySpan<DocPoint>)[command.Point, command.Control1, command.Control2]
+-                         : (ReadOnlySpan<DocPoint>)[command.Point])
+-            {
+-                if (!any)
+-                {
+-                    left = right = point.X;
+-                    top = bottom = point.Y;
+-                    any = true;
+-                    continue;
+-                }
+-
+-                if (point.X < left) left = point.X;
+-                if (point.X > right) right = point.X;
+-                if (point.Y < top) top = point.Y;
+-                if (point.Y > bottom) bottom = point.Y;
+-            }
+-        }
+-
+-        return any ? DocRect.FromCorners(new DocPoint(left, top), new DocPoint(right, bottom)) : DocRect.Empty;
+-    }
++        => Hatching.Fill(outline, fill, sink);
+ 
+     /// <summary>
+     /// Draws a shape's drop shadow: the shape again, offset, in one colour, behind itself.
+--- a/dotnet/src/XRay.Office.Spreadsheets/MsBinary/XlsChartReader.cs
++++ b/dotnet/src/XRay.Office.Spreadsheets/MsBinary/XlsChartReader.cs
+@@ -127,6 +127,15 @@
+ /// </remarks>
+ internal sealed class XlsChartBuilder
+ {
++    /// <summary>A colour as a paint, or null when there is no colour.</summary>
++    /// <remarks>
++    /// <c>ChartPlot.Background</c> and <c>ChartPlot.PlotBackground</c> are paints because a
++    /// DrawingML chart may state a hatch there; this format states a colour, so the widening
++    /// costs it one wrapper and changes nothing it draws.
++    /// </remarks>
++    private static Paint? Solid(Colour? colour)
++        => colour is { } resolved ? Paint.Solid(resolved) : null;
++
+     private readonly Stack<ushort> _open = new();
+     private ushort _header;
+ 
+@@ -734,8 +743,8 @@
+             SecondaryTicks = _ticks[SecondaryAxesSet, AxisY],
+             Legend = _hasLegend ? ChartLegendPosition.Right : ChartLegendPosition.None,
+             TextFamily = FamilyOf(fonts),
+-            Background = _background?.Resolve(fonts),
+-            PlotBackground = _plotBackground?.Resolve(fonts),
++            Background = Solid(_background?.Resolve(fonts)),
++            PlotBackground = Solid(_plotBackground?.Resolve(fonts)),
+             OuterPlotAreaUnits = _manualPlotArea ? _outerPlotArea : null,
+         };
+ 

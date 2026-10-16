@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  A merged cell's background where the merge runs off the right of the printed column block.
+
+  Five columns on 21 cm paper with 2 cm margins, so 17 cm of printable width.  Column A is
+  2 cm and column B carries a manual page break (`fo:break-before="page"` on its column
+  style), so the first page's printed block is column A ALONE and the second page's is
+  B to E.
+
+  Row 1  ZMERGE4  A1:D1 merged, red.  The merge is 11 cm wide and the block is 2 cm.
+  Row 2  ZMERGE3  A2:C2 merged, green.  8 cm against the same 2 cm block.
+  Row 3  ZPLAIN   unmerged, blue.  The control that must stay at the column's own width.
+  Rows 4-5 ZMERGE32  A4:C5 merged across three columns AND two rows, red.
+
+  What LibreOffice 26.2.4.2 draws for it, read off its own PDF:
+
+    page 1   red    56.64 .. 198.43   (141.79 pt = 5 cm = A + B)
+             green  56.64 .. 198.43   (141.79 pt = 5 cm = A + B)
+             blue   56.64 .. 113.39   ( 56.75 pt = 2 cm = A alone)
+             red    56.64 .. 198.43   over BOTH rows 4 and 5
+    page 2   red    56.64 .. 311.81   (255.18 pt = 9 cm = B + C + D)
+             green  56.64 .. 226.77   (170.13 pt = 6 cm = B + C)
+             red    56.64 .. 226.77   (170.13 pt = 6 cm = B + C)
+
+  The 4-column merge and the 3-column merge are drawn at THE SAME width on page 1, and that
+  is the point of having both: the fill is not "the whole merge, clipped by the paper" — it
+  stops one column past the block's last, which is `ScOutputData::DrawBackground`'s
+  `nCol > mnX2 + 2` break while it is adding the width of column `nCol - 1`.  A rule that
+  painted the whole merge would draw 11 cm and 8 cm here and both would fit the paper.
+
+  Page 2 is the other half: the origin is off the block to the left, so nothing is extended
+  and each covered column contributes its own width.  Row 4-5 shows that a merge spanning
+  rows is extended on every row it covers, not only on the origin's.
+-->
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+ xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+ xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+ xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+ xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+ office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+ <office:automatic-styles>
+  <style:style style:name="coA" style:family="table-column">
+   <style:table-column-properties style:column-width="2cm"/>
+  </style:style>
+  <style:style style:name="coB" style:family="table-column">
+   <style:table-column-properties style:column-width="3cm" fo:break-before="page"/>
+  </style:style>
+  <style:style style:name="coR" style:family="table-column">
+   <style:table-column-properties style:column-width="3cm"/>
+  </style:style>
+  <style:style style:name="ceRed" style:family="table-cell">
+   <style:table-cell-properties fo:background-color="#ff0000"/>
+  </style:style>
+  <style:style style:name="ceGreen" style:family="table-cell">
+   <style:table-cell-properties fo:background-color="#00ff00"/>
+  </style:style>
+  <style:style style:name="ceBlue" style:family="table-cell">
+   <style:table-cell-properties fo:background-color="#0000ff"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+    fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"
+    style:print-orientation="portrait"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Default" style:page-layout-name="pm1"/>
+ </office:master-styles>
+ <office:body>
+  <office:spreadsheet>
+   <table:table table:name="Probe">
+    <table:table-column table:style-name="coA"/>
+    <table:table-column table:style-name="coB"/>
+    <table:table-column table:style-name="coR" table:number-columns-repeated="3"/>
+    <table:table-row>
+     <table:table-cell table:style-name="ceRed" table:number-columns-spanned="4" table:number-rows-spanned="1" office:value-type="string"><text:p>ZMERGE4</text:p></table:table-cell>
+     <table:covered-table-cell table:number-columns-repeated="3"/>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="ceGreen" table:number-columns-spanned="3" table:number-rows-spanned="1" office:value-type="string"><text:p>ZMERGE3</text:p></table:table-cell>
+     <table:covered-table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="ceBlue" office:value-type="string"><text:p>ZPLAIN</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row>
+     <table:table-cell table:style-name="ceRed" table:number-columns-spanned="3" table:number-rows-spanned="2" office:value-type="string"><text:p>ZMERGE32</text:p></table:table-cell>
+     <table:covered-table-cell table:number-columns-repeated="2"/>
+    </table:table-row>
+    <table:table-row>
+     <table:covered-table-cell table:number-columns-repeated="3"/>
+    </table:table-row>
+   </table:table>
+  </office:spreadsheet>
+ </office:body>
+</office:document>

@@ -1,0 +1,7 @@
+         probe     A->B     B->C  rule
+        l-full    62.65    14.65  sum
+ l-nolisttable    38.65    14.65  max
+      l-nopict    62.65    14.65  sum
+       l-norow    38.65    14.65  max
+     l-onelist    38.65    14.65  max
+    l-pictonly    38.65    14.65  max

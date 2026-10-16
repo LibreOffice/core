@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  A print range whose sheet name contains the character the list is separated by.
+
+  table:print-ranges is a *space*-separated list of range addresses in the OOO convention, and a
+  sheet name holding a space is written quoted — which Calc's own export does, on every sheet it
+  names. So the attribute below reads
+
+      'Q1 Sales'.B2:'Q1 Sales'.C4
+
+  and a reader that splits it on every space gets three fragments, of which the first two fail to
+  parse and the third — "Sales'.C4" — parses as the single cell C4. That is the dangerous shape:
+  no error, a valid range, and a sheet that prints one cell of its own last page instead of the
+  block the author asked for.
+
+  Calc tokenises with ScRangeStringConverter::GetTokenByOffset, whose IndexOf carries a bQuoted
+  flag toggled by every apostrophe and stops at the separator only outside one
+  (sc/source/core/tool/rangeutl.cxx:552-576, :35-56); the separator defaults to a space and the
+  quote to an apostrophe (sc/inc/rangeutl.hxx:119-120).
+
+  The data is arranged so that the three readings are all distinguishable: the whole sheet
+  reaches A1 to D6, the declared range B2:C4 excludes both the first row and the last, and the
+  single cell a naive split lands on is C4.
+-->
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+ xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+ xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+ xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+ xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+ office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+ <office:automatic-styles>
+  <style:style style:name="co1" style:family="table-column">
+   <style:table-column-properties style:column-width="2.5cm"/>
+  </style:style>
+  <style:style style:name="ro1" style:family="table-row">
+   <style:table-row-properties style:row-height="0.45cm" style:use-optimal-row-height="false"/>
+  </style:style>
+  <style:style style:name="ta1" style:family="table" style:master-page-name="Default"/>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+    fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"
+    style:print-orientation="portrait"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Default" style:page-layout-name="pm1"/>
+ </office:master-styles>
+ <office:body>
+  <office:spreadsheet>
+   <table:table table:name="Q1 Sales" table:style-name="ta1"
+    table:print-ranges="&apos;Q1 Sales&apos;.B2:&apos;Q1 Sales&apos;.C4">
+    <table:table-column table:style-name="co1" table:number-columns-repeated="4"/>
+    <table:table-row table:style-name="ro1"><table:table-cell office:value-type="string"><text:p>A1</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>B1</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>C1</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>D1</text:p></table:table-cell></table:table-row>
+    <table:table-row table:style-name="ro1"><table:table-cell office:value-type="string"><text:p>A2</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>B2</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>C2</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>D2</text:p></table:table-cell></table:table-row>
+    <table:table-row table:style-name="ro1"><table:table-cell office:value-type="string"><text:p>A3</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>B3</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>C3</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>D3</text:p></table:table-cell></table:table-row>
+    <table:table-row table:style-name="ro1"><table:table-cell office:value-type="string"><text:p>A4</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>B4</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>C4</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>D4</text:p></table:table-cell></table:table-row>
+    <table:table-row table:style-name="ro1"><table:table-cell office:value-type="string"><text:p>A5</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>B5</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>C5</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>D5</text:p></table:table-cell></table:table-row>
+    <table:table-row table:style-name="ro1"><table:table-cell office:value-type="string"><text:p>A6</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>B6</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>C6</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>D6</text:p></table:table-cell></table:table-row>
+   </table:table>
+  </office:spreadsheet>
+ </office:body>
+</office:document>

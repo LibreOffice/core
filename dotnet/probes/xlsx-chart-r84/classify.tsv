@@ -1,0 +1,14 @@
+document	class	pages ours/ref	glyphs ours/ref	band	Δ	chart's own Δ	what decides it
+070_Equipment_inventory_list	slicer-fallback	1/1	1004/1029	20.6	-25	-25	a slicer's mc:Fallback shape: the reference draws a line of "If the shape was modified in an earlier version of Excel" that we do not. No chart part in the file.
+040_Blood_pressure_tracker	chart-axis-scale	1/1	737/719	15.0	18	10	the value axis' automatic increment: ours 2 (62 64 66 68 72 74 76 78), 26.2.4.2's 5 (60 65 70 75). Frozen against its own TODAY() the row is inside the band.
+055_Project_timeline_with_milestones	chart-label-format	2/2	960/1045	20.9	-85	26	the chart writes its dates as 4/24/2023 and the reference as 24 Apr. Its DATE column is volatile; frozen, the delta is +26.
+053_Personal_asset_inventory	sheet-pagination	4/2	257/226	15.0	31	0	pinned in probes/chart-resid-r75 §2: we paginate the hidden columns' block onto pages 3 and 4. Removing the chart leaves the delta unchanged.
+075_Idea_planner_tasks	sheet-narrow-wrap	1/1	503/485	15.0	18	0	CLOSED. A wrapping cell whose text begins past its own column draws nothing; we drew all of it across two occupied columns. No chart part in the file.
+029_Annual_budget	chart-labels	2/2	943/914	18.3	29	29	our charts draw a legend (Income, Expenses) and category labels the reference does not draw at all.
+047_Date_tracker_Gantt_chart	sheet-pagination	5/8	3058/3358	67.2	-300	-5	5 pages against 8; the reference paginates an instructions sheet we do not. Removing the chart leaves 5/8 and -295.
+030_Basic_balance_sheet	chart-axis-scale	8/8	1727/1624	32.5	103	103	the two charts' value axes: ours 1000..8000, the reference's 500..2500, plus category labels we draw and it does not. Removing them makes the document 6/6 and glyph-exact.
+065_Weight_loss_tracker	chart-outline-ceiling	2/2	340/320	15.0	20	32	the reference draws 120 glyph-sized filled paths on the chart page against our 12: it outlines labels we draw as text.
+057_Simple_balance_sheet	chart-outline-ceiling	3/3	2185/1877	37.5	308	308	the chartsheet's 20 category labels: we draw them as text at 45 degrees, the reference outlines them (331 glyph-sized fills against our 114, and no 45-degree text at all).
+071_Four-week_project_timeline	sheet-pagination	1/2	400/588	15.0	-188	0	1 page against 2; the reference prints a second page of calendar cells. No chart part in the file.
+033_Event_planning_tracker	sheet-text	3/3	2720/2650	53.0	70	0	the chart's own text nets to nothing (we draw whole words where the reference wraps them into fragments); the +70 is in the sheet.
+045_Check_register_with_chart	sheet-values	1/1	736/764	15.3	-28	0	five numeric cell values (2251 2252 2253 67112449 68240158) the reference draws and we do not.

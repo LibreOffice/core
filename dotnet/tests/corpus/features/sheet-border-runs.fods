@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Fourteen collinear border runs, each varying exactly one thing, so that LibreOffice's rule for
+  coalescing cell edges into one stroke can be read out of its own PDF.
+
+  Every run is four cells wide (A..D) or four rows tall, and every variant differs from variant 1
+  in one property only. Read the answers with `probes/sheets-d-01/strokes.py`: each variant is one
+  y (a horizontal run) or one x (a vertical run), and the question is how many strokes sit on it
+  and whether consecutive ones abut, overlap or leave a gap.
+
+    row  2  all four cells state the same thin red top border        - the control
+    row  4  A,B red   -> C,D blue        colour changes mid-run
+    row  6  A,B thin  -> C,D thick       width changes mid-run
+    row  8  A,B solid -> C,D dashed      line style changes mid-run
+    row 10  A,B set, C unset, D set      a hole in the middle of a run
+    row 12  A,B single -> C,D double     the number of sub-lines changes
+    row 14  all four the same, and C states a thick green LEFT border
+            -> does a perpendicular border crossing an interior joint break the run?
+    row 16  A,B red -> C,D blue, and C states the same left border
+            -> at a joint that IS broken, do the two ends still extend over each other?
+    rows 17/18  C17,D17 state a BOTTOM border; A18,B18 state the same TOP border
+            -> the same grid line reached from two different cell attributes: does it merge?
+    rows 20-23  column A states the same left border on all four rows   - a vertical run
+    rows 20-23  column C states green on 20,21 and blue on 22,23        - broken vertical run
+    rows 25/26  C25 states a LEFT border, B26 states the same RIGHT border
+            -> one grid line, two rows, two different attributes: does it merge?
+    row 28  all four the same, A states a left border and E states a left border
+            -> the run's two OUTER ends, each meeting a perpendicular border
+
+  Column E carries no top border anywhere, so a run that reaches it has over-run its cells.
+-->
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+ xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+ xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+ xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+ xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+ office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+ <office:automatic-styles>
+  <style:style style:name="co1" style:family="table-column">
+   <style:table-column-properties style:column-width="2cm"/>
+  </style:style>
+  <style:style style:name="ro1" style:family="table-row">
+   <style:table-row-properties style:row-height="0.6cm"/>
+  </style:style>
+  <style:style style:name="tR" style:family="table-cell">
+   <style:table-cell-properties fo:border-top="0.05cm solid #ff0000"/>
+  </style:style>
+  <style:style style:name="tB" style:family="table-cell">
+   <style:table-cell-properties fo:border-top="0.05cm solid #0000ff"/>
+  </style:style>
+  <style:style style:name="tRthick" style:family="table-cell">
+   <style:table-cell-properties fo:border-top="0.1cm solid #ff0000"/>
+  </style:style>
+  <style:style style:name="tRdash" style:family="table-cell">
+   <style:table-cell-properties fo:border-top="0.05cm dashed #ff0000"/>
+  </style:style>
+  <style:style style:name="tRdouble" style:family="table-cell">
+   <style:table-cell-properties fo:border-top="0.15cm double #ff0000"
+    style:border-line-width-top="0.05cm 0.05cm 0.05cm"/>
+  </style:style>
+  <style:style style:name="tR_lG" style:family="table-cell">
+   <style:table-cell-properties fo:border-top="0.05cm solid #ff0000"
+    fo:border-left="0.1cm solid #008000"/>
+  </style:style>
+  <style:style style:name="tB_lG" style:family="table-cell">
+   <style:table-cell-properties fo:border-top="0.05cm solid #0000ff"
+    fo:border-left="0.1cm solid #008000"/>
+  </style:style>
+  <style:style style:name="bR" style:family="table-cell">
+   <style:table-cell-properties fo:border-bottom="0.05cm solid #ff0000"/>
+  </style:style>
+  <style:style style:name="lG" style:family="table-cell">
+   <style:table-cell-properties fo:border-left="0.1cm solid #008000"/>
+  </style:style>
+  <style:style style:name="lB" style:family="table-cell">
+   <style:table-cell-properties fo:border-left="0.1cm solid #0000ff"/>
+  </style:style>
+  <style:style style:name="rG" style:family="table-cell">
+   <style:table-cell-properties fo:border-right="0.1cm solid #008000"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+    fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"
+    style:print-orientation="portrait"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Default" style:page-layout-name="pm1"/>
+ </office:master-styles>
+ <office:body>
+  <office:spreadsheet>
+   <table:table table:name="Runs">
+    <table:table-column table:style-name="co1" table:number-columns-repeated="6"/>
+
+    <!-- 1 -->
+    <table:table-row table:style-name="ro1"><table:table-cell table:number-columns-repeated="6"/></table:table-row>
+    <!-- 2: control, four identical thin red tops -->
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="tR" table:number-columns-repeated="4"/>
+     <table:table-cell table:number-columns-repeated="2"/></table:table-row>
+    <!-- 3 -->
+    <table:table-row table:style-name="ro1"><table:table-cell table:number-columns-repeated="6"/></table:table-row>
+    <!-- 4: colour changes mid-run -->
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="tR" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="tB" table:number-columns-repeated="2"/>
+     <table:table-cell table:number-columns-repeated="2"/></table:table-row>
+    <!-- 5 -->
+    <table:table-row table:style-name="ro1"><table:table-cell table:number-columns-repeated="6"/></table:table-row>
+    <!-- 6: width changes mid-run -->
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="tR" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="tRthick" table:number-columns-repeated="2"/>
+     <table:table-cell table:number-columns-repeated="2"/></table:table-row>
+    <!-- 7 -->
+    <table:table-row table:style-name="ro1"><table:table-cell table:number-columns-repeated="6"/></table:table-row>
+    <!-- 8: solid then dashed -->
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="tR" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="tRdash" table:number-columns-repeated="2"/>
+     <table:table-cell table:number-columns-repeated="2"/></table:table-row>
+    <!-- 9 -->
+    <table:table-row table:style-name="ro1"><table:table-cell table:number-columns-repeated="6"/></table:table-row>
+    <!-- 10: a hole in the middle -->
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="tR" table:number-columns-repeated="2"/>
+     <table:table-cell/>
+     <table:table-cell table:style-name="tR"/>
+     <table:table-cell table:number-columns-repeated="2"/></table:table-row>
+    <!-- 11 -->
+    <table:table-row table:style-name="ro1"><table:table-cell table:number-columns-repeated="6"/></table:table-row>
+    <!-- 12: single then double -->
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="tR" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="tRdouble" table:number-columns-repeated="2"/>
+     <table:table-cell table:number-columns-repeated="2"/></table:table-row>
+    <!-- 13 -->
+    <table:table-row table:style-name="ro1"><table:table-cell table:number-columns-repeated="6"/></table:table-row>
+    <!-- 14: unbroken run, perpendicular border crossing the B|C joint -->
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="tR" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="tR_lG"/>
+     <table:table-cell table:style-name="tR"/>
+     <table:table-cell table:number-columns-repeated="2"/></table:table-row>
+    <!-- 15 -->
+    <table:table-row table:style-name="ro1"><table:table-cell table:number-columns-repeated="6"/></table:table-row>
+    <!-- 16: broken run, perpendicular border crossing the same joint -->
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="tR" table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="tB_lG"/>
+     <table:table-cell table:style-name="tB"/>
+     <table:table-cell table:number-columns-repeated="2"/></table:table-row>
+    <!-- 17: C,D state a bottom border -->
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="bR" table:number-columns-repeated="2"/>
+     <table:table-cell table:number-columns-repeated="2"/></table:table-row>
+    <!-- 18: A,B state the same top border, on the same grid line as row 17's bottom -->
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="tR" table:number-columns-repeated="2"/>
+     <table:table-cell table:number-columns-repeated="4"/></table:table-row>
+    <!-- 19 -->
+    <table:table-row table:style-name="ro1"><table:table-cell table:number-columns-repeated="6"/></table:table-row>
+    <!-- 20..23: a vertical run in column A, and a broken vertical run in column C -->
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="lG"/><table:table-cell/>
+     <table:table-cell table:style-name="lG"/>
+     <table:table-cell table:number-columns-repeated="3"/></table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="lG"/><table:table-cell/>
+     <table:table-cell table:style-name="lG"/>
+     <table:table-cell table:number-columns-repeated="3"/></table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="lG"/><table:table-cell/>
+     <table:table-cell table:style-name="lB"/>
+     <table:table-cell table:number-columns-repeated="3"/></table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="lG"/><table:table-cell/>
+     <table:table-cell table:style-name="lB"/>
+     <table:table-cell table:number-columns-repeated="3"/></table:table-row>
+    <!-- 24 -->
+    <table:table-row table:style-name="ro1"><table:table-cell table:number-columns-repeated="6"/></table:table-row>
+    <!-- 25: C states a left border -->
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:number-columns-repeated="2"/>
+     <table:table-cell table:style-name="lG"/>
+     <table:table-cell table:number-columns-repeated="3"/></table:table-row>
+    <!-- 26: B states the same border as its RIGHT edge, one row below -->
+    <table:table-row table:style-name="ro1">
+     <table:table-cell/>
+     <table:table-cell table:style-name="rG"/>
+     <table:table-cell table:number-columns-repeated="4"/></table:table-row>
+    <!-- 27 -->
+    <table:table-row table:style-name="ro1"><table:table-cell table:number-columns-repeated="6"/></table:table-row>
+    <!-- 28: the run's two outer ends each meet a perpendicular border -->
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="tR_lG"/>
+     <table:table-cell table:style-name="tR" table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="lG"/>
+     <table:table-cell/></table:table-row>
+    <!-- 29 -->
+    <table:table-row table:style-name="ro1"><table:table-cell table:number-columns-repeated="6"/></table:table-row>
+   </table:table>
+   <!--
+     A second sheet, on its own page, asking one further question the first cannot: does a run
+     survive a HIDDEN row or column in the middle of it? A hidden line has no width on the page,
+     so the two halves are geometrically contiguous either way; what is being measured is whether
+     Calc's border array holds the hidden line as a cell (which would break the run) or drops it
+     (which would not). This decides whether a renderer may coalesce on placed adjacency or must
+     coalesce on sheet adjacency.
+   -->
+   <table:table table:name="Hidden">
+    <table:table-column table:style-name="co1"/>
+    <table:table-column table:style-name="co1" table:visibility="collapse"/>
+    <table:table-column table:style-name="co1" table:number-columns-repeated="4"/>
+    <!-- 1: a top border across A..D, with column B hidden -->
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="tR" table:number-columns-repeated="4"/>
+     <table:table-cell table:number-columns-repeated="2"/></table:table-row>
+    <!-- 2..5: a left border down column D, with row 3 hidden -->
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="lG"/>
+     <table:table-cell table:number-columns-repeated="2"/></table:table-row>
+    <table:table-row table:style-name="ro1" table:visibility="collapse">
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="lG"/>
+     <table:table-cell table:number-columns-repeated="2"/></table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="lG"/>
+     <table:table-cell table:number-columns-repeated="2"/></table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:number-columns-repeated="3"/>
+     <table:table-cell table:style-name="lG"/>
+     <table:table-cell table:number-columns-repeated="2"/></table:table-row>
+   </table:table>
+  </office:spreadsheet>
+ </office:body>
+</office:document>

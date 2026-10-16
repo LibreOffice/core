@@ -1,0 +1,20 @@
+laufende-nip-vorhaben-hyland.ods {'line-break': 0}
+tk-syllabus-comparison-document-v5.ods {'line-break': 0}
+underlying-holdings-emea-en_gb-monthly-holdings-state-street-emu-esg-screened-index-equity-fund.ods {'line-break': 0}
+EASA-IFP-147Scope_WEB__ALL_Valid147SoA_2024-11-28-11-16-31.ods {'line-break': 0}
+Laser Report 2024 FOIA __Oct (1).ods {'line-break': 0}
+RCO_VOR_Master_List_082824.ods {'line-break': 0}
+STC_WebList.ods {'line-break': 0}
+TK-Syllabus-Comparison-Document-v2.ods {'line-break': 0}
+environment-edb-docs-edb-emissions-databank.ods {'line-break': 0}
+FY2018_Q4_UAS_Sightings.ods {'line-break': 0}
+ans_mappings_of_eccairs_terms.ods {'paragraphs': 66, 'line-break': 0}
+orbus_togaf_tool_csq.ods {'line-break': 18}
+CIS_Debian_Linux_8_Benchmark_v1.0.0.ods {'paragraphs': 361, 'line-break': 0}
+ODs-February-2022-Airbus-Commercial-Aircraft.ods {'line-break': 0}
+SIL_TDB648.ods {'line-break': 0}
+grants-2005.ods {'line-break': 0}
+sectors-defense-and-aerospace.ods {'line-break': 0}
+FAA-2019-0995-0002_attachment_2.ods {'line-break': 0}
+fse_identification_form.ods {'paragraphs': 1, 'line-break': 0}
+--- 307 documents {'line-break': 40, 'paragraphs': 659}

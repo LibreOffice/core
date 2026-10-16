@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+ xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+ xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+ xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+ xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+ xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+ xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+ office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+ <office:automatic-styles>
+  <style:style style:name="gr1" style:family="graphic" style:parent-style-name="objectwithoutfill">
+   <style:graphic-properties draw:fill="none" draw:stroke="none"/>
+  </style:style>
+  <style:style style:name="P1" style:family="paragraph">
+   <style:text-properties fo:font-size="12pt" style:font-name-asian="Liberation Sans"/>
+  </style:style>
+  <style:style style:name="T1" style:family="text">
+   <style:text-properties fo:color="#ff0000" fo:font-size="12pt"/>
+  </style:style>
+  <style:style style:name="T2" style:family="text">
+   <style:text-properties fo:color="#0000ff" fo:font-size="12pt"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+    fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Default" style:page-layout-name="pm1"/>
+ </office:master-styles>
+ <office:body>
+  <office:spreadsheet>
+   <table:table table:name="Probe">
+    <table:table-column table:number-columns-repeated="4"/>
+    <table:table-row>
+     <table:table-cell office:value-type="string"><text:p>ZCELL</text:p>
+      <draw:frame draw:style-name="gr1" draw:text-style-name="P1" svg:width="9cm" svg:height="2cm" svg:x="0.2cm" svg:y="0.2cm">
+       <draw:text-box>
+        <text:p text:style-name="P1"><text:span text:style-name="T1">ZREDRUN</text:span> ZPLAINRUN <text:span text:style-name="T2">ZBLUERUN</text:span></text:p>
+       </draw:text-box>
+      </draw:frame>
+     </table:table-cell>
+    </table:table-row>
+    <table:table-row><table:table-cell/></table:table-row>
+    <table:table-row><table:table-cell/></table:table-row>
+    <table:table-row><table:table-cell/></table:table-row>
+   </table:table>
+  </office:spreadsheet>
+ </office:body>
+</office:document>

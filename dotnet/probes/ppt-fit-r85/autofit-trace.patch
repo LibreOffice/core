@@ -1,0 +1,79 @@
+--- /tmp/SlideAutofit.cs.before	2026-09-08 19:43:41.297286084 +0000
++++ dotnet/src/XRay.Office.Presentations/Layout/SlideAutofit.cs	2026-09-08 19:51:53.142817803 +0000
+@@ -404,6 +404,67 @@
+     /// replaces; the walk visits at most thirteen and usually two or three.
+     /// </para>
+     /// </remarks>
++    private static void Trace(SlideTextBody body, DocRect area, SlideFonts fonts)
++    {
++        if (Environment.GetEnvironmentVariable("XRAY_OFFICE_AUTOFIT_TRACE") is not { Length: > 0 } path)
++        {
++            return;
++        }
++
++        System.Text.StringBuilder sb = new();
++        sb.Append("BODY avail=").Append(area.Height.Mm100 + 1)
++          .Append(" width=").Append(area.Width.Mm100)
++          .Append(" paras=").Append(body.Paragraphs.Count)
++          .Append(" fils=").Append(body.FontIndependentLineSpacing)
++          .Append(" wraps=").Append(body.Wraps)
++          .Append(" text=").Append(Excerpt(body)).Append('\n');
++
++        foreach ((double f, double sp) in new[] { (1.0, 1.0), (1.0, 0.9), (0.925, 0.9) })
++        {
++            Measurement m = Measure(body, area.Width, fonts, new Scaling(f, sp, f != 1.0 || sp != 1.0),
++                                    body.FontIndependentLineSpacing);
++            sb.Append("  SCALE font=").Append(f).Append(" sp=").Append(sp)
++              .Append(" total=").Append(m.Total.Mm100)
++              .Append(" ntp=").Append(m.TotalToLastNonEmpty.Mm100).Append('\n');
++            foreach (Block b in m.Blocks)
++            {
++                sb.Append("    P sb=").Append(b.SpaceBefore.Mm100)
++                  .Append(" sa=").Append(b.SpaceAfter.Mm100)
++                  .Append(" h=").Append(b.Height.Mm100)
++                  .Append(" mode=").Append(b.Paragraph.LineSpacing.Mode)
++                  .Append(" prop=").Append(b.Paragraph.LineSpacing.Proportion)
++                  .Append(" val=").Append(b.Paragraph.LineSpacing.Value.Mm100)
++                  .Append(" stated=").Append(b.Paragraph.LineSpacingStated)
++                  .Append(" sizes=");
++                foreach (SlideTextRun r in b.Paragraph.Runs) sb.Append(r.Size.Mm100).Append(',');
++                sb.Append(" lines=");
++                foreach (PlacedLine l in b.Lines)
++                {
++                    sb.Append('[').Append(l.Height.Mm100).Append('/').Append(l.TextHeight.Mm100)
++                      .Append('/').Append(l.Ascent.Mm100)
++                      .Append('@').Append(l.Box.Line.Start).Append('-').Append(l.Box.Line.End)
++                      .Append(']');
++                }
++                sb.Append('\n');
++            }
++        }
++
++        File.AppendAllText(path, sb.ToString());
++    }
++
++    private static string Excerpt(SlideTextBody body)
++    {
++        foreach (SlideParagraph p in body.Paragraphs)
++        {
++            if (!string.IsNullOrWhiteSpace(p.Text))
++            {
++                return p.Text.Length > 40 ? p.Text[..40] : p.Text;
++            }
++        }
++
++        return string.Empty;
++    }
++
+     private static Scaling Solve(SlideTextBody body, DocRect area, SlideFonts fonts)
+     {
+         if (!body.AutoFit) return Scaling.Stated(body);
+@@ -419,6 +480,8 @@
+                        body.FontIndependentLineSpacing)
+                    .TotalToLastNonEmpty.Mm100 <= available;
+ 
++        Trace(body, area, fonts);
++
+         if (Fits(1.0, 1.0)) return Scaling.None;
+ 
+         foreach ((double font, double spacing) in FitLevels)

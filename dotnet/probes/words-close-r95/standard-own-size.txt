@@ -1,0 +1,12 @@
+A Standard-parented pool name whose entry states its own \fs, measured on 26.2.4.2.
+`plain` states nothing, `own`/`caption-own`/`quote-own` state \fs28; `Normal` is the column.
+
+probe              Normal fs20   Normal fs28   this tree fs20 / fs28
+plain                     10.0          14.0   10.0 / 14.0   agree
+own                       12.0          12.0   12.0 / 12.0   agree
+caption-own               12.0          12.0   12.0 / 12.0   agree
+quote-own                 12.0          12.0   12.0 / 12.0   agree
+
+So a style that states its own size gets neither its own nor its parent's but
+\pard\plain's twelve points -- round 87's trap, and it is why the two corpus documents
+that apply `Body Text` do not move: both state an \fs on the entry itself.

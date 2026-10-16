@@ -1,0 +1,26 @@
+# The plot area's top edge on the five chart pages of Demick_JetBlue.pptx, in PDF points
+# (y up), read as the top of the tallest vertical stroke inside the chart frame. That edge is
+# exactly what a title's reserved band decides, so it isolates this round's change from every
+# other difference on the page.
+#
+# base        = 7b3704e59
+# size+weight = the auto-text table: title 18 pt bold, axis title 10 pt bold
+# +wrap       = and a main title wrapped at 0.8 of the chart's width
+#
+# Pages 4 and 6 have a one-line title in the reference and do not wrap; 5, 7 and 8 do.
+# Mean absolute error over the five pages: 22.88 -> 13.88 -> 1.19 pt.
+page	base	size_weight	plus_wrap	reference	err_base	err_size_weight	err_plus_wrap
+4	386.15	377.15	377.15	376.07	10.08	1.08	1.08
+5	356.15	347.15	326.00	325.36	30.79	21.79	0.64
+6	380.15	371.15	371.15	370.06	10.09	1.09	1.09
+7	350.15	341.15	320.00	318.42	31.73	22.73	1.58
+8	368.15	359.15	338.00	336.42	31.73	22.73	1.58
+#
+# The plot area's *bottom* edge on the same five pages, with both of this round's changes in.
+# It is untouched by them and it is now the larger error on this deck — the band under the
+# plot area (category labels, the category axis' title, a bottom legend) over-reserves:
+#
+#   page        4       5       6       7       8
+#   ours   206.65  176.65  172.38  170.65  160.38
+#   ref    193.92  137.93  167.50  157.92  155.51
+#   err    +12.73  +38.72   +4.88  +12.73   +4.87

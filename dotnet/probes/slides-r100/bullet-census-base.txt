@@ -1,0 +1,25 @@
+shows directory /home/user/r100-work/shows-base
+pages scanned 1532; agreeing pages carrying a bullet: 310 in 16 documents
+  BULLET n= 1462 mean  -0.2217 median   0.0140  beyond 0.10 pt   426 ( 29.1%)
+  body   n= 4769 mean   0.0141 median   0.0003  beyond 0.10 pt   401 (  8.4%)
+
+  of those, pages where EVERY body show is within 0.10 pt: 262 (3909 body shows, 1239 bullets)
+  BULLET beyond 0.10 pt 315 of 1239 (25.4%)  mean -0.2117 min -4.067 max 0.114
+
+document                                              nbul  >0.1      %  nbody  >0.1      %
+2015-Civil-Rights-Website-training                     257    98  38.1%   1211    45   3.7%
+Employment-Based_I-485                                 146    14   9.6%    530     0   0.0%
+8.16_AOD_FINAL_Provider_Training_Presentation_9_2009   136    19  14.0%    600    58   9.7%
+gillikin_online_user_mtg_2010                          136    30  22.1%    281    50  17.8%
+RESPA_-_Section_8_Webinar                              134    84  62.7%    227     2   0.9%
+71393_pp7                                              102    70  68.6%    172     0   0.0%
+pods05                                                  85     8   9.4%    335   173  51.6%
+EG1_dsrc tech                                           76    13  17.1%    179    12   6.7%
+joint_user_outcomes_michael_fullerton_29.06.12          75    33  44.0%    169     0   0.0%
+architecture6                                           70    18  25.7%    212    13   6.1%
+iep-amount-frequency-for-webinar                        66     0   0.0%    195     3   1.5%
+ws_prod-g-doc-Events-2007-Approval-of-Flight-Conditi    62    19  30.6%    163     0   0.0%
+FAA_Form_337                                            54    14  25.9%    183    17   9.3%
+ws_prod-g-doc-Events-industrymeeting18112004-Aercap     45     6  13.3%    149    28  18.8%
+010605Vul                                               11     0   0.0%     98     0   0.0%
+Airport Planning 09112013                                7     0   0.0%     65     0   0.0%

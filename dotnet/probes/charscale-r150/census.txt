@@ -1,0 +1,5 @@
+rtf column           337 documents
+  base rate \fN      256927
+  gross              1965 occurrences in 20 documents
+  non-identity       1520 occurrences in 17 documents
+  commonest values   [(99, 1265), (95, 87), (103, 77), (105, 27), (104, 13), (102, 10)]

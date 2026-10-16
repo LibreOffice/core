@@ -1,0 +1,22 @@
+023.docx: chart anchor 3 states 8662670x6267450 EMU = 682.10 x 493.50 pt
+  base     page 595.30 x 841.89 pt
+      Chart 2      w   595.30 h   430.70  at x  -221.36 y   117.50
+      Picture 1    w   133.20 h    25.80  at x    90.25 y    70.81
+  half     page 595.30 x 841.89 pt
+      Chart 2      w   341.04 h   246.76  at x  -221.36 y   117.50
+      Picture 1    w   133.20 h    25.80  at x    90.25 y    70.81
+  wide     page 595.30 x 841.89 pt
+      Chart 2      w   595.30 h   132.29  at x  -221.36 y   117.50
+      Picture 1    w   133.20 h    25.80  at x    90.25 y    70.81
+  tall     page 595.30 x 841.89 pt
+      Chart 2      w   292.79 h   841.89  at x  -221.36 y   117.50
+      Picture 1    w   133.20 h    25.80  at x    90.25 y    70.81
+  both     page 595.30 x 841.89 pt
+      Chart 2      w   595.30 h   760.65  at x  -221.36 y   117.50
+      Picture 1    w   133.20 h    25.80  at x    90.25 y    70.81
+  fit      page 595.30 x 841.89 pt
+      Chart 2      w   393.70 h   236.21  at x  -221.36 y   117.50
+      Picture 1    w   133.20 h    25.80  at x    90.25 y    70.81
+  picbig   page 595.30 x 841.89 pt
+      Chart 2      w   595.30 h   430.70  at x  -221.36 y   117.50
+      Picture 1    w   682.10 h   493.51  at x    90.25 y    70.81

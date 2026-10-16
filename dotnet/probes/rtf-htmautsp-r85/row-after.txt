@@ -1,0 +1,10 @@
+probe                         ref     ours   ref ours  agree
+b-barerow                    37.8     37.8   max  max  yes
+b-cellrow                    37.8     37.8   max  max  yes
+b-defrow                     37.8     37.8   max  max  yes
+b-fieldcell                  37.8     37.8   max  max  yes
+b-fieldpara                  37.8     37.8   max  max  yes
+b-picpara                    37.8     37.8   max  max  yes
+b-pictcell                   37.8     37.8   max  max  yes
+
+agree 7 of 7

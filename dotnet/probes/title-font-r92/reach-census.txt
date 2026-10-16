@@ -1,0 +1,16 @@
+zip documents scanned: 803
+  sheets      2
+  slides     99
+  TOTAL     101
+
+family names that split, by document count:
+    91  'Helvetica' + sans   LiberationSans-Regular.ttf -> DejaVuSans.ttf
+     2  'Century Schoolbook' + serif   DejaVuSans.ttf -> DejaVuSerif.ttf
+     1  'Adobe Myungjo Std M' + serif   DejaVuSans.ttf -> DejaVuSerif.ttf
+     1  'Bodoni MT' + serif   DejaVuSans.ttf -> DejaVuSerif.ttf
+     1  'Times' + serif   LiberationSerif-Regular.ttf -> DejaVuSerif.ttf
+     1  'Amasis MT Pro Black' + serif   DejaVuSans.ttf -> DejaVuSerif.ttf
+     1  'Castellar' + serif   DejaVuSans.ttf -> DejaVuSerif.ttf
+     1  'Book Antiqua' + serif   DejaVuSans.ttf -> DejaVuSerif.ttf
+     1  'Webdings' + serif   DejaVuSans.ttf -> DejaVuSerif.ttf
+     1  'Batang' + serif   DejaVuSans.ttf -> DejaVuSerif.ttf

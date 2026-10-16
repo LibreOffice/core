@@ -1,0 +1,3 @@
+docx/docm stating a w:vertAlign super/subscript: 57 of 271
+converted .odt stating a style:text-position proportion other than 100%: 84 of 337
+converted .rtf stating \super or \sub: 84 of 337

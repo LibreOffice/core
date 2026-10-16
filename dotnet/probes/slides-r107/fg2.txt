@@ -1,0 +1,54 @@
+# Fundamentals_Module_1_basics.ppt	candidate OPT records 518	fGtext 0
+# RRM-training-syllabus-Chapter-3-Teamwork-TC-Towing-Incident-Analysis-Dec-2009.ppt	candidate OPT records 286	fGtext 0
+# Thailand17.ppt	candidate OPT records 658	fGtext 0
+# W3_Case_Study_of_a_Tsunami_Warning_Simulation_Exercise_Ed.ppt	candidate OPT records 164	fGtext 0
+# architecture6.ppt	candidate OPT records 254	fGtext 0
+pres_ioc_phuket.ppt	opt@56184	prop255=0xffff5700
+# pres_ioc_phuket.ppt	candidate OPT records 369	fGtext 1
+# WC_Update-Aug03.ppt	candidate OPT records 75	fGtext 0
+# policy-pesentation.ppt	candidate OPT records 78	fGtext 0
+# wells08_basic.ppt	candidate OPT records 202	fGtext 0
+# 080214-Intl-pol-frameworks-and-their-implications-for-Africa-ISS-workshop.ppt	candidate OPT records 271	fGtext 0
+# gfopportunitiesforlinkagespres_2010_en.ppt	candidate OPT records 119	fGtext 0
+# ws_prod-g-doc-Events-2007-Approval-of-Flight-Conditions-RM-NAA-16032007.ppt	candidate OPT records 178	fGtext 0
+# ws_prod-g-doc-Events-2007-may-presentation-PtF-background-+-principles.ppt	candidate OPT records 98	fGtext 0
+# ws_prod-g-doc-Events-2007-november-IACA-presentation-at-EASA-Fuel-Tank-Safety-Training-Seminar.ppt	candidate OPT records 75	fGtext 0
+# ws_prod-g-doc-Events-Part-M-presentation.ppt	candidate OPT records 138	fGtext 0
+# 010605Vul.ppt	candidate OPT records 80	fGtext 0
+# Inducement-to-Insurance-Business.ppt	candidate OPT records 71	fGtext 0
+# outlook_of_nigerian_pension_sector.ppt	candidate OPT records 347	fGtext 0
+# ws_prod-g-doc-Events-2007-Privileges.ppt	candidate OPT records 85	fGtext 0
+# ws_prod-g-doc-Events-2007-september-M.017-(French)-France.ppt	candidate OPT records 204	fGtext 0
+# ws_prod-g-doc-Events-2007-september-MDM.032-(ENGLISH)-CZ.ppt	candidate OPT records 225	fGtext 0
+# 0335fab9-79f0-4944-b92c-f223837ca2d8.ppt	candidate OPT records 50	fGtext 0
+# undp_presentation_revised_17_may.ppt	candidate OPT records 135	fGtext 0
+# ws_prod-g-doc-Events-industrymeeting18112004-European-Safety-Strategy-Initiative.ppt	candidate OPT records 124	fGtext 0
+# ITE106-Chapter 4.ppt	candidate OPT records 401	fGtext 0
+# berlin.ppt	candidate OPT records 287	fGtext 0
+# pods05.ppt	candidate OPT records 1351	fGtext 0
+# ws_prod-g-doc-Events-industrymeeting18112004-Aercap.ppt	candidate OPT records 130	fGtext 0
+# Lepore.ppt	candidate OPT records 235	fGtext 0
+# ws_prod-g-doc-Events-r-6.-ESM.ppt	candidate OPT records 102	fGtext 0
+# 1-secretariat.ppt	candidate OPT records 102	fGtext 0
+# 71393_pp7.ppt	candidate OPT records 661	fGtext 0
+# introduction_to_bea_tuxedo.ppt	candidate OPT records 500	fGtext 0
+# joint_user_outcomes_michael_fullerton_29.06.12.ppt	candidate OPT records 221	fGtext 0
+8.16_AOD_FINAL_Provider_Training_Presentation_9_2009.ppt	opt@368555	prop255=0xf2bb5200
+# 8.16_AOD_FINAL_Provider_Training_Presentation_9_2009.ppt	candidate OPT records 544	fGtext 1
+# EG1_dsrc tech.ppt	candidate OPT records 352	fGtext 0
+# Framing Europe.ppt	candidate OPT records 100	fGtext 0
+# RESPA_-_Section_8_Webinar.ppt	candidate OPT records 287	fGtext 0
+# concepts-surrounding-cloud-computing-carolyn-kranz-and-rich-prem-gb-seattle-2011.ppt	candidate OPT records 408	fGtext 0
+# Airport Planning 09112013.ppt	candidate OPT records 304	fGtext 0
+# Employment-Based_I-485.ppt	candidate OPT records 180	fGtext 0
+# iep-amount-frequency-for-webinar.ppt	candidate OPT records 617	fGtext 0
+# BUS-Chapter 05.ppt	candidate OPT records 387	fGtext 0
+# JesuitAssocOfStudentPersonnel.ppt	candidate OPT records 153	fGtext 0
+# gillikin_online_user_mtg_2010.ppt	candidate OPT records 278	fGtext 0
+# 2015-Civil-Rights-Website-training.ppt	candidate OPT records 458	fGtext 0
+# FAA_Form_337.ppt	candidate OPT records 1101	fGtext 0
+# hofman.ppt	candidate OPT records 220	fGtext 0
+# ws_prod-g-doc-Events-2008-February-5-NATO-activities.ppt	candidate OPT records 478	fGtext 0
+# Aerospace_Journey_of_Flight_Chapter_BCB1637572DA6.ppt	candidate OPT records 227	fGtext 0
+# Architecture.ppt	candidate OPT records 144	fGtext 0
+## files 51   candidate OPT 15032   fGtext shapes 2

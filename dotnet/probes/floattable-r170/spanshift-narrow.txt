@@ -1,0 +1,12 @@
+paired	ofOurs	mean|dx|	mean|dy|	max|dy|	over10pt	document
+warning: The `fitz` API is deprecated and will be removed in future. Use `import pymupdf` instead.
+951	1492	8.16	17.52	539.95	273	ABCD-FE-01-00 Flight Envelope - v1 08.03.16.docx
+56	56	0.11	0.72	5.40	0	017_Project_Timeline_Template_Customizable_Format_5d5ca2e8.docx
+146	167	0.43	13.39	249.40	87	HC-Bulletin-template.docx
+412	486	9.08	7.38	539.57	83	PES-Technical-Report-Template_Jan_2019.docx
+1959	2036	1.21	2.42	266.60	205	ABCD-SDE-23-00 - Avionic System Description - 17.02.16 - v1.docx
+820	924	1.33	22.49	361.25	171	ABCD-WB-08-00 Weight and Balance Report - v1 08.03.16.docx
+7274	9125	1.22	3.87	436.95	887	OM template for non-complex NCC operators_August 2016.docx
+1955	2099	0.22	1.13	189.10	24	33004.docx
+68	88	1.29	83.84	159.25	38	May 25 bulletin focus on carers in the workplace.docx
+19751	22200	29.42	23.56	558.90	1982	FAA 2025-26 Holdover Tables.docx

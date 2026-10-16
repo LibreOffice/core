@@ -1,0 +1,97 @@
+arm	lines	widest_pt	content
+R0_1031	2	36.888	i | Reference
+R0_1032	2	36.888	i | Reference
+R0_1033	2	36.888	i | Reference
+R0_1034	2	36.888	i | Reference
+R0_1035	1	40.880	i Reference
+R0_1036	1	40.880	i Reference
+R0_1037	1	40.880	i Reference
+R0_1038	1	40.880	i Reference
+R1_1164	2	38.616	m | Mississippi
+R1_1165	2	38.616	m | Mississippi
+R1_1166	2	38.616	m | Mississippi
+R1_1167	2	38.616	m | Mississippi
+R1_1168	1	47.512	m Mississippi
+R1_1169	1	47.512	m Mississippi
+R1_1170	1	47.512	m Mississippi
+R1_1171	1	47.512	m Mississippi
+R2_1600	2	60.424	m | Hamburgefonstiv
+R2_1601	2	60.424	m | Hamburgefonstiv
+R2_1602	2	60.424	m | Hamburgefonstiv
+R2_1603	2	60.424	m | Hamburgefonstiv
+R2_1604	1	69.304	m Hamburgefonstiv
+R2_1605	1	69.304	m Hamburgefonstiv
+R2_1606	1	69.304	m Hamburgefonstiv
+R2_1607	1	69.304	m Hamburgefonstiv
+R3_924	2	31.528	i | Viscosity
+R3_925	2	31.528	i | Viscosity
+R3_926	2	31.528	i | Viscosity
+R3_927	2	31.528	i | Viscosity
+R3_928	1	35.520	i Viscosity
+R3_929	1	35.520	i Viscosity
+R3_930	1	35.520	i Viscosity
+R3_931	1	35.520	i Viscosity
+R4_933	2	31.968	i | Alternate
+R4_934	2	31.968	i | Alternate
+R4_935	2	31.968	i | Alternate
+R4_936	2	31.968	i | Alternate
+R4_937	1	35.960	i Alternate
+R4_938	1	35.960	i Alternate
+R4_939	1	35.960	i Alternate
+R4_940	1	35.960	i Alternate
+R5_942	2	32.424	i | Available
+R5_943	2	32.424	i | Available
+R5_944	2	32.424	i | Available
+R5_945	2	32.424	i | Available
+R5_946	1	36.416	i Available
+R5_947	1	36.416	i Available
+R5_948	1	36.416	i Available
+R5_949	1	36.416	i Available
+R6_1049	2	37.776	i | Xylophone
+R6_1050	2	37.776	i | Xylophone
+R6_1051	2	37.776	i | Xylophone
+R6_1052	2	37.776	i | Xylophone
+R6_1053	1	41.768	i Xylophone
+R6_1054	1	41.768	i Xylophone
+R6_1055	1	41.768	i Xylophone
+R6_1056	1	41.768	i Xylophone
+R7_1262	2	45.728	a | Temperature
+R7_1263	2	45.728	a | Temperature
+R7_1264	2	45.728	a | Temperature
+R7_1265	2	45.728	a | Temperature
+R7_1266	1	52.408	a Temperature
+R7_1267	1	52.408	a Temperature
+R7_1268	1	52.408	a Temperature
+R7_1269	1	52.408	a Temperature
+R8_1013	2	33.288	a | Objective
+R8_1014	2	33.288	a | Objective
+R8_1015	2	33.288	a | Objective
+R8_1016	2	33.288	a | Objective
+R8_1017	1	39.968	a Objective
+R8_1018	1	39.968	a Objective
+R8_1019	1	39.968	a Objective
+R8_1020	1	39.968	a Objective
+R9_1102	2	37.728	a | Kilometres
+R9_1103	2	37.728	a | Kilometres
+R9_1104	2	37.728	a | Kilometres
+R9_1105	2	37.728	a | Kilometres
+R9_1106	1	44.416	a Kilometres
+R9_1107	1	44.416	a Kilometres
+R9_1108	1	44.416	a Kilometres
+R9_1109	1	44.416	a Kilometres
+R10_1191	2	42.176	a | Wavelength
+R10_1192	2	42.176	a | Wavelength
+R10_1193	2	42.176	a | Wavelength
+R10_1194	2	42.176	a | Wavelength
+R10_1195	1	48.864	a Wavelength
+R10_1196	1	48.864	a Wavelength
+R10_1197	1	48.864	a Wavelength
+R10_1198	1	48.864	a Wavelength
+R11_1102	2	37.744	a | Quicksand
+R11_1103	2	37.744	a | Quicksand
+R11_1104	2	37.744	a | Quicksand
+R11_1105	2	37.744	a | Quicksand
+R11_1106	1	44.424	a Quicksand
+R11_1107	1	44.424	a Quicksand
+R11_1108	1	44.424	a Quicksand
+R11_1109	1	44.424	a Quicksand

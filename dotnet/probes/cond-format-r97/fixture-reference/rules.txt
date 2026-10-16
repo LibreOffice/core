@@ -1,0 +1,27 @@
+# `soffice --convert-to fods` of each fixture, LibreOffice 26.2.4.2, 2026-09-11.
+# The `calcext:conditional-format` elements only; everything else is the sheet.
+#
+# Note `negative-color="#ff0000"` on `sheet-cf-data-bar-default-negative`, whose extension
+# states no `x14:negativeFillColor` at all: that is COL_LIGHTRED, and it is what eight of the
+# nine corpus rules also resolve to. See results.md section 2 arm (4).
+
+=== sheet-cf-data-bar-auto.fods
+    <calcext:conditional-format calcext:target-range-address="Rules.A1:Rules.A5"> <calcext:data-bar calcext:gradient="false" calcext:min-length="10" calcext:max-length="90" calcext:negative-color="#ff0000" calcext:positive-color="#2e75b6" calcext:axis-color="#000000"> <calcext:formatting-entry calcext:value="0" calcext:type="auto-minimum"/> <calcext:formatting-entry calcext:value="0" calcext:type="auto-maximum"/> </calcext:data-bar> </calcext:conditional-format>
+
+=== sheet-cf-data-bar-default-negative.fods
+    <calcext:conditional-format calcext:target-range-address="Rules.A1:Rules.A5"> <calcext:data-bar calcext:gradient="false" calcext:min-length="10" calcext:max-length="90" calcext:negative-color="#ff0000" calcext:positive-color="#2e75b6" calcext:axis-color="#000000"> <calcext:formatting-entry calcext:value="-100" calcext:type="number"/> <calcext:formatting-entry calcext:value="100" calcext:type="number"/> </calcext:data-bar> </calcext:conditional-format>
+
+=== sheet-cf-data-bar-lengths.fods
+    <calcext:conditional-format calcext:target-range-address="Rules.A1:Rules.A5"> <calcext:data-bar calcext:min-length="10" calcext:max-length="90" calcext:negative-color="#ff0000" calcext:axis-position="none" calcext:positive-color="#2e75b6" calcext:axis-color="#000000"> <calcext:formatting-entry calcext:value="0" calcext:type="minimum"/> <calcext:formatting-entry calcext:value="0" calcext:type="maximum"/> </calcext:data-bar> </calcext:conditional-format>
+
+=== sheet-cf-data-bar-negative.fods
+    <calcext:conditional-format calcext:target-range-address="Rules.A1:Rules.A5"> <calcext:data-bar calcext:gradient="false" calcext:min-length="10" calcext:max-length="90" calcext:negative-color="#c00000" calcext:positive-color="#2e75b6" calcext:axis-color="#000000"> <calcext:formatting-entry calcext:value="-100" calcext:type="number"/> <calcext:formatting-entry calcext:value="100" calcext:type="number"/> </calcext:data-bar> </calcext:conditional-format>
+
+=== sheet-cf-data-bar-only.fods
+    <calcext:conditional-format calcext:target-range-address="Rules.A1:Rules.A5"> <calcext:data-bar calcext:show-value="false" calcext:min-length="10" calcext:max-length="90" calcext:negative-color="#ff0000" calcext:axis-position="none" calcext:positive-color="#2e75b6" calcext:axis-color="#000000"> <calcext:formatting-entry calcext:value="0" calcext:type="minimum"/> <calcext:formatting-entry calcext:value="0" calcext:type="maximum"/> </calcext:data-bar> </calcext:conditional-format>
+
+=== sheet-cf-stored-vs-drawn.fods
+    <calcext:conditional-format calcext:target-range-address="Rules.A1:Rules.A6"> <calcext:condition calcext:apply-style-name="ConditionalStyle_1" calcext:value="duplicate" calcext:base-cell-address="Rules.A1"/> </calcext:conditional-format>
+    <calcext:conditional-format calcext:target-range-address="Rules.C1:Rules.C3"> <calcext:condition calcext:apply-style-name="ConditionalStyle_1" calcext:value="formula-is(LEN(TRIM([.C1]))=0)" calcext:base-cell-address="Rules.C1"/> </calcext:conditional-format>
+    <calcext:conditional-format calcext:target-range-address="Rules.C1:Rules.C3"> <calcext:condition calcext:apply-style-name="ConditionalStyle_2" calcext:value="formula-is(LEN(TRIM([.C1]))&gt;0)" calcext:base-cell-address="Rules.C1"/> </calcext:conditional-format>
+

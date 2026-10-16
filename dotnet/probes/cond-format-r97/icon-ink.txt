@@ -1,0 +1,21 @@
+041_Business_budget_ef942467                             pages    4  icons   0  area      0.0 pt2
+042_Business_monthly_budget_4e4d092f                     pages    4  icons   0  area      0.0 pt2
+066_Agile_Gantt_chart_08f9de45                           pages    5  icons  27  area    522.5 pt2
+069_Blue_modern_balance_sheet_Use_this_template_6b4d70d3 pages    4  icons   2  area    207.8 pt2
+075_Idea_planner_tasks_f44ebd73                          pages    1  icons   4  area    192.0 pt2
+076_Inventory_list_accessibility_guide_Use_this_template pages    9  icons   2  area     74.8 pt2
+077_Inventory_list_with_highlighting_Use_this_template_3 pages    1  icons  12  area    249.1 pt2
+078_Modern_inventory_list_Use_this_template_41abd5bf     pages    1  icons  12  area    244.0 pt2
+088_To-do_list_with_progress_tracker_Use_this_template_8 pages    1  icons   1  area     59.3 pt2
+sistem-rekod-markah-srm-_-rekod-master                   pages   31  icons   0  area      0.0 pt2
+total icons the reference draws: 60
+
+# Per-icon area, which is why the ten-points-square reading is wrong: the icon is as tall as
+# the cell's own font, not a constant. GetIconSetInfo sets mnHeight from ATTR_FONT_HEIGHT.
+#   066_Agile_Gantt_chart_08f9de45                            19.4 pt2 each  (4.40 pt square)
+#   069_Blue_modern_balance_sheet_Use_this_template_6b4d70d3 103.9 pt2 each  (10.19 pt square)
+#   075_Idea_planner_tasks_f44ebd73                           48.0 pt2 each  (6.93 pt square)
+#   076_Inventory_list_accessibility_guide_Use_this_template  37.4 pt2 each  (6.12 pt square)
+#   077_Inventory_list_with_highlighting_Use_this_template_3  20.8 pt2 each  (4.56 pt square)
+#   078_Modern_inventory_list_Use_this_template_41abd5bf      20.3 pt2 each  (4.51 pt square)
+#   088_To-do_list_with_progress_tracker_Use_this_template_8  59.3 pt2 each  (7.70 pt square)

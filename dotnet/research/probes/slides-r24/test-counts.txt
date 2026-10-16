@@ -1,0 +1,29 @@
+Every test project run individually on the round's final tree (9a6ddc7ce), rebuilt after the
+last defect-reintroduction cycle so that --no-build measures the clean source and not the
+defect. Counts compared against the known-good line at 7b3704e59.
+
+project           known-good   this round
+Core                     249          256   +7 : 4 auto-text, 3 title wrap
+Containers               109          109
+Text                     240          240
+Vector                   291          291
+Rendering                119          119
+Markup                   259          259
+OpenDocument             125          125
+WordProcessing           660          660
+Spreadsheets             498          498
+Presentations            529          535   +6 : the reader's sizes and weights
+Fidelity                 550          550   0 skipped
+
+Failed: 0 everywhere. Fidelity reports 0 skipped, so the LibreOffice-backed project covered
+its 23 files rather than sitting out.
+
+Reintroduction cycles, each watched failing on its own:
+  A  title size default 18 -> 13 pt          AnUnstatedTitleIsEighteenPoints
+  B  axis title size default 10 -> 9 pt      AnUnstatedAxisTitleIsTenPoints
+  C  unstated weight true -> false           UnstatedTitlesAreBold
+  D  mnRelFontSize dropped                   AGlobalSizeScalesTheTableRatherThanReplacingIt
+  E  IsBold never put on the label           OnlyTheTitlesAreBold, ABoldMainTitleDoesNot...
+  F  the weight never passed to Measure      TheMeasurerIsAskedInTheWeightTheTextIsDrawnIn
+  G  TitleWidthFraction 0.8 -> 1000          ALongMainTitleWrapsAtEightyPerCentOfTheChart,
+                                             AWrappedTitleReservesEveryLineItTakes

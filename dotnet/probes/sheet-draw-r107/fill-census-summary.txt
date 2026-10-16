@@ -1,0 +1,4 @@
+# /home/user/sample-files/sheets/done-010/xls/Special-Procedures_2025-07-10.xls: not an OLE2 structured storage file
+# shape containers: 562
+# stating fillType pattern/texture/picture: 4 in 1 documents
+#   apron-area.xls: {'pattern': 4}

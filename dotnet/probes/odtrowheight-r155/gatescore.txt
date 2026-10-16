@@ -1,0 +1,124 @@
+scored 117 movers of 117
+  gate verdict: 92 match before, 96 after
+  gained 4, lost 0
+  page count closer on 6, further on 1
+  mean |dy| per span, median over the documents: 7.2343 -> 5.7512 pt   closer 87  further 15
+
+  before  after      dy bef    dy aft  refp basep headp  document
+  match   match      3.1427    2.2786    15    15    15  00338b97171e-TE.CAO.00125 Foreign Part 145 approvals
+  match   match      6.9338    6.9256    85    85    85  0126226bc58c-SPA-06_mcar_part-6_and_IS_v2.9.odt
+  match   match      0.0007    0.0007     1     1     1  048789512af3-089_Printable_Graph_Paper_Template_Siml
+  match   match      0.8298    0.6992     5     5     5  0610bb342420-2015-April-SWIM_Users_Forum-Q&A.odt
+  match   match     12.3196   12.3196     3     3     3  070c52604e72-07-04.odt
+  match   match      4.8177    1.1970    13    13    13  07609a64b136-tibs_guidelines_2.odt
+  match   match     31.8206   31.5422     8     8     8  09798ee603ff-AFS-050-004-F2_0i.odt
+  match   match      4.5226    0.0226     1     1     1  0a06a7b3742f-044_Visual_Product_Roadmap_Template_Edi
+  match   match     25.9006   27.0989     6     6     6  102c929b7af8-CP-ETSO template_v2020.odt
+  match   match     53.4654   53.4075     8     8     8  10bacff9f61d-part-145-approval list (1).odt
+  match   match      3.0030    0.0030     1     1     1  134ea481f2d9-098_Business_Case_Template_Fillable_Lay
+  match   match      3.7577    0.0782     1     1     1  1610e3230af2-049_Visual_Product_Roadmap_Template_Sim
+  match   match      2.9682    2.5674    13    13    13  1618a17034c7-dragon1-enterprise-architecture-documen
+  match   match     11.9908   12.0022    48    48    48  176747a82c76-SPA-11_mcar_part-11_v2.9.odt
+  match   match      9.3284   23.4514     4     4     4  1e02f5df28e1-gpp-pr-top-7-office-markets-4q-2023.odt
+  match   match     27.3202   26.7545     4     4     4  1ef46e226af0-JEMIT_Template.odt
+  glyphs  glyphs     2.1724    1.0517     1     1     1  237e724dcaba-042_Visual_Product_Roadmap_Template_Col
+  glyphs  glyphs     2.4207    0.2493     1     1     1  2698c23b2072-018_Project_Timeline_Template_Editable_
+  match   match     10.0281   10.0167     7     7     7  2f5e2258d1f5-absrc-pac-01-info-note-en.odt
+  match   match     86.4541   86.3523     7     7     7  34b65ed5cb55-part-145-approval list 2025.odt
+  match   match    230.7159  230.7159     1     1     1  36a5a60a81e9-008_Free_Genogram_Diagram_Template_Gree
+  match   match     49.4890   49.2535    14    14    14  3c6d04065221-review-welsh-government-communications-
+  pages   pages     29.3377   29.4131     6     7     7  410a0fe0dba2-B11. TE.CAO.00129  Experience  logbook.
+  match   match     44.2691   30.0373     3     3     3  4373cd432be7-P200904290238_0238_51880.odt
+  match   match      0.0008    0.0008     1     1     1  4639d98f3dd5-088_Printable_Graph_Paper_Template_Qual
+  match   match      0.1407    0.0000    18    18    18  48b932db790f-monthly-content-feeder.odt
+  match   match      3.0667    0.0795     1     1     1  4985240899d4-048_Visual_Product_Roadmap_Template_Qua
+  pages   pages     26.3779   26.3769   726   722   722  49befd6540a9-150-5370-10H.odt
+  glyphs  glyphs   182.3632    3.0966     6     6     6  4d161b99e91b-FO.FCTOA_.000129 Application for activi
+  match   match      8.3925    8.2826    42    42    42  4d94599451fa-A320SimNotes.odt
+  match   match      0.2467    0.0000     2     2     2  4f433d29cca4-UAS-SGI_waiver_approval_request_form.od
+  pages   pages     24.2347   20.9109    44    46    46  5301e8c077f9-docs-quality-MA.IMS.00001-Integrated-Ma
+  match   match      0.3321    0.0464     2     2     2  59ed58407b1c-015_Project_Timeline_Template_Colored_B
+  match   match     81.1450   65.3419     2     2     2  5b0b9d89c723-Technical_Issue_Report_Form.odt
+  match   match      4.0845    3.8706    10    10    10  5ba5bbaed3a0-template-technical-report.odt
+  match   match      0.8306    0.5887     2     2     2  5ee4fec55c91-BID_ACKNOWLEDGEMENT_FORM_FOR_A320.odt
+  match   match      0.0007    0.0007     1     1     1  5fcd36be4c30-080_Printable_Graph_Paper_Template_Blac
+  match   match     10.3421   10.2818     8     8     8  664ca41db1fb-2013_11.odt
+  match   match     17.2465   15.9075    20    20    20  681b81943f79-DOA_Template_Form_Type_Certification_Pr
+  match   match     32.0350   31.8877    32    32    32  6ba268b84b01-150_5300_13_chg12.odt
+  match   match    168.0704  168.0704     1     1     1  6f1706e3cee4-010_Free_Genogram_Diagram_Template_Yell
+  match   match      3.0701    0.0831     1     1     1  6f1bffd21d03-045_Visual_Product_Roadmap_Template_Exc
+  match   match     18.0853   16.4129     2     2     2  71d93d372aa9-SDL_FSDO_Part91_LOA_Checklist.odt
+  match   match      5.8341    0.0007     1     1     1  7384f938a6f9-099_Business_Case_Template_Gray_Theme_a
+  match   match     15.2667   13.7212     8     8     8  767a4636588c-technical-architecture.odt
+  match   match      3.3842    3.3614    61    61    61  7764ec518f7e-Sample_SQMS_Program.odt
+  match   match     44.7366   42.8813     4     4     4  78b7139024e4-PAT-047 - Architecture and Detailed Des
+  match   match      2.1321    0.8846    47    47    47  78d4ed430137-33004.odt
+  match   match      7.8620    7.4130     5     5     5  794b214dbc12-461249.odt
+  pages   pages     51.2487   50.6590   165   166   166  7be9cfcc7637-OM template for non-complex NCC operato
+  match   match      0.0094    0.0020     6     6     6  7ee3693381c9-Wales_Office_Quarter_4_Ministerial_Tran
+  match   match      1.9009    0.9009     1     1     1  7f1796abe7b0-086_Printable_Graph_Paper_Template_Gray
+  match   match      2.7618    1.4880     3     3     3  83dcb19372e4-form_1123_application_form_rvsm_spa.odt
+  match   match      6.3696    3.5281    29    29    29  8488bcedf746-CRIF - SpÃ©cification technique - Socle
+  match   match      3.8891    3.4580     2     2     2  912516649914-cacs-206-1751218225.odt
+  match   match      0.4260    0.2978     5     5     5  91eb3bd65dec-easa-form-1.odt
+  match   match     10.1726    0.0007     3     3     3  923e73cade82-Checklist for TC STC ETSO data packages
+  match   match      0.0007    0.0007     1     1     1  941167ff8dea-083_Printable_Graph_Paper_Template_Cust
+  glyphs  glyphs    16.6360    6.7867    29    29    29  96794d8f65e2-ABCD-SDE-23-00 - Avionic System Descrip
+  pages   pages     54.3294   54.8062    16    15    15  993ca203e5af-ABCD-FE-01-00 Flight Envelope - v1 08.0
+  pages   pages      7.8940    2.5160   155   141   153  9a0dd0c6025a-24-25_FAA_Holdover_Tables.odt
+  match   match     24.0986   23.4989    58    58    58  9a283dc56300-ESPN-R - MCF - RA - Ed1.odt
+  glyphs  glyphs     3.2699    0.0046     1     1     1  9c04025d4e2f-016_Project_Timeline_Template_Complete_
+  match   match     19.8314   19.6804     4     4     4  9c595c1372d8-ECSS-E-ST-50-16C-Annex-A(30September202
+  match   match      9.0620    8.8746    82    82    82  9d289f4d021d-EHEST-SMS-Safety-Management-Manual-V2.o
+  match   match      2.4395    2.4106     8     8     8  a3cc62ed5e23-237287_0486190101_0486190101_geolink2ne
+  match   match      6.8360    6.5761    24    24    24  a7dcf358bceb-AirbusCallouts.odt
+  glyphs  pages      4.6320    9.5608    10    10    11  ace5b9b0b4d4-03_Technical_Report_(progress)_template
+  match   match     16.7282   17.7341    18    18    18  aeb14d9767eb-UG.CAO.00133 Foreign Part 145 approvals
+  match   match     55.6546   55.7399    10    10    10  aec06a3b66af-hdss-bulletin-issue-285-25-june-2025.od
+  match   match      8.9447    5.6363     1     1     1  b1114d0a1c91-fleetfastfacts16nov2023.odt
+  match   match     20.4950   14.9974     6     6     6  b1b5a9310896-4400-91_Proposal_To_Lease_Space_10-2024
+  pages   pages     52.2290   52.5225    76    79    79  b1eeaf9dec9c-150_5300_13_chg10.odt
+  match   match      5.8234    5.8089     9     9     9  b2a4d38e82d0-airbus-pdf-information-package_v1-4.odt
+  match   match      0.8359    0.0218     2     2     2  b3189d01461d-private-hire-operators-licensed.odt
+  match   match     11.6286   11.9958    15    15    15  b6b629e87f8f-f445896eb008d14c1746fc37d412dc22.odt
+  glyphs  glyphs     0.9243    0.9199    15    15    15  b71f10d1da6a-xx_SETIS_PWS_template_10.19.22.odt
+  match   match      3.5643    3.5581    14    14    14  b94cdf0df624-PES-Technical-Report-Template_Jan_2019.
+  match   match      2.9125    3.2060     2     2     2  bc17eefecac9-DRX-Ascend System Course Description.od
+  match   match    238.9000  238.9000     1     1     1  bc7992bf1e67-002_Free_Genogram_Diagram_Template_Cust
+  match   match      0.4870    0.3203     1     1     1  bc86178e5426-035_Venn_Diagram_Template_Editable_Form
+  match   match      2.9507    0.0507     1     1     1  bd670096ce53-093_Business_Case_Template_Customizable
+  match   match    166.0877   13.2187     7     7     7  be08258af317-A1. EASA Form 2.odt
+  match   match     84.2090   74.2682     8     8     8  c3ca6e28b089-exhibit-06---technical-architecture-tem
+  glyphs  glyphs     0.6250    0.4624     9     9     9  c515bf8e826b-1603642410-MoM-CASCOM-06-2020-draft04.o
+  match   match     53.6754   52.6238     3     3     3  c6d769563c6f-Case-Study-Heathrow-Airport.odt
+  match   match      0.8204    0.0592     3     3     3  c7164e021fe7-foca_form_1.odt
+  match   match      0.1535    0.0821     2     2     2  d6c91a8ddb2b-part-147_approval list_20230119.odt
+  match   match      8.7559    8.1149     5     5     5  d774a14d81e7-HC-Bulletin-template.odt
+  match   match      7.2207    7.0207     5     5     5  d7d79af88c4d-100_Business_Case_Template_Modern_Forma
+  match   match      2.2224    2.0921    20    20    20  d8c1eba8d845-AAC-AD-No-2021-01-Boeing-737-8-and-737-
+  pages   pages      4.9766    0.7667   167   154   168  d97cdeea9a38-FAA 2025-26 Holdover Tables.odt
+  match   match     18.7331   11.0802     9     9     9  d99c9f54ed6d-draft-variation-notice-airbus-bm3965ia-
+  glyphs  glyphs     6.1540    5.7512    12    12    12  dadea16e85b1-ABCD-WB-08-00 Weight and Balance Report
+  pages   pages     51.8608   51.8576   696   695   695  dd4c69ac3950-AC-150-5370-10G-updated-201604.odt
+  match   match      0.3721    0.3430     8     8     8  dd515c324f94-1_tpr_template__from_fy14_.odt
+  match   match      6.5346    6.3926     2     2     2  df34a327fb28-LHD-230-application-for-the-approval-of
+  match   match     33.7493   33.7493     1     1     1  e22af5bea8dc-085_Printable_Graph_Paper_Template_Exce
+  pages   pages    116.2580  116.3356    18    19    19  e3fcd2815598-150_5300_13_chg8.odt
+  match   match     30.4155   25.3663     7     7     7  e53e5901df3e-092_Business_Case_Template_Convenient_F
+  pages   pages     86.2786   87.6642    15    10    10  e93e7e131d5f-AWR OPS-AOC 044 Statement of Compliance
+  match   match     30.7426   16.8540     3     3     3  e95546337ea4-Form-SM-76A-_-CAR-OPS-2A-Instruments-an
+  match   match     28.4518   28.3952    26    26    26  ed07ce5f44c7-t_TEMPforInvProgs.odt
+  match   match      9.5892    0.0386     1     1     1  ed120676ba63-1528039320.odt
+  match   match     20.5044   21.5544     1     1     1  ef8718d2b6f1-090_Business_Case_Template_Blue_Theme_1
+  match   match      2.7629    0.0130     1     1     1  f3cc26651647-013_Project_Timeline_Template_Blue_Back
+  match   match      2.9849    2.1709     7     7     7  f61819845751-template---tpr-technical-progress-repor
+  match   match      1.0657    0.0157     1     1     1  f9b7ebc70df3-095_Business_Case_Template_Easy_Format_
+  match   match      6.8673    1.2249     7     7     7  fa696bf19b98-technical-report-template.odt
+  pages   pages     28.2014   28.4351     6     7     7  fa86e47856dd-approvals-and-standardisation-organisat
+  match   match     53.3885   52.6962     1     1     1  fe0db0fa2021-043_Visual_Product_Roadmap_Template_Cus
+  match   match      5.4847    0.7356     3     3     3  ff23c273accb-1528364855.odt
+  match   match      0.1256    0.0215     1     1     1  ffc95e0819d4-047_Visual_Product_Roadmap_Template_Pro
+  pages   match      3.4348    0.0030     2     1     2  17ddb50d9338-097_Business_Case_Template_Elegant_Layo
+  pages   match      1.6007    0.0007     2     1     2  4638126a743b-087_Printable_Graph_Paper_Template_Gree
+  pages   match      7.2343    4.5546    35    34    35  66cd4750ab46-ESPN-R - MCF - Manual - Ed1.0 - For Pub
+  pages   match    121.7216    0.5195    16    15    16  fec368137046-FO.FCTOA.00010 Application for a Part-O

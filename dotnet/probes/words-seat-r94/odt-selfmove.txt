@@ -1,0 +1,6 @@
+  spans   moved  mean dx of movers      min      max   document
+   6608       6               7.20     7.20     7.20   150_5300_13_chg10__odt.pdf
+   3123      14               7.20     7.20     7.20   150_5300_13_chg12__odt.pdf
+   2112       1              22.50    22.50    22.50   150_5300_13_chg8__odt.pdf
+    675      10             -42.00   -42.00   -42.00   644730BRI0mna000BOX361539B00public0__odt.pdf
+    108      40             -38.15   -38.15   -38.15   手机免提系统TSB__odt.pdf

@@ -1,0 +1,75 @@
+                                                     NCC
+                                             OPERATIONS MANUAL
+                                                   PART A
+                                                Rev. X of [date]
+
+
+
+ 2.1.5   Management of the collection process. Analysis and storage of records, flight
+         documents, additional information and data
+
+2.1.5.1 Analysis of records, flight documents, additional information and data
+
+         All records, flight documents, additional information and data shall be analysed in accordance with the
+         Safety Management System and the Compliance Monitoring Program. This procedure is designed to
+         gather and ensure continuous learning as well as improvements within the department.
+
+2.1.5.2 Procedures for document storage
+
+          Task                               Frequency                            Responsibility
+          Establish File                     On receipt
+          Maintain File                      Continuously
+          Sort through files                 Annually                             [responsible person]
+          Archive files                      As listed below
+          Destroy files                      After minimum Storage Time
+
+
+         2.1.5.2.1     Storage of organization related documents
+
+                                                                       Minimum Storage
+          Document                            Place of Storage                                   Responsibility
+                                                                       Time
+          A copy of the operator’s
+                                                                                                 [responsible
+          declaration                                                  5 years
+                                                                                                 person]
+          Details of approvals held                                                              [responsible
+                                                                       5 years
+                                                                                                 person]
+          Operations Manual and all its
+                                                                                                 [responsible
+          Revisions                                                    5 years
+                                                                                                 person]
+          Copy of the CAMO certificate on
+                                                                                                 [responsible
+          file.                                                        1 year periodically
+                                                                                                 person]
+
+
+
+         2.1.5.2.2     Storage of information used for the preparation and execution of a flight
+
+                                                                          Minimum Storage
+                                                 Place of Storage                                   Responsibility
+                       Document                                                Time
+
+           Operational Flight Plan (OFP)
+
+                     ATS Flight Plan
+                                                                                                      [responsible
+                                                                               3 months
+                      NOTAM, AIS                                                                         person]
+
+                 Mass and balance
+                  documentation
+                                                                          36 months after date        [responsible
+                      Journey Log
+                                                                              of last entry              person]
+
+
+         2.1.5.2.3     Storage of reports related to incidents, accidents and occurrences
+
+                Document                    Place of storage            Minimum              Responsibility
+
+                                                                                                      Page 29 of 165
+

@@ -1,0 +1,509 @@
+010605Vul__ppt
+  page    3  ours   32.00 x13   ref   31.01 x12    (+3.19%)
+  page   11  ours   27.01 x10   ref   28.01 x6     (-3.57%)
+  page   13  ours   29.00 x10   ref   29.99 x10    (-3.30%)
+  page   18  ours   27.01 x12   ref   28.01 x7     (-3.57%)
+  page   19  ours   27.01 x12   ref   28.01 x7     (-3.57%)
+1-secretariat__ppt
+  page    9  ours   29.00 x16   ref   29.31 x8     (-1.06%)
+10. Drawings, circuit diagrams and schematics__pptx
+  page    2  ours   18.00 x6    ref   20.01 x8     (-10.04%)
+  page    9  ours   18.00 x7    ref   20.01 x9     (-10.04%)
+  page   10  ours   18.00 x5    ref   20.01 x10    (-10.04%)
+  page   16  ours   18.00 x10   ref   20.01 x10    (-10.04%)
+1200-Assigning-Club-officers__pptx
+  page   11  ours   43.00 x7    ref   43.99 x5     (-2.25%)
+16 - UTM - (NASA)__pptx
+  page    4  ours   28.01 x3    ref   18.00 x2     (+55.61%)
+  page   10  ours   15.00 x22   ref   14.71 x11    (+1.97%)
+  page   16  ours   18.00 x9    ref   15.19 x7     (+18.50%)
+  page   28  ours   27.01 x14   ref   26.70 x7     (+1.16%)
+171128IPAP__pptx
+  page    3  ours   13.49 x25   ref   18.00 x19    (-25.06%)
+  page    4  ours   13.49 x16   ref   18.00 x20    (-25.06%)
+  page    6  ours   13.49 x17   ref   18.00 x16    (-25.06%)
+  page    7  ours   13.49 x21   ref   18.00 x15    (-25.06%)
+  page    8  ours   13.49 x18   ref   18.00 x20    (-25.06%)
+  page    9  ours   13.49 x23   ref   18.00 x16    (-25.06%)
+  page   11  ours   13.49 x18   ref   18.00 x16    (-25.06%)
+  page   13  ours   13.49 x27   ref   18.00 x19    (-25.06%)
+  page   14  ours   13.49 x31   ref   18.00 x26    (-25.06%)
+  page   22  ours   13.49 x21   ref   18.00 x17    (-25.06%)
+  page   27  ours   13.49 x24   ref   18.00 x23    (-25.06%)
+  page   28  ours   13.49 x17   ref   18.00 x17    (-25.06%)
+  page   31  ours   13.49 x14   ref   18.00 x14    (-25.06%)
+  page   32  ours   11.00 x18   ref   14.00 x52    (-21.43%)
+  page   37  ours   11.99 x32   ref   10.91 x17    (+9.90%)
+  page   39  ours   11.00 x22   ref   11.99 x53    (-8.26%)
+2014BSA_Sunday_Killion__pptx
+  page    5  ours   20.73 x13   ref   16.50 x78    (+25.64%)
+  page   10  ours   14.98 x33   ref   11.51 x107   (+30.15%)
+  page   12  ours    9.95 x41   ref    9.50 x125   (+4.74%)
+  page   17  ours   14.98 x48   ref   11.00 x150   (+36.18%)
+  page   20  ours   17.02 x15   ref   16.30 x48    (+4.42%)
+  page   22  ours    9.96 x277  ref   11.20 x277   (-11.07%)
+  page   25  ours   15.01 x43   ref   10.40 x43    (+44.33%)
+  page   27  ours   13.00 x50   ref   11.79 x50    (+10.26%)
+  page   38  ours   12.01 x34   ref   14.20 x93    (-15.42%)
+2015-Civil-Rights-Website-training__ppt
+  page   18  ours   22.99 x9    ref   22.00 x8     (+4.50%)
+  page   21  ours   20.01 x31   ref   18.99 x31    (+5.37%)
+  page   22  ours   25.99 x6    ref   24.01 x7     (+8.25%)
+  page   25  ours   22.99 x8    ref   22.00 x7     (+4.50%)
+  page   29  ours   29.99 x7    ref   29.00 x7     (+3.41%)
+  page   30  ours   22.99 x8    ref   22.00 x7     (+4.50%)
+  page   38  ours   12.02 x168  ref    6.41 x168   (+87.52%)
+  page   39  ours   18.00 x11   ref   17.01 x10    (+5.82%)
+  page   41  ours   27.01 x12   ref   25.99 x11    (+3.92%)
+  page   42  ours   22.99 x13   ref   24.01 x14    (-4.25%)
+  page   43  ours   18.00 x15   ref   17.01 x14    (+5.82%)
+  page   47  ours   18.00 x4    ref   17.01 x5     (+5.82%)
+  page   56  ours   24.01 x14   ref   22.99 x13    (+4.44%)
+  page   58  ours   27.01 x12   ref   28.01 x12    (-3.57%)
+  page   66  ours   11.06 x259  ref    5.70 x136   (+94.04%)
+  page   75  ours   12.64 x5    ref   12.81 x5     (-1.33%)
+  page   79  ours    9.90 x6    ref    9.61 x6     (+3.02%)
+  page   80  ours   27.01 x7    ref   25.99 x7     (+3.92%)
+  page   89  ours   27.01 x9    ref   25.99 x10    (+3.92%)
+  page   90  ours    6.01 x157  ref    7.00 x142   (-14.14%)
+  page   91  ours   15.00 x6    ref   25.99 x7     (-42.29%)
+  page   93  ours   19.20 x5    ref   32.00 x6     (-40.00%)
+30-04-2021 merged NDoH and NICD_Presentation HBV BD meeting 05May2021_1__pptx
+  page    9  ours   20.01 x30   ref   18.99 x17    (+5.37%)
+3492__pptx
+  page    4  ours   18.00 x4    ref   15.99 x4     (+12.57%)
+  page    9  ours    4.51 x3    ref   15.99 x32    (-71.79%)
+  page   11  ours   18.00 x11   ref   15.99 x9     (+12.57%)
+  page   19  ours   20.01 x5    ref   11.00 x21    (+81.91%)
+3495__pptx
+  page    7  ours   18.00 x4    ref   11.99 x6     (+50.13%)
+  page    9  ours   18.00 x4    ref   11.99 x5     (+50.13%)
+429_BLISc 2019 IInd Sem.  PAPER-7 UNIT 3__pptx
+  page    2  ours   15.99 x15   ref   17.01 x17    (-6.00%)
+  page    9  ours   14.00 x17   ref   13.01 x23    (+7.61%)
+  page   12  ours   15.99 x47   ref   17.01 x28    (-6.00%)
+  page   19  ours   17.01 x34   ref   15.99 x20    (+6.38%)
+5b_upasana_dasgupta_-_liability_and_registration__pptx
+  page    7  ours   15.00 x19   ref   15.99 x16    (-6.19%)
+  page   13  ours   17.01 x16   ref   18.00 x14    (-5.50%)
+7-Zulkefli_Part147n66_IKMAS__pptx
+  page    4  ours    7.99 x25   ref   10.01 x44    (-20.18%)
+71393_pp7__ppt
+  page    4  ours   15.00 x10   ref   14.60 x5     (+2.74%)
+  page    5  ours   11.00 x10   ref   11.99 x10    (-8.26%)
+  page   10  ours   17.01 x17   ref   18.00 x16    (-5.50%)
+  page   12  ours    9.01 x18   ref    8.50 x9     (+6.00%)
+  page   14  ours   18.99 x16   ref   17.01 x9     (+11.64%)
+  page   33  ours   11.27 x20   ref    7.99 x21    (+41.05%)
+  page   34  ours   17.01 x12   ref   18.99 x9     (-10.43%)
+  page   36  ours   14.00 x10   ref   13.01 x10    (+7.61%)
+8.16_AOD_FINAL_Provider_Training_Presentation_9_2009__ppt
+  page    6  ours   15.75 x7    ref   16.81 x7     (-6.31%)
+  page   24  ours   17.01 x10   ref   20.01 x15    (-14.99%)
+  page   25  ours   18.00 x9    ref   20.01 x11    (-10.04%)
+  page   32  ours   11.99 x8    ref   18.00 x9     (-33.39%)
+  page   42  ours   17.01 x12   ref   18.00 x15    (-5.50%)
+  page   47  ours   11.00 x11   ref   13.01 x11    (-15.45%)
+8_P-Pavese_AIRBUS-ATB-journee-CRATB__pptx
+  page    3  ours   44.03 x15   ref   14.00 x10    (+214.50%)
+  page    8  ours   10.01 x10   ref   18.00 x19    (-44.39%)
+Architecture__ppt
+  page    8  ours   29.99 x2    ref   28.01 x1     (+7.07%)
+  page   11  ours   29.99 x2    ref   18.00 x2     (+66.61%)
+  page   21  ours   29.99 x2    ref   28.01 x1     (+7.07%)
+  page   22  ours   29.99 x2    ref   28.01 x1     (+7.07%)
+  page   23  ours   31.01 x2    ref   28.01 x2     (+10.71%)
+  page   26  ours   31.01 x2    ref   24.01 x2     (+29.15%)
+  page   28  ours   31.01 x2    ref   29.00 x1     (+6.93%)
+  page   29  ours   31.01 x1    ref   29.99 x1     (+3.40%)
+BHCA Part II webinar #2 - 10.2020__pptx
+  page   12  ours   17.01 x12   ref   15.99 x11    (+6.38%)
+  page   15  ours   22.99 x12   ref   17.01 x8     (+35.16%)
+  page   19  ours   15.99 x23   ref   18.00 x24    (-11.17%)
+BMFE-06-03 (Gerflor) Smoke Density and Toxicity__pptx
+  page    4  ours   18.00 x24   ref   18.99 x24    (-5.21%)
+BUS-Chapter 05__ppt
+  page    4  ours   25.99 x15   ref   25.00 x10    (+3.96%)
+  page   17  ours   24.01 x14   ref   22.99 x10    (+4.44%)
+BasicMed_AME_Presentation__pptx
+  page    3  ours   18.00 x27   ref   24.01 x17    (-25.03%)
+  page   17  ours   18.00 x21   ref   24.01 x14    (-25.03%)
+  page   18  ours   18.00 x12   ref   24.01 x13    (-25.03%)
+Copy of Full deck with references Promotion of Outside Interests at Work final(1)__pptx
+  page    1  ours   24.01 x6    ref   43.00 x6     (-44.16%)
+  page   25  ours   38.01 x3    ref   24.01 x3     (+58.31%)
+County ACHS Presentaion Webinar 8-16-16 Peg__pptx
+  page    7  ours   25.99 x16   ref   25.00 x11    (+3.96%)
+  page    8  ours   24.01 x17   ref   22.00 x11    (+9.14%)
+  page   23  ours   32.00 x4    ref   15.99 x5     (+100.13%)
+Course Selection 2025-26 Current Grade 09__pptx
+  page    7  ours   11.00 x14   ref   11.99 x14    (-8.26%)
+Curriculum-Schematic-E22-11052025__pptx
+  page    7  ours   15.99 x26   ref   18.00 x23    (-11.17%)
+  page    8  ours   15.99 x43   ref   14.00 x36    (+14.21%)
+  page   11  ours   15.99 x48   ref   14.00 x28    (+14.21%)
+Demick_JetBlue__pptx
+  page    4  ours   10.01 x33   ref    9.89 x49    (+1.21%)
+  page    5  ours   10.01 x24   ref    9.89 x37    (+1.21%)
+  page    6  ours   10.01 x18   ref    9.89 x63    (+1.21%)
+  page    7  ours   10.01 x31   ref    9.89 x68    (+1.21%)
+  page    8  ours   10.01 x26   ref    9.89 x66    (+1.21%)
+DoIRD Meeting 16JAN14 v1-1__pptx
+  page    7  ours   22.99 x15   ref   22.00 x11    (+4.50%)
+  page    8  ours   22.00 x18   ref   22.99 x12    (-4.31%)
+  page   13  ours   32.00 x14   ref   31.01 x8     (+3.19%)
+EG1_dsrc tech__ppt
+  page    2  ours   15.00 x12   ref   15.99 x6     (-6.19%)
+Employment-Based_I-485__ppt
+  page   33  ours   29.99 x9    ref   29.00 x8     (+3.41%)
+  page   35  ours   31.01 x12   ref   32.00 x12    (-3.09%)
+FAAAIandtheArtandScienceofV&Vfinal__pptx
+  page    7  ours    9.01 x16   ref    8.90 x16    (+1.24%)
+  page   19  ours   24.01 x3    ref   14.00 x25    (+71.50%)
+FAA_Form_337__ppt
+  page    1  ours   28.01 x1    ref   14.00 x1     (+100.07%)
+  page   66  ours   27.00 x6    ref   26.19 x6     (+3.09%)
+Framing Europe__ppt
+  page    5  ours   22.99 x7    ref   24.01 x18    (-4.25%)
+Fundamentals_Module_1_basics__ppt
+  page    1  ours   28.01 x4    ref   11.99 x4     (+133.61%)
+  page    8  ours   27.01 x24   ref   28.01 x22    (-3.57%)
+G-InvoicingKeithJarboe__pptx
+  page    9  ours   15.99 x16   ref   24.01 x32    (-33.40%)
+HENTZEN_COMPOSITE_MATERIALS_IN_THE_AEROSPACE_INDUSTRY__pptx
+  page    7  ours   18.99 x7    ref   20.01 x5     (-5.10%)
+ITE106-Chapter 4__ppt
+  page    2  ours   25.00 x7    ref   25.99 x7     (-3.81%)
+  page    5  ours   25.00 x12   ref   28.01 x12    (-10.75%)
+  page    6  ours   21.00 x16   ref   22.99 x14    (-8.66%)
+  page    7  ours   22.00 x14   ref   24.01 x16    (-8.37%)
+  page   11  ours   22.00 x14   ref   28.01 x10    (-21.46%)
+  page   14  ours   22.99 x14   ref   24.01 x11    (-4.25%)
+  page   15  ours   18.99 x15   ref   22.00 x12    (-13.68%)
+  page   17  ours   24.01 x13   ref   28.01 x10    (-14.28%)
+  page   18  ours   25.00 x12   ref   28.01 x12    (-10.75%)
+  page   19  ours   25.00 x12   ref   28.01 x12    (-10.75%)
+  page   21  ours   27.01 x13   ref   28.01 x13    (-3.57%)
+  page   23  ours   24.01 x15   ref   28.01 x12    (-14.28%)
+  page   29  ours   27.01 x12   ref   28.01 x12    (-3.57%)
+  page   38  ours   22.00 x17   ref   24.01 x18    (-8.37%)
+  page   44  ours   24.01 x18   ref   25.00 x15    (-3.96%)
+  page   46  ours   22.00 x15   ref   22.99 x11    (-4.31%)
+Intersil_Italy_CAN_Bus_Transceiver_Presentation_Final__pptx
+  page    5  ours   11.99 x45   ref   13.01 x28    (-7.84%)
+  page    7  ours   15.99 x18   ref   20.01 x9     (-20.09%)
+  page    8  ours   27.01 x4    ref   29.99 x3     (-9.94%)
+  page   13  ours   18.99 x16   ref   20.01 x14    (-5.10%)
+  page   21  ours    4.54 x44   ref    5.61 x44    (-19.07%)
+JesuitAssocOfStudentPersonnel__ppt
+  page    7  ours   24.01 x13   ref   22.99 x9     (+4.44%)
+  page   13  ours   17.01 x22   ref   20.01 x16    (-14.99%)
+  page   18  ours   24.01 x15   ref   22.99 x9     (+4.44%)
+  page   24  ours   14.00 x12   ref   13.49 x6     (+3.78%)
+  page   27  ours   18.99 x17   ref   20.01 x12    (-5.10%)
+Lepore__ppt
+  page    4  ours   17.01 x11   ref   18.00 x7     (-5.50%)
+  page    7  ours   15.00 x21   ref   15.99 x11    (-6.19%)
+  page   10  ours   13.01 x23   ref   14.00 x25    (-7.07%)
+  page   11  ours   20.01 x17   ref   18.99 x11    (+5.37%)
+  page   12  ours   17.01 x18   ref   17.80 x9     (-4.44%)
+NAS-Infrastructure-Roadmaps-HSI__pptx
+  page    1  ours   31.01 x3    ref   32.00 x3     (-3.09%)
+  page    5  ours   10.01 x32   ref    7.99 x135   (+25.28%)
+NAS-Infrastructure-Roadmaps-v16.0__pptx
+  page   13  ours   10.01 x32   ref    7.99 x96    (+25.28%)
+  page   43  ours   10.01 x37   ref    7.99 x72    (+25.28%)
+  page   52  ours   10.01 x32   ref    7.99 x53    (+25.28%)
+  page   65  ours   10.01 x32   ref    7.99 x134   (+25.28%)
+  page   85  ours   10.01 x32   ref    7.00 x66    (+43.00%)
+  page   92  ours    7.99 x42   ref    7.00 x106   (+14.14%)
+  page   93  ours   10.01 x32   ref    7.00 x160   (+43.00%)
+  page   94  ours   10.01 x32   ref    7.99 x155   (+25.28%)
+  page  101  ours   10.01 x32   ref    7.99 x62    (+25.28%)
+NWD-GLA-Community-Outreach-Day-Oct-2025__pptx
+  page    6  ours   10.01 x1    ref    0.99 x8     (+911.11%)
+  page   12  ours   10.01 x1    ref    0.99 x14    (+911.11%)
+OnTrac_StarCertificationProgram-3Day__pptx
+  page   11  ours   24.01 x13   ref   18.00 x8     (+33.39%)
+  page   13  ours   24.01 x7    ref   11.99 x6     (+100.25%)
+  page   14  ours   82.01 x2    ref   36.00 x1     (+127.81%)
+  page   15  ours   82.01 x2    ref   60.01 x1     (+36.66%)
+REDAC Briefing_SSIT_CARA_08132014.ppt__pptx
+  page    2  ours    9.01 x15   ref   24.01 x8     (-62.47%)
+  page    5  ours    9.01 x15   ref   24.01 x11    (-62.47%)
+  page    6  ours    9.01 x15   ref   11.99 x8     (-24.85%)
+  page    8  ours    9.01 x15   ref   24.01 x12    (-62.47%)
+  page    9  ours    9.01 x15   ref   18.99 x14    (-52.55%)
+  page   10  ours    9.01 x15   ref   24.01 x8     (-62.47%)
+RESPA_-_Section_8_Webinar__ppt
+  page    7  ours   24.01 x5    ref   22.99 x4     (+4.44%)
+  page    9  ours   21.00 x5    ref   22.00 x5     (-4.55%)
+  page   10  ours   21.00 x11   ref   18.99 x10    (+10.58%)
+  page   14  ours   21.00 x9    ref   20.01 x8     (+4.95%)
+  page   16  ours   18.99 x7    ref   17.01 x7     (+11.64%)
+  page   17  ours   18.00 x8    ref   18.99 x8     (-5.21%)
+  page   18  ours   21.00 x9    ref   18.99 x8     (+10.58%)
+  page   24  ours   20.01 x12   ref   18.99 x11    (+5.37%)
+  page   30  ours   17.01 x11   ref   18.00 x11    (-5.50%)
+  page   32  ours   24.01 x6    ref   22.99 x5     (+4.44%)
+RPA P4 - Advanced Material__pptx
+  page    3  ours   18.00 x64   ref    6.80 x64    (+164.71%)
+  page   18  ours   20.01 x10   ref   40.00 x13    (-49.97%)
+  page   19  ours   18.00 x10   ref   40.00 x13    (-55.00%)
+RRM-training-syllabus-Chapter-3-Teamwork-TC-Towing-Incident-Analysis-Dec-2009__ppt
+  page    5  ours   24.01 x18   ref   22.99 x13    (+4.44%)
+  page    8  ours   20.01 x24   ref   18.99 x19    (+5.37%)
+  page    9  ours   22.00 x15   ref   22.99 x14    (-4.31%)
+  page   12  ours   24.01 x6    ref   28.01 x9     (-14.28%)
+  page   16  ours   18.99 x30   ref   20.01 x23    (-5.10%)
+  page   17  ours   22.00 x7    ref   22.99 x5     (-4.31%)
+  page   20  ours   15.00 x25   ref   15.99 x20    (-6.19%)
+  page   24  ours   18.00 x23   ref   18.99 x17    (-5.21%)
+  page   27  ours   24.01 x12   ref   23.61 x6     (+1.69%)
+SRDMG(16)024_60 GHz onboard airplanes__pptx
+  page    6  ours   18.00 x6    ref    6.01 x30    (+199.50%)
+  page    9  ours   13.35 x29   ref    7.71 x29    (+73.15%)
+  page   10  ours   16.03 x18   ref    6.89 x18    (+132.66%)
+Sector_Skills_Insights_Advanced_Manufacturing_summary_slide_pack__pptx
+  page   13  ours   13.01 x44   ref   11.99 x32    (+8.51%)
+  page   15  ours   15.00 x45   ref   14.00 x219   (+7.14%)
+Session-1-Presentation-Reporting-Forms-Form-12-final__pptx
+  page    1  ours   18.11 x5    ref   46.69 x4     (-61.21%)
+Snowbirds_High_Show__pptx
+  page   22  ours    9.01 x10   ref   14.00 x14    (-35.64%)
+  page   27  ours   10.01 x11   ref   14.00 x6     (-28.50%)
+  page   32  ours   18.00 x6    ref   24.01 x6     (-25.03%)
+Stakeholders-v08052017 - v5__pptx
+  page    6  ours   14.00 x6    ref   20.01 x3     (-30.03%)
+  page    9  ours   24.01 x4    ref   10.01 x2     (+139.86%)
+Statement of Work presentation__pptx
+  page    8  ours   18.99 x9    ref   20.01 x10    (-5.10%)
+Structural Testing__pptx
+  page   12  ours   10.63 x85   ref    8.39 x85    (+26.70%)
+  page   40  ours   14.00 x84   ref   11.99 x85    (+16.76%)
+  page   50  ours   11.99 x7    ref   28.01 x9     (-57.19%)
+  page   76  ours   25.99 x9    ref   25.00 x11    (+3.96%)
+  page   89  ours   22.00 x18   ref   22.51 x9     (-2.27%)
+Tax factsheet 2022 (1)__pptx
+  page    7  ours   18.00 x31   ref   14.00 x37    (+28.57%)
+Thailand17__ppt
+  page   26  ours   15.99 x26   ref   18.00 x41    (-11.17%)
+Wildlife for REDAC September 11__pptx
+  page    9  ours   18.00 x13   ref   24.01 x23    (-25.03%)
+  page   15  ours   18.00 x14   ref   24.01 x8     (-25.03%)
+  page   22  ours   40.00 x3    ref   11.99 x2     (+233.61%)
+  page   32  ours   18.00 x4    ref   24.01 x4     (-25.03%)
+  page   35  ours   40.00 x4    ref   11.99 x2     (+233.61%)
+[Christophe]NLP_reseau_inge_stat__pptx
+  page   10  ours   20.01 x15   ref   11.99 x20    (+66.89%)
+airbus-powerpoint-presentation-2019-20-without-video_diy_2019-20__pptx
+  page   23  ours   22.00 x7    ref   36.00 x9     (-38.89%)
+  page   28  ours   17.01 x10   ref   18.00 x6     (-5.50%)
+  page   32  ours   22.00 x8    ref   36.00 x11    (-38.89%)
+architecture6__ppt
+  page   30  ours   18.00 x12   ref   18.99 x8     (-5.21%)
+berlin__ppt
+  page    7  ours   27.01 x9    ref   22.99 x7     (+17.49%)
+  page   14  ours   24.01 x22   ref   22.99 x17    (+4.44%)
+  page   15  ours   28.01 x1    ref   14.00 x2     (+100.07%)
+  page   16  ours   22.00 x15   ref   22.99 x11    (-4.31%)
+  page   22  ours   25.00 x20   ref   25.40 x10    (-1.57%)
+chapter_4_0__pptx
+  page   12  ours   18.99 x10   ref   22.00 x7     (-13.68%)
+concepts-surrounding-cloud-computing-carolyn-kranz-and-rich-prem-gb-seattle-2011__ppt
+  page   27  ours   11.99 x17   ref   13.01 x21    (-7.84%)
+  page   30  ours   18.99 x12   ref   20.01 x12    (-5.10%)
+  page   31  ours   18.99 x17   ref   20.01 x14    (-5.10%)
+dhs-293364__pptx
+  page    3  ours   24.01 x17   ref   22.99 x9     (+4.44%)
+  page   19  ours   25.99 x17   ref   25.00 x12    (+3.96%)
+  page   20  ours   22.00 x17   ref   18.99 x11    (+15.85%)
+  page   28  ours   22.00 x14   ref   22.99 x10    (-4.31%)
+  page   31  ours   25.00 x17   ref   25.99 x9     (-3.81%)
+  page   32  ours   21.00 x18   ref   20.01 x11    (+4.95%)
+  page   33  ours   21.00 x22   ref   18.00 x13    (+16.67%)
+  page   34  ours   22.00 x18   ref   24.01 x14    (-8.37%)
+diapo_6_fees_vous_etes_poctdoct_exterieur_a_luniv_v2_0_1__pptx
+  page    1  ours   11.00 x21   ref   11.99 x13    (-8.26%)
+ev122_jj-liew-tort-of-bribery-webinar__pptx
+  page   16  ours   31.01 x17   ref   32.00 x13    (-3.09%)
+  page   21  ours   20.01 x20   ref   24.01 x19    (-16.66%)
+gfopportunitiesforlinkagespres_2010_en__ppt
+  page    9  ours   25.99 x16   ref   25.00 x14    (+3.96%)
+  page   12  ours   22.99 x6    ref   24.01 x7     (-4.25%)
+  page   15  ours   18.99 x14   ref   20.01 x16    (-5.10%)
+  page   17  ours   22.99 x22   ref   24.01 x19    (-4.25%)
+  page   23  ours   25.99 x16   ref   25.00 x10    (+3.96%)
+  page   24  ours   29.00 x15   ref   28.01 x12    (+3.53%)
+  page   25  ours   27.01 x13   ref   28.01 x11    (-3.57%)
+  page   26  ours   21.00 x17   ref   22.00 x18    (-4.55%)
+ghgp-supply-chain-initiative_20100323_wri__pptx
+  page   36  ours   25.00 x20   ref   22.99 x15    (+8.74%)
+gillikin_online_user_mtg_2010__ppt
+  page    2  ours   29.99 x13   ref   31.01 x8     (-3.29%)
+  page   11  ours   27.01 x13   ref   28.01 x9     (-3.57%)
+  page   22  ours   29.00 x8    ref   29.99 x8     (-3.30%)
+  page   29  ours   25.00 x9    ref   25.99 x9     (-3.81%)
+hofman__ppt
+  page    2  ours   24.01 x8    ref   22.00 x7     (+9.14%)
+  page    7  ours   29.99 x9    ref   31.01 x9     (-3.29%)
+  page    9  ours   27.01 x8    ref   31.01 x7     (-12.90%)
+  page   13  ours   31.01 x10   ref   31.69 x5     (-2.15%)
+introduction_to_bea_tuxedo__ppt
+  page    8  ours   21.00 x4    ref   14.00 x4     (+50.00%)
+  page   15  ours   21.00 x4    ref   14.00 x4     (+50.00%)
+  page   18  ours   17.01 x16   ref   15.99 x22    (+6.38%)
+item_3-environmental_process_briefing__pptx
+  page    1  ours   14.00 x1    ref   15.99 x1     (-12.45%)
+joint_user_outcomes_michael_fullerton_29.06.12__ppt
+  page    4  ours   24.01 x12   ref   22.99 x10    (+4.44%)
+  page    7  ours   24.01 x12   ref   22.99 x12    (+4.44%)
+  page   11  ours   18.00 x15   ref   17.01 x13    (+5.82%)
+  page   17  ours   17.01 x15   ref   18.00 x15    (-5.50%)
+  page   20  ours   11.99 x33   ref   11.00 x33    (+9.00%)
+manufacturing_process_simulation_working_group_overview_2023__pptx
+  page    7  ours   10.01 x14   ref   11.00 x16    (-9.00%)
+nabiyeleul_1_aviation_service_28_july_2020__pptx
+  page    1  ours   36.00 x8    ref   28.80 x33    (+25.00%)
+  page    8  ours   28.01 x28   ref   25.60 x21    (+9.41%)
+  page    9  ours   28.01 x19   ref   25.60 x26    (+9.41%)
+order-of-worship-ppt-revised-2018__pptx
+  page    6  ours   29.02 x9    ref   20.01 x18    (+45.03%)
+  page   14  ours   18.99 x13   ref   20.01 x17    (-5.10%)
+  page   16  ours   32.00 x4    ref   20.01 x3     (+59.92%)
+outlook_of_nigerian_pension_sector__ppt
+  page    4  ours   19.01 x6    ref   15.39 x6     (+23.52%)
+pods05__ppt
+  page    7  ours   25.99 x21   ref   24.01 x11    (+8.25%)
+  page   25  ours   15.94 x13   ref   15.59 x17    (+2.25%)
+  page   31  ours   25.99 x38   ref   25.00 x38    (+3.96%)
+  page   32  ours    9.01 x17   ref    7.99 x17    (+12.77%)
+  page   33  ours   14.00 x36   ref   10.01 x36    (+39.86%)
+  page   51  ours   27.01 x10   ref   27.50 x5     (-1.78%)
+policy-pesentation__ppt
+  page    1  ours   36.00 x2    ref   14.00 x2     (+157.14%)
+  page    8  ours   36.00 x1    ref   14.00 x2     (+157.14%)
+pres_ioc_phuket__ppt
+  page    8  ours   40.00 x1    ref   14.00 x2     (+185.71%)
+redac-nasops-201503-RIRP-portfolio-update__pptx
+  page    7  ours   20.01 x11   ref   18.00 x10    (+11.17%)
+  page    9  ours   20.01 x4    ref   13.01 x3     (+53.80%)
+  page   25  ours   20.01 x6    ref   40.00 x3     (-49.97%)
+  page   44  ours   20.01 x13   ref   18.00 x10    (+11.17%)
+redac-sas-201703-hf-research-division__pptx
+  page    6  ours   18.00 x18   ref   15.99 x12    (+12.57%)
+section_1_our_rights_presentation__pptx
+  page   29  ours   15.99 x1    ref   60.01 x1     (-73.35%)
+servicedesk-plus-overviewfinal__pptx
+  page   66  ours   14.00 x4    ref   11.20 x2     (+25.00%)
+solog_orientation_august_2019__pptx
+  page    6  ours   21.00 x13   ref   22.00 x11    (-4.55%)
+southern-classic-kennesaw-state-university-final__pptx
+  page   12  ours   15.99 x40   ref   18.00 x40    (-11.17%)
+undp_presentation_revised_17_may__ppt
+  page   18  ours   11.39 x23   ref    7.60 x23    (+49.87%)
+vv_summit_SAIC-PRESENTATION_FAA-V&V-Summit_508c__pptx
+  page    2  ours    4.99 x5    ref   32.00 x4     (-84.41%)
+  page   10  ours    4.99 x5    ref   18.00 x4     (-72.28%)
+  page   12  ours    4.99 x5    ref   32.00 x6     (-84.41%)
+  page   16  ours    4.99 x5    ref   15.99 x6     (-68.79%)
+  page   17  ours    4.99 x5    ref   15.99 x4     (-68.79%)
+vvsummit2022-SAIC-PRESENTATION__pptx
+  page    2  ours    4.99 x5    ref   32.00 x4     (-84.41%)
+  page   10  ours    4.99 x5    ref   18.00 x4     (-72.28%)
+  page   12  ours    4.99 x5    ref   32.00 x6     (-84.41%)
+  page   16  ours    4.99 x5    ref   15.99 x6     (-68.79%)
+  page   17  ours    4.99 x5    ref   15.99 x4     (-68.79%)
+ws_prod-g-doc-Events-2007-Approval-of-Flight-Conditions-RM-NAA-16032007__ppt
+  page    8  ours   20.01 x20   ref   22.99 x10    (-12.96%)
+ws_prod-g-doc-Events-2007-Privileges__ppt
+  page    2  ours    9.74 x25   ref    8.90 x25    (+9.44%)
+ws_prod-g-doc-Events-2007-may-presentation-PtF-background-+-principles__ppt
+  page    5  ours   20.89 x8    ref   18.99 x8     (+10.01%)
+  page    8  ours   26.41 x7    ref   24.01 x7     (+10.00%)
+  page   13  ours   22.01 x7    ref   20.01 x7     (+10.00%)
+ws_prod-g-doc-Events-2007-september-M.017-(French)-France__ppt
+  page   16  ours   17.01 x16   ref   15.99 x18    (+6.38%)
+  page   21  ours   15.99 x15   ref   17.01 x12    (-6.00%)
+  page   28  ours   15.00 x16   ref   15.99 x21    (-6.19%)
+  page   39  ours   18.00 x16   ref   17.01 x17    (+5.82%)
+  page   44  ours   17.01 x17   ref   18.00 x18    (-5.50%)
+ws_prod-g-doc-Events-2007-september-MDM.032-(ENGLISH)-CZ__ppt
+  page    4  ours   43.41 x4    ref   10.01 x6     (+333.67%)
+  page   27  ours   43.41 x4    ref   10.01 x6     (+333.67%)
+ws_prod-g-doc-Events-Part-M-presentation__ppt
+  page    3  ours   15.99 x3    ref   10.01 x6     (+59.74%)
+  page    7  ours   15.00 x12   ref   15.99 x15    (-6.19%)
+  page    9  ours   18.99 x9    ref   20.01 x9     (-5.10%)
+  page   14  ours   20.01 x5    ref   10.01 x6     (+99.90%)
+  page   15  ours   28.01 x6    ref   10.01 x6     (+179.82%)
+  page   23  ours   20.01 x6    ref   10.01 x6     (+99.90%)
+  page   27  ours   20.01 x6    ref   10.01 x6     (+99.90%)
+  page   30  ours   15.99 x3    ref   10.01 x6     (+59.74%)
+ws_prod-g-doc-Events-industrymeeting18112004-Aercap__ppt
+  page    4  ours   14.00 x19   ref   15.99 x21    (-12.45%)
+  page    9  ours   15.00 x22   ref   15.99 x22    (-6.19%)
+ws_prod-g-doc-Events-industrymeeting18112004-European-Safety-Strategy-Initiative__ppt
+  page    6  ours   26.41 x6    ref   10.01 x6     (+163.84%)
+  page    8  ours   26.41 x6    ref   10.01 x6     (+163.84%)
+ws_prod-g-doc-Events-r-6.-ESM__ppt
+  page    2  ours   14.00 x4    ref   20.01 x8     (-30.03%)
+  page    5  ours   18.99 x13   ref   20.01 x11    (-5.10%)
+  page    7  ours   20.01 x15   ref   18.99 x9     (+5.37%)
+  page   13  ours   18.00 x14   ref   18.99 x11    (-5.21%)
+  page   17  ours   18.99 x11   ref   20.01 x9     (-5.10%)
+  page   18  ours   18.00 x12   ref   18.99 x9     (-5.21%)
+  page   20  ours   18.00 x14   ref   18.99 x11    (-5.21%)
+  page   21  ours   20.01 x19   ref   18.99 x12    (+5.37%)
+
+pages compared                             4199  over 163 documents
+  dominant size agrees                     3488
+  differs, within 1% — the mm100 grid      25
+  differs, same sizes cut up differently   128
+  differs, the reference draws far less    65   raster ceiling
+  differs, its size is off the mm100 grid  135   metafile text
+  differs, and neither explains it         358   over 99 documents
+
+worst documents:
+    22  2015-Civil-Rights-Website-training__ppt
+    16  171128IPAP__pptx
+    16  ITE106-Chapter 4__ppt
+    10  RESPA_-_Section_8_Webinar__ppt
+     9  2014BSA_Sunday_Killion__pptx
+     9  NAS-Infrastructure-Roadmaps-v16.0__pptx
+     9  RRM-training-syllabus-Chapter-3-Teamwork-TC-Towing-Incident-Analysis-Dec-2009__ppt
+     8  71393_pp7__ppt
+     8  Architecture__ppt
+     8  dhs-293364__pptx
+     8  gfopportunitiesforlinkagespres_2010_en__ppt
+     8  ws_prod-g-doc-Events-Part-M-presentation__ppt
+     8  ws_prod-g-doc-Events-r-6.-ESM__ppt
+     6  8.16_AOD_FINAL_Provider_Training_Presentation_9_2009__ppt
+     6  REDAC Briefing_SSIT_CARA_08132014.ppt__pptx
+     6  pods05__ppt
+     5  010605Vul__ppt
+     5  Demick_JetBlue__pptx
+     5  Intersil_Italy_CAN_Bus_Transceiver_Presentation_Final__pptx
+     5  JesuitAssocOfStudentPersonnel__ppt
+
+commonest (ours, ref) pairs:
+    13  ours   13.49  ref   18.00   ratio 0.7494
+    12  ours   18.99  ref   20.01   ratio 0.9490
+    11  ours   24.01  ref   22.99   ratio 1.0444
+     9  ours   27.01  ref   28.01   ratio 0.9643
+     8  ours   17.01  ref   18.00   ratio 0.9450
+     7  ours   20.01  ref   18.99   ratio 1.0537
+     7  ours   15.00  ref   15.99   ratio 0.9381
+     7  ours   18.00  ref   18.99   ratio 0.9479
+     7  ours   25.99  ref   25.00   ratio 1.0396
+     7  ours   18.00  ref   24.01   ratio 0.7497
+     7  ours   10.01  ref    7.99   ratio 1.2528
+     6  ours   22.00  ref   22.99   ratio 0.9569
+     5  ours   18.00  ref   20.01   ratio 0.8996
+     5  ours   18.00  ref   17.01   ratio 1.0582
+     5  ours   22.99  ref   24.01   ratio 0.9575
+     5  ours   10.01  ref    9.89   ratio 1.0121
+     4  ours   11.00  ref   11.99   ratio 0.9174
+     4  ours   22.99  ref   22.00   ratio 1.0450
+     4  ours   17.01  ref   15.99   ratio 1.0638
+     4  ours   15.99  ref   18.00   ratio 0.8883

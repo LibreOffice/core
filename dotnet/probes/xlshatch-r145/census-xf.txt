@@ -1,0 +1,5 @@
+SKIP /home/user/sample-files/sheets/done-010/xls/Special-Procedures_2025-07-10.xls (not an OLE2 structured storage file)
+BIFF workbooks scanned: 63
+XF records stating a hatch: 2 in 2 documents {14: 1, 17: 1}
+cells reaching one:         82 in 1 documents {17: 82}
+    /home/user/sample-files/sheets/done-010/xls/PC1000.xls

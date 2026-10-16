@@ -1,0 +1,61 @@
+SPLIT Fundamentals_Module_1_basics.ppt                           faces= 4 Times[0x10] LiberationSerif-Regular.ttf->DejaVuSerif.ttf
+SPLIT RRM-training-syllabus-Chapter-3-Teamwork-TC-Towing-Incident-Analysis-Dec-2009.ppt faces= 4 Book Antiqua[0x10] DejaVuSans.ttf->DejaVuSerif.ttf
+-     Thailand17.ppt                                             faces= 6 
+-     W3_Case_Study_of_a_Tsunami_Warning_Simulation_Exercise_Ed.ppt faces= 3 
+SPLIT architecture6.ppt                                          faces= 6 Helvetica[0x20] LiberationSans-Regular.ttf->DejaVuSans.ttf
+SPLIT pres_ioc_phuket.ppt                                        faces= 6 Times[0x10] LiberationSerif-Regular.ttf->DejaVuSerif.ttf
+-     WC_Update-Aug03.ppt                                        faces= 1 
+-     policy-pesentation.ppt                                     faces= 3 
+-     wells08_basic.ppt                                          faces= 2 
+-     080214-Intl-pol-frameworks-and-their-implications-for-Africa-ISS-workshop.ppt faces= 4 
+-     gfopportunitiesforlinkagespres_2010_en.ppt                 faces= 6 
+SPLIT ws_prod-g-doc-Events-2007-Approval-of-Flight-Conditions-RM-NAA-16032007.ppt faces= 5 Wingdings 2[0x10] DejaVuSans.ttf->DejaVuSerif.ttf
+SPLIT ws_prod-g-doc-Events-2007-may-presentation-PtF-background-+-principles.ppt faces= 4 Wingdings 2[0x10] DejaVuSans.ttf->DejaVuSerif.ttf
+-     ws_prod-g-doc-Events-2007-november-IACA-presentation-at-EASA-Fuel-Tank-Safety-Training-Seminar.ppt faces= 1 
+SPLIT ws_prod-g-doc-Events-Part-M-presentation.ppt               faces= 4 Wingdings 2[0x10] DejaVuSans.ttf->DejaVuSerif.ttf
+-     010605Vul.ppt                                              faces= 2 
+-     Inducement-to-Insurance-Business.ppt                       faces= 5 
+SPLIT outlook_of_nigerian_pension_sector.ppt                     faces=11 UBSHeadline[0x10] DejaVuSans.ttf->DejaVuSerif.ttf
+SPLIT ws_prod-g-doc-Events-2007-Privileges.ppt                   faces= 5 Wingdings 2[0x10] DejaVuSans.ttf->DejaVuSerif.ttf
+SPLIT ws_prod-g-doc-Events-2007-september-M.017-(French)-France.ppt faces= 4 Wingdings 2[0x10] DejaVuSans.ttf->DejaVuSerif.ttf
+SPLIT ws_prod-g-doc-Events-2007-september-MDM.032-(ENGLISH)-CZ.ppt faces= 7 Wingdings 2[0x10] DejaVuSans.ttf->DejaVuSerif.ttf
+-     0335fab9-79f0-4944-b92c-f223837ca2d8.ppt                   faces= 2 
+-     undp_presentation_revised_17_may.ppt                       faces= 6 
+SPLIT ws_prod-g-doc-Events-industrymeeting18112004-European-Safety-Strategy-Initiative.ppt faces= 5 Wingdings 2[0x10] DejaVuSans.ttf->DejaVuSerif.ttf
+-     ITE106-Chapter 4.ppt                                       faces= 2 
+-     berlin.ppt                                                 faces= 4 
+-     pods05.ppt                                                 faces= 7 
+SPLIT ws_prod-g-doc-Events-industrymeeting18112004-Aercap.ppt    faces= 3 Times[0x10] LiberationSerif-Regular.ttf->DejaVuSerif.ttf
+-     Lepore.ppt                                                 faces= 3 
+-     ws_prod-g-doc-Events-r-6.-ESM.ppt                          faces= 5 
+-     1-secretariat.ppt                                          faces= 3 
+SPLIT 71393_pp7.ppt                                              faces= 8 Times[0x10] LiberationSerif-Regular.ttf->DejaVuSerif.ttf
+-     introduction_to_bea_tuxedo.ppt                             faces= 3 
+SPLIT joint_user_outcomes_michael_fullerton_29.06.12.ppt         faces= 7 Wingdings 2[0x10] DejaVuSans.ttf->DejaVuSerif.ttf
+-     8.16_AOD_FINAL_Provider_Training_Presentation_9_2009.ppt   faces= 3 
+-     EG1_dsrc tech.ppt                                          faces= 4 
+-     Framing Europe.ppt                                         faces= 2 
+SPLIT RESPA_-_Section_8_Webinar.ppt                              faces= 9 Wingdings 2[0x10] DejaVuSans.ttf->DejaVuSerif.ttf
+SPLIT concepts-surrounding-cloud-computing-carolyn-kranz-and-rich-prem-gb-seattle-2011.ppt faces= 4 Helvetica[0x20] LiberationSans-Regular.ttf->DejaVuSans.ttf
+-     Airport Planning 09112013.ppt                              faces= 3 
+-     Employment-Based_I-485.ppt                                 faces= 3 
+SPLIT iep-amount-frequency-for-webinar.ppt                       faces= 5 Book Antiqua[0x10] DejaVuSans.ttf->DejaVuSerif.ttf
+-     BUS-Chapter 05.ppt                                         faces= 7 
+-     JesuitAssocOfStudentPersonnel.ppt                          faces= 2 
+-     gillikin_online_user_mtg_2010.ppt                          faces= 4 
+SPLIT 2015-Civil-Rights-Website-training.ppt                     faces= 8 Perpetua[0x10] DejaVuSans.ttf->DejaVuSerif.ttf
+SPLIT FAA_Form_337.ppt                                           faces= 9 Book Antiqua[0x10] DejaVuSans.ttf->DejaVuSerif.ttf
+-     hofman.ppt                                                 faces= 3 
+-     ws_prod-g-doc-Events-2008-February-5-NATO-activities.ppt   faces= 2 
+-     Aerospace_Journey_of_Flight_Chapter_BCB1637572DA6.ppt      faces= 2 
+-     Architecture.ppt                                           faces= 4 
+
+legacy PPT-family corpus files: 51
+stating at least one class-ful family whose fc-match splits: 20
+pairs:
+   9 ('Wingdings 2', '0x10', 'DejaVuSans.ttf', 'DejaVuSerif.ttf')
+   4 ('Times', '0x10', 'LiberationSerif-Regular.ttf', 'DejaVuSerif.ttf')
+   3 ('Book Antiqua', '0x10', 'DejaVuSans.ttf', 'DejaVuSerif.ttf')
+   2 ('Helvetica', '0x20', 'LiberationSans-Regular.ttf', 'DejaVuSans.ttf')
+   1 ('UBSHeadline', '0x10', 'DejaVuSans.ttf', 'DejaVuSerif.ttf')
+   1 ('Perpetua', '0x10', 'DejaVuSans.ttf', 'DejaVuSerif.ttf')

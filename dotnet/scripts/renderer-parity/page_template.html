@@ -1,0 +1,867 @@
+<title>Three Renderers, One Reference</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Serif:wght@500;600&display=swap">
+<style>
+:root {
+  color-scheme: light;
+  --ground:      #eef0f3;
+  --surface:     #ffffff;
+  --surface-2:   #f7f8fa;
+  --line:        #d9dde3;
+  --line-soft:   #e6e9ee;
+  --ink:         #14171c;
+  --ink-2:       #4a545f;
+  --ink-3:       #78838f;
+  --ref:         #2b3138;
+  --pl:          #2a78d6;
+  --pl-soft:     #e2edfb;
+  --wv:          #eb6834;
+  --wv-soft:     #fbe8df;
+  --good:        #14804a;
+  --warn:        #a06a00;
+  --bad:         #b3261e;
+  --shadow:      0 1px 2px rgba(20,23,28,.05), 0 8px 24px -16px rgba(20,23,28,.35);
+  --rule:        1px solid var(--line);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --ground:    #101319;
+    --surface:   #171b22;
+    --surface-2: #1d222a;
+    --line:      #2b323c;
+    --line-soft: #232932;
+    --ink:       #eef1f5;
+    --ink-2:     #a8b3c0;
+    --ink-3:     #7d8895;
+    --ref:       #cbd3dc;
+    --pl:        #3987e5;
+    --pl-soft:   #16273c;
+    --wv:        #d95926;
+    --wv-soft:   #35200f;
+    --good:      #3fbb7d;
+    --warn:      #d5a02f;
+    --bad:       #e97a72;
+    --shadow:    0 1px 2px rgba(0,0,0,.4), 0 10px 28px -18px rgba(0,0,0,.9);
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --ground:    #101319;
+  --surface:   #171b22;
+  --surface-2: #1d222a;
+  --line:      #2b323c;
+  --line-soft: #232932;
+  --ink:       #eef1f5;
+  --ink-2:     #a8b3c0;
+  --ink-3:     #7d8895;
+  --ref:       #cbd3dc;
+  --pl:        #3987e5;
+  --pl-soft:   #16273c;
+  --wv:        #d95926;
+  --wv-soft:   #35200f;
+  --good:      #3fbb7d;
+  --warn:      #d5a02f;
+  --bad:       #e97a72;
+  --shadow:    0 1px 2px rgba(0,0,0,.4), 0 10px 28px -18px rgba(0,0,0,.9);
+}
+
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: "IBM Plex Sans", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+.wrap { max-width: 1160px; margin: 0 auto; padding: 0 24px 96px; }
+h1, h2, h3 { font-family: "IBM Plex Serif", ui-serif, Georgia, serif; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(30px, 4.4vw, 46px); font-weight: 600; letter-spacing: -.02em; line-height: 1.1; }
+h2 { font-size: 25px; font-weight: 600; letter-spacing: -.01em; }
+h3 { font-size: 17px; font-weight: 600; }
+p { margin: 0; }
+a { color: var(--pl); }
+code, .mono, .num { font-family: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, monospace; }
+.num { font-variant-numeric: tabular-nums; }
+
+.eyebrow {
+  font-family: "IBM Plex Mono", monospace; font-size: 11px; font-weight: 500;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--ink-3);
+}
+
+/* ---------- masthead ---------- */
+header.top {
+  border-bottom: var(--rule); background: var(--surface); margin-bottom: 40px;
+}
+header.top .wrap { padding-top: 44px; padding-bottom: 34px; display: grid; gap: 18px; }
+.lede { color: var(--ink-2); font-size: 17px; max-width: 68ch; }
+.facts {
+  display: flex; flex-wrap: wrap; gap: 8px 28px; padding-top: 6px;
+  border-top: 1px solid var(--line-soft); margin-top: 6px;
+}
+.fact { display: flex; align-items: baseline; gap: 8px; }
+.fact b { font-family: "IBM Plex Mono", monospace; font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; }
+.fact span { font-size: 12.5px; color: var(--ink-3); }
+
+/* ---------- sections ---------- */
+section { margin-top: 56px; }
+.sechead { display: grid; gap: 8px; margin-bottom: 20px; max-width: 74ch; }
+.sechead p { color: var(--ink-2); font-size: 15px; }
+
+/* ---------- headline cards ---------- */
+.verdicts { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.verdict {
+  background: var(--surface); border: var(--rule); border-radius: 4px;
+  box-shadow: var(--shadow); padding: 22px 24px 20px; display: grid; gap: 16px;
+  border-top: 3px solid var(--accent);
+}
+.verdict.pl { --accent: var(--pl); }
+.verdict.wv { --accent: var(--wv); }
+.verdict header { display: grid; gap: 3px; }
+.verdict h3 { font-family: "IBM Plex Sans", sans-serif; font-size: 15px; letter-spacing: .01em; }
+.verdict .sub { font-size: 12.5px; color: var(--ink-3); }
+.bignum { display: flex; align-items: baseline; gap: 10px; }
+.bignum b {
+  font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums;
+  font-size: 46px; font-weight: 500; letter-spacing: -.03em; line-height: 1; color: var(--accent);
+}
+.bignum span { font-size: 13px; color: var(--ink-2); max-width: 20ch; line-height: 1.35; }
+.vrows { display: grid; gap: 0; border-top: 1px solid var(--line-soft); }
+.vrow {
+  display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+  padding: 7px 0; border-bottom: 1px solid var(--line-soft); font-size: 13.5px;
+}
+.vrow span { color: var(--ink-2); }
+.vrow b { font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; font-weight: 500; }
+
+/* ---------- steps ---------- */
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(215px, 1fr)); gap: 1px; background: var(--line); border: var(--rule); border-radius: 4px; overflow: hidden; }
+.step { background: var(--surface); padding: 18px 20px; display: grid; gap: 7px; align-content: start; }
+.step .n { font-family: "IBM Plex Mono", monospace; font-size: 11px; color: var(--ink-3); letter-spacing: .1em; }
+.step h3 { font-family: "IBM Plex Sans", sans-serif; font-size: 14px; }
+.step p { font-size: 13px; color: var(--ink-2); line-height: 1.5; }
+
+/* ---------- tables ---------- */
+.tablewrap { overflow-x: auto; border: var(--rule); border-radius: 4px; background: var(--surface); box-shadow: var(--shadow); }
+table { border-collapse: collapse; width: 100%; font-size: 13.5px; min-width: 700px; }
+th, td { text-align: right; padding: 9px 14px; border-bottom: 1px solid var(--line-soft); white-space: nowrap; }
+th:first-child, td:first-child { text-align: left; }
+thead th {
+  font-family: "IBM Plex Mono", monospace; font-size: 10.5px; font-weight: 500;
+  letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3);
+  background: var(--surface-2); border-bottom: var(--rule); position: sticky; top: 0;
+}
+tbody td.num, tbody th.num { font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; }
+tr.groupstart td, tr.groupstart th { border-top: var(--rule); }
+td.engine { display: flex; align-items: center; gap: 8px; }
+.dot { width: 9px; height: 9px; border-radius: 2px; flex: none; }
+.dot.pl { background: var(--pl); }
+.dot.wv { background: var(--wv); }
+.dot.ref { background: var(--ref); }
+tbody tr:hover td { background: var(--surface-2); }
+.na { color: var(--ink-3); font-style: italic; }
+
+/* ---------- charts ---------- */
+.chartcard { background: var(--surface); border: var(--rule); border-radius: 4px; box-shadow: var(--shadow); padding: 22px 24px 18px; }
+.chartcard h3 { font-family: "IBM Plex Sans", sans-serif; font-size: 14px; }
+.chartcard .cap { font-size: 12.5px; color: var(--ink-3); margin-top: 3px; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 20px; margin: 14px 0 4px; font-size: 12.5px; color: var(--ink-2); }
+.legend i { display: inline-flex; align-items: center; gap: 7px; font-style: normal; }
+.smallmults { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px 28px; margin-top: 18px; }
+.sm h4 { margin: 0 0 2px; font-size: 12.5px; font-weight: 600; }
+.sm .smsub { font-size: 11.5px; color: var(--ink-3); font-family: "IBM Plex Mono", monospace; }
+svg { display: block; max-width: 100%; }
+svg text { font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; }
+
+#tip {
+  position: fixed; z-index: 50; pointer-events: none; opacity: 0;
+  transition: opacity .1s; background: var(--surface); color: var(--ink);
+  border: var(--rule); border-radius: 3px; box-shadow: var(--shadow);
+  padding: 7px 10px; font-size: 12px; line-height: 1.45; max-width: 260px;
+}
+#tip b { font-family: "IBM Plex Mono", monospace; font-variant-numeric: tabular-nums; }
+
+
+/* ---------- declines ---------- */
+.declrow {
+  display: grid; grid-template-columns: minmax(150px, 22em) 1fr 3.5em;
+  align-items: center; gap: 14px; padding: 7px 0;
+  border-bottom: 1px solid var(--line-soft); font-size: 13px;
+}
+.declrow:last-child { border-bottom: 0; }
+.decllabel { color: var(--ink-2); }
+.decltrack { height: 12px; background: var(--surface-2); border-radius: 3px; overflow: hidden; }
+.declfill { height: 100%; background: var(--wv); border-radius: 3px; }
+.declnum {
+  text-align: right; font-family: "IBM Plex Mono", monospace;
+  font-variant-numeric: tabular-nums; color: var(--ink-2);
+}
+
+/* ---------- worst-case wall ---------- */
+.tabs { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 18px; }
+.tab {
+  font: 500 12.5px/1 "IBM Plex Sans", sans-serif; color: var(--ink-2);
+  background: var(--surface); border: var(--rule); border-radius: 3px;
+  padding: 8px 13px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+}
+.tab[aria-selected="true"] { background: var(--ink); color: var(--ground); border-color: var(--ink); }
+.tab:focus-visible { outline: 2px solid var(--pl); outline-offset: 2px; }
+.case {
+  background: var(--surface); border: var(--rule); border-radius: 4px;
+  box-shadow: var(--shadow); overflow: hidden; margin-bottom: 20px;
+}
+.case .head { padding: 14px 18px 12px; display: grid; gap: 8px; border-bottom: var(--rule); }
+.case .title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 12px; }
+.case .title b { font-size: 14px; font-weight: 600; }
+.case .title .where { font-family: "IBM Plex Mono", monospace; font-size: 11.5px; color: var(--ink-3); }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip {
+  font-family: "IBM Plex Mono", monospace; font-size: 11px; letter-spacing: .02em;
+  padding: 3px 8px; border-radius: 2px; background: var(--surface-2);
+  color: var(--ink-2); border: 1px solid var(--line-soft); font-variant-numeric: tabular-nums;
+}
+.chip.sev { border-color: transparent; }
+.chip.sev.missing { background: var(--wv-soft); color: var(--bad); }
+.chip.sev.extra   { background: var(--wv-soft); color: var(--warn); }
+.chip.sev.reflow  { background: var(--pl-soft); color: var(--pl); }
+.chip.sev.median  { background: transparent; border-color: var(--line); color: var(--ink-3); }
+.case .read { padding: 12px 18px 14px; font-size: 13.5px; color: var(--ink-2); border-top: 1px solid var(--line-soft); }
+.case .read b { color: var(--ink); font-weight: 600; }
+.pairimg { display: block; width: 100%; height: auto; background: var(--surface-2); }
+.pairlabels {
+  display: grid; grid-template-columns: 1fr 1fr; font-family: "IBM Plex Mono", monospace;
+  font-size: 10.5px; letter-spacing: .09em; text-transform: uppercase; color: var(--ink-3);
+  border-bottom: 1px solid var(--line-soft);
+}
+.pairlabels span { padding: 7px 18px; }
+.pairlabels span + span { border-left: 1px solid var(--line-soft); }
+
+/* ---------- notes ---------- */
+.notes { display: grid; gap: 1px; background: var(--line); border: var(--rule); border-radius: 4px; overflow: hidden; }
+.note { background: var(--surface); padding: 16px 20px; display: grid; gap: 5px; }
+.note h3 { font-family: "IBM Plex Sans", sans-serif; font-size: 13.5px; }
+.note p { font-size: 13.5px; color: var(--ink-2); }
+pre {
+  margin: 0; overflow-x: auto; background: var(--surface); border: var(--rule);
+  border-radius: 4px; padding: 16px 18px; font-size: 12.5px; line-height: 1.65; color: var(--ink-2);
+}
+footer { margin-top: 60px; padding-top: 20px; border-top: var(--rule); font-size: 12.5px; color: var(--ink-3); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <div class="eyebrow">Rendering fidelity &middot; 946 real-world office documents</div>
+    <h1>Two renderers measured against LibreOffice</h1>
+    <p class="lede">
+      Every document in the corpus was rendered three ways &mdash; by headless LibreOffice,
+      by <b>X-Ray.Office</b> (pure&nbsp;C#, document&nbsp;&rarr;&nbsp;PDF), and by the
+      <b>Rust/WASM viewer</b> (Canvas in headless Chromium) &mdash; rasterised to the same
+      pixel grid and compared page by page. LibreOffice is the gold standard; the question
+      is how close the other two get, and where they part company with it.
+    </p>
+    <div class="facts" id="facts"></div>
+  </div>
+</header>
+
+<main class="wrap">
+
+<section id="verdict">
+  <div class="sechead">
+    <h2>The headline</h2>
+    <p>
+      Scored on the 639 word-processing and presentation documents, where all three engines
+      produce printed <em>pages</em> and the comparison is like-for-like. Spreadsheets are
+      held back to their own section: the WASM viewer has no print pagination, so its
+      spreadsheet output is a screen grid rather than a page.
+    </p>
+  </div>
+  <div class="verdicts" id="verdicts"></div>
+</section>
+
+<section id="method">
+  <div class="sechead">
+    <h2>How a page was compared</h2>
+    <p>Same document, same DPI, same pixel box &mdash; then several metrics rather than one,
+      because no single number separates &ldquo;a shape is missing&rdquo; from
+      &ldquo;everything moved down three pixels.&rdquo;</p>
+  </div>
+  <div class="steps">
+    <div class="step">
+      <div class="n">STEP 1</div>
+      <h3>Reference</h3>
+      <p><code>soffice --convert-to pdf</code> on all 946 documents, then rasterised at
+        150&nbsp;dpi. Metric-compatible substitute fonts (Carlito, Caladea, Liberation)
+        installed first &mdash; a silent font substitution invalidates every number after it.</p>
+    </div>
+    <div class="step">
+      <div class="n">STEP 2</div>
+      <h3>Candidates</h3>
+      <p>X-Ray.Office writes its own PDF, rasterised identically. The viewer is driven through
+        Playwright: load, wait for layout, render each page onto a canvas sized to the page's
+        own point dimensions at 150&nbsp;dpi, screenshot the canvas.</p>
+    </div>
+    <div class="step">
+      <div class="n">STEP 3</div>
+      <h3>Align</h3>
+      <p>Both sides land on the reference page's pixel box; anything off by rounding is
+        resampled onto it. Pages the engine never produced are scored as zero rather than
+        skipped. First five pages of each document.</p>
+    </div>
+    <div class="step">
+      <div class="n">STEP 4</div>
+      <h3>Score</h3>
+      <p>Structural similarity (SSIM) is the headline. Alongside it: mean absolute error,
+        ink ratio, 32&nbsp;px tile error, and a shifted-tile count that detects reflow.
+        A page is called <em>defective</em> only when two independent metrics agree.</p>
+    </div>
+  </div>
+</section>
+
+<section id="categories">
+  <div class="sechead">
+    <h2>Per category</h2>
+    <p>Fidelity is mean SSIM against the reference page, over the documents the engine
+      actually rendered. <em>Corpus fidelity</em> is the same figure with every document the
+      engine could not open counted as zero &mdash; the difference between the two columns is
+      entirely format coverage.</p>
+  </div>
+  <div class="chartcard">
+    <h3>Structural similarity to LibreOffice, by category</h3>
+    <div class="cap">1.00 is the reference itself. Bars show mean SSIM on rendered documents; the solid part is the corpus-wide figure, with every document the engine could not open counted as zero.</div>
+    <div class="legend">
+      <i><span class="dot pl"></span> X-Ray.Office</i>
+      <i><span class="dot wv"></span> Rust/WASM viewer</i>
+      <i><span class="dot ref"></span> LibreOffice reference = 1.00</i>
+      <i><span class="dot pl" style="opacity:.34"></span> pale extension: fidelity available only on documents the engine opens</i>
+    </div>
+    <div id="chart-fid"></div>
+  </div>
+  <div class="tablewrap" style="margin-top:20px">
+    <table id="cat-table">
+      <thead>
+        <tr>
+          <th>Category / engine</th>
+          <th>Docs</th><th>Rendered</th><th>Fidelity</th><th>Median</th>
+          <th>Pixel agreement</th><th>Page count exact</th><th>Defect pages</th><th>Clean docs</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</section>
+
+<section id="spread">
+  <div class="sechead">
+    <h2>The shape of the distribution</h2>
+    <p>Means hide the tail. These are the same documents, counted into fidelity bands &mdash;
+      what matters operationally is how much of the corpus sits above 0.90 and how long the
+      bad tail is.</p>
+  </div>
+  <div class="chartcard">
+    <div class="smallmults" id="chart-dist"></div>
+  </div>
+</section>
+
+<section id="coverage">
+  <div class="sechead">
+    <h2>Format coverage</h2>
+    <p>The single largest difference between the two engines is not fidelity, it is what they
+      will open at all. X-Ray.Office reads the legacy binary formats; the viewer is OOXML-only
+      and says so explicitly rather than failing obscurely.</p>
+  </div>
+  <div class="tablewrap">
+    <table id="ext-table">
+      <thead>
+        <tr><th>Format</th><th>Docs</th><th>X-Ray.Office rendered</th><th>Fidelity</th>
+            <th>Viewer rendered</th><th>Fidelity</th></tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+  <div class="chartcard" style="margin-top:20px">
+    <h3 id="decl-head">Why the viewer declined documents</h3>
+    <div class="cap">Reasons as reported by the library itself, grouped by category.</div>
+    <div id="declines" style="margin-top:14px"></div>
+  </div>
+</section>
+
+<section id="worst">
+  <div class="sechead">
+    <h2>Worst cases, side by side</h2>
+    <p>The three most divergent documents per engine and category, each shown as
+      <b>LibreOffice on the left, the engine on the right</b>, at the page the metrics
+      flagged. A page qualifies only if a second metric corroborates the low SSIM &mdash;
+      otherwise the list fills up with pages that are visually identical and merely
+      resampled differently.</p>
+  </div>
+  <div class="tabs" id="tabs" role="tablist"></div>
+  <div id="cases"></div>
+</section>
+
+<section id="sheetsnote">
+  <div class="sechead">
+    <h2>Spreadsheets and the viewer: a category difference, not a fidelity gap</h2>
+    <p>The viewer's public API has <code>renderViewport(sheet, {row, col, rows, cols})</code>
+      and no pagination: it draws a scrollable grid with row and column headers, at screen
+      scale, with gridlines. LibreOffice fits the same sheet to paper &mdash; scaled, headerless,
+      broken across pages. Those are different artefacts, and no alignment makes the pixel
+      comparison mean what it means elsewhere. The grid-region figure below is reported for
+      completeness and should not be read as a fidelity score.</p>
+  </div>
+  <div id="sheetcase"></div>
+</section>
+
+<section id="cost">
+  <div class="sechead">
+    <h2>What it cost to produce the pages</h2>
+    <p>Wall time per document to reach a PDF, measured over the same 946 documents on the
+      same four cores. The viewer is not on this axis: it renders in a browser and never
+      produces a file.</p>
+  </div>
+  <div class="chartcard"><div id="chart-cost"></div></div>
+</section>
+
+<section id="caveats">
+  <div class="sechead">
+    <h2>What these numbers do not say</h2>
+  </div>
+  <div class="notes" id="caveats-list"></div>
+</section>
+
+<section id="repro">
+  <div class="sechead">
+    <h2>Reproducing it</h2>
+    <p>LibreOffice 24.2.7.2, Chromium 141, .NET 10, 150&nbsp;dpi throughout.</p>
+  </div>
+  <pre id="repro-code"></pre>
+</section>
+
+<footer>
+  946 documents &middot; 28,366 reference pages &middot; 3,243 page pairs scored for X-Ray.Office,
+  2,031 for the viewer (it declined 200 documents outright).
+  LibreOffice 24.2.7.2 headless is the reference implementation throughout; a divergence from
+  it is a divergence from the reference, not necessarily from Microsoft Office.
+</footer>
+</main>
+
+<div id="tip" role="status" aria-live="polite"></div>
+
+<script>
+const REPORT = /*__REPORT__*/;
+const GALLERY = /*__GALLERY__*/;
+
+const FAM = { docs: "Documents", sheets: "Spreadsheets", slides: "Presentations" };
+const FAMSUB = { docs: "docx &middot; doc", sheets: "xlsx &middot; xlsm &middot; xls", slides: "pptx &middot; ppt" };
+const ENG = { "xray-office": "X-Ray.Office", "wasm-viewer": "Rust/WASM viewer" };
+const KEY = { "xray-office": "pl", "wasm-viewer": "wv" };
+const pct = (v) => (v * 100).toFixed(1) + "%";
+const f3 = (v) => v.toFixed(3);
+const el = (tag, cls, html) => {
+  const n = document.createElement(tag);
+  if (cls) n.className = cls;
+  if (html !== undefined) n.innerHTML = html;
+  return n;
+};
+
+/* ---------------- masthead facts ---------------- */
+{
+  const c = REPORT.corpus;
+  const facts = [
+    [c.documents.toLocaleString(), "documents"],
+    [c.reference_pages.toLocaleString(), "reference pages"],
+    [REPORT.overall["xray-office"].pages_compared.toLocaleString() + " / "
+       + REPORT.overall["wasm-viewer"].pages_compared.toLocaleString(),
+     "page pairs scored (X-Ray.Office / viewer)"],
+    ["3", "rendering engines"],
+    ["150", "dpi"],
+  ];
+  const host = document.getElementById("facts");
+  for (const [b, s] of facts) host.append(el("div", "fact", `<b>${b}</b><span>${s}</span>`));
+}
+
+/* ---------------- headline cards ---------------- */
+{
+  const host = document.getElementById("verdicts");
+  for (const eng of ["xray-office", "wasm-viewer"]) {
+    const h = REPORT.headline[eng];
+    const card = el("div", "verdict " + KEY[eng]);
+    card.append(el("header", null,
+      `<h3><span class="dot ${KEY[eng]}" style="display:inline-block;margin-right:7px"></span>${ENG[eng]}</h3>
+       <div class="sub">${eng === "xray-office"
+         ? "Pure C# / .NET &middot; renders to PDF"
+         : "Rust &rarr; WASM parser &middot; Canvas renderer in the browser"}</div>`));
+    card.append(el("div", "bignum",
+      `<b>${f3(h.fidelity_rendered)}</b><span>mean structural similarity to the reference page</span>`));
+    const rows = el("div", "vrows");
+    const add = (k, v) => rows.append(el("div", "vrow", `<span>${k}</span><b>${v}</b>`));
+    add("Documents it rendered", `${h.rendered} / ${h.documents}  (${pct(h.render_rate)})`);
+    add("Corpus fidelity (failures = 0)", f3(h.fidelity_corpus));
+    add("Pixel agreement (1 &minus; MAE)", f3(h.agreement_rendered));
+    add("Page count matches reference", pct(h.page_exact_rate_rendered));
+    card.append(rows);
+    host.append(card);
+  }
+}
+
+/* ---------------- tooltip ---------------- */
+const tip = document.getElementById("tip");
+function showTip(e, html) {
+  tip.innerHTML = html;
+  tip.style.opacity = "1";
+  const pad = 14, r = tip.getBoundingClientRect();
+  let x = e.clientX + pad, y = e.clientY + pad;
+  if (x + r.width > innerWidth - 8) x = e.clientX - r.width - pad;
+  if (y + r.height > innerHeight - 8) y = e.clientY - r.height - pad;
+  tip.style.left = x + "px"; tip.style.top = y + "px";
+}
+const hideTip = () => { tip.style.opacity = "0"; };
+function bindTip(node, html) {
+  node.addEventListener("mousemove", (e) => showTip(e, html));
+  node.addEventListener("mouseleave", hideTip);
+}
+
+const SVGNS = "http://www.w3.org/2000/svg";
+function svg(tag, attrs) {
+  const n = document.createElementNS(SVGNS, tag);
+  for (const k in attrs) n.setAttribute(k, attrs[k]);
+  return n;
+}
+
+/* ---------------- chart: fidelity by category ---------------- */
+{
+  const fams = ["docs", "sheets", "slides"];
+  const W = 900, rowH = 34, groupH = rowH * 2 + 26, padL = 132, padR = 56, padT = 26;
+  const H = padT + groupH * fams.length + 26;
+  const plotW = W - padL - padR;
+  const s = svg("svg", { viewBox: `0 0 ${W} ${H}`, width: "100%", role: "img",
+                         "aria-label": "Mean structural similarity to LibreOffice by category and engine" });
+  const x = (v) => padL + v * plotW;
+
+  for (let i = 0; i <= 5; i++) {
+    const v = i / 5;
+    s.append(svg("line", { x1: x(v), x2: x(v), y1: padT - 8, y2: H - 30,
+                           stroke: "var(--line-soft)", "stroke-width": 1 }));
+    const t = svg("text", { x: x(v), y: H - 14, "text-anchor": "middle",
+                            "font-size": 10.5, fill: "var(--ink-3)" });
+    t.textContent = v.toFixed(1);
+    s.append(t);
+  }
+  s.append(svg("line", { x1: x(1), x2: x(1), y1: padT - 12, y2: H - 30,
+                         stroke: "var(--ref)", "stroke-width": 2 }));
+  const rl = svg("text", { x: x(1), y: padT - 17, "text-anchor": "end", "font-size": 10.5,
+                           fill: "var(--ref)", "letter-spacing": ".06em" });
+  rl.textContent = "REFERENCE";
+  s.append(rl);
+
+  fams.forEach((fam, gi) => {
+    const gy = padT + gi * groupH;
+    const lab = svg("text", { x: 0, y: gy + rowH - 6, "font-size": 12, fill: "var(--ink)",
+                              "font-family": "IBM Plex Sans, sans-serif", "font-weight": 600 });
+    lab.textContent = FAM[fam];
+    s.append(lab);
+    const sub = svg("text", { x: 0, y: gy + rowH + 10, "font-size": 10, fill: "var(--ink-3)" });
+    sub.textContent = REPORT.families[fam].documents + " docs";
+    s.append(sub);
+
+    ["xray-office", "wasm-viewer"].forEach((eng, ei) => {
+      const d = REPORT.families[fam].engines[eng];
+      const y = gy + ei * rowH;
+      const v = d.fidelity_rendered, cv = d.fidelity_corpus;
+      const h = rowH - 16;
+      // Solid to the corpus-wide figure, pale out to the rendered-only figure: the
+      // pale part is fidelity that is only available on documents it can open.
+      const solidW = Math.max(2, x(cv) - padL);
+      const bar = svg("rect", { x: padL, y: y + 6, width: solidW, height: h, rx: 3,
+                                fill: `var(--${KEY[eng]})` });
+      s.append(bar);
+      let ext = null;
+      if (v - cv > 0.004) {
+        ext = svg("rect", { x: padL + solidW + 2, y: y + 6,
+                            width: Math.max(2, x(v) - padL - solidW - 2), height: h, rx: 3,
+                            fill: `var(--${KEY[eng]})`, opacity: 0.34 });
+        s.append(ext);
+      }
+      const val = svg("text", { x: x(v) + 8, y: y + rowH / 2 + 1, "font-size": 11.5,
+                                fill: "var(--ink-2)", "dominant-baseline": "middle" });
+      val.textContent = f3(v);
+      s.append(val);
+      const note = (fam === "sheets" && eng === "wasm-viewer")
+        ? "<br><em>grid region, not a printed page</em>" : "";
+      const tipHtml = `<b>${ENG[eng]}</b> &middot; ${FAM[fam]}<br>
+        rendered ${d.rendered_documents}/${d.documents} &middot; fidelity <b>${f3(v)}</b><br>
+        corpus-wide, failures as zero <b>${f3(cv)}</b>${note}`;
+      bindTip(bar, tipHtml);
+      bar.style.cursor = "crosshair";
+      if (ext) { bindTip(ext, tipHtml); ext.style.cursor = "crosshair"; }
+    });
+  });
+  document.getElementById("chart-fid").append(s);
+}
+
+/* ---------------- table: per category ---------------- */
+{
+  const tb = document.querySelector("#cat-table tbody");
+  for (const fam of ["docs", "sheets", "slides"]) {
+    const F = REPORT.families[fam];
+    ["xray-office", "wasm-viewer"].forEach((eng, i) => {
+      const d = F.engines[eng];
+      const tr = el("tr", i === 0 ? "groupstart" : null);
+      const c1 = el("td", "engine");
+      c1.append(el("span", "dot " + KEY[eng]));
+      c1.append(el("span", null, i === 0
+        ? `<b>${FAM[fam]}</b> &nbsp;<span style="color:var(--ink-3)">${ENG[eng]}</span>`
+        : `<span style="color:var(--ink-3);padding-left:0">${ENG[eng]}</span>`));
+      tr.append(c1);
+      const cells = [
+        d.documents,
+        `${d.rendered_documents} <span style="color:var(--ink-3)">(${pct(d.render_rate)})</span>`,
+        f3(d.fidelity_rendered),
+        f3(d.median_fidelity_rendered),
+        f3(d.agreement_rendered),
+        d.page_exact_rate_rendered === null
+          ? '<span class="na">not paginated</span>' : pct(d.page_exact_rate_rendered),
+        `${pct(d.defect_page_rate)} <span style="color:var(--ink-3)">of ${d.pages_compared}</span>`,
+        `${d.clean_documents} / ${d.rendered_documents}`,
+      ];
+      for (const c of cells) tr.append(el("td", "num", String(c)));
+      tb.append(tr);
+    });
+  }
+}
+
+/* ---------------- small multiples: distribution ---------------- */
+{
+  const host = document.getElementById("chart-dist");
+  const labels = ["<.50", ".50", ".60", ".70", ".80", ".90", ".95"];
+  const edges = ["below 0.50", "0.50&ndash;0.60", "0.60&ndash;0.70", "0.70&ndash;0.80",
+                 "0.80&ndash;0.90", "0.90&ndash;0.95", "0.95&ndash;1.00"];
+  for (const fam of ["docs", "sheets", "slides"]) {
+    for (const eng of ["xray-office", "wasm-viewer"]) {
+      const d = REPORT.distribution[`${fam}|${eng}`];
+      const box = el("div", "sm");
+      box.append(el("h4", null,
+        `<span class="dot ${KEY[eng]}" style="display:inline-block;margin-right:7px"></span>${FAM[fam]} &mdash; ${ENG[eng]}`));
+      box.append(el("div", "smsub", `${d.n} documents rendered`));
+      const W = 340, H = 128, padB = 26, padT2 = 14, padL2 = 4;
+      const s = svg("svg", { viewBox: `0 0 ${W} ${H}`, width: "100%", role: "img",
+        "aria-label": `${FAM[fam]} ${ENG[eng]} fidelity distribution` });
+      const max = Math.max(...d.counts, 1);
+      const bw = (W - padL2 * 2) / d.counts.length;
+      d.counts.forEach((c, i) => {
+        const h = (c / max) * (H - padB - padT2);
+        const r = svg("rect", { x: padL2 + i * bw + 2, y: H - padB - h,
+                                width: bw - 4, height: Math.max(c ? 2 : 0, h), rx: 3,
+                                fill: `var(--${KEY[eng]})`, opacity: 0.35 + 0.65 * (i / 6) });
+        s.append(r);
+        r.style.cursor = "crosshair";
+        bindTip(r, `${FAM[fam]} &middot; ${ENG[eng]}<br>fidelity ${edges[i]}<br><b>${c}</b> document${c === 1 ? "" : "s"}`);
+        if (c) {
+          const t = svg("text", { x: padL2 + i * bw + bw / 2, y: H - padB - h - 4,
+                                  "text-anchor": "middle", "font-size": 9.5, fill: "var(--ink-3)" });
+          t.textContent = c;
+          s.append(t);
+        }
+        const lt = svg("text", { x: padL2 + i * bw + bw / 2, y: H - 10, "text-anchor": "middle",
+                                 "font-size": 9.5, fill: "var(--ink-3)" });
+        lt.textContent = labels[i];
+        s.append(lt);
+      });
+      s.append(svg("line", { x1: padL2, x2: W - padL2, y1: H - padB, y2: H - padB,
+                             stroke: "var(--line)", "stroke-width": 1 }));
+      box.append(s);
+      host.append(box);
+    }
+  }
+}
+
+/* ---------------- table: format coverage ---------------- */
+{
+  const tb = document.querySelector("#ext-table tbody");
+  for (const [ext, d] of Object.entries(REPORT.by_ext)) {
+    const tr = el("tr");
+    tr.append(el("td", null,
+      `<code>.${ext}</code> <span style="color:var(--ink-3)">${FAM[d.family]}</span>`));
+    tr.append(el("td", "num", d.documents));
+    for (const eng of ["xray-office", "wasm-viewer"]) {
+      const e = d[eng];
+      const col = e.render_rate === 1 ? "var(--good)"
+                : e.render_rate === 0 ? "var(--bad)" : "var(--warn)";
+      tr.append(el("td", "num",
+        `<span style="color:${col};font-weight:500">${pct(e.render_rate)}</span>
+         <span style="color:var(--ink-3)"> ${e.rendered}</span>`));
+      tr.append(el("td", "num", e.fidelity === null ? '<span class="na">&mdash;</span>' : f3(e.fidelity)));
+    }
+    tb.append(tr);
+  }
+}
+
+/* ---------------- declines ---------------- */
+{
+  const host = document.getElementById("declines");
+  const all = {};
+  for (const [fam, reasons] of Object.entries(REPORT.viewer_declines))
+    for (const [r, n] of Object.entries(reasons)) (all[r] ??= {})[fam] = n;
+  const rows = Object.entries(all).sort((a, b) =>
+    Object.values(b[1]).reduce((x, y) => x + y, 0) - Object.values(a[1]).reduce((x, y) => x + y, 0));
+  const max = Math.max(...rows.map(([, m]) => Object.values(m).reduce((x, y) => x + y, 0)));
+  const grand = rows.reduce((a, [, m]) => a + Object.values(m).reduce((x, y) => x + y, 0), 0);
+  document.getElementById("decl-head").textContent =
+    `Why the viewer declined ${grand} of ${REPORT.corpus.documents} documents`;
+  // HTML rather than SVG: these labels are sentences, and a fixed SVG gutter either
+  // clips them or collides with the bars.
+  for (const [reason, byFam] of rows) {
+    const n = Object.values(byFam).reduce((x, y) => x + y, 0);
+    const row = el("div", "declrow");
+    row.append(el("div", "decllabel", reason));
+    const track = el("div", "decltrack");
+    const fill = el("div", "declfill");
+    fill.style.width = (n / max * 100) + "%";
+    track.append(fill);
+    row.append(track);
+    row.append(el("div", "declnum", String(n)));
+    bindTip(row, `<b>${n}</b> documents<br>` +
+      Object.entries(byFam).map(([f, c]) => `${FAM[f]}: ${c}`).join("<br>"));
+    host.append(row);
+  }
+}
+
+/* ---------------- worst-case wall ---------------- */
+const READINGS = /*__READINGS__*/;
+{
+  const tabs = document.getElementById("tabs");
+  const host = document.getElementById("cases");
+  const combos = [];
+  for (const eng of ["xray-office", "wasm-viewer"])
+    for (const fam of ["docs", "slides", "sheets"])
+      combos.push([fam, eng]);
+
+  function sevClass(d) {
+    if (d === "content-missing") return "missing";
+    if (d === "extra-content") return "extra";
+    if (d === "median document") return "median";
+    return "reflow";
+  }
+  function renderCase(c, eng) {
+    const box = el("div", "case");
+    const head = el("div", "head");
+    head.append(el("div", "title",
+      `<b>${c.name}</b><span class="where">${c.path.replace(/\/[^/]+$/, "")} &middot; page ${c.page} of ${c.ref_pages}</span>`));
+    const chips = el("div", "chips");
+    chips.append(el("span", "chip sev " + sevClass(c.diagnosis), c.diagnosis));
+    chips.append(el("span", "chip", `SSIM ${f3(c.ssim)}`));
+    chips.append(el("span", "chip", `MAE ${c.mae.toFixed(3)}`));
+    chips.append(el("span", "chip", `ink &times;${Number(c.ink_ratio).toFixed(2)}`));
+    if (c.engine_pages !== c.ref_pages)
+      chips.append(el("span", "chip", `pages ${c.engine_pages} vs ${c.ref_pages}`));
+    head.append(chips);
+    box.append(head);
+    box.append(el("div", "pairlabels",
+      `<span>LibreOffice &mdash; reference</span><span>${ENG[eng]}</span>`));
+    const img = el("img", "pairimg");
+    img.src = c.image;
+    img.loading = "lazy";
+    img.alt = `${c.name} page ${c.page}: LibreOffice reference on the left, ${ENG[eng]} on the right`;
+    box.append(img);
+    const reading = READINGS[c.name];
+    if (reading) box.append(el("div", "read", reading));
+    return box;
+  }
+  function show(fam, eng) {
+    host.replaceChildren();
+    const med = (GALLERY[`${fam}|${eng}|median`] || [])[0];
+    if (med) {
+      const lead = el("p", null,
+        `<span class="eyebrow">For scale &mdash; the median document in this category</span>`);
+      lead.style.marginBottom = "10px";
+      host.append(lead);
+      host.append(renderCase(med, eng));
+      const h = el("p", null, `<span class="eyebrow">The three most divergent</span>`);
+      h.style.margin = "26px 0 10px";
+      host.append(h);
+    }
+    for (const c of GALLERY[`${fam}|${eng}`] || []) host.append(renderCase(c, eng));
+    [...tabs.children].forEach((b) =>
+      b.setAttribute("aria-selected", String(b.dataset.k === `${fam}|${eng}`)));
+  }
+  combos.forEach(([fam, eng], i) => {
+    const b = el("button", "tab",
+      `<span class="dot ${KEY[eng]}"></span>${ENG[eng]} &middot; ${FAM[fam]}`);
+    b.dataset.k = `${fam}|${eng}`;
+    b.setAttribute("role", "tab");
+    b.setAttribute("aria-selected", String(i === 0));
+    b.addEventListener("click", () => show(fam, eng));
+    tabs.append(b);
+  });
+  show("docs", "xray-office");
+
+  // The spreadsheet section shows the same pair, with the category difference named.
+  const sc = (GALLERY["sheets|wasm-viewer"] || [])[0];
+  if (sc) document.getElementById("sheetcase").append(renderCase(sc, "wasm-viewer"));
+}
+
+/* ---------------- cost ---------------- */
+{
+  const c = REPORT.cost;
+  const rows = [["LibreOffice (reference)", c.libreoffice, "ref"],
+                ["X-Ray.Office", c["xray-office"], "pl"]];
+  const W = 880, rowH = 46, H = rows.length * rowH + 34;
+  const padL = 200, plotW = W - padL - 290;
+  const max = Math.max(...rows.map(([, d]) => d.mean_s));
+  const s = svg("svg", { viewBox: `0 0 ${W} ${H}`, width: "100%", role: "img",
+                         "aria-label": "Mean and median seconds per document to produce a PDF" });
+  rows.forEach(([name, d, k], i) => {
+    const y = i * rowH + 8;
+    const t = svg("text", { x: 0, y: y + 20, "font-size": 12.5, fill: "var(--ink)",
+                            "font-family": "IBM Plex Sans, sans-serif", "font-weight": 500 });
+    t.textContent = name;
+    s.append(t);
+    const bw = (d.mean_s / max) * plotW;
+    const r = svg("rect", { x: padL, y: y + 6, width: bw, height: 20, rx: 3, fill: `var(--${k})` });
+    s.append(r);
+    r.style.cursor = "crosshair";
+    bindTip(r, `<b>${name}</b><br>mean <b>${d.mean_s.toFixed(2)} s</b> &middot; median <b>${d.median_s.toFixed(2)} s</b><br>${d.total_s.toLocaleString()} s of CPU for ${d.documents} documents`);
+    const v = svg("text", { x: padL + bw + 10, y: y + 21, "font-size": 12, fill: "var(--ink-2)" });
+    v.textContent = `${d.mean_s.toFixed(2)} s mean \u00B7 ${d.median_s.toFixed(2)} s median`;
+    s.append(v);
+  });
+  const ax = svg("text", { x: padL, y: H - 8, "font-size": 10.5, fill: "var(--ink-3)" });
+  ax.textContent = "seconds per document, one process per core";
+  s.append(ax);
+  document.getElementById("chart-cost").append(s);
+}
+
+/* ---------------- caveats ---------------- */
+{
+  const notes = [
+    ["SSIM punishes texture, and a page can be right while scoring badly",
+     "The lowest-scoring X-Ray.Office slide in the whole corpus is a deck with a mottled photographic background: SSIM 0.49, and visually indistinguishable from the reference &mdash; mean absolute error 0.035. That is why nothing here is ranked on SSIM alone, and why a page is only called defective when a second metric agrees."],
+    ["Only the first five pages of each document were compared",
+     "3,243 page pairs out of 28,366 reference pages. Page counts are compared in full; pixels are not. A defect that only appears on page 40 of a 166-page workbook is not in these numbers."],
+    ["LibreOffice is the reference, not the truth",
+     "Where an engine differs from LibreOffice it has differed from the reference. On at least one deck the viewer drew a background image at full saturation where LibreOffice applied a washout &mdash; a divergence from the reference that may well be closer to what PowerPoint shows."],
+    ["The reflow verdict dominates because layout cascades",
+     "One wrong measurement early &mdash; a font metric, a margin, a line break &mdash; shifts everything after it, so a single defect can mark five pages divergent. The diagnosis counts describe pages, not distinct bugs."],
+    ["The viewer was measured through a browser, not a file",
+     "Load, layout wait, per-page canvas render, element screenshot. Five documents never finished layout inside the time budget and are recorded as failures; two more hit the library's own resource limits and said so &mdash; 250,001 cells against a 250,000 ceiling, and a <code>word/document.xml</code> one byte over a megabyte."],
+  ];
+  const host = document.getElementById("caveats-list");
+  for (const [h, p] of notes) host.append(el("div", "note", `<h3>${h}</h3><p>${p}</p>`));
+}
+
+document.getElementById("repro-code").textContent = `# reference: 946 documents through headless LibreOffice, one profile per worker
+soffice --headless --convert-to pdf --outdir out/ document.docx
+
+# candidate A: X-Ray.Office writes its own PDF
+XRay.Office.Cli render --format pdf --outdir out/ document.docx
+
+# candidate B: the WASM viewer, driven in headless Chromium
+#   doc.renderPage(canvas, i, { width: pageWidthPt / 72 * 150, dpr: 1 })
+#   then screenshot the canvas element
+
+# score: rasterise both sides at 150 dpi onto the reference page's pixel box,
+# then SSIM + mean absolute error + ink ratio + shifted-tile count per page.`;
+</script>

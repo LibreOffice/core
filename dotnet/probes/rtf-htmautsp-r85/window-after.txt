@@ -1,0 +1,13 @@
+probe                         ref     ours   ref ours  agree
+w-absent                     61.8     61.8   sum  sum  yes
+w-afterfooter                37.8     37.8   max  max  yes
+w-afterpara                  61.8     61.8   sum  sum  yes
+w-afterrow                   61.8     61.8   sum  sum  yes
+w-beforepict                 37.8     37.8   max  max  yes
+w-beforerow                  37.8     37.8   max  max  yes
+w-beforerowdef               None     37.8     ?  max  NO
+w-early                      37.8     37.8   max  max  yes
+w-parathenrow                37.8     37.8   max  max  yes
+w-rowthenpara                37.8     37.8   max  max  yes
+
+agree 9 of 10

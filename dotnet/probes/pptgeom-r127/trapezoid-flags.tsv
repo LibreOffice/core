@@ -1,0 +1,8 @@
+# The msofbtSp flag word of every Escher type-8 shape in the two documents O74 names, read out of
+# the OLE2 streams. bit 6 is fFlipH and bit 7 fFlipV (SvxMSDffManager's ShapeFlag).
+document	index	spid	flags	fFlipV	fFlipH	drawn_page	wide_edge_after	wide_edge_26.2.4.2
+ws_prod-...-European-Safety-Strategy-Initiative.ppt	1	384004	0x00000a00	0	0	7	top	top
+ws_prod-...-European-Safety-Strategy-Initiative.ppt	2	386051	0x00000a80	1	0	8	bottom	bottom
+ws_prod-...-European-Safety-Strategy-Initiative.ppt	3	387077	0x00000a00	0	0	9	top	top
+ws_prod-...-European-Safety-Strategy-Initiative.ppt	4	387078	0x00000a80	1	0	9	bottom	bottom
+outlook_of_nigerian_pension_sector.ppt	1	196685	0x00000a82	1	0	(not drawn by either side)	-	-

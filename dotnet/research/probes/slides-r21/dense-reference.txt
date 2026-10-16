@@ -1,0 +1,275 @@
+=== dref/af-dense.pdf page 1
+  column x~   20.0  sizes(mm100) [212, 423]  n=8
+    pitches(mm100) [508, 1223, 254, 254, 254, 254, 254]
+  column x~  380.0  sizes(mm100) [212]  n=6
+    pitches(mm100) [254, 254, 254, 254, 254]
+=== dref/af-dense.pdf page 2
+  column x~   20.0  sizes(mm100) [247, 423]  n=8
+    pitches(mm100) [508, 1258, 296, 296, 296, 296, 296]
+  column x~  380.0  sizes(mm100) [247]  n=6
+    pitches(mm100) [295, 295, 295, 295, 295]
+=== dref/af-dense.pdf page 3
+  column x~   20.0  sizes(mm100) [282, 423]  n=8
+    pitches(mm100) [508, 1293, 338, 338, 338, 338, 338]
+  column x~  380.0  sizes(mm100) [282]  n=6
+    pitches(mm100) [341, 341, 341, 341, 341]
+=== dref/af-dense.pdf page 4
+  column x~   20.0  sizes(mm100) [318, 423]  n=8
+    pitches(mm100) [508, 1329, 382, 382, 382, 382, 382]
+  column x~  380.0  sizes(mm100) [318]  n=6
+    pitches(mm100) [382, 382, 382, 382, 382]
+=== dref/af-dense.pdf page 5
+  column x~   20.0  sizes(mm100) [353, 423]  n=8
+    pitches(mm100) [508, 1364, 424, 424, 424, 424, 424]
+  column x~  380.0  sizes(mm100) [353]  n=6
+    pitches(mm100) [421, 421, 421, 421, 421]
+=== dref/af-dense.pdf page 6
+  column x~   20.0  sizes(mm100) [388, 423]  n=8
+    pitches(mm100) [508, 1399, 466, 466, 466, 466, 466]
+  column x~  380.0  sizes(mm100) [388]  n=6
+    pitches(mm100) [467, 467, 467, 467, 467]
+=== dref/af-dense.pdf page 7
+  column x~   20.0  sizes(mm100) [423]  n=8
+    pitches(mm100) [508, 1434, 508, 508, 508, 508, 508]
+  column x~  380.0  sizes(mm100) [423]  n=6
+    pitches(mm100) [508, 508, 508, 508, 508]
+=== dref/af-dense.pdf page 8
+  column x~   20.0  sizes(mm100) [423, 459]  n=8
+    pitches(mm100) [508, 1470, 551, 551, 551, 551, 551]
+  column x~  380.0  sizes(mm100) [459]  n=6
+    pitches(mm100) [548, 548, 548, 548, 548]
+=== dref/af-dense.pdf page 9
+  column x~   20.0  sizes(mm100) [423, 494]  n=8
+    pitches(mm100) [508, 1505, 593, 593, 593, 593, 593]
+  column x~  380.0  sizes(mm100) [494]  n=6
+    pitches(mm100) [594, 594, 594, 594, 594]
+=== dref/af-dense.pdf page 10
+  column x~   20.0  sizes(mm100) [423, 529]  n=8
+    pitches(mm100) [508, 1540, 635, 635, 635, 635, 635]
+  column x~  380.0  sizes(mm100) [529]  n=6
+    pitches(mm100) [635, 635, 635, 635, 635]
+=== dref/af-dense.pdf page 11
+  column x~   20.0  sizes(mm100) [423, 564]  n=8
+    pitches(mm100) [508, 1575, 677, 677, 677, 677, 677]
+  column x~  380.0  sizes(mm100) [564]  n=6
+    pitches(mm100) [676, 676, 676, 676, 676]
+=== dref/af-dense.pdf page 12
+  column x~   20.0  sizes(mm100) [423, 600]  n=8
+    pitches(mm100) [508, 1611, 720, 720, 720, 720, 720]
+  column x~  380.0  sizes(mm100) [600]  n=6
+    pitches(mm100) [721, 721, 721, 721, 721]
+=== dref/af-dense.pdf page 13
+  column x~   20.0  sizes(mm100) [423, 635]  n=8
+    pitches(mm100) [508, 1646, 762, 762, 762, 762, 762]
+  column x~  380.0  sizes(mm100) [635]  n=6
+    pitches(mm100) [762, 762, 762, 762, 762]
+=== dref/af-dense.pdf page 14
+  column x~   20.0  sizes(mm100) [423, 670]  n=8
+    pitches(mm100) [508, 1681, 804, 804, 804, 804, 804]
+  column x~  380.0  sizes(mm100) [670]  n=6
+    pitches(mm100) [803, 803, 803, 803, 803]
+=== dref/af-dense.pdf page 15
+  column x~   20.0  sizes(mm100) [423, 706]  n=8
+    pitches(mm100) [508, 1717, 847, 847, 847, 847, 847]
+  column x~  380.0  sizes(mm100) [706]  n=6
+    pitches(mm100) [848, 848, 848, 848, 848]
+=== dref/af-dense.pdf page 16
+  column x~   20.0  sizes(mm100) [423, 741]  n=8
+    pitches(mm100) [508, 1752, 889, 889, 889, 889, 889]
+  column x~  380.0  sizes(mm100) [741]  n=6
+    pitches(mm100) [889, 889, 889, 889, 889]
+=== dref/af-dense.pdf page 17
+  column x~   20.0  sizes(mm100) [423, 776]  n=8
+    pitches(mm100) [508, 1787, 931, 931, 931, 931, 931]
+  column x~  380.0  sizes(mm100) [776]  n=6
+    pitches(mm100) [930, 930, 930, 930, 930]
+=== dref/af-dense.pdf page 18
+  column x~   20.0  sizes(mm100) [423, 811]  n=8
+    pitches(mm100) [508, 1822, 973, 973, 973, 973, 973]
+  column x~  380.0  sizes(mm100) [811]  n=6
+    pitches(mm100) [976, 976, 976, 976, 976]
+=== dref/af-dense.pdf page 19
+  column x~   20.0  sizes(mm100) [423, 847]  n=8
+    pitches(mm100) [508, 1858, 1016, 1016, 1016, 1016, 1016]
+  column x~  380.0  sizes(mm100) [847]  n=6
+    pitches(mm100) [1016, 1016, 1016, 1016, 1016]
+=== dref/af-dense.pdf page 20
+  column x~   20.0  sizes(mm100) [423, 882]  n=8
+    pitches(mm100) [508, 1893, 1058, 1058, 1058, 1058, 1058]
+  column x~  380.0  sizes(mm100) [882]  n=6
+    pitches(mm100) [1057, 1057, 1057, 1057, 1057]
+=== dref/af-dense.pdf page 21
+  column x~   20.0  sizes(mm100) [423, 917]  n=8
+    pitches(mm100) [508, 1928, 1100, 1100, 1100, 1100, 1100]
+  column x~  380.0  sizes(mm100) [917]  n=6
+    pitches(mm100) [1103, 1103, 1103, 1103, 1103]
+=== dref/af-dense.pdf page 22
+  column x~   20.0  sizes(mm100) [423, 953]  n=8
+    pitches(mm100) [508, 1964, 1144, 1144, 1144, 1144, 1144]
+  column x~  380.0  sizes(mm100) [953]  n=6
+    pitches(mm100) [1144, 1144, 1144, 1144, 1144]
+=== dref/af-dense.pdf page 23
+  column x~   20.0  sizes(mm100) [423, 988]  n=8
+    pitches(mm100) [508, 1999, 1186, 1186, 1186, 1186, 1186]
+  column x~  380.0  sizes(mm100) [988]  n=6
+    pitches(mm100) [1183, 1183, 1183, 1183, 1183]
+=== dref/af-dense.pdf page 24
+  column x~   20.0  sizes(mm100) [423, 1023]  n=8
+    pitches(mm100) [508, 2034, 1228, 1228, 1228, 1228, 1228]
+  column x~  380.0  sizes(mm100) [1023]  n=6
+    pitches(mm100) [1229, 1229, 1229, 1229, 1229]
+=== dref/af-dense.pdf page 25
+  column x~   20.0  sizes(mm100) [423, 1058]  n=8
+    pitches(mm100) [508, 2069, 1270, 1270, 1270, 1270, 1270]
+  column x~  380.0  sizes(mm100) [1058]  n=6
+    pitches(mm100) [1270, 1270, 1270, 1270, 1270]
+=== dref/af-dense.pdf page 26
+  column x~   20.0  sizes(mm100) [423, 1094]  n=8
+    pitches(mm100) [508, 2105, 1313, 1313, 1313, 1313, 1313]
+  column x~  380.0  sizes(mm100) [1094]  n=6
+    pitches(mm100) [1310, 1310, 1310, 1310, 1310]
+=== dref/af-dense.pdf page 27
+  column x~   20.0  sizes(mm100) [423, 1129]  n=8
+    pitches(mm100) [508, 2140, 1355, 1355, 1355, 1355, 1355]
+  column x~  380.0  sizes(mm100) [1129]  n=6
+    pitches(mm100) [1356, 1356, 1356, 1356, 1356]
+=== dref/af-dense.pdf page 28
+  column x~   20.0  sizes(mm100) [423, 1164]  n=8
+    pitches(mm100) [508, 2175, 1397, 1397, 1397, 1397, 1397]
+  column x~  380.0  sizes(mm100) [1164]  n=6
+    pitches(mm100) [1397, 1397, 1397, 1397, 1397]
+=== dref/af-dense.pdf page 29
+  column x~   20.0  sizes(mm100) [423, 1199]  n=8
+    pitches(mm100) [508, 2210, 1439, 1439, 1439, 1439, 1439]
+  column x~  380.0  sizes(mm100) [1199]  n=6
+    pitches(mm100) [1438, 1438, 1438, 1438, 1438]
+=== dref/af-dense.pdf page 30
+  column x~   20.0  sizes(mm100) [423, 1235]  n=8
+    pitches(mm100) [508, 2246, 1482, 1482, 1482, 1482, 1482]
+  column x~  380.0  sizes(mm100) [1235]  n=6
+    pitches(mm100) [1483, 1483, 1483, 1483, 1483]
+=== dref/af-dense.pdf page 31
+  column x~   20.0  sizes(mm100) [423, 1270]  n=8
+    pitches(mm100) [508, 2281, 1524, 1524, 1524, 1524, 1524]
+  column x~  380.0  sizes(mm100) [1270]  n=6
+    pitches(mm100) [1524, 1524, 1524, 1524, 1524]
+=== dref/af-dense.pdf page 32
+  column x~   20.0  sizes(mm100) [423, 1305]  n=8
+    pitches(mm100) [508, 2316, 1566, 1566, 1566, 1566, 1566]
+  column x~  380.0  sizes(mm100) [1305]  n=6
+    pitches(mm100) [1565, 1565, 1565, 1565, 1565]
+=== dref/af-dense.pdf page 33
+  column x~   20.0  sizes(mm100) [423, 1341]  n=8
+    pitches(mm100) [508, 2352, 1609, 1609, 1609, 1609, 1609]
+  column x~  380.0  sizes(mm100) [1341]  n=6
+    pitches(mm100) [1610, 1610, 1610, 1610, 1610]
+=== dref/af-dense.pdf page 34
+  column x~   20.0  sizes(mm100) [423, 1376]  n=8
+    pitches(mm100) [508, 2387, 1651, 1651, 1651, 1651, 1651]
+  column x~  380.0  sizes(mm100) [1376]  n=6
+    pitches(mm100) [1651, 1651, 1651, 1651, 1651]
+=== dref/af-dense.pdf page 35
+  column x~   20.0  sizes(mm100) [423, 1411]  n=8
+    pitches(mm100) [508, 2422, 1693, 1693, 1693, 1693, 1693]
+  column x~  380.0  sizes(mm100) [1411]  n=6
+    pitches(mm100) [1692, 1692, 1692, 1692, 1692]
+=== dref/af-dense.pdf page 36
+  column x~   20.0  sizes(mm100) [423, 1446]  n=8
+    pitches(mm100) [508, 2457, 1735, 1735, 1735, 1735, 1735]
+  column x~  380.0  sizes(mm100) [1446]  n=6
+    pitches(mm100) [1738, 1738, 1738, 1738, 1738]
+=== dref/af-dense.pdf page 37
+  column x~   20.0  sizes(mm100) [423, 1482]  n=8
+    pitches(mm100) [508, 2493, 1778, 1778, 1778, 1778, 1778]
+  column x~  380.0  sizes(mm100) [1482]  n=6
+    pitches(mm100) [1778, 1778, 1778, 1778, 1778]
+=== dref/af-dense.pdf page 38
+  column x~   20.0  sizes(mm100) [423, 1517]  n=8
+    pitches(mm100) [508, 2528, 1820, 1820, 1820, 1820, 1820]
+  column x~  380.0  sizes(mm100) [1517]  n=6
+    pitches(mm100) [1819, 1819, 1819, 1819, 1819]
+=== dref/af-dense.pdf page 39
+  column x~   20.0  sizes(mm100) [423, 1552]  n=8
+    pitches(mm100) [508, 2563, 1862, 1862, 1862, 1862, 1862]
+  column x~  380.0  sizes(mm100) [1552]  n=6
+    pitches(mm100) [1865, 1865, 1865, 1865, 1865]
+=== dref/af-dense.pdf page 40
+  column x~   20.0  sizes(mm100) [423, 1588]  n=8
+    pitches(mm100) [508, 2599, 1906, 1906, 1906, 1906, 1906]
+  column x~  380.0  sizes(mm100) [1588]  n=6
+    pitches(mm100) [1906, 1906, 1906, 1906, 1906]
+=== dref/af-dense.pdf page 41
+  column x~   20.0  sizes(mm100) [423, 1623]  n=8
+    pitches(mm100) [508, 2634, 1948, 1948, 1948, 1948, 1948]
+  column x~  380.0  sizes(mm100) [1623]  n=6
+    pitches(mm100) [1945, 1945, 1945, 1945, 1945]
+=== dref/af-dense.pdf page 42
+  column x~   20.0  sizes(mm100) [423, 1658]  n=8
+    pitches(mm100) [508, 2669, 1990, 1990, 1990, 1990, 1990]
+  column x~  380.0  sizes(mm100) [1658]  n=6
+    pitches(mm100) [1991, 1991, 1991, 1991, 1991]
+=== dref/af-dense.pdf page 43
+  column x~   20.0  sizes(mm100) [423, 1693]  n=8
+    pitches(mm100) [508, 2704, 2032, 2032, 2032, 2032, 2032]
+  column x~  380.0  sizes(mm100) [1693]  n=6
+    pitches(mm100) [2032, 2032, 2032, 2032, 2032]
+=== dref/af-dense.pdf page 44
+  column x~   20.0  sizes(mm100) [423, 1729]  n=8
+    pitches(mm100) [508, 2740, 2075, 2075, 2075, 2075, 2075]
+  column x~  380.0  sizes(mm100) [1729]  n=6
+    pitches(mm100) [2072, 2072, 2072, 2072, 2072]
+=== dref/af-dense.pdf page 45
+  column x~   20.0  sizes(mm100) [423, 1764]  n=8
+    pitches(mm100) [508, 2775, 2117, 2117, 2117, 2117, 2117]
+  column x~  380.0  sizes(mm100) [1764]  n=6
+    pitches(mm100) [2118, 2118, 2118, 2118, 2118]
+=== dref/af-dense.pdf page 46
+  column x~   20.0  sizes(mm100) [423, 1799]  n=8
+    pitches(mm100) [508, 2810, 2159, 2159, 2159, 2159, 2159]
+  column x~  380.0  sizes(mm100) [1799]  n=6
+    pitches(mm100) [2159, 2159, 2159, 2159, 2159]
+=== dref/af-dense.pdf page 47
+  column x~   20.0  sizes(mm100) [423, 1834]  n=8
+    pitches(mm100) [508, 2845, 2201, 2201, 2201, 2201, 2201]
+  column x~  380.0  sizes(mm100) [1834]  n=6
+    pitches(mm100) [2200, 2200, 2200, 2200, 2200]
+=== dref/af-dense.pdf page 48
+  column x~   20.0  sizes(mm100) [423, 1870]  n=8
+    pitches(mm100) [508, 2881, 2244, 2244, 2244, 2244, 2244]
+  column x~  380.0  sizes(mm100) [1870]  n=6
+    pitches(mm100) [2245, 2245, 2245, 2245, 2245]
+=== dref/af-dense.pdf page 49
+  column x~   20.0  sizes(mm100) [423, 1905]  n=8
+    pitches(mm100) [508, 2916, 2286, 2286, 2286, 2286, 2286]
+  column x~  380.0  sizes(mm100) [1905]  n=6
+    pitches(mm100) [2286, 2286, 2286, 2286, 2286]
+=== dref/af-dense.pdf page 50
+  column x~   20.0  sizes(mm100) [423, 1940]  n=8
+    pitches(mm100) [508, 2951, 2328, 2328, 2328, 2328, 2328]
+  column x~  380.0  sizes(mm100) [1940]  n=6
+    pitches(mm100) [2327, 2327, 2327, 2327, 2327]
+=== dref/af-dense.pdf page 51
+  column x~   20.0  sizes(mm100) [423, 1976]  n=8
+    pitches(mm100) [508, 2987, 2371, 2371, 2371, 2371, 2371]
+  column x~  380.0  sizes(mm100) [1976]  n=6
+    pitches(mm100) [2372, 2372, 2372, 2372, 2372]
+=== dref/af-dense.pdf page 52
+  column x~   20.0  sizes(mm100) [423, 2011]  n=8
+    pitches(mm100) [508, 3022, 2413, 2413, 2413, 2413, 2413]
+  column x~  380.0  sizes(mm100) [2011]  n=6
+    pitches(mm100) [2413, 2413, 2413, 2413, 2413]
+=== dref/af-dense.pdf page 53
+  column x~   20.0  sizes(mm100) [423, 2046]  n=8
+    pitches(mm100) [508, 3057, 2455, 2455, 2455, 2455, 2455]
+  column x~  380.0  sizes(mm100) [2046]  n=6
+    pitches(mm100) [2454, 2454, 2454, 2454, 2454]
+=== dref/af-dense.pdf page 54
+  column x~   20.0  sizes(mm100) [423, 2081]  n=8
+    pitches(mm100) [508, 3092, 2497, 2497, 2497, 2497, 2497]
+  column x~  380.0  sizes(mm100) [2046]  n=6
+    pitches(mm100) [2455, 2455, 2455, 2455, 2455]
+=== dref/af-dense.pdf page 55
+  column x~   20.0  sizes(mm100) [423, 2117]  n=8
+    pitches(mm100) [508, 3128, 2540, 2540, 2540, 2540, 2540]
+  column x~  380.0  sizes(mm100) [2046]  n=6
+    pitches(mm100) [2455, 2455, 2455, 2455, 2455]

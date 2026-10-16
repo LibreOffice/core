@@ -1,0 +1,7 @@
+mean|dx| before     after  off-edge before   after   spans   document
+         20.106    20.113             4208    4208    6279   150_5300_13_chg10__odt.pdf  WORSE
+         26.483    26.455             1774    1773    2946   150_5300_13_chg12__odt.pdf  BETTER
+         17.717    17.721             1066    1067    1974   150_5300_13_chg8__odt.pdf  WORSE
+          2.931     2.885              149     147     675   644730BRI0mna000BOX361539B00public0__odt.pdf  BETTER
+          2.462     1.347               22      16     111   手机免提系统TSB__odt.pdf  BETTER
+         20.149    20.134                            11985   TOTAL

@@ -1,0 +1,14 @@
+probe                  side      x(B)     A->B     B->C
+p-bodypict             ref      72.10    61.80    13.80
+p-bodypict             ours     72.00    61.80    13.80
+
+p-control              ref      72.10    61.80    13.80
+p-control              ours     72.00    61.80    13.80
+
+p-listpicture          ref      72.10    37.80    13.80
+p-listpicture          ours     72.00    37.80    13.80
+
+p-none                 ref      72.10    37.80    13.80
+p-none                 ours     72.00    37.80    13.80
+
+agree 4 of 4

@@ -1,0 +1,43 @@
+== Thailand17
+   261  0.23pt solid #000000
+   130  0.54pt solid #000000
+     1  0.74pt solid #808080
+     2  1.5pt solid #000000
+  row style ro1 style:row-height="2.82cm" style:use-optimal-row-height="false"
+  row style ro2 style:row-height="2.819cm" style:use-optimal-row-height="false"
+  row style ro3 style:row-height="3.309cm" style:use-optimal-row-height="false"
+  row style ro4 style:row-height="2.816cm" style:use-optimal-row-height="false"
+  row style ro5 style:row-height="1.421cm" style:use-optimal-row-height="false"
+  row style ro6 style:row-height="2.978cm" style:use-optimal-row-height="false"
+  row style ro7 style:row-height="2.253cm" style:use-optimal-row-height="false"
+  row style ro8 style:row-height="2.252cm" style:use-optimal-row-height="false"
+  row style ro9 style:row-height="1.383cm" style:use-optimal-row-height="false"
+  row style ro10 style:row-height="1.277cm" style:use-optimal-row-height="false"
+  row style ro11 style:row-height="1.424cm" style:use-optimal-row-height="false"
+  row style ro12 style:row-height="2.258cm" style:use-optimal-row-height="false"
+  row style ro13 style:row-height="2.257cm" style:use-optimal-row-height="false"
+  row style ro14 style:row-height="2.293cm" style:use-optimal-row-height="false"
+  row style ro15 style:row-height="2.306cm" style:use-optimal-row-height="false"
+  row style ro16 style:row-height="2.324cm" style:use-optimal-row-height="false"
+  row style ro17 style:row-height="2.323cm" style:use-optimal-row-height="false"
+  row style ro18 style:row-height="2.88cm" style:use-optimal-row-height="false"
+  row style ro19 style:row-height="3.819cm" style:use-optimal-row-height="false"
+  row style ro20 style:row-height="2.87cm" style:use-optimal-row-height="false"
+  row style ro21 style:row-height="2.802cm" style:use-optimal-row-height="false"
+  row style ro22 style:row-height="2.799cm" style:use-optimal-row-height="false"
+  row style ro23 style:row-height="2.305cm" style:use-optimal-row-height="false"
+  row style ro24 style:row-height="2.322cm" style:use-optimal-row-height="false"
+  row style ro25 style:row-height="2.821cm" style:use-optimal-row-height="false"
+  row style ro26 style:row-height="2.89cm" style:use-optimal-row-height="false"
+  row style ro1 style:row-height="0.178in" fo:break-before="auto" style:use-optimal-row-height="true"
+  row style ro2 style:row-height="0.1772in" fo:break-before="auto" style:use-optimal-row-height="true"
+== 2015-Civil-Rights-Website-training
+    26  0.23pt solid #000000
+    14  0.54pt solid #000000
+   138  0.5pt solid #000000
+    22  0.75pt solid #000000
+    25  1.5pt solid #000000
+     4  2.25pt solid #000000
+   320  none
+  row style ro1 style:row-height="1.108cm" style:use-optimal-row-height="false"
+  row style ro2 style:row-height="5.024cm" style:use-optimal-row-height="false"

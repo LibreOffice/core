@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+ xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+ xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+ xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+ xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+ xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+ xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+ xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0"
+ office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:automatic-styles>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="8.5in" fo:page-height="11in"
+    fo:margin-top="1in" fo:margin-bottom="1in" fo:margin-left="1in" fo:margin-right="1in"/>
+  </style:page-layout>
+  <style:style style:name="Tbl" style:family="table">
+   <style:table-properties style:width="6in" table:align="left"/>
+  </style:style>
+  <style:style style:name="Col" style:family="table-column">
+   <style:table-column-properties style:column-width="1in"/>
+  </style:style>
+  <style:style style:name="P1" style:family="paragraph" style:parent-style-name="Standard">
+   <style:text-properties style:font-name="Liberation Serif" fo:font-size="12pt"/>
+  </style:style>
+  <style:style style:name="c0" style:family="table-cell">
+   <style:table-cell-properties fo:padding="0.02in" fo:border="0.5pt solid #000000"/>
+  </style:style>
+  <style:style style:name="c1" style:family="table-cell">
+   <style:table-cell-properties fo:padding="0.02in" fo:border="0.5pt solid #000000" loext:writing-mode="bt-lr"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="pm1"/>
+ </office:master-styles>
+ <office:body><office:text>
+  <table:table table:name="b" table:style-name="Tbl">
+   <table:table-column table:style-name="Col" table:number-columns-repeated="2"/>
+   <table:table-row>
+    <table:table-cell table:style-name="c0" office:value-type="string"><text:p text:style-name="P1">AaAaAa</text:p></table:table-cell>
+    <table:table-cell table:style-name="c1" office:value-type="string"><text:p text:style-name="P1">AaAaAa</text:p></table:table-cell>
+   </table:table-row>
+  </table:table>
+  <text:p text:style-name="P1">after</text:p>
+ </office:text></office:body>
+</office:document>

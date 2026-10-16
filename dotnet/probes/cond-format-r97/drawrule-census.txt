@@ -1,0 +1,120 @@
+documents opened as OPC spreadsheets: 244
+dataBar  main-namespace rules   9 in  6 documents; x14 extensions of those   9; x14-only rules   0 in  0 documents
+iconSet  main-namespace rules   2 in  2 documents; x14 extensions of those   0; x14-only rules  18 in  8 documents
+
+015_Free_Gantt_Chart_Template_for_Excel_414e86bf.xlsx | xl/worksheets/sheet1.xml | main dataBar | sqref 'H8:H43' | priority 10
+    attrs {}
+    cfvo  [('num', '0'), ('num', '1')]
+    extra [{'theme': '0', 'tint': '-0.34998626667073579'}]
+036_Simple_to-do_list_Use_this_template_ba44373b.xlsx | xl/worksheets/sheet11.xml | main dataBar | sqref 'I5:L5' | priority 5
+    attrs {'showValue': '0'}
+    cfvo  [('num', '0'), ('num', '1')]
+    extra [{'theme': '5'}]
+041_Business_budget_ef942467.xlsx | xl/worksheets/sheet22.xml | x14-only iconSet | sqref '' | priority 10
+    attrs {'iconSet': '3Flags', 'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '0'), ('num', '0')]
+    extra [('3Flags', '0'), ('NoIcons', '0'), ('NoIcons', '0')]
+041_Business_budget_ef942467.xlsx | xl/worksheets/sheet31.xml | x14-only iconSet | sqref '' | priority 10
+    attrs {'iconSet': '3Flags', 'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '0'), ('num', '0')]
+    extra [('3Flags', '0'), ('NoIcons', '0'), ('NoIcons', '0')]
+041_Business_budget_ef942467.xlsx | xl/worksheets/sheet44.xml | x14-only iconSet | sqref '' | priority 2
+    attrs {'iconSet': '3Flags', 'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '0'), ('num', '0')]
+    extra [('3Flags', '0'), ('NoIcons', '0'), ('NoIcons', '0')]
+042_Business_monthly_budget_4e4d092f.xlsx | xl/worksheets/sheet22.xml | x14-only iconSet | sqref '' | priority 8
+    attrs {'iconSet': '3Flags', 'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '0'), ('num', '0')]
+    extra [('3Flags', '0'), ('NoIcons', '0'), ('NoIcons', '0')]
+042_Business_monthly_budget_4e4d092f.xlsx | xl/worksheets/sheet31.xml | x14-only iconSet | sqref '' | priority 9
+    attrs {'iconSet': '3Flags', 'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '0'), ('num', '0')]
+    extra [('3Flags', '0'), ('NoIcons', '0'), ('NoIcons', '0')]
+042_Business_monthly_budget_4e4d092f.xlsx | xl/worksheets/sheet44.xml | x14-only iconSet | sqref '' | priority 2
+    attrs {'iconSet': '3Flags', 'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '0'), ('num', '0')]
+    extra [('3Flags', '0'), ('NoIcons', '0'), ('NoIcons', '0')]
+066_Agile_Gantt_chart_08f9de45.xlsx | xl/worksheets/sheet22.xml | main dataBar | sqref 'E9:E36' | priority 5
+    attrs {}
+    cfvo  [('num', '0'), ('num', '1')]
+    extra [{'theme': '6'}]
+066_Agile_Gantt_chart_08f9de45.xlsx | xl/worksheets/sheet22.xml | x14-only iconSet | sqref '' | priority 12
+    attrs {'iconSet': '3Stars', 'showValue': '0', 'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '1'), ('num', '2')]
+    extra [('NoIcons', '0'), ('3Flags', '1'), ('3Signs', '0')]
+066_Agile_Gantt_chart_08f9de45.xlsx | xl/worksheets/sheet22.xml | x14-only iconSet | sqref '' | priority 6
+    attrs {'iconSet': '3Stars', 'showValue': '0', 'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '1'), ('num', '2')]
+    extra [('NoIcons', '0'), ('3Flags', '1'), ('3Signs', '0')]
+066_Agile_Gantt_chart_08f9de45.xlsx | xl/worksheets/sheet31.xml | main dataBar | sqref 'E9:E36' | priority 5
+    attrs {}
+    cfvo  [('num', '0'), ('num', '1')]
+    extra [{'theme': '6'}]
+066_Agile_Gantt_chart_08f9de45.xlsx | xl/worksheets/sheet31.xml | x14-only iconSet | sqref '' | priority 12
+    attrs {'iconSet': '3Stars', 'showValue': '0', 'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '1'), ('num', '2')]
+    extra [('NoIcons', '0'), ('3Flags', '1'), ('3Signs', '0')]
+066_Agile_Gantt_chart_08f9de45.xlsx | xl/worksheets/sheet31.xml | x14-only iconSet | sqref '' | priority 6
+    attrs {'iconSet': '3Stars', 'showValue': '0', 'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '1'), ('num', '2')]
+    extra [('NoIcons', '0'), ('3Flags', '1'), ('3Signs', '0')]
+066_Agile_Gantt_chart_08f9de45.xlsx | xl/worksheets/sheet44.xml | main dataBar | sqref 'E9:E36' | priority 5
+    attrs {}
+    cfvo  [('num', '0'), ('num', '1')]
+    extra [{'theme': '9', 'tint': '0.59999389629810485'}]
+066_Agile_Gantt_chart_08f9de45.xlsx | xl/worksheets/sheet44.xml | x14-only iconSet | sqref '' | priority 12
+    attrs {'iconSet': '3Stars', 'showValue': '0', 'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '1'), ('num', '2')]
+    extra [('NoIcons', '0'), ('3Flags', '1'), ('3Signs', '0')]
+066_Agile_Gantt_chart_08f9de45.xlsx | xl/worksheets/sheet44.xml | x14-only iconSet | sqref '' | priority 6
+    attrs {'iconSet': '3Stars', 'showValue': '0', 'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '1'), ('num', '2')]
+    extra [('NoIcons', '0'), ('3Flags', '1'), ('3Signs', '0')]
+069_Blue_modern_balance_sheet_Use_this_template_6b4d70d3.xlsx | xl/worksheets/sheet13.xml | x14-only iconSet | sqref '' | priority 4
+    attrs {'iconSet': '3Flags', 'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '$C$11'), ('num', '$C$11')]
+    extra [('3Flags', '0'), ('3Flags', '2'), ('3Flags', '0')]
+069_Blue_modern_balance_sheet_Use_this_template_6b4d70d3.xlsx | xl/worksheets/sheet13.xml | x14-only iconSet | sqref '' | priority 8
+    attrs {'iconSet': '3Flags', 'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '$D$11'), ('num', '$D$11')]
+    extra [('3Flags', '0'), ('3Flags', '2'), ('3Flags', '0')]
+075_Idea_planner_tasks_f44ebd73.xlsx | xl/worksheets/sheet1.xml | main iconSet | sqref 'F7:F10' | priority 18
+    attrs {'iconSet': '3Symbols2'}
+    cfvo  [('percent', '0'), ('num', '0'), ('num', '1')]
+    extra []
+076_Inventory_list_accessibility_guide_Use_this_template_f43dab19.xlsx | xl/worksheets/sheet24.xml | main dataBar | sqref 'J6:J16' | priority 21
+    attrs {}
+    cfvo  [('min', None), ('max', None)]
+    extra [{'theme': '0', 'tint': '-0.14999847407452621'}]
+076_Inventory_list_accessibility_guide_Use_this_template_f43dab19.xlsx | xl/worksheets/sheet24.xml | main dataBar | sqref 'J6:J16' | priority 22
+    attrs {}
+    cfvo  [('min', None), ('max', None)]
+    extra [{'theme': '2', 'tint': '-0.34998626667073579'}]
+076_Inventory_list_accessibility_guide_Use_this_template_f43dab19.xlsx | xl/worksheets/sheet24.xml | x14-only iconSet | sqref '' | priority 25
+    attrs {'iconSet': '3Flags', 'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '0'), ('num', '1')]
+    extra [('NoIcons', '0'), ('NoIcons', '0'), ('3Flags', '0')]
+077_Inventory_list_with_highlighting_Use_this_template_36d8d57a.xlsx | xl/worksheets/sheet11.xml | x14-only iconSet | sqref '' | priority 9
+    attrs {'showValue': '0', 'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '-1'), ('num', '1')]
+    extra [('NoIcons', '0'), ('NoIcons', '0'), ('3Flags', '0')]
+078_Modern_inventory_list_Use_this_template_41abd5bf.xlsx | xl/worksheets/sheet11.xml | x14-only iconSet | sqref '' | priority 79
+    attrs {'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '0'), ('num', '1')]
+    extra [('NoIcons', '0'), ('NoIcons', '0'), ('3Flags', '0')]
+085_Simple_Gantt_chart_d65b8377.xlsx | xl/worksheets/sheet12.xml | main dataBar | sqref 'D7:D33' | priority 23
+    attrs {}
+    cfvo  [('num', '0'), ('num', '1')]
+    extra [{'theme': '0'}]
+088_To-do_list_with_progress_tracker_Use_this_template_8c438912.xlsx | xl/worksheets/sheet11.xml | main dataBar | sqref 'G3:G7' | priority 9
+    attrs {}
+    cfvo  [('min', None), ('max', None)]
+    extra [{'theme': '4', 'tint': '0.39997558519241921'}]
+088_To-do_list_with_progress_tracker_Use_this_template_8c438912.xlsx | xl/worksheets/sheet11.xml | x14-only iconSet | sqref '' | priority 10
+    attrs {'iconSet': '3Symbols', 'custom': '1'}
+    cfvo  [('percent', '0'), ('num', '0'), ('num', '1')]
+    extra [('NoIcons', '0'), ('NoIcons', '0'), ('3Symbols', '2')]
+sistem-rekod-markah-srm-_-rekod-master.xlsx | xl/worksheets/sheet1.xml | main iconSet | sqref 'C46' | priority 1
+    attrs {'iconSet': '3Symbols'}
+    cfvo  [('percent', '0'), ('percent', '33'), ('percent', '67')]
+    extra []

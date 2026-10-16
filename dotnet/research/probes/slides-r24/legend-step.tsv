@@ -1,0 +1,20 @@
+# The reference's legend geometry at eleven font sizes a point apart, read by
+# slides-r23/read-legend.py from soffice 24.2.7.2's own PDF of the probe decks.
+#
+# pitch_less_1mm = pitch - 2.834645 pt (1 mm). Every value of it from 6 to 14 points is an
+# exact multiple of 0.75 pt — one pixel at 96 dpi — to within 0.028 pt, and the eight steps
+# between consecutive sizes are 1.013, 2.013, 2.000, 0.987, 2.000, 0.987, 1.013 and 2.987
+# times 0.75. 15 and 16 pt leave that regime (0.168 and 0.368 pt off the grid) and the pitch
+# nearly stops growing, which is a second effect and not this one.
+font_pt	borderW	borderH	pad	keyW	gap	pitch	nameW_pad	pitch_less_1mm	over_0.75	grid_err_pt
+6	30.16	22.02	2.84	3.59	2.84	9.58	20.89	6.745	9.010	0.008
+7	33.00	23.56	2.84	4.20	2.83	10.34	23.13	7.505	10.024	0.018
+8	38.10	26.56	2.84	4.79	2.83	11.85	27.64	9.015	12.037	0.028
+9	41.19	29.56	2.95	5.39	2.83	13.35	30.02	10.515	14.037	0.028
+10	44.70	31.04	3.29	5.98	2.83	14.09	32.60	11.255	15.024	0.018
+11	50.48	34.04	3.62	6.58	2.84	15.59	37.44	12.755	17.024	0.018
+12	53.97	35.52	3.94	7.20	2.83	16.33	40.00	13.495	18.010	0.008
+13	57.49	37.05	4.28	7.80	2.84	17.09	42.57	14.255	19.024	0.018
+14	63.44	41.53	4.59	8.39	3.07	19.33	47.39	16.495	22.010	0.008
+15	67.21	43.49	4.93	8.99	3.29	20.24	50.00	17.405	23.224	0.168
+16	70.95	44.08	5.27	9.58	3.52	20.44	52.58	17.605	23.490	0.368

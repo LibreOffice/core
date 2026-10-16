@@ -1,0 +1,12 @@
+family         ext      moved      of
+odt-column     odt        117     337
+rtf-column     rtf          0     337
+sheets         xls          0      64
+sheets         xlsm         0       2
+sheets         xlsx         0     241
+slides         ppt          0      51
+slides         pptx         0     251
+words          doc          0      66
+words          docx         0     271
+
+total 117 of 1620 moved, 1503 byte-identical

@@ -1,0 +1,22 @@
+left	top	lines	words	arm	renderer
+warning: The `fitz` API is deprecated and will be removed in future. Use `import pymupdf` instead.
+7.55	4.29	4	Alpha,Bravo,Charlie,Delta	inset-four	reference
+7.45	4.29	4	Alpha,Bravo,Charlie,Delta	inset-four	ours
+11.45	4.04	4	Alpha,Bravo,Charlie,Delta	inset-one	reference
+11.34	4.04	4	Alpha,Bravo,Charlie,Delta	inset-one	ours
+7.30	2.14	4	Alpha,Bravo,Charlie,Delta	inset-partial	reference
+7.20	2.14	4	Alpha,Bravo,Charlie,Delta	inset-partial	ours
+0.10	0.44	4	Alpha,Bravo,Charlie,Delta	inset-zero	reference
+0.00	0.44	4	Alpha,Bravo,Charlie,Delta	inset-zero	ours
+4.35	4.69	4	Alpha,Bravo,Charlie,Delta	insetmode-auto	reference
+4.25	4.69	4	Alpha,Bravo,Charlie,Delta	insetmode-auto	ours
+7.30	4.04	4	Alpha,Bravo,Charlie,Delta	insetmode-custom	reference
+7.20	4.04	4	Alpha,Bravo,Charlie,Delta	insetmode-custom	ours
+7.30	4.04	4	Alpha,Bravo,Charlie,Delta	plain	reference
+7.20	4.04	4	Alpha,Bravo,Charlie,Delta	plain	ours
+7.30	4.04	4	Alpha,Bravo,Charlie,Delta	short-boxfit	reference
+7.20	4.04	4	Alpha,Bravo,Charlie,Delta	short-boxfit	ours
+7.30	4.04	4	Alpha,Bravo,Charlie,Delta	short-shapefit	reference
+7.20	4.04	4	Alpha,Bravo,Charlie,Delta	short-shapefit	ours
+7.30	4.04	2	Alpha,Bravo	short	reference
+7.20	4.04	2	Alpha,Bravo	short	ours

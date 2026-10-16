@@ -1,0 +1,186 @@
+# reach. Measured 2026-09-06. corpus /home/user/sample-files, scored from MANIFEST.tsv
+# a prediction from the documents, not a rendering: the reference binaries it is calibrated against are 24.2.7.2 (/usr/bin/soffice) and 26.2.4.2 (/opt/libreoffice26.2/program/soffice, its Latin metric duplicates, its Latin NotoSans/NotoSerif and opens___.ttf moved aside), system fonts /usr/share/fonts
+# the rule and its residuals are measured in chart-gap.py and chart-vs-textbox.py
+# predicted per-glyph error = round(px96)/px96 - 1 at the chart's declared text sizes, px96 = round(size_pt x 2540/72) x 96/2540
+family	path	kind	sizes	worst_error_pct	worst_size_pt
+sheets	sheets/done-010/xlsx/Keywords_Mapping_Graphs_and_Charts.xlsx	ooxml	9,14,18	+1.76	14
+slides	slides/ceiling-001/pptx/Sylva%20introduction%20session.pptx	ooxml	10	-2.56	10
+slides	slides/ceiling-001/pptx/N2_E_Maestroni_Swarm_COP.pptx	ooxml	8,9,12	+3.21	8
+slides	slides/ceiling-002/pptx/Demick_JetBlue.pptx	ooxml	10	-2.56	10
+slides	slides/ceiling-002/pptx/8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx	ooxml	9,18	-0.16	9
+slides	slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx	ooxml	14,15,16,18,20,22,24	+1.76	14
+slides	slides/done-007/pptx/flying-by-numbers-presentation.pptx	ooxml	12	+0.08	12
+slides	slides/done-007/pptx/bitesize-writing-a-report.pptx	ooxml	9,14,16,20	+1.76	14
+slides	slides/done-007/ppt/71393_pp7.ppt	ole		+nan	0
+slides	slides/done-010/pptx/Sector_Skills_Insights_Advanced_Manufacturing_summary_slide_pack.pptx	ooxml	12	+0.08	12
+slides	slides/done-011/pptx/171128IPAP.pptx	ooxml	9,10,11,12,14,16,18	-2.56	10
+slides	slides/done-011/pptx/3495.pptx	ooxml	12,28	-0.92	28
+slides	slides/done-011/pptx/1_Country-Updates_DRC_English.pptx	ooxml	9,11.97	+0.32	11.97
+slides	slides/done-011/pptx/3492.pptx	ooxml	14,18	+1.76	14
+slides	slides/done-012/pptx/Intersil_Italy_CAN_Bus_Transceiver_Presentation_Final.pptx	ooxml	10,11.97	-2.56	10
+slides	slides/done-015/pptx/RPA P4 - Advanced Material.pptx	ooxml	9,10	-2.56	10
+slides	slides/extra-001/pptx/FAAAIandtheArtandScienceofV&Vfinal.pptx	ooxml	9,10,14	-2.56	10
+words	words/ceiling-001/docx/ABCD-FE-01-00 Flight Envelope - v1 08.03.16.docx	ooxml	12	+0.08	12
+words	words/chartset-001/docx/clustered-column-template.docx	ooxml	9	-0.16	9
+words	words/chartset-001/docx/clustered-column-result.docx	ooxml	9	-0.16	9
+words	words/chartset-001/docx/pie-chart-template.docx	ooxml	10,18	-2.56	10
+words	words/chartset-001/docx/pie-chart-result.docx	ooxml	10,18	-2.56	10
+sheets	sheets/chartset-001/xlsx/016_advanced_excel_radar.xlsx	ooxml	10,13,18	-2.56	10
+sheets	sheets/chartset-001/xlsx/032_advanced_excel_radar.xlsx	ooxml	10,13,18	-2.56	10
+sheets	sheets/chartset-001/xlsx/006_advanced_excel_scatter.xlsx	ooxml	10,13,18	-2.56	10
+sheets	sheets/chartset-001/xlsx/005_advanced_excel_area.xlsx	ooxml	10,13,18	-2.56	10
+sheets	sheets/chartset-001/xlsx/028_advanced_excel_doughnut.xlsx	ooxml	10,13,18	-2.56	10
+sheets	sheets/chartset-001/xlsx/001_advanced_excel_bar.xlsx	ooxml	10,13,18	-2.56	10
+sheets	sheets/chartset-001/xlsx/025_advanced_excel_bar.xlsx	ooxml	10,13,18	-2.56	10
+sheets	sheets/chartset-001/xlsx/033_advanced_excel_bar.xlsx	ooxml	10,13,18	-2.56	10
+sheets	sheets/chartset-001/xlsx/002_advanced_excel_line.xlsx	ooxml	10,13,18	-2.56	10
+sheets	sheets/chartset-001/xlsx/022_advanced_excel_scatter.xlsx	ooxml	10,13,18	-2.56	10
+sheets	sheets/chartset-002/xlsx/013_advanced_excel_area.xlsx	ooxml	10,13,18	-2.56	10
+sheets	sheets/chartset-002/xlsx/030_advanced_excel_scatter.xlsx	ooxml	10,13,18	-2.56	10
+sheets	sheets/chartset-002/xlsx/011_advanced_excel_pie.xlsx	ooxml	10,13,18	-2.56	10
+sheets	sheets/chartset-002/xlsx/027_advanced_excel_pie.xlsx	ooxml	10,13,18	-2.56	10
+sheets	sheets/chartset-002/xlsx/012_advanced_excel_doughnut.xlsx	ooxml	10,13,18	-2.56	10
+sheets	sheets/chartset-002/xlsx/021_advanced_excel_area.xlsx	ooxml	10,13,18	-2.56	10
+sheets	sheets/chartset-002/xlsx/026_advanced_excel_line.xlsx	ooxml	10,13,18	-2.56	10
+sheets	sheets/chartset-002/xlsx/034_advanced_excel_line.xlsx	ooxml	10,13,18	-2.56	10
+sheets	sheets/chartset-002/xlsx/003_advanced_excel_pie.xlsx	ooxml	10,13,18	-2.56	10
+sheets	sheets/chartset-002/xlsx/007_advanced_excel_bubble.xlsx	ooxml	10,13,18	-2.56	10
+sheets	sheets/chartset-003/xlsx/031_advanced_excel_bubble.xlsx	ooxml	10,13,18	-2.56	10
+sheets	sheets/chartset-003/xlsx/015_advanced_excel_bubble.xlsx	ooxml	10,13,18	-2.56	10
+sheets	sheets/chartset-003/xlsx/004_advanced_excel_doughnut.xlsx	ooxml	10,13,18	-2.56	10
+sheets	sheets/chartset-003/xlsx/020_advanced_excel_doughnut.xlsx	ooxml	10,13,18	-2.56	10
+sheets	sheets/chartset-003/xlsx/008_advanced_excel_radar.xlsx	ooxml	10,13,18	-2.56	10
+sheets	sheets/chartset-003/xlsx/024_advanced_excel_radar.xlsx	ooxml	10,13,18	-2.56	10
+sheets	sheets/chartset-003/xlsx/014_advanced_excel_scatter.xlsx	ooxml	10,13,18	-2.56	10
+sheets	sheets/chartset-003/xlsx/018_advanced_excel_line.xlsx	ooxml	10,13,18	-2.56	10
+sheets	sheets/chartset-003/xlsx/017_advanced_excel_bar.xlsx	ooxml	10,13,18	-2.56	10
+sheets	sheets/chartset-003/xlsx/029_advanced_excel_area.xlsx	ooxml	10,13,18	-2.56	10
+sheets	sheets/chartset-004/xlsx/023_advanced_excel_bubble.xlsx	ooxml	10,13,18	-2.56	10
+sheets	sheets/chartset-004/xlsx/009_advanced_excel_bar.xlsx	ooxml	10,13,18	-2.56	10
+sheets	sheets/chartset-004/xlsx/010_advanced_excel_line.xlsx	ooxml	10,13,18	-2.56	10
+sheets	sheets/chartset-004/xlsx/019_advanced_excel_pie.xlsx	ooxml	10,13,18	-2.56	10
+sheets	sheets/chartset-004/xlsx/microsoft_learn_multi_chart_examples.xlsx	ooxml	10	-2.56	10
+sheets	sheets/chartset-004/xlsx/DynamicBubbleChart.xlsx	ooxml	10	-2.56	10
+slides	slides/chartset-001/pptx/scatter_chart.pptx	ooxml	11.97,13.3	+1.55	13.3
+slides	slides/chartset-001/pptx/stacked_area_chart.pptx	ooxml	11.97	+0.32	11.97
+slides	slides/chartset-001/pptx/stacked_bar_chart.pptx	ooxml	11.97	+0.32	11.97
+slides	slides/chartset-001/pptx/bar_chart.pptx	ooxml	11.97	+0.32	11.97
+slides	slides/chartset-001/pptx/combo_bar_line_chart.pptx	ooxml	11.97	+0.32	11.97
+slides	slides/chartset-001/pptx/line_chart.pptx	ooxml	11.97	+0.32	11.97
+slides	slides/chartset-001/pptx/008_advanced_powerpoint_bubble.pptx	ooxml	10,12	-2.56	10
+slides	slides/chartset-001/pptx/015_advanced_powerpoint_scatter.pptx	ooxml	10,12	-2.56	10
+slides	slides/chartset-001/pptx/016_advanced_powerpoint_bubble.pptx	ooxml	10,12	-2.56	10
+slides	slides/chartset-001/pptx/031_advanced_powerpoint_scatter.pptx	ooxml	10,12	-2.56	10
+slides	slides/chartset-002/pptx/007_advanced_powerpoint_scatter.pptx	ooxml	10,12	-2.56	10
+slides	slides/chartset-002/pptx/023_advanced_powerpoint_scatter.pptx	ooxml	10,12	-2.56	10
+slides	slides/chartset-002/pptx/032_advanced_powerpoint_bubble.pptx	ooxml	10,12	-2.56	10
+slides	slides/chartset-002/pptx/024_advanced_powerpoint_bubble.pptx	ooxml	10,12	-2.56	10
+slides	slides/chartset-002/pptx/006_advanced_powerpoint_area.pptx	ooxml	10,12	-2.56	10
+slides	slides/chartset-002/pptx/014_advanced_powerpoint_area.pptx	ooxml	10,12	-2.56	10
+slides	slides/chartset-002/pptx/030_advanced_powerpoint_area.pptx	ooxml	10,12	-2.56	10
+slides	slides/chartset-002/pptx/001_advanced_powerpoint_bar.pptx	ooxml	10,12	-2.56	10
+slides	slides/chartset-002/pptx/017_advanced_powerpoint_bar.pptx	ooxml	10,12	-2.56	10
+slides	slides/chartset-002/pptx/033_advanced_powerpoint_bar.pptx	ooxml	10,12	-2.56	10
+slides	slides/chartset-003/pptx/019_advanced_powerpoint_line.pptx	ooxml	10,12	-2.56	10
+slides	slides/chartset-003/pptx/003_advanced_powerpoint_line.pptx	ooxml	10,12	-2.56	10
+slides	slides/chartset-003/pptx/002_advanced_powerpoint_column.pptx	ooxml	10,12	-2.56	10
+slides	slides/chartset-003/pptx/010_advanced_powerpoint_column.pptx	ooxml	10,12	-2.56	10
+slides	slides/chartset-003/pptx/011_advanced_powerpoint_line.pptx	ooxml	10,12	-2.56	10
+slides	slides/chartset-003/pptx/027_advanced_powerpoint_line.pptx	ooxml	10,12	-2.56	10
+slides	slides/chartset-003/pptx/012_advanced_powerpoint_pie.pptx	ooxml	12,18	+0.08	12
+slides	slides/chartset-003/pptx/028_advanced_powerpoint_pie.pptx	ooxml	12,18	+0.08	12
+slides	slides/chartset-003/pptx/005_advanced_powerpoint_doughnut.pptx	ooxml	12,18	+0.08	12
+slides	slides/chartset-003/pptx/009_advanced_powerpoint_bar.pptx	ooxml	10,12	-2.56	10
+slides	slides/chartset-004/pptx/021_advanced_powerpoint_doughnut.pptx	ooxml	12,18	+0.08	12
+slides	slides/chartset-004/pptx/025_advanced_powerpoint_bar.pptx	ooxml	10,12	-2.56	10
+slides	slides/chartset-004/pptx/026_advanced_powerpoint_column.pptx	ooxml	10,12	-2.56	10
+slides	slides/chartset-004/pptx/013_advanced_powerpoint_doughnut.pptx	ooxml	12,18	+0.08	12
+slides	slides/chartset-004/pptx/029_advanced_powerpoint_doughnut.pptx	ooxml	12,18	+0.08	12
+slides	slides/chartset-004/pptx/004_advanced_powerpoint_pie.pptx	ooxml	12,18	+0.08	12
+slides	slides/chartset-004/pptx/020_advanced_powerpoint_pie.pptx	ooxml	12,18	+0.08	12
+slides	slides/chartset-004/pptx/022_advanced_powerpoint_area.pptx	ooxml	10,12	-2.56	10
+slides	slides/chartset-004/pptx/018_advanced_powerpoint_column.pptx	ooxml	10,12	-2.56	10
+words	words/chartset-009/docx/027_Unit_Circle_Chart_Graphical_Chart_5462a579.docx	ooxml	9	-0.16	9
+words	words/chartset-010/docx/023_Unit_Circle_Chart_Circular_Percentage_790f7b75.docx	ooxml	14	+1.76	14
+words	words/chartset-010/docx/028_Unit_Circle_Chart_Optimized_Graph_83d9c756.docx	ooxml	9	-0.16	9
+words	words/chartset-011/docx/029_Unit_Circle_Chart_Pie_Theme_8a922142.docx	ooxml	12,16	-1.48	16
+words	words/chartset-012/docx/021_Unit_Circle_Chart_3D_Pie_Chart_404247ab.docx	ooxml	14	+1.76	14
+sheets	sheets/chartset-005/xlsx/004_Contextures_chart_sample_de7c0671.xlsx	ooxml	9,14	+1.76	14
+sheets	sheets/chartset-005/xlsx/022_Pareto_Chart_Template_-_Pareto_Analysis_in_Excel_with_Pareto_Diagram_82b5a874.xlsx	ooxml	9.2,10,12	-2.56	10
+sheets	sheets/chartset-006/xlsx/005_Contextures_chart_sample_6e279b08.xlsx	ooxml	11,12,14	+2.29	11
+sheets	sheets/chartset-006/xlsx/006_Contextures_chart_sample_afa23b53.xlsx	ooxml	9,14	+1.76	14
+sheets	sheets/chartset-006/xlsx/044_Cash_flow_forecast_Use_this_template_b8fa1f35.xlsx	ooxml	9	-0.16	9
+sheets	sheets/chartset-006/xlsx/052_Manufacturing_output_chart_88570318.xlsx	ooxml	9	-0.16	9
+sheets	sheets/chartset-006/xlsx/061_Regional_sales_chart_cb9eb690.xlsx	ooxml	11	+2.29	11
+sheets	sheets/chartset-007/xlsm/003_Contextures_chart_sample_9bda2719.xlsm	ooxml	9	-0.16	9
+sheets	sheets/chartset-007/xlsx/037_Personal_money_tracker_a57957bb.xlsx	ooxml	9,11	+2.29	11
+sheets	sheets/chartset-007/xlsx/040_Blood_pressure_tracker_872b6833.xlsx	ooxml	11	+2.29	11
+sheets	sheets/chartset-007/xlsx/050_Financial_vision_d44241e1.xlsx	ooxml	9,11	+2.29	11
+sheets	sheets/chartset-007/xlsx/058_Social_media_engagement_data_cfa1cb18.xlsx	ooxml	9	-0.16	9
+sheets	sheets/chartset-007/xlsx/063_Sales_pipeline_aec57013.xlsx	ooxml	10,20,30	-2.56	10
+sheets	sheets/chartset-008/xlsx/008_Contextures_chart_sample_7ea7a1d7.xlsx	ooxml	10	-2.56	10
+sheets	sheets/chartset-008/xlsx/021_Control_Chart_Template_-_Create_Control_Charts_in_Excel_fd3b1a5d.xlsx	ooxml	8.75,9	+2.75	8.75
+sheets	sheets/chartset-008/xlsx/023_Waterfall_Chart_Template_for_Excel_349f7689.xlsx	ooxml	16	-1.48	16
+sheets	sheets/chartset-008/xlsx/034_Personal_net_worth_calculator_f7b8fb57.xlsx	ooxml	9	-0.16	9
+sheets	sheets/chartset-008/xlsx/046_Cost_analysis_with_Pareto_chart_7db5ef69.xlsx	ooxml	9	-0.16	9
+sheets	sheets/chartset-008/xlsx/055_Project_timeline_with_milestones_Use_this_template_546cecc0.xlsx	ooxml	10,12	-2.56	10
+sheets	sheets/chartset-009/xlsx/018_Weight_Loss_Chart_-_Free_Printable_Weight_Loss_Charts_and_Weight_Log_3337bd0a.xlsx	ooxml	8,9,9.75,10,11,12	+3.21	8
+sheets	sheets/chartset-009/xlsx/029_Annual_budget_Use_this_template_30324a97.xlsx	ooxml	9,10,12,14	-2.56	10
+sheets	sheets/chartset-009/xlsx/041_Business_budget_ef942467.xlsx	ooxml	10,36	-2.56	10
+sheets	sheets/chartset-009/xlsx/053_Personal_asset_inventory_5446d84b.xlsx	ooxml	11	+2.29	11
+sheets	sheets/chartset-009/xlsx/056_Quarterly_sale_report_baa6bb0d.xlsx	ooxml	9	-0.16	9
+sheets	sheets/chartset-010/xlsx/047_Date_tracker_Gantt_chart_bf34f3a8.xlsx	ooxml	9,11	+2.29	11
+sheets	sheets/chartset-010/xlsx/062_Run_chart_cb7476ea.xlsx	ooxml	11,12,24	+2.29	11
+sheets	sheets/chartset-010/xlsx/065_Weight_loss_tracker_ff1c89af.xlsx	ooxml	12,13	-2.01	13
+sheets	sheets/chartset-011/xlsx/010_Contextures_chart_sample_e6ea06a3.xlsx	ooxml	10	-2.56	10
+sheets	sheets/chartset-011/xlsx/028_Budget_summary_report_4aeefd13.xlsx	ooxml	10.5	+0.11	10.5
+sheets	sheets/chartset-011/xlsx/030_Basic_balance_sheet_Use_this_template_10ed9144.xlsx	ooxml	8,9,10	+3.21	8
+sheets	sheets/chartset-011/xlsx/042_Business_monthly_budget_4e4d092f.xlsx	ooxml	9,16	-1.48	16
+sheets	sheets/chartset-011/xlsx/057_Simple_balance_sheet_Use_this_template_e2d4cbb2.xlsx	ooxml	9,14	+1.76	14
+sheets	sheets/chartset-011/xlsx/060_Monthly_company_budget_47b2a99a.xlsx	ooxml	10,12	-2.56	10
+sheets	sheets/chartset-012/xlsx/002_Contextures_chart_sample_f605e7bc.xlsx	ooxml	12	+0.08	12
+sheets	sheets/chartset-012/xlsx/012_Contextures_chart_sample_9900da76.xlsx	ooxml	10	-2.56	10
+sheets	sheets/chartset-012/xlsx/013_Contextures_chart_sample_21b98e22.xlsx	ooxml	10	-2.56	10
+sheets	sheets/chartset-012/xlsx/026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx	ooxml	9	-0.16	9
+sheets	sheets/chartset-012/xlsx/036_Simple_to-do_list_Use_this_template_ba44373b.xlsx	ooxml	9	-0.16	9
+sheets	sheets/chartset-013/xlsx/001_Contextures_chart_sample_b089bc34.xlsx	ooxml	10	-2.56	10
+sheets	sheets/chartset-013/xlsx/019_Free_Blood_Sugar_Chart_for_Excel_-_Track_Your_Blood_Sugar_Level_36f4a782.xlsx	ooxml	8,8.25,9,10,10.25,12	+3.21	8
+sheets	sheets/chartset-013/xlsx/031_Business_expense_budget_f3a46278.xlsx	ooxml	10,14	-2.56	10
+sheets	sheets/chartset-013/xlsx/032_Business_expenses_budget_d377eaab.xlsx	ooxml	9,10,10.5	-2.56	10
+sheets	sheets/chartset-013/xlsx/033_Event_planning_tracker_Use_this_template_f29a848e.xlsx	ooxml	9,20	+1.19	20
+sheets	sheets/chartset-013/xlsx/035_Project_plan_for_law_firms_aa2d4462.xlsx	ooxml	9,20	+1.19	20
+sheets	sheets/chartset-013/xlsx/043_Buy_a_car_vs._rideshare_ff07c7e6.xlsx	ooxml	11,16	+2.29	11
+sheets	sheets/chartset-013/xlsx/049_Expenses_calculator_c351f3d0.xlsx	ooxml	10	-2.56	10
+sheets	sheets/chartset-013/xlsx/059_Milestone_and_task_project_timeline_Use_this_template_24f1e8f1.xlsx	ooxml	12,14,18	+1.76	14
+sheets	sheets/chartset-014/xlsx/027_Simple_personal_cash_flow_statement_675c6584.xlsx	ooxml	9	-0.16	9
+sheets	sheets/chartset-014/xlsx/038_Baby_growth_chart_bb9cd672.xlsx	ooxml	10,11,12,72	-2.56	10
+sheets	sheets/chartset-014/xlsx/039_Baby_growth_tracker_e295ae56.xlsx	ooxml	10,11,12,54	-2.56	10
+sheets	sheets/chartset-014/xlsx/045_Check_register_with_chart_4becb8a0.xlsx	ooxml	9	-0.16	9
+sheets	sheets/chartset-014/xlsx/048_Expense_trends_budget_18d1e8ba.xlsx	ooxml	9,11	+2.29	11
+sheets	sheets/chartset-014/xlsx/064_Small_business_cash_flow_Use_this_template_0a640756.xlsx	ooxml	11,16,24,48	+2.29	11
+slides	slides/chartset-005/pptx/076_Hexadonut_Charts_for_PowerPoint_and_Google_Slides_2b879835.pptx	ooxml	10	-2.56	10
+slides	slides/chartset-006/pptx/031_Alarm_Clock_Pie-Chart_for_PowerPoint_and_Google_Slides_0b185a05.pptx	ooxml	20	+1.19	20
+slides	slides/chartset-006/pptx/044_Dual_Mind_Spark_Chart_for_PowerPoint_a83f890a.pptx	ooxml	10	-2.56	10
+slides	slides/chartset-007/pptx/035_Chemistry_Column_PowerPoint_Chart_45bf8a76.pptx	ooxml	11.97,16,24	-1.48	16
+slides	slides/chartset-007/pptx/047_Female_Radar_Brain_for_PowerPoint_and_Google_Slides_c2a541f6.pptx	ooxml	10	-2.56	10
+slides	slides/chartset-007/pptx/096_Lab_Flask_Charts_for_PowerPoint_and_Google_Slides_91e3cbb5.pptx	ooxml	32	+0.77	32
+slides	slides/chartset-008/pptx/038_Competitive_Advantage_Card_for_PowerPoint_and_Google_Slides_373720f6.pptx	ooxml	11,11.97,14	+2.29	11
+slides	slides/chartset-008/pptx/072_Gear_Pie_Chart_for_PowerPoint_and_Google_Slides_d464d3a0.pptx	ooxml	14,18	+1.76	14
+slides	slides/chartset-008/pptx/100_Lime_and_Lemon_Data-Driven_Chart_for_PowerPoint_d7bb4a44.pptx	ooxml	20	+1.19	20
+slides	slides/chartset-009/pptx/033_Battery_Percentage_Chart_c99c24b5.pptx	ooxml	10	-2.56	10
+slides	slides/chartset-009/pptx/052_Flame_Percentage_Chart_d27d49c4.pptx	ooxml	10	-2.56	10
+slides	slides/chartset-010/pptx/093_Insightful_Zoom_Chart_22b5464e.pptx	ooxml	10	-2.56	10
+slides	slides/chartset-012/pptx/061_Four-Stage_Serpentine_Chart_05699efe.pptx	ooxml	10	-2.56	10
+
+# 947 manifest rows, 168 carry a chart: sheets 90, slides 68, words 10
+# the ten worst predicted, by |error| at the chart's own declared sizes
+#    3.21%      8 pt  slides/N2_E_Maestroni_Swarm_COP.pptx
+#    3.21%      8 pt  sheets/019_Free_Blood_Sugar_Chart_for_Excel_-_Track_Your_Blood_Sugar_Level_36f4a782.xlsx
+#    3.21%      8 pt  sheets/030_Basic_balance_sheet_Use_this_template_10ed9144.xlsx
+#    3.21%      8 pt  sheets/018_Weight_Loss_Chart_-_Free_Printable_Weight_Loss_Charts_and_Weight_Log_3337bd0a.xlsx
+#    2.75%   8.75 pt  sheets/021_Control_Chart_Template_-_Create_Control_Charts_in_Excel_fd3b1a5d.xlsx
+#    2.56%     10 pt  words/pie-chart-template.docx
+#    2.56%     10 pt  words/pie-chart-result.docx
+#    2.56%     10 pt  slides/FAAAIandtheArtandScienceofV&Vfinal.pptx
+#    2.56%     10 pt  slides/RPA P4 - Advanced Material.pptx
+#    2.56%     10 pt  slides/Intersil_Italy_CAN_Bus_Transceiver_Presentation_Final.pptx

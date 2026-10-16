@@ -1,0 +1,10 @@
+# .pptx scanned: 251
+# warped bodies: 21 in 3 documents
+#   noFill           0
+#   solidFill        15
+#   gradFill         0
+#   blipFill         0
+#   pattFill         0
+#   grpFill          0
+#   (none stated)    6
+# documents with a non-solid first-run fill: 0

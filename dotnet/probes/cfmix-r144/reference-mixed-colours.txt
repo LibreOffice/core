@@ -1,0 +1,4 @@
+OK       #735773   #735773   (solid, bgColor theme 7)
+OK       #e9ab51   #e9ab51   (solid, bgColor theme 9)
+OK       #b5a1b5   #b5a1b5   (lightUp, fgColor theme 7 over bgColor theme 7 tint 0.6)
+OK       #d6bca8   #d6bca8   (lightUp, fgColor theme 7 over bgColor theme 9 tint 0.6)

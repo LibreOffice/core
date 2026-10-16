@@ -1,0 +1,96 @@
+re-derivation of clip-seats-r97, 2026-09-11, after the container restart
+reference bank /home/user/gate-orig-r83/ref (947), reference binary 26.2.4.2, our side dotnet/tools/XRay.Office.Cli
+built Release in this worktree with SOURCE_DATE_EPOCH=1700000000
+
+== s1.2  the authored probe, re-rendered through 26.2.4.2 ==
+pages: 6   page 1 mediabox: 595.304 x 841.890
+page 1 clips: [(0.0, 0.028, 595.276, 841.889), (50.4, 58.28, 516.614, 787.889)]
+  p1  pdftotext= 979  mupdf= 977   ZQ: pdftotext=True  mupdf=False   LEFTZ: pdftotext=True
+  p2  pdftotext= 414  mupdf= 414   ZQ: pdftotext=False mupdf=False   LEFTZ: pdftotext=False
+  p3  pdftotext= 974  mupdf= 974   ZQ: pdftotext=True  mupdf=True    LEFTZ: pdftotext=False
+  p4  pdftotext= 414  mupdf= 414   ZQ: pdftotext=False mupdf=False   LEFTZ: pdftotext=False
+  p5  pdftotext= 648  mupdf= 648   ZQ: pdftotext=False mupdf=False   LEFTZ: pdftotext=False
+  p6  pdftotext= 276  mupdf= 276   ZQ: pdftotext=False mupdf=False   LEFTZ: pdftotext=False
+  total pdftotext=3705 mupdf=3703   (the pre-restart draft said 27 against 46; withdrawn)
+
+== s1.3  the twenty largest witness pages, pdftotext against mupdf ==
+  pdftotext=81031  mupdf=78192  difference=2839
+  EHEST p11: mupdf=4  pdftotext=171
+
+== s1.4  re-read of cliptext-chars.tsv ==
+  rows=74  changed=56  keeping=1168118  hiding=1164968  lost=3150
+  leave the band on the flip (8):
+      012_Contextures_chart_sample_9900da76__xlsx                            ref=648    keeping=648    hiding=622
+      019_Free_Blood_Sugar_Chart_for_Excel_-_Track_Your_Blood_Sugar_Level_36f4a782__xlsx ref=3660   keeping=3664   hiding=3522
+      019_advanced_excel_pie__xlsx                                           ref=476    keeping=476    hiding=458
+      044_Cash_flow_forecast_Use_this_template_b8fa1f35__xlsx                ref=2336   keeping=2332   hiding=2261
+      064_Small_business_cash_flow_Use_this_template_0a640756__xlsx          ref=1776   keeping=1801   hiding=1701
+      EHEST-Pre-departure-checklist-Rev.-1-06-12-2016__xls                   ref=39744  keeping=39506  hiding=38538
+      Keywords_Mapping_Graphs_and_Charts__xlsx                               ref=27201  keeping=27295  hiding=26166
+      microsoft_learn_multi_chart_examples__xlsx                             ref=826    keeping=839    hiding=761
+  ENTER the band on the flip (2) -- omitted by the pre-restart draft:
+      030_Basic_balance_sheet_Use_this_template_10ed9144__xlsx               ref=1624   keeping=1727   hiding=1638
+      053_Personal_asset_inventory_5446d84b__xlsx                            ref=226    keeping=257    hiding=239
+
+== s2.1  the block clip, ours against the reference, CTM applied ==
+  Template Pilot Logbook JAR-FCL V3.0      p17  ours=(53.83, 91.725, 750.416, 524.462)
+                                                ref =(53.83, 90.964, 750.671, 524.466)
+  Template Pilot Logbook JAR-FCL V3.0      p18  ours=(53.83, 91.725, 243.808, 524.462)
+                                                ref =(53.83, 90.964, 243.893, 524.466)
+  SIL_TDB609                               p6   ours=(50.4, 260.844, 553.606, 738.0)
+                                                ref =(50.4, 260.249, 553.663, 738.0)
+  SIL_TDB609                               p7   ours=(50.4, 260.844, 394.979, 738.0)
+                                                ref =(50.4, 260.249, 395.093, 738.0)
+  SIL_TDB605                               p6   ours=(50.4, 260.844, 553.606, 738.0)
+                                                ref =(50.4, 260.249, 553.663, 738.0)
+  SIL_TDB605                               p7   ours=(50.4, 260.844, 394.979, 738.0)
+                                                ref =(50.4, 260.249, 395.093, 738.0)
+  PC1000                                   p1   ours=(55.551, 64.46, 737.17, 576.0)
+                                                ref =(55.389, 63.751, 737.235, 576.0)
+  012_Contextures_chart_sample_9900da76    p1   ours=(54.0, 432.879, 508.224, 720.0)
+                                                ref =(118.942, 448.299, 583.739, 668.806)
+  012_Contextures_chart_sample_9900da76    p2   ours=(54.0, 432.879, 183.883, 720.0)
+                                                ref =None
+  013_Contextures_chart_sample_21b98e22    p1   ours=(54.0, 401.414, 507.798, 720.0)
+                                                ref =(54.0, 401.046, 507.855, 720.0)
+  013_Contextures_chart_sample_21b98e22    p2   ours=(54.0, 401.414, 183.883, 720.0)
+                                                ref =(54.0, 401.046, 183.883, 720.0)
+  (012 emits no block clip in the reference on either page: its "ref" rows above are the chart's own
+   frame, which is what the largest positive-x sub-page clip is when no block clip exists)
+
+== s2.1  the plot rectangle on Template Pilot Logbook p17, drawn paths wider than 300 pt ==
+  ref   8 paths, all at x 153.07 .. 785.73, width 632.66
+  ours  9 paths, all at x 165.45 .. 761.75, width 596.30
+  ref   leftmost value-axis label: 1000.0 at x=116.16
+  ours  leftmost value-axis label: 1000.0 at x=128.54
+
+== s2.2  three-way pixel count, 120 dpi, ink at grey < 200 ==
+     the pre-clip leg is SheetPageGraphics.cs:153 forced to 'bool cut = false && LeavesTheBlock(box, block)'
+  page                                          removed  ref blank  ref inks
+  Template Pilot Logbook JAR-FCL V3.0 p18         43154      43154         0
+  SIL_TDB609 p6                                    2580       2580         0
+  SIL_TDB609 p7                                    2624       2624         0
+  PC1000 p1                                       17811      17809         2
+  012_Contextures_chart_sample_9900da7 p2          7306         85      7221
+
+== s2.3  the reference's clip operators on 013_Contextures page 2, in order ==
+    (0.0, 0.028, 611.972, 792.0)
+    (-333.862, 416.072, 123.435, 636.566)
+    (-329.657, 429.526, 118.179, 632.081)
+    (-279.197, 454.191, 47.744, 620.87)
+    (-329.657, 429.526, 118.179, 632.081)
+    (54.0, 401.046, 183.883, 720.0)
+    (-329.657, 429.526, 118.179, 632.081)
+    (54.0, 401.046, 183.883, 720.0)
+    (-329.657, 429.526, 118.179, 632.081)
+    (54.0, 401.046, 183.883, 720.0)
+    (-329.657, 429.526, 118.179, 632.081)
+    (54.0, 401.046, 183.883, 720.0)
+    (-333.862, 416.072, 123.435, 636.566)
+
+== s2.4  re-read of overreach.tsv ==
+  rows=867  documents=73  rows with over_px>0 = 61
+  over_px total=31384  over_pct total=2.319  under_px total=10216274
+      012_Contextures_chart_sample_9900da76__xlsx                  0.645
+      DynamicBubbleChart__xlsx                                     0.642
+      013_Contextures_chart_sample_21b98e22__xlsx                  0.637

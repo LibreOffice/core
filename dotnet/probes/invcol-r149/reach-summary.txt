@@ -1,0 +1,8 @@
+--- STATES style:table-centering: 81 listed, 75 scored, 0 unrendered, 6 unpaired
+    documents with at least one displaced page: 69 of 75
+    worst |dx| median 5.53 pt, max 311.90 pt
+    every displaced page reads LEFT (our block left of the reference): 65 of 69; mixed or rightward: 4
+--- CONTROL states none (n=81, seed 149): 81 listed, 71 scored, 0 unrendered, 10 unpaired
+    documents with at least one displaced page: 10 of 71
+    worst |dx| median 0.99 pt, max 11.02 pt
+    every displaced page reads LEFT (our block left of the reference): 5 of 10; mixed or rightward: 5

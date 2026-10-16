@@ -1,0 +1,301 @@
+######## 029_Annual_budget_Use_this_template_30324a97.xlsx
+alnum ours 943 ref 914
+--- ONLY OURS  26 tokens, 71 alnum
+   x1 'EXPENSES'
+   x1 'Ed'
+   x1 'Expenses'
+   x1 'INCOME'
+   x1 'Income'
+   x1 'Nov'
+   x1 'Sh'
+   x1 'ai'
+   x1 'ch'
+   x1 'e'
+   x1 'es'
+   x1 'gy'
+   x1 'i'
+   x1 'lo'
+   x1 'nc'
+   x1 'nm'
+   x1 'no'
+   x2 'on'
+--- ONLY REF  29 tokens, 42 alnum
+   x1 '1'
+   x1 '2'
+   x1 'E'
+   x1 'S'
+   x1 'a'
+   x1 'an'
+   x1 'at'
+   x1 'c'
+   x1 'd'
+   x1 'er'
+   x1 'h'
+   x1 'hn'
+   x1 'ie'
+   x1 'in'
+   x2 'io'
+   x1 'm'
+   x2 'n'
+   x1 'o'
+
+######## 030_Basic_balance_sheet_Use_this_template_10ed9144.xlsx
+alnum ours 1727 ref 1624
+--- ONLY OURS  36 tokens, 120 alnum
+   x3 '00'
+   x8 '000'
+   x2 '2021'
+   x2 '2022'
+   x1 '3'
+   x2 '4'
+   x2 '5'
+   x1 '6'
+   x1 '7'
+   x1 '8'
+   x1 'Assets'
+   x1 'Liabilities'
+   x1 'Total'
+   x4 'Year'
+   x1 'and'
+   x1 'assets'
+   x1 'current'
+   x1 'equity'
+--- ONLY REF  7 tokens, 17 alnum
+   x2 '1'
+   x5 '500'
+
+######## 033_Event_planning_tracker_Use_this_template_f29a848e.xlsx
+alnum ours 2720 ref 2650
+--- ONLY OURS  70 tokens, 469 alnum
+   x3 'ACCOUNT'
+   x9 'ACTUAL'
+   x4 'ADMIN'
+   x3 'DESIGN'
+   x2 'DURATION'
+   x6 'ESTIMATE'
+   x4 'ESTIMATED'
+   x4 'EVENT'
+   x1 'FINISH'
+   x1 'Grand'
+   x11 'MANAGER'
+   x4 'PROJECT'
+   x4 'SPECIALIST'
+   x8 'STAFF'
+   x4 'STRATEGY'
+   x2 'WORK'
+--- ONLY REF  135 tokens, 399 alnum
+   x2 'AC'
+   x3 'ACTU'
+   x2 'AD'
+   x4 'AF'
+   x3 'AL'
+   x4 'ATED'
+   x2 'CO'
+   x2 'D'
+   x2 'DE'
+   x4 'EC'
+   x2 'EN'
+   x1 'ER'
+   x4 'ESTIM'
+   x2 'EV'
+   x4 'F'
+   x1 'FIN'
+   x3 'G'
+   x5 'GE'
+
+######## 040_Blood_pressure_tracker_872b6833.xlsx
+alnum ours 737 ref 727
+--- ONLY OURS  8 tokens, 16 alnum
+   x1 '62'
+   x1 '64'
+   x1 '66'
+   x1 '68'
+   x1 '72'
+   x1 '74'
+   x1 '76'
+   x1 '78'
+--- ONLY REF  3 tokens, 6 alnum
+   x1 '60'
+   x1 '65'
+   x1 '75'
+
+######## 045_Check_register_with_chart_4becb8a0.xlsx
+alnum ours 736 ref 764
+--- ONLY OURS  0 tokens, 0 alnum
+--- ONLY REF  5 tokens, 28 alnum
+   x1 '2251'
+   x1 '2252'
+   x1 '2253'
+   x1 '67112449'
+   x1 '68240158'
+
+######## 047_Date_tracker_Gantt_chart_bf34f3a8.xlsx
+alnum ours 3058 ref 3353
+--- ONLY OURS  45 tokens, 224 alnum
+   x1 '14'
+   x1 '19'
+   x6 '2024'
+   x1 '29'
+   x4 '5'
+   x1 'Date'
+   x2 'Enter'
+   x1 'Milestone'
+   x1 'Position'
+   x1 'The'
+   x1 'These'
+   x1 'Track'
+   x1 'a'
+   x1 'appear'
+   x1 'be'
+   x1 'chart'
+   x1 'charts'
+   x4 'column'
+--- ONLY REF  210 tokens, 519 alnum
+   x4 '0'
+   x2 '1'
+   x1 '15'
+   x6 '2'
+   x2 '20'
+   x5 '24'
+   x3 '4'
+   x1 '6'
+   x8 '8'
+   x2 '9'
+   x1 'A'
+   x1 'Ad'
+   x1 'B4'
+   x1 'B5'
+   x1 'Chart'
+   x1 'D2'
+   x1 'E4'
+   x1 'E5'
+
+######## 053_Personal_asset_inventory_5446d84b.xlsx
+alnum ours 257 ref 226
+--- ONLY OURS  14 tokens, 37 alnum
+   x1 '3'
+   x4 '4'
+   x2 'My'
+   x2 'Page'
+   x2 'assets'
+   x2 'of'
+   x1 'sset'
+--- ONLY REF  2 tokens, 6 alnum
+   x1 '2'
+   x1 'asset'
+
+######## 055_Project_timeline_with_milestones_Use_this_template_546cecc0.xlsx
+alnum ours 960 ref 934
+--- ONLY OURS  26 tokens, 65 alnum
+   x13 '2023'
+   x3 '4'
+   x3 '5'
+   x2 '6'
+   x2 '7'
+   x3 '8'
+--- ONLY REF  13 tokens, 39 alnum
+   x3 'Apr'
+   x3 'Aug'
+   x2 'Jul'
+   x2 'Jun'
+   x3 'May'
+
+######## 057_Simple_balance_sheet_Use_this_template_e2d4cbb2.xlsx
+alnum ours 2185 ref 1877
+--- ONLY OURS  176 tokens, 308 alnum
+   x5 'Ac'
+   x1 'C'
+   x1 'Eq'
+   x1 'G'
+   x4 'In'
+   x2 'Le'
+   x1 'M'
+   x2 'O'
+   x2 'Pr'
+   x1 'U'
+   x1 'a'
+   x1 'ac'
+   x2 'ag'
+   x1 'ai'
+   x2 'an'
+   x1 'ar'
+   x1 'as'
+   x3 'at'
+--- ONLY REF  0 tokens, 0 alnum
+
+######## 065_Weight_loss_tracker_ff1c89af.xlsx
+alnum ours 340 ref 308
+--- ONLY OURS  38 tokens, 68 alnum
+   x1 '02'
+   x1 '04'
+   x5 '09'
+   x8 '10'
+   x4 '11'
+   x3 '16'
+   x1 '17'
+   x1 '18'
+   x1 '23'
+   x1 '25'
+   x2 '26'
+   x1 '27'
+   x1 '30'
+   x1 '5'
+   x2 '6'
+   x2 '8'
+   x3 '9'
+--- ONLY REF  18 tokens, 36 alnum
+   x1 '01'
+   x2 '05'
+   x4 '06'
+   x5 '07'
+   x1 '08'
+   x1 '12'
+   x1 '14'
+   x1 '22'
+   x1 '24'
+   x1 '29'
+
+######## 070_Equipment_inventory_list_Use_this_template_fd524c8a.xlsx
+alnum ours 1004 ref 1029
+--- ONLY OURS  0 tokens, 0 alnum
+--- ONLY REF  7 tokens, 25 alnum
+   x1 'If'
+   x1 'an'
+   x1 'in'
+   x1 'modified'
+   x1 'shape'
+   x1 'the'
+   x1 'was'
+
+######## 071_Four-week_project_timeline_Use_this_template_4f05db49.xlsx
+alnum ours 400 ref 587
+--- ONLY OURS  0 tokens, 0 alnum
+--- ONLY REF  75 tokens, 187 alnum
+   x2 '1'
+   x1 '10'
+   x1 '11'
+   x1 '12'
+   x1 '13'
+   x1 '14'
+   x1 '15'
+   x1 '16'
+   x1 '17'
+   x1 '18'
+   x1 '19'
+   x4 '2'
+   x1 '20'
+   x1 '21'
+   x1 '22'
+   x1 '23'
+   x1 '24'
+   x1 '25'
+
+######## 075_Idea_planner_tasks_f44ebd73.xlsx
+alnum ours 503 ref 484
+--- ONLY OURS  3 tokens, 24 alnum
+   x1 'Indicator'
+   x1 'Task'
+   x1 'TasksStatus'
+--- ONLY REF  1 tokens, 5 alnum
+   x1 'Tasks'
+

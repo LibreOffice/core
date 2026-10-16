@@ -1,0 +1,487 @@
+path	ext	family	batch	kind	part	feature
+sheets/done-010/xlsx/Keywords_Mapping_Graphs_and_Charts.xlsx	xlsx	sheets	done-010		xl/charts/chart7.xml	c:barChart
+sheets/done-010/xlsx/Keywords_Mapping_Graphs_and_Charts.xlsx	xlsx	sheets	done-010		xl/charts/chart1.xml	c:barChart
+sheets/done-010/xlsx/Keywords_Mapping_Graphs_and_Charts.xlsx	xlsx	sheets	done-010		xl/charts/chart2.xml	c:barChart
+sheets/done-010/xlsx/Keywords_Mapping_Graphs_and_Charts.xlsx	xlsx	sheets	done-010		xl/charts/chart3.xml	c:barChart
+sheets/done-010/xlsx/Keywords_Mapping_Graphs_and_Charts.xlsx	xlsx	sheets	done-010		xl/charts/chart8.xml	c:barChart
+sheets/done-010/xlsx/Keywords_Mapping_Graphs_and_Charts.xlsx	xlsx	sheets	done-010		xl/charts/chart4.xml	c:barChart
+sheets/done-010/xlsx/Keywords_Mapping_Graphs_and_Charts.xlsx	xlsx	sheets	done-010		xl/charts/chart5.xml	c:barChart
+sheets/done-010/xlsx/Keywords_Mapping_Graphs_and_Charts.xlsx	xlsx	sheets	done-010		xl/charts/chart6.xml	c:barChart
+sheets/done-010/xlsx/Keywords_Mapping_Graphs_and_Charts.xlsx	xlsx	sheets	done-010		xl/charts/chart9.xml	c:barChart
+sheets/done-010/xlsx/Keywords_Mapping_Graphs_and_Charts.xlsx	xlsx	sheets	done-010		xl/charts/chart10.xml	c:barChart
+sheets/done-010/xlsx/Keywords_Mapping_Graphs_and_Charts.xlsx	xlsx	sheets	done-010		xl/charts/chart11.xml	c:barChart
+slides/ceiling-001/pptx/Sylva%20introduction%20session.pptx	pptx	slides	ceiling-001	text	ppt/charts/chart1.xml	c:doughnutChart
+slides/ceiling-001/pptx/Sylva%20introduction%20session.pptx	pptx	slides	ceiling-001	text	ppt/charts/chart1.xml	@holeSize
+slides/ceiling-001/pptx/N2_E_Maestroni_Swarm_COP.pptx	pptx	slides	ceiling-001	ceiling	ppt/charts/chart1.xml	c:barChart
+slides/ceiling-001/pptx/N2_E_Maestroni_Swarm_COP.pptx	pptx	slides	ceiling-001	ceiling	ppt/charts/chart1.xml	@barDir_bar
+slides/ceiling-001/pptx/N2_E_Maestroni_Swarm_COP.pptx	pptx	slides	ceiling-001	ceiling	ppt/charts/chart1.xml	@grouping_stacked
+slides/ceiling-002/pptx/Demick_JetBlue.pptx	pptx	slides	ceiling-002	ceiling	ppt/charts/chart5.xml	c:lineChart
+slides/ceiling-002/pptx/Demick_JetBlue.pptx	pptx	slides	ceiling-002	ceiling	ppt/charts/chart4.xml	c:lineChart
+slides/ceiling-002/pptx/Demick_JetBlue.pptx	pptx	slides	ceiling-002	ceiling	ppt/charts/chart3.xml	c:lineChart
+slides/ceiling-002/pptx/Demick_JetBlue.pptx	pptx	slides	ceiling-002	ceiling	ppt/charts/chart2.xml	c:lineChart
+slides/ceiling-002/pptx/Demick_JetBlue.pptx	pptx	slides	ceiling-002	ceiling	ppt/charts/chart1.xml	c:lineChart
+slides/ceiling-002/pptx/8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx	pptx	slides	ceiling-002	text	ppt/charts/chart1.xml	c:barChart
+slides/ceiling-002/pptx/8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx	pptx	slides	ceiling-002	text	ppt/charts/chart1.xml	@grouping_pctstk
+slides/ceiling-002/pptx/8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx	pptx	slides	ceiling-002	text	ppt/charts/chart2.xml	c:scatterChart
+slides/ceiling-002/pptx/8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx	pptx	slides	ceiling-002	text	ppt/charts/chart2.xml	@scatterStyle_line
+slides/ceiling-002/pptx/8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx	pptx	slides	ceiling-002	text	ppt/charts/chart3.xml	c:scatterChart
+slides/ceiling-002/pptx/8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx	pptx	slides	ceiling-002	text	ppt/charts/chart3.xml	@scatterStyle_line
+slides/ceiling-002/pptx/8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx	pptx	slides	ceiling-002	text	ppt/charts/chart6.xml	c:barChart
+slides/ceiling-002/pptx/8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx	pptx	slides	ceiling-002	text	ppt/charts/chart5.xml	c:barChart
+slides/ceiling-002/pptx/8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx	pptx	slides	ceiling-002	text	ppt/charts/chart4.xml	c:barChart
+slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx	pptx	slides	chart-001	chart	ppt/charts/chart21.xml	c:bubbleChart
+slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx	pptx	slides	chart-001	chart	ppt/charts/chart5.xml	c:barChart
+slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx	pptx	slides	chart-001	chart	ppt/charts/chart4.xml	c:barChart
+slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx	pptx	slides	chart-001	chart	ppt/charts/chart6.xml	c:barChart
+slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx	pptx	slides	chart-001	chart	ppt/charts/chart8.xml	c:lineChart
+slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx	pptx	slides	chart-001	chart	ppt/charts/chart7.xml	c:radarChart
+slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx	pptx	slides	chart-001	chart	ppt/charts/chart3.xml	c:barChart
+slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx	pptx	slides	chart-001	chart	ppt/charts/chart1.xml	c:lineChart
+slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx	pptx	slides	chart-001	chart	ppt/charts/chart2.xml	c:barChart
+slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx	pptx	slides	chart-001	chart	ppt/charts/chart17.xml	c:barChart
+slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx	pptx	slides	chart-001	chart	ppt/charts/chart17.xml	@barDir_bar
+slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx	pptx	slides	chart-001	chart	ppt/charts/chart16.xml	c:barChart
+slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx	pptx	slides	chart-001	chart	ppt/charts/chart16.xml	@grouping_stacked
+slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx	pptx	slides	chart-001	chart	ppt/charts/chart18.xml	c:lineChart
+slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx	pptx	slides	chart-001	chart	ppt/charts/chart20.xml	c:lineChart
+slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx	pptx	slides	chart-001	chart	ppt/charts/chart19.xml	c:doughnutChart
+slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx	pptx	slides	chart-001	chart	ppt/charts/chart19.xml	@holeSize
+slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx	pptx	slides	chart-001	chart	ppt/charts/chart15.xml	c:barChart
+slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx	pptx	slides	chart-001	chart	ppt/charts/chart14.xml	c:lineChart
+slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx	pptx	slides	chart-001	chart	ppt/charts/chart10.xml	c:lineChart
+slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx	pptx	slides	chart-001	chart	ppt/charts/chart9.xml	c:barChart
+slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx	pptx	slides	chart-001	chart	ppt/charts/chart11.xml	c:lineChart
+slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx	pptx	slides	chart-001	chart	ppt/charts/chart13.xml	c:barChart
+slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx	pptx	slides	chart-001	chart	ppt/charts/chart13.xml	@grouping_stacked
+slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx	pptx	slides	chart-001	chart	ppt/charts/chart12.xml	c:lineChart
+slides/done-007/pptx/flying-by-numbers-presentation.pptx	pptx	slides	done-007		ppt/charts/chart1.xml	c:scatterChart
+slides/done-007/pptx/flying-by-numbers-presentation.pptx	pptx	slides	done-007		ppt/charts/chart1.xml	@scatterStyle_line
+slides/done-007/pptx/bitesize-writing-a-report.pptx	pptx	slides	done-007		ppt/charts/chart1.xml	c:pieChart
+slides/done-007/pptx/bitesize-writing-a-report.pptx	pptx	slides	done-007		ppt/charts/chart2.xml	c:pieChart
+slides/done-010/pptx/Sector_Skills_Insights_Advanced_Manufacturing_summary_slide_pack.pptx	pptx	slides	done-010		ppt/charts/chart1.xml	c:barChart
+slides/done-010/pptx/Sector_Skills_Insights_Advanced_Manufacturing_summary_slide_pack.pptx	pptx	slides	done-010		ppt/charts/chart1.xml	@barDir_bar
+slides/done-010/pptx/Sector_Skills_Insights_Advanced_Manufacturing_summary_slide_pack.pptx	pptx	slides	done-010		ppt/charts/chart1.xml	@grouping_stacked
+slides/done-011/pptx/171128IPAP.pptx	pptx	slides	done-011		ppt/charts/chart8.xml	c:lineChart
+slides/done-011/pptx/171128IPAP.pptx	pptx	slides	done-011		ppt/charts/chart4.xml	c:lineChart
+slides/done-011/pptx/171128IPAP.pptx	pptx	slides	done-011		ppt/charts/chart5.xml	c:barChart
+slides/done-011/pptx/171128IPAP.pptx	pptx	slides	done-011		ppt/charts/chart5.xml	c:lineChart
+slides/done-011/pptx/171128IPAP.pptx	pptx	slides	done-011		ppt/charts/chart5.xml	@smooth_1
+slides/done-011/pptx/171128IPAP.pptx	pptx	slides	done-011		ppt/charts/chart9.xml	c:barChart
+slides/done-011/pptx/171128IPAP.pptx	pptx	slides	done-011		ppt/charts/chart9.xml	c:lineChart
+slides/done-011/pptx/171128IPAP.pptx	pptx	slides	done-011		ppt/charts/chart9.xml	@smooth_1
+slides/done-011/pptx/171128IPAP.pptx	pptx	slides	done-011		ppt/charts/chart6.xml	c:barChart
+slides/done-011/pptx/171128IPAP.pptx	pptx	slides	done-011		ppt/charts/chart6.xml	c:lineChart
+slides/done-011/pptx/171128IPAP.pptx	pptx	slides	done-011		ppt/charts/chart6.xml	@smooth_1
+slides/done-011/pptx/171128IPAP.pptx	pptx	slides	done-011		ppt/charts/chart3.xml	c:barChart
+slides/done-011/pptx/171128IPAP.pptx	pptx	slides	done-011		ppt/charts/chart7.xml	c:lineChart
+slides/done-011/pptx/171128IPAP.pptx	pptx	slides	done-011		ppt/charts/chart7.xml	@smooth_1
+slides/done-011/pptx/171128IPAP.pptx	pptx	slides	done-011		ppt/charts/chart1.xml	c:lineChart
+slides/done-011/pptx/171128IPAP.pptx	pptx	slides	done-011		ppt/charts/chart2.xml	c:lineChart
+slides/done-011/pptx/3495.pptx	pptx	slides	done-011		ppt/charts/chart1.xml	c:pieChart
+slides/done-011/pptx/3495.pptx	pptx	slides	done-011		ppt/charts/chart2.xml	c:pieChart
+slides/done-011/pptx/3495.pptx	pptx	slides	done-011		ppt/charts/chart3.xml	c:pieChart
+slides/done-011/pptx/3495.pptx	pptx	slides	done-011		ppt/charts/chart4.xml	c:pieChart
+slides/done-011/pptx/1_Country-Updates_DRC_English.pptx	pptx	slides	done-011		ppt/charts/chart1.xml	c:lineChart
+slides/done-011/pptx/1_Country-Updates_DRC_English.pptx	pptx	slides	done-011		ppt/charts/chart2.xml	c:barChart
+slides/done-011/pptx/1_Country-Updates_DRC_English.pptx	pptx	slides	done-011		ppt/charts/chart2.xml	@grouping_stacked
+slides/done-011/pptx/1_Country-Updates_DRC_English.pptx	pptx	slides	done-011		ppt/charts/chart3.xml	c:lineChart
+slides/done-011/pptx/3492.pptx	pptx	slides	done-011		ppt/charts/chart3.xml	c:barChart
+slides/done-011/pptx/3492.pptx	pptx	slides	done-011		ppt/charts/chart3.xml	@grouping_pctstk
+slides/done-011/pptx/3492.pptx	pptx	slides	done-011		ppt/charts/chart4.xml	c:doughnutChart
+slides/done-011/pptx/3492.pptx	pptx	slides	done-011		ppt/charts/chart4.xml	@holeSize
+slides/done-011/pptx/3492.pptx	pptx	slides	done-011		ppt/charts/chart1.xml	c:barChart
+slides/done-011/pptx/3492.pptx	pptx	slides	done-011		ppt/charts/chart2.xml	c:barChart
+slides/done-011/pptx/3492.pptx	pptx	slides	done-011		ppt/charts/chart2.xml	@grouping_stacked
+slides/done-012/pptx/Intersil_Italy_CAN_Bus_Transceiver_Presentation_Final.pptx	pptx	slides	done-012		ppt/charts/chart1.xml	c:barChart
+slides/done-015/pptx/RPA P4 - Advanced Material.pptx	pptx	slides	done-015		ppt/charts/chart1.xml	c:scatterChart
+slides/done-015/pptx/RPA P4 - Advanced Material.pptx	pptx	slides	done-015		ppt/charts/chart1.xml	@scatterStyle_line
+slides/extra-001/pptx/FAAAIandtheArtandScienceofV&Vfinal.pptx	pptx	slides	extra-001		ppt/charts/chart1.xml	c:scatterChart
+slides/extra-001/pptx/FAAAIandtheArtandScienceofV&Vfinal.pptx	pptx	slides	extra-001		ppt/charts/chart1.xml	@scatterStyle_line
+words/ceiling-001/docx/ABCD-FE-01-00 Flight Envelope - v1 08.03.16.docx	docx	words	ceiling-001	ceiling	word/charts/chart1.xml	c:scatterChart
+words/ceiling-001/docx/ABCD-FE-01-00 Flight Envelope - v1 08.03.16.docx	docx	words	ceiling-001	ceiling	word/charts/chart1.xml	@scatterStyle_line
+words/chartset-001/docx/clustered-column-template.docx	docx	words	chartset-001		word/charts/chart1.xml	c:barChart
+words/chartset-001/docx/clustered-column-result.docx	docx	words	chartset-001		word/charts/chart1.xml	c:barChart
+words/chartset-001/docx/pie-chart-template.docx	docx	words	chartset-001		word/charts/chart1.xml	c:pie3DChart
+words/chartset-001/docx/pie-chart-result.docx	docx	words	chartset-001		word/charts/chart1.xml	c:pie3DChart
+sheets/chartset-001/xlsx/016_advanced_excel_radar.xlsx	xlsx	sheets	chartset-001		xl/charts/chart1.xml	c:radarChart
+sheets/chartset-001/xlsx/032_advanced_excel_radar.xlsx	xlsx	sheets	chartset-001		xl/charts/chart1.xml	c:radarChart
+sheets/chartset-001/xlsx/006_advanced_excel_scatter.xlsx	xlsx	sheets	chartset-001		xl/charts/chart1.xml	c:scatterChart
+sheets/chartset-001/xlsx/006_advanced_excel_scatter.xlsx	xlsx	sheets	chartset-001		xl/charts/chart1.xml	@scatterStyle_line
+sheets/chartset-001/xlsx/006_advanced_excel_scatter.xlsx	xlsx	sheets	chartset-001		xl/charts/chart1.xml	@smooth_1
+sheets/chartset-001/xlsx/005_advanced_excel_area.xlsx	xlsx	sheets	chartset-001		xl/charts/chart1.xml	c:areaChart
+sheets/chartset-001/xlsx/005_advanced_excel_area.xlsx	xlsx	sheets	chartset-001		xl/charts/chart1.xml	@grouping_stacked
+sheets/chartset-001/xlsx/028_advanced_excel_doughnut.xlsx	xlsx	sheets	chartset-001		xl/charts/chart1.xml	c:doughnutChart
+sheets/chartset-001/xlsx/028_advanced_excel_doughnut.xlsx	xlsx	sheets	chartset-001		xl/charts/chart1.xml	@holeSize
+sheets/chartset-001/xlsx/001_advanced_excel_bar.xlsx	xlsx	sheets	chartset-001		xl/charts/chart1.xml	c:barChart
+sheets/chartset-001/xlsx/025_advanced_excel_bar.xlsx	xlsx	sheets	chartset-001		xl/charts/chart1.xml	c:barChart
+sheets/chartset-001/xlsx/033_advanced_excel_bar.xlsx	xlsx	sheets	chartset-001		xl/charts/chart1.xml	c:barChart
+sheets/chartset-001/xlsx/002_advanced_excel_line.xlsx	xlsx	sheets	chartset-001		xl/charts/chart1.xml	c:lineChart
+sheets/chartset-001/xlsx/002_advanced_excel_line.xlsx	xlsx	sheets	chartset-001		xl/charts/chart1.xml	@smooth_1
+sheets/chartset-001/xlsx/022_advanced_excel_scatter.xlsx	xlsx	sheets	chartset-001		xl/charts/chart1.xml	c:scatterChart
+sheets/chartset-001/xlsx/022_advanced_excel_scatter.xlsx	xlsx	sheets	chartset-001		xl/charts/chart1.xml	@scatterStyle_line
+sheets/chartset-001/xlsx/022_advanced_excel_scatter.xlsx	xlsx	sheets	chartset-001		xl/charts/chart1.xml	@smooth_1
+sheets/chartset-002/xlsx/013_advanced_excel_area.xlsx	xlsx	sheets	chartset-002		xl/charts/chart1.xml	c:areaChart
+sheets/chartset-002/xlsx/013_advanced_excel_area.xlsx	xlsx	sheets	chartset-002		xl/charts/chart1.xml	@grouping_stacked
+sheets/chartset-002/xlsx/030_advanced_excel_scatter.xlsx	xlsx	sheets	chartset-002		xl/charts/chart1.xml	c:scatterChart
+sheets/chartset-002/xlsx/030_advanced_excel_scatter.xlsx	xlsx	sheets	chartset-002		xl/charts/chart1.xml	@scatterStyle_line
+sheets/chartset-002/xlsx/030_advanced_excel_scatter.xlsx	xlsx	sheets	chartset-002		xl/charts/chart1.xml	@smooth_1
+sheets/chartset-002/xlsx/011_advanced_excel_pie.xlsx	xlsx	sheets	chartset-002		xl/charts/chart1.xml	c:pieChart
+sheets/chartset-002/xlsx/027_advanced_excel_pie.xlsx	xlsx	sheets	chartset-002		xl/charts/chart1.xml	c:pieChart
+sheets/chartset-002/xlsx/012_advanced_excel_doughnut.xlsx	xlsx	sheets	chartset-002		xl/charts/chart1.xml	c:doughnutChart
+sheets/chartset-002/xlsx/012_advanced_excel_doughnut.xlsx	xlsx	sheets	chartset-002		xl/charts/chart1.xml	@holeSize
+sheets/chartset-002/xlsx/021_advanced_excel_area.xlsx	xlsx	sheets	chartset-002		xl/charts/chart1.xml	c:areaChart
+sheets/chartset-002/xlsx/021_advanced_excel_area.xlsx	xlsx	sheets	chartset-002		xl/charts/chart1.xml	@grouping_stacked
+sheets/chartset-002/xlsx/026_advanced_excel_line.xlsx	xlsx	sheets	chartset-002		xl/charts/chart1.xml	c:lineChart
+sheets/chartset-002/xlsx/026_advanced_excel_line.xlsx	xlsx	sheets	chartset-002		xl/charts/chart1.xml	@smooth_1
+sheets/chartset-002/xlsx/034_advanced_excel_line.xlsx	xlsx	sheets	chartset-002		xl/charts/chart1.xml	c:lineChart
+sheets/chartset-002/xlsx/034_advanced_excel_line.xlsx	xlsx	sheets	chartset-002		xl/charts/chart1.xml	@smooth_1
+sheets/chartset-002/xlsx/003_advanced_excel_pie.xlsx	xlsx	sheets	chartset-002		xl/charts/chart1.xml	c:pieChart
+sheets/chartset-002/xlsx/007_advanced_excel_bubble.xlsx	xlsx	sheets	chartset-002		xl/charts/chart1.xml	c:bubbleChart
+sheets/chartset-003/xlsx/031_advanced_excel_bubble.xlsx	xlsx	sheets	chartset-003		xl/charts/chart1.xml	c:bubbleChart
+sheets/chartset-003/xlsx/015_advanced_excel_bubble.xlsx	xlsx	sheets	chartset-003		xl/charts/chart1.xml	c:bubbleChart
+sheets/chartset-003/xlsx/004_advanced_excel_doughnut.xlsx	xlsx	sheets	chartset-003		xl/charts/chart1.xml	c:doughnutChart
+sheets/chartset-003/xlsx/004_advanced_excel_doughnut.xlsx	xlsx	sheets	chartset-003		xl/charts/chart1.xml	@holeSize
+sheets/chartset-003/xlsx/020_advanced_excel_doughnut.xlsx	xlsx	sheets	chartset-003		xl/charts/chart1.xml	c:doughnutChart
+sheets/chartset-003/xlsx/020_advanced_excel_doughnut.xlsx	xlsx	sheets	chartset-003		xl/charts/chart1.xml	@holeSize
+sheets/chartset-003/xlsx/008_advanced_excel_radar.xlsx	xlsx	sheets	chartset-003		xl/charts/chart1.xml	c:radarChart
+sheets/chartset-003/xlsx/024_advanced_excel_radar.xlsx	xlsx	sheets	chartset-003		xl/charts/chart1.xml	c:radarChart
+sheets/chartset-003/xlsx/014_advanced_excel_scatter.xlsx	xlsx	sheets	chartset-003		xl/charts/chart1.xml	c:scatterChart
+sheets/chartset-003/xlsx/014_advanced_excel_scatter.xlsx	xlsx	sheets	chartset-003		xl/charts/chart1.xml	@scatterStyle_line
+sheets/chartset-003/xlsx/014_advanced_excel_scatter.xlsx	xlsx	sheets	chartset-003		xl/charts/chart1.xml	@smooth_1
+sheets/chartset-003/xlsx/018_advanced_excel_line.xlsx	xlsx	sheets	chartset-003		xl/charts/chart1.xml	c:lineChart
+sheets/chartset-003/xlsx/018_advanced_excel_line.xlsx	xlsx	sheets	chartset-003		xl/charts/chart1.xml	@smooth_1
+sheets/chartset-003/xlsx/017_advanced_excel_bar.xlsx	xlsx	sheets	chartset-003		xl/charts/chart1.xml	c:barChart
+sheets/chartset-003/xlsx/029_advanced_excel_area.xlsx	xlsx	sheets	chartset-003		xl/charts/chart1.xml	c:areaChart
+sheets/chartset-003/xlsx/029_advanced_excel_area.xlsx	xlsx	sheets	chartset-003		xl/charts/chart1.xml	@grouping_stacked
+sheets/chartset-004/xlsx/023_advanced_excel_bubble.xlsx	xlsx	sheets	chartset-004		xl/charts/chart1.xml	c:bubbleChart
+sheets/chartset-004/xlsx/009_advanced_excel_bar.xlsx	xlsx	sheets	chartset-004		xl/charts/chart1.xml	c:barChart
+sheets/chartset-004/xlsx/010_advanced_excel_line.xlsx	xlsx	sheets	chartset-004		xl/charts/chart1.xml	c:lineChart
+sheets/chartset-004/xlsx/010_advanced_excel_line.xlsx	xlsx	sheets	chartset-004		xl/charts/chart1.xml	@smooth_1
+sheets/chartset-004/xlsx/019_advanced_excel_pie.xlsx	xlsx	sheets	chartset-004		xl/charts/chart1.xml	c:pieChart
+sheets/chartset-004/xlsx/microsoft_learn_multi_chart_examples.xlsx	xlsx	sheets	chartset-004	text	xl/charts/chart1.xml	c:lineChart
+sheets/chartset-004/xlsx/microsoft_learn_multi_chart_examples.xlsx	xlsx	sheets	chartset-004	text	xl/charts/chart2.xml	c:barChart
+sheets/chartset-004/xlsx/microsoft_learn_multi_chart_examples.xlsx	xlsx	sheets	chartset-004	text	xl/charts/chart3.xml	c:areaChart
+sheets/chartset-004/xlsx/microsoft_learn_multi_chart_examples.xlsx	xlsx	sheets	chartset-004	text	xl/charts/chart4.xml	c:pieChart
+sheets/chartset-004/xlsx/microsoft_learn_multi_chart_examples.xlsx	xlsx	sheets	chartset-004	text	xl/charts/chart5.xml	c:scatterChart
+sheets/chartset-004/xlsx/DynamicBubbleChart.xlsx	xlsx	sheets	chartset-004		xl/charts/chart1.xml	c:bubbleChart
+slides/chartset-001/pptx/scatter_chart.pptx	pptx	slides	chartset-001		ppt/charts/chart1.xml	c:scatterChart
+slides/chartset-001/pptx/scatter_chart.pptx	pptx	slides	chartset-001		ppt/charts/chart1.xml	@scatterStyle_line
+slides/chartset-001/pptx/stacked_area_chart.pptx	pptx	slides	chartset-001		ppt/charts/chart1.xml	c:areaChart
+slides/chartset-001/pptx/stacked_area_chart.pptx	pptx	slides	chartset-001		ppt/charts/chart1.xml	@grouping_stacked
+slides/chartset-001/pptx/stacked_bar_chart.pptx	pptx	slides	chartset-001		ppt/charts/chart1.xml	c:barChart
+slides/chartset-001/pptx/stacked_bar_chart.pptx	pptx	slides	chartset-001		ppt/charts/chart1.xml	@grouping_stacked
+slides/chartset-001/pptx/bar_chart.pptx	pptx	slides	chartset-001		ppt/charts/chart1.xml	c:barChart
+slides/chartset-001/pptx/combo_bar_line_chart.pptx	pptx	slides	chartset-001		ppt/charts/chart1.xml	c:barChart
+slides/chartset-001/pptx/combo_bar_line_chart.pptx	pptx	slides	chartset-001		ppt/charts/chart1.xml	c:lineChart
+slides/chartset-001/pptx/line_chart.pptx	pptx	slides	chartset-001		ppt/charts/chart1.xml	c:lineChart
+slides/chartset-001/pptx/008_advanced_powerpoint_bubble.pptx	pptx	slides	chartset-001		ppt/charts/chart8.xml	c:bubbleChart
+slides/chartset-001/pptx/015_advanced_powerpoint_scatter.pptx	pptx	slides	chartset-001		ppt/charts/chart15.xml	c:scatterChart
+slides/chartset-001/pptx/015_advanced_powerpoint_scatter.pptx	pptx	slides	chartset-001		ppt/charts/chart15.xml	@scatterStyle_line
+slides/chartset-001/pptx/016_advanced_powerpoint_bubble.pptx	pptx	slides	chartset-001		ppt/charts/chart16.xml	c:bubbleChart
+slides/chartset-001/pptx/031_advanced_powerpoint_scatter.pptx	pptx	slides	chartset-001		ppt/charts/chart31.xml	c:scatterChart
+slides/chartset-001/pptx/031_advanced_powerpoint_scatter.pptx	pptx	slides	chartset-001		ppt/charts/chart31.xml	@scatterStyle_line
+slides/chartset-002/pptx/007_advanced_powerpoint_scatter.pptx	pptx	slides	chartset-002		ppt/charts/chart7.xml	c:scatterChart
+slides/chartset-002/pptx/007_advanced_powerpoint_scatter.pptx	pptx	slides	chartset-002		ppt/charts/chart7.xml	@scatterStyle_line
+slides/chartset-002/pptx/023_advanced_powerpoint_scatter.pptx	pptx	slides	chartset-002		ppt/charts/chart23.xml	c:scatterChart
+slides/chartset-002/pptx/023_advanced_powerpoint_scatter.pptx	pptx	slides	chartset-002		ppt/charts/chart23.xml	@scatterStyle_line
+slides/chartset-002/pptx/032_advanced_powerpoint_bubble.pptx	pptx	slides	chartset-002		ppt/charts/chart32.xml	c:bubbleChart
+slides/chartset-002/pptx/024_advanced_powerpoint_bubble.pptx	pptx	slides	chartset-002		ppt/charts/chart24.xml	c:bubbleChart
+slides/chartset-002/pptx/006_advanced_powerpoint_area.pptx	pptx	slides	chartset-002		ppt/charts/chart6.xml	c:areaChart
+slides/chartset-002/pptx/014_advanced_powerpoint_area.pptx	pptx	slides	chartset-002		ppt/charts/chart14.xml	c:areaChart
+slides/chartset-002/pptx/030_advanced_powerpoint_area.pptx	pptx	slides	chartset-002		ppt/charts/chart30.xml	c:areaChart
+slides/chartset-002/pptx/001_advanced_powerpoint_bar.pptx	pptx	slides	chartset-002		ppt/charts/chart1.xml	c:barChart
+slides/chartset-002/pptx/001_advanced_powerpoint_bar.pptx	pptx	slides	chartset-002		ppt/charts/chart1.xml	@barDir_bar
+slides/chartset-002/pptx/017_advanced_powerpoint_bar.pptx	pptx	slides	chartset-002		ppt/charts/chart17.xml	c:barChart
+slides/chartset-002/pptx/017_advanced_powerpoint_bar.pptx	pptx	slides	chartset-002		ppt/charts/chart17.xml	@barDir_bar
+slides/chartset-002/pptx/033_advanced_powerpoint_bar.pptx	pptx	slides	chartset-002		ppt/charts/chart33.xml	c:barChart
+slides/chartset-002/pptx/033_advanced_powerpoint_bar.pptx	pptx	slides	chartset-002		ppt/charts/chart33.xml	@barDir_bar
+slides/chartset-003/pptx/019_advanced_powerpoint_line.pptx	pptx	slides	chartset-003		ppt/charts/chart19.xml	c:lineChart
+slides/chartset-003/pptx/003_advanced_powerpoint_line.pptx	pptx	slides	chartset-003		ppt/charts/chart3.xml	c:lineChart
+slides/chartset-003/pptx/002_advanced_powerpoint_column.pptx	pptx	slides	chartset-003		ppt/charts/chart2.xml	c:barChart
+slides/chartset-003/pptx/010_advanced_powerpoint_column.pptx	pptx	slides	chartset-003		ppt/charts/chart10.xml	c:barChart
+slides/chartset-003/pptx/011_advanced_powerpoint_line.pptx	pptx	slides	chartset-003		ppt/charts/chart11.xml	c:lineChart
+slides/chartset-003/pptx/027_advanced_powerpoint_line.pptx	pptx	slides	chartset-003		ppt/charts/chart27.xml	c:lineChart
+slides/chartset-003/pptx/012_advanced_powerpoint_pie.pptx	pptx	slides	chartset-003		ppt/charts/chart12.xml	c:pieChart
+slides/chartset-003/pptx/028_advanced_powerpoint_pie.pptx	pptx	slides	chartset-003		ppt/charts/chart28.xml	c:pieChart
+slides/chartset-003/pptx/005_advanced_powerpoint_doughnut.pptx	pptx	slides	chartset-003		ppt/charts/chart5.xml	c:doughnutChart
+slides/chartset-003/pptx/005_advanced_powerpoint_doughnut.pptx	pptx	slides	chartset-003		ppt/charts/chart5.xml	@holeSize
+slides/chartset-003/pptx/009_advanced_powerpoint_bar.pptx	pptx	slides	chartset-003		ppt/charts/chart9.xml	c:barChart
+slides/chartset-003/pptx/009_advanced_powerpoint_bar.pptx	pptx	slides	chartset-003		ppt/charts/chart9.xml	@barDir_bar
+slides/chartset-004/pptx/021_advanced_powerpoint_doughnut.pptx	pptx	slides	chartset-004		ppt/charts/chart21.xml	c:doughnutChart
+slides/chartset-004/pptx/021_advanced_powerpoint_doughnut.pptx	pptx	slides	chartset-004		ppt/charts/chart21.xml	@holeSize
+slides/chartset-004/pptx/025_advanced_powerpoint_bar.pptx	pptx	slides	chartset-004		ppt/charts/chart25.xml	c:barChart
+slides/chartset-004/pptx/025_advanced_powerpoint_bar.pptx	pptx	slides	chartset-004		ppt/charts/chart25.xml	@barDir_bar
+slides/chartset-004/pptx/026_advanced_powerpoint_column.pptx	pptx	slides	chartset-004		ppt/charts/chart26.xml	c:barChart
+slides/chartset-004/pptx/013_advanced_powerpoint_doughnut.pptx	pptx	slides	chartset-004		ppt/charts/chart13.xml	c:doughnutChart
+slides/chartset-004/pptx/013_advanced_powerpoint_doughnut.pptx	pptx	slides	chartset-004		ppt/charts/chart13.xml	@holeSize
+slides/chartset-004/pptx/029_advanced_powerpoint_doughnut.pptx	pptx	slides	chartset-004		ppt/charts/chart29.xml	c:doughnutChart
+slides/chartset-004/pptx/029_advanced_powerpoint_doughnut.pptx	pptx	slides	chartset-004		ppt/charts/chart29.xml	@holeSize
+slides/chartset-004/pptx/004_advanced_powerpoint_pie.pptx	pptx	slides	chartset-004		ppt/charts/chart4.xml	c:pieChart
+slides/chartset-004/pptx/020_advanced_powerpoint_pie.pptx	pptx	slides	chartset-004		ppt/charts/chart20.xml	c:pieChart
+slides/chartset-004/pptx/022_advanced_powerpoint_area.pptx	pptx	slides	chartset-004		ppt/charts/chart22.xml	c:areaChart
+slides/chartset-004/pptx/018_advanced_powerpoint_column.pptx	pptx	slides	chartset-004		ppt/charts/chart18.xml	c:barChart
+words/chartset-009/docx/027_Unit_Circle_Chart_Graphical_Chart_5462a579.docx	docx	words	chartset-009		word/charts/chart1.xml	c:pieChart
+words/chartset-010/docx/023_Unit_Circle_Chart_Circular_Percentage_790f7b75.docx	docx	words	chartset-010		word/charts/chart1.xml	c:doughnutChart
+words/chartset-010/docx/023_Unit_Circle_Chart_Circular_Percentage_790f7b75.docx	docx	words	chartset-010		word/charts/chart1.xml	@holeSize
+words/chartset-010/docx/028_Unit_Circle_Chart_Optimized_Graph_83d9c756.docx	docx	words	chartset-010	text	word/charts/chart1.xml	c:ofPieChart
+words/chartset-010/docx/028_Unit_Circle_Chart_Optimized_Graph_83d9c756.docx	docx	words	chartset-010	text	word/charts/chart1.xml	@ofPieType_bar
+words/chartset-011/docx/029_Unit_Circle_Chart_Pie_Theme_8a922142.docx	docx	words	chartset-011		word/charts/chart1.xml	c:ofPieChart
+words/chartset-012/docx/021_Unit_Circle_Chart_3D_Pie_Chart_404247ab.docx	docx	words	chartset-012		word/charts/chart1.xml	c:pie3DChart
+sheets/chartset-005/xlsx/004_Contextures_chart_sample_de7c0671.xlsx	xlsx	sheets	chartset-005		xl/charts/chart1.xml	c:barChart
+sheets/chartset-005/xlsx/004_Contextures_chart_sample_de7c0671.xlsx	xlsx	sheets	chartset-005		xl/charts/chart1.xml	c:lineChart
+sheets/chartset-005/xlsx/004_Contextures_chart_sample_de7c0671.xlsx	xlsx	sheets	chartset-005		xl/charts/chart1.xml	@grouping_stacked
+sheets/chartset-005/xlsx/022_Pareto_Chart_Template_-_Pareto_Analysis_in_Excel_with_Pareto_Diagram_82b5a874.xlsx	xlsx	sheets	chartset-005		xl/charts/chart1.xml	c:barChart
+sheets/chartset-005/xlsx/022_Pareto_Chart_Template_-_Pareto_Analysis_in_Excel_with_Pareto_Diagram_82b5a874.xlsx	xlsx	sheets	chartset-005		xl/charts/chart1.xml	c:lineChart
+sheets/chartset-006/xlsx/005_Contextures_chart_sample_6e279b08.xlsx	xlsx	sheets	chartset-006		xl/charts/chart5.xml	c:pieChart
+sheets/chartset-006/xlsx/005_Contextures_chart_sample_6e279b08.xlsx	xlsx	sheets	chartset-006		xl/charts/chart1.xml	c:pieChart
+sheets/chartset-006/xlsx/005_Contextures_chart_sample_6e279b08.xlsx	xlsx	sheets	chartset-006		xl/charts/chart2.xml	c:barChart
+sheets/chartset-006/xlsx/005_Contextures_chart_sample_6e279b08.xlsx	xlsx	sheets	chartset-006		xl/charts/chart3.xml	c:barChart
+sheets/chartset-006/xlsx/005_Contextures_chart_sample_6e279b08.xlsx	xlsx	sheets	chartset-006		xl/charts/chart3.xml	@barDir_bar
+sheets/chartset-006/xlsx/005_Contextures_chart_sample_6e279b08.xlsx	xlsx	sheets	chartset-006		xl/charts/chart4.xml	c:pieChart
+sheets/chartset-006/xlsx/005_Contextures_chart_sample_6e279b08.xlsx	xlsx	sheets	chartset-006		xl/charts/chart6.xml	c:pieChart
+sheets/chartset-006/xlsx/006_Contextures_chart_sample_afa23b53.xlsx	xlsx	sheets	chartset-006		xl/charts/chart1.xml	c:barChart
+sheets/chartset-006/xlsx/006_Contextures_chart_sample_afa23b53.xlsx	xlsx	sheets	chartset-006		xl/charts/chart1.xml	c:lineChart
+sheets/chartset-006/xlsx/006_Contextures_chart_sample_afa23b53.xlsx	xlsx	sheets	chartset-006		xl/charts/chart1.xml	@grouping_stacked
+sheets/chartset-006/xlsx/044_Cash_flow_forecast_Use_this_template_b8fa1f35.xlsx	xlsx	sheets	chartset-006		xl/charts/chart11.xml	c:barChart
+sheets/chartset-006/xlsx/044_Cash_flow_forecast_Use_this_template_b8fa1f35.xlsx	xlsx	sheets	chartset-006		xl/charts/chart11.xml	@grouping_stacked
+sheets/chartset-006/xlsx/052_Manufacturing_output_chart_88570318.xlsx	xlsx	sheets	chartset-006		xl/charts/chart11.xml	c:barChart
+sheets/chartset-006/xlsx/061_Regional_sales_chart_cb9eb690.xlsx	xlsx	sheets	chartset-006		xl/charts/chart11.xml	c:lineChart
+sheets/chartset-006/xlsx/061_Regional_sales_chart_cb9eb690.xlsx	xlsx	sheets	chartset-006		xl/charts/chart11.xml	c:scatterChart
+sheets/chartset-006/xlsx/061_Regional_sales_chart_cb9eb690.xlsx	xlsx	sheets	chartset-006		xl/charts/chart11.xml	@scatterStyle_line
+sheets/chartset-007/xlsm/003_Contextures_chart_sample_9bda2719.xlsm	xlsm	sheets	chartset-007		xl/charts/chart1.xml	c:pieChart
+sheets/chartset-007/xlsm/003_Contextures_chart_sample_9bda2719.xlsm	xlsm	sheets	chartset-007		xl/charts/chart2.xml	c:barChart
+sheets/chartset-007/xlsm/003_Contextures_chart_sample_9bda2719.xlsm	xlsm	sheets	chartset-007		xl/charts/chart2.xml	@barDir_bar
+sheets/chartset-007/xlsx/037_Personal_money_tracker_a57957bb.xlsx	xlsx	sheets	chartset-007		xl/charts/chart21.xml	c:barChart
+sheets/chartset-007/xlsx/037_Personal_money_tracker_a57957bb.xlsx	xlsx	sheets	chartset-007		xl/charts/chart12.xml	c:barChart
+sheets/chartset-007/xlsx/040_Blood_pressure_tracker_872b6833.xlsx	xlsx	sheets	chartset-007		xl/charts/chart11.xml	c:barChart
+sheets/chartset-007/xlsx/040_Blood_pressure_tracker_872b6833.xlsx	xlsx	sheets	chartset-007		xl/charts/chart11.xml	c:lineChart
+sheets/chartset-007/xlsx/050_Financial_vision_d44241e1.xlsx	xlsx	sheets	chartset-007		xl/charts/chart11.xml	c:barChart
+sheets/chartset-007/xlsx/050_Financial_vision_d44241e1.xlsx	xlsx	sheets	chartset-007		xl/charts/chart11.xml	@grouping_stacked
+sheets/chartset-007/xlsx/054_Problem_analysis_with_Pareto_chart_11058329.xlsx	xlsx	sheets	chartset-007		xl/charts/chartEx1.xml	cx:clusteredColumn
+sheets/chartset-007/xlsx/054_Problem_analysis_with_Pareto_chart_11058329.xlsx	xlsx	sheets	chartset-007		xl/charts/chartEx1.xml	cx:paretoLine
+sheets/chartset-007/xlsx/058_Social_media_engagement_data_cfa1cb18.xlsx	xlsx	sheets	chartset-007	text	xl/charts/chart11.xml	c:barChart
+sheets/chartset-007/xlsx/063_Sales_pipeline_aec57013.xlsx	xlsx	sheets	chartset-007	text	xl/charts/chart11.xml	c:areaChart
+sheets/chartset-007/xlsx/063_Sales_pipeline_aec57013.xlsx	xlsx	sheets	chartset-007	text	xl/charts/chart11.xml	c:scatterChart
+sheets/chartset-007/xlsx/063_Sales_pipeline_aec57013.xlsx	xlsx	sheets	chartset-007	text	xl/charts/chart11.xml	@scatterStyle_line
+sheets/chartset-008/xlsx/008_Contextures_chart_sample_7ea7a1d7.xlsx	xlsx	sheets	chartset-008		xl/charts/chart1.xml	c:barChart
+sheets/chartset-008/xlsx/008_Contextures_chart_sample_7ea7a1d7.xlsx	xlsx	sheets	chartset-008		xl/charts/chart1.xml	@barDir_bar
+sheets/chartset-008/xlsx/008_Contextures_chart_sample_7ea7a1d7.xlsx	xlsx	sheets	chartset-008		xl/charts/chart1.xml	@grouping_stacked
+sheets/chartset-008/xlsx/021_Control_Chart_Template_-_Create_Control_Charts_in_Excel_fd3b1a5d.xlsx	xlsx	sheets	chartset-008		xl/charts/chart3.xml	c:lineChart
+sheets/chartset-008/xlsx/021_Control_Chart_Template_-_Create_Control_Charts_in_Excel_fd3b1a5d.xlsx	xlsx	sheets	chartset-008		xl/charts/chart4.xml	c:lineChart
+sheets/chartset-008/xlsx/021_Control_Chart_Template_-_Create_Control_Charts_in_Excel_fd3b1a5d.xlsx	xlsx	sheets	chartset-008		xl/charts/chart1.xml	c:lineChart
+sheets/chartset-008/xlsx/021_Control_Chart_Template_-_Create_Control_Charts_in_Excel_fd3b1a5d.xlsx	xlsx	sheets	chartset-008		xl/charts/chart2.xml	c:lineChart
+sheets/chartset-008/xlsx/023_Waterfall_Chart_Template_for_Excel_349f7689.xlsx	xlsx	sheets	chartset-008		xl/charts/chart2.xml	c:barChart
+sheets/chartset-008/xlsx/023_Waterfall_Chart_Template_for_Excel_349f7689.xlsx	xlsx	sheets	chartset-008		xl/charts/chart2.xml	c:scatterChart
+sheets/chartset-008/xlsx/023_Waterfall_Chart_Template_for_Excel_349f7689.xlsx	xlsx	sheets	chartset-008		xl/charts/chart2.xml	@barDir_bar
+sheets/chartset-008/xlsx/023_Waterfall_Chart_Template_for_Excel_349f7689.xlsx	xlsx	sheets	chartset-008		xl/charts/chart2.xml	@grouping_stacked
+sheets/chartset-008/xlsx/023_Waterfall_Chart_Template_for_Excel_349f7689.xlsx	xlsx	sheets	chartset-008		xl/charts/chart2.xml	@scatterStyle_line
+sheets/chartset-008/xlsx/023_Waterfall_Chart_Template_for_Excel_349f7689.xlsx	xlsx	sheets	chartset-008		xl/charts/chart1.xml	c:barChart
+sheets/chartset-008/xlsx/023_Waterfall_Chart_Template_for_Excel_349f7689.xlsx	xlsx	sheets	chartset-008		xl/charts/chart1.xml	c:lineChart
+sheets/chartset-008/xlsx/023_Waterfall_Chart_Template_for_Excel_349f7689.xlsx	xlsx	sheets	chartset-008		xl/charts/chart1.xml	c:scatterChart
+sheets/chartset-008/xlsx/023_Waterfall_Chart_Template_for_Excel_349f7689.xlsx	xlsx	sheets	chartset-008		xl/charts/chart1.xml	@grouping_stacked
+sheets/chartset-008/xlsx/023_Waterfall_Chart_Template_for_Excel_349f7689.xlsx	xlsx	sheets	chartset-008		xl/charts/chart1.xml	@scatterStyle_line
+sheets/chartset-008/xlsx/034_Personal_net_worth_calculator_f7b8fb57.xlsx	xlsx	sheets	chartset-008		xl/charts/chart21.xml	c:barChart
+sheets/chartset-008/xlsx/034_Personal_net_worth_calculator_f7b8fb57.xlsx	xlsx	sheets	chartset-008		xl/charts/chart21.xml	@barDir_bar
+sheets/chartset-008/xlsx/034_Personal_net_worth_calculator_f7b8fb57.xlsx	xlsx	sheets	chartset-008		xl/charts/chart12.xml	c:barChart
+sheets/chartset-008/xlsx/034_Personal_net_worth_calculator_f7b8fb57.xlsx	xlsx	sheets	chartset-008		xl/charts/chart12.xml	@barDir_bar
+sheets/chartset-008/xlsx/046_Cost_analysis_with_Pareto_chart_7db5ef69.xlsx	xlsx	sheets	chartset-008	text	xl/charts/chart11.xml	c:barChart
+sheets/chartset-008/xlsx/046_Cost_analysis_with_Pareto_chart_7db5ef69.xlsx	xlsx	sheets	chartset-008	text	xl/charts/chart11.xml	c:lineChart
+sheets/chartset-008/xlsx/051_Manufacturer_defect_analysis_53db27ea.xlsx	xlsx	sheets	chartset-008		xl/charts/chartEx1.xml	cx:clusteredColumn
+sheets/chartset-008/xlsx/051_Manufacturer_defect_analysis_53db27ea.xlsx	xlsx	sheets	chartset-008		xl/charts/chartEx1.xml	cx:paretoLine
+sheets/chartset-008/xlsx/055_Project_timeline_with_milestones_Use_this_template_546cecc0.xlsx	xlsx	sheets	chartset-008	text	xl/charts/chart11.xml	c:barChart
+sheets/chartset-008/xlsx/055_Project_timeline_with_milestones_Use_this_template_546cecc0.xlsx	xlsx	sheets	chartset-008	text	xl/charts/chart11.xml	c:lineChart
+sheets/chartset-008/xlsx/055_Project_timeline_with_milestones_Use_this_template_546cecc0.xlsx	xlsx	sheets	chartset-008	text	xl/charts/chart11.xml	@smooth_1
+sheets/chartset-009/xlsx/018_Weight_Loss_Chart_-_Free_Printable_Weight_Loss_Charts_and_Weight_Log_3337bd0a.xlsx	xlsx	sheets	chartset-009		xl/charts/chart2.xml	c:scatterChart
+sheets/chartset-009/xlsx/018_Weight_Loss_Chart_-_Free_Printable_Weight_Loss_Charts_and_Weight_Log_3337bd0a.xlsx	xlsx	sheets	chartset-009		xl/charts/chart2.xml	@scatterStyle_line
+sheets/chartset-009/xlsx/018_Weight_Loss_Chart_-_Free_Printable_Weight_Loss_Charts_and_Weight_Log_3337bd0a.xlsx	xlsx	sheets	chartset-009		xl/charts/chart1.xml	c:scatterChart
+sheets/chartset-009/xlsx/018_Weight_Loss_Chart_-_Free_Printable_Weight_Loss_Charts_and_Weight_Log_3337bd0a.xlsx	xlsx	sheets	chartset-009		xl/charts/chart1.xml	@scatterStyle_line
+sheets/chartset-009/xlsx/029_Annual_budget_Use_this_template_30324a97.xlsx	xlsx	sheets	chartset-009		xl/charts/chart31.xml	c:barChart
+sheets/chartset-009/xlsx/029_Annual_budget_Use_this_template_30324a97.xlsx	xlsx	sheets	chartset-009		xl/charts/chart22.xml	c:barChart
+sheets/chartset-009/xlsx/029_Annual_budget_Use_this_template_30324a97.xlsx	xlsx	sheets	chartset-009		xl/charts/chart13.xml	c:barChart
+sheets/chartset-009/xlsx/041_Business_budget_ef942467.xlsx	xlsx	sheets	chartset-009		xl/charts/chart11.xml	c:barChart
+sheets/chartset-009/xlsx/053_Personal_asset_inventory_5446d84b.xlsx	xlsx	sheets	chartset-009	pagination	xl/charts/chart11.xml	c:barChart
+sheets/chartset-009/xlsx/053_Personal_asset_inventory_5446d84b.xlsx	xlsx	sheets	chartset-009	pagination	xl/charts/chart11.xml	@barDir_bar
+sheets/chartset-009/xlsx/056_Quarterly_sale_report_baa6bb0d.xlsx	xlsx	sheets	chartset-009		xl/charts/chart11.xml	c:barChart
+sheets/chartset-009/xlsx/056_Quarterly_sale_report_baa6bb0d.xlsx	xlsx	sheets	chartset-009		xl/charts/chart11.xml	@barDir_bar
+sheets/chartset-009/xlsx/056_Quarterly_sale_report_baa6bb0d.xlsx	xlsx	sheets	chartset-009		xl/charts/chart11.xml	@grouping_stacked
+sheets/chartset-010/xlsx/047_Date_tracker_Gantt_chart_bf34f3a8.xlsx	xlsx	sheets	chartset-010	pagination	xl/charts/chart11.xml	c:scatterChart
+sheets/chartset-010/xlsx/047_Date_tracker_Gantt_chart_bf34f3a8.xlsx	xlsx	sheets	chartset-010	pagination	xl/charts/chart11.xml	@scatterStyle_line
+sheets/chartset-010/xlsx/062_Run_chart_cb7476ea.xlsx	xlsx	sheets	chartset-010	pagination	xl/charts/chart11.xml	c:lineChart
+sheets/chartset-010/xlsx/065_Weight_loss_tracker_ff1c89af.xlsx	xlsx	sheets	chartset-010	text	xl/charts/chart11.xml	c:areaChart
+sheets/chartset-010/xlsx/065_Weight_loss_tracker_ff1c89af.xlsx	xlsx	sheets	chartset-010	text	xl/charts/chart11.xml	c:scatterChart
+sheets/chartset-010/xlsx/065_Weight_loss_tracker_ff1c89af.xlsx	xlsx	sheets	chartset-010	text	xl/charts/chart11.xml	@scatterStyle_line
+sheets/chartset-011/xlsx/010_Contextures_chart_sample_e6ea06a3.xlsx	xlsx	sheets	chartset-011		xl/charts/chart1.xml	c:barChart
+sheets/chartset-011/xlsx/010_Contextures_chart_sample_e6ea06a3.xlsx	xlsx	sheets	chartset-011		xl/charts/chart1.xml	@barDir_bar
+sheets/chartset-011/xlsx/010_Contextures_chart_sample_e6ea06a3.xlsx	xlsx	sheets	chartset-011		xl/charts/chart1.xml	@grouping_stacked
+sheets/chartset-011/xlsx/028_Budget_summary_report_4aeefd13.xlsx	xlsx	sheets	chartset-011		xl/charts/chart31.xml	c:barChart
+sheets/chartset-011/xlsx/028_Budget_summary_report_4aeefd13.xlsx	xlsx	sheets	chartset-011		xl/charts/chart31.xml	@barDir_bar
+sheets/chartset-011/xlsx/028_Budget_summary_report_4aeefd13.xlsx	xlsx	sheets	chartset-011		xl/charts/chart12.xml	c:barChart
+sheets/chartset-011/xlsx/028_Budget_summary_report_4aeefd13.xlsx	xlsx	sheets	chartset-011		xl/charts/chart12.xml	@barDir_bar
+sheets/chartset-011/xlsx/028_Budget_summary_report_4aeefd13.xlsx	xlsx	sheets	chartset-011		xl/charts/chart23.xml	c:barChart
+sheets/chartset-011/xlsx/028_Budget_summary_report_4aeefd13.xlsx	xlsx	sheets	chartset-011		xl/charts/chart23.xml	@barDir_bar
+sheets/chartset-011/xlsx/030_Basic_balance_sheet_Use_this_template_10ed9144.xlsx	xlsx	sheets	chartset-011	text	xl/charts/chart21.xml	c:barChart
+sheets/chartset-011/xlsx/030_Basic_balance_sheet_Use_this_template_10ed9144.xlsx	xlsx	sheets	chartset-011	text	xl/charts/chart21.xml	@barDir_bar
+sheets/chartset-011/xlsx/030_Basic_balance_sheet_Use_this_template_10ed9144.xlsx	xlsx	sheets	chartset-011	text	xl/charts/chart12.xml	c:barChart
+sheets/chartset-011/xlsx/030_Basic_balance_sheet_Use_this_template_10ed9144.xlsx	xlsx	sheets	chartset-011	text	xl/charts/chart12.xml	@barDir_bar
+sheets/chartset-011/xlsx/042_Business_monthly_budget_4e4d092f.xlsx	xlsx	sheets	chartset-011		xl/charts/chart11.xml	c:barChart
+sheets/chartset-011/xlsx/057_Simple_balance_sheet_Use_this_template_e2d4cbb2.xlsx	xlsx	sheets	chartset-011	pagination	xl/charts/chart11.xml	c:barChart
+sheets/chartset-011/xlsx/060_Monthly_company_budget_47b2a99a.xlsx	xlsx	sheets	chartset-011		xl/charts/chart11.xml	c:barChart
+sheets/chartset-012/xlsx/002_Contextures_chart_sample_f605e7bc.xlsx	xlsx	sheets	chartset-012		xl/charts/chart1.xml	c:doughnutChart
+sheets/chartset-012/xlsx/002_Contextures_chart_sample_f605e7bc.xlsx	xlsx	sheets	chartset-012		xl/charts/chart1.xml	@holeSize
+sheets/chartset-012/xlsx/002_Contextures_chart_sample_f605e7bc.xlsx	xlsx	sheets	chartset-012		xl/charts/chart2.xml	c:doughnutChart
+sheets/chartset-012/xlsx/002_Contextures_chart_sample_f605e7bc.xlsx	xlsx	sheets	chartset-012		xl/charts/chart2.xml	@holeSize
+sheets/chartset-012/xlsx/002_Contextures_chart_sample_f605e7bc.xlsx	xlsx	sheets	chartset-012		xl/charts/chart3.xml	c:doughnutChart
+sheets/chartset-012/xlsx/002_Contextures_chart_sample_f605e7bc.xlsx	xlsx	sheets	chartset-012		xl/charts/chart3.xml	@holeSize
+sheets/chartset-012/xlsx/012_Contextures_chart_sample_9900da76.xlsx	xlsx	sheets	chartset-012		xl/charts/chart1.xml	c:barChart
+sheets/chartset-012/xlsx/013_Contextures_chart_sample_21b98e22.xlsx	xlsx	sheets	chartset-012		xl/charts/chart1.xml	c:barChart
+sheets/chartset-012/xlsx/013_Contextures_chart_sample_21b98e22.xlsx	xlsx	sheets	chartset-012		xl/charts/chart2.xml	c:barChart
+sheets/chartset-012/xlsx/026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx	xlsx	sheets	chartset-012		xl/charts/chart31.xml	c:barChart
+sheets/chartset-012/xlsx/026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx	xlsx	sheets	chartset-012		xl/charts/chart31.xml	@barDir_bar
+sheets/chartset-012/xlsx/026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx	xlsx	sheets	chartset-012		xl/charts/chart22.xml	c:barChart
+sheets/chartset-012/xlsx/026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx	xlsx	sheets	chartset-012		xl/charts/chart22.xml	@barDir_bar
+sheets/chartset-012/xlsx/026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx	xlsx	sheets	chartset-012		xl/charts/chart13.xml	c:barChart
+sheets/chartset-012/xlsx/026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx	xlsx	sheets	chartset-012		xl/charts/chart13.xml	@barDir_bar
+sheets/chartset-012/xlsx/026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx	xlsx	sheets	chartset-012		xl/charts/chart44.xml	c:barChart
+sheets/chartset-012/xlsx/026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx	xlsx	sheets	chartset-012		xl/charts/chart44.xml	@barDir_bar
+sheets/chartset-012/xlsx/036_Simple_to-do_list_Use_this_template_ba44373b.xlsx	xlsx	sheets	chartset-012		xl/charts/chart21.xml	c:barChart
+sheets/chartset-012/xlsx/036_Simple_to-do_list_Use_this_template_ba44373b.xlsx	xlsx	sheets	chartset-012		xl/charts/chart21.xml	@barDir_bar
+sheets/chartset-012/xlsx/036_Simple_to-do_list_Use_this_template_ba44373b.xlsx	xlsx	sheets	chartset-012		xl/charts/chart12.xml	c:barChart
+sheets/chartset-012/xlsx/036_Simple_to-do_list_Use_this_template_ba44373b.xlsx	xlsx	sheets	chartset-012		xl/charts/chart12.xml	@barDir_bar
+sheets/chartset-013/xlsx/001_Contextures_chart_sample_b089bc34.xlsx	xlsx	sheets	chartset-013		xl/charts/chart1.xml	c:lineChart
+sheets/chartset-013/xlsx/019_Free_Blood_Sugar_Chart_for_Excel_-_Track_Your_Blood_Sugar_Level_36f4a782.xlsx	xlsx	sheets	chartset-013		xl/charts/chart1.xml	c:scatterChart
+sheets/chartset-013/xlsx/019_Free_Blood_Sugar_Chart_for_Excel_-_Track_Your_Blood_Sugar_Level_36f4a782.xlsx	xlsx	sheets	chartset-013		xl/charts/chart1.xml	@scatterStyle_line
+sheets/chartset-013/xlsx/019_Free_Blood_Sugar_Chart_for_Excel_-_Track_Your_Blood_Sugar_Level_36f4a782.xlsx	xlsx	sheets	chartset-013		xl/charts/chart2.xml	c:scatterChart
+sheets/chartset-013/xlsx/019_Free_Blood_Sugar_Chart_for_Excel_-_Track_Your_Blood_Sugar_Level_36f4a782.xlsx	xlsx	sheets	chartset-013		xl/charts/chart2.xml	@scatterStyle_line
+sheets/chartset-013/xlsx/019_Free_Blood_Sugar_Chart_for_Excel_-_Track_Your_Blood_Sugar_Level_36f4a782.xlsx	xlsx	sheets	chartset-013		xl/charts/chart3.xml	c:scatterChart
+sheets/chartset-013/xlsx/019_Free_Blood_Sugar_Chart_for_Excel_-_Track_Your_Blood_Sugar_Level_36f4a782.xlsx	xlsx	sheets	chartset-013		xl/charts/chart3.xml	@scatterStyle_line
+sheets/chartset-013/xlsx/031_Business_expense_budget_f3a46278.xlsx	xlsx	sheets	chartset-013		xl/charts/chart21.xml	c:barChart
+sheets/chartset-013/xlsx/031_Business_expense_budget_f3a46278.xlsx	xlsx	sheets	chartset-013		xl/charts/chart21.xml	@barDir_bar
+sheets/chartset-013/xlsx/031_Business_expense_budget_f3a46278.xlsx	xlsx	sheets	chartset-013		xl/charts/chart12.xml	c:barChart
+sheets/chartset-013/xlsx/031_Business_expense_budget_f3a46278.xlsx	xlsx	sheets	chartset-013		xl/charts/chart12.xml	c:lineChart
+sheets/chartset-013/xlsx/032_Business_expenses_budget_d377eaab.xlsx	xlsx	sheets	chartset-013		xl/charts/chart21.xml	c:barChart
+sheets/chartset-013/xlsx/032_Business_expenses_budget_d377eaab.xlsx	xlsx	sheets	chartset-013		xl/charts/chart21.xml	@barDir_bar
+sheets/chartset-013/xlsx/032_Business_expenses_budget_d377eaab.xlsx	xlsx	sheets	chartset-013		xl/charts/chart12.xml	c:barChart
+sheets/chartset-013/xlsx/032_Business_expenses_budget_d377eaab.xlsx	xlsx	sheets	chartset-013		xl/charts/chart12.xml	@barDir_bar
+sheets/chartset-013/xlsx/033_Event_planning_tracker_Use_this_template_f29a848e.xlsx	xlsx	sheets	chartset-013		xl/charts/chart21.xml	c:barChart
+sheets/chartset-013/xlsx/033_Event_planning_tracker_Use_this_template_f29a848e.xlsx	xlsx	sheets	chartset-013		xl/charts/chart12.xml	c:barChart
+sheets/chartset-013/xlsx/035_Project_plan_for_law_firms_aa2d4462.xlsx	xlsx	sheets	chartset-013		xl/charts/chart21.xml	c:barChart
+sheets/chartset-013/xlsx/035_Project_plan_for_law_firms_aa2d4462.xlsx	xlsx	sheets	chartset-013		xl/charts/chart21.xml	@barDir_bar
+sheets/chartset-013/xlsx/035_Project_plan_for_law_firms_aa2d4462.xlsx	xlsx	sheets	chartset-013		xl/charts/chart12.xml	c:barChart
+sheets/chartset-013/xlsx/035_Project_plan_for_law_firms_aa2d4462.xlsx	xlsx	sheets	chartset-013		xl/charts/chart12.xml	@barDir_bar
+sheets/chartset-013/xlsx/043_Buy_a_car_vs._rideshare_ff07c7e6.xlsx	xlsx	sheets	chartset-013		xl/charts/chart11.xml	c:barChart
+sheets/chartset-013/xlsx/043_Buy_a_car_vs._rideshare_ff07c7e6.xlsx	xlsx	sheets	chartset-013		xl/charts/chart11.xml	c:lineChart
+sheets/chartset-013/xlsx/043_Buy_a_car_vs._rideshare_ff07c7e6.xlsx	xlsx	sheets	chartset-013		xl/charts/chart11.xml	@grouping_stacked
+sheets/chartset-013/xlsx/049_Expenses_calculator_c351f3d0.xlsx	xlsx	sheets	chartset-013		xl/charts/chart11.xml	c:barChart
+sheets/chartset-013/xlsx/059_Milestone_and_task_project_timeline_Use_this_template_24f1e8f1.xlsx	xlsx	sheets	chartset-013	text	xl/charts/chart11.xml	c:scatterChart
+sheets/chartset-013/xlsx/059_Milestone_and_task_project_timeline_Use_this_template_24f1e8f1.xlsx	xlsx	sheets	chartset-013	text	xl/charts/chart11.xml	@scatterStyle_line
+sheets/chartset-014/xlsx/027_Simple_personal_cash_flow_statement_675c6584.xlsx	xlsx	sheets	chartset-014		xl/charts/chart31.xml	c:barChart
+sheets/chartset-014/xlsx/027_Simple_personal_cash_flow_statement_675c6584.xlsx	xlsx	sheets	chartset-014		xl/charts/chart31.xml	@barDir_bar
+sheets/chartset-014/xlsx/027_Simple_personal_cash_flow_statement_675c6584.xlsx	xlsx	sheets	chartset-014		xl/charts/chart22.xml	c:barChart
+sheets/chartset-014/xlsx/027_Simple_personal_cash_flow_statement_675c6584.xlsx	xlsx	sheets	chartset-014		xl/charts/chart22.xml	@barDir_bar
+sheets/chartset-014/xlsx/027_Simple_personal_cash_flow_statement_675c6584.xlsx	xlsx	sheets	chartset-014		xl/charts/chart13.xml	c:barChart
+sheets/chartset-014/xlsx/027_Simple_personal_cash_flow_statement_675c6584.xlsx	xlsx	sheets	chartset-014		xl/charts/chart13.xml	@barDir_bar
+sheets/chartset-014/xlsx/027_Simple_personal_cash_flow_statement_675c6584.xlsx	xlsx	sheets	chartset-014		xl/charts/chart44.xml	c:barChart
+sheets/chartset-014/xlsx/027_Simple_personal_cash_flow_statement_675c6584.xlsx	xlsx	sheets	chartset-014		xl/charts/chart44.xml	@barDir_bar
+sheets/chartset-014/xlsx/038_Baby_growth_chart_bb9cd672.xlsx	xlsx	sheets	chartset-014		xl/charts/chart11.xml	c:barChart
+sheets/chartset-014/xlsx/038_Baby_growth_chart_bb9cd672.xlsx	xlsx	sheets	chartset-014		xl/charts/chart11.xml	c:lineChart
+sheets/chartset-014/xlsx/039_Baby_growth_tracker_e295ae56.xlsx	xlsx	sheets	chartset-014		xl/charts/chart11.xml	c:barChart
+sheets/chartset-014/xlsx/039_Baby_growth_tracker_e295ae56.xlsx	xlsx	sheets	chartset-014		xl/charts/chart11.xml	c:lineChart
+sheets/chartset-014/xlsx/045_Check_register_with_chart_4becb8a0.xlsx	xlsx	sheets	chartset-014	text	xl/charts/chart11.xml	c:barChart
+sheets/chartset-014/xlsx/045_Check_register_with_chart_4becb8a0.xlsx	xlsx	sheets	chartset-014	text	xl/charts/chart11.xml	@barDir_bar
+sheets/chartset-014/xlsx/048_Expense_trends_budget_18d1e8ba.xlsx	xlsx	sheets	chartset-014	text	xl/charts/chart11.xml	c:barChart
+sheets/chartset-014/xlsx/064_Small_business_cash_flow_Use_this_template_0a640756.xlsx	xlsx	sheets	chartset-014	text	xl/charts/chart11.xml	c:barChart
+sheets/chartset-014/xlsx/064_Small_business_cash_flow_Use_this_template_0a640756.xlsx	xlsx	sheets	chartset-014	text	xl/charts/chart11.xml	c:lineChart
+slides/chartset-005/pptx/076_Hexadonut_Charts_for_PowerPoint_and_Google_Slides_2b879835.pptx	pptx	slides	chartset-005	ceiling	ppt/charts/chart1.xml	c:pieChart
+slides/chartset-005/pptx/076_Hexadonut_Charts_for_PowerPoint_and_Google_Slides_2b879835.pptx	pptx	slides	chartset-005	ceiling	ppt/charts/chart2.xml	c:pieChart
+slides/chartset-005/pptx/076_Hexadonut_Charts_for_PowerPoint_and_Google_Slides_2b879835.pptx	pptx	slides	chartset-005	ceiling	ppt/charts/chart3.xml	c:pieChart
+slides/chartset-005/pptx/076_Hexadonut_Charts_for_PowerPoint_and_Google_Slides_2b879835.pptx	pptx	slides	chartset-005	ceiling	ppt/charts/chart4.xml	c:pieChart
+slides/chartset-005/pptx/076_Hexadonut_Charts_for_PowerPoint_and_Google_Slides_2b879835.pptx	pptx	slides	chartset-005	ceiling	ppt/charts/chart5.xml	c:pieChart
+slides/chartset-005/pptx/076_Hexadonut_Charts_for_PowerPoint_and_Google_Slides_2b879835.pptx	pptx	slides	chartset-005	ceiling	ppt/charts/chart6.xml	c:pieChart
+slides/chartset-006/pptx/031_Alarm_Clock_Pie-Chart_for_PowerPoint_and_Google_Slides_0b185a05.pptx	pptx	slides	chartset-006	text	ppt/charts/chart1.xml	c:pieChart
+slides/chartset-006/pptx/031_Alarm_Clock_Pie-Chart_for_PowerPoint_and_Google_Slides_0b185a05.pptx	pptx	slides	chartset-006	text	ppt/charts/chart2.xml	c:pieChart
+slides/chartset-006/pptx/044_Dual_Mind_Spark_Chart_for_PowerPoint_a83f890a.pptx	pptx	slides	chartset-006	ceiling	ppt/charts/chart1.xml	c:barChart
+slides/chartset-006/pptx/044_Dual_Mind_Spark_Chart_for_PowerPoint_a83f890a.pptx	pptx	slides	chartset-006	ceiling	ppt/charts/chart1.xml	@grouping_pctstk
+slides/chartset-006/pptx/044_Dual_Mind_Spark_Chart_for_PowerPoint_a83f890a.pptx	pptx	slides	chartset-006	ceiling	ppt/charts/chart2.xml	c:barChart
+slides/chartset-006/pptx/044_Dual_Mind_Spark_Chart_for_PowerPoint_a83f890a.pptx	pptx	slides	chartset-006	ceiling	ppt/charts/chart2.xml	@grouping_pctstk
+slides/chartset-006/pptx/044_Dual_Mind_Spark_Chart_for_PowerPoint_a83f890a.pptx	pptx	slides	chartset-006	ceiling	ppt/charts/chart3.xml	c:barChart
+slides/chartset-006/pptx/044_Dual_Mind_Spark_Chart_for_PowerPoint_a83f890a.pptx	pptx	slides	chartset-006	ceiling	ppt/charts/chart3.xml	@grouping_pctstk
+slides/chartset-007/pptx/035_Chemistry_Column_PowerPoint_Chart_45bf8a76.pptx	pptx	slides	chartset-007	text	ppt/charts/chart1.xml	c:barChart
+slides/chartset-007/pptx/035_Chemistry_Column_PowerPoint_Chart_45bf8a76.pptx	pptx	slides	chartset-007	text	ppt/charts/chart1.xml	@grouping_pctstk
+slides/chartset-007/pptx/035_Chemistry_Column_PowerPoint_Chart_45bf8a76.pptx	pptx	slides	chartset-007	text	ppt/charts/chart2.xml	c:barChart
+slides/chartset-007/pptx/035_Chemistry_Column_PowerPoint_Chart_45bf8a76.pptx	pptx	slides	chartset-007	text	ppt/charts/chart2.xml	@grouping_pctstk
+slides/chartset-007/pptx/047_Female_Radar_Brain_for_PowerPoint_and_Google_Slides_c2a541f6.pptx	pptx	slides	chartset-007	text	ppt/charts/chart1.xml	c:radarChart
+slides/chartset-007/pptx/047_Female_Radar_Brain_for_PowerPoint_and_Google_Slides_c2a541f6.pptx	pptx	slides	chartset-007	text	ppt/charts/chart1.xml	@radarStyle_filled
+slides/chartset-007/pptx/047_Female_Radar_Brain_for_PowerPoint_and_Google_Slides_c2a541f6.pptx	pptx	slides	chartset-007	text	ppt/charts/chart2.xml	c:radarChart
+slides/chartset-007/pptx/047_Female_Radar_Brain_for_PowerPoint_and_Google_Slides_c2a541f6.pptx	pptx	slides	chartset-007	text	ppt/charts/chart2.xml	@radarStyle_filled
+slides/chartset-007/pptx/096_Lab_Flask_Charts_for_PowerPoint_and_Google_Slides_91e3cbb5.pptx	pptx	slides	chartset-007	ceiling	ppt/charts/chart1.xml	c:barChart
+slides/chartset-007/pptx/096_Lab_Flask_Charts_for_PowerPoint_and_Google_Slides_91e3cbb5.pptx	pptx	slides	chartset-007	ceiling	ppt/charts/chart1.xml	@grouping_pctstk
+slides/chartset-007/pptx/096_Lab_Flask_Charts_for_PowerPoint_and_Google_Slides_91e3cbb5.pptx	pptx	slides	chartset-007	ceiling	ppt/charts/chart2.xml	c:barChart
+slides/chartset-007/pptx/096_Lab_Flask_Charts_for_PowerPoint_and_Google_Slides_91e3cbb5.pptx	pptx	slides	chartset-007	ceiling	ppt/charts/chart2.xml	@grouping_pctstk
+slides/chartset-007/pptx/096_Lab_Flask_Charts_for_PowerPoint_and_Google_Slides_91e3cbb5.pptx	pptx	slides	chartset-007	ceiling	ppt/charts/chart3.xml	c:barChart
+slides/chartset-007/pptx/096_Lab_Flask_Charts_for_PowerPoint_and_Google_Slides_91e3cbb5.pptx	pptx	slides	chartset-007	ceiling	ppt/charts/chart3.xml	@grouping_pctstk
+slides/chartset-007/pptx/096_Lab_Flask_Charts_for_PowerPoint_and_Google_Slides_91e3cbb5.pptx	pptx	slides	chartset-007	ceiling	ppt/charts/chart5.xml	c:barChart
+slides/chartset-007/pptx/096_Lab_Flask_Charts_for_PowerPoint_and_Google_Slides_91e3cbb5.pptx	pptx	slides	chartset-007	ceiling	ppt/charts/chart5.xml	@grouping_pctstk
+slides/chartset-007/pptx/096_Lab_Flask_Charts_for_PowerPoint_and_Google_Slides_91e3cbb5.pptx	pptx	slides	chartset-007	ceiling	ppt/charts/chart4.xml	c:barChart
+slides/chartset-007/pptx/096_Lab_Flask_Charts_for_PowerPoint_and_Google_Slides_91e3cbb5.pptx	pptx	slides	chartset-007	ceiling	ppt/charts/chart4.xml	@grouping_pctstk
+slides/chartset-007/pptx/096_Lab_Flask_Charts_for_PowerPoint_and_Google_Slides_91e3cbb5.pptx	pptx	slides	chartset-007	ceiling	ppt/charts/chart6.xml	c:barChart
+slides/chartset-007/pptx/096_Lab_Flask_Charts_for_PowerPoint_and_Google_Slides_91e3cbb5.pptx	pptx	slides	chartset-007	ceiling	ppt/charts/chart6.xml	@grouping_pctstk
+slides/chartset-008/pptx/038_Competitive_Advantage_Card_for_PowerPoint_and_Google_Slides_373720f6.pptx	pptx	slides	chartset-008	text	ppt/charts/chart1.xml	c:barChart
+slides/chartset-008/pptx/038_Competitive_Advantage_Card_for_PowerPoint_and_Google_Slides_373720f6.pptx	pptx	slides	chartset-008	text	ppt/charts/chart2.xml	c:barChart
+slides/chartset-008/pptx/072_Gear_Pie_Chart_for_PowerPoint_and_Google_Slides_d464d3a0.pptx	pptx	slides	chartset-008	text	ppt/charts/chart3.xml	c:doughnutChart
+slides/chartset-008/pptx/072_Gear_Pie_Chart_for_PowerPoint_and_Google_Slides_d464d3a0.pptx	pptx	slides	chartset-008	text	ppt/charts/chart3.xml	@holeSize
+slides/chartset-008/pptx/072_Gear_Pie_Chart_for_PowerPoint_and_Google_Slides_d464d3a0.pptx	pptx	slides	chartset-008	text	ppt/charts/chart4.xml	c:doughnutChart
+slides/chartset-008/pptx/072_Gear_Pie_Chart_for_PowerPoint_and_Google_Slides_d464d3a0.pptx	pptx	slides	chartset-008	text	ppt/charts/chart4.xml	@holeSize
+slides/chartset-008/pptx/072_Gear_Pie_Chart_for_PowerPoint_and_Google_Slides_d464d3a0.pptx	pptx	slides	chartset-008	text	ppt/charts/chart5.xml	c:doughnutChart
+slides/chartset-008/pptx/072_Gear_Pie_Chart_for_PowerPoint_and_Google_Slides_d464d3a0.pptx	pptx	slides	chartset-008	text	ppt/charts/chart5.xml	@holeSize
+slides/chartset-008/pptx/072_Gear_Pie_Chart_for_PowerPoint_and_Google_Slides_d464d3a0.pptx	pptx	slides	chartset-008	text	ppt/charts/chart6.xml	c:doughnutChart
+slides/chartset-008/pptx/072_Gear_Pie_Chart_for_PowerPoint_and_Google_Slides_d464d3a0.pptx	pptx	slides	chartset-008	text	ppt/charts/chart6.xml	@holeSize
+slides/chartset-008/pptx/072_Gear_Pie_Chart_for_PowerPoint_and_Google_Slides_d464d3a0.pptx	pptx	slides	chartset-008	text	ppt/charts/chart1.xml	c:doughnutChart
+slides/chartset-008/pptx/072_Gear_Pie_Chart_for_PowerPoint_and_Google_Slides_d464d3a0.pptx	pptx	slides	chartset-008	text	ppt/charts/chart1.xml	@holeSize
+slides/chartset-008/pptx/072_Gear_Pie_Chart_for_PowerPoint_and_Google_Slides_d464d3a0.pptx	pptx	slides	chartset-008	text	ppt/charts/chart2.xml	c:doughnutChart
+slides/chartset-008/pptx/072_Gear_Pie_Chart_for_PowerPoint_and_Google_Slides_d464d3a0.pptx	pptx	slides	chartset-008	text	ppt/charts/chart2.xml	@holeSize
+slides/chartset-008/pptx/100_Lime_and_Lemon_Data-Driven_Chart_for_PowerPoint_d7bb4a44.pptx	pptx	slides	chartset-008	text	ppt/charts/chart1.xml	c:pieChart
+slides/chartset-008/pptx/100_Lime_and_Lemon_Data-Driven_Chart_for_PowerPoint_d7bb4a44.pptx	pptx	slides	chartset-008	text	ppt/charts/chart2.xml	c:pieChart
+slides/chartset-008/pptx/100_Lime_and_Lemon_Data-Driven_Chart_for_PowerPoint_d7bb4a44.pptx	pptx	slides	chartset-008	text	ppt/charts/chart4.xml	c:pieChart
+slides/chartset-008/pptx/100_Lime_and_Lemon_Data-Driven_Chart_for_PowerPoint_d7bb4a44.pptx	pptx	slides	chartset-008	text	ppt/charts/chart3.xml	c:pieChart
+slides/chartset-008/pptx/100_Lime_and_Lemon_Data-Driven_Chart_for_PowerPoint_d7bb4a44.pptx	pptx	slides	chartset-008	text	ppt/charts/chart6.xml	c:pieChart
+slides/chartset-008/pptx/100_Lime_and_Lemon_Data-Driven_Chart_for_PowerPoint_d7bb4a44.pptx	pptx	slides	chartset-008	text	ppt/charts/chart5.xml	c:pieChart
+slides/chartset-009/pptx/033_Battery_Percentage_Chart_c99c24b5.pptx	pptx	slides	chartset-009	ceiling	ppt/charts/chart1.xml	c:barChart
+slides/chartset-009/pptx/033_Battery_Percentage_Chart_c99c24b5.pptx	pptx	slides	chartset-009	ceiling	ppt/charts/chart1.xml	@grouping_pctstk
+slides/chartset-009/pptx/033_Battery_Percentage_Chart_c99c24b5.pptx	pptx	slides	chartset-009	ceiling	ppt/charts/chart2.xml	c:barChart
+slides/chartset-009/pptx/033_Battery_Percentage_Chart_c99c24b5.pptx	pptx	slides	chartset-009	ceiling	ppt/charts/chart2.xml	@grouping_pctstk
+slides/chartset-009/pptx/033_Battery_Percentage_Chart_c99c24b5.pptx	pptx	slides	chartset-009	ceiling	ppt/charts/chart3.xml	c:barChart
+slides/chartset-009/pptx/033_Battery_Percentage_Chart_c99c24b5.pptx	pptx	slides	chartset-009	ceiling	ppt/charts/chart3.xml	@grouping_pctstk
+slides/chartset-009/pptx/033_Battery_Percentage_Chart_c99c24b5.pptx	pptx	slides	chartset-009	ceiling	ppt/charts/chart5.xml	c:barChart
+slides/chartset-009/pptx/033_Battery_Percentage_Chart_c99c24b5.pptx	pptx	slides	chartset-009	ceiling	ppt/charts/chart5.xml	@grouping_pctstk
+slides/chartset-009/pptx/033_Battery_Percentage_Chart_c99c24b5.pptx	pptx	slides	chartset-009	ceiling	ppt/charts/chart4.xml	c:barChart
+slides/chartset-009/pptx/033_Battery_Percentage_Chart_c99c24b5.pptx	pptx	slides	chartset-009	ceiling	ppt/charts/chart4.xml	@grouping_pctstk
+slides/chartset-009/pptx/033_Battery_Percentage_Chart_c99c24b5.pptx	pptx	slides	chartset-009	ceiling	ppt/charts/chart6.xml	c:barChart
+slides/chartset-009/pptx/033_Battery_Percentage_Chart_c99c24b5.pptx	pptx	slides	chartset-009	ceiling	ppt/charts/chart6.xml	@grouping_pctstk
+slides/chartset-009/pptx/052_Flame_Percentage_Chart_d27d49c4.pptx	pptx	slides	chartset-009	ceiling	ppt/charts/chart3.xml	c:barChart
+slides/chartset-009/pptx/052_Flame_Percentage_Chart_d27d49c4.pptx	pptx	slides	chartset-009	ceiling	ppt/charts/chart3.xml	@grouping_pctstk
+slides/chartset-009/pptx/052_Flame_Percentage_Chart_d27d49c4.pptx	pptx	slides	chartset-009	ceiling	ppt/charts/chart4.xml	c:barChart
+slides/chartset-009/pptx/052_Flame_Percentage_Chart_d27d49c4.pptx	pptx	slides	chartset-009	ceiling	ppt/charts/chart4.xml	@grouping_pctstk
+slides/chartset-009/pptx/052_Flame_Percentage_Chart_d27d49c4.pptx	pptx	slides	chartset-009	ceiling	ppt/charts/chart5.xml	c:barChart
+slides/chartset-009/pptx/052_Flame_Percentage_Chart_d27d49c4.pptx	pptx	slides	chartset-009	ceiling	ppt/charts/chart5.xml	@grouping_pctstk
+slides/chartset-009/pptx/052_Flame_Percentage_Chart_d27d49c4.pptx	pptx	slides	chartset-009	ceiling	ppt/charts/chart7.xml	c:barChart
+slides/chartset-009/pptx/052_Flame_Percentage_Chart_d27d49c4.pptx	pptx	slides	chartset-009	ceiling	ppt/charts/chart7.xml	@grouping_pctstk
+slides/chartset-009/pptx/052_Flame_Percentage_Chart_d27d49c4.pptx	pptx	slides	chartset-009	ceiling	ppt/charts/chart8.xml	c:barChart
+slides/chartset-009/pptx/052_Flame_Percentage_Chart_d27d49c4.pptx	pptx	slides	chartset-009	ceiling	ppt/charts/chart8.xml	@grouping_pctstk
+slides/chartset-009/pptx/052_Flame_Percentage_Chart_d27d49c4.pptx	pptx	slides	chartset-009	ceiling	ppt/charts/chart1.xml	c:barChart
+slides/chartset-009/pptx/052_Flame_Percentage_Chart_d27d49c4.pptx	pptx	slides	chartset-009	ceiling	ppt/charts/chart1.xml	@grouping_pctstk
+slides/chartset-009/pptx/052_Flame_Percentage_Chart_d27d49c4.pptx	pptx	slides	chartset-009	ceiling	ppt/charts/chart2.xml	c:barChart
+slides/chartset-009/pptx/052_Flame_Percentage_Chart_d27d49c4.pptx	pptx	slides	chartset-009	ceiling	ppt/charts/chart2.xml	@grouping_pctstk
+slides/chartset-009/pptx/052_Flame_Percentage_Chart_d27d49c4.pptx	pptx	slides	chartset-009	ceiling	ppt/charts/chart6.xml	c:barChart
+slides/chartset-009/pptx/052_Flame_Percentage_Chart_d27d49c4.pptx	pptx	slides	chartset-009	ceiling	ppt/charts/chart6.xml	@grouping_pctstk
+slides/chartset-010/pptx/093_Insightful_Zoom_Chart_22b5464e.pptx	pptx	slides	chartset-010	text	ppt/charts/chart1.xml	c:doughnutChart
+slides/chartset-010/pptx/093_Insightful_Zoom_Chart_22b5464e.pptx	pptx	slides	chartset-010	text	ppt/charts/chart1.xml	@holeSize
+slides/chartset-010/pptx/093_Insightful_Zoom_Chart_22b5464e.pptx	pptx	slides	chartset-010	text	ppt/charts/chart2.xml	c:doughnutChart
+slides/chartset-010/pptx/093_Insightful_Zoom_Chart_22b5464e.pptx	pptx	slides	chartset-010	text	ppt/charts/chart2.xml	@holeSize
+slides/chartset-012/pptx/061_Four-Stage_Serpentine_Chart_05699efe.pptx	pptx	slides	chartset-012	text	ppt/charts/chart3.xml	c:pieChart
+slides/chartset-012/pptx/061_Four-Stage_Serpentine_Chart_05699efe.pptx	pptx	slides	chartset-012	text	ppt/charts/chart4.xml	c:pieChart
+slides/chartset-012/pptx/061_Four-Stage_Serpentine_Chart_05699efe.pptx	pptx	slides	chartset-012	text	ppt/charts/chart5.xml	c:pieChart
+slides/chartset-012/pptx/061_Four-Stage_Serpentine_Chart_05699efe.pptx	pptx	slides	chartset-012	text	ppt/charts/chart6.xml	c:pieChart
+slides/chartset-012/pptx/061_Four-Stage_Serpentine_Chart_05699efe.pptx	pptx	slides	chartset-012	text	ppt/charts/chart7.xml	c:pieChart
+slides/chartset-012/pptx/061_Four-Stage_Serpentine_Chart_05699efe.pptx	pptx	slides	chartset-012	text	ppt/charts/chart8.xml	c:pieChart
+slides/chartset-012/pptx/061_Four-Stage_Serpentine_Chart_05699efe.pptx	pptx	slides	chartset-012	text	ppt/charts/chart1.xml	c:pieChart
+slides/chartset-012/pptx/061_Four-Stage_Serpentine_Chart_05699efe.pptx	pptx	slides	chartset-012	text	ppt/charts/chart2.xml	c:pieChart

@@ -1,0 +1,41 @@
+26.2.4.2's own rendering of each fixture: coloured text spans and non-white fills, page 1.
+== sheet-cf-blank-cells
+   text y=   71.3 'text'               colour #0000FF
+   text y=   86.1 '   '                colour #9C0006
+   text y=  114.8 '0'                  colour #0000FF
+   text y=  129.7 'x'                  colour #0000FF
+   fill  y=   70.8-   85.7 x=53.8-101.0 #CCE5FF
+   fill  y=   85.7-  114.4 x=53.8-101.0 #FFC7CE
+   fill  y=  114.4-  144.1 x=53.8-101.0 #CCE5FF
+== sheet-cf-contains-text
+   text y=   71.3 'Open'               colour #9C0006
+   text y=   86.1 'Reopened later'     colour #9C0006
+   text y=  101.0 'OPEN'               colour #9C0006
+   text y=  115.9 'Closed'             colour #000000
+   text y=  130.8 '1924'               colour #000000
+   text y=  145.7 'Rope'               colour #9C0006
+   fill  y=   70.8-  115.5 x=53.8-101.0 #FFC7CE
+   fill  y=  145.2-  160.1 x=53.8-101.0 #FFC7CE
+== sheet-cf-duplicate-values
+   text y=   71.3 'alpha'              colour #9C0006
+   text y=   86.1 'alpha'              colour #9C0006
+   text y=  101.0 'ALPHA'              colour #9C0006
+   text y=  115.9 'bravo'              colour #000000
+   text y=  130.8 '7'                  colour #9C0006
+   text y=  145.7 '7'                  colour #9C0006
+   text y=  160.5 '7'                  colour #000000
+   fill  y=   70.8-  115.5 x=53.8-101.0 #FFC7CE
+   fill  y=  130.3-  160.1 x=53.8-101.0 #FFC7CE
+== sheet-cf-ends-with
+   text y=   71.3 'Case Closed'        colour #9C0006
+   text y=   86.1 'Closed case'        colour #000000
+   text y=  101.0 'case CLOSED'        colour #9C0006
+   text y=  115.9 'no'                 colour #000000
+   fill  y=   70.8-   85.7 x=53.8-101.0 #FFC7CE
+   fill  y=  100.6-  115.5 x=53.8-101.0 #FFC7CE
+== sheet-cf-multi-range-anchor
+   text y=   70.1 'hit'                colour #000000
+   text y=   98.8 'miss'               colour #000000
+   text y=   98.8 'three'              colour #000000
+   text y=  127.5 'five'               colour #9C0006
+   fill  y=  127.0-  141.9 x=53.8-101.0 #FFC7CE

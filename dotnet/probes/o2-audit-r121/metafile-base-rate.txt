@@ -1,0 +1,8 @@
+manifest rows           : 947
+documents scanned       : 947
+documents with metafiles: 123
+metafiles found         : 453
+blit records found      : 4149
+documents, paired SRCAND: 8  (blits 200)
+documents, lone   SRCAND: 3  (blits 6)
+metafile-holding docs by extension: [('doc', 8), ('docx', 29), ('ppt', 27), ('pptx', 52), ('xls', 3), ('xlsx', 4)]

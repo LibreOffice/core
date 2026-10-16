@@ -1,0 +1,4 @@
+150-5370-10H.rtf                                           word   266199  first super      at   222775  all ['super']
+
+338 .rtf, 308 state the word, 1 have a caller before it
+  super        1

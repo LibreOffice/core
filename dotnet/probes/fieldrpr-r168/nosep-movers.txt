@@ -1,0 +1,8 @@
+/home/user/sample-files/words/done-002/docx/AUWG min 4-3-24 final.docx
+/home/user/sample-files/words/done-006/docx/technical-memo-format.docx
+/home/user/sample-files/words/done-007/docx/template-technical-report.docx
+/home/user/sample-files/words/done-008/docx/draft-variation-notice-airbus-bm3965ia-v006-vs-comments.docx
+/home/user/sample-files/words/done-010/docx/5709.16 ch.40_mgfinal.docx
+/home/user/sample-files/words/done-012/docx/bulletin.docx
+/home/user/sample-files/words/done-014/docx/1603642410-MoM-CASCOM-06-2020-draft04.docx
+/home/user/sample-files/words/done-014/docx/1_tpr_template__from_fy14_.docx

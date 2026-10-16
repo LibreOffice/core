@@ -1,0 +1,25 @@
+pages compared                             4199  over 163 documents
+  dominant size agrees                     3542
+  differs, within 1% — the mm100 grid      25
+  differs, same sizes cut up differently   137
+  differs, the reference draws far less    61   raster ceiling
+  differs, its size is off the mm100 grid  131   metafile text
+  differs, and neither explains it         303   over 91 documents
+
+worst documents:
+    16  ITE106-Chapter 4__ppt
+    16  2015-Civil-Rights-Website-training__ppt
+    11  RESPA_-_Section_8_Webinar__ppt
+     9  NAS-Infrastructure-Roadmaps-v16.0__pptx
+     9  2014BSA_Sunday_Killion__pptx
+     8  gfopportunitiesforlinkagespres_2010_en__ppt
+     8  ws_prod-g-doc-Events-Part-M-presentation__ppt
+     8  ws_prod-g-doc-Events-r-6.-ESM__ppt
+     8  RRM-training-syllabus-Chapter-3-Teamwork-TC-Towing-Incident-Analysis-Dec-2009__ppt
+     8  Architecture__ppt
+     7  8.16_AOD_FINAL_Provider_Training_Presentation_9_2009__ppt
+     6  ws_prod-g-doc-Events-2007-september-M.017-(French)-France__ppt
+     6  pods05__ppt
+     6  REDAC Briefing_SSIT_CARA_08132014.ppt__pptx
+     6  JesuitAssocOfStudentPersonnel__ppt
+     5  010605Vul__ppt

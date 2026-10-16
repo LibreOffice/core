@@ -1,0 +1,11 @@
+scored 4 movers
+  mean |dx| per span, median over the documents:  10.9861 pt  ->   10.9835 pt   closer 0  further 0  level 4
+  mean |dy| per span, median over the documents:  13.7202 pt  ->   18.3739 pt   closer 2  further 1  level 1
+  page count:        closer on 0, further on 0
+  alphanumerics:     closer on 0, further on 0
+
+    dx bef   dx aft   dy bef   dy aft   refp basep headp   ref an base an head an  document
+    1.5738   1.5686   7.8404  17.1986      3     3     3     1921    1921    1921  P200904290238_0238_51880.doc
+    0.1017   0.1017   0.0116   0.0016      3     3     3     8518    8518    8518  foca_form_1.doc
+   20.3984  20.3984  19.6001  19.5491     31    31    31    61920   62170   62170  150_5300_13_chg12.doc
+   32.5218  32.5218  29.5850  29.4947     78    77    77   116092  119052  119052  150_5300_13_chg10.doc

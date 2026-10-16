@@ -1,0 +1,37 @@
+=== sweep rows: 947 ===
+=== no-render before/after: 0 / 0 ===
+# 4 of 947 moved
+=== movers: 4 ===
+words/done-015/docx/PI-doc.-no.-2E-Technical-Review-Report.docx
+words/done-016/docx/AC-150-5370-10G-updated-201604.docx
+words/pagination-001/docx/ESPN-R - MCF - Manual - Ed1.0 - For Publication.docx
+words/pagination-003/docx/150-5370-10H.docx
+=== distance over the movers ===
+2	1	closer	words/done-015/docx/PI-doc.-no.-2E-Technical-Review-Report.docx
+2	2	same	words/done-016/docx/AC-150-5370-10G-updated-201604.docx
+1	0	closer	words/pagination-001/docx/ESPN-R - MCF - Manual - Ed1.0 - For Publication.docx
+2	1	closer	words/pagination-003/docx/150-5370-10H.docx
+# 4 of 947 moved
+# symmetric difference over those: 7 -> 4
+=== r64's fourteen, after ===
+1	sheets/pagination-001/xlsx/sectors-defense-and-aerospace.xlsx
+0	slides/done-010/pptx/Tax factsheet 2022 (1).pptx
+3	slides/done-013/ppt/2015-Civil-Rights-Website-training.ppt
+2	words/done-009/doc/A380MaenPressRel.doc
+1	words/done-010/doc/f111.doc
+1	words/done-011/doc/AAC-AD-No-2021-01-Boeing-737-8-and-737-9-MAX.doc
+2	words/done-013/doc/1228841571067_2009_TPPT_13__2007_TPPT_102__R-108535759.doc
+1	words/done-013/doc/1257259179492_2007_TPPT_102_Supporting_Doc_2-434003080.doc
+0	words/done-014/doc/300502-Mecenat-Airbus-Simusante_CHU-Amiens-Picardie.doc
+1	words/done-015/docx/PI-doc.-no.-2E-Technical-Review-Report.docx
+2	words/metrics-001/docx/AWR OPS-AOC 044 Statement of Compliance RVSM  Rev 04 01 Feb 2024.docx
+0	words/pagination-001/docx/ESPN-R - MCF - Manual - Ed1.0 - For Publication.docx
+1	words/pagination-002/doc/150_5300_13_chg12.doc
+1	words/pagination-003/docx/150-5370-10H.docx
+# total 16 over 14
+=== page counts on the movers ===
+12	12	words/done-015/docx/PI-doc.-no.-2E-Technical-Review-Report.docx
+696	696	words/done-016/docx/AC-150-5370-10G-updated-201604.docx
+35	35	words/pagination-001/docx/ESPN-R - MCF - Manual - Ed1.0 - For Publication.docx
+727	727	words/pagination-003/docx/150-5370-10H.docx
+=== ANALYSIS-DONE ===

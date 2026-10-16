@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  A hard break in a cell that does not wrap draws a line of its own, and whether it sizes the row
+  is a second question with a different answer.
+
+  The drawing goes through the EditEngine, which splits a multi-paragraph edit cell at every
+  separator whatever the wrap option says, because Calc's ODF filter never puts the engine into
+  single-line mode (ScXMLTableRowCellContext::PushParagraphEnd,
+  sc/source/filter/xml/xmlcelli.cxx:610-636).
+
+  The height is decided by whether the row was recalculated at all, and an ODF sheet recalculates
+  only its first 200 rows: ScXMLTableRowContext::EndElement excludes a block ending past row 200
+  from the recalc ranges whenever its style carries a stored height and the optimal flag,
+  (sc/source/filter/xml/xmlrowi.cxx:218-243, with ScXMLRowImportPropertyMapper::finished at
+  xmlstyli.cxx:245-258 removing CTF_SC_ROWHEIGHT from exactly such a style). Below row 200 the
+  stored height stands however many paragraphs the cell holds, which is why
+  Capability_List_9-14-2022_Dallas_Combined-Aircraft_Manuf_unsorted.ods draws two lines inside
+  rows 26.2.4.2 leaves 14.23 pt tall.
+
+  This file is four rows, so it is on the recalculating side of that boundary.
+  LibreOffice 26.2.4.2's own PDF of it:
+
+    row 1  "one"                          one line at 57.73
+    row 2  "Alpha" / "Bravo" / "Charlie"   three lines at 70.54, 81.74 and 92.94
+    row 3  "three"                        one line at 105.15
+    row 4  "four"                         one line at 117.94
+
+  We draw the three lines where the reference draws them, to 0.03 pt, and give row 2 a single
+  line's height, so our "three" is at 82.90. That half is the open one; see
+  SheetVerbatimCellTextTests.
+-->
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+ xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+ xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+ xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+ xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+ office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+ <office:automatic-styles>
+  <style:style style:name="co1" style:family="table-column">
+   <style:table-column-properties style:column-width="6cm"/>
+  </style:style>
+  <style:style style:name="ro1" style:family="table-row">
+   <style:table-row-properties style:use-optimal-row-height="true"/>
+  </style:style>
+  <style:style style:name="ceFlat" style:family="table-cell">
+   <style:table-cell-properties fo:wrap-option="no-wrap" style:vertical-align="top"/>
+  </style:style>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+    fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"
+    style:print-orientation="portrait"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Default" style:page-layout-name="pm1"/>
+ </office:master-styles>
+ <office:body>
+  <office:spreadsheet>
+   <table:table table:name="Probe">
+    <table:table-column table:style-name="co1" table:number-columns-repeated="2"/>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string"><text:p>one</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell table:style-name="ceFlat" office:value-type="string"><text:p>Alpha
+Bravo
+Charlie</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string"><text:p>three</text:p></table:table-cell>
+    </table:table-row>
+    <table:table-row table:style-name="ro1">
+     <table:table-cell office:value-type="string"><text:p>four</text:p></table:table-cell>
+    </table:table-row>
+   </table:table>
+  </office:spreadsheet>
+ </office:body>
+</office:document>

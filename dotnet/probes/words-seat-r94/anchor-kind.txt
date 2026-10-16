@@ -1,0 +1,38 @@
+023_Unit_Circle_Chart_Circular_Percentage_790f7b75.docx
+     1  other       wrapSquare   -> CAPTURED
+     1  picture     wrapNone     -> not captured
+     1  shape+text  wrapNone     -> not captured
+     1  shape+text  wrapSquare   -> CAPTURED
+021_Unit_Circle_Chart_3D_Pie_Chart_404247ab.docx
+     1  other       wrapTight    -> CAPTURED
+     1  picture     wrapNone     -> not captured
+     1  shape+text  wrapNone     -> not captured
+     1  shape+text  wrapSquare   -> CAPTURED
+027_Unit_Circle_Chart_Graphical_Chart_5462a579.docx
+     1  other       wrapTight    -> CAPTURED
+     1  picture     wrapNone     -> not captured
+     1  shape+text  wrapNone     -> not captured
+     1  shape+text  wrapSquare   -> CAPTURED
+b053-19.docx
+     1  picture     wrapTight    -> CAPTURED
+Case-Study-Heathrow-Airport.docx
+     1  picture     wrapTight    -> CAPTURED
+1603642410-MoM-CASCOM-06-2020-draft04.docx
+     2  picture     wrapNone     -> not captured
+     1  shape+text  wrapSquare   -> CAPTURED
+003_Free_Genogram_Diagram_Template_Easy_Format_60eb6e42.docx
+     1  group       wrapNone     -> not captured
+     1  picture     wrapNone     -> not captured
+     7  shape+text  wrapNone     -> not captured
+     1  shape+text  wrapSquare   -> CAPTURED
+004_Free_Genogram_Diagram_Template_Editable_Format_b82b6152.docx
+     1  picture     wrapNone     -> not captured
+    18  shape       wrapNone     -> not captured
+     5  shape+text  wrapNone     -> not captured
+     1  shape+text  wrapSquare   -> CAPTURED
+008_Free_Genogram_Diagram_Template_Green_and_Yellow_Theme_9017c1a8.docx
+     3  group       wrapNone     -> not captured
+     1  picture     wrapNone     -> not captured
+     2  shape       wrapNone     -> not captured
+     4  shape+text  wrapNone     -> not captured
+     1  shape+text  wrapSquare   -> CAPTURED

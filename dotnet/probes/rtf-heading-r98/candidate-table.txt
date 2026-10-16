@@ -1,0 +1,15 @@
+document                                                    pairs  Normal align  gained                        rendering
+PES-Technical-Report-Template_Jan_2019.rtf                      2  \qj           align,colour,lang             MOVES
+03_Technical_Report_(progress)_template.rtf                     2  \ql           align,colour,lang             -
+231164_SystemDesignDocument.rtf                                 5  \ql           (nothing)                     -
+24-25_FAA_Holdover_Tables.rtf                                   2  \qj           align,colour                  -
+CRIF - SpÃ©cification technique - Socle applicatif.rtf          1  \ql           (nothing)                     -
+EHEST-SMS-Safety-Management-Manual-V2.rtf                       1  \qj           align,colour,lang             -
+FAA 2025-26 Holdover Tables.rtf                                 2  \qj           align,colour                  -
+PAT-047 - Architecture and Detailed Design Assessment.rtf       1  \ql           align,colour,lang             -
+Sample_SQMS_Program.rtf                                         4  \ql           align,colour,lang             -
+final-technical-report-template.rtf                             1  \ql           align,colour,lang             -
+hdss-bulletin-issue-285-25-june-2025.rtf                        4  \ql           (nothing)                     -
+template---tpr-technical-progress-report-with-guidance.rtf      3  \ql           align,colour,lang             -
+
+12 documents, 28 (document, style) pairs, 1 renderings move

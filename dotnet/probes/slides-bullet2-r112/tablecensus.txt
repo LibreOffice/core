@@ -1,0 +1,11 @@
+Thailand17.ppt	groups 8	cells 246	autofit-kind 151
+architecture6.ppt	groups 5	cells 115	autofit-kind 0
+pres_ioc_phuket.ppt	groups 2	cells 34	autofit-kind 13
+outlook_of_nigerian_pension_sector.ppt	groups 1	cells 38	autofit-kind 25
+undp_presentation_revised_17_may.ppt	groups 1	cells 26	autofit-kind 14
+pods05.ppt	groups 4	cells 269	autofit-kind 188
+joint_user_outcomes_michael_fullerton_29.06.12.ppt	groups 1	cells 116	autofit-kind 0
+concepts-surrounding-cloud-computing-carolyn-kranz-and-rich-prem-gb-seattle-2011.ppt	groups 1	cells 30	autofit-kind 0
+iep-amount-frequency-for-webinar.ppt	groups 10	cells 195	autofit-kind 0
+2015-Civil-Rights-Website-training.ppt	groups 1	cells 20	autofit-kind 0
+TOTAL {'documents': 10, 'groups': 34, 'cells': 1089, 'texted': 391}

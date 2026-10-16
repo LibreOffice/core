@@ -1,0 +1,75 @@
+# facts. Measured 2026-09-06
+# 24.2.7.2: /usr/bin/soffice -> LibreOffice 24.2.7.2 420(Build:2)
+# 26.2.4.2: /opt/libreoffice26.2/program/soffice -> LibreOffice 26.2.4.2 0229ac93fcf0d7cbc6376066c6f35021cef002dc
+# ours: /home/user/wt-charttext/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
+# fonts: system /usr/share/fonts; the 26.2 tarball's Latin metric duplicates, its Latin NotoSans/NotoSerif and opens___.ttf are moved aside
+# face: /usr/share/fonts/truetype/liberation/LiberationMono-Regular.ttf, digit advance 0.60009766 em
+
+## fact 1: the digit advance of the value axis labels
+# pen("80") - pen("100"), the quantity SlideChartFaceComparisonTests asserts
+stack	size_pt	pen_100	pen_80	digit_pt	design_pt
+24.2.7.2	10.005	83.703	89.713	6.010	6.004
+26.2.4.2	10.005	83.703	89.542	5.839	6.004
+ours	10.006	40.847	46.687	5.839	6.005
+
+## fact 2: every inter-glyph gap of every value label
+stack	label	size_pt	adjustments	gaps_pt	gaps_px96
+24.2.7.2	20	10.005	[76]	[5.2426]	[6.99]
+24.2.7.2	40	10.005	[76]	[5.2426]	[6.99]
+24.2.7.2	60	10.005	[76]	[5.2426]	[6.99]
+24.2.7.2	80	10.005	[76]	[5.2426]	[6.99]
+24.2.7.2	100	10.005	[76, 0]	[5.2426, 6.003]	[6.99, 8.004]
+24.2.7.2	120	10.005	[76, 0]	[5.2426, 6.003]	[6.99, 8.004]
+24.2.7.2	140	10.005	[76, 0]	[5.2426, 6.003]	[6.99, 8.004]
+24.2.7.2	160	10.005	[76, 0]	[5.2426, 6.003]	[6.99, 8.004]
+24.2.7.2	180	10.005	[76, 0]	[5.2426, 6.003]	[6.99, 8.004]
+26.2.4.2	20	10.005	[16]	[5.8429]	[7.791]
+26.2.4.2	40	10.005	[16]	[5.8429]	[7.791]
+26.2.4.2	60	10.005	[16]	[5.8429]	[7.791]
+26.2.4.2	80	10.005	[16]	[5.8429]	[7.791]
+26.2.4.2	100	10.005	[16, 16]	[5.8429, 5.8429]	[7.791, 7.791]
+26.2.4.2	120	10.005	[16, 16]	[5.8429, 5.8429]	[7.791, 7.791]
+26.2.4.2	140	10.005	[16, 16]	[5.8429, 5.8429]	[7.791, 7.791]
+26.2.4.2	160	10.005	[16, 16]	[5.8429, 5.8429]	[7.791, 7.791]
+26.2.4.2	180	10.005	[16, 16]	[5.8429, 5.8429]	[7.791, 7.791]
+ours	20	10.006	[15]	[5.8537]	[7.805]
+ours	40	10.006	[15]	[5.8537]	[7.805]
+ours	60	10.006	[15]	[5.8537]	[7.805]
+ours	80	10.006	[15]	[5.8537]	[7.805]
+ours	100	10.006	[15, 15]	[5.8537, 5.8537]	[7.805, 7.805]
+ours	120	10.006	[15, 15]	[5.8537, 5.8537]	[7.805, 7.805]
+ours	140	10.006	[15, 15]	[5.8537, 5.8537]	[7.805, 7.805]
+ours	160	10.006	[15, 15]	[5.8537, 5.8537]	[7.805, 7.805]
+ours	180	10.006	[15, 15]	[5.8537, 5.8537]	[7.805, 7.805]
+
+## fact 3: the origins, and whether they move between the binaries
+document	run	24.2.7.2	26.2.4.2	moved_pt
+chart-face-theme-minor.pptx	0	95.722	95.410	-0.312
+chart-face-theme-minor.pptx	20	89.713	89.542	-0.171
+chart-face-theme-minor.pptx	40	89.713	89.542	-0.171
+chart-face-theme-minor.pptx	60	89.713	89.542	-0.171
+chart-face-theme-minor.pptx	80	89.713	89.542	-0.171
+chart-face-theme-minor.pptx	100	83.703	83.703	+0.000
+chart-face-theme-minor.pptx	120	83.703	83.703	+0.000
+chart-face-theme-minor.pptx	140	83.703	83.703	+0.000
+chart-face-theme-minor.pptx	160	83.703	83.703	+0.000
+chart-face-theme-minor.pptx	180	83.703	83.703	+0.000
+tabbed.docx	'Aa'	70.950	70.950	+0.000
+tabbed.docx	'Bb'	106.400	106.400	+0.000
+tabbed.docx	'Cc'	141.850	141.850	+0.000
+tabbed.docx	'Dd'	177.300	177.300	+0.000
+tabbed.docx	'Ee'	70.950	70.950	+0.000
+tabbed.docx	'Ff'	106.400	106.400	+0.000
+tabbed.docx	'Gg'	141.850	141.850	+0.000
+tabbed.docx	'Hh'	177.300	177.300	+0.000
+tabbed.docx	'Ii'	70.950	70.950	+0.000
+tabbed.docx	'Jj'	106.400	106.400	+0.000
+tabbed.docx	'Kk'	141.850	141.850	+0.000
+tabbed.docx	'Ll'	177.300	177.300	+0.000
+# tabbed.docx: 39 runs compared, 4 moved by more than 0.001 pt
+
+## the model: a 96 dpi reference device, and a whole-pixel font height
+stack	size_pt	height_100thmm	px96	rounded	predicted_ratio	measured_ratio
+24.2.7.2	10.005	353	13.342	13	0.97439	0.93651
+26.2.4.2	10.005	353	13.342	13	0.97439	0.97317
+ours	10.006	353	13.342	13	0.97439	0.97484

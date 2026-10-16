@@ -1,0 +1,46 @@
+# ours vs 26.2.4.2 with the family class cleared (var-class00)
+pages 31 vs 31
+  p 2 runs 11/11 sym-diff=2 worst-common-origin-shift=0.41
+  p 3 runs 17/17 sym-diff=2 worst-common-origin-shift=0.41
+  p 5 runs 37/37 sym-diff=2 worst-common-origin-shift=0.41
+  p 6 runs 23/23 sym-diff=4 worst-common-origin-shift=0.41
+  p 7 runs 41/41 sym-diff=4 worst-common-origin-shift=0.81
+  p 8 runs 28/28 sym-diff=2 worst-common-origin-shift=1.33
+  p 9 runs 16/16 sym-diff=2 worst-common-origin-shift=0.41
+  p10 runs 40/40 sym-diff=0 worst-common-origin-shift=0.62
+  p13 runs 18/18 sym-diff=2 worst-common-origin-shift=0.41
+  p14 runs 30/30 sym-diff=12 worst-common-origin-shift=0.41
+  p19 runs 9/9 sym-diff=2 worst-common-origin-shift=0.41
+  p20 runs 19/19 sym-diff=4 worst-common-origin-shift=0.63
+  p21 runs 37/37 sym-diff=0 worst-common-origin-shift=1.60
+  p23 runs 21/21 sym-diff=4 worst-common-origin-shift=0.41
+  p24 runs 35/35 sym-diff=0 worst-common-origin-shift=0.58
+  p26 runs 18/18 sym-diff=2 worst-common-origin-shift=0.41
+  p29 runs 18/18 sym-diff=2 worst-common-origin-shift=0.41
+  p30 runs 23/23 sym-diff=4 worst-common-origin-shift=0.41
+  p31 runs 20/20 sym-diff=2 worst-common-origin-shift=0.41
+pages differing: 19  total run-set symmetric difference: 52
+
+# ours vs 26.2.4.2 as authored
+pages 31 vs 31
+  p 2 runs 11/11 sym-diff=2 worst-common-origin-shift=0.41
+  p 3 runs 17/17 sym-diff=2 worst-common-origin-shift=0.41
+  p 5 runs 37/37 sym-diff=2 worst-common-origin-shift=0.41
+  p 6 runs 23/23 sym-diff=4 worst-common-origin-shift=0.41
+  p 7 runs 41/41 sym-diff=4 worst-common-origin-shift=0.81
+  p 8 runs 28/28 sym-diff=2 worst-common-origin-shift=1.33
+  p 9 runs 16/16 sym-diff=2 worst-common-origin-shift=0.41
+  p10 runs 40/43 sym-diff=37 worst-common-origin-shift=304.48
+  p13 runs 18/18 sym-diff=2 worst-common-origin-shift=0.41
+  p14 runs 30/41 sym-diff=51 worst-common-origin-shift=38.33
+  p19 runs 9/9 sym-diff=2 worst-common-origin-shift=0.41
+  p20 runs 19/19 sym-diff=4 worst-common-origin-shift=0.63
+  p21 runs 37/48 sym-diff=60 worst-common-origin-shift=322.07
+  p23 runs 21/21 sym-diff=4 worst-common-origin-shift=0.41
+  p24 runs 35/29 sym-diff=40 worst-common-origin-shift=12.08
+  p26 runs 18/18 sym-diff=2 worst-common-origin-shift=0.41
+  p27 runs 28/36 sym-diff=40 worst-common-origin-shift=12.08
+  p29 runs 18/18 sym-diff=2 worst-common-origin-shift=0.41
+  p30 runs 23/23 sym-diff=4 worst-common-origin-shift=0.41
+  p31 runs 20/20 sym-diff=2 worst-common-origin-shift=0.41
+pages differing: 20  total run-set symmetric difference: 268

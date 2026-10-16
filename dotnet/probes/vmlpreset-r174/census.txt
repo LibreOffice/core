@@ -1,0 +1,12 @@
+reachable VML shape elements:
+     154  v:rect painted
+     150  v:shape NOT painted unless it is a straight connector
+       6  v:line painted
+       4  v:roundrect painted
+
+v:shape presets:
+      87  _x0000_t32             in 5 documents
+      37  _x0000_t75             in 13 documents
+      15  _x0000_t136            in 5 documents
+       8  _x0000_t202            in 4 documents
+       3  _x0000_t15             in 1 documents

@@ -1,0 +1,25 @@
+documents with a dgm data part: 18 {'slides': 15, 'words': 3}
+total data parts: 38
+total drawing parts: 38  usable: 33  emptied/none: 5
+total baked dsp:sp: 315
+anchors naming the diagram uri: 38
+
+fam	data	drawing	usable	shapes	anchors	path
+slides	1	1	1	6	1	slides/done-001/pptx/Definitions commodity chains.pptx
+slides	1	1	1	2	1	slides/done-002/pptx/medicines_bulletin_february_2023_final.pptx
+slides	3	3	0	0	3	slides/done-004/pptx/ghgp-supply-chain-initiative_20100323_wri.pptx
+slides	5	5	5	32	5	slides/done-006/pptx/Course Selection 2025-26 Current Grade 09.pptx
+slides	5	5	5	28	5	slides/done-006/pptx/Ensemble-pour-l-amelioration-de-la-securite-de-lac-AIRBUS.pptx
+slides	1	1	1	10	1	slides/done-006/pptx/wopanets-innovationdays-06-16.pptx
+slides	2	2	2	25	2	slides/done-008/pptx/G-InvoicingKeithJarboe.pptx
+slides	2	2	2	35	2	slides/done-010/pptx/REDAC Briefing_SSIT_CARA_08132014.ppt.pptx
+slides	3	3	3	27	3	slides/done-010/pptx/Sector_Skills_Insights_Advanced_Manufacturing_summary_slide_pack.pptx
+slides	3	3	3	20	3	slides/done-011/pptx/3492.pptx
+slides	2	2	0	0	2	slides/done-012/pptx/County ACHS Presentaion Webinar 8-16-16 Peg.pptx
+slides	1	1	1	2	1	slides/done-013/pptx/redac-sas-201703-hf-research-division.pptx
+slides	1	1	1	8	1	slides/done-013/pptx/schematicplaymar21.pptx
+slides	1	1	1	8	1	slides/done-014/pptx/schematicplay.pptx
+slides	2	2	2	23	2	slides/missing-001/pptx/NWD-GLA-Community-Outreach-Day-Oct-2025.pptx
+words	1	1	1	9	1	words/chartset-012/docx/024_Unit_Circle_Chart_Colorful_Circles_7c92601e.docx
+words	2	2	2	34	2	words/done-016/docx/SPA-06_mcar_part-6_and_IS_v2.9.docx
+words	2	2	2	46	2	words/done-016/docx/t_TEMPforInvProgs.docx

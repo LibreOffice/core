@@ -1,0 +1,7 @@
+cstyle   width   50.205 pt   right edge  538.705   'Hamburgefonstiv'
+none     width   83.712 pt   right edge  538.712   'Hamburgefonstiv'
+pstyle   width   50.205 pt   right edge  538.705   'Hamburgefonstiv'
+
+cstyle   ratio to the unscaled arm 0.59974
+none     ratio to the unscaled arm 1.00000
+pstyle   ratio to the unscaled arm 0.59974

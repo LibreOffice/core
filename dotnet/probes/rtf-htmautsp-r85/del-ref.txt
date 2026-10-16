@@ -1,0 +1,6 @@
+         probe     A->B     B->C  rule
+       d-empty    38.65    14.65  max
+      d-nocell    62.65    14.65  sum
+     d-nofield    62.65    14.65  sum
+        d-none    62.65    14.65  sum
+      d-nopict    62.65    14.65  sum

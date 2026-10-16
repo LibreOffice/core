@@ -1,0 +1,15 @@
+008_Free_Genogram_Diagram_Template_Green_and_Yellow_Theme_9017c1a8.docx, one attribute
+rewritten per variant, rendered through /opt/libreoffice26.2 (26.2.4.2) and through X-Ray.Office.
+The number is the yMin of the title text box's own text, in PDF points.
+
+variant           26.2.4.2     ours (at 6a6f18d9a + this round)
+orig              134.856937   134.856000
+as-page            83.556937    83.556000
+as-margin         155.556937   155.556000
+as-page-both       83.556937      --
+as-margin-both    155.556937      --
+
+`as-page` and `as-margin` bracket `orig`, and `orig` is neither: it is `as-page` clamped up to the
+body's own top, which is 72.006 pt behind that text's 62.85 pt offset inside its box. The `-both`
+variants reproduce their `mc:Choice` twins exactly, which is the control saying the reference reads
+the DrawingML branch and not the VML fallback.

@@ -1,0 +1,9 @@
+variant	model	drawn	connector_lines	wedge_paths	wedge_centres	plain_rects
+028-pie-nodpt-n3	pie split=2	?129	129	0	0	9
+028-bar-nodpt-n3	bar split=2	?129	129	0	0	9
+028-pie-nodpt-n4	pie split=2	?129	129	0	0	9
+028-bar-nodpt-n4	bar split=2	?129	129	0	0	9
+028-pie-nodpt-n8	pie split=2	?129	129	0	0	9
+028-bar-nodpt-n8	bar split=2	?129	129	0	0	9
+028-pie-nodpt-n16	pie split=2	?297	297	17	17	9
+028-bar-nodpt-n16	bar split=2	?297	297	15	15	9

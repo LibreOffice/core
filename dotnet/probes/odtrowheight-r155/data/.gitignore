@@ -1,0 +1,5 @@
+# Renderings and the converted fixture, reproducible from the scripts beside them.
+ours/
+ref/
+*.fodt
+ours-base/

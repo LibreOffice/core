@@ -1,0 +1,43 @@
+diff --git a/dotnet/src/XRay.Office.Spreadsheets/Layout/SheetHeaderFooter.cs b/dotnet/src/XRay.Office.Spreadsheets/Layout/SheetHeaderFooter.cs
+--- a/dotnet/src/XRay.Office.Spreadsheets/Layout/SheetHeaderFooter.cs
++++ b/dotnet/src/XRay.Office.Spreadsheets/Layout/SheetHeaderFooter.cs
+@@ -385,7 +385,22 @@
+                 continue;
+             }
+ 
++            // **The code letter's case is not significant, and reading it as significant loses
++            // the field.** Calc folds it before its switch —
++            // `if (('a' <= cChar) && (cChar <= 'z')) cChar = (cChar - 'a') + 'A';`, under the
++            // comment "ignore case of token codes" (`HeaderFooterParser::parse`,
++            // `sc/source/filter/oox/pagesettings.cxx:565-567`) — and the BIFF parser does the
++            // same. Only `&B` and `&I` were spelled both ways below, so every other lower-case
++            // code fell through to `default` and was swallowed: `airports_6.xlsx` states
++            // `<oddFooter>Page &p</oddFooter>` and printed a bare "Page" where the reference
++            // prints "Page 2". Measured against 24.2.7.2 on a probe stating `Page &p of &n`,
++            // which the reference renders "Page 1 of 1" and this rendered "Page of".
++            //
++            // The fold cannot disturb the arms that are not letters: `&"`, `&&`, `&\n` and the
++            // digit run that states a point size are all outside `a`-`z`, and the digit arm reads
++            // its span out of `text` rather than out of this variable.
+             char code = text[at + 1];
++            if (code is >= 'a' and <= 'z') code = (char)(code - 'a' + 'A');
+             at += 2;
+ 
+             switch (code)
+@@ -436,7 +451,15 @@
+                     // separately and Calc swallows the second (xihelper.cxx:356-361), because
+                     // its own path field already ends in the file name. A reader that took
+                     // both prints the name twice.
+-                    if (at + 1 < text.Length && text[at] == '&' && text[at + 1] == 'F') at += 2;
++                    //
++                    // Either case of the `F`, which is how Calc spells the same test:
++                    // `(pcChar[2] == 'f') || (pcChar[2] == 'F')` (pagesettings.cxx:600).
++                    if (at + 1 < text.Length && text[at] == '&'
++                        && text[at + 1] is 'F' or 'f')
++                    {
++                        at += 2;
++                    }
++
+                     break;
+                 }
+ 

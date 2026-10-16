@@ -1,0 +1,8 @@
+shape	rules	documents	cells_covered	rules_can_paint	cells_can_paint
+AND(...) of 2-3 comparisons	42	9	37604	41	34916
+bare defined name / bare TRUE	6	1	7866	5	7800
+comparison with a function on one side	21	8	5928	20	3800
+bare function call, no comparison	14	6	3400	14	3400
+boolean arithmetic ((...)*(...))	12	1	1994	12	1994
+contains #REF!	18	3	1901	18	1901
+comparison against a defined name	5	3	1648	5	1648

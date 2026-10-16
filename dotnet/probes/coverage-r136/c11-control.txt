@@ -1,0 +1,4 @@
+document	placements a/b/bank	boxes identical	text identical
+091_Volunteer_Sign_Up_Sheet_Template_Colored	1/1/1	True	True
+A1. EASA Form 2	15/15/15	True	True
+086_Printable_Graph_Paper_Template_Gray_Them	1/1/1	True	True

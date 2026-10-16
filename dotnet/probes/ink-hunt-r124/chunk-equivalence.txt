@@ -1,0 +1,2 @@
+40 pages; whole 40 rows sum 9.7700; chunked 40 rows sum 9.7700
+per-page disagreements: 0 []

@@ -1,0 +1,43 @@
+diff --git a/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8Frames.cs b/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8Frames.cs
+--- a/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8Frames.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Ww8/Ww8Frames.cs
+@@ -88,7 +88,28 @@
+         bool inTableCell = false,
+         bool writtenByWord97 = false)
+     {
+-        if (anchor.Width <= 0 || anchor.Height <= 0) return null;
++        bool isLine = shape?.ShapeType
++            is EscherShapeTypes.Line or EscherShapeTypes.StraightConnector;
++
++        // A rule is a line with no thickness, and Word states it as an FSPA whose two edges coincide:
++        // `150_5300_13_chg8.doc`'s revision change-bars are 25 mso_sptLine shapes, every one of them
++        // 0 twips wide and 360 tall (`xaLeft` = `xaRight` = 10430). Rejecting a rectangle with no area
++        // is right for a box, a picture and a text frame — none of them can be drawn — and wrong for
++        // the one shape whose outline is its box's *diagonal*: PageDrawing strokes a line frame from
++        // (X, Y) to (Right, Bottom), which for a coincident pair of edges is exactly the vertical or
++        // horizontal rule the file asks for. LibreOffice imports them (its flat-ODF export of that
++        // document carries 25 `draw:line` elements with `svg:x1` = `svg:x2`), and we drew none.
++        //
++        // Measured over this lane: 108 of 123 anchors on `AAC-AD-No-2021-01-…`, 25 of 25 on
++        // `150_5300_13_chg8`, 58 of 72 on `chg10`, 18 of 23 on `chg12` and 2 of 2 on the Chinese TSB
++        // are degenerate, and every one of them is shape type 20, `mso_sptLine`.
++        //
++        // Both edges coinciding in *both* axes is still nothing to draw, and a negative extent is a
++        // malformed record rather than a rule.
++        if (anchor.Width < 0 || anchor.Height < 0) return null;
++        if (anchor.Width <= 0 && anchor.Height <= 0) return null;
++        if (!isLine && (anchor.Width <= 0 || anchor.Height <= 0)) return null;
++
+         if (shape is not null && (shape.IsDeleted || shape.Properties.Boolean(EscherPropertyIds.Hidden)))
+         {
+             return null;
+@@ -155,9 +176,6 @@
+         Length lineWidth = Length.FromEmu(
+             lined ? properties.Value(EscherPropertyIds.LineWidth, DefaultLineWidthEmu) : 0);
+ 
+-        bool isLine = shape?.ShapeType
+-            is EscherShapeTypes.Line or EscherShapeTypes.StraightConnector;
+-
+         return new PageFrame
+         {
+             Size = new DocSize(Length.FromTwips(anchor.Width), Length.FromTwips(anchor.Height)),

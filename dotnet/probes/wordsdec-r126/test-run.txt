@@ -1,0 +1,30 @@
+Round 126 test run, at the committed source, projects run individually.
+
+XRay.Office.Core.Tests            Passed!  Failed: 0  Passed:  591  Skipped: 0
+XRay.Office.Containers.Tests      Passed!  Failed: 0  Passed:  109  Skipped: 0
+XRay.Office.Markup.Tests          Passed!  Failed: 0  Passed:  259  Skipped: 0
+XRay.Office.OpenDocument.Tests    Passed!  Failed: 0  Passed:  169  Skipped: 0
+XRay.Office.Rendering.Tests       Passed!  Failed: 0  Passed:  164  Skipped: 0
+XRay.Office.Text.Tests            Passed!  Failed: 0  Passed:  744  Skipped: 0
+XRay.Office.Vector.Tests          Passed!  Failed: 0  Passed:  309  Skipped: 0
+XRay.Office.WordProcessing.Tests  Passed!  Failed: 0  Passed: 1974  Skipped: 0
+XRay.Office.Presentations.Tests   Passed!  Failed: 0  Passed: 1203  Skipped: 0
+XRay.Office.Spreadsheets.Tests    Passed!  Failed: 0  Passed: 1387  Skipped: 0
+XRay.Office.Fidelity.Tests        Failed!  Failed: 10  Passed:  542  Skipped: 0  (9 m 51 s)
+
+Every count was checked against `dotnet test --list-tests` for the same project, and ONE run
+had to be discarded: the first run of XRay.Office.WordProcessing.Tests reported
+
+    Passed!  - Failed: 0, Passed: 1408, Skipped: 0, Total: 1408
+
+against 1974 discovered -- 566 tests silently dropped, zero failures, and a summary line that
+looks entirely normal.  That is exactly CLAUDE.md's "A truncated run reports success", caught by
+the check it prescribes rather than by anything looking wrong.  Two re-runs of the project alone
+both report 1974 of 1974.  (`--list-tests` collapses some theory rows, so it is a LOWER bound:
+Markup runs 259 against 249 listed.  A run BELOW the listing is the signal; above it is normal.)
+
+0 skipped everywhere, so no project covered nothing (CLAUDE.md, 'Before trusting a
+green run').  The ten fidelity failures are the standing set O64's register row records --
+'10 of 552 failed before and the same ten after' -- and are listed in fidelity-failures.txt.
+
+dotnet build XRay.Office.slnx -v q -nologo: 0 Warning(s), 0 Error(s).

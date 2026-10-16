@@ -1,0 +1,316 @@
+            face    pt |  ref asc  ref h |  mod asc  mod h |  our asc  our h | flags
+ Liberation Mono   5.0 |       83    113 |       83    113 |       83    113 | 
+ Liberation Mono   5.5 |       92    125 |       92    125 |       92    125 | 
+ Liberation Mono   6.0 |      100    136 |      100    136 |      100    136 | 
+ Liberation Mono   6.5 |      108    147 |      108    147 |      108    147 | 
+ Liberation Mono   7.0 |      117    159 |      117    159 |      117    159 | 
+ Liberation Mono   7.5 |      125    170 |      125    170 |      125    170 | 
+ Liberation Mono   8.0 |      133    181 |      133    181 |      133    181 | 
+ Liberation Mono   8.5 |      142    193 |      142    193 |      142    193 | 
+ Liberation Mono   9.0 |      150    204 |      150    204 |      150    204 | 
+ Liberation Mono   9.5 |      158    215 |      158    215 |      158    215 | 
+ Liberation Mono  10.0 |      167    227 |      167    227 |      167    227 | 
+ Liberation Mono  10.5 |      175    238 |      175    238 |      175    238 | 
+ Liberation Mono  11.0 |      183    249 |      183    249 |      183    249 | 
+ Liberation Mono  11.5 |      192    261 |      192    261 |      192    261 | 
+ Liberation Mono  12.0 |      200    272 |      200    272 |      200    272 | 
+ Liberation Mono  12.5 |      208    283 |      208    283 |      208    283 | 
+ Liberation Mono  13.0 |      217    295 |      217    295 |      217    295 | 
+ Liberation Mono  13.5 |      225    306 |      225    306 |      225    306 | 
+ Liberation Mono  14.0 |      233    317 |      233    317 |      233    317 | 
+ Liberation Mono  14.5 |      242    329 |      242    329 |      242    329 | 
+ Liberation Mono  15.0 |      250    340 |      250    340 |      250    340 | 
+ Liberation Mono  15.5 |      258    351 |      258    351 |      258    351 | 
+ Liberation Mono  16.0 |      266    363 |      266    363 |      266    363 | 
+ Liberation Mono  16.5 |      275    374 |      275    374 |      275    374 | 
+ Liberation Mono  17.0 |      283    385 |      283    385 |      283    385 | 
+ Liberation Mono  17.5 |      291    397 |      291    397 |      291    397 | 
+ Liberation Mono  18.0 |      300    408 |      300    408 |      300    408 | 
+ Liberation Mono  18.5 |      308    419 |      308    419 |      308    419 | 
+ Liberation Mono  19.0 |      316    431 |      316    431 |      316    431 | 
+ Liberation Mono  19.5 |      325    442 |      325    442 |      325    442 | 
+ Liberation Mono  20.0 |      333    453 |      333    453 |      333    453 | 
+ Liberation Mono  20.5 |      341    465 |      341    465 |      341    465 | 
+ Liberation Mono  21.0 |      350    476 |      350    476 |      350    476 | 
+ Liberation Mono  21.5 |      358    487 |      358    487 |      358    487 | 
+ Liberation Mono  22.0 |      366    499 |      366    499 |      366    499 | 
+ Liberation Mono  22.5 |      375    510 |      375    510 |      375    510 | 
+ Liberation Mono  23.0 |      383    521 |      383    521 |      383    521 | 
+ Liberation Mono  23.5 |      391    533 |      391    533 |      391    533 | 
+ Liberation Mono  24.0 |      400    544 |      400    544 |      400    544 | 
+  Lib Serif Bold   5.0 |       93    115 |       93    115 |       93    115 | 
+  Lib Serif Bold   5.5 |      103    127 |      103    127 |      103    127 | 
+  Lib Serif Bold   6.0 |      112    138 |      112    138 |      112    138 | 
+  Lib Serif Bold   6.5 |      122    150 |      122    150 |      122    150 | 
+  Lib Serif Bold   7.0 |      131    161 |      131    161 |      131    161 | 
+  Lib Serif Bold   7.5 |      140    172 |      140    172 |      140    172 | 
+  Lib Serif Bold   8.0 |      150    184 |      150    184 |      150    184 | 
+  Lib Serif Bold   8.5 |      159    195 |      159    195 |      159    195 | 
+  Lib Serif Bold   9.0 |      168    207 |      168    207 |      168    207 | 
+  Lib Serif Bold   9.5 |      177    219 |      177    219 |      177    219 | 
+  Lib Serif Bold  10.0 |      187    231 |      187    231 |      187    231 | 
+  Lib Serif Bold  10.5 |      196    242 |      196    242 |      196    242 | 
+  Lib Serif Bold  11.0 |      205    253 |      205    253 |      205    253 | 
+  Lib Serif Bold  11.5 |      215    265 |      215    265 |      215    265 | 
+  Lib Serif Bold  12.0 |      224    276 |      224    276 |      224    276 | 
+  Lib Serif Bold  12.5 |      234    288 |      234    288 |      234    288 | 
+  Lib Serif Bold  13.0 |      243    299 |      243    299 |      243    299 | 
+  Lib Serif Bold  13.5 |      253    311 |      253    311 |      253    311 | 
+  Lib Serif Bold  14.0 |      262    322 |      262    322 |      262    322 | 
+  Lib Serif Bold  14.5 |      271    333 |      271    333 |      271    333 | 
+  Lib Serif Bold  15.0 |      280    345 |      280    345 |      280    345 | 
+  Lib Serif Bold  15.5 |      289    356 |      289    356 |      289    356 | 
+  Lib Serif Bold  16.0 |      299    368 |      299    368 |      299    368 | 
+  Lib Serif Bold  16.5 |      308    379 |      308    379 |      308    379 | 
+  Lib Serif Bold  17.0 |      318    392 |      318    392 |      318    392 | 
+  Lib Serif Bold  17.5 |      327    403 |      327    403 |      327    403 | 
+  Lib Serif Bold  18.0 |      336    414 |      336    414 |      336    414 | 
+  Lib Serif Bold  18.5 |      346    426 |      346    426 |      346    426 | 
+  Lib Serif Bold  19.0 |      355    437 |      355    437 |      355    437 | 
+  Lib Serif Bold  19.5 |      365    449 |      365    449 |      365    449 | 
+  Lib Serif Bold  20.0 |      374    460 |      374    460 |      374    460 | 
+  Lib Serif Bold  20.5 |      383    472 |      383    472 |      383    472 | 
+  Lib Serif Bold  21.0 |      392    483 |      392    483 |      392    483 | 
+  Lib Serif Bold  21.5 |      401    494 |      401    494 |      401    494 | 
+  Lib Serif Bold  22.0 |      411    506 |      411    506 |      411    506 | 
+  Lib Serif Bold  22.5 |      420    517 |      420    517 |      420    517 | 
+  Lib Serif Bold  23.0 |      430    529 |      430    529 |      430    529 | 
+  Lib Serif Bold  23.5 |      439    541 |      439    541 |      439    541 | 
+  Lib Serif Bold  24.0 |      448    552 |      448    552 |      448    552 | 
+ Lib Sans Italic   5.0 |       94    115 |       94    115 |       94    115 | 
+ Lib Sans Italic   5.5 |      104    127 |      104    127 |      104    127 | 
+ Lib Sans Italic   6.0 |      113    138 |      113    138 |      113    138 | 
+ Lib Sans Italic   6.5 |      122    149 |      122    149 |      122    149 | 
+ Lib Sans Italic   7.0 |      132    161 |      132    161 |      132    161 | 
+ Lib Sans Italic   7.5 |      141    173 |      141    173 |      141    173 | 
+ Lib Sans Italic   8.0 |      150    184 |      150    184 |      150    184 | 
+ Lib Sans Italic   8.5 |      160    196 |      160    196 |      160    196 | 
+ Lib Sans Italic   9.0 |      169    207 |      169    207 |      169    207 | 
+ Lib Sans Italic   9.5 |      178    218 |      178    218 |      178    218 | 
+ Lib Sans Italic  10.0 |      188    230 |      188    230 |      188    230 | 
+ Lib Sans Italic  10.5 |      197    242 |      197    242 |      197    242 | 
+ Lib Sans Italic  11.0 |      206    253 |      206    253 |      206    253 | 
+ Lib Sans Italic  11.5 |      216    265 |      216    265 |      216    265 | 
+ Lib Sans Italic  12.0 |      225    276 |      225    276 |      225    276 | 
+ Lib Sans Italic  12.5 |      234    287 |      234    287 |      234    287 | 
+ Lib Sans Italic  13.0 |      244    300 |      244    300 |      244    300 | 
+ Lib Sans Italic  13.5 |      254    311 |      254    311 |      254    311 | 
+ Lib Sans Italic  14.0 |      263    322 |      263    322 |      263    322 | 
+ Lib Sans Italic  14.5 |      273    334 |      273    334 |      273    334 | 
+ Lib Sans Italic  15.0 |      282    345 |      282    345 |      282    345 | 
+ Lib Sans Italic  15.5 |      291    356 |      291    356 |      291    356 | 
+ Lib Sans Italic  16.0 |      301    369 |      301    369 |      301    369 | 
+ Lib Sans Italic  16.5 |      310    380 |      310    380 |      310    380 | 
+ Lib Sans Italic  17.0 |      319    391 |      319    391 |      319    391 | 
+ Lib Sans Italic  17.5 |      329    403 |      329    403 |      329    403 | 
+ Lib Sans Italic  18.0 |      338    414 |      338    414 |      338    414 | 
+ Lib Sans Italic  18.5 |      347    425 |      347    425 |      347    425 | 
+ Lib Sans Italic  19.0 |      357    438 |      357    438 |      357    438 | 
+ Lib Sans Italic  19.5 |      366    449 |      366    449 |      366    449 | 
+ Lib Sans Italic  20.0 |      375    460 |      375    460 |      375    460 | 
+ Lib Sans Italic  20.5 |      384    471 |      384    471 |      384    471 | 
+ Lib Sans Italic  21.0 |      394    483 |      394    483 |      394    483 | 
+ Lib Sans Italic  21.5 |      403    495 |      403    495 |      403    495 | 
+ Lib Sans Italic  22.0 |      412    506 |      412    506 |      412    506 | 
+ Lib Sans Italic  22.5 |      422    518 |      422    518 |      422    518 | 
+ Lib Sans Italic  23.0 |      432    529 |      432    529 |      432    529 | 
+ Lib Sans Italic  23.5 |      441    540 |      441    540 |      441    540 | 
+ Lib Sans Italic  24.0 |      451    552 |      451    552 |      451    552 | 
+    Caladea Bold   5.0 |       90    115 |       90    115 |       90    115 | 
+    Caladea Bold   5.5 |       99    127 |       99    127 |       99    127 | 
+    Caladea Bold   6.0 |      108    138 |      108    138 |      108    138 | 
+    Caladea Bold   6.5 |      117    150 |      117    150 |      117    150 | 
+    Caladea Bold   7.0 |      126    161 |      126    161 |      126    161 | 
+    Caladea Bold   7.5 |      135    173 |      135    173 |      135    173 | 
+    Caladea Bold   8.0 |      144    184 |      144    184 |      144    184 | 
+    Caladea Bold   8.5 |      153    196 |      153    196 |      153    196 | 
+    Caladea Bold   9.0 |      162    207 |      162    207 |      162    207 | 
+    Caladea Bold   9.5 |      171    219 |      171    219 |      171    219 | 
+    Caladea Bold  10.0 |      180    230 |      180    230 |      180    230 | 
+    Caladea Bold  10.5 |      189    242 |      189    242 |      189    242 | 
+    Caladea Bold  11.0 |      198    253 |      198    253 |      198    253 | 
+    Caladea Bold  11.5 |      207    265 |      207    265 |      207    265 | 
+    Caladea Bold  12.0 |      216    276 |      216    276 |      216    276 | 
+    Caladea Bold  12.5 |      225    288 |      225    288 |      225    288 | 
+    Caladea Bold  13.0 |      234    299 |      234    299 |      234    299 | 
+    Caladea Bold  13.5 |      243    311 |      243    311 |      243    311 | 
+    Caladea Bold  14.0 |      252    322 |      252    322 |      252    322 | 
+    Caladea Bold  14.5 |      261    334 |      261    334 |      261    334 | 
+    Caladea Bold  15.0 |      270    345 |      270    345 |      270    345 | 
+    Caladea Bold  15.5 |      279    357 |      279    357 |      279    357 | 
+    Caladea Bold  16.0 |      288    368 |      288    368 |      288    368 | 
+    Caladea Bold  16.5 |      297    380 |      297    380 |      297    380 | 
+    Caladea Bold  17.0 |      306    391 |      306    391 |      306    391 | 
+    Caladea Bold  17.5 |      315    403 |      315    403 |      315    403 | 
+    Caladea Bold  18.0 |      324    414 |      324    414 |      324    414 | 
+    Caladea Bold  18.5 |      333    426 |      333    426 |      333    426 | 
+    Caladea Bold  19.0 |      342    437 |      342    437 |      342    437 | 
+    Caladea Bold  19.5 |      351    449 |      351    449 |      351    449 | 
+    Caladea Bold  20.0 |      360    460 |      360    460 |      360    460 | 
+    Caladea Bold  20.5 |      369    472 |      369    472 |      369    472 | 
+    Caladea Bold  21.0 |      378    483 |      378    483 |      378    483 | 
+    Caladea Bold  21.5 |      387    495 |      387    495 |      387    495 | 
+    Caladea Bold  22.0 |      396    506 |      396    506 |      396    506 | 
+    Caladea Bold  22.5 |      405    518 |      405    518 |      405    518 | 
+    Caladea Bold  23.0 |      414    529 |      414    529 |      414    529 | 
+    Caladea Bold  23.5 |      423    541 |      423    541 |      423    541 | 
+    Caladea Bold  24.0 |      432    552 |      432    552 |      432    552 | 
+    DejaVu Serif   5.0 |       93    117 |       93    117 |       93    117 | 
+    DejaVu Serif   5.5 |      102    128 |      102    128 |      102    128 | 
+    DejaVu Serif   6.0 |      111    140 |      111    140 |      111    140 | 
+    DejaVu Serif   6.5 |      121    151 |      121    151 |      121    151 | 
+    DejaVu Serif   7.0 |      130    163 |      130    163 |      130    163 | 
+    DejaVu Serif   7.5 |      139    175 |      139    175 |      139    175 | 
+    DejaVu Serif   8.0 |      149    186 |      149    186 |      149    186 | 
+    DejaVu Serif   8.5 |      158    198 |      158    198 |      158    198 | 
+    DejaVu Serif   9.0 |      167    210 |      167    210 |      167    210 | 
+    DejaVu Serif   9.5 |      176    221 |      176    221 |      176    221 | 
+    DejaVu Serif  10.0 |      186    233 |      186    233 |      186    233 | 
+    DejaVu Serif  10.5 |      195    245 |      195    245 |      195    245 | 
+    DejaVu Serif  11.0 |      204    256 |      204    256 |      204    256 | 
+    DejaVu Serif  11.5 |      214    268 |      214    268 |      214    268 | 
+    DejaVu Serif  12.0 |      223    280 |      223    280 |      223    280 | 
+    DejaVu Serif  12.5 |      232    291 |      232    291 |      232    291 | 
+    DejaVu Serif  13.0 |      241    303 |      241    303 |      241    303 | 
+    DejaVu Serif  13.5 |      251    314 |      251    314 |      251    314 | 
+    DejaVu Serif  14.0 |      260    326 |      260    326 |      260    326 | 
+    DejaVu Serif  14.5 |      269    338 |      269    338 |      269    338 | 
+    DejaVu Serif  15.0 |      279    349 |      279    349 |      279    349 | 
+    DejaVu Serif  15.5 |      288    361 |      288    361 |      288    361 | 
+    DejaVu Serif  16.0 |      297    373 |      297    373 |      297    373 | 
+    DejaVu Serif  16.5 |      306    384 |      306    384 |      306    384 | 
+    DejaVu Serif  17.0 |      316    396 |      316    396 |      316    396 | 
+    DejaVu Serif  17.5 |      325    407 |      325    407 |      325    407 | 
+    DejaVu Serif  18.0 |      334    419 |      334    419 |      334    419 | 
+    DejaVu Serif  18.5 |      344    431 |      344    431 |      344    431 | 
+    DejaVu Serif  19.0 |      353    442 |      353    442 |      353    442 | 
+    DejaVu Serif  19.5 |      362    454 |      362    454 |      362    454 | 
+    DejaVu Serif  20.0 |      371    466 |      371    466 |      371    466 | 
+    DejaVu Serif  20.5 |      381    477 |      381    477 |      381    477 | 
+    DejaVu Serif  21.0 |      390    489 |      390    489 |      390    489 | 
+    DejaVu Serif  21.5 |      399    501 |      399    501 |      399    501 | 
+    DejaVu Serif  22.0 |      409    512 |      409    512 |      409    512 | 
+    DejaVu Serif  22.5 |      418    524 |      418    524 |      418    524 | 
+    DejaVu Serif  23.0 |      427    536 |      427    536 |      427    536 | 
+    DejaVu Serif  23.5 |      436    547 |      436    547 |      436    547 | 
+    DejaVu Serif  24.0 |      446    559 |      446    559 |      446    559 | 
+DejaVu Sans Mono   5.0 |       93    117 |       93    117 |       93    117 | 
+DejaVu Sans Mono   5.5 |      102    128 |      102    128 |      102    128 | 
+DejaVu Sans Mono   6.0 |      111    140 |      111    140 |      111    140 | 
+DejaVu Sans Mono   6.5 |      121    151 |      121    151 |      121    151 | 
+DejaVu Sans Mono   7.0 |      130    163 |      130    163 |      130    163 | 
+DejaVu Sans Mono   7.5 |      139    175 |      139    175 |      139    175 | 
+DejaVu Sans Mono   8.0 |      149    186 |      149    186 |      149    186 | 
+DejaVu Sans Mono   8.5 |      158    198 |      158    198 |      158    198 | 
+DejaVu Sans Mono   9.0 |      167    210 |      167    210 |      167    210 | 
+DejaVu Sans Mono   9.5 |      176    221 |      176    221 |      176    221 | 
+DejaVu Sans Mono  10.0 |      186    233 |      186    233 |      186    233 | 
+DejaVu Sans Mono  10.5 |      195    245 |      195    245 |      195    245 | 
+DejaVu Sans Mono  11.0 |      204    256 |      204    256 |      204    256 | 
+DejaVu Sans Mono  11.5 |      214    268 |      214    268 |      214    268 | 
+DejaVu Sans Mono  12.0 |      223    280 |      223    280 |      223    280 | 
+DejaVu Sans Mono  12.5 |      232    291 |      232    291 |      232    291 | 
+DejaVu Sans Mono  13.0 |      241    303 |      241    303 |      241    303 | 
+DejaVu Sans Mono  13.5 |      251    314 |      251    314 |      251    314 | 
+DejaVu Sans Mono  14.0 |      260    326 |      260    326 |      260    326 | 
+DejaVu Sans Mono  14.5 |      269    338 |      269    338 |      269    338 | 
+DejaVu Sans Mono  15.0 |      279    349 |      279    349 |      279    349 | 
+DejaVu Sans Mono  15.5 |      288    361 |      288    361 |      288    361 | 
+DejaVu Sans Mono  16.0 |      297    373 |      297    373 |      297    373 | 
+DejaVu Sans Mono  16.5 |      306    384 |      306    384 |      306    384 | 
+DejaVu Sans Mono  17.0 |      316    396 |      316    396 |      316    396 | 
+DejaVu Sans Mono  17.5 |      325    407 |      325    407 |      325    407 | 
+DejaVu Sans Mono  18.0 |      334    419 |      334    419 |      334    419 | 
+DejaVu Sans Mono  18.5 |      344    431 |      344    431 |      344    431 | 
+DejaVu Sans Mono  19.0 |      353    442 |      353    442 |      353    442 | 
+DejaVu Sans Mono  19.5 |      362    454 |      362    454 |      362    454 | 
+DejaVu Sans Mono  20.0 |      371    466 |      371    466 |      371    466 | 
+DejaVu Sans Mono  20.5 |      381    477 |      381    477 |      381    477 | 
+DejaVu Sans Mono  21.0 |      390    489 |      390    489 |      390    489 | 
+DejaVu Sans Mono  21.5 |      399    501 |      399    501 |      399    501 | 
+DejaVu Sans Mono  22.0 |      409    512 |      409    512 |      409    512 | 
+DejaVu Sans Mono  22.5 |      418    524 |      418    524 |      418    524 | 
+DejaVu Sans Mono  23.0 |      427    536 |      427    536 |      427    536 | 
+DejaVu Sans Mono  23.5 |      436    547 |      436    547 |      436    547 | 
+DejaVu Sans Mono  24.0 |      446    559 |      446    559 |      446    559 | 
+       IPAGothic   5.0 |      111    127 |       88    100 |       88    100 | ASC-23 H-27 ourASC ourH
+       IPAGothic   5.5 |      123    139 |       97    110 |       97    110 | ASC-26 H-29 ourASC ourH
+       IPAGothic   6.0 |      134    152 |      106    120 |      106    120 | ASC-28 H-32 ourASC ourH
+       IPAGothic   6.5 |      144    165 |      114    130 |      114    130 | ASC-30 H-35 ourASC ourH
+       IPAGothic   7.0 |      156    177 |      123    140 |      123    140 | ASC-33 H-37 ourASC ourH
+       IPAGothic   7.5 |      167    190 |      132    150 |      132    150 | ASC-35 H-40 ourASC ourH
+       IPAGothic   8.0 |      179    203 |      141    160 |      141    160 | ASC-38 H-43 ourASC ourH
+       IPAGothic   8.5 |      190    215 |      150    170 |      150    170 | ASC-40 H-45 ourASC ourH
+       IPAGothic   9.0 |      200    228 |      158    180 |      158    180 | ASC-42 H-48 ourASC ourH
+       IPAGothic   9.5 |      212    241 |      167    190 |      167    190 | ASC-45 H-51 ourASC ourH
+       IPAGothic  10.0 |      223    254 |      176    200 |      176    200 | ASC-47 H-54 ourASC ourH
+       IPAGothic  10.5 |      234    266 |      185    210 |      185    210 | ASC-49 H-56 ourASC ourH
+       IPAGothic  11.0 |      246    279 |      194    220 |      194    220 | ASC-52 H-59 ourASC ourH
+       IPAGothic  11.5 |      256    292 |      202    230 |      202    230 | ASC-54 H-62 ourASC ourH
+       IPAGothic  12.0 |      267    304 |      211    240 |      211    240 | ASC-56 H-64 ourASC ourH
+       IPAGothic  12.5 |      279    317 |      220    250 |      220    250 | ASC-59 H-67 ourASC ourH
+       IPAGothic  13.0 |      290    330 |      229    260 |      229    260 | ASC-61 H-70 ourASC ourH
+       IPAGothic  13.5 |      302    342 |      238    270 |      238    270 | ASC-64 H-72 ourASC ourH
+       IPAGothic  14.0 |      312    355 |      246    280 |      246    280 | ASC-66 H-75 ourASC ourH
+       IPAGothic  14.5 |      323    368 |      255    290 |      255    290 | ASC-68 H-78 ourASC ourH
+       IPAGothic  15.0 |      335    381 |      264    300 |      264    300 | ASC-71 H-81 ourASC ourH
+       IPAGothic  15.5 |      346    393 |      273    310 |      273    310 | ASC-73 H-83 ourASC ourH
+       IPAGothic  16.0 |      358    406 |      282    320 |      282    320 | ASC-76 H-86 ourASC ourH
+       IPAGothic  16.5 |      368    419 |      290    330 |      290    330 | ASC-78 H-89 ourASC ourH
+       IPAGothic  17.0 |      379    431 |      299    340 |      299    340 | ASC-80 H-91 ourASC ourH
+       IPAGothic  17.5 |      391    444 |      308    350 |      308    350 | ASC-83 H-94 ourASC ourH
+       IPAGothic  18.0 |      402    457 |      317    360 |      317    360 | ASC-85 H-97 ourASC ourH
+       IPAGothic  18.5 |      414    469 |      326    370 |      326    370 | ASC-88 H-99 ourASC ourH
+       IPAGothic  19.0 |      424    482 |      334    380 |      334    380 | ASC-90 H-102 ourASC ourH
+       IPAGothic  19.5 |      435    495 |      343    390 |      343    390 | ASC-92 H-105 ourASC ourH
+       IPAGothic  20.0 |      447    508 |      352    400 |      352    400 | ASC-95 H-108 ourASC ourH
+       IPAGothic  20.5 |      458    520 |      361    410 |      361    410 | ASC-97 H-110 ourASC ourH
+       IPAGothic  21.0 |      469    533 |      370    420 |      370    420 | ASC-99 H-113 ourASC ourH
+       IPAGothic  21.5 |      480    546 |      378    430 |      378    430 | ASC-102 H-116 ourASC ourH
+       IPAGothic  22.0 |      491    558 |      387    440 |      387    440 | ASC-104 H-118 ourASC ourH
+       IPAGothic  22.5 |      502    571 |      396    450 |      396    450 | ASC-106 H-121 ourASC ourH
+       IPAGothic  23.0 |      514    584 |      405    460 |      405    460 | ASC-109 H-124 ourASC ourH
+       IPAGothic  23.5 |      525    596 |      414    470 |      414    470 | ASC-111 H-126 ourASC ourH
+       IPAGothic  24.0 |      535    609 |      422    480 |      422    480 | ASC-113 H-129 ourASC ourH
+
+MODEL: line height 234/273 exact, ascent 234/273 exact
+TREE:  line height 234/273 exact, ascent 234/273 exact
+  miss ('IPAGothic', 5.0, 111, 127, 88, 100)
+  miss ('IPAGothic', 5.5, 123, 139, 97, 110)
+  miss ('IPAGothic', 6.0, 134, 152, 106, 120)
+  miss ('IPAGothic', 6.5, 144, 165, 114, 130)
+  miss ('IPAGothic', 7.0, 156, 177, 123, 140)
+  miss ('IPAGothic', 7.5, 167, 190, 132, 150)
+  miss ('IPAGothic', 8.0, 179, 203, 141, 160)
+  miss ('IPAGothic', 8.5, 190, 215, 150, 170)
+  miss ('IPAGothic', 9.0, 200, 228, 158, 180)
+  miss ('IPAGothic', 9.5, 212, 241, 167, 190)
+  miss ('IPAGothic', 10.0, 223, 254, 176, 200)
+  miss ('IPAGothic', 10.5, 234, 266, 185, 210)
+  miss ('IPAGothic', 11.0, 246, 279, 194, 220)
+  miss ('IPAGothic', 11.5, 256, 292, 202, 230)
+  miss ('IPAGothic', 12.0, 267, 304, 211, 240)
+  miss ('IPAGothic', 12.5, 279, 317, 220, 250)
+  miss ('IPAGothic', 13.0, 290, 330, 229, 260)
+  miss ('IPAGothic', 13.5, 302, 342, 238, 270)
+  miss ('IPAGothic', 14.0, 312, 355, 246, 280)
+  miss ('IPAGothic', 14.5, 323, 368, 255, 290)
+  miss ('IPAGothic', 15.0, 335, 381, 264, 300)
+  miss ('IPAGothic', 15.5, 346, 393, 273, 310)
+  miss ('IPAGothic', 16.0, 358, 406, 282, 320)
+  miss ('IPAGothic', 16.5, 368, 419, 290, 330)
+  miss ('IPAGothic', 17.0, 379, 431, 299, 340)
+  miss ('IPAGothic', 17.5, 391, 444, 308, 350)
+  miss ('IPAGothic', 18.0, 402, 457, 317, 360)
+  miss ('IPAGothic', 18.5, 414, 469, 326, 370)
+  miss ('IPAGothic', 19.0, 424, 482, 334, 380)
+  miss ('IPAGothic', 19.5, 435, 495, 343, 390)
+  miss ('IPAGothic', 20.0, 447, 508, 352, 400)
+  miss ('IPAGothic', 20.5, 458, 520, 361, 410)
+  miss ('IPAGothic', 21.0, 469, 533, 370, 420)
+  miss ('IPAGothic', 21.5, 480, 546, 378, 430)
+  miss ('IPAGothic', 22.0, 491, 558, 387, 440)
+  miss ('IPAGothic', 22.5, 502, 571, 396, 450)
+  miss ('IPAGothic', 23.0, 514, 584, 405, 460)
+  miss ('IPAGothic', 23.5, 525, 596, 414, 470)
+  miss ('IPAGothic', 24.0, 535, 609, 422, 480)

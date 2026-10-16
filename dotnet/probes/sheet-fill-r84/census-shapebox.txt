@@ -1,0 +1,12 @@
+== shapebox
+shapes           644 shapes in  49 documents
+xdr:style        583 shapes in  36 documents
+a:ln             454 shapes in  46 documents
+fill             421 shapes in  32 documents
+line-noFill      233 shapes in   0 documents
+line             205 shapes in  21 documents
+noFill            29 shapes in   9 documents
+
+presets: [('rect', 206), ('roundRect', 106), ('round1Rect', 28), ('ellipse', 24), ('star5', 22), ('smileyFace', 22), ('heart', 22), ('cloud', 22), ('pie', 22), ('sun', 22), ('lightningBolt', 22), ('irregularSeal1', 22), ('verticalScroll', 22), ('flowChartDelay', 15), ('round2SameRect', 7), ('diamond', 6), ('pentagon', 6), ('snip2DiagRect', 6), ('triangle', 4), ('hexagon', 4), ('plus', 4), ('homePlate', 4), ('snip1Rect', 3), ('accentCallout1', 3), ('trapezoid', 2), ('parallelogram', 2), ('octagon', 2), ('rightBrace', 1)]
+colour references: [('fill:sysClr', 242), ('line:schemeClr', 181), ('fill:schemeClr', 151), ('fill:prstClr', 19), ('line:prstClr', 19), ('fill:srgbClr', 9), ('line:sysClr', 4), ('line:srgbClr', 1)]
+

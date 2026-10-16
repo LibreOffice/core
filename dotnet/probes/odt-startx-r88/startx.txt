@@ -1,0 +1,13 @@
+  matched b/a mean|dx| before     after  within .1pt  unique mean|dx| unique   document
+    45/45              21.259     8.746     0/1            5           0.117   022_Unit_Circle_Chart_Circle_A_and_B_19dbf275_  BETTER
+  1016/1338            20.603    15.249   337/548        913          16.049   150_5300_13_chg10__odt.pdf  BETTER
+   520/664             17.598    21.333   169/190        447          20.078   150_5300_13_chg12__odt.pdf  WORSE
+   302/374              9.584     9.103    73/109        227           6.205   150_5300_13_chg8__odt.pdf  BETTER
+    21/54              65.541    10.023     0/8           52          10.227   644730BRI0mna000BOX361539B00public0__odt.pdf  BETTER
+   985/1080            45.947     0.566   485/544        744           0.756   ABCD-SDE-23-00 - Avionic System Description -   BETTER
+  6592/6592             0.101     0.101  3513/3513      3228           0.101   Annex-10-to-the-Aircraft-Maintenance-Specialis
+   105/162             33.825     2.272    42/61         120           0.240   JEMIT_Template__odt.pdf  BETTER
+   166/162              0.228     9.110   125/117        152           9.703   absrc-pac-01-info-note-en__odt.pdf  WORSE
+    94/99               0.100     5.551    94/97          95           5.780   mde087077~283__odt.pdf  WORSE
+    50/47               3.967    16.374    20/11          46          16.728   手机免提系统TSB__odt.pdf  WORSE
+TOTAL matched 9896/10617  mean |dx| before 8.593 pt after 4.083 pt  within 0.1 pt 4858 -> 5199

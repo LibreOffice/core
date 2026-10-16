@@ -1,0 +1,44 @@
+documents compared page-for-page: 129  pages: 13872
+
+[all distinct lines]  closer 11924   unchanged 1872   further 76
+   pages exactly equal to the reference: before 1567 -> after 12422  (of 13872)
+   totals: before 2761996  after 350206  reference 364637
+
+[distinct lines, shared (width,colour) classes only]  closer 9463   unchanged 4408   further 1
+   pages exactly equal to the reference: before 4122 -> after 13498  (of 13872)
+   totals: before 1281082  after 221502  reference 227067
+
+   pages further, by document:
+          1 6f9e605c-fded-11e3-bd0e-00144feab7de__xls.pdf
+
+   after, shared classes: pages under the reference 314, over it 60
+   under (we merge more):
+        194 environment-edb-docs-edb-emissions-databank__xls.pdf
+         17 airports_6__xlsx.pdf
+         16 6f9e605c-fded-11e3-bd0e-00144feab7de__xls.pdf
+         16 NAARMO_Mexico_RVSM_Approvals__xlsx.pdf
+         15 TOGAF9-Tool-ConfReqts-CSQ__xls.pdf
+         10 SLSA_Directory_031423__xlsx.pdf
+          9 Application_for_authorisation_as_crowdfunding_service_provider__xlsx.pdf
+          6 4-12-Kings-Attachment-13-Application-Architecture-Security-Requirements__xls.pdf
+   over (we merge less):
+         34 Aircraft_Database__xlsx.pdf
+          5 Application_Compliance_Checklist_5_Apr_2021__xlsx.pdf
+          4 links-2026__xlsx.pdf
+          3 Application_for_authorisation_as_crowdfunding_service_provider__xlsx.pdf
+          3 RegChangeReport__xlsx.pdf
+          3 afn-afn-20250801-fy25-jan25-mar25__xlsx.pdf
+          2 Template Pilot Logbook JAR-FCL V3.0__xls.pdf
+          1 114339-PROP-P127508-PUBLIC-PPCRNARCPPforPublication__xlsx.pdf
+
+[overhang double-ink]  changed on 10760 pages; toward reference 10555; away 205
+   totals: before 1789135 pt  after 459213 pt  reference 703617 pt
+   pages with zero overhang: before 2920  after 12869  reference 12567
+      away:    78 ECA Sinters__xls.pdf
+      away:    36 cy01_state__xls.pdf
+      away:    17 airports_6__xlsx.pdf
+      away:    16 NAARMO_Mexico_RVSM_Approvals__xlsx.pdf
+      away:    10 SLSA_Directory_031423__xlsx.pdf
+      away:     9 EHEST-Pre-departure-checklist-Rev.-1-06-12-2016__xls.pdf
+      away:     8 TOGAF9-Tool-ConfReqts-CSQ__xls.pdf
+      away:     6 4-12-Kings-Attachment-13-Application-Architecture-Security-Requirements__xls.pdf

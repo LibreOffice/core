@@ -1,0 +1,14 @@
+rows in both       307
+excluded (failed)  0
+comparable         307
+  match before     274
+  match after      278
+
+GAINED 4
+    done-006/ods/Hazard Analysis Template.ods	pages,words -> match	pages 2/3 -> 3/3	glyphs 2131/3313 -> 3309/3313
+    done-007/ods/hdss-bulletin-index-2019-2022.ods	pages -> match	pages 21/24 -> 24/24	glyphs 18383/18407 -> 18407/18407
+    done-010/ods/RMP 2011-2014 and Inventory.ods	pages -> match	pages 36/38 -> 38/38	glyphs 97952/98381 -> 98381/98381
+    done-010/ods/Special-Procedures_2025-07-10.ods	pages -> match	pages 21/22 -> 22/22	glyphs 153843/153843 -> 153843/153843
+LOST 0
+MOVED-BUT-SAME-VERDICT 1
+    done-007/ods/ecopy of 2016 statistical bulletin_public finance statistics_final.ods	pages 17/17 -> 17/17	glyphs 25548/25548 -> 25548/25548

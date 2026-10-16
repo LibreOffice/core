@@ -1,0 +1,28 @@
+alle einzeln.xlsx	Pivot	pivotTable1.xml	ref=A4:I1013	border=0 bold=0 aligned=0 indented=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	Summary	pivotTable1.xml	ref=A3:B22	border=0 bold=0 aligned=19 indented=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	Literature Mapping	pivotTable2.xml	ref=A3:B16	border=0 bold=0 aligned=13 indented=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	SABSA Skills Mapping	pivotTable3.xml	ref=A3:B15	border=0 bold=0 aligned=12 indented=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Skills Mapping	pivotTable4.xml	ref=A3:B13	border=0 bold=0 aligned=10 indented=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping EA	pivotTable5.xml	ref=A4:B17	border=0 bold=0 aligned=13 indented=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping ESA	pivotTable6.xml	ref=A4:B21	border=0 bold=0 aligned=17 indented=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping BA	pivotTable7.xml	ref=A4:B13	border=0 bold=0 aligned=9 indented=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping SA	pivotTable8.xml	ref=A4:B13	border=0 bold=0 aligned=9 indented=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping AA	pivotTable9.xml	ref=A4:B16	border=0 bold=0 aligned=12 indented=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping DA	pivotTable10.xml	ref=A4:B7	border=0 bold=0 aligned=3 indented=0
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping TA	pivotTable11.xml	ref=A4:B18	border=0 bold=0 aligned=14 indented=0
+DynamicBubbleChart.xlsx	Chart	pivotTable1.xml	ref=A29:E41	border=0 bold=0 aligned=1 indented=0
+049_Expenses_calculator_c351f3d0.xlsx	Personal Expenses Data	pivotTable1.xml	ref=B3:G11	border=0 bold=0 aligned=38 indented=31
+007_Contextures_chart_sample_667d8e47.xlsm	CityPivot	pivotTable1.xml	ref=B2:H10	border=0 bold=0 aligned=6 indented=0
+037_Personal_money_tracker_a57957bb.xlsx	Monthly summary	pivotTable1.xml	ref=B19:F37	border=0 bold=0 aligned=27 indented=10
+037_Personal_money_tracker_a57957bb.xlsx	Chart data	pivotTable22.xml	ref=B3:F11	border=0 bold=0 aligned=7 indented=0
+033_Event_planning_tracker_Use_this_template_f29a848e.xlsx	PROJECT TOTALS	pivotTable1.xml	ref=B5:N11	border=0 bold=26 aligned=91 indented=91
+035_Project_plan_for_law_firms_aa2d4462.xlsx	PROJECT TOTALS	pivotTable1.xml	ref=B5:N11	border=0 bold=0 aligned=13 indented=0
+027_Simple_personal_cash_flow_statement_675c6584.xlsx	Annual cash flow	pivotTable3.xml	ref=X10:Y22	border=0 bold=0 aligned=12 indented=0
+027_Simple_personal_cash_flow_statement_675c6584.xlsx	Annual cash flow	pivotTable22.xml	ref=U10:V29	border=0 bold=0 aligned=19 indented=0
+027_Simple_personal_cash_flow_statement_675c6584.xlsx	Annual cash flow	pivotTable13.xml	ref=AA10:AB16	border=0 bold=0 aligned=6 indented=0
+027_Simple_personal_cash_flow_statement_675c6584.xlsx	Annual cash flow	pivotTable44.xml	ref=R10:S17	border=0 bold=0 aligned=7 indented=0
+026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx	Annual cash flow	pivotTable3.xml	ref=R9:S16	border=0 bold=0 aligned=7 indented=0
+026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx	Annual cash flow	pivotTable22.xml	ref=X9:Y21	border=0 bold=0 aligned=12 indented=0
+026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx	Annual cash flow	pivotTable13.xml	ref=U9:V28	border=0 bold=0 aligned=19 indented=0
+026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx	Annual cash flow	pivotTable44.xml	ref=AA9:AB15	border=0 bold=0 aligned=6 indented=0
+053_Personal_asset_inventory_5446d84b.xlsx	Assets	pivotTable1.xml	ref=H23:I30	border=0 bold=0 aligned=7 indented=0

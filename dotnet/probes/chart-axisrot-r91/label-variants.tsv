@@ -1,0 +1,26 @@
+variant	label	word1_pt	word2_pt	whole_pt	reference
+all0	Product Quality	36.013	32.893	71.487	wrapped, 2 rows
+all1	Innovation	49.252		49.252	wrapped, 1 rows
+all2	Brand Reputation	27.252	50.878	80.711	TURNED (outlined)
+all3	Cost Efficiency	20.099	43.638	66.318	TURNED (outlined)
+all4	Customer Service	44.517	32.706	79.804	wrapped, 2 rows
+drop0	(real, Product Quality -> x)		36.013		TURNED (outlined)
+drop1	(real, Innovation -> x)		49.252		TURNED (outlined)
+drop2	(real, Brand Reputation -> x)		27.252		TURNED (outlined)
+drop3	(five real labels, Cost Efficiency -> x)				wrapped, 2 rows
+drop4	(real, Customer Service -> x)		44.517		TURNED (outlined)
+nospace	(five real labels, spaces removed)				TURNED (outlined)
+a_cost_eff	Cost Efficiency	20.099	43.638	66.318	TURNED (outlined)
+b_cost_nnn	Cost nnnnnnn	20.099	41.170	63.850	wrapped, 2 rows
+c_short_eff	nnnn Efficiency	23.605	43.638	69.824	TURNED (outlined)
+d_long_eff	nnnnnnnn Efficiency	47.285	43.638	93.504	TURNED (outlined)
+e_long_nnn	nnnnnnnn nnnnnnn	47.285	41.170	91.036	TURNED (outlined)
+h_cost_scratched	Cost Scratched	20.099	45.181	67.861	wrapped, 2 rows
+h_cost_strengths	Cost Strengths	20.099	43.742	66.422	wrapped, 2 rows
+h_cost_stretched	Cost Stretched	20.099	44.401	67.081	wrapped, 2 rows
+h_cost_thoughts	Cost Thoughts	20.099	42.610	65.290	wrapped, 2 rows
+h_nnnn_stretched	nnnn Stretched	23.605	44.401	70.587	wrapped, 2 rows
+q_effcost	Efficiency Cost	43.638	20.099	66.318	wrapped, 2 rows
+q_quality_eff	Quality Efficiency	32.893	43.638	79.112	TURNED (outlined)
+q_quality_str	Quality Stretched	32.893	44.401	79.875	wrapped, 2 rows
+recheck_drop3	(drop3 re-rendered)				wrapped, 2 rows

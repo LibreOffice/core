@@ -1,0 +1,4 @@
+files 337   base rate \fN 256927
+gross 17563 in 116 documents
+NON-ZERO 13829 in 109 documents
+commonest values [(-2, 6702), (0, 3734), (-1, 2325), (1, 692), (-3, 634), (4, 423), (-4, 403), (2, 374)]

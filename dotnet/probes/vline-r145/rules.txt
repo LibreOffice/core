@@ -1,0 +1,6 @@
+JEMIT_Template   pages 4   ours 21 rules, reference 22
+                 the reference draws and we do not: 20;  we draw and it does not: 19;  pages affected 2
+                 page 1 misses [(56, 786, 180), (57, 283, 482), (57, 284, 482), (57, 546, 482), (57, 547, 482), (224, 309, 315), (224, 310, 315)]  (ours has [(56, 296, 483), (56, 297, 483), (56, 555, 483), (56, 556, 483), (87, 807, 103), (223, 323, 316), (223, 324, 316)])
+33004            pages 47   ours 335 rules, reference 409
+                 the reference draws and we do not: 134;  we draw and it does not: 60;  pages affected 47
+                 page 1 misses [(72, 63, 468)]  (ours has [(72, 730, 468)])

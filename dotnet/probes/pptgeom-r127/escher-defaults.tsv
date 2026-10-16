@@ -1,0 +1,149 @@
+mso_spt	odf_type	preset	source_defaults	binary_modifiers	agree
+2	round-rectangle	roundRect	3600	3600	yes
+3	ellipse	ellipse			yes
+4	diamond	diamond			yes
+5	isosceles-triangle	triangle	10800	10800	yes
+6	right-triangle	rtTriangle			yes
+7	parallelogram	parallelogram	5400	5400	yes
+8	trapezoid	trapezoid	5400	5400	yes
+9	hexagon	hexagon	5400	5400	yes
+10	octagon	octagon	32	6326	no
+11	cross	plus	5400	5400	yes
+12	star5	star5			yes
+13	right-arrow	rightArrow	16200,5400	16200,5400	yes
+15	pentagon-right	homePlate	16200	16200	yes
+16	cube	cube	5400	5400	yes
+17	mso-spt17	wedgeRoundRectCallout	1400,25920	1400,25920	yes
+18	mso-spt18	star16		2500	no
+19	mso-spt19	arc	270,0	270,0	yes
+20	mso-spt20	line			yes
+21	mso-spt21	plaque	3600	3600	yes
+22	can	can	5400	5400	yes
+23	ring	donut	5400	5400	yes
+32	mso-spt32	straightConnector1			yes
+33	mso-spt33	bentConnector2			yes
+34	mso-spt34	bentConnector3	10800	10800	yes
+35	mso-spt35	bentConnector4	10800,10800	10800,10800	yes
+36	mso-spt36	bentConnector5	10800,10800,10800	10800,10800,10800	yes
+37	mso-spt37	curvedConnector2			yes
+38	mso-spt38	curvedConnector3	10800	10800	yes
+39	mso-spt39	curvedConnector4	10800,10800	10800,10800	yes
+40	mso-spt40	curvedConnector5	10800,10800,10800	10800,10800,10800	yes
+41	mso-spt41	callout1	-8300,24500,-1800,4000	-8300,24500,-1800,4000	yes
+42	mso-spt42	callout2	-10000,24500,-3600,4000,-1800,4000	-10000,24500,-3600,4000,-1800,4000	yes
+43	mso-spt43	callout3	23400,24500,25200,21600,25200,4000,23400,4000	23400,24500,25200,21600,25200,4000,23400,4000	yes
+44	mso-spt44	accentCallout1	-8300,24500,-1800,4000	-8300,24500,-1800,4000	yes
+45	mso-spt45	accentCallout2	-10000,24500,-3600,4000,-1800,4000	-10000,24500,-3600,4000,-1800,4000	yes
+46	mso-spt46	accentCallout3	23400,24500,25200,21600,25200,4000,23400,4000	23400,24500,25200,21600,25200,4000,23400,4000	yes
+47	line-callout-1	borderCallout1	-8300,24500,-1800,4000	-8300,24500,-1800,4000	yes
+48	line-callout-2	borderCallout2	-10000,24500,-3600,4000,-1800,4000	-10000,24500,-3600,4000,-1800,4000	yes
+49	mso-spt49	borderCallout3	23400,24500,25200,21600,25200,4000,23400,4000	23400,24500,25200,21600,25200,4000,23400,4000	yes
+50	mso-spt50	accentBorderCallout1	-8300,24500,-1800,4000	-8300,24500,-1800,4000	yes
+51	mso-spt51	accentBorderCallout2	-10000,24500,-3600,4000,-1800,4000	-10000,24500,-3600,4000,-1800,4000	yes
+52	mso-spt52	accentBorderCallout3	23400,24500,25200,21600,25200,4000,23400,4000	23400,24500,25200,21600,25200,4000,23400,4000	yes
+53	mso-spt53	ribbon	5400,2700	5400,2700	yes
+54	mso-spt54	ribbon2	5400,18900	5400,18900	yes
+55	chevron	chevron	16200	16200	yes
+56	pentagon	pentagon			yes
+57	forbidden	noSmoking	2700	2700	yes
+58	star8	star8	2500	2500	yes
+59	mso-spt59	star16	2500	2500	yes
+60	mso-spt60	star32	2500	2500	yes
+61	rectangular-callout	wedgeRectCallout	1400,25920	1400,25920	yes
+62	round-rectangular-callout	wedgeRoundRectCallout	1400,25920	1400,25920	yes
+63	round-callout	wedgeEllipseCallout	1350,25920	1350,25920	yes
+64	mso-spt64	wave	1400,10800	1400,10800	yes
+65	paper	foldedCorner	18900	18900	yes
+66	left-arrow	leftArrow	5400,5400	5400,5400	yes
+67	down-arrow	downArrow	16200,5400	16200,5400	yes
+68	up-arrow	upArrow	5400,5400	5400,5400	yes
+69	left-right-arrow	leftRightArrow	4300,5400	4300,5400	yes
+70	up-down-arrow	upDownArrow	5400,4300	5400,4300	yes
+71	mso-spt71	irregularSeal1			yes
+72	bang	irregularSeal2			yes
+73	lightning	lightningBolt			yes
+74	heart	heart			yes
+76	quad-arrow	quadArrow	6500,8600,4300	6500,8600,4300	yes
+77	left-arrow-callout	leftArrowCallout	7200,5400,3600,8100	7200,5400,3600,8100	yes
+78	right-arrow-callout	rightArrowCallout	14400,5400,18000,8100	14400,5400,18000,8100	yes
+79	up-arrow-callout	upArrowCallout	7200,5400,3600,8100	7200,5400,3600,8100	yes
+80	down-arrow-callout	downArrowCallout	14400,5400,18000,8100	14400,5400,18000,8100	yes
+81	left-right-arrow-callout	leftRightArrowCallout	5400,5500,2700,8100	5400,5500,2700,8100	yes
+82	up-down-arrow-callout	upDownArrowCallout	5400,5500,2700,8100	5400,5500,2700,8100	yes
+83	quad-arrow-callout	quadArrowCallout	5400,8100,2700,9400	5400,8100,2700,9400	yes
+84	quad-bevel	bevel	2700	2700	yes
+85	left-bracket	leftBracket	1800	1800	yes
+86	right-bracket	rightBracket	1800	1800	yes
+87	left-brace	leftBrace		1800,10800	no
+88	right-brace	rightBrace		1800,10800	no
+89	mso-spt89	leftUpArrow	9340,18500,6200	9340,18500,6200	yes
+90	mso-spt90	bentUpArrow	9340,18500,7200	9340,18500,7200	yes
+91	mso-spt91	bentArrow	15100,2900	15100,2900	yes
+92	star24	star24	2500	2500	yes
+93	striped-right-arrow	stripedRightArrow	16200,5400	16200,5400	yes
+94	notched-right-arrow	notchedRightArrow	16200,5400	16200,5400	yes
+95	block-arc	blockArc	180,5400	180,5400	yes
+96	smiley	smileyFace	18520	18520	yes
+97	vertical-scroll	verticalScroll	2700	2700	yes
+98	horizontal-scroll	horizontalScroll	2700	2700	yes
+99	circular-arrow	circularArrow	180,0,5500	180,0,5500	yes
+101	mso-spt101	uturnArrow			yes
+102	mso-spt102	curvedRightArrow	12960,19440,14400	12960,19440,14400	yes
+103	mso-spt103	curvedLeftArrow	12960,19440,7200	12960,19440,7200	yes
+104	mso-spt104	curvedUpArrow	12960,19440,7200	12960,19440,7200	yes
+105	mso-spt105	curvedDownArrow	12960,19440,14400	12960,19440,14400	yes
+106	cloud-callout	cloudCallout	1350,25920	1350,25920	yes
+107	mso-spt107	ellipseRibbon	5400,5400,18900	5400,5400,18900	yes
+108	mso-spt108	ellipseRibbon2	5400,16200,2700	5400,16200,2700	yes
+109	flowchart-process	flowChartProcess			yes
+110	flowchart-decision	flowChartDecision			yes
+111	flowchart-data	flowChartInputOutput			yes
+112	flowchart-predefined-process	flowChartPredefinedProcess			yes
+113	flowchart-internal-storage	flowChartInternalStorage			yes
+114	flowchart-document	flowChartDocument			yes
+115	flowchart-multidocument	flowChartMultidocument			yes
+116	flowchart-terminator	flowChartTerminator			yes
+117	flowchart-preparation	flowChartPreparation			yes
+118	flowchart-manual-input	flowChartManualInput			yes
+119	flowchart-manual-operation	flowChartManualOperation			yes
+120	flowchart-connector	flowChartConnector			yes
+121	flowchart-card	flowChartPunchedCard			yes
+122	flowchart-punched-tape	flowChartPunchedTape			yes
+123	flowchart-summing-junction	flowChartSummingJunction			yes
+124	flowchart-or	flowChartOr			yes
+125	flowchart-collate	flowChartCollate			yes
+126	flowchart-sort	flowChartSort			yes
+127	flowchart-extract	flowChartExtract			yes
+128	flowchart-merge	flowChartMerge			yes
+129	mso-spt129	flowChartOfflineStorage			yes
+130	flowchart-stored-data	flowChartOnlineStorage			yes
+131	flowchart-sequential-access	flowChartMagneticTape			yes
+132	flowchart-magnetic-disk	flowChartMagneticDisk			yes
+133	flowchart-direct-access-storage	flowChartMagneticDrum			yes
+134	flowchart-display	flowChartDisplay			yes
+135	flowchart-delay	flowChartDelay			yes
+176	flowchart-alternate-process	flowChartAlternateProcess			yes
+177	flowchart-off-page-connector	flowChartOffpageConnector			yes
+178	mso-spt178	callout1	-1800,24500,-1800,4000	-1800,24500,-1800,4000	yes
+179	mso-spt179	accentCallout1	-1800,24500,-1800,4000	-1800,24500,-1800,4000	yes
+180	mso-spt180	borderCallout1	-1800,24500,-1800,4000	-1800,24500,-1800,4000	yes
+181	line-callout-3	accentBorderCallout1	-1800,24500,-1800,4000	-1800,24500,-1800,4000	yes
+182	mso-spt182	leftRightUpArrow	6500,8600,6200	6500,8600,6200	yes
+183	sun	sun	5400	5400	yes
+184	moon	moon	10800	10800	yes
+185	bracket-pair	bracketPair	3700	3700	yes
+186	brace-pair	bracePair	1800	1800	yes
+187	star4	star4	8100	8100	yes
+188	mso-spt188	doubleWave	1400,10800	1400,10800	yes
+189	mso-spt189	actionButtonBlank	1400	1400	yes
+190	mso-spt190	actionButtonHome	1400	1400	yes
+191	mso-spt191	actionButtonHelp	1400	1400	yes
+192	mso-spt192	actionButtonInformation	1400	1400	yes
+193	mso-spt193	actionButtonForwardNext	1400	1400	yes
+194	mso-spt194	actionButtonBackPrevious	1400	1400	yes
+195	mso-spt195	actionButtonEnd	1400	1400	yes
+196	mso-spt196	actionButtonBeginning	1400	1400	yes
+197	mso-spt197	actionButtonReturn	1400	1400	yes
+198	mso-spt198	actionButtonDocument	1400	1400	yes
+199	mso-spt199	actionButtonSound	1400	1400	yes
+200	mso-spt200	actionButtonMovie	1400	1400	yes

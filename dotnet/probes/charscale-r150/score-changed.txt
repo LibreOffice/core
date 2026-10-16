@@ -1,0 +1,17 @@
+spans whose drawn width this change moved: 1178
+  closer to 26.2.4.2 1173   further 5   neither 0
+
+    moved  closer further  document
+     1099    1097       2  195389b8c6c6-Annex-10-to-the-Aircraft-Maintenance-Speciali
+       28      26       2  4c44defb9273-Regulations Governing the Status, Basic Right
+       13      13       0  404b8cb5cec3-SWDD-template.rtf
+       10       9       1  9a283dc56300-ESPN-R - MCF - RA - Ed1.rtf
+        9       9       0  5ee4fec55c91-BID_ACKNOWLEDGEMENT_FORM_FOR_A320.rtf
+        6       6       0  ed07ce5f44c7-t_TEMPforInvProgs.rtf
+        6       6       0  d8c1eba8d845-AAC-AD-No-2021-01-Boeing-737-8-and-737-9-MAX.
+        6       6       0  AAC-AD-No-2021-01-Boeing-737-8-and-737-9-MAX.doc
+        1       1       0  ae2db2175f3d-091_Business_Case_Template_Complete_Guide_cb9
+        0       0       0  e93e7e131d5f-AWR OPS-AOC 044 Statement of Compliance RVSM 
+        0       0       0  e6a30de46c19-19-06 Assistive Technology TAB Final - 508.rt
+        0       0       0  7be9cfcc7637-OM template for non-complex NCC operators_Aug
+        0       0       0  66cd4750ab46-ESPN-R - MCF - Manual - Ed1.0 - For Publicati

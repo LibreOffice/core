@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Hand-authored. Four slides differing only in what stands inside an EMPTY paragraph
+     between two 8pt paragraphs, in a box whose paragraph style states 24pt.
+
+       1  <text:p><text:span T40/></text:p>   - an empty span stating 40pt
+       2  <text:p><text:span T8/></text:p>    - an empty span stating 8pt
+       3  <text:p/>                           - no span at all
+       4  <text:p><text:span T40/><text:span T8/></text:p>  - two empty spans
+
+     The question each answers is what sizes the line an empty paragraph occupies. EditEngine
+     builds a dummy portion for such a line from the character attributes at the paragraph's own
+     position: SeekCursor(node, 0) at editeng/source/editeng/impedit3.cxx:1896-1902, and
+     gives it ImplCalculateFontIndependentLineSpacing(font height), so it is the empty SPAN's
+     size and not the paragraph's default. Slide 3 is the control where there is no span and the
+     paragraph's own 24pt is right; slide 4 says which span wins when there are several, and the
+     answer is the LAST one entered rather than the largest.
+
+     Verified against LibreOffice 26.2.4.2. Its PDF of this file draws Alpha's baseline at
+     93.033 pt from the page top on every slide, and Beta's at:
+
+       1  150.605     the 40pt span:  Alpha -> Beta 57.572
+       2  112.195     the  8pt span:  Alpha -> Beta 19.162
+       3  131.414     no span, 24pt:  Alpha -> Beta 38.381
+       4  112.195     two spans, and the answer is the 8pt one, not the 40pt one
+
+     Every line here is 1.2 x its own size, which is EditEngine's fixed cell height, so the
+     pitch between two baselines is the height of the earlier line: 8pt gives 9.58, 24pt gives
+     28.80 and 40pt gives 47.99, computed in hundredths of a millimetre. There is no paragraph
+     margin in this file, so nothing else is in the sums.
+
+     One placement matters and cost a first cut of this file. style:font-independent-line-spacing
+     is on the frame's draw:text-style-name paragraph style, NOT on the paragraphs' own
+     text:style-name. 26.2.4.2 honours it only in the first position - with it on P1 instead, the
+     same four slides come back 53.660 / 18.028 / 35.773 / 18.028, which is ascent + descent and
+     not 1.2 em. The flag is EditEngine-wide (SetFixedCellHeight), so it belongs to the shape's
+     text and not to a paragraph inside it. -->
+<office:document
+  xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+  xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+  xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+  xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+  xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0"
+  xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+  xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+  office:version="1.3"
+  office:mimetype="application/vnd.oasis.opendocument.presentation">
+ <office:styles>
+  <draw:layer-set>
+   <draw:layer draw:name="layout"/>
+   <draw:layer draw:name="background"/>
+   <draw:layer draw:name="backgroundobjects"/>
+   <draw:layer draw:name="controls"/>
+   <draw:layer draw:name="measurelines"/>
+  </draw:layer-set>
+ </office:styles>
+ <office:automatic-styles>
+  <style:page-layout style:name="PL1">
+   <style:page-layout-properties fo:page-width="25.4cm" fo:page-height="19.05cm"
+       style:print-orientation="landscape" fo:margin-top="0cm" fo:margin-bottom="0cm"
+       fo:margin-left="0cm" fo:margin-right="0cm"/>
+  </style:page-layout>
+  <style:style style:name="dp1" style:family="drawing-page">
+   <style:drawing-page-properties draw:fill="none"/>
+  </style:style>
+  <style:style style:name="gr1" style:family="graphic">
+   <style:graphic-properties draw:stroke="none" draw:fill="none"
+       draw:auto-grow-height="false" draw:auto-grow-width="false"
+       draw:textarea-vertical-align="top" fo:wrap-option="wrap"
+       fo:padding-top="0cm" fo:padding-bottom="0cm"
+       fo:padding-left="0cm" fo:padding-right="0cm"/>
+  </style:style>
+  <style:style style:name="PTS" style:family="paragraph">
+   <style:paragraph-properties style:font-independent-line-spacing="true"/>
+  </style:style>
+  <style:style style:name="P1" style:family="paragraph">
+   <style:paragraph-properties fo:margin-top="0cm" fo:margin-bottom="0cm"
+       fo:line-height="100%"/>
+   <style:text-properties fo:font-size="24pt" style:font-name="Liberation Sans"/>
+  </style:style>
+  <style:style style:name="T8" style:family="text">
+   <style:text-properties fo:font-size="8pt" style:font-name="Liberation Sans"/>
+  </style:style>
+  <style:style style:name="T40" style:family="text">
+   <style:text-properties fo:font-size="40pt" style:font-name="Liberation Sans"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Default" style:page-layout-name="PL1" draw:style-name="dp1"/>
+ </office:master-styles>
+ <office:body>
+  <office:presentation>
+   <draw:page draw:name="span40" draw:style-name="dp1" draw:master-page-name="Default">
+    <draw:frame draw:style-name="gr1" draw:text-style-name="PTS" draw:name="box" draw:layer="layout"
+        svg:x="2cm" svg:y="3cm" svg:width="18cm" svg:height="10cm">
+     <draw:text-box>
+      <text:p text:style-name="P1"><text:span text:style-name="T8">Alpha</text:span></text:p>
+      <text:p text:style-name="P1"><text:span text:style-name="T40"/></text:p>
+      <text:p text:style-name="P1"><text:span text:style-name="T8">Beta</text:span></text:p>
+     </draw:text-box>
+    </draw:frame>
+   </draw:page>
+   <draw:page draw:name="span8" draw:style-name="dp1" draw:master-page-name="Default">
+    <draw:frame draw:style-name="gr1" draw:text-style-name="PTS" draw:name="box" draw:layer="layout"
+        svg:x="2cm" svg:y="3cm" svg:width="18cm" svg:height="10cm">
+     <draw:text-box>
+      <text:p text:style-name="P1"><text:span text:style-name="T8">Alpha</text:span></text:p>
+      <text:p text:style-name="P1"><text:span text:style-name="T8"/></text:p>
+      <text:p text:style-name="P1"><text:span text:style-name="T8">Beta</text:span></text:p>
+     </draw:text-box>
+    </draw:frame>
+   </draw:page>
+   <draw:page draw:name="nospan" draw:style-name="dp1" draw:master-page-name="Default">
+    <draw:frame draw:style-name="gr1" draw:text-style-name="PTS" draw:name="box" draw:layer="layout"
+        svg:x="2cm" svg:y="3cm" svg:width="18cm" svg:height="10cm">
+     <draw:text-box>
+      <text:p text:style-name="P1"><text:span text:style-name="T8">Alpha</text:span></text:p>
+      <text:p text:style-name="P1"/>
+      <text:p text:style-name="P1"><text:span text:style-name="T8">Beta</text:span></text:p>
+     </draw:text-box>
+    </draw:frame>
+   </draw:page>
+   <draw:page draw:name="twospans" draw:style-name="dp1" draw:master-page-name="Default">
+    <draw:frame draw:style-name="gr1" draw:text-style-name="PTS" draw:name="box" draw:layer="layout"
+        svg:x="2cm" svg:y="3cm" svg:width="18cm" svg:height="10cm">
+     <draw:text-box>
+      <text:p text:style-name="P1"><text:span text:style-name="T8">Alpha</text:span></text:p>
+      <text:p text:style-name="P1"><text:span text:style-name="T40"/><text:span text:style-name="T8"/></text:p>
+      <text:p text:style-name="P1"><text:span text:style-name="T8">Beta</text:span></text:p>
+     </draw:text-box>
+    </draw:frame>
+   </draw:page>
+  </office:presentation>
+ </office:body>
+</office:document>

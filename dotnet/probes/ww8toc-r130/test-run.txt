@@ -1,0 +1,13 @@
+XRay.Office.Containers.Tests listed=109 Failed:     0, Passed:   109, Skipped:     0, Total:   109
+XRay.Office.Core.Tests listed=591 Failed:     0, Passed:   591, Skipped:     0, Total:   591
+XRay.Office.Markup.Tests listed=249 Failed:     0, Passed:   259, Skipped:     0, Total:   259
+XRay.Office.OpenDocument.Tests listed=169 Failed:     0, Passed:   169, Skipped:     0, Total:   169
+XRay.Office.Presentations.Tests listed=1205 Failed:     0, Passed:  1205, Skipped:     0, Total:  1205
+XRay.Office.Rendering.Tests listed=164 Failed:     0, Passed:   164, Skipped:     0, Total:   164
+XRay.Office.Spreadsheets.Tests listed=1387 Failed:     0, Passed:  1387, Skipped:     0, Total:  1387
+XRay.Office.Text.Tests listed=744 Failed:     0, Passed:   744, Skipped:     0, Total:   744
+XRay.Office.Vector.Tests listed=309 Failed:     0, Passed:   309, Skipped:     0, Total:   309
+XRay.Office.WordProcessing.Tests listed=1988 Failed:     0, Passed:  1988, Skipped:     0, Total:  1988
+XRay.Office.Fidelity.Tests listed=552 Failed:    10, Passed:   542, Skipped:     0, Total:   552
+
+[exited with code 0]

@@ -1,0 +1,22 @@
+87	3	FAA_IS Heading,Heading 2,Heading 3	SPA-11_mcar_part-11_v2.9.docx
+18	3	Heading 0,Heading 1,Heading 2	OM template for non-complex NCC operators_August 2016.docx
+9	2	Heading 1,Heading 2	hdss-bulletin-issue-285-25-june-2025.docx
+6	2	AFS TOC 1,Adjusted Heading 2,Adjusted Heading 3	FAA 2025-26 Holdover Tables.docx
+6	2	AFS TOC 1,Adjusted Heading 2,Adjusted Heading 3	24-25_FAA_Holdover_Tables.docx
+2	1	FAA_IS Heading,Heading 2,Heading_SectionStart	SPA-06_mcar_part-6_and_IS_v2.9.docx
+1	8	Heading 2,Heading 3,Heading 4	report-template.docx
+0	6	Heading 1,Heading 2,Heading 3	EHEST-SMS-Safety-Management-Manual-V2.docx
+0	3	Heading 1,Heading 2,Heading 3	AC-150-5370-10G-updated-201604.docx
+0	3	Heading 1,Heading 2,Heading 3	150-5370-10H.docx
+0	3	Appendix,Back Matter Heading,ESHeading 1	231164_SystemDesignDocument.docx
+0	1	Heading 3,Heading A3	PES-Technical-Report-Template_Jan_2019.docx
+0	0	TitelÜberschrift	airbus-pdf-information-package_v1-4.docx
+0	0	HEADER APPENDICES,HEADER CHAPTER 1,HEADER CHAPTER 2	UG.CAO.00133 Foreign Part 145 approvals - Language.docx
+0	0	HEADER APPENDICES,HEADER CHAPTER 1,HEADER CHAPTER 2	UG.CAO.00006 Foreign Part 145 approvals - User Guide for Applicants & Approval Holders.docx
+0	0	FigureCaption,Table Heading	t_TEMPforInvProgs.docx
+0	0	FSM Heading 1,FSM Heading 2,FSM Heading 3	5709.16 ch.40_mgfinal.docx
+0	0	FAA_IS Heading,Heading_SectionStart	SPA-02_mcar_part-2_and_IS_v2.9.docx
+0	0	FAA_IS Heading,Heading_SectionStart	FRE-03_mcar_part-3_and_IS_v2.9.docx
+0	0	FAA_IS Heading,Heading_SectionStart	02_mcar_part-2_and_IS_v2.10.docx
+0	0	1,Annex_No &amp,Annex_NoTitle	FG-AI4NDM-TR-skeleton_template.docx
+# 271 documents, 21 with a TOC \t switch, 7 where it voids a paragraph's direct formatting

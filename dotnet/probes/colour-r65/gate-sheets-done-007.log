@@ -1,0 +1,18 @@
+measuring /home/user/wt-colour/dotnet/tools/XRay.Office.Cli/bin/Debug/net10.0/linux-x64/XRay.Office.Cli
+# words = tokens carrying at least one Unicode letter or digit; rawwords = pdftotext | wc -w
+# NOT comparable to any scoreboard recorded before 2026-08-13 — see dotnet/probes/gate-01/results.md
+path	ext	pages	words	fonts	unemb	verdict	rawwords
+sheets/done-007/xls/ACRONYM.xls	xls	69/69	9840/9840	2/2	0	match	9851/9851	61586/61586
+sheets/done-007/xls/CSA_CCM_v1.2.xls	xls	13/13	15667/15666	2/2	0	match	15924/15923	73416/73416
+sheets/done-007/xlsx/114339-PROP-P127508-PUBLIC-PPCRNARCPPforPublication.xlsx	xlsx	21/21	2329/2326	3/3	0	match	2371/2368	14213/14205
+sheets/done-007/xlsx/National-Finalists-2024-1.xlsx	xlsx	30/30	4155/4155	3/3	0	match	4184/4184	27258/27258
+sheets/done-007/xlsx/SLSA_Directory_031423.xlsx	xlsx	10/10	5768/5787	3/3	0	match	5880/5899	28238/28332
+sheets/done-007/xlsx/ecopy of 2016 statistical bulletin_public finance statistics_final.xlsx	xlsx	17/17	5368/5404	6/6	0	match	5701/5755	25528/25548
+sheets/done-007/xlsx/essd-16-3433-2024-t02.xlsx	xlsx	4/4	431/431	1/1	0	match	439/439	2346/2349
+sheets/done-007/xlsx/hdss-bulletin-index-2019-2022.xlsx	xlsx	24/24	3611/3626	3/3	0	match	3796/3811	18341/18407
+sheets/done-007/xlsx/jobs-bulletin-51-22-december-2025.xlsx	xlsx	12/12	1807/1807	4/4	0	match	1884/1884	10033/10033
+sheets/done-007/xlsx/wiley-cancelled-title-list.xlsx	xlsx	60/60	7582/7582	2/2	0	match	7706/7706	56700/56700
+
+BATCHES sheets/done-007
+TOTAL 10  MATCH 10  MISMATCH 0  REF-CANNOT-RENDER 0
+TSV /home/user/wt-colour/dotnet/probes/colour-r65/gate-sheets-done-007/parity.tsv

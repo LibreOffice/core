@@ -1,0 +1,5 @@
+family           file                                         hhea      win typo+gap    drawn
+DejaVu Sans      DejaVuSans.ttf                             23.281   23.281   24.004   23.300
+FreeSerif        FreeSerif.ttf                              26.040   24.040   22.000   22.000
+Liberation Mono  LiberationMono-Regular.ttf                 22.656   22.656   16.025   22.650
+Liberation Sans  LiberationSans-Regular.ttf                 22.998   22.344   21.768   23.000

@@ -1,0 +1,57 @@
+The three decks this round moves, page by page, against the banked 26.2.4.2 renderings in
+/home/user/gate-orig-r83/ref.  Dominant drawn text size per page (pagesizes.py); only pages whose
+dominant size differs on some leg are listed.  base = 4f4d0ddc8, head = this branch.
+
+  ws_prod-g-doc-Events-2007-september-M.017-(French)-France.ppt        (55 pages)
+    page   26.2.4.2   base    head-with-table-and-nHardCount-only   head (with the ruler)
+       8      15.99   15.99   15.0                                  15.99
+      14      18.99   20.01   20.01                                 18.99
+      15      18.99   18.99   17.01                                 18.99
+      16      14.99   17.01   17.01                                 15.0
+      20      18.0    18.0    17.01                                 18.0
+      21      18.0    18.0    17.01                                 18.0
+      28      15.99   15.99   15.0                                  15.99
+      44      18.0    18.0    17.01                                 18.0
+
+    The third column is the intermediate state and is why the ruler is load-bearing: nHardCount
+    alone answers "keep the master's box" on every one of this deck's paragraphs, because their
+    masks state none of the seven.  The ruler is what makes them hard.
+
+  ws_prod-g-doc-Events-Part-M-presentation.ppt                         (30 pages)
+    page   26.2.4.2   base    head
+      21      17.01   18.0    17.01
+
+  Thailand17.ppt                                                       (54 pages)
+    page   26.2.4.2   base    head
+      11      11.99   11.0    11.99
+       8      24.01   16.68   16.68      raster ceiling, unchanged
+       2       7.95    7.96    7.96      inside the 0.15 pt band
+
+Bullet graphics, drawn size in points, read out of the two PDFs with pymupdf's get_image_info.
+Every one of these is exact at head; the third column is the base.
+
+  France  page  8   ref 17.86              base 17.86              head 17.86
+  France  page 14   ref 22.31 / 15.85      base 22.31 / 15.85      head 22.31 / 15.85
+  France  page 15   ref 22.31 / 15.85      base 15.85 / 22.31      head 22.31 / 15.85
+  France  page 16   ref 20.10 / 14.26      base 20.10 / 14.26      head 20.10 / 14.26
+  France  page 44   ref 20.10             base 20.10              head 20.10
+  Part-M  page 21   ref 31.24 / 19.02      base 20.10 / 14.26      head 31.24 / 19.02
+
+The label width, France pages 8 and 16 -- the leftmost six text spans' x, in points:
+
+  page  8   26.2.4.2   43.06  85.10  111.03  115.43  152.19  282.05
+            base       43.09  70.09  111.97  115.46  151.17  282.71
+            head       43.09  85.09  111.97  115.46  151.17  282.71
+
+  page 16   26.2.4.2   43.06  85.10  111.03  115.09  115.43  142.10
+            base       43.09  70.09  101.59  111.97  115.09  115.46
+            head       43.09  85.09  111.97  115.09  115.46  142.09
+
+  43.09 + 0.953 cm = 70.09   is the Body master level's text offset, 216 master units
+  43.09 + 1.482 cm = 85.10   is the shape ruler's textOfs[0], 336 master units
+
+Thailand17 page 11, alphanumeric characters bucketed by drawn size:
+
+  26.2.4.2   548 @ 11.99   47 @ 24.01
+  base       358 @ 11.00   190 @ 11.99   47 @ 24.01
+  head       548 @ 11.99   47 @ 24.01

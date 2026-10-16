@@ -1,0 +1,8 @@
+# words = tokens carrying at least one Unicode letter or digit; rawwords = pdftotext | wc -w
+# NOT comparable to any scoreboard recorded before 2026-08-13 — see dotnet/probes/gate-01/results.md
+path	ext	pages	words	fonts	unemb	verdict	rawwords
+words/missing-001/docx/33004.docx	docx	47/47	11980/11963	15/15	0	match	12159/12141
+words/missing-001/docx/CRIF - SpÃ©cification technique - Socle applicatif.docx	docx	27/29	6260/6618	10/10	0	pages,words	6578/7068
+words/missing-001/docx/May 25 bulletin focus on carers in the workplace.docx	docx	5/4	435/521	3/3	0	pages,words	448/538
+words/missing-001/docx/TE.CAO.00125 Foreign Part 145 approvals - OJT Logbook.docx	docx	15/15	2793/2793	6/6	0	match	3176/3177
+words/missing-001/docx/xx_SETIS_PWS_template_10.19.22.docx	docx	15/15	4920/4923	6/6	0	match	4977/4980

@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  A table's width and its columns can both be stated as proportions.
+
+  style:rel-width on style:table-properties maps to RES_FRM_SIZE's MID_FRMSIZE_REL_WIDTH
+  (sw/source/filter/xml/xmlitemm.cxx:47) and becomes SwFormatFrameSize::SetWidthPercent,
+  clamped to 1..100 (xmlimpit.cxx:936-949).  It is read only for a table with a real
+  horizontal orientation: SwXMLTableContext::MakeTable_ reads the size in the default arm of
+  its orientation switch alone, and under FULL / NONE - table:align="margins" or no
+  table:align at all - sets m_nWidth = MAX_WIDTH and never looks at it
+  (sw/source/filter/xml/xmltbli.cxx:2540-2582).
+
+  style:rel-column-width="2677*" is the column's own proportion: xmlimpit.cxx:971-986 sets
+  the width and marks the size type Variable, and SwXMLTableColContext passes that to
+  InsertColumn as bRelWidth = true (xmltbli.cxx:694-714).  MakeTable_ then distributes.
+
+  RELA/RELB are a 50% centred table whose columns are 1:3.
+  FULLA/FULLB are the same table with table:align="margins", whose stated 50% is ignored.
+
+  Ground truth is 26.2.4.2's own PDF of this file, read with pdftotext -bbox; the numbers
+  are in OdtTableRelativeWidthTests.
+-->
+<office:document
+    xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+    xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+    xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+    xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0"
+    xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:meta>
+  <dc:title>Paperless relative table widths</dc:title>
+ </office:meta>
+ <office:styles>
+  <style:style style:name="Body" style:family="paragraph">
+   <style:paragraph-properties fo:text-align="start" fo:text-indent="0cm" fo:hyphenate="false"
+       fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%"
+       fo:orphans="0" fo:widows="0"/>
+   <style:text-properties style:font-name="Carlito" fo:font-family="Carlito" fo:font-size="11pt"
+       fo:language="en" fo:country="GB"/>
+  </style:style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:page-layout style:name="PL">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+       fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"/>
+  </style:page-layout>
+  <style:style style:name="Half" style:family="table">
+   <style:table-properties style:rel-width="50%" table:align="center"/>
+  </style:style>
+  <style:style style:name="Margins" style:family="table">
+   <style:table-properties style:rel-width="50%" table:align="margins"/>
+  </style:style>
+  <style:style style:name="ColA" style:family="table-column">
+   <style:table-column-properties style:rel-column-width="1000*"/>
+  </style:style>
+  <style:style style:name="ColB" style:family="table-column">
+   <style:table-column-properties style:rel-column-width="3000*"/>
+  </style:style>
+  <style:style style:name="Cell" style:family="table-cell">
+   <style:table-cell-properties fo:padding="0cm" fo:border="none"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="PL"/>
+ </office:master-styles>
+ <office:body>
+  <office:text>
+   <table:table table:name="Rel" table:style-name="Half">
+    <table:table-column table:style-name="ColA"/>
+    <table:table-column table:style-name="ColB"/>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string">
+      <text:p text:style-name="Body">RELA</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string">
+      <text:p text:style-name="Body">RELB</text:p>
+     </table:table-cell>
+    </table:table-row>
+   </table:table>
+   <text:p text:style-name="Body">BETWEEN</text:p>
+   <table:table table:name="Full" table:style-name="Margins">
+    <table:table-column table:style-name="ColA"/>
+    <table:table-column table:style-name="ColB"/>
+    <table:table-row>
+     <table:table-cell table:style-name="Cell" office:value-type="string">
+      <text:p text:style-name="Body">FULLA</text:p>
+     </table:table-cell>
+     <table:table-cell table:style-name="Cell" office:value-type="string">
+      <text:p text:style-name="Body">FULLB</text:p>
+     </table:table-cell>
+    </table:table-row>
+   </table:table>
+  </office:text>
+ </office:body>
+</office:document>

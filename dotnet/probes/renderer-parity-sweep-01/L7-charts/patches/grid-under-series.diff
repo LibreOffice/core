@@ -1,0 +1,99 @@
+--- a/dotnet/src/XRay.Office.Core/Charts/ChartLayout.cs
++++ b/dotnet/src/XRay.Office.Core/Charts/ChartLayout.cs
+@@ -172,12 +172,30 @@
+ /// A chart laid out: every mark it draws, in paint order, in the frame's coordinates.
+ /// </summary>
+ /// <param name="PlotArea">The inner plot rectangle — the axes' extent, labels excluded.</param>
+-/// <param name="Boxes">The filled and outlined rectangles, back to front.</param>
++/// <param name="Boxes">
++/// The chart's furniture: its own background, the plot area's wall and the legend's keys, back to
++/// front. Every consumer paints these <em>before</em> <paramref name="Lines"/>, so nothing a
++/// series draws may go here — see <paramref name="Shapes"/>.
++/// </param>
+ /// <param name="Lines">The axes, ticks and gridlines.</param>
+ /// <param name="Labels">The text.</param>
+ /// <param name="Shapes">
+-/// The paths — wedges, polylines and areas — drawn after <paramref name="Boxes"/> and before
+-/// <paramref name="Labels"/>, which is where the reference draws them.
++/// <strong>Every mark a series draws</strong> — a bar, a candle, a wedge, a polyline, an area —
++/// drawn after <paramref name="Lines"/> and before <paramref name="Labels"/>, which is where the
++/// reference draws them.
++/// <para>
++/// <strong>A bar belongs here and not in <paramref name="Boxes"/>, and the reason is Z order.</strong>
++/// <c>VCoordinateSystem::initPlottingTargets</c> creates the grid group, then the series-behind-axis
++/// group, then the axis group, all as children of the diagram's coordinate region
++/// (<c>chart2/source/view/axes/VCoordinateSystem.cxx:91-115</c>); the series plotters then add their
++/// shapes to the coordinate region <em>itself</em>, after all three
++/// (<c>ChartView.cxx:638-680</c>), unless <c>ChartType::isSeriesInFrontOfAxisLine</c> says otherwise —
++/// and it says otherwise only for a filled net (<c>ChartType.cxx:609-615</c>). So the grid and the
++/// axes are under the data on every chart type in the corpus. A rectangle emitted into
++/// <paramref name="Boxes"/> is painted before <paramref name="Lines"/> and therefore ends up
++/// <em>under</em> the gridlines, which draws a light-grey rule across every bar at every major tick —
++/// the "bars filled with horizontal stripes" seen on three unrelated workbooks.
++/// </para>
+ /// </param>
+ /// <param name="DiagramArea">
+ /// The <em>outer</em> rectangle the diagram was laid out in — what is left of the frame once the
+@@ -939,14 +957,14 @@
+                         AddBubbles(part, area, against, domain, shapes, labels);
+                         break;
+                     case ChartPlotKind.Stock:
+-                        AddCandles(part, area, against, categories, boxes, lines, labels);
++                        AddCandles(part, area, against, categories, shapes, lines, labels);
+                         break;
+                     case ChartPlotKind.OfPie:
+                         AddOfPie(part, area, DiagramAreaOf(plot, frame, measurer),
+                                  measurer, shapes, lines, labels);
+                         break;
+                     default:
+-                        AddBars(part, area, against, categories, columns, boxes, labels);
++                        AddBars(part, area, against, categories, columns, shapes, labels);
+                         break;
+                 }
+             }
+@@ -3007,7 +3025,7 @@
+         ChartScaleResult scale,
+         int categories,
+         bool columns,
+-        List<ChartBox> boxes,
++        List<ChartShape> shapes,
+         List<ChartLabel> labels)
+     {
+         if (categories <= 0 || plot.Series.Count == 0) return;
+@@ -3074,7 +3092,10 @@
+                         area.Width * Math.Abs(to - from),
+                         area.Height * slotFraction);
+ 
+-                boxes.Add(new ChartBox(bounds, one.Fill, one.Line, one.LineWidth));
++                // A path rather than a ChartBox: a bar is a series mark and must paint over the
++                // grid. See ChartDrawing.Shapes.
++                shapes.Add(new ChartShape(
++                    GraphicsPath.Rectangle(bounds), one.Fill, one.Line, one.LineWidth));
+ 
+                 if (one.LabelAt(at) is { Draws: true } label)
+                     AddBarLabel(plot, one, label, at, value, bounds, to >= from, columns, labels);
+--- a/dotnet/src/XRay.Office.Core/Charts/ChartLayout.Plots.cs
++++ b/dotnet/src/XRay.Office.Core/Charts/ChartLayout.Plots.cs
+@@ -412,7 +412,7 @@
+         DocRect area,
+         ChartScaleResult scale,
+         int categories,
+-        List<ChartBox> boxes,
++        List<ChartShape> shapes,
+         List<ChartLine> lines,
+         List<ChartLabel> labels)
+     {
+@@ -462,8 +462,11 @@
+                 Length upper = area.Bottom - area.Height * scale.Fraction(closed);
+                 Length lower = area.Bottom - area.Height * scale.Fraction(opened);
+ 
+-                boxes.Add(new ChartBox(
+-                    new DocRect(middle - candle / 2, upper, candle, lower - upper),
++                // A path rather than a ChartBox, for the reason ChartDrawing.Shapes gives: a
++                // candle is a series mark and paints over the grid, not under it.
++                shapes.Add(new ChartShape(
++                    GraphicsPath.Rectangle(
++                        new DocRect(middle - candle / 2, upper, candle, lower - upper)),
+                     fell
+                         ? plot.StockLossFill ?? StockLoss
+                         : plot.StockGainFill ?? StockGain,

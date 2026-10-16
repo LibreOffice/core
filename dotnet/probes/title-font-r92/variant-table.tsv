@@ -1,0 +1,15 @@
+variant	a:latin attributes	family class	pitch	drawn face	drawn pt	implied pt	ratio	line 1
+v0-control	typeface="Helvetica" panose=… pitchFamily="34" charset="0"	SWISS	VARIABLE	LiberationSans-Bold	531.684	623.484	1.1727	Competitive Advantage Card – 
+v1-arial	typeface="Arial" panose=… pitchFamily="34" charset="0"	SWISS	VARIABLE	LiberationSans-Bold	627.552	626.220	0.9979	Competitive Advantage Card – Slide 
+v2-nopanose	typeface="Helvetica"	DONTKNOW	DONTKNOW	LiberationSans-Bold	627.552	626.220	0.9979	Competitive Advantage Card – Slide 
+v3-libsans	typeface="Liberation Sans" pitchFamily="34" charset="0"	SWISS	VARIABLE	LiberationSans-Bold	627.552	626.220	0.9979	Competitive Advantage Card – Slide 
+v4-absent	typeface="Zzyzx Nonexistent" panose=… pitchFamily="34" charset="0"	SWISS	VARIABLE	DejaVuSans-Bold	626.364	626.364	1.0000	Competitive Advantage Card – 
+v5-absent-np	typeface="Zzyzx Nonexistent"	DONTKNOW	DONTKNOW	DejaVuSans-Bold	626.364	626.364	1.0000	Competitive Advantage Card – 
+v6-nopitch	typeface="Helvetica" panose=…	DONTKNOW	DONTKNOW	LiberationSans-Bold	627.552	626.220	0.9979	Competitive Advantage Card – Slide 
+v7-helvneue	typeface="Helvetica Neue" panose=… pitchFamily="34" charset="0"	SWISS	VARIABLE	DejaVuSans-Bold	626.364	626.364	1.0000	Competitive Advantage Card – 
+v8-roman	typeface="Helvetica" panose=… pitchFamily="18" charset="0"	ROMAN	VARIABLE	LiberationSans-Bold	531.684	615.456	1.1576	Competitive Advantage Card – 
+v9-nocharset	typeface="Helvetica" panose=… pitchFamily="34"	SWISS	VARIABLE	LiberationSans-Bold	531.684	623.484	1.1727	Competitive Advantage Card – 
+v10-charsetonly	typeface="Helvetica" panose=… charset="0"	DONTKNOW	DONTKNOW	LiberationSans-Bold	627.552	626.220	0.9979	Competitive Advantage Card – Slide 
+v11-fixed	typeface="Helvetica" panose=… pitchFamily="49" charset="0"	MODERN	FIXED	DejaVuSansMono-Bold	628.488	628.488	1.0000	Competitive Advantage Card – 
+v12-famnone	typeface="Helvetica" panose=… pitchFamily="2" charset="0"	DONTKNOW	VARIABLE	LiberationSans-Bold	627.552	626.220	0.9979	Competitive Advantage Card – Slide 
+v13-nopanose-pf	typeface="Helvetica" pitchFamily="34" charset="0"	SWISS	VARIABLE	LiberationSans-Bold	531.684	623.484	1.1727	Competitive Advantage Card – 

@@ -1,0 +1,10 @@
+identity	|ink|%	rules the round newly reads	why the rendering does not move
+flightstandards-doc-Cross-reference-table_version02__xlsx	18.17	containsText 358	every rule searches "xxx" and no cell on the sheet holds it: 0 cells painted, and the reference paints none either
+Application_Compliance_Checklist_5_Apr_2021__xlsx	6.54	containsText 564 containsBlanks 99 endsWith 5	287+50+4 are on a veryHidden sheet; the remaining 277+49+1 are on columns L and M of a sheet whose cols 10-19 are hidden
+fm-provider-service-measures__xlsx	21.67	duplicateValues 5	100 positions, no value occurs twice
+FAA-2019-0995-0002_attachment_2__xlsx	11.97	duplicateValues 2	241 positions, no value occurs twice
+SSRO_Quarterly_Statistical_Bulletin_Q3201617_DATA__xlsx	0.10	duplicateValues 7	16 positions, no value occurs twice
+Chicago.List.2025__xlsx	0.10	containsText 2	720 positions, no cell holds "1924"
+Computer and Software Services_50 State Comparison__xlsx	20.15	containsText 1	one cell, F4, which does not hold "No Sales Tax"
+028_Budget_summary_report_4aeefd13__xlsx	0.81	notContainsBlanks 2	54 hits, all in helper columns J-M outside the printed block
+036_Simple_to-do_list_Use_this_template_ba44373b__xlsx	0.48	notContainsBlanks 1	12 hits, all in helper columns N-Q outside the printed block

@@ -1,0 +1,63 @@
+# words = tokens carrying at least one Unicode letter or digit; rawwords = pdftotext | wc -w
+# NOT comparable to any scoreboard recorded before 2026-08-13 — see dotnet/probes/gate-01/results.md
+path	ext	pages	words	fonts	unemb	verdict	rawwords
+words/batch-001/doc/FAA-2013-0422-0009_attachment_1.doc	doc	7/7	1845/1845	1/1	0	match	1907/1907
+words/batch-001/doc/GLACIERBG.ETT.doc	doc	1/1	408/408	3/3	0	match	411/411
+words/batch-001/doc/LENTOBUSSIAIKATAULU.-31.10.-31.12.2022.doc	doc	1/1	104/104	3/3	0	match	128/128
+words/batch-001/doc/advert-for-draft-decision-airbus-epr-bm3965ia-v006.doc	doc	2/2	385/385	3/3	0	match	387/387
+words/batch-001/doc/foca_form_1.doc	doc	3/3	1672/1672	2/2	0	match	1687/1687
+words/batch-001/docx/CMTA_Airport_Transportation.docx	docx	1/1	255/255	2/2	0	match	260/260
+words/batch-001/docx/Pre-Application_Letter_of_Intent_Example.docx	docx	1/1	350/350	2/2	0	match	350/350
+words/batch-001/docx/Sample_PAO-PSO_91-113_Letter.docx	docx	1/1	307/307	2/2	0	match	317/317
+words/batch-001/docx/Service-Bulletin-SDFNR5-April-25-2023-FNR-TRANSMISSION-LUBRICATION.docx	docx	1/1	297/297	3/3	0	match	300/300
+words/batch-001/docx/private-hire-operators-licensed.docx	docx	2/2	237/237	2/2	0	match	239/239
+words/batch-002/doc/Bull01-06-Reserve Training Standards.doc	doc	6/6	1482/1482	2/2	0	match	1483/1483
+words/batch-002/doc/FMRBullletinB-28.doc	doc	2/2	461/461	3/3	0	match	461/461
+words/batch-002/doc/prison-population-bulletin-june.doc	doc	4/4	1425/1425	2/2	0	match	1440/1440
+words/batch-002/docx/AUWG min 4-3-24 final.docx	docx	2/2	647/647	2/2	0	match	649/649
+words/batch-002/docx/CSCRS_Technical-Report-Documentation-Page-with-instructions.docx	docx	2/2	719/719	3/3	0	match	720/720
+words/batch-002/docx/FAA-High-Level-Org-Chart.docx	docx	3/3	673/673	4/4	0	match	812/812
+words/batch-002/docx/Interview-mit-Manfred1-Müller.docx	docx	2/2	801/801	2/2	0	match	805/805
+words/batch-002/docx/easa-form-1.docx	docx	5/5	1421/1421	2/2	0	match	1434/1433
+words/batch-002/docx/lk03_17.docx	docx	2/2	367/367	2/2	0	match	373/373
+words/batch-002/docx/s33song-beverlyactproductionofdocuments.docx	docx	2/2	571/571	3/3	0	match	572/572
+words/batch-003/doc/10795.doc	doc	4/4	853/857	3/4	0	match	860/864
+words/batch-003/doc/96-3-clement-data.doc	doc	7/7	1469/1469	4/4	0	match	1514/1513
+words/batch-003/doc/DEP2008-1900.doc	doc	4/4	998/998	5/4	0	match	1011/1011
+words/batch-003/doc/II.1.2_Hypoxia.doc	doc	13/13	3729/3729	2/2	0	match	3738/3738
+words/batch-003/doc/Temp16.doc	doc	2/2	669/669	3/3	0	match	671/671
+words/batch-003/docx/191216_Lesefassung_Nachtflugregelung.docx	docx	3/3	907/907	4/4	0	match	910/910
+words/batch-003/docx/2015-April-SWIM_Users_Forum-Q&A.docx	docx	5/5	1700/1700	4/4	0	match	1704/1704
+words/batch-003/docx/DRX-Ascend System Course Description.docx	docx	2/2	475/475	4/4	0	match	512/512
+words/batch-003/docx/Technical_Issue_Report_Form.docx	docx	2/2	341/341	4/4	0	match	406/406
+words/batch-003/docx/mde087077~283.docx	docx	4/4	987/987	3/3	0	match	997/997
+words/batch-004/doc/07-04.doc	doc	3/3	1069/1069	5/5	0	match	1078/1078
+words/batch-004/doc/1447.doc	doc	3/4	959/959	5/5	0	pages	962/962
+words/batch-004/doc/2ca950374241722b8ea7c132dfce63ae.doc	doc	3/3	949/949	4/4	0	match	1051/1051
+words/batch-004/doc/opic 5--Case Studies Movie and Aviation Industries.doc	doc	5/5	1194/1194	5/5	0	match	1196/1196
+words/batch-004/docx/1528039320.docx	docx	1/1	289/289	2/2	0	match	292/292
+words/batch-004/docx/461249.docx	docx	5/5	1671/1669	4/4	0	match	1710/1708
+words/batch-004/docx/How-to-Write-an-Architecture-Document-for-a-Technology-Service.docx	docx	3/3	953/953	3/3	0	match	960/960
+words/batch-004/docx/License App Instructions 2-22.docx	docx	3/3	1002/1002	4/4	0	match	1036/1036
+words/batch-004/docx/PAT-047 - Architecture and Detailed Design Assessment.docx	docx	4/4	1081/1081	6/6	0	match	1094/1094
+words/batch-004/docx/Software Architecture Document Template.docx	docx	3/3	589/589	5/5	0	match	604/604
+words/batch-005/doc/316r_a_e.doc	doc	14/14	4372/4373	4/4	0	match	4417/4418
+words/batch-005/doc/316r_a_f.doc	doc	14/14	4581/4584	4/4	0	match	4631/4634
+words/batch-005/doc/RobertQ_Service.doc	doc	4/4	547/547	2/2	0	match	587/587
+words/batch-005/doc/Theft-Restitution-Letter-Vancouver-ASC-2005.doc	doc	1/1	262/262	2/2	0	match	265/265
+words/batch-005/doc/loi_format_letter_of_intent-a-320-214-a330.doc	doc	10/10	3346/3346	4/5	0	match	3372/3372
+words/batch-005/docx/2024-12_Comlux_opens_Maintenance_and_Service_Center_in_Dubai.docx	docx	3/3	668/668	4/3	0	match	672/672
+words/batch-005/docx/BID_ACKNOWLEDGEMENT_FORM_FOR_A320.docx	docx	2/2	294/294	3/3	0	match	310/310
+words/batch-005/docx/Technical Report and Technical Update Guidelines.docx	docx	4/4	1205/1205	5/5	0	match	1251/1251
+words/batch-005/docx/healthcare-reform-nsa-consumer-bulletin.docx	docx	4/4	1701/1701	5/5	0	match	1711/1711
+words/batch-005/docx/part-147_approval list_20230119.docx	docx	2/2	735/735	5/5	0	match	758/758
+words/batch-006/doc/003.doc	doc	5/5	984/984	3/3	0	match	999/999
+words/batch-006/doc/1244277 1 Comment.doc	doc	2/2	389/389	5/5	0	match	393/393
+words/batch-006/doc/LHD-230-application-for-the-approval-of-an-aircraftr.doc	doc	2/2	774/774	3/3	0	match	781/779
+words/batch-006/doc/P200904290238_0238_51880.doc	doc	3/3	308/308	4/4	0	match	312/312
+words/batch-006/docx/62599_FRANCE-BRAZIL- Air France Flight 447 crash.docx	docx	18/18	6133/6133	2/2	0	match	6166/6166
+words/batch-006/docx/SDL_FSDO_Part91_LOA_Checklist.docx	docx	2/2	424/424	3/3	0	match	430/430
+words/batch-006/docx/cacs-206-1751218225.docx	docx	2/2	347/347	3/3	0	match	348/348
+words/batch-006/docx/f445896eb008d14c1746fc37d412dc22.docx	docx	15/15	5453/5453	3/3	0	match	5657/5657
+words/batch-006/docx/healthcare-reform-nsa-provider-bulletin.docx	docx	5/5	1936/1936	7/7	0	match	1980/1980
+words/batch-006/docx/technical-memo-format.docx	docx	5/5	1813/1812	5/5	0	match	1847/1846

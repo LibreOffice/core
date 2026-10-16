@@ -1,0 +1,16 @@
+# Build output
+bin/
+obj/
+[Dd]ebug/
+[Rr]elease/
+artifacts/
+*.user
+*.suo
+
+# Test corpus that is generated or not ours to redistribute
+tests/corpus/generated/
+tests/corpus/external/
+
+# Local comparison output
+**/comparison-output/
+**/diffs/

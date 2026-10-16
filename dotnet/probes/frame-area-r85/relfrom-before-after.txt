@@ -1,0 +1,41 @@
+34 one-page A4 fixtures, red band, both installed references. x and y of the band's
+top-left corner in PDF points, at 288 dpi (raster quantum 0.25 pt).
+
+fixture                    24.2 x   24.2 y   26.2 x   26.2 y    was x    was y    now x    now y  verdict
+h-column-0                  72.00   300.00    72.00   300.00    72.00   300.00    72.00   300.00  agrees
+h-insidemargin-0             0.00   300.00     0.00   300.00     0.00   300.00     0.00   300.00  agrees
+h-leftmargin-0               0.00   300.00     0.00   300.00     0.00   300.00     0.00   300.00  agrees
+h-leftmargin-centre         16.00   300.00    16.00   300.00   277.75   300.00    16.00   300.00  agrees  <- fixed
+h-leftmargin-right          32.00   300.00    32.00   300.00   555.25   300.00    32.00   300.00  agrees  <- fixed
+h-margin-0                  72.00   300.00    72.00   300.00    72.00   300.00    72.00   300.00  agrees
+h-outsidemargin-0           72.00   300.00    72.00   300.00     0.00   300.00    72.00   300.00  agrees  <- fixed
+h-outsidemargin-right      483.25   300.00   483.25   300.00   555.25   300.00   483.25   300.00  agrees  <- fixed
+h-page-0                     0.00   300.00     0.00   300.00     0.00   300.00     0.00   300.00  agrees
+h-rightmargin-0            523.25   300.00   523.25   300.00     0.00   300.00   523.25   300.00  agrees  <- fixed
+h-rightmargin-centre       539.25   300.00   539.25   300.00   277.75   300.00   539.25   300.00  agrees  <- fixed
+h-rightmargin-left         523.25   300.00   523.25   300.00     0.00   300.00   523.25   300.00  agrees  <- fixed
+h-rightmargin-right        555.25   300.00   555.25   300.00   555.25   300.00   555.25   300.00  agrees
+m-h-innermargin-0          523.25   300.00   523.25   300.00    72.00   300.00   523.25   300.00  agrees  <- fixed
+m-h-leftmargin-0             0.00   300.00     0.00   300.00    72.00   300.00     0.00   300.00  agrees  <- fixed
+m-h-margin-0                72.00   300.00    72.00   300.00    72.00   300.00    72.00   300.00  agrees
+m-h-outermargin-0            0.00   300.00     0.00   300.00    72.00   300.00     0.00   300.00  agrees  <- fixed
+m-h-rightmargin-0          523.25   300.00   523.25   300.00    72.00   300.00   523.25   300.00  agrees  <- fixed
+m-v-bottommargin-0           0.00   770.00     0.00   770.00     0.00    72.00     0.00   770.00  agrees  <- fixed
+m-v-margin-0                 0.00    72.00     0.00    72.00     0.00    72.00     0.00    72.00  agrees
+m-v-topmargin-0              0.00     0.00     0.00     0.00     0.00    72.00     0.00     0.00  agrees  <- fixed
+m-v-topmargin-36             0.00    36.00     0.00    36.00     0.00   108.00     0.00    36.00  agrees  <- fixed
+v-bottommargin-0           100.00   770.00   100.00   770.00   100.00    72.00   100.00   770.00  agrees  <- fixed
+v-bottommargin-36          100.00   806.00   100.00   806.00   100.00   108.00   100.00   806.00  agrees  <- fixed
+v-bottommargin-bottom      100.00   821.75   100.00   821.75   100.00   750.00   100.00   822.00  agrees  <- fixed
+v-bottommargin-centre      100.00   796.00   100.00   796.00   100.00   411.00   100.00   796.00  agrees  <- fixed
+v-bottommargin-top         100.00   770.00   100.00   770.00   100.00    72.00   100.00   770.00  agrees  <- fixed
+v-margin-0                 100.00    72.00   100.00    72.00   100.00    72.00   100.00    72.00  agrees
+v-page-0                   100.00     0.00   100.00     0.00   100.00     0.00   100.00     0.00  agrees
+v-topmargin-0              100.00     0.00   100.00     0.00   100.00    72.00   100.00     0.00  agrees  <- fixed
+v-topmargin-36             100.00    36.00   100.00    36.00   100.00   108.00   100.00    36.00  agrees  <- fixed
+v-topmargin-bottom         100.00    52.00   100.00    52.00   100.00   750.00   100.00    52.00  agrees  <- fixed
+v-topmargin-centre         100.00    26.00   100.00    26.00   100.00   411.00   100.00    26.00  agrees  <- fixed
+v-topmargin-top            100.00     0.00   100.00     0.00   100.00    72.00   100.00     0.00  agrees  <- fixed
+
+24.2.7.2 and 26.2.4.2 identical on 34 of 34 rows
+agreeing with 26.2.4.2: before 10 of 34, after 34 of 34

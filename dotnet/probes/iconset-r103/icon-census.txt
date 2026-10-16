@@ -1,0 +1,11 @@
+document                                                   26.2.4.2                           ours                              
+= 088_To-do_list_with_progress_tracker_Use_this_template_8   1 tick-green x1                    1 tick-green x1
+= 041_Business_budget_ef942467                               0 (none)                           0 (none)
+= 075_Idea_planner_tasks_f44ebd73                            4 cross-red x2, excl-amber x1, tick-green x1   4 cross-red x2, excl-amber x1, tick-green x1
+= 069_Blue_modern_balance_sheet_Use_this_template_6b4d70d3   2 flag-green x1, flag-red x1       2 flag-green x1, flag-red x1
+= 078_Modern_inventory_list_Use_this_template_41abd5bf      12 flag-red x12                    12 flag-red x12
+= 042_Business_monthly_budget_4e4d092f                       0 (none)                           0 (none)
+! 066_Agile_Gantt_chart_08f9de45                            27 diamond x18, flag-amber x9      18 diamond x9, flag-amber x9
+= 077_Inventory_list_with_highlighting_Use_this_template_3  12 flag-red x12                    12 flag-red x12
+= 076_Inventory_list_accessibility_guide_Use_this_template   2 flag-red x2                      2 flag-red x2
+= sistem-rekod-markah-srm-_-rekod-master                     0 (none)                           0 (none)

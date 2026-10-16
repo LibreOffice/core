@@ -1,0 +1,43 @@
+Fundamentals_Module_1_basics.ppt	rulers 239	lost 0	with level-0 text offset 0
+RRM-training-syllabus-Chapter-3-Teamwork-TC-Towing-Incident-Analysis-Dec-2009.ppt	rulers 119	lost 0	with level-0 text offset 0
+Thailand17.ppt	rulers 187	lost 0	with level-0 text offset 0
+W3_Case_Study_of_a_Tsunami_Warning_Simulation_Exercise_Ed.ppt	rulers 5	lost 3	with level-0 text offset 3
+architecture6.ppt	rulers 134	lost 0	with level-0 text offset 0
+pres_ioc_phuket.ppt	rulers 15	lost 2	with level-0 text offset 2
+wells08_basic.ppt	rulers 2	lost 2	with level-0 text offset 2
+gfopportunitiesforlinkagespres_2010_en.ppt	rulers 46	lost 0	with level-0 text offset 0
+ws_prod-g-doc-Events-Part-M-presentation.ppt	rulers 3	lost 3	with level-0 text offset 2
+010605Vul.ppt	rulers 1	lost 1	with level-0 text offset 0
+Inducement-to-Insurance-Business.ppt	rulers 25	lost 0	with level-0 text offset 0
+outlook_of_nigerian_pension_sector.ppt	rulers 37	lost 4	with level-0 text offset 4
+ws_prod-g-doc-Events-2007-september-M.017-(French)-France.ppt	rulers 54	lost 54	with level-0 text offset 54
+ws_prod-g-doc-Events-2007-september-MDM.032-(ENGLISH)-CZ.ppt	rulers 1	lost 1	with level-0 text offset 1
+0335fab9-79f0-4944-b92c-f223837ca2d8.ppt	rulers 18	lost 0	with level-0 text offset 0
+undp_presentation_revised_17_may.ppt	rulers 50	lost 14	with level-0 text offset 2
+ws_prod-g-doc-Events-industrymeeting18112004-European-Safety-Strategy-Initiative.ppt	rulers 11	lost 1	with level-0 text offset 0
+ITE106-Chapter 4.ppt	rulers 157	lost 0	with level-0 text offset 0
+berlin.ppt	rulers 14	lost 1	with level-0 text offset 1
+pods05.ppt	rulers 200	lost 1	with level-0 text offset 1
+Lepore.ppt	rulers 122	lost 0	with level-0 text offset 0
+ws_prod-g-doc-Events-r-6.-ESM.ppt	rulers 23	lost 23	with level-0 text offset 23
+1-secretariat.ppt	rulers 57	lost 0	with level-0 text offset 0
+71393_pp7.ppt	rulers 30	lost 0	with level-0 text offset 0
+introduction_to_bea_tuxedo.ppt	rulers 8	lost 0	with level-0 text offset 0
+joint_user_outcomes_michael_fullerton_29.06.12.ppt	rulers 123	lost 0	with level-0 text offset 0
+8.16_AOD_FINAL_Provider_Training_Presentation_9_2009.ppt	rulers 294	lost 0	with level-0 text offset 0
+EG1_dsrc tech.ppt	rulers 6	lost 5	with level-0 text offset 5
+RESPA_-_Section_8_Webinar.ppt	rulers 111	lost 0	with level-0 text offset 0
+concepts-surrounding-cloud-computing-carolyn-kranz-and-rich-prem-gb-seattle-2011.ppt	rulers 225	lost 0	with level-0 text offset 0
+Airport Planning 09112013.ppt	rulers 144	lost 0	with level-0 text offset 0
+Employment-Based_I-485.ppt	rulers 1	lost 1	with level-0 text offset 1
+iep-amount-frequency-for-webinar.ppt	rulers 400	lost 0	with level-0 text offset 0
+BUS-Chapter 05.ppt	rulers 8	lost 4	with level-0 text offset 4
+JesuitAssocOfStudentPersonnel.ppt	rulers 3	lost 1	with level-0 text offset 1
+gillikin_online_user_mtg_2010.ppt	rulers 165	lost 0	with level-0 text offset 0
+2015-Civil-Rights-Website-training.ppt	rulers 232	lost 0	with level-0 text offset 0
+FAA_Form_337.ppt	rulers 491	lost 0	with level-0 text offset 0
+hofman.ppt	rulers 57	lost 0	with level-0 text offset 0
+ws_prod-g-doc-Events-2008-February-5-NATO-activities.ppt	rulers 12	lost 0	with level-0 text offset 0
+Aerospace_Journey_of_Flight_Chapter_BCB1637572DA6.ppt	rulers 117	lost 0	with level-0 text offset 0
+Architecture.ppt	rulers 78	lost 0	with level-0 text offset 0
+TOTAL {'documents': 42, 'rulers': 4025, 'lost': 121, 'level0': 106, 'documents-losing': 17}

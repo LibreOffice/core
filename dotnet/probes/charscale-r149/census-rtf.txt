@@ -1,0 +1,30 @@
+files                         : 337
+base rate, \fN run tokens     : 256927
+occurrences, gross            : 1965 in 20 documents
+occurrences, NON-IDENTITY     : 1520 in 17 documents
+outside {\stylesheet}, gross  : 1680
+outside {\stylesheet}, net    : 1467 in 12 documents
+values (all)                  : {86: 1, 90: 1, 95: 87, 96: 4, 98: 6, 99: 1265, 100: 445, 101: 4, 102: 10, 103: 77, 104: 13, 105: 27, 106: 7, 107: 6, 108: 2, 112: 1, 130: 4, 131: 5}
+values (outside stylesheet)   : {95: 87, 96: 3, 98: 4, 99: 1227, 100: 213, 101: 4, 102: 10, 103: 76, 104: 11, 105: 27, 106: 6, 107: 6, 108: 2, 131: 4}
+
+document	gross	net	body_gross	body_net
+195389b8c6c6-Annex-10-to-the-Aircraft-Maintenance-Specialist-Certification-Rule-GCAA.rtf	1100	1100	1100	1100
+9a283dc56300-ESPN-R - MCF - RA - Ed1.rtf	94	94	94	94
+4c44defb9273-Regulations Governing the Status, Basic Rights and Duties of Officials other than Secretariat Officials, and Experts on Mission.rtf	86	80	70	68
+ae2db2175f3d-091_Business_Case_Template_Complete_Guide_cb91a140.rtf	54	54	54	54
+7be9cfcc7637-OM template for non-complex NCC operators_August 2016.rtf	39	39	39	39
+e93e7e131d5f-AWR OPS-AOC 044 Statement of Compliance RVSM  Rev 04 01 Feb 2024.rtf	44	36	23	23
+404b8cb5cec3-SWDD-template.rtf	46	35	34	30
+5ee4fec55c91-BID_ACKNOWLEDGEMENT_FORM_FOR_A320.rtf	19	19	19	19
+66cd4750ab46-ESPN-R - MCF - Manual - Ed1.0 - For Publication.rtf	105	14	22	14
+0126226bc58c-SPA-06_mcar_part-6_and_IS_v2.9.rtf	12	12	0	0
+e6a30de46c19-19-06 Assistive Technology TAB Final - 508.rtf	19	10	18	10
+d8c1eba8d845-AAC-AD-No-2021-01-Boeing-737-8-and-737-9-MAX.rtf	9	9	9	9
+ed07ce5f44c7-t_TEMPforInvProgs.rtf	8	8	7	7
+bc17eefecac9-DRX-Ascend System Course Description.rtf	7	7	0	0
+1ef46e226af0-JEMIT_Template.rtf	1	1	0	0
+2df5a30320b3-Allegiant_Company_Profile_with_History.rtf	1	1	0	0
+f30b3e8d2d1e-mde087077~283.rtf	1	1	0	0
+8488bcedf746-CRIF - SpÃ©cification technique - Socle applicatif.rtf	2	0	1	0
+b6b629e87f8f-f445896eb008d14c1746fc37d412dc22.rtf	314	0	188	0
+d2de78581f39-Press release_EUREKA labels ITEA 3 Cluster.rtf	4	0	2	0

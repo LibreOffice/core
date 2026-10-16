@@ -1,0 +1,53 @@
+diff --git a/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs b/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs
+--- a/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs
+@@ -1811,6 +1811,30 @@
+                         Emit("\t");
+                         break;
+ 
++                    // A *positional* tab: an absolute stop stated on the element rather than in the
++                    // paragraph's `w:tabs`, which is how Word writes a three-part running head with no
++                    // tab stops of its own. LibreOffice emits an ordinary tab character for every one
++                    // of them — the tokenizer's `CT_PTab` resource is
++                    // `<action name="end" action="tab"/>` (`writerfilter/ooxml/model.xml`:18204-18208)
++                    // — and only then, for a *left*-aligned one that follows text on the line,
++                    // replaces that tab with a line break (`DomainMapper_Impl::HandlePTab`,
++                    // `DomainMapper_Impl.cxx`:5550-5604, which returns immediately for every other
++                    // alignment). Dropping the element instead runs the parts together: measured on
++                    // `PI-doc.-no.-2E-Technical-Review-Report.docx`, whose footer draws
++                    // `Page 5 of 12Version 1Last saved …` where the reference spaces the three across
++                    // the page.
++                    case "ptab" when !Suppressed:
++                        if (Word.Attribute(child, "alignment") == "left" && _builder.Length > 0)
++                        {
++                            Emit(LineSeparator.ToString());
++                        }
++                        else
++                        {
++                            Emit("\t");
++                        }
++
++                        break;
++
+                     // A character named by slot in a face of its own, and the only run-level element
+                     // that overrides the run's font for one character. LibreOffice sets
+                     // PROP_CHAR_FONT_NAME to `w:font` with charset SYMBOL and appends the raw `w:char`
+diff --git a/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxContentReader.cs b/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxContentReader.cs
+--- a/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxContentReader.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxContentReader.cs
+@@ -524,7 +524,14 @@
+                     ReadAnchoredContent(child, paragraph);
+                     break;
+ 
+-                case "separator" or "continuationSeparator" or "lastRenderedPageBreak" or "ptab":
++                // A positional tab is a tab: LibreOffice's tokenizer emits one character for it
++                // (`writerfilter/ooxml/model.xml`:18204-18208, `CT_PTab` → `action="tab"`), so
++                // dropping it here runs a three-part running head into one word.
++                case "ptab":
++                    Emit(paragraph, "\t", format, characterStyleName, hyperlink);
++                    break;
++
++                case "separator" or "continuationSeparator" or "lastRenderedPageBreak":
+                     break;
+ 
+                 default:

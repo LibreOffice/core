@@ -1,0 +1,13 @@
+1534 scored pages present in both the census and the flat-ODP export
+
+every scored page                             1217 /  1534 =  79.3%
+pages whose dominant size AGREES              1201 /  1515 =  79.3%
+  ... of those, with >= 30 alnum chars        1168 /  1427 =  81.9%
+the 19 that differ                              16 /    19 =  84.2%
+the 13 whose alnum counts also agree            13 /    13 = 100.0%
+
+13 of 13 under the agreeing-page rate of 81.9%: p = 0.074
+So "16 of 19" is AT the base rate and carries no information, and "13 of 13" is
+suggestive at best. The census does not establish the autofit reading; it is
+consistent with it. It is also page-level: it cannot say that the shape carrying
+the dominant text is the one stating shrink-to-fit.

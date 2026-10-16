@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  A header's gap below it is either added to its height or eaten by it, and
+  style:dynamic-spacing is what says which.
+
+  Both page layouts below declare the same header — fo:min-height="1cm" with a
+  fo:margin-bottom="1cm" gap under it, on a page whose fo:margin-top is 2cm — and differ in
+  that one attribute. The header holds one 11pt line, about 13.45pt, so:
+
+    PLeat  style:dynamic-spacing="true"   header total = max(1cm, 13.45pt)        = 28.35pt
+    PLadd  style:dynamic-spacing="false"  header total = max(1cm, 13.45 + 1cm)    = 41.80pt
+
+  which puts the first body line at 56.69 + 28.35 = 85.08 and at 56.69 + 41.80 = 98.53.
+
+  The rule is LibreOffice's SwHeaderAndFooterEatSpacingItem: the header's print area starts
+  at fo:min-height less both spacings and gives back out of the gap exactly what its content
+  overruns that by (sw/source/core/layout/hffrm.cxx:116-170), which reduces to
+
+      total = max(min-height, content + (dynamic-spacing ? 0 : gap))
+
+  Absence of the attribute is the "false" reading, not the "true" one: xmloff maps it to a
+  MAYBEVOID property (xmloff/source/style/PageMasterStyleMap.cxx:195) and the item's own
+  default is false (sw/inc/hfspacingitem.hxx:30-31).
+
+  NOTE ON SHAPE: style:header-style is a sibling of style:page-layout-properties, not a child
+  of it. Nested inside, the whole element is ignored — silently, with the header sized to its
+  content — and the fixture proves nothing.
+
+  Ground truth is 26.2.4.2's own PDF of this file, read with pdftotext -bbox: the first body
+  line of page 1 has yMin 85.0789 and of page 2 yMin 98.5289.
+-->
+<office:document
+    xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+    xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+    xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+    xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:meta>
+  <dc:title>Paperless header dynamic spacing</dc:title>
+  <dc:subject>A header with style:dynamic-spacing absorbs its gap instead of adding it</dc:subject>
+ </office:meta>
+ <office:automatic-styles>
+  <style:page-layout style:name="PLeat">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="15cm"
+       fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"/>
+   <style:header-style>
+    <style:header-footer-properties fo:min-height="1cm" fo:margin-bottom="1cm"
+        style:dynamic-spacing="true"/>
+   </style:header-style>
+  </style:page-layout>
+  <style:page-layout style:name="PLadd">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="15cm"
+       fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"/>
+   <style:header-style>
+    <style:header-footer-properties fo:min-height="1cm" fo:margin-bottom="1cm"
+        style:dynamic-spacing="false"/>
+   </style:header-style>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:styles>
+  <style:style style:name="Body" style:family="paragraph">
+   <style:paragraph-properties fo:text-align="start" fo:text-indent="0cm" fo:hyphenate="false"
+       fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%"
+       fo:orphans="0" fo:widows="0"/>
+   <style:text-properties style:font-name="Carlito" fo:font-family="Carlito" fo:font-size="11pt"
+       fo:language="en" fo:country="GB"/>
+  </style:style>
+  <style:style style:name="AddingPageStart" style:family="paragraph" style:parent-style-name="Body"
+      style:master-page-name="Adding"/>
+ </office:styles>
+ <office:master-styles>
+  <style:master-page style:name="Standard" style:page-layout-name="PLeat">
+   <style:header>
+    <text:p text:style-name="Body">HEADEREAT</text:p>
+   </style:header>
+  </style:master-page>
+  <style:master-page style:name="Adding" style:page-layout-name="PLadd">
+   <style:header>
+    <text:p text:style-name="Body">HEADERADD</text:p>
+   </style:header>
+  </style:master-page>
+ </office:master-styles>
+ <office:body><office:text>
+   <text:p text:style-name="Body">EATFIRST</text:p>
+   <text:p text:style-name="AddingPageStart">ADDFIRST</text:p>
+ </office:text></office:body>
+</office:document>

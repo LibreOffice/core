@@ -1,0 +1,5 @@
+reference /home/user/fa-r85/ref3/ref: 30 documents
+/home/user/fa-r85/before/ours: MATCH 30 of 30
+/home/user/fa-r85/after3/ours: MATCH 30 of 30
+
+verdicts that moved: 0

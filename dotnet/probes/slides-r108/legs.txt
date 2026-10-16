@@ -1,0 +1,25 @@
+# O15's twelve pages at four legs, per-page dominant drawn text size in points.
+#
+#   REF.ppt    26.2.4.2 reading the .ppt        -- the banked reference, slides-r107/sizes-ref.tsv
+#   REF.fodp   26.2.4.2 reading its OWN flat ODP of that same .ppt
+#   OUR.base   this tree at 3a926f63f reading the .ppt   -- slides-r107/sizes-head.tsv
+#   OUR.head   this tree with the last-portion change reading the .ppt
+#   OUR.fodp   this tree reading the SAME flat ODP (a .ppt-only change cannot move this column)
+#
+# REF.ppt != REF.fodp  -- the round trip is not faithful there, so it carries no evidence
+# OUR.fodp == REF.ppt  -- we agree once we are handed the reference's own model: an IMPORT cause
+# OUR.fodp != REF.ppt  -- we disagree on that model too: a LAYOUT cause
+
+document                                                    pg  REF.ppt  REF.fodp  OUR.base  OUR.head  OUR.fodp  verdict
+JesuitAssocOfStudentPersonnel                               24    13.01     13.01     15.99     15.99     15.99  LAYOUT
+RRM-training-syllabus-Chapter-3-Teamwork-TC-Towing-Inciden  16    18.99     18.99     20.01     20.01     20.01  LAYOUT
+gfopportunitiesforlinkagespres_2010_en                      27    25.99     28.01     28.01     28.01     28.01  ODP-NOT-FAITHFUL
+gillikin_online_user_mtg_2010                                2    33.99     33.99     31.01     33.99     33.99  IMPORT  (fixed this round)
+ws_prod-g-doc-Events-2007-september-M.017-(French)-France   14    18.99     18.99     20.01     20.01     20.01  LAYOUT
+ws_prod-g-doc-Events-2007-september-M.017-(French)-France   16    14.99     14.99     17.01     17.01      15.0  IMPORT
+ws_prod-g-doc-Events-Part-M-presentation                    21    17.01      18.0      18.0      18.0      18.0  ODP-NOT-FAITHFUL
+2015-Civil-Rights-Website-training                          22     14.0     14.99     17.01     17.01     17.01  ODP-NOT-FAITHFUL
+Fundamentals_Module_1_basics                                 6     32.0      32.0      7.08      7.08      32.0  IMPORT
+Thailand17                                                   8    24.01     24.01     16.68     16.68     24.01  IMPORT
+Thailand17                                                  11    11.99     11.99      11.0      11.0     11.99  IMPORT
+W3_Case_Study_of_a_Tsunami_Warning_Simulation_Exercise_Ed   10    24.01     24.01     16.68     16.68     24.01  IMPORT

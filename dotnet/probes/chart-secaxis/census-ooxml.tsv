@@ -1,0 +1,310 @@
+part	groups	axpairs	valax	dateax	catax	plotvisonly	varycolors	dpt	cellrange	dlblrange	strlit	numlit	spacebold	axorder	gaxorder	doc
+ppt/charts/chart1.xml	1	1	0	0	0	True	1	2	0	0	0	0	0		pieChart::1	slides/chartset-005/pptx/076_Hexadonut_Charts_for_PowerPoint_and_Google_Slides_2b879835.pptx
+ppt/charts/chart2.xml	1	1	0	0	0	True	1	2	0	0	0	0	0		pieChart::1	slides/chartset-005/pptx/076_Hexadonut_Charts_for_PowerPoint_and_Google_Slides_2b879835.pptx
+ppt/charts/chart3.xml	1	1	0	0	0	True	1	2	0	0	0	0	0		pieChart::1	slides/chartset-005/pptx/076_Hexadonut_Charts_for_PowerPoint_and_Google_Slides_2b879835.pptx
+ppt/charts/chart4.xml	1	1	0	0	0	True	1	2	0	0	0	0	0		pieChart::1	slides/chartset-005/pptx/076_Hexadonut_Charts_for_PowerPoint_and_Google_Slides_2b879835.pptx
+ppt/charts/chart5.xml	1	1	0	0	0	True	1	2	0	0	0	0	0		pieChart::1	slides/chartset-005/pptx/076_Hexadonut_Charts_for_PowerPoint_and_Google_Slides_2b879835.pptx
+ppt/charts/chart6.xml	1	1	0	0	0	True	1	2	0	0	0	0	0		pieChart::1	slides/chartset-005/pptx/076_Hexadonut_Charts_for_PowerPoint_and_Google_Slides_2b879835.pptx
+ppt/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:257198848;valAx:257201200	barChart:257198848,257201200:1	slides/done-012/pptx/Intersil_Italy_CAN_Bus_Transceiver_Presentation_Final.pptx
+ppt/charts/chart1.xml	1	1	2	0	0	True	0	0	0	0	0	0	0	valAx:452699472;valAx:452698488	scatterChart:452699472,452698488:1	slides/done-007/pptx/flying-by-numbers-presentation.pptx
+ppt/charts/chart1.xml	1	1	0	0	0	True	1	10	0	0	0	0	0		pieChart::1	slides/done-007/pptx/bitesize-writing-a-report.pptx
+ppt/charts/chart2.xml	1	1	0	0	0	True	1	6	0	0	0	0	0		pieChart::1	slides/done-007/pptx/bitesize-writing-a-report.pptx
+ppt/charts/chart1.xml	1	1	1	0	1	True	0	1	0	0	0	0	0	catAx:767064575;valAx:767056895	barChart:767064575,767056895:2	slides/chartset-009/pptx/033_Battery_Percentage_Chart_c99c24b5.pptx
+ppt/charts/chart2.xml	1	1	1	0	1	True	0	1	0	0	0	0	0	catAx:767064575;valAx:767056895	barChart:767064575,767056895:2	slides/chartset-009/pptx/033_Battery_Percentage_Chart_c99c24b5.pptx
+ppt/charts/chart3.xml	1	1	1	0	1	True	0	2	0	0	0	0	0	catAx:767064575;valAx:767056895	barChart:767064575,767056895:2	slides/chartset-009/pptx/033_Battery_Percentage_Chart_c99c24b5.pptx
+ppt/charts/chart5.xml	1	1	1	0	1	True	0	1	0	0	0	0	0	catAx:767064575;valAx:767056895	barChart:767064575,767056895:2	slides/chartset-009/pptx/033_Battery_Percentage_Chart_c99c24b5.pptx
+ppt/charts/chart4.xml	1	1	1	0	1	True	0	1	0	0	0	0	0	catAx:767064575;valAx:767056895	barChart:767064575,767056895:2	slides/chartset-009/pptx/033_Battery_Percentage_Chart_c99c24b5.pptx
+ppt/charts/chart6.xml	1	1	1	0	1	True	0	2	0	0	0	0	0	catAx:767064575;valAx:767056895	barChart:767064575,767056895:2	slides/chartset-009/pptx/033_Battery_Percentage_Chart_c99c24b5.pptx
+ppt/charts/chart3.xml	1	1	1	0	1	True	0	1	0	0	0	0	0	catAx:767064575;valAx:767056895	barChart:767064575,767056895:2	slides/chartset-009/pptx/052_Flame_Percentage_Chart_d27d49c4.pptx
+ppt/charts/chart4.xml	1	1	1	0	1	True	0	1	0	0	0	0	0	catAx:767064575;valAx:767056895	barChart:767064575,767056895:2	slides/chartset-009/pptx/052_Flame_Percentage_Chart_d27d49c4.pptx
+ppt/charts/chart5.xml	1	1	1	0	1	True	0	1	0	0	0	0	0	catAx:767064575;valAx:767056895	barChart:767064575,767056895:2	slides/chartset-009/pptx/052_Flame_Percentage_Chart_d27d49c4.pptx
+ppt/charts/chart7.xml	1	1	1	0	1	True	0	1	0	0	0	0	0	catAx:767064575;valAx:767056895	barChart:767064575,767056895:2	slides/chartset-009/pptx/052_Flame_Percentage_Chart_d27d49c4.pptx
+ppt/charts/chart8.xml	1	1	1	0	1	True	0	1	0	0	0	0	0	catAx:767064575;valAx:767056895	barChart:767064575,767056895:2	slides/chartset-009/pptx/052_Flame_Percentage_Chart_d27d49c4.pptx
+ppt/charts/chart1.xml	1	1	1	0	1	True	0	1	0	0	0	0	0	catAx:767064575;valAx:767056895	barChart:767064575,767056895:2	slides/chartset-009/pptx/052_Flame_Percentage_Chart_d27d49c4.pptx
+ppt/charts/chart2.xml	1	1	1	0	1	True	0	1	0	0	0	0	0	catAx:767064575;valAx:767056895	barChart:767064575,767056895:2	slides/chartset-009/pptx/052_Flame_Percentage_Chart_d27d49c4.pptx
+ppt/charts/chart6.xml	1	1	1	0	1	True	0	1	0	0	0	0	0	catAx:767064575;valAx:767056895	barChart:767064575,767056895:2	slides/chartset-009/pptx/052_Flame_Percentage_Chart_d27d49c4.pptx
+ppt/charts/chart18.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:2094734554;valAx:2094734552	barChart:2094734554,2094734552,2094734556:2	slides/chartset-004/pptx/018_advanced_powerpoint_column.pptx
+ppt/charts/chart26.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:2094734554;valAx:2094734552	barChart:2094734554,2094734552,2094734556:2	slides/chartset-004/pptx/026_advanced_powerpoint_column.pptx
+ppt/charts/chart22.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:2094734554;valAx:2094734552	areaChart:2094734554,2094734552,2094734556:2	slides/chartset-004/pptx/022_advanced_powerpoint_area.pptx
+ppt/charts/chart25.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:2094734554;valAx:2094734552	barChart:2094734554,2094734552,2094734556:2	slides/chartset-004/pptx/025_advanced_powerpoint_bar.pptx
+ppt/charts/chart21.xml	1	1	0	0	0	True	1	5	0	0	0	0	0		doughnutChart::1	slides/chartset-004/pptx/021_advanced_powerpoint_doughnut.pptx
+ppt/charts/chart20.xml	1	1	0	0	0	True	1	5	0	0	0	0	0		pieChart::1	slides/chartset-004/pptx/020_advanced_powerpoint_pie.pptx
+ppt/charts/chart4.xml	1	1	0	0	0	True	1	5	0	0	0	0	0		pieChart::1	slides/chartset-004/pptx/004_advanced_powerpoint_pie.pptx
+ppt/charts/chart29.xml	1	1	0	0	0	True	1	5	0	0	0	0	0		doughnutChart::1	slides/chartset-004/pptx/029_advanced_powerpoint_doughnut.pptx
+ppt/charts/chart13.xml	1	1	0	0	0	True	1	5	0	0	0	0	0		doughnutChart::1	slides/chartset-004/pptx/013_advanced_powerpoint_doughnut.pptx
+ppt/charts/chart16.xml	1	0	2	0	0	True	0	0	0	0	0	0	0	valAx:2094734554;valAx:2094734552	bubbleChart:2094734554,2094734552:0	slides/chartset-001/pptx/016_advanced_powerpoint_bubble.pptx
+ppt/charts/chart31.xml	1	0	2	0	0	True	0	0	0	0	0	0	0	valAx:2094734554;valAx:2094734552	scatterChart:2094734554,2094734552:0	slides/chartset-001/pptx/031_advanced_powerpoint_scatter.pptx
+ppt/charts/chart15.xml	1	0	2	0	0	True	0	0	0	0	0	0	0	valAx:2094734554;valAx:2094734552	scatterChart:2094734554,2094734552:0	slides/chartset-001/pptx/015_advanced_powerpoint_scatter.pptx
+ppt/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:620604223;valAx:612392015	lineChart:620604223,612392015:3	slides/chartset-001/pptx/line_chart.pptx
+ppt/charts/chart1.xml	1	1	2	0	0	True	0	0	14	6	0	0	0	valAx:1258785568;valAx:1258786048	scatterChart:1258785568,1258786048:3	slides/chartset-001/pptx/scatter_chart.pptx
+ppt/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:620604223;valAx:612392015	areaChart:620604223,612392015:2	slides/chartset-001/pptx/stacked_area_chart.pptx
+ppt/charts/chart8.xml	1	0	2	0	0	True	0	0	0	0	0	0	0	valAx:2094734554;valAx:2094734552	bubbleChart:2094734554,2094734552:0	slides/chartset-001/pptx/008_advanced_powerpoint_bubble.pptx
+ppt/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:620604223;valAx:612392015	barChart:620604223,612392015:2	slides/chartset-001/pptx/stacked_bar_chart.pptx
+ppt/charts/chart1.xml	2	2	2	0	2	True	0	0	0	0	0	0	0	catAx:620604223;valAx:612392015;valAx:2049921631;catAx:2049923279	barChart:620604223,612392015:2|lineChart:2049923279,2049921631:1	slides/chartset-001/pptx/combo_bar_line_chart.pptx
+ppt/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:620604223;valAx:612392015	barChart:620604223,612392015:4	slides/chartset-001/pptx/bar_chart.pptx
+ppt/charts/chart11.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:2094734554;valAx:2094734552	lineChart:2094734554,2094734552,2094734556:2	slides/chartset-003/pptx/011_advanced_powerpoint_line.pptx
+ppt/charts/chart19.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:2094734554;valAx:2094734552	lineChart:2094734554,2094734552,2094734556:2	slides/chartset-003/pptx/019_advanced_powerpoint_line.pptx
+ppt/charts/chart3.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:2094734554;valAx:2094734552	lineChart:2094734554,2094734552,2094734556:2	slides/chartset-003/pptx/003_advanced_powerpoint_line.pptx
+ppt/charts/chart10.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:2094734554;valAx:2094734552	barChart:2094734554,2094734552,2094734556:2	slides/chartset-003/pptx/010_advanced_powerpoint_column.pptx
+ppt/charts/chart27.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:2094734554;valAx:2094734552	lineChart:2094734554,2094734552,2094734556:2	slides/chartset-003/pptx/027_advanced_powerpoint_line.pptx
+ppt/charts/chart28.xml	1	1	0	0	0	True	1	5	0	0	0	0	0		pieChart::1	slides/chartset-003/pptx/028_advanced_powerpoint_pie.pptx
+ppt/charts/chart9.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:2094734554;valAx:2094734552	barChart:2094734554,2094734552,2094734556:2	slides/chartset-003/pptx/009_advanced_powerpoint_bar.pptx
+ppt/charts/chart12.xml	1	1	0	0	0	True	1	5	0	0	0	0	0		pieChart::1	slides/chartset-003/pptx/012_advanced_powerpoint_pie.pptx
+ppt/charts/chart2.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:2094734554;valAx:2094734552	barChart:2094734554,2094734552,2094734556:2	slides/chartset-003/pptx/002_advanced_powerpoint_column.pptx
+ppt/charts/chart5.xml	1	1	0	0	0	True	1	5	0	0	0	0	0		doughnutChart::1	slides/chartset-003/pptx/005_advanced_powerpoint_doughnut.pptx
+ppt/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:168992768;valAx:195874816	barChart:168992768,195874816:2	slides/ceiling-001/pptx/N2_E_Maestroni_Swarm_COP.pptx
+ppt/charts/chart1.xml	1	1	0	0	0	True	1	3	0	0	0	0	0		doughnutChart::1	slides/ceiling-001/pptx/Sylva%20introduction%20session.pptx
+ppt/charts/chart1.xml	1	1	2	0	0	True	0	0	0	0	0	0	0	valAx:1647269824;valAx:1647279808	scatterChart:1647269824,1647279808:1	slides/extra-001/pptx/FAAAIandtheArtandScienceofV&Vfinal.pptx
+ppt/charts/chart8.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:67795968;valAx:67810048	lineChart:67795968,67810048:13	slides/done-011/pptx/171128IPAP.pptx
+ppt/charts/chart4.xml	1	1	1	0	1	True	0	0	0	0	0	0	1	catAx:61140992;valAx:61142528	lineChart:61140992,61142528:2	slides/done-011/pptx/171128IPAP.pptx
+ppt/charts/chart5.xml	2	2	2	1	1	True	0	0	0	0	0	0	0	dateAx:61827328;valAx:61837696;valAx:61839616;catAx:61857792	barChart:61827328,61837696:1|lineChart:61857792,61839616:1	slides/done-011/pptx/171128IPAP.pptx
+ppt/charts/chart9.xml	2	2	2	2	0	True	0	0	0	0	0	0	0	dateAx:68142208;valAx:68144128;valAx:68228608;dateAx:68230528	barChart:68142208,68144128:1|lineChart:68230528,68228608:1	slides/done-011/pptx/171128IPAP.pptx
+ppt/charts/chart6.xml	2	2	2	1	1	True	0	0	0	0	0	0	0	dateAx:61681024;valAx:61695488;valAx:61697408;catAx:61720064	barChart:61681024,61695488:1|lineChart:61720064,61697408:1	slides/done-011/pptx/171128IPAP.pptx
+ppt/charts/chart3.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:61644800;valAx:61646336	barChart:61644800,61646336:1	slides/done-011/pptx/171128IPAP.pptx
+ppt/charts/chart7.xml	1	1	1	1	0	True	0	0	0	0	0	0	0	dateAx:62138240;valAx:62181376	lineChart:62138240,62181376:3	slides/done-011/pptx/171128IPAP.pptx
+ppt/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:61466112;valAx:61467648	lineChart:61466112,61467648:4	slides/done-011/pptx/171128IPAP.pptx
+ppt/charts/chart2.xml	1	1	1	0	1	True	0	0	0	0	0	0	1	catAx:116638464;valAx:116640384	lineChart:116638464,116640384:3	slides/done-011/pptx/171128IPAP.pptx
+ppt/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:126066824;valAx:126069176	lineChart:126066824,126069176:1	slides/done-011/pptx/1_Country-Updates_DRC_English.pptx
+ppt/charts/chart2.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:127698264;valAx:127697872	barChart:127698264,127697872:2	slides/done-011/pptx/1_Country-Updates_DRC_English.pptx
+ppt/charts/chart3.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:127702184;valAx:127702576	lineChart:127702184,127702576:2	slides/done-011/pptx/1_Country-Updates_DRC_English.pptx
+ppt/charts/chart1.xml	1	1	0	0	0	True	1	2	0	0	0	0	0		pieChart::1	slides/done-011/pptx/3495.pptx
+ppt/charts/chart2.xml	1	1	0	0	0	True	1	2	0	0	0	0	0		pieChart::1	slides/done-011/pptx/3495.pptx
+ppt/charts/chart3.xml	1	1	0	0	0	True	1	2	0	0	0	0	0		pieChart::1	slides/done-011/pptx/3495.pptx
+ppt/charts/chart4.xml	1	1	0	0	0	True	1	2	0	0	0	0	0		pieChart::1	slides/done-011/pptx/3495.pptx
+ppt/charts/chart3.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:185943168;valAx:185945472	barChart:185943168,185945472:2	slides/done-011/pptx/3492.pptx
+ppt/charts/chart4.xml	1	1	0	0	0	True	1	10	0	0	0	0	0		doughnutChart::1	slides/done-011/pptx/3492.pptx
+ppt/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:151147264;valAx:151204992	barChart:151147264,151204992:1	slides/done-011/pptx/3492.pptx
+ppt/charts/chart2.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:165109760;valAx:165111680	barChart:165109760,165111680:2	slides/done-011/pptx/3492.pptx
+ppt/charts/chart30.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:2094734554;valAx:2094734552	areaChart:2094734554,2094734552,2094734556:2	slides/chartset-002/pptx/030_advanced_powerpoint_area.pptx
+ppt/charts/chart6.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:2094734554;valAx:2094734552	areaChart:2094734554,2094734552,2094734556:2	slides/chartset-002/pptx/006_advanced_powerpoint_area.pptx
+ppt/charts/chart32.xml	1	0	2	0	0	True	0	0	0	0	0	0	0	valAx:2094734554;valAx:2094734552	bubbleChart:2094734554,2094734552:0	slides/chartset-002/pptx/032_advanced_powerpoint_bubble.pptx
+ppt/charts/chart33.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:2094734554;valAx:2094734552	barChart:2094734554,2094734552,2094734556:2	slides/chartset-002/pptx/033_advanced_powerpoint_bar.pptx
+ppt/charts/chart14.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:2094734554;valAx:2094734552	areaChart:2094734554,2094734552,2094734556:2	slides/chartset-002/pptx/014_advanced_powerpoint_area.pptx
+ppt/charts/chart24.xml	1	0	2	0	0	True	0	0	0	0	0	0	0	valAx:2094734554;valAx:2094734552	bubbleChart:2094734554,2094734552:0	slides/chartset-002/pptx/024_advanced_powerpoint_bubble.pptx
+ppt/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:2094734554;valAx:2094734552	barChart:2094734554,2094734552,2094734556:2	slides/chartset-002/pptx/001_advanced_powerpoint_bar.pptx
+ppt/charts/chart17.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:2094734554;valAx:2094734552	barChart:2094734554,2094734552,2094734556:2	slides/chartset-002/pptx/017_advanced_powerpoint_bar.pptx
+ppt/charts/chart7.xml	1	0	2	0	0	True	0	0	0	0	0	0	0	valAx:2094734554;valAx:2094734552	scatterChart:2094734554,2094734552:0	slides/chartset-002/pptx/007_advanced_powerpoint_scatter.pptx
+ppt/charts/chart23.xml	1	0	2	0	0	True	0	0	0	0	0	0	0	valAx:2094734554;valAx:2094734552	scatterChart:2094734554,2094734552:0	slides/chartset-002/pptx/023_advanced_powerpoint_scatter.pptx
+ppt/charts/chart1.xml	1	1	0	0	0	True	1	4	0	0	0	0	0		pieChart::1	slides/chartset-006/pptx/031_Alarm_Clock_Pie-Chart_for_PowerPoint_and_Google_Slides_0b185a05.pptx
+ppt/charts/chart2.xml	1	1	0	0	0	True	1	4	0	0	0	0	0		pieChart::1	slides/chartset-006/pptx/031_Alarm_Clock_Pie-Chart_for_PowerPoint_and_Google_Slides_0b185a05.pptx
+ppt/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:648886687;valAx:388046303	barChart:648886687,388046303:4	slides/chartset-006/pptx/044_Dual_Mind_Spark_Chart_for_PowerPoint_a83f890a.pptx
+ppt/charts/chart2.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:648886687;valAx:388046303	barChart:648886687,388046303:4	slides/chartset-006/pptx/044_Dual_Mind_Spark_Chart_for_PowerPoint_a83f890a.pptx
+ppt/charts/chart3.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:648886687;valAx:388046303	barChart:648886687,388046303:4	slides/chartset-006/pptx/044_Dual_Mind_Spark_Chart_for_PowerPoint_a83f890a.pptx
+ppt/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	1	catAx:182561280;valAx:46972928	barChart:182561280,46972928:2	slides/done-010/pptx/Sector_Skills_Insights_Advanced_Manufacturing_summary_slide_pack.pptx
+ppt/charts/chart1.xml	2	2	4	0	0	True	0	0	0	0	0	0	0	valAx:42795008;valAx:42796928;valAx:42803200;valAx:42805120	scatterChart:42795008,42796928:6|scatterChart:42805120,42803200:1	slides/done-015/pptx/RPA P4 - Advanced Material.pptx
+ppt/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:501078448;valAx:715539936	radarChart:501078448,715539936:1	slides/chartset-007/pptx/047_Female_Radar_Brain_for_PowerPoint_and_Google_Slides_c2a541f6.pptx
+ppt/charts/chart2.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:501078448;valAx:715539936	radarChart:501078448,715539936:1	slides/chartset-007/pptx/047_Female_Radar_Brain_for_PowerPoint_and_Google_Slides_c2a541f6.pptx
+ppt/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:441541400;valAx:441545712	barChart:441541400,441545712:2	slides/chartset-007/pptx/096_Lab_Flask_Charts_for_PowerPoint_and_Google_Slides_91e3cbb5.pptx
+ppt/charts/chart2.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:441541400;valAx:441545712	barChart:441541400,441545712:2	slides/chartset-007/pptx/096_Lab_Flask_Charts_for_PowerPoint_and_Google_Slides_91e3cbb5.pptx
+ppt/charts/chart3.xml	1	1	1	0	1	True	0	1	0	0	0	0	0	catAx:441541400;valAx:441545712	barChart:441541400,441545712:2	slides/chartset-007/pptx/096_Lab_Flask_Charts_for_PowerPoint_and_Google_Slides_91e3cbb5.pptx
+ppt/charts/chart5.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:441541400;valAx:441545712	barChart:441541400,441545712:2	slides/chartset-007/pptx/096_Lab_Flask_Charts_for_PowerPoint_and_Google_Slides_91e3cbb5.pptx
+ppt/charts/chart4.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:441541400;valAx:441545712	barChart:441541400,441545712:2	slides/chartset-007/pptx/096_Lab_Flask_Charts_for_PowerPoint_and_Google_Slides_91e3cbb5.pptx
+ppt/charts/chart6.xml	1	1	1	0	1	True	0	1	0	0	0	0	0	catAx:441541400;valAx:441545712	barChart:441541400,441545712:2	slides/chartset-007/pptx/096_Lab_Flask_Charts_for_PowerPoint_and_Google_Slides_91e3cbb5.pptx
+ppt/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:727639344;valAx:727635424	barChart:727639344,727635424:4	slides/chartset-007/pptx/035_Chemistry_Column_PowerPoint_Chart_45bf8a76.pptx
+ppt/charts/chart2.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:727759688;valAx:727769488	barChart:727759688,727769488:4	slides/chartset-007/pptx/035_Chemistry_Column_PowerPoint_Chart_45bf8a76.pptx
+ppt/charts/chart1.xml	1	1	0	0	0	True	1	7	0	0	0	0	0		doughnutChart::1	slides/chartset-010/pptx/093_Insightful_Zoom_Chart_22b5464e.pptx
+ppt/charts/chart2.xml	1	1	0	0	0	True	1	7	0	0	0	0	0		doughnutChart::1	slides/chartset-010/pptx/093_Insightful_Zoom_Chart_22b5464e.pptx
+ppt/charts/chart21.xml	1	1	2	0	0	True	0	0	0	0	0	0	0	valAx:-2078256864;valAx:-1988554720	bubbleChart:-2078256864,-1988554720:1	slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx
+ppt/charts/chart5.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:-2091051632;valAx:-2014998240	barChart:-2091051632,-2014998240:1	slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx
+ppt/charts/chart4.xml	1	1	1	0	1	True	0	2	0	0	0	0	1	catAx:2088535776;valAx:2114610944	barChart:2088535776,2114610944:2	slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx
+ppt/charts/chart6.xml	1	1	1	0	1	True	0	1	0	0	0	0	0	catAx:-2020920000;valAx:-2092378848	barChart:-2020920000,-2092378848:1	slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx
+ppt/charts/chart8.xml	1	1	1	0	1	True	0	0	0	0	0	0	1	catAx:-2017574384;valAx:-2074328864	lineChart:-2017574384,-2074328864:2	slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx
+ppt/charts/chart7.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:2135347616;valAx:2146125136	radarChart:2135347616,2146125136:1	slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx
+ppt/charts/chart3.xml	1	1	1	0	1	True	0	1	0	0	0	0	0	catAx:-2070575072;valAx:-2070870896	barChart:-2070575072,-2070870896:1	slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx
+ppt/charts/chart1.xml	1	1	1	1	0	True	0	0	0	0	0	0	1	dateAx:2139276576;valAx:2139276976	lineChart:2139276576,2139276976:4	slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx
+ppt/charts/chart2.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:-2115748304;valAx:-2042165488	barChart:-2115748304,-2042165488:1	slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx
+ppt/charts/chart17.xml	1	1	1	0	1	True	0	0	0	0	0	0	1	catAx:-2016309200;valAx:-1994564720	barChart:-2016309200,-1994564720:4	slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx
+ppt/charts/chart16.xml	1	1	1	0	1	True	0	8	0	0	0	0	1	catAx:-2014691584;valAx:-1994334592	barChart:-2014691584,-1994334592:3	slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx
+ppt/charts/chart18.xml	1	1	1	0	1	True	0	4	0	0	0	0	0	catAx:-1995483360;valAx:-1995464352	lineChart:-1995483360,-1995464352:1	slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx
+ppt/charts/chart20.xml	1	1	1	0	1	True	0	0	0	0	0	0	1	catAx:-1991286976;valAx:-1995627728	lineChart:-1991286976,-1995627728:2	slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx
+ppt/charts/chart19.xml	1	1	0	0	0	True	1	2	0	0	0	0	0		doughnutChart::1	slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx
+ppt/charts/chart15.xml	1	1	1	0	1	True	0	0	0	0	0	0	1	catAx:-1994226784;valAx:-1994223472	barChart:-1994226784,-1994223472:4	slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx
+ppt/charts/chart14.xml	1	1	1	0	1	True	0	0	0	0	0	0	1	catAx:-2065486080;valAx:-2065621616	lineChart:-2065486080,-2065621616:3	slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx
+ppt/charts/chart10.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:-2041765824;valAx:-2069607712	lineChart:-2041765824,-2069607712:1	slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx
+ppt/charts/chart9.xml	1	1	1	0	1	True	0	1	0	0	0	0	0	catAx:-2070870448;valAx:-2042122528	barChart:-2070870448,-2042122528:1	slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx
+ppt/charts/chart11.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:-1992745856;valAx:2133184032	lineChart:-1992745856,2133184032:1	slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx
+ppt/charts/chart13.xml	1	1	1	0	1	True	0	0	0	0	0	0	1	catAx:-2065273600;valAx:-2095719776	barChart:-2065273600,-2095719776:5	slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx
+ppt/charts/chart12.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:-2014460352;valAx:-2040851120	lineChart:-2014460352,-2040851120:2	slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx
+ppt/charts/chart1.xml	1	1	0	0	0	True	1	8	0	0	0	0	0		pieChart::1	slides/chartset-008/pptx/100_Lime_and_Lemon_Data-Driven_Chart_for_PowerPoint_d7bb4a44.pptx
+ppt/charts/chart2.xml	1	1	0	0	0	True	1	8	0	0	0	0	0		pieChart::1	slides/chartset-008/pptx/100_Lime_and_Lemon_Data-Driven_Chart_for_PowerPoint_d7bb4a44.pptx
+ppt/charts/chart4.xml	1	1	0	0	0	True	1	8	0	0	0	0	0		pieChart::1	slides/chartset-008/pptx/100_Lime_and_Lemon_Data-Driven_Chart_for_PowerPoint_d7bb4a44.pptx
+ppt/charts/chart3.xml	1	1	0	0	0	True	1	8	0	0	0	0	0		pieChart::1	slides/chartset-008/pptx/100_Lime_and_Lemon_Data-Driven_Chart_for_PowerPoint_d7bb4a44.pptx
+ppt/charts/chart6.xml	1	1	0	0	0	True	1	8	0	0	0	0	0		pieChart::1	slides/chartset-008/pptx/100_Lime_and_Lemon_Data-Driven_Chart_for_PowerPoint_d7bb4a44.pptx
+ppt/charts/chart5.xml	1	1	0	0	0	True	1	8	0	0	0	0	0		pieChart::1	slides/chartset-008/pptx/100_Lime_and_Lemon_Data-Driven_Chart_for_PowerPoint_d7bb4a44.pptx
+ppt/charts/chart3.xml	1	1	0	0	0	True	1	4	0	0	0	0	0		doughnutChart::1	slides/chartset-008/pptx/072_Gear_Pie_Chart_for_PowerPoint_and_Google_Slides_d464d3a0.pptx
+ppt/charts/chart4.xml	1	1	0	0	0	True	1	4	0	0	0	0	0		doughnutChart::1	slides/chartset-008/pptx/072_Gear_Pie_Chart_for_PowerPoint_and_Google_Slides_d464d3a0.pptx
+ppt/charts/chart5.xml	1	1	0	0	0	True	1	4	0	0	0	0	0		doughnutChart::1	slides/chartset-008/pptx/072_Gear_Pie_Chart_for_PowerPoint_and_Google_Slides_d464d3a0.pptx
+ppt/charts/chart6.xml	1	1	0	0	0	True	1	4	0	0	0	0	0		doughnutChart::1	slides/chartset-008/pptx/072_Gear_Pie_Chart_for_PowerPoint_and_Google_Slides_d464d3a0.pptx
+ppt/charts/chart1.xml	1	1	0	0	0	True	1	4	0	0	0	0	0		doughnutChart::1	slides/chartset-008/pptx/072_Gear_Pie_Chart_for_PowerPoint_and_Google_Slides_d464d3a0.pptx
+ppt/charts/chart2.xml	1	1	0	0	0	True	1	4	0	0	0	0	0		doughnutChart::1	slides/chartset-008/pptx/072_Gear_Pie_Chart_for_PowerPoint_and_Google_Slides_d464d3a0.pptx
+ppt/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:1926229520;valAx:1926227600	barChart:1926229520,1926227600:2	slides/chartset-008/pptx/038_Competitive_Advantage_Card_for_PowerPoint_and_Google_Slides_373720f6.pptx
+ppt/charts/chart2.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:1926229520;valAx:1926227600	barChart:1926229520,1926227600:2	slides/chartset-008/pptx/038_Competitive_Advantage_Card_for_PowerPoint_and_Google_Slides_373720f6.pptx
+ppt/charts/chart3.xml	1	1	0	0	0	True	1	4	0	0	0	0	0		pieChart::1	slides/chartset-012/pptx/061_Four-Stage_Serpentine_Chart_05699efe.pptx
+ppt/charts/chart4.xml	1	1	0	0	0	True	1	4	0	0	0	0	0		pieChart::1	slides/chartset-012/pptx/061_Four-Stage_Serpentine_Chart_05699efe.pptx
+ppt/charts/chart5.xml	1	1	0	0	0	True	1	4	0	0	0	0	0		pieChart::1	slides/chartset-012/pptx/061_Four-Stage_Serpentine_Chart_05699efe.pptx
+ppt/charts/chart6.xml	1	1	0	0	0	True	1	4	0	0	0	0	0		pieChart::1	slides/chartset-012/pptx/061_Four-Stage_Serpentine_Chart_05699efe.pptx
+ppt/charts/chart7.xml	1	1	0	0	0	True	1	4	0	0	0	0	0		pieChart::1	slides/chartset-012/pptx/061_Four-Stage_Serpentine_Chart_05699efe.pptx
+ppt/charts/chart8.xml	1	1	0	0	0	True	1	4	0	0	0	0	0		pieChart::1	slides/chartset-012/pptx/061_Four-Stage_Serpentine_Chart_05699efe.pptx
+ppt/charts/chart1.xml	1	1	0	0	0	True	1	4	0	0	0	0	0		pieChart::1	slides/chartset-012/pptx/061_Four-Stage_Serpentine_Chart_05699efe.pptx
+ppt/charts/chart2.xml	1	1	0	0	0	True	1	4	0	0	0	0	0		pieChart::1	slides/chartset-012/pptx/061_Four-Stage_Serpentine_Chart_05699efe.pptx
+ppt/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:-2006602896;valAx:-2079160464	barChart:-2006602896,-2079160464:2	slides/ceiling-002/pptx/8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx
+ppt/charts/chart2.xml	1	1	2	0	0	True	0	0	0	0	0	0	0	valAx:422345768;valAx:422336256	scatterChart:422345768,422336256:1	slides/ceiling-002/pptx/8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx
+ppt/charts/chart3.xml	1	1	2	0	0	True	0	0	0	0	0	0	0	valAx:422345768;valAx:422336256	scatterChart:422345768,422336256:1	slides/ceiling-002/pptx/8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx
+ppt/charts/chart6.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:532741416;valAx:532737808	barChart:532741416,532737808:1	slides/ceiling-002/pptx/8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx
+ppt/charts/chart5.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:532741416;valAx:532737808	barChart:532741416,532737808:1	slides/ceiling-002/pptx/8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx
+ppt/charts/chart4.xml	1	1	1	1	0	True	0	0	0	0	0	0	0	dateAx:532741416;valAx:532737808	barChart:532741416,532737808:1	slides/ceiling-002/pptx/8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx
+ppt/charts/chart5.xml	2	2	2	0	2	True	0	0	0	0	0	0	0	catAx:95094272;valAx:95096192;valAx:95118848;catAx:95120768	lineChart:95094272,95096192:1|lineChart:95120768,95118848:2	slides/ceiling-002/pptx/Demick_JetBlue.pptx
+ppt/charts/chart4.xml	2	2	2	0	2	True	0	0	0	0	0	0	0	catAx:95033216;valAx:95051776;valAx:95053696;catAx:95059968	lineChart:95033216,95051776:2|lineChart:95059968,95053696:1	slides/ceiling-002/pptx/Demick_JetBlue.pptx
+ppt/charts/chart3.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:84286848;valAx:84297216	lineChart:84286848,84297216:4	slides/ceiling-002/pptx/Demick_JetBlue.pptx
+ppt/charts/chart2.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:94972544;valAx:94991104	lineChart:94972544,94991104:3	slides/ceiling-002/pptx/Demick_JetBlue.pptx
+ppt/charts/chart1.xml	2	2	2	0	2	True	0	0	0	0	0	0	0	catAx:114663808;valAx:114665728;valAx:114667904;catAx:114669824	lineChart:114663808,114665728:2|lineChart:114669824,114667904:1	slides/ceiling-002/pptx/Demick_JetBlue.pptx
+word/charts/chart1.xml	1	1	0	0	0	True	1	16	0	0	0	0	0		pieChart::1	words/chartset-009/docx/027_Unit_Circle_Chart_Graphical_Chart_5462a579.docx
+word/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:234405272;valAx:234401992	barChart:234405272,234401992:3	words/chartset-001/docx/clustered-column-result.docx
+word/charts/chart1.xml	1	1	0	0	0	True	1	1	0	0	0	0	0		pie3DChart::1	words/chartset-001/docx/pie-chart-template.docx
+word/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:234405272;valAx:234401992	barChart:234405272,234401992:3	words/chartset-001/docx/clustered-column-template.docx
+word/charts/chart1.xml	1	1	0	0	0	True	0	1	0	0	0	0	0		pie3DChart::1	words/chartset-001/docx/pie-chart-result.docx
+word/charts/chart1.xml	1	1	2	0	0	True	0	0	0	0	0	0	0	valAx:282605640;valAx:282606032	scatterChart:282605640,282606032:4	words/ceiling-001/docx/ABCD-FE-01-00 Flight Envelope - v1 08.03.16.docx
+word/charts/chart1.xml	1	1	0	0	0	True	1	5	0	0	0	0	0		ofPieChart::1	words/chartset-011/docx/029_Unit_Circle_Chart_Pie_Theme_8a922142.docx
+word/charts/chart1.xml	1	1	0	0	0	True	1	5	0	0	0	0	0		doughnutChart::1	words/chartset-010/docx/023_Unit_Circle_Chart_Circular_Percentage_790f7b75.docx
+word/charts/chart1.xml	1	1	0	0	0	True	1	17	0	0	0	0	0		ofPieChart::1	words/chartset-010/docx/028_Unit_Circle_Chart_Optimized_Graph_83d9c756.docx
+word/charts/chart1.xml	1	1	0	0	0	True	1	5	0	0	0	0	0		pie3DChart::1	words/chartset-012/docx/021_Unit_Circle_Chart_3D_Pie_Chart_404247ab.docx
+xl/charts/chart1.xml	2	1	1	0	1	True	0	0	0	0	0	0	0	catAx:477346800;valAx:477338176	barChart:477346800,477338176:5|lineChart:477346800,477338176:2	sheets/chartset-005/xlsx/004_Contextures_chart_sample_de7c0671.xlsx
+xl/charts/chart1.xml	2	2	2	0	2	True	0	0	0	0	0	0	0	catAx:190086528;valAx:190088704;catAx:190090624;valAx:190092416	barChart:190086528,190088704:3|lineChart:190090624,190092416:2	sheets/chartset-005/xlsx/022_Pareto_Chart_Template_-_Pareto_Analysis_in_Excel_with_Pareto_Diagram_82b5a874.xlsx
+xl/charts/chart31.xml	1	1	1	0	1	True	0	2	0	0	1	0	1	catAx:539195768;valAx:539196160	barChart:539195768,539196160:1	sheets/chartset-009/xlsx/029_Annual_budget_Use_this_template_30324a97.xlsx
+xl/charts/chart22.xml	1	1	1	0	1	True	0	0	0	0	0	0	1	catAx:1081865903;valAx:1109733487	barChart:1081865903,1109733487:1	sheets/chartset-009/xlsx/029_Annual_budget_Use_this_template_30324a97.xlsx
+xl/charts/chart13.xml	1	1	1	0	1	True	0	0	0	0	0	0	1	catAx:1124757727;valAx:1132187055	barChart:1124757727,1132187055:2	sheets/chartset-009/xlsx/029_Annual_budget_Use_this_template_30324a97.xlsx
+xl/charts/chart2.xml	1	1	2	0	0	True	0	0	0	0	0	0	0	valAx:199820032;valAx:199821568	scatterChart:199820032,199821568:7	sheets/chartset-009/xlsx/018_Weight_Loss_Chart_-_Free_Printable_Weight_Loss_Charts_and_Weight_Log_3337bd0a.xlsx
+xl/charts/chart1.xml	1	1	2	0	0	True	0	1	0	0	0	0	0	valAx:199578752;valAx:199580288	scatterChart:199578752,199580288:7	sheets/chartset-009/xlsx/018_Weight_Loss_Chart_-_Free_Printable_Weight_Loss_Charts_and_Weight_Log_3337bd0a.xlsx
+xl/charts/chart11.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:344965856;valAx:344966184	barChart:344965856,344966184:1	sheets/chartset-009/xlsx/053_Personal_asset_inventory_5446d84b.xlsx
+xl/charts/chart11.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:377020336;valAx:377026240	barChart:377020336,377026240:2	sheets/chartset-009/xlsx/056_Quarterly_sale_report_baa6bb0d.xlsx
+xl/charts/chart11.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:1451110848;valAx:-2126111024	barChart:1451110848,-2126111024:2	sheets/chartset-009/xlsx/041_Business_budget_ef942467.xlsx
+xl/charts/chart1.xml	1	1	0	0	0	True	1	5	0	0	0	0	0		pieChart::1	sheets/chartset-004/xlsx/019_advanced_excel_pie.xlsx
+xl/charts/chart1.xml	1	1	2	0	0	True	0	0	0	0	0	0	0	valAx:85990144;valAx:85990720	bubbleChart:85990144,85990720:4	sheets/chartset-004/xlsx/DynamicBubbleChart.xlsx
+xl/charts/chart1.xml	1	1	2	0	0	True	0	0	0	0	0	0	0	valAx:34893176;valAx:54279217	bubbleChart:34893176,54279217:1	sheets/chartset-004/xlsx/023_advanced_excel_bubble.xlsx
+xl/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:99276981;valAx:46095868	barChart:99276981,46095868:3	sheets/chartset-004/xlsx/009_advanced_excel_bar.xlsx
+xl/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:86690293;valAx:48029041	lineChart:86690293,48029041:3	sheets/chartset-004/xlsx/010_advanced_excel_line.xlsx
+xl/charts/chart1.xml	0	0	0	0	0	True	0	0	0	0	0	0	0			sheets/chartset-004/xlsx/microsoft_learn_multi_chart_examples.xlsx
+xl/charts/chart2.xml	0	0	0	0	0	True	0	0	0	0	0	0	0			sheets/chartset-004/xlsx/microsoft_learn_multi_chart_examples.xlsx
+xl/charts/chart3.xml	0	0	0	0	0	True	0	0	0	0	0	0	0			sheets/chartset-004/xlsx/microsoft_learn_multi_chart_examples.xlsx
+xl/charts/chart4.xml	0	0	0	0	0	True	0	0	0	0	0	0	0			sheets/chartset-004/xlsx/microsoft_learn_multi_chart_examples.xlsx
+xl/charts/chart5.xml	0	0	0	0	0	True	0	0	0	0	0	0	0			sheets/chartset-004/xlsx/microsoft_learn_multi_chart_examples.xlsx
+xl/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:6361084;valAx:9188093	areaChart:6361084,9188093:3	sheets/chartset-001/xlsx/005_advanced_excel_area.xlsx
+xl/charts/chart1.xml	1	1	2	0	0	True	0	0	0	0	0	0	0	valAx:84602087;valAx:40622547	scatterChart:84602087,40622547:1	sheets/chartset-001/xlsx/006_advanced_excel_scatter.xlsx
+xl/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:35945644;valAx:75551170	radarChart:35945644,75551170:3	sheets/chartset-001/xlsx/032_advanced_excel_radar.xlsx
+xl/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:39081744;valAx:67472071	barChart:39081744,67472071:3	sheets/chartset-001/xlsx/025_advanced_excel_bar.xlsx
+xl/charts/chart1.xml	1	1	2	0	0	True	0	0	0	0	0	0	0	valAx:6789043;valAx:23685027	scatterChart:6789043,23685027:1	sheets/chartset-001/xlsx/022_advanced_excel_scatter.xlsx
+xl/charts/chart1.xml	1	1	0	0	0	True	1	6	0	0	0	0	0		doughnutChart::1	sheets/chartset-001/xlsx/028_advanced_excel_doughnut.xlsx
+xl/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:40792969;valAx:11814879	barChart:40792969,11814879:3	sheets/chartset-001/xlsx/033_advanced_excel_bar.xlsx
+xl/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:37615549;valAx:24999023	lineChart:37615549,24999023:3	sheets/chartset-001/xlsx/002_advanced_excel_line.xlsx
+xl/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:92397440;valAx:99656734	radarChart:92397440,99656734:3	sheets/chartset-001/xlsx/016_advanced_excel_radar.xlsx
+xl/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:71686427;valAx:51626348	barChart:71686427,51626348:3	sheets/chartset-001/xlsx/001_advanced_excel_bar.xlsx
+xl/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:57805290;valAx:78505350	barChart:57805290,78505350:3	sheets/chartset-003/xlsx/017_advanced_excel_bar.xlsx
+xl/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:5131510;valAx:53925688	radarChart:5131510,53925688:3	sheets/chartset-003/xlsx/008_advanced_excel_radar.xlsx
+xl/charts/chart1.xml	1	1	0	0	0	True	1	6	0	0	0	0	0		doughnutChart::1	sheets/chartset-003/xlsx/020_advanced_excel_doughnut.xlsx
+xl/charts/chart1.xml	1	1	0	0	0	True	1	6	0	0	0	0	0		doughnutChart::1	sheets/chartset-003/xlsx/004_advanced_excel_doughnut.xlsx
+xl/charts/chart1.xml	1	1	2	0	0	True	0	0	0	0	0	0	0	valAx:8128669;valAx:48800689	scatterChart:8128669,48800689:1	sheets/chartset-003/xlsx/014_advanced_excel_scatter.xlsx
+xl/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:84882414;valAx:59359782	radarChart:84882414,59359782:3	sheets/chartset-003/xlsx/024_advanced_excel_radar.xlsx
+xl/charts/chart1.xml	1	1	2	0	0	True	0	0	0	0	0	0	0	valAx:24982306;valAx:68034250	bubbleChart:24982306,68034250:1	sheets/chartset-003/xlsx/015_advanced_excel_bubble.xlsx
+xl/charts/chart1.xml	1	1	2	0	0	True	0	0	0	0	0	0	0	valAx:7281115;valAx:32743566	bubbleChart:7281115,32743566:1	sheets/chartset-003/xlsx/031_advanced_excel_bubble.xlsx
+xl/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:6997556;valAx:65896760	areaChart:6997556,65896760:3	sheets/chartset-003/xlsx/029_advanced_excel_area.xlsx
+xl/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:67322762;valAx:61322922	lineChart:67322762,61322922:3	sheets/chartset-003/xlsx/018_advanced_excel_line.xlsx
+xl/charts/chart31.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:287964960;valAx:287968896	barChart:287964960,287968896:1	sheets/chartset-014/xlsx/027_Simple_personal_cash_flow_statement_675c6584.xlsx
+xl/charts/chart22.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:512411144;valAx:512410816	barChart:512411144,512410816:1	sheets/chartset-014/xlsx/027_Simple_personal_cash_flow_statement_675c6584.xlsx
+xl/charts/chart13.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:305458912;valAx:305465800	barChart:305458912,305465800:1	sheets/chartset-014/xlsx/027_Simple_personal_cash_flow_statement_675c6584.xlsx
+xl/charts/chart44.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:527863088;valAx:527863416	barChart:527863088,527863416:1	sheets/chartset-014/xlsx/027_Simple_personal_cash_flow_statement_675c6584.xlsx
+xl/charts/chart11.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:243593864;valAx:243593472	barChart:243593864,243593472:5	sheets/chartset-014/xlsx/048_Expense_trends_budget_18d1e8ba.xlsx
+xl/charts/chart11.xml	2	1	1	0	1	True	0	0	0	0	0	0	0	catAx:149172224;valAx:165924864	barChart:149172224,165924864:1|lineChart:149172224,165924864:1	sheets/chartset-014/xlsx/064_Small_business_cash_flow_Use_this_template_0a640756.xlsx
+xl/charts/chart11.xml	1	1	1	0	1	True	0	6	0	0	0	0	0	catAx:457660232;valAx:457663512	barChart:457660232,457663512:1	sheets/chartset-014/xlsx/045_Check_register_with_chart_4becb8a0.xlsx
+xl/charts/chart11.xml	2	2	2	0	2	True	0	0	0	0	0	0	0	catAx:308489480;valAx:308026032;valAx:308026416;catAx:308026800	barChart:308026800,308026416:2|lineChart:308489480,308026032:2	sheets/chartset-014/xlsx/039_Baby_growth_tracker_e295ae56.xlsx
+xl/charts/chart11.xml	2	2	2	0	2	True	0	0	0	0	0	0	0	catAx:308489480;valAx:308026032;valAx:308026416;catAx:308026800	barChart:308026800,308026416:2|lineChart:308489480,308026032:2	sheets/chartset-014/xlsx/038_Baby_growth_chart_bb9cd672.xlsx
+xl/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:561537400;valAx:561538184	barChart:561537400,561538184:2	sheets/chartset-011/xlsx/010_Contextures_chart_sample_e6ea06a3.xlsx
+xl/charts/chart11.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:1451110848;valAx:-2126111024	barChart:1451110848,-2126111024:2	sheets/chartset-011/xlsx/042_Business_monthly_budget_4e4d092f.xlsx
+xl/charts/chart11.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:742567104;valAx:742571024	barChart:742567104,742571024:2	sheets/chartset-011/xlsx/060_Monthly_company_budget_47b2a99a.xlsx
+xl/charts/chart11.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:70048384;valAx:70058368	barChart:70048384,70058368:2	sheets/chartset-011/xlsx/057_Simple_balance_sheet_Use_this_template_e2d4cbb2.xlsx
+xl/charts/chart31.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:592099312;valAx:592099968	barChart:592099312,592099968:2	sheets/chartset-011/xlsx/028_Budget_summary_report_4aeefd13.xlsx
+xl/charts/chart12.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:397782792;valAx:397780824	barChart:397782792,397780824:2	sheets/chartset-011/xlsx/028_Budget_summary_report_4aeefd13.xlsx
+xl/charts/chart23.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:592089800;valAx:592092096	barChart:592089800,592092096:2	sheets/chartset-011/xlsx/028_Budget_summary_report_4aeefd13.xlsx
+xl/charts/chart21.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:417355752;valAx:417357392	barChart:417355752,417357392:2	sheets/chartset-011/xlsx/030_Basic_balance_sheet_Use_this_template_10ed9144.xlsx
+xl/charts/chart12.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:506775480;valAx:506775808	barChart:506775480,506775808:2	sheets/chartset-011/xlsx/030_Basic_balance_sheet_Use_this_template_10ed9144.xlsx
+xl/charts/chart21.xml	1	1	1	0	1	True	0	4	0	0	0	0	1	valAx:716855552;catAx:716845712	barChart:716845712,716855552:2	sheets/chartset-013/xlsx/031_Business_expense_budget_f3a46278.xlsx
+xl/charts/chart12.xml	2	1	1	0	1	True	0	0	0	0	0	0	0	catAx:362146616;valAx:362147008	barChart:362146616,362147008:2|lineChart:362146616,362147008:1	sheets/chartset-013/xlsx/031_Business_expense_budget_f3a46278.xlsx
+xl/charts/chart21.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:243689824;valAx:243690208	barChart:243689824,243690208:2	sheets/chartset-013/xlsx/035_Project_plan_for_law_firms_aa2d4462.xlsx
+xl/charts/chart12.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:243720024;valAx:243728600	barChart:243720024,243728600:2	sheets/chartset-013/xlsx/035_Project_plan_for_law_firms_aa2d4462.xlsx
+xl/charts/chart1.xml	1	1	2	0	0	False	0	0	0	0	0	0	0	valAx:190621184;valAx:190622720	scatterChart:190621184,190622720:10	sheets/chartset-013/xlsx/019_Free_Blood_Sugar_Chart_for_Excel_-_Track_Your_Blood_Sugar_Level_36f4a782.xlsx
+xl/charts/chart2.xml	1	1	2	0	0	False	0	0	0	0	0	0	0	valAx:190621184;valAx:190622720	scatterChart:190621184,190622720:10	sheets/chartset-013/xlsx/019_Free_Blood_Sugar_Chart_for_Excel_-_Track_Your_Blood_Sugar_Level_36f4a782.xlsx
+xl/charts/chart3.xml	1	1	2	0	0	True	0	0	0	0	0	0	0	valAx:202552832;valAx:202554368	scatterChart:202552832,202554368:2	sheets/chartset-013/xlsx/019_Free_Blood_Sugar_Chart_for_Excel_-_Track_Your_Blood_Sugar_Level_36f4a782.xlsx
+xl/charts/chart21.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:438010624;valAx:438017184	barChart:438010624,438017184:2	sheets/chartset-013/xlsx/032_Business_expenses_budget_d377eaab.xlsx
+xl/charts/chart12.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:555670640;valAx:555672608	barChart:555670640,555672608:2	sheets/chartset-013/xlsx/032_Business_expenses_budget_d377eaab.xlsx
+xl/charts/chart11.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:369003632;valAx:369002848	barChart:369003632,369002848:4	sheets/chartset-013/xlsx/049_Expenses_calculator_c351f3d0.xlsx
+xl/charts/chart11.xml	1	1	2	0	0	True	0	3	13	4	0	2	0	valAx:484833240;valAx:484834552	scatterChart:484833240,484834552:2	sheets/chartset-013/xlsx/059_Milestone_and_task_project_timeline_Use_this_template_24f1e8f1.xlsx
+xl/charts/chart11.xml	2	1	1	0	1	True	0	0	0	0	0	0	0	catAx:-28058208;valAx:-28054944	barChart:-28058208,-28054944:5|lineChart:-28058208,-28054944:1	sheets/chartset-013/xlsx/043_Buy_a_car_vs._rideshare_ff07c7e6.xlsx
+xl/charts/chart21.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:235519648;valAx:235697816	barChart:235519648,235697816:2	sheets/chartset-013/xlsx/033_Event_planning_tracker_Use_this_template_f29a848e.xlsx
+xl/charts/chart12.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:235542680;valAx:235555352	barChart:235542680,235555352:2	sheets/chartset-013/xlsx/033_Event_planning_tracker_Use_this_template_f29a848e.xlsx
+xl/charts/chart1.xml	1	1	1	1	0	True	0	0	0	0	0	0	0	dateAx:602770264;valAx:602758504	lineChart:602770264,602758504:1	sheets/chartset-013/xlsx/001_Contextures_chart_sample_b089bc34.xlsx
+xl/charts/chart1.xml	1	1	0	0	0	True	1	6	0	0	0	0	0		doughnutChart::1	sheets/chartset-002/xlsx/012_advanced_excel_doughnut.xlsx
+xl/charts/chart1.xml	1	1	2	0	0	True	0	0	0	0	0	0	0	valAx:94487455;valAx:13732712	scatterChart:94487455,13732712:1	sheets/chartset-002/xlsx/030_advanced_excel_scatter.xlsx
+xl/charts/chart1.xml	1	1	0	0	0	True	1	5	0	0	0	0	0		pieChart::1	sheets/chartset-002/xlsx/003_advanced_excel_pie.xlsx
+xl/charts/chart1.xml	1	1	0	0	0	True	1	5	0	0	0	0	0		pieChart::1	sheets/chartset-002/xlsx/027_advanced_excel_pie.xlsx
+xl/charts/chart1.xml	1	1	0	0	0	True	1	5	0	0	0	0	0		pieChart::1	sheets/chartset-002/xlsx/011_advanced_excel_pie.xlsx
+xl/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:40550892;valAx:68562357	areaChart:40550892,68562357:3	sheets/chartset-002/xlsx/021_advanced_excel_area.xlsx
+xl/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:87018223;valAx:47318229	lineChart:87018223,47318229:3	sheets/chartset-002/xlsx/026_advanced_excel_line.xlsx
+xl/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:99476023;valAx:91645789	lineChart:99476023,91645789:3	sheets/chartset-002/xlsx/034_advanced_excel_line.xlsx
+xl/charts/chart1.xml	1	1	2	0	0	True	0	0	0	0	0	0	0	valAx:43367095;valAx:17456153	bubbleChart:43367095,17456153:1	sheets/chartset-002/xlsx/007_advanced_excel_bubble.xlsx
+xl/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:46746271;valAx:86904640	areaChart:46746271,86904640:3	sheets/chartset-002/xlsx/013_advanced_excel_area.xlsx
+xl/charts/chart1.xml	2	1	1	1	0	True	0	0	0	0	0	0	0	dateAx:561512312;valAx:561508784	barChart:561512312,561508784:2|lineChart:561512312,561508784:1	sheets/chartset-006/xlsx/006_Contextures_chart_sample_afa23b53.xlsx
+xl/charts/chart11.xml	2	1	1	0	1	False	0	0	8	2	0	0	0	catAx:923958488;valAx:923958880	lineChart:923958488,923958880:8|scatterChart:923958488,923958880:2	sheets/chartset-006/xlsx/061_Regional_sales_chart_cb9eb690.xlsx
+xl/charts/chart11.xml	1	1	1	1	0	True	0	0	0	0	0	0	0	dateAx:688037200;valAx:688042776	barChart:688037200,688042776:2	sheets/chartset-006/xlsx/044_Cash_flow_forecast_Use_this_template_b8fa1f35.xlsx
+xl/charts/chart11.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:77674072;valAx:235177488	barChart:77674072,235177488:1	sheets/chartset-006/xlsx/052_Manufacturing_output_chart_88570318.xlsx
+xl/charts/chart5.xml	1	1	0	0	0	True	1	0	0	0	0	0	0		pieChart::1	sheets/chartset-006/xlsx/005_Contextures_chart_sample_6e279b08.xlsx
+xl/charts/chart1.xml	1	1	0	0	0	True	1	0	0	0	0	0	0		pieChart::1	sheets/chartset-006/xlsx/005_Contextures_chart_sample_6e279b08.xlsx
+xl/charts/chart2.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:561521720;valAx:561519760	barChart:561521720,561519760:1	sheets/chartset-006/xlsx/005_Contextures_chart_sample_6e279b08.xlsx
+xl/charts/chart3.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:561524072;valAx:561520152	barChart:561524072,561520152:1	sheets/chartset-006/xlsx/005_Contextures_chart_sample_6e279b08.xlsx
+xl/charts/chart4.xml	1	1	0	0	0	True	1	0	0	0	0	0	0		pieChart::1	sheets/chartset-006/xlsx/005_Contextures_chart_sample_6e279b08.xlsx
+xl/charts/chart6.xml	1	1	0	0	0	True	1	0	0	0	0	0	0		pieChart::1	sheets/chartset-006/xlsx/005_Contextures_chart_sample_6e279b08.xlsx
+xl/charts/chart7.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:1107925903;valAx:1247061103	barChart:1107925903,1247061103:1	sheets/done-010/xlsx/Keywords_Mapping_Graphs_and_Charts.xlsx
+xl/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:607852592;valAx:500246832	barChart:607852592,500246832:1	sheets/done-010/xlsx/Keywords_Mapping_Graphs_and_Charts.xlsx
+xl/charts/chart2.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:607852592;valAx:500246832	barChart:607852592,500246832:1	sheets/done-010/xlsx/Keywords_Mapping_Graphs_and_Charts.xlsx
+xl/charts/chart3.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:1107925903;valAx:1247061103	barChart:1107925903,1247061103:1	sheets/done-010/xlsx/Keywords_Mapping_Graphs_and_Charts.xlsx
+xl/charts/chart8.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:1107925903;valAx:1247061103	barChart:1107925903,1247061103:1	sheets/done-010/xlsx/Keywords_Mapping_Graphs_and_Charts.xlsx
+xl/charts/chart4.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:1107925903;valAx:1247061103	barChart:1107925903,1247061103:1	sheets/done-010/xlsx/Keywords_Mapping_Graphs_and_Charts.xlsx
+xl/charts/chart5.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:1107925903;valAx:1247061103	barChart:1107925903,1247061103:1	sheets/done-010/xlsx/Keywords_Mapping_Graphs_and_Charts.xlsx
+xl/charts/chart6.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:1107925903;valAx:1247061103	barChart:1107925903,1247061103:1	sheets/done-010/xlsx/Keywords_Mapping_Graphs_and_Charts.xlsx
+xl/charts/chart9.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:1107925903;valAx:1247061103	barChart:1107925903,1247061103:1	sheets/done-010/xlsx/Keywords_Mapping_Graphs_and_Charts.xlsx
+xl/charts/chart10.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:1107925903;valAx:1247061103	barChart:1107925903,1247061103:1	sheets/done-010/xlsx/Keywords_Mapping_Graphs_and_Charts.xlsx
+xl/charts/chart11.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:1107925903;valAx:1247061103	barChart:1107925903,1247061103:1	sheets/done-010/xlsx/Keywords_Mapping_Graphs_and_Charts.xlsx
+xl/charts/chart1.xml	1	1	0	0	0	True	1	11	0	0	0	0	0		pieChart::1	sheets/chartset-007/xlsm/003_Contextures_chart_sample_9bda2719.xlsm
+xl/charts/chart2.xml	1	1	1	0	1	True	0	11	0	0	0	0	0	catAx:857440800;valAx:857445720	barChart:857440800,857445720:1	sheets/chartset-007/xlsm/003_Contextures_chart_sample_9bda2719.xlsm
+xl/charts/chart11.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:77674072;valAx:235177488	barChart:77674072,235177488:1	sheets/chartset-007/xlsx/058_Social_media_engagement_data_cfa1cb18.xlsx
+xl/charts/chartEx1.xml	0	0	0	0	0	True	0	0	0	0	0	0	0			sheets/chartset-007/xlsx/054_Problem_analysis_with_Pareto_chart_11058329.xlsx
+xl/charts/chart11.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:506491328;valAx:506491656	barChart:506491328,506491656:6	sheets/chartset-007/xlsx/050_Financial_vision_d44241e1.xlsx
+xl/charts/chart21.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:567614576;valAx:567613792	barChart:567614576,567613792:3	sheets/chartset-007/xlsx/037_Personal_money_tracker_a57957bb.xlsx
+xl/charts/chart12.xml	1	1	1	0	1	True	0	1	0	0	1	0	0	catAx:581534232;valAx:567614184	barChart:581534232,567614184:1	sheets/chartset-007/xlsx/037_Personal_money_tracker_a57957bb.xlsx
+xl/charts/chart11.xml	2	1	1	0	1	True	0	0	13	10	0	0	0	catAx:510966384;valAx:510966776	areaChart:510966384,510966776:5|scatterChart:510966384,510966776:7	sheets/chartset-007/xlsx/063_Sales_pipeline_aec57013.xlsx
+xl/charts/chart11.xml	2	2	2	0	2	True	0	0	0	0	0	0	0	catAx:361727584;valAx:361742040;valAx:33289552;catAx:33289936	barChart:361727584,361742040:2|lineChart:33289936,33289552:1	sheets/chartset-007/xlsx/040_Blood_pressure_tracker_872b6833.xlsx
+xl/charts/chart11.xml	2	1	1	1	0	True	0	0	0	0	0	0	0	dateAx:247652392;valAx:247669160	areaChart:247652392,247669160:1|scatterChart:247652392,247669160:2	sheets/chartset-010/xlsx/065_Weight_loss_tracker_ff1c89af.xlsx
+xl/charts/chart11.xml	1	1	1	1	0	True	0	0	0	0	0	0	0	dateAx:58007936;valAx:58009856	lineChart:58007936,58009856:2	sheets/chartset-010/xlsx/062_Run_chart_cb7476ea.xlsx
+xl/charts/chart11.xml	1	1	2	0	0	True	0	0	23	6	0	1	0	valAx:604342632;valAx:604342960	scatterChart:604342632,604342960:3	sheets/chartset-010/xlsx/047_Date_tracker_Gantt_chart_bf34f3a8.xlsx
+xl/charts/chart3.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:12931072;valAx:12932992	lineChart:12931072,12932992:4	sheets/chartset-008/xlsx/021_Control_Chart_Template_-_Create_Control_Charts_in_Excel_fd3b1a5d.xlsx
+xl/charts/chart4.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:12978816;valAx:13034240	lineChart:12978816,13034240:4	sheets/chartset-008/xlsx/021_Control_Chart_Template_-_Create_Control_Charts_in_Excel_fd3b1a5d.xlsx
+xl/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:198019328;valAx:201098368	lineChart:198019328,201098368:4	sheets/chartset-008/xlsx/021_Control_Chart_Template_-_Create_Control_Charts_in_Excel_fd3b1a5d.xlsx
+xl/charts/chart2.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:12783616;valAx:12785536	lineChart:12783616,12785536:4	sheets/chartset-008/xlsx/021_Control_Chart_Template_-_Create_Control_Charts_in_Excel_fd3b1a5d.xlsx
+xl/charts/chart11.xml	2	2	2	0	2	True	0	0	0	0	0	0	0	catAx:310122592;valAx:310122976;valAx:310143576;catAx:310148056	barChart:310122592,310122976:1|lineChart:310148056,310143576:1	sheets/chartset-008/xlsx/046_Cost_analysis_with_Pareto_chart_7db5ef69.xlsx
+xl/charts/chart21.xml	1	1	1	0	1	True	0	2	0	0	0	0	0	catAx:335321912;valAx:335319944	barChart:335321912,335319944:1	sheets/chartset-008/xlsx/034_Personal_net_worth_calculator_f7b8fb57.xlsx
+xl/charts/chart12.xml	1	1	1	0	1	True	0	5	0	0	0	0	0	catAx:454827560;valAx:454824280	barChart:454827560,454824280:1	sheets/chartset-008/xlsx/034_Personal_net_worth_calculator_f7b8fb57.xlsx
+xl/charts/chart2.xml	2	2	3	0	1	True	0	0	0	0	0	3	0	catAx:190566400;valAx:190567936;valAx:190569472;valAx:191038208	barChart:190566400,190567936:4|scatterChart:191038208,190569472:3	sheets/chartset-008/xlsx/023_Waterfall_Chart_Template_for_Excel_349f7689.xlsx
+xl/charts/chart1.xml	3	1	1	0	1	True	0	0	0	0	0	2	0	catAx:190497920;valAx:190499456	barChart:190497920,190499456:4|lineChart:190497920,190499456:3|scatterChart:190497920,190499456:1	sheets/chartset-008/xlsx/023_Waterfall_Chart_Template_for_Excel_349f7689.xlsx
+xl/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:561541320;valAx:561530344	barChart:561541320,561530344:2	sheets/chartset-008/xlsx/008_Contextures_chart_sample_7ea7a1d7.xlsx
+xl/charts/chart11.xml	2	2	2	1	1	False	0	1	13	2	0	0	0	dateAx:717044104;valAx:717044496;valAx:717044888;catAx:717045280	barChart:717045280,717044888:1|lineChart:717044104,717044496:1	sheets/chartset-008/xlsx/055_Project_timeline_with_milestones_Use_this_template_546cecc0.xlsx
+xl/charts/chartEx1.xml	0	0	0	0	0	True	0	0	0	0	0	0	0			sheets/chartset-008/xlsx/051_Manufacturer_defect_analysis_53db27ea.xlsx
+xl/charts/chart1.xml	1	1	0	0	0	True	1	8	0	0	0	0	0		doughnutChart::1	sheets/chartset-012/xlsx/002_Contextures_chart_sample_f605e7bc.xlsx
+xl/charts/chart2.xml	1	1	0	0	0	True	1	8	0	0	0	0	0		doughnutChart::1	sheets/chartset-012/xlsx/002_Contextures_chart_sample_f605e7bc.xlsx
+xl/charts/chart3.xml	1	1	0	0	0	True	1	8	0	0	0	0	0		doughnutChart::1	sheets/chartset-012/xlsx/002_Contextures_chart_sample_f605e7bc.xlsx
+xl/charts/chart21.xml	1	1	1	0	1	True	0	2	0	0	0	0	0	catAx:439685656;valAx:439685000	barChart:439685656,439685000:1	sheets/chartset-012/xlsx/036_Simple_to-do_list_Use_this_template_ba44373b.xlsx
+xl/charts/chart12.xml	1	1	1	0	1	True	0	2	0	0	0	0	0	catAx:439685656;valAx:439685000	barChart:439685656,439685000:1	sheets/chartset-012/xlsx/036_Simple_to-do_list_Use_this_template_ba44373b.xlsx
+xl/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:561539752;valAx:561535048	barChart:561539752,561535048:3	sheets/chartset-012/xlsx/012_Contextures_chart_sample_9900da76.xlsx
+xl/charts/chart31.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:287964960;valAx:287968896	barChart:287964960,287968896:1	sheets/chartset-012/xlsx/026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx
+xl/charts/chart22.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:512411144;valAx:512410816	barChart:512411144,512410816:1	sheets/chartset-012/xlsx/026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx
+xl/charts/chart13.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:305458912;valAx:305465800	barChart:305458912,305465800:1	sheets/chartset-012/xlsx/026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx
+xl/charts/chart44.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:527863088;valAx:527863416	barChart:527863088,527863416:1	sheets/chartset-012/xlsx/026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx
+xl/charts/chart1.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:70078464;valAx:70080000	barChart:70078464,70080000:3	sheets/chartset-012/xlsx/013_Contextures_chart_sample_21b98e22.xlsx
+xl/charts/chart2.xml	1	1	1	0	1	True	0	0	0	0	0	0	0	catAx:62494208;valAx:62495744	barChart:62494208,62495744:1	sheets/chartset-012/xlsx/013_Contextures_chart_sample_21b98e22.xlsx

@@ -1,0 +1,11 @@
+26.2.4.2 --convert-to fodt of tests/corpus/features/words-toc-template-styles.docx
+label              resolved style   own paragraph properties
+A-named-spacing    Heading_20_3     {'fo:margin-bottom': '0.0835in', 'fo:text-align': 'center'}
+B-named-jc         Heading_20_3     {'fo:margin-bottom': '0.0835in', 'fo:text-align': 'center'}
+C-named-ind        Heading_20_3     {'fo:margin-bottom': '0.0835in', 'fo:text-align': 'center'}
+D-named-break      P1               {'fo:break-before': 'page'}
+E-named-before     Heading_20_3     {'fo:margin-bottom': '0.0835in', 'fo:text-align': 'center'}
+G-other-style      P2               {'fo:margin-bottom': '0in'}
+I-custom-name      P3               {'fo:margin-bottom': '0in'}
+J-custom-outline   P4               {'fo:margin-bottom': '0in'}
+K-builtin-title    P5               {'fo:margin-bottom': '0in'}

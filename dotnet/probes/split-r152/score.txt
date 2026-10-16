@@ -1,0 +1,37 @@
+scored 31 movers on BASELINE
+  mean |dy| per span, median over the documents:  10.5325 pt  ->   11.2251 pt
+  closer 11   further 9   level 11
+  page count: closer to the reference on 0, further on 1
+
+     before     after    ref  base  head  document
+   267.4971  211.7003     10    10    10  4c0c20f9b055-PI-doc.-no.-2E-Technical-Review-Report.
+    40.3842   32.7090     14    14    15  3c6d04065221-review-welsh-government-communications-
+    70.2948   64.9815      7     6     6  b1b5a9310896-4400-91_Proposal_To_Lease_Space_10-2024
+    54.1940   49.4890     14    14    14  3c6d04065221-review-welsh-government-communications-
+     7.4607    7.2207      5     5     5  d7d79af88c4d-100_Business_Case_Template_Modern_Forma
+     0.3350    0.2920     15    15    15  f445896eb008d14c1746fc37d412dc22.docx
+     7.2689    7.2343     35    34    34  66cd4750ab46-ESPN-R - MCF - Manual - Ed1.0 - For Pub
+     0.6533    0.6250      9     9     9  c515bf8e826b-1603642410-MoM-CASCOM-06-2020-draft04.o
+     7.2031    7.1756    223   221   221  9a0dd0c6025a-24-25_FAA_Holdover_Tables.rtf
+     0.4386    0.4143      9     9     9  1603642410-MoM-CASCOM-06-2020-draft04.docx
+    33.5603   33.5435     76    75    75  22148ac459f1-FRE-03_mcar_part-3_and_IS_v2.9.odt
+    10.3209   10.3117     64    64    64  150_5335_5a.doc
+    31.1330   31.1263     70    71    71  22148ac459f1-FRE-03_mcar_part-3_and_IS_v2.9.rtf
+     8.8956    8.8889     76    76    76  FRE-03_mcar_part-3_and_IS_v2.9.docx
+    11.9943   11.9908     48    48    48  176747a82c76-SPA-11_mcar_part-11_v2.9.odt
+     6.9363    6.9338     85    85    85  0126226bc58c-SPA-06_mcar_part-6_and_IS_v2.9.odt
+     7.3033    7.3033     47    46    46  176747a82c76-SPA-11_mcar_part-11_v2.9.rtf
+    34.3140   34.3140    134   123   123  7705066bf7b3-A_320.rtf
+    51.8608   51.8608    696   695   695  dd4c69ac3950-AC-150-5370-10G-updated-201604.odt
+     5.9419    5.9458     49    49    49  SPA-11_mcar_part-11_v2.9.docx
+     7.9811    7.9884      3     3     3  81806c920f13-2ca950374241722b8ea7c132dfce63ae.odt
+     8.3294    8.3388      3     3     3  2ca950374241722b8ea7c132dfce63ae.doc
+     4.5433    4.5534      3     3     3  81806c920f13-2ca950374241722b8ea7c132dfce63ae.rtf
+    11.2037   11.2251      9     9     9  c515bf8e826b-1603642410-MoM-CASCOM-06-2020-draft04.r
+    10.5325   10.5707    312   312   312  fb14ff62872a-02_mcar_part-2_and_IS_v2.10.odt
+   115.1475  115.1874     16    15    15  fec368137046-FO.FCTOA.00010 Application for a Part-O
+    40.6693   40.8464    312   314   314  02_mcar_part-2_and_IS_v2.10.docx
+    18.4209   18.6764      4     4     4  7f4302a290dd-slcc-architecture-uu-architecture.rtf
+    15.4781   16.7282     18    18    18  aeb14d9767eb-UG.CAO.00133 Foreign Part 145 approvals
+   122.9732  124.3036      5     5     5  d7d79af88c4d-100_Business_Case_Template_Modern_Forma
+     9.0708   11.6286     15    15    15  b6b629e87f8f-f445896eb008d14c1746fc37d412dc22.odt

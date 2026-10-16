@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  A row is measured across the columns the sheet *allocates*, not the ones its print area reaches.
+
+  ScTable::aCol holds only the columns that have been allocated, and a column is allocated by
+  anything applying a pattern to it — a cell that states a format and holds no value allocates one
+  exactly as a cell holding a value does. GetOptimalHeightsInColumn (sc/source/core/data/table1.cxx
+  :88-127) walks every one of them, and ScColumn::GetOptimalHeight (column2.cxx:899-1110) applies
+  the pattern's arithmetic height over the whole row range the pattern covers — which for a column
+  holding nothing is the sheet's default pattern, over every row.
+
+  So one formatted blank cell makes the default cell style's font decide a floor for every row of
+  the sheet, and both tables below say so. They are identical except for the last row:
+
+    S1  A5, B5 and a formatted *empty* C5, so column C exists
+    S2  A5 and B5 only, so it does not
+
+  The default cell style is 20 pt and every cell in sight is 9 pt. LibreOffice 26.2.4.2's own flat
+  ODF export of this file gives
+
+    S1  rows 1-4  0.3398in = 489 twips   trunc(400 x 1.18) + 40 - 23, the 20 pt default's height
+        row 5     0.178in  = 256 twips   it states a format in all three columns, so nothing falls
+                                         through, and 9 pt asks for less than the sheet minimum
+    S2  rows 1-5  0.178in  = 256 twips   no third column, so the default pattern is never reached
+
+  231 twips a row is a fifth of a page every five rows: on Aviation_Abbreviations.ods — whose
+  Sheet1 carries exactly this shape, one empty ce57 cell in column C of row 681 — it is 80 pages
+  against 94.
+-->
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+ <office:styles>
+  <style:style style:name="Default" style:family="table-cell"><style:table-cell-properties style:vertical-align="bottom"/><style:text-properties style:font-name="Liberation Sans" fo:font-family="Liberation Sans" fo:font-size="20pt"/></style:style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="co1" style:family="table-column"><style:table-column-properties fo:break-before="auto" style:column-width="2in"/></style:style>
+  <style:style style:name="ro1" style:family="table-row"><style:table-row-properties style:row-height="0.4in" fo:break-before="auto" style:use-optimal-row-height="true"/></style:style>
+  <style:style style:name="ce9" style:family="table-cell" style:parent-style-name="Default"><style:text-properties style:font-name="Liberation Sans" fo:font-family="Liberation Sans" fo:font-size="9pt"/></style:style>
+  <style:style style:name="pm1" style:family="page-layout"><style:page-layout-properties fo:page-width="8.5in" fo:page-height="11in" fo:margin-top="0.5in" fo:margin-bottom="0.5in" fo:margin-left="0.5in" fo:margin-right="0.5in"/></style:style>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Default" style:page-layout-name="pm1"/>
+ </office:master-styles>
+ <office:body><office:spreadsheet>
+  <table:table table:name="S1">
+   <table:table-column table:style-name="co1" table:number-columns-repeated="3"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce9" office:value-type="string"><text:p>r0a</text:p></table:table-cell><table:table-cell table:style-name="ce9" office:value-type="string"><text:p>r0b</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce9" office:value-type="string"><text:p>r1a</text:p></table:table-cell><table:table-cell table:style-name="ce9" office:value-type="string"><text:p>r1b</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce9" office:value-type="string"><text:p>r2a</text:p></table:table-cell><table:table-cell table:style-name="ce9" office:value-type="string"><text:p>r2b</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce9" office:value-type="string"><text:p>r3a</text:p></table:table-cell><table:table-cell table:style-name="ce9" office:value-type="string"><text:p>r3b</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce9" office:value-type="string"><text:p>r4a</text:p></table:table-cell><table:table-cell table:style-name="ce9" office:value-type="string"><text:p>r4b</text:p></table:table-cell><table:table-cell table:style-name="ce9"/></table:table-row>
+  </table:table>
+  <table:table table:name="S2">
+   <table:table-column table:style-name="co1" table:number-columns-repeated="3"/>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce9" office:value-type="string"><text:p>r0a</text:p></table:table-cell><table:table-cell table:style-name="ce9" office:value-type="string"><text:p>r0b</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce9" office:value-type="string"><text:p>r1a</text:p></table:table-cell><table:table-cell table:style-name="ce9" office:value-type="string"><text:p>r1b</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce9" office:value-type="string"><text:p>r2a</text:p></table:table-cell><table:table-cell table:style-name="ce9" office:value-type="string"><text:p>r2b</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce9" office:value-type="string"><text:p>r3a</text:p></table:table-cell><table:table-cell table:style-name="ce9" office:value-type="string"><text:p>r3b</text:p></table:table-cell></table:table-row>
+   <table:table-row table:style-name="ro1"><table:table-cell table:style-name="ce9" office:value-type="string"><text:p>r4a</text:p></table:table-cell><table:table-cell table:style-name="ce9" office:value-type="string"><text:p>r4b</text:p></table:table-cell></table:table-row>
+  </table:table>
+ </office:spreadsheet></office:body>
+</office:document>

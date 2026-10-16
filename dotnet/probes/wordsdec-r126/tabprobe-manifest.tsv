@@ -1,0 +1,172 @@
+row	label	face	size	kind	stop	group	tabtwips
+0	L000	Liberation Serif	8	under	2.5in	span	0
+1	L001	Liberation Serif	8	under	3.517in	span	0
+2	L002	Liberation Serif	8	under	4.531in	span	0
+3	L003	Liberation Serif	8	under	5.549in	span	0
+4	L004	Liberation Serif	8	over	2.5in	span	0
+5	L005	Liberation Serif	8	over	3.517in	span	0
+6	L006	Liberation Serif	8	over	4.531in	span	0
+7	L007	Liberation Serif	8	over	5.549in	span	0
+8	L008	Liberation Serif	8	strike	2.5in	span	0
+9	L009	Liberation Serif	8	strike	3.517in	span	0
+10	L010	Liberation Serif	8	strike	4.531in	span	0
+11	L011	Liberation Serif	8	strike	5.549in	span	0
+12	L012	Liberation Serif	10	under	2.5in	span	0
+13	L013	Liberation Serif	10	under	3.517in	span	0
+14	L014	Liberation Serif	10	under	4.531in	span	0
+15	L015	Liberation Serif	10	under	5.549in	span	0
+16	L016	Liberation Serif	10	over	2.5in	span	0
+17	L017	Liberation Serif	10	over	3.517in	span	0
+18	L018	Liberation Serif	10	over	4.531in	span	0
+19	L019	Liberation Serif	10	over	5.549in	span	0
+20	L020	Liberation Serif	10	strike	2.5in	span	0
+21	L021	Liberation Serif	10	strike	3.517in	span	0
+22	L022	Liberation Serif	10	strike	4.531in	span	0
+23	L023	Liberation Serif	10	strike	5.549in	span	0
+24	L024	Liberation Serif	14	under	2.5in	span	0
+25	L025	Liberation Serif	14	under	3.517in	span	0
+26	L026	Liberation Serif	14	under	4.531in	span	0
+27	L027	Liberation Serif	14	under	5.549in	span	0
+28	L028	Liberation Serif	14	over	2.5in	span	0
+29	L029	Liberation Serif	14	over	3.517in	span	0
+30	L030	Liberation Serif	14	over	4.531in	span	0
+31	L031	Liberation Serif	14	over	5.549in	span	0
+32	L032	Liberation Serif	14	strike	2.5in	span	0
+33	L033	Liberation Serif	14	strike	3.517in	span	0
+34	L034	Liberation Serif	14	strike	4.531in	span	0
+35	L035	Liberation Serif	14	strike	5.549in	span	0
+36	L036	Liberation Sans	8	under	2.5in	span	0
+37	L037	Liberation Sans	8	under	3.517in	span	0
+38	L038	Liberation Sans	8	under	4.531in	span	0
+39	L039	Liberation Sans	8	under	5.549in	span	0
+40	L040	Liberation Sans	8	over	2.5in	span	0
+41	L041	Liberation Sans	8	over	3.517in	span	0
+42	L042	Liberation Sans	8	over	4.531in	span	0
+43	L043	Liberation Sans	8	over	5.549in	span	0
+44	L044	Liberation Sans	8	strike	2.5in	span	0
+45	L045	Liberation Sans	8	strike	3.517in	span	0
+46	L046	Liberation Sans	8	strike	4.531in	span	0
+47	L047	Liberation Sans	8	strike	5.549in	span	0
+48	L048	Liberation Sans	10	under	2.5in	span	0
+49	L049	Liberation Sans	10	under	3.517in	span	0
+50	L050	Liberation Sans	10	under	4.531in	span	0
+51	L051	Liberation Sans	10	under	5.549in	span	0
+52	L052	Liberation Sans	10	over	2.5in	span	0
+53	L053	Liberation Sans	10	over	3.517in	span	0
+54	L054	Liberation Sans	10	over	4.531in	span	0
+55	L055	Liberation Sans	10	over	5.549in	span	0
+56	L056	Liberation Sans	10	strike	2.5in	span	0
+57	L057	Liberation Sans	10	strike	3.517in	span	0
+58	L058	Liberation Sans	10	strike	4.531in	span	0
+59	L059	Liberation Sans	10	strike	5.549in	span	0
+60	L060	Liberation Sans	14	under	2.5in	span	0
+61	L061	Liberation Sans	14	under	3.517in	span	0
+62	L062	Liberation Sans	14	under	4.531in	span	0
+63	L063	Liberation Sans	14	under	5.549in	span	0
+64	L064	Liberation Sans	14	over	2.5in	span	0
+65	L065	Liberation Sans	14	over	3.517in	span	0
+66	L066	Liberation Sans	14	over	4.531in	span	0
+67	L067	Liberation Sans	14	over	5.549in	span	0
+68	L068	Liberation Sans	14	strike	2.5in	span	0
+69	L069	Liberation Sans	14	strike	3.517in	span	0
+70	L070	Liberation Sans	14	strike	4.531in	span	0
+71	L071	Liberation Sans	14	strike	5.549in	span	0
+72	L072	Carlito	8	under	2.5in	span	0
+73	L073	Carlito	8	under	3.517in	span	0
+74	L074	Carlito	8	under	4.531in	span	0
+75	L075	Carlito	8	under	5.549in	span	0
+76	L076	Carlito	8	over	2.5in	span	0
+77	L077	Carlito	8	over	3.517in	span	0
+78	L078	Carlito	8	over	4.531in	span	0
+79	L079	Carlito	8	over	5.549in	span	0
+80	L080	Carlito	8	strike	2.5in	span	0
+81	L081	Carlito	8	strike	3.517in	span	0
+82	L082	Carlito	8	strike	4.531in	span	0
+83	L083	Carlito	8	strike	5.549in	span	0
+84	L084	Carlito	10	under	2.5in	span	0
+85	L085	Carlito	10	under	3.517in	span	0
+86	L086	Carlito	10	under	4.531in	span	0
+87	L087	Carlito	10	under	5.549in	span	0
+88	L088	Carlito	10	over	2.5in	span	0
+89	L089	Carlito	10	over	3.517in	span	0
+90	L090	Carlito	10	over	4.531in	span	0
+91	L091	Carlito	10	over	5.549in	span	0
+92	L092	Carlito	10	strike	2.5in	span	0
+93	L093	Carlito	10	strike	3.517in	span	0
+94	L094	Carlito	10	strike	4.531in	span	0
+95	L095	Carlito	10	strike	5.549in	span	0
+96	L096	Carlito	14	under	2.5in	span	0
+97	L097	Carlito	14	under	3.517in	span	0
+98	L098	Carlito	14	under	4.531in	span	0
+99	L099	Carlito	14	under	5.549in	span	0
+100	L100	Carlito	14	over	2.5in	span	0
+101	L101	Carlito	14	over	3.517in	span	0
+102	L102	Carlito	14	over	4.531in	span	0
+103	L103	Carlito	14	over	5.549in	span	0
+104	L104	Carlito	14	strike	2.5in	span	0
+105	L105	Carlito	14	strike	3.517in	span	0
+106	L106	Carlito	14	strike	4.531in	span	0
+107	L107	Carlito	14	strike	5.549in	span	0
+108	L108	DejaVu Sans	8	under	2.5in	span	0
+109	L109	DejaVu Sans	8	under	3.517in	span	0
+110	L110	DejaVu Sans	8	under	4.531in	span	0
+111	L111	DejaVu Sans	8	under	5.549in	span	0
+112	L112	DejaVu Sans	8	over	2.5in	span	0
+113	L113	DejaVu Sans	8	over	3.517in	span	0
+114	L114	DejaVu Sans	8	over	4.531in	span	0
+115	L115	DejaVu Sans	8	over	5.549in	span	0
+116	L116	DejaVu Sans	8	strike	2.5in	span	0
+117	L117	DejaVu Sans	8	strike	3.517in	span	0
+118	L118	DejaVu Sans	8	strike	4.531in	span	0
+119	L119	DejaVu Sans	8	strike	5.549in	span	0
+120	L120	DejaVu Sans	10	under	2.5in	span	0
+121	L121	DejaVu Sans	10	under	3.517in	span	0
+122	L122	DejaVu Sans	10	under	4.531in	span	0
+123	L123	DejaVu Sans	10	under	5.549in	span	0
+124	L124	DejaVu Sans	10	over	2.5in	span	0
+125	L125	DejaVu Sans	10	over	3.517in	span	0
+126	L126	DejaVu Sans	10	over	4.531in	span	0
+127	L127	DejaVu Sans	10	over	5.549in	span	0
+128	L128	DejaVu Sans	10	strike	2.5in	span	0
+129	L129	DejaVu Sans	10	strike	3.517in	span	0
+130	L130	DejaVu Sans	10	strike	4.531in	span	0
+131	L131	DejaVu Sans	10	strike	5.549in	span	0
+132	L132	DejaVu Sans	14	under	2.5in	span	0
+133	L133	DejaVu Sans	14	under	3.517in	span	0
+134	L134	DejaVu Sans	14	under	4.531in	span	0
+135	L135	DejaVu Sans	14	under	5.549in	span	0
+136	L136	DejaVu Sans	14	over	2.5in	span	0
+137	L137	DejaVu Sans	14	over	3.517in	span	0
+138	L138	DejaVu Sans	14	over	4.531in	span	0
+139	L139	DejaVu Sans	14	over	5.549in	span	0
+140	L140	DejaVu Sans	14	strike	2.5in	span	0
+141	L141	DejaVu Sans	14	strike	3.517in	span	0
+142	L142	DejaVu Sans	14	strike	4.531in	span	0
+143	L143	DejaVu Sans	14	strike	5.549in	span	0
+144	L144	Liberation Serif	10	under	3.517in	skip	0
+145	L145	Liberation Serif	10	over	3.517in	skip	0
+146	L146	Liberation Serif	10	strike	3.517in	skip	0
+147	L147	Liberation Sans	10	under	3.517in	skip	0
+148	L148	Liberation Sans	10	over	3.517in	skip	0
+149	L149	Liberation Sans	10	strike	3.517in	skip	0
+150	L150	Carlito	10	under	3.517in	skip	0
+151	L151	Carlito	10	over	3.517in	skip	0
+152	L152	Carlito	10	strike	3.517in	skip	0
+153	L153	DejaVu Sans	10	under	3.517in	skip	0
+154	L154	DejaVu Sans	10	over	3.517in	skip	0
+155	L155	DejaVu Sans	10	strike	3.517in	skip	0
+156	L156	Liberation Mono	10	under	0.854167in	mono	30
+157	L157	Liberation Mono	10	under	0.895833in	mono	90
+158	L158	Liberation Mono	10	under	0.915972in	mono	119
+159	L159	Liberation Mono	10	under	0.917361in	mono	121
+160	L160	Liberation Mono	10	under	0.958333in	mono	180
+161	L161	Liberation Mono	10	under	1.084028in	mono	361
+162	L162	Liberation Sans	10	under	0.037500in	cliff	54
+163	L163	Liberation Sans	10	under	0.038194in	cliff	55
+164	L164	Liberation Sans	10	under	0.038889in	cliff	56
+165	L165	Liberation Sans	10	under	0.039583in	cliff	57
+166	L166	Liberation Mono	10	under	0.138889in	resid	200
+167	L167	Liberation Mono	10	under	0.180556in	resid	260
+168	L168	Liberation Mono	10	under	0.236111in	resid	340
+169	L169	Liberation Mono	10	under	0.319444in	resid	460
+170	L170	Liberation Mono	10	under	0.402778in	resid	580

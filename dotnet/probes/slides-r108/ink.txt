@@ -1,0 +1,92 @@
+# Both legs of the 51-document .ppt column against the banked 26.2.4.2 renderings in
+# /home/user/gate-orig-r83/ref, base = 3a926f63f, head = that plus the last-portion change.
+#
+# TABLE 1 -- every document. Columns: stem, SAME|MOVED (md5 of our PDF), pages, alphanumerics,
+# then base and head as `sum |ink|% over MAJOR pages<TAB>MAJOR page count`.
+#
+#   CAUTION: pdf-image-diff.py --quiet lists only the pages it calls MAJOR, so the ink column of
+#   THIS table is a sum over MAJOR pages and is NOT the whole-column figure earlier rounds quote.
+#   Table 2 is the one to read for ink; it re-scores every mover without --quiet.
+#
+Fundamentals_Module_1_basics	MOVED	26/26	6589/6589	0.00	0	0.00	0
+RRM-training-syllabus-Chapter-3-Teamwork-TC-Towing-Incident-Analysis-Dec-2009	MOVED	27/27	13921/13921	2.12	3	2.07	3
+Thailand17	MOVED	54/54	14879/14879	2.78	2	2.78	2
+W3_Case_Study_of_a_Tsunami_Warning_Simulation_Exercise_Ed	SAME	20	4973	0.54	1	0.54	1
+architecture6	SAME	31	10724	0.60	1	0.60	1
+pres_ioc_phuket	MOVED	26/26	6090/6090	1.06	1	1.06	1
+WC_Update-Aug03	SAME	11	2874	0.00	0	0.00	0
+policy-pesentation	MOVED	16/16	2288/2288	0.00	0	0.00	0
+wells08_basic	SAME	27	5741	1.66	2	1.66	2
+080214-Intl-pol-frameworks-and-their-implications-for-Africa-ISS-workshop	SAME	18	4473	1.28	2	1.28	2
+gfopportunitiesforlinkagespres_2010_en	MOVED	27/27	10371/10371	1.18	1	0.00	0
+ws_prod-g-doc-Events-2007-Approval-of-Flight-Conditions-RM-NAA-16032007	MOVED	14/14	4659/4659	0.00	0	0.00	0
+ws_prod-g-doc-Events-2007-may-presentation-PtF-background-+-principles	SAME	20	5043	0.00	0	0.00	0
+ws_prod-g-doc-Events-2007-november-IACA-presentation-at-EASA-Fuel-Tank-Safety-Training-Seminar	SAME	10	2925	0.00	0	0.00	0
+ws_prod-g-doc-Events-Part-M-presentation	MOVED	30/30	10489/10489	0.36	1	0.36	1
+010605Vul	SAME	21	5746	0.00	0	0.00	0
+Inducement-to-Insurance-Business	SAME	22	12892	0.00	0	0.00	0
+outlook_of_nigerian_pension_sector	SAME	12	5802	0.24	1	0.24	1
+ws_prod-g-doc-Events-2007-Privileges	SAME	15	4160	1.92	4	1.92	4
+ws_prod-g-doc-Events-2007-september-M.017-(French)-France	MOVED	55/55	32790/32790	2.31	2	2.31	2
+ws_prod-g-doc-Events-2007-september-MDM.032-(ENGLISH)-CZ	MOVED	38/38	14835/14835	0.00	0	0.00	0
+0335fab9-79f0-4944-b92c-f223837ca2d8	SAME	12	4499	0.00	0	0.00	0
+undp_presentation_revised_17_may	SAME	22	10590	5.21	4	5.21	4
+ws_prod-g-doc-Events-industrymeeting18112004-European-Safety-Strategy-Initiative	SAME	10	1878	4.98	2	4.98	2
+ITE106-Chapter 4	SAME	47	16509	0.00	0	0.00	0
+berlin	SAME	29	7392	0.96	2	0.96	2
+pods05	SAME	60	10680	1.52	3	1.52	3
+ws_prod-g-doc-Events-industrymeeting18112004-Aercap	SAME	12	6950	0.00	0	0.00	0
+Lepore	MOVED	20/20	10753/10753	0.00	0	0.00	0
+ws_prod-g-doc-Events-r-6.-ESM	MOVED	25/25	11330/11330	0.00	0	0.00	0
+1-secretariat	MOVED	10/10	1034/1034	1.29	2	1.31	2
+71393_pp7	MOVED	39/39	12475/12475	0.00	0	0.00	0
+introduction_to_bea_tuxedo	SAME	40	9931	1.85	2	1.85	2
+joint_user_outcomes_michael_fullerton_29.06.12	MOVED	20/20	9836/9836	0.40	1	0.40	1
+8.16_AOD_FINAL_Provider_Training_Presentation_9_2009	MOVED	94/94	22481/22481	0.13	1	0.13	1
+EG1_dsrc tech	SAME	26	11126	2.87	1	2.87	1
+Framing Europe	MOVED	24/24	11537/11537	0.00	0	0.00	0
+RESPA_-_Section_8_Webinar	SAME	35	13293	0.00	0	0.00	0
+concepts-surrounding-cloud-computing-carolyn-kranz-and-rich-prem-gb-seattle-2011	SAME	36	13459	0.00	0	0.00	0
+Airport Planning 09112013	SAME	9	3591	0.00	0	0.00	0
+Employment-Based_I-485	SAME	42	13353	0.77	1	0.77	1
+iep-amount-frequency-for-webinar	SAME	39	9154	0.00	0	0.00	0
+BUS-Chapter 05	SAME	50	12354	0.00	0	0.00	0
+JesuitAssocOfStudentPersonnel	MOVED	31/31	7310/7310	3.25	1	3.25	1
+gillikin_online_user_mtg_2010	MOVED	40/40	7753/7753	0.10	1	0.10	1
+2015-Civil-Rights-Website-training	MOVED	94/94	34816/34816	8.96	12	8.99	12
+FAA_Form_337	MOVED	67/67	29445/29445	2.88	4	2.88	4
+hofman	SAME	13	2945	0.14	1	0.14	1
+ws_prod-g-doc-Events-2008-February-5-NATO-activities	SAME	13	2163	0.73	2	0.73	2
+Aerospace_Journey_of_Flight_Chapter_BCB1637572DA6	SAME	26	10159	0.00	0	0.00	0
+Architecture	SAME	29	4696	0.00	0	0.00	0
+INKDONE
+
+# TABLE 2 -- the 21 documents whose bytes moved, re-scored over EVERY differing page.
+# Columns: stem, base sum |ink|%, base MAJOR, head sum |ink|%, head MAJOR.
+# The 30 documents not listed render byte-identically at the two legs, so their contribution
+# is the same number on both sides and cancels out of the delta.
+#
+Fundamentals_Module_1_basics	1.39	0	1.39	0
+RRM-training-syllabus-Chapter-3-Teamwork-TC-Towing-Incident-Analysis-Dec-2009	8.10	3	8.06	3
+Thailand17	11.07	2	11.06	2
+pres_ioc_phuket	2.96	1	2.96	1
+policy-pesentation	0.02	0	0.02	0
+gfopportunitiesforlinkagespres_2010_en	3.92	1	2.91	0
+ws_prod-g-doc-Events-2007-Approval-of-Flight-Conditions-RM-NAA-16032007	0.34	0	0.34	0
+ws_prod-g-doc-Events-Part-M-presentation	2.16	1	2.12	1
+ws_prod-g-doc-Events-2007-september-M.017-(French)-France	19.40	2	19.40	2
+ws_prod-g-doc-Events-2007-september-MDM.032-(ENGLISH)-CZ	4.55	0	4.54	0
+Lepore	0.31	0	0.30	0
+ws_prod-g-doc-Events-r-6.-ESM	4.79	0	4.79	0
+1-secretariat	2.95	2	2.97	2
+71393_pp7	1.87	0	1.87	0
+joint_user_outcomes_michael_fullerton_29.06.12	2.57	1	2.63	1
+8.16_AOD_FINAL_Provider_Training_Presentation_9_2009	4.56	1	4.64	1
+Framing Europe	2.50	0	2.46	0
+JesuitAssocOfStudentPersonnel	6.61	1	6.61	1
+gillikin_online_user_mtg_2010	6.83	1	6.14	1
+2015-Civil-Rights-Website-training	20.55	12	20.59	12
+FAA_Form_337	7.50	4	7.28	4
+FULLDONE
+
+# movers 21   sum |ink|% 114.95 -> 113.08   MAJOR 32 -> 31   improve 9  worsen 4  level 8

@@ -1,0 +1,29 @@
+Thailand17.ppt	line members 87	groups 8
+     40 x     12700 EMU =  1.000 pt  -> mm100   35  -> border    8  -> reference draws 0.4000 pt
+     47 x     28575 EMU =  2.250 pt  -> mm100   79  -> border   19  -> reference draws 0.9500 pt
+architecture6.ppt	line members 50	groups 5
+     45 x     12700 EMU =  1.000 pt  -> mm100   35  -> border    8  -> reference draws 0.4000 pt
+      5 x     38100 EMU =  3.000 pt  -> mm100  105  -> border   26  -> reference draws 1.3000 pt
+pres_ioc_phuket.ppt	line members 19	groups 2
+     11 x     12700 EMU =  1.000 pt  -> mm100   35  -> border    8  -> reference draws 0.4000 pt
+      8 x     28575 EMU =  2.250 pt  -> mm100   79  -> border   19  -> reference draws 0.9500 pt
+outlook_of_nigerian_pension_sector.ppt	line members 12	groups 1
+     12 x     12700 EMU =  1.000 pt  -> mm100   35  -> border    8  -> reference draws 0.4000 pt
+undp_presentation_revised_17_may.ppt	line members 11	groups 1
+      7 x     12700 EMU =  1.000 pt  -> mm100   35  -> border    8  -> reference draws 0.4000 pt
+      4 x     28575 EMU =  2.250 pt  -> mm100   79  -> border   19  -> reference draws 0.9500 pt
+pods05.ppt	line members 77	groups 4
+     46 x     12700 EMU =  1.000 pt  -> mm100   35  -> border    8  -> reference draws 0.4000 pt
+      1 x     19050 EMU =  1.500 pt  -> mm100   52  -> border   13  -> reference draws 0.6500 pt
+     30 x     28575 EMU =  2.250 pt  -> mm100   79  -> border   19  -> reference draws 0.9500 pt
+joint_user_outcomes_michael_fullerton_29.06.12.ppt	line members 25	groups 1
+     21 x     12700 EMU =  1.000 pt  -> mm100   35  -> border    8  -> reference draws 0.4000 pt
+      4 x     28575 EMU =  2.250 pt  -> mm100   79  -> border   19  -> reference draws 0.9500 pt
+concepts-surrounding-cloud-computing-carolyn-kranz-and-rich-prem-gb-seattle-2011.ppt	line members 2	groups 1
+      2 x     19050 EMU =  1.500 pt  -> mm100   52  -> border   13  -> reference draws 0.6500 pt
+iep-amount-frequency-for-webinar.ppt	line members 85	groups 10
+     75 x     12700 EMU =  1.000 pt  -> mm100   35  -> border    8  -> reference draws 0.4000 pt
+     10 x     38100 EMU =  3.000 pt  -> mm100  105  -> border   26  -> reference draws 1.3000 pt
+2015-Civil-Rights-Website-training.ppt	line members 9	groups 1
+      5 x     12700 EMU =  1.000 pt  -> mm100   35  -> border    8  -> reference draws 0.4000 pt
+      4 x     28575 EMU =  2.250 pt  -> mm100   79  -> border   19  -> reference draws 0.9500 pt

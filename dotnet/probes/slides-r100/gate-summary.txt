@@ -1,0 +1,30 @@
+The 51 .ppt rendered at three legs and scored against the banked 26.2.4.2 reference
+(/home/user/gate-orig-r83/ref).  `match` is batch-check.sh's own rule: the page count
+equal and the alphanumeric-character count within max(2%, 15).  |ink|% is
+pdf-image-diff.py's per-page figure summed over the document and then over the column.
+
+leg                       docs  match  pagemismatch  sum|glyph|  sum|ink|%  MAJOR
+base (= round 99 head)      51     49             0        1417     252.82     66
++ O34 line break            51     49             0        1307     250.10     65
++ O28 bullet box            51     49             0        1307     250.28     65
+
+--- O34, the line break: 9 of 51 renderings changed by a byte
+document                                               ink a   ink b       d  glyph a  glyph b      ref
+Inducement-to-Insurance-Business                        5.01    3.24   -1.77    12812    12892    12899
+2015-Civil-Rights-Website-training                     21.51   20.55   -0.96    34846    34816    34816
+JesuitAssocOfStudentPersonnel                           6.65    6.61   -0.04     7310     7310     7310
+gillikin_online_user_mtg_2010                           7.73    7.77   +0.04     7753     7753     7753
+0335fab9-79f0-4944-b92c-f223837ca2d8                    1.70    1.72   +0.02     4499     4499     4499
+FAA_Form_337                                            7.49    7.48   -0.01    29445    29445    29447
+    (the other 3 moved by less than 0.005 of |ink|% and not at all on glyphs)
+
+--- O28, the bullet box: 50 of 51 renderings changed by a byte
+document                                               ink a   ink b       d  glyph a  glyph b      ref
+ws_prod-g-doc-Events-r-6.-ESM                           4.66    4.79   +0.13    11330    11330    11330
+joint_user_outcomes_michael_fullerton_29.06.12          3.51    3.59   +0.08     9836     9836     9836
+8.16_AOD_FINAL_Provider_Training_Presentation_9_2009   20.37   20.34   -0.03    22481    22481    22481
+FAA_Form_337                                            7.48    7.50   +0.02    29445    29445    29447
+WC_Update-Aug03                                         0.55    0.54   -0.01     2874     2874     2874
+EG1_dsrc tech                                          10.74   10.73   -0.01    11126    11126    11126
+    (the other 44 moved by less than 0.005 of |ink|% and not at all on glyphs)
+

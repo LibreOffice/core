@@ -1,0 +1,32 @@
+Measured at merge (round 121 never checked these), correcting "there is no a:tbl in the file".
+
+NAS-Infrastructure-Roadmaps-Weather.pptx part census:
+  ppt/slides/slide8.xml    a:tbl=1  graphicData uri=.../drawingml/2006/table
+  ppt/slides/slide9.xml    a:tbl=1  graphicData uri=.../drawingml/2006/table
+  ppt/slides/slide10.xml   a:tbl=1  graphicData uri=.../drawingml/2006/table
+  ppt/slides/slide11.xml   a:tbl=0  graphicData uri=.../presentationml/2006/ole
+  5 <a:tbl> across all parts of the package.
+
+Rendered with /home/user/gate-r119-cli/XRay.Office.Cli and 26.2.4.2, then
+  pdf-ops.py diff ours.pdf ref.pdf --page N
+counting each reported difference by kind:
+
+page  frame       shows  glyphs  position  size
+   8  a:tbl          35      14         0     0
+   9  a:tbl          33      15         0     0
+  10  a:tbl          30      15         0     0
+  11  p:oleObj        3       0         0    87
+
+pdf-ops.py record counts (only-ours / only-ref / both-differently):
+  p8  1 / 2 / 35     p9  10 / 5 / 33     p10  2 / 1 / 30     p11  0 / 1 / 90
+
+Conclusion: the three real DrawingML table frames show no position and no size
+divergence at all -- only show-splitting and the glyph counts that follow from
+it. r94's "we lay a p:graphicFrame table out nominally and stretch it" is dead
+on the tables as well as on the OLE frame, so O67's NOT WORK verdict stands on
+a wider basis than the round gave for it.
+
+Instrument note: a first attempt to count `cm` operators with pikepdf returned
+0 on every page of both renderings. pikepdf is not installed in this container,
+the subprocess failed silently, and the zero was the instrument rather than the
+documents. Not to be quoted; the pdf-ops.py figures above replace it.

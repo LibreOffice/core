@@ -1,0 +1,12 @@
+four-point line series, page 1: 4 knots, 61 reference vertices
+   parameterised by index, natural ends    0.0427 pt
+   parameterised by index, clamped ends    0.1586 pt
+   parameterised by x value, natural ends  0.0416 pt
+   no spline at all, the straight polyline 0.5613 pt
+   every reference vertex is a whole 1/100 mm from the first, to within 0.0218 of a unit
+eleven-point scatter series with uneven x, page 3: 11 knots, 201 reference vertices
+   parameterised by index, natural ends    0.0495 pt
+   parameterised by index, clamped ends    0.1700 pt
+   parameterised by x value, natural ends  1.8219 pt
+   no spline at all, the straight polyline 1.8183 pt
+   every reference vertex is a whole 1/100 mm from the first, to within 0.0313 of a unit

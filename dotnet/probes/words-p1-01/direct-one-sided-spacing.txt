@@ -1,0 +1,18 @@
+variant                  child declared first    parent declared first
+                              top      bottom          top      bottom
+------------------------------------------------------------------------------
+style-only                    120         120          120          60
+direct-before-only             80          60           80          60
+direct-after-only             120          80          120          80
+direct-both                    80          40           80          40
+direct-neither                120         120          120          60
+direct-before-zero              0          60            0          60
+plain-style-only              180          60          180          60
+plain-before-only              80          60           80          60
+plain-after-only              180          80          180          80
+plain-both                     80          40           80          40
+plain-neither                 180          60          180          60
+plain-line-only               180          60          180          60
+ctx-only                      120          60          120          60
+ctx-and-before                 80          60           80          60
+ctx-and-both                   80          40           80          40

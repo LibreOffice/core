@@ -1,0 +1,40 @@
+ours	Im1	y=39.95	9 tiles	pitch 6.0000 pt
+ours	Im1	y=45.95	9 tiles	pitch 6.0000 pt
+ours	Im1	y=51.95	9 tiles	pitch 6.0000 pt
+ours	Im1	y=57.95	9 tiles	pitch 6.0000 pt
+ours	Im1	y=63.95	9 tiles	pitch 6.0000 pt
+ours	Im1	y=69.95	9 tiles	pitch 6.0000 pt
+ours	Im1	y=75.95	9 tiles	pitch 6.0000 pt
+ours	Im1	y=81.95	9 tiles	pitch 6.0000 pt
+ours	Im1	y=87.95	9 tiles	pitch 6.0000 pt
+ours	Im1	y=93.95	9 tiles	pitch 6.0000 pt
+ours	Im2	y=39.95	9 tiles	pitch 6.0000 pt
+ours	Im2	y=45.95	9 tiles	pitch 6.0000 pt
+ours	Im2	y=51.95	9 tiles	pitch 6.0000 pt
+ours	Im2	y=57.95	9 tiles	pitch 6.0000 pt
+ours	Im2	y=63.95	9 tiles	pitch 6.0000 pt
+ours	Im2	y=69.95	9 tiles	pitch 6.0000 pt
+ours	Im2	y=75.95	9 tiles	pitch 6.0000 pt
+ours	Im2	y=81.95	9 tiles	pitch 6.0000 pt
+ours	Im2	y=87.95	9 tiles	pitch 6.0000 pt
+ours	Im2	y=93.95	9 tiles	pitch 6.0000 pt
+ours	Im3	y=194.39	25 tiles	pitch 6.0000 pt
+ours	Im3	y=200.39	25 tiles	pitch 6.0000 pt
+ours	Im3	y=206.39	25 tiles	pitch 6.0000 pt
+ours	Im3	y=212.39	25 tiles	pitch 6.0000 pt
+ours	Im3	y=218.39	25 tiles	pitch 6.0000 pt
+ours	Im3	y=224.39	25 tiles	pitch 6.0000 pt
+ours	Im3	y=230.39	25 tiles	pitch 6.0000 pt
+ours	Im3	y=236.39	25 tiles	pitch 6.0000 pt
+ours	Im4	y=62.45	26 tiles	pitch 6.0000 pt
+ours	Im4	y=68.45	26 tiles	pitch 6.0000 pt
+ours	Im4	y=74.45	26 tiles	pitch 6.0000 pt
+ours	Im4	y=80.45	26 tiles	pitch 6.0000 pt
+ours	Im4	y=86.45	26 tiles	pitch 6.0000 pt
+ours	Im4	y=92.45	26 tiles	pitch 6.0000 pt
+ours	Im4	y=98.45	26 tiles	pitch 6.0000 pt
+ours	Im4	y=104.45	26 tiles	pitch 6.0000 pt
+ours	Im4	y=110.45	26 tiles	pitch 6.0000 pt
+reference	scanline 50	51 stripes	period 2.9971 pt	tile 5.9943 pt
+reference	scanline 100	51 stripes	period 2.9971 pt	tile 5.9943 pt
+reference	scanline 150	51 stripes	period 2.9971 pt	tile 5.9943 pt

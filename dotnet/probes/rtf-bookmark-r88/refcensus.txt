@@ -1,0 +1,12 @@
+338 files; 11 state a REF field
+    365 REF   1231 bkmkstart  FAA 2025-26 Holdover Tables.rtf
+    332 REF   1233 bkmkstart  24-25_FAA_Holdover_Tables.rtf
+     32 REF     57 bkmkstart  ABCD-FE-01-00 Flight Envelope - v1 08.03.16.rtf
+     19 REF     71 bkmkstart  ABCD-SDE-23-00 - Avionic System Description - 17.02.16 - v1.rtf
+     15 REF     34 bkmkstart  ABCD-WB-08-00 Weight and Balance Report - v1 08.03.16.rtf
+     10 REF    114 bkmkstart  report-template.rtf
+      5 REF     80 bkmkstart  Agile_Arc_SysDes.rtf
+      4 REF     33 bkmkstart  FG-AI4NDM-TR-skeleton_template.rtf
+      4 REF     13 bkmkstart  ECSS-E-ST-50-16C-Annex-A(30September2021).rtf
+      1 REF      1 bkmkstart  PI-doc.-no.-2E-Technical-Review-Report.rtf
+      1 REF      1 bkmkstart  PAT-047 - Architecture and Detailed Design Assessment.rtf

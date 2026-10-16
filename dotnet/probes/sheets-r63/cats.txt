@@ -1,0 +1,31 @@
+Round 63 — the two-word decks, which separate the wrap limit from the collision boundary.
+`make-cats-probe.py`, twelve categories in Liberation Sans at 10 pt unless stated, the tick
+spacing swept by the chart frame's own width, LibreOffice's decision read from its own
+`chart:coordinate-region` and from whether the labels are still in the exported PDF's text
+layer.  `Column` measures 33.597 at 10 pt and 38.765 at 11 pt on chart2's 96 dpi device.
+
+series  label replacing "Middle Column"   swept spacing   rotated up to   upright from
+A       (none — the workbook's own)       32.58 .. 36.48       35.348         35.476
+B       MiddleColumn (one word)           32.58 .. 36.48       36.482         (none)
+C       Middle                            32.58 .. 36.48       (none)         32.580
+D       Mi Column                         30.69 .. 38.50       35.225         35.476
+E       MiddleMiddleMi Column             30.69 .. 38.50       38.502         (none)
+F       Middle Colum                      30.69 .. 38.50       (none)         30.690
+G       Middle Columnn                    30.69 .. 38.50       38.502         (none)
+H       (none), at 11 pt                  35.35 .. 42.91       40.703         40.864
+
+A and D put the limit at [0.9470, 0.9505) of the spacing; H at [0.9486, 0.9524).  Both
+contain 0.95 — `createTextShapes`'s own reduction — and neither contains 1.000.  Read on the
+unquantised metrics the same two are [0.9713, 0.9748) and [0.9276, 0.9312) and are disjoint.
+
+D against A: changing the *first* word from `Middle` to `Mi` does not move the boundary.
+F and G against A: changing the *second* word moves it to where 0.95 x spacing puts it.
+E: a first word of 67.73 breaks at every spacing in range, as 0.95 x 38.50 = 36.58 says.
+C: the widest word left is `START` at 31.96, in label *zero*; 0.95 x 32.58 = 30.95 is less
+   than that and the axis is upright anyway, which is the C++'s `nTick > 0`.
+
+The single-word series (`make-fine-probe.py`, `rot-fine.txt`) put the boundary at 0.998 of
+the spacing instead, at both 10 and 11 pt and at both twelve and thirteen categories.  That
+is the *collision* boundary and not the wrap limit: a word wider than 0.95 of a tick but
+narrower than a whole one breaks, which turns line breaking off, and the restarted pass then
+finds one line that does not collide and leaves the axis upright.

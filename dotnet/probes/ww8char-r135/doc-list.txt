@@ -1,0 +1,66 @@
+/home/user/sample-files/words/done-001/doc/FAA-2013-0422-0009_attachment_1.doc
+/home/user/sample-files/words/done-001/doc/GLACIERBG.ETT.doc
+/home/user/sample-files/words/done-001/doc/advert-for-draft-decision-airbus-epr-bm3965ia-v006.doc
+/home/user/sample-files/words/done-001/doc/LENTOBUSSIAIKATAULU.-31.10.-31.12.2022.doc
+/home/user/sample-files/words/done-001/doc/foca_form_1.doc
+/home/user/sample-files/words/done-002/doc/FMRBullletinB-28.doc
+/home/user/sample-files/words/done-002/doc/Bull01-06-Reserve Training Standards.doc
+/home/user/sample-files/words/done-002/doc/prison-population-bulletin-june.doc
+/home/user/sample-files/words/done-003/doc/10795.doc
+/home/user/sample-files/words/done-003/doc/Temp16.doc
+/home/user/sample-files/words/done-003/doc/II.1.2_Hypoxia.doc
+/home/user/sample-files/words/done-003/doc/96-3-clement-data.doc
+/home/user/sample-files/words/done-003/doc/DEP2008-1900.doc
+/home/user/sample-files/words/done-004/doc/07-04.doc
+/home/user/sample-files/words/done-004/doc/2ca950374241722b8ea7c132dfce63ae.doc
+/home/user/sample-files/words/done-004/doc/opic 5--Case Studies Movie and Aviation Industries.doc
+/home/user/sample-files/words/done-004/doc/RobertQ_Service.doc
+/home/user/sample-files/words/done-005/doc/316r_a_f.doc
+/home/user/sample-files/words/done-005/doc/316r_a_e.doc
+/home/user/sample-files/words/done-005/doc/Theft-Restitution-Letter-Vancouver-ASC-2005.doc
+/home/user/sample-files/words/done-005/doc/loi_format_letter_of_intent-a-320-214-a330.doc
+/home/user/sample-files/words/done-006/doc/LHD-230-application-for-the-approval-of-an-aircraftr.doc
+/home/user/sample-files/words/done-006/doc/003.doc
+/home/user/sample-files/words/done-006/doc/P200904290238_0238_51880.doc
+/home/user/sample-files/words/done-006/doc/1244277 1 Comment.doc
+/home/user/sample-files/words/done-006/doc/Wales_Office_Quarter_4_Ministerial_Transparency_Return.DOC
+/home/user/sample-files/words/done-007/doc/RNW167A-150428.doc
+/home/user/sample-files/words/done-007/doc/congregationalhistories_ky_2023.doc
+/home/user/sample-files/words/done-007/doc/chapter 12.doc
+/home/user/sample-files/words/done-008/doc/2024-2nd-quarter-case-summaries.doc
+/home/user/sample-files/words/done-008/doc/PUR-0012-UTAS-GRAMS-SPA-Template-1-25-2024.doc
+/home/user/sample-files/words/done-008/doc/1245685 1 Comment.doc
+/home/user/sample-files/words/done-008/doc/FlightLaws.doc
+/home/user/sample-files/words/done-009/doc/2013-op12-Annex III - Curriculum Vitae.doc
+/home/user/sample-files/words/done-009/doc/certification-flight-standards-doc-oeb-supporting-documents-tgl-TGL26-section-5-REV10.doc
+/home/user/sample-files/words/done-009/doc/A380MaenPressRel.doc
+/home/user/sample-files/words/done-009/doc/237287_0486190101_0486190101_geolink2neu.doc
+/home/user/sample-files/words/done-009/doc/CP-ETSO template_v2020.DOC
+/home/user/sample-files/words/done-010/doc/361400CSLegislation1RF01PUBLIC1.doc
+/home/user/sample-files/words/done-010/doc/f111.doc
+/home/user/sample-files/words/done-010/doc/1528364855.doc
+/home/user/sample-files/words/done-011/doc/135.doc
+/home/user/sample-files/words/done-011/doc/AAC-AD-No-2021-01-Boeing-737-8-and-737-9-MAX.doc
+/home/user/sample-files/words/done-012/doc/AirbusCallouts.doc
+/home/user/sample-files/words/done-012/doc/RMI_Document_Repository_Public-Reprts_GettingOffOil.doc
+/home/user/sample-files/words/done-013/doc/1257259179492_2007_TPPT_102_Supporting_Doc_2-434003080.doc
+/home/user/sample-files/words/done-013/doc/1228841571067_2009_TPPT_13__2007_TPPT_102__R-108535759.doc
+/home/user/sample-files/words/done-013/doc/omrIMInterpretiveGuideLine.doc
+/home/user/sample-files/words/done-013/doc/Reid.doc
+/home/user/sample-files/words/done-014/doc/644730BRI0mna000BOX361539B00public0.doc
+/home/user/sample-files/words/done-014/doc/PK_FlugzeugeStricken.doc
+/home/user/sample-files/words/done-014/doc/300502-Mecenat-Airbus-Simusante_CHU-Amiens-Picardie.doc
+/home/user/sample-files/words/done-015/doc/SFSP_2013-02_Bulletin.doc
+/home/user/sample-files/words/done-015/doc/2013_11.doc
+/home/user/sample-files/words/done-016/doc/120509coss.doc
+/home/user/sample-files/words/done-016/doc/150_5335_5a.doc
+/home/user/sample-files/words/extra-001/doc/info-bulletin-601.doc
+/home/user/sample-files/words/extra-001/doc/762.doc
+/home/user/sample-files/words/metrics-001/doc/手机免提系统TSB.doc
+/home/user/sample-files/words/metrics-001/doc/A320SimNotes.doc
+/home/user/sample-files/words/pagination-001/doc/1447.doc
+/home/user/sample-files/words/pagination-002/doc/absrc-pac-01-info-note-en.doc
+/home/user/sample-files/words/pagination-001/doc/A_320.doc
+/home/user/sample-files/words/pagination-002/doc/150_5300_13_chg12.doc
+/home/user/sample-files/words/ceiling-001/doc/150_5300_13_chg8.doc
+/home/user/sample-files/words/table-001/doc/150_5300_13_chg10.doc

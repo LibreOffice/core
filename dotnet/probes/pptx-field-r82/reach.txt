@@ -1,0 +1,13 @@
+# field-making a:hlinkClick runs, by part kind
+# notesSlide	14 runs	4 documents
+# slide	416 runs	89 documents
+# slideLayout	1 runs	1 documents
+# slideMaster	177 runs	89 documents
+# inert (map stays empty): 1
+# INERT sheets/done-006/xlsx/SSRO_Quarterly_Statistical_Bulletin_Q3201617_DATA.xlsx	xl/drawings/drawing1.xml	<ns0:hlinkClick xmlns:ns0="http://schemas.openxmlformats.org/drawingml/2006/main" xmlns:ns1="http://schemas.openxmlformats.org/officeDocument/2006/relationships" ns1:id="" />
+
+# slide-run text length distribution
+# 1-19	167
+# 20-39	140
+# 40-79	80
+# 80+	29

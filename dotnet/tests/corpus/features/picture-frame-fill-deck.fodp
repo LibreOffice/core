@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document
+  xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+  xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+  xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+  xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+  xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+  xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+  xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0"
+  office:version="1.3"
+  office:mimetype="application/vnd.oasis.opendocument.presentation">
+ <office:automatic-styles>
+  <style:page-layout style:name="pm1">
+   <style:page-layout-properties fo:page-width="20cm" fo:page-height="15cm"
+        style:print-orientation="landscape" fo:margin-top="0cm" fo:margin-bottom="0cm"
+        fo:margin-left="0cm" fo:margin-right="0cm"/>
+  </style:page-layout>
+  <style:style style:name="dp1" style:family="drawing-page">
+   <style:drawing-page-properties draw:fill="solid" draw:fill-color="#ffffcc"
+        draw:background-size="border" presentation:background-visible="true"/>
+  </style:style>
+  <style:style style:name="grA" style:family="graphic">
+   <style:graphic-properties draw:stroke="none" draw:fill="solid" draw:fill-color="#ff0000"
+        draw:image-opacity="100%"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Default" style:page-layout-name="pm1" draw:style-name="dp1"/>
+ </office:master-styles>
+ <office:body>
+  <office:presentation>
+   <draw:page draw:name="page1" draw:style-name="dp1" draw:master-page-name="Default">
+    <draw:frame draw:name="emf-over-fill" draw:style-name="grA" draw:layer="layout"
+                svg:width="8cm" svg:height="6cm" svg:x="1cm" svg:y="2cm">
+      <draw:image draw:mime-type="image/x-emf"><office:binary-data>AQAAAFgAAAAAAAAAAAAAAD8fAABvFwAAAAAAAAAAAAA/HwAAbxcAACBFTUYAAAEAfAMAAB0AAABAAAAAAAAAAAAAAAAAAAAAQB8AAHAXAABQAAAAPAAAACcAAAAYAAAAAQAAAAAAAAAzZswAAAAAACYAAAAcAAAAAgAAAAAAAAAUAAAAAAAAAAAAAAAlAAAADAAAAAEAAAAlAAAADAAAAAIAAAArAAAAGAAAAPQBAAD0AQAArA0AANAHAAAnAAAAGAAAAAMAAAAAAAAAzDMzAAAAAAAlAAAADAAAAAMAAAAqAAAAGAAAAKAPAAD0AQAATB0AANAHAAAnAAAAGAAAAAQAAAAAAAAA/8wAAAAAAABfAAAANAAAAAUAAAAAAAAAAAAAAAAAAAAAAAAAAAABAB4AAAAAAAAAAEQAAAAAAAAAAAAAJQAAAAwAAAAEAAAAJQAAAAwAAAAFAAAAOwAAAAgAAAAbAAAAEAAAAPQBAACUEQAANgAAABAAAADQBwAAxAkAADYAAAAQAAAArA0AAJQRAAA9AAAACAAAADwAAAAIAAAAPwAAAAgAAABfAAAARAAAAAYAAAAAAAAAAAAAAAAAAAAAAAAABwABABkAAAAAAAAAiACqAAAAAAAEAAAALAEAAJYAAAAsAQAAlgAAACUAAAAMAAAABgAAAFcAAAAsAAAAAAAAAAAAAAAAAAAAAAAAAAQAAACgD8QJiBOgD3AXxAlYG6APdgAAAEwAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAEAAAAAAAAA9AEAAMASAAAA/wAAAAAAAKAPAAB8FQAAAAAAAAD/AAAAAAAAAQAAABgAAAAMAAAAAGYAABIAAAAMAAAAAQAAAFIAAABoAAAABwAAAKL+//8AAAAAAAAAAAAAAACQAQAAAAAAAAAAAABMAGkAYgBlAHIAYQB0AGkAbwBuACAAUwBhAG4AcwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAJQAAAAwAAAAHAAAAVAAAAGgAAAAAAAAAAAAAAAAAAAAAAAAAAQAAAAAAgD8AAIA/MBEAAIgTAAANAAAATAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAFAAYQBwAGUAcgBsAGUAcwBzACAARQBNAEYAAAAOAAAAFAAAAAAAAAAAAAAAFAAAAA==</office:binary-data></draw:image>
+    </draw:frame>
+    <draw:frame draw:name="png-over-fill" draw:style-name="grA" draw:layer="layout"
+                svg:width="8cm" svg:height="6cm" svg:x="10cm" svg:y="2cm">
+      <draw:image draw:mime-type="image/png"><office:binary-data>iVBORw0KGgoAAAANSUhEUgAAAHgAAAB4CAYAAAA5ZDbSAAACGUlEQVR4nO2RMQ0AMAyA6l/FnK4qCEchwQDMvPmnPIcdvMEwdvAGw9jBGwxjB28wjB28wTB28AbD2MEbDGMHbzCMHbzBMHbwBsPYwRsMYwdvMIwdvMEwdvAGw9jBGwxjB28wjB28wTB28AbD2MEbDGMHbzCMHbzBMHbwBsPYwRsMYwdvMIwdvMEwdvAGw9jBGwxjB28wjB28wTB28AbD2MEbDGMHbzCMHbzBMHbwBsPYwRsMYwdvMIwdvMEwdvAGw9jBGwxjB28wjB28wTB28AbD2MEbDGMHbzCMHbzBMHbwBsPYwRsMYwdvMIwdvMEwdvAGw9jBGwxjB28wjB28wTB28AbD2MEbDGMHbzCMHbzBMHbwBsPYwRsMYwdvMIwdvMEwdvAGw9jBGwxjB28wjB28wTB28AbD2MEbDGMHbzCMHbzBMHbwBsPYwRsMYwdvMIwdvMEwdvAGw9jBGwxjB28wjB28wTB28AbD2MEbDGMHbzCMHbzBMHbwBsPYwRsMYwdvMIwdvMEwdvAGw9jBGwxjB28wjB28wTB28AbD2MEbDGMHbzCMHbzBMHbwBsPYwRsMYwdvMIwdvMEwdvAGw9jBGwxjB28wjB28wTB28AbD2MEbDGMHbzCMHbzBMHbwBsPYwRsMYwdvMIwdvMEwdvAGw9jBGwxjB28wjB28wTB28AbD2MEbDGMHbzCMHbzBMHbwBsPYwRuMstpumoT9VfkNAAAAAElFTkSuQmCC</office:binary-data></draw:image>
+    </draw:frame>
+    <draw:custom-shape draw:name="bare-fill" draw:style-name="grA" draw:layer="layout"
+                svg:width="8cm" svg:height="4cm" svg:x="1cm" svg:y="9cm">
+      <draw:enhanced-geometry draw:type="rectangle"/>
+    </draw:custom-shape>
+   </draw:page>
+  </office:presentation>
+ </office:body>
+</office:document>

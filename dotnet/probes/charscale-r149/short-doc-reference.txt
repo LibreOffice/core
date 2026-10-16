@@ -1,0 +1,7 @@
+none     width   23.280 pt   right edge  538.730   'Ham'
+p600     width  139.824 pt   right edge  538.624   'Ham'
+p601     width   23.280 pt   right edge  538.730   'Ham'
+
+none     ratio to the unscaled arm 1.00000
+p600     ratio to the unscaled arm 6.00621
+p601     ratio to the unscaled arm 1.00000

@@ -1,0 +1,16 @@
+scored 81 of the 81 movers
+  median |dx| over all of them :   4.359 pt  ->    0.092 pt
+  within 0.1 pt of 26.2.4.2    : 6  ->  48
+  closer 71   further 4   level 6
+
+   242.268 ->    0.073  (274 spans)  66090ba85c2e-064_Small_business_cash_flow_Use_this_template_0a64
+    73.739 ->    0.043  ( 97 spans)  243b86ab078a-057_Simple_balance_sheet_Use_this_template_e2d4cbb2
+    65.216 ->    0.100  (147 spans)  fb421f125101-030_Basic_balance_sheet_Use_this_template_10ed9144.
+    59.862 ->    0.069  (1527 spans)  5baecec54301-SLSA_Directory_031423.ods
+    56.126 ->    0.057  (194 spans)  6c7010e8b643-047_Date_tracker_Gantt_chart_bf34f3a8.ods
+    73.232 ->   22.406  (656 spans)  acae1580c11d-programs contact list as of 07-01-10.ods
+  ...
+     0.019 ->    0.108  (402 spans)  03b0eea04793-048_Expense_trends_budget_18d1e8ba.ods
+    16.207 ->   17.119  (145 spans)  d14177f1b271-071_Four-week_project_timeline_Use_this_template_4f
+     1.659 ->    3.813  (  9 spans)  3a26af4cf3ee-058_Social_media_engagement_data_cfa1cb18.ods
+     4.400 ->    8.187  (631 spans)  6a93b5b21dce-066_Agile_Gantt_chart_08f9de45.ods

@@ -1,0 +1,15 @@
+/home/user/sample-files/words/chartset-006/docx/093_Business_Case_Template_Customizable_Layout_510c25e7.docx
+/home/user/sample-files/words/chartset-006/docx/097_Business_Case_Template_Elegant_Layout_3ba9cbf2.docx
+/home/user/sample-files/words/chartset-008/docx/098_Business_Case_Template_Fillable_Layout_d0c5410e.docx
+/home/user/sample-files/words/chartset-010/docx/066_Work_Breakdown_Structure_Template_Colored_Background_c27ff248.docx
+/home/user/sample-files/words/chartset-010/docx/067_Work_Breakdown_Structure_Template_Gray_Theme_89f8be8b.docx
+/home/user/sample-files/words/chartset-010/docx/090_Business_Case_Template_Blue_Theme_108ff0f1.docx
+/home/user/sample-files/words/chartset-011/docx/065_Work_Breakdown_Structure_Template_Blue_Theme_2b207f62.docx
+/home/user/sample-files/words/chartset-011/docx/068_Work_Breakdown_Structure_Template_Green_Theme_63e69ed8.docx
+/home/user/sample-files/words/chartset-012/docx/095_Business_Case_Template_Easy_Format_61de7128.docx
+/home/user/sample-files/words/chartset-013/docx/069_Work_Breakdown_Structure_Template_Professional_Format_1e02dce1.docx
+/home/user/sample-files/words/done-007/docx/0c662f5c948a7d81d32ffd833c5cc59421a5f522.docx
+/home/user/sample-files/words/done-009/docx/SWDD-template.docx
+/home/user/sample-files/words/done-010/docx/FG-AI4NDM-TR-skeleton_template.docx
+/home/user/sample-files/words/done-015/docx/JEMIT_Template.docx
+/home/user/sample-files/words/missing-001/docx/33004.docx

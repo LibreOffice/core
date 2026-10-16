@@ -1,0 +1,9 @@
+document                           our centre               ref centre                  our r    ref r    err %
+003_advanced_excel_pie__xlsx.pdf   ( 408.81, 464.81)      ( 408.84, 464.74)        100.01    99.78   +0.23%
+                                     centre offset  -0.03,   0.07
+011_advanced_excel_pie__xlsx.pdf   ( 411.14, 464.64)      ( 411.11, 464.57)        100.04    99.78   +0.26%
+                                     centre offset   0.03,   0.07
+019_advanced_excel_pie__xlsx.pdf   ( 408.90, 464.88)      ( 408.95, 464.82)        100.00    99.76   +0.24%
+                                     centre offset  -0.05,   0.06
+027_advanced_excel_pie__xlsx.pdf   ( 411.25, 464.72)      ( 411.22, 464.68)        100.03    99.78   +0.25%
+                                     centre offset   0.03,   0.04

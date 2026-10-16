@@ -1,0 +1,12 @@
+Every one of MANIFEST.tsv's 947 paths, rendered at both binaries, /CreationDate masked.
+
+sheets   changed   1 of 307
+slides   changed   0 of 302
+words    changed   3 of 338
+
+total    changed   4 of 947
+
+   words 003_Free_Genogram_Diagram_Template_Easy_Format_60eb6e42__docx
+   words 004_Free_Genogram_Diagram_Template_Editable_Format_b82b6152__docx
+   words 008_Free_Genogram_Diagram_Template_Green_and_Yellow_Theme_9017c1a8__docx
+   sheets PBN Matrix NAAs (V01)__xlsx

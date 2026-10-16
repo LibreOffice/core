@@ -1,0 +1,96 @@
+# The 87 documents the whole-corpus gate scored MISMATCH at XRay.Office 2f4709c08.
+# ours   = XRay.Office.Cli @ 2f4709c08, XRAY_OFFICE_BUNDLED_FONTS unset (installed faces win)
+# ref24  = /usr/bin/soffice, LibreOffice 24.2.7.2 420(Build:2) - what batch-check.sh measures
+# ref26  = /opt/libreoffice26.2/program/soffice, LibreOffice 26.2.4.2 0229ac93fcf0d7cb,
+#          with the eight Latin duplicate faces moved aside (.duplicates-aside/.noto-aside)
+# fonts  = system fontconfig: Carlito, Caladea, Liberation, DejaVu, WenQuanYi, IPAGothic
+# rule   = batch-check.sh of 2026-09-05: page count, then max(2%, 15) alphanumeric characters
+# host   = /home/user/sample-files corpus, 947 documents; measured 2026-09-06
+path	ext	pages_ours	pages_ref24	pages_ref26	glyphs_ours	glyphs_ref24	glyphs_ref26	v_vs24	v_vs26	ref24_vs_ref26	cause	note
+sheets/ceiling-001/xls/Template Pilot Logbook JAR-FCL V3.0.xls	xls	38	38	38	5756	5643	5643	words	words	match	number-format-time	124 cells read 00:00 where the reference reads 0:00, and the date cells differ in the same way - a leading zero our h:mm formatter adds
+sheets/chartset-004/xlsx/DynamicBubbleChart.xlsx	xlsx	5	5	5	1723	1803	1728	words	match	words	version-gap	matches 26.2.4.2 under the gate's own rule
+sheets/chartset-004/xlsx/microsoft_learn_multi_chart_examples.xlsx	xlsx	5	5	5	839	858	826	words	match	words	version-gap	matches 26.2.4.2 under the gate's own rule
+sheets/chartset-005/xlsx/004_Contextures_chart_sample_de7c0671.xlsx	xlsx	4	4	4	879	900	882	words	match	words	version-gap	matches 26.2.4.2 under the gate's own rule
+sheets/chartset-006/xls/011_Contextures_chart_sample_599b4392.xls	xls	4	4	4	1099	1477	1102	words	match	words	version-gap	matches 26.2.4.2 under the gate's own rule
+sheets/chartset-006/xls/014_Contextures_chart_sample_991ecfc5.xls	xls	3	3	3	537	561	561	words	words	match	chart-broken	read: our chart plots ~20 #N/A categories, has no secondary axis, and its bars run off the top of the plot; value axis reads $1/$0 against the reference's $800/$720
+sheets/chartset-006/xlsx/070_Equipment_inventory_list_Use_this_template_fd524c8a.xlsx	xlsx	1	1	1	1128	943	1028	words	words	words	refs-disagree	943 glyphs on 24.2, 1028 on 26.2, 1128 ours; a chart-fallback notice one ref draws
+sheets/chartset-007/xlsm/003_Contextures_chart_sample_9bda2719.xlsm	xlsm	6	6	6	1426	1507	1426	words	match	words	version-gap	matches 26.2.4.2 under the gate's own rule
+sheets/chartset-007/xlsx/040_Blood_pressure_tracker_872b6833.xlsx	xlsx	1	1	1	737	711	711	words	words	match	volatile-recalc	ours 11/6/2022 x4 where both references print today's date; nothing else differs
+sheets/chartset-007/xlsx/054_Problem_analysis_with_Pareto_chart_11058329.xlsx	xlsx	1	1	1	299	429	299	words	match	words	version-gap	matches 26.2.4.2 under the gate's own rule
+sheets/chartset-008/xlsx/051_Manufacturer_defect_analysis_53db27ea.xlsx	xlsx	1	1	1	320	450	320	words	match	words	version-gap	matches 26.2.4.2 under the gate's own rule
+sheets/chartset-008/xlsx/055_Project_timeline_with_milestones_Use_this_template_546cecc0.xlsx	xlsx	2	2	2	1211	1045	1045	words	words	match	unclassified	+166; chart text on both sides, shattered into fragments. Screened, not read
+sheets/chartset-009/xlsx/029_Annual_budget_Use_this_template_30324a97.xlsx	xlsx	2	2	2	943	914	914	words	words	match	unclassified	+29; chart text fragments on both sides. Screened, not read
+sheets/chartset-009/xlsx/053_Personal_asset_inventory_5446d84b.xlsx	xlsx	4	2	2	266	226	226	pages,words	pages,words	match	unclassified	4 pages against 2, +40 glyphs of which the surplus is two extra Page n of 4 footers; read: our theme colour is blue where the reference's is teal, on both the heading and the line art, and our value axis steps 100k where the reference steps 50k
+sheets/chartset-010/xlsx/047_Date_tracker_Gantt_chart_bf34f3a8.xlsx	xlsx	5	8	8	3058	3366	3366	pages,words	pages,words	match	volatile-recalc	ours 1/10/2024, references 2026 - a Gantt keyed off TODAY()
+sheets/chartset-010/xlsx/062_Run_chart_cb7476ea.xlsx	xlsx	3	2	2	680	645	645	pages,words	pages,words	match	chartsheet-scale	CLOSED: chart sheet not fitted to one page; 3 pages -> 2, 680 glyphs -> 643 (ref 645)
+sheets/chartset-010/xlsx/065_Weight_loss_tracker_ff1c89af.xlsx	xlsx	2	2	2	334	308	308	words	words	match	volatile-recalc	dates, plus two of our own: an unformatted serial (44790) and the day-name format code 'aaaa' printed literally where the reference prints Sunday
+sheets/chartset-011/xlsx/030_Basic_balance_sheet_Use_this_template_10ed9144.xlsx	xlsx	8	8	8	1723	1644	1624	words	words	match	volatile-recalc	ours 2022/2021, references 2025/2026 - a YEAR(TODAY()) heading
+sheets/chartset-011/xlsx/042_Business_monthly_budget_4e4d092f.xlsx	xlsx	4	4	4	1453	1567	1567	words	words	match	number-format-unapplied	we print 500, 1000, -100 where the reference prints 500.00, 1,000.00, (100.00)
+sheets/chartset-011/xlsx/057_Simple_balance_sheet_Use_this_template_e2d4cbb2.xlsx	xlsx	4	3	3	2207	1877	1877	pages,words	pages,words	match	chartsheet-scale	PARTLY CLOSED: 4 pages -> 3, pages,words -> words. The residual is the outlining ceiling - the reference's chart page yields 112 alnum characters to pdftotext against our 398, because it draws the rotated category labels as vector outlines
+sheets/chartset-012/xlsx/002_Contextures_chart_sample_f605e7bc.xlsx	xlsx	8	8	8	1953	1998	1953	words	match	words	version-gap	matches 26.2.4.2 under the gate's own rule
+sheets/chartset-012/xlsx/020_Free_Blood_Pressure_Chart_and_Printable_Blood_Pressure_Log_8f8dcc39.xlsx	xlsx	6	6	6	987	1038	987	words	match	words	version-gap	matches 26.2.4.2 under the gate's own rule
+sheets/chartset-012/xlsx/068_Blue_inventory_list_Use_this_template_f9908489.xlsx	xlsx	4	4	4	1141	1196	1199	words	words	match	missing-text	the reference draws INVENTORY LIST x3, PICK, BIN, LOOKUP that we omit entirely; -58 glyphs accounts for the whole gap
+sheets/chartset-013/xlsx/001_Contextures_chart_sample_b089bc34.xlsx	xlsx	15	15	11	3874	4120	3851	words	pages	pages,words	refs-disagree	26.2 paginates 11 pages where 24.2 and we make 15; glyphs agree with 26.2 to 0.6%
+sheets/chartset-013/xlsx/033_Event_planning_tracker_Use_this_template_f29a848e.xlsx	xlsx	3	3	3	2720	2783	2650	words	words	words	refs-disagree	2783 on 24.2, 2650 on 26.2, 2720 ours - inside the band against neither
+sheets/chartset-013/xlsx/035_Project_plan_for_law_firms_aa2d4462.xlsx	xlsx	4	4	4	3923	3751	3879	words	match	words	version-gap	matches 26.2.4.2 under the gate's own rule
+sheets/chartset-014/xlsx/017_Timeline_Templates_for_Excel_b88faee6.xlsx	xlsx	3	3	3	969	989	969	words	match	words	version-gap	matches 26.2.4.2 under the gate's own rule
+sheets/chartset-014/xlsx/045_Check_register_with_chart_4becb8a0.xlsx	xlsx	1	1	1	736	764	764	words	words	match	volatile-recalc	ours 02/27/2023, references 09/06/2026 - the render date
+sheets/chartset-014/xlsx/048_Expense_trends_budget_18d1e8ba.xlsx	xlsx	14	14	14	4088	3986	3986	words	words	match	unclassified	+102; instruction text differs in wrapping. Screened, not read
+sheets/chartset-014/xlsx/076_Inventory_list_accessibility_guide_Use_this_template_f43dab19.xlsx	xlsx	9	9	9	4949	4782	4782	words	words	match	unclassified	+167; we draw 'Inventory list' x5 and 'Navigation links' x3 the reference does not. Screened, not read
+sheets/done-001/xlsx/FMMO_NMPF_37C.xlsx	xlsx	1	1	1	1327	1299	1327	words	match	words	version-gap	matches 26.2.4.2 under the gate's own rule
+sheets/done-004/xls/NorwegianXPensionXFundXanalysisXexportsXandXLAWS-1.xls	xls	8	8	8	4209	4361	4210	words	match	words	version-gap	matches 26.2.4.2 under the gate's own rule
+sheets/done-005/xlsx/arp-sop-300-Exhibit-A-Table-Templates.xlsx	xlsx	11	11	11	19533	19978	19812	words	match	match	version-gap	matches 26.2.4.2 under the gate's own rule
+sheets/done-006/xlsx/Infotabelle_WLAN im Flugzeug.xlsx	xlsx	4	4	4	2025	2234	2025	words	match	words	version-gap	matches 26.2.4.2 under the gate's own rule
+sheets/done-006/xlsx/Performance.xlsx	xlsx	13	13	13	7270	7439	7273	words	match	words	version-gap	matches 26.2.4.2 under the gate's own rule
+sheets/done-006/xlsx/Published_Issuances_2024.xlsx	xlsx	1	1	1	4294	4064	4294	words	match	words	version-gap	matches 26.2.4.2 under the gate's own rule
+sheets/done-007/xlsx/essd-16-3433-2024-t02.xlsx	xlsx	4	4	4	2346	5403	2349	words	match	words	version-gap	matches 26.2.4.2 under the gate's own rule
+sheets/done-008/xlsx/2015-19 top 25 Arms producing companies data - to upload on website - FINAL_edit.xlsx	xlsx	19	19	19	12974	14433	12973	words	match	words	version-gap	matches 26.2.4.2 under the gate's own rule
+sheets/done-008/xlsx/Company_Seniority_Date_Calculator.xlsx	xlsx	12	12	12	16107	16725	16125	words	match	words	version-gap	matches 26.2.4.2 under the gate's own rule
+sheets/done-009/xlsx/sistem-rekod-markah-srm-_-rekod-master.xlsx	xlsx	31	31	31	15175	16300	16180	words	words	match	volatile-recalc	1395 cached 5s against the references' 1395 #N/A - a lookup they re-evaluate
+sheets/done-011/xls/SIL_TDB605.xls	xls	44	44	44	18688	19131	18693	words	match	words	version-gap	matches 26.2.4.2 under the gate's own rule
+sheets/done-012/xlsx/CSJU List of Recipients of funds 2013-2020.xlsx	xlsx	97	96	97	270623	270627	270627	pages	match	pages	version-gap	matches 26.2.4.2 under the gate's own rule
+sheets/done-014/xls/7-memento-2015-transports-aeriens-b.xls	xls	190	191	190	118434	123230	118350	pages,words	match	pages,words	version-gap	matches 26.2.4.2 under the gate's own rule
+sheets/done-014/xlsx/Aircraft_Database.xlsx	xlsx	134	134	134	77978	81831	77983	words	match	words	version-gap	matches 26.2.4.2 under the gate's own rule
+sheets/done-016/xlsx/RCO_VOR_Master_List_082824.xlsx	xlsx	80	80	80	60644	63199	60668	words	match	words	version-gap	matches 26.2.4.2 under the gate's own rule
+sheets/missing-001/xls/orbus_togaf_tool_csq.xls	xls	75	75	75	299335	306037	298902	words	match	words	version-gap	matches 26.2.4.2 under the gate's own rule
+sheets/pagination-001/xls/CIS_Debian_Linux_8_Benchmark_v1.0.0.xls	xls	88	109	88	49864	90659	49734	pages,words	match	pages,words	version-gap	matches 26.2.4.2 under the gate's own rule
+sheets/pagination-001/xls/grants-2005.xls	xls	201	220	201	179245	184708	179260	pages,words	match	pages,words	version-gap	matches 26.2.4.2 under the gate's own rule
+sheets/pagination-001/xlsx/SIL_TDB648.xlsx	xlsx	90	88	90	30893	31552	30896	pages,words	match	pages,words	version-gap	matches 26.2.4.2 under the gate's own rule
+sheets/pagination-001/xlsx/sectors-defense-and-aerospace.xlsx	xlsx	449	227	449	139163	139190	139231	pages	match	pages	version-gap	matches 26.2.4.2 under the gate's own rule
+slides/ceiling-001/ppt/Thailand17.ppt	ppt	54	54	54	14880	14380	14380	words	words	match	ceiling-raster	listed in TODO.raster-ceiling.md; same slide as W3_Case_Study, same +500
+slides/ceiling-001/ppt/W3_Case_Study_of_a_Tsunami_Warning_Simulation_Exercise_Ed.ppt	ppt	20	20	20	4973	4473	4473	words	words	match	ceiling-raster	listed in TODO.raster-ceiling.md; shares its +500 glyph surplus token for token with Thailand17.ppt, which carries the same slide
+slides/ceiling-001/pptx/N2_E_Maestroni_Swarm_COP.pptx	pptx	30	30	30	29088	28136	28278	words	words	match	ceiling-raster	listed in TODO.raster-ceiling.md
+slides/ceiling-001/pptx/OnTrac_StarCertificationProgram-3Day.pptx	pptx	15	15	15	7709	6233	6233	words	words	match	ceiling-raster	listed in TODO.raster-ceiling.md
+slides/ceiling-002/pptx/16 - UTM - (NASA).pptx	pptx	37	37	37	15126	13981	13981	words	words	match	ceiling-raster	listed in TODO.raster-ceiling.md
+slides/ceiling-002/pptx/8_P-Pavese_AIRBUS-ATB-journee-CRATB.pptx	pptx	26	26	26	10424	9949	9914	words	words	match	ceiling-raster	listed in TODO.raster-ceiling.md
+slides/ceiling-002/pptx/Demick_JetBlue.pptx	pptx	10	10	10	3519	3179	3179	words	words	match	ceiling-raster	listed in TODO.raster-ceiling.md, verdict ceiling
+slides/done-011/pptx/NAS-Infrastructure-Roadmaps-v16.0.pptx	pptx	137	137	137	107016	87559	106979	words	match	words	version-gap	matches 26.2.4.2 under the gate's own rule
+slides/done-014/pptx/vvsummit2022-Research-Roadmap-and-the-UML-3-Operational-Integration-Assessment.pptx	pptx	33	33	33	8377	8377	8377	unembedded	match	match	version-gap	matches 26.2.4.2 under the gate's own rule
+slides/metrics-001/pptx/Ramp Up Campaign - French.pptx	pptx	6	6	6	2536	2418	2536	words	match	words	version-gap	matches 26.2.4.2 under the gate's own rule
+slides/missing-001/pptx/NWD-GLA-Community-Outreach-Day-Oct-2025.pptx	pptx	13	13	13	3998	3623	3957	words	match	words	version-gap	matches 26.2.4.2 under the gate's own rule
+words/ceiling-001/docx/ABCD-FE-01-00 Flight Envelope - v1 08.03.16.docx	docx	14	15	16	18420	17751	18492	pages,words	pages	pages,words	refs-disagree	14/15/16 pages; our glyphs are within 0.4% of 26.2 and 3.8% of 24.2
+words/chartset-005/docx/087_Printable_Graph_Paper_Template_Green_Theme_0c14ea04.docx	docx	2	1	2	37	27	37	pages	match	pages	version-gap	matches 26.2.4.2 under the gate's own rule
+words/chartset-006/docx/097_Business_Case_Template_Elegant_Layout_3ba9cbf2.docx	docx	2	1	2	276	276	276	pages	match	pages	version-gap	matches 26.2.4.2 under the gate's own rule
+words/chartset-012/docx/024_Unit_Circle_Chart_Colorful_Circles_7c92601e.docx	docx	1	1	1	517	557	557	words	words	match	docx-smartart	we draw an empty frame where the reference draws a five-node SmartArt diagram. Diagram support exists for PPTX (XRay.Office.Presentations/Ooxml/PptxDiagram) and not for DOCX. Three corpus docx carry a diagram; the other two pass inside the band
+words/done-005/docx/f445896eb008d14c1746fc37d412dc22.docx	docx	15	16	15	27066	27066	27066	pages	match	pages	version-gap	matches 26.2.4.2 under the gate's own rule
+words/done-006/doc/003.doc	doc	5	4	5	5761	5761	5761	pages	match	pages	version-gap	matches 26.2.4.2 under the gate's own rule
+words/done-011/doc/AAC-AD-No-2021-01-Boeing-737-8-and-737-9-MAX.doc	doc	21	20	20	38766	38764	38764	pages	pages	match	pagination-break	21 pages against 20; our page 3 holds MORE than the reference's (3266 against 3117) and is then followed by a 245-glyph page 4 the reference has no counterpart for. Every later page is exactly one behind
+words/done-013/doc/omrIMInterpretiveGuideLine.doc	doc	2	2	2	2319	2370	2370	words	words	match	missing-text	six words the reference draws and we do not - Mental Retardation Program Appropriate Regional Managers; -51 glyphs is exactly those six
+words/done-016/doc/150_5335_5a.doc	doc	64	63	64	95749	95814	95844	pages	match	pages	version-gap	matches 26.2.4.2 under the gate's own rule
+words/done-016/docx/AC-150-5370-10G-updated-201604.docx	docx	696	697	696	1432510	1432534	1432447	pages	match	pages	version-gap	matches 26.2.4.2 under the gate's own rule
+words/extra-001/docx/UG.CAO.00006 Foreign Part 145 approvals - User Guide for Applicants & Approval Holders.docx	docx	29	29	29	42116	40732	40732	words	words	match	unclassified	+1384; we draw 23 extra 'note' and much other body text, the reference draws TOC leader lines we do not. Screened, not read
+words/metrics-001/doc/手机免提系统TSB.doc	doc	3	2	3	1189	1172	1189	pages	match	pages	version-gap	matches 26.2.4.2 under the gate's own rule
+words/metrics-001/docx/02_mcar_part-2_and_IS_v2.10.docx	docx	314	312	200	421243	414481	408662	pages	pages,words	pages	refs-disagree	26.2 makes 200 pages against 24.2's 312 and our 314 - a 112-page reference split
+words/metrics-001/docx/OM template for non-complex NCC operators_August 2016.docx	docx	166	165	165	270077	270009	270009	pages	pages	match	pagination-fill	166 pages against 165, glyphs agree to 0.03%
+words/metrics-001/docx/SPA-02_mcar_part-2_and_IS_v2.9.docx	docx	268	266	205	485953	479178	475771	pages	pages,words	pages	refs-disagree	26.2 makes 205 pages against 24.2's 266 and our 268; same shape as its v2.10 sibling
+words/missing-002/docx/CRIF - SpÃ©cification technique - Socle applicatif.docx	docx	28	29	28	39524	39783	39598	pages	match	pages	version-gap	matches 26.2.4.2 under the gate's own rule
+words/pagination-001/doc/1447.doc	doc	4	3	3	5153	5153	5153	pages	pages	match	pagination-fill	4 pages against 3 with identical glyph counts and an empty token diff; we fit less on every page (p1 1570 against 1928) and spill 103 glyphs onto a fourth
+words/pagination-001/doc/A_320.doc	doc	118	150	118	88958	90539	88958	pages	match	pages	version-gap	matches 26.2.4.2 under the gate's own rule
+words/pagination-001/docx/24-25_FAA_Holdover_Tables.docx	docx	155	141	155	300664	298427	299593	pages	match	pages	version-gap	matches 26.2.4.2 under the gate's own rule
+words/pagination-001/docx/ESPN-R - MCF - RA - Ed1.docx	docx	58	59	58	65676	66102	65952	pages	match	pages	version-gap	matches 26.2.4.2 under the gate's own rule
+words/pagination-001/docx/FAA 2025-26 Holdover Tables.docx	docx	167	154	167	336754	334493	335613	pages	match	pages	version-gap	matches 26.2.4.2 under the gate's own rule
+words/pagination-001/docx/template---tpr-technical-progress-report-with-guidance.docx	docx	7	8	7	9713	9713	9713	pages	match	pages	version-gap	matches 26.2.4.2 under the gate's own rule
+words/pagination-002/doc/150_5300_13_chg12.doc	doc	31	33	31	61921	61920	61920	pages	match	pages	version-gap	matches 26.2.4.2 under the gate's own rule
+words/pagination-002/doc/absrc-pac-01-info-note-en.doc	doc	6	7	7	6872	6874	6874	pages	pages	match	pagination-break	6 pages against 7: the reference splits its page 1 into 411 + 146 glyphs where we keep 555 together, and every later page is one behind. A break it takes and we do not - the mirror of AAC-AD, where we take one it does not
+words/pagination-003/docx/150-5370-10H.docx	docx	727	721	727	1508484	1508153	1508422	pages	match	pages	version-gap	matches 26.2.4.2 under the gate's own rule
+words/table-001/doc/150_5300_13_chg10.doc	doc	77	76	78	117451	116063	116093	pages	pages	pages	refs-disagree	77 ours, 76 on 24.2, 78 on 26.2 - we sit between the two references

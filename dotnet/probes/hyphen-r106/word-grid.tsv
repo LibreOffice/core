@@ -1,0 +1,27 @@
+word	len	points	ref_on	ref_off	ours_on	ours_off
+Quality	7	[4]	turned	upright	turned	upright	
+Service	7	[3]	upright	upright	turned	upright	DIFFERS
+Thoughts	8	[]	upright	upright	upright	upright	
+Strength	8	[]	upright	upright	upright	upright	
+Splashed	8	[]	upright	upright	upright	upright	
+Stretched	9	[]	upright	upright	upright	upright	
+Strengths	9	[]	upright	upright	upright	upright	
+Scratched	9	[]	upright	upright	upright	upright	
+Straights	9	[]	upright	upright	upright	upright	
+Screeched	9	[]	turned	turned	upright	upright	DIFFERS
+Squelched	9	[]	turned	turned	upright	upright	DIFFERS
+Marketing	9	[3, 6]	turned	upright	turned	upright	
+Efficiency	10	[2, 4]	turned	upright	turned	upright	
+Reputation	10	[3, 4, 6]	turned	turned	turned	upright	
+Governance	10	[3, 5]	turned	turned	turned	turned	
+Throughput	10	[7]	turned	turned	turned	turned	
+Excellence	10	[2, 5]	turned	turned	turned	upright	
+Resilience	10	[2]	turned	upright	turned	upright	
+Stringency	10	[5]	turned	turned	turned	upright	
+Consumption	11	[3, 7]	turned	turned	turned	turned	
+Streamlined	11	[6]	turned	turned	turned	turned	
+Breakthrough	12	[5]	turned	turned	turned	turned	
+
+ours-with-dictionary agrees with reference-with-dictionary   19 of 22
+ours-without agrees with reference-without                  17 of 22
+reference's own arrangement moves when its dictionary is off: 4 of 22

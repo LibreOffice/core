@@ -1,0 +1,10 @@
+rows in both       307
+excluded (failed)  0
+comparable         307
+  match before     294
+  match after      294
+
+GAINED 0
+LOST 0
+MOVED-BUT-SAME-VERDICT 1
+    done-007/xlsx/ecopy of 2016 statistical bulletin_public finance statistics_final.xlsx	pages 17/17 -> 17/17	glyphs 25528/25548 -> 25528/25548

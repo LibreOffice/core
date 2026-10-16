@@ -1,0 +1,11 @@
+alle einzeln.xlsx	-	no <format> in any pivot part
+Keywords_Mapping_Graphs_and_Charts.xlsx	-	no <format> in any pivot part
+DynamicBubbleChart.xlsx	-	no <format> in any pivot part
+049_Expenses_calculator_c351f3d0.xlsx	-	no <format> in any pivot part
+007_Contextures_chart_sample_667d8e47.xlsm	-	no <format> in any pivot part
+037_Personal_money_tracker_a57957bb.xlsx	-	no <format> in any pivot part
+033_Event_planning_tracker_Use_this_template_f29a848e.xlsx	-	no <format> in any pivot part
+035_Project_plan_for_law_firms_aa2d4462.xlsx	-	no <format> in any pivot part
+027_Simple_personal_cash_flow_statement_675c6584.xlsx	-	no <format> in any pivot part
+026_Monthly_cash_flow_statement_Use_this_template_8aaebea1.xlsx	-	no <format> in any pivot part
+053_Personal_asset_inventory_5446d84b.xlsx	-	no <format> in any pivot part

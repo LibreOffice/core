@@ -1,0 +1,32 @@
+PAT-047 - Architecture and Detailed Design Assessment.rtf	s1	heading 1	align,colour,lang
+final-technical-report-template.rtf	s1	heading 1	align,colour,lang
+hdss-bulletin-issue-285-25-june-2025.rtf	s1	heading 1	(nothing)
+hdss-bulletin-issue-285-25-june-2025.rtf	s2	heading 2	(nothing)
+hdss-bulletin-issue-285-25-june-2025.rtf	s3	heading 3	(nothing)
+hdss-bulletin-issue-285-25-june-2025.rtf	s4	heading 4	(nothing)
+231164_SystemDesignDocument.rtf	s1	heading 1	(nothing)
+231164_SystemDesignDocument.rtf	s2	heading 2	(nothing)
+231164_SystemDesignDocument.rtf	s3	heading 3	(nothing)
+231164_SystemDesignDocument.rtf	s4	heading 4	(nothing)
+231164_SystemDesignDocument.rtf	s5	heading 5	(nothing)
+03_Technical_Report_(progress)_template.rtf	s1	heading 1	align,colour,lang
+03_Technical_Report_(progress)_template.rtf	s2	heading 2	align,colour,lang
+Sample_SQMS_Program.rtf	s1	heading 1	align,colour,lang
+Sample_SQMS_Program.rtf	s2	heading 2	align,colour,lang
+Sample_SQMS_Program.rtf	s3	heading 3	align,colour,lang
+Sample_SQMS_Program.rtf	s4	heading 4	align,colour,lang
+PES-Technical-Report-Template_Jan_2019.rtf	s8	heading 8	align,colour,lang
+PES-Technical-Report-Template_Jan_2019.rtf	s9	heading 9	align,colour,lang
+CRIF - SpÃ©cification technique - Socle applicatif.rtf	s1	heading 1	(nothing)
+24-25_FAA_Holdover_Tables.rtf	s1	heading 1	align,colour
+24-25_FAA_Holdover_Tables.rtf	s4	heading 4	align,colour
+FAA 2025-26 Holdover Tables.rtf	s1	heading 1	align,colour
+FAA 2025-26 Holdover Tables.rtf	s4	heading 4	align,colour
+template---tpr-technical-progress-report-with-guidance.rtf	s1	heading 1	align,colour,lang
+template---tpr-technical-progress-report-with-guidance.rtf	s2	heading 2	align,colour,lang
+template---tpr-technical-progress-report-with-guidance.rtf	s3	heading 3	align,lang
+EHEST-SMS-Safety-Management-Manual-V2.rtf	s2	heading 2	align,colour,lang
+
+# documents applying a heading-parented name with no resolvable \sbasedon: 12
+# (document, style) pairs: 28, of which predicted to change: 18
+# documents predicted to change: 9

@@ -1,0 +1,3 @@
+base	sheet-cf-icon-set-x14-custom.pdf	4 clipped cells	heights [13.7764]	pitches [13.7763, 13.7764, 13.7764]
+head	sheet-cf-icon-set-x14-custom.pdf	4 clipped cells	heights [14.8819]	pitches [14.8819, 14.8819, 14.8818]
+reference	soffice --convert-to fods	style:row-height="0.2071in" on all five table:table-row (ro1) = 14.9112 pt

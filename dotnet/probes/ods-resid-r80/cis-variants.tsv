@@ -1,0 +1,14 @@
+variant	26.2.4.2	ours at 5c003d58c	what it settles
+copy	61	88	repackaging the file changes nothing on either side
+nocols	61	-	dropping the 246 styled-but-empty columns moves the reference not at all
+nodefstyle	61	-	nor does dropping their default cell style
+norows	61	-	nor does dropping the trailing padding row blocks
+pad1	61	-	nor does one padding row
+pad100	61	-	nor a hundred
+pad400	61	-	nor four hundred
+only_lic	1	1	License is one page on both sides
+only_l1	39	51	Level 1 is the whole of 12 of the 27 extra pages
+only_l2	21	36	Level 2 is the other 15
+l1_nl2space	51	51	newlines to spaces: the reference reproduces OUR count exactly
+l2_nl2space	36	36	and again on the other sheet
+l2_longest	21	21	keeping only each cell's longest paragraph: we reproduce ITS count exactly

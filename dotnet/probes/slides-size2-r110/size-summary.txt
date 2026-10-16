@@ -1,0 +1,24 @@
+pages scored on all three legs: 1534
+base	pages differing >0.15pt   11	documents   9	total |size error|    55.10	same-alnum   6	of those we draw larger   6
+head	pages differing >0.15pt   11	documents   7	total |size error|    54.10	same-alnum   5	of those we draw larger   4
+fixed: 2   newly wrong: 2   pages whose dominant size moved between base and head: 4
+  fixed	JesuitAssocOfStudentPersonnel__ppt                     24  ref  13.01  base  15.99  head  13.01
+  fixed	ws_prod-g-doc-Events-Part-M-presentation__ppt          21  ref  17.01  base   18.0  head  17.01
+  newly wrong	ws_prod-g-doc-Events-2007-september-M.017-(French)-F    8  ref  15.99  base  15.99  head   15.0
+  newly wrong	ws_prod-g-doc-Events-2007-september-M.017-(French)-F   15  ref  18.99  base  18.99  head  17.01
+
+still differing at head:
+   document                                             page     ref    ours  ref alnum  our alnum
+   2015-Civil-Rights-Website-training__ppt                22    14.0   17.01         92         90
+   Fundamentals_Module_1_basics__ppt                       6    32.0    7.08         44         87
+   RRM-training-syllabus-Chapter-3-Teamwork-TC-Towing-I   16   18.99   20.01        632        632
+   Thailand17__ppt                                         8   24.01   16.68         92        500
+   Thailand17__ppt                                        11   11.99    11.0        548        358
+   W3_Case_Study_of_a_Tsunami_Warning_Simulation_Exerci   10   24.01   16.68         92        500
+   gfopportunitiesforlinkagespres_2010_en__ppt            27   25.99   28.01        262        262
+   ws_prod-g-doc-Events-2007-september-M.017-(French)-F    8   15.99    15.0        770        742
+   ws_prod-g-doc-Events-2007-september-M.017-(French)-F   14   18.99   20.01        599        599
+   ws_prod-g-doc-Events-2007-september-M.017-(French)-F   15   18.99   17.01        328        328
+   ws_prod-g-doc-Events-2007-september-M.017-(French)-F   16   14.99   17.01        661        661
+
+per document: {'2015-Civil-Rights-Website-training__ppt': 1, 'Fundamentals_Module_1_basics__ppt': 1, 'RRM-training-syllabus-Chapter-3-Teamwork-TC-Towing-Incident-Analysis-Dec-2009__ppt': 1, 'Thailand17__ppt': 2, 'W3_Case_Study_of_a_Tsunami_Warning_Simulation_Exercise_Ed__ppt': 1, 'gfopportunitiesforlinkagespres_2010_en__ppt': 1, 'ws_prod-g-doc-Events-2007-september-M.017-(French)-France__ppt': 4}

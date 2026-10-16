@@ -1,0 +1,1 @@
+convert /home/user/sample-files/words/metrics-001/docx/review-welsh-government-communications-mister-peter-mandelson.docx as a Writer document -> /home/user/libreoffice-core/dotnet/probes/tablerow-r146/out/review-welsh-government-communications-mister-peter-mandelson.pdf using filter : writer_pdf_Export

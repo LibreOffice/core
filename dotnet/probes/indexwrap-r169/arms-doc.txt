@@ -1,0 +1,15 @@
+arm                  what                   26.2.4.2             ours
+heading-then-plain   obstacle            p1 x  71.90      p1 x  77.40  <--
+heading-then-plain   heading             p1 x 229.70      p1 x  72.00  <--
+heading-then-plain   body                p1 x 229.70      p1 x  72.00  <--
+
+heading-then-toc     obstacle            p1 x  71.90      p1 x  77.40  <--
+heading-then-toc     heading             p1 x 229.70      p1 x  72.00  <--
+heading-then-toc     index               p1 x 229.70      p1 x  72.00  <--
+
+plain-after          obstacle            p1 x  71.90      p1 x  77.40  <--
+plain-after          body                p1 x 229.70      p1 x  72.00  <--
+
+toc-after            obstacle            p1 x  71.90      p1 x  77.40  <--
+toc-after            index               p1 x 229.70      p1 x  72.00  <--
+

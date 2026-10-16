@@ -1,0 +1,39 @@
+== b\d+  (the BREAK RUN size, in half-points)
+   b02        reference    1.150   ours   12.800   DIFFER
+   b04        reference    2.350   ours   12.800   DIFFER
+   b08        reference    4.650   ours   12.800   DIFFER
+   b12        reference    7.000   ours   12.800   DIFFER
+   b16        reference    9.300   ours   12.800   DIFFER
+   b20        reference   11.650   ours   12.800   DIFFER
+   b22        reference   12.800   ours   12.800   agree
+   b24        reference   14.000   ours   12.800   DIFFER
+   b32        reference   18.650   ours   12.800   DIFFER
+   b40        reference   23.300   ours   12.800   DIFFER
+   b48        reference   27.950   ours   12.800   DIFFER
+   b60        reference   34.950   ours   12.800   DIFFER
+   b80        reference   46.550   ours   12.800   DIFFER
+
+== m\d+  (the PARAGRAPH MARK size, in half-points)
+   m002       reference    2.350   ours   12.800   DIFFER
+   m004       reference    2.350   ours   12.800   DIFFER
+   m022       reference    2.350   ours   12.800   DIFFER
+   m040       reference    2.350   ours   12.800   DIFFER
+   m080       reference    2.350   ours   12.800   DIFFER
+   m120       reference    2.350   ours   12.800   DIFFER
+
+== n\d  (0..6 breaks at the default size)
+   n0         reference    0.000   ours    0.000   agree
+   n1         reference    2.350   ours   12.800   DIFFER
+   n2         reference    4.700   ours   25.600   DIFFER
+   n3         reference    7.050   ours   38.400   DIFFER
+   n4         reference    9.400   ours   51.200   DIFFER
+   n5         reference   11.750   ours   64.000   DIFFER
+   n6         reference   14.100   ours   76.800   DIFFER
+
+== pr259-n\d  (0..4 breaks in a 108 per cent paragraph)
+   pr259-n0   reference    0.000   ours    0.000   agree
+   pr259-n1   reference    3.350   ours   13.800   DIFFER
+   pr259-n2   reference    5.850   ours   27.600   DIFFER
+   pr259-n3   reference    8.350   ours   41.400   DIFFER
+   pr259-n4   reference   10.850   ours   55.200   DIFFER
+

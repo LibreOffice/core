@@ -1,0 +1,14 @@
+document	shape	spType	element	fillRaw	lineRaw	refFill	refStroke	refWidth
+014_Contextures_chart_sample_991ecfc5	Chart 1	201	frame	0x0800004e	-	none	none	-
+014_Contextures_chart_sample_991ecfc5	cmdRefreshCharts_a	201	control	-	0x08000040	none	none	-
+EHEST-Pre-departure-checklist-Rev.-1-06-12-2016	Chart 8	201	frame	0x0800004e	-	none	none	-
+PC1000	Rectangle 16	1	custom-shape	0x0800002b	0x08000040	#ffff99	#000000	0.0102in
+PC1000	Text 1	202	custom-shape	0x08000009	0x08000040	#ffffff	#000000	0.0102in
+PC1000	Text 24	202	custom-shape	0x08000009	0x08000040	#ffffff	#000000	0.0102in
+PC1000	Text 4	202	custom-shape	0x08000009	0x08000040	#ffffff	#000000	0.0102in
+PC1000	Text 5	202	custom-shape	0x08000009	0x08000040	#ffffff	#000000	0.0102in
+TICAPCapability_Final	OptionButton1	201	control	-	0x08000040	none	none	-
+TICAPCapability_Final	OptionButton2	201	control	-	0x08000040	none	none	-
+TICAPCapability_Final	OptionButton3	201	control	-	0x08000040	none	none	-
+TOGAF9-Tool-ConfReqts-CSQ	Chart 1	201	frame	0x0800004e	-	none	none	-
+orbus_togaf_tool_csq	Chart 1	201	frame	0x0800004e	-	none	none	-

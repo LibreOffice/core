@@ -1,0 +1,57 @@
+diff --git a/dotnet/src/XRay.Office.Spreadsheets/Layout/SheetPageDecoration.cs b/dotnet/src/XRay.Office.Spreadsheets/Layout/SheetPageDecoration.cs
+--- a/dotnet/src/XRay.Office.Spreadsheets/Layout/SheetPageDecoration.cs
++++ b/dotnet/src/XRay.Office.Spreadsheets/Layout/SheetPageDecoration.cs
+@@ -339,14 +339,15 @@
+             foreach (PlacedColumn column in columns)
+             {
+                 Box(new DocRect(column.X, top, column.Width, headingHeight),
+-                    ColumnName(column.Column), sink);
++                    ColumnName(column.Column), _scale, sink);
+             }
+ 
+             Length left = origin.X;
+             foreach (PlacedRow row in rows)
+             {
+                 Box(new DocRect(left, row.Y, headingWidth, row.Height),
+-                    (row.Row + 1).ToString(System.Globalization.CultureInfo.CurrentCulture), sink);
++                    (row.Row + 1).ToString(System.Globalization.CultureInfo.CurrentCulture),
++                    _scale, sink);
+             }
+         }
+ 
+@@ -860,11 +861,33 @@
+             new Stroke(Paint.Solid(FurnitureColour), HairlineWidth));
+ 
+     /// <summary>A heading cell: its box, and its label centred inside it.</summary>
+-    private static void Box(DocRect area, string label, IDrawingSink sink)
++    /// <remarks>
++    /// <para>
++    /// <strong>The label is drawn at the page's own print scale, not at a fixed ten point.</strong>
++    /// <c>ScPrintFunc::PrintPage</c> sets the heading font on the device while its map mode is
++    /// <c>aOffsetMode</c> (<c>sc/source/ui/view/printfun.cxx:2350-2357</c>), and <c>InitModes</c>
++    /// builds that map mode with the zoom as its scale fraction (<c>:2642</c>), so
++    /// <c>PrintColHdr</c>'s <c>DrawText</c> is scaled along with the cells. The strip itself was
++    /// already scaled by the caller — <c>HeadingWidth * _scale</c> — so only the text was out.
++    /// </para>
++    /// <para>
++    /// Measured on a probe stating <c>printOptions headings="1"</c> through LibreOffice 24.2.7.2:
++    /// at <c>pageSetup scale="30"</c> the reference's column heading <c>A</c> is 3.35 pt tall and
++    /// this drew it 11.17 pt tall, while at <c>scale="100"</c> both are 11.17 pt. The corpus
++    /// witness is <c>Application_Compliance_Checklist_5_Apr_2021.xlsx</c>, whose sheets print at
++    /// 28, 50 and 59 per cent with headings switched on: its row numbers were drawn three times
++    /// over the cells.
++    /// </para>
++    /// </remarks>
++    /// <param name="area">The heading cell's rectangle.</param>
++    /// <param name="label">The column letter or row number.</param>
++    /// <param name="scale">The page's print scale, as a fraction.</param>
++    /// <param name="sink">Receives the drawing commands.</param>
++    private static void Box(DocRect area, string label, double scale, IDrawingSink sink)
+     {
+         Outline(area, sink);
+ 
+-        Length size = SheetBandText.DefaultSize;
++        Length size = SheetBandText.DefaultSize * scale;
+         if (SheetBandText.Shape(label, size) is not { } run) return;
+ 
+         Length x = area.X + ((area.Width - run.Width) / 2);

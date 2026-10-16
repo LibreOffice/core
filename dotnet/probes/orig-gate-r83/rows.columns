@@ -1,0 +1,9 @@
+1 path
+2 ext
+3 pages ours/ref
+4 words ours/ref (letter-or-digit TOKENS; decides nothing)
+5 fonts ours/ref
+6 unembedded
+7 verdict
+8 rawwords ours/ref (pdftotext | wc -w; decides nothing)
+9 glyphs ours/ref  <-- THE VERDICT IS DECIDED ON THIS COLUMN, within max(2%, 15)

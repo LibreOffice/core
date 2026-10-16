@@ -1,0 +1,4 @@
+A  covered-table-cell   style Table1.A1      top=3pt solid #000000  all=-
+B  covered-table-cell   style Table2.A1      top=-                  all=1pt solid #000000
+C  table-cell           style Table3.A2      top=none               all=-
+D  table-cell           style Table4.A2      top=3pt solid #000000  all=-

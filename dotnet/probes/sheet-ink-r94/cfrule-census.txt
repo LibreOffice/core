@@ -1,0 +1,78 @@
+kind	rules	documents	naming a dxf	documents
+containsText	933	6	933	6
+expression	601	34	601	34
+cellIs	123	18	123	18
+containsBlanks	99	1	99	1
+colorScale	43	38	0	0
+duplicateValues	20	5	20	5
+dataBar	9	6	0	0
+endsWith	5	1	5	1
+notContainsBlanks	3	2	3	2
+iconSet	2	2	0	0
+
+expression shape	rules
+R=S	461
+ISERROR(R)	12
+AND(R=S,R&gt;=R,R&lt;=R+R-N)	12
+AND(#REF!=S,R&gt;=#REF!,R&lt;=#REF!+#REF!-N)	12
+MOD(ROW(),N)=N	10
+R=N	6
+(MOD(ROW(),N)&lt;&gt;N)*(R=S)	5
+R=TODAY()	4
+AND(task_start&lt;=R,ROUNDDOWN((task_end-task_start+N)*task_progress,N)+task_start-N&gt;=R)	4
+AND(task_end&gt;=R,task_start&lt;R)	4
+R&gt;R	4
+AND(TODAY()&gt;=R,TODAY()&lt;R)	3
+R&lt;=EOMONTH(R,N)	3
+AND(R&lt;=EOMONTH(R,N),R&gt;EOMONTH(R,N),R&gt;EOMONTH(R,N))	3
+AND(R&lt;=EOMONTH(R,N),R&gt;EOMONTH(R,N))	3
+AND(LEN(R)=N,R&gt;=R,R&lt;=R+R-N)	3
+AND(LEN(#REF!)=N,R&gt;=#REF!,R&lt;=#REF!+#REF!-N)	3
+(MOD(ROW(),N)=N)*(R=S)	3
+(MOD(ROW(),N)&lt;&gt;N)*(R&lt;&gt;S)	3
+R&lt;N	2
+R&lt;=N	2
+R&gt;N	2
+(ABS((R-R))/R)&gt;FlagPercent	2
+R&lt;R	2
+R=R	2
+R=period_selected	2
+AND(R&gt;N,R&lt;R)	2
+#REF!=S	2
+R&lt;Cash_Minimum	1
+AND(R=N,R&lt;&gt;S)	1
+
+documents stating a dxf	95
+dxf child tag	dxfs stating it
+font	4425
+color	3899
+strike	3452
+name	3158
+scheme	3153
+outline	3075
+vertAlign	3075
+shadow	3075
+sz	2987
+u	2970
+fill	2736
+patternFill	2735
+bgColor	2734
+family	2687
+alignment	2454
+b	2146
+i	1960
+condense	1675
+extend	1675
+fgColor	1088
+border	969
+numFmt	938
+right	759
+left	747
+bottom	721
+top	706
+vertical	320
+horizontal	269
+protection	88
+stop	1
+gradientFill	1
+diagonal	1

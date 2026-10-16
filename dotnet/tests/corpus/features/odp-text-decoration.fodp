@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Hand-authored. Four slides carrying the same words in the same box, differing only in the
+     text style's decoration attributes:
+
+       1  nothing stated                              the control
+       2  style:text-underline-style="solid"          a rule under the words
+       3  style:text-line-through-style="solid"       a rule through them
+       4  style:text-underline-style="none"           the second control
+
+     ODF states a slide's hyperlink decoration exactly this way - LibreOffice's export writes
+     style:text-underline-style="solid" beside fo:color on the link's own text style - so there
+     is no implicit "a hyperlink is underlined" rule to model here as there is in DrawingML.
+     OdfTextFormat has resolved both attributes since it was written and OdfTextBody passed on
+     neither, so no ODF slide has ever had a rule drawn under or through it. No gate column can
+     see that: a rule carries no characters and adds no page.
+
+     Verified against LibreOffice 26.2.4.2, counting marks in its own PDF rather than in a
+     raster. Fills and strokes under 2.5 pt tall and over 20 pt wide, per slide:
+
+       1  0     2  1     3  1     4  0
+
+     26.2.4.2 strokes its rules where this tree fills them, which is the same rule drawn two
+     ways; the count is what the two have in common. -->
+<office:document
+  xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+  xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+  xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+  xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0"
+  xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0"
+  xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+  xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0"
+  office:version="1.3"
+  office:mimetype="application/vnd.oasis.opendocument.presentation">
+ <office:styles>
+  <draw:layer-set>
+   <draw:layer draw:name="layout"/>
+   <draw:layer draw:name="background"/>
+   <draw:layer draw:name="backgroundobjects"/>
+   <draw:layer draw:name="controls"/>
+   <draw:layer draw:name="measurelines"/>
+  </draw:layer-set>
+ </office:styles>
+ <office:automatic-styles>
+  <style:page-layout style:name="PL1">
+   <style:page-layout-properties fo:page-width="25.4cm" fo:page-height="19.05cm"
+       style:print-orientation="landscape" fo:margin-top="0cm" fo:margin-bottom="0cm"
+       fo:margin-left="0cm" fo:margin-right="0cm"/>
+  </style:page-layout>
+  <style:style style:name="dp1" style:family="drawing-page">
+   <style:drawing-page-properties draw:fill="none"/>
+  </style:style>
+  <style:style style:name="gr1" style:family="graphic">
+   <style:graphic-properties draw:stroke="none" draw:fill="none"
+       draw:auto-grow-height="false" draw:auto-grow-width="false"
+       draw:textarea-vertical-align="top" fo:wrap-option="wrap"
+       fo:padding-top="0cm" fo:padding-bottom="0cm"
+       fo:padding-left="0cm" fo:padding-right="0cm"/>
+  </style:style>
+  <style:style style:name="P1" style:family="paragraph">
+   <style:text-properties fo:font-size="24pt" style:font-name="Liberation Sans"/>
+  </style:style>
+  <style:style style:name="Tplain" style:family="text">
+   <style:text-properties fo:font-size="24pt" style:font-name="Liberation Sans"/>
+  </style:style>
+  <style:style style:name="Tunder" style:family="text">
+   <style:text-properties fo:font-size="24pt" style:font-name="Liberation Sans"
+       style:text-underline-style="solid" style:text-underline-width="auto"
+       style:text-underline-color="font-color"/>
+  </style:style>
+  <style:style style:name="Tstrike" style:family="text">
+   <style:text-properties fo:font-size="24pt" style:font-name="Liberation Sans"
+       style:text-line-through-style="solid" style:text-line-through-type="single"/>
+  </style:style>
+  <style:style style:name="Tnone" style:family="text">
+   <style:text-properties fo:font-size="24pt" style:font-name="Liberation Sans"
+       style:text-underline-style="none" style:text-line-through-style="none"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:master-styles>
+  <style:master-page style:name="Default" style:page-layout-name="PL1" draw:style-name="dp1"/>
+ </office:master-styles>
+ <office:body>
+  <office:presentation>
+   <draw:page draw:name="plain" draw:style-name="dp1" draw:master-page-name="Default">
+    <draw:frame draw:style-name="gr1" draw:name="box" draw:layer="layout"
+        svg:x="2cm" svg:y="3cm" svg:width="18cm" svg:height="6cm">
+     <draw:text-box>
+      <text:p text:style-name="P1"><text:span text:style-name="Tplain">Undecorated words here</text:span></text:p>
+     </draw:text-box>
+    </draw:frame>
+   </draw:page>
+   <draw:page draw:name="underlined" draw:style-name="dp1" draw:master-page-name="Default">
+    <draw:frame draw:style-name="gr1" draw:name="box" draw:layer="layout"
+        svg:x="2cm" svg:y="3cm" svg:width="18cm" svg:height="6cm">
+     <draw:text-box>
+      <text:p text:style-name="P1"><text:span text:style-name="Tunder">Undecorated words here</text:span></text:p>
+     </draw:text-box>
+    </draw:frame>
+   </draw:page>
+   <draw:page draw:name="struck" draw:style-name="dp1" draw:master-page-name="Default">
+    <draw:frame draw:style-name="gr1" draw:name="box" draw:layer="layout"
+        svg:x="2cm" svg:y="3cm" svg:width="18cm" svg:height="6cm">
+     <draw:text-box>
+      <text:p text:style-name="P1"><text:span text:style-name="Tstrike">Undecorated words here</text:span></text:p>
+     </draw:text-box>
+    </draw:frame>
+   </draw:page>
+   <draw:page draw:name="stated-none" draw:style-name="dp1" draw:master-page-name="Default">
+    <draw:frame draw:style-name="gr1" draw:name="box" draw:layer="layout"
+        svg:x="2cm" svg:y="3cm" svg:width="18cm" svg:height="6cm">
+     <draw:text-box>
+      <text:p text:style-name="P1"><text:span text:style-name="Tnone">Undecorated words here</text:span></text:p>
+     </draw:text-box>
+    </draw:frame>
+   </draw:page>
+  </office:presentation>
+ </office:body>
+</office:document>

@@ -1,0 +1,42 @@
+=== pres_ioc_phuket.ppt  sp@56168  type=136  spid=274436  flags=0x00000a00
+    clientAnchor(8) top=96 left=96 right=5547 bottom=391 -> w=5451 h=295
+      133                          =           2 (0x00000002)
+      192 gtextUNICODE             =          84 (0x00000054) cx  data=49004e005400450052004e004100540049004f004e0041004c0020005400530055004e0041004d004900200048004100
+      197 gtextFont                =          14 (0x0000000e) cx  text='Impact'
+      255 gtext boolean group      =  4294924032 (0xffff5700)
+      327 adjustValue              =       10707 (0x000029d3)
+      384 fillType                 =           5 (0x00000005)
+      385 fillColor                =       65535 (0x0000ffff)
+      387 fillBackColor            =     3381759 (0x003399ff)
+      395 fillAngle                =  4286119936 (0xff790000)
+      396 fillFocus                =         100 (0x00000064)
+      397 fillToLeft               =       32768 (0x00008000)
+      398 fillToTop                =       32768 (0x00008000)
+      399 fillToRight              =       32768 (0x00008000)
+      400 fillToBottom             =       32768 (0x00008000)
+      447 fill boolean group       =     1048592 (0x00100010)
+      511 line boolean group       =      524288 (0x00080000)
+      513                          =    12632256 (0x00c0c0c0)
+      575                          =      196610 (0x00030002)
+      639                          =       65536 (0x00010000)
+      703                          =      983041 (0x000f0001)
+      767                          =     2031638 (0x001f0016)
+    prop255 value bits: ['fGtext (text path on)', 'kerning', 'gtextFStretch (fit shape)', 'fit path']
+    prop255 stated bits: ['fGtext (text path on)', 'vertical writing', 'kerning', 'gtextFStretch (fit shape)', 'fit path', 'SameLetterHeights', 'ScaleX', 'bold', 'italic']
+=== 8.16_AOD_FINAL_Provider_Training_Presentation_9_2009.ppt  sp@368539  type=144  spid=66564  flags=0x00000a00
+    clientAnchor(8) top=2016 left=1296 right=4644 bottom=3333 -> w=3348 h=1317
+      127 LockAgainstGrouping      =    32440324 (0x01ef0004)
+      133                          =           2 (0x00000002)
+      191 fFitTextToShape group    =      262148 (0x00040004)
+      192 gtextUNICODE             =          58 (0x0000003a) cx  data=44006f00200079006f00750020006b006e006f0077002000770068006100740020007400680065007300650020006100
+      197 gtextFont                =          32 (0x00000020) cx  text='Times New Roman'
+      255 gtext boolean group      =  4072362496 (0xf2bb5200)
+      327 adjustValue              =  4283170827 (0xff4c000b)
+      385 fillColor                =           0 (0x00000000)
+      447 fill boolean group       =     1048592 (0x00100010)
+      511 line boolean group       =     1572872 (0x00180008)
+      831                          =      524296 (0x00080008)
+      896                          =          20 (0x00000014) cx  text='WordArt 3'
+      959                          =      131072 (0x00020000)
+    prop255 value bits: ['fGtext (text path on)', 'kerning']
+    prop255 stated bits: ['fGtext (text path on)', 'vertical writing', 'kerning', 'SameLetterHeights', 'bold', 'italic']

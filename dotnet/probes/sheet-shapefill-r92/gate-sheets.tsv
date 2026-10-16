@@ -1,0 +1,29 @@
+identity	refpages	refchars	base pages/chars	clip pages/chars	base	clip
+Foreign_SA-CAT-I_and_CAT-II-III_Pub_0__xlsx	16	7557	16/7842	16/7558	glyphs	match
+SSRO_Quarterly_Statistical_Bulletin_Q3201617_DATA__xlsx	4	2532	4/2783	4/2532	glyphs	match
+EHEST-Pre-departure-checklist-Rev.-1-06-12-2016__xls	24	37362	24/39526	24/37444	glyphs	match
+Keywords_Mapping_Graphs_and_Charts__xlsx	46	25824	46/27315	46/25919	glyphs	match
+001_advanced_excel_bar__xlsx	3	455	3/472	3/455	glyphs	match
+002_advanced_excel_line__xlsx	3	447	3/466	3/447	glyphs	match
+011_advanced_excel_pie__xlsx	3	433	3/457	3/433	glyphs	match
+027_advanced_excel_pie__xlsx	3	427	3/450	3/427	glyphs	match
+026_advanced_excel_line__xlsx	3	438	3/454	3/438	glyphs	match
+034_advanced_excel_line__xlsx	3	447	3/465	3/447	glyphs	match
+003_advanced_excel_pie__xlsx	3	449	3/479	3/449	glyphs	match
+017_advanced_excel_bar__xlsx	3	471	3/488	3/471	glyphs	match
+009_advanced_excel_bar__xlsx	3	477	3/495	3/477	glyphs	match
+010_advanced_excel_line__xlsx	3	444	3/461	3/444	glyphs	match
+019_advanced_excel_pie__xlsx	3	446	3/475	3/446	glyphs	match
+microsoft_learn_multi_chart_examples__xlsx	5	700	5/827	5/710	glyphs	match
+005_Contextures_chart_sample_6e279b08__xlsx	8	1418	8/1456	8/1418	glyphs	match
+006_Contextures_chart_sample_afa23b53__xlsx	5	795	5/822	5/799	glyphs	match
+044_Cash_flow_forecast_Use_this_template_b8fa1f35__xlsx	5	2200	5/2313	5/2200	glyphs	match
+008_Contextures_chart_sample_7ea7a1d7__xlsx	5	781	5/807	5/781	glyphs	match
+056_Quarterly_sale_report_baa6bb0d__xlsx	4	607	4/637	4/607	glyphs	match
+013_Contextures_chart_sample_21b98e22__xlsx	7	805	7/830	7/805	glyphs	match
+036_Simple_to-do_list_Use_this_template_ba44373b__xlsx	4	336	4/357	4/341	glyphs	match
+019_Free_Blood_Sugar_Chart_for_Excel_-_Track_Your_Blood_Sugar_Level_36f4a782__xlsx	9	3374	9/3664	9/3378	glyphs	match
+064_Small_business_cash_flow_Use_this_template_0a640756__xlsx	7	1635	7/1803	7/1635	glyphs	match
+# base verdicts: Counter({'match': 262, 'glyphs': 40, 'pages': 3})
+# clip verdicts: Counter({'match': 287, 'glyphs': 15, 'pages': 3})
+# verdicts moved: 25

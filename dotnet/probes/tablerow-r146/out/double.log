@@ -1,0 +1,1 @@
+convert /home/user/libreoffice-core/dotnet/probes/tablerow-r146/fixtures/double.docx as a Writer document -> /home/user/libreoffice-core/dotnet/probes/tablerow-r146/out/double.pdf using filter : writer_pdf_Export

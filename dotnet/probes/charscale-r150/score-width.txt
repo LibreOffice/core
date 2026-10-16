@@ -1,0 +1,18 @@
+scored 13 movers on span WIDTH
+  mean |width error| per span, median over the documents:  1.0151 pt  ->   1.0119 pt
+  closer 3   further 2   level 8
+
+     before     after   paired   paired  document
+     2.0530    1.2133       72       72  5ee4fec55c91-BID_ACKNOWLEDGEMENT_FORM_FOR_A320.rtf
+     1.0675    1.0455     1181     1187  9a283dc56300-ESPN-R - MCF - RA - Ed1.rtf
+     0.9355    0.9266      188      188  404b8cb5cec3-SWDD-template.rtf
+     1.0151    1.0119      884      885  AAC-AD-No-2021-01-Boeing-737-8-and-737-9-MAX.doc
+     0.2996    0.2965    19607    19607  195389b8c6c6-Annex-10-to-the-Aircraft-Maintenance-Speciali
+     0.5747    0.5719     1551     1554  ed07ce5f44c7-t_TEMPforInvProgs.rtf
+     1.0253    1.0236     1145     1147  7be9cfcc7637-OM template for non-complex NCC operators_Aug
+     0.8726    0.8726       89       89  66cd4750ab46-ESPN-R - MCF - Manual - Ed1.0 - For Publicati
+     1.3364    1.3364      752      752  d8c1eba8d845-AAC-AD-No-2021-01-Boeing-737-8-and-737-9-MAX.
+     1.5444    1.5444      123      123  e6a30de46c19-19-06 Assistive Technology TAB Final - 508.rt
+     0.9350    0.9350      600      600  e93e7e131d5f-AWR OPS-AOC 044 Statement of Compliance RVSM 
+     3.5506    3.8963       33       39  4c44defb9273-Regulations Governing the Status, Basic Right
+     0.2381    0.7465       75      170  ae2db2175f3d-091_Business_Case_Template_Complete_Guide_cb9

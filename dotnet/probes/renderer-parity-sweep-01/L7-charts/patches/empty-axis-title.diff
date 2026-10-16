@@ -1,0 +1,80 @@
+--- a/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChartPlot.cs
++++ b/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChartPlot.cs
+@@ -232,8 +232,9 @@
+             // title hangs off that element — so reading only c:catAx loses it entirely. The same
+             // fallback CategoryAxisVisible already takes, and tdf127720.pptx is what shows it:
+             // "Dissolved Oxygen (%)" is three words the reference draws and this did not.
+-            CategoryAxisTitle = TitleText(Child(axes.Domain ?? axes.Category, "title")),
+-            ValueAxisTitle = TitleText(Child(axes.Value, "title")),
++            CategoryAxisTitle = AxisTitleText(
++                Child(axes.Domain ?? axes.Category, "title"), kind),
++            ValueAxisTitle = AxisTitleText(Child(axes.Value, "title"), kind),
+             Categories = orderedCategories,
+             Series = orderedSeries,
+             Kind = kind,
+@@ -262,7 +263,7 @@
+             DataTable = DataTableOf(Child(plotArea, "dTable"), theme),
+             SecondaryValueScale = axes.Secondary is null ? null : ScaleOf(axes.Secondary),
+             SecondaryValueFormat = FormatOf(axes.Secondary),
+-            SecondaryValueAxisTitle = TitleText(Child(axes.Secondary, "title")),
++            SecondaryValueAxisTitle = AxisTitleText(Child(axes.Secondary, "title"), kind),
+             DomainScale = ScaleOf(axes.Domain),
+             DomainFormat = FormatOf(axes.Domain),
+             ValueAxisVisible = Shown(axes.Value),
+@@ -2425,6 +2426,38 @@
+         return null;
+     }
+ 
++    /// <summary>
++    /// An axis title's text, with LibreOffice's own caption where the element states none.
++    /// </summary>
++    /// <remarks>
++    /// <para>
++    /// <strong>A <c>c:title</c> with no text in it is still a title, and the reference draws
++    /// <c>Axis Title</c> in it.</strong> <c>AxisConverter::convertFromModel</c> passes
++    /// <c>OoxResId(STR_DIAGRAM_AXISTITLE)</c> as the default string to
++    /// <c>TitleConverter::convertFromModel</c> whenever the model holds a title element and the
++    /// type group is not a radar (<c>oox/source/drawingml/chart/axisconverter.cxx:461-470</c>),
++    /// and <c>TextConverter::createStringSequence</c> falls back to that default once the rich
++    /// body, the <c>c:txPr</c> paragraphs and the <c>c:tx</c> cache have all come back empty
++    /// (<c>titleconverter.cxx:141-160</c>). Unlike the chart title's, this arm has no
++    /// tdf#146487 escape and no <c>autoTitleDeleted</c>: the element being present is the whole
++    /// condition.
++    /// </para>
++    /// <para>
++    /// Measured on <c>040_Blood_pressure_tracker_872b6833.xlsx</c>, whose category axis carries
++    /// <c>&lt;c:title&gt;</c> with a <c>c:overlay</c>, a <c>c:spPr</c> and a <c>c:txPr</c> and no
++    /// <c>c:tx</c> at all: the reference prints <c>Axis Title</c> under the axis and we printed
++    /// nothing.
++    /// </para>
++    /// </remarks>
++    private static string? AxisTitleText(XElement? title, ChartPlotKind kind)
++    {
++        if (title is null) return null;
++        if (TitleText(title) is { Length: > 0 } stated) return stated;
++
++        // "in radar charts, title objects may exist, but are not shown".
++        return kind is ChartPlotKind.Radar ? null : DrawingChartTitle.AxisTitle;
++    }
++
+     private static string? TitleText(XElement? title)
+     {
+         if (title is null) return null;
+--- a/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChartTitle.cs
++++ b/dotnet/src/XRay.Office.Ooxml/DrawingML/DrawingChartTitle.cs
+@@ -73,6 +73,15 @@
+     internal const string DiagramTitle = "Chart Title";
+ 
+     /// <summary>
++    /// LibreOffice's <c>STR_DIAGRAM_AXISTITLE</c>, in the same en-US resource.
++    /// </summary>
++    /// <remarks>
++    /// The axis counterpart of <see cref="DiagramTitle"/> and localized in the same way; see
++    /// <c>DrawingChartPlot.AxisTitleText</c> for the condition, which is not this one's.
++    /// </remarks>
++    internal const string AxisTitle = "Axis Title";
++
++    /// <summary>
+     /// The text to put in a chart title the part leaves empty, or null when the reference draws
+     /// no title.
+     /// </summary>

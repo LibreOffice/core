@@ -1,0 +1,36 @@
+alle einzeln.xlsx	Pivot	pivotTable1.xml	cells=9090	face m=9090 c=9090 d=9090  size m=9090 c=9090 d=9090  colour m=9090 c=9090 d=9090  fill m=9090 c=9090 d=9090
+Keywords_Mapping_Graphs_and_Charts.xlsx	Summary	pivotTable1.xml	cells=40	face m=40 c=40 d=40  size m=40 c=40 d=40  colour m=40 c=40 d=40  fill m=40 c=40 d=40
+Keywords_Mapping_Graphs_and_Charts.xlsx	Literature Mapping	pivotTable2.xml	cells=28	face m=28 c=28 d=28  size m=28 c=28 d=28  colour m=28 c=28 d=28  fill m=28 c=28 d=28
+Keywords_Mapping_Graphs_and_Charts.xlsx	SABSA Skills Mapping	pivotTable3.xml	cells=26	face m=26 c=26 d=26  size m=26 c=26 d=26  colour m=26 c=26 d=26  fill m=26 c=26 d=26
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Skills Mapping	pivotTable4.xml	cells=22	face m=22 c=22 d=22  size m=22 c=22 d=22  colour m=22 c=22 d=22  fill m=22 c=22 d=22
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping EA	pivotTable5.xml	cells=28	face m=28 c=28 d=28  size m=28 c=28 d=28  colour m=28 c=28 d=28  fill m=28 c=28 d=28
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping ESA	pivotTable6.xml	cells=36	face m=36 c=36 d=36  size m=36 c=36 d=36  colour m=36 c=36 d=36  fill m=36 c=36 d=36
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping BA	pivotTable7.xml	cells=20	face m=20 c=20 d=20  size m=20 c=20 d=20  colour m=20 c=20 d=20  fill m=20 c=20 d=20
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping SA	pivotTable8.xml	cells=20	face m=20 c=20 d=20  size m=20 c=20 d=20  colour m=20 c=20 d=20  fill m=20 c=20 d=20
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping AA	pivotTable9.xml	cells=26	face m=26 c=26 d=26  size m=26 c=26 d=26  colour m=26 c=26 d=26  fill m=26 c=26 d=26
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping DA	pivotTable10.xml	cells=8	face m=8 c=8 d=8  size m=8 c=8 d=8  colour m=8 c=8 d=8  fill m=8 c=8 d=8
+Keywords_Mapping_Graphs_and_Charts.xlsx	TOGAF Role Mapping TA	pivotTable11.xml	cells=30	face m=30 c=30 d=30  size m=30 c=30 d=30  colour m=30 c=30 d=30  fill m=30 c=30 d=30
+DynamicBubbleChart.xlsx	Chart	pivotTable1.xml	cells=65	face m=65 c=65 d=65  size m=65 c=65 d=65  colour m=65 c=65 d=65  fill m=65 c=65 d=65
+049_Expenses_calculator_c351f3d0.xlsx	Personal Expenses Data	pivotTable1.xml	cells=54	face m=54 c=54 d=54  size m=54 c=54 d=54  colour m=54 c=54 d=54  fill m=54 c=0 d=45
+      B3 fill ours=None ref=F9FAF5
+      C3 fill ours=None ref=F9FAF5
+      D3 fill ours=None ref=F9FAF5
+      E3 fill ours=None ref=F9FAF5
+      F3 fill ours=None ref=F9FAF5
+      G3 fill ours=None ref=F9FAF5
+      B4 fill ours=None ref=F9FAF5
+      G4 fill ours=None ref=F9FAF5
+      B11 fill ours=None ref=F9FAF5
+007_Contextures_chart_sample_667d8e47.xlsm	CityPivot	pivotTable1.xml	cells=63	face m=63 c=63 d=63  size m=63 c=63 d=63  colour m=63 c=63 d=63  fill m=63 c=63 d=63
+037_Personal_money_tracker_a57957bb.xlsx	Monthly summary	pivotTable1.xml	cells=95	face m=94 c=95 d=95  size m=93 c=92 d=95  colour m=94 c=95 d=95  fill m=95 c=95 d=95
+037_Personal_money_tracker_a57957bb.xlsx	Chart data	pivotTable22.xml	cells=45	face m=45 c=45 d=45  size m=43 c=42 d=45  colour m=45 c=45 d=45  fill m=45 c=45 d=45
+033_Event_planning_tracker_Use_this_template_f29a848e.xlsx	PROJECT TOTALS	pivotTable1.xml	cells=91	face m=91 c=91 d=91  size m=89 c=2 d=91  colour m=90 c=86 d=91  fill m=19 c=19 d=91
+035_Project_plan_for_law_firms_aa2d4462.xlsx	PROJECT TOTALS	pivotTable1.xml	cells=91	face m=91 c=91 d=91  size m=91 c=91 d=91  colour m=91 c=91 d=91  fill m=91 c=91 d=91
+
+property    cells      merge      clear  clear+dxf
+face         9878       9877       9878       9878
+size         9878       9872       9783       9878
+colour       9878       9876       9873       9878
+fill         9878       9806       9752       9869
+
+cells the reference draws in the automatic font colour (not decidable from the .fods, counted as agreeing for every model): 72

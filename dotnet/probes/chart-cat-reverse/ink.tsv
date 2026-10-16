@@ -1,0 +1,22 @@
+path	mean_before	mean_after	worst_before	worst_after	worstpage
+slides/ceiling-001/pptx/N2_E_Maestroni_Swarm_COP.pptx	3.98	3.95	39.53	38.53	7 better
+slides/ceiling-002/pptx/Demick_JetBlue.pptx	11.26	11.26	23.49	23.50	5
+slides/chart-001/pptx/southern-classic-kennesaw-state-university-final.pptx	4.68	4.68	9.96	9.96	20
+sheets/chartset-001/xlsx/016_advanced_excel_radar.xlsx	0.80	0.80	2.02	2.02	1
+sheets/chartset-001/xlsx/032_advanced_excel_radar.xlsx	0.78	0.78	1.98	1.98	1
+sheets/chartset-003/xlsx/008_advanced_excel_radar.xlsx	0.78	0.78	1.99	1.99	1
+sheets/chartset-003/xlsx/024_advanced_excel_radar.xlsx	0.79	0.79	1.99	1.99	1
+sheets/chartset-007/xlsm/003_Contextures_chart_sample_9bda2719.xlsm	0.69	0.65	2.30	2.06	3 better
+sheets/chartset-008/xlsx/008_Contextures_chart_sample_7ea7a1d7.xlsx	3.92	3.92	4.71	4.71	3
+sheets/chartset-008/xlsx/023_Waterfall_Chart_Template_for_Excel_349f7689.xlsx	2.45	2.46	5.68	5.68	1
+sheets/chartset-008/xlsx/034_Personal_net_worth_calculator_f7b8fb57.xlsx	1.01	0.51	6.21	2.66	1 better
+sheets/chartset-009/xlsx/056_Quarterly_sale_report_baa6bb0d.xlsx	1.63	0.99	3.61	1.96	3 better
+sheets/chartset-010/xlsx/065_Weight_loss_tracker_ff1c89af.xlsx	46.93	46.91	72.23	72.23	2 better
+sheets/chartset-011/xlsx/010_Contextures_chart_sample_e6ea06a3.xlsx	3.58	3.50	8.27	7.94	2 better
+sheets/chartset-011/xlsx/030_Basic_balance_sheet_Use_this_template_10ed9144.xlsx	3.50	2.72	11.12	9.01	1 better
+sheets/chartset-011/xlsx/057_Simple_balance_sheet_Use_this_template_e2d4cbb2.xlsx	3.76	3.76	9.85	9.85	3
+sheets/chartset-013/xlsx/031_Business_expense_budget_f3a46278.xlsx	1.09	1.01	3.16	2.78	1 better
+sheets/chartset-013/xlsx/032_Business_expenses_budget_d377eaab.xlsx	3.13	2.15	7.20	3.36	4 better
+sheets/chartset-014/xlsx/045_Check_register_with_chart_4becb8a0.xlsx	1.48	0.96	1.48	0.96	1 better
+sheets/chartset-006/xlsx/044_Cash_flow_forecast_Use_this_template_b8fa1f35.xlsx	5.72	5.72	10.60	10.60	4
+# sum of means	101.98	98.30

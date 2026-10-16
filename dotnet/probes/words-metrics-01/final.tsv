@@ -1,0 +1,11 @@
+# words = tokens carrying at least one Unicode letter or digit; rawwords = pdftotext | wc -w
+# NOT comparable to any scoreboard recorded before 2026-08-13 — see dotnet/probes/gate-01/results.md
+path	ext	pages	words	fonts	unemb	verdict	rawwords
+words/metrics-001/doc/A320SimNotes.doc	doc	42/42	13846/13919	7/10	0	match	15004/14999
+words/metrics-001/doc/手机免提系统TSB.doc	doc	3/3	98/95	8/6	0	match	102/99
+words/metrics-001/docx/02_mcar_part-2_and_IS_v2.10.docx	docx	314/312	80663/80500	4/4	0	pages	81267/81108
+words/metrics-001/docx/AWR OPS-AOC 044 Statement of Compliance RVSM  Rev 04 01 Feb 2024.docx	docx	12/15	2068/2125	6/6	0	pages,words	2211/2259
+words/metrics-001/docx/FRE-03_mcar_part-3_and_IS_v2.9.docx	docx	76/76	24740/24693	2/4	0	match	25837/25787
+words/metrics-001/docx/OM template for non-complex NCC operators_August 2016.docx	docx	164/165	51409/51673	8/8	0	pages	52436/52697
+words/metrics-001/docx/SPA-02_mcar_part-2_and_IS_v2.9.docx	docx	267/266	95026/94826	4/4	0	pages	95039/94848
+words/metrics-001/docx/review-welsh-government-communications-mister-peter-mandelson.docx	docx	14/14	3015/3017	6/6	0	match	3052/3052

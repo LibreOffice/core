@@ -1,0 +1,51 @@
+scored 44 movers
+  mean |dx| per span, median over the documents:   1.9559 pt  ->    1.9583 pt   closer 1  further 1  level 42
+  mean |dy| per span, median over the documents:   7.4189 pt  ->    7.8039 pt   closer 26  further 9  level 9
+  page count:        closer on 1, further on 0
+  alphanumerics:     closer on 1, further on 2
+
+    dx bef   dx aft   dy bef   dy aft   refp basep headp   ref an base an head an  document
+   11.3525  11.3189   5.0641   8.3040      2     2     2      402     402     402  4985240899d4-048_Visual_Product_Roadmap_Templa
+    0.0922   0.0895   0.1256   0.0190      1     1     1      178     182     183  ffc95e0819d4-047_Visual_Product_Roadmap_Templa
+    0.0831   0.0807   0.1256   0.0215      1     1     1      218     224     225  047_Visual_Product_Roadmap_Template_Profession
+   21.4288  21.4288   9.5217   5.6050      1     1     1      219     227     227  0a06a7b3742f-044_Visual_Product_Roadmap_Templa
+   11.3536  11.3536   2.9487   0.0000      1     1     1      401     406     406  1610e3230af2-049_Visual_Product_Roadmap_Templa
+    8.0991   8.0991  35.2776  35.2776      4     5     5     8669    8794    8794  1ef46e226af0-JEMIT_Template.rtf
+   33.4538  33.4538  17.3664  17.3691      8     6     6     5518    5086    5086  410a0fe0dba2-B11. TE.CAO.00129  Experience  lo
+    5.2434   5.2434  30.7374  28.1507      3     3     3     1873    1873    1873  4373cd432be7-P200904290238_0238_51880.rtf
+   32.1145  32.1145 128.8268 128.8268    746   746   746  1504838 1507651 1507651  49befd6540a9-150-5370-10H.rtf
+    3.8893   3.8893 133.6448 133.6448      7     6     6     9261    9023    9023  4d161b99e91b-FO.FCTOA_.000129 Application for 
+    1.1846   1.1846  62.4388  62.4388     19    24    24    28467   27371   27371  681b81943f79-DOA_Template_Form_Type_Certificat
+   17.6505  17.6505  20.3451  20.2860     33    34    34    61683   62062   62062  6ba268b84b01-150_5300_13_chg12.rtf
+   29.7850  29.7850  10.1930  12.4118      1     1     1      235     242     242  6f1bffd21d03-045_Visual_Product_Roadmap_Templa
+    0.3037   0.3037   2.4273   2.4030     81    81    81   105000  105137  105137  9d289f4d021d-EHEST-SMS-Safety-Management-Manua
+    0.1892   0.1892  22.7428  22.7549      8     6     6     9990    9846    9846  a3cc62ed5e23-237287_0486190101_0486190101_geol
+   69.6921  69.6921  53.3072  53.2845     77    57    57   116044   90077   90077  b1eeaf9dec9c-150_5300_13_chg10.rtf
+    0.4115   0.4115 168.7492 168.7260      8     7     7    10146   10077   10077  be08258af317-A1. EASA Form 2.rtf
+    0.1225   0.1225   0.0193   0.0078      3     3     3     8518    8518    8518  c7164e021fe7-foca_form_1.rtf
+    5.6193   5.6193   6.9966   6.8635    233   172   172   358857  352762  352762  d97cdeea9a38-FAA 2025-26 Holdover Tables.rtf
+   35.1364  35.1364 122.2739 122.2905     19    17    17    41729   34230   34230  e3fcd2815598-150_5300_13_chg8.rtf
+    4.0894   4.0894  27.7961  27.7833     25    25    25    27421   27424   27424  ed07ce5f44c7-t_TEMPforInvProgs.rtf
+   10.0158  10.0158  22.5550  22.5584      8     6     6     6130    5004    5004  fa86e47856dd-approvals-and-standardisation-org
+   14.4409  14.4409  44.6500  44.5735     17    18    18    41298   41702   41702  150_5300_13_chg8.doc
+    0.0839   0.0839   2.9487   0.0000      1     1     1      399     406     406  049_Visual_Product_Roadmap_Template_Simple_For
+    0.0963   0.0963   2.7976   0.0000      1     1     1      263     263     263  044_Visual_Product_Roadmap_Template_Editable_F
+    0.0847   0.0847   2.9872   0.0000      1     1     1      402     402     402  048_Visual_Product_Roadmap_Template_Quality_La
+    1.7420   1.7420   2.1617   0.0571      1     1     1      235     235     235  045_Visual_Product_Roadmap_Template_Excellent_
+    1.5738   1.5738   7.6623   7.8404      3     3     3     1921    1921    1921  P200904290238_0238_51880.doc
+    0.0780   0.0780   2.1270   1.9645      6     6     6     8979    9023    9023  FO.FCTOA_.000129 Application for activities re
+    9.6872   9.6872   0.4183   0.3978      8     8     8    19095   19095   19095  1_tpr_template__from_fy14_.docx
+    0.0932   0.0932   6.3253   6.0703     20    20    20    28545   28542   28542  DOA_Template_Form_Type_Certification_Programme
+    6.1601   6.1601  19.2471  19.2471      4     4     4     8668    8667    8667  JEMIT_Template.docx
+    0.7060   0.7060  27.3056  27.2936     26    26    26    27737   27737   27737  t_TEMPforInvProgs.docx
+    1.0097   1.0097   2.0940   1.6631    155   155   155   299583  300664  300664  24-25_FAA_Holdover_Tables.docx
+    0.6374   0.6374   1.0460   0.7540    167   166   166   335603  336680  336680  FAA 2025-26 Holdover Tables.docx
+   20.3984  20.3984  19.5873  19.6001     31    31    31    61920   62170   62170  150_5300_13_chg12.doc
+    0.2071   0.2071   2.3432   2.3426    727   727   727  1508422 1508484 1508484  150-5370-10H.docx
+    1.3891   1.3891   5.0396   4.9968     82    82    82   105180  105317  105317  EHEST-SMS-Safety-Management-Manual-V2.docx
+   32.5218  32.5218  29.5804  29.5850     78    77    77   116092  119052  119052  150_5300_13_chg10.doc
+    0.0788   0.0788  30.8537  30.9515      7     7     7    11527   11547   11547  A1. EASA Form 2.docx
+    0.0946   0.0946   0.1113   0.0111      6     6     6     6666    6685    6685  B11. TE.CAO.00129  Experience  logbook.docx
+    0.0950   0.0950   0.1150   0.0170      6     6     6     5747    5747    5747  approvals-and-standardisation-organisation-app
+    2.1697   2.1745   5.3880   5.4671     10    10    10    18672   18672   18672  dd515c324f94-1_tpr_template__from_fy14_.rtf
+    4.8574   5.3041   7.1756   7.7674    223   221   222   321294  320241  320315  9a0dd0c6025a-24-25_FAA_Holdover_Tables.rtf

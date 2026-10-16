@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document
+    xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+    xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+    xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+    xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:meta>
+  <dc:title>Paperless title page with no header of its own</dc:title>
+  <dc:subject>A first page declared different and given no header draws none</dc:subject>
+ </office:meta>
+ <office:automatic-styles>
+  <style:page-layout style:name="PL">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="12cm"
+       fo:margin-left="2cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="1.5cm">
+    <style:header-style>
+     <style:header-footer-properties fo:min-height="0.6cm" fo:margin-bottom="0.3cm"/>
+    </style:header-style>
+   </style:page-layout-properties>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:styles>
+  <style:style style:name="Body" style:family="paragraph">
+   <style:paragraph-properties fo:text-align="start" fo:text-indent="0cm" fo:hyphenate="false"
+       fo:margin-top="0cm" fo:margin-bottom="0cm" fo:line-height="100%"
+       fo:orphans="0" fo:widows="0"/>
+   <style:text-properties style:font-name="Carlito" fo:font-family="Carlito" fo:font-size="11pt"
+       fo:language="en" fo:country="GB"/>
+  </style:style>
+  <style:style style:name="TitlePageStart" style:family="paragraph" style:parent-style-name="Body"
+      style:master-page-name="TitlePage"/>
+ </office:styles>
+ <office:master-styles>
+  <style:master-page style:name="TitlePage" style:page-layout-name="PL"
+      style:next-style-name="Standard"/>
+  <style:master-page style:name="Standard" style:page-layout-name="PL">
+   <style:header>
+    <text:p text:style-name="Body">Running head on every page but the first</text:p>
+   </style:header>
+  </style:master-page>
+ </office:master-styles>
+ <office:body><office:text>
+   <text:p text:style-name="TitlePageStart">Title page line 01</text:p>
+   <text:p text:style-name="Body">Title page line 02</text:p>
+   <text:p text:style-name="Body">Title page line 03</text:p>
+   <text:p text:style-name="Body">Title page line 04</text:p>
+   <text:p text:style-name="Body">Title page line 05</text:p>
+   <text:p text:style-name="Body">Title page line 06</text:p>
+   <text:p text:style-name="Body">Title page line 07</text:p>
+   <text:p text:style-name="Body">Title page line 08</text:p>
+   <text:p text:style-name="Body">Title page line 09</text:p>
+   <text:p text:style-name="Body">Title page line 10</text:p>
+   <text:p text:style-name="Body">Title page line 11</text:p>
+   <text:p text:style-name="Body">Title page line 12</text:p>
+   <text:p text:style-name="Body">Title page line 13</text:p>
+   <text:p text:style-name="Body">Title page line 14</text:p>
+   <text:p text:style-name="Body">Title page line 15</text:p>
+   <text:p text:style-name="Body">Title page line 16</text:p>
+   <text:p text:style-name="Body">Title page line 17</text:p>
+   <text:p text:style-name="Body">Title page line 18</text:p>
+   <text:p text:style-name="Body">Title page line 19</text:p>
+   <text:p text:style-name="Body">Title page line 20</text:p>
+   <text:p text:style-name="Body">Title page line 21</text:p>
+   <text:p text:style-name="Body">Title page line 22</text:p>
+   <text:p text:style-name="Body">Title page line 23</text:p>
+   <text:p text:style-name="Body">Title page line 24</text:p>
+   <text:p text:style-name="Body">Second page line 01</text:p>
+   <text:p text:style-name="Body">Second page line 02</text:p>
+   <text:p text:style-name="Body">Second page line 03</text:p>
+   <text:p text:style-name="Body">Second page line 04</text:p>
+   <text:p text:style-name="Body">Second page line 05</text:p>
+   <text:p text:style-name="Body">Second page line 06</text:p>
+   <text:p text:style-name="Body">Second page line 07</text:p>
+   <text:p text:style-name="Body">Second page line 08</text:p>
+   <text:p text:style-name="Body">Second page line 09</text:p>
+   <text:p text:style-name="Body">Second page line 10</text:p>
+   <text:p text:style-name="Body">Second page line 11</text:p>
+   <text:p text:style-name="Body">Second page line 12</text:p>
+  </office:text></office:body>
+</office:document>

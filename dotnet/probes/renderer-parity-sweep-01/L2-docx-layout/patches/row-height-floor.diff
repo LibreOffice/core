@@ -1,0 +1,152 @@
+--- a/dotnet/src/XRay.Office.WordProcessing/Layout/TableLayouter.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Layout/TableLayouter.cs
+@@ -131,19 +131,9 @@
+                 // A merged cell charges only its last row, and only for what one row's worth of it needs.
+                 // Charging the whole height there would make that row as tall as the merge.
+                 //
+-                // The declared floor is deliberately *not* applied here. Two rounds found the same defect
+-                // independently — a `w:trHeight` `atLeast` row resting on its floor is its floor plus its
+-                // cell margins tall, not the greater of the floor and text-plus-margins — and wrote two
+-                // different fixes. This one, applied in the per-cell loop and ungated, is the weaker of
+-                // them: it reaches every format, and the setting it models is one the three Word filters
+-                // set and the ODF filter does not. Applying it to all five was measured to fix
+-                // `table-exact-row.{doc,docx,rtf}` and break `.odt` and `.fodt`.
+-                //
+-                // The floor is therefore applied once, per row, further down, gated on
+-                // `PageTable.MinHeightIncludesInsets` and carrying the border term as well. Both rounds'
+-                // evidence agrees and is recorded there: `template---tpr…docx`'s 460-twip rows with
+-                // 100-twip margins measure 33.00 pt, and `FAA 2025-26 Holdover Tables.docx`'s Table 54
+-                // measures 440 twips to the hundredth.
++                // The declared floor is deliberately *not* applied here: it belongs to the row rather than
++                // to a cell, and it is applied once, per row, further down. What a cell contributes is its
++                // content plus its own margins, which is what the floor is then compared against.
+                 if (last == row)
+                 {
+                     heights[row] = Length.Max(heights[row], text + cell.Padding.Vertical);
+@@ -157,53 +147,47 @@
+             // A border takes space, and a row owns *half* of each of the two grid lines it sits between — the
+             // line runs through the border's centre, so the other half belongs to the neighbour. The two
+             // outermost halves, which have no neighbour, are added to the last row once the rectangles are
+-            // built; see there.
++            // built; see there. It is charged against the *content*, which is the only thing it makes taller.
+             //
+-            // The `atLeast` floor sits *under* those borders rather than over them: it raises the content and
+-            // the borders are then added on top, so a row resting on its floor is one border taller than the
+-            // floor. Measured by sweeping the border width against a fixed w:trHeight — see
+-            // `dotnet/probes/words-pagination-01/row-min-height-border.py`, which reads 24.00 / 24.50 / 25.00 /
+-            // 26.00 / 27.00 pt out of the reference for w:sz 0 / 4 / 8 / 16 / 24 against a 24 pt floor, while
+-            // we read 24.00 throughout. That the gap tracks the border exactly is what rules out the other
+-            // reading of the same two corpus observations — both `ESPN-R - MCF - Manual` and the FAA Holdover
+-            // Tables draw a w:sz="4" grid, so a flat half point fits them just as well and is refuted here.
++            // **The floor is the whole of the row, borders and cell margins included, and it is not raised by
++            // either.** `w:trHeight` is the row's height and nothing is added on top of it.
+             //
+-            // `exact` is the other branch and measured the other way: at w:sz="16" both sides read 24.00, so a
+-            // clipped row's height really is the whole of it, borders included. Applying the border there too
+-            // would be the obvious symmetry and is wrong.
++            // This reverses `MIN_ROW_HEIGHT_INCL_BORDER` — `lcl_CalcMinRowHeight`
++            // (`sw/source/core/layout/tabfrm.cxx`:5087-5097), which adds `lcl_GetTopSpace` and
++            // `lcl_GetBottomLineDist` to an `atLeast` floor, and `lcl_GetFixedRowHeight` (:5058), which adds
++            // the second of those to an `exact` one. **Those additions are a LibreOffice 26.x behaviour and
++            // 24.2.7.2 does not have them**, so a tree calibrated against 26.2.4.2 over-heights every row that
++            // rests on its floor when it is compared against 24.2. Re-run of this project's own probe,
++            // `dotnet/probes/words-pagination-01/row-min-height-border.py`, against the installed 24.2.7.2 —
++            // six rows under a 24.00 pt floor, sweeping the grid's `w:sz`:
+             //
+-            // **The cell margins go on top of the floor as well**, and that probe could not see it because its
+-            // cells had none. `lcl_CalcMinRowHeight` (`sw/source/core/layout/tabfrm.cxx`:5087-5097) is the
+-            // whole rule, under `MIN_ROW_HEIGHT_INCL_BORDER` — which both Word filters turn on and neither ODF
+-            // nor the Writer default does (`ww8par.cxx`:1966, `DomainMapper.cxx`:156, comment "handle MS Word
+-            // 'atLeast' oddities"):
++            //     w:sz     0     4     8    16    24    16/exact
++            //     LO   24.00 24.00 24.00 24.00 24.00    24.00
++            //     ours 24.00 24.50 25.00 26.00 27.00    24.00
+             //
+-            //     nHeight  = trHeight
+-            //     nHeight += lcl_GetTopSpace(row)        // top border width *and* top margin
+-            //     nHeight += lcl_GetBottomLineDist(row)  // the bottom margin, and not the bottom border
++            // and with `w:tcMar` top and bottom of 100 twips (5 pt) each, at `w:sz` 0 and 8: LO reads 24.00
++            // both times where we read 34.00 and 35.00, and the `exact` row with the same margins reads 24.00
++            // against our 29.00. A `w:trHeight w:val="397"` row with `w:tcMar` top 23 under `w:sz="8"` — the
++            // FAA Holdover Tables' Table 54 shape the 26.2 reading was calibrated on — reads **19.85 pt**,
++            // which is the bare 397 twips, against our 22.00.
+             //
+-            // and `lcl_GetFixedRowHeight` (:5058) does the second of those two for an `exact` row.
+-            // Both maxima are over the row's cells, since one tall margin governs the row.
++            // The corpus says the same thing without a probe. Six graph-paper templates whose every row
++            // states a `w:trHeight` and whose content is shorter than it lay their grids out at the declared
++            // sum to the hundredth of a point, while we run over by exactly one border per row:
+             //
+-            // `MIN_ROW_HEIGHT_INCL_BORDER` is a per-document setting and the three Word filters set it
+-            // while the ODF one does not, so this is gated on `PageTable.MinHeightIncludesInsets` rather
+-            // than applied to every table — measured, not assumed: applying it to all five formats fixed
+-            // the `table-exact-row` fidelity fixture's `.doc`, `.docx` and `.rtf` and broke its `.odt`
+-            // and `.fodt`, which is the setting's own split exactly.
++            //     doc  rows  declared sum  reference  ours    per row
++            //     141    28      675.20 pt    675.20  689.20  +0.50 (w:sz 4, from TableGrid)
++            //     057    56      666.65       666.60  694.65  +0.50 (w:sz 4)
++            //     058    48      653.60       653.60  689.60  +0.50 (w:sz 4, from TableGrid)
++            //     069    48      629.60       629.60  661.09  +0.25 (w:sz 2 on the cells)
+             //
+-            // Measured on `FAA 2025-26 Holdover Tables.docx`, whose Table 54 rows state `w:trHeight
+-            // w:val="397"` and `w:tcMar` top 23, bottom 0, under a `w:sz="8"` grid: 397 + (20 + 23) + 0 = 440
+-            // twips = 22.00 pt, which is the reference's row pitch to the hundredth. Without the margins we
+-            // read 417 twips = 20.85, and eleven rows of 1.15 pt is the 12.7 pt that lets a three-line
+-            // paragraph onto a page the reference had to break before.
+-            Length topInset = table.MinHeightIncludesInsets ? TopInset(table.Rows[row]) : Length.Zero;
+-            Length bottomInset =
+-                table.MinHeightIncludesInsets ? BottomInset(table.Rows[row]) : Length.Zero;
+-
++            // `PageTable.MinHeightIncludesInsets` is left in place but no longer read; removing it means
++            // removing the four readers that set it, which is not this file's to do.
+             heights[row] = table.Rows[row].HasExactHeight
+-                ? Length.Max(Length.Zero, table.Rows[row].MinHeight + bottomInset)
+-                : Length.Max(heights[row], table.Rows[row].MinHeight + topInset + bottomInset)
+-                  + BorderHeight(table.Rows[row]);
++                ? Length.Max(Length.Zero, table.Rows[row].MinHeight)
++                : Length.Max(
++                    heights[row] + BorderHeight(table.Rows[row]),
++                    table.Rows[row].MinHeight);
+ 
+             measuredRowTop += heights[row];
+         }
+@@ -1065,39 +1049,6 @@
+     }
+ 
+     /// <summary>
+-    /// The top margin a row's declared height is raised by, which is its cells' thickest.
+-    /// </summary>
+-    /// <remarks>
+-    /// <c>lcl_GetTopSpace</c> (<c>sw/source/core/layout/tabfrm.cxx</c>:5175) takes the maximum over the
+-    /// row's cells of the top border's <em>line space</em> — its width plus its distance — and adds the whole
+-    /// of it to a <c>w:trHeight</c> floor. The border half of that is already
+-    /// <see cref="BorderHeight"/>'s, which is added outside the floor and comes to the same total, so what is
+-    /// left to charge here is the distance: the cell's top margin.
+-    /// </remarks>
+-    private static Length TopInset(PageTableRow row)
+-    {
+-        Length top = Length.Zero;
+-        foreach (PageTableCell cell in row.Cells) top = Length.Max(top, cell.Padding.Top);
+-        return top;
+-    }
+-
+-    /// <summary>
+-    /// The bottom margin a row's declared height is raised by, which is its cells' thickest.
+-    /// </summary>
+-    /// <remarks>
+-    /// <c>lcl_GetBottomLineDist</c> (<c>tabfrm.cxx</c>:5245) — the distance alone, with no part of the bottom
+-    /// border, which is the asymmetry the LibreOffice comment calls out: <em>"MS Word also adds the bottom
+-    /// border padding (but not the bottom border line)"</em>. It is charged for an <c>exact</c> row as well
+-    /// as for an <c>atLeast</c> one, which is the one thing <c>lcl_GetFixedRowHeight</c> does.
+-    /// </remarks>
+-    private static Length BottomInset(PageTableRow row)
+-    {
+-        Length bottom = Length.Zero;
+-        foreach (PageTableCell cell in row.Cells) bottom = Length.Max(bottom, cell.Padding.Bottom);
+-        return bottom;
+-    }
+-
+-    /// <summary>
+     /// How much a cell grows for the proportional line spacing on its last paragraph.
+     /// </summary>
+     /// <remarks>

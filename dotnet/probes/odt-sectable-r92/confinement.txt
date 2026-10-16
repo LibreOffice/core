@@ -1,0 +1,11 @@
+696 renderings compared with the date masked, 4 differ
+   150_5300_13_chg12__doc.pdf
+   150_5300_13_chg8__doc.pdf
+   150_5300_13_chg8__rtf.pdf
+   JEMIT_Template__docx.pdf
+
+  matched b/a mean|dx| before     after  within .1pt  unique mean|dx| unique   document
+   904/904             11.032    11.032   416/416        722          10.274   150_5300_13_chg12__doc.pdf
+   529/529             12.741    12.691   131/132        385          12.418   150_5300_13_chg8__doc.pdf  BETTER
+   171/171              8.436     8.436   135/135        126           3.875   JEMIT_Template__docx.pdf
+TOTAL matched 1604/1604  mean |dx| before 11.319 pt after 11.303 pt  within 0.1 pt 682 -> 683

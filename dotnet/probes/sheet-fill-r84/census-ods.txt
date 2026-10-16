@@ -1,0 +1,19 @@
+shapes in cells / table:shapes, by kind
+  custom-shape       689 in  60 documents
+  frame              504 in 141 documents
+  control             78 in   6 documents
+  line                41 in   1 documents
+  connector           31 in   2 documents
+
+draw:fill  : [('none', 630), ('solid', 589), ('absent', 78), ('gradient', 32), ('bitmap', 14)]
+draw:stroke: [('none', 773), ('solid', 490), ('absent', 78), ('dash', 2)]
+
+shapes with ink (fill or stroke) in 52 documents
+  custom-shape                   444
+  (with text) custom-shape       198
+  line                            41
+  connector                       31
+  frame                            1
+  ...textless inked shapes live in 26 documents
+
+presets: [('ooxml-rect', 204), ('ooxml-roundRect', 106), ('mso-spt202', 33), ('ooxml-round1Rect', 28), ('ooxml-ellipse', 24), ('ooxml-star5', 22), ('ooxml-verticalScroll', 22), ('ooxml-irregularSeal1', 22), ('ooxml-smileyFace', 22), ('ooxml-sun', 22), ('ooxml-heart', 22), ('ooxml-lightningBolt', 22), ('ooxml-cloud', 22), ('ooxml-pie', 22), ('ooxml-flowChartDelay', 15)]

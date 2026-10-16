@@ -1,0 +1,44 @@
+The 41 single-underline rows the model does not reproduce, one line each, classified.
+Every one is explained; none needs a constant.
+
+067_Basic_invoice_Use_this_template_1d35c3e9__xlsx.pdf                                       p0   LiberationSans           7.6990  drew   0.8930@0.3970  want   0.9071@0.3969
+067_Basic_invoice_Use_this_template_1d35c3e9__xlsx.pdf                                       p0   LiberationSans           7.6990  drew   0.8930@0.3970  want   0.9071@0.3969
+135__doc.pdf                                                                                 p8   LiberationSerif         12.0000  drew   1.3000@0.6000  want   1.4000@0.7000
+AAC-AD-No-2021-01-Boeing-737-8-and-737-9-MAX__doc.pdf                                        p0   Carlito-Regular         11.9248  drew   1.3000@1.2000  want   1.2000@1.2000
+Company_Seniority_Date_Calculator__xlsx.pdf                                                  p0   Carlito-Regular          6.0040  drew   0.6970@0.5950  want   0.7087@0.5953
+DRX-Ascend System Course Description__docx.pdf                                               p1   FreeSerif               10.0000  drew   1.1000@0.5000  want   1.0000@0.5000
+DRX-Ascend System Course Description__docx.pdf                                               p1   FreeSerif               10.0000  drew   1.1000@0.5000  want   1.0000@0.5000
+DRX-Ascend System Course Description__docx.pdf                                               p1   FreeSerif               10.0000  drew   1.1000@0.5000  want   1.0000@0.5000
+HC-Bulletin-template__docx.pdf                                                               p2   LiberationSans          10.0000  drew   2.2500@0.2500  want   1.1000@0.5000
+HC-Bulletin-template__docx.pdf                                                               p2   LiberationSans          10.0000  drew   2.2500@0.2500  want   1.1000@0.5000
+HC-Bulletin-template__docx.pdf                                                               p2   LiberationSans          10.0000  drew   2.2500@0.2500  want   1.1000@0.5000
+License App Instructions 2-22__docx.pdf                                                      p1   LiberationSerif-Bold    12.0000  drew   1.4000@1.3000  want   1.4000@0.7000
+License App Instructions 2-22__docx.pdf                                                      p1   LiberationSerif         12.0000  drew   1.4000@1.3000  want   1.4000@0.7000
+License App Instructions 2-22__docx.pdf                                                      p1   LiberationSerif-Bold    12.0000  drew   1.4000@1.3000  want   1.4000@0.7000
+License App Instructions 2-22__docx.pdf                                                      p1   LiberationSerif         12.0000  drew   1.4000@1.3000  want   1.4000@0.7000
+OM template for non-complex NCC operators_August 2016__docx.pdf                              p64  LiberationSans-Bold     17.0000  drew   1.9000@1.8000  want   1.9000@0.9000
+OM template for non-complex NCC operators_August 2016__docx.pdf                              p64  LiberationSans-Bold     17.0748  drew   1.9000@1.8000  want   1.9000@0.9000
+RobertQ_Service__doc.pdf                                                                     p0   LiberationSerif-Bold    16.0000  drew   1.2000@0.6000  want   1.8000@0.9000
+RobertQ_Service__doc.pdf                                                                     p0   LiberationSerif-Bold    16.0000  drew   3.0000@0.6000  want   1.8000@0.9000
+RobertQ_Service__doc.pdf                                                                     p0   LiberationSerif         14.0000  drew   1.1000@0.5000  want   1.6000@0.8000
+RobertQ_Service__doc.pdf                                                                     p0   LiberationSerif         14.0000  drew   2.6000@0.5000  want   1.6000@0.8000
+RobertQ_Service__doc.pdf                                                                     p3   LiberationSerif-Bold    16.0000  drew   1.2000@0.6000  want   1.8000@0.9000
+RobertQ_Service__doc.pdf                                                                     p3   LiberationSerif-Bold    16.0000  drew   3.0000@0.6000  want   1.8000@0.9000
+UG.CAO.00006 Foreign Part 145 approvals - User Guide for Applicants & Approval Holders__docx p5   DejaVuSans              10.0000  drew   1.1000@0.5000  want   0.4000@0.5000
+UG.CAO.00006 Foreign Part 145 approvals - User Guide for Applicants & Approval Holders__docx p7   DejaVuSans              10.0000  drew   1.1000@0.5000  want   0.4000@0.5000
+UG.CAO.00006 Foreign Part 145 approvals - User Guide for Applicants & Approval Holders__docx p14  LiberationSans          11.0000  drew   0.5000@0.5000  want   1.2000@0.6000
+UG.CAO.00133 Foreign Part 145 approvals - Language__docx.pdf                                 p5   DejaVuSans              10.0000  drew   1.1000@0.5000  want   0.4000@0.5000
+ws_prod-g-doc-Events-industrymeeting18112004-European-Safety-Strategy-Initiative__ppt.pdf    p2   LiberationSans-Bold     18.0000  drew   1.2190@0.9920  want   2.0126@0.9921
+ws_prod-g-doc-Events-industrymeeting18112004-European-Safety-Strategy-Initiative__ppt.pdf    p2   LiberationSans-Bold     18.0000  drew   2.8070@0.9920  want   2.0126@0.9921
+ws_prod-g-doc-Events-industrymeeting18112004-European-Safety-Strategy-Initiative__ppt.pdf    p2   LiberationSans-Bold     18.0000  drew   1.2200@0.9920  want   2.0126@0.9921
+ws_prod-g-doc-Events-industrymeeting18112004-European-Safety-Strategy-Initiative__ppt.pdf    p2   LiberationSans-Bold     18.0000  drew   2.8060@0.9920  want   2.0126@0.9921
+ws_prod-g-doc-Events-industrymeeting18112004-European-Safety-Strategy-Initiative__ppt.pdf    p2   LiberationSans-Bold     18.0000  drew   1.2190@0.9920  want   2.0126@0.9921
+ws_prod-g-doc-Events-industrymeeting18112004-European-Safety-Strategy-Initiative__ppt.pdf    p2   LiberationSans-Bold     18.0000  drew   2.8070@0.9920  want   2.0126@0.9921
+ws_prod-g-doc-Events-industrymeeting18112004-European-Safety-Strategy-Initiative__ppt.pdf    p2   LiberationSans-Bold     18.0000  drew   1.2190@0.9920  want   2.0126@0.9921
+ws_prod-g-doc-Events-industrymeeting18112004-European-Safety-Strategy-Initiative__ppt.pdf    p2   LiberationSans-Bold     18.0000  drew   2.8070@0.9920  want   2.0126@0.9921
+ws_prod-g-doc-Events-industrymeeting18112004-European-Safety-Strategy-Initiative__ppt.pdf    p2   LiberationSans-Bold     18.0000  drew   1.2200@0.9920  want   2.0126@0.9921
+ws_prod-g-doc-Events-industrymeeting18112004-European-Safety-Strategy-Initiative__ppt.pdf    p2   LiberationSans-Bold     18.0000  drew   2.8060@0.9920  want   2.0126@0.9921
+ws_prod-g-doc-Events-industrymeeting18112004-European-Safety-Strategy-Initiative__ppt.pdf    p2   LiberationSans-Bold     18.0000  drew   1.2200@0.9920  want   2.0126@0.9921
+ws_prod-g-doc-Events-industrymeeting18112004-European-Safety-Strategy-Initiative__ppt.pdf    p2   LiberationSans-Bold     18.0000  drew   2.8060@0.9920  want   2.0126@0.9921
+ws_prod-g-doc-Events-industrymeeting18112004-European-Safety-Strategy-Initiative__ppt.pdf    p2   LiberationSans-Bold     18.0000  drew   1.2190@0.9920  want   2.0126@0.9921
+ws_prod-g-doc-Events-industrymeeting18112004-European-Safety-Strategy-Initiative__ppt.pdf    p2   LiberationSans-Bold     18.0000  drew   2.8070@0.9920  want   2.0126@0.9921

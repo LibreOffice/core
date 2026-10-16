@@ -1,0 +1,4 @@
+both         x  241.937   y  415.121   'BLOCK'
+horizontal   x  241.937   y   57.276   'BLOCK'
+none         x   57.685   y   57.276   'BLOCK'
+vertical     x   57.685   y  415.121   'BLOCK'

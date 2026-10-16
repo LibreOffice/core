@@ -1,0 +1,188 @@
+diff --git a/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs b/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs
+--- a/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Ooxml/DocxLayoutSource.cs
+@@ -1100,7 +1100,7 @@
+                 ? paragraph
+                 : WordParagraphFormats.ResolveRun(
+                     _styles, paragraphProperties, range.RunProperties, _theme, _tableStyleRun,
+-                    _fontTable);
++                    _fontTable, ignoreCharacterStyle: range.InIndexField);
+ 
+             if (range.IsCitation) style = AsCitation(style);
+ 
+@@ -1191,12 +1191,17 @@
+     /// the same decision picks the character: a slot recoded into OpenSymbol is a different code point
+     /// from the one the file states, so the face cannot be chosen after the text is built.
+     /// </param>
++    /// <param name="InIndexField">
++    /// True when the range sits in the *result* of a <c>TOC</c>, <c>INDEX</c> or <c>BIBLIOGRAPHY</c>
++    /// field, where the character style a run names is not applied. See <see cref="RunWalker"/>.
++    /// </param>
+     private readonly record struct StyledRange(
+         int Start,
+         int Length,
+         XElement? RunProperties,
+         bool IsCitation = false,
+-        (OpenTypeFace Face, FontReference? Font)? Symbol = null);
++        (OpenTypeFace Face, FontReference? Font)? Symbol = null,
++        bool InIndexField = false);
+ 
+     /// <summary>A note found while walking a paragraph, before its body has been read.</summary>
+     /// <param name="Offset">Where its citation sits in the paragraph's text.</param>
+@@ -1586,8 +1591,55 @@
+             /// <c>w:rPr</c>, which is what makes this the right guess rather than merely a guess.
+             /// </remarks>
+             internal XElement? InstructionProperties { get; set; }
++
++            /// <summary>
++            /// True when this field is a <c>TOC</c>, <c>INDEX</c> or <c>BIBLIOGRAPHY</c> whose result
++            /// is being read, so the runs inside it do not take the character style they name.
++            /// </summary>
++            internal bool IsIndexResult { get; set; }
+         }
+ 
++        /// <summary>
++        /// How many index fields' results the walk is inside, so a run's <c>w:rStyle</c> is ignored.
++        /// </summary>
++        /// <remarks>
++        /// <para>
++        /// A table of contents is written by Word as a field whose cached result is a run of paragraphs,
++        /// each entry a <c>w:hyperlink</c> around a run naming the <c>Hyperlink</c> character style — so
++        /// taken at its word every entry is blue and underlined. LibreOffice does not take it at its
++        /// word: <c>DomainMapper.cxx</c>:3037-3047 looks the style up and then declines to apply it,
++        /// <em>"do not add it elements in TOC: they will receive later another style references from
++        /// TOC"</em>, so the entries come out in the <c>TOC N</c> paragraph style alone — plain, black,
++        /// not underlined. That is what the reference draws, on every document in the corpus that has a
++        /// contents list.
++        /// </para>
++        /// <para>
++        /// A counter rather than a flag, and scoped to the field's <em>result</em> rather than to the
++        /// whole field, because that is the extent LibreOffice gives it: <c>m_bStartTOC</c> is set when
++        /// the field command closes (<c>DomainMapper_Impl.cxx</c>:7643, reached from
++        /// <c>CloseFieldCommand</c> at the <c>w:fldChar w:fldCharType="separate"</c>) and cleared only
++        /// when that same field's context is popped (<c>DomainMapper_Impl.cxx</c>:9269, guarded by
++        /// <c>pContext-&gt;GetTOC().is()</c>), so the <c>PAGEREF</c> fields nested inside each entry do
++        /// not end it.
++        /// </para>
++        /// </remarks>
++        private int _indexResults;
++
++        /// <summary>True while the walk is inside an index field's result.</summary>
++        private bool InIndexField => _indexResults > 0;
++
++        /// <summary>
++        /// Whether an instruction names a field whose result LibreOffice regenerates, and whose runs
++        /// therefore lose the character style they name.
++        /// </summary>
++        /// <remarks>
++        /// The three <c>DomainMapper_Impl::IsInTOC</c> covers: <c>handleToc</c>, <c>handleIndex</c> and
++        /// <c>handleBibliography</c> all set <c>m_bStartTOC</c>.
++        /// </remarks>
++        private static bool IsIndexField(string instruction)
++            => FieldInstructions.Name(instruction)?.ToUpperInvariant()
++                is "TOC" or "INDEX" or "BIBLIOGRAPHY";
++
+         /// <summary>The value a constant field evaluates to, or null when nothing can be computed.</summary>
+         private string? ValueOf(string instruction)
+         {
+@@ -1739,6 +1791,16 @@
+                                     OpenField open = _fields.Peek();
+                                     open.ResultAt = _builder.Length;
+ 
++                                    // The instruction has been read in full, which is the earliest the
++                                    // field's name is known — and it is exactly where LibreOffice
++                                    // decides the same thing, in `CloseFieldCommand`.
++                                    if (!open.IsIndexResult
++                                        && IsIndexField(open.Instruction.ToString()))
++                                    {
++                                        open.IsIndexResult = true;
++                                        _indexResults++;
++                                    }
++
+                                     // The one point at which a field this walk computes can be written:
+                                     // the instruction has been read in full, so the field's name is
+                                     // known, and the cached result it replaces starts here.
+@@ -1753,6 +1815,8 @@
+                                 {
+                                     OpenField closing = _fields.Pop();
+ 
++                                    if (closing.IsIndexResult) _indexResults--;
++
+                                     // A field with no separator has no cached result at all, and
+                                     // LibreOffice still draws its value — measured on the second
+                                     // FILENAME in `CRIF …`'s footer, which the reference draws and this
+@@ -1796,7 +1860,18 @@
+                         }
+                         else
+                         {
+-                            Append(child, depth + 1);
++                            // The compact form of an index carries its result the same way and loses
++                            // its runs' character styles for the same reason.
++                            bool index = IsIndexField(simple.Instruction.ToString());
++                            if (index) _indexResults++;
++                            try
++                            {
++                                Append(child, depth + 1);
++                            }
++                            finally
++                            {
++                                if (index) _indexResults--;
++                            }
+                         }
+ 
+                         CloseField(simple);
+@@ -1977,6 +2052,7 @@
+                 && _symbolFace is null
+                 && _ranges[^1].Symbol is null
+                 && _ranges[^1].IsCitation == _inCitation
++                && _ranges[^1].InIndexField == InIndexField
+                 && _ranges[^1].RunProperties == _runProperties)
+             {
+                 _ranges[^1] = _ranges[^1] with { Length = _ranges[^1].Length + text.Length };
+@@ -1984,7 +2060,8 @@
+             }
+ 
+             _ranges.Add(new StyledRange(
+-                _builder.Length - text.Length, text.Length, _runProperties, _inCitation, _symbolFace));
++                _builder.Length - text.Length, text.Length, _runProperties, _inCitation, _symbolFace,
++                InIndexField));
+         }
+ 
+         /// <summary>True while a note's citation is being emitted.</summary>
+diff --git a/dotnet/src/XRay.Office.WordProcessing/Ooxml/WordParagraphFormats.cs b/dotnet/src/XRay.Office.WordProcessing/Ooxml/WordParagraphFormats.cs
+--- a/dotnet/src/XRay.Office.WordProcessing/Ooxml/WordParagraphFormats.cs
++++ b/dotnet/src/XRay.Office.WordProcessing/Ooxml/WordParagraphFormats.cs
+@@ -447,19 +447,31 @@
+     /// <em>layer</em> named a classified font, and the layers are gone by then — see
+     /// <see cref="StatedClass"/>.
+     /// </param>
++    /// <param name="ignoreCharacterStyle">
++    /// True to drop the run's <c>w:rStyle</c> layer while keeping its own <c>w:rPr</c>, which is what a
++    /// run inside a table of contents gets: <c>DomainMapper.cxx</c>:3037-3047 resolves the style name,
++    /// finds it, and then declines to insert <c>PROP_CHAR_STYLE_NAME</c> when
++    /// <c>DomainMapper_Impl::IsInTOC</c> — "do not add it elements in TOC: they will receive later
++    /// another style references from TOC". Word writes every contents entry as a run naming the
++    /// <c>Hyperlink</c> character style, so honouring it draws the whole list blue and underlined where
++    /// the reference draws it in the <c>TOC N</c> paragraph style alone.
++    /// </param>
+     internal static WordTextStyle ResolveRun(
+         WordStyles styles,
+         XElement? paragraphProperties,
+         XElement? runProperties,
+         DrawingTheme? theme = null,
+         IReadOnlyList<XElement>? tableStyleRunProperties = null,
+-        WordFontTable? fontTable = null)
++        WordFontTable? fontTable = null,
++        bool ignoreCharacterStyle = false)
+     {
+         ArgumentNullException.ThrowIfNull(styles);
+ 
+         string? styleId = Word.Attribute(Word.Child(paragraphProperties, "pStyle"), "val")
+                           ?? styles.DefaultStyleId(WordStyleType.Paragraph);
+-        string? characterStyleId = Word.Attribute(Word.Child(runProperties, "rStyle"), "val");
++        string? characterStyleId = ignoreCharacterStyle
++            ? null
++            : Word.Attribute(Word.Child(runProperties, "rStyle"), "val");
+ 
+         List<XElement> fonts =
+             styles.RunPropertyLayers(

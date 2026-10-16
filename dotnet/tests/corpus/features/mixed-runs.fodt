@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document
+    xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0"
+    xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0"
+    xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0"
+    xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0"
+    office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:automatic-styles>
+  <style:page-layout style:name="PL">
+   <style:page-layout-properties fo:page-width="21cm" fo:page-height="29.7cm"
+       fo:margin-left="2.5cm" fo:margin-right="2cm" fo:margin-top="2cm" fo:margin-bottom="2cm"/>
+  </style:page-layout>
+ </office:automatic-styles>
+ <office:master-styles><style:master-page style:name="Standard" style:page-layout-name="PL"/></office:master-styles>
+ <office:styles>
+  <style:style style:name="Body" style:family="paragraph">
+   <style:paragraph-properties fo:text-align="start" fo:text-indent="0cm" fo:hyphenate="false"
+       fo:margin-top="0cm" fo:margin-bottom="0.2cm" fo:line-height="100%"
+       fo:orphans="0" fo:widows="0"/>
+   <style:text-properties style:font-name="Carlito" fo:font-family="Carlito" fo:font-size="11pt"
+       fo:language="en" fo:country="GB"/>
+  </style:style>
+  <style:style style:name="Bold" style:family="text">
+   <style:text-properties fo:font-weight="bold"/>
+  </style:style>
+  <style:style style:name="Italic" style:family="text">
+   <style:text-properties fo:font-style="italic"/>
+  </style:style>
+  <style:style style:name="Big" style:family="text">
+   <style:text-properties fo:font-size="22pt"/>
+  </style:style>
+  <style:style style:name="Small" style:family="text">
+   <style:text-properties fo:font-size="8pt"/>
+  </style:style>
+  <style:style style:name="Serif" style:family="text">
+   <style:text-properties style:font-name="Caladea" fo:font-family="Caladea"/>
+  </style:style>
+  <style:style style:name="Red" style:family="text">
+   <style:text-properties fo:color="#c9211e"/>
+  </style:style>
+  <style:style style:name="Relative" style:family="text">
+   <style:text-properties fo:font-size="200%"/>
+  </style:style>
+ </office:styles>
+ <office:body><office:text>
+   <text:p text:style-name="Body">One. The measurement of a line changes when one word inside it is <text:span text:style-name="Bold">emboldened</text:span> and the rest is not, because a bold face is wider than the regular one it replaces.</text:p>
+   <text:p text:style-name="Body">Two. A run set larger than the paragraph makes its own line taller: <text:span text:style-name="Big">twentytwo</text:span> raises this line and leaves the following lines alone, so the pitch between them is not constant down the paragraph and every line after it moves.</text:p>
+   <text:p text:style-name="Body">Three. A run set smaller than the paragraph does not shrink the line, because the line keeps the tallest run it holds: <text:span text:style-name="Small">eightpoint</text:span> sits inside a line whose height the eleven point text around it still decides.</text:p>
+   <text:p text:style-name="Body">Four. A <text:span text:style-name="Italic">phrase set in italics that is long enough to run past the end of the line it starts on and continue onto the next one</text:span> becomes two drawn runs rather than one, because a glyph run is one face at one position and a line break is a position.</text:p>
+   <text:p text:style-name="Body">Five. A <text:span text:style-name="Serif">serif face with different metrics</text:span> mixed into a sans paragraph decides the line's ascent and descent separately from its height.</text:p>
+   <text:p text:style-name="Body">Six. A <text:span text:style-name="Red">coloured run</text:span> measures exactly as the text around it and draws differently, which is why colour travels with the drawing half of a run rather than the measuring half.</text:p>
+   <text:p text:style-name="Body">Seven. Nesting: <text:span text:style-name="Relative">a run at twice the default size containing <text:span text:style-name="Bold">a bold word</text:span> that inherits the size</text:span> and then back to the paragraph's own.</text:p>
+   <text:p text:style-name="Body">Eight. A paragraph with no runs at all measures on the single face path, which is the common case and must keep working: kerning across the whole paragraph rather than restarting at every run boundary is what keeps this line where Writer puts it.</text:p>
+ </office:text></office:body>
+</office:document>

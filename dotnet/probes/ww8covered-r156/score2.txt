@@ -1,0 +1,9 @@
+4 movers scored; spans that moved between the legs: 614
+  of those, CLOSER to 26.2.4.2 529, FURTHER 84, level 1
+  documents net better 3, net worse 1, net level 0
+
+    moved  closer further  document
+      329     329       0  150_5300_13_chg10.doc
+      143     143       0  150_5300_13_chg12.doc
+        2       2       0  foca_form_1.doc
+      140      55      84  P200904290238_0238_51880.doc
