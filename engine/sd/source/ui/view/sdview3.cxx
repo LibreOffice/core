@@ -687,7 +687,9 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                     pWorkModel->DeletePage( static_cast<sal_uInt16>(i) );
             }
 
-            bool bReturn = Paste(*pWorkModel, maDropPos, pPage, nPasteOptions);
+            // The place comes from where the copy began in the document.
+            bool bReturn = Paste(*pWorkModel, maDropPos, pPage,
+                                 nPasteOptions | SdrInsertFlags::POSITIONFROMDOCUMENT);
 
             if( !pPage )
                 pPage = static_cast<SdPage*>( GetSdrPageView()->GetPage() );
@@ -869,6 +871,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                     pWorkPage->SetSdrObjListRectsDirty();
 
+                    SdrInsertFlags nOptions = nPasteOptions;
                     if( pOwnData )
                     {
                         // tdf#118171 - snap rectangles of objects without line width
@@ -876,9 +879,12 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                         maDropPos.setX( pOwnData->GetBoundStartPos().X() + ( aSize.Width() >> 1 ) );
                         maDropPos.setY( pOwnData->GetBoundStartPos().Y() + ( aSize.Height() >> 1 ) );
+
+                        // The place comes from where the copy began in the document.
+                        nOptions |= SdrInsertFlags::POSITIONFROMDOCUMENT;
                     }
 
-                    bReturn = Paste(*pModel, maDropPos, pPage, nPasteOptions);
+                    bReturn = Paste(*pModel, maDropPos, pPage, nOptions);
                 }
 
                 xShell->DoClose();
@@ -945,6 +951,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                     pWorkPage->SetSdrObjListRectsDirty();
 
+                    SdrInsertFlags nOptions = nPasteOptions;
                     if( pOwnData )
                     {
                         // tdf#118171 - snap rectangles of objects without line width
@@ -952,6 +959,9 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
 
                         maDropPos.setX( pOwnData->GetBoundStartPos().X() + ( aSize.Width() >> 1 ) );
                         maDropPos.setY( pOwnData->GetBoundStartPos().Y() + ( aSize.Height() >> 1 ) );
+
+                        // The place comes from where the copy began in the document.
+                        nOptions |= SdrInsertFlags::POSITIONFROMDOCUMENT;
                     }
 
                     // delete pages, that are not of any interest for us
@@ -963,7 +973,7 @@ bool View::InsertData( const TransferableDataHelper& rDataHelper,
                             pModel->DeletePage( static_cast<sal_uInt16>(i) );
                     }
 
-                    bReturn = Paste(*pModel, maDropPos, pPage, nPasteOptions);
+                    bReturn = Paste(*pModel, maDropPos, pPage, nOptions);
 
                     if( !pPage )
                         pPage = static_cast<SdPage*>(GetSdrPageView()->GetPage());
