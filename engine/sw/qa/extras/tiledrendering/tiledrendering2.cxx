@@ -2175,6 +2175,43 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphShape)
     // existed before the cursor came, so Writer sent no CHILD event for it.
     CPPUNIT_ASSERT_EQUAL(std::string("Before \xef\xbf\xbc after."),
                          aView.m_aA11yFocusedParagraph.get<std::string>("content", ""));
+
+    // And the shape is reported as an image, at the character standing for it:
+    // Without the fix, only images were reported, and there was no "images" node.
+    boost::property_tree::ptree aImages = aView.m_aA11yFocusedParagraph.get_child("images");
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aImages.size());
+    const boost::property_tree::ptree& rImage = aImages.begin()->second;
+    CPPUNIT_ASSERT_EQUAL(7, rImage.get<int>("position"));
+    // a shape's name is its object name followed by its title
+    CPPUNIT_ASSERT_EQUAL(std::string("Shape 1 Blue box"), rImage.get<std::string>("name"));
+    CPPUNIT_ASSERT_EQUAL(std::string("A small blue square"),
+                         rImage.get<std::string>("description"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphEmbeddedObject)
+{
+    // Given a formula anchored as a character, with a title and a description:
+    createDoc("a11y-embedded.fodt");
+    SwTestViewCallback aView;
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+    Scheduler::ProcessEventsToIdle();
+
+    // When the cursor moves into its paragraph:
+    pWrtShell->Down(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the formula is reported as an image, by the title and description of its frame:
+    CPPUNIT_ASSERT_EQUAL(std::string("Before \xef\xbf\xbc after."),
+                         aView.m_aA11yFocusedParagraph.get<std::string>("content"));
+    // Without the fix, only images were reported, and there was no "images" node.
+    boost::property_tree::ptree aImages = aView.m_aA11yFocusedParagraph.get_child("images");
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aImages.size());
+    const boost::property_tree::ptree& rImage = aImages.begin()->second;
+    CPPUNIT_ASSERT_EQUAL(7, rImage.get<int>("position"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Half of b"), rImage.get<std::string>("name"));
+    CPPUNIT_ASSERT_EQUAL(std::string("The letter b over the number 2"),
+                         rImage.get<std::string>("description"));
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphShapeAfterScroll)
