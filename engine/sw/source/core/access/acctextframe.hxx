@@ -21,12 +21,14 @@
 
 #include "accframebase.hxx"
 
+#include <com/sun/star/accessibility/XAccessibleExtendedAttributes.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 
 class SwFlyFrame;
 
 class SwAccessibleTextFrame : public SwAccessibleFrameBase,
-        public css::accessibility::XAccessibleSelection
+        public css::accessibility::XAccessibleSelection,
+        public css::accessibility::XAccessibleExtendedAttributes
 {
 private:
     // #i73249#
@@ -63,6 +65,9 @@ public:
 
     virtual void deselectAccessibleChild(
         sal_Int64 nSelectedChildIndex ) override;
+
+    // XAccessibleExtendedAttributes
+    virtual OUString getExtendedAttributes() override;
 
     // XAccessibleContext
 

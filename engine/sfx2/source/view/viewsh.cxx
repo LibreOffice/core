@@ -264,8 +264,29 @@ struct TableSizeType
     sal_Int32 nColCount;
 };
 
+// The table held by a Writer frame that only exists for a floating table
+uno::Reference<accessibility::XAccessibleContext>
+getFloatingTable(const uno::Reference<accessibility::XAccessibleContext>& xContext)
+{
+    if (xContext->getAccessibleRole() != accessibility::AccessibleRole::TEXT_FRAME
+        || xContext->getAccessibleChildCount() < 1)
+        return {};
+    const auto xAttributes = xContext.query<accessibility::XAccessibleExtendedAttributes>();
+    if (!xAttributes.is() || xAttributes->getExtendedAttributes().indexOf("floating-table:true") < 0)
+        return {};
+    const uno::Reference<accessibility::XAccessible> xChild = xContext->getAccessibleChild(0);
+    uno::Reference<accessibility::XAccessibleContext> xTable
+        = xChild.is() ? xChild->getAccessibleContext() : nullptr;
+    if (!xTable.is() || xTable->getAccessibleRole() != accessibility::AccessibleRole::TABLE)
+        return {};
+    return xTable;
+}
+
 OUString getSelectionName(const uno::Reference<accessibility::XAccessibleContext>& xContext)
 {
+    // a floating table is presented as the table, not as the frame holding it
+    if (const auto xTable = getFloatingTable(xContext))
+        return getSelectionName(xTable);
     OUString sName = xContext->getAccessibleName().trim();
     if (sName == "GraphicObjectShape")
         return u"Graphic"_ustr;
@@ -359,7 +380,8 @@ bool selectionHasToBeNotified(const uno::Reference<accessibility::XAccessibleCon
     return
         nRole == accessibility::AccessibleRole::GRAPHIC ||
         nRole == accessibility::AccessibleRole::EMBEDDED_OBJECT ||
-        nRole == accessibility::AccessibleRole::SHAPE;
+        nRole == accessibility::AccessibleRole::SHAPE ||
+        nRole == accessibility::AccessibleRole::TEXT_FRAME;
 }
 
 bool hasToBeActiveForEditing(sal_Int16 nRole)
@@ -1855,6 +1877,7 @@ void KitDocumentFocusListener::notifySelectionChanged(const uno::Reference<acces
     if (xContext.is())
     {
         OUString sName = getSelectionName(xContext);
+        const uno::Reference<XAccessibleContext> xTable = getFloatingTable(xContext);
 
         // check for text content and send it with some limitations:
         // no more than 10 paragraphs, no more than 1000 chars
@@ -1863,7 +1886,9 @@ void KitDocumentFocusListener::notifySelectionChanged(const uno::Reference<acces
         if (sAction == "create" || sAction == "add")
         {
             const sal_Int64 nMaxJoinedParagraphs = 10;
-            const sal_Int32 nMaxTextContentLength = 1000;
+            // a sentence or so of a text frame, which may hold any amount of text
+            const sal_Int32 nMaxTextContentLength
+                = xContext->getAccessibleRole() == AccessibleRole::TEXT_FRAME ? 100 : 1000;
             if (bIsCell)
             {
                 uno::Reference<XAccessibleText> xAccText(xAccObj, uno::UNO_QUERY);
@@ -1879,31 +1904,54 @@ void KitDocumentFocusListener::notifySelectionChanged(const uno::Reference<acces
             }
             else
             {
-                sal_Int32 nTotalTextLength = 0;
-                sal_Int64 nChildCount = xContext->getAccessibleChildCount();
-                if (nChildCount > nMaxJoinedParagraphs)
-                    nChildCount = nMaxJoinedParagraphs;
-                for (sal_Int64 i = 0; i < nChildCount; ++i)
+                // the paragraphs of a floating table are in its cells
+                std::vector<uno::Reference<XAccessibleContext>> aTextParents;
+                if (xTable.is())
                 {
-                    uno::Reference<XAccessible> xChild = xContext->getAccessibleChild(i);
-                    uno::Reference<XAccessibleText> xAccText(xChild, uno::UNO_QUERY);
-                    if (!xAccText.is())
-                        continue;
-                    OUString sText = xAccText->getText();
-                    sal_Int32 nTextLength = sText.getLength();
-                    if (nTextLength < 1)
-                        continue;
-                    if (nTotalTextLength + nTextLength < nMaxTextContentLength)
+                    const sal_Int64 nCells
+                        = std::min(xTable->getAccessibleChildCount(), nMaxJoinedParagraphs);
+                    for (sal_Int64 i = 0; i < nCells; ++i)
                     {
-                        nTotalTextLength += nTextLength;
-                        sTextContent += sText + " \n";
+                        if (const uno::Reference<XAccessible> xCell = xTable->getAccessibleChild(i))
+                            aTextParents.push_back(xCell->getAccessibleContext());
                     }
-                    else
-                    {
-                        // truncate paragraph
-                        sal_Int32 nNewLength = nMaxTextContentLength - nTotalTextLength;
-                        sTextContent += truncateText(sText, nNewLength);
+                }
+                else
+                    aTextParents.push_back(xContext);
+                sal_Int32 nTotalTextLength = 0;
+                bool bFull = false;
+                for (const auto& xParent : aTextParents)
+                {
+                    if (bFull)
                         break;
+                    if (!xParent.is())
+                        continue;
+                    sal_Int64 nChildCount = xParent->getAccessibleChildCount();
+                    if (nChildCount > nMaxJoinedParagraphs)
+                        nChildCount = nMaxJoinedParagraphs;
+                    for (sal_Int64 i = 0; i < nChildCount; ++i)
+                    {
+                        uno::Reference<XAccessible> xChild = xParent->getAccessibleChild(i);
+                        uno::Reference<XAccessibleText> xAccText(xChild, uno::UNO_QUERY);
+                        if (!xAccText.is())
+                            continue;
+                        OUString sText = xAccText->getText();
+                        sal_Int32 nTextLength = sText.getLength();
+                        if (nTextLength < 1)
+                            continue;
+                        if (nTotalTextLength + nTextLength < nMaxTextContentLength)
+                        {
+                            nTotalTextLength += nTextLength;
+                            sTextContent += sText + " \n";
+                        }
+                        else
+                        {
+                            // truncate paragraph
+                            sal_Int32 nNewLength = nMaxTextContentLength - nTotalTextLength;
+                            sTextContent += truncateText(sText, nNewLength);
+                            bFull = true;
+                            break;
+                        }
                     }
                 }
             }
@@ -2099,7 +2147,12 @@ void KitDocumentFocusListener::onShapeSelectionChanged(
         m_bIsEditingInSelection = false;
         notifyEditingInSelectionState();
     }
-    notifySelectionChanged(xSelectedObject, sAction);
+    // a frame being deleted has no children any more, so its floating table is not found then
+    if (const uno::Reference<accessibility::XAccessible> xFrame = m_xSelectedFrame;
+        sAction == "delete" && m_oSelectedFrameName && xFrame && xFrame == xSelectedObject)
+        notifySelectionChanged(false, sAction, *m_oSelectedFrameName, {});
+    else
+        notifySelectionChanged(xSelectedObject, sAction);
     if (isText(m_nDocumentType))
     {
         uno::Reference<accessibility::XAccessibleContext> xContext;
@@ -2492,6 +2545,7 @@ void KitDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
                     case AccessibleRole::GRAPHIC:
                     case AccessibleRole::EMBEDDED_OBJECT:
                     case AccessibleRole::SHAPE:
+                    case AccessibleRole::TEXT_FRAME:
                     {
                         onShapeSelectionChanged(xSelectedObject, sAction);
                         break;

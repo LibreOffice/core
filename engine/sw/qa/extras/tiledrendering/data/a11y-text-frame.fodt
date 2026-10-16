@@ -12,7 +12,7 @@
   <office:text>
    <text:p>First paragraph.</text:p>
    <text:p>Before <draw:frame draw:name="Frame1" text:anchor-type="as-char" svg:width="4cm"><draw:text-box fo:min-height="0.5cm"><text:p>Inside the frame.</text:p></draw:text-box><svg:title>Note box</svg:title><svg:desc>A box beside the text</svg:desc></draw:frame> after.</text:p>
-   <text:p><draw:frame draw:name="Frame2" text:anchor-type="paragraph" svg:x="10cm" svg:y="0cm" svg:width="4cm"><draw:text-box fo:min-height="0.5cm"><text:p>Beside the paragraph.</text:p></draw:text-box></draw:frame>Ending with a frame.</text:p>
+   <text:p><draw:frame draw:name="Frame2" text:anchor-type="paragraph" svg:x="10cm" svg:y="0cm" svg:width="4cm"><draw:text-box fo:min-height="0.5cm"><text:p>Beside the paragraph, this frame holds a sentence long enough to be cut short when its selection is announced.</text:p></draw:text-box></draw:frame>Ending with a frame.</text:p>
    <text:p>Last paragraph.</text:p>
   </office:text>
  </office:body>

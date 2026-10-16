@@ -27,6 +27,7 @@
 #include <com/sun/star/accessibility/XAccessibleRelationSet.hpp>
 #include <com/sun/star/accessibility/AccessibleEventId.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <formatflysplit.hxx>
 #include <frmfmt.hxx>
 #include <flyfrm.hxx>
 #include <accmap.hxx>
@@ -109,9 +110,22 @@ cpo::uno::Any
     cpo::uno::Any aReturn = SwAccessibleContext::queryInterface (rType);
     if ( ! aReturn.hasValue())
         aReturn = ::cppu::queryInterface (rType,
-            static_cast< css::accessibility::XAccessibleSelection* >(this)
+            static_cast< css::accessibility::XAccessibleSelection* >(this),
+            static_cast< css::accessibility::XAccessibleExtendedAttributes* >(this)
             );
     return aReturn;
+}
+
+OUString SwAccessibleTextFrame::getExtendedAttributes()
+{
+    SolarMutexGuard aGuard;
+    ThrowIfDisposed();
+
+    // a frame that may split across pages holds a floating table, no frame to the user
+    const SwFlyFrame* pFlyFrame = getFlyFrame();
+    if (pFlyFrame && pFlyFrame->GetFormat()->GetFlySplit().GetValue())
+        return u"floating-table:true;"_ustr;
+    return OUString();
 }
 
 void

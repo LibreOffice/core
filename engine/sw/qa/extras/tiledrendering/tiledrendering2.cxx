@@ -2401,6 +2401,128 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yShapeSelectionDelete)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yTextFrameSelection)
+{
+    // Given a text frame anchored to a paragraph, and the cursor in the paragraph before:
+    SwXTextDocument* pXTextDocument = createDoc("a11y-text-frame.fodt");
+    SwTestViewCallback aView;
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+    pWrtShell->Down(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // When the frame is selected from the keyboard (Shift+F4):
+    dispatchCommand(mxComponent, u".uno:JumpToNextFrame"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Then its selection is reported by its name, with the start of its text:
+    CPPUNIT_ASSERT(pWrtShell->IsFrameSelected());
+    // Without the fix, a text frame had no selection report.
+    CPPUNIT_ASSERT_EQUAL(std::string("create"),
+                         aView.m_aA11ySelection.get<std::string>("action", ""));
+    CPPUNIT_ASSERT_EQUAL(std::string("Frame2"), aView.m_aA11ySelection.get<std::string>("name", ""));
+    const std::string aText = aView.m_aA11ySelection.get<std::string>("text", "");
+    CPPUNIT_ASSERT(aText.starts_with("Beside the paragraph, this frame holds"));
+    CPPUNIT_ASSERT_LESSEQUAL(size_t(100), aText.size());
+
+    // And when Enter takes the cursor into the frame's text:
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_RETURN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the end of the selection is reported, and the paragraph of the frame is the focused one:
+    CPPUNIT_ASSERT(!pWrtShell->IsFrameSelected());
+    CPPUNIT_ASSERT_EQUAL(std::string("remove"),
+                         aView.m_aA11ySelection.get<std::string>("action", ""));
+    CPPUNIT_ASSERT_EQUAL(std::string("Frame2"), aView.m_aA11ySelection.get<std::string>("name", ""));
+    CPPUNIT_ASSERT(aView.m_aA11yFocusedParagraph.get<std::string>("content", "")
+                       .starts_with("Beside the paragraph, this frame holds"));
+
+    // And when Escape selects the frame again:
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_ESCAPE);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_ESCAPE);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then that selection is reported too:
+    CPPUNIT_ASSERT(pWrtShell->IsFrameSelected());
+    CPPUNIT_ASSERT_EQUAL(std::string("create"),
+                         aView.m_aA11ySelection.get<std::string>("action", ""));
+    CPPUNIT_ASSERT_EQUAL(std::string("Frame2"), aView.m_aA11ySelection.get<std::string>("name", ""));
+
+    // And when a second Escape goes back to the text, the end of the selection is reported:
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_ESCAPE);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_ESCAPE);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!pWrtShell->IsFrameSelected());
+    CPPUNIT_ASSERT_EQUAL(std::string("remove"),
+                         aView.m_aA11ySelection.get<std::string>("action", ""));
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFloatingTableSelection)
+{
+    // Given a floating table split over two pages, A1 on the first and A2 on the second, and the
+    // cursor in the paragraph before it:
+    createDoc("a11y-floating-table.docx");
+    SwTestViewCallback aView;
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+    Scheduler::ProcessEventsToIdle();
+
+    // When the frame holding the table is selected from the keyboard (Shift+F4):
+    dispatchCommand(mxComponent, u".uno:JumpToNextFrame"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the selection is reported as the table's, by its name and the text of its cells, as the
+    // frame is no frame to the user:
+    CPPUNIT_ASSERT(pWrtShell->IsFrameSelected());
+    CPPUNIT_ASSERT_EQUAL(std::string("create"),
+                         aView.m_aA11ySelection.get<std::string>("action", ""));
+    // Without the fix, a text frame had no selection report.
+    // Writer selects the first part of the table, whose accessible name carries its page number
+    CPPUNIT_ASSERT_EQUAL(std::string("Table1-1"), aView.m_aA11ySelection.get<std::string>("name", ""));
+    CPPUNIT_ASSERT_EQUAL(std::string("A1 \n"), aView.m_aA11ySelection.get<std::string>("text", ""));
+
+    // And when Enter takes the cursor into the table:
+    SwXTextDocument* pXTextDocument = getSwTextDoc();
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_RETURN);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_RETURN);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the end of the selection is reported by the table's name too, and the cursor is in A1:
+    CPPUNIT_ASSERT(!pWrtShell->IsFrameSelected());
+    CPPUNIT_ASSERT_EQUAL(std::string("remove"),
+                         aView.m_aA11ySelection.get<std::string>("action", ""));
+    CPPUNIT_ASSERT_EQUAL(std::string("Table1-1"), aView.m_aA11ySelection.get<std::string>("name", ""));
+    // a paragraph in a table comes with its cell
+    CPPUNIT_ASSERT_EQUAL(std::string("A1"),
+                         aView.m_aA11yFocusedCell.get<std::string>("paragraph.content", ""));
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFloatingTableDeletion)
+{
+    // Given a selected floating table:
+    SwXTextDocument* pXTextDocument = createDoc("a11y-floating-table.docx");
+    SwTestViewCallback aView;
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+    Scheduler::ProcessEventsToIdle();
+    dispatchCommand(mxComponent, u".uno:JumpToNextFrame"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(std::string("Table1-1"), aView.m_aA11ySelection.get<std::string>("name", ""));
+
+    // When it is deleted:
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_DELETE);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_DELETE);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then its deletion is reported by the table's name, given while it still had its table:
+    CPPUNIT_ASSERT(!pWrtShell->IsFrameSelected());
+    CPPUNIT_ASSERT_EQUAL(std::string("delete"),
+                         aView.m_aA11ySelection.get<std::string>("action", ""));
+    // Without the fix, the frame's own name was reported.
+    CPPUNIT_ASSERT_EQUAL(std::string("Table1-1"), aView.m_aA11ySelection.get<std::string>("name", ""));
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yImageSelection)
 {
     for (const char* pFile : { "a11y-image.fodt", "a11y-image-at-paragraph.fodt" })

@@ -47,4 +47,25 @@ describe(['tagdesktop'], 'Writer text frames for the reader', { testIsolation: f
 			});
 		});
 	});
+
+	it('a text frame selected from the keyboard is announced with the start of its text', function () {
+		// the frame anchored to the next paragraph lies below the caret
+		const SELECTED = 'Frame2 selected. Has text: Beside the paragraph, this frame holds a sentence long'
+			+ ' enough to be cut short when its selection is';
+		cy.realPress(['Shift', 'F4']);
+		cy.cGet('#clipboard-area').should('have.attr', 'aria-description', SELECTED);
+		cy.realPress('Enter');
+		cy.cGet('#clipboard-area').should('have.attr', 'aria-description', 'Frame2 unselected');
+		cy.cGet('#clipboard-area').should(function () {
+			expect(win.app.map._textInput.getPlainTextContent(), 'the text of the frame')
+				.to.match(/^Beside the paragraph, this frame holds/);
+		});
+		cy.realPress('Escape');
+		cy.cGet('#clipboard-area').should('have.attr', 'aria-description', SELECTED);
+		cy.realPress('Escape');
+		cy.cGet('#clipboard-area').should('have.attr', 'aria-description', 'Frame2 unselected');
+		cy.cGet('#clipboard-area').should(function () {
+			expect(win.app.map._textInput._hasAnySelection, 'a selection held').to.equal(false);
+		});
+	});
 });
