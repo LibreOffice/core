@@ -477,6 +477,8 @@ window.L.TextInput = window.L.Layer.extend({
 			return _('Chart');
 		case 'object':
 			return _('Object');
+		case 'frame':
+			return _('Frame');
 		}
 		return null;
 	},

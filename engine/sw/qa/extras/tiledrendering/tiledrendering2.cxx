@@ -2254,6 +2254,42 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphEmbeddedKinds
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphTextFrame)
+{
+    // Given a text frame anchored as a character, with a title and a description:
+    createDoc("a11y-text-frame.fodt");
+    SwTestViewCallback aView;
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+    Scheduler::ProcessEventsToIdle();
+
+    // When the cursor moves into its paragraph:
+    pWrtShell->Down(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the frame is reported like an image, by its title and description, as a frame:
+    CPPUNIT_ASSERT_EQUAL(std::string("Before \xef\xbf\xbc after."),
+                         aView.m_aA11yFocusedParagraph.get<std::string>("content"));
+    // Without the fix, there was no "images" node.
+    boost::property_tree::ptree aImages = aView.m_aA11yFocusedParagraph.get_child("images");
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aImages.size());
+    const boost::property_tree::ptree& rImage = aImages.begin()->second;
+    CPPUNIT_ASSERT_EQUAL(7, rImage.get<int>("position"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Note box"), rImage.get<std::string>("name"));
+    CPPUNIT_ASSERT_EQUAL(std::string("A box beside the text"),
+                         rImage.get<std::string>("description"));
+    CPPUNIT_ASSERT_EQUAL(std::string("frame"), rImage.get<std::string>("kind", ""));
+
+    // And when the cursor moves on to the paragraph holding a frame anchored to it:
+    pWrtShell->Down(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then that frame is not reported, as it stands for no character of the text:
+    CPPUNIT_ASSERT_EQUAL(std::string("Ending with a frame."),
+                         aView.m_aA11yFocusedParagraph.get<std::string>("content"));
+    CPPUNIT_ASSERT(!aView.m_aA11yFocusedParagraph.get_child_optional("images"));
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphShapeAfterScroll)
 {
     // Given a shape anchored as a character, in a paragraph farther than the paragraphs given

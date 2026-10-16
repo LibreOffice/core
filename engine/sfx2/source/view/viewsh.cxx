@@ -719,8 +719,8 @@ boost::property_tree::ptree makeLinksTree(const std::vector<ParagraphLink>& rLin
     return aLinks;
 }
 
-// An image, a shape or an embedded object anchored as a character, by its position in the
-// paragraph text
+// An image, a shape, an embedded object or a text frame anchored as a character, by its position
+// in the paragraph text
 struct ParagraphImage
 {
     sal_Int32 nPosition;
@@ -737,6 +737,8 @@ std::string_view getImageKind(const uno::Reference<accessibility::XAccessibleCon
     {
         case accessibility::AccessibleRole::SHAPE:
             return "shape";
+        case accessibility::AccessibleRole::TEXT_FRAME:
+            return "frame";
         case accessibility::AccessibleRole::EMBEDDED_OBJECT:
             break;
         default:
@@ -763,8 +765,8 @@ sal_Int32 overlapWidth(const css::awt::Rectangle& rA, const css::awt::Rectangle&
     return std::min(rA.X + rA.Width, rB.X + rB.Width) - std::max(rA.X, rB.X);
 }
 
-// An image, a shape or an embedded object anchored as a character is a child of the paragraph, and
-// U+FFFC (OBJECT REPLACEMENT CHARACTER) in its text.
+// An image, a shape, an embedded object or a text frame anchored as a character is a child of the
+// paragraph, and U+FFFC (OBJECT REPLACEMENT CHARACTER) in its text.
 std::vector<ParagraphImage>
 collectImages(const uno::Reference<css::accessibility::XAccessibleText>& xAccText)
 {
@@ -790,7 +792,8 @@ collectImages(const uno::Reference<css::accessibility::XAccessibleText>& xAccTex
         if (const sal_Int16 nRole = xChildContext->getAccessibleRole();
             nRole == accessibility::AccessibleRole::GRAPHIC
             || nRole == accessibility::AccessibleRole::SHAPE
-            || nRole == accessibility::AccessibleRole::EMBEDDED_OBJECT)
+            || nRole == accessibility::AccessibleRole::EMBEDDED_OBJECT
+            || nRole == accessibility::AccessibleRole::TEXT_FRAME)
             aGraphics.push_back(std::move(xChildContext));
     }
     // each getCharacterBounds() is a layout query, and fields and comments are U+FFFC too
