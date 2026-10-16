@@ -121,6 +121,7 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
 	desktop/source/lib/l10ntranslate \
 	desktop/source/lib/kitinteractionhandler \
 	desktop/source/lib/kitclipboard \
+	desktop/source/lib/kitremotechecker \
 ))
 $(eval $(call gb_Library_set_componentfile,sofficeapp,desktop/kitclipboard,services))
 else
@@ -130,6 +131,7 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
 	desktop/source/lib/l10ntranslate \
 	desktop/source/lib/kitinteractionhandler \
 	desktop/source/lib/kitclipboard \
+	desktop/source/lib/kitremotechecker \
 ))
 $(eval $(call gb_Library_set_componentfile,sofficeapp,desktop/kitclipboard,services))
 endif
