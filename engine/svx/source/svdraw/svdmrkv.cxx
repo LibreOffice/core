@@ -1014,12 +1014,23 @@ void SdrMarkView::SetMarkHandlesForKit(tools::Rectangle const & rRect, const Sfx
         bool bTableSelection = false;
         bool bConnectorSelection = false;
 
+        /*
+            A view that draws the document from the objects it holds works out the handles, the
+            boxes of the other objects, what may be done to the selection and the rest from those
+            objects itself. So its own message is only put together from which objects are
+            selected, where they stand, what is edited in place and where a media object's file
+            is.
+        */
+        const bool bClientHoldsTheObjects
+            = !pOtherShell && pViewShell && pViewShell->drawsFromObjects();
+
         if (mpMarkedObj && mpMarkedObj->GetObjIdentifier() == SdrObjKind::Table)
         {
             auto& rTableObject = dynamic_cast<sdr::table::SdrTableObj&>(*mpMarkedObj);
             bTableSelection = rTableObject.createTableEdgesJson(aTableJsonTree);
         }
-        if (mpMarkedObj && mpMarkedObj->GetObjIdentifier() == SdrObjKind::Edge)
+        if (mpMarkedObj && mpMarkedObj->GetObjIdentifier() == SdrObjKind::Edge
+            && !bClientHoldsTheObjects)
         {
             bConnectorSelection = dumpGluePointsToJSON(aGluePointsTree);
         }
@@ -1072,7 +1083,7 @@ void SdrMarkView::SetMarkHandlesForKit(tools::Rectangle const & rRect, const Sfx
             aExtraInfo.append("], \"isMathObject\": " + OString::boolean(lcl_isStarMath(pO)));
             aExtraInfo.append(", \"isDiagram\": " + OString::boolean(pO->isDiagram()));
 
-            if (mpMarkedObj && !pOtherShell)
+            if (mpMarkedObj && !pOtherShell && !bClientHoldsTheObjects)
             {
                 OString innerTextInfo = CreateInnerTextRectString();
                 if (!innerTextInfo.isEmpty())
@@ -1088,7 +1099,10 @@ void SdrMarkView::SetMarkHandlesForKit(tools::Rectangle const & rRect, const Sfx
             // whether the shape is rotated or not, we will always have the correct gridOffset
             // Note that the gridOffset is calculated from the first selected obj
             basegfx::B2DVector aGridOffset(0.0, 0.0);
-            if(getPossibleGridOffsetForSdrObject(aGridOffset, rMarkList.GetMark(0)->GetMarkedSdrObj(), pPageView))
+            if (!bClientHoldsTheObjects
+                && getPossibleGridOffsetForSdrObject(aGridOffset,
+                                                     rMarkList.GetMark(0)->GetMarkedSdrObj(),
+                                                     pPageView))
             {
                 Point p(aGridOffset.getX(), aGridOffset.getY());
                 if (convertMapMode)
@@ -1109,14 +1123,14 @@ void SdrMarkView::SetMarkHandlesForKit(tools::Rectangle const & rRect, const Sfx
 
             // Add graphic format extension for image objects
             OUString aGraphicExtension = pO->getGraphicExtension();
-            if (!aGraphicExtension.isEmpty())
+            if (!aGraphicExtension.isEmpty() && !bClientHoldsTheObjects)
             {
                 aExtraInfo.append(", \"graphicExtension\": \"" + aGraphicExtension.toUtf8() + "\"");
             }
 
             // The selection is rotatable only when every marked object allows
             // free rotation; a media object, for one, does not.
-            if (!bIsChart)
+            if (!bIsChart && !bClientHoldsTheObjects)
             {
                 bool bRotatable = true;
                 for (size_t nMark = 0; nMark < rMarkList.GetMarkCount(); ++nMark)
@@ -1287,7 +1301,7 @@ void SdrMarkView::SetMarkHandlesForKit(tools::Rectangle const & rRect, const Sfx
                     }
                 }
             }
-            else
+            else if (!bClientHoldsTheObjects)
             {
                 SfxObjectShell* pObjectShell = pViewShell ? pViewShell->GetObjectShell() : nullptr;
                 if (pObjectShell && pObjectShell->IsSignPDF() && pViewShell && pViewShell->GetSignPDFCertificate().Is())
@@ -1297,7 +1311,8 @@ void SdrMarkView::SetMarkHandlesForKit(tools::Rectangle const & rRect, const Sfx
                     aExtraInfo.append(", \"isSignature\": true");
                 }
             }
-            if (!bTableSelection && !pOtherShell && maHdlList.GetHdlCount())
+            if (!bTableSelection && !pOtherShell && !bClientHoldsTheObjects
+                && maHdlList.GetHdlCount())
             {
                 boost::property_tree::ptree responseJSON;
                 boost::property_tree::ptree others;
@@ -1408,7 +1423,7 @@ void SdrMarkView::SetMarkHandlesForKit(tools::Rectangle const & rRect, const Sfx
 
                 SdrPage *pPage = pPageView ? pPageView->GetPage(): nullptr;
 
-                if (pPage && getSdrModelFromSdrView().IsImpress())
+                if (pPage && getSdrModelFromSdrView().IsImpress() && !bClientHoldsTheObjects)
                 {
                     // Send all objects' rectangles along with the selected object's information.
                     // Other rectangles can be used for aligning the selected object referencing the others.
