@@ -72,6 +72,8 @@ struct SFX2_DLLPUBLIC KitMouseEventData
     int mnButtons;
     int mnModifier;
     std::optional<Point> maLogicPosition;
+    /// Whether the event can start or continue a drag-and-drop of the window's selection.
+    bool mbKitDrag = false;
 
     KitMouseEventData(COKitMouseEventType eType, Point aPosition, int nCount, MouseEventModifiers eModifiers, int nButtons, int nModifier)
         : meType(eType)

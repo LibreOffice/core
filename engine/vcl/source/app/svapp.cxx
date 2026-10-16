@@ -1650,6 +1650,33 @@ void unregisterPollCallbacks()
     pSVData->mpPollClosure = nullptr;
 }
 
+bool handleDragForMouseEvent(VclEventId nEvent, vcl::Window* pWindow, const MouseEvent& rEvent)
+{
+    if (!pWindow || pWindow->isDisposed())
+        return false;
+
+    switch (nEvent)
+    {
+        case VclEventId::WindowMouseMove:
+            return ImplKitHandleDragForMouseEvent(pWindow, NotifyEventType::MOUSEMOVE, rEvent);
+        case VclEventId::WindowMouseButtonDown:
+            return ImplKitHandleDragForMouseEvent(pWindow, NotifyEventType::MOUSEBUTTONDOWN,
+                                                  rEvent);
+        case VclEventId::WindowMouseButtonUp:
+            return ImplKitHandleDragForMouseEvent(pWindow, NotifyEventType::MOUSEBUTTONUP, rEvent);
+        default:
+            return false;
+    }
+}
+
+bool cancelDrag(vcl::Window* pWindow)
+{
+    if (!pWindow || pWindow->isDisposed())
+        return false;
+
+    return ImplKitCancelDrag(pWindow);
+}
+
 bool isUnipoll()
 {
     ImplSVData * pSVData = ImplGetSVData();

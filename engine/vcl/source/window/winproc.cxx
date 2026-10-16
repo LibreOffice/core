@@ -1148,6 +1148,47 @@ std::optional<bool> ImplKitHandleDrag(ImplFrameData* pFrameData, NotifyEventType
 }
 }
 
+bool ImplKitHandleDragForMouseEvent(vcl::Window* pWindow, NotifyEventType nEvent,
+                                    const MouseEvent& rEvent)
+{
+    ImplFrameData* pFrameData = pWindow->ImplGetFrameData();
+    if (!pFrameData)
+        return false;
+
+    const Point aWinPos = rEvent.GetPosPixel();
+    const Point aMousePos = pWindow->OutputToScreenPixel(aWinPos);
+    // A kit client sends the macOS Command key as KEY_MOD3, which GetModifier leaves out.
+    const sal_uInt16 nCode
+        = rEvent.GetButtons() | rEvent.GetModifier() | (rEvent.IsMod3() ? KEY_MOD3 : 0);
+    if (ImplKitHandleDrag(pFrameData, nEvent, aMousePos, aWinPos, nCode, rEvent.GetClicks()))
+        return true;
+
+    // The drag gesture is measured from the position where the button went down.
+    if (nEvent == NotifyEventType::MOUSEBUTTONDOWN)
+    {
+        pFrameData->mpMouseDownWin = pWindow;
+        pFrameData->mnFirstMouseX = aMousePos.X();
+        pFrameData->mnFirstMouseY = aMousePos.Y();
+        pFrameData->mbStartDragCalled = false;
+    }
+    else if (nEvent == NotifyEventType::MOUSEBUTTONUP)
+    {
+        pFrameData->mpMouseDownWin = nullptr;
+        pFrameData->mbStartDragCalled = false;
+    }
+    return false;
+}
+
+bool ImplKitCancelDrag(vcl::Window* pWindow)
+{
+    ImplFrameData* pFrameData = pWindow->ImplGetFrameData();
+    if (!pFrameData || !pFrameData->mbDragging)
+        return false;
+
+    ImplEndKitDrag(pFrameData);
+    return true;
+}
+
 static vcl::Window* ImplGetKeyInputWindow( vcl::Window* pWindow )
 {
     ImplSVData* pSVData = ImplGetSVData();

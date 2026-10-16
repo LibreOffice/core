@@ -439,6 +439,11 @@ bool ImplKitHandleMouseEvent( const VclPtr<vcl::Window>& xWindow, NotifyEventTyp
                               tools::Long nX, tools::Long nY, sal_uInt64 nMsgTime,
                               sal_uInt16 nCode, MouseEventModifiers nMode, sal_uInt16 nClicks);
 
+bool ImplKitHandleDragForMouseEvent(vcl::Window* pWindow, NotifyEventType nSVEvent,
+                                    const MouseEvent& rEvent);
+
+bool ImplKitCancelDrag(vcl::Window* pWindow);
+
 void ImplHandleResize( vcl::Window* pWindow, tools::Long nNewWidth, tools::Long nNewHeight );
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

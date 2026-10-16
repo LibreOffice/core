@@ -17,8 +17,25 @@
 
 #include <string_view>
 
+class MouseEvent;
+enum class VclEventId;
+namespace vcl
+{
+class Window;
+}
+
 namespace vcl::kit
 {
+/// Runs the kit drag that a mouse event drives, for a window that gets its mouse events directly.
+/// The event position is relative to pWindow. Returns true when the drag took the event, which
+/// then does not go to the window.
+bool VCL_DLLPUBLIC handleDragForMouseEvent(VclEventId nEvent, vcl::Window* pWindow,
+                                           const MouseEvent& rEvent);
+
+/// Ends the kit drag that runs in the frame of pWindow, without a drop. Returns true when a drag
+/// was running.
+bool VCL_DLLPUBLIC cancelDrag(vcl::Window* pWindow);
+
 bool VCL_DLLPUBLIC isUnipoll();
 void VCL_DLLPUBLIC registerPollCallbacks(COKitPollCallback pPollCallback,
                                          COKitWakeCallback pWakeCallback, void* pData);

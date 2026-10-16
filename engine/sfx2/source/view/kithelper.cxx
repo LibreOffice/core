@@ -1365,6 +1365,8 @@ namespace
         MouseEvent maMouseEvent;
         KeyEvent maKeyEvent;
         OUString maText;
+        // Whether the mouse event can start or continue a drag-and-drop of the window's selection.
+        bool mbKitDrag = false;
     };
 
     void KitPostAsyncEvent(void* pEv, void*)
@@ -1396,10 +1398,24 @@ namespace
         if (pKitEv->mpWindow->isDisposed())
             return;
 
+        if (pKitEv->mbKitDrag
+            && vcl::kit::handleDragForMouseEvent(pKitEv->mnEvent, pKitEv->mpWindow,
+                                                 pKitEv->maMouseEvent))
+            return;
+
+        // Starting a drag runs application code, which can dispose the window.
+        if (pKitEv->mpWindow->isDisposed())
+            return;
+
         switch (pKitEv->mnEvent)
         {
         case VclEventId::WindowKeyInput:
         {
+            // Escape ends a running drag and keeps the dragged data and its selection as they are.
+            if (pKitEv->maKeyEvent.GetKeyCode().GetCode() == KEY_ESCAPE
+                && vcl::kit::cancelDrag(pKitEv->mpWindow))
+                break;
+
             sal_uInt16 nRepeat = pKitEv->maKeyEvent.GetRepeat();
             KeyEvent singlePress(pKitEv->maKeyEvent.GetCharCode(),
                                  pKitEv->maKeyEvent.GetKeyCode());
@@ -1559,6 +1575,7 @@ void KitHelper::postMouseEventAsync(const VclPtr<vcl::Window> &xWindow, KitMouse
         pKitEv->maMouseEvent.setLogicPosition(*rKitMouseEventData.maLogicPosition);
     }
     pKitEv->mpWindow = xWindow;
+    pKitEv->mbKitDrag = rKitMouseEventData.mbKitDrag;
     postEventAsync(pKitEv);
 }
 
