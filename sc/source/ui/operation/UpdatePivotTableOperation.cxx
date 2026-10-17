@@ -10,6 +10,8 @@
 #include <operation/UpdatePivotTableOperation.hxx>
 #include <operation/PivotTableOperationCommon.hxx>
 
+#include <tabprotection.hxx>
+
 #include <vcl/svapp.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/weld/MessageDialog.hxx>
@@ -45,9 +47,15 @@ bool UpdatePivotTableOperation::runImplementation()
     if (pDPObject != &mrDPObject && mrDPObject.GetSaveData())
         pDPObject->SetSaveData(*mrDPObject.GetSaveData());
 
-    if (!sc::pivot::isEditable(mrDocShell, pDPObject->GetOutRange(), mbApi,
-                               sc::EditAction::UpdatePivotTable))
-        return false;
+    SCTAB nTab = ScDocShell::GetCurTab();
+    const ScTableProtection* pTabProt = rDoc.GetTabProtection(nTab);
+    bool bPivotTablesOK = pTabProt && pTabProt->isOptionEnabled(ScTableProtection::PIVOT_TABLES);
+    if (!bPivotTablesOK)
+    {
+        if (!sc::pivot::isEditable(mrDocShell, pDPObject->GetOutRange(), mbApi,
+                                   sc::EditAction::UpdatePivotTable))
+            return false;
+    }
 
     ScDocumentUniquePtr pOldUndoDoc;
     ScDocumentUniquePtr pNewUndoDoc;
@@ -72,7 +80,7 @@ bool UpdatePivotTableOperation::runImplementation()
         pDPObject->SetName(rDoc.GetDPCollection()->CreateNewName());
 
     ScRange aNewOut;
-    if (!sc::pivot::checkNewOutputRange(*pDPObject, mrDocShell, aNewOut, mbApi,
+    if (!sc::pivot::checkNewOutputRange(*pDPObject, mrDocShell, aNewOut, mbApi, bPivotTablesOK,
                                         sc::EditAction::UpdatePivotTable))
     {
         *pDPObject = aUndoDPObject;

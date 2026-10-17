@@ -10,6 +10,8 @@
 #include <operation/ReplacePivotTableOperation.hxx>
 #include <operation/PivotTableOperationCommon.hxx>
 
+#include <tabprotection.hxx>
+
 #include <vcl/svapp.hxx>
 #include <vcl/vclenum.hxx>
 #include <vcl/weld/MessageDialog.hxx>
@@ -54,15 +56,21 @@ bool ReplacePivotTableOperation::runImplementation()
         convertAddress(mpNewDPObject->GetOutRange()
                            .aStart))); // at least one cell in the output position must be editable.
 
-    if (!sc::pivot::isEditable(mrDocShell, aRanges, mbApi))
-        return false;
+    ScDocument& rDoc = mrDocShell.GetDocument();
+    SCTAB nTab = ScDocShell::GetCurTab();
+    const ScTableProtection* pTabProt = rDoc.GetTabProtection(nTab);
+    bool bPivotTablesOK = pTabProt && pTabProt->isOptionEnabled(ScTableProtection::PIVOT_TABLES);
+    if (!bPivotTablesOK)
+    {
+        if (!sc::pivot::isEditable(mrDocShell, aRanges, mbApi))
+            return false;
+    }
 
     ScDocumentUniquePtr pOldUndoDoc;
     ScDocumentUniquePtr pNewUndoDoc;
 
     ScDPObject aUndoDPObject(*pDPObject); // for undo or revert on failure
 
-    ScDocument& rDoc = mrDocShell.GetDocument();
     if (mbRecord && !rDoc.IsUndoEnabled())
         mbRecord = false;
 
@@ -86,7 +94,7 @@ bool ReplacePivotTableOperation::runImplementation()
         pDPObject->SetName(rDoc.GetDPCollection()->CreateNewName());
 
     ScRange aNewOut;
-    if (!sc::pivot::checkNewOutputRange(*pDPObject, mrDocShell, aNewOut, mbApi))
+    if (!sc::pivot::checkNewOutputRange(*pDPObject, mrDocShell, aNewOut, mbApi, bPivotTablesOK))
     {
         *pDPObject = aUndoDPObject;
         return false;

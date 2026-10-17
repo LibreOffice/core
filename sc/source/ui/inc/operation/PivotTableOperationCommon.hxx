@@ -58,7 +58,8 @@ inline void createUndoDoc(ScDocumentUniquePtr& pUndoDoc, ScDocument& rDocument,
 }
 
 inline bool checkNewOutputRange(ScDPObject& rDPObj, ScDocShell& rDocShell, ScRange& rNewOut,
-                                bool bApi, sc::EditAction eAction = sc::EditAction::Unknown)
+                                bool bApi, bool bPivotTablesOK,
+                                sc::EditAction eAction = sc::EditAction::Unknown)
 {
     ScDocument& rDoc = rDocShell.GetDocument();
 
@@ -82,13 +83,13 @@ inline bool checkNewOutputRange(ScDPObject& rDPObj, ScDocShell& rDocShell, ScRan
 
     if (bOverflow)
     {
-        if (!bApi)
+        if (!bApi && !bPivotTablesOK)
             rDocShell.ErrorMessage(STR_PIVOT_ERROR);
 
         return false;
     }
 
-    if (!rDoc.IsImportingXML())
+    if (!rDoc.IsImportingXML() && !bPivotTablesOK)
     {
         ScEditableTester aTester = ScEditableTester::CreateAndTestRange(rDoc, rNewOut, eAction);
         if (!aTester.IsEditable())
