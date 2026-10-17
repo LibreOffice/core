@@ -72,6 +72,9 @@
 /* Whether to default to using SSL_VERIFY_PEER */
 #undef SSL_VERIFY
 
+/* Default of experimental_features */
+#undef ENABLE_EXPERIMENTAL_DEFAULT
+
 /* Whether to enable support key */
 #undef ENABLE_SUPPORT_KEY
 

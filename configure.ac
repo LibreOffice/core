@@ -832,6 +832,7 @@ if test "$enable_experimental" = "yes" ; then
   SSL_VERIFY="false"
 fi
 AC_SUBST(ENABLE_EXPERIMENTAL)
+AC_DEFINE_UNQUOTED([ENABLE_EXPERIMENTAL_DEFAULT],["$ENABLE_EXPERIMENTAL"],[Default of experimental_features.])
 
 AC_MSG_CHECKING([if ssl verification is enabled by default])
 AC_MSG_RESULT([$SSL_VERIFY])

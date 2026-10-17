@@ -67,6 +67,9 @@
 /* Whether to default to using SSL_VERIFY_PEER */
 #define SSL_VERIFY "true"
 
+/* Default of experimental_features */
+#define ENABLE_EXPERIMENTAL_DEFAULT "false"
+
 /* Whether to enable support key */
 #define ENABLE_SUPPORT_KEY 0
 
