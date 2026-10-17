@@ -207,7 +207,7 @@ public:
             failTest("Timestamps of first (default) and second users (Pacific/Auckland) "
                      "shouldn't match");
         }
-        else if (_user1Time.substr(2) == _user2Time.substr(2))
+        else if (_user1Time.substr(0, 2) == _user2Time.substr(0, 2))
         {
             failTest("The hours of first (default) and second users (Pacific/Auckland) "
                      "shouldn't match");
