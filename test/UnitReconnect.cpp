@@ -16,6 +16,7 @@
 #include <net/Socket.hpp>
 #include <test/helpers.hpp>
 #include <test/lokassert.hpp>
+#include <wsd/COOLWSD.hpp>
 
 #include <Poco/Util/LayeredConfiguration.h>
 
@@ -67,7 +68,13 @@ class UnitReconnect : public UnitWSD
             ++_uploads;
     }
 
-    void onDocBrokerDestroy(const std::string&) override { _docDestroyed = true; }
+    void onDocBrokerDestroy(const std::string& docKey) override
+    {
+        // Each test's document is named after the test, so a document left over from an earlier
+        // test does not count.
+        if (docKey.find(testname) != std::string::npos)
+            _docDestroyed = true;
+    }
 
     std::shared_ptr<SocketPoll> newPoller()
     {
@@ -547,7 +554,12 @@ UnitBase::TestResult UnitReconnect::testLastEditorParkExpires()
     const auto deadline =
         std::chrono::steady_clock::now() + std::chrono::seconds(ParkTimeoutSeconds + 60);
     while (!_docDestroyed && std::chrono::steady_clock::now() < deadline)
+    {
+        // A finished broker is removed the next time the prisoner poll wakes up, and nothing
+        // else in this test wakes it.
+        COOLWSD::doHousekeeping();
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
     LOK_ASSERT_MESSAGE("The document did not unload after the park expired",
                        _docDestroyed.load());
     LOK_ASSERT_MESSAGE("The last editor's changes were not saved", _uploads.load() >= 1);
