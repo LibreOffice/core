@@ -89,37 +89,36 @@ body {
 	border-radius: 0;
 	background: var(--color-main-background);
 	--close-color: var(--color-main-background);
-	mask:
-		linear-gradient(#000 0 0) center bottom /
-			calc(100% - 2 * var(--tab-radius)) calc(100% - var(--tab-radius))
-			no-repeat,
+	mask: linear-gradient(#000 0 0) center bottom /
+		calc(100% - 2 * var(--tab-radius)) calc(100% - var(--tab-radius))
+		no-repeat,
 		linear-gradient(#000 0 0) center top / calc(100% - 4 * var(--tab-radius))
-			var(--tab-radius) no-repeat,
+		var(--tab-radius) no-repeat,
 		radial-gradient(
-				circle at 100% 100%,
-				#000 calc(var(--tab-radius) - 0.5px),
-				#0000 var(--tab-radius)
-			)
-			var(--tab-radius) 0 / var(--tab-radius) var(--tab-radius) no-repeat,
+			circle at 100% 100%,
+			#000 calc(var(--tab-radius) - 0.5px),
+			#0000 var(--tab-radius)
+		)
+		var(--tab-radius) 0 / var(--tab-radius) var(--tab-radius) no-repeat,
 		radial-gradient(
-				circle at 0 100%,
-				#000 calc(var(--tab-radius) - 0.5px),
-				#0000 var(--tab-radius)
-			)
-			right var(--tab-radius) top 0 / var(--tab-radius) var(--tab-radius)
-			no-repeat,
+			circle at 0 100%,
+			#000 calc(var(--tab-radius) - 0.5px),
+			#0000 var(--tab-radius)
+		)
+		right var(--tab-radius) top 0 / var(--tab-radius) var(--tab-radius)
+		no-repeat,
 		radial-gradient(
-				circle at 0 0,
-				#0000 calc(var(--tab-radius) - 0.5px),
-				#000 var(--tab-radius)
-			)
-			left bottom / var(--tab-radius) var(--tab-radius) no-repeat,
+			circle at 0 0,
+			#0000 calc(var(--tab-radius) - 0.5px),
+			#000 var(--tab-radius)
+		)
+		left bottom / var(--tab-radius) var(--tab-radius) no-repeat,
 		radial-gradient(
-				circle at 100% 0,
-				#0000 calc(var(--tab-radius) - 0.5px),
-				#000 var(--tab-radius)
-			)
-			right bottom / var(--tab-radius) var(--tab-radius) no-repeat;
+			circle at 100% 0,
+			#0000 calc(var(--tab-radius) - 0.5px),
+			#000 var(--tab-radius)
+		)
+		right bottom / var(--tab-radius) var(--tab-radius) no-repeat;
 }
 /* The visible edges of the active tab are one radius in from its box. */
 .tab.active .content {
