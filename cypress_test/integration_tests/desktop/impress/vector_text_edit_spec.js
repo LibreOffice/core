@@ -189,5 +189,15 @@ var desktopHelper = require('../../common/desktop_helper');
 			expectNoPressSent();
 			expectSelectedText('Text 1');
 		});
+
+		it('moves the caret by word', function() {
+			expectKeys('{ctrl}{rightarrow}', { paragraph: 0, index: 5 });
+			expectKeys('{ctrl}{rightarrow}', { paragraph: 1, index: 0 });
+			expectKeys('{ctrl}{leftarrow}', { paragraph: 0, index: 6 });
+			expectKeys('{ctrl}{leftarrow}', { paragraph: 0, index: 5 });
+			keysToServer('{home}');
+			expectKeys('{ctrl}{shift}{rightarrow}', { paragraph: 0, index: 5 }, { paragraph: 0, index: 0 });
+			expectSelectedText('Text ');
+		});
 	});
 });

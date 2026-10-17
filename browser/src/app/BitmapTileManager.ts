@@ -2437,6 +2437,10 @@ class BitmapTileManager extends RenderManagerBase {
 		return false;
 	}
 
+	public moveCaretByWord(_step: -1 | 1, _extend?: boolean): boolean {
+		return false;
+	}
+
 	public moveCaretByLine(_step: -1 | 1, _extend?: boolean): boolean {
 		return false;
 	}

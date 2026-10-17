@@ -254,6 +254,10 @@ class RenderManager {
 		return RenderManager.ensureInstance().moveCaretByCharacter(step, extend);
 	}
 
+	static moveCaretByWord(step: -1 | 1, extend: boolean = false): boolean {
+		return RenderManager.ensureInstance().moveCaretByWord(step, extend);
+	}
+
 	static moveCaretByLine(step: -1 | 1, extend: boolean = false): boolean {
 		return RenderManager.ensureInstance().moveCaretByLine(step, extend);
 	}

@@ -939,6 +939,28 @@ class VectorManager extends RenderManagerBase {
 	/// Move the caret one character left (step -1) or right (step 1). With extend, the
 	/// selection follows the caret. True when it moved.
 	moveCaretByCharacter(step: -1 | 1, extend: boolean = false): boolean {
+		return this._stepCaret(extend, (position, logical) =>
+			cool.stepByCharacter(position, logical, step),
+		);
+	}
+
+	/// Move the caret one word left (step -1) or right (step 1). With extend, the selection
+	/// follows the caret. True when it moved.
+	moveCaretByWord(step: -1 | 1, extend: boolean = false): boolean {
+		return this._stepCaret(extend, (position, logical) =>
+			cool.stepByWord(position, logical, step),
+		);
+	}
+
+	// Move the caret to where step takes it, and with extend select from the anchor to it. True
+	// when it moved.
+	private _stepCaret(
+		extend: boolean,
+		step: (
+			position: cool.CaretPosition,
+			logical: cool.LogicalCaret,
+		) => cool.LogicalCaret | null,
+	): boolean {
 		const target = this._caretTarget();
 		if (!target || !target.logical) return false;
 		const anchor = this._anchorForMove(target.logical, extend);
@@ -946,7 +968,7 @@ class VectorManager extends RenderManagerBase {
 		const position = this._lookUpCaret(target);
 		const entryId = position?.objectId;
 		if (!position || entryId === undefined) return false;
-		const logical = cool.stepByCharacter(position, target.logical, step);
+		const logical = step(position, target.logical);
 		return (
 			logical !== null && this._moveCaret(target, entryId, logical, anchor)
 		);

@@ -207,6 +207,10 @@ abstract class RenderManagerBase {
 	// True when it moved.
 	abstract moveCaretByCharacter(step: -1 | 1, extend?: boolean): boolean;
 
+	// Moves the caret one word without the server, and with extend selects text to it. True
+	// when it moved.
+	abstract moveCaretByWord(step: -1 | 1, extend?: boolean): boolean;
+
 	// Moves the caret one line up or down without the server, and with extend selects text to
 	// it. True when it moved.
 	abstract moveCaretByLine(step: -1 | 1, extend?: boolean): boolean;

@@ -344,4 +344,48 @@ describe('text prediction caret steps', function () {
 			index: 2,
 		});
 	});
+
+	// The index one word from the index in a one-line paragraph, or null.
+	function wordStep(
+		data: cool.VectorPrimitivesData,
+		logical: cool.LogicalCaret,
+		direction: -1 | 1,
+	): cool.LogicalCaret | null {
+		const position = findCaretPosition(data, 0, 0, 0, measure, logical, 1);
+		nodeassert.ok(position, 'the caret is in a run');
+		return cool.stepByWord(position, logical, direction);
+	}
+
+	it('moves the caret to the start of the next word, with punctuation as a word', function () {
+		// "Hello" at 0, "," at 5, "big" at 7 and "world" at 11.
+		const data = oneLine('Hello, big world');
+		const starts = [0, 5, 7, 11].map(
+			(index) => wordStep(data, { paragraph: 0, index }, 1)?.index,
+		);
+		nodeassert.deepStrictEqual(starts, [5, 7, 11, undefined]);
+	});
+
+	it('moves the caret to the start of the word at or before it', function () {
+		const data = oneLine('Hello, big world');
+		const starts = [16, 13, 11, 8, 6, 1].map(
+			(index) => wordStep(data, { paragraph: 0, index }, -1)?.index,
+		);
+		nodeassert.deepStrictEqual(starts, [11, 11, 7, 7, 5, 0]);
+	});
+
+	it('moves by word from the last word into the next paragraph and back to the end of the previous one', function () {
+		const data = makeTwoParaSlide();
+		nodeassert.deepStrictEqual(wordStep(data, { paragraph: 0, index: 2 }, 1), {
+			paragraph: 1,
+			index: 0,
+		});
+		nodeassert.deepStrictEqual(wordStep(data, { paragraph: 1, index: 0 }, -1), {
+			paragraph: 0,
+			index: 5,
+		});
+		nodeassert.strictEqual(
+			wordStep(data, { paragraph: 0, index: 0 }, -1),
+			null,
+		);
+	});
 });

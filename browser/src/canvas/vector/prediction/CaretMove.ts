@@ -10,8 +10,8 @@
  */
 
 /*
- * Moves the caret from the cached runs alone: by one character, by one line, or to where a click
- * lands.
+ * Moves the caret from the cached runs alone: by one character, by one word, by one line, or to
+ * where a click lands.
  *
  * A step goes over one grapheme cluster, as the engine's caret does, so a base letter and its
  * combining marks, or an emoji sequence, count as one character. A field counts as one character
@@ -23,27 +23,32 @@ namespace cool {
 	const rightToLeft =
 		/[\u0590-\u08ff\ufb1d-\ufdff\ufe70-\ufefc\u200e\u200f\u202a-\u202e\u2066-\u2069]/;
 
-	// The part of Intl.Segmenter that splits text into grapheme clusters. It is typed here, as
-	// the type libraries of some builds are older than it.
-	interface GraphemeSegmenter {
-		segment(text: string): {
-			containing(index: number): { index: number; segment: string } | undefined;
-		};
+	// The part of Intl.Segmenter that the caret moves use, typed here for older type libraries.
+	interface Segment {
+		index: number;
+		segment: string;
 	}
 
-	let graphemes: GraphemeSegmenter | null | undefined;
+	interface Segmenter {
+		segment(
+			text: string,
+		): Iterable<Segment> & { containing(index: number): Segment | undefined };
+	}
 
-	function graphemeSegmenter(): GraphemeSegmenter | null {
-		if (graphemes === undefined) {
+	// One segmenter for each granularity, made on first use, or null without Intl.Segmenter.
+	const segmenters = new Map<string, Segmenter | null>();
+
+	function segmenter(granularity: 'grapheme' | 'word'): Segmenter | null {
+		let found = segmenters.get(granularity);
+		if (found === undefined) {
 			const Segmenter = (Intl as any).Segmenter;
-			graphemes =
+			found =
 				typeof Segmenter === 'function'
-					? (new Segmenter(undefined, {
-							granularity: 'grapheme',
-						}) as GraphemeSegmenter)
+					? (new Segmenter(undefined, { granularity }) as Segmenter)
 					: null;
+			segmenters.set(granularity, found);
 		}
-		return graphemes;
+		return found;
 	}
 
 	// The boundary one grapheme cluster from index, or null at the edge of the text. Without
@@ -55,9 +60,9 @@ namespace cool {
 	): number | null {
 		if (step > 0 ? index >= text.length : index <= 0) return null;
 
-		const segmenter = graphemeSegmenter();
-		if (segmenter) {
-			const segment = segmenter
+		const graphemes = segmenter('grapheme');
+		if (graphemes) {
+			const segment = graphemes
 				.segment(text)
 				.containing(step > 0 ? index : index - 1);
 			if (!segment) return null;
@@ -86,6 +91,62 @@ namespace cool {
 	// True when a run shows the paragraph offset. An offset before a leading tab is in none.
 	function isShown(textRuns: TextRun[], index: number): boolean {
 		return textRuns.some((run) => index >= run.start && index <= run.end);
+	}
+
+	// The offsets where words start in the text, or null without word support. Punctuation
+	// counts as a word and whitespace does not, as in the engine.
+	function wordStarts(text: string): number[] | null {
+		const words = segmenter('word');
+		if (!words) return null;
+		const starts: number[] = [];
+		for (const segment of words.segment(text))
+			if (segment.segment.trim() !== '') starts.push(segment.index);
+		return starts;
+	}
+
+	/// The caret one word before (step -1) or after (step 1) logical: back to the start of the
+	/// word at or before the caret, forward to the start of the next word, and into the next or
+	/// previous paragraph at an edge, as in the engine. Null when no run shows the new place,
+	/// or that paragraph is empty, rotated or right to left.
+	export function stepByWord(
+		position: CaretPosition,
+		logical: LogicalCaret,
+		step: -1 | 1,
+	): LogicalCaret | null {
+		const runs = position.objectRuns;
+		const textRuns = movableRuns(runs, logical.paragraph);
+		if (!textRuns) return null;
+		const text = textRuns[0].text;
+		const starts = wordStarts(text);
+		if (!starts) return null;
+
+		let index: number;
+		if (step > 0) {
+			index = starts.find((start) => start > logical.index) ?? text.length;
+		} else {
+			if (logical.index === 0) {
+				const previousRuns = movableRuns(runs, logical.paragraph - 1);
+				if (!previousRuns) return null;
+				const end = previousRuns[0].text.length;
+				return isShown(previousRuns, end)
+					? { paragraph: logical.paragraph - 1, index: end }
+					: null;
+			}
+			const before = starts.filter((start) => start < logical.index);
+			index = before.length ? before[before.length - 1] : 0;
+		}
+
+		if (step > 0 && index >= text.length) {
+			const nextRuns = movableRuns(runs, logical.paragraph + 1);
+			// Only the engine knows whether a next paragraph without runs exists.
+			if (!nextRuns) return null;
+			return isShown(nextRuns, 0)
+				? { paragraph: logical.paragraph + 1, index: 0 }
+				: null;
+		}
+		return isShown(textRuns, index)
+			? { paragraph: logical.paragraph, index }
+			: null;
 	}
 
 	/// The caret one character before (step -1) or after (step 1) logical, into the next or

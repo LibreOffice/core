@@ -851,6 +851,11 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 					ev.preventDefault();
 					return;
 				}
+				// A word move, plain or selecting, can be answered here.
+				if (this._map.isEditMode() && this._pressMovesCaretHere(ev, keyCode)) {
+					ev.preventDefault();
+					return;
+				}
 				if (keyEventFn) {
 					keyEventFn('input', charCode, unoKeyCode);
 					ev.preventDefault();
@@ -986,11 +991,18 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		return here;
 	},
 
-	// Moves the caret here for an arrow key, in a document drawn from objects, and with Shift
-	// selects text to it. True when the caret moved.
+	// Moves the caret here for an arrow key, in a document drawn from objects. Left and Right
+	// with the word modifier move one word, and with Shift the keys select text to the caret.
+	// True when the caret moved.
 	_moveCaretHere: function (ev, keyCode) {
-		const extend = this.modifier === app.UNOModifier.SHIFT;
-		if ((this.modifier && !extend) || ev.isComposing)
+		if (ev.type !== 'keydown' || ev.isComposing)
+			return false;
+		const shift = app.UNOModifier.SHIFT;
+		// On macOS Option moves by word, and Command goes to the end of the line.
+		const wordModifier = window.L.Browser.mac ? app.UNOModifier.ALT : app.UNOModifier.CTRL;
+		const extend = (this.modifier & shift) !== 0;
+		const others = this.modifier & ~shift;
+		if (others && others !== wordModifier)
 			return false;
 		if (!RenderManager.isVectorRendering() || this._map.getWinId() !== 0)
 			return false;
@@ -998,6 +1010,13 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		// keys.
 		if (this._map._textInput.hasAccessibilitySupport())
 			return false;
+		if (others) {
+			if (keyCode === this.keyCodes.LEFT)
+				return RenderManager.moveCaretByWord(-1, extend);
+			if (keyCode === this.keyCodes.RIGHT)
+				return RenderManager.moveCaretByWord(1, extend);
+			return false;
+		}
 		switch (keyCode) {
 		case this.keyCodes.LEFT:
 			return RenderManager.moveCaretByCharacter(-1, extend);

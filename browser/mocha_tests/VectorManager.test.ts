@@ -2354,6 +2354,21 @@ describe('VectorManager', function () {
 				]);
 			});
 
+			it('selects a word with Ctrl, Shift and an arrow', function () {
+				const manager = managerWith('Hi');
+				nodeassert.ok(manager.moveCaretByWord(-1, true));
+				nodeassert.deepStrictEqual(app.file.textCursor.logical, {
+					paragraph: 0,
+					index: 0,
+				});
+				nodeassert.deepStrictEqual(app.file.textCursor.anchor, {
+					paragraph: 0,
+					index: 2,
+				});
+				nodeassert.deepStrictEqual(drawn[0], [[1000, 1712, 200, 432]]);
+				nodeassert.deepStrictEqual(sent, []);
+			});
+
 			it('drops the selection when Shift and an arrow bring the caret back to the anchor', function () {
 				const manager = managerWith('Hi');
 				manager.moveCaretByCharacter(-1, true);
