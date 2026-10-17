@@ -1371,6 +1371,29 @@ void SdrObjEditView::ImpSetKitTextObjectId(OutlinerView& rView) const
         rView.GetEditView().SetKitTextObjectId(pEdited->GetUniqueID());
 }
 
+bool SdrObjEditView::SetKitTextCursor(sal_uInt64 nObjectId, sal_Int32 nParagraph, sal_Int32 nIndex)
+{
+    rtl::Reference<SdrTextObj> pEdited = mxWeakTextEditObj.get();
+    if (!pEdited.is() || !mpTextEditOutlinerView)
+        return false;
+
+    const EditEngine& rEditEngine = mpTextEditOutlinerView->GetOutliner().GetEditEngine();
+    if (pEdited->GetUniqueID() != nObjectId || nParagraph < 0
+        || nParagraph >= rEditEngine.GetParagraphCount() || nIndex < 0)
+    {
+        // The caret stays. Showing it reports that place again as the answer.
+        mpTextEditOutlinerView->ShowCursor(/*bGotoCursor=*/false);
+        return false;
+    }
+
+    nIndex = std::min(nIndex, rEditEngine.GetTextLen(nParagraph));
+    mpTextEditOutlinerView->SetSelection(ESelection(nParagraph, nIndex));
+    // SetSelection shows the caret only for a selection with a range. Showing it here sends the
+    // new position of a plain caret.
+    mpTextEditOutlinerView->ShowCursor(/*bGotoCursor=*/false);
+    return true;
+}
+
 bool SdrObjEditView::SdrBeginTextEdit(SdrObject* pObj_, SdrPageView* pPV, vcl::Window* pWin,
                                       bool bIsNewObj, SdrOutliner* pGivenOutliner,
                                       OutlinerView* pGivenOutlinerView, bool bDontDeleteOutliner,

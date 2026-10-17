@@ -733,6 +733,7 @@ std::string KitQueue::combineTextInput(const StringVector& tokens)
              (queuedTokens.equals(1, "key") ||
               queuedTokens.equals(1, "mouse") ||
               queuedTokens.equals(1, "removetextcontext") ||
+              queuedTokens.equals(1, "textcursor") ||
               queuedTokens.equals(1, "windowkey"))))
             return std::string();
 
@@ -859,6 +860,7 @@ std::string KitQueue::combineRemoveText(const StringVector& tokens)
              (queuedTokens.equals(1, "key") ||
               queuedTokens.equals(1, "mouse") ||
               queuedTokens.equals(1, "textinput") ||
+              queuedTokens.equals(1, "textcursor") ||
               queuedTokens.equals(1, "windowkey"))))
             return std::string();
 

@@ -220,6 +220,10 @@ class Socket {
 
 		if (this._map.uiManager && this._map.uiManager.isUIBlocked()) return;
 
+		// A caret moved here goes to the engine ahead of a message that may read or move
+		// it.
+		if (typeof msg === 'string') LocalCaret.tellBefore(msg);
+
 		// The changes of objects and the undos and redos of a view that draws from the objects
 		// go to the engine at its own pace, one at a time. The outbox holds them meanwhile.
 		if (typeof msg === 'string' && ChangeOutbox.take(msg)) return;
@@ -627,8 +631,12 @@ class Socket {
 			this._map._docLayer._resetClientVisArea();
 			if (GraphicSelection.hasActiveSelection())
 				GraphicSelection.rectangle = null;
-			if (this._map._docLayer._docType === 'presentation')
+			if (this._map._docLayer._docType === 'presentation') {
+				// The new session starts with no text edit for a caret moved here
+				// to be ahead of.
+				LocalCaret.forget();
 				app.setCursorVisibility(false);
+			}
 
 			this._map._docLayer._resetCanonicalIdStatus();
 			this._map._docLayer._resetViewId();

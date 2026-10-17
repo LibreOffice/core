@@ -5992,6 +5992,28 @@ void COKitDocumentImpl::postUnoCommand(const char* pCommand, const char* pArgume
         return;
     }
 
+    // The caret of the running text edit goes to the paragraph and offset the client names. The
+    // states that follow the caret, such as the font of the text at it, are worked out again.
+    if (aCommand.startsWith(".uno:SetTextCursor?"))
+    {
+        const std::map<OUString, OUString> aParameters
+            = KitHelper::parseCommandParameters(aCommand);
+        const auto aObjectIterator = aParameters.find(u"object"_ustr);
+        const auto aParagraphIterator = aParameters.find(u"paragraph"_ustr);
+        const auto aIndexIterator = aParameters.find(u"index"_ustr);
+        if (aObjectIterator == aParameters.end() || aParagraphIterator == aParameters.end()
+            || aIndexIterator == aParameters.end())
+            return;
+
+        SdrView* pDrawView = pViewShell->GetDrawView();
+        if (pDrawView
+            && pDrawView->SetKitTextCursor(aObjectIterator->second.toUInt64(),
+                                           aParagraphIterator->second.toInt32(),
+                                           aIndexIterator->second.toInt32()))
+            pViewShell->GetViewFrame().GetBindings().InvalidateAll(false);
+        return;
+    }
+
     // handle potential interaction
     if (gImpl && aCommand == ".uno:Save")
     {

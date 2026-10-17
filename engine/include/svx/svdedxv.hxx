@@ -287,6 +287,15 @@ public:
      */
     drawinglayer::primitive2d::Primitive2DContainer getTextEditPrimitives() const;
 
+    /** Put the caret of the running text edit at a character offset of a paragraph.
+
+        nObjectId is the unique id of the edited object. An offset past the end of the paragraph
+        means its end. Returns false, with the caret left where it was, when no text edit runs,
+        another object is edited or the paragraph does not exist. While an edit runs, the caret
+        that stays is reported again.
+     */
+    bool SetKitTextCursor(sal_uInt64 nObjectId, sal_Int32 nParagraph, sal_Int32 nIndex);
+
     virtual bool KeyInput(const KeyEvent& rKEvt, vcl::Window* pWin) override;
     virtual bool MouseButtonDown(const MouseEvent& rMEvt, OutputDevice* pWin) override;
     virtual bool MouseButtonUp(const MouseEvent& rMEvt, OutputDevice* pWin) override;

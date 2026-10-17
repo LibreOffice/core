@@ -1916,6 +1916,7 @@ bool ClientSession::_handleInput(const char *buffer, int length)
              tokens.equals(0, "rendershapeselection") ||
              tokens.equals(0, "resizewindow") ||
              tokens.equals(0, "removetextcontext") ||
+             tokens.equals(0, "textcursor") ||
              tokens.equals(0, "rendersearchresult") ||
              tokens.equals(0, "geta11yfocusedparagraph") ||
              tokens.equals(0, "geta11ycaretposition") ||

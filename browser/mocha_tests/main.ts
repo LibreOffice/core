@@ -87,4 +87,5 @@
 /// <reference path="./prediction/CaretLookup.test.ts" />
 /// <reference path="./prediction/TextEdit.test.ts" />
 /// <reference path="./prediction/ParagraphWrap.test.ts" />
+/// <reference path="./prediction/CaretMove.test.ts" />
 // NOTE: reference new tests here ...

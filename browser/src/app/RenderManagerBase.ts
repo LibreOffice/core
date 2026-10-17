@@ -203,6 +203,10 @@ abstract class RenderManagerBase {
 	// Returns true when a keystroke at the caret would be predicted.
 	abstract canPredictAtCaret(): boolean;
 
+	// Moves the caret one character inside its paragraph without the server. Returns true when
+	// it moved.
+	abstract moveCaretInParagraph(step: -1 | 1): boolean;
+
 	abstract requestThumbnail(
 		id: cool.PreviewId,
 		part: number,

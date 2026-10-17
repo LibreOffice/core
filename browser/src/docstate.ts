@@ -132,8 +132,8 @@
 			rectangle: null, // SimpleRectangle.
 			logical: null, // { paragraph, index } once a cursor message carries it.
 		},
-		// The sequence number of the newest key, mouse, textinput or removetextcontext message sent
-		// to the server, 0 before any was sent.
+		// The sequence number of the newest key, mouse, textinput, removetextcontext or
+		// textcursor message sent to the server, 0 before any was sent.
 		inputSequence: 0,
 		fileBasedView: false, // (draw-impress only) Default is false. For read-only documents, user can view all parts at once. In that case, this variable is set to "true".
 		writer: {

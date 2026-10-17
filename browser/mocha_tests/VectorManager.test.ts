@@ -1672,12 +1672,14 @@ describe('VectorManager', function () {
 				logical: { paragraph: 0, index: 2 },
 			};
 			app.file.inputSequence = 10;
+			LocalCaret.forget();
 		});
 		afterEach(function () {
 			(app as any).map = savedMap;
 			(window as any).TextSelections = savedSelections;
 			app.file.textCursor = savedCursor;
 			app.file.inputSequence = savedSequence;
+			LocalCaret.forget();
 		});
 
 		function managerWith(text: string): VectorManager {
@@ -2044,6 +2046,189 @@ describe('VectorManager', function () {
 				manager.keepPredictedCaret({ paragraph: '0', index: '2' }),
 				false,
 			);
+		});
+
+		describe('caret moved here', function () {
+			let sent: string[];
+			let savedSend: any;
+			let savedNextInputSequence: any;
+			let savedTimerRegistry: any;
+			beforeEach(function () {
+				sent = [];
+				savedSend = (app as any).socket.sendMessage;
+				(app as any).socket.sendMessage = (message: string) =>
+					sent.push(message);
+				// Each numbered message takes the next input sequence number.
+				savedNextInputSequence = (app as any).nextInputSequence;
+				(app as any).nextInputSequence = () => ++app.file.inputSequence;
+				savedTimerRegistry = (app as any).timerRegistry;
+				(app as any).timerRegistry = new TimerRegistry();
+			});
+			afterEach(function () {
+				LocalCaret.forget();
+				(app as any).socket.sendMessage = savedSend;
+				(app as any).nextInputSequence = savedNextInputSequence;
+				(app as any).timerRegistry = savedTimerRegistry;
+			});
+
+			it('moves the caret one character left without telling the server', function () {
+				const manager = managerWith('Hi');
+				nodeassert.ok(manager.moveCaretInParagraph(-1));
+				nodeassert.deepStrictEqual(app.file.textCursor.logical, {
+					paragraph: 0,
+					index: 1,
+				});
+				nodeassert.strictEqual(app.file.textCursor.rectangle.x1, 1100);
+				nodeassert.deepStrictEqual(sent, []);
+			});
+
+			it('leaves a step past the end of the paragraph to the server', function () {
+				const manager = managerWith('Hi');
+				nodeassert.strictEqual(manager.moveCaretInParagraph(1), false);
+				nodeassert.deepStrictEqual(app.file.textCursor.logical, {
+					paragraph: 0,
+					index: 2,
+				});
+			});
+
+			it('moves the caret to the start of the next line at a line break', function () {
+				const manager = new TestManager();
+				manager.handleVectorPrimitivesResponse({
+					partId: 'S0',
+					version: 1,
+					objects: [twoLineBox()],
+				});
+				// The caret is before the last character of "line1".
+				app.file.textCursor.rectangle = new cool.SimpleRectangle(
+					1400,
+					1800,
+					0,
+					250,
+				);
+				app.file.textCursor.logical = { paragraph: 0, index: 4 };
+				nodeassert.ok(manager.moveCaretInParagraph(1));
+				nodeassert.ok(manager.moveCaretInParagraph(1));
+				nodeassert.deepStrictEqual(app.file.textCursor.logical, {
+					paragraph: 0,
+					index: 6,
+				});
+				nodeassert.strictEqual(app.file.textCursor.rectangle.x1, 1100);
+				nodeassert.strictEqual(app.file.textCursor.rectangle.y1, 2112);
+			});
+
+			it('tells the server where the caret is once, before a message that may read it', function () {
+				const manager = managerWith('Hi');
+				manager.moveCaretInParagraph(-1);
+				manager.moveCaretInParagraph(-1);
+				LocalCaret.tellBefore('tilecombine nviewid=0 part=0');
+				nodeassert.deepStrictEqual(sent, []);
+				LocalCaret.tellBefore('key type=input char=0 key=1280');
+				LocalCaret.tellBefore('key type=up char=0 key=1280');
+				nodeassert.deepStrictEqual(sent, [
+					'textcursor object=5 paragraph=0 index=0 sequence=11',
+				]);
+			});
+
+			it('keeps the caret here while the mouse hovers, and tells the server before a drag', function () {
+				const manager = managerWith('Hi');
+				manager.moveCaretInParagraph(-1);
+				LocalCaret.tellBefore(
+					'mouse type=move x=10 y=20 count=1 buttons=0 modifier=0 sequence=11',
+				);
+				nodeassert.deepStrictEqual(sent, []);
+				LocalCaret.tellBefore(
+					'mouse type=move x=10 y=20 count=1 buttons=1 modifier=0 sequence=12',
+				);
+				nodeassert.strictEqual(sent.length, 1);
+				nodeassert.ok(
+					sent[0].startsWith('textcursor object=5 paragraph=0 index=1 '),
+				);
+			});
+
+			it('tells the server where the caret is once the caret rests', function () {
+				installFakeClock();
+				try {
+					const manager = managerWith('Hi');
+					manager.moveCaretInParagraph(-1);
+					advanceClock(200);
+					// A second move starts the wait again.
+					manager.moveCaretInParagraph(-1);
+					advanceClock(299);
+					nodeassert.deepStrictEqual(sent, []);
+					advanceClock(1);
+					nodeassert.deepStrictEqual(sent, [
+						'textcursor object=5 paragraph=0 index=0 sequence=11',
+					]);
+				} finally {
+					LocalCaret.forget();
+					restoreClock();
+				}
+			});
+
+			it('tells the server once when a message goes out before the caret rests', function () {
+				installFakeClock();
+				try {
+					const manager = managerWith('Hi');
+					manager.moveCaretInParagraph(-1);
+					LocalCaret.tellBefore('key type=input char=97 key=0');
+					advanceClock(1000);
+					nodeassert.strictEqual(sent.length, 1);
+				} finally {
+					LocalCaret.forget();
+					restoreClock();
+				}
+			});
+
+			it('types a character where the caret moved, after telling the server', function () {
+				const manager = managerWith('Hi');
+				manager.moveCaretInParagraph(-1);
+				nodeassert.ok(manager.predictTextInsert('a'));
+				nodeassert.strictEqual(textOf(manager), 'Hai');
+				nodeassert.deepStrictEqual(sent, [
+					'textcursor object=5 paragraph=0 index=1 sequence=11',
+				]);
+				// The character goes out as input 12, after the caret.
+				app.file.inputSequence = 12;
+				nodeassert.strictEqual(
+					manager.keepPredictedCaret(caretUpdate(11, 1)),
+					true,
+				);
+				nodeassert.strictEqual(
+					manager.keepPredictedCaret(caretUpdate(12, 2)),
+					false,
+				);
+			});
+
+			it('keeps the caret it moved over caret updates from before the server knew of it', function () {
+				const manager = managerWith('Hi');
+				manager.moveCaretInParagraph(-1);
+				nodeassert.strictEqual(
+					manager.keepPredictedCaret(caretUpdate(10, 2)),
+					true,
+				);
+				LocalCaret.tell();
+				nodeassert.strictEqual(
+					manager.keepPredictedCaret(caretUpdate(10, 2)),
+					true,
+				);
+				nodeassert.strictEqual(
+					manager.keepPredictedCaret(caretUpdate(11, 1)),
+					false,
+				);
+				nodeassert.strictEqual(LocalCaret.ahead(), null);
+			});
+
+			it('keeps the caret it moved after a typed character the server has not shown', function () {
+				const manager = afterTypingA();
+				nodeassert.ok(manager.moveCaretInParagraph(-1));
+				sendDelta(manager, 10, 'Hi');
+				nodeassert.strictEqual(textOf(manager), 'Hia');
+				nodeassert.deepStrictEqual(app.file.textCursor.logical, {
+					paragraph: 0,
+					index: 2,
+				});
+				nodeassert.strictEqual(app.file.textCursor.rectangle.x1, 1200);
+			});
 		});
 	});
 });

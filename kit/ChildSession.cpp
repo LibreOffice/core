@@ -700,6 +700,7 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                tokens.equals(0, "asksignaturestatus") ||
                tokens.equals(0, "rendershapeselection") ||
                tokens.equals(0, "removetextcontext") ||
+               tokens.equals(0, "textcursor") ||
                tokens.equals(0, "dialogevent") ||
                tokens.equals(0, "completefunction")||
                tokens.equals(0, "formfieldevent") ||
@@ -1009,6 +1010,10 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         else if (tokens.equals(0, "removetextcontext"))
         {
             return removeTextContext(tokens);
+        }
+        else if (tokens.equals(0, "textcursor"))
+        {
+            return setTextCursor(tokens);
         }
         else if (tokens.equals(0, "completefunction"))
         {
@@ -5061,6 +5066,28 @@ bool ChildSession::removeTextContext(const StringVector& tokens)
 
     getLOKitDocument()->setView(_viewId);
     getLOKitDocument()->removeTextContext(id, before, after);
+    noteInputSequence(tokens);
+
+    return true;
+}
+
+bool ChildSession::setTextCursor(const StringVector& tokens)
+{
+    uint64_t object;
+    int paragraph, index;
+    if (tokens.size() < 4 || !getTokenUInt64(tokens[1], "object", object) ||
+        !getTokenInteger(tokens[2], "paragraph", paragraph) || paragraph < 0 ||
+        !getTokenInteger(tokens[3], "index", index) || index < 0)
+    {
+        sendTextFrameAndLogError("error: cmd=" + tokens[0] + " kind=syntax");
+        return false;
+    }
+
+    const std::string command = ".uno:SetTextCursor?object=" + std::to_string(object) +
+                                "&paragraph=" + std::to_string(paragraph) +
+                                "&index=" + std::to_string(index);
+    getLOKitDocument()->setView(_viewId);
+    getLOKitDocument()->postUnoCommand(command.c_str(), "", false);
     noteInputSequence(tokens);
 
     return true;

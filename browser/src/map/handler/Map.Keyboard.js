@@ -300,6 +300,9 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		this._setPanOffset(map.options.keyboardPanOffset);
 		this._setZoomOffset(map.options.keyboardZoomOffset);
 		this.modifier = 0;
+		// For each held key, whether every press since it was last released moved the caret
+		// here. The release of such a key stays here too.
+		this._heldKeysMoveCaretHere = new Map();
 		window.KeyboardShortcuts.initialize(map);
 	},
 
@@ -897,7 +900,10 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 					&& this._isFormatPaintbrushActiveOnCalcCell()) {
 					this._clickCellCursor();
 				}
-				if (this.handleOnKeyDownKeys[keyCode] && charCode === 0) {
+				if (this._pressMovesCaretHere(ev, keyCode)) {
+					ev.preventDefault();
+				}
+				else if (this.handleOnKeyDownKeys[keyCode] && charCode === 0) {
 					if (keyEventFn) {
 						keyEventFn('input', charCode, unoKeyCode);
 						if (!(this._map._textInput.hasAccessibilitySupport() && this._map._textInput.hasFocus() &&
@@ -934,9 +940,12 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 				}
 			}
 			else if (ev.type === 'keyup') {
-				if ((this.handleOnKeyDownKeys[keyCode] && charCode === 0) ||
+				const releaseStaysHere = this._heldKeysMoveCaretHere.get(keyCode) === true;
+				this._heldKeysMoveCaretHere.delete(keyCode);
+				if (!releaseStaysHere &&
+				    ((this.handleOnKeyDownKeys[keyCode] && charCode === 0) ||
 				    (this.modifier) ||
-				    unoKeyCode === UNOKey.RETURN) {
+				    unoKeyCode === UNOKey.RETURN)) {
 					if (keyEventFn) {
 						keyEventFn('up', charCode, unoKeyCode);
 					}
@@ -965,6 +974,32 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		}
 
 		window.L.DomEvent.stopPropagation(ev);
+	},
+
+	// Moves the caret here when the cached text answers the press, and notes for the release
+	// whether the server saw a press of the key. Once one press went to the server, the release
+	// goes there too.
+	_pressMovesCaretHere: function (ev, keyCode) {
+		const here = this._moveCaretHere(ev, keyCode);
+		const held = this._heldKeysMoveCaretHere;
+		held.set(keyCode, here && held.get(keyCode) !== false);
+		return here;
+	},
+
+	// Left and Right without modifiers move the caret one character inside its paragraph here,
+	// when the document is drawn from objects. Returns true when the caret moved.
+	_moveCaretHere: function (ev, keyCode) {
+		if (this.modifier || ev.isComposing)
+			return false;
+		if (keyCode !== this.keyCodes.LEFT && keyCode !== this.keyCodes.RIGHT)
+			return false;
+		if (!RenderManager.isVectorRendering() || this._map.getWinId() !== 0)
+			return false;
+		// With accessibility support the browser moves the caret of the text area on these
+		// keys.
+		if (this._map._textInput.hasAccessibilitySupport())
+			return false;
+		return RenderManager.moveCaretInParagraph(keyCode === this.keyCodes.LEFT ? -1 : 1);
 	},
 
 	_isCtrlKey: function (e) {

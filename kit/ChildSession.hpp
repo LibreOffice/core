@@ -312,6 +312,7 @@ private:
     bool askSignatureStatus(const char* buffer, int length, const StringVector& tokens);
     bool renderShapeSelection(const StringVector& tokens);
     bool removeTextContext(const StringVector& tokens);
+    bool setTextCursor(const StringVector& tokens);
 #if ENABLE_FEATURE_LOCK || ENABLE_FEATURE_RESTRICTION || ENABLE_DEBUG
     bool updateBlockingCommandStatus(const StringVector& tokens);
     static std::string getBlockedCommandType(const std::string& command);
@@ -437,8 +438,8 @@ private:
     bool _isVectorRendering = false;
     /// The ids of the vector parts a primitives response served this session.
     std::set<std::string> _vectorParts;
-    /// The sequence number of the newest textinput, key, mouse or removetextcontext message applied
-    /// to the document, 0 before any.
+    /// The sequence number of the newest textinput, key, mouse, removetextcontext or textcursor
+    /// message applied to the document, 0 before any.
     int _inputSequence = 0;
 
     std::string _docType;

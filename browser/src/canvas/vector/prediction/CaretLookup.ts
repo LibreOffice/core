@@ -72,7 +72,7 @@ namespace cool {
 
 	// The paragraph's runs in reading order, without its fields. The offsets of the other runs
 	// already skip a field's character.
-	function paragraphTextRuns(
+	export function paragraphTextRuns(
 		siblings: TextRun[],
 		paragraph: number,
 	): TextRun[] {

@@ -250,6 +250,10 @@ class RenderManager {
 		return RenderManager.ensureInstance().canPredictAtCaret();
 	}
 
+	static moveCaretInParagraph(step: -1 | 1): boolean {
+		return RenderManager.ensureInstance().moveCaretInParagraph(step);
+	}
+
 	static requestThumbnail(
 		id: cool.PreviewId,
 		part: number,

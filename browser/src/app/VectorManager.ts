@@ -899,6 +899,31 @@ class VectorManager extends RenderManagerBase {
 		);
 	}
 
+	/// Move the caret one character left (step -1) or right (step 1) inside its paragraph, here
+	/// only. Returns true when it moved.
+	moveCaretInParagraph(step: -1 | 1): boolean {
+		const target = this._editTarget();
+		if (!target || !target.logical) return false;
+		const position = this._lookUpCaret(target);
+		const entryId = position?.objectId;
+		if (!position || entryId === undefined) return false;
+		const logical = cool.stepInParagraph(position, target.logical, step);
+		if (!logical) return false;
+		const geometry = target.tree.caretIn(entryId, logical)?.geometry();
+		if (!geometry) return false;
+
+		const partId = target.tree.data.partId;
+		LocalCaret.moved({
+			partId,
+			entryId,
+			objectId: this._editedObjectOf(partId, entryId),
+			logical,
+		});
+		app.file.textCursor.logical = { ...logical };
+		this._setCaretRectangle(geometry);
+		return true;
+	}
+
 	// Apply an edit at the caret, record it for replay and move the caret. The
 	// edit returns how far the caret moved, or null when nothing changed.
 	private _predictEdit(
@@ -907,6 +932,9 @@ class VectorManager extends RenderManagerBase {
 			position: cool.CaretPosition,
 		) => { indexShift: number; caretShift: number } | null,
 	): boolean {
+		// The engine learns of a caret moved here before the edit, so the edit's number is
+		// the one after it.
+		LocalCaret.tell();
 		const target = this._editTarget();
 		if (!target) return false;
 		const position = this._lookUpCaret(target);
@@ -1049,15 +1077,23 @@ class VectorManager extends RenderManagerBase {
 			treeChanged = true;
 		}
 		if (treeChanged) {
-			// The newest edit set the caret, replayed or not.
+			// The newest edit set the caret, replayed or not, unless the caret moved
+			// here after it.
 			const newest = remaining[remaining.length - 1];
+			const moved = LocalCaret.ahead();
+			const caret =
+				moved &&
+				moved.caret.partId === partId &&
+				moved.sequence > newest.sequence
+					? { entryId: moved.caret.entryId, logical: moved.caret.logical }
+					: { entryId: newest.objectId, logical: newest.caretAfter };
 			const geometry = this._treeOf(data)
-				.caretIn(newest.objectId, newest.caretAfter)
+				.caretIn(caret.entryId, caret.logical)
 				?.geometry();
 			if (geometry) this._setCaretRectangle(geometry);
 			app.file.textCursor.logical = {
-				paragraph: newest.caretAfter.paragraph,
-				index: newest.caretAfter.index,
+				paragraph: caret.logical.paragraph,
+				index: caret.logical.index,
 			};
 		}
 		this.changedHere();
@@ -1083,6 +1119,10 @@ class VectorManager extends RenderManagerBase {
 	/// stays. A current update that puts the caret elsewhere, as after
 	/// autocorrect, drops the edits and re-fetches the part.
 	keepPredictedCaret(update: cool.CaretUpdate): boolean {
+		// The caret moved here, read before isAhead clears it once the engine has caught
+		// up.
+		const moved = LocalCaret.ahead();
+		if (LocalCaret.isAhead(update)) return true;
 		const partId = this._selectedPartId();
 		if (partId === undefined) return false;
 		const pending = this._pendingEdits.filter((edit) => edit.partId === partId);
@@ -1091,7 +1131,12 @@ class VectorManager extends RenderManagerBase {
 		if (inputSequence === undefined) return false;
 		const newest = pending[pending.length - 1];
 		if (inputSequence < newest.sequence) return true;
-		const expected = newest.caretAfter;
+		// A caret moved here after the newest edit is where the engine's caret answers
+		// from.
+		const expected =
+			moved && moved.caret.partId === partId && moved.sequence > newest.sequence
+				? moved.caret.logical
+				: newest.caretAfter;
 		const paragraph = VectorManager._numberOf(update.paragraph);
 		const index = VectorManager._numberOf(update.index);
 		const objectId = VectorManager._numberOf(update.object);
@@ -1305,6 +1350,7 @@ class VectorManager extends RenderManagerBase {
 
 	/// Drop all cached data for all parts.
 	discardAllCache(): void {
+		LocalCaret.forget();
 		this._cache.clear();
 		this._staleParts.clear();
 		this._inFlightParts.clear();

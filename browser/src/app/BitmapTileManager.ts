@@ -2433,6 +2433,10 @@ class BitmapTileManager extends RenderManagerBase {
 		return false;
 	}
 
+	public moveCaretInParagraph(_step: -1 | 1): boolean {
+		return false;
+	}
+
 	public requestThumbnail(
 		_id: cool.PreviewId,
 		_part: number,

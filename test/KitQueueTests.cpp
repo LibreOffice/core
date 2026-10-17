@@ -66,10 +66,12 @@ class KitQueueTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testTextInputBlockedByKeyMessage);
     CPPUNIT_TEST(testTextInputBlockedByMouse);
     CPPUNIT_TEST(testTextInputBlockedByRemoveText);
+    CPPUNIT_TEST(testTextInputBlockedByTextCursor);
     CPPUNIT_TEST(testTextInputDifferentId);
     CPPUNIT_TEST(testTextInputMissingTokens);
     CPPUNIT_TEST(testRemoveTextBlockedByKeyMessage);
     CPPUNIT_TEST(testRemoveTextBlockedByTextInput);
+    CPPUNIT_TEST(testRemoveTextBlockedByTextCursor);
     CPPUNIT_TEST(testRemoveTextDifferentId);
     CPPUNIT_TEST(testTextInputCombinedKeepsNewestSequence);
     CPPUNIT_TEST(testRemoveTextCombinedKeepsNewestSequence);
@@ -121,10 +123,12 @@ class KitQueueTests : public CPPUNIT_NS::TestFixture
     void testTextInputBlockedByKeyMessage();
     void testTextInputBlockedByMouse();
     void testTextInputBlockedByRemoveText();
+    void testTextInputBlockedByTextCursor();
     void testTextInputDifferentId();
     void testTextInputMissingTokens();
     void testRemoveTextBlockedByKeyMessage();
     void testRemoveTextBlockedByTextInput();
+    void testRemoveTextBlockedByTextCursor();
     void testRemoveTextDifferentId();
     void testTextInputCombinedKeepsNewestSequence();
     void testRemoveTextCombinedKeepsNewestSequence();
@@ -1397,6 +1401,21 @@ void KitQueueTests::testTextInputBlockedByRemoveText()
     LOK_ASSERT_EQUAL(static_cast<size_t>(3), queue.size());
 }
 
+void KitQueueTests::testTextInputBlockedByTextCursor()
+{
+    constexpr std::string_view testname = __func__;
+
+    TilePrioritizer dummy;
+    KitQueue queue(dummy);
+
+    // The text typed before the caret moved goes in where the caret was.
+    queue.put("sess textinput id=0 text=a");
+    queue.put("sess textcursor object=5 paragraph=0 index=0 sequence=2");
+    queue.put("sess textinput id=0 text=b");
+
+    LOK_ASSERT_EQUAL(static_cast<size_t>(3), queue.size());
+}
+
 void KitQueueTests::testTextInputDifferentId()
 {
     constexpr std::string_view testname = __func__;
@@ -1461,6 +1480,20 @@ void KitQueueTests::testRemoveTextBlockedByTextInput()
 
     queue.put("sess removetextcontext id=0 before=3 after=0");
     queue.put("sess textinput id=0 text=a");
+    queue.put("sess removetextcontext id=0 before=2 after=0");
+
+    LOK_ASSERT_EQUAL(static_cast<size_t>(3), queue.size());
+}
+
+void KitQueueTests::testRemoveTextBlockedByTextCursor()
+{
+    constexpr std::string_view testname = __func__;
+
+    TilePrioritizer dummy;
+    KitQueue queue(dummy);
+
+    queue.put("sess removetextcontext id=0 before=3 after=0");
+    queue.put("sess textcursor object=5 paragraph=0 index=0 sequence=2");
     queue.put("sess removetextcontext id=0 before=2 after=0");
 
     LOK_ASSERT_EQUAL(static_cast<size_t>(3), queue.size());

@@ -367,7 +367,7 @@ key type=<type> char=<charcode> key=<keycode> [sequence=<sequence>]
     <type> is 'input' or 'up', <charcode> and <keycode> are numbers.
 
     sequence is an optional number that the client increments for every
-    key, mouse, textinput and removetextcontext message. The kit reports
+    key, mouse, textinput, removetextcontext and textcursor message. The kit reports
     the newest one it has applied, so the client can tell which of its
     inputs a message reflects. The invalidatecursor payload has it as its
     inputSequence field. The vector primitives frames have it in their
@@ -949,6 +949,19 @@ removetextcontext id=<windowId> before=<before_position> after=<after_position> 
     - id=<windowId> : Specifies the ID of the window where the text removal operation is occurring.
     - before=<before_position> : The position before the deletion starts.
     - after=<after_position> : The position after the deletion ends.
+    - sequence=<sequence> : Optional input sequence number, see the key message.
+
+textcursor object=<objectId> paragraph=<paragraph> index=<index> [sequence=<sequence>]
+
+    Puts the caret of the running text edit at a character offset of a
+    paragraph, with no text selected.
+
+    - object=<objectId> : The unique id of the drawing object being edited,
+      as the invalidatecursor payload reports it in its object field. When
+      another object or none is being edited, the caret stays where it is.
+    - paragraph=<paragraph> : The paragraph, counted from 0.
+    - index=<index> : The offset in UTF-16 units from the start of the
+      paragraph. An offset past the end puts the caret at the end.
     - sequence=<sequence> : Optional input sequence number, see the key message.
 
 browsersetting action=update [upload=false] json=<JSON>

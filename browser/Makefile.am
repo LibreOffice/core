@@ -413,6 +413,7 @@ COOL_JS_LST =\
 	src/app/ViewLayoutImpress.ts \
 	src/app/ViewLayoutVector.ts \
 	src/app/ChangeOutbox.ts \
+	src/app/LocalCaret.ts \
 	src/app/ViewLayoutWriter.ts \
 	src/app/ViewLayoutCalc.ts \
 	src/app/ViewLayoutMultiPage.ts \
@@ -554,6 +555,7 @@ COOL_JS_LST =\
 	src/canvas/vector/prediction/CaretLookup.ts \
 	src/canvas/vector/prediction/ParagraphWrap.ts \
 	src/canvas/vector/prediction/TextEdit.ts \
+	src/canvas/vector/prediction/CaretMove.ts \
 	src/canvas/vector/VectorPrimitiveRenderer.ts \
 	src/canvas/vector/VectorHitTest.ts \
 	src/canvas/vector/VectorLineGeometryExtractor.ts \
