@@ -254,6 +254,14 @@ class RenderManager {
 		return RenderManager.ensureInstance().moveCaretInParagraph(step);
 	}
 
+	static placeCaretAt(
+		x: number,
+		y: number,
+		hitId: number | undefined,
+	): boolean {
+		return RenderManager.ensureInstance().placeCaretAt(x, y, hitId);
+	}
+
 	static requestThumbnail(
 		id: cool.PreviewId,
 		part: number,

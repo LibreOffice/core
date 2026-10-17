@@ -118,9 +118,37 @@ var desktopHelper = require('../../common/desktop_helper');
 			});
 		}
 
+		function isPress(message) {
+			return message.startsWith('mouse type=buttondown');
+		}
+
+		// Checks that a press in a vector view went to the server as no button message.
+		function expectNoPressSent() {
+			cy.then(function() {
+				if (view.vector)
+					expect(sent.filter(isPress)).to.deep.equal([]);
+			});
+		}
+
 		it('moves the caret by character', function() {
 			expectKeys('{rightarrow}{rightarrow}{rightarrow}', { paragraph: 0, index: 3 });
 			expectKeys('{leftarrow}', { paragraph: 0, index: 2 });
+		});
+
+		it('puts the caret where a click lands', function() {
+			var before, after;
+			keysToServer('{rightarrow}{rightarrow}').then(function(caret) { before = caret; });
+			keysToServer('{rightarrow}').then(function(caret) { after = caret; });
+			keysToServer('{end}');
+
+			// A third of the way from offset 2 to offset 3, so offset 2 is the closest.
+			cy.then(function() {
+				sent.length = 0;
+				var at = onCanvas(before.x + (after.x - before.x) / 3, before.y);
+				cy.cGet('#document-canvas').click(at.x, at.y);
+			});
+			expectCaret({ paragraph: 0, index: 2 });
+			expectNoPressSent();
 		});
 	});
 });

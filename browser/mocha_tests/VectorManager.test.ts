@@ -2218,6 +2218,58 @@ describe('VectorManager', function () {
 				nodeassert.strictEqual(LocalCaret.ahead(), null);
 			});
 
+			it('puts the caret where a click lands in the edited text without telling the server', function () {
+				const manager = managerWith('Hi');
+				nodeassert.ok(manager.placeCaretAt(1120, 1950, 5));
+				nodeassert.deepStrictEqual(app.file.textCursor.logical, {
+					paragraph: 0,
+					index: 1,
+				});
+				nodeassert.strictEqual(app.file.textCursor.rectangle.x1, 1100);
+				nodeassert.deepStrictEqual(sent, []);
+			});
+
+			it('leaves a click on another object to the server', function () {
+				const manager = managerWith('Hi');
+				nodeassert.strictEqual(manager.placeCaretAt(1120, 1950, 9), false);
+				nodeassert.deepStrictEqual(app.file.textCursor.logical, {
+					paragraph: 0,
+					index: 2,
+				});
+			});
+
+			it('answers a click on a table only on the text of the cell being edited', function () {
+				const manager = new TestManager();
+				manager.handleVectorPrimitivesResponse({
+					partId: 'S0',
+					version: 1,
+					objects: [
+						{ id: 7, primitives: [], textEdit: true, objectKind: 35 },
+						{
+							...textBox('Hi'),
+							kind: 'texteditoverlay',
+							viewId: 0,
+							parent: 7,
+							x: 1000,
+							y: 1700,
+							width: 300,
+							height: 450,
+						},
+					],
+				});
+				// Right of the text, where the next cell may be.
+				nodeassert.strictEqual(manager.placeCaretAt(1350, 1950, 7), false);
+				nodeassert.deepStrictEqual(app.file.textCursor.logical, {
+					paragraph: 0,
+					index: 2,
+				});
+				nodeassert.ok(manager.placeCaretAt(1120, 1950, 7));
+				nodeassert.deepStrictEqual(app.file.textCursor.logical, {
+					paragraph: 0,
+					index: 1,
+				});
+			});
+
 			it('keeps the caret it moved after a typed character the server has not shown', function () {
 				const manager = afterTypingA();
 				nodeassert.ok(manager.moveCaretInParagraph(-1));

@@ -2437,6 +2437,14 @@ class BitmapTileManager extends RenderManagerBase {
 		return false;
 	}
 
+	public placeCaretAt(
+		_x: number,
+		_y: number,
+		_hitId: number | undefined,
+	): boolean {
+		return false;
+	}
+
 	public requestThumbnail(
 		_id: cool.PreviewId,
 		_part: number,

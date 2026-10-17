@@ -818,6 +818,21 @@ class VectorManager extends RenderManagerBase {
 		return new cool.PredictionTree(data, this._measurer());
 	}
 
+	// The measured text of the last entry pointed at, reused while the tree still holds it.
+	private _objectText: { entryId: number; text: cool.ObjectText } | null = null;
+
+	private _textOf(
+		tree: cool.PredictionTree,
+		entryId: number,
+	): cool.ObjectText | null {
+		const kept = this._objectText;
+		if (kept && kept.entryId === entryId && kept.text.isOf(tree, entryId))
+			return kept.text;
+		const text = cool.ObjectText.of(tree, entryId);
+		this._objectText = text ? { entryId, text } : null;
+		return text;
+	}
+
 	/// The id of the page in the edit view, or undefined while the page list
 	/// does not name it.
 	private _selectedPartId(): cool.VectorPartGuid | undefined {
@@ -908,7 +923,67 @@ class VectorManager extends RenderManagerBase {
 		const entryId = position?.objectId;
 		if (!position || entryId === undefined) return false;
 		const logical = cool.stepInParagraph(position, target.logical, step);
-		if (!logical) return false;
+		return logical !== null && this._moveCaret(target, entryId, logical);
+	}
+
+	/// Put the caret where a click at (x, y), in document twips, lands in the edited text.
+	/// hitId is the object at the point, if any. True when the caret moved.
+	placeCaretAt(x: number, y: number, hitId: number | undefined): boolean {
+		const target = this._editTarget();
+		if (!target) return false;
+		const entryId = this._lookUpCaret(target)?.objectId;
+		if (entryId === undefined) return false;
+		const partId = target.tree.data.partId;
+		// A click off the edited object ends the edit, so it is for the engine.
+		if (
+			hitId === undefined ||
+			(hitId !== entryId && hitId !== this._editedObjectOf(partId, entryId)) ||
+			!this._mayHoldTheCaret(partId, entryId, hitId, x, y)
+		)
+			return false;
+		const logical =
+			this._textOf(target.tree, entryId)?.caretAtPoint(x, y) ?? null;
+		return logical !== null && this._moveCaret(target, entryId, logical);
+	}
+
+	// The objectKind of a table.
+	private static readonly tableKind: number = 35;
+
+	// True when a press at (x, y) on the object hitId may land in the entry's text. A table
+	// edits one cell at a time, so there the press has to be inside that cell's text.
+	private _mayHoldTheCaret(
+		partId: cool.VectorPartGuid,
+		entryId: number,
+		hitId: number,
+		x: number,
+		y: number,
+	): boolean {
+		const objects = this._cache.get(partId)?.objects;
+		if (objects?.get(hitId)?.objectKind !== VectorManager.tableKind)
+			return true;
+		const text = objects.get(entryId);
+		if (
+			text?.x === undefined ||
+			text.y === undefined ||
+			text.width === undefined ||
+			text.height === undefined
+		)
+			return false;
+		return (
+			x >= text.x &&
+			x <= text.x + text.width &&
+			y >= text.y &&
+			y <= text.y + text.height
+		);
+	}
+
+	// Put the caret at logical in the entry and draw it. The engine is told later. False when
+	// no run shows the position.
+	private _moveCaret(
+		target: EditTarget,
+		entryId: number,
+		logical: cool.LogicalCaret,
+	): boolean {
 		const geometry = target.tree.caretIn(entryId, logical)?.geometry();
 		if (!geometry) return false;
 

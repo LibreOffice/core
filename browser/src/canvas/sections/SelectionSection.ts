@@ -384,6 +384,9 @@ abstract class SelectionSection extends CanvasSectionObject {
 	/// The group that took the press, which says what a click on that place means.
 	private pressedGroup: HandleGroup | null = null;
 
+	/// True while the running press landed on the edited text.
+	private pressedTheText: boolean = false;
+
 	/*
 		The kind that names the handle which turns the selection. The client makes that handle
 		itself: the engine has no handle of the kind, and what it is told at the end of a turn is
@@ -2700,6 +2703,17 @@ abstract class SelectionSection extends CanvasSectionObject {
 		this.pressedAHandle = handle !== undefined;
 		this.pressedHandle = handle ?? null;
 
+		// The mouse control handles a press on the edited text.
+		this.pressedTheText = this.onTheEditedText(onCanvas);
+		if (this.pressedTheText) {
+			this.pressedGroup = null;
+			this.interaction = null;
+			this.handToTheMouseControl(point, (control, at) =>
+				control.onMouseDown(at, e),
+			);
+			return;
+		}
+
 		/*
 			The group that owns the handle begins the drag of it. A press that reached no handle
 			goes to the last group that answers for the place it landed on, which is the object
@@ -2742,6 +2756,14 @@ abstract class SelectionSection extends CanvasSectionObject {
 	}
 
 	onMouseMove(point: cool.SimplePoint, dragDistance: number[], e: MouseEvent) {
+		// The mouse control follows a drag that started on the edited text.
+		if (this.pressedTheText && this.containerObject.isDraggingSomething()) {
+			this.handToTheMouseControl(point, (control, at) =>
+				control.onMouseMove(at, dragDistance, e),
+			);
+			return;
+		}
+
 		if (!this.containerObject.isDraggingSomething() || !this.interaction) {
 			const onCanvas = [
 				this.myTopLeft[0] + point.pX,
@@ -2764,8 +2786,9 @@ abstract class SelectionSection extends CanvasSectionObject {
 			);
 			const inTheDocument = this.inTheDocument(point);
 			const overText =
+				app.file.textCursor.visible ||
 				RenderGeometrySection.pointerAt(inTheDocument.x, inTheDocument.y) ===
-				'text';
+					'text';
 			this.context.canvas.style.cursor = over
 				? this.pointerOver(over)
 				: !onTheObject
@@ -2838,6 +2861,13 @@ abstract class SelectionSection extends CanvasSectionObject {
 	}
 
 	onMouseUp(point: cool.SimplePoint, e: MouseEvent): void {
+		if (this.pressedTheText) {
+			this.handToTheMouseControl(point, (control, at) =>
+				control.onMouseUp(at, e),
+			);
+			return;
+		}
+
 		if (!this.containerObject.isDraggingSomething() || !this.interaction) {
 			/*
 				A press on a handle that was let go where it started puts the keyboard on that
@@ -2877,6 +2907,15 @@ abstract class SelectionSection extends CanvasSectionObject {
 		of the double press could begin.
 	*/
 	onClick(point: cool.SimplePoint, e: MouseEvent): void {
+		// The mouse control answers a click on the edited text, and counts double and
+		// triple clicks itself.
+		if (this.pressedTheText) {
+			this.handToTheMouseControl(point, (control, at) =>
+				control.onClick(at, e),
+			);
+			return;
+		}
+
 		this.stopPropagating();
 		e.stopPropagation();
 
@@ -2980,6 +3019,9 @@ abstract class SelectionSection extends CanvasSectionObject {
 		group; otherwise it goes to the engine, which starts the text edit of the object underneath.
 	*/
 	onDoubleClick(point: cool.SimplePoint, e: MouseEvent): void {
+		// The mouse control answers a double click on the edited text too.
+		if (this.pressedTheText) return;
+
 		const at = this.inTheDocument(point);
 
 		this.forgetThePendingClick();
@@ -3017,6 +3059,35 @@ abstract class SelectionSection extends CanvasSectionObject {
 		MouseControl.contextMenuFrom(this, point, e);
 	}
 
+	/// Passes an event to the mouse control, in its coordinates. The container delivers events
+	/// only to bound sections, and the selection is not bound.
+	private handToTheMouseControl(
+		point: cool.SimplePoint | null,
+		deliver: (control: CanvasSectionObject, at: cool.SimplePoint) => void,
+	): void {
+		const control = app.sectionContainer.getSectionWithName(
+			app.CSections.MouseControl.name,
+		);
+		if (!control) return;
+		const at = point
+			? cool.SimplePoint.fromCorePixels([
+					point.pX + this.myTopLeft[0] - control.myTopLeft[0],
+					point.pY + this.myTopLeft[1] - control.myTopLeft[1],
+				])
+			: new cool.SimplePoint(0, 0);
+		deliver(control, at);
+	}
+
+	/// True during a text edit when the canvas point is inside the selected object, which is
+	/// the edited one, and off its handles.
+	private onTheEditedText(onCanvas: number[]): boolean {
+		if (!app.file.textCursor.visible) return false;
+		if (this.handleAt(onCanvas[0], onCanvas[1])) return false;
+		return this.groups().some((group: HandleGroup) =>
+			group.takesAPress(onCanvas[0], onCanvas[1]),
+		);
+	}
+
 	/// Drops a press that is waiting to be handed over, because a second one took its place.
 	private forgetThePendingClick(): void {
 		if (this.pendingClick === null) return;
@@ -3035,6 +3106,11 @@ abstract class SelectionSection extends CanvasSectionObject {
 	}
 
 	onDragCancel(): void {
+		if (this.pressedTheText) {
+			this.handToTheMouseControl(null, (control) => control.onDragCancel());
+			return;
+		}
+
 		this.interaction?.cancel();
 		this.endTheInteraction(false);
 	}

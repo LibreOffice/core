@@ -23,7 +23,7 @@ namespace cool {
 	}
 
 	// True when the caret's height overlaps the run's line.
-	function onLine(
+	export function onLine(
 		run: TextRun,
 		caretYTop: number,
 		caretYBottom: number,

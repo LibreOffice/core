@@ -113,4 +113,60 @@ describe('text prediction caret steps', function () {
 		const data = oneLine('ab \u05d0\u05d1');
 		nodeassert.strictEqual(step(data, { paragraph: 0, index: 1 }, 1), null);
 	});
+
+	// The caret where a click at (x, y) lands in the first object.
+	function click(
+		data: cool.VectorPrimitivesData,
+		x: number,
+		y: number,
+	): cool.LogicalCaret | null {
+		return (
+			cool.ObjectText.of(predictionTest.treeOf(data), 1)?.caretAtPoint(x, y) ??
+			null
+		);
+	}
+
+	it('puts the caret at the character boundary closest to a click', function () {
+		// "Hello" spans 1000..1500 on the first line, "World" the same on the second.
+		const data = makeTwoParaSlide();
+		nodeassert.deepStrictEqual(click(data, 1220, 1950), {
+			paragraph: 0,
+			index: 2,
+		});
+		nodeassert.deepStrictEqual(click(data, 1480, 2400), {
+			paragraph: 1,
+			index: 5,
+		});
+	});
+
+	it('keeps the caret on a wrapped line when the click is past its end', function () {
+		// "Hello " ends the first line at 1600, and "world" starts the second.
+		const data = makeSharedWrapSlide('Hello world', [
+			{ start: 0, length: 6, f: 0 },
+			{ start: 6, length: 5, f: 400 },
+		]);
+		nodeassert.deepStrictEqual(click(data, 1700, 1950), {
+			paragraph: 0,
+			index: 5,
+		});
+	});
+
+	it('puts the caret at the end of a run that a raised run follows on the same line', function () {
+		// "x" ends at 1100, and the raised "2" follows it on the same line.
+		const data = makeSharedWrapSlide('x2 y', [
+			{ start: 0, length: 1, f: 0 },
+			{ start: 1, length: 1, e: 100, f: -120 },
+			{ start: 2, length: 2, e: 200, f: 0 },
+		]);
+		nodeassert.deepStrictEqual(click(data, 1090, 1950), {
+			paragraph: 0,
+			index: 1,
+		});
+	});
+
+	it('leaves a click away from the text to the server', function () {
+		const data = makeTwoParaSlide();
+		nodeassert.strictEqual(click(data, 5000, 1950), null);
+		nodeassert.strictEqual(click(data, 1200, 6000), null);
+	});
 });

@@ -207,6 +207,14 @@ abstract class RenderManagerBase {
 	// it moved.
 	abstract moveCaretInParagraph(step: -1 | 1): boolean;
 
+	// Puts the caret where a click lands in the edited text, without the server. True when it
+	// moved.
+	abstract placeCaretAt(
+		x: number,
+		y: number,
+		hitId: number | undefined,
+	): boolean;
+
 	abstract requestThumbnail(
 		id: cool.PreviewId,
 		part: number,

@@ -740,6 +740,24 @@ class MouseControl extends CanvasSectionObject {
 		return taken;
 	}
 
+	/// Puts the caret where a plain left click lands in the edited text, without the server.
+	/// False when the click is for the engine: another button, a modifier, no text edit, or a
+	/// point off the text.
+	private placeCaretAt(
+		point: cool.SimplePoint,
+		buttons: number,
+		modifier: number,
+	): boolean {
+		if (buttons !== app.LOButtons.left || modifier !== 0) return false;
+		if (!app.file.textCursor.visible) return false;
+		if (!RenderGeometrySection.answersPointer()) return false;
+		return RenderManager.placeCaretAt(
+			point.x,
+			point.y,
+			RenderGeometrySection.objectIdAt(point.x, point.y),
+		);
+	}
+
 	/*
 		Whether the context takes a double press itself, on the same terms as a single press is
 		taken from the geometry the client holds.
@@ -842,10 +860,13 @@ class MouseControl extends CanvasSectionObject {
 
 		if (this.clickTimer) app.timerRegistry.clearTimeout(this.clickTimer);
 		else {
-			// Old code always sends the first click, so do we, unless the client marks the
-			// object itself. A second click within the timer is sent either way, so a double
-			// click still reaches the engine and enters the text of the object.
-			if (!this.selectObjectAt(sendingPosition, buttons, modifier))
+			// Old code always sends the first click, so do we, unless the client marks
+			// the object or places the caret itself. A second click within the timer is
+			// sent either way, so a double click still reaches the engine.
+			if (
+				!this.selectObjectAt(sendingPosition, buttons, modifier) &&
+				!this.placeCaretAt(sendingPosition, buttons, modifier)
+			)
 				this.sendClick(clickInfo, 1);
 
 			// For future: Here, we are checking the window size to determine the view mode, we can also check the event type (touch/click).
