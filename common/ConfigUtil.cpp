@@ -54,6 +54,7 @@ RuntimeConstant<bool> SslTermination;
 // 2) in the 'default' attribute in coolwsd.xml, which is for documentation
 // 3) the default parameter of getConfigValue() call. That is used when the
 //    setting is present in coolwsd.xml, but empty (i.e. use the default).
+// ConfigUtilTests checks 1) against 2).
 // NOTE: Poco doesn't index the first entry in an array, so omit '[0]'.
 // NOTE: This is sorted, please keep it sorted as it's friendlier to readers,
 //       except for properties, which are sorted before the value, e.g.

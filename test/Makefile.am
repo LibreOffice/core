@@ -33,6 +33,7 @@ util_platform_cpp = ../common/Util-linux.cpp
 endif
 
 AM_CXXFLAGS = $(CPPUNIT_CFLAGS) -DTDOC=\"$(abs_top_srcdir)/test/data\" -DTDIST=\"$(DIST_FOLDER)\" \
+	-DCOOLWSD_XML_PATH=\"$(abs_top_builddir)/coolwsd.xml\" \
 	-I${top_srcdir}/common -I${top_srcdir}/net -I${top_srcdir}/wsd -I${top_srcdir}/kit \
 	-I${top_srcdir} -I${top_srcdir}/test \
 	${include_paths}
@@ -168,6 +169,7 @@ AM_CPPFLAGS = -pthread -I$(top_srcdir) -DBUILDING_TESTS -DLOK_ABORT_ON_ASSERTION
 test_base_sources = \
 	AIUtilTests.cpp \
 	BgSaveWhiteBoxTests.cpp \
+	ConfigUtilTests.cpp \
 	DeckSpecTests.cpp \
 	DeltaTests.cpp \
 	FileServeWhiteBoxTests.cpp \
