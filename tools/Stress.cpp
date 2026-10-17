@@ -11,6 +11,7 @@
 
 #include <config.h>
 
+#include <common/ConfigUtil.hpp>
 #include <tools/Replay.hpp>
 
 #include <sysexits.h>
@@ -84,7 +85,7 @@ int Stress::main(const std::vector<std::string>& args)
         throw std::runtime_error("Failed to init unit test pieces.");
 
 #if ENABLE_SSL
-    ssl::Manager::initializeClientContext("", "", "", "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH",
+    ssl::Manager::initializeClientContext("", "", "", DEFAULT_CIPHER_SET,
                                           ssl::CertificateVerification::Disabled);
     if (!ssl::Manager::isClientContextInitialized())
     {

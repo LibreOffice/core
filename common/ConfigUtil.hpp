@@ -31,6 +31,9 @@
 #include <map>
 #include <type_traits>
 
+/* Default ciphers used, when not specified otherwise */
+#define DEFAULT_CIPHER_SET "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH"
+
 namespace ConfigUtil
 {
 /// Helper class to hold default configuration entries.

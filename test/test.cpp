@@ -110,7 +110,7 @@ int main(int argc, char** argv)
         const std::string ssl_cert_file_path = cert_path + "/cert.pem";
         const std::string ssl_key_file_path = cert_path + "/key.pem";
         const std::string ssl_ca_file_path = cert_path + "/ca-chain.cert.pem";
-        const std::string ssl_cipher_list = "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH";
+        const std::string ssl_cipher_list = DEFAULT_CIPHER_SET;
 
         // Initialize the non-blocking socket SSL.
         ssl::Manager::initializeServerContext(ssl_cert_file_path, ssl_key_file_path,

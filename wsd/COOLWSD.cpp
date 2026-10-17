@@ -35,9 +35,6 @@
 
 #endif
 
-/* Default ciphers used, when not specified otherwise */
-#define DEFAULT_CIPHER_SET "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH"
-
 // This is the main source for the coolwsd program. COOL uses several coolwsd processes: one main
 // parent process that listens on the TCP port and accepts connections from COOL clients, and a
 // number of child processes, each which handles a viewing (editing) session for one document.
@@ -1591,7 +1588,7 @@ static int probeRunningServer()
         if (ssl && !ssl::Manager::isClientContextInitialized())
             ssl::Manager::initializeClientContext(
                 std::string(), std::string(), std::string(),
-                "ALL:!ADH:!LOW:!EXP:!MD5:@STRENGTH", ssl::CertificateVerification::Disabled);
+                DEFAULT_CIPHER_SET, ssl::CertificateVerification::Disabled);
 #endif
         completeResponse = false;
         try
