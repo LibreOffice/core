@@ -263,6 +263,13 @@ public:
     double getWatermarkOpacity() const { return _watermarkOpacity; }
 
     const std::string& getLang() const { return _lang; }
+    void setLang(const std::string& lang)
+    {
+        if (lang == "en")
+            _lang = "en-US";
+        else
+            _lang = lang;
+    }
 
     const std::string& getTimezone() const { return _timeZone; }
 

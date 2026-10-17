@@ -109,10 +109,7 @@ bool Session::applyBrowserLoadOption(const std::string& name, std::string& value
     }
     else if (name == "lang")
     {
-        if (value == "en")
-            _lang = "en-US";
-        else
-            _lang = std::move(value);
+        setLang(value);
     }
     else if (name == "timezone")
     {
