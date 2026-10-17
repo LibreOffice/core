@@ -70,6 +70,7 @@ const Util::UnorderedStringMap<std::string> DefAppConfig = {
     { "ai.allow_user_settings", "true" },
     { "ai.api_key", "" },
     { "ai.api_url", "" },
+    { "ai.deck_budgets.max_slides", "30" },
     { "ai.enabled", "false" },
     { "ai.ethical_rating_message", "true" },
     { "ai.image_api_key", "" },
@@ -86,7 +87,9 @@ const Util::UnorderedStringMap<std::string> DefAppConfig = {
     { "cache_files.expiry_min", "3000" },
     { "canvas_slideshow_enabled", "true" },
     { "certificates.database_path", "" },
+    { "child_root_path[@relative]", "true" },
     { "child_root_path", "jails" },
+    { "comment_avatar", "" },
     { "deepl.api_url", "" },
     { "deepl.auth_key", "" },
     { "deepl.enabled", "false" },
@@ -127,7 +130,8 @@ const Util::UnorderedStringMap<std::string> DefAppConfig = {
 #endif
     { "fetch_update_check", "10" },
     { "fonts_missing.handling", "log" },
-    { "file_server_root_path", "browser/.." },
+    { "file_server_root_path[@relative]", "true" },
+    { "file_server_root_path", "browser/../" },
     { "grammalecte.allow_user_settings", "false" },
     { "grammalecte.base_url", "" },
     { "grammalecte.enabled", "false" },
@@ -215,6 +219,13 @@ const Util::UnorderedStringMap<std::string> DefAppConfig = {
     { "remote_asset_config.url", "" },
     { "remote_config.remote_url", "" },
     { "remote_font_config.url", "" },
+    // { "remote_links.chain_secret", "" }, // Not set: these defaults go to every kit.
+    { "remote_links.enable", "false" },
+    { "remote_links.max_chain_depth", "3" },
+    { "remote_links.max_links_per_document", "0" },
+    { "remote_links.max_remote_docs", "0" },
+    { "remote_links.reconnect_attempts", "5" },
+    { "remote_links.server_url", "" },
 #if ENABLE_FEATURE_RESTRICTION
     { "restricted_commands", "" },
 #endif
@@ -262,6 +273,7 @@ const Util::UnorderedStringMap<std::string> DefAppConfig = {
     { "storage.wopi.locking.refresh", "900" },
     { "storage.wopi.max_file_size", "0" },
     { "storage.wopi[@allow]", "true" },
+    { "sys_template_path[@relative]", "true" },
     { "sys_template_path", "systemplate" },
     { "trace.filter.message", "" },
     { "trace.outgoing.record", "false" },
@@ -277,6 +289,7 @@ const Util::UnorderedStringMap<std::string> DefAppConfig = {
     { "user_interface.brandProductName", "" },
     { "user_interface.brandProductURL", "" },
     { "user_interface.logoURL", "" },
+    { "ver_suffix", "" },
     { "wasm.enable", "false" },
     { "watermark.opacity", "0.2" },
     { "watermark.text", "" },
@@ -286,6 +299,7 @@ const Util::UnorderedStringMap<std::string> DefAppConfig = {
 
 // The defaults the server adds to the set above.
 const Util::UnorderedStringMap<std::string> DefServerConfig = {
+    { "accessibility_statement_url", ACCESSIBILITY_STATEMENT_URL },
     { "help_url", HELP_URL },
     // { "logging.anonymize.anonymize_user_data", "false" }, // Do not set to fallback on filename/username.
     { "logging.anonymize.anonymization_salt", "82589933" },
@@ -487,7 +501,7 @@ std::string getLoggableConfig(const Poco::Util::AbstractConfiguration& config)
             if (pair.first == "admin_console.username" || pair.first == "admin_console.password" ||
                 pair.first == "admin_console.secure_password" ||
                 pair.first == "languagetool.api_key" || pair.first == "duden.api_key" ||
-                pair.first == "deepl.auth_key" ||
+                pair.first == "deepl.auth_key" || pair.first == "remote_links.chain_secret" ||
                 pair.first == "ai.api_key" || pair.first == "ai.image_api_key" ||
                 pair.first == "logging.anonymize.anonymization_salt" || pair.first == "support_key")
             {

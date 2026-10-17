@@ -97,6 +97,9 @@
 /* Default value of help root URL */
 #define HELP_URL ""
 
+/* Accessibility statement URL. */
+#define ACCESSIBILITY_STATEMENT_URL ""
+
 /* Default value of feature_lock.impress_unlock_highlights */
 #undef IMPRESS_UNLOCK_HIGHLIGHTS
 

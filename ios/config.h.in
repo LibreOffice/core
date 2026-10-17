@@ -92,6 +92,9 @@
 /* Default value of help root URL */
 #define HELP_URL ""
 
+/* Accessibility statement URL. */
+#define ACCESSIBILITY_STATEMENT_URL ""
+
 /* Path to LibreOffice installation */
 #define LO_PATH "."
 
