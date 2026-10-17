@@ -41,6 +41,7 @@
 #include <editeng/lspcitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/kernitem.hxx>
+#include <editeng/lrspitem.hxx>
 #include <osl/thread.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -75,9 +76,11 @@
 #include <vcl/keycodes.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/window.hxx>
 
 #include <tools/UnitConversion.hxx>
 
+#include <functional>
 #include <set>
 
 #include <DrawDocShell.hxx>
@@ -403,6 +406,124 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testNotesPanelPasteSpecialUnformatted
     const OutlinerParaObject* pParaObject = pNotes->GetOutlinerParaObject();
     CPPUNIT_ASSERT(pParaObject);
     CPPUNIT_ASSERT_EQUAL(u"First slide"_ustr, pParaObject->GetTextObject().GetText(0));
+}
+
+namespace
+{
+/// Answers the modal dialog that a dispatched command opens. The answer runs as an event in the
+/// event loop of the dialog, so it can also change the document while the dialog is open.
+class DialogAnswer
+{
+public:
+    explicit DialogAnswer(std::function<void(vcl::Window&)> aAnswer)
+        : maAnswer(std::move(aAnswer))
+    {
+    }
+
+    /// Queues the answer. Call this before the command is dispatched.
+    void post() { Application::PostUserEvent(LINK(this, DialogAnswer, Answer)); }
+
+    /// Whether a dialog was open when the answer ran.
+    bool isAnswered() const { return mbAnswered; }
+
+private:
+    DECL_LINK(Answer, void*, void);
+
+    std::function<void(vcl::Window&)> maAnswer;
+    bool mbAnswered = false;
+};
+
+IMPL_LINK_NOARG(DialogAnswer, Answer, void*, void)
+{
+    vcl::Window* pDialog = nullptr;
+    for (vcl::Window* pWindow = Application::GetFirstTopLevelWindow(); pWindow;
+         pWindow = Application::GetNextTopLevelWindow(pWindow))
+    {
+        vcl::Window* pClient = pWindow->GetWindow(GetWindowType::Client);
+        if (pClient && pClient->IsDialog())
+            pDialog = pClient;
+    }
+    if (!pDialog)
+        return;
+
+    mbAnswered = true;
+    maAnswer(*pDialog);
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testParagraphDialogTextEditEnds)
+{
+    // Given a text edit in the title of the first slide.
+    SdXImpressDocument* pXImpressDocument = createDoc("2slides.odp");
+    SdTestViewCallback aView;
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+    auto pTitle = dynamic_cast<SdrTextObj*>(pViewShell->GetActualPage()->GetObj(0));
+    CPPUNIT_ASSERT(pTitle);
+    pView->MarkObj(pTitle, pView->GetSdrPageView());
+    pView->SdrBeginTextEdit(pTitle);
+    CPPUNIT_ASSERT(pView->GetTextEditOutlinerView());
+
+    // The paragraph dialog sets the indent before the text and presses OK. When the text edit is
+    // to end while the dialog is open, it ends first.
+    OUString sIndent;
+    bool bEndTextEdit = false;
+    bool bIndentSet = false;
+    bool bClosed = false;
+    auto aSetIndent = [&](vcl::Window& rDialog) {
+        if (bEndTextEdit)
+            pView->SdrEndTextEdit();
+        const OUString sDialogId
+            = OUString::number(static_cast<sal_uInt64>(rDialog.GetKitWindowId()));
+        StringMap aValue{ { u"type"_ustr, u"spinfield"_ustr },
+                          { u"cmd"_ustr, u"value"_ustr },
+                          { u"data"_ustr, sIndent } };
+        bIndentSet = jsdialog::ExecuteAction(sDialogId, u"spinED_LEFTINDENT"_ustr, aValue);
+        StringMap aClick{ { u"type"_ustr, u"responsebutton"_ustr },
+                          { u"cmd"_ustr, u"click"_ustr },
+                          { u"data"_ustr, OUString::number(RET_OK) } };
+        bClosed = jsdialog::ExecuteAction(sDialogId, u"ok"_ustr, aClick);
+    };
+
+    // When the dialog is answered while the text edit goes on.
+    sIndent = u"1"_ustr;
+    DialogAnswer aAnswer(aSetIndent);
+    aAnswer.post();
+    dispatchCommand(mxComponent, u".uno:ParagraphDialog"_ustr, {});
+
+    // Then the paragraph gets the indent.
+    CPPUNIT_ASSERT(aAnswer.isAnswered());
+    CPPUNIT_ASSERT(bIndentSet);
+    CPPUNIT_ASSERT(bClosed);
+    OutlinerView* pOutlinerView = pView->GetTextEditOutlinerView();
+    CPPUNIT_ASSERT(pOutlinerView);
+    const sal_Int32 nIndent
+        = pOutlinerView->GetOutliner().GetParaAttribs(0).Get(EE_PARA_LRSPACE).ResolveTextLeft({});
+    CPPUNIT_ASSERT(nIndent > 0);
+    const sal_Int32 nShapeIndent = pTitle->GetMergedItem(EE_PARA_LRSPACE).ResolveTextLeft({});
+
+    // When the text edit ends while the dialog is open, and the dialog is answered after that.
+    sIndent = u"2"_ustr;
+    bEndTextEdit = true;
+    bIndentSet = false;
+    bClosed = false;
+    DialogAnswer aAnswerAfterEnd(aSetIndent);
+    aAnswerAfterEnd.post();
+    dispatchCommand(mxComponent, u".uno:ParagraphDialog"_ustr, {});
+
+    // Then neither the paragraph nor the shape changes, because the attributes are for the text
+    // that was selected when the dialog opened. Without the accompanying fix in place, the indent
+    // was set on the whole shape.
+    CPPUNIT_ASSERT(aAnswerAfterEnd.isAnswered());
+    CPPUNIT_ASSERT(bIndentSet);
+    CPPUNIT_ASSERT(bClosed);
+    CPPUNIT_ASSERT(!pView->IsTextEdit());
+    const OutlinerParaObject* pParaObject = pTitle->GetOutlinerParaObject();
+    CPPUNIT_ASSERT(pParaObject);
+    CPPUNIT_ASSERT_EQUAL(
+        nIndent,
+        pParaObject->GetTextObject().GetParaAttribs(0).Get(EE_PARA_LRSPACE).ResolveTextLeft({}));
+    CPPUNIT_ASSERT_EQUAL(nShapeIndent, pTitle->GetMergedItem(EE_PARA_LRSPACE).ResolveTextLeft({}));
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testNotesPanelTypingCreatesNotesObject)

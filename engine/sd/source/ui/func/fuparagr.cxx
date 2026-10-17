@@ -61,6 +61,7 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
 
     OutlinerView* pOutlView = mpView->GetTextEditOutlinerView();
     ::Outliner* pOutliner = mpView->GetTextEditOutliner();
+    const SdrTextObj* pTextEditObject = mpView->GetTextEditObject();
 
     if( !pArgs )
     {
@@ -92,6 +93,12 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
 
         sal_uInt16 nResult = pDlg->Execute();
 
+        // The dialog runs its own event loop, in which the text edit can end, for example by a
+        // save, or start. The attributes are for what was selected when the dialog opened, so
+        // they are applied only when the text edit is on the same object as then, or still off.
+        if (mpView->GetTextEditObject() != pTextEditObject)
+            return;
+
         switch( nResult )
         {
             case RET_OK:
@@ -106,6 +113,10 @@ void FuParagraph::DoExecute( SfxRequest& rReq )
             return; // Cancel
         }
     }
+    // The text edit may have changed while the dialog was open, so look it up again.
+    pOutlView = mpView->GetTextEditOutlinerView();
+    pOutliner = mpView->GetTextEditOutliner();
+
     mpView->SetAttributes( *pArgs );
 
     if( pOutlView && pOutliner )
