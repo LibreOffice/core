@@ -20,6 +20,8 @@
 #include <sal/config.h>
 
 #include <string_view>
+#include <algorithm>
+#include <tools/mapunit.hxx>
 
 #include <test/bootstrapfixture.hxx>
 #include <tools/stream.hxx>
@@ -176,6 +178,7 @@ public:
     void testPngWrite8BitRGBPalette();
     void testTdf153180MonochromeFilterPngExport();
     void testDump();
+    void testNativeResolution();
 
     CPPUNIT_TEST_SUITE(PngFilterTest);
     CPPUNIT_TEST(testPng);
@@ -188,9 +191,98 @@ public:
     CPPUNIT_TEST(testPngRoundtrip32);
     CPPUNIT_TEST(testPngWrite8BitRGBPalette);
     CPPUNIT_TEST(testDump);
+    CPPUNIT_TEST(testNativeResolution);
     CPPUNIT_TEST(testTdf153180MonochromeFilterPngExport);
     CPPUNIT_TEST_SUITE_END();
 };
+
+void PngFilterTest::testNativeResolution()
+{
+    // Native compression, unknown/colour chunks and APNG frames must survive.
+    const auto withoutResolution = [](SvStream& rStream) {
+        SvMemoryStream aNative;
+        rStream.Seek(0);
+        rStream.SetEndian(SvStreamEndian::BIG);
+        aNative.WriteStream(rStream, PNG_SIGNATURE_SIZE);
+        for (;;)
+        {
+            const auto nStart = rStream.Tell();
+            sal_uInt32 nSize = 0, nType = 0;
+            rStream.ReadUInt32(nSize).ReadUInt32(nType);
+            CPPUNIT_ASSERT(rStream.good());
+            rStream.Seek(nStart);
+            if (nType == PNG_PHYS_SIGNATURE)
+                rStream.SeekRel(sal_uInt64(nSize) + 12);
+            else
+                aNative.WriteStream(rStream, sal_uInt64(nSize) + 12);
+            if (nType == PNG_IEND_SIGNATURE)
+                break;
+        }
+        const auto* pBytes = static_cast<const sal_uInt8*>(aNative.GetData());
+        return std::vector<sal_uInt8>(pBytes, pBytes + aNative.GetEndOfData());
+    };
+    for (const auto aName : { u"rect-1bit-pal.png", u"basn6a08.png", u"ms-gif.png",
+                              u"apng_simple.apng", u"tdf172076.png", u"cdfn2c08.png" })
+    {
+        SvFileStream aFile(getFullUrl(aName), StreamMode::READ);
+        const auto aNative = withoutResolution(aFile);
+        aFile.Seek(0);
+        aFile.SetEndian(SvStreamEndian::LITTLE);
+        SvMemoryStream aFirst;
+        CPPUNIT_ASSERT(vcl::PngImageWriter::writeWithResolution(aFile, aFirst, 3780, 5669));
+        CPPUNIT_ASSERT_EQUAL(sal_uInt64(0), aFile.Tell());
+        CPPUNIT_ASSERT_EQUAL(SvStreamEndian::LITTLE, aFile.GetEndian());
+        const auto aFirstNative = withoutResolution(aFirst);
+        CPPUNIT_ASSERT_EQUAL(aNative.size(), aFirstNative.size());
+        CPPUNIT_ASSERT(std::equal(aNative.begin(), aNative.end(), aFirstNative.begin()));
+
+        // Replacing an existing pHYs must not add a duplicate or grow the file.
+        aFirst.Seek(0);
+        SvMemoryStream aSecond;
+        CPPUNIT_ASSERT(vcl::PngImageWriter::writeWithResolution(aFirst, aSecond, 5669, 3780));
+        CPPUNIT_ASSERT_EQUAL(aFirst.GetEndOfData(), aSecond.GetEndOfData());
+        const auto aSecondNative = withoutResolution(aSecond);
+        CPPUNIT_ASSERT_EQUAL(aNative.size(), aSecondNative.size());
+        CPPUNIT_ASSERT(std::equal(aNative.begin(), aNative.end(), aSecondNative.begin()));
+        aSecond.Seek(PNG_SIGNATURE_SIZE + 12 + PNG_IHDR_SIZE);
+        sal_uInt32 nSize = 0, nType = 0, nX = 0, nY = 0;
+        sal_uInt8 nUnit = 0;
+        aSecond.ReadUInt32(nSize).ReadUInt32(nType).ReadUInt32(nX).ReadUInt32(nY).ReadUChar(nUnit);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(9), nSize);
+        CPPUNIT_ASSERT_EQUAL(PNG_PHYS_SIGNATURE, nType);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(5669), nX);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt32(3780), nY);
+        CPPUNIT_ASSERT_EQUAL(sal_uInt8(1), nUnit);
+        aSecond.Seek(0);
+        vcl::PngImageReader aReader(aSecond);
+        ImportOutput aImported;
+        CPPUNIT_ASSERT(aReader.read(aImported));
+        aFile.Seek(0);
+        vcl::PngImageReader aOriginalReader(aFile);
+        ImportOutput aOriginalImported;
+        CPPUNIT_ASSERT(aOriginalReader.read(aOriginalImported));
+        CPPUNIT_ASSERT_EQUAL(aOriginalImported.mbIsAnimated, aImported.mbIsAnimated);
+        if (!aImported.mbIsAnimated)
+        {
+            CPPUNIT_ASSERT_EQUAL(MapUnit::Map100thMM,
+                                 aImported.moBitmap->GetPrefMapMode().GetMapUnit());
+            CPPUNIT_ASSERT_EQUAL(aOriginalImported.moBitmap->GetChecksum(),
+                                 aImported.moBitmap->GetChecksum());
+        }
+    }
+
+    SvFileStream aFile(getFullUrl(u"rect-1bit-pal.png"), StreamMode::READ);
+    SvMemoryStream aOriginal;
+    aOriginal.WriteStream(aFile);
+    for (sal_uInt64 nLength :
+         { sal_uInt64(0), sal_uInt64(8), sal_uInt64(32), aOriginal.GetEndOfData() - 1 })
+    {
+        SvMemoryStream aTruncated(const_cast<void*>(aOriginal.GetData()), nLength,
+                                  StreamMode::READ);
+        SvMemoryStream aOutput;
+        CPPUNIT_ASSERT(!vcl::PngImageWriter::writeWithResolution(aTruncated, aOutput, 3780, 3780));
+    }
+}
 
 void PngFilterTest::testPng()
 {

@@ -8,6 +8,8 @@
  */
 
 #include <vcl/filter/PngImageWriter.hxx>
+#include <vcl/filter/PngImageReader.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <png.h>
 #include <vcl/BitmapWriteAccess.hxx>
 #include <vcl/bitmap.hxx>
@@ -51,6 +53,79 @@ static void lclWriteStream(png_structp pPng, png_bytep pData, png_size_t pDataSi
 
     if (nBytesWritten != pDataSize)
         png_error(pPng, "Write Error");
+}
+
+bool PngImageWriter::writeWithResolution(SvStream& rInput, SvStream& rOutput,
+                                         sal_uInt32 nPixelsPerMeterX, sal_uInt32 nPixelsPerMeterY)
+{
+    if (!nPixelsPerMeterX || !nPixelsPerMeterY)
+        return false;
+
+    const auto nStart = rInput.Tell();
+    const auto eEndian = rInput.GetEndian();
+    comphelper::ScopeGuard aRestoreInput([&] {
+        rInput.Seek(nStart);
+        rInput.SetEndian(eEndian);
+    });
+    rInput.SetEndian(SvStreamEndian::BIG);
+    sal_uInt64 nSignature = 0;
+    rInput.ReadUInt64(nSignature);
+    if (!rInput.good() || nSignature != PNG_SIGNATURE)
+        return false;
+
+    png_structp pPng = png_create_write_struct(PNG_LIBPNG_VER_STRING, nullptr, nullptr, nullptr);
+    if (!pPng)
+        return false;
+    comphelper::ScopeGuard aDestroyPng([&] { png_destroy_write_struct(&pPng, nullptr); });
+    if (setjmp(png_jmpbuf(pPng)))
+        return false;
+    png_set_write_fn(pPng, &rOutput, lclWriteStream, nullptr);
+
+    rInput.Seek(nStart);
+    if (rOutput.WriteStream(rInput, PNG_SIGNATURE_SIZE) != PNG_SIGNATURE_SIZE)
+        return false;
+    bool bFirstChunk = true;
+    while (rInput.good())
+    {
+        const auto nChunkStart = rInput.Tell();
+        sal_uInt32 nSize = 0, nType = 0;
+        rInput.ReadUInt32(nSize).ReadUInt32(nType);
+        if (!rInput.good() || sal_uInt64(nSize) + PNG_CRC_SIZE > rInput.remainingSize())
+            return false;
+        if (bFirstChunk && (nType != PNG_IHDR_SIGNATURE || nSize != PNG_IHDR_SIZE))
+            return false;
+        if (nType == PNG_PHYS_SIGNATURE)
+            rInput.SeekRel(sal_uInt64(nSize) + PNG_CRC_SIZE);
+        else
+        {
+            rInput.Seek(nChunkStart);
+            const sal_uInt64 nChunkSize
+                = sal_uInt64(nSize) + PNG_SIZE_SIZE + PNG_TYPE_SIZE + PNG_CRC_SIZE;
+            if (rOutput.WriteStream(rInput, nChunkSize) != nChunkSize)
+                return false;
+        }
+        if (bFirstChunk)
+        {
+            // Use libpng for the pHYs payload encoding and CRC. The native
+            // IDAT and all unrelated metadata retain their original bytes.
+            std::array<png_byte, 9> aResolution;
+            png_save_uint_32(aResolution.data(), nPixelsPerMeterX);
+            png_save_uint_32(aResolution.data() + 4, nPixelsPerMeterY);
+            aResolution[8] = PNG_RESOLUTION_METER;
+            png_write_chunk(pPng, reinterpret_cast<png_const_bytep>("pHYs"), aResolution.data(),
+                            aResolution.size());
+            bFirstChunk = false;
+        }
+        if (nType == PNG_IEND_SIGNATURE)
+        {
+            if (nSize != PNG_IEND_SIZE)
+                return false;
+            rOutput.WriteStream(rInput, rInput.remainingSize());
+            rOutput.Flush();
+            return rInput.good() && rOutput.good();
+        }
+    }
+    return false;
 }
 
 static void writeFctlChunk(std::vector<uint8_t>& aFctlChunk, sal_uInt32 nSequenceNumber, Size aSize,

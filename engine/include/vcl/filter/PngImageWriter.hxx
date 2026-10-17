@@ -41,6 +41,11 @@ public:
 
     void setParameters(cpo::uno::Sequence<css::beans::PropertyValue> const& rParameters);
     bool write(const Graphic& rGraphic);
+
+    // Update physical pixel dimensions without decoding or recompressing the
+    // image. Other chunks, including animation and colour metadata, are copied.
+    static bool writeWithResolution(SvStream& rInput, SvStream& rOutput,
+                                    sal_uInt32 nPixelsPerMeterX, sal_uInt32 nPixelsPerMeterY);
 };
 
 // Encode a bitmap as a PNG at the fastest compression level and return it as a
