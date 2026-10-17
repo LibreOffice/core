@@ -2433,7 +2433,11 @@ class BitmapTileManager extends RenderManagerBase {
 		return false;
 	}
 
-	public moveCaretInParagraph(_step: -1 | 1): boolean {
+	public moveCaretByCharacter(_step: -1 | 1): boolean {
+		return false;
+	}
+
+	public moveCaretByLine(_step: -1 | 1): boolean {
 		return false;
 	}
 

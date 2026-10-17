@@ -10,8 +10,8 @@
  */
 
 /*
- * Moves the caret from the cached runs alone: by one character inside its paragraph, or to
- * where a click lands.
+ * Moves the caret from the cached runs alone: by one character, by one line, or to where a click
+ * lands.
  *
  * A step goes over one grapheme cluster, as the engine's caret does, so a base letter and its
  * combining marks, or an emoji sequence, count as one character. A field counts as one character
@@ -73,32 +73,44 @@ namespace cool {
 		return splitsPair ? next + step : next;
 	}
 
-	/// The caret one character before (step -1) or after (step 1) logical, or null when the
-	/// step leaves the paragraph, no run shows the new offset, or the paragraph is rotated or
-	/// right to left.
-	export function stepInParagraph(
+	// The runs of a paragraph that a caret can move in, or null when the paragraph has no runs,
+	// is rotated or is written right to left.
+	function movableRuns(runs: TextRun[], paragraph: number): TextRun[] | null {
+		if (runs.some((run) => run.paragraph === paragraph && run.rotated))
+			return null;
+		const textRuns = paragraphTextRuns(runs, paragraph);
+		if (!textRuns.length || rightToLeft.test(textRuns[0].text)) return null;
+		return textRuns;
+	}
+
+	// True when a run shows the paragraph offset. An offset before a leading tab is in none.
+	function isShown(textRuns: TextRun[], index: number): boolean {
+		return textRuns.some((run) => index >= run.start && index <= run.end);
+	}
+
+	/// The caret one character before (step -1) or after (step 1) logical, into the next or
+	/// previous paragraph at an edge. Null when no run shows the new place, or that paragraph
+	/// is empty, rotated or right to left.
+	export function stepByCharacter(
 		position: CaretPosition,
 		logical: LogicalCaret,
 		step: -1 | 1,
 	): LogicalCaret | null {
-		const paragraph = logical.paragraph;
 		const runs = position.objectRuns;
-		if (runs.some((run) => run.paragraph === paragraph && run.rotated))
-			return null;
+		const textRuns = movableRuns(runs, logical.paragraph);
+		if (!textRuns) return null;
 
-		const textRuns = paragraphTextRuns(runs, paragraph);
-		if (!textRuns.length) return null;
+		const next = graphemeBoundary(textRuns[0].text, logical.index, step);
+		if (next !== null)
+			return isShown(textRuns, next)
+				? { paragraph: logical.paragraph, index: next }
+				: null;
 
-		const text = textRuns[0].text;
-		if (rightToLeft.test(text)) return null;
-
-		const next = graphemeBoundary(text, logical.index, step);
-		if (next === null) return null;
-
-		// An offset that no run covers, such as one before a leading tab, has no place for
-		// the caret in the runs.
-		const shown = textRuns.some((run) => next >= run.start && next <= run.end);
-		return shown ? { paragraph, index: next } : null;
+		const paragraph = logical.paragraph + step;
+		const nextRuns = paragraph >= 0 ? movableRuns(runs, paragraph) : null;
+		if (!nextRuns) return null;
+		const index = step > 0 ? 0 : nextRuns[0].text.length;
+		return isShown(nextRuns, index) ? { paragraph, index } : null;
 	}
 
 	// The runs that show paragraph text, without fields, over all paragraphs.
@@ -152,6 +164,45 @@ namespace cool {
 		return best;
 	}
 
+	// The caret in lineRuns closest to the slide x, or null. With nearOnly, runs more than a
+	// font size from x are skipped. At the end of a wrapped line the caret goes before the last
+	// character, as in the engine.
+	function caretOnLine(
+		lineRuns: TextRun[],
+		objectRuns: TextRun[],
+		positionsOf: (run: TextRun) => number[],
+		x: number,
+		nearOnly: boolean,
+	): LogicalCaret | null {
+		let target: { run: TextRun; positions: number[] } | null = null;
+		let bestDelta = Infinity;
+		for (const run of lineRuns) {
+			const positions = positionsOf(run);
+			const left = run.x;
+			const right = run.slideX(positions[positions.length - 1]);
+			const delta = x < left ? left - x : x > right ? x - right : 0;
+			// The font size scaled to slide twips, like delta.
+			const near = delta < run.fontSize * run.scaleX;
+			if ((!nearOnly || near) && delta < bestDelta) {
+				bestDelta = delta;
+				target = { run, positions };
+			}
+		}
+		if (!target) return null;
+
+		const run = target.run;
+		const paragraph = run.paragraph;
+		if (paragraph === undefined || rightToLeft.test(run.text)) return null;
+
+		let index = nearestGraphemeBoundary(run, target.positions, x);
+		if (index === run.end && endsWrappedLine(run, objectRuns))
+			index = Math.max(
+				run.start,
+				graphemeBoundary(run.text, index, -1) ?? index,
+			);
+		return { paragraph, index };
+	}
+
 	/// The runs of one object, each measured once, for the caret at a pointer.
 	export class ObjectText {
 		// The runs that show paragraph text, without fields.
@@ -192,37 +243,60 @@ namespace cool {
 			return positions;
 		}
 
-		/// The caret where a click at slide (x, y) lands, or null off the text. Past the
-		/// end of a wrapped line it goes before the last character, as in the engine.
+		/// The caret where a click at slide (x, y) lands, or null off the text.
 		caretAtPoint(x: number, y: number): LogicalCaret | null {
-			let target: { run: TextRun; positions: number[] } | null = null;
-			let bestDelta = Infinity;
+			// A click further than a font size from the text is in the empty part of
+			// the box.
+			const lineRuns = this.shown.filter((run) => onLine(run, y, y));
+			return caretOnLine(
+				lineRuns,
+				this.runs,
+				(run) => this.positionsOf(run),
+				x,
+				true,
+			);
+		}
+
+		/// The caret on the line above (step -1) or below (step 1) the run's line, closest
+		/// to the slide x. Null when there is no such line, or it is past a paragraph
+		/// without text.
+		caretOnNextLine(
+			from: TextRun,
+			x: number,
+			step: -1 | 1,
+		): LogicalCaret | null {
+			const paragraph = from.paragraph;
+			if (paragraph === undefined) return null;
+
+			// The nearest run off the caret's line in the direction of the step.
+			let next: TextRun | null = null;
 			for (const run of this.shown) {
-				if (!onLine(run, y, y)) continue;
-				const positions = this.positionsOf(run);
-				const left = run.x;
-				const right = run.slideX(positions[positions.length - 1]);
-				const delta = x < left ? left - x : x > right ? x - right : 0;
-				// A click further than a font size from the text is in the empty
-				// part of the box.
-				if (delta < run.fontSize && delta < bestDelta) {
-					bestDelta = delta;
-					target = { run, positions };
-				}
+				if (onSameLine(run, from)) continue;
+				const ahead =
+					step > 0
+						? run.baseline > from.baseline
+						: run.baseline < from.baseline;
+				const closer =
+					next === null ||
+					(step > 0
+						? run.baseline < next.baseline
+						: run.baseline > next.baseline);
+				if (ahead && closer) next = run;
 			}
-			if (!target) return null;
+			if (next === null) return null;
 
-			const run = target.run;
-			const paragraph = run.paragraph;
-			if (paragraph === undefined || rightToLeft.test(run.text)) return null;
-
-			let index = nearestGraphemeBoundary(run, target.positions, x);
-			if (index === run.end && endsWrappedLine(run, this.runs))
-				index = Math.max(
-					run.start,
-					graphemeBoundary(run.text, index, -1) ?? index,
-				);
-			return { paragraph, index };
+			const line = next;
+			const caret = caretOnLine(
+				this.shown.filter(
+					(run) => onSameLine(run, line) && !onSameLine(run, from),
+				),
+				this.runs,
+				(run) => this.positionsOf(run),
+				x,
+				false,
+			);
+			if (!caret || Math.abs(caret.paragraph - paragraph) > 1) return null;
+			return caret;
 		}
 	}
 }

@@ -914,17 +914,46 @@ class VectorManager extends RenderManagerBase {
 		);
 	}
 
-	/// Move the caret one character left (step -1) or right (step 1) inside its paragraph, here
-	/// only. Returns true when it moved.
-	moveCaretInParagraph(step: -1 | 1): boolean {
+	/// Move the caret one character left (step -1) or right (step 1). True when it moved.
+	moveCaretByCharacter(step: -1 | 1): boolean {
 		const target = this._editTarget();
 		if (!target || !target.logical) return false;
 		const position = this._lookUpCaret(target);
 		const entryId = position?.objectId;
 		if (!position || entryId === undefined) return false;
-		const logical = cool.stepInParagraph(position, target.logical, step);
+		const logical = cool.stepByCharacter(position, target.logical, step);
 		return logical !== null && this._moveCaret(target, entryId, logical);
 	}
+
+	/// Move the caret one line up (step -1) or down (step 1), keeping its starting x over
+	/// several moves. True when it moved.
+	moveCaretByLine(step: -1 | 1): boolean {
+		const target = this._editTarget();
+		if (!target || !target.logical) return false;
+		const position = this._lookUpCaret(target);
+		const entryId = position?.objectId;
+		if (!position || entryId === undefined) return false;
+
+		const travel = this._travelX;
+		const x =
+			travel &&
+			travel.logical.paragraph === target.logical.paragraph &&
+			travel.logical.index === target.logical.index
+				? travel.x
+				: position.geometry().x;
+		const logical =
+			this._textOf(target.tree, entryId)?.caretOnNextLine(
+				position.run,
+				x,
+				step,
+			) ?? null;
+		if (!logical || !this._moveCaret(target, entryId, logical)) return false;
+		this._travelX = { x, logical: { ...logical } };
+		return true;
+	}
+
+	// The x kept over moves by line, and the caret the last of them left.
+	private _travelX: { x: number; logical: cool.LogicalCaret } | null = null;
 
 	/// Put the caret where a click at (x, y), in document twips, lands in the edited text.
 	/// hitId is the object at the point, if any. True when the caret moved.
@@ -987,6 +1016,7 @@ class VectorManager extends RenderManagerBase {
 		const geometry = target.tree.caretIn(entryId, logical)?.geometry();
 		if (!geometry) return false;
 
+		this._travelX = null;
 		const partId = target.tree.data.partId;
 		LocalCaret.moved({
 			partId,

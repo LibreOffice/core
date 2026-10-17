@@ -2073,7 +2073,7 @@ describe('VectorManager', function () {
 
 			it('moves the caret one character left without telling the server', function () {
 				const manager = managerWith('Hi');
-				nodeassert.ok(manager.moveCaretInParagraph(-1));
+				nodeassert.ok(manager.moveCaretByCharacter(-1));
 				nodeassert.deepStrictEqual(app.file.textCursor.logical, {
 					paragraph: 0,
 					index: 1,
@@ -2082,9 +2082,9 @@ describe('VectorManager', function () {
 				nodeassert.deepStrictEqual(sent, []);
 			});
 
-			it('leaves a step past the end of the paragraph to the server', function () {
+			it('leaves a step past the end of the text to the server', function () {
 				const manager = managerWith('Hi');
-				nodeassert.strictEqual(manager.moveCaretInParagraph(1), false);
+				nodeassert.strictEqual(manager.moveCaretByCharacter(1), false);
 				nodeassert.deepStrictEqual(app.file.textCursor.logical, {
 					paragraph: 0,
 					index: 2,
@@ -2106,8 +2106,8 @@ describe('VectorManager', function () {
 					250,
 				);
 				app.file.textCursor.logical = { paragraph: 0, index: 4 };
-				nodeassert.ok(manager.moveCaretInParagraph(1));
-				nodeassert.ok(manager.moveCaretInParagraph(1));
+				nodeassert.ok(manager.moveCaretByCharacter(1));
+				nodeassert.ok(manager.moveCaretByCharacter(1));
 				nodeassert.deepStrictEqual(app.file.textCursor.logical, {
 					paragraph: 0,
 					index: 6,
@@ -2116,10 +2116,44 @@ describe('VectorManager', function () {
 				nodeassert.strictEqual(app.file.textCursor.rectangle.y1, 2112);
 			});
 
+			it('moves the caret down and up a line and keeps its column over a shorter line', function () {
+				const manager = new TestManager();
+				manager.handleVectorPrimitivesResponse({
+					partId: 'S0',
+					version: 1,
+					objects: [twoLineBox('longline1')],
+				});
+				// The caret is before the last character of "longline1", at 1800.
+				app.file.textCursor.rectangle = new cool.SimpleRectangle(
+					1800,
+					1800,
+					0,
+					250,
+				);
+				app.file.textCursor.logical = { paragraph: 0, index: 8 };
+
+				// "line2" ends at 1500, so the caret goes to its end.
+				nodeassert.ok(manager.moveCaretByLine(1));
+				nodeassert.deepStrictEqual(app.file.textCursor.logical, {
+					paragraph: 0,
+					index: 14,
+				});
+				nodeassert.strictEqual(app.file.textCursor.rectangle.x1, 1500);
+				nodeassert.strictEqual(app.file.textCursor.rectangle.y1, 2112);
+
+				nodeassert.ok(manager.moveCaretByLine(-1));
+				nodeassert.deepStrictEqual(app.file.textCursor.logical, {
+					paragraph: 0,
+					index: 8,
+				});
+				nodeassert.strictEqual(app.file.textCursor.rectangle.x1, 1800);
+				nodeassert.deepStrictEqual(sent, []);
+			});
+
 			it('tells the server where the caret is once, before a message that may read it', function () {
 				const manager = managerWith('Hi');
-				manager.moveCaretInParagraph(-1);
-				manager.moveCaretInParagraph(-1);
+				manager.moveCaretByCharacter(-1);
+				manager.moveCaretByCharacter(-1);
 				LocalCaret.tellBefore('tilecombine nviewid=0 part=0');
 				nodeassert.deepStrictEqual(sent, []);
 				LocalCaret.tellBefore('key type=input char=0 key=1280');
@@ -2131,7 +2165,7 @@ describe('VectorManager', function () {
 
 			it('keeps the caret here while the mouse hovers, and tells the server before a drag', function () {
 				const manager = managerWith('Hi');
-				manager.moveCaretInParagraph(-1);
+				manager.moveCaretByCharacter(-1);
 				LocalCaret.tellBefore(
 					'mouse type=move x=10 y=20 count=1 buttons=0 modifier=0 sequence=11',
 				);
@@ -2149,10 +2183,10 @@ describe('VectorManager', function () {
 				installFakeClock();
 				try {
 					const manager = managerWith('Hi');
-					manager.moveCaretInParagraph(-1);
+					manager.moveCaretByCharacter(-1);
 					advanceClock(200);
 					// A second move starts the wait again.
-					manager.moveCaretInParagraph(-1);
+					manager.moveCaretByCharacter(-1);
 					advanceClock(299);
 					nodeassert.deepStrictEqual(sent, []);
 					advanceClock(1);
@@ -2169,7 +2203,7 @@ describe('VectorManager', function () {
 				installFakeClock();
 				try {
 					const manager = managerWith('Hi');
-					manager.moveCaretInParagraph(-1);
+					manager.moveCaretByCharacter(-1);
 					LocalCaret.tellBefore('key type=input char=97 key=0');
 					advanceClock(1000);
 					nodeassert.strictEqual(sent.length, 1);
@@ -2181,7 +2215,7 @@ describe('VectorManager', function () {
 
 			it('types a character where the caret moved, after telling the server', function () {
 				const manager = managerWith('Hi');
-				manager.moveCaretInParagraph(-1);
+				manager.moveCaretByCharacter(-1);
 				nodeassert.ok(manager.predictTextInsert('a'));
 				nodeassert.strictEqual(textOf(manager), 'Hai');
 				nodeassert.deepStrictEqual(sent, [
@@ -2201,7 +2235,7 @@ describe('VectorManager', function () {
 
 			it('keeps the caret it moved over caret updates from before the server knew of it', function () {
 				const manager = managerWith('Hi');
-				manager.moveCaretInParagraph(-1);
+				manager.moveCaretByCharacter(-1);
 				nodeassert.strictEqual(
 					manager.keepPredictedCaret(caretUpdate(10, 2)),
 					true,
@@ -2272,7 +2306,7 @@ describe('VectorManager', function () {
 
 			it('keeps the caret it moved after a typed character the server has not shown', function () {
 				const manager = afterTypingA();
-				nodeassert.ok(manager.moveCaretInParagraph(-1));
+				nodeassert.ok(manager.moveCaretByCharacter(-1));
 				sendDelta(manager, 10, 'Hi');
 				nodeassert.strictEqual(textOf(manager), 'Hia');
 				nodeassert.deepStrictEqual(app.file.textCursor.logical, {

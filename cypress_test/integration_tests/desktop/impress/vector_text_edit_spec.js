@@ -150,5 +150,14 @@ var desktopHelper = require('../../common/desktop_helper');
 			expectCaret({ paragraph: 0, index: 2 });
 			expectNoPressSent();
 		});
+
+		it('moves the caret by line and across paragraphs', function() {
+			expectKeys('{rightarrow}{rightarrow}', { paragraph: 0, index: 2 });
+			expectKeys('{downarrow}', { paragraph: 1, index: 2 });
+			expectKeys('{uparrow}', { paragraph: 0, index: 2 });
+			keysToServer('{end}');
+			expectKeys('{rightarrow}', { paragraph: 1, index: 0 });
+			expectKeys('{leftarrow}', { paragraph: 0, index: 6 });
+		});
 	});
 });

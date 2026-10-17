@@ -986,12 +986,10 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		return here;
 	},
 
-	// Left and Right without modifiers move the caret one character inside its paragraph here,
-	// when the document is drawn from objects. Returns true when the caret moved.
+	// Moves the caret here for an arrow key without modifiers, in a document drawn from
+	// objects. True when the caret moved.
 	_moveCaretHere: function (ev, keyCode) {
 		if (this.modifier || ev.isComposing)
-			return false;
-		if (keyCode !== this.keyCodes.LEFT && keyCode !== this.keyCodes.RIGHT)
 			return false;
 		if (!RenderManager.isVectorRendering() || this._map.getWinId() !== 0)
 			return false;
@@ -999,7 +997,17 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		// keys.
 		if (this._map._textInput.hasAccessibilitySupport())
 			return false;
-		return RenderManager.moveCaretInParagraph(keyCode === this.keyCodes.LEFT ? -1 : 1);
+		switch (keyCode) {
+		case this.keyCodes.LEFT:
+			return RenderManager.moveCaretByCharacter(-1);
+		case this.keyCodes.RIGHT:
+			return RenderManager.moveCaretByCharacter(1);
+		case this.keyCodes.UP:
+			return RenderManager.moveCaretByLine(-1);
+		case this.keyCodes.DOWN:
+			return RenderManager.moveCaretByLine(1);
+		}
+		return false;
 	},
 
 	_isCtrlKey: function (e) {

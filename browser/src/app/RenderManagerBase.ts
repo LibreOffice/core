@@ -203,9 +203,11 @@ abstract class RenderManagerBase {
 	// Returns true when a keystroke at the caret would be predicted.
 	abstract canPredictAtCaret(): boolean;
 
-	// Moves the caret one character inside its paragraph without the server. Returns true when
-	// it moved.
-	abstract moveCaretInParagraph(step: -1 | 1): boolean;
+	// Moves the caret one character without the server. True when it moved.
+	abstract moveCaretByCharacter(step: -1 | 1): boolean;
+
+	// Moves the caret one line up or down without the server. True when it moved.
+	abstract moveCaretByLine(step: -1 | 1): boolean;
 
 	// Puts the caret where a click lands in the edited text, without the server. True when it
 	// moved.

@@ -250,8 +250,12 @@ class RenderManager {
 		return RenderManager.ensureInstance().canPredictAtCaret();
 	}
 
-	static moveCaretInParagraph(step: -1 | 1): boolean {
-		return RenderManager.ensureInstance().moveCaretInParagraph(step);
+	static moveCaretByCharacter(step: -1 | 1): boolean {
+		return RenderManager.ensureInstance().moveCaretByCharacter(step);
+	}
+
+	static moveCaretByLine(step: -1 | 1): boolean {
+		return RenderManager.ensureInstance().moveCaretByLine(step);
 	}
 
 	static placeCaretAt(
