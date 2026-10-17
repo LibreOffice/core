@@ -40,6 +40,12 @@
 #include <unotools/tempfile.hxx>
 #include <unotools/saveopt.hxx>
 #include <vcl/filter/SvmWriter.hxx>
+#include <vcl/filter/PngImageWriter.hxx>
+#include <vcl/animate/Animation.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/outdev.hxx>
+#include <o3tl/unit_conversion.hxx>
+#include <tools/mapunit.hxx>
 #include <vcl/gfxlink.hxx>
 #include <vcl/metaact.hxx>
 #include <tools/debug.hxx>
@@ -63,6 +69,52 @@ using namespace com::sun::star::io;
 namespace cpo::uno { class XComponentContext; }
 
 namespace {
+
+Graphic withPhysicalSize(const Graphic& rGraphic)
+{
+    if (rGraphic.GetType() == GraphicType::Bitmap
+        && rGraphic.GetPrefMapMode().GetMapUnit() == MapUnit::MapPixel)
+    {
+        const Size aSize = Application::GetDefaultDevice()->PixelToLogic(
+            rGraphic.GetPrefSize(), MapMode(MapUnit::Map100thMM));
+        // Graphic copies share their bitmap container. Use a distinct container
+        // so exporting cannot alter the source's preferred size.
+        Graphic aGraphic = rGraphic.IsAnimated() ? Graphic(rGraphic.GetAnimation())
+                                                : Graphic(rGraphic.GetBitmap());
+        aGraphic.SetPrefMapMode(MapMode(MapUnit::Map100thMM));
+        aGraphic.SetPrefSize(aSize);
+        return aGraphic;
+    }
+    return rGraphic;
+}
+
+void writeNativeGraphic(const Graphic& rGraphic, const GfxLink& rLink, SvStream& rStream)
+{
+    // Crop distances use the intrinsic physical size. Persist the author's
+    // assumed size without recompressing native PNG pixels or animation.
+    if (rLink.GetType() == GfxLinkType::NativePng
+        && rGraphic.GetPrefMapMode().GetMapUnit() == MapUnit::MapPixel)
+    {
+        const Size aPixels = rGraphic.GetSizePixel();
+        const Size aPhysical = Application::GetDefaultDevice()->PixelToLogic(
+            rGraphic.GetPrefSize(), MapMode(MapUnit::Map100thMM));
+        if (aPhysical.Width() > 0 && aPhysical.Height() > 0)
+        {
+            // Match PngImageWriter's conversion of a physical preferred size.
+            const sal_uInt32 nPPMX = o3tl::convert(aPixels.Width(), 100000, aPhysical.Width());
+            const sal_uInt32 nPPMY = o3tl::convert(aPixels.Height(), 100000, aPhysical.Height());
+            SvMemoryStream aNative(const_cast<sal_uInt8*>(rLink.GetData()),
+                                   rLink.GetDataSize(), StreamMode::READ);
+            SvMemoryStream aWithResolution;
+            if (vcl::PngImageWriter::writeWithResolution(aNative, aWithResolution, nPPMX, nPPMY))
+            {
+                rStream.WriteBytes(aWithResolution.GetData(), aWithResolution.GetEndOfData());
+                return;
+            }
+        }
+    }
+    rStream.WriteBytes(rLink.GetData(), rLink.GetDataSize());
+}
 
 const MetaCommentAction* ImplCheckForEPS( GDIMetaFile const & rMtf )
 {
@@ -122,13 +174,14 @@ GraphicInputStream::GraphicInputStream(GraphicObject const & aGraphicObject, con
     {
         if (rMimeType.isEmpty())
         {
-            pStream->WriteBytes(pGfxLink->GetData(), pGfxLink->GetDataSize());
+            writeNativeGraphic(aGraphic, *pGfxLink, *pStream);
             bRet = (pStream->GetError() == ERRCODE_NONE);
         }
         else
         {
             GraphicFilter &rFilter = GraphicFilter::GetGraphicFilter();
-            bRet = (rFilter.ExportGraphic(aGraphic, u"", *pStream, rFilter.GetExportFormatNumberForMediaType(rMimeType)) == ERRCODE_NONE);
+            const Graphic aExportGraphic = rMimeType == "image/png" ? withPhysicalSize(aGraphic) : aGraphic;
+            bRet = (rFilter.ExportGraphic(aExportGraphic, u"", *pStream, rFilter.GetExportFormatNumberForMediaType(rMimeType)) == ERRCODE_NONE);
         }
     }
     else
@@ -143,7 +196,8 @@ GraphicInputStream::GraphicInputStream(GraphicObject const & aGraphicObject, con
             else if (aFormat.isEmpty())
                 aFormat = u"image/png"_ustr;
 
-            bRet = (rFilter.ExportGraphic(aGraphic, u"", *pStream, rFilter.GetExportFormatNumberForMediaType(aFormat)) == ERRCODE_NONE);
+            const Graphic aExportGraphic = aFormat == "image/png" ? withPhysicalSize(aGraphic) : aGraphic;
+            bRet = (rFilter.ExportGraphic(aExportGraphic, u"", *pStream, rFilter.GetExportFormatNumberForMediaType(aFormat)) == ERRCODE_NONE);
         }
         else if (rMimeType.isEmpty() && aGraphic.GetType() == GraphicType::GdiMetafile)
         {
@@ -810,7 +864,7 @@ OUString SvXMLGraphicHelper::implSaveGraphic(cpo::uno::Reference<css::graphic::X
             if (bUseGfxLink && pGfxLink && pGfxLink->GetDataSize() && pGfxLink->GetData())
             {
                 SAL_INFO("svx", "implSaveGraphic: link");
-                pStream->WriteBytes(pGfxLink->GetData(), pGfxLink->GetDataSize());
+                writeNativeGraphic(aGraphic, *pGfxLink, *pStream);
                 rOutSavedMimeType = aMimeType;
                 bSuccess = (pStream->GetError() == ERRCODE_NONE);
             }
@@ -833,7 +887,8 @@ OUString SvXMLGraphicHelper::implSaveGraphic(cpo::uno::Reference<css::graphic::X
                     }
                     rOutSavedMimeType = comphelper::GraphicMimeTypeHelper::GetMimeTypeForExtension(aFormat.toUtf8());
 
-                    bSuccess = (rFilter.ExportGraphic(aGraphic, u"", *pStream, rFilter.GetExportFormatNumberForShortName(aFormat)) == ERRCODE_NONE);
+                    const Graphic aExportGraphic = aFormat == "png" ? withPhysicalSize(aGraphic) : aGraphic;
+                    bSuccess = (rFilter.ExportGraphic(aExportGraphic, u"", *pStream, rFilter.GetExportFormatNumberForShortName(aFormat)) == ERRCODE_NONE);
                 }
                 else if (aGraphic.GetType() == GraphicType::GdiMetafile)
                 {

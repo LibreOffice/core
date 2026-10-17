@@ -9,6 +9,7 @@
 
 #include <config_pdfimport.h>
 #include <test/unoapixml_test.hxx>
+#include <cstring>
 
 #include <com/sun/star/document/XUndoManagerSupplier.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
@@ -39,6 +40,11 @@
 #include <svx/svdogrp.hxx>
 #include <svx/svdocirc.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <svx/svdograf.hxx>
+#include <svx/sdgcpitm.hxx>
+#include <vcl/svapp.hxx>
+#include <vcl/gfxlink.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svl/itempool.hxx>
@@ -73,6 +79,7 @@ public:
     }
 
     void setUp() override;
+    void checkCropResolution(TestFilter eFilter, bool bNative, bool bCustomPreferredSize = false);
 
 #if ENABLE_PDFIMPORT
     uno::Reference<xml::crypto::XXMLSecurityContext>& getSecurityContext()
@@ -123,6 +130,116 @@ xmlDocUniquePtr lcl_dumpAndParseFirstObjectWithAssert(SdrPage* pSdrPage)
     xmlDocUniquePtr pXmlDoc = aDumper.dumpAndParse(xPrimitiveSequence);
     CPPUNIT_ASSERT(pXmlDoc);
     return pXmlDoc;
+}
+
+void SvdrawTest::checkCropResolution(TestFilter eFilter, bool bNative, bool bCustomPreferredSize)
+{
+    OutputDevice* pDevice = Application::GetDefaultDevice();
+    const sal_Int32 nOriginalDPIX = pDevice->GetDPIX();
+    const sal_Int32 nOriginalDPIY = pDevice->GetDPIY();
+    comphelper::ScopeGuard aRestoreDPI([&] {
+        pDevice->SetDPIX(nOriginalDPIX);
+        pDevice->SetDPIY(nOriginalDPIY);
+    });
+    const auto cropScale = [](const SdrGrafObj& rObject) {
+        const auto& rCrop = rObject.GetMergedItemSet().Get(SDRATTR_GRAFCROP);
+        const Size aSize = rObject.GetLogicRect().GetSize();
+        return rObject.GetGraphicObject().calculateCropScaling(aSize.Width(), aSize.Height(),
+                                                               rCrop.GetLeft(), rCrop.GetTop(),
+                                                               rCrop.GetRight(), rCrop.GetBottom());
+    };
+
+    // Preserve the appearance seen by the author, including on a HiDPI display.
+    for (sal_Int32 nAuthorDPI : { 96, 144 })
+    {
+        pDevice->SetDPIX(nAuthorDPI);
+        pDevice->SetDPIY(nAuthorDPI);
+        loadFromFile(u"tdf92375-crop.odp");
+        SdrPage* pPage = getFirstDrawPageWithAssert();
+        CPPUNIT_ASSERT_EQUAL(size_t(2), pPage->GetObjCount());
+        auto* pWithoutDPI = dynamic_cast<SdrGrafObj*>(pPage->GetObj(0));
+        auto* pWithDPI = dynamic_cast<SdrGrafObj*>(pPage->GetObj(1));
+        CPPUNIT_ASSERT(pWithoutDPI);
+        CPPUNIT_ASSERT(pWithDPI);
+        if (!bNative)
+        {
+            // A clipboard bitmap has no native PNG to copy on export.
+            pWithoutDPI->SetGraphic(Graphic(pWithoutDPI->GetGraphic().GetBitmap()));
+            CPPUNIT_ASSERT(!pWithoutDPI->GetGraphic().IsGfxLink());
+        }
+        if (bCustomPreferredSize)
+        {
+            Graphic aGraphic(pWithoutDPI->GetGraphic());
+            aGraphic.SetPrefSize(Size(200, 100));
+            pWithoutDPI->SetGraphic(aGraphic);
+            CPPUNIT_ASSERT(pWithoutDPI->GetGraphic().IsGfxLink());
+        }
+        const auto aWithoutDPI = cropScale(*pWithoutDPI);
+        const auto aWithDPI = cropScale(*pWithDPI);
+        const Size aPhysicalSize = pDevice->PixelToLogic(pWithoutDPI->GetGraphic().GetPrefSize(),
+                                                         MapMode(MapUnit::Map100thMM));
+        const GfxLink aOriginalWithDPI = pWithDPI->GetGraphic().GetGfxLink();
+        save(eFilter);
+        CPPUNIT_ASSERT_EQUAL(MapUnit::MapPixel,
+                             pWithoutDPI->GetGraphic().GetPrefMapMode().GetMapUnit());
+        mxComponent->dispose();
+        mxComponent.clear();
+
+        pDevice->SetDPIX(nAuthorDPI == 96 ? 144 : 96);
+        pDevice->SetDPIY(nAuthorDPI == 96 ? 144 : 96);
+        loadFromURL(maTempFile.GetURL());
+        pPage = getFirstDrawPageWithAssert();
+        CPPUNIT_ASSERT_EQUAL(size_t(2), pPage->GetObjCount());
+        pWithoutDPI = dynamic_cast<SdrGrafObj*>(pPage->GetObj(0));
+        pWithDPI = dynamic_cast<SdrGrafObj*>(pPage->GetObj(1));
+        CPPUNIT_ASSERT(pWithoutDPI);
+        CPPUNIT_ASSERT(pWithDPI);
+        const auto aReloadedWithoutDPI = cropScale(*pWithoutDPI);
+        const auto aReloadedWithDPI = cropScale(*pWithDPI);
+        // PNG resolution and the imported physical size use integer units.
+        // Their conversion may lose one hundredth of a millimetre.
+        const Graphic& rReloaded = pWithoutDPI->GetGraphic();
+        CPPUNIT_ASSERT_EQUAL(MapUnit::Map100thMM, rReloaded.GetPrefMapMode().GetMapUnit());
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(double(aPhysicalSize.Width()),
+                                     double(rReloaded.GetPrefSize().Width()), 1.0);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(double(aPhysicalSize.Height()),
+                                     double(rReloaded.GetPrefSize().Height()), 1.0);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(aWithoutDPI.getX(), aReloadedWithoutDPI.getX(), 0.005);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(aWithoutDPI.getY(), aReloadedWithoutDPI.getY(), 0.005);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(aWithDPI.getX(), aReloadedWithDPI.getX(), 0.001);
+        CPPUNIT_ASSERT_DOUBLES_EQUAL(aWithDPI.getY(), aReloadedWithDPI.getY(), 0.001);
+        const GfxLink aReloadedWithDPILink = pWithDPI->GetGraphic().GetGfxLink();
+        CPPUNIT_ASSERT_EQUAL(aOriginalWithDPI.GetDataSize(), aReloadedWithDPILink.GetDataSize());
+        CPPUNIT_ASSERT_EQUAL(0,
+                             std::memcmp(aOriginalWithDPI.GetData(), aReloadedWithDPILink.GetData(),
+                                         aOriginalWithDPI.GetDataSize()));
+        mxComponent->dispose();
+        mxComponent.clear();
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf92375) { checkCropResolution(TestFilter::ODP, true); }
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf92375Flat) { checkCropResolution(TestFilter::FODP, true); }
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf92375Bitmap)
+{
+    checkCropResolution(TestFilter::ODP, false);
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf92375FlatBitmap)
+{
+    checkCropResolution(TestFilter::FODP, false);
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf92375PreferredSize)
+{
+    checkCropResolution(TestFilter::ODP, true, true);
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testTdf92375FlatPreferredSize)
+{
+    checkCropResolution(TestFilter::FODP, true, true);
 }
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testSemiTransparentText)
