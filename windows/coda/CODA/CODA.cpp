@@ -151,7 +151,7 @@ struct WindowState
     bool isTabbed = false;
     std::vector<int> tabIds;
     int activeTabId = 0;
-    // The tab strip. It is created with the window and shown at two documents.
+    // The tab strip. It is created with the window and shown while the window holds a document.
     wil::com_ptr<ICoreWebView2Controller> stripController;
     wil::com_ptr<ICoreWebView2> stripWebView;
     bool stripIsVisible = false;
@@ -415,6 +415,12 @@ static void updateStripVisibility(WindowState& window);
 static void pushTabsToStrip(WindowState& window);
 
 static void hideHoverCard();
+
+static bool hasStripInTitleBar(const WindowState& window);
+
+static int topResizeBorderHeight(HWND hWnd);
+
+static int titleBarFrameHeight(const WindowState& window);
 
 [[noreturn]] static void fatal(const std::string& message)
 {
@@ -1878,8 +1884,81 @@ static LRESULT CALLBACK HiddenOwnerWndProc(HWND hWnd, UINT message, WPARAM wPara
 
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
+    // The system draws the caption buttons of a window with the strip in its title bar, and it
+    // handles the mouse over them.
+    WindowState* frameWindow = findWindow(hWnd);
+    if (frameWindow && hasStripInTitleBar(*frameWindow))
+    {
+        LRESULT result;
+        if (DwmDefWindowProc(hWnd, message, wParam, lParam, &result))
+            return result;
+    }
+
     switch (message)
     {
+        case WM_NCCALCSIZE:
+        {
+            if (!wParam || !frameWindow || !hasStripInTitleBar(*frameWindow))
+                return DefWindowProc(hWnd, message, wParam, lParam);
+
+            // The client area takes the place of the title bar and of the resize border above it,
+            // and the system keeps the borders at the sides and at the bottom. A maximized window
+            // reaches above the screen by the height of that border, so its client area starts
+            // lower by as much.
+            NCCALCSIZE_PARAMS* params = reinterpret_cast<NCCALCSIZE_PARAMS*>(lParam);
+            const LONG top = params->rgrc[0].top;
+            const LRESULT result = DefWindowProc(hWnd, message, wParam, lParam);
+            params->rgrc[0].top = top;
+            if (IsZoomed(hWnd))
+                params->rgrc[0].top += topResizeBorderHeight(hWnd);
+            return result;
+        }
+
+        case WM_NCHITTEST:
+        {
+            const LRESULT result = DefWindowProc(hWnd, message, wParam, lParam);
+            if (result != HTCLIENT || !frameWindow || !hasStripInTitleBar(*frameWindow))
+                return result;
+
+            // The strip takes the clicks on itself, so what comes here is the top resize border,
+            // or the part of the title bar between the strip and the caption buttons.
+            POINT point = { static_cast<short>(LOWORD(lParam)),
+                            static_cast<short>(HIWORD(lParam)) };
+            ScreenToClient(hWnd, &point);
+            RECT client;
+            GetClientRect(hWnd, &client);
+            const int border = topResizeBorderHeight(hWnd);
+            if (!IsZoomed(hWnd) && point.y < border)
+            {
+                if (point.x < border)
+                    return HTTOPLEFT;
+                if (point.x >= client.right - border)
+                    return HTTOPRIGHT;
+                return HTTOP;
+            }
+            if (point.y < titleBarFrameHeight(*frameWindow))
+                return HTCAPTION;
+            return HTCLIENT;
+        }
+
+        case WM_PAINT:
+        {
+            if (!frameWindow || !hasStripInTitleBar(*frameWindow))
+                return DefWindowProc(hWnd, message, wParam, lParam);
+
+            // Black is clear in the frame that DWM extends into the client area, so the frame and
+            // the caption buttons show around the strip.
+            PAINTSTRUCT paint;
+            HDC dc = BeginPaint(hWnd, &paint);
+            RECT frame;
+            GetClientRect(hWnd, &frame);
+            frame.bottom =
+                std::min(frame.bottom, static_cast<LONG>(titleBarFrameHeight(*frameWindow)));
+            FillRect(dc, &frame, static_cast<HBRUSH>(GetStockObject(BLACK_BRUSH)));
+            EndPaint(hWnd, &paint);
+            return 0;
+        }
+
         case WM_CREATE:
             {
                 // Accept files dragged from Explorer onto the window, which arrive as WM_DROPFILES.
@@ -2270,9 +2349,12 @@ static bool isLightTheme()
 
 static bool darkModeEnabled() { return Desktop::getDarkMode().value_or(!isLightTheme()); }
 
-// This might not be defined for older Windows versions
+// These might not be defined for older Windows versions
 #ifndef DWMWA_USE_IMMERSIVE_DARK_MODE
 #define DWMWA_USE_IMMERSIVE_DARK_MODE 20
+#endif
+#ifndef DWMWA_CAPTION_COLOR
+#define DWMWA_CAPTION_COLOR 35
 #endif
 
 // Make the native (DWM-drawn) title bar of a window match the effective dark mode. The document UI
@@ -2286,6 +2368,17 @@ static void applyTitleBarTheme(HWND hWnd)
     {
         LOG_DBG("DwmSetWindowAttribute() for a dark title bar failed: " << hr);
         return;
+    }
+
+    // The frame around the caption buttons of a window with the strip in its title bar has the
+    // background colour of the strip, which is --color-background-dark in the light palette and
+    // --color-background-tabs-group in the dark one. Windows 10 has no caption colour and keeps
+    // its own.
+    const WindowState* window = findWindow(hWnd);
+    if (window && hasStripInTitleBar(*window))
+    {
+        const COLORREF captionColor = darkMode ? RGB(0x30, 0x30, 0x30) : RGB(0xe8, 0xe8, 0xe8);
+        DwmSetWindowAttribute(hWnd, DWMWA_CAPTION_COLOR, &captionColor, sizeof(captionColor));
     }
 
     // A window that is already on screen does not necessarily repaint its frame by itself, so ask
@@ -2825,6 +2918,66 @@ static int stripHeight(const WindowState& window)
     return MulDiv(TAB_STRIP_HEIGHT, GetDpiForWindow(window.hWnd), USER_DEFAULT_SCREEN_DPI);
 }
 
+// A tabbed window shows its tab strip where the title bar would be. The client area covers the
+// title bar, and DWM extends its frame down over the strip, so the system still draws the minimize,
+// maximize and close buttons there. A window in full screen has no frame at all.
+static bool hasStripInTitleBar(const WindowState& window)
+{
+    return window.isTabbed &&
+           (GetWindowLongW(window.hWnd, GWL_STYLE) & WS_CAPTION) == WS_CAPTION;
+}
+
+// The height of the resize border along the top of a window. A window with the strip in its title
+// bar has that border inside its client area.
+static int topResizeBorderHeight(HWND hWnd)
+{
+    const UINT dpi = GetDpiForWindow(hWnd);
+    return GetSystemMetricsForDpi(SM_CYFRAME, dpi) +
+           GetSystemMetricsForDpi(SM_CXPADDEDBORDER, dpi);
+}
+
+// Where the strip starts from the top of the client area. A strip in the title bar leaves the top
+// resize border free, except in a maximized window, which has that border above the screen.
+static int stripTop(const WindowState& window)
+{
+    if (!hasStripInTitleBar(window) || IsZoomed(window.hWnd))
+        return 0;
+    return topResizeBorderHeight(window.hWnd);
+}
+
+// The height of the frame that DWM extends into the client area, and that the caption buttons are
+// in, or 0 for a window that keeps its own title bar.
+static int titleBarFrameHeight(const WindowState& window)
+{
+    if (!hasStripInTitleBar(window))
+        return 0;
+    return stripTop(window) + MulDiv(TAB_STRIP_HEIGHT, GetDpiForWindow(window.hWnd),
+                                     USER_DEFAULT_SCREEN_DPI);
+}
+
+// The left edge of the caption buttons in client coordinates, or the right edge of the client area
+// for a window that keeps its own title bar.
+static LONG captionButtonsLeft(const WindowState& window)
+{
+    RECT client;
+    GetClientRect(window.hWnd, &client);
+
+    RECT buttons;
+    if (!hasStripInTitleBar(window) ||
+        FAILED(DwmGetWindowAttribute(window.hWnd, DWMWA_CAPTION_BUTTON_BOUNDS, &buttons,
+                                     sizeof(buttons))) ||
+        buttons.right <= buttons.left)
+        return client.right;
+
+    // The bounds are relative to the window, which starts left of the client area by the width of
+    // its left border.
+    RECT windowRect;
+    GetWindowRect(window.hWnd, &windowRect);
+    POINT origin = { 0, 0 };
+    ClientToScreen(window.hWnd, &origin);
+    return std::clamp(buttons.left - (origin.x - windowRect.left), client.left, client.right);
+}
+
 // A minimized window has no client area at all, so both of these keep the
 // bottom edge at or below the top one: a web view rejects a rectangle that is
 // the wrong way round.
@@ -2832,7 +2985,9 @@ static RECT stripBounds(const WindowState& window)
 {
     RECT bounds;
     GetClientRect(window.hWnd, &bounds);
+    bounds.top = std::min(bounds.bottom, bounds.top + stripTop(window));
     bounds.bottom = std::min(bounds.bottom, bounds.top + stripHeight(window));
+    bounds.right = captionButtonsLeft(window);
     return bounds;
 }
 
@@ -2840,12 +2995,22 @@ static RECT documentArea(const WindowState& window)
 {
     RECT bounds;
     GetClientRect(window.hWnd, &bounds);
-    bounds.top = std::min(bounds.bottom, bounds.top + stripHeight(window));
+    bounds.top = std::min(bounds.bottom, bounds.top + stripTop(window) + stripHeight(window));
     return bounds;
+}
+
+// DWM draws its frame, with the caption buttons, in the top of the client area of a window with the
+// strip in its title bar.
+static void updateTitleBarFrame(const WindowState& window)
+{
+    MARGINS margins = { 0, 0, titleBarFrameHeight(window), 0 };
+    DwmExtendFrameIntoClientArea(window.hWnd, &margins);
 }
 
 static void layoutTabs(WindowState& window)
 {
+    updateTitleBarFrame(window);
+
     if (window.stripController)
         window.stripController->put_Bounds(stripBounds(window));
 
@@ -2919,9 +3084,9 @@ static void notifyStrip(WindowState& window, const std::string& signal,
 
 static void updateStripVisibility(WindowState& window)
 {
-    // A single document needs no strip to pick from, and a presentation wants
-    // the whole monitor.
-    const bool visible = window.tabIds.size() > 1 && !window.isFullScreen;
+    // The strip is to take the place of the title bar, so a tabbed window shows it also with a
+    // single document. A presentation wants the whole monitor.
+    const bool visible = window.isTabbed && !window.tabIds.empty() && !window.isFullScreen;
     if (visible == window.stripIsVisible)
         return;
 
@@ -3209,11 +3374,12 @@ static void startHoverCard(const WindowState& window, int tabId, POINT point,
     if (!hoverCard.hWnd)
         return;
 
-    // The strip lies along the top of the client area, and it does not zoom, so the window's DPI
-    // is all that tells its CSS pixels and those of the screen apart.
+    // The strip does not zoom, so the window's DPI is all that tells its CSS pixels and those of
+    // the screen apart.
     const UINT dpi = GetDpiForWindow(window.hWnd);
-    point.x = MulDiv(point.x, dpi, USER_DEFAULT_SCREEN_DPI);
-    point.y = MulDiv(point.y, dpi, USER_DEFAULT_SCREEN_DPI);
+    const RECT strip = stripBounds(window);
+    point.x = strip.left + MulDiv(point.x, dpi, USER_DEFAULT_SCREEN_DPI);
+    point.y = strip.top + MulDiv(point.y, dpi, USER_DEFAULT_SCREEN_DPI);
     ClientToScreen(window.hWnd, &point);
 
     hoverCard.tabId = tabId;
@@ -3591,16 +3757,15 @@ static void processStripMessage(WindowState& window, const std::string& message)
     }
     else if (call == "tabContextMenuRequested" && argCount >= 3)
     {
-        // The page gives the click in its own CSS pixels from the top left of the strip, which is
-        // that of the window's client area. The strip does not zoom, so the window's DPI is all
-        // that tells the two units apart.
+        // The page gives the click in its own CSS pixels from the top left of the strip. The strip
+        // does not zoom, so the window's DPI is all that tells the two units apart.
         const UINT dpi = GetDpiForWindow(window.hWnd);
-        const int x = MulDiv(static_cast<int>(std::lround(args->getElement<double>(1))), dpi,
-                             USER_DEFAULT_SCREEN_DPI);
-        const int y = MulDiv(static_cast<int>(std::lround(args->getElement<double>(2))), dpi,
-                             USER_DEFAULT_SCREEN_DPI);
+        const RECT strip = stripBounds(window);
+        const int x = static_cast<int>(std::lround(args->getElement<double>(1)));
+        const int y = static_cast<int>(std::lround(args->getElement<double>(2)));
         PostMessageW(window.hWnd, CODA_WM_SHOWTABMENU, (WPARAM)args->getElement<int>(0),
-                     MAKELPARAM(x, y));
+                     MAKELPARAM(strip.left + MulDiv(x, dpi, USER_DEFAULT_SCREEN_DPI),
+                                strip.top + MulDiv(y, dpi, USER_DEFAULT_SCREEN_DPI)));
     }
     else if (call == "tabReordered" && argCount >= 2)
     {
@@ -3723,6 +3888,12 @@ static void createTabStrip(WindowState& window)
                             = settings.try_query<ICoreWebView2Settings6>();
                         if (settings6)
                             settings6->put_IsSwipeNavigationEnabled(FALSE);
+                        // The page marks the space around the tabs with app-region: drag, and a
+                        // drag there moves the window as a drag on the title bar does.
+                        wil::com_ptr<ICoreWebView2Settings9> settings9
+                            = settings.try_query<ICoreWebView2Settings9>();
+                        if (settings9)
+                            settings9->put_IsNonClientRegionSupportEnabled(TRUE);
 
                         EventRegistrationToken token;
                         webView->add_WebMessageReceived(
@@ -3776,7 +3947,7 @@ static void createTabStrip(WindowState& window)
                         // it is in the right colours from its first paint.
                         const std::string stripURL =
                             app_installation_uri + "../cool/qtapp-tabstrip.html?darkTheme=" +
-                            (currentStripTheme() == "dark" ? "true" : "false");
+                            (currentStripTheme() == "dark" ? "true" : "false") + "&titleBar=true";
                         webView->Navigate(Util::string_to_wide_string(stripURL).c_str());
 
                         return S_OK;
@@ -4173,6 +4344,10 @@ static WindowState& createTabbedWindow(const POINT* titleBarPoint = nullptr)
                                           WS_OVERLAPPEDWINDOW, x, y, width, height);
     window.isTabbed = true;
     tabbedWindow = window.hWnd;
+
+    // The window was created before it was known to be tabbed, so its frame and the colour of its
+    // title bar are computed again.
+    applyTitleBarTheme(window.hWnd);
 
     createTabStrip(window);
 

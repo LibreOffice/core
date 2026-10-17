@@ -12,6 +12,9 @@ m4_changequote([,])m4_dnl
         if (params.get('darkTheme') === 'true') {
             document.documentElement.setAttribute('data-theme', 'dark');
         }
+        if (params.get('titleBar') === 'true') {
+            document.documentElement.setAttribute('data-title-bar', 'true');
+        }
     })();
     </script>
     <link rel="stylesheet" href="color-palette.css" />

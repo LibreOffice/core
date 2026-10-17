@@ -18,6 +18,15 @@ body {
 	--strip-background: var(--color-background-tabs-group);
 	--strip-hover: var(--color-background-dark);
 }
+/* A strip that takes the place of the title bar moves the window from the
+   space around the tabs, and the tabs and the + button take the clicks. */
+[data-title-bar] #strip {
+	app-region: drag;
+}
+[data-title-bar] .tab,
+[data-title-bar] #new-tab {
+	app-region: no-drag;
+}
 #strip {
 	/* The radius of the top corners of the active tab, and of the outward
 	   curves at its foot. */
