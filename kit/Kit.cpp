@@ -2271,6 +2271,25 @@ std::string removeServerLoadOptions(const std::string& filterOptions,
     }
     return result;
 }
+
+/// Append ",name=value" to the comma-separated document load options string. A value is a single
+/// option, so one that is empty or holds a comma is left out.
+void appendLoadOption(std::string& options, std::string_view name, std::string_view value)
+{
+    if (value.empty())
+        return;
+
+    if (value.find(',') != std::string_view::npos)
+    {
+        LOG_WRN("Ignoring the [" << name << "] load option, its value holds a comma");
+        return;
+    }
+
+    options += ',';
+    options += name;
+    options += '=';
+    options += value;
+}
 }
 
 std::shared_ptr<COKitDocument> Document::load(const std::shared_ptr<ChildSession>& session)
@@ -2331,10 +2350,7 @@ std::shared_ptr<COKitDocument> Document::load(const std::shared_ptr<ChildSession
         options = removeServerLoadOptions(filterOption, serverOptions);
 
     for (const auto& option : serverOptions)
-    {
-        if (!option.value.empty())
-            options += ',' + std::string(option.name) + '=' + option.value;
-    }
+        appendLoadOption(options, option.name, option.value);
 
     const std::string wopiCertDir = pathFromFileURL(session->getJailedFilePath() + ".certs");
     if (FileUtil::Stat(wopiCertDir).exists())
