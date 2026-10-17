@@ -36,6 +36,7 @@
 #include <shobjidl.h>
 #include <shobjidl_core.h>
 
+#include <wincodec.h>
 #include <wincrypt.h>
 #include <winhttp.h>
 
@@ -129,6 +130,9 @@ struct DocumentTab
     std::string docType = "other";
     // The document holds changes that have not reached the file yet.
     bool isModified = false;
+    // A PNG image of what the document shows, sent by the page, or empty until the page has sent
+    // one.
+    std::string thumbnailPng;
     // The page has parsed its document and its stylesheets, so the WebView2 has something
     // styled to put on the screen. It stays hidden until then.
     bool hasContent = false;
@@ -225,6 +229,9 @@ static const wchar_t windowClass[] = L"CODA";
 
 // The class name of the transparent window that catches drops over the web view.
 static const wchar_t overlayWindowClass[] = L"CODADropOverlayWindow";
+
+// The class name of the card that shows a background document below its tab.
+static const wchar_t hoverCardWindowClass[] = L"CODATabHoverCard";
 
 // The hidden file open dialog and clipboard owner window class name.
 static const wchar_t hiddenOwnerWindowClass[] = L"CODAHiddenOwnerWindow";
@@ -406,6 +413,8 @@ static RECT documentArea(const WindowState& window);
 static void updateStripVisibility(WindowState& window);
 
 static void pushTabsToStrip(WindowState& window);
+
+static void hideHoverCard();
 
 [[noreturn]] static void fatal(const std::string& message)
 {
@@ -2205,7 +2214,10 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
             // active one, so the key is not taken from other applications and
             // each window opens the developer tools of the document it shows.
             if (LOWORD(wParam) == WA_INACTIVE)
+            {
                 UnregisterHotKey(hWnd, HOTKEY_ID_DEVTOOLS);
+                hideHoverCard();
+            }
             else
             {
                 RegisterHotKey(hWnd, HOTKEY_ID_DEVTOOLS,
@@ -2874,6 +2886,7 @@ static std::string currentTabsJson(const WindowState& window)
         entry->set("docType", tab->docType);
         entry->set("modified", tab->isModified);
         entry->set("active", tab->tabId == window.activeTabId);
+        entry->set("hasThumbnail", !tab->thumbnailPng.empty());
         tabs.add(entry);
     }
 
@@ -2913,6 +2926,8 @@ static void updateStripVisibility(WindowState& window)
         return;
 
     window.stripIsVisible = visible;
+    if (!visible)
+        hideHoverCard();
     if (window.stripController)
         window.stripController->put_IsVisible(visible && window.stripHasContent);
     layoutTabs(window);
@@ -2933,12 +2948,369 @@ static void focusActiveDocument(const WindowState& window)
         tab->webViewController->MoveFocus(COREWEBVIEW2_MOVE_FOCUS_REASON_PROGRAMMATIC);
 }
 
+// How long the pointer has to rest on a tab before its hover card shows, in milliseconds.
+static const UINT HOVER_CARD_DELAY = 500;
+// The timer of the hover card window that holds that delay.
+static const int TIMER_ID_HOVER_CARD = 1;
+// The frame of the image in the hover card, at the standard resolution.
+static const int HOVER_CARD_IMAGE_WIDTH = 218;
+static const int HOVER_CARD_IMAGE_HEIGHT = 170;
+
+// The card with the name and the image of a background document, below the tab that the pointer
+// rests on. One card serves every window, because the pointer rests on one tab at a time.
+struct HoverCard
+{
+    HWND hWnd = 0;
+    // The tab the card is for, or 0 when the pointer rests on no tab.
+    int tabId = 0;
+    // The bottom left corner of that tab, in screen coordinates.
+    POINT position = {};
+    // The colours of the card, from the theme of the strip.
+    COLORREF background = RGB(0xf8, 0xf9, 0xfa);
+    COLORREF text = RGB(0x33, 0x33, 0x33);
+    COLORREF border = RGB(0x94, 0x94, 0x94);
+    // What the card shows, laid out in the client area of the card.
+    std::wstring title;
+    HFONT font = nullptr;
+    RECT titleRect = {};
+    HBITMAP image = nullptr;
+    RECT imageRect = {};
+};
+
+static HoverCard hoverCard;
+
+// A colour from the strip page, which gives it as a CSS colour string such as "#f8f9fa" or
+// "rgb(248, 249, 250)". Any other form gives the fallback.
+static COLORREF cssColor(const std::string& css, COLORREF fallback)
+{
+    const std::size_t first = css.find_first_not_of(" \t");
+    if (first == std::string::npos)
+        return fallback;
+    const std::string value = css.substr(first, css.find_last_not_of(" \t") - first + 1);
+
+    if (value[0] == '#')
+    {
+        const std::string hex = value.substr(1);
+        if (hex.find_first_not_of("0123456789abcdefABCDEF") != std::string::npos)
+            return fallback;
+        // The short forms have one digit for each channel, and an alpha channel is ignored.
+        if (hex.size() == 3 || hex.size() == 4)
+            return RGB(std::stoi(hex.substr(0, 1), nullptr, 16) * 17,
+                       std::stoi(hex.substr(1, 1), nullptr, 16) * 17,
+                       std::stoi(hex.substr(2, 1), nullptr, 16) * 17);
+        if (hex.size() == 6 || hex.size() == 8)
+            return RGB(std::stoi(hex.substr(0, 2), nullptr, 16),
+                       std::stoi(hex.substr(2, 2), nullptr, 16),
+                       std::stoi(hex.substr(4, 2), nullptr, 16));
+        return fallback;
+    }
+
+    if (value.starts_with("rgb(") || value.starts_with("rgba("))
+    {
+        const char* p = value.c_str() + value.find('(') + 1;
+        int channels[3];
+        for (int& channel : channels)
+        {
+            char* end;
+            const long number = std::strtol(p, &end, 10);
+            if (end == p || number < 0 || number > 255)
+                return fallback;
+            channel = static_cast<int>(number);
+            p = end + std::strspn(end, " ,");
+        }
+        return RGB(channels[0], channels[1], channels[2]);
+    }
+
+    return fallback;
+}
+
+// A PNG image fitted inside a box of the given size in pixels, keeping its shape, and drawn over
+// the background colour where it is transparent. The size of the bitmap goes to size. There is no
+// bitmap when the PNG cannot be read.
+static HBITMAP fittedImage(const std::string& png, int boxWidth, int boxHeight,
+                           COLORREF background, SIZE& size)
+{
+    wil::com_ptr<IWICImagingFactory> factory;
+    if (FAILED(CoCreateInstance(CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER,
+                                IID_PPV_ARGS(factory.put()))))
+        return nullptr;
+
+    wil::com_ptr<IWICStream> stream;
+    if (FAILED(factory->CreateStream(&stream)) ||
+        FAILED(stream->InitializeFromMemory(
+            reinterpret_cast<BYTE*>(const_cast<char*>(png.data())),
+            static_cast<DWORD>(png.size()))))
+        return nullptr;
+
+    wil::com_ptr<IWICBitmapDecoder> decoder;
+    wil::com_ptr<IWICBitmapFrameDecode> frame;
+    UINT width, height;
+    if (FAILED(factory->CreateDecoderFromStream(stream.get(), nullptr,
+                                                WICDecodeMetadataCacheOnDemand, &decoder)) ||
+        FAILED(decoder->GetFrame(0, &frame)) || FAILED(frame->GetSize(&width, &height)) ||
+        width == 0 || height == 0)
+        return nullptr;
+
+    const double scale = std::min(static_cast<double>(boxWidth) / width,
+                                  static_cast<double>(boxHeight) / height);
+    const UINT fittedWidth = std::max(1U, static_cast<UINT>(std::lround(width * scale)));
+    const UINT fittedHeight = std::max(1U, static_cast<UINT>(std::lround(height * scale)));
+
+    // The pixels come out with the colour already multiplied by the alpha, so the background
+    // only has to be added in proportion to what the image leaves uncovered.
+    wil::com_ptr<IWICBitmapScaler> scaler;
+    wil::com_ptr<IWICFormatConverter> converter;
+    if (FAILED(factory->CreateBitmapScaler(&scaler)) ||
+        FAILED(scaler->Initialize(frame.get(), fittedWidth, fittedHeight,
+                                  WICBitmapInterpolationModeFant)) ||
+        FAILED(factory->CreateFormatConverter(&converter)) ||
+        FAILED(converter->Initialize(scaler.get(), GUID_WICPixelFormat32bppPBGRA,
+                                     WICBitmapDitherTypeNone, nullptr, 0.0,
+                                     WICBitmapPaletteTypeCustom)))
+        return nullptr;
+
+    BITMAPINFO info = {};
+    info.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+    info.bmiHeader.biWidth = static_cast<LONG>(fittedWidth);
+    // A negative height makes the rows run from the top down, as WIC gives them.
+    info.bmiHeader.biHeight = -static_cast<LONG>(fittedHeight);
+    info.bmiHeader.biPlanes = 1;
+    info.bmiHeader.biBitCount = 32;
+    info.bmiHeader.biCompression = BI_RGB;
+
+    void* bits = nullptr;
+    HBITMAP bitmap = CreateDIBSection(nullptr, &info, DIB_RGB_COLORS, &bits, nullptr, 0);
+    if (!bitmap)
+        return nullptr;
+
+    const UINT stride = fittedWidth * 4;
+    if (FAILED(converter->CopyPixels(nullptr, stride, stride * fittedHeight,
+                                     static_cast<BYTE*>(bits))))
+    {
+        DeleteObject(bitmap);
+        return nullptr;
+    }
+
+    BYTE* pixel = static_cast<BYTE*>(bits);
+    for (UINT i = 0; i < fittedWidth * fittedHeight; i++, pixel += 4)
+    {
+        const int uncovered = 255 - pixel[3];
+        pixel[0] = static_cast<BYTE>(pixel[0] + (GetBValue(background) * uncovered + 127) / 255);
+        pixel[1] = static_cast<BYTE>(pixel[1] + (GetGValue(background) * uncovered + 127) / 255);
+        pixel[2] = static_cast<BYTE>(pixel[2] + (GetRValue(background) * uncovered + 127) / 255);
+        pixel[3] = 255;
+    }
+
+    size = { static_cast<LONG>(fittedWidth), static_cast<LONG>(fittedHeight) };
+    return bitmap;
+}
+
+static void hideHoverCard()
+{
+    hoverCard.tabId = 0;
+    if (hoverCard.hWnd)
+    {
+        KillTimer(hoverCard.hWnd, TIMER_ID_HOVER_CARD);
+        ShowWindow(hoverCard.hWnd, SW_HIDE);
+    }
+}
+
+// Show the card for the tab that the pointer rests on, with the image that its document sent
+// last. The active tab shows the document itself, so it gets no card.
+static void showHoverCard()
+{
+    DocumentTab* tab = findTab(hoverCard.tabId);
+    WindowState* window = tab ? findWindow(tab->hWnd) : nullptr;
+    if (!hoverCard.hWnd || !window || tab->thumbnailPng.empty() ||
+        window->activeTabId == tab->tabId)
+    {
+        if (hoverCard.hWnd)
+            ShowWindow(hoverCard.hWnd, SW_HIDE);
+        return;
+    }
+
+    const UINT dpi = GetDpiForWindow(window->hWnd);
+    const auto scaled = [dpi](int value) { return MulDiv(value, dpi, USER_DEFAULT_SCREEN_DPI); };
+
+    if (hoverCard.font)
+        DeleteObject(hoverCard.font);
+    NONCLIENTMETRICSW metrics = { sizeof(NONCLIENTMETRICSW) };
+    hoverCard.font = SystemParametersInfoForDpi(SPI_GETNONCLIENTMETRICS, sizeof(metrics),
+                                                &metrics, 0, dpi)
+                         ? CreateFontIndirectW(&metrics.lfStatusFont)
+                         : nullptr;
+
+    int titleHeight = scaled(16);
+    if (HDC dc = GetDC(nullptr))
+    {
+        const HGDIOBJ oldFont = SelectObject(dc, hoverCard.font ? hoverCard.font
+                                                                : GetStockObject(DEFAULT_GUI_FONT));
+        TEXTMETRICW textMetrics;
+        if (GetTextMetricsW(dc, &textMetrics))
+            titleHeight = textMetrics.tmHeight;
+        SelectObject(dc, oldFont);
+        ReleaseDC(nullptr, dc);
+    }
+
+    // The title above the image, with margins of 8 at the sides and the bottom, 6 at the top and
+    // 6 between the two. Every card has the same size, and an image of another shape is fitted
+    // inside the frame and centred.
+    const int imageWidth = scaled(HOVER_CARD_IMAGE_WIDTH);
+    const int imageHeight = scaled(HOVER_CARD_IMAGE_HEIGHT);
+    hoverCard.titleRect = { scaled(8), scaled(6), scaled(8) + imageWidth,
+                            scaled(6) + titleHeight };
+    const RECT imageFrame = { scaled(8), hoverCard.titleRect.bottom + scaled(6),
+                              scaled(8) + imageWidth,
+                              hoverCard.titleRect.bottom + scaled(6) + imageHeight };
+    const int cardWidth = imageFrame.right + scaled(8);
+    const int cardHeight = imageFrame.bottom + scaled(8);
+
+    if (hoverCard.image)
+        DeleteObject(hoverCard.image);
+    SIZE size = {};
+    hoverCard.image =
+        fittedImage(tab->thumbnailPng, imageWidth, imageHeight, hoverCard.background, size);
+    const int left = imageFrame.left + (imageWidth - size.cx) / 2;
+    const int top = imageFrame.top + (imageHeight - size.cy) / 2;
+    hoverCard.imageRect = { left, top, left + size.cx, top + size.cy };
+
+    // The tooltip of a tab shows the full path of its document, so the card does too.
+    const std::string path = fileUriToWindowsPath(tab->filenameAndUri.uri);
+    hoverCard.title =
+        Util::string_to_wide_string(path.empty() ? tab->filenameAndUri.filename : path);
+    std::wstring accessibleName = translate("TabManager", "Preview of %1");
+    const std::size_t placeholder = accessibleName.find(L"%1");
+    if (placeholder != std::wstring::npos)
+        accessibleName.replace(placeholder, 2, hoverCard.title);
+    SetWindowTextW(hoverCard.hWnd, accessibleName.c_str());
+
+    // The card stays on the monitor of the tab, even for a tab near its right edge.
+    POINT position = hoverCard.position;
+    MONITORINFO monitor = { sizeof(MONITORINFO) };
+    if (GetMonitorInfoW(MonitorFromPoint(position, MONITOR_DEFAULTTONEAREST), &monitor))
+        position.x = std::max(monitor.rcWork.left,
+                              std::min(position.x, monitor.rcWork.right - cardWidth));
+
+    SetWindowPos(hoverCard.hWnd, HWND_TOPMOST, position.x, position.y, cardWidth, cardHeight,
+                 SWP_NOACTIVATE | SWP_SHOWWINDOW);
+    InvalidateRect(hoverCard.hWnd, nullptr, TRUE);
+}
+
+// The pointer has come to rest on a tab of the window. The point is the bottom left corner of the
+// tab in the CSS pixels of the strip, and the colours are those of the theme of the strip.
+static void startHoverCard(const WindowState& window, int tabId, POINT point,
+                           const std::string& background, const std::string& text,
+                           const std::string& border)
+{
+    if (!hoverCard.hWnd)
+        hoverCard.hWnd = CreateWindowExW(WS_EX_TOOLWINDOW | WS_EX_NOACTIVATE | WS_EX_TOPMOST,
+                                         hoverCardWindowClass, L"", WS_POPUP, 0, 0, 0, 0,
+                                         nullptr, nullptr, appInstance, nullptr);
+    if (!hoverCard.hWnd)
+        return;
+
+    // The strip lies along the top of the client area, and it does not zoom, so the window's DPI
+    // is all that tells its CSS pixels and those of the screen apart.
+    const UINT dpi = GetDpiForWindow(window.hWnd);
+    point.x = MulDiv(point.x, dpi, USER_DEFAULT_SCREEN_DPI);
+    point.y = MulDiv(point.y, dpi, USER_DEFAULT_SCREEN_DPI);
+    ClientToScreen(window.hWnd, &point);
+
+    hoverCard.tabId = tabId;
+    hoverCard.position = point;
+    hoverCard.background = cssColor(background, RGB(0xf8, 0xf9, 0xfa));
+    hoverCard.text = cssColor(text, RGB(0x33, 0x33, 0x33));
+    hoverCard.border = cssColor(border, RGB(0x94, 0x94, 0x94));
+
+    // Moving from one tab to the next while a card is up swaps the card at once.
+    if (IsWindowVisible(hoverCard.hWnd))
+        showHoverCard();
+    else
+        SetTimer(hoverCard.hWnd, TIMER_ID_HOVER_CARD, HOVER_CARD_DELAY, nullptr);
+}
+
+// The card only shows what the pointer rests on, so it takes neither the focus nor the mouse.
+static LRESULT CALLBACK HoverCardWndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+    switch (message)
+    {
+        case WM_TIMER:
+            if (wParam != TIMER_ID_HOVER_CARD)
+                break;
+            KillTimer(hWnd, TIMER_ID_HOVER_CARD);
+            showHoverCard();
+            return 0;
+
+        case WM_MOUSEACTIVATE:
+            return MA_NOACTIVATE;
+
+        case WM_NCHITTEST:
+            return HTTRANSPARENT;
+
+        case WM_PAINT:
+        {
+            PAINTSTRUCT paint;
+            HDC dc = BeginPaint(hWnd, &paint);
+
+            RECT client;
+            GetClientRect(hWnd, &client);
+            HBRUSH backgroundBrush = CreateSolidBrush(hoverCard.background);
+            FillRect(dc, &client, backgroundBrush);
+            DeleteObject(backgroundBrush);
+            HBRUSH borderBrush = CreateSolidBrush(hoverCard.border);
+            FrameRect(dc, &client, borderBrush);
+            DeleteObject(borderBrush);
+
+            const HGDIOBJ font =
+                hoverCard.font ? hoverCard.font : GetStockObject(DEFAULT_GUI_FONT);
+            const HGDIOBJ oldFont = SelectObject(dc, font);
+            SetBkMode(dc, TRANSPARENT);
+            SetTextColor(dc, hoverCard.text);
+            RECT titleRect = hoverCard.titleRect;
+            DrawTextW(dc, hoverCard.title.c_str(), -1, &titleRect,
+                      DT_SINGLELINE | DT_VCENTER | DT_NOPREFIX | DT_PATH_ELLIPSIS);
+            SelectObject(dc, oldFont);
+
+            if (hoverCard.image)
+            {
+                if (HDC imageDC = CreateCompatibleDC(dc))
+                {
+                    const HGDIOBJ oldBitmap = SelectObject(imageDC, hoverCard.image);
+                    BitBlt(dc, hoverCard.imageRect.left, hoverCard.imageRect.top,
+                           hoverCard.imageRect.right - hoverCard.imageRect.left,
+                           hoverCard.imageRect.bottom - hoverCard.imageRect.top, imageDC, 0, 0,
+                           SRCCOPY);
+                    SelectObject(imageDC, oldBitmap);
+                    DeleteDC(imageDC);
+                }
+            }
+
+            EndPaint(hWnd, &paint);
+            return 0;
+        }
+    }
+
+    return DefWindowProcW(hWnd, message, wParam, lParam);
+}
+
 // Bring one document of the window to the front and leave the rest behind it.
 static void activateTab(WindowState& window, int tabId)
 {
     DocumentTab* tab = findTab(tabId);
     if (!tab)
         return;
+
+    hideHoverCard();
+
+    // The tab the user leaves sends an image of what it shows, for the card of its tab.
+    DocumentTab* previous = activeTabOf(window);
+    if (previous && previous != tab && previous->webView && previous->hasContent)
+        previous->webView->ExecuteScript(
+            L"if (window.app && window.app.map && window.app.map.requestTabThumbnail)"
+            L"  window.app.map.requestTabThumbnail();",
+            Microsoft::WRL::Callback<ICoreWebView2ExecuteScriptCompletedHandler>(
+                [](HRESULT, LPCWSTR) -> HRESULT { return S_OK; })
+                .Get());
 
     window.activeTabId = tabId;
 
@@ -2963,6 +3335,9 @@ static void closeTab(WindowState& window, int tabId)
     DocumentTab* tab = findTab(tabId);
     if (!tab)
         return;
+
+    if (hoverCard.tabId == tabId)
+        hideHoverCard();
 
     if (tab->isConsole)
     {
@@ -3084,6 +3459,8 @@ static void showTabContextMenu(HWND hWnd, int tabId, POINT point)
 {
     if (!findWindow(hWnd) || !findTab(tabId))
         return;
+
+    hideHoverCard();
 
     enum
     {
@@ -3278,10 +3655,24 @@ static void processStripMessage(WindowState& window, const std::string& message)
         PostMessageW(window.hWnd, CODA_WM_MOVETABTOWINDOW, (WPARAM)args->getElement<int>(0),
                      (LPARAM)args->getElement<int>(1));
     }
+    else if (call == "tabHoverStarted" && argCount >= 6)
+    {
+        const POINT point = { static_cast<LONG>(std::lround(args->getElement<double>(1))),
+                              static_cast<LONG>(std::lround(args->getElement<double>(2))) };
+        startHoverCard(window, args->getElement<int>(0), point, args->getElement<std::string>(3),
+                       args->getElement<std::string>(4), args->getElement<std::string>(5));
+    }
+    else if (call == "tabHoverEnded")
+    {
+        hideHoverCard();
+    }
     else if (call == "tabDragStarted" || call == "targetDragOver")
     {
         // The app learns where a tab drag ended from tabDragEnded, and from the drop calls of the
-        // strip it ended on, so it does not follow the drag as it goes.
+        // strip it ended on, so it does not follow the drag as it goes. The start of a drag only
+        // takes the hover card away.
+        if (call == "tabDragStarted")
+            hideHoverCard();
     }
     else
     {
@@ -4578,6 +4969,28 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
                 CloseClipboard();
             }
         }
+        else if (s.starts_with(L"TABTHUMBNAIL "))
+        {
+            // An image of what the document shows, as a "data:image/png;base64," URL. Anything
+            // else is ignored.
+            const std::string dataUrl = Util::wide_string_to_string(s.substr(13));
+            constexpr std::string_view prefix = "data:image/png;base64,";
+            if (!dataUrl.starts_with(prefix))
+                return;
+            std::string png = Util::base64Decode(dataUrl.substr(prefix.size()));
+            if (png.empty())
+                return;
+
+            // The strip only needs to know that a tab has an image, so later images skip the
+            // push.
+            const bool isFirstThumbnail = data.thumbnailPng.empty();
+            data.thumbnailPng = std::move(png);
+            WindowState* window = findWindow(data.hWnd);
+            if (isFirstThumbnail && window)
+                pushTabsToStrip(*window);
+            if (hoverCard.tabId == data.tabId && IsWindowVisible(hoverCard.hWnd))
+                showHoverCard();
+        }
         else if (s.starts_with(L"HYPERLINK "))
         {
             do_open_hyperlink(data.hWnd, s.substr(10));
@@ -5296,6 +5709,20 @@ int APIENTRY wWinMain(HINSTANCE hInstance, HINSTANCE, PWSTR, int showWindowMode)
 
         if (!RegisterClassExW(&wcex))
             fatal("RegisterClassExW() for the drop overlay window failed");
+    }
+
+    {
+        WNDCLASSEXW wcex = { sizeof(WNDCLASSEXW) };
+
+        // A drop shadow, as on the tooltips of the system.
+        wcex.style = CS_DROPSHADOW;
+        wcex.lpfnWndProc = HoverCardWndProc;
+        wcex.hInstance = hInstance;
+        wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
+        wcex.lpszClassName = hoverCardWindowClass;
+
+        if (!RegisterClassExW(&wcex))
+            fatal("RegisterClassExW() for the tab hover card failed");
     }
 
     // Open the first document here, then open the rest one by one once the previous has loaded.

@@ -1875,7 +1875,7 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 
 	// Give the desktop app the image of the current slide, for the hover card on the document tab.
 	_sendTabThumbnail: function () {
-		if (!window.ThisIsTheQtApp || app.file.fileBasedView)
+		if (!(window.ThisIsTheQtApp || window.ThisIsTheWindowsApp) || app.file.fileBasedView)
 			return;
 		const tile = this._previewTiles[this._map._docLayer._selectedPart];
 		if (!tile || !tile.fetched || tile.src === this._lastTabThumbnail)

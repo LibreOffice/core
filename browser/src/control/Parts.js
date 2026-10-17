@@ -347,7 +347,9 @@ window.L.Map.include({
 	// tab. The document canvas is cropped from its centre to the thumbnail's 218 x 170 shape.
 	requestTabThumbnail: function () {
 		const docLayer = this._docLayer;
-		if (!window.ThisIsTheQtApp || !docLayer || !(docLayer.isWriter() || docLayer.isCalc()))
+		if (!(window.ThisIsTheQtApp || window.ThisIsTheWindowsApp))
+			return;
+		if (!docLayer || !(docLayer.isWriter() || docLayer.isCalc()))
 			return;
 		const source = document.getElementById('document-canvas');
 		if (!source || !source.width || !source.height)
