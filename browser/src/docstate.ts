@@ -131,6 +131,7 @@
 			*/
 			rectangle: null, // SimpleRectangle.
 			logical: null, // { paragraph, index } once a cursor message carries it.
+			anchor: null, // { paragraph, index } of the selection's other end.
 		},
 		// The sequence number of the newest key, mouse, textinput, removetextcontext or
 		// textcursor message sent to the server, 0 before any was sent.

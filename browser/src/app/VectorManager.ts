@@ -857,11 +857,17 @@ class VectorManager extends RenderManagerBase {
 	// The cached tree and caret of the edited part, or null when no caret is
 	// visible, text is selected or the part is not cached.
 	private _editTarget(): EditTarget | null {
-		const cursor = app.file.textCursor;
-		if (!cursor || !cursor.visible || !cursor.rectangle) return null;
 		// Typing over a selection replaces it, which is more than an insertion,
 		// so the server handles that edit.
 		if (TextSelections.isActive()) return null;
+		return this._caretTarget();
+	}
+
+	// The cached tree and caret of the edited part, with text selected or not, or null when no
+	// caret is visible or the part is not cached.
+	private _caretTarget(): EditTarget | null {
+		const cursor = app.file.textCursor;
+		if (!cursor || !cursor.visible || !cursor.rectangle) return null;
 		const partId = this._selectedPartId();
 		const data = partId === undefined ? undefined : this._cache.get(partId);
 		if (!data) return null;
@@ -914,22 +920,45 @@ class VectorManager extends RenderManagerBase {
 		);
 	}
 
-	/// Move the caret one character left (step -1) or right (step 1). True when it moved.
-	moveCaretByCharacter(step: -1 | 1): boolean {
-		const target = this._editTarget();
+	/*
+		The anchor a move here selects from, or null for no selection. Undefined when the
+		move is for the server: it drops a selection, or the anchor is not known here.
+	*/
+	private _anchorForMove(
+		caret: cool.LogicalCaret,
+		extend: boolean,
+	): cool.LogicalCaret | null | undefined {
+		const anchor = app.file.textCursor.anchor ?? null;
+		// A selection over a paragraph break alone draws no rectangle and still has its
+		// anchor.
+		if (extend && anchor) return anchor;
+		if (TextSelections.isActive()) return undefined;
+		return extend ? { paragraph: caret.paragraph, index: caret.index } : null;
+	}
+
+	/// Move the caret one character left (step -1) or right (step 1). With extend, the
+	/// selection follows the caret. True when it moved.
+	moveCaretByCharacter(step: -1 | 1, extend: boolean = false): boolean {
+		const target = this._caretTarget();
 		if (!target || !target.logical) return false;
+		const anchor = this._anchorForMove(target.logical, extend);
+		if (anchor === undefined) return false;
 		const position = this._lookUpCaret(target);
 		const entryId = position?.objectId;
 		if (!position || entryId === undefined) return false;
 		const logical = cool.stepByCharacter(position, target.logical, step);
-		return logical !== null && this._moveCaret(target, entryId, logical);
+		return (
+			logical !== null && this._moveCaret(target, entryId, logical, anchor)
+		);
 	}
 
 	/// Move the caret one line up (step -1) or down (step 1), keeping its starting x over
-	/// several moves. True when it moved.
-	moveCaretByLine(step: -1 | 1): boolean {
-		const target = this._editTarget();
+	/// several moves. With extend, the selection follows the caret. True when it moved.
+	moveCaretByLine(step: -1 | 1, extend: boolean = false): boolean {
+		const target = this._caretTarget();
 		if (!target || !target.logical) return false;
+		const anchor = this._anchorForMove(target.logical, extend);
+		if (anchor === undefined) return false;
 		const position = this._lookUpCaret(target);
 		const entryId = position?.objectId;
 		if (!position || entryId === undefined) return false;
@@ -947,7 +976,8 @@ class VectorManager extends RenderManagerBase {
 				x,
 				step,
 			) ?? null;
-		if (!logical || !this._moveCaret(target, entryId, logical)) return false;
+		if (!logical || !this._moveCaret(target, entryId, logical, anchor))
+			return false;
 		this._travelX = { x, logical: { ...logical } };
 		return true;
 	}
@@ -955,24 +985,25 @@ class VectorManager extends RenderManagerBase {
 	// The x kept over moves by line, and the caret the last of them left.
 	private _travelX: { x: number; logical: cool.LogicalCaret } | null = null;
 
-	/// Put the caret where a click at (x, y), in document twips, lands in the edited text.
-	/// hitId is the object at the point, if any. True when the caret moved.
-	placeCaretAt(x: number, y: number, hitId: number | undefined): boolean {
-		const target = this._editTarget();
-		if (!target) return false;
+	// The entry that holds the caret for a press at (x, y) on the object hitId, or undefined
+	// when the press is for the server.
+	private _pressedEntry(
+		target: EditTarget,
+		hitId: number | undefined,
+		x: number,
+		y: number,
+	): number | undefined {
 		const entryId = this._lookUpCaret(target)?.objectId;
-		if (entryId === undefined) return false;
+		if (entryId === undefined) return undefined;
 		const partId = target.tree.data.partId;
-		// A click off the edited object ends the edit, so it is for the engine.
+		// A press off the edited object ends the edit, so it is for the engine.
 		if (
 			hitId === undefined ||
 			(hitId !== entryId && hitId !== this._editedObjectOf(partId, entryId)) ||
 			!this._mayHoldTheCaret(partId, entryId, hitId, x, y)
 		)
-			return false;
-		const logical =
-			this._textOf(target.tree, entryId)?.caretAtPoint(x, y) ?? null;
-		return logical !== null && this._moveCaret(target, entryId, logical);
+			return undefined;
+		return entryId;
 	}
 
 	// The objectKind of a table.
@@ -1006,15 +1037,65 @@ class VectorManager extends RenderManagerBase {
 		);
 	}
 
-	// Put the caret at logical in the entry and draw it. The engine is told later. False when
-	// no run shows the position.
+	/// Put the caret where a click at (x, y), in document twips, lands in the edited text, and
+	/// drop any selection. hitId is the object at the point, if any. True when the caret moved.
+	placeCaretAt(x: number, y: number, hitId: number | undefined): boolean {
+		const target = this._caretTarget();
+		if (!target) return false;
+		const entryId = this._pressedEntry(target, hitId, x, y);
+		if (entryId === undefined) return false;
+		const logical =
+			this._textOf(target.tree, entryId)?.caretAtPoint(x, y) ?? null;
+		return logical !== null && this._moveCaret(target, entryId, logical, null);
+	}
+
+	// The entry and the caret where a drag that selects text started.
+	private _dragStart: { entryId: number; anchor: cool.LogicalCaret } | null =
+		null;
+
+	/// Start a drag that selects text from a press at (x, y), in document twips. hitId is the
+	/// object at the point, if any. True when the caret moved to the press.
+	startTextDrag(x: number, y: number, hitId: number | undefined): boolean {
+		this._dragStart = null;
+		const target = this._caretTarget();
+		if (!target) return false;
+		const entryId = this._pressedEntry(target, hitId, x, y);
+		if (entryId === undefined) return false;
+		const anchor = this._textOf(target.tree, entryId)?.caretAtPoint(x, y);
+		if (!anchor || !this._moveCaret(target, entryId, anchor, null))
+			return false;
+		this._dragStart = { entryId, anchor };
+		return true;
+	}
+
+	/// Select the text from where the drag started to the mouse at (x, y), in document twips.
+	dragTextTo(x: number, y: number): void {
+		const start = this._dragStart;
+		const target = this._caretTarget();
+		if (!start || !target) return;
+		const logical = this._textOf(target.tree, start.entryId)?.caretNearPoint(
+			x,
+			y,
+		);
+		if (logical) this._moveCaret(target, start.entryId, logical, start.anchor);
+	}
+
+	endTextDrag(): void {
+		this._dragStart = null;
+	}
+
+	// Put the caret at logical in the entry and draw it, with the text from the anchor to it
+	// selected. The engine is told later. False when no run shows the position.
 	private _moveCaret(
 		target: EditTarget,
 		entryId: number,
 		logical: cool.LogicalCaret,
+		anchor: cool.LogicalCaret | null,
 	): boolean {
 		const geometry = target.tree.caretIn(entryId, logical)?.geometry();
 		if (!geometry) return false;
+		// An anchor at the caret selects nothing.
+		if (anchor && cool.compareCarets(anchor, logical) === 0) anchor = null;
 
 		this._travelX = null;
 		const partId = target.tree.data.partId;
@@ -1023,10 +1104,55 @@ class VectorManager extends RenderManagerBase {
 			entryId,
 			objectId: this._editedObjectOf(partId, entryId),
 			logical,
+			anchor,
 		});
 		app.file.textCursor.logical = { ...logical };
+		app.file.textCursor.anchor = anchor ? { ...anchor } : null;
 		this._setCaretRectangle(geometry);
+		this._showSelection(target.tree, entryId, anchor, logical);
 		return true;
+	}
+
+	// Draw the selection from the anchor to the caret, or remove it without an anchor.
+	private _showSelection(
+		tree: cool.PredictionTree,
+		entryId: number,
+		anchor: cool.LogicalCaret | null,
+		logical: cool.LogicalCaret,
+	): void {
+		const documentLayer = this._docLayer;
+		if (!anchor) {
+			if (TextSelections.isActive()) documentLayer.showTextSelection([]);
+			return;
+		}
+		const rectangles =
+			this._textOf(tree, entryId)?.selectionRectangles(anchor, logical) ?? [];
+		documentLayer.showTextSelection(
+			rectangles.map((rectangle) =>
+				[rectangle.x, rectangle.y, rectangle.width, rectangle.height].map(
+					Math.round,
+				),
+			),
+		);
+
+		// The handles go at the start and the end of the selection, in reading order.
+		const [from, to] =
+			cool.compareCarets(anchor, logical) <= 0
+				? [anchor, logical]
+				: [logical, anchor];
+		const handle = (caret: cool.LogicalCaret): cool.SimpleRectangle | null => {
+			const geometry = tree.caretIn(entryId, caret)?.geometry();
+			return geometry
+				? new cool.SimpleRectangle(
+						Math.round(geometry.x),
+						Math.round(geometry.top),
+						0,
+						Math.round(geometry.height),
+					)
+				: null;
+		};
+		TextSelections.setStartRectangle(handle(from));
+		TextSelections.setEndRectangle(handle(to));
 	}
 
 	// Apply an edit at the caret, record it for replay and move the caret. The

@@ -1371,15 +1371,18 @@ void SdrObjEditView::ImpSetKitTextObjectId(OutlinerView& rView) const
         rView.GetEditView().SetKitTextObjectId(pEdited->GetUniqueID());
 }
 
-bool SdrObjEditView::SetKitTextCursor(sal_uInt64 nObjectId, sal_Int32 nParagraph, sal_Int32 nIndex)
+bool SdrObjEditView::SetKitTextCursor(sal_uInt64 nObjectId, sal_Int32 nParagraph, sal_Int32 nIndex,
+                                      sal_Int32 nAnchorParagraph, sal_Int32 nAnchorIndex)
 {
     rtl::Reference<SdrTextObj> pEdited = mxWeakTextEditObj.get();
     if (!pEdited.is() || !mpTextEditOutlinerView)
         return false;
 
     const EditEngine& rEditEngine = mpTextEditOutlinerView->GetOutliner().GetEditEngine();
-    if (pEdited->GetUniqueID() != nObjectId || nParagraph < 0
-        || nParagraph >= rEditEngine.GetParagraphCount() || nIndex < 0)
+    const sal_Int32 nParagraphCount = rEditEngine.GetParagraphCount();
+    if (pEdited->GetUniqueID() != nObjectId || nParagraph < 0 || nParagraph >= nParagraphCount
+        || nIndex < 0 || nAnchorParagraph < 0 || nAnchorParagraph >= nParagraphCount
+        || nAnchorIndex < 0)
     {
         // The caret stays. Showing it reports that place again as the answer.
         mpTextEditOutlinerView->ShowCursor(/*bGotoCursor=*/false);
@@ -1387,7 +1390,10 @@ bool SdrObjEditView::SetKitTextCursor(sal_uInt64 nObjectId, sal_Int32 nParagraph
     }
 
     nIndex = std::min(nIndex, rEditEngine.GetTextLen(nParagraph));
-    mpTextEditOutlinerView->SetSelection(ESelection(nParagraph, nIndex));
+    nAnchorIndex = std::min(nAnchorIndex, rEditEngine.GetTextLen(nAnchorParagraph));
+    // The selection starts at the anchor and ends at the caret, whichever comes first.
+    mpTextEditOutlinerView->SetSelection(
+        ESelection(nAnchorParagraph, nAnchorIndex, nParagraph, nIndex));
     // SetSelection shows the caret only for a selection with a range. Showing it here sends the
     // new position of a plain caret.
     mpTextEditOutlinerView->ShowCursor(/*bGotoCursor=*/false);

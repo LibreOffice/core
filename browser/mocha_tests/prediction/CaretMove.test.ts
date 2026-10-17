@@ -152,16 +152,20 @@ describe('text prediction caret steps', function () {
 		nodeassert.strictEqual(step(data, { paragraph: 0, index: 1 }, 1), null);
 	});
 
+	// The measured text of the first object.
+	function textOf(data: cool.VectorPrimitivesData): cool.ObjectText {
+		const text = cool.ObjectText.of(predictionTest.treeOf(data), 1);
+		nodeassert.ok(text, 'the object has text');
+		return text;
+	}
+
 	// The caret where a click at (x, y) lands in the first object.
 	function click(
 		data: cool.VectorPrimitivesData,
 		x: number,
 		y: number,
 	): cool.LogicalCaret | null {
-		return (
-			cool.ObjectText.of(predictionTest.treeOf(data), 1)?.caretAtPoint(x, y) ??
-			null
-		);
+		return textOf(data).caretAtPoint(x, y);
 	}
 
 	it('puts the caret at the character boundary closest to a click', function () {
@@ -298,5 +302,46 @@ describe('text prediction caret steps', function () {
 			lineStep(data, { paragraph: 0, index: 2 }, 1200, 1),
 			null,
 		);
+	});
+
+	it('covers the selected text of each line with its own rectangle', function () {
+		// "Hello " on the first line, "world" on the second, 400 twips apart.
+		const data = makeSharedWrapSlide('Hello world', [
+			{ start: 0, length: 6, f: 0 },
+			{ start: 6, length: 5, f: 400 },
+		]);
+		const rectangles = textOf(data).selectionRectangles(
+			{ paragraph: 0, index: 8 },
+			{ paragraph: 0, index: 2 },
+		);
+		nodeassert.deepStrictEqual(
+			rectangles.map((rectangle) => [rectangle.x, rectangle.width]),
+			[
+				[1200, 400],
+				[1000, 200],
+			],
+		);
+		nodeassert.strictEqual(rectangles[1].y - rectangles[0].y, 400);
+	});
+
+	it('takes a drag below the text to its last line', function () {
+		const data = makeTwoParaSlide();
+		nodeassert.deepStrictEqual(textOf(data).caretNearPoint(1220, 6000), {
+			paragraph: 1,
+			index: 2,
+		});
+	});
+
+	it('takes a drag above the text to its first line when that line has a raised run', function () {
+		// "Hel" spans 1000..1300 on the first line, and the raised "lo " follows it.
+		const data = makeSharedWrapSlide('Hello world', [
+			{ start: 0, length: 3, f: 0 },
+			{ start: 3, length: 3, e: 300, f: -120 },
+			{ start: 6, length: 5, f: 400 },
+		]);
+		nodeassert.deepStrictEqual(textOf(data).caretNearPoint(1220, -5000), {
+			paragraph: 0,
+			index: 2,
+		});
 	});
 });

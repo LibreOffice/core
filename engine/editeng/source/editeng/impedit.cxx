@@ -1548,6 +1548,14 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
                 // offset within that paragraph.
                 aMessageParams.put("paragraph", nPara);
                 aMessageParams.put("index", aPaM.GetIndex());
+                // The other end of a selection, where it started. None without a selection.
+                if (maEditSelection.HasRange())
+                {
+                    const EditPaM& rAnchor = maEditSelection.Min();
+                    aMessageParams.put("anchorParagraph",
+                                       getEditEngine().GetEditDoc().GetPos(rAnchor.GetNode()));
+                    aMessageParams.put("anchorIndex", rAnchor.GetIndex());
+                }
                 // The drawing object whose text holds the caret, so the
                 // position is unambiguous when several objects have text.
                 if (mnKitTextObjectId != 0)

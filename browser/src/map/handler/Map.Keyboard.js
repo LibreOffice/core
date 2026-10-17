@@ -986,10 +986,11 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		return here;
 	},
 
-	// Moves the caret here for an arrow key without modifiers, in a document drawn from
-	// objects. True when the caret moved.
+	// Moves the caret here for an arrow key, in a document drawn from objects, and with Shift
+	// selects text to it. True when the caret moved.
 	_moveCaretHere: function (ev, keyCode) {
-		if (this.modifier || ev.isComposing)
+		const extend = this.modifier === app.UNOModifier.SHIFT;
+		if ((this.modifier && !extend) || ev.isComposing)
 			return false;
 		if (!RenderManager.isVectorRendering() || this._map.getWinId() !== 0)
 			return false;
@@ -999,13 +1000,13 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 			return false;
 		switch (keyCode) {
 		case this.keyCodes.LEFT:
-			return RenderManager.moveCaretByCharacter(-1);
+			return RenderManager.moveCaretByCharacter(-1, extend);
 		case this.keyCodes.RIGHT:
-			return RenderManager.moveCaretByCharacter(1);
+			return RenderManager.moveCaretByCharacter(1, extend);
 		case this.keyCodes.UP:
-			return RenderManager.moveCaretByLine(-1);
+			return RenderManager.moveCaretByLine(-1, extend);
 		case this.keyCodes.DOWN:
-			return RenderManager.moveCaretByLine(1);
+			return RenderManager.moveCaretByLine(1, extend);
 		}
 		return false;
 	},

@@ -5992,8 +5992,9 @@ void COKitDocumentImpl::postUnoCommand(const char* pCommand, const char* pArgume
         return;
     }
 
-    // The caret of the running text edit goes to the paragraph and offset the client names. The
-    // states that follow the caret, such as the font of the text at it, are worked out again.
+    // Put the caret of the running text edit at the paragraph and offset the client names, with
+    // the text from the anchor selected. The states that follow the caret, such as its font, are
+    // computed again.
     if (aCommand.startsWith(".uno:SetTextCursor?"))
     {
         const std::map<OUString, OUString> aParameters
@@ -6005,11 +6006,19 @@ void COKitDocumentImpl::postUnoCommand(const char* pCommand, const char* pArgume
             || aIndexIterator == aParameters.end())
             return;
 
+        const sal_Int32 nParagraph = aParagraphIterator->second.toInt32();
+        const sal_Int32 nIndex = aIndexIterator->second.toInt32();
+        const auto aAnchorParagraphIterator = aParameters.find(u"anchorparagraph"_ustr);
+        const auto aAnchorIndexIterator = aParameters.find(u"anchorindex"_ustr);
+        const bool bHasAnchor = aAnchorParagraphIterator != aParameters.end()
+                                && aAnchorIndexIterator != aParameters.end();
+
         SdrView* pDrawView = pViewShell->GetDrawView();
         if (pDrawView
-            && pDrawView->SetKitTextCursor(aObjectIterator->second.toUInt64(),
-                                           aParagraphIterator->second.toInt32(),
-                                           aIndexIterator->second.toInt32()))
+            && pDrawView->SetKitTextCursor(
+                   aObjectIterator->second.toUInt64(), nParagraph, nIndex,
+                   bHasAnchor ? aAnchorParagraphIterator->second.toInt32() : nParagraph,
+                   bHasAnchor ? aAnchorIndexIterator->second.toInt32() : nIndex))
             pViewShell->GetViewFrame().GetBindings().InvalidateAll(false);
         return;
     }

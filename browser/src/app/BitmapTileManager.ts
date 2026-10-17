@@ -2433,13 +2433,27 @@ class BitmapTileManager extends RenderManagerBase {
 		return false;
 	}
 
-	public moveCaretByCharacter(_step: -1 | 1): boolean {
+	public moveCaretByCharacter(_step: -1 | 1, _extend?: boolean): boolean {
 		return false;
 	}
 
-	public moveCaretByLine(_step: -1 | 1): boolean {
+	public moveCaretByLine(_step: -1 | 1, _extend?: boolean): boolean {
 		return false;
 	}
+
+	public startTextDrag(
+		_x: number,
+		_y: number,
+		_hitId: number | undefined,
+	): boolean {
+		return false;
+	}
+
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	public dragTextTo(_x: number, _y: number): void {}
+
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	public endTextDrag(): void {}
 
 	public placeCaretAt(
 		_x: number,

@@ -729,8 +729,13 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		else if (textMsg.startsWith('partstatus:')) {
 			this._onStatusMsg(textMsg);
 		}
-		else if (textMsg.startsWith('textselection:')) {
-			this._onTextSelectionMsg(textMsg);
+		else if (textMsg.startsWith('textselection:') ||
+		         textMsg.startsWith('textselectionstart:') ||
+		         textMsg.startsWith('textselectionend:')) {
+			// While the caret moved here is ahead of the server, the server's selection
+			// waits for the caret update that catches up.
+			if (!LocalCaret.hold(textMsg))
+				this._onSelectionMessage(textMsg);
 		}
 		else if (textMsg.startsWith('textselectioncontent:')) {
 			let textMsgContent = textMsg.substr(22);
@@ -788,12 +793,6 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 				else // Or use previous method.
 					this._map._clip._execCopyCutPaste('copy');
 			}
-		}
-		else if (textMsg.startsWith('textselectionend:')) {
-			this._onTextSelectionEndMsg(textMsg);
-		}
-		else if (textMsg.startsWith('textselectionstart:')) {
-			this._onTextSelectionStartMsg(textMsg);
 		}
 		else if (textMsg.startsWith('cellselectionarea:')) {
 			this._onCellSelectionAreaMsg(textMsg);
@@ -1532,9 +1531,10 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 	_onCursorVisibleMsg: function(textMsg) {
 		var command = textMsg.match('cursorvisible: true');
-		// Without a text edit there is no caret for the one moved here to be ahead of.
+		// With the caret hidden, the last selection the engine sent applies.
 		if (!command)
-			LocalCaret.forget();
+			for (const held of LocalCaret.release())
+				this._onSelectionMessage(held);
 		app.setCursorVisibility(command ? true : false);
 		this._onUpdateCursor();
 		app.events.fire('TextCursorVisibility', { visible: app.file.textCursor.visible });
@@ -1782,6 +1782,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		textMsg = textMsg.substring('invalidatecursor:'.length + 1);
 		var obj = JSON.parse(textMsg);
 		const keepPredictedCaret = RenderManager.keepPredictedCaret(obj);
+		// The server's selection that waited for this caret update.
+		for (const held of LocalCaret.takeHeld())
+			this._onSelectionMessage(held);
 		var recCursor = this._getEditCursorRectangle(obj);
 		if (recCursor === undefined || this.persistCursorPositionInWriter) {
 			this.persistCursorPositionInWriter = false;
@@ -1812,6 +1815,14 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 				app.file.textCursor.logical = { paragraph: cursorParagraph, index: cursorIndex };
 			else
 				app.file.textCursor.logical = null;
+
+			// The other end of the selected text, when text is selected.
+			const anchorParagraph = obj.anchorParagraph !== undefined ? parseInt(obj.anchorParagraph) : NaN;
+			const anchorIndex = obj.anchorIndex !== undefined ? parseInt(obj.anchorIndex) : NaN;
+			if (!isNaN(anchorParagraph) && !isNaN(anchorIndex))
+				app.file.textCursor.anchor = { paragraph: anchorParagraph, index: anchorIndex };
+			else
+				app.file.textCursor.anchor = null;
 		}
 
 		if (this.isWriter()) {
@@ -2349,10 +2360,24 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		return rawRectangles;
 	},
 
+	// A textselection, textselectionstart or textselectionend message.
+	_onSelectionMessage: function (textMsg) {
+		if (textMsg.startsWith('textselectionstart:'))
+			this._onTextSelectionStartMsg(textMsg);
+		else if (textMsg.startsWith('textselectionend:'))
+			this._onTextSelectionEndMsg(textMsg);
+		else
+			this._onTextSelectionMsg(textMsg);
+	},
+
 	_onTextSelectionMsg: function (textMsg) {
 		textMsg = textMsg.replace('textselection:', '').trim();
-		const rawRectangles = this._getRawRectangles(textMsg);
+		this.showTextSelection(this._getRawRectangles(textMsg));
+	},
 
+	// Draws the selected text from its rectangles, each as [x, y, width, height] in twips, or
+	// removes the selection when there are none.
+	showTextSelection: function (rawRectangles) {
 		if (rawRectangles.length > 0) {
 			TextSelections.activate();
 

@@ -33,6 +33,9 @@ class MouseControl extends CanvasSectionObject {
 	localPositionOnMouseDown: cool.SimplePoint | null = null;
 	mouseDownSent: boolean = false;
 
+	/// True while a drag selects text here, without the server.
+	private selectingText: boolean = false;
+
 	/// The selection this press is carrying, where the press marked the object itself. Null
 	/// while no such drag is running.
 	private carrying: SelectionSection | null = null;
@@ -439,6 +442,22 @@ class MouseControl extends CanvasSectionObject {
 			// so no drag of the engine's own is begun.
 			if (this.carryTheObject(modifier)) return;
 
+			// A drag that starts in the text being edited selects the text here.
+			if (this.selectingText || this.startSelectingText()) {
+				point.pX += this.position[0];
+				point.pY += this.position[1];
+				app.map.fire('handleautoscroll', {
+					pos: { x: point.cX, y: point.cY },
+					map: app.map,
+				});
+				RenderManager.dragTextTo(
+					this.currentPosition.x,
+					this.currentPosition.y,
+				);
+				app.idleHandler.notifyActive();
+				return;
+			}
+
 			// The button-down goes to core only once the drag has started, but with the
 			// modifier held at the press. A key pressed later, such as Ctrl to copy,
 			// reaches core with the moves and the button-up.
@@ -569,6 +588,7 @@ class MouseControl extends CanvasSectionObject {
 	onDragCancel(): void {
 		this.stopCarrying(false);
 		this.hideShapeDragPreview();
+		this.stopSelectingText();
 		this.mouseDownSent = false;
 		this.positionOnMouseDown = null;
 		this.lastDragLocalPoint = null;
@@ -589,6 +609,12 @@ class MouseControl extends CanvasSectionObject {
 	// a different document position. Recompute that position from the unchanged
 	// screen point and re-send the drag move so the selection follows the view.
 	public onNewDocumentTopLeft(): void {
+		if (this.selectingText && this.lastDragLocalPoint) {
+			this.refreshPosition(this.lastDragLocalPoint);
+			RenderManager.dragTextTo(this.currentPosition.x, this.currentPosition.y);
+			return;
+		}
+
 		if (!this.mouseDownSent || !this.lastDragLocalPoint) return;
 
 		this.refreshPosition(this.lastDragLocalPoint);
@@ -619,6 +645,7 @@ class MouseControl extends CanvasSectionObject {
 		this.refreshPosition(point);
 
 		this.stopCarrying(true);
+		this.stopSelectingText();
 
 		this.hideShapeDragPreview();
 
@@ -738,6 +765,30 @@ class MouseControl extends CanvasSectionObject {
 		// on before the engine reports it.
 		if (taken) GraphicSelection.updateSelectionSection();
 		return taken;
+	}
+
+	/// Starts a drag that selects text here when a plain left press landed in the edited text.
+	/// Any other press goes to the engine.
+	private startSelectingText(): boolean {
+		const press = this.positionOnMouseDown;
+		if (!press || this.mouseDownSent || this.modifierOnMouseDown !== 0)
+			return false;
+		if (!app.file.textCursor.visible) return false;
+		if (!RenderGeometrySection.answersPointer()) return false;
+		this.selectingText = RenderManager.startTextDrag(
+			press.x,
+			press.y,
+			RenderGeometrySection.objectIdAt(press.x, press.y),
+		);
+		return this.selectingText;
+	}
+
+	private stopSelectingText(): void {
+		if (!this.selectingText) return;
+		this.selectingText = false;
+		// The drag was scrolling the view while it reached past the edge.
+		app.map.fire('scrollvelocity', { vx: 0, vy: 0 });
+		RenderManager.endTextDrag();
 	}
 
 	/// Puts the caret where a plain left click lands in the edited text, without the server.

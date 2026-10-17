@@ -203,11 +203,26 @@ abstract class RenderManagerBase {
 	// Returns true when a keystroke at the caret would be predicted.
 	abstract canPredictAtCaret(): boolean;
 
-	// Moves the caret one character without the server. True when it moved.
-	abstract moveCaretByCharacter(step: -1 | 1): boolean;
+	// Moves the caret one character without the server, and with extend selects text to it.
+	// True when it moved.
+	abstract moveCaretByCharacter(step: -1 | 1, extend?: boolean): boolean;
 
-	// Moves the caret one line up or down without the server. True when it moved.
-	abstract moveCaretByLine(step: -1 | 1): boolean;
+	// Moves the caret one line up or down without the server, and with extend selects text to
+	// it. True when it moved.
+	abstract moveCaretByLine(step: -1 | 1, extend?: boolean): boolean;
+
+	// Starts a drag that selects text without the server. True when the press is in the edited
+	// text.
+	abstract startTextDrag(
+		x: number,
+		y: number,
+		hitId: number | undefined,
+	): boolean;
+
+	// Selects the text from where the drag started to the mouse.
+	abstract dragTextTo(x: number, y: number): void;
+
+	abstract endTextDrag(): void;
 
 	// Puts the caret where a click lands in the edited text, without the server. True when it
 	// moved.

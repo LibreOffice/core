@@ -951,10 +951,11 @@ removetextcontext id=<windowId> before=<before_position> after=<after_position> 
     - after=<after_position> : The position after the deletion ends.
     - sequence=<sequence> : Optional input sequence number, see the key message.
 
-textcursor object=<objectId> paragraph=<paragraph> index=<index> [sequence=<sequence>]
+textcursor object=<objectId> paragraph=<paragraph> index=<index> [anchorparagraph=<paragraph> anchorindex=<index>] [sequence=<sequence>]
 
     Puts the caret of the running text edit at a character offset of a
-    paragraph, with no text selected.
+    paragraph. With an anchor, the text from the anchor to the caret is
+    selected, otherwise no text is selected.
 
     - object=<objectId> : The unique id of the drawing object being edited,
       as the invalidatecursor payload reports it in its object field. When
@@ -962,6 +963,8 @@ textcursor object=<objectId> paragraph=<paragraph> index=<index> [sequence=<sequ
     - paragraph=<paragraph> : The paragraph, counted from 0.
     - index=<index> : The offset in UTF-16 units from the start of the
       paragraph. An offset past the end puts the caret at the end.
+    - anchorparagraph=<paragraph> anchorindex=<index> : The other end of
+      the selection, in the same terms as the caret.
     - sequence=<sequence> : Optional input sequence number, see the key message.
 
 browsersetting action=update [upload=false] json=<JSON>
@@ -1391,6 +1394,9 @@ invalidatecursor: <payload>
     While a drawing object's text is edited, object is the unique id of
     the object that holds the caret, as the vector primitives name it.
     For a shape in a group, it is the group member being edited.
+    While text is selected in an edit text, anchorParagraph and
+    anchorIndex give the other end of the selection, in the same terms as
+    the caret's paragraph and index.
 
     The communication between the parent process (the one keeping open the
     Websocket connections to the clients) and a child process (handling

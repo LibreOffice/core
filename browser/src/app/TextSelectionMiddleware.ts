@@ -104,12 +104,12 @@ class TextSelections {
 		return this.endRectangle ? this.endRectangle.clone() : null;
 	}
 
-	public static setStartRectangle(rectangle: cool.SimpleRectangle) {
+	public static setStartRectangle(rectangle: cool.SimpleRectangle | null) {
 		this.startRectangle = rectangle;
 		this.updateMarkers();
 	}
 
-	public static setEndRectangle(rectangle: cool.SimpleRectangle) {
+	public static setEndRectangle(rectangle: cool.SimpleRectangle | null) {
 		this.endRectangle = rectangle;
 		this.updateMarkers();
 	}

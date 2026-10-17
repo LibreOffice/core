@@ -17,5 +17,8 @@ namespace cool {
 		/// The id the document gave this client's view, or undefined until it
 		/// has been reported.
 		_viewId?: number;
+		/// Draws the selected text from its rectangles, each as [x, y, width, height] in
+		/// twips, or removes the selection when there are none.
+		showTextSelection(rawRectangles: number[][]): void;
 	}
 }

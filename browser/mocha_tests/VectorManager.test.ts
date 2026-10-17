@@ -2053,6 +2053,17 @@ describe('VectorManager', function () {
 			let savedSend: any;
 			let savedNextInputSequence: any;
 			let savedTimerRegistry: any;
+			// The selection rectangles drawn here, as [x, y, width, height], one entry
+			// per draw.
+			let drawn: number[][][];
+			// The handle rectangles set here, as [x, y, width, height] or null.
+			let handles: (number[] | null)[];
+			let savedSetStartRectangle: any;
+			let savedSetEndRectangle: any;
+			const handleOf = (rectangle: cool.SimpleRectangle | null) =>
+				rectangle
+					? [rectangle.x1, rectangle.y1, rectangle.width, rectangle.height]
+					: null;
 			beforeEach(function () {
 				sent = [];
 				savedSend = (app as any).socket.sendMessage;
@@ -2063,12 +2074,27 @@ describe('VectorManager', function () {
 				(app as any).nextInputSequence = () => ++app.file.inputSequence;
 				savedTimerRegistry = (app as any).timerRegistry;
 				(app as any).timerRegistry = new TimerRegistry();
+				drawn = [];
+				handles = [];
+				(TextSelections as any).active = false;
+				const documentLayer = (app as any).map._docLayer;
+				documentLayer.showTextSelection = (rectangles: number[][]) =>
+					drawn.push(rectangles);
+				savedSetStartRectangle = TextSelections.setStartRectangle;
+				savedSetEndRectangle = TextSelections.setEndRectangle;
+				TextSelections.setStartRectangle = (rectangle) =>
+					handles.push(handleOf(rectangle));
+				TextSelections.setEndRectangle = (rectangle) =>
+					handles.push(handleOf(rectangle));
 			});
 			afterEach(function () {
 				LocalCaret.forget();
 				(app as any).socket.sendMessage = savedSend;
 				(app as any).nextInputSequence = savedNextInputSequence;
 				(app as any).timerRegistry = savedTimerRegistry;
+				(TextSelections as any).active = false;
+				TextSelections.setStartRectangle = savedSetStartRectangle;
+				TextSelections.setEndRectangle = savedSetEndRectangle;
 			});
 
 			it('moves the caret one character left without telling the server', function () {
@@ -2302,6 +2328,131 @@ describe('VectorManager', function () {
 					paragraph: 0,
 					index: 1,
 				});
+			});
+
+			it('selects text with Shift and an arrow, and tells the server the selection with the caret', function () {
+				const manager = managerWith('Hi');
+				nodeassert.ok(manager.moveCaretByCharacter(-1, true));
+				nodeassert.deepStrictEqual(app.file.textCursor.logical, {
+					paragraph: 0,
+					index: 1,
+				});
+				nodeassert.deepStrictEqual(app.file.textCursor.anchor, {
+					paragraph: 0,
+					index: 2,
+				});
+				// "i" spans 1100..1200 on the line from 1712 to 2144.
+				nodeassert.deepStrictEqual(drawn, [[[1100, 1712, 100, 432]]]);
+				nodeassert.deepStrictEqual(handles, [
+					[1100, 1712, 0, 432],
+					[1200, 1712, 0, 432],
+				]);
+
+				LocalCaret.tellBefore('key type=up char=0 key=4096');
+				nodeassert.deepStrictEqual(sent, [
+					'textcursor object=5 paragraph=0 index=1 anchorparagraph=0 anchorindex=2 sequence=11',
+				]);
+			});
+
+			it('drops the selection when Shift and an arrow bring the caret back to the anchor', function () {
+				const manager = managerWith('Hi');
+				manager.moveCaretByCharacter(-1, true);
+				(TextSelections as any).active = true;
+				drawn = [];
+				nodeassert.ok(manager.moveCaretByCharacter(1, true));
+				nodeassert.strictEqual(app.file.textCursor.anchor, null);
+				nodeassert.deepStrictEqual(drawn, [[]]);
+			});
+
+			it('leaves an arrow without Shift over selected text to the server', function () {
+				const manager = managerWith('Hi');
+				(TextSelections as any).active = true;
+				app.file.textCursor.anchor = { paragraph: 0, index: 0 };
+				nodeassert.strictEqual(manager.moveCaretByCharacter(-1), false);
+				nodeassert.strictEqual(manager.moveCaretByLine(1), false);
+			});
+
+			it('leaves Shift and an arrow to the server when the start of the selection is not known', function () {
+				const manager = managerWith('Hi');
+				(TextSelections as any).active = true;
+				app.file.textCursor.anchor = null;
+				nodeassert.strictEqual(manager.moveCaretByCharacter(-1, true), false);
+			});
+
+			it('drops the selection where a click puts the caret', function () {
+				const manager = managerWith('Hi');
+				(TextSelections as any).active = true;
+				app.file.textCursor.anchor = { paragraph: 0, index: 0 };
+				nodeassert.ok(manager.placeCaretAt(1120, 1950, 5));
+				nodeassert.strictEqual(app.file.textCursor.anchor, null);
+				nodeassert.deepStrictEqual(drawn, [[]]);
+			});
+
+			it('selects the text a drag goes over', function () {
+				const manager = managerWith('Hi');
+				nodeassert.ok(manager.startTextDrag(1020, 1950, 5));
+				// Past the end of the text, the drag reaches the end of the line.
+				manager.dragTextTo(1900, 2600);
+				manager.endTextDrag();
+				nodeassert.deepStrictEqual(app.file.textCursor.anchor, {
+					paragraph: 0,
+					index: 0,
+				});
+				nodeassert.deepStrictEqual(app.file.textCursor.logical, {
+					paragraph: 0,
+					index: 2,
+				});
+				nodeassert.deepStrictEqual(drawn[0], [[1000, 1712, 200, 432]]);
+				nodeassert.deepStrictEqual(sent, []);
+			});
+
+			it('draws the selection the server sent with the caret update that catches up', function () {
+				const manager = managerWith('Hi');
+				manager.moveCaretByCharacter(-1, true);
+				LocalCaret.tell();
+				// The server sends the selection before the caret update, after an
+				// older selection.
+				nodeassert.ok(LocalCaret.hold('textselection: 1000, 1712, 200, 432'));
+				nodeassert.ok(
+					LocalCaret.hold('textselectionstart: 1100, 1712, 1, 432'),
+				);
+				nodeassert.ok(LocalCaret.hold('textselection: 1100, 1712, 100, 432'));
+				nodeassert.deepStrictEqual(LocalCaret.takeHeld(), []);
+
+				nodeassert.strictEqual(
+					manager.keepPredictedCaret(caretUpdate(11, 1)),
+					false,
+				);
+				nodeassert.deepStrictEqual(LocalCaret.takeHeld(), [
+					'textselectionstart: 1100, 1712, 1, 432',
+					'textselection: 1100, 1712, 100, 432',
+				]);
+				nodeassert.strictEqual(LocalCaret.hold('textselection: '), false);
+			});
+
+			it('tells the server where the caret is when the caret is hidden before it rests', function () {
+				const manager = managerWith('Hi');
+				manager.moveCaretByCharacter(-1);
+				nodeassert.deepStrictEqual(LocalCaret.release(), []);
+				nodeassert.deepStrictEqual(sent, [
+					'textcursor object=5 paragraph=0 index=1 sequence=11',
+				]);
+				nodeassert.strictEqual(LocalCaret.ahead(), null);
+			});
+
+			it('hands over the selection the server sent when the text edit ends before the caret catches up', function () {
+				const manager = managerWith('Hi');
+				manager.moveCaretByCharacter(-1, true);
+				LocalCaret.tell();
+				nodeassert.ok(LocalCaret.hold('textselection: '));
+				nodeassert.deepStrictEqual(LocalCaret.release(), ['textselection: ']);
+				// The caret here is gone with the edit, so the next update is the
+				// engine's.
+				nodeassert.strictEqual(
+					manager.keepPredictedCaret(caretUpdate(1, 0)),
+					false,
+				);
+				nodeassert.deepStrictEqual(LocalCaret.takeHeld(), []);
 			});
 
 			it('keeps the caret it moved after a typed character the server has not shown', function () {

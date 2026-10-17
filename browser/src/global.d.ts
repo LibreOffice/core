@@ -233,6 +233,9 @@ interface AppInterface {
 			// The caret's paragraph and character index, or null before a
 			// cursor message carries them.
 			logical: null | cool.LogicalCaret;
+			// The other end of the selected text, in the same terms, or null
+			// when no text is selected.
+			anchor?: null | cool.LogicalCaret;
 		};
 		fileBasedView: boolean;
 		writer: {

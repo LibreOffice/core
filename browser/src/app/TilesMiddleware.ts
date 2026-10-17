@@ -250,12 +250,28 @@ class RenderManager {
 		return RenderManager.ensureInstance().canPredictAtCaret();
 	}
 
-	static moveCaretByCharacter(step: -1 | 1): boolean {
-		return RenderManager.ensureInstance().moveCaretByCharacter(step);
+	static moveCaretByCharacter(step: -1 | 1, extend: boolean = false): boolean {
+		return RenderManager.ensureInstance().moveCaretByCharacter(step, extend);
 	}
 
-	static moveCaretByLine(step: -1 | 1): boolean {
-		return RenderManager.ensureInstance().moveCaretByLine(step);
+	static moveCaretByLine(step: -1 | 1, extend: boolean = false): boolean {
+		return RenderManager.ensureInstance().moveCaretByLine(step, extend);
+	}
+
+	static startTextDrag(
+		x: number,
+		y: number,
+		hitId: number | undefined,
+	): boolean {
+		return RenderManager.ensureInstance().startTextDrag(x, y, hitId);
+	}
+
+	static dragTextTo(x: number, y: number): void {
+		RenderManager.ensureInstance().dragTextTo(x, y);
+	}
+
+	static endTextDrag(): void {
+		RenderManager.ensureInstance().endTextDrag();
 	}
 
 	static placeCaretAt(

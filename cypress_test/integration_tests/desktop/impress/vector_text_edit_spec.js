@@ -130,6 +130,12 @@ var desktopHelper = require('../../common/desktop_helper');
 			});
 		}
 
+		// Checks the selected text through a copy of it.
+		function expectSelectedText(text) {
+			helper.copy();
+			helper.expectTextForClipboard(text);
+		}
+
 		it('moves the caret by character', function() {
 			expectKeys('{rightarrow}{rightarrow}{rightarrow}', { paragraph: 0, index: 3 });
 			expectKeys('{leftarrow}', { paragraph: 0, index: 2 });
@@ -158,6 +164,30 @@ var desktopHelper = require('../../common/desktop_helper');
 			keysToServer('{end}');
 			expectKeys('{rightarrow}', { paragraph: 1, index: 0 });
 			expectKeys('{leftarrow}', { paragraph: 0, index: 6 });
+		});
+
+		it('selects text with Shift and an arrow', function() {
+			expectKeys('{shift}{rightarrow}{rightarrow}', { paragraph: 0, index: 2 }, { paragraph: 0, index: 0 });
+			expectSelectedText('Te');
+		});
+
+		it('selects the text a drag goes over', function() {
+			var start, end;
+			settledCaret().then(function(caret) { start = caret; });
+			keysToServer('{end}').then(function(caret) { end = caret; });
+			cy.then(function() {
+				sent.length = 0;
+				var from = onCanvas(start.x, start.y);
+				var to = onCanvas(end.x, end.y);
+				cy.cGet('#document-canvas')
+					.trigger('mousedown', from.x, from.y, { button: 0, buttons: 1 })
+					.trigger('mousemove', (from.x + to.x) / 2, to.y, { button: 0, buttons: 1 })
+					.trigger('mousemove', to.x, to.y, { button: 0, buttons: 1 })
+					.trigger('mouseup', to.x, to.y, { button: 0, buttons: 0 });
+			});
+			expectCaret({ paragraph: 0, index: 6 }, { paragraph: 0, index: 0 });
+			expectNoPressSent();
+			expectSelectedText('Text 1');
 		});
 	});
 });

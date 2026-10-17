@@ -5083,9 +5083,21 @@ bool ChildSession::setTextCursor(const StringVector& tokens)
         return false;
     }
 
-    const std::string command = ".uno:SetTextCursor?object=" + std::to_string(object) +
-                                "&paragraph=" + std::to_string(paragraph) +
-                                "&index=" + std::to_string(index);
+    std::string command = ".uno:SetTextCursor?object=" + std::to_string(object) +
+                          "&paragraph=" + std::to_string(paragraph) +
+                          "&index=" + std::to_string(index);
+
+    // A selection names its other end as well.
+    int anchorParagraph;
+    int anchorIndex;
+    if (getTokenInteger(tokens, "anchorparagraph", anchorParagraph) &&
+        getTokenInteger(tokens, "anchorindex", anchorIndex) && anchorParagraph >= 0 &&
+        anchorIndex >= 0)
+    {
+        command += "&anchorparagraph=" + std::to_string(anchorParagraph) +
+                   "&anchorindex=" + std::to_string(anchorIndex);
+    }
+
     getLOKitDocument()->setView(_viewId);
     getLOKitDocument()->postUnoCommand(command.c_str(), "", false);
     noteInputSequence(tokens);

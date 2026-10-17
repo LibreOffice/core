@@ -25,6 +25,8 @@ interface MovedCaret {
 	/// The engine's unique id of the edited object.
 	objectId: number;
 	logical: cool.LogicalCaret;
+	/// The other end of the selected text, or null when no text is selected.
+	anchor: cool.LogicalCaret | null;
 }
 
 class LocalCaret {
@@ -97,6 +99,12 @@ class LocalCaret {
 		// The number is taken before the message goes out, so it is older than the message
 		// itself.
 		LocalCaret.sequence = app.nextInputSequence();
+		const anchor = caret.anchor
+			? ' anchorparagraph=' +
+				caret.anchor.paragraph +
+				' anchorindex=' +
+				caret.anchor.index
+			: '';
 		app.socket.sendMessage(
 			'textcursor object=' +
 				caret.objectId +
@@ -104,6 +112,7 @@ class LocalCaret {
 				caret.logical.paragraph +
 				' index=' +
 				caret.logical.index +
+				anchor +
 				' sequence=' +
 				LocalCaret.sequence,
 		);
@@ -133,13 +142,52 @@ class LocalCaret {
 		const inputSequence = Number(update.inputSequence);
 		if (update.inputSequence === undefined || isNaN(inputSequence)) return true;
 		if (inputSequence < LocalCaret.sequence) return true;
-		LocalCaret.forget();
+		LocalCaret.caughtUp();
 		return false;
 	}
 
-	public static forget(): void {
+	// The engine's caret is current again. The held selection stays.
+	private static caughtUp(): void {
 		LocalCaret.stopRestTimer();
 		LocalCaret.caret = null;
 		LocalCaret.sequence = 0;
+	}
+
+	/// Drops the caret moved here, and the selection messages held while it was ahead.
+	public static forget(): void {
+		LocalCaret.caughtUp();
+		LocalCaret.heldSelection.clear();
+	}
+
+	/// Drops the caret moved here once the caret is hidden, and returns the held selection
+	/// messages, oldest first, as no caret update follows. A caret the engine was not told of
+	/// is told first: an edit that runs on keeps it, and one that ended ignores it.
+	public static release(): string[] {
+		LocalCaret.tell();
+		LocalCaret.caughtUp();
+		return LocalCaret.takeHeld();
+	}
+
+	/// The newest held selection message of each kind, keyed by the message name.
+	private static readonly heldSelection: Map<string, string> = new Map();
+
+	/// Holds a selection message from the engine while the caret here is ahead, replacing the
+	/// held one of its kind. The engine sends the selection before the caret update it goes
+	/// with. False while the caret here is not ahead.
+	public static hold(message: string): boolean {
+		if (!LocalCaret.caret) return false;
+		const kind = message.substring(0, message.indexOf(':'));
+		LocalCaret.heldSelection.delete(kind);
+		LocalCaret.heldSelection.set(kind, message);
+		return true;
+	}
+
+	/// Takes the held selection messages, oldest first, once the engine caught up. Empty while
+	/// the caret here is ahead.
+	public static takeHeld(): string[] {
+		if (LocalCaret.caret) return [];
+		const held = [...LocalCaret.heldSelection.values()];
+		LocalCaret.heldSelection.clear();
+		return held;
 	}
 }

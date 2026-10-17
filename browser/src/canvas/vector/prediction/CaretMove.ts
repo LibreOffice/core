@@ -257,6 +257,71 @@ namespace cool {
 			);
 		}
 
+		/// The caret a drag at slide (x, y) reaches, or null. A point off the lines goes to
+		/// the closest one.
+		caretNearPoint(x: number, y: number): LogicalCaret | null {
+			let closest: TextRun | null = null;
+			let lineDistance = Infinity;
+			for (const run of this.shown) {
+				const top = run.baseline - run.lineAscent * run.scaleY;
+				const bottom = top + run.lineHeight * run.scaleY;
+				const distance = y < top ? top - y : y > bottom ? y - bottom : 0;
+				if (distance < lineDistance) {
+					lineDistance = distance;
+					closest = run;
+				}
+			}
+			if (closest === null) return null;
+			const line = closest;
+			return caretOnLine(
+				this.shown.filter((run) => onSameLine(run, line)),
+				this.runs,
+				(run) => this.positionsOf(run),
+				x,
+				false,
+			);
+		}
+
+		/// The rectangles that cover the text between two carets, one for each run that
+		/// shows some of it, in reading order.
+		selectionRectangles(
+			a: LogicalCaret,
+			b: LogicalCaret,
+		): SelectionRectangle[] {
+			const [from, to] = compareCarets(a, b) <= 0 ? [a, b] : [b, a];
+
+			const rectangles: SelectionRectangle[] = [];
+			const runs = [...this.shown].sort(
+				(first, second) =>
+					first.baseline - second.baseline || first.x - second.x,
+			);
+			for (const run of runs) {
+				const paragraph = run.paragraph;
+				if (paragraph === undefined) continue;
+				if (paragraph < from.paragraph || paragraph > to.paragraph) continue;
+				const start = Math.max(
+					run.start,
+					paragraph === from.paragraph ? from.index : run.start,
+				);
+				const end = Math.min(
+					run.end,
+					paragraph === to.paragraph ? to.index : run.end,
+				);
+				if (end <= start) continue;
+
+				const positions = this.positionsOf(run);
+				const left = run.slideX(positions[start - run.start]);
+				const right = run.slideX(positions[end - run.start]);
+				rectangles.push({
+					x: Math.min(left, right),
+					y: run.baseline - run.lineAscent * run.scaleY,
+					width: Math.abs(right - left),
+					height: run.lineHeight * run.scaleY,
+				});
+			}
+			return rectangles;
+		}
+
 		/// The caret on the line above (step -1) or below (step 1) the run's line, closest
 		/// to the slide x. Null when there is no such line, or it is past a paragraph
 		/// without text.
@@ -298,5 +363,18 @@ namespace cool {
 			if (!caret || Math.abs(caret.paragraph - paragraph) > 1) return null;
 			return caret;
 		}
+	}
+
+	/// Negative when caret a is before b, positive when after, 0 when they are equal.
+	export function compareCarets(a: LogicalCaret, b: LogicalCaret): number {
+		return a.paragraph - b.paragraph || a.index - b.index;
+	}
+
+	/// A rectangle of selected text, in slide twips.
+	export interface SelectionRectangle {
+		x: number;
+		y: number;
+		width: number;
+		height: number;
 	}
 }
