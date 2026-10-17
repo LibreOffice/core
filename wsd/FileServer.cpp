@@ -568,8 +568,8 @@ bool FileServerRequestHandler::handleRequest(const HTTPRequest& request,
 #endif
         if (request.getMethod() == HTTPRequest::HTTP_POST && endPoint == "browser-logging")
         {
-            const std::string coolLogging = ConfigUtil::getString("browser_logging", "false");
-            if (coolLogging == "false")
+            // As COOLWSD decides whether to make a LogToken.
+            if (!ConfigUtil::getConfigValue<bool>("browser_logging", false))
             {
                 sendError(http::StatusCode::Forbidden, requestUri.toString(), socket,
                           "browser_logging is disabled.", "");
