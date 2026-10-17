@@ -582,15 +582,18 @@ endif
 
 gb_WinResTarget_POSTFIX :=.res
 
+define gb_WinResTarget__rc
+$(gb_RC) $(DEFS) $(FLAGS) $(INCLUDE) -Fo$(1) $(RCFILE)
+endef
+
+# A failed compile also prints what the resource compiler could see.
 define gb_WinResTarget__command
 $(call gb_Output_announce,$(2),$(true),RC ,1)
 $(call gb_Helper_abbreviate_dirs,\
 	mkdir -p $(dir $(1)) && \
-	$(gb_RC) \
-		$(DEFS) $(FLAGS) \
-		$(INCLUDE) \
-		-Fo$(1) \
-		$(RCFILE) )
+	{ $(call gb_WinResTarget__rc,$(1)) || \
+		{ $(SRCDIR)/solenv/bin/report-rc-failure.sh $(BUILDDIR) \
+			$(call gb_WinResTarget__rc,$(1)); exit 1; } } )
 endef
 
 $(eval $(call gb_Helper_make_dep_targets,\
