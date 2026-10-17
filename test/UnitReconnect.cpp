@@ -97,12 +97,20 @@ class UnitReconnect : public UnitWSD
     }
 
     /// The token of the next reconnecttoken: message, or empty. The server sends it before the
-    /// view's status, so call this first.
-    std::string waitForToken(http::WebSocketSession& session)
+    /// view's status, so call this first. When sawCanonicalId is given, it is set if a
+    /// canonicalidchange: message went by on the way to the token.
+    std::string waitForToken(http::WebSocketSession& session, bool* sawCanonicalId = nullptr)
     {
         static constexpr std::string_view prefix = "reconnecttoken: ";
-        const std::vector<char> message =
-            session.waitForMessage(prefix, std::chrono::seconds(30), testname);
+        const std::vector<char> message = session.poll(
+            [&](const std::vector<char>& candidate) -> bool
+            {
+                const std::string_view text(candidate.data(), candidate.size());
+                if (sawCanonicalId && text.starts_with("canonicalidchange:"))
+                    *sawCanonicalId = true;
+                return text.starts_with(prefix);
+            },
+            std::chrono::seconds(30), testname);
         if (message.size() <= prefix.size())
             return std::string();
         return std::string(message.begin() + prefix.size(), message.end());
@@ -323,10 +331,10 @@ UnitBase::TestResult UnitReconnect::testTakeoverOfLiveSession()
     LOK_ASSERT(waitForViews(*sessionB, 2, 0, std::chrono::seconds(30)));
 
     auto sessionA2 = connect(documentURL, true, token, " part=0");
-    const std::string newToken = waitForToken(*sessionA2);
+    bool sawCanonicalId = false;
+    const std::string newToken = waitForToken(*sessionA2, &sawCanonicalId);
     LOK_ASSERT_MESSAGE("The reconnected browser got no new token",
                        !newToken.empty() && newToken != token);
-    bool sawCanonicalId = false;
     const int viewIdA2 = waitForStatusViewId(*sessionA2, std::chrono::seconds(10), &sawCanonicalId);
     LOK_ASSERT_EQUAL(viewIdA, viewIdA2);
     // The browser rebuilt its tile layer, so it needs its canonical view id again.
@@ -369,10 +377,10 @@ UnitBase::TestResult UnitReconnect::testReconnectWithToken()
     LOK_ASSERT_MESSAGE("B did not see A parked", waitForViews(*sessionB, 2, 1, DropNoticed));
 
     auto sessionA2 = connect(documentURL, true, token, " part=0");
-    const std::string newToken = waitForToken(*sessionA2);
+    bool sawCanonicalId = false;
+    const std::string newToken = waitForToken(*sessionA2, &sawCanonicalId);
     LOK_ASSERT_MESSAGE("The reconnected browser got no new token",
                        !newToken.empty() && newToken != token);
-    bool sawCanonicalId = false;
     const int viewIdA2 = waitForStatusViewId(*sessionA2, std::chrono::seconds(10), &sawCanonicalId);
     LOK_ASSERT_EQUAL(viewIdA, viewIdA2);
     LOK_ASSERT_MESSAGE("The reconnected browser got no canonicalidchange",
