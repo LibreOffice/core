@@ -195,10 +195,10 @@ Label_Range_Join:
     assert(pOver);
     const SCCOL nCol1 = pOver->aStart.Col();
     const SCROW nRow1 = pOver->aStart.Row();
-    const SCCOL nTab1 = pOver->aStart.Tab();
+    const SCTAB nTab1 = pOver->aStart.Tab();
     const SCCOL nCol2 = pOver->aEnd.Col();
     const SCROW nRow2 = pOver->aEnd.Row();
-    const SCCOL nTab2 = pOver->aEnd.Tab();
+    const SCTAB nTab2 = pOver->aEnd.Tab();
 
     size_t nOverPos = std::numeric_limits<size_t>::max();
     for (size_t i = 0; i < maRanges.size(); ++i)

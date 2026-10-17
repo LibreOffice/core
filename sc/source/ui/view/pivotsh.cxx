@@ -149,7 +149,7 @@ void ScPivotShell::GetState( SfxItemSet& rSet )
     bool bRefreshDisable = bDisable;
     if (!bDisable)
     {
-        SCCOL nTab = pViewShell->GetViewData().CurrentTabForData();
+        SCTAB nTab = pViewShell->GetViewData().CurrentTabForData();
         const ScTableProtection* pTabProt = rDoc.GetTabProtection(nTab);
         if (pTabProt && pTabProt->isProtected())
         {

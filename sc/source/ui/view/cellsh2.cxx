@@ -397,7 +397,7 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     if( lcl_GetSortParam( rData, aSortParam ) )
                     {
                         SCCOL nCol  = GetViewData().GetCurX();
-                        SCCOL nTab  = GetViewData().CurrentTabForData();
+                        SCTAB nTab  = GetViewData().CurrentTabForData();
                         ScDocument& rDoc = GetViewData().GetDocument();
 
                         pDBData->GetSortParam( aSortParam );
