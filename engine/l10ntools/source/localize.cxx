@@ -63,15 +63,6 @@ bool passesNegativeList(std::u16string_view rUrl) {
     static const std::u16string_view list[] = {
         u"/desktop/test/deployment/passive/help/en/help.tree",
         u"/desktop/test/deployment/passive/help/en/main.xhp",
-        u"/dictionaries.xcu",
-        u"/dictionaries/da_DK/help/da/help.tree",
-        (u"/dictionaries/da_DK/help/da/"
-         "org.openoffice.da.hunspell.dictionaries/page1.xhp"),
-        (u"/dictionaries/da_DK/help/da/"
-         "org.openoffice.da.hunspell.dictionaries/page2.xhp"),
-        u"/dictionaries/hu_HU/help/hu/help.tree",
-        (u"/dictionaries/hu_HU/help/hu/"
-         "org.openoffice.hu.hunspell.dictionaries/page1.xhp"),
         u"/officecfg/registry/data/org/openoffice/Office/Accelerators.xcu",
         // The UIName labels of the *WindowState.xcu files name toolbars and
         // context menus for the floating toolbar titles, the View - Toolbars
@@ -331,7 +322,6 @@ bool includeProject(std::string_view rProject) {
         "cui",
         "dbaccess",
         "desktop",
-        "dictionaries",
         "editeng",
         "extensions",
         "extras",
