@@ -220,6 +220,23 @@ body {
 	z-index: 2;
 	background: var(--strip-background);
 }
+/* The bar after the last tab, on the left of the button. It is as long as the
+   bars between the tabs, half the height of a tab, which is the strip without
+   its top padding. It goes when the last tab is active or under the mouse, as
+   the bars beside such a tab do. */
+#new-tab::before {
+	content: '';
+	position: absolute;
+	left: -4px;
+	top: calc(50% - (100vh - 4px) / 4);
+	width: 1px;
+	height: calc((100vh - 4px) / 2);
+	background: var(--color-border);
+}
+.tab.active + #new-tab::before,
+.tab:hover + #new-tab::before {
+	content: none;
+}
 /* The active tab's box covers the start of the button, and it takes the
    clicks there although that part is not painted. */
 .tab.active + #new-tab {
