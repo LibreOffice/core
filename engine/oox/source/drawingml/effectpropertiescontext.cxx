@@ -22,6 +22,41 @@ using namespace ::cpo::uno;
 
 namespace oox::drawingml {
 
+namespace
+{
+/// Reads a length in EMU. A missing attribute gives the default.
+gfx::Length readLength(const AttributeList& rAttribs, sal_Int32 nToken, gfx::Length aDefault)
+{
+    return gfx::Length::emu(rAttribs.getHyper(nToken, aDefault.as_emu<sal_Int64>()));
+}
+
+/// Reads an angle in 1/60000 degree. A missing attribute gives the default.
+Degree60000 readAngle(const AttributeList& rAttribs, sal_Int32 nToken, Degree60000 aDefault)
+{
+    return Degree60000(rAttribs.getInteger(nToken, aDefault.get()));
+}
+
+/// Reads the blur radius, the distance and the direction of a shadow or a reflection. An attribute
+/// that is missing keeps the default of the effect, which is the default of the schema.
+template <class Effect> void readOffset(Effect& rEffect, const AttributeList& rAttribs)
+{
+    rEffect.maBlurRadius = readLength(rAttribs, XML_blurRad, rEffect.maBlurRadius);
+    rEffect.maDistance = readLength(rAttribs, XML_dist, rEffect.maDistance);
+    rEffect.mnDirection = readAngle(rAttribs, XML_dir, rEffect.mnDirection);
+}
+
+/// Reads the scale, the skew, the alignment and the rotation of an outer shadow or a reflection.
+template <class Effect> void readTransform(Effect& rEffect, const AttributeList& rAttribs)
+{
+    rEffect.mnScaleX = rAttribs.getInteger(XML_sx, rEffect.mnScaleX);
+    rEffect.mnScaleY = rAttribs.getInteger(XML_sy, rEffect.mnScaleY);
+    rEffect.mnSkewX = readAngle(rAttribs, XML_kx, rEffect.mnSkewX);
+    rEffect.mnSkewY = readAngle(rAttribs, XML_ky, rEffect.mnSkewY);
+    rEffect.meAlignment = convertToRectangleAlignment(rAttribs.getToken(XML_algn, XML_b));
+    rEffect.mbRotateWithShape = rAttribs.getBool(XML_rotWithShape, rEffect.mbRotateWithShape);
+}
+}
+
 EffectPropertiesContext::EffectPropertiesContext( ContextHandler2Helper const& rParent,
         EffectProperties& rEffectProperties, model::EffectStyle* pEffectStyle) noexcept
     : ContextHandler2(rParent)
@@ -91,18 +126,9 @@ ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, 
             model::ComplexColor* pColor = nullptr;
             if (mpEffectStyle)
             {
-                auto& rEffect = mpEffectStyle->maEffectList.emplace_back();
-                rEffect.meType = model::EffectType::OuterShadow;
-                rEffect.mnBlurRadius = rAttribs.getInteger(XML_blurRad, 0); // ST_PositiveCoordinate, default 0
-                rEffect.mnDistance = rAttribs.getInteger(XML_dist, 0); // ST_PositiveCoordinate, default 0
-                rEffect.mnDirection = rAttribs.getInteger(XML_dir, 0); // ST_PositiveFixedAngle, default 0
-                rEffect.mnScaleX = GetPercent( rAttribs.getStringDefaulted(XML_sx)); // ST_Percentage, default 100%
-                rEffect.mnScaley = GetPercent( rAttribs.getStringDefaulted(XML_sy)); // ST_Percentage, default 100%
-                rEffect.mnScewX = rAttribs.getInteger(XML_kx, 0); // ST_FixedAngle, default 0
-                rEffect.mnScewY = rAttribs.getInteger(XML_ky, 0); // ST_FixedAngle, default 0
-                // ST_RectAlignment, default "b" - Bottom
-                rEffect.meAlignment = convertToRectangleAlignment(rAttribs.getToken(XML_algn, XML_b));
-                rEffect.mbRotateWithShape = rAttribs.getBool(XML_rotWithShape, true); // boolean, default "true"
+                auto& rEffect = mpEffectStyle->moOuterShadow.emplace();
+                readOffset(rEffect, rAttribs);
+                readTransform(rEffect, rAttribs);
                 pColor = &rEffect.maColor;
             }
             return new ColorContext(*this, &mrEffectProperties.m_Effects[nPos]->moColor, pColor);
@@ -119,11 +145,8 @@ ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, 
             model::ComplexColor* pColor = nullptr;
             if (mpEffectStyle)
             {
-                auto& rEffect = mpEffectStyle->maEffectList.emplace_back();
-                rEffect.meType = model::EffectType::InnerShadow;
-                rEffect.mnBlurRadius = rAttribs.getInteger(XML_blurRad, 0); // ST_PositiveCoordinate, default 0
-                rEffect.mnDistance = rAttribs.getInteger(XML_dist, 0); // ST_PositiveCoordinate, default 0
-                rEffect.mnDirection = rAttribs.getInteger(XML_dir, 0); // ST_PositiveFixedAngle, default 0
+                auto& rEffect = mpEffectStyle->moInnerShadow.emplace();
+                readOffset(rEffect, rAttribs);
                 pColor = &rEffect.maColor;
             }
             return new ColorContext(*this, &mrEffectProperties.m_Effects[nPos]->moColor, pColor);
@@ -138,9 +161,8 @@ ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, 
             model::ComplexColor* pColor = nullptr;
             if (mpEffectStyle)
             {
-                auto& rEffect = mpEffectStyle->maEffectList.emplace_back();
-                rEffect.meType = model::EffectType::Glow;
-                rEffect.mnRadius = rAttribs.getInteger(XML_rad, 0); //ST_PositiveCoordinate, default 0
+                auto& rEffect = mpEffectStyle->moGlow.emplace();
+                rEffect.maRadius = readLength(rAttribs, XML_rad, rEffect.maRadius);
                 pColor = &rEffect.maColor;
             }
             return new ColorContext(*this, &mrEffectProperties.maGlow.moGlowColor, pColor);
@@ -151,9 +173,8 @@ ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, 
             mrEffectProperties.maSoftEdge.moRad = rAttribs.getInteger(XML_rad, 0);
             if (mpEffectStyle)
             {
-                auto& rEffect = mpEffectStyle->maEffectList.emplace_back();
-                rEffect.meType = model::EffectType::SoftEdge;
-                rEffect.mnRadius = rAttribs.getInteger(XML_rad, 0); // ST_PositiveCoordinate, default 0
+                auto& rEffect = mpEffectStyle->moSoftEdge.emplace();
+                rEffect.maRadius = readLength(rAttribs, XML_rad, rEffect.maRadius);
             }
             return this; // no inner elements
         }
@@ -171,47 +192,31 @@ ContextHandlerRef EffectPropertiesContext::onCreateContext( sal_Int32 nElement, 
             rReflection.moEndAlpha = rAttribs.getInteger(XML_endA, 0);
             rReflection.moEndPosition = rAttribs.getInteger(XML_endPos, 100000);
 
-            model::ComplexColor* pColor = nullptr;
             if (mpEffectStyle)
             {
-                auto& rEffect = mpEffectStyle->maEffectList.emplace_back();
-                rEffect.meType = model::EffectType::Reflection;
-                rEffect.mnBlurRadius = rAttribs.getInteger(XML_blurRad, 0); // ST_PositiveCoordinate, default 0
-                rEffect.mnDistance = rAttribs.getInteger(XML_dist, 0); // ST_PositiveCoordinate, default 0
-                rEffect.mnDirection = rAttribs.getInteger(XML_dir, 0); // ST_PositiveFixedAngle, default 0
-                rEffect.mnScaleX = GetPercent(rAttribs.getStringDefaulted(XML_sx)); // ST_Percentage, default 100%
-                rEffect.mnScaley = GetPercent(rAttribs.getStringDefaulted(XML_sy)); // ST_Percentage, default 100%
-                rEffect.mnScewX = rAttribs.getInteger(XML_kx, 0); // ST_FixedAngle, default 0
-                rEffect.mnScewY = rAttribs.getInteger(XML_ky, 0); // ST_FixedAngle, default 0
-                // ST_RectAlignment, default "b" - Bottom
-                rEffect.meAlignment = convertToRectangleAlignment(rAttribs.getToken(XML_algn, XML_b));
-                rEffect.mbRotateWithShape = rAttribs.getBool(XML_rotWithShape, true); // boolean, default "true"
-
-                rEffect.mnEndAlpha = GetPositiveFixedPercentage(rAttribs.getStringDefaulted(XML_endA)); // ST_PositiveFixedPercentage, default 100%
-                rEffect.mnEndPosition = GetPositiveFixedPercentage(rAttribs.getStringDefaulted(XML_endPos)); // ST_PositiveFixedPercentage, default 0%
-                rEffect.mnStartAlpha = GetPositiveFixedPercentage(rAttribs.getStringDefaulted(XML_stA)); // ST_PositiveFixedPercentage, default 0%
-                rEffect.mnStartPosition = GetPositiveFixedPercentage(rAttribs.getStringDefaulted(XML_stPos)); // ST_PositiveFixedPercentage, default 100%
-                rEffect.mnFadeDirection = rAttribs.getInteger(XML_fadeDir, 5400000); // ST_PositiveFixedAngle, default 5400000
-
-                pColor = &rEffect.maColor;
+                auto& rEffect = mpEffectStyle->moReflection.emplace();
+                readOffset(rEffect, rAttribs);
+                readTransform(rEffect, rAttribs);
+                rEffect.mnStartAlpha = rAttribs.getInteger(XML_stA, rEffect.mnStartAlpha);
+                rEffect.mnStartPosition = rAttribs.getInteger(XML_stPos, rEffect.mnStartPosition);
+                rEffect.mnEndAlpha = rAttribs.getInteger(XML_endA, rEffect.mnEndAlpha);
+                rEffect.mnEndPosition = rAttribs.getInteger(XML_endPos, rEffect.mnEndPosition);
+                rEffect.mnFadeDirection = readAngle(rAttribs, XML_fadeDir, rEffect.mnFadeDirection);
             }
-            return new ColorContext(*this, &mrEffectProperties.m_Effects[nPos]->moColor, pColor);
+            return new ColorContext(*this, &mrEffectProperties.m_Effects[nPos]->moColor, nullptr);
         }
         case A_TOKEN( blur ):
         {
             mrEffectProperties.m_Effects[nPos]->msName = u"blur"_ustr;
             saveUnsupportedAttribs(*mrEffectProperties.m_Effects[nPos], rAttribs);
 
-            model::ComplexColor* pColor = nullptr;
             if (mpEffectStyle)
             {
-                auto& rEffect = mpEffectStyle->maEffectList.emplace_back();
-                rEffect.meType = model::EffectType::Blur;
-                rEffect.mnRadius = rAttribs.getInteger(XML_rad, 0); // ST_PositiveCoordinate, default 0
-                rEffect.mbGrow = rAttribs.getBool(XML_grow, true); // boolean, default true
-                pColor = &rEffect.maColor;
+                auto& rEffect = mpEffectStyle->moBlur.emplace();
+                rEffect.maRadius = readLength(rAttribs, XML_rad, rEffect.maRadius);
+                rEffect.mbGrow = rAttribs.getBool(XML_grow, rEffect.mbGrow);
             }
-            return new ColorContext(*this, &mrEffectProperties.m_Effects[nPos]->moColor, pColor);
+            return new ColorContext(*this, &mrEffectProperties.m_Effects[nPos]->moColor, nullptr);
         }
         break;
     }

@@ -44,6 +44,12 @@ inline Degree100 abs(Degree100 x) { return Degree100(std::abs(x.get())); }
 /** custom literal */
 constexpr Degree100 operator""_deg100(unsigned long long n) { return Degree100{ n }; }
 
+/** 60000ths of a Degree */
+typedef Degree<sal_Int32, 60000> Degree60000;
+
+/** custom literal */
+constexpr Degree60000 operator""_deg60000(unsigned long long n) { return Degree60000{ n }; }
+
 /** conversion functions */
 
 template <class To, typename IofFrom, int NofFrom> inline To to(Degree<IofFrom, NofFrom> x)

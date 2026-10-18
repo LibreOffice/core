@@ -12,7 +12,16 @@
 
 #include <docmodel/dllapi.h>
 #include <docmodel/color/ComplexColor.hxx>
+#include <docmodel/effect/BlurEffect.hxx>
+#include <docmodel/effect/GlowEffect.hxx>
+#include <docmodel/effect/InnerShadowEffect.hxx>
+#include <docmodel/effect/OuterShadowEffect.hxx>
+#include <docmodel/effect/ReflectionEffect.hxx>
+#include <docmodel/effect/SoftEdgeEffect.hxx>
+#include <docmodel/theme/RectangleAlignment.hxx>
 #include <com/sun/star/graphic/XGraphic.hpp>
+
+#include <optional>
 
 namespace model
 {
@@ -190,22 +199,6 @@ enum class FlipMode
     Y,
     XY
 };
-
-enum class RectangleAlignment
-{
-    Unset,
-    TopLeft,
-    Top,
-    TopRight,
-    Left,
-    Center,
-    Right,
-    BottomLeft,
-    Bottom,
-    BottomRight
-};
-constexpr sal_uInt16 RECTANGLE_ALIGNMENT_COUNT
-    = static_cast<sal_uInt16>(RectangleAlignment::BottomRight) + 1;
 
 enum class BlipEffectType
 {
@@ -397,44 +390,23 @@ public:
     FillStyle maLineFillStyle;
 };
 
-enum class EffectType
-{
-    Unset,
-    OuterShadow,
-    InnerShadow,
-    Glow,
-    SoftEdge,
-    Reflection,
-    Blur
-};
-
-class DOCMODEL_DLLPUBLIC Effect
-{
-public:
-    EffectType meType = EffectType::Unset;
-    sal_Int32 mnBlurRadius = 0;
-    sal_Int32 mnRadius = 0;
-    sal_Int32 mnDistance = 0;
-    sal_Int32 mnDirection = 0;
-    sal_Int32 mnScaleX = 100;
-    sal_Int32 mnScaley = 100;
-    sal_Int32 mnScewX = 0;
-    sal_Int32 mnScewY = 0;
-    RectangleAlignment meAlignment = RectangleAlignment::Bottom;
-    bool mbRotateWithShape = true;
-    ComplexColor maColor;
-    double mnEndAlpha = 100.0;
-    double mnEndPosition = 0.0;
-    double mnStartAlpha = 0.0;
-    double mnStartPosition = 100.0;
-    sal_Int32 mnFadeDirection = 0;
-    bool mbGrow = false;
-};
-
+/// The effects of an effect style, at most one of each kind. An effect that is not set is not
+/// part of the style.
 class DOCMODEL_DLLPUBLIC EffectStyle
 {
 public:
-    std::vector<Effect> maEffectList;
+    std::optional<BlurEffect> moBlur;
+    std::optional<GlowEffect> moGlow;
+    std::optional<InnerShadowEffect> moInnerShadow;
+    std::optional<OuterShadowEffect> moOuterShadow;
+    std::optional<ReflectionEffect> moReflection;
+    std::optional<SoftEdgeEffect> moSoftEdge;
+
+    bool empty() const
+    {
+        return !moBlur && !moGlow && !moInnerShadow && !moOuterShadow && !moReflection
+               && !moSoftEdge;
+    }
 };
 
 class DOCMODEL_DLLPUBLIC FormatScheme

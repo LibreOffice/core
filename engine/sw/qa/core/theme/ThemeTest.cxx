@@ -304,23 +304,27 @@ void checkEffects(std::vector<model::EffectStyle> const& rEffectStyleList)
     CPPUNIT_ASSERT_EQUAL(size_t(3), rEffectStyleList.size());
     {
         model::EffectStyle rEffectStyle = rEffectStyleList[0];
-        CPPUNIT_ASSERT_EQUAL(size_t(0), rEffectStyle.maEffectList.size());
+        CPPUNIT_ASSERT(rEffectStyle.empty());
     }
 
     {
         model::EffectStyle rEffectStyle = rEffectStyleList[1];
-        CPPUNIT_ASSERT_EQUAL(size_t(0), rEffectStyle.maEffectList.size());
+        CPPUNIT_ASSERT(rEffectStyle.empty());
     }
 
     {
         model::EffectStyle rEffectStyle = rEffectStyleList[2];
-        CPPUNIT_ASSERT_EQUAL(size_t(1), rEffectStyle.maEffectList.size());
-        model::Effect const& rEffect = rEffectStyle.maEffectList[0];
+        // The third effect style has only an outer shadow.
+        CPPUNIT_ASSERT(rEffectStyle.moOuterShadow);
+        model::EffectStyle aOtherEffects = rEffectStyle;
+        aOtherEffects.moOuterShadow.reset();
+        CPPUNIT_ASSERT(aOtherEffects.empty());
 
-        CPPUNIT_ASSERT_EQUAL(model::EffectType::OuterShadow, rEffect.meType);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(57150), rEffect.mnBlurRadius);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(19050), rEffect.mnDistance);
-        CPPUNIT_ASSERT_EQUAL(sal_Int32(5400000), rEffect.mnDirection);
+        model::OuterShadowEffect const& rEffect = *rEffectStyle.moOuterShadow;
+
+        CPPUNIT_ASSERT_EQUAL(57150_emu, rEffect.maBlurRadius);
+        CPPUNIT_ASSERT_EQUAL(19050_emu, rEffect.maDistance);
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(5400000), rEffect.mnDirection.get());
         CPPUNIT_ASSERT_EQUAL(model::RectangleAlignment::Center, rEffect.meAlignment);
         CPPUNIT_ASSERT_EQUAL(false, rEffect.mbRotateWithShape);
 
