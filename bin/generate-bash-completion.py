@@ -31,7 +31,7 @@ DRAWDOCS = ["sxd", "std", "dxf", "emf", "eps", "met", "pct", "sgf", "sgv", "sda"
 
 IMPRESSDOCS = ["sxi", "sti", "ppt", "pps", "pot", "sxd", "sda", "sdd", "sdp",
                "vor", "cgm", "odp", "otp", "fodp", "ppsm", "ppsx", "pptm", "pptx",
-               "potm", "potx"]
+               "potm", "potx", "key"]
 
 MATHDOCS = ["sxm", "smf", "mml", "odf"]
 
