@@ -1890,9 +1890,9 @@ static LRESULT CALLBACK HiddenOwnerWndProc(HWND hWnd, UINT message, WPARAM wPara
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
     // The system draws the caption buttons of a window with the strip in its title bar, and it
-    // handles the mouse over them.
+    // handles the mouse over them. WM_NCHITTEST asks it below, after the top resize border.
     WindowState* frameWindow = findWindow(hWnd);
-    if (frameWindow && hasStripInTitleBar(*frameWindow))
+    if (frameWindow && hasStripInTitleBar(*frameWindow) && message != WM_NCHITTEST)
     {
         LRESULT result;
         if (DwmDefWindowProc(hWnd, message, wParam, lParam, &result))
@@ -1926,7 +1926,8 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
                 return result;
 
             // The strip takes the clicks on itself, so what comes here is the top resize border,
-            // or the part of the title bar between the strip and the caption buttons.
+            // the caption buttons, or the part of the title bar between the strip and the
+            // buttons. The resize border reaches over the buttons, as on a normal title bar.
             POINT point = { static_cast<short>(LOWORD(lParam)),
                             static_cast<short>(HIWORD(lParam)) };
             ScreenToClient(hWnd, &point);
@@ -1944,6 +1945,9 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
                     return mirrored ? HTTOPLEFT : HTTOPRIGHT;
                 return HTTOP;
             }
+            LRESULT buttonResult;
+            if (DwmDefWindowProc(hWnd, message, wParam, lParam, &buttonResult))
+                return buttonResult;
             if (point.y < titleBarFrameHeight(*frameWindow))
                 return HTCAPTION;
             return HTCLIENT;
