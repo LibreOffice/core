@@ -1947,11 +1947,6 @@ OUString SfxObjectShell_Impl::getDocumentLocation() const
     if ( pMedium )
     {
         sLocation = pMedium->GetName();
-        if ( sLocation.isEmpty() )
-        {
-            // for documents made from a template: get the name of the template
-            sLocation = rDocShell.getDocProperties()->getTemplateURL();
-        }
 
         // tdf#128006 take document base url as location
         if (sLocation.isEmpty())
