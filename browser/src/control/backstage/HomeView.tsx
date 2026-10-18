@@ -97,7 +97,9 @@ namespace BackstageTemplates {
                 {r.fileName}
               </div>
               <div class="backstage-recent-document-path-text">
-                {r.filePath}
+                {/* A path reads from left to right also in a right-to-left user interface,
+                    where the separators would otherwise move to the other end. */}
+                <span dir="ltr">{r.filePath}</span>
               </div>
             </div>
           </div>
