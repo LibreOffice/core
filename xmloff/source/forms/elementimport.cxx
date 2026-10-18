@@ -1980,8 +1980,7 @@ namespace xmloff
     {
         OElementImport::endFastElement(nElement);
 
-        // A form whose database is outside the user's configuration is an external link of its
-        // document.
+        // A form that names a database is an external link of its document.
         if (SfxObjectShell* pShell
             = SfxObjectShell::GetShellFromComponent(m_rFormImport.getGlobalContext().GetModel()))
         {
