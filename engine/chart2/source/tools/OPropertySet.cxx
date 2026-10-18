@@ -389,6 +389,7 @@ void OPropertySet::setFastPropertyValue( sal_Int32 nHandle, const Any& rValue )
 
 beans::PropertyState OPropertySet::GetPropertyStateByHandle( sal_Int32 nHandle ) const
 {
+    MutexGuard aGuard(m_aMutex);
     if( m_aProperties.end() == m_aProperties.find( nHandle ))
         return beans::PropertyState_DEFAULT_VALUE;
     return beans::PropertyState_DIRECT_VALUE;
@@ -399,6 +400,7 @@ Sequence< beans::PropertyState > OPropertySet::GetPropertyStatesByHandle(
 {
     Sequence< beans::PropertyState > aResult( aHandles.size());
 
+    MutexGuard aGuard(m_aMutex);
     std::transform( aHandles.begin(), aHandles.end(),
                       aResult.getArray(),
                       [this](sal_Int32 nHandle) { return GetPropertyStateByHandle(nHandle); });
@@ -408,24 +410,30 @@ Sequence< beans::PropertyState > OPropertySet::GetPropertyStatesByHandle(
 
 void OPropertySet::SetPropertyToDefault( sal_Int32 nHandle )
 {
-    auto aFoundIter( m_aProperties.find( nHandle ) );
-
-    if( m_aProperties.end() != aFoundIter )
+    // Releasing an interface-valued property can call back into the model.
+    // Detach it under the mutex, but release it after unlocking.
+    decltype(m_aProperties)::node_type aRemoved;
     {
-        m_aProperties.erase( aFoundIter );
+        MutexGuard aGuard(m_aMutex);
+        aRemoved = m_aProperties.extract(nHandle);
     }
 }
 
 void OPropertySet::SetPropertiesToDefault(
     const std::vector< sal_Int32 > & aHandles )
 {
+    std::vector<decltype(m_aProperties)::node_type> aRemoved;
+    aRemoved.reserve(aHandles.size());
+    MutexGuard aGuard(m_aMutex);
     for(auto nHandle : aHandles)
-        m_aProperties.erase(nHandle);
+        aRemoved.push_back(m_aProperties.extract(nHandle));
 }
 
 void OPropertySet::SetAllPropertiesToDefault()
 {
-    m_aProperties.clear();
+    decltype(m_aProperties) aRemoved;
+    MutexGuard aGuard(m_aMutex);
+    m_aProperties.swap(aRemoved);
 }
 
 bool OPropertySet::GetPropertyValueByHandle(

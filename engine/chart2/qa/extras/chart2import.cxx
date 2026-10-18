@@ -15,6 +15,7 @@
 #include <com/sun/star/chart/ErrorBarStyle.hpp>
 #include <com/sun/star/chart/ChartErrorCategory.hpp>
 #include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/beans/XMultiPropertyStates.hpp>
 #include <com/sun/star/chart2/XRegressionCurveContainer.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart/XChartDocument.hpp>
@@ -36,7 +37,12 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
 #include <com/sun/star/util/XModifyListener.hpp>
+#include <com/sun/star/util/XCloneable.hpp>
 #include <cppuhelper/implbase.hxx>
+#include <vcl/svapp.hxx>
+#include <atomic>
+#include <exception>
+#include <thread>
 #include <iterator>
 
 #include <com/sun/star/util/Color.hpp>
@@ -82,6 +88,123 @@ public:
 
     void disposing(const lang::EventObject&) override {}
 };
+
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testConcurrentLegendPropertyStates)
+{
+    loadFromFile(u"ods/tdf86624.ods");
+    Reference<chart2::XChartDocument> xChart2Doc = getChartDocFromSheet(0);
+    // Keep the imported model's values without document/view listeners: their
+    // own threading requirements are independent of property-map access.
+    Reference<util::XCloneable> xImportedLegend(xChart2Doc->getFirstDiagram()->getLegend(),
+                                               UNO_QUERY_THROW);
+    Reference<beans::XPropertySet> xLegend(xImportedLegend->createClone(), UNO_QUERY_THROW);
+    Reference<beans::XPropertyState> xState(xLegend, UNO_QUERY_THROW);
+    Reference<beans::XMultiPropertyStates> xStates(xLegend, UNO_QUERY_THROW);
+    const Sequence<OUString> aNames{ u"LineColor"_ustr, u"LineWidth"_ustr };
+    std::atomic<bool> bStart(false);
+    std::exception_ptr aFailures[3];
+    auto wait = [&]
+    {
+        while (!bStart.load())
+            std::this_thread::yield();
+    };
+    {
+        SolarMutexReleaser aReleaser;
+        std::thread aWriter(
+            [&]
+            {
+                wait();
+                try
+                {
+                    for (sal_Int32 n = 0; n < 50000; ++n)
+                        xLegend->setPropertyValue(u"LineWidth"_ustr, Any(n % 1000));
+                }
+                catch (...)
+                {
+                    aFailures[0] = std::current_exception();
+                }
+            });
+        std::thread aResetter(
+            [&]
+            {
+                wait();
+                try
+                {
+                    for (sal_Int32 n = 0; n < 50000; ++n)
+                    {
+                        switch (n % 3)
+                        {
+                            case 0:
+                                xState->setPropertyToDefault(u"LineWidth"_ustr);
+                                break;
+                            case 1:
+                                xStates->setPropertiesToDefault(aNames);
+                                break;
+                            case 2:
+                                xStates->setAllPropertiesToDefault();
+                                break;
+                        }
+                    }
+                }
+                catch (...)
+                {
+                    aFailures[1] = std::current_exception();
+                }
+            });
+        std::thread aReader(
+            [&]
+            {
+                wait();
+                try
+                {
+                    for (sal_Int32 n = 0; n < 50000; ++n)
+                    {
+                        xLegend->getPropertyValue(u"LineWidth"_ustr);
+                        xState->getPropertyState(u"LineWidth"_ustr);
+                        xState->getPropertyStates(aNames);
+                    }
+                }
+                catch (...)
+                {
+                    aFailures[2] = std::current_exception();
+                }
+            });
+        bStart = true;
+        aWriter.join();
+        aResetter.join();
+        aReader.join();
+    }
+    for (const auto& rFailure : aFailures)
+        if (rFailure)
+            std::rethrow_exception(rFailure);
+
+    // Resetting one property must preserve other direct values.
+    xLegend->setPropertyValue(u"LineColor"_ustr, Any(sal_Int32(0x123456)));
+    xLegend->setPropertyValue(u"LineWidth"_ustr, Any(sal_Int32(120)));
+    CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE,
+                         xState->getPropertyState(u"LineWidth"_ustr));
+    xState->setPropertyToDefault(u"LineWidth"_ustr);
+    CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DEFAULT_VALUE,
+                         xState->getPropertyState(u"LineWidth"_ustr));
+    CPPUNIT_ASSERT_EQUAL(xState->getPropertyDefault(u"LineWidth"_ustr),
+                         xLegend->getPropertyValue(u"LineWidth"_ustr));
+    CPPUNIT_ASSERT_EQUAL(Any(sal_Int32(0x123456)), xLegend->getPropertyValue(u"LineColor"_ustr));
+    const auto aStates = xState->getPropertyStates(aNames);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aStates.getLength());
+    CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DIRECT_VALUE, aStates[0]);
+    CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DEFAULT_VALUE, aStates[1]);
+
+    xLegend->setPropertyValue(u"LineWidth"_ustr, Any(sal_Int32(120)));
+    xStates->setPropertiesToDefault({ u"LineWidth"_ustr });
+    CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DEFAULT_VALUE,
+                         xState->getPropertyState(u"LineWidth"_ustr));
+    CPPUNIT_ASSERT_EQUAL(Any(sal_Int32(0x123456)), xLegend->getPropertyValue(u"LineColor"_ustr));
+    xStates->setAllPropertiesToDefault();
+    for (const auto eState : xState->getPropertyStates(aNames))
+        CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DEFAULT_VALUE, eState);
+    CPPUNIT_ASSERT_EQUAL(xState->getPropertyDefault(u"LineColor"_ustr),
+                         xLegend->getPropertyValue(u"LineColor"_ustr));
+}
 
 OUString getShapeDump(cpo::uno::Reference<css::chart::XChartDocument> const& doc)
 {
