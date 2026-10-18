@@ -62,7 +62,11 @@ constexpr gfx::Length operator""_twip(long double value) { return gfx::Length::t
 constexpr gfx::Length operator""_pt(long double value) { return gfx::Length::pt(value); }
 constexpr gfx::Length operator""_px(long double value) { return gfx::Length::px(value); }
 
-/// Stream output for debugging, prints EMU value with twip and hmm equivalents
+namespace gfx
+{
+/// Stream output for debugging, prints EMU value with twip and hmm equivalents. It is in the
+/// namespace of Length, so argument-dependent lookup finds it from a template like the ones of
+/// CppUnit, whatever the order of the includes.
 template <typename charT, typename traits>
 inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, traits>& stream,
                                                      gfx::Length const& rLength)
@@ -70,6 +74,7 @@ inline std::basic_ostream<charT, traits>& operator<<(std::basic_ostream<charT, t
     return stream << rLength.data() << " (twip=" << rLength.as_twip()
                   << ", hmm=" << rLength.as_hmm() << ")";
 }
+} // end namespace gfx
 
 /// Make Length available in the basegfx namespace as well
 namespace basegfx
