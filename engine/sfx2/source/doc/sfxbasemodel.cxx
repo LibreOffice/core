@@ -1935,19 +1935,6 @@ OUString getFilterProvider( SfxMedium const & rMedium )
     return pFilter->GetProviderName();
 }
 
-void setUpdatePickList( SfxMedium* pMedium )
-{
-    if (!pMedium)
-        return;
-
-    bool bHidden = false;
-    const SfxBoolItem* pHidItem = pMedium->GetItemSet().GetItem(SID_HIDDEN, false);
-    if (pHidItem)
-        bHidden = pHidItem->GetValue();
-
-    pMedium->SetUpdatePickList(!bHidden);
-}
-
 }
 
 void SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqArguments )
@@ -1975,7 +1962,6 @@ void SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqArguments 
             nError = ERRCODE_IO_GENERAL;
 
         pMedium = handleLoadError(nError, pMedium);
-        setUpdatePickList(pMedium);
         return;
     }
 
@@ -2068,7 +2054,6 @@ void SfxBaseModel::load(   const Sequence< beans::PropertyValue >& seqArguments 
 
     pMedium = handleLoadError(nError, pMedium);
     loadCmisProperties();
-    setUpdatePickList(pMedium);
 
 #if OSL_DEBUG_LEVEL > 0
     const SfxStringItem* pPasswdItem = pMedium->GetItemSet().GetItem(SID_PASSWORD, false);

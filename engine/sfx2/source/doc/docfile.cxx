@@ -393,7 +393,6 @@ public:
     ErrCodeMsg m_eWarningError;
 
     ::ucbhelper::Content aContent;
-    bool bUpdatePickList:1;
     bool bIsTemp:1;
     bool bDownloadDone:1;
     bool bIsStorage:1;
@@ -494,7 +493,6 @@ SfxMedium_Impl::SfxMedium_Impl() :
     m_nStorOpenMode(SFX_STREAM_READWRITE),
     m_eError(ERRCODE_NONE),
     m_eWarningError(ERRCODE_NONE),
-    bUpdatePickList(true),
     bIsTemp( false ),
     bDownloadDone( true ),
     bIsStorage( false ),
@@ -3137,16 +3135,6 @@ void SfxMedium::GetMedium_Impl()
 bool SfxMedium::IsRemote() const
 {
     return pImpl->m_bRemote;
-}
-
-void SfxMedium::SetUpdatePickList(bool bVal)
-{
-    pImpl->bUpdatePickList = bVal;
-}
-
-bool SfxMedium::IsUpdatePickList() const
-{
-    return pImpl->bUpdatePickList;
 }
 
 void SfxMedium::SetLongName(const OUString &rName)

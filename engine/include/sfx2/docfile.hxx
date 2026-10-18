@@ -269,8 +269,6 @@ public:
     SAL_DLLPRIVATE bool TryDirectTransfer( const OUString& aURL, SfxItemSet const & aTargetSet );
     SAL_DLLPRIVATE void Transfer_Impl();
     SAL_DLLPRIVATE void CreateFileStream();
-    SAL_DLLPRIVATE void SetUpdatePickList(bool);
-    SAL_DLLPRIVATE bool IsUpdatePickList() const;
 
     SAL_DLLPRIVATE void SetLongName(const OUString &rName);
     SAL_DLLPRIVATE const OUString & GetLongName() const;

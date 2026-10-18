@@ -206,7 +206,6 @@ private:
     bool                        bHasName :1;      // true  := existing object,
                                                   // false := new object
     bool                        bIsInGenerateThumbnail; //optimize thumbnail generate and store procedure to improve odt saving performance, i120030
-    bool                        mbAvoidRecentDocs; ///< Avoid adding to the recent documents list, if not necessary.
     bool                        bPendingLinkUpdateInfobar;
     std::vector<std::pair<cpo::uno::WeakReference<css::beans::XPropertySet>, OUString>>
                                 maDeferredFormControlImages;
@@ -531,12 +530,6 @@ public:
                                     const cpo::uno::Reference< css::io::XStream >& xStream );
 
     bool                        IsInGenerateAndStoreThumbnail() const {return bIsInGenerateThumbnail;}//optimize thumbnail generate and store procedure to improve odt saving performance, i120030
-
-    /// Don't add to the recent documents - it's an expensive operation, sometimes it is not wanted.
-    bool                        IsAvoidRecentDocs() const { return mbAvoidRecentDocs; }
-
-    /// Don't add to the recent documents - it's an expensive operation, sometimes it is not wanted.
-    void                        AvoidRecentDocs(bool bAvoid) { mbAvoidRecentDocs = bAvoid; }
 
     /// On first error ask user if import should continue; return saved answer.
     bool                        IsContinueImportOnFilterExceptions();

@@ -1158,15 +1158,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
                                      aDispatchArgs,
                                      aResultParams );
                 rReq.SetArgs( aResultParams );
-
-                // the StoreAsURL/StoreToURL method have called this method with false
-                // so it has to be restored to true here since it is a call from GUI
-                GetMedium()->SetUpdatePickList( true );
-
-                // TODO: in future it must be done in following way
-                // if document is opened from GUI, it immediately appears in the picklist
-                // if the document is a new one then it appears in the picklist immediately
-                // after SaveAs operation triggered from GUI
             }
             catch( const task::ErrorCodeIOException& aErrorEx )
             {
@@ -1419,10 +1410,6 @@ void SfxObjectShell::ExecFile_Impl(SfxRequest &rReq)
             break;
         }
     }
-
-    // Prevent entry in the Pick-lists
-    if ( rReq.IsAPI() )
-        GetMedium()->SetUpdatePickList( false );
 
     rReq.Done();
 }
