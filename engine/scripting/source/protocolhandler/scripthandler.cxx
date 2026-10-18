@@ -141,8 +141,11 @@ void ScriptProtocolHandler::dispatchWithNotification(
                 urifac->parse(aURL.Complete), cpo::uno::UNO_QUERY_THROW);
             auto const loc = uri->getParameter(u"location"_ustr);
             bool bIsDocumentScript = loc == "document";
+            // A document's scripts are addressed as location=document, so a vnd.sun.star.tdoc
+            // location is refused.
+            bool bIsTDocLocation = loc.startsWithIgnoreAsciiCase("vnd.sun.star.tdoc");
 
-            if ( bIsDocumentScript )
+            if ( bIsDocumentScript || bIsTDocLocation )
             {
                 // obtain the component for our security check
                 Reference< XEmbeddedScripts > xDocumentScripts;
@@ -150,7 +153,7 @@ void ScriptProtocolHandler::dispatchWithNotification(
                     xDocumentScripts.set( m_xScriptInvocation->getScriptContainer(), UNO_SET_THROW );
 
                 OSL_ENSURE( xDocumentScripts.is(), "ScriptProtocolHandler::dispatchWithNotification: can't do the security check!" );
-                if ( !xDocumentScripts.is() || !xDocumentScripts->getAllowMacroExecution() )
+                if ( bIsTDocLocation || !xDocumentScripts.is() || !xDocumentScripts->getAllowMacroExecution() )
                 {
                     if ( xListener.is() )
                     {
