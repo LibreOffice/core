@@ -39,6 +39,13 @@
 	result of each, and the delta the last of them brings has arrived: until then the objects stand
 	where only the engine knows, and the deltas that arrive before the results belong to changes
 	sent earlier.
+
+	Typed text and deleted characters go the same way, as the engine sends a delta for each
+	character. What is typed while changes wait merges into one textinput message, and what is
+	deleted into one removetextcontext message, each with the newest sequence number. The engine
+	deletes the characters before the caret first, so a backspace after a forward delete starts
+	a message of its own. Any other message that the engine applies in order sends the waiting
+	text ahead of it.
 */
 /*
 	One change waiting to go out. A change of objects or of another thing is sealed where it is
@@ -52,7 +59,9 @@ type OutboxEntry =
 			sealed?: boolean;
 	  }
 	| { kind: 'undo' | 'redo'; count: number }
-	| { kind: 'other'; channel: string; message: string; sealed?: boolean };
+	| { kind: 'other'; channel: string; message: string; sealed?: boolean }
+	| { kind: 'text'; text: string; sequence: number }
+	| { kind: 'remove'; before: number; after: number; sequence: number };
 
 class ChangeOutbox {
 	/// How long a change may go unanswered before the next one goes out anyway, in milliseconds.
@@ -128,8 +137,8 @@ class ChangeOutbox {
 
 	/*
 		Takes a message on its way to the engine, if it is one the outbox holds to the engine's
-		pace, and answers whether it took it. It holds the changes of objects and the undos and
-		redos, in a view that draws from the objects only.
+		pace, and answers whether it took it. It holds the changes of objects, the undos and
+		redos and the typed text, in a view that draws from the objects only.
 	*/
 	public static take(message: string): boolean {
 		if (ChangeOutbox.sending || !RenderManager.isVectorRendering())
@@ -140,7 +149,10 @@ class ChangeOutbox {
 
 		ChangeOutbox.listen();
 
-		if (entry.kind === 'undo' || entry.kind === 'redo') {
+		if (entry.kind === 'text' || entry.kind === 'remove') {
+			ChangeOutbox.letGoOfWhatIsHeld();
+			ChangeOutbox.merge(entry);
+		} else if (entry.kind === 'undo' || entry.kind === 'redo') {
 			if (!ChangeOutbox.undoOnItsWay())
 				ChangeOutbox.undoAskedAt = performance.now();
 
@@ -163,6 +175,23 @@ class ChangeOutbox {
 
 		ChangeOutbox.sendTheNext();
 		return true;
+	}
+
+	/// Sends the waiting text ahead of a message that the engine applies in order after it,
+	/// however many changes are in flight. A message that neither reads nor moves the caret
+	/// goes out on its own.
+	public static sendAhead(message: string): void {
+		if (ChangeOutbox.sending) return;
+		if (
+			!ChangeOutbox.waiting.some(
+				(entry) => entry.kind === 'text' || entry.kind === 'remove',
+			)
+		)
+			return;
+		if (LocalCaret.isUnrelated(message)) return;
+
+		while (ChangeOutbox.waiting.length)
+			ChangeOutbox.send(ChangeOutbox.waiting.shift() as OutboxEntry);
 	}
 
 	/// Whether an undo or a redo waits to go out or has not been answered yet.
@@ -199,6 +228,21 @@ class ChangeOutbox {
 	private static entryOf(message: string): OutboxEntry | null {
 		if (message === 'uno .uno:Undo') return { kind: 'undo', count: 1 };
 		if (message === 'uno .uno:Redo') return { kind: 'redo', count: 1 };
+
+		// Text typed into the document itself. A dialog answers with no delta.
+		const text = /^textinput id=0 text=(\S*) sequence=(\d+)$/.exec(message);
+		if (text) return { kind: 'text', text: text[1], sequence: Number(text[2]) };
+		const remove =
+			/^removetextcontext id=0 before=(\d+) after=(\d+) sequence=(\d+)$/.exec(
+				message,
+			);
+		if (remove)
+			return {
+				kind: 'remove',
+				before: Number(remove[1]),
+				after: Number(remove[2]),
+				sequence: Number(remove[3]),
+			};
 
 		const transform = /^setobjecttransform to=(\S*) as=(\S+)$/.exec(message);
 		if (transform) {
@@ -300,6 +344,26 @@ class ChangeOutbox {
 			return;
 		}
 
+		if (last && last.kind === 'text' && entry.kind === 'text') {
+			last.text += entry.text;
+			last.sequence = entry.sequence;
+			return;
+		}
+
+		// The engine deletes before the caret first, so two deletions merge only when that
+		// keeps their order.
+		if (
+			last &&
+			last.kind === 'remove' &&
+			entry.kind === 'remove' &&
+			(last.after === 0 || entry.before === 0)
+		) {
+			last.before += entry.before;
+			last.after += entry.after;
+			last.sequence = entry.sequence;
+			return;
+		}
+
 		ChangeOutbox.waiting.push(entry);
 	}
 
@@ -339,6 +403,19 @@ class ChangeOutbox {
 	/// number, which the engine's undo takes as an argument.
 	private static messageOf(entry: OutboxEntry): string {
 		if (entry.kind === 'other') return entry.message;
+		if (entry.kind === 'text')
+			return (
+				'textinput id=0 text=' + entry.text + ' sequence=' + entry.sequence
+			);
+		if (entry.kind === 'remove')
+			return (
+				'removetextcontext id=0 before=' +
+				entry.before +
+				' after=' +
+				entry.after +
+				' sequence=' +
+				entry.sequence
+			);
 
 		if (entry.kind === 'transform')
 			return (

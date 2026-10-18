@@ -121,7 +121,8 @@ class LocalCaret {
 	/// Tells the engine where the caret is when the message may read or move it.
 	public static tellBefore(message: string): void {
 		if (!LocalCaret.caret || LocalCaret.sequence) return;
-		if (LocalCaret.isUnrelated(message)) return;
+		// What the outbox sends itself was made before the caret moved, so it goes first.
+		if (ChangeOutbox.sending || LocalCaret.isUnrelated(message)) return;
 		LocalCaret.tell();
 	}
 

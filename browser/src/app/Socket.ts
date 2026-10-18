@@ -224,9 +224,13 @@ class Socket {
 		// it.
 		if (typeof msg === 'string') LocalCaret.tellBefore(msg);
 
-		// The changes of objects and the undos and redos of a view that draws from the objects
-		// go to the engine at its own pace, one at a time. The outbox holds them meanwhile.
-		if (typeof msg === 'string' && ChangeOutbox.take(msg)) return;
+		// The changes of objects, undos, redos and typed text of a view drawn from the
+		// objects go to the engine at its pace through the outbox, which sends its text
+		// ahead of a message that follows it.
+		if (typeof msg === 'string') {
+			if (ChangeOutbox.take(msg)) return;
+			ChangeOutbox.sendAhead(msg);
+		}
 
 		const socketState = this.socket.readyState;
 		if (socketState === 2 || socketState === 3) {

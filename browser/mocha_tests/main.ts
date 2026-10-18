@@ -71,6 +71,7 @@
 /// <reference path="./InternUtil.test.ts" />
 /// <reference path="./Plural.test.ts" />
 /// <reference path="./VectorManager.test.ts" />
+/// <reference path="./ChangeOutbox.test.ts" />
 /// <reference path="./RenderGeometrySection.test.ts" />
 /// <reference path="./DocDispatcherExtensions.test.ts" />
 /// <reference path="./StateMachine.test.ts" />

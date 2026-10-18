@@ -261,5 +261,48 @@ var desktopHelper = require('../../common/desktop_helper');
 			helper.typeIntoDocument('{backspace}');
 			expectParagraph('', 'xt 2');
 		});
+
+		// Holds the messages from the server until the keys are typed, so the answer to the
+		// first key arrives after the last one.
+		function typeWithAnswersHeld(keys) {
+			var held = [];
+			var onMessage;
+			cy.then(function() {
+				var socket = win.app.socket;
+				onMessage = socket._onMessage;
+				socket._onMessage = function() { held.push(arguments); };
+			});
+			helper.typeIntoDocument(keys);
+			cy.then(function() {
+				var socket = win.app.socket;
+				socket._onMessage = onMessage;
+				held.forEach(function(message) { onMessage.apply(socket, message); });
+			});
+		}
+
+		it('keeps typed text, deletions and caret moves in the order they were made', function() {
+			// The outbox keeps four messages in flight, so the "e" waits to be sent
+			// while the caret moves back over all five letters.
+			keysToServer('{end}');
+			cy.then(function() { sent.length = 0; });
+			typeWithAnswersHeld('abcde{leftarrow}{leftarrow}{leftarrow}{leftarrow}{leftarrow}');
+			expectParagraph('', 'Text 1abcde');
+			cy.then(function() {
+				if (!view.vector)
+					return;
+				var e = sent.findIndex(function(message) {
+					return /^textinput id=0 text=\w*e /.test(message);
+				});
+				var cursor = sent.findIndex(function(message) {
+					return message.startsWith('textcursor ');
+				});
+				expect(e).to.be.at.least(0);
+				expect(cursor).to.be.greaterThan(e);
+			});
+
+			keysToServer('{downarrow}{end}');
+			typeWithAnswersHeld('xyz{leftarrow}{del}{backspace}');
+			expectParagraph('', 'Text 2x');
+		});
 	});
 });
