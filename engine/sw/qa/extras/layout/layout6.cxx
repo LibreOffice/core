@@ -38,6 +38,7 @@
 #include <view.hxx>
 #include <txtfrm.hxx>
 #include <pagefrm.hxx>
+#include <shellio.hxx>
 #include <bodyfrm.hxx>
 #include <tabfrm.hxx>
 #include <sortedobjs.hxx>
@@ -1957,6 +1958,15 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf169399)
     xmlDocUniquePtr pXmlDoc = parseLayoutDump();
     // Without the fix, this failed, because there were two pages:
     assertXPath(pXmlDoc, "/root/page", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testOfz574847387)
+{
+    // Frames anchored to a paragraph in a 2-column section push the previous paragraph down, which
+    // moves their anchor down too, so the layout has no stable state. Without the fix, the layout
+    // never finished.
+    SvFileStream aFileStream(createFileURL(u"ofz574847387-1.rtf"), StreamMode::READ);
+    TestPDFExportRTF(aFileStream);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter6, testTdf155306)
