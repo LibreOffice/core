@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:styles/>
+ <office:body>
+  <office:text>
+   <office:forms form:automatic-focus="false" form:apply-design-mode="false">
+    <form:form form:name="Form" form:datasource="Bibliography" form:command="biblio" form:command-type="table">
+     <form:text form:name="Identifier" form:data-field="Identifier" xml:id="control1" form:id="control1"/>
+    </form:form>
+   </office:forms>
+   <text:p>A form on the registered Bibliography data source, showing the Identifier column of its biblio table:</text:p>
+   <text:p><draw:control text:anchor-type="as-char" svg:width="6cm" svg:height="0.8cm" draw:control="control1"/></text:p>
+  </office:text>
+ </office:body>
+</office:document>
