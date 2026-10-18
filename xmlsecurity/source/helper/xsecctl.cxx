@@ -1002,7 +1002,7 @@ bool IsSigningKeyBound(InternalSignatureInformation const& rInformation)
     // For an OpenPGP signature, the xd:CertDigest element holds the key ID.
     bool const isX509{rInfo.ouGpgKeyID.isEmpty() && rInfo.ouGpgCertificate.isEmpty()};
     if (isX509 && !rInfo.SigningCertificates.empty()
-        && (!rInformation.xSigningCertificate.is()
+        && (!rInformation.xSigningCertificate.is() || !rInfo.xVerifiedCertificate.is()
             || rInformation.xSigningCertificate->getEncoded() != rInfo.xVerifiedCertificate->getEncoded()))
     {
         SAL_WARN("xmlsecurity.helper",
