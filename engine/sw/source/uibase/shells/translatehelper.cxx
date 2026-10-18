@@ -35,10 +35,12 @@
 #include <doc.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <translatehelper.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <o3tl/string_view.hxx>
 #include <sal/log.hxx>
 #include <rtl/string.h>
 #include <shellio.hxx>
+#include <vcl/kit.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/htmltransferable.hxx>
 #include <vcl/transfer.hxx>
@@ -357,9 +359,16 @@ bool TranslateRanges(SwWrtShell& rWrtSh, const TranslateFunc& rTranslate,
                 aIdle.Start();
 
                 rWrtSh.LockView(true);
-                while (aIdle.IsActive() && !Application::IsQuit())
                 {
-                    Application::Yield();
+                    // Spinning the event loop here is deliberate, so the progress is painted
+                    // and a click on Cancel is seen: tell the kit host poll loop not to take
+                    // this re-entry for a non-async dialog.
+                    vcl::kit::pushExpectedReentry();
+                    comphelper::ScopeGuard aPopReentry([] { vcl::kit::popExpectedReentry(); });
+                    while (aIdle.IsActive() && !Application::IsQuit())
+                    {
+                        Application::Yield();
+                    }
                 }
                 rWrtSh.LockView(false);
             }
