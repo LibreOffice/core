@@ -69,8 +69,7 @@ const ItemPropertyMapType & lcl_GetDataPointFilledPropertyMap()
         {XATTR_FILLBMP_TILEOFFSETX, {u"FillBitmapOffsetX"_ustr, 0}},
         {XATTR_FILLBMP_TILEOFFSETY, {u"FillBitmapOffsetY"_ustr, 0}},
         {XATTR_FILLBMP_POSOFFSETX, {u"FillBitmapPositionOffsetX"_ustr, 0}},
-        {XATTR_FILLBMP_POSOFFSETY, {u"FillBitmapPositionOffsetY"_ustr, 0}},
-        {SDRATTR_SOFTEDGE_RADIUS, {u"SoftEdgeRadius"_ustr, 0}}
+        {XATTR_FILLBMP_POSOFFSETY, {u"FillBitmapPositionOffsetY"_ustr, 0}}
     };
 
     return aDataPointPropertyFilledMap;

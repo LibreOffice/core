@@ -22,6 +22,7 @@
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/util/XComplexColor.hpp>
 #include <com/sun/star/util/XGlowEffect.hpp>
+#include <com/sun/star/util/XSoftEdgeEffect.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 
 #include <comphelper/processfactory.hxx>
@@ -32,6 +33,7 @@
 #include <docmodel/theme/Theme.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
 #include <docmodel/uno/UnoGlowEffect.hxx>
+#include <docmodel/uno/UnoSoftEdgeEffect.hxx>
 #include <test/unoapixml_test.hxx>
 #include <unotools/tempfile.hxx>
 #include <svx/EffectItems.hxx>
@@ -386,6 +388,27 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testGlowEffectProperties)
     CPPUNIT_ASSERT_EQUAL(
         sal_Int16(25),
         xOtherProps->getPropertyValue(u"GlowEffectTransparency"_ustr).get<sal_Int16>());
+}
+
+CPPUNIT_TEST_FIXTURE(UnodrawTest, testSoftEdgeEffectProperties)
+{
+    loadFromURL(u"private:factory/simpress"_ustr);
+    uno::Reference<beans::XPropertySet> xShapeProps(insertRectangle(mxComponent), uno::UNO_QUERY);
+
+    // The radius is a view of the whole soft edge.
+    xShapeProps->setPropertyValue(u"SoftEdgeRadius"_ustr, uno::Any(sal_Int32(350)));
+    uno::Reference<util::XSoftEdgeEffect> xSoftEdge;
+    CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"SoftEdgeEffect"_ustr) >>= xSoftEdge);
+    std::optional<model::SoftEdgeEffect> oSoftEdge
+        = model::effect::getFromXSoftEdgeEffect(xSoftEdge);
+    CPPUNIT_ASSERT(oSoftEdge);
+    CPPUNIT_ASSERT_EQUAL(350_hmm, oSoftEdge->maRadius);
+
+    // The whole soft edge set on another shape gives it the same radius.
+    uno::Reference<beans::XPropertySet> xOtherProps(insertRectangle(mxComponent), uno::UNO_QUERY);
+    xOtherProps->setPropertyValue(u"SoftEdgeEffect"_ustr, uno::Any(xSoftEdge));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(350),
+                         xOtherProps->getPropertyValue(u"SoftEdgeRadius"_ustr).get<sal_Int32>());
 }
 
 CPPUNIT_TEST_FIXTURE(UnodrawTest, testReflectionProperties)

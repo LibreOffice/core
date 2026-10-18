@@ -32,7 +32,7 @@ public:
     static std::unique_ptr<PanelLayout> Create(weld::Widget* pParent, ChartController* pController);
 
     void setGlow(const SdrGlowEffectItem& rItem) override;
-    void setSoftEdgeRadius(const SdrMetricItem& rItem) override;
+    void setSoftEdge(const SdrSoftEdgeEffectItem& rItem) override;
 
     void updateData() override;
     void modelInvalid() override;

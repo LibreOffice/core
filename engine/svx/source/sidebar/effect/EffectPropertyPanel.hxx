@@ -24,7 +24,7 @@ public:
     static std::unique_ptr<PanelLayout> Create(weld::Widget* pParent, SfxBindings* pBindings);
 
     void setGlow(const SdrGlowEffectItem& rGlow) override;
-    void setSoftEdgeRadius(const SdrMetricItem& rSoftEdgeRadius) override;
+    void setSoftEdge(const SdrSoftEdgeEffectItem& rSoftEdge) override;
 
     void NotifyItemUpdate(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState) override;
 
@@ -50,7 +50,7 @@ private:
     bool mbReflectionAvailable = true;
 
     sfx2::sidebar::ControllerItem maGlowController;
-    sfx2::sidebar::ControllerItem maSoftEdgeRadiusController;
+    sfx2::sidebar::ControllerItem maSoftEdgeController;
     sfx2::sidebar::ControllerItem maReflectionController;
     sfx2::sidebar::ControllerItem maReflectionTransparencyController;
     sfx2::sidebar::ControllerItem maReflectionSizeController;

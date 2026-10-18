@@ -44,7 +44,7 @@ EffectPropertyPanel::EffectPropertyPanel(weld::Widget* pParent, SfxBindings* pBi
     , mxReflectionBlur(
           m_xBuilder->weld_metric_spin_button(u"SB_REFLECTION_BLUR"_ustr, FieldUnit::POINT))
     , maGlowController(SID_ATTR_GLOW, *pBindings, *this)
-    , maSoftEdgeRadiusController(SID_ATTR_SOFTEDGE_RADIUS, *pBindings, *this)
+    , maSoftEdgeController(SID_ATTR_SOFTEDGE, *pBindings, *this)
     , maReflectionController(SID_ATTR_REFLECTION, *pBindings, *this)
     , maReflectionTransparencyController(SID_ATTR_REFLECTION_START_TRANSPARENCY, *pBindings, *this)
     , maReflectionSizeController(SID_ATTR_REFLECTION_END_POSITION, *pBindings, *this)
@@ -75,7 +75,7 @@ EffectPropertyPanel::EffectPropertyPanel(weld::Widget* pParent, SfxBindings* pBi
 EffectPropertyPanel::~EffectPropertyPanel()
 {
     maGlowController.dispose();
-    maSoftEdgeRadiusController.dispose();
+    maSoftEdgeController.dispose();
     maReflectionController.dispose();
     maReflectionTransparencyController.dispose();
     maReflectionSizeController.dispose();
@@ -218,10 +218,9 @@ void EffectPropertyPanel::setGlow(const SdrGlowEffectItem& rGlow)
     mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_GLOW, SfxCallMode::SLOT, { &rGlow });
 }
 
-void EffectPropertyPanel::setSoftEdgeRadius(const SdrMetricItem& rSoftEdgeRadius)
+void EffectPropertyPanel::setSoftEdge(const SdrSoftEdgeEffectItem& rSoftEdge)
 {
-    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_SOFTEDGE_RADIUS, SfxCallMode::SLOT,
-                                             { &rSoftEdgeRadius });
+    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_SOFTEDGE, SfxCallMode::SLOT, { &rSoftEdge });
 }
 
 std::unique_ptr<PanelLayout> EffectPropertyPanel::Create(weld::Widget* pParent,

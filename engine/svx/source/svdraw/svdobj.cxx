@@ -18,6 +18,7 @@
  */
 
 #include <svx/svdobj.hxx>
+#include <svx/EffectItems.hxx>
 #include <config_features.h>
 
 #include <sal/config.h>
@@ -2456,10 +2457,8 @@ void SdrObject::SetMergedItemSetAndBroadcast(const SfxItemSet& rSet, bool bClear
 {
     GetProperties().SetMergedItemSetAndBroadcast(rSet, bClearAllItems);
 
-    const SdrMetricItem* pItem;
-    const bool bSetSoftEdge
-        = (SfxItemState::SET == rSet.GetItemState(SDRATTR_SOFTEDGE_RADIUS, true, &pItem)
-           && pItem->GetValue() > 0);
+    const SdrSoftEdgeEffectItem* pItem = rSet.GetItemIfSet(SDRATTR_SOFTEDGE);
+    const bool bSetSoftEdge = pItem && pItem->getEffect().maRadius > 0_emu;
     if (bSetSoftEdge)
     {
         // Remove 3D grabbag

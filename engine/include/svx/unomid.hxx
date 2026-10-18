@@ -101,13 +101,14 @@
 #define MID_CHART_GRADIENT_PRESET_VARIATION 0
 #define MID_CHART_GRADIENT_PRESET_TYPE 1
 
-// SdrGlowEffectItem
+// SdrGlowEffectItem, SdrSoftEdgeEffectItem
 #define MID_EFFECT                  0
 #define MID_EFFECT_JSON             1
 #define MID_GLOW_RADIUS             2
 #define MID_GLOW_COLOR              3
 #define MID_GLOW_COMPLEX_COLOR      4
 #define MID_GLOW_TRANSPARENCY       5
+#define MID_SOFTEDGE_RADIUS         2
 
 #endif
 

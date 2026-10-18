@@ -23,6 +23,7 @@
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <com/sun/star/util/XComplexColor.hpp>
 #include <com/sun/star/util/XGlowEffect.hpp>
+#include <com/sun/star/util/XSoftEdgeEffect.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/drawing/RectanglePoint.hpp>
@@ -222,7 +223,8 @@
     { u"GlowEffectTransparency"_ustr,    SDRATTR_GLOW, ::cppu::UnoType<sal_Int16>::get(),                0, MID_GLOW_TRANSPARENCY},
 
 #define SOFTEDGE_PROPERTIES \
-    { u"SoftEdgeRadius"_ustr,      SDRATTR_SOFTEDGE_RADIUS,       cppu::UnoType<sal_Int32>::get(),      0,      0, PropertyMoreFlags::METRIC_ITEM},
+    { u"SoftEdgeEffect"_ustr,      SDRATTR_SOFTEDGE, ::cppu::UnoType<css::util::XSoftEdgeEffect>::get(), 0, MID_EFFECT}, \
+    { u"SoftEdgeRadius"_ustr,      SDRATTR_SOFTEDGE, ::cppu::UnoType<sal_Int32>::get(),                  0, MID_SOFTEDGE_RADIUS},
 
 #define REFLECTION_PROPERTIES \
     { u"ReflectionEffect"_ustr,                  SDRATTR_REFLECTION,                    cppu::UnoType<bool>::get(),         0, 0}, \

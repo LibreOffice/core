@@ -196,7 +196,7 @@ interface TextDraw : TextDrawBase
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
-    SID_ATTR_SOFTEDGE_RADIUS
+    SID_ATTR_SOFTEDGE
     [
         ExecMethod = ExecDrawAttrArgs ;
         StateMethod = GetDrawAttrState ;

@@ -14,6 +14,7 @@
 #include <svl/poolitem.hxx>
 #include <svx/svxdllapi.h>
 #include <docmodel/effect/GlowEffect.hxx>
+#include <docmodel/effect/SoftEdgeEffect.hxx>
 #include <tools/color.hxx>
 
 namespace model
@@ -57,6 +58,31 @@ public:
 
     bool operator==(const SfxPoolItem& rItem) const override;
     SdrGlowEffectItem* Clone(SfxItemPool* pPool = nullptr) const override;
+    bool QueryValue(cpo::uno::Any& rValue, sal_uInt8 nMemberId = 0) const override;
+    bool PutValue(const cpo::uno::Any& rValue, sal_uInt8 nMemberId) override;
+    boost::property_tree::ptree dumpAsJSON() const override;
+};
+
+/** The soft edge of a shape. A soft edge with a radius of 0 is no soft edge.
+
+    The members of the item for UNO are MID_EFFECT for the XSoftEdgeEffect, MID_EFFECT_JSON for
+    the JSON of model::effect::convertToJSON, and MID_SOFTEDGE_RADIUS (1/100 mm).
+ */
+class SVXCORE_DLLPUBLIC SdrSoftEdgeEffectItem final : public SfxPoolItem
+{
+    model::SoftEdgeEffect maEffect;
+
+public:
+    DECLARE_ITEM_TYPE_FUNCTION(SdrSoftEdgeEffectItem)
+    explicit SdrSoftEdgeEffectItem(TypedWhichId<SdrSoftEdgeEffectItem> nWhich,
+                                   model::SoftEdgeEffect const& rEffect = {});
+    static SfxPoolItem* CreateDefault();
+
+    model::SoftEdgeEffect const& getEffect() const { return maEffect; }
+    void setRadius(gfx::Length aRadius) { maEffect.maRadius = aRadius; }
+
+    bool operator==(const SfxPoolItem& rItem) const override;
+    SdrSoftEdgeEffectItem* Clone(SfxItemPool* pPool = nullptr) const override;
     bool QueryValue(cpo::uno::Any& rValue, sal_uInt8 nMemberId = 0) const override;
     bool PutValue(const cpo::uno::Any& rValue, sal_uInt8 nMemberId) override;
     boost::property_tree::ptree dumpAsJSON() const override;

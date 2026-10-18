@@ -13,7 +13,6 @@
 
 #include <svx/EffectItems.hxx>
 #include <svx/colorbox.hxx>
-#include <svx/sdmetitm.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svxids.hrc>
 #include <svl/itemset.hxx>
@@ -57,8 +56,9 @@ void EffectPropertyPanelBase::Initialize()
 
 IMPL_LINK_NOARG(EffectPropertyPanelBase, ModifySoftEdgeRadiusHdl, weld::MetricSpinButton&, void)
 {
-    SdrMetricItem aItem(SDRATTR_SOFTEDGE_RADIUS, mxSoftEdgeRadius->get_value(FieldUnit::MM_100TH));
-    setSoftEdgeRadius(aItem);
+    SdrSoftEdgeEffectItem aItem(SDRATTR_SOFTEDGE);
+    aItem.setRadius(gfx::Length::hmm(mxSoftEdgeRadius->get_value(FieldUnit::MM_100TH)));
+    setSoftEdge(aItem);
 }
 
 SdrGlowEffectItem EffectPropertyPanelBase::getGlow() const
@@ -120,14 +120,15 @@ void EffectPropertyPanelBase::updateGlow(const bool bDefaultOrSet, const SfxPool
     mxGlowTransparency->set_value(pGlow->getTransparency(), FieldUnit::PERCENT);
 }
 
-void EffectPropertyPanelBase::updateSoftEdgeRadius(const bool bDefaultOrSet,
-                                                   const SfxPoolItem* pState) const
+void EffectPropertyPanelBase::updateSoftEdge(const bool bDefaultOrSet,
+                                             const SfxPoolItem* pState) const
 {
     if (bDefaultOrSet)
     {
-        if (const auto* pRadiusItem = dynamic_cast<const SdrMetricItem*>(pState))
+        if (const auto* pSoftEdge = dynamic_cast<const SdrSoftEdgeEffectItem*>(pState))
         {
-            mxSoftEdgeRadius->set_value(pRadiusItem->GetValue(), FieldUnit::MM_100TH);
+            mxSoftEdgeRadius->set_value(pSoftEdge->getEffect().maRadius.as_hmm<sal_Int64>(),
+                                        FieldUnit::MM_100TH);
         }
     }
 }
@@ -138,8 +139,8 @@ void EffectPropertyPanelBase::NotifyItemUpdate(const sal_uInt16 nSID, const SfxI
     const bool bDefaultOrSet(SfxItemState::DEFAULT <= eState);
     switch (nSID)
     {
-        case SID_ATTR_SOFTEDGE_RADIUS:
-            updateSoftEdgeRadius(bDefaultOrSet, pState);
+        case SID_ATTR_SOFTEDGE:
+            updateSoftEdge(bDefaultOrSet, pState);
             break;
         case SID_ATTR_GLOW:
             updateGlow(bDefaultOrSet, pState);

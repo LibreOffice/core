@@ -235,6 +235,7 @@ enum class SfxItemType : sal_uInt16
     SdrScaleItemType,
     SdrShearAngleItemType,
     SdrSignedPercentItemType,
+    SdrSoftEdgeEffectItemType,
     SdrTextAniAmountItemType,
     SdrTextAniCountItemType,
     SdrTextAniDelayItemType,

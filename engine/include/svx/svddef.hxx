@@ -125,6 +125,7 @@ class SdrResizeYAllItem;
 class SdrResizeYOneItem;
 class SdrRotateOneItem;
 class SdrShearAngleItem;
+class SdrSoftEdgeEffectItem;
 class SdrTextFitToSizeTypeItem;
 class SdrTextFixedCellHeightItem;
 class SdrTextVertAdjustItem;
@@ -426,8 +427,8 @@ inline constexpr TypedWhichId<SdrGlowEffectItem> SDRATTR_GLOW(SDRATTR_GLOW_FIRST
 inline constexpr sal_uInt16                      SDRATTR_GLOW_LAST(SDRATTR_GLOW);                          // 1243
 
 inline constexpr sal_uInt16                      SDRATTR_SOFTEDGE_FIRST(SDRATTR_GLOW_LAST+1);              // 1244
-inline constexpr TypedWhichId<SdrMetricItem>     SDRATTR_SOFTEDGE_RADIUS(SDRATTR_SOFTEDGE_FIRST+0);        // 1244
-inline constexpr sal_uInt16                      SDRATTR_SOFTEDGE_LAST(SDRATTR_SOFTEDGE_RADIUS);           // 1244
+inline constexpr TypedWhichId<SdrSoftEdgeEffectItem> SDRATTR_SOFTEDGE(SDRATTR_SOFTEDGE_FIRST+0);           // 1244
+inline constexpr sal_uInt16                      SDRATTR_SOFTEDGE_LAST(SDRATTR_SOFTEDGE);                  // 1244
 
 inline constexpr sal_uInt16                      SDRATTR_GLOW_TEXT_FIRST(SDRATTR_SOFTEDGE_LAST+1);         // 1245
 inline constexpr TypedWhichId<SdrMetricItem>     SDRATTR_GLOW_TEXT_RADIUS(SDRATTR_GLOW_TEXT_FIRST+0);      // 1245

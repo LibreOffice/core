@@ -15,7 +15,6 @@
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <sfx2/weldutils.hxx>
-#include <svx/sdmetitm.hxx>
 #include <svx/svddef.hxx>
 #include <svx/tbcontrl.hxx>
 #include <vcl/svapp.hxx>
@@ -147,14 +146,16 @@ void ChartEffectPanel::setGlow(const SdrGlowEffectItem& rItem)
                                cpo::uno::Any(rItem.getTransparency()));
 }
 
-void ChartEffectPanel::setSoftEdgeRadius(const SdrMetricItem& rItem)
+void ChartEffectPanel::setSoftEdge(const SdrSoftEdgeEffectItem& rItem)
 {
     PreventUpdate aProtector(mbUpdate);
     const cpo::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
     if (!xPropSet.is())
         return;
 
-    xPropSet->setPropertyValue(u"SoftEdgeRadius"_ustr, cpo::uno::Any(rItem.GetValue()));
+    // The chart model has the radius in 1/100 mm.
+    xPropSet->setPropertyValue(u"SoftEdgeRadius"_ustr,
+                               cpo::uno::Any(rItem.getEffect().maRadius.as_hmm<sal_Int32>()));
 }
 
 void ChartEffectPanel::updateData()

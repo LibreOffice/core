@@ -16,7 +16,6 @@
 
 #include <memory>
 
-class SdrMetricItem;
 class ColorListBox;
 
 namespace svx::sidebar
@@ -37,10 +36,10 @@ public:
     }
 
     virtual void setGlow(const SdrGlowEffectItem& rGlow) = 0;
-    virtual void setSoftEdgeRadius(const SdrMetricItem& rSoftEdgeRadius) = 0;
+    virtual void setSoftEdge(const SdrSoftEdgeEffectItem& rSoftEdge) = 0;
 
     void updateGlow(bool bDefaultOrSet, const SfxPoolItem* pState);
-    void updateSoftEdgeRadius(bool bDefaultOrSet, const SfxPoolItem* pState) const;
+    void updateSoftEdge(bool bDefaultOrSet, const SfxPoolItem* pState) const;
 
 private:
     /// The glow of the selection, or none when the selection has no single glow.

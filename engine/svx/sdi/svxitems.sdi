@@ -240,6 +240,13 @@ struct SdrGlowEffect
 };
 item SdrGlowEffect SdrGlowEffectItem;
 
+struct SdrSoftEdgeEffect
+{
+    String JSON             MID_EFFECT_JSON;
+    INT32  Radius           MID_SOFTEDGE_RADIUS;
+};
+item SdrSoftEdgeEffect SdrSoftEdgeEffectItem;
+
 item BYTE                   SfxGlobalNameItem;
 
 struct SvxCrossedOut

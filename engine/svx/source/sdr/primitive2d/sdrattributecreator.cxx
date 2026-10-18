@@ -195,16 +195,19 @@ namespace drawinglayer
             return aRetval;
         }
 
+        /// The length of an effect, in the unit of the model that the attributes take.
+        sal_Int32 toModelUnit(const SfxItemSet& rSet, sal_uInt16 nWhich, gfx::Length aLength)
+        {
+            const MapUnit eMapUnit = rSet.GetPool()->GetMetric(nWhich);
+            return std::lround(
+                o3tl::convert(aLength.as_hmm(), o3tl::Length::mm100, MapToO3tlLength(eMapUnit)));
+        }
+
         attribute::SdrGlowAttribute createNewSdrGlowAttribute(const SfxItemSet& rSet)
         {
             const SdrGlowEffectItem& rGlowItem = rSet.Get(SDRATTR_GLOW);
-
-            // The radius is a gfx::Length, and the glow attribute takes it in the unit of the
-            // model.
-            const MapUnit eMapUnit = rSet.GetPool()->GetMetric(SDRATTR_GLOW);
             const sal_Int32 nRadius(
-                std::lround(o3tl::convert(rGlowItem.getEffect().maRadius.as_hmm(),
-                                          o3tl::Length::mm100, MapToO3tlLength(eMapUnit))));
+                toModelUnit(rSet, SDRATTR_GLOW, rGlowItem.getEffect().maRadius));
 
             if (!nRadius)
                 return attribute::SdrGlowAttribute();
@@ -271,7 +274,8 @@ namespace drawinglayer
 
         sal_Int32 getSoftEdgeRadius(const SfxItemSet& rSet)
         {
-            return rSet.Get(SDRATTR_SOFTEDGE_RADIUS).GetValue();
+            return toModelUnit(rSet, SDRATTR_SOFTEDGE,
+                               rSet.Get(SDRATTR_SOFTEDGE).getEffect().maRadius);
         }
 
         attribute::ReflectionAttribute createNewReflectionAttribute(const SfxItemSet& rSet)

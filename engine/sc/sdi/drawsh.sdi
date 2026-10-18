@@ -229,7 +229,7 @@ interface TableDraw
     SID_ATTR_GLOW_TEXT_RADIUS       [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; ]
     SID_ATTR_GLOW_TEXT_TRANSPARENCY [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; ]
 
-    SID_ATTR_SOFTEDGE_RADIUS        [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; ]
+    SID_ATTR_SOFTEDGE               [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; ]
 
     SID_ATTR_REFLECTION                     [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; ]
     SID_ATTR_REFLECTION_DISTANCE            [ ExecMethod = ExecDrawAttr; StateMethod = GetDrawAttrState; ]
