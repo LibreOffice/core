@@ -123,8 +123,9 @@ class UnitReconnect : public UnitWSD
         return std::string(message.begin() + prefix.size(), message.end());
     }
 
-    /// Waits for the loaded: message, which comes after the view's status. The session is live
-    /// from then on, and the document is loaded.
+    /// Waits for the loaded: message, which comes after the view's status and its viewinfo. The
+    /// session is live from then on, and the document is loaded. Until then the server takes a
+    /// view for loading, and fails it when the last loaded view goes.
     bool waitForLoaded(http::WebSocketSession& session)
     {
         return !session.waitForMessage("loaded:", std::chrono::seconds(10), testname).empty();
@@ -270,6 +271,7 @@ UnitBase::TestResult UnitReconnect::testUserExitIsNotParked()
     LOK_ASSERT(waitForViews(*sessionA, 1, 0, std::chrono::seconds(30)));
     auto sessionB = connect(documentURL, false);
     LOK_ASSERT(waitForViews(*sessionB, 2, 0, std::chrono::seconds(30)));
+    LOK_ASSERT(waitForLoaded(*sessionB));
 
     sessionA->exitWS();
     bool sawParked = false;
@@ -300,6 +302,7 @@ UnitBase::TestResult UnitReconnect::testOtherCloseIsParked()
     LOK_ASSERT(waitForViews(*sessionA, 1, 0, std::chrono::seconds(30)));
     auto sessionB = connect(documentURL, false);
     LOK_ASSERT(waitForViews(*sessionB, 2, 0, std::chrono::seconds(30)));
+    LOK_ASSERT(waitForLoaded(*sessionB));
 
     // shutdownWS sends ENDPOINT_GOING_AWAY.
     sessionA->shutdownWS();
@@ -336,6 +339,7 @@ UnitBase::TestResult UnitReconnect::testTakeoverOfLiveSession()
     LOK_ASSERT(waitForViews(*sessionA, 1, 0, std::chrono::seconds(30)));
     auto sessionB = connect(documentURL, false);
     LOK_ASSERT(waitForViews(*sessionB, 2, 0, std::chrono::seconds(30)));
+    LOK_ASSERT(waitForLoaded(*sessionB));
 
     auto sessionA2 = connect(documentURL, true, token, " part=0");
     bool sawCanonicalId = false;
@@ -378,6 +382,7 @@ UnitBase::TestResult UnitReconnect::testReconnectWithToken()
     LOK_ASSERT(waitForViews(*sessionA, 1, 0, std::chrono::seconds(30)));
     auto sessionB = connect(documentURL, false);
     LOK_ASSERT(waitForViews(*sessionB, 2, 0, std::chrono::seconds(30)));
+    LOK_ASSERT(waitForLoaded(*sessionB));
 
     TST_LOG("Freezing A");
     sessionA->freeze();
@@ -464,6 +469,7 @@ UnitBase::TestResult UnitReconnect::testNotReconnectableIsNotParked()
     LOK_ASSERT(waitForViews(*sessionA, 1, 0, std::chrono::seconds(30)));
     auto sessionB = connect(documentURL, false);
     LOK_ASSERT(waitForViews(*sessionB, 2, 0, std::chrono::seconds(30)));
+    LOK_ASSERT(waitForLoaded(*sessionB));
 
     sessionA->dropWS();
     bool sawParked = false;
@@ -489,6 +495,7 @@ UnitBase::TestResult UnitReconnect::testWrongToken()
     LOK_ASSERT(waitForViews(*sessionA, 1, 0, std::chrono::seconds(30)));
     auto sessionB = connect(documentURL, false);
     LOK_ASSERT(waitForViews(*sessionB, 2, 0, std::chrono::seconds(30)));
+    LOK_ASSERT(waitForLoaded(*sessionB));
 
     sessionA->freeze();
     LOK_ASSERT(waitForViews(*sessionB, 2, 1, DropNoticed));
@@ -516,6 +523,7 @@ UnitBase::TestResult UnitReconnect::testParkExpires()
     LOK_ASSERT(waitForViews(*sessionA, 1, 0, std::chrono::seconds(30)));
     auto sessionB = connect(documentURL, false);
     LOK_ASSERT(waitForViews(*sessionB, 2, 0, std::chrono::seconds(30)));
+    LOK_ASSERT(waitForLoaded(*sessionB));
 
     sessionA->freeze();
     LOK_ASSERT(waitForViews(*sessionB, 2, 1, DropNoticed));

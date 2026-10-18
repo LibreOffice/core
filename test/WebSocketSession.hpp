@@ -346,7 +346,9 @@ public:
     }
 
     /// Closes the connection with status USER_EXIT, as a browser does when the user closes the
-    /// document.
+    /// document: it sends the Close frame, and goes on reading until the server answers with its
+    /// own and closes the connection. The server reads the Close frame before anything that it
+    /// sends meanwhile could find the connection gone.
     void exitWS()
     {
         const auto poller = _socketPoll.lock();
@@ -357,7 +359,7 @@ public:
             poller->addCallback([weakSession=std::move(weakSession)]() {
                 auto session = weakSession.lock();
                 if (session)
-                    session->shutdown(StatusCodes::USER_EXIT);
+                    session->sendCloseFrame(StatusCodes::USER_EXIT);
             });
         }
         else
