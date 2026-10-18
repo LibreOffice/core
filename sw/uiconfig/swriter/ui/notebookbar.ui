@@ -2177,7 +2177,7 @@
       <object class="GtkMenuItem" id="MenuTools-AutoCorrect">
         <property name="visible">True</property>
         <property name="can-focus">False</property>
-        <property name="label">AutoCorrect</property>
+        <property name="action-name">.uno:AutoFormatMenu</property>
         <child type="submenu">
           <object class="GtkMenu" id="MenuTools-Popup">
             <property name="visible">True</property>
@@ -2187,7 +2187,6 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="action-name">.uno:OnlineAutoFormat</property>
-                <property name="label">While Typing</property>
               </object>
             </child>
             <child>
@@ -2195,7 +2194,6 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="action-name">.uno:AutoFormatApply</property>
-                <property name="label">Apply</property>
               </object>
             </child>
             <child>
@@ -2203,7 +2201,6 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="action-name">.uno:AutoFormatRedlineApply</property>
-                <property name="label">Apply and Edit Changes</property>
               </object>
             </child>
             <child>
@@ -2211,7 +2208,6 @@
                 <property name="visible">True</property>
                 <property name="can-focus">False</property>
                 <property name="action-name">.uno:AutoCorrectDlg</property>
-                <property name="label">AutoCorrect Options...</property>
               </object>
             </child>
           </object>

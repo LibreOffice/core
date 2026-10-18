@@ -2627,7 +2627,7 @@
       <object class="GtkMenuItem" id="MenuReview-AutoCorrect">
         <property name="visible">True</property>
         <property name="can_focus">False</property>
-        <property name="label">AutoCorrect</property>
+        <property name="action-name">.uno:AutoFormatMenu</property>
         <child>
           <object class="GtkMenu" id="MenuReview-Popup">
             <property name="visible">True</property>
@@ -2635,7 +2635,6 @@
               <object class="GtkCheckMenuItem" id="MenuReview-OnlineAutoFormat">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label">While Typing</property>
                 <property name="action_name">.uno:OnlineAutoFormat</property>
               </object>
             </child>
@@ -2643,7 +2642,6 @@
               <object class="GtkMenuItem" id="MenuReview-AutoFormatApply">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label">Apply</property>
                 <property name="action_name">.uno:AutoFormatApply</property>
               </object>
             </child>
@@ -2651,7 +2649,6 @@
               <object class="GtkMenuItem" id="MenuReview-AutoFormatRedlineApply">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label">Apply and Edit Changes</property>
                 <property name="action_name">.uno:AutoFormatRedlineApply</property>
               </object>
             </child>
@@ -2659,7 +2656,6 @@
               <object class="GtkMenuItem" id="MenuReview-AutoCorrectDlg">
                 <property name="visible">True</property>
                 <property name="can_focus">False</property>
-                <property name="label">AutoCorrect Options...</property>
                 <property name="action_name">.uno:AutoCorrectDlg</property>
               </object>
             </child>
