@@ -1359,7 +1359,7 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf170177_not_compound_push)
                 u"vasemberellenes vasemberellenes vasemberellenes vasemberellenes vasem");
 }
 
-// check fix of the regression asociated to tdf#170177
+// check fix of the regression associated to tdf#170177
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testTdf174015)
 {
     uno::Reference<linguistic2::XHyphenator> xHyphenator = LinguMgr::GetHyphenator();
