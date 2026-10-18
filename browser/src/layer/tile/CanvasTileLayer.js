@@ -924,6 +924,13 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 				var tooltipInfo = JSON.parse(textMsg.substring(textMsg.indexOf('{')));
 				this._map.uiManager.showDocumentTooltip(tooltipInfo);
 			}
+			else if (tooltipInfo.type === 'dragrefused') {
+				// The drag of another user holds the text, so this drag did not start and the
+				// selection stays as it was, with its context toolbar.
+				this._map.uiManager.showSnackbar(tooltipInfo.text);
+				if (this._map.contextToolbar)
+					this._map.contextToolbar.showContextToolbar();
+			}
 			else if (tooltipInfo.type === 'autofillpreviewtooltip') {
 
 				var strTwips = textMsg.match(/\d+/g);
