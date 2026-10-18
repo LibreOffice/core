@@ -497,6 +497,36 @@ struct PPTXLayoutInfo
     const char* sType;
 };
 
+// The slide size types of p:sldSz corresponding to their size, in EMU, in landscape
+// Not specified anywhere, figured out from sample original files
+struct SlideSizeType
+{
+    const char* pType;
+    sal_Int64 nWidth;
+    sal_Int64 nHeight;
+};
+
+// screen4x3 is the same as letter, but only one can be identified based on size
+constexpr SlideSizeType aSlideSizeTypes[] = {
+    { "A3", 12801600, 9601200 },
+    { "A4", 9906000, 6858000 },
+    { "screen4x3", 9144000, 6858000 }, // == letter
+    { "screen16x9", 9144000, 5143500 },
+    { "screen16x10", 9144000, 5715000 },
+};
+
+const char* getSlideSizeType(sal_Int64 nWidth, sal_Int64 nHeight)
+{
+    for (const SlideSizeType& rType : aSlideSizeTypes)
+    {
+        // Consider either orientation
+        if ((nWidth == rType.nWidth && nHeight == rType.nHeight)
+            || (nWidth == rType.nHeight && nHeight == rType.nWidth))
+            return rType.pType;
+    }
+    return nullptr;
+}
+
 }
 
 // the function 'SlidePersist::getLayoutFromValueToken()'
@@ -815,9 +845,11 @@ bool PowerPointExport::exportDocument()
     // clamp to minimum values supported by PPTX
     sal_Int64 nDestPageWidth = std::max(sal_Int64(914400), PPTtoEMU(maDestPageSize.Width));
     sal_Int64 nDestPageHeight = std::max(sal_Int64(914400), PPTtoEMU(maDestPageSize.Height));
+    const char* pSlideSizeType = getSlideSizeType(nDestPageWidth, nDestPageHeight);
     mPresentationFS->singleElementNS(XML_p, XML_sldSz,
                                      XML_cx, OString::number(nDestPageWidth),
-                                     XML_cy, OString::number(nDestPageHeight));
+                                     XML_cy, OString::number(nDestPageHeight),
+                                     XML_type, pSlideSizeType);
     // for some reason if added before slides list it will not load the slides (alas with error reports) in mso
     mPresentationFS->singleElementNS(XML_p, XML_notesSz,
                                      XML_cx, OString::number(PPTtoEMU(maNotesPageSize.Width)),
