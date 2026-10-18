@@ -235,6 +235,9 @@ struct EmuRectangle : public EmuPoint, public EmuSize
 
 model::RectangleAlignment convertToRectangleAlignment(sal_Int32 nToken);
 
+/// The ST_RectAlignment value of the alignment, or an empty string for Unset.
+OString convertRectangleAlignment(model::RectangleAlignment eAlignment);
+
 } // namespace oox::drawingml
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
