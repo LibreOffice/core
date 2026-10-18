@@ -3941,6 +3941,7 @@ class PrisonerRequestDispatcher final : public WebSocketHandler
     int _pid; ///< The Kit's PID (for logging).
     int _socketFD; ///< The socket FD to the Kit (for logging).
     bool _associatedWithDoc; ///< True when/if we get a DocBroker.
+    bool _disconnected; ///< True once we handled the disconnection.
 
 public:
     PrisonerRequestDispatcher()
@@ -3948,6 +3949,7 @@ public:
         , _pid(0)
         , _socketFD(0)
         , _associatedWithDoc(false)
+        , _disconnected(false)
     {
         LOG_TRC_S("PrisonerRequestDispatcher");
     }
@@ -3975,6 +3977,11 @@ private:
 
     void onDisconnect() override
     {
+        // The disconnection is handled once. Later calls return without doing anything.
+        if (_disconnected)
+            return;
+
+        _disconnected = true;
         LOG_DBG("Prisoner connection disconnected");
 
         // Notify the broker that we're done.
