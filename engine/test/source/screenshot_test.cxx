@@ -214,10 +214,6 @@ void ScreenshotTest::dumpDialogToPath(std::string_view rUIXMLDescription)
                           rUIXMLDescription == "modules/scalc/ui/sidebaralignment.ui" ||
                           rUIXMLDescription == "modules/scalc/ui/sidebarcellappearance.ui" ||
                           rUIXMLDescription == "modules/scalc/ui/sidebarnumberformat.ui" ||
-                          rUIXMLDescription == "sfx/ui/helpbookmarkpage.ui" ||
-                          rUIXMLDescription == "sfx/ui/helpcontentpage.ui" ||
-                          rUIXMLDescription == "sfx/ui/helpindexpage.ui" ||
-                          rUIXMLDescription == "sfx/ui/helpsearchpage.ui" ||
                           rUIXMLDescription == "sfx/ui/startcenter.ui" ||
                           rUIXMLDescription == "svx/ui/datanavigator.ui" ||
                           rUIXMLDescription == "svx/ui/xformspage.ui";

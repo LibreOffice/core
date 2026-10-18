@@ -49,7 +49,6 @@
 #include <COKit/COKit.hxx>
 #include <sfx2/viewsh.hxx>
 
-#include "newhelp.hxx"
 #include <helper.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -65,9 +64,7 @@ static OUString const & HelpLocaleString()
     return comphelper::COKit::getLanguageTag().getBcp47();
 }
 
-
-
-void AppendConfigToken( OUStringBuffer& rURL, bool bQuestionMark )
+static void AppendConfigToken( OUStringBuffer& rURL, bool bQuestionMark )
 {
     const OUString& aLocaleStr = HelpLocaleString();
 

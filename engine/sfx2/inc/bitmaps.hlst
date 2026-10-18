@@ -10,18 +10,6 @@
 
 #include <rtl/ustring.hxx>
 
-inline constexpr OUString BMP_HELP_TOOLBOX_INDEX_ON = u"sfx2/res/indexon_small.png"_ustr;
-inline constexpr OUString BMP_HELP_TOOLBOX_INDEX_OFF = u"sfx2/res/indexoff_small.png"_ustr;
-inline constexpr OUString BMP_HELP_TOOLBOX_START = u"res/sc06303.png"_ustr;
-inline constexpr OUString BMP_HELP_TOOLBOX_PREV = u"res/sc06301.png"_ustr;
-inline constexpr OUString BMP_HELP_TOOLBOX_NEXT = u"res/sc06300.png"_ustr;
-inline constexpr OUString BMP_HELP_TOOLBOX_PRINT = u"res/sc05504.png"_ustr;
-inline constexpr OUString BMP_HELP_TOOLBOX_BOOKMARKS = u"sfx2/res/favourite.png"_ustr;
-inline constexpr OUString BMP_HELP_TOOLBOX_SEARCHDIALOG = u"sfx2/res/sc05961.png"_ustr;
-inline constexpr OUString BMP_HELP_TOOLBOX_COPY = u"sfx2/res/sc05711.png"_ustr;
-inline constexpr OUString BMP_HELP_CONTENT_BOOK_OPEN = u"sfx2/res/hlpbookopen.png"_ustr;
-inline constexpr OUString BMP_HELP_CONTENT_BOOK_CLOSED = u"sfx2/res/hlpbookclosed.png"_ustr;
-inline constexpr OUString BMP_HELP_CONTENT_DOC = u"sfx2/res/hlpdoc.png"_ustr;
 
 //start, sfx2/source/sidebar/Theme.cxx
 inline constexpr OUString CLOSEDOC = u"sfx2/res/closedoc.png"_ustr;

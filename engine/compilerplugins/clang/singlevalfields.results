@@ -666,18 +666,6 @@ sfx2/source/appl/lnkbase2.cxx:67
 sfx2/source/appl/lnkbase2.cxx:86
     sfx2::(anonymous namespace)::ImplDdeItem bIsInDTOR
     1
-sfx2/source/appl/newhelp.hxx:94
-    IndexTabPage_Impl aFactoryIdle
-    sfx2 appl IndexTabPage_Impl Factory
-sfx2/source/appl/newhelp.hxx:95
-    IndexTabPage_Impl aAutoCompleteIdle
-    sfx2 appl IndexTabPage_Impl AutoComplete
-sfx2/source/appl/newhelp.hxx:228
-    SfxHelpIndexWindow_Impl aIdle
-    sfx2 appl SfxHelpIndexWindow_Impl
-sfx2/source/appl/newhelp.hxx:348
-    SfxHelpTextWindow_Impl aSelectIdle
-    sfx2 appl SfxHelpTextWindow_Impl Select
 slideshow/source/engine/slideshowimpl.cxx:486
     (anonymous namespace)::SlideShowImpl maFrameSynchronization
     0.02\10

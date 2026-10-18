@@ -12,8 +12,6 @@ $(eval $(call gb_UIConfig_UIConfig,sfx))
 $(eval $(call gb_UIConfig_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/addtargetdialog \
 	sfx2/uiconfig/ui/autoredactdialog \
-	sfx2/uiconfig/ui/bookmarkdialog \
-	sfx2/uiconfig/ui/bookmarkmenu \
 	sfx2/uiconfig/ui/charmapcontrol \
 	sfx2/uiconfig/ui/charviewmenu \
 	sfx2/uiconfig/ui/checkin \
@@ -33,12 +31,6 @@ $(eval $(call gb_UIConfig_add_uifiles,sfx,\
 	sfx2/uiconfig/ui/editdurationdialog \
 	sfx2/uiconfig/ui/extrabutton \
 	sfx2/uiconfig/ui/errorfindemaildialog \
-	sfx2/uiconfig/ui/helpbookmarkpage \
-	sfx2/uiconfig/ui/helpcontrol \
-	sfx2/uiconfig/ui/helpcontentpage \
-	sfx2/uiconfig/ui/helpindexpage \
-	sfx2/uiconfig/ui/helpsearchpage \
-	sfx2/uiconfig/ui/helpwindow \
 	sfx2/uiconfig/ui/infobar \
 	sfx2/uiconfig/ui/inputdialog \
 	sfx2/uiconfig/ui/licensedialog \

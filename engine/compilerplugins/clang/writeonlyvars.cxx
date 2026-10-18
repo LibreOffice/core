@@ -254,8 +254,6 @@ void WriteOnlyVars::run()
             return;
         if (loplugin::isSamePathname(fn, SRCDIR "/sfx2/source/doc/guisaveas.cxx"))
             return;
-        if (loplugin::isSamePathname(fn, SRCDIR "/sfx2/source/appl/newhelp.cxx"))
-            return;
         if (loplugin::isSamePathname(fn, SRCDIR "/sfx2/source/control/thumbnailview.cxx"))
             return;
         if (loplugin::isSamePathname(fn, SRCDIR "/sfx2/source/control/recentdocsview.cxx"))

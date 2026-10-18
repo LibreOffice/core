@@ -42,13 +42,8 @@ sfx/ui/cmisinfopage.ui
 sfx/ui/documentfontspage.ui
 sfx/ui/managestylepage.ui
 sfx/ui/securityinfopage.ui
-sfx/ui/helpcontentpage.ui
-sfx/ui/helpindexpage.ui
-sfx/ui/helpsearchpage.ui
-sfx/ui/helpbookmarkpage.ui
 sfx/ui/licensedialog.ui
 sfx/ui/linkeditdialog.ui
-sfx/ui/bookmarkdialog.ui
 sfx/ui/checkin.ui
 sfx/ui/editdurationdialog.ui
 sfx/ui/inputdialog.ui
@@ -63,7 +58,6 @@ sfx/ui/printeroptionsdialog.ui
 sfx/ui/searchdialog.ui
 sfx/ui/errorfindemaildialog.ui
 sfx/ui/querysavedialog.ui
-sfx/ui/helpcontrol.ui
 sfx/ui/startcenter.ui
 sfx/ui/cmisline.ui
 sfx/ui/autoredactdialog.ui

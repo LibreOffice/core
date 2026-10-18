@@ -111,15 +111,12 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/appl/flatpak \
     sfx2/source/appl/fwkhelper \
     sfx2/source/appl/getbasctlfunction \
-    sfx2/source/appl/helpdispatch \
-    sfx2/source/appl/helpinterceptor \
     sfx2/source/appl/impldde \
     sfx2/source/appl/linkmgr2 \
     sfx2/source/appl/linksrc \
     sfx2/source/appl/lnkbase2 \
 	sfx2/source/appl/macroloader \
     sfx2/source/appl/module \
-    sfx2/source/appl/newhelp \
     sfx2/source/appl/opengrf \
     sfx2/source/appl/openuriexternally \
     sfx2/source/appl/preventduplicateinteraction \

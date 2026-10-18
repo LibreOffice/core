@@ -1,4 +1,3 @@
-sfx2/uiconfig/ui/bookmarkdialog.ui://GtkLabel[@id='alttitle'] orphan-label
 sfx2/uiconfig/ui/charmapcontrol.ui://GtkLabel[@id='label1'] orphan-label
 sfx2/uiconfig/ui/charmapcontrol.ui://GtkLabel[@id='label2'] orphan-label
 sfx2/uiconfig/ui/charmapcontrol.ui://GtkLabel[@id='charinfolabel'] orphan-label
@@ -26,9 +25,6 @@ sfx2/uiconfig/ui/documentinfopage.ui://GtkImage[@id='icon'] no-labelled-by
 sfx2/uiconfig/ui/documentinfopage.ui://GtkLabel[@id='nameed'] orphan-label
 sfx2/uiconfig/ui/documentinfopage.ui://GtkLabel[@id='lbUnit'] orphan-label
 sfx2/uiconfig/ui/extrabutton.ui://GtkButton[@id='button'] button-no-label
-sfx2/uiconfig/ui/helpindexpage.ui://GtkEntry[@id='termentry'] no-labelled-by
-sfx2/uiconfig/ui/helpwindow.ui://GtkCheckButton[@id='checkbutton'] button-no-label
-sfx2/uiconfig/ui/helpwindow.ui://GtkToolButton[@id='index'] button-no-label
 sfx2/uiconfig/ui/licensedialog.ui://GtkLabel[@id='label'] orphan-label
 sfx2/uiconfig/ui/loadtemplatedialog.ui://GtkLabel[@id='alttitle'] orphan-label
 sfx2/uiconfig/ui/loadtemplatedialog.ui://GtkDrawingArea[@id='image'] no-labelled-by

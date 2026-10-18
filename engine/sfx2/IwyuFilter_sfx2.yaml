@@ -62,10 +62,6 @@ excludelist:
     - sfx2/frame.hxx
     - sfx2/msg.hxx
     - sorgitm.hxx
-    sfx2/source/appl/newhelp.cxx:
-    # Actually used
-    - com/sun/star/i18n/XBreakIterator.hpp
-    - sfx2/strings.hrc
     sfx2/source/bastyp/fltfnc.cxx:
     # Needed for UnoType to work
     - com/sun/star/task/XInteractionHandler.hpp
