@@ -3491,6 +3491,22 @@ bool ClientSession::handlePresentationInfo(const std::shared_ptr<Message>& paylo
 
     bool modified = false;
 
+    // Keep the original message with the internal URL, hand out the public one.
+    const auto registerMedia = [this, &docBroker](const std::string& id, const std::string& url,
+                                                  const std::string& mimeType) -> std::string
+    {
+        Poco::JSON::Object record;
+        record.set("id", id);
+        record.set("url", url);
+        if (!mimeType.empty())
+            record.set("mimeType", mimeType);
+        std::ostringstream recordStr;
+        record.stringify(recordStr);
+        docBroker->addEmbeddedMedia(id, recordStr.str());
+
+        return Uri::encode(createMediaURI("media", id), "&");
+    };
+
     Poco::JSON::Object::Ptr rootObject;
     try
     {
@@ -3514,13 +3530,7 @@ bool ClientSession::handlePresentationInfo(const std::shared_ptr<Message>& paylo
 
                             if (!id.empty() && !url.empty())
                             {
-                                std::string original =
-                                    R"({ "id" : ")" + id + R"(", "url" : ")" + url + "\" }";
-                                docBroker->addEmbeddedMedia(id, original); // Capture the original message with internal URL.
-
-                                const std::string mediaUrl =
-                                    Uri::encode(createMediaURI("media", id), "&");
-                                video->set("url", mediaUrl); // Replace the url with the public one.
+                                video->set("url", registerMedia(id, url, std::string()));
                                 modified = true;
                             }
                         }
@@ -3543,18 +3553,43 @@ bool ClientSession::handlePresentationInfo(const std::shared_ptr<Message>& paylo
 
                             if (!id.empty() && !url.empty())
                             {
-                                std::string original = R"({ "id" : ")" + id + R"(", "url" : ")" +
-                                                       url + R"(", "mimeType" : ")" + mimeType +
-                                                       "\" }";
-                                docBroker->addEmbeddedMedia(id, original); // Capture the original message with internal URL.
-
-                                std::string mediaUrl =
-                                    Uri::encode(createMediaURI("media", id), "&");
+                                std::string mediaUrl = registerMedia(id, url, mimeType);
                                 if (!checksum.empty())
                                     mediaUrl += "&Ver=" + checksum;
-                                gif->set("url", mediaUrl); // Replace the url with the public one.
+                                gif->set("url", mediaUrl);
                                 modified = true;
                             }
+                        }
+                    }
+
+                    // Sound click actions are served like videos.
+                    Poco::JSON::Array::Ptr interactions = slide->getArray("interactions");
+                    if (!interactions.isNull() && interactions->size() > 0)
+                    {
+                        for (size_t index = 0; index < interactions->size(); index++)
+                        {
+                            Poco::JSON::Object::Ptr interaction = interactions->getObject(index);
+                            Poco::JSON::Object::Ptr clickAction =
+                                interaction->getObject("clickAction");
+                            if (clickAction.isNull() ||
+                                JsonUtil::getJSONValue<std::string>(clickAction, "action") !=
+                                    "sound")
+                                continue;
+
+                            const std::string id =
+                                JsonUtil::getJSONValue<std::string>(clickAction, "id");
+                            const std::string url =
+                                JsonUtil::getJSONValue<std::string>(clickAction, "sound");
+                            if (id.empty() || !Util::toLower(url).starts_with("file://"))
+                                continue;
+
+                            std::string mimeType =
+                                JsonUtil::getJSONValue<std::string>(clickAction, "mimeType");
+                            if (mimeType.empty())
+                                mimeType = "application/octet-stream";
+
+                            clickAction->set("sound", registerMedia(id, url, mimeType));
+                            modified = true;
                         }
                     }
                 }

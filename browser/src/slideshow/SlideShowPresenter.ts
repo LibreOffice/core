@@ -59,6 +59,7 @@ interface ClickAction {
 	targetSlide?: string;
 	document?: string;
 	sound?: string;
+	id?: string;
 	verb?: string;
 	program?: string;
 	macro?: string;

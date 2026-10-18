@@ -275,6 +275,17 @@ private:
     /// Extracted animated GIF files, keyed by the graphic object's unique id.
     mutable std::unordered_map<sal_uInt64, AnimatedGifTempFile> maAnimatedGifCache;
 
+    struct ClickSoundTempFile
+    {
+        OUString maPackageUrl;
+        OUString maMimeType;
+        OUString maUrl;
+        std::shared_ptr<avmedia::MediaTempFile> mpTempFile;
+    };
+
+    /// Extracted click-action sounds, keyed by the shape's unique id.
+    mutable std::unordered_map<sal_uInt64, ClickSoundTempFile> maClickSoundCache;
+
     /// Vector content state, keyed by the GUID of the page it belongs to, which is also the
     /// page's part id. The state stays with the page when pages are inserted, removed or moved
     /// and its index in the page list changes.
@@ -323,6 +334,13 @@ private:
 
     /// Creates file URL of the animated GIF extracted from rGraphicObject
     OUString getOrCreateAnimatedGifUrl(const SdrGrafObj& rGraphicObject) const;
+
+    /// Creates file URL of the click action sound copied out of the document package
+    OUString getOrCreateClickSoundUrl(const SdrObject& rObject, const OUString& rPackageUrl,
+                                      OUString& rMimeType) const;
+
+    void getShapeClickAction(const cpo::uno::Reference<css::drawing::XShape>& xShape,
+                             ::tools::JsonWriter& rJsonWriter) const;
 
     SAL_RET_MAYBENULL sd::DrawViewShell* GetViewShell();
 

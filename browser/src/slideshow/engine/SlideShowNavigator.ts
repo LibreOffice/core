@@ -28,6 +28,7 @@ class SlideShowNavigator {
 	private currentLeaderEffect: number = 0;
 	private isSlideLoading: boolean = false;
 	private isEffectPending: boolean = false;
+	private soundPlayer: HTMLAudioElement = null;
 
 	constructor(slideShowHandler: SlideShowHandler) {
 		this.slideShowHandler = slideShowHandler;
@@ -258,6 +259,21 @@ class SlideShowNavigator {
 		this.currentSlide = undefined;
 		this.prevSlide = undefined;
 		this.removeHandlers();
+	}
+
+	private playSound(url: string) {
+		this.stopSound();
+		if (!url) return;
+		this.soundPlayer = new Audio(url);
+		this.soundPlayer.play().catch((error) => {
+			NAVDBG.print('SlideShowNavigator.playSound: ' + error);
+		});
+	}
+
+	private stopSound() {
+		if (!this.soundPlayer) return;
+		this.soundPlayer.pause();
+		this.soundPlayer = null;
 	}
 
 	switchSlide(nOffset: number, bSkipTransition: boolean) {
@@ -496,6 +512,7 @@ class SlideShowNavigator {
 	}
 
 	endPresentation(force: boolean = false) {
+		this.stopSound();
 		this.presenter.endPresentation(force);
 	}
 
@@ -660,6 +677,9 @@ class SlideShowNavigator {
 					break;
 				case 'document':
 					this.openExternalLink(action.document, fromPresenterConsole);
+					break;
+				case 'sound':
+					this.playSound(action.sound);
 					break;
 				case 'stoppresentation':
 					this.quit();

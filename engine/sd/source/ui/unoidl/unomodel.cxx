@@ -87,6 +87,9 @@
 #include <comphelper/profilezone.hxx>
 #include <comphelper/seqstream.hxx>
 #include <avmedia/mediaitem.hxx>
+#include <comphelper/mediamimetype.hxx>
+#include <comphelper/storagehelper.hxx>
+#include <SdSoundLink.hxx>
 #include <com/sun/star/io/XInputStream.hpp>
 
 #include <sal/log.hxx>
@@ -7120,8 +7123,8 @@ static SdPage* getBookmarkSlide(SdrObject* pObject)
     return pPage;
 }
 
-static
-void getShapeClickAction(const uno::Reference<drawing::XShape> &xShape, ::tools::JsonWriter& rJsonWriter)
+void SdXImpressDocument::getShapeClickAction(const uno::Reference<drawing::XShape>& xShape,
+                                             ::tools::JsonWriter& rJsonWriter) const
 {
     bool bIsShapeVisible = true;
     uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
@@ -7143,6 +7146,10 @@ void getShapeClickAction(const uno::Reference<drawing::XShape> &xShape, ::tools:
 
     if (eClickAction != presentation::ClickAction_NONE)
     {
+        auto* pObject = SdrObject::getSdrObjectFromXShape(xShape);
+        if (!pObject)
+            return;
+
         auto aShape = rJsonWriter.startStruct();
 
         sal_Int32 nVerb = 0;
@@ -7152,7 +7159,6 @@ void getShapeClickAction(const uno::Reference<drawing::XShape> &xShape, ::tools:
             xShapeProps->getPropertyValue(u"Bookmark"_ustr) >>= sBookmark;
 
         {
-            auto* pObject = SdrObject::getSdrObjectFromXShape(xShape);
             auto const& rRectangle = pObject->GetLogicRect();
             auto aRectangle = o3tl::convert(rRectangle, o3tl::Length::mm100, o3tl::Length::twip);
             auto aRect = rJsonWriter.startNode("bounds");
@@ -7170,7 +7176,7 @@ void getShapeClickAction(const uno::Reference<drawing::XShape> &xShape, ::tools:
                 rJsonWriter.put("action", "bookmark");
                 rJsonWriter.put("bookmark", sBookmark);
                 // The hash of the slide to jump to, the same one the slide reports itself.
-                if (SdPage* pTarget = getBookmarkSlide(SdrObject::getSdrObjectFromXShape(xShape)))
+                if (SdPage* pTarget = getBookmarkSlide(pObject))
                 {
                     auto* pTargetSlide = dynamic_cast<SdGenericDrawPage*>(pTarget->getUnoPage().get());
                     if (pTargetSlide)
@@ -7197,9 +7203,25 @@ void getShapeClickAction(const uno::Reference<drawing::XShape> &xShape, ::tools:
                 break;
 
             case presentation::ClickAction_SOUND:
+            {
                 rJsonWriter.put("action", "sound");
-                rJsonWriter.put("sound", sBookmark);
+
+                OUString aUrl = sBookmark;
+                OUString aMimeType;
+                if (SdSoundLink(sBookmark).isEmbedded())
+                {
+                    aUrl = getOrCreateClickSoundUrl(*pObject, sBookmark, aMimeType);
+                    if (aMimeType.isEmpty())
+                        aMimeType = comphelper::GuessMediaMimeType(aUrl);
+                    // The copy has an id, so it can be served in place of the file URL.
+                    rJsonWriter.put("id", "sound" + OUString::number(pObject->GetUniqueID()));
+                }
+
+                rJsonWriter.put("sound", aUrl);
+                if (!aMimeType.isEmpty())
+                    rJsonWriter.put("mimeType", aMimeType);
                 break;
+            }
 
             case presentation::ClickAction_VERB:
                 rJsonWriter.put("action", "verb");
@@ -7316,6 +7338,66 @@ OUString SdXImpressDocument::getOrCreateAnimatedGifUrl(const SdrGrafObj& rGraphi
     aEntry.maUrl = aTempFileUrl;
     aEntry.mpTempFile = std::make_shared<avmedia::MediaTempFile>(aTempFileUrl);
     maAnimatedGifCache[nId] = std::move(aEntry);
+    return aTempFileUrl;
+}
+
+OUString SdXImpressDocument::getOrCreateClickSoundUrl(const SdrObject& rObject,
+                                                       const OUString& rPackageUrl,
+                                                       OUString& rMimeType) const
+{
+    const sal_uInt64 nId = rObject.GetUniqueID();
+
+    // Reuse the file while the shape still refers to the same package sound.
+    auto it = maClickSoundCache.find(nId);
+    if (it != maClickSoundCache.end() && it->second.maPackageUrl == rPackageUrl
+        && it->second.mpTempFile)
+    {
+        rMimeType = it->second.maMimeType;
+        return it->second.maUrl;
+    }
+
+    ::comphelper::LifecycleProxy aProxy;
+    uno::Reference<io::XInputStream> xStream;
+    OUString aMimeType;
+    try
+    {
+        uno::Reference<embed::XStorage> const xStorage(mpDoc->GetDocumentStorage());
+        if (!xStorage.is())
+            return OUString();
+        uno::Reference<io::XStream> const xPackageStream(
+            ::comphelper::OStorageHelper::GetStreamAtPackageURL(
+                xStorage, rPackageUrl, embed::ElementModes::READ, aProxy));
+        if (!xPackageStream.is())
+            return OUString();
+        xStream = xPackageStream->getInputStream();
+        uno::Reference<beans::XPropertySet> const xStreamProps(xPackageStream, uno::UNO_QUERY);
+        if (xStreamProps.is())
+            xStreamProps->getPropertyValue(u"MediaType"_ustr) >>= aMimeType;
+    }
+    catch (const uno::Exception&)
+    {
+        TOOLS_INFO_EXCEPTION("sd", "reading the click action sound " << rPackageUrl);
+        return OUString();
+    }
+    if (!xStream.is())
+        return OUString();
+
+    OUString aExtension;
+    const sal_Int32 nLastDot = rPackageUrl.lastIndexOf('.');
+    if (nLastDot > rPackageUrl.lastIndexOf('/') && nLastDot + 1 < rPackageUrl.getLength())
+        aExtension = rPackageUrl.copy(nLastDot);
+
+    OUString aTempFileUrl;
+    if (!avmedia::CreateMediaTempFile(xStream, aTempFileUrl, aExtension))
+        return OUString();
+
+    ClickSoundTempFile aEntry;
+    aEntry.maPackageUrl = rPackageUrl;
+    aEntry.maMimeType = aMimeType;
+    aEntry.maUrl = aTempFileUrl;
+    aEntry.mpTempFile = std::make_shared<avmedia::MediaTempFile>(aTempFileUrl);
+    maClickSoundCache[nId] = std::move(aEntry);
+    rMimeType = aMimeType;
     return aTempFileUrl;
 }
 
@@ -8098,8 +8180,9 @@ void SdXImpressDocument::dispose()
         mpDoc = nullptr;
     }
 
-    // Drop the extracted animated GIF files so they are removed from the jail.
+    // Drop the extracted animated GIF and click sound files so they are removed from the jail.
     maAnimatedGifCache.clear();
+    maClickSoundCache.clear();
 
     // Call the base class dispose() before setting the mbDisposed flag
     // to true.  The reason for this is that if close() has not yet been

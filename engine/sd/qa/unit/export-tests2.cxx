@@ -71,10 +71,13 @@
 
 #include <avmedia/mediaitem.hxx>
 #include <SdSoundLink.hxx>
+#include <unomodel.hxx>
 #include <com/sun/star/document/XStorageBasedDocument.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+
+#include <boost/property_tree/json_parser.hpp>
 
 using namespace css;
 using namespace css::animations;
@@ -1329,7 +1332,8 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testCompatibilityFlagIsDocumentSetting)
 }
 
 // A click-action sound inside the document package survives saving: the saved package carries
-// the sound stream, and the shape refers to it inside the package again after loading.
+// the sound stream, the shape refers to it inside the package again after loading, and the
+// slideshow gets the sound as a temp file.
 CPPUNIT_TEST_FIXTURE(SdExportTest2, testClickActionSoundEmbeddedRoundTrip)
 {
     createSdImpressDoc("odp/clickaction-sound-link.fodp");
@@ -1367,6 +1371,33 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testClickActionSoundEmbeddedRoundTrip)
         uno::UNO_SET_THROW);
     CPPUNIT_ASSERT(xMedia->hasByName(u"silence.wav"_ustr));
 
+    // the slideshow gets the sound as a temp file
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    boost::property_tree::ptree aTree;
+    std::stringstream aStream(pXImpressDocument->getPresentationInfo());
+    boost::property_tree::read_json(aStream, aTree);
+    const boost::property_tree::ptree& rSlide = aTree.get_child("slides").begin()->second;
+    const boost::property_tree::ptree& rInteractions = rSlide.get_child("interactions");
+    CPPUNIT_ASSERT_EQUAL(size_t(1), rInteractions.size());
+    const boost::property_tree::ptree& rClickAction
+        = rInteractions.begin()->second.get_child("clickAction");
+    CPPUNIT_ASSERT_EQUAL(std::string("sound"), rClickAction.get<std::string>("action"));
+    const std::string aSoundUrl = rClickAction.get<std::string>("sound");
+    CPPUNIT_ASSERT_MESSAGE(aSoundUrl, aSoundUrl.starts_with("file://"));
+    CPPUNIT_ASSERT_MESSAGE(aSoundUrl, aSoundUrl.ends_with(".wav"));
+    CPPUNIT_ASSERT(rClickAction.get<std::string>("id").starts_with("sound"));
+    CPPUNIT_ASSERT_EQUAL(std::string("audio/x-wav"), rClickAction.get<std::string>("mimeType"));
+
+    // the temp file is reused
+    std::stringstream aSecondStream(pXImpressDocument->getPresentationInfo());
+    boost::property_tree::ptree aSecondTree;
+    boost::property_tree::read_json(aSecondStream, aSecondTree);
+    CPPUNIT_ASSERT_EQUAL(aSoundUrl, aSecondTree.get_child("slides")
+                                        .begin()
+                                        ->second.get_child("interactions")
+                                        .begin()
+                                        ->second.get<std::string>("clickAction.sound"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
