@@ -1600,11 +1600,14 @@ static void handleDroppedFiles(HWND hWnd, HDROP drop, const POINT& dropPoint)
     // The document view starts below the tab strip, and the page places the insert relative to
     // its own top left corner. A drop on the window frame arrives negative and stays that way,
     // which puts the insert at the cursor instead.
+    // The client coordinates of a mirrored window run from the right, and the page measures from
+    // the left.
     POINT documentPoint = dropPoint;
     if (window && documentPoint.x >= 0 && documentPoint.y >= 0)
     {
         const RECT area = documentArea(*window);
-        documentPoint.x -= area.left;
+        const bool mirrored = (GetWindowLongW(hWnd, GWL_EXSTYLE) & WS_EX_LAYOUTRTL) != 0;
+        documentPoint.x = mirrored ? area.right - documentPoint.x : documentPoint.x - area.left;
         documentPoint.y -= area.top;
     }
 
@@ -1729,11 +1732,13 @@ static void showDropOverlay(WindowState& data)
     // layer, and it is owned by the document window, which keeps it above that window and takes it
     // away when the document window goes. It stops short of the tab strip, which takes its own
     // drags.
-    const RECT bounds = documentArea(data);
+    // With exactly two points, MapWindowPoints() keeps left less than right also when it maps out
+    // of a mirrored window.
+    RECT bounds = documentArea(data);
+    MapWindowPoints(data.hWnd, HWND_DESKTOP, reinterpret_cast<POINT*>(&bounds), 2);
     const int width = bounds.right - bounds.left;
     const int height = bounds.bottom - bounds.top;
-    POINT topLeft = { bounds.left, bounds.top };
-    ClientToScreen(data.hWnd, &topLeft);
+    const POINT topLeft = { bounds.left, bounds.top };
 
     if (!data.hOverlayWnd)
     {
@@ -1930,10 +1935,13 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
             const int border = topResizeBorderHeight(hWnd);
             if (!IsZoomed(hWnd) && point.y < border)
             {
+                // The hit test codes name the sides of the screen, also in a mirrored window,
+                // whose client coordinates run from the right.
+                const bool mirrored = (GetWindowLongW(hWnd, GWL_EXSTYLE) & WS_EX_LAYOUTRTL) != 0;
                 if (point.x < border)
-                    return HTTOPLEFT;
+                    return mirrored ? HTTOPRIGHT : HTTOPLEFT;
                 if (point.x >= client.right - border)
-                    return HTTOPRIGHT;
+                    return mirrored ? HTTOPLEFT : HTTOPRIGHT;
                 return HTTOP;
             }
             if (point.y < titleBarFrameHeight(*frameWindow))
@@ -2955,8 +2963,10 @@ static int titleBarFrameHeight(const WindowState& window)
                                      USER_DEFAULT_SCREEN_DPI);
 }
 
-// The left edge of the caption buttons in client coordinates, or the right edge of the client area
-// for a window that keeps its own title bar.
+// Where the caption buttons start in client coordinates, or the end of the client area for a
+// window that keeps its own title bar. The buttons are at the end of the title bar, which is its
+// left end in a mirrored window, and the client coordinates of a mirrored window run from the
+// right. So in both cases the buttons are at the high end of the client coordinates.
 static LONG captionButtonsLeft(const WindowState& window)
 {
     RECT client;
@@ -2969,13 +2979,16 @@ static LONG captionButtonsLeft(const WindowState& window)
         buttons.right <= buttons.left)
         return client.right;
 
-    // The bounds are relative to the window, which starts left of the client area by the width of
-    // its left border.
+    // The bounds are relative to the window, so the space between the buttons and the nearer edge
+    // of the window, less the border at the side of the client area, is what the client area has
+    // beyond the buttons.
     RECT windowRect;
     GetWindowRect(window.hWnd, &windowRect);
-    POINT origin = { 0, 0 };
-    ClientToScreen(window.hWnd, &origin);
-    return std::clamp(buttons.left - (origin.x - windowRect.left), client.left, client.right);
+    const LONG windowWidth = windowRect.right - windowRect.left;
+    const LONG border = (windowWidth - (client.right - client.left)) / 2;
+    const LONG beyond = std::max(0L, std::min(buttons.left, windowWidth - buttons.right) - border);
+    return std::clamp(client.right - beyond - (buttons.right - buttons.left), client.left,
+                      client.right);
 }
 
 // A minimized window has no client area at all, so both of these keep the
@@ -3005,6 +3018,22 @@ static void updateTitleBarFrame(const WindowState& window)
 {
     MARGINS margins = { 0, 0, titleBarFrameHeight(window), 0 };
     DwmExtendFrameIntoClientArea(window.hWnd, &margins);
+}
+
+// A point that the strip page gives in its own CSS pixels from the top left corner of the strip,
+// in screen coordinates. The page itself is never mirrored, so its left is the left of the screen
+// also in a mirrored window.
+static POINT stripPointToScreen(const WindowState& window, double x, double y)
+{
+    // With exactly two points, MapWindowPoints() keeps left less than right also when it maps out
+    // of a mirrored window.
+    RECT strip = stripBounds(window);
+    MapWindowPoints(window.hWnd, HWND_DESKTOP, reinterpret_cast<POINT*>(&strip), 2);
+
+    // The strip does not zoom, so the window's DPI is all that tells the two units apart.
+    const UINT dpi = GetDpiForWindow(window.hWnd);
+    return { strip.left + MulDiv(static_cast<int>(std::lround(x)), dpi, USER_DEFAULT_SCREEN_DPI),
+             strip.top + MulDiv(static_cast<int>(std::lround(y)), dpi, USER_DEFAULT_SCREEN_DPI) };
 }
 
 static void layoutTabs(WindowState& window)
@@ -3379,16 +3408,8 @@ static void startHoverCard(const WindowState& window, int tabId, POINT point,
     if (!hoverCard.hWnd)
         return;
 
-    // The strip does not zoom, so the window's DPI is all that tells its CSS pixels and those of
-    // the screen apart.
-    const UINT dpi = GetDpiForWindow(window.hWnd);
-    const RECT strip = stripBounds(window);
-    point.x = strip.left + MulDiv(point.x, dpi, USER_DEFAULT_SCREEN_DPI);
-    point.y = strip.top + MulDiv(point.y, dpi, USER_DEFAULT_SCREEN_DPI);
-    ClientToScreen(window.hWnd, &point);
-
     hoverCard.tabId = tabId;
-    hoverCard.position = point;
+    hoverCard.position = stripPointToScreen(window, point.x, point.y);
     hoverCard.rightToLeft = rightToLeft;
     hoverCard.background = cssColor(background, RGB(0xf8, 0xf9, 0xfa));
     hoverCard.text = cssColor(text, RGB(0x33, 0x33, 0x33));
@@ -3763,15 +3784,11 @@ static void processStripMessage(WindowState& window, const std::string& message)
     }
     else if (call == "tabContextMenuRequested" && argCount >= 3)
     {
-        // The page gives the click in its own CSS pixels from the top left of the strip. The strip
-        // does not zoom, so the window's DPI is all that tells the two units apart.
-        const UINT dpi = GetDpiForWindow(window.hWnd);
-        const RECT strip = stripBounds(window);
-        const int x = static_cast<int>(std::lround(args->getElement<double>(1)));
-        const int y = static_cast<int>(std::lround(args->getElement<double>(2)));
+        POINT point = stripPointToScreen(window, args->getElement<double>(1),
+                                         args->getElement<double>(2));
+        ScreenToClient(window.hWnd, &point);
         PostMessageW(window.hWnd, CODA_WM_SHOWTABMENU, (WPARAM)args->getElement<int>(0),
-                     MAKELPARAM(strip.left + MulDiv(x, dpi, USER_DEFAULT_SCREEN_DPI),
-                                strip.top + MulDiv(y, dpi, USER_DEFAULT_SCREEN_DPI)));
+                     MAKELPARAM(point.x, point.y));
     }
     else if (call == "tabReordered" && argCount >= 2)
     {
@@ -4354,6 +4371,14 @@ static WindowState& createTabbedWindow(const POINT* titleBarPoint = nullptr)
                                           WS_OVERLAPPEDWINDOW, x, y, width, height);
     window.isTabbed = true;
     tabbedWindow = window.hWnd;
+
+    // In a language written from right to left the window is mirrored, as the tab strip is, so the
+    // strip starts at the right and the caption buttons are at the left. The web views in it are
+    // not mirrored, as their pages lay themselves out from the dir parameter.
+    if (LangUtil::isRtlLanguage(uiLanguage))
+        SetWindowLongW(window.hWnd, GWL_EXSTYLE,
+                       GetWindowLongW(window.hWnd, GWL_EXSTYLE) | WS_EX_LAYOUTRTL |
+                           WS_EX_NOINHERITLAYOUT);
 
     // The window was created before it was known to be tabbed, so its frame and the colour of its
     // title bar are computed again.
