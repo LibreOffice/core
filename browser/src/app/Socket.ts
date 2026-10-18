@@ -509,6 +509,7 @@ class Socket {
 			msg += ' focusRingColor=' + focusRingColor;
 		}
 
+		window.seedCypressAccessibilityState();
 		msg += ' accessibilityState=' + window.getAccessibilityState();
 
 		msg += ' clientvisiblearea=' + window.makeClientVisibleArea();

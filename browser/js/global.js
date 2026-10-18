@@ -1035,8 +1035,7 @@ function showWelcomeSVG() {
 			if (!global.ThisIsAMobileApp)
 				global.prefs.useBrowserSetting = true;
 
-			// make sure set accessibilityState for cypress
-			global.getAccessibilityState();
+			global.seedCypressAccessibilityState();
 			if (this._initialized) {
 				window.dispatchEvent(new Event("browsersettingchanged"));
 			}
@@ -1303,7 +1302,13 @@ function showWelcomeSVG() {
 		},
 	};
 
-	global.getAccessibilityState = function () {
+	// Under cypress, set the accessibilityState preference to the server-level
+	// enableAccessibility, so each test starts from the same state whatever an earlier test
+	// left in localStorage. Outside cypress it does nothing.
+	global.seedCypressAccessibilityState = function () {
+		if (!L.Browser.cypressTest)
+			return;
+
 		var isCalcTest =
 			global.docURL.includes('data/desktop/calc/') ||
 			global.docURL.includes('data/mobile/calc/') ||
@@ -1311,12 +1316,13 @@ function showWelcomeSVG() {
 			global.docURL.includes('data/multiuser/calc/');
 
 		// FIXME: a11y doesn't work in calc under cypress
-		if (L.Browser.cypressTest && isCalcTest)
+		if (isCalcTest)
 			global.enableAccessibility = false;
 
-		if (L.Browser.cypressTest)
-			global.prefs.set('accessibilityState', global.enableAccessibility);
+		global.prefs.set('accessibilityState', global.enableAccessibility);
+	};
 
+	global.getAccessibilityState = function () {
 		return global.prefs.getBoolean('accessibilityState');
 	};
 
@@ -2540,6 +2546,7 @@ function showWelcomeSVG() {
 				var now2 = Date.now();
 				global.socket.send('coolclient ' + ProtocolVersionNumber + ' ' + ((now0 + now2) / 2) + ' ' + now1);
 
+				global.seedCypressAccessibilityState();
 				msg += ' accessibilityState=' + global.getAccessibilityState();
 
 				if (global.ThisIsAMobileApp) {

@@ -540,6 +540,7 @@ interface Window {
 	unoCmdToToolbarId: (name: string) => string;
 	L: any;
 	createWebSocket(url: string): SockInterface;
+	seedCypressAccessibilityState(): void;
 	getAccessibilityState(): boolean;
 	getFocusRingColor(): string;
 	makeClientVisibleArea(): string;
