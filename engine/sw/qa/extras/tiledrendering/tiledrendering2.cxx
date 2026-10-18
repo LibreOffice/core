@@ -39,6 +39,9 @@
 #include <unotxdoc.hxx>
 
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
@@ -3456,27 +3459,100 @@ void lcl_selectSecondParagraph(SwWrtShell* pWrtShell, Point& rInsideSelection, P
     Scheduler::ProcessEventsToIdle();
 }
 
-/// Presses the left button at aFrom, moves to aTo in clear steps and, when bRelease is true,
-/// releases the button there. Positions are in twips.
+/// Presses the left button at aFrom with nPressModifier held, moves to aTo in clear steps with
+/// nModifier held and, when bRelease is true, releases the button there. Positions are in twips.
+/// A view other than -1 is made the current view before every mouse event, as Online does for
+/// the message of each user.
 void lcl_dragText(SwXTextDocument* pXTextDocument, Point aFrom, Point aTo, int nModifier,
-                  bool bRelease = true)
+                  bool bRelease = true, int nView = -1, int nPressModifier = 0)
 {
-    pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONDOWN, aFrom.getX(), aFrom.getY(), 1,
-                                   MOUSE_LEFT, 0);
-    Scheduler::ProcessEventsToIdle();
+    auto post = [&](COKitMouseEventType eType, Point aPos, int nEventModifier) {
+        if (nView != -1)
+            KitHelper::setView(nView);
+        pXTextDocument->postMouseEvent(eType, aPos.getX(), aPos.getY(), 1, MOUSE_LEFT,
+                                       nEventModifier);
+        Scheduler::ProcessEventsToIdle();
+    };
+    post(COKitMouseEventType::BUTTONDOWN, aFrom, nPressModifier);
     const int nSteps = 5;
     for (int i = 1; i <= nSteps; ++i)
-    {
-        pXTextDocument->postMouseEvent(
-            COKitMouseEventType::MOVE, aFrom.getX() + (aTo.getX() - aFrom.getX()) * i / nSteps,
-            aFrom.getY() + (aTo.getY() - aFrom.getY()) * i / nSteps, 1, MOUSE_LEFT, nModifier);
-        Scheduler::ProcessEventsToIdle();
-    }
-    if (!bRelease)
-        return;
-    pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, aTo.getX(), aTo.getY(), 1,
-                                   MOUSE_LEFT, nModifier);
+        post(COKitMouseEventType::MOVE,
+             Point(aFrom.getX() + (aTo.getX() - aFrom.getX()) * i / nSteps,
+                   aFrom.getY() + (aTo.getY() - aFrom.getY()) * i / nSteps),
+             nModifier);
+    if (bRelease)
+        post(COKitMouseEventType::BUTTONUP, aTo, nModifier);
+}
+
+/// Releases the left button at aPos in the given view.
+void lcl_releaseButton(SwXTextDocument* pXTextDocument, int nView, Point aPos)
+{
+    KitHelper::setView(nView);
+    pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, aPos.getX(), aPos.getY(), 1,
+                                   MOUSE_LEFT, 0);
     Scheduler::ProcessEventsToIdle();
+}
+
+/// Points of the paragraphs "Aaa", "Bbb" and "Ccc", in twips: the middle of the second letter
+/// and the end of each paragraph.
+struct ThreeParagraphs
+{
+    Point aInsideFirst, aEndOfFirst, aInsideSecond, aEndOfSecond, aInsideThird, aEndOfThird;
+};
+
+/// Fills a new document with the paragraphs "Aaa", "Bbb" and "Ccc".
+ThreeParagraphs lcl_fillThreeParagraphs(SwWrtShell* pWrtShell)
+{
+    ThreeParagraphs aPoints;
+    const std::pair<OUString, std::pair<Point*, Point*>> aParagraphs[] = {
+        { u"Aaa"_ustr, { &aPoints.aInsideFirst, &aPoints.aEndOfFirst } },
+        { u"Bbb"_ustr, { &aPoints.aInsideSecond, &aPoints.aEndOfSecond } },
+        { u"Ccc"_ustr, { &aPoints.aInsideThird, &aPoints.aEndOfThird } },
+    };
+    bool bFirst = true;
+    for (const auto& rParagraph : aParagraphs)
+    {
+        if (!bFirst)
+            pWrtShell->SplitNode();
+        bFirst = false;
+        pWrtShell->Insert(rParagraph.first);
+        *rParagraph.second.second = pWrtShell->GetCharRect().Center();
+        pWrtShell->SttPara(/*bSelect=*/false);
+        pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+        *rParagraph.second.first = pWrtShell->GetCharRect().Center();
+        pWrtShell->EndPara(/*bSelect=*/false);
+    }
+    return aPoints;
+}
+
+/// Selects the whole text of a paragraph in the view of pWrtShell.
+void lcl_selectParagraph(SwWrtShell* pWrtShell,
+                         const cpo::uno::Reference<css::text::XTextRange>& xParagraph)
+{
+    cpo::uno::Reference<css::text::XTextViewCursorSupplier> xSupplier(
+        pWrtShell->GetView().GetController(), cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::text::XTextViewCursor> xCursor = xSupplier->getViewCursor();
+    xCursor->gotoRange(xParagraph->getStart(), /*bExpand=*/false);
+    xCursor->gotoRange(xParagraph->getEnd(), /*bExpand=*/true);
+}
+
+/// The text of every paragraph of the document, each followed by "|".
+OUString lcl_documentText(const cpo::uno::Reference<css::lang::XComponent>& xComponent)
+{
+    cpo::uno::Reference<css::text::XTextDocument> xTextDocument(xComponent,
+                                                                cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::container::XEnumerationAccess> xParagraphs(xTextDocument->getText(),
+                                                                        cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::container::XEnumeration> xEnumeration
+        = xParagraphs->createEnumeration();
+    OUStringBuffer aText;
+    while (xEnumeration->hasMoreElements())
+    {
+        cpo::uno::Reference<css::text::XTextRange> xParagraph(xEnumeration->nextElement(),
+                                                              cpo::uno::UNO_QUERY_THROW);
+        aText.append(xParagraph->getString() + "|");
+    }
+    return aText.makeStringAndClear();
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextMove)
@@ -3573,57 +3649,260 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextReadOnlyView)
     CPPUNIT_ASSERT_EQUAL(u"Test2"_ustr, getParagraph(2)->getString());
 }
 
+/// Opens a second view of the document and makes it the current view.
+int lcl_addView(SwXTextDocument* pXTextDocument)
+{
+    KitHelper::createView();
+    int nView = KitHelper::getCurrentView();
+    pXTextDocument->initializeForTiledRendering({});
+    Scheduler::ProcessEventsToIdle();
+    return nView;
+}
+
+constexpr std::string_view constDragRefusedText
+    = "Another user is moving text in this document. Try again when they have finished.";
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextTwoViews)
 {
-    // Given the paragraphs "Aaa", "Bbb" and "Ccc", with "Ccc" selected in the first view and "Bbb"
-    // in the second:
+    // Given the paragraphs "Aaa", "Bbb" and "Ccc", open in two views:
     SwXTextDocument* pXTextDocument = createDoc();
-    int nView1 = KitHelper::getCurrentView();
-    SwWrtShell* pWrtShell1 = getSwDocShell()->GetWrtShell();
-    pWrtShell1->Insert(u"Aaa"_ustr);
-    Point aEndOfFirst = pWrtShell1->GetCharRect().Center();
-    pWrtShell1->SplitNode();
-    pWrtShell1->Insert(u"Bbb"_ustr);
-    pWrtShell1->SplitNode();
-    pWrtShell1->Insert(u"Ccc"_ustr);
-    pWrtShell1->SttPara(/*bSelect=*/false);
-    pWrtShell1->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
-    Point aInsideThird = pWrtShell1->GetCharRect().Center();
-    pWrtShell1->SttPara(/*bSelect=*/false);
-    pWrtShell1->EndPara(/*bSelect=*/true);
+    int nViewA = KitHelper::getCurrentView();
+    SwTestViewCallback aViewA;
+    SwWrtShell* pWrtShellA = getSwDocShell()->GetWrtShell();
+    ThreeParagraphs aPoints = lcl_fillThreeParagraphs(pWrtShellA);
+    int nViewB = lcl_addView(pXTextDocument);
+    SwTestViewCallback aViewB;
+    SwWrtShell* pWrtShellB = getSwDocShell()->GetWrtShell();
+    // When the first view drags "Ccc" to the end of "Aaa" and holds the button, and the second
+    // view then tries to drag "Bbb" to the same place:
+    lcl_selectParagraph(pWrtShellA, getParagraph(3));
+    lcl_selectParagraph(pWrtShellB, getParagraph(2));
+    lcl_dragText(pXTextDocument, aPoints.aInsideThird, aPoints.aEndOfFirst, 0,
+                 /*bRelease=*/false, nViewA);
+    lcl_dragText(pXTextDocument, aPoints.aInsideSecond, aPoints.aEndOfFirst, 0,
+                 /*bRelease=*/false, nViewB);
 
-    KitHelper::createView();
-    int nView2 = KitHelper::getCurrentView();
-    pXTextDocument->initializeForTiledRendering({});
-    SwWrtShell* pWrtShell2 = getSwDocShell()->GetWrtShell();
-    pWrtShell2->SttEndDoc(/*bStt=*/true);
-    pWrtShell2->Down(/*bSelect=*/false);
-    pWrtShell2->SttPara(/*bSelect=*/false);
-    pWrtShell2->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
-    Point aInsideSecond = pWrtShell2->GetCharRect().Center();
-    pWrtShell2->SttPara(/*bSelect=*/false);
-    pWrtShell2->EndPara(/*bSelect=*/true);
-    Scheduler::ProcessEventsToIdle();
+    // Then the second view starts no drag: nothing moved, its selection stays, and only that view
+    // is told why:
+    CPPUNIT_ASSERT_EQUAL(u"Aaa|Bbb|Ccc|"_ustr, lcl_documentText(mxComponent));
+    CPPUNIT_ASSERT_EQUAL(u"Bbb"_ustr, pWrtShellB->GetSelText());
+    CPPUNIT_ASSERT_EQUAL(std::string("dragrefused"), aViewB.m_aTooltipType);
+    CPPUNIT_ASSERT_EQUAL(std::string(constDragRefusedText), aViewB.m_aTooltipText);
+    CPPUNIT_ASSERT_EQUAL(std::string(), aViewA.m_aTooltipType);
 
-    // When both views drag their selection to the end of "Aaa" at the same time, and the first
-    // view releases first:
-    KitHelper::setView(nView1);
-    lcl_dragText(pXTextDocument, aInsideThird, aEndOfFirst, 0, /*bRelease=*/false);
-    KitHelper::setView(nView2);
-    lcl_dragText(pXTextDocument, aInsideSecond, aEndOfFirst, 0, /*bRelease=*/false);
-    KitHelper::setView(nView1);
-    pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, aEndOfFirst.getX(),
-                                   aEndOfFirst.getY(), 1, MOUSE_LEFT, 0);
-    Scheduler::ProcessEventsToIdle();
-    KitHelper::setView(nView2);
-    pXTextDocument->postMouseEvent(COKitMouseEventType::BUTTONUP, aEndOfFirst.getX(),
-                                   aEndOfFirst.getY(), 1, MOUSE_LEFT, 0);
-    Scheduler::ProcessEventsToIdle();
+    // When the second view releases its button:
+    lcl_releaseButton(pXTextDocument, nViewB, aPoints.aEndOfFirst);
 
-    // Then the drag of the first view moved its text, and no text was lost:
-    CPPUNIT_ASSERT_EQUAL(u"AaaCcc"_ustr, getParagraph(1)->getString());
-    CPPUNIT_ASSERT_EQUAL(u"Bbb"_ustr, getParagraph(2)->getString());
-    CPPUNIT_ASSERT_EQUAL(OUString(), getParagraph(3)->getString());
+    // Then still nothing moved, and its selection stays:
+    CPPUNIT_ASSERT_EQUAL(u"Aaa|Bbb|Ccc|"_ustr, lcl_documentText(mxComponent));
+    CPPUNIT_ASSERT_EQUAL(u"Bbb"_ustr, pWrtShellB->GetSelText());
+
+    // When the first view drops:
+    lcl_releaseButton(pXTextDocument, nViewA, aPoints.aEndOfFirst);
+
+    // Then its text moved, and no text was lost:
+    CPPUNIT_ASSERT_EQUAL(u"AaaCcc|Bbb||"_ustr, lcl_documentText(mxComponent));
+
+    // When the second view drags "Bbb" to the same place once the first drag is over:
+    lcl_selectParagraph(pWrtShellB, getParagraph(2));
+    lcl_dragText(pXTextDocument, aPoints.aInsideSecond, aPoints.aEndOfFirst, 0,
+                 /*bRelease=*/true, nViewB);
+
+    // Then that text moves as well:
+    CPPUNIT_ASSERT_EQUAL(u"AaaBbbCcc|||"_ustr, lcl_documentText(mxComponent));
+}
+
+/// The text of every part of the selection that selects something, each followed by "|".
+OUString lcl_selectedParts(SwWrtShell* pWrtShell)
+{
+    OUStringBuffer aText;
+    for (SwPaM& rPaM : pWrtShell->GetCursor()->GetRingContainer())
+    {
+        if (rPaM.HasMark() && *rPaM.GetPoint() != *rPaM.GetMark())
+            aText.append(rPaM.GetText() + "|");
+    }
+    return aText.makeStringAndClear();
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextTwoViewsCtrlAtPress)
+{
+    // Given the paragraphs "Aaa", "Bbb" and "Ccc", open in two views:
+    SwXTextDocument* pXTextDocument = createDoc();
+    int nViewA = KitHelper::getCurrentView();
+    SwWrtShell* pWrtShellA = getSwDocShell()->GetWrtShell();
+    ThreeParagraphs aPoints = lcl_fillThreeParagraphs(pWrtShellA);
+    int nViewB = lcl_addView(pXTextDocument);
+    SwTestViewCallback aViewB;
+    SwWrtShell* pWrtShellB = getSwDocShell()->GetWrtShell();
+
+    // When the first view drags "Ccc" and holds the button, and the second view drags "Bbb" with
+    // Ctrl held from the press, which copies and keeps the add selection mode on while the button
+    // is down:
+    lcl_selectParagraph(pWrtShellA, getParagraph(3));
+    lcl_selectParagraph(pWrtShellB, getParagraph(2));
+    lcl_dragText(pXTextDocument, aPoints.aInsideThird, aPoints.aEndOfFirst, 0,
+                 /*bRelease=*/false, nViewA);
+    lcl_dragText(pXTextDocument, aPoints.aInsideSecond, aPoints.aEndOfFirst, KEY_MOD1,
+                 /*bRelease=*/true, nViewB, KEY_MOD1);
+
+    // Then the second view is back in the ordinary selection mode with "Bbb" still selected, as
+    // after a Ctrl click, nothing moved, and it is told why:
+    CPPUNIT_ASSERT(!pWrtShellB->IsAddMode());
+    CPPUNIT_ASSERT_EQUAL(u"Bbb|"_ustr, lcl_selectedParts(pWrtShellB));
+    CPPUNIT_ASSERT_EQUAL(u"Aaa|Bbb|Ccc|"_ustr, lcl_documentText(mxComponent));
+    CPPUNIT_ASSERT_EQUAL(std::string("dragrefused"), aViewB.m_aTooltipType);
+
+    lcl_releaseButton(pXTextDocument, nViewA, aPoints.aEndOfFirst);
+    CPPUNIT_ASSERT_EQUAL(u"AaaCcc|Bbb||"_ustr, lcl_documentText(mxComponent));
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextTwoViewsOneAfterAnother)
+{
+    // Given the paragraphs "Aaa", "Bbb" and "Ccc", open in two views:
+    SwXTextDocument* pXTextDocument = createDoc();
+    int nViewA = KitHelper::getCurrentView();
+    SwTestViewCallback aViewA;
+    SwWrtShell* pWrtShellA = getSwDocShell()->GetWrtShell();
+    ThreeParagraphs aPoints = lcl_fillThreeParagraphs(pWrtShellA);
+    int nViewB = lcl_addView(pXTextDocument);
+    SwTestViewCallback aViewB;
+    SwWrtShell* pWrtShellB = getSwDocShell()->GetWrtShell();
+    // When the first view drags "Ccc" to the end of "Aaa":
+    lcl_selectParagraph(pWrtShellA, getParagraph(3));
+    lcl_dragText(pXTextDocument, aPoints.aInsideThird, aPoints.aEndOfFirst, 0,
+                 /*bRelease=*/true, nViewA);
+    CPPUNIT_ASSERT_EQUAL(u"AaaCcc|Bbb||"_ustr, lcl_documentText(mxComponent));
+
+    // And then the second view drags "Bbb" to the same place:
+    lcl_selectParagraph(pWrtShellB, getParagraph(2));
+    lcl_dragText(pXTextDocument, aPoints.aInsideSecond, aPoints.aEndOfFirst, 0,
+                 /*bRelease=*/true, nViewB);
+
+    // Then each text lands where its drag was released, and neither view was refused:
+    CPPUNIT_ASSERT_EQUAL(u"AaaBbbCcc|||"_ustr, lcl_documentText(mxComponent));
+    CPPUNIT_ASSERT_EQUAL(std::string(), aViewA.m_aTooltipType);
+    CPPUNIT_ASSERT_EQUAL(std::string(), aViewB.m_aTooltipType);
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextTwoViewsSameText)
+{
+    // Given the paragraphs "Aaa", "Bbb" and "Ccc", open in two views that both select "Ccc":
+    SwXTextDocument* pXTextDocument = createDoc();
+    int nViewA = KitHelper::getCurrentView();
+    SwTestViewCallback aViewA;
+    SwWrtShell* pWrtShellA = getSwDocShell()->GetWrtShell();
+    ThreeParagraphs aPoints = lcl_fillThreeParagraphs(pWrtShellA);
+    int nViewB = lcl_addView(pXTextDocument);
+    SwTestViewCallback aViewB;
+    SwWrtShell* pWrtShellB = getSwDocShell()->GetWrtShell();
+    lcl_selectParagraph(pWrtShellA, getParagraph(3));
+    lcl_selectParagraph(pWrtShellB, getParagraph(3));
+
+    // When the first view drags "Ccc" to the end of "Aaa" and holds the button, and the second
+    // view drags the same text to the end of "Bbb":
+    lcl_dragText(pXTextDocument, aPoints.aInsideThird, aPoints.aEndOfFirst, 0,
+                 /*bRelease=*/false, nViewA);
+    lcl_dragText(pXTextDocument, aPoints.aInsideThird, aPoints.aEndOfSecond, 0,
+                 /*bRelease=*/false, nViewB);
+    lcl_releaseButton(pXTextDocument, nViewB, aPoints.aEndOfSecond);
+
+    // Then the second drag moved nothing, and the second view keeps its selection:
+    CPPUNIT_ASSERT_EQUAL(u"Aaa|Bbb|Ccc|"_ustr, lcl_documentText(mxComponent));
+    CPPUNIT_ASSERT_EQUAL(u"Ccc"_ustr, pWrtShellB->GetSelText());
+    CPPUNIT_ASSERT_EQUAL(std::string("dragrefused"), aViewB.m_aTooltipType);
+
+    // And when the first view drops, the text moves there once:
+    lcl_releaseButton(pXTextDocument, nViewA, aPoints.aEndOfFirst);
+    CPPUNIT_ASSERT_EQUAL(u"AaaCcc|Bbb||"_ustr, lcl_documentText(mxComponent));
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextSourceDeletedByOtherView)
+{
+    // Given the paragraphs "Aaa", "Bbb" and "Ccc", open in two views:
+    SwXTextDocument* pXTextDocument = createDoc();
+    int nViewA = KitHelper::getCurrentView();
+    SwTestViewCallback aViewA;
+    SwWrtShell* pWrtShellA = getSwDocShell()->GetWrtShell();
+    ThreeParagraphs aPoints = lcl_fillThreeParagraphs(pWrtShellA);
+    int nViewB = lcl_addView(pXTextDocument);
+    SwTestViewCallback aViewB;
+    SwWrtShell* pWrtShellB = getSwDocShell()->GetWrtShell();
+    // When the first view drags "Ccc" to the end of "Aaa" and holds the button, the second view
+    // deletes "Ccc", and the first view then drops:
+    lcl_selectParagraph(pWrtShellA, getParagraph(3));
+    lcl_dragText(pXTextDocument, aPoints.aInsideThird, aPoints.aEndOfFirst, 0,
+                 /*bRelease=*/false, nViewA);
+    KitHelper::setView(nViewB);
+    lcl_selectParagraph(pWrtShellB, getParagraph(3));
+    pWrtShellB->DelRight();
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(u"Aaa|Bbb||"_ustr, lcl_documentText(mxComponent));
+    lcl_releaseButton(pXTextDocument, nViewA, aPoints.aEndOfFirst);
+
+    // Then the drop brings back none of the deleted text:
+    CPPUNIT_ASSERT_EQUAL(u"Aaa|Bbb||"_ustr, lcl_documentText(mxComponent));
+
+    // And the drag is over, so the first view can drag "Bbb" to the end of "Aaa":
+    lcl_selectParagraph(pWrtShellA, getParagraph(2));
+    lcl_dragText(pXTextDocument, aPoints.aInsideSecond, aPoints.aEndOfFirst, 0,
+                 /*bRelease=*/true, nViewA);
+    CPPUNIT_ASSERT_EQUAL(u"AaaBbb|||"_ustr, lcl_documentText(mxComponent));
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextSourceEditedByOtherView)
+{
+    // Given the paragraphs "Aaa", "Bbb" and "Ccc", open in two views:
+    SwXTextDocument* pXTextDocument = createDoc();
+    int nViewA = KitHelper::getCurrentView();
+    SwTestViewCallback aViewA;
+    SwWrtShell* pWrtShellA = getSwDocShell()->GetWrtShell();
+    ThreeParagraphs aPoints = lcl_fillThreeParagraphs(pWrtShellA);
+    int nViewB = lcl_addView(pXTextDocument);
+    SwTestViewCallback aViewB;
+    SwWrtShell* pWrtShellB = getSwDocShell()->GetWrtShell();
+    // When the first view drags "Ccc" to the end of "Aaa" and holds the button, the second view
+    // types "XX" inside "Ccc", and the first view then drops:
+    lcl_selectParagraph(pWrtShellA, getParagraph(3));
+    lcl_dragText(pXTextDocument, aPoints.aInsideThird, aPoints.aEndOfFirst, 0,
+                 /*bRelease=*/false, nViewA);
+    KitHelper::setView(nViewB);
+    pWrtShellB->SttEndDoc(/*bStt=*/false);
+    pWrtShellB->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 1, /*bBasicCall=*/false);
+    pWrtShellB->Insert(u"XX"_ustr);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(u"Aaa|Bbb|CcXXc|"_ustr, lcl_documentText(mxComponent));
+    lcl_releaseButton(pXTextDocument, nViewA, aPoints.aEndOfFirst);
+
+    // Then the dragged text moves with the second view's edit in it:
+    CPPUNIT_ASSERT_EQUAL(u"AaaCcXXc|Bbb||"_ustr, lcl_documentText(mxComponent));
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextDropPlaceEditedByOtherView)
+{
+    // Given the paragraphs "Aaa", "Bbb" and "Ccc", open in two views:
+    SwXTextDocument* pXTextDocument = createDoc();
+    int nViewA = KitHelper::getCurrentView();
+    SwTestViewCallback aViewA;
+    SwWrtShell* pWrtShellA = getSwDocShell()->GetWrtShell();
+    ThreeParagraphs aPoints = lcl_fillThreeParagraphs(pWrtShellA);
+    int nViewB = lcl_addView(pXTextDocument);
+    SwTestViewCallback aViewB;
+    SwWrtShell* pWrtShellB = getSwDocShell()->GetWrtShell();
+    // When the first view drags "Ccc" to the end of "Aaa" and holds the button, the second view
+    // types "YY" at the end of "Aaa", and the first view then drops where "Aaa" ended:
+    lcl_selectParagraph(pWrtShellA, getParagraph(3));
+    lcl_dragText(pXTextDocument, aPoints.aInsideThird, aPoints.aEndOfFirst, 0,
+                 /*bRelease=*/false, nViewA);
+    KitHelper::setView(nViewB);
+    pWrtShellB->SttEndDoc(/*bStt=*/true);
+    pWrtShellB->EndPara(/*bSelect=*/false);
+    pWrtShellB->Insert(u"YY"_ustr);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(u"AaaYY|Bbb|Ccc|"_ustr, lcl_documentText(mxComponent));
+    lcl_releaseButton(pXTextDocument, nViewA, aPoints.aEndOfFirst);
+
+    // Then the text lands at the release point, between "Aaa" and the typed "YY":
+    CPPUNIT_ASSERT_EQUAL(u"AaaCccYY|Bbb||"_ustr, lcl_documentText(mxComponent));
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDragDropTextDropPosition)

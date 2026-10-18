@@ -68,6 +68,15 @@ void SwTestViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayl
             m_aStateChanges.push_back(OString(pPayload));
             break;
         }
+        case COKitCallbackType::TOOLTIP:
+        {
+            std::stringstream aStream(pPayload);
+            boost::property_tree::ptree aTree;
+            boost::property_tree::read_json(aStream, aTree);
+            m_aTooltipType = aTree.get<std::string>("type", "");
+            m_aTooltipText = aTree.get<std::string>("text", "");
+            break;
+        }
         case COKitCallbackType::INVALIDATE_TILES:
         {
             m_bTilesInvalidated = true;
