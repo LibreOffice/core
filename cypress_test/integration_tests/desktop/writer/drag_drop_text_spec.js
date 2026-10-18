@@ -101,3 +101,80 @@ describe(['tagdesktop'], 'Writer drag and drop of a text selection.', function()
 		helper.expectTextForClipboard('Test1Test2');
 	});
 });
+
+describe(['tagdesktop'], 'Writer drag and drop of a text selection past the visible area.', function() {
+
+	beforeEach(function() {
+		// Test1, Test2, 120 filler lines and End: about three pages.
+		helper.setupAndLoadDocument('writer/drag_drop_text_long.fodt');
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+		});
+	});
+
+	it('Holding a dragged selection at the bottom edge scrolls the view so it can be dropped further down', function() {
+		var win = this.win;
+
+		helper.assertCursorAndFocus();
+		// A modifier stays held for the rest of the typed string, so each key goes alone.
+		helper.typeIntoDocument('{ctrl}{end}');
+		helper.processToIdle(win);
+		var endOfDocument = readCaretAfterMove(null);
+
+		helper.typeIntoDocument('{ctrl}{home}');
+		helper.processToIdle(win);
+		var startOfDocument = readCaretAfterMove(endOfDocument);
+		// The view is back at the top, so End is out of sight again.
+		cy.getFrameWindow().should(function(frameWindow) {
+			var viewed = frameWindow.app.activeDocument.activeLayout.viewedRectangle;
+			expect(viewed.y2).to.be.below(endOfDocument.y1);
+		});
+		helper.typeIntoDocument('{downarrow}');
+		helper.typeIntoDocument('{end}');
+		helper.processToIdle(win);
+		var endOfTest2 = readCaretAfterMove(startOfDocument);
+		helper.typeIntoDocument('{home}');
+		helper.processToIdle(win);
+		var startOfTest2 = readCaretAfterMove(endOfTest2);
+		helper.typeIntoDocument('{shift}{end}');
+		helper.textSelectionShouldExist();
+		helper.processToIdle(win);
+
+		// Drag Test2 to just above the bottom edge of the document area and hold it there, inside
+		// the band where the view scrolls by itself.
+		cy.then(function() {
+			var start = screenPoint(win, (startOfTest2.x1 + endOfTest2.x1) / 2,
+				(startOfTest2.y1 + startOfTest2.y2) / 2);
+			var bounds = win.document.getElementById('canvas-container').getBoundingClientRect();
+			var edge = { x: start.x, y: bounds.bottom - 15 };
+
+			cy.cGet('body').realMouseDown({ x: start.x, y: start.y });
+			for (let step = 1; step <= 5; ++step) {
+				cy.cGet('body').realMouseMove(start.x, start.y + (edge.y - start.y) * step / 5);
+			}
+		});
+
+		// The view scrolls while the mouse stands still, until End comes into sight.
+		cy.getFrameWindow().should(function(frameWindow) {
+			var viewed = frameWindow.app.activeDocument.activeLayout.viewedRectangle;
+			expect(viewed.y2).to.be.above(endOfDocument.y2);
+		});
+
+		// Move onto the end of End, which stops the scrolling, and drop there.
+		cy.then(function() {
+			var target = screenPoint(win, endOfDocument.x1, (endOfDocument.y1 + endOfDocument.y2) / 2);
+			cy.cGet('body').realMouseMove(target.x, target.y);
+			helper.processToIdle(win);
+			cy.cGet('.text-drop-caret').should('be.visible');
+			cy.cGet('body').realMouseUp({ x: target.x, y: target.y });
+		});
+		helper.processToIdle(win);
+
+		helper.setDummyClipboardForCopy();
+		helper.typeIntoDocument('{ctrl}{end}');
+		helper.typeIntoDocument('{shift}{home}');
+		helper.textSelectionShouldExist();
+		helper.copy();
+		helper.expectTextForClipboard('EndTest2');
+	});
+});
