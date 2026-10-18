@@ -152,6 +152,7 @@ $(eval $(call gb_Library_add_exception_objects,xo,\
     xmloff/source/draw/animexp \
     xmloff/source/draw/animimp \
     xmloff/source/draw/descriptionimp \
+    xmloff/source/draw/embeddedmedia \
     xmloff/source/draw/eventimp \
     xmloff/source/draw/layerexp \
     xmloff/source/draw/layerimp \

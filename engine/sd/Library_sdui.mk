@@ -28,6 +28,7 @@ $(eval $(call gb_Library_use_external,sdui,boost_headers))
 $(eval $(call gb_Library_use_sdk_api,sdui))
 
 $(eval $(call gb_Library_use_libraries,sdui,\
+    avmedia \
     basegfx \
     comphelper \
     cppu \

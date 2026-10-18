@@ -106,8 +106,14 @@ XMLEventSoundContext::XMLEventSoundContext( SvXMLImport& rImp, const Reference< 
         switch( aIter.getToken() )
         {
             case XML_ELEMENT(XLINK, XML_HREF):
-                pParent->maData.msSoundURL = rImp.GetAbsoluteReference(aIter.toString());
+            {
+                // A path inside the document package names an embedded sound.
+                const OUString aHref = aIter.toString();
+                pParent->maData.msSoundURL = rImp.IsPackageURL(aHref)
+                                                 ? "vnd.sun.star.Package:" + aHref
+                                                 : rImp.GetAbsoluteReference(aHref);
                 break;
+            }
             case XML_ELEMENT(PRESENTATION, XML_PLAY_FULL):
                 pParent->maData.mbPlayFull = IsXMLToken( aIter, XML_TRUE );
                 break;

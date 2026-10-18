@@ -17,17 +17,23 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <config_features.h>
+
 #include <svx/svxids.hrc>
 #include <com/sun/star/presentation/ClickAction.hpp>
 #include <com/sun/star/embed/NeedsRunningStateException.hpp>
 #include <com/sun/star/embed/VerbDescriptor.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
+#include <comphelper/kit.hxx>
 #include <comphelper/string.hxx>
 #include <com/sun/star/embed/VerbAttributes.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 
 #include <sdattr.hrc>
+#if HAVE_FEATURE_AVMEDIA
+#include <avmedia/mediaitem.hxx>
+#endif
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/strings.hrc>
 #include <o3tl/safeint.hxx>
@@ -434,6 +440,17 @@ IMPL_LINK_NOARG(SdTPAction, SoundFileDialogClosedHdl, sfx2::FileDialogHelper*, v
     OUString aFile = m_xSoundFileDialog->GetPath();
     if (aFile.isEmpty())
         return;
+
+#if HAVE_FEATURE_AVMEDIA
+    // A COKit document is edited away from the file system the sound was picked from, so the
+    // sound goes inside the document package and the entry names it there.
+    if (comphelper::COKit::isActive() && mpDoc && mpDoc->GetDocSh())
+    {
+        OUString aEmbeddedURL;
+        if (::avmedia::EmbedMedia(mpDoc->GetDocSh()->GetModel(), aFile, aEmbeddedURL))
+            aFile = aEmbeddedURL;
+    }
+#endif
 
     SetEditText( aFile );
 }

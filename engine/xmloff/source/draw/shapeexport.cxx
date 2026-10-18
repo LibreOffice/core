@@ -125,6 +125,7 @@
 #include <anim.hxx>
 #include <EnhancedCustomShapeToken.hxx>
 #include "sdpropls.hxx"
+#include "embeddedmedia.hxx"
 #include <xexptran.hxx>
 #include "ximpshap.hxx"
 #include <XMLBase64Export.hxx>
@@ -1956,9 +1957,13 @@ void XMLShapeExport::ImpExportEvents( const uno::Reference< drawing::XShape >& x
 
         if( eClickAction == presentation::ClickAction_VANISH || eClickAction == presentation::ClickAction_SOUND )
         {
+            OUString aSoundHref;
             if( ( nFound & Found::SOUNDURL ) && !aStrSoundURL.isEmpty() )
+                aSoundHref = xmloff::StoreEmbeddedMediaAndGetHref(GetExport(), aStrSoundURL);
+
+            if( !aSoundHref.isEmpty() )
             {
-                mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, GetExport().GetRelativeReference(aStrSoundURL) );
+                mrExport.AddAttribute(XML_NAMESPACE_XLINK, XML_HREF, aSoundHref);
                 mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_TYPE, XML_SIMPLE );
                 mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_SHOW, XML_NEW );
                 mrExport.AddAttribute( XML_NAMESPACE_XLINK, XML_ACTUATE, XML_ONREQUEST );

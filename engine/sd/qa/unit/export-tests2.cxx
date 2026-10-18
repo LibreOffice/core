@@ -69,6 +69,13 @@
 #include <svx/svdotable.hxx>
 #include <vcl/filter/PDFiumLibrary.hxx>
 
+#include <avmedia/mediaitem.hxx>
+#include <SdSoundLink.hxx>
+#include <com/sun/star/document/XStorageBasedDocument.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/frame/XModel.hpp>
+
 using namespace css;
 using namespace css::animations;
 using namespace ::cpo;
@@ -1319,6 +1326,47 @@ CPPUNIT_TEST_FIXTURE(SdExportTest2, testCompatibilityFlagIsDocumentSetting)
                        "config:config-item-set[@config:name='ooo:configuration-settings']/"
                        "config:config-item[@config:name='AnchoredTextOverflowLegacy']",
                        u"true");
+}
+
+// A click-action sound inside the document package survives saving: the saved package carries
+// the sound stream, and the shape refers to it inside the package again after loading.
+CPPUNIT_TEST_FIXTURE(SdExportTest2, testClickActionSoundEmbeddedRoundTrip)
+{
+    createSdImpressDoc("odp/clickaction-sound-link.fodp");
+
+    SdAnimationInfo* pInfo = lcl_getClickActionSoundInfo(*getSdDocShell()->GetDoc());
+    CPPUNIT_ASSERT(pInfo);
+
+    // the sound goes into the package the way the interaction dialog puts it there
+    OUString aEmbeddedURL;
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT(
+        avmedia::EmbedMedia(xModel, createFileURL(u"silence.wav"), aEmbeddedURL));
+    CPPUNIT_ASSERT_EQUAL(u"vnd.sun.star.Package:Media/silence.wav"_ustr, aEmbeddedURL);
+    pInfo->SetBookmark(aEmbeddedURL);
+
+    saveAndReload(TestFilter::ODP);
+
+    // the saved content refers to the sound by its path inside the package
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc, "//presentation:event-listener/presentation:sound", "href",
+                u"Media/silence.wav");
+
+    pInfo = lcl_getClickActionSoundInfo(*getSdDocShell()->GetDoc());
+    CPPUNIT_ASSERT(pInfo);
+    CPPUNIT_ASSERT_EQUAL(aEmbeddedURL, pInfo->GetBookmark());
+    CPPUNIT_ASSERT(SdSoundLink(pInfo->GetBookmark()).isEmbedded());
+
+    // the saved package carries the sound stream
+    uno::Reference<document::XStorageBasedDocument> xStorageBased(mxComponent,
+                                                                  uno::UNO_QUERY_THROW);
+    uno::Reference<embed::XStorage> xStorage(xStorageBased->getDocumentStorage(),
+                                             uno::UNO_SET_THROW);
+    uno::Reference<embed::XStorage> xMedia(
+        xStorage->openStorageElement(u"Media"_ustr, embed::ElementModes::READ),
+        uno::UNO_SET_THROW);
+    CPPUNIT_ASSERT(xMedia->hasByName(u"silence.wav"_ustr));
+
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

@@ -43,9 +43,6 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/beans/NamedValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/document/XStorageBasedDocument.hpp>
-#include <com/sun/star/embed/ElementModes.hpp>
-#include <com/sun/star/embed/XTransactedObject.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include <com/sun/star/presentation/EffectPresetClass.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
@@ -61,6 +58,7 @@
 
 #include <xmloff/unointerfacetouniqueidentifiermapper.hxx>
 #include "sdpropls.hxx"
+#include "embeddedmedia.hxx"
 #include <xmlsdtypes.hxx>
 #include <xmloff/xmltoken.hxx>
 #include <xmloff/xmlnamespace.hxx>
@@ -504,86 +502,6 @@ AnimationsExporterImpl::AnimationsExporterImpl( SvXMLExport& rExport, const Refe
 {
 }
 
-
-/** split a uri hierarchy into first segment and rest */
-static bool splitPath(OUString const & i_rPath,
-    OUString & o_rDir, OUString& o_rRest)
-{
-    const sal_Int32 idx(i_rPath.indexOf(u'/'));
-    if (idx < 0 || idx >= i_rPath.getLength()) {
-        o_rDir = OUString();
-        o_rRest = i_rPath;
-        return true;
-    } else if (idx == 0 || idx == i_rPath.getLength() - 1) {
-        // input must not start or end with '/'
-        return false;
-    } else {
-        o_rDir  = i_rPath.copy(0, idx);
-        o_rRest = i_rPath.copy(idx+1);
-        return true;
-    }
-}
-
-static void lcl_CopyStream(
-        uno::Reference<embed::XStorage> const& xSource,
-        uno::Reference<embed::XStorage> const& xTarget,
-         OUString const& rPath)
-{
-    OUString dir;
-    OUString rest;
-    if (!splitPath(rPath, dir, rest))
-        throw cpo::uno::RuntimeException();
-
-    if (dir.getLength() == 0)
-        xSource->copyElementTo(rPath, xTarget, rPath);
-    else
-    {
-        uno::Reference<embed::XStorage> const xSubSource(
-            xSource->openStorageElement(dir, embed::ElementModes::READ));
-        uno::Reference<embed::XStorage> const xSubTarget(
-            xTarget->openStorageElement(dir, embed::ElementModes::WRITE));
-        lcl_CopyStream(xSubSource, xSubTarget, rest);
-    }
-    uno::Reference<embed::XTransactedObject> const xTransaction(xTarget, uno::UNO_QUERY);
-    if (xTransaction.is())
-        xTransaction->commit();
-}
-
-char const s_PkgScheme[] = "vnd.sun.star.Package:";
-
-static OUString lcl_StoreMediaAndGetURL(SvXMLExport & rExport, OUString const& rURL)
-{
-    if (rURL.startsWithIgnoreAsciiCase(s_PkgScheme))
-    {
-        try // video is embedded
-        {
-            // copy the media stream from document storage to target storage
-            // (not sure if this is the best way to store these?)
-            uno::Reference<document::XStorageBasedDocument> const xSBD(
-                    rExport.GetModel(), uno::UNO_QUERY_THROW);
-            uno::Reference<embed::XStorage> const xSource(
-                    xSBD->getDocumentStorage(), uno::UNO_SET_THROW);
-            uno::Reference<embed::XStorage> const xTarget(
-                    rExport.GetTargetStorage(), uno::UNO_SET_THROW);
-
-            OUString urlPath = rURL.copy(SAL_N_ELEMENTS(s_PkgScheme)-1);
-
-            lcl_CopyStream(xSource, xTarget, urlPath);
-
-            return urlPath;
-        }
-        catch (cpo::uno::Exception const&)
-        {
-            TOOLS_INFO_EXCEPTION("xmloff", "exception while storing embedded media");
-        }
-        return OUString();
-    }
-    else
-    {
-        return rExport.GetRelativeReference(rURL); // linked
-    }
-}
-
 void AnimationsExporterImpl::exportTransitionNode()
 {
     if( !(mbHasTransition && mxPageProps.is()) )
@@ -658,7 +576,7 @@ void AnimationsExporterImpl::exportTransitionNode()
     }
     else if( !sSoundURL.isEmpty())
     {
-        sSoundURL = lcl_StoreMediaAndGetURL(*mxExport, sSoundURL);
+        sSoundURL = xmloff::StoreEmbeddedMediaAndGetHref(*mxExport, sSoundURL);
         mxExport->AddAttribute( XML_NAMESPACE_XLINK, XML_HREF, sSoundURL );
 
         bool bLoopSound = false;
