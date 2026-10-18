@@ -62,6 +62,8 @@ private:
     std::unique_ptr<weld::Button> m_xBtnTranslate;
     /// The languages in the order they are listed.
     std::vector<SwLanguageListItem> m_aLanguages;
+    /// The language picked in the box, if the box holds one.
+    std::optional<SwLanguageListItem> m_oLanguage;
 
     bool m_bTranslationStarted;
     bool m_bCancelTranslation;

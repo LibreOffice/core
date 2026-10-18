@@ -135,10 +135,15 @@ SwTranslateLangSelectDlg::SwTranslateLangSelectDlg(weld::Window* pParent, SwWrtS
         const OUString aSelectedId
             = OStringToOUString(s_oSelectedLanguage->getLanguage(), RTL_TEXTENCODING_ASCII_US);
         if (m_xLanguageListBox->find_id(aSelectedId) != -1)
+        {
             m_xLanguageListBox->set_active_id(aSelectedId);
+            m_oLanguage = s_oSelectedLanguage;
+        }
         else
             s_oSelectedLanguage.reset();
     }
+    // The box can be typed into: translating needs a language picked from the list.
+    m_xBtnTranslate->set_sensitive(m_oLanguage.has_value());
 }
 
 std::optional<SwLanguageListItem> SwTranslateLangSelectDlg::GetSelectedLanguage()
@@ -150,9 +155,11 @@ IMPL_LINK(SwTranslateLangSelectDlg, LangSelectHdl, weld::ComboBox&, rBox, void)
 {
     const sal_Int32 nActive = rBox.get_active();
     if (nActive == -1)
-        s_oSelectedLanguage.reset();
+        m_oLanguage.reset();
     else
-        s_oSelectedLanguage.emplace(m_aLanguages[nActive]);
+        m_oLanguage.emplace(m_aLanguages[nActive]);
+    if (!m_bTranslationStarted)
+        m_xBtnTranslate->set_sensitive(m_oLanguage.has_value());
 }
 
 IMPL_LINK_NOARG(SwTranslateLangSelectDlg, LangSelectCancelHdl, weld::Button&, void)
@@ -166,15 +173,14 @@ IMPL_LINK_NOARG(SwTranslateLangSelectDlg, LangSelectCancelHdl, weld::Button&, vo
 
 IMPL_LINK_NOARG(SwTranslateLangSelectDlg, LangSelectTranslateHdl, weld::Button&, void)
 {
-    if (m_bTranslationStarted)
+    // The button is only sensitive with a language picked and no translation running.
+    if (m_bTranslationStarted || !m_oLanguage)
         return;
-    if (!s_oSelectedLanguage)
-    {
-        m_xDialog->response(RET_CANCEL);
-        return;
-    }
 
-    const OString aTargetLang = s_oSelectedLanguage->getLanguage();
+    // Remember the language only when translating: typing into the box to search must
+    // not lose it when the dialog is cancelled.
+    s_oSelectedLanguage = m_oLanguage;
+    const OString aTargetLang = m_oLanguage->getLanguage();
 
     m_bTranslationStarted = true;
     m_xBtnTranslate->set_sensitive(false);
