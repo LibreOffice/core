@@ -520,6 +520,49 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testInnerShadowEffectProperties)
     CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"InnerShadowEffectEnabled"_ustr).get<bool>());
 }
 
+CPPUNIT_TEST_FIXTURE(UnodrawTest, testShadowTransformProperties)
+{
+    loadFromURL(u"private:factory/simpress"_ustr);
+    uno::Reference<beans::XPropertySet> xShapeProps(insertRectangle(mxComponent), uno::UNO_QUERY);
+
+    // A new shape has a shadow without skew that does not turn with the shape.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
+                         xShapeProps->getPropertyValue(u"ShadowSkewX"_ustr).get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0),
+                         xShapeProps->getPropertyValue(u"ShadowSkewY"_ustr).get<sal_Int32>());
+    CPPUNIT_ASSERT(!xShapeProps->getPropertyValue(u"ShadowRotateWithShape"_ustr).get<bool>());
+
+    // Values set on the shape read back unchanged, and the skew keeps 1/60000 degree.
+    xShapeProps->setPropertyValue(u"ShadowSkewX"_ustr, uno::Any(sal_Int32(-1200001)));
+    xShapeProps->setPropertyValue(u"ShadowSkewY"_ustr, uno::Any(sal_Int32(900000)));
+    xShapeProps->setPropertyValue(u"ShadowRotateWithShape"_ustr, uno::Any(true));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1200001),
+                         xShapeProps->getPropertyValue(u"ShadowSkewX"_ustr).get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(900000),
+                         xShapeProps->getPropertyValue(u"ShadowSkewY"_ustr).get<sal_Int32>());
+    CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"ShadowRotateWithShape"_ustr).get<bool>());
+}
+
+CPPUNIT_TEST_FIXTURE(UnodrawTest, testShadowComplexColor)
+{
+    loadFromURL(u"private:factory/simpress"_ustr);
+    uno::Reference<beans::XPropertySet> xShapeProps(insertRectangle(mxComponent), uno::UNO_QUERY);
+
+    // A theme color set as the shadow color reads back as the theme color.
+    model::ComplexColor aThemeColor = model::ComplexColor::Theme(model::ThemeColorType::Accent2);
+    xShapeProps->setPropertyValue(u"ShadowComplexColor"_ustr,
+                                  uno::Any(model::color::createXComplexColor(aThemeColor)));
+    CPPUNIT_ASSERT_EQUAL(
+        model::ThemeColorType::Accent2,
+        getComplexColor(xShapeProps, u"ShadowComplexColor"_ustr).getThemeColorType());
+
+    // A different plain shadow color replaces the theme color.
+    xShapeProps->setPropertyValue(u"ShadowColor"_ustr, uno::Any(Color(0x123456)));
+    CPPUNIT_ASSERT_EQUAL(
+        model::ThemeColorType::Unknown,
+        getComplexColor(xShapeProps, u"ShadowComplexColor"_ustr).getThemeColorType());
+}
+
 CPPUNIT_TEST_FIXTURE(UnodrawTest, testReflectionProperties)
 {
     loadFromURL(u"private:factory/simpress"_ustr);

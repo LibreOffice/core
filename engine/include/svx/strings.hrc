@@ -520,6 +520,9 @@
 #define SIP_SA_REFLECTION                                   NC_("SIP_SA_REFLECTION", "Reflection effect")
 #define SIP_SA_BLUR                                         NC_("SIP_SA_BLUR", "Blur effect")
 #define SIP_SA_INNER_SHADOW                                 NC_("SIP_SA_INNER_SHADOW", "Inner shadow effect")
+#define SIP_SA_SHADOW_SKEW_X                                NC_("SIP_SA_SHADOW_SKEW_X", "Horizontal skew of shadow")
+#define SIP_SA_SHADOW_SKEW_Y                                NC_("SIP_SA_SHADOW_SKEW_Y", "Vertical skew of shadow")
+#define SIP_SA_SHADOW_ROTATE_WITH_SHAPE                     NC_("SIP_SA_SHADOW_ROTATE_WITH_SHAPE", "Rotate shadow with shape")
 #define STR_ObjNameSingulMEDIA                              NC_("STR_ObjNameSingulMEDIA", "Media object")
 #define STR_ObjNamePluralMEDIA                              NC_("STR_ObjNamePluralMEDIA", "Media objects")
 // drawing layer table strings

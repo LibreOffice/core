@@ -255,13 +255,17 @@
 #define SHADOW_PROPERTIES \
     { UNO_NAME_SHADOW,            SDRATTR_SHADOW,             cppu::UnoType<bool>::get(),    0,      0}, \
     { UNO_NAME_SHADOWCOLOR,       SDRATTR_SHADOWCOLOR,        ::cppu::UnoType<sal_Int32>::get(),    0,      0}, \
+    { UNO_NAME_SHADOW_COMPLEX_COLOR, SDRATTR_SHADOWCOLOR,     ::cppu::UnoType<css::util::XComplexColor>::get(), 0, MID_COMPLEX_COLOR}, \
     { UNO_NAME_SHADOWTRANSPARENCE,SDRATTR_SHADOWTRANSPARENCE, ::cppu::UnoType<sal_Int16>::get(),    0,      0}, \
     { UNO_NAME_SHADOWXDIST,       SDRATTR_SHADOWXDIST,        ::cppu::UnoType<sal_Int32>::get(),    0,      0, PropertyMoreFlags::METRIC_ITEM}, \
     { UNO_NAME_SHADOWYDIST,       SDRATTR_SHADOWYDIST,        ::cppu::UnoType<sal_Int32>::get(),    0,      0, PropertyMoreFlags::METRIC_ITEM}, \
     { UNO_NAME_SHADOWSIZEX,       SDRATTR_SHADOWSIZEX,        ::cppu::UnoType<sal_Int32>::get(),    0,      0}, \
     { UNO_NAME_SHADOWSIZEY,       SDRATTR_SHADOWSIZEY,        ::cppu::UnoType<sal_Int32>::get(),    0,      0}, \
     { UNO_NAME_SHADOWBLUR,        SDRATTR_SHADOWBLUR,         ::cppu::UnoType<sal_Int32>::get(),    0,      0, PropertyMoreFlags::METRIC_ITEM}, \
-    { UNO_NAME_SHADOWALIGNMENT,   SDRATTR_SHADOWALIGNMENT,    /*ENUM*/::cppu::UnoType<sal_Int32>::get(), 0, 0},
+    { UNO_NAME_SHADOWALIGNMENT,   SDRATTR_SHADOWALIGNMENT,    /*ENUM*/::cppu::UnoType<sal_Int32>::get(), 0, 0}, \
+    { u"ShadowSkewX"_ustr,        SDRATTR_SHADOW_SKEW_X,      ::cppu::UnoType<sal_Int32>::get(),    0,      0}, \
+    { u"ShadowSkewY"_ustr,        SDRATTR_SHADOW_SKEW_Y,      ::cppu::UnoType<sal_Int32>::get(),    0,      0}, \
+    { u"ShadowRotateWithShape"_ustr, SDRATTR_SHADOW_ROTATE_WITH_SHAPE, cppu::UnoType<bool>::get(), 0,  0},
 
 
 #define LINE_PROPERTIES_DEFAULTS\

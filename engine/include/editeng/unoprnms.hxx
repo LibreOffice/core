@@ -91,6 +91,7 @@ inline constexpr OUString UNO_NAME_LINECAP = u"LineCap"_ustr;
 
 inline constexpr OUString UNO_NAME_SHADOW = u"Shadow"_ustr;
 inline constexpr OUString UNO_NAME_SHADOWCOLOR = u"ShadowColor"_ustr;
+inline constexpr OUString UNO_NAME_SHADOW_COMPLEX_COLOR = u"ShadowComplexColor"_ustr;
 inline constexpr OUString UNO_NAME_SHADOWXDIST = u"ShadowXDistance"_ustr;
 inline constexpr OUString UNO_NAME_SHADOWYDIST = u"ShadowYDistance"_ustr;
 inline constexpr OUString UNO_NAME_SHADOWSIZEX = u"ShadowSizeX"_ustr;

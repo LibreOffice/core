@@ -231,6 +231,11 @@ static ItemInfoPackage& getItemInfoPackageSdr()
             { SDRATTR_SHADOWSIZEY, new SdrMetricItem(SDRATTR_SHADOWSIZEY, 100000), 0, SFX_ITEMINFOFLAG_NONE },
             { SDRATTR_SHADOWBLUR, new SdrMetricItem(SDRATTR_SHADOWBLUR, 0), SID_ATTR_SHADOW_BLUR, SFX_ITEMINFOFLAG_NONE },
             { SDRATTR_SHADOWALIGNMENT, new SvxRectangleAlignmentItem(SDRATTR_SHADOWALIGNMENT, model::RectangleAlignment::Unset), 0, SFX_ITEMINFOFLAG_NONE },
+            // The skew is in 1/60000 degree. The shadow distances are an offset on the page, so by
+            // default the shadow does not turn with the shape.
+            { SDRATTR_SHADOW_SKEW_X, new SfxInt32Item(SDRATTR_SHADOW_SKEW_X, 0), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_SHADOW_SKEW_Y, new SfxInt32Item(SDRATTR_SHADOW_SKEW_Y, 0), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_SHADOW_ROTATE_WITH_SHAPE, new SdrOnOffItem(SDRATTR_SHADOW_ROTATE_WITH_SHAPE, false), 0, SFX_ITEMINFOFLAG_NONE },
 
             { SDRATTR_CAPTIONTYPE, new SdrCaptionTypeItem, 0, SFX_ITEMINFOFLAG_NONE },
             { SDRATTR_CAPTIONFIXEDANGLE, new SdrOnOffItem(SDRATTR_CAPTIONFIXEDANGLE, true), 0, SFX_ITEMINFOFLAG_NONE },
@@ -599,6 +604,9 @@ OUString SdrItemPool::GetItemName(sal_uInt16 nWhich)
         case SDRATTR_SHADOWBLUR        : pResId = SIP_SA_SHADOWBLUR;break;
         case SDRATTR_SHADOW3D          : pResId = SIP_SA_SHADOW3D;break;
         case SDRATTR_SHADOWPERSP       : pResId = SIP_SA_SHADOWPERSP;break;
+        case SDRATTR_SHADOW_SKEW_X     : pResId = SIP_SA_SHADOW_SKEW_X; break;
+        case SDRATTR_SHADOW_SKEW_Y     : pResId = SIP_SA_SHADOW_SKEW_Y; break;
+        case SDRATTR_SHADOW_ROTATE_WITH_SHAPE: pResId = SIP_SA_SHADOW_ROTATE_WITH_SHAPE; break;
 
         case SDRATTR_GLOW              : pResId = SIP_SA_GLOW;break;
 
