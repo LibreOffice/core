@@ -56,4 +56,7 @@ inline std::chrono::milliseconds timeSinceTestStartMs()
 /// Used to log the name of the test and the time since starting to run the tests.
 #define TST_LOG(X) TST_LOG_NAME(testname, X)
 
+/// TST_LOG for UnitBase code that can run on a thread other than the one that calls setTestname.
+#define TST_LOG_SAFE(X) TST_LOG_NAME(getTestname(), X)
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

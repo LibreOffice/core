@@ -77,7 +77,7 @@ void UnitBase::initTestSuiteOptions()
 
 bool UnitBase::matchesFilter(std::size_t index)
 {
-    const std::string& name = GlobalArray[index]->getTestname();
+    const std::string name = GlobalArray[index]->getTestname();
     return strstr(Util::toLower(name).c_str(), GlobalTestOptions.getFilter().c_str()) != nullptr;
 }
 
@@ -407,8 +407,8 @@ void UnitBase::exitTest(TestResult result, const std::string& reason, LOG_CAPTUR
     {
         if (result != _result)
         {
-            TST_LOG("exitTest got " << name(result) << " but is already finished with "
-                                    << name(_result));
+            TST_LOG_SAFE("exitTest got " << name(result) << " but is already finished with "
+                                         << name(_result));
         }
 
         return;
@@ -416,12 +416,13 @@ void UnitBase::exitTest(TestResult result, const std::string& reason, LOG_CAPTUR
 
     if (result == TestResult::Ok)
     {
-        TST_LOG("SUCCESS: exitTest: " << name(result) << (reason.empty() ? "" : ": " + reason));
+        TST_LOG_SAFE("SUCCESS: exitTest: " << name(result)
+                                           << (reason.empty() ? "" : ": " + reason));
     }
     else
     {
-        TST_LOG("ERROR: FAILURE: exitTest: " << name(result)
-                                             << (reason.empty() ? "" : ": " + reason));
+        TST_LOG_SAFE("ERROR: FAILURE: exitTest: " << name(result)
+                                                  << (reason.empty() ? "" : ": " + reason));
 
         if (GlobalResult == TestResult::Ok)
             GlobalResult = result;
@@ -469,7 +470,7 @@ std::string UnitKit::getResultMessage() const
 void UnitWSD::processUnitResult(const StringVector &tokens)
 {
     UnitBase::TestResult result = UnitBase::TestResult::TimedOut;
-    TST_LOG("Received " << tokens[0] << " from kit:" << tokens[1] << " " << tokens[2]);
+    TST_LOG_SAFE("Received " << tokens[0] << " from kit:" << tokens[1] << " " << tokens[2]);
     assert (tokens[0] == "unitresult:");
     if (tokens[1] == "Ok")
         result = UnitBase::TestResult::Ok;
@@ -483,7 +484,7 @@ void UnitBase::timeout()
     // Don't timeout if we had already finished.
     if (isUnitTesting() && !isFinished())
     {
-        TST_LOG("ERROR: Timed out waiting for unit test to complete within "
+        TST_LOG_SAFE("ERROR: Timed out waiting for unit test to complete within "
                 << _timeoutMilliSeconds);
         exitTest(TestResult::TimedOut);
     }
@@ -497,13 +498,13 @@ void UnitBase::returnValue(int& retValue)
 
 void UnitBase::endTest([[maybe_unused]] const std::string& reason)
 {
-    TST_LOG("Ending test by stopping SocketPoll [" << getTestname() << "]: " << reason);
+    TST_LOG_SAFE("Ending test by stopping SocketPoll [" << getTestname() << "]: " << reason);
     std::shared_ptr<SocketPoll> socketPoll = getSocketPoll();
     if (socketPoll)
         socketPoll->joinThread();
 
-    TST_LOG("==================== Finished [" << getTestname() << "] " << name(_result) << " - "
-                                              << reason << " ====================");
+    TST_LOG_SAFE("==================== Finished [" << getTestname() << "] " << name(_result)
+                                                   << " - " << reason << " ====================");
 }
 
 UnitWSD::UnitWSD(const std::string& name)

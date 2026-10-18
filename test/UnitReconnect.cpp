@@ -72,7 +72,7 @@ class UnitReconnect : public UnitWSD
     {
         // Each test's document is named after the test, so a document left over from an earlier
         // test does not count.
-        if (docKey.find(testname) != std::string::npos)
+        if (docKey.find(getTestname()) != std::string::npos)
             _docDestroyed = true;
     }
 

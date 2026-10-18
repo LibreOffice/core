@@ -228,10 +228,10 @@ protected:
         _fileContent = fileContent;
         const auto oldTime = _fileLastModifiedTime;
         _fileLastModifiedTime = std::chrono::system_clock::now();
-        TST_LOG("setFileContent at " << Util::getIso8601FracformatTime(getFileLastModifiedTime())
-                                     << ": [" << COOLProtocol::getAbbreviatedMessage(_fileContent)
-                                     << "], previous version was at "
-                                     << Util::getIso8601FracformatTime(oldTime));
+        TST_LOG_SAFE("setFileContent at "
+                     << Util::getIso8601FracformatTime(getFileLastModifiedTime()) << ": ["
+                     << COOLProtocol::getAbbreviatedMessage(_fileContent)
+                     << "], previous version was at " << Util::getIso8601FracformatTime(oldTime));
     }
 
     /// The SHA-256 of the current file content, Base64-encoded, as the WOPI
@@ -492,7 +492,7 @@ protected:
             std::ostringstream jsonStream;
             fileInfo->stringify(jsonStream);
             std::string json = jsonStream.str();
-            TST_LOG("FakeWOPIHost: Response to CheckFileInfo "
+            TST_LOG_SAFE("FakeWOPIHost: Response to CheckFileInfo "
                     << Poco::URI(request.getURI()).getPath() << ": 200 OK: " << json);
 
             httpResponse->set("Last-Modified", Util::getHttpTime(getFileLastModifiedTime()));
@@ -500,7 +500,7 @@ protected:
         }
         else
         {
-            TST_LOG("FakeWOPIHost: Response to CheckFileInfo "
+            TST_LOG_SAFE("FakeWOPIHost: Response to CheckFileInfo "
                     << Poco::URI(request.getURI()).getPath()
                     << httpResponse->statusLine().statusCode() << ' '
                     << httpResponse->statusLine().reasonPhrase());
@@ -526,15 +526,15 @@ protected:
         if (httpResponse->statusLine().statusCategory() ==
             http::StatusLine::StatusCodeClass::Successful)
         {
-            TST_LOG("FakeWOPIHost: Response to GetFile " << Poco::URI(request.getURI()).getPath()
-                                                         << ": 200 OK (" << getFileContent().size()
-                                                         << " bytes)");
+            TST_LOG_SAFE("FakeWOPIHost: Response to GetFile "
+                         << Poco::URI(request.getURI()).getPath() << ": 200 OK ("
+                         << getFileContent().size() << " bytes)");
             httpResponse->set("Last-Modified", Util::getHttpTime(getFileLastModifiedTime()));
             httpResponse->setBody(getFileContent(), "application/octet-stream");
         }
         else
         {
-            TST_LOG("FakeWOPIHost: Response to GetFile "
+            TST_LOG_SAFE("FakeWOPIHost: Response to GetFile "
                     << Poco::URI(request.getURI()).getPath()
                     << httpResponse->statusLine().statusCode() << ' '
                     << httpResponse->statusLine().reasonPhrase());
@@ -554,21 +554,21 @@ protected:
         if (isWopiInfoRequest(uriReq.getPath())) // CheckFileInfo
         {
             ++_countCheckFileInfo;
-            TST_LOG("FakeWOPIHost: Handling CheckFileInfo (#" << _countCheckFileInfo
-                                                              << "): " << uriReq.getPath());
+            TST_LOG_SAFE("FakeWOPIHost: Handling CheckFileInfo (#" << _countCheckFileInfo
+                                                                   << "): " << uriReq.getPath());
 
             return handleCheckFileInfoRequest(request, socket);
         }
         else if (isWopiContentRequest(uriReq.getPath())) // GetFile
         {
             ++_countGetFile;
-            TST_LOG("FakeWOPIHost: Handling GetFile (#" << _countGetFile
-                                                        << "): " << uriReq.getPath());
+            TST_LOG_SAFE("FakeWOPIHost: Handling GetFile (#" << _countGetFile
+                                                             << "): " << uriReq.getPath());
 
             return handleGetFileRequest(request, socket);
         }
 
-        TST_LOG("FakeWOPIHost: not a wopi request, skipping: " << uriReq.getPath());
+        TST_LOG_SAFE("FakeWOPIHost: not a wopi request, skipping: " << uriReq.getPath());
         return false;
     }
 
@@ -589,16 +589,17 @@ protected:
                     std::unique_ptr<http::Response> response = assertLockRequest(request);
                     if (!response)
                     {
-                        TST_LOG("FakeWOPIHost: " << op << " operation on [" << uriReq.getPath()
-                                                 << "] succeeded 200 OK");
+                        TST_LOG_SAFE("FakeWOPIHost: " << op << " operation on ["
+                                                      << uriReq.getPath() << "] succeeded 200 OK");
                         http::Response httpResponse(http::StatusCode::OK);
                         socket->sendAndShutdown(httpResponse);
                     }
                     else
                     {
-                        TST_LOG("FakeWOPIHost: " << op << " operation on [" << uriReq.getPath()
-                                                 << "]: " << response->statusLine().statusCode()
-                                                 << ' ' << response->statusLine().reasonPhrase());
+                        TST_LOG_SAFE("FakeWOPIHost: "
+                                     << op << " operation on [" << uriReq.getPath()
+                                     << "]: " << response->statusLine().statusCode() << ' '
+                                     << response->statusLine().reasonPhrase());
                         socket->sendAndShutdown(*response);
                     }
                 }
@@ -619,7 +620,7 @@ protected:
                 if (request.get("X-WOPI-Override") == std::string("PUT_RELATIVE"))
                 {
                     ++_countPutRelative;
-                    TST_LOG("FakeWOPIHost: Handling PutRelativeFile (#"
+                    TST_LOG_SAFE("FakeWOPIHost: Handling PutRelativeFile (#"
                             << _countPutRelative << "): " << uriReq.getPath());
 
                     LOK_ASSERT_EQUAL_STR("PUT_RELATIVE", request.get("X-WOPI-Override"));
@@ -645,8 +646,8 @@ protected:
         else if (isWopiContentRequest(uriReq.getPath()))
         {
             ++_countPutFile;
-            TST_LOG("FakeWOPIHost: Handling PutFile (#" << _countPutFile
-                                                        << "): " << uriReq.getPath());
+            TST_LOG_SAFE("FakeWOPIHost: Handling PutFile (#" << _countPutFile
+                                                             << "): " << uriReq.getPath());
 
             return handleWopiUpload(request, message, socket);
         }
@@ -666,7 +667,7 @@ protected:
                 Util::getIso8601FracformatTime(getFileLastModifiedTime());
             if (wopiTimestamp != fileModifiedTime)
             {
-                TST_LOG("FakeWOPIHost: Document conflict detected, Stored ModifiedTime: ["
+                TST_LOG_SAFE("FakeWOPIHost: Document conflict detected, Stored ModifiedTime: ["
                         << fileModifiedTime << "], Upload ModifiedTime: [" << wopiTimestamp << ']');
                 http::Response httpResponse(http::StatusCode::Conflict);
                 if (!_dontSendJSONOnPutFile)
@@ -681,7 +682,7 @@ protected:
         }
         else
         {
-            TST_LOG("FakeWOPIHost: Forced document upload");
+            TST_LOG_SAFE("FakeWOPIHost: Forced document upload");
         }
 
         std::unique_ptr<http::Response> response = assertPutFileRequest(request);
@@ -689,7 +690,8 @@ protected:
                              http::StatusLine::StatusCodeClass::Successful)
         {
             const std::streamsize size = request.getContentLength();
-            TST_LOG("FakeWOPIHost: Writing document contents in storage (" << size << "bytes)");
+            TST_LOG_SAFE("FakeWOPIHost: Writing document contents in storage (" << size
+                                                                                 << "bytes)");
             std::vector<char> buffer(size);
             message.read(buffer.data(), size);
             setFileContent(Util::toString(buffer));
@@ -698,9 +700,9 @@ protected:
         const Poco::URI uriReq(request.getURI());
         if (response)
         {
-            TST_LOG("FakeWOPIHost: Response to POST " << uriReq.getPath() << ": "
-                                                      << response->statusLine().statusCode() << ' '
-                                                      << response->statusLine().reasonPhrase());
+            TST_LOG_SAFE("FakeWOPIHost: Response to POST "
+                         << uriReq.getPath() << ": " << response->statusLine().statusCode() << ' '
+                         << response->statusLine().reasonPhrase());
             socket->sendAndShutdown(*response);
         }
         else
@@ -712,8 +714,8 @@ protected:
                 std::string body = "{\"LastModifiedTime\": \"" +
                                    Util::getIso8601FracformatTime(getFileLastModifiedTime()) +
                                    "\" }";
-                TST_LOG("FakeWOPIHost: Response (default) to POST " << uriReq.getPath() << ": 200 OK "
-                                                                    << body);
+                TST_LOG_SAFE("FakeWOPIHost: Response (default) to POST "
+                             << uriReq.getPath() << ": 200 OK " << body);
                 httpResponse.setBody(std::move(body), "application/json; charset=utf-8");
             }
             socket->sendAndShutdown(httpResponse);
@@ -747,8 +749,8 @@ protected:
     {
         Poco::URI uriReq(Uri::decode(request.getURI()));
 
-        TST_LOG("FakeWOPIHost: " << request.getMethod() << " request URI [" << uriReq.toString()
-                                 << "]: " <<
+        TST_LOG_SAFE("FakeWOPIHost: " << request.getMethod() << " request URI ["
+                                      << uriReq.toString() << "]: " <<
                 [&](auto& log)
                 {
                     Util::joinPair(log, request, " / ");
@@ -770,7 +772,8 @@ protected:
         else if (!uriReq.getPath().starts_with("/cool/")) // Skip requests to the websrv.
         {
             // Complain if we are expected to handle something that we don't.
-            TST_LOG("ERROR: FakeWOPIHost: Request, cannot handle request: " << uriReq.getPath());
+            TST_LOG_SAFE("ERROR: FakeWOPIHost: Request, cannot handle request: "
+                         << uriReq.getPath());
         }
 
         return false;

@@ -172,7 +172,7 @@ public:
     /// Returns true if we failed, false otherwise.
     virtual bool onDataLoss(const std::string& reason)
     {
-        TST_LOG("onDataLoss: " << reason);
+        TST_LOG_SAFE("onDataLoss: " << reason);
         failTest(reason);
         return failed();
     }
@@ -293,7 +293,7 @@ public:
         if (isUnitTesting() && !isFinished() &&
             (elapsedTime - _startTimeMilliSeconds) > getTimeoutMilliSeconds())
         {
-            TST_LOG("ERROR Test exceeded its time limit of "
+            TST_LOG_SAFE("ERROR Test exceeded its time limit of "
                     << getTimeoutMilliSeconds() << ". It's been running for " << elapsedTime);
             timeout();
         }
@@ -308,8 +308,18 @@ public:
 
     static std::string getUnitLibPath() { return std::string(UnitLibPath); }
 
-    const std::string& getTestname() const { return testname; }
-    void setTestname(std::string name) { testname = std::move(name); }
+    /// A copy of the test name, safe to take from any thread.
+    std::string getTestname() const
+    {
+        std::lock_guard<std::mutex> guard(_testnameLock);
+        return testname;
+    }
+
+    void setTestname(std::string name)
+    {
+        std::lock_guard<std::mutex> guard(_testnameLock);
+        testname = std::move(name);
+    }
 
     std::shared_ptr<SocketPoll> socketPoll();
 
@@ -377,7 +387,10 @@ private:
     std::string _reason;
 protected:
     mutable std::mutex _lock; ///< Used to protect cleanup functions.
-    /// The name of the current test. Accessed from logs in derived classes.
+    mutable std::mutex _testnameLock; ///< Guards testname against setTestname.
+    /// The name of the current test. Accessed from logs in derived classes. Only read it directly
+    /// on the thread that calls setTestname; hooks and handlers on other threads use getTestname()
+    /// or TST_LOG_SAFE.
     std::string testname;
 private:
     std::shared_ptr<SocketPoll> _socketPoll; ///< Poll thread for async http comm.
