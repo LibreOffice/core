@@ -1973,27 +1973,31 @@ void CalcContent( SwLayoutFrame *pLay, bool bNoColl )
 
                 if ( bAgain )
                 {
-                    pFrame = pLay->ContainsContent();
-                    if ( pFrame && pFrame->IsInTab() )
-                        pFrame = pFrame->FindTabFrame();
-                    if( pFrame && pFrame->IsInSct() )
+                    SwFrame* pRestartFrame = pLay->ContainsContent();
+                    if ( pRestartFrame && pRestartFrame->IsInTab() )
+                        pRestartFrame = pRestartFrame->FindTabFrame();
+                    if( pRestartFrame && pRestartFrame->IsInSct() )
                     {
-                        SwSectionFrame* pTmp = pFrame->FindSctFrame();
+                        SwSectionFrame* pTmp = pRestartFrame->FindSctFrame();
                         if( pTmp != pLay && pLay->IsAnLower( pTmp ) )
-                            pFrame = pTmp;
+                            pRestartFrame = pTmp;
                     }
 
-                    if ( pFrame == pLoopControlCond )
+                    if ( pRestartFrame == pLoopControlCond )
                         ++nLoopControlRuns;
                     else
                     {
                         nLoopControlRuns = 0;
-                        pLoopControlCond = pFrame;
+                        pLoopControlCond = pRestartFrame;
                     }
 
                     if ( nLoopControlRuns < nLoopControlMax )
+                    {
+                        pFrame = pRestartFrame;
                         continue;
+                    }
 
+                    // ofz#574847387 past the limit, go on with the frame after this one
                     OSL_FAIL( "LoopControl in CalcContent" );
                 }
             }
