@@ -237,7 +237,7 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                 {
                     // The element past the pool ends the last string.
                     pStrings.reset(new sal_Unicode[ nLen + 1 ]());
-                    nStringSize = static_cast<sal_uInt16>(nLen);
+                    nStringSize = nLen;
 
                     if (GetToUnicodePoolData(r, nLen, nNext))
                     {
@@ -648,8 +648,10 @@ OUString SbiImage::GetString(sal_uInt32 nId, SbxDataType* peType) const
     sal_uInt32 nOff = mvStringOffsets[ nId - 1 ];
     sal_Unicode* pStr = pStrings.get() + nOff;
 
+    // The string can run up to the start of the next one, and no further than the pool.
     sal_uInt32 nNextOff = (nId < mvStringOffsets.size()) ? mvStringOffsets[ nId ] : nStringSize;
-    sal_uInt32 nLen = nNextOff - nOff - 1;
+    nNextOff = std::min(nNextOff, nStringSize);
+    sal_uInt32 nLen = nNextOff > nOff ? nNextOff - nOff - 1 : 0;
     OUString aOUStr(pStr);
     // #i42467: Special treatment for vbNullChar
     if (aOUStr.isEmpty() && nLen == 1)
