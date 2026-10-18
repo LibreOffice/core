@@ -22,6 +22,8 @@
 #include "opcodes.hxx"
 #include "buffer.hxx"
 
+#include <cstddef>
+
 class SbiParser;
 class SbModule;
 
@@ -52,8 +54,8 @@ public:
     void IncForLevel() { nForLevel++; }
     void DecForLevel() { nForLevel--; }
 
-    static sal_uInt32 calcNewOffSet( sal_uInt8 const * pCode, sal_uInt16 nOffset );
-    static sal_uInt16 calcLegacyOffSet( sal_uInt8 const * pCode, sal_uInt32 nOffset );
+    static sal_uInt32 calcNewOffSet( sal_uInt8 const * pCode, std::size_t nCodeSize, sal_uInt16 nOffset );
+    static sal_uInt16 calcLegacyOffSet( sal_uInt8 const * pCode, std::size_t nCodeSize, sal_uInt32 nOffset );
 
 };
 
