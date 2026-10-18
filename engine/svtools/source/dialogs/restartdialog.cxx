@@ -29,9 +29,6 @@ public:
         , btnNo_(m_xBuilder->weld_button(u"no"_ustr))
     {
         switch (reason) {
-        case svtools::RESTART_REASON_JAVA:
-            reason_ = m_xBuilder->weld_widget(u"reason_java"_ustr);
-            break;
         case svtools::RESTART_REASON_BIBLIOGRAPHY_INSTALL:
             reason_ = m_xBuilder->weld_widget(u"reason_bibliography_install"_ustr);
             break;

@@ -66,21 +66,6 @@
             <property name="orientation">vertical</property>
             <property name="spacing">12</property>
             <child>
-              <object class="GtkLabel" id="reason_java">
-                <property name="can-focus">False</property>
-                <property name="no-show-all">True</property>
-                <property name="label" translatable="yes" context="restartdialog|reason_java">For the selected Java runtime environment to work properly, %PRODUCTNAME must be restarted.</property>
-                <property name="wrap">True</property>
-                <property name="max-width-chars">30</property>
-                <property name="xalign">0</property>
-              </object>
-              <packing>
-                <property name="expand">False</property>
-                <property name="fill">True</property>
-                <property name="position">0</property>
-              </packing>
-            </child>
-            <child>
               <object class="GtkLabel" id="reason_mailmerge_install">
                 <property name="can-focus">False</property>
                 <property name="no-show-all">True</property>
