@@ -15,7 +15,7 @@
 
 namespace LangUtil
 {
-    bool isRtlLanguage(const std::string& language)
+    inline bool isRtlLanguage(const std::string& language)
     {
         if (language.rfind("ar", 0) == 0 ||
             language.rfind("arc", 0) == 0 ||

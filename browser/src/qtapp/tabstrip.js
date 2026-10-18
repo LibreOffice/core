@@ -58,6 +58,11 @@
 		lastMarker.cls = cls;
 	}
 
+	// The tabs run from right to left in a language written that way.
+	function isRightToLeft() {
+		return document.documentElement.dir === 'rtl';
+	}
+
 	// For a viewport X inside the strip, return the tab under it, whether the
 	// drop goes before or after, and the resulting insert index (null if empty).
 	function dropTargetAt(clientX) {
@@ -65,8 +70,12 @@
 		for (let i = 0; i < tabEls.length; i++) {
 			const tabEl = tabEls[i];
 			const rect = tabEl.getBoundingClientRect();
-			if (clientX < rect.right) {
-				const before = clientX - rect.left < rect.width / 2;
+			// How far X is from the edge of the tab where the tab starts.
+			const fromStart = isRightToLeft()
+				? rect.right - clientX
+				: clientX - rect.left;
+			if (fromStart < rect.width) {
+				const before = fromStart < rect.width / 2;
 				return {
 					el: tabEl,
 					before: before,
@@ -132,19 +141,21 @@
 	}
 
 	// Ask the app for the tab's hover card, placed below the tab and drawn in the strip's
-	// theme colours.
+	// theme colours. The card lines up with the edge of the tab where the tab starts.
 	function startHover(tab, id) {
 		if (!bridge) return;
 		const rect = tab.getBoundingClientRect();
 		const style = getComputedStyle(document.documentElement);
 		const color = (name) => style.getPropertyValue(name).trim();
+		const rightToLeft = isRightToLeft();
 		bridge.tabHoverStarted(
 			id,
-			Math.round(rect.left),
+			Math.round(rightToLeft ? rect.right : rect.left),
 			Math.round(rect.bottom),
 			color('--color-main-background'),
 			color('--color-main-text'),
 			color('--color-border-dark'),
+			rightToLeft,
 		);
 	}
 

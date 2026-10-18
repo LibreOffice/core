@@ -113,6 +113,8 @@ private:
 #endif
 };
 
+} // namespace
+
 std::string getUILanguage()
 {
     const char* envVars[] = {"LC_ALL", "LC_MESSAGES", "LANG", "LANGUAGE"};
@@ -148,6 +150,9 @@ std::string getUILanguage()
 
     return lang;
 }
+
+namespace
+{
 
 /// The directory new documents are created in.  XDG only tells us where the
 /// documents directory belongs; on a fresh account it does not exist yet, so

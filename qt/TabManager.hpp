@@ -103,9 +103,10 @@ public:
     void showTabContextMenu(int tabId, int x, int y);
 
     // Show the tab's name and current view in a card below it, after a short delay. x and y
-    // are the tab's bottom left corner in the strip, the colours are CSS colour strings.
+    // are the bottom corner of the tab where the tab starts, in the strip, which is its right
+    // corner when rightToLeft is set. The colours are CSS colour strings.
     void onTabHoverStarted(int tabId, int x, int y, const QString& background,
-                           const QString& text, const QString& border);
+                           const QString& text, const QString& border, bool rightToLeft);
     void hideHoverCard();
 
 signals:
@@ -200,8 +201,10 @@ private:
     QTimer* _hoverCardTimer;
     // The tab the card is for, or -1 when no tab is hovered.
     int _hoverCardTabId = -1;
-    // The hovered tab's bottom left corner, in strip coordinates.
+    // The bottom corner of the hovered tab where the tab starts, in strip coordinates.
     QPoint _hoverCardPosition;
+    // The tabs run from right to left, so the card lines up with the right edge of its tab.
+    bool _hoverCardRightToLeft = false;
 
     // One drag at a time, so process-wide; the QPointers self-null if a
     // window dies mid-drag. s_lastHover* hold the strip a DragLeave demoted

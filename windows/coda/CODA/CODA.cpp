@@ -3128,8 +3128,10 @@ struct HoverCard
     HWND hWnd = 0;
     // The tab the card is for, or 0 when the pointer rests on no tab.
     int tabId = 0;
-    // The bottom left corner of that tab, in screen coordinates.
+    // The bottom corner of that tab where the tab starts, in screen coordinates.
     POINT position = {};
+    // The tabs run from right to left, so the card lines up with the right edge of its tab.
+    bool rightToLeft = false;
     // The colours of the card, from the theme of the strip.
     COLORREF background = RGB(0xf8, 0xf9, 0xfa);
     COLORREF text = RGB(0x33, 0x33, 0x33);
@@ -3349,8 +3351,10 @@ static void showHoverCard()
         accessibleName.replace(placeholder, 2, hoverCard.title);
     SetWindowTextW(hoverCard.hWnd, accessibleName.c_str());
 
-    // The card stays on the monitor of the tab, even for a tab near its right edge.
+    // The card stays on the monitor of the tab, even for a tab near its edge.
     POINT position = hoverCard.position;
+    if (hoverCard.rightToLeft)
+        position.x -= cardWidth;
     MONITORINFO monitor = { sizeof(MONITORINFO) };
     if (GetMonitorInfoW(MonitorFromPoint(position, MONITOR_DEFAULTTONEAREST), &monitor))
         position.x = std::max(monitor.rcWork.left,
@@ -3361,11 +3365,12 @@ static void showHoverCard()
     InvalidateRect(hoverCard.hWnd, nullptr, TRUE);
 }
 
-// The pointer has come to rest on a tab of the window. The point is the bottom left corner of the
-// tab in the CSS pixels of the strip, and the colours are those of the theme of the strip.
+// The pointer has come to rest on a tab of the window. The point is the bottom corner of the tab
+// where the tab starts, in the CSS pixels of the strip, which is its right corner when the tabs run
+// from right to left. The colours are those of the theme of the strip.
 static void startHoverCard(const WindowState& window, int tabId, POINT point,
                            const std::string& background, const std::string& text,
-                           const std::string& border)
+                           const std::string& border, bool rightToLeft)
 {
     if (!hoverCard.hWnd)
         hoverCard.hWnd = CreateWindowExW(WS_EX_TOOLWINDOW | WS_EX_NOACTIVATE | WS_EX_TOPMOST,
@@ -3384,6 +3389,7 @@ static void startHoverCard(const WindowState& window, int tabId, POINT point,
 
     hoverCard.tabId = tabId;
     hoverCard.position = point;
+    hoverCard.rightToLeft = rightToLeft;
     hoverCard.background = cssColor(background, RGB(0xf8, 0xf9, 0xfa));
     hoverCard.text = cssColor(text, RGB(0x33, 0x33, 0x33));
     hoverCard.border = cssColor(border, RGB(0x94, 0x94, 0x94));
@@ -3820,12 +3826,13 @@ static void processStripMessage(WindowState& window, const std::string& message)
         PostMessageW(window.hWnd, CODA_WM_MOVETABTOWINDOW, (WPARAM)args->getElement<int>(0),
                      (LPARAM)args->getElement<int>(1));
     }
-    else if (call == "tabHoverStarted" && argCount >= 6)
+    else if (call == "tabHoverStarted" && argCount >= 7)
     {
         const POINT point = { static_cast<LONG>(std::lround(args->getElement<double>(1))),
                               static_cast<LONG>(std::lround(args->getElement<double>(2))) };
         startHoverCard(window, args->getElement<int>(0), point, args->getElement<std::string>(3),
-                       args->getElement<std::string>(4), args->getElement<std::string>(5));
+                       args->getElement<std::string>(4), args->getElement<std::string>(5),
+                       args->getElement<bool>(6));
     }
     else if (call == "tabHoverEnded")
     {
@@ -3947,7 +3954,10 @@ static void createTabStrip(WindowState& window)
                         // it is in the right colours from its first paint.
                         const std::string stripURL =
                             app_installation_uri + "../cool/qtapp-tabstrip.html?darkTheme=" +
-                            (currentStripTheme() == "dark" ? "true" : "false") + "&titleBar=true";
+                            (currentStripTheme() == "dark" ? "true" : "false") + "&titleBar=true" +
+                            // The tabs run from right to left in a language written that way, as
+                            // the document UI does.
+                            (LangUtil::isRtlLanguage(uiLanguage) ? "&dir=rtl" : "");
                         webView->Navigate(Util::string_to_wide_string(stripURL).c_str());
 
                         return S_OK;

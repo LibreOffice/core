@@ -36,10 +36,11 @@ public slots:
     void tabDragEnded(int tabId, bool inStripDropHandled);
     void tabAdoptFromOtherWindow(int srcTabId, int insertAt);
     void targetDragOver(int insertAt);
-    // The pointer rests on a tab. x and y are the tab's bottom left corner in the strip, and
-    // the colours are the strip's theme colours as CSS colour strings.
+    // The pointer rests on a tab. x and y are the bottom corner of the tab where the tab starts,
+    // in the strip, which is its right corner when rightToLeft is set. The colours are the
+    // strip's theme colours as CSS colour strings.
     void tabHoverStarted(int tabId, int x, int y, const QString& background, const QString& text,
-                         const QString& border);
+                         const QString& border, bool rightToLeft);
     void tabHoverEnded();
     void debug(const QString& message);
 

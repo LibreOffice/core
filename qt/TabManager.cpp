@@ -25,6 +25,7 @@
 
 #include <qt/CodaConfig.hpp>
 #include <qt/qt.hpp>
+#include <common/LangUtil.hpp>
 #include <common/Log.hpp>
 #include <common/SettingsStorage.hpp>
 
@@ -170,6 +171,9 @@ TabManager::TabManager(TabbedWindow* window, QWebEngineProfile* profile)
     stripUrl.setScheme("file");
     stripUrl.addQueryParameter("darkTheme",
                                currentTheme() == QStringLiteral("dark") ? "true" : "false");
+    // The tabs run from right to left in a language written that way, as the document UI does.
+    if (LangUtil::isRtlLanguage(getUILanguage()))
+        stripUrl.addQueryParameter("dir", "rtl");
     _shellView->load(QUrl(QString::fromStdString(stripUrl.toString())));
 
     _shellView->setFocusPolicy(Qt::NoFocus);
@@ -818,10 +822,11 @@ void TabManager::onThumbnailChanged(WebView* wv, bool isFirstThumbnail)
 }
 
 void TabManager::onTabHoverStarted(int tabId, int x, int y, const QString& background,
-                                   const QString& text, const QString& border)
+                                   const QString& text, const QString& border, bool rightToLeft)
 {
     _hoverCardTabId = tabId;
     _hoverCardPosition = QPoint(x, y);
+    _hoverCardRightToLeft = rightToLeft;
     _hoverCard->setStyleSheet(
         QStringLiteral("#tabHoverCard { background: %1; border: 1px solid %3; }"
                        "#tabHoverCard QLabel { color: %2; background: transparent; }")
@@ -864,7 +869,10 @@ void TabManager::showHoverCard()
     _hoverCard->setAccessibleName(tr("Preview of %1").arg(title));
 
     _hoverCard->adjustSize();
-    _hoverCard->move(_shellView->mapToGlobal(_hoverCardPosition));
+    QPoint position = _shellView->mapToGlobal(_hoverCardPosition);
+    if (_hoverCardRightToLeft)
+        position.rx() -= _hoverCard->width();
+    _hoverCard->move(position);
     _hoverCard->show();
 }
 

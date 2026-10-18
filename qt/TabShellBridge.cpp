@@ -49,9 +49,10 @@ void TabShellBridge::tabAdoptFromOtherWindow(int srcTabId, int insertAt)
 void TabShellBridge::targetDragOver(int insertAt) { _manager->onTargetDragOver(insertAt); }
 
 void TabShellBridge::tabHoverStarted(int tabId, int x, int y, const QString& background,
-                                     const QString& text, const QString& border)
+                                     const QString& text, const QString& border,
+                                     bool rightToLeft)
 {
-    _manager->onTabHoverStarted(tabId, x, y, background, text, border);
+    _manager->onTabHoverStarted(tabId, x, y, background, text, border, rightToLeft);
 }
 
 void TabShellBridge::tabHoverEnded() { _manager->hideHoverCard(); }

@@ -64,17 +64,21 @@ body {
 	align-items: center;
 	gap: 6px;
 	/* The margins are as wide as the overlap of an active neighbour, so that
-	   overlap stays clear of the icon and the close button. The right one
+	   overlap stays clear of the icon and the close button. The one at the end
 	   also leaves room for the close button and a gap. */
-	padding: 0 calc(var(--tab-radius) + 22px) 0 var(--tab-radius);
+	padding-block: 0;
+	padding-inline: var(--tab-radius) calc(var(--tab-radius) + 22px);
 	height: 100%;
 }
-/* A short light bar on the left edge of each tab separates it from the tab
-   before. A tab that is active or under the mouse stands out by its own fill,
-   so the bars on both its sides go. */
+/* A short light bar on the starting edge of each tab separates it from the
+   tab before. A tab that is active or under the mouse stands out by its own
+   fill, so the bars on both its sides go. */
 .tab + .tab {
 	background: linear-gradient(var(--color-border) 0 0) left center / 1px 50%
 		no-repeat;
+}
+[dir='rtl'] .tab + .tab {
+	background-position: right center;
 }
 .tab.active,
 .tab.active + .tab,
@@ -165,12 +169,12 @@ body {
        container's align-items alone leaves it sitting too low. */
 	line-height: 0;
 	position: absolute;
-	right: var(--tab-radius);
+	inset-inline-end: var(--tab-radius);
 	top: 50%;
 	transform: translateY(-50%);
 	background: var(--close-color);
 }
-.tab.active .close { right: calc(2 * var(--tab-radius)); }
+.tab.active .close { inset-inline-end: calc(2 * var(--tab-radius)); }
 .tab:hover .close,
 .tab.active .close { visibility: visible; }
 /* A tab narrower than 82px shows its close button only while it is the active one. */
@@ -193,10 +197,10 @@ body {
 	width: 2px;
 	background: var(--color-primary);
 }
-.tab.drop-before::before { left: 0; }
-.tab.drop-after::before { right: 0; }
-.tab.active.drop-before::before { left: var(--tab-radius); }
-.tab.active.drop-after::before { right: var(--tab-radius); }
+.tab.drop-before::before { inset-inline-start: 0; }
+.tab.drop-after::before { inset-inline-end: 0; }
+.tab.active.drop-before::before { inset-inline-start: var(--tab-radius); }
+.tab.active.drop-after::before { inset-inline-end: var(--tab-radius); }
 #new-tab {
 	box-sizing: border-box;
 	display: flex;
@@ -214,20 +218,20 @@ body {
 	/* See .tab .close: keeps the + glyph optically centered. */
 	line-height: 0;
 	position: sticky;
-	right: 0;
+	inset-inline-end: 0;
 	/* Above the active tab, which is raised over its neighbours, so a tab
 	   scrolled under the button stays hidden. */
 	z-index: 2;
 	background: var(--strip-background);
 }
-/* The bar after the last tab, on the left of the button. It is as long as the
+/* The bar after the last tab, at the start of the button. It is as long as the
    bars between the tabs, half the height of a tab, which is the strip without
    its top padding. It goes when the last tab is active or under the mouse, as
    the bars beside such a tab do. */
 #new-tab::before {
 	content: '';
 	position: absolute;
-	left: -4px;
+	inset-inline-start: -4px;
 	top: calc(50% - (100vh - 4px) / 4);
 	width: 1px;
 	height: calc((100vh - 4px) / 2);
@@ -240,7 +244,7 @@ body {
 /* The active tab's box covers the start of the button, and it takes the
    clicks there although that part is not painted. */
 .tab.active + #new-tab {
-	margin-left: calc(4px + var(--tab-radius));
+	margin-inline-start: calc(4px + var(--tab-radius));
 }
 #new-tab:hover {
 	background: var(--strip-hover);

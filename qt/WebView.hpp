@@ -62,6 +62,10 @@ Bridge* attachRemoteBridge(QWebEnginePage* page,
 void addRemoteCoolParams(QUrl& url, const coda::DocumentData& document);
 } // namespace coda
 
+// The language of the user interface, such as "pt-BR", from the locale environment variables, or
+// "en-US" when they name none.
+std::string getUILanguage();
+
 // The user's portal "color-scheme" preference, cached on first call to avoid a
 // D-Bus round-trip per tab: true = dark, false = light, nullopt = no preference.
 std::optional<bool> portalPrefersDark();
