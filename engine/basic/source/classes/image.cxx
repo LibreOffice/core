@@ -694,12 +694,12 @@ const SbxObject* SbiImage::FindType (const OUString& aTypeName) const
 
 sal_uInt16 SbiImage::CalcLegacyOffset( sal_Int32 nOffset )
 {
-    return SbiCodeGen::calcLegacyOffSet(aCode.data(), nOffset);
+    return SbiCodeGen::calcLegacyOffSet(aCode.data(), aCode.size(), nOffset);
 }
 
 sal_uInt32 SbiImage::CalcNewOffset( sal_Int16 nOffset )
 {
-    return SbiCodeGen::calcNewOffSet(aLegacyPCode.data(), nOffset);
+    return SbiCodeGen::calcNewOffSet(aLegacyPCode.data(), aLegacyPCode.size(), nOffset);
 }
 
 void  SbiImage::ReleaseLegacyBuffer()

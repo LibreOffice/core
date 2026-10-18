@@ -31,6 +31,7 @@
 #include <algorithm>
 #include <osl/diagnose.h>
 #include <rtl/ustrbuf.hxx>
+#include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 #include <com/sun/star/script/ModuleType.hpp>
 
@@ -396,7 +397,7 @@ class PCodeVisitor
 public:
     virtual ~PCodeVisitor();
 
-    virtual void start( const sal_uInt8* pStart ) = 0;
+    virtual void start( const sal_uInt8* pStart, std::size_t nSize ) = 0;
     virtual void processOpCode0( SbiOpcode eOp ) = 0;
     virtual void processOpCode1( SbiOpcode eOp, T nOp1 ) = 0;
     virtual void processOpCode2( SbiOpcode eOp, T nOp1, T nOp2 ) = 0;
@@ -433,7 +434,7 @@ public:
         if ( !pCode )
             return;
         const sal_uInt8* pEnd = pCode + m_nBytes;
-        visitor.start( m_pCode );
+        visitor.start( m_pCode, m_nBytes );
         T nOp1 = 0, nOp2 = 0;
         for( ; pCode < pEnd; )
         {
@@ -443,6 +444,8 @@ public:
                 visitor.processOpCode0( eOp );
             else if( eOp >= SbiOpcode::SbOP1_START && eOp <= SbiOpcode::SbOP1_END )
             {
+                if (o3tl::make_unsigned(pEnd - pCode) < sizeof(T))
+                    break;
                 if ( visitor.processParams() )
                     nOp1 = readParam( pCode );
                 else
@@ -451,6 +454,8 @@ public:
             }
             else if( eOp >= SbiOpcode::SbOP2_START && eOp <= SbiOpcode::SbOP2_END )
             {
+                if (o3tl::make_unsigned(pEnd - pCode) < sizeof(T) * 2)
+                    break;
                 if ( visitor.processParams() )
                 {
                     nOp1 = readParam( pCode );
@@ -473,7 +478,7 @@ class OffSetAccumulator : public PCodeVisitor< T >
 public:
 
     OffSetAccumulator() : m_nNumOp0(0), m_nNumSingleParams(0), m_nNumDoubleParams(0){}
-    virtual void start( const sal_uInt8* /*pStart*/ ) override {}
+    virtual void start( const sal_uInt8* /*pStart*/, std::size_t /*nSize*/ ) override {}
     virtual void processOpCode0( SbiOpcode /*eOp*/ ) override { ++m_nNumOp0; }
     virtual void processOpCode1( SbiOpcode /*eOp*/, T /*nOp1*/ ) override {  ++m_nNumSingleParams; }
     virtual void processOpCode2( SbiOpcode /*eOp*/, T /*nOp1*/, T /*nOp2*/ ) override { ++m_nNumDoubleParams; }
@@ -493,10 +498,15 @@ template < class T, class S >
 class BufferTransformer : public PCodeVisitor< T >
 {
     const sal_uInt8* m_pStart;
+    std::size_t m_nSize;
     SbiBuffer m_ConvertedBuf;
 public:
-    BufferTransformer():m_pStart(nullptr) {}
-    virtual void start( const sal_uInt8* pStart ) override { m_pStart = pStart; }
+    BufferTransformer():m_pStart(nullptr), m_nSize(0) {}
+    virtual void start( const sal_uInt8* pStart, std::size_t nSize ) override
+    {
+        m_pStart = pStart;
+        m_nSize = nSize;
+    }
     virtual void processOpCode0( SbiOpcode eOp ) override
     {
         m_ConvertedBuf += static_cast<sal_uInt8>(eOp);
@@ -514,11 +524,11 @@ public:
             case SbiOpcode::RETURN_:
             case SbiOpcode::ERRHDL_:
             case SbiOpcode::TESTFOR_:
-                nOp1 = static_cast<T>( convertBufferOffSet(m_pStart, nOp1) );
+                nOp1 = static_cast<T>( convertBufferOffSet(m_pStart, m_nSize, nOp1) );
                 break;
             case SbiOpcode::RESUME_:
                 if ( nOp1 > 1 )
-                    nOp1 = static_cast<T>( convertBufferOffSet(m_pStart, nOp1) );
+                    nOp1 = static_cast<T>( convertBufferOffSet(m_pStart, m_nSize, nOp1) );
                 break;
             default:
                 break;
@@ -530,7 +540,7 @@ public:
     {
         m_ConvertedBuf += static_cast<sal_uInt8>(eOp);
         if ( eOp == SbiOpcode::CASEIS_  && nOp1 )
-            nOp1 = static_cast<T>( convertBufferOffSet(m_pStart, nOp1) );
+            nOp1 = static_cast<T>( convertBufferOffSet(m_pStart, m_nSize, nOp1) );
         m_ConvertedBuf += static_cast<S>(nOp1);
         m_ConvertedBuf += static_cast<S>(nOp2);
 
@@ -543,9 +553,10 @@ public:
     {
         return m_ConvertedBuf;
     }
-    static S convertBufferOffSet( const sal_uInt8* pStart, T nOp1 )
+    // The offset counts the code from its start up to nOp1, or up to its end if that comes first.
+    static S convertBufferOffSet( const sal_uInt8* pStart, std::size_t nSize, T nOp1 )
     {
-        PCodeBufferWalker< T > aBuff( pStart, nOp1);
+        PCodeBufferWalker< T > aBuff( pStart, static_cast<T>(std::min<std::size_t>(nOp1, nSize)));
         OffSetAccumulator< T, S > aVisitor;
         aBuff.visitBuffer( aVisitor );
         return aVisitor.offset();
@@ -555,15 +566,15 @@ public:
 }
 
 sal_uInt32
-SbiCodeGen::calcNewOffSet( sal_uInt8 const * pCode, sal_uInt16 nOffset )
+SbiCodeGen::calcNewOffSet( sal_uInt8 const * pCode, std::size_t nCodeSize, sal_uInt16 nOffset )
 {
-    return BufferTransformer< sal_uInt16, sal_uInt32 >::convertBufferOffSet( pCode, nOffset );
+    return BufferTransformer< sal_uInt16, sal_uInt32 >::convertBufferOffSet( pCode, nCodeSize, nOffset );
 }
 
 sal_uInt16
-SbiCodeGen::calcLegacyOffSet( sal_uInt8 const * pCode, sal_uInt32 nOffset )
+SbiCodeGen::calcLegacyOffSet( sal_uInt8 const * pCode, std::size_t nCodeSize, sal_uInt32 nOffset )
 {
-    return BufferTransformer< sal_uInt32, sal_uInt16 >::convertBufferOffSet( pCode, nOffset );
+    return BufferTransformer< sal_uInt32, sal_uInt16 >::convertBufferOffSet( pCode, nCodeSize, nOffset );
 }
 
 template <class T, class S>
