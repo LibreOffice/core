@@ -9358,7 +9358,7 @@ void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
     if (GetProperty(rXPropSet, u"SoftEdgeRadius"_ustr))
         mAny >>= nSoftEdgeRadius;
     bool bHasReflection = false;
-    if (GetProperty(rXPropSet, u"ReflectionEffect"_ustr))
+    if (GetProperty(rXPropSet, u"ReflectionEffectEnabled"_ustr))
         mAny >>= bHasReflection;
 
     // An imported effect list is written even when all its effects are off, because an effect
@@ -9517,11 +9517,11 @@ sal_Int32 toWholePercent(sal_Int32 nThousandthsOfPercent)
 void DrawingML::WriteReflectionEffect(const Reference<XPropertySet>& rXPropSet,
                                       const Sequence<PropertyValue>& rStoredEffect)
 {
-    if (!rXPropSet->getPropertySetInfo()->hasPropertyByName(u"ReflectionEffect"_ustr))
+    if (!rXPropSet->getPropertySetInfo()->hasPropertyByName(u"ReflectionEffectEnabled"_ustr))
         return;
 
     bool bReflection = false;
-    rXPropSet->getPropertyValue(u"ReflectionEffect"_ustr) >>= bReflection;
+    rXPropSet->getPropertyValue(u"ReflectionEffectEnabled"_ustr) >>= bReflection;
     if (!bReflection)
         return;
 

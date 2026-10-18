@@ -178,7 +178,7 @@ const XMLPropertyMapEntry aXMLSDProperties[] =
     GMAPV( PROP_SoftEdgeRadius,                XML_NAMESPACE_LO_EXT, XML_SOFTEDGE_RADIUS,      XML_TYPE_MEASURE          , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
 
     // reflection attributes
-    GMAPV( PROP_ReflectionEffect,                   XML_NAMESPACE_CO_EXT, XML_REFLECTION,                    XML_TYPE_BOOL     , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
+    GMAPV( PROP_ReflectionEffectEnabled,            XML_NAMESPACE_CO_EXT, XML_REFLECTION,                    XML_TYPE_BOOL     , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
     GMAPV( PROP_ReflectionEffectDistance,           XML_NAMESPACE_CO_EXT, XML_REFLECTION_DISTANCE,           XML_TYPE_MEASURE  , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
     GMAPV( PROP_ReflectionEffectBlurRadius,         XML_NAMESPACE_CO_EXT, XML_REFLECTION_BLUR,               XML_TYPE_MEASURE  , 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),
     GMAPV( PROP_ReflectionEffectStartTransparency,  XML_NAMESPACE_CO_EXT, XML_REFLECTION_START_TRANSPARENCY, XML_TYPE_PERCENT16, 0, SvtSaveOptions::ODFSVER_FUTURE_EXTENDED),

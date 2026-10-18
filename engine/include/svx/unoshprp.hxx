@@ -23,6 +23,7 @@
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <com/sun/star/util/XComplexColor.hpp>
 #include <com/sun/star/util/XGlowEffect.hpp>
+#include <com/sun/star/util/XReflectionEffect.hpp>
 #include <com/sun/star/util/XSoftEdgeEffect.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <cpo/uno/Sequence.hxx>
@@ -227,13 +228,14 @@
     { u"SoftEdgeRadius"_ustr,      SDRATTR_SOFTEDGE, ::cppu::UnoType<sal_Int32>::get(),                  0, MID_SOFTEDGE_RADIUS},
 
 #define REFLECTION_PROPERTIES \
-    { u"ReflectionEffect"_ustr,                  SDRATTR_REFLECTION,                    cppu::UnoType<bool>::get(),         0, 0}, \
-    { u"ReflectionEffectDistance"_ustr,          SDRATTR_REFLECTION_DISTANCE,           ::cppu::UnoType<sal_Int32>::get(),  0, 0, PropertyMoreFlags::METRIC_ITEM}, \
-    { u"ReflectionEffectBlurRadius"_ustr,        SDRATTR_REFLECTION_BLUR_RADIUS,        ::cppu::UnoType<sal_Int32>::get(),  0, 0, PropertyMoreFlags::METRIC_ITEM}, \
-    { u"ReflectionEffectStartTransparency"_ustr, SDRATTR_REFLECTION_START_TRANSPARENCY, ::cppu::UnoType<sal_Int16>::get(),  0, 0}, \
-    { u"ReflectionEffectStartPosition"_ustr,     SDRATTR_REFLECTION_START_POSITION,     ::cppu::UnoType<sal_Int16>::get(),  0, 0}, \
-    { u"ReflectionEffectEndTransparency"_ustr,   SDRATTR_REFLECTION_END_TRANSPARENCY,   ::cppu::UnoType<sal_Int16>::get(),  0, 0}, \
-    { u"ReflectionEffectEndPosition"_ustr,       SDRATTR_REFLECTION_END_POSITION,       ::cppu::UnoType<sal_Int16>::get(),  0, 0},
+    { u"ReflectionEffect"_ustr,                  SDRATTR_REFLECTION, ::cppu::UnoType<css::util::XReflectionEffect>::get(), 0, MID_EFFECT}, \
+    { u"ReflectionEffectEnabled"_ustr,           SDRATTR_REFLECTION, cppu::UnoType<bool>::get(),                         0, MID_REFLECTION_ENABLED}, \
+    { u"ReflectionEffectDistance"_ustr,          SDRATTR_REFLECTION, ::cppu::UnoType<sal_Int32>::get(),                  0, MID_REFLECTION_DISTANCE}, \
+    { u"ReflectionEffectBlurRadius"_ustr,        SDRATTR_REFLECTION, ::cppu::UnoType<sal_Int32>::get(),                  0, MID_REFLECTION_BLUR_RADIUS}, \
+    { u"ReflectionEffectStartTransparency"_ustr, SDRATTR_REFLECTION, ::cppu::UnoType<sal_Int16>::get(),                  0, MID_REFLECTION_START_TRANSPARENCY}, \
+    { u"ReflectionEffectStartPosition"_ustr,     SDRATTR_REFLECTION, ::cppu::UnoType<sal_Int16>::get(),                  0, MID_REFLECTION_START_POSITION}, \
+    { u"ReflectionEffectEndTransparency"_ustr,   SDRATTR_REFLECTION, ::cppu::UnoType<sal_Int16>::get(),                  0, MID_REFLECTION_END_TRANSPARENCY}, \
+    { u"ReflectionEffectEndPosition"_ustr,       SDRATTR_REFLECTION, ::cppu::UnoType<sal_Int16>::get(),                  0, MID_REFLECTION_END_POSITION},
 
 #define GLOW_TEXT_PROPERTIES \
     { u"GlowTextEffectRadius"_ustr,      SDRATTR_GLOW_TEXT_RADIUS,         ::cppu::UnoType<sal_Int32>::get(),    0,      0, PropertyMoreFlags::METRIC_ITEM}, \

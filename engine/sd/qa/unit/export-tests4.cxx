@@ -72,7 +72,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest4, testReflection)
     // The first three shapes have a reflection, each with its own values, and they read back the
     // same.
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
-    CPPUNIT_ASSERT(xShape->getPropertyValue(u"ReflectionEffect"_ustr).get<bool>());
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"ReflectionEffectEnabled"_ustr).get<bool>());
     CPPUNIT_ASSERT_EQUAL(
         sal_Int32(18),
         xShape->getPropertyValue(u"ReflectionEffectBlurRadius"_ustr).get<sal_Int32>());
@@ -90,7 +90,7 @@ CPPUNIT_TEST_FIXTURE(SdExportTest4, testReflection)
         sal_Int32(141),
         xShape->getPropertyValue(u"ReflectionEffectDistance"_ustr).get<sal_Int32>());
     xShape.set(getShapeFromPage(3, 0));
-    CPPUNIT_ASSERT(!xShape->getPropertyValue(u"ReflectionEffect"_ustr).get<bool>());
+    CPPUNIT_ASSERT(!xShape->getPropertyValue(u"ReflectionEffectEnabled"_ustr).get<bool>());
 
     // The reflection is in the coext namespace of the graphic styles.
     xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);

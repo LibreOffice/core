@@ -59,6 +59,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <svl/intitem.hxx>
 #include <svl/srchitem.hxx>
+#include <svx/EffectItems.hxx>
 #include <svx/hlnkitem.hxx>
 #include <svx/svxids.hrc>
 #include <svx/documentbullets.hxx>
@@ -6542,18 +6543,15 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testReflectionCommands)
     pView->MarkObj(pViewShell->GetActualPage()->GetObj(3), pView->GetSdrPageView());
     Scheduler::ProcessEventsToIdle();
 
-    dispatchCommand(
-        mxComponent, u".uno:ReflectionEffect"_ustr,
-        comphelper::InitPropertySequence({ { u"ReflectionEffect"_ustr, cpo::uno::Any(true) } }));
-    dispatchCommand(mxComponent, u".uno:ReflectionDistance"_ustr,
+    // The command sets the whole reflection, and the values it lacks are the defaults.
+    dispatchCommand(mxComponent, u".uno:ReflectionEffect"_ustr,
                     comphelper::InitPropertySequence(
-                        { { u"ReflectionDistance"_ustr, cpo::uno::Any(sal_Int32(500)) } }));
-    dispatchCommand(mxComponent, u".uno:ReflectionEndPosition"_ustr,
-                    comphelper::InitPropertySequence(
-                        { { u"ReflectionEndPosition"_ustr, cpo::uno::Any(sal_Int16(70)) } }));
+                        { { u"ReflectionEffect.Enabled"_ustr, cpo::uno::Any(true) },
+                          { u"ReflectionEffect.Distance"_ustr, cpo::uno::Any(sal_Int32(500)) },
+                          { u"ReflectionEffect.EndPosition"_ustr, cpo::uno::Any(sal_Int16(70)) } }));
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(3, 0));
-    CPPUNIT_ASSERT(xShape->getPropertyValue(u"ReflectionEffect"_ustr).get<bool>());
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"ReflectionEffectEnabled"_ustr).get<bool>());
     CPPUNIT_ASSERT_EQUAL(
         sal_Int32(500),
         xShape->getPropertyValue(u"ReflectionEffectDistance"_ustr).get<sal_Int32>());
@@ -6561,19 +6559,15 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testReflectionCommands)
         sal_Int16(70),
         xShape->getPropertyValue(u"ReflectionEffectEndPosition"_ustr).get<sal_Int16>());
 
-    // The state of the selected shape reads back through the same slots, the way the sidebar
+    // The state of the selected shape reads back through the same slot, the way the sidebar
     // sees it.
     SfxDispatcher* pDispatcher = pViewShell->GetViewFrame()->GetDispatcher();
     SfxPoolItemHolder aResult;
     CPPUNIT_ASSERT(pDispatcher->QueryState(SID_ATTR_REFLECTION, aResult) >= SfxItemState::DEFAULT);
-    auto pOnOff = dynamic_cast<const SfxBoolItem*>(aResult.getItem());
-    CPPUNIT_ASSERT(pOnOff);
-    CPPUNIT_ASSERT(pOnOff->GetValue());
-    CPPUNIT_ASSERT(pDispatcher->QueryState(SID_ATTR_REFLECTION_END_POSITION, aResult)
-                   >= SfxItemState::DEFAULT);
-    auto pSize = dynamic_cast<const SfxUInt16Item*>(aResult.getItem());
-    CPPUNIT_ASSERT(pSize);
-    CPPUNIT_ASSERT_EQUAL(sal_uInt16(70), pSize->GetValue());
+    auto pReflection = dynamic_cast<const SdrReflectionEffectItem*>(aResult.getItem());
+    CPPUNIT_ASSERT(pReflection);
+    CPPUNIT_ASSERT(pReflection->isEnabled());
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(70), pReflection->getEndPosition());
 }
 
 namespace

@@ -280,17 +280,18 @@ namespace drawinglayer
 
         attribute::ReflectionAttribute createNewReflectionAttribute(const SfxItemSet& rSet)
         {
-            if (!rSet.Get(SDRATTR_REFLECTION).GetValue())
+            const SdrReflectionEffectItem& rReflectionItem = rSet.Get(SDRATTR_REFLECTION);
+            if (!rReflectionItem.isEnabled())
                 return attribute::ReflectionAttribute();
 
-            // The items hold percentages, the attribute holds fractions.
+            // The effect has the alphas and the positions in 1/1000 percent, and the attribute
+            // has transparencies and positions as fractions.
+            const model::ReflectionEffect& rReflection = rReflectionItem.getEffect();
             return attribute::ReflectionAttribute(
-                rSet.Get(SDRATTR_REFLECTION_DISTANCE).GetValue(),
-                rSet.Get(SDRATTR_REFLECTION_BLUR_RADIUS).GetValue(),
-                rSet.Get(SDRATTR_REFLECTION_START_TRANSPARENCY).GetValue() / 100.0,
-                rSet.Get(SDRATTR_REFLECTION_START_POSITION).GetValue() / 100.0,
-                rSet.Get(SDRATTR_REFLECTION_END_TRANSPARENCY).GetValue() / 100.0,
-                rSet.Get(SDRATTR_REFLECTION_END_POSITION).GetValue() / 100.0);
+                toModelUnit(rSet, SDRATTR_REFLECTION, rReflection.maDistance),
+                toModelUnit(rSet, SDRATTR_REFLECTION, rReflection.maBlurRadius),
+                1.0 - rReflection.mnStartAlpha / 100000.0, rReflection.mnStartPosition / 100000.0,
+                1.0 - rReflection.mnEndAlpha / 100000.0, rReflection.mnEndPosition / 100000.0);
         }
     } // end of anonymous namespace
 } // end of namespace drawinglayer

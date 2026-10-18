@@ -101,7 +101,7 @@
 #define MID_CHART_GRADIENT_PRESET_VARIATION 0
 #define MID_CHART_GRADIENT_PRESET_TYPE 1
 
-// SdrGlowEffectItem, SdrSoftEdgeEffectItem
+// SdrGlowEffectItem, SdrSoftEdgeEffectItem, SdrReflectionEffectItem
 #define MID_EFFECT                  0
 #define MID_EFFECT_JSON             1
 #define MID_GLOW_RADIUS             2
@@ -109,6 +109,15 @@
 #define MID_GLOW_COMPLEX_COLOR      4
 #define MID_GLOW_TRANSPARENCY       5
 #define MID_SOFTEDGE_RADIUS         2
+
+// SdrReflectionEffectItem, with MID_EFFECT and MID_EFFECT_JSON
+#define MID_REFLECTION_ENABLED              2
+#define MID_REFLECTION_DISTANCE             3
+#define MID_REFLECTION_BLUR_RADIUS          4
+#define MID_REFLECTION_START_TRANSPARENCY   5
+#define MID_REFLECTION_START_POSITION       6
+#define MID_REFLECTION_END_TRANSPARENCY     7
+#define MID_REFLECTION_END_POSITION         8
 
 #endif
 

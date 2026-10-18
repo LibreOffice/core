@@ -14,6 +14,7 @@
 #include <svl/poolitem.hxx>
 #include <svx/svxdllapi.h>
 #include <docmodel/effect/GlowEffect.hxx>
+#include <docmodel/effect/ReflectionEffect.hxx>
 #include <docmodel/effect/SoftEdgeEffect.hxx>
 #include <tools/color.hxx>
 
@@ -83,6 +84,53 @@ public:
 
     bool operator==(const SfxPoolItem& rItem) const override;
     SdrSoftEdgeEffectItem* Clone(SfxItemPool* pPool = nullptr) const override;
+    bool QueryValue(cpo::uno::Any& rValue, sal_uInt8 nMemberId = 0) const override;
+    bool PutValue(const cpo::uno::Any& rValue, sal_uInt8 nMemberId) override;
+    boost::property_tree::ptree dumpAsJSON() const override;
+};
+
+/** The reflection of a shape, and whether the shape has it. A reflection that is off keeps its
+    values, so turning it on again brings them back.
+
+    The default is a plain mirror image below the shape, which is how the reflection is drawn and
+    what the reflection presets use, so a reflection made in the document matches what is drawn.
+
+    The members of the item for UNO are MID_EFFECT for the XReflectionEffect, MID_EFFECT_JSON for
+    the JSON of model::effect::convertToJSON, MID_REFLECTION_ENABLED, MID_REFLECTION_DISTANCE and
+    MID_REFLECTION_BLUR_RADIUS (1/100 mm), and the transparencies and positions of the fade in
+    percent.
+ */
+class SVXCORE_DLLPUBLIC SdrReflectionEffectItem final : public SfxPoolItem
+{
+    bool mbEnabled = false;
+    model::ReflectionEffect maEffect;
+
+public:
+    DECLARE_ITEM_TYPE_FUNCTION(SdrReflectionEffectItem)
+    explicit SdrReflectionEffectItem(TypedWhichId<SdrReflectionEffectItem> nWhich);
+    static SfxPoolItem* CreateDefault();
+
+    bool isEnabled() const { return mbEnabled; }
+    void setEnabled(bool bEnabled) { mbEnabled = bEnabled; }
+    model::ReflectionEffect const& getEffect() const { return maEffect; }
+
+    void setDistance(gfx::Length aDistance) { maEffect.maDistance = aDistance; }
+    void setBlurRadius(gfx::Length aBlurRadius) { maEffect.maBlurRadius = aBlurRadius; }
+
+    /// The transparency where the fade starts and ends, in percent.
+    sal_Int16 getStartTransparency() const;
+    sal_Int16 getEndTransparency() const;
+    void setStartTransparency(sal_Int16 nTransparency);
+    void setEndTransparency(sal_Int16 nTransparency);
+
+    /// The position where the fade starts and ends, in percent of the height of the reflection.
+    sal_Int16 getStartPosition() const;
+    sal_Int16 getEndPosition() const;
+    void setStartPosition(sal_Int16 nPosition);
+    void setEndPosition(sal_Int16 nPosition);
+
+    bool operator==(const SfxPoolItem& rItem) const override;
+    SdrReflectionEffectItem* Clone(SfxItemPool* pPool = nullptr) const override;
     bool QueryValue(cpo::uno::Any& rValue, sal_uInt8 nMemberId = 0) const override;
     bool PutValue(const cpo::uno::Any& rValue, sal_uInt8 nMemberId) override;
     boost::property_tree::ptree dumpAsJSON() const override;

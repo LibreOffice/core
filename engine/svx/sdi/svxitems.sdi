@@ -247,6 +247,19 @@ struct SdrSoftEdgeEffect
 };
 item SdrSoftEdgeEffect SdrSoftEdgeEffectItem;
 
+struct SdrReflectionEffect
+{
+    BOOL   Enabled          MID_REFLECTION_ENABLED;
+    String JSON             MID_EFFECT_JSON;
+    INT32  Distance         MID_REFLECTION_DISTANCE;
+    INT32  BlurRadius       MID_REFLECTION_BLUR_RADIUS;
+    INT16  StartTransparency MID_REFLECTION_START_TRANSPARENCY;
+    INT16  StartPosition    MID_REFLECTION_START_POSITION;
+    INT16  EndTransparency  MID_REFLECTION_END_TRANSPARENCY;
+    INT16  EndPosition      MID_REFLECTION_END_POSITION;
+};
+item SdrReflectionEffect SdrReflectionEffectItem;
+
 item BYTE                   SfxGlobalNameItem;
 
 struct SvxCrossedOut

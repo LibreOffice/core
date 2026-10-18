@@ -98,7 +98,7 @@ insertReflectedShape(const uno::Reference<lang::XComponent>& xComponent,
         ->add(xShape);
 
     auto xProperties = xShape.queryThrow<beans::XPropertySet>();
-    xProperties->setPropertyValue(u"ReflectionEffect"_ustr, cpo::uno::Any(true));
+    xProperties->setPropertyValue(u"ReflectionEffectEnabled"_ustr, cpo::uno::Any(true));
     xProperties->setPropertyValue(u"ReflectionEffectDistance"_ustr, cpo::uno::Any(sal_Int32(100)));
     xProperties->setPropertyValue(u"ReflectionEffectBlurRadius"_ustr, cpo::uno::Any(sal_Int32(50)));
     xProperties->setPropertyValue(u"ReflectionEffectStartTransparency"_ustr,
@@ -532,7 +532,7 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testReflectionOfShape)
     assertXPath(pDocument, "//reflection", "endposition", u"0.25");
 
     // Turning the reflection off keeps the other values but removes the reflection.
-    xShape.queryThrow<beans::XPropertySet>()->setPropertyValue(u"ReflectionEffect"_ustr,
+    xShape.queryThrow<beans::XPropertySet>()->setPropertyValue(u"ReflectionEffectEnabled"_ustr,
                                                                cpo::uno::Any(false));
     pDocument = aDumper.dumpAndParse(renderPageToPrimitives(xDrawPage));
     assertXPath(pDocument, "//reflection", 0);

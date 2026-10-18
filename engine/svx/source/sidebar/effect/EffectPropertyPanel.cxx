@@ -15,9 +15,6 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <sfx2/dispatch.hxx>
 #include <svx/colorbox.hxx>
-#include <svx/sdmetitm.hxx>
-#include <svx/sdooitm.hxx>
-#include <svx/sdprcitm.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svxids.hrc>
 #include <svl/itemset.hxx>
@@ -46,10 +43,6 @@ EffectPropertyPanel::EffectPropertyPanel(weld::Widget* pParent, SfxBindings* pBi
     , maGlowController(SID_ATTR_GLOW, *pBindings, *this)
     , maSoftEdgeController(SID_ATTR_SOFTEDGE, *pBindings, *this)
     , maReflectionController(SID_ATTR_REFLECTION, *pBindings, *this)
-    , maReflectionTransparencyController(SID_ATTR_REFLECTION_START_TRANSPARENCY, *pBindings, *this)
-    , maReflectionSizeController(SID_ATTR_REFLECTION_END_POSITION, *pBindings, *this)
-    , maReflectionDistanceController(SID_ATTR_REFLECTION_DISTANCE, *pBindings, *this)
-    , maReflectionBlurController(SID_ATTR_REFLECTION_BLUR_RADIUS, *pBindings, *this)
 {
     // The reflection section is in the shared layout but shows only for shapes.
     mxReflectionFrame->show();
@@ -77,10 +70,6 @@ EffectPropertyPanel::~EffectPropertyPanel()
     maGlowController.dispose();
     maSoftEdgeController.dispose();
     maReflectionController.dispose();
-    maReflectionTransparencyController.dispose();
-    maReflectionSizeController.dispose();
-    maReflectionDistanceController.dispose();
-    maReflectionBlurController.dispose();
 }
 
 void EffectPropertyPanel::NotifyItemUpdate(const sal_uInt16 nSID, const SfxItemState eState,
@@ -90,40 +79,29 @@ void EffectPropertyPanel::NotifyItemUpdate(const sal_uInt16 nSID, const SfxItemS
     switch (nSID)
     {
         case SID_ATTR_REFLECTION:
+        {
             mbReflectionAvailable = eState != SfxItemState::DISABLED;
             mxReflection->set_sensitive(mbReflectionAvailable);
-            if (const auto* pItem = dynamic_cast<const SfxBoolItem*>(pState);
-                bDefaultOrSet && pItem)
-                mxReflection->set_active(pItem->GetValue());
-            else
+            const auto* pItem
+                = bDefaultOrSet ? dynamic_cast<const SdrReflectionEffectItem*>(pState) : nullptr;
+            if (!pItem)
+            {
+                mpReflection.reset();
                 mxReflection->set_state(TRISTATE_INDET);
-            break;
-        case SID_ATTR_REFLECTION_START_TRANSPARENCY:
-            if (const auto* pItem = dynamic_cast<const SdrPercentItem*>(pState);
-                bDefaultOrSet && pItem)
-            {
-                mxReflectionTransparency->set_value(pItem->GetValue(), FieldUnit::PERCENT);
-                mxReflectionTransparencySlider->set_value(pItem->GetValue());
+                break;
             }
+            mpReflection.reset(pItem->Clone());
+            mxReflection->set_active(pItem->isEnabled());
+            mxReflectionTransparency->set_value(pItem->getStartTransparency(), FieldUnit::PERCENT);
+            mxReflectionTransparencySlider->set_value(pItem->getStartTransparency());
+            mxReflectionSize->set_value(pItem->getEndPosition(), FieldUnit::PERCENT);
+            mxReflectionSizeSlider->set_value(pItem->getEndPosition());
+            mxReflectionDistance->set_value(pItem->getEffect().maDistance.as_hmm<sal_Int64>(),
+                                            FieldUnit::MM_100TH);
+            mxReflectionBlur->set_value(pItem->getEffect().maBlurRadius.as_hmm<sal_Int64>(),
+                                        FieldUnit::MM_100TH);
             break;
-        case SID_ATTR_REFLECTION_END_POSITION:
-            if (const auto* pItem = dynamic_cast<const SdrPercentItem*>(pState);
-                bDefaultOrSet && pItem)
-            {
-                mxReflectionSize->set_value(pItem->GetValue(), FieldUnit::PERCENT);
-                mxReflectionSizeSlider->set_value(pItem->GetValue());
-            }
-            break;
-        case SID_ATTR_REFLECTION_DISTANCE:
-            if (const auto* pItem = dynamic_cast<const SdrMetricItem*>(pState);
-                bDefaultOrSet && pItem)
-                mxReflectionDistance->set_value(pItem->GetValue(), FieldUnit::MM_100TH);
-            break;
-        case SID_ATTR_REFLECTION_BLUR_RADIUS:
-            if (const auto* pItem = dynamic_cast<const SdrMetricItem*>(pState);
-                bDefaultOrSet && pItem)
-                mxReflectionBlur->set_value(pItem->GetValue(), FieldUnit::MM_100TH);
-            break;
+        }
         default:
             EffectPropertyPanelBase::NotifyItemUpdate(nSID, eState, pState);
             return;
@@ -148,10 +126,26 @@ void EffectPropertyPanel::UpdateReflectionControls()
     mxReflectionBlur->set_sensitive(bEnabled);
 }
 
+SdrReflectionEffectItem EffectPropertyPanel::getReflection() const
+{
+    if (mpReflection)
+        return *mpReflection;
+    return SdrReflectionEffectItem(SDRATTR_REFLECTION);
+}
+
+void EffectPropertyPanel::setReflection(const SdrReflectionEffectItem& rReflection)
+{
+    // The next change starts from this one, also before the state of the selection comes back.
+    mpReflection.reset(rReflection.Clone());
+    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_REFLECTION, SfxCallMode::SLOT,
+                                             { &rReflection });
+}
+
 IMPL_LINK_NOARG(EffectPropertyPanel, ToggleReflectionHdl, weld::Toggleable&, void)
 {
-    const SdrOnOffItem aItem(SDRATTR_REFLECTION, mxReflection->get_active());
-    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_REFLECTION, SfxCallMode::SLOT, { &aItem });
+    SdrReflectionEffectItem aReflection(getReflection());
+    aReflection.setEnabled(mxReflection->get_active());
+    setReflection(aReflection);
     UpdateReflectionControls();
 }
 
@@ -160,18 +154,18 @@ void EffectPropertyPanel::SetReflectionTransparency(sal_uInt16 nTransparency)
 {
     mxReflectionTransparency->set_value(nTransparency, FieldUnit::PERCENT);
     mxReflectionTransparencySlider->set_value(nTransparency);
-    const SdrPercentItem aItem(SDRATTR_REFLECTION_START_TRANSPARENCY, nTransparency);
-    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_REFLECTION_START_TRANSPARENCY,
-                                             SfxCallMode::SLOT, { &aItem });
+    SdrReflectionEffectItem aReflection(getReflection());
+    aReflection.setStartTransparency(nTransparency);
+    setReflection(aReflection);
 }
 
 void EffectPropertyPanel::SetReflectionSize(sal_uInt16 nSize)
 {
     mxReflectionSize->set_value(nSize, FieldUnit::PERCENT);
     mxReflectionSizeSlider->set_value(nSize);
-    const SdrPercentItem aItem(SDRATTR_REFLECTION_END_POSITION, nSize);
-    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_REFLECTION_END_POSITION, SfxCallMode::SLOT,
-                                             { &aItem });
+    SdrReflectionEffectItem aReflection(getReflection());
+    aReflection.setEndPosition(nSize);
+    setReflection(aReflection);
 }
 
 IMPL_LINK_NOARG(EffectPropertyPanel, ModifyReflectionTransparencyHdl, weld::MetricSpinButton&, void)
@@ -199,18 +193,16 @@ IMPL_LINK_NOARG(EffectPropertyPanel, ModifyReflectionSizeSliderHdl, weld::Scale&
 
 IMPL_LINK_NOARG(EffectPropertyPanel, ModifyReflectionDistanceHdl, weld::MetricSpinButton&, void)
 {
-    const SdrMetricItem aItem(SDRATTR_REFLECTION_DISTANCE,
-                              mxReflectionDistance->get_value(FieldUnit::MM_100TH));
-    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_REFLECTION_DISTANCE, SfxCallMode::SLOT,
-                                             { &aItem });
+    SdrReflectionEffectItem aReflection(getReflection());
+    aReflection.setDistance(gfx::Length::hmm(mxReflectionDistance->get_value(FieldUnit::MM_100TH)));
+    setReflection(aReflection);
 }
 
 IMPL_LINK_NOARG(EffectPropertyPanel, ModifyReflectionBlurHdl, weld::MetricSpinButton&, void)
 {
-    const SdrMetricItem aItem(SDRATTR_REFLECTION_BLUR_RADIUS,
-                              mxReflectionBlur->get_value(FieldUnit::MM_100TH));
-    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_REFLECTION_BLUR_RADIUS, SfxCallMode::SLOT,
-                                             { &aItem });
+    SdrReflectionEffectItem aReflection(getReflection());
+    aReflection.setBlurRadius(gfx::Length::hmm(mxReflectionBlur->get_value(FieldUnit::MM_100TH)));
+    setReflection(aReflection);
 }
 
 void EffectPropertyPanel::setGlow(const SdrGlowEffectItem& rGlow)

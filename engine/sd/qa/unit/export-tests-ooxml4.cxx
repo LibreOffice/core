@@ -1709,11 +1709,11 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testShapeReflectionEffect)
 
     // Edit the reflections: turn off the first, fade the second out further down, and give the
     // shape without a reflection one that stands off from it.
-    getShapeFromPage(0, 0)->setPropertyValue(u"ReflectionEffect"_ustr, cpo::uno::Any(false));
+    getShapeFromPage(0, 0)->setPropertyValue(u"ReflectionEffectEnabled"_ustr, cpo::uno::Any(false));
     getShapeFromPage(1, 0)->setPropertyValue(u"ReflectionEffectEndPosition"_ustr,
                                              cpo::uno::Any(sal_Int16(70)));
     uno::Reference<beans::XPropertySet> xNew(getShapeFromPage(3, 0));
-    xNew->setPropertyValue(u"ReflectionEffect"_ustr, cpo::uno::Any(true));
+    xNew->setPropertyValue(u"ReflectionEffectEnabled"_ustr, cpo::uno::Any(true));
     xNew->setPropertyValue(u"ReflectionEffectDistance"_ustr, cpo::uno::Any(sal_Int32(500)));
     xNew->setPropertyValue(u"ReflectionEffectStartTransparency"_ustr, cpo::uno::Any(sal_Int16(40)));
     save(TestFilter::PPTX);

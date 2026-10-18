@@ -1184,7 +1184,7 @@ struct ReflectionValues
 void assertReflection(const ReflectionValues& rExpected,
                       const uno::Reference<beans::XPropertySet>& xShape)
 {
-    CPPUNIT_ASSERT(xShape->getPropertyValue(u"ReflectionEffect"_ustr).get<bool>());
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"ReflectionEffectEnabled"_ustr).get<bool>());
     CPPUNIT_ASSERT_EQUAL(
         rExpected.nDistance,
         xShape->getPropertyValue(u"ReflectionEffectDistance"_ustr).get<sal_Int32>());
@@ -1228,7 +1228,7 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testReflectionImport)
     assertReflection({ 0, 0, 0, 0, 100, 100 }, xDefaults);
 
     uno::Reference<beans::XPropertySet> xNone(xDrawPage->getByIndex(3), uno::UNO_QUERY);
-    CPPUNIT_ASSERT(!xNone->getPropertyValue(u"ReflectionEffect"_ustr).get<bool>());
+    CPPUNIT_ASSERT(!xNone->getPropertyValue(u"ReflectionEffectEnabled"_ustr).get<bool>());
 
     // The reflection also stays in the stored effects, which keep the attributes that are not
     // shape properties, such as the vertical scale.

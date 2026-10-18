@@ -48,16 +48,17 @@ private:
 
     // False while the selection has no reflection items.
     bool mbReflectionAvailable = true;
+    /// The reflection of the selection, or none when the selection has no single reflection.
+    std::unique_ptr<SdrReflectionEffectItem> mpReflection;
 
     sfx2::sidebar::ControllerItem maGlowController;
     sfx2::sidebar::ControllerItem maSoftEdgeController;
     sfx2::sidebar::ControllerItem maReflectionController;
-    sfx2::sidebar::ControllerItem maReflectionTransparencyController;
-    sfx2::sidebar::ControllerItem maReflectionSizeController;
-    sfx2::sidebar::ControllerItem maReflectionDistanceController;
-    sfx2::sidebar::ControllerItem maReflectionBlurController;
 
     void UpdateReflectionControls();
+    /// The reflection that a change of one of its values starts from.
+    SdrReflectionEffectItem getReflection() const;
+    void setReflection(const SdrReflectionEffectItem& rReflection);
     void SetReflectionTransparency(sal_uInt16 nTransparency);
     void SetReflectionSize(sal_uInt16 nSize);
 

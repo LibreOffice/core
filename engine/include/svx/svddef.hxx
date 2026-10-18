@@ -119,6 +119,7 @@ class SdrOnePositionYItem;
 class SdrOneSizeHeightItem;
 class SdrOneSizeWidthItem;
 class SdrPercentItem;
+class SdrReflectionEffectItem;
 class SdrResizeXAllItem;
 class SdrResizeXOneItem;
 class SdrResizeYAllItem;
@@ -450,16 +451,10 @@ inline constexpr TypedWhichId<SfxBoolItem>       SDRATTR_EDGEOOXMLCURVE(SDRATTR_
 inline constexpr sal_uInt16                      SDRATTR_EDGEOOXMLCURVE_LAST(SDRATTR_EDGEOOXMLCURVE);      // 1251
 
 inline constexpr sal_uInt16                      SDRATTR_REFLECTION_FIRST(SDRATTR_EDGEOOXMLCURVE_LAST+1);               // 1252
-inline constexpr TypedWhichId<SdrOnOffItem>      SDRATTR_REFLECTION(SDRATTR_REFLECTION_FIRST+0);                        // 1252
-inline constexpr TypedWhichId<SdrMetricItem>     SDRATTR_REFLECTION_DISTANCE(SDRATTR_REFLECTION_FIRST+1);               // 1253
-inline constexpr TypedWhichId<SdrMetricItem>     SDRATTR_REFLECTION_BLUR_RADIUS(SDRATTR_REFLECTION_FIRST+2);            // 1254
-inline constexpr TypedWhichId<SdrPercentItem>    SDRATTR_REFLECTION_START_TRANSPARENCY(SDRATTR_REFLECTION_FIRST+3);     // 1255
-inline constexpr TypedWhichId<SdrPercentItem>    SDRATTR_REFLECTION_START_POSITION(SDRATTR_REFLECTION_FIRST+4);         // 1256
-inline constexpr TypedWhichId<SdrPercentItem>    SDRATTR_REFLECTION_END_TRANSPARENCY(SDRATTR_REFLECTION_FIRST+5);       // 1257
-inline constexpr TypedWhichId<SdrPercentItem>    SDRATTR_REFLECTION_END_POSITION(SDRATTR_REFLECTION_FIRST+6);           // 1258
-inline constexpr sal_uInt16                      SDRATTR_REFLECTION_LAST(SDRATTR_REFLECTION_END_POSITION);              // 1258
+inline constexpr TypedWhichId<SdrReflectionEffectItem> SDRATTR_REFLECTION(SDRATTR_REFLECTION_FIRST+0);                  // 1252
+inline constexpr sal_uInt16                      SDRATTR_REFLECTION_LAST(SDRATTR_REFLECTION);                           // 1252
 
-inline constexpr sal_uInt16 SDRATTR_END (SDRATTR_REFLECTION_LAST);      // 1258
+inline constexpr sal_uInt16 SDRATTR_END (SDRATTR_REFLECTION_LAST);      // 1252
 
 #endif // INCLUDED_SVX_SVDDEF_HXX
 

@@ -2682,7 +2682,7 @@ Reference< XShape > const & Shape::createAndInsert(
             const EffectReflectionProperties& rReflection = aEffectProperties.maReflection;
 
             uno::Reference<beans::XPropertySet> propertySet(mxShape, uno::UNO_QUERY);
-            propertySet->setPropertyValue(u"ReflectionEffect"_ustr, Any(true));
+            propertySet->setPropertyValue(u"ReflectionEffectEnabled"_ustr, Any(true));
             propertySet->setPropertyValue(u"ReflectionEffectDistance"_ustr,
                                           Any(rReflection.moDistance->as_hmm<sal_Int32>()));
             propertySet->setPropertyValue(u"ReflectionEffectBlurRadius"_ustr,

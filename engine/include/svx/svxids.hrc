@@ -1118,12 +1118,6 @@ class XFillGradientItem;
 #define SID_TABLE_STYLE_LIST                            TypedWhichId<SfxStringItem>( SID_SVX_START + 1263 )
 
 #define SID_ATTR_REFLECTION                             ( SID_SVX_START + 1264 )
-#define SID_ATTR_REFLECTION_DISTANCE                    ( SID_SVX_START + 1265 )
-#define SID_ATTR_REFLECTION_BLUR_RADIUS                 ( SID_SVX_START + 1266 )
-#define SID_ATTR_REFLECTION_START_TRANSPARENCY          ( SID_SVX_START + 1267 )
-#define SID_ATTR_REFLECTION_START_POSITION              ( SID_SVX_START + 1268 )
-#define SID_ATTR_REFLECTION_END_TRANSPARENCY            ( SID_SVX_START + 1269 )
-#define SID_ATTR_REFLECTION_END_POSITION                ( SID_SVX_START + 1270 )
 
 // The bullets that the document already uses, handed to a numbering tab page when its dialog is
 // built.

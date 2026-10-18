@@ -226,6 +226,7 @@ enum class SfxItemType : sal_uInt16
     SdrOneSizeWidthItemType,
     SdrOnOffItemType,
     SdrPercentItemType,
+    SdrReflectionEffectItemType,
     SdrResizeXAllItemType,
     SdrResizeXOneItemType,
     SdrResizeYAllItemType,

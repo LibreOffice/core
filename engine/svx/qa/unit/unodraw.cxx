@@ -22,6 +22,7 @@
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/util/XComplexColor.hpp>
 #include <com/sun/star/util/XGlowEffect.hpp>
+#include <com/sun/star/util/XReflectionEffect.hpp>
 #include <com/sun/star/util/XSoftEdgeEffect.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 
@@ -33,6 +34,7 @@
 #include <docmodel/theme/Theme.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
 #include <docmodel/uno/UnoGlowEffect.hxx>
+#include <docmodel/uno/UnoReflectionEffect.hxx>
 #include <docmodel/uno/UnoSoftEdgeEffect.hxx>
 #include <test/unoapixml_test.hxx>
 #include <unotools/tempfile.hxx>
@@ -411,6 +413,54 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testSoftEdgeEffectProperties)
                          xOtherProps->getPropertyValue(u"SoftEdgeRadius"_ustr).get<sal_Int32>());
 }
 
+CPPUNIT_TEST_FIXTURE(UnodrawTest, testEffectJSONTurnsTheEffectOnAndOff)
+{
+    SdrReflectionEffectItem aReflection(SDRATTR_REFLECTION);
+    CPPUNIT_ASSERT(!aReflection.isEnabled());
+
+    // The JSON of an effect that can be off has whether it is on, next to its values.
+    CPPUNIT_ASSERT(aReflection.PutValue(
+        uno::Any(u"{\"Enabled\":true,\"Distance\":36000}"_ustr), MID_EFFECT_JSON));
+    CPPUNIT_ASSERT(aReflection.isEnabled());
+    CPPUNIT_ASSERT_EQUAL(36000_emu, aReflection.getEffect().maDistance);
+
+    // The JSON that the item gives reads back to the same reflection.
+    uno::Any aJSON;
+    CPPUNIT_ASSERT(aReflection.QueryValue(aJSON, MID_EFFECT_JSON));
+    SdrReflectionEffectItem aCopy(SDRATTR_REFLECTION);
+    CPPUNIT_ASSERT(aCopy.PutValue(aJSON, MID_EFFECT_JSON));
+    CPPUNIT_ASSERT(aCopy.isEnabled());
+    CPPUNIT_ASSERT_EQUAL(36000_emu, aCopy.getEffect().maDistance);
+}
+
+CPPUNIT_TEST_FIXTURE(UnodrawTest, testReflectionEffectObject)
+{
+    loadFromURL(u"private:factory/simpress"_ustr);
+    uno::Reference<beans::XPropertySet> xShapeProps(insertRectangle(mxComponent), uno::UNO_QUERY);
+    xShapeProps->setPropertyValue(u"ReflectionEffectEnabled"_ustr, uno::Any(true));
+    xShapeProps->setPropertyValue(u"ReflectionEffectDistance"_ustr, uno::Any(sal_Int32(250)));
+
+    // The whole reflection has the distance, and a new reflection is a mirror image below the
+    // shape.
+    uno::Reference<util::XReflectionEffect> xReflection;
+    CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"ReflectionEffect"_ustr) >>= xReflection);
+    std::optional<model::ReflectionEffect> oReflection
+        = model::effect::getFromXReflectionEffect(xReflection);
+    CPPUNIT_ASSERT(oReflection);
+    CPPUNIT_ASSERT_EQUAL(250_hmm, oReflection->maDistance);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(5400000), oReflection->mnDirection.get());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-100000), oReflection->mnScaleY);
+
+    // The whole reflection set on another shape gives it the same values, without turning the
+    // reflection on.
+    uno::Reference<beans::XPropertySet> xOtherProps(insertRectangle(mxComponent), uno::UNO_QUERY);
+    xOtherProps->setPropertyValue(u"ReflectionEffect"_ustr, uno::Any(xReflection));
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int32(250),
+        xOtherProps->getPropertyValue(u"ReflectionEffectDistance"_ustr).get<sal_Int32>());
+    CPPUNIT_ASSERT(!xOtherProps->getPropertyValue(u"ReflectionEffectEnabled"_ustr).get<bool>());
+}
+
 CPPUNIT_TEST_FIXTURE(UnodrawTest, testReflectionProperties)
 {
     loadFromURL(u"private:factory/simpress"_ustr);
@@ -418,7 +468,7 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testReflectionProperties)
 
     // A new shape has no reflection, and the values it would have fade from opaque at the shape
     // to invisible at the far end.
-    CPPUNIT_ASSERT(!xShapeProps->getPropertyValue(u"ReflectionEffect"_ustr).get<bool>());
+    CPPUNIT_ASSERT(!xShapeProps->getPropertyValue(u"ReflectionEffectEnabled"_ustr).get<bool>());
     CPPUNIT_ASSERT_EQUAL(
         sal_Int32(0),
         xShapeProps->getPropertyValue(u"ReflectionEffectDistance"_ustr).get<sal_Int32>());
@@ -439,11 +489,11 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testReflectionProperties)
         xShapeProps->getPropertyValue(u"ReflectionEffectEndPosition"_ustr).get<sal_Int16>());
 
     // Values set on the shape read back unchanged.
-    xShapeProps->setPropertyValue(u"ReflectionEffect"_ustr, cpo::uno::Any(true));
+    xShapeProps->setPropertyValue(u"ReflectionEffectEnabled"_ustr, cpo::uno::Any(true));
     xShapeProps->setPropertyValue(u"ReflectionEffectDistance"_ustr, cpo::uno::Any(sal_Int32(250)));
     xShapeProps->setPropertyValue(u"ReflectionEffectEndPosition"_ustr,
                                   cpo::uno::Any(sal_Int16(35)));
-    CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"ReflectionEffect"_ustr).get<bool>());
+    CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"ReflectionEffectEnabled"_ustr).get<bool>());
     CPPUNIT_ASSERT_EQUAL(
         sal_Int32(250),
         xShapeProps->getPropertyValue(u"ReflectionEffectDistance"_ustr).get<sal_Int32>());
