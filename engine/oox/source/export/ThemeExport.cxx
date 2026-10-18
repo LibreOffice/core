@@ -178,11 +178,39 @@ namespace
 {
 constexpr auto constTransformTypeTokenMap
     = frozen::make_unordered_map<model::TransformationType, sal_Int32>({
+        { model::TransformationType::Red, XML_red },
+        { model::TransformationType::RedMod, XML_redMod },
+        { model::TransformationType::RedOff, XML_redOff },
+        { model::TransformationType::Green, XML_green },
+        { model::TransformationType::GreenMod, XML_greenMod },
+        { model::TransformationType::GreenOff, XML_greenOff },
+        { model::TransformationType::Blue, XML_blue },
+        { model::TransformationType::BlueMod, XML_blueMod },
+        { model::TransformationType::BlueOff, XML_blueOff },
+        { model::TransformationType::Alpha, XML_alpha },
+        { model::TransformationType::AlphaMod, XML_alphaMod },
+        { model::TransformationType::AlphaOff, XML_alphaOff },
+        { model::TransformationType::Hue, XML_hue },
+        { model::TransformationType::HueMod, XML_hueMod },
+        { model::TransformationType::HueOff, XML_hueOff },
+        { model::TransformationType::Sat, XML_sat },
         { model::TransformationType::SatMod, XML_satMod },
-        { model::TransformationType::Tint, XML_tint },
-        { model::TransformationType::Shade, XML_shade },
+        { model::TransformationType::SatOff, XML_satOff },
+        { model::TransformationType::Lum, XML_lum },
         { model::TransformationType::LumMod, XML_lumMod },
         { model::TransformationType::LumOff, XML_lumOff },
+        { model::TransformationType::Shade, XML_shade },
+        { model::TransformationType::Tint, XML_tint },
+    });
+
+// The transformations that have no value.
+constexpr auto constTransformTypeNoValueTokenMap
+    = frozen::make_unordered_map<model::TransformationType, sal_Int32>({
+        { model::TransformationType::Gray, XML_gray },
+        { model::TransformationType::Comp, XML_comp },
+        { model::TransformationType::Inv, XML_inv },
+        { model::TransformationType::Gamma, XML_gamma },
+        { model::TransformationType::InvGamma, XML_invGamma },
     });
 
 constexpr auto constThemeColorTypeTokenMap
@@ -261,6 +289,12 @@ void ThemeExport::writeColorTransformations(
             mpFS->singleElementNS(XML_a, nToken, XML_val,
                                   OString::number(rTransformation.mnValue * 10));
         }
+        else if (auto iteratorNoValue
+                 = constTransformTypeNoValueTokenMap.find(rTransformation.meType);
+                 iteratorNoValue != constTransformTypeNoValueTokenMap.end())
+        {
+            mpFS->singleElementNS(XML_a, iteratorNoValue->second);
+        }
     }
 }
 
@@ -268,6 +302,7 @@ void ThemeExport::writeColorRGB(model::ComplexColor const& rComplexColor)
 {
     auto aColor = rComplexColor.getRGBColor();
     mpFS->startElementNS(XML_a, XML_srgbClr, XML_val, I32SHEX(sal_Int32(aColor)));
+    writeColorTransformations(rComplexColor.getTransformations());
     mpFS->endElementNS(XML_a, XML_srgbClr);
 }
 
@@ -312,7 +347,7 @@ void ThemeExport::writeColorSystem(model::ComplexColor const& rComplexColor)
         mpFS->startElementNS(XML_a, XML_sysClr, XML_val, sValue);
         //XML_lastClr
         writeColorTransformations(rComplexColor.getTransformations());
-        mpFS->endElementNS(XML_a, XML_schemeClr);
+        mpFS->endElementNS(XML_a, XML_sysClr);
     }
 }
 
