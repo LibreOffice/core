@@ -42,6 +42,9 @@
 #include <vcl/svapp.hxx>
 #include <atomic>
 #include <exception>
+#include <initializer_list>
+#include <utility>
+#include <comphelper/scopeguard.hxx>
 #include <thread>
 #include <iterator>
 
@@ -2454,6 +2457,87 @@ CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testPieChartPlotAreaMarginWithAutomaticLa
     // Chart use case - Width > Height
     // Load chart Chart_3_2 - 3cm x 2cm
     verify(u"Chart_3_2", Size(1300, 1300), Point(850, 350));
+}
+
+class WriteSymmetricErrorOnceOnModify final : public cppu::WeakImplHelper<util::XModifyListener>
+{
+    Reference<beans::XPropertySet> m_xLegacy;
+    OUString m_aName;
+    bool& m_rCalled;
+
+public:
+    WriteSymmetricErrorOnceOnModify(const Reference<beans::XPropertySet>& xLegacy, OUString aName,
+                                    bool& rCalled)
+        : m_xLegacy(xLegacy)
+        , m_aName(std::move(aName))
+        , m_rCalled(rCalled)
+    {
+    }
+
+    void modified(const lang::EventObject&) override
+    {
+        if (m_rCalled)
+            return;
+        m_rCalled = true;
+        m_xLegacy->setPropertyValue(m_aName, Any(0.8));
+    }
+
+    void disposing(const lang::EventObject&) override {}
+};
+
+template <typename Function>
+void withModifyListener(const Reference<util::XModifyBroadcaster>& xBroadcaster,
+                        const Reference<util::XModifyListener>& xListener, Function&& rOperation)
+{
+    xBroadcaster->addModifyListener(xListener);
+    const comphelper::ScopeGuard aRemove([&] { xBroadcaster->removeModifyListener(xListener); });
+    std::forward<Function>(rOperation)();
+}
+
+CPPUNIT_TEST_FIXTURE(Chart2ImportTest, testLegacySymmetricErrorReentrantWrites)
+{
+    struct Case
+    {
+        OUString aName;
+        sal_Int32 nStyle;
+    };
+    const Case aCases[] = { { u"PercentageError"_ustr, chart::ErrorBarStyle::RELATIVE },
+                            { u"ErrorMargin"_ustr, chart::ErrorBarStyle::ERROR_MARGIN } };
+    for (const auto& rCase : aCases)
+        for (const bool bReset : { false, true })
+        {
+            loadFromFile(u"ods/smoothedLines.ods");
+            Reference<chart2::XChartDocument> xNative = getChartDocFromSheet(0);
+            Reference<chart::XChartDocument> xLegacy(xNative, UNO_QUERY_THROW);
+            Reference<beans::XPropertySet> xProperties(
+                xLegacy->getDiagram()->getDataRowProperties(0));
+            Reference<beans::XPropertySet> xReentrant(
+                xLegacy->getDiagram()->getDataRowProperties(0));
+            CPPUNIT_ASSERT(xProperties != xReentrant);
+            Reference<beans::XPropertyState> xState(xProperties, UNO_QUERY_THROW);
+            xProperties->setPropertyValue(u"ErrorBarStyle"_ustr, Any(rCase.nStyle));
+            xProperties->setPropertyValue(rCase.aName, Any(2.5));
+            Reference<beans::XPropertySet> xSeries(getDataSeriesFromDoc(xNative, 0),
+                                                   UNO_QUERY_THROW);
+            Reference<beans::XPropertySet> xError;
+            CPPUNIT_ASSERT(xSeries->getPropertyValue(CHART_UNONAME_ERRORBAR_Y) >>= xError);
+            CPPUNIT_ASSERT_EQUAL(Any(2.5), xError->getPropertyValue(u"PositiveError"_ustr));
+            CPPUNIT_ASSERT_EQUAL(Any(2.5), xError->getPropertyValue(u"NegativeError"_ustr));
+
+            Reference<util::XModifyBroadcaster> xBroadcaster(xNative, UNO_QUERY_THROW);
+            bool bCalled = false;
+            Reference<util::XModifyListener> xListener(
+                new WriteSymmetricErrorOnceOnModify(xReentrant, rCase.aName, bCalled));
+            withModifyListener(xBroadcaster, xListener, [&] {
+                if (bReset)
+                    xState->setPropertyToDefault(rCase.aName);
+                else
+                    xProperties->setPropertyValue(rCase.aName, Any(0.0));
+            });
+            CPPUNIT_ASSERT(bCalled);
+            CPPUNIT_ASSERT_EQUAL(Any(0.8), xError->getPropertyValue(u"PositiveError"_ustr));
+            CPPUNIT_ASSERT_EQUAL(Any(0.8), xError->getPropertyValue(u"NegativeError"_ustr));
+        }
 }
 
 } // end of anonymous namespace

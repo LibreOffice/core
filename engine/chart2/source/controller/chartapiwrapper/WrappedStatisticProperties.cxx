@@ -492,10 +492,9 @@ void WrappedPercentageErrorProperty::setValueToSeries( const Reference< beans::X
     if( xErrorBarProperties.is() )
     {
         m_aOuterValue <<= aNewValue;
-        if( lcl_getErrorBarStyle( xErrorBarProperties ) == css::chart::ErrorBarStyle::RELATIVE )
+        if (lcl_getErrorBarStyle(xErrorBarProperties) == css::chart::ErrorBarStyle::RELATIVE)
         {
-            xErrorBarProperties->setPropertyValue( u"PositiveError"_ustr , m_aOuterValue );
-            xErrorBarProperties->setPropertyValue( u"NegativeError"_ustr , m_aOuterValue );
+            xErrorBarProperties->setPropertyValue(u"PercentageError"_ustr, m_aOuterValue);
         }
     }
 }
@@ -546,10 +545,9 @@ void WrappedErrorMarginProperty::setValueToSeries( const Reference< beans::XProp
     if( xErrorBarProperties.is() )
     {
         m_aOuterValue <<= aNewValue;
-        if( lcl_getErrorBarStyle( xErrorBarProperties ) == css::chart::ErrorBarStyle::ERROR_MARGIN )
+        if (lcl_getErrorBarStyle(xErrorBarProperties) == css::chart::ErrorBarStyle::ERROR_MARGIN)
         {
-            xErrorBarProperties->setPropertyValue( u"PositiveError"_ustr , m_aOuterValue );
-            xErrorBarProperties->setPropertyValue( u"NegativeError"_ustr , m_aOuterValue );
+            xErrorBarProperties->setPropertyValue(u"PercentageError"_ustr, m_aOuterValue);
         }
     }
 }
