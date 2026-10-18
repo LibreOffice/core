@@ -13,7 +13,9 @@
 
 #include <svl/poolitem.hxx>
 #include <svx/svxdllapi.h>
+#include <docmodel/effect/BlurEffect.hxx>
 #include <docmodel/effect/GlowEffect.hxx>
+#include <docmodel/effect/InnerShadowEffect.hxx>
 #include <docmodel/effect/ReflectionEffect.hxx>
 #include <docmodel/effect/SoftEdgeEffect.hxx>
 #include <tools/color.hxx>
@@ -131,6 +133,63 @@ public:
 
     bool operator==(const SfxPoolItem& rItem) const override;
     SdrReflectionEffectItem* Clone(SfxItemPool* pPool = nullptr) const override;
+    bool QueryValue(cpo::uno::Any& rValue, sal_uInt8 nMemberId = 0) const override;
+    bool PutValue(const cpo::uno::Any& rValue, sal_uInt8 nMemberId) override;
+    boost::property_tree::ptree dumpAsJSON() const override;
+};
+
+/** The blur of a shape, and whether the shape has it. A blur with a radius of 0 is a blur all the
+    same, so the item says whether there is one. Nothing draws the blur yet, so the item keeps it
+    for the round trip of the document.
+
+    The members of the item for UNO are MID_EFFECT for the XBlurEffect, MID_EFFECT_JSON for the JSON
+    of model::effect::convertToJSON, and MID_BLUR_ENABLED.
+ */
+class SVXCORE_DLLPUBLIC SdrBlurEffectItem final : public SfxPoolItem
+{
+    bool mbEnabled = false;
+    model::BlurEffect maEffect;
+
+public:
+    DECLARE_ITEM_TYPE_FUNCTION(SdrBlurEffectItem)
+    explicit SdrBlurEffectItem(TypedWhichId<SdrBlurEffectItem> nWhich);
+    static SfxPoolItem* CreateDefault();
+
+    bool isEnabled() const { return mbEnabled; }
+    void setEnabled(bool bEnabled) { mbEnabled = bEnabled; }
+    model::BlurEffect const& getEffect() const { return maEffect; }
+    void setEffect(model::BlurEffect const& rEffect) { maEffect = rEffect; }
+
+    bool operator==(const SfxPoolItem& rItem) const override;
+    SdrBlurEffectItem* Clone(SfxItemPool* pPool = nullptr) const override;
+    bool QueryValue(cpo::uno::Any& rValue, sal_uInt8 nMemberId = 0) const override;
+    bool PutValue(const cpo::uno::Any& rValue, sal_uInt8 nMemberId) override;
+    boost::property_tree::ptree dumpAsJSON() const override;
+};
+
+/** The inner shadow of a shape, and whether the shape has it. Nothing draws the inner shadow yet,
+    so the item keeps it for the round trip of the document.
+
+    The members of the item for UNO are MID_EFFECT for the XInnerShadowEffect, MID_EFFECT_JSON for
+    the JSON of model::effect::convertToJSON, and MID_INNER_SHADOW_ENABLED.
+ */
+class SVXCORE_DLLPUBLIC SdrInnerShadowEffectItem final : public SfxPoolItem
+{
+    bool mbEnabled = false;
+    model::InnerShadowEffect maEffect;
+
+public:
+    DECLARE_ITEM_TYPE_FUNCTION(SdrInnerShadowEffectItem)
+    explicit SdrInnerShadowEffectItem(TypedWhichId<SdrInnerShadowEffectItem> nWhich);
+    static SfxPoolItem* CreateDefault();
+
+    bool isEnabled() const { return mbEnabled; }
+    void setEnabled(bool bEnabled) { mbEnabled = bEnabled; }
+    model::InnerShadowEffect const& getEffect() const { return maEffect; }
+    void setEffect(model::InnerShadowEffect const& rEffect) { maEffect = rEffect; }
+
+    bool operator==(const SfxPoolItem& rItem) const override;
+    SdrInnerShadowEffectItem* Clone(SfxItemPool* pPool = nullptr) const override;
     bool QueryValue(cpo::uno::Any& rValue, sal_uInt8 nMemberId = 0) const override;
     bool PutValue(const cpo::uno::Any& rValue, sal_uInt8 nMemberId) override;
     boost::property_tree::ptree dumpAsJSON() const override;

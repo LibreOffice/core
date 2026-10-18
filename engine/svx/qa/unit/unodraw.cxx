@@ -20,8 +20,10 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
+#include <com/sun/star/util/XBlurEffect.hpp>
 #include <com/sun/star/util/XComplexColor.hpp>
 #include <com/sun/star/util/XGlowEffect.hpp>
+#include <com/sun/star/util/XInnerShadowEffect.hpp>
 #include <com/sun/star/util/XReflectionEffect.hpp>
 #include <com/sun/star/util/XSoftEdgeEffect.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
@@ -33,7 +35,9 @@
 #include <docmodel/theme/ColorSet.hxx>
 #include <docmodel/theme/Theme.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
+#include <docmodel/uno/UnoBlurEffect.hxx>
 #include <docmodel/uno/UnoGlowEffect.hxx>
+#include <docmodel/uno/UnoInnerShadowEffect.hxx>
 #include <docmodel/uno/UnoReflectionEffect.hxx>
 #include <docmodel/uno/UnoSoftEdgeEffect.hxx>
 #include <test/unoapixml_test.hxx>
@@ -459,6 +463,61 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testReflectionEffectObject)
         sal_Int32(250),
         xOtherProps->getPropertyValue(u"ReflectionEffectDistance"_ustr).get<sal_Int32>());
     CPPUNIT_ASSERT(!xOtherProps->getPropertyValue(u"ReflectionEffectEnabled"_ustr).get<bool>());
+}
+
+CPPUNIT_TEST_FIXTURE(UnodrawTest, testBlurEffectProperties)
+{
+    loadFromURL(u"private:factory/simpress"_ustr);
+    uno::Reference<beans::XPropertySet> xShapeProps(insertRectangle(mxComponent), uno::UNO_QUERY);
+
+    // A new shape has no blur.
+    CPPUNIT_ASSERT(!xShapeProps->getPropertyValue(u"BlurEffectEnabled"_ustr).get<bool>());
+
+    // A blur set on the shape reads back unchanged.
+    model::BlurEffect aBlur;
+    aBlur.maRadius = 12700_emu;
+    aBlur.mbGrow = false;
+    xShapeProps->setPropertyValue(u"BlurEffect"_ustr,
+                                  uno::Any(model::effect::createXBlurEffect(aBlur)));
+    xShapeProps->setPropertyValue(u"BlurEffectEnabled"_ustr, uno::Any(true));
+
+    uno::Reference<util::XBlurEffect> xBlur;
+    CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"BlurEffect"_ustr) >>= xBlur);
+    std::optional<model::BlurEffect> oBlur = model::effect::getFromXBlurEffect(xBlur);
+    CPPUNIT_ASSERT(oBlur);
+    CPPUNIT_ASSERT_EQUAL(12700_emu, oBlur->maRadius);
+    CPPUNIT_ASSERT(!oBlur->mbGrow);
+    CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"BlurEffectEnabled"_ustr).get<bool>());
+}
+
+CPPUNIT_TEST_FIXTURE(UnodrawTest, testInnerShadowEffectProperties)
+{
+    loadFromURL(u"private:factory/simpress"_ustr);
+    uno::Reference<beans::XPropertySet> xShapeProps(insertRectangle(mxComponent), uno::UNO_QUERY);
+
+    // A new shape has no inner shadow.
+    CPPUNIT_ASSERT(!xShapeProps->getPropertyValue(u"InnerShadowEffectEnabled"_ustr).get<bool>());
+
+    // An inner shadow set on the shape reads back unchanged, with its theme color.
+    model::InnerShadowEffect aInnerShadow;
+    aInnerShadow.maBlurRadius = 63500_emu;
+    aInnerShadow.maDistance = 38100_emu;
+    aInnerShadow.mnDirection = 2700000_deg60000;
+    aInnerShadow.maColor = model::ComplexColor::Theme(model::ThemeColorType::Accent3);
+    xShapeProps->setPropertyValue(u"InnerShadowEffect"_ustr,
+                                  uno::Any(model::effect::createXInnerShadowEffect(aInnerShadow)));
+    xShapeProps->setPropertyValue(u"InnerShadowEffectEnabled"_ustr, uno::Any(true));
+
+    uno::Reference<util::XInnerShadowEffect> xInnerShadow;
+    CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"InnerShadowEffect"_ustr) >>= xInnerShadow);
+    std::optional<model::InnerShadowEffect> oInnerShadow
+        = model::effect::getFromXInnerShadowEffect(xInnerShadow);
+    CPPUNIT_ASSERT(oInnerShadow);
+    CPPUNIT_ASSERT_EQUAL(63500_emu, oInnerShadow->maBlurRadius);
+    CPPUNIT_ASSERT_EQUAL(38100_emu, oInnerShadow->maDistance);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2700000), oInnerShadow->mnDirection.get());
+    CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent3, oInnerShadow->maColor.getThemeColorType());
+    CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"InnerShadowEffectEnabled"_ustr).get<bool>());
 }
 
 CPPUNIT_TEST_FIXTURE(UnodrawTest, testReflectionProperties)

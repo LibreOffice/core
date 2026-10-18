@@ -12,12 +12,16 @@
 #include <svx/EffectItems.hxx>
 #include <svx/unomid.hxx>
 
+#include <docmodel/effect/BlurEffectJSON.hxx>
 #include <docmodel/effect/GlowEffectJSON.hxx>
+#include <docmodel/effect/InnerShadowEffectJSON.hxx>
 #include <docmodel/effect/ReflectionEffectJSON.hxx>
 #include <docmodel/effect/SoftEdgeEffectJSON.hxx>
 #include <docmodel/theme/ColorSet.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
+#include <docmodel/uno/UnoBlurEffect.hxx>
 #include <docmodel/uno/UnoGlowEffect.hxx>
+#include <docmodel/uno/UnoInnerShadowEffect.hxx>
 #include <docmodel/uno/UnoReflectionEffect.hxx>
 #include <docmodel/uno/UnoSoftEdgeEffect.hxx>
 
@@ -492,6 +496,132 @@ bool SdrReflectionEffectItem::PutValue(const uno::Any& rValue, sal_uInt8 nMember
 }
 
 boost::property_tree::ptree SdrReflectionEffectItem::dumpAsJSON() const
+{
+    boost::property_tree::ptree aTree = dumpEffectAsJSON(SfxPoolItem::dumpAsJSON(), maEffect);
+    aTree.get_child("state").put("Enabled", mbEnabled);
+    return aTree;
+}
+
+SdrBlurEffectItem::SdrBlurEffectItem(TypedWhichId<SdrBlurEffectItem> nWhich)
+    : SfxPoolItem(nWhich)
+{
+}
+
+SfxPoolItem* SdrBlurEffectItem::CreateDefault()
+{
+    return new SdrBlurEffectItem(TypedWhichId<SdrBlurEffectItem>(0));
+}
+
+bool SdrBlurEffectItem::operator==(const SfxPoolItem& rItem) const
+{
+    if (!SfxPoolItem::operator==(rItem))
+        return false;
+    auto const& rOther = static_cast<const SdrBlurEffectItem&>(rItem);
+    return mbEnabled == rOther.mbEnabled && maEffect == rOther.maEffect;
+}
+
+SdrBlurEffectItem* SdrBlurEffectItem::Clone(SfxItemPool*) const
+{
+    return new SdrBlurEffectItem(*this);
+}
+
+bool SdrBlurEffectItem::QueryValue(uno::Any& rValue, sal_uInt8 nMemberId) const
+{
+    nMemberId &= ~CONVERT_TWIPS;
+    switch (nMemberId)
+    {
+        case MID_EFFECT:
+            rValue <<= model::effect::createXBlurEffect(maEffect);
+            return true;
+        case MID_EFFECT_JSON:
+            rValue <<= getEffectJSON(maEffect, mbEnabled);
+            return true;
+        case MID_BLUR_ENABLED:
+            rValue <<= mbEnabled;
+            return true;
+    }
+    return false;
+}
+
+bool SdrBlurEffectItem::PutValue(const uno::Any& rValue, sal_uInt8 nMemberId)
+{
+    nMemberId &= ~CONVERT_TWIPS;
+    switch (nMemberId)
+    {
+        case MID_EFFECT:
+            return putEffect(rValue, maEffect, &model::effect::getFromXBlurEffect);
+        case MID_EFFECT_JSON:
+            return putEffectJSON(rValue, maEffect, mbEnabled);
+        case MID_BLUR_ENABLED:
+            return rValue >>= mbEnabled;
+    }
+    return false;
+}
+
+boost::property_tree::ptree SdrBlurEffectItem::dumpAsJSON() const
+{
+    boost::property_tree::ptree aTree = dumpEffectAsJSON(SfxPoolItem::dumpAsJSON(), maEffect);
+    aTree.get_child("state").put("Enabled", mbEnabled);
+    return aTree;
+}
+
+SdrInnerShadowEffectItem::SdrInnerShadowEffectItem(TypedWhichId<SdrInnerShadowEffectItem> nWhich)
+    : SfxPoolItem(nWhich)
+{
+}
+
+SfxPoolItem* SdrInnerShadowEffectItem::CreateDefault()
+{
+    return new SdrInnerShadowEffectItem(TypedWhichId<SdrInnerShadowEffectItem>(0));
+}
+
+bool SdrInnerShadowEffectItem::operator==(const SfxPoolItem& rItem) const
+{
+    if (!SfxPoolItem::operator==(rItem))
+        return false;
+    auto const& rOther = static_cast<const SdrInnerShadowEffectItem&>(rItem);
+    return mbEnabled == rOther.mbEnabled && maEffect == rOther.maEffect;
+}
+
+SdrInnerShadowEffectItem* SdrInnerShadowEffectItem::Clone(SfxItemPool*) const
+{
+    return new SdrInnerShadowEffectItem(*this);
+}
+
+bool SdrInnerShadowEffectItem::QueryValue(uno::Any& rValue, sal_uInt8 nMemberId) const
+{
+    nMemberId &= ~CONVERT_TWIPS;
+    switch (nMemberId)
+    {
+        case MID_EFFECT:
+            rValue <<= model::effect::createXInnerShadowEffect(maEffect);
+            return true;
+        case MID_EFFECT_JSON:
+            rValue <<= getEffectJSON(maEffect, mbEnabled);
+            return true;
+        case MID_INNER_SHADOW_ENABLED:
+            rValue <<= mbEnabled;
+            return true;
+    }
+    return false;
+}
+
+bool SdrInnerShadowEffectItem::PutValue(const uno::Any& rValue, sal_uInt8 nMemberId)
+{
+    nMemberId &= ~CONVERT_TWIPS;
+    switch (nMemberId)
+    {
+        case MID_EFFECT:
+            return putEffect(rValue, maEffect, &model::effect::getFromXInnerShadowEffect);
+        case MID_EFFECT_JSON:
+            return putEffectJSON(rValue, maEffect, mbEnabled);
+        case MID_INNER_SHADOW_ENABLED:
+            return rValue >>= mbEnabled;
+    }
+    return false;
+}
+
+boost::property_tree::ptree SdrInnerShadowEffectItem::dumpAsJSON() const
 {
     boost::property_tree::ptree aTree = dumpEffectAsJSON(SfxPoolItem::dumpAsJSON(), maEffect);
     aTree.get_child("state").put("Enabled", mbEnabled);

@@ -45,6 +45,8 @@ namespace sdr::properties
                     SDRATTR_GLOW_FIRST, SDRATTR_GLOW_TEXT_LAST,
                     SDRATTR_TEXTCOLUMNS_FIRST, SDRATTR_TEXTCOLUMNS_LAST,
                     SDRATTR_REFLECTION_FIRST, SDRATTR_REFLECTION_LAST,
+                    SDRATTR_BLUR_FIRST, SDRATTR_BLUR_LAST,
+                    SDRATTR_INNER_SHADOW_FIRST, SDRATTR_INNER_SHADOW_LAST,
                     // Range from SdrTextObj:
                     EE_ITEMS_START, EE_ITEMS_END>);
         }

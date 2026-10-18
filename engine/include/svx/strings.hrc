@@ -518,6 +518,8 @@
 #define SIP_SA_GLOW_TEXT_TRANSPARENCY                       NC_("SIP_SA_GLOW_TEXT_TRANSPARENCY", "Transparency of text glow effect")
 #define SIP_SA_SOFTEDGE                                     NC_("SIP_SA_SOFTEDGE", "Soft edge effect")
 #define SIP_SA_REFLECTION                                   NC_("SIP_SA_REFLECTION", "Reflection effect")
+#define SIP_SA_BLUR                                         NC_("SIP_SA_BLUR", "Blur effect")
+#define SIP_SA_INNER_SHADOW                                 NC_("SIP_SA_INNER_SHADOW", "Inner shadow effect")
 #define STR_ObjNameSingulMEDIA                              NC_("STR_ObjNameSingulMEDIA", "Media object")
 #define STR_ObjNamePluralMEDIA                              NC_("STR_ObjNamePluralMEDIA", "Media objects")
 // drawing layer table strings

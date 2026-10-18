@@ -61,6 +61,7 @@ class SdrAllPositionYItem;
 class SdrAllSizeHeightItem;
 class SdrAllSizeWidthItem;
 class SdrAngleItem;
+class SdrBlurEffectItem;
 class SdrCaptionEscAbsItem;
 class SdrCaptionEscDirItem;
 class SdrCaptionEscIsRelItem;
@@ -92,6 +93,7 @@ class SdrGrafRedItem;
 class SdrGrafTransparenceItem;
 class SdrHorzShearAllItem;
 class SdrHorzShearOneItem;
+class SdrInnerShadowEffectItem;
 class SdrLayerIdItem;
 class SdrLayerNameItem;
 class SdrLogicSizeHeightItem;
@@ -454,7 +456,15 @@ inline constexpr sal_uInt16                      SDRATTR_REFLECTION_FIRST(SDRATT
 inline constexpr TypedWhichId<SdrReflectionEffectItem> SDRATTR_REFLECTION(SDRATTR_REFLECTION_FIRST+0);                  // 1252
 inline constexpr sal_uInt16                      SDRATTR_REFLECTION_LAST(SDRATTR_REFLECTION);                           // 1252
 
-inline constexpr sal_uInt16 SDRATTR_END (SDRATTR_REFLECTION_LAST);      // 1252
+inline constexpr sal_uInt16                      SDRATTR_BLUR_FIRST(SDRATTR_REFLECTION_LAST+1);                         // 1253
+inline constexpr TypedWhichId<SdrBlurEffectItem> SDRATTR_BLUR(SDRATTR_BLUR_FIRST+0);                                    // 1253
+inline constexpr sal_uInt16                      SDRATTR_BLUR_LAST(SDRATTR_BLUR);                                       // 1253
+
+inline constexpr sal_uInt16                      SDRATTR_INNER_SHADOW_FIRST(SDRATTR_BLUR_LAST+1);                       // 1254
+inline constexpr TypedWhichId<SdrInnerShadowEffectItem> SDRATTR_INNER_SHADOW(SDRATTR_INNER_SHADOW_FIRST+0);             // 1254
+inline constexpr sal_uInt16                      SDRATTR_INNER_SHADOW_LAST(SDRATTR_INNER_SHADOW);                       // 1254
+
+inline constexpr sal_uInt16 SDRATTR_END (SDRATTR_INNER_SHADOW_LAST);      // 1254
 
 #endif // INCLUDED_SVX_SVDDEF_HXX
 

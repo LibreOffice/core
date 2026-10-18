@@ -442,7 +442,9 @@ static ItemInfoPackage& getItemInfoPackageSdr()
 
             { SDRATTR_EDGEOOXMLCURVE, new SfxBoolItem(SDRATTR_EDGEOOXMLCURVE, false), 0, SFX_ITEMINFOFLAG_NONE },
 
-            { SDRATTR_REFLECTION, new SdrReflectionEffectItem(SDRATTR_REFLECTION), SID_ATTR_REFLECTION, SFX_ITEMINFOFLAG_NONE }
+            { SDRATTR_REFLECTION, new SdrReflectionEffectItem(SDRATTR_REFLECTION), SID_ATTR_REFLECTION, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_BLUR, new SdrBlurEffectItem(SDRATTR_BLUR), 0, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_INNER_SHADOW, new SdrInnerShadowEffectItem(SDRATTR_INNER_SHADOW), 0, SFX_ITEMINFOFLAG_NONE }
         }};
 
         virtual const ItemInfoStatic& getItemInfoStatic(size_t nIndex) const override { return maItemInfos[nIndex]; }
@@ -607,6 +609,8 @@ OUString SdrItemPool::GetItemName(sal_uInt16 nWhich)
         case SDRATTR_SOFTEDGE          : pResId = SIP_SA_SOFTEDGE; break;
 
         case SDRATTR_REFLECTION                    : pResId = SIP_SA_REFLECTION; break;
+        case SDRATTR_BLUR                          : pResId = SIP_SA_BLUR; break;
+        case SDRATTR_INNER_SHADOW                  : pResId = SIP_SA_INNER_SHADOW; break;
 
         case SDRATTR_CAPTIONTYPE      : pResId = SIP_SA_CAPTIONTYPE;break;
         case SDRATTR_CAPTIONFIXEDANGLE: pResId = SIP_SA_CAPTIONFIXEDANGLE;break;

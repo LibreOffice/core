@@ -21,8 +21,10 @@
 #define INCLUDED_SVX_UNOSHPRP_HXX
 
 #include <com/sun/star/drawing/PointSequence.hpp>
+#include <com/sun/star/util/XBlurEffect.hpp>
 #include <com/sun/star/util/XComplexColor.hpp>
 #include <com/sun/star/util/XGlowEffect.hpp>
+#include <com/sun/star/util/XInnerShadowEffect.hpp>
 #include <com/sun/star/util/XReflectionEffect.hpp>
 #include <com/sun/star/util/XSoftEdgeEffect.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
@@ -236,6 +238,14 @@
     { u"ReflectionEffectStartPosition"_ustr,     SDRATTR_REFLECTION, ::cppu::UnoType<sal_Int16>::get(),                  0, MID_REFLECTION_START_POSITION}, \
     { u"ReflectionEffectEndTransparency"_ustr,   SDRATTR_REFLECTION, ::cppu::UnoType<sal_Int16>::get(),                  0, MID_REFLECTION_END_TRANSPARENCY}, \
     { u"ReflectionEffectEndPosition"_ustr,       SDRATTR_REFLECTION, ::cppu::UnoType<sal_Int16>::get(),                  0, MID_REFLECTION_END_POSITION},
+
+#define BLUR_PROPERTIES \
+    { u"BlurEffect"_ustr,        SDRATTR_BLUR, ::cppu::UnoType<css::util::XBlurEffect>::get(), 0, MID_EFFECT}, \
+    { u"BlurEffectEnabled"_ustr, SDRATTR_BLUR, cppu::UnoType<bool>::get(),                     0, MID_BLUR_ENABLED},
+
+#define INNER_SHADOW_PROPERTIES \
+    { u"InnerShadowEffect"_ustr,        SDRATTR_INNER_SHADOW, ::cppu::UnoType<css::util::XInnerShadowEffect>::get(), 0, MID_EFFECT}, \
+    { u"InnerShadowEffectEnabled"_ustr, SDRATTR_INNER_SHADOW, cppu::UnoType<bool>::get(),                            0, MID_INNER_SHADOW_ENABLED},
 
 #define GLOW_TEXT_PROPERTIES \
     { u"GlowTextEffectRadius"_ustr,      SDRATTR_GLOW_TEXT_RADIUS,         ::cppu::UnoType<sal_Int32>::get(),    0,      0, PropertyMoreFlags::METRIC_ITEM}, \
