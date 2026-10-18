@@ -1528,6 +1528,36 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testExternalDatabaseFormLoadsOnlyAfterLinkUp
     CPPUNIT_ASSERT(xLoadable->isLoaded());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testRegisteredDatabaseFormLoadsOnlyAfterLinkUpdateAllowed)
+{
+    // Given a document whose form names a data source registered in the user's configuration,
+    // loaded without link updates:
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"UpdateDocMode"_ustr,
+                                      sal_Int16(document::UpdateDocMode::NO_UPDATE)),
+    };
+    loadFromFile(u"registered-database-form.fodt", aParams);
+    SwDocShell* pDocShell = getSwDocShell();
+
+    // Then the form is an external link of the document, as one naming a connection URL is:
+    CPPUNIT_ASSERT(pDocShell->HasExternalDatabaseForms());
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<form::XFormsSupplier> xFormsSupplier(xDrawPageSupplier->getDrawPage(),
+                                                        uno::UNO_QUERY);
+    uno::Reference<form::XLoadable> xLoadable(xFormsSupplier->getForms()->getByName(u"Form"_ustr),
+                                              uno::UNO_QUERY);
+
+    // When the form is loaded while link updates are not allowed, it stays unloaded.
+    xLoadable->load();
+    CPPUNIT_ASSERT(!xLoadable->isLoaded());
+
+    // When the user then allows link updates, the form connects to the registered data source
+    // and loads.
+    pDocShell->AllowLinkUpdate();
+    CPPUNIT_ASSERT(xLoadable->isLoaded());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -45,7 +45,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
-#include <com/sun/star/sdb/DatabaseContext.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
@@ -4115,14 +4114,11 @@ bool SfxObjectShell::IsExternalDatabaseForm(const uno::Reference<beans::XPropert
         if (!sURL.isEmpty())
             return true;
 
+        // The command the form runs on its data source is the document's, so a registered data
+        // source counts as external too.
         OUString sDataSourceName;
         rxForm->getPropertyValue(u"DataSourceName"_ustr) >>= sDataSourceName;
-        if (sDataSourceName.isEmpty())
-            return false;
-
-        uno::Reference<sdb::XDatabaseContext> xDatabaseContext
-            = sdb::DatabaseContext::create(comphelper::getProcessComponentContext());
-        return !xDatabaseContext->hasRegisteredDatabase(sDataSourceName);
+        return !sDataSourceName.isEmpty();
     }
     catch (const uno::Exception&)
     {
