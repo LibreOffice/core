@@ -9,6 +9,7 @@
 
 #include <oox/export/ThemeExport.hxx>
 
+#include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/tokens.hxx>
@@ -618,34 +619,6 @@ OString convertFlipMode(model::FlipMode eFlipMode)
     }
     return "none"_ostr;
 }
-
-OString convertRectangleAlignment(model::RectangleAlignment eFlipMode)
-{
-    switch (eFlipMode)
-    {
-        case model::RectangleAlignment::TopLeft:
-            return "tl"_ostr;
-        case model::RectangleAlignment::Top:
-            return "t"_ostr;
-        case model::RectangleAlignment::TopRight:
-            return "tr"_ostr;
-        case model::RectangleAlignment::Left:
-            return "l"_ostr;
-        case model::RectangleAlignment::Center:
-            return "ctr"_ostr;
-        case model::RectangleAlignment::Right:
-            return "r"_ostr;
-        case model::RectangleAlignment::BottomLeft:
-            return "bl"_ostr;
-        case model::RectangleAlignment::Bottom:
-            return "b"_ostr;
-        case model::RectangleAlignment::BottomRight:
-            return "br"_ostr;
-        case model::RectangleAlignment::Unset:
-            break;
-    }
-    return {};
-}
 } // end anonymous ns
 
 void ThemeExport::writeBlip(model::BlipFill const& rBlipFill)
@@ -672,7 +645,7 @@ void ThemeExport::writeBlipFill(model::BlipFill const& rBlipFill)
     if (rBlipFill.meMode == model::BitmapMode::Tile)
     {
         OString aFlipMode = convertFlipMode(rBlipFill.meTileFlipMode);
-        OString aAlignment = convertRectangleAlignment(rBlipFill.meTileAlignment);
+        OString aAlignment = drawingml::convertRectangleAlignment(rBlipFill.meTileAlignment);
 
         mpFS->startElementNS(XML_a, XML_tile, XML_tx, OString::number(rBlipFill.mnTileOffsetX),
                              XML_ty, OString::number(rBlipFill.mnTileOffsetY), XML_sx,

@@ -18,6 +18,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/numitem.hxx>
+#include <docmodel/theme/FormatScheme.hxx>
 #include <docmodel/uno/UnoGradientTools.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <test/commontesttools.hxx>
@@ -1738,6 +1739,63 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testShapeReflectionEffect)
     assertXPathNoAttribute(pXmlDoc, sNew, "endA");
     assertXPathNoAttribute(pXmlDoc, sNew, "endPos");
     assertXPathNoAttribute(pXmlDoc, sNew, "blurRad");
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf142858ShadowNextToImportedReflection)
+{
+    // The second shape has a reflection from the imported document and no shadow.
+    createSdImpressDoc("pptx/shape-reflection-effect.pptx");
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(1, 0));
+    xShape->setPropertyValue(u"Shadow"_ustr, cpo::uno::Any(true));
+    xShape->setPropertyValue(u"ShadowXDistance"_ustr, cpo::uno::Any(sal_Int32(-500)));
+    xShape->setPropertyValue(u"ShadowYDistance"_ustr, cpo::uno::Any(sal_Int32(-500)));
+    save(TestFilter::PPTX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+
+    // The shadow set in the office is written next to the reflection, in the effect order.
+    static constexpr OString sEffects = "/p:sld/p:cSld/p:spTree/p:sp[2]/p:spPr/a:effectLst"_ostr;
+    assertXPathChildren(pXmlDoc, sEffects, 2);
+    assertXPath(pXmlDoc, sEffects + "/*[1]", "dist", u"254558");
+    assertXPath(pXmlDoc, sEffects + "/a:outerShdw", 1);
+    assertXPath(pXmlDoc, sEffects + "/*[2]", "endPos", u"55000");
+    assertXPath(pXmlDoc, sEffects + "/a:reflection", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testShapeShadowTurnedOffIsNotWritten)
+{
+    // The third shape has a glow and a shadow from the imported document.
+    createSdImpressDoc("pptx/effectOrder.pptx");
+    getShapeFromPage(2, 0)->setPropertyValue(u"Shadow"_ustr, cpo::uno::Any(false));
+    save(TestFilter::PPTX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+
+    static constexpr OString sEffects = "/p:sld/p:cSld/p:spTree/p:sp[3]/p:spPr/a:effectLst"_ostr;
+    assertXPathChildren(pXmlDoc, sEffects, 1);
+    assertXPath(pXmlDoc, sEffects + "/a:glow", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testShapeShadowScaleAndAlignment)
+{
+    // The fourth shape has no effects in the imported document.
+    createSdImpressDoc("pptx/shape-reflection-effect.pptx");
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(3, 0));
+    xShape->setPropertyValue(u"Shadow"_ustr, cpo::uno::Any(true));
+    xShape->setPropertyValue(u"ShadowXDistance"_ustr, cpo::uno::Any(sal_Int32(200)));
+    xShape->setPropertyValue(u"ShadowYDistance"_ustr, cpo::uno::Any(sal_Int32(200)));
+    xShape->setPropertyValue(u"ShadowSizeX"_ustr, cpo::uno::Any(sal_Int32(50000)));
+    xShape->setPropertyValue(u"ShadowAlignment"_ustr, cpo::uno::Any(static_cast<sal_Int32>(
+                                                          model::RectangleAlignment::TopLeft)));
+    save(TestFilter::PPTX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+
+    // The scale and the alignment of the shadow are written, and the vertical scale, which
+    // equals the schema default, is left out.
+    static constexpr OString sShadow
+        = "/p:sld/p:cSld/p:spTree/p:sp[4]/p:spPr/a:effectLst/a:outerShdw"_ostr;
+    assertXPath(pXmlDoc, sShadow, "sx", u"50000");
+    assertXPathNoAttribute(pXmlDoc, sShadow, "sy");
+    assertXPath(pXmlDoc, sShadow, "algn", u"tl");
+    assertXPath(pXmlDoc, sShadow, "rotWithShape", u"0");
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testAirplaneTransition)

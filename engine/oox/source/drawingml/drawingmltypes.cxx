@@ -454,6 +454,34 @@ model::RectangleAlignment convertToRectangleAlignment(sal_Int32 nToken)
     return model::RectangleAlignment::Unset;
 }
 
+OString convertRectangleAlignment(model::RectangleAlignment eAlignment)
+{
+    switch (eAlignment)
+    {
+        case model::RectangleAlignment::TopLeft:
+            return "tl"_ostr;
+        case model::RectangleAlignment::Top:
+            return "t"_ostr;
+        case model::RectangleAlignment::TopRight:
+            return "tr"_ostr;
+        case model::RectangleAlignment::Left:
+            return "l"_ostr;
+        case model::RectangleAlignment::Center:
+            return "ctr"_ostr;
+        case model::RectangleAlignment::Right:
+            return "r"_ostr;
+        case model::RectangleAlignment::BottomLeft:
+            return "bl"_ostr;
+        case model::RectangleAlignment::Bottom:
+            return "b"_ostr;
+        case model::RectangleAlignment::BottomRight:
+            return "br"_ostr;
+        case model::RectangleAlignment::Unset:
+            break;
+    }
+    return {};
+}
+
 } // namespace oox::drawingml
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
