@@ -2843,7 +2843,6 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
             if (aFormatter.IsNumberFormat(aMacroSecurityLevel, nFormat, nNumber))
                 nMacroSecurityLevel = static_cast<int>(nNumber);
         }
-        SvtSecurityOptions::SetMacroSecurityLevel(nMacroSecurityLevel);
 
         OUString aClientVisibleArea = extractParameter(aOptions, u"ClientVisibleArea");
         if (!aClientVisibleArea.isEmpty())
@@ -2903,6 +2902,10 @@ static COKitDocument* lo_documentLoadWithOptions(COKit* pThis, const char* pURL,
             xChanges->commit();
         }
 #endif
+        // With macros disabled the requested level is ignored and the default level applies.
+        if (nMacroExecMode == document::MacroExecMode::NEVER_EXECUTE)
+            nMacroSecurityLevel = 1;
+        SvtSecurityOptions::SetMacroSecurityLevel(nMacroSecurityLevel);
 
         // set AsTemplate explicitly false to be able to load template files
         // as regular files, otherwise we cannot save them; it will try
