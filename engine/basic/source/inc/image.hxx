@@ -59,7 +59,7 @@ class SbiImage {
     std::size_t    nStringIdx;
     sal_uInt32     nStringOff;      // current Pos in the stringbuffer
                                     // routines for the compiler:
-    void MakeStrings( short );      // establish StringPool
+    void MakeStrings( sal_uInt16 ); // establish StringPool
     void AddString( const OUString& );
     void AddCode(std::vector<sal_uInt8>&&);
     void AddType(SbxObject const *);
