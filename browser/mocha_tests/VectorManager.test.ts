@@ -2445,6 +2445,119 @@ describe('VectorManager', function () {
 				nodeassert.deepStrictEqual(drawn, [[]]);
 			});
 
+			it('deletes the selected text with Backspace, and the caret lands where it began', function () {
+				const manager = managerWith('Hi');
+				nodeassert.ok(manager.moveCaretByCharacter(-1, true));
+				(TextSelections as any).active = true;
+				drawn = [];
+				nodeassert.ok(manager.predictTextDelete(1, 0));
+				nodeassert.strictEqual(textOf(manager), 'H');
+				nodeassert.deepStrictEqual(app.file.textCursor.logical, {
+					paragraph: 0,
+					index: 1,
+				});
+				nodeassert.strictEqual(app.file.textCursor.anchor, null);
+				nodeassert.deepStrictEqual(drawn, [[]]);
+				// The engine learns the selection with the caret before the
+				// deletion.
+				nodeassert.deepStrictEqual(sent, [
+					'textcursor object=5 paragraph=0 index=1 anchorparagraph=0 anchorindex=2 sequence=11',
+				]);
+
+				// A delta from before the deletion replays it.
+				app.file.inputSequence = 12;
+				sendDelta(manager, 11, 'Hi');
+				nodeassert.strictEqual(textOf(manager), 'H');
+			});
+
+			it('deletes the selected text with Delete when the selection runs forward', function () {
+				const manager = managerWith('Hi');
+				nodeassert.ok(manager.moveCaretByWord(-1));
+				nodeassert.ok(manager.moveCaretByCharacter(1, true));
+				(TextSelections as any).active = true;
+				nodeassert.ok(manager.predictTextDelete(0, 1));
+				nodeassert.strictEqual(textOf(manager), 'i');
+				nodeassert.deepStrictEqual(app.file.textCursor.logical, {
+					paragraph: 0,
+					index: 0,
+				});
+				nodeassert.strictEqual(app.file.textCursor.anchor, null);
+			});
+
+			it('deletes one more character for each key past the one that takes the selection', function () {
+				// The caret sits before the "!", so the second key takes the "H".
+				const manager = managerWith('Hi!');
+				nodeassert.ok(manager.moveCaretByCharacter(-1, true));
+				(TextSelections as any).active = true;
+				nodeassert.ok(manager.predictTextDelete(2, 0));
+				nodeassert.strictEqual(textOf(manager), '!');
+				nodeassert.deepStrictEqual(app.file.textCursor.logical, {
+					paragraph: 0,
+					index: 0,
+				});
+			});
+
+			it('leaves a deletion over selected text to the server when the selection start is not known', function () {
+				const manager = managerWith('Hi');
+				(TextSelections as any).active = true;
+				app.file.textCursor.anchor = null;
+				nodeassert.strictEqual(manager.predictTextDelete(1, 0), false);
+				nodeassert.strictEqual(textOf(manager), 'Hi');
+			});
+
+			it('leaves an edit over a selection that reaches another paragraph to the server', function () {
+				// A selection over the paragraph break alone draws no rectangle.
+				const manager = managerWith('Hi');
+				app.file.textCursor.logical = { paragraph: 0, index: 2 };
+				app.file.textCursor.anchor = { paragraph: 1, index: 0 };
+				nodeassert.strictEqual(manager.canPredictAtCaret(), false);
+				nodeassert.strictEqual(manager.predictTextDelete(1, 0), false);
+				nodeassert.strictEqual(manager.predictTextInsert('x'), false);
+				nodeassert.strictEqual(textOf(manager), 'Hi');
+			});
+
+			it('deletes nothing for a key that removes no character', function () {
+				const manager = managerWith('Hi');
+				nodeassert.ok(manager.moveCaretByCharacter(-1, true));
+				(TextSelections as any).active = true;
+				nodeassert.strictEqual(manager.predictTextDelete(0, 0), false);
+				nodeassert.strictEqual(textOf(manager), 'Hi');
+			});
+
+			it('replaces the selected text with the typed character', function () {
+				const manager = managerWith('Hi');
+				nodeassert.ok(manager.moveCaretByWord(-1, true));
+				(TextSelections as any).active = true;
+				drawn = [];
+				nodeassert.ok(manager.predictTextInsert('a'));
+				nodeassert.strictEqual(textOf(manager), 'a');
+				nodeassert.deepStrictEqual(app.file.textCursor.logical, {
+					paragraph: 0,
+					index: 1,
+				});
+				nodeassert.strictEqual(app.file.textCursor.anchor, null);
+				nodeassert.deepStrictEqual(drawn, [[]]);
+				// "a" is 100 wide from 1000.
+				nodeassert.strictEqual(app.file.textCursor.rectangle.x1, 1100);
+
+				// A delta from before the key replays both edits in one.
+				app.file.inputSequence = 12;
+				sendDelta(manager, 11, 'Hi');
+				nodeassert.strictEqual(textOf(manager), 'a');
+				nodeassert.deepStrictEqual(app.file.textCursor.logical, {
+					paragraph: 0,
+					index: 1,
+				});
+			});
+
+			it('leaves typing over selected text to the server when the selection start is not known', function () {
+				const manager = managerWith('Hi');
+				(TextSelections as any).active = true;
+				app.file.textCursor.anchor = null;
+				nodeassert.strictEqual(manager.predictTextInsert('a'), false);
+				nodeassert.strictEqual(textOf(manager), 'Hi');
+			});
+
 			it('selects the text a drag goes over', function () {
 				const manager = managerWith('Hi');
 				nodeassert.ok(manager.startTextDrag(1020, 1950, 5));

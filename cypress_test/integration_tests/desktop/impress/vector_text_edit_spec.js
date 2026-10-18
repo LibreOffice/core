@@ -136,6 +136,12 @@ var desktopHelper = require('../../common/desktop_helper');
 			helper.expectTextForClipboard(text);
 		}
 
+		// Checks the text of the paragraph through a copy of it, after the keys.
+		function expectParagraph(keys, text) {
+			keysToServer(keys + '{home}{shift}{end}');
+			expectSelectedText(text);
+		}
+
 		it('moves the caret by character', function() {
 			expectKeys('{rightarrow}{rightarrow}{rightarrow}', { paragraph: 0, index: 3 });
 			expectKeys('{leftarrow}', { paragraph: 0, index: 2 });
@@ -244,6 +250,16 @@ var desktopHelper = require('../../common/desktop_helper');
 			});
 			expectCaret({ paragraph: 0, index: 6 }, { paragraph: 0, index: 0 });
 			expectNoPressSent();
+		});
+
+		it('replaces or deletes the selected text', function() {
+			keysToServer('{shift}{rightarrow}{rightarrow}{rightarrow}{rightarrow}');
+			helper.typeIntoDocument('Word');
+			expectParagraph('', 'Word 1');
+
+			keysToServer('{downarrow}{home}{shift}{rightarrow}{rightarrow}');
+			helper.typeIntoDocument('{backspace}');
+			expectParagraph('', 'xt 2');
 		});
 	});
 });

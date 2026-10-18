@@ -20,7 +20,7 @@
  * a vector-rendered document has no bitmap tile grid.
  */
 
-/// The inserted text, or the code points deleted before and after the caret.
+/// The code points deleted before and after the caret, and the text then inserted there.
 interface PredictedChange {
 	text?: string;
 	deleteBefore?: number;
@@ -854,13 +854,29 @@ class VectorManager extends RenderManagerBase {
 		return order.length === data.order.length ? data : { ...data, order };
 	}
 
-	// The cached tree and caret of the edited part, or null when no caret is
-	// visible, text is selected or the part is not cached.
-	private _editTarget(): EditTarget | null {
-		// Typing over a selection replaces it, which is more than an insertion,
-		// so the server handles that edit.
-		if (TextSelections.isActive()) return null;
+	// The cached tree and caret of the edited part, or null when no caret is visible, the part
+	// is not cached, or text is selected that the edit does not cover.
+	private _editTarget(overSelection = false): EditTarget | null {
+		// An edit covers a selection in the caret's paragraph whose ends the client knows.
+		// A selection over a paragraph break alone draws no rectangle, so its anchor counts
+		// too.
+		const selected =
+			TextSelections.isActive() || Boolean(app.file.textCursor.anchor);
+		if (selected && !(overSelection && this._selectionAnchorInParagraph()))
+			return null;
 		return this._caretTarget();
+	}
+
+	// The other end of a selection in the caret's paragraph, or null when there is none or its
+	// start is not known.
+	private _selectionAnchorInParagraph(): cool.LogicalCaret | null {
+		const cursor = app.file.textCursor;
+		const anchor = cursor.anchor;
+		return anchor &&
+			cursor.logical &&
+			anchor.paragraph === cursor.logical.paragraph
+			? anchor
+			: null;
 	}
 
 	// The cached tree and caret of the edited part, with text selected or not, or null when no
@@ -895,29 +911,33 @@ class VectorManager extends RenderManagerBase {
 		return target !== null && this._lookUpCaret(target) !== null;
 	}
 
-	/// Insert typed text into the cached tree so it shows before the server
-	/// re-renders. Returns true when the tree changed.
+	/// Insert typed text into the cached tree so it shows before the server re-renders. It
+	/// replaces a selection in the caret's paragraph, as in the engine. True when the tree
+	/// changed.
 	predictTextInsert(text: string): boolean {
-		return this._predictEdit({ text }, (position) => {
-			const advance = position.insert(text);
-			return advance > 0
-				? { indexShift: text.length, caretShift: advance }
-				: null;
-		});
+		return this._predictEdit((selected) =>
+			selected
+				? { text, deleteBefore: selected.before, deleteAfter: selected.after }
+				: { text },
+		);
 	}
 
-	/// Delete before characters left of the caret and after characters right of
-	/// it in the cached tree. Returns true when the tree changed.
+	/// Delete before characters left of the caret and after characters right of it in the
+	/// cached tree. A selection in the caret's paragraph is the first one deleted, as in the
+	/// engine. True when the tree changed.
 	predictTextDelete(before: number, after: number): boolean {
-		return this._predictEdit(
-			{ deleteBefore: before, deleteAfter: after },
-			(position) => {
-				const result = position.delete(before, after);
-				return result.removed > 0
-					? { indexShift: -result.removedBefore, caretShift: result.caretShift }
-					: null;
-			},
-		);
+		if (before <= 0 && after <= 0) return false;
+		return this._predictEdit((selected) => {
+			if (selected) {
+				// The engine takes one key to delete the selection, whichever kind
+				// comes first.
+				if (before > 0) before--;
+				else after--;
+				before += selected.before;
+				after += selected.after;
+			}
+			return { deleteBefore: before, deleteAfter: after };
+		});
 	}
 
 	/*
@@ -1212,42 +1232,125 @@ class VectorManager extends RenderManagerBase {
 		TextSelections.setEndRectangle(handle(to));
 	}
 
-	// Apply an edit at the caret, record it for replay and move the caret. The
-	// edit returns how far the caret moved, or null when nothing changed.
+	// Apply an edit at the caret, record it for replay and move the caret. build gets the code
+	// points selected before and after the caret in its paragraph, or null without a selection,
+	// and returns the change to apply.
 	private _predictEdit(
-		change: PredictedChange,
-		apply: (
-			position: cool.CaretPosition,
-		) => { indexShift: number; caretShift: number } | null,
+		build: (
+			selected: { before: number; after: number } | null,
+		) => PredictedChange,
 	): boolean {
 		// The engine learns of a caret moved here before the edit, so the edit's number is
 		// the one after it.
 		LocalCaret.tell();
-		const target = this._editTarget();
+		const target = this._editTarget(true);
 		if (!target) return false;
 		const position = this._lookUpCaret(target);
 		if (!position) return false;
-		const moved = apply(position);
-		if (!moved) return false;
+		const anchor = this._selectionAnchorInParagraph();
+		const selected = anchor
+			? VectorManager._selectedAt(position, anchor)
+			: null;
+		const applied = VectorManager._applyChange(
+			target.tree,
+			position,
+			target.logical,
+			build(selected),
+		);
+		if (!applied) return false;
 		if (target.logical) {
-			// The caret stays in its run, so atEnd still holds.
 			const caretAfter = {
 				paragraph: target.logical.paragraph,
-				index: Math.max(0, target.logical.index + moved.indexShift),
-				atEnd: position.atEnd,
+				index: Math.max(0, target.logical.index + applied.indexShift),
+				atEnd: applied.position.atEnd,
 			};
 			this._recordEdit(
 				target.tree.data.partId,
 				position,
 				target.logical,
 				caretAfter,
-				change,
+				applied.change,
 			);
 			target.logical.index = caretAfter.index;
 		}
-		this._placeCaret(target, moved.caretShift);
+		if (selected) {
+			// The selection is gone with the text it covered.
+			app.file.textCursor.anchor = null;
+			if (TextSelections.isActive()) this._docLayer.showTextSelection([]);
+		}
+		this._placeCaret(target, applied.caretShift);
 		this.changedHere();
 		return true;
+	}
+
+	// Apply a change at the position in the tree: the deletion, then the insertion at the caret
+	// looked up again, as the deletion leaves the position stale. Returns how far the caret
+	// index and x moved, the position after the change, and the change applied, without the
+	// text when the insertion could not be predicted. Null when nothing changed.
+	private static _applyChange(
+		tree: cool.PredictionTree,
+		position: cool.CaretPosition,
+		logical: cool.LogicalCaret | null,
+		change: PredictedChange,
+	): {
+		indexShift: number;
+		caretShift: number;
+		position: cool.CaretPosition;
+		change: PredictedChange;
+	} | null {
+		const deleteBefore = change.deleteBefore ?? 0;
+		const deleteAfter = change.deleteAfter ?? 0;
+		let indexShift = 0;
+		let caretShift = 0;
+		let deleted = false;
+		if (deleteBefore > 0 || deleteAfter > 0) {
+			const result = position.delete(deleteBefore, deleteAfter);
+			if (result.removed === 0) return null;
+			deleted = true;
+			indexShift = -result.removedBefore;
+			caretShift = result.caretShift;
+		}
+		const deletion = {
+			indexShift,
+			caretShift,
+			position,
+			change: { deleteBefore, deleteAfter },
+		};
+		const text = change.text;
+		if (text === undefined) return deleted ? deletion : null;
+		if (deleted) {
+			const objectId = position.objectId;
+			if (objectId === undefined || !logical) return deletion;
+			const after = tree.caretIn(objectId, {
+				paragraph: logical.paragraph,
+				index: Math.max(0, logical.index + indexShift),
+			});
+			if (!after) return deletion;
+			position = after;
+		}
+		const advance = position.insert(text);
+		if (!(advance > 0)) return deleted ? deletion : null;
+		return {
+			indexShift: indexShift + text.length,
+			caretShift: caretShift + advance,
+			position,
+			change: deleted ? { text, deleteBefore, deleteAfter } : { text },
+		};
+	}
+
+	// The code points selected before and after the caret, up to the anchor.
+	private static _selectedAt(
+		position: cool.CaretPosition,
+		anchor: cool.LogicalCaret,
+	): { before: number; after: number } {
+		const text = position.run.text;
+		const caret = position.run.start + position.offset;
+		const count = (from: number, to: number) =>
+			[...text.slice(from, to)].length;
+		return {
+			before: anchor.index < caret ? count(anchor.index, caret) : 0,
+			after: anchor.index > caret ? count(caret, anchor.index) : 0,
+		};
 	}
 
 	// Place the caret at its logical position in the edited tree, so it follows
@@ -1397,9 +1500,13 @@ class VectorManager extends RenderManagerBase {
 			edit.caretBefore,
 		);
 		if (!position) return false;
-		if (edit.text !== undefined) return position.insert(edit.text) > 0;
 		return (
-			position.delete(edit.deleteBefore ?? 0, edit.deleteAfter ?? 0).removed > 0
+			VectorManager._applyChange(
+				this._treeOf(data),
+				position,
+				edit.caretBefore,
+				edit,
+			) !== null
 		);
 	}
 
