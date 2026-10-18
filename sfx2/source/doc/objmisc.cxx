@@ -1509,9 +1509,8 @@ ErrCode SfxObjectShell::CallBasic( std::u16string_view rMacro,
             return ERRCODE_IO_ACCESSDENIED;
     }
 
-    BasicManager *pMgr = GetBasicManager();
-    if( pApp->GetName() == rBasic )
-        pMgr = SfxApplication::GetBasicManager();
+    BasicManager* pMgr = pApp->GetName() == rBasic ? SfxApplication::GetBasicManager()
+                                                   : GetBasicManager();
     ErrCode nRet = SfxApplication::CallBasic( OUString(rMacro), pMgr, pArgs, pRet );
     return nRet;
 }
