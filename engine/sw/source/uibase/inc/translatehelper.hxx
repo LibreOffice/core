@@ -25,6 +25,7 @@
 #include <functional>
 #include <vector>
 
+#include <i18nlangtag/lang.h>
 #include <rtl/string.hxx>
 
 #include <swdllapi.h>
@@ -69,10 +70,12 @@ using TranslateFunc = std::function<OString(const OString& rHtml, OString& rErro
 /// Translates the current selection (or the whole document when there is no
 /// selection) text node by text node, replacing the original text with the
 /// result of rTranslate for the exported HTML of each node. A table box
-/// selection is translated box by box. Returns false when a translation
-/// failed, after reporting the failure to the user.
+/// selection is translated box by box. The translated text gets the language
+/// eTargetLanguage, unless it is LANGUAGE_DONTKNOW. Returns false when a
+/// translation failed, after reporting the failure to the user.
 SW_DLLPUBLIC bool TranslateRanges(SwWrtShell& rWrtSh, const TranslateFunc& rTranslate,
-                                  const bool& rCancelTranslation);
+                                  const bool& rCancelTranslation,
+                                  LanguageType eTargetLanguage = LANGUAGE_DONTKNOW);
 #if HAVE_FEATURE_CURL
 SW_DLLPUBLIC void TranslateDocument(SwWrtShell& rWrtSh, const OString& rTargetLang);
 SW_DLLPUBLIC bool TranslateDocumentCancellable(SwWrtShell& rWrtSh, const OString& rTargetLang,

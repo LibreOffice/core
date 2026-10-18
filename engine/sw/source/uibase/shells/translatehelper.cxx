@@ -33,11 +33,16 @@
 #include <ndtxt.hxx>
 #include <swcrsr.hxx>
 #include <doc.hxx>
+#include <IDocumentContentOperations.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <hintids.hxx>
 #include <translatehelper.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <editeng/langitem.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <o3tl/string_view.hxx>
 #include <sal/log.hxx>
+#include <svl/languageoptions.hxx>
 #include <rtl/string.h>
 #include <shellio.hxx>
 #include <vcl/kit.hxx>
@@ -165,10 +170,34 @@ struct TranslateRange
     SwPosition aStart;
     SwPosition aEnd;
 };
+
+/// Sets eLanguage on the text from nStartContent in node nStartNode up to nCharsAfter
+/// characters before the end of node nEndNode.
+void SetLanguageOfRange(SwWrtShell& rWrtSh, SwNodeOffset nStartNode, sal_Int32 nStartContent,
+                        SwNodeOffset nEndNode, sal_Int32 nCharsAfter, LanguageType eLanguage)
+{
+    const SwNodes& rNodes = rWrtSh.GetNodes();
+    if (nEndNode < nStartNode || nEndNode >= rNodes.Count())
+        return;
+    SwTextNode* pStartNode = rNodes[nStartNode]->GetTextNode();
+    SwTextNode* pEndNode = rNodes[nEndNode]->GetTextNode();
+    if (!pStartNode || !pEndNode || nStartContent > pStartNode->Len())
+        return;
+    const sal_Int32 nEndContent = pEndNode->Len() - nCharsAfter;
+    if (nEndContent < 0 || (nStartNode == nEndNode && nEndContent <= nStartContent))
+        return;
+
+    // The attribute of the language's script: a Western, Asian or Complex one.
+    const TypedWhichId<SvxLanguageItem> nWhich = GetWhichOfScript(
+        RES_CHRATR_LANGUAGE, SvtLanguageOptions::GetI18NScriptTypeOfLanguage(eLanguage));
+    const SwPaM aPaM(*pStartNode, nStartContent, *pEndNode, nEndContent);
+    rWrtSh.GetDoc()->getIDocumentContentOperations().InsertPoolItem(
+        aPaM, SvxLanguageItem(eLanguage, nWhich));
+}
 }
 
 bool TranslateRanges(SwWrtShell& rWrtSh, const TranslateFunc& rTranslate,
-                     const bool& rCancelTranslation)
+                     const bool& rCancelTranslation, LanguageType eTargetLanguage)
 {
     SwCursor* pCurrentPam = rWrtSh.GetCursor();
     const bool bTableMode = rWrtSh.IsTableMode();
@@ -328,7 +357,20 @@ bool TranslateRanges(SwWrtShell& rWrtSh, const TranslateFunc& rTranslate,
                 const auto aTranslatedOut = rTranslate(aOut, aError);
                 if (!aTranslatedOut.isEmpty())
                 {
+                    // The translation replaces the range and the text after the range stays,
+                    // so the end of the translation is found by counting back from there:
+                    // the paste can change the number of paragraphs.
+                    const sal_Int32 nStartContent = cursor->Start()->GetContentIndex();
+                    const SwNodeOffset nNodesAfter = pNodes.Count() - n;
+                    const sal_Int32 nCharsAfter
+                        = pNode->GetTextNode()->Len() - cursor->End()->GetContentIndex();
+                    // One undo step for the paragraph: its translation and its language.
+                    rWrtSh.StartUndo(SwUndoId::PASTE_CLIPBOARD);
                     SwTranslateHelper::PasteHTMLToPaM(rWrtSh, cursor.get(), aTranslatedOut);
+                    if (eTargetLanguage != LANGUAGE_DONTKNOW)
+                        SetLanguageOfRange(rWrtSh, n, nStartContent, pNodes.Count() - nNodesAfter,
+                                           nCharsAfter, eTargetLanguage);
+                    rWrtSh.EndUndo(SwUndoId::PASTE_CLIPBOARD);
                 }
                 else
                 {
@@ -433,6 +475,18 @@ std::vector<OString> GetTargetLanguages()
     return aCachedLanguages;
 }
 
+/// The language of text translated to rTargetLang, a code like "DE" or "EN-GB".
+static LanguageType GetTargetLanguageType(std::string_view rTargetLang)
+{
+    const LanguageTag aTag(OStringToOUString(rTargetLang, RTL_TEXTENCODING_ASCII_US));
+    // A bare language like "DE" stands for its default locale, de-DE. A language without
+    // a known locale falls back to en-US instead, so it is taken as it is.
+    LanguageTag aFallbackTag(aTag);
+    aFallbackTag.makeFallback();
+    return aFallbackTag.getLanguage() == aTag.getLanguage() ? aFallbackTag.getLanguageType()
+                                                            : aTag.getLanguageType();
+}
+
 bool TranslateDocumentCancellable(SwWrtShell& rWrtSh, const OString& rTargetLang,
                                   const bool& rCancelTranslation)
 {
@@ -452,7 +506,7 @@ bool TranslateDocumentCancellable(SwWrtShell& rWrtSh, const OString& rTargetLang
             rError = aResult.aError;
             return aResult.aText;
         },
-        rCancelTranslation);
+        rCancelTranslation, GetTargetLanguageType(rTargetLang));
 }
 #endif // HAVE_FEATURE_CURL
 }

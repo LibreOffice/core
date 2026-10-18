@@ -15,6 +15,7 @@
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
+#include <com/sun/star/lang/Locale.hpp>
 #include <IDocumentDrawModelAccess.hxx>
 #include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
@@ -1572,6 +1573,87 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testCool6098TranslateEndToEnd)
     // the body, and the footer's own text must be untouched:
     CPPUNIT_ASSERT_EQUAL(nParagraphsBefore, getParagraphs());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), xFooter->getString().indexOf("TRANSLATED-TEXT"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateSetsTargetLanguage)
+{
+    Cool6098MockTranslateServer aMockServer;
+    aMockServer.init();
+    aMockServer.create();
+    comphelper::ScopeGuard aStopServer([&aMockServer] { aMockServer.stop(); });
+    comphelper::ScopeGuard<std::function<void()>> aResetConfig
+        = setTranslationService(u"http://127.0.0.1:18099/v2/translate"_ustr);
+
+    // Given a paragraph with its last word selected:
+    createSwDoc();
+    SwWrtShell* const pWrtSh = getSwDocShell()->GetWrtShell();
+    pWrtSh->Insert(u"Hello World"_ustr);
+    const lang::Locale aOriginalLocale
+        = getProperty<lang::Locale>(getParagraph(1), u"CharLocale"_ustr);
+    pWrtSh->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 5, /*bBasicCall=*/false);
+
+    // When translating the selection to German:
+    bool bCancel = false;
+    CPPUNIT_ASSERT(SwTranslateHelper::TranslateDocumentCancellable(*pWrtSh, "DE"_ostr, bCancel));
+
+    // Then the translation is German, its default locale, and the text before it keeps its
+    // language:
+    CPPUNIT_ASSERT_EQUAL(u"Hello TRANSLATED-TEXT"_ustr, getParagraph(1)->getString());
+    uno::Reference<text::XTextRange> xBefore = getRun(getParagraph(1), 1);
+    CPPUNIT_ASSERT_EQUAL(u"Hello "_ustr, xBefore->getString());
+    CPPUNIT_ASSERT_EQUAL(aOriginalLocale.Language,
+                         getProperty<lang::Locale>(xBefore, u"CharLocale"_ustr).Language);
+    uno::Reference<text::XTextRange> xTranslated = getRun(getParagraph(1), 2);
+    CPPUNIT_ASSERT_EQUAL(u"TRANSLATED-TEXT"_ustr, xTranslated->getString());
+    lang::Locale aLocale = getProperty<lang::Locale>(xTranslated, u"CharLocale"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"de"_ustr, aLocale.Language);
+    CPPUNIT_ASSERT_EQUAL(u"DE"_ustr, aLocale.Country);
+
+    // When translating the whole paragraph to Japanese:
+    pWrtSh->SttEndDoc(true);
+    CPPUNIT_ASSERT(SwTranslateHelper::TranslateDocumentCancellable(*pWrtSh, "JA"_ostr, bCancel));
+
+    // Then the Asian language is Japanese, and the Western language is left as it was, the
+    // German set on the earlier translation:
+    CPPUNIT_ASSERT_EQUAL(u"TRANSLATED-TEXT"_ustr, getParagraph(1)->getString());
+    xTranslated = getRun(getParagraph(1), 1);
+    aLocale = getProperty<lang::Locale>(xTranslated, u"CharLocaleAsian"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"ja"_ustr, aLocale.Language);
+    CPPUNIT_ASSERT_EQUAL(u"de"_ustr,
+                         getProperty<lang::Locale>(xTranslated, u"CharLocale"_ustr).Language);
+
+    // When translating to Javanese, which has no default locale:
+    CPPUNIT_ASSERT(SwTranslateHelper::TranslateDocumentCancellable(*pWrtSh, "JV"_ostr, bCancel));
+
+    // Then the language is Javanese, not the English that unknown languages fall back to:
+    aLocale = getProperty<lang::Locale>(getRun(getParagraph(1), 1), u"CharLocale"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"jv"_ustr, aLocale.Language);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateUndo)
+{
+    Cool6098MockTranslateServer aMockServer;
+    aMockServer.init();
+    aMockServer.create();
+    comphelper::ScopeGuard aStopServer([&aMockServer] { aMockServer.stop(); });
+    comphelper::ScopeGuard<std::function<void()>> aResetConfig
+        = setTranslationService(u"http://127.0.0.1:18099/v2/translate"_ustr);
+
+    // Given a paragraph translated to German:
+    createSwDoc();
+    SwWrtShell* const pWrtSh = getSwDocShell()->GetWrtShell();
+    pWrtSh->Insert(u"Hello World"_ustr);
+    pWrtSh->SttEndDoc(true);
+    bool bCancel = false;
+    CPPUNIT_ASSERT(SwTranslateHelper::TranslateDocumentCancellable(*pWrtSh, "DE"_ostr, bCancel));
+    CPPUNIT_ASSERT_EQUAL(u"TRANSLATED-TEXT"_ustr, getParagraph(1)->getString());
+
+    // When undoing once:
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+
+    // Then the original text is back: the translation and its language are one undo step,
+    // not two, where the first undo would only take the language away.
+    CPPUNIT_ASSERT_EQUAL(u"Hello World"_ustr, getParagraph(1)->getString());
 }
 #endif
 
