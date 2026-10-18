@@ -13084,7 +13084,9 @@ elif test $_os = WINNT; then
     ENABLE_OPENGL_CANVAS=TRUE
 else
     if test "$USING_UNIX_DESKTOP" = TRUE; then
-        AC_CHECK_LIB(GL, glBegin, [:], AC_MSG_ERROR([libGL required.]))
+        if test -z "$ENABLE_EPOXY"; then
+            AC_MSG_ERROR([libepoxy is required for OpenGL support])
+        fi
         ENABLE_OPENGL_TRANSITIONS=TRUE
         AC_DEFINE(HAVE_FEATURE_OPENGL,1)
         ENABLE_OPENGL_CANVAS=TRUE
