@@ -362,8 +362,7 @@ public:
                                     { return maDeferredFormControlImages; }
     void                        ClearDeferredFormControlImages()
                                     { maDeferredFormControlImages.clear(); }
-    /// Whether rxForm is a database form whose database is not a data source registered in the
-    /// user's configuration.
+    /// Whether rxForm is a database form that names a database, by URL or by data source name.
     static bool                 IsExternalDatabaseForm(
                                     const cpo::uno::Reference<css::beans::XPropertySet>& rxForm);
     void                        SetHasExternalDatabaseForms() { mbHasExternalDatabaseForms = true; }
