@@ -552,7 +552,7 @@ bool SbiImage::Save( SvStream& r, sal_uInt32 nVer )
     return !bError;
 }
 
-void SbiImage::MakeStrings( short nSize )
+void SbiImage::MakeStrings( sal_uInt16 nSize )
 {
     nStringIdx = 0;
     nStringOff = 0;
