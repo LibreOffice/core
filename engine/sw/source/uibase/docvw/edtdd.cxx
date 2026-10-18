@@ -24,6 +24,7 @@
 #include <sot/formats.hxx>
 #include <sfx2/bindings.hxx>
 #include <comphelper/kit.hxx>
+#include <tools/json_writer.hxx>
 #include <vcl/commandevent.hxx>
 #include <osl/diagnose.h>
 
@@ -38,6 +39,8 @@
 #include <viewopt.hxx>
 #include <swdtflvr.hxx>
 #include <swmodule.hxx>
+#include <swtypes.hxx>
+#include <strings.hrc>
 #include <docsh.hxx>
 #include <wdocsh.hxx>
 
@@ -70,10 +73,8 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
         || !SwViewOption::IsAllowDragDropText())
         return;
 
-    // In a kit process a read-only view starts no drag. The process holds one drag for all its
-    // views, so a view starts none while another view's drag runs.
-    if (comphelper::COKit::isActive()
-        && (m_rView.IsKitReadOnlyView() || SwModule::get()->m_pDragDrop))
+    // In a kit process a read-only view starts no drag.
+    if (comphelper::COKit::isActive() && m_rView.IsKitReadOnlyView())
         return;
 
     SwWrtShell &rSh = m_rView.GetWrtShell();
@@ -161,6 +162,19 @@ void SwEditWin::StartDrag( sal_Int8 /*nAction*/, const Point& rPosPixel )
 
     m_bMBPressed = false;
     ReleaseMouse();
+
+    // A kit process holds one drag for all its views, so a view starts none while the drag of
+    // another view runs. The press is released as for a drag that starts, which keeps the
+    // selection as it is, and the view learns why nothing moves.
+    if (comphelper::COKit::isActive() && SwModule::get()->m_pDragDrop)
+    {
+        tools::JsonWriter aJson;
+        aJson.put("type", "dragrefused");
+        aJson.put("text", SwResId(STR_DRAG_TEXT_IN_USE));
+        m_rView.viewCallback(COKitCallbackType::TOOLTIP, aJson.finishAndGetAsOString());
+        return;
+    }
+
     g_bFrameDrag = false;
     g_bExecuteDrag = true;
     s_aDDStartPos = aDocPos;

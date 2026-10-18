@@ -746,6 +746,7 @@
 #define STR_OUTLINE_TRACKING_OFF                NC_("STR_OUTLINE_TRACKING_OFF", "Off")
 #define STR_OUTLINE_CONTENT_TOGGLE_VISIBILITY       NC_("STR_OUTLINE_CONTENT_TOGGLE_VISIBILITY", "Click to toggle outline folding")
 #define STR_OUTLINE_CONTENT_TOGGLE_VISIBILITY_EXT   NC_("STR_OUTLINE_CONTENT_TOGGLE_VISIBILITY_EXT", "right-click to include sub levels")
+#define STR_DRAG_TEXT_IN_USE                        NC_("STR_DRAG_TEXT_IN_USE", "Another user is moving text in this document. Try again when they have finished.")
 #define STR_CLICK_OUTLINE_CONTENT_TOGGLE_VISIBILITY NC_("STR_CLICK_OUTLINE_CONTENT_TOGGLE_VISIBILITY", "Click to toggle outline folding")
 #define STR_CLICK_OUTLINE_CONTENT_TOGGLE_VISIBILITY_EXT NC_("STR_CLICK_OUTLINE_CONTENT_TOGGLE_VISIBILITY_EXT", "right-click to include sub levels")
 #define STR_OUTLINE_CONTENT_VISIBILITY_TOGGLE   NC_("STR_OUTLINE_CONTENT_VISIBILITY_TOGGLE", "Toggle")
