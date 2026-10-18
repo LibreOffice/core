@@ -286,6 +286,22 @@ class RenderManager {
 		return RenderManager.ensureInstance().placeCaretAt(x, y, hitId);
 	}
 
+	static selectWordAt(
+		x: number,
+		y: number,
+		hitId: number | undefined,
+	): boolean {
+		return RenderManager.ensureInstance().selectWordAt(x, y, hitId);
+	}
+
+	static selectParagraphAt(
+		x: number,
+		y: number,
+		hitId: number | undefined,
+	): boolean {
+		return RenderManager.ensureInstance().selectParagraphAt(x, y, hitId);
+	}
+
 	static requestThumbnail(
 		id: cool.PreviewId,
 		part: number,

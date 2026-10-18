@@ -809,6 +809,29 @@ class MouseControl extends CanvasSectionObject {
 		);
 	}
 
+	/// Selects the word under a double click, or the paragraph under a triple click, without
+	/// the server. False when the click is for the engine, as for a single click, or is a
+	/// fourth click or more.
+	private selectTextAt(
+		clickInfo: {
+			sendingPosition: cool.SimplePoint;
+			buttons: number;
+			modifier: number;
+		},
+		count: number,
+	): boolean {
+		if (clickInfo.buttons !== app.LOButtons.left || clickInfo.modifier !== 0)
+			return false;
+		if (!app.file.textCursor.visible) return false;
+		if (!RenderGeometrySection.answersPointer()) return false;
+		const point = clickInfo.sendingPosition;
+		const hitId = RenderGeometrySection.objectIdAt(point.x, point.y);
+		if (count === 2) return RenderManager.selectWordAt(point.x, point.y, hitId);
+		if (count === 3)
+			return RenderManager.selectParagraphAt(point.x, point.y, hitId);
+		return false;
+	}
+
 	/*
 		Whether the context takes a double press itself, on the same terms as a single press is
 		taken from the geometry the client holds.
@@ -912,8 +935,8 @@ class MouseControl extends CanvasSectionObject {
 		if (this.clickTimer) app.timerRegistry.clearTimeout(this.clickTimer);
 		else {
 			// Old code always sends the first click, so do we, unless the client marks
-			// the object or places the caret itself. A second click within the timer is
-			// sent either way, so a double click still reaches the engine.
+			// the object or places the caret itself. A second click within the timer
+			// counts with it, and is answered here or sent when the timer runs out.
 			if (
 				!this.selectObjectAt(sendingPosition, buttons, modifier) &&
 				!this.placeCaretAt(sendingPosition, buttons, modifier)
@@ -993,8 +1016,10 @@ class MouseControl extends CanvasSectionObject {
 				this.sendClick(clickInfo, 2);
 				this.sendClick(clickInfo, 3);
 			} else if (this.clickCount > 1) {
-				if (this.clickCount !== 2 || !this.doublePressTaken(clickInfo))
-					this.sendClick(clickInfo, this.clickCount);
+				const taken =
+					(this.clickCount === 2 && this.doublePressTaken(clickInfo)) ||
+					this.selectTextAt(clickInfo, this.clickCount);
+				if (!taken) this.sendClick(clickInfo, this.clickCount);
 			}
 		}
 

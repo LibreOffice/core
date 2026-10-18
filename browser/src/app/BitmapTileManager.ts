@@ -2467,6 +2467,22 @@ class BitmapTileManager extends RenderManagerBase {
 		return false;
 	}
 
+	public selectWordAt(
+		_x: number,
+		_y: number,
+		_hitId: number | undefined,
+	): boolean {
+		return false;
+	}
+
+	public selectParagraphAt(
+		_x: number,
+		_y: number,
+		_hitId: number | undefined,
+	): boolean {
+		return false;
+	}
+
 	public requestThumbnail(
 		_id: cool.PreviewId,
 		_part: number,

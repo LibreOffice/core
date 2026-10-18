@@ -236,6 +236,22 @@ abstract class RenderManagerBase {
 		hitId: number | undefined,
 	): boolean;
 
+	// Selects the word under a double click in the edited text, without the server. True when
+	// the word is selected.
+	abstract selectWordAt(
+		x: number,
+		y: number,
+		hitId: number | undefined,
+	): boolean;
+
+	// Selects the paragraph under a triple click in the edited text, without the server. True
+	// when the paragraph is selected.
+	abstract selectParagraphAt(
+		x: number,
+		y: number,
+		hitId: number | undefined,
+	): boolean;
+
 	abstract requestThumbnail(
 		id: cool.PreviewId,
 		part: number,

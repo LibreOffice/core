@@ -27,6 +27,8 @@ namespace cool {
 	interface Segment {
 		index: number;
 		segment: string;
+		/// With word granularity, true for a word and false for whitespace or punctuation.
+		isWordLike?: boolean;
 	}
 
 	interface Segmenter {
@@ -102,6 +104,62 @@ namespace cool {
 		for (const segment of words.segment(text))
 			if (segment.segment.trim() !== '') starts.push(segment.index);
 		return starts;
+	}
+
+	// Characters the engine splits into words by its own rules or a dictionary: punctuation,
+	// symbols and scripts written without spaces.
+	const engineSplitCharacters =
+		/[\u0021-\u002f\u003a-\u0040\u005b-\u0060\u007b-\u00bf\u00d7\u00f7\u0e00-\u0eff\u1000-\u109f\u1100-\u11ff\u1780-\u17ff\u2000-\u206f\u3000-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uac00-\ud7af\ud800-\udfff]/;
+
+	/// The anchor and the caret of a selection.
+	export interface CaretSpan {
+		anchor: LogicalCaret;
+		caret: LogicalCaret;
+	}
+
+	/// The word a double click at logical selects in the engine: the word that covers or starts
+	/// at the caret, or the whitespace there, anchored at its start. Null at the end of the
+	/// paragraph, and for a word with punctuation or a symbol, in a script that needs a
+	/// dictionary, or in a rotated or right to left paragraph.
+	export function wordAt(
+		position: CaretPosition,
+		logical: LogicalCaret,
+	): CaretSpan | null {
+		const textRuns = movableRuns(position.objectRuns, logical.paragraph);
+		if (!textRuns) return null;
+		const words = segmenter('word');
+		if (!words) return null;
+		const segment = words.segment(textRuns[0].text).containing(logical.index);
+		if (!segment) return null;
+		const whitespace = segment.segment.trim() === '';
+		if (!whitespace && !segment.isWordLike) return null;
+		if (!whitespace && engineSplitCharacters.test(segment.segment)) return null;
+
+		const start = segment.index;
+		const end = start + segment.segment.length;
+		if (!isShown(textRuns, start) || !isShown(textRuns, end)) return null;
+		const paragraph = logical.paragraph;
+		return {
+			anchor: { paragraph, index: start },
+			caret: { paragraph, index: end },
+		};
+	}
+
+	/// The paragraph a triple click at logical selects, anchored at its start. Null when no run
+	/// shows one of its ends, or it is rotated or right to left.
+	export function paragraphAt(
+		position: CaretPosition,
+		logical: LogicalCaret,
+	): CaretSpan | null {
+		const textRuns = movableRuns(position.objectRuns, logical.paragraph);
+		if (!textRuns) return null;
+		const end = textRuns[0].text.length;
+		if (!isShown(textRuns, 0) || !isShown(textRuns, end)) return null;
+		const paragraph = logical.paragraph;
+		return {
+			anchor: { paragraph, index: 0 },
+			caret: { paragraph, index: end },
+		};
 	}
 
 	/// The caret one word before (step -1) or after (step 1) logical: back to the start of the

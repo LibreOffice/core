@@ -356,6 +356,46 @@ describe('text prediction caret steps', function () {
 		return cool.stepByWord(position, logical, direction);
 	}
 
+	// The span a double click at the index selects in a one-line paragraph, or null.
+	function wordAt(
+		data: cool.VectorPrimitivesData,
+		index: number,
+	): [number, number] | null {
+		const logical = { paragraph: 0, index };
+		const position = findCaretPosition(data, 0, 0, 0, measure, logical, 1);
+		nodeassert.ok(position, 'the caret is in a run');
+		const span = cool.wordAt(position, logical);
+		return span ? [span.anchor.index, span.caret.index] : null;
+	}
+
+	it('selects the word at or after a double click, or the spaces there', function () {
+		// "Hello" at 0, "," at 5, a space at 6, "big" at 7 and "world" at 11.
+		const data = oneLine('Hello, big world');
+		nodeassert.deepStrictEqual(wordAt(data, 1), [0, 5]);
+		nodeassert.deepStrictEqual(wordAt(data, 0), [0, 5]);
+		nodeassert.deepStrictEqual(wordAt(data, 6), [6, 7]);
+		nodeassert.deepStrictEqual(wordAt(data, 11), [11, 16]);
+	});
+
+	it('leaves a double click on punctuation, at the end of the text or in a word with a symbol to the server', function () {
+		nodeassert.strictEqual(wordAt(oneLine('Hello, big world'), 5), null);
+		nodeassert.strictEqual(wordAt(oneLine('Hello, big world'), 16), null);
+		nodeassert.strictEqual(wordAt(oneLine("don't stop"), 2), null);
+		nodeassert.strictEqual(wordAt(oneLine('e.g. this'), 1), null);
+		nodeassert.strictEqual(wordAt(oneLine('\u65e5\u672c\u8a9e'), 1), null);
+	});
+
+	it('selects the whole paragraph of a triple click', function () {
+		const data = makeTwoParaSlide();
+		const logical = { paragraph: 1, index: 2 };
+		const position = findCaretPosition(data, 0, 0, 0, measure, logical, 1);
+		nodeassert.ok(position, 'the caret is in a run');
+		nodeassert.deepStrictEqual(cool.paragraphAt(position, logical), {
+			anchor: { paragraph: 1, index: 0 },
+			caret: { paragraph: 1, index: 5 },
+		});
+	});
+
 	it('moves the caret to the start of the next word, with punctuation as a word', function () {
 		// "Hello" at 0, "," at 5, "big" at 7 and "world" at 11.
 		const data = oneLine('Hello, big world');

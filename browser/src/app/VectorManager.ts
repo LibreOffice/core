@@ -1071,6 +1071,41 @@ class VectorManager extends RenderManagerBase {
 		return logical !== null && this._moveCaret(target, entryId, logical, null);
 	}
 
+	/// Select the word under a double click at (x, y), in document twips, as the engine does.
+	/// hitId is the object at the point, if any. True when the word is selected.
+	selectWordAt(x: number, y: number, hitId: number | undefined): boolean {
+		return this._selectAt(x, y, hitId, cool.wordAt);
+	}
+
+	/// Select the paragraph under a triple click at (x, y), in document twips. hitId is the
+	/// object at the point, if any. True when the paragraph is selected.
+	selectParagraphAt(x: number, y: number, hitId: number | undefined): boolean {
+		return this._selectAt(x, y, hitId, cool.paragraphAt);
+	}
+
+	// Select the span that extent gives around the caret where a click at (x, y) lands.
+	private _selectAt(
+		x: number,
+		y: number,
+		hitId: number | undefined,
+		extent: (
+			position: cool.CaretPosition,
+			logical: cool.LogicalCaret,
+		) => cool.CaretSpan | null,
+	): boolean {
+		const target = this._caretTarget();
+		if (!target) return false;
+		const entryId = this._pressedEntry(target, hitId, x, y);
+		if (entryId === undefined) return false;
+		const logical = this._textOf(target.tree, entryId)?.caretAtPoint(x, y);
+		if (!logical) return false;
+		const position = target.tree.caretIn(entryId, logical);
+		const span = position ? extent(position, logical) : null;
+		return (
+			span !== null && this._moveCaret(target, entryId, span.caret, span.anchor)
+		);
+	}
+
 	// The entry and the caret where a drag that selects text started.
 	private _dragStart: { entryId: number; anchor: cool.LogicalCaret } | null =
 		null;

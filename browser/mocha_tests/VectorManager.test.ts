@@ -2289,6 +2289,48 @@ describe('VectorManager', function () {
 				nodeassert.deepStrictEqual(sent, []);
 			});
 
+			it('selects the word under a double click without telling the server', function () {
+				const manager = managerWith('Hi');
+				nodeassert.ok(manager.selectWordAt(1120, 1950, 5));
+				nodeassert.deepStrictEqual(app.file.textCursor.anchor, {
+					paragraph: 0,
+					index: 0,
+				});
+				nodeassert.deepStrictEqual(app.file.textCursor.logical, {
+					paragraph: 0,
+					index: 2,
+				});
+				nodeassert.deepStrictEqual(drawn, [[[1000, 1712, 200, 432]]]);
+				nodeassert.deepStrictEqual(sent, []);
+			});
+
+			it('selects the paragraph under a triple click, over its lines', function () {
+				const manager = new TestManager();
+				manager.handleVectorPrimitivesResponse({
+					partId: 'S0',
+					version: 1,
+					objects: [twoLineBox()],
+				});
+				app.file.textCursor.rectangle = new cool.SimpleRectangle(
+					1400,
+					1800,
+					0,
+					250,
+				);
+				app.file.textCursor.logical = { paragraph: 0, index: 4 };
+				nodeassert.ok(manager.selectParagraphAt(1120, 1950, 5));
+				nodeassert.deepStrictEqual(app.file.textCursor.anchor, {
+					paragraph: 0,
+					index: 0,
+				});
+				nodeassert.deepStrictEqual(app.file.textCursor.logical, {
+					paragraph: 0,
+					index: 10,
+				});
+				nodeassert.strictEqual(drawn[0].length, 2);
+				nodeassert.deepStrictEqual(sent, []);
+			});
+
 			it('leaves a click on another object to the server', function () {
 				const manager = managerWith('Hi');
 				nodeassert.strictEqual(manager.placeCaretAt(1120, 1950, 9), false);
