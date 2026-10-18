@@ -29,7 +29,6 @@
 #include <com/sun/star/linguistic2/LinguProperties.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker.hpp>
 
-#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <i18nlangtag/languagetag.hxx>
@@ -583,10 +582,7 @@ uno::Reference< XDictionary > LinguMgr::GetIgnoreAll()
     uno::Reference< XSearchableDictionaryList >  xTmpDicList( GetDictionaryList() );
     if (xTmpDicList.is())
     {
-        const LanguageTag tag = comphelper::COKit::isActive()
-                                    ? LanguageTag(u"en-US"_ustr)
-                                    : SvtSysLocale().GetUILanguageTag();
-        std::locale loc(Translate::Create("svt", tag));
+        std::locale loc(Translate::Create("svt", LanguageTag(u"en-US"_ustr)));
         xIgnoreAll = xTmpDicList->getDictionaryByName(
                                     Translate::get(STR_DESCRIPTION_IGNOREALLLIST, loc) );
     }

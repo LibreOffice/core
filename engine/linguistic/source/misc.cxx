@@ -35,7 +35,6 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Reference.h>
-#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <unotools/charclass.hxx>
@@ -709,10 +708,7 @@ uno::Reference< XDictionary > GetIgnoreAllList()
     uno::Reference< XSearchableDictionaryList > xDL( GetDictionaryList() );
     if (xDL.is())
     {
-        const LanguageTag tag = comphelper::COKit::isActive()
-                                    ? LanguageTag(u"en-US"_ustr)
-                                    : SvtSysLocale().GetUILanguageTag();
-        std::locale loc(Translate::Create("svt", tag));
+        std::locale loc(Translate::Create("svt", LanguageTag(u"en-US"_ustr)));
         xRes = xDL->getDictionaryByName( Translate::get(STR_DESCRIPTION_IGNOREALLLIST, loc) );
     }
     return xRes;

@@ -622,10 +622,7 @@ void DicList::CreateDicList(bool bDispatchEvents)
 
     // create IgnoreAllList dictionary with empty URL (non persistent)
     // and add it to list
-    const LanguageTag tag = comphelper::COKit::isActive()
-                                ? LanguageTag(u"en-US"_ustr)
-                                : SvtSysLocale().GetUILanguageTag();
-    std::locale loc(Translate::Create("svt", tag));
+    std::locale loc(Translate::Create("svt", LanguageTag(u"en-US"_ustr)));
     uno::Reference< XDictionary > xIgnAll(
             createDictionary( Translate::get(STR_DESCRIPTION_IGNOREALLLIST, loc), LinguLanguageToLocale( LANGUAGE_NONE ),
                               DictionaryType_POSITIVE, OUString() ) );
