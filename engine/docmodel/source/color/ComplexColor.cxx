@@ -110,6 +110,23 @@ bool ComplexColor::isTransparent() const
     return false;
 }
 
+sal_Int32 ComplexColor::getAlpha() const
+{
+    for (const Transformation& rTransformation : maTransformations)
+    {
+        if (rTransformation.meType == TransformationType::Alpha)
+            return rTransformation.mnValue;
+    }
+    return 10000;
+}
+
+void ComplexColor::setAlpha(sal_Int32 nAlpha)
+{
+    removeTransformations(TransformationType::Alpha);
+    if (nAlpha != 10000)
+        addTransformation({ TransformationType::Alpha, nAlpha });
+}
+
 void ComplexColor::setThemeColor(ThemeColorType eType)
 {
     meThemeColorType = eType;

@@ -3811,6 +3811,12 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/util,\
 	XCloseListener \
 	XCloseable \
 	XComplexColor \
+	XBlurEffect \
+	XGlowEffect \
+	XInnerShadowEffect \
+	XOuterShadowEffect \
+	XReflectionEffect \
+	XSoftEdgeEffect \
 	XTheme \
 	XDataEditor \
 	XDataEditorListener \

@@ -177,6 +177,12 @@ public:
 
     bool isTransparent() const;
 
+    /// The alpha transformation of the color, in 1/100 percent. A color without one is opaque.
+    sal_Int32 getAlpha() const;
+
+    /// Sets the alpha transformation, in 1/100 percent. An opaque color has none.
+    void setAlpha(sal_Int32 nAlpha);
+
     void setThemePlaceholder() { meType = ColorType::Placeholder; }
 
     void setThemeColor(ThemeColorType eType);

@@ -11,6 +11,12 @@ $(eval $(call gb_Library_Library,docmodel))
 
 $(eval $(call gb_Library_add_exception_objects,docmodel,\
     docmodel/source/uno/UnoComplexColor \
+    docmodel/source/uno/UnoBlurEffect \
+    docmodel/source/uno/UnoGlowEffect \
+    docmodel/source/uno/UnoInnerShadowEffect \
+    docmodel/source/uno/UnoOuterShadowEffect \
+    docmodel/source/uno/UnoReflectionEffect \
+    docmodel/source/uno/UnoSoftEdgeEffect \
     docmodel/source/uno/UnoChartStyle \
     docmodel/source/uno/UnoChartColorStyle \
     docmodel/source/uno/UnoGradientTools \
@@ -19,6 +25,13 @@ $(eval $(call gb_Library_add_exception_objects,docmodel,\
     docmodel/source/theme/Theme \
     docmodel/source/color/ComplexColorJSON \
     docmodel/source/color/ComplexColor \
+    docmodel/source/effect/BlurEffectJSON \
+    docmodel/source/effect/GlowEffectJSON \
+    docmodel/source/effect/InnerShadowEffectJSON \
+    docmodel/source/effect/OuterShadowEffectJSON \
+    docmodel/source/effect/ReflectionEffectJSON \
+    docmodel/source/effect/SoftEdgeEffectJSON \
+    docmodel/source/effect/EffectJSONTools \
     docmodel/source/styles/ChartStyle \
     docmodel/source/styles/ChartColorStyle \
 ))
