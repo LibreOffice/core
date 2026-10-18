@@ -776,7 +776,8 @@ XMLSignatureHelper::CheckAndUpdateSignatureInformation(
     // The certificate at the end of the chain is the signing certificate, so it
     // must be the certificate whose public key verified the signature value.
     if (rInfo.nStatus == css::xml::crypto::SecurityOperationStatus_OPERATION_SUCCEEDED
-        && (certs.empty() || certs.back()->getEncoded() != rInfo.xVerifiedCertificate->getEncoded()))
+        && (certs.empty() || !rInfo.xVerifiedCertificate.is()
+            || certs.back()->getEncoded() != rInfo.xVerifiedCertificate->getEncoded()))
     {
         SAL_WARN("xmlsecurity.comp", "CheckX509Data did not guess the same certificate that verified the signature");
         datas.clear();
