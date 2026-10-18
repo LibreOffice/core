@@ -345,6 +345,8 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
                                     sal_Int32 lBound;
                                     sal_Int32 uBound;
                                     r.ReadInt32(lBound).ReadInt32(uBound);
+                                    if (!r.good())
+                                        break;
                                     pArray->unoAddDim(lBound, uBound);
                                 }
 
