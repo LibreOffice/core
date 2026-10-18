@@ -318,6 +318,27 @@ nav [id^='save'].saved img {
 .lo-menu ul a:hover > span.sub-arrow {
 	filter: brightness(100);
 }
+/* The smartmenus theme has rules of its own for a menu that runs from right to
+   left, more specific than the ones above, with wider padding and a border on
+   the first entry. These give that menu the same look as the other one, with
+   the submenu arrows at the left and pointing left. */
+.lo-menu.sm-simple.sm-rtl > li > a,
+.lo-menu.sm-simple.sm-rtl > li > a.has-submenu {
+	padding: var(--spacing-m);
+}
+.lo-menu.sm-simple.sm-rtl > li:first-child {
+	border-left-color: transparent;
+}
+.lo-menu.sm-simple.sm-rtl ul a.has-submenu {
+	padding: 5px 22px;
+}
+.lo-menu.sm-simple.sm-rtl ul a span.sub-arrow {
+	right: auto;
+	left: 0;
+	margin-right: 0;
+	margin-left: 5px;
+	transform: scaleX(-1);
+}
 .lo-menu ul a:has(> span.shortcut) {
 	display: flex;
 	align-items: center;

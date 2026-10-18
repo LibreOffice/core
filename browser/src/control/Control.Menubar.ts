@@ -1952,6 +1952,13 @@ class Menubar extends window.L.Control {
 			this._initializeMenu(this.options.drawing);
 		}
 
+		// In a language written from right to left the entries run from the right, and the
+		// submenus open towards the left. The menu plugin reads the class when it starts.
+		$('#main-menu').toggleClass(
+			'sm-rtl',
+			document.documentElement.dir === 'rtl',
+		);
+
 		// initialize menubar plugin
 		$('#main-menu').smartmenus({
 			hideOnClick: true,
