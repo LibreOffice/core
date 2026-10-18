@@ -45,6 +45,9 @@
 #include <svx/xlnedit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/svdmodel.hxx>
+#include <svx/EffectItems.hxx>
+#include <svx/unomid.hxx>
+#include <docmodel/theme/Theme.hxx>
 #include <svx/svdobjkind.hxx>
 #include <svx/unopage.hxx>
 #include <svx/unoshape.hxx>
@@ -154,6 +157,20 @@ SdrTextObj* getTextObjectWithFitToSize(SdrObject* pObject)
     }
 
     return pTextObj;
+}
+
+/// Sets the color of a theme color of the glow from the theme of the page of the object.
+void resolveGlowColor(const SdrObject& rObject, SfxItemSet& rSet)
+{
+    const SdrPage* pPage = rObject.getSdrPageFromSdrObject();
+    const std::shared_ptr<model::Theme>& pTheme
+        = pPage ? pPage->getSdrPageProperties().getTheme()
+                : rObject.getSdrModelFromSdrObject().getTheme();
+    if (!pTheme || !pTheme->getColorSet())
+        return;
+    SdrGlowEffectItem aGlow(rSet.Get(SDRATTR_GLOW));
+    if (aGlow.resolveColor(*pTheme->getColorSet()))
+        rSet.Put(aGlow);
 }
 }
 
@@ -1583,6 +1600,10 @@ void SvxShape::_setPropertyValue( const OUString& rPropertyName, const cpo::uno:
         if( pSet->GetItemState( pMap->nWID ) == SfxItemState::SET )
         {
             SvxItemPropertySet_setPropertyValue( pMap, rVal, *pSet );
+            // GlowEffectComplexColor gives only the theme color, and the theme gives its color.
+            if (pMap->nWID == SDRATTR_GLOW
+                && (pMap->nMemberId & ~CONVERT_TWIPS) == MID_GLOW_COMPLEX_COLOR)
+                resolveGlowColor(*GetSdrObject(), *pSet);
         }
     }
 

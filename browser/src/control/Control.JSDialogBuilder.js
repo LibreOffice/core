@@ -1242,6 +1242,13 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 				return state;
 			}
 			break;
+
+		case 'LB_GLOW_COLOR':
+			state = items.getItemValue('.uno:GlowEffect');
+			if (state && state.Color) {
+				return parseInt(state.Color.RGB, 16);
+			}
+			break;
 		}
 
 		return null;

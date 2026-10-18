@@ -231,6 +231,15 @@ item XColor XColorItem;
 item INT16                  SdrPercentItem;
 item INT32                  SdrMetricItem;
 
+struct SdrGlowEffect
+{
+    String JSON             MID_EFFECT_JSON;
+    INT32  Radius           MID_GLOW_RADIUS;
+    INT32  Color            MID_GLOW_COLOR;
+    INT16  Transparency     MID_GLOW_TRANSPARENCY;
+};
+item SdrGlowEffect SdrGlowEffectItem;
+
 item BYTE                   SfxGlobalNameItem;
 
 struct SvxCrossedOut

@@ -21,6 +21,8 @@
 #define INCLUDED_SVX_UNOSHPRP_HXX
 
 #include <com/sun/star/drawing/PointSequence.hpp>
+#include <com/sun/star/util/XComplexColor.hpp>
+#include <com/sun/star/util/XGlowEffect.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <com/sun/star/drawing/RectanglePoint.hpp>
@@ -213,9 +215,11 @@
     { u"FontWorkShadowTransparence"_ustr,XATTR_FORMTXTSHDWTRANSP,   ::cppu::UnoType<sal_Int16>::get(),            0,  0},
 
 #define GLOW_PROPERTIES \
-    { u"GlowEffectRadius"_ustr,          SDRATTR_GLOW_RADIUS,         ::cppu::UnoType<sal_Int32>::get(),    0,      0, PropertyMoreFlags::METRIC_ITEM}, \
-    { u"GlowEffectColor"_ustr,           SDRATTR_GLOW_COLOR,       ::cppu::UnoType<sal_Int32>::get(),    0,      0}, \
-    { u"GlowEffectTransparency"_ustr,    SDRATTR_GLOW_TRANSPARENCY,::cppu::UnoType<sal_Int16>::get(),    0,      0 },
+    { u"GlowEffect"_ustr,                SDRATTR_GLOW, ::cppu::UnoType<css::util::XGlowEffect>::get(),   0, MID_EFFECT}, \
+    { u"GlowEffectRadius"_ustr,          SDRATTR_GLOW, ::cppu::UnoType<sal_Int32>::get(),                0, MID_GLOW_RADIUS}, \
+    { u"GlowEffectColor"_ustr,           SDRATTR_GLOW, ::cppu::UnoType<sal_Int32>::get(),                0, MID_GLOW_COLOR}, \
+    { u"GlowEffectComplexColor"_ustr,    SDRATTR_GLOW, ::cppu::UnoType<css::util::XComplexColor>::get(), 0, MID_GLOW_COMPLEX_COLOR}, \
+    { u"GlowEffectTransparency"_ustr,    SDRATTR_GLOW, ::cppu::UnoType<sal_Int16>::get(),                0, MID_GLOW_TRANSPARENCY},
 
 #define SOFTEDGE_PROPERTIES \
     { u"SoftEdgeRadius"_ustr,      SDRATTR_SOFTEDGE_RADIUS,       cppu::UnoType<sal_Int32>::get(),      0,      0, PropertyMoreFlags::METRIC_ITEM},

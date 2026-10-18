@@ -64,7 +64,10 @@ JSDialog.getCurrentColor = function (data, builder) {
 		data.command,
 	);
 
-	if (selectedColor === 'disabled') selectedColor = null;
+	// A command whose state is a JSON object, like the glow, has its color looked
+	// up by the id of the widget.
+	if (selectedColor === 'disabled' || typeof selectedColor === 'object')
+		selectedColor = null;
 
 	if (!selectedColor || selectedColor < 0)
 		selectedColor = builder._getUnoStateForItemId(data.id, builder);
@@ -108,6 +111,21 @@ JSDialog.sendColorCommand = function (builder, data, color, themeData) {
 				JSON.stringify(gradientItem),
 		);
 		return;
+	} else if (data.id === 'LB_GLOW_COLOR') {
+		// A glow always has a color, and a radius of 0 turns it off.
+		if (color === 'transparent') return;
+		// The glow is one command with the whole effect as JSON, so the new color
+		// goes into the current glow and its other values stay.
+		const glowItem =
+			builder.map['stateChangeHandler'].getItemValue('.uno:GlowEffect') || {};
+		glowItem.Color = themeData
+			? JSON.parse(themeData)
+			: { ThemeIndex: -1, Transformations: [] };
+		glowItem.Color.RGB = color;
+		builder.map.sendUnoCommand(
+			'.uno:GlowEffect?GlowEffect.JSON:string=' + JSON.stringify(glowItem),
+		);
+		return;
 	} else if (data.id === 'fillattr3') {
 		gradientItem = builder.map['stateChangeHandler'].getItemValue(
 			'.uno:FillPageGradient',
@@ -124,8 +142,6 @@ JSDialog.sendColorCommand = function (builder, data, color, themeData) {
 
 	if (data.id === 'fillattr') {
 		data.command = '.uno:FillPageColor';
-	} else if (data.id === 'LB_GLOW_COLOR') {
-		data.id = 'GlowColor';
 	} else if (data.id === 'LB_SHADOW_COLOR') {
 		data.command = '.uno:FillShadowColor';
 	}

@@ -11,12 +11,11 @@
 
 #include <svx/sidebar/EffectPropertyPanelBase.hxx>
 
+#include <svx/EffectItems.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/sdmetitm.hxx>
-#include <svx/sdprcitm.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svxids.hrc>
-#include <svx/xcolit.hxx>
 #include <svl/itemset.hxx>
 
 namespace svx::sidebar
@@ -62,23 +61,39 @@ IMPL_LINK_NOARG(EffectPropertyPanelBase, ModifySoftEdgeRadiusHdl, weld::MetricSp
     setSoftEdgeRadius(aItem);
 }
 
+SdrGlowEffectItem EffectPropertyPanelBase::getGlow() const
+{
+    if (mpGlow)
+        return *mpGlow;
+    return SdrGlowEffectItem(SDRATTR_GLOW);
+}
+
+void EffectPropertyPanelBase::changeGlow(const SdrGlowEffectItem& rGlow)
+{
+    // The next change starts from this one, also before the state of the selection comes back.
+    mpGlow.reset(rGlow.Clone());
+    setGlow(rGlow);
+}
+
 IMPL_LINK_NOARG(EffectPropertyPanelBase, ModifyGlowColorHdl, ColorListBox&, void)
 {
-    const XColorItem aItem(SDRATTR_GLOW_COLOR, mxLBGlowColor->GetSelectEntryColor());
-    setGlowColor(aItem);
+    SdrGlowEffectItem aGlow(getGlow());
+    aGlow.setColor(mxLBGlowColor->GetSelectEntryColor());
+    changeGlow(aGlow);
 }
 
 IMPL_LINK_NOARG(EffectPropertyPanelBase, ModifyGlowRadiusHdl, weld::MetricSpinButton&, void)
 {
-    const SdrMetricItem aItem(SDRATTR_GLOW_RADIUS, mxGlowRadius->get_value(FieldUnit::MM_100TH));
-    setGlowRadius(aItem);
+    SdrGlowEffectItem aGlow(getGlow());
+    aGlow.setRadius(gfx::Length::hmm(mxGlowRadius->get_value(FieldUnit::MM_100TH)));
+    changeGlow(aGlow);
 }
 
 IMPL_LINK_NOARG(EffectPropertyPanelBase, ModifyGlowTransparencyHdl, weld::MetricSpinButton&, void)
 {
-    const SdrPercentItem aItem(SDRATTR_GLOW_TRANSPARENCY,
-                               mxGlowTransparency->get_value(FieldUnit::PERCENT));
-    setGlowTransparency(aItem);
+    SdrGlowEffectItem aGlow(getGlow());
+    aGlow.setTransparency(mxGlowTransparency->get_value(FieldUnit::PERCENT));
+    changeGlow(aGlow);
 }
 
 void EffectPropertyPanelBase::UpdateControls() const
@@ -90,40 +105,19 @@ void EffectPropertyPanelBase::UpdateControls() const
     mxFTTransparency->set_sensitive(bEnabled);
 }
 
-void EffectPropertyPanelBase::updateGlowRadius(const bool bDefaultOrSet,
-                                               const SfxPoolItem* pState) const
+void EffectPropertyPanelBase::updateGlow(const bool bDefaultOrSet, const SfxPoolItem* pState)
 {
-    if (bDefaultOrSet)
+    const auto* pGlow = bDefaultOrSet ? dynamic_cast<const SdrGlowEffectItem*>(pState) : nullptr;
+    if (!pGlow)
     {
-        if (const auto* pRadiusItem = dynamic_cast<const SdrMetricItem*>(pState))
-        {
-            mxGlowRadius->set_value(pRadiusItem->GetValue(), FieldUnit::MM_100TH);
-        }
+        mpGlow.reset();
+        return;
     }
-}
 
-void EffectPropertyPanelBase::updateGlowColor(const bool bDefaultOrSet,
-                                              const SfxPoolItem* pState) const
-{
-    if (bDefaultOrSet)
-    {
-        if (const auto* pColorItem = dynamic_cast<const XColorItem*>(pState))
-        {
-            mxLBGlowColor->SelectEntry(pColorItem->GetColorValue());
-        }
-    }
-}
-
-void EffectPropertyPanelBase::updateGlowTransparency(const bool bDefaultOrSet,
-                                                     const SfxPoolItem* pState) const
-{
-    if (bDefaultOrSet)
-    {
-        if (const auto pItem = dynamic_cast<const SdrPercentItem*>(pState))
-        {
-            mxGlowTransparency->set_value(pItem->GetValue(), FieldUnit::PERCENT);
-        }
-    }
+    mpGlow.reset(pGlow->Clone());
+    mxGlowRadius->set_value(pGlow->getEffect().maRadius.as_hmm<sal_Int64>(), FieldUnit::MM_100TH);
+    mxLBGlowColor->SelectEntry(pGlow->getColor());
+    mxGlowTransparency->set_value(pGlow->getTransparency(), FieldUnit::PERCENT);
 }
 
 void EffectPropertyPanelBase::updateSoftEdgeRadius(const bool bDefaultOrSet,
@@ -147,14 +141,8 @@ void EffectPropertyPanelBase::NotifyItemUpdate(const sal_uInt16 nSID, const SfxI
         case SID_ATTR_SOFTEDGE_RADIUS:
             updateSoftEdgeRadius(bDefaultOrSet, pState);
             break;
-        case SID_ATTR_GLOW_COLOR:
-            updateGlowColor(bDefaultOrSet, pState);
-            break;
-        case SID_ATTR_GLOW_RADIUS:
-            updateGlowRadius(bDefaultOrSet, pState);
-            break;
-        case SID_ATTR_GLOW_TRANSPARENCY:
-            updateGlowTransparency(bDefaultOrSet, pState);
+        case SID_ATTR_GLOW:
+            updateGlow(bDefaultOrSet, pState);
             break;
     }
     UpdateControls();

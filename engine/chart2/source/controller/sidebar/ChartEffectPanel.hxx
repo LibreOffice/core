@@ -31,9 +31,7 @@ public:
 
     static std::unique_ptr<PanelLayout> Create(weld::Widget* pParent, ChartController* pController);
 
-    void setGlowRadius(const SdrMetricItem& rItem) override;
-    void setGlowColor(const XColorItem& rItem) override;
-    void setGlowTransparency(const SdrPercentItem& rItem) override;
+    void setGlow(const SdrGlowEffectItem& rItem) override;
     void setSoftEdgeRadius(const SdrMetricItem& rItem) override;
 
     void updateData() override;

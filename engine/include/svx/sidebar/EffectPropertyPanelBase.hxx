@@ -11,10 +11,11 @@
 
 #include <sfx2/sidebar/ControllerItem.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
+#include <svx/EffectItems.hxx>
 #include <svx/svxdllapi.h>
 
-class XColorItem;
-class SdrPercentItem;
+#include <memory>
+
 class SdrMetricItem;
 class ColorListBox;
 
@@ -35,17 +36,16 @@ public:
     {
     }
 
-    virtual void setGlowRadius(const SdrMetricItem& rGlowRadius) = 0;
-    virtual void setGlowColor(const XColorItem& rGlowColor) = 0;
-    virtual void setGlowTransparency(const SdrPercentItem& rGlowTransparency) = 0;
+    virtual void setGlow(const SdrGlowEffectItem& rGlow) = 0;
     virtual void setSoftEdgeRadius(const SdrMetricItem& rSoftEdgeRadius) = 0;
 
-    void updateGlowRadius(bool bDefaultOrSet, const SfxPoolItem* pState) const;
-    void updateGlowColor(bool bDefaultOrSet, const SfxPoolItem* pState) const;
-    void updateGlowTransparency(bool bDefaultOrSet, const SfxPoolItem* pState) const;
+    void updateGlow(bool bDefaultOrSet, const SfxPoolItem* pState);
     void updateSoftEdgeRadius(bool bDefaultOrSet, const SfxPoolItem* pState) const;
 
 private:
+    /// The glow of the selection, or none when the selection has no single glow.
+    std::unique_ptr<SdrGlowEffectItem> mpGlow;
+
     std::unique_ptr<weld::Label> mxFTTransparency;
     std::unique_ptr<weld::MetricSpinButton> mxGlowRadius;
     std::unique_ptr<ColorListBox> mxLBGlowColor;
@@ -55,6 +55,10 @@ private:
 
     void Initialize();
     void UpdateControls() const;
+    /// The glow that a change of one of its values starts from.
+    SdrGlowEffectItem getGlow() const;
+    /// Sets the glow on the selection and keeps it as the glow that the next change starts from.
+    void changeGlow(const SdrGlowEffectItem& rGlow);
 
     DECL_DLLPRIVATE_LINK(ModifyGlowColorHdl, ColorListBox&, void);
     DECL_DLLPRIVATE_LINK(ModifyGlowRadiusHdl, weld::MetricSpinButton&, void);

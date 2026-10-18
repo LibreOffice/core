@@ -78,6 +78,7 @@ class SdrEdgeNode1VertDistItem;
 class SdrEdgeNode2GlueDistItem;
 class SdrEdgeNode2HorzDistItem;
 class SdrEdgeNode2VertDistItem;
+class SdrGlowEffectItem;
 class SdrGrafBlueItem;
 class SdrGrafClipPolyPolygonItem;
 class SdrGrafContrastItem;
@@ -421,45 +422,43 @@ inline constexpr TypedWhichId<SfxGrabBagItem>    SDRATTR_TABLE_CELL_GRABBAG  (SD
 inline constexpr sal_uInt16                      SDRATTR_TABLE_LAST          (SDRATTR_TABLE_CELL_GRABBAG); // 1242
 
 inline constexpr sal_uInt16                      SDRATTR_GLOW_FIRST (SDRATTR_TABLE_LAST+1);                // 1243
-inline constexpr TypedWhichId<SdrMetricItem>     SDRATTR_GLOW_RADIUS(SDRATTR_GLOW_FIRST+0);                // 1243
-inline constexpr TypedWhichId<XColorItem>        SDRATTR_GLOW_COLOR (SDRATTR_GLOW_FIRST+1);                // 1244
-inline constexpr TypedWhichId<SdrPercentItem>    SDRATTR_GLOW_TRANSPARENCY(SDRATTR_GLOW_FIRST+2);          // 1245
-inline constexpr sal_uInt16                      SDRATTR_GLOW_LAST(SDRATTR_GLOW_TRANSPARENCY);             // 1245
+inline constexpr TypedWhichId<SdrGlowEffectItem> SDRATTR_GLOW(SDRATTR_GLOW_FIRST+0);                       // 1243
+inline constexpr sal_uInt16                      SDRATTR_GLOW_LAST(SDRATTR_GLOW);                          // 1243
 
-inline constexpr sal_uInt16                      SDRATTR_SOFTEDGE_FIRST(SDRATTR_GLOW_LAST+1);              // 1246
-inline constexpr TypedWhichId<SdrMetricItem>     SDRATTR_SOFTEDGE_RADIUS(SDRATTR_SOFTEDGE_FIRST+0);        // 1246
-inline constexpr sal_uInt16                      SDRATTR_SOFTEDGE_LAST(SDRATTR_SOFTEDGE_RADIUS);           // 1246
+inline constexpr sal_uInt16                      SDRATTR_SOFTEDGE_FIRST(SDRATTR_GLOW_LAST+1);              // 1244
+inline constexpr TypedWhichId<SdrMetricItem>     SDRATTR_SOFTEDGE_RADIUS(SDRATTR_SOFTEDGE_FIRST+0);        // 1244
+inline constexpr sal_uInt16                      SDRATTR_SOFTEDGE_LAST(SDRATTR_SOFTEDGE_RADIUS);           // 1244
 
-inline constexpr sal_uInt16                      SDRATTR_GLOW_TEXT_FIRST(SDRATTR_SOFTEDGE_LAST+1);         // 1247
-inline constexpr TypedWhichId<SdrMetricItem>     SDRATTR_GLOW_TEXT_RADIUS(SDRATTR_GLOW_TEXT_FIRST+0);      // 1247
-inline constexpr TypedWhichId<XColorItem>        SDRATTR_GLOW_TEXT_COLOR(SDRATTR_GLOW_TEXT_FIRST+1);       // 1248
-inline constexpr TypedWhichId<SdrPercentItem>    SDRATTR_GLOW_TEXT_TRANSPARENCY(SDRATTR_GLOW_TEXT_FIRST+2);// 1249
-inline constexpr sal_uInt16                      SDRATTR_GLOW_TEXT_LAST(SDRATTR_GLOW_TEXT_TRANSPARENCY);   // 1249
+inline constexpr sal_uInt16                      SDRATTR_GLOW_TEXT_FIRST(SDRATTR_SOFTEDGE_LAST+1);         // 1245
+inline constexpr TypedWhichId<SdrMetricItem>     SDRATTR_GLOW_TEXT_RADIUS(SDRATTR_GLOW_TEXT_FIRST+0);      // 1245
+inline constexpr TypedWhichId<XColorItem>        SDRATTR_GLOW_TEXT_COLOR(SDRATTR_GLOW_TEXT_FIRST+1);       // 1246
+inline constexpr TypedWhichId<SdrPercentItem>    SDRATTR_GLOW_TEXT_TRANSPARENCY(SDRATTR_GLOW_TEXT_FIRST+2);// 1247
+inline constexpr sal_uInt16                      SDRATTR_GLOW_TEXT_LAST(SDRATTR_GLOW_TEXT_TRANSPARENCY);   // 1247
 
-inline constexpr sal_uInt16                      SDRATTR_TEXTCOLUMNS_FIRST(SDRATTR_GLOW_TEXT_LAST+1);      // 1250
-inline constexpr TypedWhichId<SfxInt16Item>      SDRATTR_TEXTCOLUMNS_NUMBER(SDRATTR_TEXTCOLUMNS_FIRST+0);  // 1250
-inline constexpr TypedWhichId<SdrMetricItem>     SDRATTR_TEXTCOLUMNS_SPACING(SDRATTR_TEXTCOLUMNS_FIRST+1); // 1251
-inline constexpr sal_uInt16                      SDRATTR_TEXTCOLUMNS_LAST(SDRATTR_TEXTCOLUMNS_SPACING);    // 1251
+inline constexpr sal_uInt16                      SDRATTR_TEXTCOLUMNS_FIRST(SDRATTR_GLOW_TEXT_LAST+1);      // 1248
+inline constexpr TypedWhichId<SfxInt16Item>      SDRATTR_TEXTCOLUMNS_NUMBER(SDRATTR_TEXTCOLUMNS_FIRST+0);  // 1248
+inline constexpr TypedWhichId<SdrMetricItem>     SDRATTR_TEXTCOLUMNS_SPACING(SDRATTR_TEXTCOLUMNS_FIRST+1); // 1249
+inline constexpr sal_uInt16                      SDRATTR_TEXTCOLUMNS_LAST(SDRATTR_TEXTCOLUMNS_SPACING);    // 1249
 
-inline constexpr sal_uInt16                          SDRATTR_WRITINGMODE2_FIRST(SDRATTR_TEXTCOLUMNS_LAST+1);// 1252
-inline constexpr TypedWhichId<SvxFrameDirectionItem> SDRATTR_WRITINGMODE2(SDRATTR_WRITINGMODE2_FIRST+0);    // 1252
-inline constexpr sal_uInt16                          SDRATTR_WRITINGMODE2_LAST(SDRATTR_WRITINGMODE2);       // 1252
+inline constexpr sal_uInt16                          SDRATTR_WRITINGMODE2_FIRST(SDRATTR_TEXTCOLUMNS_LAST+1);// 1250
+inline constexpr TypedWhichId<SvxFrameDirectionItem> SDRATTR_WRITINGMODE2(SDRATTR_WRITINGMODE2_FIRST+0);    // 1250
+inline constexpr sal_uInt16                          SDRATTR_WRITINGMODE2_LAST(SDRATTR_WRITINGMODE2);       // 1250
 
-inline constexpr sal_uInt16                      SDRATTR_EDGEOOXMLCURVE_FIRST(SDRATTR_WRITINGMODE2_LAST+1);// 1253
-inline constexpr TypedWhichId<SfxBoolItem>       SDRATTR_EDGEOOXMLCURVE(SDRATTR_EDGEOOXMLCURVE_FIRST+0);   // 1253
-inline constexpr sal_uInt16                      SDRATTR_EDGEOOXMLCURVE_LAST(SDRATTR_EDGEOOXMLCURVE);      // 1253
+inline constexpr sal_uInt16                      SDRATTR_EDGEOOXMLCURVE_FIRST(SDRATTR_WRITINGMODE2_LAST+1);// 1251
+inline constexpr TypedWhichId<SfxBoolItem>       SDRATTR_EDGEOOXMLCURVE(SDRATTR_EDGEOOXMLCURVE_FIRST+0);   // 1251
+inline constexpr sal_uInt16                      SDRATTR_EDGEOOXMLCURVE_LAST(SDRATTR_EDGEOOXMLCURVE);      // 1251
 
-inline constexpr sal_uInt16                      SDRATTR_REFLECTION_FIRST(SDRATTR_EDGEOOXMLCURVE_LAST+1);               // 1254
-inline constexpr TypedWhichId<SdrOnOffItem>      SDRATTR_REFLECTION(SDRATTR_REFLECTION_FIRST+0);                        // 1254
-inline constexpr TypedWhichId<SdrMetricItem>     SDRATTR_REFLECTION_DISTANCE(SDRATTR_REFLECTION_FIRST+1);               // 1255
-inline constexpr TypedWhichId<SdrMetricItem>     SDRATTR_REFLECTION_BLUR_RADIUS(SDRATTR_REFLECTION_FIRST+2);            // 1256
-inline constexpr TypedWhichId<SdrPercentItem>    SDRATTR_REFLECTION_START_TRANSPARENCY(SDRATTR_REFLECTION_FIRST+3);     // 1257
-inline constexpr TypedWhichId<SdrPercentItem>    SDRATTR_REFLECTION_START_POSITION(SDRATTR_REFLECTION_FIRST+4);         // 1258
-inline constexpr TypedWhichId<SdrPercentItem>    SDRATTR_REFLECTION_END_TRANSPARENCY(SDRATTR_REFLECTION_FIRST+5);       // 1259
-inline constexpr TypedWhichId<SdrPercentItem>    SDRATTR_REFLECTION_END_POSITION(SDRATTR_REFLECTION_FIRST+6);           // 1260
-inline constexpr sal_uInt16                      SDRATTR_REFLECTION_LAST(SDRATTR_REFLECTION_END_POSITION);              // 1260
+inline constexpr sal_uInt16                      SDRATTR_REFLECTION_FIRST(SDRATTR_EDGEOOXMLCURVE_LAST+1);               // 1252
+inline constexpr TypedWhichId<SdrOnOffItem>      SDRATTR_REFLECTION(SDRATTR_REFLECTION_FIRST+0);                        // 1252
+inline constexpr TypedWhichId<SdrMetricItem>     SDRATTR_REFLECTION_DISTANCE(SDRATTR_REFLECTION_FIRST+1);               // 1253
+inline constexpr TypedWhichId<SdrMetricItem>     SDRATTR_REFLECTION_BLUR_RADIUS(SDRATTR_REFLECTION_FIRST+2);            // 1254
+inline constexpr TypedWhichId<SdrPercentItem>    SDRATTR_REFLECTION_START_TRANSPARENCY(SDRATTR_REFLECTION_FIRST+3);     // 1255
+inline constexpr TypedWhichId<SdrPercentItem>    SDRATTR_REFLECTION_START_POSITION(SDRATTR_REFLECTION_FIRST+4);         // 1256
+inline constexpr TypedWhichId<SdrPercentItem>    SDRATTR_REFLECTION_END_TRANSPARENCY(SDRATTR_REFLECTION_FIRST+5);       // 1257
+inline constexpr TypedWhichId<SdrPercentItem>    SDRATTR_REFLECTION_END_POSITION(SDRATTR_REFLECTION_FIRST+6);           // 1258
+inline constexpr sal_uInt16                      SDRATTR_REFLECTION_LAST(SDRATTR_REFLECTION_END_POSITION);              // 1258
 
-inline constexpr sal_uInt16 SDRATTR_END (SDRATTR_REFLECTION_LAST);      // 1260
+inline constexpr sal_uInt16 SDRATTR_END (SDRATTR_REFLECTION_LAST);      // 1258
 
 #endif // INCLUDED_SVX_SVDDEF_HXX
 

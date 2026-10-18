@@ -47,6 +47,7 @@
 #include <editeng/sizeitem.hxx>
 #include <sfx2/zoomitem.hxx>
 #include <svx/pageitem.hxx>
+#include <svx/EffectItems.hxx>
 #include <svx/sdooitm.hxx>
 #include <svx/sdtfsitm.hxx>
 #include <svx/sdprcitm.hxx>

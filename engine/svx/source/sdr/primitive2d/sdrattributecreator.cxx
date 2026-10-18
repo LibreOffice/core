@@ -87,6 +87,8 @@
 #include <drawinglayer/attribute/sdrglowattribute.hxx>
 #include <drawinglayer/attribute/sdrglowtextattribute.hxx>
 #include <drawinglayer/attribute/ReflectionAttribute.hxx>
+#include <svx/EffectItems.hxx>
+#include <tools/mapunit.hxx>
 #include <drawinglayer/attribute/sdrsceneattribute3d.hxx>
 #include <drawinglayer/attribute/sdrlightingattribute3d.hxx>
 #include <drawinglayer/attribute/sdrlightattribute3d.hxx>
@@ -195,14 +197,21 @@ namespace drawinglayer
 
         attribute::SdrGlowAttribute createNewSdrGlowAttribute(const SfxItemSet& rSet)
         {
-            sal_Int32 nRadius = rSet.Get(SDRATTR_GLOW_RADIUS).GetValue();
+            const SdrGlowEffectItem& rGlowItem = rSet.Get(SDRATTR_GLOW);
+
+            // The radius is a gfx::Length, and the glow attribute takes it in the unit of the
+            // model.
+            const MapUnit eMapUnit = rSet.GetPool()->GetMetric(SDRATTR_GLOW);
+            const sal_Int32 nRadius(
+                std::lround(o3tl::convert(rGlowItem.getEffect().maRadius.as_hmm(),
+                                          o3tl::Length::mm100, MapToO3tlLength(eMapUnit))));
 
             if (!nRadius)
                 return attribute::SdrGlowAttribute();
 
-            Color aColor(rSet.Get(SDRATTR_GLOW_COLOR).GetColorValue());
+            Color aColor(rGlowItem.getColor());
 
-            sal_uInt16 nTransparency(rSet.Get(SDRATTR_GLOW_TRANSPARENCY).GetValue());
+            sal_uInt16 nTransparency(rGlowItem.getTransparency());
             if (nTransparency)
                 aColor.SetAlpha(255 - std::round(nTransparency / 100.0 * 255.0));
 

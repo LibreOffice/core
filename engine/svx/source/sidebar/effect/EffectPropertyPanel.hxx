@@ -23,9 +23,7 @@ public:
 
     static std::unique_ptr<PanelLayout> Create(weld::Widget* pParent, SfxBindings* pBindings);
 
-    void setGlowRadius(const SdrMetricItem& rGlowRadius) override;
-    void setGlowColor(const XColorItem& rGlowColor) override;
-    void setGlowTransparency(const SdrPercentItem& rGlowTransparency) override;
+    void setGlow(const SdrGlowEffectItem& rGlow) override;
     void setSoftEdgeRadius(const SdrMetricItem& rSoftEdgeRadius) override;
 
     void NotifyItemUpdate(sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState) override;
@@ -51,9 +49,7 @@ private:
     // False while the selection has no reflection items.
     bool mbReflectionAvailable = true;
 
-    sfx2::sidebar::ControllerItem maGlowColorController;
-    sfx2::sidebar::ControllerItem maGlowRadiusController;
-    sfx2::sidebar::ControllerItem maGlowTransparencyController;
+    sfx2::sidebar::ControllerItem maGlowController;
     sfx2::sidebar::ControllerItem maSoftEdgeRadiusController;
     sfx2::sidebar::ControllerItem maReflectionController;
     sfx2::sidebar::ControllerItem maReflectionTransparencyController;

@@ -13,11 +13,11 @@
 #include <ChartModel.hxx>
 #include <ViewElementListProvider.hxx>
 
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <sfx2/weldutils.hxx>
 #include <svx/sdmetitm.hxx>
-#include <svx/sdprcitm.hxx>
+#include <svx/svddef.hxx>
 #include <svx/tbcontrl.hxx>
-#include <svx/xcolit.hxx>
 #include <vcl/svapp.hxx>
 
 namespace chart::sidebar
@@ -132,34 +132,19 @@ void ChartEffectPanel::Initialize()
     updateData();
 }
 
-void ChartEffectPanel::setGlowColor(const XColorItem& rItem)
+void ChartEffectPanel::setGlow(const SdrGlowEffectItem& rItem)
 {
     PreventUpdate aProtector(mbUpdate);
     const cpo::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
     if (!xPropSet.is())
         return;
 
-    xPropSet->setPropertyValue(u"GlowEffectColor"_ustr, cpo::uno::Any(rItem.GetColorValue()));
-}
-
-void ChartEffectPanel::setGlowRadius(const SdrMetricItem& rItem)
-{
-    PreventUpdate aProtector(mbUpdate);
-    cpo::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
-    if (!xPropSet.is())
-        return;
-
-    xPropSet->setPropertyValue(u"GlowEffectRadius"_ustr, cpo::uno::Any(rItem.GetValue()));
-}
-
-void ChartEffectPanel::setGlowTransparency(const SdrPercentItem& rItem)
-{
-    PreventUpdate aProtector(mbUpdate);
-    cpo::uno::Reference<css::beans::XPropertySet> xPropSet = getPropSet(mxModel);
-    if (!xPropSet.is())
-        return;
-
-    xPropSet->setPropertyValue(u"GlowEffectTransparency"_ustr, cpo::uno::Any(rItem.GetValue()));
+    // The chart model has the glow as three properties, with the radius in 1/100 mm.
+    xPropSet->setPropertyValue(u"GlowEffectRadius"_ustr,
+                               cpo::uno::Any(rItem.getEffect().maRadius.as_hmm<sal_Int32>()));
+    xPropSet->setPropertyValue(u"GlowEffectColor"_ustr, cpo::uno::Any(rItem.getColor()));
+    xPropSet->setPropertyValue(u"GlowEffectTransparency"_ustr,
+                               cpo::uno::Any(rItem.getTransparency()));
 }
 
 void ChartEffectPanel::setSoftEdgeRadius(const SdrMetricItem& rItem)
@@ -189,25 +174,17 @@ void ChartEffectPanel::updateData()
     if (xInfo->hasPropertyByName(u"GlowEffectRadius"_ustr))
     {
         sal_Int32 nRadius = 0;
-        xPropSet->getPropertyValue(u"GlowEffectRadius"_ustr) >>= nRadius;
-        const SdrMetricItem aRadiusItem(SDRATTR_GLOW_RADIUS, nRadius);
-        updateGlowRadius(true, &aRadiusItem);
-    }
-
-    if (xInfo->hasPropertyByName(u"GlowEffectColor"_ustr))
-    {
         sal_uInt32 nColor = 0;
-        xPropSet->getPropertyValue(u"GlowEffectColor"_ustr) >>= nColor;
-        const XColorItem aColorItem(SDRATTR_GLOW_COLOR, Color(ColorTransparency, nColor));
-        updateGlowColor(true, &aColorItem);
-    }
-
-    if (xInfo->hasPropertyByName(u"GlowEffectTransparency"_ustr))
-    {
         sal_Int16 nTransparency = 0;
+        xPropSet->getPropertyValue(u"GlowEffectRadius"_ustr) >>= nRadius;
+        xPropSet->getPropertyValue(u"GlowEffectColor"_ustr) >>= nColor;
         xPropSet->getPropertyValue(u"GlowEffectTransparency"_ustr) >>= nTransparency;
-        const SdrPercentItem aTransparencyItem(SDRATTR_GLOW_TRANSPARENCY, nTransparency);
-        updateGlowTransparency(true, &aTransparencyItem);
+
+        SdrGlowEffectItem aGlow(SDRATTR_GLOW);
+        aGlow.setRadius(gfx::Length::hmm(nRadius));
+        aGlow.setColor(Color(ColorTransparency, nColor));
+        aGlow.setTransparency(nTransparency);
+        updateGlow(true, &aGlow);
     }
 }
 

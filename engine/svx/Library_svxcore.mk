@@ -220,6 +220,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/items/documentbullets \
     svx/source/items/drawitem \
     svx/source/items/e3ditem \
+    svx/source/items/EffectItems \
     svx/source/items/RectangleAlignmentItem \
     svx/source/items/galleryitem \
     svx/source/items/grfitem \

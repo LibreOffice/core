@@ -82,6 +82,7 @@
 #include <svx/xlncapit.hxx>
 #include <svx/xlinjoit.hxx>
 #include <svx/galleryitem.hxx>
+#include <svx/EffectItems.hxx>
 #include <svx/sdooitm.hxx>
 #include <avmedia/mediaitem.hxx>
 #include <sfx2/frame.hxx>

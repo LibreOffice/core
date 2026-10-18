@@ -1268,7 +1268,6 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
         { u"Color", { PayloadType::ColorPayload, true } },
         { u"FontColor", { PayloadType::ColorPayload, true } },
         { u"FrameLineColor", { PayloadType::ColorPayload, true } },
-        { u"GlowColor", { PayloadType::ColorPayload, false } },
         { u"FillColor", { PayloadType::ColorOrDisabledPayload, true } },
         { u"Extrusion3DColor", { PayloadType::ColorOrDisabledPayload, true } },
 

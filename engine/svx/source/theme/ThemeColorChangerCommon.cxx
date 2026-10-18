@@ -20,7 +20,9 @@
 
 #include <sfx2/kit/helper.hxx>
 
+#include <svx/EffectItems.hxx>
 #include <svx/PaletteManager.hxx>
+#include <svx/svddef.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/svdundo.hxx>
@@ -139,6 +141,15 @@ bool updateObjectAttributes(model::ColorSet const& rColorSet, SdrObject& rObject
             std::unique_ptr<SvxColorItem> pNewItem(pItem->Clone());
             pNewItem->setColor(aNewColor);
             aItemSet.Put(*pNewItem);
+            bChanged = true;
+        }
+    }
+    if (const SdrGlowEffectItem* pItem = aItemSet.GetItemIfSet(SDRATTR_GLOW, false))
+    {
+        SdrGlowEffectItem aGlow(*pItem);
+        if (aGlow.resolveColor(rColorSet))
+        {
+            aItemSet.Put(aGlow);
             bChanged = true;
         }
     }

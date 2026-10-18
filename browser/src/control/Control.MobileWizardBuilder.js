@@ -769,7 +769,7 @@ window.L.Control.MobileWizardBuilder = window.L.Control.JSDialogBuilder.extend({
 				|| data[i].id === 'LB_GLOW_COLOR')) {
 
 				if (data[i].id === 'LB_GLOW_COLOR')
-					data[i].command = '.uno:GlowColor';
+					data[i].command = '.uno:GlowEffect';
 
 				data[i].type = 'colorlistbox';
 			} else if ((data[i].command === 'sidebargradient' && data[i].type === 'toolitem')

@@ -168,21 +168,7 @@ interface TextDraw : TextDrawBase
         DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
     ]
 
-    SID_ATTR_GLOW_COLOR
-    [
-        ExecMethod = ExecDrawAttrArgs ;
-        StateMethod = GetDrawAttrState ;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
-
-    SID_ATTR_GLOW_RADIUS
-    [
-        ExecMethod = ExecDrawAttrArgs ;
-        StateMethod = GetDrawAttrState ;
-        DisableFlags="SfxDisableFlags::SwOnProtectedCursor";
-    ]
-
-    SID_ATTR_GLOW_TRANSPARENCY
+    SID_ATTR_GLOW
     [
         ExecMethod = ExecDrawAttrArgs ;
         StateMethod = GetDrawAttrState ;

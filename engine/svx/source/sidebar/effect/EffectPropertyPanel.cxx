@@ -12,6 +12,7 @@
 #include "EffectPropertyPanel.hxx"
 
 #include <o3tl/untaint.hxx>
+#include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <sfx2/dispatch.hxx>
 #include <svx/colorbox.hxx>
 #include <svx/sdmetitm.hxx>
@@ -19,7 +20,6 @@
 #include <svx/sdprcitm.hxx>
 #include <svx/svddef.hxx>
 #include <svx/svxids.hrc>
-#include <svx/xcolit.hxx>
 #include <svl/itemset.hxx>
 
 namespace svx::sidebar
@@ -43,9 +43,7 @@ EffectPropertyPanel::EffectPropertyPanel(weld::Widget* pParent, SfxBindings* pBi
     , mxReflectionBlurLabel(m_xBuilder->weld_label(u"reflectionblur"_ustr))
     , mxReflectionBlur(
           m_xBuilder->weld_metric_spin_button(u"SB_REFLECTION_BLUR"_ustr, FieldUnit::POINT))
-    , maGlowColorController(SID_ATTR_GLOW_COLOR, *pBindings, *this)
-    , maGlowRadiusController(SID_ATTR_GLOW_RADIUS, *pBindings, *this)
-    , maGlowTransparencyController(SID_ATTR_GLOW_TRANSPARENCY, *pBindings, *this)
+    , maGlowController(SID_ATTR_GLOW, *pBindings, *this)
     , maSoftEdgeRadiusController(SID_ATTR_SOFTEDGE_RADIUS, *pBindings, *this)
     , maReflectionController(SID_ATTR_REFLECTION, *pBindings, *this)
     , maReflectionTransparencyController(SID_ATTR_REFLECTION_START_TRANSPARENCY, *pBindings, *this)
@@ -76,9 +74,7 @@ EffectPropertyPanel::EffectPropertyPanel(weld::Widget* pParent, SfxBindings* pBi
 
 EffectPropertyPanel::~EffectPropertyPanel()
 {
-    maGlowColorController.dispose();
-    maGlowRadiusController.dispose();
-    maGlowTransparencyController.dispose();
+    maGlowController.dispose();
     maSoftEdgeRadiusController.dispose();
     maReflectionController.dispose();
     maReflectionTransparencyController.dispose();
@@ -217,22 +213,9 @@ IMPL_LINK_NOARG(EffectPropertyPanel, ModifyReflectionBlurHdl, weld::MetricSpinBu
                                              { &aItem });
 }
 
-void EffectPropertyPanel::setGlowRadius(const SdrMetricItem& rGlowRadius)
+void EffectPropertyPanel::setGlow(const SdrGlowEffectItem& rGlow)
 {
-    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_GLOW_RADIUS, SfxCallMode::SLOT,
-                                             { &rGlowRadius });
-}
-
-void EffectPropertyPanel::setGlowColor(const XColorItem& rGlowColor)
-{
-    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_GLOW_COLOR, SfxCallMode::SLOT,
-                                             { &rGlowColor });
-}
-
-void EffectPropertyPanel::setGlowTransparency(const SdrPercentItem& rGlowTransparency)
-{
-    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_GLOW_TRANSPARENCY, SfxCallMode::SLOT,
-                                             { &rGlowTransparency });
+    mpBindings->GetDispatcher()->ExecuteList(SID_ATTR_GLOW, SfxCallMode::SLOT, { &rGlow });
 }
 
 void EffectPropertyPanel::setSoftEdgeRadius(const SdrMetricItem& rSoftEdgeRadius)

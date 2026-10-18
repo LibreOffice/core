@@ -181,6 +181,7 @@ enum class SfxItemType : sal_uInt16
     SdrEdgeNode2HorzDistItemType,
     SdrEdgeNode2VertDistItemType,
     SdrFractionItemType,
+    SdrGlowEffectItemType,
     SdrGrafBlueItemType,
     SdrGrafClipPolyPolygonItemType,
     SdrGrafContrastItemType,

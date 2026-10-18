@@ -21,15 +21,24 @@
 #include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/util/XComplexColor.hpp>
+#include <com/sun/star/util/XGlowEffect.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <docmodel/color/ComplexColor.hxx>
+#include <docmodel/theme/ColorSet.hxx>
+#include <docmodel/theme/Theme.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
+#include <docmodel/uno/UnoGlowEffect.hxx>
 #include <test/unoapixml_test.hxx>
 #include <unotools/tempfile.hxx>
+#include <svx/EffectItems.hxx>
+#include <svx/svddef.hxx>
+#include <svx/svdobj.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/unomid.hxx>
 #include <svx/unopage.hxx>
 #include <vcl/virdev.hxx>
 #include <svx/sdr/contact/displayinfo.hxx>
@@ -296,6 +305,87 @@ CPPUNIT_TEST_FIXTURE(UnodrawTest, testTextThemeColorSetBeforePlainColor)
     // - Actual  : -1
     // i.e. the plain color cleared the theme color that the same call had set.
     CPPUNIT_ASSERT_EQUAL(model::ThemeColorType::Accent1, aCharColor.getThemeColorType());
+}
+
+CPPUNIT_TEST_FIXTURE(UnodrawTest, testGlowThemeColorTakesTheColorOfTheTheme)
+{
+    loadFromURL(u"private:factory/simpress"_ustr);
+    uno::Reference<drawing::XShape> xShape = insertRectangle(mxComponent);
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    xShapeProps->setPropertyValue(u"GlowEffectRadius"_ustr, uno::Any(sal_Int32(500)));
+    xShapeProps->setPropertyValue(u"GlowEffectColor"_ustr, uno::Any(Color(0xff0000)));
+
+    auto pColorSet = std::make_shared<model::ColorSet>(u"Test"_ustr);
+    pColorSet->add(model::ThemeColorType::Accent2, Color(0x4472c4));
+    auto pTheme = std::make_shared<model::Theme>(u"Test"_ustr);
+    pTheme->setColorSet(pColorSet);
+    SdrObject* pObject = SdrObject::getSdrObjectFromXShape(xShape);
+    CPPUNIT_ASSERT(pObject);
+    pObject->getSdrPageFromSdrObject()->getSdrPageProperties().setTheme(pTheme);
+
+    // The glow draws with the color that the theme gives to the theme color.
+    model::ComplexColor aAccent;
+    aAccent.setThemeColor(model::ThemeColorType::Accent2);
+    xShapeProps->setPropertyValue(u"GlowEffectComplexColor"_ustr,
+                                  uno::Any(model::color::createXComplexColor(aAccent)));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x4472c4),
+                         xShapeProps->getPropertyValue(u"GlowEffectColor"_ustr).get<sal_Int32>());
+}
+
+CPPUNIT_TEST_FIXTURE(UnodrawTest, testEffectJSONWithWrongValuesIsRejected)
+{
+    SdrGlowEffectItem aGlow(SDRATTR_GLOW);
+    aGlow.setRadius(500_hmm);
+
+    // A radius that is no number, a theme color without its transformations and a color that is
+    // no hex number are rejected, and the glow stays as it was.
+    CPPUNIT_ASSERT(!aGlow.PutValue(uno::Any(u"{\"Radius\":\"wide\"}"_ustr), MID_EFFECT_JSON));
+    CPPUNIT_ASSERT(!aGlow.PutValue(
+        uno::Any(u"{\"Radius\":1,\"Color\":{\"ThemeIndex\":4,\"RGB\":\"ff0000\"}}"_ustr),
+        MID_EFFECT_JSON));
+    CPPUNIT_ASSERT(!aGlow.PutValue(
+        uno::Any(u"{\"Radius\":1,\"Color\":{\"ThemeIndex\":-1,\"RGB\":\"transparent\"}}"_ustr),
+        MID_EFFECT_JSON));
+    CPPUNIT_ASSERT_EQUAL(500_hmm, aGlow.getEffect().maRadius);
+    CPPUNIT_ASSERT_EQUAL(COL_BLACK, aGlow.getColor());
+}
+
+CPPUNIT_TEST_FIXTURE(UnodrawTest, testGlowEffectProperties)
+{
+    loadFromURL(u"private:factory/simpress"_ustr);
+    uno::Reference<beans::XPropertySet> xShapeProps(insertRectangle(mxComponent), uno::UNO_QUERY);
+
+    // The single values of the glow are views of one glow.
+    xShapeProps->setPropertyValue(u"GlowEffectRadius"_ustr, uno::Any(sal_Int32(500)));
+    xShapeProps->setPropertyValue(u"GlowEffectColor"_ustr, uno::Any(Color(0x4472c4)));
+    xShapeProps->setPropertyValue(u"GlowEffectTransparency"_ustr, uno::Any(sal_Int16(40)));
+
+    uno::Reference<util::XGlowEffect> xGlow;
+    CPPUNIT_ASSERT(xShapeProps->getPropertyValue(u"GlowEffect"_ustr) >>= xGlow);
+    std::optional<model::GlowEffect> oGlow = model::effect::getFromXGlowEffect(xGlow);
+    CPPUNIT_ASSERT(oGlow);
+    CPPUNIT_ASSERT_EQUAL(500_hmm, oGlow->maRadius);
+    CPPUNIT_ASSERT_EQUAL(Color(0x4472c4), oGlow->maColor.getRGB());
+
+    // A changed transparency keeps the radius and the color.
+    xShapeProps->setPropertyValue(u"GlowEffectTransparency"_ustr, uno::Any(sal_Int16(25)));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(500),
+                         xShapeProps->getPropertyValue(u"GlowEffectRadius"_ustr).get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0x4472c4),
+                         xShapeProps->getPropertyValue(u"GlowEffectColor"_ustr).get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int16(25),
+        xShapeProps->getPropertyValue(u"GlowEffectTransparency"_ustr).get<sal_Int16>());
+
+    // The whole glow set on another shape gives it the same single values.
+    uno::Reference<beans::XPropertySet> xOtherProps(insertRectangle(mxComponent), uno::UNO_QUERY);
+    xOtherProps->setPropertyValue(u"GlowEffect"_ustr,
+                                  xShapeProps->getPropertyValue(u"GlowEffect"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(500),
+                         xOtherProps->getPropertyValue(u"GlowEffectRadius"_ustr).get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(
+        sal_Int16(25),
+        xOtherProps->getPropertyValue(u"GlowEffectTransparency"_ustr).get<sal_Int16>());
 }
 
 CPPUNIT_TEST_FIXTURE(UnodrawTest, testReflectionProperties)

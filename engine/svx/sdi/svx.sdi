@@ -11889,37 +11889,7 @@ SfxBoolItem AccessibilityCheckOnline SID_ACCESSIBILITY_CHECK_ONLINE
     GroupId = SfxGroupId::Options;
 ]
 
-XColorItem GlowColor SID_ATTR_GLOW_COLOR
-
-[
-    AutoUpdate = TRUE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Document;
-]
-
-SdrMetricItem GlowRadius SID_ATTR_GLOW_RADIUS
-
-[
-    AutoUpdate = TRUE,
-    FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
-    Container = FALSE,
-
-    AccelConfig = FALSE,
-    MenuConfig = FALSE,
-    ToolBoxConfig = FALSE,
-    GroupId = SfxGroupId::Document;
-]
-
-SdrPercentItem GlowTransparency SID_ATTR_GLOW_TRANSPARENCY
+SdrGlowEffectItem GlowEffect SID_ATTR_GLOW
 
 [
     AutoUpdate = TRUE,

@@ -99,6 +99,7 @@
 
 #include <svx/strings.hrc>
 #include <svx/dialmgr.hxx>
+#include <svx/EffectItems.hxx>
 #include <svx/sdgcpitm.hxx>
 #include <svx/sdtfchim.hxx>
 #include <svx/sdasitm.hxx>
@@ -426,9 +427,7 @@ static ItemInfoPackage& getItemInfoPackageSdr()
             { SDRATTR_TABLE_TEXT_ROTATION, new SvxTextRotateItem(0_deg10, SDRATTR_TABLE_TEXT_ROTATION), 0, SFX_ITEMINFOFLAG_NONE },
             { SDRATTR_TABLE_CELL_GRABBAG, new SfxGrabBagItem(SDRATTR_TABLE_CELL_GRABBAG), 0, SFX_ITEMINFOFLAG_NONE },
 
-            { SDRATTR_GLOW_RADIUS, new SdrMetricItem(SDRATTR_GLOW_RADIUS, 0), SID_ATTR_GLOW_RADIUS, SFX_ITEMINFOFLAG_NONE },
-            { SDRATTR_GLOW_COLOR, new XColorItem(SDRATTR_GLOW_COLOR, COL_BLACK), SID_ATTR_GLOW_COLOR, SFX_ITEMINFOFLAG_NONE },
-            { SDRATTR_GLOW_TRANSPARENCY, new SdrPercentItem(SDRATTR_GLOW_TRANSPARENCY, 0), SID_ATTR_GLOW_TRANSPARENCY, SFX_ITEMINFOFLAG_NONE },
+            { SDRATTR_GLOW, new SdrGlowEffectItem(SDRATTR_GLOW), SID_ATTR_GLOW, SFX_ITEMINFOFLAG_NONE },
 
             { SDRATTR_SOFTEDGE_RADIUS, new SdrMetricItem(SDRATTR_SOFTEDGE_RADIUS, 0), SID_ATTR_SOFTEDGE_RADIUS, SFX_ITEMINFOFLAG_NONE },
 
@@ -606,9 +605,7 @@ OUString SdrItemPool::GetItemName(sal_uInt16 nWhich)
         case SDRATTR_SHADOW3D          : pResId = SIP_SA_SHADOW3D;break;
         case SDRATTR_SHADOWPERSP       : pResId = SIP_SA_SHADOWPERSP;break;
 
-        case SDRATTR_GLOW_RADIUS       : pResId = SIP_SA_GLOW_RADIUS;break;
-        case SDRATTR_GLOW_COLOR        : pResId = SIP_SA_GLOW_COLOR;break;
-        case SDRATTR_GLOW_TRANSPARENCY : pResId = SIP_SA_GLOW_TRANSPARENCY;break;
+        case SDRATTR_GLOW              : pResId = SIP_SA_GLOW;break;
 
         case SDRATTR_GLOW_TEXT_RADIUS  : pResId = SIP_SA_GLOW_TEXT_RADIUS; break;
         case SDRATTR_GLOW_TEXT_COLOR   : pResId = SIP_SA_GLOW_TEXT_COLOR; break;
