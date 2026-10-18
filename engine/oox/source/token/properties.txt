@@ -550,9 +550,13 @@ ShadeMode
 Shadow
 ShadowAlignment
 ShadowColor
+ShadowComplexColor
 ShadowFormat
+ShadowRotateWithShape
 ShadowSizeX
 ShadowSizeY
+ShadowSkewX
+ShadowSkewY
 ShadowTransparence
 ShadowBlur
 ShadowXDistance

@@ -26,6 +26,7 @@
 #include <sal/log.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <oox/export/drawingml.hxx>
+#include <oox/export/ThemeExport.hxx>
 #include <oox/export/utils.hxx>
 #include <oox/helper/propertyset.hxx>
 #include <oox/drawingml/color.hxx>
@@ -142,6 +143,11 @@
 #include <editeng/escapementitem.hxx>
 #include <editeng/unonrule.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
+#include <docmodel/uno/UnoBlurEffect.hxx>
+#include <docmodel/uno/UnoGlowEffect.hxx>
+#include <docmodel/uno/UnoInnerShadowEffect.hxx>
+#include <docmodel/uno/UnoReflectionEffect.hxx>
+#include <docmodel/uno/UnoSoftEdgeEffect.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdoashp.hxx>
 #include <svx/svdomedia.hxx>
@@ -9335,130 +9341,246 @@ static sal_Int32 lcl_CalculateDir(const double dX, const double dY)
     return (static_cast< sal_Int32 >(basegfx::rad2deg<60000>(atan2(dY,dX))) + 21600000) % 21600000;
 }
 
+namespace
+{
+/// The effect of the shape from its UNO object, or none when the shape has no such property.
+template <class Interface, class Effect>
+std::optional<Effect> getShapeEffect(const Reference<XPropertySet>& rXPropSet,
+                                     const OUString& rName,
+                                     std::optional<Effect> (*pGetFromUnoEffect)(
+                                         Reference<Interface> const&))
+{
+    if (!rXPropSet->getPropertySetInfo()->hasPropertyByName(rName))
+        return std::nullopt;
+    Reference<Interface> xEffect;
+    if (!(rXPropSet->getPropertyValue(rName) >>= xEffect))
+        return std::nullopt;
+    return pGetFromUnoEffect(xEffect);
+}
+
+/// The effect of the shape, when the property that turns it on is set.
+template <class Interface, class Effect>
+std::optional<Effect> getEnabledShapeEffect(const Reference<XPropertySet>& rXPropSet,
+                                            const OUString& rName, const OUString& rEnabledName,
+                                            std::optional<Effect> (*pGetFromUnoEffect)(
+                                                Reference<Interface> const&))
+{
+    bool bEnabled = false;
+    if (!rXPropSet->getPropertySetInfo()->hasPropertyByName(rEnabledName)
+        || !(rXPropSet->getPropertyValue(rEnabledName) >>= bEnabled) || !bEnabled)
+        return std::nullopt;
+    return getShapeEffect(rXPropSet, rName, pGetFromUnoEffect);
+}
+
+/// Whether the shape style of the shape refers to an effect style of the theme.
+bool hasStyleEffects(const Reference<XPropertySet>& rXPropSet)
+{
+    if (!rXPropSet->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
+        return false;
+    comphelper::SequenceAsHashMap aGrabBag(rXPropSet->getPropertyValue(u"InteropGrabBag"_ustr));
+    comphelper::SequenceAsHashMap aEffectRef(aGrabBag.getValue(u"StyleEffectRef"_ustr));
+    sal_Int32 nIdx = 0;
+    aEffectRef.getValue(u"Idx"_ustr) >>= nIdx;
+    return nIdx > 0;
+}
+
+/// Adds an attribute that differs from the default of the schema.
+void addAttribute(rtl::Reference<sax_fastparser::FastAttributeList> const& rAttributes,
+                  sal_Int32 nToken, sal_Int64 nValue, sal_Int64 nDefault)
+{
+    if (nValue != nDefault)
+        rAttributes->add(nToken, OString::number(nValue));
+}
+
+void addLengthAttribute(rtl::Reference<sax_fastparser::FastAttributeList> const& rAttributes,
+                        sal_Int32 nToken, gfx::Length aLength)
+{
+    addAttribute(rAttributes, nToken, aLength.as_emu<sal_Int64>(), 0);
+}
+
+void addAngleAttribute(rtl::Reference<sax_fastparser::FastAttributeList> const& rAttributes,
+                       sal_Int32 nToken, Degree60000 aAngle, Degree60000 aDefault)
+{
+    addAttribute(rAttributes, nToken, aAngle.get(), aDefault.get());
+}
+
+/// Adds the scale, the skew, the alignment and the rotation of an outer shadow or a reflection.
+template <class Effect>
+void addTransformAttributes(rtl::Reference<sax_fastparser::FastAttributeList> const& rAttributes,
+                            Effect const& rEffect)
+{
+    addAttribute(rAttributes, XML_sx, rEffect.mnScaleX, 100000);
+    addAttribute(rAttributes, XML_sy, rEffect.mnScaleY, 100000);
+    addAngleAttribute(rAttributes, XML_kx, rEffect.mnSkewX, 0_deg60000);
+    addAngleAttribute(rAttributes, XML_ky, rEffect.mnSkewY, 0_deg60000);
+    if (rEffect.meAlignment != model::RectangleAlignment::Unset
+        && rEffect.meAlignment != model::RectangleAlignment::Bottom)
+        rAttributes->add(XML_algn, convertRectangleAlignment(rEffect.meAlignment));
+    // The schema default of rotWithShape is "1", so the attribute is always written.
+    rAttributes->add(XML_rotWithShape, rEffect.mbRotateWithShape ? "1" : "0");
+}
+}
+
 void DrawingML::WriteShapeEffects( const Reference< XPropertySet >& rXPropSet )
 {
-    // The effects without a shape property are written as they were imported. The others are
-    // written from their shape properties, and take only what the properties lack from the import.
-    comphelper::SequenceAsHashMap aStoredEffects;
-    if (GetProperty(rXPropSet, u"InteropGrabBag"_ustr))
-    {
-        comphelper::SequenceAsHashMap aGrabBag(mAny);
-        aStoredEffects << aGrabBag.getValue(u"EffectProperties"_ustr);
-    }
-    auto getStoredEffect = [&aStoredEffects](const OUString& rName)
-    { return aStoredEffects.getUnpackedValueOrDefault(rName, Sequence<PropertyValue>()); };
-
     bool bHasShadow = false;
     if (GetProperty(rXPropSet, u"Shadow"_ustr))
         mAny >>= bHasShadow;
-    sal_Int32 nGlowRadius = 0;
-    if (GetProperty(rXPropSet, u"GlowEffectRadius"_ustr))
-        mAny >>= nGlowRadius;
-    sal_Int32 nSoftEdgeRadius = 0;
-    if (GetProperty(rXPropSet, u"SoftEdgeRadius"_ustr))
-        mAny >>= nSoftEdgeRadius;
-    bool bHasReflection = false;
-    if (GetProperty(rXPropSet, u"ReflectionEffectEnabled"_ustr))
-        mAny >>= bHasReflection;
+    std::optional<model::BlurEffect> oBlur = getEnabledShapeEffect(
+        rXPropSet, u"BlurEffect"_ustr, u"BlurEffectEnabled"_ustr, &model::effect::getFromXBlurEffect);
+    std::optional<model::GlowEffect> oGlow
+        = getShapeEffect(rXPropSet, u"GlowEffect"_ustr, &model::effect::getFromXGlowEffect);
+    if (oGlow && oGlow->maRadius <= 0_emu)
+        oGlow.reset();
+    std::optional<model::InnerShadowEffect> oInnerShadow
+        = getEnabledShapeEffect(rXPropSet, u"InnerShadowEffect"_ustr,
+                                u"InnerShadowEffectEnabled"_ustr,
+                                &model::effect::getFromXInnerShadowEffect);
+    std::optional<model::ReflectionEffect> oReflection
+        = getEnabledShapeEffect(rXPropSet, u"ReflectionEffect"_ustr,
+                                u"ReflectionEffectEnabled"_ustr,
+                                &model::effect::getFromXReflectionEffect);
+    std::optional<model::SoftEdgeEffect> oSoftEdge
+        = getShapeEffect(rXPropSet, u"SoftEdgeEffect"_ustr, &model::effect::getFromXSoftEdgeEffect);
+    if (oSoftEdge && oSoftEdge->maRadius <= 0_emu)
+        oSoftEdge.reset();
 
-    // An imported effect list is written even when all its effects are off, because an effect
-    // list replaces the effects that the style of the shape refers to.
-    if (!bHasShadow && !nGlowRadius && !nSoftEdgeRadius && !bHasReflection
-        && aStoredEffects.empty())
+    if (!bHasShadow && !oBlur && !oGlow && !oInnerShadow && !oReflection && !oSoftEdge)
+    {
+        // A shape without an effect list has the effects of its effect style, so an empty list
+        // keeps a shape without effects from getting them.
+        if (hasStyleEffects(rXPropSet))
+            mpFS->singleElementNS(XML_a, XML_effectLst);
         return;
+    }
 
     // tdf#132201: the order of effects is important. Effects order (CT_EffectList in ECMA-376):
     // blur -> fillOverlay -> glow -> innerShdw -> outerShdw -> prstShdw -> reflection -> softEdge
-    // The import keeps no fillOverlay and no prstShdw.
     mpFS->startElementNS(XML_a, XML_effectLst);
-    WriteShapeEffect(u"blur", getStoredEffect(u"blur"_ustr));
-    WriteGlowEffect(rXPropSet);
-    WriteShapeEffect(u"innerShdw", getStoredEffect(u"innerShdw"_ustr));
+    if (oBlur)
+        WriteBlurEffect(*oBlur);
+    if (oGlow)
+        WriteGlowEffect(*oGlow);
+    if (oInnerShadow)
+        WriteInnerShadowEffect(*oInnerShadow);
     if (bHasShadow)
-        WriteShadowEffect(rXPropSet, getStoredEffect(u"outerShdw"_ustr));
-    WriteReflectionEffect(rXPropSet, getStoredEffect(u"reflection"_ustr));
-    WriteSoftEdgeEffect(rXPropSet);
+        WriteShadowEffect(rXPropSet);
+    if (oReflection)
+        WriteReflectionEffect(*oReflection);
+    if (oSoftEdge)
+        WriteSoftEdgeEffect(*oSoftEdge);
     mpFS->endElementNS(XML_a, XML_effectLst);
 }
 
-void DrawingML::WriteShadowEffect(const Reference<XPropertySet>& rXPropSet,
-                                  const Sequence<PropertyValue>& rStoredEffect)
+void DrawingML::WriteEffectColor(model::ComplexColor const& rColor)
 {
+    // A color that only a theme style can resolve, like phClr, is written as the color that it
+    // resolved to, with its alpha.
+    const model::ColorType eType = rColor.getType();
+    const bool bWritable
+        = eType == model::ColorType::RGB || eType == model::ColorType::CRGB
+          || eType == model::ColorType::HSL || eType == model::ColorType::System
+          || rColor.isValidThemeType();
+    if (bWritable)
+    {
+        ThemeExport(mpFB, meDocumentType, mpFS).writeComplexColor(rColor);
+        return;
+    }
+
+    model::ComplexColor aColor = model::ComplexColor::createRGB(rColor.getFinalColor());
+    for (auto const& rTransformation : rColor.getTransformations())
+    {
+        if (rTransformation.meType == model::TransformationType::Alpha)
+            aColor.addTransformation(rTransformation);
+    }
+    ThemeExport(mpFB, meDocumentType, mpFS).writeComplexColor(aColor);
+}
+
+void DrawingML::WriteBlurEffect(model::BlurEffect const& rBlur)
+{
+    rtl::Reference<sax_fastparser::FastAttributeList> pAttributes
+        = FastSerializerHelper::createAttrList();
+    addLengthAttribute(pAttributes, XML_rad, rBlur.maRadius);
+    if (!rBlur.mbGrow)
+        pAttributes->add(XML_grow, "0");
+    mpFS->singleElementNS(XML_a, XML_blur, pAttributes);
+}
+
+void DrawingML::WriteGlowEffect(model::GlowEffect const& rGlow)
+{
+    mpFS->startElementNS(XML_a, XML_glow, XML_rad,
+                         OString::number(rGlow.maRadius.as_emu<sal_Int64>()));
+    WriteEffectColor(rGlow.maColor);
+    mpFS->endElementNS(XML_a, XML_glow);
+}
+
+void DrawingML::WriteInnerShadowEffect(model::InnerShadowEffect const& rInnerShadow)
+{
+    rtl::Reference<sax_fastparser::FastAttributeList> pAttributes
+        = FastSerializerHelper::createAttrList();
+    addLengthAttribute(pAttributes, XML_blurRad, rInnerShadow.maBlurRadius);
+    addLengthAttribute(pAttributes, XML_dist, rInnerShadow.maDistance);
+    addAngleAttribute(pAttributes, XML_dir, rInnerShadow.mnDirection, 0_deg60000);
+    mpFS->startElementNS(XML_a, XML_innerShdw, pAttributes);
+    WriteEffectColor(rInnerShadow.maColor);
+    mpFS->endElementNS(XML_a, XML_innerShdw);
+}
+
+void DrawingML::WriteShadowEffect(const Reference<XPropertySet>& rXPropSet)
+{
+    // The shadow distances are an offset, which DrawingML has as a distance and a direction.
     double dX = +0.0, dY = +0.0;
     sal_Int32 nBlur = 0;
-    sal_Int32 nSizeX = MAX_PERCENT;
-    sal_Int32 nSizeY = MAX_PERCENT;
-    sal_Int32 nAlignment = static_cast<sal_Int32>(model::RectangleAlignment::Unset);
     rXPropSet->getPropertyValue(u"ShadowXDistance"_ustr) >>= dX;
     rXPropSet->getPropertyValue(u"ShadowYDistance"_ustr) >>= dY;
     rXPropSet->getPropertyValue(u"ShadowBlur"_ustr) >>= nBlur;
+
+    model::OuterShadowEffect aShadow;
+    aShadow.maBlurRadius = gfx::Length::hmm(nBlur);
+    aShadow.mbRotateWithShape = false;
+    aShadow.meAlignment = model::RectangleAlignment::Unset;
     if (GetProperty(rXPropSet, u"ShadowSizeX"_ustr))
-        mAny >>= nSizeX;
+        mAny >>= aShadow.mnScaleX;
     if (GetProperty(rXPropSet, u"ShadowSizeY"_ustr))
-        mAny >>= nSizeY;
-    if (GetProperty(rXPropSet, u"ShadowAlignment"_ustr))
-        mAny >>= nAlignment;
+        mAny >>= aShadow.mnScaleY;
+    sal_Int32 nSkew = 0;
+    if (GetProperty(rXPropSet, u"ShadowSkewX"_ustr) && (mAny >>= nSkew))
+        aShadow.mnSkewX = Degree60000(nSkew);
+    if (GetProperty(rXPropSet, u"ShadowSkewY"_ustr) && (mAny >>= nSkew))
+        aShadow.mnSkewY = Degree60000(nSkew);
+    if (GetProperty(rXPropSet, u"ShadowRotateWithShape"_ustr))
+        mAny >>= aShadow.mbRotateWithShape;
+    sal_Int32 nAlignment = 0;
+    if (GetProperty(rXPropSet, u"ShadowAlignment"_ustr) && (mAny >>= nAlignment))
+        aShadow.meAlignment = static_cast<model::RectangleAlignment>(nAlignment);
 
-    // The stored attributes keep what has no shape property, like the skew. A shadow without
-    // them has rotWithShape="0", because the shadow distances of the shape are an offset on the
-    // page and the schema default is "1".
-    comphelper::SequenceAsHashMap aStoredEffect(rStoredEffect);
-    comphelper::SequenceAsHashMap aAttribs(aStoredEffect.getValue(u"Attribs"_ustr));
-    if (aAttribs.empty())
-        aAttribs[u"rotWithShape"_ustr] <<= sal_Int32(0);
+    rtl::Reference<sax_fastparser::FastAttributeList> pAttributes
+        = FastSerializerHelper::createAttrList();
+    addLengthAttribute(pAttributes, XML_blurRad, aShadow.maBlurRadius);
+    pAttributes->add(XML_dist, OString::number(lcl_CalculateDist(dX, dY)));
+    pAttributes->add(XML_dir, OString::number(lcl_CalculateDir(dX, dY)));
+    addTransformAttributes(pAttributes, aShadow);
+    mpFS->startElementNS(XML_a, XML_outerShdw, pAttributes);
 
-    aAttribs[u"dist"_ustr] <<= lcl_CalculateDist(dX, dY);
-    aAttribs[u"dir"_ustr] <<= lcl_CalculateDir(dX, dY);
-    aAttribs[u"blurRad"_ustr] <<= oox::drawingml::convertHmmToEmu(nBlur);
-
-    // A value that equals the schema default is written only when the imported shadow had it.
-    auto setScale = [&aAttribs](const OUString& rName, sal_Int32 nScale)
+    // A theme color keeps its reference, and the transparency is the alpha of the color.
+    sal_Int16 nTransparency = 0;
+    rXPropSet->getPropertyValue(u"ShadowTransparence"_ustr) >>= nTransparency;
+    Reference<util::XComplexColor> xComplexColor;
+    if (GetProperty(rXPropSet, u"ShadowComplexColor"_ustr))
+        mAny >>= xComplexColor;
+    model::ComplexColor aColor = model::color::getFromXComplexColor(xComplexColor);
+    if (!aColor.isValidThemeType())
     {
-        if (nScale != MAX_PERCENT || aAttribs.contains(rName))
-            aAttribs[rName] <<= nScale;
-    };
-    setScale(u"sx"_ustr, nSizeX);
-    setScale(u"sy"_ustr, nSizeY);
-    const OString aAlignment(
-        convertRectangleAlignment(static_cast<model::RectangleAlignment>(nAlignment)));
-    if (!aAlignment.isEmpty() && (aAlignment != "b" || aAttribs.contains(u"algn"_ustr)))
-        aAttribs[u"algn"_ustr] <<= OUString::fromUtf8(aAlignment);
-    aStoredEffect[u"Attribs"_ustr] <<= aAttribs.getAsConstPropertyValueList();
-
-    // A theme color is written as it was imported, because the shadow color property holds only
-    // the resolved color.
-    if (!aStoredEffect.contains(u"SchemeClr"_ustr))
-    {
-        aStoredEffect[u"RgbClr"_ustr] = rXPropSet->getPropertyValue(u"ShadowColor"_ustr);
-        aStoredEffect[u"RgbClrTransparency"_ustr]
-            = rXPropSet->getPropertyValue(u"ShadowTransparence"_ustr);
+        ::Color nColor;
+        rXPropSet->getPropertyValue(u"ShadowColor"_ustr) >>= nColor;
+        aColor = model::ComplexColor::createRGB(nColor);
     }
-
-    WriteShapeEffect(u"outerShdw", aStoredEffect.getAsConstPropertyValueList());
-}
-
-void DrawingML::WriteGlowEffect(const Reference< XPropertySet >& rXPropSet)
-{
-    if (!rXPropSet->getPropertySetInfo()->hasPropertyByName(u"GlowEffectRadius"_ustr))
-    {
-        return;
-    }
-
-    sal_Int32 nRad = 0;
-    rXPropSet->getPropertyValue(u"GlowEffectRadius"_ustr) >>= nRad;
-    if (!nRad)
-        return;
-
-    Sequence< PropertyValue > aGlowAttribs{ comphelper::makePropertyValue(
-        u"rad"_ustr, oox::drawingml::convertHmmToEmu(nRad)) };
-    Sequence< PropertyValue > aGlowProps{
-        comphelper::makePropertyValue(u"Attribs"_ustr, aGlowAttribs),
-        comphelper::makePropertyValue(u"RgbClr"_ustr, rXPropSet->getPropertyValue(u"GlowEffectColor"_ustr)),
-        comphelper::makePropertyValue(u"RgbClrTransparency"_ustr, rXPropSet->getPropertyValue(u"GlowEffectTransparency"_ustr))
-    };
-    // TODO other stuff like saturation or luminance
-
-    WriteShapeEffect(u"glow", aGlowProps);
+    aColor.removeTransformations(model::TransformationType::Alpha);
+    if (nTransparency)
+        aColor.addTransformation(
+            { model::TransformationType::Alpha, (100 - nTransparency) * 100 });
+    WriteEffectColor(aColor);
+    mpFS->endElementNS(XML_a, XML_outerShdw);
 }
 
 void DrawingML::WriteTextGlowEffect(const Reference< XPropertySet >& rXPropSet)
@@ -9485,104 +9607,26 @@ void DrawingML::WriteTextGlowEffect(const Reference< XPropertySet >& rXPropSet)
     WriteShapeEffect(u"glowtext", aGlowProps);
 }
 
-void DrawingML::WriteSoftEdgeEffect(const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet)
+void DrawingML::WriteReflectionEffect(model::ReflectionEffect const& rReflection)
 {
-    if (!rXPropSet->getPropertySetInfo()->hasPropertyByName(u"SoftEdgeRadius"_ustr))
-    {
-        return;
-    }
-
-    sal_Int32 nRad = 0;
-    rXPropSet->getPropertyValue(u"SoftEdgeRadius"_ustr) >>= nRad;
-    if (!nRad)
-        return;
-
-    cpo::uno::Sequence<css::beans::PropertyValue> aAttribs{ comphelper::makePropertyValue(
-        u"rad"_ustr, oox::drawingml::convertHmmToEmu(nRad)) };
-    cpo::uno::Sequence<css::beans::PropertyValue> aProps{ comphelper::makePropertyValue(u"Attribs"_ustr,
-                                                                                        aAttribs) };
-
-    WriteShapeEffect(u"softEdge", aProps);
+    rtl::Reference<sax_fastparser::FastAttributeList> pAttributes
+        = FastSerializerHelper::createAttrList();
+    addLengthAttribute(pAttributes, XML_blurRad, rReflection.maBlurRadius);
+    addAttribute(pAttributes, XML_stA, rReflection.mnStartAlpha, 100000);
+    addAttribute(pAttributes, XML_stPos, rReflection.mnStartPosition, 0);
+    addAttribute(pAttributes, XML_endA, rReflection.mnEndAlpha, 0);
+    addAttribute(pAttributes, XML_endPos, rReflection.mnEndPosition, 100000);
+    addLengthAttribute(pAttributes, XML_dist, rReflection.maDistance);
+    addAngleAttribute(pAttributes, XML_dir, rReflection.mnDirection, 0_deg60000);
+    addAngleAttribute(pAttributes, XML_fadeDir, rReflection.mnFadeDirection, 5400000_deg60000);
+    addTransformAttributes(pAttributes, rReflection);
+    mpFS->singleElementNS(XML_a, XML_reflection, pAttributes);
 }
 
-namespace
+void DrawingML::WriteSoftEdgeEffect(model::SoftEdgeEffect const& rSoftEdge)
 {
-// DrawingML has 1/1000 of a percent, the shape property has whole percent.
-sal_Int32 toWholePercent(sal_Int32 nThousandthsOfPercent)
-{
-    return static_cast<sal_Int32>(std::lround(nThousandthsOfPercent / 1000.0));
-}
-}
-
-void DrawingML::WriteReflectionEffect(const Reference<XPropertySet>& rXPropSet,
-                                      const Sequence<PropertyValue>& rStoredEffect)
-{
-    if (!rXPropSet->getPropertySetInfo()->hasPropertyByName(u"ReflectionEffectEnabled"_ustr))
-        return;
-
-    bool bReflection = false;
-    rXPropSet->getPropertyValue(u"ReflectionEffectEnabled"_ustr) >>= bReflection;
-    if (!bReflection)
-        return;
-
-    sal_Int32 nDistance = 0;
-    sal_Int32 nBlurRadius = 0;
-    sal_Int16 nStartTransparency = 0;
-    sal_Int16 nStartPosition = 0;
-    sal_Int16 nEndTransparency = 100;
-    sal_Int16 nEndPosition = 100;
-    rXPropSet->getPropertyValue(u"ReflectionEffectDistance"_ustr) >>= nDistance;
-    rXPropSet->getPropertyValue(u"ReflectionEffectBlurRadius"_ustr) >>= nBlurRadius;
-    rXPropSet->getPropertyValue(u"ReflectionEffectStartTransparency"_ustr) >>= nStartTransparency;
-    rXPropSet->getPropertyValue(u"ReflectionEffectStartPosition"_ustr) >>= nStartPosition;
-    rXPropSet->getPropertyValue(u"ReflectionEffectEndTransparency"_ustr) >>= nEndTransparency;
-    rXPropSet->getPropertyValue(u"ReflectionEffectEndPosition"_ustr) >>= nEndPosition;
-
-    // The stored attributes keep what has no shape property, like the direction and the scale. A
-    // reflection without them is mirrored straight down below the shape, like the presets.
-    comphelper::SequenceAsHashMap aStoredEffect(rStoredEffect);
-    comphelper::SequenceAsHashMap aAttribs(aStoredEffect.getValue(u"Attribs"_ustr));
-    if (aAttribs.empty())
-    {
-        aAttribs[u"dir"_ustr] <<= sal_Int32(5400000);
-        aAttribs[u"sy"_ustr] <<= sal_Int32(-100000);
-        aAttribs[u"algn"_ustr] <<= u"bl"_ustr;
-        aAttribs[u"rotWithShape"_ustr] <<= sal_Int32(0);
-    }
-
-    // A stored value stays when it still gives the value of the shape property, since the stored
-    // one can be more precise. A value that equals the schema default is left out.
-    auto setLength = [&aAttribs](const OUString& rName, gfx::Length aLength)
-    {
-        sal_Int64 nStored = 0;
-        if ((aAttribs.getValue(rName) >>= nStored)
-            && gfx::Length::emu(nStored).as_hmm<sal_Int32>() == aLength.as_hmm<sal_Int32>())
-            return;
-        if (aLength == gfx::Length())
-            aAttribs.erase(rName);
-        else
-            aAttribs[rName] <<= aLength.as_emu<sal_Int32>();
-    };
-    auto setPercent = [&aAttribs](const OUString& rName, sal_Int32 nPercent, sal_Int32 nDefault)
-    {
-        sal_Int32 nStored = 0;
-        if ((aAttribs.getValue(rName) >>= nStored) && toWholePercent(nStored) == nPercent)
-            return;
-        if (nPercent * PER_PERCENT == nDefault)
-            aAttribs.erase(rName);
-        else
-            aAttribs[rName] <<= nPercent * PER_PERCENT;
-    };
-    setLength(u"dist"_ustr, gfx::Length::hmm(nDistance));
-    setLength(u"blurRad"_ustr, gfx::Length::hmm(nBlurRadius));
-    setPercent(u"stA"_ustr, 100 - nStartTransparency, MAX_PERCENT);
-    setPercent(u"stPos"_ustr, nStartPosition, 0);
-    setPercent(u"endA"_ustr, 100 - nEndTransparency, 0);
-    setPercent(u"endPos"_ustr, nEndPosition, MAX_PERCENT);
-
-    Sequence<PropertyValue> aProps{ comphelper::makePropertyValue(
-        u"Attribs"_ustr, aAttribs.getAsConstPropertyValueList()) };
-    WriteShapeEffect(u"reflection", aProps);
+    mpFS->singleElementNS(XML_a, XML_softEdge, XML_rad,
+                          OString::number(rSoftEdge.maRadius.as_emu<sal_Int64>()));
 }
 
 void DrawingML::Write3DEffects( const Reference< XPropertySet >& xPropSet, bool bIsText )

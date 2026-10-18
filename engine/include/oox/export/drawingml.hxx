@@ -371,17 +371,16 @@ protected:
     static bool EqualGradients( const css::awt::Gradient2& rGradient1, const css::awt::Gradient2& rGradient2 );
     bool IsFontworkShape(const cpo::uno::Reference< css::beans::XPropertySet >& rXShapePropSet);
 
-    /** Writes the shadow of the shape. rStoredEffect is the outerShdw entry of the effects kept
-        from the imported document, or empty. */
-    void WriteShadowEffect(const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet,
-                           const cpo::uno::Sequence<css::beans::PropertyValue>& rStoredEffect);
-    void WriteGlowEffect(const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet);
+    /** Writes a color of an effect. A color that needs the style of the theme to resolve, like
+        phClr, is written as its final color. */
+    void WriteEffectColor(model::ComplexColor const& rColor);
+    void WriteBlurEffect(model::BlurEffect const& rBlur);
+    void WriteGlowEffect(model::GlowEffect const& rGlow);
+    void WriteInnerShadowEffect(model::InnerShadowEffect const& rInnerShadow);
+    void WriteShadowEffect(const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet);
     void WriteTextGlowEffect(const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet);
-    void WriteSoftEdgeEffect(const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet);
-    /** Writes the reflection of the shape. rStoredEffect is the reflection entry of the effects
-        kept from the imported document, or empty. */
-    void WriteReflectionEffect(const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet,
-                               const cpo::uno::Sequence<css::beans::PropertyValue>& rStoredEffect);
+    void WriteReflectionEffect(model::ReflectionEffect const& rReflection);
+    void WriteSoftEdgeEffect(model::SoftEdgeEffect const& rSoftEdge);
     // pTokenX / pTokenY: a guide or adjustment name to write instead of the resolved number
     void WriteCustomGeometryPoint(const css::drawing::EnhancedCustomShapeParameterPair& rParamPair,
                                   const EnhancedCustomShape2d& rCustomShape2d,

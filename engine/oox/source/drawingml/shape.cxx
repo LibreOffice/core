@@ -134,6 +134,11 @@
 #include <svx/sdtaitm.hxx>
 #include <oox/drawingml/diagram/diagram.hxx>
 #include <docmodel/theme/Theme.hxx>
+#include <docmodel/uno/UnoBlurEffect.hxx>
+#include <docmodel/uno/UnoGlowEffect.hxx>
+#include <docmodel/uno/UnoInnerShadowEffect.hxx>
+#include <docmodel/uno/UnoReflectionEffect.hxx>
+#include <docmodel/uno/UnoSoftEdgeEffect.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <i18nlangtag/mslangid.hxx>
 
@@ -685,6 +690,7 @@ EffectPropertiesPtr lcl_getOuterShadow(const EffectProperties& rEffects)
         {
             auto pShadow = std::make_shared<EffectProperties>();
             pShadow->maShadow.assignUsed(rEffects.maShadow);
+            pShadow->maEffects.moOuterShadow = rEffects.maEffects.moOuterShadow;
             pShadow->m_Effects.push_back(std::make_unique<Effect>(*pEffect));
             return pShadow;
         }
@@ -1279,11 +1285,66 @@ void PushMasterTextListStyleToMasterShapeParagraphs(TextListStyle& rMasterTextLi
     }
 }
 
-// DrawingML has 1/1000 of a percent, the shape property has whole percent from 0 to 100.
-sal_Int16 toWholePercent(sal_Int32 nThousandthsOfPercent)
+/// The oox color that an effect element was read with, which knows how to resolve its theme color.
+const Color* lcl_getEffectColor(const EffectProperties& rEffects, std::u16string_view rName)
 {
-    return static_cast<sal_Int16>(
-        std::clamp<double>(std::round(nThousandthsOfPercent / 1000.0), 0, 100));
+    for (auto const& pEffect : rEffects.m_Effects)
+    {
+        if (pEffect->msName == rName)
+            return &pEffect->moColor;
+    }
+    return nullptr;
+}
+
+/** Sets the effects of the effect list on the shape. An effect color keeps the color of the file,
+    with the drawn color as its final color. A group gets only the soft edge, and a shape without
+    the property of an effect, like a table, does not get that effect. */
+void lcl_setShapeEffects(const uno::Reference<beans::XPropertySet>& xShape,
+                         const EffectProperties& rEffects, const GraphicHelper& rGraphicHelper,
+                         ::Color nPhClr, bool bGroup)
+{
+    const uno::Reference<beans::XPropertySetInfo> xInfo = xShape->getPropertySetInfo();
+    auto setProperty = [&xShape, &xInfo](const OUString& rName, const Any& rValue) {
+        if (xInfo->hasPropertyByName(rName))
+            xShape->setPropertyValue(rName, rValue);
+    };
+
+    const model::EffectStyle& rModel = rEffects.maEffects;
+    if (rModel.moSoftEdge)
+    {
+        setProperty(u"SoftEdgeEffect"_ustr,
+                    Any(model::effect::createXSoftEdgeEffect(*rModel.moSoftEdge)));
+    }
+
+    if (bGroup)
+        return;
+
+    if (rModel.moBlur)
+    {
+        setProperty(u"BlurEffect"_ustr, Any(model::effect::createXBlurEffect(*rModel.moBlur)));
+        setProperty(u"BlurEffectEnabled"_ustr, Any(true));
+    }
+    if (rModel.moGlow)
+    {
+        model::GlowEffect aGlow(*rModel.moGlow);
+        aGlow.maColor.setFinalColor(rEffects.maGlow.moGlowColor.getColor(rGraphicHelper, nPhClr));
+        setProperty(u"GlowEffect"_ustr, Any(model::effect::createXGlowEffect(aGlow)));
+    }
+    if (rModel.moInnerShadow)
+    {
+        model::InnerShadowEffect aInnerShadow(*rModel.moInnerShadow);
+        if (const Color* pColor = lcl_getEffectColor(rEffects, u"innerShdw"))
+            aInnerShadow.maColor.setFinalColor(pColor->getColor(rGraphicHelper, nPhClr));
+        setProperty(u"InnerShadowEffect"_ustr,
+                    Any(model::effect::createXInnerShadowEffect(aInnerShadow)));
+        setProperty(u"InnerShadowEffectEnabled"_ustr, Any(true));
+    }
+    if (rModel.moReflection)
+    {
+        setProperty(u"ReflectionEffect"_ustr,
+                    Any(model::effect::createXReflectionEffect(*rModel.moReflection)));
+        setProperty(u"ReflectionEffectEnabled"_ustr, Any(true));
+    }
 }
 }
 
@@ -1995,10 +2056,10 @@ Reference< XShape > const & Shape::createAndInsert(
             = get3DProperties().getShape3DAttributes(rGraphicHelper, nFillPhClr);
         bool bHas3DProps = aCamera3DEffects.hasElements() || aLightRig3DEffects.hasElements()
                            || aShape3DEffects.hasElements();
-        if (bHas3DProps && getEffectProperties().maSoftEdge.moRad.has_value())
+        if (bHas3DProps && getEffectProperties().maEffects.moSoftEdge)
         {
             // 3D properties override softeEdge
-            getEffectProperties().maSoftEdge.moRad.reset();
+            getEffectProperties().maEffects.moSoftEdge.reset();
         }
 
         // applying properties
@@ -2360,40 +2421,6 @@ Reference< XShape > const & Shape::createAndInsert(
                 putPropertyToGrabBag( u"OriginalGradFill"_ustr, aShapeProps.getProperty(PROP_FillGradient) );
             }
 
-            // store unsupported effect attributes in the grab bag
-            if (!aEffectProperties.m_Effects.empty())
-            {
-                std::vector<beans::PropertyValue> aEffects;
-                for (auto const& it : aEffectProperties.m_Effects)
-                {
-                    PropertyValue aEffect = it->getEffect();
-                    if( !aEffect.Name.isEmpty() )
-                    {
-                        std::vector<beans::PropertyValue> aEffectsGrabBag
-                        {
-                            comphelper::makePropertyValue(u"Attribs"_ustr, aEffect.Value)
-                        };
-
-                        Color& aColor( it->moColor );
-                        OUString sColorScheme = aColor.getSchemeColorName();
-                        if( sColorScheme.isEmpty() )
-                        {
-                            // RGB color and transparency value
-                            aEffectsGrabBag.push_back(comphelper::makePropertyValue(u"RgbClr"_ustr, aColor.getColor(rGraphicHelper, nFillPhClr)));
-                            aEffectsGrabBag.push_back(comphelper::makePropertyValue(u"RgbClrTransparency"_ustr, aColor.getTransparency()));
-                        }
-                        else
-                        {
-                            // scheme color with name and transformations
-                            aEffectsGrabBag.push_back(comphelper::makePropertyValue(u"SchemeClr"_ustr, sColorScheme));
-                            aEffectsGrabBag.push_back(comphelper::makePropertyValue(u"SchemeClrTransformations"_ustr, aColor.getTransformations()));
-                        }
-                        aEffects.push_back(comphelper::makePropertyValue(aEffect.Name, comphelper::containerToSequence(aEffectsGrabBag)));
-                    }
-                }
-                putPropertyToGrabBag(u"EffectProperties"_ustr, cpo::uno::Any(comphelper::containerToSequence(aEffects)));
-            }
-
             // add 3D effects if any to GrabBag. They are still used in export.
             if (bHas3DProps)
             {
@@ -2665,47 +2692,10 @@ Reference< XShape > const & Shape::createAndInsert(
             }
         }
 
-        // Set glow effect properties
-        if (aEffectProperties.maGlow.moGlowRad.has_value()
-            && aServiceName != "com.sun.star.drawing.GroupShape")
-        {
-            uno::Reference<beans::XPropertySet> propertySet (mxShape, uno::UNO_QUERY);
-            propertySet->setPropertyValue(u"GlowEffectRadius"_ustr, Any(convertEmuToHmm(aEffectProperties.maGlow.moGlowRad.value())));
-            propertySet->setPropertyValue(u"GlowEffectColor"_ustr, Any(aEffectProperties.maGlow.moGlowColor.getColor(rGraphicHelper)));
-            propertySet->setPropertyValue(u"GlowEffectTransparency"_ustr, Any(aEffectProperties.maGlow.moGlowColor.getTransparency()));
-        }
-
-        // Set reflection effect properties
-        if (aEffectProperties.maReflection.isUsed()
-            && aServiceName != "com.sun.star.drawing.GroupShape")
-        {
-            const EffectReflectionProperties& rReflection = aEffectProperties.maReflection;
-
-            uno::Reference<beans::XPropertySet> propertySet(mxShape, uno::UNO_QUERY);
-            propertySet->setPropertyValue(u"ReflectionEffectEnabled"_ustr, Any(true));
-            propertySet->setPropertyValue(u"ReflectionEffectDistance"_ustr,
-                                          Any(rReflection.moDistance->as_hmm<sal_Int32>()));
-            propertySet->setPropertyValue(u"ReflectionEffectBlurRadius"_ustr,
-                                          Any(rReflection.moBlurRadius->as_hmm<sal_Int32>()));
-            propertySet->setPropertyValue(
-                u"ReflectionEffectStartTransparency"_ustr,
-                Any(sal_Int16(100 - toWholePercent(*rReflection.moStartAlpha))));
-            propertySet->setPropertyValue(u"ReflectionEffectStartPosition"_ustr,
-                                          Any(toWholePercent(*rReflection.moStartPosition)));
-            propertySet->setPropertyValue(
-                u"ReflectionEffectEndTransparency"_ustr,
-                Any(sal_Int16(100 - toWholePercent(*rReflection.moEndAlpha))));
-            propertySet->setPropertyValue(u"ReflectionEffectEndPosition"_ustr,
-                                          Any(toWholePercent(*rReflection.moEndPosition)));
-        }
-
-        // Set soft edge effect properties
-        if (aEffectProperties.maSoftEdge.moRad.has_value())
-        {
-            uno::Reference<beans::XPropertySet> propertySet(mxShape, uno::UNO_QUERY);
-            propertySet->setPropertyValue(
-                u"SoftEdgeRadius"_ustr, Any(convertEmuToHmm(aEffectProperties.maSoftEdge.moRad.value())));
-        }
+        // Set the effects of the shape
+        lcl_setShapeEffects(uno::Reference<beans::XPropertySet>(mxShape, uno::UNO_QUERY),
+                            aEffectProperties, rGraphicHelper, nFillPhClr,
+                            aServiceName == "com.sun.star.drawing.GroupShape");
 
         // Set text glow effect for shapes
         if (mpTextBody && (!pPlaceholder || !mpTextBody->isEmpty()))
@@ -3276,6 +3266,7 @@ EffectProperties Shape::getActualEffectProperties(const Theme* pTheme) const
     if (mpGroupShadowPtr && !lcl_getOuterShadow(aEffectProperties))
     {
         aEffectProperties.maShadow.assignUsed(mpGroupShadowPtr->maShadow);
+        aEffectProperties.maEffects.moOuterShadow = mpGroupShadowPtr->maEffects.moOuterShadow;
         auto& rEffects = aEffectProperties.m_Effects;
         auto itLater = std::find_if(rEffects.begin(), rEffects.end(), [](auto const& pEffect) {
             return pEffect->msName == "prstShdw" || pEffect->msName == "reflection"

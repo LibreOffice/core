@@ -99,6 +99,25 @@ bool isTopGroupObj(const uno::Reference<drawing::XShape>& xShape)
 
     return pObject->IsGroupObject();
 }
+
+/// Whether the shape has a shadow, a blur, a glow, an inner shadow, a reflection or a soft edge.
+bool containsShapeEffects(const uno::Reference<beans::XPropertySet>& xShapeProps)
+{
+    uno::Reference<beans::XPropertySetInfo> xInfo = xShapeProps->getPropertySetInfo();
+    auto isSet = [&xShapeProps, &xInfo](const OUString& rName) {
+        bool bValue = false;
+        return xInfo->hasPropertyByName(rName) && (xShapeProps->getPropertyValue(rName) >>= bValue)
+               && bValue;
+    };
+    auto isPositive = [&xShapeProps, &xInfo](const OUString& rName) {
+        sal_Int32 nValue = 0;
+        return xInfo->hasPropertyByName(rName) && (xShapeProps->getPropertyValue(rName) >>= nValue)
+               && nValue > 0;
+    };
+    return isSet(u"Shadow"_ustr) || isSet(u"BlurEffectEnabled"_ustr)
+           || isPositive(u"GlowEffectRadius"_ustr) || isSet(u"InnerShadowEffectEnabled"_ustr)
+           || isSet(u"ReflectionEffectEnabled"_ustr) || isPositive(u"SoftEdgeRadius"_ustr);
+}
 }
 
 namespace writerfilter::dmapper
@@ -822,13 +841,13 @@ void GraphicImport::lcl_attribute(Id nName, const Value& rValue)
 
                         css::beans::PropertyValues aGrabBag;
                         xShapeProps->getPropertyValue(u"InteropGrabBag"_ustr) >>= aGrabBag;
-                        // if the shape contains effects in the grab bag, we should not transform it
-                        // in a XTextContent so those effects can be preserved
+                        // if the shape contains effects, we should not transform it in a
+                        // XTextContent so those effects can be preserved
                         bool bContainsEffects = std::any_of(std::cbegin(aGrabBag), std::cend(aGrabBag), [](const auto& rProp) {
-                            return rProp.Name == "EffectProperties"
-                                || rProp.Name == "3DEffectProperties"
+                            return rProp.Name == "3DEffectProperties"
                                 || rProp.Name == "ArtisticEffectProperties";
                         });
+                        bContainsEffects = bContainsEffects || containsShapeEffects(xShapeProps);
 
                         xShapeProps->getPropertyValue(u"Shadow"_ustr) >>= m_bShadow;
                         if (m_bShadow)

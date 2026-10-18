@@ -43,6 +43,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <tools/color.hxx>
 #include <docmodel/uno/UnoComplexColor.hxx>
+#include <docmodel/uno/UnoReflectionEffect.hxx>
 #include <docmodel/uno/UnoGradientTools.hxx>
 #include <basegfx/utils/gradienttools.hxx>
 #include <editeng/unoprnms.hxx>
@@ -1230,15 +1231,14 @@ CPPUNIT_TEST_FIXTURE(OoxShapeTest, testReflectionImport)
     uno::Reference<beans::XPropertySet> xNone(xDrawPage->getByIndex(3), uno::UNO_QUERY);
     CPPUNIT_ASSERT(!xNone->getPropertyValue(u"ReflectionEffectEnabled"_ustr).get<bool>());
 
-    // The reflection also stays in the stored effects, which keep the attributes that are not
-    // shape properties, such as the vertical scale.
-    comphelper::SequenceAsHashMap aGrabBag(xTight->getPropertyValue(u"InteropGrabBag"_ustr));
-    auto aEffects = aGrabBag[u"EffectProperties"_ustr].get<uno::Sequence<beans::PropertyValue>>();
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aEffects.getLength());
-    CPPUNIT_ASSERT_EQUAL(u"reflection"_ustr, aEffects[0].Name);
-    comphelper::SequenceAsHashMap aReflection(aEffects[0].Value);
-    comphelper::SequenceAsHashMap aAttributes(aReflection[u"Attribs"_ustr]);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-100000), aAttributes[u"sy"_ustr].get<sal_Int32>());
+    // The reflection effect also has the attributes that have no shape property of their own,
+    // such as the vertical scale.
+    uno::Reference<util::XReflectionEffect> xReflection;
+    xTight->getPropertyValue(u"ReflectionEffect"_ustr) >>= xReflection;
+    std::optional<model::ReflectionEffect> oReflection
+        = model::effect::getFromXReflectionEffect(xReflection);
+    CPPUNIT_ASSERT(oReflection);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-100000), oReflection->mnScaleY);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

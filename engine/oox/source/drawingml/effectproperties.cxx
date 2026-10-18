@@ -15,6 +15,7 @@
 #include <basegfx/numeric/ftools.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <docmodel/theme/FormatScheme.hxx>
+#include <docmodel/uno/UnoComplexColor.hxx>
 
 #include <algorithm>
 
@@ -24,21 +25,6 @@ void EffectGlowProperties ::assignUsed(const EffectGlowProperties& rSourceProps)
 {
     assignIfUsed( moGlowRad, rSourceProps.moGlowRad );
     moGlowColor.assignIfUsed( rSourceProps.moGlowColor );
-}
-
-void EffectSoftEdgeProperties::assignUsed(const EffectSoftEdgeProperties& rSourceProps)
-{
-    assignIfUsed(moRad, rSourceProps.moRad);
-}
-
-void EffectReflectionProperties::assignUsed(const EffectReflectionProperties& rSourceProps)
-{
-    assignIfUsed(moDistance, rSourceProps.moDistance);
-    assignIfUsed(moBlurRadius, rSourceProps.moBlurRadius);
-    assignIfUsed(moStartAlpha, rSourceProps.moStartAlpha);
-    assignIfUsed(moStartPosition, rSourceProps.moStartPosition);
-    assignIfUsed(moEndAlpha, rSourceProps.moEndAlpha);
-    assignIfUsed(moEndPosition, rSourceProps.moEndPosition);
 }
 
 void EffectShadowProperties::assignUsed(const EffectShadowProperties& rSourceProps)
@@ -57,9 +43,11 @@ void EffectProperties::assignUsed( const EffectProperties& rSourceProps )
 {
     maShadow.assignUsed(rSourceProps.maShadow);
     maGlow.assignUsed(rSourceProps.maGlow);
-    maSoftEdge.assignUsed(rSourceProps.maSoftEdge);
-    maReflection.assignUsed(rSourceProps.maReflection);
-    if (!rSourceProps.m_Effects.empty())
+    // An effect list replaces the whole effect list that it is assigned over, also when it is
+    // empty.
+    if (rSourceProps.mbEffectList || !rSourceProps.maEffects.empty())
+        maEffects = rSourceProps.maEffects;
+    if (rSourceProps.mbEffectList || !rSourceProps.m_Effects.empty())
     {
         m_Effects.clear();
         m_Effects.reserve(rSourceProps.m_Effects.size());
@@ -68,6 +56,7 @@ void EffectProperties::assignUsed( const EffectProperties& rSourceProps )
             m_Effects.push_back(std::make_unique<Effect>(*it));
         }
     }
+    mbEffectList = mbEffectList || rSourceProps.mbEffectList;
 }
 
 void EffectProperties::pushToPropMap( PropertyMap& rPropMap,
@@ -122,26 +111,27 @@ void EffectProperties::pushToPropMap( PropertyMap& rPropMap,
                 PROP_ShadowAlignment,
                 static_cast<sal_Int32>(maShadow.moShadowAlignment.value_or(model::RectangleAlignment::Bottom)));
 
+            if (maEffects.moOuterShadow)
+            {
+                const model::OuterShadowEffect& rShadow = *maEffects.moOuterShadow;
+                rPropMap.setProperty(PROP_ShadowSkewX, rShadow.mnSkewX.get());
+                rPropMap.setProperty(PROP_ShadowSkewY, rShadow.mnSkewY.get());
+                rPropMap.setProperty(PROP_ShadowRotateWithShape, rShadow.mbRotateWithShape);
+                // A theme color keeps the reference to the theme. Its alpha is in
+                // ShadowTransparence already.
+                if (rShadow.maColor.isValidThemeType())
+                {
+                    model::ComplexColor aColor(rShadow.maColor);
+                    aColor.removeTransformations(model::TransformationType::Alpha);
+                    rPropMap.setProperty(PROP_ShadowComplexColor,
+                                         model::color::createXComplexColor(aColor));
+                }
+            }
+
         }
     }
 }
 
-css::beans::PropertyValue Effect::getEffect()
-{
-    css::beans::PropertyValue aRet;
-    if( msName.isEmpty() )
-        return aRet;
-
-    cpo::uno::Sequence< css::beans::PropertyValue > aSeq( maAttribs.size() );
-    std::transform(maAttribs.begin(), maAttribs.end(), aSeq.getArray(),
-                   [](const auto& attrib)
-                   { return comphelper::makePropertyValue(attrib.first, attrib.second); });
-
-    aRet.Name = msName;
-    aRet.Value <<= aSeq;
-
-    return aRet;
-}
 
 } // namespace oox::drawingml
 

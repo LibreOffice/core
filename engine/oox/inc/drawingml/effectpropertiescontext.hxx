@@ -27,6 +27,7 @@ public:
 
     virtual ::oox::core::ContextHandlerRef
         onCreateContext( ::sal_Int32 Element, const ::oox::AttributeList& rAttribs ) override;
+    virtual void onEndElement() override;
 
 private:
     static void saveUnsupportedAttribs( Effect& rEffect, const AttributeList& rAttribs );
