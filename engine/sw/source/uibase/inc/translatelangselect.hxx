@@ -20,7 +20,9 @@
 #pragma once
 #include <vcl/weld.hxx>
 #include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
 #include <optional>
+#include <vector>
 
 class SwWrtShell;
 
@@ -28,37 +30,43 @@ class SwWrtShell;
 class SwLanguageListItem final
 {
 public:
-    SwLanguageListItem(const OString& sLanguage, const OString& sName)
+    SwLanguageListItem(const OString& sLanguage, const OUString& sName)
         : m_sLanguage(sLanguage)
         , m_sName(sName)
     {
     }
+    /// The code passed to the translation API, e.g. "EN-GB".
     const OString& getLanguage() const { return m_sLanguage; }
-    const OString& getName() const { return m_sName; }
+    /// The name of the language in the UI language.
+    const OUString& getName() const { return m_sName; }
 
 private:
-    const OString m_sLanguage;
-    const OString m_sName;
+    OString m_sLanguage;
+    OUString m_sName;
 };
 
 // SwTranslateLangSelectDlg Language selection dialog for translation API.
 class SwTranslateLangSelectDlg final : public weld::GenericDialogController
 {
 public:
-    static int selectedLangIdx;
     SwTranslateLangSelectDlg(weld::Window* pParent, SwWrtShell& rSh);
     static std::optional<SwLanguageListItem> GetSelectedLanguage();
 
 private:
+    /// The language last picked in the dialog, offered again the next time.
+    static std::optional<SwLanguageListItem> s_oSelectedLanguage;
+
     SwWrtShell& m_rWrtSh;
     std::unique_ptr<weld::ComboBox> m_xLanguageListBox;
     std::unique_ptr<weld::Button> m_xBtnCancel;
     std::unique_ptr<weld::Button> m_xBtnTranslate;
+    /// The languages in the order they are listed.
+    std::vector<SwLanguageListItem> m_aLanguages;
 
     bool m_bTranslationStarted;
     bool m_bCancelTranslation;
 
-    DECL_STATIC_LINK(SwTranslateLangSelectDlg, LangSelectHdl, weld::ComboBox&, void);
+    DECL_LINK(LangSelectHdl, weld::ComboBox&, void);
     DECL_LINK(LangSelectCancelHdl, weld::Button&, void);
     DECL_LINK(LangSelectTranslateHdl, weld::Button&, void);
 };

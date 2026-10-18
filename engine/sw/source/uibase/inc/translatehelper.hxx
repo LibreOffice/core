@@ -23,6 +23,7 @@
 #include <config_features.h>
 
 #include <functional>
+#include <vector>
 
 #include <rtl/string.hxx>
 
@@ -77,5 +78,9 @@ SW_DLLPUBLIC void TranslateDocument(SwWrtShell& rWrtSh, const OString& rTargetLa
 SW_DLLPUBLIC bool TranslateDocumentCancellable(SwWrtShell& rWrtSh, const OString& rTargetLang,
                                                const bool& rCancelTranslation);
 SW_DLLPUBLIC bool IsTranslationServiceConfigured();
+/// Codes of the languages the configured translation service can translate into, as
+/// reported by the service, e.g. "de" or "en-GB"; empty when the service could not
+/// tell.
+SW_DLLPUBLIC std::vector<OString> GetTargetLanguages();
 #endif
 }

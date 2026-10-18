@@ -19,6 +19,8 @@
 
 #include <sal/config.h>
 
+#include <chrono>
+#include <optional>
 #include <vector>
 
 #include <config_features.h>
@@ -392,6 +394,35 @@ static bool IsTranslationServiceConfigured(OString* pAPIUrl, OString* pKey)
 }
 
 bool IsTranslationServiceConfigured() { return IsTranslationServiceConfigured(nullptr, nullptr); }
+
+std::vector<OString> GetTargetLanguages()
+{
+    OString aAPIUrl, aAuthKey;
+    if (!IsTranslationServiceConfigured(&aAPIUrl, &aAuthKey))
+        return {};
+
+    // The service is asked only once per configuration. A request can block for seconds,
+    // so after a failed one the service is not asked again for a while; it is asked again
+    // later, so a temporary failure does not hide the list for good.
+    static constexpr std::chrono::minutes RETRY_AFTER_FAILURE(5);
+    static OString aCachedAPIUrl, aCachedAuthKey;
+    static std::vector<OString> aCachedLanguages;
+    static std::optional<std::chrono::steady_clock::time_point> oLastFailure;
+    const std::chrono::steady_clock::time_point aNow = std::chrono::steady_clock::now();
+    if (aAPIUrl == aCachedAPIUrl && aAuthKey == aCachedAuthKey
+        && (!aCachedLanguages.empty()
+            || (oLastFailure && aNow - *oLastFailure < RETRY_AFTER_FAILURE)))
+        return aCachedLanguages;
+
+    aCachedLanguages = linguistic::GetTargetLanguages(aAPIUrl, aAuthKey);
+    aCachedAPIUrl = aAPIUrl;
+    aCachedAuthKey = aAuthKey;
+    if (aCachedLanguages.empty())
+        oLastFailure = aNow;
+    else
+        oLastFailure.reset();
+    return aCachedLanguages;
+}
 
 bool TranslateDocumentCancellable(SwWrtShell& rWrtSh, const OString& rTargetLang,
                                   const bool& rCancelTranslation)
