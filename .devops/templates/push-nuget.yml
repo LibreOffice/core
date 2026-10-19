@@ -1,0 +1,21 @@
+# Pushes each named package to nuget.org in a step of its own.
+#   packages: package ids; the file pushed is <staging directory>/<id>.$(targetVersion).nupkg
+# Runs after an earlier push failed (so one bad package does not hide the others) but only once the
+# build and pack steps have succeeded (the `packed` variable); the job still fails if any push fails.
+# allowPackageConflicts skips a package that already exists at this version.
+parameters:
+- name: packages
+  type: object
+  default: []
+
+steps:
+- ${{ each package in parameters.packages }}:
+  - task: NuGetCommand@2
+    displayName: 'push ${{ package }}'
+    condition: and(succeededOrFailed(), eq(variables['packed'], 'true'))
+    inputs:
+      command: 'push'
+      packagesToPush: '$(Build.ArtifactStagingDirectory)/${{ package }}.$(targetVersion).nupkg'
+      nuGetFeedType: 'external'
+      publishFeedCredentials: 'nuget-curiosity-org'
+      allowPackageConflicts: true

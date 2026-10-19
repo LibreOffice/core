@@ -136,15 +136,33 @@ steps:
     nobuild: true
   displayName: 'pack nuget'
 
-# The push below picks up every .nupkg in the staging directory, so all thirteen packages go out
-# in one step (the .snupkg symbol packages beside them are pushed with their .nupkg). NuGet
-# accepts them in any order: a package may be published before a dependency it names, and the
-# dependency only has to exist by the time a consumer restores.
-
-- task: NuGetCommand@2
+# Marks that every package was built and packed, so the push steps below may run even when an
+# earlier push failed, but never after a failed build or pack.
+- task: PowerShell@2
+  displayName: 'mark packed'
   inputs:
-    command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg'
-    nuGetFeedType: 'external'
-    publishFeedCredentials: 'nuget-curiosity-org'
-  displayName: 'push nuget'
+    targetType: 'inline'
+    script: |
+      Write-Host "##vso[task.setvariable variable=packed;]true"
+
+# One push step per package (templates/push-nuget.yml), not one glob push. A glob push stops at the
+# first package that fails, and a later package then never reaches nuget.org (the first runs of the
+# multi-package pipelines published one package each). Each step also skips a package that is already
+# on nuget.org at this version, so a re-run of the same build completes the set instead of failing on
+# the packages that went out the first time. The .snupkg beside each .nupkg is pushed with it.
+- template: templates/push-nuget.yml
+  parameters:
+    packages:
+    - X-Ray.Office.Core
+    - X-Ray.Office.Containers
+    - X-Ray.Office.Text
+    - X-Ray.Office.Vector
+    - X-Ray.Office.Rendering
+    - X-Ray.Office.Markup
+    - X-Ray.Office.Ooxml
+    - X-Ray.Office.OpenDocument
+    - X-Ray.Office.MsBinary
+    - X-Ray.Office.WordProcessing
+    - X-Ray.Office.Spreadsheets
+    - X-Ray.Office.Presentations
+    - X-Ray.Office
