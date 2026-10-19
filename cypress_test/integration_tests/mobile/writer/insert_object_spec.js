@@ -49,6 +49,10 @@ describe(['tagmobile', 'tagnextcloud'], 'Insert objects via insertion wizard.', 
 		// model, so a bare ctrl+a/copy sequence selects nothing.
 		helper.processToIdle(this.win);
 		helper.typeIntoDocument('{ctrl}a');
+		// A selected table shows no text selection handles on mobile, so wait for the view state.
+		cy.getFrameWindow().should(function(win) {
+			expect(win.app.activeDocument.activeView.hasTextSelection).to.equal(true);
+		});
 		helper.copy();
 		// Two rows
 		cy.cGet('#copy-paste-container tr').should('have.length', 2);
@@ -72,6 +76,9 @@ describe(['tagmobile', 'tagnextcloud'], 'Insert objects via insertion wizard.', 
 		// Same insert-then-select race as 'Insert default table'.
 		helper.processToIdle(this.win);
 		helper.typeIntoDocument('{ctrl}a');
+		cy.getFrameWindow().should(function(win) {
+			expect(win.app.activeDocument.activeView.hasTextSelection).to.equal(true);
+		});
 		helper.copy();
 		// Three rows
 		cy.cGet('#copy-paste-container tr').should('have.length', 3);
