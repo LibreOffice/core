@@ -3464,9 +3464,9 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
     if (xProps
         && xProps->getPropertySetInfo()->hasPropertyByName(u"IsEmptyPresentationObject"_ustr))
         xProps->getPropertyValue(u"IsEmptyPresentationObject"_ustr) >>= bIsEmptyPresObj;
-    // Field placeholders carry their field content, and a master's text box carries list styles.
-    const bool bTextIsDefaultPrompt = bIsEmptyPresObj && !bUseCustomPrompt && !bUsePlaceholderIndex
-                                      && !bWritePropertiesAsLstStyles;
+    // Field placeholders carry their field content.
+    const bool bTextIsDefaultPrompt
+        = bIsEmptyPresObj && !bUseCustomPrompt && !bUsePlaceholderIndex;
 
     // A slide-side empty picture placeholder inherits the prompt from the layout, so it writes no
     // text; one that is not empty was typed into, and that text is the slide's own content. The

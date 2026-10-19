@@ -4769,7 +4769,9 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
     } // end of bodyPr
 
     Reference< XEnumerationAccess > access( xXText, UNO_QUERY );
-    if( !access.is() || !bText )
+    // The list styles of a master live on its first paragraph, so they are read from the text
+    // even where the text itself stays out of the file.
+    if( !access.is() || (!bText && !bWritePropertiesAsLstStyles) )
         return;
 
     Reference< XEnumeration > enumeration( access->createEnumeration() );
@@ -4832,7 +4834,8 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
 
     if (xXText->getString().isEmpty())
     {
-        WriteTextlessParagraph(rXIface);
+        if (bText)
+            WriteTextlessParagraph(rXIface);
         return;
     }
 
@@ -4856,6 +4859,9 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
 
             if (bFirstParagraph && bWritePropertiesAsLstStyles)
                 WriteLstStyles(paragraph, bOverridingCharHeight, nCharHeight, rXPropSet);
+
+            if (!bText)
+                return;
 
             WriteParagraph(paragraph, bOverridingCharHeight, nCharHeight, rXPropSet);
             bFirstParagraph = false;

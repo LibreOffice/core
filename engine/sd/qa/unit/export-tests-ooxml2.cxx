@@ -1466,33 +1466,50 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf128049)
                 "fmla", u"val 12500");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testMasterPlaceholderStatesNoPrompt)
+{
+    // A placeholder of a master that nobody has typed into shows the prompt of the application,
+    // which belongs to the application rather than to the document, so the file states no text
+    // for it and it is still waiting for content when it is read back.
+    createSdImpressDoc("pptx/subtitle-animation-save.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlMaster = parseExport(u"ppt/slideMasters/slideMaster1.xml"_ustr);
+    assertXPath(pXmlMaster, "/p:sldMaster/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r", 0);
+    // The formatting the master gives its text is stated all the same.
+    assertXPath(pXmlMaster, "/p:sldMaster/p:cSld/p:spTree/p:sp/p:txBody/a:lstStyle/a:lvl1pPr", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf106026)
 {
     createSdImpressDoc("odp/tdf106026.odp");
     save(TestFilter::PPTX);
 
     xmlDocUniquePtr pXmlMasterContent = parseExport(u"ppt/slideMasters/slideMaster1.xml"_ustr);
+    // The space above a paragraph of the master is stated for each outline level, which is
+    // where a reader looks for it. The text of the master says nothing, because what it holds
+    // is the prompt the application shows and no document wrote.
     assertXPath(pXmlMasterContent,
-                "/p:sldMaster/p:cSld/p:spTree/p:sp/p:txBody/a:p[1]/a:pPr/a:spcBef/a:spcPts", "val",
-                u"1417");
+                "/p:sldMaster/p:cSld/p:spTree/p:sp/p:txBody/a:lstStyle/a:lvl1pPr/a:spcBef/a:spcPts",
+                "val", u"1417");
     assertXPath(pXmlMasterContent,
-                "/p:sldMaster/p:cSld/p:spTree/p:sp/p:txBody/a:p[2]/a:pPr/a:spcBef/a:spcPts", "val",
-                u"1134");
+                "/p:sldMaster/p:cSld/p:spTree/p:sp/p:txBody/a:lstStyle/a:lvl2pPr/a:spcBef/a:spcPts",
+                "val", u"1134");
     assertXPath(pXmlMasterContent,
-                "/p:sldMaster/p:cSld/p:spTree/p:sp/p:txBody/a:p[3]/a:pPr/a:spcBef/a:spcPts", "val",
-                u"850");
+                "/p:sldMaster/p:cSld/p:spTree/p:sp/p:txBody/a:lstStyle/a:lvl3pPr/a:spcBef/a:spcPts",
+                "val", u"850");
     assertXPath(pXmlMasterContent,
-                "/p:sldMaster/p:cSld/p:spTree/p:sp/p:txBody/a:p[4]/a:pPr/a:spcBef/a:spcPts", "val",
-                u"567");
+                "/p:sldMaster/p:cSld/p:spTree/p:sp/p:txBody/a:lstStyle/a:lvl4pPr/a:spcBef/a:spcPts",
+                "val", u"567");
     assertXPath(pXmlMasterContent,
-                "/p:sldMaster/p:cSld/p:spTree/p:sp/p:txBody/a:p[5]/a:pPr/a:spcBef/a:spcPts", "val",
-                u"283");
+                "/p:sldMaster/p:cSld/p:spTree/p:sp/p:txBody/a:lstStyle/a:lvl5pPr/a:spcBef/a:spcPts",
+                "val", u"283");
     assertXPath(pXmlMasterContent,
-                "/p:sldMaster/p:cSld/p:spTree/p:sp/p:txBody/a:p[6]/a:pPr/a:spcBef/a:spcPts", "val",
-                u"283");
+                "/p:sldMaster/p:cSld/p:spTree/p:sp/p:txBody/a:lstStyle/a:lvl6pPr/a:spcBef/a:spcPts",
+                "val", u"283");
     assertXPath(pXmlMasterContent,
-                "/p:sldMaster/p:cSld/p:spTree/p:sp/p:txBody/a:p[7]/a:pPr/a:spcBef/a:spcPts", "val",
-                u"283");
+                "/p:sldMaster/p:cSld/p:spTree/p:sp/p:txBody/a:lstStyle/a:lvl7pPr/a:spcBef/a:spcPts",
+                "val", u"283");
 
     xmlDocUniquePtr pXmlSlideContent = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPath(pXmlSlideContent,
