@@ -24,7 +24,7 @@ describe(['tagmultiuser'], 'Multiuser slide reorder and delete', function() {
 	// thumbnail by position: frame 0 is the reorder drop-site, frame k is
 	// slide k.
 	function clickSlideThumbnail(part) {
-		cy.cGet('.preview-frame').eq(part + 1).find('img').scrollIntoView().click();
+		cy.cGet('.preview-frame').eq(part + 1).find('img.preview-img').scrollIntoView().click();
 	}
 
 	// Collect the ready tiles cached for one slide, as the live Tile objects.

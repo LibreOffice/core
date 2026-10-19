@@ -25,7 +25,7 @@ describe(['tagmultiuser'], 'Multiuser slide sorter avatars', function() {
 	}
 
 	function clickSlideThumbnail(part) {
-		frameOfSlide(part).find('img').scrollIntoView().click();
+		frameOfSlide(part).find('img.preview-img').scrollIntoView().click();
 	}
 
 	// How many avatars and counters the active frame draws on each slide.
