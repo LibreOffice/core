@@ -1942,6 +1942,35 @@ void SwFootnoteBossFrame::CollectFootnotes( const SwContentFrame* _pRef,
     CollectFootnotes_(_pRef, pFootnote, _rFootnoteArr, _bCollectOnlyPreviousFootnotes ? this : nullptr);
 }
 
+static bool ShouldCollectFoundFootnote(const SwContentFrame* pRef, SwFootnoteFrame* pFootnote,
+                                const SwFootnoteBossFrame* pRefFootnoteBossFrame)
+{
+    bool bCollectFoundFootnote = false;
+    // Ignore endnotes which are on a separate endnote page.
+    bool bEndNote = pFootnote->GetAttr()->GetFootnote().IsEndNote();
+    if (pFootnote->GetRef() != pRef || bEndNote)
+        return false;
+
+    if (pRefFootnoteBossFrame)
+    {
+        SwFootnoteBossFrame* pBossOfFoundFootnote = pFootnote->FindFootnoteBossFrame(true);
+        OSL_ENSURE(pBossOfFoundFootnote,
+                   "<ShouldCollectFoundFootnote(..)> - footnote boss frame of "
+                   "found footnote frame missing.\nWrong layout!");
+        if (!pBossOfFoundFootnote || // don't crash, if no footnote boss is found.
+            pBossOfFoundFootnote->IsBefore(pRefFootnoteBossFrame))
+        {
+            bCollectFoundFootnote = true;
+        }
+    }
+    else
+    {
+        bCollectFoundFootnote = true;
+    }
+
+    return bCollectFoundFootnote;
+}
+
 static void FootnoteInArr( SwFootnoteFrames& rFootnoteArr, SwFootnoteFrame* pFootnote )
 {
     if ( rFootnoteArr.end() == std::find( rFootnoteArr.begin(), rFootnoteArr.end(), pFootnote ) )
@@ -2013,31 +2042,7 @@ void SwFootnoteBossFrame::CollectFootnotes_( const SwContentFrame*   _pRef,
             pNxtFootnote = nullptr;
         }
 
-        // OD 03.04.2003 #108446# - determine, if found footnote has to be collected.
-        bool bCollectFoundFootnote = false;
-        // Ignore endnotes which are on a separate endnote page.
-        bool bEndNote = _pFootnote->GetAttr()->GetFootnote().IsEndNote();
-        if (_pFootnote->GetRef() == _pRef && !bEndNote)
-        {
-            if (_pRefFootnoteBossFrame)
-            {
-                SwFootnoteBossFrame* pBossOfFoundFootnote = _pFootnote->FindFootnoteBossFrame( true );
-                OSL_ENSURE( pBossOfFoundFootnote,
-                        "<SwFootnoteBossFrame::CollectFootnotes_(..)> - footnote boss frame of found footnote frame missing.\nWrong layout!" );
-                if ( !pBossOfFoundFootnote ||    // don't crash, if no footnote boss is found.
-                     pBossOfFoundFootnote->IsBefore( _pRefFootnoteBossFrame )
-                   )
-                {
-                    bCollectFoundFootnote = true;
-                }
-            }
-            else
-            {
-                bCollectFoundFootnote = true;
-            }
-        }
-
-        if ( bCollectFoundFootnote )
+        if ( ShouldCollectFoundFootnote(_pRef, _pFootnote, _pRefFootnoteBossFrame) )
         {
             OSL_ENSURE( !_pFootnote->GetMaster(), "move FollowFootnote?" );
             SwFootnoteFrame *pNxt = _pFootnote->GetFollow();
