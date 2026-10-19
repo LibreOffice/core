@@ -26,7 +26,9 @@
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/text/XTextColumns.hpp>
 
+#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 
 #include <rtl/character.hxx>
 #include <o3tl/string_view.hxx>
@@ -1464,6 +1466,62 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf128049)
                 "name", u"adj");
     assertXPath(pXmlDocContent, "/p:sld/p:cSld/p:spTree/p:sp[1]/p:spPr/a:prstGeom/a:avLst/a:gd",
                 "fmla", u"val 12500");
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testCentredTitleKeepsItsName)
+{
+    // The format has a name of its own for the title of a title slide, and the model has no kind
+    // for it and reads it as a plain title. The name the document used is written back.
+    createSdImpressDoc("pptx/3columns.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pLayout = parseExport(u"ppt/slideLayouts/slideLayout1.xml"_ustr);
+    assertXPath(pLayout,
+                "/p:sldLayout/p:cSld/p:spTree/p:sp/p:nvSpPr/p:nvPr/p:ph[@type='ctrTitle']", 1);
+    assertXPath(pLayout, "/p:sldLayout/p:cSld/p:spTree/p:sp/p:nvSpPr/p:nvPr/p:ph[@type='title']",
+                0);
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testCentredTitleStaysOnItsLayout)
+{
+    // Given a document whose first layout has a centred title, with the name of that layout
+    // given to another one:
+    createSdImpressDoc("pptx/master-and-eleven-layouts.pptx");
+
+    uno::Reference<drawing::XMasterPagesSupplier> xSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPages> xMasterPages = xSupplier->getMasterPages();
+    sal_Int32 nCentred = -1;
+    sal_Int32 nPlain = -1;
+    for (sal_Int32 nPage = 0; nPage < xMasterPages->getCount(); ++nPage)
+    {
+        uno::Reference<container::XNamed> xNamed(xMasterPages->getByIndex(nPage),
+                                                 uno::UNO_QUERY_THROW);
+        if (xNamed->getName() == "Title Slide")
+            nCentred = nPage;
+        else if (xNamed->getName() == "Title and Content")
+            nPlain = nPage;
+    }
+    CPPUNIT_ASSERT(nCentred >= 0);
+    CPPUNIT_ASSERT(nPlain >= 0);
+    uno::Reference<container::XNamed>(xMasterPages->getByIndex(nCentred), uno::UNO_QUERY_THROW)
+        ->setName(u"Renamed"_ustr);
+    uno::Reference<container::XNamed>(xMasterPages->getByIndex(nPlain), uno::UNO_QUERY_THROW)
+        ->setName(u"Title Slide"_ustr);
+
+    save(TestFilter::PPTX);
+
+    // The layout the centred title was read on keeps it, and the layout that took the name it
+    // used to have keeps the plain title it was read with.
+    xmlDocUniquePtr pCentred
+        = parseExport("ppt/slideLayouts/slideLayout" + OUString::number(nCentred + 1) + ".xml");
+    assertXPath(pCentred,
+                "/p:sldLayout/p:cSld/p:spTree/p:sp/p:nvSpPr/p:nvPr/p:ph[@type='ctrTitle']", 1);
+    xmlDocUniquePtr pPlain
+        = parseExport("ppt/slideLayouts/slideLayout" + OUString::number(nPlain + 1) + ".xml");
+    assertXPath(pPlain,
+                "/p:sldLayout/p:cSld/p:spTree/p:sp/p:nvSpPr/p:nvPr/p:ph[@type='ctrTitle']", 0);
+    assertXPath(pPlain, "/p:sldLayout/p:cSld/p:spTree/p:sp/p:nvSpPr/p:nvPr/p:ph[@type='title']",
+                1);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testMasterPlaceholderStatesNoPrompt)

@@ -17,7 +17,10 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <comphelper/sequenceashashmap.hxx>
 #include <oox/ppt/pptshape.hxx>
+#include <ppt/pageidentifier.hxx>
+#include <oox/token/tokenmap.hxx>
 #include <oox/core/xmlfilterbase.hxx>
 #include <drawingml/customshapeproperties.hxx>
 #include <drawingml/textbody.hxx>
@@ -246,6 +249,66 @@ void PPTShape::setTextMasterStyles( const SlidePersist& rSlidePersist, const oox
     catch (const cpo::uno::Exception&)
     {
     }
+}
+
+namespace
+{
+/** The name the model would give a placeholder that the document named this way.
+
+    A centred title is a title to the model. The names that stand for the text of a slide, such
+    as a chart or a diagram, are left alone: a page may stand several of them side by side, and
+    one name for the page could not say which is which. */
+OUString modelPlaceholderName(sal_Int32 nSubType)
+{
+    if (nSubType == XML_ctrTitle)
+        return u"title"_ustr;
+    return oox::TokenMap::getUnicodeTokenName(nSubType);
+}
+
+/// Keeps the name a document gave a placeholder where the model has no kind of that name
+void keepStatedPlaceholderName(const SlidePersist& rSlidePersist,
+                               oox::core::XmlFilterBase& rFilterBase, sal_Int32 nSubType)
+{
+    const OUString aStated = oox::TokenMap::getUnicodeTokenName(nSubType);
+    const OUString aModel = modelPlaceholderName(nSubType);
+    // A slide is named after its own text once the whole document is read, so it would not be
+    // found again under the name it has here. It takes the name of its layout on the way out.
+    if (aStated == aModel || !rSlidePersist.isMasterPage())
+        return;
+
+    try
+    {
+        const OUString aPageKey = getPageIdentifier(rSlidePersist.getPage());
+        Reference<XPropertySet> xDocProps(rFilterBase.getModel(), UNO_QUERY);
+        if (aPageKey.isEmpty() || !xDocProps.is()
+            || !xDocProps->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
+            return;
+
+        static constexpr OUString aKey = u"OOXPlaceholderTypes"_ustr;
+        comphelper::SequenceAsHashMap aGrabBag(
+            xDocProps->getPropertyValue(u"InteropGrabBag"_ustr));
+
+        comphelper::SequenceAsHashMap aPerPage;
+        const auto aEntry = aGrabBag.find(aKey);
+        if (aEntry != aGrabBag.end())
+            aPerPage << aEntry->second;
+
+        comphelper::SequenceAsHashMap aOnPage;
+        const auto aPage = aPerPage.find(aPageKey);
+        if (aPage != aPerPage.end())
+            aOnPage << aPage->second;
+
+        aOnPage[aModel] <<= aStated;
+        aPerPage[aPageKey] <<= aOnPage.getAsConstPropertyValueList();
+        aGrabBag[aKey] <<= aPerPage.getAsConstPropertyValueList();
+        xDocProps->setPropertyValue(u"InteropGrabBag"_ustr,
+                                    Any(aGrabBag.getAsConstPropertyValueList()));
+    }
+    catch (const Exception&)
+    {
+        SAL_WARN("oox.ppt", "keepStatedPlaceholderName: failed to keep the name");
+    }
+}
 }
 
 void PPTShape::addShape(
@@ -547,6 +610,11 @@ void PPTShape::addShape(
             }
 
             Reference< XShape > xShape( createAndInsert( rFilterBase, sServiceName, pTheme, rxShapes, bClearText, mpPlaceholder, aTransformation, getFillProperties() ) );
+
+            // The format knows more kinds of placeholder than the model does, so a centred title
+            // reads as a title and a chart or a diagram reads as the text of a slide. The name
+            // the document gave it is kept beside the model, to be given back on the way out.
+            keepStatedPlaceholderName(rSlidePersist, rFilterBase, mnSubType);
 
             // Apply text properties on placeholder text inside this placeholder shape
             if (meShapeLocation == Slide && mpPlaceholder && getTextBody() && getTextBody()->isEmpty())

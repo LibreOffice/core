@@ -498,6 +498,82 @@ const char* getPlaceholderTypeName(PlaceholderType ePlaceholder)
 }
 }
 
+namespace
+{
+/** The identifier of the page that holds what the import kept.
+
+    A slide takes what the layout it follows kept, so that the two agree and a reader can pair
+    them. The page of a layout is a master page of the model and holds one of its own. The
+    identifier stays the same when a page is renamed. */
+OUString placeholderPageKey(const Reference<css::drawing::XDrawPage>& rxPage)
+{
+    uno::Reference<beans::XPropertySet> xPageProperties(rxPage, uno::UNO_QUERY);
+    uno::Reference<drawing::XMasterPageTarget> xTarget(rxPage, uno::UNO_QUERY);
+    if (xTarget.is() && xTarget->getMasterPage().is())
+        xPageProperties.set(xTarget->getMasterPage(), uno::UNO_QUERY);
+
+    OUString aIdentifier;
+    if (xPageProperties.is()
+        && xPageProperties->getPropertySetInfo()->hasPropertyByName(u"Guid"_ustr))
+        xPageProperties->getPropertyValue(u"Guid"_ustr) >>= aIdentifier;
+    return aIdentifier;
+}
+
+/** The name the document gave a placeholder of this kind on this page.
+
+    Several names of the format stand for one kind of the model, and the import keeps the one the
+    document used. Empty where the document used the name the model would give it anyway. */
+OString statedPlaceholderName(const Reference<css::drawing::XDrawPage>& rxPage,
+                              const rtl::Reference<SdXImpressDocument>& rxModel,
+                              std::string_view aModelName)
+{
+    const OUString aPageKey = placeholderPageKey(rxPage);
+    if (aPageKey.isEmpty() || !rxModel.is()
+        || !rxModel->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
+        return OString();
+
+    OUString aStated;
+    try
+    {
+        comphelper::SequenceAsHashMap aGrabBag(
+            rxModel->getPropertyValue(u"InteropGrabBag"_ustr));
+        const auto aEntry = aGrabBag.find(u"OOXPlaceholderTypes"_ustr);
+        if (aEntry == aGrabBag.end())
+            return OString();
+
+        comphelper::SequenceAsHashMap aPerPage(aEntry->second);
+        const auto aPage = aPerPage.find(aPageKey);
+        if (aPage == aPerPage.end())
+            return OString();
+
+        comphelper::SequenceAsHashMap aOnPage(aPage->second);
+        const auto aName
+            = aOnPage.find(OStringToOUString(aModelName, RTL_TEXTENCODING_UTF8));
+        if (aName == aOnPage.end() || !(aName->second >>= aStated))
+            return OString();
+    }
+    catch (const uno::Exception&)
+    {
+        return OString();
+    }
+    return OUStringToOString(aStated, RTL_TEXTENCODING_UTF8);
+}
+
+/** The name a master states a placeholder by.
+
+    A layout may call the same thing by another name: the text of a title slide is a subtitle
+    there and the body here, and a centred title is a title. */
+OString masterPlaceholderName(std::string_view aType)
+{
+    if (aType == "ctrTitle")
+        return "title"_ostr;
+    if (aType == "subTitle" || aType == "obj")
+        return "body"_ostr;
+    return OString(aType);
+}
+}
+
+
 namespace {
 
 struct PPTXLayoutInfo
@@ -3400,7 +3476,20 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
 
     bool bUsePlaceholderIndex
         = ePlaceholder == Footer || ePlaceholder == DateAndTime || ePlaceholder == SlideNumber;
-    const char* pType = getPlaceholderTypeName(ePlaceholder);
+    OString aTypeName(getPlaceholderTypeName(ePlaceholder));
+
+    // The format knows more kinds of placeholder than the model does, so the name the document
+    // gave this one is given back where the model still stands for the same thing. A master
+    // states none of those names, and keeps the one it has.
+    if (!mbSlideMasterPart)
+    {
+        auto* pExport = static_cast<PowerPointExport*>(GetFB());
+        const OString aStated = statedPlaceholderName(pExport->GetCurrentPage(),
+                                                      pExport->GetModel(), aTypeName);
+        if (!aStated.isEmpty())
+            aTypeName = aStated;
+    }
+    const char* pType = aTypeName.getStr();
 
     SAL_INFO("sd.eppt", "write placeholder " << pType);
 
@@ -4043,41 +4132,6 @@ void PowerPointExport::WriteMasterOwnPlaceholders(PowerPointShapeExport& rDML,
             break;
         }
     }
-}
-
-namespace
-{
-/** The identifier of the page that holds what the import kept.
-
-    A slide takes what the layout it follows kept, so that the two agree and a reader can pair
-    them. The page of a layout is a master page of the model and holds one of its own. The
-    identifier stays the same when a page is renamed. */
-OUString placeholderPageKey(const Reference<css::drawing::XDrawPage>& rxPage)
-{
-    uno::Reference<beans::XPropertySet> xPageProperties(rxPage, uno::UNO_QUERY);
-    uno::Reference<drawing::XMasterPageTarget> xTarget(rxPage, uno::UNO_QUERY);
-    if (xTarget.is() && xTarget->getMasterPage().is())
-        xPageProperties.set(xTarget->getMasterPage(), uno::UNO_QUERY);
-
-    OUString aIdentifier;
-    if (xPageProperties.is()
-        && xPageProperties->getPropertySetInfo()->hasPropertyByName(u"Guid"_ustr))
-        xPageProperties->getPropertyValue(u"Guid"_ustr) >>= aIdentifier;
-    return aIdentifier;
-}
-
-/** The name a master states a placeholder by.
-
-    A layout may call the same thing by another name: the text of a title slide is a subtitle
-    there and the body here, and a centred title is a title. */
-OString masterPlaceholderName(std::string_view aType)
-{
-    if (aType == "ctrTitle")
-        return "title"_ostr;
-    if (aType == "subTitle" || aType == "obj")
-        return "body"_ostr;
-    return OString(aType);
-}
 }
 
 void PowerPointExport::WriteMasterStatedPlaceholders(const FSHelperPtr& pFS,

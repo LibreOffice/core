@@ -150,6 +150,11 @@ private:
     void WriteLayoutContentPlaceholders(PowerPointShapeExport& rDML);
     /** Writes the placeholders a slide master holds that the page standing for it has none of */
     void WriteMasterOwnPlaceholders(PowerPointShapeExport& rDML, sal_uInt32 nMasterNum);
+public:
+    /// The page whose part is being written
+    const cpo::uno::Reference<css::drawing::XDrawPage>& GetCurrentPage() const { return mXDrawPage; }
+    const rtl::Reference<SdXImpressDocument>& GetModel() const { return mXModel; }
+private:
     /** Writes the placeholders the slide master stated and the model has no place for.
 
         They are read from what the import kept beside the model, and only the ones that nothing
