@@ -1518,12 +1518,11 @@ ErrCode SfxObjectShell::CallBasic( std::u16string_view rMacro,
     std::u16string_view rBasic, SbxArray* pArgs,
     SbxValue* pRet )
 {
+    // The call is made for this document, so its macro mode applies to the application Basic too.
+    if ( !AdjustMacroMode() )
+        return ERRCODE_IO_ACCESSDENIED;
+
     SfxApplication* pApp = SfxGetpApp();
-    if( pApp->GetName() != rBasic )
-    {
-        if ( !AdjustMacroMode() )
-            return ERRCODE_IO_ACCESSDENIED;
-    }
 
     BasicManager* pMgr = pApp->GetName() == rBasic ? SfxApplication::GetBasicManager()
                                                    : GetBasicManager();
