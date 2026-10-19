@@ -3333,6 +3333,16 @@ bool ClientSession::attemptLock(const std::shared_ptr<DocumentBroker>& docBroker
     return result;
 }
 
+void ClientSession::closeWithError(const std::string& kind)
+{
+    sendTextFrameAndLogError("error: cmd=internal kind=" + kind);
+
+    // The close frame goes to the socket directly, so the queue, with the error at its end, is
+    // written out to the socket first.
+    writeQueuedMessages(std::numeric_limits<std::size_t>::max());
+    shutdownGoingAway(kind);
+}
+
 void ClientSession::writeQueuedMessages(std::size_t capacity)
 {
     LOG_TRC("performing writes, up to " << capacity << " bytes");
@@ -3798,6 +3808,17 @@ bool ClientSession::handleKitToClientMessage(const std::shared_ptr<Message>& pay
         // not just the originating view: broadcast rather than forward. The originating
         // view is included, so this replaces the single forward below.
         docBroker->broadcastMessage(firstLine);
+
+        // The host may give or take access by the label, once it has stored it.
+        Poco::JSON::Object::Ptr object;
+        bool removed = false;
+        if (JsonUtil::parseJSON(firstLine, object))
+        {
+            const Poco::JSON::Object::Ptr state = object->getObject("state");
+            removed = state && state->optValue<std::string>("action", std::string()) == "removed";
+        }
+
+        docBroker->onSecurityLabelChanged(client_from_this(), removed);
         return true;
     }
     else if (tokens.size() == 2 && tokens.equals(0, "statechanged:"))

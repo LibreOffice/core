@@ -519,6 +519,12 @@ public:
     /// Add a callback to be invoked in our polling thread.
     void addCallback(const SocketPoll::CallbackFn& fn);
 
+    /// A security label was applied, changed or removed in the given session's view. The
+    /// host decides access from the label it stores, so save and upload now; once that upload
+    /// succeeds, ask the host whether each user may still access the document, unless the label
+    /// was removed.
+    void onSecurityLabelChanged(const std::shared_ptr<ClientSession>& session, bool removed);
+
     /// Sends a raw text frame to the kit child process, without a view prefix.
     bool sendTextFrameToKit(const std::string& message);
 
@@ -937,6 +943,28 @@ private:
 
     /// Start an asynchronous CheckFileInfo request.
     void checkFileInfo(const std::shared_ptr<ClientSession>& uri, int redirectLimit);
+
+    /// Saves for the latest security-label change when no save has been asked for since.
+    void saveForSecurityLabel();
+
+    /// Asks the host, with each view's own token, whether its user may still access the
+    /// document after a security-label change.
+    void startAccessChecks();
+
+    /// Starts the access checks that are due and acts on the ones that completed.
+    void processAccessChecks(std::chrono::steady_clock::time_point now);
+
+    /// Acts on a completed access check: disconnects a user who lost access or can no longer
+    /// write. Returns true to retry the check later.
+    bool handleAccessCheck(const std::shared_ptr<ClientSession>& session, CheckFileInfo& check);
+
+    /// Disconnects a view, without saving for it, whose user lost access to the document
+    /// ("accessrevoked") or can no longer write it ("accessdowngraded"). kind is the error kind
+    /// the client is sent.
+    void revokeAccess(const std::shared_ptr<ClientSession>& session, const std::string& kind);
+
+    /// When the next access check is due, or the epoch when none is waiting.
+    std::chrono::steady_clock::time_point nextAccessCheck() const;
 
     /// Writes the presentation a source document wrote into the staging area of this
     /// document's jail. answer is the reply past its message name: a header line and then the
@@ -2013,11 +2041,7 @@ private:
     }
 
     /// Ends the current activity.
-    void endActivity()
-    {
-        LOG_DBG("Ending [" << DocumentState::name(_docState.activity()) << "] activity");
-        _docState.setActivity(DocumentState::Activity::None);
-    }
+    void endActivity();
 
     bool forwardUrpToChild(const std::string& message);
 
@@ -2109,6 +2133,32 @@ private:
 #if !MOBILEAPP
     /// The current CheckFileInfo request, if any.
     std::shared_ptr<CheckFileInfo> _checkFileInfo;
+
+    /// A view's access check after a security-label change.
+    struct AccessCheck
+    {
+        std::shared_ptr<CheckFileInfo> request; ///< Null until started, and between retries.
+        std::chrono::steady_clock::time_point notBefore; ///< When to (re)start it.
+        unsigned attempts = 0; ///< How many requests got no answer, or a transient one.
+    };
+
+    /// The access checks in progress, by session id.
+    std::map<std::string, AccessCheck> _accessChecks;
+
+    /// Security-label changes are numbered, so that we know which of them a file holds.
+    /// The latest change, the one current when the last save was asked for, the one in the
+    /// last saved file, the one in the file being uploaded, and the last one checked.
+    unsigned _labelGeneration = 0;
+    unsigned _labelGenerationInSave = 0;
+    unsigned _labelGenerationSaved = 0;
+    unsigned _labelGenerationUploading = 0;
+    unsigned _labelGenerationChecked = 0;
+
+    /// The latest change that removed the security label, or zero when none did.
+    unsigned _labelGenerationRemoved = 0;
+
+    /// The view that changed the security label last, or null when it has closed.
+    std::weak_ptr<ClientSession> _labelSession;
     std::shared_ptr<PresetsInstallTask> _asyncInstallTask;
 #endif
 

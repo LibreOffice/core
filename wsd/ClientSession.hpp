@@ -251,6 +251,10 @@ public:
         _auth.expire();
     }
 
+    /// Sends the client an internal error of the given kind, after the messages already queued
+    /// for it, and closes the connection.
+    void closeWithError(const std::string& kind);
+
     /// Start waiting for a token refresh from the host.
     void startTokenRefresh(const std::chrono::seconds timeout = std::chrono::seconds(30))
     {

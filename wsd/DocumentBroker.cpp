@@ -529,6 +529,9 @@ void DocumentBroker::pollThread()
         };
 
         capPollTimeout(_checkFileInfoNotBefore);
+#if !MOBILEAPP
+        capPollTimeout(nextAccessCheck());
+#endif
         if (_lockCtx)
             capPollTimeout(_lockCtx->nextRefresh());
 
@@ -550,6 +553,14 @@ void DocumentBroker::pollThread()
 
         // Consolidate updates across multiple processed events.
         processBatchUpdates();
+
+#if !MOBILEAPP
+        if (_labelGenerationInSave < _labelGeneration)
+            saveForSecurityLabel();
+
+        if (!_accessChecks.empty())
+            processAccessChecks(std::chrono::steady_clock::now());
+#endif
 
         if (_stop)
         {
@@ -3455,6 +3466,12 @@ void DocumentBroker::handleSaveResponse(const std::shared_ptr<ClientSession>& se
     // Record that we got a response to avoid timing out on saving.
     _saveManager.setLastSaveResult(upToDate, /*newVersion=*/wroteNewVersion);
 
+#if !MOBILEAPP
+    // The file on disk now holds the security label changes made before the save was asked for.
+    if (upToDate)
+        _labelGenerationSaved = _labelGenerationInSave;
+#endif
+
     if (!upToDate)
         _anySaveEverFailed = true;
 
@@ -3791,6 +3808,11 @@ void DocumentBroker::uploadToStorageInternal(const std::shared_ptr<ClientSession
         return;
     }
 
+#if !MOBILEAPP
+    if (!isSaveAs && !isRename && !isExport)
+        _labelGenerationUploading = _labelGenerationSaved;
+#endif
+
     const std::string uriAnonym = Anonymizer::anonymizeUrl(uri);
 
     // If the file timestamp hasn't changed, skip uploading.
@@ -3943,6 +3965,27 @@ void DocumentBroker::handleUploadToStorageSuccessful(const StorageBase::UploadRe
 
     if (!_uploadRequest->isSaveAs() && !_uploadRequest->isRename())
     {
+#if !MOBILEAPP
+        // The host has the latest security label now, and may have changed who can access the
+        // document with it. An export leaves the document on the host as it was. Only a WOPI
+        // host decides access.
+        if (wopiStorage != nullptr && !_uploadRequest->isExport() &&
+            _labelGenerationUploading > _labelGenerationChecked)
+        {
+            _labelGenerationChecked = _labelGenerationUploading;
+            if (_labelGenerationUploading == _labelGenerationRemoved)
+            {
+                // The host stores the document without a label now, which takes no access away.
+                // The checks still running for an earlier label are dropped.
+                LOG_INF("Uploaded the removal of the security label of docKey ["
+                        << _docKey << "]. Access stays as it was");
+                _accessChecks.clear();
+            }
+            else
+                startAccessChecks();
+        }
+#endif
+
         // Saved and stored; update flags.
         _saveManager.setLastModifiedLocalTime(_uploadRequest->newFileModifiedLocalTime());
 
@@ -4990,6 +5033,9 @@ bool DocumentBroker::sendUnoSave(const std::shared_ptr<ClientSession>& session,
         LOG_DBG("Saving [" << _docKey << "] using [" << sessionId << "]: " << command);
 
         _saveManager.markLastSaveRequestTime();
+#if !MOBILEAPP
+        _labelGenerationInSave = _labelGeneration;
+#endif
         if (_docState.activity() == DocumentState::Activity::None)
         {
             // If we aren't in the midst of any particular activity,
@@ -5755,6 +5801,37 @@ std::shared_ptr<ClientSession> DocumentBroker::createNewClientSession(
 void DocumentBroker::addCallback(const SocketPoll::CallbackFn& fn)
 {
     _poll->addCallback(fn);
+}
+
+void DocumentBroker::endActivity()
+{
+    LOG_DBG("Ending [" << DocumentState::name(_docState.activity()) << "] activity");
+    _docState.setActivity(DocumentState::Activity::None);
+
+#if !MOBILEAPP
+    // A security label change waits for the activity to end before it is saved, and the poll
+    // loop saves it on its next pass.
+    if (_labelGenerationInSave < _labelGeneration)
+        _poll->wakeup();
+#endif
+}
+
+void DocumentBroker::onSecurityLabelChanged(
+    [[maybe_unused]] const std::shared_ptr<ClientSession>& session, [[maybe_unused]] bool removed)
+{
+    ASSERT_CORRECT_THREAD();
+
+#if !MOBILEAPP
+    ++_labelGeneration;
+    if (removed)
+        _labelGenerationRemoved = _labelGeneration;
+
+    _labelSession = session;
+    LOG_INF("Security label change #" << _labelGeneration << " in session [" << session->getId()
+                                      << "] of docKey [" << _docKey
+                                      << "]. Saving it, for the host to re-check access");
+    saveForSecurityLabel();
+#endif
 }
 
 bool DocumentBroker::sendTextFrameToKit(const std::string& message)
@@ -7808,6 +7885,263 @@ bool DocumentBroker::forwardPasteToChild(const std::string& viewId, const std::s
     // Forward the original message.
     return false;
 }
+
+void DocumentBroker::saveForSecurityLabel()
+{
+    // Any save asked for since the change holds it; a running one may not. While another
+    // activity, a save or an upload runs, the poll loop tries again once it ends, so that the
+    // labelled file is uploaded after the one in flight.
+    if (_labelGenerationInSave >= _labelGeneration ||
+        _docState.activity() != DocumentState::Activity::None || _saveManager.isSaving() ||
+        isAsyncUploading())
+    {
+        return;
+    }
+
+    std::shared_ptr<ClientSession> session = _labelSession.lock();
+    if (!session || !session->isWritable() || session->isReadOnly())
+        session = getWriteableSession();
+
+    if (!session || !session->isWritable() || session->isReadOnly())
+    {
+        // Then no view can upload it either, so the host never sees it.
+        LOG_WRN("No view can save the security label change #"
+                << _labelGeneration << " of docKey [" << _docKey << ']');
+        _labelGenerationInSave = _labelGeneration;
+        return;
+    }
+
+    // An autosave, written even if Core sees nothing new and uploaded right after.
+    if (!sendUnoSave(session, /*dontTerminateEdit=*/true, /*dontSaveIfUnmodified=*/false,
+                     /*isAutosave=*/true, /*finalWrite=*/false, std::string()))
+    {
+        // The next save of the document, by autosave or by a user, carries the change instead.
+        LOG_WRN("Failed to save the security label change #" << _labelGeneration << " of docKey ["
+                                                              << _docKey << ']');
+        _labelGenerationInSave = _labelGeneration;
+    }
+}
+
+void DocumentBroker::startAccessChecks()
+{
+    LOG_INF("Uploaded security label change #"
+            << _labelGenerationChecked << " of docKey [" << _docKey << "]. Asking the host whether "
+            << _sessions.size() << " view(s) may still access it");
+
+    // A newer label supersedes the checks still running for an older one.
+    _accessChecks.clear();
+
+    const auto now = std::chrono::steady_clock::now();
+    for (const auto& it : _sessions)
+    {
+        if (!it.second->isCloseFrame() && !it.second->inWaitDisconnected())
+            _accessChecks[it.first].notBefore = now;
+    }
+
+    // The checks start on the next pass of the poll loop, where removing a session is safe.
+    _poll->wakeup();
+}
+
+void DocumentBroker::processAccessChecks(std::chrono::steady_clock::time_point now)
+{
+    // Requests that got no answer, or a transient one, are tried this many times in all.
+    constexpr unsigned MaxAccessCheckAttempts = 5;
+
+    for (auto it = _accessChecks.begin(); it != _accessChecks.end();)
+    {
+        const auto sessionIt = _sessions.find(it->first);
+        if (sessionIt == _sessions.end())
+        {
+            it = _accessChecks.erase(it); // The view is gone.
+            continue;
+        }
+
+        const std::shared_ptr<ClientSession> session = sessionIt->second;
+        AccessCheck& check = it->second;
+        if (check.request)
+        {
+            if (!check.request->completed())
+            {
+                ++it;
+                continue;
+            }
+
+            if (!handleAccessCheck(session, *check.request))
+            {
+                it = _accessChecks.erase(it);
+                continue;
+            }
+
+            check.request.reset();
+            ++check.attempts;
+        }
+        else if (now >= check.notBefore && session->getAuthorization().isRefreshingToken())
+        {
+            // The host is giving this view a new token. The check waits for it, so that it asks
+            // with the token the view has now.
+            check.notBefore = now + std::chrono::seconds(1);
+            ++it;
+            continue;
+        }
+        else if (now >= check.notBefore)
+        {
+            check.request = std::make_shared<CheckFileInfo>(_poll, session->getPublicUri(),
+                                                            [](CheckFileInfo&) {});
+
+            // The view's current token, which a refresh may have replaced since the view
+            // connected with the one in its URI. A token past its expiry time is sent as it is,
+            // as the host may still take it.
+            check.request->setAuthorization(session->getAuthorization().withExpiredCredential());
+            if (check.request->checkFileInfo(HTTP_REDIRECTION_LIMIT))
+            {
+                ++it;
+                continue;
+            }
+
+            LOG_WRN("Failed to start the access check of session [" << session->getId() << ']');
+            check.request.reset();
+            ++check.attempts;
+        }
+        else
+        {
+            ++it;
+            continue;
+        }
+
+        if (check.attempts >= MaxAccessCheckAttempts)
+        {
+            LOG_WRN("Giving up the access check of session ["
+                    << session->getId() << "] on docKey [" << _docKey << "] after "
+                    << check.attempts << " attempts. It keeps its access");
+            it = _accessChecks.erase(it);
+            continue;
+        }
+
+        // Back off: 1, 2, 4, 8 seconds.
+        check.notBefore = now + std::chrono::seconds(1 << (check.attempts - 1));
+        ++it;
+    }
+}
+
+std::chrono::steady_clock::time_point DocumentBroker::nextAccessCheck() const
+{
+    std::chrono::steady_clock::time_point next;
+    for (const auto& it : _accessChecks)
+    {
+        if (!it.second.request &&
+            (next == std::chrono::steady_clock::time_point() || it.second.notBefore < next))
+        {
+            next = it.second.notBefore;
+        }
+    }
+
+    return next;
+}
+
+bool DocumentBroker::handleAccessCheck(const std::shared_ptr<ClientSession>& session,
+                                       CheckFileInfo& check)
+{
+    const std::string& sessionId = session->getId();
+    switch (check.state())
+    {
+        case CheckFileInfo::State::Pass:
+        {
+            std::unique_ptr<WOPIFileInfo> wopiFileInfo;
+            try
+            {
+                wopiFileInfo = check.wopiFileInfo(session->getPublicUri());
+            }
+            catch (const std::exception& exc)
+            {
+                LOG_WRN("Invalid CheckFileInfo in the access check of session ["
+                        << sessionId << "]: " << exc.what() << ". It keeps its access");
+                return false;
+            }
+
+            if (!wopiFileInfo)
+            {
+                LOG_WRN("No CheckFileInfo in the access check of session [" << sessionId
+                                                                           << "]. It keeps its access");
+                return false;
+            }
+
+            // The host grants full editing, commenting only, managing tracked changes only, or
+            // viewing only. A view keeps its access when the host still grants each thing the view
+            // can do.
+            const bool canOnlyComment = wopiFileInfo->getUserCanOnlyComment();
+            const bool canOnlyManageRedlines = wopiFileInfo->getUserCanOnlyManageRedlines();
+            const bool canEdit =
+                wopiFileInfo->getUserCanWrite() && !canOnlyComment && !canOnlyManageRedlines;
+            const bool canComment = canEdit || canOnlyComment;
+            const bool canManageRedlines = canEdit || canOnlyManageRedlines;
+            session->setWopiFileInfo(std::move(wopiFileInfo));
+
+            const bool viewEdits = session->isWritable() && !session->isReadOnly();
+            const bool viewComments = session->isWritable() && session->isAllowChangeComments();
+            const bool viewManagesRedlines =
+                session->isWritable() && session->isAllowManageRedlines();
+            if ((viewEdits && !canEdit) || (viewComments && !canComment) ||
+                (viewManagesRedlines && !canManageRedlines))
+            {
+                LOG_INF("The user of session [" << sessionId << "] can no longer write docKey ["
+                                                << _docKey << "] with the security label change");
+                revokeAccess(session, "accessdowngraded");
+            }
+            else
+            {
+                LOG_DBG("Session [" << sessionId << "] keeps its access to docKey [" << _docKey
+                                    << ']');
+            }
+
+            return false;
+        }
+
+        case CheckFileInfo::State::Unauthorized:
+            if (session->getAuthorization().isExpired())
+            {
+                // The host may have refused the token for its age alone, which says nothing
+                // about the label.
+                LOG_WRN("The host refused the expired token of session ["
+                        << sessionId << "] in its access check");
+                break;
+            }
+
+            LOG_INF("The user of session [" << sessionId << "] lost access to docKey [" << _docKey
+                                            << "] with the security label change");
+            revokeAccess(session, "accessrevoked");
+            return false;
+
+        case CheckFileInfo::State::NoAnswer:
+        case CheckFileInfo::State::Transient:
+            LOG_WRN("The access check of session ["
+                    << sessionId << "] got " << CheckFileInfo::name(check.state()) << ". Retrying");
+            return true;
+
+        case CheckFileInfo::State::None:
+        case CheckFileInfo::State::Active:
+        case CheckFileInfo::State::Fail:
+            break;
+    }
+
+    LOG_WRN("The access check of session [" << sessionId << "] failed with "
+                                            << CheckFileInfo::name(check.state())
+                                            << ". It keeps its access");
+    return false;
+}
+
+void DocumentBroker::revokeAccess(const std::shared_ptr<ClientSession>& session,
+                                  const std::string& kind)
+{
+    LOG_WRN("Disconnecting session [" << session->getId() << "] of docKey [" << _docKey
+                                      << "] after the security label change: " << kind);
+
+    // Nothing is saved or uploaded on behalf of this view any more.
+    session->setWritable(false);
+    session->invalidateAuthorizationToken();
+
+    session->closeWithError(kind);
+    removeSession(session);
+}
 #endif // !MOBILEAPP
 
 std::vector<std::shared_ptr<ClientSession>> DocumentBroker::getSessionsTestOnlyUnsafe()
@@ -7891,6 +8225,28 @@ void DocumentBroker::dumpState(std::ostream& os)
            << std::chrono::duration_cast<std::chrono::milliseconds>(_checkFileInfoNotBefore - now);
     else
         os << "none";
+#if !MOBILEAPP
+    os << "\n  labelGeneration: " << _labelGeneration;
+    os << "\n  labelGenerationInSave: " << _labelGenerationInSave;
+    os << "\n  labelGenerationSaved: " << _labelGenerationSaved;
+    os << "\n  labelGenerationUploading: " << _labelGenerationUploading;
+    os << "\n  labelGenerationChecked: " << _labelGenerationChecked;
+    os << "\n  labelGenerationRemoved: " << _labelGenerationRemoved;
+    const std::shared_ptr<ClientSession> labelSession = _labelSession.lock();
+    os << "\n  labelSession: " << (labelSession ? labelSession->getId() : "<none>");
+    os << "\n  accessChecks: " << _accessChecks.size();
+    for (const auto& it : _accessChecks)
+    {
+        os << "\n    session [" << it.first << "]: attempts: " << it.second.attempts;
+        if (it.second.request)
+            os << ", request: " << CheckFileInfo::name(it.second.request->state());
+        else if (it.second.notBefore > now)
+            os << ", next in: "
+               << std::chrono::duration_cast<std::chrono::milliseconds>(it.second.notBefore - now);
+        else
+            os << ", due";
+    }
+#endif
     os << "\n  lastActivityTime: " << Util::getTimeForLog(now, _lastActivityTime);
     os << "\n  haveActivityAfterSaveRequest: " << haveActivityAfterSaveRequest();
     os << "\n  lastModifyActivityTime: " << Util::getTimeForLog(now, _lastModifyActivityTime);

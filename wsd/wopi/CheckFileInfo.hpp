@@ -15,6 +15,7 @@
 #error This file should be excluded from builds without the WOPI storage backend
 #endif // !ENABLE_WOPI
 
+#include <common/Authorization.hpp>
 #include <common/StateEnum.hpp>
 #include <common/TraceEvent.hpp>
 #include <net/HttpRequest.hpp>
@@ -27,6 +28,7 @@
 
 #include <functional>
 #include <memory>
+#include <optional>
 #include <string>
 
 class CheckFileInfo : public std::enable_shared_from_this<CheckFileInfo>
@@ -60,6 +62,10 @@ public:
 
     /// Returns our unique DocKey.
     const std::string& docKey() const { return _docKey; }
+
+    /// Sets the credential to send to the URL this instance was made with, in place of the one in
+    /// that URL. A redirect target is asked with the credential in its own URL.
+    void setAuthorization(const Authorization& auth) { _auth = auth; }
 
     /// Returns the parsed response JSON, if any.
     Poco::JSON::Object::Ptr wopiInfo() const { return _wopiInfo; }
@@ -96,6 +102,8 @@ private:
 
     Poco::URI _url; ///< Sanitized URL to the document. Can change through redirection.
     bool _urlFromRedirect; ///< True when _url is a redirect target, not the original URL.
+    /// The credential for the original URL, when it is not the one in that URL.
+    std::optional<Authorization> _auth;
     ProfileZone _profileZone;
     std::shared_ptr<http::Session> _httpSession;
     std::shared_ptr<TerminatingPoll> _poll;

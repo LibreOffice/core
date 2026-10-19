@@ -51,6 +51,7 @@ all_la_unit_tests = \
 	unit-wopi-documentconflict.la \
 	unit-wopi-stuck-save.la \
 	unit-wopi-upload-precondition.la \
+	unit-wopi-access-recheck.la \
 	unit-wopi-fail-upload.la \
 	unit-wopi-fail-upload-no-conflict.la \
 	unit-wopi-async-slow.la \
@@ -337,6 +338,8 @@ unit_wopi_stuck_save_la_SOURCES = UnitWOPIStuckSave.cpp
 unit_wopi_stuck_save_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_wopi_upload_precondition_la_SOURCES = UnitWOPIUploadPrecondition.cpp
 unit_wopi_upload_precondition_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
+unit_wopi_access_recheck_la_SOURCES = UnitWOPIAccessRecheck.cpp
+unit_wopi_access_recheck_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_wopi_transient_connect_fault_la_SOURCES = UnitWOPITransientConnectFault.cpp
 unit_wopi_transient_connect_fault_la_LIBADD = libtesthelpers.la $(CPPUNIT_LIBS)
 unit_wopi_fail_upload_la_SOURCES = UnitWOPIFailUpload.cpp

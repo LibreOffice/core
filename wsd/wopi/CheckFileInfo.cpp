@@ -31,8 +31,16 @@ bool CheckFileInfo::checkFileInfo(int redirectLimit)
     LOG_DBG("Getting info for wopi uri [" << uriAnonym << ']');
     _httpSession = _urlFromRedirect ? StorageConnectionManager::getHttpSession(_url)
                                     : StorageConnectionManager::getWopiHttpSession(_url);
+    Poco::URI uri = _url;
     Authorization auth = Authorization::create(_url);
-    const http::Request httpRequest = StorageConnectionManager::createHttpRequest(_url, auth);
+    if (_auth && !_urlFromRedirect)
+    {
+        // The given credential goes in the query and in the header.
+        auth = *_auth;
+        auth.authorizeURI(uri);
+    }
+
+    const http::Request httpRequest = StorageConnectionManager::createHttpRequest(uri, auth);
 
     const auto startTime = std::chrono::steady_clock::now();
 
