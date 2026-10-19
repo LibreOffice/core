@@ -18,7 +18,7 @@ The HTTP code it shares with the Duden and Grammalecte checkers is in
 Settings: `/org.openoffice.Office.Linguistic/GrammarChecking/LanguageTool`
 (`IsEnabled`, `BaseURL`, `Username`, `ApiKey`, `SSLCertVerify`). The
 languages are its `GrammarCheckers` entry in
-`../../config/Linguistic-lingucomponent-grammarchecker.xcu`.
+`../../../config/Linguistic-lingucomponent-grammarchecker.xcu`.
 
 On the wire: `POST <BaseURL>/check` with `text` and `language` form fields,
 plus `username` and `apiKey` for the premium service; whether the server is

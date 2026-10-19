@@ -18,7 +18,7 @@ Settings: `/org.openoffice.Office.Linguistic/GrammarChecking/Grammalecte`
 (`IsEnabled`, `BaseURL`, `SSLCertVerify`, and the `Options` group, one switch
 per rule family, with Grammalecte's own Writer defaults). The language is
 its `GrammarCheckers` entry in
-`../../config/Linguistic-lingucomponent-grammarchecker.xcu`.
+`../../../config/Linguistic-lingucomponent-grammarchecker.xcu`.
 
 On the wire: `POST <BaseURL>/gc_text/fr` with `text` and `options` form
 fields; whether the server is there is asked with

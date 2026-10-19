@@ -21,7 +21,7 @@ Settings: `/org.openoffice.Office.Linguistic/GrammarChecking/Duden`
 (`IsEnabled`, `BaseURL`, `ApiKey`, `SSLCertVerify`, `SpellcheckingLevel`,
 `OrthographyStandard`, `MessageLevel`, `PropertySets`, `Dictionaries`, and
 the `Style` group). The languages are its `GrammarCheckers` entry in
-`../../config/Linguistic-lingucomponent-grammarchecker.xcu`.
+`../../../config/Linguistic-lingucomponent-grammarchecker.xcu`.
 
 On the wire: `POST <BaseURL>/check` with a JSON body, the API token in an
 `access_token` header; whether the server is there is asked with
