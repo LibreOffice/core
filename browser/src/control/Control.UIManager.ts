@@ -1927,6 +1927,7 @@ class UIManager extends window.L.Control {
 	 */
 	showMenubar(): void {
 		this._menubarShouldBeHidden = false;
+		this._menubarHiddenByUser = false;
 		if (!this.isMenubarHidden())
 			return;
 		$('.main-nav').show();
@@ -1950,9 +1951,12 @@ class UIManager extends window.L.Control {
 	/**
 	 * Hides the menubar.
 	 */
-	hideMenubar(): void {
+	hideMenubar(byUser: boolean = false): void {
 		this._menubarShouldBeHidden = true;
+		this._menubarHiddenByUser = byUser;
 		if (this.isMenubarHidden() || this.shouldUseNotebookbarMode())
+			return;
+		if (byUser && this.map.isReadOnlyMode())
 			return;
 
 		var notebookbarWasCollapsed = this.isNotebookbarCollapsed();
@@ -1988,7 +1992,7 @@ class UIManager extends window.L.Control {
 		if (this.isMenubarHidden())
 			this.showMenubar();
 		else
-			this.hideMenubar();
+			this.hideMenubar(true);
 	}
 
 	// Ruler
@@ -2294,6 +2298,26 @@ class UIManager extends window.L.Control {
 			} else {
 				app.socket.sendMessage('uno .uno:SidebarHide');
 			}
+		}
+
+		if (this._menubarHiddenByUser && this.getCurrentMode() === 'classic')
+			this.updateMenubarForPermission(e.detail.perm === 'edit');
+	}
+
+	updateMenubarForPermission(canEdit: boolean): void {
+		if (!canEdit) {
+			this.showMenubar();
+			this._menubarShouldBeHidden = true;
+			this._menubarHiddenByUser = true;
+			return;
+		}
+
+		const focusWasInHeader = !!document.activeElement?.closest('.main-nav');
+		this.hideMenubar(true);
+		if (focusWasInHeader) {
+			app.layoutingService.appendLayoutingTask(() => {
+				document.getElementById('documentmenu-button')?.focus();
+			});
 		}
 	}
 

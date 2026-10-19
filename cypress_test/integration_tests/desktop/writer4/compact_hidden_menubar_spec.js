@@ -79,4 +79,48 @@ describe(['tagdesktop'], 'Compact view: the document button brings back a hidden
 
 		cy.cGet('#toolbar-up .documentmenu').should('not.be.visible');
 	});
+
+	function setPermission(permission) {
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.setPermission(permission);
+		});
+	}
+
+	it('shows a menu bar hidden by the user in read-only and hides it again in edit', function() {
+		hideMenubarFromViewMenu(this.win);
+
+		setPermission('readonly');
+		helper.processToIdle(this.win);
+		cy.cGet('.main-nav').should('be.visible');
+
+		setPermission('edit');
+		helper.processToIdle(this.win);
+		cy.cGet('.main-nav').should('not.be.visible');
+		cy.cGet('#toolbar-up .documentmenu').should('be.visible');
+	});
+
+	it('moves focus from the Editing switch to the document button when the header hides', function() {
+		hideMenubarFromViewMenu(this.win);
+		setPermission('readonly');
+		helper.processToIdle(this.win);
+
+		cy.cGet('#viewModeDropdownButton-button').focus();
+		cy.cGet('#viewModeDropdownButton-button').should('have.focus');
+		setPermission('edit');
+		helper.processToIdle(this.win);
+
+		cy.cGet('#toolbar-up .documentmenu button').should('have.focus');
+	});
+
+	it('keeps a menu bar hidden by the integrator hidden in read-only', function() {
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.uiManager.hideMenubar();
+		});
+		helper.processToIdle(this.win);
+		cy.cGet('.main-nav').should('not.be.visible');
+
+		setPermission('readonly');
+		helper.processToIdle(this.win);
+		cy.cGet('.main-nav').should('not.be.visible');
+	});
 });
