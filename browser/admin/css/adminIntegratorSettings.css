@@ -688,13 +688,19 @@ ul {
   margin: 0;
 }
 
-#ai-reset-button {
+#ai-reset-button,
+.service-reset-button {
   flex: 0 0 auto;
   color: var(--color-primary-text);
   background-color: var(--settings-btn-primary);
 }
 
-#ai-reset-button .material-design-icon {
+.service-reset-button {
+  margin-top: 8px;
+}
+
+#ai-reset-button .material-design-icon,
+.service-reset-button .material-design-icon {
   width: 18px;
   height: 18px;
   background-color: currentColor;

@@ -2691,7 +2691,11 @@ void DocumentBroker::asyncInstallPresets(const std::shared_ptr<ClientSession>& s
                 const std::string settings = extractViewSettings(viewSettings, session, getDocKey(), _isViewSettingsUpdated);
                 session->sendTextFrame("viewsetting: " + settings);
             }
-            forwardToChild(session, "addconfig");
+            // A user re-reading their own settings, alone on the document, may
+            // have dropped some: the kit takes the server's anew before theirs.
+            // A view joining a shared document only lays its own over what is
+            // in force, as the others' settings are not its to drop.
+            forwardToChild(session, onlyWhileAlone ? "addconfig reset" : "addconfig");
         }
         else
         {
@@ -8185,7 +8189,9 @@ bool DocumentBroker::installUserPresets()
         return false;
     }
 
-    return forwardToChild(_sessions.begin()->second, "addconfig");
+    // The app's user is alone on the document: what they dropped goes back
+    // to the defaults.
+    return forwardToChild(_sessions.begin()->second, "addconfig reset");
 }
 
 void uploadAndApplySettings(const std::string& payload)

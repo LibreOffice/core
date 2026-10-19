@@ -5765,9 +5765,18 @@ void COKitImpl::setOption(const char *pOption, const char* pValue)
         if (SfxObjectShell* pDocSh = SfxObjectShell::Current())
             pDocSh->AllowLinkUpdate();
     }
-    else if (strcmp(pOption, "addconfig") == 0)
+    else if (strcmp(pOption, "addconfig") == 0 || strcmp(pOption, "resetconfig") == 0)
     {
         const OUString aConfigPath(pValue, strlen(pValue), RTL_TEXTENCODING_UTF8);
+        // With "resetconfig" the server's settings come first, so that a
+        // setting the user has dropped from their own is the server's again,
+        // and theirs on top. A view joining a shared document only lays its
+        // own over what is in force.
+        if (strcmp(pOption, "resetconfig") == 0)
+        {
+            desktop::remotechecker::setRemoteCheckerConfig();
+            desktop::translation::setTranslationConfig();
+        }
         updateConfig(aConfigPath);
         // The per-session call (the per-user tree) arrives last and wins.
         comphelper::COKit::setUserConfigDir(aConfigPath);

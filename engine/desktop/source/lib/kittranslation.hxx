@@ -16,7 +16,9 @@
 // dialog is told about them.
 namespace desktop::translation
 {
-// Takes the translation settings from the environment the server set up.
+// Takes the translation settings from the environment the server set up,
+// and the schema's defaults where it set none. Run again before a user's
+// own settings are applied, it puts back what the user may have dropped.
 void setTranslationConfig();
 
 // Whether a user's own settings for the provider with this environment

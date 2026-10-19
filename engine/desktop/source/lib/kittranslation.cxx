@@ -68,9 +68,10 @@ bool allowsUserSettings(const char* pPrefix)
     return desktop::remotechecker::allowsUserSettings(pPrefix);
 }
 
-// Only a variable that is set says anything: the apps set none, and their
-// users' own settings stand. An empty one is the server's word and clears
-// what the kit held.
+// The server's settings, from the environment it set up, with the defaults
+// of the schema where it says nothing, as in the apps, which set no
+// variable at all. This runs before a user's own settings are applied, so
+// a user who drops a setting of their own is back at the server's.
 void setTranslationConfig()
 {
     using desktop::remotechecker::envBool;
@@ -80,24 +81,19 @@ void setTranslationConfig()
         std::shared_ptr<comphelper::ConfigurationChanges> batch(
             comphelper::ConfigurationChanges::create());
 
-        if (const std::optional<OUString> oValue = envString("TRANSLATION", "PROVIDER"))
-            TranslationCfg::Provider::set(*oValue, batch);
+        TranslationCfg::Provider::set(envString("TRANSLATION", "PROVIDER").value_or(OUString()),
+                                      batch);
 
-        if (const std::optional<bool> oValue = envBool("DEEPL", "ENABLED"))
-            DeeplCfg::IsEnabled::set(*oValue, batch);
-        if (const std::optional<OUString> oValue = envString("DEEPL", "API_URL"))
-            DeeplCfg::ApiURL::set(*oValue, batch);
-        if (const std::optional<OUString> oValue = envString("DEEPL", "AUTH_KEY"))
-            DeeplCfg::AuthKey::set(*oValue, batch);
+        DeeplCfg::IsEnabled::set(envBool("DEEPL", "ENABLED").value_or(true), batch);
+        DeeplCfg::ApiURL::set(envString("DEEPL", "API_URL"), batch);
+        DeeplCfg::AuthKey::set(envString("DEEPL", "AUTH_KEY"), batch);
 
-        if (const std::optional<bool> oValue = envBool("LIBRETRANSLATE", "ENABLED"))
-            LibreTranslateCfg::IsEnabled::set(*oValue, batch);
-        if (const std::optional<OUString> oValue = envString("LIBRETRANSLATE", "BASE_URL"))
-            LibreTranslateCfg::BaseURL::set(*oValue, batch);
-        if (const std::optional<OUString> oValue = envString("LIBRETRANSLATE", "API_KEY"))
-            LibreTranslateCfg::ApiKey::set(*oValue, batch);
-        if (const std::optional<bool> oValue = envBool("LIBRETRANSLATE", "SSL_VERIFICATION"))
-            LibreTranslateCfg::SSLCertVerify::set(*oValue, batch);
+        LibreTranslateCfg::IsEnabled::set(envBool("LIBRETRANSLATE", "ENABLED").value_or(false),
+                                          batch);
+        LibreTranslateCfg::BaseURL::set(envString("LIBRETRANSLATE", "BASE_URL"), batch);
+        LibreTranslateCfg::ApiKey::set(envString("LIBRETRANSLATE", "API_KEY"), batch);
+        LibreTranslateCfg::SSLCertVerify::set(
+            envBool("LIBRETRANSLATE", "SSL_VERIFICATION").value_or(true), batch);
 
         batch->commit();
     }

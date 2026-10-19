@@ -56,6 +56,7 @@ window.L.Map.Settings = window.L.Handler.extend({
 		this._map.on('doclayerinit', this.askForSentenceChecking, this);
 		this._map.on('doclayerinit', this.askForRemoteCheckers, this);
 		this._map.on('doclayerinit', this.askForTranslationProviders, this);
+		this._map.on('commandstatechanged', this.onCommandStateChanged, this);
 	},
 
 	removeHooks: function (): void {
@@ -65,6 +66,24 @@ window.L.Map.Settings = window.L.Handler.extend({
 		this._map.off('doclayerinit', this.askForSentenceChecking, this);
 		this._map.off('doclayerinit', this.askForRemoteCheckers, this);
 		this._map.off('doclayerinit', this.askForTranslationProviders, this);
+		this._map.off('commandstatechanged', this.onCommandStateChanged, this);
+	},
+
+	// The engine sends the Translate command's state anew once it has
+	// applied a user's settings: what it says about the providers and the
+	// checkers may have changed with it. Forget what it said, so the dialog
+	// asks again when it next opens; an answer still on its way is kept.
+	onCommandStateChanged: function (e: any): void {
+		if (e.commandName !== '.uno:Translate') return;
+		this.forgetEngineSettings();
+	},
+
+	forgetEngineSettings: function (): void {
+		app.remoteGrammarCheckers = undefined;
+		if (!this._resolveRemoteCheckers) this._remoteCheckersAsked = null;
+		app.translationProviders = null;
+		if (!this._resolveTranslationProviders)
+			this._translationProvidersAsked = null;
 	},
 
 	// Resolves when the engine answers, so the dialog can wait for a late
@@ -344,6 +363,12 @@ window.L.Map.Settings = window.L.Handler.extend({
 			// apply the file as the shell writes it and have no such command.
 			if (data.documentSettings && !window.ThisIsAMobileApp)
 				app.socket.sendMessage('reloadconfig');
+			// The remote checkers and the translation providers may have been
+			// set up anew: what the engine said about them is stale. It is
+			// asked again when the dialog next opens, and forgotten once more
+			// when the engine reports the Translate command's state after it
+			// has applied the settings.
+			if (data.documentSettings) this.forgetEngineSettings();
 			if (data.browserSettings) this.applyBrowserSettings(data.browserSettings);
 			// updateviewsettings applies these to the session (e.g. AI credentials
 			// so the AI assistant can authenticate). The apps persist settings

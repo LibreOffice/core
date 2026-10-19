@@ -4909,6 +4909,18 @@ class SettingIframe {
 			content,
 		);
 		panel.id = `remote-checker-${info.id}`;
+		content.appendChild(
+			this.createUseServerSettingsButton(`${info.id}-reset`, () => {
+				this.forgetOwnSettings(group);
+				const fresh = this.createRemoteCheckerPanel(info, group);
+				if (!fresh) {
+					panel.remove();
+					return;
+				}
+				fresh.appendChild(this.createResetNote());
+				panel.replaceWith(fresh);
+			}),
+		);
 		return panel;
 	}
 
@@ -4966,18 +4978,26 @@ class SettingIframe {
 		// Which provider translates: the engine's choice is shown until the
 		// user makes their own.
 		const own = group.Provider !== null && group.Provider !== undefined;
-		section.appendChild(
-			this.createSelectField(
-				'translation-Provider-container',
-				_('Provider'),
-				'translation-Provider',
-				[{ value: '', label: _('The first one that is set up') }, ...choices],
-				own ? String(group.Provider) : infos.provider || '',
-				(selectEl) => {
-					group.Provider = selectEl.value;
-				},
-			),
+		const providerField = this.createSelectField(
+			'translation-Provider-container',
+			_('Provider'),
+			'translation-Provider',
+			[{ value: '', label: _('The first one that is set up') }, ...choices],
+			own ? String(group.Provider) : infos.provider || '',
+			(selectEl) => {
+				group.Provider = selectEl.value;
+			},
 		);
+		providerField.appendChild(
+			this.createUseServerSettingsButton('translation-Provider-reset', () => {
+				group.Provider = null;
+				const select = providerField.querySelector(
+					'select',
+				) as HTMLSelectElement | null;
+				if (select) select.value = infos.provider || '';
+			}),
+		);
+		section.appendChild(providerField);
 		for (const panel of panels) section.appendChild(panel);
 		return section;
 	}
@@ -5075,7 +5095,73 @@ class SettingIframe {
 		content.appendChild(details);
 		const panel = this.createFieldsetFor(info.name, content);
 		panel.id = `translation-provider-${info.id}`;
+		if (canEditServer) {
+			content.appendChild(
+				this.createUseServerSettingsButton(`${info.id}-reset`, () => {
+					this.forgetOwnSettings(group);
+					const fresh = this.createTranslationProviderPanel(
+						info,
+						group,
+						canEditServer,
+					);
+					if (!fresh) {
+						panel.remove();
+						return;
+					}
+					fresh.appendChild(this.createResetNote());
+					panel.replaceWith(fresh);
+				}),
+			);
+		}
 		return panel;
+	}
+
+	// Forgets every value of a settings group the user set, so the server's
+	// settings, or the defaults where there is no server, apply again. The
+	// nested groups keep their shape.
+	private forgetOwnSettings(group: any): void {
+		for (const key of Object.keys(group)) {
+			const value = group[key];
+			if (value !== null && typeof value === 'object' && !Array.isArray(value))
+				this.forgetOwnSettings(value);
+			else group[key] = null;
+		}
+	}
+
+	// A button that puts a panel back to what the server, or the defaults, say:
+	// the user's own values of the group are dropped and the panel is built
+	// anew. The AI section has the same button.
+	private createUseServerSettingsButton(
+		id: string,
+		onReset: () => void,
+	): HTMLElement {
+		const button = this.createButtonWithIcon(
+			id,
+			'updateAll',
+			_('Reset'),
+			['button-primary', 'service-reset-button'],
+			onReset,
+		);
+		button.title = isCODesktop
+			? _('Use the default settings')
+			: _('Use the settings set on the server');
+		return button;
+	}
+
+	// Said under a panel that was just reset: the values shown are still the
+	// ones in force, which change only once the reset is saved.
+	private createResetNote(): HTMLElement {
+		const note = this.createParagraph(
+			isCODesktop
+				? _(
+						'Your own settings are dropped when you save; the defaults apply then.',
+					)
+				: _(
+						'Your own settings are dropped when you save; the settings set on the server apply then.',
+					),
+		);
+		note.className = 'settings-scope-note';
+		return note;
 	}
 
 	// A toggle for a boolean of a remote service's group. The engine's value

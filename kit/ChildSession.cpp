@@ -589,7 +589,11 @@ bool ChildSession::_handleInput(const char *buffer, int length)
 #else
         const Poco::Path presetsPath(getJailRoot() + JAILED_CONFIG_ROOT);
 #endif
-        getLOKit()->setOption("addconfig", Poco::URI(presetsPath).toString().c_str());
+        // "reset" puts the server's settings back before the user's are
+        // applied, for settings the user dropped from their own.
+        const bool reset = tokens.size() > 1 && tokens.equals(1, "reset");
+        getLOKit()->setOption(reset ? "resetconfig" : "addconfig",
+                              Poco::URI(presetsPath).toString().c_str());
     }
     else if (tokens.equals(0, "userpersistence"))
     {
