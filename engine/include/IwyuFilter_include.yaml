@@ -283,10 +283,6 @@ excludelist:
     include/vcl/FilterConfigItem.hxx:
     # Needed on Windows with --disable-pch
     - com/sun/star/beans/PropertyValue.hpp
-    include/vcl/builderfactory.hxx:
-    # Needed for macro #define
-    - vcl/builder.hxx
-    - vcl/vclptr.hxx
     include/vcl/CairoFormats.hxx:
     # Needed for macro #define
     - vcl/Scanline.hxx
