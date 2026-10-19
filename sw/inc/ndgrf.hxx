@@ -107,7 +107,7 @@ public:
 
     /** Re-read in case graphic was not OK. The current one
        gets replaced by the new one. */
-    bool ReRead( const OUString& rGrfName, const OUString& rFltName,
+    SW_DLLPUBLIC bool ReRead( const OUString& rGrfName, const OUString& rFltName,
                  const Graphic* pGraphic = nullptr,
                  bool bModify = true );
 private:
