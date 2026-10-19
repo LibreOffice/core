@@ -19,8 +19,8 @@
 
 #include <rtl/string.hxx>
 #include <osl/socket.hxx>
-#include <osl/thread.hxx>
 #include <unotest/bootstrapfixturebase.hxx>
+#include <unotest/mockhttpserver.hxx>
 #include <officecfg/Office/Linguistic.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -33,131 +33,47 @@ using namespace ::cpo::uno;
 
 namespace
 {
-class MockServerThread : public ::osl::Thread
+// The request the checker is expected to send: the text and the options as
+// form fields.
+bool isCheckRequest(const test::MockHttpServer::Request& rRequest)
 {
-public:
-    MockServerThread()
-        : m_aSocketAddr(u"localhost"_ustr, 2023)
-    {
-    }
-
-    virtual void run()
-    {
-        if (m_aAcceptorSocket.acceptConnection(m_aStreamSocket) != osl_Socket_Ok)
-            return;
-
-        sal_Int32 nTcpNoDelay = sal_Int32(true);
-        m_aStreamSocket.setOption(osl_Socket_OptionTcpNoDelay, &nTcpNoDelay, sizeof(nTcpNoDelay),
-                                  osl_Socket_LevelTcp);
-
-        // Read until the body announced by Content-Length is complete: the
-        // options make the request longer than one read returns.
-        std::string aRequest;
-        size_t nHeaderEnd = std::string::npos;
-        size_t nContentLength = 0;
-        while (true)
-        {
-            char aBuffer[1024];
-            const sal_Int32 nRead = m_aStreamSocket.recv(aBuffer, sizeof(aBuffer));
-            if (nRead <= 0)
-                break;
-            aRequest.append(aBuffer, nRead);
-            if (nHeaderEnd == std::string::npos)
-            {
-                nHeaderEnd = aRequest.find("\r\n\r\n");
-                if (nHeaderEnd == std::string::npos)
-                    continue;
-                const size_t nField = aRequest.find("Content-Length: ");
-                if (nField != std::string::npos && nField < nHeaderEnd)
-                    nContentLength = std::stoul(aRequest.substr(nField + 16));
-            }
-            if (aRequest.size() >= nHeaderEnd + 4 + nContentLength)
-                break;
-        }
-
-        const std::string aBody
-            = nHeaderEnd == std::string::npos ? std::string() : aRequest.substr(nHeaderEnd + 4);
-        if (aRequest.find("POST /gc_text/fr ") != 0
-            || aRequest.find("Content-Type: application/x-www-form-urlencoded") == std::string::npos
-            || aBody.find("text=Ligne%201") != 0 || aBody.find("&options=%7B%22typo%22") == std::string::npos)
-        {
-            m_bRequestOK = false;
-            NotFound();
-        }
-        else
-        {
-            m_bRequestOK = true;
-            ResponseOK();
-        }
-    }
-
-    void ResponseOK()
-    {
-        const OString aBody(
-            "{\"program\":\"grammalecte-fr\",\"version\":\"2.3.0\",\"lang\":\"fr\",\"error\":\"\","
-            "\"data\":["
-            "{\"iParagraph\":1,\"lGrammarErrors\":[{\"nStart\":9,\"nEnd\":15,\"sLineId\":\"#1\","
-            "\"sRuleId\":\"typo_test\",\"sType\":\"typo\",\"aColor\":null,\"sMessage\":\"Faute.\","
-            "\"aSuggestions\":[\"faute\"],\"URL\":\"https://example.org/rule\"}],"
-            "\"lSpellingErrors\":[{\"nStart\":9,\"nEnd\":15,\"sValue\":\"fautte\",\"sType\":\"WORD\"}]},"
-            "{\"iParagraph\":2,\"lGrammarErrors\":[{\"nStart\":9,\"nEnd\":15,\"sLineId\":\"#2\","
-            "\"sRuleId\":\"gn_test\",\"sType\":\"gn\",\"aColor\":null,\"sMessage\":\"Accord.\","
-            "\"aSuggestions\":[\"ligne\",\"lignes\"],\"URL\":\"\"}],\"lSpellingErrors\":[]}"
-            "]}"_ostr);
-        const OString aResponse = "HTTP/1.1 200 OK\r\n"
-                                  "Server: MockServer\r\n"
-                                  "Content-Type: application/json\r\n"
-                                  "Content-Length: "
-                                  + OString::number(aBody.getLength())
-                                  + "\r\n"
-                                    "\r\n"
-                                  + aBody;
-        m_aStreamSocket.write(aResponse.getStr(), aResponse.getLength());
-        m_aStreamSocket.close();
-    }
-
-    void NotFound()
-    {
-        const OString aResponse("HTTP/1.1 404 Not Found\r\n"
-                                "Connection: Closed\r\n"
-                                "\r\n"_ostr);
-        m_aStreamSocket.write(aResponse.getStr(), aResponse.getLength());
-        m_aStreamSocket.close();
-    }
-
-    // Started by the test that talks to it, since the port can be bound
-    // only once per process.
-    void start()
-    {
-        m_aAcceptorSocket.setOption(osl_Socket_OptionReuseAddr, 1);
-        CPPUNIT_ASSERT(m_aAcceptorSocket.bind(m_aSocketAddr));
-        CPPUNIT_ASSERT(m_aAcceptorSocket.listen());
-        create();
-        m_bStarted = true;
-        osl::Thread::wait(std::chrono::seconds(1));
-    }
-
-    void stop()
-    {
-        if (!m_bStarted)
-            return;
-        m_bStarted = false;
-        m_aAcceptorSocket.close();
-        join();
-    }
-
-    bool m_bStarted = false;
-
-    bool m_bRequestOK = false;
-
-private:
-    ::osl::SocketAddr m_aSocketAddr;
-    ::osl::AcceptorSocket m_aAcceptorSocket;
-    ::osl::StreamSocket m_aStreamSocket;
-};
+    return rRequest.aMethod == "POST" && rRequest.aPath == "/gc_text/fr"
+           && rRequest.aHeaders.find("Content-Type: application/x-www-form-urlencoded")
+                  != std::string::npos
+           && rRequest.aBody.find("text=Ligne%201") == 0
+           && rRequest.aBody.find("&options=%7B%22typo%22") != std::string::npos;
 }
 
-MockServerThread aMockServer;
+// Stands in for a Grammalecte server: answers the check with a finding on
+// each of two paragraphs, and anything else with 404.
+test::MockHttpServer::Response grammalecteHandler(const test::MockHttpServer::Request& rRequest)
+{
+    test::MockHttpServer::Response aResponse;
+    if (!isCheckRequest(rRequest))
+    {
+        aResponse.nStatus = 404;
+        aResponse.aStatusText = "Not Found";
+        aResponse.aContentType.clear();
+        return aResponse;
+    }
+    aResponse.aBody
+        = "{\"program\":\"grammalecte-fr\",\"version\":\"2.3.0\",\"lang\":\"fr\",\"error\":\"\","
+          "\"data\":["
+          "{\"iParagraph\":1,\"lGrammarErrors\":[{\"nStart\":9,\"nEnd\":15,\"sLineId\":\"#1\","
+          "\"sRuleId\":\"typo_test\",\"sType\":\"typo\",\"aColor\":null,\"sMessage\":\"Faute.\","
+          "\"aSuggestions\":[\"faute\"],\"URL\":\"https://example.org/rule\"}],"
+          "\"lSpellingErrors\":[{\"nStart\":9,\"nEnd\":15,\"sValue\":\"fautte\",\"sType\":\"WORD\"}]},"
+          "{\"iParagraph\":2,\"lGrammarErrors\":[{\"nStart\":9,\"nEnd\":15,\"sLineId\":\"#2\","
+          "\"sRuleId\":\"gn_test\",\"sType\":\"gn\",\"aColor\":null,\"sMessage\":\"Accord.\","
+          "\"aSuggestions\":[\"ligne\",\"lignes\"],\"URL\":\"\"}],\"lSpellingErrors\":[]}"
+          "]}";
+    return aResponse;
+}
+}
+
+// Started by the test that talks to it, since the port can be bound only
+// once per process.
+static test::MockHttpServer aMockServer(2023, grammalecteHandler);
 
 class TestGrammalecte : public test::BootstrapFixtureBase
 {
@@ -251,7 +167,7 @@ void TestGrammalecte::testStaysConfiguredWhileOff()
 
 void TestGrammalecte::testProofreading()
 {
-    aMockServer.start();
+    CPPUNIT_ASSERT(aMockServer.start());
 
     using GrammalecteCfg = officecfg::Office::Linguistic::GrammarChecking::Grammalecte;
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
@@ -273,7 +189,9 @@ void TestGrammalecte::testProofreading()
     css::linguistic2::ProofreadingResult aResult
         = xProofreader->doProofreading(u"id"_ustr, aText, aLocale, 0, aText.getLength(), {});
 
-    CPPUNIT_ASSERT(aMockServer.m_bRequestOK);
+    const std::vector<test::MockHttpServer::Request> aRequests = aMockServer.getRequests();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aRequests.size());
+    CPPUNIT_ASSERT(isCheckRequest(aRequests[0]));
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aResult.aErrors.getLength());
 
     CPPUNIT_ASSERT_EQUAL(sal_Int32(10), aResult.aErrors[0].nErrorStart);

@@ -39,6 +39,7 @@ $(eval $(call gb_Library_add_exception_objects,unotest,\
     unotest/source/cpp/getargument \
     unotest/source/cpp/gettestargument \
     unotest/source/cpp/macros_test \
+    unotest/source/cpp/mockhttpserver \
     unotest/source/cpp/officeconnection \
     unotest/source/cpp/toabsolutefileurl \
 ))

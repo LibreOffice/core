@@ -9,16 +9,10 @@
 
 #include <sal/config.h>
 
-#include <algorithm>
-#include <cassert>
-#include <cstring>
 
 #include <sal/log.hxx>
-#include <rtl/ustrbuf.hxx>
-#include <rtl/strbuf.hxx>
-#include <osl/socket.hxx>
-#include <osl/thread.hxx>
 #include <unotest/bootstrapfixturebase.hxx>
+#include <unotest/mockhttpserver.hxx>
 #include <officecfg/Office/Linguistic.hxx>
 
 #include <com/sun/star/beans/PropertyValue.hpp>
@@ -32,121 +26,31 @@ using namespace ::cpo::uno;
 
 namespace
 {
-class MockServerThread : public ::osl::Thread
+// Stands in for the Duden Korrekturserver: answers a well-formed check,
+// with the token, with two findings, and anything else with 404.
+test::MockHttpServer::Response dudenHandler(const test::MockHttpServer::Request& rRequest)
 {
-public:
-    MockServerThread()
-        : m_aSocketAddr(u"localhost"_ustr, 2022)
+    test::MockHttpServer::Response aResponse;
+    if (rRequest.aMethod != "POST" || rRequest.aPath != "/api/check"
+        || rRequest.aHeaders.find("Content-Type: application/json") == std::string::npos
+        || rRequest.aHeaders.find("access_token: hcvhcvhcv") == std::string::npos)
     {
+        aResponse.nStatus = 404;
+        aResponse.aStatusText = "Not Found";
+        aResponse.aContentType.clear();
+        return aResponse;
     }
-
-    virtual void run()
-    {
-        if (m_aAcceptorSocket.acceptConnection(m_aStreamSocket) != osl_Socket_Ok)
-        {
-            return;
-        }
-
-        sal_Int32 nTcpNoDelay = sal_Int32(true);
-        m_aStreamSocket.setOption(osl_Socket_OptionTcpNoDelay, &nTcpNoDelay, sizeof(nTcpNoDelay),
-                                  osl_Socket_LevelTcp);
-
-        // Read the whole request, as far as Content-Length says: closing
-        // the socket with part of it unread resets the connection, and the
-        // client then reports the reset instead of the answer.
-        std::string aText;
-        size_t nHeaderEnd = std::string::npos;
-        size_t nContentLength = 0;
-        while (true)
-        {
-            char aBuffer[1024];
-            const sal_Int32 nRead = m_aStreamSocket.recv(aBuffer, sizeof(aBuffer));
-            if (nRead <= 0)
-                break;
-            aText.append(aBuffer, nRead);
-            if (nHeaderEnd == std::string::npos)
-            {
-                nHeaderEnd = aText.find("\r\n\r\n");
-                if (nHeaderEnd == std::string::npos)
-                    continue;
-                const size_t nField = aText.find("Content-Length: ");
-                if (nField != std::string::npos && nField < nHeaderEnd)
-                    nContentLength = std::stoul(aText.substr(nField + 16));
-            }
-            if (aText.size() >= nHeaderEnd + 4 + nContentLength)
-                break;
-        }
-        if (!aText.empty())
-        {
-
-            if (aText.find("POST /api/check") == std::string::npos)
-            {
-                NotFound();
-            }
-            else if (aText.find("Content-Type: application/json") == std::string::npos)
-            {
-                NotFound();
-            }
-            else if (aText.find("access_token: hcvhcvhcv") == std::string::npos)
-            {
-                NotFound();
-            }
-            else
-            {
-                ResponseOK();
-            }
-        }
-    }
-
-    void ResponseOK()
-    {
-        OString aResponse(
-            "HTTP/1.1 200 OK\r\n"
-            "Server: MockServer\r\n"
-            "Cache-Control: no-cache\r\n"
-            "Content-Type: application/json\r\n"
-            "\r\n"
-            "{\"check-positions\":[{\"offset\":15,\"length\":6,\"errorcode\":4711,\"type\":"
-            "\"orth\","
-            "\"severity\":1,\"proposals\":[\"Entwurf\",\"Entw\u00fcrfe\"]},"
-            "{\"offset\":22,\"length\":3,\"errorcode\":8221,\"type\":\"orth\",\"severity\":1}],"
-            "\"messages\":{\"4711\":\"Dieses Wort korrigieren?\"}}"_ostr);
-
-        m_aStreamSocket.write(aResponse.getStr(), aResponse.getLength());
-        m_aStreamSocket.close();
-    }
-
-    void NotFound()
-    {
-        OString aResponse("HTTP/1.1 404 Not Found\r\n"
-                          "Connection: Closed\r\n"
-                          "\r\n"_ostr);
-
-        m_aStreamSocket.write(aResponse.getStr(), aResponse.getLength());
-        m_aStreamSocket.close();
-    }
-
-    void stop()
-    {
-        m_aAcceptorSocket.close();
-        join();
-    }
-
-    void init()
-    {
-        m_aAcceptorSocket.setOption(osl_Socket_OptionReuseAddr, 1);
-        CPPUNIT_ASSERT(m_aAcceptorSocket.bind(m_aSocketAddr));
-        CPPUNIT_ASSERT(m_aAcceptorSocket.listen());
-    }
-
-private:
-    ::osl::SocketAddr m_aSocketAddr;
-    ::osl::AcceptorSocket m_aAcceptorSocket;
-    ::osl::StreamSocket m_aStreamSocket;
-};
+    aResponse.aBody
+        = "{\"check-positions\":[{\"offset\":15,\"length\":6,\"errorcode\":4711,\"type\":"
+          "\"orth\","
+          "\"severity\":1,\"proposals\":[\"Entwurf\",\"Entw\u00fcrfe\"]},"
+          "{\"offset\":22,\"length\":3,\"errorcode\":8221,\"type\":\"orth\",\"severity\":1}],"
+          "\"messages\":{\"4711\":\"Dieses Wort korrigieren?\"}}";
+    return aResponse;
+}
 }
 
-MockServerThread aMockServer;
+static test::MockHttpServer aMockServer(2022, dudenHandler);
 
 class TestRestProtocol : public test::BootstrapFixtureBase
 {
@@ -200,9 +104,7 @@ void TestRestProtocol::setUp()
 {
     test::BootstrapFixtureBase::setUp();
 
-    aMockServer.init();
-    aMockServer.create();
-    osl::Thread::wait(std::chrono::seconds(1));
+    CPPUNIT_ASSERT(aMockServer.start());
 }
 
 void TestRestProtocol::tearDown()

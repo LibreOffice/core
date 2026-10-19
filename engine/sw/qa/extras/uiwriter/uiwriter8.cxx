@@ -38,8 +38,6 @@
 #include <comphelper/configuration.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <officecfg/Office/Linguistic.hxx>
-#include <osl/socket.hxx>
-#include <osl/thread.hxx>
 #include <UndoManager.hxx>
 #include <unotxdoc.hxx>
 #include <drawdoc.hxx>
@@ -54,10 +52,10 @@
 #include <redline.hxx>
 #include <itabenum.hxx>
 #include <officecfg/Office/Common.hxx>
+#include <unotest/mockhttpserver.hxx>
 
 #include <algorithm>
 #include <functional>
-#include <mutex>
 #include <vector>
 
 using namespace css;
@@ -1371,79 +1369,35 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testCool6098TranslateSkipsFooter)
 #if HAVE_FEATURE_CURL
 /// Stands in for the DeepL API: answers a language list request with a fixed list, and every
 /// other request with the same fixed translation, regardless of what was asked, so a test can
-/// tell a translated node from an untouched one without a real API key. Same in-process
-/// approach as linguistic/qa/restprotocol.cxx.
-class Cool6098MockTranslateServer : public ::osl::Thread
+/// tell a translated node from an untouched one without a real API key. With bFailLanguageList,
+/// the language list request fails.
+std::unique_ptr<test::MockHttpServer> createMockTranslateServer(bool bFailLanguageList = false)
 {
-public:
-    Cool6098MockTranslateServer()
-        : m_aSocketAddr(u"localhost"_ustr, 18099)
-    {
-    }
-
-    virtual void run() override
-    {
-        while (m_aAcceptorSocket.acceptConnection(m_aStreamSocket) == osl_Socket_Ok)
-        {
-            cpo::uno::Sequence<sal_Int8> aBuffer(2048);
-            const sal_Int32 nRead = m_aStreamSocket.recv(aBuffer.getArray(), aBuffer.getLength());
-            const OString aRequest(reinterpret_cast<const char*>(aBuffer.getConstArray()),
-                                   std::max<sal_Int32>(nRead, 0));
+    return std::make_unique<test::MockHttpServer>(
+        18099, [bFailLanguageList](const test::MockHttpServer::Request& rRequest) {
+            test::MockHttpServer::Response aResponse;
+            if (rRequest.aMethod == "GET" && rRequest.aPath.starts_with("/v3/languages"))
             {
-                std::scoped_lock aGuard(m_aMutex);
-                m_aRequests.push_back(aRequest);
+                if (bFailLanguageList)
+                {
+                    aResponse.nStatus = 500;
+                    aResponse.aStatusText = "Internal Server Error";
+                    return aResponse;
+                }
+                aResponse.aBody = "[{\"lang\":\"de\",\"name\":\"German\",\"usable_as_source\":true,"
+                                  "\"usable_as_target\":true},"
+                                  "{\"lang\":\"en\",\"name\":\"English\",\"usable_as_source\":true,"
+                                  "\"usable_as_target\":false},"
+                                  "{\"lang\":\"en-GB\",\"name\":\"English (British)\","
+                                  "\"usable_as_source\":false,\"usable_as_target\":true},"
+                                  "{\"lang\":\"zh-Hant\",\"name\":\"Chinese (traditional)\","
+                                  "\"usable_as_source\":false,\"usable_as_target\":true}]";
             }
-            const OString aBody
-                = aRequest.startsWith("GET /v3/languages")
-                      ? "[{\"lang\":\"de\",\"name\":\"German\",\"usable_as_source\":true,"
-                        "\"usable_as_target\":true},"
-                        "{\"lang\":\"en\",\"name\":\"English\",\"usable_as_source\":true,"
-                        "\"usable_as_target\":false},"
-                        "{\"lang\":\"en-GB\",\"name\":\"English (British)\","
-                        "\"usable_as_source\":false,\"usable_as_target\":true},"
-                        "{\"lang\":\"zh-Hant\",\"name\":\"Chinese (traditional)\","
-                        "\"usable_as_source\":false,\"usable_as_target\":true}]"_ostr
-                      : "{\"translations\":[{\"text\":\"TRANSLATED-TEXT\"}]}"_ostr;
-            const bool bFail = m_bFailLanguageList && aRequest.startsWith("GET /v3/languages");
-            const OString aResponse = (bFail ? "HTTP/1.1 500 Internal Server Error\r\n"_ostr
-                                             : "HTTP/1.1 200 OK\r\n"_ostr)
-                                      + "Content-Type: application/json\r\n\r\n" + aBody;
-            m_aStreamSocket.write(aResponse.getStr(), aResponse.getLength());
-            m_aStreamSocket.close();
-        }
-    }
-
-    void init()
-    {
-        m_aAcceptorSocket.setOption(osl_Socket_OptionReuseAddr, 1);
-        CPPUNIT_ASSERT(m_aAcceptorSocket.bind(m_aSocketAddr));
-        CPPUNIT_ASSERT(m_aAcceptorSocket.listen());
-    }
-
-    void stop()
-    {
-        m_aAcceptorSocket.close();
-        join();
-    }
-
-    /// Makes the language list request fail; call before create().
-    void setFailLanguageList() { m_bFailLanguageList = true; }
-
-    /// The requests received so far, each with its request line and headers.
-    std::vector<OString> getRequests()
-    {
-        std::scoped_lock aGuard(m_aMutex);
-        return m_aRequests;
-    }
-
-private:
-    ::osl::SocketAddr m_aSocketAddr;
-    ::osl::AcceptorSocket m_aAcceptorSocket;
-    ::osl::StreamSocket m_aStreamSocket;
-    std::mutex m_aMutex;
-    std::vector<OString> m_aRequests;
-    bool m_bFailLanguageList = false;
-};
+            else
+                aResponse.aBody = "{\"translations\":[{\"text\":\"TRANSLATED-TEXT\"}]}";
+            return aResponse;
+        });
+}
 
 /// Points the translation service at rAPIUrl with a dummy key until the returned guard is gone.
 comphelper::ScopeGuard<std::function<void()>> setTranslationService(const OUString& rAPIUrl)
@@ -1466,10 +1420,8 @@ comphelper::ScopeGuard<std::function<void()>> setTranslationService(const OUStri
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateTargetLanguages)
 {
-    Cool6098MockTranslateServer aMockServer;
-    aMockServer.init();
-    aMockServer.create();
-    comphelper::ScopeGuard aStopServer([&aMockServer] { aMockServer.stop(); });
+    std::unique_ptr<test::MockHttpServer> pMockServer = createMockTranslateServer();
+    CPPUNIT_ASSERT(pMockServer->start());
 
     {
         // Given a translation service URL that is not DeepL's /v2/translate endpoint:
@@ -1482,7 +1434,7 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateTargetLanguages)
         // Then there is no answer, as there is no way to know where the list is, and the
         // service is not asked:
         CPPUNIT_ASSERT(aLanguages.empty());
-        CPPUNIT_ASSERT(aMockServer.getRequests().empty());
+        CPPUNIT_ASSERT(pMockServer->getRequests().empty());
     }
 
     // Given the DeepL translate endpoint:
@@ -1494,10 +1446,12 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateTargetLanguages)
 
     // Then the list comes from the /v3/languages endpoint of the same host, asked with the key,
     // and has only the languages usable as a target:
-    const std::vector<OString> aRequests = aMockServer.getRequests();
+    const std::vector<test::MockHttpServer::Request> aRequests = pMockServer->getRequests();
     CPPUNIT_ASSERT_EQUAL(size_t(1), aRequests.size());
-    CPPUNIT_ASSERT(aRequests[0].startsWith("GET /v3/languages?resource=translate_text "));
-    CPPUNIT_ASSERT(aRequests[0].indexOf("Authorization: DeepL-Auth-Key dummy\r\n") != -1);
+    CPPUNIT_ASSERT_EQUAL(std::string("GET"), aRequests[0].aMethod);
+    CPPUNIT_ASSERT_EQUAL(std::string("/v3/languages?resource=translate_text"), aRequests[0].aPath);
+    CPPUNIT_ASSERT(aRequests[0].aHeaders.find("Authorization: DeepL-Auth-Key dummy\r\n")
+                   != std::string::npos);
     CPPUNIT_ASSERT_EQUAL(size_t(3), aLanguages.size());
     CPPUNIT_ASSERT_EQUAL("de"_ostr, aLanguages[0]);
     CPPUNIT_ASSERT_EQUAL("en-GB"_ostr, aLanguages[1]);
@@ -1505,18 +1459,16 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateTargetLanguages)
 
     // And asking again does not ask the service again:
     CPPUNIT_ASSERT_EQUAL(size_t(3), SwTranslateHelper::GetTargetLanguages().size());
-    CPPUNIT_ASSERT_EQUAL(size_t(1), aMockServer.getRequests().size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pMockServer->getRequests().size());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateTargetLanguagesFailure)
 {
     // Given a translation service that fails to list its languages, under a configuration
     // no other test uses, as the list is kept per configuration:
-    Cool6098MockTranslateServer aMockServer;
-    aMockServer.setFailLanguageList();
-    aMockServer.init();
-    aMockServer.create();
-    comphelper::ScopeGuard aStopServer([&aMockServer] { aMockServer.stop(); });
+    std::unique_ptr<test::MockHttpServer> pMockServer
+        = createMockTranslateServer(/*bFailLanguageList=*/true);
+    CPPUNIT_ASSERT(pMockServer->start());
     comphelper::ScopeGuard<std::function<void()>> aResetConfig
         = setTranslationService(u"http://127.0.0.1:18099/v2/translate/"_ustr);
 
@@ -1525,17 +1477,15 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateTargetLanguagesFailure)
     CPPUNIT_ASSERT(SwTranslateHelper::GetTargetLanguages().empty());
 
     // Then the service is asked only once, as each request can block for seconds:
-    CPPUNIT_ASSERT_EQUAL(size_t(1), aMockServer.getRequests().size());
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pMockServer->getRequests().size());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testCool6098TranslateEndToEnd)
 {
     // Point the translation service at a local mock server, so a real end-to-end translate
     // run can be told apart from untouched text without needing a real DeepL account.
-    Cool6098MockTranslateServer aMockServer;
-    aMockServer.init();
-    aMockServer.create();
-    comphelper::ScopeGuard aStopServer([&aMockServer] { aMockServer.stop(); });
+    std::unique_ptr<test::MockHttpServer> pMockServer = createMockTranslateServer();
+    CPPUNIT_ASSERT(pMockServer->start());
 
     comphelper::ScopeGuard<std::function<void()>> aResetConfig
         = setTranslationService(u"http://127.0.0.1:18099"_ustr);
@@ -1577,10 +1527,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testCool6098TranslateEndToEnd)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateSetsTargetLanguage)
 {
-    Cool6098MockTranslateServer aMockServer;
-    aMockServer.init();
-    aMockServer.create();
-    comphelper::ScopeGuard aStopServer([&aMockServer] { aMockServer.stop(); });
+    std::unique_ptr<test::MockHttpServer> pMockServer = createMockTranslateServer();
+    CPPUNIT_ASSERT(pMockServer->start());
     comphelper::ScopeGuard<std::function<void()>> aResetConfig
         = setTranslationService(u"http://127.0.0.1:18099/v2/translate"_ustr);
 
@@ -1642,10 +1590,8 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateSetsTargetLanguage)
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateUndo)
 {
-    Cool6098MockTranslateServer aMockServer;
-    aMockServer.init();
-    aMockServer.create();
-    comphelper::ScopeGuard aStopServer([&aMockServer] { aMockServer.stop(); });
+    std::unique_ptr<test::MockHttpServer> pMockServer = createMockTranslateServer();
+    CPPUNIT_ASSERT(pMockServer->start());
     comphelper::ScopeGuard<std::function<void()>> aResetConfig
         = setTranslationService(u"http://127.0.0.1:18099/v2/translate"_ustr);
 
