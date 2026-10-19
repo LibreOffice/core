@@ -712,6 +712,8 @@ class SettingIframe {
 	private wordbook;
 	private xcuEditor;
 	private _viewSetting!: ViewSettings;
+	// The first fetch and build of every section. It never rejects.
+	private _initialLoad: Promise<void> = Promise.resolve();
 	// URL of the stored viewsetting.json, remembered when it is fetched so a save
 	// can tell the server where to read back any secret the user chose to keep.
 	private _viewSettingFileUrl = '';
@@ -1321,6 +1323,8 @@ class SettingIframe {
 	}
 
 	public async saveAll(): Promise<SaveAllResult> {
+		await this._initialLoad;
+
 		// Store the AI base URLs in their canonical form (no trailing "/v1"), in
 		// case a field was edited but never blurred before the save.
 		this._viewSetting.aiProviderURL = this.normalizeBaseUrl(
@@ -1425,7 +1429,7 @@ class SettingIframe {
 		} else {
 			this.settingsStorage = new OnlineSettingsStorage();
 		}
-		this.fetchAndPopulateSharedConfigs();
+		this._initialLoad = this.fetchAndPopulateSharedConfigs();
 		this.wordbook = window.WordBook;
 	}
 
