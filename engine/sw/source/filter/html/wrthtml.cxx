@@ -55,6 +55,7 @@
 #include <docary.hxx>
 #include <pam.hxx>
 #include <doc.hxx>
+#include <FillBitmapNotify.hxx>
 #include <ndtxt.hxx>
 #include <mdiexp.hxx>
 #include <fltini.hxx>
@@ -1441,7 +1442,11 @@ void SwHTMLWriter::OutBackground( const SvxBrushItem *pBrushItem, bool bGraphic 
 
     const Graphic* pGrf = pBrushItem->GetGraphic();
     OUString GraphicURL = pBrushItem->GetGraphicLink();
-    if( mbEmbedImages || GraphicURL.isEmpty())
+    // A picture still waiting for the document's link update is written as its link.
+    const OUString aDeferredURL = sw::getDeferredBrushURL(*pBrushItem);
+    if (!aDeferredURL.isEmpty())
+        GraphicURL = aDeferredURL;
+    if( (mbEmbedImages || GraphicURL.isEmpty()) && aDeferredURL.isEmpty() )
     {
         if( pGrf )
         {

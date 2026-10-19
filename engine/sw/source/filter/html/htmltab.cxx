@@ -22,6 +22,7 @@
 #include <comphelper/configuration.hxx>
 #include <comphelper/flagguard.hxx>
 #include <utility>
+#include <vcl/graph.hxx>
 #include <vcl/svapp.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/brushitem.hxx>
@@ -2771,6 +2772,18 @@ SvxBrushItem* SwHTMLParser::CreateBrushItem( const Color *pColor,
             pBrushItem->SetGraphicLink( URIHelper::SmartRel2Abs( INetURLObject(m_sBaseURL), rImageURL, Link<OUString *, bool>(), false) );
             pBrushItem->SetGraphicPos( GPOS_TILED );
         }
+    }
+
+    // A table, row or cell keeps its brush, so a linked picture is held as a picture that waits for
+    // the document's link update.
+    if (pBrushItem && !pBrushItem->GetGraphicLink().isEmpty()
+        && !pBrushItem->GetGraphicLink().startsWithIgnoreAsciiCase("data:"))
+    {
+        const OUString aLink = pBrushItem->GetGraphicLink();
+        const SvxGraphicPosition ePos = pBrushItem->GetGraphicPos();
+        pBrushItem->SetGraphicLink(OUString());
+        pBrushItem->SetGraphic(Graphic(GraphicExternalLink(aLink)));
+        pBrushItem->SetGraphicPos(ePos);
     }
 
     return pBrushItem;

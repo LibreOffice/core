@@ -12,6 +12,8 @@
 #include <format.hxx>
 #include <node.hxx>
 
+#include <editeng/brushitem.hxx>
+#include <hintids.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <sfx2/lnkbase.hxx>
 #include <svx/xbtmpit.hxx>
@@ -70,10 +72,10 @@ public:
         if (aGrf.GetType() == GraphicType::Default)
             return ERROR_GENERAL;
 
-        OUString aName;
-        if (const SwAttrSet* pSet = HostOps<Host>::getAttrSet(m_rHost))
-            if (const XFillBitmapItem* pItem = pSet->GetItemIfSet(XATTR_FILLBITMAP, false))
-                aName = pItem->GetName();
+        const SwAttrSet* pSet = HostOps<Host>::getAttrSet(m_rHost);
+        const XFillBitmapItem* pFill = pSet ? pSet->GetItemIfSet(XATTR_FILLBITMAP, false) : nullptr;
+        const SvxBrushItem* pBrush
+            = pSet && !pFill ? pSet->GetItemIfSet(RES_BACKGROUND, false) : nullptr;
         // Write the resolved graphic back to this one host. The write
         // re-enters onFillBitmapURLChanged with a now-resolved item, so tell
         // the tracker to ignore that notification for this host and keep us
@@ -81,7 +83,15 @@ public:
         // here instead would free the link inside SvBaseLink::Update, which
         // still reads its members after DataChanged returns.
         m_rTracker.setUpdatingHost(&m_rHost);
-        HostOps<Host>::setAttr(m_rHost, XFillBitmapItem(aName, aGrf));
+        if (pBrush)
+        {
+            SvxBrushItem aBrush(*pBrush);
+            aBrush.SetGraphic(aGrf);
+            HostOps<Host>::setAttr(m_rHost, aBrush);
+        }
+        else
+            HostOps<Host>::setAttr(m_rHost,
+                                   XFillBitmapItem(pFill ? pFill->GetName() : OUString(), aGrf));
         m_rTracker.clearUpdatingHost();
         return SUCCESS;
     }
