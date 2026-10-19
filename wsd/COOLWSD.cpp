@@ -94,6 +94,7 @@
 #include <Poco/Util/ServerApplication.h>
 #include <Poco/Util/XMLConfiguration.h>
 
+#include <algorithm>
 #include <cassert>
 #include <chrono>
 #include <clocale>
@@ -3683,7 +3684,15 @@ private:
                 return;
             }
 
-            if (jailId.empty())
+            // A jail id names one folder under the child root. Forkit makes it from ASCII letters
+            // and digits.
+            if (jailId.empty() || !std::all_of(jailId.begin(), jailId.end(),
+                                               [](char c)
+                                               {
+                                                   return (c >= 'a' && c <= 'z') ||
+                                                          (c >= 'A' && c <= 'Z') ||
+                                                          (c >= '0' && c <= '9');
+                                               }))
             {
                 LOG_ERR("Invalid JailId in child URI ["
                         << Anonymizer::anonymizeUrl(request.getUrl()) << ']');
