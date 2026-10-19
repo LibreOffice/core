@@ -18,6 +18,7 @@
  */
 
 #include "backingwindow.hxx"
+#include <chrono>
 #include <utility>
 #include <vcl/event.hxx>
 #include <vcl/help.hxx>
