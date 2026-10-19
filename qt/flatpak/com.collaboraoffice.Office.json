@@ -20,10 +20,8 @@
     "--socket=wayland",
     "--socket=pulseaudio",
     "--socket=cups",
-    "--filesystem=xdg-run/gvfsd",
     "--filesystem=xdg-documents",
     "--env=LIBO_FLATPAK=1",
-    "--talk-name=org.gtk.vfs.*",
     "--device=dri"
   ],
   "cleanup-commands": [
