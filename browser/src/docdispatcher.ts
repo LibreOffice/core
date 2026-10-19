@@ -399,6 +399,11 @@ class Dispatcher {
 			app.map.uiManager.collapseNotebookbar();
 		};
 
+		this.actionsMap['showmenubar'] = () => {
+			app.map.uiManager.showMenubar();
+			this.focusTopBar();
+		};
+
 		this.actionsMap['validatedialogsa11y'] = () => {
 			if (window.app.a11yValidator) {
 				window.app.a11yValidator.validateAllOpenDialogs();

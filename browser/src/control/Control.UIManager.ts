@@ -1942,6 +1942,9 @@ class UIManager extends window.L.Control {
 
 		if (this._notebookbarShouldBeCollapsed)
 			this.collapseNotebookbar();
+
+		if (this.map.topToolbar)
+			this.map.topToolbar.updateDocumentMenu();
 	}
 
 	/**
@@ -1966,6 +1969,9 @@ class UIManager extends window.L.Control {
 			obj.style.transform = 'rotate(180deg)';
 
 		$('#fold').prop('title', _('Show Menu'));
+
+		if (this.map.topToolbar)
+			this.map.topToolbar.updateDocumentMenu();
 	}
 
 	/**

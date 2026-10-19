@@ -240,6 +240,12 @@ class TopToolbar extends JSDialog.Toolbar {
 
 		var items = [
 			{type: 'overflowmanager', id: 'overflow-manager-toptoolbar', children: [
+				{type: 'menubutton', id: 'documentmenu', command: 'documentmenu', noLabel: true, image: false, text: _('Show Menu Bar'), mobile: false, tablet: false, visible: false,
+					menu: [
+						{id: 'showmenubar', action: 'showmenubar', text: _('Show Menu Bar')},
+					]
+				},
+				{type: 'separator', orientation: 'vertical', id: 'documentmenubreak', mobile: false, tablet: false, visible: false},
 				{type: 'overflowgroup', id: 'save-toptoolbar', children: saveGroup},
 				{type: 'separator', orientation: 'vertical', id: 'savebreak', mobile: false},
 				{type: 'overflowgroup', id: 'undo-toptoolbar', children: undoGroup},
@@ -369,8 +375,25 @@ class TopToolbar extends JSDialog.Toolbar {
 		this.map.saveState = new app.definitions.saveState(this.map);
 	}
 
+	updateDocumentMenu() {
+		var button = this.getItemElement('documentmenu');
+		if (!button)
+			return;
+
+		var iconClass = app.LOUtil.getDocumentLogoClass(this.map.getDocType())[0];
+		if (iconClass)
+			button.classList.add(iconClass);
+
+		var show = window.mode.isDesktop() && this.map.uiManager.isMenubarHidden()
+			&& this.map.uiManager.isButtonVisible('documentmenu');
+		this.showItem('documentmenu', show);
+		this.showItem('documentmenubreak', show);
+	}
+
 	onDocLayerInit() {
 		var docType = this.map.getDocType();
+
+		this.updateDocumentMenu();
 
 		switch (docType) {
 		case 'spreadsheet':

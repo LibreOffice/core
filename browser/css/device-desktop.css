@@ -191,3 +191,7 @@ button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton):not
 	padding-block: 0;
 	line-height: 22px;
 }
+
+[data-userinterfacemode='classic'] #toolbar-up #documentmenu-button {
+	background: var(--doc-icon-url) center / 16px 16px no-repeat;
+}
