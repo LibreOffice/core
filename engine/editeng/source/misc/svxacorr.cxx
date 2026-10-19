@@ -324,27 +324,27 @@ const sal_Unicode aStopSingleQuoteEndRuUa[] = { 0x201E, 0x201C, cRightDoubleAngl
 
 SvxAutoCorrect::SvxAutoCorrect( OUString aShareAutocorrFile,
                                 OUString aUserAutocorrFile )
-    : sShareAutoCorrFile(std::move( aShareAutocorrFile ))
-    , sUserAutoCorrFile(std::move( aUserAutocorrFile ))
-    , eCharClassLang( LANGUAGE_DONTKNOW )
-    , nFlags(SvxAutoCorrect::GetDefaultFlags())
-    , cStartDQuote( 0 )
-    , cEndDQuote( 0 )
-    , cStartSQuote( 0 )
-    , cEndSQuote( 0 )
+    : m_sShareAutoCorrFile(std::move( aShareAutocorrFile ))
+    , m_sUserAutoCorrFile(std::move( aUserAutocorrFile ))
+    , m_eCharClassLang( LANGUAGE_DONTKNOW )
+    , m_nFlags(SvxAutoCorrect::GetDefaultFlags())
+    , m_cStartDQuote( 0 )
+    , m_cEndDQuote( 0 )
+    , m_cStartSQuote( 0 )
+    , m_cEndSQuote( 0 )
 {
 }
 
 SvxAutoCorrect::SvxAutoCorrect( const SvxAutoCorrect& rCpy )
-    : sShareAutoCorrFile( rCpy.sShareAutoCorrFile )
-    , sUserAutoCorrFile( rCpy.sUserAutoCorrFile )
-    , aSwFlags( rCpy.aSwFlags )
-    , eCharClassLang(rCpy.eCharClassLang)
-    , nFlags( rCpy.nFlags & ~ACFlags(ACFlags::ChgWordLstLoad|ACFlags::CplSttLstLoad|ACFlags::WordStartLstLoad))
-    , cStartDQuote( rCpy.cStartDQuote )
-    , cEndDQuote( rCpy.cEndDQuote )
-    , cStartSQuote( rCpy.cStartSQuote )
-    , cEndSQuote( rCpy.cEndSQuote )
+    : m_sShareAutoCorrFile( rCpy.m_sShareAutoCorrFile )
+    , m_sUserAutoCorrFile( rCpy.m_sUserAutoCorrFile )
+    , m_aSwFlags( rCpy.m_aSwFlags )
+    , m_eCharClassLang(rCpy.m_eCharClassLang)
+    , m_nFlags( rCpy.m_nFlags & ~ACFlags(ACFlags::ChgWordLstLoad|ACFlags::CplSttLstLoad|ACFlags::WordStartLstLoad))
+    , m_cStartDQuote( rCpy.m_cStartDQuote )
+    , m_cEndDQuote( rCpy.m_cEndDQuote )
+    , m_cStartSQuote( rCpy.m_cStartSQuote )
+    , m_cEndSQuote( rCpy.m_cEndSQuote )
 {
 }
 
@@ -356,23 +356,23 @@ SvxAutoCorrect::~SvxAutoCorrect()
 void SvxAutoCorrect::GetCharClass_( LanguageType eLang )
 {
     moCharClass.emplace( LanguageTag( eLang) );
-    eCharClassLang = eLang;
+    m_eCharClassLang = eLang;
 }
 
 void SvxAutoCorrect::SetAutoCorrFlag( ACFlags nFlag, bool bOn )
 {
-    ACFlags nOld = nFlags;
-    nFlags = bOn ? nFlags | nFlag
-                 : nFlags & ~nFlag;
+    ACFlags nOld = m_nFlags;
+    m_nFlags = bOn ? m_nFlags | nFlag
+                 : m_nFlags & ~nFlag;
 
     if( !bOn )
     {
-        if( (nOld & ACFlags::CapitalStartSentence) != (nFlags & ACFlags::CapitalStartSentence) )
-            nFlags &= ~ACFlags::CplSttLstLoad;
-        if( (nOld & ACFlags::CapitalStartWord) != (nFlags & ACFlags::CapitalStartWord) )
-            nFlags &= ~ACFlags::WordStartLstLoad;
-        if( (nOld & ACFlags::Autocorrect) != (nFlags & ACFlags::Autocorrect) )
-            nFlags &= ~ACFlags::ChgWordLstLoad;
+        if( (nOld & ACFlags::CapitalStartSentence) != (m_nFlags & ACFlags::CapitalStartSentence) )
+            m_nFlags &= ~ACFlags::CplSttLstLoad;
+        if( (nOld & ACFlags::CapitalStartWord) != (m_nFlags & ACFlags::CapitalStartWord) )
+            m_nFlags &= ~ACFlags::WordStartLstLoad;
+        if( (nOld & ACFlags::Autocorrect) != (m_nFlags & ACFlags::Autocorrect) )
+            m_nFlags &= ~ACFlags::ChgWordLstLoad;
     }
 }
 
@@ -453,7 +453,7 @@ void SvxAutoCorrect::FnCapitalStartWord( SvxAutoCorrDoc& rDoc, const OUString& r
                 OUString sChar = rCC.lowercase( OUString(cSave) );
                 if( sChar[0] != cSave && rDoc.ReplaceRange( nSttPos, 1, sChar ))
                 {
-                    if( ACFlags::SaveWordWordStartLst & nFlags )
+                    if( ACFlags::SaveWordWordStartLst & m_nFlags )
                         rDoc.SaveCpltSttWord( ACFlags::CapitalStartWord, nSttPos, sWord, cSave );
                 }
             }
@@ -1190,7 +1190,7 @@ void SvxAutoCorrect::FnCapitalStartSentence( SvxAutoCorrDoc& rDoc,
     bool bRet = sChar[0] != cSave && rDoc.ReplaceRange( nSttPos, 1, sChar );
 
     // Perhaps someone wants to have the word
-    if( bRet && ACFlags::SaveWordCplSttLst & nFlags )
+    if( bRet && ACFlags::SaveWordCplSttLst & m_nFlags )
         rDoc.SaveCpltSttWord( ACFlags::CapitalStartSentence, nSttPos, sWord, cSave );
 }
 
@@ -1894,8 +1894,8 @@ bool SvxAutoCorrect::CreateLanguageFile( const LanguageTag& rLanguageTag, bool b
 
     tools::Time nAktTime(tools::Time::SYSTEM);
 
-    auto nFndPos = aLastFileTable.find(rLanguageTag);
-    bool lastCheckLessThan2MinutesAgo = nFndPos != aLastFileTable.end();
+    auto nFndPos = m_aLastFileTable.find(rLanguageTag);
+    bool lastCheckLessThan2MinutesAgo = nFndPos != m_aLastFileTable.end();
     if (lastCheckLessThan2MinutesAgo)
     {
         const tools::Time nLastCheckTime(tools::Time::fromEncodedTime(nFndPos->second));
@@ -1913,7 +1913,7 @@ bool SvxAutoCorrect::CreateLanguageFile( const LanguageTag& rLanguageTag, bool b
                             std::forward_as_tuple(rLanguageTag),
                             std::forward_as_tuple(*this, sShareDirFile, sUserDirFile));
             pLists = &itBool.first->second;
-            aLastFileTable.erase(nFndPos);
+            m_aLastFileTable.erase(nFndPos);
         }
     }
     else if(
@@ -1930,22 +1930,22 @@ bool SvxAutoCorrect::CreateLanguageFile( const LanguageTag& rLanguageTag, bool b
                         std::forward_as_tuple(rLanguageTag),
                         std::forward_as_tuple(*this, sShareDirFile, sUserDirFile));
         pLists = &itBool.first->second;
-        if (nFndPos != aLastFileTable.end())
-            aLastFileTable.erase(nFndPos);
+        if (nFndPos != m_aLastFileTable.end())
+            m_aLastFileTable.erase(nFndPos);
     }
     else if( !bNewFile )
     {
-        aLastFileTable[rLanguageTag] = nAktTime.GetTime();
+        m_aLastFileTable[rLanguageTag] = nAktTime.GetTime();
     }
     return pLists != nullptr;
 }
 
 void SvxAutoCorrect::SetAutoCorrFileNames(const OUString& rShareFile, const OUString& rUserFile)
 {
-    sShareAutoCorrFile = rShareFile;
-    sUserAutoCorrFile = rUserFile;
+    m_sShareAutoCorrFile = rShareFile;
+    m_sUserAutoCorrFile = rUserFile;
     m_aLangTable.clear();
-    aLastFileTable.clear();
+    m_aLastFileTable.clear();
 }
 
 bool SvxAutoCorrect::PutText( const OUString& rShort, const OUString& rLong,
@@ -2269,15 +2269,15 @@ OUString SvxAutoCorrect::GetAutoCorrFileName( const LanguageTag& rLanguageTag,
 
     sExt = "_" + sExt + ".dat";
     if( bNewFile )
-        sRet = sUserAutoCorrFile + sExt;
+        sRet = m_sUserAutoCorrFile + sExt;
     else if( !bTst )
-        sRet = sShareAutoCorrFile + sExt;
+        sRet = m_sShareAutoCorrFile + sExt;
     else
     {
         // test first in the user directory - if not exist, then
-        sRet = sUserAutoCorrFile + sExt;
+        sRet = m_sUserAutoCorrFile + sExt;
         if( !FStatHelper::IsDocument( sRet ))
-            sRet = sShareAutoCorrFile + sExt;
+            sRet = m_sShareAutoCorrFile + sExt;
     }
     return sRet;
 }

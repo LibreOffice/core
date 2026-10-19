@@ -299,19 +299,19 @@ class EDITENG_DLLPUBLIC SvxAutoCorrect
 {
     friend class SvxAutoCorrectLanguageLists;
 
-    OUString sShareAutoCorrFile, sUserAutoCorrFile;
+    OUString m_sShareAutoCorrFile, m_sUserAutoCorrFile;
 
-    SvxSwAutoFormatFlags aSwFlags;     // StarWriter AutoFormat Flags
+    SvxSwAutoFormatFlags m_aSwFlags;     // StarWriter AutoFormat Flags
 
     // all languages in a table
     std::map<LanguageTag, SvxAutoCorrectLanguageLists> m_aLangTable;
-    std::map<LanguageTag, sal_Int64> aLastFileTable;
+    std::map<LanguageTag, sal_Int64> m_aLastFileTable;
     std::optional<CharClass> moCharClass;
 
-    LanguageType eCharClassLang;
+    LanguageType m_eCharClassLang;
 
-    ACFlags nFlags;
-    sal_Unicode cStartDQuote, cEndDQuote, cStartSQuote, cEndSQuote;
+    ACFlags m_nFlags;
+    sal_Unicode m_cStartDQuote, m_cEndDQuote, m_cStartSQuote, m_cEndSQuote;
 
 
     // private methods
@@ -383,15 +383,15 @@ public:
                           SvxAutocorrWordList::WordSearchStatus& rStatus );
 
     // Query/Set the Character for the Quote substitution
-    sal_Unicode GetStartSingleQuote() const         { return cStartSQuote; }
-    sal_Unicode GetEndSingleQuote() const           { return cEndSQuote; }
-    sal_Unicode GetStartDoubleQuote() const         { return cStartDQuote; }
-    sal_Unicode GetEndDoubleQuote() const           { return cEndDQuote; }
+    sal_Unicode GetStartSingleQuote() const         { return m_cStartSQuote; }
+    sal_Unicode GetEndSingleQuote() const           { return m_cEndSQuote; }
+    sal_Unicode GetStartDoubleQuote() const         { return m_cStartDQuote; }
+    sal_Unicode GetEndDoubleQuote() const           { return m_cEndDQuote; }
 
-    void SetStartSingleQuote( const sal_Unicode cStart )    { cStartSQuote = cStart; }
-    void SetEndSingleQuote( const sal_Unicode cEnd )        { cEndSQuote = cEnd; }
-    void SetStartDoubleQuote( const sal_Unicode cStart )    { cStartDQuote = cStart; }
-    void SetEndDoubleQuote( const sal_Unicode cEnd )        { cEndDQuote = cEnd; }
+    void SetStartSingleQuote( const sal_Unicode cStart )    { m_cStartSQuote = cStart; }
+    void SetEndSingleQuote( const sal_Unicode cEnd )        { m_cEndSQuote = cEnd; }
+    void SetStartDoubleQuote( const sal_Unicode cStart )    { m_cStartDQuote = cStart; }
+    void SetEndDoubleQuote( const sal_Unicode cEnd )        { m_cEndDQuote = cEnd; }
 
     OUString GetQuote( SvxAutoCorrDoc const & rDoc, sal_Int32 nInsPos,
                     sal_Unicode cInsChar, bool bSttQuote );
@@ -407,11 +407,11 @@ public:
                                 bool bUnlocalized = false ) const;
 
     // Query/Set the current settings of AutoCorrect
-    ACFlags GetFlags() const                { return nFlags; }
-    SvxSwAutoFormatFlags&   GetSwFlags()    { return aSwFlags;}
-    const SvxSwAutoFormatFlags& GetSwFlags() const { return aSwFlags; }
+    ACFlags GetFlags() const                { return m_nFlags; }
+    SvxSwAutoFormatFlags&   GetSwFlags()    { return m_aSwFlags;}
+    const SvxSwAutoFormatFlags& GetSwFlags() const { return m_aSwFlags; }
     bool IsAutoCorrFlag( ACFlags nFlag ) const
-                                { return bool(nFlags & nFlag); }
+                                { return bool(m_nFlags & nFlag); }
     void SetAutoCorrFlag( ACFlags nFlag, bool bOn = true );
 
     /** Point the object at the share and user autocorrect directories in use now, and drop
@@ -501,7 +501,7 @@ public:
 
     CharClass& GetCharClass( LanguageType eLang )
     {
-        if( !moCharClass || eLang != eCharClassLang )
+        if( !moCharClass || eLang != m_eCharClassLang )
             GetCharClass_( eLang );
         return *moCharClass;
     }
