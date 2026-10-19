@@ -473,9 +473,7 @@ SfxVoidItem ClearEmbeddedDatabase FN_CLEAR_EMBEDDED_DATABASE
     FastCall = FALSE,
     ReadOnlyDoc = FALSE,
     Toggle = FALSE,
-    Container = FALSE,
-    RecordAbsolute = FALSE,
-    RecordPerSet;
+    Container = FALSE;
 
 
     AccelConfig = TRUE,
