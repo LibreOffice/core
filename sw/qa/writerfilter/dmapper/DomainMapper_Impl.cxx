@@ -26,7 +26,9 @@
 #include <vcl/scheduler.hxx>
 #include <editeng/fhgtitem.hxx>
 
+#include <doc.hxx>
 #include <docsh.hxx>
+#include <fmtanchr.hxx>
 #include <frameformats.hxx>
 #include <ndtxt.hxx>
 #include <swtable.hxx>
@@ -576,6 +578,28 @@ CPPUNIT_TEST_FIXTURE(Test, testAnnotationMarkRedline)
     // Without the accompanying fix in place, this test would have failed, the anchor point was not
     // inside a redline.
     CPPUNIT_ASSERT(pRedline);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testGroupTextBoxesInTOC)
+{
+    // Given a document with a group of two text boxes inside the result of a TOC field:
+    // When importing that document:
+    createSwDoc("toc-group-textbox.docx");
+
+    // Then make sure each text box frame is anchored in the body text, not inside another frame:
+    int nTextFrames = 0;
+    for (const auto pFormat : *getSwDoc()->GetSpzFrameFormats())
+    {
+        if (pFormat->Which() != RES_FLYFRMFMT)
+            continue;
+        ++nTextFrames;
+        const SwNode* pAnchorNode = pFormat->GetAnchor().GetAnchorNode();
+        CPPUNIT_ASSERT(pAnchorNode);
+        // Without the accompanying fix in place, this test would have failed, the second text box
+        // was anchored inside the first one.
+        CPPUNIT_ASSERT(!pAnchorNode->FindFlyStartNode());
+    }
+    CPPUNIT_ASSERT_EQUAL(2, nTextFrames);
 }
 }
 

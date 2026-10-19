@@ -3685,7 +3685,8 @@ void DomainMapper_Impl::appendTextPortion( const OUString& rString, const Proper
         }
         else
         {
-            if (IsInTOC() || m_bStartIndex || m_bStartBibliography || m_nStartGenericField != 0)
+            if ((IsInTOC() || m_bStartIndex || m_bStartBibliography || m_nStartGenericField != 0)
+                && !IsInShape() && !m_StreamStateStack.top().bIsInTextBox)
             {
                 if (IsInHeaderFooter() && !m_bStartTOCHeaderFooter)
                 {
