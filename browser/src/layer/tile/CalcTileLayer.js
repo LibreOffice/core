@@ -369,8 +369,8 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 	_refreshPartHashes(statusJSON) {
 		app.calc.partHashes = [];
 
-		// The status carries the hash as a number; it is kept as a string, the form every
-		// comparison with a hash from another message uses.
+		// The status carries the hash as a string, the form every comparison with a hash
+		// from another message uses.
 		for (let i = 0; i < statusJSON.parts.length; i++) {
 			app.calc.partHashes.push(String(statusJSON.parts[i].hash));
 		}

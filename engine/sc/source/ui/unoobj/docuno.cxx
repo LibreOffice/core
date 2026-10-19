@@ -729,16 +729,18 @@ std::string ScModelObj::getPartInfo( int nPart )
         SCTAB nDefaultViewTableNumber = rDocument.GetDefaultViewTableNumber(nPart);
         sal_Int64 nDefaultViewHashCode = 0;
         if (rDocument.GetHashCode(nDefaultViewTableNumber, nDefaultViewHashCode))
-            jsonWriter.put("defaultviewhash", int64_t(nDefaultViewHashCode));
+            jsonWriter.put("defaultviewhash", OUString::number(nDefaultViewHashCode));
     }
 
     OUString tabName;
     pViewData->GetDocument().GetName(nPart, tabName);
     jsonWriter.put("name", tabName);
 
+    // The hashes are 64-bit values written as strings, so every digit survives a JSON parser
+    // that keeps only 53 bits of a number.
     sal_Int64 hashCode = 0;
     if (pViewData->GetDocument().GetHashCode(nPart, hashCode))
-        jsonWriter.put("hash", hashCode);
+        jsonWriter.put("hash", OUString::number(hashCode));
 
     Size lastColRow = getDataArea(nPart);
     jsonWriter.put("lastcolumn", lastColRow.getWidth());
