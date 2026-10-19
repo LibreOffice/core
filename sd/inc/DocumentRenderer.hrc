@@ -83,14 +83,16 @@ const TranslateId STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE[] =
 {
     NC_("STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE", "All ~Slides"),
     NC_("STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE", "S~lides:"),
-    NC_("STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE", "~Selection")
+    NC_("STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE", "~Selection"),
+    NC_("STR_IMPRESS_PRINT_UI_PAGE_RANGE_CHOICE", "~Current Slide")
 };
 
 const TranslateId STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE[] =
 {
     NC_("STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE", "All ~Pages"),
     NC_("STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE", "~Pages:"),
-    NC_("STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE", "~Selection")
+    NC_("STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE", "~Selection"),
+    NC_("STR_DRAW_PRINT_UI_PAGE_RANGE_CHOICE", "~Current Page")
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

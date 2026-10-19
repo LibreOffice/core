@@ -251,7 +251,7 @@ namespace {
                 return sValue.isEmpty() ? sFullRange : sValue;
             }
 
-            if (nContent == 2 && // selection
+            if ((nContent == 2 || nContent == 3)  && // selection or current page/slide
                 nCurrentPageIndex >= 0)
             {
                 return OUString::number(nCurrentPageIndex + 1);
@@ -647,8 +647,9 @@ namespace {
             OUString aPrintRangeName( u"PrintContent"_ustr );
             aHelpIds = { u".HelpID:vcl:PrintDialog:PrintContent:RadioButton:0"_ustr,
                          u".HelpID:vcl:PrintDialog:PrintContent:RadioButton:1"_ustr,
-                         u".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2"_ustr };
-            aWidgetIds = { u"rbAllPages"_ustr, u"rbRangePages"_ustr, u"rbRangeSelection"_ustr };
+                         u".HelpID:vcl:PrintDialog:PrintContent:RadioButton:2"_ustr,
+                         u".HelpID:vcl:PrintDialog:PrintContent:RadioButton:3"_ustr };
+            aWidgetIds = { u"rbAllPages"_ustr, u"rbRangePages"_ustr, u"rbRangeSelection"_ustr, u"rbCurrentPage"_ustr };
 
             AddDialogControl( vcl::PrinterOptionsHelper::setChoiceRadiosControlOpt(aWidgetIds, OUString(),
                                 aHelpIds, aPrintRangeName,
