@@ -493,6 +493,15 @@ body > #formulabar-row {
 #mobile-wizard.snackbar .mobile-wizard-content {
 	align-items: center;
 }
+/* Cap the popup content at the wizard width and wrap a row of one text cell,
+   so a long custom sort list of a pivot field stays on the screen. */
+#mobile-wizard.popup .mobile-wizard-content {
+	max-width: 100%;
+}
+#mobile-wizard.popup .ui-treeview-entry > div:only-child {
+	white-space: normal;
+	overflow-wrap: anywhere;
+}
 #mobile-wizard.popup.potrait #mobile-wizard-content {
 	flex-direction: column;
 }
