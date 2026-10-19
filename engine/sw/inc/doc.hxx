@@ -342,6 +342,8 @@ private:
     bool mbDontCorrectBookmarks = false;
     /// Is in the process of receiving a merged paste.
     bool mbInMergedPaste = false;
+    /// The paste position's paragraph properties that the pasted content should inherit.
+    std::shared_ptr<SfxItemSet> m_pMergedPasteParaAttrs;
 
     enum MissingDictionary { False = -1, Undefined = 0, True = 1 };
     MissingDictionary meDictionaryMissing;
@@ -997,6 +999,9 @@ public:
 
     bool IsInMergedPaste() const { return mbInMergedPaste; }
     void SetInMergedPaste(bool bNew) { mbInMergedPaste = bNew; }
+
+    const SfxItemSet* GetMergedPasteParaAttrs() const { return m_pMergedPasteParaAttrs.get(); }
+    void SetMergedPasteParaAttrs(std::shared_ptr<SfxItemSet> pAttrs) { m_pMergedPasteParaAttrs = std::move(pAttrs); }
 
     bool IsInWriting() const { return mbInWriting; }
     void SetInWriting(bool bNew) { mbInWriting = bNew; }

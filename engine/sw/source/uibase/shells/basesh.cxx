@@ -410,9 +410,29 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     if (bMerged)
                     {
                         pDoc->SetInMergedPaste(true);
+                        // Remember the destination paragraph's relevant attributes.
+                        if (SwTextNode* pDestNode = rSh.GetCursor()->GetPoint()->GetNode().GetTextNode())
+                        {
+                            auto pDestAttrs = std::make_shared<SfxItemSet>(pDestNode->GetSwAttrSet());
+                            SfxWhichIter aIter(*pDestAttrs);
+                            for (sal_uInt16 nWhich = aIter.FirstWhich(); nWhich; nWhich = aIter.NextWhich())
+                            {
+                                if (SwTextNode::IsParaItemKeptInMergedPaste(nWhich))
+                                {
+                                    pDestAttrs->ClearItem(nWhich);
+                                }
+                            }
+                            pDoc->SetMergedPasteParaAttrs(std::move(pDestAttrs));
+                        }
                     }
                     comphelper::ScopeGuard g(
-                        [pDoc, bMerged] { if (bMerged) pDoc->SetInMergedPaste(false); });
+                        [pDoc, bMerged] {
+                            if (bMerged)
+                            {
+                                pDoc->SetInMergedPaste(false);
+                                pDoc->SetMergedPasteParaAttrs(nullptr);
+                            }
+                        });
 
                     SwTransferable::Paste(rSh, aDataHelper, nAnchorType, bIgnoreComments, ePasteTable);
 

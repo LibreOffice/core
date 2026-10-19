@@ -5416,6 +5416,11 @@ bool SwTextNode::SetAttr( const SfxItemSet& rSet, std::optional<bool> oInMergedP
                 aFiltered.ClearItem(nWhich);
             }
         }
+        // Propagate the destination paragraph's properties.
+        if (const SfxItemSet* pParaAttrs = GetDoc().GetMergedPasteParaAttrs())
+        {
+            aFiltered.Put(*pParaAttrs);
+        }
     }
 
     HandleSetAttrAtTextNode aHandleSetAttr( *this, aFiltered );

@@ -17,6 +17,7 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/scheduler.hxx>
 #include <sfx2/kit/helper.hxx>
+#include <svl/whiter.hxx>
 #include <test/kitcallback.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/scopeguard.hxx>
@@ -972,6 +973,63 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testMergedPasteJoinedKeepsDestColor)
     const SvxColorItem* pColor = aQuery.GetItemIfSet(RES_CHRATR_COLOR);
     // Without the accompanying fix in place, this test would have failed, the
     // uncolored pasted text had the default black color.
+    CPPUNIT_ASSERT(pColor);
+    CPPUNIT_ASSERT_EQUAL(nOrange, pColor->GetValue());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testMergedPasteMultiParaDestColor)
+{
+    // Given a Writer document with a paragraph that has a non-default font color
+    // and the cursor in the middle of its text:
+    createSwDoc();
+    SwDoc* pDoc = getSwDocShell()->GetDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SfxItemSetFixed<RES_CHRATR_COLOR, RES_CHRATR_COLOR> aColorSet(pWrtShell->GetAttrPool());
+    Color nOrange(0xffcc00);
+    aColorSet.Put(SvxColorItem(nOrange, RES_CHRATR_COLOR));
+    pWrtShell->SetAttrSet(aColorSet);
+    pWrtShell->Insert(u"AAAZZZ"_ustr);
+    pWrtShell->Left(SwCursorSkipMode::Chars, /*bSelect=*/false, 3, /*bBasicCall=*/false);
+
+    // When merged-pasting an HTML snippet that is multiple whole paragraphs:
+    pDoc->SetInMergedPaste(true);
+    // Snapshot the destination's paragraph attrs the way SwBaseShell::ExecClpbrd() does,
+    // since .uno:InsertDoc bypasses SID_PASTE:
+    SwTextNode* pDestNode = pWrtShell->GetCursor()->GetPoint()->GetNode().GetTextNode();
+    CPPUNIT_ASSERT(pDestNode);
+    auto pDestAttrs = std::make_shared<SfxItemSet>(pDestNode->GetSwAttrSet());
+    SfxWhichIter aWhichIter(*pDestAttrs);
+    for (sal_uInt16 nWhich = aWhichIter.FirstWhich(); nWhich; nWhich = aWhichIter.NextWhich())
+    {
+        if (SwTextNode::IsParaItemKeptInMergedPaste(nWhich))
+            pDestAttrs->ClearItem(nWhich);
+    }
+    pDoc->SetMergedPasteParaAttrs(std::move(pDestAttrs));
+    comphelper::ScopeGuard g([pDoc] {
+        pDoc->SetInMergedPaste(false);
+        pDoc->SetMergedPasteParaAttrs(nullptr);
+    });
+    cpo::uno::Sequence<beans::PropertyValue> aArgs
+        = { comphelper::makePropertyValue(u"Name"_ustr, createFileURL(u"merged-paste-multi.html")) };
+    dispatchCommand(mxComponent, u".uno:InsertDoc"_ustr, aArgs);
+
+    // Then the brand-new middle paragraph between the two halves of the
+    // destination also inherits the paragraph's font color:
+    SwTextNode* pMiddleNode = nullptr;
+    SwNodes& rNodes = pDoc->GetNodes();
+    for (SwNodeOffset i(0); i < rNodes.Count(); ++i)
+    {
+        SwTextNode* pCandidate = rNodes[i]->GetTextNode();
+        if (pCandidate && pCandidate->GetText() == u"second")
+        {
+            pMiddleNode = pCandidate;
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(pMiddleNode);
+    const SvxColorItem* pColor = pMiddleNode->GetSwAttrSet().GetItemIfSet(RES_CHRATR_COLOR);
+    // Without the accompanying fix in place, this test would have failed, the
+    // brand-new middle paragraph had the default black color.
     CPPUNIT_ASSERT(pColor);
     CPPUNIT_ASSERT_EQUAL(nOrange, pColor->GetValue());
 }
