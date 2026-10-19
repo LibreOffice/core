@@ -2097,7 +2097,7 @@ AS_IF([test "$ENABLE_QTAPP" = true],
        dnl Locate qtpaths6 for Qt6 tool discovery
        dnl FreeBSD ports keep the Qt tools out of the PATH, under
        dnl /usr/local/lib/qt6/bin.
-       AC_PATH_PROG([QTPATHS6], [qtpaths6], [no],
+       AC_PATH_PROGS([QTPATHS6], [qtpaths6 qtpaths], [no],
              [$PATH$PATH_SEPARATOR/usr/lib/qt6/bin$PATH_SEPARATOR/usr/local/lib/qt6/bin])
        if test "x$QTPATHS6" = "xno"; then
              AC_MSG_ERROR([qtpaths6 not found. Install Qt6 development tools.])

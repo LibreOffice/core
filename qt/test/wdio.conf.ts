@@ -10,7 +10,7 @@
 
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
-import { execSync } from 'child_process';
+import { execSync, spawnSync } from 'child_process';
 import { existsSync } from 'fs';
 
 import { CodaQtServiceLauncher } from './lib/coda-qt.service.js';
@@ -33,9 +33,12 @@ if (!AT_SPI_DRIVER_PATH) {
 	);
 }
 
+
 let QT_WEBENGINE_DRIVER: string;
 try {
-	const qtLibExecDir = execSync('qtpaths6 --query QT_INSTALL_LIBEXECS')
+	const qtpaths = spawnSync('sh', ['-c', 'command -v qtpaths6']).status === 0 ? 'qtpaths6' : 'qtpaths';
+
+	const qtLibExecDir = execSync(`${qtpaths} --query QT_INSTALL_LIBEXECS`)
 		.toString()
 		.trim();
 	QT_WEBENGINE_DRIVER = join(qtLibExecDir, 'webenginedriver');

@@ -38,11 +38,18 @@ if [ -d "$AT_SPI_VENV/bin" ]; then
     export PATH="$AT_SPI_VENV/bin:$PATH"
 fi
 
-check_cmd() { command -v "$1" >/dev/null 2>&1 || { echo "ERROR: $1 not found. $2"; exit 1; }; }
-check_cmd weston        "Install weston."
-check_cmd qtpaths6      "Install Qt 6 development tools (qt6-qtbase-devel)."
-check_cmd flask         "Run: pip install flask (inside the AT-SPI venv)."
-check_cmd node          "Install Node.js >= 18."
+check_cmd() {
+    local name
+    for name in $1; do
+        command -v "$name" >/dev/null 2>&1 && return 0
+    done
+    echo "ERROR: ${1// / or } not found. $2" >&2
+    exit 1
+}
+check_cmd weston        	"Install weston."
+check_cmd "qtpaths6 qtpaths"	"Install Qt 6 development tools (qt6-qtbase-devel)."
+check_cmd flask         	"Run: pip install flask (inside the AT-SPI venv)."
+check_cmd node          	"Install Node.js >= 18."
 
 # Re-exec under setsid so all child processes share one process group.
 # The outer shell kills the entire group on exit
