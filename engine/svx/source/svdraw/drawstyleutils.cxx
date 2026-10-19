@@ -29,6 +29,7 @@
 #include <svx/xlineit0.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xlnwtit.hxx>
+#include <sdgtritm.hxx>
 
 #include <com/sun/star/drawing/FillStyle.hpp>
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -134,6 +135,9 @@ bool canFillColorShowThroughMarked(const SdrMarkList& rMarkList)
             = pMark ? dynamic_cast<const SdrGrafObj*>(pMark->GetMarkedSdrObj()) : nullptr;
 
         if (!pGraphicObject || pGraphicObject->GetGraphic().HasTransparentPixels())
+            return true;
+
+        if (pGraphicObject->GetMergedItem(SDRATTR_GRAFTRANSPARENCE).GetValue() != 0)
             return true;
     }
 

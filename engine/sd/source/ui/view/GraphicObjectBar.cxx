@@ -28,6 +28,8 @@
 #include <svx/graphichelper.hxx>
 
 #include <sfx2/objface.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/viewfrm.hxx>
 
 #include <strings.hrc>
 #include <DrawDocShell.hxx>
@@ -79,6 +81,8 @@ void GraphicObjectBar::Execute( SfxRequest& rReq )
     {
         SvxGrafAttrHelper::ExecuteGrafAttr( rReq, *mpView );
         Invalidate();
+        if (rReq.GetSlot() == SID_ATTR_GRAF_TRANSPARENCE && GetFrame())
+            GetFrame()->GetBindings().Invalidate(SID_ATTR_FILL_COLOR);
     }
 }
 

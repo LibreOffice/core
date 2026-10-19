@@ -18,6 +18,9 @@
  */
 
 #include <sfx2/objface.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/request.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <vcl/EnumContext.hxx>
 #include <sfx2/opengrf.hxx>
 #include <svx/svdograf.hxx>
@@ -80,6 +83,8 @@ void ScGraphicShell::Execute( SfxRequest& rReq )
     {
         SvxGrafAttrHelper::ExecuteGrafAttr( rReq, *pView );
         Invalidate();
+        if (rReq.GetSlot() == SID_ATTR_GRAF_TRANSPARENCE && GetFrame())
+            GetFrame()->GetBindings().Invalidate(SID_ATTR_FILL_COLOR);
     }
 }
 

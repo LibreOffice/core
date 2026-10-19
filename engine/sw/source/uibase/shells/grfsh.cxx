@@ -772,6 +772,8 @@ void SwGrfShell::ExecAttr( SfxRequest const &rReq )
             GetShell().SetAttrSet( aGrfSet );
     }
     GetView().GetViewFrame().GetBindings().Invalidate(rReq.GetSlot());
+    if (rReq.GetSlot() == SID_ATTR_GRAF_TRANSPARENCE)
+        GetView().GetViewFrame().GetBindings().Invalidate(SID_ATTR_FILL_COLOR);
 }
 
 namespace

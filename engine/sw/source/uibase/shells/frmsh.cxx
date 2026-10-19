@@ -1486,7 +1486,12 @@ void SwFrameShell::GetDrawAttrStateTextFrame(SfxItemSet &rSet)
             {
                 const Graphic* pGraphic = rSh.GetGraphic(false);
 
-                if (pGraphic && !pGraphic->HasTransparentPixels())
+                SfxItemSetFixed<RES_GRFATR_TRANSPARENCY, RES_GRFATR_TRANSPARENCY> aGrfSet(
+                    rSh.GetAttrPool());
+                rSh.GetCurAttr(aGrfSet);
+
+                if (pGraphic && !pGraphic->HasTransparentPixels()
+                    && aGrfSet.Get(RES_GRFATR_TRANSPARENCY).GetValue() == 0)
                     rSet.DisableItem(nFillColorWhich);
             }
         }

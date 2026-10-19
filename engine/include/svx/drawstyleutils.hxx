@@ -47,10 +47,11 @@ SVXCORE_DLLPUBLIC void applyBareLineAttributesToMarked(SdrView& rView, const Sfx
  * Whether a fill colour could ever be seen on the objects marked in
  * @p rMarkList.
  *
- * A picture without a single transparent pixel covers its whole area, so a fill
- * behind it can never show. Only a selection made up entirely of such pictures
- * answers false; anything else - an empty selection, a shape, a picture with
- * some transparency - keeps the fill colour meaningful.
+ * A picture without a single transparent pixel and with no transparency of
+ * its own covers its whole area, so a fill behind it can never show. Only a
+ * selection made up entirely of such pictures answers false; anything else -
+ * an empty selection, a shape, a picture with some transparency - keeps the
+ * fill colour meaningful.
  */
 SVXCORE_DLLPUBLIC bool canFillColorShowThroughMarked(const SdrMarkList& rMarkList);
 }
