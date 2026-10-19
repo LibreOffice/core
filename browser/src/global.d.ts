@@ -455,7 +455,7 @@ interface Window {
 	bundlejsLoaded: boolean;
 	canvasSlideshowEnabled: boolean;
 	remoteLinksEnabled: boolean;
-	deeplEnabled: boolean;
+	translationEnabled: boolean;
 	documentSigningEnabled: boolean;
 	deviceFormFactor?: string;
 	enableAccessibility: boolean;

@@ -295,7 +295,7 @@ class InitializerBase {
 		window.uiDefaults = {};
 		window.useStatusbarSaveIndicator = false;
 		window.checkFileInfoOverride = {};
-		window.deeplEnabled = false;
+		window.translationEnabled = false;
 		// Match COOL's ai.ethical_rating_message default (true).
 		window.aiEthicalRatingMessage = true;
 		// Match COOL's ai.show_ai_sidebar default (false).
@@ -490,7 +490,7 @@ class BrowserInitializer extends InitializerBase {
 		if (element.dataset.defaultZoom)
 			window.uiDefaults['defaultZoom'] = element.dataset.defaultZoom;
 		window.checkFileInfoOverride = element.dataset.checkFileInfoOverride;
-		window.deeplEnabled = element.dataset.deeplEnabled.toLowerCase().trim() === "true";
+		window.translationEnabled = element.dataset.translationEnabled.toLowerCase().trim() === "true";
 		window.aiEthicalRatingMessage = element.dataset.aiEthicalRatingMessage.toLowerCase().trim() === "true";
 		window.showAISidebar = element.dataset.showAiSidebar.toLowerCase().trim() === "true";
 		window.showAINotebookbar = element.dataset.showAiNotebookbar.toLowerCase().trim() === "true";
@@ -592,6 +592,10 @@ class MacOSAppInitializer extends MobileAppInitializer {
 		super();
 
 		window.ThisIsTheMacOSApp = true;
+		// No server to switch translation on: the user sets a provider up
+		// in the Options dialog, and the engine keeps the command disabled
+		// until one is.
+		window.translationEnabled = true;
 		window.postMobileMessage = function(msg) { return window.webkit.messageHandlers.lok.postMessage(msg); };
 		window.postMobileCall    = window.postMobileMessage;
 		window.postMobileError   = function(msg) { return window.webkit.messageHandlers.error.postMessage(msg); };
@@ -606,6 +610,10 @@ class WindowsAppInitializer extends MobileAppInitializer {
 		super();
 
 		window.ThisIsTheWindowsApp = true;
+		// No server to switch translation on: the user sets a provider up
+		// in the Options dialog, and the engine keeps the command disabled
+		// until one is.
+		window.translationEnabled = true;
 		window.postMobileMessage = function(msg) { window.chrome.webview.postMessage('MSG ' + msg); };
 
 		// Here, and elsewhere, things would be nicer if we just used JSON for all our
@@ -717,6 +725,10 @@ class QtAppInitializer extends MobileAppInitializer {
 	constructor() {
 		super();
 		window.ThisIsTheQtApp = true;
+		// No server to switch translation on: the user sets a provider up
+		// in the Options dialog, and the engine keeps the command disabled
+		// until one is.
+		window.translationEnabled = true;
 
 		const messageQueue = [];
 

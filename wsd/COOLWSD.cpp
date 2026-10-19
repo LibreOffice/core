@@ -2372,12 +2372,13 @@ void COOLWSD::innerInitialize(Poco::Util::Application& self)
 #endif
 
 #if !MOBILEAPP
-    // The remote sentence checkers. The kit reads them from the environment,
-    // one cluster of variables per checker. The apps have no server
-    // configuration: their checkers are set up in the settings dialog alone,
-    // and nothing here must look like an administrator's choice to the kit.
-    const auto exportRemoteChecker = [&conf](const std::string& block, const char* prefix,
-                                             const std::vector<std::pair<const char*, const char*>>& keys)
+    // The remote sentence checkers and the translation providers. The kit
+    // reads them from the environment, one cluster of variables per block.
+    // The apps have no server configuration: their services are set up in
+    // the settings dialog alone, and nothing here must look like an
+    // administrator's choice to the kit.
+    const auto exportKitEnvBlock = [&conf](const std::string& block, const char* prefix,
+                                           const std::vector<std::pair<const char*, const char*>>& keys)
     {
         for (const std::pair<const char*, const char*>& key : keys)
         {
@@ -2405,9 +2406,9 @@ void COOLWSD::innerInitialize(Poco::Util::Application& self)
         { "ssl_verification", "SSL_VERIFICATION" },
         { "allow_user_settings", "ALLOW_USER_SETTINGS" },
     };
-    exportRemoteChecker("languagetool", "LANGUAGETOOL", serverKeys);
+    exportKitEnvBlock("languagetool", "LANGUAGETOOL", serverKeys);
     // The Duden Korrekturserver takes an API token, not an account name.
-    exportRemoteChecker("duden", "DUDEN",
+    exportKitEnvBlock("duden", "DUDEN",
                         { { "enabled", "ENABLED" },
                           { "base_url", "BASEURL" },
                           { "api_key", "APIKEY" },
@@ -2418,7 +2419,7 @@ void COOLWSD::innerInitialize(Poco::Util::Application& self)
                           { "message_level", "MESSAGE_LEVEL" },
                           { "property_sets", "PROPERTY_SETS" },
                           { "dictionaries", "DICTIONARIES" } });
-    exportRemoteChecker("grammalecte", "GRAMMALECTE",
+    exportKitEnvBlock("grammalecte", "GRAMMALECTE",
                         { { "enabled", "ENABLED" },
                           { "base_url", "BASEURL" },
                           { "ssl_verification", "SSL_VERIFICATION" },
@@ -2445,13 +2446,23 @@ void COOLWSD::innerInitialize(Poco::Util::Application& self)
         }
         setenv("LANGUAGETOOL_ENABLED", "false", 1);
     }
-#endif
 
-    // DeepL configuration
-    const std::string apiURL = ConfigUtil::getConfigValue<std::string>(conf, "deepl.api_url", "");
-    const std::string authKey = ConfigUtil::getConfigValue<std::string>(conf, "deepl.auth_key", "");
-    setenv("DEEPL_API_URL", apiURL.c_str(), 1);
-    setenv("DEEPL_AUTH_KEY", authKey.c_str(), 1);
+    // The translation providers, the same way: the apps have no server
+    // configuration, and their users set up a provider in the settings
+    // dialog alone.
+    exportKitEnvBlock("translation", "TRANSLATION", { { "provider", "PROVIDER" } });
+    exportKitEnvBlock("deepl", "DEEPL",
+                      { { "enabled", "ENABLED" },
+                        { "api_url", "API_URL" },
+                        { "auth_key", "AUTH_KEY" },
+                        { "allow_user_settings", "ALLOW_USER_SETTINGS" } });
+    exportKitEnvBlock("libretranslate", "LIBRETRANSLATE",
+                      { { "enabled", "ENABLED" },
+                        { "base_url", "BASE_URL" },
+                        { "api_key", "API_KEY" },
+                        { "ssl_verification", "SSL_VERIFICATION" },
+                        { "allow_user_settings", "ALLOW_USER_SETTINGS" } });
+#endif
 
 #if !MOBILEAPP
     const std::string helpUrl = ConfigUtil::getConfigValue<std::string>(conf, "help_url", HELP_URL);

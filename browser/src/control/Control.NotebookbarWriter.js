@@ -2341,7 +2341,7 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 				'command': '.uno:LanguageMenu',
 				'accessibility': { focusBack: false, combination: 'ZL', de: null }
 			},
-			window.deeplEnabled ?
+			window.translationEnabled ?
 				{
 					'id': 'review-translate',
 					'type': 'bigtoolitem',

@@ -91,6 +91,7 @@ const Util::UnorderedStringMap<std::string> DefAppConfig = {
     { "child_root_path[@relative]", "true" },
     { "child_root_path", "jails" },
     { "comment_avatar", "" },
+    { "deepl.allow_user_settings", "false" },
     { "deepl.api_url", "" },
     { "deepl.auth_key", "" },
     { "deepl.enabled", "false" },
@@ -147,6 +148,11 @@ const Util::UnorderedStringMap<std::string> DefAppConfig = {
     { "indirection_endpoint.migration_timeout_secs", "180" },
     { "indirection_endpoint.server_name", "" },
     { "indirection_endpoint.url", "" },
+    { "libretranslate.allow_user_settings", "false" },
+    { "libretranslate.api_key", "" },
+    { "libretranslate.base_url", "" },
+    { "libretranslate.enabled", "false" },
+    { "libretranslate.ssl_verification", "true" },
     { "languagetool.allow_user_settings", "false" },
     { "languagetool.api_key", "" },
     { "languagetool.base_url", "" },
@@ -217,6 +223,7 @@ const Util::UnorderedStringMap<std::string> DefAppConfig = {
     { "quarantine_files.max_versions_to_maintain", "5" },
     { "quarantine_files.path", "" },
     { "quarantine_files[@enable]", "false" },
+    { "translation.provider", "" },
     { "view_mode.file_extensions", "" },
     { "remote_asset_config.url", "" },
     { "remote_config.remote_url", "" },
@@ -503,7 +510,8 @@ std::string getLoggableConfig(const Poco::Util::AbstractConfiguration& config)
             if (pair.first == "admin_console.username" || pair.first == "admin_console.password" ||
                 pair.first == "admin_console.secure_password" ||
                 pair.first == "languagetool.api_key" || pair.first == "duden.api_key" ||
-                pair.first == "deepl.auth_key" || pair.first == "remote_links.chain_secret" ||
+                pair.first == "deepl.auth_key" || pair.first == "libretranslate.api_key" ||
+                pair.first == "remote_links.chain_secret" ||
                 pair.first == "ai.api_key" || pair.first == "ai.image_api_key" ||
                 pair.first == "logging.anonymize.anonymization_salt" || pair.first == "support_key")
             {

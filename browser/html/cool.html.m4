@@ -310,7 +310,7 @@ m4_ifelse(APP, [true],
         ]
       )
       data-copyright-year = _YEAR_
-      data-deepl-enabled = "%DEEPL_ENABLED%"
+      data-translation-enabled = "%TRANSLATION_ENABLED%"
       data-default-zoom = "%DEFAULT_ZOOM%"
       data-document-signing-enabled = "%DOCUMENT_SIGNING_ENABLED%"
       data-enable-accessibility = "%ENABLE_ACCESSIBILITY%"

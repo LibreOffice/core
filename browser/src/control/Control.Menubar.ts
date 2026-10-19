@@ -420,7 +420,7 @@ class Menubar extends window.L.Control {
 			{name: _UNO('.uno:ToolsMenu', 'text'), id: 'tools', type: 'menu', accessibility: {combination: 'MT'}, menu: [
 				{uno: '.uno:SpellingAndGrammarDialog'},
 				{uno: '.uno:SpellOnline'},
-				window.deeplEnabled ?
+				window.translationEnabled ?
 					{
 						uno: '.uno:Translate'
 					}: {},
@@ -1211,7 +1211,7 @@ class Menubar extends window.L.Control {
 			{id: 'watermark', uno: '.uno:Watermark'},
 			{name: _('Page Setup'), id: 'pagesetup', type: 'action'},
 			{uno: '.uno:WordCountDialog'},
-			window.deeplEnabled ?
+			window.translationEnabled ?
 				{
 					uno: '.uno:Translate'
 				} : {},

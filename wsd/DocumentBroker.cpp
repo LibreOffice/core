@@ -2307,8 +2307,10 @@ const std::vector<std::string>& getUploadableXcuPaths()
         // GrammarChecking/LanguageTool, GrammarChecking/Duden and
         // GrammarChecking/Grammalecte hold the servers, accounts and API
         // keys of the remote checkers, which must not round-trip to the
-        // host. The kit applies them from the user's own xcu, where the
-        // server allows it, but never sends them back.
+        // host. The same goes for the whole Translation subtree, with the
+        // servers and keys of the translation providers. The kit applies
+        // them from the user's own xcu, where the server allows it, but
+        // never sends them back.
         "/org.openoffice.Office.Linguistic/GrammarChecking/SentenceChecking",
     };
     return sPaths;
