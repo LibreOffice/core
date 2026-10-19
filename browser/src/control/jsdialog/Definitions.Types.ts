@@ -337,6 +337,7 @@ interface MenuDefinition extends WidgetJSON {
 	shortcut?: string; // keyboard shortcut to display right-aligned next to the entry
 	separatorAfter?: boolean; // draw a separator below this entry
 	locked?: boolean; // the entry is locked for this user, a click asks to unlock
+	focusHandled?: boolean; // the action moves focus itself, closing the menu leaves it there
 }
 
 interface HtmlContentJson extends WidgetJSON {

@@ -23,6 +23,7 @@ describe(['tagdesktop'], 'Compact view: the document button brings back a hidden
 		cy.cGet('#toolbar-up .documentmenu').should('have.class', 'calc-icon-img');
 
 		cy.cGet('#toolbar-up .documentmenu').click();
+		cy.cGet('#documentmenu-entries [data-filter-text="show menu bar"]').click();
 		helper.processToIdle(this.win);
 
 		cy.cGet('.main-nav').should('be.visible');

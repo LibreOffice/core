@@ -3206,6 +3206,8 @@ class Menubar extends window.L.Control {
 			if ($.inArray(targetId, this._hiddenItems) == -1)
 				this._hiddenItems.push(targetId);
 			$(item).css('display', 'none');
+			if (this._map.topToolbar)
+				this._map.topToolbar.updateDocumentFileMenu();
 			return true;
 		} else {
 			return false;
@@ -3222,6 +3224,8 @@ class Menubar extends window.L.Control {
 			if ($.inArray(targetId, this._hiddenItems) !== -1)
 				this._hiddenItems.splice(this._hiddenItems.indexOf(targetId), 1);
 			$(item).css('display', '');
+			if (this._map.topToolbar)
+				this._map.topToolbar.updateDocumentFileMenu();
 			return true;
 		} else {
 			return false;

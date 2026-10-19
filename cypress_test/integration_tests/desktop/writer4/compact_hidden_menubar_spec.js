@@ -47,10 +47,11 @@ describe(['tagdesktop'], 'Compact view: the document button brings back a hidden
 		cy.cGet('.hidden-overflow-container .documentmenu').should('not.exist');
 	});
 
-	it('brings the menu bar back on click and moves focus to File', function() {
+	it('brings the menu bar back from Show Menu Bar and moves focus to File', function() {
 		hideMenubarFromViewMenu(this.win);
 
 		cy.cGet('#toolbar-up .documentmenu').click();
+		cy.cGet('#documentmenu-entries [data-filter-text="show menu bar"]').click();
 		helper.processToIdle(this.win);
 
 		cy.cGet('.main-nav').should('be.visible');
@@ -59,11 +60,13 @@ describe(['tagdesktop'], 'Compact view: the document button brings back a hidden
 		cy.cGet('#menu-file > a').should('have.focus');
 	});
 
-	it('brings the menu bar back with Enter and moves focus to File', function() {
+	it('brings the menu bar back with Enter, Enter and moves focus to File', function() {
 		hideMenubarFromViewMenu(this.win);
 
 		cy.cGet('#toolbar-up .documentmenu button').focus();
 		cy.cGet('#toolbar-up .documentmenu button').should('have.focus');
+		cy.realPress('Enter');
+		cy.cGet('#documentmenu-entries [data-filter-text="show menu bar"]').should('have.focus');
 		cy.realPress('Enter');
 		helper.processToIdle(this.win);
 
@@ -137,5 +140,49 @@ describe(['tagdesktop'], 'Compact view: the document button brings back a hidden
 				.map(function(link) { return link.firstChild.textContent.trim(); });
 			expect(shown).to.deep.equal(expected);
 		});
+	});
+
+	it('opens a menu with Show Menu Bar and the File entries', function() {
+		hideMenubarFromViewMenu(this.win);
+		cy.cGet('#toolbar-up .documentmenu button').should('have.attr', 'aria-haspopup', 'true');
+		cy.cGet('#toolbar-up .documentmenu button').should('have.attr', 'aria-label', 'File');
+
+		cy.cGet('#toolbar-up .documentmenu').click();
+		cy.cGet('#toolbar-up .documentmenu button').should('have.attr', 'aria-expanded', 'true');
+		cy.cGet('#documentmenu-entries > [role="option"]').first()
+			.should('have.attr', 'data-filter-text', 'show menu bar');
+		cy.cGet('#documentmenu-entries [data-filter-text="show menu bar"] + hr').should('exist');
+
+		cy.getFrameWindow().should(function(win) {
+			var expected = win.app.map.menubar.getFileMenuEntries()
+				.filter(function(entry) { return entry.type !== 'separator'; })
+				.map(function(entry) { return entry.text; });
+			var shown = Array.from(win.document.querySelectorAll('#documentmenu-entries > [role="option"]'))
+				.slice(1)
+				.map(function(entry) { return entry.textContent.trim(); });
+			expect(shown).to.deep.equal(expected);
+		});
+	});
+
+	it('runs a File entry from the menu', function() {
+		hideMenubarFromViewMenu(this.win);
+
+		cy.cGet('#toolbar-up .documentmenu').click();
+		cy.cGet('#documentmenu-entries [data-filter-text="options"]').click();
+
+		cy.cGet('#documentmenu-dropdown').should('not.exist');
+		cy.cGet('.iframe-settings-wrap').should('be.visible');
+	});
+
+	it('offers Show Menu Bar when the integrator hid the menu bar', function() {
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.uiManager.hideMenubar();
+		});
+		helper.processToIdle(this.win);
+
+		cy.cGet('#toolbar-up .documentmenu').click();
+		cy.cGet('#documentmenu-entries [data-filter-text="show menu bar"]').click();
+		helper.processToIdle(this.win);
+		cy.cGet('.main-nav').should('be.visible');
 	});
 });

@@ -134,7 +134,10 @@ function _menubuttonControl(
 					const opensExternal =
 						menuEntry.action.startsWith('exportas-') ||
 						menuEntry.action.startsWith('saveas-');
-					jsdialog.CloseDropdown(dropdownId, opensExternal);
+					jsdialog.CloseDropdown(
+						dropdownId,
+						opensExternal || menuEntry.focusHandled === true,
+					);
 					return true;
 				} else if (eventType === 'selected' && menuEntry && menuEntry.id) {
 					builder.callback(

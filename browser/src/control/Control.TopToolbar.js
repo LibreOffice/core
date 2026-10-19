@@ -96,7 +96,38 @@ class TopToolbar extends JSDialog.Toolbar {
 			return;
 		}
 
+		if (object.id === 'documentmenu' && eventType === 'select') {
+			var entry = this.findDocumentMenuEntry(JSDialog.MenuDefinitions.get('DocumentFileMenu'), data);
+			if (entry && entry.locked)
+				this.map.openUnlockPopup('');
+			else
+				this.map.menubar.executeMenuAction(data);
+			return;
+		}
+
 		return this.builder._defaultCallbackHandler(objectType, eventType, object, data, builder);
+	}
+
+	findDocumentMenuEntry(entries, id) {
+		for (const entry of entries || []) {
+			const found = entry.id === id ? entry : this.findDocumentMenuEntry(entry.items, id);
+			if (found)
+				return found;
+		}
+		return null;
+	}
+
+	getDocumentMenuText() {
+		return window.mode.isCODesktop() ? _('Show Menu Bar') : _UNO('.uno:PickList', this.map.getDocType());
+	}
+
+	updateDocumentFileMenu() {
+		var entries = [{id: 'showmenubar', action: 'showmenubar', text: _('Show Menu Bar'), focusHandled: true}];
+		if (!window.mode.isCODesktop()) {
+			var fileEntries = this.map.menubar ? this.map.menubar.getFileMenuEntries() : [];
+			entries = entries.concat([{type: 'separator'}], fileEntries);
+		}
+		JSDialog.MenuDefinitions.set('DocumentFileMenu', entries);
 	}
 
 	onStyleSelect(e) {
@@ -240,11 +271,7 @@ class TopToolbar extends JSDialog.Toolbar {
 
 		var items = [
 			{type: 'overflowmanager', id: 'overflow-manager-toptoolbar', children: [
-				{type: 'menubutton', id: 'documentmenu', command: 'documentmenu', noLabel: true, image: false, text: _('Show Menu Bar'), mobile: false, tablet: false, visible: false,
-					menu: [
-						{id: 'showmenubar', action: 'showmenubar', text: _('Show Menu Bar')},
-					]
-				},
+				{type: 'menubutton', id: 'documentmenu:DocumentFileMenu', command: 'documentmenu', noLabel: true, image: false, text: this.getDocumentMenuText(), mobile: false, tablet: false, visible: false},
 				{type: 'separator', orientation: 'vertical', id: 'documentmenubreak', mobile: false, tablet: false, visible: false},
 				{type: 'overflowgroup', id: 'save-toptoolbar', children: saveGroup},
 				{type: 'separator', orientation: 'vertical', id: 'savebreak', mobile: false},
@@ -331,6 +358,7 @@ class TopToolbar extends JSDialog.Toolbar {
 
 	create() {
 		this.reset();
+		this.updateDocumentFileMenu();
 
 		var items = this.getToolItems();
 
@@ -376,6 +404,7 @@ class TopToolbar extends JSDialog.Toolbar {
 	}
 
 	updateDocumentMenu() {
+		this.updateDocumentFileMenu();
 		var button = this.getItemElement('documentmenu');
 		if (!button)
 			return;

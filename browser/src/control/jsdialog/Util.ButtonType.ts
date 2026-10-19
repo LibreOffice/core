@@ -177,6 +177,7 @@ function getDropdownButtons() {
 		'.uno:SetBorderStyle',
 		'.uno:XLineColor',
 		'DateAndTimeFunctionsMenu',
+		'documentmenu',
 		'downloadas',
 		'exportas',
 		'FinancialFunctionsMenu',
