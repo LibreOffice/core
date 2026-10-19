@@ -307,7 +307,11 @@ void box2DWorld::createStaticFrameAroundSlide(const ::basegfx::B2DVector& rSlide
 
     b2ChainDef aChainDef = b2DefaultChainDef();
     aChainDef.points = aEdgePoints;
+#if BOX2D_CHECK_VERSION(3, 2)
+    aChainDef.pointCount = 4;
+#else
     aChainDef.count = 4;
+#endif
     aChainDef.isLoop = true;
     b2CreateChain(aBody, &aChainDef);
 #else
@@ -991,8 +995,12 @@ void box2DBody::setDensityAndRestitution(const double fDensity, const double fRe
 #endif
         b2Shape_SetRestitution(aShapeId, static_cast<float>(fRestitution));
     }
-    // without resetting the massdata of the body, density change won't take effect
+        // without resetting the massdata of the body, density change won't take effect
+#if BOX2D_CHECK_VERSION(3, 2)
+    b2Body_UpdateMassFromShapes(*mpBox2DBody);
+#else
     b2Body_ApplyMassFromShapes(*mpBox2DBody);
+#endif
 #else
     // density and restitution have to be set for each fixture of the body individually
     for (b2Fixture* pFixture = mpBox2DBody->GetFixtureList(); pFixture;

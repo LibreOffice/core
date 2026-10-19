@@ -1,13 +1,12 @@
 --- box2d/src/core.h	2026-05-08 15:52:10.437558753 +0200
 +++ box2d/src/core.h	2026-05-08 15:53:32.176900568 +0200
-@@ -72,10 +72,6 @@
- 	#elif defined( B2_CPU_ARM )
- 		#define B2_SIMD_NEON
- 		#define B2_SIMD_WIDTH 4
+@@ -65,9 +65,6 @@
+ 			// and unverifiable performance.
+ 			#define B2_SIMD_NONE
+ 		#endif
 -	#elif defined( B2_CPU_WASM )
 -		#define B2_CPU_WASM
 -		#define B2_SIMD_SSE2
--		#define B2_SIMD_WIDTH 4
  	#else
  		#define B2_SIMD_NONE
- 		#define B2_SIMD_WIDTH 4
+ 	#endif
