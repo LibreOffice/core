@@ -13,19 +13,23 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
 #include <com/sun/star/sdb/XOfficeDatabaseDocument.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
+#include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/XColumnLocate.hpp>
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
+#include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XStatement.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
+#include <comphelper/processfactory.hxx>
 #include <connectivity/predicateinput.hxx>
 
 using namespace ::com::sun::star;
@@ -47,6 +51,9 @@ public:
     void testTdf164328_AliasColumn();
     void testTdf164328_SameRealName();
     void testTdf164328_Aggregate();
+    void testTdf96372_DerivedTableColumns();
+    void testTdf96372_DerivedTableAutoFilter();
+    void testTdf58586_JoinWithDerivedTable();
 
     CPPUNIT_TEST_SUITE(FirebirdTest);
     CPPUNIT_TEST(testEmptyDBConnection);
@@ -59,6 +66,9 @@ public:
     CPPUNIT_TEST(testTdf164328_AliasColumn);
     CPPUNIT_TEST(testTdf164328_SameRealName);
     CPPUNIT_TEST(testTdf164328_Aggregate);
+    CPPUNIT_TEST(testTdf96372_DerivedTableColumns);
+    CPPUNIT_TEST(testTdf96372_DerivedTableAutoFilter);
+    CPPUNIT_TEST(testTdf58586_JoinWithDerivedTable);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -440,6 +450,69 @@ Sequence<Sequence<beans::PropertyValue>> lcl_makeFilter(const OUString& rName, s
     aCondition.Value <<= rValue;
     return { { aCondition } };
 }
+
+// "MASTER" has the rows 1, 2, 3; "DETAIL" has 2, 3 and 1 rows pointing to them via "Number"
+void lcl_createDerivedTableTestTables(const uno::Reference<XConnection>& xConnection)
+{
+    uno::Reference<XStatement> xStmt = xConnection->createStatement();
+    xStmt->execute(u"CREATE TABLE \"MASTER\" ("
+                   " \"ID\" INTEGER NOT NULL PRIMARY KEY,"
+                   " \"Title\" VARCHAR(20))"_ustr);
+    xStmt->execute(u"CREATE TABLE \"DETAIL\" ("
+                   " \"ID\" INTEGER NOT NULL PRIMARY KEY,"
+                   " \"Name\" VARCHAR(20),"
+                   " \"Number\" INTEGER)"_ustr);
+    xStmt->execute(u"INSERT INTO \"MASTER\" VALUES(1, 'One')"_ustr);
+    xStmt->execute(u"INSERT INTO \"MASTER\" VALUES(2, 'Two')"_ustr);
+    xStmt->execute(u"INSERT INTO \"MASTER\" VALUES(3, 'Three')"_ustr);
+    xStmt->execute(u"INSERT INTO \"DETAIL\" VALUES(1, 'a1', 1)"_ustr);
+    xStmt->execute(u"INSERT INTO \"DETAIL\" VALUES(2, 'a2', 1)"_ustr);
+    xStmt->execute(u"INSERT INTO \"DETAIL\" VALUES(3, 'b1', 2)"_ustr);
+    xStmt->execute(u"INSERT INTO \"DETAIL\" VALUES(4, 'b2', 2)"_ustr);
+    xStmt->execute(u"INSERT INTO \"DETAIL\" VALUES(5, 'b3', 2)"_ustr);
+    xStmt->execute(u"INSERT INTO \"DETAIL\" VALUES(6, 'c1', 3)"_ustr);
+    xConnection->commit();
+
+    uno::Reference<sdbcx::XTablesSupplier> xTablesSupplier(xConnection, UNO_QUERY_THROW);
+    uno::Reference<util::XRefreshable> xTablesRefresh(xTablesSupplier->getTables(), UNO_QUERY_THROW);
+    xTablesRefresh->refresh();
+}
+
+uno::Reference<beans::XPropertySet>
+lcl_getComposerColumn(const uno::Reference<XSingleSelectQueryComposer>& xComposer,
+                      const OUString& rColumnName)
+{
+    uno::Reference<container::XNameAccess> xColumns(
+        uno::Reference<sdbcx::XColumnsSupplier>(xComposer, UNO_QUERY_THROW)->getColumns());
+    return uno::Reference<beans::XPropertySet>(xColumns->getByName(rColumnName), UNO_QUERY_THROW);
+}
+
+// like the AutoFilter does: filter by the value of a column in the current row of a row set
+OUString lcl_autoFilter(const uno::Reference<XConnection>& xConnection, const OUString& rQuery,
+                        const OUString& rColumnName, sal_Int32 nValue)
+{
+    uno::Reference<XRowSet> xRowSet(
+        comphelper::getProcessServiceFactory()->createInstance(u"com.sun.star.sdb.RowSet"_ustr),
+        UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xRowSetProps(xRowSet, UNO_QUERY_THROW);
+    xRowSetProps->setPropertyValue(u"ActiveConnection"_ustr, Any(xConnection));
+    xRowSetProps->setPropertyValue(u"CommandType"_ustr, Any(CommandType::COMMAND));
+    xRowSetProps->setPropertyValue(u"Command"_ustr, Any(rQuery));
+    xRowSet->execute();
+
+    uno::Reference<container::XNameAccess> xRowSetColumns(
+        uno::Reference<sdbcx::XColumnsSupplier>(xRowSet, UNO_QUERY_THROW)->getColumns());
+    uno::Reference<beans::XPropertySet> xRowSetColumn(xRowSetColumns->getByName(rColumnName),
+                                                      UNO_QUERY_THROW);
+    bool bFound = false;
+    while (!bFound && xRowSet->next())
+        bFound = xRowSetColumn->getPropertyValue(u"Value"_ustr) == Any(nValue);
+    CPPUNIT_ASSERT_MESSAGE("no row with the value to filter by", bFound);
+
+    uno::Reference<XSingleSelectQueryComposer> xComposer = lcl_createComposer(xConnection, rQuery);
+    xComposer->appendFilterByColumn(xRowSetColumn, true, SQLFilterOperator::EQUAL);
+    return xComposer->getQuery();
+}
 }
 
 /**
@@ -505,6 +578,114 @@ void FirebirdTest::testTdf164328_Aggregate()
 
     CPPUNIT_ASSERT_EQUAL(u"( COUNT( \"ID\" ) > 0 )"_ustr, xComposer->getHavingClause());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3), lcl_countRows(xConnection, xComposer->getQuery()));
+}
+
+/**
+ * tdf#96372, tdf#158453: the columns of a sub query in the FROM clause belong to that sub query,
+ * known by its range variable. Before the fix, the table name came from the driver's result set
+ * metadata (the inner table for Firebird, SYSTEM_SUBQUERY for HSQLDB), so filters and subform
+ * links built from it referred to a table which does not exist in the outer query.
+ */
+void FirebirdTest::testTdf96372_DerivedTableColumns()
+{
+    createTempCopy(u"firebird_empty.odb");
+    uno::Reference<XOfficeDatabaseDocument> xDocument = getDocumentForUrl(maTempFile.GetURL());
+    uno::Reference<XConnection> xConnection = getConnectionForDocument(xDocument);
+    lcl_createDerivedTableTestTables(xConnection);
+
+    const std::pair<OUString, OUString> aQueries[] = {
+        { u"SELECT * FROM ( SELECT \"ID\", \"Name\", \"Number\" FROM \"DETAIL\" ) AS \"a\""_ustr,
+          u"a"_ustr },
+        { u"SELECT \"a\".* FROM ( SELECT \"ID\", \"Name\", \"Number\" FROM \"DETAIL\" ) AS \"a\""_ustr,
+          u"a"_ustr },
+        { u"SELECT \"a\".\"Number\" FROM ( SELECT \"ID\", \"Number\" FROM \"DETAIL\" ) AS \"a\""_ustr,
+          u"a"_ustr },
+        // nested sub queries, like in tdf#158453
+        { u"SELECT \"b\".* FROM ( SELECT \"a\".* FROM ( SELECT \"ID\", \"Number\" FROM \"DETAIL\" ) AS \"a\" ) AS \"b\""_ustr,
+          u"b"_ustr },
+        // the column list after the range variable renames the columns
+        { u"SELECT * FROM ( SELECT \"ID\", \"Name\" FROM \"DETAIL\" ) AS \"a\" ( \"Number\", \"Label\" )"_ustr,
+          u"a"_ustr },
+        // no range variable, so no table name
+        { u"SELECT * FROM ( SELECT \"ID\", \"Name\", \"Number\" FROM \"DETAIL\" )"_ustr,
+          u""_ustr },
+    };
+    for (auto const & [ rQuery, rTableName ] : aQueries)
+    {
+        uno::Reference<XSingleSelectQueryComposer> xComposer = lcl_createComposer(xConnection, rQuery);
+        uno::Reference<beans::XPropertySet> xColumn = lcl_getComposerColumn(xComposer, u"Number"_ustr);
+
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(rQuery.toUtf8().getStr(), rTableName,
+                                     xColumn->getPropertyValue(u"TableName"_ustr).get<OUString>());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(rQuery.toUtf8().getStr(), u"Number"_ustr,
+                                     xColumn->getPropertyValue(u"RealName"_ustr).get<OUString>());
+        CPPUNIT_ASSERT_MESSAGE(rQuery.toUtf8().getStr(),
+                               !xColumn->getPropertyValue(u"Function"_ustr).get<bool>());
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(rQuery.toUtf8().getStr(), DataType::INTEGER,
+                                     xColumn->getPropertyValue(u"Type"_ustr).get<sal_Int32>());
+
+        // a sub query is no table which could be updated
+        uno::Reference<container::XNameAccess> xTables(
+            uno::Reference<sdbcx::XTablesSupplier>(xComposer, UNO_QUERY_THROW)->getTables());
+        CPPUNIT_ASSERT_MESSAGE(rQuery.toUtf8().getStr(), !xTables->getElementNames().hasElements());
+    }
+}
+
+/**
+ * tdf#96372: AutoFilter on a query selecting from a sub query. Before the fix, Firebird rejected
+ * the generated condition on "DETAIL"."Number", or on ""."Number" without range variable.
+ */
+void FirebirdTest::testTdf96372_DerivedTableAutoFilter()
+{
+    createTempCopy(u"firebird_empty.odb");
+    uno::Reference<XOfficeDatabaseDocument> xDocument = getDocumentForUrl(maTempFile.GetURL());
+    uno::Reference<XConnection> xConnection = getConnectionForDocument(xDocument);
+    lcl_createDerivedTableTestTables(xConnection);
+
+    const OUString aQueries[] = {
+        u"SELECT * FROM ( SELECT \"ID\", \"Name\", \"Number\" FROM \"DETAIL\" ) AS \"a\""_ustr,
+        u"SELECT \"a\".* FROM ( SELECT \"ID\", \"Name\", \"Number\" FROM \"DETAIL\" ) AS \"a\""_ustr,
+        u"SELECT * FROM ( SELECT \"ID\", \"Name\", \"Number\" FROM \"DETAIL\" )"_ustr,
+    };
+    for (auto const& rQuery : aQueries)
+    {
+        const OUString sFiltered = lcl_autoFilter(xConnection, rQuery, u"Number"_ustr, 2);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(sFiltered.toUtf8().getStr(), sal_Int32(3),
+                                     lcl_countRows(xConnection, sFiltered));
+    }
+}
+
+/**
+ * tdf#58586: a table joined with a sub query. Before the fix, "*" was only expanded for the
+ * table, and the AutoFilter on the aggregate of the sub query generated an empty table name.
+ */
+void FirebirdTest::testTdf58586_JoinWithDerivedTable()
+{
+    createTempCopy(u"firebird_empty.odb");
+    uno::Reference<XOfficeDatabaseDocument> xDocument = getDocumentForUrl(maTempFile.GetURL());
+    uno::Reference<XConnection> xConnection = getConnectionForDocument(xDocument);
+    lcl_createDerivedTableTestTables(xConnection);
+
+    const OUString sQuery = u"SELECT * FROM \"MASTER\" LEFT OUTER JOIN"
+                            " ( SELECT \"Number\", MAX( \"ID\" ) AS \"LastID\" FROM \"DETAIL\""
+                            " GROUP BY \"Number\" ) AS \"d\" ON \"MASTER\".\"ID\" = \"d\".\"Number\""_ustr;
+    uno::Reference<XSingleSelectQueryComposer> xComposer = lcl_createComposer(xConnection, sQuery);
+
+    uno::Reference<beans::XPropertySet> xColumn = lcl_getComposerColumn(xComposer, u"LastID"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"d"_ustr, xColumn->getPropertyValue(u"TableName"_ustr).get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(u"LastID"_ustr, xColumn->getPropertyValue(u"RealName"_ustr).get<OUString>());
+    CPPUNIT_ASSERT(!xColumn->getPropertyValue(u"Function"_ustr).get<bool>());
+
+    // the columns of the table still belong to it, and it is the only table
+    xColumn = lcl_getComposerColumn(xComposer, u"Title"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"MASTER"_ustr, xColumn->getPropertyValue(u"TableName"_ustr).get<OUString>());
+    uno::Reference<container::XNameAccess> xTables(
+        uno::Reference<sdbcx::XTablesSupplier>(xComposer, UNO_QUERY_THROW)->getTables());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getElementNames().getLength());
+
+    const OUString sFiltered = lcl_autoFilter(xConnection, sQuery, u"LastID"_ustr, 5);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(sFiltered.toUtf8().getStr(), sal_Int32(1),
+                                 lcl_countRows(xConnection, sFiltered));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(FirebirdTest);

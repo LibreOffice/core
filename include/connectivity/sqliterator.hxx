@@ -147,6 +147,7 @@ namespace connectivity
 
         void setSelectColumnName(const OUString& rColumnName, const OUString& rColumnAlias, const OUString& rTableRange, bool bFkt = false, sal_Int32 _nType = css::sdbc::DataType::VARCHAR, bool bAggFkt = false);
         void appendColumns(const OUString& _rTableAlias, const OSQLTable& _rTable);
+        void appendDerivedColumns(const OSQLColumns& rColumns);
         // Other member variables that should be available in the "set" functions
         // can be defined in the derived class. They can be initialized
         // in its constructor and, after the "traverse" routines have been used,
@@ -310,6 +311,18 @@ namespace connectivity
         /** retrieves the parameter columns of the given query
         */
         void    impl_getQueryParameterColumns( const OSQLTable& _rQuery );
+
+        /** analyzes a sub query in the FROM clause, and remembers the columns it provides
+
+            @param  rTableRange
+                the range variable of the sub query, may be empty
+            @param  pQueryExpression
+                the select statement of the sub query
+            @param  rColumnList
+                the list of column names after the range variable, an empty rule if there is none
+        */
+        void    impl_appendDerivedTable( const OUString& rTableRange, const OSQLParseNode* pQueryExpression,
+                                         const OSQLParseNode& rColumnList );
 
         void setOrderByColumnName(const OUString & rColumnName, OUString & rTableRange, bool bAscending);
         void setGroupByColumnName(const OUString & rColumnName, OUString & rTableRange);

@@ -41,6 +41,7 @@
 #include <o3tl/safeint.hxx>
 #include <sal/log.hxx>
 
+#include <algorithm>
 #include <iterator>
 #include <memory>
 #include <utility>
@@ -72,6 +73,15 @@ namespace connectivity
         std::shared_ptr< OSQLTables >   m_pSubTables;   // all tables from sub queries not the tables from the select tables
         std::shared_ptr< QueryNameSet > m_pForbiddenQueryNames;
 
+        // a sub query in the FROM clause (derived table)
+        struct DerivedTable
+        {
+            OUString                        sTableRange;    // range variable, empty if there is none
+            ::rtl::Reference< OSQLColumns > xColumns;       // the columns the sub query provides
+        };
+        using DerivedTables = std::vector< DerivedTable >;
+        DerivedTables                   m_aDerivedTables;   // in the order of appearance
+
         TraversalParts                  m_nIncludeMask;
 
         bool                            m_bIsCaseSensitive;
@@ -102,6 +112,38 @@ namespace connectivity
         }
 
     public:
+        DerivedTables::const_iterator findDerivedTable( std::u16string_view rTableRange ) const
+        {
+            const ::comphelper::UStringMixEqual aCompare( m_bIsCaseSensitive );
+            return std::ranges::find_if( m_aDerivedTables,
+                [&aCompare, rTableRange]( std::u16string_view rRange ) { return aCompare( rRange, rTableRange ); },
+                &DerivedTable::sTableRange );
+        }
+
+        bool hasDerivedTable( std::u16string_view rTableRange ) const
+        {
+            return findDerivedTable( rTableRange ) != m_aDerivedTables.end();
+        }
+
+        /// finds a column of a derived table; if rTableRange is empty, all derived tables are searched
+        Reference< XPropertySet > findDerivedColumn( std::u16string_view rTableRange, std::u16string_view rColumnName ) const
+        {
+            const ::comphelper::UStringMixEqual aCompare( m_bIsCaseSensitive );
+            for (auto const& derivedTable : m_aDerivedTables)
+            {
+                if ( !rTableRange.empty() && !aCompare( derivedTable.sTableRange, rTableRange ) )
+                    continue;
+                for (auto const& xColumn : *derivedTable.xColumns)
+                {
+                    OUString sName;
+                    xColumn->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_NAME ) ) >>= sName;
+                    if ( aCompare( sName, rColumnName ) )
+                        return xColumn;
+                }
+            }
+            return nullptr;
+        }
+
         bool    isQueryAllowed( const OUString& _rQueryName )
         {
             if ( !m_pForbiddenQueryNames )
@@ -188,12 +230,14 @@ void OSQLParseTreeIterator::dispose()
     m_aCreateColumns    = nullptr;
     m_pImpl->m_pTables->clear();
     m_pImpl->m_pSubTables->clear();
+    m_pImpl->m_aDerivedTables.clear();
 }
 
 void OSQLParseTreeIterator::setParseTree(const OSQLParseNode * pNewParseTree)
 {
     m_pImpl->m_pTables->clear();
     m_pImpl->m_pSubTables->clear();
+    m_pImpl->m_aDerivedTables.clear();
 
     m_aSelectColumns = new OSQLColumns();
     m_aGroupColumns = new OSQLColumns();
@@ -346,6 +390,62 @@ void OSQLParseTreeIterator::impl_getQueryParameterColumns( const OSQLTable& _rQu
 
     // copy the parameters of the sub query to our own parameter array
     m_aParameters->insert( m_aParameters->end(), pSubQueryParameterColumns->begin(), pSubQueryParameterColumns->end() );
+}
+
+
+void OSQLParseTreeIterator::impl_appendDerivedTable( const OUString& rTableRange, const OSQLParseNode* pQueryExpression,
+                                                     const OSQLParseNode& rColumnList )
+{
+    OSQLParseTreeIterator aSubQueryIterator( *this, m_rParser, pQueryExpression );
+    aSubQueryIterator.impl_traverse( TraversalParts::SelectColumns );
+    const ::rtl::Reference< OSQLColumns >& rSubQueryColumns = aSubQueryIterator.getSelectColumns();
+
+    // the names of the columns outside the sub query: as inside, unless
+    // "( SELECT ... ) AS <range> ( <column>, ... )" renames them
+    std::vector< OUString > aNames;
+    for (auto const& xSubQueryColumn : *rSubQueryColumns)
+        aNames.push_back( getString( xSubQueryColumn->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_NAME ) ) ) );
+    if ( rColumnList.count() == 3 )
+    {
+        const OSQLParseNode& rNames = *rColumnList.getChild(1);
+        // one name per column: if the counts differ, our analysis of the sub query does not
+        // match what the database returns
+        if ( rNames.count() != aNames.size() )
+            return;
+        for (size_t i = 0; i < aNames.size(); ++i)
+            aNames[i] = rNames.getChild(i)->getTokenValue();
+    }
+
+    ::rtl::Reference< OSQLColumns > aColumns( new OSQLColumns() );
+    for (size_t i = 0; i < rSubQueryColumns->size(); ++i)
+    {
+        const Reference< XPropertySet >& xSubQueryColumn = (*rSubQueryColumns)[i];
+        const OUString& sName = aNames[i];
+
+        // create an outer column build from the sub query
+        rtl::Reference< OParseColumn > pColumn = new OParseColumn(
+            sName,
+            getString( xSubQueryColumn->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_TYPENAME ) ) ),
+            OUString(),
+            OUString(),
+            getINT32( xSubQueryColumn->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_ISNULLABLE ) ) ),
+            getINT32( xSubQueryColumn->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_PRECISION ) ) ),
+            getINT32( xSubQueryColumn->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_SCALE ) ) ),
+            getINT32( xSubQueryColumn->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_TYPE ) ) ),
+            false,
+            getBOOL( xSubQueryColumn->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_ISCURRENCY ) ) ),
+            isCaseSensitive(),
+            OUString(),
+            OUString(),
+            rTableRange );
+        pColumn->setRealName( sName );
+        aColumns->push_back( pColumn );
+    }
+    aSubQueryIterator.dispose();
+
+    // if the sub query could not be analyzed, then we know nothing about it
+    if ( !aColumns->empty() )
+        m_pImpl->m_aDerivedTables.emplace_back( rTableRange, aColumns );
 }
 
 
@@ -576,13 +676,8 @@ const OSQLParseNode* OSQLParseTreeIterator::getTableNode( OSQLTables& _rTables, 
                 if ( SQL_ISRULE( pQueryExpression, select_statement ) )
                 {
                     getSelect_statement( *m_pImpl->m_pSubTables, pQueryExpression );
-                    // TODO: now, we need to setup an OSQLTable from pQueryExpression in some way
-                    //       and stick it in _rTables[rTableRange]. Probably fake it by
-                    //       setting up a full OSQLParseTreeIterator on pQueryExpression
-                    //       and using its m_aSelectColumns
-                    //       This is necessary in stuff like "SELECT * FROM tbl1 INNER JOIN (SELECT foo, bar FROM tbl2) AS tbl3"
-                    //       so that setSelectColumnName() can expand the "*" correctly.
-                    //       See e.g. R_UserAndLastSubscription query of https://bugs.libreoffice.org/attachment.cgi?id=71871
+                    // not a table which could be updated, so keep it out of _rTables
+                    impl_appendDerivedTable( rTableRange, pQueryExpression, *pTableRef->getChild(2) );
                 }
                 else
                 {
@@ -838,7 +933,8 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
     if ( !( m_pImpl->m_nIncludeMask & TraversalParts::SelectColumns ) )
         return true;
 
-    if (!pSelectNode || m_eStatementType != OSQLStatementType::Select || m_pImpl->m_pTables->empty())
+    if (!pSelectNode || m_eStatementType != OSQLStatementType::Select
+        || (m_pImpl->m_pTables->empty() && m_pImpl->m_aDerivedTables.empty()))
     {
         impl_appendError( IParseContext::ErrorCode::General );
         return false;
@@ -1569,12 +1665,32 @@ void OSQLParseTreeIterator::appendColumns(const OUString& _rTableAlias, const OS
     }
 }
 
+void OSQLParseTreeIterator::appendDerivedColumns(const OSQLColumns& rColumns)
+{
+    ::comphelper::UStringMixLess aCompare(isCaseSensitive());
+    std::vector<OUString> aSelectColumnNames = getSelectColumnNames();
+
+    for (auto const& xDerivedColumn : rColumns)
+    {
+        OUString sColumnName = getString(xDerivedColumn->getPropertyValue(OMetaConnection::getPropMap().getNameByIndex(PROPERTY_ID_NAME)));
+        OUString aName(getUniqueColumnName(aSelectColumnNames, sColumnName));
+
+        rtl::Reference<OParseColumn> pColumn = new OParseColumn(xDerivedColumn, isCaseSensitive());
+        pColumn->setName(aName);
+        pColumn->setRealName(sColumnName);
+        m_aSelectColumns->push_back(pColumn);
+        aSelectColumnNames.insert(std::upper_bound(aSelectColumnNames.begin(), aSelectColumnNames.end(), aName, aCompare), aName);
+    }
+}
+
 void OSQLParseTreeIterator::setSelectColumnName(const OUString & rColumnName,const OUString & rColumnAlias, const OUString & rTableRange, bool bFkt, sal_Int32 _nType, bool bAggFkt)
 {
     if(rColumnName.toChar() == '*' && rTableRange.isEmpty())
     {   // SELECT * ...
         for (auto const& table : *m_pImpl->m_pTables)
             appendColumns(table.first, table.second);
+        for (auto const& derivedTable : m_pImpl->m_aDerivedTables)
+            appendDerivedColumns(*derivedTable.xColumns);
     }
     else if( rColumnName.toChar() == '*' && !rTableRange.isEmpty() )
     {   // SELECT <table>.*
@@ -1582,6 +1698,8 @@ void OSQLParseTreeIterator::setSelectColumnName(const OUString & rColumnName,con
 
         if(aFind != m_pImpl->m_pTables->end())
             appendColumns(rTableRange, aFind->second);
+        else if (auto aDerivedTable = m_pImpl->findDerivedTable(rTableRange); aDerivedTable != m_pImpl->m_aDerivedTables.end())
+            appendDerivedColumns(*aDerivedTable->xColumns);
     }
     else if ( rTableRange.isEmpty() )
     {   // SELECT <something> ...
@@ -1611,6 +1729,20 @@ void OSQLParseTreeIterator::setSelectColumnName(const OUString & rColumnName,con
                 pColumn->setRealName(rColumnName);
 
                 break;
+            }
+
+            if ( !xNewColumn.is() )
+            {
+                Reference< XPropertySet > xDerivedColumn = m_pImpl->findDerivedColumn( u"", rColumnName );
+                if ( xDerivedColumn.is() )
+                {
+                    OUString aNewColName(getUniqueColumnName(getSelectColumnNames(), rColumnAlias));
+
+                    rtl::Reference<OParseColumn> pColumn = new OParseColumn(xDerivedColumn,isCaseSensitive());
+                    xNewColumn = pColumn;
+                    pColumn->setName(aNewColName);
+                    pColumn->setRealName(rColumnName);
+                }
             }
 
             if ( !xNewColumn.is() )
@@ -1698,6 +1830,16 @@ void OSQLParseTreeIterator::setSelectColumnName(const OUString & rColumnName,con
                 else
                     bError = true;
             }
+        }
+        else if (Reference< XPropertySet > xDerivedColumn = m_pImpl->findDerivedColumn(rTableRange, rColumnName); xDerivedColumn.is())
+        {
+            OUString aNewColName(getUniqueColumnName(getSelectColumnNames(), rColumnAlias));
+
+            rtl::Reference<OParseColumn> pColumn = new OParseColumn(xDerivedColumn,isCaseSensitive());
+            pColumn->setName(aNewColName);
+            pColumn->setRealName(rColumnName);
+
+            m_aSelectColumns->push_back(pColumn);
         }
         else
             bError = true;
@@ -1956,7 +2098,18 @@ Reference< XPropertySet > OSQLParseTreeIterator::findSelectColumn( std::u16strin
 
 Reference< XPropertySet > OSQLParseTreeIterator::findColumn( const OUString & rColumnName, OUString & rTableRange, bool _bLookInSubTables )
 {
-    Reference< XPropertySet > xColumn = findColumn( *m_pImpl->m_pTables, rColumnName, rTableRange );
+    Reference< XPropertySet > xColumn;
+    // the tables lookup ignores a table range it does not know, so do not let it find the column
+    // in some table when the range is a sub query
+    if ( rTableRange.isEmpty() || !m_pImpl->hasDerivedTable( rTableRange ) )
+        xColumn = findColumn( *m_pImpl->m_pTables, rColumnName, rTableRange );
+    if ( !xColumn.is() )
+    {
+        // a column of a sub query in the FROM clause
+        xColumn = m_pImpl->findDerivedColumn( rTableRange, rColumnName );
+        if ( xColumn.is() )
+            rTableRange = getString( xColumn->getPropertyValue( OMetaConnection::getPropMap().getNameByIndex( PROPERTY_ID_TABLENAME ) ) );
+    }
     if ( !xColumn.is() && _bLookInSubTables )
         xColumn = findColumn( *m_pImpl->m_pSubTables, rColumnName, rTableRange );
     return xColumn;

@@ -1720,12 +1720,15 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
                 ::dbtools::qualifiedNameComponents(m_xMetaData,sTableName,aCatalog,aSchema,aTable,::dbtools::EComposeRule::InDataManipulation);
                 sTableName = ::dbtools::composeTableName( m_xMetaData, aCatalog, aSchema, aTable, true, ::dbtools::EComposeRule::InDataManipulation );
             }
-            else
+            else if ( !sTableName.isEmpty() )
                 sTableName = ::dbtools::quoteName(aQuote,sTableName);
 
             if ( !::comphelper::getBOOL(xColumn->getPropertyValue(u"Function"_ustr)) )
             {
-                aSQL =  sTableName + "." + ::dbtools::quoteName( aQuote, sRealName );
+                // e.g. a column of a sub query without range variable has no table name
+                if ( !sTableName.isEmpty() )
+                    aSQL = sTableName + ".";
+                aSQL.append( ::dbtools::quoteName( aQuote, sRealName ) );
             }
             else
                 aSQL = sRealName;

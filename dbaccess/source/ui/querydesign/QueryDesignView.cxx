@@ -1890,6 +1890,14 @@ namespace
             }
 
             const OSQLTables& aMap = aIterator.getTables();
+            if ( aMap.empty() )
+            {
+                // Unknown tables are already errors of the parse iterator, so without
+                // tables the FROM clause consists of sub queries only. They are not in
+                // getTables(), and there is no table window to show them.
+                eErrorCode = eStatementTooComplex;
+                break;
+            }
             ::comphelper::UStringMixLess aTmp(aMap.key_comp());
             ::comphelper::UStringMixEqual aKeyComp( aTmp.isCaseSensitive() );
 
