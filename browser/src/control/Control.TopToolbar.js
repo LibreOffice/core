@@ -244,7 +244,7 @@ class TopToolbar extends JSDialog.Toolbar {
 				{type: 'separator', orientation: 'vertical', id: 'savebreak', mobile: false},
 				{type: 'overflowgroup', id: 'undo-toptoolbar', children: undoGroup},
 				{type: 'separator', orientation: 'vertical', id: 'redobreak', mobile: false, tablet: false,},
-				{type: 'overflowgroup', id: 'save-toptoolbar', children: printGroup},
+				{type: 'overflowgroup', id: 'print-toptoolbar', children: printGroup},
 				{type: 'separator', orientation: 'vertical', id: 'printbreak', mobile: false},
 				{type: 'overflowgroup', id: 'font-toptoolbar', children: fontGroup},
 				{type: 'separator', orientation: 'vertical', id: 'breakfontsizes', invisible: true, mobile: false, tablet: false},
