@@ -129,7 +129,7 @@ diff -ur builds/posix/make.defaults builds/posix/make.defaults
    FIREBIRD=$(FB_BUILD)
  endif
 -FIREBIRD_LOCK=$(FIREBIRD)
-+FIREBIRD_LOCK=$(shell cygpath -w $(FIREBIRD))
++FIREBIRD_LOCK:=$(shell cygpath -w $(FIREBIRD))
  
  export FIREBIRD
  export FIREBIRD_LOCK
@@ -222,7 +222,7 @@ diff -ur builds/posix/make.defaults builds/posix/make.defaults
  #
 
 -ROOT=$(shell cd ..; pwd)
-+ROOT=$(shell cygpath -m '$(shell cd ..; pwd)')
++ROOT:=$(shell cygpath -m '$(shell cd ..; pwd)')
 
  include     make.defaults
  ifeq ($(CROSS_OUT), Y)
@@ -648,7 +648,7 @@ diff -ur src/misc/makeHeader.cpp src/misc/makeHeader.cpp
  #
  
 -ROOT=$(shell cd ..; pwd)
-+ROOT=$(shell cygpath -m '$(shell cd ..; pwd)')
++ROOT:=$(shell cygpath -m '$(shell cd ..; pwd)')
  
  ifeq ($(IsDeveloper), Y)
    DefaultTarget := Debug
