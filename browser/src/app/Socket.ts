@@ -2602,6 +2602,27 @@ class Socket {
 					msg: errorMessages.diskfull,
 					errorDetail: command.errorDetail,
 				});
+			} else if (command.errorKind === 'accessrevoked') {
+				// The host took this user's access away, after a security label
+				// change. The error ends the session, and the host is told why.
+				this._map.fire('error', { msg: errorMessages.accessrevoked });
+				this._map.fire('postMessage', {
+					msgId: 'Session_Closed',
+					args: { Reason: 'AccessRevoked' },
+				});
+			} else if (command.errorKind === 'accessdowngraded') {
+				// The host lets this user only read the document after a security
+				// label change. Opening it again gives them a read-only view.
+				this._map.fire('error', { msg: errorMessages.accessdowngraded });
+				this._map.fire('postMessage', {
+					msgId: 'Session_Closed',
+					args: { Reason: 'AccessDowngraded' },
+				});
+			} else if (command.errorKind === 'accessunverified') {
+				// The host gave no decision on this user's access after a security
+				// label change, and the server closed the view. Loading the page
+				// again opens the document anew, and the host is asked again.
+				window.location.reload();
 			} else if (command.errorKind === 'unauthorized') {
 				const postMessageObj = {
 					errorType: 'websocketunauthorized',

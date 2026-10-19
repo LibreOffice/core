@@ -404,6 +404,8 @@ interface ErrorMessages {
 	limitreachedprod: string;
 	serviceunavailable: string;
 	unauthorized: string;
+	accessrevoked: string;
+	accessdowngraded: string;
 	verificationerror: string;
 	wrongwopisrc: string;
 	sessionexpiry: string;

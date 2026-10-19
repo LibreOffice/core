@@ -31,6 +31,12 @@ const errorMessages: ErrorMessages = {
 	unauthorized: _(
 		'Unauthorized WOPI host. Please try again later and report to your administrator if the issue persists.',
 	),
+	accessrevoked: _(
+		'You no longer have access to this document. Its security label was changed.',
+	),
+	accessdowngraded: _(
+		'You can no longer edit this document. Its security label was changed. Please open it again to view it.',
+	),
 	verificationerror: _("Authorization error was: '{errormessage}'."),
 	wrongwopisrc: _(
 		'Wrong or missing WOPISrc parameter, please contact support.',
