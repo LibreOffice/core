@@ -483,8 +483,14 @@ static LanguageType GetTargetLanguageType(std::string_view rTargetLang)
     // a known locale falls back to en-US instead, so it is taken as it is.
     LanguageTag aFallbackTag(aTag);
     aFallbackTag.makeFallback();
-    return aFallbackTag.getLanguage() == aTag.getLanguage() ? aFallbackTag.getLanguageType()
-                                                            : aTag.getLanguageType();
+    if (aFallbackTag.getLanguage() != aTag.getLanguage())
+        return aTag.getLanguageType();
+    const LanguageType eType = aFallbackTag.getLanguageType();
+    // zh-Hant has no default locale to fall back to, unlike zh-Hans with zh-CN: it gets the
+    // locale the language list shows it under.
+    if (eType == LANGUAGE_CHINESE_TRADITIONAL_LSO)
+        return LANGUAGE_CHINESE_TRADITIONAL;
+    return eType;
 }
 
 bool TranslateDocumentCancellable(SwWrtShell& rWrtSh, const OString& rTargetLang,

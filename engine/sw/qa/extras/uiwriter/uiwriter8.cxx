@@ -1628,6 +1628,16 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateSetsTargetLanguage)
     // Then the language is Javanese, not the English that unknown languages fall back to:
     aLocale = getProperty<lang::Locale>(getRun(getParagraph(1), 1), u"CharLocale"_ustr);
     CPPUNIT_ASSERT_EQUAL(u"jv"_ustr, aLocale.Language);
+
+    // When translating to traditional Chinese, which has no default locale to fall back to:
+    CPPUNIT_ASSERT(
+        SwTranslateHelper::TranslateDocumentCancellable(*pWrtSh, "ZH-HANT"_ostr, bCancel));
+
+    // Then the Asian language is the locale the language list shows it under, zh-TW, as
+    // simplified Chinese gets zh-CN:
+    aLocale = getProperty<lang::Locale>(getRun(getParagraph(1), 1), u"CharLocaleAsian"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"zh"_ustr, aLocale.Language);
+    CPPUNIT_ASSERT_EQUAL(u"TW"_ustr, aLocale.Country);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateUndo)
