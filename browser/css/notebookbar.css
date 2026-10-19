@@ -428,6 +428,18 @@ label.notebookbar.ui-checkbox-label {
 	padding-left: 0;
 }
 
+/* The labels in the bar get smaller with the window, so fewer groups fold. A popup opened from
+   the bar has room and keeps the full size. */
+.notebookbar-scroll-wrapper .unotoolbutton.notebookbar .unolabel,
+.notebookbar-scroll-wrapper label.notebookbar.ui-checkbox-label {
+	font-size: var(--notebookbar-label-font-size);
+}
+
+.notebookbar-scroll-wrapper .jsdialog-window .unotoolbutton.notebookbar .unolabel,
+.notebookbar-scroll-wrapper .jsdialog-window label.notebookbar.ui-checkbox-label {
+	font-size: var(--header-font-size);
+}
+
 .notebookbar #table-options #chk_empty_row {
 	visibility: hidden;
 }

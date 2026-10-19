@@ -83,6 +83,9 @@
 	--tb-max-fs-u: 16;
 	/* tab font-size preferred value or scaler */
 	--tb-fs-s: 1vw;
+	/* notebookbar button labels, they shrink with the window like the tabs, and their smallest
+	   and largest size follow the default font size of the browser like those of the tabs */
+	--notebookbar-label-font-size: clamp(0.75rem, 1vw, 1rem);
 
 	--default-height: 24px;
 	--default-width: 24px;
