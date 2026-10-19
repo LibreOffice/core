@@ -37,6 +37,8 @@
 #include <svx/xflhtit.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xfltrit.hxx>
+#include <vcl/graph.hxx>
+#include <vcl/GraphicExternalLink.hxx>
 
 using namespace com::sun::star;
 
@@ -66,10 +68,14 @@ void setSvxBrushItemAsFillAttributesToTargetSet(const SvxBrushItem& rBrush, SfxI
         // we have a graphic fill, set fill style
         rToSet.Put(XFillStyleItem(drawing::FillStyle_BITMAP));
 
+        const OUString& rLink = rBrush.GetGraphicLink();
+        if (!rLink.isEmpty() && !rLink.startsWithIgnoreAsciiCase("data:"))
+        {
+            // A linked picture is read when the document's links are updated.
+            rToSet.Put(XFillBitmapItem(OUString(), Graphic(GraphicExternalLink(rLink))));
+        }
         // set graphic (if available)
-        const Graphic* pGraphic = rBrush.GetGraphic(rReferer);
-
-        if(pGraphic)
+        else if (const Graphic* pGraphic = rBrush.GetGraphic(rReferer))
         {
             rToSet.Put(XFillBitmapItem(OUString(), *pGraphic));
         }
