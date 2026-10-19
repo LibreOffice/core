@@ -58,6 +58,10 @@ private:
                            const OUString& rMasterFragmentPath);
     void saveThemeToGrabBag(const oox::drawingml::ThemePtr& pThemePtr, sal_Int32 nThemeIdx);
     void saveColorMapToGrabBag(const oox::drawingml::ClrMapPtr& pClrMapPtr);
+    /// Keeps the placeholders a slide master states for itself, which the model has no place for
+    void saveMasterPlaceholdersToGrabBag(
+        const cpo::uno::Reference<css::drawing::XDrawPage>& rxPage,
+        const std::vector<css::beans::PropertyValue>& rPlaceholders);
     void saveLayoutColorMapToGrabBag(const oox::drawingml::ClrMapPtr& pClrMapPtr,
                                      sal_Int32 nMasterIndex);
     void importCustomSlideShow(std::vector<CustomShow>& rCustomShowList);

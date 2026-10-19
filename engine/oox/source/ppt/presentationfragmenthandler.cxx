@@ -67,6 +67,7 @@
 #include <oox/ole/vbaproject.hxx>
 #include <oox/ppt/pptshape.hxx>
 #include <oox/ppt/presentationfragmenthandler.hxx>
+#include <ppt/pageidentifier.hxx>
 #include <oox/ppt/slidefragmenthandler.hxx>
 #include <oox/ppt/layoutfragmenthandler.hxx>
 #include <oox/ppt/moderncommentsfragmenthandler.hxx>
@@ -392,6 +393,39 @@ void PresentationFragmentHandler::importCustomSlideShow(std::vector<CustomShow>&
     }
 }
 
+namespace
+{
+/** Gathers the placeholders a slide master states for itself.
+
+    A master page of the model stands for one layout and holds what that layout states, so a
+    placeholder the master states and the layout leaves out has nowhere to live. Its name, its
+    index and the place it takes are kept beside the model, in the units the file states them in. */
+void collectMasterPlaceholders(const std::vector<oox::drawingml::ShapePtr>& rShapes,
+                               std::vector<beans::PropertyValue>& rList)
+{
+    for (const auto& pShape : rShapes)
+    {
+        const auto* pPPTShape = dynamic_cast<const PPTShape*>(pShape.get());
+        if (pPPTShape && pPPTShape->getSubType() && pPPTShape->getShapeLocation() == Master)
+        {
+            const cpo::uno::Sequence<beans::PropertyValue> aOne{
+                comphelper::makePropertyValue(u"Type"_ustr, pPPTShape->getSubType()),
+                comphelper::makePropertyValue(
+                    u"Index"_ustr, pPPTShape->getSubTypeIndex().value_or(sal_Int32(-1))),
+                comphelper::makePropertyValue(u"X"_ustr, pShape->getPosition().X),
+                comphelper::makePropertyValue(u"Y"_ustr, pShape->getPosition().Y),
+                comphelper::makePropertyValue(u"Width"_ustr, pShape->getSize().Width),
+                comphelper::makePropertyValue(u"Height"_ustr, pShape->getSize().Height)
+            };
+            rList.push_back(
+                comphelper::makePropertyValue(OUString::number(rList.size()), aOne));
+        }
+
+        collectMasterPlaceholders(pShape->getChildren(), rList);
+    }
+}
+}
+
 void PresentationFragmentHandler::importMasterSlide(const Reference<frame::XModel>& xModel,
                                                     PowerPointImport& rFilter,
                                                     const OUString& rMasterFragmentPath)
@@ -436,6 +470,11 @@ void PresentationFragmentHandler::importMasterSlide(const Reference<frame::XMode
         }
         importSlide( xMasterFragmentHandler, pMasterPersistPtr );
 
+        // What the master states for itself, read before the layout adds its own shapes
+        std::vector<beans::PropertyValue> aMasterPlaceholders;
+        collectMasterPlaceholders(pMasterPersistPtr->getShapes()->getChildren(),
+                                  aMasterPlaceholders);
+
         /* Save the master's clrMap before importing the layouts. A layout's
         clrMapOvr/overrideClrMapping element replaces the shared master persist's
         clrMap with the layout-local override */
@@ -456,11 +495,55 @@ void PresentationFragmentHandler::importMasterSlide(const Reference<frame::XMode
         uno::Reference< beans::XPropertySet > xSet(pMasterPersistPtr->getPage(), uno::UNO_QUERY_THROW);
         xSet->setPropertyValue(u"SlideLayout"_ustr, Any(pMasterPersistPtr->getLayoutFromValueToken()));
 
+        saveMasterPlaceholdersToGrabBag(pMasterPersistPtr->getPage(), aMasterPlaceholders);
+
         oox::drawingml::ThemePtr pTheme = pMasterPersistPtr->getTheme();
         if (pTheme)
         {
             pTheme->addTheme(pMasterPersistPtr->getPage());
         }
+    }
+}
+
+void PresentationFragmentHandler::saveMasterPlaceholdersToGrabBag(
+    const cpo::uno::Reference<drawing::XDrawPage>& rxPage,
+    const std::vector<beans::PropertyValue>& rPlaceholders)
+{
+    if (rPlaceholders.empty())
+        return;
+
+    try
+    {
+        const OUString aPageKey = getPageIdentifier(rxPage);
+        uno::Reference<beans::XPropertySet> xDocProps(getFilter().getModel(), uno::UNO_QUERY);
+        if (aPageKey.isEmpty() || !xDocProps.is())
+            return;
+
+        uno::Reference<beans::XPropertySetInfo> xPropsInfo = xDocProps->getPropertySetInfo();
+        static constexpr OUString aGrabBagPropName = u"InteropGrabBag"_ustr;
+        if (!xPropsInfo.is() || !xPropsInfo->hasPropertyByName(aGrabBagPropName))
+            return;
+
+        comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue(aGrabBagPropName));
+
+        // One entry for every master page, under the identifier the page holds, which stays
+        // the same when the page is renamed and when the pages are numbered differently
+        static constexpr OUString aKey = u"OOXMasterPlaceholders"_ustr;
+        comphelper::SequenceAsHashMap aPerPage;
+        const auto aIter = aGrabBag.find(aKey);
+        if (aIter != aGrabBag.end())
+            aPerPage << aIter->second;
+
+        aPerPage[aPageKey] <<= comphelper::containerToSequence(rPlaceholders);
+
+        aGrabBag[aKey] <<= aPerPage.getAsConstPropertyValueList();
+        xDocProps->setPropertyValue(aGrabBagPropName,
+                                    cpo::uno::Any(aGrabBag.getAsConstPropertyValueList()));
+    }
+    catch (const cpo::uno::Exception&)
+    {
+        SAL_WARN("oox", "oox::ppt::PresentationFragmentHandler::saveMasterPlaceholdersToGrabBag,"
+                        " Failed to save grab bag");
     }
 }
 

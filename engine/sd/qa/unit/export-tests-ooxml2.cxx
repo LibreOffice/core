@@ -1477,7 +1477,10 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testMasterPlaceholderStatesNoPrompt)
     xmlDocUniquePtr pXmlMaster = parseExport(u"ppt/slideMasters/slideMaster1.xml"_ustr);
     assertXPath(pXmlMaster, "/p:sldMaster/p:cSld/p:spTree/p:sp/p:txBody/a:p/a:r", 0);
     // The formatting the master gives its text is stated all the same.
-    assertXPath(pXmlMaster, "/p:sldMaster/p:cSld/p:spTree/p:sp/p:txBody/a:lstStyle/a:lvl1pPr", 1);
+    assertXPath(pXmlMaster,
+                "/p:sldMaster/p:cSld/p:spTree/p:sp[p:nvSpPr/p:nvPr/p:ph/@type='title']"
+                "/p:txBody/a:lstStyle/a:lvl1pPr",
+                1);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf106026)
@@ -1944,16 +1947,18 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf59323_slideFooters)
                              xPropSet->getPropertyValue(u"IsPageNumberVisible"_ustr).get<bool>());
     }
 
-    // Test placeholder indexes
+    // The date, the footer and the slide number are numbered as they are written, past the
+    // numbers the master keeps for the areas it states, so each of them keeps a number of its
+    // own. A slide names the same numbers as its layout.
     xmlDocUniquePtr pXmlDocLayout = parseExport(u"ppt/slideLayouts/slideLayout1.xml"_ustr);
-    assertXPath(pXmlDocLayout, "//p:ph [@type='dt']", "idx", u"1");
-    assertXPath(pXmlDocLayout, "//p:ph [@type='ftr']", "idx", u"2");
-    assertXPath(pXmlDocLayout, "//p:ph [@type='sldNum']", "idx", u"3");
+    assertXPath(pXmlDocLayout, "//p:ph [@type='dt']", "idx", u"5");
+    assertXPath(pXmlDocLayout, "//p:ph [@type='ftr']", "idx", u"6");
+    assertXPath(pXmlDocLayout, "//p:ph [@type='sldNum']", "idx", u"7");
 
     xmlDocUniquePtr pXmlDocSlide1 = parseExport(u"ppt/slides/slide1.xml"_ustr);
-    assertXPath(pXmlDocSlide1, "//p:ph [@type='dt']", "idx", u"1");
-    assertXPath(pXmlDocSlide1, "//p:ph [@type='ftr']", "idx", u"2");
-    assertXPath(pXmlDocSlide1, "//p:ph [@type='sldNum']", "idx", u"3");
+    assertXPath(pXmlDocSlide1, "//p:ph [@type='dt']", "idx", u"5");
+    assertXPath(pXmlDocSlide1, "//p:ph [@type='ftr']", "idx", u"6");
+    assertXPath(pXmlDocSlide1, "//p:ph [@type='sldNum']", "idx", u"7");
 
     // Test if datetime fields have text in them
     // This is needed for backwards compatibility

@@ -858,6 +858,30 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest5, testCool16080_masterKeepsItsPlaceholder
                 "y", u"1825560");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest5, testMasterKeepsThePlaceholdersItStates)
+{
+    // Given a master that states five areas and one layout that states none of them:
+    createSdImpressDoc("pptx/croppedTo0.pptx");
+    save(TestFilter::PPTX);
+
+    // A master page of the model stands for a layout and holds what that layout states, so the
+    // areas the master states have nowhere to live. Without the fix the master was written with
+    // an empty shape tree, and a reader had nothing to inherit from.
+    xmlDocUniquePtr pMaster = parseExport(u"ppt/slideMasters/slideMaster1.xml"_ustr);
+    static constexpr OString aTree("/p:sldMaster/p:cSld/p:spTree"_ostr);
+    assertXPath(pMaster, aTree + "/p:sp/p:nvSpPr/p:nvPr/p:ph[@type='title']", 1);
+    assertXPath(pMaster, aTree + "/p:sp/p:nvSpPr/p:nvPr/p:ph[@type='body']", 1);
+    assertXPath(pMaster, aTree + "/p:sp/p:nvSpPr/p:nvPr/p:ph[@type='dt']", 1);
+    assertXPath(pMaster, aTree + "/p:sp/p:nvSpPr/p:nvPr/p:ph[@type='ftr']", 1);
+    assertXPath(pMaster, aTree + "/p:sp/p:nvSpPr/p:nvPr/p:ph[@type='sldNum']", 1);
+
+    // Each one takes the place the master gave it.
+    assertXPath(pMaster, aTree + "/p:sp[p:nvSpPr/p:nvPr/p:ph/@type='body']/p:spPr/a:xfrm/a:off",
+                "y", u"1825625");
+    assertXPath(pMaster, aTree + "/p:sp[p:nvSpPr/p:nvPr/p:ph/@type='ftr']/p:spPr/a:xfrm/a:off",
+                "x", u"4038600");
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest5, testCool16080_layoutShapesStayOnTheirLayout)
 {
     // Given a deck whose first layout paints the whole slide blue, and a slide on another layout,

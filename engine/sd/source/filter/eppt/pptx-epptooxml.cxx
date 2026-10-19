@@ -50,6 +50,8 @@
 #include <map>
 #include <o3tl/safeint.hxx>
 #include <comphelper/sequenceashashmap.hxx>
+#include <oox/token/tokenmap.hxx>
+#include <map>
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/xmltools.hxx>
@@ -185,7 +187,14 @@ class PowerPointShapeExport : public ShapeExport
     bool                mbMaster;
     /// True while writing a slideMaster part; a slideLayout part also uses PageType::MASTER.
     bool                mbSlideMasterPart = false;
+    /// How many placeholders of each name, such as title or body, the slideMaster part states
+    std::map<OString, sal_Int32> maSlideMasterPlaceholders;
 public:
+    sal_Int32 CountStatedOnSlideMaster(std::string_view aType) const
+    {
+        const auto aIter = maSlideMasterPlaceholders.find(OString(aType));
+        return aIter == maSlideMasterPlaceholders.end() ? 0 : aIter->second;
+    }
     PowerPointShapeExport(FSHelperPtr pFS, ShapeHashMap* pShapeMap, PowerPointExport* pFB);
     void                SetMaster(bool bMaster);
     void                SetPageType(PageType ePageType);
@@ -3317,7 +3326,10 @@ void PowerPointExport::WriteShapeTree(const FSHelperPtr& pFS, PageType ePageType
     if ( ePageType == LAYOUT )
         WriteLayoutContentPlaceholders(aDML);
     if (bSlideMasterPart)
+    {
         WriteMasterOwnPlaceholders(aDML, nMasterNum);
+        WriteMasterStatedPlaceholders(pFS, aDML);
+    }
     pFS->endElementNS(XML_p, XML_spTree);
 }
 
@@ -3359,6 +3371,9 @@ bool PowerPointShapeExport::WritePlaceholder(const Reference< XShape >& xShape, 
 
 ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShape >& xShape, PlaceholderType ePlaceholder)
 {
+    if (mbSlideMasterPart)
+        ++maSlideMasterPlaceholders[OString(getPlaceholderTypeName(ePlaceholder))];
+
     Reference<XPropertySet> xProps(xShape, UNO_QUERY);
     bool bUseBackground(false);
     if (xProps.is() && xProps->getPropertySetInfo()->hasPropertyByName(u"FillUseSlideBackground"_ustr))
@@ -4030,10 +4045,177 @@ void PowerPointExport::WriteMasterOwnPlaceholders(PowerPointShapeExport& rDML,
     }
 }
 
+namespace
+{
+/** The identifier of the page that holds what the import kept.
+
+    A slide takes what the layout it follows kept, so that the two agree and a reader can pair
+    them. The page of a layout is a master page of the model and holds one of its own. The
+    identifier stays the same when a page is renamed. */
+OUString placeholderPageKey(const Reference<css::drawing::XDrawPage>& rxPage)
+{
+    uno::Reference<beans::XPropertySet> xPageProperties(rxPage, uno::UNO_QUERY);
+    uno::Reference<drawing::XMasterPageTarget> xTarget(rxPage, uno::UNO_QUERY);
+    if (xTarget.is() && xTarget->getMasterPage().is())
+        xPageProperties.set(xTarget->getMasterPage(), uno::UNO_QUERY);
+
+    OUString aIdentifier;
+    if (xPageProperties.is()
+        && xPageProperties->getPropertySetInfo()->hasPropertyByName(u"Guid"_ustr))
+        xPageProperties->getPropertyValue(u"Guid"_ustr) >>= aIdentifier;
+    return aIdentifier;
+}
+
+/** The name a master states a placeholder by.
+
+    A layout may call the same thing by another name: the text of a title slide is a subtitle
+    there and the body here, and a centred title is a title. */
+OString masterPlaceholderName(std::string_view aType)
+{
+    if (aType == "ctrTitle")
+        return "title"_ostr;
+    if (aType == "subTitle" || aType == "obj")
+        return "body"_ostr;
+    return OString(aType);
+}
+}
+
+void PowerPointExport::WriteMasterStatedPlaceholders(const FSHelperPtr& pFS,
+                                                     const PowerPointShapeExport& rDML)
+{
+    const OUString aPageKey = placeholderPageKey(mXDrawPage);
+    if (aPageKey.isEmpty() || !mXModel.is()
+        || !mXModel->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
+        return;
+
+    uno::Sequence<beans::PropertyValue> aPlaceholders;
+    try
+    {
+        comphelper::SequenceAsHashMap aGrabBag(
+            mXModel->getPropertyValue(u"InteropGrabBag"_ustr));
+        const auto aEntry = aGrabBag.find(u"OOXMasterPlaceholders"_ustr);
+        if (aEntry == aGrabBag.end())
+            return;
+
+        comphelper::SequenceAsHashMap aPerPage(aEntry->second);
+        const auto aPage = aPerPage.find(aPageKey);
+        if (aPage == aPerPage.end() || !(aPage->second >>= aPlaceholders))
+            return;
+    }
+    catch (const uno::Exception&)
+    {
+        return;
+    }
+
+    std::map<OString, sal_Int32> aStated;
+    for (const beans::PropertyValue& rPlaceholder : aPlaceholders)
+    {
+        uno::Sequence<beans::PropertyValue> aFields;
+        if (!(rPlaceholder.Value >>= aFields))
+            continue;
+
+        comphelper::SequenceAsHashMap aMap(aFields);
+        const OString aType = masterPlaceholderName(
+            OUStringToOString(oox::TokenMap::getUnicodeTokenName(
+                                  aMap.getUnpackedValueOrDefault(u"Type"_ustr, sal_Int32(0))),
+                              RTL_TEXTENCODING_UTF8));
+        if (aType.isEmpty())
+            continue;
+
+        // A master may state several areas of one name, one for each index. The ones anything
+        // else has already stated come first, and the rest are stated here.
+        if (++aStated[aType] <= rDML.CountStatedOnSlideMaster(aType))
+            continue;
+
+        const sal_Int32 nIndex = aMap.getUnpackedValueOrDefault(u"Index"_ustr, sal_Int32(-1));
+        const sal_Int32 nX = aMap.getUnpackedValueOrDefault(u"X"_ustr, sal_Int32(0));
+        const sal_Int32 nY = aMap.getUnpackedValueOrDefault(u"Y"_ustr, sal_Int32(0));
+        const sal_Int32 nWidth = aMap.getUnpackedValueOrDefault(u"Width"_ustr, sal_Int32(0));
+        const sal_Int32 nHeight = aMap.getUnpackedValueOrDefault(u"Height"_ustr, sal_Int32(0));
+
+        pFS->startElementNS(XML_p, XML_sp);
+        pFS->startElementNS(XML_p, XML_nvSpPr);
+        pFS->singleElementNS(XML_p, XML_cNvPr, XML_id, OString::number(GetUniqueId()), XML_name,
+                             "Placeholder " + aType);
+        pFS->startElementNS(XML_p, XML_cNvSpPr);
+        pFS->singleElementNS(XML_a, XML_spLocks, XML_noGrp, "1");
+        pFS->endElementNS(XML_p, XML_cNvSpPr);
+        pFS->startElementNS(XML_p, XML_nvPr);
+        pFS->singleElementNS(XML_p, XML_ph, XML_type, aType, XML_idx,
+                             sax_fastparser::UseIf(OString::number(nIndex), nIndex >= 0));
+        pFS->endElementNS(XML_p, XML_nvPr);
+        pFS->endElementNS(XML_p, XML_nvSpPr);
+        pFS->startElementNS(XML_p, XML_spPr);
+        if (nWidth && nHeight)
+        {
+            pFS->startElementNS(XML_a, XML_xfrm);
+            pFS->singleElementNS(XML_a, XML_off, XML_x, OString::number(nX), XML_y,
+                                 OString::number(nY));
+            pFS->singleElementNS(XML_a, XML_ext, XML_cx, OString::number(nWidth), XML_cy,
+                                 OString::number(nHeight));
+            pFS->endElementNS(XML_a, XML_xfrm);
+        }
+        pFS->endElementNS(XML_p, XML_spPr);
+        pFS->startElementNS(XML_p, XML_txBody);
+        pFS->singleElementNS(XML_a, XML_bodyPr);
+        pFS->singleElementNS(XML_a, XML_lstStyle);
+        pFS->singleElementNS(XML_a, XML_p);
+        pFS->endElementNS(XML_p, XML_txBody);
+        pFS->endElementNS(XML_p, XML_sp);
+    }
+}
+
+const std::set<sal_Int32>& PowerPointExport::GetStatedPlaceholderIndexes()
+{
+    if (moStatedPlaceholderIndexes)
+        return *moStatedPlaceholderIndexes;
+
+    moStatedPlaceholderIndexes.emplace();
+    if (!mXModel.is()
+        || !mXModel->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
+        return *moStatedPlaceholderIndexes;
+
+    try
+    {
+        comphelper::SequenceAsHashMap aGrabBag(mXModel->getPropertyValue(u"InteropGrabBag"_ustr));
+        const auto aEntry = aGrabBag.find(u"OOXMasterPlaceholders"_ustr);
+        if (aEntry != aGrabBag.end())
+        {
+            comphelper::SequenceAsHashMap aPerPage(aEntry->second);
+            for (const auto& rPage : aPerPage)
+            {
+                uno::Sequence<beans::PropertyValue> aPlaceholders;
+                if (!(rPage.second >>= aPlaceholders))
+                    continue;
+                for (const beans::PropertyValue& rPlaceholder : aPlaceholders)
+                {
+                    uno::Sequence<beans::PropertyValue> aFields;
+                    if (!(rPlaceholder.Value >>= aFields))
+                        continue;
+                    comphelper::SequenceAsHashMap aMap(aFields);
+                    const sal_Int32 nIndex
+                        = aMap.getUnpackedValueOrDefault(u"Index"_ustr, sal_Int32(-1));
+                    if (nIndex >= 0)
+                        moStatedPlaceholderIndexes->insert(nIndex);
+                }
+            }
+        }
+    }
+    catch (const uno::Exception&)
+    {
+    }
+
+    return *moStatedPlaceholderIndexes;
+}
+
 sal_Int32 PowerPointExport::GetOrCreatePlaceholderIndex(const cpo::uno::Reference<XShape> &rXShape)
 {
     // One index per shape, however many parts write it: a slide's placeholder pairs with the
     // layout's by type and index, so handing the second writer a fresh number breaks that pair.
+    const std::set<sal_Int32>& rStated = GetStatedPlaceholderIndexes();
+    while (rStated.count(mnPlaceholderIndexMax))
+        ++mnPlaceholderIndexMax;
+
     const auto [aIter, bInserted]
         = maPlaceholderShapeToIndexMap.try_emplace(rXShape, mnPlaceholderIndexMax);
     if (bInserted)

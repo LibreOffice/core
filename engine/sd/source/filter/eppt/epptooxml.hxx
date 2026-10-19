@@ -20,6 +20,8 @@
 #pragma once
 
 #include <oox/core/xmlfilterbase.hxx>
+#include <set>
+#include <optional>
 #include <oox/vml/vmldrawing.hxx>
 #include <oox/export/shapes.hxx>
 #include <unotools/securityoptions.hxx>
@@ -141,12 +143,19 @@ private:
         @returns Placeholder index
     */
     sal_Int32 GetOrCreatePlaceholderIndex(const cpo::uno::Reference<css::drawing::XShape>& rXShape);
+    const std::set<sal_Int32>& GetStatedPlaceholderIndexes();
     cpo::uno::Reference<css::drawing::XShape> GetReferencedPlaceholderXShape(const PlaceholderType eType, PageType ePageType) const;
     void WritePlaceholderReferenceShapes(PowerPointShapeExport& rDML, PageType ePageType);
     /** Writes the master page's content placeholders into the layout they belong on */
     void WriteLayoutContentPlaceholders(PowerPointShapeExport& rDML);
     /** Writes the placeholders a slide master holds that the page standing for it has none of */
     void WriteMasterOwnPlaceholders(PowerPointShapeExport& rDML, sal_uInt32 nMasterNum);
+    /** Writes the placeholders the slide master stated and the model has no place for.
+
+        They are read from what the import kept beside the model, and only the ones that nothing
+        else has written are stated, so the master says where each of its own areas sits. */
+    void WriteMasterStatedPlaceholders(const ::sax_fastparser::FSHelperPtr& pFS,
+                                       const PowerPointShapeExport& rDML);
 
     /// The form controls of the page being written, which go out after its shapes.
     std::vector<cpo::uno::Reference<css::drawing::XShape>> maControlShapes;
@@ -211,6 +220,9 @@ private:
     ::oox::drawingml::ShapeExport::ShapeHashMap maShapeMap;
 
     sal_Int32 mnPlaceholderIndexMax; ///< Last used placeholder index
+    /// The numbers a document states for its own placeholders, gathered the first time one is
+    /// needed. A number in here belongs to a placeholder already, so none is handed out again.
+    std::optional<std::set<sal_Int32>> moStatedPlaceholderIndexes;
     /// Map of placeholder indexes for Master placeholders
     std::unordered_map< cpo::uno::Reference<css::drawing::XShape>, sal_Int32 > maPlaceholderShapeToIndexMap;
 
