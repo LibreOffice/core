@@ -760,7 +760,22 @@ class MouseControl extends CanvasSectionObject {
 		);
 	}
 
+	// A tap outside the open wizard only puts it away, so the cursor stays and a format picked
+	// with nothing selected still applies to the next typed text. A snackbar passes it on.
+	private wizardTakesTheTap(): boolean {
+		if ((<any>window).mode.isDesktop()) return false;
+		const wizard = app.map.uiManager.mobileWizard;
+		if (!wizard || !wizard.isOpen()) return false;
+		const element = document.getElementById('mobile-wizard');
+		return !(element && element.classList.contains('snackbar'));
+	}
+
 	onClick(point: cool.SimplePoint, e: MouseEvent): void {
+		if (this.wizardTakesTheTap()) {
+			app.map.fire('closemobilewizard');
+			return;
+		}
+
 		app.map.fire('closepopups');
 		app.map.fire('editorgotfocus');
 

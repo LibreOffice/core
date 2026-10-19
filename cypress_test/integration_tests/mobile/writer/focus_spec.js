@@ -62,6 +62,34 @@ describe(['tagmobile', 'tagproxy'], 'Focus tests', function() {
 		helper.assertHaveKeyboardInput();
 	});
 
+	it('Tapping the document closes the mobile wizard and keeps the cursor.', function() {
+		mobileHelper.enableEditingMobile();
+		cy.cGet('#document-container').click();
+		helper.assertHaveKeyboardInput();
+		// Typed text moves the cursor away from the start of the paragraph, where a tap on the
+		// top left of the page would put it.
+		helper.typeIntoDocument('abc');
+		cy.getFrameWindow().then((win) => {
+			return helper.processToIdle(win).then(() => {
+				this.cursorBefore = [win.app.file.textCursor.rectangle.x1, win.app.file.textCursor.rectangle.y1];
+			});
+		});
+		mobileHelper.openMobileWizard();
+		helper.assertNoKeyboardInput();
+		// A tap on the part of the document above the wizard.
+		cy.cGet('#document-container').click(20, 20);
+		cy.cGet('#mobile-wizard').should('not.be.visible');
+		cy.cGet('#toolbar-up #mobile_wizard').should('not.have.class', 'selected');
+		// The tap only put the wizard away: the cursor stays and the keyboard is back.
+		helper.assertHaveKeyboardInput();
+		cy.getFrameWindow().then((win) => {
+			return helper.processToIdle(win).then(() => {
+				expect([win.app.file.textCursor.rectangle.x1, win.app.file.textCursor.rectangle.y1])
+					.to.deep.equal(this.cursorBefore);
+			});
+		});
+	});
+
 	it('Focus inside mobile wizard.', function() {
 		// Click on edit button
 		mobileHelper.enableEditingMobile();
