@@ -687,8 +687,7 @@ SdrEndTextEditKind View::SdrEndTextEdit(bool bDontDeleteReally)
         {
             mpViewSh->GetViewShellBase().GetDrawController()->FireSelectionChangeListener();
 
-            if (comphelper::COKit::isActive())
-                KitHelper::notifyOtherViews(&mpViewSh->GetViewShellBase(), COKitCallbackType::VIEW_LOCK, "rectangle", "EMPTY"_ostr);
+            KitHelper::notifyOtherViews(&mpViewSh->GetViewShellBase(), COKitCallbackType::VIEW_LOCK, "rectangle", "EMPTY"_ostr);
 
         }
     }

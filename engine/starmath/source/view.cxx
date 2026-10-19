@@ -2056,11 +2056,10 @@ public:
 
     virtual void dispose() override
     {
-        if (comphelper::COKit::isActive())
-            if (auto pViewShell = GetViewShell_Impl())
-                pViewShell->viewCallback(COKitCallbackType::CURSOR_VISIBLE,
-                                                       OString::boolean(false));
-
+        if (auto pViewShell = GetViewShell_Impl())
+        {
+            pViewShell->viewCallback(COKitCallbackType::CURSOR_VISIBLE, OString::boolean(false));
+        }
         SfxBaseController::dispose();
     }
 

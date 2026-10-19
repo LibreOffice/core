@@ -641,11 +641,8 @@ bool SwView::BeginTextEdit(SdrObject* pObj, SdrPageView* pPV, vcl::Window* pWin,
         {
             pView->SetSelection(aNewSelection);
 
-            if (comphelper::COKit::isActive())
-            {
-                OString sRect = pView->GetOutputArea().toString();
-                KitHelper::notifyOtherViews(this, COKitCallbackType::VIEW_LOCK, "rectangle", sRect);
-            }
+            OString sRect = pView->GetOutputArea().toString();
+            KitHelper::notifyOtherViews(this, COKitCallbackType::VIEW_LOCK, "rectangle", sRect);
         }
     }
 

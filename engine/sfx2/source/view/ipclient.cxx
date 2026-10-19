@@ -418,11 +418,8 @@ void SfxInPlaceClient_Impl::deactivatedInplace()
 
     m_bInPlaceReported = false;
 
-    if ( comphelper::COKit::isActive() )
-    {
-        if ( SfxViewShell* pViewShell = m_pClient->GetViewShell() ) {
-            pViewShell->viewCallback( COKitCallbackType::GRAPHIC_SELECTION, "INPLACE EXIT"_ostr );
-        }
+    if ( SfxViewShell* pViewShell = m_pClient->GetViewShell() ) {
+        pViewShell->viewCallback( COKitCallbackType::GRAPHIC_SELECTION, "INPLACE EXIT"_ostr );
     }
 }
 

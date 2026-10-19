@@ -1233,12 +1233,9 @@ void SwView::Execute(SfxRequest &rReq)
 
             if (pNext)
             {
-                if (comphelper::COKit::isActive())
-                {
-                    sal_uInt32 nRedlineId = pNext->GetId();
-                    OString aPayload(".uno:CurrentTrackedChangeId=" + OString::number(nRedlineId));
-                    viewCallback(COKitCallbackType::STATE_CHANGED, aPayload);
-                }
+                sal_uInt32 nRedlineId = pNext->GetId();
+                OString aPayload(".uno:CurrentTrackedChangeId=" + OString::number(nRedlineId));
+                viewCallback(COKitCallbackType::STATE_CHANGED, aPayload);
 
                 m_pWrtShell->SetInSelect();
             }
@@ -1252,12 +1249,9 @@ void SwView::Execute(SfxRequest &rReq)
 
             if (pPrev)
             {
-                if (comphelper::COKit::isActive())
-                {
-                    sal_uInt32 nRedlineId = pPrev->GetId();
-                    OString aPayload(".uno:CurrentTrackedChangeId=" + OString::number(nRedlineId));
-                    viewCallback(COKitCallbackType::STATE_CHANGED, aPayload);
-                }
+                sal_uInt32 nRedlineId = pPrev->GetId();
+                OString aPayload(".uno:CurrentTrackedChangeId=" + OString::number(nRedlineId));
+                viewCallback(COKitCallbackType::STATE_CHANGED, aPayload);
 
                 m_pWrtShell->SetInSelect();
             }
