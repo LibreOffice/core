@@ -10,6 +10,7 @@
 		1F957DC22BA8229A006C9E78 /* Util-mobile.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1F957DC12BA82296006C9E78 /* Util-mobile.cpp */; };
 		1FCFA28A2B2AF13F007EE2DF /* coolwsd-fork.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 1FCFA2892B2AF13C007EE2DF /* coolwsd-fork.cpp */; };
 		3F3A77D22C59B04000947249 /* global.js in Resources */ = {isa = PBXBuildFile; fileRef = 3F3A77D12C59B04000947249 /* global.js */; };
+		F5298224F045BF70EF05D82D /* app-dark-theme.js in Resources */ = {isa = PBXBuildFile; fileRef = 067F260BDBEA5F447B2019E6 /* app-dark-theme.js */; };
 		3F3B54DD2A3928D100063C01 /* HttpRequest.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 3F3B54DB2A39288500063C01 /* HttpRequest.cpp */; };
 		A5C2FA5A2AC1BB3900265946 /* Simd.cpp in Sources */ = {isa = PBXBuildFile; fileRef = A5C2FA592AC1BB3800265946 /* Simd.cpp */; };
 		A5C2FA5D2AC1BEC500265946 /* DeltaSimd.c in Sources */ = {isa = PBXBuildFile; fileRef = A5C2FA5B2AC1BEC500265946 /* DeltaSimd.c */; };
@@ -140,6 +141,7 @@
 		1F957DC12BA82296006C9E78 /* Util-mobile.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "Util-mobile.cpp"; sourceTree = "<group>"; };
 		1FCFA2892B2AF13C007EE2DF /* coolwsd-fork.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "coolwsd-fork.cpp"; sourceTree = "<group>"; };
 		3F3A77D12C59B04000947249 /* global.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = global.js; path = ../../../browser/dist/global.js; sourceTree = "<group>"; };
+		067F260BDBEA5F447B2019E6 /* app-dark-theme.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = "app-dark-theme.js"; path = "../../../browser/dist/app-dark-theme.js"; sourceTree = "<group>"; };
 		3F3B54DB2A39288500063C01 /* HttpRequest.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = HttpRequest.cpp; sourceTree = "<group>"; };
 		3F3B54DC2A39288500063C01 /* HttpRequest.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = HttpRequest.hpp; sourceTree = "<group>"; };
 		3F3B54DF2A392C9C00063C02 /* Uri.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = Uri.hpp; sourceTree = "<group>"; };
@@ -1613,6 +1615,7 @@
 				BECD983F24336DD400016117 /* device-tablet.css */,
 				BE00F89921396585001CE2D4 /* bundle.js */,
 				3F3A77D12C59B04000947249 /* global.js */,
+				067F260BDBEA5F447B2019E6 /* app-dark-theme.js */,
 				BE00F89E21396585001CE2D4 /* images */,
 				BE00F89D21396585001CE2D4 /* cool-help.html */,
 				BE00F89621396585001CE2D4 /* cool.html */,
@@ -3799,6 +3802,7 @@
 				BE8D85D5214055F3009F1860 /* unorc in Resources */,
 				BE8D85D1214055F3009F1860 /* services.rdb in Resources */,
 				3F3A77D22C59B04000947249 /* global.js in Resources */,
+				F5298224F045BF70EF05D82D /* app-dark-theme.js in Resources */,
 				BE00F8A021396585001CE2D4 /* cool.html in Resources */,
 				BE8D85CA214055F3009F1860 /* offapi.rdb in Resources */,
 				BE8D773A2136762600AC58EA /* Assets.xcassets in Resources */,

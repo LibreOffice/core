@@ -29,6 +29,7 @@
 		BE22529E2CC79BAE00385A9C /* cool-help.html in Resources */ = {isa = PBXBuildFile; fileRef = BE22492F2CC79BAE00385A9C /* cool-help.html */; };
 		BE2253F32CC79BAE00385A9C /* device-desktop.css in Resources */ = {isa = PBXBuildFile; fileRef = BE2249302CC79BAE00385A9C /* device-desktop.css */; };
 		BE22557E2CC79BAE00385A9C /* global.js in Resources */ = {isa = PBXBuildFile; fileRef = BE2249312CC79BAE00385A9C /* global.js */; };
+		3C57435A73314BB693F887FD /* app-dark-theme.js in Resources */ = {isa = PBXBuildFile; fileRef = 1B5C74B92971442CA39F9DEE /* app-dark-theme.js */; };
 		BE2257AD2CC79BAE00385A9C /* bundle.css in Resources */ = {isa = PBXBuildFile; fileRef = BE22492D2CC79BAE00385A9C /* bundle.css */; };
 		BE22AA9C2CC7AE7400385A9C /* images in Resources */ = {isa = PBXBuildFile; fileRef = BE22AA9B2CC7AE7400385A9C /* images */; };
 		BE252C5B2EC6667400349F71 /* SlideCache.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE252C5A2EC6667400349F71 /* SlideCache.cpp */; };
@@ -141,6 +142,7 @@
 		BE22492F2CC79BAE00385A9C /* cool-help.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = "cool-help.html"; path = "../../browser/dist/cool-help.html"; sourceTree = "<group>"; };
 		BE2249302CC79BAE00385A9C /* device-desktop.css */ = {isa = PBXFileReference; lastKnownFileType = text.css; name = "device-desktop.css"; path = "../../browser/dist/device-desktop.css"; sourceTree = "<group>"; };
 		BE2249312CC79BAE00385A9C /* global.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = global.js; path = ../../browser/dist/global.js; sourceTree = "<group>"; };
+		1B5C74B92971442CA39F9DEE /* app-dark-theme.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = "app-dark-theme.js"; path = "../../browser/dist/app-dark-theme.js"; sourceTree = "<group>"; };
 		BE22AA9B2CC7AE7400385A9C /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; name = images; path = ../../browser/dist/images; sourceTree = "<group>"; };
 		AD01AD01AD01AD01AD010001 /* adminIntegratorSettings.html */ = {isa = PBXFileReference; lastKnownFileType = text.html; name = "adminIntegratorSettings.html"; path = "../../browser/dist/adminIntegratorSettings.html"; sourceTree = "<group>"; };
 		AD01AD01AD01AD01AD010002 /* admin-bundle.js */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.javascript; name = "admin-bundle.js"; path = "../../browser/dist/admin-bundle.js"; sourceTree = "<group>"; };
@@ -421,6 +423,7 @@
 				BE2249302CC79BAE00385A9C /* device-desktop.css */,
 				BEF5CE8E2D633CE60006FD77 /* discovery.xml */,
 				BE2249312CC79BAE00385A9C /* global.js */,
+				1B5C74B92971442CA39F9DEE /* app-dark-theme.js */,
 				BE16C9EF2CD51F58005E5960 /* hello.odt */,
 			);
 			name = Resources;
@@ -863,6 +866,7 @@
 				BE22529E2CC79BAE00385A9C /* cool-help.html in Resources */,
 				BE2253F32CC79BAE00385A9C /* device-desktop.css in Resources */,
 				BE22557E2CC79BAE00385A9C /* global.js in Resources */,
+				3C57435A73314BB693F887FD /* app-dark-theme.js in Resources */,
 				BE16C9F02CD51F58005E5960 /* hello.odt in Resources */,
 				BE2257AD2CC79BAE00385A9C /* bundle.css in Resources */,
 				BE22492C2CC79AD700385A9C /* cool.html in Resources */,

@@ -43,6 +43,12 @@ m4_ifelse(APP, [true],
 [<title>MOBILEAPPNAME</title>],
 [<title>Online Editor</title>])
 <meta charset="utf-8">
+m4_dnl# coolwsd sends the Content-Security-Policy as a header with the page it serves. An app loads
+m4_dnl# the page from a local file, so the policy is in this meta tag. It comes before every script
+m4_dnl# and stylesheet, because a meta policy covers only what follows it.
+m4_ifelse(APP, [true], [m4_ifelse(EMSCRIPTENAPP, [true], [],
+[<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' file: m4_ifelse(QTAPP, [true], [qrc: ])'unsafe-eval'; style-src 'self' file:; font-src 'self' file:; img-src 'self' file: data: blob: cool: https://www.collaboraoffice.com/; media-src 'self' file: blob: cool:; connect-src 'self' file: cool: https: wss:; frame-src 'self' file: blob: https:; object-src 'self' file:">
+])])m4_dnl
 m4_ifelse(APP, [true],
 [
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1, user-scalable=no, interactive-widget=resizes-content">
@@ -105,24 +111,11 @@ m4_ifelse(APP,[true],[],
    <link rel="localizations" href="%SERVICE_ROOT%/browser/%VERSION%/l10n/uno-localizations.json" type="application/vnd.oftn.l10n+json"/>]
 )m4_dnl
 m4_dnl# In the browser the loading screen theme is applied server-side (see the
-m4_dnl# %DARK_THEME_ATTR% attribute and the %DARK_THEME_CSS% placeholder below) so
-m4_dnl# that no inline <script> is needed - an inline script would violate the
-m4_dnl# Content-Security-Policy. The apps load cool.html from a local file with no
-m4_dnl# CSP, so there the theme is applied by this script.
+m4_dnl# %DARK_THEME_ATTR% attribute and the %DARK_THEME_CSS% placeholder below). The apps apply
+m4_dnl# it with this script, which is a file of its own because the app Content-Security-Policy
+m4_dnl# above allows no inline script.
 m4_ifelse(APP, [true],
-[<script>
-// Apply dark theme immediately if darkTheme query parameter is present
-(function() {
-	const params = new URLSearchParams(window.location.search);
-	if (params.get('darkTheme') === 'true') {
-		document.documentElement.setAttribute('data-theme', 'dark');
-		const link = document.createElement('link');
-		link.setAttribute('rel', 'stylesheet');
-		link.setAttribute('href', 'color-palette-dark.css');
-		document.head.appendChild(link);
-	}
-})();
-</script>],
+[<script src="app-dark-theme.js"></script>],
 [<!--%DARK_THEME_CSS%-->])
 </head>
 

@@ -3699,6 +3699,7 @@ share/coolwsd/browser/dist/admin/images/Compact.svg
 share/coolwsd/browser/dist/admin/images/Notebookbar.svg
 share/coolwsd/browser/dist/adminIntegratorSettings.html
 share/coolwsd/browser/dist/aichat-sidebar.css
+share/coolwsd/browser/dist/app-dark-theme.js
 share/coolwsd/browser/dist/backstage.css
 share/coolwsd/browser/dist/branding-desktop.css
 share/coolwsd/browser/dist/branding-mobile.css
