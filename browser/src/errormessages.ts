@@ -81,6 +81,7 @@ const errorMessages: ErrorMessages = {
 					'Document cannot be saved due to expired session, please reopen the document to continue.',
 				),
 				savefailed: _('Document cannot be saved.'),
+				saveprecondition: _('The storage refused to save the document.'),
 				renamefailed: _('Document cannot be renamed.'),
 			}
 		: {
@@ -99,6 +100,7 @@ const errorMessages: ErrorMessages = {
 				savefailed: _(
 					'Document cannot be saved, please check your permissions.',
 				),
+				saveprecondition: _('The storage refused to save the document.'),
 				renamefailed: _(
 					'Document cannot be renamed, please check your permissions.',
 				),

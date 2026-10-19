@@ -424,6 +424,7 @@ interface ErrorMessages {
 		savetoolarge: string;
 		saveunauthorized: string;
 		savefailed: string;
+		saveprecondition: string;
 		renamefailed: string;
 		saveasfailed?: string;
 	};

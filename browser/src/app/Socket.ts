@@ -2504,6 +2504,7 @@ class Socket {
 
 			this._map.hideBusy();
 			let storageError: string | undefined = undefined;
+			let storageErrorDetail = command.errorDetail;
 			if (command.errorKind === 'savediskfull') {
 				storageError = errorMessages.storage.savediskfull;
 			} else if (command.errorKind === 'savetoolarge') {
@@ -2514,6 +2515,12 @@ class Socket {
 				storageError = errorMessages.storage.renamefailed;
 			} else if (command.errorKind === 'saveunauthorized') {
 				storageError = errorMessages.storage.saveunauthorized;
+			} else if (command.errorKind === 'saveprecondition') {
+				// The host refused the document and says why: that is the message,
+				// not a technical detail. Ours stands in when it gave none.
+				storageError =
+					storageErrorDetail || errorMessages.storage.saveprecondition;
+				storageErrorDetail = undefined;
 			} else if (command.errorKind === 'saveasfailed') {
 				storageError = errorMessages.storage.saveasfailed;
 			} else if (command.errorKind === 'loadfailed') {
@@ -2545,7 +2552,7 @@ class Socket {
 				// show message to the user in Control.AlertDialog
 				this._map.fire('warn', {
 					msg: storageError,
-					errorDetail: command.errorDetail,
+					errorDetail: storageErrorDetail,
 				});
 
 				// send to wopi handler so we can respond
