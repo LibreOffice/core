@@ -141,14 +141,19 @@ https://gitlab.opencode.de/oci-community/images/zendis/base
 
 Writing aids next to Collabora Online
 
-Two subdirectories run a remote sentence checker beside a Collabora Online
-container, with a compose.yaml and a README on how to configure it:
+Three subdirectories run a remote sentence checker or a translation service
+beside a Collabora Online container, with a compose.yaml and a README on
+how to configure it:
 
 - grammalecte/: Grammalecte, the French grammar checker, built from its
   release archive.
 
 - languagetool/: LanguageTool, the multilingual grammar, style and spelling
   checker, from the collabora/languagetool image.
+
+- libretranslate/: LibreTranslate, the machine translation service behind
+  the Translate command, built from its PyPI release with the models of the
+  chosen languages.
 
 
 Usage

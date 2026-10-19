@@ -1,0 +1,45 @@
+# Collabora Online with a LibreTranslate server beside it. Collabora reaches
+# the translator over a network of its own, which is where the translator
+# stays: it answers anyone who can reach it, with no password.
+#
+#   docker compose up
+#
+# Then open a Writer document and translate it, or a selection of it, with
+# Tools > Translate: the dialog lists the languages the server has models
+# for (see the README on choosing them).
+
+services:
+  collabora:
+    image: collabora/code:latest
+    ports:
+      - "9980:9980"
+    environment:
+      # Your hosts, as for any Collabora Online container.
+      - aliasgroup1=https://my-wopi-host.example.com:443
+      - extra_params=--o:ssl.enable=false --o:ssl.termination=true --o:libretranslate.enabled=true --o:libretranslate.base_url=http://libretranslate:5000
+    networks:
+      - web
+      - translators
+    depends_on:
+      libretranslate:
+        condition: service_healthy
+    restart: unless-stopped
+
+  libretranslate:
+    build:
+      context: .
+      # The languages to build the models for; see the README.
+      # args:
+      #   LIBRETRANSLATE_LANGUAGES: en,de,fr
+    # How many requests are translated at once; a paragraph takes a CPU
+    # core for a few seconds.
+    environment:
+      - LT_THREADS=4
+    networks:
+      - translators
+    restart: unless-stopped
+
+networks:
+  web:
+  translators:
+    internal: true

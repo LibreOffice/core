@@ -1,0 +1,77 @@
+LibreTranslate for Collabora Online
+
+LibreTranslate is a machine translation service that runs on your own
+hardware, with models from the Argos Translate project. Collabora Online
+talks to it over HTTP for the Translate command of Writer, the way it talks
+to DeepL, and replaces the document text, or the selection, with the
+translation. This directory builds the service and shows how to run it next
+to Collabora Online.
+
+Nothing of LibreTranslate is in this repository. The Dockerfile installs
+the release from PyPI while the image builds, checking every package
+against the hashes in requirements.txt, and runs the server as the user
+"libretranslate". LibreTranslate is released under the AGPL 3; the licence
+text is in the installed package. The translation models are fetched from
+the Argos Translate package index while the image builds; the index
+publishes neither hashes nor a licence for them, so check the terms before
+you redistribute an image with the models in it.
+
+Build and try it:
+
+    docker build -t libretranslate docker/libretranslate
+    docker run --rm -p 5000:5000 libretranslate
+    curl -H 'Content-Type: application/json' \
+         -d '{"q":"The house is green.","source":"en","target":"de","format":"text"}' \
+         http://127.0.0.1:5000/translate
+
+The answer is the German sentence. The languages the server has models
+for are listed at http://127.0.0.1:5000/languages.
+
+Running it next to Collabora Online:
+
+    cd docker/libretranslate
+    docker compose up
+
+compose.yaml starts the collabora/code image with the provider enabled and
+pointed at the service, on a network the service shares with nothing else.
+In coolwsd.xml the same two settings are
+
+    <libretranslate>
+        <enabled>true</enabled>
+        <base_url>http://libretranslate:5000</base_url>
+    </libretranslate>
+
+The base URL is the root of the server; the provider appends /translate and
+/languages. One provider translates at a time: with DeepL enabled as well,
+translation.provider in coolwsd.xml says which, and empty takes the first
+enabled one, DeepL before LibreTranslate. allowed_languages in coolwsd.xml
+does not come into it: it limits the local writing aids loaded at start,
+and the Translate dialog lists what the server has.
+
+Every model translates to or from English, so a translation between two
+other languages goes through English. The languages are chosen when the
+image builds, with the LIBRETRANSLATE_LANGUAGES build argument (en,de,fr,
+es,it,nl,pt by default): each direction is a package of some 100 MB, and
+each loaded model takes a few hundred MB of memory. A paragraph takes a
+CPU core for a few seconds; LT_THREADS in compose.yaml says how many are
+translated at once. Collabora Online waits 30 seconds for each one.
+
+The server has no authentication by default and no TLS. Anyone who can
+reach it can send it text, so keep it on an internal network, as
+compose.yaml does, and never on a public address. A server that must be
+reachable more widely can demand a key: start it with LT_API_KEYS=true and
+LT_REQUIRE_API_KEY_SECRET=true, keep its key database on a volume mounted
+at /srv/libretranslate/db, create a key with
+
+    docker compose exec libretranslate /srv/libretranslate/bin/ltmanage keys add 120
+
+(the number is the requests per minute the key allows) and put the key in
+api_key of the libretranslate block of coolwsd.xml.
+
+The server settings show in the Options dialog only where the
+administrator allows it, with allow_user_settings in coolwsd.xml, and only
+while the provider is enabled there. With it, a user may point Collabora
+Online at a server and key of their own.
+
+Collabora Office, the desktop application, has the same provider and is
+configured in its own Options dialog.
