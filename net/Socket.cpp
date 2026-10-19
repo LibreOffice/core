@@ -284,6 +284,34 @@ namespace {
         static std::mutex* pollWakeupsMutex = new std::mutex;
         return *pollWakeupsMutex;
     }
+
+    /// True when a signal handler asked to wake every poll while a thread held the lock of the
+    /// list of polls, and no thread has woken them since.
+    std::atomic<bool> PendingWakeupWorld(false);
+
+    /// Holds the lock of the list of polls. After releasing it, wakes every poll if a signal
+    /// handler asked for that while the lock was held.
+    class PollWakeupsLock
+    {
+        std::unique_lock<std::mutex> _lock;
+
+    public:
+        PollWakeupsLock()
+            : _lock(getPollWakeupsMutex())
+        {
+        }
+
+        ~PollWakeupsLock()
+        {
+            _lock.unlock();
+            while (PendingWakeupWorld.exchange(false))
+            {
+                std::lock_guard<std::mutex> lock(getPollWakeupsMutex());
+                for (const auto& fd : getWakeupsArray())
+                    SocketPoll::wakeup(fd);
+            }
+        }
+    };
 }
 
 SocketPoll::SocketPoll(std::string threadName)
@@ -344,7 +372,7 @@ void SocketPoll::removeFromWakeupArray()
 {
     if (_wakeup[1] != -1)
     {
-        std::lock_guard<std::mutex> lock(getPollWakeupsMutex());
+        PollWakeupsLock lock;
         auto it = std::find(getWakeupsArray().begin(),
                             getWakeupsArray().end(),
                             _wakeup[1]);
@@ -748,9 +776,30 @@ void SocketPoll::transfer(const SocketTransfer& pendingTransfer)
 
 void SocketPoll::wakeupWorld()
 {
-    std::lock_guard<std::mutex> lock(getPollWakeupsMutex());
+    PollWakeupsLock lock;
     for (const auto& fd : getWakeupsArray())
         wakeup(fd);
+}
+
+void SocketPoll::wakeupWorldFromSignal()
+{
+    // Record the request before trying the lock. When a thread holds the lock, that thread wakes
+    // every poll after it releases the lock, also when it is the thread that the signal
+    // interrupted. While this handler holds the lock, it also serves the requests that other
+    // handlers record, and it checks for one more after it releases the lock.
+    PendingWakeupWorld = true;
+    do
+    {
+        std::unique_lock<std::mutex> lock(getPollWakeupsMutex(), std::try_to_lock);
+        if (!lock.owns_lock())
+            return;
+
+        while (PendingWakeupWorld.exchange(false))
+        {
+            for (const auto& fd : getWakeupsArray())
+                wakeup(fd);
+        }
+    } while (PendingWakeupWorld);
 }
 
 // NB. if we just ~Socket we do a shutdown which closes
@@ -836,7 +885,7 @@ void SocketPoll::createWakeups()
     LOG_DBG("Created wakeup FDs for SocketPoll [" << _name << "], rfd: " << _wakeup[0]
                                                   << ", wfd: " << _wakeup[1]);
 
-    std::lock_guard<std::mutex> lock(getPollWakeupsMutex());
+    PollWakeupsLock lock;
     getWakeupsArray().push_back(_wakeup[1]);
 }
 

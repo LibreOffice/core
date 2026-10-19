@@ -370,7 +370,7 @@ void resetTerminationFlags()
         signalLogClose();
 
         if (!hardExit)
-            SocketPoll::wakeupWorld();
+            SocketPoll::wakeupWorldFromSignal();
         else
         {
 #if CODE_COVERAGE
@@ -624,7 +624,7 @@ void resetTerminationFlags()
         }
 
         signalLogClose();
-        SocketPoll::wakeupWorld();
+        SocketPoll::wakeupWorldFromSignal();
     }
 
     static
