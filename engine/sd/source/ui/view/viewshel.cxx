@@ -1339,8 +1339,9 @@ void ViewShell::ImpSidUndo(SfxRequest& rReq)
 
     if(nNumber && pUndoManager)
     {
+        // A number larger than the history holds undoes all it holds.
         sal_uInt16 nCount(pUndoManager->GetUndoActionCount());
-        if(nCount >= nNumber)
+        if(nCount)
         {
             // Every action in the notes pane history comes from this view.
             if (comphelper::COKit::isActive() && !bRepair
@@ -1411,8 +1412,9 @@ void ViewShell::ImpSidRedo(SfxRequest& rReq)
 
     if(nNumber && pUndoManager)
     {
+        // A number larger than the history holds redoes all it holds.
         sal_uInt16 nCount(pUndoManager->GetRedoActionCount());
-        if(nCount >= nNumber)
+        if(nCount)
         {
             // Every action in the notes pane history comes from this view.
             if (comphelper::COKit::isActive() && !bRepair
