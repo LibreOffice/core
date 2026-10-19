@@ -40,10 +40,13 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QMenu>
+#include <QPainter>
 #include <QAction>
 #include <QColor>
 #include <QFontMetrics>
+#include <QFont>
 #include <QFrame>
+#include <QGraphicsDropShadowEffect>
 #include <QLabel>
 #include <QPixmap>
 #include <QStackedWidget>
@@ -87,16 +90,32 @@ constexpr int kLiveViewLimitDelayMilliseconds = 1000;
 constexpr int kViewRestoreDelayMilliseconds = 250;
 // How long the pointer has to rest on a tab before its hover card shows.
 constexpr int kHoverCardDelayMilliseconds = 500;
-// The frame of the image in the hover card, in device independent pixels.
-constexpr int kHoverCardImageWidth = 218;
-constexpr int kHoverCardImageHeight = 170;
+// The frame of the image in the hover card, in device independent pixels. It has the shape of a
+// 16:9 slide.
+constexpr int kHoverCardImageWidth = 240;
+constexpr int kHoverCardImageHeight = 135;
+// The radius of the image corners, as --border-radius, and of the card corners, as a tooltip.
+constexpr int kHoverCardImageRadius = 4;
+constexpr int kHoverCardRadius = 6;
+// The space between the foot of the tab and the top of the card.
+constexpr int kHoverCardGap = 4;
+// The title starts a little in from the edge of the image.
+constexpr int kHoverCardTitleIndent = 2;
+// The blur of the card shadow, as --shadow-subtle, and the transparent margin of the card window
+// that the shadow is drawn in.
+constexpr int kHoverCardShadowBlur = 6;
+constexpr int kHoverCardShadowMargin = 6;
 
-// A CSS colour string from the strip as a colour name Qt style sheets accept, or the fallback
-// when Qt cannot read it.
-QString styleColor(const QString& cssColor, const char* fallback)
+// A CSS colour from the strip, or the fallback when Qt cannot read it. Qt reads the alpha of an
+// #rrggbbaa colour first, as #aarrggbb.
+QColor stripColor(const QString& rgba, const char* fallback)
 {
-    const QColor color = QColor::fromString(cssColor.trimmed());
-    return color.isValid() ? color.name() : QString::fromLatin1(fallback);
+    const auto read = [](const QString& value) {
+        return QColor::fromString(
+            value.size() == 9 ? QLatin1Char('#') + value.right(2) + value.mid(1, 6) : value);
+    };
+    const QColor color = read(rgba);
+    return color.isValid() ? color : read(QLatin1String(fallback));
 }
 
 // The strip page only makes tabs draggable, so the source view identifies a
@@ -127,9 +146,11 @@ TabManager::TabManager(TabbedWindow* window, QWebEngineProfile* profile)
     , _shellBridge(new TabShellBridge(this))
     , _liveViewLimitTimer(new QTimer(this))
     , _viewRestoreTimer(new QTimer(this))
-    , _hoverCard(new QFrame(window, Qt::ToolTip | Qt::FramelessWindowHint))
-    , _hoverCardTitle(new QLabel(_hoverCard))
-    , _hoverCardImage(new QLabel(_hoverCard))
+    , _hoverCard(new QWidget(window, Qt::ToolTip | Qt::FramelessWindowHint))
+    , _hoverCardFrame(new QFrame(_hoverCard))
+    , _hoverCardShadow(new QGraphicsDropShadowEffect(_hoverCardFrame))
+    , _hoverCardTitle(new QLabel(_hoverCardFrame))
+    , _hoverCardImage(new QLabel(_hoverCardFrame))
     , _hoverCardTimer(new QTimer(this))
 {
     _liveViewLimitTimer->setSingleShot(true);
@@ -140,15 +161,30 @@ TabManager::TabManager(TabbedWindow* window, QWebEngineProfile* profile)
     connect(_hoverCardTimer, &QTimer::timeout, this, &TabManager::showHoverCard);
 
     // The card only shows what the pointer rests on, so it never takes focus or clicks.
-    _hoverCard->setObjectName(QStringLiteral("tabHoverCard"));
+    // The window is transparent around the rounded card, so its shadow shows there.
     _hoverCard->setAttribute(Qt::WA_ShowWithoutActivating);
     _hoverCard->setAttribute(Qt::WA_TransparentForMouseEvents);
+    _hoverCard->setAttribute(Qt::WA_TranslucentBackground);
     _hoverCard->setFocusPolicy(Qt::NoFocus);
-    QVBoxLayout* cardLayout = new QVBoxLayout(_hoverCard);
-    cardLayout->setContentsMargins(8, 6, 8, 8);
-    cardLayout->setSpacing(6);
+    QVBoxLayout* windowLayout = new QVBoxLayout(_hoverCard);
+    windowLayout->setContentsMargins(kHoverCardShadowMargin, kHoverCardShadowMargin,
+                                     kHoverCardShadowMargin, kHoverCardShadowMargin);
+    windowLayout->addWidget(_hoverCardFrame);
+    _hoverCardFrame->setObjectName(QStringLiteral("tabHoverCard"));
+    _hoverCardShadow->setBlurRadius(kHoverCardShadowBlur);
+    _hoverCardShadow->setOffset(0, 0);
+    _hoverCardFrame->setGraphicsEffect(_hoverCardShadow);
+    QVBoxLayout* cardLayout = new QVBoxLayout(_hoverCardFrame);
+    cardLayout->setContentsMargins(8, 8, 8, 8);
+    cardLayout->setSpacing(8);
     cardLayout->addWidget(_hoverCardTitle);
     cardLayout->addWidget(_hoverCardImage);
+    // One line of 12px text, as --default-font-size, with a line height of 16px.
+    QFont titleFont = _hoverCardTitle->font();
+    titleFont.setPixelSize(12);
+    _hoverCardTitle->setFont(titleFont);
+    _hoverCardTitle->setFixedHeight(16);
+    _hoverCardTitle->setContentsMargins(kHoverCardTitleIndent, 0, 0, 0);
     // Every card is the same size. An image of another shape is fitted inside and centred.
     _hoverCardImage->setFixedSize(kHoverCardImageWidth, kHoverCardImageHeight);
     _hoverCardImage->setAlignment(Qt::AlignCenter);
@@ -822,16 +858,21 @@ void TabManager::onThumbnailChanged(WebView* wv, bool isFirstThumbnail)
 }
 
 void TabManager::onTabHoverStarted(int tabId, int x, int y, const QString& background,
-                                   const QString& text, const QString& border, bool rightToLeft)
+                                   const QString& text, const QString& border, bool rightToLeft,
+                                   const QString& imageBackground, const QString& shadow)
 {
     _hoverCardTabId = tabId;
     _hoverCardPosition = QPoint(x, y);
     _hoverCardRightToLeft = rightToLeft;
-    _hoverCard->setStyleSheet(
-        QStringLiteral("#tabHoverCard { background: %1; border: 1px solid %3; }"
+    _hoverCardImageBackground = stripColor(imageBackground, "#e8e8e8");
+    _hoverCardShadow->setColor(stripColor(shadow, "#4d4d4d80"));
+    _hoverCardFrame->setStyleSheet(
+        QStringLiteral("#tabHoverCard { background: %1; border: 1px solid %3;"
+                       " border-radius: %4px; }"
                        "#tabHoverCard QLabel { color: %2; background: transparent; }")
-            .arg(styleColor(background, "#f8f9fa"), styleColor(text, "#333333"),
-                 styleColor(border, "#949494")));
+            .arg(stripColor(background, "#f8f9fa").name(), stripColor(text, "#333333").name(),
+                 stripColor(border, "#949494").name())
+            .arg(kHoverCardRadius));
 
     // Moving from one tab to the next while a card is up swaps the card at once.
     if (_hoverCard->isVisible())
@@ -857,21 +898,47 @@ void TabManager::showHoverCard()
         return;
     }
 
+    // An image of another shape is fitted inside the frame and centred on the image background.
+    // The frame has rounded corners.
     const QString title = wv->documentTitle();
     const qreal pixelRatio = _window->devicePixelRatioF();
-    QImage image = wv->thumbnail().scaled(qRound(kHoverCardImageWidth * pixelRatio),
-                                          qRound(kHoverCardImageHeight * pixelRatio),
-                                          Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    image.setDevicePixelRatio(pixelRatio);
-    _hoverCardImage->setPixmap(QPixmap::fromImage(image));
+    const QSize frameSize(qRound(kHoverCardImageWidth * pixelRatio),
+                          qRound(kHoverCardImageHeight * pixelRatio));
+    const QImage image =
+        wv->thumbnail().scaled(frameSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+    QImage framed(frameSize, QImage::Format_ARGB32_Premultiplied);
+    framed.fill(_hoverCardImageBackground);
+    {
+        QPainter painter(&framed);
+        painter.drawImage((frameSize.width() - image.width()) / 2,
+                          (frameSize.height() - image.height()) / 2, image);
+    }
+    QPixmap pixmap(frameSize);
+    pixmap.fill(Qt::transparent);
+    {
+        QPainter painter(&pixmap);
+        painter.setRenderHint(QPainter::Antialiasing);
+        painter.setPen(Qt::NoPen);
+        painter.setBrush(QBrush(framed));
+        const qreal radius = kHoverCardImageRadius * pixelRatio;
+        painter.drawRoundedRect(QRectF(QPointF(0, 0), QSizeF(frameSize)), radius, radius);
+    }
+    pixmap.setDevicePixelRatio(pixelRatio);
+    _hoverCardImage->setPixmap(pixmap);
     _hoverCardTitle->setText(
-        _hoverCardTitle->fontMetrics().elidedText(title, Qt::ElideMiddle, kHoverCardImageWidth));
+        _hoverCardTitle->fontMetrics().elidedText(title, Qt::ElideMiddle,
+                                                  kHoverCardImageWidth - kHoverCardTitleIndent));
     _hoverCard->setAccessibleName(tr("Preview of %1").arg(title));
 
+    // The card stands a little below the tab. The window is larger than the card by the shadow
+    // margin on every side.
     _hoverCard->adjustSize();
     QPoint position = _shellView->mapToGlobal(_hoverCardPosition);
+    position.ry() += kHoverCardGap - kHoverCardShadowMargin;
     if (_hoverCardRightToLeft)
-        position.rx() -= _hoverCard->width();
+        position.rx() -= _hoverCard->width() - kHoverCardShadowMargin;
+    else
+        position.rx() -= kHoverCardShadowMargin;
     _hoverCard->move(position);
     _hoverCard->show();
 }

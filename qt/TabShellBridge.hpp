@@ -40,7 +40,8 @@ public slots:
     // in the strip, which is its right corner when rightToLeft is set. The colours are the
     // strip's theme colours as CSS colour strings.
     void tabHoverStarted(int tabId, int x, int y, const QString& background, const QString& text,
-                         const QString& border, bool rightToLeft);
+                         const QString& border, bool rightToLeft,
+                         const QString& imageBackground, const QString& shadow);
     void tabHoverEnded();
     void debug(const QString& message);
 

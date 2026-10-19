@@ -140,8 +140,29 @@
 		});
 	}
 
+	// A pixel that the browser paints a theme colour into, so any CSS colour form reads back as
+	// its four channels.
+	const colorProbe = document
+		.createElement('canvas')
+		.getContext('2d', { willReadFrequently: true });
+
+	// The theme colour as #rrggbbaa, which also carries an alpha that the palette writes as rgba().
+	function themeColorWithAlpha(style, name) {
+		// A value that the canvas cannot read leaves the probe transparent.
+		colorProbe.clearRect(0, 0, 1, 1);
+		colorProbe.fillStyle = 'transparent';
+		colorProbe.fillStyle = style.getPropertyValue(name).trim();
+		colorProbe.fillRect(0, 0, 1, 1);
+		const channels = colorProbe.getImageData(0, 0, 1, 1).data;
+		return (
+			'#' +
+			Array.from(channels, (c) => c.toString(16).padStart(2, '0')).join('')
+		);
+	}
+
 	// Ask the app for the tab's hover card, placed below the tab and drawn in the strip's
-	// theme colours. The card lines up with the edge of the tab where the tab starts.
+	// theme colours, with the colour around the image and the colour of the card shadow. The
+	// card lines up with the edge of the tab where the tab starts.
 	function startHover(tab, id) {
 		if (!bridge) return;
 		const rect = tab.getBoundingClientRect();
@@ -156,6 +177,8 @@
 			color('--color-main-text'),
 			color('--color-border-dark'),
 			rightToLeft,
+			color('--color-background-dark'),
+			themeColorWithAlpha(style, '--color-box-shadow'),
 		);
 	}
 

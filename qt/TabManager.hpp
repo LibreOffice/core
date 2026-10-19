@@ -13,6 +13,7 @@
 
 #include <Poco/URI.h>
 
+#include <QColor>
 #include <QElapsedTimer>
 #include <QObject>
 #include <QPoint>
@@ -25,6 +26,7 @@
 
 class QEvent;
 class QFrame;
+class QGraphicsDropShadowEffect;
 class QLabel;
 class QStackedWidget;
 class QTimer;
@@ -106,7 +108,8 @@ public:
     // are the bottom corner of the tab where the tab starts, in the strip, which is its right
     // corner when rightToLeft is set. The colours are CSS colour strings.
     void onTabHoverStarted(int tabId, int x, int y, const QString& background,
-                           const QString& text, const QString& border, bool rightToLeft);
+                           const QString& text, const QString& border, bool rightToLeft,
+                           const QString& imageBackground, const QString& shadow);
     void hideHoverCard();
 
 signals:
@@ -194,7 +197,10 @@ private:
     QTimer* _viewRestoreTimer;
 
     // A tooltip window, so it may extend below the strip over the document.
-    QFrame* _hoverCard;
+    // The window is transparent and holds the card with its shadow.
+    QWidget* _hoverCard;
+    QFrame* _hoverCardFrame;
+    QGraphicsDropShadowEffect* _hoverCardShadow;
     QLabel* _hoverCardTitle;
     QLabel* _hoverCardImage;
     // Single-shot, and holds the delay between the pointer resting on a tab and its card.
@@ -205,6 +211,8 @@ private:
     QPoint _hoverCardPosition;
     // The tabs run from right to left, so the card lines up with the right edge of its tab.
     bool _hoverCardRightToLeft = false;
+    // The colour around an image of another shape than the frame.
+    QColor _hoverCardImageBackground;
 
     // One drag at a time, so process-wide; the QPointers self-null if a
     // window dies mid-drag. s_lastHover* hold the strip a DragLeave demoted

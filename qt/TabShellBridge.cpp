@@ -50,9 +50,11 @@ void TabShellBridge::targetDragOver(int insertAt) { _manager->onTargetDragOver(i
 
 void TabShellBridge::tabHoverStarted(int tabId, int x, int y, const QString& background,
                                      const QString& text, const QString& border,
-                                     bool rightToLeft)
+                                     bool rightToLeft, const QString& imageBackground,
+                                     const QString& shadow)
 {
-    _manager->onTabHoverStarted(tabId, x, y, background, text, border, rightToLeft);
+    _manager->onTabHoverStarted(tabId, x, y, background, text, border, rightToLeft,
+                                imageBackground, shadow);
 }
 
 void TabShellBridge::tabHoverEnded() { _manager->hideHoverCard(); }
