@@ -369,6 +369,11 @@ class DebugManager {
 			unit.textContent = ' ' + toolInput.unit;
 			label.appendChild(numberInput);
 			label.appendChild(unit);
+			// The keys typed into the field are the field's, and the document hears none of them.
+			for (const type of ['keydown', 'keypress', 'keyup'])
+				numberInput.addEventListener(type, (event: Event) =>
+					event.stopPropagation(),
+				);
 			numberInput.addEventListener('change', function () {
 				let value = parseInt(numberInput.value, 10);
 				if (isNaN(value) || value < toolInput.min) value = toolInput.min;
