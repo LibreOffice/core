@@ -42,6 +42,7 @@
 #include <fmtinfmt.hxx>
 #include <frmatr.hxx>
 #include <fmtanchr.hxx>
+#include <fmtcntnt.hxx>
 #include <fmtfsize.hxx>
 #include <vcl/graph.hxx>
 #include <vcl/graphicfilter.hxx>
@@ -674,14 +675,7 @@ void SwMarkdownParser::InsertImage(const MDImage& rImg)
     }
 
     Size aGrfSz(0, 0);
-    if (m_xDoc->AllowAccessLink() && !aGraphicURL.IsExoticProtocol() && !sGrfNm.isEmpty())
-    {
-        GraphicDescriptor aDescriptor(aGraphicURL);
-        if (aDescriptor.Detect(true))
-            aGrfSz
-                = o3tl::convert(aDescriptor.GetSizePixel(), o3tl::Length::px, o3tl::Length::twip);
-    }
-    else if (aGraphic.GetType() == GraphicType::Bitmap)
+    if (aGraphic.GetType() == GraphicType::Bitmap)
     {
         // We have an unloaded graphic in aGraphic, read its size.
         aGrfSz = o3tl::convert(aGraphic.GetSizePixel(), o3tl::Length::px, o3tl::Length::twip);
@@ -739,6 +733,15 @@ void SwMarkdownParser::InsertImage(const MDImage& rImg)
     {
         pFlyFormat->SetObjTitle(rImg.title);
         pFlyFormat->SetObjDescription(rImg.desc);
+
+        // A linked image's own size reaches the frame when the links are updated.
+        if (!sGrfNm.isEmpty())
+        {
+            if (SwGrfNode* pGrfNd
+                = m_xDoc->GetNodes()[pFlyFormat->GetContent().GetContentIdx()->GetIndex() + 1]
+                      ->GetGrfNode())
+                pGrfNd->SetChgTwipSize(true);
+        }
     }
 
     m_bNoParSpace = true;
