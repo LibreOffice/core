@@ -2809,6 +2809,27 @@ abstract class SelectionSection extends CanvasSectionObject {
 		)
 			return;
 
+		/*
+			A plain click on another object than the selected ones, one lying in their area,
+			selects that object here and draws it at once, as a click beside the selection does.
+			A click on what is selected goes on to the engine.
+		*/
+		if (modifier === 0 && RenderGeometrySection.answersPointer()) {
+			const hit = RenderGeometrySection.objectIdAt(at.x, at.y);
+			const selected = this.selectedObjects();
+			const own = selected.concat(
+				RenderGeometrySection.theOnesThatDraw(selected),
+			);
+			if (
+				hit !== undefined &&
+				!own.includes(hit) &&
+				Interaction.context().press(hit, modifier)
+			) {
+				GraphicSelection.updateSelectionSection();
+				return;
+			}
+		}
+
 		this.pendingClick = app.timerRegistry.setTimeout(
 			'selectionClick',
 			() => {

@@ -716,14 +716,21 @@ class MouseControl extends CanvasSectionObject {
 		if (app.file.textCursor.visible) return false;
 
 		const alt = app.UNOModifier.ALT;
-		if (modifier === alt || modifier === (alt | app.UNOModifier.SHIFT))
-			return Interaction.context().altPress(
-				RenderGeometrySection.objectIdsAt(point.x, point.y),
-				modifier !== alt,
-			);
+		const taken =
+			modifier === alt || modifier === (alt | app.UNOModifier.SHIFT)
+				? Interaction.context().altPress(
+						RenderGeometrySection.objectIdsAt(point.x, point.y),
+						modifier !== alt,
+					)
+				: Interaction.context().press(
+						RenderGeometrySection.objectIdAt(point.x, point.y),
+						modifier,
+					);
 
-		const hit = RenderGeometrySection.objectIdAt(point.x, point.y);
-		return Interaction.context().press(hit, modifier);
+		// The selection the click made is drawn at once, with its handles, so it can be worked
+		// on before the engine reports it.
+		if (taken) GraphicSelection.updateSelectionSection();
+		return taken;
 	}
 
 	/*
@@ -790,6 +797,25 @@ class MouseControl extends CanvasSectionObject {
 			this.pendingClickInfo = null;
 			this.clickCount = 0;
 			return;
+		}
+
+		/*
+			In a view that draws from objects a second click counts toward a double click only
+			close to the first one. One further away is a click of its own, so clicks quickly from
+			one object to the next each select their object here.
+		*/
+		const pending = this.pendingClickInfo?.sendingPosition;
+		const reach = 4 * app.dpiScale;
+		if (
+			this.clickTimer &&
+			pending &&
+			RenderGeometrySection.answersPointer() &&
+			(Math.abs(pending.pX - sendingPosition.pX) > reach ||
+				Math.abs(pending.pY - sendingPosition.pY) > reach)
+		) {
+			this.clickCount--;
+			this.flushPendingClick();
+			this.clickCount = 1;
 		}
 
 		if (this.clickTimer) app.timerRegistry.clearTimeout(this.clickTimer);
