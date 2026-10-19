@@ -67,7 +67,7 @@ class ViewState {
 	}
 
 	// The offset goes on through the same two fields a reconnect uses, so a later
-	// cursor update reaffirms it instead of overriding it.
+	// cursor update reaffirms it instead of overriding it, except in Calc.
 	private scrollTo(pixelX: number, pixelY: number): void {
 		const layout =
 			app.activeDocument && app.activeDocument.activeLayout
@@ -78,8 +78,12 @@ class ViewState {
 		const docLayer = this.map._docLayer;
 		if (!docLayer) return;
 
-		docLayer._savedScrollPos = { pX1: pixelX, pY1: pixelY };
-		docLayer._restoringViewScroll = true;
+		// Calc shows no text cursor until a cell is edited, so its first cursor
+		// update comes with typing, by when the user may have moved the view.
+		if (!docLayer.isCalc()) {
+			docLayer._savedScrollPos = { pX1: pixelX, pY1: pixelY };
+			docLayer._restoringViewScroll = true;
+		}
 		layout.scrollTo(pixelX, pixelY);
 	}
 }
