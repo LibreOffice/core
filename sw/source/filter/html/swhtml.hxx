@@ -490,6 +490,8 @@ class SwHTMLParser : public SfxHTMLParser, public SvtListener
     bool m_bBodySeen : 1;
     bool m_bReadingHeaderOrFooter : 1;
     bool m_bNotifyMacroEventRead : 1;
+    // The caller gave no base URL, which is how content pasted from the clipboard arrives.
+    bool m_bFromClipboard : 1;
     bool m_isInTableStructure;
 
     int m_nTableDepth;
