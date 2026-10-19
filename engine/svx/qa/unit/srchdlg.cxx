@@ -11,8 +11,10 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <svl/eitem.hxx>
 #include <svl/itempool.hxx>
+#include <svl/itemset.hxx>
 #include <svx/srchdlg.hxx>
 #include <svx/svxids.hrc>
+#include <optional>
 #include <utility>
 #include <vector>
 
@@ -75,6 +77,82 @@ CPPUNIT_TEST_FIXTURE(SearchAttrItemListTest, testCopiedSearchPoolChainIsDetached
                                    bDetached);
         }
     }
+}
+
+// A copy may outlive the document whose pool supplied its items, so every
+// holder it receives must be bound to the copy's own pool.
+CPPUNIT_TEST_FIXTURE(SearchAttrItemListTest, testCopiedListBindsInsertedItem)
+{
+    rtl::Reference<TestPool> xSource(new TestPool);
+    SfxBoolItem aItem(SID_ATTR_CHAR_WEIGHT, true);
+    SearchAttrItemList aOriginal;
+    aOriginal.Insert(SearchAttrInfo(SID_ATTR_CHAR_WEIGHT, SfxPoolItemHolder(*xSource, &aItem)));
+    SearchAttrItemList aCopy(aOriginal);
+    aCopy.Insert(SearchAttrInfo(SID_ATTR_CHAR_WEIGHT, SfxPoolItemHolder(*xSource, &aItem)));
+    CPPUNIT_ASSERT_EQUAL(&aCopy[0].aItemPtr.getPool(), &aCopy[1].aItemPtr.getPool());
+}
+
+CPPUNIT_TEST_FIXTURE(SearchAttrItemListTest, testCopiedListBindsPutItem)
+{
+    rtl::Reference<TestPool> xSource(new TestPool);
+    SfxBoolItem aItem(SID_ATTR_CHAR_WEIGHT, true);
+    SearchAttrItemList aOriginal;
+    aOriginal.Insert(SearchAttrInfo(SID_ATTR_CHAR_WEIGHT, SfxPoolItemHolder(*xSource, &aItem)));
+    SearchAttrItemList aCopy(aOriginal);
+    SfxItemSet aSet(*xSource, svl::Items<SID_ATTR_CHAR_WEIGHT, SID_ATTR_CHAR_WEIGHT>);
+    aSet.Put(aItem);
+    aCopy.Put(aSet);
+    CPPUNIT_ASSERT_EQUAL(&aCopy[0].aItemPtr.getPool(), &aCopy[1].aItemPtr.getPool());
+}
+
+CPPUNIT_TEST_FIXTURE(SearchAttrItemListTest, testEmptyCopiedListBindsInsertedItem)
+{
+    rtl::Reference<TestPool> xSource(new TestPool);
+    SfxBoolItem aItem(SID_ATTR_CHAR_WEIGHT, true);
+    const SearchAttrItemList aEmpty;
+    SearchAttrItemList aCopy(aEmpty);
+    aCopy.Insert(SearchAttrInfo(SID_ATTR_CHAR_WEIGHT, SfxPoolItemHolder(*xSource, &aItem)));
+    CPPUNIT_ASSERT(&aCopy[0].aItemPtr.getPool() != xSource.get());
+}
+
+CPPUNIT_TEST_FIXTURE(SearchAttrItemListTest, testCopiedListBindsReplacedItem)
+{
+    rtl::Reference<TestPool> xSource(new TestPool);
+    SfxBoolItem aItem(SID_ATTR_CHAR_WEIGHT, true);
+    SearchAttrItemList aOriginal;
+    aOriginal.Insert(SearchAttrInfo(SID_ATTR_CHAR_WEIGHT, SfxPoolItemHolder(*xSource, &aItem)));
+    SearchAttrItemList aCopy(aOriginal);
+    SfxBoolItem aReplacement(SID_ATTR_CHAR_WEIGHT, false);
+    aCopy.SetItem(0, SfxPoolItemHolder(*xSource, &aReplacement));
+    CPPUNIT_ASSERT(&aCopy[0].aItemPtr.getPool() != xSource.get());
+    CPPUNIT_ASSERT(!static_cast<const SfxBoolItem*>(aCopy[0].aItemPtr.getItem())->GetValue());
+}
+
+CPPUNIT_TEST_FIXTURE(SearchAttrItemListTest, testUncopiedListBorrowsPool)
+{
+    rtl::Reference<TestPool> xSource(new TestPool);
+    SfxBoolItem aItem(SID_ATTR_CHAR_WEIGHT, true);
+    SearchAttrItemList aList;
+    aList.Insert(SearchAttrInfo(SID_ATTR_CHAR_WEIGHT, SfxPoolItemHolder(*xSource, &aItem)));
+    CPPUNIT_ASSERT_EQUAL(static_cast<SfxItemPool*>(xSource.get()), &aList[0].aItemPtr.getPool());
+}
+
+// A remembered copy may outlive the document whose pool supplied its items.
+// Destroying it afterwards must not touch that pool. This shows up as an
+// invalid read under valgrind or ASan rather than as an assertion.
+CPPUNIT_TEST_FIXTURE(SearchAttrItemListTest, testCopiedListOutlivesSourcePool)
+{
+    std::optional<SearchAttrItemList> oCopy;
+    {
+        rtl::Reference<TestPool> xSource(new TestPool);
+        SfxBoolItem aItem(SID_ATTR_CHAR_WEIGHT, true);
+        SearchAttrItemList aOriginal;
+        aOriginal.Insert(SearchAttrInfo(SID_ATTR_CHAR_WEIGHT, SfxPoolItemHolder(*xSource, &aItem)));
+        oCopy.emplace(aOriginal);
+        oCopy->Insert(SearchAttrInfo(SID_ATTR_CHAR_WEIGHT, SfxPoolItemHolder(*xSource, &aItem)));
+    }
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), oCopy->Count());
+    oCopy.reset();
 }
 }
 

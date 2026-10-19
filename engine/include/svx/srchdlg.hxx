@@ -57,9 +57,14 @@ typedef std::vector<SearchAttrInfo> SrchAttrInfoList;
 
 class SVX_DLLPUBLIC SearchAttrItemList : private SrchAttrInfoList
 {
-    // Copies may outlive the document whose pool supplied their items.
-    // The destructor clears the holders before releasing this pool.
+    // Copies may outlive the document whose pool supplied their items, so a
+    // copy binds every holder it receives to its own clone of the first such
+    // pool. Other lists borrow the caller's pool. The destructor clears the
+    // holders before releasing this pool.
     rtl::Reference<SfxItemPool> m_xPool;
+    bool m_bOwnsPool = false;
+
+    SfxPoolItemHolder bindToPool(const SfxPoolItemHolder& rItem);
 
 public:
     SearchAttrItemList() {}
@@ -71,14 +76,15 @@ public:
     SfxItemSet&     Get( SfxItemSet& rSet );
     void            Clear();
     sal_uInt16      Count() const { return SrchAttrInfoList::size(); }
-    SearchAttrInfo& operator[](sal_uInt16 nPos)
+    // Read-only: holders must be replaced through SetItem so they stay bound.
+    const SearchAttrInfo& operator[](sal_uInt16 nPos) const
                         { return SrchAttrInfoList::operator[]( nPos ); }
-    SearchAttrInfo& GetObject( sal_uInt16 nPos )
+    const SearchAttrInfo& GetObject( sal_uInt16 nPos ) const
                         { return SrchAttrInfoList::operator[]( nPos ); }
+    void SetItem( sal_uInt16 nPos, const SfxPoolItemHolder& rItem );
 
-    // the pointer to the item is not being copied, so don't delete
     void Insert( const SearchAttrInfo& rItem )
-        { SrchAttrInfoList::push_back( rItem ); }
+        { SrchAttrInfoList::emplace_back( rItem.nSlot, bindToPool( rItem.aItemPtr ) ); }
     // deletes the pointer to the items
     void Remove(size_t nPos);
 };

@@ -180,25 +180,34 @@ static void StrArrToList_Impl( TypedWhichId<SfxStringListItem> nId, const std::v
 
 SearchAttrItemList::SearchAttrItemList( SearchAttrItemList&& rList ) noexcept :
     SrchAttrInfoList(std::move(rList)),
-    m_xPool(std::move(rList.m_xPool))
+    m_xPool(std::move(rList.m_xPool)),
+    m_bOwnsPool(rList.m_bOwnsPool)
 {
 }
 
 SearchAttrItemList::SearchAttrItemList( const SearchAttrItemList& rList )
     : SrchAttrInfoList()
+    , m_bOwnsPool(true)
 {
     reserve(rList.size());
     for (const auto& rAttr : rList)
-    {
-        if (!rAttr.aItemPtr)
-        {
-            push_back(rAttr);
-            continue;
-        }
-        if (!m_xPool)
-            m_xPool = rAttr.aItemPtr.getPool().Clone();
-        emplace_back(rAttr.nSlot, SfxPoolItemHolder(*m_xPool, rAttr.aItemPtr.getItem()));
-    }
+        emplace_back(rAttr.nSlot, bindToPool(rAttr.aItemPtr));
+}
+
+SfxPoolItemHolder SearchAttrItemList::bindToPool(const SfxPoolItemHolder& rItem)
+{
+    if (!m_bOwnsPool || !rItem)
+        return rItem;
+    if (!m_xPool)
+        m_xPool = rItem.getPool().Clone();
+    else if (&rItem.getPool() == m_xPool.get())
+        return rItem;
+    return SfxPoolItemHolder(*m_xPool, rItem.getItem());
+}
+
+void SearchAttrItemList::SetItem(sal_uInt16 nPos, const SfxPoolItemHolder& rItem)
+{
+    SrchAttrInfoList::operator[](nPos).aItemPtr = bindToPool(rItem);
 }
 
 SearchAttrItemList::~SearchAttrItemList()
@@ -224,7 +233,7 @@ void SearchAttrItemList::Put( const SfxItemSet& rSet )
     {
         const sal_uInt16 nWhich(aIter.GetCurWhich());
         const sal_uInt16 nSlot(pPool->GetSlotId(nWhich));
-        emplace_back(nSlot, SfxPoolItemHolder(*pPool, aIter.GetCurItem()));
+        emplace_back(nSlot, bindToPool(SfxPoolItemHolder(*pPool, aIter.GetCurItem())));
     }
 }
 
@@ -2051,13 +2060,13 @@ IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl, weld::Button&, void)
         const SfxPoolItem* pItem;
         for( sal_uInt16 n = 0; n < pList->Count(); ++n )
         {
-            SearchAttrInfo* pAItem = &pList->GetObject(n);
-            if( !IsInvalidItem( pAItem->aItemPtr.getItem() ) &&
+            const SearchAttrInfo& rAItem = pList->GetObject(n);
+            if( !IsInvalidItem( rAItem.aItemPtr.getItem() ) &&
                 SfxItemState::SET == aOutSet.GetItemState(
-                    pAItem->aItemPtr.Which(), false, &pItem ) )
+                    rAItem.aItemPtr.Which(), false, &pItem ) )
             {
-                pAItem->aItemPtr = SfxPoolItemHolder(*aOutSet.GetPool(), pItem);
-                aOutSet.ClearItem( pAItem->aItemPtr.Which() );
+                pList->SetItem(n, SfxPoolItemHolder(*aOutSet.GetPool(), pItem));
+                aOutSet.ClearItem( rAItem.aItemPtr.Which() );
             }
         }
 

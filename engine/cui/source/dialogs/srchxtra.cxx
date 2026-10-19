@@ -187,13 +187,13 @@ IMPL_LINK_NOARG(SvxSearchAttributeDialog, OKHdl, weld::Button&, void)
         sal_uInt16 j;
         for ( j = rList.Count(); j; )
         {
-            SearchAttrInfo& rItem = rList[ --j ];
+            const SearchAttrInfo& rItem = rList[ --j ];
             if( rItem.nSlot == nSlot )
             {
                 if( bChecked )
-                    rItem.aItemPtr = SfxPoolItemHolder(rPool, INVALID_POOL_ITEM);
+                    rList.SetItem(j, SfxPoolItemHolder(rPool, INVALID_POOL_ITEM));
                 else if( IsInvalidItem( rItem.aItemPtr.getItem() ) )
-                    rItem.aItemPtr = SfxPoolItemHolder();
+                    rList.SetItem(j, SfxPoolItemHolder());
                 j = 1;
                 break;
             }
