@@ -30,6 +30,7 @@
 #include <filter/msfilter/util.hxx>
 #include <filter/msfilter/rtfutil.hxx>
 #include <o3tl/numeric.hxx>
+#include <o3tl/safeint.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/globname.hxx>
@@ -1776,7 +1777,7 @@ void RTFDocumentImpl::prepareProperties(
         auto pUnitValue = new RTFValue(3);
         putNestedAttribute(localTableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblW,
                            NS_ooxml::LN_CT_TblWidth_type, pUnitValue);
-        auto pWValue = new RTFValue(nCurrentCellX - nTRLeft);
+        auto pWValue = new RTFValue(o3tl::saturating_sub(nCurrentCellX, nTRLeft));
         putNestedAttribute(localTableRowSprms, NS_ooxml::LN_CT_TblPrBase_tblW,
                            NS_ooxml::LN_CT_TblWidth_w, pWValue);
     }
@@ -1804,7 +1805,7 @@ void RTFDocumentImpl::prepareProperties(
                 {
                     // First cell: it was calculated against the initial value of *CurrentCellX,
                     // which is 0; now subtract nTRLeft from it
-                    val -= nTRLeft;
+                    val = o3tl::saturating_sub(val, nTRLeft);
                     pValue = new RTFValue(val);
                 }
                 seenFirstColumn = true;
