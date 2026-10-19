@@ -144,7 +144,6 @@ public:
     }
 
     std::shared_ptr<weld::DialogController> getDialogController() override { return m_xDlg; }
-    std::optional<SwLanguageListItem> GetSelectedLanguage() override;
 };
 
 class AbstractInsTableDlg_Impl : public AbstractInsTableDlg
@@ -206,15 +205,6 @@ void AbstractInsTableDlg_Impl::GetValues( OUString& rName, sal_uInt16& rRow, sal
     SwInsTableDlg* pDlg = dynamic_cast<SwInsTableDlg*>(m_xDlg.get());
     if (pDlg)
         pDlg->GetValues(rName, rRow, rCol, rInsTableFlags, rTableAutoFormatName, prTAFormat);
-}
-
-std::optional<SwLanguageListItem> AbstractSwTranslateLangSelectDlg_Impl::GetSelectedLanguage()
-{
-#if HAVE_FEATURE_CURL && !ENABLE_WASM_STRIP_EXTRA
-    return SwTranslateLangSelectDlg::GetSelectedLanguage();
-#else
-    return {};
-#endif
 }
 
 namespace

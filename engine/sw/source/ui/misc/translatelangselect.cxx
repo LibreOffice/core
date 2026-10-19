@@ -146,11 +146,6 @@ SwTranslateLangSelectDlg::SwTranslateLangSelectDlg(weld::Window* pParent, SwWrtS
     m_xBtnTranslate->set_sensitive(m_oLanguage.has_value());
 }
 
-std::optional<SwLanguageListItem> SwTranslateLangSelectDlg::GetSelectedLanguage()
-{
-    return s_oSelectedLanguage;
-}
-
 IMPL_LINK(SwTranslateLangSelectDlg, LangSelectHdl, weld::ComboBox&, rBox, void)
 {
     const sal_Int32 nActive = rBox.get_active();

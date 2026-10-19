@@ -415,15 +415,12 @@ public:
     virtual sal_uInt16          GetRestartPage() const = 0;
 };
 
-class SwLanguageListItem;
-
 class AbstractSwTranslateLangSelectDlg
 {
 protected:
     virtual ~AbstractSwTranslateLangSelectDlg() = default;
 public:
     virtual std::shared_ptr<weld::DialogController> getDialogController() = 0;
-    virtual std::optional<SwLanguageListItem> GetSelectedLanguage() = 0;
 };
 
 class AbstractSwSortDlg : public VclAbstractDialog

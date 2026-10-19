@@ -50,7 +50,6 @@ class SwTranslateLangSelectDlg final : public weld::GenericDialogController
 {
 public:
     SwTranslateLangSelectDlg(weld::Window* pParent, SwWrtShell& rSh);
-    static std::optional<SwLanguageListItem> GetSelectedLanguage();
 
 private:
     /// The language last picked in the dialog, offered again the next time.
