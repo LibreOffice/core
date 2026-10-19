@@ -349,14 +349,14 @@ void HostUtil::setFirstHost(const Poco::URI& uri)
     {
         if (FirstHost.empty())
         {
-            FirstHost = uri.getAuthority();
+            FirstHost = uri.getHost();
             // The host comes from a request, so it is matched as that name only.
             addWopiHost(RegexUtil::escapeRegex(uri.getHost()), true);
         }
     }
-    else if(!FirstHost.empty() && FirstHost != uri.getAuthority())
+    else if(!FirstHost.empty() && FirstHost != uri.getHost())
     {
-        LOG_ERR("Rejected WOPI host [" << uri.getAuthority() << "]: the only allowed host is ["
+        LOG_ERR("Rejected WOPI host [" << uri.getHost() << "]: the only allowed host is ["
                                        << FirstHost
                                        << "]. To use multiple host/aliases check alias_groups tag "
                                           "in configuration");

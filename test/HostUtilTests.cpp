@@ -194,7 +194,7 @@ void HostUtilTests::testFirstHostTrustedOnlyInFirstMode()
     config->setString("storage.wopi.alias_groups[@mode]", "first");
     resetHostState(true);
     HostUtil::setFirstHost(uri);
-    LOK_ASSERT_EQUAL_STR(uri.getAuthority(), HostUtil::FirstHost);
+    LOK_ASSERT_EQUAL_STR(uri.getHost(), HostUtil::FirstHost);
     LOK_ASSERT_MESSAGE("first mode trusts the connecting host",
                        HostUtil::allowedWopiHost(uri.getHost()));
     LOK_ASSERT_MESSAGE("first mode trusts no other host",
