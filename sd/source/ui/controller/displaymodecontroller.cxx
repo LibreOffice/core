@@ -81,49 +81,23 @@ struct snew_slide_value_info
     sal_uInt16 mnId;
     OUString msBmpResId;
     TranslateId mpStrResId;
-    const char* msUnoCommand;
+    OUString msUnoCommand;
 };
 
 }
 
-constexpr snew_slide_value_info editmodes[] =
-{
-    {1,
-        BMP_DISPLAYMODE_SLIDE,
-        STR_NORMAL_MODE,
-        ".uno:NormalMultiPaneGUI" },
-    {2,
-        BMP_DISPLAYMODE_OUTLINE,
-        STR_OUTLINE_MODE,
-        ".uno:OutlineMode" },
-    {3,
-        BMP_DISPLAYMODE_NOTES,
-        STR_NOTES_MODE,
-        ".uno:NotesMode" },
-    {4,
-        BMP_DISPLAYMODE_SLIDE_SORTER,
-        STR_SLIDE_SORTER_MODE,
-        ".uno:DiaMode" },
-    {0, u""_ustr, {}, "" }
-};
+constexpr snew_slide_value_info editmodes[]
+    = { { 1, BMP_DISPLAYMODE_SLIDE, STR_NORMAL_MODE, u".uno:NormalMultiPaneGUI"_ustr },
+        { 2, BMP_DISPLAYMODE_OUTLINE, STR_OUTLINE_MODE, u".uno:OutlineMode"_ustr },
+        { 3, BMP_DISPLAYMODE_NOTES, STR_NOTES_MODE, u".uno:NotesMode"_ustr },
+        { 4, BMP_DISPLAYMODE_SLIDE_SORTER, STR_SLIDE_SORTER_MODE, u".uno:DiaMode"_ustr },
+        { 0, u""_ustr, {}, u""_ustr } };
 
-constexpr snew_slide_value_info mastermodes[] =
-{
-    {5,
-        BMP_DISPLAYMODE_SLIDE_MASTER,
-        STR_SLIDE_MASTER_MODE,
-        ".uno:SlideMasterPage" },
-    {6,
-        BMP_DISPLAYMODE_NOTES_MASTER,
-        STR_NOTES_MASTER_MODE,
-        ".uno:NotesMasterPage" },
-    {7,
-        BMP_DISPLAYMODE_HANDOUT_MASTER,
-        STR_HANDOUT_MASTER_MODE,
-        ".uno:HandoutMode" },
-    {0, u""_ustr, {}, "" }
-};
-
+constexpr snew_slide_value_info mastermodes[]
+    = { { 5, BMP_DISPLAYMODE_SLIDE_MASTER, STR_SLIDE_MASTER_MODE, u".uno:SlideMasterPage"_ustr },
+        { 6, BMP_DISPLAYMODE_NOTES_MASTER, STR_NOTES_MASTER_MODE, u".uno:NotesMasterPage"_ustr },
+        { 7, BMP_DISPLAYMODE_HANDOUT_MASTER, STR_HANDOUT_MASTER_MODE, u".uno:HandoutMode"_ustr },
+        { 0, u""_ustr, {}, u""_ustr } };
 
 static void fillLayoutValueSet(ValueSet* pValue, const snew_slide_value_info* pInfo)
 {
@@ -181,11 +155,11 @@ IMPL_LINK( DisplayModeToolbarMenu, SelectValueSetHdl, ValueSet*, pControl, void 
     OUString sImage;
 
     if( pControl == mxDisplayModeSet1.get() ) {
-        sCommandURL = OUString::createFromAscii(editmodes[mxDisplayModeSet1->GetSelectedItemId() - 1 ].msUnoCommand);
+        sCommandURL = editmodes[mxDisplayModeSet1->GetSelectedItemId() - 1].msUnoCommand;
         sImage = editmodes[mxDisplayModeSet1->GetSelectedItemId() - 1 ].msBmpResId;
     }
     else if( pControl == mxDisplayModeSet2.get() ) {
-        sCommandURL = OUString::createFromAscii(mastermodes[mxDisplayModeSet2->GetSelectedItemId() - 5 ].msUnoCommand);
+        sCommandURL = mastermodes[mxDisplayModeSet2->GetSelectedItemId() - 5].msUnoCommand;
         sImage = mastermodes[mxDisplayModeSet2->GetSelectedItemId() - 5 ].msBmpResId;
     }
 
