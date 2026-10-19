@@ -602,7 +602,7 @@ std::vector<css::lang::Locale> getRemoteSpellingLocales()
             continue;
         uno::Reference< linguistic2::XSupportedLocales > xRemote(
                 xContext->getServiceManager()->createInstanceWithContext(rChecker.aImplementationName, xContext),
-                uno::UNO_QUERY_THROW );
+                uno::UNO_QUERY );
         for (const css::lang::Locale& rLocale : xRemote->getLocales())
             aLocales.push_back(rLocale);
     }
