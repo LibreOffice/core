@@ -188,11 +188,21 @@ function selectTextOfShape() {
 	cy.log('>> selectTextOfShape - start');
 
 	dblclickOnSelectedShape();
+
+	// The double-click's clicks are held back by the click timer, so let them reach core before the
+	// ctrl+a.
+	cy.getFrameWindow().then(function(win) {
+		helper.waitForTimers(win, 'clicktimer');
+		helper.processToIdle(win);
+	});
+
 	helper.typeIntoDocument('{ctrl}a');
-	cy.cGet('.text-selection-handle-start, .text-selection-handle-end')
-		.should('exist');
-	cy.cGet('.leaflet-cursor-container, .text-selection-handle-start')
-		.should('exist');
+
+	cy.getFrameWindow().then(function(win) {
+		helper.processToIdle(win);
+	});
+
+	helper.textSelectionShouldExist();
 
 	cy.log('<< selectTextOfShape - end');
 }
