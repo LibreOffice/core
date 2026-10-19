@@ -250,12 +250,12 @@ bool lockdown([[maybe_unused]] Type type)
 
     if (prctl(PR_SET_NO_NEW_PRIVS, 1, 0, 0, 0))
     {
-        LOG_ERR("Cannot turn off acquisition of new privileges for us & children");
+        LOG_SYS("Cannot turn off acquisition of new privileges for us & children");
         return false;
     }
     if (prctl(PR_SET_SECCOMP, SECCOMP_MODE_FILTER, &filter))
     {
-        LOG_ERR("Failed to install seccomp syscall filter");
+        LOG_SYS("Failed to install seccomp syscall filter");
         return false;
     }
 
