@@ -641,8 +641,10 @@ void lcl_JoinTouching(SwRects& rRects, tools::Long nSlack, const SwRects& rHoles
             SwTextCursor::SetRightMargin(false); // WTF is this crap
         }
         // what holds no text is gone, so joining the rest keeps a line whole, and a hole
-        // stops a join that would cover what the selection excludes on purpose
-        lcl_JoinTouching(parts, 2, holes);
+        // stops a join that would cover what the selection excludes on purpose; a part one
+        // twip wide can be gone from between two others, which a slack of 2 reaches across
+        constexpr tools::Long nSlack = 2;
+        lcl_JoinTouching(parts, nSlack, holes);
         ret.insert(ret.end(), parts.begin(), parts.end());
     }
     return ret;
