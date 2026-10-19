@@ -264,6 +264,37 @@ bool SwDocShell::ConvertFrom( SfxMedium& rMedium )
     return bOk;
 }
 
+namespace
+{
+/// While an OLE object is edited in place, link updates are allowed for the lifetime of this
+/// object, so an up to date replacement graphic can be created on save.
+class ActiveOLELinkUpdateAllowance
+{
+    comphelper::EmbeddedObjectContainer* m_pContainer = nullptr;
+    bool m_bOldAllowsLinkUpdate = false;
+
+public:
+    explicit ActiveOLELinkUpdateAllowance(SwDocShell& rDocShell)
+    {
+        SwView* pView = rDocShell.GetView();
+        if (!pView || !pView->GetIPClient())
+            return;
+        m_pContainer = &rDocShell.getEmbeddedObjectContainer();
+        m_bOldAllowsLinkUpdate = m_pContainer->getUserAllowsLinkUpdate();
+        m_pContainer->setUserAllowsLinkUpdate(true);
+    }
+
+    ~ActiveOLELinkUpdateAllowance()
+    {
+        if (m_pContainer)
+            m_pContainer->setUserAllowsLinkUpdate(m_bOldAllowsLinkUpdate);
+    }
+
+    ActiveOLELinkUpdateAllowance(const ActiveOLELinkUpdateAllowance&) = delete;
+    ActiveOLELinkUpdateAllowance& operator=(const ActiveOLELinkUpdateAllowance&) = delete;
+};
+}
+
 // Saving the Default-Format, Stg present
 bool SwDocShell::Save()
 {
@@ -272,6 +303,7 @@ bool SwDocShell::Save()
         m_pView->GetEditWin().StopQuickHelp();
     SwWait aWait( *this, true );
 
+    ActiveOLELinkUpdateAllowance aOLELinkUpdateAllowance(*this);
     CalcLayoutForOLEObjects();  // format for OLE objects
     // #i62875#
     // reset compatibility flag <DoNotCaptureDrawObjsOnPage>, if possible
@@ -420,6 +452,7 @@ bool SwDocShell::SaveAs( SfxMedium& rMedium )
         }
     }
 
+    ActiveOLELinkUpdateAllowance aOLELinkUpdateAllowance(*this);
     CalcLayoutForOLEObjects();  // format for OLE objects
 
     const bool bURLChanged = GetMedium() && GetMedium()->GetURLObject() != rMedium.GetURLObject();
@@ -651,6 +684,7 @@ bool SwDocShell::ConvertTo( SfxMedium& rMedium )
     if ( !rMedium.IsSkipImages() )
         m_xDoc->getIDocumentStatistics().UpdateDocStat( false, true );
 
+    ActiveOLELinkUpdateAllowance aOLELinkUpdateAllowance(*this);
     CalcLayoutForOLEObjects();  // format for OLE objects
     // #i62875#
     // reset compatibility flag <DoNotCaptureDrawObjsOnPage>, if possible
@@ -1280,14 +1314,6 @@ void SwDocShell::CalcLayoutForOLEObjects()
 {
     if (!m_pWrtShell)
         return;
-
-    if (m_pView && m_pView->GetIPClient())
-    {
-        // We have an active OLE edit: allow link updates, so an up to date replacement graphic can
-        // be created.
-        comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = getEmbeddedObjectContainer();
-        rEmbeddedObjectContainer.setUserAllowsLinkUpdate(true);
-    }
 
     SwIterator<SwContentNode,SwFormatColl> aIter( *m_xDoc->GetDfltGrfFormatColl() );
     for( SwContentNode* pNd = aIter.First(); pNd; pNd = aIter.Next() )
