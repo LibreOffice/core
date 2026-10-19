@@ -955,13 +955,18 @@ private:
     void processAccessChecks(std::chrono::steady_clock::time_point now);
 
     /// Acts on a completed access check: disconnects a user who lost access or can no longer
-    /// write. Returns true to retry the check later.
+    /// write, and closes the view when the host gave no decision. Returns true to retry the
+    /// check later.
     bool handleAccessCheck(const std::shared_ptr<ClientSession>& session, CheckFileInfo& check);
 
     /// Disconnects a view, without saving for it, whose user lost access to the document
     /// ("accessrevoked") or can no longer write it ("accessdowngraded"). kind is the error kind
     /// the client is sent.
     void revokeAccess(const std::shared_ptr<ClientSession>& session, const std::string& kind);
+
+    /// Closes a view whose access the host gave no decision on after a security-label change,
+    /// saving its edits as any close does.
+    void accessUndecided(const std::shared_ptr<ClientSession>& session);
 
     /// When the next access check is due, or the epoch when none is waiting.
     std::chrono::steady_clock::time_point nextAccessCheck() const;

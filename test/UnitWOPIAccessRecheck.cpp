@@ -29,8 +29,8 @@ using namespace std::literals;
 /// with the new label, one it denies, one it gives no decision on, and one who may only comment,
 /// before and after. The label change is uploaded as an autosave, and the host is then asked
 /// about each of them: the denied view is disconnected, as is the reader's (after a transient
-/// failure is retried), and the undecided, the editor's and the commenter's views are left
-/// alone. The editor's token is refreshed before the label change, and the host is asked
+/// failure is retried), the undecided view is closed, and the editor's and the commenter's are
+/// left alone. The editor's token is refreshed before the label change, and the host is asked
 /// with the new one.
 class UnitWOPIAccessRecheck : public SecurityLabelTest
 {
@@ -104,8 +104,8 @@ public:
 
     bool isSettled() override
     {
-        return getRemoved() == "denied,reader" && getErrorCount("accessrevoked") >= 1 &&
-               getErrorCount("accessdowngraded") >= 1 && getCheckCount("undecided") >= 1;
+        return getRemoved() == "denied,reader,undecided" && getErrorCount("accessrevoked") >= 1 &&
+               getErrorCount("accessdowngraded") >= 1 && getErrorCount("accessunverified") >= 1;
     }
 
     void verify() override
@@ -114,7 +114,9 @@ public:
                                  getErrorCount("accessrevoked"));
         LOK_ASSERT_EQUAL_MESSAGE("Expected one view to be disconnected as a reader",
                                  std::size_t(1), getErrorCount("accessdowngraded"));
-        LOK_ASSERT_EQUAL_STR("denied,reader", getRemoved());
+        LOK_ASSERT_EQUAL_MESSAGE("Expected one view to be closed for want of a decision",
+                                 std::size_t(1), getErrorCount("accessunverified"));
+        LOK_ASSERT_EQUAL_STR("denied,reader,undecided", getRemoved());
 
         LOK_ASSERT_EQUAL_MESSAGE("Expected the reader to be checked again after the transient "
                                  "failure",
@@ -142,7 +144,7 @@ public:
 /// The host answers each user's CheckFileInfo after the label change in another way. A refusal
 /// (403, 404) disconnects the view. A transient failure (429, 500, 502, 504) and a connection
 /// closed with no answer are retried, and the view stays once the host lets it. An answer that
-/// cannot be read gives no decision, and the view stays as it was.
+/// cannot be read closes the view, as the host gave no decision.
 class UnitWOPIAccessRecheckAnswers : public SecurityLabelTest
 {
     /// The first answer to each user's check, by token. The ones after it are 200.
@@ -194,8 +196,7 @@ public:
 
     bool isSettled() override
     {
-        return getRemoved() == "forbidden,notfound" && getCheckCount("unreadable") == 1 &&
-               getCheckCount("toomany") == 2 &&
+        return getRemoved() == "forbidden,notfound,unreadable" && getCheckCount("toomany") == 2 &&
                getCheckCount("servererror") == 2 && getCheckCount("badgateway") == 2 &&
                getCheckCount("gatewaytimeout") == 2 && getCheckCount("dropped") == 2;
     }
@@ -203,8 +204,9 @@ public:
     void verify() override
     {
         LOK_ASSERT_EQUAL(std::size_t(2), getErrorCount("accessrevoked"));
+        LOK_ASSERT_EQUAL(std::size_t(1), getErrorCount("accessunverified"));
         LOK_ASSERT_EQUAL(std::size_t(0), getErrorCount("accessdowngraded"));
-        LOK_ASSERT_EQUAL_STR("forbidden,notfound", getRemoved());
+        LOK_ASSERT_EQUAL_STR("forbidden,notfound,unreadable", getRemoved());
 
         for (const char* token : { "editor", "forbidden", "notfound", "unreadable" })
             LOK_ASSERT_EQUAL_MESSAGE(token, std::size_t(1), getCheckCount(token));
@@ -213,7 +215,7 @@ public:
 
 /// The host never decides on two users after the label change: it closes the connection of one
 /// with no answer each time, and is busy for the other each time. Each is asked five times in
-/// all, and the view stays as it was.
+/// all, then the view is closed.
 class UnitWOPIAccessRecheckGiveUp : public SecurityLabelTest
 {
 public:
@@ -238,14 +240,12 @@ public:
         return Answer::Default;
     }
 
-    bool isSettled() override
-    {
-        return getCheckCount("silent") == 5 && getCheckCount("busy") == 5;
-    }
+    bool isSettled() override { return getRemoved() == "busy,silent"; }
 
     void verify() override
     {
-        LOK_ASSERT_EQUAL_STR("", getRemoved());
+        LOK_ASSERT_EQUAL(std::size_t(2), getErrorCount("accessunverified"));
+        LOK_ASSERT_EQUAL_STR("busy,silent", getRemoved());
         LOK_ASSERT_EQUAL(std::size_t(5), getCheckCount("silent"));
         LOK_ASSERT_EQUAL(std::size_t(5), getCheckCount("busy"));
         LOK_ASSERT_EQUAL(std::size_t(1), getCheckCount("editor"));

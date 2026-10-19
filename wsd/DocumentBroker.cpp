@@ -7957,6 +7957,12 @@ void DocumentBroker::processAccessChecks(std::chrono::steady_clock::time_point n
         }
 
         const std::shared_ptr<ClientSession> session = sessionIt->second;
+        if (session->isCloseFrame() || session->inWaitDisconnected())
+        {
+            it = _accessChecks.erase(it); // The view is closing.
+            continue;
+        }
+
         AccessCheck& check = it->second;
         if (check.request)
         {
@@ -8012,7 +8018,8 @@ void DocumentBroker::processAccessChecks(std::chrono::steady_clock::time_point n
         {
             LOG_WRN("Giving up the access check of session ["
                     << session->getId() << "] on docKey [" << _docKey << "] after "
-                    << check.attempts << " attempts. It keeps its access");
+                    << check.attempts << " attempts");
+            accessUndecided(session);
             it = _accessChecks.erase(it);
             continue;
         }
@@ -8054,14 +8061,15 @@ bool DocumentBroker::handleAccessCheck(const std::shared_ptr<ClientSession>& ses
             catch (const std::exception& exc)
             {
                 LOG_WRN("Invalid CheckFileInfo in the access check of session ["
-                        << sessionId << "]: " << exc.what() << ". It keeps its access");
+                        << sessionId << "]: " << exc.what());
+                accessUndecided(session);
                 return false;
             }
 
             if (!wopiFileInfo)
             {
-                LOG_WRN("No CheckFileInfo in the access check of session [" << sessionId
-                                                                           << "]. It keeps its access");
+                LOG_WRN("No CheckFileInfo in the access check of session [" << sessionId << ']');
+                accessUndecided(session);
                 return false;
             }
 
@@ -8124,8 +8132,8 @@ bool DocumentBroker::handleAccessCheck(const std::shared_ptr<ClientSession>& ses
     }
 
     LOG_WRN("The access check of session [" << sessionId << "] failed with "
-                                            << CheckFileInfo::name(check.state())
-                                            << ". It keeps its access");
+                                            << CheckFileInfo::name(check.state()));
+    accessUndecided(session);
     return false;
 }
 
@@ -8140,6 +8148,17 @@ void DocumentBroker::revokeAccess(const std::shared_ptr<ClientSession>& session,
     session->invalidateAuthorizationToken();
 
     session->closeWithError(kind);
+    removeSession(session);
+}
+
+void DocumentBroker::accessUndecided(const std::shared_ptr<ClientSession>& session)
+{
+    // The view closes as when its user closes it: it keeps its token, so its edits are saved
+    // and uploaded with it. Opening the document again asks the host anew.
+    LOG_WRN("The host gave no decision on the access of session ["
+            << session->getId() << "] to docKey [" << _docKey
+            << "] with the security label change. Closing the view");
+    session->closeWithError("accessunverified");
     removeSession(session);
 }
 #endif // !MOBILEAPP
