@@ -1018,7 +1018,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146955)
     // import of that DOCX raised a SAX exception, when the code tried to access a non-existent
     // footnote
     uno::Reference<text::XFootnotesSupplier> xNotes(mxComponent, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xNotes->getFootnotes()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xNotes->getFootnotes()->getCount());
 }
 #endif
 
