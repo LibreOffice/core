@@ -3362,6 +3362,63 @@ class Menubar extends window.L.Control {
 	}
 
 	/**
+	 * Lists the entries of the File menu as menu definitions, with the
+	 * visibility, restriction and locking rules of the menubar.
+	 * @returns The File menu entries for the current document type.
+	 */
+	getFileMenuEntries(): Array<MenuDefinition> {
+		const docType = this._map.getDocType();
+		const menu = this.options[docType as keyof typeof this.options] as Array<any>;
+		const fileMenu = (menu || []).find((item: any) => item.id === 'file');
+		return fileMenu ? this._getMenuDefinitions(fileMenu.menu, docType) : [];
+	}
+
+	/**
+	 * Runs a menu entry the way a click on it in the menubar does.
+	 * @param id - The menu item ID.
+	 */
+	executeMenuAction(id: string): void {
+		this._executeAction(undefined, {id: id});
+	}
+
+	private _getMenuDefinitions(menu: any[], docType: string): Array<MenuDefinition> {
+		const entries: Array<MenuDefinition> = [];
+		for (const item of menu) {
+			if (this._checkItemVisibility(item) === false)
+				continue;
+			if (item.type === 'separator') {
+				if (entries.length && entries[entries.length - 1].type !== 'separator')
+					entries.push({type: 'separator'} as MenuDefinition);
+				continue;
+			}
+			if (item.hidden || (item.tablet === false && window.mode.isTablet()))
+				continue;
+			if (this._map.isRestrictedUser() && this._map.isRestrictedItem(item))
+				continue;
+
+			const entry = {
+				id: item.id,
+				text: item.name !== undefined ? item.name : _UNO(item.uno, docType),
+			} as MenuDefinition;
+			if (item.type === 'menu') {
+				entry.items = this._getMenuDefinitions(item.menu, docType);
+				if (!entry.items.length)
+					continue;
+			}
+			if (this._map.isLockedUser() && this._map.isLockedItem(item)) {
+				entry.class = 'locking-disabled';
+				entry.locked = true;
+			} else if (item.type !== 'menu' && item.uno && item.type !== 'action') {
+				entry.uno = item.uno;
+			}
+			entries.push(entry);
+		}
+		if (entries.length && entries[entries.length - 1].type === 'separator')
+			entries.pop();
+		return entries;
+	}
+
+	/**
        * Recursively generates a menu structure object from a configuration item.
        * @param item - The menu configuration item.
        * @param docType - The document type.

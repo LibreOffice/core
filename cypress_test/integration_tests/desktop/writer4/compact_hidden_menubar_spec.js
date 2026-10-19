@@ -1,4 +1,4 @@
-/* global describe it cy beforeEach require */
+/* global describe it cy beforeEach require expect */
 
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
@@ -122,5 +122,20 @@ describe(['tagdesktop'], 'Compact view: the document button brings back a hidden
 		setPermission('readonly');
 		helper.processToIdle(this.win);
 		cy.cGet('.main-nav').should('not.be.visible');
+	});
+
+	it('lists the same File entries as the menu bar', function() {
+		cy.cGet('#menu-file').click();
+		cy.cGet('#menu-file > ul > li > a:visible').should('have.length.greaterThan', 3);
+
+		cy.getFrameWindow().should(function(win) {
+			var expected = win.app.map.menubar.getFileMenuEntries()
+				.filter(function(entry) { return entry.type !== 'separator'; })
+				.map(function(entry) { return entry.text; });
+			var shown = Array.from(win.document.querySelectorAll('#menu-file > ul > li > a:not(.separator)'))
+				.filter(function(link) { return link.checkVisibility(); })
+				.map(function(link) { return link.firstChild.textContent.trim(); });
+			expect(shown).to.deep.equal(expected);
+		});
 	});
 });

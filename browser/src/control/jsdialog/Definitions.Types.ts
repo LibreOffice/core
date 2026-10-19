@@ -336,6 +336,7 @@ interface MenuDefinition extends WidgetJSON {
 	class?: string; // extra CSS class to add to the rendered entry
 	shortcut?: string; // keyboard shortcut to display right-aligned next to the entry
 	separatorAfter?: boolean; // draw a separator below this entry
+	locked?: boolean; // the entry is locked for this user, a click asks to unlock
 }
 
 interface HtmlContentJson extends WidgetJSON {
