@@ -242,4 +242,36 @@ describe(['tagdesktop'], 'Compact view: the document button brings back a hidden
 			expect(win.getComputedStyle(win.document.getElementById('documentmenu-entries')).maxHeight).to.equal('none');
 		});
 	});
+
+	function pressAltMF() {
+		cy.getFrameWindow().then(function(win) {
+			win.app.UI.compactViewAccessibility.onDocumentKeyDown({ key: 'Alt' });
+			win.app.UI.compactViewAccessibility.onDocumentKeyUp({ key: 'Alt' });
+		});
+		cy.cGet('body').should('have.class', 'activate-info-boxes');
+		cy.realPress('m');
+		cy.realPress('f');
+	}
+
+	it('opens the document menu with Alt M F while the menu bar is hidden', function() {
+		hideMenubarFromViewMenu(this.win);
+
+		pressAltMF();
+
+		cy.cGet('#documentmenu-dropdown').should('be.visible');
+		cy.cGet('#documentmenu-entries [data-filter-text="show menu bar"]').should('have.focus');
+	});
+
+	it('opens File in the menu bar with Alt M F after the menu bar came back', function() {
+		hideMenubarFromViewMenu(this.win);
+		pressAltMF();
+		cy.cGet('#documentmenu-entries [data-filter-text="show menu bar"]').click();
+		helper.processToIdle(this.win);
+		cy.cGet('.main-nav').should('be.visible');
+
+		pressAltMF();
+
+		cy.cGet('#menu-file > ul').should('be.visible');
+		cy.cGet('#documentmenu-dropdown').should('not.exist');
+	});
 });

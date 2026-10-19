@@ -275,7 +275,7 @@ class TopToolbar extends JSDialog.Toolbar {
 
 		var items = [
 			{type: 'overflowmanager', id: 'overflow-manager-toptoolbar', children: [
-				{type: 'menubutton', id: 'documentmenu:DocumentFileMenu', command: 'documentmenu', noLabel: true, image: false, text: this.getDocumentMenuText(), mobile: false, tablet: false, visible: false},
+				{type: 'menubutton', id: 'documentmenu:DocumentFileMenu', command: 'documentmenu', noLabel: true, image: false, text: this.getDocumentMenuText(), mobile: false, tablet: false, visible: false, accessibility: { focusBack: false, combination: 'MF' }},
 				{type: 'separator', orientation: 'vertical', id: 'documentmenubreak', mobile: false, tablet: false, visible: false},
 				{type: 'overflowgroup', id: 'save-toptoolbar', children: saveGroup},
 				{type: 'separator', orientation: 'vertical', id: 'savebreak', mobile: false},

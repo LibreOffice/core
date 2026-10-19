@@ -79,10 +79,7 @@ class CompactViewAccessibility {
 		for (const item of menuItems) {
 			if (!item.accessibility?.combination || !item.id) continue;
 
-			const anchor = document.getElementById(
-				'menu-' + item.id,
-			) as HTMLElement | null;
-			if (!anchor || anchor.offsetParent === null) continue;
+			if (!document.getElementById('menu-' + item.id)) continue;
 
 			this.contentList.push({
 				id: 'menu-' + item.id,
@@ -260,12 +257,10 @@ class CompactViewAccessibility {
 	private findMatchingItem(): AccessibilityItem | null {
 		if (!this.combination) return null;
 
-		for (const item of this.contentList) {
-			if (item.combination === this.combination) return item;
-		}
-
-		for (const item of this.fixedContentList) {
-			if (item.combination === this.combination) return item;
+		for (const item of this.contentList.concat(this.fixedContentList)) {
+			if (item.combination !== this.combination) continue;
+			const element = this.findElement(item.id);
+			if (element && element.offsetParent !== null) return item;
 		}
 		return null;
 	}
