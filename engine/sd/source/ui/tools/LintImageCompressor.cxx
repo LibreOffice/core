@@ -66,10 +66,10 @@ LintCompressedImage compressGraphic(const Graphic& rGraphic, sal_uInt64 nSourceB
     const Size aScaledSize(std::min(nTargetWidth, aPixelSize.Width()),
                            std::min(nTargetHeight, aPixelSize.Height()));
 
-    // The default scaling is the one the rest of the program draws a bitmap with. It gets through a
-    // slide-sized photograph in a fraction of a second, which fits a single turn of the idle loop
-    // the measurement runs in.
-    if (aScaledSize != aPixelSize && !aBitmap.Scale(aScaledSize, BmpScaleFlag::Default))
+    // The scaled image is what the document keeps after the fix, so it is scaled at the best
+    // quality. A slide-sized photograph still scales in a fraction of a second, which fits a single
+    // turn of the idle loop the measurement runs in.
+    if (aScaledSize != aPixelSize && !aBitmap.Scale(aScaledSize, BmpScaleFlag::BestQuality))
         return aResult;
 
     const bool bTransparent = rGraphic.IsTransparent() || aBitmap.HasAlpha();
