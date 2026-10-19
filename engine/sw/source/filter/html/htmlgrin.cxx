@@ -493,12 +493,11 @@ IMAGE_SETEVENT:
             }
         }
     }
-    else if (m_sBaseURL.isEmpty() || !aGraphicData.isEmpty())
+    else if (m_bFromClipboard || !aGraphicData.isEmpty())
     {
         if (comphelper::COKit::isActive() && HostFilter::isForbidden(aGraphicURL.GetHost()))
             KitHelper::sendNetworkAccessError("paste");
 
-        // sBaseURL is empty if the source is clipboard
         // aGraphicData is non-empty for <object data="..."> -> not a linked graphic.
         if (ERRCODE_NONE == GraphicFilter::GetGraphicFilter().ImportGraphic(aGraphic, aGraphicURL))
             sGrfNm.clear();
