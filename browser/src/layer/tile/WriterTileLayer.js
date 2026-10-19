@@ -138,7 +138,8 @@ window.L.WriterTileLayer = window.L.CanvasTileLayer.extend({
 	_onStatusMsg: function (textMsg) {
 		const statusJSON = JSON.parse(textMsg.replace('status:', '').replace('statusupdate:', ''));
 
-		if (app.socket._reconnecting) {
+		// A reattached view still has its cursor in the kit.
+		if (app.socket._reconnecting && !statusJSON.reattached) {
 			// persist cursor position on reconnection
 			// In writer, core always sends the cursor coordinates
 			// of the first paragraph of the document so we want to ignore that

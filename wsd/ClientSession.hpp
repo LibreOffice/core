@@ -829,6 +829,9 @@ private:
     /// True after a reconnect, until the browser's next load has refreshed the view.
     bool _resyncOnNextLoad;
 
+    /// True from the resync of a reconnected view until the next status goes to the browser.
+    bool _nextStatusReattached;
+
     Poco::SharedPtr<Poco::JSON::Object> _viewSettingsJSON;
 
 #if !MOBILEAPP || defined(QTAPP) || defined(MACOSAPP) || defined(_WIN32)

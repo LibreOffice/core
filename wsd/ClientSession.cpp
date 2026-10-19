@@ -172,6 +172,7 @@ ClientSession::ClientSession(const std::shared_ptr<ProtocolHandlerInterface>& ws
     , _isConvertTo(false)
     , _isRemoteDocumentConnection(requestDetails.isRemoteDocument())
     , _resyncOnNextLoad(false)
+    , _nextStatusReattached(false)
 {
     const std::size_t curConnections = ++COOLWSD::NumConnections;
     LOG_INF("ClientSession ctor [" << getName() << "] for URI: [" << _uriPublic.toString()
@@ -2754,6 +2755,7 @@ bool ClientSession::resyncAfterReconnect(const StringVector& tokens,
     }
 
     // A fresh status carries the view id the browser's document layer is rebuilt around.
+    _nextStatusReattached = true;
     docBroker->forwardToChild(client_from_this(), "status");
 
     // useractive makes the kit send everyone a new viewinfo, this view its current part, and the
@@ -4177,8 +4179,21 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
         if (statusJsonObject->has("viewid"))
             _kitViewId = std::atoi(statusJsonObject->get("viewid").toString().c_str());
 
-        // Forward the status response to the client.
-        const bool forwarded = forwardToClient(payload);
+        // Forward the status response to the client. The first one after a reconnect says that
+        // the view is the one the browser had, so the browser keeps what it has set up for it.
+        bool forwarded;
+        if (_nextStatusReattached)
+        {
+            _nextStatusReattached = false;
+            Poco::JSON::Object::Ptr reattachedStatus = statusJsonObject;
+            reattachedStatus->set("reattached", true);
+            std::ostringstream oss;
+            oss << "status: ";
+            reattachedStatus->stringify(oss);
+            forwarded = forwardToClient(std::make_shared<Message>(oss.str(), Message::Dir::Out));
+        }
+        else
+            forwarded = forwardToClient(payload);
 
         // The position the last view of this document left goes on once, after the first
         // status. The kit sends a status again whenever the document size changes.
@@ -5044,6 +5059,7 @@ void ClientSession::dumpState(std::ostream& os)
                             std::chrono::steady_clock::now() - _parkedSince).count()
                       : 0)
        << " s\n\t\tresyncOnNextLoad: " << _resyncOnNextLoad
+       << "\n\t\tnextStatusReattached: " << _nextStatusReattached
        << "\n\t\tclientSelectedMode: " << _clientSelectedMode
        << "\n\t\tvisibleAreaMode: " << _visibleAreaMode
        << "\n\t\trequestedTiles: " << getRequestedTiles().size()

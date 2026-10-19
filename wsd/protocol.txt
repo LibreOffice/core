@@ -1244,6 +1244,10 @@ statusupdate: type=<typeName> parts=<numberOfParts> current=<currentPartNumber> 
     GUID, and each entry of the parts array carries its page's
     identifier as part, in document order.
 
+    The first status: after a reconnect that gave the client its old view
+    back has "reattached": true. The view still has its cursor, selection,
+    part and dialogs in the kit.
+
 styles: {"styleFamily": ["styles in family"], etc. }
 
 statechanged: <key>=<value>

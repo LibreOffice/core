@@ -661,8 +661,9 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 					this._pendingPartPicks = [];
 					// Before the first status arrives there is no part list, so
 					// there is no identifier to restore the selection with.
+					// A reattached view is still on its slide in the kit.
 					const selectedPart = this.getSelectedPart();
-					if (selectedPart)
+					if (selectedPart && !statusJSON.reattached)
 						app.socket.sendMessage('setclientpart part=' + selectedPart);
 				} else {
 					// The status names the selected slide by its part

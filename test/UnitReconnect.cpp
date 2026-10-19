@@ -161,10 +161,11 @@ class UnitReconnect : public UnitWSD
     }
 
     /// The viewid in the next status: message, or -1. When sawCanonicalId is given, it is set if a
-    /// canonicalidchange: message went by on the way to the status.
+    /// canonicalidchange: message went by on the way to the status. When reattached is given, it is
+    /// set if the status says that the view is the one the client had before.
     static int waitForStatusViewId(http::WebSocketSession& session,
                                    std::chrono::milliseconds timeout,
-                                   bool* sawCanonicalId = nullptr)
+                                   bool* sawCanonicalId = nullptr, bool* reattached = nullptr)
     {
         const std::vector<char> status = session.poll(
             [&](const std::vector<char>& message) -> bool
@@ -178,6 +179,8 @@ class UnitReconnect : public UnitWSD
         if (status.empty())
             return -1;
         const std::string text(status.begin(), status.end());
+        if (reattached)
+            *reattached = text.find("\"reattached\":true") != std::string::npos;
         const auto pos = text.find("\"viewid\":");
         return pos == std::string::npos ? -1 : std::atoi(text.c_str() + pos + 9);
     }
@@ -329,8 +332,11 @@ UnitBase::TestResult UnitReconnect::testTakeoverOfLiveSession()
     auto sessionA = connect(documentURL);
     const std::string token = waitForToken(*sessionA);
     LOK_ASSERT(!token.empty());
-    const int viewIdA = waitForStatusViewId(*sessionA, std::chrono::seconds(30));
+    bool reattached = true;
+    const int viewIdA = waitForStatusViewId(*sessionA, std::chrono::seconds(30), nullptr,
+                                            &reattached);
     LOK_ASSERT(viewIdA >= 0);
+    LOK_ASSERT_MESSAGE("The status of a new view says it was reattached", !reattached);
     LOK_ASSERT(waitForViews(*sessionA, 1, 0, std::chrono::seconds(30)));
     auto sessionB = connect(documentURL);
     LOK_ASSERT(waitForViews(*sessionB, 2, 0, std::chrono::seconds(30)));
@@ -341,8 +347,10 @@ UnitBase::TestResult UnitReconnect::testTakeoverOfLiveSession()
     const std::string newToken = waitForToken(*sessionA2, &sawCanonicalId);
     LOK_ASSERT_MESSAGE("The reconnected browser got no new token",
                        !newToken.empty() && newToken != token);
-    const int viewIdA2 = waitForStatusViewId(*sessionA2, std::chrono::seconds(10), &sawCanonicalId);
+    const int viewIdA2 = waitForStatusViewId(*sessionA2, std::chrono::seconds(10), &sawCanonicalId,
+                                             &reattached);
     LOK_ASSERT_EQUAL(viewIdA, viewIdA2);
+    LOK_ASSERT_MESSAGE("The status of the reattached view does not say so", reattached);
     // The browser rebuilt its tile layer, so it needs its canonical view id again.
     LOK_ASSERT_MESSAGE("The reconnected browser got no canonicalidchange",
                        sawCanonicalId || !sessionA2->waitForMessage("canonicalidchange:",

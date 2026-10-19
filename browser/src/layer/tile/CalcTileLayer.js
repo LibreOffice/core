@@ -521,8 +521,12 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 
 			const reconnecting = app.socket._reconnecting;
 			if (reconnecting) {
-				app.socket.sendMessage('setclientpart part=' + this._selectedPart);
-				this._resetInternalState();
+				// A reattached view still has its sheet, cell cursor and selection
+				// in the kit.
+				if (!statusJSON.reattached) {
+					app.socket.sendMessage('setclientpart part=' + this._selectedPart);
+					this._resetInternalState();
+				}
 				window.keyboard.applyOnscreenKeyboardMode();
 			} else {
 				// The status names the selected sheet by its part identifier,

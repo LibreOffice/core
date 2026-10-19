@@ -1159,20 +1159,26 @@ class Socket {
 			RenderManager.revalidateCachedParts();
 			this._map.fire('statusindicator', { statusType: 'reconnected' });
 
-			const darkTheme = window.prefs.getBoolean('darkTheme');
-			this._map.uiManager.activateDarkModeInCore(darkTheme);
-			this._map.uiManager.applyInvert();
-			this._map.uiManager.setCanvasColorAfterModeChange();
+			// A reattached view keeps its mode, notebookbar, sidebar and dialogs
+			// in the kit, so only a new view needs them set up again.
+			if (!command.reattached) {
+				const darkTheme = window.prefs.getBoolean('darkTheme');
+				this._map.uiManager.activateDarkModeInCore(darkTheme);
+				this._map.uiManager.applyInvert();
+				this._map.uiManager.setCanvasColorAfterModeChange();
 
-			if (!window.mode.isSmallScreenDevice())
-				this._map.uiManager.initializeNotebookbarInCore();
+				if (!window.mode.isSmallScreenDevice())
+					this._map.uiManager.initializeNotebookbarInCore();
 
-			// close all the popups otherwise document textArea will not get focus
-			this._map.uiManager.closeAll();
+				// close all the popups otherwise document textArea will not get focus
+				this._map.uiManager.closeAll();
+			}
 			this._map.setPermission(app.file.permission);
 			this.endMigration();
-			this._map.uiManager.initializeSidebar();
-			this._map.uiManager.refreshTheme();
+			if (!command.reattached) {
+				this._map.uiManager.initializeSidebar();
+				this._map.uiManager.refreshTheme();
+			}
 		}
 
 		this._map.fire('docloaded', { status: true });
