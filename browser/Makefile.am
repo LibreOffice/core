@@ -380,6 +380,7 @@ COOL_JS_LST =\
 	src/app/LayoutingService.ts \
 	src/app/ServerConnectionService.ts \
 	src/app/DocEvents.ts \
+	src/app/StateMachine.ts \
 	src/docstate.ts \
 	src/docstatefunctions.js \
 	src/app/ExportFormats.ts \

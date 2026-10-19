@@ -53,55 +53,104 @@ enum ReviewModeTrigger {
 	CoreState,
 }
 
-// The states each state can move to.
-const reviewModeTransitions: Record<ReviewModeState, ReviewModeState[]> = {
-	[ReviewModeState.Unknown]: [
-		ReviewModeState.Off,
-		ReviewModeState.On,
-		ReviewModeState.Starting,
-		ReviewModeState.Requested,
-	],
-	[ReviewModeState.Off]: [
-		ReviewModeState.Off,
-		ReviewModeState.On,
-		ReviewModeState.Starting,
-		ReviewModeState.Requested,
-	],
-	[ReviewModeState.Requested]: [
-		ReviewModeState.Requested,
-		ReviewModeState.Starting,
-		ReviewModeState.On,
-		ReviewModeState.Off,
-	],
-	[ReviewModeState.Starting]: [
-		ReviewModeState.Starting,
-		ReviewModeState.On,
-		ReviewModeState.Off,
-	],
-	[ReviewModeState.On]: [ReviewModeState.On, ReviewModeState.Off],
-};
+// The moves review mode can make, with what each one does to recording and the Review tab.
+function reviewModeTransitions(
+	map: MapInterface,
+): StateMachineTransition<ReviewModeState, ReviewModeTrigger>[] {
+	const { Unknown, Off, Requested, Starting, On } = ReviewModeState;
+	const { User, Permission, CoreState } = ReviewModeTrigger;
+
+	const showReviewTab = () => {
+		map.uiManager.notebookbar?.selectTab('Review');
+	};
+	const startRecording = () => {
+		map.sendUnoCommand('.uno:TrackChangesInThisView');
+	};
+	const startRecordingAndShowTab = () => {
+		startRecording();
+		showReviewTab();
+	};
+	// The command takes an argument because swriter.sdi gives TrackChangesInThisView none and
+	// core treats that as on.
+	const stopRecording = () => {
+		map.sendUnoCommand('.uno:TrackChanges?TrackChanges:bool=false');
+	};
+
+	return [
+		// The first report from core. A document loaded with recording on keeps its tab.
+		{ from: Unknown, to: Off, triggers: [CoreState] },
+		{ from: Unknown, to: On, triggers: [CoreState, Permission] },
+		{ from: Unknown, to: On, triggers: [User], action: showReviewTab },
+		{
+			from: Unknown,
+			to: Starting,
+			triggers: [User],
+			action: startRecordingAndShowTab,
+		},
+		{ from: Unknown, to: Requested, triggers: [User] },
+
+		// Recording turned on from the Review tab or a shortcut opens the tab. A view that
+		// becomes editable while recording is already on keeps its tab.
+		{ from: Off, to: On, triggers: [CoreState, User], action: showReviewTab },
+		{ from: Off, to: On, triggers: [Permission] },
+		{
+			from: Off,
+			to: Starting,
+			triggers: [User],
+			action: startRecordingAndShowTab,
+		},
+		{ from: Off, to: Requested, triggers: [User] },
+
+		// The edit permission arrived for a review request made while read-only.
+		{ from: Requested, to: Requested, triggers: [User] },
+		{
+			from: Requested,
+			to: Starting,
+			triggers: [Permission],
+			action: startRecordingAndShowTab,
+		},
+		{ from: Requested, to: On, triggers: [Permission], action: showReviewTab },
+		{ from: Requested, to: Off, triggers: [User, Permission] },
+
+		// The view became editable again while waiting, so a reloaded view records too.
+		{
+			from: Starting,
+			to: Starting,
+			triggers: [Permission],
+			action: startRecording,
+		},
+		{ from: Starting, to: On, triggers: [CoreState] },
+		// Leaving review mode by choice stops this user's recording. A read-only view takes
+		// no command.
+		{ from: Starting, to: Off, triggers: [User], action: stopRecording },
+		{ from: Starting, to: Off, triggers: [Permission] },
+		{ from: On, to: Off, triggers: [User], action: stopRecording },
+		{ from: On, to: Off, triggers: [CoreState, Permission] },
+	];
+}
 
 // Holds the review mode state and performs every change to it.
-class ReviewModeMachine {
-	private current: ReviewModeState = ReviewModeState.Unknown;
+class ReviewModeMachine extends StateMachine<
+	ReviewModeState,
+	ReviewModeTrigger
+> {
 	private map: MapInterface;
-	private onChanged: () => void;
 
 	constructor(map: MapInterface, onChanged: () => void) {
+		super({
+			name: 'ReviewModeMachine',
+			initial: ReviewModeState.Unknown,
+			transitions: reviewModeTransitions(map),
+			stateNames: ReviewModeState,
+			triggerNames: ReviewModeTrigger,
+			onChanged: onChanged,
+		});
 		this.map = map;
-		this.onChanged = onChanged;
-	}
-
-	get state(): ReviewModeState {
-		return this.current;
 	}
 
 	// True while the view is in review mode, whether or not core has confirmed recording yet.
 	isReviewing(): boolean {
-		return (
-			this.current === ReviewModeState.Starting ||
-			this.current === ReviewModeState.On
-		);
+		return this.is(ReviewModeState.Starting, ReviewModeState.On);
 	}
 
 	// The recording state core last reported for this view.
@@ -109,70 +158,6 @@ class ReviewModeMachine {
 		const state =
 			this.map['stateChangeHandler'].getItemValue('.uno:TrackChanges');
 		return state === 'true' || state === true;
-	}
-
-	// The only place the state changes.
-	transition(
-		from: ReviewModeState,
-		to: ReviewModeState,
-		trigger: ReviewModeTrigger,
-	): boolean {
-		if (this.current !== from) {
-			app.console.warn(
-				'ReviewModeMachine: refused transition from ' +
-					ReviewModeState[from] +
-					' to ' +
-					ReviewModeState[to] +
-					', the current state is ' +
-					ReviewModeState[this.current],
-			);
-			return false;
-		}
-		if (!reviewModeTransitions[from].includes(to)) {
-			app.console.warn(
-				'ReviewModeMachine: no transition from ' +
-					ReviewModeState[from] +
-					' to ' +
-					ReviewModeState[to],
-			);
-			return false;
-		}
-
-		this.current = to;
-
-		if (to === ReviewModeState.Starting) {
-			// Sent again when the view becomes editable while still waiting, so a reloaded
-			// view records too.
-			this.map.sendUnoCommand('.uno:TrackChangesInThisView');
-			if (from !== to) this.showReviewTab();
-		} else if (to === ReviewModeState.On) {
-			// A document that loads with recording on keeps its current tab, and so does a
-			// view that becomes editable while recording is already on.
-			const userTurnedRecordingOn =
-				from === ReviewModeState.Off && trigger === ReviewModeTrigger.CoreState;
-			if (
-				trigger === ReviewModeTrigger.User ||
-				from === ReviewModeState.Requested ||
-				userTurnedRecordingOn
-			)
-				this.showReviewTab();
-		} else if (
-			to === ReviewModeState.Off &&
-			trigger === ReviewModeTrigger.User &&
-			(from === ReviewModeState.Starting || from === ReviewModeState.On)
-		) {
-			// Leaving review mode by choice stops this user's recording. The command takes an
-			// argument because swriter.sdi gives TrackChangesInThisView none and core treats
-			// that as on.
-			this.map.sendUnoCommand('.uno:TrackChanges?TrackChanges:bool=false');
-		}
-
-		if (from !== to) this.onChanged();
-		return true;
-	}
-
-	private showReviewTab(): void {
-		this.map.uiManager.notebookbar?.selectTab('Review');
 	}
 }
 

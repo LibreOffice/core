@@ -20,6 +20,7 @@
 /// <reference path="../src/app/TableStyleGalleryService.ts" />
 /// <reference path="../src/app/ServerConnectionService.ts" />
 /// <reference path="../src/app/DocEvents.ts" />
+/// <reference path="../src/app/StateMachine.ts" />
 /// <reference path="../src/docstate.ts" />
 /// <reference path="../src/docstatefunctions.js" />
 /// <reference path="../src/app/ExportFormats.ts" />
