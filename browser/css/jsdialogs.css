@@ -381,14 +381,14 @@ div#autoFillPreviewTooltip .lokdialog.ui-dialog-content.ui-widget-content {
 }
 
 /* Security Label dialog: cap the category list so it -- and only it -- scrolls, never
-   the whole dialog. Its container is sized with max-height (not a definite height), so
-   the vexpand grid row cannot resolve and the list would otherwise grow to its full
-   content and push the dialog past its own max-height, producing a second, outer
-   scrollbar. The reserve leaves room for the marking banner above, the
-   policy/classification rows and the (wrapping) warning below; tune it if those
+   the whole dialog, however many categories the policy has. Its container is sized with
+   max-height, so the vexpand grid row has no definite height to resolve against, and the
+   list grows to its full content unless capped here. Like .ui-dialog-content, the cap
+   follows the space the dialog has; the reserve leaves room for the marking banner above,
+   the policy and classification rows and the (wrapping) warning below; tune it if those
    grow. */
 #SecurityLabelDialog #categorieswin {
-	max-height: calc(90vh - 28rem);
+	max-height: calc(0.9 * var(--dialog-available-height) - 28rem);
 	overflow-y: auto;
 }
 
