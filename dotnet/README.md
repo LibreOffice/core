@@ -152,7 +152,7 @@ Requires the .NET 10 SDK.
 ```bash
 dotnet build XRay.Office.slnx -c Release   # warning-free; TreatWarningsAsErrors is on
 dotnet test  XRay.Office.slnx -c Release
-dotnet pack  XRay.Office.slnx -c Release -o artifacts   # the 13 packages under src/, with symbols
+dotnet pack  XRay.Office.slnx -c Release -o artifacts   # the 13 packages under src/ (symbols embedded)
 ```
 
 `XRay.Office.Fidelity.Tests` compares against an installed LibreOffice and skips, with a reason,

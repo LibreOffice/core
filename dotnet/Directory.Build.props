@@ -62,8 +62,10 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>logo.png</PackageIcon>
     <PackageTags>x-ray;office;document;docx;xlsx;pptx;doc;xls;ppt;odf;rtf;pdf;rendering;extraction;libreoffice</PackageTags>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <!-- No .snupkg: a symbol package beside each .nupkg is a second push that can fail the first.
+         The symbols are embedded in the assemblies instead, so stepping into the packages still works. -->
+    <IncludeSymbols>false</IncludeSymbols>
+    <DebugType>embedded</DebugType>
   </PropertyGroup>
 
   <!--

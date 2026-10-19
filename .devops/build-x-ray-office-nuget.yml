@@ -53,13 +53,6 @@ pool:
   vmImage: 'windows-latest'
 
 steps:
-# nuget.exe 7.6 or later: an external service connection that authenticates with an API key
-# (the `nuget-curiosity-org` push below) is refused by older versions, and the task's default is 6.x.
-- task: NuGetToolInstaller@1
-  inputs:
-    versionSpec: '>=7.6.0'
-
-
 - task: PowerShell@2
   displayName: 'Create CalVer Version'
   inputs:
@@ -136,33 +129,15 @@ steps:
     nobuild: true
   displayName: 'pack nuget'
 
-# Marks that every package was built and packed, so the push steps below may run even when an
-# earlier push failed, but never after a failed build or pack.
-- task: PowerShell@2
-  displayName: 'mark packed'
-  inputs:
-    targetType: 'inline'
-    script: |
-      Write-Host "##vso[task.setvariable variable=packed;]true"
+# Push every package in one step, as sentence-transformers-sharp does. No NuGetToolInstaller step:
+# it put nuget.exe 6.4 on the path, which refuses an API key service connection, whereas the push
+# task's own bundled nuget.exe accepts it. No symbol packages (.snupkg) are produced, so nothing
+# beside a .nupkg can fail the push.
 
-# One push step per package (templates/push-nuget.yml), not one glob push. A glob push stops at the
-# first package that fails, and a later package then never reaches nuget.org (the first runs of the
-# multi-package pipelines published one package each). Each step also skips a package that is already
-# on nuget.org at this version, so a re-run of the same build completes the set instead of failing on
-# the packages that went out the first time. The .snupkg beside each .nupkg is pushed with it.
-- template: templates/push-nuget.yml
-  parameters:
-    packages:
-    - X-Ray.Office.Core
-    - X-Ray.Office.Containers
-    - X-Ray.Office.Text
-    - X-Ray.Office.Vector
-    - X-Ray.Office.Rendering
-    - X-Ray.Office.Markup
-    - X-Ray.Office.Ooxml
-    - X-Ray.Office.OpenDocument
-    - X-Ray.Office.MsBinary
-    - X-Ray.Office.WordProcessing
-    - X-Ray.Office.Spreadsheets
-    - X-Ray.Office.Presentations
-    - X-Ray.Office
+- task: NuGetCommand@2
+  displayName: 'push nuget'
+  inputs:
+    command: 'push'
+    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg'
+    nuGetFeedType: 'external'
+    publishFeedCredentials: 'nuget-curiosity-org'
