@@ -2984,7 +2984,7 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 				'type': 'overflowgroup',
 				'name': _('Themes'),
 				'nofold': true,
-				'icon': 'lc_themesthames.svg',
+				'icon': 'lc_themedialog.svg',
 				'children': [
 					{
 						'id': 'iconview_theme_colors-iconview-list',
