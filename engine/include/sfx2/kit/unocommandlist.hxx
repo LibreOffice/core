@@ -15,6 +15,7 @@ enum class PayloadType
 {
     None,
     IsActivePayload,
+    IsActiveOrDisabledPayload,
     FontNamePayload,
     FontHeightPayload,
     StyleApplyPayload,

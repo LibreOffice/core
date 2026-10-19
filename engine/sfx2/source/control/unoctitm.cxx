@@ -899,6 +899,17 @@ OString IsActivePayload(sal_uInt16, SfxViewFrame*, const css::frame::FeatureStat
     return aEvent.FeatureURL.Complete.toUtf8() + "=" + OString::boolean(bTemp);
 }
 
+// Like IsActivePayload, but sends "disabled" for a disabled command. An enabled command whose
+// state is not a boolean reads as not active.
+OString IsActiveOrDisabledPayload(sal_uInt16 nSID, SfxViewFrame* pViewFrame,
+                                  const css::frame::FeatureStateEvent& aEvent,
+                                  const SfxPoolItem* pState)
+{
+    if (!aEvent.IsEnabled)
+        return aEvent.FeatureURL.Complete.toUtf8() + "=disabled";
+    return IsActivePayload(nSID, pViewFrame, aEvent, pState);
+}
+
 OString FontNamePayload(sal_uInt16, SfxViewFrame*, const css::frame::FeatureStateEvent& aEvent,
                         const SfxPoolItem*)
 {
@@ -1162,6 +1173,7 @@ OString TableStylePayload(sal_uInt16, SfxViewFrame*, const css::frame::FeatureSt
 constexpr auto enumToPayload = frozen::make_unordered_map<PayloadType, PayloadGetter_t>({
     { PayloadType::None, nullptr },
     { PayloadType::IsActivePayload, IsActivePayload },
+    { PayloadType::IsActiveOrDisabledPayload, IsActiveOrDisabledPayload },
     { PayloadType::FontNamePayload, FontNamePayload },
     { PayloadType::FontHeightPayload, FontHeightPayload },
     { PayloadType::StyleApplyPayload, StyleApplyPayload },
@@ -1220,12 +1232,12 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
         { u"AlignHorizontalCenter", { PayloadType::IsActivePayload, true } },
         { u"AlignRight", { PayloadType::IsActivePayload, true } },
         { u"DocumentRepair", { PayloadType::IsActivePayload, true } },
-        { u"ObjectAlignLeft", { PayloadType::IsActivePayload, true } },
-        { u"ObjectAlignRight", { PayloadType::IsActivePayload, true } },
-        { u"AlignCenter", { PayloadType::IsActivePayload, true } },
-        { u"AlignUp", { PayloadType::IsActivePayload, true } },
-        { u"AlignMiddle", { PayloadType::IsActivePayload, true } },
-        { u"AlignDown", { PayloadType::IsActivePayload, true } },
+        { u"ObjectAlignLeft", { PayloadType::IsActiveOrDisabledPayload, true } },
+        { u"ObjectAlignRight", { PayloadType::IsActiveOrDisabledPayload, true } },
+        { u"AlignCenter", { PayloadType::IsActiveOrDisabledPayload, true } },
+        { u"AlignUp", { PayloadType::IsActiveOrDisabledPayload, true } },
+        { u"AlignMiddle", { PayloadType::IsActiveOrDisabledPayload, true } },
+        { u"AlignDown", { PayloadType::IsActiveOrDisabledPayload, true } },
         { u"TraceChangeMode", { PayloadType::IsActivePayload, true } },
         { u"FormatPaintbrush", { PayloadType::IsActivePayload, true } },
         { u"FreezePanes", { PayloadType::IsActivePayload, true } },
