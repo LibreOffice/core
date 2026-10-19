@@ -241,8 +241,60 @@ class GraphicSelection {
 		// Nothing selected by asking for it is where one meant to be; nothing is to follow.
 		this.rememberWhereItStands(objectIds);
 		if (!objectIds.length) this.stoodAt = null;
+		if (RenderManager.isVectorRendering()) this.noteTheAsk(objectIds);
 		app.socket.sendMessage('selectobjects ids=' + objectIds.join(','));
 		this.tellTheStates();
+	}
+
+	/*
+		The selections the client asked the engine for that the engine has not moved on from, oldest
+		first, each as the ids of its objects. The first may be one the engine reported already,
+		since it reports a selection again after each change of its objects. Empty where the last
+		report named a selection the client did not ask for.
+	*/
+	private static askedFor: number[][] = [];
+
+	/// The most selections that wait for their report; a longer row loses its oldest.
+	private static readonly mostAsked: number = 16;
+
+	/// Whether the two lists name the same objects in the same order.
+	private static sameObjects(one: number[], other: number[]): boolean {
+		return (
+			one.length === other.length &&
+			one.every((objectId: number, index: number) => objectId === other[index])
+		);
+	}
+
+	/// Notes a selection asked of the engine, behind the ones asked before it. The same one asked
+	/// again in a row is noted once, as the engine reports it once.
+	private static noteTheAsk(objectIds: number[]): void {
+		const last = this.askedFor[this.askedFor.length - 1];
+		if (last && this.sameObjects(last, objectIds)) return;
+
+		this.askedFor.push(objectIds.slice());
+		if (this.askedFor.length > this.mostAsked) this.askedFor.shift();
+	}
+
+	/*
+		Whether a report of the engine names a selection the client asked for before the last one it
+		asked for. The engine takes what it is sent in order, so such a report tells where it stood
+		before it came to the newer ones, whose reports follow, and it is left aside. The asks before
+		the one a report names are done with; a report that names none of them is a selection made
+		elsewhere, by an undo, a command or another user, and leaves none waiting.
+	*/
+	private static outdatedReport(objectIds: number[]): boolean {
+		if (!RenderManager.isVectorRendering()) return false;
+
+		const at = this.askedFor.findIndex((asked: number[]) =>
+			this.sameObjects(asked, objectIds),
+		);
+		if (at < 0) {
+			this.askedFor = [];
+			return false;
+		}
+
+		this.askedFor.splice(0, at);
+		return this.askedFor.length > 1;
 	}
 
 	/*
@@ -1627,6 +1679,7 @@ class GraphicSelection {
 		URLPopUpSection.closeURLPopUp();
 
 		if (textMsg.match('EMPTY')) {
+			if (this.outdatedReport([])) return;
 			this.resetSelectionRanges();
 			if (this.inPlaceArea) this.showInPlaceFrame();
 		} else if (textMsg.match('INPLACE EXIT')) {
@@ -1662,9 +1715,19 @@ class GraphicSelection {
 			if (!window.ThisIsTheiOSApp && !this.inPlaceMath)
 				app.socket.sendMessage('rendershapeselection mimetype=image/svg+xml');
 		} else {
-			this.inPlaceActive = false;
 			msgData = this.parseMessage(textMsg);
 
+			// A report of a selection the client asked for before its last one changes nothing.
+			if (
+				this.outdatedReport(
+					GraphicSelection.selectedObjectIDsOf(
+						msgData.length > 5 ? msgData[5] : null,
+					),
+				)
+			)
+				return;
+
+			this.inPlaceActive = false;
 			const isMathObject = this.isMathSelection(msgData);
 
 			this.transformGraphicSelection(msgData);
