@@ -482,7 +482,6 @@ def isNonLinuxFile(path):
     NonLinuxFiles = (
         "include/comphelper/windowserrorstring.hxx",
         "include/comphelper/windowsdebugoutput.hxx",
-        "include/comphelper/windowsStart.hxx",
         "include/drawinglayer/processor2d/d2dpixelprocessor2d.hxx",
         "include/version.hrc",
         "include/vcl/winscheduler.hxx",
