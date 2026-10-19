@@ -13,6 +13,12 @@ import ApplicationServices
 import Foundation
 import Network
 
+/// An action that did not go through, as the WebDriver error the request is answered with.
+struct W3CFailure {
+    let error: String
+    let message: String
+}
+
 /**
  * W3C WebDriver server that drives the target app via cross-process AX.
  *
@@ -108,7 +114,9 @@ final class NativeUIServer: WebDriverHTTPServerBase {
         if request.method == "POST" && subpath.count == 3
             && subpath[0] == "element" && subpath[2] == "click" {
             performOnElement(id: subpath[1], connection: connection) { [ax] elem in
-                ax.performPress(on: elem)
+                if let failure = ax.performPress(on: elem) {
+                    return W3CFailure(error: "element not interactable", message: failure)
+                }
                 return NSNull()
             }
             return
@@ -235,7 +243,10 @@ final class NativeUIServer: WebDriverHTTPServerBase {
                 return
             }
             let result = action(elem)
-            if let bool = result as? Bool {
+            if let failure = result as? W3CFailure {
+                self.sendW3CError(connection: connection, error: failure.error,
+                                  message: failure.message)
+            } else if let bool = result as? Bool {
                 self.sendW3C(connection: connection, value: bool)
             } else {
                 self.sendW3C(connection: connection, value: NSNull())
@@ -259,7 +270,9 @@ final class NativeUIServer: WebDriverHTTPServerBase {
         }
 
         performOnElement(id: elementId, connection: connection) { [ax] elem in
-            ax.setValue(text, on: elem)
+            if let failure = ax.setValue(text, on: elem) {
+                return W3CFailure(error: "invalid element state", message: failure)
+            }
             return NSNull()
         }
     }

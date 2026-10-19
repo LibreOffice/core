@@ -173,25 +173,44 @@ final class AXTree {
 
     // MARK: - Actions
 
-    func performPress(on elem: AXUIElement) {
-        AXUIElementPerformAction(elem, kAXPressAction as CFString)
+    /// Press the element.  Returns nil when the press went through, otherwise why it did not.
+    func performPress(on elem: AXUIElement) -> String? {
+        if (attr(elem, kAXEnabledAttribute as String) as? Bool) == false {
+            return "\(describe(elem)) is disabled"
+        }
+        let err = AXUIElementPerformAction(elem, kAXPressAction as CFString)
+        if err != .success {
+            return "pressing \(describe(elem)) failed with AXError \(err.rawValue)"
+        }
+        return nil
     }
 
-    func setValue(_ text: String, on elem: AXUIElement) {
-        // Special-case NSOpenPanel: drive it like a user via Cmd+Shift+G
-        // ("Go to folder") + typing the path + Return.  This works
-        // regardless of locale and exercises the panel's normal
-        // navigation/selection path.
+    /// Set the element's value.  NSOpenPanel is a special case: the text is a path, and the
+    /// panel is navigated to it and the file selected the way a user does it, through the
+    /// Go-to-folder sheet.  Returns nil when done, otherwise why it did not work.
+    func setValue(_ text: String, on elem: AXUIElement) -> String? {
         if stringAttr(elem, kAXIdentifierAttribute as String) == "open-panel" {
-            navigateOpenPanel(to: text)
-            return
+            return navigateOpenPanel(elem, to: text)
         }
-        AXUIElementSetAttributeValue(elem, kAXValueAttribute as CFString, text as CFString)
+        let err = AXUIElementSetAttributeValue(elem, kAXValueAttribute as CFString,
+                                               text as CFString)
+        if err != .success {
+            return "setting the value of \(describe(elem)) failed with AXError \(err.rawValue)"
+        }
+        return nil
     }
 
     // MARK: - NSOpenPanel keyboard navigation
 
-    private func navigateOpenPanel(to path: String) {
+    /// Navigate the open panel to the file at path and select it: Cmd+Shift+G opens the
+    /// Go-to-folder sheet, the path is pasted into it, Return commits it.  Each step is
+    /// checked against the tree before the next one, and the result is that the panel lists
+    /// the file's folder with the file selected, ready for the Open button.  The whole
+    /// sequence stays well under the 30 seconds the test runner gives one request; a request
+    /// that takes longer is sent again, and the sequence would start over on the same panel.
+    private func navigateOpenPanel(_ panel: AXUIElement, to path: String) -> String? {
+        let started = CFAbsoluteTimeGetCurrent()
+
         // Keyboard events go to the frontmost app, so activate the
         // target first.  The panel is the key window once active.
         if let app = NSRunningApplication(processIdentifier: pid) {
@@ -208,32 +227,41 @@ final class AXTree {
         pasteboard.clearContents()
         pasteboard.setString(path, forType: .string)
 
-        // Cmd+Shift+G opens the "Go to folder" sheet on NSOpenPanel.
-        // Look up the physical key that produces 'g' in the current
-        // keyboard layout - hardcoding kVK_ANSI_G = 5 sends the wrong
-        // shortcut on non-QWERTY layouts (e.g. Dvorak, where the same
-        // physical key produces 'i' and so Cmd+Shift+G turns into
-        // Cmd+Shift+I = navigate to iCloud Drive sidebar item).
-        sendKey(virtualKey: keyCodeFor("g"), flags: [.maskCommand, .maskShift])
-
-        // Wait for the sheet to actually appear before pasting; the
-        // sheet animates in and Cmd+V sent too early lands in
-        // whatever has focus in the main panel (the file browser
-        // AXList), not the path field.
+        // Cmd+Shift+G opens the "Go to folder" sheet on NSOpenPanel.  A sheet
+        // that an earlier attempt left up is used as it is.  Look up the
+        // physical key that produces 'g' in the current keyboard layout -
+        // hardcoding kVK_ANSI_G = 5 sends the wrong shortcut on non-QWERTY
+        // layouts (e.g. Dvorak, where the same physical key produces 'i' and
+        // so Cmd+Shift+G turns into Cmd+Shift+I = navigate to iCloud Drive
+        // sidebar item).
         let pathFieldPredicate = SimpleXPath.Predicate(
             attribute: "accessibility-id", value: "PathTextField")
-        var pathField: AXUIElement?
-        for _ in 0..<30 {
-            if let f = findElement(matching: pathFieldPredicate).first {
-                pathField = f
-                break
-            }
-            Thread.sleep(forTimeInterval: 0.1)
+        var pathField = findElement(matching: pathFieldPredicate,
+                                    maxDepth: AXTree.controlDepth).first
+        if pathField == nil {
+            sendKey(virtualKey: keyCodeFor("g"), flags: [.maskCommand, .maskShift])
+
+            // Wait for the sheet to actually appear before pasting; the
+            // sheet animates in and Cmd+V sent too early lands in
+            // whatever has focus in the main panel (the file browser
+            // AXList), not the path field.
+            let sheetDeadline = Deadline(seconds: 3)
+            repeat {
+                pathField = findElement(matching: pathFieldPredicate, deadline: sheetDeadline,
+                                        maxDepth: AXTree.controlDepth).first
+                if pathField == nil {
+                    Thread.sleep(forTimeInterval: 0.1)
+                }
+            } while pathField == nil && !sheetDeadline.isPast()
         }
         guard let field = pathField else {
-            NSLog("navigateOpenPanel: Go-to-folder sheet never appeared after Cmd+Shift+G")
-            NSLog("navigateOpenPanel: AX tree:\n%@", dumpTree())
-            return
+            return openPanelFailure("the Go-to-folder sheet did not appear after Cmd+Shift+G")
+        }
+
+        // A field that still holds the text of an earlier attempt is emptied through the
+        // accessibility API first, so the paste replaces it.
+        if let existing = stringAttr(field, kAXValueAttribute as String), !existing.isEmpty {
+            AXUIElementSetAttributeValue(field, kAXValueAttribute as CFString, "" as CFString)
         }
 
         // Cmd+V pastes the path into the sheet's path field.
@@ -243,18 +271,105 @@ final class AXTree {
 
         // Read the path field's value back to verify the paste landed.
         let pastedValue = stringAttr(field, kAXValueAttribute as String) ?? ""
-        let pasteLanded = pastedValue.contains(path)
-
-        // Return commits the "Go to folder" sheet, navigating to the
-        // parent directory and selecting the file (if path is a file)
-        // or just navigating (if it is a directory).  kVK_Return = 36.
-        sendKey(virtualKey: 36, flags: [])
-        Thread.sleep(forTimeInterval: 0.3)
-
-        if !pasteLanded {
-            NSLog("navigateOpenPanel: paste did not land in PathTextField")
-            NSLog("navigateOpenPanel: AX tree at end:\n%@", dumpTree())
+        guard pastedValue.contains(path) else {
+            return openPanelFailure(
+                "the path did not land in the Go-to-folder field, which holds '\(pastedValue)'")
         }
+
+        // Return commits the "Go to folder" sheet: the sheet closes, the
+        // panel lists the file's folder and selects the file.  kVK_Return = 36.
+        sendKey(virtualKey: 36, flags: [])
+
+        // Listing the folder and selecting the file take a moment, and longer on a slow or
+        // busy machine, so wait for the panel to show the result rather than for a fixed
+        // time.  The sheet is checked first: while it is up, the panel behind it has not
+        // taken the path yet.
+        let navigationDeadline = Deadline(seconds: 10)
+        var sheetStillUp = true
+        var shown = ""
+        repeat {
+            sheetStillUp = findElement(matching: pathFieldPredicate, deadline: navigationDeadline,
+                                       maxDepth: AXTree.controlDepth).first != nil
+            if !sheetStillUp {
+                shown = panelState(panel, deadline: navigationDeadline)
+                if panelShowsFolder(of: path, in: panel, deadline: navigationDeadline) {
+                    NSLog("navigateOpenPanel: %@ after %.1f s", shown,
+                          CFAbsoluteTimeGetCurrent() - started)
+                    return nil
+                }
+            }
+            Thread.sleep(forTimeInterval: 0.2)
+        } while !navigationDeadline.isPast()
+
+        if sheetStillUp {
+            return openPanelFailure("the Go-to-folder sheet is still showing after Return")
+        }
+        return openPanelFailure(
+            "the open panel does not show the folder of \(path) with a file selected; \(shown)")
+    }
+
+    /// Log what went wrong, with the tree as it is now, and hand the message back.
+    private func openPanelFailure(_ message: String) -> String {
+        NSLog("navigateOpenPanel: %@", message)
+        NSLog("navigateOpenPanel: AX tree:\n%@", dumpTree())
+        return message
+    }
+
+    /// Whether the panel is in the folder of the file at path with a file selected.  Two
+    /// controls of the panel itself tell: the "where" popup names the folder the panel
+    /// lists, and the Open button is enabled only while something is selected.  Reading
+    /// those takes a few levels down from the window, and no walk through the file listing,
+    /// which can be thousands of rows.  A panel without the popup counts as in the folder.
+    private func panelShowsFolder(of path: String, in panel: AXUIElement,
+                                  deadline: Deadline) -> Bool {
+        guard let openButton = findElement(matching: openButtonPredicate, roots: [panel],
+                                           deadline: deadline, maxDepth: AXTree.controlDepth).first,
+              (attr(openButton, kAXEnabledAttribute as String) as? Bool) == true else {
+            return false
+        }
+        guard let popup = findElement(matching: wherePopupPredicate, roots: [panel],
+                                      deadline: deadline, maxDepth: AXTree.controlDepth).first,
+              let shown = stringAttr(popup, kAXValueAttribute as String) else {
+            return true
+        }
+        // The popup shows the folder as Finder names it, which is the display name, and
+        // wraps it in Unicode isolate marks for bidirectional text.
+        let folder = (path as NSString).deletingLastPathComponent
+        let names: Set<String> = [
+            (folder as NSString).lastPathComponent,
+            FileManager.default.displayName(atPath: folder),
+        ]
+        return names.contains(plainName(shown))
+    }
+
+    /// The values of the two controls panelShowsFolder reads, for the log.
+    private func panelState(_ panel: AXUIElement, deadline: Deadline) -> String {
+        let popup = findElement(matching: wherePopupPredicate, roots: [panel],
+                                deadline: deadline, maxDepth: AXTree.controlDepth).first
+        let openButton = findElement(matching: openButtonPredicate, roots: [panel],
+                                     deadline: deadline, maxDepth: AXTree.controlDepth).first
+        let shown = popup.flatMap { stringAttr($0, kAXValueAttribute as String) }
+        let enabled = openButton.flatMap { attr($0, kAXEnabledAttribute as String) as? Bool }
+        return "the panel is in '\(shown.map(plainName) ?? "?")' and its Open button is "
+            + (enabled.map { $0 ? "enabled" : "disabled" } ?? "missing")
+    }
+
+    /// How many levels below a window its controls sit: the buttons, the "where" popup and
+    /// the fields of an attached sheet are all within this many, while the rows of the file
+    /// listing are below it.
+    private static let controlDepth = 6
+
+    private let openButtonPredicate = SimpleXPath.Predicate(
+        attribute: "accessibility-id", value: "OKButton")
+    private let wherePopupPredicate = SimpleXPath.Predicate(
+        attribute: "accessibility-id", value: "where popup")
+
+    /// The text without the Unicode marks that isolate bidirectional runs, U+2066 to U+2069,
+    /// and the left-to-right and right-to-left marks U+200E and U+200F.
+    private func plainName(_ text: String) -> String {
+        let marks: Set<Character> = ["\u{2066}", "\u{2067}", "\u{2068}", "\u{2069}",
+                                     "\u{200E}", "\u{200F}"]
+        return String(text.filter { !marks.contains($0) })
     }
 
     private func sendKey(virtualKey: CGKeyCode, flags: CGEventFlags) {
