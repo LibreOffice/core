@@ -1094,6 +1094,12 @@ define run_prettier_check
 		$(1)
 endef
 
+define run_stylelint_check
+	$(QUIET_STYLELINT) $(NODE) node_modules/stylelint/bin/stylelint.js \
+		--config $(srcdir)/.stylelintrc.json \
+		$(1)
+endef
+
 .PHONY: build-cool install-demo-extensions
 
 all-local: build-cool $(MOCHA_JS_DIR)/main.js
@@ -1321,7 +1327,8 @@ $(INTERMEDIATE_DIR)/cool-src.js: tscompile.done $(call prereq_cool) $(COOL_JS_DS
 
 $(DIST_FOLDER)/bundle.css: $(call prereq_css)
 	@mkdir -p $(dir $@)
-	$(QUIET_STYLELINT) $(NODE) node_modules/stylelint/bin/stylelint.js --config $(srcdir)/.stylelintrc.json $(srcdir)/css/*.css --fix
+	$(call run_stylelint_check,$(srcdir)/css/*.css) || \
+		{ status=$$?; printf '\nError: Stylelint failed. Run "make stylelint-write" to fix these issues.\n'; exit $$status; }
 	$(call bundle_css)
 
 $(DIST_FOLDER)/bundle.js: $(INTERMEDIATE_DIR)/cool-src.js $(L10N_ALL_JS) $(call prereq_all)
@@ -1895,6 +1902,16 @@ prettier:
 
 prettier-write:
 	$(call run_prettier_check,--write $(addprefix $(srcdir)/,$(PRETTIER_TARGETS)))
+
+# Override to check a subset, for example a pre-commit hook passing
+# only the staged files: make stylelint STYLELINT_TARGETS="css/foo.css".
+STYLELINT_TARGETS ?= css/*.css
+
+stylelint:
+	$(call run_stylelint_check,$(addprefix $(srcdir)/,$(STYLELINT_TARGETS)))
+
+stylelint-write:
+	$(call run_stylelint_check,--fix $(addprefix $(srcdir)/,$(STYLELINT_TARGETS)))
 
 # Verify the committed .pot files are not stale
 check-introdocs:

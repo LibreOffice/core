@@ -1011,6 +1011,12 @@ prettier: browser/node_modules
 prettier-write: browser/node_modules
 	@$(MAKE) -C browser prettier-write
 
+stylelint: browser/node_modules
+	@$(MAKE) -C browser stylelint
+
+stylelint-write: browser/node_modules
+	@$(MAKE) -C browser stylelint-write
+
 if ENABLE_SERVER
 install-exec-hook:
 	cd $(DESTDIR)$(bindir) && \
