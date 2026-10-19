@@ -16,6 +16,85 @@
 
 declare var JSDialog: any;
 
+// The render requests the engine has not answered yet, by "controlId:entryId",
+// each with the function that sends it and whether it went out already. The
+// engine can only draw a widget that exists on its side, and while the document
+// is not loaded, for example during a reconnect, the widgets of the new view are
+// still being built there. A request made then is held here and sent once the
+// load completes, in the same order as the commands that build the widgets.
+interface PendingRender {
+	send: () => void;
+	sent: boolean;
+}
+const pendingRenderSenders = new Map<string, PendingRender>();
+let resendOnLoadInstalled = false;
+// The loaded state the last docloaded event reported. The document reports itself
+// loaded again on every later status message, so only the change from not loaded
+// to loaded sends the held requests.
+let documentWasLoaded = false;
+
+function isDocumentLoaded(): boolean {
+	return !app.map || app.map._docLoaded !== false;
+}
+
+function installResendOnLoad() {
+	if (resendOnLoadInstalled || !app.map) return;
+	resendOnLoadInstalled = true;
+	documentWasLoaded = isDocumentLoaded();
+	app.map.on('docloaded', (e: { status: boolean }) => {
+		const loaded = !!e.status;
+		if (loaded && !documentWasLoaded) resendPendingRenders();
+		documentWasLoaded = loaded;
+	});
+}
+
+/// Sends every render request that is still unanswered.
+function resendPendingRenders() {
+	for (const pending of Array.from(pendingRenderSenders.values()))
+		pending.send();
+}
+
+/// Sends a render request for one entry, or holds it until the document is loaded.
+/// isAlive tells whether the widget that asked still wants the image.
+function requestOnDemandRender(
+	builder: JSBuilder,
+	controlType: string,
+	controlId: string,
+	entryId: number,
+	isAlive: () => boolean,
+) {
+	const key = controlId + ':' + entryId;
+	const dpi = Math.floor(100 * window.devicePixelRatio);
+	const pending: PendingRender = {
+		sent: false,
+		send: () => {
+			if (!isAlive()) {
+				pendingRenderSenders.delete(key);
+				return;
+			}
+			pending.sent = true;
+			builder.callback(
+				controlType,
+				'render_entry',
+				{ id: controlId },
+				entryId + ';' + dpi + ';' + dpi,
+				builder,
+			);
+		},
+	};
+	pendingRenderSenders.set(key, pending);
+
+	if (isDocumentLoaded()) pending.send();
+	else installResendOnLoad();
+}
+
+/// The engine answered the request with this key. A request for the same key that
+/// is still held has not gone out yet, so the answer is not its own and it stays.
+function onDemandRenderAnswered(key: string) {
+	const pending = pendingRenderSenders.get(key);
+	if (pending && pending.sent) pendingRenderSenders.delete(key);
+}
+
 function onDemandRenderer(
 	builder: JSBuilder,
 	controlId: string,
@@ -76,16 +155,12 @@ function onDemandRenderer(
 							app.pendingOnDemandRenderRequests.add(pendingKey);
 							app.pendingOnDemandRenders++;
 						}
-						builder.callback(
-							controlType,
-							'render_entry',
-							{ id: controlId },
-							entryId +
-								';' +
-								Math.floor(100 * window.devicePixelRatio) +
-								';' +
-								Math.floor(100 * window.devicePixelRatio),
+						requestOnDemandRender(
 							builder,
+							controlType,
+							controlId,
+							entryId,
+							() => parentContainer.isConnected,
 						);
 					}
 				});
@@ -105,3 +180,5 @@ function onDemandRenderer(
 }
 
 JSDialog.OnDemandRenderer = onDemandRenderer;
+JSDialog.RequestOnDemandRender = requestOnDemandRender;
+JSDialog.OnDemandRenderAnswered = onDemandRenderAnswered;

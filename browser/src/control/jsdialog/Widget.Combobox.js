@@ -613,16 +613,12 @@ JSDialog.combobox = function (parentContainer, data, builder) {
 					app.pendingOnDemandRenderRequests.add(pendingKey);
 					app.pendingOnDemandRenders++;
 				}
-				builder.callback(
-					'combobox',
-					'render_entry',
-					{ id: data.id },
-					container._selectedValuePos +
-						';' +
-						Math.floor(100 * window.devicePixelRatio) +
-						';' +
-						Math.floor(100 * window.devicePixelRatio),
+				JSDialog.RequestOnDemandRender(
 					builder,
+					'combobox',
+					data.id,
+					container._selectedValuePos,
+					function () { return container.isConnected; },
 				);
 			}
 		};

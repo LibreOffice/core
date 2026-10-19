@@ -2124,6 +2124,7 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 			const pendingKey = data.control_id + ':' + data.pos;
 			if (app.pendingOnDemandRenderRequests.delete(pendingKey) && app.pendingOnDemandRenders > 0)
 				app.pendingOnDemandRenders--;
+			JSDialog.OnDemandRenderAnswered(pendingKey);
 		}
 
 		let control = this._getItemById(container, this._removeMenuId(data.control_id));
