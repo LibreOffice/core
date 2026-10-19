@@ -3130,7 +3130,7 @@ static void collectPdfColors(vcl::pdf::PDFiumPageObject& rObject, std::vector<Co
         case vcl::pdf::PDFPageObjectType::Path:
         {
             vcl::pdf::PDFFillMode eFillMode;
-            bool bStroke;
+            bool bStroke = false;
             rObject.getDrawMode(eFillMode, bStroke);
             if (eFillMode != vcl::pdf::PDFFillMode::None)
                 rPathColors.push_back(rObject.getFillColor());
