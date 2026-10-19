@@ -317,7 +317,8 @@ interface MenuDefinition extends WidgetJSON {
 		| 'separator'
 		| 'html'
 		| 'json'
-		| 'comboboxentry'; // type of entry
+		| 'comboboxentry'
+		| 'header'; // type of entry
 	text?: string; // displayed text
 	hint?: string; // hint text
 	uno?: string; // uno command
@@ -716,6 +717,7 @@ interface AriaLabelAttributes {
 	description?: string;
 	role?: string;
 	pressed?: boolean; // drives aria-pressed on widgets that honour it (e.g. pushbutton)
+	describedBy?: string; // id of the element that describes the widget
 }
 
 interface SeparatorWidgetJSON extends WidgetJSON {

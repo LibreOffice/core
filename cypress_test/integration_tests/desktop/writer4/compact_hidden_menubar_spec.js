@@ -185,4 +185,61 @@ describe(['tagdesktop'], 'Compact view: the document button brings back a hidden
 		helper.processToIdle(this.win);
 		cy.cGet('.main-nav').should('be.visible');
 	});
+
+	it('shows the file name above the menu entries', function() {
+		hideMenubarFromViewMenu(this.win);
+		cy.cGet('#toolbar-up .documentmenu').click();
+
+		cy.getFrameWindow().should(function(win) {
+			var name = win.app.map.wopi.BreadcrumbDocName || win.app.map.wopi.BaseFileName;
+			expect(name).to.not.be.empty;
+			expect(win.document.getElementById('documentmenu-header').textContent).to.equal(name);
+		});
+		cy.cGet('#documentmenu-entries').should('have.attr', 'aria-label', 'File');
+		cy.cGet('#documentmenu-entries').should('have.attr', 'aria-describedby', 'documentmenu-header');
+
+		cy.cGet('#documentmenu-entries [data-filter-text="show menu bar"]').should('have.focus');
+		cy.realPress('ArrowUp');
+		cy.cGet('#documentmenu-header').should('not.have.focus');
+		cy.cGet('#documentmenu-entries [role="option"]:focus').should('have.length', 1);
+	});
+
+	it('keeps the menu at 240px and cuts a long file name in the middle', function() {
+		var longName = 'Quarterly report for the Collabora Online product team with the full list of open items and decisions from 2026.odt';
+		hideMenubarFromViewMenu(this.win);
+		cy.cGet('#toolbar-up .documentmenu').click();
+		cy.cGet('#documentmenu-content').invoke('outerWidth').should('be.gte', 240);
+		cy.cGet('#documentmenu-dropdown').invoke('outerWidth').as('shortNameWidth');
+		cy.realPress('Escape');
+		cy.cGet('#documentmenu-dropdown').should('not.exist');
+
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.wopi.BreadcrumbDocName = longName;
+			win.app.map.topToolbar.updateDocumentFileMenu();
+		});
+		cy.cGet('#toolbar-up .documentmenu').click();
+		cy.get('@shortNameWidth').then(function(shortNameWidth) {
+			cy.cGet('#documentmenu-dropdown').invoke('outerWidth').should('equal', shortNameWidth);
+		});
+
+		cy.cGet('#documentmenu-header').should('have.attr', 'data-cooltip', longName);
+		cy.cGet('#documentmenu-header-end').should('have.text', 'from 2026.odt');
+		cy.cGet('#documentmenu-header-end').should(function($end) {
+			expect($end[0].scrollWidth).to.be.at.most($end[0].clientWidth);
+		});
+		cy.cGet('#documentmenu-header-start').should(function($start) {
+			expect($start[0].scrollWidth).to.be.greaterThan($start[0].clientWidth);
+		});
+	});
+
+	it('limits the menu height to the window height minus 38px', function() {
+		hideMenubarFromViewMenu(this.win);
+		cy.cGet('#toolbar-up .documentmenu').click();
+
+		cy.getFrameWindow().should(function(win) {
+			var dropdown = win.document.getElementById('documentmenu-dropdown');
+			expect(parseFloat(win.getComputedStyle(dropdown).maxHeight)).to.equal(win.innerHeight - 38);
+			expect(win.getComputedStyle(win.document.getElementById('documentmenu-entries')).maxHeight).to.equal('none');
+		});
+	});
 });

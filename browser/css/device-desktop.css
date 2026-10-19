@@ -195,3 +195,41 @@ button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton):not
 [data-userinterfacemode='classic'] #toolbar-up #documentmenu-button {
 	background: var(--doc-icon-url) center / 16px 16px no-repeat;
 }
+
+[data-userinterfacemode='classic'] #documentmenu-content {
+	min-width: 240px;
+}
+
+[data-userinterfacemode='classic'] #documentmenu-dropdown {
+	max-height: calc(100vh - 38px);
+	overflow-y: auto;
+}
+
+[data-userinterfacemode='classic'] #documentmenu-dropdown :is(.ui-dialog-content, #documentmenu-entries) {
+	max-height: none;
+	overflow-y: visible;
+}
+
+[data-userinterfacemode='classic'] #documentmenu-header {
+	display: block;
+	box-sizing: border-box;
+	width: 0;
+	min-width: 100%;
+	overflow: hidden;
+	padding: var(--spacing-s) var(--spacing-m);
+	border-bottom: 1px solid var(--color-border);
+	font-weight: 600;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+[data-userinterfacemode='classic'] #documentmenu-header.ui-grid-cell {
+	grid-template-columns: minmax(0, max-content) max-content;
+	justify-content: start;
+	column-gap: 0;
+}
+
+[data-userinterfacemode='classic'] #documentmenu-header-start {
+	overflow: hidden;
+	text-overflow: ellipsis;
+}

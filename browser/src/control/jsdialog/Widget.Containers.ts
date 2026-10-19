@@ -83,6 +83,10 @@ JSDialog.grid = function (
 			table.setAttribute('aria-activedescendant', data.initialSelectedId);
 	}
 
+	if (data.aria?.label) table.setAttribute('aria-label', data.aria.label);
+	if (data.aria?.describedBy)
+		table.setAttribute('aria-describedby', data.aria.describedBy);
+
 	if (data.tabIndex !== undefined)
 		table.setAttribute('tabindex', data.tabIndex);
 

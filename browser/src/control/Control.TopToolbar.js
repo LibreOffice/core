@@ -126,6 +126,10 @@ class TopToolbar extends JSDialog.Toolbar {
 		if (!window.mode.isCODesktop()) {
 			var fileEntries = this.map.menubar ? this.map.menubar.getFileMenuEntries() : [];
 			entries = entries.concat([{type: 'separator'}], fileEntries);
+			var wopi = this.map['wopi'] || {};
+			var fileName = wopi.BreadcrumbDocName || wopi.BaseFileName;
+			if (fileName)
+				entries.unshift({type: 'header', text: fileName, aria: {label: this.getDocumentMenuText()}});
 		}
 		JSDialog.MenuDefinitions.set('DocumentFileMenu', entries);
 	}
@@ -530,6 +534,7 @@ class TopToolbar extends JSDialog.Toolbar {
 	}
 
 	onWopiProps(e) {
+		this.updateDocumentFileMenu();
 		var hideSave = e.HideSaveOption || this.map.isReadOnlyMode();
 		if (hideSave) {
 			this.showItem('save', false);

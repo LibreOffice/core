@@ -19,6 +19,42 @@ function _createDropdownId(id: string) {
 	return id + '-dropdown';
 }
 
+function _createHeader(id: string, text: string): WidgetJSON {
+	const characters = Array.from(text);
+	let endStart = characters.length - 12;
+	for (let i = endStart; i > endStart - 8 && i > 0; i--) {
+		if (characters[i - 1] === ' ') {
+			endStart = i;
+			break;
+		}
+	}
+	if (characters.length <= 16)
+		return {
+			id: id,
+			type: 'fixedtext',
+			text: text,
+			tooltip: text,
+		} as TextWidget;
+
+	return {
+		id: id,
+		type: 'container',
+		tooltip: text,
+		children: [
+			{
+				id: id + '-start',
+				type: 'fixedtext',
+				text: characters.slice(0, endStart).join(''),
+			} as TextWidget,
+			{
+				id: id + '-end',
+				type: 'fixedtext',
+				text: characters.slice(endStart).join(''),
+			} as TextWidget,
+		],
+	} as ContainerWidgetJSON;
+}
+
 JSDialog.CreateDropdownEntriesId = function (id: string) {
 	return id + '-entries';
 };
@@ -94,6 +130,8 @@ JSDialog.OpenDropdown = function (
 		}
 	}
 
+	const header = entries.find((entry) => entry.type === 'header');
+	const firstEntryIndex = entries[0]?.type === 'header' ? 1 : 0;
 	const shouldSelectFirstEntry =
 		!noDefaultSelection && entries.length > 0
 			? !entries.some((entry) => entry.selected === true)
@@ -158,6 +196,10 @@ JSDialog.OpenDropdown = function (
 					json.gridKeyboardNavigation = true;
 				break;
 
+			// shown as text above the entries, outside the list
+			case 'header':
+				break;
+
 			// horizontal separator in menu
 			case 'separator':
 				entry = {
@@ -186,7 +228,9 @@ JSDialog.OpenDropdown = function (
 					checked: entries[i].checked || checkedValue,
 					enabled: isEnabled ? isEnabled() : entries[i].enabled,
 					selected:
-						i === 0 && shouldSelectFirstEntry ? true : entries[i].selected,
+						i === firstEntryIndex && shouldSelectFirstEntry
+							? true
+							: entries[i].selected,
 					hasSubMenu: !!entries[i].items,
 					class: entries[i].class,
 				} as ComboBoxEntry;
@@ -216,6 +260,20 @@ JSDialog.OpenDropdown = function (
 	if (focusId && json?.children?.length) {
 		json.init_focus_id = focusId;
 		(json.children[0] as ComboBoxEntry).initialSelectedId = focusId;
+	}
+
+	if (header && json?.children?.length) {
+		const headerId = id + '-header';
+		const grid = json.children[0];
+		grid.aria = { label: header.aria?.label, describedBy: headerId };
+		json.children = [
+			{
+				id: id + '-content',
+				type: 'container',
+				vertical: true,
+				children: [_createHeader(headerId, header.text || ''), grid],
+			} as ContainerWidgetJSON,
+		];
 	}
 
 	const generateCallback = function (
