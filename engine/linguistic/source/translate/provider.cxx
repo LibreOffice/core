@@ -51,6 +51,7 @@ const std::vector<std::shared_ptr<TranslationProvider>>& getTranslationProviders
         std::vector<std::shared_ptr<TranslationProvider>> aList;
 #if HAVE_FEATURE_CURL
         aList.push_back(translate::createDeeplProvider());
+        aList.push_back(translate::createLibreTranslateProvider());
 #endif
         return aList;
     }();

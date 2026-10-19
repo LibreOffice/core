@@ -1411,18 +1411,37 @@
           <value>true</value>
         </prop>
       </group>
-      <group oor:name="Client">
+      <group oor:name="LibreTranslate">
         <info>
-          <desc>Translation on the user's own machine, by the client that
-          shows the document, so the text does not leave it. Reserved: no
-          client does it yet.</desc>
+          <desc>A LibreTranslate server.</desc>
         </info>
+        <prop oor:name="BaseURL" oor:type="xs:string">
+          <info>
+            <desc>The server's root, e.g. https://libretranslate.example.com;
+            the provider appends /translate and /languages.</desc>
+            <label>URL of the LibreTranslate server</label>
+          </info>
+        </prop>
+        <prop oor:name="ApiKey" oor:type="xs:string">
+          <info>
+            <desc>The API key, sent as api_key; empty for a server that
+            needs none.</desc>
+            <label>API key for the LibreTranslate server</label>
+          </info>
+        </prop>
         <prop oor:name="IsEnabled" oor:type="xs:boolean" oor:nillable="false">
           <info>
-            <desc>Enable or disable translation by the client.</desc>
-            <label>Client-side translation</label>
+            <desc>Enable or disable translation with LibreTranslate.</desc>
+            <label>LibreTranslate translation</label>
           </info>
           <value>false</value>
+        </prop>
+        <prop oor:name="SSLCertVerify" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Enable or disable SSL certificate verification for HTTPS requests</desc>
+            <label>API SSL verification control</label>
+          </info>
+          <value>true</value>
         </prop>
       </group>
     </group>

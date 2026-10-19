@@ -20,6 +20,8 @@ namespace linguistic::translate
 #if HAVE_FEATURE_CURL
 /// The DeepL API, configured under Linguistic/Translation/Deepl.
 std::shared_ptr<TranslationProvider> createDeeplProvider();
+/// A LibreTranslate server, configured under Linguistic/Translation/LibreTranslate.
+std::shared_ptr<TranslationProvider> createLibreTranslateProvider();
 #endif
 }
 

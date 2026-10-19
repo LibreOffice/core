@@ -81,6 +81,7 @@ $(eval $(call gb_Library_add_exception_objects,lng,\
 	$(if $(ENABLE_CURL),\
 		linguistic/source/translate/httprequest \
 		linguistic/source/translate/deepl \
+		linguistic/source/translate/libretranslate \
 	) \
 ))
 
