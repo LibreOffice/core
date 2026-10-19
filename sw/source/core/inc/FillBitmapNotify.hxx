@@ -13,6 +13,7 @@
 #include <hintids.hxx>
 #include <swatrset.hxx>
 
+#include <editeng/brushitem.hxx>
 #include <svx/fillbitmaplink.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xdef.hxx>
@@ -25,9 +26,35 @@ class SwAttrSetChg;
 
 namespace sw
 {
+// The URL of a brush picture that is still waiting for a link update. A brush with a graphic link
+// holds no picture yet, so it has none.
+inline OUString getDeferredBrushURL(const SvxBrushItem& rBrush)
+{
+    if (!rBrush.GetGraphicLink().isEmpty())
+        return OUString();
+    const GraphicObject* pObj = rBrush.GetGraphicObject();
+    if (!pObj || pObj->GetGraphic().GetType() != GraphicType::Default)
+        return OUString();
+    return pObj->GetGraphic().getOriginURL();
+}
+
+// The URL of a fill bitmap or brush picture in rSet that is still waiting for a link update.
+inline OUString getDeferredHostURL(const SwAttrSet& rSet)
+{
+    if (const XFillBitmapItem* pItem = rSet.GetItemIfSet(XATTR_FILLBITMAP, false))
+        return getDeferredOriginURL(*pItem);
+    const SvxBrushItem* pBrush = rSet.GetItemIfSet(RES_BACKGROUND, false);
+    return pBrush ? getDeferredBrushURL(*pBrush) : OUString();
+}
+
+inline bool hasLinkablePicture(const SfxItemSet& rSet)
+{
+    return rSet.GetItemIfSet(XATTR_FILLBITMAP, false) || rSet.GetItemIfSet(RES_BACKGROUND, false);
+}
+
 // Adaptor for SwFormat/SwContentNode SwClientNotify to the document's
 // fill-bitmap link tracker. Fires onFillBitmapURLChanged on rHost when
-// XATTR_FILLBITMAP appears in either side of the change and the change
+// XATTR_FILLBITMAP or RES_BACKGROUND appears in either side of the change and the change
 // originated on the host's own attribute set (pOwnSet).
 template <typename Host>
 inline void notifyFillBitmapIfChanged(Host& rHost, const SwAttrSet* pOwnSet,
@@ -37,12 +64,9 @@ inline void notifyFillBitmapIfChanged(Host& rHost, const SwAttrSet* pOwnSet,
         return;
     if (pNew->GetTheChgdSet() != pOwnSet)
         return;
-    if (!pNew->GetChgSet()->GetItemIfSet(XATTR_FILLBITMAP, false)
-        && !pOld->GetChgSet()->GetItemIfSet(XATTR_FILLBITMAP, false))
+    if (!hasLinkablePicture(*pNew->GetChgSet()) && !hasLinkablePicture(*pOld->GetChgSet()))
         return;
-    OUString aNewURL;
-    if (const XFillBitmapItem* pItem = pOwnSet->GetItemIfSet(XATTR_FILLBITMAP, false))
-        aNewURL = getDeferredOriginURL(*pItem);
+    const OUString aNewURL = getDeferredHostURL(*pOwnSet);
     rHost.GetDoc().getIDocumentLinksAdministration().onFillBitmapURLChanged(rHost, aNewURL);
 }
 
@@ -53,12 +77,9 @@ template <typename Host>
 inline void notifyFillBitmapForPutSet(Host& rHost, const SfxItemSet& rPutSet,
                                       const SwAttrSet* pOwnSet)
 {
-    if (!rPutSet.GetItemIfSet(XATTR_FILLBITMAP, false))
+    if (!hasLinkablePicture(rPutSet))
         return;
-    OUString aNewURL;
-    if (pOwnSet)
-        if (const XFillBitmapItem* pItem = pOwnSet->GetItemIfSet(XATTR_FILLBITMAP, false))
-            aNewURL = getDeferredOriginURL(*pItem);
+    const OUString aNewURL = pOwnSet ? getDeferredHostURL(*pOwnSet) : OUString();
     rHost.GetDoc().getIDocumentLinksAdministration().onFillBitmapURLChanged(rHost, aNewURL);
 }
 }
