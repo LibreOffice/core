@@ -398,51 +398,81 @@ void watchRemoteCheckerConfig()
     }
 }
 
+// What the server set up for a checker: from the environment it set up,
+// with the defaults of the schema where it says nothing, as in the apps,
+// which set no variable at all.
+struct ServerSettings
+{
+    bool bEnabled = false;
+    std::optional<OUString> oBaseURL;
+    std::optional<OUString> oUsername;
+    std::optional<OUString> oApiKey;
+    bool bVerifySSL = true;
+    sal_Int32 nSpellcheckingLevel = 3;
+    OUString aOrthographyStandard = u"duden"_ustr;
+    sal_Int32 nMessageLevel = 1;
+    cpo::uno::Sequence<OUString> aPropertySets;
+    cpo::uno::Sequence<OUString> aDictionaries;
+};
+
+ServerSettings getServerSettings(const char* pPrefix)
+{
+    ServerSettings aSettings;
+    aSettings.bEnabled = envBool(pPrefix, "ENABLED").value_or(false);
+    aSettings.oBaseURL = envString(pPrefix, "BASEURL");
+    aSettings.oUsername = envString(pPrefix, "USERNAME");
+    aSettings.oApiKey = envString(pPrefix, "APIKEY");
+    aSettings.bVerifySSL = envBool(pPrefix, "SSL_VERIFICATION").value_or(true);
+    if (const std::optional<OUString> oValue = envString(pPrefix, "SPELLCHECKING_LEVEL");
+        oValue && !oValue->isEmpty())
+        aSettings.nSpellcheckingLevel = oValue->toInt32();
+    if (const std::optional<OUString> oValue = envString(pPrefix, "ORTHOGRAPHY_STANDARD");
+        oValue && !oValue->isEmpty())
+        aSettings.aOrthographyStandard = *oValue;
+    if (const std::optional<OUString> oValue = envString(pPrefix, "MESSAGE_LEVEL");
+        oValue && !oValue->isEmpty())
+        aSettings.nMessageLevel = oValue->toInt32();
+    aSettings.aPropertySets = envList(pPrefix, "PROPERTY_SETS").value_or(cpo::uno::Sequence<OUString>());
+    aSettings.aDictionaries = envList(pPrefix, "DICTIONARIES").value_or(cpo::uno::Sequence<OUString>());
+    return aSettings;
+}
+
 } // namespace
 
-// Takes the remote checker settings from the environment the server set up.
-// The languages are handed over separately: by the forkit, whose kits
-// inherit the servers' answers, and by a kit when it loads a document.
-// The server's settings, from the environment it set up, with the defaults
-// of the schema where it says nothing, as in the apps, which set no
-// variable at all: a value a user dropped from their own settings is the
-// server's again when this runs before theirs are applied. The groups'
-// nested choices, the Duden style checks and the Grammalecte rule
-// families, are the user's own and stay.
+// Applies what the server set up: a value a user dropped from their own
+// settings is the server's again when this runs before theirs are applied.
+// The groups' nested choices, the Duden style checks and the Grammalecte
+// rule families, are the user's own and stay. The languages are handed
+// over separately: by the forkit, whose kits inherit the servers' answers,
+// and by a kit when it loads a document.
 void setRemoteCheckerConfig()
 {
     try
     {
         std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
-        LanguageToolCfg::IsEnabled::set(envBool("LANGUAGETOOL", "ENABLED").value_or(false), batch);
-        LanguageToolCfg::BaseURL::set(envString("LANGUAGETOOL", "BASEURL"), batch);
-        LanguageToolCfg::SSLCertVerify::set(envBool("LANGUAGETOOL", "SSL_VERIFICATION").value_or(true), batch);
-        LanguageToolCfg::Username::set(envString("LANGUAGETOOL", "USERNAME"), batch);
-        LanguageToolCfg::ApiKey::set(envString("LANGUAGETOOL", "APIKEY"), batch);
+        const ServerSettings aLanguageTool = getServerSettings("LANGUAGETOOL");
+        LanguageToolCfg::IsEnabled::set(aLanguageTool.bEnabled, batch);
+        LanguageToolCfg::BaseURL::set(aLanguageTool.oBaseURL, batch);
+        LanguageToolCfg::SSLCertVerify::set(aLanguageTool.bVerifySSL, batch);
+        LanguageToolCfg::Username::set(aLanguageTool.oUsername, batch);
+        LanguageToolCfg::ApiKey::set(aLanguageTool.oApiKey, batch);
 
-        DudenCfg::IsEnabled::set(envBool("DUDEN", "ENABLED").value_or(false), batch);
-        DudenCfg::BaseURL::set(envString("DUDEN", "BASEURL"), batch);
-        DudenCfg::SSLCertVerify::set(envBool("DUDEN", "SSL_VERIFICATION").value_or(true), batch);
-        DudenCfg::ApiKey::set(envString("DUDEN", "APIKEY"), batch);
-        {
-            const std::optional<OUString> oValue = envString("DUDEN", "SPELLCHECKING_LEVEL");
-            DudenCfg::SpellcheckingLevel::set(oValue && !oValue->isEmpty() ? oValue->toInt32() : 3, batch);
-        }
-        {
-            const std::optional<OUString> oValue = envString("DUDEN", "ORTHOGRAPHY_STANDARD");
-            DudenCfg::OrthographyStandard::set(oValue && !oValue->isEmpty() ? *oValue : u"duden"_ustr, batch);
-        }
-        {
-            const std::optional<OUString> oValue = envString("DUDEN", "MESSAGE_LEVEL");
-            DudenCfg::MessageLevel::set(oValue && !oValue->isEmpty() ? oValue->toInt32() : 1, batch);
-        }
-        DudenCfg::PropertySets::set(envList("DUDEN", "PROPERTY_SETS").value_or(cpo::uno::Sequence<OUString>()), batch);
-        DudenCfg::Dictionaries::set(envList("DUDEN", "DICTIONARIES").value_or(cpo::uno::Sequence<OUString>()), batch);
+        const ServerSettings aDuden = getServerSettings("DUDEN");
+        DudenCfg::IsEnabled::set(aDuden.bEnabled, batch);
+        DudenCfg::BaseURL::set(aDuden.oBaseURL, batch);
+        DudenCfg::SSLCertVerify::set(aDuden.bVerifySSL, batch);
+        DudenCfg::ApiKey::set(aDuden.oApiKey, batch);
+        DudenCfg::SpellcheckingLevel::set(aDuden.nSpellcheckingLevel, batch);
+        DudenCfg::OrthographyStandard::set(aDuden.aOrthographyStandard, batch);
+        DudenCfg::MessageLevel::set(aDuden.nMessageLevel, batch);
+        DudenCfg::PropertySets::set(aDuden.aPropertySets, batch);
+        DudenCfg::Dictionaries::set(aDuden.aDictionaries, batch);
 
-        GrammalecteCfg::IsEnabled::set(envBool("GRAMMALECTE", "ENABLED").value_or(false), batch);
-        GrammalecteCfg::BaseURL::set(envString("GRAMMALECTE", "BASEURL"), batch);
-        GrammalecteCfg::SSLCertVerify::set(envBool("GRAMMALECTE", "SSL_VERIFICATION").value_or(true), batch);
+        const ServerSettings aGrammalecte = getServerSettings("GRAMMALECTE");
+        GrammalecteCfg::IsEnabled::set(aGrammalecte.bEnabled, batch);
+        GrammalecteCfg::BaseURL::set(aGrammalecte.oBaseURL, batch);
+        GrammalecteCfg::SSLCertVerify::set(aGrammalecte.bVerifySSL, batch);
 
         // A profile that drove the Duden Korrekturserver through the
         // LanguageTool group, with RestProtocol set to "duden", has its server
@@ -572,6 +602,35 @@ std::string getRemoteGrammarCheckers()
             }
 
             putRemoteCheckerSettings(aJson, getRemoteCheckerConfig(rChecker));
+
+            // What the server set up, for the dialog to show when the user
+            // drops their own settings; the key stays here too.
+            {
+                const ServerSettings aServer = getServerSettings(rChecker.pEnvPrefix);
+                tools::JsonWriter::ScopedJsonWriterNode<'}'> aNode = aJson.startNode("server");
+                aJson.put("enabled", aServer.bEnabled);
+                aJson.put("baseURL", aServer.oBaseURL.value_or(OUString()));
+                aJson.put("hasCredentials", !aServer.oApiKey.value_or(OUString()).isEmpty());
+                aJson.put("sslVerify", aServer.bVerifySSL);
+                if (rChecker.aConfigGroup == "LanguageTool")
+                    aJson.put("username", aServer.oUsername.value_or(OUString()));
+                if (rChecker.aConfigGroup == "Duden")
+                {
+                    aJson.put("spellcheckingLevel", aServer.nSpellcheckingLevel);
+                    aJson.put("orthographyStandard", aServer.aOrthographyStandard);
+                    aJson.put("messageLevel", aServer.nMessageLevel);
+                    {
+                        tools::JsonWriter::ScopedJsonWriterNode<']'> aArray = aJson.startArray("propertySets");
+                        for (const OUString& rName : aServer.aPropertySets)
+                            aJson.putSimpleValue(rName);
+                    }
+                    {
+                        tools::JsonWriter::ScopedJsonWriterNode<']'> aArray = aJson.startArray("dictionaries");
+                        for (const OUString& rName : aServer.aDictionaries)
+                            aJson.putSimpleValue(rName);
+                    }
+                }
+            }
 
             // What the server offers, when it has been asked and answered:
             // each list in its answer, as "available" and the list's name.

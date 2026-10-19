@@ -76,6 +76,9 @@ interface RemoteCheckerInfo {
 	// checks by their names, the Grammalecte rule families by the server's ids.
 	style?: Record<string, boolean>;
 	options?: Record<string, boolean>;
+	// What the server set up, or the defaults where there is no server: the
+	// same fields as above, shown once the user drops their own settings.
+	server?: Partial<RemoteCheckerInfo>;
 }
 
 // What the engine says about one translation provider: how it is set up and
@@ -92,12 +95,16 @@ interface TranslationProviderInfo {
 	baseURL?: string;
 	sslVerify?: boolean;
 	targetLanguages: string[];
+	// What the server set up, or the defaults where there is no server.
+	server?: Partial<TranslationProviderInfo>;
 }
 
 // The translation providers: which one is asked for, which one translates,
 // and each of them.
 interface TranslationProvidersInfo {
 	provider: string;
+	// The server's own choice of provider, "" for the first one set up.
+	serverProvider?: string;
 	active: string;
 	providers: TranslationProviderInfo[];
 }
@@ -4912,7 +4919,12 @@ class SettingIframe {
 		content.appendChild(
 			this.createUseServerSettingsButton(`${info.id}-reset`, () => {
 				this.forgetOwnSettings(group);
-				const fresh = this.createRemoteCheckerPanel(info, group);
+				// The values in force are still the user's until saved: show
+				// the server's, which is what applies then.
+				const fresh = this.createRemoteCheckerPanel(
+					{ ...info, ...(info.server || {}) },
+					group,
+				);
 				if (!fresh) {
 					panel.remove();
 					return;
@@ -4994,7 +5006,7 @@ class SettingIframe {
 				const select = providerField.querySelector(
 					'select',
 				) as HTMLSelectElement | null;
-				if (select) select.value = infos.provider || '';
+				if (select) select.value = infos.serverProvider ?? infos.provider ?? '';
 			}),
 		);
 		section.appendChild(providerField);
@@ -5100,7 +5112,7 @@ class SettingIframe {
 				this.createUseServerSettingsButton(`${info.id}-reset`, () => {
 					this.forgetOwnSettings(group);
 					const fresh = this.createTranslationProviderPanel(
-						info,
+						{ ...info, ...(info.server || {}) },
 						group,
 						canEditServer,
 					);
@@ -5149,17 +5161,11 @@ class SettingIframe {
 		return button;
 	}
 
-	// Said under a panel that was just reset: the values shown are still the
-	// ones in force, which change only once the reset is saved.
+	// Said under a panel that was just reset, which shows what the server set
+	// up, or the defaults: that is what applies once saved.
 	private createResetNote(): HTMLElement {
 		const note = this.createParagraph(
-			isCODesktop
-				? _(
-						'Your own settings are dropped when you save; the defaults apply then.',
-					)
-				: _(
-						'Your own settings are dropped when you save; the settings set on the server apply then.',
-					),
+			_('Your own settings are dropped when you save.'),
 		);
 		note.className = 'settings-scope-note';
 		return note;
