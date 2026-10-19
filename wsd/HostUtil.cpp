@@ -39,6 +39,7 @@ RegexUtil::RegexListMatcher HostUtil::WopiHosts;
 std::map<std::string, std::string> HostUtil::AliasHosts;
 std::set<std::string> HostUtil::hostList;
 std::string HostUtil::FirstHost;
+bool HostUtil::FirstHostRejectionLogged;
 bool HostUtil::WopiEnabled;
 std::set<std::string> HostUtil::AllowedWSOriginList;
 
@@ -356,10 +357,19 @@ void HostUtil::setFirstHost(const Poco::URI& uri)
     }
     else if(!FirstHost.empty() && FirstHost != uri.getHost())
     {
+        if (FirstHostRejectionLogged)
+        {
+            LOG_DBG("Rejected WOPI host [" << uri.getHost() << "]: the only allowed host is ["
+                                           << FirstHost << ']');
+            return;
+        }
+
+        FirstHostRejectionLogged = true;
         LOG_ERR("Rejected WOPI host [" << uri.getHost() << "]: the only allowed host is ["
                                        << FirstHost
                                        << "]. To use multiple host/aliases check alias_groups tag "
-                                          "in configuration");
+                                          "in configuration. Later rejections are logged at debug "
+                                          "level");
     }
 }
 

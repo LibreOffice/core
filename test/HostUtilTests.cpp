@@ -85,6 +85,7 @@ void HostUtilTests::resetHostState(bool wopiEnabled)
     HostUtil::AliasHosts.clear();
     HostUtil::hostList.clear();
     HostUtil::FirstHost.clear();
+    HostUtil::FirstHostRejectionLogged = false;
     HostUtil::WopiEnabled = wopiEnabled;
 }
 

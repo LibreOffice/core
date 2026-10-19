@@ -42,6 +42,8 @@ private:
     static std::map<std::string, std::string> AliasHosts;
     /// When group configuration is not defined only the firstHost gets access
     static std::string FirstHost;
+    /// True once a host other than FirstHost has been rejected and reported at error level.
+    static bool FirstHostRejectionLogged;
     /// list of host (not aliases) in alias_groups
     static std::set<std::string> hostList;
     /// list of allowed websocket origin, used only when indirection_endpoint.geolocation is enabled
