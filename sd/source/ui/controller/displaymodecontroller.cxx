@@ -90,24 +90,22 @@ constexpr snew_slide_value_info editmodes[]
     = { { 1, BMP_DISPLAYMODE_SLIDE, STR_NORMAL_MODE, u".uno:NormalMultiPaneGUI"_ustr },
         { 2, BMP_DISPLAYMODE_OUTLINE, STR_OUTLINE_MODE, u".uno:OutlineMode"_ustr },
         { 3, BMP_DISPLAYMODE_NOTES, STR_NOTES_MODE, u".uno:NotesMode"_ustr },
-        { 4, BMP_DISPLAYMODE_SLIDE_SORTER, STR_SLIDE_SORTER_MODE, u".uno:DiaMode"_ustr },
-        { 0, u""_ustr, {}, u""_ustr } };
+        { 4, BMP_DISPLAYMODE_SLIDE_SORTER, STR_SLIDE_SORTER_MODE, u".uno:DiaMode"_ustr } };
 
 constexpr snew_slide_value_info mastermodes[]
     = { { 5, BMP_DISPLAYMODE_SLIDE_MASTER, STR_SLIDE_MASTER_MODE, u".uno:SlideMasterPage"_ustr },
         { 6, BMP_DISPLAYMODE_NOTES_MASTER, STR_NOTES_MASTER_MODE, u".uno:NotesMasterPage"_ustr },
-        { 7, BMP_DISPLAYMODE_HANDOUT_MASTER, STR_HANDOUT_MASTER_MODE, u".uno:HandoutMode"_ustr },
-        { 0, u""_ustr, {}, u""_ustr } };
+        { 7, BMP_DISPLAYMODE_HANDOUT_MASTER, STR_HANDOUT_MASTER_MODE, u".uno:HandoutMode"_ustr } };
 
-static void fillLayoutValueSet(ValueSet* pValue, const snew_slide_value_info* pInfo)
+static void fillLayoutValueSet(ValueSet* pValue, std::span<const snew_slide_value_info> aInfos)
 {
     Size aLayoutItemSize;
-    for( ; pInfo->mnId; pInfo++ )
+    for (const snew_slide_value_info& rInfo : aInfos)
     {
-        OUString aText(SdResId(pInfo->mpStrResId));
-        Bitmap aBmp(pInfo->msBmpResId);
+        OUString aText(SdResId(rInfo.mpStrResId));
+        Bitmap aBmp(rInfo.msBmpResId);
 
-        pValue->InsertItem(pInfo->mnId, Image(aBmp), aText);
+        pValue->InsertItem(rInfo.mnId, Image(aBmp), aText);
 
         aLayoutItemSize.setWidth( std::max( aLayoutItemSize.Width(),  aBmp.GetSizePixel().Width()  ) );
         aLayoutItemSize.setHeight( std::max( aLayoutItemSize.Height(), aBmp.GetSizePixel().Height() ) );
@@ -143,10 +141,10 @@ DisplayModeToolbarMenu::DisplayModeToolbarMenu(DisplayModeController* pControl, 
     sal_Int16 nColCount = 2;
 
     mxDisplayModeSet1->SetColCount( nColCount );
-    fillLayoutValueSet( mxDisplayModeSet1.get(), &editmodes[0] );
+    fillLayoutValueSet(mxDisplayModeSet1.get(), editmodes);
 
     mxDisplayModeSet2->SetColCount( nColCount );
-    fillLayoutValueSet( mxDisplayModeSet2.get(), &mastermodes[0] );
+    fillLayoutValueSet(mxDisplayModeSet2.get(), mastermodes);
 }
 
 IMPL_LINK( DisplayModeToolbarMenu, SelectValueSetHdl, ValueSet*, pControl, void )
