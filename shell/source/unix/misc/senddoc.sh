@@ -133,11 +133,11 @@ case $MAILER_TYPE in
                     shift
                     ;;
                 --subject)
-                    SUBJECT=$2
+                    SUBJECT=$(printf %s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --body)
-                    BODY=$2
+                    BODY=$(printf %s "$2" | "${URI_ENCODE}")
                     shift
                     ;;
                 --attach)
@@ -159,11 +159,12 @@ case $MAILER_TYPE in
         if [ "$BCC" != "" ]; then
             COMMAND=${COMMAND:+${COMMAND},}bcc=\'${BCC}\'
         fi
+        # The mail client percent-decodes an unquoted value and takes a quoted one as it is.
         if [ "$SUBJECT" != "" ]; then
-            COMMAND=${COMMAND:+${COMMAND},}subject=\'${SUBJECT}\'
+            COMMAND=${COMMAND:+${COMMAND},}subject=${SUBJECT}
         fi
         if [ "$BODY" != "" ]; then
-            COMMAND=${COMMAND:+${COMMAND},}body=\'${BODY}\'
+            COMMAND=${COMMAND:+${COMMAND},}body=${BODY}
         fi
         if [ "$ATTACH" != "" ]; then
             COMMAND=${COMMAND:+${COMMAND},}attachment=\'${ATTACH}\'
