@@ -3183,7 +3183,7 @@ static void InsertTableImpl(SwWrtShell& rSh,
         rSh.GetTableFormat()->SetFormatName( aTableName );
 
     if( pTAFormat != nullptr && !aAutoName.isEmpty()
-                        && aAutoName != SwViewShell::GetShellRes()->aStrNone )
+        && aAutoName != SvxResId(RID_SVXSTR_TBLAFMT_NONE))
     {
         SwTableNode* pTableNode = const_cast<SwTableNode*>( rSh.IsCursorInTable() );
         if ( pTableNode )

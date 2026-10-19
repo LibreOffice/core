@@ -710,6 +710,7 @@
 #define RID_SVXSTR_TBLAFMT_LO6_SIMPLE_GRID_COLUMNS          NC_("RID_SVXSTR_TBLAFMT_LO6_SIMPLE_GRID_COLUMNS", "Simple Grid Columns")
 #define RID_SVXSTR_TBLAFMT_LO6_SIMPLE_GRID_ROWS             NC_("RID_SVXSTR_TBLAFMT_LO6_SIMPLE_GRID_ROWS", "Simple Grid Rows")
 #define RID_SVXSTR_TBLAFMT_LO6_SIMPLE_LIST_SHADED           NC_("RID_SVXSTR_TBLAFMT_LO6_SIMPLE_LIST_SHADED", "Simple List Shaded")
+#define RID_SVXSTR_TBLAFMT_NONE                             NC_("RID_SVXSTR_TBLAFMT_NONE", "None")
 #define RID_SVXSTR_LINEJOINT_MIDDLE                         NC_("RID_SVXSTR_LINEJOINT_MIDDLE", "Line joint averaged")
 #define RID_SVXSTR_LINEJOINT_BEVEL                          NC_("RID_SVXSTR_LINEJOINT_BEVEL", "Line joint bevel")
 #define RID_SVXSTR_LINEJOINT_MITER                          NC_("RID_SVXSTR_LINEJOINT_MITER", "Line joint miter")

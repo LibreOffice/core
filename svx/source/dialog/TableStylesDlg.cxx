@@ -190,12 +190,17 @@ SvxTableStylesDlg::SvxTableStylesDlg(weld::Window* pParent, bool bNewStyle, SvxA
     {
         m_xLinkedWith->freeze();
         OUString sFormatName = mpData.GetName();
+        const OUString sNone = SvxResId(RID_SVXSTR_TBLAFMT_NONE);
+
         for (size_t i = 0; i < mpFormat.size(); i++)
         {
             OUString sName = mpFormat.GetData(i)->GetName();
+            if (sName.equals(sNone) || sFormatName.equals(sName))
+                continue;
             OUString sParent = mpFormat.GetData(i)->GetParent();
-            if (!sFormatName.equals(sName) && !sFormatName.equals(sParent))
-                m_xLinkedWith->append_text(sName);
+            if (sFormatName.equals(sParent))
+                continue;
+            m_xLinkedWith->append_text(sName);
         }
         m_xLinkedWith->thaw();
         m_xLinkedWith->set_active_text(mpData.GetParent());

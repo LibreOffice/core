@@ -27,6 +27,8 @@
 #include <editeng/boxitem.hxx>
 #include <string_view>
 #include <svl/stritem.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/strings.hrc>
 #include <editeng/shaditem.hxx>
 #include <fmtfsize.hxx>
 #include <formatflysplit.hxx>
@@ -4068,7 +4070,7 @@ bool SwDoc::SetTableAutoFormat(const SwSelBoxes& rBoxes,
     {   // tdf#98226 do this here where undo can record it
 
         // The 'None' style is special in table styles. Clear the template-name in that case.
-        if (*pStyleNameToSet == SwViewShell::GetShellRes()->aStrNone)
+        if (*pStyleNameToSet == SvxResId(RID_SVXSTR_TBLAFMT_NONE))
             pTableNd->GetTable().SetTableStyleName(TableStyleName());
         else
             pTableNd->GetTable().SetTableStyleName(*pStyleNameToSet);

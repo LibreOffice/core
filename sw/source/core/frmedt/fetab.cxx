@@ -26,6 +26,8 @@
 #include <editeng/brushitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <svtools/ruler.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/strings.hrc>
 #include <osl/diagnose.h>
 #include <swwait.hxx>
 #include <fmtfsize.hxx>
@@ -1437,7 +1439,7 @@ bool SwFEShell::UpdateTableStyleFormatting(SwTableNode *pTableNode,
     SwTableAutoFormat* pTableStyle;
     if (pStyleName && pStyleName->isEmpty())
     {
-        pNone.reset(new SwTableAutoFormat(TableStyleName(SwViewShell::GetShellRes()->aStrNone)));
+        pNone.reset(new SwTableAutoFormat(TableStyleName(SvxResId(RID_SVXSTR_TBLAFMT_NONE))));
         pNone->DisableAll();
         pTableStyle = pNone.get();
     }

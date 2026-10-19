@@ -22,6 +22,8 @@
 #include <modcfg.hxx>
 #include <swmodule.hxx>
 #include <sfx2/htmlmode.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/strings.hrc>
 #include <viewopt.hxx>
 #include <comphelper/lok.hxx>
 #include <vcl/weld/Builder.hxx>
@@ -152,7 +154,7 @@ IMPL_LINK_NOARG(SwInsTableDlg, SelFormatHdl, weld::ItemView&, void)
     int styleIdx = m_xLbFormat->get_selected_index();
     if (styleIdx == -1)
     {
-        SwTableAutoFormat aNone(TableStyleName(SwViewShell::GetShellRes()->aStrNone));
+        SwTableAutoFormat aNone(TableStyleName(SvxResId(RID_SVXSTR_TBLAFMT_NONE)));
         aNone.DisableAll();
         m_aWndPreview.NotifyChange(&aNone);
     }

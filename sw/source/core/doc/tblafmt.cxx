@@ -44,9 +44,10 @@
 #include <editeng/shdditem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/wghtitem.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/strings.hrc>
 #include <unostyle.hxx>
 #include <names.hxx>
-#include <strings.hrc>
 
 #include <memory>
 #include <utility>
@@ -662,9 +663,8 @@ SwTableAutoFormatTable::SwTableAutoFormatTable()
     : m_pImpl(new Impl)
 {
     // Add 'None'' style as first Writer autoformat table (since table styles don't work well)
-    // Exceptional handling: special name must exactly match SwViewShell::GetShellRes()->aStrNone
     std::unique_ptr<SwTableAutoFormat> pNoneStyle(
-        new SwTableAutoFormat(TableStyleName(SwResId(STR_TEMPLATE_NONE))));
+        new SwTableAutoFormat(TableStyleName(SvxResId(RID_SVXSTR_TBLAFMT_NONE))));
     pNoneStyle->DisableAll();
     m_pImpl->m_AutoFormats.emplace_back(std::move(pNoneStyle));
 

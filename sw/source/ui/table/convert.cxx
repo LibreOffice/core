@@ -19,6 +19,8 @@
 
 #include <modcfg.hxx>
 #include <sfx2/htmlmode.hxx>
+#include <svx/dialmgr.hxx>
+#include <svx/strings.hrc>
 #include <viewopt.hxx>
 #include <swmodule.hxx>
 #include <convert.hxx>
@@ -284,7 +286,7 @@ IMPL_LINK_NOARG(SwConvertTableDlg, SelFormatHdl, weld::ItemView&, void)
     m_nIndex = m_xLbFormat->get_selected_index();
     if (m_nIndex == -1)
     {
-        SwTableAutoFormat aNone(TableStyleName(SwViewShell::GetShellRes()->aStrNone));
+        SwTableAutoFormat aNone(TableStyleName(SvxResId(RID_SVXSTR_TBLAFMT_NONE)));
         aNone.DisableAll();
         m_aWndPreview.NotifyChange(&aNone);
         mxTAutoFormat.reset();
