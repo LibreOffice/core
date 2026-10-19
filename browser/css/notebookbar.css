@@ -440,6 +440,19 @@ label.notebookbar.ui-checkbox-label {
 	font-size: var(--header-font-size);
 }
 
+/* Make sure that folded buttons are not extra-large due to long labels. The longest line a label
+   gets narrows with the window, from wider than any label at 1600px to 5em at 1200px, so labels
+   take a second line one after the other. */
+.notebookbar-scroll-wrapper .unotoolbutton.notebookbar.has-label:not(.inline) .unolabel {
+	display: inline-block;
+	min-width: min-content;
+	max-width: clamp(5em, calc(60vw - 660px), 300px);
+	white-space: normal;
+	hyphens: auto;
+	line-height: 1.15;
+	text-align: center;
+}
+
 .notebookbar #table-options #chk_empty_row {
 	visibility: hidden;
 }

@@ -80,6 +80,9 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test jumping on large cell
 	});
 
 	it('Scroll and check drawing on frozen part of the view', function() {
+		// The View tab fits at this width, so the freeze panes button is in the bar.
+		cy.viewport(1920, 1080);
+
 		// We will add a new sheet. Go to a cell other than A1. We will check if the new sheet is added by checking the current cell.
 		calcHelper.enterCellAddressAndConfirm(this.win, 'B2');
 
@@ -93,13 +96,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test jumping on large cell
 
 		// Find freeze panes button and click.
 		cy.cGet('#View-tab-label').click();
-		desktopHelper.getNbIconArrow('FreezePanes').click();
-		// There are two FreezePanes buttons, the first in the main
-		// toolbar we clicked to create the dropdown in which the
-		// second appears. We want to wait until that second one is
-		// available and click that one, not reclick the first.
-		desktopHelper.getNbIcon('FreezePanes').should('have.length', 2).last().click();
-		closeNotebookbarPopup();
+		desktopHelper.getNbIcon('FreezePanes', 'View').click();
 
 		// Wait for freeze panes statechanged message to arrive from core.
 		helper.waitForMapState('.uno:FreezePanes', 'true');
