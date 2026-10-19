@@ -379,6 +379,14 @@ interface OverflowGroupContainer extends Element {
 	unfoldGroup?: () => void;
 }
 
+// root of a notebookbar iconviewlist, sized by the overflow manager
+interface IconViewGalleryElement extends HTMLElement {
+	getGalleryWidth: () => number;
+	getGalleryMinWidth: () => number;
+	setGalleryWidth: (width: number | null) => void;
+	openFoldedDropdown: (button: HTMLElement, overlayParent: HTMLElement) => void;
+}
+
 interface GridWidgetJSON extends ContainerWidgetJSON {
 	cols: number; // number of grid columns
 	rows: number; // numer of grid rows

@@ -10,6 +10,8 @@ var calcHelper = require('../../common/calc_helper');
 
 describe(['tagdesktop'], 'Calc Table Design tab (Online-native).', function() {
 	beforeEach(function() {
+		// wide enough for the table style gallery to stay in the notebookbar, unfolded
+		cy.viewport(1920, 1080);
 		helper.setupAndLoadDocument('calc/testfile.xlsx');
 		desktopHelper.switchUIToNotebookbar();
 		cy.getFrameWindow().then((win) => {

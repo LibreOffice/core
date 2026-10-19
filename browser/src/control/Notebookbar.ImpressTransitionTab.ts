@@ -37,8 +37,8 @@ class ImpressTransitionTab implements NotebookbarTab {
 			{
 				id: 'transitions-group',
 				type: 'overflowgroup',
-				nofold: true,
 				name: _('Transitions'),
+				icon: 'lc_slidechangewindow.svg',
 				children: [
 					{
 						id: 'transitions_icons-iconview-list',

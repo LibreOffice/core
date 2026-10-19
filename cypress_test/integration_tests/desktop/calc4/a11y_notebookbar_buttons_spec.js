@@ -1,4 +1,4 @@
-/* global describe expect it cy before require Cypress Array JSON */
+/* global describe expect it cy before beforeEach require Cypress Array JSON */
 
 const helper = require('../../common/helper');
 const desktopHelper = require('../../common/desktop_helper');
@@ -23,6 +23,12 @@ describe(['tagdesktop'], 'Notebookbar items', { testIsolation: false }, function
 		desktopHelper.switchUIToNotebookbar();
 		cy.cGet('.notebookbar-tabs-container').should('be.visible');
 		cy.then(function () { return helper.processToIdle(win); });
+	});
+
+	// Cypress sets the default viewport again before every test, and at that width the
+	// galleries fold into buttons, so the sweep runs at the width the document was loaded with.
+	beforeEach(function () {
+		cy.viewport(1920, 1080);
 	});
 
 	function tabs() {

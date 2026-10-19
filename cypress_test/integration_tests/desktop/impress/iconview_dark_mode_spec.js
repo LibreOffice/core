@@ -33,6 +33,8 @@ describe(['tagdesktop'], 'Iconview Dark Mode Inversion Tests', function() {
 	});
 
 	it('Paragraph Styles panel should NOT invert in dark mode', function() {
+		// wide enough for the styles view to stay in the notebookbar, unfolded
+		cy.viewport(1920, 1080);
 		helper.setupAndLoadDocument('writer/styles.odt');
 		desktopHelper.switchUIToNotebookbar();
 

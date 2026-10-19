@@ -242,15 +242,19 @@ JSDialog.notebookbarIconViewList = function (
 		if (objectType !== 'iconview') JSDialog.CloseAllDropdowns();
 	};
 
-	const expanderCallback = () => {
+	const openDropdown = (popupParent: HTMLElement) => {
 		JSDialog.CloseAllDropdowns();
 
 		JSDialog.OpenDropdown(
 			data.id,
-			rootNode,
+			popupParent,
 			_getDropdownContent(data, builder),
 			notebookbarIconViewCallback,
 		);
+	};
+
+	const expanderCallback = () => {
+		openDropdown(rootNode);
 	};
 
 	_createButtonForNotebookbarIconview(
@@ -289,36 +293,150 @@ JSDialog.notebookbarIconViewList = function (
 		true /* opensPopup */,
 	);
 
-	rootNode._onDropDown = function (opened: boolean) {
-		if (opened) {
+	// below, when given, is the element the dropdown opens under. Without it the dropdown
+	// takes the place the stylesheet gives it, over the gallery.
+	const setupOpenedDropdown = (
+		overlayParent: HTMLElement,
+		below?: HTMLElement,
+	) => {
+		app.layoutingService.appendLayoutingTask(() => {
 			app.layoutingService.appendLayoutingTask(() => {
-				app.layoutingService.appendLayoutingTask(() => {
-					const expander = JSDialog.GetDropdown(data.id);
-					if (!expander) {
-						app.console.error(
-							'iconview._onDropDown: expander missing: "' + data.id + '"',
-						);
-						return;
-					}
-					const overlay = expander.parentNode;
-					overlay.style.position = 'fixed';
-					overlay.style.zIndex = '20000';
-					rootNode.appendChild(overlay);
+				const expander = JSDialog.GetDropdown(data.id);
+				if (!expander) {
+					app.console.error(
+						'iconview._onDropDown: expander missing: "' + data.id + '"',
+					);
+					return;
+				}
+				const overlay = expander.parentNode;
+				overlay.style.position = 'fixed';
+				overlay.style.zIndex = '20000';
+				overlayParent.appendChild(overlay);
+				if (below)
+					expander.style.setProperty(
+						'margin-top',
+						below.getBoundingClientRect().bottom + 'px',
+						'important',
+					);
 
-					// setup correct callbacks for rendering actions for fresh instance
-					// both in notebookbar and inside dropdown
-					const currentIconView = commonContainer.firstChild as IconViewElement;
-					currentIconView.updateRenders = (pos: number) => {
-						currentIconView.updateRendersImpl(
-							pos,
-							iconViewData.id,
-							currentIconView,
-						);
-						currentIconView.updateRendersImpl(pos, iconViewData.id, expander);
-					};
-				});
+				// setup correct callbacks for rendering actions for fresh instance
+				// both in notebookbar and inside dropdown
+				const currentIconView = commonContainer.firstChild as IconViewElement;
+				currentIconView.updateRenders = (pos: number) => {
+					currentIconView.updateRendersImpl(
+						pos,
+						iconViewData.id,
+						currentIconView,
+					);
+					currentIconView.updateRendersImpl(pos, iconViewData.id, expander);
+				};
 			});
+		});
+	};
+
+	rootNode._onDropDown = function (opened: boolean) {
+		if (opened) setupOpenedDropdown(rootNode);
+	};
+
+	const gallery = rootNode as IconViewGalleryElement;
+
+	// When its overflow group is folded the gallery is not displayed, and
+	// the button standing in for the group opens the dropdown instead.
+	gallery.openFoldedDropdown = (
+		button: HTMLElement,
+		overlayParent: HTMLElement,
+	) => {
+		openDropdown(button);
+		setupOpenedDropdown(overlayParent, button);
+	};
+
+	// The overflow manager narrows the gallery before it folds any group,
+	// null gives back the width from the stylesheet. That width is set with
+	// !important on the iconview, which is replaced on every update, so the
+	// width goes on as an !important inline style and again on each new one.
+	let galleryWidth: number | null = null;
+	const applyGalleryWidth = () => {
+		const current = commonContainer.firstChild as HTMLElement;
+		if (!current) return;
+		for (const property of ['width', 'min-width']) {
+			if (galleryWidth === null) current.style.removeProperty(property);
+			else
+				current.style.setProperty(property, galleryWidth + 'px', 'important');
 		}
+	};
+	new MutationObserver(applyGalleryWidth).observe(commonContainer, {
+		childList: true,
+	});
+
+	// The minimum width is measured from the entries, which arrive after the notebookbar is
+	// built, so the fold decision runs again when the first ones come.
+	const entriesObserver = new MutationObserver(() => {
+		if (!commonContainer.querySelector('.ui-iconview-entry')) return;
+		entriesObserver.disconnect();
+		app.layoutingService.appendLayoutingTask(() =>
+			builder.map.fire('refreshoverflows', { force: true }),
+		);
+	});
+	if (!commonContainer.querySelector('.ui-iconview-entry'))
+		entriesObserver.observe(commonContainer, {
+			childList: true,
+			subtree: true,
+		});
+
+	gallery.setGalleryWidth = (width: number | null) => {
+		galleryWidth = width;
+		applyGalleryWidth();
+	};
+
+	gallery.getGalleryWidth = () => {
+		const current = commonContainer.firstChild as HTMLElement;
+		return current ? current.offsetWidth : 0;
+	};
+
+	// The narrowest width depends only on the entries, so it is measured once for each iconview
+	// and number of entries, and measured again when the iconview is replaced or entries arrive.
+	let measuredMinWidth: {
+		iconView: HTMLElement;
+		entries: number;
+		width: number;
+	} | null = null;
+
+	// the narrowest the gallery gets: one entry
+	gallery.getGalleryMinWidth = () => {
+		const current = commonContainer.firstChild as HTMLElement;
+		if (!current) return 0;
+
+		const width = current.offsetWidth;
+		const entries = current.querySelectorAll(':scope > .ui-iconview-entry');
+		if (entries.length <= 1) return width;
+
+		if (
+			measuredMinWidth &&
+			measuredMinWidth.iconView === current &&
+			measuredMinWidth.entries === entries.length
+		)
+			return Math.min(width, measuredMinWidth.width);
+
+		const style = window.getComputedStyle(current);
+		const frame =
+			current.offsetWidth -
+			current.clientWidth +
+			parseFloat(style.paddingLeft) +
+			parseFloat(style.paddingRight);
+		// An entry stretches to fill its column, so it is measured with the gallery squeezed to
+		// nothing, where it has the narrowest width the grid allows. The width then does not
+		// depend on how many columns the full gallery happens to have.
+		for (const property of ['width', 'min-width'])
+			current.style.setProperty(property, '0px', 'important');
+		const entryWidth = (entries[0] as HTMLElement).offsetWidth;
+		applyGalleryWidth();
+
+		measuredMinWidth = {
+			iconView: current,
+			entries: entries.length,
+			width: Math.ceil(entryWidth + frame),
+		};
+		return Math.min(width, measuredMinWidth.width);
 	};
 
 	/*

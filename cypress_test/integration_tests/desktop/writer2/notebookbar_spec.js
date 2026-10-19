@@ -22,22 +22,43 @@ describe(['tagdesktop'], 'Notebookbar tests.', function() {
 		});
 	});
 
-	function checkCollapsedGroups() {
-		// check if dropdown arrows exist for groups
-		desktopHelper.getNbIconArrow('Grow');
-		desktopHelper.getNbIconArrow('DefaultBullet');
-		desktopHelper.getNbIconArrow('InsertTable');
-		cy.cGet('.home-search .arrowbackground');
+	// the ids of the groups of the Home tab that are folded
+	function foldedHomeGroups() {
+		return cy.cGet('#Home-container .ui-overflow-group').then(function($groups) {
+			return Array.from($groups)
+				.filter((group) => !group.classList.contains('ui-overflow-group-container-with-label'))
+				.map((group) => group.id);
+		});
 	}
 
 	it('Check collapsed state after mode switch', function() {
-		cy.viewport(1280, 600);
+		cy.viewport(900, 600);
 		helper.processToIdle(this.win); // stabilize
 
-		checkCollapsedGroups();
-		desktopHelper.switchUIToCompact();
-		desktopHelper.switchUIToNotebookbar();
-		checkCollapsedGroups();
+		foldedHomeGroups().then(function(before) {
+			expect(before, 'groups folded at 900px').to.not.be.empty;
+			desktopHelper.switchUIToCompact();
+			desktopHelper.switchUIToNotebookbar();
+			helper.processToIdle(this.win);
+			foldedHomeGroups().should('deep.equal', before);
+		}.bind(this));
+	});
+
+	it('A group that folded stays folded while the window gets narrower', function() {
+		let folded = [];
+		[1600, 1400, 1200, 1100, 1000, 900, 800, 700].forEach(function(width) {
+			cy.viewport(width, 600);
+			helper.processToIdle(this.win);
+			foldedHomeGroups().then(function(now) {
+				for (const id of folded)
+					expect(now, id + ' is still folded at ' + width + 'px').to.include(id);
+				folded = now;
+			});
+		}.bind(this));
+
+		// the style gallery gives way before the groups to its left
+		cy.cGet('.ui-overflow-group#home-stylesview-group')
+			.should('not.have.class', 'ui-overflow-group-container-with-label');
 	});
 
 	it('Overflow groups should not folded after switching from tabbed to compact mode', function() {
@@ -57,7 +78,7 @@ describe(['tagdesktop'], 'Notebookbar tests.', function() {
 	});
 
 	it('OverflowGroup collapse state preserved after mode switch', function() {
-		cy.viewport(1280, 600);
+		cy.viewport(900, 600);
 		helper.processToIdle(this.win);
 
 		// At this width some groups should be collapsed and some expanded

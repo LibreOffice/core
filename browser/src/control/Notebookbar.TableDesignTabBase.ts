@@ -220,7 +220,7 @@ abstract class TableDesignTabBase implements NotebookbarTab {
 			id: 'table-design-styles-group',
 			type: 'overflowgroup',
 			name: _('Table Styles'),
-			nofold: true,
+			icon: 'lc_tablestyle.svg',
 			children: [
 				{
 					id: 'table-design-styles-iconview-list',

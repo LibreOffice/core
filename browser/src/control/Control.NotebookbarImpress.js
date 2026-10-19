@@ -1940,7 +1940,6 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 				'id': 'design-master-page-group',
 				'type': 'overflowgroup',
 				'name': _('Master Slide Templates'),
-				'nofold': true,
 				'icon': 'lc_masterslide.svg',
 				'children': [
 					{
@@ -1975,7 +1974,6 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 				'id': 'themes-group',
 				'type': 'overflowgroup',
 				'name': _('Themes'),
-				'nofold': true,
 				'icon': 'lc_themedialog.svg',
 				'children': [
 					{

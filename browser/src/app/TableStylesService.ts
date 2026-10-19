@@ -249,7 +249,6 @@ class TableStylesService {
 			id: 'Tablestyles_design--group',
 			type: 'overflowgroup',
 			name: _('Table Styles'),
-			nofold: true,
 			icon: 'lc_tablestyle.svg',
 			children: [
 				{

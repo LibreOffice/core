@@ -315,6 +315,104 @@ function setupOverflowMenu(
 	};
 }
 
+// A group of one gallery folds into a button that opens the gallery dropdown. The gallery
+// stays where it is, hidden, so it keeps its updates and its entries.
+function setupGalleryFold(
+	overflowGroupContainer: HTMLElement,
+	overflowGroupInnerContainer: HTMLElement,
+	contentContainer: HTMLElement,
+	bottomBar: HTMLElement,
+	data: OverflowGroupWidgetJSON,
+	builder: JSBuilder,
+) {
+	const gallery = contentContainer.querySelector(
+		'.ui-iconview-root',
+	) as IconViewGalleryElement | null;
+	if (!gallery) {
+		app.console.error('OverflowGroup: gallery missing in "' + data.id + '"');
+		return;
+	}
+
+	const groupLabel = bottomBar.querySelector(
+		'.ui-overflow-group-label',
+	) as HTMLElement;
+
+	const noLabels = builder.options.noLabelsForUnoButtons;
+	builder.options.noLabelsForUnoButtons = false;
+	const control = builder._unoToolButton(
+		overflowGroupInnerContainer,
+		{
+			type: 'menubutton',
+			id: 'overflow-button-' + data.id,
+			text: data.name,
+			icon: data.icon ? data.icon : 'lc_menuoverflow.svg',
+			command: 'overflow-button-' + data.id,
+		} as MenuButtonWidgetJSON,
+		builder,
+		{ hasDropdownArrow: true },
+	);
+	builder.options.noLabelsForUnoButtons = noLabels;
+	control.container.classList.add('menubutton');
+	control.container.style.display = 'none';
+	$(control.button).unbind('click');
+	$(control.label).unbind('click');
+	JSDialog.AddOnClick(control.container, () => {
+		if (control.container.hasAttribute('disabled')) return;
+		gallery.openFoldedDropdown(control.container, overflowGroupContainer);
+	});
+	builder._preventDocumentLosingFocusOnClick(control.container);
+
+	let isCollapsed = false;
+	const container = overflowGroupContainer as OverflowGroupContainer;
+
+	container.isCollapsed = () => {
+		return isCollapsed;
+	};
+
+	container.foldGroup = () => {
+		if (isCollapsed) return;
+		app.console.debug('overflow manager: fold gallery group: ' + data.id);
+		// the gallery dropdown has the id of the gallery
+		JSDialog.CloseDropdown(gallery.id);
+
+		// The caption can follow the gallery, so the button takes it when it is shown.
+		if (control.label) control.label.textContent = groupLabel.textContent;
+		contentContainer.style.display = 'none';
+		bottomBar.style.display = 'none';
+		overflowGroupContainer.classList.remove(
+			'ui-overflow-group-container-with-label',
+		);
+		control.container.style.display = '';
+		isCollapsed = true;
+	};
+
+	container.unfoldGroup = () => {
+		if (!isCollapsed) return;
+		app.console.debug('overflow manager: unfold gallery group: ' + data.id);
+		JSDialog.CloseDropdown(gallery.id);
+
+		control.container.style.display = 'none';
+		overflowGroupContainer.classList.add(
+			'ui-overflow-group-container-with-label',
+		);
+		contentContainer.style.display = '';
+		bottomBar.style.display = '';
+		isCollapsed = false;
+	};
+
+	overflowGroupContainer.classList.add(
+		'ui-overflow-group-container-with-label',
+	);
+}
+
+function isGalleryGroup(data: OverflowGroupWidgetJSON): boolean {
+	return (
+		!!data.children &&
+		data.children.length === 1 &&
+		data.children[0].type === 'iconviewlist'
+	);
+}
+
 function findFirstToolitem(
 	items: Array<WidgetJSON> | undefined,
 ): WidgetJSON | null {
@@ -426,6 +524,18 @@ JSDialog.OverflowGroup = function (
 	builder._menus.set(data.id, builtMenu);
 
 	if (data.nofold === true) return false;
+
+	if (isGalleryGroup(data)) {
+		setupGalleryFold(
+			overflowGroupContainer,
+			overflowGroupInnerContainer,
+			contentContainer,
+			bottomBar,
+			data,
+			builder,
+		);
+		return false;
+	}
 
 	// button
 	const id = 'overflow-button-' + data.id;

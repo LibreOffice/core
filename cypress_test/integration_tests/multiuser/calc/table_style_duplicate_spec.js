@@ -12,6 +12,9 @@ describe(['tagmultiuser'], 'Calc table styles across views', function() {
 
 	beforeEach(function() {
 		helper.setupAndLoadDocument('calc/table_style_swatch.fods', true);
+		// each view gets half the window, which is then still wide enough for the table style
+		// gallery to stay in the notebookbar, unfolded
+		cy.viewport(3000, 800);
 	});
 
 	// Make a table in the first view so the Table Design tab and its gallery are

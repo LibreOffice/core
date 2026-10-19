@@ -1052,8 +1052,8 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 			{
 			   'type': 'overflowgroup',
 			   'id': 'home-stylesview-group',
-			   'nofold': true,
 			   'name':_('Styles'),
+			   'icon': 'lc_styleapply.svg',
 			   'children' : [
 					{
 						'id': 'stylesview-iconview-list',
@@ -2678,7 +2678,7 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 				{
 					'type': 'overflowgroup',
 					'id': groupId + '-group',
-					'nofold': true,
+					'icon': 'lc_insertobjectstarmath.svg',
 					'visible': group === 0,
 					'children': [
 						{

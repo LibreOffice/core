@@ -7,7 +7,9 @@ describe(['tagdesktop'], 'Stylesview Iconview Tests', { testIsolation: false }, 
 
 	desktopHelper.shareDocumentAcrossTests('writer/styles.odt', {
 		notebookbar: true,
-		viewport: [1280, 720],
+		// wide enough for the styles view to stay in the notebookbar, unfolded, and narrow enough
+		// for it to show only some of the styles, so it scrolls
+		viewport: [1600, 720],
 	});
 
 	// check expand button visibility and click on it
@@ -146,8 +148,10 @@ describe(['tagdesktop'], 'Stylesview Iconview Tests', { testIsolation: false }, 
 		cy.viewport(650, 1080);
 		cy.cGet('#stylesview-iconview-list-dropdown').should('not.exist');
 
-		// re-open after the resize
-		openExpander();
+		// re-open after the resize, the narrow window folds the styles view into a button
+		cy.cGet('#overflow-button-home-stylesview-group').should('be.visible').click();
+		desktopHelper.getDropdown('stylesview-iconview-list').should('exist');
+		cy.cGet('.jsdialog #stylesview').should('exist').should('be.visible');
 
 		// with reduced height:
 		// - only a few rows should be visible.

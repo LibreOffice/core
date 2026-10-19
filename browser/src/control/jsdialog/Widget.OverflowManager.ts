@@ -141,6 +141,50 @@ class OverflowManager {
 		return maxWidth < requiredWidth;
 	}
 
+	// Narrows the galleries from the last one on until the content fits in maxWidth, each one
+	// down to its own minimum width at most.
+	shrinkGalleries(
+		galleries: Array<IconViewGalleryElement>,
+		minWidths: Array<number>,
+		maxWidth: number,
+	) {
+		for (let i = galleries.length - 1; i >= 0; i--) {
+			if (!this.hasOverflow(maxWidth)) return;
+
+			// The content width is rounded to whole pixels, so one step can leave it a pixel too
+			// wide. The gallery narrows again until the content fits or it is at its minimum.
+			const gallery = galleries[i];
+			for (let step = 0; step < 3 && this.hasOverflow(maxWidth); step++) {
+				const width = gallery.getGalleryWidth();
+				if (width <= minWidths[i]) break;
+
+				const excess = this.parentContainer.scrollWidth - maxWidth;
+				gallery.setGalleryWidth(Math.max(minWidths[i], width - excess - step));
+			}
+		}
+	}
+
+	// Widens the narrowed galleries, from the first one on, into the room left in maxWidth,
+	// each one up to the full width it had before.
+	growGalleries(
+		galleries: Array<IconViewGalleryElement>,
+		fullWidths: Array<number>,
+		maxWidth: number,
+	) {
+		for (let i = 0; i < galleries.length; i++) {
+			const gallery = galleries[i];
+			const width = gallery.getGalleryWidth();
+			// a folded gallery is not displayed and measures 0
+			if (width === 0 || width >= fullWidths[i]) continue;
+
+			const room = maxWidth - this.parentContainer.scrollWidth;
+			if (room <= 0) return;
+
+			const newWidth = Math.min(fullWidths[i], width + room);
+			gallery.setGalleryWidth(newWidth === fullWidths[i] ? null : newWidth);
+		}
+	}
+
 	onResize(event: Event) {
 		// Ignore resize when the window size has not actually changed.
 		if (this.lastMaxWidth === window.innerWidth) return;
@@ -196,13 +240,26 @@ class OverflowManager {
 		this.lastMaxWidth = window.innerWidth;
 
 		const groups = this.parentContainer.querySelectorAll('.ui-overflow-group');
+		const galleries = Array.from(
+			this.parentContainer.querySelectorAll('.ui-iconview-root'),
+		).filter(
+			(element) =>
+				typeof (element as IconViewGalleryElement).setGalleryWidth ===
+				'function',
+		) as Array<IconViewGalleryElement>;
 
-		// first show all the groups
+		// first show all the groups at their full width
 		groups.forEach((element: OverflowGroupContainer) => {
 			if (typeof element.unfoldGroup === 'function') element.unfoldGroup();
 		});
+		galleries.forEach((gallery) => gallery.setGalleryWidth(null));
 
 		const maxWidth = this.calculateMaxWidth();
+		const fullWidths = galleries.map((gallery) => gallery.getGalleryWidth());
+		const minWidths = galleries.map((gallery) => gallery.getGalleryMinWidth());
+
+		// then narrow the galleries, they give way before any group folds
+		if (maxWidth >= 0) this.shrinkGalleries(galleries, minWidths, maxWidth);
 
 		// then hide required
 		for (let i = groups.length - 1; i >= 0; i--) {
@@ -211,6 +268,9 @@ class OverflowManager {
 				if (typeof element.foldGroup === 'function') element.foldGroup();
 			}
 		}
+
+		// a folded group can leave more room than was missing, the galleries take it back
+		if (maxWidth >= 0) this.growGalleries(galleries, fullWidths, maxWidth);
 
 		// remember the widths this fold decision was computed from
 		this.lastContentWidth = this.parentContainer.scrollWidth;
