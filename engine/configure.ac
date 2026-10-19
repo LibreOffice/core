@@ -551,6 +551,17 @@ if test -z "$host" -a -z "$build" -a "`wslsys -v 2>/dev/null`" != ""; then
     fi
 fi
 
+# On Windows ARM64 the MSYS helper runtime is emulated x64, so config.guess
+# reports x86_64-pc-msys and a native build looks like a cross-compile. uname -s
+# still shows the real arch (MSYS_NT-...-ARM64); use it to fix the build triplet.
+if test -n "$MSYS_ONLY_AS_HELPER" -a -z "$build"; then
+    case "$(uname -s)" in
+    *-ARM64)
+        ac_cv_build="aarch64-pc-msys"
+        ;;
+    esac
+fi
+
 AC_CANONICAL_HOST
 AC_CANONICAL_BUILD
 
