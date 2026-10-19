@@ -750,6 +750,8 @@ public:
     virtual tools::Rectangle getKitVisibleArea() const override;
     virtual std::vector<SfxParagraphComment> getKitParagraphComments(
         const cpo::uno::Reference<css::accessibility::XAccessibleText>& xText) const override;
+    virtual std::vector<SfxParagraphContentControl> getKitParagraphContentControls(
+        const cpo::uno::Reference<css::accessibility::XAccessibleText>& xText) const override;
     virtual void flushPendingKitInvalidateTiles() override;
     virtual std::optional<OString> getKitPayload(COKitCallbackType eType, int nViewId) const override;
     /// See SfxViewShell::getEditMode().

@@ -56,6 +56,7 @@ class XAccessible;
 class XAccessibleText;
 }
 struct SfxParagraphComment;
+struct SfxParagraphContentControl;
 
 enum class AccessibleStates
 {
@@ -184,6 +185,10 @@ public:
     /// The comments on an accessible paragraph, see SfxViewShell::getKitParagraphComments()
     static std::vector<SfxParagraphComment>
     GetParagraphComments(const cpo::uno::Reference<css::accessibility::XAccessibleText>& xText);
+    /// The content controls in an accessible paragraph, see
+    /// SfxViewShell::getKitParagraphContentControls()
+    static std::vector<SfxParagraphContentControl> GetParagraphContentControls(
+        const cpo::uno::Reference<css::accessibility::XAccessibleText>& xText);
     void AddShapeContext(const SdrObject *pObj,
                              rtl::Reference < ::accessibility::AccessibleShape > const & xAccShape);
 

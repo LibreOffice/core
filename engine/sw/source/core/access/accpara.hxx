@@ -42,6 +42,7 @@ class SwRangeRedline;
 class SwXTextPortion;
 class SwParaChangeTrackingInfo; //#i108125#
 struct SfxParagraphComment;
+struct SfxParagraphContentControl;
 
 namespace com::sun::star {
     namespace i18n { struct Boundary; }
@@ -164,6 +165,8 @@ public:
     static bool IsParagraphRole(sal_Int16 nRole);
     /// the comments on this paragraph, by positions in its accessible text
     std::vector<SfxParagraphComment> GetComments();
+    /// the content controls in this paragraph, by positions in its accessible text
+    std::vector<SfxParagraphContentControl> GetContentControls();
 
 protected:
 

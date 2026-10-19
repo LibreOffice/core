@@ -2567,6 +2567,55 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphContentContro
                          aView.m_aA11yFocusedParagraph.get<std::string>("content", ""));
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphContentControls)
+{
+    // Given a checkbox, a drop-down and a plain text control in the paragraph after the first one:
+    createDoc("a11y-content-controls.fodt");
+    SwTestViewCallback aView;
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+    Scheduler::ProcessEventsToIdle();
+
+    // When the cursor moves into that paragraph:
+    pWrtShell->Down(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then they are reported for it, each by the range of its content:
+    // Without the fix, there was no "contentControls" node.
+    CPPUNIT_ASSERT_EQUAL(std::string("Agree: o, colour: red, name: Type a name."),
+                         aView.m_aA11yFocusedParagraph.get<std::string>("content", ""));
+    const boost::property_tree::ptree& rControls
+        = aView.m_aA11yFocusedParagraph.get_child("contentControls");
+    CPPUNIT_ASSERT_EQUAL(size_t(3), rControls.size());
+    auto it = rControls.begin();
+    const boost::property_tree::ptree& rCheckbox = (it++)->second;
+    CPPUNIT_ASSERT_EQUAL(7, rCheckbox.get<int>("start"));
+    CPPUNIT_ASSERT_EQUAL(8, rCheckbox.get<int>("end"));
+    CPPUNIT_ASSERT_EQUAL(std::string("checkbox"), rCheckbox.get<std::string>("type"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Agreement"), rCheckbox.get<std::string>("alias", ""));
+    CPPUNIT_ASSERT_EQUAL(std::string("false"), rCheckbox.get<std::string>("checked", ""));
+    const boost::property_tree::ptree& rDropDown = (it++)->second;
+    CPPUNIT_ASSERT_EQUAL(18, rDropDown.get<int>("start"));
+    CPPUNIT_ASSERT_EQUAL(21, rDropDown.get<int>("end"));
+    CPPUNIT_ASSERT_EQUAL(std::string("dropDown"), rDropDown.get<std::string>("type"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Colour"), rDropDown.get<std::string>("alias", ""));
+    CPPUNIT_ASSERT(!rDropDown.get_optional<std::string>("checked"));
+    const boost::property_tree::ptree& rPlainText = it->second;
+    CPPUNIT_ASSERT_EQUAL(29, rPlainText.get<int>("start"));
+    CPPUNIT_ASSERT_EQUAL(40, rPlainText.get<int>("end"));
+    CPPUNIT_ASSERT_EQUAL(std::string("plainText"), rPlainText.get<std::string>("type"));
+    CPPUNIT_ASSERT(!rPlainText.get_optional<std::string>("alias"));
+    // its text is the placeholder, not content
+    CPPUNIT_ASSERT_EQUAL(std::string("true"), rPlainText.get<std::string>("placeholder", ""));
+
+    // And when the cursor moves back up, they are reported for the paragraph after it:
+    pWrtShell->Up(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+    const boost::property_tree::ptree& rAfter
+        = aView.m_aA11yFocusedParagraph.get_child("afterContentControls").begin()->second;
+    CPPUNIT_ASSERT_EQUAL(size_t(3), rAfter.size());
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yImageSelection)
 {
     for (const char* pFile : { "a11y-image.fodt", "a11y-image-at-paragraph.fodt" })

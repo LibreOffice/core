@@ -1851,6 +1851,14 @@ SwAccessibleMap::GetParagraphComments(const uno::Reference<XAccessibleText>& xTe
     return {};
 }
 
+std::vector<SfxParagraphContentControl>
+SwAccessibleMap::GetParagraphContentControls(const uno::Reference<XAccessibleText>& xText)
+{
+    if (auto pParagraph = dynamic_cast<SwAccessibleParagraph*>(xText.get()))
+        return pParagraph->GetContentControls();
+    return {};
+}
+
 void SwAccessibleMap::AddShapeContext(const SdrObject *pObj, rtl::Reference < ::accessibility::AccessibleShape > const & xAccShape)
 {
     DBG_TESTSOLARMUTEX();

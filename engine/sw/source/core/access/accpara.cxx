@@ -95,6 +95,7 @@
 #include "../../uibase/inc/fldmgr.hxx"
 #include <fldbas.hxx>      // SwField
 #include <txtannotationfld.hxx>
+#include <formatcontentcontrol.hxx>
 #include <annotationmark.hxx>
 #include <IDocumentMarkAccess.hxx>
 
@@ -979,6 +980,29 @@ cpo::uno::Sequence< css::style::TabStop > SwAccessibleParagraph::GetCurrentTabSt
 }
 
 namespace {
+
+// the type of a content control, as the client of the Kit reads it
+OUString lcl_GetContentControlType(SwContentControlType eType)
+{
+    switch (eType)
+    {
+        case SwContentControlType::RICH_TEXT:
+            return u"richText"_ustr;
+        case SwContentControlType::CHECKBOX:
+            return u"checkbox"_ustr;
+        case SwContentControlType::DROP_DOWN_LIST:
+            return u"dropDown"_ustr;
+        case SwContentControlType::PICTURE:
+            return u"picture"_ustr;
+        case SwContentControlType::DATE:
+            return u"date"_ustr;
+        case SwContentControlType::PLAIN_TEXT:
+            return u"plainText"_ustr;
+        case SwContentControlType::COMBO_BOX:
+            return u"comboBox"_ustr;
+    }
+    return u"richText"_ustr;
+}
 
 struct IndexCompare
 {
@@ -3373,6 +3397,51 @@ std::vector<SfxParagraphComment> SwAccessibleParagraph::GetComments()
     });
     std::ranges::stable_sort(aComments, {}, &SfxParagraphComment::nStart);
     return aComments;
+}
+
+std::vector<SfxParagraphContentControl> SwAccessibleParagraph::GetContentControls()
+{
+    SolarMutexGuard aGuard;
+
+    const SwTextFrame* const pFrame = GetTextFrame();
+    if (!pFrame)
+        return {};
+
+    // a paragraph split across pages has a frame, and an accessible paragraph, per page
+    const TextFrameIndex nFrameStart = pFrame->GetOffset();
+    const SwTextFrame* const pFollow = pFrame->GetFollow();
+    const TextFrameIndex nFrameEnd
+        = pFollow ? pFollow->GetOffset() : TextFrameIndex(pFrame->GetText().getLength());
+    SwAccessiblePortionData& rPortions = GetPortionData();
+    auto toAccessible = [&](SwTextNode const* pNode, sal_Int32 nIndex) {
+        return rPortions.GetAccessiblePosition(
+            std::clamp(pFrame->MapModelToView(pNode, nIndex), nFrameStart, nFrameEnd));
+    };
+
+    std::vector<SfxParagraphContentControl> aControls;
+    sw::MergedAttrIter aIter(*pFrame);
+    SwTextNode const* pNode = nullptr;
+    while (SwTextAttr const* const pHt = aIter.NextAttr(&pNode))
+    {
+        if (pHt->Which() != RES_TXTATR_CONTENTCONTROL)
+            continue;
+        const std::shared_ptr<SwContentControl>& pControl
+            = pHt->GetContentControl().GetContentControl();
+        if (!pControl)
+            continue;
+        // the content, between the dummy chars at either end
+        aControls.push_back({ .nStart = toAccessible(pNode, pHt->GetStart() + 1),
+                              .nEnd = toAccessible(pNode, *pHt->End() - 1),
+                              .aType = lcl_GetContentControlType(pControl->GetType()),
+                              .aAlias = pControl->GetAlias(),
+                              .bChecked = pControl->GetChecked(),
+                              .bPlaceholder = pControl->GetShowingPlaceHolder() });
+    }
+    // empty, or on another page
+    std::erase_if(aControls, [](const SfxParagraphContentControl& rControl) {
+        return rControl.nStart >= rControl.nEnd;
+    });
+    return aControls;
 }
 
 //Get the real heading level, Heading1 ~ Heading10

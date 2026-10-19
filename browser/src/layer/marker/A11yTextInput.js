@@ -673,6 +673,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 			const links = sideElements.links;
 			const images = sideElements.images;
 			const comments = sideElements.comments;
+			const controls = sideElements.contentControls;
 			const texts = Array.isArray(paragraphs) ? paragraphs : [];
 			while (region.children.length > texts.length)
 				region.lastElementChild.remove();
@@ -704,11 +705,15 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 				const spanComments = Array.isArray(comments) && Array.isArray(comments[index])
 					? comments[index] : [];
 				const commentsKey = JSON.stringify(spanComments);
+				const spanControls = Array.isArray(controls) && Array.isArray(controls[index])
+					? controls[index] : [];
+				const controlsKey = JSON.stringify(spanControls);
 				if (span.textContent !== text || (span.dataset.links || '[]') !== linksKey
 					|| (span.dataset.images || '[]') !== imagesKey
-					|| (span.dataset.comments || '[]') !== commentsKey) {
+					|| (span.dataset.comments || '[]') !== commentsKey
+					|| (span.dataset.contentControls || '[]') !== controlsKey) {
 					span.replaceChildren(...this._createLinkedNodes(text, { links: spanLinks,
-						images: spanImages, comments: spanComments }));
+						images: spanImages, comments: spanComments, contentControls: spanControls }));
 					// a reader still reaches them; Tab does not
 					for (const link of span.querySelectorAll('a'))
 						link.tabIndex = -1;
@@ -724,6 +729,10 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 						span.dataset.comments = commentsKey;
 					else
 						delete span.dataset.comments;
+					if (spanControls.length)
+						span.dataset.contentControls = controlsKey;
+					else
+						delete span.dataset.contentControls;
 				}
 				if (span.getAttribute('role') !== role)
 					span.setAttribute('role', role);

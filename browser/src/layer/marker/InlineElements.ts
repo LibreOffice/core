@@ -44,11 +44,29 @@ namespace cool {
 		text: string;
 	}
 
+	// the range of a content control's content, without the characters marking its ends
+	export interface InlineContentControl {
+		start: MessageNumber;
+		end: MessageNumber;
+		type:
+			| 'richText'
+			| 'plainText'
+			| 'checkbox'
+			| 'dropDown'
+			| 'comboBox'
+			| 'date'
+			| 'picture';
+		alias?: string;
+		checked?: boolean | string; // a checkbox only
+		placeholder?: boolean | string; // the content is the placeholder text
+	}
+
 	// the elements of one paragraph, each kind in order
 	export interface InlineElements {
 		links?: InlineLink[];
 		images?: InlineImage[];
 		comments?: InlineComment[];
+		contentControls?: InlineContentControl[];
 	}
 
 	// one list per paragraph, an empty string for a paragraph without any or for no paragraphs
@@ -59,6 +77,7 @@ namespace cool {
 		links?: PerParagraph<InlineLink>;
 		images?: PerParagraph<InlineImage>;
 		comments?: PerParagraph<InlineComment>;
+		contentControls?: PerParagraph<InlineContentControl>;
 	}
 
 	export interface ParagraphInlineElements {
@@ -72,12 +91,15 @@ namespace cool {
 		links?: InlineLink[];
 		images?: InlineImage[];
 		comments?: InlineComment[];
+		contentControls?: InlineContentControl[];
 		beforeLinks?: PerParagraph<InlineLink>;
 		afterLinks?: PerParagraph<InlineLink>;
 		beforeImages?: PerParagraph<InlineImage>;
 		afterImages?: PerParagraph<InlineImage>;
 		beforeComments?: PerParagraph<InlineComment>;
 		afterComments?: PerParagraph<InlineComment>;
+		beforeContentControls?: PerParagraph<InlineContentControl>;
+		afterContentControls?: PerParagraph<InlineContentControl>;
 	}
 
 	export function inlineElements(
@@ -88,16 +110,19 @@ namespace cool {
 				links: message.links,
 				images: message.images,
 				comments: message.comments,
+				contentControls: message.contentControls,
 			},
 			before: {
 				links: message.beforeLinks,
 				images: message.beforeImages,
 				comments: message.beforeComments,
+				contentControls: message.beforeContentControls,
 			},
 			after: {
 				links: message.afterLinks,
 				images: message.afterImages,
 				comments: message.afterComments,
+				contentControls: message.afterContentControls,
 			},
 		};
 	}

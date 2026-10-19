@@ -175,6 +175,20 @@ struct SfxParagraphComment
     bool operator==(const SfxParagraphComment&) const = default;
 };
 
+/// A content control in a paragraph, by the range of its content in the accessible text of the
+/// paragraph
+struct SfxParagraphContentControl
+{
+    sal_Int32 nStart;
+    sal_Int32 nEnd;
+    OUString aType; // e.g. "checkbox", see SwAccessibleParagraph::GetContentControls()
+    OUString aAlias;
+    bool bChecked;
+    bool bPlaceholder; // the content is the placeholder text
+
+    bool operator==(const SfxParagraphContentControl&) const = default;
+};
+
 /**
  * One SfxViewShell more or less represents one edit window for a document, there can be multiple
  * ones for a single opened document (SfxObjectShell).
@@ -550,6 +564,13 @@ public:
     /// The comments on an accessible paragraph of this view, which the accessibility API lacks
     virtual std::vector<SfxParagraphComment>
     getKitParagraphComments(const cpo::uno::Reference<css::accessibility::XAccessibleText>&) const
+    {
+        return {};
+    }
+    /// The content controls in an accessible paragraph of this view, which the accessibility API
+    /// lacks
+    virtual std::vector<SfxParagraphContentControl> getKitParagraphContentControls(
+        const cpo::uno::Reference<css::accessibility::XAccessibleText>&) const
     {
         return {};
     }

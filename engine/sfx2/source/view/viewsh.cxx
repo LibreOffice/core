@@ -891,6 +891,27 @@ boost::property_tree::ptree makeCommentsTree(const std::vector<SfxParagraphComme
     return aComments;
 }
 
+boost::property_tree::ptree
+makeContentControlsTree(const std::vector<SfxParagraphContentControl>& rControls)
+{
+    boost::property_tree::ptree aControls;
+    for (const SfxParagraphContentControl& rControl : rControls)
+    {
+        boost::property_tree::ptree aControl;
+        aControl.put("start", rControl.nStart);
+        aControl.put("end", rControl.nEnd);
+        aControl.put("type", rControl.aType.toUtf8().getStr());
+        if (!rControl.aAlias.isEmpty())
+            aControl.put("alias", rControl.aAlias.toUtf8().getStr());
+        if (rControl.aType == "checkbox")
+            aControl.put("checked", rControl.bChecked);
+        if (rControl.bPlaceholder)
+            aControl.put("placeholder", true);
+        aControls.push_back(std::make_pair("", aControl));
+    }
+    return aControls;
+}
+
 boost::property_tree::ptree makeImagesTree(const std::vector<ParagraphImage>& rImages)
 {
     boost::property_tree::ptree aImages;
@@ -918,6 +939,7 @@ struct ContextParagraph
     std::vector<ParagraphLink> aLinks;
     std::vector<ParagraphImage> aImages;
     std::vector<SfxParagraphComment> aComments;
+    std::vector<SfxParagraphContentControl> aContentControls;
 };
 
 tools::Rectangle paragraphTwips(const uno::Reference<accessibility::XAccessibleContext>& xContext,
@@ -948,7 +970,10 @@ ContextParagraph contextParagraph(const SfxViewShell* pViewShell,
         aParagraph.aLinks = collectLinks(xText);
         aParagraph.aImages = collectImages(xText);
         if (pViewShell)
+        {
             aParagraph.aComments = pViewShell->getKitParagraphComments(xText);
+            aParagraph.aContentControls = pViewShell->getKitParagraphContentControls(xText);
+        }
     }
     aParagraph.aTwips = paragraphTwips(xContext, rParentOnScreen);
     return aParagraph;
@@ -1449,6 +1474,7 @@ class KitDocumentFocusListener :
     std::vector<ParagraphLink> m_aFocusedLinks;
     std::vector<ParagraphImage> m_aFocusedImages;
     std::vector<SfxParagraphComment> m_aFocusedComments;
+    std::vector<SfxParagraphContentControl> m_aFocusedContentControls;
     mutable std::vector<ContextParagraph> m_aParagraphsBefore;
     mutable std::vector<ContextParagraph> m_aParagraphsAfter;
     mutable ListWindow m_aList;
@@ -1589,6 +1615,9 @@ void KitDocumentFocusListener::paragraphPropertiesToTree(boost::property_tree::p
         aPayloadTree.add_child("images", makeImagesTree(m_aFocusedImages));
     if (!m_aFocusedComments.empty())
         aPayloadTree.add_child("comments", makeCommentsTree(m_aFocusedComments));
+    if (!m_aFocusedContentControls.empty())
+        aPayloadTree.add_child("contentControls",
+                               makeContentControlsTree(m_aFocusedContentControls));
     if (!m_aParagraphsBefore.empty() || !m_aParagraphsAfter.empty())
     {
         auto toArray = [](const std::vector<ContextParagraph>& rParagraphs, auto aValue) {
@@ -1639,6 +1668,15 @@ void KitDocumentFocusListener::paragraphPropertiesToTree(boost::property_tree::p
         };
         aPayloadTree.add_child("beforeComments", toComments(m_aParagraphsBefore));
         aPayloadTree.add_child("afterComments", toComments(m_aParagraphsAfter));
+        auto toContentControls = [](const std::vector<ContextParagraph>& rParagraphs) {
+            boost::property_tree::ptree aArray;
+            for (const ContextParagraph& rParagraph : rParagraphs)
+                aArray.push_back(
+                    std::make_pair("", makeContentControlsTree(rParagraph.aContentControls)));
+            return aArray;
+        };
+        aPayloadTree.add_child("beforeContentControls", toContentControls(m_aParagraphsBefore));
+        aPayloadTree.add_child("afterContentControls", toContentControls(m_aParagraphsAfter));
     }
     if (!m_aList.aItems.empty())
     {
@@ -2074,15 +2112,19 @@ bool KitDocumentFocusListener::updateParagraphInfo(const uno::Reference<css::acc
         std::vector<SfxParagraphComment> aComments
             = m_pViewShell ? m_pViewShell->getKitParagraphComments(xAccText)
                            : std::vector<SfxParagraphComment>();
+        std::vector<SfxParagraphContentControl> aContentControls
+            = m_pViewShell ? m_pViewShell->getKitParagraphContentControls(xAccText)
+                           : std::vector<SfxParagraphContentControl>();
         if (m_sFocusedParagraph != sText || m_nHeadingLevel != nHeadingLevel
             || m_aFocusedLinks != aLinks || m_aFocusedImages != aImages
-            || m_aFocusedComments != aComments)
+            || m_aFocusedComments != aComments || m_aFocusedContentControls != aContentControls)
         {
             m_sFocusedParagraph = sText;
             m_nHeadingLevel = nHeadingLevel;
             m_aFocusedLinks = std::move(aLinks);
             m_aFocusedImages = std::move(aImages);
             m_aFocusedComments = std::move(aComments);
+            m_aFocusedContentControls = std::move(aContentControls);
             collectContextWindow(xAccText);
             // Writer announces no new child for a paragraph the context walk created first.
             for (const auto& xItem : m_aList.aParagraphs)
@@ -2125,6 +2167,7 @@ void KitDocumentFocusListener::resetParagraphInfo()
     m_aFocusedLinks.clear();
     m_aFocusedImages.clear();
     m_aFocusedComments.clear();
+    m_aFocusedContentControls.clear();
     m_aParagraphsBefore.clear();
     m_aParagraphsAfter.clear();
     m_aList = ListWindow();

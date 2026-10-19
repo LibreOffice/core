@@ -408,6 +408,7 @@ window.L.TextInput = window.L.Layer.extend({
 		const links = elements ? elements.links : undefined;
 		const images = elements ? elements.images : undefined;
 		const comments = elements ? elements.comments : undefined;
+		const controls = elements ? elements.contentControls : undefined;
 		const nodes = [];
 		let pos = 0;
 		for (const link of links || []) {
@@ -415,23 +416,32 @@ window.L.TextInput = window.L.Layer.extend({
 			const end = parseInt(link.end);
 			if (start < pos || end <= start || end > content.length)
 				continue;
-			nodes.push(...this._createCommentNodes(content, pos, start, images, comments));
+			nodes.push(...this._createCommentNodes(content, pos, start, images, comments, controls));
 			const anchor = document.createElement('a');
 			anchor.setAttribute('href', window.sanitizeUrl(link.url));
-			anchor.append(...this._createCommentNodes(content, start, end, images, comments));
+			anchor.append(...this._createCommentNodes(content, start, end, images, comments,
+				controls));
 			nodes.push(anchor);
 			pos = end;
 		}
-		nodes.push(...this._createCommentNodes(content, pos, content.length, images, comments));
+		nodes.push(...this._createCommentNodes(content, pos, content.length, images, comments,
+			controls));
 		return nodes;
 	},
 
-	// the text between start and end, with its commented ranges; a range ends after the U+FFFC of
-	// its anchor, and a comment without a range is that character alone
-	_createCommentNodes: function(content, start, end, images, comments) {
-		const ranges = (comments || []).map(function (comment) {
-			return { id: comment.id, start: Math.max(start, parseInt(comment.start)),
-				end: Math.min(end, parseInt(comment.end)) };
+	// the text between start and end, with its commented ranges and its content controls; a
+	// comment's range ends after the U+FFFC of its anchor, and a comment without a range is that
+	// character alone
+	_createCommentNodes: function(content, start, end, images, comments, controls) {
+		const commentRanges = (comments || []).map(function (comment) {
+			return { id: comment.id, start: parseInt(comment.start), end: parseInt(comment.end) };
+		});
+		const controlRanges = (controls || []).map(function (control) {
+			return { control: control, start: parseInt(control.start), end: parseInt(control.end) };
+		});
+		const ranges = commentRanges.concat(controlRanges).map(function (range) {
+			return Object.assign({}, range, { start: Math.max(start, range.start),
+				end: Math.min(end, range.end) });
 		}).filter(function (range) { return range.start < range.end; });
 		return this._createMarkNodes(content, start, end, images, ranges);
 	},
@@ -448,22 +458,61 @@ window.L.TextInput = window.L.Layer.extend({
 			while (ranges.length && ranges[0].start < range.end) {
 				const next = ranges.shift();
 				if (next.end > range.end) {
-					ranges.push({ id: next.id, start: range.end, end: next.end });
+					ranges.push(Object.assign({}, next, { start: range.end }));
 					ranges.sort(function (a, b) { return a.start - b.start || b.end - a.end; });
 				}
-				inner.push({ id: next.id, start: next.start, end: Math.min(next.end, range.end) });
+				inner.push(Object.assign({}, next, { end: Math.min(next.end, range.end) }));
 			}
 			nodes.push(...this._createImageNodes(content, pos, range.start, images));
-			const mark = document.createElement('span');
-			mark.setAttribute('role', 'mark');
-			mark.setAttribute('aria-roledescription', _('Comment'));
-			mark.dataset.commentId = range.id;
+			const mark = this._createRangeElement(range);
 			mark.append(...this._createMarkNodes(content, range.start, range.end, images, inner));
 			nodes.push(mark);
 			pos = range.end;
 		}
 		nodes.push(...this._createImageNodes(content, pos, end, images));
 		return nodes;
+	},
+
+	// the element of a commented range or of a content control
+	_createRangeElement: function(range) {
+		const element = document.createElement('span');
+		const control = range.control;
+		if (!control) {
+			element.setAttribute('role', 'mark');
+			element.setAttribute('aria-roledescription', _('Comment'));
+			element.dataset.commentId = range.id;
+			return element;
+		}
+		// in an editable, a reader in focus mode reads the description of a span but not its label
+		// a checkbox shows its state, never placeholder text
+		const placeholder = control.type !== 'checkbox' && String(control.placeholder) === 'true';
+		const description = [(control.alias || '').trim(), placeholder ? _('Placeholder') : '']
+			.filter(Boolean).join(', ');
+		if (description)
+			element.setAttribute('aria-description', description);
+		if (control.type === 'checkbox') {
+			// one unit for the caret, so a reader announces it entered and left, as for an image
+			element.setAttribute('contenteditable', 'false');
+			element.setAttribute('role', 'checkbox');
+			element.setAttribute('aria-checked', String(control.checked) === 'true' ? 'true' : 'false');
+			return element;
+		}
+		element.setAttribute('role', 'mark');
+		element.setAttribute('aria-roledescription', this._getContentControlLabel(control));
+		return element;
+	},
+
+	// read in place of "mark"
+	_getContentControlLabel: function(control) {
+		switch (control.type) {
+		case 'dropDown':
+			return _('Drop-down list');
+		case 'comboBox':
+			return _('Combo box');
+		case 'date':
+			return _('Date');
+		}
+		return _('Content control');
 	},
 
 	// read in place of "image"
