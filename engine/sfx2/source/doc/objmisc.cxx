@@ -1591,7 +1591,7 @@ bool SfxObjectShell::isDocumentScriptAllowed(const OUString& rScriptURL,
 // don't allow LibreLogo to be used with our mouseover/etc dom-alike events
 bool SfxObjectShell::UnTrustedScript(const OUString& rScriptURL)
 {
-    if (!rScriptURL.startsWith("vnd.sun.star.script:"))
+    if (!rScriptURL.startsWithIgnoreAsciiCase("vnd.sun.star.script:"))
         return false;
 
     // ensure URL Escape Codes are decoded
