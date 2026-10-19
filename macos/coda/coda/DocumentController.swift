@@ -69,6 +69,8 @@ final class DocumentController: NSDocumentController {
             guard let self = self else { return }
             // Panel is going away regardless of result.
             self.liveOpenPanel = nil
+            let picked = openPanel.urls.map { $0.path }.joined(separator: ", ")
+            COWrapper.LOG_DBG("The open panel closed with result \(result), picked: \(picked)")
             if result == NSApplication.ModalResponse.OK.rawValue {
                 self.openPanelPickHandler?()
             }
@@ -113,7 +115,13 @@ final class DocumentController: NSDocumentController {
         // Write any unsaved documents to disk before loading this one. Loading a document is a relatively dangerous
         // checkpoint which can e.g. OOM, so ensure already-open work survives if loading takes down the process.
         flushModifiedDocuments {
-            self.performOpenDocument(withContentsOf: url, display: displayDocument, completionHandler: completionHandler)
+            self.performOpenDocument(withContentsOf: url, display: displayDocument) {
+                document, documentWasAlreadyOpen, error in
+                if let error = error {
+                    COWrapper.LOG_ERR("Opening \(url.path) failed: \(error.localizedDescription)")
+                }
+                completionHandler(document, documentWasAlreadyOpen, error)
+            }
         }
     }
 
@@ -136,7 +144,8 @@ final class DocumentController: NSDocumentController {
                 super.openDocument(withContentsOf: destURL, display: displayDocument, completionHandler: completionHandler)
                 return
             } catch {
-                NSLog("DocumentController: failed to copy test file: %@", error.localizedDescription)
+                COWrapper.LOG_ERR("Copying the test file \(url.path) failed: "
+                                  + error.localizedDescription)
             }
         }
 
