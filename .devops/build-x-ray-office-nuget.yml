@@ -1,10 +1,10 @@
 # Publishes X-Ray.Office to nuget.org: the C# port of LibreOffice's Writer, Calc and Impress
 # readers and layout under dotnet/, whose API lives in the XRay.Office namespaces. Modelled on
 # curiosity-ai/x-ray-content's .devops/build-x-ray-nuget.yml: CalVer versioning off the build id,
-# pack, then push through the shared service connection.
+# build (which also packs), then push through the shared service connection.
 #
 # The whole set ships in one run, from one version. The facade, X-Ray.Office, references the other
-# twelve libraries by ProjectReference, and `dotnet pack` writes each of those as a package
+# twelve libraries by ProjectReference, and the build writes each of those as a package
 # dependency at the version the referenced project was packed with, so publishing them together
 # pins the facade's dependencies to this run with nothing to bump by hand. Publishing a member on
 # its own would leave the facade pointing at the older version.
@@ -12,11 +12,8 @@
 # The family's umbrella package, `X-Ray`, lives in curiosity-ai/x-ray and references the facade by
 # PackageReference; it picks up a new X-Ray.Office the next time its own pipeline runs.
 variables:
-  # Every packable project (the libraries under dotnet/src), in dependency order. The two tasks
-  # that take a list do not take it the same way: `projects` (restore/build) is a multi-line input,
-  # one path per line, while `packagesToPack` is a *pattern* input split on semicolons only — a
-  # newline-separated value there is one pattern containing a newline, which matches no file, and
-  # the pack step fails with "No files matched the search pattern". Hence `packList` below.
+  # Every packable project (the libraries under dotnet/src), in dependency order, one path per line
+  # in the restore and build steps below. The build writes each one's package (GeneratePackageOnBuild).
   core: './dotnet/src/XRay.Office.Core/XRay.Office.Core.csproj'
   containers: './dotnet/src/XRay.Office.Containers/XRay.Office.Containers.csproj'
   text: './dotnet/src/XRay.Office.Text/XRay.Office.Text.csproj'
@@ -30,8 +27,6 @@ variables:
   spreadsheets: './dotnet/src/XRay.Office.Spreadsheets/XRay.Office.Spreadsheets.csproj'
   presentations: './dotnet/src/XRay.Office.Presentations/XRay.Office.Presentations.csproj'
   facade: './dotnet/src/XRay.Office/XRay.Office.csproj'
-  # The same thirteen projects as one semicolon-separated pattern, for `packagesToPack`.
-  packList: '$(core);$(containers);$(text);$(vector);$(rendering);$(markup);$(ooxml);$(opendocument);$(msbinary);$(wordprocessing);$(spreadsheets);$(presentations);$(facade)'
   buildConfiguration: 'Release'
   targetVersion: yy.M.$(build.buildId)
 
@@ -110,7 +105,7 @@ steps:
       $(spreadsheets)
       $(presentations)
       $(facade)
-    arguments: '-c $(buildConfiguration) /p:Version=$(targetVersion) /p:LangVersion=latest'
+    arguments: '-c $(buildConfiguration) /p:Version=$(targetVersion) /p:LangVersion=latest /p:GeneratePackageOnBuild=true'
   displayName: 'build'
 
 # No test step: XRay.Office.Fidelity.Tests needs an installed LibreOffice with a pinned font set,
@@ -118,26 +113,17 @@ steps:
 # projects are self-contained and could run here, but the libraries' parity is measured locally
 # against LibreOffice (see dotnet/CLAUDE.md), so a green hosted run would say little.
 
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'pack'
-    packagesToPack: '$(packList)'
-    packDirectory: '$(Build.ArtifactStagingDirectory)'
-    versioningScheme: 'off'
-    configuration: '$(buildConfiguration)'
-    buildProperties: 'Version="$(targetVersion)";LangVersion="latest"'
-    nobuild: true
-  displayName: 'pack nuget'
-
 # Push every package in one step, as sentence-transformers-sharp does. No NuGetToolInstaller step:
 # it put nuget.exe 6.4 on the path, which refuses an API key service connection, whereas the push
-# task's own bundled nuget.exe accepts it. No symbol packages (.snupkg) are produced, so nothing
-# beside a .nupkg can fail the push.
+# task's own bundled nuget.exe accepts it. The packages are written by the build itself
+# (/p:GeneratePackageOnBuild=true, one per project), not by a separate pack step: the pack step with a
+# semicolon-separated project list packed only the first project, so only one package was ever
+# pushed. No symbol packages (.snupkg) are produced either, so nothing beside a .nupkg can fail the push.
 
 - task: NuGetCommand@2
   displayName: 'push nuget'
   inputs:
     command: 'push'
-    packagesToPush: '$(Build.ArtifactStagingDirectory)/**/*.nupkg'
+    packagesToPush: '$(Build.SourcesDirectory)/**/bin/$(buildConfiguration)/*.nupkg'
     nuGetFeedType: 'external'
     publishFeedCredentials: 'nuget-curiosity-org'
