@@ -25,7 +25,7 @@
 #include <vector>
 
 #include <uiconfiguration/globalsettings.hxx>
-#include <framework/addonsoptions.hxx>
+#include <addonsoptions.hxx>
 #include <uielement/uielement.hxx>
 #include <services/layoutmanager.hxx>
 

@@ -23,7 +23,7 @@
 #include <vcl/settings.hxx>
 #include <osl/diagnose.h>
 
-#include <svx/uiobject.hxx>
+#include <uiobject.hxx>
 
 SvxColorValueSet::SvxColorValueSet(std::unique_ptr<weld::ScrolledWindow> pWindow)
     : ValueSet(std::move(pWindow))

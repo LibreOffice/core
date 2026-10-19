@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <svx/ThemeColorsToolBoxControl.hxx>
+#include <ThemeColorsToolBoxControl.hxx>
 #include <svx/ColorSets.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <sfx2/viewsh.hxx>

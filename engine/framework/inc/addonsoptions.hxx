@@ -45,7 +45,7 @@ inline constexpr OUString ADDONSPOPUPMENU_URL_PREFIX_STR = u"private:menu/Addon"
 namespace framework
 {
 
-struct FWK_DLLPUBLIC MergeMenuInstruction
+struct MergeMenuInstruction
 {
     OUString     aMergePoint;
     OUString     aMergeCommand;
@@ -56,7 +56,7 @@ struct FWK_DLLPUBLIC MergeMenuInstruction
 };
 typedef ::std::vector< MergeMenuInstruction > MergeMenuInstructionContainer;
 
-struct FWK_DLLPUBLIC MergeToolbarInstruction
+struct MergeToolbarInstruction
 {
     OUString     aMergeToolbar;
     OUString     aMergePoint;
@@ -69,7 +69,7 @@ struct FWK_DLLPUBLIC MergeToolbarInstruction
 
 typedef ::std::vector< MergeToolbarInstruction > MergeToolbarInstructionContainer;
 
-struct FWK_DLLPUBLIC MergeStatusbarInstruction
+struct MergeStatusbarInstruction
 {
     OUString     aMergePoint;
     OUString     aMergeCommand;
@@ -94,7 +94,7 @@ class AddonsOptions_Impl;
     @devstatus      ready to use
 *//*-*************************************************************************************************************/
 
-class UNLESS_MERGELIBS(FWK_DLLPUBLIC) AddonsOptions
+class AddonsOptions
 {
     public:
          AddonsOptions();

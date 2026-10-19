@@ -17,30 +17,27 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_GRADIENTSTYLE_HXX
-#define INCLUDED_XMLOFF_GRADIENTSTYLE_HXX
+#ifndef INCLUDED_XMLOFF_DASHSTYLE_HXX
+#define INCLUDED_XMLOFF_DASHSTYLE_HXX
 
-#include <sal/config.h>
-#include <xmloff/dllapi.h>
 #include <rtl/ustring.hxx>
-#include <xmloff/xmlictxt.hxx>
+#include <xmloff/dllapi.h>
 
 class SvXMLImport;
 class SvXMLExport;
 namespace com::sun::star {
     namespace xml::sax { class XFastAttributeList; }
-    namespace awt { struct ColorStop; }
 }
 namespace cpo::uno { template<class A> class Reference; }
 namespace cpo::uno { class Any; }
 
 
-class XMLOFF_DLLPUBLIC XMLGradientStyleImport
+class XMLDashStyleImport
 {
     SvXMLImport& m_rImport;
 
 public:
-    XMLGradientStyleImport( SvXMLImport& rImport );
+    XMLDashStyleImport( SvXMLImport& rImport );
 
     void importXML(
         const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
@@ -48,28 +45,18 @@ public:
         OUString& rStrName );
 };
 
-class XMLOFF_DLLPUBLIC XMLGradientStopContext final : public SvXMLImportContext
-{
-public:
-    XMLGradientStopContext(
-        SvXMLImport& rImport, sal_Int32 nElement,
-        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
-        std::vector<css::awt::ColorStop>& rColorStopVec);
-    virtual ~XMLGradientStopContext() override;
-};
 
-class XMLOFF_DLLPUBLIC XMLGradientStyleExport
+class XMLDashStyleExport
 {
     SvXMLExport& m_rExport;
 
 public:
-    XMLGradientStyleExport( SvXMLExport& rExport );
+    XMLDashStyleExport( SvXMLExport& rExport );
 
-    void exportXML(
-        const OUString& rStrName,
-        const cpo::uno::Any& rValue );
+    void exportXML( const OUString& rStrName,
+                        const cpo::uno::Any& rValue );
 };
 
-#endif // INCLUDED_XMLOFF_GRADIENTSTYLE_HXX
+#endif // INCLUDED_XMLOFF_DASHSTYLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

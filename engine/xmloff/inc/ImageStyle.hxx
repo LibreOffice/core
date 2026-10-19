@@ -34,8 +34,8 @@ class SvXMLImport;
 namespace XMLImageStyle
 {
 
-XMLOFF_DLLPUBLIC void exportXML(OUString const & rStrName, cpo::uno::Any const & rValue, SvXMLExport& rExport);
-XMLOFF_DLLPUBLIC bool importXML(cpo::uno::Reference<css::xml::sax::XFastAttributeList> const & xAttrList,
+void exportXML(OUString const & rStrName, cpo::uno::Any const & rValue, SvXMLExport& rExport);
+bool importXML(cpo::uno::Reference<css::xml::sax::XFastAttributeList> const & xAttrList,
                                 cpo::uno::Any& rValue, OUString& rStrName, SvXMLImport& rImport);
 
 }

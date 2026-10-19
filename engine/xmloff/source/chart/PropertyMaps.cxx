@@ -30,7 +30,7 @@
 #include "XMLAxisPositionPropertyHdl.hxx"
 #include <propimp0.hxx>
 
-#include <xmloff/EnumPropertyHdl.hxx>
+#include <EnumPropertyHdl.hxx>
 #include <comphelper/attributelist.hxx>
 #include <xmloff/namespacemap.hxx>
 #include <xmloff/xmlnamespace.hxx>

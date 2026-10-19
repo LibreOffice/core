@@ -30,7 +30,7 @@
 #include <xmloff/XMLFontStylesContext.hxx>
 #include <xmloff/txtprmap.hxx>
 #include <xmloff/xmlimp.hxx>
-#include <xmloff/txtimppr.hxx>
+#include <txtimppr.hxx>
 #include <xmloff/maptype.hxx>
 
 #define XML_LINE_LEFT 0

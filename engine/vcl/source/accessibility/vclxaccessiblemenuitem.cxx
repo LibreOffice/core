@@ -30,7 +30,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <comphelper/sequence.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <vcl/accessibility/characterattributeshelper.hxx>
+#include <accessibility/characterattributeshelper.hxx>
 #include <vcl/accessibility/strings.hxx>
 #include <vcl/event.hxx>
 #include <vcl/svapp.hxx>

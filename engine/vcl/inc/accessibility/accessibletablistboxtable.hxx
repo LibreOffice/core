@@ -20,7 +20,7 @@
 #pragma once
 
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
-#include <vcl/accessibility/AccessibleBrowseBoxTable.hxx>
+#include <accessibility/AccessibleBrowseBoxTable.hxx>
 
 class SvHeaderTabListBox;
 

@@ -19,7 +19,7 @@
 
 #include <uielement/imagebuttontoolbarcontroller.hxx>
 
-#include <framework/addonsoptions.hxx>
+#include <addonsoptions.hxx>
 
 #include <cpo/uno/XComponentContext.hpp>
 

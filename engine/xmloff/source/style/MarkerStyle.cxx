@@ -18,7 +18,7 @@
  */
 
 #include <memory>
-#include <xmloff/MarkerStyle.hxx>
+#include <MarkerStyle.hxx>
 #include <xexptran.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlnamespace.hxx>

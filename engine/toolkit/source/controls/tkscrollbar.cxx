@@ -23,7 +23,7 @@
 #include <cppuhelper/typeprovider.hxx>
 #include <cppuhelper/queryinterface.hxx>
 
-#include <toolkit/awt/vclxwindows.hxx>
+#include <awt/vclxwindows.hxx>
 
 #include <helper/unopropertyarrayhelper.hxx>
 

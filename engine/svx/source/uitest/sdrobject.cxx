@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <svx/uiobject.hxx>
+#include <uiobject.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/SvxColorValueSet.hxx>
 #include <tools/fract.hxx>

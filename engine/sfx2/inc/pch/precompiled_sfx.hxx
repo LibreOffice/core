@@ -463,7 +463,7 @@
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/templatedlg.hxx>
 #include <sfx2/thumbnailview.hxx>
-#include <sfx2/thumbnailviewitem.hxx>
+#include <thumbnailviewitem.hxx>
 #include <sfx2/tplpitem.hxx>
 #include <sfx2/viewfac.hxx>
 #include <sfx2/viewfrm.hxx>

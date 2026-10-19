@@ -65,12 +65,12 @@
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XModule.hpp>
-#include <xmloff/GradientStyle.hxx>
-#include <xmloff/HatchStyle.hxx>
-#include <xmloff/ImageStyle.hxx>
+#include <GradientStyle.hxx>
+#include <HatchStyle.hxx>
+#include <ImageStyle.hxx>
 #include <TransGradientStyle.hxx>
-#include <xmloff/MarkerStyle.hxx>
-#include <xmloff/DashStyle.hxx>
+#include <MarkerStyle.hxx>
+#include <DashStyle.hxx>
 #include <xmloff/XMLFontAutoStylePool.hxx>
 #include <XMLImageMapExport.hxx>
 #include <XMLBase64Export.hxx>

@@ -26,7 +26,7 @@
 #include <vcl/InterimItemWindow.hxx>
 #include <svtools/miscopt.hxx>
 #include <svtools/imgdef.hxx>
-#include <framework/addonsoptions.hxx>
+#include <addonsoptions.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::cpo::uno;

@@ -20,7 +20,7 @@
 #include <framework/actiontriggerhelper.hxx>
 #include <classes/actiontriggerseparatorpropertyset.hxx>
 #include <classes/rootactiontriggercontainer.hxx>
-#include <framework/addonsoptions.hxx>
+#include <addonsoptions.hxx>
 #include <com/sun/star/awt/XBitmap.hpp>
 #include <com/sun/star/awt/XPopupMenu.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>

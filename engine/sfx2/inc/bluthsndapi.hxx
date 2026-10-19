@@ -11,7 +11,7 @@
 #define INCLUDED_SFX2_INC_BLUTHSNDAPI_HXX
 
 #include <com/sun/star/frame/XFrame.hpp>
-#include <sfx2/mailmodelapi.hxx>
+#include "mailmodelapi.hxx"
 
 
 // class SfxBluetoothModel_Impl -----------------------------------------------

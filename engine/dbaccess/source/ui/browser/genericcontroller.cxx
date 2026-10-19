@@ -17,12 +17,12 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
- #include <dbaccess/genericcontroller.hxx>
+#include <genericcontroller.hxx>
 #include <browserids.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/weld.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
-#include <dbaccess/dataview.hxx>
+#include <dataview.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <osl/diagnose.h>
 #include <vcl/stdtext.hxx>

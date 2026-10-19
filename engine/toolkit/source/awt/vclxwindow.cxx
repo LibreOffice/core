@@ -35,7 +35,7 @@
 #include <comphelper/OAccessible.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <awt/vclxpointer.hxx>
-#include <toolkit/awt/vclxwindows.hxx>
+#include <awt/vclxwindows.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <helper/property.hxx>
 #include <rtl/math.hxx>

@@ -20,7 +20,7 @@
 
 // Used to put theme colors pane to the notebookbar
 
-class SVX_DLLPUBLIC ThemeColorsPaneWrapper final : public InterimItemWindow,
+class ThemeColorsPaneWrapper final : public InterimItemWindow,
                                                    public svx::ThemeColorsPaneBase,
                                                    public SfxListener
 {
@@ -45,7 +45,7 @@ protected:
 using ThemeColorsToolBoxControl_Base
     = cppu::ImplInheritanceHelper<svt::ToolboxController, css::lang::XServiceInfo>;
 
-class SVX_DLLPUBLIC ThemeColorsToolBoxControl final : public ThemeColorsToolBoxControl_Base
+class ThemeColorsToolBoxControl final : public ThemeColorsToolBoxControl_Base
 {
     VclPtr<ThemeColorsPaneWrapper> m_xVclBox;
 

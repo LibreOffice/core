@@ -19,9 +19,9 @@
 
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
-#include <dbaccess/dataview.hxx>
+#include <dataview.hxx>
 #include <comphelper/namedvaluecollection.hxx>
-#include <dbaccess/IController.hxx>
+#include <IController.hxx>
 #include <svtools/acceleratorexecute.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/event.hxx>

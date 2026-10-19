@@ -44,7 +44,7 @@
 #include <vcl/weld.hxx>
 #include <osl/diagnose.h>
 
-#include <sfx2/mailmodelapi.hxx>
+#include <mailmodelapi.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/strings.hrc>
 

@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <xmloff/EnumPropertyHdl.hxx>
+#include <EnumPropertyHdl.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <comphelper/extract.hxx>
 #include <rtl/ustring.hxx>

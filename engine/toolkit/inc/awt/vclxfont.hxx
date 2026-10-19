@@ -33,10 +33,7 @@ class FontMetric;
 
 
 
-
-class UNLESS_MERGELIBS(TOOLKIT_DLLPUBLIC) VCLXFont final :
-                        public cppu::WeakImplHelper<
-                            css::awt::XFont>
+class VCLXFont final : public cppu::WeakImplHelper<css::awt::XFont>
 {
     std::mutex    maMutex;
     cpo::uno::Reference< css::awt::XDevice> mxDevice;

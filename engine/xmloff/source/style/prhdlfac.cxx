@@ -50,7 +50,7 @@
 #include "lspachdl.hxx"
 #include "bordrhdl.hxx"
 #include "tabsthdl.hxx"
-#include <xmloff/EnumPropertyHdl.hxx>
+#include <EnumPropertyHdl.hxx>
 #include <AttributeContainerHandler.hxx>
 #include "durationhdl.hxx"
 #include <XMLRectangleMembersHandler.hxx>

@@ -23,7 +23,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <sfx2/thumbnailview.hxx>
-#include <sfx2/thumbnailviewitem.hxx>
+#include <thumbnailviewitem.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
 #include <sal/log.hxx>

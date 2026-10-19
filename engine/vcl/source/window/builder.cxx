@@ -43,7 +43,7 @@
 #include <vcl/headbar.hxx>
 #include <vcl/toolkit/ivctrl.hxx>
 #include <vcl/layout.hxx>
-#include <vcl/customwidget.hxx>
+#include <customwidget.hxx>
 #include <vcl/toolkit/lstbox.hxx>
 #include <vcl/toolkit/MenuButton.hxx>
 #include <vcl/mnemonic.hxx>

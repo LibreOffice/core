@@ -44,13 +44,13 @@ struct TableDesignPreviewSettings
 /// Renders a small grid bitmap previewing one named table design style,
 /// used both by the sidebar's Table Design panel and by the notebookbar's
 /// Table Design gallery toolbar item.
-SVXCORE_DLLPUBLIC Bitmap
+Bitmap
 CreateTableDesignPreview(const cpo::uno::Reference<css::container::XIndexAccess>& xTableStyle,
                          const TableDesignPreviewSettings& rSettings, bool bIsPageDark);
 
 /// Same preview, encoded as a "data:image/png;base64,..." string, for
 /// embedding directly in JSON sent to the Online browser.
-SVXCORE_DLLPUBLIC OString CreateTableDesignPreviewDataUri(
+OString CreateTableDesignPreviewDataUri(
     const cpo::uno::Reference<css::container::XIndexAccess>& xTableStyle,
     const TableDesignPreviewSettings& rSettings, bool bIsPageDark);
 }

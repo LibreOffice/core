@@ -10,7 +10,7 @@
 #include <config_wasm_strip.h>
 
 #include <sfx2/thumbnailview.hxx>
-#include <sfx2/thumbnailviewitem.hxx>
+#include <thumbnailviewitem.hxx>
 
 #include <utility>
 

@@ -311,7 +311,7 @@
 #include <unotools/unotoolsdllapi.h>
 #endif // PCH_LEVEL >= 3
 #if PCH_LEVEL >= 4
-#include <framework/addonsoptions.hxx>
+#include <addonsoptions.hxx>
 #include <framework/fwkdllapi.h>
 #include <menuconfiguration.hxx>
 #include <properties.h>

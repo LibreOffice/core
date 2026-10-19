@@ -8,7 +8,7 @@
  */
 
 #include <vcl/customweld.hxx>
-#include <vcl/customwidget.hxx>
+#include <customwidget.hxx>
 #include <salvtables.hxx>
 
 namespace weld

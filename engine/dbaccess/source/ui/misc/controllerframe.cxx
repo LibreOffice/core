@@ -17,8 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <dbaccess/controllerframe.hxx>
-#include <dbaccess/IController.hxx>
+#include <controllerframe.hxx>
+#include <IController.hxx>
 
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>

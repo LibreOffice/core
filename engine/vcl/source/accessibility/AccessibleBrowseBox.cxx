@@ -20,8 +20,8 @@
 #include <com/sun/star/awt/XVclWindowPeer.hdl>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <vcl/accessibility/AccessibleBrowseBox.hxx>
-#include <vcl/accessibility/AccessibleBrowseBoxHeaderBar.hxx>
-#include <vcl/accessibility/AccessibleBrowseBoxTable.hxx>
+#include <accessibility/AccessibleBrowseBoxHeaderBar.hxx>
+#include <accessibility/AccessibleBrowseBoxTable.hxx>
 #include <vcl/accessibletableprovider.hxx>
 #include <vcl/unohelp.hxx>
 #include <sal/types.h>

@@ -29,7 +29,7 @@
 #include "PageMasterPropHdl.hxx"
 #include <PageMasterStyleMap.hxx>
 #include <com/sun/star/text/TextGridMode.hpp>
-#include <xmloff/EnumPropertyHdl.hxx>
+#include <EnumPropertyHdl.hxx>
 #include <osl/diagnose.h>
 #include <XMLFillBitmapSizePropertyHandler.hxx>
 #include <XMLBitmapLogicalSizePropertyHandler.hxx>

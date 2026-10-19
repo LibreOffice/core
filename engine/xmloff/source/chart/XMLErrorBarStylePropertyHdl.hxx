@@ -18,7 +18,7 @@
  */
 #pragma once
 
-#include <xmloff/EnumPropertyHdl.hxx>
+#include <EnumPropertyHdl.hxx>
 
 class XMLErrorBarStylePropertyHdl : public XMLEnumPropertyHdl
 {

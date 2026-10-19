@@ -22,7 +22,7 @@
 
 #include <sax/tools/converter.hxx>
 
-#include <xmloff/DashStyle.hxx>
+#include <DashStyle.hxx>
 #include <xmloff/xmluconv.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/xmltoken.hxx>

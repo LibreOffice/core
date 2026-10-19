@@ -311,12 +311,6 @@ excludelist:
     - com/sun/star/awt/XView.hpp
     - com/sun/star/beans/XPropertySetInfo.hpp
     - com/sun/star/awt/XDockableWindow.hpp
-    include/toolkit/awt/vclxwindows.hxx:
-    # base class has to be a complete type
-    - com/sun/star/awt/XListBox.hpp
-    - com/sun/star/awt/XToggleButton.hpp
-    - com/sun/star/awt/XComboBox.hpp
-    - com/sun/star/awt/XItemListListener.hpp
     include/toolkit/controls/unocontrol.hxx:
     # base class has to be a complete type
     - com/sun/star/awt/XControl.hpp

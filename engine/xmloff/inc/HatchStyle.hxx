@@ -33,7 +33,7 @@ namespace cpo::uno { template<class A> class Reference; }
 namespace cpo::uno { class Any; }
 
 
-class XMLOFF_DLLPUBLIC XMLHatchStyleImport
+class XMLHatchStyleImport
 {
     SvXMLImport& m_rImport;
 
@@ -46,7 +46,7 @@ public:
         OUString& rStrName );
 };
 
-class XMLOFF_DLLPUBLIC XMLHatchStyleExport
+class XMLHatchStyleExport
 {
     SvXMLExport& m_rExport;
 

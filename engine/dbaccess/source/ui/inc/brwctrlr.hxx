@@ -19,7 +19,7 @@
 
 #pragma once
 
-#include <dbaccess/genericcontroller.hxx>
+#include <genericcontroller.hxx>
 #include "brwview.hxx"
 #include "sbagrid.hxx"
 

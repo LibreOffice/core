@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <vcl/customwidget.hxx>
+#include <customwidget.hxx>
 #include <tools/json_writer.hxx>
 
 VclCustomWidget::VclCustomWidget(vcl::Window* pParent, WinBits nStyle)

@@ -28,7 +28,7 @@
 #include <comphelper/accessiblecontexthelper.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <unotools/accessiblerelationsethelper.hxx>
-#include <vcl/accessibility/characterattributeshelper.hxx>
+#include <accessibility/characterattributeshelper.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/unohelp.hxx>

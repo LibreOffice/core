@@ -25,7 +25,7 @@
 
 namespace cpo::uno { template <typename > class Reference; }
 
-class UNLESS_MERGELIBS(XMLOFF_DLLPUBLIC) XMLCharContext : public SvXMLImportContext
+class XMLCharContext : public SvXMLImportContext
 {
     XMLCharContext(const XMLCharContext&) = delete;
     void operator =(const XMLCharContext&) = delete;

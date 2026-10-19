@@ -38,7 +38,7 @@
 #include <editeng/fontitem.hxx>
 #include <editeng/wghtitem.hxx>
 #include <editeng/postitem.hxx>
-#include <editeng/rubyitem.hxx>
+#include <rubyitem.hxx>
 #include <editeng/langitem.hxx>
 #include <editeng/frmdiritem.hxx>
 #include <editeng/scriptspaceitem.hxx>

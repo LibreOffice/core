@@ -17,46 +17,29 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#ifndef INCLUDED_XMLOFF_DASHSTYLE_HXX
-#define INCLUDED_XMLOFF_DASHSTYLE_HXX
+#pragma once
 
-#include <rtl/ustring.hxx>
-#include <xmloff/dllapi.h>
+#include <cpo/uno/Sequence.hxx>
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <vcl/dllapi.h>
+#include <vcl/font.hxx>
 
-class SvXMLImport;
-class SvXMLExport;
-namespace com::sun::star {
-    namespace xml::sax { class XFastAttributeList; }
-}
-namespace cpo::uno { template<class A> class Reference; }
-namespace cpo::uno { class Any; }
+#include <map>
+#include <vector>
 
-
-class XMLOFF_DLLPUBLIC XMLDashStyleImport
+class CharacterAttributesHelper
 {
-    SvXMLImport& m_rImport;
+private:
+    typedef std::map<OUString, cpo::uno::Any> AttributeMap;
+
+    AttributeMap m_aAttributeMap;
 
 public:
-    XMLDashStyleImport( SvXMLImport& rImport );
+    CharacterAttributesHelper(const vcl::Font& rFont, sal_Int32 nBackColor, sal_Int32 nColor);
 
-    void importXML(
-        const cpo::uno::Reference< css::xml::sax::XFastAttributeList >& xAttrList,
-        cpo::uno::Any& rValue,
-        OUString& rStrName );
+    std::vector<css::beans::PropertyValue> GetCharacterAttributes();
+    cpo::uno::Sequence<css::beans::PropertyValue>
+    GetCharacterAttributes(const cpo::uno::Sequence<OUString>& aRequestedAttributes);
 };
-
-
-class XMLOFF_DLLPUBLIC XMLDashStyleExport
-{
-    SvXMLExport& m_rExport;
-
-public:
-    XMLDashStyleExport( SvXMLExport& rExport );
-
-    void exportXML( const OUString& rStrName,
-                        const cpo::uno::Any& rValue );
-};
-
-#endif // INCLUDED_XMLOFF_DASHSTYLE_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

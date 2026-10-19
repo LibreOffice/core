@@ -51,10 +51,10 @@
 #include <connectivity/dbexception.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/interfacecontainer.h>
-#include <dbaccess/AsynchronousLink.hxx>
-#include <dbaccess/controllerframe.hxx>
+#include "AsynchronousLink.hxx"
+#include "controllerframe.hxx"
 #include <dbaccess/dbaccessdllapi.h>
-#include <dbaccess/IController.hxx>
+#include "IController.hxx"
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <tools/link.hxx>
@@ -182,7 +182,7 @@ namespace dbaui
                                            ,   css::frame::XTitleChangeBroadcaster
                                            >   OGenericUnoController_Base;
 
-    class UNLESS_MERGELIBS(DBACCESS_DLLPUBLIC) OGenericUnoController
+    class OGenericUnoController
                                 :public OGenericUnoController_MBASE
                                 ,public OGenericUnoController_Base
                                 ,public IController
@@ -318,8 +318,8 @@ namespace dbaui
         void executeUserDefinedFeatures( const css::util::URL& _rFeatureURL, const cpo::uno::Sequence< css::beans::PropertyValue>& _rArgs );
 
         // link methods
-        DECL_DLLPRIVATE_LINK(OnAsyncInvalidateAll, void*, void);
-        DECL_DLLPRIVATE_LINK(OnAsyncCloseTask, void*, void);
+        DECL_LINK(OnAsyncInvalidateAll, void*, void);
+        DECL_LINK(OnAsyncCloseTask, void*, void);
 
     public:
         const cpo::uno::Reference< cpo::uno::XComponentContext >& getORB() const { return m_xContext; }

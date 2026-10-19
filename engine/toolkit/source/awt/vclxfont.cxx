@@ -22,7 +22,7 @@
 #include <com/sun/star/awt/XDevice.hpp>
 
 #include <comphelper/sequence.hxx>
-#include <toolkit/awt/vclxfont.hxx>
+#include <awt/vclxfont.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 
 #include <vcl/kernarray.hxx>

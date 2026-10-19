@@ -38,7 +38,7 @@ typedef ::std::vector< OUString > AddressList_Impl;
 
 // class SfxMailModel_Impl -----------------------------------------------
 
-class UNLESS_MERGELIBS(SFX2_DLLPUBLIC) SfxMailModel
+class SfxMailModel
 {
 protected:
     enum SaveResult

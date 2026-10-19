@@ -18,7 +18,7 @@
  */
 
 #include <addonmenu.hxx>
-#include <framework/addonsoptions.hxx>
+#include <addonsoptions.hxx>
 #include <menuconfiguration.hxx>
 
 #include <cpo/uno/Reference.hxx>

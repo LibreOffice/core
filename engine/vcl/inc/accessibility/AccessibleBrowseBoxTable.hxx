@@ -20,7 +20,7 @@
 
 #pragma once
 
-#include <vcl/accessibility/AccessibleBrowseBoxTableBase.hxx>
+#include <accessibility/AccessibleBrowseBoxTableBase.hxx>
 
 
 /** This class represents the accessible object of the data table of a

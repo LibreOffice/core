@@ -30,7 +30,7 @@
 #include <com/sun/star/text/WritingMode.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <utility>
-#include <xmloff/EnumPropertyHdl.hxx>
+#include <EnumPropertyHdl.hxx>
 #include <xmloff/NamedBoolPropertyHdl.hxx>
 #include <WordWrapPropertyHdl.hxx>
 #include <enummaps.hxx>

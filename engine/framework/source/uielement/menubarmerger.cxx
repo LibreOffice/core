@@ -18,7 +18,7 @@
  */
 
 #include <uielement/menubarmerger.hxx>
-#include <framework/addonsoptions.hxx>
+#include <addonsoptions.hxx>
 #include <cpo/uno/Sequence.hxx>
 #include <o3tl/string_view.hxx>
 

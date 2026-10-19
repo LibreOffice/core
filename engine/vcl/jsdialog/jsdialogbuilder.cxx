@@ -11,7 +11,7 @@
 #include <comphelper/scopeguard.hxx>
 #include <sal/log.hxx>
 #include <iconview.hxx>
-#include <vcl/customwidget.hxx>
+#include <customwidget.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/toolbox.hxx>

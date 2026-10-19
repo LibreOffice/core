@@ -82,7 +82,6 @@
 #include <vcl/textrectinfo.hxx>
 #include <vcl/toolkit/vclmedit.hxx>
 
-#include <toolkit/awt/vclxwindows.hxx>
 #include <awt/vclxwindows.hxx>
 #include <awt/vclxsystemdependentwindow.hxx>
 #include <awt/vclxregion.hxx>

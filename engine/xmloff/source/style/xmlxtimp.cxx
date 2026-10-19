@@ -38,11 +38,11 @@
 #include <xmloff/namespacemap.hxx>
 
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/DashStyle.hxx>
-#include <xmloff/GradientStyle.hxx>
-#include <xmloff/HatchStyle.hxx>
-#include <xmloff/ImageStyle.hxx>
-#include <xmloff/MarkerStyle.hxx>
+#include <DashStyle.hxx>
+#include <GradientStyle.hxx>
+#include <HatchStyle.hxx>
+#include <ImageStyle.hxx>
+#include <MarkerStyle.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include <xmloff/xmlgrhlp.hxx>
 

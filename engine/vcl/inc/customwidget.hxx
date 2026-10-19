@@ -24,7 +24,7 @@ class JsonWriter;
  * VclCustomWidget produces JSON via DumpAsPropertyTree(). The client
  * receives the JSON and renders the widget natively.
  */
-class VCL_DLLPUBLIC VclCustomWidget final : public Control
+class VclCustomWidget final : public Control
 {
 public:
     using DumpCallback = std::function<void(tools::JsonWriter& /*rWriter*/)>;

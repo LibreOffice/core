@@ -31,7 +31,7 @@
 #include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
-#include <dbaccess/IController.hxx>
+#include <IController.hxx>
 #include <framework/actiontriggerhelper.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 #include <toolkit/helper/vclunohelper.hxx>

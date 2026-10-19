@@ -108,7 +108,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/strings.hrc>
 #include <sfx2/sfxbasecontroller.hxx>
-#include <sfx2/mailmodelapi.hxx>
+#include <mailmodelapi.hxx>
 #include <bluthsndapi.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/event.hxx>

@@ -45,7 +45,7 @@
 #include <sal/log.hxx>
 #include "txtparai.hxx"
 #include <xmloff/txtprmap.hxx>
-#include <xmloff/txtimppr.hxx>
+#include <txtimppr.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <txtvfldi.hxx>
 #include <xmloff/i18nmap.hxx>

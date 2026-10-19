@@ -42,7 +42,7 @@ enum class MediaControlStyle
     MultiLine = 1
 };
 
-class UNLESS_MERGELIBS(AVMEDIA_DLLPUBLIC) MediaControlBase
+class MediaControlBase
 {
 public:
     MediaControlBase();

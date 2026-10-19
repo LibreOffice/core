@@ -18,7 +18,7 @@
  */
 
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <framework/addonsoptions.hxx>
+#include <addonsoptions.hxx>
 #include <o3tl/safeint.hxx>
 #include <unotools/configmgr.hxx>
 #include <unotools/configitem.hxx>

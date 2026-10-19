@@ -37,7 +37,7 @@
 #include <memory>
 #include <tools/json_writer.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxCheckBoxCell.hxx>
-#include <vcl/accessibility/AccessibleBrowseBoxHeaderBar.hxx>
+#include <accessibility/AccessibleBrowseBoxHeaderBar.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxHeaderCell.hxx>
 #include <vcl/accessibility/AccessibleBrowseBoxTableCell.hxx>
 #include <vcl/filter/PngImageWriter.hxx>

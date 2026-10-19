@@ -42,7 +42,7 @@ d_Col = BitmapColor( static_cast<sal_uInt8>( _def_cR | ( ( _def_cR & maR.mnOr ) 
     d_ALPHA )
 
 
-struct VCL_DLLPUBLIC ColorMaskElement
+struct ColorMaskElement
 {
     sal_uInt32              mnMask;
     int                     mnShift;
@@ -86,7 +86,7 @@ struct VCL_DLLPUBLIC ColorMaskElement
     }
 };
 
-class VCL_DLLPUBLIC ColorMask
+class ColorMask
 {
     ColorMaskElement        maR;
     ColorMaskElement        maG;

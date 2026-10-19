@@ -44,7 +44,7 @@
 #include <vcl/timer.hxx>
 #include <comphelper/compbase.hxx>
 #include <cppuhelper/weakref.hxx>
-#include <framework/addonsoptions.hxx>
+#include <addonsoptions.hxx>
 #include <toolkit/awt/vclxmenu.hxx>
 
 namespace framework

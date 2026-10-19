@@ -21,7 +21,7 @@
 #include <uielement/styletoolbarcontroller.hxx>
 #include <menuconfiguration.hxx>
 #include <addonmenu.hxx>
-#include <framework/addonsoptions.hxx>
+#include <addonsoptions.hxx>
 #include <classes/fwkresid.hxx>
 #include <strings.hrc>
 

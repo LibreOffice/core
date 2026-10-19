@@ -49,7 +49,7 @@
 #include "XMLFootnoteImportContext.hxx"
 #include "XMLTextMarkImportContext.hxx"
 #include "XMLTextFrameContext.hxx"
-#include <xmloff/XMLCharContext.hxx>
+#include <XMLCharContext.hxx>
 #include "XMLTextFrameHyperlinkContext.hxx"
 #include <xmloff/XMLEventsImportContext.hxx>
 #include "XMLChangeImportContext.hxx"

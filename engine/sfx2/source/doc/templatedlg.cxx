@@ -26,7 +26,7 @@
 #include <sfx2/templatedlglocalview.hxx>
 #include <templatecontaineritem.hxx>
 #include <templateviewitem.hxx>
-#include <sfx2/thumbnailviewitem.hxx>
+#include <thumbnailviewitem.hxx>
 #include <sot/storage.hxx>
 #include <tools/urlobj.hxx>
 #include <unotools/moduleoptions.hxx>

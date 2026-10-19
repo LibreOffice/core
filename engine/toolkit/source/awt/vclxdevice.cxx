@@ -23,7 +23,7 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 
 #include <toolkit/awt/vclxdevice.hxx>
-#include <toolkit/awt/vclxfont.hxx>
+#include <awt/vclxfont.hxx>
 #include <awt/vclxbitmap.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 

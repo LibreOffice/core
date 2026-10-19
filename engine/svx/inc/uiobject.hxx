@@ -13,6 +13,7 @@
 #include <memory>
 #include <vcl/uitest/uiobject.hxx>
 #include <svx/numvset.hxx>
+#include <svx/SvxColorValueSet.hxx>
 
 class SvxShowCharSet;
 class SvxNumValueSet;
@@ -29,6 +30,28 @@ public:
     static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
 
 private:
+    OUString get_name() const override;
+};
+
+class SvxColorValueSet;
+
+class SvxColorValueSetUIObject final : public DrawingAreaUIObject
+{
+    SvxColorValueSet* mpColorSet;
+
+public:
+
+    SvxColorValueSetUIObject(vcl::Window* pColorSetWin);
+
+    virtual void execute(const OUString& rAction,
+            const StringMap& rParameters) override;
+
+    static std::unique_ptr<UIObject> create(vcl::Window* pWindow);
+
+    virtual StringMap get_state() override;
+
+private:
+
     OUString get_name() const override;
 };
 

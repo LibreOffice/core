@@ -33,7 +33,7 @@
 #include <cpo/uno/XComponentContext.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
-#include <framework/addonsoptions.hxx>
+#include <addonsoptions.hxx>
 
 #include <rtl/ustring.hxx>
 #include <cppuhelper/implbase.hxx>

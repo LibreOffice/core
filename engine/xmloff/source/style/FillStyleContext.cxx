@@ -32,11 +32,11 @@
 #include <sax/tools/converter.hxx>
 #include <xmloff/xmlimp.hxx>
 #include <xmloff/xmltoken.hxx>
-#include <xmloff/GradientStyle.hxx>
-#include <xmloff/HatchStyle.hxx>
-#include <xmloff/ImageStyle.hxx>
-#include <xmloff/MarkerStyle.hxx>
-#include <xmloff/DashStyle.hxx>
+#include <GradientStyle.hxx>
+#include <HatchStyle.hxx>
+#include <ImageStyle.hxx>
+#include <MarkerStyle.hxx>
+#include <DashStyle.hxx>
 #include <xmloff/xmlnamespace.hxx>
 #include <xmloff/XMLBase64ImportContext.hxx>
 

@@ -11,7 +11,7 @@
 #include <COKit/COKit.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/json_writer.hxx>
-#include <vcl/customwidget.hxx>
+#include <customwidget.hxx>
 #include <vcl/dockwin.hxx>
 #include <vcl/toolkit/dialog.hxx>
 

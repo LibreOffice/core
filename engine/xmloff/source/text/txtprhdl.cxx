@@ -53,7 +53,7 @@
 #include "txtprhdl.hxx"
 #include <com/sun/star/text/WrapInfluenceOnPosition.hpp>
 #include <com/sun/star/drawing/TextVerticalAdjust.hpp>
-#include <xmloff/EnumPropertyHdl.hxx>
+#include <EnumPropertyHdl.hxx>
 #include <XMLFillBitmapSizePropertyHandler.hxx>
 #include <XMLBitmapLogicalSizePropertyHandler.hxx>
 #include <XMLBitmapRepeatOffsetPropertyHandler.hxx>

@@ -51,7 +51,7 @@
 #include <editeng/kernitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/postitem.hxx>
-#include <editeng/rubyitem.hxx>
+#include <rubyitem.hxx>
 #include <editeng/shdditem.hxx>
 #include <editeng/udlnitem.hxx>
 #include <editeng/ulspitem.hxx>

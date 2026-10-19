@@ -21,7 +21,7 @@
 #include <uielement/genericstatusbarcontroller.hxx>
 
 #include <framework/sfxhelperfunctions.hxx>
-#include <framework/addonsoptions.hxx>
+#include <addonsoptions.hxx>
 #include <uielement/statusbarmerger.hxx>
 #include <uielement/statusbaritem.hxx>
 #include <com/sun/star/frame/XLayoutManager.hpp>

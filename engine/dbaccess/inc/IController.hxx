@@ -43,7 +43,7 @@ class NotifyEvent;
 namespace dbaui
 {
     // interface for controller depended calls like commands
-    class DBACCESS_DLLPUBLIC IController
+    class IController
     {
     public:
         /** executes the given command only when it is allowed

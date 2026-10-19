@@ -18,7 +18,7 @@
  */
 
 #include <editeng/memberids.h>
-#include <editeng/rubyitem.hxx>
+#include <rubyitem.hxx>
 
 using namespace ::com::sun::star;
 

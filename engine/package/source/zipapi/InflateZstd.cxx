@@ -7,7 +7,7 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
 
-#include <package/InflateZstd.hxx>
+#include <InflateZstd.hxx>
 #include <string.h>
 
 using namespace ::cpo::uno;

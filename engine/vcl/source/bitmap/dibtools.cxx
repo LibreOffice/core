@@ -34,7 +34,7 @@
 #include <vcl/bitmap.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/BitmapWriteAccess.hxx>
-#include <vcl/ColorMask.hxx>
+#include <ColorMask.hxx>
 #include <vcl/BitmapTools.hxx>
 #include <memory>
 

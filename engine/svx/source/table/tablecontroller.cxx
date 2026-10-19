@@ -20,7 +20,7 @@
 #include <algorithm>
 
 #include <svx/sdr/table/tablecontroller.hxx>
-#include <svx/sdr/table/TableDesignPreview.hxx>
+#include <sdr/table/TableDesignPreview.hxx>
 #include <tablemodel.hxx>
 
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>

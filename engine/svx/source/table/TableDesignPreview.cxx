@@ -32,7 +32,7 @@
 #include <editeng/eeitem.hxx>
 #include <tools/debug.hxx>
 
-#include <svx/sdr/table/TableDesignPreview.hxx>
+#include <sdr/table/TableDesignPreview.hxx>
 #include <svx/sdr/table/TableStylePreviewPaint.hxx>
 
 using namespace ::com::sun::star;

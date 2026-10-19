@@ -21,7 +21,7 @@
 
 #include <vcl/window.hxx>
 
-#include <dbaccess/dataview.hxx>
+#include <dataview.hxx>
 #include <unotools/eventlisteneradapter.hxx>
 #include "dbtreelistbox.hxx"
 

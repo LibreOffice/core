@@ -42,7 +42,7 @@
 #include <awt/vclxregion.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 #include <awt/vclxgraphics.hxx>
-#include <toolkit/awt/vclxfont.hxx>
+#include <awt/vclxfont.hxx>
 #include <toolkit/controls/unocontrolcontainer.hxx>
 #include <toolkit/controls/unocontrolcontainermodel.hxx>
 #include <comphelper/processfactory.hxx>

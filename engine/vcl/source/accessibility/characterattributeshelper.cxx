@@ -18,7 +18,7 @@
  */
 
 #include <tools/gen.hxx>
-#include <vcl/accessibility/characterattributeshelper.hxx>
+#include <accessibility/characterattributeshelper.hxx>
 #include <vcl/unohelp.hxx>
 #include <comphelper/sequence.hxx>
 

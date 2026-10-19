@@ -38,7 +38,7 @@
 #include <editeng/shdditem.hxx>
 #include <editeng/escapementitem.hxx>
 #include <editeng/kernitem.hxx>
-#include <editeng/rubyitem.hxx>
+#include <rubyitem.hxx>
 #include <editeng/wrlmitem.hxx>
 #include <editeng/autokernitem.hxx>
 #include <editeng/langitem.hxx>
