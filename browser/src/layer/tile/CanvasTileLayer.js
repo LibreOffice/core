@@ -284,6 +284,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		// Position and size of the selection start (as if there would be a cursor caret there).
 
 		this._lastValidPart = -1;
+		this._lastViewportHeight = 0;
 		// Cursor marker
 		this._cursorMarker = null;
 
@@ -3932,14 +3933,20 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	_mobileChecksAfterResizeEvent: function(heightIncreased) {
 		if (!window.mode.isSmallScreenDevice()) return;
 
+		// The document area grows when the wizard closes too, so go by the viewport.
+		const viewportHeight = window.visualViewport
+			? window.visualViewport.height : window.innerHeight;
+		const viewportGrew = this._lastViewportHeight < viewportHeight;
+		this._lastViewportHeight = viewportHeight;
+
 		const hasMobileWizardOpened = this._map.uiManager.mobileWizard ? this._map.uiManager.mobileWizard.isOpen() : false;
 		const hasIframeModalOpened = $('.iframe-dialog-modal').is(':visible');
 		// when integrator has opened dialog in parent frame (eg. save as) we shouldn't steal the focus
 		const focusedUI = document.activeElement === document.body;
 		if (!hasMobileWizardOpened && !hasIframeModalOpened && !focusedUI) {
 			if (heightIncreased) {
-				// if the keyboard is hidden - be sure we setup correct state in TextInput
-				this._map.setAcceptInput(false);
+				if (viewportGrew)
+					this._map.setAcceptInput(false);
 			} else
 				this._onUpdateCursor(true);
 		}
