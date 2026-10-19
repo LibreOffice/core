@@ -418,9 +418,16 @@ export class CodaMacOSServiceLauncher {
 
 		const driverBundle = buildDriver(driverPath);
 
+		// The logs of a run go to the output directory, where they stay after the
+		// run; a failure on a machine nobody watches is worked out from them.
+		const logDir = config?.outputDir ?? process.cwd();
+		mkdirSync(logDir, { recursive: true });
+
 		// `open -a` does not pipe stdio.  Have the driver redirect its
-		// output to a file we tail to forward to console.
-		this.#driverLogFile = join(this.#testDocDir, 'coda-driver.log');
+		// output to a file we tail to forward to console.  The file starts
+		// empty, so the tail shows this run alone.
+		this.#driverLogFile = join(logDir, 'coda-driver.log');
+		writeFileSync(this.#driverLogFile, '');
 		this.#stopTail = tailFile(this.#driverLogFile, '[coda-driver]:');
 
 		console.log('Starting coda-driver via LaunchServices (open -a)...');
@@ -484,8 +491,6 @@ export class CodaMacOSServiceLauncher {
 		// zero, so the lines written during startup are included, late as we are
 		// to it.
 		if (typeof appStatus?.logFile === 'string') {
-			const logDir = config?.outputDir ?? process.cwd();
-			mkdirSync(logDir, { recursive: true });
 			this.#appLogFile = join(logDir, 'coda-app.log');
 			writeFileSync(this.#appLogFile, '');
 			this.#appLogPoll = setInterval(() => {
@@ -510,9 +515,16 @@ export class CodaMacOSServiceLauncher {
 		}
 
 		// A run that failed gets the end of the app's log printed, which is
-		// where whatever went wrong shows up.
-		if (exitCode !== 0 && this.#appLogFile !== null) {
-			this.#printAppLogTail();
+		// where whatever went wrong shows up, and a pointer to the driver's.
+		if (exitCode !== 0) {
+			if (this.#appLogFile !== null) {
+				this.#printAppLogTail();
+			}
+			if (this.#driverLogFile !== null) {
+				console.log(
+					`The native driver's log is in ${this.#driverLogFile}`,
+				);
+			}
 		}
 
 		await this.#shutdownApp();
