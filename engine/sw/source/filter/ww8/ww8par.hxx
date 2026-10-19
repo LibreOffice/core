@@ -1244,7 +1244,9 @@ private:
 
     std::unique_ptr<SwMSConvertControls> m_xFormImpl; // implementation of control
 
-    SwFlyFrameFormat* m_pFlyFormatOfJustInsertedGraphic;
+    // The target of an INCLUDEPICTURE field with the \d switch, waiting for the picture that
+    // follows the field. Empty when there is none.
+    OUString m_sIncludePictureLink;
     std::unique_ptr<FrameDeleteWatch> m_xFormatOfJustInsertedApo;
     SwPaM* m_pPreviousNumPaM;
     const SwNumRule* m_pPrevNumRule;
@@ -1541,6 +1543,7 @@ private:
         SvxULSpaceItem &rUL);
     static void MapWrapIntoFlyFormat(const SvxMSDffImportRec& rRecord, SwFrameFormat& rFlyFormat);
 
+    void LinkGrfNode(const SwFrameFormat& rFlyFormat, const OUString& rLink);
     void SetAttributesAtGrfNode(const SvxMSDffImportRec& rRecord, const SwFrameFormat& rFlyFormat,
                                 WW8_FSPA const* pF);
 
@@ -1973,7 +1976,6 @@ public:
     ~WW8LastAnchorPosSaver();
 };
 
-bool CanUseRemoteLink(const OUString &rGrfName);
 void UseListIndent(SwWW8StyInf &rStyle, const SwNumFormat &rFormat);
 void SetStyleIndent(SwWW8StyInf &rStyleInfo, const SwNumFormat &rFormat);
 // #i103711#

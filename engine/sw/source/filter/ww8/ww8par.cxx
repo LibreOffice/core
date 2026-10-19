@@ -4122,7 +4122,6 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SotStorage* pStorage,
     , m_aGrfNameGenerator(bNewDoc, OUString('G'))
     , m_aParaStyleMapper(rD)
     , m_aCharStyleMapper(rD)
-    , m_pFlyFormatOfJustInsertedGraphic(nullptr)
     , m_pPreviousNumPaM(nullptr)
     , m_pPrevNumRule(nullptr)
     , m_pCurrentColl(nullptr)

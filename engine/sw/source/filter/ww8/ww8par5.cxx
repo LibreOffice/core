@@ -24,13 +24,10 @@
 #include <tools/solar.h>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
-#include <comphelper/simplefileaccessinteraction.hxx>
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
-#include <com/sun/star/task/InteractionHandler.hpp>
 
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <svl/cintitem.hxx>
 #include <svl/lngmisc.hxx>
 #include <svl/urihelper.hxx>
@@ -40,9 +37,6 @@
 #include <sfx2/linkmgr.hxx>
 #include <rtl/character.hxx>
 #include <unotools/charclass.hxx>
-
-#include <ucbhelper/content.hxx>
-#include <ucbhelper/commandenvironment.hxx>
 
 #include <i18npool/breakiterator.hxx>
 #include <hintids.hxx>
@@ -2467,47 +2461,6 @@ eF_ResT SwWW8ImplReader::Read_F_Macro( WW8FieldDesc*, OUString& rStr)
     return eF_ResT::OK;
 }
 
-bool CanUseRemoteLink(const OUString &rGrfName)
-{
-    bool bUseRemote = false;
-    try
-    {
-        // Related: tdf#102499, add a default css::ucb::XCommandEnvironment
-        // in order to have https protocol manage certificates correctly
-        uno::Reference< task::XInteractionHandler > xIH(
-            task::InteractionHandler::createWithParent(comphelper::getProcessComponentContext(), nullptr));
-
-        uno::Reference< ucb::XProgressHandler > xProgress;
-        rtl::Reference<::ucbhelper::CommandEnvironment> pCommandEnv =
-              new ::ucbhelper::CommandEnvironment(new comphelper::SimpleFileAccessInteraction( xIH ), xProgress);
-
-        ::ucbhelper::Content aCnt(rGrfName,
-                                  static_cast< ucb::XCommandEnvironment* >(pCommandEnv.get()),
-                                  comphelper::getProcessComponentContext());
-
-        if ( !INetURLObject( rGrfName ).isAnyKnownWebDAVScheme() )
-        {
-            OUString   aTitle;
-            aCnt.getPropertyValue(u"Title"_ustr) >>= aTitle;
-            bUseRemote = !aTitle.isEmpty();
-        }
-        else
-        {
-            // is a link to a WebDAV resource
-            // need to use MediaType to check for link usability
-            OUString   aMediaType;
-            aCnt.getPropertyValue(u"MediaType"_ustr) >>= aMediaType;
-            bUseRemote = !aMediaType.isEmpty();
-        }
-    }
-    catch ( ... )
-    {
-        // this file did not exist, so we will not set this as graphiclink
-        bUseRemote = false;
-    }
-    return bUseRemote;
-}
-
 // "INCLUDEPICTURE"
 eF_ResT SwWW8ImplReader::Read_F_IncludePicture( WW8FieldDesc*, OUString& rStr )
 {
@@ -2538,33 +2491,7 @@ eF_ResT SwWW8ImplReader::Read_F_IncludePicture( WW8FieldDesc*, OUString& rStr )
     }
 
     if (!bEmbedded)
-        bEmbedded = !CanUseRemoteLink(aGrfName);
-
-    if (!bEmbedded)
-    {
-        /*
-            Special case:
-
-            Now we write the Link into the Doc and remember the SwFlyFrameFormat.
-            Since we end on return FLD_READ_FSPA below, the skip value will be set
-            so that Char-1 will still be read.
-            When we then call SwWW8ImplReader::ImportGraf() it will then recognize
-            that we have inserted a graphic link and the suiting SwAttrSet will be
-            inserted into the frame format.
-        */
-        SfxItemSetFixed<RES_FRMATR_BEGIN, RES_FRMATR_END-1> aFlySet( m_rDoc.GetAttrPool() );
-        aFlySet.Put( SwFormatAnchor( RndStdIds::FLY_AS_CHAR ) );
-        aFlySet.Put( SwFormatVertOrient( 0, text::VertOrientation::TOP, text::RelOrientation::FRAME ));
-        m_pFlyFormatOfJustInsertedGraphic =
-            m_rDoc.getIDocumentContentOperations().InsertGraphic(*m_pPaM,
-                                                    aGrfName,
-                                                    OUString(),
-                                                    nullptr,          // Graphic*
-                                                    &aFlySet,
-                                                    nullptr, nullptr);         // SwFrameFormat*
-        m_aGrfNameGenerator.SetUniqueGraphName(m_pFlyFormatOfJustInsertedGraphic,
-            INetURLObject(aGrfName).GetBase());
-    }
+        m_sIncludePictureLink = aGrfName;
     return eF_ResT::READ_FSPA;
 }
 

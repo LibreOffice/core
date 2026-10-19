@@ -2177,6 +2177,23 @@ static sal_Int32 lcl_ConvertCrop(sal_uInt32 const nCrop, sal_Int32 const nSize)
     return (nIntegral * nSize) + (((nCrop & 0xffff) * nSize) >> 16);
 }
 
+void SwWW8ImplReader::LinkGrfNode(const SwFrameFormat& rFlyFormat, const OUString& rLink)
+{
+    const SwNodeIndex* pIdx = rFlyFormat.GetContent(false).GetContentIdx();
+    SwGrfNode *const pGrfNd(
+        pIdx ? m_rDoc.GetNodes()[pIdx->GetIndex() + 1]->GetGrfNode() : nullptr);
+    if (!pGrfNd)
+        return;
+
+    // The imported picture, or the placeholder when there is none, is shown until the link is
+    // updated. A graphic node takes its link from the graphic's origin URL.
+    Graphic aPreview(pGrfNd->GetGraphic());
+    if (GraphicType::NONE == aPreview.GetType())
+        aPreview.SetDefaultType();
+    aPreview.setOriginURL(rLink);
+    pGrfNd->ReRead(rLink, OUString(), &aPreview);
+}
+
 void SwWW8ImplReader::SetAttributesAtGrfNode(const SvxMSDffImportRec& rRecord,
                                              const SwFrameFormat& rFlyFormat, WW8_FSPA const *pF)
 {
@@ -3189,7 +3206,6 @@ SwFlyFrameFormat* SwWW8ImplReader::ImportReplaceableDrawables(rtl::Reference<Sdr
     else
     {
         const SdrGrafObj *pGrf = static_cast<const SdrGrafObj*>(rpObject.get());
-        bool bDone = false;
         if (pGrf->IsLinkedGraphic() && !pGrf->GetFileName().isEmpty())
         {
             GraphicType eType = pGrf->GetGraphicType();
@@ -3197,18 +3213,15 @@ SwFlyFrameFormat* SwWW8ImplReader::ImportReplaceableDrawables(rtl::Reference<Sdr
                 URIHelper::SmartRel2Abs(
                     INetURLObject(m_sBaseURL), pGrf->GetFileName(),
                     URIHelper::GetMaybeFileHdl()));
-            // correction of fix for issue #i10939#:
-            // One of the two conditions have to be true to insert the graphic
-            // as a linked graphic -
-            if (GraphicType::NONE == eType || CanUseRemoteLink(aGrfName))
-            {
-                pRetFrameFormat = m_rDoc.getIDocumentContentOperations().InsertGraphic(
-                    *m_pPaM, aGrfName, OUString(), nullptr,
-                    &rFlySet, &aGrSet, nullptr);
-                bDone = true;
-            }
+            // The stored picture is shown until the link is updated. A graphic node takes its
+            // link from the graphic's origin URL, so that is set to the absolute name.
+            Graphic aPreview(pGrf->GetGraphic());
+            aPreview.setOriginURL(aGrfName);
+            pRetFrameFormat = m_rDoc.getIDocumentContentOperations().InsertGraphic(
+                *m_pPaM, aGrfName, OUString(), GraphicType::NONE == eType ? nullptr : &aPreview,
+                &rFlySet, &aGrSet, nullptr);
         }
-        if (!bDone)
+        else
         {
             const Graphic& rGraph = pGrf->GetGraphic();
             pRetFrameFormat = m_rDoc.getIDocumentContentOperations().InsertGraphic(

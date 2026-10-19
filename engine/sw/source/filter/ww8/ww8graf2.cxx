@@ -473,6 +473,7 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj const * pTextObj,
     SwFrameFormat const * pOldFlyFormat)
 {
     SwFrameFormat* pRet = nullptr;
+    const OUString sLink = std::exchange(m_sIncludePictureLink, OUString());
     if (
         ((m_pStrm == m_pDataStream ) && !m_nPicLocFc) ||
         (m_nIniFlags & WW8FL_NO_GRAF)
@@ -499,29 +500,7 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj const * pTextObj,
     // contain a WMF-like struct
     if (bValid && aPic.lcb >= 58)
     {
-        if( m_pFlyFormatOfJustInsertedGraphic )
-        {
-            // We just added a graphic-link into the doc. Now we need to set
-            // its position and scale it.
-            WW8PicDesc aPD( aPic );
-
-            WW8FlySet aFlySet( *this, m_pPaM, aPic, aPD.nWidth, aPD.nHeight );
-
-            // the correct anchor is set in Read_F_IncludePicture and the
-            // current PaM point is after the position if it is anchored in
-            // content; because this anchor add a character into the textnode.
-            // #i2806#
-            if (RndStdIds::FLY_AS_CHAR ==
-                m_pFlyFormatOfJustInsertedGraphic->GetAnchor().GetAnchorId() )
-            {
-                aFlySet.ClearItem( RES_ANCHOR );
-            }
-
-            m_pFlyFormatOfJustInsertedGraphic->SetFormatAttr( aFlySet );
-
-            m_pFlyFormatOfJustInsertedGraphic = nullptr;
-        }
-        else if((0x64 == aPic.MFP.mm) || (0x66 == aPic.MFP.mm))
+        if((0x64 == aPic.MFP.mm) || (0x66 == aPic.MFP.mm))
         {
             // linked graphic in ESCHER-Object
             rtl::Reference<SdrObject> pObject;
@@ -724,6 +703,8 @@ SwFrameFormat* SwWW8ImplReader::ImportGraf(SdrTextObj const * pTextObj,
 
     if (pRet)
     {
+        if (!sLink.isEmpty())
+            LinkGrfNode(*pRet, sLink);
         SdrObject* pOurNewObject = CreateContactObject(pRet);
         m_xWWZOrder->InsertTextLayerObject(pOurNewObject);
     }
