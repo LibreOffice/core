@@ -2396,7 +2396,6 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 			{ type: 'separator', id: 'review-spell-break', orientation: 'vertical' },
 			{
 				'id': 'review-insert-annotation',
-				'class': 'unoAccessibilityCheck',
 				'type': 'bigtoolitem',
 				'text': _UNO('.uno:InsertAnnotation'),
 				'command': '.uno:InsertAnnotation',
