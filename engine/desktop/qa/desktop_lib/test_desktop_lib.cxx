@@ -59,6 +59,8 @@
 #include <unotools/syslocaleoptions.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <comphelper/configuration.hxx>
+#include <officecfg/Office/Linguistic.hxx>
 #include <cairo.h>
 #include <config_fonts.h>
 #include <config_mpl.h>
@@ -191,6 +193,7 @@ public:
     void testCellCursor();
     void testCommandResult();
     void testWriterComments();
+    void testTranslationProviders();
     void testCommentAuthorFromSession();
     void testCommentAuthorAnonymous();
     void testSheetOperations();
@@ -291,6 +294,7 @@ public:
     CPPUNIT_TEST(testCellCursor);
     CPPUNIT_TEST(testCommandResult);
     CPPUNIT_TEST(testWriterComments);
+    CPPUNIT_TEST(testTranslationProviders);
     CPPUNIT_TEST(testCommentAuthorFromSession);
     CPPUNIT_TEST(testCommentAuthorAnonymous);
     CPPUNIT_TEST(testSheetOperations);
@@ -3028,6 +3032,79 @@ void DesktopKitTest::testGetFontSubset()
     CPPUNIT_ASSERT( !aValues.empty() );
 }
 #endif
+
+void DesktopKitTest::testTranslationProviders()
+{
+    COKitDocumentImpl* pDocument = loadDoc("blank_text.odt");
+
+    // Given a LibreTranslate server set up with a key, and no provider named:
+    using LibreTranslateCfg = officecfg::Office::Linguistic::Translation::LibreTranslate;
+    using ProviderCfg = officecfg::Office::Linguistic::Translation::Provider;
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch
+            = comphelper::ConfigurationChanges::create();
+        LibreTranslateCfg::BaseURL::set(u"http://127.0.0.1:1"_ustr, pBatch);
+        LibreTranslateCfg::ApiKey::set(u"secret-key"_ustr, pBatch);
+        LibreTranslateCfg::IsEnabled::set(true, pBatch);
+        pBatch->commit();
+    }
+    comphelper::ScopeGuard aResetConfig([] {
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch
+            = comphelper::ConfigurationChanges::create();
+        LibreTranslateCfg::BaseURL::set(std::optional<OUString>(), pBatch);
+        LibreTranslateCfg::ApiKey::set(std::optional<OUString>(), pBatch);
+        LibreTranslateCfg::IsEnabled::set(false, pBatch);
+        ProviderCfg::set(OUString(), pBatch);
+        pBatch->commit();
+    });
+
+    // When the settings dialog asks about the translation providers:
+    std::string aJSON = pDocument->getCommandValues(".uno:TranslationProviders");
+
+    // Then the key stays here:
+    CPPUNIT_ASSERT_EQUAL(std::string::npos, aJSON.find("secret-key"));
+    // and the answer says that LibreTranslate translates, how it is set up, and that the
+    // user may set it up themselves, there being no server to forbid it:
+    boost::property_tree::ptree aTree;
+    std::stringstream aStream(aJSON);
+    boost::property_tree::read_json(aStream, aTree);
+    CPPUNIT_ASSERT_EQUAL(std::string(".uno:TranslationProviders"),
+                         aTree.get<std::string>("commandName"));
+    const boost::property_tree::ptree& rValues = aTree.get_child("commandValues");
+    CPPUNIT_ASSERT_EQUAL(std::string(), rValues.get<std::string>("provider"));
+    CPPUNIT_ASSERT_EQUAL(std::string("libretranslate"), rValues.get<std::string>("active"));
+    const boost::property_tree::ptree& rProviders = rValues.get_child("providers");
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), rProviders.size());
+    const boost::property_tree::ptree& rDeepl = rProviders.begin()->second;
+    CPPUNIT_ASSERT_EQUAL(std::string("deepl"), rDeepl.get<std::string>("id"));
+    CPPUNIT_ASSERT(!rDeepl.get<bool>("configured"));
+    CPPUNIT_ASSERT(!rDeepl.get<bool>("hasCredentials"));
+    const boost::property_tree::ptree& rLibreTranslate = std::next(rProviders.begin())->second;
+    CPPUNIT_ASSERT_EQUAL(std::string("libretranslate"), rLibreTranslate.get<std::string>("id"));
+    CPPUNIT_ASSERT_EQUAL(std::string("LibreTranslate"), rLibreTranslate.get<std::string>("name"));
+    CPPUNIT_ASSERT(rLibreTranslate.get<bool>("enabled"));
+    CPPUNIT_ASSERT(rLibreTranslate.get<bool>("configured"));
+    CPPUNIT_ASSERT(rLibreTranslate.get<bool>("allowUserSettings"));
+    CPPUNIT_ASSERT(rLibreTranslate.get<bool>("hasCredentials"));
+    CPPUNIT_ASSERT_EQUAL(std::string("http://127.0.0.1:1"),
+                         rLibreTranslate.get<std::string>("baseURL"));
+    CPPUNIT_ASSERT(rLibreTranslate.get<bool>("sslVerify"));
+    // The server was not asked for its languages: that is for the translate dialog.
+    CPPUNIT_ASSERT(rLibreTranslate.get_child("targetLanguages").empty());
+
+    // And when DeepL is named without being set up, nothing translates:
+    {
+        std::shared_ptr<comphelper::ConfigurationChanges> pBatch
+            = comphelper::ConfigurationChanges::create();
+        ProviderCfg::set(u"deepl"_ustr, pBatch);
+        pBatch->commit();
+    }
+    aJSON = pDocument->getCommandValues(".uno:TranslationProviders");
+    std::stringstream aStream2(aJSON);
+    boost::property_tree::read_json(aStream2, aTree);
+    CPPUNIT_ASSERT_EQUAL(std::string("deepl"), aTree.get<std::string>("commandValues.provider"));
+    CPPUNIT_ASSERT_EQUAL(std::string(), aTree.get<std::string>("commandValues.active"));
+}
 
 void DesktopKitTest::testCommentsWriter()
 {

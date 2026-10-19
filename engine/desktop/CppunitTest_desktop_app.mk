@@ -32,6 +32,7 @@ $(eval $(call gb_CppunitTest_use_libraries,desktop_app, \
     fwk \
     i18nlangtag \
     $(call gb_Helper_optional,QUICKJS,jsuno) \
+    lng \
     $(if $(filter OPENCL,$(BUILD_TYPE)),opencl) \
     sal \
     salhelper \

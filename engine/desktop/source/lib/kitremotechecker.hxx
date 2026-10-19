@@ -9,10 +9,12 @@
 
 #pragma once
 
+#include <optional>
 #include <string>
 #include <vector>
 
 #include <com/sun/star/lang/Locale.hpp>
+#include <rtl/ustring.hxx>
 
 // The remote sentence checkers (LanguageTool, the Duden Korrekturserver and
 // Grammalecte) as the kit sets them up: their settings from the server's
@@ -20,6 +22,11 @@
 // what the settings dialog is told about them.
 namespace desktop::remotechecker
 {
+// The variable <pPrefix>_<pName> of the environment the server set up;
+// nothing when it is not set, as in the apps.
+std::optional<OUString> envString(const char* pPrefix, const char* pName);
+std::optional<bool> envBool(const char* pPrefix, const char* pName);
+
 // Takes the remote checker settings from the environment the server set up.
 void setRemoteCheckerConfig();
 

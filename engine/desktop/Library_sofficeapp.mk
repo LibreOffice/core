@@ -56,6 +56,7 @@ $(eval $(call gb_Library_use_libraries,sofficeapp,\
     fwk \
     i18nlangtag \
     $(call gb_Helper_optional,QUICKJS,jsuno) \
+    lng \
     $(if $(filter OPENCL,$(BUILD_TYPE)),opencl) \
     sal \
     salhelper \
@@ -122,6 +123,7 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
 	desktop/source/lib/kitinteractionhandler \
 	desktop/source/lib/kitclipboard \
 	desktop/source/lib/kitremotechecker \
+	desktop/source/lib/kittranslation \
 ))
 $(eval $(call gb_Library_set_componentfile,sofficeapp,desktop/kitclipboard,services))
 else
@@ -132,6 +134,7 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
 	desktop/source/lib/kitinteractionhandler \
 	desktop/source/lib/kitclipboard \
 	desktop/source/lib/kitremotechecker \
+	desktop/source/lib/kittranslation \
 ))
 $(eval $(call gb_Library_set_componentfile,sofficeapp,desktop/kitclipboard,services))
 endif

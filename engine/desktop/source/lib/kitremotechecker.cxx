@@ -80,6 +80,8 @@ const RemoteChecker aRemoteCheckers[] = {
       u"Grammalecte"_ustr, false },
 };
 
+} // namespace
+
 std::optional<OUString> envString(const char* pPrefix, const char* pName)
 {
     const char* pValue = ::getenv(OString(OString::Concat(pPrefix) + "_" + pName).getStr());
@@ -96,6 +98,8 @@ std::optional<bool> envBool(const char* pPrefix, const char* pName)
     return *oValue == "true";
 }
 
+namespace
+{
 // A list of names separated by commas; a name may have spaces in it.
 std::optional<cpo::uno::Sequence<OUString>> envList(const char* pPrefix, const char* pName)
 {

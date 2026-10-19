@@ -27,13 +27,16 @@ namespace tools
 {
 class TOOLS_DLLPUBLIC JsonWriter
 {
-    // Auto-closes the node.
+public:
+    // Auto-closes the node. What startNode(), startArray(), startAnonArray()
+    // and startStruct() return, kept for as long as the node is open.
     template <char closing> struct ScopedJsonWriterNode
     {
         JsonWriter& mrWriter;
         ~ScopedJsonWriterNode() { mrWriter.endNode(closing); }
     };
 
+private:
     rtl_String* mpBuffer;
     char* mPos;
     int mSpaceAllocated;

@@ -281,6 +281,7 @@
 #include "kitinteractionhandler.hxx"
 #include "kitclipboard.hxx"
 #include "kitremotechecker.hxx"
+#include "kittranslation.hxx"
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Impress.hxx>
 #include <officecfg/Office/Linguistic.hxx>
@@ -5708,6 +5709,15 @@ static void updateConfig(const OUString& rConfigPath)
                     aAllowedSubset.push_back(u"/org.openoffice.Office.Linguistic/GrammarChecking/Duden"_ustr);
                 if (desktop::remotechecker::allowsUserSettings("GRAMMALECTE"))
                     aAllowedSubset.push_back(u"/org.openoffice.Office.Linguistic/GrammarChecking/Grammalecte"_ustr);
+                // Which provider translates is the user's choice among the
+                // ones that are set up; a provider's server and key are the
+                // server's, unless it allows otherwise. These do not go back
+                // to the host either.
+                aAllowedSubset.push_back(u"/org.openoffice.Office.Linguistic/Translation/Provider"_ustr);
+                if (desktop::translation::allowsUserSettings("DEEPL"))
+                    aAllowedSubset.push_back(u"/org.openoffice.Office.Linguistic/Translation/Deepl"_ustr);
+                if (desktop::translation::allowsUserSettings("LIBRETRANSLATE"))
+                    aAllowedSubset.push_back(u"/org.openoffice.Office.Linguistic/Translation/LibreTranslate"_ustr);
                 xUpdate->insertModificationXcuFile(xcustat.getFileURL(),
                                                    comphelper::containerToSequence(aAllowedSubset), {});
             }
@@ -9040,6 +9050,10 @@ std::string COKitDocumentImpl::getCommandValues(const char* pCommand)
     {
         return desktop::remotechecker::getRemoteGrammarCheckers();
     }
+    else if (aCommand == ".uno:TranslationProviders")
+    {
+        return desktop::translation::getTranslationProviders();
+    }
     else if (aCommand == ".uno:HasPasswordToModify")
     {
         return getDocHasPasswordToModify(this);
@@ -10605,27 +10619,6 @@ void setCertificateDir()
     }
 }
 
-void setDeeplConfig()
-{
-    const char* pAPIUrlString = ::getenv("DEEPL_API_URL");
-    const char* pAuthKeyString = ::getenv("DEEPL_AUTH_KEY");
-    if (pAPIUrlString && pAuthKeyString)
-    {
-        OUString aAPIUrl = OStringToOUString(pAPIUrlString, RTL_TEXTENCODING_UTF8);
-        OUString aAuthKey = OStringToOUString(pAuthKeyString, RTL_TEXTENCODING_UTF8);
-        try
-        {
-            std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
-            officecfg::Office::Linguistic::Translation::Deepl::ApiURL::set(aAPIUrl, batch);
-            officecfg::Office::Linguistic::Translation::Deepl::AuthKey::set(aAuthKey, batch);
-            batch->commit();
-        }
-        catch(cpo::uno::Exception const& rException)
-        {
-            SAL_WARN("kit", "Failed to set Deepl API settings: " << rException.Message);
-        }
-    }
-}
 
 }
 
@@ -11008,7 +11001,7 @@ static int lo_initialize(COKit* pThis, const char* pAppPath, const char* pUserPr
 
     setHelpRootURL();
     setCertificateDir();
-    setDeeplConfig();
+    desktop::translation::setTranslationConfig();
     desktop::remotechecker::setRemoteCheckerConfig();
 
     if (bNotebookbar)

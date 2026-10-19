@@ -62,6 +62,10 @@ $(eval $(call gb_CppunitTest_use_rdb,desktop_lib,services))
 
 $(eval $(call gb_CppunitTest_use_configuration,desktop_lib))
 
+$(eval $(call gb_CppunitTest_use_custom_headers,desktop_lib,\
+    officecfg/registry \
+))
+
 $(eval $(call gb_CppunitTest_use_more_fonts,desktop_lib))
 
 $(eval $(call gb_CppunitTest_use_packages,desktop_lib, \
