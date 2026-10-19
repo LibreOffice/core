@@ -3321,8 +3321,9 @@ class Menubar extends window.L.Control {
 			id : 'menubar',
 			children : [] as any[]
 		};
-		var docType = ('mobile' + this._map.getDocType()) as keyof typeof this.options; // FIXME There should be a better structure for 'mobile<something>' in the options
-		var items = this.options[docType];
+		var docType = this._map.getDocType();
+		const optionsKey = ('mobile' + docType) as keyof typeof this.options; // FIXME There should be a better structure for 'mobile<something>' in the options
+		var items = this.options[optionsKey];
 		if (!Array.isArray(items))
 			return topMenu;
 
