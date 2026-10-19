@@ -5443,7 +5443,9 @@ sal_Int32 PDFWriterImpl::emitDocumentMetadata()
     lcl_assignMeta(m_aContext.DocumentInfo.Creator, aMetadata.m_sCreatorTool);
     aMetadata.m_sCreateDate = m_aCreationMetaDateString;
 
-    bool const bEncryptMetadata{m_pPDFEncryptor && m_pPDFEncryptor->isMetadataEncrypted()};
+    // metadata is always encrypted: V 2 has no /EncryptMetadata to leave it plain, and at V 5
+    // that entry defaults to true
+    const bool bEncryptMetadata = m_pPDFEncryptor != nullptr;
 
     {
         sal_uInt64 const nLength{bEncryptMetadata
@@ -5517,9 +5519,6 @@ sal_Int32 PDFWriterImpl::emitEncrypt()
             aWriter.write("/CF", "<</StdCF <</CFM /AESV3 /Length 256>>>>");
             aWriter.write("/StmF", "/StdCF");
             aWriter.write("/StrF", "/StdCF");
-            // Encrypt metadata. Default is true. Relevant for Revision 6+
-            if (!m_pPDFEncryptor->isMetadataEncrypted())
-                aWriter.write("/EncryptMetadata", " false ");
         }
         else
         {

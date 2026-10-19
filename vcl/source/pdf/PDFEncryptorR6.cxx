@@ -290,7 +290,7 @@ PDFEncryptorR6::~PDFEncryptorR6() = default;
 
 std::vector<sal_uInt8> PDFEncryptorR6::getEncryptedAccessPermissions(std::vector<sal_uInt8>& rKey)
 {
-    std::vector<sal_uInt8> aPerms = createPerms(m_nAccessPermissions, isMetadataEncrypted());
+    std::vector<sal_uInt8> aPerms = createPerms(m_nAccessPermissions, /*bEncryptMetadata=*/true);
     return encryptPerms(aPerms, rKey);
 }
 
