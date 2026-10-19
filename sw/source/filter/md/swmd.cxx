@@ -586,7 +586,7 @@ void SwMarkdownParser::InsertHtmlData()
 {
     OString aData = rtl::OUStringToOString(m_htmlData, RTL_TEXTENCODING_UTF8);
     SvMemoryStream aStream(const_cast<char*>(aData.getStr()), aData.getLength(), StreamMode::READ);
-    SwReader aReader(aStream, OUString(), OUString(), *m_pPam);
+    SwReader aReader(aStream, OUString(), m_sBaseURL, *m_pPam);
     aReader.Read(*ReadHTML);
 }
 
