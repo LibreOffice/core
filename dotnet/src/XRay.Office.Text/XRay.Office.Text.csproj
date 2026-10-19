@@ -5,10 +5,12 @@
     <!--
       Wider than the MPL-2.0 every other package declares, because this package also carries the
       28 bundled faces under Fonts/Bundled/: Carlito and Liberation are SIL OFL 1.1, Caladea is
-      Apache-2.0, DejaVu is the Bitstream Vera licence (its changes public domain). The licence of
+      Apache-2.0, DejaVu is the Bitstream Vera licence (its changes public domain). That last one is
+      left out of the expression on purpose: nuget.org only accepts OSI or FSF approved ids and rejects
+      Bitstream-Vera with a 400. It is recorded in Fonts/Bundled/README.md instead. The licence of
       each was read out of the face's own name table; see Fonts/Bundled/README.md, packed beside them.
     -->
-    <PackageLicenseExpression>MPL-2.0 AND OFL-1.1 AND Apache-2.0 AND Bitstream-Vera</PackageLicenseExpression>
+    <PackageLicenseExpression>MPL-2.0 AND OFL-1.1 AND Apache-2.0</PackageLicenseExpression>
   </PropertyGroup>
 
   <ItemGroup>

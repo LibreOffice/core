@@ -189,7 +189,9 @@ MPL-2.0, matching the LibreOffice source tree the port derives from (see
 [COPYING.MPL](../COPYING.MPL)). Two packages also ship third-party data under its own terms:
 `X-Ray.Office.Text` bundles Carlito and Liberation (SIL OFL 1.1), Caladea (Apache-2.0) and DejaVu
 (Bitstream Vera), so its package licence expression is
-`MPL-2.0 AND OFL-1.1 AND Apache-2.0 AND Bitstream-Vera`; `X-Ray.Office.Core` bundles the
+`MPL-2.0 AND OFL-1.1 AND Apache-2.0`. The expression leaves out Bitstream Vera, which nuget.org does not
+accept as an approved licence id; the DejaVu licence is in `Fonts/Bundled/README.md`, packed beside the
+fonts; `X-Ray.Office.Core` bundles the
 American English hyphenation patterns, whose BSD-style notice travels with them.
 
 Every package dependency is permissively licensed: SkiaSharp and HarfBuzzSharp (MIT), the

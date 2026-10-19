@@ -83,8 +83,9 @@ Rendering and text shaping use SkiaSharp and HarfBuzzSharp, which carry native l
 ## Licence
 
 MPL-2.0, as the code derives from LibreOffice. `X-Ray.Office.Text` also ships the Carlito,
-Liberation (SIL OFL 1.1), Caladea (Apache-2.0) and DejaVu (Bitstream Vera) fonts, and its licence
-expression says so. `X-Ray.Office.Core` ships the American English hyphenation patterns under
+Liberation (SIL OFL 1.1), Caladea (Apache-2.0) and DejaVu (Bitstream Vera) fonts. Its licence
+expression lists all but the Bitstream Vera licence of the DejaVu fonts (nuget.org does not accept that
+id); the font licence table ships in the package under `fonts/README.md`. `X-Ray.Office.Core` ships the American English hyphenation patterns under
 their own BSD-style terms, with their README beside them. Macro-enabled files are read as data;
 macros are never executed.
 
