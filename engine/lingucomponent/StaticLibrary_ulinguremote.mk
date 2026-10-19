@@ -8,7 +8,8 @@
 #
 
 # What the remote sentence checkers share. Kept apart from ulingu so the
-# spell checker, hyphenator and thesaurus do not pick up a curl dependency.
+# spell checker, hyphenator and thesaurus do not pick it up. The HTTP round
+# trip itself is the linguistic library's.
 
 $(eval $(call gb_StaticLibrary_StaticLibrary,ulinguremote))
 
@@ -19,7 +20,6 @@ $(eval $(call gb_StaticLibrary_use_api,ulinguremote,\
 
 $(eval $(call gb_StaticLibrary_use_externals,ulinguremote,\
 	boost_headers \
-	curl \
 ))
 
 $(eval $(call gb_StaticLibrary_use_custom_headers,ulinguremote,\

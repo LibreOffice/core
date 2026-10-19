@@ -8,7 +8,8 @@
  */
 
 #include <translate/providers.hxx>
-#include <translate/httprequest.hxx>
+
+#include <linguistic/httprequest.hxx>
 
 #include <o3tl/string_view.hxx>
 #include <officecfg/Office/Linguistic.hxx>
@@ -46,9 +47,11 @@ protected:
 private:
     /// The server's root without a trailing slash, and the key, which may be empty;
     /// false without a server.
-    static bool getSettings(OString& rBaseUrl, OString& rApiKey);
-    /// Has rRequest check the certificate as configured and report the server's error message.
-    static void prepareRequest(HttpRequest& rRequest);
+    static bool getSettings(OUString& rBaseUrl, OString& rApiKey);
+    /// A request to the path rPath of the server, checking the certificate as configured.
+    static http::Request createRequest(std::u16string_view rBaseUrl, std::u16string_view rPath,
+                                       std::chrono::seconds aTimeout,
+                                       std::chrono::seconds aConnectTimeout);
     /// The code the server knows the language rBcp47 by.
     OString toServiceCode(const OString& rBcp47);
 
@@ -61,7 +64,7 @@ private:
 /// for "zt", the server's name for traditional Chinese.
 OString toBcp47(const OString& rCode) { return rCode == "zt" ? "zh-Hant"_ostr : rCode; }
 
-bool LibreTranslateProvider::getSettings(OString& rBaseUrl, OString& rApiKey)
+bool LibreTranslateProvider::getSettings(OUString& rBaseUrl, OString& rApiKey)
 {
     const std::optional<OUString> oBaseUrl = LibreTranslateCfg::BaseURL::get();
     const std::optional<OUString> oApiKey = LibreTranslateCfg::ApiKey::get();
@@ -74,28 +77,37 @@ bool LibreTranslateProvider::getSettings(OString& rBaseUrl, OString& rApiKey)
         aBaseUrl.remove_suffix(std::u16string_view(u"/translate").size());
     if (aBaseUrl.empty())
         return false;
-    rBaseUrl = OUStringToOString(aBaseUrl, RTL_TEXTENCODING_UTF8);
+    rBaseUrl = OUString(aBaseUrl);
     rApiKey = OUStringToOString(aApiKey, RTL_TEXTENCODING_UTF8);
     return true;
 }
 
 bool LibreTranslateProvider::isConfigured() const
 {
-    OString aBaseUrl, aApiKey;
+    OUString aBaseUrl;
+    OString aApiKey;
     return isEnabled() && getSettings(aBaseUrl, aApiKey);
 }
 
 OString LibreTranslateProvider::getLanguageCacheKey() const
 {
-    OString aBaseUrl, aApiKey;
+    OUString aBaseUrl;
+    OString aApiKey;
     getSettings(aBaseUrl, aApiKey);
-    return aBaseUrl + "\n" + aApiKey;
+    return OUStringToOString(aBaseUrl, RTL_TEXTENCODING_UTF8) + "\n" + aApiKey;
 }
 
-void LibreTranslateProvider::prepareRequest(HttpRequest& rRequest)
+http::Request LibreTranslateProvider::createRequest(std::u16string_view rBaseUrl,
+                                                    std::u16string_view rPath,
+                                                    std::chrono::seconds aTimeout,
+                                                    std::chrono::seconds aConnectTimeout)
 {
-    rRequest.setVerifySSL(LibreTranslateCfg::SSLCertVerify::get());
-    rRequest.setErrorMessageKey("error");
+    http::Request aRequest;
+    aRequest.aURL = OUString::Concat(rBaseUrl) + rPath;
+    aRequest.bVerifySSL = LibreTranslateCfg::SSLCertVerify::get();
+    aRequest.aTimeout = aTimeout;
+    aRequest.aConnectTimeout = aConnectTimeout;
+    return aRequest;
 }
 
 OString LibreTranslateProvider::toServiceCode(const OString& rBcp47)
@@ -135,15 +147,12 @@ TranslateResult LibreTranslateProvider::translate(const OString& rHtml, const OS
     static constexpr std::chrono::seconds TIMEOUT(30);
     static constexpr std::chrono::seconds CONNECT_TIMEOUT(3);
 
-    OString aBaseUrl, aApiKey;
+    OUString aBaseUrl;
+    OString aApiKey;
     if (!getSettings(aBaseUrl, aApiKey))
         return { {}, "The LibreTranslate server is not set up"_ostr };
 
-    HttpRequest aRequest(aBaseUrl + "/translate", TIMEOUT, CONNECT_TIMEOUT);
-    if (!aRequest.isValid())
-        return { {}, "CURL initialization failed"_ostr };
-    prepareRequest(aRequest);
-
+    http::Request aRequest = createRequest(aBaseUrl, u"/translate", TIMEOUT, CONNECT_TIMEOUT);
     // rHtml is HTML: the html format keeps the markup intact across the translation. The
     // source language is for the server to detect.
     tools::JsonWriter aJson;
@@ -153,14 +162,14 @@ TranslateResult LibreTranslateProvider::translate(const OString& rHtml, const OS
     aJson.put("format", "html");
     if (!aApiKey.isEmpty())
         aJson.put("api_key", aApiKey);
-    aRequest.setJsonBody(aJson.finishAndGetAsOString());
+    aRequest.aBody = aJson.finishAndGetAsOString();
+    aRequest.aContentType = "application/json"_ostr;
 
-    const OString aError = aRequest.perform();
-    if (!aError.isEmpty())
-        return { {}, aError };
+    const http::Response aResponse = http::post(aRequest);
+    if (!aResponse.bOk)
+        return { {}, describeFailure(aResponse, "error") };
 
-    const std::optional<boost::property_tree::ptree> oRoot
-        = parseJson(aRequest.getResponseBody(), "response");
+    const std::optional<boost::property_tree::ptree> oRoot = http::parseJson(aResponse.aBody);
     if (!oRoot)
         return { {}, "Unexpected response from the service"_ostr };
     const std::string aText = oRoot->get<std::string>("translatedText", std::string());
@@ -178,21 +187,21 @@ std::vector<OString> LibreTranslateProvider::fetchTargetLanguages()
     // The request blocks the main loop, so an unreachable host should fail fast.
     static constexpr std::chrono::seconds CONNECT_TIMEOUT(2);
 
-    OString aBaseUrl, aApiKey;
+    OUString aBaseUrl;
+    OString aApiKey;
     if (!getSettings(aBaseUrl, aApiKey))
         return {};
 
-    HttpRequest aRequest(aBaseUrl + "/languages", TIMEOUT, CONNECT_TIMEOUT);
-    prepareRequest(aRequest);
-    if (!aRequest.perform().isEmpty())
+    const http::Response aResponse
+        = http::get(createRequest(aBaseUrl, u"/languages", TIMEOUT, CONNECT_TIMEOUT));
+    if (!aResponse.bOk)
         return {};
 
     // The response is an array of objects like
     // {"code": "en", "name": "English", "targets": ["de", "fr", ...]}: the languages
     // each source language can be translated into. With the source detected by the
     // server, every target of any source is a target.
-    const std::optional<boost::property_tree::ptree> oRoot
-        = parseJson(aRequest.getResponseBody(), "language list");
+    const std::optional<boost::property_tree::ptree> oRoot = http::parseJson(aResponse.aBody);
     if (!oRoot)
         return {};
     std::vector<OString> aLanguages;

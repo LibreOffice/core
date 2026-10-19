@@ -79,7 +79,7 @@ $(eval $(call gb_Library_add_exception_objects,lng,\
 	linguistic/source/thesdsp \
 	linguistic/source/translate/provider \
 	$(if $(ENABLE_CURL),\
-		linguistic/source/translate/httprequest \
+		linguistic/source/httprequest \
 		linguistic/source/translate/deepl \
 		linguistic/source/translate/libretranslate \
 	) \

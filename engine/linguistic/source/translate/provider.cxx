@@ -15,9 +15,35 @@
 #include <o3tl/string_view.hxx>
 #include <officecfg/Office/Linguistic.hxx>
 #include <sal/log.hxx>
+#if HAVE_FEATURE_CURL
+#include <linguistic/httprequest.hxx>
+#include <boost/property_tree/ptree.hpp>
+#endif
 
 namespace linguistic
 {
+#if HAVE_FEATURE_CURL
+OString translate::describeFailure(const http::Response& rResponse, const char* pMessageKey)
+{
+    OString aError = rResponse.aError;
+    SAL_WARN("linguistic", "translation request failed: " << aError);
+    if (rResponse.nStatus == 0)
+        return aError;
+    // The error body says why, e.g. "Authorization failure, check auth_key",
+    // when it is JSON; a proxy's HTML page is not.
+    const size_t nStart = rResponse.aBody.find_first_not_of(" \t\r\n");
+    if (nStart == std::string::npos || rResponse.aBody[nStart] != '{')
+        return aError;
+    if (const std::optional<boost::property_tree::ptree> oRoot = http::parseJson(rResponse.aBody))
+    {
+        const std::string aMessage = oRoot->get<std::string>(pMessageKey, std::string());
+        if (!aMessage.empty())
+            aError += OString::Concat(": ") + std::string_view(aMessage);
+    }
+    return aError;
+}
+#endif
+
 TranslationProvider::~TranslationProvider() = default;
 
 std::vector<OString> TranslationProvider::getTargetLanguages(bool bAskService)

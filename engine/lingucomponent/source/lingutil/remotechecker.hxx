@@ -30,7 +30,7 @@
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
 
-#include <curl/curl.h>
+#include <linguistic/httprequest.hxx>
 #include <boost/property_tree/ptree_fwd.hpp>
 
 #include <chrono>
@@ -42,47 +42,18 @@
 
 namespace lingucomponent::remote
 {
-// One HTTP request to a checker's server, as the checker builds it: where it
-// goes, what it sends and how the server is trusted. post() and get() carry
-// it out with curl.
-struct Request
-{
-    OUString aURL;
-    // The body, already encoded the way aContentType says.
-    OString aBody;
-    OString aContentType;
-    std::vector<OString> aHeaders;
-    // "user:password" for HTTP Basic authentication, empty for none.
-    OString aUserPassword;
-    bool bVerifySSL = true;
-    // How long the whole round trip may take, and the connection alone.
-    std::chrono::seconds aTimeout{ 10 };
-    std::chrono::seconds aConnectTimeout{ 3 };
-};
+// The HTTP round trip is the linguistic library's, shared with the
+// translation providers; the names stay the checkers' own.
+using Request = linguistic::http::Request;
+using Response = linguistic::http::Response;
+using linguistic::http::get;
+using linguistic::http::parseJson;
+using linguistic::http::percentEncode;
+using linguistic::http::post;
 
 // The round trip allowed when a server is asked whether it is there: the
 // caller waits for the answer, so it is cut shorter than a check.
 constexpr std::chrono::seconds PROBE_TIMEOUT(5);
-
-// What came back from a Request. eCode is curl's verdict on the transfer;
-// an HTTP status of 400 or more is one too, as the request fails on it, so
-// a caller only reads aBody when eCode is CURLE_OK.
-struct Response
-{
-    CURLcode eCode = CURLE_OK;
-    // The HTTP status, in the type curl writes it in.
-    long nStatus = 0;
-    std::string aBody;
-};
-
-Response post(const Request& rRequest);
-Response get(const Request& rRequest);
-
-// Keeps RFC 3986's unreserved characters and percent-encodes the UTF-8 bytes
-// of everything else.
-OString percentEncode(std::u16string_view rText);
-
-std::optional<boost::property_tree::ptree> parseJson(const std::string& rJson);
 
 // The underline colours the remote checkers share: red for a misspelling,
 // blue for a matter of style, orange for everything else.

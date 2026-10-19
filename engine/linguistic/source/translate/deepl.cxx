@@ -8,8 +8,8 @@
  */
 
 #include <translate/providers.hxx>
-#include <translate/httprequest.hxx>
 
+#include <linguistic/httprequest.hxx>
 #include <o3tl/string_view.hxx>
 #include <officecfg/Office/Linguistic.hxx>
 #include <sal/log.hxx>
@@ -42,12 +42,14 @@ protected:
 
 private:
     /// The translate endpoint and the key, trimmed; false when either is missing.
-    static bool getSettings(OString& rApiUrl, OString& rAuthKey);
-    /// Authenticates rRequest with the key and has it report the DeepL error message.
-    static void prepareRequest(HttpRequest& rRequest, std::string_view rAuthKey);
+    static bool getSettings(OUString& rApiUrl, OString& rAuthKey);
+    /// A request to rUrl, authenticated with the key.
+    static http::Request createRequest(const OUString& rUrl, std::string_view rAuthKey,
+                                       std::chrono::seconds aTimeout,
+                                       std::chrono::seconds aConnectTimeout);
 };
 
-bool DeeplProvider::getSettings(OString& rApiUrl, OString& rAuthKey)
+bool DeeplProvider::getSettings(OUString& rApiUrl, OString& rAuthKey)
 {
     const std::optional<OUString> oApiUrl = DeeplCfg::ApiURL::get();
     const std::optional<OUString> oAuthKey = DeeplCfg::AuthKey::get();
@@ -55,30 +57,38 @@ bool DeeplProvider::getSettings(OString& rApiUrl, OString& rAuthKey)
     const std::u16string_view aAuthKey = oAuthKey ? o3tl::trim(*oAuthKey) : std::u16string_view();
     if (aApiUrl.empty() || aAuthKey.empty())
         return false;
-    rApiUrl = OUStringToOString(aApiUrl, RTL_TEXTENCODING_UTF8);
+    rApiUrl = OUString(aApiUrl);
     rAuthKey = OUStringToOString(aAuthKey, RTL_TEXTENCODING_UTF8);
     return true;
 }
 
 bool DeeplProvider::isConfigured() const
 {
-    OString aApiUrl, aAuthKey;
+    OUString aApiUrl;
+    OString aAuthKey;
     return isEnabled() && getSettings(aApiUrl, aAuthKey);
 }
 
 OString DeeplProvider::getLanguageCacheKey() const
 {
-    OString aApiUrl, aAuthKey;
+    OUString aApiUrl;
+    OString aAuthKey;
     getSettings(aApiUrl, aAuthKey);
-    return aApiUrl + "\n" + aAuthKey;
+    return OUStringToOString(aApiUrl, RTL_TEXTENCODING_UTF8) + "\n" + aAuthKey;
 }
 
-void DeeplProvider::prepareRequest(HttpRequest& rRequest, std::string_view rAuthKey)
+http::Request DeeplProvider::createRequest(const OUString& rUrl, std::string_view rAuthKey,
+                                           std::chrono::seconds aTimeout,
+                                           std::chrono::seconds aConnectTimeout)
 {
+    http::Request aRequest;
+    aRequest.aURL = rUrl;
     // DeepL only accepts the key in the Authorization header; the former
     // auth_key form field is rejected with 403 since January 2026.
-    rRequest.addHeader(OString::Concat("Authorization: DeepL-Auth-Key ") + rAuthKey);
-    rRequest.setErrorMessageKey("message");
+    aRequest.aHeaders.push_back(OString::Concat("Authorization: DeepL-Auth-Key ") + rAuthKey);
+    aRequest.aTimeout = aTimeout;
+    aRequest.aConnectTimeout = aConnectTimeout;
+    return aRequest;
 }
 
 TranslateResult DeeplProvider::translate(const OString& rHtml, const OString& rTargetLang,
@@ -87,26 +97,23 @@ TranslateResult DeeplProvider::translate(const OString& rHtml, const OString& rT
     static constexpr std::chrono::seconds TIMEOUT(10);
     static constexpr std::chrono::seconds CONNECT_TIMEOUT(10);
 
-    OString aApiUrl, aAuthKey;
+    OUString aApiUrl;
+    OString aAuthKey;
     if (!getSettings(aApiUrl, aAuthKey))
         return { {}, "The DeepL API is not set up"_ostr };
 
-    HttpRequest aRequest(aApiUrl, TIMEOUT, CONNECT_TIMEOUT);
-    if (!aRequest.isValid())
-        return { {}, "CURL initialization failed"_ostr };
-    prepareRequest(aRequest, aAuthKey);
-
+    http::Request aRequest = createRequest(aApiUrl, aAuthKey, TIMEOUT, CONNECT_TIMEOUT);
     // rHtml is HTML: tag_handling keeps the markup intact across the translation. The
     // API takes the language codes in uppercase, e.g. "EN-GB".
-    aRequest.setPostFields("target_lang=" + aRequest.escape(rTargetLang.toAsciiUpperCase())
-                           + "&tag_handling=html&text=" + aRequest.escape(rHtml));
+    aRequest.aBody
+        = "target_lang=" + http::percentEncode(std::string_view(rTargetLang.toAsciiUpperCase()))
+          + "&tag_handling=html&text=" + http::percentEncode(std::string_view(rHtml));
 
-    const OString aError = aRequest.perform();
-    if (!aError.isEmpty())
-        return { {}, aError };
+    const http::Response aResponse = http::post(aRequest);
+    if (!aResponse.bOk)
+        return { {}, describeFailure(aResponse, "message") };
 
-    const std::optional<boost::property_tree::ptree> oRoot
-        = parseJson(aRequest.getResponseBody(), "response");
+    const std::optional<boost::property_tree::ptree> oRoot = http::parseJson(aResponse.aBody);
     if (!oRoot)
         return { {}, "Unexpected response from the service"_ostr };
     try
@@ -133,15 +140,16 @@ std::vector<OString> DeeplProvider::fetchTargetLanguages()
     static constexpr std::chrono::seconds TIMEOUT(5);
     // The request blocks the main loop, so an unreachable host should fail fast.
     static constexpr std::chrono::seconds CONNECT_TIMEOUT(2);
-    static constexpr std::string_view aTranslatePath = "/v2/translate";
+    static constexpr std::u16string_view aTranslatePath = u"/v2/translate";
 
-    OString aApiUrl, aAuthKey;
+    OUString aApiUrl;
+    OString aAuthKey;
     if (!getSettings(aApiUrl, aAuthKey))
         return {};
 
     // The language list lives at /v3/languages next to the /v2/translate endpoint.
-    std::string_view aBaseUrl(aApiUrl);
-    if (aBaseUrl.ends_with('/'))
+    std::u16string_view aBaseUrl(aApiUrl);
+    if (aBaseUrl.ends_with(u'/'))
         aBaseUrl.remove_suffix(1);
     if (!aBaseUrl.ends_with(aTranslatePath))
     {
@@ -150,16 +158,15 @@ std::vector<OString> DeeplProvider::fetchTargetLanguages()
     }
     aBaseUrl.remove_suffix(aTranslatePath.size());
 
-    HttpRequest aRequest(OString::Concat(aBaseUrl) + "/v3/languages?resource=translate_text",
-                         TIMEOUT, CONNECT_TIMEOUT);
-    prepareRequest(aRequest, aAuthKey);
-    if (!aRequest.perform().isEmpty())
+    const http::Response aResponse = http::get(
+        createRequest(OUString::Concat(aBaseUrl) + "/v3/languages?resource=translate_text",
+                      aAuthKey, TIMEOUT, CONNECT_TIMEOUT));
+    if (!aResponse.bOk)
         return {};
 
     // The response is an array of objects like
     // {"lang": "en-GB", "name": "English (British)", "usable_as_target": true, ...}
-    const std::optional<boost::property_tree::ptree> oRoot
-        = parseJson(aRequest.getResponseBody(), "language list");
+    const std::optional<boost::property_tree::ptree> oRoot = http::parseJson(aResponse.aBody);
     if (!oRoot)
         return {};
     std::vector<OString> aLanguages;

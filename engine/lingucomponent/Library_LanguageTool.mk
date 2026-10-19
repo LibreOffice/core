@@ -37,7 +37,6 @@ $(eval $(call gb_Library_use_static_libraries,LanguageTool,\
 
 $(eval $(call gb_Library_use_externals,LanguageTool,\
 	boost_headers \
-	curl \
 ))
 
 $(eval $(call gb_Library_use_custom_headers,LanguageTool,\

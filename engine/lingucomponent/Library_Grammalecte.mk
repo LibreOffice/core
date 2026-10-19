@@ -36,7 +36,6 @@ $(eval $(call gb_Library_use_static_libraries,Grammalecte,\
 
 $(eval $(call gb_Library_use_externals,Grammalecte,\
 	boost_headers \
-	curl \
 ))
 
 $(eval $(call gb_Library_use_custom_headers,Grammalecte,\

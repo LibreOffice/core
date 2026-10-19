@@ -639,6 +639,7 @@ certain functionality.
 @li @c lingucomponent.lightproof
 @li @c lingucomponent.remote
 @li @c linguistic
+@li @c linguistic.http
 @li @c net
 @li @c opencl
 @li @c opencl.device

@@ -233,7 +233,7 @@ cpo::uno::Sequence<css::beans::PropertyValue> GrammalecteChecker::probe()
     aRequest.aURL = getBaseURL() + "/get_options/fr";
     aRequest.bVerifySSL = GrammalecteCfg::SSLCertVerify::get();
     aRequest.aTimeout = PROBE_TIMEOUT;
-    const bool bReachable = !getBaseURL().isEmpty() && get(aRequest).eCode == CURLE_OK;
+    const bool bReachable = !getBaseURL().isEmpty() && get(aRequest).bOk;
     return { comphelper::makePropertyValue(u"IsReachable"_ustr, bReachable) };
 }
 

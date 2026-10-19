@@ -207,7 +207,7 @@ std::optional<std::vector<OUString>> DudenChecker::fetchNames(std::u16string_vie
     Request aRequest = makeRequest(rPath);
     aRequest.aTimeout = PROBE_TIMEOUT;
     const Response aResponse = get(aRequest);
-    if (aResponse.eCode != CURLE_OK)
+    if (!aResponse.bOk)
         return std::nullopt;
     const std::optional<boost::property_tree::ptree> oRoot = parseJson(aResponse.aBody);
     if (!oRoot)
@@ -229,7 +229,7 @@ cpo::uno::Sequence<css::beans::PropertyValue> DudenChecker::probe()
     {
         Request aRequest = makeRequest(u"/version");
         aRequest.aTimeout = PROBE_TIMEOUT;
-        bReachable = get(aRequest).eCode == CURLE_OK;
+        bReachable = get(aRequest).bOk;
     }
     std::vector<OUString> aPropertySets;
     std::vector<OUString> aDictionaries;

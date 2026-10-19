@@ -36,7 +36,6 @@ $(eval $(call gb_Library_use_static_libraries,Duden,\
 
 $(eval $(call gb_Library_use_externals,Duden,\
 	boost_headers \
-	curl \
 ))
 
 $(eval $(call gb_Library_use_custom_headers,Duden,\

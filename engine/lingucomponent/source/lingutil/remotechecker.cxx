@@ -12,11 +12,8 @@
 #include "remotechecker.hxx"
 
 #include <algorithm>
-#include <array>
 #include <memory>
-#include <sstream>
 
-#include <boost/property_tree/json_parser.hpp>
 #include <boost/property_tree/ptree.hpp>
 
 #include <com/sun/star/beans/NamedValue.hpp>
@@ -35,9 +32,7 @@
 #include <i18nlangtag/languagetag.hxx>
 #include <linguistic/misc.hxx>
 #include <osl/mutex.hxx>
-#include <rtl/uri.hxx>
 #include <sal/log.hxx>
-#include <systools/curlinit.hxx>
 #include <unotools/weakref.hxx>
 
 using namespace css::linguistic2;
@@ -48,117 +43,6 @@ namespace
 {
 constexpr size_t MAX_SUGGESTIONS = 10;
 constexpr std::chrono::seconds RETRY_DELAY(30);
-
-size_t writeCallback(void* pData, size_t nSize, size_t nMembers, void* pUser)
-{
-    if (!pUser)
-        return 0;
-    std::string* pBody = static_cast<std::string*>(pUser);
-    const size_t nBytes = nSize * nMembers;
-    pBody->append(static_cast<char*>(pData), nBytes);
-    return nBytes;
-}
-
-// Deleters for std::unique_ptr, so a curl handle and a header list are freed
-// on every way out of perform().
-struct CurlCleanup
-{
-    void operator()(CURL* p) const { curl_easy_cleanup(p); }
-};
-
-struct SlistCleanup
-{
-    void operator()(curl_slist* p) const { curl_slist_free_all(p); }
-};
-
-Response perform(const Request& rRequest, bool bPost)
-{
-    Response aResponse;
-    std::unique_ptr<CURL, CurlCleanup> pCurl(curl_easy_init());
-    if (!pCurl)
-    {
-        SAL_WARN("lingucomponent.remote", "curl initialization failed");
-        aResponse.eCode = CURLE_FAILED_INIT;
-        return aResponse;
-    }
-
-    ::InitCurl_easy(pCurl.get());
-
-    std::unique_ptr<curl_slist, SlistCleanup> pHeaders;
-    if (!rRequest.aContentType.isEmpty())
-    {
-        const OString aHeader = "Content-Type: " + rRequest.aContentType;
-        pHeaders.reset(curl_slist_append(pHeaders.release(), aHeader.getStr()));
-    }
-    for (const OString& rHeader : rRequest.aHeaders)
-        pHeaders.reset(curl_slist_append(pHeaders.release(), rHeader.getStr()));
-
-    const OString aURL = OUStringToOString(rRequest.aURL, RTL_TEXTENCODING_UTF8);
-    (void)curl_easy_setopt(pCurl.get(), CURLOPT_URL, aURL.getStr());
-    (void)curl_easy_setopt(pCurl.get(), CURLOPT_HTTPHEADER, pHeaders.get());
-    (void)curl_easy_setopt(pCurl.get(), CURLOPT_FAILONERROR, 1L);
-    (void)curl_easy_setopt(pCurl.get(), CURLOPT_TIMEOUT,
-                           static_cast<long>(rRequest.aTimeout.count()));
-    (void)curl_easy_setopt(pCurl.get(), CURLOPT_CONNECTTIMEOUT,
-                           static_cast<long>(rRequest.aConnectTimeout.count()));
-    (void)curl_easy_setopt(pCurl.get(), CURLOPT_WRITEFUNCTION, writeCallback);
-    (void)curl_easy_setopt(pCurl.get(), CURLOPT_WRITEDATA, &aResponse.aBody);
-
-    if (!rRequest.aUserPassword.isEmpty())
-    {
-        (void)curl_easy_setopt(pCurl.get(), CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
-        (void)curl_easy_setopt(pCurl.get(), CURLOPT_USERPWD, rRequest.aUserPassword.getStr());
-    }
-
-    // A self-signed or otherwise unknown certificate is let through only
-    // when the configuration says so.
-    if (!rRequest.bVerifySSL)
-    {
-        (void)curl_easy_setopt(pCurl.get(), CURLOPT_SSL_VERIFYPEER, 0L);
-        (void)curl_easy_setopt(pCurl.get(), CURLOPT_SSL_VERIFYHOST, 0L);
-    }
-
-    if (bPost)
-    {
-        (void)curl_easy_setopt(pCurl.get(), CURLOPT_POST, 1L);
-        (void)curl_easy_setopt(pCurl.get(), CURLOPT_POSTFIELDSIZE,
-                               static_cast<long>(rRequest.aBody.getLength()));
-        (void)curl_easy_setopt(pCurl.get(), CURLOPT_POSTFIELDS, rRequest.aBody.getStr());
-    }
-
-    aResponse.eCode = curl_easy_perform(pCurl.get());
-    curl_easy_getinfo(pCurl.get(), CURLINFO_RESPONSE_CODE, &aResponse.nStatus);
-    return aResponse;
-}
-}
-
-Response post(const Request& rRequest) { return perform(rRequest, true); }
-
-Response get(const Request& rRequest) { return perform(rRequest, false); }
-
-OString percentEncode(std::u16string_view rText)
-{
-    static constexpr std::array<bool, rtl::UriCharClassSize> aUnreserved = rtl::createUriCharClass(
-        u8"-._~0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
-    return OUStringToOString(rtl::Uri::encode(OUString(rText), aUnreserved.data(),
-                                              rtl_UriEncodeStrict, RTL_TEXTENCODING_UTF8),
-                             RTL_TEXTENCODING_ASCII_US);
-}
-
-std::optional<boost::property_tree::ptree> parseJson(const std::string& rJson)
-{
-    std::stringstream aStream(rJson);
-    boost::property_tree::ptree aRoot;
-    try
-    {
-        boost::property_tree::read_json(aStream, aRoot);
-    }
-    catch (const std::runtime_error& rError)
-    {
-        SAL_WARN("lingucomponent.remote", "cannot parse the answer: " << rError.what());
-        return std::nullopt;
-    }
-    return aRoot;
 }
 
 void setLineColor(SingleProofreadingError& rError, Color aColor)
@@ -365,23 +249,21 @@ Response CheckerBase::send(const Request& rRequest)
         if (std::chrono::steady_clock::now() < m_aRetryAfter)
         {
             Response aSkipped;
-            aSkipped.eCode = CURLE_COULDNT_CONNECT;
+            aSkipped.aError = "not asked: the server did not answer a moment ago"_ostr;
             return aSkipped;
         }
     }
 
     Response aResponse = post(rRequest);
-    if (aResponse.eCode == CURLE_OK)
+    if (aResponse.bOk)
         return aResponse;
 
     osl::MutexGuard aGuard(linguistic::GetLinguMutex());
     if (m_aLastFailedURL != rRequest.aURL)
     {
         m_aLastFailedURL = rRequest.aURL;
-        SAL_WARN("lingucomponent.remote",
-                 rRequest.aURL << " failed: (" << static_cast<sal_Int32>(aResponse.eCode) << ") "
-                               << curl_easy_strerror(aResponse.eCode)
-                               << ", HTTP status " << aResponse.nStatus);
+        SAL_WARN("lingucomponent.remote", rRequest.aURL << " failed: " << aResponse.aError
+                                                        << ", HTTP status " << aResponse.nStatus);
     }
     // A server that did not answer at all is left alone for a while. One
     // that answered with an error is asked again: a 4xx may be about this
@@ -433,7 +315,7 @@ ProofreadingResult CheckerBase::doProofreading(
     else
     {
         const Response aResponse = send(*oRequest);
-        if (aResponse.eCode != CURLE_OK || aResponse.nStatus != 200 || aResponse.aBody.empty())
+        if (!aResponse.bOk || aResponse.nStatus != 200 || aResponse.aBody.empty())
             return aResult;
         aErrors = parseResponse(aResponse.aBody, aText, aLocale);
         m_aCache.insert(oRequest->aBody, aErrors);

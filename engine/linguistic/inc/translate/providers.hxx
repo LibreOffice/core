@@ -15,9 +15,19 @@
 
 #include <memory>
 
+namespace linguistic::http
+{
+struct Response;
+}
+
 namespace linguistic::translate
 {
 #if HAVE_FEATURE_CURL
+/// What went wrong with a failed request, for the user: the transfer's own
+/// words or the HTTP status, and the service's message when its error body
+/// has one under pMessageKey, e.g. "HTTP 403: Authorization failure".
+OString describeFailure(const http::Response& rResponse, const char* pMessageKey);
+
 /// The DeepL API, configured under Linguistic/Translation/Deepl.
 std::shared_ptr<TranslationProvider> createDeeplProvider();
 /// A LibreTranslate server, configured under Linguistic/Translation/LibreTranslate.
