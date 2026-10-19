@@ -577,7 +577,9 @@ class RenderGeometrySection extends CanvasSectionObject {
 	/*
 		Takes up an answer from the engine for the objects it replaced: the ones named, or every
 		object with a change pending where none are named. The answer is held against the
-		mappings the pending changes left the object at, newest first. Where it matches one, the
+		mappings the pending changes left the object at, oldest first: the engine answers the
+		changes in the order they were sent, so where the object came back to a place it stood at
+		before, the answer is the one for its first visit there. Where it matches one, the
 		changes up to that one are answered and the ones after it are laid on again over the
 		answer, so the object shows the newest state made here. Where it matches none the engine
 		went its own way, and its answer stands as it is with nothing laid on.
@@ -613,9 +615,9 @@ class RenderGeometrySection extends CanvasSectionObject {
 			// The mapping is the surer of the two, so it is asked first and the box only where
 			// no mapping matches.
 			let matched = -1;
-			for (let at = laid.length - 1; at >= 0 && matched < 0; --at)
+			for (let at = 0; at < laid.length && matched < 0; ++at)
 				if (laid[at].answeredBy(answer)) matched = at;
-			for (let at = laid.length - 1; at >= 0 && matched < 0; --at)
+			for (let at = 0; at < laid.length && matched < 0; ++at)
 				if (laid[at].answeredInTheBox(object)) matched = at;
 
 			if (matched < 0) GraphicSelection.unpredictedAnswer(objectId);
