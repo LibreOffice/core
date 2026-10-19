@@ -25,6 +25,7 @@
 #include <com/sun/star/i18n/Boundary.hpp>
 #include <i18npool/breakiterator.hxx>
 #include <txttypes.hxx>
+#include <hintids.hxx>
 
 // for portion replacement in Special()
 #include <viewopt.hxx>
@@ -47,6 +48,7 @@ using i18n::Boundary;
 #define PORATTR_SPECIAL     1
 #define PORATTR_READONLY    2
 #define PORATTR_GRAY        4
+#define PORATTR_DUMMY 8
 #define PORATTR_TERM        128
 
 /// returns the index of the first position whose value is smaller
@@ -93,6 +95,15 @@ void SwAccessiblePortionData::Text(TextFrameIndex const nLength,
     if (nLength == TextFrameIndex(0))
         return;
 
+    // the dummy char at the end of a content control
+    if (nType == PortionType::ContentControl
+        && m_rTextFrame.GetText()[sal_Int32(m_nViewPosition + nLength) - 1] == CH_TXTATR_BREAKWORD)
+    {
+        Text(nLength - TextFrameIndex(1), nType);
+        Special(TextFrameIndex(1), OUString(), nType);
+        return;
+    }
+
     // store 'old' positions
     m_ViewPositions.push_back( m_nViewPosition );
     m_aAccessiblePositions.push_back( m_aBuffer.getLength() );
@@ -137,6 +148,7 @@ void SwAccessiblePortionData::Special(
             m_aFieldPosition.push_back(m_aBuffer.getLength() + rText.getLength());
             break;
         case PortionType::FootnoteNum:
+        case PortionType::ContentControl: // a dummy char at either end
             break;
         case PortionType::Footnote:
             {
@@ -186,6 +198,8 @@ void SwAccessiblePortionData::Special(
     if( IsGrayPortionType(nType) )      nAttr |= PORATTR_GRAY;
     if (nLength == TextFrameIndex(0))   nAttr |= PORATTR_READONLY;
     if( nType == POR_TERMINATE )        nAttr |= PORATTR_TERM;
+    if (nType == PortionType::ContentControl)
+        nAttr |= PORATTR_DUMMY;
     m_aPortionAttrs.push_back( nAttr );
 
     // update buffer + nViewPosition
@@ -237,6 +251,17 @@ bool SwAccessiblePortionData::IsPortionAttrSet(
 bool SwAccessiblePortionData::IsSpecialPortion( size_t nPortionNo ) const
 {
     return IsPortionAttrSet(nPortionNo, PORATTR_SPECIAL);
+}
+
+size_t SwAccessiblePortionData::FindAccessibleBreak(sal_Int32 nPos, bool bRangeEnd) const
+{
+    size_t nPortionNo = FindBreak(m_aAccessiblePositions, nPos);
+    // a dummy char has no text, so the position is that of the following portion
+    while (!bRangeEnd && IsPortionAttrSet(nPortionNo, PORATTR_DUMMY)
+           && nPortionNo < m_aAccessiblePositions.size() - 2
+           && m_aAccessiblePositions[nPortionNo + 1] == nPos)
+        ++nPortionNo;
+    return nPortionNo;
 }
 
 bool SwAccessiblePortionData::IsGrayPortionType( PortionType nType ) const
@@ -328,13 +353,14 @@ void SwAccessiblePortionData::GetLastLineBoundary(
     FillBoundary( rBound, m_aLineBreaks, nBreaks <= 3 ? 0 : nBreaks-4 );
 }
 
-TextFrameIndex SwAccessiblePortionData::GetCoreViewPosition(sal_Int32 const nPos) const
+TextFrameIndex SwAccessiblePortionData::GetCoreViewPosition(sal_Int32 const nPos,
+                                                            bool bRangeEnd) const
 {
     OSL_ENSURE( nPos >= 0, "illegal position" );
     OSL_ENSURE( nPos <= m_sAccessibleString.getLength(), "illegal position" );
 
     // find the portion number
-    size_t nPortionNo = FindBreak( m_aAccessiblePositions, nPos );
+    size_t nPortionNo = FindAccessibleBreak(nPos, bRangeEnd);
 
     // get core view portion size
     TextFrameIndex nStartPos = m_ViewPositions[nPortionNo];
@@ -487,8 +513,7 @@ void SwAccessiblePortionData::GetAttributeBoundary(
     sal_Int32 nPos) const
 {
     // attribute boundaries can only occur on portion boundaries
-    FillBoundary( rBound, m_aAccessiblePositions,
-                  FindBreak( m_aAccessiblePositions, nPos ) );
+    FillBoundary(rBound, m_aAccessiblePositions, FindAccessibleBreak(nPos));
 }
 
 sal_Int32 SwAccessiblePortionData::GetAccessiblePosition(TextFrameIndex const nPos) const
@@ -630,14 +655,12 @@ bool SwAccessiblePortionData::FillBoundaryIFDateField( css::i18n::Boundary& rBou
     return false;
 }
 
-void SwAccessiblePortionData::AdjustAndCheck(
-    sal_Int32 nPos,
-    size_t& nPortionNo,
-    TextFrameIndex& rCorePos,
-    bool& bEdit) const
+void SwAccessiblePortionData::AdjustAndCheck(sal_Int32 nPos, size_t& nPortionNo,
+                                             TextFrameIndex& rCorePos, bool& bEdit,
+                                             bool bRangeEnd) const
 {
     // find portion and get mode position
-    nPortionNo = FindBreak( m_aAccessiblePositions, nPos );
+    nPortionNo = FindAccessibleBreak(nPos, bRangeEnd);
     rCorePos = m_ViewPositions[ nPortionNo ];
 
     // for special portions, make sure we're on a portion boundary
@@ -656,8 +679,9 @@ bool SwAccessiblePortionData::GetEditableRange(
 
     // get start and end portions
     size_t nStartPortion, nEndPortion;
-    AdjustAndCheck( nStart, nStartPortion, rCoreStart, bIsEditable );
-    AdjustAndCheck( nEnd,   nEndPortion,   rCoreEnd,   bIsEditable );
+    // the larger position ends the range
+    AdjustAndCheck(nStart, nStartPortion, rCoreStart, bIsEditable, /*bRangeEnd=*/nStart > nEnd);
+    AdjustAndCheck(nEnd, nEndPortion, rCoreEnd, bIsEditable, /*bRangeEnd=*/nEnd > nStart);
 
     // iterate over portions, and make sure there is no read-only portion
     // in-between
@@ -713,8 +737,7 @@ bool SwAccessiblePortionData::IsIndexInFootnode(sal_Int32 nIndex)
 bool SwAccessiblePortionData::IsInGrayPortion( sal_Int32 nPos )
 {
 //    return IsGrayPortion( FindBreak( aAccessiblePositions, nPos ) );
-    return IsPortionAttrSet( FindBreak( m_aAccessiblePositions, nPos ),
-                             PORATTR_GRAY );
+    return IsPortionAttrSet(FindAccessibleBreak(nPos), PORATTR_GRAY);
 }
 
 sal_Int32 SwAccessiblePortionData::GetFieldIndex(sal_Int32 nPos) const

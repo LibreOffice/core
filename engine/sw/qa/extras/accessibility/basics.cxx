@@ -8,12 +8,18 @@
  */
 
 #include <com/sun/star/accessibility/AccessibleRole.hpp>
+#include <com/sun/star/accessibility/AccessibleTextType.hpp>
+#include <com/sun/star/accessibility/XAccessibleEditableText.hpp>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include <com/sun/star/awt/Key.hpp>
 #include <com/sun/star/container/XEnumerationAccess.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
+#include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <COKit/COKit.hxx>
 #include <vcl/scheduler.hxx>
@@ -142,6 +148,119 @@ CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, TestTextFrameSelectedHeading)
                          xFrameSelection->getSelectedAccessibleChild(0)
                              ->getAccessibleContext()
                              ->getAccessibleRole());
+}
+
+CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, TestContentControlOffsets)
+{
+    // Given a content control around "Some notes":
+    loadFromSrc(u"/sw/qa/extras/accessibility/testdocuments/content-control.fodt"_ustr);
+    auto xText = getDocumentAccessibleContext()
+                     ->getAccessibleChild(0)
+                     ->getAccessibleContext()
+                     .queryThrow<accessibility::XAccessibleText>();
+    CPPUNIT_ASSERT_EQUAL(u"Notes: Some notes end."_ustr, xText->getText());
+    auto xParagraph = mxDocument.queryThrow<text::XTextDocument>()
+                          ->getText()
+                          .queryThrow<container::XEnumerationAccess>()
+                          ->createEnumeration()
+                          ->nextElement()
+                          .queryThrow<container::XEnumerationAccess>();
+    auto xPortions = xParagraph->createEnumeration();
+    uno::Reference<text::XTextRange> xContentControl;
+    while (xPortions->hasMoreElements() && !xContentControl)
+    {
+        auto xPortion = xPortions->nextElement().queryThrow<beans::XPropertySet>();
+        if (xPortion->getPropertyValue(u"TextPortionType"_ustr).get<OUString>() == "ContentControl")
+            xContentControl
+                = xPortion->getPropertyValue(u"ContentControl"_ustr).queryThrow<text::XTextRange>();
+    }
+    CPPUNIT_ASSERT(xContentControl);
+
+    // When asking for the attribute run at its first character:
+    accessibility::TextSegment aRun
+        = xText->getTextAtIndex(7, accessibility::AccessibleTextType::ATTRIBUTE_RUN);
+
+    // Then it is its text, not an empty run at the dummy char before it:
+    CPPUNIT_ASSERT_EQUAL(u"Some notes"_ustr, aRun.SegmentText);
+
+    // And when selecting its text:
+    CPPUNIT_ASSERT(xText->setSelection(7, 17));
+
+    // Then the selection ends where its text does, before the dummy char after it:
+    auto xViewCursor = mxDocument.queryThrow<frame::XModel>()
+                           ->getCurrentController()
+                           .queryThrow<text::XTextViewCursorSupplier>()
+                           ->getViewCursor();
+    auto xCompare = xViewCursor->getText().queryThrow<text::XTextRangeCompare>();
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xCompare->compareRegionEnds(xViewCursor, xContentControl));
+
+    // And when selecting it backwards, the selection ends there too:
+    CPPUNIT_ASSERT(xText->setSelection(17, 7));
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(0), xCompare->compareRegionEnds(xViewCursor, xContentControl));
+
+    // And when putting the caret before its first character, and typing there:
+    CPPUNIT_ASSERT(xText->setCaretPosition(7));
+    xViewCursor->getText()->insertString(xViewCursor, u"x"_ustr, /*bAbsorb=*/false);
+
+    // Then the caret was inside the content control:
+    CPPUNIT_ASSERT_EQUAL(u"xSome notes"_ustr, xContentControl->getString());
+
+    // And when replacing its text:
+    xText.queryThrow<accessibility::XAccessibleEditableText>()->replaceText(7, 18, u"New"_ustr);
+
+    // Then the new text is inside the content control:
+    CPPUNIT_ASSERT_EQUAL(u"New"_ustr, xContentControl->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(test::AccessibleTestBase, TestAdjacentContentControlOffsets)
+{
+    // Given two adjacent content controls around "x" and "y", and an empty one:
+    loadFromSrc(u"/sw/qa/extras/accessibility/testdocuments/content-control.fodt"_ustr);
+    auto xText = getDocumentAccessibleContext()
+                     ->getAccessibleChild(1)
+                     ->getAccessibleContext()
+                     .queryThrow<accessibility::XAccessibleText>();
+    CPPUNIT_ASSERT_EQUAL(u"Two: xy and end."_ustr, xText->getText());
+
+    // When asking for the attribute runs at "y" and at the empty one:
+    // Then they are the text there, not empty runs at the dummy chars:
+    CPPUNIT_ASSERT_EQUAL(
+        u"y"_ustr,
+        xText->getTextAtIndex(6, accessibility::AccessibleTextType::ATTRIBUTE_RUN).SegmentText);
+    CPPUNIT_ASSERT_EQUAL(
+        u" end."_ustr,
+        xText->getTextAtIndex(11, accessibility::AccessibleTextType::ATTRIBUTE_RUN).SegmentText);
+
+    // And when putting the caret before "y", and typing there:
+    CPPUNIT_ASSERT(xText->setCaretPosition(6));
+    auto xViewCursor = mxDocument.queryThrow<frame::XModel>()
+                           ->getCurrentController()
+                           .queryThrow<text::XTextViewCursorSupplier>()
+                           ->getViewCursor();
+    xViewCursor->getText()->insertString(xViewCursor, u"z"_ustr, /*bAbsorb=*/false);
+
+    // Then the caret was inside the second content control, not between the two:
+    CPPUNIT_ASSERT_EQUAL(u"Two: xzy and end."_ustr, xText->getText());
+    auto xParagraphs = mxDocument.queryThrow<text::XTextDocument>()
+                           ->getText()
+                           .queryThrow<container::XEnumerationAccess>()
+                           ->createEnumeration();
+    xParagraphs->nextElement();
+    auto xPortions = xParagraphs->nextElement()
+                         .queryThrow<container::XEnumerationAccess>()
+                         ->createEnumeration();
+    std::vector<OUString> aContents;
+    while (xPortions->hasMoreElements())
+    {
+        auto xPortion = xPortions->nextElement().queryThrow<beans::XPropertySet>();
+        if (xPortion->getPropertyValue(u"TextPortionType"_ustr).get<OUString>() == "ContentControl")
+            aContents.push_back(xPortion->getPropertyValue(u"ContentControl"_ustr)
+                                    .queryThrow<text::XTextRange>()
+                                    ->getString());
+    }
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aContents.size());
+    CPPUNIT_ASSERT_EQUAL(u"x"_ustr, aContents[0]);
+    CPPUNIT_ASSERT_EQUAL(u"zy"_ustr, aContents[1]);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

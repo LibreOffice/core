@@ -2548,6 +2548,25 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFloatingTableDeletion)
     CPPUNIT_ASSERT_EQUAL(std::string("Table1-1"), aView.m_aA11ySelection.get<std::string>("name", ""));
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphContentControl)
+{
+    // Given a content control in the paragraph after the first one:
+    createDoc("a11y-content-control.fodt");
+    SwTestViewCallback aView;
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+    Scheduler::ProcessEventsToIdle();
+
+    // When the cursor moves into that paragraph:
+    pWrtShell->Down(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the paragraph text holds no dummy char of the content control:
+    // Without the fix, the start one was reported as U+FFFC, and the end one as U+0001.
+    CPPUNIT_ASSERT_EQUAL(std::string("Notes: Some notes end."),
+                         aView.m_aA11yFocusedParagraph.get<std::string>("content", ""));
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yImageSelection)
 {
     for (const char* pFile : { "a11y-image.fodt", "a11y-image-at-paragraph.fodt" })

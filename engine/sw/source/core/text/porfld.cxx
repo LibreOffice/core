@@ -506,7 +506,8 @@ bool SwFieldPortion::GetExpText( const SwTextSizeInfo &rInf, OUString &rText ) c
 
 void SwFieldPortion::HandlePortion( SwPortionHandler& rPH ) const
 {
-    rPH.Special( GetLen(), m_aExpand, GetWhichPor() );
+    rPH.Special(GetLen(), m_aExpand,
+                m_bContentControl ? PortionType::ContentControl : GetWhichPor());
 }
 
 void SwFieldPortion::dumpAsXml(xmlTextWriterPtr pWriter, const OUString& rText,

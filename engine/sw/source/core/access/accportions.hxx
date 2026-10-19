@@ -79,11 +79,13 @@ class SwAccessiblePortionData : public SwPortionHandler
     /// Access to portion attributes
     bool IsPortionAttrSet( size_t nPortionNo, sal_uInt8 nAttr ) const;
     bool IsSpecialPortion( size_t nPortionNo ) const;
+    /// FindBreak() on the accessible positions, past a dummy char unless a range ends there
+    size_t FindAccessibleBreak(sal_Int32 nPos, bool bRangeEnd = false) const;
     bool IsGrayPortionType( PortionType nType ) const;
 
     // helper method for GetEditableRange(...):
-    void AdjustAndCheck( sal_Int32 nPos, size_t& nPortionNo,
-                         TextFrameIndex& rCorePos, bool& bEdit) const;
+    void AdjustAndCheck(sal_Int32 nPos, size_t& nPortionNo, TextFrameIndex& rCorePos, bool& bEdit,
+                        bool bRangeEnd) const;
 
 public:
     SwAccessiblePortionData(const SwTextFrame& rTextFrame,
@@ -138,7 +140,8 @@ public:
 
     /// get the position in the core view string for a given
     /// (accessibility) position
-    TextFrameIndex GetCoreViewPosition(sal_Int32 nPos) const;
+    /// (accessibility) position; a range ends before a dummy char there
+    TextFrameIndex GetCoreViewPosition(sal_Int32 nPos, bool bRangeEnd = false) const;
 
     /// fill a SwSpecialPos structure, suitable for calling
     /// SwTextFrame->GetCharRect

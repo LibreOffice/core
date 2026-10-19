@@ -436,10 +436,13 @@ rtl::Reference<SwXTextPortion> SwAccessibleParagraph::CreateUnoPortion(
                    || IsValidRange(nStartIndex, nEndIndex),
                "please check parameters before calling this method");
 
-    const TextFrameIndex nStart = GetPortionData().GetCoreViewPosition(nStartIndex);
+    // the larger position ends the range
+    const TextFrameIndex nStart = GetPortionData().GetCoreViewPosition(
+        nStartIndex, /*bRangeEnd=*/nEndIndex != -1 && nStartIndex > nEndIndex);
     const TextFrameIndex nEnd = (nEndIndex == -1)
-            ? (nStart + TextFrameIndex(1))
-            : GetPortionData().GetCoreViewPosition(nEndIndex);
+                                    ? (nStart + TextFrameIndex(1))
+                                    : GetPortionData().GetCoreViewPosition(
+                                          nEndIndex, /*bRangeEnd=*/nEndIndex > nStartIndex);
 
     // create UNO cursor
     const SwTextFrame* const pFrame = GetTextFrame();
@@ -2037,8 +2040,11 @@ bool SwAccessibleParagraph::setSelection( sal_Int32 nStartIndex, sal_Int32 nEndI
     {
         // create pam for selection
         const SwTextFrame* const pFrame = GetTextFrame();
-        TextFrameIndex const nStart(GetPortionData().GetCoreViewPosition(nStartIndex));
-        TextFrameIndex const nEnd(GetPortionData().GetCoreViewPosition(nEndIndex));
+        // the larger position ends the range
+        TextFrameIndex const nStart(GetPortionData().GetCoreViewPosition(
+            nStartIndex, /*bRangeEnd=*/nStartIndex > nEndIndex));
+        TextFrameIndex const nEnd(
+            GetPortionData().GetCoreViewPosition(nEndIndex, /*bRangeEnd=*/nEndIndex > nStartIndex));
         SwPaM aPaM(pFrame->MapViewToModelPos(nStart));
         aPaM.SetMark();
         *aPaM.GetPoint() = pFrame->MapViewToModelPos(nEnd);
@@ -2934,8 +2940,11 @@ sal_Int32 SwAccessibleParagraph::addSelection(sal_Int32 startOffset, sal_Int32 e
         const SwTextFrame* const pFrame = GetTextFrame();
         SwPaM* aPaM = pCursorShell->CreateCursor();
         aPaM->SetMark();
-        *aPaM->GetPoint() = pFrame->MapViewToModelPos(GetPortionData().GetCoreViewPosition(startOffset));
-        *aPaM->GetMark() = pFrame->MapViewToModelPos(GetPortionData().GetCoreViewPosition(endOffset));
+        // the larger position ends the range
+        *aPaM->GetPoint() = pFrame->MapViewToModelPos(GetPortionData().GetCoreViewPosition(
+            startOffset, /*bRangeEnd=*/startOffset > endOffset));
+        *aPaM->GetMark() = pFrame->MapViewToModelPos(
+            GetPortionData().GetCoreViewPosition(endOffset, /*bRangeEnd=*/endOffset > startOffset));
         pCursorShell->EndAction();
     }
 
