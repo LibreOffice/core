@@ -315,8 +315,7 @@ SwLinePortion *SwTextFormatter::Underflow( SwTextFormatInfo &rInf )
         // HACK: decrement again, so we pick up the suffix in next line!
         m_pByEndIter->PrevAttr();
     }
-    delete pRest;
-    rInf.SetRest(nullptr);
+    rInf.DiscardRest();
     return pPor;
 }
 
