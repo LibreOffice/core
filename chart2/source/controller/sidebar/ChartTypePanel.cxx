@@ -84,6 +84,8 @@ ChartTypePanel::ChartTypePanel(weld::Widget* pParent, ::chart::ChartController* 
     {
         m_aChartTypeDialogControllerList.push_back(std::make_unique<XYChartDialogController>());
         m_aChartTypeDialogControllerList.push_back(std::make_unique<BubbleChartDialogController>());
+        m_aChartTypeDialogControllerList.push_back(
+            std::make_unique<CorrelationCircleChartDialogController>());
     }
     m_aChartTypeDialogControllerList.push_back(std::make_unique<NetChartDialogController>());
     if (bEnableComplexChartTypes)
