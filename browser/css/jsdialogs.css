@@ -2674,6 +2674,13 @@ img.ui-combobox-value-preview {
 	padding-top: 10px;
 }
 
+/* Labels are inline elements, so the headers float to make clear take effect. */
+#mobile-wizard #WordCountDialog #label9,
+#mobile-wizard #WordCountDialog #documentlabel-mobile {
+	float: left !important;
+	clear: both !important;
+}
+
 #mobile-wizard #wordslabel,
 #mobile-wizard #inclspaceslabel,
 #mobile-wizard #exclspaceslabel,
@@ -2685,7 +2692,8 @@ img.ui-combobox-value-preview {
 #mobile-wizard #commentslabel {
 	float: left !important;
 	clear: left !important;
-	width: 70% !important;
+	margin: 0 0 0 4%;
+	width: 72% !important;
 	color: #636363 !important;
 }
 
@@ -2700,6 +2708,7 @@ img.ui-combobox-value-preview {
 #mobile-wizard #docComments {
 	float: right !important;
 	clear: right !important;
+	margin: 0 4% 0 0;
 	width: 20% !important;
 	border-bottom: none !important;
 	color: #636363 !important;
