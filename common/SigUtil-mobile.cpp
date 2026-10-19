@@ -149,6 +149,15 @@ namespace SigUtil
     {
     }
 
+    bool dieOnParentDeath([[maybe_unused]] int parentPid)
+    {
+        return true;
+    }
+
+    void stopDyingOnParentDeath()
+    {
+    }
+
     void setUserSignals()
     {
     }

@@ -31,6 +31,7 @@ std::pair<size_t, size_t> getPssAndDirtyFromSMaps(FILE*) { return std::make_pair
 std::size_t getProcessTreePss(pid_t) { return 0; }
 size_t getCpuUsage(pid_t) { return 0; }
 size_t getStatFromPid(pid_t, int) { return 0; }
+bool isRunning(pid_t pid) { return pid > 0; }
 void setProcessAndThreadPriorities(pid_t, int) {}
 } // namespace ProcUtil
 

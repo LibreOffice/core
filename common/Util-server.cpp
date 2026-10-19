@@ -25,6 +25,8 @@
 #include <Poco/Exception.h>
 #include <Poco/File.h>
 
+#include <cerrno>
+#include <csignal>
 #include <cstring>
 #include <dirent.h>
 #include <fstream>
@@ -489,6 +491,32 @@ std::size_t getStatFromPid(const pid_t pid, int ind)
         }
     }
     return 0;
+}
+
+bool isRunning(const pid_t pid)
+{
+    // EPERM means that the process exists, but may not be signalled by this one.
+    if (pid <= 0 || (::kill(pid, 0) != 0 && errno != EPERM))
+        return false;
+
+#ifdef __linux__
+    // The state follows the command name, which is in parentheses and may contain spaces and
+    // parentheses itself. It is 'Z' for a zombie and 'X' for a process being removed.
+    // Without the state, the process counts as running, as kill found it.
+    std::ifstream stat("/proc/" + std::to_string(pid) + "/stat");
+    std::string line;
+    if (!std::getline(stat, line))
+        return true;
+
+    const std::size_t pos = line.rfind(')');
+    if (pos == std::string::npos || pos + 2 >= line.size())
+        return true;
+
+    const char state = line[pos + 2];
+    return state != 'Z' && state != 'X';
+#else
+    return true;
+#endif
 }
 
 void setProcessAndThreadPriorities(const pid_t pid, int prio)

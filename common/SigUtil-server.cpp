@@ -598,6 +598,26 @@ void resetTerminationFlags()
 #endif
     }
 
+    bool dieOnParentDeath(int parentPid)
+    {
+        dieOnParentDeath();
+
+        // The signal comes only from the parent at the time of the call. A parent that died
+        // earlier gave us a new parent already.
+        return getppid() == parentPid;
+    }
+
+    void stopDyingOnParentDeath()
+    {
+#if defined(__linux__) && !defined(ANDROID)
+        prctl(PR_SET_PDEATHSIG, 0);
+#endif
+#if defined(__FreeBSD__)
+        int sig = 0;
+        procctl(P_PID, 0, PROC_PDEATHSIG_CTL, &sig);
+#endif
+    }
+
     static
     void handleUserSignal(const int signal)
     {

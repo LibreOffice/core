@@ -56,6 +56,9 @@ size_t getCpuUsage(pid_t pid);
 
 size_t getStatFromPid(pid_t pid, int ind);
 
+/// Answers whether the process exists and has not exited. A zombie has exited.
+bool isRunning(pid_t pid);
+
 /// Sets priorities for a given pid & the current thread
 void setProcessAndThreadPriorities(pid_t pid, int prio);
 

@@ -126,6 +126,13 @@ namespace SigUtil
     /// Ensure that if a parent process is killed we go down too
     void dieOnParentDeath();
 
+    /// Ensure that if the parent process with parentPid is killed we go down too.
+    /// Returns false when parentPid is no longer our parent, as it died before the call.
+    bool dieOnParentDeath(int parentPid);
+
+    /// Keep running when the parent process dies, which clears dieOnParentDeath.
+    void stopDyingOnParentDeath();
+
     /// Dump a signal-safe back-trace
     void dumpBacktrace();
 
