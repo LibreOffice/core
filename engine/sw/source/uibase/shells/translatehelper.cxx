@@ -19,11 +19,10 @@
 
 #include <sal/config.h>
 
-#include <chrono>
-#include <optional>
+#include <memory>
+#include <string_view>
 #include <vector>
 
-#include <config_features.h>
 #include <wrtsh.hxx>
 #include <view.hxx>
 #include <pam.hxx>
@@ -40,7 +39,6 @@
 #include <comphelper/scopeguard.hxx>
 #include <editeng/langitem.hxx>
 #include <i18nlangtag/languagetag.hxx>
-#include <o3tl/string_view.hxx>
 #include <sal/log.hxx>
 #include <svl/languageoptions.hxx>
 #include <rtl/string.h>
@@ -54,7 +52,6 @@
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <sfx2/viewfrm.hxx>
 #include <com/sun/star/task/XStatusIndicatorFactory.hpp>
-#include <officecfg/Office/Linguistic.hxx>
 #include <strings.hrc>
 
 using namespace css;
@@ -422,64 +419,28 @@ bool TranslateRanges(SwWrtShell& rWrtSh, const TranslateFunc& rTranslate,
     return !bStop;
 }
 
-#if HAVE_FEATURE_CURL
 void TranslateDocument(SwWrtShell& rWrtSh, const OString& rTargetLang)
 {
     bool bCancel = false;
     TranslateDocumentCancellable(rWrtSh, rTargetLang, bCancel);
 }
 
-static bool IsTranslationServiceConfigured(OString* pAPIUrl, OString* pKey)
-{
-    auto oDeeplAPIUrl = officecfg::Office::Linguistic::Translation::Deepl::ApiURL::get();
-    auto oDeeplKey = officecfg::Office::Linguistic::Translation::Deepl::AuthKey::get();
-    auto sApiUrlTrimmed = oDeeplAPIUrl ? o3tl::trim(*oDeeplAPIUrl) : std::u16string_view();
-    auto sKeyTrimmed = oDeeplKey ? o3tl::trim(*oDeeplKey) : std::u16string_view();
-    if (sApiUrlTrimmed.empty() || sKeyTrimmed.empty())
-        return false;
-    if (pAPIUrl)
-        *pAPIUrl = OUStringToOString(sApiUrlTrimmed, RTL_TEXTENCODING_UTF8);
-    if (pKey)
-        *pKey = OUStringToOString(sKeyTrimmed, RTL_TEXTENCODING_UTF8);
-    return true;
-}
-
-bool IsTranslationServiceConfigured() { return IsTranslationServiceConfigured(nullptr, nullptr); }
+bool IsTranslationServiceConfigured() { return linguistic::getActiveTranslationProvider() != nullptr; }
 
 std::vector<OString> GetTargetLanguages()
 {
-    OString aAPIUrl, aAuthKey;
-    if (!IsTranslationServiceConfigured(&aAPIUrl, &aAuthKey))
+    std::shared_ptr<linguistic::TranslationProvider> pProvider
+        = linguistic::getActiveTranslationProvider();
+    if (!pProvider)
         return {};
-
-    // The service is asked only once per configuration. A request can block for seconds,
-    // so after a failed one the service is not asked again for a while; it is asked again
-    // later, so a temporary failure does not hide the list for good.
-    static constexpr std::chrono::minutes RETRY_AFTER_FAILURE(5);
-    static OString aCachedAPIUrl, aCachedAuthKey;
-    static std::vector<OString> aCachedLanguages;
-    static std::optional<std::chrono::steady_clock::time_point> oLastFailure;
-    const std::chrono::steady_clock::time_point aNow = std::chrono::steady_clock::now();
-    if (aAPIUrl == aCachedAPIUrl && aAuthKey == aCachedAuthKey
-        && (!aCachedLanguages.empty()
-            || (oLastFailure && aNow - *oLastFailure < RETRY_AFTER_FAILURE)))
-        return aCachedLanguages;
-
-    aCachedLanguages = linguistic::GetTargetLanguages(aAPIUrl, aAuthKey);
-    aCachedAPIUrl = aAPIUrl;
-    aCachedAuthKey = aAuthKey;
-    if (aCachedLanguages.empty())
-        oLastFailure = aNow;
-    else
-        oLastFailure.reset();
-    return aCachedLanguages;
+    return pProvider->getTargetLanguages();
 }
 
-/// The language of text translated to rTargetLang, a code like "DE" or "EN-GB".
+/// The language of text translated to rTargetLang, a tag like "de" or "en-GB".
 static LanguageType GetTargetLanguageType(std::string_view rTargetLang)
 {
     const LanguageTag aTag(OStringToOUString(rTargetLang, RTL_TEXTENCODING_ASCII_US));
-    // A bare language like "DE" stands for its default locale, de-DE. A language without
+    // A bare language like "de" stands for its default locale, de-DE. A language without
     // a known locale falls back to en-US instead, so it is taken as it is.
     LanguageTag aFallbackTag(aTag);
     aFallbackTag.makeFallback();
@@ -496,23 +457,23 @@ static LanguageType GetTargetLanguageType(std::string_view rTargetLang)
 bool TranslateDocumentCancellable(SwWrtShell& rWrtSh, const OString& rTargetLang,
                                   const bool& rCancelTranslation)
 {
-    OString aAPIUrl, aAuthKey;
-    if (!IsTranslationServiceConfigured(&aAPIUrl, &aAuthKey))
+    std::shared_ptr<linguistic::TranslationProvider> pProvider
+        = linguistic::getActiveTranslationProvider();
+    if (!pProvider)
     {
-        SAL_WARN("sw.ui", "TranslateDocumentCancellable: API options are not set");
+        SAL_WARN("sw.ui", "TranslateDocumentCancellable: no translation provider is set up");
         return false;
     }
 
     return TranslateRanges(
         rWrtSh,
-        [&rTargetLang, &aAPIUrl, &aAuthKey](const OString& rData, OString& rError)
+        [&rTargetLang, &pProvider, &rCancelTranslation](const OString& rData, OString& rError)
         {
             linguistic::TranslateResult aResult
-                = linguistic::Translate(rTargetLang, aAPIUrl, aAuthKey, rData);
+                = pProvider->translate(rData, rTargetLang, rCancelTranslation);
             rError = aResult.aError;
             return aResult.aText;
         },
         rCancelTranslation, GetTargetLanguageType(rTargetLang));
 }
-#endif // HAVE_FEATURE_CURL
 }

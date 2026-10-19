@@ -323,7 +323,7 @@ std::shared_ptr<AbstractSwBreakDlg> SwAbstractDialogFactory_Impl::CreateSwBreakD
 
 std::shared_ptr<AbstractSwTranslateLangSelectDlg> SwAbstractDialogFactory_Impl::CreateSwTranslateLangSelectDlg(weld::Window* pParent, SwWrtShell &rSh)
 {
-#if HAVE_FEATURE_CURL && !ENABLE_WASM_STRIP_EXTRA
+#if !ENABLE_WASM_STRIP_EXTRA
     return std::make_shared<AbstractSwTranslateLangSelectDlg_Impl>(std::make_unique<SwTranslateLangSelectDlg>(pParent, rSh));
 #else
     (void) pParent;

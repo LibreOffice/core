@@ -121,11 +121,11 @@
 #include <comphelper/scopeguard.hxx>
 #include <authfld.hxx>
 #include <config_wasm_strip.h>
-#if HAVE_FEATURE_CURL && !ENABLE_WASM_STRIP_EXTRA
+#if !ENABLE_WASM_STRIP_EXTRA
 #include <officecfg/Office/Common.hxx>
 #include <svl/visitem.hxx>
 #include <translatelangselect.hxx>
-#endif // HAVE_FEATURE_CURL && ENABLE_WASM_STRIP_EXTRA
+#endif // !ENABLE_WASM_STRIP_EXTRA
 #include <translatehelper.hxx>
 #include <IDocumentContentOperations.hxx>
 #include <IDocumentUndoRedo.hxx>
@@ -2289,7 +2289,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
     break;
     case SID_FM_TRANSLATE:
     {
-#if HAVE_FEATURE_CURL && !ENABLE_WASM_STRIP_EXTRA
+#if !ENABLE_WASM_STRIP_EXTRA
         const SfxPoolItem* pTargetLangStringItem = nullptr;
         if (pArgs && SfxItemState::SET == pArgs->GetItemState(SID_ATTR_TARGETLANG_STR, false, &pTargetLangStringItem))
         {
@@ -2303,7 +2303,7 @@ void SwTextShell::Execute(SfxRequest &rReq)
             std::shared_ptr<weld::DialogController> pDialogController(pAbstractDialog->getDialogController());
             weld::DialogController::runAsync(pDialogController, [] (sal_Int32 /*nResult*/) { });
         }
-#endif // HAVE_FEATURE_CURL && ENABLE_WASM_STRIP_EXTRA
+#endif // !ENABLE_WASM_STRIP_EXTRA
     }
     break;
     case SID_SPELLCHECK_IGNORE:
@@ -3948,7 +3948,7 @@ void SwTextShell::GetState( SfxItemSet &rSet )
 
             case SID_FM_TRANSLATE:
                 {
-#if HAVE_FEATURE_CURL && !ENABLE_WASM_STRIP_EXTRA
+#if !ENABLE_WASM_STRIP_EXTRA
                     if (!officecfg::Office::Common::Misc::ExperimentalMode::get()
                         && !comphelper::COKit::isActive())
                     {

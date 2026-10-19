@@ -20,8 +20,6 @@
 
 #include <sal/config.h>
 
-#include <config_features.h>
-
 #include <functional>
 #include <vector>
 
@@ -76,14 +74,13 @@ using TranslateFunc = std::function<OString(const OString& rHtml, OString& rErro
 SW_DLLPUBLIC bool TranslateRanges(SwWrtShell& rWrtSh, const TranslateFunc& rTranslate,
                                   const bool& rCancelTranslation,
                                   LanguageType eTargetLanguage = LANGUAGE_DONTKNOW);
-#if HAVE_FEATURE_CURL
 SW_DLLPUBLIC void TranslateDocument(SwWrtShell& rWrtSh, const OString& rTargetLang);
 SW_DLLPUBLIC bool TranslateDocumentCancellable(SwWrtShell& rWrtSh, const OString& rTargetLang,
                                                const bool& rCancelTranslation);
+/// True when a translation provider is enabled and set up, so TranslateDocument() can
+/// translate.
 SW_DLLPUBLIC bool IsTranslationServiceConfigured();
-/// Codes of the languages the configured translation service can translate into, as
-/// reported by the service, e.g. "de" or "en-GB"; empty when the service could not
-/// tell.
+/// Tags of the languages the translation provider in use can translate into, as reported
+/// by its service, e.g. "de" or "en-GB"; empty when the service could not tell.
 SW_DLLPUBLIC std::vector<OString> GetTargetLanguages();
-#endif
 }

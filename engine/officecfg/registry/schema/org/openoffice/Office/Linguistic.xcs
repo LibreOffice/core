@@ -1373,23 +1373,56 @@
     </group>
     <group oor:name="Translation">
       <info>
-        <desc>Contains translation relevant settings.</desc>
+        <desc>Machine translation of document text: which provider does it,
+        and how each provider is reached.</desc>
       </info>
+      <prop oor:name="Provider" oor:type="xs:string" oor:nillable="false">
+        <info>
+          <desc>The provider that translates: "deepl" or "libretranslate".
+          Empty takes the first of them, in that order, that is enabled and
+          set up.</desc>
+          <label>Translation provider</label>
+        </info>
+        <value/>
+      </prop>
       <group oor:name="Deepl">
         <info>
-          <desc>Contains DeepL API relevant settings.</desc>
+          <desc>The DeepL API.</desc>
         </info>
         <prop oor:name="ApiURL" oor:type="xs:string">
           <info>
-            <desc>Deepl Translator API URL</desc>
-            <label>URL for the Deepl translator api</label>
+            <desc>The translate endpoint, e.g. https://api.deepl.com/v2/translate.
+            The languages are asked from /v3/languages next to it.</desc>
+            <label>URL for the DeepL translator API</label>
           </info>
         </prop>
         <prop oor:name="AuthKey" oor:type="xs:string">
           <info>
-            <desc>Deepl Translator API URL Authkey</desc>
-            <label>Auth key for the Deepl translator api</label>
+            <desc>The DeepL authentication key, sent in the Authorization header.</desc>
+            <label>Auth key for the DeepL translator API</label>
           </info>
+        </prop>
+        <prop oor:name="IsEnabled" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Enable or disable translation with DeepL. On by default, so a
+            DeepL set up before this setting existed keeps working.</desc>
+            <label>DeepL translation</label>
+          </info>
+          <value>true</value>
+        </prop>
+      </group>
+      <group oor:name="Client">
+        <info>
+          <desc>Translation on the user's own machine, by the client that
+          shows the document, so the text does not leave it. Reserved: no
+          client does it yet.</desc>
+        </info>
+        <prop oor:name="IsEnabled" oor:type="xs:boolean" oor:nillable="false">
+          <info>
+            <desc>Enable or disable translation by the client.</desc>
+            <label>Client-side translation</label>
+          </info>
+          <value>false</value>
         </prop>
       </group>
     </group>

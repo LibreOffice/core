@@ -112,9 +112,8 @@ SwTranslateLangSelectDlg::SwTranslateLangSelectDlg(weld::Window* pParent, SwWrtS
             rListedCode = rCode;
     }
 
-    // The API takes the codes in uppercase, e.g. "EN-GB".
     for (const auto & [ rName, rCode ] : aCodeByName)
-        m_aLanguages.emplace_back(rCode.toAsciiUpperCase(), rName);
+        m_aLanguages.emplace_back(rCode, rName);
 
     // List the languages sorted in the UI language.
     const comphelper::string::NaturalStringSorter aSorter(

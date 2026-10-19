@@ -20,6 +20,7 @@ ifeq ($(OS),LINUX)
 $(eval $(call gb_Module_add_subsequentcheck_targets,linguistic,\
     CppunitTest_linguistic_grammalecte \
     CppunitTest_linguistic_restprotocol \
+    CppunitTest_linguistic_translate \
 ))
 endif
 

@@ -35,7 +35,7 @@ public:
         , m_sName(sName)
     {
     }
-    /// The code passed to the translation API, e.g. "EN-GB".
+    /// The BCP 47 tag of the language, e.g. "en-GB", as the translation provider lists it.
     const OString& getLanguage() const { return m_sLanguage; }
     /// The name of the language in the UI language.
     const OUString& getName() const { return m_sName; }
