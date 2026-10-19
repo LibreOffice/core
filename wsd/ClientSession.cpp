@@ -2079,8 +2079,16 @@ bool ClientSession::_handleInput(const char *buffer, int length)
         }
     }
 #endif
-    else if (tokens.equals(0, "executescript") ||
-             tokens.equals(0, "proxyreturn"))
+    else if (tokens.equals(0, "executescript"))
+    {
+        if (!allowsExtensions())
+        {
+            LOG_WRN("Dropping executescript from a session where extensions are off");
+            return true;
+        }
+        return forwardToChild(std::string(buffer, length), docBroker);
+    }
+    else if (tokens.equals(0, "proxyreturn"))
     {
         return forwardToChild(std::string(buffer, length), docBroker);
     }

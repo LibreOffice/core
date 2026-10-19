@@ -625,6 +625,18 @@ private:
                 _wopiFileInfo->getWatermarkText().empty());
     }
 
+    /// Whether the session may run extension scripts. Extensions are off when experimental
+    /// features are off, when the session is read-only, or when the host disables copy, export or
+    /// print.
+    bool allowsExtensions() const
+    {
+        // (EnableExperimental is always false for MOBILEAPP, so ignore it in that case:)
+        return (EnableExperimental || Util::isMobileAppBuild()) && !isReadOnly() &&
+               (!_wopiFileInfo ||
+                (!_wopiFileInfo->getDisableCopy() && !_wopiFileInfo->getDisableExport() &&
+                 !_wopiFileInfo->getDisablePrint()));
+    }
+
     void dumpState(std::ostream& os) override;
 
     /// Handle invalidation message coming from a kit and transfer it to a tile request.

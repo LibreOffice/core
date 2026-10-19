@@ -2367,12 +2367,15 @@ window.L.loadExtensions = async function (map: any, docType: string) {
 	// experimental functionality never fetch the discovery index:
 	if (!window.enableExperimentalFeatures) return {};
 
+	// The read-only state comes from the server's perm and filemode messages, so it also covers
+	// permission=readonly, comment-only sessions and view-only file types:
 	if (
-		map.wopi &&
-		(!map.wopi.UserCanWrite ||
-			map.wopi.DisableCopy ||
-			map.wopi.DisableExport ||
-			map.wopi.DisablePrint)
+		app.isReadOnly() ||
+		(map.wopi &&
+			(!map.wopi.UserCanWrite ||
+				map.wopi.DisableCopy ||
+				map.wopi.DisableExport ||
+				map.wopi.DisablePrint))
 	) {
 		return {};
 	}
