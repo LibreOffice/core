@@ -5176,7 +5176,10 @@ bool ChildSession::proxyReturn(char const * buffer, int length) {
     std::string_view const callId = full.substr(prefix.size(), idEnd - prefix.size());
     {
         std::scoped_lock lock(_pendingProxyCallIdsMutex);
-        _pendingProxyCallIds.erase(std::string(callId));
+        if (_pendingProxyCallIds.erase(std::string(callId)) == 0) {
+            LOG_WRN("Ignoring proxyreturn for call [" << callId << "] not pending in this session");
+            return true;
+        }
     }
     _docManager->getLOKit()->deliverProxyResult(callId, full.substr(idEnd + 1));
     return true;
