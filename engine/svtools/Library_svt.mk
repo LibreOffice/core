@@ -46,8 +46,6 @@ $(eval $(call gb_Library_use_libraries,svt,\
     drawinglayercore \
     i18nlangtag \
     i18nutil \
-    $(if $(ENABLE_JAVA), \
-        jvmfwk) \
     salhelper \
     sal \
     sot \
