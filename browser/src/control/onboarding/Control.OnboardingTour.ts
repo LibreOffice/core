@@ -296,6 +296,7 @@ class OnboardingTourController {
 		return getOnboardingSteps().filter((step) => {
 			if (step.docTypes && step.docTypes.indexOf(docType) === -1) return false;
 			if (step.uiModes && step.uiModes.indexOf(uiMode) === -1) return false;
+			if (step.isAvailable && !step.isAvailable()) return false;
 			if (!step.target) return true;
 			return OnboardingTourController.resolveTarget(step) !== null;
 		});

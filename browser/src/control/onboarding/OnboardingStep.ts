@@ -46,6 +46,10 @@ interface OnboardingStep {
 	// The document types this step belongs to. Absent means every document type.
 	docTypes?: OnboardingDocType[];
 
+	// Whether this step applies in the current environment. Absent means it
+	// does.
+	isAvailable?: () => boolean;
+
 	// The user interface modes this step belongs to. Absent means both modes.
 	uiModes?: OnboardingUiMode[];
 
