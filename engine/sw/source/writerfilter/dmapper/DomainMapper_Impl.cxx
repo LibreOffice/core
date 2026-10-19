@@ -40,6 +40,7 @@
 #include <com/sun/star/i18n/NumberFormatMapper.hpp>
 #include <com/sun/star/i18n/NumberFormatIndex.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/style/BreakType.hpp>
 #include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/LineNumberPosition.hpp>
@@ -5556,6 +5557,15 @@ void DomainMapper_Impl::HandleAltChunk(const OUString& rStreamName)
         uno::Reference<io::XStream> xInputStream = new utl::OStreamWrapper(aMemory);
         // Not handling AltChunk during paste for now.
         uno::Reference<text::XTextRange> xInsertTextRange = GetCurrentXText()->getEnd();
+        if (isBreakDeferred(PAGE_BREAK))
+        {
+            // A page break right before the chunk: the chunk content is inserted into the
+            // paragraph at the end, so the break goes there and not to the paragraph after it.
+            uno::Reference<beans::XPropertySet> xParaProps(xInsertTextRange, uno::UNO_QUERY_THROW);
+            xParaProps->setPropertyValue(getPropertyName(PROP_BREAK_TYPE),
+                                         uno::Any(style::BreakType_PAGE_BEFORE));
+            clearDeferredBreak(PAGE_BREAK);
+        }
         uno::Reference<text::XTextRange> xSectionStartingRange;
         SectionPropertyMap* pSectionContext = GetSectionContext();
         if (pSectionContext)
