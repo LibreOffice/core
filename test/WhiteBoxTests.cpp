@@ -65,6 +65,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testTileData);
     CPPUNIT_TEST(testRectanglesIntersect);
     CPPUNIT_TEST(testJson);
+    CPPUNIT_TEST(testJsonFindIgnoreCase);
     CPPUNIT_TEST(testWopiSecurityLabelFlag);
     CPPUNIT_TEST(testAnonymization);
     CPPUNIT_TEST(testStat);
@@ -95,6 +96,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     void testTileData();
     void testRectanglesIntersect();
     void testJson();
+    void testJsonFindIgnoreCase();
     void testWopiSecurityLabelFlag();
     void testAnonymization();
     void testStat();
@@ -787,6 +789,31 @@ void WhiteBoxTests::testJson()
 
     JsonUtil::findJSONValue(object, "UserId", stringValue);
     LOK_ASSERT_EQUAL_STR("user@user.com", stringValue);
+}
+
+void WhiteBoxTests::testJsonFindIgnoreCase()
+{
+    constexpr std::string_view testname = __func__;
+
+    // A host's 428 (Precondition Required) body carries {"Message": "..."} in any case.
+    const auto message = [](const char* json) -> std::string
+    {
+        Poco::JSON::Object::Ptr object;
+        std::string value;
+        if (JsonUtil::parseJSON(json, object))
+            JsonUtil::findJSONValueIgnoreCase(object, "Message", value);
+        return value;
+    };
+
+    LOK_ASSERT_EQUAL_STR("Label it first", message(R"({"Message":"Label it first"})"));
+    LOK_ASSERT_EQUAL_STR("Label it first", message(R"({"message":"Label it first"})"));
+    LOK_ASSERT_EQUAL_STR("Label it first", message(R"({"MESSAGE":"Label it first"})"));
+
+    // A near miss is not a match, and neither is a missing key or a body that isn't JSON.
+    LOK_ASSERT_EQUAL_STR("", message(R"({"Messages":"Label it first"})"));
+    LOK_ASSERT_EQUAL_STR("", message(R"({"Reason":"Label it first"})"));
+    LOK_ASSERT_EQUAL_STR("", message("Label it first"));
+    LOK_ASSERT_EQUAL_STR("", message(""));
 }
 
 void WhiteBoxTests::testWopiSecurityLabelFlag()

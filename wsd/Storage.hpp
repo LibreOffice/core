@@ -212,6 +212,7 @@ public:
                    UNAUTHORIZED, ///< 401, 403, 404
                    DOC_CHANGED, /**< Document changed in storage */
                    CONFLICT, ///< 409
+                   PRECONDITION, ///< 428, the host refused the file; the reason is its message
                    FAILED);
 
         explicit UploadResult(Result result)

@@ -292,6 +292,14 @@ protected:
     /// server poll. Call from the constructor.
     void useOwnWopiHost() { _ownWopiHost = true; }
 
+    /// Runs the callback on the thread of the listener of our own, where the sockets of the WOPI
+    /// requests live.
+    void runOnWopiHost(SocketPoll::CallbackFn callback)
+    {
+        LOK_ASSERT_MESSAGE("Expected a WOPI listener of our own", _wopiHostPoll);
+        _wopiHostPoll->addCallback(std::move(callback));
+    }
+
     /// Started on first use, which is the first WOPI URL the test builds.
     std::string getWopiHostURI() const override
     {
@@ -361,6 +369,14 @@ protected:
 
     virtual void assertPutRelativeFileRequest(const Poco::Net::HTTPRequest& /*request*/)
     {
+    }
+
+    /// The response to a PutRelativeFile request instead of storing the new file, or null to
+    /// store it.
+    virtual std::unique_ptr<http::Response>
+    answerPutRelativeFileRequest(const Poco::Net::HTTPRequest& /*request*/)
+    {
+        return nullptr;
     }
 
     virtual void assertRenameFileRequest(const Poco::Net::HTTPRequest& /*request*/)
@@ -479,6 +495,13 @@ protected:
     virtual bool handleCheckFileInfoRequest(const Poco::Net::HTTPRequest& request,
                                             const std::shared_ptr<StreamSocket>& socket)
     {
+        socket->sendAndShutdown(*makeCheckFileInfoResponse(request));
+        return true;
+    }
+
+    /// The response to a CheckFileInfo request, as the host answers it now.
+    std::unique_ptr<http::Response> makeCheckFileInfoResponse(const Poco::Net::HTTPRequest& request)
+    {
         std::unique_ptr<http::Response> httpResponse = assertCheckFileInfoRequest(request);
         if (!httpResponse)
             httpResponse = std::make_unique<http::Response>(http::StatusCode::OK);
@@ -506,8 +529,7 @@ protected:
                     << httpResponse->statusLine().reasonPhrase());
         }
 
-        socket->sendAndShutdown(*httpResponse);
-        return true;
+        return httpResponse;
     }
 
     /// Override to set the CheckFileInfo attributes.
@@ -625,6 +647,13 @@ protected:
 
                     LOK_ASSERT_EQUAL_STR("PUT_RELATIVE", request.get("X-WOPI-Override"));
                     assertPutRelativeFileRequest(request);
+                    if (std::unique_ptr<http::Response> response =
+                            answerPutRelativeFileRequest(request))
+                    {
+                        socket->sendAndShutdown(*response);
+                        return true;
+                    }
+
                     content = "{ \"Name\":\"hello world%1.pdf\", \"Url\":\"" + wopiURL + "\" }";
                 }
                 else

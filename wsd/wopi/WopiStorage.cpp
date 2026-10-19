@@ -70,6 +70,36 @@ constexpr bool isTemplate(const std::string_view filename)
     return false;
 }
 
+/// The message for the user in the body of a 428 (Precondition Required) refusal of an upload:
+/// the value of "Message", with the key in any case. Empty when the body has none. At most 1024
+/// bytes long, cut at the start of a UTF-8 sequence.
+std::string getUploadRefusalMessage(const std::string& body)
+{
+    constexpr std::size_t MaxLength = 1024;
+
+    std::string message;
+    Poco::JSON::Object::Ptr object;
+    if (!JsonUtil::parseJSON(body, object) ||
+        !JsonUtil::findJSONValueIgnoreCase(object, "Message", message))
+    {
+        return std::string();
+    }
+
+    if (message.size() > MaxLength)
+    {
+        // Move the cut back to the first byte of the UTF-8 sequence it falls in.
+        std::size_t length = MaxLength;
+        while (length > 0 && (static_cast<unsigned char>(message[length]) & 0xC0) == 0x80)
+        {
+            --length;
+        }
+
+        message.resize(length);
+    }
+
+    return message;
+}
+
 /// A helper class to invoke the callback of an async
 /// request when it exits its scope.
 /// By default it invokes the callback with a failure state.
@@ -1132,6 +1162,16 @@ WopiStorage::handleUploadToStorageResponse(const WopiUploadDetails& details,
             // and file unknown/user unauthorized, respectively.
             // We also handle 403 that some implementation use.
             result.setResult(StorageBase::UploadResult::Result::UNAUTHORIZED);
+        }
+        else if (details.httpResponseCode == http::StatusCode::PreconditionRequired)
+        {
+            // The host won't take this file as it is, and says why for the user to act on.
+            result.setResult(StorageBase::UploadResult::Result::PRECONDITION);
+            result.setReason(getUploadRefusalMessage(origResponseString));
+            if (result.getReason().empty())
+            {
+                LOG_WRN(wopiLog << " was refused with 428 without a message for the user");
+            }
         }
         else if (details.httpResponseCode == http::StatusCode::Conflict)
         {

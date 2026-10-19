@@ -3326,6 +3326,12 @@ DocumentBroker::NeedToUpload DocumentBroker::needToUploadToStorage() const
         return NeedToUpload::Yes;
     }
 
+    if (isRefusedUpload())
+    {
+        LOG_TRC("Not uploading: the host refused this file with 428, waiting for a newer save");
+        return NeedToUpload::No;
+    }
+
     // Retry uploading only for retryable failures, not conflicts.
     if (!_storageManager.lastUploadSuccessful() && !_documentChangedInStorage)
     {
@@ -3355,6 +3361,17 @@ DocumentBroker::NeedToUpload DocumentBroker::needToUploadToStorage() const
     }
 
     return NeedToUpload::No; // No reason to upload, seems up-to-date.
+}
+
+bool DocumentBroker::isRefusedUpload() const
+{
+    if (!_storage || _refusedUploadFileTime == std::chrono::system_clock::time_point())
+    {
+        return false;
+    }
+
+    const auto st = FileUtil::Stat(_storage->getRootFilePathUploading());
+    return st.exists() && st.modifiedTimepoint() <= _refusedUploadFileTime;
 }
 
 bool DocumentBroker::isStorageOutdated() const
@@ -4114,6 +4131,14 @@ void DocumentBroker::handleUploadToStorageResponse(const StorageBase::UploadResu
 
     if (uploadResult.getResult() == StorageBase::UploadResult::Result::OK)
     {
+        // The host took the document itself, so a refusal of an older file no longer applies. A
+        // save-as or an export is a different file and leaves that refusal in place.
+        if (!_uploadRequest->isSaveAs() && !_uploadRequest->isRename() &&
+            !_uploadRequest->isExport())
+        {
+            _refusedUploadFileTime = std::chrono::system_clock::time_point();
+        }
+
         return handleUploadToStorageSuccessful(uploadResult);
     }
 
@@ -4250,6 +4275,44 @@ void DocumentBroker::handleUploadToStorageFailed(const StorageBase::UploadResult
             }
 
             broadcastSaveResult(false, "Invalid or expired access token");
+        }
+    }
+    else if (uploadResult.getResult() == StorageBase::UploadResult::Result::PRECONDITION)
+    {
+        LOG_WRN("The host refused to store docKey ["
+                << _docKey << "] to URI [" << _uploadRequest->uriAnonym()
+                << "] with 428 (Precondition Required): " << uploadResult.getReason());
+
+        const std::string preconditionMessage = COOLProtocol::buildErrorFrame(
+            "storage", "saveprecondition", uploadResult.getReason());
+        if (_uploadRequest->isSaveAs() || _uploadRequest->isRename() ||
+            _uploadRequest->isExport())
+        {
+            // The host refused a save-as, an export or a rename. Only the view that asked for it
+            // is told, and the document's own pending upload stays as it was.
+            if (const auto session = _uploadRequest->session())
+            {
+                session->sendTextFrameAndLogError(preconditionMessage);
+            }
+        }
+        else
+        {
+            // Record which file was refused, by the time it had when it was sent. The host
+            // refuses the same file again, and the next save writes a newer one, which is uploaded
+            // as usual.
+            _refusedUploadFileTime = _uploadRequest->newFileModifiedLocalTime();
+
+            // Tell the views that can upload, which are the ones that can act on it. A view that
+            // may only comment or manage tracked changes uploads its edits too.
+            for (const auto& sessionIt : _sessions)
+            {
+                if (sessionIt.second->isWritable() && sessionIt.second->isEditable())
+                {
+                    sessionIt.second->sendTextFrameAndLogError(preconditionMessage);
+                }
+            }
+
+            broadcastSaveResult(false, "Precondition required", uploadResult.getReason());
         }
     }
     else if (uploadResult.getResult() == StorageBase::UploadResult::Result::FAILED)
@@ -7817,6 +7880,7 @@ void DocumentBroker::dumpState(std::ostream& os)
     os << "\n  needToUpload: " << name(needToUploadToStorage());
     os << "\n  documentChangedInStorage: " << _documentChangedInStorage;
     os << "\n  lastUploadDefinitelyFailed: " << _lastUploadDefinitelyFailed;
+    os << "\n  refusedUpload: " << isRefusedUpload();
     os << "\n  lastResortUpload: " << _lastResortUpload;
     os << "\n  lastResortUploadFailed: " << _lastResortUploadFailed;
     os << "\n  lastUploadedFileHash: "

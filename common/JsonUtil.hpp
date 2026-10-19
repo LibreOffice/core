@@ -159,6 +159,26 @@ bool findJSONValue(const Poco::JSON::Object::Ptr& object, const std::string& key
     return false;
 }
 
+/// Searches `object` for `key`, ignoring case, and fills `value` with the first match.
+/// Unlike findJSONValue, a differently-cased key is a match, not a mis-spelling.
+template <typename T>
+bool findJSONValueIgnoreCase(const Poco::JSON::Object::Ptr& object, const std::string& key,
+                             T& value)
+{
+    std::vector<std::string> propertyNames;
+    object->getNames(propertyNames);
+    for (const std::string& name : propertyNames)
+    {
+        if (Util::iequal(name, key))
+        {
+            value = getJSONValue<T>(object, name);
+            return true;
+        }
+    }
+
+    return false;
+}
+
 static char getEscapementChar(char ch)
 {
     switch (ch)

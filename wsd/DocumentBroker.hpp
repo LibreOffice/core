@@ -1079,6 +1079,9 @@ private:
     /// Returns true iff the document on disk is newer than the one in Storage.
     bool isStorageOutdated() const;
 
+    /// Returns true iff the file to upload is the one the host last refused with 428.
+    bool isRefusedUpload() const;
+
     /// Upload the doc to the storage.
     void uploadToStorageInternal(const std::shared_ptr<ClientSession>& session,
                                  const std::string& saveAsPath, const std::string& saveAsFilename,
@@ -2207,6 +2210,11 @@ private:
     /// any change in storage is somebody else's. When we don't, our own upload
     /// may have landed and we have to work out which version storage holds.
     bool _lastUploadDefinitelyFailed;
+
+    /// The modified time of the document's file that the host last refused with 428
+    /// (Precondition Required), or the epoch when there is none. The host refuses a file with
+    /// this time or an older one again.
+    std::chrono::system_clock::time_point _refusedUploadFileTime;
 
     /// True while the upload in flight, or the last one, uses an access token that has expired or
     /// that the host has rejected.
