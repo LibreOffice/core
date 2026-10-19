@@ -1405,6 +1405,105 @@ abstract class SelectionSection extends CanvasSectionObject {
 
 		this.drawTheMarks();
 		this.drawTheReading();
+		this.drawTheHoldBack();
+	}
+
+	/// When a key or a drag was last held back for an undo or a redo on its way, in the time of
+	/// performance.now(), or null while no notice of it is shown.
+	private heldBackAt: number | null = null;
+
+	/// How long the notice of a key or a drag held back is fully seen, in milliseconds.
+	private static readonly holdBackSeen: number = 700;
+
+	/// How long the notice then takes to fade away, in milliseconds.
+	private static readonly holdBackFading: number = 400;
+
+	/*
+		How long an undo or a redo has to be waited for before a key or a drag held back for it is
+		told, in milliseconds. A connection of the usual speed answers well within this, so a key
+		pressed right after an undo there is held back for a moment without a word.
+	*/
+	private static readonly holdBackToldAfter: number = 1000;
+
+	/*
+		Shows that a key or a drag was held back for an undo or a redo that has been on its way for
+		a while: a notice below the selection, fully seen for a moment and then fading away. Each
+		further key or drag held back shows it fully again, and it goes at once when the answer is
+		in.
+	*/
+	public showTheHoldBack(): void {
+		if (ChangeOutbox.undoWaitedFor() < SelectionSection.holdBackToldAfter)
+			return;
+
+		const shown = this.heldBackAt !== null;
+		this.heldBackAt = performance.now();
+		if (!shown) this.followTheHoldBack();
+	}
+
+	/// Draws the view again on every frame while the notice is shown, and once more after.
+	private followTheHoldBack(): void {
+		if (
+			this.heldBackAt !== null &&
+			(!ChangeOutbox.undoOnItsWay() ||
+				performance.now() - this.heldBackAt >
+					SelectionSection.holdBackSeen + SelectionSection.holdBackFading)
+		)
+			this.heldBackAt = null;
+
+		app.sectionContainer?.requestReDraw();
+		if (this.heldBackAt !== null)
+			requestAnimationFrame(() => this.followTheHoldBack());
+	}
+
+	/// Writes the notice of a key or a drag held back below the selection, in a light box with
+	/// the color of the handles, as see-through as its fading has made it.
+	private drawTheHoldBack(): void {
+		if (this.heldBackAt === null || !ChangeOutbox.undoOnItsWay()) return;
+
+		const past = performance.now() - this.heldBackAt;
+		const seen =
+			1 -
+			Math.max(0, past - SelectionSection.holdBackSeen) /
+				SelectionSection.holdBackFading;
+		const corners = this.cornersInView();
+		if (seen <= 0 || !corners.length) return;
+
+		const box = cool.Range2D.fromPoints(corners);
+		const text =
+			ChangeOutbox.waitsFor() === 'redo'
+				? _('Waiting for redo...')
+				: _('Waiting for undo...');
+
+		this.context.save();
+		this.context.setTransform(1, 0, 0, 1, 0, 0);
+		this.context.globalAlpha = seen;
+		this.context.font = Math.round(12 * app.dpiScale) + 'px sans-serif';
+		this.context.textAlign = 'center';
+		this.context.textBaseline = 'middle';
+
+		// The notice stands clear of the handles below the selection.
+		const padding = 6 * app.dpiScale;
+		const width = this.context.measureText(text).width + 2 * padding;
+		const height = 12 * app.dpiScale + 2 * padding;
+		const x = (box.minX + box.maxX) / 2;
+		const y = box.maxY + 2 * ShapeHandlesSection.handleSize() + height / 2;
+
+		this.context.beginPath();
+		this.context.roundRect(
+			x - width / 2,
+			y - height / 2,
+			width,
+			height,
+			height / 2,
+		);
+		this.context.fillStyle = '#FFFFFF';
+		this.context.strokeStyle = HandleLook.outlineColour;
+		this.context.lineWidth = app.dpiScale;
+		this.context.fill();
+		this.context.stroke();
+		this.context.fillStyle = HandleLook.outlineColour;
+		this.context.fillText(text, x, y);
+		this.context.restore();
 	}
 
 	/*
@@ -2608,6 +2707,13 @@ abstract class SelectionSection extends CanvasSectionObject {
 					group.takesAPress(onCanvas[0], onCanvas[1]),
 				) ?? null;
 			this.interaction = this.pressedGroup?.interactionForThePlace(at) ?? null;
+		}
+
+		// While an undo or a redo is on its way the objects stand where only the engine's answer
+		// tells, so a press begins no drag then and stays a click.
+		if (this.interaction && ChangeOutbox.undoOnItsWay()) {
+			this.interaction = null;
+			this.showTheHoldBack();
 		}
 
 		if (this.interaction) {

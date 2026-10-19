@@ -526,6 +526,57 @@ class GraphicSelection {
 	};
 
 	/*
+		The keys held back for undos and redos on their way and the keys let go meanwhile, in the
+		order the two happened: a press as its event, a release as the code of the key.
+	*/
+	private static keysHeldBack: (KeyboardEvent | string)[] = [];
+
+	/// Whether the release of keys is listened to, which is once.
+	private static followingTheKeysHeldBack: boolean = false;
+
+	/// Keeps the key to be handled once the undos and redos on their way are in.
+	private static holdTheKeyBack(event: KeyboardEvent): void {
+		if (!this.followingTheKeysHeldBack) {
+			this.followingTheKeysHeldBack = true;
+			document.addEventListener(
+				'keyup',
+				(up: KeyboardEvent) => {
+					if (GraphicSelection.keysHeldBack.length)
+						GraphicSelection.keysHeldBack.push(up.code || up.key);
+				},
+				true,
+			);
+		}
+
+		this.keysHeldBack.push(event);
+		if (this.keysHeldBack.length === 1)
+			ChangeOutbox.whenTheUndosAreIn(() =>
+				GraphicSelection.handleTheKeysHeldBack(),
+			);
+	}
+
+	/*
+		Handles the keys held back on the objects as the undos left them, each press and each
+		release in the order they happened, so what each press made goes out as it does after any
+		key, as one step of the undo.
+	*/
+	private static handleTheKeysHeldBack(): void {
+		const keys = this.keysHeldBack;
+		this.keysHeldBack = [];
+
+		for (const key of keys)
+			if (typeof key === 'string') ChangeOutbox.keyIsUp(key);
+			else this.handleKeyboard(key);
+	}
+
+	/// Whether the key changes the objects selected or a handle of them: an arrow, with or without
+	/// modifiers, or 0, which takes a turn or a slant away.
+	private static changesTheObjects(event: KeyboardEvent): boolean {
+		if (GraphicSelection.theWayOf[event.key]) return true;
+		return event.code === 'Digit0' || event.code === 'Numpad0';
+	}
+
+	/*
 		What the keyboard does to what is selected, while the client draws the selection itself.
 		A handle takes the key first, where the keyboard is on one. An arrow key with the
 		keyboard on no handle moves the objects, and that is done here and sent as the one change
@@ -552,6 +603,15 @@ class GraphicSelection {
 		// A drag by the mouse owns the selection while it runs, so a key does nothing to it then
 		// and is taken here. Escape goes on to call the drag off, and the selection stays.
 		if (this.selectionSection?.isDragged()) return event.key !== 'Escape';
+
+		// A key that moves, turns, slants or resets what is selected waits while an undo or a redo
+		// is on its way, since the objects then stand where only the engine's answer tells. It is
+		// handled once the answer is in, from where the undo left the objects.
+		if (ChangeOutbox.undoOnItsWay() && this.changesTheObjects(event)) {
+			this.holdTheKeyBack(event);
+			this.selectionSection?.showTheHoldBack();
+			return true;
+		}
 
 		// What a key changes goes to the engine once the keys are let go, as the last state of
 		// each thing it changed. It is shown here at once all the same.

@@ -526,6 +526,13 @@ class MouseControl extends CanvasSectionObject {
 			const objectId = Interaction.context().takesHoldFor(hit, modifier);
 			if (objectId === undefined) return false;
 
+			// While an undo or a redo is on its way the objects stand where only the engine's
+			// answer tells, so the drag carries nothing then and nothing of it goes to the engine.
+			if (ChangeOutbox.undoOnItsWay()) {
+				GraphicSelection.selectionSection?.showTheHoldBack();
+				return true;
+			}
+
 			GraphicSelection.selectObjects([objectId]);
 			GraphicSelection.updateSelectionSection();
 
