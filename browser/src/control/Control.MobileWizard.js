@@ -28,6 +28,8 @@ window.L.Control.MobileWizard = window.L.Control.extend({
 			return;
 
 		this.contents = [];
+		this.keyboardWasOpen = false;
+		this._switchingWizard = false;
 
 		map.on('mobilewizard', this._onMobileWizard, this);
 		map.on('closemobilewizard', this._closeWizard, this);
@@ -63,7 +65,8 @@ window.L.Control.MobileWizard = window.L.Control.extend({
 		this.map.showSidebar = true;
 	},
 
-	_closeWizard: function() {
+	_closeWizard: function(e) {
+		this._switchingWizard = !!(e && e.switching);
 		const sidebarRequested = this.map.showSidebar
 			|| window.mobileWizard === true || window.pageMobileWizard === true;
 		let sidebarClosed = false;
@@ -133,7 +136,10 @@ window.L.Control.MobileWizard = window.L.Control.extend({
 
 		this._updateToolbarItemStateByClose();
 
-		if (!this.map.hasFocus()) {
+		if (!this.contents.length && this.keyboardWasOpen && !this._switchingWizard) {
+			this.keyboardWasOpen = false;
+			this.map.focus(true);
+		} else if (!this.map.hasFocus()) {
 			this.map.focus();
 		}
 
@@ -202,6 +208,10 @@ window.L.Control.MobileWizard = window.L.Control.extend({
 				return;
 			} else {
 				var newWindow = window.L.control.mobileWizardWindow(this, 'mobile-wizard-content-' + data.id);
+				// a replacing wizard keeps the keyboard state
+				if (!this.contents.length && !this._switchingWizard)
+					this.keyboardWasOpen = false;
+				this._switchingWizard = false;
 				for (var i in this.contents)
 					this.contents[i].hideWindow();
 				this.contents.push(newWindow);

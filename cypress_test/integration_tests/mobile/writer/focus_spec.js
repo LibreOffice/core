@@ -1,4 +1,4 @@
-/* global describe it cy beforeEach require */
+/* global describe it cy beforeEach expect require */
 
 var helper = require('../../common/helper');
 var impressHelper = require('../../common/impress_helper');
@@ -32,6 +32,34 @@ describe(['tagmobile', 'tagproxy'], 'Focus tests', function() {
 		// Body should have the focus (no focus on document)
 		helper.assertFocus('tagName', 'BODY');
 		mobileHelper.closeMobileWizard();
+	});
+
+	it('Keyboard comes back when the mobile wizard closes.', function() {
+		mobileHelper.enableEditingMobile();
+		cy.cGet('#document-container').click();
+		helper.assertHaveKeyboardInput();
+		mobileHelper.openMobileWizard();
+		helper.assertNoKeyboardInput();
+		mobileHelper.closeMobileWizard();
+		helper.assertHaveKeyboardInput();
+	});
+
+	it('Keyboard stays down while one wizard replaces another.', function() {
+		mobileHelper.enableEditingMobile();
+		cy.cGet('#document-container').click();
+		helper.assertHaveKeyboardInput();
+		mobileHelper.openInsertionWizard();
+		helper.assertNoKeyboardInput();
+		cy.cGet('#toolbar-up #mobile_wizard').click();
+		// the sidebar arrives later, no keyboard in between
+		cy.cGet('div.clipboard').then(function(clipboard) {
+			expect(clipboard.attr('data-accept-input')).to.equal('false');
+		});
+		cy.cGet('#toolbar-up #mobile_wizard').should('have.class', 'selected');
+		cy.cGet('#mobile-wizard-content').should('not.be.empty');
+		helper.assertNoKeyboardInput();
+		mobileHelper.closeMobileWizard();
+		helper.assertHaveKeyboardInput();
 	});
 
 	it('Focus inside mobile wizard.', function() {

@@ -210,6 +210,8 @@ window.L.Control.MobileWizardWindow = window.L.Control.extend({
 	},
 
 	_hideKeyboard: function() {
+		if (this.map.canAcceptKeyboardInput())
+			this.parent.keyboardWasOpen = true;
 		this.map.blur();
 	},
 

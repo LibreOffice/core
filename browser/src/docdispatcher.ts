@@ -1412,20 +1412,27 @@ class Dispatcher {
 	}
 
 	private addMobileCommands() {
+		const configuration = window as any;
+		// switching: another wizard takes the closed one's place
+		const closeWizard = (flag: string, item: string, switching: boolean) => {
+			configuration[flag] = false;
+			app.map.fire('closemobilewizard', { switching });
+			app.map.mobileTopBar.selectItem(item, false);
+		};
+		const closeCommentWizard = (switching: boolean) => {
+			app.sectionContainer
+				.getSectionWithName(app.CSections.CommentList.name)
+				.removeHighlighters();
+			closeWizard('commentWizard', 'comment_wizard', switching);
+		};
 		this.actionsMap['comment_wizard'] = function () {
-			const configuration = window as any;
 			if (configuration.commentWizard) {
-				configuration.commentWizard = false;
-				app.sectionContainer
-					.getSectionWithName(app.CSections.CommentList.name)
-					.removeHighlighters();
-				app.map.fire('closemobilewizard');
-				app.map.mobileTopBar.selectItem('comment_wizard', false);
+				closeCommentWizard(false);
 			} else {
 				if (configuration.insertionMobileWizard)
-					app.dispatcher.dispatch('insertion_mobile_wizard');
+					closeWizard('insertionMobileWizard', 'insertion_mobile_wizard', true);
 				else if (configuration.mobileWizard)
-					app.dispatcher.dispatch('mobile_wizard');
+					closeWizard('mobileWizard', 'mobile_wizard', true);
 				configuration.commentWizard = true;
 				var menuData = app.map._docLayer.getCommentWizardStructure();
 				app.map.fire('mobilewizard', { data: menuData });
@@ -1433,16 +1440,12 @@ class Dispatcher {
 			}
 		};
 		this.actionsMap['mobile_wizard'] = () => {
-			const configuration = window as any;
 			if (configuration.mobileWizard) {
-				configuration.mobileWizard = false;
-				app.map.fire('closemobilewizard');
-				app.map.mobileTopBar.selectItem('mobile_wizard', false);
+				closeWizard('mobileWizard', 'mobile_wizard', false);
 			} else {
 				if (configuration.insertionMobileWizard)
-					app.dispatcher.dispatch('insertion_mobile_wizard');
-				else if (configuration.commentWizard)
-					app.dispatcher.dispatch('comment_wizard');
+					closeWizard('insertionMobileWizard', 'insertion_mobile_wizard', true);
+				else if (configuration.commentWizard) closeCommentWizard(true);
 				configuration.mobileWizard = true;
 				app.map.sendUnoCommand('.uno:SidebarShow');
 				app.map.fire('showwizardsidebar');
@@ -1450,16 +1453,12 @@ class Dispatcher {
 			}
 		};
 		this.actionsMap['insertion_mobile_wizard'] = () => {
-			const configuration = window as any;
 			if (configuration.insertionMobileWizard) {
-				configuration.insertionMobileWizard = false;
-				app.map.fire('closemobilewizard');
-				app.map.mobileTopBar.selectItem('insertion_mobile_wizard', false);
+				closeWizard('insertionMobileWizard', 'insertion_mobile_wizard', false);
 			} else {
 				if (configuration.mobileWizard)
-					app.dispatcher.dispatch('mobile_wizard');
-				else if (configuration.commentWizard)
-					app.dispatcher.dispatch('comment_wizard');
+					closeWizard('mobileWizard', 'mobile_wizard', true);
+				else if (configuration.commentWizard) closeCommentWizard(true);
 				configuration.insertionMobileWizard = true;
 				const menuData = app.map.menubar.generateInsertMenuStructure();
 				app.map.fire('mobilewizard', { data: menuData });
