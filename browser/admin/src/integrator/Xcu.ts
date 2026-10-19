@@ -273,6 +273,22 @@ const defaultXcuObj: Record<string, any> = {
 				},
 			},
 		},
+		// Machine translation: which provider translates, and how each is
+		// set up. Null until the user sets it, like the checkers above.
+		Translation: {
+			Provider: null,
+			Deepl: {
+				IsEnabled: null,
+				ApiURL: null,
+				AuthKey: null,
+			},
+			LibreTranslate: {
+				IsEnabled: null,
+				BaseURL: null,
+				ApiKey: null,
+				SSLCertVerify: null,
+			},
+		},
 	},
 	Writer: {
 		Grid: {
@@ -537,6 +553,18 @@ class Xcu {
 		const linguistic = this.xcuDataObj ? this.xcuDataObj['Linguistic'] : null;
 		const grammar = linguistic ? linguistic['GrammarChecking'] : null;
 		return grammar ? grammar[id] || null : null;
+	}
+
+	// The translation group, or null when the xcu has none.
+	public getTranslationGroup(): any {
+		const linguistic = this.xcuDataObj ? this.xcuDataObj['Linguistic'] : null;
+		return linguistic ? linguistic['Translation'] || null : null;
+	}
+
+	// The group of one translation provider, or null when the xcu has none.
+	public getTranslationProviderGroup(id: string): any {
+		const translation = this.getTranslationGroup();
+		return translation ? translation[id] || null : null;
 	}
 
 	// The option group of one rule package, or null when the xcu has none.

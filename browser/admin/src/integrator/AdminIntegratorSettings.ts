@@ -31,6 +31,8 @@ interface Window {
 	sentenceCheckingPackages?: Array<{ id: string; locale: string }>;
 	// The remote sentence checkers as the engine runs them.
 	remoteCheckers?: Array<RemoteCheckerInfo>;
+	// The translation providers as the engine runs them.
+	translationProviders?: TranslationProvidersInfo | null;
 	iframeType?: string;
 	cssVars?: string;
 	serviceRoot?: string;
@@ -74,6 +76,36 @@ interface RemoteCheckerInfo {
 	// checks by their names, the Grammalecte rule families by the server's ids.
 	style?: Record<string, boolean>;
 	options?: Record<string, boolean>;
+}
+
+// What the engine says about one translation provider: how it is set up and
+// whether the user may change that. The key never comes; hasCredentials says
+// there is one.
+interface TranslationProviderInfo {
+	id: 'deepl' | 'libretranslate';
+	name: string;
+	enabled: boolean;
+	configured: boolean;
+	allowUserSettings: boolean;
+	hasCredentials: boolean;
+	apiURL?: string;
+	baseURL?: string;
+	sslVerify?: boolean;
+	targetLanguages: string[];
+}
+
+// The translation providers: which one is asked for, which one translates,
+// and each of them.
+interface TranslationProvidersInfo {
+	provider: string;
+	active: string;
+	providers: TranslationProviderInfo[];
+}
+
+// What the field builders of a remote service's panel need to know about it.
+interface RemoteServiceInfo {
+	id: string;
+	hasCredentials: boolean;
 }
 
 interface ConfigItem {
@@ -1270,6 +1302,7 @@ class SettingIframe {
 	private _xcuSection: HTMLElement | null = null;
 	private _sentenceCheckerSection: HTMLElement | null = null;
 	private _remoteCheckerSection: HTMLElement | null = null;
+	private _translationSection: HTMLElement | null = null;
 	private _aiSection: HTMLElement | null = null;
 	private _docSigningSection: HTMLElement | null = null;
 	private _zoteroSection: HTMLElement | null = null;
@@ -1516,6 +1549,13 @@ class SettingIframe {
 			);
 		} catch {
 			window.remoteCheckers = [];
+		}
+		try {
+			window.translationProviders = JSON.parse(
+				read('translationProviders', 'translation_providers') || 'null',
+			);
+		} catch {
+			window.translationProviders = null;
 		}
 		window.wopiSettingBaseUrl = read(
 			'wopiSettingBaseUrl',
@@ -4872,10 +4912,176 @@ class SettingIframe {
 		return panel;
 	}
 
-	// A toggle for a boolean of a remote checker's group. The engine's value
+	/**
+	 * The translation providers: which one translates the document with the
+	 * Translate command, and how each is reached. As with the checkers, a
+	 * provider's server and key are shown and may be changed only where the
+	 * server allows it, or in the desktop app, which has no server; one the
+	 * server switched off is not offered at all. A field never touched is
+	 * not written.
+	 */
+	private createTranslationSection(): HTMLElement | null {
+		if (!this.xcuEditor) return null;
+		const infos = window.translationProviders;
+		if (!infos || !Array.isArray(infos.providers)) return null;
+		const group = this.xcuEditor.getTranslationGroup();
+		if (!group) return null;
+
+		const panels: HTMLElement[] = [];
+		const choices: Array<{ value: string; label: string }> = [];
+		for (const info of infos.providers) {
+			const groupName = {
+				deepl: 'Deepl',
+				libretranslate: 'LibreTranslate',
+			}[info.id];
+			if (!groupName) continue;
+			const providerGroup =
+				this.xcuEditor.getTranslationProviderGroup(groupName);
+			if (!providerGroup) continue;
+			const canEditServer = isCODesktop || info.allowUserSettings;
+			if (!canEditServer && !info.enabled) continue;
+			choices.push({ value: info.id, label: info.name });
+			const panel = this.createTranslationProviderPanel(
+				info,
+				providerGroup,
+				canEditServer,
+			);
+			if (panel) panels.push(panel);
+		}
+		if (!choices.length) return null;
+
+		const section = document.createElement('div');
+		section.id = 'translation-section';
+		section.className = 'section';
+		section.appendChild(this.createHeading(_('Translation')));
+		section.appendChild(
+			this.createParagraph(
+				_(
+					'Machine translation of the document text with the Translate command. The text is sent to the provider to be translated.',
+				),
+			),
+		);
+		section.appendChild(this.createNextDocumentNote());
+
+		// Which provider translates: the engine's choice is shown until the
+		// user makes their own.
+		const own = group.Provider !== null && group.Provider !== undefined;
+		section.appendChild(
+			this.createSelectField(
+				'translation-Provider-container',
+				_('Provider'),
+				'translation-Provider',
+				[{ value: '', label: _('The first one that is set up') }, ...choices],
+				own ? String(group.Provider) : infos.provider || '',
+				(selectEl) => {
+					group.Provider = selectEl.value;
+				},
+			),
+		);
+		for (const panel of panels) section.appendChild(panel);
+		return section;
+	}
+
+	private createTranslationProviderPanel(
+		info: TranslationProviderInfo,
+		group: any,
+		canEditServer: boolean,
+	): HTMLElement | null {
+		const content = document.createElement('div');
+		content.classList.add('remote-checker');
+		const details = document.createElement('div');
+		details.classList.add('remote-checker-details');
+
+		if (canEditServer) {
+			const isOn = group.IsEnabled === null ? info.enabled : !!group.IsEnabled;
+			details.hidden = !isOn;
+			content.appendChild(
+				this.createRemoteToggle(
+					info,
+					group,
+					'IsEnabled',
+					_('Enabled'),
+					info.enabled,
+					(checked) => {
+						details.hidden = !checked;
+					},
+				),
+			);
+			if (info.id === 'deepl') {
+				// DeepL is reached at its translate endpoint, with a key of
+				// the account.
+				details.appendChild(
+					this.createRemoteTextField(
+						info,
+						group,
+						'ApiURL',
+						_('API URL'),
+						info.apiURL || '',
+					),
+				);
+				details.appendChild(
+					this.createRemoteTextField(
+						info,
+						group,
+						'AuthKey',
+						_('Authentication key'),
+						'',
+						true,
+					),
+				);
+			} else {
+				// A LibreTranslate server is reached at its root; a key only
+				// where the server wants one.
+				details.appendChild(
+					this.createRemoteTextField(
+						info,
+						group,
+						'BaseURL',
+						_('Server URL'),
+						info.baseURL || '',
+					),
+				);
+				details.appendChild(
+					this.createRemoteTextField(
+						info,
+						group,
+						'ApiKey',
+						_('API key'),
+						'',
+						true,
+					),
+				);
+				details.appendChild(
+					this.createRemoteToggle(
+						info,
+						group,
+						'SSLCertVerify',
+						_('Verify the server certificate'),
+						info.sslVerify !== false,
+					),
+				);
+			}
+		} else {
+			// What the server set up, which is not theirs to change.
+			details.appendChild(
+				this.createParagraph(
+					info.configured
+						? _('Set up on this server.')
+						: _('Enabled on this server, but not set up.'),
+				),
+			);
+		}
+
+		content.appendChild(details);
+		const panel = this.createFieldsetFor(info.name, content);
+		panel.id = `translation-provider-${info.id}`;
+		return panel;
+	}
+
+	// A toggle for a boolean of a remote service's group. The engine's value
 	// is shown until the user sets their own.
 	private createRemoteToggle(
-		info: RemoteCheckerInfo,
+		info: RemoteServiceInfo,
 		group: any,
 		key: string,
 		label: string,
@@ -4898,11 +5104,11 @@ class SettingIframe {
 		);
 	}
 
-	// A text field for a string of a remote checker's group. A secret is
+	// A text field for a string of a remote service's group. A secret is
 	// never shown: a saved one is a masked placeholder, and the field stays
 	// empty until the user types a new one.
 	private createRemoteTextField(
-		info: RemoteCheckerInfo,
+		info: RemoteServiceInfo,
 		group: any,
 		key: string,
 		label: string,
@@ -4935,7 +5141,7 @@ class SettingIframe {
 	}
 
 	private createRemoteSelect(
-		info: RemoteCheckerInfo,
+		info: RemoteServiceInfo,
 		group: any,
 		key: string,
 		label: string,
@@ -5237,6 +5443,18 @@ class SettingIframe {
 				} else {
 					this._remoteCheckerSection?.remove();
 					this._remoteCheckerSection = null;
+				}
+
+				const translation = this.createTranslationSection();
+				if (translation) {
+					this._translationSection = this.mountConfigSection(
+						settingsContainer,
+						this._translationSection,
+						translation,
+					);
+				} else {
+					this._translationSection?.remove();
+					this._translationSection = null;
 				}
 			}
 		}

@@ -31,6 +31,8 @@ window.L.Map.Settings = window.L.Handler.extend({
 	_resolveSentenceChecking: null as (() => void) | null,
 	_remoteCheckersAsked: null as Promise<void> | null,
 	_resolveRemoteCheckers: null as (() => void) | null,
+	_translationProvidersAsked: null as Promise<void> | null,
+	_resolveTranslationProviders: null as (() => void) | null,
 
 	_getLocalSettingsUrl: function (): string {
 		const settingsLocation: string = app.LOUtil.getURL(
@@ -53,6 +55,7 @@ window.L.Map.Settings = window.L.Handler.extend({
 		// time anyone opens the dialog.
 		this._map.on('doclayerinit', this.askForSentenceChecking, this);
 		this._map.on('doclayerinit', this.askForRemoteCheckers, this);
+		this._map.on('doclayerinit', this.askForTranslationProviders, this);
 	},
 
 	removeHooks: function (): void {
@@ -61,6 +64,7 @@ window.L.Map.Settings = window.L.Handler.extend({
 		this._map.off('documentsettingsscope', this.sendSettingsScope, this);
 		this._map.off('doclayerinit', this.askForSentenceChecking, this);
 		this._map.off('doclayerinit', this.askForRemoteCheckers, this);
+		this._map.off('doclayerinit', this.askForTranslationProviders, this);
 	},
 
 	// Resolves when the engine answers, so the dialog can wait for a late
@@ -103,9 +107,25 @@ window.L.Map.Settings = window.L.Handler.extend({
 		return this._remoteCheckersAsked;
 	},
 
+	// The translation providers, as the engine has them set up, the same way.
+	askForTranslationProviders: function (): Promise<void> {
+		if (this._translationProvidersAsked) return this._translationProvidersAsked;
+		this._translationProvidersAsked = new Promise<void>((resolve) => {
+			this._resolveTranslationProviders = resolve;
+			app.socket.sendMessage('commandvalues command=.uno:TranslationProviders');
+			setTimeout(() => {
+				if (!this._resolveTranslationProviders) return; // answered in time
+				this._resolveTranslationProviders = null;
+				this._translationProvidersAsked = null;
+				resolve();
+			}, 2000);
+		});
+		return this._translationProvidersAsked;
+	},
+
 	// Which sentence checking rule packages the engine has. A language with no
 	// package installed gets no panel in the dialog. And how the remote
-	// checkers are set up.
+	// checkers and the translation providers are set up.
 	onCommandValues: function (e: any): void {
 		if (e.commandName === '.uno:SentenceCheckingPackages') {
 			app.sentenceCheckingPackages = Array.isArray(e.commandValues)
@@ -123,6 +143,15 @@ window.L.Map.Settings = window.L.Handler.extend({
 				this._resolveRemoteCheckers();
 				this._resolveRemoteCheckers = null;
 			}
+		} else if (e.commandName === '.uno:TranslationProviders') {
+			app.translationProviders =
+				e.commandValues && typeof e.commandValues === 'object'
+					? e.commandValues
+					: null;
+			if (this._resolveTranslationProviders) {
+				this._resolveTranslationProviders();
+				this._resolveTranslationProviders = null;
+			}
 		}
 	},
 
@@ -139,6 +168,7 @@ window.L.Map.Settings = window.L.Handler.extend({
 		// sentence checker out of the dialog for the rest of the session.
 		if (!app.sentenceCheckingPackages) await this.askForSentenceChecking();
 		if (!app.remoteGrammarCheckers) await this.askForRemoteCheckers();
+		if (!app.translationProviders) await this.askForTranslationProviders();
 
 		if (this._iframeDialog && this._iframeDialog.hasLoaded())
 			this.removeIframe();
@@ -170,6 +200,10 @@ window.L.Map.Settings = window.L.Handler.extend({
 			// dialog can show what is in force and which of it may be changed.
 			{
 				remote_checkers: JSON.stringify(app.remoteGrammarCheckers || []),
+			},
+			// The translation providers as the engine runs them, likewise.
+			{
+				translation_providers: JSON.stringify(app.translationProviders || null),
 			},
 			// Whether the document settings this document is running with are
 			// this user's own, and whether a change made now would be felt

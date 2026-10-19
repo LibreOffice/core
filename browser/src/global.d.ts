@@ -260,6 +260,8 @@ interface AppInterface {
 	sentenceCheckingPackages?: Array<{ id: string; locale: string }>;
 	// The remote sentence checkers as the engine has them set up.
 	remoteGrammarCheckers?: Array<any>;
+	// The translation providers as the engine runs them, for the settings dialog.
+	translationProviders?: any;
 	// Whether this document is running with this user's own document
 	// settings. It is running with whoever opened it first's.
 	userPresetsApplied?: boolean;
