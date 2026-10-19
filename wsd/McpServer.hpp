@@ -80,8 +80,11 @@ public:
         std::string documentFilename;
         /// The media type of the produced document.
         std::string documentMimeType;
+        /// The PNG bytes of a picture of the result, or empty for none. A picture is written as an
+        /// image content block after the main one, which a model can view directly.
+        std::string previewPng;
         /// A remark about the result, or empty for none. It is written as a text content block
-        /// after the main one.
+        /// after the main one and any picture.
         std::string note;
     };
 

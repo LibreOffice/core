@@ -176,8 +176,10 @@ void ConvertToBroker::dumpState(std::ostream& os)
     os << "\n   options: " << _options;
     os << "\n   inFilterOptions: " << _inFilterOptions;
     os << "\n   lang: " << _lang;
-    os << "\n   extractResponder: " << (_responders && _responders->extract);
-    os << "\n   saveAsResponder: " << (_responders && _responders->saveAs);
+    // The client session takes the responders when the conversion starts, and its own dump
+    // shows them from then on.
+    os << "\n   respondersBeforeStart: " << (_responders != nullptr);
+    os << "\n   renderSlideSheet: " << _renderSlideSheet;
     os << "\n   hasSaveAsResponder: " << _hasSaveAsResponder;
     os << "\n   waitingSocket: " << !_waitingSocket.expired();
     os << "\n   waitingRequestFailure: " << _waitingRequestFailure;
@@ -191,7 +193,11 @@ void ConvertToBroker::sendStartMessage(const std::shared_ptr<ClientSession>& cli
     clientSession->setLang(getLang());
 
     // add batch mode, no interactive dialogs
-    const std::string load = "load url=" + encodedFrom + " batch=true";
+    std::string load = "load url=" + encodedFrom + " batch=true";
+
+    // A picture of the slides shows the slides as they print, without spelling marks.
+    if (_renderSlideSheet)
+        load += " spellOnline=false";
     std::vector<char> loadRequest(load.begin(), load.end());
     clientSession->handleMessage(loadRequest);
 }
@@ -268,6 +274,10 @@ void ConvertToBroker::setLoaded()
         std::vector<char> unoRequest(unoCmd.begin(), unoCmd.end());
         _clientSession->handleMessage(unoRequest);
     }
+
+    // The kit takes its commands in order, so the sheet shows the document as it is saved.
+    if (_renderSlideSheet)
+        forwardToChild(_clientSession, "getslidesheet");
 
     // FIXME: Check for security violations.
     Poco::Path toPath(getPublicUri().getPath());

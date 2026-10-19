@@ -5528,6 +5528,39 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
 
         docBroker->closeDocument("thumbnailgenerated");
     }
+    else if (tokens.equals(0, "sendslidesheet:"))
+    {
+        // The payload is the first line followed by the PNG bytes of the sheet. The first line
+        // says how many slides the deck has and how many of them the sheet shows. The document
+        // stays open, since the save that follows the sheet still has to run.
+        const std::size_t firstLineSize = firstLine.size() + 1;
+        if (!_convertResponders || !_convertResponders->slideSheet)
+            LOG_WRN("Received a slide sheet that nothing asked for.");
+        else if (firstLine.find("error") != std::string::npos ||
+                 payload->data().size() <= firstLineSize)
+        {
+            auto responder = std::move(_convertResponders->slideSheet);
+            responder(false, "the slides could not be painted", std::string());
+        }
+        else
+        {
+            int slides = 0;
+            int painted = 0;
+            std::string note;
+            if (getTokenInteger(tokens, "slides", slides) &&
+                getTokenInteger(tokens, "painted", painted) && painted < slides)
+                note = "The picture shows the first " + std::to_string(painted) + " of the " +
+                       std::to_string(slides) + " slides.";
+
+            auto responder = std::move(_convertResponders->slideSheet);
+            responder(true,
+                      std::string(payload->data().data() + firstLineSize,
+                                  payload->data().size() - firstLineSize),
+                      note);
+        }
+
+        return true;
+    }
 
     // Fall-through, as we couldn't handle the message.
     return std::nullopt;
@@ -5550,6 +5583,13 @@ void ClientSession::failPendingResponder(const std::string& message)
         LOG_DBG("Reporting an unfinished convert request as a failure: " << message);
         auto responder = std::move(_convertResponders->saveAs);
         responder(false, message, std::string(), std::string());
+    }
+
+    if (_convertResponders->slideSheet)
+    {
+        LOG_DBG("Reporting an unfinished slide sheet request as a failure: " << message);
+        auto responder = std::move(_convertResponders->slideSheet);
+        responder(false, message, std::string());
     }
 }
 
@@ -6169,6 +6209,8 @@ void ClientSession::dumpState(std::ostream& os)
        << "\n\t\tsaveAsResponder: " << (_convertResponders && _convertResponders->saveAs)
        << "\n\t\ttransformNote: "
        << (_convertResponders ? _convertResponders->transformNote : std::string())
+       << "\n\t\tslideSheetResponder: "
+       << (_convertResponders && _convertResponders->slideSheet)
        << "\n\t\trequestedTiles: " << getRequestedTiles().size()
        << "\n\t\tbeingRendered: " << (!docBroker ? -1 : docBroker->tileCache().countTilesBeingRenderedForSession(client_from_this(), std::chrono::steady_clock::now()));
 

@@ -2462,6 +2462,17 @@ getthumbnail x=<Width> y=<Height>
 
     https://sdk.collaboraonline.com/docs/linking_api.html?highlight=thumbnail
 
+getslidesheet
+
+    Paints the slides of a presentation or drawing into one PNG image, 1200
+    pixels wide and at most 4096 pixels tall, with up to four slides in a row
+    for a short deck and up to ten for a long one. The first 100 slides are
+    painted. The kit answers with
+    'sendslidesheet: slides=<count> painted=<count>' followed by a newline and
+    the PNG bytes, where slides is the number of slides in the document and
+    painted the number the image shows, or with 'sendslidesheet: error' when
+    the document is not a presentation or drawing, or has no slides to paint.
+
 rendersearchresult <searchResultXml>
 
     This command generates an image (PNG) of a specific search result within a document.

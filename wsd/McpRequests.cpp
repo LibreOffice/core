@@ -292,9 +292,71 @@ McpServer::McpToolResult makeProducedDocumentResult(const std::string& downloadB
     return result;
 }
 
+/// Puts the responders for a produced document on the broker. The document comes back through
+/// complete, inline when asLink is false, and otherwise as a download link made by adding the
+/// document's identifier to downloadBase. With withSlideSheet, the kit also paints the slides into
+/// one picture before it saves the document, so the picture is known by the time the document
+/// arrives and both go back in one result. When the picture cannot be painted, the result says so
+/// only when noteMissingSheet is true. clientSocket is the socket the result is answered on.
+McpResponderInstaller makeProducedDocumentResponders(const McpServer::McpToolCompletion& complete,
+                                                     const std::string& downloadBase, bool asLink,
+                                                     bool withSlideSheet, bool noteMissingSheet,
+                                                     const std::weak_ptr<Socket>& clientSocket)
+{
+    return [complete, downloadBase, asLink, withSlideSheet, noteMissingSheet,
+            clientSocket](const std::shared_ptr<ConvertToBroker>& docBroker)
+    {
+        // The picture and its note, once the kit has painted it.
+        const auto slideSheet = std::make_shared<std::pair<std::string, std::string>>();
+        if (withSlideSheet)
+        {
+            docBroker->setSlideSheetResponder(
+                [slideSheet](bool success, const std::string& pngBytesOrError,
+                             const std::string& note)
+                {
+                    if (success)
+                        *slideSheet = { pngBytesOrError, note };
+                });
+        }
+
+        docBroker->setSaveAsResponder(
+            [complete, downloadBase, asLink, slideSheet, noteMissingSheet,
+             clientSocket](bool success, const std::string& pathOrError,
+                           const std::string& filename, const std::string& note)
+            {
+                // A stored document holds its room until its time passes, so the result is made
+                // only while the client is there to be given it.
+                const std::shared_ptr<Socket> client = clientSocket.lock();
+                if (success && (!client || !client->isOpen()))
+                {
+                    LOG_DBG_S("MCP: the client went away before the produced document was ready");
+                    complete({ /*isError=*/true, "The client went away before the result was "
+                                                 "ready." });
+                    return;
+                }
+
+                McpServer::McpToolResult result = makeProducedDocumentResult(
+                    downloadBase, asLink, success, pathOrError, filename, note);
+                std::string sheetNote;
+                if (success && !slideSheet->first.empty())
+                {
+                    result.previewPng = std::move(slideSheet->first);
+                    sheetNote = std::move(slideSheet->second);
+                }
+                else if (success && noteMissingSheet)
+                    sheetNote = "The picture of the slides could not be painted.";
+                if (!result.isError && !sheetNote.empty())
+                    result.note += (result.note.empty() ? "" : "\n") + sheetNote;
+                complete(std::move(result));
+            });
+    };
+}
+
 /// Run one conversion or transform over the document named by input. The produced document comes
 /// back through complete: as an embedded resource when asLink is false, or as a download link made
-/// from downloadBase.
+/// from downloadBase. A transform on a presentation or a drawing also returns a picture of its
+/// slides. The kit decides that from the loaded document, so a document of another type comes back
+/// without a picture or a note.
 bool startMcpConversion(const std::string& requestType, const std::string& format,
                         const std::string& options, const std::string& lang,
                         const std::string& transformJSON, const std::string& downloadBase,
@@ -309,17 +371,10 @@ bool startMcpConversion(const std::string& requestType, const std::string& forma
     brokerRequest.lang = lang;
     brokerRequest.transformJSON = transformJSON;
 
+    const bool withSlideSheet = requestType == "transform-document-structure";
     const McpResponderInstaller installResponder =
-        [complete, downloadBase, asLink](const std::shared_ptr<ConvertToBroker>& docBroker)
-    {
-        docBroker->setSaveAsResponder(
-            [complete, downloadBase, asLink](bool success, const std::string& pathOrError,
-                                             const std::string& filename, const std::string& note)
-            {
-                complete(makeProducedDocumentResult(downloadBase, asLink, success, pathOrError,
-                                                    filename, note));
-            });
-    };
+        makeProducedDocumentResponders(complete, downloadBase, asLink, withSlideSheet,
+                                       /*noteMissingSheet=*/false, disposition.getSocket());
 
     return startMcpDocumentRequest(brokerRequest, input, installResponder, disposition, id,
                                    complete);
@@ -384,13 +439,19 @@ bool startMcpPresentation(const Poco::JSON::Object::Ptr& arguments,
     std::string encodedTransform;
     Poco::URI::encode(deck.transformJSON, "", encodedTransform);
 
-    std::string format = arguments->optValue<std::string>("format", std::string());
-    if (format.empty())
-        format = "odp";
+    McpBrokerRequest brokerRequest;
+    brokerRequest.requestType = "transform-document-structure";
+    brokerRequest.format = arguments->optValue<std::string>("format", std::string());
+    if (brokerRequest.format.empty())
+        brokerRequest.format = "odp";
+    brokerRequest.transformJSON = encodedTransform;
 
-    return startMcpConversion("transform-document-structure", format, /*options=*/std::string(),
-                              /*lang=*/std::string(), encodedTransform, downloadBase, asLink,
-                              input, disposition, id, complete);
+    const McpResponderInstaller installResponder =
+        makeProducedDocumentResponders(complete, downloadBase, asLink, /*withSlideSheet=*/true,
+                                       /*noteMissingSheet=*/true, disposition.getSocket());
+
+    return startMcpDocumentRequest(brokerRequest, input, installResponder, disposition, id,
+                                   complete);
 }
 }
 

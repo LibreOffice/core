@@ -58,6 +58,8 @@ class ConvertToBroker : public StatelessBatchBroker
     /// The functions that carry the outcome to a caller in this process, until the session that
     /// loads the document takes them, or null when there are none.
     std::unique_ptr<ConvertResponders> _responders;
+    /// True when the slides are painted into a sheet before the document is saved.
+    bool _renderSlideSheet = false;
     /// True when a save-as responder was installed.
     bool _hasSaveAsResponder = false;
     /// The socket moved to this broker for the request, while it exists.
@@ -104,6 +106,19 @@ public:
     {
         responders().saveAs = std::move(responder);
         _hasSaveAsResponder = true;
+    }
+
+    /// Install the function that carries the outcome of painting the slides into one sheet: true,
+    /// the PNG bytes of the sheet and a note on success, false, a message and an empty note on
+    /// failure. The note says when the sheet shows only some of the slides. The sheet is painted
+    /// after the document is loaded and changed, and before it is saved.
+    void setSlideSheetResponder(
+        std::function<void(bool success, const std::string& pngBytesOrError,
+                           const std::string& note)>
+            responder)
+    {
+        responders().slideSheet = std::move(responder);
+        _renderSlideSheet = true;
     }
 
     /// Move socket to this broker for response & do conversion

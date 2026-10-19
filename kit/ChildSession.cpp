@@ -76,6 +76,7 @@
 #endif
 
 #include <algorithm>
+#include <cstdint>
 #include <cassert>
 #include <climits>
 #include <fstream>
@@ -595,6 +596,18 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         }
 
         return success;
+    }
+    else if (tokens.equals(0, "getslidesheet"))
+    {
+        if (!_isDocLoaded)
+        {
+            LOG_ERR("getslidesheet: the document is not loaded.");
+            const std::string error = "sendslidesheet: error";
+            sendTextFrame(error.data(), error.size());
+            return false;
+        }
+
+        return renderSlideSheet();
     }
     else if (tokens.equals(0, "addconfig"))
     {
@@ -6722,6 +6735,109 @@ bool ChildSession::setPage(const StringVector& tokens)
     getLOKitDocument()->setPart(pageString.c_str());
 
     return true;
+}
+
+bool ChildSession::renderSlideSheet()
+{
+    const std::shared_ptr<COKitDocument> document = getLOKitDocument();
+    const COKitDocumentType type = document->getDocumentType();
+    const int slideCount = document->getParts();
+
+    // Every slide of a presentation or drawing has the size of the document.
+    const COKitSize slideSize = document->getDocumentSize();
+
+    if (type != COKitDocumentType::PRESENTATION && type != COKitDocumentType::DRAWING)
+    {
+        LOG_DBG("getslidesheet: the document is not a presentation or a drawing.");
+        const std::string error = "sendslidesheet: error";
+        sendTextFrame(error.data(), error.size());
+        return false;
+    }
+
+    if (slideCount <= 0 || slideSize.nWidth <= 0 || slideSize.nHeight <= 0)
+    {
+        LOG_ERR("getslidesheet: the document has no slides to paint.");
+        const std::string error = "sendslidesheet: error";
+        sendTextFrame(error.data(), error.size());
+        return false;
+    }
+
+    // The sheet is 1200 pixels wide, with a gap around each slide. It holds up to four slides in
+    // a row. A deck of more than 32 slides gets more slides to a row, up to ten. The first 100
+    // slides are painted, so the sheet has at most ten rows. Each cell keeps the proportions of
+    // the page, held between four times as wide as tall and four times as tall as wide, and the
+    // cells are made shorter when the sheet would be more than 4096 pixels tall. Each slide is
+    // painted at the proportions of the page, as large as fits in the middle of its cell.
+    constexpr int sheetWidth = 1200;
+    constexpr int maxSheetHeight = 4096;
+    constexpr int maxPaintedSlides = 100;
+    constexpr int gap = 8;
+    const int paintedSlides = std::min(slideCount, maxPaintedSlides);
+    int columns = 1;
+    while (columns < 4 && columns * columns < paintedSlides)
+        ++columns;
+    columns = std::clamp((paintedSlides + 7) / 8, columns, 10);
+    const int rows = (paintedSlides + columns - 1) / columns;
+    const int cellWidth = (sheetWidth - gap * (columns + 1)) / columns;
+    const std::int64_t cellPageHeight =
+        std::clamp(slideSize.nHeight, slideSize.nWidth / 4, slideSize.nWidth * 4);
+    const int cellHeight = std::clamp(
+        static_cast<int>((cellWidth * cellPageHeight + slideSize.nWidth / 2) / slideSize.nWidth),
+        1, (maxSheetHeight - gap * (rows + 1)) / rows);
+    const int sheetHeight = rows * cellHeight + gap * (rows + 1);
+
+    const std::int64_t fullWidthHeight =
+        (cellWidth * slideSize.nHeight + slideSize.nWidth / 2) / slideSize.nWidth;
+    int drawWidth = cellWidth;
+    int drawHeight = static_cast<int>(std::clamp<std::int64_t>(fullWidthHeight, 1, cellHeight));
+    if (fullWidthHeight > cellHeight)
+        drawWidth = static_cast<int>(std::clamp<std::int64_t>(
+            (cellHeight * slideSize.nWidth + slideSize.nHeight / 2) / slideSize.nHeight, 1,
+            cellWidth));
+    const int drawLeft = (cellWidth - drawWidth) / 2;
+    const int drawTop = (cellHeight - drawHeight) / 2;
+
+    // The gaps are an opaque mid grey, which reads the same in either pixel order.
+    std::vector<unsigned char> sheet(static_cast<std::size_t>(sheetWidth) * sheetHeight * 4);
+    for (std::size_t index = 0; index < sheet.size(); index += 4)
+    {
+        sheet[index] = sheet[index + 1] = sheet[index + 2] = 0xc0;
+        sheet[index + 3] = 0xff;
+    }
+
+    std::vector<unsigned char> cell(static_cast<std::size_t>(drawWidth) * drawHeight * 4);
+    for (int slide = 0; slide < paintedSlides; ++slide)
+    {
+        const std::string partId = document->getPartId(slide, /*nMode=*/0);
+        std::fill(cell.begin(), cell.end(), 0);
+        document->paintPartTile(cell, partId.c_str(), /*nMode=*/0, drawWidth, drawHeight, 0, 0,
+                                slideSize.nWidth, slideSize.nHeight, /*bIsPreview=*/true);
+
+        const int left = gap + (slide % columns) * (cellWidth + gap) + drawLeft;
+        const int top = gap + (slide / columns) * (cellHeight + gap) + drawTop;
+        for (int row = 0; row < drawHeight; ++row)
+        {
+            std::copy_n(cell.begin() + static_cast<std::size_t>(row) * drawWidth * 4,
+                        drawWidth * 4,
+                        sheet.begin() +
+                            (static_cast<std::size_t>(top + row) * sheetWidth + left) * 4);
+        }
+    }
+
+    std::vector<char> png;
+    if (!Png::encodeBufferToPNG(sheet.data(), sheetWidth, sheetHeight, png,
+                                document->getTileMode()))
+    {
+        LOG_ERR("getslidesheet: encoding the slide sheet failed.");
+        const std::string error = "sendslidesheet: error";
+        sendTextFrame(error.data(), error.size());
+        return false;
+    }
+
+    std::string frame = "sendslidesheet: slides=" + std::to_string(slideCount) +
+                        " painted=" + std::to_string(paintedSlides) + '\n';
+    frame.append(png.data(), png.size());
+    return sendBinaryFrame(frame.data(), frame.size());
 }
 
 bool ChildSession::renderShapeSelection(const StringVector& tokens)

@@ -418,6 +418,9 @@ public:
 private:
     bool askSignatureStatus(const char* buffer, int length, const StringVector& tokens);
     bool renderShapeSelection(const StringVector& tokens);
+    /// Paints the first 100 slides of a presentation or drawing into one PNG, the slides in rows
+    /// from left to right, and sends it as a sendslidesheet: frame.
+    bool renderSlideSheet();
     bool removeTextContext(const StringVector& tokens);
     bool setTextCursor(const StringVector& tokens);
     bool setCellCursor(const StringVector& tokens);

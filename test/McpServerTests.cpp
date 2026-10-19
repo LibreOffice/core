@@ -46,6 +46,7 @@ class McpServerTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testToolsCallWithNonObjectArgumentsIsRejected);
     CPPUNIT_TEST(testToolFailureIsReportedAsAReadableResult);
     CPPUNIT_TEST(testToolSuccessIsReportedAsTextContent);
+    CPPUNIT_TEST(testPictureAndNoteFollowTheResult);
     CPPUNIT_TEST(testUnknownMethodIsRejected);
     CPPUNIT_TEST(testInvalidRequestsAreRejected);
     CPPUNIT_TEST(testUnsupportedProtocolHeaderIsRejected);
@@ -73,6 +74,7 @@ class McpServerTests : public CPPUNIT_NS::TestFixture
     void testToolsCallWithNonObjectArgumentsIsRejected();
     void testToolFailureIsReportedAsAReadableResult();
     void testToolSuccessIsReportedAsTextContent();
+    void testPictureAndNoteFollowTheResult();
     void testUnknownMethodIsRejected();
     void testInvalidRequestsAreRejected();
     void testUnsupportedProtocolHeaderIsRejected();
@@ -521,6 +523,42 @@ void McpServerTests::testToolSuccessIsReportedAsTextContent()
     LOK_ASSERT(contains(response.body, R"("isError":false)"));
     LOK_ASSERT(contains(response.body, R"("type":"text")"));
     LOK_ASSERT(contains(response.body, "the extracted document body"));
+}
+
+void McpServerTests::testPictureAndNoteFollowTheResult()
+{
+    constexpr std::string_view testname = __func__;
+
+    // A picture of the result comes after the main block as an image a model can view, and a note
+    // comes after that as text.
+    std::vector<McpServer::McpTool> tools = McpServer::documentToolDefinitions();
+    for (McpServer::McpTool& tool : tools)
+    {
+        tool.executor = [](const Poco::JSON::Object::Ptr&,
+                           const McpServer::McpToolCompletion& complete)
+        {
+            McpServer::McpToolResult outcome(/*error=*/false, "the deck");
+            outcome.previewPng = "the png bytes";
+            outcome.note = "a remark";
+            complete(std::move(outcome));
+            return true;
+        };
+    }
+
+    const McpServer::McpResponse response =
+        call(R"({"jsonrpc":"2.0","id":10,"method":"tools/call",)"
+             R"("params":{"name":"create_presentation","arguments":{}}})",
+             std::string(), tools);
+    LOK_ASSERT_EQUAL(200, response.statusCode);
+
+    const std::size_t deck = response.body.find("the deck");
+    const std::size_t image = response.body.find(R"("type":"image")");
+    const std::size_t note = response.body.find("a remark");
+    LOK_ASSERT(deck != std::string::npos);
+    LOK_ASSERT(image != std::string::npos && image > deck);
+    LOK_ASSERT(note != std::string::npos && note > image);
+    LOK_ASSERT(contains(response.body, R"("mimeType":"image/png")"));
+    LOK_ASSERT(contains(response.body, R"("data":")"));
 }
 
 void McpServerTests::testUnknownMethodIsRejected()

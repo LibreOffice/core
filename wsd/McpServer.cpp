@@ -98,8 +98,9 @@ std::string makeResultBody(const Poco::Dynamic::Var& id, const Poco::JSON::Objec
 
 // Wrap a tool outcome as a tools/call result. A text outcome is carried in a single text content
 // block. A document outcome is carried in one embedded resource content block whose blob is the
-// document bytes encoded as base64. A note follows as a further text content block. isError says
-// whether the outcome is a failure the model should read or the tool's successful output.
+// document bytes encoded as base64. A picture of the result follows as an image content block, and
+// a note as a further text content block. isError says whether the outcome is a failure the model
+// should read or the tool's successful output.
 std::string makeToolResultBody(const Poco::Dynamic::Var& id,
                                const McpServer::McpToolResult& outcome)
 {
@@ -127,6 +128,15 @@ std::string makeToolResultBody(const Poco::Dynamic::Var& id,
 
     Poco::JSON::Array::Ptr content = new Poco::JSON::Array();
     content->add(block);
+
+    if (!outcome.previewPng.empty())
+    {
+        Poco::JSON::Object::Ptr image = new Poco::JSON::Object();
+        image->set("type", "image");
+        image->set("data", macaron::Base64::Encode(outcome.previewPng));
+        image->set("mimeType", "image/png");
+        content->add(image);
+    }
 
     if (!outcome.note.empty())
     {
@@ -345,7 +355,9 @@ std::string makeTransformDocumentStructureDescription()
                "described below. A "
                "transform that names a command or key the server does not know, or a command "
                "that is not allowed, is refused, and the failure names it. Warnings about "
-               "commands that ran with a problem come back as a note after the document.\n\n") +
+               "commands that ran with a problem come back as a note after the document. A "
+               "transform on a presentation also returns a picture of its slides, laid out in "
+               "rows.\n\n") +
            DocumentToolDescriptions::TRANSFORM_INTRO +
            DocumentToolDescriptions::TRANSFORM_IMPRESS_INTRO + AIUtil::getSlideCommandDocs() +
            DocumentToolDescriptions::TRANSFORM_IMPRESS_DETAILS +
@@ -459,7 +471,9 @@ std::string makeCreatePresentationDescription()
            "\n\nThe \"image\" intent needs a picture generator, which this tool does not have, so "
            "a slide asking for one is refused. Set \"design\" to a name from "
            "list_design_templates to style the deck; the limits that design declares are the ones "
-           "the deck is checked against." +
+           "the deck is checked against.\n\nThe result also carries a picture of every slide, "
+           "laid out in rows, so the deck can be checked by eye and sent again with changes. When "
+           "the picture cannot be painted, a note says so and the deck is still returned." +
            OutputDescription;
 }
 

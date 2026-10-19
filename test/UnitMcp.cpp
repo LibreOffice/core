@@ -17,12 +17,14 @@
 
 #include <config.h>
 
+#include <chrono>
 #include <cstdint>
 #include <filesystem>
 #include <fstream>
 #include <string>
 #include <thread>
 #include <typeinfo>
+#include <utility>
 
 #include <unistd.h>
 
@@ -87,12 +89,33 @@ std::size_t countIncomingFiles(const std::string& childRootBase, const std::stri
 /// The name of a document whose kit exits when it is asked to save it, as a crash would end it.
 const std::string KitCrashName = "kitcrash";
 
+// The whole test runs in about a minute, and its slowest request, which paints a picture of 100
+// slides, in about five seconds. These limits leave room for a host six times slower.
+constexpr std::chrono::minutes TestTimeout(6);
+constexpr std::chrono::seconds RequestTimeout(60);
+
 /// The largest document the endpoint accepts in this test.
 constexpr std::int64_t MaxFileSize = 32 * 1024 * 1024;
 
 /// The largest request body the server holds in memory while it arrives. A larger upload is written
 /// to disk as it arrives.
 constexpr std::uintmax_t MaxInMemoryBody = 16 * 1024;
+
+/// A flat presentation with the given number of empty slides.
+std::string presentationWithSlides(int slides)
+{
+    std::string pages;
+    for (int slide = 0; slide < slides; ++slide)
+        pages += "<draw:page/>";
+    return R"(<?xml version="1.0" encoding="UTF-8"?>)"
+           R"(<office:document )"
+           R"(xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" )"
+           R"(xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" )"
+           R"(office:version="1.2" )"
+           R"(office:mimetype="application/vnd.oasis.opendocument.presentation">)"
+           R"(<office:body><office:presentation>)" +
+           pages + R"(</office:presentation></office:body></office:document>)";
+}
 }
 
 /// Inside the WSD process.
@@ -107,7 +130,7 @@ public:
         , _workerStarted(false)
     {
         setHasKitHooks();
-        setTimeout(1h);
+        setTimeout(TestTimeout);
     }
 
     ~UnitMcp()
@@ -221,6 +244,24 @@ public:
     static Poco::JSON::Object::Ptr firstContentBlock(const std::string& body)
     {
         return contentBlock(body, 0);
+    }
+
+    /// The width and height a PNG declares in its image header chunk, which is the first chunk and
+    /// holds both as four-byte big-endian numbers.
+    static std::pair<unsigned, unsigned> pngSize(const std::string& png)
+    {
+        if (png.size() < 24)
+            return { 0, 0 };
+
+        auto number = [&png](std::size_t offset)
+        {
+            unsigned value = 0;
+            for (std::size_t index = 0; index < 4; ++index)
+                value = (value << 8) | static_cast<unsigned char>(png[offset + index]);
+            return value;
+        };
+
+        return { number(16), number(20) };
     }
 
     /// The base64 blob of a document returned inline as an embedded resource.
@@ -506,6 +547,36 @@ public:
             LOK_ASSERT(!contains(structure, "plain text value"));
         }
 
+        // Building a deck returns the presentation and, after it, a picture of all its slides.
+        // Three wide slides sit two to a row on a sheet 1200 pixels wide, so the sheet is wider
+        // than it is tall.
+        {
+            const std::string slide = R"({"part":"body","intent":"bullets","title":"Slide",)"
+                                      R"("blocks":[{"kind":"bullets","items":["one","two"]}]})";
+            auto response = mcpCall(
+                session, R"({"jsonrpc":"2.0","id":11,"method":"tools/call","params":)"
+                         R"({"name":"create_presentation","arguments":{"spec":{"slides":[)" +
+                             slide + ',' + slide + ',' + slide + R"(]}}}})");
+            LOK_ASSERT(response->statusCode() == http::StatusCode::OK);
+            LOK_ASSERT(contains(response->getBody(), R"("isError":false)"));
+
+            const std::string odp = Util::base64Decode(resourceBlobFrom(response->getBody()));
+            LOK_ASSERT(odp.rfind("PK", 0) == 0);
+
+            auto image = contentBlock(response->getBody(), 1);
+            LOK_ASSERT(image);
+            LOK_ASSERT_EQUAL_STR("image", image->optValue<std::string>("type", std::string()));
+            LOK_ASSERT_EQUAL_STR("image/png",
+                                 image->optValue<std::string>("mimeType", std::string()));
+
+            const std::string png =
+                Util::base64Decode(image->optValue<std::string>("data", std::string()));
+            LOK_ASSERT(png.rfind(std::string("\x89PNG\r\n\x1a\n", 8), 0) == 0);
+            const auto [sheetWidth, sheetHeight] = pngSize(png);
+            LOK_ASSERT_EQUAL(1200u, sheetWidth);
+            LOK_ASSERT(sheetHeight > 0 && sheetHeight < sheetWidth);
+        }
+
         // A transform that names a key the engine does not know returns the document with the rest
         // applied, and a note that names the key.
         {
@@ -583,6 +654,35 @@ public:
                            .type() == typeid(Poco::JSON::Object::Ptr));
         }
 
+        // A transform on a presentation returns the changed deck and a picture of its slides.
+        {
+            const std::string deckPath = Poco::Path(TDOC, "hello.odp").toString();
+            const std::string deckData = Util::base64Encode(readWholeFile(deckPath));
+            auto response = mcpCall(
+                session, R"({"jsonrpc":"2.0","id":15,"method":"tools/call","params":)"
+                         R"({"name":"transform_document_structure","arguments":)"
+                         R"({"data":")" + deckData + R"(","filename":"hello.odp",)"
+                         R"("transform":"{\"Transforms\":{\"SlideCommands\":)"
+                         R"([{\"SetText.0\":\"New title\"}]}}"}}})");
+            LOK_ASSERT(response->statusCode() == http::StatusCode::OK);
+            LOK_ASSERT(contains(response->getBody(), R"("isError":false)"));
+            auto image = contentBlock(response->getBody(), 1);
+            LOK_ASSERT(image);
+            LOK_ASSERT_EQUAL_STR("image", image->optValue<std::string>("type", std::string()));
+
+            // The same deck sent without a file name is still known as a deck by its content.
+            response = mcpCall(
+                session, R"({"jsonrpc":"2.0","id":16,"method":"tools/call","params":)"
+                         R"({"name":"transform_document_structure","arguments":)"
+                         R"({"data":")" + deckData + R"(","format":"odp",)"
+                         R"("transform":"{\"Transforms\":{\"SlideCommands\":)"
+                         R"([{\"SetText.0\":\"New title\"}]}}"}}})");
+            LOK_ASSERT(contains(response->getBody(), R"("isError":false)"));
+            image = contentBlock(response->getBody(), 1);
+            LOK_ASSERT(image);
+            LOK_ASSERT_EQUAL_STR("image", image->optValue<std::string>("type", std::string()));
+        }
+
         // A filter that is not one of the views, and a range that is not a cell range, are readable
         // failures that name the argument.
         {
@@ -601,6 +701,26 @@ public:
                          R"("range":"A1:B5 "}}})");
             LOK_ASSERT(contains(response->getBody(), R"("isError":true)"));
             LOK_ASSERT(contains(textResultFrom(response->getBody()), "range argument"));
+        }
+
+        // The picture of a deck of more than 100 slides shows the first 100, says so, and stays
+        // within 4096 pixels in height.
+        {
+            const std::string deckData = Util::base64Encode(presentationWithSlides(120));
+            auto response = mcpCall(
+                session, R"({"jsonrpc":"2.0","id":22,"method":"tools/call","params":)"
+                         R"({"name":"transform_document_structure","arguments":)"
+                         R"({"data":")" + deckData + R"(","filename":"long.fodp",)"
+                         R"("transform":"{\"Transforms\":{}}","output":"link"}}})");
+            LOK_ASSERT(contains(response->getBody(), R"("isError":false)"));
+            auto image = contentBlock(response->getBody(), 1);
+            LOK_ASSERT(image);
+            const std::string png =
+                Util::base64Decode(image->optValue<std::string>("data", std::string()));
+            const auto [sheetWidth, sheetHeight] = pngSize(png);
+            LOK_ASSERT_EQUAL(1200u, sheetWidth);
+            LOK_ASSERT(sheetHeight > 0 && sheetHeight <= 4096);
+            LOK_ASSERT(contains(response->getBody(), "first 100 of the 120 slides"));
         }
 
         // Converting to a format the engine does not know is a readable tool failure, not a
@@ -752,7 +872,7 @@ public:
                 try
                 {
                     auto session = http::Session::create(helpers::getTestServerURI());
-                    session->setTimeout(std::chrono::seconds(30));
+                    session->setTimeout(RequestTimeout);
                     runTest(session);
                     exitTest(TestResult::Ok);
                 }
@@ -772,7 +892,7 @@ public:
     UnitKitMcp()
         : UnitKit("UnitKitMcp")
     {
-        setTimeout(1h);
+        setTimeout(TestTimeout);
     }
 
     bool filterKitMessage(WebSocketHandler*, std::string& message) override

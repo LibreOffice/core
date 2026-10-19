@@ -35,6 +35,11 @@ struct ConvertResponders
     /// document's note, or empty when it ran without one.
     std::string transformNote;
 
+    /// The outcome of painting the slides into one sheet: true, the PNG bytes of the sheet and a
+    /// note on success, or false, a message and an empty note on failure. The note says when the
+    /// sheet shows only some of the slides, and is empty otherwise.
+    std::function<void(bool success, const std::string& pngBytesOrError, const std::string& note)>
+        slideSheet;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
