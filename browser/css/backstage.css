@@ -27,6 +27,24 @@
 	font-family: var(--cool-font);
 }
 
+/* Fills for the classes in the embedded icons, which take theme colours here. In an icon
+ * loaded as an image, each shape's own fill attribute applies. */
+.backstage-view .icon-primary {
+	fill: var(--icon-primary-color);
+}
+.backstage-view .icon-secondary {
+	fill: var(--icon-secondary-color);
+}
+.backstage-view .icon-white {
+	fill: rgb(250, 250, 250);
+}
+.backstage-view .icon-gray {
+	fill: rgb(121, 119, 116);
+}
+.backstage-view .icon-light-purple {
+	fill: rgb(176, 142, 202);
+}
+
 [data-theme='dark'] .backstage-view {
 	--color-accent-background: var(--doc-type-color);
 	--icon-primary-color: rgb(138, 138, 138);
