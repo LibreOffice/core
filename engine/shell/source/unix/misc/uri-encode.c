@@ -30,8 +30,9 @@ int main(void) {
         c = getchar();
         if (c == EOF) {
             exit(errno == 0 ? EXIT_SUCCESS : EXIT_FAILURE);
-        } else if (isalnum(c) || strchr("!$'()*+,-.:=@_~/", c) != NULL) {
-            /* valid RFC 2396 pchar characters + '/' */
+        } else if (isalnum(c) || strchr("!$()*+-.:=@_~/", c) != NULL) {
+            /* valid RFC 2396 pchar characters + '/', less the quote and the comma, which delimit
+               the fields of a mail client's compose argument */
             if (putchar(c) == EOF) {
                 exit(EXIT_FAILURE);
             }
