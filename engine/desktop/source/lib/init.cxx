@@ -5771,6 +5771,13 @@ void COKitImpl::setOption(const char *pOption, const char* pValue)
         updateConfig(aConfigPath);
         // The per-session call (the per-user tree) arrives last and wins.
         comphelper::COKit::setUserConfigDir(aConfigPath);
+        // A translation provider may have been set up or taken away: every
+        // view is told anew whether there is one to translate with, as the
+        // client shows the command only while there is.
+        SolarMutexGuard aGuard;
+        for (SfxViewShell* pShell = SfxViewShell::GetFirst(false); pShell;
+             pShell = SfxViewShell::GetNext(*pShell, false))
+            pShell->GetViewFrame().GetBindings().Invalidate(SID_FM_TRANSLATE);
     }
     else if (strcmp(pOption, "addsharedpresetpaths") == 0)
     {

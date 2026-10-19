@@ -1353,6 +1353,7 @@ const std::map<std::u16string_view, KitUnoCommand>& GetKitUnoCommandList()
         { u"TransformDialog", { PayloadType::EnabledPayload, true } },
         { u"EditRegion", { PayloadType::EnabledPayload, true } },
         { u"ThesaurusDialog", { PayloadType::EnabledPayload, true } },
+        { u"Translate", { PayloadType::EnabledPayload, true } },
         { u"OutlineRight", { PayloadType::EnabledPayload, false } },
         { u"OutlineLeft", { PayloadType::EnabledPayload, false } },
         { u"OutlineDown", { PayloadType::EnabledPayload, false } },

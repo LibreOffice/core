@@ -24,6 +24,9 @@ interface MenuItem {
 	menu?: MenuItem[];
 	disabled?: boolean;
 	hidden?: boolean;
+	// Hide the entry, rather than grey it, while the engine reports its
+	// command as disabled.
+	hideWhenDisabled?: boolean;
 	mobileapp?: boolean;
 	iosapp?: boolean;
 	tablet?: boolean;
@@ -422,7 +425,7 @@ class Menubar extends window.L.Control {
 				{uno: '.uno:SpellOnline'},
 				window.translationEnabled ?
 					{
-						uno: '.uno:Translate'
+						uno: '.uno:Translate', hideWhenDisabled: true
 					}: {},
 				{uno: '.uno:ThesaurusDialog'},
 				{name: _UNO('.uno:LanguageMenu'), type: 'menu', menu: [
@@ -1213,7 +1216,7 @@ class Menubar extends window.L.Control {
 			{uno: '.uno:WordCountDialog'},
 			window.translationEnabled ?
 				{
-					uno: '.uno:Translate'
+					uno: '.uno:Translate', hideWhenDisabled: true
 				} : {},
 			{name: _UNO('.uno:RunMacro'), id: 'runmacro', uno: '.uno:RunMacro'},
 			{name: _('Latest Updates'), id: 'latestupdates', type: 'action', iosapp: false},
@@ -2189,6 +2192,13 @@ class Menubar extends window.L.Control {
 			const uno = $(aItem).data('uno');
 			const constChecked = 'lo-menu-item-checked';
 
+			// An entry hidden while its command is disabled: that depends on the
+			// command's state alone, in every mode.
+			if (type === 'unocommand' && $(aItem).data('hidewhendisabled')) {
+				const state = this._map['stateChangeHandler'].getItemValue(uno);
+				$(aItem).css('display', state === 'disabled' ? 'none' : '');
+			}
+
 			if (this._map.isEditMode()) {
 				if (type === 'unocommand') { // enable all depending on stored commandStates
 					var data, lang, languageAndCode;
@@ -3109,6 +3119,8 @@ class Menubar extends window.L.Control {
 				$(aItem).data('type', 'unocommand');
 				$(aItem).data('uno', menu[i].uno);
 				$(aItem).data('tag', menu[i].tag);
+				if (menu[i].hideWhenDisabled)
+					$(aItem).data('hidewhendisabled', true);
 				aItem.tabIndex = 0;
 			} else if (menu[i].type === 'separator') {
 				$(aItem).addClass('separator');

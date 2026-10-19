@@ -2347,6 +2347,9 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 					'type': 'bigtoolitem',
 					'text': _UNO('.uno:Translate', 'text'),
 					'command': '.uno:Translate',
+					// Shown only while a translation provider is set up: the
+					// engine disables the command while there is none.
+					'hideWhenDisabled': true,
 					'accessibility': { focusBack: false, combination: 'ZT', de: null }
 				}: {},
 			{ type: 'separator', id: 'review-wordcountdialog-break', orientation: 'vertical' },
