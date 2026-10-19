@@ -143,6 +143,8 @@ ClientSession::ClientSession(const std::shared_ptr<ProtocolHandlerInterface>& ws
     , _serverURL(requestDetails)
     , _auth(Authorization::create(uriPublic))
     , _tokenRefreshAttempts(0)
+    , _clipboardKeys(ClipboardTokenLengthBytes)
+    , _reconnectTokens(2 * ReconnectTokenLengthBytes)
     , _docBroker(docBroker)
     , _lastStateTime(std::chrono::steady_clock::now())
     , _parkedSince()
@@ -174,10 +176,6 @@ ClientSession::ClientSession(const std::shared_ptr<ProtocolHandlerInterface>& ws
     const std::size_t curConnections = ++COOLWSD::NumConnections;
     LOG_INF("ClientSession ctor [" << getName() << "] for URI: [" << _uriPublic.toString()
                                    << "], current number of connections: " << curConnections);
-
-    // populate with random values.
-    for (size_t i = 0; i < N_ELEMENTS(_clipboardKeys); ++i)
-        rotateClipboardKey(false);
 
     // Emit metadata Trace Events for the synthetic pid used for the Trace Events coming in from the
     // client's cool, and for its dummy thread.
@@ -276,13 +274,11 @@ void ClientSession::rotateClipboardKey(bool notifyClient)
     if (_state == SessionState::WAIT_DISCONNECT)
         return;
 
-    _clipboardKeys[1] = _clipboardKeys[0];
-    _clipboardKeys[0] = Util::rng::getHexString(
-        ClipboardTokenLengthBytes);
-    LOG_TRC("Clipboard key on [" << getId() << "] set to " << _clipboardKeys[0] <<
-            " last was " << _clipboardKeys[1]);
+    _clipboardKeys.rotate();
+    LOG_TRC("Clipboard key on [" << getId() << "] set to " << _clipboardKeys.getCurrent() <<
+            " last was " << _clipboardKeys.getPrevious());
     if (notifyClient)
-        sendTextFrame("clipboardkey: " + _clipboardKeys[0]);
+        sendTextFrame("clipboardkey: " + _clipboardKeys.getCurrent());
 }
 
 void ClientSession::rotateLinkToken(bool notifyClient)
@@ -303,33 +299,14 @@ void ClientSession::rotateReconnectToken(bool notifyClient)
     if (!isReconnectable() || _state == SessionState::WAIT_DISCONNECT || isParked())
         return;
 
-    _reconnectTokens[1] = _reconnectTokens[0];
-    _reconnectTokens[0] = Util::toLower(Util::rng::getHexString(2 * ReconnectTokenLengthBytes));
+    _reconnectTokens.rotate();
     if (notifyClient)
-        sendTextFrame("reconnecttoken: " + _reconnectTokens[0]);
+        sendTextFrame("reconnecttoken: " + _reconnectTokens.getCurrent());
 }
 
 bool ClientSession::matchesReconnectToken(std::string_view token) const
 {
-    // The time taken depends only on the lengths of the two tokens.
-    const auto equalConstantTime = [](std::string_view a, std::string_view b)
-    {
-        if (a.size() != b.size())
-            return false;
-
-        unsigned char diff = 0;
-        for (std::size_t i = 0; i < a.size(); ++i)
-            diff |= static_cast<unsigned char>(a[i]) ^ static_cast<unsigned char>(b[i]);
-        return diff == 0;
-    };
-
-    if (token.empty())
-        return false;
-
-    bool matches = false;
-    for (const std::string& it : _reconnectTokens)
-        matches |= !it.empty() && equalConstantTime(it, token);
-    return matches;
+    return _reconnectTokens.matches(token);
 }
 
 std::string ClientSession::getClipboardURI(bool encode)
@@ -337,7 +314,7 @@ std::string ClientSession::getClipboardURI(bool encode)
     if (_wopiFileInfo && _wopiFileInfo->getDisableCopy())
         return std::string();
 
-    return createPublicURI("clipboard", _clipboardKeys[0], encode);
+    return createPublicURI("clipboard", _clipboardKeys.getCurrent(), encode);
 }
 
 std::string ClientSession::createPublicURI(const std::string& subPath, const std::string& tag, bool encode)
@@ -373,8 +350,7 @@ bool ClientSession::matchesClipboardKeys(const std::string &/*viewId*/, const st
     }
 
     // FIXME: check viewId for paranoia if we can.
-    return std::any_of(std::begin(_clipboardKeys), std::end(_clipboardKeys),
-                       [&tag](const std::string& it) { return it == tag; });
+    return _clipboardKeys.matches(tag);
 }
 
 // Rewrite path to be visible to the outside world
@@ -4948,7 +4924,7 @@ bool ClientSession::shouldPark(const std::shared_ptr<DocumentBroker>& docBroker)
     (void)docBroker;
     return false;
 #else
-    if (!isReconnectable() || _reconnectTokens[0].empty() || _state != SessionState::LIVE ||
+    if (!isReconnectable() || _state != SessionState::LIVE ||
         isParked() || docBroker->isUnloading() || SigUtil::getShutdownRequestFlag() ||
         SigUtil::getTerminationFlag())
         return false;
@@ -5056,13 +5032,12 @@ void ClientSession::dumpState(std::ostream& os)
        << "\n\t\tkit ViewId: " << _kitViewId
        << "\n\t\tour URL (un-trusted): " << _serverURL.getSubURLForEndpoint("")
        << "\n\t\tisTextDocument: " << _isTextDocument
-       << "\n\t\tclipboardKeys[0]: " << _clipboardKeys[0]
-       << "\n\t\tclipboardKeys[1]: " << _clipboardKeys[1]
+       << "\n\t\tclipboardKeys[0]: " << _clipboardKeys.getCurrent()
+       << "\n\t\tclipboardKeys[1]: " << _clipboardKeys.getPrevious()
        << "\n\t\tclip sockets: " << _clipSockets.size()
        << "\n\t\tproxy access:: " << _proxyAccess
        << "\n\t\tlinkToken set: " << !_linkToken.empty()
        << "\n\t\tisRemoteDocumentConnection: " << _isRemoteDocumentConnection
-       << "\n\t\treconnectTokens: " << (_reconnectTokens[0].empty() ? "absent" : "present")
        << "\n\t\tparked: " << isParked()
        << "\n\t\tparkedFor: "
        << (isParked() ? std::chrono::duration_cast<std::chrono::seconds>(

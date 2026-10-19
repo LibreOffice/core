@@ -20,6 +20,7 @@
 #include <common/JailUtil.hpp>
 #include <common/Log.hpp>
 #include <common/Protocol.hpp>
+#include <common/RotatingToken.hpp>
 #include <common/Util.hpp>
 #include <wsd/COOLWSD.hpp>
 
@@ -88,7 +89,7 @@ public:
         return _cacheDir + '/' + std::to_string(_cacheFileId++);
     }
 
-    std::string insertClipboard(const std::string key[2],
+    std::string insertClipboard(const RotatingToken& key,
                          const std::string& clipFile)
     {
         Entry ent;
@@ -102,9 +103,10 @@ public:
         }
 
         ent._cacheFile = std::make_shared<FileUtil::OwnedFile>(cacheFile);
-        LOG_TRC("Insert cached clipboard: " << key[0] << " and " << key[1] << ", clip file of: " << cacheFile);
+        LOG_TRC("Insert cached clipboard: " << key.getCurrent() << " and " << key.getPrevious()
+                                            << ", clip file of: " << cacheFile);
         std::lock_guard<std::mutex> lock(_mutex);
-        _cache[key[0]] = _cache[key[1]] = std::move(ent);
+        _cache[key.getCurrent()] = _cache[key.getPrevious()] = std::move(ent);
         return cacheFile;
     }
 

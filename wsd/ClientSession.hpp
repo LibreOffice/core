@@ -17,6 +17,7 @@
 #pragma once
 
 #include <common/Rectangle.hpp>
+#include <common/RotatingToken.hpp>
 #include <common/Session.hpp>
 #include <common/TilePrioritizer.hpp>
 #include <common/Uri.hpp>
@@ -683,7 +684,7 @@ private:
     int _tokenRefreshAttempts;
 
     /// Rotating clipboard remote access identifiers - protected by GlobalSessionMapMutex
-    std::string _clipboardKeys[2];
+    RotatingToken _clipboardKeys;
 
     /// Target used for thumbnail rendering
     std::string _thumbnailTarget;
@@ -695,9 +696,8 @@ private:
     /// /cool/links for this view. Empty until the first is generated.
     std::string _linkToken;
 
-    /// The current and the previous token that lets a new connection take over this view, as 64 hex
-    /// digits. Both are empty until the first rotation.
-    std::string _reconnectTokens[2];
+    /// The token that lets a new connection take over this view, as 64 hex digits.
+    RotatingToken _reconnectTokens;
 
     /// Store last sent payload of form field button, so we can filter out redundant messages.
     std::string _lastSentFormFielButtonMessage;

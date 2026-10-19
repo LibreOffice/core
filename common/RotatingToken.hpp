@@ -16,6 +16,7 @@
 #include <chrono>
 #include <mutex>
 #include <string>
+#include <string_view>
 
 /// A rotating access token with current and previous values.
 /// Supports automatic time-based rotation and graceful validation of both tokens.
@@ -109,7 +110,7 @@ public:
     /// Check if a tag matches either the current or previous token.
     /// @param tag The tag to validate
     /// @return true if the tag matches current or previous token
-    bool matches(const std::string& tag) const
+    bool matches(std::string_view tag) const
     {
         if (tag.empty())
             return false;
