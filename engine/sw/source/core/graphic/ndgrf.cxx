@@ -203,7 +203,9 @@ bool SwGrfNode::ReRead(
                 else if ( bNewGrf )
                 {
                     //TODO refLink->setInputStream(getInputStream());
-                    mxLink->SwapIn();
+                    SwDocShell* pDocSh = GetDoc().GetDocShell();
+                    if (!pDocSh || pDocSh->getEmbeddedObjectContainer().getUserAllowsLinkUpdate())
+                        mxLink->SwapIn();
                 }
             }
             onGraphicChanged();
