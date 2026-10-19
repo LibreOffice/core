@@ -148,18 +148,20 @@ final class NativeUIServer: WebDriverHTTPServerBase {
 
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            guard let found = self.ax.findElement(matching: predicate) else {
+            let found = self.ax.findElement(matching: predicate)
+            guard let element = found.first else {
                 let tree = self.ax.dumpTree()
                 self.sendW3CError(
                     connection: connection,
                     error: "no such element",
-                    message: "No element matching \(predicate.attribute)=\(predicate.value)\n--- accessibility tree ---\n\(tree)"
+                    message: self.notFoundMessage(for: predicate, timedOut: found.timedOut)
+                        + "\n--- accessibility tree ---\n\(tree)"
                 )
                 return
             }
 
             let elementId = UUID().uuidString.lowercased()
-            self.elementsQueue.sync { self.elements[elementId] = found }
+            self.elementsQueue.sync { self.elements[elementId] = element }
             self.sendW3C(connection: connection, value: [
                 "element-6066-11e4-a52e-4f735466cecf": elementId
             ])
@@ -171,15 +173,32 @@ final class NativeUIServer: WebDriverHTTPServerBase {
 
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
-            let matches = self.ax.findAllElements(matching: predicate)
+            let found = self.ax.findAllElements(matching: predicate)
+            if found.elements.isEmpty && found.timedOut {
+                self.sendW3CError(connection: connection, error: "no such element",
+                                  message: self.notFoundMessage(for: predicate, timedOut: true))
+                return
+            }
             var elements: [[String: String]] = []
-            for elem in matches {
+            for elem in found.elements {
                 let elementId = UUID().uuidString.lowercased()
                 self.elementsQueue.sync { self.elements[elementId] = elem }
                 elements.append(["element-6066-11e4-a52e-4f735466cecf": elementId])
             }
             self.sendW3C(connection: connection, value: elements)
         }
+    }
+
+    /// Why a search came back empty.  A walk that ran out of time says so, since the element
+    /// may well exist further on in a tree too large to walk in the time, such as an open
+    /// panel listing a folder of thousands of files.
+    private func notFoundMessage(for predicate: SimpleXPath.Predicate, timedOut: Bool) -> String {
+        var message = "No element matching \(predicate.attribute)=\(predicate.value)"
+        if timedOut {
+            message += " in the \(Int(AXTree.walkSeconds)) seconds a walk of the tree may take;"
+                + " the tree is larger than that, so the element may exist further on"
+        }
+        return message
     }
 
     private func parsePredicate(_ request: HTTPRequest,

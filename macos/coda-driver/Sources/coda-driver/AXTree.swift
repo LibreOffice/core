@@ -27,6 +27,41 @@ import Foundation
  */
 final class AXTree {
 
+    /// What a search of the tree returned.
+    struct Found {
+        /// The matching elements, in tree order.
+        let elements: [AXUIElement]
+        /// True when the walk stopped at its time limit, so elements further on in the tree
+        /// are missing from the list.
+        let timedOut: Bool
+
+        var first: AXUIElement? { elements.first }
+    }
+
+    /// How many seconds one walk of the tree may take, for a search, a dump or the page
+    /// source alike.  Every attribute read is a round trip into the target process, and on
+    /// into the XPC service for a remote view such as NSOpenPanel, so a folder listing of
+    /// thousands of rows takes minutes to walk.  A walk that reaches this limit stops and
+    /// says so, instead of holding up the test until its own timeout.
+    static let walkSeconds: TimeInterval = 5
+
+    /// The time limit of one walk, or of a sequence of them.  Once past, it stays past.
+    final class Deadline {
+        private let end: CFAbsoluteTime
+        private(set) var passed = false
+
+        init(seconds: TimeInterval) {
+            end = CFAbsoluteTimeGetCurrent() + seconds
+        }
+
+        func isPast() -> Bool {
+            if !passed && CFAbsoluteTimeGetCurrent() > end {
+                passed = true
+            }
+            return passed
+        }
+    }
+
     private let pid: pid_t
     private let appElement: AXUIElement
 
@@ -45,24 +80,26 @@ final class AXTree {
 
     // MARK: - Find
 
-    func findElement(matching predicate: SimpleXPath.Predicate) -> AXUIElement? {
+    /// Find the first element matching the predicate.  The walk takes at most walkSeconds,
+    /// or stops at the given deadline when the caller has one for a longer sequence of calls.
+    func findElement(matching predicate: SimpleXPath.Predicate, roots: [AXUIElement]? = nil,
+                     deadline: Deadline? = nil, maxDepth: Int? = nil) -> Found {
         // @default-button is resolved by asking each window for its
         // kAXDefaultButton attribute, not by tree-walking.
         if predicate.attribute == "default-button" && predicate.value == "true" {
-            for window in orderedWindows() {
+            for window in roots ?? orderedWindows() {
                 if let btn = elementAttr(window, kAXDefaultButtonAttribute as String) {
-                    return btn
+                    return Found(elements: [btn], timedOut: false)
                 }
             }
-            return nil
+            return Found(elements: [], timedOut: false)
         }
-        for window in orderedWindows() {
-            if let m = walk(window, predicate: predicate) { return m }
+        return search(firstOnly: true, roots: roots, deadline: deadline, maxDepth: maxDepth) {
+            self.matches($0, predicate: predicate)
         }
-        return nil
     }
 
-    func findAllElements(matching predicate: SimpleXPath.Predicate) -> [AXUIElement] {
+    func findAllElements(matching predicate: SimpleXPath.Predicate) -> Found {
         if predicate.attribute == "default-button" && predicate.value == "true" {
             var out: [AXUIElement] = []
             for window in orderedWindows() {
@@ -70,30 +107,53 @@ final class AXTree {
                     out.append(btn)
                 }
             }
-            return out
+            return Found(elements: out, timedOut: false)
         }
+        return search(firstOnly: false) { self.matches($0, predicate: predicate) }
+    }
+
+    /// Walk the roots, by default every window most recent first, collecting the elements
+    /// the closure accepts.  With firstOnly the walk ends at the first match, and with
+    /// maxDepth it stays within that many levels of each root.
+    private func search(firstOnly: Bool, roots: [AXUIElement]? = nil, deadline: Deadline? = nil,
+                        maxDepth: Int? = nil, where accepts: (AXUIElement) -> Bool) -> Found {
+        let deadline = deadline ?? Deadline(seconds: AXTree.walkSeconds)
         var out: [AXUIElement] = []
-        for window in orderedWindows() {
-            walkAll(window, predicate: predicate, into: &out)
+        for root in roots ?? orderedWindows() {
+            walk(root, deadline: deadline, firstOnly: firstOnly, maxDepth: maxDepth, into: &out,
+                 where: accepts)
+            if (firstOnly && !out.isEmpty) || deadline.isPast() {
+                break
+            }
         }
-        return out
+        return Found(elements: out, timedOut: deadline.passed)
     }
 
-    private func walk(_ root: AXUIElement,
-                      predicate: SimpleXPath.Predicate) -> AXUIElement? {
-        if matches(root, predicate: predicate) { return root }
-        for child in arrayAttr(root, kAXChildrenAttribute as String) ?? [] {
-            if let found = walk(child, predicate: predicate) { return found }
-        }
-        return nil
-    }
-
-    private func walkAll(_ root: AXUIElement,
-                         predicate: SimpleXPath.Predicate,
-                         into out: inout [AXUIElement]) {
-        if matches(root, predicate: predicate) { out.append(root) }
-        for child in arrayAttr(root, kAXChildrenAttribute as String) ?? [] {
-            walkAll(child, predicate: predicate, into: &out)
+    /// Walk one root level by level.  The controls of a window, its buttons, fields and
+    /// sheets, sit a few levels down, while the rows of a file listing sit far below them,
+    /// so a walk that runs out of time has visited the controls and lost only rows.
+    private func walk(_ root: AXUIElement, deadline: Deadline, firstOnly: Bool, maxDepth: Int?,
+                      into out: inout [AXUIElement], where accepts: (AXUIElement) -> Bool) {
+        var queue = [(elem: root, depth: 0)]
+        var next = 0
+        while next < queue.count {
+            if deadline.isPast() {
+                return
+            }
+            let (elem, depth) = queue[next]
+            next += 1
+            if accepts(elem) {
+                out.append(elem)
+                if firstOnly {
+                    return
+                }
+            }
+            if let maxDepth = maxDepth, depth >= maxDepth {
+                continue
+            }
+            for child in childElementsToWalk(of: elem) {
+                queue.append((elem: child, depth: depth + 1))
+            }
         }
     }
 
@@ -164,7 +224,7 @@ final class AXTree {
             attribute: "accessibility-id", value: "PathTextField")
         var pathField: AXUIElement?
         for _ in 0..<30 {
-            if let f = findElement(matching: pathFieldPredicate) {
+            if let f = findElement(matching: pathFieldPredicate).first {
                 pathField = f
                 break
             }
@@ -290,24 +350,43 @@ final class AXTree {
 
     // MARK: - Tree dump
 
+    /// One line naming an element: its role, identifier and title.
+    private func describe(_ elem: AXUIElement) -> String {
+        let role = stringAttr(elem, kAXRoleAttribute as String) ?? ""
+        let id = stringAttr(elem, kAXIdentifierAttribute as String) ?? ""
+        let title = stringAttr(elem, kAXTitleAttribute as String) ?? ""
+        return "role=\"\(role)\" id=\"\(id)\" title=\"\(title)\""
+    }
+
     /// Return an indented plain-text dump of the AX tree, one line per
     /// element with its role, identifier and title.
     func dumpTree() -> String {
-        var out = ""
+        let deadline = Deadline(seconds: AXTree.walkSeconds)
+        var lines: [String] = []
         for window in orderedWindows() {
-            dump(window, depth: 0, into: &out)
+            dump(window, depth: 0, deadline: deadline, into: &lines)
+        }
+        var out = lines.joined(separator: "\n") + "\n"
+        if deadline.passed || lines.count >= AXTree.dumpLines {
+            out += "(the dump stopped after \(lines.count) lines"
+                + " or \(Int(AXTree.walkSeconds)) seconds; the tree goes on)\n"
         }
         return out
     }
 
-    private func dump(_ elem: AXUIElement, depth: Int, into out: inout String) {
-        let indent = String(repeating: "  ", count: depth)
-        let role = stringAttr(elem, kAXRoleAttribute as String) ?? ""
-        let id = stringAttr(elem, kAXIdentifierAttribute as String) ?? ""
-        let title = stringAttr(elem, kAXTitleAttribute as String) ?? ""
-        out += "\(indent)role=\"\(role)\" id=\"\(id)\" title=\"\(title)\"\n"
-        for child in childElements(of: elem) {
-            dump(child, depth: depth + 1, into: &out)
+    /// How many lines a dump of the tree may have.  A file listing of thousands of rows
+    /// says nothing about why a control was not found, and would push the useful lines
+    /// out of view.
+    private static let dumpLines = 400
+
+    private func dump(_ elem: AXUIElement, depth: Int, deadline: Deadline,
+                      into lines: inout [String]) {
+        if deadline.isPast() || lines.count >= AXTree.dumpLines {
+            return
+        }
+        lines.append(String(repeating: "  ", count: depth) + describe(elem))
+        for child in childElementsToWalk(of: elem) {
+            dump(child, depth: depth + 1, deadline: deadline, into: &lines)
         }
     }
 
@@ -323,15 +402,22 @@ final class AXTree {
     /// child indexes from the root, joined with spaces.  A synthetic
     /// desktop_frame root element wraps the target application's node,
     /// mirroring the AT-SPI desktop that contains the running
-    /// applications.
+    /// applications.  A web view's content is left out, the way every
+    /// walk of the tree leaves it out; the page is driven through the
+    /// WebDriver server inside the app.
     func pageSourceXML() -> String {
+        let deadline = Deadline(seconds: AXTree.walkSeconds)
         var out = "<desktop_frame name=\"main\" role=\"\" description=\"\" path=\"\">\n"
-        serialize(appElement, path: [0], depth: 1, into: &out)
+        serialize(appElement, path: [0], depth: 1, deadline: deadline, into: &out)
+        if deadline.passed {
+            out += "  <!-- the walk stopped after \(Int(AXTree.walkSeconds)) seconds;"
+                + " elements are missing -->\n"
+        }
         out += "</desktop_frame>\n"
         return out
     }
 
-    private func serialize(_ elem: AXUIElement, path: [Int], depth: Int,
+    private func serialize(_ elem: AXUIElement, path: [Int], depth: Int, deadline: Deadline,
                            into out: inout String) {
         let axRole = stringAttr(elem, kAXRoleAttribute as String) ?? ""
         let subrole = stringAttr(elem, kAXSubroleAttribute as String)
@@ -350,14 +436,17 @@ final class AXTree {
         }
         out += " path=\"\(path.map(String.init).joined(separator: " "))\""
 
-        let children = childElements(of: elem)
+        let children = deadline.isPast() ? [] : childElementsToWalk(of: elem)
         if children.isEmpty {
             out += "/>\n"
             return
         }
         out += ">\n"
         for (index, child) in children.enumerated() {
-            serialize(child, path: path + [index], depth: depth + 1, into: &out)
+            if deadline.isPast() {
+                break
+            }
+            serialize(child, path: path + [index], depth: depth + 1, deadline: deadline, into: &out)
         }
         out += "\(indent)</\(tag)>\n"
     }
@@ -464,6 +553,17 @@ final class AXTree {
             }
         }
         return elements
+    }
+
+    /// The children a walk descends into: the element's children and attached sheets, except
+    /// below a web area.  The content of a web view is a tree of thousands of nodes, each
+    /// read a round trip into the web content process, and the page is driven through the
+    /// WebDriver server inside the app, so the native tree ends at the web area element.
+    private func childElementsToWalk(of elem: AXUIElement) -> [AXUIElement] {
+        if stringAttr(elem, kAXRoleAttribute as String) == "AXWebArea" {
+            return []
+        }
+        return childElements(of: elem)
     }
 
     private func elementAttr(_ elem: AXUIElement, _ name: String) -> AXUIElement? {
