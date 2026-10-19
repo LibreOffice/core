@@ -112,9 +112,13 @@ bool CheckFileInfo::checkFileInfo(int redirectLimit)
             // callers can retry where they could not retry a refusal. A connection
             // dropped before the answer arrived (State::Error, which covers a
             // reset, an early EOF and a reply we couldn't parse) tells us exactly
-            // as little as one that never came, so it belongs here too.
-            if (httpResponse->state() == http::Response::State::Timeout ||
-                httpResponse->state() == http::Response::State::Error)
+            // as little as one that never came, so it belongs here too. But once
+            // the status line has arrived the host has answered, even if the
+            // connection breaks after it, and its status says how.
+            const bool gotStatus = httpResponse->statusLine().statusCategory() !=
+                                   http::StatusLine::StatusCodeClass::Invalid;
+            if (!gotStatus && (httpResponse->state() == http::Response::State::Timeout ||
+                               httpResponse->state() == http::Response::State::Error))
             {
                 _state = State::NoAnswer;
                 LOG_ERR("No answer to CheckFileInfo [" << uriAnonym
