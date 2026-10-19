@@ -39,7 +39,7 @@ class SvxSecurityLabelDialog final : public weld::GenericDialogController
     // hides the rest. Static widgets stay interactive in JSDialog (runtime-created ones
     // do not), so the pool is fixed; a policy needing more warns and is truncated.
     static constexpr int MAX_GROUPS = 10;
-    static constexpr int MAX_CATS = 100;
+    static constexpr int MAX_CATS = 300;
     svx::seclabel::SpifPolicySet m_aPolicySet;
     // The policy currently driving the editor (an entry of m_aPolicySet), or null
     // when no policy is provisioned.

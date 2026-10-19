@@ -9,6 +9,7 @@
 
 #include <sal/types.h>
 
+#include <rtl/strbuf.hxx>
 #include <rtl/ustring.hxx>
 
 #include <svx/seclabel/SpifPolicy.hxx>
@@ -34,6 +35,7 @@ class SpifPolicyTest : public CppUnit::TestFixture
     void testDeriveMarking();
     void testDeriveMarkingOwnership();
     void testMarkingMatrix();
+    void testLargePolicy();
 
     CPPUNIT_TEST_SUITE(SpifPolicyTest);
     CPPUNIT_TEST(testParse);
@@ -47,6 +49,7 @@ class SpifPolicyTest : public CppUnit::TestFixture
     CPPUNIT_TEST(testDeriveMarking);
     CPPUNIT_TEST(testDeriveMarkingOwnership);
     CPPUNIT_TEST(testMarkingMatrix);
+    CPPUNIT_TEST(testLargePolicy);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -821,6 +824,67 @@ void SpifPolicyTest::testMarkingMatrix()
                          marking(u"SECRET"_ustr, sel({ 0, 7, 8, 12 })));
     CPPUNIT_ASSERT_EQUAL(u"NATO/EAPC CONFIDENTIAL Releasable to RESOLUTE SUPPORT"_ustr,
                          marking(u"CONFIDENTIAL"_ustr, sel({ 2, 13 })));
+}
+
+void SpifPolicyTest::testLargePolicy()
+{
+    // Mirrors sixworks/spif-300.xml: 300 selectable categories over three tags (250, 30
+    // and 20). The dialog lists them all, so the selection indexing has to hold across
+    // groups of that size.
+    OStringBuffer aSpif(
+        "<?xml version=\"1.0\" encoding=\"utf-8\"?>"
+        "<spif:SPIF xmlns:spif=\"http://www.xmlspif.org/spif\" schemaVersion=\"1.0\" version=\"1\">"
+        "<spif:securityPolicyId name=\"SPIF Test 300\" id=\"1.2.826.0.1310.1.2.300\" />"
+        "<spif:securityClassifications>"
+        "<spif:securityClassification name=\"SECRET\" color=\"red\" lacv=\"4\" hierarchy=\"4\" />"
+        "</spif:securityClassifications><spif:securityCategoryTagSets>");
+    const auto appendTag = [&aSpif](std::string_view sTag, std::string_view sAttributes,
+                                    std::string_view sPrefix, int nCount, int nLacv) {
+        aSpif.append(OString::Concat("<spif:securityCategoryTagSet name=\"") + sTag
+                     + "\" id=\"1.2.3." + OString::number(nLacv)
+                     + "\"><spif:securityCategoryTag name=\"" + sTag + "\" " + sAttributes + ">");
+        for (int i = 1; i <= nCount; ++i)
+        {
+            aSpif.append(OString::Concat("<spif:tagCategory name=\"") + sPrefix + " "
+                         + OString::number(i) + "\" lacv=\"" + OString::number(nLacv + i)
+                         + "\" obsolete=\"false\" />");
+        }
+        aSpif.append("</spif:securityCategoryTag></spif:securityCategoryTagSet>");
+    };
+    appendTag("Releasable To", "tagType=\"enumerated\" enumType=\"permissive\"", "NATION", 250,
+              1000);
+    appendTag("Codewords", "tagType=\"enumerated\" enumType=\"restrictive\" maxSelection=\"5\"",
+              "CODEWORD", 30, 2000);
+    appendTag("Handling Caveat", "tagType=\"restrictive\" singleSelection=\"true\"", "CAVEAT", 20,
+              3000);
+    aSpif.append("</spif:securityCategoryTagSets></spif:SPIF>");
+
+    SvMemoryStream aStream(const_cast<char*>(aSpif.getStr()), aSpif.getLength(), StreamMode::READ);
+    svx::seclabel::SpifPolicy aPolicy;
+    CPPUNIT_ASSERT(aPolicy.parse(aStream));
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aPolicy.aTagSets.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(250), aPolicy.aTagSets[0].aTags[0].aCategories.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(30), aPolicy.aTagSets[1].aTags[0].aCategories.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(20), aPolicy.aTagSets[2].aTags[0].aCategories.size());
+
+    // The last category of each group, at selection indexes 249, 279 and 299.
+    std::vector<bool> aSelected(300, false);
+    aSelected[249] = aSelected[279] = aSelected[299] = true;
+    CPPUNIT_ASSERT(aPolicy.validate(u"SECRET"_ustr, aSelected).empty());
+
+    const auto aLabel = aPolicy.buildLabel(u"SECRET"_ustr, aSelected, OUString(), OUString());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), aLabel.aCategories.size());
+    CPPUNIT_ASSERT_EQUAL(u"NATION 250"_ustr, aLabel.aCategories[0].aValues[0]);
+    CPPUNIT_ASSERT_EQUAL(u"CODEWORD 30"_ustr, aLabel.aCategories[1].aValues[0]);
+    CPPUNIT_ASSERT_EQUAL(u"CAVEAT 20"_ustr, aLabel.aCategories[2].aValues[0]);
+
+    // maxSelection still applies to a group in the middle of a large policy.
+    for (int i = 250; i < 256; ++i)
+        aSelected[i] = true;
+    const auto aViolations = aPolicy.validate(u"SECRET"_ustr, aSelected);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aViolations.size());
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(svx::seclabel::SpifViolationType::MaxSelection),
+                         static_cast<int>(aViolations[0].eType));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(SpifPolicyTest);
