@@ -403,19 +403,54 @@ void watchRemoteCheckerConfig()
 // Takes the remote checker settings from the environment the server set up.
 // The languages are handed over separately: by the forkit, whose kits
 // inherit the servers' answers, and by a kit when it loads a document.
+// The server's settings, from the environment it set up, with the defaults
+// of the schema where it says nothing, as in the apps, which set no
+// variable at all: a value a user dropped from their own settings is the
+// server's again when this runs before theirs are applied. The groups'
+// nested choices, the Duden style checks and the Grammalecte rule
+// families, are the user's own and stay.
 void setRemoteCheckerConfig()
 {
     try
     {
         std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
 
+        LanguageToolCfg::IsEnabled::set(envBool("LANGUAGETOOL", "ENABLED").value_or(false), batch);
+        LanguageToolCfg::BaseURL::set(envString("LANGUAGETOOL", "BASEURL"), batch);
+        LanguageToolCfg::SSLCertVerify::set(envBool("LANGUAGETOOL", "SSL_VERIFICATION").value_or(true), batch);
+        LanguageToolCfg::Username::set(envString("LANGUAGETOOL", "USERNAME"), batch);
+        LanguageToolCfg::ApiKey::set(envString("LANGUAGETOOL", "APIKEY"), batch);
+
+        DudenCfg::IsEnabled::set(envBool("DUDEN", "ENABLED").value_or(false), batch);
+        DudenCfg::BaseURL::set(envString("DUDEN", "BASEURL"), batch);
+        DudenCfg::SSLCertVerify::set(envBool("DUDEN", "SSL_VERIFICATION").value_or(true), batch);
+        DudenCfg::ApiKey::set(envString("DUDEN", "APIKEY"), batch);
+        {
+            const std::optional<OUString> oValue = envString("DUDEN", "SPELLCHECKING_LEVEL");
+            DudenCfg::SpellcheckingLevel::set(oValue && !oValue->isEmpty() ? oValue->toInt32() : 3, batch);
+        }
+        {
+            const std::optional<OUString> oValue = envString("DUDEN", "ORTHOGRAPHY_STANDARD");
+            DudenCfg::OrthographyStandard::set(oValue && !oValue->isEmpty() ? *oValue : u"duden"_ustr, batch);
+        }
+        {
+            const std::optional<OUString> oValue = envString("DUDEN", "MESSAGE_LEVEL");
+            DudenCfg::MessageLevel::set(oValue && !oValue->isEmpty() ? oValue->toInt32() : 1, batch);
+        }
+        DudenCfg::PropertySets::set(envList("DUDEN", "PROPERTY_SETS").value_or(cpo::uno::Sequence<OUString>()), batch);
+        DudenCfg::Dictionaries::set(envList("DUDEN", "DICTIONARIES").value_or(cpo::uno::Sequence<OUString>()), batch);
+
+        GrammalecteCfg::IsEnabled::set(envBool("GRAMMALECTE", "ENABLED").value_or(false), batch);
+        GrammalecteCfg::BaseURL::set(envString("GRAMMALECTE", "BASEURL"), batch);
+        GrammalecteCfg::SSLCertVerify::set(envBool("GRAMMALECTE", "SSL_VERIFICATION").value_or(true), batch);
+
         // A profile that drove the Duden Korrekturserver through the
         // LanguageTool group, with RestProtocol set to "duden", has its server
-        // moved to the Duden group, once; the environment below, where there
-        // is one, has the last word.
+        // moved to the Duden group, once; a Duden server from the environment
+        // has the last word.
         if (LanguageToolCfg::RestProtocol::get().value_or(OUString()) == "duden")
         {
-            if (DudenCfg::BaseURL::get().value_or(OUString()).isEmpty())
+            if (envString("DUDEN", "BASEURL").value_or(OUString()).isEmpty())
             {
                 DudenCfg::BaseURL::set(LanguageToolCfg::BaseURL::get().value_or(OUString()), batch);
                 DudenCfg::ApiKey::set(LanguageToolCfg::ApiKey::get().value_or(OUString()), batch);
@@ -425,44 +460,6 @@ void setRemoteCheckerConfig()
             LanguageToolCfg::IsEnabled::set(false, batch);
             LanguageToolCfg::RestProtocol::set(OUString(), batch);
         }
-
-        if (const std::optional<bool> oEnabled = envBool("LANGUAGETOOL", "ENABLED"))
-            LanguageToolCfg::IsEnabled::set(*oEnabled, batch);
-        if (const std::optional<OUString> oValue = envString("LANGUAGETOOL", "BASEURL"))
-            LanguageToolCfg::BaseURL::set(*oValue, batch);
-        if (const std::optional<bool> oValue = envBool("LANGUAGETOOL", "SSL_VERIFICATION"))
-            LanguageToolCfg::SSLCertVerify::set(*oValue, batch);
-        if (const std::optional<OUString> oValue = envString("LANGUAGETOOL", "USERNAME"))
-            LanguageToolCfg::Username::set(*oValue, batch);
-        if (const std::optional<OUString> oValue = envString("LANGUAGETOOL", "APIKEY"))
-            LanguageToolCfg::ApiKey::set(*oValue, batch);
-
-        if (const std::optional<bool> oEnabled = envBool("DUDEN", "ENABLED"))
-            DudenCfg::IsEnabled::set(*oEnabled, batch);
-        if (const std::optional<OUString> oValue = envString("DUDEN", "BASEURL"))
-            DudenCfg::BaseURL::set(*oValue, batch);
-        if (const std::optional<bool> oValue = envBool("DUDEN", "SSL_VERIFICATION"))
-            DudenCfg::SSLCertVerify::set(*oValue, batch);
-        if (const std::optional<OUString> oValue = envString("DUDEN", "APIKEY"))
-            DudenCfg::ApiKey::set(*oValue, batch);
-        if (const std::optional<OUString> oValue = envString("DUDEN", "SPELLCHECKING_LEVEL"))
-            DudenCfg::SpellcheckingLevel::set(oValue->toInt32(), batch);
-        if (const std::optional<OUString> oValue = envString("DUDEN", "ORTHOGRAPHY_STANDARD"))
-            DudenCfg::OrthographyStandard::set(*oValue, batch);
-        if (const std::optional<OUString> oValue = envString("DUDEN", "MESSAGE_LEVEL");
-            oValue && !oValue->isEmpty())
-            DudenCfg::MessageLevel::set(oValue->toInt32(), batch);
-        if (const std::optional<cpo::uno::Sequence<OUString>> oValue = envList("DUDEN", "PROPERTY_SETS"))
-            DudenCfg::PropertySets::set(*oValue, batch);
-        if (const std::optional<cpo::uno::Sequence<OUString>> oValue = envList("DUDEN", "DICTIONARIES"))
-            DudenCfg::Dictionaries::set(*oValue, batch);
-
-        if (const std::optional<bool> oEnabled = envBool("GRAMMALECTE", "ENABLED"))
-            GrammalecteCfg::IsEnabled::set(*oEnabled, batch);
-        if (const std::optional<OUString> oValue = envString("GRAMMALECTE", "BASEURL"))
-            GrammalecteCfg::BaseURL::set(*oValue, batch);
-        if (const std::optional<bool> oValue = envBool("GRAMMALECTE", "SSL_VERIFICATION"))
-            GrammalecteCfg::SSLCertVerify::set(*oValue, batch);
 
         batch->commit();
     }

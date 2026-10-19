@@ -5116,15 +5116,16 @@ class SettingIframe {
 		return panel;
 	}
 
-	// Forgets every value of a settings group the user set, so the server's
+	// Forgets the values of a settings group the user set, so the server's
 	// settings, or the defaults where there is no server, apply again. The
-	// nested groups keep their shape.
+	// nested groups hold what the user chooses for themselves, the Duden
+	// style checks and the Grammalecte rule families: those stay.
 	private forgetOwnSettings(group: any): void {
 		for (const key of Object.keys(group)) {
 			const value = group[key];
 			if (value !== null && typeof value === 'object' && !Array.isArray(value))
-				this.forgetOwnSettings(value);
-			else group[key] = null;
+				continue;
+			group[key] = null;
 		}
 	}
 

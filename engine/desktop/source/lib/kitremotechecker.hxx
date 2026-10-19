@@ -27,7 +27,9 @@ namespace desktop::remotechecker
 std::optional<OUString> envString(const char* pPrefix, const char* pName);
 std::optional<bool> envBool(const char* pPrefix, const char* pName);
 
-// Takes the remote checker settings from the environment the server set up.
+// Takes the remote checker settings from the environment the server set up,
+// and the schema's defaults where it set none. Run again before a user's
+// own settings are applied, it puts back what the user may have dropped.
 void setRemoteCheckerConfig();
 
 // Switches the local spell checker off for the languages a reachable remote
