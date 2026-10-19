@@ -172,6 +172,13 @@ bool SbiImage::Load( SvStream& r, sal_uInt32& nVersion )
             }
             case FileOffset::PCode:
                 if( bBadVer ) break;
+                if (nLen > r.remainingSize())
+                {
+                    SAL_WARN("basic", "Parsing error: code of " << nLen
+                             << " does not fit the record");
+                    bError = true;
+                    break;
+                }
                 aCode.resize(nLen);
                 r.ReadBytes(aCode.data(), aCode.size());
                 if ( bLegacy )
@@ -591,7 +598,7 @@ void SbiImage::AddString( const OUString& r )
         std::unique_ptr<sal_Unicode[]> p(new sal_Unicode[nNewLen]);
         std::copy_n(pStrings.get(), nStringSize, p.get());
         pStrings = std::move(p);
-        nStringSize = sal::static_int_cast< sal_uInt16 >(nNewLen);
+        nStringSize = nNewLen;
     }
     if( !bError )
     {
