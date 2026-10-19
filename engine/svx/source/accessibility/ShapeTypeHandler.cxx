@@ -220,6 +220,9 @@ OUString ShapeTypeHandler::CreateAccessibleBaseName (const uno::Reference<drawin
         case DRAWING_MEASURE:
             pResourceId = STR_ObjNameSingulMEASURE;
             break;
+        case DRAWING_MEDIA:
+            pResourceId = STR_ObjNameSingulMEDIA;
+            break;
         case DRAWING_OPEN_BEZIER:
             pResourceId = STR_ObjNameSingulPATHLINE;
             break;

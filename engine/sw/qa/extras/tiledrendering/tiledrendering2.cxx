@@ -2191,6 +2191,31 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphShape)
     CPPUNIT_ASSERT_EQUAL(std::string("A small blue square"),
                          rImage.get<std::string>("description"));
     CPPUNIT_ASSERT_EQUAL(std::string("shape"), rImage.get<std::string>("kind", ""));
+    // the object name holds no type, as Writer's object names are "Shape 1" and the like
+    CPPUNIT_ASSERT_EQUAL(std::string("Rectangle"), rImage.get<std::string>("shapeType", ""));
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphCustomShape)
+{
+    // Given a custom shape, an ellipse, anchored as a character, without a title:
+    createDoc("a11y-custom-shape.fodt");
+    SwTestViewCallback aView;
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+    Scheduler::ProcessEventsToIdle();
+
+    // When the cursor moves into its paragraph:
+    pWrtShell->Down(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the shape is reported by its object name, with its type:
+    boost::property_tree::ptree aImages = aView.m_aA11yFocusedParagraph.get_child("images");
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aImages.size());
+    const boost::property_tree::ptree& rImage = aImages.begin()->second;
+    CPPUNIT_ASSERT_EQUAL(std::string("Shape 1"), rImage.get<std::string>("name"));
+    CPPUNIT_ASSERT_EQUAL(std::string("shape"), rImage.get<std::string>("kind", ""));
+    // Without the fix, there was no "shapeType".
+    CPPUNIT_ASSERT_EQUAL(std::string("Ellipse"), rImage.get<std::string>("shapeType", ""));
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphEmbeddedObject)

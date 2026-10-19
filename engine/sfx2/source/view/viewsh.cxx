@@ -749,9 +749,27 @@ struct ParagraphImage
     OUString aName;
     OUString aDescription;
     std::string_view aKind; // empty for an image
+    OUString aShapeType; // e.g. "Rectangle", for a shape
 
     bool operator==(const ParagraphImage&) const = default;
 };
+
+// The type of a shape, from the extended attributes of its accessible object; Writer's object
+// names are "Shape 1" and the like, so the accessible name of a shape holds no type
+OUString getShapeType(const uno::Reference<accessibility::XAccessibleContext>& xContext)
+{
+    if (xContext->getAccessibleRole() != accessibility::AccessibleRole::SHAPE)
+        return {};
+    const auto xAttributes = xContext.query<accessibility::XAccessibleExtendedAttributes>();
+    const OUString aAttributes = xAttributes.is() ? xAttributes->getExtendedAttributes() : OUString();
+    for (sal_Int32 nIndex = 0; nIndex >= 0;)
+    {
+        const std::u16string_view aAttribute = o3tl::getToken(aAttributes, 0, u';', nIndex);
+        if (std::u16string_view aType; o3tl::starts_with(aAttribute, u"style:", &aType))
+            return OUString(o3tl::trim(aType));
+    }
+    return {};
+}
 
 std::string_view getImageKind(const uno::Reference<accessibility::XAccessibleContext>& xContext)
 {
@@ -850,7 +868,8 @@ collectImages(const uno::Reference<css::accessibility::XAccessibleText>& xAccTex
             aResult.push_back({ .nPosition = nPosition,
                                 .aName = xGraphic->getAccessibleName(),
                                 .aDescription = xGraphic->getAccessibleDescription(),
-                                .aKind = getImageKind(xGraphic) });
+                                .aKind = getImageKind(xGraphic),
+                                .aShapeType = getShapeType(xGraphic) });
     }
     std::ranges::stable_sort(aResult, {}, &ParagraphImage::nPosition);
     return aResult;
@@ -883,6 +902,8 @@ boost::property_tree::ptree makeImagesTree(const std::vector<ParagraphImage>& rI
         aImage.put("description", rImage.aDescription.toUtf8().getStr());
         if (!rImage.aKind.empty())
             aImage.put("kind", std::string(rImage.aKind));
+        if (!rImage.aShapeType.isEmpty())
+            aImage.put("shapeType", rImage.aShapeType.toUtf8().getStr());
         aImages.push_back(std::make_pair("", aImage));
     }
     return aImages;
@@ -2013,6 +2034,8 @@ bool KitDocumentFocusListener::updateParagraphInfo(const uno::Reference<css::acc
 {
     if (!xAccText.is())
         return false;
+    // the shape types are in the language of this view, also on a change from another view
+    SfxKitLanguageGuard aLanguageGuard(m_pViewShell);
 
     bool bNotify = false;
     // If caret is present inside the paragraph (pos != -1), it means that paragraph has focus in the current view.

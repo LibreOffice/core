@@ -498,7 +498,10 @@ window.L.TextInput = window.L.Layer.extend({
 			// one unit for the caret, so a reader announces it entered and left, as for <img>
 			node.setAttribute('contenteditable', 'false');
 			node.setAttribute('role', 'img');
-			const kind = this._getImageKindLabel(image.kind);
+			// a shape is read by its type when the engine sends one, unless that is its name already
+			const type = image.kind === 'shape' && image.shapeType;
+			const kind = type && type !== (image.name || '').trim()
+				? type : this._getImageKindLabel(image.kind);
 			if (kind)
 				node.setAttribute('aria-roledescription', kind);
 			node.setAttribute('aria-label', image.name);

@@ -32,6 +32,7 @@ namespace cool {
 		name: string;
 		description: string;
 		kind?: 'shape' | 'formula' | 'chart' | 'object' | 'frame';
+		shapeType?: string; // as the engine sends it, e.g. "Rectangle"
 	}
 
 	// a range of the paragraph text, ending after the U+FFFC of its anchor

@@ -28,7 +28,7 @@ describe(['tagdesktop'], 'Writer shapes and objects for the reader', { testIsola
 		cy.cGet('#clipboard-area [role="img"]').should(function ($images) {
 			expect($images, 'the images').to.have.length(2);
 			expect($images.eq(0).attr('aria-label'), 'the shape name').to.equal('Shape 1 Blue box');
-			expect($images.eq(0).attr('aria-roledescription'), 'the shape role').to.equal('Shape');
+			expect($images.eq(0).attr('aria-roledescription'), 'the shape role').to.equal('Rectangle');
 			expect($images.eq(1).attr('aria-label'), 'the formula name').to.equal('Half of b');
 			expect($images.eq(1).attr('aria-roledescription'), 'the formula role').to.equal('Formula');
 		});
@@ -40,7 +40,7 @@ describe(['tagdesktop'], 'Writer shapes and objects for the reader', { testIsola
 				expect(images.map(function (node) { return node.name; }), 'the objects read')
 					.to.deep.equal(['Shape 1 Blue box', 'Half of b']);
 				expect(images.map(function (node) { return node.properties.roledescription; }),
-					'the roles read').to.deep.equal(['Shape', 'Formula']);
+					'the roles read').to.deep.equal(['Rectangle', 'Formula']);
 			});
 		});
 	});
