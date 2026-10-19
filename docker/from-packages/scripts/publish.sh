@@ -81,16 +81,16 @@ make_provenance() {
     cat > "$WORKDIR/provenance.json" <<EOF
 {
   "buildDefinition": {
-    "buildType": "https://collaboraonline.github.io/build-types/docker-from-packages@v1",
+    "buildType": "https://github.com/CollaboraOnline/online.mirror/blob/main/docker/README",
     "externalParameters": {
-      "source": "https://github.com/CollaboraOnline/online",
+      "source": "https://github.com/CollaboraOnline/online.mirror",
       "revision": "${commit}",
       "dockerfile": "docker/from-packages/Dockerfile",
       "imageRef": "${ref}"
     }
   },
   "runDetails": {
-    "builder": { "id": "https://collaboraoffice.com/docker-publisher" },
+    "builder": { "id": "https://sdk.collaboraonline.com/docs/installation/Docker_image.html" },
     "metadata": { "finishedOn": "$(date -u +%Y-%m-%dT%H:%M:%SZ)" }
   }
 }
