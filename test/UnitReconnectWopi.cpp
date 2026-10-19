@@ -39,6 +39,7 @@ class UnitReconnectWopi : public WopiTestServer
     std::mutex _mutex;
     std::string _lastPutFileToken;
     std::atomic<int> _putFiles{ 0 };
+    std::atomic<int> _viewsLoaded{ 0 };
 
     void configure(Poco::Util::LayeredConfiguration& config) override
     {
@@ -73,6 +74,21 @@ class UnitReconnectWopi : public WopiTestServer
         _lastPutFileToken = accessTokenOf(request);
         ++_putFiles;
         return nullptr;
+    }
+
+    void onDocBrokerViewLoaded(const std::string&, const std::shared_ptr<ClientSession>&) override
+    {
+        ++_viewsLoaded;
+    }
+
+    /// Waits until the server has counted this many views as loaded. Only a loaded view is kept
+    /// for its browser to reconnect to.
+    bool waitForViewsLoaded(int count)
+    {
+        const auto deadline = std::chrono::steady_clock::now() + std::chrono::seconds(30);
+        while (_viewsLoaded < count && std::chrono::steady_clock::now() < deadline)
+            std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        return _viewsLoaded >= count;
     }
 
     std::string lastPutFileToken()
@@ -180,11 +196,13 @@ UnitBase::TestResult UnitReconnectWopi::testChangedPermissionIsNotReattached()
     setTestname(__func__);
     TST_LOG("Starting Test: " << testname);
 
+    _viewsLoaded = 0;
     auto sessionA = connect(wopiSrc("permission.odt", "alice"));
     const std::string token = waitForToken(*sessionA);
     LOK_ASSERT(!token.empty());
     const int viewIdA = waitForStatusViewId(*sessionA, std::chrono::seconds(30));
     LOK_ASSERT(viewIdA >= 0);
+    LOK_ASSERT(waitForViewsLoaded(1));
     sessionA->dropWS();
     LOK_ASSERT(sessionA->waitForDisconnection(std::chrono::seconds(10)));
 
@@ -205,6 +223,7 @@ UnitBase::TestResult UnitReconnectWopi::testReconnectRenewsAccessToken()
     setTestname(__func__);
     TST_LOG("Starting Test: " << testname);
 
+    _viewsLoaded = 0;
     auto sessionA = connect(wopiSrc("renewed-token.odt", "alice"));
     const std::string token = waitForToken(*sessionA);
     LOK_ASSERT(!token.empty());
@@ -215,6 +234,7 @@ UnitBase::TestResult UnitReconnectWopi::testReconnectRenewsAccessToken()
                        !sessionA->waitForMessage("statechanged: .uno:ModifiedStatus=true",
                                                  std::chrono::seconds(10))
                             .empty());
+    LOK_ASSERT(waitForViewsLoaded(1));
     sessionA->dropWS();
     LOK_ASSERT(sessionA->waitForDisconnection(std::chrono::seconds(10)));
 
