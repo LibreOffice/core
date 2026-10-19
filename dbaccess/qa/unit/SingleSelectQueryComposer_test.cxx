@@ -14,11 +14,13 @@
 #include <com/sun/star/beans/XPropertyContainer.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
+#include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
 #include <com/sun/star/sdb/XSingleSelectQueryComposer.hpp>
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
+#include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
@@ -42,7 +44,7 @@ CPPUNIT_TEST_FIXTURE(SingleSelectQueryComposerTest, testConditionByColumn)
     xComposer->setQuery("SELECT * FROM \"CUSTOMERS\"");
     Sequence<Any> aArgs{ Any(NamedValue(u"AutomaticAddition"_ustr, Any(true))) };
     Reference<beans::XPropertyContainer> filter(
-        m_xSFactory->createInstanceWithArguments(u"com.sun.star.beans.PropertyBag"_ustr, aArgs),
+        xFactory->createInstanceWithArguments(u"com.sun.star.beans.PropertyBag"_ustr, aArgs),
         UNO_QUERY);
 
     filter->addProperty(u"Name"_ustr, PropertyAttribute::MAYBEVOID, Any(u"COMMENT"_ustr));
@@ -65,6 +67,47 @@ CPPUNIT_TEST_FIXTURE(SingleSelectQueryComposerTest, testConditionByColumn)
     // The row returned should be the 4th, i.e. the one that
     // contains the Value "Good One"
     CPPUNIT_ASSERT_EQUAL(u"4"_ustr, xRow->getString(1));
+}
+
+// test various sub query related features ("queries in queries")
+CPPUNIT_TEST_FIXTURE(SingleSelectQueryComposerTest, testSubQueries)
+{
+    uno::Reference<XConnection> xConnection = setUpDBConnection();
+
+    uno::Reference<lang::XMultiServiceFactory> xFactory(xConnection, UNO_QUERY);
+    CPPUNIT_ASSERT(xFactory.is());
+
+    Reference<XSingleSelectQueryComposer> xComposer(
+        xFactory->createInstance(u"com.sun.star.sdb.SingleSelectQueryComposer"_ustr),
+        UNO_QUERY_THROW);
+
+    uno::Reference<sdb::XOfficeDatabaseDocument> xDocument(mxComponent, UNO_QUERY_THROW);
+    const OUString INNERPRODUCTSQUERY = u"products (inner)"_ustr;
+    DBTestBase::createQuery(u"SELECT * FROM \"PRODUCTS\""_ustr, true, INNERPRODUCTSQUERY,
+                            xDocument->getDataSource());
+
+    xComposer->setQuery(u"SELECT * FROM \""_ustr + INNERPRODUCTSQUERY + u"\""_ustr);
+
+    Reference<sdbcx::XTablesSupplier> suppTables(xComposer, UNO_QUERY_THROW);
+    Reference<container::XNameAccess> tables = suppTables->getTables();
+    CPPUNIT_ASSERT(tables->hasElements());
+    CPPUNIT_ASSERT(tables->hasByName(INNERPRODUCTSQUERY));
+
+    Reference<XQueriesSupplier> xQuerySupplier(xConnection, UNO_QUERY_THROW);
+    Reference<container::XNameAccess> xQueryAccess = xQuerySupplier->getQueries();
+    CPPUNIT_ASSERT(xQueryAccess->hasElements());
+
+    Reference<XPropertySet> xQuery(xQueryAccess->getByName(INNERPRODUCTSQUERY), UNO_QUERY);
+    OUString sInnerProductsQuery;
+    xQuery->getPropertyValue(u"Command"_ustr) >>= sInnerProductsQuery;
+
+    const OUString sExpectedQuery = u"SELECT * FROM ( "_ustr + sInnerProductsQuery
+                                    + u" )"
+                                      " AS \""_ustr
+                                    + INNERPRODUCTSQUERY + u"\""_ustr;
+    const OUString sExecutableQuery = xComposer->getQueryWithSubstitution();
+
+    CPPUNIT_ASSERT_EQUAL(sExpectedQuery, sExecutableQuery);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
