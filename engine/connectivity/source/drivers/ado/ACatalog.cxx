@@ -85,18 +85,4 @@ void OCatalog::refreshViews()
         m_pViews.reset( new OViews(this,m_aMutex,aVector,aViews,m_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers()) );
 }
 
-void OCatalog::refreshUsers()
-{
-    ::std::vector< OUString> aVector;
-
-    WpADOUsers aUsers = m_aCatalog.get_Users();
-    aUsers.fillElementNames(aVector);
-
-    if(m_pUsers)
-        m_pUsers->reFill(aVector);
-    else
-        m_pUsers.reset( new OUsers(this,m_aMutex,aVector,aUsers,m_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers()) );
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

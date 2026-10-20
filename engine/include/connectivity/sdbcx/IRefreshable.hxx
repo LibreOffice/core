@@ -23,15 +23,6 @@
 
 namespace connectivity::sdbcx
 {
-    class OOO_DLLPUBLIC_DBTOOLS SAL_NO_VTABLE IRefreshableUsers
-    {
-    public:
-        virtual void refreshUsers() = 0;
-
-    protected:
-        ~IRefreshableUsers() {}
-    };
-
     class OOO_DLLPUBLIC_DBTOOLS SAL_NO_VTABLE IRefreshableColumns
     {
     public:

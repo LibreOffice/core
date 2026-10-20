@@ -119,7 +119,6 @@
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
 #include <com/sun/star/sdbcx/XKeysSupplier.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
-#include <com/sun/star/sdbcx/XUsersSupplier.hpp>
 #include <com/sun/star/util/Date.hpp>
 #include <com/sun/star/util/DateTime.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>

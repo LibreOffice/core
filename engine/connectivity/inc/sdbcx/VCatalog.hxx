@@ -21,7 +21,6 @@
 
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
-#include <com/sun/star/sdbcx/XUsersSupplier.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <connectivity/CommonTools.hxx>
@@ -44,13 +43,11 @@ namespace connectivity::sdbcx
 
     typedef ::cppu::WeakComponentImplHelper< css::sdbcx::XTablesSupplier,
                                              css::sdbcx::XViewsSupplier,
-                                             css::sdbcx::XUsersSupplier,
                                              css::lang::XServiceInfo> OCatalog_BASE;
 
 
     class OOO_DLLPUBLIC_DBTOOLS SAL_NO_VTABLE OCatalog :
-                        public OCatalog_BASE,
-                        public IRefreshableUsers
+                        public OCatalog_BASE
     {
     protected:
 
@@ -60,7 +57,6 @@ namespace connectivity::sdbcx
         // they are hold weak
         std::unique_ptr<OCollection> m_pTables;
         std::unique_ptr<OCollection> m_pViews;
-        std::unique_ptr<OCollection> m_pUsers;
 
         cpo::uno::Reference< css::sdbc::XDatabaseMetaData > m_xMetaData; // just to make things easier
 
@@ -92,16 +88,12 @@ namespace connectivity::sdbcx
         // refreshViews is called when the method getViews had been called
         virtual void refreshViews()     = 0;
 
-        // the other refresh methods come from base classes IRefreshableGroups and IRefreshableUsers
-
         // ::cppu::OComponentHelper
         virtual void disposing() override;
         // XTablesSupplier
         virtual cpo::uno::Reference< css::container::XNameAccess > getTables(  ) override;
         // XViewsSupplier
         virtual cpo::uno::Reference< css::container::XNameAccess > getViews(  ) override;
-        // XUsersSupplier
-        virtual cpo::uno::Reference< css::container::XNameAccess > getUsers(  ) override;
 
     };
 

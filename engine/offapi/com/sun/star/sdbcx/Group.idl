@@ -19,21 +19,14 @@
 
  module com {  module sun {  module star {  module sdbcx {
 
- published interface XUsersSupplier;
-
 
 /** represents a group of users, which has certain access rights for the objects
     of the database.
  */
 published service Group
 {
-    /** gives access to the users which contains to this group.
-    */
-    interface XUsersSupplier;
-
     // gives access to the properties.
     interface com::sun::star::beans::XPropertySet;
-
 
     /** is the name of the group.
      */

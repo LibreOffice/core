@@ -33,7 +33,6 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
-#include <com/sun/star/sdbcx/XUsersSupplier.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdb/tools/XConnectionTools.hpp>
@@ -57,7 +56,6 @@ typedef cppu::ImplInheritanceHelper<    connectivity::OConnectionWrapper
                                     ,   css::sdbc::XWarningsSupplier
                                     ,   css::sdb::XQueriesSupplier
                                     ,   css::lang::XMultiServiceFactory
-                                    ,   css::sdbcx::XUsersSupplier
                                     ,   css::sdb::tools::XConnectionTools
                                     >   OConnection_Base;
 
@@ -92,7 +90,6 @@ class OConnection final     :public OConnection_Base
     ::dbtools::WarningsContainer    m_aWarnings;
     std::atomic<std::size_t>        m_nInAppend;
     bool                            m_bSupportsViews;       // true when the getTableTypes return "VIEW" as type
-    bool                            m_bSupportsUsers;
 
     virtual ~OConnection() override;
 public:
@@ -157,9 +154,6 @@ public:
     virtual cpo::uno::Reference< cpo::uno::XInterface > createInstance( const OUString& aServiceSpecifier ) override;
     virtual cpo::uno::Reference< cpo::uno::XInterface > createInstanceWithArguments( const OUString& ServiceSpecifier, const cpo::uno::Sequence< cpo::uno::Any >& Arguments ) override;
     virtual cpo::uno::Sequence< OUString > getAvailableServiceNames(  ) override;
-
-    // XUsersSupplier
-    virtual cpo::uno::Reference< css::container::XNameAccess > getUsers(  ) override;
 
     // XConnectionTools
     virtual cpo::uno::Reference< css::sdb::tools::XObjectNames > getObjectNames(  ) override;

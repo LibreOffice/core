@@ -32,7 +32,6 @@ namespace connectivity::evoab
         OEvoabConnection* getConnection() const { return m_pConnection; }
         virtual void refreshTables() override;
         virtual void refreshViews() override {}
-        virtual void refreshUsers() override {}
 // XTablesSupplier
         virtual cpo::uno::Reference< css::container::XNameAccess > getTables(
                                     ) override;

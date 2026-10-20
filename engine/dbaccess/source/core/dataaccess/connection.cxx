@@ -260,7 +260,6 @@ OConnection::OConnection(ODatabaseSource& _rDB
             ,m_aWarnings( Reference< XWarningsSupplier >( _rxMaster, UNO_QUERY ) )
             ,m_nInAppend(0)
             ,m_bSupportsViews(false)
-            ,m_bSupportsUsers(false)
 {
     osl_atomic_increment(&m_refCount);
 
@@ -337,7 +336,6 @@ OConnection::OConnection(ODatabaseSource& _rDB
                 m_pViews->addContainerListener(m_pTables.get());
                 m_pTables->addContainerListener(m_pViews.get());
             }
-            m_bSupportsUsers = Reference< XUsersSupplier> (getMasterTables(),UNO_QUERY).is();
 
             impl_checkTableQueryNames_nothrow();
         }
@@ -395,8 +393,6 @@ Sequence< Type > OConnection::getTypes()
 
     if ( !m_bSupportsViews )
         aNormalizedTypes.erase( cppu::UnoType<XViewsSupplier>::get() );
-    if ( !m_bSupportsUsers )
-        aNormalizedTypes.erase( cppu::UnoType<XUsersSupplier>::get() );
 
     return comphelper::containerToSequence(aNormalizedTypes);
 }
@@ -405,8 +401,6 @@ Sequence< Type > OConnection::getTypes()
 Any OConnection::queryInterface( const Type & rType )
 {
     if ( !m_bSupportsViews && rType.equals( cppu::UnoType<XViewsSupplier>::get() ) )
-        return Any();
-    else if ( !m_bSupportsUsers && rType.equals( cppu::UnoType<XUsersSupplier>::get() ) )
         return Any();
     return OConnection_Base::queryInterface( rType );
 }
@@ -596,16 +590,6 @@ Reference< XTablesSupplier > const & OConnection::getMasterTables()
         }
     }
     return m_xMasterTables;
-}
-
-// XUsersSupplier
-Reference< XNameAccess > OConnection::getUsers(  )
-{
-    MutexGuard aGuard(m_aMutex);
-    checkDisposed();
-
-    Reference<XUsersSupplier> xUsr(getMasterTables(),UNO_QUERY);
-    return xUsr.is() ? xUsr->getUsers() : Reference< XNameAccess >();
 }
 
 void OConnection::impl_loadConnectionTools_throw()

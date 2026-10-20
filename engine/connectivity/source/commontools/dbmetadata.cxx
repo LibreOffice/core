@@ -30,7 +30,6 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/sdb/BooleanComparisonMode.hpp>
 #include <com/sun/star/sdbc/XDatabaseMetaData2.hpp>
-#include <com/sun/star/sdbcx/XUsersSupplier.hpp>
 #include <com/sun/star/sdbcx/XDataDefinitionSupplier.hpp>
 #include <com/sun/star/sdbc/DriverManager.hpp>
 
@@ -58,7 +57,6 @@ namespace dbtools
     using ::cpo::uno::UNO_QUERY_THROW;
     using ::com::sun::star::beans::XPropertySet;
     using ::cpo::uno::UNO_QUERY;
-    using ::com::sun::star::sdbcx::XUsersSupplier;
     using ::com::sun::star::sdbcx::XDataDefinitionSupplier;
     using ::com::sun::star::sdbc::DriverManager;
     using ::com::sun::star::sdbc::XDriverManager2;

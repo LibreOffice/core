@@ -63,11 +63,6 @@ Sequence< Type > OGroup::getTypes(  )
 void OGroup::disposing()
 {
     OPropertySetHelper::disposing();
-
-    ::osl::MutexGuard aGuard(m_aMutex);
-
-    if(m_pUsers)
-        m_pUsers->disposing();
 }
 
 ::cppu::IPropertyArrayHelper* OGroup::createArrayHelper( ) const
@@ -81,30 +76,6 @@ void OGroup::disposing()
 {
     return *getArrayHelper();
 }
-
-Reference< XNameAccess > OGroup::getUsers(  )
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-    checkDisposed(OGroup_BASE::rBHelper.bDisposed);
-
-    try
-    {
-        if ( !m_pUsers )
-            refreshUsers();
-    }
-    catch( const RuntimeException& )
-    {
-        // allowed to leave this method
-        throw;
-    }
-    catch( const Exception& )
-    {
-        // allowed
-    }
-
-    return m_pUsers.get();
-}
-
 
 cpo::uno::Reference< css::beans::XPropertySetInfo > OGroup::getPropertySetInfo(  )
 {

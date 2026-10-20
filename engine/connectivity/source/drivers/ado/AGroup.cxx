@@ -57,19 +57,6 @@ OAdoGroup::OAdoGroup(OCatalog* _pParent,bool _bCase, const OUString& Name) : OGr
     m_aGroup.put_Name(Name);
 }
 
-void OAdoGroup::refreshUsers()
-{
-    ::std::vector< OUString> aVector;
-
-    WpADOUsers aUsers = m_aGroup.get_Users();
-    aUsers.fillElementNames(aVector);
-
-    if(m_pUsers)
-        m_pUsers->reFill(aVector);
-    else
-        m_pUsers.reset(new OUsers(m_pCatalog, m_aMutex, aVector, aUsers, isCaseSensitive()));
-}
-
 void OAdoGroup::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue)
 {
     if(m_aGroup.IsValid())

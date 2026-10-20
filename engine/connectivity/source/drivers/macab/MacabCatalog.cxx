@@ -71,10 +71,6 @@ void MacabCatalog::refreshViews()
 {
 }
 
-void MacabCatalog::refreshUsers()
-{
-}
-
 const OUString& MacabCatalog::getDot()
 {
     static constexpr OUString sDot = u"."_ustr;

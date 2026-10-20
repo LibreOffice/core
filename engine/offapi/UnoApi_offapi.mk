@@ -2971,7 +2971,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sdbcx,\
 	XRename \
 	XRowLocate \
 	XTablesSupplier \
-	XUsersSupplier \
 	XViewsSupplier \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/security,\

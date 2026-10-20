@@ -33,7 +33,6 @@ namespace connectivity::ado
     public:
         virtual void refreshTables() override;
         virtual void refreshViews() override;
-        virtual void refreshUsers() override;
 
     public:
         OCatalog(_ADOCatalog* _pCatalog,OConnection* _pCon);

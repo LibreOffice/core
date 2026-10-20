@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <com/sun/star/sdbcx/XUsersSupplier.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/compbase.hxx>
@@ -34,21 +33,16 @@ namespace connectivity::sdbcx
 {
     typedef OCollection OUsers;
 
-    typedef ::cppu::WeakComponentImplHelper<   css::sdbcx::XUsersSupplier,
-                                               css::container::XNamed,
+    typedef ::cppu::WeakComponentImplHelper<   css::container::XNamed,
                                                css::lang::XServiceInfo> OGroup_BASE;
 
     class OOO_DLLPUBLIC_DBTOOLS OGroup :
                     public cppu::BaseMutex,
                     public OGroup_BASE,
-                    public IRefreshableUsers,
                     public ::comphelper::OPropertyArrayUsageHelper<OGroup>,
                     public ODescriptor
     {
     protected:
-        // no Reference! see OCollection::acquire
-        std::unique_ptr<OUsers> m_pUsers;
-
         using OGroup_BASE::rBHelper;
 
         // OPropertyArrayUsageHelper
@@ -74,8 +68,6 @@ namespace connectivity::sdbcx
         virtual void disposing() override;
         // XPropertySet
         virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
-        // XUsersSupplier
-        virtual cpo::uno::Reference< css::container::XNameAccess > getUsers(  ) override;
 
         // XNamed
         virtual OUString getName(  ) override;

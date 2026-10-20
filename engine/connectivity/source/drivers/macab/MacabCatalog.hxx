@@ -39,7 +39,6 @@ namespace connectivity::macab
         // implementation of the pure virtual methods
         virtual void refreshTables() override;
         virtual void refreshViews() override;
-        virtual void refreshUsers() override;
 
         // XTablesSupplier
         virtual cpo::uno::Reference< css::container::XNameAccess > getTables(

@@ -31,9 +31,6 @@ using namespace connectivity::file;
 
 void OFileCatalog::refreshViews()
 {}
-void OFileCatalog::refreshUsers()
-{
-}
 
 OPredicateInterpreter::~OPredicateInterpreter()
 {

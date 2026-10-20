@@ -9593,10 +9593,6 @@ module com {
      interface ::cpo::uno::XInterface;
      ::com::sun::star::container::XNameAccess getTables();
     };
-    published interface XUsersSupplier {
-     interface ::cpo::uno::XInterface;
-     ::com::sun::star::container::XNameAccess getUsers();
-    };
     published interface XViewsSupplier {
      interface ::cpo::uno::XInterface;
      ::com::sun::star::container::XNameAccess getViews();
@@ -9604,7 +9600,6 @@ module com {
     published service DatabaseDefinition {
      interface ::com::sun::star::sdbcx::XTablesSupplier;
      [optional] interface ::com::sun::star::sdbcx::XViewsSupplier;
-     [optional] interface ::com::sun::star::sdbcx::XUsersSupplier;
     };
    };
    module sdb {
@@ -10492,7 +10487,6 @@ module com {
      [optional] interface ::com::sun::star::sdbcx::XDropCatalog;
     };
     published service Group {
-     interface ::com::sun::star::sdbcx::XUsersSupplier;
      interface ::com::sun::star::beans::XPropertySet;
      [property, readonly] string Name;
     };

@@ -40,8 +40,6 @@ namespace connectivity::ado
         virtual void setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const cpo::uno::Any& rValue) override;
 
     public:
-        virtual void refreshUsers() override;
-    public:
         OAdoGroup(OCatalog* _pParent,bool _bCase, ADOGroup* _pGroup=nullptr);
         OAdoGroup(OCatalog* _pParent,bool _bCase, const OUString& Name);
 

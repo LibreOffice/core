@@ -42,7 +42,6 @@ namespace connectivity::file
     public:
         virtual void refreshTables() override;
         virtual void refreshViews() override;
-        virtual void refreshUsers() override;
 
     public:
         OFileCatalog(OConnection* _pCon);
