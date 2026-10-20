@@ -27,7 +27,7 @@ $(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,se
 $(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,soffice) \
 $(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,uno) \
 $(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,version) \
-	: $(SRCDIR)/instsetoo_native/CustomTarget_setup.mk
+	: $(SRCDIR)/instsetoo_native/CustomTarget_setup.mk $(BUILDDIR)/config_host.mk.stamp
 
 $(gb_CustomTarget_workdir)/instsetoo_native/setup/$(call gb_Helper_get_rcfile,bootstrap) :
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
