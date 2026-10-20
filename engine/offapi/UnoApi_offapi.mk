@@ -2960,7 +2960,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sdbcx,\
 	XAlterTable \
 	XAppend \
 	XColumnsSupplier \
-	XCreateCatalog \
 	XDataDefinitionSupplier \
 	XDataDescriptorFactory \
 	XDeleteRows \

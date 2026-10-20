@@ -10468,10 +10468,6 @@ module com {
      [optional] interface ::com::sun::star::sdbcx::XAppend;
      [optional] interface ::com::sun::star::sdbcx::XDrop;
     };
-    published interface XCreateCatalog {
-     interface ::cpo::uno::XInterface;
-     void createCatalog([in] sequence< ::com::sun::star::beans::PropertyValue > info) raises (::com::sun::star::sdbc::SQLException, ::com::sun::star::container::ElementExistException);
-    };
     published interface XDataDefinitionSupplier {
      interface ::cpo::uno::XInterface;
      ::com::sun::star::sdbcx::XTablesSupplier getDataDefinitionByConnection([in] ::com::sun::star::sdbc::XConnection connection) raises (::com::sun::star::sdbc::SQLException);
@@ -10479,7 +10475,6 @@ module com {
     published service Driver {
      service ::com::sun::star::sdbc::Driver;
      interface ::com::sun::star::sdbcx::XDataDefinitionSupplier;
-     [optional] interface ::com::sun::star::sdbcx::XCreateCatalog;
     };
     published service Group {
      interface ::com::sun::star::beans::XPropertySet;
