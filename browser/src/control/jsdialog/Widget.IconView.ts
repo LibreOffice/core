@@ -82,13 +82,17 @@ function _setEntryTooltip(
 }
 
 function _createEntryImage(
-	parent: HTMLElement,
+	parent: HTMLElement | undefined,
 	builder: JSBuilder,
 	entryData: IconViewEntry,
 	image: string,
 	hasText: boolean = false,
-) {
-	const img = window.L.DomUtil.create('img', builder.options.cssClass, parent);
+): HTMLImageElement {
+	const img = window.L.DomUtil.create(
+		'img',
+		builder.options.cssClass,
+		parent,
+	) as HTMLImageElement;
 	if (image) img.src = image;
 
 	if (hasText) {
@@ -104,6 +108,7 @@ function _createEntryImage(
 	_setEntryTooltip(img, builder, entryData);
 
 	setupSize(entryData, img);
+	return img;
 }
 
 function _createEntryText(parent: HTMLElement, entryData: IconViewEntry) {
@@ -145,29 +150,44 @@ function _createEntryPlaceholder(
 	return placeholder;
 }
 
-/// Puts the image the engine drew for an entry in place of what the entry holds, the
-/// placeholder or an earlier image, with the title below it when the view shows text.
+// The image each entry is about to show while the browser decodes it. A newer image
+// for the same entry takes its place, and the older swap then does nothing.
+const pendingEntryImages = new WeakMap<HTMLElement, string>();
+
+/// Puts the image the engine drew for an entry in place of what the entry holds, with
+/// the title below it when the view shows text. With keepUntilDecoded the entry keeps
+/// its placeholder until the image can be painted, so it never shows an empty box.
 function _showRenderedEntry(
 	entryContainer: HTMLElement,
 	parentData: IconViewJSON,
 	entry: IconViewEntry,
 	image: string,
 	builder: JSBuilder,
+	keepUntilDecoded: boolean,
 ) {
 	const hasText = !!(entry.text && parentData.textWithIconEnabled);
 
-	entryContainer.replaceChildren();
-	let container = entryContainer;
+	let content: HTMLElement;
+	let img: HTMLImageElement;
 	if (hasText) {
-		container = window.L.DomUtil.create(
-			'div',
-			builder.options.cssClass,
-			entryContainer,
-		);
+		content = window.L.DomUtil.create('div', builder.options.cssClass);
+		img = _createEntryImage(content, builder, entry, image, hasText);
+		_createEntryText(content, entry);
+	} else {
+		img = _createEntryImage(undefined, builder, entry, image, hasText);
+		content = img;
 	}
 
-	_createEntryImage(container, builder, entry, image, hasText);
-	if (hasText) _createEntryText(container, entry);
+	const swap = () => {
+		if (pendingEntryImages.get(entryContainer) !== image) return;
+		pendingEntryImages.delete(entryContainer);
+		entryContainer.replaceChildren(content);
+	};
+
+	pendingEntryImages.set(entryContainer, image);
+	if (keepUntilDecoded && typeof img.decode === 'function')
+		img.decode().then(swap, swap);
+	else swap();
 }
 
 function _iconViewEntry(
@@ -562,6 +582,7 @@ JSDialog.iconView = function (
 				entry,
 				cache.images[entry.row],
 				builder,
+				false,
 			);
 			return;
 		}
@@ -601,6 +622,7 @@ JSDialog.iconView = function (
 				data.entries[pos],
 				builder.rendersCache[id].images[pos],
 				builder,
+				true,
 			);
 		} else {
 			app.console.debug('IconView: not found entry: ' + pos);
