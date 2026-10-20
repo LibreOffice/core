@@ -41,6 +41,7 @@
 #include <svl/stritem.hxx>
 #include <svl/visitem.hxx>
 #include <svl/whiter.hxx>
+#include <svx/sdr/properties/properties.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/xfillit0.hxx>
 #include <svx/xflclit.hxx>
@@ -86,6 +87,10 @@
 #include <fuconcs.hxx>
 #include <fuformatpaintbrush.hxx>
 #include <stlsheet.hxx>
+#include <unchss.hxx>
+#include <undoback.hxx>
+#include <sdresid.hxx>
+#include <strings.hrc>
 #include <SlideSectionManager.hxx>
 
 using namespace ::com::sun::star;
@@ -1758,15 +1763,9 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
 
     if ( ( nSlotId >= SID_ATTR_PAGE_COLOR ) && ( nSlotId <= SID_ATTR_PAGE_FILLSTYLE ) )
     {
-        SdrPageProperties& rPageProperties = pPage->getSdrPageProperties();
-        const SfxItemSet &aPageItemSet = rPageProperties.GetItemSet();
-        SfxItemSet aTempSet = aPageItemSet.CloneAsValue(false, &mpDrawView->GetModel().GetItemPool());
+        SdrModel& rModel = mpDrawView->GetModel();
+        SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aFillSet(rModel.GetItemPool());
         const SfxPoolItem* pItem = nullptr;
-
-        rPageProperties.ClearItem(XATTR_FILLSTYLE);
-        rPageProperties.ClearItem(XATTR_FILLGRADIENT);
-        rPageProperties.ClearItem(XATTR_FILLHATCH);
-        rPageProperties.ClearItem(XATTR_FILLBITMAP);
 
         switch (nSlotId)
         {
@@ -1776,17 +1775,17 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
                 drawing::FillStyle eXFS = aFSItem.GetValue();
 
                 if ( eXFS == drawing::FillStyle_NONE )
-                     rPageProperties.PutItem( XFillStyleItem( eXFS ) );
+                     aFillSet.Put( XFillStyleItem( eXFS ) );
             }
             break;
 
             case SID_ATTR_PAGE_COLOR:
             {
-                rPageProperties.PutItem( XFillStyleItem( drawing::FillStyle_SOLID ) );
+                aFillSet.Put( XFillStyleItem( drawing::FillStyle_SOLID ) );
                 if (const XFillColorItem* pColorItem = static_cast<const XFillColorItem*>(pArgs->GetItem(SID_ATTR_PAGE_COLOR)))
-                    rPageProperties.PutItem(XFillColorItem(u""_ustr, pColorItem->GetColorValue()));
+                    aFillSet.Put(XFillColorItem(u""_ustr, pColorItem->GetColorValue()));
                 else
-                    rPageProperties.PutItem(pArgs->Get(XATTR_FILLCOLOR));
+                    aFillSet.Put(pArgs->Get(XATTR_FILLCOLOR));
             }
             break;
 
@@ -1795,27 +1794,13 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
                 if (SfxItemState::SET == pArgs->GetItemState(SID_FILL_GRADIENT_JSON, false, &pItem))
                 {
                     const SfxStringItem* pJSON = static_cast<const SfxStringItem*>(pItem);
-                    XFillGradientItem aGradientItem( basegfx::BGradient::fromJSON(pJSON->GetValue()) );
-
-                    // MigrateItemSet guarantees unique gradient names
-                    SfxItemSetFixed<XATTR_FILLGRADIENT, XATTR_FILLGRADIENT> aMigrateSet(mpDrawView->GetModel().GetItemPool());
-                    aMigrateSet.Put( aGradientItem );
-                    SdrModel::MigrateItemSet(&aMigrateSet, &aTempSet, mpDrawView->GetModel());
-
-                    rPageProperties.PutItem( XFillStyleItem( drawing::FillStyle_GRADIENT ) );
-                    rPageProperties.PutItemSet( aTempSet );
+                    aFillSet.Put( XFillGradientItem( basegfx::BGradient::fromJSON(pJSON->GetValue()) ) );
+                    aFillSet.Put( XFillStyleItem( drawing::FillStyle_GRADIENT ) );
                 }
                 else
                 {
-                    XFillGradientItem aGradientItem( pArgs->Get( XATTR_FILLGRADIENT ) );
-
-                    // MigrateItemSet guarantees unique gradient names
-                    SfxItemSetFixed<XATTR_FILLGRADIENT, XATTR_FILLGRADIENT> aMigrateSet(mpDrawView->GetModel().GetItemPool());
-                    aMigrateSet.Put( aGradientItem );
-                    SdrModel::MigrateItemSet(&aMigrateSet, &aTempSet, mpDrawView->GetModel());
-
-                    rPageProperties.PutItem( XFillStyleItem( drawing::FillStyle_GRADIENT ) );
-                    rPageProperties.PutItemSet( aTempSet );
+                    aFillSet.Put( pArgs->Get( XATTR_FILLGRADIENT ) );
+                    aFillSet.Put( XFillStyleItem( drawing::FillStyle_GRADIENT ) );
                 }
             }
             break;
@@ -1823,21 +1808,93 @@ void DrawViewShell::SetPageProperties (SfxRequest& rReq)
             case SID_ATTR_PAGE_HATCH:
             {
                 XFillHatchItem aHatchItem( pArgs->Get( XATTR_FILLHATCH ) );
-                rPageProperties.PutItem( XFillStyleItem( drawing::FillStyle_HATCH ) );
-                rPageProperties.PutItem( aHatchItem );
+                aFillSet.Put( XFillStyleItem( drawing::FillStyle_HATCH ) );
+                aFillSet.Put( aHatchItem );
             }
             break;
 
             case SID_ATTR_PAGE_BITMAP:
             {
                 XFillBitmapItem aBitmapItem( pArgs->Get( XATTR_FILLBITMAP ) );
-                rPageProperties.PutItem( XFillStyleItem( drawing::FillStyle_BITMAP ) );
-                rPageProperties.PutItem( aBitmapItem );
+                aFillSet.Put( XFillStyleItem( drawing::FillStyle_BITMAP ) );
+                aFillSet.Put( aBitmapItem );
             }
             break;
 
             default:
             break;
+        }
+
+        // MigrateItemSet gives each hatch, gradient and bitmap a unique name in the document.
+        SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aMigratedFillSet(rModel.GetItemPool());
+        SdrModel::MigrateItemSet(&aFillSet, &aMigratedFillSet, rModel);
+
+        SdrPageProperties& rPageProperties = pPage->getSdrPageProperties();
+        SfxStyleSheet* pStyleSheet
+            = pPage->IsMasterPage() ? rPageProperties.GetStyleSheet() : nullptr;
+        SfxUndoManager* pUndoManager = GetDocSh()->GetUndoManager();
+        if (pStyleSheet)
+        {
+            // Fill attributes held by the master page itself go to the style sheet below the new
+            // fill, so the background stays as it looks unless the new fill replaces it.
+            SfxItemSetFixed<XATTR_FILL_FIRST, XATTR_FILL_LAST> aPageFillSet(rModel.GetItemPool());
+            aPageFillSet.Put(rPageProperties.GetItemSet());
+            const bool bHasPageItems = rPageProperties.GetItemSet().Count() != 0;
+
+            if (bHasPageItems || aMigratedFillSet.Count())
+            {
+                // Undo reverts the page and the style sheet together in one step.
+                const OUString aComment(SdResId(STR_UNDO_CHANGE_PAGEFORMAT));
+                pUndoManager->EnterListAction(aComment, aComment, 0,
+                                              GetViewShellBase().GetViewShellId());
+
+                // The fill of a master page is stored in its background style sheet, and the
+                // master page itself holds no fill attributes.
+                if (bHasPageItems)
+                {
+                    pUndoManager->AddUndoAction(std::make_unique<SdBackgroundObjUndoAction>(
+                        *GetDoc(), *pPage, rPageProperties.GetItemSet()));
+                    rPageProperties.ClearItem();
+                }
+
+                if (aPageFillSet.Count() || aMigratedFillSet.Count())
+                {
+                    // The undo action restores the whole item set of the style sheet on redo, so
+                    // it gets the complete new set, with the items outside the fill range kept.
+                    SfxItemSet aStyleSet(pStyleSheet->GetItemSet());
+                    SdrModel::MigrateItemSet(&aPageFillSet, &aStyleSet, rModel);
+                    aStyleSet.Put(aMigratedFillSet);
+                    sdr::properties::CleanupFillProperties(aStyleSet);
+
+                    pUndoManager->AddUndoAction(std::make_unique<StyleSheetUndoAction>(
+                        *GetDoc(), *pStyleSheet, &aStyleSet));
+                    pStyleSheet->GetItemSet().Set(aStyleSet);
+                    pStyleSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
+                }
+
+                pUndoManager->LeaveListAction();
+            }
+        }
+        else
+        {
+            const SfxItemSet& rPageItemSet = rPageProperties.GetItemSet();
+            const bool bHasPageFill
+                = rPageItemSet.GetItemState(XATTR_FILLSTYLE, false) == SfxItemState::SET
+                  || rPageItemSet.GetItemState(XATTR_FILLGRADIENT, false) == SfxItemState::SET
+                  || rPageItemSet.GetItemState(XATTR_FILLHATCH, false) == SfxItemState::SET
+                  || rPageItemSet.GetItemState(XATTR_FILLBITMAP, false) == SfxItemState::SET;
+
+            if (bHasPageFill || aMigratedFillSet.Count())
+            {
+                // The undo action holds the fill of the page before the change.
+                pUndoManager->AddUndoAction(std::make_unique<SdBackgroundObjUndoAction>(
+                    *GetDoc(), *pPage, rPageItemSet));
+                rPageProperties.ClearItem(XATTR_FILLSTYLE);
+                rPageProperties.ClearItem(XATTR_FILLGRADIENT);
+                rPageProperties.ClearItem(XATTR_FILLHATCH);
+                rPageProperties.ClearItem(XATTR_FILLBITMAP);
+                rPageProperties.PutItemSet(aMigratedFillSet);
+            }
         }
 
         rReq.Done();

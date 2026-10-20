@@ -3157,6 +3157,32 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPageFillColor)
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, aColor);
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPageFillColorUndoRedo)
+{
+    createSdImpressDoc();
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+    SdPage* pPage = pViewShell->getCurrentPage();
+    const SfxItemSet& rPageAttr = pPage->getSdrPageProperties().GetItemSet();
+    const drawing::FillStyle eOldFillStyle = rPageAttr.Get(XATTR_FILLSTYLE).GetValue();
+    CPPUNIT_ASSERT(eOldFillStyle != drawing::FillStyle_SOLID);
+
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = {
+        comphelper::makePropertyValue(u"FillColor"_ustr, static_cast<sal_Int32>(0xff0000)),
+    };
+    dispatchCommand(mxComponent, u".uno:FillPageColor"_ustr, aPropertyValues);
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rPageAttr.Get(XATTR_FILLSTYLE).GetValue());
+
+    // Undo gives the slide its old background back.
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(eOldFillStyle, rPageAttr.Get(XATTR_FILLSTYLE).GetValue());
+
+    // Redo gives the slide the new background again.
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rPageAttr.Get(XATTR_FILLSTYLE).GetValue());
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, rPageAttr.Get(XATTR_FILLCOLOR).GetColorValue());
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPageFillGradient)
 {
     // Load the document and create two new windows.
@@ -3190,6 +3216,91 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPageFillGradient)
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, Color(rColorStops.getStopColor(0)));
     CPPUNIT_ASSERT(basegfx::fTools::equal(rColorStops.getStopOffset(1), 1.0));
     CPPUNIT_ASSERT_EQUAL(COL_LIGHTBLUE, Color(rColorStops.getStopColor(1)));
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMasterPageFillColorSaved)
+{
+    createSdImpressDoc();
+
+    dispatchCommand(mxComponent, u".uno:SlideMasterPage"_ustr, {});
+
+    cpo::uno::Sequence<beans::PropertyValue> aPropertyValues = {
+        comphelper::makePropertyValue(u"FillColor"_ustr, static_cast<sal_Int32>(0xff0000)),
+    };
+    dispatchCommand(mxComponent, u".uno:FillPageColor"_ustr, aPropertyValues);
+
+    // The master page holds no fill of its own, and its background style sheet holds the new one.
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    SdPage* pMasterPage = pImpressDocument->GetDocShell()->GetViewShell()->getCurrentPage();
+    CPPUNIT_ASSERT(pMasterPage->IsMasterPage());
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), pMasterPage->getSdrPageProperties().GetItemSet().Count());
+    const SfxItemSet& rStyleSet = pMasterPage->getSdrPageProperties().GetStyleSheet()->GetItemSet();
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rStyleSet.Get(XATTR_FILLSTYLE).GetValue());
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, rStyleSet.Get(XATTR_FILLCOLOR).GetColorValue());
+
+    // Undo brings back the master page background with no fill.
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    {
+        uno::Reference<drawing::XMasterPagesSupplier> xMasterPagesSupplier(mxComponent,
+                                                                           uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xMasterPage(
+            xMasterPagesSupplier->getMasterPages()->getByIndex(0), uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xBackground(
+            xMasterPage->getPropertyValue(u"Background"_ustr), uno::UNO_QUERY_THROW);
+        CPPUNIT_ASSERT_EQUAL(
+            drawing::FillStyle_NONE,
+            xBackground->getPropertyValue(u"FillStyle"_ustr).get<drawing::FillStyle>());
+    }
+
+    // Redo brings the new background back.
+    dispatchCommand(mxComponent, u".uno:Redo"_ustr, {});
+
+    saveAndReload(TestFilter::ODP);
+
+    // The new master page background is still there after the round trip.
+    uno::Reference<drawing::XMasterPagesSupplier> xMasterPagesSupplier(mxComponent,
+                                                                       uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xMasterPage(
+        xMasterPagesSupplier->getMasterPages()->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xBackground(
+        xMasterPage->getPropertyValue(u"Background"_ustr), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID,
+                         xBackground->getPropertyValue(u"FillStyle"_ustr).get<drawing::FillStyle>());
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED,
+                         Color(ColorTransparency,
+                               xBackground->getPropertyValue(u"FillColor"_ustr).get<sal_Int32>()));
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMasterPageOwnFillMovedToStyleSheet)
+{
+    createSdImpressDoc();
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+
+    dispatchCommand(mxComponent, u".uno:SlideMasterPage"_ustr, {});
+    SdPage* pMasterPage = pViewShell->getCurrentPage();
+    CPPUNIT_ASSERT(pMasterPage->IsMasterPage());
+
+    // A master page with a red fill of its own, as older versions could leave behind.
+    SdrPageProperties& rPageProperties = pMasterPage->getSdrPageProperties();
+    rPageProperties.PutItem(XFillStyleItem(drawing::FillStyle_SOLID));
+    rPageProperties.PutItem(XFillColorItem(u""_ustr, COL_LIGHTRED));
+
+    const XFillStyleItem aFillStyleItem(drawing::FillStyle_SOLID);
+    pViewShell->GetViewFrame()->GetDispatcher()->ExecuteList(
+        SID_ATTR_PAGE_FILLSTYLE, SfxCallMode::SYNCHRON, { &aFillStyleItem });
+
+    // The red fill moved to the background style sheet, so the master page looks the same.
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(0), rPageProperties.GetItemSet().Count());
+    const SfxItemSet& rStyleSet = rPageProperties.GetStyleSheet()->GetItemSet();
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID, rStyleSet.Get(XATTR_FILLSTYLE).GetValue());
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, rStyleSet.Get(XATTR_FILLCOLOR).GetColorValue());
+
+    // One undo step brings back both the fill of the master page and the old style sheet.
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID,
+                         rPageProperties.GetItemSet().Get(XATTR_FILLSTYLE).GetValue());
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, rStyleSet.Get(XATTR_FILLSTYLE).GetValue());
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf134053)
