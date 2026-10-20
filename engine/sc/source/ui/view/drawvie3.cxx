@@ -23,9 +23,12 @@
 
 #include <svx/svdograf.hxx>
 #include <svx/svdoole2.hxx>
+#include <svx/svdpage.hxx>
 #include <svx/ImageMapInfo.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <comphelper/kit.hxx>
+#include <o3tl/unit_conversion.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <officecfg/Office/Common.hxx>
 
 #include <strings.hrc>
@@ -38,6 +41,7 @@
 #include <userdat.hxx>
 #include <tabvwsh.hxx>
 #include <docsh.hxx>
+#include <SheetViewManager.hxx>
 
 ScDrawView::ScDrawView(
     OutputDevice* pOut,
@@ -195,12 +199,65 @@ void adjustAnchoredPosition(const SdrHint& rHint, const ScDocument& rDoc, SCTAB 
 
 }
 
+void ScDrawView::notifyObjectTilesInvalidated(const SdrHint& rHint)
+{
+    if (!comphelper::COKit::isActive())
+        return;
+
+    const SdrHintKind eKind = rHint.GetKind();
+    if (eKind != SdrHintKind::ObjectChange && eKind != SdrHintKind::ObjectInserted
+        && eKind != SdrHintKind::ObjectRemoved)
+        return;
+
+    const SdrObject* pObject = rHint.GetObject();
+    if (!pObject)
+        return;
+
+    const SdrPage* pPage = rHint.GetPage();
+    if (!pPage)
+        pPage = pObject->getSdrPageFromSdrObject();
+    if (!pPage)
+        return;
+
+    tools::Rectangle aRect100thMM = pObject->GetCurrentBoundRect();
+    if (aRect100thMM.IsEmpty())
+        return;
+
+    // The drawing layer repaints an object only through the page a view is showing, so the
+    // client keeps the tiles it cached for any other sheet. Each draw page belongs to the table
+    // with the same number, so the object's rectangle goes out in twips under that part number
+    // and the tiles below it are fetched again when the sheet is shown next.
+    const SCTAB nObjectTab = static_cast<SCTAB>(pPage->GetPageNum());
+    if (rDoc.IsLayoutRTL(nObjectTab))
+    {
+        // A right-to-left sheet places its objects at negative X, mirrored at the left edge.
+        aRect100thMM = tools::Rectangle(std::max(tools::Long(0), -aRect100thMM.Right()),
+                                        aRect100thMM.Top(),
+                                        std::max(tools::Long(0), -aRect100thMM.Left()),
+                                        aRect100thMM.Bottom());
+    }
+    const tools::Rectangle aRectTwips
+        = o3tl::convert(aRect100thMM, o3tl::Length::mm100, o3tl::Length::twip);
+
+    ScTabViewShell* pViewShell = rViewData.GetViewShell();
+    KitHelper::notifyInvalidation(pViewShell, static_cast<int>(nObjectTab), &aRectTwips);
+
+    // A sheet view tab shares the draw page of its base sheet and is a part of its own.
+    std::shared_ptr<sc::SheetViewManager> pManager = rDoc.GetSheetViewManager(nObjectTab);
+    if (!pManager || pManager->isEmpty())
+        return;
+    for (auto& rSheetView : pManager->iterateValidSheetViews())
+        KitHelper::notifyInvalidation(pViewShell, static_cast<int>(rSheetView.getTableNumber()),
+                                      &aRectTwips);
+}
+
 void ScDrawView::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
 {
     if (rHint.GetId() == SfxHintId::ThisIsAnSdrHint)
     {
         const SdrHint* pSdrHint = static_cast<const SdrHint*>( &rHint );
         adjustAnchoredPosition(*pSdrHint, rDoc, nTab);
+        notifyObjectTilesInvalidated(*pSdrHint);
         FmFormView::Notify( rBC,rHint );
     }
     else if (rHint.GetId() == SfxHintId::ScTabDeleted) // Sheet has been deleted

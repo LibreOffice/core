@@ -54,6 +54,8 @@ class SAL_DLLPUBLIC_RTTI ScDrawView final : public FmFormView
     // Create a local UndoManager
     std::unique_ptr<SdrUndoManager> createLocalTextUndoManager() override;
 
+    void notifyObjectTilesInvalidated(const SdrHint& rHint);
+
 public:
     ScDrawView(
         OutputDevice* pOut,

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:config="urn:oasis:names:tc:opendocument:xmlns:config:1.0" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:rpt="http://openoffice.org/2005/report" xmlns:css3t="http://www.w3.org/TR/css3-text/" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:coext="urn:com:collaboraoffice:names:experimental:office:xmlns:coext:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.spreadsheet">
+<office:body>
+<office:spreadsheet>
+<table:table table:name="Projects">
+<table:table-column table:number-columns-repeated="5"/>
+<table:table-row><table:table-cell office:value-type="string"><text:p>Project</text:p></table:table-cell><table:table-cell/><table:table-cell/><table:table-cell/><table:table-cell office:value-type="string"><text:p>Status</text:p></table:table-cell></table:table-row>
+<table:table-row><table:table-cell office:value-type="string"><text:p>Project 1</text:p></table:table-cell><table:table-cell/><table:table-cell/><table:table-cell/><table:table-cell office:value-type="string"><text:p>Completed</text:p></table:table-cell></table:table-row>
+<table:table-row><table:table-cell office:value-type="string"><text:p>Project 2</text:p></table:table-cell><table:table-cell/><table:table-cell/><table:table-cell/><table:table-cell office:value-type="string"><text:p>Completed</text:p></table:table-cell></table:table-row>
+<table:table-row><table:table-cell office:value-type="string"><text:p>Project 3</text:p></table:table-cell><table:table-cell/><table:table-cell/><table:table-cell/><table:table-cell office:value-type="string"><text:p>In Progress</text:p></table:table-cell></table:table-row>
+<table:table-row><table:table-cell office:value-type="string"><text:p>Project 4</text:p></table:table-cell><table:table-cell/><table:table-cell/><table:table-cell/><table:table-cell office:value-type="string"><text:p>On Hold</text:p></table:table-cell></table:table-row>
+<table:table-row><table:table-cell office:value-type="string"><text:p>Project 5</text:p></table:table-cell><table:table-cell/><table:table-cell/><table:table-cell/><table:table-cell office:value-type="string"><text:p>Cancelled</text:p></table:table-cell></table:table-row>
+</table:table>
+<table:table table:name="Summary">
+<table:shapes><draw:frame draw:z-index="0" svg:width="8cm" svg:height="6cm" svg:x="1cm" svg:y="4cm">
+<draw:object draw:notify-on-update-of-ranges="Summary.E2:Summary.E5 Summary.F2:Summary.F5">
+       <loext:p/>
+       <office:document xmlns:grddl="http://www.w3.org/2003/g/data-view#" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:form="urn:oasis:names:tc:opendocument:xmlns:form:1.0" xmlns:math="http://www.w3.org/1998/Math/MathML" xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:ooo="http://openoffice.org/2004/office" xmlns:chartooo="http://openoffice.org/2010/chart" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:ooow="http://openoffice.org/2004/writer" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:drawooo="http://openoffice.org/2010/draw" xmlns:oooc="http://openoffice.org/2004/calc" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:calcext="urn:org:documentfoundation:names:experimental:calc:xmlns:calcext:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:of="urn:oasis:names:tc:opendocument:xmlns:of:1.2" xmlns:tableooo="http://openoffice.org/2009/table" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:dr3d="urn:oasis:names:tc:opendocument:xmlns:dr3d:1.0" xmlns:rpt="http://openoffice.org/2005/report" xmlns:css3t="http://www.w3.org/TR/css3-text/" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:field="urn:openoffice:names:experimental:ooo-ms-interop:xmlns:field:1.0" xmlns:formx="urn:openoffice:names:experimental:ooxml-odf-interop:xmlns:form:1.0" xmlns:chart="urn:oasis:names:tc:opendocument:xmlns:chart:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:coext="urn:com:collaboraoffice:names:experimental:office:xmlns:coext:1.0" xmlns:number="urn:oasis:names:tc:opendocument:xmlns:datastyle:1.0" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.chart">
+        <office:meta><meta:generator>Collabora_Office/26.04.6.0$Linux_X86_64 LibreOffice_project/e16c03e83089f7f2c032c7746d417667db7e1a4b</meta:generator></office:meta>
+        <office:styles/>
+        <office:automatic-styles>
+         <number:number-style style:name="N0">
+          <number:number number:min-integer-digits="1"/>
+         </number:number-style>
+         <style:style style:name="ch1" style:family="chart">
+          <style:graphic-properties draw:stroke="none"/>
+         </style:style>
+         <style:style style:name="ch2" style:family="chart">
+          <style:chart-properties chart:auto-position="true" style:rotation-angle="0"/>
+          <style:text-properties fo:font-size="13pt" style:font-size-asian="13pt" style:font-size-complex="13pt"/>
+         </style:style>
+         <style:style style:name="ch3" style:family="chart">
+          <style:chart-properties chart:auto-position="true"/>
+          <style:graphic-properties draw:stroke="none" svg:stroke-color="#b3b3b3" draw:fill="none" draw:fill-color="#e6e6e6"/>
+          <style:text-properties fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt"/>
+         </style:style>
+         <style:style style:name="ch4" style:family="chart">
+          <style:chart-properties chart:include-hidden-cells="false" chart:auto-position="true" chart:auto-size="true" chart:right-angled-axes="true" coext:frequency-type="0" coext:bin-width="0" coext:bin-count="0" coext:use-underflow-bin="false" coext:underflow-bin-value="0" coext:use-overflow-bin="false" coext:overflow-bin-value="0" chart:data-label-number="value" chart:data-label-text="false" chart:data-label-symbol="false" chart:data-label-series="false"/>
+         </style:style>
+         <style:style style:name="ch5" style:family="chart" style:data-style-name="N0">
+          <style:chart-properties chart:display-label="true" chart:logarithmic="false" chart:reverse-direction="true" text:line-break="false" loext:try-staggering-first="false" chart:link-data-style-to-source="true" chart:axis-position="0"/>
+          <style:graphic-properties svg:stroke-color="#b3b3b3"/>
+          <style:text-properties fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt"/>
+         </style:style>
+         <style:style style:name="ch6" style:family="chart" style:data-style-name="N0">
+          <style:chart-properties chart:display-label="true" chart:logarithmic="false" chart:reverse-direction="false" text:line-break="false" loext:try-staggering-first="false" chart:link-data-style-to-source="true" chart:axis-position="0"/>
+          <style:graphic-properties svg:stroke-color="#b3b3b3"/>
+          <style:text-properties fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt"/>
+         </style:style>
+         <style:style style:name="ch7" style:family="chart">
+          <style:graphic-properties svg:stroke-color="#b3b3b3"/>
+         </style:style>
+         <style:style style:name="ch8" style:family="chart" style:data-style-name="N0">
+          <style:chart-properties chart:link-data-style-to-source="true" chart:data-label-number="value" chart:data-label-text="false" chart:data-label-symbol="false" chart:data-label-series="false"/>
+          <style:graphic-properties draw:stroke="none" draw:fill-color="#004586" dr3d:edge-rounding="5%"/>
+          <style:text-properties fo:font-size="10pt" style:font-size-asian="10pt" style:font-size-complex="10pt"/>
+         </style:style>
+         <style:style style:name="ch9" style:family="chart">
+          <style:chart-properties chart:solid-type="cuboid"/>
+          <style:graphic-properties draw:fill-color="#004586"/>
+         </style:style>
+         <style:style style:name="ch10" style:family="chart">
+          <style:chart-properties chart:solid-type="cuboid"/>
+          <style:graphic-properties draw:fill-color="#ff420e"/>
+         </style:style>
+         <style:style style:name="ch11" style:family="chart">
+          <style:chart-properties chart:solid-type="cuboid"/>
+          <style:graphic-properties draw:fill-color="#ffd320"/>
+         </style:style>
+         <style:style style:name="ch12" style:family="chart">
+          <style:chart-properties chart:solid-type="cuboid"/>
+          <style:graphic-properties draw:fill-color="#579d1c"/>
+         </style:style>
+         <style:style style:name="ch13" style:family="chart">
+          <style:graphic-properties draw:stroke="solid" svg:stroke-color="#b3b3b3" draw:fill="none" draw:fill-color="#e6e6e6"/>
+         </style:style>
+         <style:style style:name="ch14" style:family="chart">
+          <style:graphic-properties svg:stroke-color="#b3b3b3" draw:fill-color="#cccccc"/>
+         </style:style>
+        </office:automatic-styles>
+        <office:body>
+         <office:chart>
+          <chart:chart svg:width="16cm" svg:height="9cm" xlink:href=".." xlink:type="simple" chart:class="chart:circle" chart:style-name="ch1">
+           <chart:title svg:x="6.671cm" svg:y="0.315cm" chart:style-name="ch2">
+            <text:p>Project status</text:p>
+           </chart:title>
+           <chart:legend chart:legend-position="end" svg:x="13.624cm" svg:y="3.454cm" style:legend-expansion="high" chart:style-name="ch3"/>
+           <chart:plot-area chart:style-name="ch4" svg:x="0.35cm" svg:y="1.476cm" svg:width="12.924cm" svg:height="7.174cm">
+            <chart:coordinate-region svg:x="3.225cm" svg:y="1.477cm" svg:width="7.173cm" svg:height="7.173cm"/>
+            <chart:axis chart:dimension="x" chart:name="primary-x" chart:style-name="ch5" chartooo:axis-type="auto">
+             <chartooo:date-scale/>
+             <chart:categories table:cell-range-address="Summary.E2:Summary.E5"/>
+            </chart:axis>
+            <chart:axis chart:dimension="y" chart:name="primary-y" chart:style-name="ch6">
+             <chart:grid chart:style-name="ch7" chart:class="major"/>
+            </chart:axis>
+            <chart:series chart:style-name="ch8" chart:values-cell-range-address="Summary.F2:Summary.F5" chart:class="chart:circle">
+             <chart:data-point chart:style-name="ch9"/>
+             <chart:data-point chart:style-name="ch10"/>
+             <chart:data-point chart:style-name="ch11"/>
+             <chart:data-point chart:style-name="ch12"/>
+            </chart:series>
+            <chart:wall chart:style-name="ch13"/>
+            <chart:floor chart:style-name="ch14"/>
+           </chart:plot-area>
+           <table:table table:name="local-table">
+            <table:table-header-columns>
+             <table:table-column/>
+            </table:table-header-columns>
+            <table:table-columns>
+             <table:table-column/>
+            </table:table-columns>
+            <table:table-header-rows>
+             <table:table-row>
+              <table:table-cell>
+               <text:p/>
+              </table:table-cell>
+              <table:table-cell office:value-type="string">
+               <text:p>Column F</text:p>
+              </table:table-cell>
+             </table:table-row>
+            </table:table-header-rows>
+            <table:table-rows>
+             <table:table-row>
+              <table:table-cell office:value-type="string">
+               <text:p>Not Started</text:p>
+               <draw:g>
+                <svg:desc>Summary.E2:Summary.E5</svg:desc></draw:g>
+              </table:table-cell>
+              <table:table-cell office:value-type="float" office:value="13">
+               <text:p>13</text:p>
+               <draw:g>
+                <svg:desc>Summary.F2:Summary.F5</svg:desc></draw:g>
+              </table:table-cell>
+             </table:table-row>
+             <table:table-row>
+              <table:table-cell office:value-type="string">
+               <text:p>In Progress</text:p>
+              </table:table-cell>
+              <table:table-cell office:value-type="float" office:value="12">
+               <text:p>12</text:p>
+              </table:table-cell>
+             </table:table-row>
+             <table:table-row>
+              <table:table-cell office:value-type="string">
+               <text:p>Completed</text:p>
+              </table:table-cell>
+              <table:table-cell office:value-type="float" office:value="13">
+               <text:p>13</text:p>
+              </table:table-cell>
+             </table:table-row>
+             <table:table-row>
+              <table:table-cell office:value-type="string">
+               <text:p>On Hold</text:p>
+              </table:table-cell>
+              <table:table-cell office:value-type="float" office:value="11">
+               <text:p>11</text:p>
+              </table:table-cell>
+             </table:table-row>
+            </table:table-rows>
+           </table:table>
+          </chart:chart>
+         </office:chart>
+        </office:body>
+       </office:document>
+      </draw:object>
+</draw:frame></table:shapes>
+<table:table-column table:number-columns-repeated="6"/>
+<table:table-row><table:table-cell office:value-type="string"><text:p>Summary</text:p></table:table-cell><table:table-cell table:number-columns-repeated="3"/><table:table-cell office:value-type="string"><text:p>Project status</text:p></table:table-cell><table:table-cell office:value-type="string"><text:p>Count</text:p></table:table-cell></table:table-row>
+<table:table-row><table:table-cell/><table:table-cell table:number-columns-repeated="3"/><table:table-cell office:value-type="string"><text:p>Completed</text:p></table:table-cell><table:table-cell table:formula="of:=COUNTIF([$Projects.E2:.E50];[.E2])" office:value-type="float" office:value="2"><text:p>2</text:p></table:table-cell></table:table-row>
+<table:table-row><table:table-cell/><table:table-cell table:number-columns-repeated="3"/><table:table-cell office:value-type="string"><text:p>In Progress</text:p></table:table-cell><table:table-cell table:formula="of:=COUNTIF([$Projects.E2:.E50];[.E3])" office:value-type="float" office:value="1"><text:p>1</text:p></table:table-cell></table:table-row>
+<table:table-row><table:table-cell/><table:table-cell table:number-columns-repeated="3"/><table:table-cell office:value-type="string"><text:p>On Hold</text:p></table:table-cell><table:table-cell table:formula="of:=COUNTIF([$Projects.E2:.E50];[.E4])" office:value-type="float" office:value="1"><text:p>1</text:p></table:table-cell></table:table-row>
+<table:table-row><table:table-cell/><table:table-cell table:number-columns-repeated="3"/><table:table-cell office:value-type="string"><text:p>Cancelled</text:p></table:table-cell><table:table-cell table:formula="of:=COUNTIF([$Projects.E2:.E50];[.E5])" office:value-type="float" office:value="1"><text:p>1</text:p></table:table-cell></table:table-row>
+</table:table>
+</office:spreadsheet>
+</office:body>
+</office:document>

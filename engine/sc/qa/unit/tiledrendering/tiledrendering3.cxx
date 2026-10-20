@@ -4099,6 +4099,53 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testTrackChangesAuthorFromView)
     CPPUNIT_ASSERT_EQUAL(u"Kit User1;Kit User2;Kit User1;"_ustr, aUsers);
 }
 
+// A chart on a sheet the view does not show plots cells that a row delete on the shown sheet
+// changes. The client keeps the tiles it cached for that sheet, so it has to learn which part
+// of them is stale.
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testChartOnOtherSheetInvalidated)
+{
+    ScModelObj* pModelObj = createDoc("chart-on-other-sheet.fods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    ScTestViewCallback aView;
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+
+    const SCTAB nProjectsTab = 0;
+    const SCTAB nSummaryTab = 1;
+    CPPUNIT_ASSERT_EQUAL(nProjectsTab, pView->GetViewData().GetTabNumber());
+
+    // The pie chart is the only drawing object on the Summary sheet.
+    SdrPage* pPage = pDoc->GetDrawLayer()->GetPage(nSummaryTab);
+    CPPUNIT_ASSERT(pPage);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pPage->GetObjCount());
+    const tools::Rectangle aChartTwips = o3tl::convert(
+        pPage->GetObj(0)->GetCurrentBoundRect(), o3tl::Length::mm100, o3tl::Length::twip);
+
+    // Delete the row of the only project that is on hold. Its count on the Summary sheet drops
+    // to zero and the pie loses a slice.
+    aView.ClearAllInvalids();
+    pView->GetViewData().GetMarkData().SetMarkArea(
+        ScRange(0, 4, nProjectsTab, 0, 4, nProjectsTab));
+    dispatchCommand(mxComponent, u".uno:DeleteRows"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(0.0, pDoc->GetValue(ScAddress(5, 3, nSummaryTab)));
+
+    // The client is told that the Summary tiles under the chart are stale.
+    CPPUNIT_ASSERT_EQUAL(aView.m_aInvalidations.size(), aView.m_aInvalidationsParts.size());
+    bool bChartInvalidated = false;
+    for (size_t i = 0; i < aView.m_aInvalidations.size(); ++i)
+    {
+        if (aView.m_aInvalidationsParts[i] == static_cast<int>(nSummaryTab)
+            && aView.m_aInvalidations[i].Overlaps(aChartTwips))
+        {
+            bChartInvalidated = true;
+            break;
+        }
+    }
+    CPPUNIT_ASSERT_MESSAGE("chart on a sheet the view does not show was not invalidated",
+                           bChartInvalidated);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
