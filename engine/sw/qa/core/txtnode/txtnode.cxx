@@ -1034,6 +1034,90 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testMergedPasteMultiParaDestColor)
     CPPUNIT_ASSERT_EQUAL(nOrange, pColor->GetValue());
 }
 
+CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testMergedPasteHintDestColor)
+{
+    // Given a Writer document whose destination font color comes from a hint,
+    // not from a paragraph-scope item, with the cursor inside that hint:
+    createSwDoc();
+    SwDoc* pDoc = getSwDocShell()->GetDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert(u"beforeAAAZZZafter"_ustr);
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 6, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 6, /*bBasicCall=*/false);
+    SfxItemSetFixed<RES_CHRATR_COLOR, RES_CHRATR_COLOR> aColorSet(pWrtShell->GetAttrPool());
+    Color nOrange(0xffcc00);
+    aColorSet.Put(SvxColorItem(nOrange, RES_CHRATR_COLOR));
+    pWrtShell->SetAttrSet(aColorSet);
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 9, /*bBasicCall=*/false);
+
+    // When merged-pasting an HTML snippet whose run has an explicit color of its own:
+    pDoc->SetInMergedPaste(true);
+    // Snapshot the destination's attrs the way SwBaseShell::ExecClpbrd() does,
+    // since .uno:InsertDoc bypasses SID_PASTE:
+    SwTextNode* pDestNode = pWrtShell->GetCursor()->GetPoint()->GetNode().GetTextNode();
+    CPPUNIT_ASSERT(pDestNode);
+    auto pParaAttrs = std::make_shared<SfxItemSet>(pDestNode->GetSwAttrSet());
+    auto pCharAttrs = std::make_shared<SfxItemSet>(pDestNode->GetSwAttrSet());
+    pCharAttrs->ClearItem();
+    pWrtShell->GetCurAttr(*pCharAttrs);
+    SfxWhichIter aParaIter(*pParaAttrs);
+    for (sal_uInt16 nWhich = aParaIter.FirstWhich(); nWhich; nWhich = aParaIter.NextWhich())
+    {
+        if (SwTextNode::IsParaItemKeptInMergedPaste(nWhich))
+            pParaAttrs->ClearItem(nWhich);
+    }
+    SfxWhichIter aCharIter(*pCharAttrs);
+    for (sal_uInt16 nWhich = aCharIter.FirstWhich(); nWhich; nWhich = aCharIter.NextWhich())
+    {
+        if (SwTextNode::IsCharItemKeptInMergedPaste(nWhich))
+            pCharAttrs->ClearItem(nWhich);
+    }
+    pDoc->SetMergedPasteParaAttrs(std::move(pParaAttrs));
+    pDoc->SetMergedPasteCharAttrs(std::move(pCharAttrs));
+    comphelper::ScopeGuard g([pDoc] {
+        pDoc->SetInMergedPaste(false);
+        pDoc->SetMergedPasteParaAttrs(nullptr);
+        pDoc->SetMergedPasteCharAttrs(nullptr);
+    });
+    cpo::uno::Sequence<beans::PropertyValue> aArgs
+        = { comphelper::makePropertyValue(u"Name"_ustr, createFileURL(u"merged-paste-hint.html")) };
+    dispatchCommand(mxComponent, u".uno:InsertDoc"_ustr, aArgs);
+
+    // Then the pasted run inherits the destination's hint-scope font color
+    // at the paste point, not its source color and not the default black:
+    SwTextNode* pTextNode = nullptr;
+    sal_Int32 nPasted = -1;
+    SwNodes& rNodes = pDoc->GetNodes();
+    for (SwNodeOffset i(0); i < rNodes.Count(); ++i)
+    {
+        SwTextNode* pCandidate = rNodes[i]->GetTextNode();
+        if (!pCandidate)
+            continue;
+        sal_Int32 nIdx = pCandidate->GetText().indexOf(u"Bold and green:");
+        if (nIdx >= 0)
+        {
+            pTextNode = pCandidate;
+            nPasted = nIdx;
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(pTextNode);
+    SfxItemSetFixed<RES_CHRATR_COLOR, RES_CHRATR_COLOR> aQuery(pDoc->GetAttrPool());
+    pTextNode->GetParaAttr(aQuery, nPasted, nPasted + 6);
+    const SvxColorItem* pColor = aQuery.GetItemIfSet(RES_CHRATR_COLOR);
+    // Without the accompanying fix in place, this test would have failed, the
+    // pasted run ended up with the default black color.
+    CPPUNIT_ASSERT(pColor);
+    CPPUNIT_ASSERT_EQUAL(nOrange, pColor->GetValue());
+    // Also check that the destination's "before" portion, which was outside
+    // the hint, stays uncolored at paragraph scope.
+    SfxItemSetFixed<RES_CHRATR_COLOR, RES_CHRATR_COLOR> aBefore(pDoc->GetAttrPool());
+    pTextNode->GetParaAttr(aBefore, 0, 6);
+    CPPUNIT_ASSERT(!aBefore.GetItemIfSet(RES_CHRATR_COLOR));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

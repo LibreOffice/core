@@ -1201,6 +1201,11 @@ SwTextAttr* MakeTextAttr( SwDoc & rDoc, const SfxItemSet& rSet,
                 aFiltered.ClearItem(nWhich);
             }
         }
+        // Propagate the destination's char-level properties as well:
+        if (const SfxItemSet* pCharAttrs = rDoc.GetMergedPasteCharAttrs())
+        {
+            aFiltered.Put(*pCharAttrs);
+        }
         pAutoStyle = rStyleAccess.getAutomaticStyle(aFiltered, IStyleAccess::AUTO_STYLE_CHAR);
     }
     else

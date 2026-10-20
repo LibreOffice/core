@@ -410,19 +410,32 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                     if (bMerged)
                     {
                         pDoc->SetInMergedPaste(true);
-                        // Remember the destination paragraph's relevant attributes.
                         if (SwTextNode* pDestNode = rSh.GetCursor()->GetPoint()->GetNode().GetTextNode())
                         {
-                            auto pDestAttrs = std::make_shared<SfxItemSet>(pDestNode->GetSwAttrSet());
-                            SfxWhichIter aIter(*pDestAttrs);
-                            for (sal_uInt16 nWhich = aIter.FirstWhich(); nWhich; nWhich = aIter.NextWhich())
+                            // Remember the destination paragraph's own properties:
+                            auto pParaAttrs = std::make_shared<SfxItemSet>(pDestNode->GetSwAttrSet());
+                            // Remember the destination's character properties:
+                            auto pCharAttrs = std::make_shared<SfxItemSet>(pDestNode->GetSwAttrSet());
+                            pCharAttrs->ClearItem();
+                            rSh.GetCurAttr(*pCharAttrs);
+                            SfxWhichIter aParaIter(*pParaAttrs);
+                            for (sal_uInt16 nWhich = aParaIter.FirstWhich(); nWhich; nWhich = aParaIter.NextWhich())
                             {
                                 if (SwTextNode::IsParaItemKeptInMergedPaste(nWhich))
                                 {
-                                    pDestAttrs->ClearItem(nWhich);
+                                    pParaAttrs->ClearItem(nWhich);
                                 }
                             }
-                            pDoc->SetMergedPasteParaAttrs(std::move(pDestAttrs));
+                            SfxWhichIter aCharIter(*pCharAttrs);
+                            for (sal_uInt16 nWhich = aCharIter.FirstWhich(); nWhich; nWhich = aCharIter.NextWhich())
+                            {
+                                if (SwTextNode::IsCharItemKeptInMergedPaste(nWhich))
+                                {
+                                    pCharAttrs->ClearItem(nWhich);
+                                }
+                            }
+                            pDoc->SetMergedPasteParaAttrs(std::move(pParaAttrs));
+                            pDoc->SetMergedPasteCharAttrs(std::move(pCharAttrs));
                         }
                     }
                     comphelper::ScopeGuard g(
@@ -431,6 +444,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                             {
                                 pDoc->SetInMergedPaste(false);
                                 pDoc->SetMergedPasteParaAttrs(nullptr);
+                                pDoc->SetMergedPasteCharAttrs(nullptr);
                             }
                         });
 

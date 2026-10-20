@@ -344,6 +344,8 @@ private:
     bool mbInMergedPaste = false;
     /// The paste position's paragraph properties that the pasted content should inherit.
     std::shared_ptr<SfxItemSet> m_pMergedPasteParaAttrs;
+    /// The paste position's character properties, that the pasted content's hints should inherit.
+    std::shared_ptr<SfxItemSet> m_pMergedPasteCharAttrs;
 
     enum MissingDictionary { False = -1, Undefined = 0, True = 1 };
     MissingDictionary meDictionaryMissing;
@@ -1002,6 +1004,9 @@ public:
 
     const SfxItemSet* GetMergedPasteParaAttrs() const { return m_pMergedPasteParaAttrs.get(); }
     void SetMergedPasteParaAttrs(std::shared_ptr<SfxItemSet> pAttrs) { m_pMergedPasteParaAttrs = std::move(pAttrs); }
+
+    const SfxItemSet* GetMergedPasteCharAttrs() const { return m_pMergedPasteCharAttrs.get(); }
+    void SetMergedPasteCharAttrs(std::shared_ptr<SfxItemSet> pAttrs) { m_pMergedPasteCharAttrs = std::move(pAttrs); }
 
     bool IsInWriting() const { return mbInWriting; }
     void SetInWriting(bool bNew) { mbInWriting = bNew; }
