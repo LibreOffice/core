@@ -690,7 +690,7 @@ ArgumentFit argumentFit(
     case cpo::uno::TypeClass_STRUCT:
     case cpo::uno::TypeClass_EXCEPTION:
         if (auto const type2 = getOptionalType(type)) {
-            if (JS_IsNull(val)) {
+            if (JS_IsNull(val) || JS_IsUndefined(val)) {
                 return ArgumentFit::Exact;
             }
             if (!isCompoundOfType(ctx, val, type)) {
@@ -2525,7 +2525,7 @@ cpo::uno::Any fromJs(JSContext* ctx, cpo::uno::Type const& type, JSValueConst va
                 if (JS_IsException(synthesizedOptional)) {
                     throw JsException();
                 }
-                auto const present = !JS_IsNull(val);
+                auto const present = !(JS_IsNull(val) || JS_IsUndefined(val));
                 if (JS_SetPropertyStr(
                         ctx, synthesizedOptional, "IsPresent", JS_NewBool(ctx, present))
                     == -1)

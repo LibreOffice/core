@@ -27,6 +27,9 @@ function test() {
     const b2n = Utilities.newBlob([1, 2, 3], null);
     console.assert(b2n.getContentType() === null);
     console.assert(b2n.getName() === null);
+    const b2u = Utilities.newBlob([1, 2, 3], undefined);
+    console.assert(b2u.getContentType() === null);
+    console.assert(b2u.getName() === null);
     const b3 = Utilities.newBlob([1, 2, 3], 'application/octet-stream', 'data');
     console.assert(b3.getContentType() === 'application/octet-stream');
     console.assert(b3.getName() === 'data');

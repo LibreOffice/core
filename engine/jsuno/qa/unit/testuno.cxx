@@ -871,6 +871,7 @@ console.assert(test.getOptionalString(true) === 'hello');
 console.assert(test.getOptionalString(false) === null);
 console.assert(test.unwrapOptionalString('hi') === 'hi');
 console.assert(test.unwrapOptionalString(null) === 'absent');
+console.assert(test.unwrapOptionalString(undefined) === 'absent');
 console.assert(
     test.unwrapOptionalString(
         new uno.idl.com.sun.star.beans.Optional(
@@ -896,6 +897,7 @@ console.assert(
              Value: new uno.idl.com.sun.star.testuno.StructString({m: 'hi'})}))
     === 'hi');
 console.assert(test.unwrapOptionalStructString(null) === 'absent');
+console.assert(test.unwrapOptionalStructString(undefined) === 'absent');
 console.assert(
     test.unwrapOptionalStructString(
         new uno.idl.com.sun.star.testuno.StructStringDerived({m: 'hi'}))
