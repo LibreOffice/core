@@ -300,9 +300,10 @@ public:
 
     virtual VclPtr<AbstractSvxZoomDialog> CreateSvxZoomDialog(weld::Window* pParent, const SfxItemSet& rCoreSet) = 0;
 
-    virtual VclPtr<AbstractSpellDialog>   CreateSvxSpellDialog(weld::Window* pParent,
-                                            SfxBindings* pBindings,
-                                            svx::SpellDialogChildWindow* pSpellChildWindow )=0;
+    virtual VclPtr<AbstractSpellDialog>
+    CreateSvxSpellDialog(weld::Window* pParent, SfxBindings* pBindings,
+                         svx::SpellDialogChildWindow& rSpellChildWindow)
+        = 0;
 
     virtual VclPtr<VclAbstractDialog> CreateActualizeProgressDialog(weld::Widget* pParent,
                                             GalleryTheme* pThm) = 0;

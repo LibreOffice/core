@@ -234,10 +234,8 @@ protected:
     void processDictionaryEvent(const css::linguistic2::DictionaryEvent& rDicEvt);
 
 public:
-    SpellDialog(
-        svx::SpellDialogChildWindow* pChildWindow,
-        weld::Window * pParent,
-        SfxBindings* pBindings);
+    SpellDialog(svx::SpellDialogChildWindow& rChildWindow, weld::Window* pParent,
+                SfxBindings* pBindings);
     virtual ~SpellDialog() override;
 
     /* Initialize, to be called after the constructor to prevent virtual calls

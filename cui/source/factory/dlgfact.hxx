@@ -85,10 +85,9 @@ public:
                                                                      const SfxItemSet* pAttr,
                                                                      const SdrView* pSdrView,
                                                                      bool bSizeTabPage) override;
-    virtual VclPtr<AbstractSpellDialog>  CreateSvxSpellDialog(
-                            weld::Window* pParent,
-                            SfxBindings* pBindings,
-                            svx::SpellDialogChildWindow* pSpellChildWindow ) override;
+    virtual VclPtr<AbstractSpellDialog>
+    CreateSvxSpellDialog(weld::Window* pParent, SfxBindings* pBindings,
+                         svx::SpellDialogChildWindow& rSpellChildWindow) override;
 
     virtual VclPtr<VclAbstractDialog> CreateActualizeProgressDialog(weld::Widget* pParent, GalleryTheme* pThm) override;
     virtual VclPtr<AbstractTitleDialog> CreateTitleDialog(weld::Widget* pParent, const OUString& rOldText) override;

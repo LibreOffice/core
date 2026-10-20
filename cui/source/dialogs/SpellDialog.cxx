@@ -210,13 +210,13 @@ SpellUndoAction SpellUndoAction_Impl::GetId()const
 
 // class SvxSpellCheckDialog ---------------------------------------------
 
-SpellDialog::SpellDialog(SpellDialogChildWindow* pChildWindow,
-    weld::Window * pParent, SfxBindings* _pBindings)
-    : SfxModelessDialogController (_pBindings, pChildWindow,
-        pParent, u"cui/ui/spellingdialog.ui"_ustr, u"SpellingDialog"_ustr)
-    , m_aDialogUndoLink(LINK (this, SpellDialog, DialogUndoHdl))
+SpellDialog::SpellDialog(SpellDialogChildWindow& rChildWindow, weld::Window* pParent,
+                         SfxBindings* _pBindings)
+    : SfxModelessDialogController(_pBindings, &rChildWindow, pParent,
+                                  u"cui/ui/spellingdialog.ui"_ustr, u"SpellingDialog"_ustr)
+    , m_aDialogUndoLink(LINK(this, SpellDialog, DialogUndoHdl))
     , m_bFocusLocked(true)
-    , m_rParent(*pChildWindow)
+    , m_rParent(rChildWindow)
     , m_pImpl(new SpellDialog_Impl)
     , m_xAltTitle(m_xBuilder->weld_label(u"alttitleft"_ustr))
     , m_xResumeFT(m_xBuilder->weld_label(u"resumeft"_ustr))

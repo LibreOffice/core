@@ -456,12 +456,11 @@ public:
 };
 }
 
-VclPtr<AbstractSpellDialog> AbstractDialogFactory_Impl::CreateSvxSpellDialog(
-                        weld::Window* pParent,
-                        SfxBindings* pBindings,
-                        svx::SpellDialogChildWindow* pSpellChildWindow)
+VclPtr<AbstractSpellDialog>
+AbstractDialogFactory_Impl::CreateSvxSpellDialog(weld::Window* pParent, SfxBindings* pBindings,
+                                                 svx::SpellDialogChildWindow& rSpellChildWindow)
 {
-    return VclPtr<AbstractSpellDialog_Impl>::Create(pSpellChildWindow, pParent, pBindings);
+    return VclPtr<AbstractSpellDialog_Impl>::Create(rSpellChildWindow, pParent, pBindings);
 }
 
 VclPtr<VclAbstractDialog> AbstractDialogFactory_Impl::CreateActualizeProgressDialog(weld::Widget* pParent,
