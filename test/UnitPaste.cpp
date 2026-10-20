@@ -73,17 +73,22 @@ void UnitPaste::invokeWSDTest()
 
     // A uri-list carries only web addresses; a local path in it is rejected.
     helpers::assertErrorReply(socket, "paste mimetype=text/uri-list\nfile:///etc/hosts\r\n",
-                              "paste", "syntax", testname);
+                              "paste", "notallowed", testname);
     helpers::assertErrorReply(socket,
                               "paste mimetype=text/uri-list\n# comment\nhttps://example.com/a.png\n"
                               "/etc/hosts\n",
-                              "paste", "syntax", testname);
+                              "paste", "notallowed", testname);
+
+    // A web address is recognised by its full scheme prefix, so a scheme that merely starts with
+    // the same letters is rejected too.
+    helpers::assertErrorReply(socket, "paste mimetype=text/uri-list\nhttpfoo:///etc/hosts\n",
+                              "paste", "notallowed", testname);
 
     // The single file name format is never offered by the browser, so it is rejected as well.
     helpers::assertErrorReply(socket,
                               "paste mimetype=application/x-openoffice-file;"
                               "windows_formatname=\"FileNameW\"\n/etc/hosts",
-                              "paste", "syntax", testname);
+                              "paste", "notallowed", testname);
 
     // Ordinary text still pastes after the rejected attempts.
     helpers::sendTextFrame(socket, "uno .uno:SelectAll", testname);

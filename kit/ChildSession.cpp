@@ -2566,7 +2566,7 @@ bool uriListHasOnlyWebAddresses(const std::string_view body)
             Util::toLower(std::string(Util::trimmed(Util::rtrim(line, '\r'))));
         if (entry.empty() || entry[0] == '#')
             continue;
-        if (!entry.starts_with("http"))
+        if (!entry.starts_with("http://") && !entry.starts_with("https://"))
             return false;
     }
 
@@ -2623,7 +2623,7 @@ bool ChildSession::paste(const char* buffer, int length, const StringVector& tok
          (mimeType.starts_with("text/uri-list") &&
           !uriListHasOnlyWebAddresses(std::string_view(data, size)))))
     {
-        sendTextFrameAndLogError("error: cmd=paste kind=syntax");
+        sendTextFrameAndLogError("error: cmd=paste kind=notallowed");
         return false;
     }
 
