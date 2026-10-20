@@ -444,14 +444,4 @@ OUString SfxHelp::CreateHelpURL(const OUString& aCommandURL, const OUString& rMo
     return pHelp ? SfxHelp::CreateHelpURL_Impl( aCommandURL, rModuleName ) : OUString();
 }
 
-OUString SfxHelp::GetDefaultHelpModule()
-{
-    return getDefaultModule_Impl();
-}
-
-OUString SfxHelp::GetCurrentModuleIdentifier()
-{
-    return getCurrentModuleIdentifier_Impl();
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

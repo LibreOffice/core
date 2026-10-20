@@ -99,64 +99,6 @@ std::vector<OUString> SfxContentHelper::GetResultSet( const OUString& rURL )
 }
 
 
-std::vector< OUString > SfxContentHelper::GetHelpTreeViewContents( const OUString& rURL )
-{
-    vector< OUString > aProperties;
-    try
-    {
-        const uno::Reference< cpo::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
-        uno::Reference< task::XInteractionHandler > xInteractionHandler(
-            task::InteractionHandler::createWithParent(xContext, nullptr), uno::UNO_QUERY_THROW );
-
-        ::ucbhelper::Content aCnt( rURL, new ::ucbhelper::CommandEnvironment( xInteractionHandler, uno::Reference< ucb::XProgressHandler >() ), comphelper::getProcessComponentContext() );
-        uno::Reference< sdbc::XResultSet > xResultSet;
-
-        try
-        {
-            uno::Reference< ucb::XDynamicResultSet > xDynResultSet = aCnt.createDynamicCursor( { u"Title"_ustr, u"IsFolder"_ustr } );
-            if ( xDynResultSet.is() )
-                xResultSet = xDynResultSet->getStaticResultSet();
-        }
-        catch( const ucb::CommandAbortedException& )
-        {
-        }
-        catch( const cpo::uno::Exception& )
-        {
-        }
-
-        if ( xResultSet.is() )
-        {
-            uno::Reference< sdbc::XRow > xRow( xResultSet, uno::UNO_QUERY );
-            uno::Reference< ucb::XContentAccess > xContentAccess( xResultSet, uno::UNO_QUERY );
-
-            try
-            {
-                while ( xResultSet->next() )
-                {
-                    OUString aTitle( xRow->getString(1) );
-                    bool bFolder = xRow->getBoolean(2);
-                    OUString aRow = aTitle + "\t" +
-                        xContentAccess->queryContentIdentifierString() + "\t" +
-                        (bFolder ? std::u16string_view(u"1") : std::u16string_view(u"0"));
-                    aProperties.push_back( aRow );
-                }
-            }
-            catch( const ucb::CommandAbortedException& )
-            {
-            }
-            catch( const cpo::uno::Exception& )
-            {
-            }
-        }
-    }
-    catch( const cpo::uno::Exception& )
-    {
-    }
-
-    return aProperties;
-}
-
-
 OUString SfxContentHelper::GetActiveHelpString( const OUString& rURL )
 {
     OUStringBuffer aRet;
@@ -185,27 +127,6 @@ OUString SfxContentHelper::GetActiveHelpString( const OUString& rURL )
     }
 
     return aRet.makeStringAndClear();
-}
-
-
-bool SfxContentHelper::IsHelpErrorDocument( std::u16string_view rURL )
-{
-    bool bRet = false;
-    try
-    {
-        ::ucbhelper::Content aCnt( INetURLObject( rURL ).GetMainURL( INetURLObject::DecodeMechanism::NONE ),
-                      uno::Reference< ucb::XCommandEnvironment >(),
-                      comphelper::getProcessComponentContext() );
-        if ( !( aCnt.getPropertyValue( u"IsErrorDocument"_ustr ) >>= bRet ) )
-        {
-            SAL_WARN( "sfx.bastyp", "Property 'IsErrorDocument' is missing" );
-        }
-    }
-    catch( const cpo::uno::Exception& )
-    {
-    }
-
-    return bRet;
 }
 
 

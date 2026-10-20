@@ -29,9 +29,7 @@ class SfxContentHelper
 {
 public:
     static std::vector<OUString> GetResultSet(const OUString& rURL);
-    static std::vector<OUString> GetHelpTreeViewContents(const OUString& rURL);
     static OUString GetActiveHelpString(const OUString& rURL);
-    static bool IsHelpErrorDocument(std::u16string_view rURL);
 
     static sal_Int64 GetSize(std::u16string_view rContent);
 };

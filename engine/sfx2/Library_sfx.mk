@@ -188,7 +188,6 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/dialog/securitypage \
     sfx2/source/dialog/sfxdlg \
     sfx2/source/dialog/splitwin \
-    sfx2/source/dialog/srchdlg \
     sfx2/source/dialog/styfitem \
     sfx2/source/dialog/styledlg \
     sfx2/source/dialog/tabdlg \

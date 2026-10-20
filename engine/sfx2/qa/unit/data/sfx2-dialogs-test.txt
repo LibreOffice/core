@@ -55,7 +55,6 @@ sfx/ui/versionscmis.ui
 sfx/ui/loadtemplatedialog.ui
 sfx/ui/templatedlg.ui
 sfx/ui/printeroptionsdialog.ui
-sfx/ui/searchdialog.ui
 sfx/ui/errorfindemaildialog.ui
 sfx/ui/querysavedialog.ui
 sfx/ui/startcenter.ui

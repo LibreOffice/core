@@ -49,8 +49,6 @@ public:
     virtual OUString        GetHelpText(const OUString&) override;
 
     static OUString         CreateHelpURL( const OUString& aCommandURL, const OUString& rModuleName );
-    static OUString         GetDefaultHelpModule();
-    static OUString         GetCurrentModuleIdentifier();
 
     static OUString GetURLHelpText(std::u16string_view);
 };
