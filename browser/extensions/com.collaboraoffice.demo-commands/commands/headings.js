@@ -1,26 +1,46 @@
-// The text ranges that a command works on, which are the selected ones when there is a selection
-// and the cursor otherwise:
-function targetRanges() {
-	var doc = DocumentApp.getActiveDocument();
-	var selection = doc.getSelection();
-	if (!selection) return [doc.getCursor().uno];
-	var ranges = [];
-	for (var i = 0; i < selection.uno.getCount(); ++i) ranges.push(selection.uno.getByIndex(i));
-	return ranges;
+function paragraphOf(element) {
+	if (
+		element.getType() === DocumentApp.ElementType.TEXT ||
+		element.getType() === DocumentApp.ElementType.INLINE_IMAGE
+	) {
+		element = element.getParent();
+		if (!element) {
+			return null;
+		}
+	}
+	const type = element.getType();
+	if (type === DocumentApp.ElementType.PARAGRAPH) {
+		return element.asParagraph();
+	}
+	if (type === DocumentApp.ElementType.LIST_ITEM) {
+		return element.asListItem();
+	}
+	return null;
 }
 
-function setParagraphStyle(name) {
-	targetRanges().forEach(function (range) { range.setPropertyValue('ParaStyleName', name); });
+function setHeading(heading) {
+	const doc = DocumentApp.getActiveDocument();
+	const selection = doc.getSelection();
+	const cursor = doc.getCursor();
+	const elements = selection
+		? selection.getRangeElements().map((rangeElement) => rangeElement.getElement())
+		: cursor ? [cursor.getElement()] : [];
+	for (const element of elements) {
+		const paragraph = paragraphOf(element);
+		if (paragraph) {
+			paragraph.setHeading(heading);
+		}
+	}
 }
 
 var commands = {
 	heading1: function () {
-		setParagraphStyle('Heading 1');
+		setHeading(DocumentApp.ParagraphHeading.HEADING1);
 	},
 	heading2: function () {
-		setParagraphStyle('Heading 2');
+		setHeading(DocumentApp.ParagraphHeading.HEADING2);
 	},
 	heading3: function () {
-		setParagraphStyle('Heading 3');
+		setHeading(DocumentApp.ParagraphHeading.HEADING3);
 	},
 };
