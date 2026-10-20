@@ -20,6 +20,7 @@
 #pragma once
 
 #include <glob.hxx>
+#include <sal/types.h>
 #include <sfx2/viewsh.hxx>
 #include <memory>
 
@@ -52,7 +53,7 @@ class ViewTabBar;
     time as much code as possible should be moved from the stacked
     shells to this class.</p>
 */
-class ViewShellBase
+class SAL_DLLPUBLIC_RTTI ViewShellBase
     : public SfxViewShell
 {
 public:
