@@ -30,6 +30,7 @@ $(eval $(call gb_Library_use_libraries,scriptinterop,\
     i18nlangtag \
     sal \
     svt \
+    tl \
 ))
 
 $(eval $(call gb_Library_use_api,scriptinterop,\
