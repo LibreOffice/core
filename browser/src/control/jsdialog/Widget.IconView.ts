@@ -407,6 +407,9 @@ JSDialog.iconView = function (
 				.join('|')
 		: '';
 	const cache = builder.rendersCache[data.id];
+	// The cache of a view is created on its first build, so one that exists means
+	// the view was shown before.
+	const shownBefore = !!cache;
 	if (!cache) {
 		// The first build records the signature of its entries, so a later
 		// build with the same entries finds the images of this one.
@@ -641,7 +644,7 @@ JSDialog.iconView = function (
 		}
 	});
 
-	app.layoutingService.appendLayoutingTask(() => {
+	const createEntries = () => {
 		const shouldSelectFirstEntry =
 			data.entries?.length > 0
 				? !data.entries.some((entry) => entry.selected === true)
@@ -654,7 +657,11 @@ JSDialog.iconView = function (
 		for (const i in data.entries) {
 			_iconViewEntry(iconview, data, data.entries[i], builder);
 		}
+	};
 
+	// The indexes and the scroll position come from the layout, so they are settled
+	// once the view is in the document.
+	const placeEntries = () => {
 		JSDialog.UpdateIconViewIndexes(iconview);
 
 		// Do not animate on creation - eg. when opening sidebar with icon view it might move the app
@@ -663,7 +670,20 @@ JSDialog.iconView = function (
 			const offsetTop = firstSelected.offsetTop;
 			iconview.scrollTop = offsetTop;
 		}
-	});
+	};
+
+	// A view that was shown before is built complete, so a rebuilt notebookbar paints
+	// it in the same frame as everything else. A view shown for the first time gets
+	// its entries in a layouting task.
+	if (shownBefore) {
+		createEntries();
+		app.layoutingService.appendLayoutingTask(placeEntries);
+	} else {
+		app.layoutingService.appendLayoutingTask(() => {
+			createEntries();
+			placeEntries();
+		});
+	}
 
 	return false;
 };
