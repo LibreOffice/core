@@ -78,37 +78,39 @@ private:
 
 struct snew_slide_value_info
 {
-    sal_uInt16 mnId;
     OUString msBmpResId;
     TranslateId mpStrResId;
     OUString msUnoCommand;
 };
-
 }
 
 constexpr snew_slide_value_info editmodes[]
-    = { { 1, BMP_DISPLAYMODE_SLIDE, STR_NORMAL_MODE, u".uno:NormalMultiPaneGUI"_ustr },
-        { 2, BMP_DISPLAYMODE_OUTLINE, STR_OUTLINE_MODE, u".uno:OutlineMode"_ustr },
-        { 3, BMP_DISPLAYMODE_NOTES, STR_NOTES_MODE, u".uno:NotesMode"_ustr },
-        { 4, BMP_DISPLAYMODE_SLIDE_SORTER, STR_SLIDE_SORTER_MODE, u".uno:DiaMode"_ustr } };
+    = { { BMP_DISPLAYMODE_SLIDE, STR_NORMAL_MODE, u".uno:NormalMultiPaneGUI"_ustr },
+        { BMP_DISPLAYMODE_OUTLINE, STR_OUTLINE_MODE, u".uno:OutlineMode"_ustr },
+        { BMP_DISPLAYMODE_NOTES, STR_NOTES_MODE, u".uno:NotesMode"_ustr },
+        { BMP_DISPLAYMODE_SLIDE_SORTER, STR_SLIDE_SORTER_MODE, u".uno:DiaMode"_ustr } };
 
 constexpr snew_slide_value_info mastermodes[]
-    = { { 5, BMP_DISPLAYMODE_SLIDE_MASTER, STR_SLIDE_MASTER_MODE, u".uno:SlideMasterPage"_ustr },
-        { 6, BMP_DISPLAYMODE_NOTES_MASTER, STR_NOTES_MASTER_MODE, u".uno:NotesMasterPage"_ustr },
-        { 7, BMP_DISPLAYMODE_HANDOUT_MASTER, STR_HANDOUT_MASTER_MODE, u".uno:HandoutMode"_ustr } };
+    = { { BMP_DISPLAYMODE_SLIDE_MASTER, STR_SLIDE_MASTER_MODE, u".uno:SlideMasterPage"_ustr },
+        { BMP_DISPLAYMODE_NOTES_MASTER, STR_NOTES_MASTER_MODE, u".uno:NotesMasterPage"_ustr },
+        { BMP_DISPLAYMODE_HANDOUT_MASTER, STR_HANDOUT_MASTER_MODE, u".uno:HandoutMode"_ustr } };
 
 static void fillLayoutValueSet(ValueSet* pValue, std::span<const snew_slide_value_info> aInfos)
 {
     Size aLayoutItemSize;
+
+    sal_uInt16 nItemId = 1;
     for (const snew_slide_value_info& rInfo : aInfos)
     {
         OUString aText(SdResId(rInfo.mpStrResId));
         Bitmap aBmp(rInfo.msBmpResId);
 
-        pValue->InsertItem(rInfo.mnId, Image(aBmp), aText);
+        pValue->InsertItem(nItemId, Image(aBmp), aText);
 
         aLayoutItemSize.setWidth( std::max( aLayoutItemSize.Width(),  aBmp.GetSizePixel().Width()  ) );
         aLayoutItemSize.setHeight( std::max( aLayoutItemSize.Height(), aBmp.GetSizePixel().Height() ) );
+
+        nItemId++;
     }
 
     aLayoutItemSize = pValue->CalcItemSizePixel( aLayoutItemSize );
@@ -157,8 +159,8 @@ IMPL_LINK( DisplayModeToolbarMenu, SelectValueSetHdl, ValueSet*, pControl, void 
         sImage = editmodes[mxDisplayModeSet1->GetSelectedItemId() - 1 ].msBmpResId;
     }
     else if( pControl == mxDisplayModeSet2.get() ) {
-        sCommandURL = mastermodes[mxDisplayModeSet2->GetSelectedItemId() - 5].msUnoCommand;
-        sImage = mastermodes[mxDisplayModeSet2->GetSelectedItemId() - 5 ].msBmpResId;
+        sCommandURL = mastermodes[mxDisplayModeSet2->GetSelectedItemId() - 1].msUnoCommand;
+        sImage = mastermodes[mxDisplayModeSet2->GetSelectedItemId() - 1].msBmpResId;
     }
 
     if (!sCommandURL.isEmpty())
