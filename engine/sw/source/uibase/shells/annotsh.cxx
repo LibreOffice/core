@@ -413,6 +413,7 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 const SvxHyperlinkItem& rHLinkItem = *static_cast<const SvxHyperlinkItem *>(pItem);
                 SvxURLField aField(rHLinkItem.GetURL(), rHLinkItem.GetName(), SvxURLFormat::AppDefault);
                 aField.SetTargetFrame(rHLinkItem.GetTargetFrame());
+                aField.SetTitle(rHLinkItem.GetTitle());
 
                 const std::optional<SvxFieldItem> oFieldItem = pOLV->GetFieldAtSelection();
 
@@ -1121,6 +1122,7 @@ void SwAnnotationShell::StateInsert(SfxItemSet &rSet)
                     SvxHyperlinkItem aHLinkItem;
                     aHLinkItem.SetShowName(false);
                     aHLinkItem.SetShowText(true);
+                    aHLinkItem.SetShowTitle(true);
                     aHLinkItem.SetInsertMode(HLINK_FIELD);
 
                     const std::optional<SvxFieldItem> oFieldItem = pOLV->GetFieldAtSelection();
@@ -1132,6 +1134,7 @@ void SwAnnotationShell::StateInsert(SfxItemSet &rSet)
                             aHLinkItem.SetName(pURLField->GetRepresentation());
                             aHLinkItem.SetURL(pURLField->GetURL());
                             aHLinkItem.SetTargetFrame(pURLField->GetTargetFrame());
+                            aHLinkItem.SetTitle(pURLField->GetTitle());
                         }
                     }
                     else

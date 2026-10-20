@@ -11,6 +11,8 @@
 
 #include <cmath>
 
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
@@ -20,14 +22,21 @@
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart/XChartDataArray.hpp>
 
+#include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/intitem.hxx>
+#include <svx/hlnkitem.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svdview.hxx>
+#include <svx/svxids.hrc>
 #include <editeng/eeitem.hxx>
 #include <editeng/adjustitem.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/editobj.hxx>
+#include <editeng/editview.hxx>
+#include <editeng/flditem.hxx>
+#include <editeng/outliner.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <unotools/ucbstreamhelper.hxx>
@@ -39,6 +48,8 @@
 
 #include <IDocumentContentOperations.hxx>
 #include <IDocumentRedlineAccess.hxx>
+#include <AnnotationWin.hxx>
+#include <PostItMgr.hxx>
 #include <cmdid.h>
 #include <fmtanchr.hxx>
 #include <fmtfsize.hxx>
@@ -137,6 +148,84 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testShapeTextAlignment)
     SvxAdjust eAdjust = rParaAttribs.GetItem(EE_PARA_JUST)->GetAdjust();
     CPPUNIT_ASSERT_EQUAL(SvxAdjust::Center, eAdjust);
 #endif
+}
+
+namespace
+{
+/// Sets a link with a title on the selection through the Hyperlink dialog's request, then checks
+/// that the dialog shows the title again.
+void setAndCheckHyperlinkTitle(SwView& rView, OutlinerView& rOlView)
+{
+    SvxHyperlinkItem aItem(SID_HYPERLINK_SETLINK);
+    aItem.SetURL(u"https://example.org/"_ustr);
+    aItem.SetName(u"f"_ustr);
+    aItem.SetTitle(u"Example site"_ustr);
+    aItem.SetInsertMode(HLINK_FIELD);
+    rView.GetViewFrame().GetDispatcher()->ExecuteList(SID_HYPERLINK_SETLINK,
+                                                      SfxCallMode::SYNCHRON, { &aItem });
+
+    // The URL field has the title:
+    rOlView.SetSelection(ESelection(0, 0, 0, 1));
+    const SvxFieldItem* pFieldItem = rOlView.GetFieldAtSelection();
+    CPPUNIT_ASSERT(pFieldItem);
+    auto pURLField = dynamic_cast<const SvxURLField*>(pFieldItem->GetField());
+    CPPUNIT_ASSERT(pURLField);
+    // Without the accompanying fix in place, this test would have failed, the title was lost.
+    CPPUNIT_ASSERT_EQUAL(u"Example site"_ustr, pURLField->GetTitle());
+
+    // And the dialog shows the title when the link is edited again:
+    std::unique_ptr<SvxHyperlinkItem> pState;
+    rView.GetViewFrame().GetBindings().QueryState(SID_HYPERLINK_GETLINK, pState);
+    CPPUNIT_ASSERT(pState);
+    CPPUNIT_ASSERT_EQUAL(u"Example site"_ustr, pState->GetTitle());
+    CPPUNIT_ASSERT(pState->GetShowTitle());
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testTdf173709HyperlinkTitleTextBox)
+{
+    // Given a shape in text edit with a selected character:
+    createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
+    xShape->setSize(awt::Size(2000, 2000));
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    xDrawPageSupplier->getDrawPage()->add(xShape);
+    selectShape(1);
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwView* pView = getSwDocShell()->GetView();
+    SdrPage* pPage = pWrtShell->GetDoc()->getIDocumentDrawModelAccess().GetDrawModel()->GetPage(0);
+    pView->EnterShapeDrawTextMode(pPage->GetObj(0));
+    pView->AttrChangedNotify(nullptr);
+    OutlinerView* pOlView = pWrtShell->GetDrawView()->GetTextEditOutlinerView();
+    CPPUNIT_ASSERT(pOlView);
+    pOlView->InsertText(u"f"_ustr);
+    pOlView->SetSelection(ESelection(0, 0, 0, 1));
+
+    // When the Hyperlink dialog sets a link with a title, then the title is kept:
+    setAndCheckHyperlinkTitle(*pView, *pOlView);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testTdf173709HyperlinkTitleComment)
+{
+    // Given a comment in edit with a selected character:
+    createSwDoc();
+    dispatchCommand(mxComponent, u".uno:InsertAnnotation"_ustr, {});
+    SwView* pView = getSwDocShell()->GetView();
+    SwPostItMgr* pPostItMgr = pView->GetPostItMgr();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPostItMgr->GetPostItFields().size());
+    pPostItMgr->SetActiveSidebarWin(pPostItMgr->GetPostItFields()[0]->mpPostIt);
+    pView->AttrChangedNotify(nullptr);
+    sw::annotation::SwAnnotationWin* pWin = pPostItMgr->GetActiveSidebarWin();
+    CPPUNIT_ASSERT(pWin);
+    OutlinerView* pOlView = pWin->GetOutlinerView();
+    CPPUNIT_ASSERT(pOlView);
+    pOlView->InsertText(u"f"_ustr);
+    pOlView->SetSelection(ESelection(0, 0, 0, 1));
+
+    // When the Hyperlink dialog sets a link with a title, then the title is kept:
+    setAndCheckHyperlinkTitle(*pView, *pOlView);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testOleSavePreviewUpdate)
