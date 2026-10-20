@@ -965,7 +965,8 @@ public:
     }
 
     cpo::uno::Reference<scriptinterop::XText> setLinkUrl(OUString const & url) override {
-        setLinkUrlOn(wholeRange(), url);
+        auto const whole = wholeRange();
+        setLinkUrlOn(whole->getText()->createTextCursorByRange(whole), url);
         return this;
     }
 

@@ -286,6 +286,8 @@ function test() {
     }
     body.editAsText().setForegroundColor('#123456');
     console.assert(body.editAsText().getForegroundColor() === '#123456');
+    appended.editAsText().setLinkUrl('https://example.com/');
+    console.assert(appended.editAsText().getLinkUrl(0) === 'https://example.com/');
 
     // Exercise the Text mutation methods; each returns Text so the calls chain:
     appended.editAsText().setText('foo').appendText('bar').insertText(3, '-');
