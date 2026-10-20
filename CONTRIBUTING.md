@@ -221,6 +221,19 @@ being written in the style it is, but unless you plan to change some
 style detail completely and consistently all over, please keep to
 the style of the existing code when editing.
 
+The repository includes a `.clang-format` configuration, which is generally
+used for explicit formatting rather than automatic formatting of entire
+files. Some editors may detect it and enable format-on-save, introducing
+unrelated changes.
+
+For JavaScript and TypeScript, Prettier is used in `browser/`, with its
+configuration in `browser/.prettierrc`. The root `.editorconfig` applies
+more broadly, so editors may automatically format files outside `browser/`
+using settings that differ from their existing style.
+
+Be aware of automatic formatting in your editor and check for unintended
+changes before committing.
+
 The style is roughly as follows, in rough order of importance:
 
 - Source code files should have unix line terminators (LF).
