@@ -131,6 +131,10 @@ public:
     }
 };
 
+/// Returns the space-separated commandList, followed by each command that does the same as a
+/// listed command under a different name.
+std::string addRelatedCommands(const std::string& commandList);
+
 class RestrictionManager
 {
     static std::unordered_set<std::string> RestrictedCommandList;

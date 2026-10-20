@@ -174,6 +174,7 @@ AM_CPPFLAGS = -pthread -I$(top_srcdir) -DBUILDING_TESTS -DLOK_ABORT_ON_ASSERTION
 test_base_sources = \
 	AIUtilTests.cpp \
 	BgSaveWhiteBoxTests.cpp \
+	CommandControlTests.cpp \
 	ConfigUtilTests.cpp \
 	DeckSpecTests.cpp \
 	DeltaTests.cpp \

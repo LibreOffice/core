@@ -23,10 +23,41 @@
 #include <common/Util.hpp>
 
 #include <string>
+#include <string_view>
 #include <unordered_set>
+#include <utility>
 
 namespace CommandControl
 {
+namespace
+{
+/// Pairs of a command and another command that does the same under a different name.
+constexpr std::pair<std::string_view, std::string_view> RelatedCommands[] = {
+    // Both switch the same change recording as .uno:TrackChanges, for one view or for all views.
+    { ".uno:TrackChanges", ".uno:TrackChangesInThisView" },
+    { ".uno:TrackChanges", ".uno:TrackChangesInAllViews" },
+};
+} // namespace
+
+std::string addRelatedCommands(const std::string& commandList)
+{
+    const StringVector commands = StringVector::tokenize(commandList);
+    std::string result = commandList;
+    for (const auto& [command, related] : RelatedCommands)
+    {
+        for (std::size_t i = 0; i < commands.size(); ++i)
+        {
+            if (commands.equals(i, command))
+            {
+                result.append(" ").append(related);
+                break;
+            }
+        }
+    }
+
+    return result;
+}
+
 bool LockManager::_isLockedUser = false;
 bool LockManager::_isHostReadOnly = false;
 std::unordered_set<std::string> LockManager::LockedCommandList;
@@ -44,6 +75,7 @@ void LockManager::generateLockedCommandList()
 
     LockedCommandListString = ConfigUtil::getString("feature_lock.locked_commands", "");
     Util::trim(LockedCommandListString);
+    LockedCommandListString = addRelatedCommands(LockedCommandListString);
     StringVector commandList = StringVector::tokenize(LockedCommandListString);
 
     std::string command;
@@ -191,7 +223,7 @@ std::string RestrictionManager::getRestrictedCommandListString()
 #ifdef ENABLE_FEATURE_RESTRICTION
     if (RestrictedCommandListString.empty())
         RestrictedCommandListString =
-            Util::trimmed(ConfigUtil::getString("restricted_commands", ""));
+            addRelatedCommands(Util::trimmed(ConfigUtil::getString("restricted_commands", "")));
 #endif
 
     return RestrictedCommandListString;
