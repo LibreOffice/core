@@ -39,6 +39,7 @@
 #include <svx/sdshcitm.hxx>
 #include <svx/sdsxyitm.hxx>
 #include <editeng/ulspitem.hxx>
+#include <editeng/lspcitem.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/cmapitem.hxx>
 #include <editeng/opticalsizingitem.hxx>
@@ -254,39 +255,35 @@ void SdStyleSheetPool::CreateLayoutStyleSheets(std::u16string_view rLayoutName, 
                 // tdf#153368 Optical sizing by default but only for new documents
                 rSet.Put(SvxOpticalSizingItem(true, EE_CHAR_OPTICALSIZING));
 
+                SvxLineSpacingItem aLineSpacing(LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL);
+                aLineSpacing.SetPropLineSpace(90);
+                rSet.Put(aLineSpacing);
+
                 vcl::Font f( GetBulletFont() );
                 PutNumBulletItem( pSheet, f );
             }
 
-            sal_uLong nFontSize = 20;
-            sal_uInt16 nUpper = 100;
+            sal_uLong nFontSize = 18;
+            sal_uInt16 nUpper = convertPointToMm100(5);
 
             switch (nLevel)
             {
                 case 1:
                 {
-                    nFontSize = 32;
-                    nUpper = 500;
+                    nFontSize = 28;
+                    nUpper = convertPointToMm100(10);
                 }
                 break;
 
                 case 2:
                 {
-                    nFontSize = 28;
-                    nUpper = 400;
+                    nFontSize = 24;
                 }
                 break;
 
                 case 3:
                 {
-                    nFontSize = 24;
-                    nUpper = 300;
-                }
-                break;
-
-                case 4:
-                {
-                    nUpper = 200;
+                    nFontSize = 20;
                 }
                 break;
             }
