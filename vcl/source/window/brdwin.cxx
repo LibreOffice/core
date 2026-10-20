@@ -288,45 +288,44 @@ void ImplBorderWindowView::ImplMouseMove(ImplBorderFrameData& rData, const Mouse
         rData.mpBorderWindow->Invalidate(rData.maMenuRect);
 }
 
-OUString ImplBorderWindowView::ImplRequestHelp( ImplBorderFrameData const * pData,
-                                              const Point& rPos,
-                                              tools::Rectangle& rHelpRect )
+OUString ImplBorderWindowView::ImplRequestHelp(const ImplBorderFrameData& rData, const Point& rPos,
+                                               tools::Rectangle& rHelpRect)
 {
     TranslateId pHelpId;
     OUString aHelpStr;
-    BorderWindowHitTest nHitTest = ImplHitTest( pData, rPos );
+    BorderWindowHitTest nHitTest = ImplHitTest(&rData, rPos);
     if ( nHitTest != BorderWindowHitTest::NONE )
     {
         if ( nHitTest & BorderWindowHitTest::Close )
         {
             pHelpId     = SV_HELPTEXT_CLOSE;
-            rHelpRect   = pData->maCloseRect;
+            rHelpRect = rData.maCloseRect;
         }
         else if ( nHitTest & BorderWindowHitTest::Dock )
         {
             pHelpId     = SV_HELPTEXT_MAXIMIZE;
-            rHelpRect   = pData->maDockRect;
+            rHelpRect = rData.maDockRect;
         }
         else if ( nHitTest & BorderWindowHitTest::Hide )
         {
             pHelpId     = SV_HELPTEXT_MINIMIZE;
-            rHelpRect   = pData->maHideRect;
+            rHelpRect = rData.maHideRect;
         }
         else if ( nHitTest & BorderWindowHitTest::Help )
         {
             pHelpId     = SV_HELPTEXT_HELP;
-            rHelpRect   = pData->maHelpRect;
+            rHelpRect = rData.maHelpRect;
         }
         else if ( nHitTest & BorderWindowHitTest::Title )
         {
-            if( !pData->maTitleRect.IsEmpty() )
+            if (!rData.maTitleRect.IsEmpty())
             {
                 // tooltip only if title truncated
-                if( pData->mbTitleClipped )
+                if (rData.mbTitleClipped)
                 {
-                    rHelpRect   = pData->maTitleRect;
+                    rHelpRect = rData.maTitleRect;
                     // no help id, use window title as help string
-                    aHelpStr    = pData->mpBorderWindow->GetText();
+                    aHelpStr = rData.mpBorderWindow->GetText();
                 }
             }
         }
@@ -1235,7 +1234,7 @@ bool ImplStdBorderWindowView::Tracking( const TrackingEvent& rTEvt )
 
 OUString ImplStdBorderWindowView::RequestHelp( const Point& rPos, tools::Rectangle& rHelpRect )
 {
-    return ImplRequestHelp( &maFrameData, rPos, rHelpRect );
+    return ImplRequestHelp(maFrameData, rPos, rHelpRect);
 }
 
 tools::Rectangle ImplStdBorderWindowView::GetMenuRect() const
