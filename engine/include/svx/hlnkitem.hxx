@@ -55,6 +55,8 @@ class SVX_DLLPUBLIC SvxHyperlinkItem final : public SfxPoolItem
 
     bool m_showName = true;
     bool m_showText = true;
+    // only where the title is stored, e.g. a Writer text hyperlink
+    bool m_showTitle = false;
 
     OUString m_sIntName;
     OUString m_sTitle;
@@ -107,6 +109,9 @@ public:
 
     bool GetShowText() const { return m_showText; }
     void    SetShowText(const bool show) { m_showText = show; }
+
+    bool GetShowTitle() const { return m_showTitle; }
+    void    SetShowTitle(const bool show) { m_showTitle = show; }
 
     SvxLinkInsertMode GetInsertMode() const { return m_eType; }
     void    SetInsertMode( SvxLinkInsertMode eNew ) { m_eType = eNew; }

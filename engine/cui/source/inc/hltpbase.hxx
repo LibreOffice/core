@@ -48,10 +48,12 @@ private:
     std::unique_ptr<weld::ComboBox> mxCbbFrame;
     std::unique_ptr<weld::ComboBox> mxLbForm;
     std::unique_ptr<weld::Entry> mxEdIndication;
+    std::unique_ptr<weld::Entry> mxEdTitle;
     std::unique_ptr<weld::Entry> mxEdText;
     std::unique_ptr<weld::Button> mxBtScript;
     std::unique_ptr<weld::Label> mxFormLabel;
     std::unique_ptr<weld::Label> mxFrameLabel;
+    std::unique_ptr<weld::Label> mxTitleLabel;
     std::unique_ptr<weld::Label> mxNameLabel;
     std::unique_ptr<weld::Label> mxIndicationLabel;
     std::unique_ptr<weld::Label> mxTabLabel;
@@ -61,6 +63,7 @@ private:
 
     bool m_showName = true;
     bool m_showText = true;
+    bool m_showTitle = false;
 
     cpo::uno::Reference< css::frame::XFrame >
                                 mxDocumentFrame;
@@ -71,8 +74,6 @@ protected:
     bool                mbStdControlsInit;
 
     OUString            maStrInitURL;
-    // the hyperlink title, which the dialog has no field for yet
-    OUString            maStrTitle;
 
     Timer               maTimer;
 

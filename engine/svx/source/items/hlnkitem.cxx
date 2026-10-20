@@ -34,6 +34,7 @@ SvxHyperlinkItem::SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem )
     m_sReplacementText(rHyperlinkItem.m_sReplacementText),
     m_showName(rHyperlinkItem.m_showName),
     m_showText(rHyperlinkItem.m_showText),
+    m_showTitle(rHyperlinkItem.m_showTitle),
     m_sIntName(rHyperlinkItem.m_sIntName),
     m_sTitle(rHyperlinkItem.m_sTitle),
     m_nMacroEvents(rHyperlinkItem.m_nMacroEvents),
@@ -84,6 +85,7 @@ bool SvxHyperlinkItem::operator==( const SfxPoolItem& rAttr ) const
                   m_sReplacementText == rItem.m_sReplacementText &&
                   m_showText == rItem.m_showText &&
                   m_showName == rItem.m_showName &&
+                  m_showTitle == rItem.m_showTitle &&
                   m_bTextIsHint == rItem.m_bTextIsHint);
     if (!bRet)
         return false;

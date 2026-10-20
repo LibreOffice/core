@@ -107,10 +107,12 @@ SvxHyperlinkTabPageBase::SvxHyperlinkTabPageBase(weld::Container* pParent,
   , mxCbbFrame(xBuilder->weld_combo_box(u"frame"_ustr))
   , mxLbForm(xBuilder->weld_combo_box(u"form"_ustr))
   , mxEdIndication(xBuilder->weld_entry(u"indication"_ustr))
+  , mxEdTitle(xBuilder->weld_entry(u"title"_ustr))
   , mxEdText(xBuilder->weld_entry(u"name"_ustr))
   , mxBtScript(xBuilder->weld_button(u"script"_ustr))
   , mxFormLabel(xBuilder->weld_label(u"form_label"_ustr))
   , mxFrameLabel(xBuilder->weld_label(u"frame_label"_ustr))
+  , mxTitleLabel(xBuilder->weld_label(u"title_label"_ustr))
   , mxNameLabel(xBuilder->weld_label(u"name_label"_ustr))
   , mxIndicationLabel(xBuilder->weld_label(u"indication_label"_ustr))
   , mxTabLabel(xBuilder->weld_label(u"label2"_ustr))
@@ -234,7 +236,7 @@ void SvxHyperlinkTabPageBase::FillStandardDlgFields ( const SvxHyperlinkItem* pH
 {
     m_showName = pHyperlinkItem->GetShowName();
     m_showText = pHyperlinkItem->GetShowText();
-    maStrTitle = pHyperlinkItem->GetTitle();
+    m_showTitle = pHyperlinkItem->GetShowTitle();
 
     // Form
     OUString aStrFormText = CuiResId( RID_CUISTR_HYPERDLG_FROM_TEXT );
@@ -285,6 +287,11 @@ void SvxHyperlinkTabPageBase::FillStandardDlgFields ( const SvxHyperlinkItem* pH
 
     // Text
     mxEdIndication->set_text( pHyperlinkItem->GetName() );
+
+    // Title: fill it even when hidden, so that OK keeps the title
+    mxTitleLabel->set_visible(m_showTitle);
+    mxEdTitle->set_visible(m_showTitle);
+    mxEdTitle->set_text( pHyperlinkItem->GetTitle() );
 
     // Name
     mxEdText->set_text( pHyperlinkItem->GetIntName() );
@@ -493,7 +500,8 @@ bool SvxHyperlinkTabPageBase::FillItemSet( SfxItemSet* rOut)
 
     SvxHyperlinkItem aItem( SID_HYPERLINK_SETLINK, aStrName, aStrURL, aStrFrame,
                             aStrIntName, eMode, nEvents, pTable, m_showName, m_showText );
-    aItem.SetTitle(maStrTitle);
+    aItem.SetTitle(mxEdTitle->get_text());
+    aItem.SetShowTitle(m_showTitle);
     rOut->Put (aItem);
 
     return true;
@@ -537,7 +545,8 @@ DeactivateRC SvxHyperlinkTabPageBase::DeactivatePage( SfxItemSet* _pSet)
     {
         SvxHyperlinkItem aItem( SID_HYPERLINK_GETLINK, aStrName, aStrURL, aStrFrame,
                                 aStrIntName, eMode, nEvents, pTable, m_showName, m_showText );
-        aItem.SetTitle(maStrTitle);
+        aItem.SetTitle(mxEdTitle->get_text());
+        aItem.SetShowTitle(m_showTitle);
         _pSet->Put( aItem );
     }
 

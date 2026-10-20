@@ -153,4 +153,24 @@ class HyperlinkDialog(UITestCase):
             # i.e. the dialog dropped the title, which it has no field for
             self.assertEqual("LibreOffice home page", xCursor.getPropertyValue("HyperLinkTitle"))
 
+    def test_tdf173709_edit_hyperlink_title(self):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
+            with self.ui_test.execute_dialog_through_command(".uno:HyperlinkDialog") as xDialog:
+                xtab = xDialog.getChild("tabcontrol")
+                select_pos(xtab, "0")
+
+                xDialog.getChild("target").executeAction("TYPE", mkPropertyValues({"TEXT": "http://www.libreoffice.org/"}))
+                xDialog.getChild("indication").executeAction("TYPE", mkPropertyValues({"TEXT": "link"}))
+                xDialog.getChild("title").executeAction("TYPE", mkPropertyValues({"TEXT": "LibreOffice home page"}))
+
+            xCursor = document.getText().createTextCursor()
+            xCursor.gotoStart(False)
+            xCursor.goRight(1, True)
+            self.assertEqual("LibreOffice home page", xCursor.getPropertyValue("HyperLinkTitle"))
+
+            # The dialog shows the title of the existing hyperlink
+            document.getCurrentController().select(xCursor)
+            with self.ui_test.execute_dialog_through_command(".uno:HyperlinkDialog", close_button="cancel") as xDialog:
+                self.assertEqual("LibreOffice home page", get_state_as_dict(xDialog.getChild("title"))["Text"])
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

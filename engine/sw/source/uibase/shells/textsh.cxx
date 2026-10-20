@@ -690,6 +690,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
                     SvxHyperlinkItem aHLinkItem;
                     aHLinkItem.SetShowName(true);
                     aHLinkItem.SetShowText(true);
+                    aHLinkItem.SetShowTitle(true);
                     if(const SwFormatINetFormat* pINetFormat = aSet.GetItemIfSet(RES_TXTATR_INETFMT, false))
                     {
                         aHLinkItem.SetURL(pINetFormat->GetValue());
