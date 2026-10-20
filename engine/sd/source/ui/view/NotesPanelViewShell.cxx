@@ -435,6 +435,7 @@ void NotesPanelViewShell::GetCtrlState(SfxItemSet& rSet)
         OutlinerView* pOLV = mpNotesPanelView->GetOutlinerView();
         if (pOLV)
         {
+            aHLinkItem.SetShowTitle(true);
             const SvxFieldItem* pFieldItem = pOLV->GetFieldAtSelection();
             if (pFieldItem)
             {
@@ -447,6 +448,7 @@ void NotesPanelViewShell::GetCtrlState(SfxItemSet& rSet)
                         aHLinkItem.SetName(pUrlField->GetRepresentation());
                         aHLinkItem.SetURL(pUrlField->GetURL());
                         aHLinkItem.SetTargetFrame(pUrlField->GetTargetFrame());
+                        aHLinkItem.SetTitle(pUrlField->GetTitle());
                     }
                 }
             }
@@ -853,9 +855,9 @@ void NotesPanelViewShell::FuTemporaryModify(SfxRequest& rReq)
             {
                 const SvxHyperlinkItem* pHLItem = &pReqArgs->Get(SID_HYPERLINK_SETLINK);
 
-                SvxFieldItem aURLItem(
-                    SvxURLField(pHLItem->GetURL(), pHLItem->GetName(), SvxURLFormat::Repr),
-                    EE_FEATURE_FIELD);
+                SvxURLField aURLField(pHLItem->GetURL(), pHLItem->GetName(), SvxURLFormat::Repr);
+                aURLField.SetTitle(pHLItem->GetTitle());
+                SvxFieldItem aURLItem(aURLField, EE_FEATURE_FIELD);
                 pOutlinerView->InsertFieldAndSelect(aURLItem);
             }
 

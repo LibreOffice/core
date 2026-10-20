@@ -1567,13 +1567,15 @@ void DrawViewShell::FuSupportRotate(SfxRequest const &rReq)
 }
 
 void DrawViewShell::InsertURLField(const OUString& rURL, const OUString& rText,
-                                   const OUString& rTarget, OUString const& rAltText)
+                                   const OUString& rTarget, OUString const& rAltText,
+                                   OUString const& rTitle)
 {
     OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
 
     SvxURLField aURLField(rURL, rText, SvxURLFormat::Repr);
     aURLField.SetTargetFrame(rTarget);
     aURLField.SetName(rAltText);
+    aURLField.SetTitle(rTitle);
 
     if (pOLV)
     {

@@ -48,11 +48,13 @@
 #include <editeng/numitem.hxx>
 #include <editeng/outliner.hxx>
 #include <sfx2/cokitfilepicker.hxx>
+#include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <svl/intitem.hxx>
 #include <svl/srchitem.hxx>
+#include <svx/hlnkitem.hxx>
 #include <svx/svxids.hrc>
 #include <svx/documentbullets.hxx>
 #include <svx/svdoashp.hxx>
@@ -1773,6 +1775,86 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testSetHyperlinkKeepSelection)
     // - Actual  : mytext
     // i.e. the selected character was lost, the provided text hint was used.
     CPPUNIT_ASSERT_EQUAL(u"f"_ustr, pURLField->GetRepresentation());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf173709HyperlinkTitle)
+{
+    // Given a text box with a selected character:
+    createSdImpressDoc();
+    auto* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrView* pView = pViewShell->GetView();
+    SdPage* pPage = pViewShell->GetActualPage();
+    rtl::Reference<SdrRectObj> pRect
+        = new SdrRectObj(pView->getSdrModelFromSdrView(), tools::Rectangle(1000, 1000, 5000, 5000));
+    pPage->NbcInsertObject(pRect.get());
+    pView->MarkObj(pRect.get(), pView->GetSdrPageView());
+    pView->SdrBeginTextEdit(pRect.get());
+    SfxStringItem aInputString(SID_ATTR_CHAR, u"f"_ustr);
+    SfxDispatcher* pDispatcher = pViewShell->GetViewFrame()->GetDispatcher();
+    pDispatcher->ExecuteList(SID_ATTR_CHAR, SfxCallMode::SYNCHRON, { &aInputString });
+    OutlinerView* pOlView = pView->GetTextEditOutlinerView();
+    CPPUNIT_ASSERT(pOlView);
+    pOlView->SetSelection(ESelection(0, 0, 0, 1));
+
+    // When the Hyperlink dialog sets a link with a title:
+    SvxHyperlinkItem aItem(SID_HYPERLINK_SETLINK);
+    aItem.SetURL(u"https://example.org/"_ustr);
+    aItem.SetName(u"f"_ustr);
+    aItem.SetTitle(u"Example site"_ustr);
+    aItem.SetInsertMode(HLINK_FIELD);
+    pDispatcher->ExecuteList(SID_HYPERLINK_SETLINK, SfxCallMode::SYNCHRON, { &aItem });
+
+    // Then the dialog shows the title when the link is edited again:
+    pOlView->SetSelection(ESelection(0, 0, 0, 1));
+    std::unique_ptr<SvxHyperlinkItem> pState;
+    pViewShell->GetViewFrame()->GetBindings().QueryState(SID_HYPERLINK_GETLINK, pState);
+    CPPUNIT_ASSERT(pState);
+    // Without the accompanying fix in place, this test would have failed, the title was lost.
+    CPPUNIT_ASSERT_EQUAL(u"Example site"_ustr, pState->GetTitle());
+    CPPUNIT_ASSERT(pState->GetShowTitle());
+
+    // And the URL field has the title:
+    pView->SdrEndTextEdit();
+    const OutlinerParaObject* pOPO = pRect->GetOutlinerParaObject();
+    CPPUNIT_ASSERT(pOPO);
+    auto* pURLField = dynamic_cast<const SvxURLField*>(
+        pOPO->GetTextObject().GetFieldData(0, 0, css::text::textfield::Type::URL));
+    CPPUNIT_ASSERT(pURLField);
+    CPPUNIT_ASSERT_EQUAL(u"Example site"_ustr, pURLField->GetTitle());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf173709HyperlinkTitleOutline)
+{
+    // Given the outline view with a selected character:
+    OutlinerView* pOutlinerView = createOutlineView({ u"f" });
+    pOutlinerView->SetSelection(ESelection(0, 0, 0, 1));
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+
+    // When the Hyperlink dialog sets a link with a title:
+    SvxHyperlinkItem aItem(SID_HYPERLINK_SETLINK);
+    aItem.SetURL(u"https://example.org/"_ustr);
+    aItem.SetName(u"f"_ustr);
+    aItem.SetTitle(u"Example site"_ustr);
+    aItem.SetInsertMode(HLINK_FIELD);
+    pViewShell->GetViewFrame()->GetDispatcher()->ExecuteList(SID_HYPERLINK_SETLINK,
+                                                             SfxCallMode::SYNCHRON, { &aItem });
+
+    // Then the URL field has the title:
+    const SvxFieldItem* pFieldItem = pOutlinerView->GetFieldAtSelection();
+    CPPUNIT_ASSERT(pFieldItem);
+    auto* pURLField = dynamic_cast<const SvxURLField*>(pFieldItem->GetField());
+    CPPUNIT_ASSERT(pURLField);
+    // Without the accompanying fix in place, this test would have failed, the title was lost.
+    CPPUNIT_ASSERT_EQUAL(u"Example site"_ustr, pURLField->GetTitle());
+
+    // And the dialog shows the title when the link is edited again:
+    std::unique_ptr<SvxHyperlinkItem> pState;
+    pViewShell->GetViewFrame()->GetBindings().QueryState(SID_HYPERLINK_GETLINK, pState);
+    CPPUNIT_ASSERT(pState);
+    CPPUNIT_ASSERT_EQUAL(u"Example site"_ustr, pState->GetTitle());
+    CPPUNIT_ASSERT(pState->GetShowTitle());
 }
 
 static SdrObject* lcl_findTextBoxByText(const SdPage* pPage, std::u16string_view rText)

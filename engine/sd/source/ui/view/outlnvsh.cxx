@@ -354,6 +354,7 @@ void OutlineViewShell::GetCtrlState(SfxItemSet &rSet)
         OutlinerView* pOLV = pOlView->GetViewByWindow(GetActiveWindow());
         if (pOLV)
         {
+            aHLinkItem.SetShowTitle(true);
             const SvxFieldItem* pFieldItem = pOLV->GetFieldAtSelection();
             if (pFieldItem)
             {
@@ -366,6 +367,7 @@ void OutlineViewShell::GetCtrlState(SfxItemSet &rSet)
                         aHLinkItem.SetName(pUrlField->GetRepresentation());
                         aHLinkItem.SetURL(pUrlField->GetURL());
                         aHLinkItem.SetTargetFrame(pUrlField->GetTargetFrame());
+                        aHLinkItem.SetTitle(pUrlField->GetTitle());
                     }
                 }
             }

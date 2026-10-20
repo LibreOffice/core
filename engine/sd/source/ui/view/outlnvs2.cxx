@@ -335,9 +335,9 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
                 const SvxHyperlinkItem* pHLItem =
                     &pReqArgs->Get(SID_HYPERLINK_SETLINK);
 
-                SvxFieldItem aURLItem(SvxURLField(pHLItem->GetURL(),
-                                                  pHLItem->GetName(),
-                                                  SvxURLFormat::Repr), EE_FEATURE_FIELD);
+                SvxURLField aURLField(pHLItem->GetURL(), pHLItem->GetName(), SvxURLFormat::Repr);
+                aURLField.SetTitle(pHLItem->GetTitle());
+                SvxFieldItem aURLItem(aURLField, EE_FEATURE_FIELD);
                 pOutlinerView->InsertFieldAndSelect(aURLItem);
             }
 

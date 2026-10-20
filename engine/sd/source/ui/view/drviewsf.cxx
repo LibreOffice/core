@@ -92,6 +92,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
         {
             aHLinkItem.SetShowText(true);
             aHLinkItem.SetShowName(true);
+            aHLinkItem.SetShowTitle(true);
 
             const SvxFieldItem* pFieldItem = pOLV->GetFieldAtSelection();
             const SvxFieldData* pField = pFieldItem ? pFieldItem->GetField() : nullptr;
@@ -101,6 +102,7 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
                 aHLinkItem.SetURL(pUrlField->GetURL());
                 aHLinkItem.SetTargetFrame(pUrlField->GetTargetFrame());
                 aHLinkItem.SetIntName(pUrlField->GetName());
+                aHLinkItem.SetTitle(pUrlField->GetTitle());
             }
             else
             {
