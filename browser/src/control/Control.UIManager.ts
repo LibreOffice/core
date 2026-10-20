@@ -1364,7 +1364,7 @@ class UIManager extends window.L.Control {
 		if (!window.mode.isDesktop()) return;
 
 		this.aiInitialStateApplied = true;
-		this.notebookbar?.impl?.refresh();
+		this.notebookbar?.impl?.refreshIfChanged();
 
 		if (!this.shouldShowAISidebar()) return;
 

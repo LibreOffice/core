@@ -20,6 +20,9 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 	_RTL: false,
 	_lastContexts: null,
 	_lastSelectedTabName: null,
+	// The layout the notebookbar was last built from, as a string, so a flag that
+	// arrives after the build can tell whether it changes anything.
+	_lastLayout: null,
 	// Counter for synthesizing unique ids for contributed separators/menus that have
 	// no natural id of their own (see _buildContributedItem).
 	_nextContributedId: 0,
@@ -58,8 +61,11 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 		}
 
 		// initialize the model only once, remember updates from core
-		if (this.model.getSnapshot() === null)
-			this.model.fullUpdate(this.getFullJSON(this.getInitialTabId()));
+		if (this.model.getSnapshot() === null) {
+			const json = this.getFullJSON(this.getInitialTabId());
+			this._lastLayout = this._layoutToString(json);
+			this.model.fullUpdate(json);
+		}
 
 		this.map.on('notebookbar', this.onNotebookbar, this);
 	},
@@ -831,10 +837,37 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 	// Extensions tab picks them up; preserves whichever tab the user has
 	// open by passing _lastSelectedTabName back through getFullJSON.
 	refresh: function() {
-		var selected = this._lastSelectedTabName
+		this._rebuild(this.getFullJSON(this._selectedTabId()));
+	},
+
+	// Rebuilds the notebookbar only when the layout it would be built from differs
+	// from the one it shows. A flag that arrives after the first build often leaves
+	// the layout as it is.
+	refreshIfChanged: function() {
+		const json = this.getFullJSON(this._selectedTabId());
+		const layout = this._layoutToString(json);
+		if (layout !== null && layout === this._lastLayout) return;
+		this._rebuild(json);
+	},
+
+	_selectedTabId: function() {
+		return this._lastSelectedTabName
 			? this._lastSelectedTabName + '-tab-label'
 			: this.getInitialTabId();
-		this.model.fullUpdateKeepingEntries(this.getFullJSON(selected));
+	},
+
+	// The layout as a string, or null when it cannot be serialized.
+	_layoutToString: function(json) {
+		try {
+			return JSON.stringify(json);
+		} catch (e) {
+			return null;
+		}
+	},
+
+	_rebuild: function(json) {
+		this._lastLayout = this._layoutToString(json);
+		this.model.fullUpdateKeepingEntries(json);
 		if (this.container) this.loadTab();
 	},
 

@@ -65,8 +65,8 @@ class ServerConnectionService {
 		app.map.uiManager.initializeAIAssistant();
 	}
 
-	// The AI entry points are gated on a configured provider, so the
-	// notebookbar has to be rebuilt whenever that changes.
+	// The AI entry points depend on a configured provider, so the notebookbar
+	// is rebuilt when that changes its layout.
 	private setAIConfigured(configured: boolean) {
 		// Undefined until the first reply lands, so compare as a boolean.
 		if (!!app.map.isAIConfigured === configured) return;
@@ -74,7 +74,8 @@ class ServerConnectionService {
 		// Until the document layer exists the notebookbar cannot tell its
 		// document type, and would rebuild the tab empty; initializeAIAssistant()
 		// does the rebuild once it can.
-		if (app.map.getDocType()) app.map.uiManager?.notebookbar?.impl?.refresh();
+		if (app.map.getDocType())
+			app.map.uiManager?.notebookbar?.impl?.refreshIfChanged();
 	}
 
 	public onViewSetting(viewSetting: ViewSetting) {
