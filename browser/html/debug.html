@@ -12,6 +12,57 @@
             padding: 0px;
             border: none;
         }
+        /* The picker that answers the editor's request for a presentation to import. */
+        #import-overlay
+        {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.4);
+            font-family: system-ui, sans-serif;
+        }
+        #import-dialog
+        {
+            min-width: 20rem;
+            max-width: 90vw;
+            max-height: 80vh;
+            overflow: auto;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            background: #ffffff;
+            color: #202124;
+        }
+        #import-title
+        {
+            margin: 0 0 0.75rem;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        #import-list button, #import-dialog .cancel
+        {
+            display: block;
+            width: 100%;
+            margin: 0 0 0.25rem;
+            padding: 0.5rem 0.75rem;
+            border: 1px solid #d8dadc;
+            border-radius: 0.25rem;
+            background: #f1f3f4;
+            color: inherit;
+            font: inherit;
+            text-align: left;
+            cursor: pointer;
+        }
+        #import-list button:hover, #import-dialog .cancel:hover
+        {
+            border-color: #0b87e7;
+        }
+        #import-dialog .cancel
+        {
+            margin-top: 0.75rem;
+            text-align: center;
+        }
     </style>
 </head>
 <body>
@@ -147,6 +198,151 @@
           return data;
         }
 
+        // The documents this server lists on documents.html: the samples and the uploaded ones,
+        // each as {name, path, size, lastModifiedTime}. The server root is kept, so the page
+        // works under a service root such as /browser-prefix/browser/<hash>/debug.html too.
+        function listDocuments() {
+          const serverRoot = window.location.pathname.replace(/\/browser\/[^/]*\/[^/]*$/, '');
+          return fetch(serverRoot + '/wopi/documents')
+            .then(function(response) {
+              if (!response.ok)
+                throw new Error('the server answered ' + response.status);
+              return response.json();
+            })
+            .then(function(documents) { return documents.uploaded.concat(documents.samples); });
+        }
+
+        // The file extensions each presentation type the editor filters on is stored with.
+        const extensionsByMimeType = {
+          'application/vnd.oasis.opendocument.presentation': ['odp', 'fodp'],
+          'application/vnd.oasis.opendocument.presentation-template': ['otp'],
+          'application/vnd.openxmlformats-officedocument.presentationml.presentation': ['pptx'],
+          'application/vnd.openxmlformats-officedocument.presentationml.slideshow': ['ppsx'],
+          'application/vnd.openxmlformats-officedocument.presentationml.template': ['potx'],
+          'application/vnd.ms-powerpoint': ['ppt', 'pps', 'pot'],
+          'application/vnd.ms-powerpoint.presentation.macroEnabled.12': ['pptm'],
+        };
+
+        // True when the name has one of the extensions the given types are stored with. With
+        // no filter every name passes.
+        function matchesMimeTypeFilter(name, mimeTypeFilter) {
+          if (!Array.isArray(mimeTypeFilter) || mimeTypeFilter.length === 0)
+            return true;
+          const extension = name.substring(name.lastIndexOf('.') + 1).toLowerCase();
+          return mimeTypeFilter.some(function(mimeType) {
+            return (extensionsByMimeType[mimeType] || []).indexOf(extension) !== -1;
+          });
+        }
+
+        // The WOPISrc this server serves a local document under
+        function localWopiSrc(parentWopiSrc, path) {
+          const filesPath = '/wopi/files/';
+          const filesIndex = (parentWopiSrc || '').indexOf(filesPath);
+          const base = filesIndex === -1
+            ? window.location.protocol + '//' + window.location.host + filesPath
+            : parentWopiSrc.substring(0, filesIndex + filesPath.length);
+          return base + encodeURIComponent(path.substring(1));
+        }
+
+        function closeImportPicker() {
+          const overlay = document.getElementById('import-overlay');
+          if (overlay)
+            overlay.remove();
+        }
+
+        // Registers the picked document with the server as a permanent link of the opened one:
+        // a POST to the /cool/links address the editor named, carrying the editor's one-time
+        // token and the link the way a CheckFileInfo RemoteLinks entry names it.
+        function addPermanentLink(values, entry) {
+          const body = {
+            Nonce: values.Nonce,
+            Link: {
+              WOPISrc: localWopiSrc(values.WOPISrc, entry.path),
+              AccessToken: document.querySelector('input[name=access_token]').value,
+              BaseFileName: entry.name,
+              LastModifiedTime: entry.lastModifiedTime,
+              PersistentLink: values.PersistentLink || entry.name,
+            },
+          };
+          fetch(values.Endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+          })
+            .then(function(response) {
+              closeImportPicker();
+              if (!response.ok)
+                return response.text().then(function(text) {
+                  window.alert('debug.html: could not add ' + entry.name + ' (' +
+                               response.status + (text ? ': ' + text : '') + ')');
+                });
+            })
+            .catch(function(error) {
+              closeImportPicker();
+              window.alert('debug.html: could not add ' + entry.name + ': ' + error.message);
+            });
+        }
+
+        // Answers the editor's request for a presentation to import with a picker.
+        function openImportPicker(values) {
+          closeImportPicker();
+
+          const overlay = document.createElement('div');
+          overlay.id = 'import-overlay';
+          const dialog = document.createElement('div');
+          dialog.id = 'import-dialog';
+          const title = document.createElement('p');
+          title.id = 'import-title';
+          title.textContent = 'Add presentation - pick a document of this server';
+          dialog.appendChild(title);
+          const list = document.createElement('div');
+          list.id = 'import-list';
+          list.textContent = 'Loading...';
+          dialog.appendChild(list);
+          const cancel = document.createElement('button');
+          cancel.type = 'button';
+          cancel.className = 'cancel';
+          cancel.textContent = 'Cancel';
+          cancel.addEventListener('click', closeImportPicker);
+          dialog.appendChild(cancel);
+          overlay.appendChild(dialog);
+          overlay.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape')
+              closeImportPicker();
+          });
+          document.body.appendChild(overlay);
+          cancel.focus();
+
+          listDocuments()
+            .then(function(entries) {
+              // The local path of the opened document, when this server serves it.
+              const parentWopiSrc = values.WOPISrc || '';
+              const filesIndex = parentWopiSrc.indexOf('/wopi/files/');
+              const openedPath = filesIndex === -1 ? '' :
+                decodeURIComponent(parentWopiSrc.substring(filesIndex + '/wopi/files'.length));
+              const offered = entries.filter(function(entry) {
+                return entry.path !== openedPath &&
+                       matchesMimeTypeFilter(entry.name, values.mimeTypeFilter);
+              });
+              list.textContent = '';
+              if (offered.length === 0) {
+                list.textContent = 'No presentation to add. Upload one on documents.html first.';
+                return;
+              }
+              offered.forEach(function(entry) {
+                const item = document.createElement('button');
+                item.type = 'button';
+                item.textContent = entry.name;
+                item.title = entry.path;
+                item.addEventListener('click', function() { addPermanentLink(values, entry); });
+                list.appendChild(item);
+              });
+            })
+            .catch(function(error) {
+              list.textContent = 'Could not list the documents: ' + error.message;
+            });
+        }
+
         function receivePostMessage(event) {
           if (event.origin !== window.origin)
             return;
@@ -180,6 +376,9 @@
                 window.document.title = msg.Values.Title;
                 document.getElementById("coolframe").title = msg.Values.Title;
               }
+              break;
+            case 'UI_GetPermanentLink':
+              openImportPicker(msg.Values || {});
               break;
             case 'UI_Mention':
               if (!msg.Values)

@@ -161,6 +161,116 @@ std::string settingsUserId(const Poco::URI::QueryParameters& params)
     return std::string();
 }
 
+// The example documents the build generates. The copies carry "-edit" in the name.
+constexpr std::string_view SampleDocumentDirectory = DEBUG_ABSSRCDIR "/test/samples";
+
+// Where a document picked from the user's own machine is saved.
+const std::string& uploadedDocumentDirectory()
+{
+    static const std::string directory = []
+    {
+        const std::string path = FileUtil::getSysTempDirectoryPath() + "/coolwsd-documents";
+        Poco::File(path).createDirectories();
+        return path;
+    }();
+
+    return directory;
+}
+
+// The path of the document the documents page lists under the given name.
+std::string listedDocumentPath(const std::string& name)
+{
+    if (name.empty() || name.find('/') != std::string::npos || name == "." || name == "..")
+        return std::string();
+
+    const std::string uploaded = uploadedDocumentDirectory() + '/' + name;
+    const FileUtil::Stat uploadedStat(uploaded);
+    if (uploadedStat.exists() && uploadedStat.isFile())
+        return uploaded;
+
+    if (name.find("-edit") == std::string::npos)
+        return std::string();
+
+    const std::string sample = std::string(SampleDocumentDirectory) + '/' + name;
+    const FileUtil::Stat sampleStat(sample);
+    if (sampleStat.exists() && sampleStat.isFile())
+        return sample;
+
+    return std::string();
+}
+
+// The WOPISrc where this server serves a local document.
+std::string localWopiSrc(const RequestDetails& requestDetails, const std::string& path)
+{
+    std::string wopiSrc = ConfigUtil::isSslEnabled() ? "https://" : "http://";
+    wopiSrc += requestDetails.getHostUntrusted();
+    wopiSrc += "/wopi/files/";
+    wopiSrc += Uri::encode(path.substr(1));
+    return wopiSrc;
+}
+
+// Names the document behind a persistent link for Slide Import feature.
+void handleLinkAccessRequest(const Poco::Net::HTTPRequest& request,
+                             const RequestDetails& requestDetails, std::istream& message,
+                             const std::shared_ptr<StreamSocket>& socket)
+{
+    // An answer without a body says so, or the asking side waits for one.
+    const auto answerWithStatus = [&socket](http::StatusCode statusCode)
+    {
+        http::Response httpResponse(statusCode);
+        httpResponse.setContentLength(0);
+        socket->send(httpResponse);
+    };
+
+    if (request.getMethod() != "POST")
+    {
+        answerWithStatus(http::StatusCode::MethodNotAllowed);
+        return;
+    }
+
+    const std::string body(std::istreambuf_iterator<char>(message), {});
+    std::string persistentLink;
+    Poco::JSON::Object::Ptr object;
+    if (JsonUtil::parseJSON(body, object))
+        JsonUtil::findJSONValue(object, "PersistentLink", persistentLink);
+
+    if (persistentLink.empty())
+    {
+        LOG_ERR("Link access request that names no persistent link");
+        answerWithStatus(http::StatusCode::BadRequest);
+        return;
+    }
+
+    const std::string path = listedDocumentPath(persistentLink);
+    if (path.empty())
+    {
+        LOG_INF("No listed document for the persistent link [" << persistentLink << ']');
+        answerWithStatus(http::StatusCode::NotFound);
+        return;
+    }
+
+    std::string accessToken = requestDetails.getParam("access_token");
+    if (accessToken.empty())
+        accessToken = "test";
+
+    Poco::JSON::Object::Ptr link = new Poco::JSON::Object();
+    link->set("WOPISrc", localWopiSrc(requestDetails, path));
+    link->set("BaseFileName", persistentLink);
+    link->set("LastModifiedTime",
+              Util::getIso8601FracformatTime(FileUtil::Stat(path).modifiedTimepoint()));
+    link->set("AccessToken", accessToken);
+    link->set("PersistentLink", persistentLink);
+
+    std::ostringstream jsonStream;
+    link->stringify(jsonStream);
+
+    LOG_INF("The persistent link [" << persistentLink << "] names [" << path << ']');
+    http::Response httpResponse(http::StatusCode::OK);
+    FileServerRequestHandler::hstsHeaders(httpResponse);
+    httpResponse.setBody(jsonStream.str(), "application/json; charset=utf-8");
+    socket->send(httpResponse);
+}
+
 //handles request starts with /wopi/files
 void handleWopiRequest(const Poco::Net::HTTPRequest& request, const RequestDetails& requestDetails,
                        std::istream& message, const std::shared_ptr<StreamSocket>& socket)
@@ -169,6 +279,13 @@ void handleWopiRequest(const Poco::Net::HTTPRequest& request, const RequestDetai
     const Poco::Path path = requestUri.getPath();
     static constexpr std::string_view prefix = "/wopi/files";
     static constexpr std::string_view suffix = "/contents";
+    static constexpr std::string_view linkAccessSuffix = "/linkaccess";
+    if (requestUri.getPath().ends_with(linkAccessSuffix))
+    {
+        handleLinkAccessRequest(request, requestDetails, message, socket);
+        return;
+    }
+
     std::string localPath;
     if (path.toString().ends_with(suffix))
     {
@@ -284,6 +401,9 @@ void handleWopiRequest(const Poco::Net::HTTPRequest& request, const RequestDetai
         fileInfo->set("PostMessageOrigin", postMessageOrigin);
         fileInfo->set("LastModifiedTime", localFile->getLastModifiedTime());
         fileInfo->set("EnableOwnerTermination", true);
+        // The pages of a presentation record the source their slides came from by its
+        // persistent link, and a POST to <WOPISrc>/linkaccess names the document behind one.
+        fileInfo->set("SupportsLinkAccess", true);
 
         std::ostringstream jsonStream;
         fileInfo->stringify(jsonStream);
@@ -353,27 +473,9 @@ void handleWopiRequest(const Poco::Net::HTTPRequest& request, const RequestDetai
     }
 }
 
-// The example documents the build generates. The copies carry "-edit" in the name and are the
-// ones that may be modified, so saving one leaves the pristine samples it came from alone.
-constexpr std::string_view SampleDocumentDirectory = DEBUG_ABSSRCDIR "/test/samples";
-
-// Where a document picked from the user's own machine is saved. The system temporary directory
-// outlives a restart, unlike the child root, which every start wipes. The name is fixed, so the
-// documents are easy to find and to delete by hand.
-const std::string& uploadedDocumentDirectory()
-{
-    static const std::string directory = []
-    {
-        const std::string path = FileUtil::getSysTempDirectoryPath() + "/coolwsd-documents";
-        Poco::File(path).createDirectories();
-        return path;
-    }();
-
-    return directory;
-}
-
-// Describes each file in a directory as {name, path, size}. Skipping the names without "-edit"
-// leaves only the editable copies.
+// Describes each file in a directory as {name, path, size, lastModifiedTime}, the time in the
+// ISO8601 form a WOPI host reports. Skipping the names without "-edit" leaves only the editable
+// copies.
 Poco::JSON::Array listDocumentsIn(const std::string& directory, bool onlyEditCopies)
 {
     std::vector<std::string> names = FileUtil::getDirEntries(directory);
@@ -394,6 +496,8 @@ Poco::JSON::Array listDocumentsIn(const std::string& directory, bool onlyEditCop
         document->set("name", name);
         document->set("path", path);
         document->set("size", stat.size());
+        document->set("lastModifiedTime",
+                      Util::getIso8601FracformatTime(stat.modifiedTimepoint()));
         documents.add(document);
     }
 
