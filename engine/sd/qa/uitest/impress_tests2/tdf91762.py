@@ -26,11 +26,11 @@ class tdf91762(UITestCase):
                 self.assertEqual('2', get_state_as_dict(xDialog.getChild('rows'))['Text'])
 
             self.assertEqual(2063, document.DrawPages[0][1].BoundRect.Height)
-            self.assertEqual(25198, document.DrawPages[0][1].Size.Width)
+            self.assertEqual(30477, document.DrawPages[0][1].Size.Width)
             self.assertEqual(2025, document.DrawPages[0][1].Size.Height)
 
-            self.assertEqual(1400, document.DrawPages[0][1].Position.X)
-            self.assertEqual(3685, document.DrawPages[0][1].Position.Y)
+            self.assertEqual(1693, document.DrawPages[0][1].Position.X)
+            self.assertEqual(4457, document.DrawPages[0][1].Position.Y)
 
             xDoc = self.xUITest.getTopFocusWindow()
             xEdit = xDoc.getChild("impress_win")

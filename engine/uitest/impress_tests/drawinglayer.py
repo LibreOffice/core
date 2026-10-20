@@ -32,20 +32,20 @@ class ImpressDrawinglayerTest(UITestCase):
                 self.assertEqual("com.sun.star.drawing.SvxShapeCollection", document.CurrentSelection.getImplementationName())
 
                 with self.ui_test.execute_dialog_through_command(".uno:Size") as xDialog:
-                    self.assertEqual('25.2', get_state_as_dict(xDialog.getChild('MTR_FLD_WIDTH'))['Value'])
-                    self.assertEqual('9.13', get_state_as_dict(xDialog.getChild('MTR_FLD_HEIGHT'))['Value'])
-                    self.assertEqual('1.4', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_X'))['Value'])
-                    self.assertEqual('3.69', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_Y'))['Value'])
+                    self.assertEqual('30.48', get_state_as_dict(xDialog.getChild('MTR_FLD_WIDTH'))['Value'])
+                    self.assertEqual('11.05', get_state_as_dict(xDialog.getChild('MTR_FLD_HEIGHT'))['Value'])
+                    self.assertEqual('1.69', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_X'))['Value'])
+                    self.assertEqual('4.46', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_Y'))['Value'])
                     self.assertEqual('0', get_state_as_dict(xDialog.getChild('NF_ANGLE'))['Value'])
 
                 xDrawinglayerObject = xEditWin.getChild("Unnamed Drawinglayer object 1")
                 xDrawinglayerObject.executeAction("MOVE", mkPropertyValues({"X": "1000", "Y":"1000"}))
 
                 with self.ui_test.execute_dialog_through_command(".uno:Size") as xDialog:
-                    self.assertEqual('25.2', get_state_as_dict(xDialog.getChild('MTR_FLD_WIDTH'))['Value'])
-                    self.assertEqual('9.13', get_state_as_dict(xDialog.getChild('MTR_FLD_HEIGHT'))['Value'])
-                    self.assertEqual('2.4', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_X'))['Value'])
-                    self.assertEqual('4.69', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_Y'))['Value'])
+                    self.assertEqual('30.48', get_state_as_dict(xDialog.getChild('MTR_FLD_WIDTH'))['Value'])
+                    self.assertEqual('11.05', get_state_as_dict(xDialog.getChild('MTR_FLD_HEIGHT'))['Value'])
+                    self.assertEqual('2.69', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_X'))['Value'])
+                    self.assertEqual('5.46', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_Y'))['Value'])
                     self.assertEqual('0', get_state_as_dict(xDialog.getChild('NF_ANGLE'))['Value'])
 
                 self.assertEqual("com.sun.star.drawing.SvxShapeCollection", document.CurrentSelection.getImplementationName())
@@ -70,10 +70,10 @@ class ImpressDrawinglayerTest(UITestCase):
                 self.assertEqual("com.sun.star.drawing.SvxShapeCollection", document.CurrentSelection.getImplementationName())
 
                 with self.ui_test.execute_dialog_through_command(".uno:Size") as xDialog:
-                    self.assertEqual('25.2', get_state_as_dict(xDialog.getChild('MTR_FLD_WIDTH'))['Value'])
-                    self.assertEqual('9.13', get_state_as_dict(xDialog.getChild('MTR_FLD_HEIGHT'))['Value'])
-                    self.assertEqual('1.4', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_X'))['Value'])
-                    self.assertEqual('3.69', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_Y'))['Value'])
+                    self.assertEqual('30.48', get_state_as_dict(xDialog.getChild('MTR_FLD_WIDTH'))['Value'])
+                    self.assertEqual('11.05', get_state_as_dict(xDialog.getChild('MTR_FLD_HEIGHT'))['Value'])
+                    self.assertEqual('1.69', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_X'))['Value'])
+                    self.assertEqual('4.46', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_Y'))['Value'])
                     self.assertEqual('0', get_state_as_dict(xDialog.getChild('NF_ANGLE'))['Value'])
 
                 xDrawinglayerObject = xEditWin.getChild("Unnamed Drawinglayer object 1")
@@ -83,10 +83,10 @@ class ImpressDrawinglayerTest(UITestCase):
                 self.assertEqual("com.sun.star.drawing.SvxShapeCollection", document.CurrentSelection.getImplementationName())
 
                 with self.ui_test.execute_dialog_through_command(".uno:Size") as xDialog:
-                    self.assertEqual('12.6', get_state_as_dict(xDialog.getChild('MTR_FLD_WIDTH'))['Value'])
-                    self.assertEqual('4.57', get_state_as_dict(xDialog.getChild('MTR_FLD_HEIGHT'))['Value'])
-                    self.assertEqual('0.95', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_X'))['Value'])
-                    self.assertEqual('3.84', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_Y'))['Value'])
+                    self.assertEqual('15.24', get_state_as_dict(xDialog.getChild('MTR_FLD_WIDTH'))['Value'])
+                    self.assertEqual('5.52', get_state_as_dict(xDialog.getChild('MTR_FLD_HEIGHT'))['Value'])
+                    self.assertEqual('1.1', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_X'))['Value'])
+                    self.assertEqual('4.23', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_Y'))['Value'])
                     self.assertEqual('0', get_state_as_dict(xDialog.getChild('NF_ANGLE'))['Value'])
 
                 self.assertEqual("com.sun.star.drawing.SvxShapeCollection", document.CurrentSelection.getImplementationName())
@@ -110,10 +110,10 @@ class ImpressDrawinglayerTest(UITestCase):
                 self.assertEqual("com.sun.star.drawing.SvxShapeCollection", document.CurrentSelection.getImplementationName())
 
                 with self.ui_test.execute_dialog_through_command(".uno:Size") as xDialog:
-                    self.assertEqual('25.2', get_state_as_dict(xDialog.getChild('MTR_FLD_WIDTH'))['Value'])
-                    self.assertEqual('9.13', get_state_as_dict(xDialog.getChild('MTR_FLD_HEIGHT'))['Value'])
-                    self.assertEqual('1.4', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_X'))['Value'])
-                    self.assertEqual('3.69', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_Y'))['Value'])
+                    self.assertEqual('30.48', get_state_as_dict(xDialog.getChild('MTR_FLD_WIDTH'))['Value'])
+                    self.assertEqual('11.05', get_state_as_dict(xDialog.getChild('MTR_FLD_HEIGHT'))['Value'])
+                    self.assertEqual('1.69', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_X'))['Value'])
+                    self.assertEqual('4.46', get_state_as_dict(xDialog.getChild('MTR_FLD_POS_Y'))['Value'])
                     self.assertEqual('0', get_state_as_dict(xDialog.getChild('NF_ANGLE'))['Value'])
 
                 xDrawinglayerObject = xEditWin.getChild("Unnamed Drawinglayer object 1")

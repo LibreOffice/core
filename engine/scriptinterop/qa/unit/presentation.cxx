@@ -355,10 +355,10 @@ CPPUNIT_TEST_FIXTURE(Test, testCurrentPageAndRemove)
 CPPUNIT_TEST_FIXTURE(Test, testPageSize)
 {
     auto const xPresentation = loadPresentation();
-    // A fresh presentation uses the 16:9 screen page, 28000 x 15750 in 1/100 mm, which converts
-    // to 793.70 x 446.46 points.
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(793.70, xPresentation->getPageWidth(), 0.05);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(446.46, xPresentation->getPageHeight(), 0.05);
+    // A fresh presentation uses the widescreen page, 33866 x 19050 in 1/100 mm, which converts
+    // to 959.98 x 540.00 points.
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(959.98, xPresentation->getPageWidth(), 0.05);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(540.00, xPresentation->getPageHeight(), 0.05);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testSlideBackgroundColor)
