@@ -29,6 +29,9 @@ namespace cool {
 		/// How far the handle may be moved, for a point a custom shape is shaped by. Absent for a
 		/// handle of another kind.
 		rails?: ObjectHandleRails;
+		/// True for a handle drawn larger than the others, so that it can still be taken hold of
+		/// where a handle of the usual size lies over it: the help line ends of a measurement.
+		larger?: boolean;
 	}
 
 	/** How far a point a custom shape is shaped by may be moved, given as the places the point
@@ -273,6 +276,9 @@ namespace cool {
 		cannotBeFlipped?: boolean;
 		/// True where the object cannot be changed into curves, a measurement for one.
 		cannotBeChangedToCurves?: boolean;
+		/// True where the object, selected on its own, is shaped by its own handles alone and has
+		/// no frame of eight around it, a measurement for one.
+		handlesOfItsOwnOnly?: boolean;
 		gluePoints?: ObjectGluePoint[];
 		/** The four glue points the object has at the middles of its sides - the upper, the
 		 * right, the lower and the left one - where they lie on the object, as gluePoints are

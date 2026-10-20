@@ -593,12 +593,20 @@ abstract class SelectionSection extends CanvasSectionObject {
 		end of a tied connector sits.
 	*/
 	private handleAt(x: number, y: number): SelectionHandle | undefined {
-		const half = 0.5 * ShapeHandlesSection.handleSize();
+		const usual = 0.5 * ShapeHandlesSection.handleSize();
 		const shown = this.handles();
 
+		/*
+			A larger handle is taken hold of over its whole size. It comes before the handle of the
+			usual size that may lie over it, so a press inside that one takes that one, and a press
+			on the rim of the larger one around it takes the larger one.
+		*/
 		for (let at = shown.length - 1; at >= 0; --at) {
 			if (!shown[at].name || shown[at].deactivated) continue;
 
+			const half = shown[at].larger
+				? usual + HandleLook.largerBy('shaping')
+				: usual;
 			const point = HandleLook.drawnAt(shown[at]);
 			if (Math.abs(point.vX - x) <= half && Math.abs(point.vY - y) <= half)
 				return shown[at];

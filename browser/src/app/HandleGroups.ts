@@ -1173,11 +1173,16 @@ class ShapingHandles extends HandlesMovedOneByOne {
 
 	public shape(
 		context: CanvasRenderingContext2D,
-		_handle: SelectionHandle,
+		handle: SelectionHandle,
 		at: cool.SimplePoint,
 		grown: number,
 	): string {
-		return HandleLook.lay(context, 'shaping', at, grown);
+		return HandleLook.lay(
+			context,
+			'shaping',
+			at,
+			grown + (handle.larger ? HandleLook.largerBy('shaping') : 0),
+		);
 	}
 
 	public moveByKey(

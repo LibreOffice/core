@@ -42,6 +42,9 @@ interface SelectionHandle {
 	/// The number the object itself gives the handle, for the handles that are told apart by
 	/// nothing else. Absent where the name already says which one it is.
 	at?: number;
+	/// True for a handle drawn larger than the others, behind a handle of the usual size that may
+	/// lie over it.
+	larger?: boolean;
 	/// The name of the group of handles it came from, which is what draws it, what a press on it
 	/// asks and what a key on it asks. Absent for a handle that stands outside the groups.
 	group?: string;
@@ -154,7 +157,11 @@ class ObjectHandles implements HandleSource {
 	public handles(): SelectionHandle[] {
 		if (!this.objectIds.length) return [];
 
-		if (this.isATiedConnector())
+		if (
+			this.isATiedConnector() ||
+			(this.objectIds.length === 1 &&
+				ObjectHandles.hasHandlesOfItsOwnOnly(this.objectIds[0]))
+		)
 			return [...this.shapingHandles(), ...this.ownGluePoints()];
 
 		const framing = ObjectHandles.framingOf(this.objectIds);
@@ -434,6 +441,13 @@ class ObjectHandles implements HandleSource {
 		return object?.tiedAtStart === true || object?.tiedAtEnd === true;
 	}
 
+	/// Whether the object of that id is shaped by its own handles alone, without the eight.
+	public static hasHandlesOfItsOwnOnly(objectId: number): boolean {
+		return (
+			RenderGeometrySection.objectOf(objectId)?.handlesOfItsOwnOnly === true
+		);
+	}
+
 	/// Whether what is selected is one connector that is tied to an object.
 	private isATiedConnector(): boolean {
 		return (
@@ -456,9 +470,14 @@ class ObjectHandles implements HandleSource {
 		/*
 			A connector that is tied to an object runs from where it is tied, so scaling it or
 			turning it leads nowhere: it is offered the points along its way alone, and neither
-			the eight nor the handle that turns them, which is made from the eight.
+			the eight nor the handle that turns them, which is made from the eight. An object
+			that is shaped by its own handles alone, a measurement, is offered those alone too.
 		*/
-		if (objectIds.length === 1 && ObjectHandles.isATiedConnector(objectIds[0]))
+		if (
+			objectIds.length === 1 &&
+			(ObjectHandles.isATiedConnector(objectIds[0]) ||
+				ObjectHandles.hasHandlesOfItsOwnOnly(objectIds[0]))
+		)
 			return undefined;
 
 		return new ObjectHandles(objectIds).framingHandles(square);
@@ -564,18 +583,22 @@ class ObjectHandles implements HandleSource {
 
 		const object = RenderGeometrySection.objectOf(this.objectIds[0]);
 
+		// The number the object gives a handle ends the name where there is one, since the
+		// handles of a measurement are alike in kind, polygon and point.
 		return (object?.handles ?? []).map((handle: cool.ObjectHandle) => ({
 			name:
 				String(handle.kind) +
 				'.' +
 				String(handle.polygon ?? 0) +
 				'.' +
-				String(handle.point ?? 0),
+				String(handle.point ?? 0) +
+				(handle.at !== undefined ? '.' + String(handle.at) : ''),
 			kind: String(handle.kind),
 			pointer: '28',
 			point: new cool.Point(handle.x, handle.y),
 			at: handle.at,
 			rails: handle.rails,
+			larger: handle.larger,
 		}));
 	}
 }

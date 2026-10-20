@@ -184,6 +184,16 @@ class HandleLook {
 		return HandleLook.size * HandleLook.shareOfTheSize[kind] * app.dpiScale;
 	}
 
+	/// How much a larger handle reaches beyond a handle of its kind on each side, as a share of
+	/// that handle's width. A half of the width in all makes it half as wide again.
+	public static readonly shareALargerHandleGrows: number = 1 / 4;
+
+	/// How much a larger handle of that kind reaches beyond the usual one on each side, in core
+	/// pixels.
+	public static largerBy(kind: HandleKind): number {
+		return HandleLook.widthOf(kind) * HandleLook.shareALargerHandleGrows;
+	}
+
 	/// How far the eight are drawn outside the places they stand on, in core pixels.
 	public static distanceTheEightMoveOut(): number {
 		const share = Math.max(-1, Math.min(1, HandleLook.shareTheEightMoveOut));

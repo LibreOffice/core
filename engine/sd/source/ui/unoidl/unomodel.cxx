@@ -119,6 +119,7 @@
 #include <svx/svdsob.hxx>
 #include <svx/svdundo.hxx>
 #include <svx/svdomedia.hxx>
+#include <svx/svdomeas.hxx>
 #include <svx/svdoedge.hxx>
 #include <svx/sxekitm.hxx>
 #include <svx/sxelditm.hxx>
@@ -3890,6 +3891,7 @@ private:
         aContent.mbCanBeSheared = aWhatItAllows.bShearAllowed && !bSizeHeldFast;
         aContent.mbCanBeFlipped = aWhatItAllows.bMirror90Allowed && !bPlaceHeldFast;
         aContent.mbCanBeChangedToCurves = aWhatItAllows.bCanConvToPath;
+        aContent.mbHandlesOfItsOwnOnly = SdrObjKind::Measure == rObject.GetObjIdentifier();
 
         aContent.maPaintedBox = paintedRectangleInTwips(rObject, aContent.maPrimitives);
         aContent.maTransformation = transformationInTwips(rObject);
@@ -4198,9 +4200,11 @@ private:
                 unless the object's path travels as well, and then they follow from it.
             */
             const SdrHdlKind eKind = pHandle->GetKind();
+            const bool bMeasurement(SdrObjKind::Measure == rObject.GetObjIdentifier());
             const bool bWanted(eKind == SdrHdlKind::Circle || eKind == SdrHdlKind::CustomShape1
                                || (eKind == SdrHdlKind::Poly
-                                   && nullptr == dynamic_cast<const SdrPathObj*>(&rObject)));
+                                   && nullptr == dynamic_cast<const SdrPathObj*>(&rObject))
+                               || (eKind == SdrHdlKind::User && bMeasurement));
             if (!bWanted)
                 continue;
 
@@ -4210,6 +4214,11 @@ private:
             aOne.mnPolygon = pHandle->GetPolyNum();
             aOne.mnPoint = pHandle->GetPointNum();
             aOne.mnObjHandle = pHandle->GetObjHdlNum();
+
+            // The first two handles of a measurement are the help line ends nearer to the line,
+            // which stand on the two ends of the measured line until moved; the office draws
+            // them larger, behind the handles of those ends.
+            aOne.mbLarger = bMeasurement && aOne.mnObjHandle < 2;
 
             /*
                 A point a custom shape is shaped by may only go where the shape lets it, and what
@@ -4350,6 +4359,16 @@ private:
      */
     static basegfx::B2DHomMatrix transformationInTwips(const SdrObject& rObject)
     {
+        /*
+            A measurement is described by the mapping it reads when it is given one, the unit line
+            onto the measured line, rather than by the upright box TRGetBaseGeometry answers for
+            it, which loses which way the line runs and has no width for an upright line.
+        */
+        if (const auto* pMeasurement = dynamic_cast<const SdrMeasureObj*>(&rObject))
+            return basegfx::utils::createScaleB2DHomMatrix(constTwipConversionFactor,
+                                                           constTwipConversionFactor)
+                   * pMeasurement->GetLineMapping();
+
         basegfx::B2DHomMatrix aTransformation;
         basegfx::B2DPolyPolygon aPolyPolygon;
         rObject.TRGetBaseGeometry(aTransformation, aPolyPolygon);
@@ -4550,6 +4569,8 @@ private:
             rWriter.put("cannotBeFlipped", true);
         if (!rContent.mbCanBeChangedToCurves)
             rWriter.put("cannotBeChangedToCurves", true);
+        if (rContent.mbHandlesOfItsOwnOnly)
+            rWriter.put("handlesOfItsOwnOnly", true);
 
         if (rContent.mbTiedAtStart)
             rWriter.put("tiedAtStart", true);
@@ -4663,6 +4684,8 @@ private:
                     rWriter.put("at", sal_Int64(rHandle.mnObjHandle));
                 rWriter.put("x", sal_Int64(rHandle.maPosition.X()));
                 rWriter.put("y", sal_Int64(rHandle.maPosition.Y()));
+                if (rHandle.mbLarger)
+                    rWriter.put("larger", true);
 
                 if (rHandle.mbHasRails)
                 {

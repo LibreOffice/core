@@ -14,6 +14,7 @@
 #include <svx/svdoashp.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdglue.hxx>
+#include <svx/svdomeas.hxx>
 #include <svx/svdopath.hxx>
 #include <cmath>
 
@@ -6756,6 +6757,25 @@ void COKitDocumentImpl::setObjectPoints(unsigned long long nObjectId,
 }
 
 /*
+    The mapping an object is described by to the client, which is the one it is given back as. For
+    most objects that is what TRGetBaseGeometry answers. A measurement answers the upright box
+    around its two points there, and reads a mapping it is given as the unit line onto the measured
+    line, so it is described by that line mapping. Answers whether the object carries an outline of
+    its own beside the mapping, as TRGetBaseGeometry does.
+*/
+static bool lcl_mappingOf(const SdrObject& rObject, basegfx::B2DHomMatrix& rMapping,
+                          basegfx::B2DPolyPolygon& rOutline)
+{
+    if (const auto* pMeasurement = dynamic_cast<const SdrMeasureObj*>(&rObject))
+    {
+        rMapping = pMeasurement->GetLineMapping();
+        return true;
+    }
+
+    return rObject.TRGetBaseGeometry(rMapping, rOutline);
+}
+
+/*
     Moves one of the points a drawing object was given for a connector to tie itself to. The place
     is given on the object, 0 and 0 being its upper left corner and 1 and 1 its lower right one,
     which is how such a point travels to the client. The object holds it either as a share of its
@@ -6792,7 +6812,7 @@ void COKitDocumentImpl::setObjectGluePoint(unsigned long long nObjectId, int nAt
     // The place on the object becomes a place on the page through the object's own mapping.
     basegfx::B2DHomMatrix aOfTheObject;
     basegfx::B2DPolyPolygon aOutline;
-    pObject->TRGetBaseGeometry(aOfTheObject, aOutline);
+    lcl_mappingOf(*pObject, aOfTheObject, aOutline);
 
     const basegfx::B2DPoint aOnThePage(aOfTheObject * basegfx::B2DPoint(fX, fY));
     const Point aWhereTo(basegfx::fround<tools::Long>(aOnThePage.getX()),
@@ -6897,7 +6917,7 @@ void COKitDocumentImpl::setObjectTransform(const char* pMappings,
 
         basegfx::B2DHomMatrix aOfTheObject;
         basegfx::B2DPolyPolygon aOutline;
-        const bool bCarriesItsOwnOutline(pObject->TRGetBaseGeometry(aOfTheObject, aOutline));
+        const bool bCarriesItsOwnOutline(lcl_mappingOf(*pObject, aOfTheObject, aOutline));
 
         /*
             An object holds the shear the other way round from the way it is drawn, and the
@@ -7108,7 +7128,7 @@ void COKitDocumentImpl::setObjectTransform(const char* pMappings,
         */
         basegfx::B2DHomMatrix aEnded;
         basegfx::B2DPolyPolygon aEndedOutline;
-        pObject->TRGetBaseGeometry(aEnded, aEndedOutline);
+        lcl_mappingOf(*pObject, aEnded, aEndedOutline);
 
         const basegfx::B2DPoint aWantedMiddle(aWanted * basegfx::B2DPoint(0.5, 0.5));
         const basegfx::B2DPoint aEndedMiddle(lcl_turnTheShearOver(aEnded)

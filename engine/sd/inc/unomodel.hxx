@@ -180,11 +180,16 @@ public:
             bool mbHasRails = false;
             SdrHandleRails maRails;
 
+            /// True where the handle is drawn larger than the others, so that it can still be
+            /// taken hold of where a handle of the usual size lies over it: the help line ends of
+            /// a measurement, which stand on the ends of the measured line until moved.
+            bool mbLarger = false;
+
             bool operator==(const Handle& rOther) const
             {
                 return mnKind == rOther.mnKind && mnPolygon == rOther.mnPolygon
                        && mnPoint == rOther.mnPoint && mnObjHandle == rOther.mnObjHandle
-                       && maPosition == rOther.maPosition
+                       && maPosition == rOther.maPosition && mbLarger == rOther.mbLarger
                        && mbHasRails == rOther.mbHasRails
                        && (!mbHasRails || sameRails(maRails, rOther.maRails));
             }
@@ -250,6 +255,9 @@ public:
         bool mbCanBeFlipped = true;
         /// False where the object cannot be changed into curves, a measurement for one.
         bool mbCanBeChangedToCurves = true;
+        /// True where the object, selected on its own, is shaped by its own handles alone and
+        /// has no frame of eight around it, a measurement for one.
+        bool mbHandlesOfItsOwnOnly = false;
 
         /** True where the object is a diagram, which is a set of shapes the office lays out
             from data it holds beside them, and the file name ending of the picture an object
@@ -458,6 +466,7 @@ public:
                    && mbCanBeSheared == rOther.mbCanBeSheared
                    && mbCanBeFlipped == rOther.mbCanBeFlipped
                    && mbCanBeChangedToCurves == rOther.mbCanBeChangedToCurves
+                   && mbHandlesOfItsOwnOnly == rOther.mbHandlesOfItsOwnOnly
                    && mbTiedAtStart == rOther.mbTiedAtStart
                    && mbTiedAtEnd == rOther.mbTiedAtEnd
                    && mnTiedToAtStart == rOther.mnTiedToAtStart

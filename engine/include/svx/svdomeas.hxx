@@ -97,6 +97,8 @@ public:
     SAL_DLLPRIVATE virtual basegfx::B2DPolyPolygon TakeXorPoly() const override;
     SAL_DLLPRIVATE virtual sal_uInt32 GetHdlCount() const override;
     SAL_DLLPRIVATE virtual void AddToHdlList(SdrHdlList& rHdlList) const override;
+    SAL_DLLPRIVATE virtual bool GetHandleRails(const SdrHdl& rHandle,
+                                              SdrHandleRails& rRails) const override;
 
     // special drag methods
     SAL_DLLPRIVATE virtual bool hasSpecialDrag() const override;
@@ -146,6 +148,14 @@ public:
     // #i97878#
     SAL_DLLPRIVATE virtual bool TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B2DPolyPolygon& rPolyPolygon) const override;
     SAL_DLLPRIVATE virtual void TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& rPolyPolygon) override;
+
+    /** The mapping that takes the unit line from 0 and 0 to 1 and 0 onto the measured line, from
+        the first point to the second: the one TRSetBaseGeometry reads. The other side of the
+        unit square is one unit long, at a right angle down from the line. TRGetBaseGeometry
+        answers the upright box around the two points instead, which is what the filters and the
+        API have always been given.
+     */
+    basegfx::B2DHomMatrix GetLineMapping() const;
 };
 
 // Creating:

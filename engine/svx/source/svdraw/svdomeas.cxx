@@ -31,12 +31,14 @@
 #include <editeng/flditem.hxx>
 #include <editeng/measfld.hxx>
 #include <editeng/outlobj.hxx>
+#include <cmath>
 #include <math.h>
 #include <svl/style.hxx>
 
 #include <sdr/contact/viewcontactofsdrmeasureobj.hxx>
 #include <sdr/properties/measureproperties.hxx>
 #include <svx/svddrag.hxx>
+#include <svx/sdrhandlerails.hxx>
 #include <svx/svdhdl.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/svdogrp.hxx>
@@ -759,6 +761,27 @@ void SdrMeasureObj::AddToHdlList(SdrHdlList& rHdlList) const
     }
 }
 
+/*
+    The two ends of the measured line move freely. The other four handles stand on the two help
+    lines, the ends nearer to the line and the ends further from it, and each of them only changes
+    a length across the measured line: the drag takes the part of the move across the line and
+    leaves the part along it. On the object's own square, which runs from the first end along the
+    line to the second (see GetLineMapping), that is a move down only, with no end on either side,
+    since a handle may also cross the measured line.
+*/
+bool SdrMeasureObj::GetHandleRails(const SdrHdl& rHandle, SdrHandleRails& rRails) const
+{
+    const sal_uInt32 nHandle(rHandle.GetObjHdlNum());
+    if (SdrHdlKind::User != rHandle.GetKind() || 2 == nHandle || 3 == nHandle)
+        return SdrTextObj::GetHandleRails(rHandle, rRails);
+
+    rRails = SdrHandleRails();
+    rRails.meKind = SdrHandleRailKind::Along;
+    rRails.mbMovesDown = true;
+
+    return true;
+}
+
 
 bool SdrMeasureObj::hasSpecialDrag() const
 {
@@ -1378,6 +1401,34 @@ bool SdrMeasureObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B
     rMatrix = basegfx::utils::createScaleTranslateB2DHomMatrix(aScale, aTranslate);
 
     return true;
+}
+
+/*
+    The mapping that takes the unit line from 0 and 0 to 1 and 0 onto the measured line, from the
+    first point to the second, which is what TRSetBaseGeometry reads. The other side of the unit
+    square goes a right angle down from the line and is one unit long, so the middle of the square
+    lies on the middle of the line, give or take half a unit, and a turn about that middle turns
+    the measurement about the middle of its line. Where both points are one, there is no line to
+    map onto, and the mapping only moves to that point.
+*/
+basegfx::B2DHomMatrix SdrMeasureObj::GetLineMapping() const
+{
+    if (m_aPt1 == m_aPt2)
+        return basegfx::utils::createTranslateB2DHomMatrix(m_aPt1.X(), m_aPt1.Y());
+
+    const double fAcross(m_aPt2.X() - m_aPt1.X());
+    const double fDown(m_aPt2.Y() - m_aPt1.Y());
+    const double fLength(std::hypot(fAcross, fDown));
+
+    basegfx::B2DHomMatrix aMapping;
+    aMapping.set(0, 0, fAcross);
+    aMapping.set(1, 0, fDown);
+    aMapping.set(0, 1, -fDown / fLength);
+    aMapping.set(1, 1, fAcross / fLength);
+    aMapping.set(0, 2, m_aPt1.X());
+    aMapping.set(1, 2, m_aPt1.Y());
+
+    return aMapping;
 }
 
 void SdrMeasureObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const basegfx::B2DPolyPolygon& /*rPolyPolygon*/)
