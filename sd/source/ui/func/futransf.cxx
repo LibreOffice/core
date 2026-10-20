@@ -49,7 +49,8 @@ rtl::Reference<FuPoor> FuTransform::Create( ViewShell& rViewSh, ::sd::Window* pW
 
 namespace {
 
-void setUndo(::sd::View* pView, const SfxItemSet* pArgs, bool addPageMargin)
+void setUndo(::sd::View* pView, const SfxItemSet* pArgs, bool addPageMargin,
+             bool bApplyAttributes)
 {
     // Undo
     const SdrMarkList& rMarkList = pView->GetMarkedObjectList();
@@ -57,7 +58,10 @@ void setUndo(::sd::View* pView, const SfxItemSet* pArgs, bool addPageMargin)
         " " + SdResId(STR_TRANSFORM);
     pView->BegUndo(aString);
     pView->SetGeoAttrToMarked(*pArgs, addPageMargin);
-    pView->SetAttributes(*pArgs);
+    // The generic transform items are already applied above. Only the
+    // caption dialog also returns shape attributes.
+    if (bApplyAttributes)
+        pView->SetAttributes(*pArgs);
     pView->EndUndo();
 }
 
@@ -73,9 +77,9 @@ void FuTransform::DoExecute( SfxRequest& rReq )
 
     if (pArgs)
     {
-        // If this comes from LOK, that means the shape is moved by mouse
-        // only then pArgs is pre-set.
-        setUndo(mpView, pArgs, comphelper::LibreOfficeKit::isActive());
+        // Pre-set transform arguments (e.g. from the sidebar or LOK) are
+        // applied by SetGeoAttrToMarked.
+        setUndo(mpView, pArgs, comphelper::LibreOfficeKit::isActive(), false);
         return;
     }
 
@@ -84,9 +88,10 @@ void FuTransform::DoExecute( SfxRequest& rReq )
     VclPtr<SfxAbstractTabDialog> pDlg;
 
     SdrObject* pObj = rMarkList.GetMark(0)->GetMarkedSdrObj();
-    if( rMarkList.GetMarkCount() == 1 &&
-        pObj->GetObjInventor() == SdrInventor::Default &&
-        pObj->GetObjIdentifier() == SdrObjKind::Caption )
+    const bool bCaptionDialog = rMarkList.GetMarkCount() == 1
+        && pObj->GetObjInventor() == SdrInventor::Default
+        && pObj->GetObjIdentifier() == SdrObjKind::Caption;
+    if (bCaptionDialog)
     {
         // --------- itemset for caption --------
         SfxItemSet aNewAttr( mrDoc.GetPool() );
@@ -111,12 +116,12 @@ void FuTransform::DoExecute( SfxRequest& rReq )
     auto xRequest = std::make_shared<SfxRequest>(rReq);
     rReq.Ignore(); // the 'old' request is not relevant any more
 
-    pDlg->StartExecuteAsync([pDlg, xRequest=std::move(xRequest), this](sal_Int32 nResult){
+    pDlg->StartExecuteAsync([pDlg, xRequest=std::move(xRequest), this, bCaptionDialog](sal_Int32 nResult){
         if (nResult == RET_OK)
         {
             xRequest->Done(*(pDlg->GetOutputItemSet()));
             // Page margin is already calculated at this point.
-            setUndo(mpView, xRequest->GetArgs(), false);
+            setUndo(mpView, xRequest->GetArgs(), false, bCaptionDialog);
         }
 
         // deferred until the dialog ends

@@ -44,6 +44,10 @@
 #include <sfx2/sfxbasemodel.hxx>
 #include <svx/signaturelinehelper.hxx>
 #include <sfx2/objsh.hxx>
+#include <sfx2/sfxuno.hxx>
+#include <svl/itemset.hxx>
+#include <svx/sdangitm.hxx>
+#include <svx/svxids.hrc>
 
 #include <sdr/contact/objectcontactofobjlistpainter.hxx>
 #include <tools/XPath.hxx>
@@ -689,6 +693,56 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObjectMove)
                          pRectangleObject->GetLogicRect());
 
     pPage->RemoveObject(0);
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testTransformRotationArguments)
+{
+    loadFromURL(u"private:factory/sdraw"_ustr);
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pViewShell);
+    SfxItemPool& rPool = pViewShell->GetPool();
+
+    auto checkAngle = [&](const SfxItemSet& rSet, sal_uInt16 nSlot, sal_Int32 nExpected) {
+        const SfxPoolItem* pItem = nullptr;
+        CPPUNIT_ASSERT_EQUAL(SfxItemState::SET,
+                             rSet.GetItemState(rPool.GetWhichIDFromSlotID(nSlot), false, &pItem));
+        // The inherited integer factory used to create SfxInt32Item here, causing
+        // an assertion when the transform code requested an SdrAngleItem.
+        const auto* pAngle = dynamic_cast<const SdrAngleItem*>(pItem);
+        CPPUNIT_ASSERT(pAngle);
+        CPPUNIT_ASSERT_EQUAL(nExpected, pAngle->GetValue().get());
+    };
+
+    for (sal_Int32 nAngle : { 0, 4500, -4500 })
+    {
+        // Method arguments cover absolute and relative rotations, with an ordinary
+        // integer position argument as a control for the shared conversion path.
+        SfxAllItemSet aSet(rPool);
+        TransformParameters(
+            SID_ATTR_TRANSFORM,
+            { comphelper::makePropertyValue(u"TransformRotationAngle"_ustr, nAngle),
+              comphelper::makePropertyValue(u"TransformRotationDeltaAngle"_ustr, nAngle),
+              comphelper::makePropertyValue(u"TransformPosX"_ustr, sal_Int32(1234)) },
+            aSet);
+        checkAngle(aSet, SID_ATTR_TRANSFORM_ANGLE, nAngle);
+        checkAngle(aSet, SID_ATTR_TRANSFORM_DELTA_ANGLE, nAngle);
+        const auto aArguments = TransformItems(SID_ATTR_TRANSFORM, aSet);
+        CPPUNIT_ASSERT_EQUAL(nAngle,
+                             aArguments.getValue(u"TransformRotationAngle"_ustr).get<sal_Int32>());
+        CPPUNIT_ASSERT_EQUAL(
+            nAngle, aArguments.getValue(u"TransformRotationDeltaAngle"_ustr).get<sal_Int32>());
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1234),
+                             aArguments.getValue(u"TransformPosX"_ustr).get<sal_Int32>());
+
+        // The rotation property uses the same factory without the method's
+        // formal-argument table.
+        SfxAllItemSet aPropertySet(rPool);
+        TransformParameters(
+            SID_ATTR_TRANSFORM_ANGLE,
+            { comphelper::makePropertyValue(u"TransformRotationAngle"_ustr, nAngle) },
+            aPropertySet);
+        checkAngle(aPropertySet, SID_ATTR_TRANSFORM_ANGLE, nAngle);
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObjectRotate)
