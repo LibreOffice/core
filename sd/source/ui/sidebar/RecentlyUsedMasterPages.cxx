@@ -237,11 +237,12 @@ void RecentlyUsedMasterPages::AddEventListener (const Link<LinkParamNone*,void>&
 
 void RecentlyUsedMasterPages::RemoveEventListener (const Link<LinkParamNone*,void>& rEventListener)
 {
-    maListeners.erase (
-        ::std::find (
-            maListeners.begin(),
-            maListeners.end(),
-            rEventListener));
+    auto aIter = ::std::find (
+        maListeners.begin(),
+        maListeners.end(),
+        rEventListener);
+    if (aIter != maListeners.end())
+        maListeners.erase(aIter);
 }
 
 int RecentlyUsedMasterPages::GetMasterPageCount() const
