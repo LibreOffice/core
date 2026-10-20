@@ -224,7 +224,7 @@ public:
 
     static void             ImplInitTitle( ImplBorderFrameData* pData );
     static BorderWindowHitTest ImplHitTest( ImplBorderFrameData const * pData, const Point& rPos );
-    static void             ImplMouseMove( ImplBorderFrameData* pData, const MouseEvent& rMEvt );
+    static void ImplMouseMove(ImplBorderFrameData& rData, const MouseEvent& rMEvt);
     static OUString         ImplRequestHelp( ImplBorderFrameData const * pData, const Point& rPos, tools::Rectangle& rHelpRect );
     static tools::Long             ImplCalcTitleWidth( const ImplBorderFrameData* pData );
 };

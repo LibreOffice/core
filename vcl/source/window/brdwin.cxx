@@ -247,15 +247,15 @@ BorderWindowHitTest ImplBorderWindowView::ImplHitTest( ImplBorderFrameData const
     return BorderWindowHitTest::NONE;
 }
 
-void ImplBorderWindowView::ImplMouseMove( ImplBorderFrameData* pData, const MouseEvent& rMEvt )
+void ImplBorderWindowView::ImplMouseMove(ImplBorderFrameData& rData, const MouseEvent& rMEvt)
 {
-    DrawButtonFlags oldCloseState = pData->mnCloseState;
-    DrawButtonFlags oldMenuState = pData->mnMenuState;
-    pData->mnCloseState &= ~DrawButtonFlags::Highlight;
-    pData->mnMenuState &= ~DrawButtonFlags::Highlight;
+    DrawButtonFlags oldCloseState = rData.mnCloseState;
+    DrawButtonFlags oldMenuState = rData.mnMenuState;
+    rData.mnCloseState &= ~DrawButtonFlags::Highlight;
+    rData.mnMenuState &= ~DrawButtonFlags::Highlight;
 
     Point aMousePos = rMEvt.GetPosPixel();
-    BorderWindowHitTest nHitTest = ImplHitTest( pData, aMousePos );
+    BorderWindowHitTest nHitTest = ImplHitTest(&rData, aMousePos);
     PointerStyle ePtrStyle = PointerStyle::Arrow;
     if ( nHitTest & BorderWindowHitTest::Left )
         ePtrStyle = PointerStyle::WindowWSize;
@@ -274,18 +274,18 @@ void ImplBorderWindowView::ImplMouseMove( ImplBorderFrameData* pData, const Mous
     else if ( nHitTest & BorderWindowHitTest::BottomLeft )
         ePtrStyle = PointerStyle::WindowSWSize;
     else if ( nHitTest & BorderWindowHitTest::Close )
-        pData->mnCloseState |= DrawButtonFlags::Highlight;
+        rData.mnCloseState |= DrawButtonFlags::Highlight;
     else if ( nHitTest & BorderWindowHitTest::Menu )
-        pData->mnMenuState |= DrawButtonFlags::Highlight;
-    else if ( nHitTest & BorderWindowHitTest::Title &&
-              pData->mnTitleType == BorderWindowTitleType::Tearoff && !rMEvt.IsLeaveWindow() )
+        rData.mnMenuState |= DrawButtonFlags::Highlight;
+    else if (nHitTest & BorderWindowHitTest::Title
+             && rData.mnTitleType == BorderWindowTitleType::Tearoff && !rMEvt.IsLeaveWindow())
         ePtrStyle = PointerStyle::Move;
-    pData->mpBorderWindow->SetPointer( ePtrStyle );
+    rData.mpBorderWindow->SetPointer(ePtrStyle);
 
-    if( pData->mnCloseState != oldCloseState )
-        pData->mpBorderWindow->Invalidate( pData->maCloseRect );
-    if( pData->mnMenuState != oldMenuState )
-        pData->mpBorderWindow->Invalidate( pData->maMenuRect );
+    if (rData.mnCloseState != oldCloseState)
+        rData.mpBorderWindow->Invalidate(rData.maCloseRect);
+    if (rData.mnMenuState != oldMenuState)
+        rData.mpBorderWindow->Invalidate(rData.maMenuRect);
 }
 
 OUString ImplBorderWindowView::ImplRequestHelp( ImplBorderFrameData const * pData,
@@ -776,7 +776,7 @@ ImplStdBorderWindowView::~ImplStdBorderWindowView()
 
 bool ImplStdBorderWindowView::MouseMove( const MouseEvent& rMEvt )
 {
-    ImplMouseMove( &maFrameData, rMEvt );
+    ImplMouseMove(maFrameData, rMEvt);
     return true;
 }
 
