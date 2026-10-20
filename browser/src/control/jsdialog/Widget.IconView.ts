@@ -417,13 +417,22 @@ JSDialog.iconView = function (
 	// with a different document theme at position 0), every cached image
 	// would be paired with the wrong label. Drop stale images when the
 	// entry texts or tooltips change.
+	const signature = data.entries
+		? data.entries
+				.map((e: IconViewEntry) => (e.text || '') + '\t' + (e.tooltip || ''))
+				.join('|')
+		: '';
 	const cache = builder.rendersCache[data.id];
-	if (cache) {
-		const signature = data.entries
-			? data.entries
-					.map((e: IconViewEntry) => (e.text || '') + '\t' + (e.tooltip || ''))
-					.join('|')
-			: '';
+	if (!cache) {
+		// The first build records the signature of its entries, so a later
+		// build with the same entries finds the images of this one.
+		builder.rendersCache[data.id] = {
+			persistent: false,
+			images: [],
+			dpiScale: window.devicePixelRatio,
+			signature,
+		};
+	} else {
 		// The entry images are bitmaps converted by core at a fixed pixel
 		// density that is sent with the render request. When the display
 		// density changes (browser zoom, or moving the window to a monitor
