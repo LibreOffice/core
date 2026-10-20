@@ -60,7 +60,7 @@ class SentenceEditWindow_Impl : public WeldEditView
 private:
     std::unique_ptr<weld::ScrolledWindow> m_xScrolledWindow;
     std::set<sal_Int32> m_aIgnoreErrorsAt;
-    SpellDialog*        m_pSpellDialog;
+    SpellDialog& m_rSpellDialog;
     weld::Toolbar*      m_pToolbar;
     sal_Int32           m_nErrorStart;
     sal_Int32           m_nErrorEnd;
@@ -69,8 +69,6 @@ private:
     Link<LinkParamNone*,void> m_aModifyLink;
 
     void            CallModifyLink() {m_aModifyLink.Call(nullptr); }
-
-    SpellDialog* GetSpellDialog() const { return m_pSpellDialog; }
 
     bool GetErrorDescription(SpellErrorDescription& rSpellErrorDescription, sal_Int32 nPosition);
 

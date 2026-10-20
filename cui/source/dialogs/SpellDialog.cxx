@@ -1187,7 +1187,7 @@ bool SpellDialog::ApplyChangeAllList_Impl(SpellPortions& rSentence, bool &bHasRe
 SentenceEditWindow_Impl::SentenceEditWindow_Impl(
     std::unique_ptr<weld::ScrolledWindow> xScrolledWindow, SpellDialog& rSpellDialog)
     : m_xScrolledWindow(std::move(xScrolledWindow))
-    , m_pSpellDialog(&rSpellDialog)
+    , m_rSpellDialog(rSpellDialog)
     , m_pToolbar(nullptr)
     , m_nErrorStart(0)
     , m_nErrorEnd(0)
@@ -1808,13 +1808,13 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css
         bRet = true;
         //add an undo action
         std::unique_ptr<SpellUndoAction_Impl> pAction(new SpellUndoAction_Impl(
-            SpellUndoAction::CHANGE_NEXTERROR, GetSpellDialog()->m_aDialogUndoLink));
+            SpellUndoAction::CHANGE_NEXTERROR, m_rSpellDialog.m_aDialogUndoLink));
         pAction->SetErrorMove(nOldErrorStart, nOldErrorEnd);
 
         if (GetErrorDescription(aSpellErrorDescription, nOldErrorStart))
         {
             pAction->SetErrorLanguageSelected(aSpellErrorDescription.aSuggestions.hasElements() &&
-                LanguageTag(aSpellErrorDescription.aLocale).getLanguageType() == GetSpellDialog()->m_xLanguageLB->get_active_id());
+                LanguageTag(aSpellErrorDescription.aLocale).getLanguageType() == m_rSpellDialog.m_xLanguageLB->get_active_id());
         }
         else
             pAction->SetErrorLanguageSelected(false);
@@ -1825,19 +1825,18 @@ bool SentenceEditWindow_Impl::MarkNextError( bool bIgnoreCurrentError, const css
         m_nErrorStart = m_nErrorEnd = nTextLen;
     if( !bModified )
         ClearModifyFlag();
-    SpellDialog* pSpellDialog = GetSpellDialog();
-    pSpellDialog->m_xIgnorePB->set_sensitive(bRet);
-    pSpellDialog->m_xIgnoreAllPB->set_sensitive(bRet);
-    pSpellDialog->m_xAutoCorrPB->set_sensitive(bRet);
-    pSpellDialog->m_xAddToDictMB->set_sensitive(bRet);
-    pSpellDialog->m_xAddToDictPB->set_sensitive(bRet);
+    m_rSpellDialog.m_xIgnorePB->set_sensitive(bRet);
+    m_rSpellDialog.m_xIgnoreAllPB->set_sensitive(bRet);
+    m_rSpellDialog.m_xAutoCorrPB->set_sensitive(bRet);
+    m_rSpellDialog.m_xAddToDictMB->set_sensitive(bRet);
+    m_rSpellDialog.m_xAddToDictPB->set_sensitive(bRet);
     if (!bRet)
     {
-        pSpellDialog->m_xChangePB->set_sensitive(bRet);
-        pSpellDialog->m_xChangeAllPB->set_sensitive(bRet);
+        m_rSpellDialog.m_xChangePB->set_sensitive(bRet);
+        m_rSpellDialog.m_xChangeAllPB->set_sensitive(bRet);
 
-        pSpellDialog->m_xSentenceED->ResetUndo();
-        pSpellDialog->m_xUndoPB->set_sensitive(false);
+        m_rSpellDialog.m_xSentenceED->ResetUndo();
+        m_rSpellDialog.m_xUndoPB->set_sensitive(false);
     }
     return bRet;
 }
@@ -1942,8 +1941,8 @@ int SentenceEditWindow_Impl::ChangeMarkedWord(const OUString& rNewWord, Language
     nEndTemp += nDiffLen;
     m_nErrorEnd = static_cast<sal_Int32>(nEndTemp);
 
-    std::unique_ptr<SpellUndoAction_Impl> pAction(new SpellUndoAction_Impl(
-        SpellUndoAction::MOVE_ERROREND, GetSpellDialog()->m_aDialogUndoLink));
+    std::unique_ptr<SpellUndoAction_Impl> pAction(
+        new SpellUndoAction_Impl(SpellUndoAction::MOVE_ERROREND, m_rSpellDialog.m_aDialogUndoLink));
     pAction->SetOffset(nDiffLen);
     AddUndoAction(std::move(pAction));
     if (bSpellErrorDescription)
@@ -2113,7 +2112,7 @@ svx::SpellPortions SentenceEditWindow_Impl::CreateSpellPortions() const
         {
             //if all content has been overwritten the attributes may have been removed, too
             svx::SpellPortion aPortion1;
-            aPortion1.eLanguage = GetSpellDialog()->GetSelectedLang_Impl();
+            aPortion1.eLanguage = m_rSpellDialog.GetSelectedLang_Impl();
 
             aPortion1.sText = m_xEditEngine->GetText(ESelection(0, 0, 0, nTextLen));
 
@@ -2191,7 +2190,7 @@ void SentenceEditWindow_Impl::Undo()
     }while(bSaveUndoEdit && SpellUndoAction::UNDO_EDIT_MODE != pUndoAction->GetId() && GetUndoActionCount());
 
     if(bSaveUndoEdit || SpellUndoAction::CHANGE_GROUP == pUndoAction->GetId())
-        GetSpellDialog()->UpdateBoxes_Impl();
+        m_rSpellDialog.UpdateBoxes_Impl();
 }
 
 void SentenceEditWindow_Impl::ResetUndo()
@@ -2204,7 +2203,7 @@ void SentenceEditWindow_Impl::AddUndoAction( std::unique_ptr<SfxUndoAction> pAct
 {
     EditUndoManager& rUndoMgr = m_xEditEngine->GetUndoManager();
     rUndoMgr.AddUndoAction(std::move(pAction));
-    GetSpellDialog()->m_xUndoPB->set_sensitive(true);
+    m_rSpellDialog.m_xUndoPB->set_sensitive(true);
 }
 
 size_t SentenceEditWindow_Impl::GetUndoActionCount() const
@@ -2237,21 +2236,20 @@ void SentenceEditWindow_Impl::SetUndoEditMode(bool bSet)
     DBG_ASSERT(!bSet || m_bIsUndoEditMode != bSet, "SetUndoEditMode with equal values?");
     m_bIsUndoEditMode = bSet;
     //disable all buttons except the Change
-    SpellDialog* pSpellDialog = GetSpellDialog();
     weld::Widget* aControls[] =
     {
-        pSpellDialog->m_xChangeAllPB.get(),
-        pSpellDialog->m_xExplainFT.get(),
-        pSpellDialog->m_xIgnoreAllPB.get(),
-        pSpellDialog->m_xIgnoreRulePB.get(),
-        pSpellDialog->m_xIgnorePB.get(),
-        pSpellDialog->m_xSuggestionLB.get(),
-        pSpellDialog->m_xSuggestionFT.get(),
-        pSpellDialog->m_xLanguageFT.get(),
-        pSpellDialog->m_xLanguageLB->get_widget(),
-        pSpellDialog->m_xAddToDictMB.get(),
-        pSpellDialog->m_xAddToDictPB.get(),
-        pSpellDialog->m_xAutoCorrPB.get()
+        m_rSpellDialog.m_xChangeAllPB.get(),
+        m_rSpellDialog.m_xExplainFT.get(),
+        m_rSpellDialog.m_xIgnoreAllPB.get(),
+        m_rSpellDialog.m_xIgnoreRulePB.get(),
+        m_rSpellDialog.m_xIgnorePB.get(),
+        m_rSpellDialog.m_xSuggestionLB.get(),
+        m_rSpellDialog.m_xSuggestionFT.get(),
+        m_rSpellDialog.m_xLanguageFT.get(),
+        m_rSpellDialog.m_xLanguageLB->get_widget(),
+        m_rSpellDialog.m_xAddToDictMB.get(),
+        m_rSpellDialog.m_xAddToDictPB.get(),
+        m_rSpellDialog.m_xAutoCorrPB.get()
     };
     for (weld::Widget* pWidget : aControls)
         pWidget->set_sensitive(false);
@@ -2266,8 +2264,8 @@ void SentenceEditWindow_Impl::SetUndoEditMode(bool bSet)
 
     //put the appropriate action on the Undo-stack
     AddUndoAction(std::make_unique<SpellUndoAction_Impl>(SpellUndoAction::UNDO_EDIT_MODE,
-                                                         GetSpellDialog()->m_aDialogUndoLink));
-    pSpellDialog->m_xChangePB->set_sensitive(true);
+                                                         m_rSpellDialog.m_aDialogUndoLink));
+    m_rSpellDialog.m_xChangePB->set_sensitive(true);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
