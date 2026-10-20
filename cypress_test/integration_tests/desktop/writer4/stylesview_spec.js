@@ -1,4 +1,4 @@
-/* global describe it cy require beforeEach */
+/* global describe it cy require beforeEach expect */
 
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
@@ -99,6 +99,45 @@ describe(['tagdesktop'], 'Stylesview Iconview Tests', { testIsolation: false }, 
 		cy.cGet('.jsdialog #stylesview .ui-iconview-entry').each(function($entry) {
 			cy.wrap($entry).scrollIntoView();
 			cy.wrap($entry).find('img').should('exist');
+		});
+	});
+
+	// Each switch to viewing mode and back builds the notebookbar again. The
+	// previews the engine drew for the earlier build stay in a cache, and from
+	// the second switch on the entries are built from that cache instead of
+	// being requested again. An entry built that way has to look like a freshly
+	// rendered one: the preview at its device-independent size, which keeps it
+	// inside its cell on a high-density display, and the style name as its
+	// tooltip.
+	it('Previews from the cache keep their size and tooltip after a second view -> edit switch', function() {
+		cy.cGet('.notebookbar #stylesview .ui-iconview-entry img').should('be.visible');
+
+		for (var round = 0; round < 2; round++) {
+			cy.getFrameWindow().its('app').then(function(app) {
+				app.map.setPermission('readonly');
+			});
+			cy.cGet('#viewModeDropdownButton-button').should('have.text', 'Viewing');
+			cy.getFrameWindow().then(function(win) { return helper.processToIdle(win); });
+
+			cy.getFrameWindow().its('app').then(function(app) {
+				app.map.setPermission('edit');
+			});
+			cy.cGet('#viewModeDropdownButton-button').should('have.text', 'Editing');
+			cy.getFrameWindow().then(function(win) { return helper.processToIdle(win); });
+		}
+		cy.getFrameWindow().then(function(win) { return helper.waitForOnDemandRenders(win); });
+
+		cy.cGet('.notebookbar #stylesview .ui-iconview-entry img').should('have.length.greaterThan', 1);
+		cy.cGet('.notebookbar #stylesview .ui-iconview-entry img').should(function($images) {
+			// This run cannot change the display density, so the size the preview
+			// is scaled to is read rather than the pixels it covers.
+			var ratio = $images[0].ownerDocument.defaultView.devicePixelRatio;
+			$images.each(function(index, img) {
+				expect(img.naturalWidth, 'preview ' + index + ' is loaded').to.be.greaterThan(0);
+				expect(parseFloat(img.style.width), 'width of preview ' + index)
+					.to.be.closeTo(img.naturalWidth / ratio, 1);
+				expect(img.hasAttribute('data-cooltip'), 'preview ' + index + ' has a tooltip').to.equal(true);
+			});
 		});
 	});
 

@@ -143,6 +143,49 @@ function setupSize(entry: IconViewEntry, placeholder: HTMLElement) {
 	}
 }
 
+/// Shows the text of an entry whose image the engine draws on request, in the size of
+/// that image when the entry gives one.
+function _createEntryPlaceholder(
+	parent: HTMLElement,
+	builder: JSBuilder,
+	entry: IconViewEntry,
+): HTMLElement {
+	const placeholder = window.L.DomUtil.create(
+		'span',
+		builder.options.cssClass,
+		parent,
+	) as HTMLElement;
+	setupSize(entry, placeholder);
+	placeholder.innerText = entry.text ? entry.text : '';
+	_setEntryTooltip(placeholder, builder, entry);
+	return placeholder;
+}
+
+/// Puts the image the engine drew for an entry in place of what the entry holds, the
+/// placeholder or an earlier image, with the title below it when the view shows text.
+function _showRenderedEntry(
+	entryContainer: HTMLElement,
+	parentData: IconViewJSON,
+	entry: IconViewEntry,
+	image: string,
+	builder: JSBuilder,
+) {
+	const hasText = !!(entry.text && parentData.textWithIconEnabled);
+
+	entryContainer.replaceChildren();
+	let container = entryContainer;
+	if (hasText) {
+		container = window.L.DomUtil.create(
+			'div',
+			builder.options.cssClass,
+			entryContainer,
+		);
+	}
+
+	_createEntryImage(container, builder, entry, image, hasText);
+	if (hasText) _createEntryText(container, entry);
+}
+
 function _iconViewEntry(
 	parentContainer: IconViewElement,
 	parentData: IconViewJSON,
@@ -193,6 +236,9 @@ function _iconViewEntry(
 		entryContainer.setAttribute('tabindex', '-1');
 	}
 
+	// Holds the place of an image that the engine draws on request.
+	let placeholder: HTMLElement | null = null;
+
 	if (entry.command) {
 		_createEntryImageFromCommand(
 			entryContainer,
@@ -202,22 +248,18 @@ function _iconViewEntry(
 			hasText,
 		);
 	} else if (entry.ondemand) {
-		const placeholder = window.L.DomUtil.create(
-			'span',
-			builder.options.cssClass,
-			entryContainer,
-		);
-		setupSize(entry, placeholder);
-
-		placeholder.innerText = entry.text ? entry.text : '';
-		_setEntryTooltip(placeholder, builder, entry);
-
-		parentContainer.requestRenders(entry, placeholder, entryContainer);
+		placeholder = _createEntryPlaceholder(entryContainer, builder, entry);
 	} else {
 		_createEntryImage(entryContainer, builder, entry, entry.image, hasText);
 	}
 
 	if (hasText) _createEntryText(entryContainer, entry);
+
+	// The image is asked for once the entry is complete. One that is already in the
+	// cache replaces the placeholder and the title right away, the way an image from
+	// the engine replaces them when it arrives.
+	if (placeholder)
+		parentContainer.requestRenders(entry, placeholder, entryContainer);
 
 	if (!disabled) {
 		const singleClick = parentData.singleclickactivate === true;
@@ -513,6 +555,21 @@ JSDialog.iconView = function (
 		placeholder: Element,
 		entryContainer: Element,
 	) => {
+		// The engine drew this entry for an earlier build of the view and the image
+		// is still in the cache, so it is the answer to this request. It goes in the
+		// way a fresh render does, with the same size and tooltip.
+		const cache = builder.rendersCache[id];
+		if (cache && cache.images[entry.row]) {
+			_showRenderedEntry(
+				entryContainer as HTMLElement,
+				data,
+				entry,
+				cache.images[entry.row],
+				builder,
+			);
+			return;
+		}
+
 		JSDialog.OnDemandRenderer(
 			builder,
 			id,
@@ -542,22 +599,13 @@ JSDialog.iconView = function (
 			'.ui-iconview-entry, .ui-iconview-separator',
 		);
 		if (dropdown[pos]) {
-			let container = dropdown[pos] as HTMLElement;
-			const entry = data.entries[pos];
-			const image = builder.rendersCache[id].images[pos];
-			const hasText = !!(entry.text && data.textWithIconEnabled);
-
-			container.replaceChildren();
-			if (hasText) {
-				container = window.L.DomUtil.create(
-					'div',
-					builder.options.cssClass,
-					dropdown[pos],
-				);
-			}
-
-			_createEntryImage(container, builder, entry, image, hasText);
-			if (hasText) _createEntryText(container, entry);
+			_showRenderedEntry(
+				dropdown[pos] as HTMLElement,
+				data,
+				data.entries[pos],
+				builder.rendersCache[id].images[pos],
+				builder,
+			);
 		} else {
 			app.console.debug('IconView: not found entry: ' + pos);
 		}
