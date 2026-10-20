@@ -50,6 +50,7 @@ protected:
     OString m_sHyperlinkLink;
     OString m_aFormFieldButton;
     OString m_aContentControl;
+    std::vector<OString> m_aContentControls; // every payload, m_aContentControl is the last
     OString m_ShapeSelection;
     struct
     {

@@ -67,6 +67,7 @@
 #include <unotools/datetime.hxx>
 
 #include <comphelper/kit.hxx>
+#include <tools/json_writer.hxx>
 #include <sfx2/kit/helper.hxx>
 
 #include <editeng/acorrcfg.hxx>
@@ -1584,6 +1585,16 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         std::shared_ptr<SwContentControl> pContentControl = rFormatContentControl.GetContentControl();
         if (pContentControl->ShouldOpenPopup(rKeyCode))
         {
+            // the client shows the list, as for a click on its button
+            if (comphelper::COKit::isActive() && !bIsViewReadOnly
+                && (pContentControl->GetDropDown() || pContentControl->GetComboBox()))
+            {
+                tools::JsonWriter aJson;
+                aJson.put("action", "popup");
+                m_rView.viewCallback(COKitCallbackType::CONTENT_CONTROL,
+                                     aJson.finishAndGetAsOString());
+                return;
+            }
             SwShellCursor* pCursor = rSh.GetCursor_();
             if (pCursor)
             {

@@ -1005,11 +1005,15 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 		}
 		else if (textMsg.startsWith('contentcontrol:')) {
 			textMsg = textMsg.substring('contentcontrol:'.length + 1);
-			if (!app.sectionContainer.doesSectionExist(app.CSections.ContentControl.name)) {
-				app.sectionContainer.addSection(new cool.ContentControlSection());
+			var contentControl = JSON.parse(textMsg);
+			// a zoom replays the last message, and the list opens on a key only
+			if (contentControl.action !== 'popup' || !this._isReplayingMessages) {
+				if (!app.sectionContainer.doesSectionExist(app.CSections.ContentControl.name)) {
+					app.sectionContainer.addSection(new cool.ContentControlSection());
+				}
+				var section = app.sectionContainer.getSectionWithName(app.CSections.ContentControl.name);
+				section.drawContentControl(contentControl);
 			}
-			var section = app.sectionContainer.getSectionWithName(app.CSections.ContentControl.name);
-			section.drawContentControl(JSON.parse(textMsg));
 		}
 		else if (textMsg.startsWith('versionbar:')) {
 			obj = JSON.parse(textMsg.substring('versionbar:'.length + 1));

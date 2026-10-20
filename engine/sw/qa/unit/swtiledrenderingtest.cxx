@@ -202,6 +202,7 @@ void SwTiledRenderingTest::callbackImpl(COKitCallbackType eType, const char* pPa
         case COKitCallbackType::CONTENT_CONTROL:
         {
             m_aContentControl = OString(pPayload);
+            m_aContentControls.push_back(m_aContentControl);
         }
         break;
         case COKitCallbackType::GRAPHIC_SELECTION:

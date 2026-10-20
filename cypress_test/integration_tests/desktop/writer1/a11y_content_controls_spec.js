@@ -63,4 +63,33 @@ describe(['tagdesktop'], 'Writer content controls for the reader', { testIsolati
 				.to.contain('Agree: o, colour: red, name: Type a name, notes: Some notes.');
 		});
 	});
+
+	it('Alt+Down opens the list of a drop-down list, and Enter chooses from it', function () {
+		// into the drop-down list starting the paragraph
+		helper.typeIntoDocument('{ctrl}{home}');
+		helper.typeIntoDocument('{downarrow}{rightarrow}');
+		cy.then(function () {
+			return helper.processToIdle(win);
+		});
+
+		cy.realPress(['Alt', 'ArrowDown']);
+		cy.cGet('.jsdialog-window.modalpopup .ui-treeview-entry').should(function ($entries) {
+			expect($entries.toArray().map(function (entry) { return entry.textContent; }),
+				'the items').to.deep.equal(['small', 'big']);
+			expect($entries.closest('.modalpopup')[0].contains($entries[0].ownerDocument.activeElement),
+				'the focus in the list').to.equal(true);
+		});
+
+		// an arrow moves through the list without choosing
+		cy.realPress('ArrowDown');
+		cy.cGet('.jsdialog-window.modalpopup .ui-treeview-entry').should(function ($entries) {
+			expect($entries[1].ownerDocument.activeElement, 'the focus on the second item')
+				.to.equal($entries[1]);
+		});
+		cy.realPress('Enter');
+		cy.cGet('.jsdialog-window.modalpopup').should('not.exist');
+		cy.cGet('#clipboard-area').should(function ($area) {
+			expect($area.text(), 'the item chosen').to.contain('big size.');
+		});
+	});
 });

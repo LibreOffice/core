@@ -3852,6 +3852,55 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownContentControl)
     CPPUNIT_ASSERT_EQUAL(u"green"_ustr, pTextNode->GetExpandText(pWrtShell->GetLayout()));
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDropDownContentControlAltDown)
+{
+    // Given a document with a dropdown content control:
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    setupCOKitViewCallback(pWrtShell->GetSfxViewShell());
+    auto xMSF = mxComponent.queryThrow<lang::XMultiServiceFactory>();
+    uno::Reference<text::XText> xText = mxComponent.queryThrow<text::XTextDocument>()->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertString(xCursor, u"choose an item"_ustr, /*bAbsorb=*/false);
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->gotoEnd(/*bExpand=*/true);
+    auto xContentControl = xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr)
+                               .queryThrow<text::XTextContent>();
+    auto xContentControlProps = xContentControl.queryThrow<beans::XPropertySet>();
+    {
+        cpo::uno::Sequence<beans::PropertyValues> aListItems = {
+            {
+                comphelper::makePropertyValue(u"DisplayText"_ustr, cpo::uno::Any(u"red"_ustr)),
+                comphelper::makePropertyValue(u"Value"_ustr, cpo::uno::Any(u"R"_ustr)),
+            },
+            {
+                comphelper::makePropertyValue(u"DisplayText"_ustr, cpo::uno::Any(u"green"_ustr)),
+                comphelper::makePropertyValue(u"Value"_ustr, cpo::uno::Any(u"G"_ustr)),
+            },
+        };
+        xContentControlProps->setPropertyValue(u"ListItems"_ustr, cpo::uno::Any(aListItems));
+    }
+    xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, /*nCount=*/1,
+                     /*bBasicCall=*/false);
+    m_aContentControls.clear();
+
+    // When pressing Alt+Down in it:
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_DOWN | KEY_MOD2);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_DOWN | KEY_MOD2);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the client is asked to show the list:
+    // Without the fix, no popup was asked for, as the list was a popup of the engine nobody saw.
+    CPPUNIT_ASSERT(std::ranges::any_of(m_aContentControls, [](const OString& rPayload) {
+        std::stringstream aStream((std::string(rPayload)));
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+        return aTree.get<std::string>("action") == "popup";
+    }));
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPictureContentControl)
 {
     // Given a document with a picture content control:

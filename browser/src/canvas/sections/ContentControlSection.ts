@@ -54,6 +54,13 @@ export class ContentControlSection extends CanvasSectionObject {
 
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public drawContentControl(json: any) {
+		// Alt+Down, for the control shown already
+		if (json.action === 'popup') {
+			if (this.sectionProperties.dropdownSection)
+				this.sectionProperties.dropdownSection.openPopup();
+			return;
+		}
+
 		this.removeDropdownSection();
 
 		this.sectionProperties.json = json;

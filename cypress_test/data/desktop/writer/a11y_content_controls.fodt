@@ -11,6 +11,7 @@
  <office:body>
   <office:text>
    <text:p>Agree: <loext:content-control loext:checkbox="true" loext:checked="false" loext:checked-state="x" loext:unchecked-state="o" loext:alias="Agreement">o</loext:content-control>, colour: <loext:content-control loext:dropdown="true" loext:alias="Colour"><loext:list-item loext:display-text="red" loext:value="R"/><loext:list-item loext:display-text="green" loext:value="G"/>red</loext:content-control>, name: <loext:content-control loext:plain-text="true" loext:showing-place-holder="true">Type a name</loext:content-control>, notes: <loext:content-control loext:alias="Notes">Some notes</loext:content-control>.</text:p>
+   <text:p><loext:content-control loext:dropdown="true" loext:alias="Size"><loext:list-item loext:display-text="small" loext:value="S"/><loext:list-item loext:display-text="big" loext:value="B"/>small</loext:content-control> size.</text:p>
    <text:p>Last paragraph.</text:p>
   </office:text>
  </office:body>

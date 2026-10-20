@@ -48,7 +48,8 @@ class ContentControlDropdownSubSection extends HTMLObjectSection {
 
 		if (eventType === 'close') {
 			app.map.fire(fireEvent, { data: closeDropdownJson, callback: undefined });
-		} else if (eventType === 'select') {
+		} else if (eventType === 'activate') {
+			// a click, Enter or Space; an arrow key only moves through the list
 			app.socket.sendMessage(
 				'contentcontrolevent type=drop-down selected=' + data,
 			);
@@ -147,7 +148,10 @@ class ContentControlDropdownSubSection extends HTMLObjectSection {
 			e.stopPropagation();
 		}
 		this.stopPropagating();
+		this.openPopup();
+	}
 
+	public openPopup(): void {
 		if (this.sectionProperties.datePicker) {
 			this.showDatePicker();
 		} else if (this.sectionProperties.json.items) {
