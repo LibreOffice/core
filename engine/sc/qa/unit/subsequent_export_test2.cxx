@@ -938,6 +938,32 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testHyperlinkTargetFrameODS)
     CPPUNIT_ASSERT_EQUAL(u"_blank"_ustr, aTargetFrameExport);
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf173709HyperlinkTitleODS)
+{
+    // Given a cell with a hyperlink that has an office:title:
+    createScDoc("fods/tdf173709-hyperlink-title.fods");
+
+    // Then the URL field has the title after import:
+    ScDocument* pDoc = getScDoc();
+    const EditTextObject* pEditText = pDoc->GetEditText(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pEditText);
+    auto pURLData = dynamic_cast<const SvxURLField*>(
+        pEditText->GetFieldData(0, 0, text::textfield::Type::URL));
+    CPPUNIT_ASSERT(pURLData);
+    // Without the accompanying fix in place, this test would have failed, the title was not
+    // imported.
+    CPPUNIT_ASSERT_EQUAL(u"Example site"_ustr, pURLData->GetTitle());
+
+    // And the title is written back on export:
+    save(TestFilter::ODS);
+    xmlDocUniquePtr pDocXml = parseExport(u"content.xml"_ustr);
+    CPPUNIT_ASSERT(pDocXml);
+    assertXPath(pDocXml,
+                "/office:document-content/office:body/office:spreadsheet/table:table/"
+                "table:table-row[1]/table:table-cell[1]/text:p/text:a",
+                "title", u"Example site");
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testOpenDocumentAsReadOnly)
 {
     cpo::uno::Sequence<beans::PropertyValue> aParams

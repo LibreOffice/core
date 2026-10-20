@@ -33,7 +33,8 @@ public:
     void PushFieldSheetName(const OUString& rStyleName);
     void PushFieldDate(const OUString& rStyleName);
     void PushFieldTitle(const OUString& rStyleName);
-    void PushFieldURL(const OUString& rURL, const OUString& rRep, const OUString& rStyleName, const OUString& rTargetFrame);
+    void PushFieldURL(const OUString& rURL, const OUString& rRep, const OUString& rStyleName, const OUString& rTargetFrame,
+                      const OUString& rTitle);
 };
 
 /**
@@ -111,6 +112,7 @@ class ScXMLCellFieldURLContext : public ScXMLImportContext
     OUString maURL;
     OUString maRep;
     OUString maTargetFrame;
+    OUString maTitle;
 public:
     ScXMLCellFieldURLContext(ScXMLImport& rImport, ScXMLCellTextParaContext& rParent);
 

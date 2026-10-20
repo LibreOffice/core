@@ -104,9 +104,10 @@ void ScXMLCellTextParaContext::PushFieldTitle(const OUString& rStyleName)
 }
 
 void ScXMLCellTextParaContext::PushFieldURL(
-    const OUString& rURL, const OUString& rRep, const OUString& rStyleName, const OUString& rTargetFrame)
+    const OUString& rURL, const OUString& rRep, const OUString& rStyleName, const OUString& rTargetFrame,
+    const OUString& rTitle)
 {
-    mrParentCxt.PushParagraphFieldURL(rURL, rRep, rStyleName, rTargetFrame);
+    mrParentCxt.PushParagraphFieldURL(rURL, rRep, rStyleName, rTargetFrame, rTitle);
 }
 
 ScXMLCellTextSpanContext::ScXMLCellTextSpanContext(
@@ -274,6 +275,9 @@ void ScXMLCellFieldURLContext::startFastElement( sal_Int32 /*nElement*/,
             case XML_ELEMENT( OFFICE, XML_TARGET_FRAME_NAME ):
                 maTargetFrame = aIter.toString();
             break;
+            case XML_ELEMENT( OFFICE, XML_TITLE ):
+                maTitle = aIter.toString();
+            break;
             default:
                 ;
         }
@@ -282,7 +286,7 @@ void ScXMLCellFieldURLContext::startFastElement( sal_Int32 /*nElement*/,
 
 void ScXMLCellFieldURLContext::endFastElement( sal_Int32 /*nElement*/ )
 {
-    mrParentCxt.PushFieldURL(maURL, maRep, maStyleName, maTargetFrame);
+    mrParentCxt.PushFieldURL(maURL, maRep, maStyleName, maTargetFrame, maTitle);
 }
 
 void ScXMLCellFieldURLContext::characters( const OUString& rChars )

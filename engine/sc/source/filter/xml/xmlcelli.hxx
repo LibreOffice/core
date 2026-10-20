@@ -141,7 +141,8 @@ public:
     void PushParagraphFieldDate(const OUString& rStyleName);
     void PushParagraphFieldSheetName(const OUString& rStyleName);
     void PushParagraphFieldDocTitle(const OUString& rStyleName);
-    void PushParagraphFieldURL(const OUString& rURL, const OUString& rRep, const OUString& rStyleName, const OUString& rTargetFrame);
+    void PushParagraphFieldURL(const OUString& rURL, const OUString& rRep, const OUString& rStyleName, const OUString& rTargetFrame,
+                               const OUString& rTitle);
     void PushParagraphEnd();
 
     void SetAnnotation( const ScAddress& rPosition );

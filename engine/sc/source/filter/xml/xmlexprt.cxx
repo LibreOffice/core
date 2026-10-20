@@ -3082,6 +3082,9 @@ void writeContent(const ScDocument& rDoc, ScXMLExport& rExport, const OUString& 
                 const OUString& aTargetFrame = pURLField->GetTargetFrame();
                 if (!aTargetFrame.isEmpty())
                     rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_TARGET_FRAME_NAME, aTargetFrame);
+                const OUString& rTitle = pURLField->GetTitle();
+                if (!rTitle.isEmpty())
+                    rExport.AddAttribute(XML_NAMESPACE_OFFICE, XML_TITLE, rTitle);
 
                 OUString aElemName = rExport.GetNamespaceMap().GetQNameByKey(
                     XML_NAMESPACE_TEXT, GetXMLToken(XML_A));

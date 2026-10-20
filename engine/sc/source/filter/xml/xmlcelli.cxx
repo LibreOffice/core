@@ -599,11 +599,13 @@ void ScXMLTableRowCellContext::PushParagraphFieldDocTitle(const OUString& rStyle
 }
 
 void ScXMLTableRowCellContext::PushParagraphFieldURL(
-    const OUString& rURL, const OUString& rRep, const OUString& rStyleName, const OUString& rTargetFrame)
+    const OUString& rURL, const OUString& rRep, const OUString& rStyleName, const OUString& rTargetFrame,
+    const OUString& rTitle)
 {
     OUString aAbsURL = GetScImport().GetAbsoluteReference(rURL);
     std::unique_ptr<SvxURLField> pURLField(new SvxURLField(aAbsURL, rRep, SvxURLFormat::Repr));
     pURLField->SetTargetFrame(rTargetFrame);
+    pURLField->SetTitle(rTitle);
     PushParagraphField(std::move(pURLField), rStyleName);
 }
 
