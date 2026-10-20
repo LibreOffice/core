@@ -1202,15 +1202,16 @@ bool EmbeddedObjectContainer::StoreAsChildren(bool _bOasisFormat,bool _bCreateEm
                     || AlwaysStoreReplacementImages(xObj))
                 {
                     sal_Int32 nCurState = xObj->getCurrentState();
-                    if (nCurState == embed::EmbedStates::LOADED
-                        || nCurState == embed::EmbedStates::RUNNING)
+                    const bool bActive = nCurState != embed::EmbedStates::LOADED
+                                         && nCurState != embed::EmbedStates::RUNNING;
+                    if (!bActive)
                     {
-                        // means that the object is not active
                         // copy replacement image from old to new container
                         xStream = GetGraphicStream(xObj, &aMediaType);
                     }
 
-                    if (!xStream.is() && getUserAllowsLinkUpdate())
+                    // An active object draws its replacement from the content it has open.
+                    if (!xStream.is() && (bActive || getUserAllowsLinkUpdate()))
                     {
                         // the image must be regenerated
                         // TODO/LATER: another aspect could be used
