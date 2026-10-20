@@ -381,6 +381,23 @@ sal_Int32 parseColor(OUString const & hex) {
     return o3tl::toInt32(hex.subView(1), 16);
 }
 
+std::optional<sal_Int32> parseColor(css::beans::Optional<OUString> const & hex) {
+    if (!hex.IsPresent) {
+        return {};
+    }
+    return parseColor(hex.Value);
+}
+
+scriptinterop::TextAlignment textAlignmentArgument(
+    css::beans::Optional<scriptinterop::TextAlignment> const & textAlignment)
+{
+    if (!textAlignment.IsPresent) {
+        // Same exception message as GAS:
+        throw cpo::uno::RuntimeException(u"Argument cannot be null: textAlignment"_ustr);
+    }
+    return textAlignment.Value;
+}
+
 OUString formatColor(sal_Int32 color) {
     // Just take the RGB part, ignoring any transparency value (and the leading 1 makes number give
     // seven digits, of which the subView drops that 1 again):
@@ -904,35 +921,40 @@ public:
         return this;
     }
 
-    cpo::uno::Reference<scriptinterop::XText> setBold(bool value) override {
+    cpo::uno::Reference<scriptinterop::XText> setBold(
+        css::beans::Optional<bool> const & value) override
+    {
         setBoldOn(wholeRange(), value);
         return this;
     }
 
     cpo::uno::Reference<scriptinterop::XText> setBoldRange(
-        sal_Int32 startOffset, sal_Int32 endOffsetInclusive, bool value) override
+        sal_Int32 startOffset, sal_Int32 endOffsetInclusive,
+        css::beans::Optional<bool> const & value) override
     {
         setBoldOn(subRange(u"setBold", startOffset, endOffsetInclusive), value);
         return this;
     }
 
-    cpo::uno::Reference<scriptinterop::XText> setFontFamily(OUString const & fontFamilyName)
-        override
+    cpo::uno::Reference<scriptinterop::XText> setFontFamily(
+        css::beans::Optional<OUString> const & fontFamilyName) override
     {
         setFontFamilyOn(wholeRange(), fontFamilyName);
         return this;
     }
 
     cpo::uno::Reference<scriptinterop::XText> setFontFamilyRange(
-        sal_Int32 startOffset, sal_Int32 endOffsetInclusive, OUString const & fontFamilyName)
-        override
+        sal_Int32 startOffset, sal_Int32 endOffsetInclusive,
+        css::beans::Optional<OUString> const & fontFamilyName) override
     {
         setFontFamilyOn(
             subRange(u"setFontFamily", startOffset, endOffsetInclusive), fontFamilyName);
         return this;
     }
 
-    cpo::uno::Reference<scriptinterop::XText> setForegroundColor(OUString const & color) override {
+    cpo::uno::Reference<scriptinterop::XText> setForegroundColor(
+        css::beans::Optional<OUString> const & color) override
+    {
         auto const value = parseColor(color);
         auto const whole = wholeRange();
         // The color goes on all the text of the paragraph, over the colors that parts of it
@@ -942,7 +964,8 @@ public:
     }
 
     cpo::uno::Reference<scriptinterop::XText> setForegroundColorRange(
-        sal_Int32 startOffset, sal_Int32 endOffsetInclusive, OUString const & color) override
+        sal_Int32 startOffset, sal_Int32 endOffsetInclusive,
+        css::beans::Optional<OUString> const & color) override
     {
         auto const value = parseColor(color);
         checkOffset(startOffset);
@@ -952,38 +975,47 @@ public:
         return this;
     }
 
-    cpo::uno::Reference<scriptinterop::XText> setItalic(bool value) override {
+    cpo::uno::Reference<scriptinterop::XText> setItalic(
+        css::beans::Optional<bool> const & value) override
+    {
         setItalicOn(wholeRange(), value);
         return this;
     }
 
     cpo::uno::Reference<scriptinterop::XText> setItalicRange(
-        sal_Int32 startOffset, sal_Int32 endOffsetInclusive, bool value) override
+        sal_Int32 startOffset, sal_Int32 endOffsetInclusive,
+        css::beans::Optional<bool> const & value) override
     {
         setItalicOn(subRange(u"setItalic", startOffset, endOffsetInclusive), value);
         return this;
     }
 
-    cpo::uno::Reference<scriptinterop::XText> setLinkUrl(OUString const & url) override {
+    cpo::uno::Reference<scriptinterop::XText> setLinkUrl(
+        css::beans::Optional<OUString> const & url) override
+    {
         auto const whole = wholeRange();
         setLinkUrlOn(whole->getText()->createTextCursorByRange(whole), url);
         return this;
     }
 
     cpo::uno::Reference<scriptinterop::XText> setLinkUrlRange(
-        sal_Int32 startOffset, sal_Int32 endOffsetInclusive, OUString const & url) override
+        sal_Int32 startOffset, sal_Int32 endOffsetInclusive,
+        css::beans::Optional<OUString> const & url) override
     {
         setLinkUrlOn(subRange(u"setLinkUrl", startOffset, endOffsetInclusive), url);
         return this;
     }
 
-    cpo::uno::Reference<scriptinterop::XText> setStrikethrough(bool value) override {
+    cpo::uno::Reference<scriptinterop::XText> setStrikethrough(
+        css::beans::Optional<bool> const & value) override
+    {
         setStrikethroughOn(wholeRange(), value);
         return this;
     }
 
     cpo::uno::Reference<scriptinterop::XText> setStrikethroughRange(
-        sal_Int32 startOffset, sal_Int32 endOffsetInclusive, bool value) override
+        sal_Int32 startOffset, sal_Int32 endOffsetInclusive,
+        css::beans::Optional<bool> const & value) override
     {
         setStrikethroughOn(subRange(u"setStrikethrough", startOffset, endOffsetInclusive), value);
         return this;
@@ -995,28 +1027,31 @@ public:
     }
 
     cpo::uno::Reference<scriptinterop::XText> setTextAlignment(
-        scriptinterop::TextAlignment textAlignment) override
+        css::beans::Optional<scriptinterop::TextAlignment> const & textAlignment) override
     {
-        setTextAlignmentOn(wholeRange(), textAlignment);
+        setTextAlignmentOn(wholeRange(), textAlignmentArgument(textAlignment));
         return this;
     }
 
     cpo::uno::Reference<scriptinterop::XText> setTextAlignmentRange(
         sal_Int32 startOffset, sal_Int32 endOffsetInclusive,
-        scriptinterop::TextAlignment textAlignment) override
+        css::beans::Optional<scriptinterop::TextAlignment> const & textAlignment) override
     {
-        setTextAlignmentOn(
-            subRange(u"setTextAlignment", startOffset, endOffsetInclusive), textAlignment);
+        auto const value = textAlignmentArgument(textAlignment);
+        setTextAlignmentOn(subRange(u"setTextAlignment", startOffset, endOffsetInclusive), value);
         return this;
     }
 
-    cpo::uno::Reference<scriptinterop::XText> setUnderline(bool value) override {
+    cpo::uno::Reference<scriptinterop::XText> setUnderline(
+        css::beans::Optional<bool> const & value) override
+    {
         setUnderlineOn(wholeRange(), value);
         return this;
     }
 
     cpo::uno::Reference<scriptinterop::XText> setUnderlineRange(
-        sal_Int32 startOffset, sal_Int32 endOffsetInclusive, bool value) override
+        sal_Int32 startOffset, sal_Int32 endOffsetInclusive,
+        css::beans::Optional<bool> const & value) override
     {
         setUnderlineOn(subRange(u"setUnderline", startOffset, endOffsetInclusive), value);
         return this;
@@ -1120,21 +1155,45 @@ private:
             ->setPropertyValue(name, value);
     }
 
-    static void setBoldOn(cpo::uno::Reference<css::text::XTextRange> const & range, bool value) {
-        setProp(range, u"CharWeight"_ustr, cpo::uno::Any(
-            static_cast<float>(value ? css::awt::FontWeight::BOLD : css::awt::FontWeight::NORMAL)));
+    static void resetProp(
+        cpo::uno::Reference<css::text::XTextRange> const & range, OUString const & name)
+    {
+        cpo::uno::Reference<css::beans::XPropertyState>(
+            range->getText()->createTextCursorByRange(range), cpo::uno::UNO_QUERY_THROW)
+            ->setPropertyToDefault(name);
+    }
+
+    static void setBoldOn(
+        cpo::uno::Reference<css::text::XTextRange> const & range,
+        css::beans::Optional<bool> const & value)
+    {
+        if (!value.IsPresent) {
+            resetProp(range, u"CharWeight"_ustr);
+            return;
+        }
+        setProp(range, u"CharWeight"_ustr, cpo::uno::Any(static_cast<float>(
+            value.Value ? css::awt::FontWeight::BOLD : css::awt::FontWeight::NORMAL)));
     }
 
     static void setFontFamilyOn(
-        cpo::uno::Reference<css::text::XTextRange> const & range, OUString const & fontFamilyName)
+        cpo::uno::Reference<css::text::XTextRange> const & range,
+        css::beans::Optional<OUString> const & fontFamilyName)
     {
-        setProp(range, u"CharFontName"_ustr, cpo::uno::Any(fontFamilyName));
+        if (!fontFamilyName.IsPresent) {
+            resetProp(range, u"CharFontName"_ustr);
+            return;
+        }
+        setProp(range, u"CharFontName"_ustr, cpo::uno::Any(fontFamilyName.Value));
     }
 
     static void setForegroundColorOn(
-        cpo::uno::Reference<css::text::XTextRange> const & range, sal_Int32 color)
+        cpo::uno::Reference<css::text::XTextRange> const & range, std::optional<sal_Int32> color)
     {
-        setProp(range, u"CharColor"_ustr, cpo::uno::Any(color));
+        if (!color) {
+            resetProp(range, u"CharColor"_ustr);
+            return;
+        }
+        setProp(range, u"CharColor"_ustr, cpo::uno::Any(*color));
     }
 
     // A run set to Writer's automatic color, COL_AUTO, reads as having no color, the same as a run
@@ -1163,22 +1222,39 @@ private:
         }
     }
 
-    static void setItalicOn(cpo::uno::Reference<css::text::XTextRange> const & range, bool value) {
+    static void setItalicOn(
+        cpo::uno::Reference<css::text::XTextRange> const & range,
+        css::beans::Optional<bool> const & value)
+    {
+        if (!value.IsPresent) {
+            resetProp(range, u"CharPosture"_ustr);
+            return;
+        }
         setProp(range, u"CharPosture"_ustr, cpo::uno::Any(
-            value ? css::awt::FontSlant_ITALIC : css::awt::FontSlant_NONE));
+            value.Value ? css::awt::FontSlant_ITALIC : css::awt::FontSlant_NONE));
     }
 
     static void setLinkUrlOn(
-        cpo::uno::Reference<css::text::XTextRange> const & range, OUString const & url)
+        cpo::uno::Reference<css::text::XTextRange> const & range,
+        css::beans::Optional<OUString> const & url)
     {
-        setProp(range, u"HyperLinkURL"_ustr, cpo::uno::Any(url));
+        if (!url.IsPresent) {
+            resetProp(range, u"HyperLinkURL"_ustr);
+            return;
+        }
+        setProp(range, u"HyperLinkURL"_ustr, cpo::uno::Any(url.Value));
     }
 
     static void setStrikethroughOn(
-        cpo::uno::Reference<css::text::XTextRange> const & range, bool value)
+        cpo::uno::Reference<css::text::XTextRange> const & range,
+        css::beans::Optional<bool> const & value)
     {
+        if (!value.IsPresent) {
+            resetProp(range, u"CharStrikeout"_ustr);
+            return;
+        }
         setProp(range, u"CharStrikeout"_ustr, cpo::uno::Any(static_cast<sal_Int16>(
-            value ? css::awt::FontStrikeout::SINGLE : css::awt::FontStrikeout::NONE)));
+            value.Value ? css::awt::FontStrikeout::SINGLE : css::awt::FontStrikeout::NONE)));
     }
 
     static void setTextAlignmentOn(
@@ -1205,10 +1281,16 @@ private:
         setProp(range, u"CharEscapementHeight"_ustr, cpo::uno::Any(height));
     }
 
-    static void setUnderlineOn(cpo::uno::Reference<css::text::XTextRange> const & range, bool value)
+    static void setUnderlineOn(
+        cpo::uno::Reference<css::text::XTextRange> const & range,
+        css::beans::Optional<bool> const & value)
     {
+        if (!value.IsPresent) {
+            resetProp(range, u"CharUnderline"_ustr);
+            return;
+        }
         setProp(range, u"CharUnderline"_ustr, cpo::uno::Any(static_cast<sal_Int16>(
-            value ? css::awt::FontUnderline::SINGLE : css::awt::FontUnderline::NONE)));
+            value.Value ? css::awt::FontUnderline::SINGLE : css::awt::FontUnderline::NONE)));
     }
 
     cpo::uno::Reference<scriptinterop::XElement> parent_;
@@ -1369,7 +1451,9 @@ public:
         return this;
     }
 
-    cpo::uno::Reference<scriptinterop::XText> setBold(bool value) override {
+    cpo::uno::Reference<scriptinterop::XText> setBold(
+        css::beans::Optional<bool> const & value) override
+    {
         for (auto const & paragraph: contents().paragraphs) {
             paragraph.text->setBold(value);
         }
@@ -1377,7 +1461,8 @@ public:
     }
 
     cpo::uno::Reference<scriptinterop::XText> setBoldRange(
-        sal_Int32 startOffset, sal_Int32 endOffsetInclusive, bool value) override
+        sal_Int32 startOffset, sal_Int32 endOffsetInclusive,
+        css::beans::Optional<bool> const & value) override
     {
         forRange(
             u"setBold", startOffset, endOffsetInclusive,
@@ -1387,8 +1472,8 @@ public:
         return this;
     }
 
-    cpo::uno::Reference<scriptinterop::XText> setFontFamily(OUString const & fontFamilyName)
-        override
+    cpo::uno::Reference<scriptinterop::XText> setFontFamily(
+        css::beans::Optional<OUString> const & fontFamilyName) override
     {
         for (auto const & paragraph: contents().paragraphs) {
             paragraph.text->setFontFamily(fontFamilyName);
@@ -1397,8 +1482,8 @@ public:
     }
 
     cpo::uno::Reference<scriptinterop::XText> setFontFamilyRange(
-        sal_Int32 startOffset, sal_Int32 endOffsetInclusive, OUString const & fontFamilyName)
-        override
+        sal_Int32 startOffset, sal_Int32 endOffsetInclusive,
+        css::beans::Optional<OUString> const & fontFamilyName) override
     {
         forRange(
             u"setFontFamily", startOffset, endOffsetInclusive,
@@ -1408,7 +1493,9 @@ public:
         return this;
     }
 
-    cpo::uno::Reference<scriptinterop::XText> setForegroundColor(OUString const & color) override {
+    cpo::uno::Reference<scriptinterop::XText> setForegroundColor(
+        css::beans::Optional<OUString> const & color) override
+    {
         for (auto const & paragraph: contents().paragraphs) {
             paragraph.text->setForegroundColor(color);
         }
@@ -1416,7 +1503,8 @@ public:
     }
 
     cpo::uno::Reference<scriptinterop::XText> setForegroundColorRange(
-        sal_Int32 startOffset, sal_Int32 endOffsetInclusive, OUString const & color) override
+        sal_Int32 startOffset, sal_Int32 endOffsetInclusive,
+        css::beans::Optional<OUString> const & color) override
     {
         forRange(
             u"setForegroundColor", startOffset, endOffsetInclusive,
@@ -1426,7 +1514,9 @@ public:
         return this;
     }
 
-    cpo::uno::Reference<scriptinterop::XText> setItalic(bool value) override {
+    cpo::uno::Reference<scriptinterop::XText> setItalic(
+        css::beans::Optional<bool> const & value) override
+    {
         for (auto const & paragraph: contents().paragraphs) {
             paragraph.text->setItalic(value);
         }
@@ -1434,7 +1524,8 @@ public:
     }
 
     cpo::uno::Reference<scriptinterop::XText> setItalicRange(
-        sal_Int32 startOffset, sal_Int32 endOffsetInclusive, bool value) override
+        sal_Int32 startOffset, sal_Int32 endOffsetInclusive,
+        css::beans::Optional<bool> const & value) override
     {
         forRange(
             u"setItalic", startOffset, endOffsetInclusive,
@@ -1444,7 +1535,9 @@ public:
         return this;
     }
 
-    cpo::uno::Reference<scriptinterop::XText> setLinkUrl(OUString const & url) override {
+    cpo::uno::Reference<scriptinterop::XText> setLinkUrl(
+        css::beans::Optional<OUString> const & url) override
+    {
         for (auto const & paragraph: contents().paragraphs) {
             paragraph.text->setLinkUrl(url);
         }
@@ -1452,7 +1545,8 @@ public:
     }
 
     cpo::uno::Reference<scriptinterop::XText> setLinkUrlRange(
-        sal_Int32 startOffset, sal_Int32 endOffsetInclusive, OUString const & url) override
+        sal_Int32 startOffset, sal_Int32 endOffsetInclusive,
+        css::beans::Optional<OUString> const & url) override
     {
         forRange(
             u"setLinkUrl", startOffset, endOffsetInclusive,
@@ -1462,7 +1556,9 @@ public:
         return this;
     }
 
-    cpo::uno::Reference<scriptinterop::XText> setStrikethrough(bool value) override {
+    cpo::uno::Reference<scriptinterop::XText> setStrikethrough(
+        css::beans::Optional<bool> const & value) override
+    {
         for (auto const & paragraph: contents().paragraphs) {
             paragraph.text->setStrikethrough(value);
         }
@@ -1470,7 +1566,8 @@ public:
     }
 
     cpo::uno::Reference<scriptinterop::XText> setStrikethroughRange(
-        sal_Int32 startOffset, sal_Int32 endOffsetInclusive, bool value) override
+        sal_Int32 startOffset, sal_Int32 endOffsetInclusive,
+        css::beans::Optional<bool> const & value) override
     {
         forRange(
             u"setStrikethrough", startOffset, endOffsetInclusive,
@@ -1485,8 +1582,9 @@ public:
     }
 
     cpo::uno::Reference<scriptinterop::XText> setTextAlignment(
-        scriptinterop::TextAlignment textAlignment) override
+        css::beans::Optional<scriptinterop::TextAlignment> const & textAlignment) override
     {
+        textAlignmentArgument(textAlignment);
         for (auto const & paragraph: contents().paragraphs) {
             paragraph.text->setTextAlignment(textAlignment);
         }
@@ -1495,8 +1593,9 @@ public:
 
     cpo::uno::Reference<scriptinterop::XText> setTextAlignmentRange(
         sal_Int32 startOffset, sal_Int32 endOffsetInclusive,
-        scriptinterop::TextAlignment textAlignment) override
+        css::beans::Optional<scriptinterop::TextAlignment> const & textAlignment) override
     {
+        textAlignmentArgument(textAlignment);
         forRange(
             u"setTextAlignment", startOffset, endOffsetInclusive,
             [textAlignment](auto const & text, sal_Int32 start, sal_Int32 end) {
@@ -1505,7 +1604,9 @@ public:
         return this;
     }
 
-    cpo::uno::Reference<scriptinterop::XText> setUnderline(bool value) override {
+    cpo::uno::Reference<scriptinterop::XText> setUnderline(
+        css::beans::Optional<bool> const & value) override
+    {
         for (auto const & paragraph: contents().paragraphs) {
             paragraph.text->setUnderline(value);
         }
@@ -1513,7 +1614,8 @@ public:
     }
 
     cpo::uno::Reference<scriptinterop::XText> setUnderlineRange(
-        sal_Int32 startOffset, sal_Int32 endOffsetInclusive, bool value) override
+        sal_Int32 startOffset, sal_Int32 endOffsetInclusive,
+        css::beans::Optional<bool> const & value) override
     {
         forRange(
             u"setUnderline", startOffset, endOffsetInclusive,

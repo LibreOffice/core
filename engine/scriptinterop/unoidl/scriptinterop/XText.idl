@@ -41,47 +41,59 @@ interface XText: XElement {
 
     com::sun::star::beans::Optional<boolean> isUnderline([in] long offset);
 
-    [overload setBold] XText setBold([in] boolean value);
+    [overload setBold] XText setBold([in] com::sun::star::beans::Optional<boolean> value);
 
     [overload setBold] XText setBoldRange(
-        [in] long startOffset, [in] long endOffsetInclusive, [in] boolean value);
+        [in] long startOffset, [in] long endOffsetInclusive,
+        [in] com::sun::star::beans::Optional<boolean> value);
 
-    [overload setFontFamily] XText setFontFamily([in] string fontFamilyName);
+    [overload setFontFamily] XText setFontFamily(
+        [in] com::sun::star::beans::Optional<string> fontFamilyName);
 
     [overload setFontFamily] XText setFontFamilyRange(
-        [in] long startOffset, [in] long endOffsetInclusive, [in] string fontFamilyName);
+        [in] long startOffset, [in] long endOffsetInclusive,
+        [in] com::sun::star::beans::Optional<string> fontFamilyName);
 
-    [overload setForegroundColor] XText setForegroundColor([in] string color);
+    [overload setForegroundColor] XText setForegroundColor(
+        [in] com::sun::star::beans::Optional<string> color);
 
     [overload setForegroundColor] XText setForegroundColorRange(
-        [in] long startOffset, [in] long endOffsetInclusive, [in] string color);
+        [in] long startOffset, [in] long endOffsetInclusive,
+        [in] com::sun::star::beans::Optional<string> color);
 
-    [overload setItalic] XText setItalic([in] boolean value);
+    [overload setItalic] XText setItalic([in] com::sun::star::beans::Optional<boolean> value);
 
     [overload setItalic] XText setItalicRange(
-        [in] long startOffset, [in] long endOffsetInclusive, [in] boolean value);
+        [in] long startOffset, [in] long endOffsetInclusive,
+        [in] com::sun::star::beans::Optional<boolean> value);
 
-    [overload setLinkUrl] XText setLinkUrl([in] string url);
+    [overload setLinkUrl] XText setLinkUrl([in] com::sun::star::beans::Optional<string> url);
 
     [overload setLinkUrl] XText setLinkUrlRange(
-        [in] long startOffset, [in] long endOffsetInclusive, [in] string url);
+        [in] long startOffset, [in] long endOffsetInclusive,
+        [in] com::sun::star::beans::Optional<string> url);
 
-    [overload setStrikethrough] XText setStrikethrough([in] boolean value);
+    [overload setStrikethrough] XText setStrikethrough(
+        [in] com::sun::star::beans::Optional<boolean> value);
 
     [overload setStrikethrough] XText setStrikethroughRange(
-        [in] long startOffset, [in] long endOffsetInclusive, [in] boolean value);
+        [in] long startOffset, [in] long endOffsetInclusive,
+        [in] com::sun::star::beans::Optional<boolean> value);
 
     XText setText([in] string text);
 
-    [overload setTextAlignment] XText setTextAlignment([in] TextAlignment textAlignment);
+    [overload setTextAlignment] XText setTextAlignment(
+        [in] com::sun::star::beans::Optional<TextAlignment> textAlignment);
 
     [overload setTextAlignment] XText setTextAlignmentRange(
-        [in] long startOffset, [in] long endOffsetInclusive, [in] TextAlignment textAlignment);
+        [in] long startOffset, [in] long endOffsetInclusive,
+        [in] com::sun::star::beans::Optional<TextAlignment> textAlignment);
 
-    [overload setUnderline] XText setUnderline([in] boolean value);
+    [overload setUnderline] XText setUnderline([in] com::sun::star::beans::Optional<boolean> value);
 
     [overload setUnderline] XText setUnderlineRange(
-        [in] long startOffset, [in] long endOffsetInclusive, [in] boolean value);
+        [in] long startOffset, [in] long endOffsetInclusive,
+        [in] com::sun::star::beans::Optional<boolean> value);
 };
 
 };

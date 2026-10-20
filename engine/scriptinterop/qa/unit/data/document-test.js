@@ -289,6 +289,85 @@ function test() {
     appended.editAsText().setLinkUrl('https://example.com/');
     console.assert(appended.editAsText().getLinkUrl(0) === 'https://example.com/');
 
+    // A null or undefined value resets an attribute, for the whole text or for a range:
+    const resetText = appended.editAsText();
+    resetText.setBold(true).setBold(null);
+    console.assert(resetText.isBold(0) === null);
+    resetText.setBold(true).setBold(1, 3, null);
+    console.assert(resetText.isBold(0) === true);
+    console.assert(resetText.isBold(2) === null);
+    resetText.setBold(undefined);
+    console.assert(resetText.isBold(0) === null);
+    resetText.setItalic(true).setItalic(null);
+    console.assert(resetText.isItalic(0) === null);
+    resetText.setItalic(true).setItalic(1, 3, null);
+    console.assert(resetText.isItalic(0) === true);
+    console.assert(resetText.isItalic(2) === null);
+    resetText.setItalic(undefined);
+    console.assert(resetText.isItalic(0) === null);
+    resetText.setUnderline(true).setUnderline(null);
+    console.assert(resetText.isUnderline(0) === null);
+    resetText.setUnderline(true).setUnderline(1, 3, null);
+    console.assert(resetText.isUnderline(0) === true);
+    console.assert(resetText.isUnderline(2) === null);
+    resetText.setUnderline(undefined);
+    console.assert(resetText.isUnderline(0) === null);
+    resetText.setStrikethrough(true).setStrikethrough(null);
+    console.assert(resetText.isStrikethrough(0) === null);
+    resetText.setStrikethrough(true).setStrikethrough(1, 3, null);
+    console.assert(resetText.isStrikethrough(0) === true);
+    console.assert(resetText.isStrikethrough(2) === null);
+    resetText.setStrikethrough(undefined);
+    console.assert(resetText.isStrikethrough(0) === null);
+    resetText.setFontFamily('Georgia').setFontFamily(null);
+    console.assert(resetText.getFontFamily(0) === null);
+    resetText.setFontFamily('Georgia').setFontFamily(1, 3, null);
+    console.assert(resetText.getFontFamily(0) === 'Georgia');
+    console.assert(resetText.getFontFamily(2) === null);
+    resetText.setFontFamily(undefined);
+    console.assert(resetText.getFontFamily(0) === null);
+    resetText.setForegroundColor('#ff0000').setForegroundColor(null);
+    console.assert(resetText.getForegroundColor(0) === null);
+    resetText.setForegroundColor('#ff0000').setForegroundColor(1, 3, null);
+    console.assert(resetText.getForegroundColor(0) === '#ff0000');
+    console.assert(resetText.getForegroundColor(2) === null);
+    resetText.setForegroundColor(undefined);
+    console.assert(resetText.getForegroundColor(0) === null);
+    resetText.setLinkUrl('https://example.com/').setLinkUrl(null);
+    console.assert(resetText.getLinkUrl(0) === null);
+    resetText.setLinkUrl('https://example.com/').setLinkUrl(1, 3, null);
+    console.assert(resetText.getLinkUrl(0) === 'https://example.com/');
+    console.assert(resetText.getLinkUrl(2) === null);
+    resetText.setLinkUrl(undefined);
+    console.assert(resetText.getLinkUrl(0) === null);
+    {
+        let message = null;
+        try {
+            resetText.setTextAlignment(null);
+        } catch (e) {
+            message = e.message;
+        }
+        console.assert(message === 'Argument cannot be null: textAlignment');
+    }
+    {
+        let message = null;
+        try {
+            resetText.setTextAlignment(1, 3, null);
+        } catch (e) {
+            message = e.message;
+        }
+        console.assert(message === 'Argument cannot be null: textAlignment');
+    }
+    {
+        let message = null;
+        try {
+            resetText.setTextAlignment(undefined);
+        } catch (e) {
+            message = e.message;
+        }
+        console.assert(message === 'Argument cannot be null: textAlignment');
+    }
+
     // Exercise the Text mutation methods; each returns Text so the calls chain:
     appended.editAsText().setText('foo').appendText('bar').insertText(3, '-');
     console.assert(appended.getText() === 'foo-bar');
