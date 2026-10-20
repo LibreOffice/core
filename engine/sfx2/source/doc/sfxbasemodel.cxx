@@ -1908,11 +1908,14 @@ void SfxBaseModel::initNew()
     if( m_pData->m_pObjectShell->GetMedium() )
         throw frame::DoubleInitializationException();
 
-    // An embedded object starts with macros disallowed, the same as one loaded from its own storage.
+    // An embedded object starts with macros disallowed and link updates off, the same as one loaded
+    // from its own storage.
+    const bool bEmbedded
+        = m_pData->m_pObjectShell->GetCreateMode() == SfxObjectCreateMode::EMBEDDED;
+    if (bEmbedded)
+        m_pData->m_pObjectShell->getEmbeddedObjectContainer().setUserAllowsLinkUpdate(false);
     const SfxNewDocumentMacros eMacros
-        = m_pData->m_pObjectShell->GetCreateMode() == SfxObjectCreateMode::EMBEDDED
-              ? SfxNewDocumentMacros::Disallow
-              : SfxNewDocumentMacros::Allow;
+        = bEmbedded ? SfxNewDocumentMacros::Disallow : SfxNewDocumentMacros::Allow;
     bool bRes = m_pData->m_pObjectShell->DoInitNew(eMacros);
     ErrCodeMsg nErrCode = m_pData->m_pObjectShell->GetErrorIgnoreWarning() ?
                        m_pData->m_pObjectShell->GetErrorIgnoreWarning() : ERRCODE_IO_CANTCREATE;
