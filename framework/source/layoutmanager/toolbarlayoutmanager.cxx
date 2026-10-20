@@ -804,70 +804,70 @@ bool ToolbarLayoutManager::dockToolbar( std::u16string_view rResourceURL, ui::Do
     {
         uno::Reference< awt::XWindow > xWindow( aUIElement.m_xUIElement->getRealInterface(), uno::UNO_QUERY );
         uno::Reference< awt::XDockableWindow > xDockWindow( xWindow, uno::UNO_QUERY );
-        if ( xDockWindow.is() )
+        if (!xDockWindow.is())
+            return false;
+
+        if ( eDockingArea != ui::DockingArea_DOCKINGAREA_DEFAULT )
+            aUIElement.m_aDockedData.m_nDockedArea = eDockingArea;
+
+        if ( !isDefaultPos( aPos ))
+            aUIElement.m_aDockedData.m_aPos = aPos;
+
+        if ( !xDockWindow->isFloating() )
         {
-            if ( eDockingArea != ui::DockingArea_DOCKINGAREA_DEFAULT )
-                aUIElement.m_aDockedData.m_nDockedArea = eDockingArea;
+            vcl::Window*  pWindow( nullptr );
+            ToolBox* pToolBox( nullptr );
 
-            if ( !isDefaultPos( aPos ))
-                aUIElement.m_aDockedData.m_aPos = aPos;
-
-            if ( !xDockWindow->isFloating() )
             {
-                vcl::Window*  pWindow( nullptr );
-                ToolBox* pToolBox( nullptr );
-
+                SolarMutexGuard aGuard;
+                pWindow = VCLUnoHelper::GetWindow( xWindow );
+                if ( pWindow && pWindow->GetType() == WindowType::TOOLBOX )
                 {
-                    SolarMutexGuard aGuard;
-                    pWindow = VCLUnoHelper::GetWindow( xWindow );
-                    if ( pWindow && pWindow->GetType() == WindowType::TOOLBOX )
-                    {
-                        pToolBox = static_cast<ToolBox *>(pWindow);
+                    pToolBox = static_cast<ToolBox *>(pWindow);
 
-                        // We have to set the alignment of the toolbox. It's possible that the toolbox is moved from a
-                        // horizontal to a vertical docking area!
-                        pToolBox->SetAlign( ImplConvertAlignment( aUIElement.m_aDockedData.m_nDockedArea ));
-                    }
-                }
-
-                if ( hasDefaultPosValue( aUIElement.m_aDockedData.m_aPos ))
-                {
-                    // Docking on its default position without a preset position -
-                    // we have to find a good place for it.
-                    ::Size aSize;
-
-                    SolarMutexGuard aGuard;
-
-                    if (pToolBox)
-                        aSize = pToolBox->CalcWindowSizePixel( 1, ImplConvertAlignment( aUIElement.m_aDockedData.m_nDockedArea ) );
-                    else if (pWindow)
-                        aSize = pWindow->GetSizePixel();
-
-                    ::Point aPixelPos;
-                    awt::Point aDockPos;
-                    implts_findNextDockingPos(aUIElement.m_aDockedData.m_nDockedArea, aSize, aDockPos, aPixelPos );
-                    aUIElement.m_aDockedData.m_aPos = aDockPos;
+                    // We have to set the alignment of the toolbox. It's possible that the toolbox is moved from a
+                    // horizontal to a vertical docking area!
+                    pToolBox->SetAlign( ImplConvertAlignment( aUIElement.m_aDockedData.m_nDockedArea ));
                 }
             }
 
-            implts_setToolbar( aUIElement );
-
-            if ( xDockWindow->isFloating() )
+            if ( hasDefaultPosValue( aUIElement.m_aDockedData.m_aPos ))
             {
-                // ATTENTION: This will call toggleFloatingMode() via notifications which
-                // sets the floating member of the UIElement correctly!
-                xDockWindow->setFloatingMode( false );
-            }
-            else
-            {
-                implts_writeWindowStateData( aUIElement );
-                implts_sortUIElements();
+                // Docking on its default position without a preset position -
+                // we have to find a good place for it.
+                ::Size aSize;
 
-                if ( aUIElement.m_bVisible )
-                    implts_setLayoutDirty();
+                SolarMutexGuard aGuard;
+
+                if (pToolBox)
+                    aSize = pToolBox->CalcWindowSizePixel( 1, ImplConvertAlignment( aUIElement.m_aDockedData.m_nDockedArea ) );
+                else if (pWindow)
+                    aSize = pWindow->GetSizePixel();
+
+                ::Point aPixelPos;
+                awt::Point aDockPos;
+                implts_findNextDockingPos(aUIElement.m_aDockedData.m_nDockedArea, aSize, aDockPos, aPixelPos );
+                aUIElement.m_aDockedData.m_aPos = aDockPos;
             }
-            return true;
         }
+
+        implts_setToolbar( aUIElement );
+
+        if ( xDockWindow->isFloating() )
+        {
+            // ATTENTION: This will call toggleFloatingMode() via notifications which
+            // sets the floating member of the UIElement correctly!
+            xDockWindow->setFloatingMode( false );
+        }
+        else
+        {
+            implts_writeWindowStateData( aUIElement );
+            implts_sortUIElements();
+
+            if ( aUIElement.m_bVisible )
+                implts_setLayoutDirty();
+        }
+        return true;
     }
     catch (const lang::DisposedException&)
     {
