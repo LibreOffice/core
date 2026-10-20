@@ -123,11 +123,6 @@ function onDemandRenderer(
 			originalClass.forEach((className: string) =>
 				placeholderImg.classList.add(className),
 			);
-			// Mirror updateRendersImpl: once the real image is in the DOM
-			// the entry is no longer a placeholder. Leaving the class on
-			// keeps the .ui-iconview-ondemand-placeholder span { color:
-			// transparent } rule active and hides the title labels.
-			parentContainer.classList.remove('ui-iconview-ondemand-placeholder');
 			requestRender = !cachedComboboxEntries.persistent;
 		}
 

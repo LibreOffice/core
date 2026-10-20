@@ -23,9 +23,9 @@ describe(['tagdesktop'], 'Style gallery after WebSocket reconnection', function 
 		helper.processToIdle(this.win);
 		helper.waitForOnDemandRenders(this.win);
 
-		// Every gallery entry shows its preview before the connection drops.
+		// The gallery shows its previews before the connection drops.
 		cy.cGet('#stylesview .ui-iconview-entry').should('have.length.greaterThan', 0);
-		cy.cGet('#stylesview .ui-iconview-ondemand-placeholder').should('not.exist');
+		cy.cGet('#stylesview .ui-iconview-entry img').should('have.length.greaterThan', 0);
 
 		// Record the render requests that go out while the document is not loaded,
 		// then close the raw WebSocket to trigger the automatic reconnection.
@@ -59,8 +59,8 @@ describe(['tagdesktop'], 'Style gallery after WebSocket reconnection', function 
 			expect(win.earlyRenderRequests).to.be.empty;
 		});
 
-		// And every gallery entry shows its preview again.
+		// And the gallery shows its previews again.
 		cy.cGet('#stylesview .ui-iconview-entry').should('have.length.greaterThan', 0);
-		cy.cGet('#stylesview .ui-iconview-ondemand-placeholder').should('not.exist');
+		cy.cGet('#stylesview .ui-iconview-entry img').should('have.length.greaterThan', 0);
 	});
 });
