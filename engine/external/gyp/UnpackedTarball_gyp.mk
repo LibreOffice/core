@@ -13,6 +13,9 @@ $(eval $(call gb_UnpackedTarball_set_tarball,gyp,$(GYP_TARBALL)))
 
 $(eval $(call gb_UnpackedTarball_set_patchlevel,gyp,0))
 
+# external/gyp/gyp-python-deprecated.patch upstream at
+#  <https://github.com/nodejs/gyp-next/commit/428343ee58c05e7b817d3603688fe7cdb7a10846> "fix: avoid
+#  deprecated os.path.commonprefix() in RelativePath (#365)":
 $(eval $(call gb_UnpackedTarball_add_patches,gyp,\
 	external/gyp/gyp-concurrent-futures.patch.1 \
 	external/gyp/gyp-msvc-env-compiler-cache.patch.1 \
