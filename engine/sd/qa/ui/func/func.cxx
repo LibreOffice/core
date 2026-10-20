@@ -82,14 +82,14 @@ CPPUNIT_TEST_FIXTURE(Test, testNoneToBullet)
     sal_Int32 nLeftMargin{};
     aNumberingRule[u"LeftMargin"_ustr] >>= nLeftMargin;
     // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 1200
+    // - Expected: 635
     // - Actual  : 0
     // i.e. there was no left margin at all, first and later lines did not match on the left hand
     // side.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1200), nLeftMargin);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(635), nLeftMargin);
     sal_Int32 nFirstLineOffset{};
     aNumberingRule[u"FirstLineOffset"_ustr] >>= nFirstLineOffset;
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-900), nFirstLineOffset);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(-635), nFirstLineOffset);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testNoneToLibraryBullet)

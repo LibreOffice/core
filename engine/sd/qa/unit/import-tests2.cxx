@@ -712,39 +712,15 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testTdf164640)
         CPPUNIT_ASSERT(pStyleSheet);
 
         const SvxNumBulletItem& rNumFmt = pStyleSheet->GetItemSet().Get(EE_PARA_NUMBULLET);
-        sal_UCS4 aBullet1 = rNumFmt.GetNumRule().GetLevel(0).GetBulletChar();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), sal_UCS4(0x25CF), aBullet1);
-
-        sal_UCS4 aBullet2 = rNumFmt.GetNumRule().GetLevel(1).GetBulletChar();
-        // Without the fix in place, this test would have failed with
-        // - Expected: 8211
-        // - Actual  : 9679
-        // - Fails on level 2
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), sal_UCS4(0x2013), aBullet2);
-
-        sal_UCS4 aBullet3 = rNumFmt.GetNumRule().GetLevel(2).GetBulletChar();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), sal_UCS4(0x25CF), aBullet3);
-
-        sal_UCS4 aBullet4 = rNumFmt.GetNumRule().GetLevel(3).GetBulletChar();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), sal_UCS4(0x2013), aBullet4);
-
-        sal_UCS4 aBullet5 = rNumFmt.GetNumRule().GetLevel(4).GetBulletChar();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), sal_UCS4(0x25CF), aBullet5);
-
-        sal_UCS4 aBullet6 = rNumFmt.GetNumRule().GetLevel(5).GetBulletChar();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), sal_UCS4(0x25CF), aBullet6);
-
-        sal_UCS4 aBullet7 = rNumFmt.GetNumRule().GetLevel(6).GetBulletChar();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), sal_UCS4(0x25CF), aBullet7);
-
-        sal_UCS4 aBullet8 = rNumFmt.GetNumRule().GetLevel(7).GetBulletChar();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), sal_UCS4(0x25CF), aBullet8);
-
-        sal_UCS4 aBullet9 = rNumFmt.GetNumRule().GetLevel(8).GetBulletChar();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), sal_UCS4(0x25CF), aBullet9);
-
-        sal_UCS4 aBullet10 = rNumFmt.GetNumRule().GetLevel(9).GetBulletChar();
-        CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), sal_UCS4(0x25CF), aBullet10);
+        // Each level of the list keeps its own indent, not the indent of the first level
+        const SvxNumRule& rNumRule = rNumFmt.GetNumRule();
+        for (sal_uInt16 nListLevel = 0; nListLevel < 10; nListLevel++)
+        {
+            const SvxNumberFormat& rFormat = rNumRule.GetLevel(nListLevel);
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), sal_UCS4(0x2022), rFormat.GetBulletChar());
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(aMsg.getStr(), sal_Int32(635 + nListLevel * 1270),
+                                         rFormat.GetAbsLSpace());
+        }
     }
 }
 

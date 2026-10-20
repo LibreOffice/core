@@ -1026,43 +1026,11 @@ void SdStyleSheetPool::UpdateStdNames()
 
 void SdStyleSheetPool::setDefaultOutlineNumberFormatBulletAndIndent(sal_uInt16 i, SvxNumberFormat &rNumberFormat)
 {
-    rNumberFormat.SetBulletChar( 0x25CF );  // StarBats: 0xF000 + 34
-    rNumberFormat.SetBulletRelSize(45);
-    const auto nLSpace = (i + 1) * 1200;
-    rNumberFormat.SetAbsLSpace(nLSpace);
-    sal_Int32 nFirstLineOffset = -600;
-
-    switch(i)
-    {
-        case 0:
-        {
-            nFirstLineOffset = -900;
-        }
-        break;
-
-        case 1:
-        {
-            rNumberFormat.SetBulletChar( 0x2013 );  // StarBats: 0xF000 + 150
-            rNumberFormat.SetBulletRelSize(75);
-            nFirstLineOffset = -900;
-        }
-        break;
-
-        case 2:
-        {
-            nFirstLineOffset = -800;
-        }
-        break;
-
-        case 3:
-        {
-            rNumberFormat.SetBulletChar( 0x2013 );  // StarBats: 0xF000 + 150
-            rNumberFormat.SetBulletRelSize(75);
-        }
-        break;
-    }
-
-    rNumberFormat.SetFirstLineOffset(nFirstLineOffset);
+    rNumberFormat.SetBulletChar(0x2022);
+    rNumberFormat.SetBulletRelSize(100);
+    // Text starts at 0.25 inch and moves 0.5 inch per level, with the bullet 0.25 inch before it.
+    rNumberFormat.SetAbsLSpace(635 + i * 1270);
+    rNumberFormat.SetFirstLineOffset(-635);
 }
 
 // Set new SvxNumBulletItem for the respective style sheet
