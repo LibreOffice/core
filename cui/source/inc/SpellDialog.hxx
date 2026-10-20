@@ -87,10 +87,10 @@ protected:
     virtual void    StyleUpdated() override;
 
 public:
-    SentenceEditWindow_Impl(std::unique_ptr<weld::ScrolledWindow> xScrolledWindow);
+    SentenceEditWindow_Impl(std::unique_ptr<weld::ScrolledWindow> xScrolledWindow,
+                            SpellDialog& rSpellDialog);
     virtual void SetDrawingArea(weld::DrawingArea* pDrawingArea) override;
     virtual void EditViewScrollStateChange() override;
-    void SetSpellDialog(SpellDialog* pDialog) { m_pSpellDialog = pDialog; }
     virtual ~SentenceEditWindow_Impl() override;
 
     void            Init(weld::Toolbar* pToolbar);

@@ -216,7 +216,8 @@ SpellDialog::SpellDialog(SpellDialogChildWindow& rChildWindow, weld::Window* pPa
     , m_xExplainFT(m_xBuilder->weld_label(u"explain"_ustr))
     , m_xExplainLink(m_xBuilder->weld_link_button(u"explainlink"_ustr))
     , m_xNotInDictFT(m_xBuilder->weld_label(u"notindictft"_ustr))
-    , m_xSentenceED(new SentenceEditWindow_Impl(m_xBuilder->weld_scrolled_window(u"scrolledwindow"_ustr, true)))
+    , m_xSentenceED(new SentenceEditWindow_Impl(
+          m_xBuilder->weld_scrolled_window(u"scrolledwindow"_ustr, true), *this))
     , m_xSuggestionFT(m_xBuilder->weld_label(u"suggestionsft"_ustr))
     , m_xSuggestionLB(m_xBuilder->weld_tree_view(u"suggestionslb"_ustr))
     , m_xIgnorePB(m_xBuilder->weld_button(u"ignore"_ustr))
@@ -234,7 +235,6 @@ SpellDialog::SpellDialog(SpellDialogChildWindow& rChildWindow, weld::Window* pPa
     , m_xToolbar(m_xBuilder->weld_toolbar(u"toolbar"_ustr))
     , m_xSentenceEDWeld(new weld::CustomWeld(*m_xBuilder, u"errorsentence"_ustr, *m_xSentenceED))
 {
-    m_xSentenceED->SetSpellDialog(this);
     m_xSentenceED->Init(m_xToolbar.get());
 
     m_sTitleSpellingGrammar = m_xDialog->get_title();
@@ -1184,9 +1184,10 @@ bool SpellDialog::ApplyChangeAllList_Impl(SpellPortions& rSentence, bool &bHasRe
     return bRet;
 }
 
-SentenceEditWindow_Impl::SentenceEditWindow_Impl(std::unique_ptr<weld::ScrolledWindow> xScrolledWindow)
+SentenceEditWindow_Impl::SentenceEditWindow_Impl(
+    std::unique_ptr<weld::ScrolledWindow> xScrolledWindow, SpellDialog& rSpellDialog)
     : m_xScrolledWindow(std::move(xScrolledWindow))
-    , m_pSpellDialog(nullptr)
+    , m_pSpellDialog(&rSpellDialog)
     , m_pToolbar(nullptr)
     , m_nErrorStart(0)
     , m_nErrorEnd(0)
