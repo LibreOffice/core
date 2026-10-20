@@ -124,6 +124,13 @@ window.L.Map.include({
 		TextCursorSection.updateVisibilities();
 		OtherViewGraphicSelectionSection.updateVisibilities();
 		docLayer._clearSelections(calledFromSetPartHandler);
+		if (docLayer.isCalc()) {
+			// The view goes to the saved position of the sheet before any tile is
+			// requested for it, so nothing is drawn at the position of the sheet left.
+			// The split panes context of the sheet is in place by now, so the visible
+			// area sent with the scroll carries its split position.
+			docLayer._sheetSwitch.restoreOnSwitch();
+		}
 		RenderManager.updateOnChangePart();
 		RenderManager.pruneTiles();
 		docLayer._prevSelectedPartNeedsUpdate = true;

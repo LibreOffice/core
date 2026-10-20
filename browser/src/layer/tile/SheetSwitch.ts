@@ -145,6 +145,29 @@ export class SheetSwitchViewRestore {
 		this.mayRestore = false;
 	}
 
+	// The scrollable area is still the one of the sheet being left, so it is grown first
+	// to reach the saved position. Without that the scroll is clamped to that area.
+	private scrollToSavedPosition (center: any): void {
+		Util.ensureValue(app.activeDocument);
+
+		this.docLayer.extendDocumentSizeToInclude(new cool.SimplePoint(center.x1, center.y1));
+		app.activeDocument.activeLayout.scrollTo(center.pX1, center.pY1);
+	}
+
+	// Moves the view to the saved position of the sheet being switched to, at the time
+	// of the switch, so the tiles requested for it are the ones at that position. The
+	// flags stay as they are: the cell-cursor driven restore still runs afterwards.
+	public restoreOnSwitch (): void {
+		if (!this.mayRestore)
+			return;
+
+		const center = this.centerOfSheet.get(this.restorePart);
+		if (center === undefined)
+			return;
+
+		this.scrollToSavedPosition(center);
+	}
+
 	private restoreView (): void {
 
 		const center = this.centerOfSheet.get(this.restorePart);
@@ -153,9 +176,7 @@ export class SheetSwitchViewRestore {
 			return;
 		}
 
-		Util.ensureValue(app.activeDocument);
-
-		app.activeDocument.activeLayout.scrollTo(center.pX1, center.pY1);
+		this.scrollToSavedPosition(center);
 
 		// Keep restoring view for every cell-cursor messages until we get this
 		// call after receiving cell-cursor msg after setpart incoming msg.

@@ -1,4 +1,4 @@
-/* global describe it cy beforeEach require */
+/* global describe it cy beforeEach require expect */
 
 var calcHelper = require('../../common/calc_helper');
 var helper = require('../../common/helper');
@@ -67,9 +67,47 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Sheet switching tests', fu
 
 	beforeEach(function() {
 		helper.setupAndLoadDocument('calc/switch.ods');
+		cy.getFrameWindow().then(function(win) {
+			this.win = win;
+		}.bind(this));
 	});
 
 	/* switch.ods has 2 sheets, 1st with data in G45, 2nd with data in F720*/
+
+	it('Check the view is back at the saved position when the tab click returns', function() {
+		// initially we are on sheet 2 tab, scrolled down to F720
+		cy.cGet(helper.addressInputSelector).should('have.prop', 'value', 'F720');
+		desktopHelper.assertScrollbarPosition('vertical', 300, 350);
+
+		var savedTop;
+		cy.getFrameWindow().should(function(win) {
+			savedTop = win.app.activeDocument.activeLayout.viewedRectangle.pY1;
+			expect(savedTop).to.be.greaterThan(0);
+		});
+
+		// go to sheet 1, which is only scrolled to G45
+		cy.cGet('#spreadsheet-tab0').click();
+		cy.cGet(helper.addressInputSelector).should('have.prop', 'value', 'G45');
+		desktopHelper.assertScrollbarPosition('vertical', 35, 45);
+		helper.processToIdle(this.win);
+
+		// The click moves the view to the saved position of sheet 2 before the
+		// engine has replied, so the position is read in the same callback as
+		// the click, with nothing in between.
+		cy.cGet('#spreadsheet-tab1').then(function($tab) {
+			$tab[0].click();
+			var top = this.win.app.activeDocument.activeLayout.viewedRectangle.pY1;
+			expect(top).to.equal(savedTop);
+		}.bind(this));
+
+		// and it stays there once the engine has replied
+		cy.cGet(helper.addressInputSelector).should('have.prop', 'value', 'F720');
+		desktopHelper.assertScrollbarPosition('vertical', 300, 350);
+		helper.processToIdle(this.win);
+		cy.getFrameWindow().should(function(win) {
+			expect(win.app.activeDocument.activeLayout.viewedRectangle.pY1).to.equal(savedTop);
+		});
+	});
 
 	it('Check view position on sheet switch', function() {
 		// go to sheet 1
