@@ -21,7 +21,6 @@
 
  published interface XDataDefinitionSupplier;
  published interface XCreateCatalog;
- published interface XDropCatalog;
 
 
 /** extends the service
@@ -51,10 +50,6 @@ published service Driver
     /** is optional for implementation.
      */
     [optional] interface XCreateCatalog;
-
-    /** is optional for implementation.
-     */
-    [optional] interface XDropCatalog;
 };
 
 

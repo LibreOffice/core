@@ -10476,15 +10476,10 @@ module com {
      interface ::cpo::uno::XInterface;
      ::com::sun::star::sdbcx::XTablesSupplier getDataDefinitionByConnection([in] ::com::sun::star::sdbc::XConnection connection) raises (::com::sun::star::sdbc::SQLException);
     };
-    published interface XDropCatalog {
-     interface ::cpo::uno::XInterface;
-     void dropCatalog([in] string catalogName, [in] sequence< ::com::sun::star::beans::PropertyValue > info) raises (::com::sun::star::sdbc::SQLException, ::com::sun::star::container::NoSuchElementException);
-    };
     published service Driver {
      service ::com::sun::star::sdbc::Driver;
      interface ::com::sun::star::sdbcx::XDataDefinitionSupplier;
      [optional] interface ::com::sun::star::sdbcx::XCreateCatalog;
-     [optional] interface ::com::sun::star::sdbcx::XDropCatalog;
     };
     published service Group {
      interface ::com::sun::star::beans::XPropertySet;
