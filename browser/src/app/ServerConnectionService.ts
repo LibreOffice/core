@@ -114,9 +114,7 @@ class ServerConnectionService {
 				// AI entry point and the AI sidebar.
 				if (app.map.backstageView) app.map.backstageView.hide();
 				const sidebar = JSDialog.getAIChatSidebar();
-				if (sidebar.isVisible()) {
-					sidebar.refreshModelAndRating();
-				} else {
+				if (!sidebar.isVisible()) {
 					app.map.uiManager.selectAIAssistantTab();
 					sidebar.show();
 				}
@@ -125,9 +123,13 @@ class ServerConnectionService {
 
 		// The sidebar needs a configured provider to answer anything, so a
 		// settings change that removed the provider closes a sidebar that is
-		// still open.
-		if (!app.map.isAIConfigured && JSDialog.AIChatSidebar?.isVisible()) {
-			JSDialog.AIChatSidebar.hide();
+		// still open. Any other change can swap the provider in use, e.g. a
+		// Reset back to the server's, so an open sidebar shows the model name
+		// and rating that now answer.
+		if (JSDialog.AIChatSidebar?.isVisible()) {
+			if (app.map.isAIConfigured)
+				JSDialog.AIChatSidebar.refreshModelAndRating();
+			else JSDialog.AIChatSidebar.hide();
 		}
 
 		let zoteroPlugin = app.map.zotero;
