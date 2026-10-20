@@ -4213,7 +4213,8 @@ void SwDoc::ResetTableStyles(const OUString& sTableStyle, std::u16string_view sO
         SwTableAutoFormat* pAutoFormat = pAutoFormats.GetData(i);
         assert(pAutoFormat);
         OUString sCurrentStyle = pAutoFormat->GetName().toString();
-        while (pAutoFormat)
+        std::unordered_set<SwTableAutoFormat*> aVisited;
+        while (pAutoFormat && aVisited.insert(pAutoFormat).second)
         {
             OUString sStyle = pAutoFormat->GetName().toString();
             if (sStyle == sTableStyle)

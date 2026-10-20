@@ -13,6 +13,8 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/container/XIndexAccess.hpp>
 #include <comphelper/propertysequence.hxx>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
@@ -39,6 +41,10 @@
 #include <vcl/vclevent.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <sfx2/dispatch.hxx>
+#include <sfx2/viewfrm.hxx>
+#include <svl/stritem.hxx>
+#include <svx/svxids.hrc>
 
 #include <wrtsh.hxx>
 #include <fmtanchr.hxx>
@@ -1331,6 +1337,45 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testDelThenFormat)
     CPPUNIT_ASSERT(pRedline);
     CPPUNIT_ASSERT_EQUAL(RedlineType::Format, pRedline->GetType());
     CPPUNIT_ASSERT(!pRedline->GetRedlineData().Next());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTdf173626)
+{
+    createSwDoc("tdf173626.odt");
+    SwDoc* pDoc = getSwDoc();
+    SwTableAutoFormatTable& rStyles = pDoc->GetTableStyles();
+    SwTableAutoFormat* pAcademic = rStyles.FindAutoFormat(u"Academic"_ustr);
+    SwTableAutoFormat* pElegant = rStyles.FindAutoFormat(u"Elegant"_ustr);
+    CPPUNIT_ASSERT(pAcademic);
+    CPPUNIT_ASSERT(pElegant);
+
+    uno::Sequence<beans::PropertyValue> aArgs(comphelper::InitPropertySequence(
+        { { "Rows", uno::Any(sal_Int32(2)) }, { "Columns", uno::Any(sal_Int32(2)) } }));
+    dispatchCommand(mxComponent, u".uno:InsertTable"_ustr, aArgs);
+    uno::Reference<text::XTextTablesSupplier> xTablesSupplier(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTablesSupplier.is());
+    uno::Reference<container::XIndexAccess> xTables(xTablesSupplier->getTextTables(),
+                                                    uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xTables.is());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xTables->getCount());
+
+    SwView* pView = getSwDocShell()->GetView();
+    SfxStringItem aFormatName(SID_AUTOFORMAT, u"Default Style"_ustr);
+    SfxStringItem aOldName(SID_RESET_AUTOFORMATS, u"Default Style"_ustr);
+    auto resetDefaultStyle = [&]() {
+        pView->GetViewFrame().GetDispatcher()->ExecuteList(
+            SID_RESET_AUTOFORMATS, SfxCallMode::SYNCHRON, { &aFormatName, &aOldName });
+    };
+
+    // The document imports Academic with itself as parent. Editing Default Style
+    // must not loop forever while checking which table styles depend on it.
+    CPPUNIT_ASSERT_EQUAL(u"Academic"_ustr, pAcademic->GetParent());
+    resetDefaultStyle();
+
+    // A cycle spanning two styles must terminate as well.
+    pAcademic->SetParent(u"Elegant"_ustr);
+    pElegant->SetParent(u"Academic"_ustr);
+    resetDefaultStyle();
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testTableAutoFormats)
