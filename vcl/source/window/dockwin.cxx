@@ -31,6 +31,7 @@
 #include <vcl/idle.hxx>
 #include <vcl/settings.hxx>
 #include <comphelper/lok.hxx>
+#include <officecfg/Office/Common.hxx>
 
 #include <accel.hxx>
 #include <svdata.hxx>
@@ -548,6 +549,9 @@ bool DockingWindow::EventNotify( NotifyEvent& rNEvt )
                 }
                 else if ( pMEvt->GetClicks() == 1 )
                 {
+                    if (!officecfg::Office::Common::Misc::AllowUndockWinPerMouse::get())
+                        return false;
+
                     // check if window is floating standalone (IsFloating())
                     // or only partially floating and still docked with one border
                     // ( !mpWindowImpl->mbFrame)
