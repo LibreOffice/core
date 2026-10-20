@@ -535,13 +535,16 @@ void SfxDispatchController_Impl::dispatch( const css::util::URL& aURL,
 
     if (comphelper::COKit::isActive())
     {
+        // The reported command is the listed entry that blocks this one.
         const SfxViewShell* pViewShell = SfxViewShell::Current();
-        if (pViewShell && pViewShell->isBlockedCommand(aURL.Complete))
+        const OUString aBlockedCommand
+            = pViewShell ? pViewShell->getBlockedCommand(aURL.Complete) : OUString();
+        if (!aBlockedCommand.isEmpty())
         {
             tools::JsonWriter aTree;
             aTree.put("code", "");
             aTree.put("kind", "BlockedCommand");
-            aTree.put("cmd", aURL.Complete);
+            aTree.put("cmd", aBlockedCommand);
             aTree.put("message", "Blocked feature");
             aTree.put("viewID", pViewShell->GetViewShellId().get());
 

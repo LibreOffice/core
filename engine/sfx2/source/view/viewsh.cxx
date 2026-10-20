@@ -5593,7 +5593,24 @@ void SfxViewShell::setBlockedCommandList(const char* blockedCommandList)
 
 bool SfxViewShell::isBlockedCommand(const OUString & command) const
 {
-    return mvLOKBlockedCommandList.find(command) != mvLOKBlockedCommandList.end();
+    return !getBlockedCommand(command).isEmpty();
+}
+
+OUString SfxViewShell::getBlockedCommand(const OUString& rCommand) const
+{
+    if (mvLOKBlockedCommandList.empty())
+        return OUString();
+
+    const sal_Int32 nArguments = rCommand.indexOf('?');
+    if (nArguments >= 0)
+    {
+        const OUString aName = rCommand.copy(0, nArguments);
+        if (mvLOKBlockedCommandList.find(aName) != mvLOKBlockedCommandList.end())
+            return aName;
+    }
+    if (mvLOKBlockedCommandList.find(rCommand) != mvLOKBlockedCommandList.end())
+        return rCommand;
+    return OUString();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

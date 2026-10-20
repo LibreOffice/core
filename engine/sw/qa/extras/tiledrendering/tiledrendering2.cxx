@@ -1099,6 +1099,53 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testBlockedCommandSlotState)
     eState = pDispatcher->QueryState(SID_ATTR_CHAR_WEIGHT, aResult);
     CPPUNIT_ASSERT_EQUAL(SfxItemState::DISABLED, eState);
 }
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testBlockedCommandWithArguments)
+{
+    // Given a view where the command with arguments switches recording on and off:
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    cpo::uno::Reference<frame::XController> xController = pXTextDocument->getCurrentController();
+    // A blocked command never reports that it finished, so these dispatches do not wait for it.
+    auto dispatch = [&xController](const OUString& rCommand) {
+        comphelper::dispatchCommand(rCommand, xController, {});
+    };
+    dispatch(u".uno:TrackChanges?TrackChanges:bool=true"_ustr);
+    CPPUNIT_ASSERT(pWrtShell->GetViewOptions()->IsRedlineRecordingOn());
+    dispatch(u".uno:TrackChanges?TrackChanges:bool=false"_ustr);
+    CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsRedlineRecordingOn());
+
+    // When .uno:TrackChanges is blocked for that view:
+    KitHelper::setBlockedCommandList(KitHelper::getCurrentView(), ".uno:TrackChanges");
+
+    // Then the command with arguments does not turn recording on:
+    dispatch(u".uno:TrackChanges?TrackChanges:bool=true"_ustr);
+    // Without the accompanying fix in place, this test would have failed, the arguments after '?'
+    // made the command miss the blocked list.
+    CPPUNIT_ASSERT(!pWrtShell->GetViewOptions()->IsRedlineRecordingOn());
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testBlockedCommandEntryWithArguments)
+{
+    // Given a view where only the form that turns recording off is blocked:
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwWrtShell* pWrtShell = pXTextDocument->GetDocShell()->GetWrtShell();
+    cpo::uno::Reference<frame::XController> xController = pXTextDocument->getCurrentController();
+    // A blocked command never reports that it finished, so these dispatches do not wait for it.
+    auto dispatch = [&xController](const OUString& rCommand) {
+        comphelper::dispatchCommand(rCommand, xController, {});
+    };
+    KitHelper::setBlockedCommandList(KitHelper::getCurrentView(),
+                                     ".uno:TrackChanges?TrackChanges:bool=false");
+
+    // When turning recording on and then off:
+    dispatch(u".uno:TrackChanges?TrackChanges:bool=true"_ustr);
+    CPPUNIT_ASSERT(pWrtShell->GetViewOptions()->IsRedlineRecordingOn());
+    dispatch(u".uno:TrackChanges?TrackChanges:bool=false"_ustr);
+
+    // Then only the listed form is blocked, so recording stays on:
+    CPPUNIT_ASSERT(pWrtShell->GetViewOptions()->IsRedlineRecordingOn());
+}
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testImageBulletRemoteNotFetched)
 {
     // text:list-level-style-image with a remote xlink:href must not fetch

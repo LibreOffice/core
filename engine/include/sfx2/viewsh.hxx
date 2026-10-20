@@ -594,6 +594,10 @@ public:
     // Blocked Command view settings
     void setBlockedCommandList(const char* blockedCommandList);
     bool isBlockedCommand(const OUString & command) const;
+    /// Returns the blocked list entry that blocks the command, or an empty string. A listed
+    /// command name blocks the command with any arguments after '?', and a listed command with
+    /// arguments blocks that exact form.
+    OUString getBlockedCommand(const OUString& rCommand) const;
 
     void SetStoringHelper(const std::shared_ptr<SfxStoringHelper>& xHelper) { m_xHelper = xHelper; }
 
