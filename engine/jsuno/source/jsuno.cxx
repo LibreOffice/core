@@ -2079,8 +2079,16 @@ cpo::uno::Any fromJsString(JSContext* ctx, JSValueConst val)
         JS_ThrowRangeError(ctx, "Bad UNO string value");
         throw JsException();
     }
+    for (std::size_t i = 0; i != n; ++i) {
+        auto const c = p.get()[i];
+        if (rtl::isHighSurrogate(c) && i + 1 != n && rtl::isLowSurrogate(p.get()[i + 1])) {
+            ++i;
+        } else if (rtl::isSurrogate(c)) {
+            JS_ThrowRangeError(ctx, "Bad UNO string value");
+            throw JsException();
+        }
+    }
     OUString s(p.get(), n);
-    //TODO: check for valid UTF-16
     return cpo::uno::Any(s);
 }
 

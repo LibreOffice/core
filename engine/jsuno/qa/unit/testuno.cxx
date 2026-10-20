@@ -177,6 +177,31 @@ const test = uno.idl.com.sun.star.testuno.Test.create(uno.componentContext);
     console.assert(v === 'hä');
     console.assert(test.isString('hä'));
 }
+console.assert(!test.isString('\uD83D\uDE00'));
+try {
+    test.isString('\uD83D');
+    console.assert(false);
+} catch (e) {
+    console.assert(e instanceof RangeError);
+}
+try {
+    test.isString('\uDE00');
+    console.assert(false);
+} catch (e) {
+    console.assert(e instanceof RangeError);
+}
+try {
+    test.isString('a\uD83Db');
+    console.assert(false);
+} catch (e) {
+    console.assert(e instanceof RangeError);
+}
+try {
+    test.isString('\uDE00\uD83D');
+    console.assert(false);
+} catch (e) {
+    console.assert(e instanceof RangeError);
+}
 {
     const v = test.getType();
     console.log(v);
