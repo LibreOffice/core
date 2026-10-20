@@ -62,6 +62,7 @@
 #include <svx/svdotable.hxx>
 #include <svx/xlineit0.hxx>
 #include <svx/xfillit0.hxx>
+#include <svx/xflhtit.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/xflgrit.hxx>
 #include <svx/xlndsit.hxx>
@@ -3271,6 +3272,37 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMasterPageFillColorSaved)
                                xBackground->getPropertyValue(u"FillColor"_ustr).get<sal_Int32>()));
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMasterPageFillHatchSavedToPPTX)
+{
+    createSdImpressDoc();
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+
+    dispatchCommand(mxComponent, u".uno:SlideMasterPage"_ustr, {});
+
+    const XFillHatchItem aHatchItem(u"Black 0 Degrees"_ustr,
+                                    XHatch(COL_BLACK, drawing::HatchStyle_SINGLE, 100, 0_deg10));
+    pViewShell->GetViewFrame()->GetDispatcher()->ExecuteList(
+        SID_ATTR_PAGE_HATCH, SfxCallMode::SYNCHRON, { &aHatchItem });
+
+    saveAndReload(TestFilter::PPTX);
+
+    // The master page background is written as a pattern fill in black.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slideMasters/slideMaster1.xml"_ustr);
+    assertXPath(pXmlDoc, "/p:sldMaster/p:cSld/p:bg/p:bgPr/a:pattFill/a:fgClr/a:srgbClr", "val",
+                u"000000");
+
+    // The hatch of the master page background is still there after the round trip.
+    uno::Reference<drawing::XMasterPagesSupplier> xMasterPagesSupplier(mxComponent,
+                                                                       uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xMasterPage(
+        xMasterPagesSupplier->getMasterPages()->getByIndex(0), uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xBackground(
+        xMasterPage->getPropertyValue(u"Background"_ustr), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_HATCH,
+                         xBackground->getPropertyValue(u"FillStyle"_ustr).get<drawing::FillStyle>());
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMasterPageOwnFillMovedToStyleSheet)
 {
     createSdImpressDoc();
@@ -3301,6 +3333,25 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testMasterPageOwnFillMovedToStyleSheet)
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_SOLID,
                          rPageProperties.GetItemSet().Get(XATTR_FILLSTYLE).GetValue());
     CPPUNIT_ASSERT_EQUAL(drawing::FillStyle_NONE, rStyleSet.Get(XATTR_FILLSTYLE).GetValue());
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testPageFillHatchSavedToPPTX)
+{
+    createSdImpressDoc();
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    sd::ViewShell* pViewShell = pImpressDocument->GetDocShell()->GetViewShell();
+
+    const XFillHatchItem aHatchItem(u"Black 0 Degrees"_ustr,
+                                    XHatch(COL_BLACK, drawing::HatchStyle_SINGLE, 100, 0_deg10));
+    pViewShell->GetViewFrame()->GetDispatcher()->ExecuteList(
+        SID_ATTR_PAGE_HATCH, SfxCallMode::SYNCHRON, { &aHatchItem });
+
+    save(TestFilter::PPTX);
+
+    // The slide background is written as a pattern fill in black.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "/p:sld/p:cSld/p:bg/p:bgPr/a:pattFill/a:fgClr/a:srgbClr", "val",
+                u"000000");
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf134053)

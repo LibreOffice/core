@@ -1350,14 +1350,18 @@ void PowerPointExport::ImplWriteBackground(const FSHelperPtr& pFS, const Referen
     if (ImplGetPropertyValue(rXPropSet, u"FillStyle"_ustr))
         mAny >>= aFillStyle;
 
-    if (aFillStyle == FillStyle_NONE ||
-            aFillStyle == FillStyle_HATCH)
+    if (aFillStyle == FillStyle_NONE)
         return;
 
     // For BITMAP fill style, check if graphic is valid before writing bgPr
     if (aFillStyle == FillStyle_BITMAP
         && (!ImplGetPropertyValue(rXPropSet, u"FillBitmap"_ustr)
             || !mAny.has<uno::Reference<graphic::XGraphic>>()))
+        return;
+
+    // A HATCH fill style is written as a pattern fill, which needs the hatch itself.
+    if (aFillStyle == FillStyle_HATCH
+        && (!ImplGetPropertyValue(rXPropSet, u"FillHatch"_ustr) || !mAny.has<drawing::Hatch>()))
         return;
 
     pFS->startElementNS(XML_p, XML_bg);
