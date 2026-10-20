@@ -1058,6 +1058,8 @@ public:
     }
 
 private:
+    friend class CursorImpl;
+
     // The text portions of the paragraph as the document has them now:
     std::vector<cpo::uno::Reference<css::text::XTextRange>> runs() {
         std::vector<cpo::uno::Reference<css::text::XTextRange>> runs;
@@ -2964,7 +2966,70 @@ public:
         host->insertString(c->getStart(), text, false);
     }
 
+    bool isBold() override {
+        float weight = css::awt::FontWeight::NORMAL;
+        property(u"CharWeight"_ustr) >>= weight;
+        return weight >= css::awt::FontWeight::BOLD;
+    }
+
+    bool isItalic() override {
+        css::awt::FontSlant slant = css::awt::FontSlant_NONE;
+        property(u"CharPosture"_ustr) >>= slant;
+        return slant == css::awt::FontSlant_ITALIC || slant == css::awt::FontSlant_OBLIQUE;
+    }
+
+    bool isUnderline() override {
+        sal_Int16 underline = css::awt::FontUnderline::NONE;
+        property(u"CharUnderline"_ustr) >>= underline;
+        return underline != css::awt::FontUnderline::NONE;
+    }
+
+    cpo::uno::Reference<scriptinterop::XCursor> setBold(
+        css::beans::Optional<bool> const & value) override
+    {
+        if (value.IsPresent) {
+            TextImpl::setBoldOn(where(), value);
+        } else {
+            reset(u"CharWeight"_ustr);
+        }
+        return this;
+    }
+
+    cpo::uno::Reference<scriptinterop::XCursor> setItalic(
+        css::beans::Optional<bool> const & value) override
+    {
+        if (value.IsPresent) {
+            TextImpl::setItalicOn(where(), value);
+        } else {
+            reset(u"CharPosture"_ustr);
+        }
+        return this;
+    }
+
+    cpo::uno::Reference<scriptinterop::XCursor> setUnderline(
+        css::beans::Optional<bool> const & value) override
+    {
+        if (value.IsPresent) {
+            TextImpl::setUnderlineOn(where(), value);
+        } else {
+            reset(u"CharUnderline"_ustr);
+        }
+        return this;
+    }
+
 private:
+    cpo::uno::Any property(OUString const & name) {
+        return cpo::uno::Reference<css::beans::XPropertySet>(where(), cpo::uno::UNO_QUERY_THROW)
+            ->getPropertyValue(name);
+    }
+
+    // The start of the cursor is a position without a mark, which a reset inside a word extends to
+    // the whole word, as setting an attribute does:
+    void reset(OUString const & name) {
+        cpo::uno::Reference<css::beans::XPropertyState>(
+            where()->getStart(), cpo::uno::UNO_QUERY_THROW)->setPropertyToDefault(name);
+    }
+
     cpo::uno::Reference<css::text::XTextRange> where() {
         return position_.is() ? position_ : viewCursorOf(model_);
     }

@@ -23,6 +23,21 @@ interface XCursor: XBase {
     com::sun::star::beans::Optional<XInlineImage> insertInlineImage([in] XBlob blob);
 
     void insertText([in] string text);
+
+    // The formatting of text typed at the cursor (or of the word around it), which GAS's Position
+    // does not have:
+
+    boolean isBold();
+
+    boolean isItalic();
+
+    boolean isUnderline();
+
+    XCursor setBold([in] com::sun::star::beans::Optional<boolean> value);
+
+    XCursor setItalic([in] com::sun::star::beans::Optional<boolean> value);
+
+    XCursor setUnderline([in] com::sun::star::beans::Optional<boolean> value);
 };
 
 };

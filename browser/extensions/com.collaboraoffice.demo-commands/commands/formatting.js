@@ -50,11 +50,8 @@ var commands = {
 		if (selection) {
 			toggleSelected(selection, 'isBold', 'setBold');
 		} else {
-			const range = doc.getCursor().uno;
-			var bold = uno.idl.com.sun.star.awt.FontWeight.BOLD;
-			var normal = uno.idl.com.sun.star.awt.FontWeight.NORMAL;
-			var value = range.getPropertyValue('CharWeight') === bold ? normal : bold;
-			range.setPropertyValue('CharWeight', value);
+			const cursor = doc.getCursor();
+			if (cursor) cursor.setBold(!cursor.isBold());
 		}
 	},
 	makeItalic: function () {
@@ -63,11 +60,8 @@ var commands = {
 		if (selection) {
 			toggleSelected(selection, 'isItalic', 'setItalic');
 		} else {
-			const range = doc.getCursor().uno;
-			var italic = uno.idl.com.sun.star.awt.FontSlant.ITALIC;
-			var none = uno.idl.com.sun.star.awt.FontSlant.NONE;
-			var value = range.getPropertyValue('CharPosture') === italic ? none : italic;
-			range.setPropertyValue('CharPosture', value);
+			const cursor = doc.getCursor();
+			if (cursor) cursor.setItalic(!cursor.isItalic());
 		}
 	},
 	makeUnderline: function () {
@@ -76,11 +70,8 @@ var commands = {
 		if (selection) {
 			toggleSelected(selection, 'isUnderline', 'setUnderline');
 		} else {
-			const range = doc.getCursor().uno;
-			var single = uno.idl.com.sun.star.awt.FontUnderline.SINGLE;
-			var none = uno.idl.com.sun.star.awt.FontUnderline.NONE;
-			var value = range.getPropertyValue('CharUnderline') === single ? none : single;
-			range.setPropertyValue('CharUnderline', value);
+			const cursor = doc.getCursor();
+			if (cursor) cursor.setUnderline(!cursor.isUnderline());
 		}
 	},
 	clearFormatting: function () {
@@ -93,10 +84,7 @@ var commands = {
 				part.text.setUnderline(part.start, part.end, false);
 			}
 		} else {
-			const range = doc.getCursor().uno;
-			range.setPropertyValue('CharWeight', uno.idl.com.sun.star.awt.FontWeight.NORMAL);
-			range.setPropertyValue('CharPosture', uno.idl.com.sun.star.awt.FontSlant.NONE);
-			range.setPropertyValue('CharUnderline', uno.idl.com.sun.star.awt.FontUnderline.NONE);
+			doc.getCursor()?.setBold(false).setItalic(false).setUnderline(false);
 		}
 	},
 };

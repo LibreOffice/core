@@ -540,6 +540,29 @@ function test() {
     console.assert(cursor.getOffset() === 1);
     console.assert(cursor.getSurroundingText().getText() === 'Before');
     console.assert(cursor.getSurroundingTextOffset() === 6);
+    // Only COOL has formatting for the text typed at the cursor:
+    if (globalThis.cool) {
+        console.assert(cursor.isBold() === false);
+        console.assert(cursor.setBold(true).isBold() === true);
+        console.assert(cursor.setBold(false).isBold() === false);
+        console.assert(cursor.isItalic() === false);
+        console.assert(cursor.setItalic(true).isItalic() === true);
+        console.assert(cursor.setItalic(false).isItalic() === false);
+        console.assert(cursor.isUnderline() === false);
+        console.assert(cursor.setUnderline(true).isUnderline() === true);
+        console.assert(cursor.setUnderline(false).isUnderline() === false);
+        console.assert(cursor.setBold(true).setBold(null).isBold() === false);
+        console.assert(cursor.setItalic(true).setItalic(null).isItalic() === false);
+        console.assert(cursor.setUnderline(true).setUnderline(null).isUnderline() === false);
+        // Inside a word, the setters format the whole word:
+        const before = para5.getChild(0).asText();
+        doc.newPosition(before, 3).setBold(true);
+        console.assert(before.isBold(0) === true);
+        console.assert(before.isBold(5) === true);
+        doc.newPosition(before, 3).setBold(null);
+        console.assert(before.isBold(0) === null);
+        console.assert(before.isBold(5) === null);
+    }
 
     // An inline image can be selected on its own, as one whole range element:
     const imageRanges = doc.setSelection(doc.newRange().addElement(image).build()).getSelection()
