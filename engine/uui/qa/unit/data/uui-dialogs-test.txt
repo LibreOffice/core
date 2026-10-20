@@ -36,7 +36,6 @@
 
 uui/ui/authfallback.ui
 uui/ui/filterselect.ui
-uui/ui/logindialog.ui
 uui/ui/setmasterpassworddlg.ui
 uui/ui/masterpassworddlg.ui
 uui/ui/simplenameclash.ui

@@ -81,40 +81,6 @@ public:
         OUString const & rURL,
         cpo::uno::Reference< css::task::XInteractionHandler2 > const & xIH );
 
-    /** This member function adds credentials for the given URL to the password
-        container.
-
-        @param rURL
-            The URL the credentials are valid for. rURL must not be empty.
-
-        @param rUsername
-            The user name.
-
-        @param rPasswords
-            This list of passwords.
-
-        @param xIH
-            The interaction handler to use, for example if a master password is
-            needed to access the password container.
-
-        @param bPersist
-            True, the record will get stored persistently; restored upon
-            password container initialization
-            False, the record will be stored until password container instance
-            gets destroyed.
-
-        @return
-            True, if the record was added successfully.
-            False, otherwise.
-
-    */
-    bool addRecord( OUString const & rURL,
-                    OUString const & rUsername,
-                    cpo::uno::Sequence< OUString > const & rPasswords,
-                    cpo::uno::Reference< css::task::XInteractionHandler2 > const & xIH,
-                    bool bPersist );
-
-
 private:
     cpo::uno::Reference< css::task::XPasswordContainer2 > m_xPasswordContainer;
 };

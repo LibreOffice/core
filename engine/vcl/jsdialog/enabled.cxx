@@ -428,7 +428,6 @@ constexpr auto OtherDialogList
         { u"svx/ui/themecoloreditdialog.ui" },
         { u"svx/ui/themedialog.ui" },
         // uui
-        { u"uui/ui/logindialog.ui" },
         { u"uui/ui/macrowarnmedium.ui" },
         // vcl
         { u"vcl/ui/wizard.ui" },
@@ -1136,10 +1135,6 @@ std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUStrin
             {
                 continue;
             }
-            // Testing this requires hosting an image, or similar, with
-            // a username+password
-            else if (entry == u"uui/ui/logindialog.ui")
-                continue;
             OUString sEntry(entry);
             if (!entries.contains(sEntry))
                 missing.push_back(sEntry);

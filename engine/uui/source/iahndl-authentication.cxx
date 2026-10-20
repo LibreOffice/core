@@ -31,7 +31,7 @@
 #include <com/sun/star/task/XInteractionPassword2.hpp>
 #include <com/sun/star/task/XInteractionRetry.hpp>
 #include <com/sun/star/ucb/XInteractionAuthFallback.hpp>
-#include <com/sun/star/ucb/XInteractionSupplyAuthentication2.hpp>
+#include <com/sun/star/ucb/XInteractionSupplyAuthentication.hpp>
 #include <com/sun/star/ucb/URLAuthenticationRequest.hpp>
 
 #include <osl/diagnose.h>
@@ -48,7 +48,6 @@
 #include "getcontinuations.hxx"
 #include "passwordcontainer.hxx"
 #include "loginerr.hxx"
-#include "logindlg.hxx"
 #include "masterpasscrtdlg.hxx"
 #include "masterpassworddlg.hxx"
 #include "passworddlg.hxx"
@@ -64,123 +63,7 @@ using namespace ::cpo;
 namespace {
 
 void
-executeLoginDialog(
-    weld::Window* pParent,
-    LoginErrorInfo & rInfo,
-    OUString const & rRealm)
-{
-    SolarMutexGuard aGuard;
-
-    bool bAccount = (rInfo.GetFlags() & LOGINERROR_FLAG_MODIFY_ACCOUNT) != 0;
-    bool bSavePassword   = rInfo.GetCanRememberPassword();
-    bool bCanUseSysCreds = rInfo.GetCanUseSystemCredentials();
-
-    LoginFlags nFlags = LoginFlags::NONE;
-    if (rInfo.GetErrorText().isEmpty())
-        nFlags |= LoginFlags::NoErrorText;
-    if (!bAccount)
-        nFlags |= LoginFlags::NoAccount;
-    if (!(rInfo.GetFlags() & LOGINERROR_FLAG_MODIFY_USER_NAME))
-        nFlags |= LoginFlags::UsernameReadonly;
-
-    if (!bSavePassword)
-        nFlags |= LoginFlags::NoSavePassword;
-
-    if (!bCanUseSysCreds)
-        nFlags |= LoginFlags::NoUseSysCreds;
-
-    LoginDialog aDialog(pParent, nFlags, rInfo.GetServer(), rRealm);
-    if (!rInfo.GetErrorText().isEmpty())
-        aDialog.SetErrorText(rInfo.GetErrorText());
-    aDialog.SetName(rInfo.GetUserName());
-    if (bAccount)
-        aDialog.ClearAccount();
-    else
-        aDialog.ClearPassword();
-    aDialog.SetPassword(rInfo.GetPassword());
-
-    if (bSavePassword)
-    {
-        std::locale aLocale(Translate::Create("uui"));
-        aDialog.SetSavePasswordText(
-            Translate::get(rInfo.GetIsRememberPersistent()
-                      ? RID_SAVE_PASSWORD
-                      : RID_KEEP_PASSWORD,
-                  aLocale));
-
-        aDialog.SetSavePassword(rInfo.GetIsRememberPassword());
-    }
-
-    if ( bCanUseSysCreds )
-        aDialog.SetUseSystemCredentials( rInfo.GetIsUseSystemCredentials() );
-
-    // The password dialog is not async and its "remember password" checkbox has no effect in
-    // COKit, so the login is cancelled without showing it.
-    rInfo.SetResult(DialogMask::ButtonsCancel);
-    rInfo.SetUserName(aDialog.GetName());
-    rInfo.SetPassword(aDialog.GetPassword());
-    rInfo.SetAccount(aDialog.GetAccount());
-    rInfo.SetIsRememberPassword(aDialog.IsSavePassword());
-
-    if ( bCanUseSysCreds )
-      rInfo.SetIsUseSystemCredentials( aDialog.IsUseSystemCredentials() );
-}
-
-void getRememberModes(
-    cpo::uno::Sequence< ucb::RememberAuthentication > const & rRememberModes,
-    ucb::RememberAuthentication & rPreferredMode,
-    ucb::RememberAuthentication & rAlternateMode )
-{
-    sal_Int32 nCount = rRememberModes.getLength();
-    OSL_ENSURE( (nCount > 0) && (nCount < 4),
-                "ucb::RememberAuthentication sequence size mismatch!" );
-    if ( nCount == 1 )
-    {
-        rPreferredMode = rAlternateMode = rRememberModes[ 0 ];
-        return;
-    }
-    else
-    {
-        bool bHasRememberModeSession = false;
-        bool bHasRememberModePersistent = false;
-
-        for (const auto& rRememberMode : rRememberModes)
-        {
-            switch ( rRememberMode )
-            {
-            case ucb::RememberAuthentication_NO:
-                break;
-            case ucb::RememberAuthentication_SESSION:
-                bHasRememberModeSession = true;
-                break;
-            case ucb::RememberAuthentication_PERSISTENT:
-                bHasRememberModePersistent = true;
-                break;
-            default:
-                SAL_WARN( "uui", "Unsupported RememberAuthentication value" << static_cast<sal_Int32>(rRememberMode) );
-                break;
-            }
-        }
-
-        if (bHasRememberModePersistent)
-        {
-            rPreferredMode = ucb::RememberAuthentication_PERSISTENT;
-            if (bHasRememberModeSession)
-                rAlternateMode = ucb::RememberAuthentication_SESSION;
-            else
-                rAlternateMode = ucb::RememberAuthentication_NO;
-        }
-        else
-        {
-            rPreferredMode = ucb::RememberAuthentication_SESSION;
-            rAlternateMode = ucb::RememberAuthentication_NO;
-        }
-    }
-}
-
-void
 handleAuthenticationRequest_(
-    weld::Window * pParent,
     uno::Reference< task::XInteractionHandler2 > const & xIH,
     uno::Reference< cpo::uno::XComponentContext > const & xContext,
     ucb::AuthenticationRequest const & rRequest,
@@ -188,18 +71,12 @@ handleAuthenticationRequest_(
         rContinuations,
     const OUString & rURL)
 {
-    uno::Reference< task::XInteractionRetry > xRetry;
     uno::Reference< task::XInteractionAbort > xAbort;
     uno::Reference< ucb::XInteractionSupplyAuthentication >
         xSupplyAuthentication;
-    uno::Reference< ucb::XInteractionSupplyAuthentication2 >
-        xSupplyAuthentication2;
-    getContinuations(rContinuations, &xRetry, &xAbort, &xSupplyAuthentication);
-    if (xSupplyAuthentication.is())
-        xSupplyAuthentication2.set(xSupplyAuthentication, uno::UNO_QUERY);
+    getContinuations(rContinuations, &xAbort, &xSupplyAuthentication);
 
-
-    // First, try to obtain credentials from password container service.
+    // Use the credentials from the password container service, if it has them.
     uui::PasswordContainerHelper aPwContainerHelper(xContext);
     if (aPwContainerHelper.handleAuthenticationRequest(rRequest,
                                                        xSupplyAuthentication,
@@ -210,193 +87,9 @@ handleAuthenticationRequest_(
         return;
     }
 
-
-    // Second, try to obtain credentials from user via password dialog.
-    ucb::RememberAuthentication eDefaultRememberMode
-        = ucb::RememberAuthentication_SESSION;
-    ucb::RememberAuthentication ePreferredRememberMode
-        = eDefaultRememberMode;
-    ucb::RememberAuthentication eAlternateRememberMode
-        = ucb::RememberAuthentication_NO;
-
-    if (xSupplyAuthentication.is())
-    {
-        getRememberModes(
-            xSupplyAuthentication->getRememberPasswordModes(
-                eDefaultRememberMode),
-            ePreferredRememberMode,
-            eAlternateRememberMode);
-    }
-
-    bool bCanUseSystemCredentials;
-    bool bDefaultUseSystemCredentials;
-    if (xSupplyAuthentication2.is())
-    {
-        bCanUseSystemCredentials
-            = xSupplyAuthentication2->canUseSystemCredentials(
-                bDefaultUseSystemCredentials);
-    }
-    else
-    {
-        bCanUseSystemCredentials = false;
-        bDefaultUseSystemCredentials = false;
-    }
-
-    LoginErrorInfo aInfo;
-    aInfo.SetServer(rRequest.ServerName);
-    if (rRequest.HasAccount)
-        aInfo.SetAccount(rRequest.Account);
-    if (rRequest.HasUserName)
-        aInfo.SetUserName(rRequest.UserName);
-    if (rRequest.HasPassword)
-        aInfo.SetPassword(rRequest.Password);
-    aInfo.SetErrorText(rRequest.Diagnostic);
-
-    aInfo.SetCanRememberPassword(
-        ePreferredRememberMode != eAlternateRememberMode);
-    aInfo.SetIsRememberPassword(
-        ePreferredRememberMode == eDefaultRememberMode);
-    aInfo.SetIsRememberPersistent(
-        ePreferredRememberMode == ucb::RememberAuthentication_PERSISTENT);
-
-    aInfo.SetCanUseSystemCredentials(bCanUseSystemCredentials);
-    aInfo.SetIsUseSystemCredentials( bDefaultUseSystemCredentials );
-    aInfo.SetModifyAccount(rRequest.HasAccount
-                           && xSupplyAuthentication.is()
-                           && xSupplyAuthentication->canSetAccount());
-    aInfo.SetModifyUserName(rRequest.HasUserName
-                            && xSupplyAuthentication.is()
-                            && xSupplyAuthentication->canSetUserName());
-    executeLoginDialog(pParent,
-                       aInfo,
-                       rRequest.HasRealm ? rRequest.Realm : OUString());
-    switch (aInfo.GetResult())
-    {
-    case DialogMask::ButtonsOk:
-        if (xSupplyAuthentication.is())
-        {
-            if (xSupplyAuthentication->canSetUserName())
-                xSupplyAuthentication->setUserName(aInfo.GetUserName());
-            if (xSupplyAuthentication->canSetPassword())
-                xSupplyAuthentication->setPassword(aInfo.GetPassword());
-
-            if (ePreferredRememberMode != eAlternateRememberMode)
-            {
-                // user had the choice.
-                if (aInfo.GetIsRememberPassword())
-                    xSupplyAuthentication->setRememberPassword(
-                        ePreferredRememberMode);
-                else
-                    xSupplyAuthentication->setRememberPassword(
-                        eAlternateRememberMode);
-            }
-            else
-            {
-                // user had no choice.
-                xSupplyAuthentication->setRememberPassword(
-                    ePreferredRememberMode);
-            }
-
-            if (rRequest.HasRealm)
-            {
-                if (xSupplyAuthentication->canSetRealm())
-                    xSupplyAuthentication->setRealm(aInfo.GetAccount());
-            }
-            else if (xSupplyAuthentication->canSetAccount())
-                xSupplyAuthentication->setAccount(aInfo.GetAccount());
-
-            if ( xSupplyAuthentication2.is() && bCanUseSystemCredentials )
-                xSupplyAuthentication2->setUseSystemCredentials(
-                    aInfo.GetIsUseSystemCredentials() );
-
-            xSupplyAuthentication->select();
-        }
-
-
-        // Third, store credentials in password container.
-
-          if ( aInfo.GetIsUseSystemCredentials() )
-          {
-              if (aInfo.GetIsRememberPassword())
-              {
-                  if (!aPwContainerHelper.addRecord(
-                          !rURL.isEmpty() ? rURL : rRequest.ServerName,
-                          OUString(), // empty u/p -> sys creds
-                          cpo::uno::Sequence< OUString >(),
-                          xIH,
-                          ePreferredRememberMode
-                              == ucb::RememberAuthentication_PERSISTENT))
-                  {
-                      xSupplyAuthentication->setRememberPassword(
-                          ucb::RememberAuthentication_NO);
-                  }
-              }
-              else if (eAlternateRememberMode
-                           == ucb::RememberAuthentication_SESSION)
-              {
-                  if (!aPwContainerHelper.addRecord(
-                          !rURL.isEmpty() ? rURL : rRequest.ServerName,
-                          OUString(), // empty u/p -> sys creds
-                          cpo::uno::Sequence< OUString >(),
-                          xIH,
-                          false /* SESSION */))
-                  {
-                      xSupplyAuthentication->setRememberPassword(
-                          ucb::RememberAuthentication_NO);
-                  }
-              }
-          }
-          // Empty user name can not be valid:
-          else if (!aInfo.GetUserName().isEmpty())
-          {
-              cpo::uno::Sequence< OUString >
-                  aPassList(aInfo.GetAccount().isEmpty() ? 1 : 2);
-              auto pPassList = aPassList.getArray();
-              pPassList[0] = aInfo.GetPassword();
-              if (!aInfo.GetAccount().isEmpty())
-                  pPassList[1] = aInfo.GetAccount();
-
-              if (aInfo.GetIsRememberPassword())
-              {
-                  if (!aPwContainerHelper.addRecord(
-                          !rURL.isEmpty() ? rURL : rRequest.ServerName,
-                          aInfo.GetUserName(),
-                          aPassList,
-                          xIH,
-                          ePreferredRememberMode
-                              == ucb::RememberAuthentication_PERSISTENT))
-                  {
-                      xSupplyAuthentication->setRememberPassword(
-                          ucb::RememberAuthentication_NO);
-                  }
-              }
-              else if (eAlternateRememberMode
-                           == ucb::RememberAuthentication_SESSION)
-              {
-                  if (!aPwContainerHelper.addRecord(
-                          !rURL.isEmpty() ? rURL : rRequest.ServerName,
-                          aInfo.GetUserName(),
-                          aPassList,
-                          xIH,
-                          false /* SESSION */))
-                  {
-                      xSupplyAuthentication->setRememberPassword(
-                          ucb::RememberAuthentication_NO);
-                  }
-              }
-          }
-          break;
-
-    case DialogMask::ButtonsRetry:
-        if (xRetry.is())
-            xRetry->select();
-        break;
-
-    default:
-        if (xAbort.is())
-            xAbort->select();
-        break;
-    }
+    // Without stored credentials the request is aborted.
+    if (xAbort.is())
+        xAbort->select();
 }
 
 void
@@ -620,13 +313,11 @@ UUIInteractionHelper::handleAuthenticationRequest(
     uno::Reference< task::XInteractionRequest > const & rRequest)
 {
     cpo::uno::Any aAnyRequest(rRequest->getRequest());
-    uno::Reference<awt::XWindow> xParent = getParentXWindow();
 
     ucb::URLAuthenticationRequest aURLAuthenticationRequest;
     if (aAnyRequest >>= aURLAuthenticationRequest)
     {
-        handleAuthenticationRequest_(Application::GetFrameWeld(xParent),
-                                     getInteractionHandler(),
+        handleAuthenticationRequest_(getInteractionHandler(),
                                      m_xContext,
                                      aURLAuthenticationRequest,
                                      rRequest->getContinuations(),
@@ -637,8 +328,7 @@ UUIInteractionHelper::handleAuthenticationRequest(
     ucb::AuthenticationRequest aAuthenticationRequest;
     if (aAnyRequest >>= aAuthenticationRequest)
     {
-        handleAuthenticationRequest_(Application::GetFrameWeld(xParent),
-                                     getInteractionHandler(),
+        handleAuthenticationRequest_(getInteractionHandler(),
                                      m_xContext,
                                      aAuthenticationRequest,
                                      rRequest->getContinuations(),

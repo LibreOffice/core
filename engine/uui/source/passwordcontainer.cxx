@@ -223,54 +223,6 @@ bool PasswordContainerHelper::handleAuthenticationRequest(
 }
 
 
-bool PasswordContainerHelper::addRecord(
-    OUString const & rURL,
-    OUString const & rUsername,
-    cpo::uno::Sequence< OUString > const & rPasswords,
-    uno::Reference< task::XInteractionHandler2 > const & xIH,
-    bool bPersist )
-{
-    try
-    {
-        if ( !rUsername.isEmpty() )
-        {
-            OSL_ENSURE( m_xPasswordContainer.is(),
-                        "Got no XPasswordContainer!" );
-            if ( !m_xPasswordContainer.is() )
-                return false;
-
-            if ( bPersist )
-            {
-                // If persistent storing of passwords is not yet
-                // allowed, enable it.
-                if ( !m_xPasswordContainer->isPersistentStoringAllowed() )
-                    m_xPasswordContainer->allowPersistentStoring( true );
-
-                m_xPasswordContainer->addPersistent( rURL,
-                                                     rUsername,
-                                                     rPasswords,
-                                                     xIH );
-            }
-            else
-                m_xPasswordContainer->add( rURL,
-                                           rUsername,
-                                           rPasswords,
-                                           xIH );
-        }
-        else
-        {
-            m_xPasswordContainer->addUrl( rURL, bPersist );
-        }
-    }
-    catch ( task::NoMasterException const & )
-    {
-        // user did not enter master password
-        return false;
-    }
-    return true;
-}
-
-
 PasswordContainerInteractionHandler::PasswordContainerInteractionHandler(
     const uno::Reference< cpo::uno::XComponentContext >& xContext )
 : m_aPwContainerHelper( xContext )

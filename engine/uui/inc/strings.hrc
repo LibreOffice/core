@@ -38,8 +38,6 @@
 #define STR_ALREADYOPEN_RETRY_SAVE_BTN          NC_("STR_ALREADYOPEN_RETRY_SAVE_BTN", "~Retry Saving")
 #define STR_ALREADYOPEN_SAVE_BTN                NC_("STR_ALREADYOPEN_SAVE_BTN", "~Save")
 
-#define RID_KEEP_PASSWORD                       NC_("RID_KEEP_PASSWORD", "~Remember password until end of session")
-#define RID_SAVE_PASSWORD                       NC_("RID_SAVE_PASSWORD", "~Remember password")
 #define STR_WARNING_INCOMPLETE_ENCRYPTION_TITLE NC_("STR_WARNING_INCOMPLETE_ENCRYPTION_TITLE", "Non-Encrypted Streams")
 
 #define STR_LOCKFAILED_TITLE                    NC_("STR_LOCKFAILED_TITLE", "Document Could Not Be Locked")
