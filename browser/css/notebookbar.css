@@ -785,6 +785,26 @@ label.notebookbar.ui-checkbox-label {
 	height: 30px;
 }
 
+/* A placeholder shows the style name the way the preview will: in the same white
+   100 by 30 box, 8 pixels from the left edge, centred vertically, at the 12 point
+   size of the default paragraph style. */
+.jsdialog #stylesview .ui-iconview-entry span:not(.ui-iconview-entry-title),
+.notebookbar #stylesview .ui-iconview-entry span:not(.ui-iconview-entry-title) {
+	display: inline-block;
+	vertical-align: middle;
+	box-sizing: border-box;
+	width: 100px;
+	height: 30px;
+	padding-left: 8px;
+	line-height: 30px;
+	text-align: left;
+	white-space: nowrap;
+	overflow: hidden;
+	background-color: white;
+	color: black;
+	font-size: 16px;
+}
+
 .ui-iconview-window {
 	display: flex;
 	flex-direction: row;
