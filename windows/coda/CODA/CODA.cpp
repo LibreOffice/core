@@ -3150,31 +3150,45 @@ static void focusActiveDocument(const WindowState& window)
 static const UINT HOVER_CARD_DELAY = 500;
 // The timer of the hover card window that holds that delay.
 static const int TIMER_ID_HOVER_CARD = 1;
-// The frame of the image in the hover card, at the standard resolution.
-static const int HOVER_CARD_IMAGE_WIDTH = 218;
-static const int HOVER_CARD_IMAGE_HEIGHT = 170;
+// The sizes in the hover card, at the standard resolution. The frame of the image has the shape of
+// a 16:9 slide, and the corners of the image have the radius of --border-radius.
+static const int HOVER_CARD_IMAGE_WIDTH = 240;
+static const int HOVER_CARD_IMAGE_HEIGHT = 135;
+static const int HOVER_CARD_IMAGE_RADIUS = 4;
+// The border of the card, and the space inside it around the title and the image and between the
+// two.
+static const int HOVER_CARD_BORDER = 1;
+static const int HOVER_CARD_PADDING = 8;
+// The title is one line of 12px text, as --default-font-size, with a line height of 16px. It starts
+// a little in from the edge of the image.
+static const int HOVER_CARD_TITLE_FONT_SIZE = 12;
+static const int HOVER_CARD_TITLE_HEIGHT = 16;
+static const int HOVER_CARD_TITLE_INDENT = 2;
+// The space between the foot of the tab and the top of the card.
+static const int HOVER_CARD_GAP = 4;
 
 // The card with the name and the image of a background document, below the tab that the pointer
 // rests on. One card serves every window, because the pointer rests on one tab at a time.
 struct HoverCard
 {
     HWND hWnd = 0;
+    // The system rounds the corners of the card and draws its border, which Windows 11 does and
+    // Windows 10 does not.
+    bool systemDrawsBorder = false;
     // The tab the card is for, or 0 when the pointer rests on no tab.
     int tabId = 0;
     // The bottom corner of that tab where the tab starts, in screen coordinates.
     POINT position = {};
     // The tabs run from right to left, so the card lines up with the right edge of its tab.
     bool rightToLeft = false;
-    // The colours of the card, from the theme of the strip.
+    // The colours of the card, from the theme of the strip. The image background shows around an
+    // image of another shape than its frame.
     COLORREF background = RGB(0xf8, 0xf9, 0xfa);
     COLORREF text = RGB(0x33, 0x33, 0x33);
     COLORREF border = RGB(0x94, 0x94, 0x94);
-    // What the card shows, laid out in the client area of the card.
-    std::wstring title;
-    HFONT font = nullptr;
-    RECT titleRect = {};
-    HBITMAP image = nullptr;
-    RECT imageRect = {};
+    COLORREF imageBackground = RGB(0xe8, 0xe8, 0xe8);
+    // What the card shows, drawn whole, and painted as it is.
+    HBITMAP picture = nullptr;
 };
 
 static HoverCard hoverCard;
@@ -3224,23 +3238,24 @@ static COLORREF cssColor(const std::string& css, COLORREF fallback)
     return fallback;
 }
 
-// A PNG image fitted inside a box of the given size in pixels, keeping its shape, and drawn over
-// the background colour where it is transparent. The size of the bitmap goes to size. There is no
-// bitmap when the PNG cannot be read.
-static HBITMAP fittedImage(const std::string& png, int boxWidth, int boxHeight,
-                           COLORREF background, SIZE& size)
+
+// A PNG image fitted inside a box of the given size in pixels, keeping its shape, as rows of
+// pixels from the top down, in BGRA with the colour multiplied by the alpha. The size of the image
+// goes to size. There are no pixels when the PNG cannot be read.
+static std::vector<uint32_t> fittedImage(const std::string& png, int boxWidth, int boxHeight,
+                                         SIZE& size)
 {
     wil::com_ptr<IWICImagingFactory> factory;
     if (FAILED(CoCreateInstance(CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER,
                                 IID_PPV_ARGS(factory.put()))))
-        return nullptr;
+        return {};
 
     wil::com_ptr<IWICStream> stream;
     if (FAILED(factory->CreateStream(&stream)) ||
         FAILED(stream->InitializeFromMemory(
             reinterpret_cast<BYTE*>(const_cast<char*>(png.data())),
             static_cast<DWORD>(png.size()))))
-        return nullptr;
+        return {};
 
     wil::com_ptr<IWICBitmapDecoder> decoder;
     wil::com_ptr<IWICBitmapFrameDecode> frame;
@@ -3249,15 +3264,13 @@ static HBITMAP fittedImage(const std::string& png, int boxWidth, int boxHeight,
                                                 WICDecodeMetadataCacheOnDemand, &decoder)) ||
         FAILED(decoder->GetFrame(0, &frame)) || FAILED(frame->GetSize(&width, &height)) ||
         width == 0 || height == 0)
-        return nullptr;
+        return {};
 
     const double scale = std::min(static_cast<double>(boxWidth) / width,
                                   static_cast<double>(boxHeight) / height);
     const UINT fittedWidth = std::max(1U, static_cast<UINT>(std::lround(width * scale)));
     const UINT fittedHeight = std::max(1U, static_cast<UINT>(std::lround(height * scale)));
 
-    // The pixels come out with the colour already multiplied by the alpha, so the background
-    // only has to be added in proportion to what the image leaves uncovered.
     wil::com_ptr<IWICBitmapScaler> scaler;
     wil::com_ptr<IWICFormatConverter> converter;
     if (FAILED(factory->CreateBitmapScaler(&scaler)) ||
@@ -3267,43 +3280,29 @@ static HBITMAP fittedImage(const std::string& png, int boxWidth, int boxHeight,
         FAILED(converter->Initialize(scaler.get(), GUID_WICPixelFormat32bppPBGRA,
                                      WICBitmapDitherTypeNone, nullptr, 0.0,
                                      WICBitmapPaletteTypeCustom)))
-        return nullptr;
+        return {};
 
-    BITMAPINFO info = {};
-    info.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
-    info.bmiHeader.biWidth = static_cast<LONG>(fittedWidth);
-    // A negative height makes the rows run from the top down, as WIC gives them.
-    info.bmiHeader.biHeight = -static_cast<LONG>(fittedHeight);
-    info.bmiHeader.biPlanes = 1;
-    info.bmiHeader.biBitCount = 32;
-    info.bmiHeader.biCompression = BI_RGB;
-
-    void* bits = nullptr;
-    HBITMAP bitmap = CreateDIBSection(nullptr, &info, DIB_RGB_COLORS, &bits, nullptr, 0);
-    if (!bitmap)
-        return nullptr;
-
+    std::vector<uint32_t> pixels(static_cast<std::size_t>(fittedWidth) * fittedHeight);
     const UINT stride = fittedWidth * 4;
     if (FAILED(converter->CopyPixels(nullptr, stride, stride * fittedHeight,
-                                     static_cast<BYTE*>(bits))))
-    {
-        DeleteObject(bitmap);
-        return nullptr;
-    }
-
-    BYTE* pixel = static_cast<BYTE*>(bits);
-    for (UINT i = 0; i < fittedWidth * fittedHeight; i++, pixel += 4)
-    {
-        const int uncovered = 255 - pixel[3];
-        pixel[0] = static_cast<BYTE>(pixel[0] + (GetBValue(background) * uncovered + 127) / 255);
-        pixel[1] = static_cast<BYTE>(pixel[1] + (GetGValue(background) * uncovered + 127) / 255);
-        pixel[2] = static_cast<BYTE>(pixel[2] + (GetRValue(background) * uncovered + 127) / 255);
-        pixel[3] = 255;
-    }
+                                     reinterpret_cast<BYTE*>(pixels.data()))))
+        return {};
 
     size = { static_cast<LONG>(fittedWidth), static_cast<LONG>(fittedHeight) };
-    return bitmap;
+    return pixels;
 }
+
+// How much of the pixel at x, y a rectangle of the given size at the origin, with rounded corners
+// of the given radius, covers, from 0 to 1. The edge is smoothed over one pixel.
+static float roundedRectCoverage(int x, int y, float width, float height, float radius)
+{
+    const float qx = std::abs(x + 0.5f - width / 2) - (width / 2 - radius);
+    const float qy = std::abs(y + 0.5f - height / 2) - (height / 2 - radius);
+    const float distance = std::hypot(std::max(qx, 0.0f), std::max(qy, 0.0f)) +
+                           std::min(std::max(qx, qy), 0.0f) - radius;
+    return std::clamp(0.5f - distance, 0.0f, 1.0f);
+}
+
 
 static void hideHoverCard()
 {
@@ -3313,6 +3312,22 @@ static void hideHoverCard()
         KillTimer(hoverCard.hWnd, TIMER_ID_HOVER_CARD);
         ShowWindow(hoverCard.hWnd, SW_HIDE);
     }
+}
+
+// A bitmap that the pixels can be written to directly, rows from the top down.
+static HBITMAP createPixelBitmap(int width, int height, uint32_t*& pixels)
+{
+    BITMAPINFO info = {};
+    info.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+    info.bmiHeader.biWidth = width;
+    info.bmiHeader.biHeight = -height;
+    info.bmiHeader.biPlanes = 1;
+    info.bmiHeader.biBitCount = 32;
+    info.bmiHeader.biCompression = BI_RGB;
+    void* bits = nullptr;
+    HBITMAP bitmap = CreateDIBSection(nullptr, &info, DIB_RGB_COLORS, &bits, nullptr, 0);
+    pixels = static_cast<uint32_t*>(bits);
+    return bitmap;
 }
 
 // Show the card for the tab that the pointer rests on, with the image that its document sent
@@ -3332,70 +3347,139 @@ static void showHoverCard()
     const UINT dpi = GetDpiForWindow(window->hWnd);
     const auto scaled = [dpi](int value) { return MulDiv(value, dpi, USER_DEFAULT_SCREEN_DPI); };
 
-    if (hoverCard.font)
-        DeleteObject(hoverCard.font);
-    NONCLIENTMETRICSW metrics = { sizeof(NONCLIENTMETRICSW) };
-    hoverCard.font = SystemParametersInfoForDpi(SPI_GETNONCLIENTMETRICS, sizeof(metrics),
-                                                &metrics, 0, dpi)
-                         ? CreateFontIndirectW(&metrics.lfStatusFont)
-                         : nullptr;
-
-    int titleHeight = scaled(16);
-    if (HDC dc = GetDC(nullptr))
-    {
-        const HGDIOBJ oldFont = SelectObject(dc, hoverCard.font ? hoverCard.font
-                                                                : GetStockObject(DEFAULT_GUI_FONT));
-        TEXTMETRICW textMetrics;
-        if (GetTextMetricsW(dc, &textMetrics))
-            titleHeight = textMetrics.tmHeight;
-        SelectObject(dc, oldFont);
-        ReleaseDC(nullptr, dc);
-    }
-
-    // The title above the image, with margins of 8 at the sides and the bottom, 6 at the top and
-    // 6 between the two. Every card has the same size, and an image of another shape is fitted
-    // inside the frame and centred.
+    const int border = std::max(1, scaled(HOVER_CARD_BORDER));
+    const int padding = scaled(HOVER_CARD_PADDING);
     const int imageWidth = scaled(HOVER_CARD_IMAGE_WIDTH);
     const int imageHeight = scaled(HOVER_CARD_IMAGE_HEIGHT);
-    hoverCard.titleRect = { scaled(8), scaled(6), scaled(8) + imageWidth,
-                            scaled(6) + titleHeight };
-    const RECT imageFrame = { scaled(8), hoverCard.titleRect.bottom + scaled(6),
-                              scaled(8) + imageWidth,
-                              hoverCard.titleRect.bottom + scaled(6) + imageHeight };
-    const int cardWidth = imageFrame.right + scaled(8);
-    const int cardHeight = imageFrame.bottom + scaled(8);
-
-    if (hoverCard.image)
-        DeleteObject(hoverCard.image);
-    SIZE size = {};
-    hoverCard.image =
-        fittedImage(tab->thumbnailPng, imageWidth, imageHeight, hoverCard.background, size);
-    const int left = imageFrame.left + (imageWidth - size.cx) / 2;
-    const int top = imageFrame.top + (imageHeight - size.cy) / 2;
-    hoverCard.imageRect = { left, top, left + size.cx, top + size.cy };
+    const int titleHeight = scaled(HOVER_CARD_TITLE_HEIGHT);
+    const int cardWidth = 2 * (border + padding) + imageWidth;
+    const int cardHeight = 2 * (border + padding) + titleHeight + padding + imageHeight;
+    const int imageLeft = border + padding;
+    const int imageTop = border + padding + titleHeight + padding;
 
     // The tooltip of a tab shows the full path of its document, so the card does too.
     const std::string path = fileUriToWindowsPath(tab->filenameAndUri.uri);
-    hoverCard.title =
+    const std::wstring title =
         Util::string_to_wide_string(path.empty() ? tab->filenameAndUri.filename : path);
     std::wstring accessibleName = translate("TabManager", "Preview of %1");
     const std::size_t placeholder = accessibleName.find(L"%1");
     if (placeholder != std::wstring::npos)
-        accessibleName.replace(placeholder, 2, hoverCard.title);
+        accessibleName.replace(placeholder, 2, title);
     SetWindowTextW(hoverCard.hWnd, accessibleName.c_str());
 
-    // The card stays on the monitor of the tab, even for a tab near its edge.
-    POINT position = hoverCard.position;
-    if (hoverCard.rightToLeft)
-        position.x -= cardWidth;
+    uint32_t* card = nullptr;
+    HBITMAP picture = createPixelBitmap(cardWidth, cardHeight, card);
+    HDC dc = CreateCompatibleDC(nullptr);
+    if (!picture || !dc)
+    {
+        if (picture)
+            DeleteObject(picture);
+        if (dc)
+            DeleteDC(dc);
+        return;
+    }
+
+    // The background, the border where the system draws none, and the title, which starts a
+    // little in from the edge of the image.
+    const HGDIOBJ oldBitmap = SelectObject(dc, picture);
+    const RECT cardRect = { 0, 0, cardWidth, cardHeight };
+    HBRUSH backgroundBrush = CreateSolidBrush(hoverCard.background);
+    FillRect(dc, &cardRect, backgroundBrush);
+    DeleteObject(backgroundBrush);
+    if (!hoverCard.systemDrawsBorder)
+    {
+        HBRUSH borderBrush = CreateSolidBrush(hoverCard.border);
+        FrameRect(dc, &cardRect, borderBrush);
+        DeleteObject(borderBrush);
+    }
+
+    NONCLIENTMETRICSW metrics = { sizeof(NONCLIENTMETRICSW) };
+    LOGFONTW logFont = {};
+    if (SystemParametersInfoForDpi(SPI_GETNONCLIENTMETRICS, sizeof(metrics), &metrics, 0, dpi))
+        logFont = metrics.lfMessageFont;
+    logFont.lfHeight = -scaled(HOVER_CARD_TITLE_FONT_SIZE);
+    logFont.lfWidth = 0;
+    HFONT font = CreateFontIndirectW(&logFont);
+    const HGDIOBJ oldFont =
+        SelectObject(dc, font ? static_cast<HGDIOBJ>(font) : GetStockObject(DEFAULT_GUI_FONT));
+    SetBkMode(dc, TRANSPARENT);
+    SetTextColor(dc, hoverCard.text);
+    RECT titleRect = { imageLeft + scaled(HOVER_CARD_TITLE_INDENT), border + padding,
+                       imageLeft + imageWidth, border + padding + titleHeight };
+    DrawTextW(dc, title.c_str(), -1, &titleRect,
+              DT_SINGLELINE | DT_VCENTER | DT_NOPREFIX | DT_PATH_ELLIPSIS);
+    GdiFlush();
+    SelectObject(dc, oldFont);
+    if (font)
+        DeleteObject(font);
+    SelectObject(dc, oldBitmap);
+    DeleteDC(dc);
+
+    // The image, fitted inside its frame and centred on the image background. The frame has
+    // rounded corners, so at its corners the background of the card shows. The pixels of the
+    // image have the colour multiplied by the alpha.
+    SIZE fittedSize = {};
+    const std::vector<uint32_t> image =
+        fittedImage(tab->thumbnailPng, imageWidth, imageHeight, fittedSize);
+    const int fittedLeft = (imageWidth - fittedSize.cx) / 2;
+    const int fittedTop = (imageHeight - fittedSize.cy) / 2;
+    const float imageRadius = static_cast<float>(scaled(HOVER_CARD_IMAGE_RADIUS));
+    const auto channel = [](uint32_t pixel, int shift) { return (pixel >> shift) & 0xff; };
+    const auto colorChannel = [](COLORREF color, int shift)
+    {
+        // A COLORREF holds red, green and blue from the low byte up, and a bitmap pixel holds
+        // them from the high byte down.
+        return shift == 0 ? GetBValue(color) : shift == 8 ? GetGValue(color) : GetRValue(color);
+    };
+    for (int y = 0; y < imageHeight; y++)
+    {
+        for (int x = 0; x < imageWidth; x++)
+        {
+            const int fittedX = x - fittedLeft;
+            const int fittedY = y - fittedTop;
+            const bool inImage = fittedX >= 0 && fittedX < fittedSize.cx && fittedY >= 0 &&
+                                 fittedY < fittedSize.cy;
+            const uint32_t imagePixel = inImage ? image[fittedY * fittedSize.cx + fittedX] : 0;
+            const float coverage = roundedRectCoverage(x, y, static_cast<float>(imageWidth),
+                                                       static_cast<float>(imageHeight),
+                                                       imageRadius);
+
+            uint32_t& pixel = card[(imageTop + y) * cardWidth + imageLeft + x];
+            uint32_t result = 0;
+            for (int shift = 0; shift <= 16; shift += 8)
+            {
+                const float uncovered = 1 - channel(imagePixel, 24) / 255.0f;
+                const float framed = channel(imagePixel, shift) +
+                                     colorChannel(hoverCard.imageBackground, shift) * uncovered;
+                const float value = framed * coverage + channel(pixel, shift) * (1 - coverage);
+                result |= static_cast<uint32_t>(std::lround(std::clamp(value, 0.0f, 255.0f)))
+                          << shift;
+            }
+            pixel = result;
+        }
+    }
+
+    if (hoverCard.picture)
+        DeleteObject(hoverCard.picture);
+    hoverCard.picture = picture;
+
+    if (hoverCard.systemDrawsBorder)
+        DwmSetWindowAttribute(hoverCard.hWnd, DWMWA_BORDER_COLOR, &hoverCard.border,
+                              sizeof(hoverCard.border));
+
+    // The card stands a little below the tab, and lines up with the edge of the tab where the tab
+    // starts. It stays on the monitor of the tab, even for a tab near its edge.
+    POINT position = { hoverCard.rightToLeft ? hoverCard.position.x - cardWidth
+                                             : hoverCard.position.x,
+                       hoverCard.position.y + scaled(HOVER_CARD_GAP) };
     MONITORINFO monitor = { sizeof(MONITORINFO) };
-    if (GetMonitorInfoW(MonitorFromPoint(position, MONITOR_DEFAULTTONEAREST), &monitor))
+    if (GetMonitorInfoW(MonitorFromPoint(hoverCard.position, MONITOR_DEFAULTTONEAREST), &monitor))
         position.x = std::max(monitor.rcWork.left,
                               std::min(position.x, monitor.rcWork.right - cardWidth));
 
     SetWindowPos(hoverCard.hWnd, HWND_TOPMOST, position.x, position.y, cardWidth, cardHeight,
                  SWP_NOACTIVATE | SWP_SHOWWINDOW);
-    InvalidateRect(hoverCard.hWnd, nullptr, TRUE);
+    InvalidateRect(hoverCard.hWnd, nullptr, FALSE);
 }
 
 // The pointer has come to rest on a tab of the window. The point is the bottom corner of the tab
@@ -3403,14 +3487,24 @@ static void showHoverCard()
 // from right to left. The colours are those of the theme of the strip.
 static void startHoverCard(const WindowState& window, int tabId, POINT point,
                            const std::string& background, const std::string& text,
-                           const std::string& border, bool rightToLeft)
+                           const std::string& border, bool rightToLeft,
+                           const std::string& imageBackground)
 {
     if (!hoverCard.hWnd)
+    {
         hoverCard.hWnd = CreateWindowExW(WS_EX_TOOLWINDOW | WS_EX_NOACTIVATE | WS_EX_TOPMOST,
                                          hoverCardWindowClass, L"", WS_POPUP, 0, 0, 0, 0,
                                          nullptr, nullptr, appInstance, nullptr);
-    if (!hoverCard.hWnd)
-        return;
+        if (!hoverCard.hWnd)
+            return;
+
+        // Windows 11 rounds the corners of the card, as those of a tooltip, and draws its border.
+        // Windows 10 does not know the attribute and keeps the card square.
+        const DWORD roundSmall = DWMWCP_ROUNDSMALL;
+        hoverCard.systemDrawsBorder =
+            SUCCEEDED(DwmSetWindowAttribute(hoverCard.hWnd, DWMWA_WINDOW_CORNER_PREFERENCE,
+                                            &roundSmall, sizeof(roundSmall)));
+    }
 
     hoverCard.tabId = tabId;
     hoverCard.position = stripPointToScreen(window, point.x, point.y);
@@ -3418,6 +3512,7 @@ static void startHoverCard(const WindowState& window, int tabId, POINT point,
     hoverCard.background = cssColor(background, RGB(0xf8, 0xf9, 0xfa));
     hoverCard.text = cssColor(text, RGB(0x33, 0x33, 0x33));
     hoverCard.border = cssColor(border, RGB(0x94, 0x94, 0x94));
+    hoverCard.imageBackground = cssColor(imageBackground, RGB(0xe8, 0xe8, 0xe8));
 
     // Moving from one tab to the next while a card is up swaps the card at once.
     if (IsWindowVisible(hoverCard.hWnd))
@@ -3444,44 +3539,25 @@ static LRESULT CALLBACK HoverCardWndProc(HWND hWnd, UINT message, WPARAM wParam,
         case WM_NCHITTEST:
             return HTTRANSPARENT;
 
+        case WM_ERASEBKGND:
+            return 1;
+
         case WM_PAINT:
         {
             PAINTSTRUCT paint;
             HDC dc = BeginPaint(hWnd, &paint);
-
-            RECT client;
-            GetClientRect(hWnd, &client);
-            HBRUSH backgroundBrush = CreateSolidBrush(hoverCard.background);
-            FillRect(dc, &client, backgroundBrush);
-            DeleteObject(backgroundBrush);
-            HBRUSH borderBrush = CreateSolidBrush(hoverCard.border);
-            FrameRect(dc, &client, borderBrush);
-            DeleteObject(borderBrush);
-
-            const HGDIOBJ font =
-                hoverCard.font ? hoverCard.font : GetStockObject(DEFAULT_GUI_FONT);
-            const HGDIOBJ oldFont = SelectObject(dc, font);
-            SetBkMode(dc, TRANSPARENT);
-            SetTextColor(dc, hoverCard.text);
-            RECT titleRect = hoverCard.titleRect;
-            DrawTextW(dc, hoverCard.title.c_str(), -1, &titleRect,
-                      DT_SINGLELINE | DT_VCENTER | DT_NOPREFIX | DT_PATH_ELLIPSIS);
-            SelectObject(dc, oldFont);
-
-            if (hoverCard.image)
+            if (hoverCard.picture)
             {
-                if (HDC imageDC = CreateCompatibleDC(dc))
+                if (HDC pictureDC = CreateCompatibleDC(dc))
                 {
-                    const HGDIOBJ oldBitmap = SelectObject(imageDC, hoverCard.image);
-                    BitBlt(dc, hoverCard.imageRect.left, hoverCard.imageRect.top,
-                           hoverCard.imageRect.right - hoverCard.imageRect.left,
-                           hoverCard.imageRect.bottom - hoverCard.imageRect.top, imageDC, 0, 0,
-                           SRCCOPY);
-                    SelectObject(imageDC, oldBitmap);
-                    DeleteDC(imageDC);
+                    BITMAP size;
+                    GetObjectW(hoverCard.picture, sizeof(size), &size);
+                    const HGDIOBJ oldBitmap = SelectObject(pictureDC, hoverCard.picture);
+                    BitBlt(dc, 0, 0, size.bmWidth, size.bmHeight, pictureDC, 0, 0, SRCCOPY);
+                    SelectObject(pictureDC, oldBitmap);
+                    DeleteDC(pictureDC);
                 }
             }
-
             EndPaint(hWnd, &paint);
             return 0;
         }
@@ -3847,13 +3923,13 @@ static void processStripMessage(WindowState& window, const std::string& message)
         PostMessageW(window.hWnd, CODA_WM_MOVETABTOWINDOW, (WPARAM)args->getElement<int>(0),
                      (LPARAM)args->getElement<int>(1));
     }
-    else if (call == "tabHoverStarted" && argCount >= 7)
+    else if (call == "tabHoverStarted" && argCount >= 8)
     {
         const POINT point = { static_cast<LONG>(std::lround(args->getElement<double>(1))),
                               static_cast<LONG>(std::lround(args->getElement<double>(2))) };
         startHoverCard(window, args->getElement<int>(0), point, args->getElement<std::string>(3),
                        args->getElement<std::string>(4), args->getElement<std::string>(5),
-                       args->getElement<bool>(6));
+                       args->getElement<bool>(6), args->getElement<std::string>(7));
     }
     else if (call == "tabHoverEnded")
     {
