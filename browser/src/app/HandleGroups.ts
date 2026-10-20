@@ -742,20 +742,81 @@ class TurningHandle extends HandleGroup {
 	/// How far above the selection it sits, in core pixels.
 	public static readonly distance: number = 30;
 
+	/// How far beyond the dimension line of a measurement it sits, in core pixels: further than
+	/// above a frame, so that it stays clear of the text standing on that line.
+	public static readonly distanceFromMeasureLine: number = 45;
+
 	public handles(): SelectionHandle[] {
-		return this.placedAbove(
-			ObjectHandles.framingOf(
-				this.selection.selectedObjects(),
-				this.selection.squareNow(),
-			) ?? [],
+		const objectIds = this.selection.selectedObjects();
+		const square = this.selection.squareNow();
+
+		// An object shaped by its own handles alone shows no eight, and the handle stands beyond
+		// its line instead.
+		if (
+			objectIds.length === 1 &&
+			ObjectHandles.hasHandlesOfItsOwnOnly(objectIds[0])
+		)
+			return square ? this.placedBeyondTheLine(objectIds[0], square) : [];
+
+		return this.placedAbove(ObjectHandles.framingOf(objectIds, square) ?? []);
+	}
+
+	/*
+		The point a turn goes about: the middle of the selection as the eight frame it, and where
+		no eight are shown, as for an object shaped by its own handles alone, the middle of the
+		selection's square.
+	*/
+	private middle(): cool.SimplePoint | undefined {
+		const framed = this.selection.middle();
+		if (framed) return framed;
+
+		const middle = this.selection.squareNow()?.apply(0.5, 0.5);
+		return middle ? new cool.SimplePoint(middle.x, middle.y) : undefined;
+	}
+
+	/*
+		The handle of an object that is shaped by its own handles alone, a measurement: out from
+		the middle of its dimension line, at a right angle to it and away from the measured line,
+		far enough to stay clear of the text on that line. It is worked out from the mapping
+		itself, since the square of such an object may be too thin for the eight to tell its sides
+		apart.
+	*/
+	private placedBeyondTheLine(
+		objectId: number,
+		square: cool.Matrix2D,
+	): SelectionHandle[] {
+		const measurement = RenderGeometrySection.objectOf(objectId)?.measurement;
+		const distance = measurement?.lineDistance ?? 0;
+		const across = measurement?.below ? distance : -distance;
+		const middle = square.apply(0.5, across);
+		const below = square.apply(0.5, across + 1).subtract(middle);
+		const length = below.length();
+		if (!length) return [];
+
+		// Away from the measured line: up where the dimension line stands above it.
+		const outwards = across > 0 ? 1 : -1;
+		const out = new cool.Point(
+			(outwards * below.x) / length,
+			(outwards * below.y) / length,
 		);
+
+		const away = TurningHandle.distanceFromMeasureLine * app.dpiScale;
+		const step = cool.SimplePoint.fromCorePixels([away, away]);
+		const point = new cool.Point(
+			middle.x + out.x * step.x,
+			middle.y + out.y * step.y,
+		);
+
+		return this.handlesAt(point, Math.atan2(out.x, -out.y));
 	}
 
 	/*
 		It is laid out again from the handles as a drag leaves them, so that it keeps its distance
-		from the upper side however the selection is scaled or turned.
+		from the upper side however the selection is scaled or turned. Where no eight are shown,
+		it stays where the drag takes it.
 	*/
 	public place(shown: SelectionHandle[]): SelectionHandle[] | null {
+		if (!shown.some((one: SelectionHandle) => one.kind === '2')) return null;
 		return this.placedAbove(shown);
 	}
 
@@ -769,8 +830,6 @@ class TurningHandle extends HandleGroup {
 		const middle = SelectionSection.middleOf(shown);
 		const above = shown.find((one: SelectionHandle) => one.kind === '2');
 		if (!middle || !above) return [];
-
-		const dead = !ObjectHandles.canBeTurned(this.selection.selectedObjects());
 
 		const away = TurningHandle.distance * app.dpiScale;
 		const out = new cool.Point(
@@ -790,6 +849,15 @@ class TurningHandle extends HandleGroup {
 			above.point.x + up.x * step.x,
 			above.point.y + up.y * step.y,
 		);
+
+		return this.handlesAt(point, turnedBy);
+	}
+
+	/// The handle at that point, turned by that angle, and the handle of the other mode beside it
+	/// while that one is shown. Where the objects say they cannot be turned it is there but dead,
+	/// so the selection looks the same whatever may be done to it.
+	private handlesAt(point: cool.Point, turnedBy: number): SelectionHandle[] {
+		const dead = !ObjectHandles.canBeTurned(this.selection.selectedObjects());
 		const handles: SelectionHandle[] = [
 			{
 				name: SelectionSection.turningKind,
@@ -879,7 +947,7 @@ class TurningHandle extends HandleGroup {
 		handle: SelectionHandle,
 		at: cool.SimplePoint,
 	): SelectionInteraction | null {
-		const middle = this.selection.middle();
+		const middle = this.middle();
 		if (!middle) return null;
 
 		return this.selection.handleMode() === 'shear'
@@ -917,7 +985,7 @@ class TurningHandle extends HandleGroup {
 	*/
 	private turnByKey(degrees: number): cool.Matrix2D | null {
 		const byKeys = TurningInteraction.keysStillHold(this.selection);
-		const middle = byKeys?.middle ?? this.selection.middle();
+		const middle = byKeys?.middle ?? this.middle();
 		if (!middle) return null;
 
 		const stands = this.standsNow();
@@ -940,7 +1008,7 @@ class TurningHandle extends HandleGroup {
 		towards: cool.Point,
 		event: KeyboardEvent,
 	): cool.Point | null {
-		const middle = this.selection.middle();
+		const middle = this.middle();
 		if (!middle) return null;
 
 		const against = towards.x < 0 || towards.y < 0;
@@ -970,7 +1038,7 @@ class TurningHandle extends HandleGroup {
 		turning mode, the shorter way round, and without a slant in the shearing mode.
 	*/
 	public backToNought(handle: SelectionHandle): void {
-		const middle = this.selection.middle();
+		const middle = this.middle();
 		if (!middle) return;
 
 		let changed: cool.Matrix2D | null;

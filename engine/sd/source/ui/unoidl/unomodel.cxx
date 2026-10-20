@@ -3897,7 +3897,10 @@ private:
         aContent.mbCanBeTurned = aWhatItAllows.bRotateFreeAllowed && !bPlaceHeldFast;
         aContent.mbCanBeResizedFreely = aWhatItAllows.bResizeFreeAllowed;
         aContent.mbCanBeMirrored = aWhatItAllows.bMirrorFreeAllowed && !bPlaceHeldFast;
-        aContent.mbCanBeSheared = aWhatItAllows.bShearAllowed && !bSizeHeldFast;
+        // The office lets a measurement be sheared, but the measurement stays at right angles to
+        // its line whatever the two points do, so nothing comes of it, and none is offered.
+        aContent.mbCanBeSheared = aWhatItAllows.bShearAllowed && !bSizeHeldFast
+                                  && SdrObjKind::Measure != rObject.GetObjIdentifier();
         aContent.mbCanBeFlipped = aWhatItAllows.bMirror90Allowed && !bPlaceHeldFast;
         aContent.mbCanBeChangedToCurves = aWhatItAllows.bCanConvToPath;
         aContent.mbHandlesOfItsOwnOnly = SdrObjKind::Measure == rObject.GetObjIdentifier();

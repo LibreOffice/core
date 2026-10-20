@@ -441,6 +441,24 @@ class ObjectHandles implements HandleSource {
 		return object?.tiedAtStart === true || object?.tiedAtEnd === true;
 	}
 
+	/*
+		The eight of one object that is shaped by its own handles alone, which are not shown: the
+		handle that turns the object is laid out from them, above the middle of the upper side.
+		Nothing for any other selection.
+	*/
+	public static unshownFramingOf(
+		objectIds: number[],
+		square?: cool.Matrix2D,
+	): SelectionHandle[] | undefined {
+		if (
+			objectIds.length !== 1 ||
+			!ObjectHandles.hasHandlesOfItsOwnOnly(objectIds[0])
+		)
+			return undefined;
+
+		return new ObjectHandles(objectIds).framingHandles(square);
+	}
+
 	/// Whether the object of that id is shaped by its own handles alone, without the eight.
 	public static hasHandlesOfItsOwnOnly(objectId: number): boolean {
 		return (

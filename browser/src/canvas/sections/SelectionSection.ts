@@ -2748,7 +2748,10 @@ abstract class SelectionSection extends CanvasSectionObject {
 				this.myTopLeft[1] + point.pY,
 			];
 			let over = this.handleAt(onCanvas[0], onCanvas[1]);
+			// While a press runs that has not become a drag yet, the handle of the other mode,
+			// which the press took away, stays away.
 			if (
+				!this.interaction &&
 				this.followTheOtherMode(over, new cool.Point(onCanvas[0], onCanvas[1]))
 			)
 				over = undefined;
