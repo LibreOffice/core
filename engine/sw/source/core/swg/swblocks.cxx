@@ -501,7 +501,8 @@ OUString const & SwTextBlocks::GetFileName() const
 
 bool SwTextBlocks::IsReadOnly() const
 {
-    return m_pImp->m_bReadOnly;
+    // there is no implementation when the file exists but is not a storage
+    return !m_pImp || m_pImp->m_bReadOnly;
 }
 
 bool SwTextBlocks::IsOnlyTextBlock( sal_uInt16 nIdx ) const

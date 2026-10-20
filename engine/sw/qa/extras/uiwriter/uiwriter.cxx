@@ -16,6 +16,7 @@
 #include <ndtxt.hxx>
 #include <wrtsh.hxx>
 #include <shellio.hxx>
+#include <swerror.h>
 #include <expfld.hxx>
 #include <drawdoc.hxx>
 #include <redline.hxx>
@@ -28,6 +29,7 @@
 #include <modcfg.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <unotools/streamwrap.hxx>
+#include <unotools/tempfile.hxx>
 #include <unocrsrhelper.hxx>
 #include <com/sun/star/text/VertOrientation.hpp>
 #include <com/sun/star/text/XDefaultNumberingProvider.hpp>
@@ -931,6 +933,22 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testDOCXAutoTextEmpty)
     // file contains normal content but no AutoText
     std::unique_ptr<SwTextBlocks> pGlossary = readDOCXAutotext(u"autotext-empty.dotx", true);
     CPPUNIT_ASSERT(pGlossary != nullptr);
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testUnrecognizedAutoTextFileIsReadOnly)
+{
+    // An AutoText group file that exists but is not a storage, e.g. one that
+    // could not be opened for reading at that moment
+    utl::TempFileNamed aTempFile(u"", true, u".bau");
+    aTempFile.EnableKillingFile();
+    aTempFile.GetStream(StreamMode::WRITE)->WriteOString("not a storage");
+    aTempFile.CloseStream();
+
+    SwTextBlocks aGlossary(aTempFile.GetURL());
+    CPPUNIT_ASSERT_EQUAL(ERR_SWG_FILE_FORMAT_ERROR, aGlossary.GetError());
+    // The AutoText dialog asks every group whether it is read-only; this
+    // crashed on the missing implementation
+    CPPUNIT_ASSERT(aGlossary.IsReadOnly());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest, testDOCXAutoTextMultiple)
