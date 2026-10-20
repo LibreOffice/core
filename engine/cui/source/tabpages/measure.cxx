@@ -589,6 +589,9 @@ IMPL_LINK( SvxMeasurePage, ChangeAttrSpinHdl_Impl, weld::SpinButton&, rBox, void
     ChangeAttrHdl_Impl(&rBox);
 }
 
+// p is the widget whose handler called: a check button arrives as the weld::Toggleable it derives
+// from virtually, which lies at another address than the check button itself, so those are
+// compared as weld::Toggleable.
 void SvxMeasurePage::ChangeAttrHdl_Impl( void const * p )
 {
     if (p == m_xMtrFldLineDist.get())
@@ -621,7 +624,7 @@ void SvxMeasurePage::ChangeAttrHdl_Impl( void const * p )
         aAttrSet.Put( makeSdrMeasureHelpline2LenItem( nValue ) );
     }
 
-    if (p == m_xTsbBelowRefEdge.get())
+    if (p == static_cast<weld::Toggleable*>(m_xTsbBelowRefEdge.get()))
     {
         TriState eState = m_xTsbBelowRefEdge->get_state();
         if( eState != TRISTATE_INDET )
@@ -635,14 +638,14 @@ void SvxMeasurePage::ChangeAttrHdl_Impl( void const * p )
         aAttrSet.Put( SdrMeasureDecimalPlacesItem( nValue ) );
     }
 
-    if (p == m_xTsbParallel.get())
+    if (p == static_cast<weld::Toggleable*>(m_xTsbParallel.get()))
     {
         TriState eState = m_xTsbParallel->get_state();
         if( eState != TRISTATE_INDET )
             aAttrSet.Put( SdrMeasureTextRota90Item( TRISTATE_FALSE == eState ) );
     }
 
-    if (p == m_xTsbShowUnit.get())
+    if (p == static_cast<weld::Toggleable*>(m_xTsbShowUnit.get()))
     {
         TriState eState = m_xTsbShowUnit->get_state();
         if( eState != TRISTATE_INDET )
@@ -660,7 +663,9 @@ void SvxMeasurePage::ChangeAttrHdl_Impl( void const * p )
         }
     }
 
-    if (p == m_xTsbAutoPosV.get() || p == m_xTsbAutoPosH.get() || p == m_aCtlPosition.GetDrawingArea())
+    if (p == static_cast<weld::Toggleable*>(m_xTsbAutoPosV.get())
+        || p == static_cast<weld::Toggleable*>(m_xTsbAutoPosH.get())
+        || p == m_aCtlPosition.GetDrawingArea())
     {
         bPositionModified = true;
 
@@ -706,7 +711,8 @@ void SvxMeasurePage::ChangeAttrHdl_Impl( void const * p )
             nState |= CTL_STATE::NOVERT;
         }
 
-        if (p == m_xTsbAutoPosV.get() || p == m_xTsbAutoPosH.get())
+        if (p == static_cast<weld::Toggleable*>(m_xTsbAutoPosV.get())
+            || p == static_cast<weld::Toggleable*>(m_xTsbAutoPosH.get()))
             m_aCtlPosition.SetState( nState );
 
         aAttrSet.Put( SdrMeasureTextVPosItem( eVPos ) );
