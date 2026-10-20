@@ -1966,7 +1966,9 @@ void ScTable::FillAutoSimple(
                     if ( nHeadNoneTail )
                     {
                         sal_Int32 nNextValue;
-                        if (nStringValue < 0)
+                        // tdf#14070 - apply the same rule as in the autofill preview where only a
+                        // number at the end of the text subtracts away from zero
+                        if (nHeadNoneTail > NumNone && nStringValue < 0)
                             nNextValue = nStringValue - static_cast<sal_Int32>(nDelta);
                         else
                             nNextValue = nStringValue + static_cast<sal_Int32>(nDelta);

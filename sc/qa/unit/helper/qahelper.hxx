@@ -127,7 +127,8 @@ public:
                                          const bool printFormula = false);
     void printRange(ScDocument* pDoc, const ScRange& rRange,
                                          const OString& rCaption, const bool printFormula = false);
-    void clearRange(ScDocument* pDoc, const ScRange& rRange);
+    void clearRange(ScDocument* pDoc, const ScRange& rRange,
+                    InsertDeleteFlags eFlags = InsertDeleteFlags::CONTENTS);
     void clearSheet(ScDocument* pDoc, SCTAB nTab);
     bool checkFormulaPosition(ScDocument& rDoc, const ScAddress& rPos);
     bool checkFormulaPositions(

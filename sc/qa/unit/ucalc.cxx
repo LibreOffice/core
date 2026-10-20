@@ -5008,6 +5008,26 @@ CPPUNIT_TEST_FIXTURE(Test, testAutoFill)
     clearRange(m_pDoc, ScRange(0,0,0,0,m_pDoc->MaxRow(),0));
     m_pDoc->SetRowHidden(0, m_pDoc->MaxRow(), 0, false); // Show all rows.
 
+    ScSetStringParam aTextParam;
+    aTextParam.setTextInput();
+    m_pDoc->SetString(0, 0, 0, u"-307"_ustr, &aTextParam);
+    m_pDoc->Fill(0, 0, 0, 0, nullptr, aMarkData, 3, FILL_TO_BOTTOM, FILL_AUTO);
+
+    // tdf#140703: Without the fix in place, this test would have failed with
+    // - Expected: -306
+    // - Actual  : -308
+    CPPUNIT_ASSERT_EQUAL(u"-306"_ustr, m_pDoc->GetString(0, 1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"-305"_ustr, m_pDoc->GetString(0, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(u"-304"_ustr, m_pDoc->GetString(0, 3, 0));
+
+    // The fill has to match the autofill preview shown while dragging
+    CPPUNIT_ASSERT_EQUAL(m_pDoc->GetAutoFillPreview(ScRange(0, 0, 0), 0, 3),
+                         m_pDoc->GetString(0, 3, 0));
+
+    // Clear column A for a new test, including the text format
+    clearRange(m_pDoc, ScRange(0, 0, 0, 0, m_pDoc->MaxRow(), 0), InsertDeleteFlags::ALL);
+    m_pDoc->SetRowHidden(0, m_pDoc->MaxRow(), 0, false); // Show all rows.
+
     m_pDoc->SetString( 0, 80, 0, u"1%"_ustr );
     m_pDoc->Fill( 0, 80, 0, 80, nullptr, aMarkData, 3, FILL_TO_BOTTOM, FILL_AUTO );
 
