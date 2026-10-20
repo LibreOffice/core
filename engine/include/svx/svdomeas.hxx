@@ -133,7 +133,7 @@ public:
     SAL_DLLPRIVATE virtual rtl::Reference<SdrObject> DoConvertToPolyObj(bool bBezier, bool bAddText) const override;
 
     SAL_DLLPRIVATE virtual bool BegTextEdit(SdrOutliner& rOutl) override;
-    SAL_DLLPRIVATE virtual const Size& GetTextSize() const override;
+    virtual const Size& GetTextSize() const override;
     SAL_DLLPRIVATE virtual void TakeTextRect( SdrOutliner& rOutliner, tools::Rectangle& rTextRect, bool bNoEditText,
         tools::Rectangle* pAnchorRect, bool bLineWidth = true ) const override;
     SAL_DLLPRIVATE virtual void TakeTextAnchorRect(tools::Rectangle& rAnchorRect) const override;
@@ -156,6 +156,19 @@ public:
         API have always been given.
      */
     basegfx::B2DHomMatrix GetLineMapping() const;
+
+    /// The measured value as the text of the measurement writes it, without the unit.
+    OUString GetValueText() const;
+
+    /// The unit the text of the measurement writes after the value, empty where it writes none.
+    OUString GetUnitText() const;
+
+    /** The arrows at the start and at the end of the dimension line, as its drawing lays them
+        out: how wide each is, and how far it reaches along the line, which is half as far for
+        an arrow centred on the end of the line. Nought for an end without an arrow.
+     */
+    void GetArrowSizes(double& rStartWidth, double& rStartLength, double& rEndWidth,
+                       double& rEndLength) const;
 };
 
 // Creating:

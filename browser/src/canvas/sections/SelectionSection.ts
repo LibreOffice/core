@@ -1285,7 +1285,10 @@ abstract class SelectionSection extends CanvasSectionObject {
 		the object cannot be drawn through one, but the line it would follow can.
 	*/
 	private drawTheOutline(): void {
-		const polygons = this.interaction?.outline();
+		// While no drag runs, a group may still show what its handles will do once answered.
+		const polygons = this.interaction
+			? this.interaction.outline()
+			: this.groups().flatMap((group: HandleGroup) => group.outline() ?? []);
 		if (!polygons?.length) return;
 
 		this.context.save();

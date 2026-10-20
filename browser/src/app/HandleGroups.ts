@@ -34,6 +34,13 @@ abstract class HandleGroup {
 		return [];
 	}
 
+	/// What it draws thin of the objects while no drag runs, in twips: an object as handles
+	/// moved by keys, or let go of, would leave it before the engine has answered. Nothing for
+	/// most groups.
+	public outline(): cool.ObjectPathPolygon[] | null {
+		return null;
+	}
+
 	/*
 		Where its handles stand while a drag runs, from all of them as the drag leaves them.
 		Nothing where they simply travel with the drag, which is what most of them do.
@@ -1031,6 +1038,7 @@ class ShapingHandles extends HandlesMovedOneByOne {
 	public handOver(handle: SelectionHandle, to: cool.Point): void {
 		if (handle.kind !== ShapingHandles.shapingPointKind) {
 			this.sendTheHandle(handle, to);
+			this.holdTheStep(handle, to);
 			return;
 		}
 
@@ -1053,7 +1061,88 @@ class ShapingHandles extends HandlesMovedOneByOne {
 	}
 
 	public handles(): SelectionHandle[] {
-		return ObjectHandles.shapingOf(this.selection.selectedObjects());
+		const objectId = this.selection.selectedObjects()[0];
+		const known = ObjectHandles.shapingOf(this.selection.selectedObjects());
+
+		// Where a handle of a measurement was taken, all its handles go where that leaves them.
+		for (const handle of known) {
+			const stepped = ShapingHandles.stepped.get(
+				ShapingHandles.keyOf(objectId, handle.name),
+			);
+			if (stepped)
+				return (
+					MeasurementGhost.handlesDuring(
+						this.selection,
+						handle,
+						stepped,
+						known,
+					) ?? known
+				);
+		}
+
+		return known;
+	}
+
+	/*
+		Where keys, or a drag that was let go, have taken handles of a measurement, which the
+		engine has not answered for yet, by the object and the name of the handle. Nothing is
+		laid on the object here for such a handle, since what it does is the object's own
+		business, so the handle stands where it was taken and the measurement is drawn thin as it
+		will be, until the engine's answer for the object brings both.
+	*/
+	private static stepped: Map<string, cool.Point> = new Map();
+
+	/// Whether the answers of the engine are listened to, which is once.
+	private static followingTheAnswers: boolean = false;
+
+	private static keyOf(objectId: number | undefined, name: string): string {
+		return String(objectId) + ':' + name;
+	}
+
+	/// Notes where a handle of a measurement was taken, until the engine answers for its object.
+	private holdTheStep(handle: SelectionHandle, to: cool.Point): void {
+		if (!MeasurementGhost.belongsToOne(this.selection, handle)) return;
+
+		if (!ShapingHandles.followingTheAnswers) {
+			ShapingHandles.followingTheAnswers = true;
+			RenderManager.onVectorChanged((answered?: number[]) => {
+				if (answered === undefined) {
+					ShapingHandles.stepped.clear();
+					return;
+				}
+				for (const objectId of answered)
+					for (const key of Array.from(ShapingHandles.stepped.keys()))
+						if (key.startsWith(String(objectId) + ':'))
+							ShapingHandles.stepped.delete(key);
+			});
+		}
+
+		ShapingHandles.stepped.set(
+			ShapingHandles.keyOf(this.selection.selectedObjects()[0], handle.name),
+			to,
+		);
+
+		// The handles are worked out again at once, so the handle stands where it was taken in
+		// the same frame as the ghost of the measurement.
+		this.selection.refresh();
+		this.selection.redraw();
+	}
+
+	/// The measurement as the handles keys took, or a drag let go of, will leave it.
+	public outline(): cool.ObjectPathPolygon[] | null {
+		const objectId = this.selection.selectedObjects()[0];
+
+		for (const handle of ObjectHandles.shapingOf(
+			this.selection.selectedObjects(),
+		)) {
+			const stepped = ShapingHandles.stepped.get(
+				ShapingHandles.keyOf(objectId, handle.name),
+			);
+			if (stepped)
+				return MeasurementGhost.outline(this.selection, handle, stepped);
+		}
+
+		return null;
 	}
 
 	/*
@@ -1185,14 +1274,23 @@ class ShapingHandles extends HandlesMovedOneByOne {
 		);
 	}
 
+	/*
+		A key moves the handle as a drag would, held on its rail. A handle of a measurement goes
+		on from where keys have taken it so far, so that a key held down goes on step by step
+		before the engine has answered.
+	*/
 	public moveByKey(
 		handle: SelectionHandle,
 		towards: cool.Point,
 		event: KeyboardEvent,
 	): cool.Point | null {
+		const stepped = ShapingHandles.stepped.get(
+			ShapingHandles.keyOf(this.selection.selectedObjects()[0], handle.name),
+		);
+		const from = stepped ? { ...handle, point: stepped } : handle;
 		const to = this.holdInside(
 			handle,
-			HandleGroup.steppedBy(handle, towards, event),
+			HandleGroup.steppedBy(from, towards, event),
 		);
 		this.handOver(handle, to);
 

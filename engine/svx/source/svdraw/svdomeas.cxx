@@ -36,6 +36,9 @@
 #include <svl/style.hxx>
 
 #include <sdr/contact/viewcontactofsdrmeasureobj.hxx>
+#include <sdr/primitive2d/sdrattributecreator.hxx>
+#include <drawinglayer/attribute/sdrlineattribute.hxx>
+#include <drawinglayer/attribute/sdrlinestartendattribute.hxx>
 #include <sdr/properties/measureproperties.hxx>
 #include <svx/svddrag.hxx>
 #include <svx/sdrhandlerails.hxx>
@@ -1401,6 +1404,51 @@ bool SdrMeasureObj::TRGetBaseGeometry(basegfx::B2DHomMatrix& rMatrix, basegfx::B
     rMatrix = basegfx::utils::createScaleTranslateB2DHomMatrix(aScale, aTranslate);
 
     return true;
+}
+
+OUString SdrMeasureObj::GetValueText() const
+{
+    return TakeRepresentation(SdrMeasureFieldKind::Value);
+}
+
+OUString SdrMeasureObj::GetUnitText() const
+{
+    return TakeRepresentation(SdrMeasureFieldKind::Unit);
+}
+
+// The arrows are measured from the same line attributes SdrMeasurePrimitive2D lays them out from,
+// the same way.
+void SdrMeasureObj::GetArrowSizes(double& rStartWidth, double& rStartLength, double& rEndWidth,
+                                  double& rEndLength) const
+{
+    rStartWidth = rStartLength = rEndWidth = rEndLength = 0.0;
+
+    const SfxItemSet& rSet = GetMergedItemSet();
+    const drawinglayer::attribute::SdrLineAttribute aLine(
+        drawinglayer::primitive2d::createNewSdrLineAttribute(rSet));
+    const drawinglayer::attribute::SdrLineStartEndAttribute aArrows(
+        drawinglayer::primitive2d::createNewSdrLineStartEndAttribute(rSet, aLine.getWidth()));
+    if (aArrows.isDefault())
+        return;
+
+    auto aLength = [](const basegfx::B2DPolyPolygon& rArrow, double fWidth, bool bCentered) {
+        const basegfx::B2DRange aRange(rArrow.getB2DRange());
+        const double fLength(aRange.getHeight() * fWidth / aRange.getWidth());
+        return bCentered ? fLength * 0.5 : fLength;
+    };
+
+    if (aArrows.isStartActive())
+    {
+        rStartWidth = aArrows.getStartWidth();
+        rStartLength = aLength(aArrows.getStartPolyPolygon(), rStartWidth,
+                               aArrows.isStartCentered());
+    }
+
+    if (aArrows.isEndActive())
+    {
+        rEndWidth = aArrows.getEndWidth();
+        rEndLength = aLength(aArrows.getEndPolyPolygon(), rEndWidth, aArrows.isEndCentered());
+    }
 }
 
 /*

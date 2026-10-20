@@ -420,6 +420,61 @@ public:
 
         tools::Rectangle maPaintedBox;
         basegfx::B2DHomMatrix maTransformation;
+        /** What shapes a measurement beyond its two points, for a reader that draws it while one
+            of its handles is dragged. The lengths are in the units of the model, which are the
+            units across the measurement's square: its second side is one unit long.
+         */
+        struct Measurement
+        {
+            /// How far the dimension line stands from the measured line.
+            double mfLineDistance = 0.0;
+            /// True where it stands below the measured line, across the square's way down.
+            bool mbBelow = false;
+            /// How far the help lines reach beyond the dimension line.
+            double mfOverhang = 0.0;
+            /// How far from the measured line the help lines begin, before their own lengths.
+            double mfHelpLineDistance = 0.0;
+            /// How much longer each help line is towards the measured line, at the first point
+            /// and at the second.
+            double mfHelpLineLength1 = 0.0;
+            double mfHelpLineLength2 = 0.0;
+            /// The value as the text writes it, the unit after it, how many places the value
+            /// is written with, and the character between whole and part.
+            OUString maValue;
+            OUString maUnit;
+            sal_Int16 mnDecimals = 0;
+            OUString maDecimalSeparator;
+            /// The arrows at the start and the end: how wide each is and how far it reaches
+            /// along the line, nought where there is none. The width of the line.
+            double mfStartArrowWidth = 0.0;
+            double mfStartArrowLength = 0.0;
+            double mfEndArrowWidth = 0.0;
+            double mfEndArrowLength = 0.0;
+            double mfLineWidth = 0.0;
+            /// The size of the text as laid out, before any turn, and its distances to the four
+            /// sides of its frame: left, upper, right, lower.
+            double mfTextWidth = 0.0;
+            double mfTextHeight = 0.0;
+            double mfTextLeftDistance = 0.0;
+            double mfTextUpperDistance = 0.0;
+            double mfTextRightDistance = 0.0;
+            double mfTextLowerDistance = 0.0;
+            /// Where the text stands along the line: -1 before the first point, 0 between the
+            /// two, 1 beyond the second, 2 where the measurement decides. Across the line: -1
+            /// on the side away from the measured line, 0 on the dimension line, 1 on the side
+            /// towards it, 2 where the measurement decides.
+            sal_Int32 mnTextAlong = 2;
+            sal_Int32 mnTextAcross = 2;
+            /// Whether the text is turned a right angle, and whether it turns itself upside down
+            /// where it would otherwise be read upside down.
+            bool mbTextTurnedRightAngle = false;
+            bool mbTextTurnsItself = false;
+
+            bool operator==(const Measurement&) const = default;
+        };
+
+        /// Nothing for any object that is not a measurement.
+        std::optional<Measurement> moMeasurement;
         /// The name the object carries, empty for an entry that stands for no object.
         OUString maName;
         /// The layer the entry draws with, nothing for an entry that belongs to no object. For
@@ -441,7 +496,8 @@ public:
         bool operator==(const VectorObjectContent& rOther) const
         {
             return maPaintedBox == rOther.maPaintedBox
-                   && maTransformation == rOther.maTransformation && maName == rOther.maName
+                   && maTransformation == rOther.maTransformation
+                   && moMeasurement == rOther.moMeasurement && maName == rOther.maName
                    && moLayer == rOther.moLayer && mbEmptyPlaceholder == rOther.mbEmptyPlaceholder
                    && mbTextEdit == rOther.mbTextEdit && mnParentId == rOther.mnParentId
                    && maAutoColor == rOther.maAutoColor && maDrawn == rOther.maDrawn

@@ -165,6 +165,56 @@ namespace cool {
 		points: ObjectPathPoint[];
 	}
 
+	/** What shapes a measurement beyond its two points. The lengths are in the units of the
+	 * model, which are the units across the measurement's square: its second side is one unit
+	 * long, at a right angle down from the measured line.
+	 */
+	export interface ObjectMeasurement {
+		/// How far the dimension line stands from the measured line.
+		lineDistance: number;
+		/// True where it stands below the measured line, the square's way down.
+		below?: boolean;
+		/// How far the help lines reach beyond the dimension line.
+		overhang: number;
+		/// How far from the measured line the help lines begin, before their own lengths.
+		helpLineDistance: number;
+		/// How much longer each help line is towards the measured line, at the first point and
+		/// at the second.
+		helpLineLength1: number;
+		helpLineLength2: number;
+		/// The value as the text writes it, the unit after it, how many places the value is
+		/// written with, and the character between whole and part.
+		value: string;
+		unit: string;
+		decimals: number;
+		decimalSeparator: string;
+		/// The arrows at the start and the end: how wide each is and how far it reaches along
+		/// the line, nought where there is none. The width of the line.
+		startArrowWidth: number;
+		startArrowLength: number;
+		endArrowWidth: number;
+		endArrowLength: number;
+		lineWidth: number;
+		/// The size of the text as laid out, before any turn, and its distances to the four
+		/// sides of its frame.
+		textWidth: number;
+		textHeight: number;
+		textLeftDistance: number;
+		textUpperDistance: number;
+		textRightDistance: number;
+		textLowerDistance: number;
+		/// Where the text stands along the line: -1 before the first point, 0 between the two, 1
+		/// beyond the second, 2 where the measurement decides. Across it: -1 on the side away
+		/// from the measured line, 0 on the dimension line, 1 on the side towards it, 2 where the
+		/// measurement decides.
+		textAlong: number;
+		textAcross: number;
+		/// Whether the text is turned a right angle, and whether it turns itself upside down
+		/// where it would otherwise be read upside down.
+		textTurnedRightAngle?: boolean;
+		textTurnsItself?: boolean;
+	}
+
 	/// One drawable object on a slide, carrying its primitive tree.
 	export interface SlideObject {
 		/// Stable identity of the object: the engine's SdrObject unique
@@ -279,6 +329,8 @@ namespace cool {
 		/// True where the object, selected on its own, is shaped by its own handles alone and has
 		/// no frame of eight around it, a measurement for one.
 		handlesOfItsOwnOnly?: boolean;
+		/// What shapes a measurement beyond its two points. Absent for any other object.
+		measurement?: ObjectMeasurement;
 		gluePoints?: ObjectGluePoint[];
 		/** The four glue points the object has at the middles of its sides - the upper, the
 		 * right, the lower and the left one - where they lie on the object, as gluePoints are

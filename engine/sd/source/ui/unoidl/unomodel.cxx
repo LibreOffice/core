@@ -140,6 +140,15 @@
 #include <svtools/colorcfg.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <drawinglayer/primitive2d/PolygonHairlinePrimitive2D.hxx>
+#include <svx/sxmbritm.hxx>
+#include <svx/sxmlhitm.hxx>
+#include <svx/sxmtfitm.hxx>
+#include <svx/sxmtpitm.hxx>
+#include <svx/sxmtritm.hxx>
+#include <svx/xlnwtit.hxx>
+#include <svl/eitem.hxx>
+#include <unotools/syslocale.hxx>
+#include <unotools/localedatawrapper.hxx>
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include <svx/unofill.hxx>
 #include <svx/sdrpagewindow.hxx>
@@ -3895,6 +3904,76 @@ private:
 
         aContent.maPaintedBox = paintedRectangleInTwips(rObject, aContent.maPrimitives);
         aContent.maTransformation = transformationInTwips(rObject);
+
+        if (const auto* pMeasurement = dynamic_cast<const SdrMeasureObj*>(&rObject))
+        {
+            const SfxItemSet& rSet = pMeasurement->GetMergedItemSet();
+            SdXImpressDocument::VectorObjectContent::Measurement aMeasurement;
+            aMeasurement.mfLineDistance = rSet.Get(SDRATTR_MEASURELINEDIST).GetValue();
+            aMeasurement.mbBelow = rSet.Get(SDRATTR_MEASUREBELOWREFEDGE).GetValue();
+            aMeasurement.mfOverhang = rSet.Get(SDRATTR_MEASUREHELPLINEOVERHANG).GetValue();
+            aMeasurement.mfHelpLineDistance = rSet.Get(SDRATTR_MEASUREHELPLINEDIST).GetValue();
+            aMeasurement.mfHelpLineLength1 = rSet.Get(SDRATTR_MEASUREHELPLINE1LEN).GetValue();
+            aMeasurement.mfHelpLineLength2 = rSet.Get(SDRATTR_MEASUREHELPLINE2LEN).GetValue();
+            aMeasurement.maValue = pMeasurement->GetValueText();
+            aMeasurement.maUnit = pMeasurement->GetUnitText();
+            aMeasurement.mnDecimals = rSet.Get(SDRATTR_MEASUREDECIMALPLACES).GetValue();
+            aMeasurement.maDecimalSeparator
+                = SvtSysLocale().GetLocaleData().getNumDecimalSep();
+            pMeasurement->GetArrowSizes(aMeasurement.mfStartArrowWidth,
+                                        aMeasurement.mfStartArrowLength,
+                                        aMeasurement.mfEndArrowWidth,
+                                        aMeasurement.mfEndArrowLength);
+            aMeasurement.mfLineWidth = rSet.Get(XATTR_LINEWIDTH).GetValue();
+
+            // A text turned a right angle stands across the line, so its width and height swap.
+            aMeasurement.mbTextTurnedRightAngle = rSet.Get(SDRATTR_MEASURETEXTROTA90).GetValue();
+            // The class of that item is private to svx; it is a yes or no all the same.
+            aMeasurement.mbTextTurnsItself
+                = static_cast<const SfxBoolItem&>(
+                      rSet.Get(sal_uInt16(SDRATTR_MEASURETEXTAUTOANGLE)))
+                      .GetValue();
+            const Size& rTextSize = pMeasurement->GetTextSize();
+            aMeasurement.mfTextWidth = aMeasurement.mbTextTurnedRightAngle
+                                           ? rTextSize.Height() : rTextSize.Width();
+            aMeasurement.mfTextHeight = aMeasurement.mbTextTurnedRightAngle
+                                            ? rTextSize.Width() : rTextSize.Height();
+            aMeasurement.mfTextLeftDistance = pMeasurement->GetTextLeftDistance();
+            aMeasurement.mfTextUpperDistance = pMeasurement->GetTextUpperDistance();
+            aMeasurement.mfTextRightDistance = pMeasurement->GetTextRightDistance();
+            aMeasurement.mfTextLowerDistance = pMeasurement->GetTextLowerDistance();
+
+            switch (rSet.Get(SDRATTR_MEASURETEXTHPOS).GetValue())
+            {
+                case css::drawing::MeasureTextHorzPos_LEFTOUTSIDE:
+                    aMeasurement.mnTextAlong = -1;
+                    break;
+                case css::drawing::MeasureTextHorzPos_INSIDE:
+                    aMeasurement.mnTextAlong = 0;
+                    break;
+                case css::drawing::MeasureTextHorzPos_RIGHTOUTSIDE:
+                    aMeasurement.mnTextAlong = 1;
+                    break;
+                default:
+                    break;
+            }
+            switch (rSet.Get(SDRATTR_MEASURETEXTVPOS).GetValue())
+            {
+                case css::drawing::MeasureTextVertPos_EAST:
+                    aMeasurement.mnTextAcross = -1;
+                    break;
+                case css::drawing::MeasureTextVertPos_CENTERED:
+                    aMeasurement.mnTextAcross = 0;
+                    break;
+                case css::drawing::MeasureTextVertPos_WEST:
+                    aMeasurement.mnTextAcross = 1;
+                    break;
+                default:
+                    break;
+            }
+
+            aContent.moMeasurement = aMeasurement;
+        }
         aContent.maName = rObject.GetName();
         aContent.moLayer = sal_Int32(rObject.GetLayer().get());
         aContent.mbEmptyPlaceholder = rObject.IsEmptyPresObj();
@@ -4509,6 +4588,40 @@ private:
         rWriter.put("y", sal_Int64(rPainted.Top()));
         rWriter.put("width", sal_Int64(rPainted.GetWidth()));
         rWriter.put("height", sal_Int64(rPainted.GetHeight()));
+
+        if (rContent.moMeasurement)
+        {
+            const auto& rMeasurement = *rContent.moMeasurement;
+            auto aNode = rWriter.startNode("measurement");
+            rWriter.put("lineDistance", rMeasurement.mfLineDistance);
+            if (rMeasurement.mbBelow)
+                rWriter.put("below", true);
+            rWriter.put("overhang", rMeasurement.mfOverhang);
+            rWriter.put("helpLineDistance", rMeasurement.mfHelpLineDistance);
+            rWriter.put("helpLineLength1", rMeasurement.mfHelpLineLength1);
+            rWriter.put("helpLineLength2", rMeasurement.mfHelpLineLength2);
+            rWriter.put("value", rMeasurement.maValue);
+            rWriter.put("unit", rMeasurement.maUnit);
+            rWriter.put("decimals", sal_Int64(rMeasurement.mnDecimals));
+            rWriter.put("decimalSeparator", rMeasurement.maDecimalSeparator);
+            rWriter.put("startArrowWidth", rMeasurement.mfStartArrowWidth);
+            rWriter.put("startArrowLength", rMeasurement.mfStartArrowLength);
+            rWriter.put("endArrowWidth", rMeasurement.mfEndArrowWidth);
+            rWriter.put("endArrowLength", rMeasurement.mfEndArrowLength);
+            rWriter.put("lineWidth", rMeasurement.mfLineWidth);
+            rWriter.put("textWidth", rMeasurement.mfTextWidth);
+            rWriter.put("textHeight", rMeasurement.mfTextHeight);
+            rWriter.put("textLeftDistance", rMeasurement.mfTextLeftDistance);
+            rWriter.put("textUpperDistance", rMeasurement.mfTextUpperDistance);
+            rWriter.put("textRightDistance", rMeasurement.mfTextRightDistance);
+            rWriter.put("textLowerDistance", rMeasurement.mfTextLowerDistance);
+            rWriter.put("textAlong", sal_Int64(rMeasurement.mnTextAlong));
+            rWriter.put("textAcross", sal_Int64(rMeasurement.mnTextAcross));
+            if (rMeasurement.mbTextTurnedRightAngle)
+                rWriter.put("textTurnedRightAngle", true);
+            if (rMeasurement.mbTextTurnsItself)
+                rWriter.put("textTurnsItself", true);
+        }
 
         // In the order a canvas takes it: x' = a * x + c * y + e and y' = b * x + d * y + f.
         {
