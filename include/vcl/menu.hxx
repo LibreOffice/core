@@ -121,39 +121,39 @@ class VCL_DLLPUBLIC Menu : public VclReferenceBase
     friend class SystemWindow;
     friend struct ImplMenuDelData;
 private:
-    ImplMenuDelData* mpFirstDel;
-    std::unique_ptr<MenuItemList> pItemList; // list with MenuItems
-    VclPtr<Menu> pStartedFrom;
+    ImplMenuDelData* m_pFirstDel;
+    std::unique_ptr<MenuItemList> m_pItemList; // list with MenuItems
+    VclPtr<Menu> m_pStartedFrom;
     VclPtr<vcl::Window> m_pWindow;
 
-    Link<Menu*, bool> aActivateHdl;       // Active-Handler
-    Link<Menu*, bool> aDeactivateHdl;     // Deactivate-Handler
-    Link<Menu*, bool> aSelectHdl;         // Select-Handler
+    Link<Menu*, bool> m_aActivateHdl; // Active-Handler
+    Link<Menu*, bool> m_aDeactivateHdl; // Deactivate-Handler
+    Link<Menu*, bool> m_aSelectHdl; // Select-Handler
 
-    std::list<Link<VclMenuEvent&,void> >  maEventListeners;
+    std::list<Link<VclMenuEvent&, void>> m_aEventListeners;
 
-    OUString maID;
+    OUString m_aID;
 
-    OUString aTitleText;         // PopupMenu text
-    sal_uInt16 nTitleHeight;
+    OUString m_aTitleText; // PopupMenu text
+    sal_uInt16 m_nTitleHeight;
 
-    ImplSVEvent* nEventId;
-    sal_uInt16 mnHighlightedItemPos; // for native menus: keeps track of the highlighted item
-    MenuFlags nMenuFlags;
-    sal_uInt16 nSelectedId;
-    OUString sSelectedIdent;
+    ImplSVEvent* m_nEventId;
+    sal_uInt16 m_nHighlightedItemPos; // for native menus: keeps track of the highlighted item
+    MenuFlags m_nMenuFlags;
+    sal_uInt16 m_nSelectedId;
+    OUString m_sSelectedIdent;
 
     // for output:
-    sal_uInt16 nImgOrChkPos;
-    sal_uInt16 nTextPos;
+    sal_uInt16 m_nImgOrChkPos;
+    sal_uInt16 m_nTextPos;
 
-    bool bCanceled : 1; ///< Terminated during a callback
-    bool bInCallback : 1; ///< In Activate/Deactivate
-    bool bKilled : 1; ///< Killed
+    bool m_bCanceled : 1; ///< Terminated during a callback
+    bool m_bInCallback : 1; ///< In Activate/Deactivate
+    bool m_bKilled : 1; ///< Killed
 
-    rtl::Reference<comphelper::OAccessible> mpAccessible;
-    mutable std::unique_ptr<vcl::MenuLayoutData> mpLayoutData;
-    std::unique_ptr<SalMenu> mpSalMenu;
+    rtl::Reference<comphelper::OAccessible> m_pAccessible;
+    mutable std::unique_ptr<vcl::MenuLayoutData> m_pLayoutData;
+    std::unique_ptr<SalMenu> m_pSalMenu;
 
     // Stores the help ID of the menu
     OUString m_sMenuHelpId;
@@ -180,7 +180,7 @@ protected:
     DECL_DLLPRIVATE_LINK(ImplCallSelect, void*, void );
 
     SAL_DLLPRIVATE void ImplFillLayoutData() const;
-    SAL_DLLPRIVATE SalMenu* ImplGetSalMenu() const { return mpSalMenu.get(); }
+    SAL_DLLPRIVATE SalMenu* ImplGetSalMenu() const { return m_pSalMenu.get(); }
 
     // returns native check and option menu symbol height in rCheckHeight and rRadioHeight
     // return value is maximum width and height of checkboxes and radiobuttons
@@ -246,8 +246,8 @@ public:
 
     void CreateAutoMnemonics();
 
-    void SetMenuFlags( MenuFlags nFlags ) { nMenuFlags = nFlags; }
-    MenuFlags GetMenuFlags() const { return nMenuFlags; }
+    void SetMenuFlags(MenuFlags nFlags) { m_nMenuFlags = nFlags; }
+    MenuFlags GetMenuFlags() const { return m_nMenuFlags; }
 
     bool HasValidEntries(bool bCheckPopups) const;
     sal_uInt16 GetItemCount() const;
@@ -256,8 +256,8 @@ public:
     sal_uInt16 GetItemPos( sal_uInt16 nItemId ) const;
     OUString GetItemIdent(sal_uInt16 nItemId) const;
     MenuItemType GetItemType( sal_uInt16 nPos ) const;
-    sal_uInt16 GetCurItemId() const { return nSelectedId;}
-    OUString const & GetCurItemIdent() const { return sSelectedIdent; }
+    sal_uInt16 GetCurItemId() const { return m_nSelectedId; }
+    OUString const& GetCurItemIdent() const { return m_sSelectedIdent; }
     void SetItemBits( sal_uInt16 nItemId, MenuItemBits nBits );
     MenuItemBits GetItemBits( sal_uInt16 nItemId ) const;
 
@@ -319,25 +319,13 @@ public:
     void SetHelpId( const OUString& rHelpId ) { m_sMenuHelpId = rHelpId; }
     const OUString & GetHelpId() const { return m_sMenuHelpId; }
 
-    void SetActivateHdl( const Link<Menu *, bool>& rLink )
-    {
-        aActivateHdl = rLink;
-    }
+    void SetActivateHdl(const Link<Menu*, bool>& rLink) { m_aActivateHdl = rLink; }
 
-    void SetDeactivateHdl( const Link<Menu *, bool>& rLink )
-    {
-        aDeactivateHdl = rLink;
-    }
+    void SetDeactivateHdl(const Link<Menu*, bool>& rLink) { m_aDeactivateHdl = rLink; }
 
-    void  SetSelectHdl( const Link<Menu*,bool>& rLink )
-    {
-        aSelectHdl = rLink;
-    }
+    void SetSelectHdl(const Link<Menu*, bool>& rLink) { m_aSelectHdl = rLink; }
 
-    sal_uInt16 GetTitleHeight() const
-    {
-        return nTitleHeight;
-    }
+    sal_uInt16 GetTitleHeight() const { return m_nTitleHeight; }
 
     void AddEventListener( const Link<VclMenuEvent&,void>& rEventListener );
     void RemoveEventListener( const Link<VclMenuEvent&,void>& rEventListener );
@@ -345,10 +333,7 @@ public:
     Menu& operator =( const Menu& rMenu );
 
     // for menu functions
-    MenuItemList* GetItemList() const
-    {
-        return pItemList.get();
-    }
+    MenuItemList* GetItemList() const { return m_pItemList.get(); }
 
     // returns the system's menu handle if native menus are supported
     void GetSystemMenuData(SystemMenuData& rData) const;
@@ -392,12 +377,12 @@ public:
     /**
      * Sets an ID.
      */
-    void set_id(const OUString& rID) { maID = rID; }
+    void set_id(const OUString& rID) { m_aID = rID; }
 
     /**
      * Get the ID of the window.
      */
-    const OUString& get_id() const { return maID; }
+    const OUString& get_id() const { return m_aID; }
 
 private:
     rtl::Reference<comphelper::OAccessible> CreateAccessible();
@@ -516,10 +501,7 @@ public:
     /// Close the 'pStartedFrom' menu window.
     SAL_DLLPRIVATE virtual void ClosePopup(PopupMenu* pPopupMenu) override;
 
-    void SetText( const OUString& rTitle )
-    {
-        aTitleText = rTitle;
-    }
+    void SetText(const OUString& rTitle) { m_aTitleText = rTitle; }
 
     sal_uInt16 Execute(vcl::Window& rWindow, const Point& rPopupPos);
     sal_uInt16 Execute( vcl::Window* pWindow, const tools::Rectangle& rRect, PopupMenuFlags nFlags = PopupMenuFlags::NONE );

@@ -204,8 +204,8 @@ void MenuBarWindow::ShowButtons( bool bClose, bool bFloat, bool bHide )
 {
     m_aCloseBtn->ShowItem(ToolBoxItemId(IID_DOCUMENTCLOSE), bClose);
     m_aCloseBtn->Show(bClose || !m_aAddButtons.empty());
-    if (m_pMenu->mpSalMenu)
-        m_pMenu->mpSalMenu->ShowCloseButton(bClose);
+    if (m_pMenu->m_pSalMenu)
+        m_pMenu->m_pSalMenu->ShowCloseButton(bClose);
     m_aFloatBtn->Show( bFloat );
     m_aHideBtn->Show( bHide );
     Resize();
@@ -297,7 +297,7 @@ void MenuBarWindow::ImplCreatePopup( bool bPreSelectFirst )
         pData = m_pMenu->GetItemList()->GetDataFromPos( n );
         nX += pData->aSz.Width();
     }
-    pData = m_pMenu->pItemList->GetDataFromPos( m_nHighlightedItem );
+    pData = m_pMenu->m_pItemList->GetDataFromPos(m_nHighlightedItem);
     Point aItemTopLeft( nX, 0 );
     Point aItemBottomRight( aItemTopLeft );
     aItemBottomRight.AdjustX(pData->aSz.Width() );
@@ -354,12 +354,12 @@ void MenuBarWindow::KillActivePopup()
     if (pFloatWin && pFloatWin->IsInCleanUp())
         return; // kill it later
 
-    if ( m_pActivePopup->bInCallback )
-        m_pActivePopup->bCanceled = true;
+    if (m_pActivePopup->m_bInCallback)
+        m_pActivePopup->m_bCanceled = true;
 
-    m_pActivePopup->bInCallback = true;
+    m_pActivePopup->m_bInCallback = true;
     m_pActivePopup->Deactivate();
-    m_pActivePopup->bInCallback = false;
+    m_pActivePopup->m_bInCallback = false;
     // check for pActivePopup, if stopped by deactivate...
     if (m_pActivePopup->GetWindow())
     {
@@ -469,7 +469,7 @@ void MenuBarWindow::ChangeHighlightItem( sal_uInt16 n, bool bSelectEntry, bool b
         SetMBWHideAccel(ImplGetSVData()->maNWFData.mbAutoAccel);
 
     // #57934# close active popup if applicable, as TH's background storage works.
-    MenuItemData* pNextData = m_pMenu->pItemList->GetDataFromPos( n );
+    MenuItemData* pNextData = m_pMenu->m_pItemList->GetDataFromPos(n);
     if (m_pActivePopup && m_pActivePopup->GetWindow() && (!pNextData || (m_pActivePopup != pNextData->pSubMenu)))
         KillActivePopup(); // pActivePopup when applicable without pWin, if Rescheduled in  Activate()
 
@@ -498,16 +498,16 @@ void MenuBarWindow::ChangeHighlightItem( sal_uInt16 n, bool bSelectEntry, bool b
             if( !bNoSaveFocus )
                 m_xSaveFocusId = Window::SaveFocus(); // only save focus when initially activated
         }
-        m_pMenu->bInCallback = true;  // set here if Activate overridden
+        m_pMenu->m_bInCallback = true; // set here if Activate overridden
         m_pMenu->Activate();
-        m_pMenu->bInCallback = false;
+        m_pMenu->m_bInCallback = false;
         bJustActivated = true;
     }
     else if ( ( m_nHighlightedItem != ITEMPOS_INVALID ) && ( n == ITEMPOS_INVALID ) )
     {
-        m_pMenu->bInCallback = true;
+        m_pMenu->m_bInCallback = true;
         m_pMenu->Deactivate();
-        m_pMenu->bInCallback = false;
+        m_pMenu->m_bInCallback = false;
         ImplGetSVData()->mpWinData->mbNoDeactivate = false;
         if (!ImplGetSVData()->mpWinData->mbNoSaveFocus)
         {
@@ -615,14 +615,14 @@ void MenuBarWindow::HighlightItem(vcl::RenderContext& rRenderContext, sal_uInt16
         return;
 
     tools::Long nX = 0;
-    size_t nCount = m_pMenu->pItemList->size();
+    size_t nCount = m_pMenu->m_pItemList->size();
 
     Size aOutputSize = GetOutputSizePixel();
     aOutputSize.AdjustWidth( -(m_aCloseBtn->GetSizePixel().Width()) );
 
     for (size_t n = 0; n < nCount; n++)
     {
-        MenuItemData* pData = m_pMenu->pItemList->GetDataFromPos( n );
+        MenuItemData* pData = m_pMenu->m_pItemList->GetDataFromPos(n);
         if (n == nPos)
         {
             if (pData->eType != MenuItemType::SEPARATOR)
@@ -690,10 +690,10 @@ tools::Rectangle MenuBarWindow::ImplGetItemRect( sal_uInt16 nPos ) const
     if( m_pMenu )
     {
         tools::Long nX = 0;
-        size_t nCount = m_pMenu->pItemList->size();
+        size_t nCount = m_pMenu->m_pItemList->size();
         for ( size_t n = 0; n < nCount; n++ )
         {
-            MenuItemData* pData = m_pMenu->pItemList->GetDataFromPos( n );
+            MenuItemData* pData = m_pMenu->m_pItemList->GetDataFromPos(n);
             if ( n == nPos )
             {
                 if ( pData->eType != MenuItemType::SEPARATOR )
@@ -719,7 +719,7 @@ bool MenuBarWindow::HandleKeyEvent( const KeyEvent& rKEvent, bool bFromMenu )
     if (!m_pMenu)
         return false;
 
-    if (m_pMenu->bInCallback)
+    if (m_pMenu->m_bInCallback)
         return true;    // swallow
 
     bool bDone = false;
@@ -964,10 +964,10 @@ sal_uInt16 MenuBarWindow::ImplFindEntry( const Point& rMousePos ) const
     if( m_pMenu )
     {
         tools::Long nX = 0;
-        size_t nCount = m_pMenu->pItemList->size();
+        size_t nCount = m_pMenu->m_pItemList->size();
         for ( size_t n = 0; n < nCount; n++ )
         {
-            MenuItemData* pData = m_pMenu->pItemList->GetDataFromPos( n );
+            MenuItemData* pData = m_pMenu->m_pItemList->GetDataFromPos(n);
             if ( m_pMenu->ImplIsVisible( n ) )
             {
                 nX += pData->aSz.Width();
@@ -1138,8 +1138,8 @@ sal_uInt16 MenuBarWindow::AddMenuBarButton( const Image& i_rImage, const Link<Me
     ShowButtons(m_aCloseBtn->IsItemVisible(ToolBoxItemId(IID_DOCUMENTCLOSE)), m_aFloatBtn->IsVisible(), m_aHideBtn->IsVisible());
     LayoutChanged();
 
-    if( m_pMenu->mpSalMenu )
-        m_pMenu->mpSalMenu->AddMenuBarButton( SalMenuButtonItem( nId, i_rImage, i_rToolTip ) );
+    if (m_pMenu->m_pSalMenu)
+        m_pMenu->m_pSalMenu->AddMenuBarButton(SalMenuButtonItem(nId, i_rImage, i_rToolTip));
 
     return nId;
 }
@@ -1156,9 +1156,10 @@ tools::Rectangle MenuBarWindow::GetMenuBarButtonRectPixel( sal_uInt16 nId )
     tools::Rectangle aRect;
     if( m_aAddButtons.find( nId ) != m_aAddButtons.end() )
     {
-        if( m_pMenu->mpSalMenu )
+        if (m_pMenu->m_pSalMenu)
         {
-            aRect = m_pMenu->mpSalMenu->GetMenuBarButtonRectPixel( nId, ImplGetWindowImpl()->mpFrame );
+            aRect
+                = m_pMenu->m_pSalMenu->GetMenuBarButtonRectPixel(nId, ImplGetWindowImpl()->mpFrame);
             if( aRect == tools::Rectangle( Point( -1, -1 ), Size( 1, 1 ) ) )
             {
                 // system menu button is somewhere but location cannot be determined
@@ -1184,8 +1185,8 @@ void MenuBarWindow::RemoveMenuBarButton( sal_uInt16 nId )
     m_aCloseBtn->calcMinSize();
     LayoutChanged();
 
-    if( m_pMenu->mpSalMenu )
-        m_pMenu->mpSalMenu->RemoveMenuBarButton( nId );
+    if (m_pMenu->m_pSalMenu)
+        m_pMenu->m_pSalMenu->RemoveMenuBarButton(nId);
 }
 
 bool MenuBarWindow::HandleMenuButtonEvent( sal_uInt16 i_nButtonId )
