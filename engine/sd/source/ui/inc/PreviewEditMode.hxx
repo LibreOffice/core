@@ -12,6 +12,7 @@
 #pragma once
 
 #include <sddllapi.h>
+#include <sal/types.h>
 #include <svl/lstner.hxx>
 #include <unotools/weakref.hxx>
 
@@ -29,7 +30,7 @@ class DrawViewShell;
     state. Listens on the document so that removal of either object, or a geometry change of
     the selected shape, is reported to the owning view at once.
 */
-class PreviewEditMode final : public SfxListener
+class SAL_DLLPUBLIC_RTTI PreviewEditMode final : public SfxListener
 {
 public:
     PreviewEditMode(DrawViewShell& rShell, SdrPageObj& rPreview);
