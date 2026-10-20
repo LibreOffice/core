@@ -9,6 +9,7 @@
 #include <algorithm>
 #include <atomic>
 #include <cctype>
+#include <charconv>
 #include <cmath>
 #include <cstdint>
 #include <cstdlib>
@@ -19,11 +20,13 @@
 #include <fstream>
 #include <functional>
 #include <map>
+#include <optional>
 #include <regex>
 #include <set>
 #include <string>
 #include <string_view>
 #include <thread>
+#include <tuple>
 #include <vector>
 
 #include <Windows.h>
@@ -44,6 +47,7 @@
 #include <WebView2EnvironmentOptions.h>
 
 #include <wrl.h>
+#include <wrl/ftm.h>
 #include <wil/com.h>
 
 #include <Poco/AutoPtr.h>
@@ -60,6 +64,7 @@
 
 #include <common/AIHttpTransport.hpp>
 #include <common/Clipboard.hpp>
+#include <common/Common.hpp>
 #include <common/ConfigUtil.hpp>
 #include <common/JsonUtil.hpp>
 #include <common/LangUtil.hpp>
@@ -2400,19 +2405,189 @@ static void applyTitleBarThemeToAllWindows()
         applyTitleBarTheme(i.second.hWnd);
 }
 
-static HRESULT GetStreamForIFStream(std::ifstream& file, IStream** outStream)
+// A read-only IStream over the bytes [first, first + count) of another stream. WebView2 reads
+// the response body on a thread of its own, after the handler has returned, so the stream is
+// agile (FtmBase).
+class MediaRangeStream final
+    : public Microsoft::WRL::RuntimeClass<
+          Microsoft::WRL::RuntimeClassFlags<Microsoft::WRL::ClassicCom>, IStream,
+          Microsoft::WRL::FtmBase>
 {
-    std::vector<char> data((std::istreambuf_iterator<char>(file)),
-                           std::istreambuf_iterator<char>());
+public:
+    MediaRangeStream(wil::com_ptr<IStream> source, ULONGLONG first, ULONGLONG count)
+        : _source(std::move(source))
+        , _first(first)
+        , _count(count)
+    {
+    }
 
-    wil::com_ptr<IStream> stream;
-    stream.attach(SHCreateMemStream(
-        reinterpret_cast<const BYTE*>(data.data()),
-        static_cast<UINT>(data.size())));
-    if (!stream)
-        return E_OUTOFMEMORY;
-    *outStream = stream.detach();
-    return S_OK;
+    ~MediaRangeStream() override
+    {
+        LOG_DBG_S("Media range " << _first << '-' << (_first + _count - 1) << ": read " << _read
+                                 << " of " << _count << " bytes");
+    }
+
+    HRESULT STDMETHODCALLTYPE Read(void* buffer, ULONG size, ULONG* read) override
+    {
+        ULONG got = 0;
+        const ULONGLONG remaining = _count - _pos;
+        if (size > 0 && remaining > 0)
+        {
+            LARGE_INTEGER at;
+            at.QuadPart = static_cast<LONGLONG>(_first + _pos);
+            HRESULT hr = _source->Seek(at, STREAM_SEEK_SET, nullptr);
+            if (FAILED(hr))
+                return hr;
+            hr = _source->Read(buffer, static_cast<ULONG>(std::min<ULONGLONG>(size, remaining)),
+                               &got);
+            if (FAILED(hr))
+                return hr;
+            _pos += got;
+            _read += got;
+        }
+        if (read)
+            *read = got;
+        return got == size ? S_OK : S_FALSE;
+    }
+
+    HRESULT STDMETHODCALLTYPE Seek(LARGE_INTEGER move, DWORD origin,
+                                   ULARGE_INTEGER* newPosition) override
+    {
+        LONGLONG base;
+        switch (origin)
+        {
+            case STREAM_SEEK_SET:
+                base = 0;
+                break;
+            case STREAM_SEEK_CUR:
+                base = static_cast<LONGLONG>(_pos);
+                break;
+            case STREAM_SEEK_END:
+                base = static_cast<LONGLONG>(_count);
+                break;
+            default:
+                return STG_E_INVALIDFUNCTION;
+        }
+        const LONGLONG target = base + move.QuadPart;
+        if (target < 0 || static_cast<ULONGLONG>(target) > _count)
+            return STG_E_INVALIDFUNCTION;
+        _pos = static_cast<ULONGLONG>(target);
+        if (newPosition)
+            newPosition->QuadPart = _pos;
+        return S_OK;
+    }
+
+    HRESULT STDMETHODCALLTYPE Stat(STATSTG* stat, DWORD /*flags*/) override
+    {
+        if (!stat)
+            return STG_E_INVALIDPOINTER;
+        *stat = {};
+        stat->type = STGTY_STREAM;
+        stat->cbSize.QuadPart = _count;
+        stat->grfMode = STGM_READ;
+        return S_OK;
+    }
+
+    HRESULT STDMETHODCALLTYPE Write(const void*, ULONG, ULONG*) override
+    {
+        return STG_E_ACCESSDENIED;
+    }
+    HRESULT STDMETHODCALLTYPE SetSize(ULARGE_INTEGER) override { return E_NOTIMPL; }
+    HRESULT STDMETHODCALLTYPE CopyTo(IStream*, ULARGE_INTEGER, ULARGE_INTEGER*,
+                                     ULARGE_INTEGER*) override
+    {
+        return E_NOTIMPL;
+    }
+    HRESULT STDMETHODCALLTYPE Commit(DWORD) override { return E_NOTIMPL; }
+    HRESULT STDMETHODCALLTYPE Revert() override { return E_NOTIMPL; }
+    HRESULT STDMETHODCALLTYPE LockRegion(ULARGE_INTEGER, ULARGE_INTEGER, DWORD) override
+    {
+        return E_NOTIMPL;
+    }
+    HRESULT STDMETHODCALLTYPE UnlockRegion(ULARGE_INTEGER, ULARGE_INTEGER, DWORD) override
+    {
+        return E_NOTIMPL;
+    }
+    HRESULT STDMETHODCALLTYPE Clone(IStream**) override { return E_NOTIMPL; }
+
+private:
+    wil::com_ptr<IStream> _source;
+    const ULONGLONG _first;
+    const ULONGLONG _count;
+    ULONGLONG _pos = 0;
+    ULONGLONG _read = 0;
+};
+
+// The [first, end) of a "bytes=first-last", "bytes=first-" or "bytes=-count" Range header in a
+// file of the given size, or nothing when the header is malformed or unsatisfiable.
+static std::optional<std::pair<ULONGLONG, ULONGLONG>> parseByteRange(std::string_view header,
+                                                                     ULONGLONG size)
+{
+    constexpr std::string_view prefix = "bytes=";
+    if (!header.starts_with(prefix) || header.find(',') != std::string_view::npos)
+        return std::nullopt;
+    header.remove_prefix(prefix.size());
+
+    const size_t dash = header.find('-');
+    if (dash == std::string_view::npos)
+        return std::nullopt;
+    const std::string_view firstText = header.substr(0, dash);
+    const std::string_view lastText = header.substr(dash + 1);
+
+    // Either side may be empty; a side that is present has to be a number.
+    const auto number = [](std::string_view text)
+    {
+        std::optional<ULONGLONG> result;
+        ULONGLONG value = 0;
+        const auto [end, error] = std::from_chars(text.data(), text.data() + text.size(), value);
+        if (error == std::errc() && end == text.data() + text.size())
+            result = value;
+        return result;
+    };
+    std::optional<ULONGLONG> first, last;
+    if (!firstText.empty() && !(first = number(firstText)))
+        return std::nullopt;
+    if (!lastText.empty() && !(last = number(lastText)))
+        return std::nullopt;
+
+    if (!first && !last)
+        return std::nullopt;
+    if (!first)
+    {
+        // The last *last bytes of the file.
+        if (*last == 0 || size == 0)
+            return std::nullopt;
+        return std::make_pair(*last >= size ? 0 : size - *last, size);
+    }
+    if (*first >= size)
+        return std::nullopt;
+    if (!last)
+        return std::make_pair(*first, size);
+    if (*last < *first)
+        return std::nullopt;
+    return std::make_pair(*first, *last >= size - 1 ? size : *last + 1);
+}
+
+// WebView2 reads an abandoned response stream to its end, so a Range response is capped at
+// this size. Chromium accepts a short 206 on an http(s) URL only, see CODA_MEDIA_HOST.
+constexpr ULONGLONG kMediaResponseChunk = 4 * 1024 * 1024;
+
+// Answers a media request with a status and no body.
+static HRESULT respondWithoutBody(ICoreWebView2Environment* env,
+                                  ICoreWebView2WebResourceRequestedEventArgs* args, int status,
+                                  const wchar_t* reason, const std::wstring& extraHeaders)
+{
+    const std::wstring headers =
+        L"Access-Control-Allow-Origin: *\r\nContent-Length: 0\r\n" + extraHeaders;
+    wil::com_ptr<ICoreWebView2WebResourceResponse> response;
+    HRESULT hr = env->CreateWebResourceResponse(nullptr, status, reason, headers.c_str(),
+                                                &response);
+    if (!SUCCEEDED(hr))
+    {
+        LOG_ERR_S("CreateWebResourceResponse() failed");
+        return hr;
+    }
+    return args->put_Response(response.get());
 }
 
 static HRESULT webResourceRequestedHandler(ICoreWebView2Environment* env,
@@ -2442,8 +2617,10 @@ static HRESULT webResourceRequestedHandler(ICoreWebView2Environment* env,
     Poco::URI::QueryParameters params = requestUri.getQueryParameters();
     std::string wopiSrc, tag;
 
-    const bool isMedia = requestUri.getPath() == "/media";
-    const bool isVtt = requestUri.getPath() == "/mediavtt";
+    // Under the cool: scheme the leading "cool" of the path becomes the host.
+    const std::string& path = requestUri.getPath();
+    const bool isMedia = path == "/media" || path == "/cool/media";
+    const bool isVtt = path == "/mediavtt" || path == "/cool/mediavtt";
 
     if (!isMedia && !isVtt)
     {
@@ -2494,11 +2671,13 @@ static HRESULT webResourceRequestedHandler(ICoreWebView2Environment* env,
         return E_FAIL;
     }
 
-    std::string mediaPath = docBroker->getEmbeddedMediaPath(tag);
+    // The same fields as ClientRequestDispatcher::handleMediaRequest(); most media has no "str".
+    const char* field = isVtt ? "str" : "url";
+    std::string mediaPath = docBroker->getEmbeddedMediaPath(tag, field);
     if (mediaPath.empty())
     {
-        LOG_ERR_S("No media path for tag [" << tag << ']');
-        return E_FAIL;
+        LOG_DBG_S("No media path for tag [" << tag << "] field [" << field << ']');
+        return respondWithoutBody(env, args, 404, L"Not Found", L"");
     }
 
     // Yes, the same code snippet once again. FIXME: Should
@@ -2507,27 +2686,72 @@ static HRESULT webResourceRequestedHandler(ICoreWebView2Environment* env,
         mediaPath[2] == ':' && mediaPath[3] == '/')
         mediaPath = mediaPath.substr(1);
 
-    std::ifstream file;
-    FileUtil::openFileToIFStream(mediaPath, file);
-    if (!file.is_open())
+    wil::com_ptr<IStream> fileStream;
+    hr = SHCreateStreamOnFileEx(Util::string_to_wide_string(mediaPath).c_str(),
+                                STGM_READ | STGM_SHARE_DENY_NONE, FILE_ATTRIBUTE_NORMAL, FALSE,
+                                nullptr, &fileStream);
+    if (!SUCCEEDED(hr))
     {
-        LOG_ERR_S("Cannot open [" << mediaPath << "]");
-        return E_FAIL;
+        LOG_ERR_S("Cannot open [" << mediaPath << "]: " << hr);
+        return respondWithoutBody(env, args, 404, L"Not Found", L"");
     }
 
-    const std::wstring mimeType = (isVtt ? L"text/vtt" : L"application/octet-stream");
-    wil::com_ptr<IStream> contentStream;
-    hr = GetStreamForIFStream(file, &contentStream);
+    STATSTG fileStat{};
+    hr = fileStream->Stat(&fileStat, STATFLAG_NONAME);
     if (!SUCCEEDED(hr))
-        return hr;
+    {
+        LOG_ERR_S("Cannot stat [" << mediaPath << "]: " << hr);
+        return respondWithoutBody(env, args, 404, L"Not Found", L"");
+    }
+    const ULONGLONG size = fileStat.cbSize.QuadPart;
+
+    std::wstring headers = L"Content-Type: ";
+    headers += isVtt ? L"text/vtt" : L"application/octet-stream";
+    headers += L"\r\nAccess-Control-Allow-Origin: *\r\nAccept-Ranges: bytes\r\n"
+               L"Cache-Control: no-store\r\n";
+
+    int status = 200;
+    const wchar_t* reason = L"OK";
+    ULONGLONG first = 0;
+    ULONGLONG end = size;
+    wil::com_ptr<ICoreWebView2HttpRequestHeaders> requestHeaders;
+    BOOL hasRange = FALSE;
+    if (SUCCEEDED(request->get_Headers(&requestHeaders)) &&
+        SUCCEEDED(requestHeaders->Contains(L"Range", &hasRange)) && hasRange)
+    {
+        wil::unique_cotaskmem_string range;
+        if (SUCCEEDED(requestHeaders->GetHeader(L"Range", &range)))
+        {
+            const auto requested =
+                parseByteRange(Util::wide_string_to_string(range.get()), size);
+            if (!requested)
+            {
+                LOG_WRN_S("Unsatisfiable range [" << Util::wide_string_to_string(range.get())
+                                                   << "] for [" << mediaPath << "] of " << size
+                                                   << " bytes");
+                return respondWithoutBody(env, args, 416, L"Range Not Satisfiable",
+                                          L"Content-Range: bytes */" + std::to_wstring(size) +
+                                              L"\r\n");
+            }
+            std::tie(first, end) = *requested;
+            end = std::min<ULONGLONG>(end, first + kMediaResponseChunk);
+            status = 206;
+            reason = L"Partial Content";
+            LOG_DBG_S("Media request for bytes " << first << '-' << (end - 1) << " of " << size
+                                                 << " [" << mediaPath << ']');
+            headers += L"Content-Range: bytes " + std::to_wstring(first) + L'-' +
+                       std::to_wstring(end - 1) + L'/' + std::to_wstring(size) + L"\r\n";
+        }
+    }
+    headers += L"Content-Length: " + std::to_wstring(end - first) + L"\r\n";
+
+    wil::com_ptr<IStream> contentStream = fileStream;
+    if (status == 206)
+        contentStream = Microsoft::WRL::Make<MediaRangeStream>(fileStream, first, end - first).Get();
 
     wil::com_ptr<ICoreWebView2WebResourceResponse> response;
-    hr = env->CreateWebResourceResponse(
-        contentStream.get(),
-        200, L"OK",
-        (L"Content-Type: " + mimeType + L"\r\n" +
-         L"Access-Control-Allow-Origin: *\r\n").c_str(),
-        &response);
+    hr = env->CreateWebResourceResponse(contentStream.get(), status, reason, headers.c_str(),
+                                        &response);
     if (!SUCCEEDED(hr))
     {
         LOG_ERR_S("CreateWebResourceResponse() failed");
@@ -4175,6 +4399,20 @@ static void createDocumentView(int tabId)
                         if (!SUCCEEDED(hr))
                         {
                             LOG_ERR_S("AddWebResourceRequestedFilterWithRequestSourceKinds() failed");
+                            return hr;
+                        }
+
+                        // Embedded media has its own https host, see CODA_MEDIA_HOST.
+                        hr = (webView22->AddWebResourceRequestedFilterWithRequestSourceKinds(
+                                  (L"https://" + Util::string_to_wide_string(CODA_MEDIA_HOST) +
+                                   L"/*")
+                                      .c_str(),
+                                  COREWEBVIEW2_WEB_RESOURCE_CONTEXT_ALL,
+                                  COREWEBVIEW2_WEB_RESOURCE_REQUEST_SOURCE_KINDS_ALL));
+                        if (!SUCCEEDED(hr))
+                        {
+                            LOG_ERR_S("AddWebResourceRequestedFilterWithRequestSourceKinds() for "
+                                      "the media host failed");
                             return hr;
                         }
 

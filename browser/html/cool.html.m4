@@ -47,7 +47,7 @@ m4_dnl# coolwsd sends the Content-Security-Policy as a header with the page it s
 m4_dnl# the page from a local file, so the policy is in this meta tag. It comes before every script
 m4_dnl# and stylesheet, because a meta policy covers only what follows it.
 m4_ifelse(APP, [true], [m4_ifelse(EMSCRIPTENAPP, [true], [],
-[<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' file: m4_ifelse(QTAPP, [true], [qrc: ])'unsafe-eval'; style-src 'self' file:; font-src 'self' file:; img-src 'self' file: data: blob: cool: https://www.collaboraoffice.com/; media-src 'self' file: blob: cool:; connect-src 'self' file: cool: https: wss:; frame-src 'self' file: blob: https:; object-src 'self' file:">
+[<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' file: m4_ifelse(QTAPP, [true], [qrc: ])'unsafe-eval'; style-src 'self' file:; font-src 'self' file:; img-src 'self' file: data: blob: cool: https://www.collaboraoffice.com/; media-src 'self' file: blob: cool:m4_ifelse(WINDOWSAPP, [true], [ https://coda-media.invalid]); connect-src 'self' file: cool: https: wss:; frame-src 'self' file: blob: https:; object-src 'self' file:">
 ])])m4_dnl
 m4_ifelse(APP, [true],
 [

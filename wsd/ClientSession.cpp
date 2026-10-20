@@ -325,11 +325,18 @@ std::string ClientSession::createPublicURI(const std::string& subPath, const std
 
     const std::string encodedFrom = Uri::encode(wopiSrc.toString());
 
-    std::string meta = _serverURL.getSubURLForEndpoint(
-        "/cool/" + subPath + "?WOPISrc=" + encodedFrom +
-        "&ServerId=" + Util::getProcessIdentifier() +
-        "&ViewId=" + std::to_string(getKitViewId()) +
-        "&Tag=" + tag);
+    const std::string path = "/cool/" + subPath + "?WOPISrc=" + encodedFrom +
+                             "&ServerId=" + Util::getProcessIdentifier() +
+                             "&ViewId=" + std::to_string(getKitViewId()) + "&Tag=" + tag;
+
+    std::string meta;
+#if MOBILEAPP && defined(_WIN32)
+    // The Windows app serves media from an https host of its own, see CODA_MEDIA_HOST.
+    if (subPath == "media" || subPath == "mediavtt")
+        meta = "https://" + std::string(CODA_MEDIA_HOST) + path;
+    else
+#endif
+        meta = _serverURL.getSubURLForEndpoint(path);
 
 #if !MOBILEAPP
     if (!COOLWSD::RouteToken.empty())

@@ -789,7 +789,9 @@ public:
     /// Remove embedded media objects.
     void removeEmbeddedMedia(const std::string& json);
 
-    std::string getEmbeddedMediaPath(const std::string& id);
+    /// The path of a file of an embedded media object: its media file for the "url" field, or
+    /// its subtitle file for the "str" field, which only some media objects have.
+    std::string getEmbeddedMediaPath(const std::string& id, const std::string& field = "url");
     /// Returns the absolute media path given the local path of the media file.
     std::string getAbsoluteMediaPath(std::string localPath);
 

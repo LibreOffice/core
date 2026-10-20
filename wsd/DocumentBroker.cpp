@@ -7984,7 +7984,7 @@ void DocumentBroker::removeEmbeddedMedia(const std::string& json)
 // on iOS this works through CoolURLSchemeHandler.mm, which handles cool:/cool/media?Tag=... requests in much the same way as
 // https://.../cool/media?Tag=... would be handled by COOLWSD on a server. As part of that, we need to get the media path from
 // the tag using this function
-std::string DocumentBroker::getEmbeddedMediaPath(const std::string& id)
+std::string DocumentBroker::getEmbeddedMediaPath(const std::string& id, const std::string& field)
 {
     const auto it = _embeddedMedia.find(id);
 
@@ -7994,7 +7994,7 @@ std::string DocumentBroker::getEmbeddedMediaPath(const std::string& id)
         return std::string();
     }
 
-    LOG_DBG("Media: " << it->second);
+    LOG_TRC("Media: " << it->second);
     Poco::JSON::Object::Ptr object;
 
     if (!JsonUtil::parseJSON(it->second, object))
@@ -8009,7 +8009,12 @@ std::string DocumentBroker::getEmbeddedMediaPath(const std::string& id)
         return std::string();
     }
 
-    const std::string url = JsonUtil::getJSONValue<std::string>(object, "url");
+    const std::string url = JsonUtil::getJSONValue<std::string>(object, field);
+    if (url.empty())
+    {
+        LOG_DBG("Media object in Doc [" << _docId << "] with tag [" << id << "] has no [" << field << ']');
+        return std::string();
+    }
 
     if (!Util::toLower(url).starts_with("file://"))
     {

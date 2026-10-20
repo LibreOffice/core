@@ -11,8 +11,9 @@
 
 #pragma once
 
-#include <vector>
 #include <memory>
+#include <string_view>
+#include <vector>
 
 // Default values and other shared data between processes.
 
@@ -34,6 +35,12 @@
 #else
 #define APP_HAS_SETTINGS_STORE 0
 #endif
+
+// The Windows app answers requests for embedded media on this host itself. Media needs an
+// https URL rather than the page's cool: scheme, because Chromium's media loader honours
+// Content-Range on http(s) only. Nothing under .invalid resolves. The page's
+// Content-Security-Policy in cool.html.m4 allows media from this host too.
+constexpr std::string_view CODA_MEDIA_HOST = "coda-media.invalid";
 
 constexpr int DEFAULT_CLIENT_PORT_NUMBER = 9980;
 
