@@ -748,6 +748,14 @@ label.notebookbar.ui-checkbox-label {
 	align-self: start;
 }
 
+/* The engine draws every preview 100 by 30 CSS pixels, at the display
+   density, so the image has its size before it loads. */
+.jsdialog #stylesview .ui-iconview-entry img,
+.notebookbar #stylesview .ui-iconview-entry img {
+	width: 100px;
+	height: 30px;
+}
+
 .ui-iconview-window {
 	display: flex;
 	flex-direction: row;

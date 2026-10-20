@@ -129,12 +129,10 @@ describe(['tagdesktop'], 'Stylesview Iconview Tests', { testIsolation: false }, 
 
 		cy.cGet('.notebookbar #stylesview .ui-iconview-entry img').should('have.length.greaterThan', 1);
 		cy.cGet('.notebookbar #stylesview .ui-iconview-entry img').should(function($images) {
-			// This run cannot change the display density, so the size the preview
-			// is scaled to is read rather than the pixels it covers.
 			var ratio = $images[0].ownerDocument.defaultView.devicePixelRatio;
 			$images.each(function(index, img) {
 				expect(img.naturalWidth, 'preview ' + index + ' is loaded').to.be.greaterThan(0);
-				expect(parseFloat(img.style.width), 'width of preview ' + index)
+				expect(img.getBoundingClientRect().width, 'width of preview ' + index)
 					.to.be.closeTo(img.naturalWidth / ratio, 1);
 				expect(img.hasAttribute('data-cooltip'), 'preview ' + index + ' has a tooltip').to.equal(true);
 			});
