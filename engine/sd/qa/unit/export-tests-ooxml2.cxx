@@ -27,7 +27,6 @@
 #include <com/sun/star/text/XTextColumns.hpp>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
-#include <svx/ColorSets.hxx>
 
 #include <rtl/character.hxx>
 #include <o3tl/string_view.hxx>
@@ -503,11 +502,8 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf132472)
 
     xCell.set(xTable->getCellByPosition(0, 0), uno::UNO_QUERY_THROW);
     xCell->getPropertyValue(u"FillColor"_ustr) >>= nColor;
-    // Fill color is set to default (from style).
-    auto* pColorSet = svx::ColorSets::getDefault();
-    CPPUNIT_ASSERT(pColorSet);
-    auto aAccent1 = pColorSet->getColor(model::ThemeColorType::Accent1);
-    CPPUNIT_ASSERT_EQUAL(aAccent1, nColor);
+    // Fill color is set to default (from style), which is accent1 of the file theme.
+    CPPUNIT_ASSERT_EQUAL(Color(0x4F81BD), nColor);
     drawing::FillStyle aFillStyle(drawing::FillStyle_NONE);
     xCell->getPropertyValue(u"FillStyle"_ustr) >>= aFillStyle;
     // But fill style is NONE anyway.

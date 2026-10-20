@@ -1875,6 +1875,40 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf173682_tableStyleFlags)
     checkFlags();
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testNewShapeTakesFileThemeColor)
+{
+    // The theme of the file gives accent1 the color 05326E. A new shape takes accent1 of that theme
+    // for its fill and a darker accent1 for its line, and keeps both colors after a round trip. The
+    // darker shade is computed again on reload, and that can round a channel by one step.
+    createSdImpressDoc("pptx/master-bg-color.pptx");
+    uno::Reference<drawing::XDrawPage> xPage(getPage(0));
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr), uno::UNO_QUERY);
+    xPage->add(xShape);
+    xShape->setSize(awt::Size(5000, 3000));
+    xShape->setPosition(awt::Point(1000, 1000));
+    uno::Reference<beans::XPropertySet> xShapeProps(xShape, uno::UNO_QUERY);
+    Color nFillColor;
+    xShapeProps->getPropertyValue(u"FillColor"_ustr) >>= nFillColor;
+    CPPUNIT_ASSERT_EQUAL(Color(0x05326E), nFillColor);
+    Color nLineColor;
+    xShapeProps->getPropertyValue(u"LineColor"_ustr) >>= nLineColor;
+    CPPUNIT_ASSERT(nLineColor != Color(0x05326E));
+
+    saveAndReload(TestFilter::PPTX);
+
+    xPage = getPage(0);
+    xShapeProps.set(xPage->getByIndex(xPage->getCount() - 1), uno::UNO_QUERY_THROW);
+    xShapeProps->getPropertyValue(u"FillColor"_ustr) >>= nFillColor;
+    CPPUNIT_ASSERT_EQUAL(Color(0x05326E), nFillColor);
+    Color nReloadedLineColor;
+    xShapeProps->getPropertyValue(u"LineColor"_ustr) >>= nReloadedLineColor;
+    CPPUNIT_ASSERT_LESSEQUAL(1, std::abs(nLineColor.GetRed() - nReloadedLineColor.GetRed()));
+    CPPUNIT_ASSERT_LESSEQUAL(1, std::abs(nLineColor.GetGreen() - nReloadedLineColor.GetGreen()));
+    CPPUNIT_ASSERT_LESSEQUAL(1, std::abs(nLineColor.GetBlue() - nReloadedLineColor.GetBlue()));
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -51,7 +51,13 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
+#include <com/sun/star/beans/XPropertyState.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
+#include <com/sun/star/util/XComplexColor.hpp>
 
+#include <docmodel/theme/ColorSet.hxx>
+#include <docmodel/theme/Theme.hxx>
+#include <docmodel/uno/UnoComplexColor.hxx>
 #include <oox/drawingml/theme.hxx>
 #include <oox/drawingml/drawingmltypes.hxx>
 #include <oox/drawingml/themefragmenthandler.hxx>
@@ -233,6 +239,56 @@ void lcl_insertModernComments(const std::vector<ModernComment>& rComments,
             }
         }
         aInserted.push_back(xInserted);
+    }
+}
+
+/** Gives each theme color of the drawing styles the color it has in the theme of the file.
+
+    The drawing styles start with the colors of the built-in theme, and a shape drawn later takes
+    them. Its theme colors are saved as references to the theme of the file, so the color the shape
+    shows has to come from that theme too.
+ */
+void lcl_applyThemeToDrawingStyles(const Reference<frame::XModel>& xModel,
+                                   const model::ColorSet& rColorSet)
+{
+    Reference<style::XStyleFamiliesSupplier> xFamiliesSupplier(xModel, UNO_QUERY);
+    if (!xFamiliesSupplier.is())
+        return;
+    Reference<container::XNameAccess> xFamilies = xFamiliesSupplier->getStyleFamilies();
+    if (!xFamilies->hasByName(u"graphics"_ustr))
+        return;
+    Reference<container::XNameAccess> xStyles(xFamilies->getByName(u"graphics"_ustr),
+                                              UNO_QUERY_THROW);
+    for (const OUString& rStyleName : xStyles->getElementNames())
+    {
+        Reference<beans::XPropertySet> xStyle(xStyles->getByName(rStyleName), UNO_QUERY);
+        Reference<beans::XPropertyState> xState(xStyle, UNO_QUERY);
+        if (!xStyle.is() || !xState.is())
+            continue;
+        Reference<beans::XPropertySetInfo> xInfo = xStyle->getPropertySetInfo();
+        for (const auto& [rColorName, rComplexColorName] :
+             { std::pair(u"FillColor"_ustr, u"FillComplexColor"_ustr),
+               std::pair(u"LineColor"_ustr, u"LineComplexColor"_ustr),
+               std::pair(u"CharColor"_ustr, u"CharComplexColor"_ustr) })
+        {
+            if (!xInfo->hasPropertyByName(rColorName)
+                || !xInfo->hasPropertyByName(rComplexColorName)
+                || xState->getPropertyState(rComplexColorName) != beans::PropertyState_DIRECT_VALUE)
+                continue;
+            Reference<util::XComplexColor> xComplexColor;
+            xStyle->getPropertyValue(rComplexColorName) >>= xComplexColor;
+            if (!xComplexColor.is())
+                continue;
+            model::ComplexColor aComplexColor = model::color::getFromXComplexColor(xComplexColor);
+            if (!aComplexColor.isValidThemeType())
+                continue;
+            ::Color aColor = rColorSet.resolveOOXMLColor(aComplexColor);
+            aComplexColor.setFinalColor(aColor);
+            // A new plain color clears the theme color, so the theme color is set after it.
+            xStyle->setPropertyValue(rColorName, Any(aColor));
+            xStyle->setPropertyValue(rComplexColorName,
+                                     Any(model::color::createXComplexColor(aComplexColor)));
+        }
     }
 }
 } // end anonymous ns
@@ -655,6 +711,21 @@ void PresentationFragmentHandler::importMasterSlides()
     {
         aMasterFragmentPath = getFragmentPathFromRelId(maSlideMasterVector[nMaster]);
         importMasterSlide(xModel, rFilter, aMasterFragmentPath);
+    }
+
+    // The styles are shared by all the master pages, so they take the theme of the first one.
+    if (rFilter.getMasterPages().empty())
+        return;
+    oox::drawingml::ThemePtr pTheme = rFilter.getMasterPages().front()->getTheme();
+    if (!pTheme || !pTheme->getTheme() || !pTheme->getTheme()->getColorSet())
+        return;
+    try
+    {
+        lcl_applyThemeToDrawingStyles(xModel, *pTheme->getTheme()->getColorSet());
+    }
+    catch (const cpo::uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("oox", "oox::ppt::PresentationFragmentHandler::importMasterSlides");
     }
 }
 
