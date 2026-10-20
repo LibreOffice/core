@@ -92,4 +92,18 @@ describe(['tagdesktop'], 'Writer content controls for the reader', { testIsolati
 			expect($area.text(), 'the item chosen').to.contain('big size.');
 		});
 	});
+
+	it('Space toggles a checkbox entered after a drop-down list', function () {
+		// out of the drop-down list the previous test chose from, into the checkbox; Ctrl stays
+		// held for the rest of a typeIntoDocument()
+		helper.typeIntoDocument('{ctrl}{home}');
+		helper.typeIntoDocument('{rightarrow}'.repeat(8));
+		cy.then(function () {
+			return helper.processToIdle(win);
+		});
+
+		cy.realPress('Space');
+		cy.cGet('#clipboard-area [role="checkbox"]').should('have.attr', 'aria-checked', 'true');
+		cy.cGet('.jsdialog-window.modalpopup').should('not.exist');
+	});
 });

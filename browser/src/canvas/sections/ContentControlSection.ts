@@ -177,6 +177,7 @@ export class ContentControlSection extends CanvasSectionObject {
 	private removeDropdownSection() {
 		if (this.sectionProperties.dropdownSection)
 			app.sectionContainer.removeSection(this.sectionProperties.dropdownSection.name);
+		this.sectionProperties.dropdownSection = null;
 	}
 
 	private addDropDownSection(): void {
