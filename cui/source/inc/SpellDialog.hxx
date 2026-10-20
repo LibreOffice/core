@@ -49,7 +49,6 @@ struct ImplSVEvent;
 
 // forward ---------------------------------------------------------------
 
-struct SpellDialog_Impl;
 namespace com::sun::star::linguistic2 { class XSpellChecker1; }
 
 namespace svx{
@@ -142,13 +141,6 @@ public:
 class SpellDialogChildWindow;
 class DictionaryEventListener;
 
-// struct SpellDialog_Impl ---------------------------------------------
-
-struct SpellDialog_Impl
-{
-    css::uno::Sequence<css::uno::Reference<css::linguistic2::XDictionary>> aDics;
-};
-
 class SpellDialog : public SfxModelessDialogController
 {
     friend class SentenceEditWindow_Impl;
@@ -167,7 +159,7 @@ private:
     svx::SpellDialogChildWindow& m_rParent;
     svx::SpellPortions           m_aSavedSentence;
 
-    SpellDialog_Impl m_aImpl;
+    css::uno::Sequence<css::uno::Reference<css::linguistic2::XDictionary>> m_aDicts;
     css::uno::Reference<css::linguistic2::XSpellChecker1> m_xSpell;
 
     rtl::Reference<DictionaryEventListener> m_xChangeAllDictListener;

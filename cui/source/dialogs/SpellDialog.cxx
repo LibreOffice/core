@@ -841,7 +841,7 @@ int SpellDialog::InitUserDicts()
         if (xDic.is())
             xDic->setActive( true );
 
-        m_aImpl.aDics = xDicList->getDictionaries();
+        m_aDicts = xDicList->getDictionaries();
     }
 
     SvtLinguConfig aCfg;
@@ -851,7 +851,7 @@ int SpellDialog::InitUserDicts()
     m_xAddToDictMB->clear();
     m_aDictIdToName.clear();
     sal_uInt16 nItemId = 1;     // menu items should be enumerated from 1 and not 0
-    for (auto& xDicTmp : m_aImpl.aDics)
+    for (auto& xDicTmp : m_aDicts)
     {
         if (!xDicTmp.is() || LinguMgr::GetIgnoreAllList() == xDicTmp)
             continue;
