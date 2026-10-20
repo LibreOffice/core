@@ -2,6 +2,26 @@
 <!-- Generated with glade 3.40.0 -->
 <interface domain="sd">
   <requires lib="gtk+" version="3.24"/>
+  <object class="GtkTreeStore" id="iconview1_model">
+    <columns>
+      <!-- column-name pixbuf -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name tooltip -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
+  <object class="GtkTreeStore" id="iconview2_model">
+    <columns>
+      <!-- column-name pixbuf -->
+      <column type="GdkPixbuf"/>
+      <!-- column-name id -->
+      <column type="gchararray"/>
+      <!-- column-name tooltip -->
+      <column type="gchararray"/>
+    </columns>
+  </object>
   <object class="GtkPopover" id="DisplayWindow">
     <property name="can-focus">False</property>
     <property name="no-show-all">True</property>
@@ -22,30 +42,15 @@
             <property name="label-xalign">0</property>
             <property name="shadow-type">none</property>
             <child>
-              <object class="GtkScrolledWindow" id="valuesetwin1">
+              <object class="GtkIconView" id="iconview1">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
-                <property name="margin-top">6</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-                <property name="hscrollbar-policy">never</property>
-                <property name="vscrollbar-policy">never</property>
-                <property name="shadow-type">in</property>
-                <child>
-                  <object class="GtkViewport">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <child>
-                      <object class="GtkDrawingArea" id="valueset1">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
+                <property name="margin">6</property>
+                <property name="model">iconview1_model</property>
+                <property name="columns">2</property>
+                <property name="pixbuf-column">0</property>
+                <property name="tooltip-column">2</property>
+                <property name="activate-on-single-click">True</property>
               </object>
             </child>
             <child type="label">
@@ -74,30 +79,15 @@
             <property name="label-xalign">0</property>
             <property name="shadow-type">none</property>
             <child>
-              <object class="GtkScrolledWindow" id="valuesetwin2">
+              <object class="GtkIconView" id="iconview2">
                 <property name="visible">True</property>
                 <property name="can-focus">True</property>
-                <property name="margin-top">6</property>
-                <property name="hexpand">True</property>
-                <property name="vexpand">True</property>
-                <property name="hscrollbar-policy">never</property>
-                <property name="vscrollbar-policy">never</property>
-                <property name="shadow-type">in</property>
-                <child>
-                  <object class="GtkViewport">
-                    <property name="visible">True</property>
-                    <property name="can-focus">False</property>
-                    <child>
-                      <object class="GtkDrawingArea" id="valueset2">
-                        <property name="visible">True</property>
-                        <property name="can-focus">True</property>
-                        <property name="events">GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK</property>
-                        <property name="hexpand">True</property>
-                        <property name="vexpand">True</property>
-                      </object>
-                    </child>
-                  </object>
-                </child>
+                <property name="margin">6</property>
+                <property name="model">iconview2_model</property>
+                <property name="columns">2</property>
+                <property name="pixbuf-column">0</property>
+                <property name="tooltip-column">2</property>
+                <property name="activate-on-single-click">True</property>
               </object>
             </child>
             <child type="label">

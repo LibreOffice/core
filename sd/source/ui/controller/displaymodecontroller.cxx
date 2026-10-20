@@ -9,13 +9,12 @@
 
 #include <svtools/popupwindowcontroller.hxx>
 #include <svtools/toolbarmenu.hxx>
-#include <svtools/valueset.hxx>
 #include <vcl/image.hxx>
 #include <vcl/toolbox.hxx>
 #include <vcl/weld/Builder.hxx>
 #include <vcl/weld/Frame.hxx>
+#include <vcl/weld/IconView.hxx>
 #include <vcl/weld/Toolbar.hxx>
-#include <vcl/weld/ScrolledWindow.hxx>
 #include <vcl/weld/Window.hxx>
 
 #include <strings.hrc>
@@ -59,21 +58,16 @@ class DisplayModeToolbarMenu final : public WeldToolbarPopup
 {
 public:
     DisplayModeToolbarMenu(DisplayModeController* pControl, weld::Widget* pParent);
-    virtual void GrabFocus() override
-    {
-        mxDisplayModeSet1->GrabFocus();
-    }
+    virtual void GrabFocus() override { mxDisplayModeIconView1->grab_focus(); }
 
 private:
     rtl::Reference<DisplayModeController> mxControl;
     std::unique_ptr<weld::Frame> mxFrame1;
-    std::unique_ptr<ValueSet> mxDisplayModeSet1;
-    std::unique_ptr<weld::CustomWeld> mxDisplayModeSetWin1;
+    std::unique_ptr<weld::IconView> mxDisplayModeIconView1;
     std::unique_ptr<weld::Frame> mxFrame2;
-    std::unique_ptr<ValueSet> mxDisplayModeSet2;
-    std::unique_ptr<weld::CustomWeld> mxDisplayModeSetWin2;
+    std::unique_ptr<weld::IconView> mxDisplayModeIconView2;
 
-    DECL_LINK(SelectValueSetHdl, ValueSet*, void);
+    DECL_LINK(ItemActivatedHdl, const weld::TreeIter&, bool);
 };
 
 struct snew_slide_value_info
@@ -95,72 +89,56 @@ constexpr snew_slide_value_info mastermodes[]
         { BMP_DISPLAYMODE_NOTES_MASTER, STR_NOTES_MASTER_MODE, u".uno:NotesMasterPage"_ustr },
         { BMP_DISPLAYMODE_HANDOUT_MASTER, STR_HANDOUT_MASTER_MODE, u".uno:HandoutMode"_ustr } };
 
-static void fillLayoutValueSet(ValueSet* pValue, std::span<const snew_slide_value_info> aInfos)
+static void fillLayoutIconView(weld::IconView& rIconView,
+                               std::span<const snew_slide_value_info> aInfos)
 {
-    Size aLayoutItemSize;
-
-    sal_uInt16 nItemId = 1;
+    int nIndex = 0;
     for (const snew_slide_value_info& rInfo : aInfos)
     {
         OUString aText(SdResId(rInfo.mpStrResId));
         Bitmap aBmp(rInfo.msBmpResId);
 
-        pValue->InsertItem(nItemId, Image(aBmp), aText);
+        rIconView.insert(nIndex, nullptr, nullptr, &aBmp, nullptr);
+        rIconView.set_item_accessible_name(nIndex, aText);
+        rIconView.set_item_tooltip_text(nIndex, aText);
 
-        aLayoutItemSize.setWidth( std::max( aLayoutItemSize.Width(),  aBmp.GetSizePixel().Width()  ) );
-        aLayoutItemSize.setHeight( std::max( aLayoutItemSize.Height(), aBmp.GetSizePixel().Height() ) );
-
-        nItemId++;
+        ++nIndex;
     }
-
-    aLayoutItemSize = pValue->CalcItemSizePixel( aLayoutItemSize );
-    Size aSize(pValue->CalcWindowSizePixel(aLayoutItemSize));
-
-    const sal_Int32 LAYOUT_BORDER_PIX = 7;
-    aSize.AdjustWidth((pValue->GetColCount() + 1) * LAYOUT_BORDER_PIX );
-    aSize.AdjustHeight((pValue->GetLineCount() +1) * LAYOUT_BORDER_PIX );
-
-    pValue->GetDrawingArea()->set_size_request(aSize.Width(), aSize.Height());
-    pValue->SetOutputSizePixel(aSize);
 }
 
 DisplayModeToolbarMenu::DisplayModeToolbarMenu(DisplayModeController* pControl, weld::Widget* pParent)
     : WeldToolbarPopup(pControl->getFrameInterface(), pParent, u"modules/simpress/ui/displaywindow.ui"_ustr, u"DisplayWindow"_ustr)
     , mxControl(pControl)
     , mxFrame1(m_xBuilder->weld_frame(u"editframe"_ustr))
-    , mxDisplayModeSet1(new ValueSet(nullptr))
-    , mxDisplayModeSetWin1(new weld::CustomWeld(*m_xBuilder, u"valueset1"_ustr, *mxDisplayModeSet1))
+    , mxDisplayModeIconView1(m_xBuilder->weld_icon_view(u"iconview1"_ustr))
     , mxFrame2(m_xBuilder->weld_frame(u"masterframe"_ustr))
-    , mxDisplayModeSet2(new ValueSet(nullptr))
-    , mxDisplayModeSetWin2(new weld::CustomWeld(*m_xBuilder, u"valueset2"_ustr, *mxDisplayModeSet2))
+    , mxDisplayModeIconView2(m_xBuilder->weld_icon_view(u"iconview2"_ustr))
 {
-    mxDisplayModeSet1->SetStyle(WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT);
-    mxDisplayModeSet1->SetStyle(WB_TABSTOP | WB_MENUSTYLEVALUESET | WB_FLATVALUESET | WB_NOBORDER | WB_NO_DIRECTSELECT);
+    mxDisplayModeIconView1->connect_item_activated(
+        LINK(this, DisplayModeToolbarMenu, ItemActivatedHdl));
+    mxDisplayModeIconView2->connect_item_activated(
+        LINK(this, DisplayModeToolbarMenu, ItemActivatedHdl));
 
-    mxDisplayModeSet1->SetSelectHdl( LINK( this, DisplayModeToolbarMenu, SelectValueSetHdl ) );
-    mxDisplayModeSet2->SetSelectHdl( LINK( this, DisplayModeToolbarMenu, SelectValueSetHdl ) );
-
-    sal_Int16 nColCount = 2;
-
-    mxDisplayModeSet1->SetColCount( nColCount );
-    fillLayoutValueSet(mxDisplayModeSet1.get(), editmodes);
-
-    mxDisplayModeSet2->SetColCount( nColCount );
-    fillLayoutValueSet(mxDisplayModeSet2.get(), mastermodes);
+    fillLayoutIconView(*mxDisplayModeIconView1, editmodes);
+    fillLayoutIconView(*mxDisplayModeIconView2, mastermodes);
 }
 
-IMPL_LINK( DisplayModeToolbarMenu, SelectValueSetHdl, ValueSet*, pControl, void )
+IMPL_LINK(DisplayModeToolbarMenu, ItemActivatedHdl, const weld::TreeIter&, rIter, bool)
 {
     OUString sCommandURL;
     OUString sImage;
 
-    if( pControl == mxDisplayModeSet1.get() ) {
-        sCommandURL = editmodes[mxDisplayModeSet1->GetSelectedItemId() - 1].msUnoCommand;
-        sImage = editmodes[mxDisplayModeSet1->GetSelectedItemId() - 1 ].msBmpResId;
+    const weld::ItemView& rItemView = rIter.getItemView();
+    const int nIndex = rItemView.get_iter_index_in_parent(rIter);
+    if (&rItemView == mxDisplayModeIconView1.get())
+    {
+        sCommandURL = editmodes[nIndex].msUnoCommand;
+        sImage = editmodes[nIndex].msBmpResId;
     }
-    else if( pControl == mxDisplayModeSet2.get() ) {
-        sCommandURL = mastermodes[mxDisplayModeSet2->GetSelectedItemId() - 1].msUnoCommand;
-        sImage = mastermodes[mxDisplayModeSet2->GetSelectedItemId() - 1].msBmpResId;
+    else if (&rItemView == mxDisplayModeIconView2.get())
+    {
+        sCommandURL = mastermodes[nIndex].msUnoCommand;
+        sImage = mastermodes[nIndex].msBmpResId;
     }
 
     if (!sCommandURL.isEmpty())
@@ -168,6 +146,8 @@ IMPL_LINK( DisplayModeToolbarMenu, SelectValueSetHdl, ValueSet*, pControl, void 
 
     mxControl->setToolboxItemImage(sImage);
     mxControl->EndPopupMode();
+
+    return true;
 }
 
 DisplayModeController::DisplayModeController( const css::uno::Reference< css::uno::XComponentContext >& rxContext )
