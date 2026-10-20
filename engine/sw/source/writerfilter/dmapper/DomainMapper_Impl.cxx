@@ -5557,13 +5557,15 @@ void DomainMapper_Impl::HandleAltChunk(const OUString& rStreamName)
         uno::Reference<io::XStream> xInputStream = new utl::OStreamWrapper(aMemory);
         // Not handling AltChunk during paste for now.
         uno::Reference<text::XTextRange> xInsertTextRange = GetCurrentXText()->getEnd();
-        if (isBreakDeferred(PAGE_BREAK))
+        // A page break right before the chunk: put it after the previous paragraph, as the
+        // chunk content may set its own break on the paragraph it is inserted into.
+        // Without a previous paragraph, keep the break deferred.
+        const uno::Reference<beans::XPropertySet>& xPrevious
+            = m_StreamStateStack.top().xPreviousParagraph;
+        if (isBreakDeferred(PAGE_BREAK) && xPrevious.is())
         {
-            // A page break right before the chunk: the chunk content is inserted into the
-            // paragraph at the end, so the break goes there and not to the paragraph after it.
-            uno::Reference<beans::XPropertySet> xParaProps(xInsertTextRange, uno::UNO_QUERY_THROW);
-            xParaProps->setPropertyValue(getPropertyName(PROP_BREAK_TYPE),
-                                         uno::Any(style::BreakType_PAGE_BEFORE));
+            xPrevious->setPropertyValue(getPropertyName(PROP_BREAK_TYPE),
+                                        uno::Any(style::BreakType_PAGE_AFTER));
             clearDeferredBreak(PAGE_BREAK);
         }
         uno::Reference<text::XTextRange> xSectionStartingRange;
