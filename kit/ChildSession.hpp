@@ -334,7 +334,7 @@ private:
     bool setTextCursor(const StringVector& tokens);
 #if ENABLE_FEATURE_LOCK || ENABLE_FEATURE_RESTRICTION || ENABLE_DEBUG
     bool updateBlockingCommandStatus(const StringVector& tokens);
-    static std::string getBlockedCommandType(const std::string& command);
+    std::string getBlockedCommandType(const std::string& command) const;
 #endif
     bool handleZoteroMessage(const StringVector& tokens);
     bool formFieldEvent(const char* buffer, int length, const StringVector& tokens);
@@ -406,6 +406,7 @@ public:
             << "\n\tcanonicalViewId: " << _canonicalViewId
             << "\n\tisDocLoaded: " << _isDocLoaded
             << "\n\tisDocPasswordToModifyEntered: " << _isDocPasswordToModifyEntered
+            << "\n\tisRestrictedUser: " << _isRestrictedUser
             << "\n\tisVectorRendering: " << _isVectorRendering
             << "\n\tvectorParts: " << _vectorParts.size()
             << "\n\tinputSequence: " << _inputSequence
@@ -454,6 +455,9 @@ private:
 
     /// Whether this view has entered the correct password to modify the document
     bool _isDocPasswordToModifyEntered;
+
+    /// Whether the user of this view is restricted, as the last blockingcommandstatus said.
+    bool _isRestrictedUser = false;
 
     /// True once this client has asked for vector primitives. Such a client draws the document
     /// from them rather than from bitmap tiles.

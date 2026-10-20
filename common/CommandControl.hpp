@@ -136,8 +136,6 @@ class RestrictionManager
     static std::unordered_set<std::string> RestrictedCommandList;
     static std::string RestrictedCommandListString;
 
-    static void setRestrictedCommandList(const std::string& commandListString);
-
 public:
     RestrictionManager();
     static const std::unordered_set<std::string>& getRestrictedCommandList();

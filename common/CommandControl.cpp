@@ -167,26 +167,21 @@ std::string RestrictionManager::RestrictedCommandListString;
 
 RestrictionManager::RestrictionManager() {}
 
-void RestrictionManager::setRestrictedCommandList(const std::string& commandListString)
-{
-#if defined(ENABLE_FEATURE_RESTRICTION) || ENABLE_DEBUG
-    RestrictedCommandListString = Util::trimmed(commandListString);
-    RestrictedCommandList.clear();
-#endif
-}
-
 const std::unordered_set<std::string>& RestrictionManager::getRestrictedCommandList()
 {
-    if (RestrictedCommandList.empty() && !RestrictedCommandListString.empty())
+    // Several threads can ask for the list at the same time. A function-local static is initialised
+    // only once, so only the first of them fills the list and the others wait for it.
+    [[maybe_unused]] static const bool filled = []
     {
-        StringVector commandList = StringVector::tokenize(RestrictedCommandListString);
+        StringVector commandList = StringVector::tokenize(getRestrictedCommandListString());
         for (std::size_t i = 0; i < commandList.size(); i++)
         {
             std::string command = commandList[i];
             if (!command.empty())
                 RestrictedCommandList.emplace(command);
         }
-    }
+        return true;
+    }();
 
     return RestrictedCommandList;
 }
@@ -195,7 +190,8 @@ std::string RestrictionManager::getRestrictedCommandListString()
 {
 #ifdef ENABLE_FEATURE_RESTRICTION
     if (RestrictedCommandListString.empty())
-        setRestrictedCommandList(ConfigUtil::getString("restricted_commands", ""));
+        RestrictedCommandListString =
+            Util::trimmed(ConfigUtil::getString("restricted_commands", ""));
 #endif
 
     return RestrictedCommandListString;

@@ -5891,8 +5891,9 @@ bool ChildSession::updateBlockingCommandStatus(const StringVector& tokens)
         sendTextFrameAndLogError("error: cmd=lockstatus kind=failure");
         return false;
     }
+    _isRestrictedUser = restrictedStatus == "true";
     std::string blockedCommands;
-    if (restrictedStatus == "true")
+    if (_isRestrictedUser)
     {
         blockedCommands += CommandControl::RestrictionManager::getRestrictedCommandListString();
 #if ENABLE_DEBUG
@@ -5916,10 +5917,11 @@ bool ChildSession::updateBlockingCommandStatus(const StringVector& tokens)
     return true;
 }
 
-std::string ChildSession::getBlockedCommandType(const std::string& command)
+std::string ChildSession::getBlockedCommandType(const std::string& command) const
 {
-    if(CommandControl::RestrictionManager::getRestrictedCommandList().find(command)
-    != CommandControl::RestrictionManager::getRestrictedCommandList().end())
+    if (_isRestrictedUser &&
+        CommandControl::RestrictionManager::getRestrictedCommandList().find(command) !=
+            CommandControl::RestrictionManager::getRestrictedCommandList().end())
         return "restricted";
 
     if (CommandControl::LockManager::getLockedCommandList().find(command) !=
