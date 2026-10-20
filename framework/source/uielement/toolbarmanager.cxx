@@ -2085,7 +2085,7 @@ IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu, bool )
 {
     // We have to hold a reference to ourself as it is possible that we will be disposed and
     // our refcount could be zero (destruction) otherwise.
-    Reference< XInterface > xKeepAlive( static_cast< OWeakObject* >( this ), UNO_QUERY );
+    rtl::Reference<ToolBarManager> pKeepAlive(this);
 
     {
         // The guard must be in its own context as the we can get destroyed when our
