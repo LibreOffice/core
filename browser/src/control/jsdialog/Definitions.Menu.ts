@@ -2249,12 +2249,12 @@ menuDefinitions.set('SlideSizeMenu', [
 	{
 		text: _('Standard (4:3)'),
 		img: 'standard-size',
-		uno: '.uno:AttributePageSize?AttributePageSize.Width:long=28000&AttributePageSize.Height:long=21000',
+		uno: '.uno:AttributePageSize?AttributePageSize.Width:long=25400&AttributePageSize.Height:long=19050',
 	},
 	{
 		text: _('Widescreen (16:9)'),
 		img: 'widescreen-size',
-		uno: '.uno:AttributePageSize?AttributePageSize.Width:long=28000&AttributePageSize.Height:long=15750',
+		uno: '.uno:AttributePageSize?AttributePageSize.Width:long=33866&AttributePageSize.Height:long=19050',
 	},
 ] as Array<MenuDefinition>);
 
