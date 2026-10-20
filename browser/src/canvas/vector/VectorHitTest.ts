@@ -576,7 +576,9 @@ namespace cool {
 		): HitPosition {
 			// The point goes the other way through the matrix, which is cheaper than putting the
 			// geometry of every child through it. The tolerance is a distance, so it goes through
-			// the part that turns and scales only.
+			// the part that turns and scales only, as the upright box around the tolerance box
+			// put through it: each term counts by its size, so a turn widens the reach on both
+			// axes rather than letting the two parts of one axis take each other away.
 			const back = matrix?.invert();
 			if (!back) return position;
 
@@ -584,12 +586,12 @@ namespace cool {
 			return {
 				x: at.x,
 				y: at.y,
-				toleranceX: Math.abs(
-					back.a * position.toleranceX + back.c * position.toleranceY,
-				),
-				toleranceY: Math.abs(
-					back.b * position.toleranceX + back.d * position.toleranceY,
-				),
+				toleranceX:
+					Math.abs(back.a) * position.toleranceX +
+					Math.abs(back.c) * position.toleranceY,
+				toleranceY:
+					Math.abs(back.b) * position.toleranceX +
+					Math.abs(back.d) * position.toleranceY,
 			};
 		}
 

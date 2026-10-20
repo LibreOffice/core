@@ -133,9 +133,22 @@ class RenderGeometrySection extends CanvasSectionObject {
 	// has over the life of the page.
 	private static _followsMouse = false;
 
-	// How far from the geometry a point still counts as a hit, in pixels. Two pixels is what an
-	// editing view allows, so a hairline can be picked without landing on it exactly.
-	private static readonly hitTolerancePixels = 2;
+	// How far from the geometry a point still counts as a hit, in CSS pixels, unless the client's
+	// preferences say otherwise (vectorHitTolerance). Eight pixels let a hairline be picked
+	// without landing on it exactly.
+	private static readonly hitTolerancePixels = 8;
+
+	/// That distance in twips at the zoom shown, so it is the same on screen at any zoom and on a
+	/// screen of any density.
+	private static hitTolerance(): number {
+		const pixels =
+			window.prefs?.getNumber(
+				'vectorHitTolerance',
+				RenderGeometrySection.hitTolerancePixels,
+			) ?? RenderGeometrySection.hitTolerancePixels;
+
+		return pixels * app.dpiScale * app.pixelsToTwips;
+	}
 
 	// Small dashes, so the outline reads as something following the pointer rather than as part
 	// of the document.
@@ -336,6 +349,30 @@ class RenderGeometrySection extends CanvasSectionObject {
 			.map((hit: RenderGeometryHit) => hit.id);
 	}
 
+	/// Whether the box an object paints into lies within the upright box of its own square, give
+	/// or take the tolerance.
+	private static paintsInsideItsSquare(
+		square: cool.Matrix2D | null,
+		painted: cool.Range2D,
+		tolerance: number,
+	): boolean {
+		if (!square) return true;
+
+		const bounds = cool.Range2D.fromPoints([
+			square.apply(0, 0),
+			square.apply(1, 0),
+			square.apply(1, 1),
+			square.apply(0, 1),
+		]);
+
+		return (
+			painted.minX >= bounds.minX - tolerance &&
+			painted.minY >= bounds.minY - tolerance &&
+			painted.maxX <= bounds.maxX + tolerance &&
+			painted.maxY <= bounds.maxY + tolerance
+		);
+	}
+
 	/// The objects the point meets, from the front to the back: the topmost alone, or with
 	/// everyOne set every one of them.
 	private walkObjectsAt(
@@ -345,8 +382,7 @@ class RenderGeometrySection extends CanvasSectionObject {
 		everyOne: boolean,
 	): RenderGeometryHit[] {
 		const hits: RenderGeometryHit[] = [];
-		const tolerance =
-			RenderGeometrySection.hitTolerancePixels * app.pixelsToTwips;
+		const tolerance = RenderGeometrySection.hitTolerance();
 		const position: cool.HitPosition = {
 			x: x,
 			y: y,
@@ -384,11 +420,16 @@ class RenderGeometrySection extends CanvasSectionObject {
 			)
 				continue;
 
+			/*
+				The object's own square settles a point outside it, where the object paints inside
+				that square. An object that paints beyond it - a measurement, whose square is the
+				measured line and whose lines and text stand beside it - is asked by what it paints
+				alone.
+			*/
+			const square = cool.Matrix2D.fromArray(object.transform);
 			if (
-				!cool.VectorHitTest.isInUnitSquare(
-					cool.Matrix2D.fromArray(object.transform),
-					position,
-				)
+				RenderGeometrySection.paintsInsideItsSquare(square, range, tolerance) &&
+				!cool.VectorHitTest.isInUnitSquare(square, position)
 			)
 				continue;
 
@@ -842,8 +883,7 @@ class RenderGeometrySection extends CanvasSectionObject {
 		const object = RenderGeometrySection.objectOf(objectId);
 		if (!object) return false;
 
-		const tolerance =
-			RenderGeometrySection.hitTolerancePixels * app.pixelsToTwips;
+		const tolerance = RenderGeometrySection.hitTolerance();
 
 		return (
 			cool.VectorHitTest.hit(
