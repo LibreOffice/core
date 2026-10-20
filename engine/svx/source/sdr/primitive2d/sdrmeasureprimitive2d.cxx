@@ -27,6 +27,7 @@
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
+#include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
 #include <osl/diagnose.h>
 
 
@@ -418,8 +419,13 @@ namespace drawinglayer::primitive2d
                 OSL_ENSURE(pNewBlockText, "SdrMeasurePrimitive2D::create2DDecomposition: Could not create transformed clone of text primitive (!)");
                 xBlockText.clear();
 
-                // add to local primitives
-                aRetval.push_back(pNewBlockText);
+                // Text that is being edited is wrapped the way every other object's text is, so
+                // that whatever draws can leave it out while the edit shows it.
+                if (rTextAttribute.isInEditMode())
+                    aRetval.push_back(new TextHierarchyEditPrimitive2D(
+                        Primitive2DContainer{ Primitive2DReference(pNewBlockText) }));
+                else
+                    aRetval.push_back(pNewBlockText);
             }
 
             // add shadow
