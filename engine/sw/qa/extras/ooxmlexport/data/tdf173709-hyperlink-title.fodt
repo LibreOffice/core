@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:body>
+  <office:text>
+   <text:p>Link with a title only: <text:a xlink:type="simple" xlink:href="https://example.org/" office:title="Example site">example</text:a></text:p>
+   <text:p>Link with a name and a title: <text:a xlink:type="simple" xlink:href="https://example.com/" office:name="anchor1" office:title="Another example site" office:target-frame-name="_blank">another</text:a></text:p>
+   <text:p>Link with a name only, as in older documents: <text:a xlink:type="simple" xlink:href="https://example.net/" office:name="Old screen tip">old</text:a></text:p>
+  </office:text>
+ </office:body>
+</office:document>

@@ -572,6 +572,33 @@ DECLARE_OOXMLEXPORT_TEST(testTdf138027_pageBreakAfterShape, "tdf138027_pageBreak
     assertXPath(pDump, "/root/page[1]/sorted_objs/fly", 2);
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf173709HyperlinkTitle)
+{
+    // The title of a hyperlink is its ScreenTip in DOCX (w:tooltip)
+    createSwDoc("tdf173709-hyperlink-title.fodt");
+    save(TestFilter::DOCX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc, "//w:p[1]/w:hyperlink", "tooltip", u"Example site");
+    // Without the fix the tooltip was the Name, and it was dropped when the link has a target
+    // frame
+    assertXPath(pXmlDoc, "//w:p[2]/w:hyperlink", "tooltip", u"Another example site");
+    assertXPath(pXmlDoc, "//w:p[2]/w:hyperlink", "tgtFrame", u"_blank");
+    // Older documents have the ScreenTip in the Name
+    assertXPath(pXmlDoc, "//w:p[3]/w:hyperlink", "tooltip", u"Old screen tip");
+
+    // The ScreenTip is imported as the title
+    saveAndReload(TestFilter::DOCX);
+    CPPUNIT_ASSERT_EQUAL(
+        u"Example site"_ustr,
+        getProperty<OUString>(getRun(getParagraph(1), 2, u"example"_ustr), u"HyperLinkTitle"_ustr));
+    CPPUNIT_ASSERT_EQUAL(
+        u"Another example site"_ustr,
+        getProperty<OUString>(getRun(getParagraph(2), 2, u"another"_ustr), u"HyperLinkTitle"_ustr));
+    CPPUNIT_ASSERT_EQUAL(OUString(),
+                         getProperty<OUString>(getRun(getParagraph(2), 2), u"HyperLinkName"_ustr));
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

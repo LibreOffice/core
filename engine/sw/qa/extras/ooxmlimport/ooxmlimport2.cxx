@@ -129,7 +129,7 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf159897Broken_link)
                 break;
         }
 
-        OUString sScreenTip = getProperty<OUString>(xRun, u"HyperLinkName"_ustr);
+        OUString sScreenTip = getProperty<OUString>(xRun, u"HyperLinkTitle"_ustr);
         CPPUNIT_ASSERT_EQUAL(sText, sScreenTip);
     }
 }

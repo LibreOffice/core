@@ -8427,7 +8427,7 @@ void DomainMapper_Impl::CloseFieldCommand()
 
                     OUString sURL;
                     OUString sTarget;
-                    OUString sName;
+                    OUString sTitle;
 
                     while (aPartIt != aItEnd)
                     {
@@ -8459,7 +8459,7 @@ void DomainMapper_Impl::CloseFieldCommand()
                             if (aPartIt == aItEnd)
                                 break;
 
-                            sName = *aPartIt;
+                            sTitle = *aPartIt;
                         }
                         else
                         {
@@ -8500,8 +8500,8 @@ void DomainMapper_Impl::CloseFieldCommand()
 
                     if (!sTarget.isEmpty())
                         pContext->SetHyperlinkTarget(sTarget);
-                    if (!sName.isEmpty())
-                        pContext->SetHyperlinkName(sName);
+                    if (!sTitle.isEmpty())
+                        pContext->SetHyperlinkTitle(sTitle);
                 }
                 break;
                 case FIELD_IF:
@@ -9419,8 +9419,8 @@ void DomainMapper_Impl::PopFieldContext()
 
                                 if (!pContext->GetHyperlinkTarget().isEmpty())
                                     xCrsrProperties->setPropertyValue(u"HyperLinkTarget"_ustr, cpo::uno::Any(pContext->GetHyperlinkTarget()));
-                                if (!pContext->GetHyperlinkName().isEmpty())
-                                    xCrsrProperties->setPropertyValue(u"HyperLinkName"_ustr, cpo::uno::Any(pContext->GetHyperlinkName()));
+                                if (!pContext->GetHyperlinkTitle().isEmpty())
+                                    xCrsrProperties->setPropertyValue(u"HyperLinkTitle"_ustr, cpo::uno::Any(pContext->GetHyperlinkTitle()));
 
                                 if (IsInTOC())
                                 {

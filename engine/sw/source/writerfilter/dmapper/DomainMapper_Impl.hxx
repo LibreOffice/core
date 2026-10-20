@@ -340,7 +340,7 @@ private:
     OUString m_sHyperlinkURL;
     /// A frame for the hyperlink when one exists.
     OUString m_sHyperlinkTarget;
-    OUString m_sHyperlinkName;
+    OUString m_sHyperlinkTitle;
     OUString m_sHyperlinkStyle;
 
     FFDataHandler::Pointer_t m_pFFDataHandler;
@@ -393,8 +393,8 @@ public:
     const OUString& GetHyperlinkURL() const { return m_sHyperlinkURL; }
     void SetHyperlinkTarget(const OUString& rTarget) { m_sHyperlinkTarget = rTarget; }
     const OUString& GetHyperlinkTarget() const { return m_sHyperlinkTarget; }
-    void SetHyperlinkName(const OUString& rName) { m_sHyperlinkName = rName; }
-    const OUString& GetHyperlinkName() const { return m_sHyperlinkName; }
+    void SetHyperlinkTitle(const OUString& rTitle) { m_sHyperlinkTitle = rTitle; }
+    const OUString& GetHyperlinkTitle() const { return m_sHyperlinkTitle; }
     void  SetHyperlinkStyle(const OUString& rStyle) { m_sHyperlinkStyle = rStyle; }
     const OUString& GetHyperlinkStyle() const { return m_sHyperlinkStyle; }
 

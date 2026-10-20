@@ -4397,7 +4397,7 @@ bool DocxAttributeOutput::StartURL(const OUString& rUrl, const OUString& rTarget
         {
             m_pHyperlinkAttrList->add(FSNS(XML_w, XML_tgtFrame), rTarget);
         }
-        else if (!rName.isEmpty())
+        if (!rName.isEmpty())
         {
             m_pHyperlinkAttrList->add(FSNS(XML_w, XML_tooltip), rName);
         }

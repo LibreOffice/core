@@ -1510,7 +1510,10 @@ int SwWW8AttrIter::OutAttrWithRange(sal_Int32 nPos)
                     if ( nPos == pHt->GetStart() )
                     {
                         const SwFormatINetFormat *rINet = static_cast< const SwFormatINetFormat* >( pItem );
-                        if (m_rExport.AttrOutput().StartURL(rINet->GetValue(), rINet->GetTargetFrame(), rINet->GetName()))
+                        // The tooltip is the Title; the Name serves older documents
+                        const OUString& rTitle = rINet->GetTitle();
+                        if (m_rExport.AttrOutput().StartURL(rINet->GetValue(), rINet->GetTargetFrame(),
+                                                            rTitle.isEmpty() ? rINet->GetName() : rTitle))
                             ++nRet;
                     }
                     pEnd = pHt->End();
