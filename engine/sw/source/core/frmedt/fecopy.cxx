@@ -1588,8 +1588,7 @@ SwPasteSdr SwFEShell::PasteStream(SvStream & rStrm, SwPasteSdr nAction, const Po
         // #i50824#
         // method <lcl_RemoveOleObjsFromSdrModel> replaced by <lcl_ConvertSdrOle2ObjsToSdrGrafObjs>
         lcl_ConvertSdrOle2ObjsToSdrGrafObjs(*pModel);
-        // aPos comes from the text cursor or the drop point, so it holds in kit too.
-        pView->Paste(*pModel, aPos, nullptr, SdrInsertFlags::POSITIONFROMDOCUMENT);
+        pView->Paste(*pModel, aPos, nullptr, SdrInsertFlags::NONE);
 
         const size_t nCnt = pView->GetMarkedObjectList().GetMarkCount();
         if (nCnt == 0)
