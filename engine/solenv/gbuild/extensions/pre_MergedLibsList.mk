@@ -15,14 +15,6 @@ gb_MERGE_LIBRARY_LIST := \
 	analysis \
 	animcore \
 	avmedia \
-	$(call gb_Helper_optional,AVMEDIA, \
-		$(if $(filter MACOSX,$(OS)),\
-			avmediaMacAVF \
-		) \
-	) \
-	$(call gb_Helper_optional,AVMEDIA, \
-		$(if $(filter WNT,$(OS)),avmediawin) \
-	) \
 	$(call gb_Helper_optional,SCRIPTING, \
 		basctl \
 		basprov \

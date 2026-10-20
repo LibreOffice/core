@@ -16,13 +16,6 @@ gb_UNITED_LIBRARY_LIST := \
 	analysis \
 	animcore \
 	avmedia \
-	$(call gb_Helper_optional,AVMEDIA, \
-		$(if $(filter MACOSX,$(OS)),avmediaMacAVF) \
-		$(if $(filter WNT,$(OS)),avmediawin) \
-		$(if $(ENABLE_GTK4),avmediagtk) \
-		$(if $(ENABLE_QT6_MULTIMEDIA),avmediaqt6) \
-		$(if $(filter WNT,$(OS)),avmediawin) \
-    ) \
 	$(call gb_Helper_optional,SCRIPTING, \
 		basctl \
 		basprov \

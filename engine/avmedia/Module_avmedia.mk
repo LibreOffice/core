@@ -19,18 +19,6 @@ $(eval $(call gb_Module_add_l10n_targets,avmedia,\
     AllLangMoTarget_avmedia \
 ))
 
-ifeq ($(OS),MACOSX)
-$(eval $(call gb_Module_add_targets,avmedia,\
-	Library_avmediaMacAVF \
-))
-endif
-
-ifeq ($(OS),WNT)
-$(eval $(call gb_Module_add_targets,avmedia,\
-	Library_avmediawin \
-))
-endif
-
 endif # AVMEDIA
 
 # vim: set noet sw=4 ts=4:

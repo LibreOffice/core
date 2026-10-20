@@ -281,11 +281,6 @@ $(eval $(call gb_Helper_register_libraries_for_install,OOOLIBS,ooo, \
     avmedia \
 	$(if $(ENABLE_CURL),Duden Grammalecte LanguageTool) \
 	lightproof \
-    $(call gb_Helper_optional,AVMEDIA, \
-	$(if $(filter MACOSX,$(OS)),\
-		avmediaMacAVF \
-	) \
-    ) \
 	$(call gb_Helper_optional,SCRIPTING, \
 		basctl \
 		basprov \
@@ -515,9 +510,6 @@ $(eval $(call gb_Helper_register_plugins_for_install,PRIVATELIBS_URE,ure, \
 ))
 
 $(eval $(call gb_Helper_register_libraries_for_install,PLAINLIBS_OOO,ooo, \
-    $(call gb_Helper_optional,AVMEDIA, \
-        $(if $(filter WNT,$(OS)),avmediawin) \
-    ) \
 	cached1 \
 	comphelper \
 	$(call gb_Helper_optional,DBCONNECTIVITY,dbpool2) \

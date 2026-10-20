@@ -116,14 +116,6 @@ int main()
     line("com_sun_star_animations_SequenceTimeContainer_get_implementation");
     line("com_sun_star_animations_TransitionFilter_get_implementation");
 #if HAVE_FEATURE_AVMEDIA
-#ifdef MACOSX
-    // avmedia/source/macavf/avmediaMacAVF.component
-    line("com_sun_star_comp_avmedia_Manager_MacAVF_get_implementation");
-#endif
-#ifdef _WIN32
-    // avmedia/source/win/avmediawin.component
-    line("avmedia_Manager_DirectX_get_implementation");
-#endif
     // avmedia/util/avmedia.component
     line("com_sun_star_comp_framework_SoundHandler_get_implementation");
 #endif
