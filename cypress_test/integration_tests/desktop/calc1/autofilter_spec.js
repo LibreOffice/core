@@ -169,6 +169,23 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'AutoFilter', function() {
 		calcHelper.assertSheetContents(['Cypress Test', 'Status', 'Test 1', 'Pass'], true);
 	});
 
+	it('Filter by color focuses the color in use', function() {
+		calcHelper.selectCellsInRange('A3:A3');
+		desktopHelper.getCompactIconArrow('Color').click();
+		desktopHelper.selectColorFromPalette('FF0000');
+
+		calcHelper.openAutoFilterMenu();
+		cy.cGet('.autofilter').contains('.ui-treeview-entry', 'Filter by Color').click();
+		cy.cGet('#textcolor .ui-treeview-entry').not(':contains("Automatic")').click();
+		calcHelper.assertSheetContents(['Cypress Test', 'Status', 'Test 2', 'Fail'], true);
+
+		calcHelper.openAutoFilterMenu();
+		cy.cGet('.autofilter').contains('.ui-treeview-entry', 'Filter by Color').click();
+
+		cy.cGet('#textcolor .ui-treeview-entry.selected').should('have.focus').and('not.contain.text', 'Automatic');
+		cy.cGet('#background .ui-treeview-entry.selected').should('not.exist');
+	});
+
 	it('Disable already filtered', function () {
 		// Filter row with ['Test 4', ''] on the first column
 		calcHelper.openAutoFilterMenu();

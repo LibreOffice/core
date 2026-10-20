@@ -1876,6 +1876,26 @@ void ScListSubMenuControl::SetupMenu(weld::TreeView& rMenu)
     rMenu.connect_key_press(LINK(this, ScListSubMenuControl, MenuKeyInputHdl));
 }
 
+namespace
+{
+    // the filter holds a single colour, so at most one row in the two lists is toggled on
+    weld::TreeView* getActiveMenu(weld::TreeView* pBgClr, weld::TreeView* pFontClr, int& rRow)
+    {
+        for (weld::TreeView* pColorMenu : { pBgClr, pFontClr })
+        {
+            for (int nRow = 0, nCount = pColorMenu->n_children(); nRow < nCount; ++nRow)
+            {
+                if (pColorMenu->get_toggle(nRow) == TRISTATE_TRUE)
+                {
+                    rRow = nRow;
+                    return pColorMenu;
+                }
+            }
+        }
+        return nullptr;
+    }
+}
+
 void ScListSubMenuControl::StartPopupMode(weld::Widget* pParent, const tools::Rectangle& rRect)
 {
     if (mxPopupStartAction)
@@ -1884,8 +1904,12 @@ void ScListSubMenuControl::StartPopupMode(weld::Widget* pParent, const tools::Re
     mxPopover->popup_at_rect(pParent, rRect, weld::Placement::End);
 
     weld::TreeView& rFirstMenu = mbColorMenu ? *mxBackColorMenu : *mxMenu;
-    rFirstMenu.set_cursor(0);
-    rFirstMenu.select(0);
+    int nRow = 0;
+    weld::TreeView* pActiveMenu
+        = mbColorMenu ? getActiveMenu(mxBackColorMenu.get(), mxTextColorMenu.get(), nRow) : nullptr;
+    weld::TreeView& rMenu = pActiveMenu ? *pActiveMenu : rFirstMenu;
+    rMenu.set_cursor(nRow);
+    rMenu.select(nRow);
 
     mrParentControl.setSubMenuFocused(this);
 }
@@ -1897,8 +1921,16 @@ void ScListSubMenuControl::EndPopupMode()
 
 void ScListSubMenuControl::GrabFocus()
 {
-    weld::TreeView& rFirstMenu = mbColorMenu ? *mxBackColorMenu : *mxMenu;
-    rFirstMenu.grab_focus();
+    if (!mbColorMenu)
+    {
+        mxMenu->grab_focus();
+        return;
+    }
+
+    int nRow = 0;
+    weld::TreeView* pActiveMenu = getActiveMenu(mxBackColorMenu.get(), mxTextColorMenu.get(), nRow);
+    weld::TreeView& rMenu = pActiveMenu ? *pActiveMenu : *mxBackColorMenu;
+    rMenu.grab_focus();
 }
 
 bool ScListSubMenuControl::IsVisible() const

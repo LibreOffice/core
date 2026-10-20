@@ -2667,12 +2667,47 @@ img.ui-combobox-value-preview {
 	max-height: none !important;
 }
 
-/* hide radio in filter by color */
+/* hide the radio in filter by color, and the header cell over it */
 .jsdialog.autofilter #background .ui-treeview-entry div:nth-of-type(1),
 .jsdialog.autofilter #textcolor .ui-treeview-entry div:nth-of-type(1),
-.jsdialog.autofilter #background > div:nth-of-type(1),
-.jsdialog.autofilter #textcolor > div:nth-of-type(1) {
-	display: none;
+.jsdialog.autofilter #background .ui-treeview-headers > div:has(.ui-treeview-header-text:empty),
+.jsdialog.autofilter #textcolor .ui-treeview-headers > div:has(.ui-treeview-header-text:empty) {
+	display: none !important;
+}
+
+.jsdialog.autofilter #background .ui-treeview-header,
+.jsdialog.autofilter #textcolor .ui-treeview-header {
+	text-align: center;
+}
+
+.jsdialog.autofilter #background,
+.jsdialog.autofilter #textcolor {
+	padding-top: 0;
+}
+
+.jsdialog.autofilter #background .ui-treeview-headers,
+.jsdialog.autofilter #textcolor .ui-treeview-headers {
+	position: sticky;
+	top: 0;
+	background-color: var(--color-background-lighter);
+	z-index: 1;
+}
+
+.jsdialog.autofilter #background .ui-treeview-entry > .ui-treeview-icon-column,
+.jsdialog.autofilter #textcolor .ui-treeview-entry > .ui-treeview-icon-column {
+	padding-inline: var(--spacing-m);
+}
+
+.jsdialog.autofilter #textcolor {
+	margin-block-start: var(--spacing-m);
+}
+
+/* show the selection only in the focused list */
+.jsdialog.autofilter #background:not(:focus-within) .ui-treeview-entry.selected,
+.jsdialog.autofilter #textcolor:not(:focus-within) .ui-treeview-entry.selected {
+	background-color: transparent;
+	border-color: transparent;
+	color: inherit;
 }
 
 /* border-less arrow icons in the autofilter menu */

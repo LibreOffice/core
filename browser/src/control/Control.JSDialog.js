@@ -718,6 +718,11 @@ window.L.Control.JSDialog = window.L.Control.extend({
 			}
 		}
 
+		// leave the focus where the engine put it
+		const focusedRow = document.activeElement && document.activeElement.closest('.ui-treeview-entry');
+		if (!instance.init_focus_id && focusedRow && instance.container.contains(focusedRow))
+			return;
+
 		// setup initial focus and helper elements for closing popup
 		var initialFocusElement = this._getFocusablesForInitialFocus(instance.container);
 
@@ -1491,13 +1496,15 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		if (model)
 			model.applyUpdate(data);
 
+		const oldBuilder = this.dialogs[data.id].builder;
+
 		var builder = new window.L.control.jsDialogBuilder({windowId: data.id,
 			mobileWizard: this,
 			map: this.map,
-			cssClass: 'jsdialog',
+			cssClass: (oldBuilder && oldBuilder.options.cssClass) || 'jsdialog',
 			callback: e.callback,
 			suffix: 'dialog',
-			isMessageBox: this.dialogs[data.id].builder && this.dialogs[data.id].builder.options.isMessageBox,
+			isMessageBox: oldBuilder && oldBuilder.options.isMessageBox,
 		});
 
 		builder.updateWidget(dialog, data.control);

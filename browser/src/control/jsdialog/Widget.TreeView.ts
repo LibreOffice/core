@@ -2499,9 +2499,13 @@ class TreeViewControl {
 
 		this._thead.setAttribute('role', 'row');
 
+		let dummyColumns = 0;
 		let dummyCells = this._columns - headers.length;
-		if (this._hasState) dummyCells++;
-		this._thead.style.gridColumn = '1 / ' + (this._columns + dummyCells + 1);
+		if (this._hasState) {
+			dummyCells++;
+			dummyColumns++;
+		}
+		this._thead.style.gridColumn = '1 / ' + (this._columns + dummyColumns + 1);
 
 		for (let index = 0; index < dummyCells; index++) {
 			this.fillHeader({ text: '', sortable: false }, builder);
@@ -2805,6 +2809,21 @@ class TreeViewControl {
 		return true;
 	}
 
+	focusSelectedRow() {
+		if (this._gridMode) return;
+		if (this._container.classList.contains('sidebar')) return;
+		if (this._container.querySelector('.ui-treeview-inline-edit')) return;
+
+		const selected = this._container.querySelector(
+			'.ui-treeview-entry.selected',
+		) as HTMLElement | null;
+		if (!selected) return;
+
+		selected.focus({ preventScroll: true });
+		const blockOption = JSDialog.ScrollIntoViewBlockOption('nearest');
+		selected.scrollIntoView({ block: blockOption, inline: 'nearest' });
+	}
+
 	build(
 		data: TreeWidgetJSON,
 		builder: JSBuilder,
@@ -2838,10 +2857,8 @@ class TreeViewControl {
 		(this._container as any).highlightEntries =
 			this.highlightEntries.bind(this);
 
-		// Prevent grab_focus(in executeActionImpl) from focusing the container
-		(this._container as any).onFocus = () => {
-			// no-op: focus is already on the correct row
-		};
+		// A core grab_focus goes to the selected row
+		(this._container as any).onFocus = () => this.focusSelectedRow();
 
 		this.setupDragAndDrop(data, builder);
 		this.setupKeyEvents(data, builder);
