@@ -516,6 +516,21 @@ window.L.Map = window.L.Evented.extend({
 		this.fire('a11ystatechanged');
 	},
 
+	// The lock keeps screen reading on and takes its toggle out of use. Lifting the lock
+	// hands the toggle back and leaves the screen reading state as it is.
+	setAccessibilityLock: function(locked) {
+		if (locked === this._lockAccessibilityOn)
+			return;
+
+		if (locked) {
+			this.lockAccessibilityOn();
+			return;
+		}
+
+		this._lockAccessibilityOn = false;
+		this.fire('a11ystatechanged');
+	},
+
 	// end of A11y
 
 	loadDocument: function(socket) {

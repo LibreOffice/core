@@ -334,8 +334,13 @@ window.L.Map.Settings = window.L.Handler.extend({
 			const dark = settings.darkTheme === 'true';
 			if (dark !== wasDark) uiManager.applyDarkMode(dark, true);
 		}
-		// Screen reading forced on by the server stays on whatever the dialog
-		// saved.
+		// The lock goes first: locking turns screen reading on by itself, and
+		// screen reading left locked stays on whatever the dialog saved.
+		if (
+			window.enableAccessibility &&
+			settings.lockAccessibilityOn !== undefined
+		)
+			this._map.setAccessibilityLock(settings.lockAccessibilityOn === 'true');
 		if (
 			window.enableAccessibility &&
 			settings.accessibilityState !== undefined &&

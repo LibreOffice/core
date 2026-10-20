@@ -173,6 +173,7 @@ interface MapInterface extends Evented {
 	hasFocus(): boolean;
 	refocus(): void;
 	lockAccessibilityOn(): void;
+	setAccessibilityLock(locked: boolean): void;
 	_partsDirection: number;
 	_docLoaded: boolean;
 	contextToolbar?: ContextToolbar;

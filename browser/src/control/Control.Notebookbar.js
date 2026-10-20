@@ -1213,6 +1213,10 @@ window.L.Control.Notebookbar = window.L.Control.extend({
 			$('#togglea11ystate').addClass('disabled');
 			$('#togglea11ystate').attr('disabled', true);
 			$('#togglea11ystate-button').attr('disabled', true);
+		} else {
+			$('#togglea11ystate').removeClass('disabled');
+			$('#togglea11ystate').removeAttr('disabled');
+			$('#togglea11ystate-button').removeAttr('disabled');
 		}
 	},
 

@@ -320,4 +320,104 @@ describe(['taga11yenabled'], 'Options dialog and screen reading', function () {
 			expect(win.app.map._textInput.hasAccessibilitySupport()).to.eq(true);
 		});
 	});
+
+	it('keeps screen reading on when the dialog is saved with the lock off', function () {
+		// Cypress runs with server accessibility on, so screen reading starts on.
+		cy.then(function () {
+			expect(win.app.map._textInput.hasAccessibilitySupport()).to.eq(true);
+		});
+
+		cy.then(function () {
+			win.app.map.settings.showSettingsDialog('browser-setting');
+		});
+		cy.cGet('.iframe-settings-wrap').should('be.visible');
+		settingsIframeBody()
+			.find('#bs-tab-spreadsheet.active', { timeout: 20000 })
+			.should('exist');
+
+		// The lock pins screen reading on; left off, it says nothing about the
+		// screen reading state, so a save of another setting leaves it alone.
+		settingsIframeBody()
+			.find('#common-lockAccessibilityOn-input')
+			.should('not.be.checked');
+		settingsIframeBody()
+			.find('#common-smoothScroll-input')
+			.click({ force: true });
+
+		cy.cGet('#iframe-settings-save').click();
+
+		cy.getFrameWindow()
+			.its('prefs._userBrowserSetting.smoothScroll')
+			.should('eq', 'false');
+		cy.getFrameWindow()
+			.its('prefs')
+			.invoke('getBoolean', 'accessibilityState', false)
+			.should('eq', true);
+		cy.then(function () {
+			expect(win.app.map._textInput.hasAccessibilitySupport()).to.eq(true);
+		});
+	});
+});
+
+// The lock comes the way it does on a real host: a userid of its own routes
+// the test WOPI server to a preset store, and the browsersetting.json seeded
+// there is what DocumentBroker reads before it sends lockaccessibilityon.
+describe(['taga11yenabled'], 'Options dialog and the screen reading lock', function () {
+	var USER = 'a11y-unlock';
+	var win;
+
+	beforeEach(function () {
+		cy.task('writeUserSetting', {
+			userId: USER,
+			settings: { accessibilityState: true, lockAccessibilityOn: true },
+		});
+		helper.setupAndLoadDocument('writer/annotation.odt', false, false, undefined,
+			'userid=' + USER);
+		cy.getFrameWindow().then(function (w) {
+			win = w;
+		});
+		cy.cGet('div.leaflet-layer').should('exist');
+		desktopHelper.switchUIToNotebookbar();
+		cy.cGet('#Help-tab-label').click();
+		cy.cGet('#togglea11ystate').should('have.attr', 'disabled');
+	});
+
+	it('hands the toggle back when the lock is lifted, with screen reading still on', function () {
+		cy.then(function () {
+			expect(win.app.map._lockAccessibilityOn).to.eq(true);
+			expect(win.app.map._textInput.hasAccessibilitySupport()).to.eq(true);
+		});
+
+		cy.then(function () {
+			win.app.map.settings.showSettingsDialog('browser-setting');
+		});
+		cy.cGet('.iframe-settings-wrap').should('be.visible');
+		settingsIframeBody()
+			.find('#bs-tab-spreadsheet.active', { timeout: 20000 })
+			.should('exist');
+
+		settingsIframeBody()
+			.find('#common-lockAccessibilityOn-input')
+			.should('be.checked')
+			.click({ force: true });
+
+		cy.cGet('#iframe-settings-save').click();
+
+		// The toggle is back in use, no reload needed, and still shows screen
+		// reading on.
+		cy.cGet('#togglea11ystate').should('not.have.attr', 'disabled');
+		cy.cGet('#togglea11ystate').should('have.class', 'selected');
+		cy.then(function () {
+			expect(win.app.map._lockAccessibilityOn).to.eq(false);
+			expect(win.app.map._textInput.hasAccessibilitySupport()).to.eq(true);
+			expect(win.prefs.getBoolean('accessibilityState')).to.eq(true);
+		});
+
+		// And the toggle works again: it turns screen reading off.
+		cy.cGet('#togglea11ystate-button').click();
+		cy.cGet('#togglea11ystate').should('not.have.class', 'selected');
+		cy.then(function () {
+			expect(win.app.map._textInput.hasAccessibilitySupport()).to.eq(false);
+		});
+	});
 });

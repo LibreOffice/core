@@ -2786,8 +2786,13 @@ class SettingIframe {
 
 				this.browserSettingOptions[settingKey] = value;
 
-				if (settingKey === 'lockAccessibilityOn')
-					this.browserSettingOptions['accessibilityState'] = value;
+				// The lock pins screen reading on, so it turns the screen reading
+				// state on with it. With the lock off, the page says nothing about
+				// that state: the file keeps the one it holds, if any.
+				if (settingKey === 'lockAccessibilityOn') {
+					if (value) this.browserSettingOptions['accessibilityState'] = true;
+					else delete this.browserSettingOptions['accessibilityState'];
+				}
 			} else {
 				(this.browserSettingOptions[sectionRaw] as Record<string, boolean>)[
 					settingKey
