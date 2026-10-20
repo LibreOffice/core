@@ -1950,6 +1950,7 @@ void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
         {
             SwFormatINetFormat aINetFormat( rURL, rTarget );
             aINetFormat.SetName(rHlnkItem.GetIntName());
+            aINetFormat.SetTitle(rHlnkItem.GetTitle());
             if(pMacroTable)
             {
                 const SvxMacro *pMacro = pMacroTable->Get( SvMacroItemId::OnMouseOver );

@@ -35,6 +35,7 @@ SvxHyperlinkItem::SvxHyperlinkItem( const SvxHyperlinkItem& rHyperlinkItem )
     m_showName(rHyperlinkItem.m_showName),
     m_showText(rHyperlinkItem.m_showText),
     m_sIntName(rHyperlinkItem.m_sIntName),
+    m_sTitle(rHyperlinkItem.m_sTitle),
     m_nMacroEvents(rHyperlinkItem.m_nMacroEvents),
     m_bTextIsHint(rHyperlinkItem.m_bTextIsHint)
 {
@@ -78,6 +79,7 @@ bool SvxHyperlinkItem::operator==( const SfxPoolItem& rAttr ) const
                   m_sTarget == rItem.m_sTarget &&
                   m_eType   == rItem.m_eType   &&
                   m_sIntName == rItem.m_sIntName &&
+                  m_sTitle == rItem.m_sTitle &&
                   m_nMacroEvents == rItem.m_nMacroEvents &&
                   m_sReplacementText == rItem.m_sReplacementText &&
                   m_showText == rItem.m_showText &&

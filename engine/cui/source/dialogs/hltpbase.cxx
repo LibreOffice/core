@@ -234,6 +234,7 @@ void SvxHyperlinkTabPageBase::FillStandardDlgFields ( const SvxHyperlinkItem* pH
 {
     m_showName = pHyperlinkItem->GetShowName();
     m_showText = pHyperlinkItem->GetShowText();
+    maStrTitle = pHyperlinkItem->GetTitle();
 
     // Form
     OUString aStrFormText = CuiResId( RID_CUISTR_HYPERDLG_FROM_TEXT );
@@ -492,6 +493,7 @@ bool SvxHyperlinkTabPageBase::FillItemSet( SfxItemSet* rOut)
 
     SvxHyperlinkItem aItem( SID_HYPERLINK_SETLINK, aStrName, aStrURL, aStrFrame,
                             aStrIntName, eMode, nEvents, pTable, m_showName, m_showText );
+    aItem.SetTitle(maStrTitle);
     rOut->Put (aItem);
 
     return true;
@@ -535,6 +537,7 @@ DeactivateRC SvxHyperlinkTabPageBase::DeactivatePage( SfxItemSet* _pSet)
     {
         SvxHyperlinkItem aItem( SID_HYPERLINK_GETLINK, aStrName, aStrURL, aStrFrame,
                                 aStrIntName, eMode, nEvents, pTable, m_showName, m_showText );
+        aItem.SetTitle(maStrTitle);
         _pSet->Put( aItem );
     }
 

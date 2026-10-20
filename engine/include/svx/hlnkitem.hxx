@@ -57,6 +57,7 @@ class SVX_DLLPUBLIC SvxHyperlinkItem final : public SfxPoolItem
     bool m_showText = true;
 
     OUString m_sIntName;
+    OUString m_sTitle;
     std::unique_ptr<SvxMacroTableDtor>  m_pMacroTable;
 
     HyperDialogEvent m_nMacroEvents;
@@ -94,6 +95,9 @@ public:
 
     const   OUString& GetIntName () const { return m_sIntName; }
     void    SetIntName(const OUString& rIntName) { m_sIntName = rIntName; }
+
+    const   OUString& GetTitle() const { return m_sTitle; }
+    void    SetTitle(const OUString& rTitle) { m_sTitle = rTitle; }
 
     const   OUString& GetTargetFrame() const { return m_sTarget; }
     void    SetTargetFrame(const OUString& rTarget) { m_sTarget = rTarget; }

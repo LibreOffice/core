@@ -695,6 +695,7 @@ void SwTextShell::StateInsert( SfxItemSet &rSet )
                         aHLinkItem.SetURL(pINetFormat->GetValue());
                         aHLinkItem.SetTargetFrame(pINetFormat->GetTargetFrame());
                         aHLinkItem.SetIntName(pINetFormat->GetName());
+                        aHLinkItem.SetTitle(pINetFormat->GetTitle());
                         const SvxMacro *pMacro = pINetFormat->GetMacro( SvMacroItemId::OnMouseOver );
                         if( pMacro )
                             aHLinkItem.SetMacro(HyperDialogEvent::MouseOverObject, *pMacro);

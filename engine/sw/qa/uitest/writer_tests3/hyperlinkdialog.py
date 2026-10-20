@@ -129,4 +129,28 @@ class HyperlinkDialog(UITestCase):
                         xindication = xDialog.getChild("indication")
                         self.assertEqual(get_state_as_dict(xindication)["Text"], text)
 
+    def test_tdf173709_keep_hyperlink_title(self):
+        with self.ui_test.create_doc_in_start_center("writer") as document:
+            xText = document.getText()
+            xText.insertString(xText.getStart(), "link", False)
+            xCursor = xText.createTextCursor()
+            xCursor.gotoStart(False)
+            xCursor.goRight(4, True)
+            xCursor.setPropertyValue("HyperLinkURL", "http://www.libreoffice.org/")
+            xCursor.setPropertyValue("HyperLinkName", "anchor1")
+            xCursor.setPropertyValue("HyperLinkTitle", "LibreOffice home page")
+            document.getCurrentController().select(xCursor)
+
+            # Press OK without any change
+            with self.ui_test.execute_dialog_through_command(".uno:HyperlinkDialog"):
+                pass
+
+            xCursor.gotoStart(False)
+            xCursor.goRight(1, True)
+            self.assertEqual("anchor1", xCursor.getPropertyValue("HyperLinkName"))
+            # Without the fix in place, this test would have failed with
+            # AssertionError: 'LibreOffice home page' != ''
+            # i.e. the dialog dropped the title, which it has no field for
+            self.assertEqual("LibreOffice home page", xCursor.getPropertyValue("HyperLinkTitle"))
+
 # vim: set shiftwidth=4 softtabstop=4 expandtab:

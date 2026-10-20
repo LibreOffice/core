@@ -71,6 +71,8 @@ protected:
     bool                mbStdControlsInit;
 
     OUString            maStrInitURL;
+    // the hyperlink title, which the dialog has no field for yet
+    OUString            maStrTitle;
 
     Timer               maTimer;
 
