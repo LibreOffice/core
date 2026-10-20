@@ -524,8 +524,11 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
 
                     try
                     {
+                        // The screen tip is the Title; the Name serves older documents
                         OUString sName;
-                        xRange->getPropertyValue(u"HyperLinkName"_ustr) >>= sName;
+                        xRange->getPropertyValue(u"HyperLinkTitle"_ustr) >>= sName;
+                        if (sName.isEmpty())
+                            xRange->getPropertyValue(u"HyperLinkName"_ustr) >>= sName;
                         if (!sName.isEmpty())
                         {
                             bScreenTip = true;

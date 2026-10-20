@@ -26,6 +26,7 @@
 #include <docsh.hxx>
 #include <edtwin.hxx>
 #include <flyfrm.hxx>
+#include <fmtinfmt.hxx>
 #include <frameformats.hxx>
 #include <IDocumentRedlineAccess.hxx>
 #include <unotxdoc.hxx>
@@ -209,6 +210,7 @@ namespace
 /// Test COKit callback, handling just COKitCallbackType::TOOLTIP.
 struct TooltipCallback
 {
+    std::string text;
     std::string rect;
     std::string anchorRectangles;
     std::string redlineType;
@@ -229,6 +231,7 @@ void TooltipCallback::callbackImpl(COKitCallbackType eType, const char* pPayload
         std::stringstream aStream(pPayload);
         boost::property_tree::ptree aTree;
         boost::property_tree::read_json(aStream, aTree);
+        text = aTree.get_child("text").get_value<std::string>();
         rect = aTree.get_child("rectangle").get_value<std::string>();
         auto it = aTree.find("anchorRectangles");
         if (it != aTree.not_found())
@@ -285,6 +288,48 @@ CPPUNIT_TEST_FIXTURE(Test, testRedlineTooltipAnchorRectangles)
     // emitted.
     CPPUNIT_ASSERT(!aCallback.anchorRectangles.empty());
     CPPUNIT_ASSERT_EQUAL(std::string("Insert"), aCallback.redlineType);
+
+    // Tear down COKit:
+    pWrtShell->GetSfxViewShell()->setCOKitViewCallback(nullptr);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testHyperlinkTooltipTitle)
+{
+    // Set up COKit:
+    comphelper::COKit::setActive(true);
+
+    // Given a document with a hyperlink that has both a name and a title:
+    createSwDoc();
+    getSwTextDoc()->initializeForTiledRendering(cpo::uno::Sequence<beans::PropertyValue>());
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    TooltipCallback aCallback;
+    TestKitCallbackWrapper aCallbackWrapper(&TooltipCallback::callback, &aCallback);
+    pWrtShell->GetSfxViewShell()->setCOKitViewCallback(&aCallbackWrapper);
+    aCallbackWrapper.setKitViewId(KitHelper::getView(*pWrtShell->GetSfxViewShell()));
+    SwFormatINetFormat aINetFormat(u"https://example.org/"_ustr, OUString());
+    aINetFormat.SetName(u"Name tip"_ustr);
+    aINetFormat.SetTitle(u"Title tip"_ustr);
+    pWrtShell->Insert(u"example"_ustr);
+    pWrtShell->SelAll();
+    pWrtShell->SetAttrItem(aINetFormat);
+    pWrtShell->ClearMark();
+
+    // When moving the mouse over the hyperlink:
+    SwShellCursor* pShellCursor = pWrtShell->getShellCursor(false);
+    CPPUNIT_ASSERT(pShellCursor);
+    pWrtShell->EndOfSection(/*bSelect=*/false);
+    Point aEnd = pShellCursor->GetSttPos();
+    pWrtShell->StartOfSection(/*bSelect=*/false);
+    Point aStart = pShellCursor->GetSttPos();
+    Point aMiddle((aStart.getX() + aEnd.getX()) / 2, (aStart.getY() + aEnd.getY()) / 2);
+    getSwTextDoc()->postMouseEvent(COKitMouseEventType::MOVE, aMiddle.getX(), aMiddle.getY(), 1, 0,
+                                   0);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then make sure the tooltip starts with the title:
+    // Without the accompanying fix in place, this test would have failed, the tooltip started with
+    // the name.
+    CPPUNIT_ASSERT(aCallback.text.starts_with("Title tip\n"));
 
     // Tear down COKit:
     pWrtShell->GetSfxViewShell()->setCOKitViewCallback(nullptr);
