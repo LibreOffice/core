@@ -408,7 +408,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 
 	// elements: cool.ParagraphInlineElements
 	onAccessibilityFocusChanged: function(content, pos, start, end, listPrefixLength, force, before, after,
-		beforeRects, afterRects, headingLevel, beforeLevels, afterLevels, elements, list) {
+		beforeRects, afterRects, headingLevel, beforeLevels, afterLevels, elements, list, table) {
 		this._listPrefixLength = listPrefixLength;
 		this._setHeadingLevel(headingLevel);
 		this._endContextJump();
@@ -416,6 +416,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		this._setContextParagraphs(before, after, beforeRects, afterRects, beforeLevels,
 			afterLevels, elements);
 		this._setContextList(list);
+		this._setContextTable(table);
 		this._requestHeadings();
 		if (!this.hasFocus() || (this._isComposing && !force)) {
 			this._log('onAccessibilityFocusChanged: skipped updating: '
@@ -434,7 +435,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 
 	// elements: cool.ParagraphInlineElements
 	setA11yFocusedParagraph: function(content, pos, start, end, before, after, beforeRects, afterRects, headingLevel,
-		beforeLevels, afterLevels, elements, list) {
+		beforeLevels, afterLevels, elements, list, table) {
 		this._contextPending = Math.max(0, (this._contextPending || 0) - 1);
 		this._setHeadingLevel(headingLevel);
 		this._keepCommentDetails(elements);
@@ -450,6 +451,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		this._setContextParagraphs(before, after, beforeRects, afterRects, beforeLevels,
 			afterLevels, elements);
 		this._setContextList(list);
+		this._setContextTable(table);
 	},
 
 	// getPlainTextContent() reads the whole editable, and every caret offset is
@@ -470,6 +472,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		this._headingsAbove = createContextRegion('a11y-headings-above');
 		this._contextBefore = createContextRegion('a11y-context-before');
 		this._contextList = createContextRegion('a11y-context-list');
+		this._contextTable = createContextRegion('a11y-context-table');
 		this._contextAfter = createContextRegion('a11y-context-after');
 		this._headingsBelow = createContextRegion('a11y-headings-below');
 		for (const region of [this._contextBefore, this._contextAfter]) {
@@ -481,6 +484,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		this._container.insertBefore(this._headingsAbove, this._textArea);
 		this._container.insertBefore(this._contextBefore, this._textArea);
 		this._container.insertBefore(this._contextList, this._textArea);
+		this._container.insertBefore(this._contextTable, this._textArea);
 		this._container.insertBefore(this._contextAfter, this._textArea.nextSibling);
 		this._container.insertBefore(this._headingsBelow, this._contextAfter.nextSibling);
 
@@ -529,6 +533,43 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 			top.element.appendChild(li);
 		});
 		this._contextList.appendChild(root);
+	},
+
+	_setContextTable: function(table) {
+		this._initContextRegions();
+		if (!this._contextTable)
+			return;
+
+		const rows = table && Array.isArray(table.rows) ? table.rows : [];
+		const key = JSON.stringify(table && rows.length ? table : null);
+		if (key === this._contextTableKey)
+			return;
+		this._contextTableKey = key;
+		this._contextTable.replaceChildren();
+		if (rows.length === 0)
+			return;
+
+		const element = document.createElement('table');
+		// Chrome exposes an unmarked table as a layout table, which readers do not navigate.
+		element.setAttribute('role', 'table');
+		element.setAttribute('aria-rowcount', table.rowCount);
+		element.setAttribute('aria-colcount', table.colCount);
+		rows.forEach(function (row) {
+			const tr = document.createElement('tr');
+			tr.setAttribute('aria-rowindex', parseInt(row.row) + 1);
+			row.cells.forEach(function (cell) {
+				const td = document.createElement('td');
+				td.setAttribute('aria-colindex', parseInt(cell.col) + 1);
+				if (cell.rowSpan !== undefined)
+					td.rowSpan = parseInt(cell.rowSpan);
+				if (cell.colSpan !== undefined)
+					td.colSpan = parseInt(cell.colSpan);
+				td.textContent = cell.text;
+				tr.appendChild(td);
+			});
+			element.appendChild(tr);
+		});
+		this._contextTable.appendChild(element);
 	},
 
 	_requestHeadings: function() {
@@ -1115,6 +1156,7 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		this._setContextParagraphs(paragraph.before, paragraph.after, paragraph.beforeRects, paragraph.afterRects,
 			paragraph.beforeLevels, paragraph.afterLevels, elements);
 		this._setContextList(paragraph.list);
+		this._setContextTable(paragraph.table);
 		this._setFocusedParagraph(paragraph.content, parseInt(paragraph.position),
 			parseInt(paragraph.start), parseInt(paragraph.end), elements.paragraph);
 		this._setHeadingLevel(paragraph.headingLevel);
