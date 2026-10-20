@@ -37,7 +37,6 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/linguistic2/DictionaryEventFlags.hpp>
-#include <com/sun/star/linguistic2/XDictionary.hpp>
 #include <com/sun/star/linguistic2/XSpellAlternatives.hpp>
 #include <com/sun/star/linguistic2/XSearchableDictionaryList.hpp>
 #include <com/sun/star/linguistic2/XSpellChecker1.hpp>
@@ -63,14 +62,6 @@ using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
 using namespace linguistic;
-
-
-// struct SpellDialog_Impl ---------------------------------------------
-
-struct SpellDialog_Impl
-{
-    Sequence< Reference< XDictionary >  >   aDics;
-};
 
 namespace
 {
@@ -217,7 +208,6 @@ SpellDialog::SpellDialog(SpellDialogChildWindow& rChildWindow, weld::Window* pPa
     , m_aDialogUndoLink(LINK(this, SpellDialog, DialogUndoHdl))
     , m_bFocusLocked(true)
     , m_rParent(rChildWindow)
-    , m_pImpl(new SpellDialog_Impl)
     , m_xAltTitle(m_xBuilder->weld_label(u"alttitleft"_ustr))
     , m_xResumeFT(m_xBuilder->weld_label(u"resumeft"_ustr))
     , m_xNoSuggestionsFT(m_xBuilder->weld_label(u"nosuggestionsft"_ustr))
@@ -305,15 +295,10 @@ SpellDialog::~SpellDialog()
         m_xOptionsDlg.reset();
     }
 
-    if (m_pImpl)
-    {
-        // save possibly modified user-dictionaries
-        Reference< XSearchableDictionaryList >  xDicList( LinguMgr::GetDictionaryList() );
-        if (xDicList.is())
-            SaveDictionaries( xDicList );
-
-        m_pImpl.reset();
-    }
+    // save possibly modified user-dictionaries
+    Reference<XSearchableDictionaryList> xDicList(LinguMgr::GetDictionaryList());
+    if (xDicList.is())
+        SaveDictionaries(xDicList);
 
     m_xChangeAllDictListener->stopListening();
     m_xChangeAllDictListener.clear();
@@ -856,7 +841,7 @@ int SpellDialog::InitUserDicts()
         if (xDic.is())
             xDic->setActive( true );
 
-        m_pImpl->aDics = xDicList->getDictionaries();
+        m_aImpl.aDics = xDicList->getDictionaries();
     }
 
     SvtLinguConfig aCfg;
@@ -866,7 +851,7 @@ int SpellDialog::InitUserDicts()
     m_xAddToDictMB->clear();
     m_aDictIdToName.clear();
     sal_uInt16 nItemId = 1;     // menu items should be enumerated from 1 and not 0
-    for (auto& xDicTmp : m_pImpl->aDics)
+    for (auto& xDicTmp : m_aImpl.aDics)
     {
         if (!xDicTmp.is() || LinguMgr::GetIgnoreAllList() == xDicTmp)
             continue;

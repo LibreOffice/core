@@ -20,6 +20,7 @@
 
 #include <sfx2/basedlgs.hxx>
 #include <com/sun/star/linguistic2/DictionaryEvent.hpp>
+#include <com/sun/star/linguistic2/XDictionary.hpp>
 #include <com/sun/star/uno/Reference.hxx>
 
 
@@ -141,6 +142,13 @@ public:
 class SpellDialogChildWindow;
 class DictionaryEventListener;
 
+// struct SpellDialog_Impl ---------------------------------------------
+
+struct SpellDialog_Impl
+{
+    css::uno::Sequence<css::uno::Reference<css::linguistic2::XDictionary>> aDics;
+};
+
 class SpellDialog : public SfxModelessDialogController
 {
     friend class SentenceEditWindow_Impl;
@@ -159,7 +167,7 @@ private:
     svx::SpellDialogChildWindow& m_rParent;
     svx::SpellPortions           m_aSavedSentence;
 
-    std::unique_ptr<SpellDialog_Impl> m_pImpl;
+    SpellDialog_Impl m_aImpl;
     css::uno::Reference<css::linguistic2::XSpellChecker1> m_xSpell;
 
     rtl::Reference<DictionaryEventListener> m_xChangeAllDictListener;
