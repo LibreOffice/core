@@ -1035,7 +1035,9 @@ std::shared_ptr<ChildProcess> getNewChild_Blocks(const std::shared_ptr<SocketPol
     // If we fail fast and return, the next document will spawn more children without knowing
     // there are some on the way already. And if the system is slow already, that wouldn't help.
     LOG_TRC("Waiting for NewChildrenCV");
-    if (NewChildrenCV.wait_for(lock, timeout, [configId]()
+    // A dead spare kit is dropped, and the wait goes on for another one until the timeout.
+    const auto deadline = startTime + timeout;
+    while (NewChildrenCV.wait_until(lock, deadline, [configId]()
                                {
                                    LOG_TRC("Predicate for NewChildrenCV wait: NewChildren.size()=" << NewChildren.size());
 
@@ -1076,12 +1078,16 @@ std::shared_ptr<ChildProcess> getNewChild_Blocks(const std::shared_ptr<SocketPol
         }
 
         LOG_WRN("getNewChild: popped dead child, need to find another.");
+
+        lock.lock();
+#if !MOBILEAPP
+        if (configId.empty() || SubForKitProcs.contains(configId))
+            rebalanceChildren(configId, COOLWSD::NumPreSpawnedChildren + 1);
+#endif
     }
-    else
-    {
-        LOG_TRC("NewChildrenCV wait failed");
-        LOG_WRN("getNewChild: No child available. Sending spawn request to forkit and failing.");
-    }
+
+    LOG_TRC("NewChildrenCV wait failed");
+    LOG_WRN("getNewChild: No child available. Sending spawn request to forkit and failing.");
 
     LOG_DBG("getNewChild: Timed out while waiting for new child.");
 
