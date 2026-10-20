@@ -34,7 +34,7 @@ namespace svxform
     public:
         /// @throws cpo::uno::RuntimeException
         virtual cpo::uno::Reference< css::frame::XDispatch> interceptedQueryDispatch(
-            const css::util::URL& aURL, const OUString& aTargetFrameName, sal_Int32 nSearchFlags) = 0;
+            const css::util::URL& aURL) = 0;
 
         virtual ::osl::Mutex* getInterceptorMutex() = 0;
 

@@ -507,7 +507,7 @@ void ScFormulaDlg::SaveLRUEntry(const ScFuncDesc* pFuncDescP)
     }
 }
 
-void ScFormulaDlg::doClose(bool /*_bOk*/)
+void ScFormulaDlg::doClose()
 {
     m_aHelper.DoClose( ScFormulaDlgWrapper::GetChildWindowId() );
 }

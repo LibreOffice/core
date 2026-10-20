@@ -332,10 +332,8 @@ public:
 
     virtual cpo::uno::Reference< css::beans::XPropertySet>
             createAndInsertOOoLink( SvXMLImport& rImport,
-                                      const OUString& rHRef,
-                                      const OUString &rStyleName,
-                                      const OUString &rTblName,
-                                         sal_Int32 nWidth, sal_Int32 nHeight );
+                                    const OUString& rHRef,
+                                    sal_Int32 nWidth, sal_Int32 nHeight );
 
     virtual cpo::uno::Reference< css::beans::XPropertySet>
         createAndInsertFloatingFrame(

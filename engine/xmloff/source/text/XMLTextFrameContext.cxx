@@ -462,10 +462,8 @@ void XMLTextFrameContext_Impl::Create()
                     // it should be an own OOo link that has no storage persistence
                     xPropSet = GetImport().GetTextImport()
                             ->createAndInsertOOoLink( GetImport(),
-                                                        sURL,
-                                                        sStyleName,
-                                                        sTblName,
-                                                        nWidth, nHeight );
+                                                      sURL,
+                                                      nWidth, nHeight );
                 }
             }
             else

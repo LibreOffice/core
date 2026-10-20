@@ -3972,8 +3972,7 @@ void FormController::invalidateAllFeatures(  )
 
 
 Reference< XDispatch >
-FormController::interceptedQueryDispatch( const URL& aURL,
-                                            const OUString& /*aTargetFrameName*/, sal_Int32 /*nSearchFlags*/)
+FormController::interceptedQueryDispatch( const URL& aURL )
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
     Reference< XDispatch >  xReturn;

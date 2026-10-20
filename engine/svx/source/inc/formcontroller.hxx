@@ -410,11 +410,7 @@ namespace svxform
 
         // DispatchInterceptor
         virtual cpo::uno::Reference< css::frame::XDispatch>
-            interceptedQueryDispatch(
-                    const css::util::URL& aURL,
-                    const OUString& aTargetFrameName,
-                    sal_Int32 nSearchFlags
-                ) override;
+            interceptedQueryDispatch( const css::util::URL& aURL ) override;
 
         virtual ::osl::Mutex* getInterceptorMutex() override { return &m_aMutex; }
 

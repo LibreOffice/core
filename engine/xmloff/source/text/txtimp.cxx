@@ -2280,8 +2280,6 @@ Reference< XPropertySet> XMLTextImportHelper::createAndInsertOLEObject(
 Reference< XPropertySet> XMLTextImportHelper::createAndInsertOOoLink(
                                         SvXMLImport&,
                                         const OUString& /*rHRef*/,
-                                        const OUString& /*rStyleName*/,
-                                        const OUString& /*rTblName*/,
                                         sal_Int32 /*nWidth*/, sal_Int32 /*nHeight*/ )
 {
     Reference< XPropertySet> xPropSet;

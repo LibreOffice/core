@@ -551,8 +551,6 @@ static rtl::Reference < SwXTextEmbeddedObject > lcl_insertOLEFrame(
 uno::Reference< XPropertySet > SwXMLTextImportHelper::createAndInsertOOoLink(
         SvXMLImport& rImport,
         const OUString& rHRef,
-        const OUString& /*rStyleName*/,
-        const OUString& /*rTableName*/,
         sal_Int32 nWidth, sal_Int32 nHeight )
 {
     // this method will modify the document directly -> lock SolarMutex

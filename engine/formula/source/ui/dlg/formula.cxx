@@ -1015,7 +1015,7 @@ void FormulaDlg_Impl::DoEnter(bool bOk)
     m_pHelper->deleteFormData();
 
     //  Close dialog
-    m_pHelper->doClose(bOk);
+    m_pHelper->doClose();
 }
 
 

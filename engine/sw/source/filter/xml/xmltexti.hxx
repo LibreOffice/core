@@ -52,8 +52,6 @@ public:
     virtual cpo::uno::Reference<css::beans::XPropertySet>
             createAndInsertOOoLink( SvXMLImport& rImport,
                                       const OUString& rHRef,
-                                      const OUString& rStyleName,
-                                      const OUString& rTableName,
                                       sal_Int32 nWidth, sal_Int32 nHeight ) override;
 
     virtual cpo::uno::Reference<css::beans::XPropertySet>

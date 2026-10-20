@@ -74,7 +74,7 @@ namespace svxform
         Reference< XDispatch> xResult;
         // ask our 'real' interceptor
         if (m_pMaster)
-            xResult = m_pMaster->interceptedQueryDispatch( aURL, aTargetFrameName, nSearchFlags);
+            xResult = m_pMaster->interceptedQueryDispatch( aURL);
 
         // ask our slave provider
         if (!xResult.is() && m_xSlaveDispatcher.is())
