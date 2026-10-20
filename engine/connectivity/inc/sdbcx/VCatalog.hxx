@@ -22,7 +22,6 @@
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
 #include <com/sun/star/sdbcx/XUsersSupplier.hpp>
-#include <com/sun/star/sdbcx/XGroupsSupplier.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <connectivity/CommonTools.hxx>
@@ -46,13 +45,11 @@ namespace connectivity::sdbcx
     typedef ::cppu::WeakComponentImplHelper< css::sdbcx::XTablesSupplier,
                                              css::sdbcx::XViewsSupplier,
                                              css::sdbcx::XUsersSupplier,
-                                             css::sdbcx::XGroupsSupplier,
                                              css::lang::XServiceInfo> OCatalog_BASE;
 
 
     class OOO_DLLPUBLIC_DBTOOLS SAL_NO_VTABLE OCatalog :
                         public OCatalog_BASE,
-                        public IRefreshableGroups,
                         public IRefreshableUsers
     {
     protected:
@@ -63,7 +60,6 @@ namespace connectivity::sdbcx
         // they are hold weak
         std::unique_ptr<OCollection> m_pTables;
         std::unique_ptr<OCollection> m_pViews;
-        std::unique_ptr<OCollection> m_pGroups;
         std::unique_ptr<OCollection> m_pUsers;
 
         cpo::uno::Reference< css::sdbc::XDatabaseMetaData > m_xMetaData; // just to make things easier
@@ -106,8 +102,6 @@ namespace connectivity::sdbcx
         virtual cpo::uno::Reference< css::container::XNameAccess > getViews(  ) override;
         // XUsersSupplier
         virtual cpo::uno::Reference< css::container::XNameAccess > getUsers(  ) override;
-        // XGroupsSupplier
-        virtual cpo::uno::Reference< css::container::XNameAccess > getGroups(  ) override;
 
     };
 

@@ -22,7 +22,6 @@
  published interface XTablesSupplier;
  published interface XViewsSupplier;
  published interface XUsersSupplier;
- published interface XGroupsSupplier;
 
 
 /** could be used as an extension for performing data definition tasks on
@@ -54,10 +53,6 @@ published service DatabaseDefinition
     /** The implementation is optional.
      */
     [optional] interface XUsersSupplier;
-
-    /** The implementation is optional.
-     */
-    [optional] interface XGroupsSupplier;
 };
 
 

@@ -67,8 +67,7 @@ void OFileCatalog::refreshTables()
 
 Any OFileCatalog::queryInterface( const Type & rType )
 {
-    if( rType == cppu::UnoType<XGroupsSupplier>::get()||
-        rType == cppu::UnoType<XUsersSupplier>::get()||
+    if( rType == cppu::UnoType<XUsersSupplier>::get()||
         rType == cppu::UnoType<XViewsSupplier>::get())
         return Any();
 
@@ -86,8 +85,7 @@ Sequence< Type > OFileCatalog::getTypes(  )
     aOwnTypes.reserve(aTypes.getLength());
     for (const Type& rType : aTypes)
     {
-        if(!(rType == cppu::UnoType<XGroupsSupplier>::get()||
-            rType == cppu::UnoType<XUsersSupplier>::get()||
+        if(!(rType == cppu::UnoType<XUsersSupplier>::get()||
             rType == cppu::UnoType<XViewsSupplier>::get()))
         {
             aOwnTypes.push_back(rType);

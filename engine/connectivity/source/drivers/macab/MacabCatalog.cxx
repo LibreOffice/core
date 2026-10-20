@@ -71,10 +71,6 @@ void MacabCatalog::refreshViews()
 {
 }
 
-void MacabCatalog::refreshGroups()
-{
-}
-
 void MacabCatalog::refreshUsers()
 {
 }

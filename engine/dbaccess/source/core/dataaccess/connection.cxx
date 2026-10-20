@@ -261,7 +261,6 @@ OConnection::OConnection(ODatabaseSource& _rDB
             ,m_nInAppend(0)
             ,m_bSupportsViews(false)
             ,m_bSupportsUsers(false)
-            ,m_bSupportsGroups(false)
 {
     osl_atomic_increment(&m_refCount);
 
@@ -339,7 +338,6 @@ OConnection::OConnection(ODatabaseSource& _rDB
                 m_pTables->addContainerListener(m_pViews.get());
             }
             m_bSupportsUsers = Reference< XUsersSupplier> (getMasterTables(),UNO_QUERY).is();
-            m_bSupportsGroups = Reference< XGroupsSupplier> (getMasterTables(),UNO_QUERY).is();
 
             impl_checkTableQueryNames_nothrow();
         }
@@ -399,8 +397,6 @@ Sequence< Type > OConnection::getTypes()
         aNormalizedTypes.erase( cppu::UnoType<XViewsSupplier>::get() );
     if ( !m_bSupportsUsers )
         aNormalizedTypes.erase( cppu::UnoType<XUsersSupplier>::get() );
-    if ( !m_bSupportsGroups )
-        aNormalizedTypes.erase( cppu::UnoType<XGroupsSupplier>::get() );
 
     return comphelper::containerToSequence(aNormalizedTypes);
 }
@@ -411,8 +407,6 @@ Any OConnection::queryInterface( const Type & rType )
     if ( !m_bSupportsViews && rType.equals( cppu::UnoType<XViewsSupplier>::get() ) )
         return Any();
     else if ( !m_bSupportsUsers && rType.equals( cppu::UnoType<XUsersSupplier>::get() ) )
-        return Any();
-    else if ( !m_bSupportsGroups && rType.equals( cppu::UnoType<XGroupsSupplier>::get() ) )
         return Any();
     return OConnection_Base::queryInterface( rType );
 }
@@ -612,15 +606,6 @@ Reference< XNameAccess > OConnection::getUsers(  )
 
     Reference<XUsersSupplier> xUsr(getMasterTables(),UNO_QUERY);
     return xUsr.is() ? xUsr->getUsers() : Reference< XNameAccess >();
-}
-
-// XGroupsSupplier
-Reference< XNameAccess > OConnection::getGroups(  )
-{
-    MutexGuard aGuard(m_aMutex);
-    checkDisposed();
-    Reference<XGroupsSupplier> xGrp(getMasterTables(),UNO_QUERY);
-    return xGrp.is() ? xGrp->getGroups() : Reference< XNameAccess >();
 }
 
 void OConnection::impl_loadConnectionTools_throw()

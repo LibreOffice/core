@@ -2966,7 +2966,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,offapi,com/sun/star/sdbcx,\
 	XDeleteRows \
 	XDrop \
 	XDropCatalog \
-	XGroupsSupplier \
 	XIndexesSupplier \
 	XKeysSupplier \
 	XRename \

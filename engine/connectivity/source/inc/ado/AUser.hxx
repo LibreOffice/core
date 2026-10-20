@@ -43,8 +43,6 @@ namespace connectivity::ado
                                 sal_Int32 nHandle
                                      ) const override;
     public:
-        virtual void refreshGroups() override;
-    public:
         OAdoUser(OCatalog* _pParent,bool _bCase,    ADOUser* _pUser=nullptr);
         OAdoUser(OCatalog* _pParent,bool _bCase,  const OUString& Name);
 

@@ -52,9 +52,6 @@ OUser::~OUser( )
 void OUser::disposing()
 {
     OPropertySetHelper::disposing();
-    ::osl::MutexGuard aGuard(m_aMutex);
-    if(m_pGroups)
-        m_pGroups->disposing();
 }
 
 Any OUser::queryInterface( const Type & rType )
@@ -79,30 +76,6 @@ Sequence< Type > OUser::getTypes(  )
 ::cppu::IPropertyArrayHelper & OUser::getInfoHelper()
 {
     return *getArrayHelper();
-}
-
-// XGroupsSupplier
-Reference< XNameAccess > OUser::getGroups(  )
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-    checkDisposed(OUser_BASE::rBHelper.bDisposed);
-
-    try
-    {
-        if ( !m_pGroups )
-            refreshGroups();
-    }
-    catch( const RuntimeException& )
-    {
-        // allowed to leave this method
-        throw;
-    }
-    catch( const Exception& )
-    {
-        // allowed
-    }
-
-    return m_pGroups.get();
 }
 
 cpo::uno::Reference< css::beans::XPropertySetInfo > OUser::getPropertySetInfo(  )

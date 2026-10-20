@@ -85,19 +85,6 @@ void OCatalog::refreshViews()
         m_pViews.reset( new OViews(this,m_aMutex,aVector,aViews,m_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers()) );
 }
 
-void OCatalog::refreshGroups()
-{
-    ::std::vector< OUString> aVector;
-
-    WpADOGroups aGroups = m_aCatalog.get_Groups();
-    aGroups.fillElementNames(aVector);
-
-    if(m_pGroups)
-        m_pGroups->reFill(aVector);
-    else
-        m_pGroups.reset( new OGroups(this,m_aMutex,aVector,aGroups,m_pConnection->getMetaData()->supportsMixedCaseQuotedIdentifiers()) );
-}
-
 void OCatalog::refreshUsers()
 {
     ::std::vector< OUString> aVector;

@@ -31,8 +31,6 @@ using namespace connectivity::file;
 
 void OFileCatalog::refreshViews()
 {}
-void OFileCatalog::refreshGroups()
-{}
 void OFileCatalog::refreshUsers()
 {
 }

@@ -19,7 +19,6 @@
 
 #pragma once
 
-#include <com/sun/star/sdbcx/XGroupsSupplier.hpp>
 #include <comphelper/proparrhlp.hxx>
 #include <cppuhelper/compbase.hxx>
 #include <cppuhelper/basemutex.hxx>
@@ -34,21 +33,16 @@ namespace connectivity::sdbcx
 {
     typedef OCollection OGroups;
 
-    typedef ::cppu::WeakComponentImplHelper< css::sdbcx::XGroupsSupplier,
-                                             css::container::XNamed,
+    typedef ::cppu::WeakComponentImplHelper< css::container::XNamed,
                                              css::lang::XServiceInfo> OUser_BASE;
 
     class OOO_DLLPUBLIC_DBTOOLS OUser :
                     public cppu::BaseMutex,
                     public OUser_BASE,
-                    public IRefreshableGroups,
                     public ::comphelper::OPropertyArrayUsageHelper<OUser>,
                     public ODescriptor
     {
     protected:
-        // no Reference! see OCollection::acquire
-        std::unique_ptr<OGroups> m_pGroups;
-
         using OUser_BASE::rBHelper;
 
         // OPropertyArrayUsageHelper
@@ -73,8 +67,6 @@ namespace connectivity::sdbcx
         virtual cpo::uno::Sequence< cpo::uno::Type > getTypes(  ) override;
         // XPropertySet
         virtual cpo::uno::Reference< css::beans::XPropertySetInfo > getPropertySetInfo(  ) override;
-        // XGroupsSupplier
-        virtual cpo::uno::Reference< css::container::XNameAccess > getGroups(  ) override;
 
         // XNamed
         virtual OUString getName(  ) override;

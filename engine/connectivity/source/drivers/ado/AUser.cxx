@@ -55,17 +55,6 @@ OAdoUser::OAdoUser(OCatalog* _pParent,bool _bCase,   const OUString& Name)
     m_aUser.put_Name(Name);
 }
 
-void OAdoUser::refreshGroups()
-{
-    ::std::vector< OUString> aVector;
-    WpADOGroups aGroups(m_aUser.get_Groups());
-    aGroups.fillElementNames(aVector);
-    if(m_pGroups)
-        m_pGroups->reFill(aVector);
-    else
-        m_pGroups.reset(new OGroups(m_pCatalog, m_aMutex, aVector, aGroups, isCaseSensitive()));
-}
-
 void OAdoUser::setFastPropertyValue_NoBroadcast(sal_Int32 nHandle,const Any& rValue)
 {
     if(m_aUser.IsValid())

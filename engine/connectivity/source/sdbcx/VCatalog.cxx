@@ -61,8 +61,6 @@ void OCatalog::disposing()
         m_pTables->disposing();
     if(m_pViews)
         m_pViews->disposing();
-    if(m_pGroups)
-        m_pGroups->disposing();
     if(m_pUsers)
         m_pUsers->disposing();
 
@@ -139,30 +137,6 @@ Reference< XNameAccess > OCatalog::getUsers(  )
     }
 
     return m_pUsers.get();
-}
-
-// XGroupsSupplier
-Reference< XNameAccess > OCatalog::getGroups(  )
-{
-    ::osl::MutexGuard aGuard(m_aMutex);
-    checkDisposed(OCatalog_BASE::rBHelper.bDisposed);
-
-    try
-    {
-        if(!m_pGroups)
-            refreshGroups();
-    }
-    catch( const cpo::uno::RuntimeException& )
-    {
-        // allowed to leave this method
-        throw;
-    }
-    catch( const cpo::uno::Exception& )
-    {
-        // allowed
-    }
-
-    return m_pGroups.get();
 }
 
 OUString OCatalog::buildName(const Reference< XRow >& _xRow)

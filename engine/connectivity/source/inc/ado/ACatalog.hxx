@@ -33,7 +33,6 @@ namespace connectivity::ado
     public:
         virtual void refreshTables() override;
         virtual void refreshViews() override;
-        virtual void refreshGroups() override;
         virtual void refreshUsers() override;
 
     public:

@@ -9589,10 +9589,6 @@ module com {
     };
    };
    module sdbcx {
-    published interface XGroupsSupplier {
-     interface ::cpo::uno::XInterface;
-     ::com::sun::star::container::XNameAccess getGroups();
-    };
     published interface XTablesSupplier {
      interface ::cpo::uno::XInterface;
      ::com::sun::star::container::XNameAccess getTables();
@@ -9609,7 +9605,6 @@ module com {
      interface ::com::sun::star::sdbcx::XTablesSupplier;
      [optional] interface ::com::sun::star::sdbcx::XViewsSupplier;
      [optional] interface ::com::sun::star::sdbcx::XUsersSupplier;
-     [optional] interface ::com::sun::star::sdbcx::XGroupsSupplier;
     };
    };
    module sdb {
@@ -10591,7 +10586,6 @@ module com {
     };
     published service User {
      interface ::com::sun::star::beans::XPropertySet;
-     [optional] interface ::com::sun::star::sdbcx::XGroupsSupplier;
      [property, readonly] string Name;
     };
     published service UserDescriptor {
