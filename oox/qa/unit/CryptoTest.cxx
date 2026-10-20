@@ -37,6 +37,7 @@ public:
     void testAgileEncryptionInfoWritingAndParsing();
     void testAgileDataIntegrityHmacKey();
     void testAgileEncryptingAndDecrypting();
+    void testAgileSHA256AndKeySizes();
 
     CPPUNIT_TEST_SUITE(CryptoTest);
     CPPUNIT_TEST(testStandard2007);
@@ -44,6 +45,7 @@ public:
     CPPUNIT_TEST(testAgileEncryptionInfoWritingAndParsing);
     CPPUNIT_TEST(testAgileDataIntegrityHmacKey);
     CPPUNIT_TEST(testAgileEncryptingAndDecrypting);
+    CPPUNIT_TEST(testAgileSHA256AndKeySizes);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -235,7 +237,7 @@ void CryptoTest::testAgileEncryptionInfoWritingAndParsing()
             aEngine.writeEncryptionInfo(aBinaryEncryptionInfoOutputStream);
             aBinaryEncryptionInfoOutputStream.close();
 
-            CPPUNIT_ASSERT_EQUAL(sal_uInt64(1048), aEncryptionInfo.GetSize());
+            CPPUNIT_ASSERT_EQUAL(sal_uInt64(1060), aEncryptionInfo.GetSize());
         }
 
         aEncryptionInfo.Seek(STREAM_SEEK_TO_BEGIN);
@@ -438,6 +440,104 @@ void CryptoTest::testAgileEncryptingAndDecrypting()
 
         // Check data integrity
         CPPUNIT_ASSERT_EQUAL(true, aEngine.checkDataIntegrity());
+    }
+}
+
+void CryptoTest::testAgileSHA256AndKeySizes()
+{
+    const OUString aPassword(u"Password"_ustr);
+    const OString aTestString = "Agile SHA256 test"_ostr;
+
+    struct TestParameters
+    {
+        sal_Int32 nKeyBits;
+        sal_Int32 nHashSize;
+        OUString sHashAlgorithm;
+    };
+
+    const TestParameters aParameters[] = {
+        { 128, 32, u"SHA256"_ustr },
+        { 192, 32, u"SHA256"_ustr },
+        { 256, 32, u"SHA256"_ustr },
+        { 256, 20, u"SHA1"_ustr },
+    };
+
+    for (const auto& rParameters : aParameters)
+    {
+        SvMemoryStream aEncryptionInfo;
+        SvMemoryStream aEncryptedStream;
+        SvMemoryStream aUnencryptedInput;
+
+        aUnencryptedInput.WriteBytes(aTestString.getStr(), aTestString.getLength() + 1);
+        aUnencryptedInput.Seek(STREAM_SEEK_TO_BEGIN);
+
+        {
+            oox::crypto::AgileEngine aEngine;
+
+            aEngine.setupEncryptionParameters(
+                { 100000, 16, rParameters.nKeyBits, rParameters.nHashSize, 16, u"AES"_ustr,
+                  u"ChainingModeCBC"_ustr, rParameters.sHashAlgorithm });
+
+            CPPUNIT_ASSERT_EQUAL(rParameters.nKeyBits, aEngine.getInfo().keyBits);
+            CPPUNIT_ASSERT_EQUAL(rParameters.nHashSize, aEngine.getInfo().hashSize);
+            CPPUNIT_ASSERT_EQUAL(rParameters.sHashAlgorithm, aEngine.getInfo().hashAlgorithm);
+
+            // Do not call setupEncryption() here: it resets the parameters
+            // according to the engine's preset.
+            CPPUNIT_ASSERT(aEngine.setupEncryptionKey(aPassword));
+
+            uno::Reference<io::XInputStream> xInputStream(
+                new utl::OSeekableInputStreamWrapper(aUnencryptedInput));
+            uno::Reference<io::XOutputStream> xOutputStream(
+                new utl::OSeekableOutputStreamWrapper(aEncryptedStream));
+
+            aEngine.encrypt(xInputStream, xOutputStream, aUnencryptedInput.GetSize());
+            xOutputStream->flush();
+
+            CPPUNIT_ASSERT(aEncryptedStream.GetSize() > 0);
+
+            oox::BinaryXOutputStream aEncryptionInfoOutput(
+                new utl::OSeekableOutputStreamWrapper(aEncryptionInfo), true);
+            aEngine.writeEncryptionInfo(aEncryptionInfoOutput);
+            aEncryptionInfoOutput.close();
+        }
+
+        aEncryptionInfo.Seek(STREAM_SEEK_TO_BEGIN);
+        aEncryptedStream.Seek(STREAM_SEEK_TO_BEGIN);
+
+        {
+            oox::crypto::AgileEngine aEngine;
+            uno::Reference<io::XInputStream> xEncryptionInfo(
+                new utl::OSeekableInputStreamWrapper(aEncryptionInfo));
+
+            xEncryptionInfo->skipBytes(4);
+            CPPUNIT_ASSERT(aEngine.readEncryptionInfo(xEncryptionInfo));
+
+            const auto& rInfo = aEngine.getInfo();
+            CPPUNIT_ASSERT_EQUAL(rParameters.nKeyBits, rInfo.keyBits);
+            CPPUNIT_ASSERT_EQUAL(rParameters.nHashSize, rInfo.hashSize);
+            CPPUNIT_ASSERT_EQUAL(rParameters.sHashAlgorithm, rInfo.hashAlgorithm);
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(16), rInfo.blockSize);
+
+            CPPUNIT_ASSERT(aEngine.generateEncryptionKey(aPassword));
+
+            oox::BinaryXInputStream aEncryptedInput(
+                new utl::OSeekableInputStreamWrapper(aEncryptedStream), true);
+            SvMemoryStream aUnencryptedOutput;
+            oox::BinaryXOutputStream aOutput(
+                new utl::OSeekableOutputStreamWrapper(aUnencryptedOutput), true);
+
+            aEngine.decrypt(aEncryptedInput, aOutput);
+            aOutput.close();
+            aEncryptedInput.close();
+
+            CPPUNIT_ASSERT_EQUAL(static_cast<sal_uInt64>(aTestString.getLength() + 1),
+                                 aUnencryptedOutput.GetSize());
+
+            OString aDecryptedString(static_cast<const char*>(aUnencryptedOutput.GetData()));
+            CPPUNIT_ASSERT_EQUAL(aTestString, aDecryptedString);
+            CPPUNIT_ASSERT(aEngine.checkDataIntegrity());
+        }
     }
 }
 

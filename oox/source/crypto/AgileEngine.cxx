@@ -208,6 +208,11 @@ bool hashCalc(std::vector<sal_uInt8>& output,
         output = comphelper::Hash::calculateHash(input.data(), input.size(), comphelper::HashType::SHA1);
         return true;
     }
+    else if (sAlgorithm == u"SHA256")
+    {
+        output = comphelper::Hash::calculateHash(input.data(), input.size(), comphelper::HashType::SHA256);
+        return true;
+    }
     else if (sAlgorithm == u"SHA384")
     {
         output = comphelper::Hash::calculateHash(input.data(), input.size(), comphelper::HashType::SHA384);
@@ -227,6 +232,8 @@ comphelper::CryptoHashType cryptoHashTypeFromString(std::u16string_view sAlgorit
         return comphelper::CryptoHashType::SHA512;
     else if (sAlgorithm == u"SHA384")
         return comphelper::CryptoHashType::SHA384;
+    else if (sAlgorithm == u"SHA256")
+        return comphelper::CryptoHashType::SHA256;
     else
         return comphelper::CryptoHashType::SHA1;
 }
@@ -275,9 +282,14 @@ void AgileEngine::calculateBlock(
     hashCalc(hash, dataFinal, mInfo.hashAlgorithm);
 
     sal_Int32 keySize = mInfo.keyBits / 8;
+
+    // [MS-OFFCRYPTO] 2.3.4.11:
+    // Pad a short hash with 0x36, or truncate a longer hash.
+    hash.resize(keySize, 0x36);
+
     std::vector<sal_uInt8> key(keySize, 0);
 
-    std::copy(hash.begin(), hash.begin() + keySize, key.begin());
+    std::copy_n(hash.begin(), keySize, key.begin());
 
     comphelper::Decrypt aDecryptor(key, mInfo.saltValue, cryptoType(mInfo));
     aDecryptor.update(rOutput, rInput);
@@ -297,9 +309,13 @@ void AgileEngine::encryptBlock(
     hashCalc(hash, dataFinal, mInfo.hashAlgorithm);
 
     sal_Int32 keySize = mInfo.keyBits / 8;
+
+    // [MS-OFFCRYPTO] 2.3.4.11
+    hash.resize(keySize, 0x36);
+
     std::vector<sal_uInt8> key(keySize, 0);
 
-    std::copy(hash.begin(), hash.begin() + keySize, key.begin());
+    std::copy_n(hash.begin(), keySize, key.begin());
 
     comphelper::Encrypt aEncryptor(key, mInfo.saltValue, cryptoType(mInfo));
 
@@ -359,18 +375,19 @@ bool AgileEngine::decryptAndCheckVerifierHash(std::u16string_view rPassword)
 void AgileEngine::decryptEncryptionKey(std::u16string_view rPassword)
 {
     sal_Int32 nKeySize = mInfo.keyBits / 8;
-
-    mKey.clear();
-    // tdf#166241: for AES 192
-    // mKey is the outbuf and in that moment, mInfo.encryptedKeyValue length is 32, while mKey size is 24.
-    // so the end result is: we simply need to reserve mKey for mInfo.encryptedKeyValue.size() before resizing.
-    mKey.reserve(mInfo.encryptedKeyValue.size());
-    mKey.resize(nKeySize, 0);
-
     std::vector<sal_uInt8> aPasswordHash(mInfo.hashSize, 0);
     calculateHashFinal(rPassword, aPasswordHash);
 
-    calculateBlock(constBlock3, aPasswordHash, mInfo.encryptedKeyValue, mKey);
+    std::vector<sal_uInt8> aDecryptedKey(mInfo.encryptedKeyValue.size(), 0);
+    calculateBlock(constBlock3, aPasswordHash, mInfo.encryptedKeyValue, aDecryptedKey);
+
+    if (aDecryptedKey.size() < o3tl::make_unsigned(nKeySize))
+    {
+        mKey.clear();
+        return;
+    }
+
+    mKey.assign(aDecryptedKey.begin(), aDecryptedKey.begin() + nKeySize);
 }
 
 // TODO: Rename
@@ -397,6 +414,8 @@ bool AgileEngine::decryptHmacKey()
     comphelper::HashType eType;
     if (mInfo.hashAlgorithm == "SHA1")
         eType = comphelper::HashType::SHA1;
+    else if (mInfo.hashAlgorithm == "SHA256")
+        eType = comphelper::HashType::SHA256;
     else if (mInfo.hashAlgorithm == "SHA384")
         eType = comphelper::HashType::SHA384;
     else if (mInfo.hashAlgorithm == "SHA512")
@@ -425,6 +444,8 @@ bool AgileEngine::decryptHmacValue()
     comphelper::HashType eType;
     if (mInfo.hashAlgorithm == "SHA1")
         eType = comphelper::HashType::SHA1;
+    else if (mInfo.hashAlgorithm == "SHA256")
+        eType = comphelper::HashType::SHA256;
     else if (mInfo.hashAlgorithm == "SHA384")
         eType = comphelper::HashType::SHA384;
     else if (mInfo.hashAlgorithm == "SHA512")
@@ -470,7 +491,6 @@ bool AgileEngine::decrypt(BinaryXInputStream& aInputStream,
     std::vector<sal_uInt8>& keyDataSalt = mInfo.keyDataSalt;
 
     sal_uInt32 saltSize = mInfo.saltSize;
-    sal_uInt32 keySize = mInfo.keyBits / 8;
 
     sal_uInt32 segment = 0;
 
@@ -478,7 +498,7 @@ bool AgileEngine::decrypt(BinaryXInputStream& aInputStream,
     std::copy(keyDataSalt.begin(), keyDataSalt.end(), saltWithBlockKey.begin());
 
     std::vector<sal_uInt8> hash(mInfo.hashSize, 0);
-    std::vector<sal_uInt8> iv(keySize, 0);
+    std::vector<sal_uInt8> iv(mInfo.blockSize, 0);
 
     std::vector<sal_uInt8> inputBuffer(constSegmentLength);
     std::vector<sal_uInt8> outputBuffer(constSegmentLength);
@@ -494,10 +514,14 @@ bool AgileEngine::decrypt(BinaryXInputStream& aInputStream,
         p[2] = (segment >> 16) & 0xFF;
         p[3] = segment >> 24;
 
-        hashCalc(hash, saltWithBlockKey, mInfo.hashAlgorithm);
+        if (!hashCalc(hash, saltWithBlockKey, mInfo.hashAlgorithm))
+            return false;
 
-        // Only if hash > keySize
-        std::copy(hash.begin(), hash.begin() + keySize, iv.begin());
+        // The IV must have the cipher block size.
+        // Pad a short hash with 0x36, or truncate a longer hash.
+        hash.resize(mInfo.blockSize, 0x36);
+
+        std::copy_n(hash.begin(), mInfo.blockSize, iv.begin());
 
         comphelper::Decrypt aDecryptor(mKey, iv, cryptoType(mInfo));
         outputLength = aDecryptor.update(outputBuffer, inputBuffer, inputLength);
@@ -548,7 +572,7 @@ bool AgileEngine::readEncryptionInfo(uno::Reference<io::XInputStream> & rxInputS
     xParser->parseStream(aInputSource);
 
     // CHECK info data
-    if (2 > mInfo.blockSize || mInfo.blockSize > 4096)
+    if (mInfo.blockSize != 16)
         return false;
 
     if (0 > mInfo.spinCount || mInfo.spinCount > 10000000)
@@ -569,48 +593,37 @@ bool AgileEngine::readEncryptionInfo(uno::Reference<io::XInputStream> & rxInputS
                  << " does not match saltSize " << mInfo.saltSize);
         return false;
     }
-
-    // AES 128 CBC with SHA1
-    if (mInfo.keyBits         == 128 &&
-        mInfo.cipherAlgorithm == "AES" &&
-        mInfo.cipherChaining  == "ChainingModeCBC" &&
-        mInfo.hashAlgorithm   == "SHA1" &&
-        mInfo.hashSize        == comphelper::SHA1_HASH_LENGTH)
+    // [MS-OFFCRYPTO] 2.3.4.10
+    if (mInfo.cipherAlgorithm != "AES" ||
+        mInfo.cipherChaining != "ChainingModeCBC")
     {
-        return true;
+        return false;
     }
 
-    // AES 128 CBC with SHA384
-    if (mInfo.keyBits         == 128 &&
-        mInfo.cipherAlgorithm == "AES" &&
-        mInfo.cipherChaining  == "ChainingModeCBC" &&
-        mInfo.hashAlgorithm   == "SHA384" &&
-        mInfo.hashSize        == comphelper::SHA384_HASH_LENGTH)
+    if (mInfo.keyBits != 128 &&
+        mInfo.keyBits != 192 &&
+        mInfo.keyBits != 256)
     {
-        return true;
+        return false;
     }
 
-    // AES 192 CBC with SHA384
-    if (mInfo.keyBits         == 192 &&
-        mInfo.cipherAlgorithm == "AES" &&
-        mInfo.cipherChaining  == "ChainingModeCBC" &&
-        mInfo.hashAlgorithm   == "SHA384" &&
-        mInfo.hashSize        == comphelper::SHA384_HASH_LENGTH)
-    {
-        return true;
-    }
+    sal_Int32 expectedHashSize = 0;
 
-    // AES 256 CBC with SHA512
-    if (mInfo.keyBits         == 256 &&
-        mInfo.cipherAlgorithm == "AES" &&
-        mInfo.cipherChaining  == "ChainingModeCBC" &&
-        mInfo.hashAlgorithm   == "SHA512" &&
-        mInfo.hashSize        == comphelper::SHA512_HASH_LENGTH)
-    {
-        return true;
-    }
+    if (mInfo.hashAlgorithm == "SHA1")
+        expectedHashSize = comphelper::SHA1_HASH_LENGTH;
+    else if (mInfo.hashAlgorithm == "SHA256")
+        expectedHashSize = comphelper::SHA256_HASH_LENGTH;
+    else if (mInfo.hashAlgorithm == "SHA384")
+        expectedHashSize = comphelper::SHA384_HASH_LENGTH;
+    else if (mInfo.hashAlgorithm == "SHA512")
+        expectedHashSize = comphelper::SHA512_HASH_LENGTH;
+    else
+        return false;
 
-    return false;
+    if (mInfo.hashSize != expectedHashSize)
+        return false;
+
+    return true;
 }
 
 bool AgileEngine::generateAndEncryptVerifierHash(std::u16string_view rPassword)
@@ -663,6 +676,8 @@ bool AgileEngine::encryptHmacKey()
     comphelper::HashType eType;
     if (mInfo.hashAlgorithm == "SHA1")
         eType = comphelper::HashType::SHA1;
+    else if (mInfo.hashAlgorithm == "SHA256")
+        eType = comphelper::HashType::SHA256;
     else if (mInfo.hashAlgorithm == "SHA384")
         eType = comphelper::HashType::SHA384;
     else if (mInfo.hashAlgorithm == "SHA512")
@@ -692,6 +707,8 @@ bool AgileEngine::encryptHmacValue()
     comphelper::HashType eType;
     if (mInfo.hashAlgorithm == "SHA1")
         eType = comphelper::HashType::SHA1;
+    else if (mInfo.hashAlgorithm == "SHA256")
+        eType = comphelper::HashType::SHA256;
     else if (mInfo.hashAlgorithm == "SHA384")
         eType = comphelper::HashType::SHA384;
     else if (mInfo.hashAlgorithm == "SHA512")
@@ -716,7 +733,7 @@ bool AgileEngine::encryptEncryptionKey(std::u16string_view rPassword)
     mKey.resize(nKeySize, 0);
 
     mInfo.encryptedKeyValue.clear();
-    mInfo.encryptedKeyValue.resize(nKeySize, 0);
+    mInfo.encryptedKeyValue.resize(comphelper::roundUp(nKeySize, sal_Int32(mInfo.blockSize)), 0);
 
     if (!generateBytes(mKey, nKeySize))
         return false;
@@ -724,7 +741,10 @@ bool AgileEngine::encryptEncryptionKey(std::u16string_view rPassword)
     std::vector<sal_uInt8> aPasswordHash(mInfo.hashSize, 0);
     calculateHashFinal(rPassword, aPasswordHash);
 
-    encryptBlock(constBlock3, aPasswordHash, mKey, mInfo.encryptedKeyValue);
+    std::vector<sal_uInt8> aPaddedKey = mKey;
+    aPaddedKey.resize(comphelper::roundUp(nKeySize, sal_Int32(mInfo.blockSize)), 0);
+
+    encryptBlock(constBlock3, aPasswordHash, aPaddedKey, mInfo.encryptedKeyValue);
 
     return true;
 }
@@ -762,13 +782,25 @@ void AgileEngine::setupEncryptionParameters(AgileEncryptionParameters const & rA
 bool AgileEngine::setupEncryptionKey(std::u16string_view rPassword)
 {
     if (!generateAndEncryptVerifierHash(rPassword))
+    {
+        SAL_WARN("oox", "generateAndEncryptVerifierHash failed");
         return false;
+    }
     if (!encryptEncryptionKey(rPassword))
+    {
+        SAL_WARN("oox", "encryptEncryptionKey failed");
         return false;
+    }
     if (!generateBytes(mInfo.keyDataSalt, mInfo.saltSize))
+    {
+        SAL_WARN("oox", "generateBytes failed");
         return false;
+    }
     if (!encryptHmacKey())
+    {
+        SAL_WARN("oox", "encryptHmacKey failed");
         return false;
+    }
     return true;
 }
 
@@ -850,7 +882,6 @@ void AgileEngine::encrypt(const css::uno::Reference<css::io::XInputStream> &  rx
     std::vector<sal_uInt8>& keyDataSalt = mInfo.keyDataSalt;
 
     sal_uInt32 saltSize = mInfo.saltSize;
-    sal_uInt32 keySize = mInfo.keyBits / 8;
 
     sal_uInt32 nSegment = 0;
     sal_uInt32 nSegmentByteSize = sizeof(nSegment);
@@ -859,7 +890,7 @@ void AgileEngine::encrypt(const css::uno::Reference<css::io::XInputStream> &  rx
     std::copy(keyDataSalt.begin(), keyDataSalt.end(), saltWithBlockKey.begin());
 
     std::vector<sal_uInt8> hash(mInfo.hashSize, 0);
-    std::vector<sal_uInt8> iv(keySize, 0);
+    std::vector<sal_uInt8> iv(mInfo.blockSize, 0);
 
     std::vector<sal_uInt8> inputBuffer(constSegmentLength);
     std::vector<sal_uInt8> outputBuffer(constSegmentLength);
@@ -878,10 +909,12 @@ void AgileEngine::encrypt(const css::uno::Reference<css::io::XInputStream> &  rx
         p[2] = (nSegment >> 16) & 0xFF;
         p[3] = nSegment >> 24;
 
-        hashCalc(hash, saltWithBlockKey, mInfo.hashAlgorithm);
+        if (!hashCalc(hash, saltWithBlockKey, mInfo.hashAlgorithm))
+            return;
 
-        // Only if hash > keySize
-        std::copy(hash.begin(), hash.begin() + keySize, iv.begin());
+        // The IV must have the cipher block size.
+        hash.resize(mInfo.blockSize, 0x36);
+        std::copy_n(hash.begin(), mInfo.blockSize, iv.begin());
 
         comphelper::Encrypt aEncryptor(mKey, iv, AgileEngine::cryptoType(mInfo));
         outputLength = aEncryptor.update(outputBuffer, inputBuffer, correctedInputLength);
