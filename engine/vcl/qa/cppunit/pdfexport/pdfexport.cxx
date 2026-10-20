@@ -1232,6 +1232,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest, testTdf173662ImpressSpanLang)
         }
     }
     std::sort(aSpanLangs.begin(), aSpanLangs.end());
+    // the text of the embedded chart is inside a Figure, so it gets no Span
     CPPUNIT_ASSERT_EQUAL(size_t(2), aSpanLangs.size());
     CPPUNIT_ASSERT_EQUAL("en-US"_ostr, aSpanLangs[0]);
     CPPUNIT_ASSERT_EQUAL("uk-UA"_ostr, aSpanLangs[1]);
