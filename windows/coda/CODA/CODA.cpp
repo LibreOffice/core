@@ -2361,14 +2361,6 @@ static bool isLightTheme()
 
 static bool darkModeEnabled() { return Desktop::getDarkMode().value_or(!isLightTheme()); }
 
-// These might not be defined for older Windows versions
-#ifndef DWMWA_USE_IMMERSIVE_DARK_MODE
-#define DWMWA_USE_IMMERSIVE_DARK_MODE 20
-#endif
-#ifndef DWMWA_CAPTION_COLOR
-#define DWMWA_CAPTION_COLOR 35
-#endif
-
 // Make the native (DWM-drawn) title bar of a window match the effective dark mode. The document UI
 // inside the web view follows the same state through the darkTheme parameter of the cool.html URL.
 static void applyTitleBarTheme(HWND hWnd)
