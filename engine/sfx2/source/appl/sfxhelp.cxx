@@ -340,12 +340,6 @@ OUString SfxHelp::GetHelpText(const OUString& aCommandURL)
     return sHelpText;
 }
 
-OUString SfxHelp::GetURLHelpText(std::u16string_view /*aURL*/)
-{
-    // The client shows its own text for hyperlinks.
-    return OUString();
-}
-
 void SfxHelp::SearchKeyword( const OUString& /*rKeyword*/ )
 {
     Start_Impl(OUString());

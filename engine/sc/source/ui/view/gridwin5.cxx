@@ -26,7 +26,6 @@
 #include <vcl/imapobj.hxx>
 #include <vcl/help.hxx>
 #include <tools/urlobj.hxx>
-#include <sfx2/sfxhelp.hxx>
 
 #include <AccessibleDocument.hxx>
 #include <com/sun/star/accessibility/XAccessible.hpp>
@@ -245,84 +244,24 @@ void ScGridWindow::RequestHelp(const HelpEvent& rHEvt)
         tools::Rectangle aPixRect;
         Point aPosPixel = ScreenToOutputPixel( rHEvt.GetMousePosPixel() );
 
-        if ( pDrView )                                      // URL / Image-Map
+        if (pDrView) // Image-Map
         {
             SdrViewEvent aVEvt;
             MouseEvent aMEvt( aPosPixel, 1, MouseEventModifiers::NONE, MOUSE_LEFT );
             SdrHitKind eHit = pDrView->PickAnything( aMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt );
 
-            if ( eHit != SdrHitKind::NONE && aVEvt.mpObj != nullptr )
+            // The description of the image map object below the pointer is the help text.
+            if (eHit != SdrHitKind::NONE && aVEvt.mpObj != nullptr
+                && SvxIMapInfo::GetIMapInfo(aVEvt.mpObj))
             {
-                // URL for IMapObject below Pointer is help text
-                if (SvxIMapInfo::GetIMapInfo(aVEvt.mpObj))
+                Point aLogicPos = PixelToLogic( aPosPixel );
+                IMapObject* pIMapObj = SvxIMapInfo::GetHitIMapObject(
+                                                aVEvt.mpObj, aLogicPos, GetOutDev() );
+                if (pIMapObj)
                 {
-                    Point aLogicPos = PixelToLogic( aPosPixel );
-                    IMapObject* pIMapObj = SvxIMapInfo::GetHitIMapObject(
-                                                    aVEvt.mpObj, aLogicPos, GetOutDev() );
-
-                    if ( pIMapObj )
-                    {
-                        // For image maps show the description, if available
-                        aHelpText = pIMapObj->GetAltText();
-                        if (aHelpText.isEmpty())
-                            aHelpText = SfxHelp::GetURLHelpText(pIMapObj->GetURL());
-                        aPixRect = LogicToPixel(aVEvt.mpObj->GetLogicRect());
-                    }
+                    aHelpText = pIMapObj->GetAltText();
+                    aPixRect = LogicToPixel(aVEvt.mpObj->GetLogicRect());
                 }
-                // URL in shape text or at shape itself (URL in text overrides object URL)
-                if ( aHelpText.isEmpty() )
-                {
-                    if( aVEvt.meEvent == SdrEventKind::ExecuteUrl )
-                    {
-                        if (aVEvt.mpURLField && !aVEvt.mpURLField->GetURL().startsWith("#"))
-                        {
-                            aHelpText = SfxHelp::GetURLHelpText(aVEvt.mpURLField->GetURL());
-                            aPixRect = LogicToPixel(aVEvt.mpObj->GetLogicRect());
-                        }
-                    }
-                    else
-                    {
-                        SdrPageView* pPV = nullptr;
-                        Point aMDPos = PixelToLogic( aPosPixel );
-                        SdrObject* pObj = pDrView->PickObj(aMDPos, pDrView->getHitTolLog(), pPV, SdrSearchOptions::ALSOONMASTER);
-                        if (pObj)
-                        {
-                            if ( pObj->IsGroupObject() )
-                            {
-                                    SdrObject* pHit = pDrView->PickObj(aMDPos, pDrView->getHitTolLog(), pPV, SdrSearchOptions::DEEP);
-                                    if (pHit)
-                                        pObj = pHit;
-                            }
-                            // Fragments pointing into the current document need no tooltip
-                            // describing the ctrl-click functionality.
-                            if ( !pObj->getHyperlink().isEmpty() && !pObj->getHyperlink().startsWith("#") )
-                            {
-                                aPixRect = LogicToPixel(aVEvt.mpObj->GetLogicRect());
-                                aHelpText = SfxHelp::GetURLHelpText(pObj->getHyperlink());
-                            }
-                        }
-                    }
-                }
-            }
-        }
-
-        if ( aHelpText.isEmpty() )                                 // Text-URL
-        {
-            OUString aUrl;
-            if ( GetEditUrl( aPosPixel, nullptr, &aUrl ) )
-            {
-                aHelpText = SfxHelp::GetURLHelpText(
-                    INetURLObject::decode(aUrl, INetURLObject::DecodeMechanism::Unambiguous));
-
-                ScDocument& rDoc = mrViewData.GetDocument();
-                SCCOL nPosX;
-                SCROW nPosY;
-                SCTAB nTab = mrViewData.CurrentTabForData();
-                mrViewData.GetPosFromPixel( aPosPixel.X(), aPosPixel.Y(), eWhich, nPosX, nPosY );
-                const ScPatternAttr* pPattern = rDoc.GetPattern( nPosX, nPosY, nTab );
-
-                // bForceToTop = false, use the cell's real position
-                aPixRect = mrViewData.GetEditArea( eWhich, nPosX, nPosY, this, pPattern, false );
             }
         }
 

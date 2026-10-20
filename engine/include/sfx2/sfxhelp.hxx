@@ -49,8 +49,6 @@ public:
     virtual OUString        GetHelpText(const OUString&) override;
 
     static OUString         CreateHelpURL( const OUString& aCommandURL, const OUString& rModuleName );
-
-    static OUString GetURLHelpText(std::u16string_view);
 };
 
 #endif // INCLUDED_SFX2_SFXHELP_HXX

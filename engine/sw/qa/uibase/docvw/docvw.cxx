@@ -326,10 +326,10 @@ CPPUNIT_TEST_FIXTURE(Test, testHyperlinkTooltipTitle)
                                    0);
     Scheduler::ProcessEventsToIdle();
 
-    // Then make sure the tooltip starts with the title:
-    // Without the accompanying fix in place, this test would have failed, the tooltip started with
-    // the name.
-    CPPUNIT_ASSERT(aCallback.text.starts_with("Title tip\n"));
+    // Then make sure the tooltip is the title:
+    // Without the accompanying fix in place, this test would have failed, the tooltip was the
+    // name.
+    CPPUNIT_ASSERT_EQUAL(std::string("Title tip"), aCallback.text);
 
     // Tear down COKit:
     pWrtShell->GetSfxViewShell()->setCOKitViewCallback(nullptr);

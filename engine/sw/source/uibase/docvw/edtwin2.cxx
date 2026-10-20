@@ -26,7 +26,6 @@
 #include <tools/urlobj.hxx>
 #include <fmtrfmrk.hxx>
 #include <svl/urihelper.hxx>
-#include <sfx2/sfxhelp.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
 #include <swmodule.hxx>
@@ -511,7 +510,8 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                 bool bExecHyperlinks = m_rView.GetDocShell()->IsReadOnly();
                 if ( !bExecHyperlinks )
                 {
-                    sText = SfxHelp::GetURLHelpText(sText);
+                    // An editable document shows the hyperlink name, not the URL.
+                    sText.clear();
 
                     SwPosition aPos(rSh.GetDoc()->GetNodes());
                     rSh.GetLayout()->GetModelPositionForViewPoint(&aPos, aPt);
@@ -532,15 +532,7 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         if (!sName.isEmpty())
                         {
                             bScreenTip = true;
-                            OUStringBuffer sStrBuffer(sName);
-                            sal_Int32 nTextLen = sText.getLength();
-                            sal_Int32 nNameLen = sName.getLength();
-                            if (nTextLen > 0 && nNameLen > nTextLen)
-                            {
-                                for (sal_Int32 i = nTextLen - 1; i < nNameLen; i += nTextLen)
-                                    sStrBuffer.insert(i + 1, std::u16string_view(u"\n"));
-                            }
-                            sText = sStrBuffer.makeStringAndClear() + "\n" + sText;
+                            sText = sName;
                         }
                     }
                     catch (cpo::uno::RuntimeException&)
@@ -713,15 +705,6 @@ void SwEditWin::RequestHelp(const HelpEvent &rEvt)
                         {
                             const auto pAuthorityField = static_cast<const SwAuthorityField*>(pField);
                             sText = pAuthorityField->GetAuthority(rSh.GetLayout());
-
-                            if (auto t = pAuthorityField->GetTargetType();
-                                t == SwAuthorityField::TargetType::UseDisplayURL
-                                || t == SwAuthorityField::TargetType::UseTargetURL)
-                            {
-                                const OUString aURL = pAuthorityField->GetAbsoluteURL();
-                                sText += "\n" + SfxHelp::GetURLHelpText(aURL);
-                            }
-
                             break;
                         }
 

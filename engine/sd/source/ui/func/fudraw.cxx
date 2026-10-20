@@ -21,18 +21,13 @@
 
 #include <vcl/svapp.hxx>
 #include <vcl/ptrstyle.hxx>
-#include <editeng/flditem.hxx>
 #include <svx/svdogrp.hxx>
-#include <tools/urlobj.hxx>
-#include <vcl/help.hxx>
 #include <svx/bmpmask.hxx>
 #include <svx/svdotext.hxx>
 #include <svx/ImageMapInfo.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
-#include <sfx2/sfxhelp.hxx>
 #include <svx/svdpagv.hxx>
-#include <vcl/imapobj.hxx>
 #include <svx/svxids.hrc>
 #include <svx/obj3d.hxx>
 #include <svx/scene3d.hxx>
@@ -692,88 +687,12 @@ void FuDraw::DoubleClick(const MouseEvent& rMEvt)
 
 bool FuDraw::RequestHelp(const HelpEvent& rHEvt)
 {
-    bool bReturn = false;
-
-    if (Help::IsBalloonHelpEnabled() || Help::IsQuickHelpEnabled())
-    {
-        SdrViewEvent aVEvt;
-
-        MouseEvent aMEvt(mpWindow->GetPointerPosPixel(), 1, MouseEventModifiers::NONE, MOUSE_LEFT);
-
-        SdrHitKind eHit = mpView->PickAnything(aMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
-
-        SdrObject* pObj = aVEvt.mpObj;
-
-        if (eHit != SdrHitKind::NONE && pObj != nullptr)
-        {
-            Point aPosPixel = rHEvt.GetMousePosPixel();
-
-            bReturn = SetHelpText(pObj, aPosPixel, aVEvt);
-
-            if (!bReturn && (dynamic_cast< const SdrObjGroup *>( pObj ) != nullptr || DynCastE3dScene(pObj)))
-            {
-                // take a glance into the group
-                SdrPageView* pPV = nullptr;
-
-                Point aPos(mpWindow->PixelToLogic(mpWindow->ScreenToOutputPixel(aPosPixel)));
-
-                pObj = mpView->PickObj(aPos, mpView->getHitTolLog(), pPV, SdrSearchOptions::ALSOONMASTER | SdrSearchOptions::DEEP);
-                if (pObj)
-                    bReturn = SetHelpText(pObj, aPosPixel, aVEvt);
-            }
-        }
-    }
-
-    if (!bReturn)
-    {
-        bReturn = FuPoor::RequestHelp(rHEvt);
-    }
+    bool bReturn = FuPoor::RequestHelp(rHEvt);
 
     if (!bReturn)
        bReturn = mpView->RequestHelp(rHEvt);
 
     return bReturn;
-}
-
-bool FuDraw::SetHelpText(const SdrObject* pObj, const Point& rPosPixel, const SdrViewEvent& rVEvt)
-{
-    OUString aHelpText;
-    Point aPos(mpWindow->PixelToLogic(mpWindow->ScreenToOutputPixel(rPosPixel)));
-    IMapObject* pIMapObj = SvxIMapInfo::GetHitIMapObject(pObj, aPos);
-
-    if (!rVEvt.mpURLField && !pIMapObj)
-        return false;
-
-    OUString aURL;
-    if (rVEvt.mpURLField)
-        aURL = INetURLObject::decode(rVEvt.mpURLField->GetURL(),
-                                     INetURLObject::DecodeMechanism::WithCharset);
-    else if (pIMapObj)
-    {
-        aURL = pIMapObj->GetAltText() +
-            " (" +
-            INetURLObject::decode(pIMapObj->GetURL(),
-                                        INetURLObject::DecodeMechanism::WithCharset) +
-            ")";
-    }
-    else
-        return false;
-
-    aHelpText = SfxHelp::GetURLHelpText(aURL);
-
-    if (aHelpText.isEmpty())
-        return false;
-
-    ::tools::Rectangle aLogicPix = mpWindow->LogicToPixel(pObj->GetLogicRect());
-    ::tools::Rectangle aScreenRect(mpWindow->OutputToScreenPixel(aLogicPix.TopLeft()),
-                            mpWindow->OutputToScreenPixel(aLogicPix.BottomRight()));
-
-    if (Help::IsBalloonHelpEnabled())
-        Help::ShowBalloon( static_cast<vcl::Window*>(mpWindow), rPosPixel, aScreenRect, aHelpText);
-    else if (Help::IsQuickHelpEnabled())
-        Help::ShowQuickHelp( static_cast<vcl::Window*>(mpWindow), aScreenRect, aHelpText);
-
-    return true;
 }
 
 /** is called when the current function should be aborted. <p>

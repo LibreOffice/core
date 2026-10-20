@@ -20,7 +20,6 @@
 #include <editeng/flditem.hxx>
 #include <vcl/imapobj.hxx>
 #include <svl/urihelper.hxx>
-#include <sfx2/sfxhelp.hxx>
 #include <vcl/help.hxx>
 #include <svx/svdview.hxx>
 #include <svx/unopage.hxx>
@@ -228,8 +227,9 @@ bool SwDPage::RequestHelp( vcl::Window* pWindow, SdrView const * pView,
             if (SwDocShell* pDocShell = m_pDoc->GetDocShell())
             {
                 bool bExecHyperlinks = pDocShell->IsReadOnly();
+                // An editable document shows an empty help text for a link.
                 if (!bExecHyperlinks && !bTooltip)
-                    sText = SfxHelp::GetURLHelpText(sText);
+                    sText.clear();
             }
 
             // then display the help:

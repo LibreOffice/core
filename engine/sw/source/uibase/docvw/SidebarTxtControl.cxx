@@ -35,7 +35,6 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
-#include <sfx2/sfxhelp.hxx>
 
 #include <vcl/commandevent.hxx>
 #include <vcl/event.hxx>
@@ -177,7 +176,7 @@ OUString SidebarTextControl::RequestHelp(tools::Rectangle& rHelpRect)
             if (pURL)
             {
                 rHelpRect = tools::Rectangle(aPos, Size(50, 10));
-                return SfxHelp::GetURLHelpText(pURL->GetURL());
+                return OUString();
             }
         }
     }
