@@ -2402,6 +2402,36 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphShapeAfterScr
                          aView.m_aA11yFocusedParagraph.get<std::string>("content", ""));
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphShapeAfterTable)
+{
+    // Given a cell with the same text as the first paragraph, farther than the paragraphs given
+    // around the cursor, and a shape in the paragraph after the table:
+    createDoc("a11y-shape-after-table.fodt");
+    SwTestViewCallback aView;
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+    pWrtShell->Down(/*bSelect=*/false);
+    pWrtShell->Up(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // When the cursor jumps into the cell, and then leaves the table into that paragraph:
+    // Writer tells a paragraph it has the focus only while its window has it, lost on idle here.
+    pWrtShell->GetWin()->GrabFocus();
+    pWrtShell->GotoTable(UIName(u"T1"_ustr));
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(std::string("Same text."),
+                         aView.m_aA11yFocusedCell.get<std::string>("paragraph.content", ""));
+    pWrtShell->GetWin()->GrabFocus();
+    pWrtShell->Down(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then that paragraph is reported:
+    // Without the fix, the paragraphs collected on entering a cell with unchanged text were not
+    // listened to, and Writer sent no CHILD event for the one kept alive by its shape.
+    CPPUNIT_ASSERT_EQUAL(std::string("Before \xef\xbf\xbc after."),
+                         aView.m_aA11yFocusedCell.get<std::string>("paragraph.content", ""));
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yShapeSelection)
 {
     // Given a shape anchored as a character and one anchored to the next paragraph, and the

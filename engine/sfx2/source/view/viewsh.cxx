@@ -1630,6 +1630,8 @@ public:
     // Writer sends no CHILD event when the caret enters a paragraph whose accessible object
     // already exists, e.g. one kept alive by the accessible object of a shape in it.
     void attachContextParagraphs();
+    void collectAndAttachContextWindow(
+        const uno::Reference<css::accessibility::XAccessibleText>& xAccText);
 
     /// @throws lang::IndexOutOfBoundsException
     /// @throws uno::RuntimeException
@@ -2207,6 +2209,17 @@ void KitDocumentFocusListener::attachContextParagraphs()
         attachRecursive(xAccessible);
 }
 
+void KitDocumentFocusListener::collectAndAttachContextWindow(
+    const uno::Reference<css::accessibility::XAccessibleText>& xAccText)
+{
+    collectContextWindow(xAccText);
+    // Writer announces no new child for a paragraph the context walk created first.
+    for (const auto& xItem : m_aList.aParagraphs)
+        attachRecursive(uno::Reference<accessibility::XAccessible>(xItem, uno::UNO_QUERY), xItem,
+                        xItem->getAccessibleStateSet());
+    attachContextParagraphs();
+}
+
 void KitDocumentFocusListener::disposing( const lang::EventObject& aEvent )
 {
     // Unref the object here, but do not remove as listener since the object
@@ -2274,12 +2287,7 @@ bool KitDocumentFocusListener::updateParagraphInfo(const uno::Reference<css::acc
             m_aFocusedImages = std::move(aImages);
             m_aFocusedComments = std::move(aComments);
             m_aFocusedContentControls = std::move(aContentControls);
-            collectContextWindow(xAccText);
-            // Writer announces no new child for a paragraph the context walk created first.
-            for (const auto& xItem : m_aList.aParagraphs)
-                attachRecursive(uno::Reference<accessibility::XAccessible>(xItem, uno::UNO_QUERY),
-                                xItem, xItem->getAccessibleStateSet());
-            attachContextParagraphs();
+            collectAndAttachContextWindow(xAccText);
             bNotify = true;
         }
     }
@@ -2450,7 +2458,8 @@ void KitDocumentFocusListener::onFocusedParagraphInWriterTable(
     sal_Int32 nColSpan = xTable->getAccessibleColumnExtentAt(nRow, nCol);
 
     m_xLastTable = xTable;
-    updateParagraphInfo(xAccText, false, "STATE_CHANGED: FOCUSED");
+    if (!updateParagraphInfo(xAccText, false, "STATE_CHANGED: FOCUSED"))
+        collectAndAttachContextWindow(xAccText);
     notifyFocusedCellChanged(nOutCount, aInList, nRow, nCol, nRowSpan, nColSpan);
 }
 
@@ -2550,7 +2559,9 @@ void KitDocumentFocusListener::notifyEvent(const accessibility::AccessibleEventO
                                         m_xLastTable.clear();
                                         // notify
                                         std::vector<TableSizeType> aInList;
-                                        updateParagraphInfo(xAccText, false, "STATE_CHANGED: FOCUSED");
+                                        if (!updateParagraphInfo(xAccText, false,
+                                                                 "STATE_CHANGED: FOCUSED"))
+                                            collectAndAttachContextWindow(xAccText);
                                         notifyFocusedCellChanged(nOutCount, aInList, -1, -1, 1, 1);
                                     }
                                     else
