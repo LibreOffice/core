@@ -21,6 +21,9 @@ function test() {
     console.assert(JSON.stringify(body.getType()) === '"BODY_SECTION"');
     console.assert(body.getText().length > 0);
     console.assert(body.getNumChildren() === 6);
+    // The page is US Letter, measured in points:
+    console.assert(body.getPageWidth() === 612);
+    console.assert(body.getPageHeight() === 792);
 
     // Paragraph 0 is a bold "Bold", italic "Italic" and plain "Plain" concatenated, followed by an
     // image anchored to a character with text wrap, which is a positioned image and no child:

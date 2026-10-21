@@ -33,6 +33,7 @@
 #include <com/sun/star/container/XEnumerationAccess.hpp>
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
+#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -43,6 +44,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
@@ -3243,6 +3245,10 @@ public:
 
     sal_Int32 getNumChildren() override { return getChildren().getLength(); }
 
+    double getPageHeight() override { return pageSize(u"Height"_ustr); }
+
+    double getPageWidth() override { return pageSize(u"Width"_ustr); }
+
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getParent() override {
         return {false, {}};
     }
@@ -3266,6 +3272,30 @@ public:
     }
 
 private:
+    // In points, of the page style that the body starts with, as GAS has one page size for the
+    // whole document:
+    double pageSize(OUString const & dimension) {
+        OUString name;
+        cpo::uno::Reference<css::beans::XPropertySet>(
+            text_->createTextCursorByRange(text_->getStart()), cpo::uno::UNO_QUERY_THROW)
+            ->getPropertyValue(u"PageStyleName"_ustr) >>= name;
+        // The start of the body has no page style name when it has no layout, as when it is hidden,
+        // and then the default page style, Standard, stands in:
+        if (name.isEmpty()) {
+            name = u"Standard"_ustr;
+        }
+        cpo::uno::Reference<css::container::XNameAccess> const styles(
+            cpo::uno::Reference<css::style::XStyleFamiliesSupplier>(
+                model_, cpo::uno::UNO_QUERY_THROW)->getStyleFamilies()->getByName(
+                    u"PageStyles"_ustr),
+            cpo::uno::UNO_QUERY_THROW);
+        sal_Int32 size = 0;
+        cpo::uno::Reference<css::beans::XPropertySet>(
+            styles->getByName(name), cpo::uno::UNO_QUERY_THROW)->getPropertyValue(dimension)
+            >>= size;
+        return o3tl::convert(double(size), o3tl::Length::mm100, o3tl::Length::pt);
+    }
+
     cpo::uno::Reference<scriptinterop::XParagraph> appendImpl(
         OUString const & text, OUString const & paraStyle)
     {

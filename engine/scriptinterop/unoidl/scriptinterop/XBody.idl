@@ -19,6 +19,10 @@ interface XBody: XContainerElement {
     XParagraph appendParagraph([in] string text);
 
     sequence<XElement> getChildren();
+
+    double getPageHeight();
+
+    double getPageWidth();
 };
 
 };

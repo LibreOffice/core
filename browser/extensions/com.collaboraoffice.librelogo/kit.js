@@ -145,18 +145,10 @@ function kitApply(ops) {
 	return results;
 }
 
-// Runs in the kit: the page size of the page the cursor is on, in points.
+// Runs in the kit: the page size of the document, in points.
 function kitPageSize() {
-	const model = cool.getActiveUnoModel();
-	let name = 'Standard';
-	try {
-		name = model.getCurrentController().getViewCursor().getPropertyValue('PageStyleName');
-	} catch (e) {
-		// no view cursor: use the default page style
-	}
-	const style = model.getStyleFamilies().getByName('PageStyles').getByName(name);
-	const w = style.getPropertyValue('Width'), h = style.getPropertyValue('Height');
-	return [w * 72 / 2540, h * 72 / 2540];
+	const body = DocumentApp.getActiveDocument().getBody();
+	return [body.getPageWidth(), body.getPageHeight()];
 }
 
 // Runs in the kit: the language the program is written in, taken from the
