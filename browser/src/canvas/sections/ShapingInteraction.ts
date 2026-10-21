@@ -26,6 +26,9 @@ class ShapingInteraction extends SelectionInteraction {
 	/// Whether Shift is held, which moves the handle as the office moves it then.
 	private ortho: boolean = false;
 
+	/// The steps a handle of a measurement snaps to while Ctrl or Alt is held, or nothing.
+	private snap: 'whole' | 'tenth' | null = null;
+
 	constructor(selection: SelectionSection, handle: SelectionHandle) {
 		super(selection);
 
@@ -45,16 +48,24 @@ class ShapingInteraction extends SelectionInteraction {
 			this.handle,
 			new cool.Point(this.at.x, this.at.y),
 		);
-		if (!this.ortho) return held;
+		const kept = this.ortho
+			? (MeasurementGhost.heldWithShift(this.selection, this.handle, held) ??
+				held)
+			: held;
+		if (!this.snap) return kept;
 
 		return (
-			MeasurementGhost.heldWithShift(this.selection, this.handle, held) ?? held
+			MeasurementGhost.snapped(this.selection, this.handle, kept, this.snap) ??
+			kept
 		);
 	}
 
 	public move(to: cool.SimplePoint, event?: MouseEvent): void {
 		this.at = this.led(to);
-		if (event) this.ortho = event.shiftKey;
+		if (event) {
+			this.ortho = event.shiftKey;
+			this.snap = event.ctrlKey ? 'whole' : event.altKey ? 'tenth' : null;
+		}
 		this.selection.redraw();
 	}
 
@@ -169,6 +180,88 @@ class MeasurementGhost {
 		const measurement = RenderGeometrySection.objectOf(objectId)?.measurement;
 		const square = RenderGeometrySection.transformOf(objectId);
 		return measurement && square ? { measurement, square } : null;
+	}
+
+	/// The value a measurement writes, read back from the way it is written with its separator
+	/// taken for a point. Nothing where it cannot be read.
+	private static valueOf(measurement: cool.ObjectMeasurement): number | null {
+		const separator = measurement.decimalSeparator || '.';
+		const digits = Array.from(measurement.value)
+			.filter(
+				(character: string) =>
+					(character >= '0' && character <= '9') ||
+					character === '-' ||
+					character === separator,
+			)
+			.join('')
+			.replace(separator, '.');
+		const value = parseFloat(digits);
+		return isNaN(value) ? null : value;
+	}
+
+	/*
+		Where a handle of a measurement goes while Ctrl or Alt is held: to the next whole unit of
+		what the measurement writes, or with Alt to the next tenth of it. The
+		ends of the measured line snap its length, measured from the other end along the way the
+		handle goes; the other handles snap the length they change, the length of a help line or
+		how far the dimension line stands. The unit is the one of the value, worked out from the
+		value written now and the length it is written for. Nothing where the handle belongs to no
+		measurement or the value cannot be read.
+	*/
+	public static snapped(
+		selection: SelectionSection,
+		handle: SelectionHandle,
+		at: cool.Point,
+		steps: 'whole' | 'tenth',
+	): cool.Point | null {
+		const found = MeasurementGhost.of(selection, handle);
+		if (!found) return null;
+
+		const square = found.square;
+		const origin = square.apply(0, 0);
+		const unit = square.apply(0, 1).subtract(origin).length();
+		const length = unit
+			? square.apply(1, 0).subtract(origin).length() / unit
+			: 0;
+		const value = MeasurementGhost.valueOf(found.measurement);
+		if (!length || !value) return null;
+
+		// A tenth of the unit with Alt, where the value is written with places at all.
+		const written =
+			steps === 'whole' || found.measurement.decimals < 1 ? 1 : 0.1;
+		// One step in the units of the model.
+		const step = (written * length) / value;
+		const onAStep = (model: number): number => Math.round(model / step) * step;
+
+		const which = handle.at ?? 0;
+		if (which === 2 || which === 3) {
+			const fixed = square.apply(which === 2 ? 1 : 0, 0);
+			const way = at.subtract(fixed);
+			const reach = way.length();
+			if (!reach) return null;
+
+			// The way goes in twips, the step in the units of the model.
+			const snappedReach = onAStep(reach / unit) * unit;
+			return new cool.Point(
+				fixed.x + (way.x / reach) * snappedReach,
+				fixed.y + (way.y / reach) * snappedReach,
+			);
+		}
+
+		const back = square.invert();
+		if (!back) return null;
+		const across = back.apply(at.x, at.y).y;
+		const x = which === 0 || which === 4 ? 0 : 1;
+
+		if (which === 0 || which === 1) return square.apply(x, onAStep(across));
+
+		// The dimension line stands as far as the handle less the overhang; that is what snaps.
+		const overhang = found.measurement.overhang;
+		const side = across < 0 ? -1 : 1;
+		return square.apply(
+			x,
+			side * (onAStep(Math.abs(across) - overhang) + overhang),
+		);
 	}
 
 	/*
@@ -522,19 +615,9 @@ class MeasurementGhost {
 		const was = lengthOf(found.square);
 		if (!was) return null;
 
-		// The value is read back from the way it is written, the separator taken for a point.
 		const separator = found.measurement.decimalSeparator || '.';
-		const digits = Array.from(found.measurement.value)
-			.filter(
-				(character: string) =>
-					(character >= '0' && character <= '9') ||
-					character === '-' ||
-					character === separator,
-			)
-			.join('')
-			.replace(separator, '.');
-		const value = parseFloat(digits);
-		if (isNaN(value)) return null;
+		const value = MeasurementGhost.valueOf(found.measurement);
+		if (value === null) return null;
 
 		let written = ((value * lengthOf(shaped.square)) / was).toFixed(
 			Math.max(0, found.measurement.decimals),
