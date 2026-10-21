@@ -71,7 +71,6 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
      */
     private static final String[] INTERCEPTED_URLS = { "private:factory/*" ,
                                                        ".uno:SaveAs"       ,
-                                                       "slot:5300"         ,
                                                        ".uno:Quit"         };
 
 
@@ -439,10 +438,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
         }
 
         // intercept "File->Exit" inside the menu
-        if (
-            (aURL.Complete.startsWith("slot:5300"))  ||
-            (aURL.Complete.startsWith(".uno:Quit"))
-           )
+        if (aURL.Complete.startsWith(".uno:Quit"))
         {
             System.out.println("intercept File->Exit");
             return this;
@@ -500,10 +496,7 @@ public class Interceptor implements com.sun.star.frame.XFrameActionListener,
                 return;
         }
 
-        if (
-            (aURL.Complete.startsWith("slot:5300")) ||
-            (aURL.Complete.startsWith(".uno:Quit"))
-           )
+        if (aURL.Complete.startsWith(".uno:Quit"))
         {
             System.exit(0);
         }

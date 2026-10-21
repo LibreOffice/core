@@ -49,9 +49,9 @@ public class CustomizeView extends    JPanel
      * These const URL's describe features for toggling some properties of loaded document.
      * Dispatch it with the corresponding parameter to the frame.
      */
-    private static final String FEATUREURL_MENUBAR      = "slot:6661"         ;
-    private static final String FEATUREURL_TOOLBAR      = "slot:5909"         ;
-    private static final String FEATUREURL_OBJECTBAR    = "slot:5905"         ;
+    private static final String FEATUREURL_MENUBAR      = ".uno:MenuBar"          ;
+    private static final String FEATUREURL_TOOLBAR      = ".uno:ShowToolbar"      ;
+    private static final String FEATUREURL_OBJECTBAR    = ".uno:ObjectBarVisible" ;
 
     private static final String FEATUREPROP_MENUBAR     = "MenuBarVisible"    ;
     private static final String FEATUREPROP_TOOLBAR     = "ToolBarVisible"    ;
