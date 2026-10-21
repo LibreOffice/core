@@ -174,13 +174,15 @@ int main(int argc, char** argv)
 
     // Must run before QApplication.
     // LocalScheme + LocalAccessAllowed lets the file:// page reach cool:.
+    // FetchApiAllowed lets the page download from cool: with fetch().
     {
         QWebEngineUrlScheme scheme("cool");
         scheme.setSyntax(QWebEngineUrlScheme::Syntax::Path);
         scheme.setFlags(QWebEngineUrlScheme::SecureScheme
                       | QWebEngineUrlScheme::LocalScheme
                       | QWebEngineUrlScheme::LocalAccessAllowed
-                      | QWebEngineUrlScheme::CorsEnabled);
+                      | QWebEngineUrlScheme::CorsEnabled
+                      | QWebEngineUrlScheme::FetchApiAllowed);
         QWebEngineUrlScheme::registerScheme(scheme);
     }
 
