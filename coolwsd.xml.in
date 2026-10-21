@@ -381,9 +381,9 @@
                  names as aliases, as in this example. -->
             <!--
             <group>
-                    <host desc="Host to allow or deny. The scheme is optional and not used for matching; only the host and port are. A regex is allowed in the host part." allow="true">scheme://hostname:port</host>
-                    <alias desc="regex pattern of aliasname">scheme://aliasname1:port</alias>
-                    <alias desc="regex pattern of aliasname">aliasname2.*\.com:port</alias>
+                    <host desc="Host to allow or deny. The scheme is optional and not used for matching; only the host and port are. A port counts only when it is written; without one the host is allowed on any port. A regex is allowed in the host part." allow="true">scheme://hostname:port</host>
+                    <alias desc="regex pattern of aliasname, with an optional port after it that counts the same way">scheme://aliasname1:port</alias>
+                    <alias desc="regex pattern of aliasname, with an optional port after it that counts the same way">aliasname2.*\.com:port</alias>
                     @UNLOCK_LINK_PER_HOST@
             </group>
             -->

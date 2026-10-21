@@ -35,12 +35,67 @@
 #include <string>
 #include <vector>
 
-RegexUtil::RegexListMatcher HostUtil::WopiHosts;
+WopiHostList HostUtil::WopiHosts;
 std::map<std::string, std::string> HostUtil::AliasHosts;
 std::set<std::string> HostUtil::hostList;
 std::string HostUtil::FirstHost;
 bool HostUtil::FirstHostRejectionLogged;
 bool HostUtil::WopiEnabled;
+
+bool WopiHostList::Entry::matches(const std::string& host) const
+{
+    return network ? network->contains(host) : std::regex_match(host, regex);
+}
+
+void WopiHostList::add(const std::string& host, int port, bool allow)
+{
+    Entry entry;
+    entry.network = Util::IpNetwork::parse(host);
+    if (!entry.network)
+    {
+        try
+        {
+            entry.regex = std::regex(host, std::regex_constants::icase);
+        }
+        catch (const std::regex_error& exc)
+        {
+            LOG_WRN("Ignoring the WOPI host [" << host
+                                               << "], which is not a valid regular expression: "
+                                               << exc.what());
+            return;
+        }
+    }
+    entry.port = port;
+    entry.allow = allow;
+    _entries.push_back(std::move(entry));
+}
+
+void WopiHostList::allow(const std::string& host, int port)
+{
+    add(host, port, true);
+}
+
+void WopiHostList::deny(const std::string& host)
+{
+    add(host, AnyPort, false);
+}
+
+bool WopiHostList::match(const std::string& host, int port) const
+{
+    bool allowed = false;
+    for (const Entry& entry : _entries)
+    {
+        if (!entry.matches(host))
+            continue;
+        // A blocked host is blocked on every port.
+        if (!entry.allow)
+            return false;
+        if (port == AnyPort || entry.port == AnyPort || entry.port == port)
+            allowed = true;
+    }
+
+    return allowed;
+}
 
 void HostUtil::parseWopiHost()
 {
@@ -51,26 +106,32 @@ void HostUtil::parseWopiHost()
     {
         for (const std::string& path : ConfigUtil::getIndexedKeys("storage.wopi", "host"))
         {
-            HostUtil::addWopiHost(ConfigUtil::getString(path, ""),
+            HostUtil::addWopiHost(ConfigUtil::getString(path, ""), 0,
                                   ConfigUtil::getBool(path + "[@allow]", false));
         }
     }
 }
 
-void HostUtil::addWopiHost(const std::string& host, bool allow)
+void HostUtil::addWopiHost(const std::string& host, int port, bool allow)
 {
-    if (!host.empty())
+    if (host.empty())
+        return;
+
+    if (allow)
     {
-        if (allow)
-        {
-            LOG_INF("Adding trusted WOPI host: [" << host << "].");
-            WopiHosts.allow(host);
-        }
-        else
-        {
-            LOG_INF("Adding blocked WOPI host: [" << host << "].");
-            WopiHosts.deny(host);
-        }
+        LOG_INF("Adding trusted WOPI host: [" << host << "] on "
+                                              << (port ? "port " + std::to_string(port)
+                                                       : std::string("any port")));
+        WopiHosts.allow(host, port);
+    }
+    else
+    {
+        // A blocked host is blocked on every port, so that no entry allows it elsewhere.
+        if (port)
+            LOG_WRN("The blocked WOPI host [" << host << "] is blocked on every port, not only on "
+                                              << port);
+        LOG_INF("Adding blocked WOPI host: [" << host << "].");
+        WopiHosts.deny(host);
     }
 }
 
@@ -79,13 +140,20 @@ bool HostUtil::allowedWopiHost(const std::string& host)
     return WopiEnabled && WopiHosts.match(host);
 }
 
-bool HostUtil::allowedWopiHostWithoutCache(const std::string& host)
+bool HostUtil::allowedWopiHost(const std::string& host, int port)
 {
-    return WopiEnabled && WopiHosts.matchWithoutCache(host);
+    return WopiEnabled && WopiHosts.match(host, port);
 }
 
 std::string HostUtil::parseAlias(const std::string& aliasPattern)
 {
+    int port = 0;
+    return parseAlias(aliasPattern, port);
+}
+
+std::string HostUtil::parseAlias(const std::string& aliasPattern, int& port)
+{
+    port = 0;
     if (!RegexUtil::isRegexValid(aliasPattern))
     {
         return {};
@@ -93,7 +161,7 @@ std::string HostUtil::parseAlias(const std::string& aliasPattern)
 
     // check if it is plain uri, then convert to a strict regex for this uri if needed
     // Must be a full match.
-    // Group 2 captures the hostname.
+    // Group 2 captures the hostname, group 5 the port with its colon.
     static const std::regex re(
         "^(https?://)?(([a-z0-9\\-]+)(\\.[a-z0-9\\-]+)*)(:[0-9]{1,5})?(/[a-z0-9\\-&?_]*)*$",
         std::regex_constants::icase);
@@ -112,10 +180,22 @@ std::string HostUtil::parseAlias(const std::string& aliasPattern)
         // make the hostname a regex matching itself
         Util::replaceAllSubStr(hostname, ".", "\\.");
 
+        if (matches[5].matched)
+            port = std::stoi(matches[5].str().substr(1));
+
         return hostname;
     }
 
-    // this is a regex
+    // A regular expression. Digits after its only colon are a port, so the documented form
+    // aliasname.*\.com:port works; the colons of an IPv6 address are left alone.
+    static const std::regex portRe("^([^:]+):([0-9]{1,5})$");
+    if (std::regex_match(aliasPattern, matches, portRe) &&
+        RegexUtil::isRegexValid(matches[1].str()))
+    {
+        port = std::stoi(matches[2].str());
+        return matches[1].str();
+    }
+
     return aliasPattern;
 }
 
@@ -213,7 +293,9 @@ void HostUtil::parseAliases(Poco::Util::LayeredConfiguration& conf)
             CommandControl::LockManager::mapUnlockLink(realUri.getHost(), path);
 #endif
             HostUtil::hostList.insert(realUri.getHost());
-            HostUtil::addWopiHost(parseAlias(realUri.getHost()), allow);
+            // A port counts only when it was written. parseHostUri adds a scheme, never a port.
+            HostUtil::addWopiHost(parseAlias(realUri.getHost()), realUri.getSpecifiedPort(),
+                                  allow);
         }
         catch (const Poco::Exception& exc)
         {
@@ -245,7 +327,8 @@ void HostUtil::parseAliases(Poco::Util::LayeredConfiguration& conf)
 
             for (std::string& aliasPattern : Util::splitStringToVector(aliasString, '|'))
             {
-                aliasPattern = parseAlias(aliasPattern);
+                int port = 0;
+                aliasPattern = parseAlias(aliasPattern, port);
                 if (aliasPattern.empty())
                 {
                     if (!warnedInvalidRegex)
@@ -259,7 +342,7 @@ void HostUtil::parseAliases(Poco::Util::LayeredConfiguration& conf)
 #if ENABLE_FEATURE_LOCK
                 CommandControl::LockManager::mapUnlockLink(aliasPattern, path);
 #endif
-                HostUtil::addWopiHost(aliasPattern, allow);
+                HostUtil::addWopiHost(aliasPattern, port, allow);
             }
         }
         warnedInvalidRegex = true;
@@ -351,7 +434,7 @@ void HostUtil::setFirstHost(const Poco::URI& uri)
         {
             FirstHost = uri.getHost();
             // The host comes from a request, so it is matched as that name only.
-            addWopiHost(RegexUtil::escapeRegex(uri.getHost()), true);
+            addWopiHost(RegexUtil::escapeRegex(uri.getHost()), 0, true);
         }
     }
     else if(!FirstHost.empty() && FirstHost != uri.getHost())

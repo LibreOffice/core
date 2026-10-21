@@ -28,6 +28,7 @@
 #include <common/HexUtil.hpp>
 #include <common/JsonUtil.hpp>
 #include <common/NumUtil.hpp>
+#include <common/RegexUtil.hpp>
 #include <common/StateEnum.hpp>
 #include <common/Util.hpp>
 #include <net/AsyncDNS.hpp>
@@ -1942,9 +1943,9 @@ bool ClientRequestDispatcher::handleWopiAccessCheckRequest(
         wopiHostAllowed = HostUtil::isWopiHostsEmpty();
 
     if (!wopiHostAllowed) {
-        // port and scheme from wopi host config are currently ignored by HostUtil
-        LOG_TRC("Wopi Access Check, matching allowed wopi host for host " << host);
-        wopiHostAllowed = HostUtil::allowedWopiHost(host);
+        LOG_TRC("Wopi Access Check, matching allowed wopi host for host " << host << " port "
+                                                                          << port);
+        wopiHostAllowed = HostUtil::allowedWopiHost(host, static_cast<int>(port));
     }
     if (!wopiHostAllowed)
     {

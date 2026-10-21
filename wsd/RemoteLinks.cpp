@@ -397,13 +397,14 @@ void RemoteLinks::completeLinkAccess(DocumentBroker& docBroker, const std::strin
     std::string reason;
     try
     {
+        const Poco::URI wopiSrcUri(wopiSrc);
         if (wopiSrc.empty() || accessToken.empty())
             reason = "names no document or no token";
         else if (!answeredPersistentLink.empty() && answeredPersistentLink != persistentLink)
             reason = "answers for another persistent link";
         else if (RequestDetails::getDocKey(wopiSrc) == docBroker.getDocKey())
             reason = "names this document itself";
-        else if (!HostUtil::allowedWopiHost(Poco::URI(wopiSrc).getHost()))
+        else if (!HostUtil::allowedWopiHost(wopiSrcUri.getHost(), wopiSrcUri.getPort()))
             reason = "names a document on a host that is not allowed";
     }
     catch (const std::exception& exc)
@@ -469,7 +470,7 @@ void RemoteLinks::handleSubscribe(DocumentBroker& docBroker, const std::string& 
         try
         {
             const Poco::URI wopiSrcUri(wopiSrc);
-            if (!HostUtil::allowedWopiHost(wopiSrcUri.getHost()))
+            if (!HostUtil::allowedWopiHost(wopiSrcUri.getHost(), wopiSrcUri.getPort()))
             {
                 LOG_WRN("Remote document [" << Anonymizer::anonymizeUrl(wopiSrc)
                                             << "] is not on an allowed WOPI host");

@@ -685,7 +685,7 @@ bool isCompareDownloadUrl(const Poco::URI& uri, const Poco::URI& documentUri)
     const std::string scheme = Util::toLower(uri.getScheme());
     return (scheme == "http" || scheme == "https") &&
            Util::iequal(uri.getHost(), documentUri.getHost()) &&
-           HostUtil::allowedWopiHost(uri.getHost());
+           HostUtil::allowedWopiHost(uri.getHost(), uri.getPort());
 }
 
 /// The extension of a file name, with its dot, when it is one to ten letters and digits. Empty

@@ -34,6 +34,7 @@ class HostUtilTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testParseHostUri);
     CPPUNIT_TEST(testFirstHostTrustedOnlyInFirstMode);
     CPPUNIT_TEST(testGroupHostMatchesItsOwnName);
+    CPPUNIT_TEST(testWrittenPortIsMatched);
     CPPUNIT_TEST(testGetNewUriBracketsIPv6Host);
     CPPUNIT_TEST(testHostListWithGaps);
     CPPUNIT_TEST(testAliasGroupExtraHosts);
@@ -45,6 +46,7 @@ class HostUtilTests : public CPPUNIT_NS::TestFixture
     void testParseHostUri();
     void testFirstHostTrustedOnlyInFirstMode();
     void testGroupHostMatchesItsOwnName();
+    void testWrittenPortIsMatched();
     void testGetNewUriBracketsIPv6Host();
     void testHostListWithGaps();
     void testAliasGroupExtraHosts();
@@ -116,6 +118,20 @@ void HostUtilTests::testParseAlias()
     LOK_ASSERT_EQUAL_STR("/my-path", HostUtil::parseAlias("/my-path")); // not a valid url, no hostname
 
     LOK_ASSERT_EQUAL_STR("https://aliasname[0-9]{1}:443", HostUtil::parseAlias("https://aliasname[0-9]{1}:443"));
+
+    // The port written after a host, plain or as a regular expression, is read out of it.
+    int port = -1;
+    LOK_ASSERT_EQUAL_STR("test12\\.local",
+                         HostUtil::parseAlias("https://test12.local:8080/path", port));
+    LOK_ASSERT_EQUAL(8080, port);
+    LOK_ASSERT_EQUAL_STR("test13\\.local", HostUtil::parseAlias("test13.local", port));
+    LOK_ASSERT_EQUAL(0, port);
+    LOK_ASSERT_EQUAL_STR("aliasname2.*\\.com",
+                         HostUtil::parseAlias("aliasname2.*\\.com:9443", port));
+    LOK_ASSERT_EQUAL(9443, port);
+    // The colons of an IPv6 address are not a port.
+    LOK_ASSERT_EQUAL_STR("2001:db8::1", HostUtil::parseAlias("2001:db8::1", port));
+    LOK_ASSERT_EQUAL(0, port);
 }
 
 void HostUtilTests::testParseHostUri()
@@ -231,6 +247,69 @@ void HostUtilTests::testGroupHostMatchesItsOwnName()
     // A host written as a regular expression still matches as one.
     LOK_ASSERT(HostUtil::allowedWopiHost("cloud1.example.org"));
     LOK_ASSERT(!HostUtil::allowedWopiHost("cloud1.example.com"));
+}
+
+/// A port written on a group host or an alias allows that host on that port only. An entry without
+/// a port allows its host on any port, and a check that knows no port sees every entry by host.
+void HostUtilTests::testWrittenPortIsMatched()
+{
+    constexpr std::string_view testname = __func__;
+
+    Poco::AutoPtr<Poco::Util::MapConfiguration> config(new Poco::Util::MapConfiguration);
+    config->setString("storage.wopi[@allow]", "true");
+    config->setString("storage.wopi.alias_groups", "");
+    config->setString("storage.wopi.alias_groups[@mode]", "groups");
+    config->setString("storage.wopi.alias_groups.group[0]", "");
+    config->setString("storage.wopi.alias_groups.group[0].host", "https://wopi.example.com:8443");
+    config->setString("storage.wopi.alias_groups.group[0].host[@allow]", "true");
+    config->setString("storage.wopi.alias_groups.group[0].alias[0]",
+                      "https://alias.example.com:9443");
+    config->setString("storage.wopi.alias_groups.group[0].alias[1]", "any.example.com");
+    config->setString("storage.wopi.alias_groups.group[0].alias[2]",
+                      "cloud.*\\.example\\.net:8443");
+    config->setString("storage.wopi.alias_groups.group[1]", "");
+    config->setString("storage.wopi.alias_groups.group[1].host", "open.example.com");
+    config->setString("storage.wopi.alias_groups.group[1].host[@allow]", "true");
+    config->setString("storage.wopi.alias_groups.group[2]", "");
+    config->setString("storage.wopi.alias_groups.group[2].host",
+                      "https://blocked.example.com:443");
+    config->setString("storage.wopi.alias_groups.group[2].host[@allow]", "false");
+
+    const ScopedHostConfig scopedConfig(config.get());
+    resetHostState(true);
+
+    Poco::AutoPtr<Poco::Util::LayeredConfiguration> layered(new Poco::Util::LayeredConfiguration);
+    layered->add(Poco::Util::AbstractConfiguration::Ptr(config.get(), true));
+    HostUtil::parseAliases(*layered);
+
+    // The group host, on its port and on another.
+    LOK_ASSERT(HostUtil::allowedWopiHost("wopi.example.com", 8443));
+    LOK_ASSERT(!HostUtil::allowedWopiHost("wopi.example.com", 443));
+    LOK_ASSERT(!HostUtil::allowedWopiHost("wopi.example.com", 9200));
+
+    // A plain alias with a port, a plain alias without one, and a regular expression with one.
+    LOK_ASSERT(HostUtil::allowedWopiHost("alias.example.com", 9443));
+    LOK_ASSERT(!HostUtil::allowedWopiHost("alias.example.com", 443));
+    LOK_ASSERT(HostUtil::allowedWopiHost("any.example.com", 443));
+    LOK_ASSERT(HostUtil::allowedWopiHost("any.example.com", 12345));
+    LOK_ASSERT(HostUtil::allowedWopiHost("cloud1.example.net", 8443));
+    LOK_ASSERT(!HostUtil::allowedWopiHost("cloud1.example.net", 443));
+
+    // A group host written without a port.
+    LOK_ASSERT(HostUtil::allowedWopiHost("open.example.com", 443));
+    LOK_ASSERT(HostUtil::allowedWopiHost("open.example.com", 8080));
+
+    // A host that is not listed, and a blocked one, which is blocked on every port.
+    LOK_ASSERT(!HostUtil::allowedWopiHost("other.example.com", 8443));
+    LOK_ASSERT(!HostUtil::allowedWopiHost("blocked.example.com", 443));
+    LOK_ASSERT(!HostUtil::allowedWopiHost("blocked.example.com", 8443));
+
+    // A check without a port sees every entry by host.
+    LOK_ASSERT(HostUtil::allowedWopiHost("wopi.example.com"));
+    LOK_ASSERT(HostUtil::allowedWopiHost("alias.example.com"));
+    LOK_ASSERT(HostUtil::allowedWopiHost("open.example.com"));
+    LOK_ASSERT(!HostUtil::allowedWopiHost("other.example.com"));
+    LOK_ASSERT(!HostUtil::allowedWopiHost("blocked.example.com"));
 }
 
 void HostUtilTests::testGetNewUriBracketsIPv6Host()

@@ -347,14 +347,14 @@ void applyZoomConfig(std::string& fileContent, const Poco::Util::LayeredConfigur
 
     const std::string& targetHost = uri.getHost();
     HostUtil::setFirstHost(uri);
-    if (HostUtil::allowedWopiHost(targetHost))
+    if (HostUtil::allowedWopiHost(targetHost, uri.getPort()))
         return true;
 
     // Check if a resolved IP address is in the allowlist.
     const auto hostAddresses(net::resolveAddresses(targetHost));
     for (const auto& address : hostAddresses)
     {
-        if (HostUtil::allowedWopiHost(address))
+        if (HostUtil::allowedWopiHost(address, uri.getPort()))
             return true;
     }
 

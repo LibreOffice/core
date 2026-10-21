@@ -181,7 +181,7 @@ StorageBase::StorageType StorageBase::validate(const Poco::URI& uri,
     {
         const auto& targetHost = uri.getHost();
         HostUtil::setFirstHost(uri);
-        if (HostUtil::allowedWopiHost(targetHost))
+        if (HostUtil::allowedWopiHost(targetHost, uri.getPort()))
         {
             LOG_DBG("Validated URI [" << Anonymizer::anonymizeUrl(uri.toString()) << "] as WOPI");
             return StorageBase::StorageType::Wopi;
@@ -191,7 +191,7 @@ StorageBase::StorageType StorageBase::validate(const Poco::URI& uri,
         const auto hostAddresses(net::resolveAddresses(targetHost));
         for (const auto& address : hostAddresses)
         {
-            if (HostUtil::allowedWopiHost(address))
+            if (HostUtil::allowedWopiHost(address, uri.getPort()))
             {
                 LOG_DBG("Validated URI [" << Anonymizer::anonymizeUrl(uri.toString())
                                           << "] as WOPI");

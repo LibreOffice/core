@@ -21,23 +21,64 @@
 // HostUtil is only used in non-mobile apps.
 #if !MOBILEAPP
 
-#include <common/RegexUtil.hpp>
+#include <common/IpNetwork.hpp>
 
 #include <Poco/URI.h>
 #include <Poco/Util/AbstractConfiguration.h>
 #include <Poco/Util/Application.h>
 
 #include <optional>
+#include <regex>
 #include <set>
 #include <string>
 #include <vector>
+
+/// The WOPI hosts allowed or blocked. Each entry is a network in CIDR notation or a regular
+/// expression matched against the whole host, ignoring case, for one port or for any port.
+class WopiHostList
+{
+public:
+    /// Allow the host on this port, or on any port when the port is 0.
+    void allow(const std::string& host, int port);
+
+    /// Block the host on every port.
+    void deny(const std::string& host);
+
+    /// Whether the host is allowed on some port, for a check that knows no port.
+    bool match(const std::string& host) const { return match(host, AnyPort); }
+
+    /// Whether the host is allowed on this port, by an entry for it or for any port, and is not
+    /// blocked.
+    bool match(const std::string& host, int port) const;
+
+    void clear() { _entries.clear(); }
+
+    bool empty() const { return _entries.empty(); }
+
+private:
+    static constexpr int AnyPort = 0;
+
+    struct Entry
+    {
+        std::optional<Util::IpNetwork> network;
+        std::regex regex;
+        int port;
+        bool allow;
+
+        bool matches(const std::string& host) const;
+    };
+
+    void add(const std::string& host, int port, bool allow);
+
+    std::vector<Entry> _entries;
+};
 
 /// This class contains static methods to parse alias_groups and WOPI host and static containers to store the data from the coolwsd.xml
 class HostUtil
 {
 private:
     /// Allowed/denied WOPI hosts, if any and if WOPI is enabled.
-    static RegexUtil::RegexListMatcher WopiHosts;
+    static WopiHostList WopiHosts;
     /// mapping of alias host and port to real host and port
     static std::map<std::string, std::string> AliasHosts;
     /// When group configuration is not defined only the firstHost gets access
@@ -62,11 +103,13 @@ public:
     /// is accessed using different aliases
     static std::string getNewUri(const Poco::URI& uri);
 
+    /// Whether the host is allowed on some port. For a check that knows no port, such as a Host
+    /// header or a resolved address on its own.
     [[nodiscard]] static bool allowedWopiHost(const std::string& host);
 
-    /// Returns what allowedWopiHost returns, without its cache, so several threads may call it at
-    /// once.
-    static bool allowedWopiHostWithoutCache(const std::string& host);
+    /// Whether the host is allowed on this port: by an entry written without a port, or by one
+    /// written with this port.
+    [[nodiscard]] static bool allowedWopiHost(const std::string& host, int port);
 
     static bool isWopiEnabled() { return WopiEnabled; }
 
@@ -92,13 +135,16 @@ private:
     /// invalid my-domain[1
     static std::string parseAlias(const std::string& aliasPattern);
 
+    /// As above, and sets @port to the port written after the host, or to 0 when there is none.
+    static std::string parseAlias(const std::string& aliasPattern, int& port);
+
     /// Parse an alias_groups <host> value into a URI so its host and port can be read. The scheme
     /// is not used for matching; when it is missing https is assumed. Returns std::nullopt when the
     /// value cannot be parsed as a URI, for example an IPv6 literal or a regex in the port.
     static std::optional<Poco::URI> parseHostUri(const std::string& host);
 
-    /// add host to WopiHosts
-    static void addWopiHost(const std::string& host, bool allow);
+    /// Add a host pattern to the WOPI hosts. A port of 0 means any port.
+    static void addWopiHost(const std::string& host, int port, bool allow);
 
     /// The <host> values after the first one in the alias_groups <group> at @groupPath. Only the
     /// first is used: the others would have to be in groups of their own, or be aliases.

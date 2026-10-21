@@ -132,7 +132,7 @@ http::Request toHttpRequest(const Poco::URI& uri, const Poco::Net::HTTPRequest& 
 
 bool isAllowedWopiAddress(const std::string& address)
 {
-    return HostUtil::allowedWopiHostWithoutCache(address) || net::isLocalAddress(address);
+    return HostUtil::allowedWopiHost(address) || net::isLocalAddress(address);
 }
 
 } // namespace
@@ -203,7 +203,7 @@ StorageConnectionManager::getWopiHttpSession(const Poco::URI& uri, std::chrono::
     // A host that is not on the list by name may be allowed through its resolved addresses, or
     // through being local, so the connection uses only the resolved addresses that the list allows
     // or that are local.
-    if (!HostUtil::allowedWopiHost(uri.getHost()))
+    if (!HostUtil::allowedWopiHost(uri.getHost(), uri.getPort()))
     {
         httpSession->setAddressFilter(isAllowedWopiAddress);
     }
