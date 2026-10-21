@@ -29,17 +29,23 @@
 #include <sal/log.hxx>
 #include <tools/multisel.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <i18nlangtag/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
 
 #include <frozen/bits/defines.h>
 #include <frozen/bits/elsa_std.h>
 #include <frozen/unordered_map.h>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
 #include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPageTarget.hpp>
 #include <com/sun/star/frame/XModel.hpp>
+#include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/xml/dom/XDocument.hpp>
@@ -667,6 +673,59 @@ void PresentationFragmentHandler::saveColorMapToGrabBag(const oox::drawingml::Cl
     }
 }
 
+// The document language: PowerPoint writes it into the default text style, dc:language is the
+// fallback
+static void importDocumentLanguage(const XmlFilterBase& rFilter,
+                                   const TextListStyle& rTextListStyle)
+{
+    try
+    {
+        const std::optional<OUString>& oLang
+            = rTextListStyle.getListStyle()[0].getTextCharacterProperties().moLang;
+        lang::Locale aLocale;
+        if (oLang && !oLang->isEmpty())
+            aLocale = LanguageTag::convertToLocale(*oLang);
+        else
+        {
+            uno::Reference<document::XDocumentPropertiesSupplier> xSupplier(rFilter.getModel(),
+                                                                            uno::UNO_QUERY_THROW);
+            aLocale = xSupplier->getDocumentProperties()->getLanguage();
+        }
+        if (aLocale.Language.isEmpty())
+            return;
+
+        // PPTX has one language, it goes to the slot of its script, as for text runs
+        OUString aProperty;
+        switch (MsLangId::getScriptType(LanguageTag(aLocale).getLanguageType()))
+        {
+            case i18n::ScriptType::ASIAN:
+                aProperty = u"CharLocaleAsian"_ustr;
+                break;
+            case i18n::ScriptType::COMPLEX:
+                aProperty = u"CharLocaleComplex"_ustr;
+                break;
+            default:
+                aProperty = u"CharLocale"_ustr;
+                break;
+        }
+        uno::Reference<beans::XPropertySet> xDefaults(
+            rFilter.getModelFactory()->createInstance(u"com.sun.star.drawing.Defaults"_ustr),
+            uno::UNO_QUERY_THROW);
+        xDefaults->setPropertyValue(aProperty, uno::Any(aLocale));
+
+        // Export writes it back while the document still has it
+        uno::Reference<beans::XPropertySet> xDocProps(rFilter.getModel(), uno::UNO_QUERY_THROW);
+        comphelper::SequenceAsHashMap aGrabBag(xDocProps->getPropertyValue(u"InteropGrabBag"_ustr));
+        aGrabBag[u"OOXDocumentLanguage"_ustr] <<= LanguageTag(aLocale).getBcp47MS();
+        xDocProps->setPropertyValue(u"InteropGrabBag"_ustr,
+                                    uno::Any(aGrabBag.getAsConstPropertyValueList()));
+    }
+    catch (const uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("oox", "importDocumentLanguage");
+    }
+}
+
 void PresentationFragmentHandler::saveSections()
 {
     if (maSectionList.empty())
@@ -1024,6 +1083,8 @@ void PresentationFragmentHandler::importSlide(sal_uInt32 nSlide, sal_Int32 nPage
 void PresentationFragmentHandler::finalizeImport()
 {
     PowerPointImport& rFilter = dynamic_cast< PowerPointImport& >( getFilter() );
+
+    importDocumentLanguage(rFilter, *mpTextListStyle);
 
     sal_Int32 nPageCount = maSlidesVector.size();
 

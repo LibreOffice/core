@@ -985,6 +985,30 @@ bool PowerPointExport::exportDocument()
 
     WriteCustomSlideShow();
 
+    // The document language, where PowerPoint keeps it. PPTX has one: keep the imported one while
+    // the document still has it, else write the Western one
+    const SdDrawDocument* pDrawDoc = mXModel->GetDoc();
+    LanguageTag aLanguageTag(pDrawDoc->GetLanguage(EE_CHAR_LANGUAGE));
+    const OUString aImportedLanguage
+        = comphelper::SequenceAsHashMap(mXModel->getPropertyValue(u"InteropGrabBag"_ustr))
+              .getUnpackedValueOrDefault(u"OOXDocumentLanguage"_ustr, OUString());
+    if (!aImportedLanguage.isEmpty())
+    {
+        const LanguageType eImported = LanguageTag(aImportedLanguage).getLanguageType();
+        if (eImported == pDrawDoc->GetLanguage(EE_CHAR_LANGUAGE)
+            || eImported == pDrawDoc->GetLanguage(EE_CHAR_LANGUAGE_CJK)
+            || eImported == pDrawDoc->GetLanguage(EE_CHAR_LANGUAGE_CTL))
+            aLanguageTag.reset(aImportedLanguage);
+    }
+    if (!aLanguageTag.isSystemLocale())
+    {
+        mPresentationFS->startElementNS(XML_p, XML_defaultTextStyle);
+        mPresentationFS->startElementNS(XML_a, XML_defPPr);
+        mPresentationFS->singleElementNS(XML_a, XML_defRPr, XML_lang, aLanguageTag.getBcp47MS());
+        mPresentationFS->endElementNS(XML_a, XML_defPPr);
+        mPresentationFS->endElementNS(XML_p, XML_defaultTextStyle);
+    }
+
     WritePresentationProps();
 
     WriteAuthors();

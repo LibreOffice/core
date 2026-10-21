@@ -18,6 +18,7 @@
 #include <editeng/eeitem.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/numitem.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <docmodel/uno/UnoGradientTools.hxx>
 #include <officecfg/Office/Common.hxx>
 #include <test/commontesttools.hxx>
@@ -42,6 +43,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
@@ -1055,6 +1057,57 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest5, testChartAltTextPPTX)
     assertXPath(pXmlDoc, "//p:graphicFrame/p:nvGraphicFramePr/p:cNvPr", "descr",
                 u"Sales rise in L2");
     assertXPath(pXmlDoc, "//p:graphicFrame/p:nvGraphicFramePr/p:cNvPr", "title", u"Sales chart");
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest5, testTdf173710DocumentLanguage)
+{
+    // The default text style says uk-UA, dc:language says de-DE: the default text style wins
+    createSdImpressDoc("pptx/tdf173710.pptx");
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: uk-UA
+    // - Actual  : en-US
+    // i.e. the language of the options was used, not the one of the document.
+    uno::Reference<beans::XPropertySet> xDoc(mxComponent, uno::UNO_QUERY_THROW);
+    lang::Locale aLocale;
+    xDoc->getPropertyValue(u"CharLocale"_ustr) >>= aLocale;
+    CPPUNIT_ASSERT_EQUAL(u"uk-UA"_ustr, LanguageTag(aLocale).getBcp47());
+
+    save(TestFilter::PPTX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/presentation.xml"_ustr);
+    assertXPath(pXmlDoc, "/p:presentation/p:defaultTextStyle/a:defPPr/a:defRPr", "lang", u"uk-UA");
+
+    // dc:language is the fallback
+    createSdImpressDoc("pptx/trailing-paragraphs.pptx");
+    xDoc.set(mxComponent, uno::UNO_QUERY_THROW);
+    xDoc->getPropertyValue(u"CharLocale"_ustr) >>= aLocale;
+    CPPUNIT_ASSERT_EQUAL(u"de-DE"_ustr, LanguageTag(aLocale).getBcp47());
+
+    // An Asian language is the Asian document language, the Western one stays
+    createSdImpressDoc("pptx/tdf173710-ja.pptx");
+    xDoc.set(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<beans::XPropertySet> xDefaults(
+        xFactory->createInstance(u"com.sun.star.drawing.Defaults"_ustr), uno::UNO_QUERY_THROW);
+    xDefaults->getPropertyValue(u"CharLocaleAsian"_ustr) >>= aLocale;
+    CPPUNIT_ASSERT_EQUAL(u"ja-JP"_ustr, LanguageTag(aLocale).getBcp47());
+    xDoc->getPropertyValue(u"CharLocale"_ustr) >>= aLocale;
+    CPPUNIT_ASSERT_EQUAL(u"en-US"_ustr, LanguageTag(aLocale).getBcp47());
+
+    // It is written back. Without the grab bag, this was en-US, the Western document language
+    save(TestFilter::PPTX);
+    pXmlDoc = parseExport(u"ppt/presentation.xml"_ustr);
+    assertXPath(pXmlDoc, "/p:presentation/p:defaultTextStyle/a:defPPr/a:defRPr", "lang", u"ja-JP");
+
+    // Once it is changed, the Western document language is written
+    xFactory.set(mxComponent, uno::UNO_QUERY_THROW);
+    xDefaults.set(xFactory->createInstance(u"com.sun.star.drawing.Defaults"_ustr),
+                  uno::UNO_QUERY_THROW);
+    xDefaults->setPropertyValue(u"CharLocaleAsian"_ustr,
+                                uno::Any(LanguageTag::convertToLocale(u"ko-KR"_ustr)));
+    save(TestFilter::PPTX);
+    pXmlDoc = parseExport(u"ppt/presentation.xml"_ustr);
+    assertXPath(pXmlDoc, "/p:presentation/p:defaultTextStyle/a:defPPr/a:defRPr", "lang", u"en-US");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
