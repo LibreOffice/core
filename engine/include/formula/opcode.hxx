@@ -575,7 +575,8 @@ enum OpCode : sal_uInt16
         ocArrayToText       = 527,
         ocMatSvd            = 528,
         ocPercentOf         = 529,
-        ocStopTwoParameters = 530, /* last function with two or more parameters' OpCode + 1 */
+        ocGroupBy           = 530,
+        ocStopTwoParameters = 531, /* last function with two or more parameters' OpCode + 1 */
 
         ocStopFunction      = ocStopTwoParameters,  /* last function's OpCode + 1 */
         ocLastOpcodeId      = ocStopFunction - 1, /* last OpCode */
@@ -1119,6 +1120,7 @@ inline std::string OpCodeEnumToString(OpCode eCode)
     case ocArrayToText: return "ArrayToText";
     case ocMatSvd: return "MatSvd";
     case ocPercentOf: return "PercentOf";
+    case ocGroupBy: return "GroupBy";
     case ocTTT: return "TTT";
     case ocDebugVar: return "DebugVar";
     case ocDataToken1: return "DataToken1";

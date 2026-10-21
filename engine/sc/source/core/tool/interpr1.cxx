@@ -9103,19 +9103,23 @@ void ScInterpreter::ScSortBy()
     }
 }
 
-static void lcl_FillCell(const ScMatrixRef& pMatSource, const ScMatrixRef& pMatDest, SCSIZE nsC, SCSIZE nsR, SCSIZE ndC, SCSIZE ndR)
+void ScInterpreter::FillMatrixCell(const ScMatrixRef& pSource, const ScMatrixRef& pDestination,
+                                   SCSIZE nSourceColumn, SCSIZE nSourceRow,
+                                   SCSIZE nDestinationColumn, SCSIZE nDestinationRow)
 {
-    if (pMatSource->IsEmptyCell(nsC, nsR))
+    if (pSource->IsEmptyCell(nSourceColumn, nSourceRow))
     {
-        pMatDest->PutEmpty(ndC, ndR);
+        pDestination->PutEmpty(nDestinationColumn, nDestinationRow);
     }
-    else if (!pMatSource->IsStringOrEmpty(nsC, nsR))
+    else if (!pSource->IsStringOrEmpty(nSourceColumn, nSourceRow))
     {
-        pMatDest->PutDouble(pMatSource->GetDouble(nsC, nsR), ndC, ndR);
+        pDestination->PutDouble(pSource->GetDouble(nSourceColumn, nSourceRow),
+                                nDestinationColumn, nDestinationRow);
     }
     else
     {
-        pMatDest->PutString(pMatSource->GetString(nsC, nsR), ndC, ndR);
+        pDestination->PutString(pSource->GetString(nSourceColumn, nSourceRow),
+                                nDestinationColumn, nDestinationRow);
     }
 }
 
@@ -9255,7 +9259,7 @@ void ScInterpreter::ScTakeOrDrop(bool bTake)
     {
         for (SCSIZE row = 0; row < nRows; ++row)
         {
-            lcl_FillCell(pMatSource, pResMat, aResPos[iPos].first, aResPos[iPos].second, col, row);
+            FillMatrixCell(pMatSource, pResMat, aResPos[iPos].first, aResPos[iPos].second, col, row);
             ++iPos;
         }
     }
@@ -9376,9 +9380,9 @@ void ScInterpreter::ScChooseColsOrRows(bool bCols)
         for(SCSIZE row = 0; row < nRows; ++row)
         {
             if (bCols)
-                lcl_FillCell(pMatSource, pResMat, aParamsVector[col] - 1, row, col, row);
+                FillMatrixCell(pMatSource, pResMat, aParamsVector[col] - 1, row, col, row);
             else
-                lcl_FillCell(pMatSource, pResMat, col, aParamsVector[row] - 1, col, row);
+                FillMatrixCell(pMatSource, pResMat, col, aParamsVector[row] - 1, col, row);
         }
     }
 
@@ -9492,7 +9496,7 @@ void ScInterpreter::ScExpand()
         for (SCSIZE row = 0; row < nRows; ++row)
         {
             if (col < nsC && row < nsR)
-                lcl_FillCell(pMatSource, pResMat, col, row, col, row);
+                FillMatrixCell(pMatSource, pResMat, col, row, col, row);
             else
             {
                 if (bDouble.has_value())
@@ -9582,7 +9586,7 @@ void ScInterpreter::ScHorizontalOrVerticalStack(bool bHorizontal)
                 for (SCSIZE row = 0; row < nRows; ++row)
                 {
                     if (row < nR)
-                        lcl_FillCell(rMatrix, pResMat, col, row, nCount, row);
+                        FillMatrixCell(rMatrix, pResMat, col, row, nCount, row);
                     else
                         pResMat->PutError(FormulaError::NotAvailable, nCount, row);
                 }
@@ -9596,7 +9600,7 @@ void ScInterpreter::ScHorizontalOrVerticalStack(bool bHorizontal)
                 for (SCSIZE col = 0; col < nColumns; ++col)
                 {
                     if (col < nC)
-                        lcl_FillCell(rMatrix, pResMat, col, row, col, nCount);
+                        FillMatrixCell(rMatrix, pResMat, col, row, col, nCount);
                     else
                         pResMat->PutError(FormulaError::NotAvailable, col, nCount);
                 }
@@ -10090,9 +10094,9 @@ void ScInterpreter::ScToColOrRow(bool bCol)
     for (SCSIZE iPos = 0; iPos < aResPos.size(); ++iPos)
     {
         if (bCol)
-            lcl_FillCell(pMatSource, pResMat, aResPos[iPos].first, aResPos[iPos].second, 0, iPos);
+            FillMatrixCell(pMatSource, pResMat, aResPos[iPos].first, aResPos[iPos].second, 0, iPos);
         else
-            lcl_FillCell(pMatSource, pResMat, aResPos[iPos].first, aResPos[iPos].second, iPos, 0);
+            FillMatrixCell(pMatSource, pResMat, aResPos[iPos].first, aResPos[iPos].second, iPos, 0);
     }
 
     PushMatrix(pResMat);
@@ -10449,14 +10453,14 @@ void ScInterpreter::ScUnique()
         {
             for (SCSIZE col = 0; col < nsC; col++)
             {
-                lcl_FillCell(pMatSource, pResMat, col, aResPos[iPos].first, col, iPos);
+                FillMatrixCell(pMatSource, pResMat, col, aResPos[iPos].first, col, iPos);
             }
         }
         else
         {
             for (SCSIZE row = 0; row < nsR; row++)
             {
-                lcl_FillCell(pMatSource, pResMat, aResPos[iPos].first, row, iPos, row);
+                FillMatrixCell(pMatSource, pResMat, aResPos[iPos].first, row, iPos, row);
             }
         }
     }
@@ -11136,6 +11140,10 @@ void ScInterpreter::ScCall( FormulaCallableRef pCallable, const std::vector<Form
         rLambdaDoc.IncCallableInterpretLevel();
         formula::StackVar aResultType = aInt.Interpret();
         rLambdaDoc.DecCallableInterpretLevel();
+        // A volatile function in the body makes the calling formula volatile from now on, as a
+        // volatile macro does.
+        if (aInt.GetVolatileType() != NOT_VOLATILE && meVolatileType == NOT_VOLATILE)
+            meVolatileType = VOLATILE_MACRO;
         formula::FormulaConstTokenRef xLambdaResult( aInt.GetResultToken() );
 
         if (aResultType == formula::svMatrixCell)
@@ -11523,7 +11531,7 @@ void ScInterpreter::ScWrapColsOrRows(bool bCols)
             SCSIZE nR = bCols ? row : col;
             if (iPos < aResPos.size())
             {
-                lcl_FillCell(pMatSource, pResMat, aResPos[iPos].first, aResPos[iPos].second, nC, nR);
+                FillMatrixCell(pMatSource, pResMat, aResPos[iPos].first, aResPos[iPos].second, nC, nR);
                 ++iPos;
             }
             else if (bDouble.has_value())

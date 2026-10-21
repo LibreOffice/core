@@ -4197,6 +4197,7 @@ void ScInterpreter::DispatchOpCode( OpCode eOp )
         case ocMap              : ScMap();                      break;
         case ocReduce           : ScReduce();                   break;
         case ocScan             : ScScan();                     break;
+        case ocGroupBy          : ScGroupBy();                  break;
         case ocB                : ScB();                        break;
         case ocNormDist         : ScNormDist( 3 );              break;
         case ocNormDist_MS      : ScNormDist( 4 );              break;

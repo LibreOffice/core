@@ -119,6 +119,7 @@ struct VectorSearchArguments
 namespace sc {
 
 struct CompareOptions;
+class GroupByFunction;
 
 struct ParamIfsResult
 {
@@ -207,6 +208,9 @@ class ScInterpreter
     // some Callable objects need to save context data when constructed
     friend class ScMacroFunction;
     friend class ScFormulaFunction;
+
+    // spreadsheet functions that are implemented in a class of their own
+    friend class sc::GroupByFunction;
 
 public:
     static void SetGlobalConfig(const ScCalcConfig& rConfig);
@@ -1010,6 +1014,10 @@ public:
     void ScMatRef();
     ScMatrixRef MatConcat(const ScMatrixRef& pMat1, const ScMatrixRef& pMat2);
     void PutMatrixValue(formula::FormulaConstTokenRef pToken, ScMatrixRef xMatrix, SCSIZE nCol, SCSIZE nRow);
+    /// Copies one element from pSource to pDestination: a number, an error, text, or an empty cell.
+    static void FillMatrixCell(const ScMatrixRef& pSource, const ScMatrixRef& pDestination,
+                               SCSIZE nSourceColumn, SCSIZE nSourceRow,
+                               SCSIZE nDestinationColumn, SCSIZE nDestinationRow);
     void PutCellIntoMatrix(const ScAddress& rAdr, const ScMatrixRef& xMatrix, SCSIZE nCol, SCSIZE nRow);
     void ScByCol();
     void ScByRow();
@@ -1017,6 +1025,7 @@ public:
     void ScMap();
     void ScReduce();
     void ScScan();
+    void ScGroupBy();
     void ScSumProduct();
     void ScSumX2MY2();
     void ScSumX2DY2();

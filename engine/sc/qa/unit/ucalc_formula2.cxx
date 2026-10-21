@@ -8089,6 +8089,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFunctionValueKeepsItsNameThroughOOXML)
     // the _xlfn. prefix of a newer function. A called function keeps its usual name. Reading the
     // OOXML formula back gives the same function.
     const std::vector<std::tuple<OUString, OUString, OpCode>> aFormulas{
+        { u"GROUPBY(A1:A4;B1:B4;SUM)"_ustr, u"_xlfn.GROUPBY(A1:A4,B1:B4,_xleta.SUM)"_ustr, ocSum },
         { u"BYCOL(A1:B4;SORT)"_ustr, u"_xlfn.BYCOL(A1:B4,_xleta.SORT)"_ustr, ocSort },
         { u"PERCENTOF(A1;A1:A4)"_ustr, u"_xlfn.PERCENTOF(A1,A1:A4)"_ustr, ocPercentOf },
     };
@@ -9284,6 +9285,386 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncPERCENTOFReturnsTheShareOfTheTotal)
     // An empty argument counts as 0, so an empty total divides by zero.
     m_pDoc->SetString(ScAddress(1, 12, 0), u"=PERCENTOF(5;)"_ustr);
     CPPUNIT_ASSERT_EQUAL(u"#DIV/0!"_ustr, m_pDoc->GetString(ScAddress(1, 12, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
+namespace
+{
+void insertSpillingFormula(ScDocument& rDocument, const ScAddress& rPosition,
+                           const OUString& rFormula)
+{
+    ScMarkData aMark(rDocument.GetSheetLimits());
+    aMark.SelectOneTable(rPosition.Tab());
+    rDocument.InsertMatrixFormula(rPosition.Col(), rPosition.Row(), rPosition.Col(),
+                                  rPosition.Row(), aMark, rFormula, nullptr,
+                                  formula::FormulaGrammar::GRAM_DEFAULT,
+                                  /*bDynamicArrayMaster=*/true);
+    // The formula is computed when its result is first read, and the result spills at the end of
+    // that computation.
+    ScFormulaCell* pCell = rDocument.GetFormulaCell(rPosition);
+    CPPUNIT_ASSERT(pCell);
+    pCell->GetErrCode();
+}
+
+// Checks the grid that spills from rPosition: its size and the text that each of its cells shows.
+// Both grids are compared as one text, rows separated by ";" and cells by ",", so a failure shows
+// the whole spilled result.
+void assertSpilledGrid(ScDocument& rDocument, const ScAddress& rPosition,
+                       const std::vector<std::vector<OUString>>& rExpected)
+{
+    ScFormulaCell* pCell = rDocument.GetFormulaCell(rPosition);
+    CPPUNIT_ASSERT(pCell);
+    SCCOL nColumns = 0;
+    SCROW nRows = 0;
+    pCell->GetMatColsRows(nColumns, nRows);
+
+    OUStringBuffer aExpected;
+    for (size_t nRow = 0; nRow < rExpected.size(); ++nRow)
+    {
+        if (nRow > 0)
+            aExpected.append(';');
+        for (size_t nColumn = 0; nColumn < rExpected[nRow].size(); ++nColumn)
+        {
+            if (nColumn > 0)
+                aExpected.append(',');
+            aExpected.append(rExpected[nRow][nColumn]);
+        }
+    }
+    OUStringBuffer aActual;
+    for (SCROW nRow = 0; nRow < nRows; ++nRow)
+    {
+        if (nRow > 0)
+            aActual.append(';');
+        for (SCCOL nColumn = 0; nColumn < nColumns; ++nColumn)
+        {
+            if (nColumn > 0)
+                aActual.append(',');
+            aActual.append(rDocument.GetString(
+                ScAddress(rPosition.Col() + nColumn, rPosition.Row() + nRow, rPosition.Tab())));
+        }
+    }
+    const OUString aFormula = pCell->GetFormula();
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(aFormula.toUtf8().getStr(), aExpected.makeStringAndClear(),
+                                 aActual.makeStringAndClear());
+}
+
+// Keys in T1:T4 and amounts in U1:U4. The keys b and B differ only in case.
+void fillGroupByKeysAndAmounts(ScDocument& rDocument)
+{
+    rDocument.SetString(ScAddress(19, 0, 0), u"a"_ustr);
+    rDocument.SetString(ScAddress(19, 1, 0), u"b"_ustr);
+    rDocument.SetString(ScAddress(19, 2, 0), u"c"_ustr);
+    rDocument.SetString(ScAddress(19, 3, 0), u"B"_ustr);
+    rDocument.SetValue(ScAddress(20, 0, 0), 5.0);
+    rDocument.SetValue(ScAddress(20, 1, 0), 10.0);
+    rDocument.SetValue(ScAddress(20, 2, 0), 10.0);
+    rDocument.SetValue(ScAddress(20, 3, 0), 20.0);
+}
+
+// Two key columns in T1:U3 and amounts in V1:V3. The second row spells the first key "A".
+void fillGroupByTwoKeyColumns(ScDocument& rDocument)
+{
+    rDocument.SetString(ScAddress(19, 0, 0), u"a"_ustr);
+    rDocument.SetString(ScAddress(19, 1, 0), u"A"_ustr);
+    rDocument.SetString(ScAddress(19, 2, 0), u"b"_ustr);
+    rDocument.SetString(ScAddress(20, 0, 0), u"x"_ustr);
+    rDocument.SetString(ScAddress(20, 1, 0), u"y"_ustr);
+    rDocument.SetString(ScAddress(20, 2, 0), u"x"_ustr);
+    rDocument.SetValue(ScAddress(21, 0, 0), 1.0);
+    rDocument.SetValue(ScAddress(21, 1, 0), 2.0);
+    rDocument.SetValue(ScAddress(21, 2, 0), 3.0);
+}
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncGROUPBYSumsEachGroupWithAGrandTotal)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+    fillGroupByKeysAndAmounts(*m_pDoc);
+
+    // The groups are sorted by key, and keys that differ only in case form one group.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 0, 0), u"=GROUPBY(T1:T4;U1:U4;SUM)"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 0, 0),
+                      { { u"a"_ustr, u"5"_ustr },
+                        { u"b"_ustr, u"30"_ustr },
+                        { u"c"_ustr, u"10"_ustr },
+                        { u"Total"_ustr, u"45"_ustr } });
+
+    // Each value column gets its own result column. Here the keys are also the first value
+    // column.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 10, 0), u"=GROUPBY(T1:T4;T1:U4;COUNTA)"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 10, 0),
+                      { { u"a"_ustr, u"1"_ustr, u"1"_ustr },
+                        { u"b"_ustr, u"2"_ustr, u"2"_ustr },
+                        { u"c"_ustr, u"1"_ustr, u"1"_ustr },
+                        { u"Total"_ustr, u"4"_ustr, u"4"_ustr } });
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncGROUPBYHeaderRow)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+    m_pDoc->SetString(ScAddress(19, 0, 0), u"Item"_ustr);
+    m_pDoc->SetString(ScAddress(20, 0, 0), u"Amount"_ustr);
+    m_pDoc->SetString(ScAddress(19, 1, 0), u"a"_ustr);
+    m_pDoc->SetString(ScAddress(19, 2, 0), u"b"_ustr);
+    m_pDoc->SetValue(ScAddress(20, 1, 0), 1.0);
+    m_pDoc->SetValue(ScAddress(20, 2, 0), 2.0);
+
+    // Text above a number in the values is taken as a header row. With one key column the
+    // header row is left out of the result.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 0, 0), u"=GROUPBY(T1:T3;U1:U3;SUM)"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 0, 0),
+                      { { u"a"_ustr, u"1"_ustr },
+                        { u"b"_ustr, u"2"_ustr },
+                        { u"Total"_ustr, u"3"_ustr } });
+
+    // Field headers 3 shows the header row of the data.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 10, 0), u"=GROUPBY(T1:T3;U1:U3;SUM;3)"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 10, 0),
+                      { { u"Item"_ustr, u"Amount"_ustr },
+                        { u"a"_ustr, u"1"_ustr },
+                        { u"b"_ustr, u"2"_ustr },
+                        { u"Total"_ustr, u"3"_ustr } });
+
+    // Field headers 2 takes every row as data and shows generated names.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 20, 0), u"=GROUPBY(T2:T3;U2:U3;SUM;2)"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 20, 0),
+                      { { u"Row Field 1"_ustr, u"Value 1"_ustr },
+                        { u"a"_ustr, u"1"_ustr },
+                        { u"b"_ustr, u"2"_ustr },
+                        { u"Total"_ustr, u"3"_ustr } });
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncGROUPBYSubtotals)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+    fillGroupByTwoKeyColumns(*m_pDoc);
+
+    // Depth 2 adds a subtotal after each group of the first key column. A subtotal row leaves
+    // the second key column empty. Every row of the group spells the first key as its first row
+    // does.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 0, 0), u"=GROUPBY(T1:U3;V1:V3;SUM;;2)"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 0, 0),
+                      { { u"a"_ustr, u"x"_ustr, u"1"_ustr },
+                        { u"a"_ustr, u"y"_ustr, u"2"_ustr },
+                        { u"a"_ustr, u""_ustr, u"3"_ustr },
+                        { u"b"_ustr, u"x"_ustr, u"3"_ustr },
+                        { u"b"_ustr, u""_ustr, u"3"_ustr },
+                        { u"Grand Total"_ustr, u""_ustr, u"6"_ustr } });
+
+    // A negative depth puts every total above the rows it sums.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 10, 0), u"=GROUPBY(T1:U3;V1:V3;SUM;;-2)"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 10, 0),
+                      { { u"Grand Total"_ustr, u""_ustr, u"6"_ustr },
+                        { u"a"_ustr, u""_ustr, u"3"_ustr },
+                        { u"a"_ustr, u"x"_ustr, u"1"_ustr },
+                        { u"a"_ustr, u"y"_ustr, u"2"_ustr },
+                        { u"b"_ustr, u""_ustr, u"3"_ustr },
+                        { u"b"_ustr, u"x"_ustr, u"3"_ustr } });
+
+    // By default there is only the grand total, also with two key columns. Depth 0 has no totals.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 20, 0), u"=GROUPBY(T1:U3;V1:V3;SUM)"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 20, 0),
+                      { { u"a"_ustr, u"x"_ustr, u"1"_ustr },
+                        { u"a"_ustr, u"y"_ustr, u"2"_ustr },
+                        { u"b"_ustr, u"x"_ustr, u"3"_ustr },
+                        { u"Total"_ustr, u""_ustr, u"6"_ustr } });
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 30, 0), u"=GROUPBY(T1:U3;V1:V3;SUM;;0)"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 30, 0),
+                      { { u"a"_ustr, u"x"_ustr, u"1"_ustr },
+                        { u"a"_ustr, u"y"_ustr, u"2"_ustr },
+                        { u"b"_ustr, u"x"_ustr, u"3"_ustr } });
+
+    // A value sort orders every level by its subtotals, and by default it shows them. Groups
+    // with the same subtotal keep the order of their keys.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 50, 0), u"=GROUPBY(T1:U3;V1:V3;SUM;;;-3)"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 50, 0),
+                      { { u"a"_ustr, u"y"_ustr, u"2"_ustr },
+                        { u"a"_ustr, u"x"_ustr, u"1"_ustr },
+                        { u"a"_ustr, u""_ustr, u"3"_ustr },
+                        { u"b"_ustr, u"x"_ustr, u"3"_ustr },
+                        { u"b"_ustr, u""_ustr, u"3"_ustr },
+                        { u"Grand Total"_ustr, u""_ustr, u"6"_ustr } });
+
+    // In a table each key column sorts on its own and there are no subtotals.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 40, 0),
+                          u"=GROUPBY(T1:U3;V1:V3;SUM;;;{-2;1};;1)"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 40, 0),
+                      { { u"a"_ustr, u"y"_ustr, u"2"_ustr },
+                        { u"a"_ustr, u"x"_ustr, u"1"_ustr },
+                        { u"b"_ustr, u"x"_ustr, u"3"_ustr },
+                        { u"Total"_ustr, u""_ustr, u"6"_ustr } });
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncGROUPBYSortAndFilter)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+    fillGroupByKeysAndAmounts(*m_pDoc);
+
+    // A negative sort entry for the value column puts the largest group first. The total stays
+    // at the bottom.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 0, 0), u"=GROUPBY(T1:T4;U1:U4;SUM;;;-2)"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 0, 0),
+                      { { u"b"_ustr, u"30"_ustr },
+                        { u"c"_ustr, u"10"_ustr },
+                        { u"a"_ustr, u"5"_ustr },
+                        { u"Total"_ustr, u"45"_ustr } });
+
+    // A negative sort entry for the key column sorts the keys in descending order.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 10, 0), u"=GROUPBY(T1:T4;U1:U4;SUM;;;-1)"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 10, 0),
+                      { { u"c"_ustr, u"10"_ustr },
+                        { u"b"_ustr, u"30"_ustr },
+                        { u"a"_ustr, u"5"_ustr },
+                        { u"Total"_ustr, u"45"_ustr } });
+
+    // The filter leaves out the row of a, so the total only sums the rows that are left.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 20, 0),
+                          u"=GROUPBY(T1:T4;U1:U4;SUM;;;;U1:U4>5)"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 20, 0),
+                      { { u"b"_ustr, u"30"_ustr },
+                        { u"c"_ustr, u"10"_ustr },
+                        { u"Total"_ustr, u"40"_ustr } });
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncGROUPBYFunctionArgument)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+    fillGroupByKeysAndAmounts(*m_pDoc);
+
+    // PERCENTOF receives the values of each group and all values, so every group gets its share
+    // and the total is the whole.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 0, 0), u"=GROUPBY(T1:T4;U1:U4;PERCENTOF)"_ustr);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(5.0 / 45.0, m_pDoc->GetValue(ScAddress(1, 0, 0)), 1e-12);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(30.0 / 45.0, m_pDoc->GetValue(ScAddress(1, 1, 0)), 1e-12);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(10.0 / 45.0, m_pDoc->GetValue(ScAddress(1, 2, 0)), 1e-12);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(1.0, m_pDoc->GetValue(ScAddress(1, 3, 0)), 1e-12);
+
+    // A LAMBDA with one parameter receives the values of the group.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 10, 0),
+                          u"=GROUPBY(T1:T4;U1:U4;LAMBDA(x;MAX(x)-MIN(x)))"_ustr);
+    assertSpilledGrid(*m_pDoc, ScAddress(0, 10, 0),
+                      { { u"a"_ustr, u"0"_ustr },
+                        { u"b"_ustr, u"10"_ustr },
+                        { u"c"_ustr, u"0"_ustr },
+                        { u"Total"_ustr, u"15"_ustr } });
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncGROUPBYInvalidArguments)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+    fillGroupByKeysAndAmounts(*m_pDoc);
+
+    const std::vector<OUString> aFormulas{
+        // The keys and the values have a different number of rows.
+        u"=GROUPBY(T1:T4;U1:U3;SUM)"_ustr,
+        // Subtotals need a second key column.
+        u"=GROUPBY(T1:T4;U1:U4;SUM;;2)"_ustr,
+        u"=GROUPBY(T1:T4;U1:U4;SUM;4)"_ustr,
+        // Sort entries count from 1 and stay inside the result.
+        u"=GROUPBY(T1:T4;U1:U4;SUM;;;0)"_ustr,
+        u"=GROUPBY(T1:T4;U1:U4;SUM;;;3)"_ustr,
+        // Several sort entries may only name key columns.
+        u"=GROUPBY(T1:T4;U1:U4;SUM;;;{1;2})"_ustr,
+        // The filter leaves no rows.
+        u"=GROUPBY(T1:T4;U1:U4;SUM;;;;T1:T4=\"z\")"_ustr,
+        u"=GROUPBY(T1:T4;U1:U4;SUM;;;;;2)"_ustr,
+    };
+    for (size_t nIndex = 0; nIndex < aFormulas.size(); ++nIndex)
+    {
+        const ScAddress aPosition(0, nIndex, 0);
+        m_pDoc->SetString(aPosition, aFormulas[nIndex]);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(aFormulas[nIndex].toUtf8().getStr(), u"#VALUE!"_ustr,
+                                     m_pDoc->GetString(aPosition));
+    }
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncGROUPBYRecalculatesWithItsInput)
+{
+    // GROUPBY recalculates when its input changes, not on every change in the document. A
+    // volatile function in a LAMBDA that it calls makes the formula volatile.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+    fillGroupByKeysAndAmounts(*m_pDoc);
+
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 0, 0), u"=GROUPBY(T1:T4;U1:U4;SUM)"_ustr);
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 10, 0),
+                          u"=GROUPBY(T1:T4;U1:U4;LAMBDA(x;SUM(x)+RAND()*0))"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"5"_ustr, m_pDoc->GetString(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"5"_ustr, m_pDoc->GetString(ScAddress(1, 10, 0)));
+
+    const ScFormulaCell* pCell = m_pDoc->GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pCell);
+    CPPUNIT_ASSERT(!pCell->GetCode()->IsRecalcModeAlways());
+    const ScFormulaCell* pLambdaCell = m_pDoc->GetFormulaCell(ScAddress(0, 10, 0));
+    CPPUNIT_ASSERT(pLambdaCell);
+    CPPUNIT_ASSERT(pLambdaCell->GetCode()->IsRecalcModeAlways());
+
+    // The input changes as a user edit changes it, because a volatile formula recalculates on the
+    // broadcast that follows every user edit.
+    m_xDocShell->GetDocFunc().SetValueCell(ScAddress(20, 0, 0), 7.0, false);
+    CPPUNIT_ASSERT_EQUAL(u"7"_ustr, m_pDoc->GetString(ScAddress(1, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"7"_ustr, m_pDoc->GetString(ScAddress(1, 10, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncGROUPBYLogicalKeys)
+{
+    FormulaSeparatorsSwitch aSeparatorsSwitch(u";"_ustr, u","_ustr, u";"_ustr);
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    // TRUE and the number 1 are different keys. Logical keys sort after the numbers and the
+    // text, and stay logical values in the result.
+    const std::vector<OUString> aKeys{ u"=TRUE()"_ustr,  u"1"_ustr, u"b"_ustr,
+                                       u"=FALSE()"_ustr, u"B"_ustr, u"=TRUE()"_ustr };
+    for (SCROW nRow = 0; nRow < 6; ++nRow)
+    {
+        m_pDoc->SetString(ScAddress(19, nRow, 0), aKeys[nRow]);
+        m_pDoc->SetValue(ScAddress(20, nRow, 0), nRow + 1);
+    }
+    m_pDoc->SetString(ScAddress(0, 0, 0), u"=ARRAYTOTEXT(GROUPBY(T1:T6;U1:U6;SUM);1)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"{1,2;\"b\",8;FALSE,4;TRUE,7;\"Total\",21}"_ustr,
+                         m_pDoc->GetString(ScAddress(0, 0, 0)));
+
+    // The same holds in an array formula.
+    insertSpillingFormula(*m_pDoc, ScAddress(0, 1, 0),
+                          u"=ARRAYTOTEXT(GROUPBY(T1:T6;U1:U6;SUM);1)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"{1,2;\"b\",8;FALSE,4;TRUE,7;\"Total\",21}"_ustr,
+                         m_pDoc->GetString(ScAddress(0, 1, 0)));
+
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncGROUPBYFunctionGivingAnArray)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+    fillGroupByKeysAndAmounts(*m_pDoc);
+
+    // A function that gives an array for a group, instead of one value, makes the whole result
+    // the #CALC! error.
+    m_pDoc->SetString(ScAddress(0, 0, 0), u"=GROUPBY(T1:T4;U1:U4;LAMBDA(x;x))"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"#CALC!"_ustr, m_pDoc->GetString(ScAddress(0, 0, 0)));
 
     m_pDoc->DeleteTab(0);
 }

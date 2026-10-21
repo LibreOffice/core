@@ -1390,6 +1390,7 @@ bool FormulaCompiler::IsMatrixFunction( OpCode eOpCode )
         case ocWrapCols :
         case ocWrapRows :
         case ocMakeArray :
+        case ocGroupBy :
             return true;
         default:
         {
@@ -1907,6 +1908,7 @@ void FormulaCompiler::Factor()
                     case ocMakeArray:
                     case ocMap:
                     case ocScan:
+                    case ocGroupBy:
                         mpArr->SetDynamicArrayFunction( true);
                     break;
                     default:

@@ -30,6 +30,7 @@
 #include <tools/duration.hxx>
 
 #include <interpre.hxx>
+#include <GroupByFunction.hxx>
 #include <global.hxx>
 #include <formulacell.hxx>
 #include <document.hxx>
@@ -1949,6 +1950,11 @@ void ScInterpreter::ScScan()
     }
 
     PushMatrix(xResMat);
+}
+
+void ScInterpreter::ScGroupBy()
+{
+    sc::GroupByFunction(*this).Execute();
 }
 
 // for DATE, TIME, DATETIME, DURATION

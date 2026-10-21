@@ -70,7 +70,7 @@ private:
 
     struct CommonData
     {
-        const static sal_Int32 nMaxParams = 7;
+        const static sal_Int32 nMaxParams = 11;
 
         formula::ParamClass nParam[nMaxParams];
         sal_uInt8           nRepeatLast;

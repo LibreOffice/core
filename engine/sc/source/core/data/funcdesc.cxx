@@ -88,7 +88,7 @@ struct ScFuncDescCore
      * For every parameter:
      *     Boolean flag whether the parameter is optional.
      */
-    sal_uInt8 aOptionalArgs[7];
+    sal_uInt8 aOptionalArgs[11];
     /*
      * Limited number of maximum (variable) parameters, or 0 if no specific
      * limit other than the general VAR_ARGS-1 value.
@@ -820,6 +820,7 @@ ScFunctionList::ScFunctionList( bool bEnglishFunctionNames )
         { ocArrayToText, ENTRY(ocARRAYTOTEXT_ARY), 0, ID_FUNCTION_GRP_TEXT, HID_FUNC_ARRAYTOTEXT_MS, 2, { 0, 1 }, 0 },
         { ocMatSvd, ENTRY(ocMSVD_ARY), 0, ID_FUNCTION_GRP_MATRIX, HID_FUNC_MSVD, 2, { 0, 1 }, 0 },
         { ocPercentOf, ENTRY(ocPERCENTOF_ARY), 0, ID_FUNCTION_GRP_MATH, HID_FUNC_PERCENTOF_MS, 2, { 0, 0 }, 0 },
+        { ocGroupBy, ENTRY(ocGROUPBY_ARY), 0, ID_FUNCTION_GRP_TABLE, HID_FUNC_GROUPBY_MS, 8, { 0, 0, 0, 1, 1, 1, 1, 1 }, 0 },
     };
 
     ScFuncDesc* pDesc = nullptr;

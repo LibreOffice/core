@@ -617,6 +617,12 @@
 #define STR_SHEET_VIEW_DEFAULT_VIEW_NAME        NC_("STR_SHEET_VIEW_DEFAULT_VIEW_NAME", "Default View")
 #define STR_SHEET_VIEW_TEMPORARY_NAME_TEMPLATE  NC_("STR_SHEET_VIEW_TEMPORARY_NAME_TEMPLATE", "Temporary View %1")
 #define STR_SHEET_VIEW_PASTE_OWN_ROWS           NC_("STR_SHEET_VIEW_PASTE_OWN_ROWS", "This sheet view sorts or filters these rows on its own, so it cannot paste here. Paste outside the filtered range, or in the default view.")
+#define STR_GROUPBY_TOTAL                       NC_("STR_GROUPBY_TOTAL", "Total")
+#define STR_GROUPBY_GRAND_TOTAL                 NC_("STR_GROUPBY_GRAND_TOTAL", "Grand Total")
+// %1 is the number of the column
+#define STR_GROUPBY_ROW_FIELD                   NC_("STR_GROUPBY_ROW_FIELD", "Row Field %1")
+// %1 is the number of the column
+#define STR_GROUPBY_VALUE                       NC_("STR_GROUPBY_VALUE", "Value %1")
 
 #endif
 

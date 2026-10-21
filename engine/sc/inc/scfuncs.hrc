@@ -4539,6 +4539,28 @@ const TranslateId ocPERCENTOF_ARY[] =
     NC_("ocPERCENTOF", "The values that make up the whole set.")
 };
 
+// -=*# Resource for function GROUPBY #*=-
+const TranslateId ocGROUPBY_ARY[] =
+{
+    NC_("ocGROUPBY", "Groups rows by the values in one or more key columns and applies a function to the values of each group."),
+    NC_("ocGROUPBY", "Row fields"),
+    NC_("ocGROUPBY", "The key columns to group the rows by. Each column is one level of the grouping."),
+    NC_("ocGROUPBY", "Values"),
+    NC_("ocGROUPBY", "The values to aggregate. Each column gives one result column."),
+    NC_("ocGROUPBY", "Function"),
+    NC_("ocGROUPBY", "The function that aggregates the values of a group, for example SUM, AVERAGE or a LAMBDA. A function with two required parameters, like PERCENTOF, also receives all values."),
+    NC_("ocGROUPBY", "Field headers"),
+    NC_("ocGROUPBY", "0 - no header row. 1 - the data has a header row that is not shown. 2 - no header row, generated names are shown. 3 - the data has a header row that is shown. If omitted, a header row is detected from the values."),
+    NC_("ocGROUPBY", "Total depth"),
+    NC_("ocGROUPBY", "0 - no totals. 1 - grand total. 2 - grand total and subtotals of the first key column, and so on. A negative number shows the totals at the top. If omitted, the grand total is shown."),
+    NC_("ocGROUPBY", "Sort order"),
+    NC_("ocGROUPBY", "The result column to sort by, counting the key columns and then the value columns. A negative number sorts in descending order. Several numbers may be given when they all refer to key columns."),
+    NC_("ocGROUPBY", "Filter array"),
+    NC_("ocGROUPBY", "A column of TRUE or FALSE values, one per row, that selects the rows to include."),
+    NC_("ocGROUPBY", "Field relationship"),
+    NC_("ocGROUPBY", "0 - the key columns form a hierarchy (default). 1 - the key columns form a table, each is sorted on its own and there are no subtotals.")
+};
+
 // -=*# Resource for function LAMBDA #*=-
 const TranslateId ocLAMBDA_ARY[] =
 {

@@ -264,6 +264,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/core/tool/formulaparserpool \
     sc/source/core/tool/formularesult \
     sc/source/core/tool/grouparealistener \
+    sc/source/core/tool/GroupByFunction \
     sc/source/core/tool/hints \
     sc/source/core/tool/inputopt \
     sc/source/core/tool/interpr1 \

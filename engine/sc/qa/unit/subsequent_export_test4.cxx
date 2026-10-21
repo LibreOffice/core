@@ -14,6 +14,7 @@
 #include <scitems.hxx>
 #include <attrib.hxx>
 #include <formulacell.hxx>
+#include <markdata.hxx>
 #include <stlpool.hxx>
 #include <validat.hxx>
 #include <scresid.hxx>
@@ -1853,6 +1854,82 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testPercentOfOdsRoundTrip)
     CPPUNIT_ASSERT(pDoc->GetFormula(1, 0, 0).startsWith("=PERCENTOF("));
     pDoc->CalcAll();
     CPPUNIT_ASSERT_DOUBLES_EQUAL(0.3, pDoc->GetValue(ScAddress(1, 0, 0)), 1e-12);
+}
+
+namespace
+{
+// Keys in A1:A4 and amounts in B1:B4, grouped by GROUPBY at D1.
+void fillGroupByDocument(ScDocument& rDocument)
+{
+    rDocument.SetString(ScAddress(0, 0, 0), u"b"_ustr);
+    rDocument.SetString(ScAddress(0, 1, 0), u"a"_ustr);
+    rDocument.SetString(ScAddress(0, 2, 0), u"b"_ustr);
+    rDocument.SetString(ScAddress(0, 3, 0), u"a"_ustr);
+    rDocument.SetValue(ScAddress(1, 0, 0), 30.0);
+    rDocument.SetValue(ScAddress(1, 1, 0), 20.0);
+    rDocument.SetValue(ScAddress(1, 2, 0), 50.0);
+    rDocument.SetValue(ScAddress(1, 3, 0), 10.0);
+    ScMarkData aMark(rDocument.GetSheetLimits());
+    aMark.SelectOneTable(0);
+    rDocument.InsertMatrixFormula(3, 0, 3, 0, aMark, u"=GROUPBY(A1:A4;B1:B4;SUM)"_ustr, nullptr,
+                                  formula::FormulaGrammar::GRAM_DEFAULT,
+                                  /*bDynamicArrayMaster=*/true);
+}
+
+void assertGroupByResult(ScDocument& rDocument)
+{
+    rDocument.CalcAll();
+    CPPUNIT_ASSERT_EQUAL(u"a"_ustr, rDocument.GetString(ScAddress(3, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(30.0, rDocument.GetValue(ScAddress(4, 0, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"b"_ustr, rDocument.GetString(ScAddress(3, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(80.0, rDocument.GetValue(ScAddress(4, 1, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"Total"_ustr, rDocument.GetString(ScAddress(3, 2, 0)));
+    CPPUNIT_ASSERT_EQUAL(110.0, rDocument.GetValue(ScAddress(4, 2, 0)));
+}
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testGroupByXlsxRoundTrip)
+{
+    // GROUPBY is saved to XLSX under the prefix that marks a newer function and loads back as
+    // the same function with the same result.
+    createScDoc();
+    fillGroupByDocument(*getScDoc());
+    assertGroupByResult(*getScDoc());
+
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+    const OUString aFormula
+        = getXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[1]/x:c[@r='D1']/x:f");
+    CPPUNIT_ASSERT_MESSAGE(aFormula.toUtf8().getStr(),
+                           aFormula.startsWith("_xlfn.GROUPBY(A1:A4,B1:B4,"));
+
+    saveAndReload(TestFilter::XLSX);
+    ScDocument* pDocument = getScDoc();
+    CPPUNIT_ASSERT(pDocument->GetFormula(3, 0, 0).startsWith("=GROUPBY("));
+    assertGroupByResult(*pDocument);
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testGroupByOdsRoundTrip)
+{
+    // ODF saves GROUPBY in the namespace for functions from OOXML and loads it back as the same
+    // function with the same result.
+    createScDoc();
+    fillGroupByDocument(*getScDoc());
+    assertGroupByResult(*getScDoc());
+
+    save(TestFilter::ODS);
+    xmlDocUniquePtr pContent = parseExport(u"content.xml"_ustr);
+    CPPUNIT_ASSERT(pContent);
+    const OUString aFormula = getXPath(
+        pContent, "(//table:table-cell[contains(@table:formula, 'GROUPBY')])[1]", "formula");
+    CPPUNIT_ASSERT_MESSAGE(aFormula.toUtf8().getStr(),
+                           aFormula.startsWith("of:=COM.MICROSOFT.GROUPBY([.A1:.A4];[.B1:.B4];"));
+
+    saveAndReload(TestFilter::ODS);
+    ScDocument* pDocument = getScDoc();
+    CPPUNIT_ASSERT(pDocument->GetFormula(3, 0, 0).startsWith("=GROUPBY("));
+    assertGroupByResult(*pDocument);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
