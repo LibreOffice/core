@@ -39,7 +39,7 @@ private:
     // Core Data
     SvxAutoFormat& mpFormat;
     OUString maFormatName;
-    size_t mnIndex;
+    int mnIndex;
     bool mbWriter;
     bool mbRTL;
 
@@ -79,7 +79,7 @@ public:
     SvxTableAutoFmtDlg(SvxAutoFormat& rFormat, const OUString& sFormatName, weld::Window* pParent,
                        bool bWriter, bool bRTL);
 
-    size_t GetIndex() const { return mnIndex; }
+    int GetIndex() const { return mnIndex; }
     OUString GetCurrFormatName();
 };
 
