@@ -151,6 +151,11 @@
       <AdditionalDependencies>$(EngineLibDir)\PocoNet.lib;$(EngineLibDir)\PocoUtil.lib;$(EngineLibDir)\PocoJSON.lib;$(EngineLibDir)\PocoXML.lib;$(EngineLibDir)\PocoFoundation.lib;$(EngineLibDir)\expat.lib;ws2_32.lib;iphlpapi.lib;crypt32.lib;shlwapi.lib;secur32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup>
+    <Manifest>
+      <AdditionalManifestFiles>..\..\..\engine\solenv\gbuild\platform\UseUtf8.manifest;%(AdditionalManifestFiles)</AdditionalManifestFiles>
+    </Manifest>
+  </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\..\..\common\Util-windows.cpp" />
     <ClCompile Include="..\..\..\tools\coconvert.cpp" />
