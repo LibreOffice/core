@@ -1801,15 +1801,15 @@ static const GdkRGBA& getDarkColor(int nViewId, KitDocumentViewPrivate& priv)
         // Based on tools/color.hxx, COL_AUTHOR1_DARK..COL_AUTHOR9_DARK.
         static std::vector<GdkRGBA> aColors =
         {
-            {(double(198))/255, (double(146))/255, (double(0))/255, 0},
-            {(double(6))/255, (double(70))/255, (double(162))/255, 0},
-            {(double(87))/255, (double(157))/255, (double(28))/255, 0},
-            {(double(105))/255, (double(43))/255, (double(157))/255, 0},
-            {(double(197))/255, (double(0))/255, (double(11))/255, 0},
-            {(double(0))/255, (double(128))/255, (double(128))/255, 0},
-            {(double(140))/255, (double(132))/255, (double(0))/255, 0},
-            {(double(43))/255, (double(85))/255, (double(107))/255, 0},
-            {(double(209))/255, (double(118))/255, (double(0))/255, 0},
+            {(double(145))/255, (double(110))/255, (double(0))/255, 0},
+            {(double(17))/255, (double(106))/255, (double(222))/255, 0},
+            {(double(7))/255, (double(137))/255, (double(7))/255, 0},
+            {(double(184))/255, (double(50))/255, (double(212))/255, 0},
+            {(double(220))/255, (double(44))/255, (double(72))/255, 0},
+            {(double(0))/255, (double(127))/255, (double(118))/255, 0},
+            {(double(109))/255, (double(122))/255, (double(37))/255, 0},
+            {(double(99))/255, (double(115))/255, (double(152))/255, 0},
+            {(double(193))/255, (double(81))/255, (double(0))/255, 0},
         };
         static int nColorCounter = 0;
         GdkRGBA aColor = aColors[nColorCounter++ % aColors.size()];

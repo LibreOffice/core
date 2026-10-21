@@ -48,15 +48,15 @@ class LOUtil {
 	// consisting of arrays of RGB values
 	// Maybe move the color logic to separate file when it becomes complex
 	public static darkColors = [
-		[198, 146, 0],
-		[6, 70, 162],
-		[87, 157, 28],
-		[105, 43, 157],
-		[197, 0, 11],
-		[0, 128, 128],
-		[140, 132, 0],
-		[53, 85, 107],
-		[209, 118, 0],
+		[145, 110, 0],
+		[17, 106, 222],
+		[7, 137, 7],
+		[184, 50, 212],
+		[220, 44, 72],
+		[0, 127, 118],
+		[109, 122, 37],
+		[99, 115, 152],
+		[193, 81, 0],
 	];
 
 	// This list is based on supported filters defined in core in
