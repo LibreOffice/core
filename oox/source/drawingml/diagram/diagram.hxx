@@ -40,6 +40,8 @@ namespace com::sun::star {
 namespace oox::drawingml {
 
 class SmartArtDiagram;
+class TextParagraph;
+class TextRun;
 class LayoutNode;
 typedef std::shared_ptr< LayoutNode > LayoutNodePtr;
 class LayoutAtom;
@@ -211,6 +213,18 @@ public:
     std::set<OUString>& getGroupsThatShrank() { return maGroupsThatShrank; }
     /// The least size the layout's rule lets the font shrink to, in points.
     double& getLeastFont() { return mfLeastFont; }
+    /// text runs the layout sized itself, a run with its own size from the data keeps it
+    std::set<const TextRun*>& getRunsSizedByLayout() { return maRunsSizedByLayout; }
+    /// shrink factor (at most 1) of a row, by the name of a column in it that did not fit,
+    /// kept over all passes of one layout
+    std::map<OUString, double>& getColumnFits() { return maColumnFits; }
+    /// the same, as found on this pass
+    std::map<OUString, double>& getColumnFitsOfThisPass() { return maColumnFitsOfThisPass; }
+    /// paragraphs the layout indented for their bullet
+    std::set<const TextParagraph*>& getParagraphsIndentedByLayout()
+    {
+        return maParagraphsIndentedByLayout;
+    }
     void syncDiagramFontHeights();
 
     /// A value under a name of its own, userA and the rest, that a layout states as a part of the
@@ -277,6 +291,10 @@ private:
     std::map<OUString, sal_Int64> maNextContentHeights;
     bool mbContentHeightMissing = false;
     std::set<OUString> maGroupsThatShrank;
+    std::set<const TextRun*> maRunsSizedByLayout;
+    std::set<const TextParagraph*> maParagraphsIndentedByLayout;
+    std::map<OUString, double> maColumnFits;
+    std::map<OUString, double> maColumnFitsOfThisPass;
     double mfLeastFont = 5.0;
     std::set<const Shape*> maLaidOutSideways;
     std::map<sal_Int32, DeferredUserVariable> maDeferredUserVariables;
