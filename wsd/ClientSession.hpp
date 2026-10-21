@@ -127,7 +127,7 @@ public:
 
     /// Give the session the browser's new connection and the authorization that came with it. A
     /// live connection it still holds is closed first.
-    void adopt(const std::shared_ptr<ProtocolHandlerInterface>& ws, const Poco::URI& uriPublic);
+    void unpark(const std::shared_ptr<ProtocolHandlerInterface>& ws, const Poco::URI& uriPublic);
 
     /// Disconnect the session and do final cleanup, @returns true if we should not wait.
     bool disconnectFromKit();

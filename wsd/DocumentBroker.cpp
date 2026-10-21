@@ -5554,34 +5554,49 @@ void DocumentBroker::parkSession(const std::shared_ptr<ClientSession>& session)
     forwardToChild(session, "viewparked value=1");
 }
 
-std::shared_ptr<ClientSession>
-DocumentBroker::findSessionByToken(std::string_view reconnectToken)
+#if !MOBILEAPP
+bool DocumentBroker::unparkSession(std::string_view reconnectToken,
+                                   const std::shared_ptr<WebSocketHandler>& ws,
+                                   const Poco::URI& uriPublic, bool isReadOnly,
+                                   const WOPIFileInfo* wopiFileInfo)
 {
     ASSERT_CORRECT_THREAD();
+    LOG_ASSERT_MSG(ws, "Need a connection");
 
+    std::shared_ptr<ClientSession> session;
     for (const auto& it : _sessions)
     {
-        const std::shared_ptr<ClientSession>& session = it.second;
-        if (!session->matchesReconnectToken(reconnectToken))
+        if (!it.second->matchesReconnectToken(reconnectToken))
             continue;
-        if (!session->isParked() && !session->isLive())
+        if (!it.second->isParked() && !it.second->isLive())
             continue; // Still loading, or already on its way out.
-        return session;
+        session = it.second;
+        break;
     }
 
-    return nullptr;
-}
+    if (!session)
+        return false;
 
-void DocumentBroker::adoptSession(const std::shared_ptr<ClientSession>& session,
-                                  const std::shared_ptr<WebSocketHandler>& ws,
-                                  const Poco::URI& uriPublic)
-{
-    ASSERT_CORRECT_THREAD();
-    LOG_ASSERT_MSG(session && ws, "Need a session and a connection");
+    // The view the browser asks for has the permissions of this request. A session with other
+    // permissions is a different view, so a new one is made.
+    if (session->isReadOnly() != isReadOnly ||
+        (wopiFileInfo && session->getWritePermission() != wopiFileInfo->getUserCanWrite()))
+    {
+        LOG_INF("Session [" << session->getName() << "] has other permissions than this request");
+        return false;
+    }
 
-    session->adopt(ws, uriPublic);
+    LOG_INF("Reattaching session [" << session->getName() << "] for [" << _docKey << ']');
+
+    static constexpr std::string_view statusReady = "progress: { \"id\":\"ready\" }";
+    ws->sendTextMessage(statusReady);
+
+    session->unpark(ws, uriPublic);
     forwardToChild(session, "viewparked value=0");
+
+    return true;
 }
+#endif // !MOBILEAPP
 
 std::shared_ptr<ClientSession> DocumentBroker::createNewClientSession(
     const std::shared_ptr<ProtocolHandlerInterface> &ws,

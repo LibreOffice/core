@@ -552,32 +552,11 @@ void RequestVettingStation::createClientSession(const std::shared_ptr<DocumentBr
                 // A browser that lost its connection presents its token. The session it left behind
                 // takes this connection.
                 const std::string reconnectToken = requestDetails.getParam("ReconnectToken");
-                if (!reconnectToken.empty())
+                if (!reconnectToken.empty() &&
+                    docBroker->unparkSession(reconnectToken, ws, uriPublic, isReadOnly,
+                                             wopiFileInfo->get()))
                 {
-                    std::shared_ptr<ClientSession> existing =
-                        docBroker->findSessionByToken(reconnectToken);
-                    // The view the browser asks for has the permissions of this request. A session
-                    // with other permissions is a different view, so a new one is made.
-                    if (existing &&
-                        (existing->isReadOnly() != isReadOnly ||
-                         (*wopiFileInfo && existing->getWritePermission() !=
-                                               (*wopiFileInfo)->getUserCanWrite())))
-                    {
-                        LOG_INF_S(logPrefix << "Session [" << existing->getName()
-                                            << "] has other permissions than this request");
-                        existing.reset();
-                    }
-                    if (existing)
-                    {
-                        LOG_INF_S(logPrefix << "Reattaching session [" << existing->getName()
-                                            << "] for [" << docKey << ']');
-
-                        static constexpr std::string_view statusReady =
-                            "progress: { \"id\":\"ready\" }";
-                        ws->sendTextMessage(statusReady);
-                        docBroker->adoptSession(existing, ws, uriPublic);
-                        return;
-                    }
+                    return;
                 }
 #endif // !MOBILEAPP
 

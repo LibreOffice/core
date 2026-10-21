@@ -507,14 +507,14 @@ public:
     /// to reconnect to.
     void parkSession(const std::shared_ptr<ClientSession>& session);
 
-    /// The session the browser with this token has in this document, parked or not. Null when there
-    /// is none.
-    std::shared_ptr<ClientSession> findSessionByToken(std::string_view reconnectToken);
-
-    /// Hand a session the browser's new connection and its authorization, and tell the kit the view
-    /// is back.
-    void adoptSession(const std::shared_ptr<ClientSession>& session,
-                      const std::shared_ptr<WebSocketHandler>& ws, const Poco::URI& uriPublic);
+#if !MOBILEAPP
+    /// Hand the browser's new connection and its authorization to the session that the reconnect
+    /// token belongs to, and tell the kit the view is back. Returns false when no live or parked
+    /// session has the token, or when that session has other permissions than the new connection.
+    bool unparkSession(std::string_view reconnectToken, const std::shared_ptr<WebSocketHandler>& ws,
+                       const Poco::URI& uriPublic, bool isReadOnly,
+                       const WOPIFileInfo* wopiFileInfo);
+#endif
 
     /// Add a callback to be invoked in our polling thread.
     void addCallback(const SocketPoll::CallbackFn& fn);

@@ -4999,13 +4999,13 @@ void ClientSession::park()
     _parkedSince = std::chrono::steady_clock::now();
 }
 
-void ClientSession::adopt(const std::shared_ptr<ProtocolHandlerInterface>& ws,
-                          const Poco::URI& uriPublic)
+void ClientSession::unpark(const std::shared_ptr<ProtocolHandlerInterface>& ws,
+                           const Poco::URI& uriPublic)
 {
     const std::shared_ptr<DocumentBroker> docBroker = getDocumentBroker();
     LOG_CHECK_RET(docBroker && "Null DocumentBroker instance", );
     docBroker->ASSERT_CORRECT_THREAD();
-    LOG_ASSERT_MSG(ws, "Need a connection to adopt");
+    LOG_ASSERT_MSG(ws, "Need a connection to unpark");
 
     if (!isParked())
     {
