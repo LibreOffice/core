@@ -84,8 +84,8 @@ class UnitReconnect : public UnitWSD
         return poller;
     }
 
-    /// A well-formed token that the server never gave out.
-    static std::string makeToken() { return Util::toLower(Util::rng::getHexString(64)); }
+    /// A token that the server never gave out.
+    static std::string makeToken() { return Util::rng::getHexString(64); }
 
     /// Connects and loads. A reconnectable browser loads with reconnect=true. The token, when
     /// given, rides on the URL.

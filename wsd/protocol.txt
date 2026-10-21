@@ -1023,7 +1023,7 @@ clipboardkey: <token>
 reconnecttoken: <token>
 
     Sent after a load with reconnect=true, again every few minutes, and
-    again after the client reconnected. <token> is 64 lowercase hex digits. The
+    again after the client reconnected. <token> is 64 hex digits. The
     current and the previous token are both accepted, so keep only the
     latest. A connection whose URL has the parameter ReconnectToken=<token>
     takes over the view that the token belongs to, with its view id, cursor

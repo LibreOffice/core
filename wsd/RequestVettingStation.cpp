@@ -552,7 +552,7 @@ void RequestVettingStation::createClientSession(const std::shared_ptr<DocumentBr
                 // A browser that lost its connection presents its token. The session it left behind
                 // takes this connection.
                 const std::string reconnectToken = requestDetails.getParam("ReconnectToken");
-                if (ClientSession::isValidReconnectToken(reconnectToken))
+                if (!reconnectToken.empty())
                 {
                     std::shared_ptr<ClientSession> existing =
                         docBroker->findSessionByToken(reconnectToken);

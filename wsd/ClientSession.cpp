@@ -5109,16 +5109,6 @@ void ClientSession::dumpState(std::ostream& os)
     // FIXME: need to dump other bits ...
 }
 
-bool ClientSession::isValidReconnectToken(std::string_view token)
-{
-    if (token.size() != 2 * ReconnectTokenLengthBytes)
-        return false;
-    for (const char c : token)
-        if (!((c >= '0' && c <= '9') || (c >= 'a' && c <= 'f')))
-            return false;
-    return true;
-}
-
 const std::string &ClientSession::getOrCreateProxyAccess()
 {
     if (_proxyAccess.empty())

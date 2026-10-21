@@ -102,9 +102,6 @@ public:
     /// Integer id of the view in the kit process, or -1 if unknown
     int getKitViewId() const { return _kitViewId; }
 
-    /// A token is 32 random bytes as 64 lowercase hex digits. Anything else is ignored.
-    static bool isValidReconnectToken(std::string_view token);
-
     /// True when the token is this view's current or previous reconnect token. Never true for a
     /// view whose browser did not ask to reconnect.
     bool matchesReconnectToken(std::string_view token) const;
