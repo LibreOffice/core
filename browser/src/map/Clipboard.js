@@ -1008,7 +1008,11 @@ window.L.Clipboard = window.L.Class.extend({
 			return false;
 		}
 
-		if (this._selectionType !== 'text' && this._selectionType !== 'slide') {
+		// A shape selected here has no selection type until the server reports the selection,
+		// and the server copies it once it has made that selection, so it is written like one
+		// the server reported already.
+		const selectedHere = this._selectionType === null && GraphicSelection.hasActiveSelection();
+		if (this._selectionType !== 'text' && this._selectionType !== 'slide' && !selectedHere) {
 			return false;
 		}
 
