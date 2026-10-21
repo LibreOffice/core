@@ -29,7 +29,7 @@ export class Point {
 			return undefined;
 		}
 
-		var pointParts = pointString.match(/\d+/g);
+		var pointParts = pointString.match(/-?\d+/g);
 		if (pointParts === null || pointParts.length < 2) {
 			console.error('incomplete point');
 			return undefined;

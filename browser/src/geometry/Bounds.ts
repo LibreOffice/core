@@ -47,7 +47,7 @@ export class Bounds {
 			return undefined;
 		}
 
-		var rectParts = rectString.match(/\d+/g);
+		var rectParts = rectString.match(/-?\d+/g);
 		if (rectParts === null || rectParts.length < 4) {
 			console.error('incomplete rectangle');
 			return undefined;
@@ -67,7 +67,7 @@ export class Bounds {
 			return undefined;
 		}
 
-		var parts = rectListString.match(/\d+/g);
+		var parts = rectListString.match(/-?\d+/g);
 		if (parts === null || parts.length < 4) {
 			return [];
 		}

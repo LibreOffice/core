@@ -238,7 +238,7 @@ class LOUtil {
 	}
 
 	public static stringToBounds(bounds: string): cool.Bounds {
-		const numbers = bounds.match(/\d+/g);
+		const numbers = bounds.match(/-?\d+/g);
 		const topLeft = cool.Point.toPoint(
 			parseInt(numbers[0]),
 			parseInt(numbers[1]),
@@ -250,7 +250,7 @@ class LOUtil {
 	}
 
 	public static stringToRectangles(strRect: string): cool.Point[][] {
-		const matches = strRect.match(/\d+/g);
+		const matches = strRect.match(/-?\d+/g);
 		const rectangles: cool.Point[][] = [];
 		if (matches !== null) {
 			for (let itMatch = 0; itMatch < matches.length; itMatch += 4) {

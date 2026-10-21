@@ -50,6 +50,21 @@ describe(['tagmobile', 'tagnextcloud'], 'Impress insertion wizard.', function() 
 			.should('exist');
 	}
 
+	// Selects the text of a field shape just inserted. The shape lands partly left of the slide,
+	// and its text can lie left of the visible area, where no selection handle shows, so the
+	// selection is not looked for on screen; the caller checks the text by copying it.
+	function selectTextOfInsertedField() {
+		impressHelper.dblclickOnSelectedShape();
+		cy.getFrameWindow().then(function(win) {
+			helper.waitForTimers(win, 'clicktimer');
+			helper.processToIdle(win);
+		});
+		helper.typeIntoDocument('{ctrl}a');
+		cy.getFrameWindow().then(function(win) {
+			helper.processToIdle(win);
+		});
+	}
+
 	it('Insert local image.', function() {
 		mobileHelper.openInsertionWizard();
 
@@ -169,7 +184,7 @@ describe(['tagmobile', 'tagnextcloud'], 'Impress insertion wizard.', function() 
 		// Check that the shape is there
 		selectionShouldBeTextShape(false);
 		// Check the text
-		impressHelper.selectTextOfShape();
+		selectTextOfInsertedField();
 		helper.copy();
 		// Check that we have a date in MM/DD/YY format
 		var regex = /\d{1,2}[/]\d{1,2}[/]\d{1,2}/;
@@ -184,7 +199,7 @@ describe(['tagmobile', 'tagnextcloud'], 'Impress insertion wizard.', function() 
 		// Check that the shape is there
 		selectionShouldBeTextShape(false);
 		// Check the text
-		impressHelper.selectTextOfShape();
+		selectTextOfInsertedField();
 		helper.copy();
 		// Check that we have a date in MM/DD/YY format
 		var regex = /\d{1,2}[/]\d{1,2}[/]\d{1,2}/;
@@ -199,7 +214,7 @@ describe(['tagmobile', 'tagnextcloud'], 'Impress insertion wizard.', function() 
 		// Check that the shape is there
 		selectionShouldBeTextShape(false);
 		// Check the text
-		impressHelper.selectTextOfShape();
+		selectTextOfInsertedField();
 		helper.copy();
 		// Check that we have a time in HH/MM/SS format
 		var regex = /\d{1,2}[:]\d{1,2}[:]\d{1,2}/;
@@ -214,7 +229,7 @@ describe(['tagmobile', 'tagnextcloud'], 'Impress insertion wizard.', function() 
 		// Check that the shape is there
 		selectionShouldBeTextShape(false);
 		// Check the text
-		impressHelper.selectTextOfShape();
+		selectTextOfInsertedField();
 		helper.copy();
 		// Check that we have a time in HH/MM/SS format
 		var regex = /\d{1,2}[:]\d{1,2}[:]\d{1,2}/;
@@ -229,7 +244,7 @@ describe(['tagmobile', 'tagnextcloud'], 'Impress insertion wizard.', function() 
 		// Check that the shape is there
 		selectionShouldBeTextShape();
 		// Check the text
-		impressHelper.selectTextOfShape();
+		selectTextOfInsertedField();
 		helper.copy();
 		helper.expectTextForClipboard('1');
 	});
@@ -242,7 +257,7 @@ describe(['tagmobile', 'tagnextcloud'], 'Impress insertion wizard.', function() 
 		// Check that the shape is there
 		selectionShouldBeTextShape();
 		// Check the text
-		impressHelper.selectTextOfShape();
+		selectTextOfInsertedField();
 		helper.copy();
 		helper.expectTextForClipboard('Slide 1');
 	});
@@ -255,7 +270,7 @@ describe(['tagmobile', 'tagnextcloud'], 'Impress insertion wizard.', function() 
 		// Check that the shape is there
 		selectionShouldBeTextShape();
 		// Check the text
-		impressHelper.selectTextOfShape();
+		selectTextOfInsertedField();
 		helper.copy();
 		helper.expectTextForClipboard('1');
 	});
