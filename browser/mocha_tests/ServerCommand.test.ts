@@ -119,4 +119,38 @@ describe('ServerCommand', function () {
 		nodeassert.equal(tileheight, sc.tileHeight);
 		nodeassert.equal(wireId, sc.wireId);
 	});
+
+	describe('sequenceOf', function () {
+		it('reads the sequence number of an input message', function () {
+			nodeassert.strictEqual(
+				ServerCommand.sequenceOf(
+					'key type=input char=0 key=1286 sequence=14\n',
+				),
+				14,
+			);
+			nodeassert.strictEqual(
+				ServerCommand.sequenceOf('textinput id=0 text=a sequence=11'),
+				11,
+			);
+		});
+
+		it('reads no number from a message without one that counts', function () {
+			nodeassert.strictEqual(
+				ServerCommand.sequenceOf('tilecombine nviewid=0 part=0'),
+				undefined,
+			);
+			nodeassert.strictEqual(
+				ServerCommand.sequenceOf('textinput id=0 text=a sequence=-1'),
+				undefined,
+			);
+			nodeassert.strictEqual(
+				ServerCommand.sequenceOf('textinput id=0 text=a sequence=x'),
+				undefined,
+			);
+			nodeassert.strictEqual(
+				ServerCommand.sequenceOf('textinput id=0 text=a sequence='),
+				undefined,
+			);
+		});
+	});
 });

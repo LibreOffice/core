@@ -91,14 +91,15 @@ class LocalCaret {
 		};
 	}
 
-	/// Tells the engine where the caret is, once for each move.
-	public static tell(): void {
+	/// Tells the engine where the caret is, once for each move, in a message with the given
+	/// sequence number or the next one.
+	public static tell(sequence?: number): void {
 		LocalCaret.stopRestTimer();
 		const caret = LocalCaret.caret;
 		if (!caret || LocalCaret.sequence) return;
 		// The number is taken before the message goes out, so it is older than the message
 		// itself.
-		LocalCaret.sequence = app.nextInputSequence();
+		LocalCaret.sequence = sequence ?? app.nextInputSequence();
 		const anchor = caret.anchor
 			? ' anchorparagraph=' +
 				caret.anchor.paragraph +
@@ -118,12 +119,26 @@ class LocalCaret {
 		);
 	}
 
-	/// Tells the engine where the caret is when the message may read or move it.
-	public static tellBefore(message: string): void {
-		if (!LocalCaret.caret || LocalCaret.sequence) return;
+	/// Tells the engine where the caret is when the message may read or move it, and returns
+	/// the message to send after that.
+	public static tellBefore(message: string): string {
+		if (!LocalCaret.caret || LocalCaret.sequence) return message;
 		// What the outbox sends itself was made before the caret moved, so it goes first.
-		if (ChangeOutbox.sending || LocalCaret.isUnrelated(message)) return;
-		LocalCaret.tell();
+		if (ChangeOutbox.sending || LocalCaret.isUnrelated(message)) return message;
+		// A message numbered just now gives its number to the caret, which goes out
+		// first, and takes the next one, so the numbers rise in the order the messages
+		// go out. A key message ends with a line break after its number.
+		const sequence = ServerCommand.sequenceOf(message);
+		if (sequence !== app.file.inputSequence) {
+			LocalCaret.tell();
+			return message;
+		}
+		LocalCaret.tell(sequence);
+		const body = message.trimEnd();
+		const tokens = body.split(' ');
+		const at = tokens.findIndex((one) => one.startsWith('sequence='));
+		tokens[at] = 'sequence=' + app.nextInputSequence();
+		return tokens.join(' ') + message.substring(body.length);
 	}
 
 	/// True for a message that neither reads nor moves the caret.

@@ -210,7 +210,7 @@ describe('ChangeOutbox typed text', function () {
 		beforeEach(function () {
 			// Messages are routed as the socket routes them.
 			(app as any).socket.sendMessage = (message: string) => {
-				LocalCaret.tellBefore(message);
+				message = LocalCaret.tellBefore(message);
 				if (ChangeOutbox.take(message)) return;
 				ChangeOutbox.sendAhead(message);
 				sent.push(message);
@@ -238,6 +238,20 @@ describe('ChangeOutbox typed text', function () {
 				anchor: null,
 			});
 		}
+
+		it('numbers the caret below the key that it goes ahead of', function () {
+			moveCaret();
+			app.socket.sendMessage(
+				'key type=input char=0 key=1286 sequence=' +
+					app.nextInputSequence() +
+					'\n',
+			);
+			nodeassert.deepStrictEqual(sent, [
+				'textcursor object=5 paragraph=0 index=0 sequence=13',
+				'key type=input char=0 key=1286 sequence=14\n',
+			]);
+			nodeassert.strictEqual(app.file.inputSequence, 14);
+		});
 
 		it('sends the text typed before the caret moved ahead of the caret', function () {
 			const filled = fillTheOutbox(app.socket.sendMessage);

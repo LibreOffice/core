@@ -221,7 +221,7 @@ class Socket {
 
 		// A caret moved here goes to the engine ahead of a message that may read or move
 		// it.
-		if (typeof msg === 'string') LocalCaret.tellBefore(msg);
+		if (typeof msg === 'string') msg = LocalCaret.tellBefore(msg);
 
 		// The changes of objects, undos, redos and typed text of a view drawn from the
 		// objects go to the engine at its pace through the outbox, which sends its text
