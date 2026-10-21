@@ -33,6 +33,9 @@ public:
 
 private:
 
+    /// Duplicates the marked objects as the copy attributes in pArgs say, as one undo step.
+    void Duplicate(const SfxItemSet* pArgs);
+
     FuCopy (
         ViewShell& rViewSh,
         ::sd::Window* pWin,

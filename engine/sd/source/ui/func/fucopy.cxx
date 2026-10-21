@@ -68,58 +68,64 @@ void FuCopy::DoExecute( SfxRequest& rReq )
     if( rMarkList.GetMarkCount() == 0 )
         return;
 
+    if (const SfxItemSet* pArgs = rReq.GetArgs())
+    {
+        Duplicate(pArgs);
+        return;
+    }
+
+    // The dialog reads the set and writes its result back to it, so the set lives as long as the
+    // dialog does.
+    auto xSet = std::make_shared<SfxItemSetFixed<XATTR_FILLSTYLE, XATTR_FILLSTYLE, ATTR_COPY_START,
+                                                 ATTR_COPY_END>>(mrViewShell.GetPool());
+
+    // indicate color attribute
+    SfxItemSet aAttr( mrDoc.GetPool() );
+    mpView->GetAttributes( aAttr );
+
+    if( const XFillStyleItem* pFillStyleItem = aAttr.GetItemIfSet( XATTR_FILLSTYLE ) )
+    {
+        drawing::FillStyle eStyle = pFillStyleItem->GetValue();
+
+        const XFillColorItem* pFillColorItem;
+        if( eStyle == drawing::FillStyle_SOLID &&
+            (pFillColorItem = aAttr.GetItemIfSet( XATTR_FILLCOLOR )) )
+        {
+            XColorItem aXColorItem( ATTR_COPY_START_COLOR, pFillColorItem->GetName(),
+                                                pFillColorItem->GetColorValue() );
+            xSet->Put(*pFillStyleItem);
+            xSet->Put( aXColorItem );
+
+        }
+    }
+
+    SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
+    VclPtr<AbstractCopyDlg> pDlg(pFact->CreateCopyDlg(mrViewShell.GetFrameWeld(), *xSet, mpView ));
+
+    auto xRequest = std::make_shared<SfxRequest>(rReq);
+    rtl::Reference<FuCopy> xThis(this); // the function is needed until the dialog ends
+    pDlg->StartExecuteAsync(
+        [pDlg, xSet, xRequest = std::move(xRequest), xThis = std::move(xThis)](sal_Int32 nResult)
+        {
+            // The objects are duplicated as they are marked when the dialog ends.
+            if (nResult == RET_OK && xThis->mpView->GetMarkedObjectList().GetMarkCount() != 0)
+            {
+                pDlg->GetAttr(*xSet);
+                xRequest->Done(*xSet);
+                xThis->Duplicate(xRequest->GetArgs());
+            }
+            pDlg->disposeOnce();
+        });
+}
+
+void FuCopy::Duplicate(const SfxItemSet* pArgs)
+{
+    const SdrMarkList& rMarkList = mpView->GetMarkedObjectList();
+
     // Undo
     OUString aString = rMarkList.GetMarkDescription() +
         " " + SdResId( STR_UNDO_COPYOBJECTS );
     mpView->BegUndo( aString );
-
-    const SfxItemSet* pArgs = rReq.GetArgs();
-
-    if( !pArgs )
-    {
-        SfxItemSetFixed<XATTR_FILLSTYLE, XATTR_FILLSTYLE, ATTR_COPY_START, ATTR_COPY_END> aSet( mrViewShell.GetPool() );
-
-        // indicate color attribute
-        SfxItemSet aAttr( mrDoc.GetPool() );
-        mpView->GetAttributes( aAttr );
-
-        if( const XFillStyleItem* pFillStyleItem = aAttr.GetItemIfSet( XATTR_FILLSTYLE ) )
-        {
-            drawing::FillStyle eStyle = pFillStyleItem->GetValue();
-
-            const XFillColorItem* pFillColorItem;
-            if( eStyle == drawing::FillStyle_SOLID &&
-                (pFillColorItem = aAttr.GetItemIfSet( XATTR_FILLCOLOR )) )
-            {
-                XColorItem aXColorItem( ATTR_COPY_START_COLOR, pFillColorItem->GetName(),
-                                                    pFillColorItem->GetColorValue() );
-                aSet.Put(*pFillStyleItem);
-                aSet.Put( aXColorItem );
-
-            }
-        }
-
-        SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
-        ScopedVclPtr<AbstractCopyDlg> pDlg(pFact->CreateCopyDlg(mrViewShell.GetFrameWeld(), aSet, mpView ));
-
-        sal_uInt16 nResult = pDlg->Execute();
-
-        switch( nResult )
-        {
-            case RET_OK:
-                pDlg->GetAttr( aSet );
-                rReq.Done( aSet );
-                pArgs = rReq.GetArgs();
-            break;
-
-            default:
-            {
-                pDlg.disposeAndClear();
-                mpView->EndUndo();
-                return; // Cancel
-            }
-        }
-    }
 
     ::tools::Rectangle           aRect;
     sal_Int32               lWidth = 0, lHeight = 0, lSizeX = 0, lSizeY = 0;

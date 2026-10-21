@@ -108,7 +108,7 @@ VclPtr<VclAbstractDialog> SdAbstractDialogFactory_Impl::CreateBreakDlg(
 
 namespace
 {
-class AbstractCopyDlg_Impl : public ScreenshottedDialog_Impl_Sync<AbstractCopyDlg, sd::CopyDlg>
+class AbstractCopyDlg_Impl : public ScreenshottedDialog_Impl_Async<AbstractCopyDlg, sd::CopyDlg>
 {
 public:
     using ScreenshottedDialog_Impl_BASE::ScreenshottedDialog_Impl_BASE;
