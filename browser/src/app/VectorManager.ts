@@ -1023,35 +1023,46 @@ class VectorManager extends RenderManagerBase {
 			logical: cool.LogicalCaret,
 		) => cool.LogicalCaret | null,
 	): boolean {
+		const start = this._moveStart(extend);
+		if (!start) return false;
+		const logical = step(start.position, start.logical);
+		return (
+			logical !== null &&
+			this._moveCaret(start.target, start.entryId, logical, start.anchor)
+		);
+	}
+
+	// Where a caret key moves the caret from: the edited part, the caret, the anchor the move
+	// selects from and the caret's entry. Null when the move is for the server.
+	private _moveStart(extend: boolean): {
+		target: EditTarget;
+		logical: cool.LogicalCaret;
+		anchor: cool.LogicalCaret | null;
+		position: cool.CaretPosition;
+		entryId: number;
+	} | null {
 		const target = this._caretTarget();
-		if (!target || !target.logical) return false;
+		if (!target || !target.logical) return null;
 		const anchor = this._anchorForMove(target.logical, extend);
-		if (anchor === undefined) return false;
+		if (anchor === undefined) return null;
 		const position = this._lookUpCaret(target);
 		const entryId = position?.objectId;
-		if (!position || entryId === undefined) return false;
-		const logical = step(position, target.logical);
-		return (
-			logical !== null && this._moveCaret(target, entryId, logical, anchor)
-		);
+		if (!position || entryId === undefined) return null;
+		return { target, logical: target.logical, anchor, position, entryId };
 	}
 
 	/// Move the caret one line up (step -1) or down (step 1), keeping its starting x over
 	/// several moves. With extend, the selection follows the caret. True when it moved.
 	moveCaretByLine(step: -1 | 1, extend: boolean = false): boolean {
-		const target = this._caretTarget();
-		if (!target || !target.logical) return false;
-		const anchor = this._anchorForMove(target.logical, extend);
-		if (anchor === undefined) return false;
-		const position = this._lookUpCaret(target);
-		const entryId = position?.objectId;
-		if (!position || entryId === undefined) return false;
+		const start = this._moveStart(extend);
+		if (!start) return false;
+		const { target, entryId, position } = start;
 
 		const travel = this._travelX;
 		const x =
 			travel &&
-			travel.logical.paragraph === target.logical.paragraph &&
-			travel.logical.index === target.logical.index
+			travel.logical.paragraph === start.logical.paragraph &&
+			travel.logical.index === start.logical.index
 				? travel.x
 				: position.geometry().x;
 		const logical =
@@ -1060,7 +1071,7 @@ class VectorManager extends RenderManagerBase {
 				x,
 				step,
 			) ?? null;
-		if (!logical || !this._moveCaret(target, entryId, logical, anchor))
+		if (!logical || !this._moveCaret(target, entryId, logical, start.anchor))
 			return false;
 		this._travelX = { x, logical: { ...logical } };
 		return true;
@@ -1088,6 +1099,25 @@ class VectorManager extends RenderManagerBase {
 		)
 			return undefined;
 		return entryId;
+	}
+
+	// The edited part, the entry and the caret where a press at (x, y) on the object hitId
+	// lands, or null when the press is for the server.
+	private _pressAt(
+		x: number,
+		y: number,
+		hitId: number | undefined,
+	): {
+		target: EditTarget;
+		entryId: number;
+		logical: cool.LogicalCaret;
+	} | null {
+		const target = this._caretTarget();
+		if (!target) return null;
+		const entryId = this._pressedEntry(target, hitId, x, y);
+		if (entryId === undefined) return null;
+		const logical = this._textOf(target.tree, entryId)?.caretAtPoint(x, y);
+		return logical ? { target, entryId, logical } : null;
 	}
 
 	// The objectKind of a table.
@@ -1124,13 +1154,11 @@ class VectorManager extends RenderManagerBase {
 	/// Put the caret where a click at (x, y), in document twips, lands in the edited text, and
 	/// drop any selection. hitId is the object at the point, if any. True when the caret moved.
 	placeCaretAt(x: number, y: number, hitId: number | undefined): boolean {
-		const target = this._caretTarget();
-		if (!target) return false;
-		const entryId = this._pressedEntry(target, hitId, x, y);
-		if (entryId === undefined) return false;
-		const logical =
-			this._textOf(target.tree, entryId)?.caretAtPoint(x, y) ?? null;
-		return logical !== null && this._moveCaret(target, entryId, logical, null);
+		const press = this._pressAt(x, y, hitId);
+		return (
+			press !== null &&
+			this._moveCaret(press.target, press.entryId, press.logical, null)
+		);
 	}
 
 	/// Select the word under a double click at (x, y), in document twips, as the engine does.
@@ -1155,12 +1183,9 @@ class VectorManager extends RenderManagerBase {
 			logical: cool.LogicalCaret,
 		) => cool.CaretSpan | null,
 	): boolean {
-		const target = this._caretTarget();
-		if (!target) return false;
-		const entryId = this._pressedEntry(target, hitId, x, y);
-		if (entryId === undefined) return false;
-		const logical = this._textOf(target.tree, entryId)?.caretAtPoint(x, y);
-		if (!logical) return false;
+		const press = this._pressAt(x, y, hitId);
+		if (!press) return false;
+		const { target, entryId, logical } = press;
 		const position = target.tree.caretIn(entryId, logical);
 		const span = position ? extent(position, logical) : null;
 		return (
@@ -1176,14 +1201,13 @@ class VectorManager extends RenderManagerBase {
 	/// object at the point, if any. True when the caret moved to the press.
 	startTextDrag(x: number, y: number, hitId: number | undefined): boolean {
 		this._dragStart = null;
-		const target = this._caretTarget();
-		if (!target) return false;
-		const entryId = this._pressedEntry(target, hitId, x, y);
-		if (entryId === undefined) return false;
-		const anchor = this._textOf(target.tree, entryId)?.caretAtPoint(x, y);
-		if (!anchor || !this._moveCaret(target, entryId, anchor, null))
+		const press = this._pressAt(x, y, hitId);
+		if (
+			!press ||
+			!this._moveCaret(press.target, press.entryId, press.logical, null)
+		)
 			return false;
-		this._dragStart = { entryId, anchor };
+		this._dragStart = { entryId: press.entryId, anchor: press.logical };
 		return true;
 	}
 

@@ -767,14 +767,21 @@ class MouseControl extends CanvasSectionObject {
 		return taken;
 	}
 
+	/// True while text is edited and the client answers presses in it from the objects it
+	/// holds.
+	private static editsTextHere(): boolean {
+		return (
+			app.file.textCursor.visible && RenderGeometrySection.answersPointer()
+		);
+	}
+
 	/// Starts a drag that selects text here when a plain left press landed in the edited text.
 	/// Any other press goes to the engine.
 	private startSelectingText(): boolean {
 		const press = this.positionOnMouseDown;
 		if (!press || this.mouseDownSent || this.modifierOnMouseDown !== 0)
 			return false;
-		if (!app.file.textCursor.visible) return false;
-		if (!RenderGeometrySection.answersPointer()) return false;
+		if (!MouseControl.editsTextHere()) return false;
 		this.selectingText = RenderManager.startTextDrag(
 			press.x,
 			press.y,
@@ -800,8 +807,7 @@ class MouseControl extends CanvasSectionObject {
 		modifier: number,
 	): boolean {
 		if (buttons !== app.LOButtons.left || modifier !== 0) return false;
-		if (!app.file.textCursor.visible) return false;
-		if (!RenderGeometrySection.answersPointer()) return false;
+		if (!MouseControl.editsTextHere()) return false;
 		return RenderManager.placeCaretAt(
 			point.x,
 			point.y,
@@ -822,8 +828,7 @@ class MouseControl extends CanvasSectionObject {
 	): boolean {
 		if (clickInfo.buttons !== app.LOButtons.left || clickInfo.modifier !== 0)
 			return false;
-		if (!app.file.textCursor.visible) return false;
-		if (!RenderGeometrySection.answersPointer()) return false;
+		if (!MouseControl.editsTextHere()) return false;
 		const point = clickInfo.sendingPosition;
 		const hitId = RenderGeometrySection.objectIdAt(point.x, point.y);
 		if (count === 2) return RenderManager.selectWordAt(point.x, point.y, hitId);
