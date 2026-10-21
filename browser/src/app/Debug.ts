@@ -104,6 +104,10 @@ class DebugManager {
 	private logTrace: boolean;
 
 	public messageDelayOn: boolean;
+	/// The delay of the messages in each direction, in milliseconds.
+	public get messageDelayMs(): number {
+		return this._messageDelayMs;
+	}
 	private _messageDelayMs: number = 100;
 
 	public eventDelayWatchdog: boolean;
@@ -136,6 +140,12 @@ class DebugManager {
 		// The vector switch starts out at what the document was opened with, and is what the
 		// rendering follows from then on.
 		this.vectorOn = window.coolParams.get('vector') === 'true';
+
+		// A round trip given with the document holds the messages back from the start, and the
+		// panel shows the delay as switched on with that round trip.
+		const startingRoundTrip = parseInt(window.coolParams.get('messagedelay'));
+		this.messageDelayOn = startingRoundTrip > 0;
+		if (this.messageDelayOn) this._messageDelayMs = startingRoundTrip / 2;
 		this.predictedCaretOn = false;
 	}
 
@@ -862,7 +872,7 @@ class DebugManager {
 		this._addDebugTool({
 			name: 'Delay messages',
 			category: 'Functionality',
-			startsOn: false,
+			startsOn: self.messageDelayOn,
 			onAdd: function () {
 				self.messageDelayOn = true;
 				app.socket.enableMessageDelay(self._messageDelayMs);

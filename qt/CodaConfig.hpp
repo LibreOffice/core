@@ -51,6 +51,25 @@ public:
         return wanted;
     }
 
+    // The round trip in milliseconds that the messages between the page and the engine are held
+    // back by, as on a slow connection, from the start. CODA_DELAY asks for that when it holds a
+    // whole number above zero. Zero means the messages are not held back.
+    int messageDelay() const
+    {
+        static const int delay = []
+        {
+            const char* env = std::getenv("CODA_DELAY");
+            if (!env || !*env)
+                return 0;
+            char* end = nullptr;
+            const long value = std::strtol(env, &end, 10);
+            if (*end != '\0' || value < 0 || value > INT_MAX)
+                return 0;
+            return static_cast<int>(value);
+        }();
+        return delay;
+    }
+
     // How many document views may hold a web engine renderer at once. A window keeps
     // the most recently used views and drops the renderers of the others, which stays
     // within one process's memory as more documents are opened. Zero means no limit.

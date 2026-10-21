@@ -364,6 +364,11 @@ class Socket {
 
 		this._connectCount++;
 		this._faultInjection();
+
+		// The delay of the messages holds for every connection while it is switched on.
+		const debug = this._map._debug;
+		if (debug && debug.messageDelayOn)
+			this.enableMessageDelay(debug.messageDelayMs);
 		this.resetTokenExpiryTimer();
 
 		// process messages for early socket connection
