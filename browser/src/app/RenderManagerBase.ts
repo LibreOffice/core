@@ -21,6 +21,17 @@
 
 type AfterVisualsReadyTask = () => void;
 
+/*
+	A callback for a change of the cached vector data. answered holds the ids of the
+	objects that the engine's answer replaced: empty for a change made here, undefined
+	where everything may have changed. inputSequence is the newest input of this view
+	that the answer reflects, where it names one.
+*/
+type VectorChangeListener = (
+	answered?: number[],
+	inputSequence?: number,
+) => void;
+
 namespace cool {
 	/// A caret update's JSON, each value optional: the newest input it reflects as a number,
 	/// and the logical caret and the edited object's id as strings.
@@ -314,7 +325,7 @@ abstract class RenderManagerBase {
 
 	abstract isLayerVisible(layer: number): boolean;
 
-	abstract onVectorChanged(callback: (answered?: number[]) => void): void;
+	abstract onVectorChanged(callback: VectorChangeListener): void;
 
 	abstract offVectorChanged(callback: () => void): void;
 

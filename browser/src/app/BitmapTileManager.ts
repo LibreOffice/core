@@ -2567,7 +2567,7 @@ class BitmapTileManager extends RenderManagerBase {
 	}
 
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	public onVectorChanged(_callback: (answered?: number[]) => void): void {}
+	public onVectorChanged(_callback: VectorChangeListener): void {}
 
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	public offVectorChanged(_callback: () => void): void {}

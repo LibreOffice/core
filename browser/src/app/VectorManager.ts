@@ -97,7 +97,7 @@ class VectorManager extends RenderManagerBase {
 	// Callbacks fired when cached vector data changes: a part's
 	// primitive tree arrived, a deferred bitmap decoded, or the cache
 	// was cleared.
-	private _changeListeners: ((answered?: number[]) => void)[] = [];
+	private _changeListeners: VectorChangeListener[] = [];
 
 	// Ids of the layers this view does not show. Objects on them are
 	// kept in the cache and skipped when drawing.
@@ -134,7 +134,7 @@ class VectorManager extends RenderManagerBase {
 		here and the engine answered nothing, and nothing at all where everything may have
 		changed, as when a whole part arrives.
 	*/
-	onVectorChanged(callback: (answered?: number[]) => void): void {
+	onVectorChanged(callback: VectorChangeListener): void {
 		this._changeListeners.push(callback);
 	}
 
@@ -151,8 +151,9 @@ class VectorManager extends RenderManagerBase {
 		);
 	}
 
-	private _fireChanged(answered?: number[]): void {
-		for (const callback of this._changeListeners) callback(answered);
+	private _fireChanged(answered?: number[], inputSequence?: number): void {
+		for (const callback of this._changeListeners)
+			callback(answered, inputSequence);
 	}
 
 	/*
@@ -667,7 +668,7 @@ class VectorManager extends RenderManagerBase {
 		if (this._isDrawable(data)) this._redrawRenderedPreviews(partId, drained);
 		if (mode === cool.VectorMode.MasterPages) this._onMasterArrived(partId);
 		this._reconcile(partId, values.inputSequence);
-		this._fireChanged();
+		this._fireChanged(undefined, values.inputSequence);
 		this.setVisualsReady();
 	}
 
@@ -810,7 +811,7 @@ class VectorManager extends RenderManagerBase {
 		const replaced = carried.flatMap((object) =>
 			object.id === undefined ? [] : [object.id],
 		);
-		this._fireChanged(replaced);
+		this._fireChanged(replaced, values.inputSequence);
 		return replaced;
 	}
 

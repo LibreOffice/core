@@ -40,12 +40,13 @@
 	where only the engine knows, and the deltas that arrive before the results belong to changes
 	sent earlier.
 
-	Typed text and deleted characters go the same way, as the engine sends a delta for each
-	character. What is typed while changes wait merges into one textinput message, and what is
-	deleted into one removetextcontext message, each with the newest sequence number. The engine
-	deletes the characters before the caret first, so a backspace after a forward delete starts
-	a message of its own. Any other message that the engine applies in order sends the waiting
-	text ahead of it.
+	Typed text and deleted characters go the same way. What is typed while changes wait merges
+	into one textinput message, and what is deleted into one removetextcontext message, each with
+	the newest sequence number. The engine deletes the characters before the caret first, so a
+	backspace after a forward delete starts a message of its own. Any other message that the
+	engine applies in order sends the waiting text ahead of it. The kit applies the text messages
+	queued for it together and sends one delta for them, so a delta answers everything in flight
+	up to the newest text message that it reflects.
 */
 /// A change of the mapping of objects, which goes out as one setobjecttransform message.
 interface TransformEntry {
@@ -147,8 +148,12 @@ class ChangeOutbox {
 	/// into one message, in milliseconds. At 0 they go out as soon as a change may.
 	private static textWait: number = 0;
 
-	/// One wait for each change in flight, the oldest first.
-	private static inFlight: ReturnType<typeof setTimeout>[] = [];
+	/// One wait for each change in flight, the oldest first, with the sequence number of a text
+	/// message.
+	private static inFlight: {
+		wait: ReturnType<typeof setTimeout>;
+		sequence?: number;
+	}[] = [];
 
 	/// How many undos and redos went out whose result the engine has not reported yet.
 	private static undosUnanswered: number = 0;
@@ -474,7 +479,13 @@ class ChangeOutbox {
 			() => ChangeOutbox.answered(wait),
 			ChangeOutbox.longestWait,
 		);
-		ChangeOutbox.inFlight.push(wait);
+		ChangeOutbox.inFlight.push({
+			wait,
+			sequence:
+				entry.kind === 'text' || entry.kind === 'remove'
+					? entry.sequence
+					: undefined,
+		});
 
 		if (entry.kind === 'undo' || entry.kind === 'redo') {
 			ChangeOutbox.undosUnanswered++;
@@ -532,11 +543,28 @@ class ChangeOutbox {
 	/// A change in flight was answered, the oldest one, or the one of that wait was waited for
 	/// long enough: the next one may go.
 	private static answered(wait?: ReturnType<typeof setTimeout>): void {
-		const at = wait === undefined ? 0 : ChangeOutbox.inFlight.indexOf(wait);
+		const at =
+			wait === undefined
+				? 0
+				: ChangeOutbox.inFlight.findIndex((one) => one.wait === wait);
 		if (at < 0 || at >= ChangeOutbox.inFlight.length) return;
 
-		clearTimeout(ChangeOutbox.inFlight[at]);
+		clearTimeout(ChangeOutbox.inFlight[at].wait);
 		ChangeOutbox.inFlight.splice(at, 1);
+		ChangeOutbox.sendTheNext();
+	}
+
+	/// The engine's delta answered everything in flight up to the newest text message with a
+	/// sequence number at most inputSequence, or only the oldest change where there is none.
+	private static deltaArrived(inputSequence?: number): void {
+		let answered = 1;
+		if (inputSequence !== undefined)
+			ChangeOutbox.inFlight.forEach((one, at) => {
+				if (one.sequence !== undefined && one.sequence <= inputSequence)
+					answered = at + 1;
+			});
+		for (const one of ChangeOutbox.inFlight.splice(0, answered))
+			clearTimeout(one.wait);
 		ChangeOutbox.sendTheNext();
 	}
 
@@ -619,11 +647,14 @@ class ChangeOutbox {
 			true,
 		);
 
-		RenderManager.onVectorChanged((answered?: number[]) => {
-			if (answered !== undefined && !answered.length) return;
-			if (ChangeOutbox.undoSettling) ChangeOutbox.undosAreIn();
-			if (ChangeOutbox.inFlight.length) ChangeOutbox.answered();
-		});
+		RenderManager.onVectorChanged(
+			(answered?: number[], inputSequence?: number) => {
+				if (answered !== undefined && !answered.length) return;
+				if (ChangeOutbox.undoSettling) ChangeOutbox.undosAreIn();
+				if (ChangeOutbox.inFlight.length)
+					ChangeOutbox.deltaArrived(inputSequence);
+			},
+		);
 
 		app.map.on('commandresult', (event: any) => {
 			if (

@@ -396,7 +396,7 @@ class RenderManager {
 		return RenderManager.ensureInstance().isLayerVisible(layer);
 	}
 
-	static onVectorChanged(callback: (answered?: number[]) => void): void {
+	static onVectorChanged(callback: VectorChangeListener): void {
 		RenderManager.ensureInstance().onVectorChanged(callback);
 	}
 

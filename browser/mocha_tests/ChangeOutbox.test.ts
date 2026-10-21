@@ -38,7 +38,7 @@ describe('ChangeOutbox typed text', function () {
 
 	function emptyTheOutbox(): void {
 		const outbox = ChangeOutbox as any;
-		for (const wait of outbox.inFlight) clearTimeout(wait);
+		for (const one of outbox.inFlight) clearTimeout(one.wait);
 		outbox.inFlight = [];
 		outbox.waiting = [];
 	}
@@ -130,6 +130,44 @@ describe('ChangeOutbox typed text', function () {
 			'textinput id=0 text=b sequence=12',
 			'removetextcontext id=0 before=1 after=0 sequence=13',
 			'textinput id=0 text=c sequence=14',
+		]);
+	});
+
+	it('lets one delta answer all the text it reflects', function () {
+		const filled = fillTheOutbox();
+		ChangeOutbox.take('textinput id=0 text=a sequence=11');
+		ChangeOutbox.take('textinput id=0 text=b sequence=12');
+		ChangeOutbox.take('textinput id=0 text=c sequence=13');
+		// The kit applied every message in flight together, and the delta says so.
+		(manager as any)._fireChanged([5], 11);
+		nodeassert.deepStrictEqual(sent, [
+			...filled,
+			'textinput id=0 text=a sequence=11',
+			'textinput id=0 text=bc sequence=13',
+		]);
+		// Only "bc" is in flight now, so the next character goes out at once.
+		ChangeOutbox.take('textinput id=0 text=d sequence=14');
+		nodeassert.strictEqual(
+			sent[filled.length + 2],
+			'textinput id=0 text=d sequence=14',
+		);
+	});
+
+	it('lets one delta answer a change sent before the text it reflects', function () {
+		ChangeOutbox.setMostInFlight(2);
+		ChangeOutbox.take('setobjecttransform to=5,1,0,0,1,10,20 as=move');
+		ChangeOutbox.take('textinput id=0 text=a sequence=11');
+		ChangeOutbox.take('textinput id=0 text=b sequence=12');
+		nodeassert.deepStrictEqual(sent, [
+			'setobjecttransform to=5,1,0,0,1,10,20 as=move',
+			'textinput id=0 text=a sequence=11',
+		]);
+		// The kit applied the change and the text in order, and the delta reflects the text.
+		(manager as any)._fireChanged([5], 11);
+		ChangeOutbox.take('textinput id=0 text=c sequence=13');
+		nodeassert.deepStrictEqual(sent.slice(2), [
+			'textinput id=0 text=b sequence=12',
+			'textinput id=0 text=c sequence=13',
 		]);
 	});
 
