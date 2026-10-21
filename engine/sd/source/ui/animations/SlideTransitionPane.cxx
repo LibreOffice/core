@@ -172,6 +172,31 @@ struct TransitionEffect
             rOutPage.SetLoopSound( mbLoopSound );
     }
 
+    /// True when applyTo would change any value the page holds.
+    bool changes( const SdPage & rPage ) const
+    {
+        const TransitionEffect aHeld( rPage );
+        if( ! mbEffectAmbiguous
+            && ( mnType != aHeld.mnType || mnSubType != aHeld.mnSubType
+                 || mbDirection != aHeld.mbDirection || mnFadeColor != aHeld.mnFadeColor ) )
+            return true;
+        if( ! mbDurationAmbiguous && mfDuration != aHeld.mfDuration )
+            return true;
+        if( ! mbTimeAmbiguous && mfTime != aHeld.mfTime )
+            return true;
+        if( ! mbPresChangeAmbiguous && mePresChange != aHeld.mePresChange )
+            return true;
+        if( ! mbSoundAmbiguous )
+        {
+            if( mbStopSound != aHeld.mbStopSound )
+                return true;
+            if( mbStopSound ? aHeld.mbSoundOn
+                            : ( mbSoundOn != aHeld.mbSoundOn || maSound != aHeld.maSound ) )
+                return true;
+        }
+        return ! mbLoopSoundAmbiguous && mbLoopSound != aHeld.mbLoopSound;
+    }
+
     void compareWith( const SdPage & rPage )
     {
         TransitionEffect aOtherEffect( rPage );
@@ -932,7 +957,10 @@ void SlideTransitionPane::applyToSelectedPages(bool = true)
 
     ::sd::slidesorter::SharedPageSelection pSelectedPages( getSelectedPages());
     impl::TransitionEffect aEffect = getTransitionEffectFromControls();
-    if( ! pSelectedPages->empty())
+    // A control reports the same value more than once, on a change and when it loses the focus,
+    // so the slides are written, as one undo step, only when one of them holds other values.
+    if (std::any_of(pSelectedPages->begin(), pSelectedPages->end(),
+                    [&aEffect](const SdPage* pPage) { return aEffect.changes(*pPage); }))
     {
         lcl_CreateUndoForPages( pSelectedPages, mrBase );
         lcl_ApplyToPages( pSelectedPages, aEffect );
