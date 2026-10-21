@@ -7980,6 +7980,60 @@ void stampInsertedPageSource(SdDrawDocument& rDoc, sal_uInt16 nFirstSlide, sal_u
             pPage->SetSourceModifiedTime(rModifiedTime);
     }
 }
+
+/** Inserts the pages rNames of rSource at nInsertPos, a page position, as the slides from
+    nFirstSlide on. A linked insert records on each page the slide of the source it came from, by
+    rSourcePositions when that names any, and rModifiedTime when that is not empty. A plain insert
+    leaves the pages as pages of rDoc alone. Returns the number of slides inserted, or -1 when the
+    pages could not be inserted. */
+sal_Int32 insertSourcePages(SdDrawDocument& rDoc, SdDrawDocument& rSource,
+                            const std::vector<OUString>& rNames,
+                            const InsertBookmarkOptions& rOptions, sal_uInt16 nInsertPos,
+                            sal_uInt16 nFirstSlide, const std::vector<sal_Int32>& rSourcePositions,
+                            const OUString& rModifiedTime)
+{
+    const sal_uInt16 nSlidesBefore = rDoc.GetSdPageCount(PageKind::Standard);
+    if (!rDoc.InsertFileAsPage(rNames, /*pExchangeList=*/nullptr, rOptions, nInsertPos,
+                               rSource.GetDocSh(), /*oScaleObjects=*/true))
+        return -1;
+
+    const sal_uInt16 nInsertedCount = rDoc.GetSdPageCount(PageKind::Standard) - nSlidesBefore;
+    if (!rOptions.bLink)
+    {
+        clearInsertedPageLinks(rDoc, nFirstSlide, nInsertedCount);
+        return nInsertedCount;
+    }
+
+    // A linked page records the slide of the source document it came from, which is the slide the
+    // file was written from rather than the page it holds in the file.
+    recordInsertedPageSources(rDoc, rSource, rNames, nFirstSlide, nInsertedCount,
+                              rSourcePositions);
+    if (!rModifiedTime.isEmpty())
+        stampInsertedPageSource(rDoc, nFirstSlide, nInsertedCount, rModifiedTime);
+    return nInsertedCount;
+}
+
+/** The link of a section to the source section rSourceSectionId named rSourceSectionName, of the
+    source document rSourceReference as it was at rModifiedTime. The section holds the nSlideCount
+    slides from nFirstSlide on, each linked to the source slide its page records. */
+sd::SlideSectionLink makeSectionLink(SdDrawDocument& rDoc, sal_Int32 nFirstSlide,
+                                     sal_Int32 nSlideCount, const OUString& rSourceReference,
+                                     const OUString& rSourceSectionId,
+                                     const OUString& rSourceSectionName,
+                                     const OUString& rModifiedTime)
+{
+    sd::SlideSectionLink aLink;
+    aLink.maSourceReference = rSourceReference;
+    aLink.maSourceSectionId = rSourceSectionId;
+    aLink.maSourceSectionName = rSourceSectionName;
+    aLink.maSourceModifiedTime = rModifiedTime;
+    for (sal_Int32 nSlide = nFirstSlide; nSlide < nFirstSlide + nSlideCount; ++nSlide)
+    {
+        const SdPage* pPage = rDoc.GetSdPage(static_cast<sal_uInt16>(nSlide), PageKind::Standard);
+        aLink.maSourcePageGuids.push_back(pPage ? pPage->GetSourcePageGuid() : OUString());
+    }
+    return aLink;
+}
 } // namespace
 
 bool SdXImpressDocument::insertPagesFromFile(const OUString& rFileUrl, const OString& rJsonOptions)
@@ -7992,6 +8046,8 @@ bool SdXImpressDocument::insertPagesFromFile(const OUString& rFileUrl, const OSt
     bool bLink = false;
     OUString aSourceName;
     OUString aLastModifiedTime;
+    OUString aSourceSection;
+    OUString aSourceSectionName;
     std::vector<sal_Int32> aPages;
     std::vector<sal_Int32> aSourcePositions;
     try
@@ -8006,6 +8062,10 @@ bool SdXImpressDocument::insertPagesFromFile(const OUString& rFileUrl, const OSt
                                         RTL_TEXTENCODING_UTF8);
         aLastModifiedTime = OStringToOUString(aTree.get<std::string>("lastModifiedTime", ""),
                                               RTL_TEXTENCODING_UTF8);
+        aSourceSection = OStringToOUString(aTree.get<std::string>("sourceSection", ""),
+                                           RTL_TEXTENCODING_UTF8);
+        aSourceSectionName = OStringToOUString(aTree.get<std::string>("sourceSectionName", ""),
+                                               RTL_TEXTENCODING_UTF8);
         if (auto oPages = aTree.get_child_optional("slides"))
         {
             for (const auto& rPage : *oPages)
@@ -8033,6 +8093,19 @@ bool SdXImpressDocument::insertPagesFromFile(const OUString& rFileUrl, const OSt
     if (bLink && aSourceName.isEmpty())
         return false;
 
+    // The pages of a source section go in as a section of their own. A linked section holds a
+    // copy of the slides of its source section, each read by the identifier of its source slide,
+    // so its pages are linked to no position.
+    const bool bSection = !aSourceSection.isEmpty();
+    if (bSection
+        && (!aSourcePositions.empty()
+            || sd::SlideLink::NormaliseGuid(aSourceSection).isEmpty()
+            || !sd::SlideLink::IsReadableSourceString(aSourceSectionName)
+            || !sd::SlideLink::IsReadableSourceString(aLastModifiedTime)))
+        return false;
+
+    sd::SlideSectionManager& rSections = mpDoc->GetSectionManager();
+
     SdDrawDocument* pSource = mpDoc->OpenBookmarkDoc(rFileUrl);
     if (!pSource)
         return false;
@@ -8056,24 +8129,38 @@ bool SdXImpressDocument::insertPagesFromFile(const OUString& rFileUrl, const OSt
         aOptions.aLinkSourceUrl = sd::SlideLink::MakeSourceReference(aSourceName);
     }
 
-    const sal_uInt16 nSlidesBefore = mpDoc->GetSdPageCount(PageKind::Standard);
-    if (!mpDoc->InsertFileAsPage(aBookmarkList, /*pExchangeList=*/nullptr, aOptions, nInsertPos,
-                                 pSource->GetDocSh(), /*oScaleObjects=*/true))
+    // The slides of a section and the section itself are one undo step.
+    SfxUndoManager* pUndoManager = bSection ? mpDoc->beginUndoAction() : nullptr;
+    comphelper::ScopeGuard aLeaveUndo(
+        [pUndoManager]
+        {
+            if (pUndoManager)
+                pUndoManager->LeaveListAction();
+        });
+
+    const sal_uInt16 nFirstSlide = nInsertPos == 0xFFFF
+                                       ? mpDoc->GetSdPageCount(PageKind::Standard)
+                                       : static_cast<sal_uInt16>(nAt);
+    const sal_Int32 nInsertedCount
+        = insertSourcePages(*mpDoc, *pSource, aBookmarkList, aOptions, nInsertPos, nFirstSlide,
+                            aSourcePositions, aLastModifiedTime);
+    if (nInsertedCount < 0)
         return false;
 
-    const sal_uInt16 nFirstSlide
-        = nInsertPos == 0xFFFF ? nSlidesBefore : static_cast<sal_uInt16>(nAt);
-    const sal_uInt16 nInsertedCount = mpDoc->GetSdPageCount(PageKind::Standard) - nSlidesBefore;
-    if (!bLink)
-        clearInsertedPageLinks(*mpDoc, nFirstSlide, nInsertedCount);
-    else
+    if (bSection)
     {
-        // A linked page records the slide of the source document it came from, which is the slide
-        // the file was written from rather than the page it holds in the file.
-        recordInsertedPageSources(*mpDoc, *pSource, aBookmarkList, nFirstSlide, nInsertedCount,
-                                  aSourcePositions);
-        if (!aLastModifiedTime.isEmpty())
-            stampInsertedPageSource(*mpDoc, nFirstSlide, nInsertedCount, aLastModifiedTime);
+        const sd::SlideSectionLink aLink
+            = bLink ? makeSectionLink(*mpDoc, nFirstSlide, nInsertedCount,
+                                      aOptions.aLinkSourceUrl, aSourceSection,
+                                      aSourceSectionName, aLastModifiedTime)
+                    : sd::SlideSectionLink();
+
+        // The slides stay in when the section cannot be added, as pages linked one by one.
+        const OUString aSectionName = aSourceSectionName.isEmpty()
+                                          ? SdResId(STR_DEFAULT_SLIDE_SECTION_NAME)
+                                          : aSourceSectionName;
+        if (!rSections.AddInsertedSection(nFirstSlide, nInsertedCount, aSectionName, aLink))
+            SAL_WARN("sd", "the inserted slides could not be added as a section");
     }
 
     return true;

@@ -698,6 +698,11 @@ void SdDrawDocument::MovePage(sal_uInt16 nPgNum, sal_uInt16 nNewPos)
             lcl_invalidateRenumberedPageFields(*this, getUnoModel(),
                                                GetStandardPageIndex(pMinPage));
     }
+
+    // A slide moved within a linked section, or out of one, unlinks that section, and the undo of
+    // the move puts the slide back and links the section again.
+    if (mpSectionManager)
+        mpSectionManager->NotifyLinksIfChanged();
 }
 
 // Insert page

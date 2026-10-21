@@ -54,6 +54,8 @@
 #include <ViewShell.hxx>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
+#include <sdresid.hxx>
+#include <strings.hrc>
 #include <SlideLink.hxx>
 #include <unomodel.hxx>
 
@@ -1051,6 +1053,327 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkRefreshKeepsSectionLink)
     pXImpressDocument->GetDocShell()->GetUndoManager()->Undo();
     CPPUNIT_ASSERT_EQUAL(u"Source title"_ustr, getSlideText(*pDoc, 0));
     CPPUNIT_ASSERT(rSections.GetSectionLink(0));
+}
+
+// Slides inserted as a linked section go in as a section of their own, which the link list reports
+// with its source section and its slides, and the whole insert is one undo step
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportLinkSection)
+{
+    loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering({});
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    // The slides go in at the end of the deck, after the two slides of the document.
+    const OUString aSourceUrl
+        = m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-sections.odp");
+    CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
+        aSourceUrl, "{\"slides\":[0,1],\"at\":2,\"link\":true,\"source\":\"Q3 deck.odp\","
+                    "\"lastModifiedTime\":\"2026-10-20T09:15:00Z\","
+                    "\"sourceSection\":\"{D2A46A4F-3C82-4E7B-A6B3-9F1E5C0D7A21}\","
+                    "\"sourceSectionName\":\"Opening\"}"_ostr));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(u"TargetOne"_ustr, pDoc->GetSdPage(0, PageKind::Standard)->GetName());
+
+    sd::SlideSectionManager& rSections = pDoc->GetSectionManager();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rSections.GetSectionCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rSections.GetSection(0).mnStartIndex);
+    CPPUNIT_ASSERT_EQUAL(u"Opening"_ustr, rSections.GetSection(0).maName);
+
+    const boost::property_tree::ptree aLinks = readLinks(*pXImpressDocument);
+    std::vector<boost::property_tree::ptree> aLinkedSections;
+    for (const auto& rSection : aLinks.get_child("sections"))
+        aLinkedSections.push_back(rSection.second);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), aLinkedSections.size());
+    const boost::property_tree::ptree& rLinked = aLinkedSections[0];
+    CPPUNIT_ASSERT_EQUAL(OUStringToOString(rSections.GetSection(0).maId, RTL_TEXTENCODING_UTF8),
+                         OString(rLinked.get<std::string>("section")));
+    CPPUNIT_ASSERT_EQUAL(std::string("Q3 deck.odp"), rLinked.get<std::string>("source"));
+    CPPUNIT_ASSERT_EQUAL(std::string("{D2A46A4F-3C82-4E7B-A6B3-9F1E5C0D7A21}"),
+                         rLinked.get<std::string>("sourceSection"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Opening"), rLinked.get<std::string>("sourceSectionName"));
+    CPPUNIT_ASSERT_EQUAL(std::string("2026-10-20T09:15:00Z"),
+                         rLinked.get<std::string>("lastModifiedTime"));
+
+    // Each slide of the section names the page it is here and the source slide it was read from.
+    std::vector<boost::property_tree::ptree> aSlides;
+    for (const auto& rSlide : rLinked.get_child("slides"))
+        aSlides.push_back(rSlide.second);
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(2), aSlides.size());
+    for (sal_uInt16 i = 0; i < 2; ++i)
+    {
+        const SdPage* pPage = pDoc->GetSdPage(2 + i, PageKind::Standard);
+        CPPUNIT_ASSERT_EQUAL(pPage->GetGuid().getString(),
+                             OString(aSlides[i].get<std::string>("part")));
+        CPPUNIT_ASSERT_EQUAL(OUStringToOString(pPage->GetSourcePageGuid(), RTL_TEXTENCODING_UTF8),
+                             OString(aSlides[i].get<std::string>("sourceGuid")));
+    }
+
+    pXImpressDocument->GetDocShell()->GetUndoManager()->Undo();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rSections.GetSectionCount());
+    CPPUNIT_ASSERT(readLinks(*pXImpressDocument).get_child("sections").empty());
+
+    // Redo gives the section its link back as well.
+    pXImpressDocument->GetDocShell()->GetUndoManager()->Redo();
+    CPPUNIT_ASSERT(rSections.GetSectionLink(0));
+}
+
+// Every view learns that the link list changed when a slide goes into the last section, which is
+// linked, although no section starts on another slide afterwards
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportLinkSectionEditNotifiesViews)
+{
+    loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering({});
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    SdTestViewCallback aView;
+
+    const OUString aSourceUrl
+        = m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-sections.odp");
+    CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
+        aSourceUrl, "{\"slides\":[0,1],\"link\":true,\"source\":\"Q3 deck.odp\","
+                    "\"sourceSection\":\"{D2A46A4F-3C82-4E7B-A6B3-9F1E5C0D7A21}\","
+                    "\"sourceSectionName\":\"Opening\"}"_ostr));
+    CPPUNIT_ASSERT(pDoc->GetSectionManager().GetSectionLink(0));
+    CPPUNIT_ASSERT(aView.m_nSlideLinksChanged > 0);
+
+    // A new slide at the end of the deck joins the linked section, which is the last one.
+    aView.m_nSlideLinksChanged = 0;
+    uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    xPagesSupplier->getDrawPages()->insertNewByIndex(3);
+    CPPUNIT_ASSERT(!pDoc->GetSectionManager().GetSectionLink(0));
+    CPPUNIT_ASSERT_EQUAL(1, aView.m_nSlideLinksChanged);
+}
+
+// A section link with an identifier that names no section of the source inserts nothing
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportLinkSectionNeedsSectionIdentifier)
+{
+    loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering({});
+
+    const OUString aSourceUrl
+        = m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-sections.odp");
+    CPPUNIT_ASSERT(!pXImpressDocument->insertPagesFromFile(
+        aSourceUrl, "{\"slides\":[0,1],\"link\":true,\"source\":\"Q3 deck.odp\","
+                    "\"sourceSection\":\"Opening\"}"_ostr));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2),
+                         pXImpressDocument->GetDoc()->GetSdPageCount(PageKind::Standard));
+}
+
+namespace
+{
+/// Inserts the first two slides of rSourceUrl before slide nAt, or at the end for -1, as a section
+/// linked to the source section "Opening" of "Q3 deck.odp", and returns the identifier of the new
+/// section.
+OUString insertLinkedSection(SdXImpressDocument& rXImpressDocument, const OUString& rSourceUrl,
+                             sal_Int32 nAt = -1)
+{
+    const sal_Int32 nSlideCount = rXImpressDocument.getParts();
+    CPPUNIT_ASSERT(rXImpressDocument.insertPagesFromFile(
+        rSourceUrl,
+        "{\"slides\":[0,1],\"at\":" + OString::number(nAt)
+            + ",\"link\":true,\"source\":\"Q3 deck.odp\","
+              "\"lastModifiedTime\":\"2026-10-20T09:15:00Z\","
+              "\"sourceSection\":\"{D2A46A4F-3C82-4E7B-A6B3-9F1E5C0D7A21}\","
+              "\"sourceSectionName\":\"Opening\"}"));
+    const sd::SlideSectionManager& rSections = rXImpressDocument.GetDoc()->GetSectionManager();
+    const sal_Int32 nSection
+        = rSections.GetSectionIndexForSlide(nAt >= 0 && nAt < nSlideCount ? nAt : nSlideCount);
+    CPPUNIT_ASSERT(rSections.GetSectionLink(nSection));
+    return rSections.GetSection(nSection).maId;
+}
+
+/// The name of the section that slide nSlide of rDoc starts, or an empty string when it starts
+/// none.
+OUString sectionStartingAt(SdDrawDocument& rDoc, sal_Int32 nSlide)
+{
+    const sd::SlideSectionManager& rSections = rDoc.GetSectionManager();
+    for (sal_Int32 i = 0; i < rSections.GetSectionCount(); ++i)
+        if (rSections.GetSection(i).mnStartIndex == nSlide)
+            return rSections.GetSection(i).maName;
+    return OUString();
+}
+}
+
+// A linked section goes in where the user asked, in a deck with no sections, and the slides after
+// it go into a section of their own. Undo and redo take the slides and the sections together.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportLinkSectionGoesInAtPosition)
+{
+    loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering({});
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    sd::SlideSectionManager& rSections = pDoc->GetSectionManager();
+    SfxUndoManager* pUndoManager = pDoc->GetDocSh()->GetUndoManager();
+    const size_t nUndoActions = pUndoManager->GetUndoActionCount();
+
+    insertLinkedSection(
+        *pXImpressDocument,
+        m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-sections.odp"), 1);
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(u"TargetOne"_ustr, pDoc->GetSdPage(0, PageKind::Standard)->GetName());
+    CPPUNIT_ASSERT_EQUAL(u"TargetTwo"_ustr, pDoc->GetSdPage(3, PageKind::Standard)->GetName());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rSections.GetSectionCount());
+    CPPUNIT_ASSERT_EQUAL(u"Opening"_ustr, sectionStartingAt(*pDoc, 1));
+    CPPUNIT_ASSERT(rSections.GetSectionLink(rSections.GetSectionIndexForSlide(1)));
+    CPPUNIT_ASSERT_EQUAL(SdResId(STR_DEFAULT_SLIDE_SECTION_NAME), sectionStartingAt(*pDoc, 3));
+
+    CPPUNIT_ASSERT_EQUAL(nUndoActions + 1, pUndoManager->GetUndoActionCount());
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rSections.GetSectionCount());
+
+    pUndoManager->Redo();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rSections.GetSectionCount());
+    CPPUNIT_ASSERT_EQUAL(u"Opening"_ustr, sectionStartingAt(*pDoc, 1));
+    CPPUNIT_ASSERT(rSections.GetSectionLink(rSections.GetSectionIndexForSlide(1)));
+    CPPUNIT_ASSERT_EQUAL(SdResId(STR_DEFAULT_SLIDE_SECTION_NAME), sectionStartingAt(*pDoc, 3));
+}
+
+// A linked section that goes in before the first slide comes before the section that started
+// there, and one that goes in inside a section splits it, so the rest keeps the name of that
+// section
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportLinkSectionSplitsSection)
+{
+    const OUString aSourceUrl
+        = m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-sections.odp");
+    {
+        loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));
+        SdXImpressDocument* pXImpressDocument
+            = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+        CPPUNIT_ASSERT(pXImpressDocument);
+        pXImpressDocument->initializeForTiledRendering({});
+        SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+        sd::SlideSectionManager& rSections = pDoc->GetSectionManager();
+        rSections.AddSection(0, u"First"_ustr);
+        rSections.AddSection(1, u"Second"_ustr);
+
+        insertLinkedSection(*pXImpressDocument, aSourceUrl, 0);
+
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rSections.GetSectionCount());
+        CPPUNIT_ASSERT_EQUAL(u"Opening"_ustr, sectionStartingAt(*pDoc, 0));
+        CPPUNIT_ASSERT(rSections.GetSectionLink(0));
+        CPPUNIT_ASSERT_EQUAL(u"First"_ustr, sectionStartingAt(*pDoc, 2));
+        CPPUNIT_ASSERT_EQUAL(u"TargetOne"_ustr, pDoc->GetSdPage(2, PageKind::Standard)->GetName());
+        CPPUNIT_ASSERT_EQUAL(u"Second"_ustr, sectionStartingAt(*pDoc, 3));
+        CPPUNIT_ASSERT_EQUAL(u"TargetTwo"_ustr, pDoc->GetSdPage(3, PageKind::Standard)->GetName());
+    }
+    {
+        loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));
+        SdXImpressDocument* pXImpressDocument
+            = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+        CPPUNIT_ASSERT(pXImpressDocument);
+        pXImpressDocument->initializeForTiledRendering({});
+        SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+        sd::SlideSectionManager& rSections = pDoc->GetSectionManager();
+        rSections.AddSection(0, u"First"_ustr);
+
+        insertLinkedSection(*pXImpressDocument, aSourceUrl, 1);
+
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rSections.GetSectionCount());
+        CPPUNIT_ASSERT_EQUAL(u"First"_ustr, sectionStartingAt(*pDoc, 0));
+        CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rSections.GetSectionSlideCount(0));
+        CPPUNIT_ASSERT_EQUAL(u"Opening"_ustr, sectionStartingAt(*pDoc, 1));
+        CPPUNIT_ASSERT(rSections.GetSectionLink(1));
+        CPPUNIT_ASSERT_EQUAL(u"First"_ustr, sectionStartingAt(*pDoc, 3));
+        CPPUNIT_ASSERT_EQUAL(u"TargetTwo"_ustr, pDoc->GetSdPage(3, PageKind::Standard)->GetName());
+    }
+}
+
+// A section link reads every slide by the identifier of its source slide, so an insert that links
+// the pages to positions inserts nothing
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportLinkSectionNeedsLinkedSlides)
+{
+    loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering({});
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    const OUString aSourceUrl
+        = m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-sections.odp");
+    CPPUNIT_ASSERT(!pXImpressDocument->insertPagesFromFile(
+        aSourceUrl, "{\"slides\":[0,1],\"link\":true,\"source\":\"Q3 deck.odp\","
+                    "\"sourcePositions\":[1,2],"
+                    "\"sourceSection\":\"{D2A46A4F-3C82-4E7B-A6B3-9F1E5C0D7A21}\"}"_ostr));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pDoc->GetSdPageCount(PageKind::Standard));
+}
+
+// A linked section read from a file reaches the views as unlinked when a slide is inserted into it
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportLinkSectionLoadedEditNotifiesViews)
+{
+    loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering({});
+    insertLinkedSection(
+        *pXImpressDocument,
+        m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-sections.odp"));
+
+    // The section list is written in the loext namespace, which the schema of the ODF check holds
+    // no element of.
+    skipValidation();
+    saveAndReload(TestFilter::ODP);
+    pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering({});
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    CPPUNIT_ASSERT(pDoc->GetSectionManager().GetSectionLink(0));
+    SdTestViewCallback aView;
+
+    uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    xPagesSupplier->getDrawPages()->insertNewByIndex(3);
+    CPPUNIT_ASSERT(!pDoc->GetSectionManager().GetSectionLink(0));
+    CPPUNIT_ASSERT(aView.m_nSlideLinksChanged > 0);
+}
+
+// Slides that make up a source section and are not linked go in as a plain section with the name of
+// the source section, and the slides and the section are one undo step
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportSectionWithoutLink)
+{
+    loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering({});
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    sd::SlideSectionManager& rSections = pDoc->GetSectionManager();
+    SfxUndoManager* pUndoManager = pDoc->GetDocSh()->GetUndoManager();
+    const size_t nUndoActions = pUndoManager->GetUndoActionCount();
+
+    CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
+        m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-sections.odp"),
+        "{\"slides\":[0,1],\"at\":1,"
+        "\"sourceSection\":\"{D2A46A4F-3C82-4E7B-A6B3-9F1E5C0D7A21}\","
+        "\"sourceSectionName\":\"Opening\"}"_ostr));
+
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rSections.GetSectionCount());
+    CPPUNIT_ASSERT_EQUAL(u"Opening"_ustr, sectionStartingAt(*pDoc, 1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rSections.GetSectionSlideCount(0));
+    CPPUNIT_ASSERT(!rSections.GetSectionLink(0));
+    CPPUNIT_ASSERT_EQUAL(SdResId(STR_DEFAULT_SLIDE_SECTION_NAME), sectionStartingAt(*pDoc, 3));
+    for (sal_uInt16 nSlide = 1; nSlide < 3; ++nSlide)
+        CPPUNIT_ASSERT_EQUAL(OUString(),
+                             pDoc->GetSdPage(nSlide, PageKind::Standard)->GetFileName());
+    CPPUNIT_ASSERT(readLinks(*pXImpressDocument).get_child("sections").empty());
+
+    CPPUNIT_ASSERT_EQUAL(nUndoActions + 1, pUndoManager->GetUndoActionCount());
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), rSections.GetSectionCount());
+
+    pUndoManager->Redo();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(u"Opening"_ustr, sectionStartingAt(*pDoc, 1));
+    CPPUNIT_ASSERT_EQUAL(SdResId(STR_DEFAULT_SLIDE_SECTION_NAME), sectionStartingAt(*pDoc, 3));
 }
 
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkSourceNotFetched)

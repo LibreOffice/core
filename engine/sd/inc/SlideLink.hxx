@@ -122,9 +122,21 @@ public:
     */
     static OUString GetSourceFile(const SdDrawDocument& rDoc, const OUString& rReference);
 
-    /** Writes the pages of rDoc that are linked to a source document, grouped by source:
+    /** Tells every view of rDoc that the pages or the sections linked to a source document are
+        not what they were.
+    */
+    static void NotifyLinksChanged(const SdDrawDocument& rDoc);
 
-        {"links":[{"source":"<source document>",
+    /** Writes the sections of rDoc that are linked to a section of a source document, and the
+        pages of rDoc that are linked to a source document, grouped by source:
+
+        {"sections":[{"section":"<section id>","name":"<section name>",
+                      "source":"<source document>","sourceSection":"<source section id>",
+                      "sourceSectionName":"<source section name at the last read>",
+                      "lastModifiedTime":"<source time at the last read>",
+                      "slides":[{"part":"<page id>",
+                                 "sourceGuid":"<source slide identifier>"},...]},...],
+         "links":[{"source":"<source document>",
                    "slides":[{"part":"<page id>","name":"<source page>",
                               "sourceGuid":"<source slide identifier>",
                               "lastModifiedTime":"<source time at the last read>"},...]},...]}
@@ -135,8 +147,13 @@ public:
         the source document was last modified when the page was read from it, empty when none was
         recorded; comparing it with the source's current time tells whether the page is out of date.
         A page linked to a file by its path is left out, since it names no source document.
+
+        The sections come in document order, each with its slides in slide order. A section is
+        listed while it holds a copy of its source section, so a section that a slide was inserted
+        into, removed from or moved within is left out. A slide of a linked section is listed
+        under its section even when an edit took its own link off.
     */
-    static void WriteLinks(const SdDrawDocument& rDoc, tools::JsonWriter& rJsonWriter);
+    static void WriteLinks(SdDrawDocument& rDoc, tools::JsonWriter& rJsonWriter);
 
     /** Refreshes the pages of rDoc linked to the source document rSourceName from rFileUrl.
 

@@ -44,6 +44,7 @@ static constexpr auto EncodedSourceName = "Q3%20%231%20100%25.odp";
 class UnitSlideLink : public UnitWSD
 {
     TestResult testSlideLinkList();
+    TestResult testSlideLinkSection();
     TestResult testSlideLinkRefresh();
     TestResult testSlideLinkBreak();
     TestResult testSlideLinkErrors();
@@ -267,6 +268,58 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkList()
     return TestResult::Ok;
 }
 
+UnitBase::TestResult UnitSlideLink::testSlideLinkSection()
+{
+    try
+    {
+        std::string documentPath, documentURL;
+        helpers::getDocumentPathAndURL("insert-delete.odp", documentPath, documentURL, testname);
+
+        std::shared_ptr<SocketPoll> socketPoll = std::make_shared<SocketPoll>(testname);
+        socketPoll->startThread();
+
+        std::shared_ptr<http::WebSocketSession> socket = load(socketPoll, documentURL);
+        stageSource(socket, documentURL, "source.odp");
+
+        // Slides inserted with the section of the source they make up go in as a linked section.
+        helpers::sendTextFrame(
+            socket,
+            insertCommand("slides=0,1 at=0 keepdesign=0 link=1 time=2021-05-05T10:00:00Z "
+                          "section=%7BD2A46A4F-3C82-4E7B-A6B3-9F1E5C0D7A21%7D "
+                          "sectionname=Opening%20slides"),
+            testname);
+        const std::string insertReply =
+            helpers::getResponseString(socket, "slideimport:", testname);
+        Poco::JSON::Object::Ptr insertObject = helpers::parseJsonReply(insertReply, "slideimport:");
+        LOK_ASSERT_EQUAL(2, insertObject->getValue<int>("count"));
+
+        helpers::sendTextFrame(socket, "slidelink list", testname);
+        const std::string reply = helpers::getResponseString(socket, "slidelinks:", testname);
+        Poco::JSON::Array::Ptr sections =
+            helpers::parseJsonReply(reply, "slidelinks:")->getArray("sections");
+        LOK_ASSERT_MESSAGE("missing section list", sections);
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(1), sections->size());
+
+        Poco::JSON::Object::Ptr section = sections->getObject(0);
+        LOK_ASSERT_EQUAL(std::string(SourceName), section->getValue<std::string>("source"));
+        LOK_ASSERT_EQUAL(std::string("{D2A46A4F-3C82-4E7B-A6B3-9F1E5C0D7A21}"),
+                         section->getValue<std::string>("sourceSection"));
+        LOK_ASSERT_EQUAL(std::string("Opening slides"),
+                         section->getValue<std::string>("sourceSectionName"));
+        LOK_ASSERT_EQUAL(std::string("Opening slides"), section->getValue<std::string>("name"));
+        LOK_ASSERT_EQUAL(std::string("2021-05-05T10:00:00Z"),
+                         section->getValue<std::string>("lastModifiedTime"));
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(2), section->getArray("slides")->size());
+
+        socketPoll->joinThread();
+    }
+    catch (const Poco::Exception& exc)
+    {
+        LOK_ASSERT_FAIL(exc.displayText());
+    }
+    return TestResult::Ok;
+}
+
 UnitBase::TestResult UnitSlideLink::testSlideLinkRefresh()
 {
     try
@@ -456,6 +509,23 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkErrors()
         helpers::assertErrorReply(socket, insertCommand("slides=0 link=1", /*named=*/false),
                                   "slideimport", "nosource", testname);
 
+        // A linked section reads each slide by the identifier of its source slide, so a section
+        // takes no positions, and its name is recorded like the source time, linked or not. A
+        // section is named by a GUID.
+        helpers::assertErrorReply(socket,
+                                  insertCommand("slides=0 section=%7Bs%7D sectionname=a%01"),
+                                  "slideimport", "syntax", testname);
+        helpers::assertErrorReply(socket, insertCommand("slides=0 section=opening"),
+                                  "slideimport", "syntax", testname);
+        helpers::assertErrorReply(
+            socket, insertCommand("slides=0 link=1 sourcepositions=1 section=%7Bs%7D"),
+            "slideimport", "syntax", testname);
+        helpers::assertErrorReply(socket,
+                                  insertCommand("slides=0 link=1 section=%7Bs%7D sectionname=a%01"),
+                                  "slideimport", "syntax", testname);
+        helpers::assertErrorReply(socket, insertCommand("slides=0 link=1 sectionname=Opening"),
+                                  "slideimport", "syntax", testname);
+
         // A file is staged for one insert, and an insert the document cannot make sense of
         // takes it all the same, so the insert that follows reaches nothing.
         stageSource(socket, documentURL, "source.odp");
@@ -563,6 +633,10 @@ UnitBase::TestResult UnitSlideLink::testReadOnly()
 void UnitSlideLink::invokeWSDTest()
 {
     UnitBase::TestResult result = testSlideLinkList();
+    if (result != TestResult::Ok)
+        exitTest(result);
+
+    result = testSlideLinkSection();
     if (result != TestResult::Ok)
         exitTest(result);
 

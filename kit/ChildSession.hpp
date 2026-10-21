@@ -263,9 +263,9 @@ private:
     bool slideLinkList();
     bool slideLinkUpdate(const StringVector& tokens);
     bool slideLinkBreak(const StringVector& tokens);
-    /// The pages of the document that are linked to a source document, as the
-    /// JSON body of a slidelinks: message; an empty list for a document that
-    /// reports none.
+    /// The sections and the pages of the document that are linked to a source
+    /// document, as the JSON body of a slidelinks: message; empty lists for a
+    /// document that reports none.
     std::string getSlideLinksJson();
     bool keyEvent(const StringVector& tokens, LokEventTargetEnum target);
     bool extTextInputEvent(const StringVector& tokens);

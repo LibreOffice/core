@@ -17,6 +17,9 @@
 #include <sfx2/objsh.hxx>
 #include <svl/undo.hxx>
 #include <sdpage.hxx>
+#include <sdtiledrenderingtest.hxx>
+#include <comphelper/kit.hxx>
+#include <comphelper/scopeguard.hxx>
 
 using namespace css;
 using namespace ::cpo;
@@ -911,6 +914,31 @@ CPPUNIT_TEST_FIXTURE(SlideSectionTest, testSectionLinkEndsWhenASlideIsMovedWithi
 
     getUndoManager().Undo();
     CPPUNIT_ASSERT(rMgr.GetSectionLink(1));
+}
+
+// A slide moved within a linked section unlinks it and undoing the move links it again, and the
+// views hear of both changes
+CPPUNIT_TEST_FIXTURE(SlideSectionTest, testSectionLinkMoveAndUndoReachViews)
+{
+    createSdImpressDoc("pptx/slide-section-test.pptx");
+    sd::SlideSectionManager& rMgr = getSectionManager();
+    CPPUNIT_ASSERT(rMgr.SetSectionLink(1, makeTopicsLink(rMgr.GetSectionSlideCount(1))));
+
+    // The views hear of a change of the links through the view callback, which a kit session
+    // has.
+    comphelper::COKit::setActive(true);
+    comphelper::ScopeGuard aInactive([] { comphelper::COKit::setActive(false); });
+    SdTestViewCallback aView;
+
+    showSlide(rMgr.GetSection(1).mnStartIndex);
+    dispatchCommand(mxComponent, u".uno:MovePageDown"_ustr, {});
+    CPPUNIT_ASSERT(!rMgr.GetSectionLink(1));
+    CPPUNIT_ASSERT(aView.m_nSlideLinksChanged > 0);
+
+    aView.m_nSlideLinksChanged = 0;
+    getUndoManager().Undo();
+    CPPUNIT_ASSERT(rMgr.GetSectionLink(1));
+    CPPUNIT_ASSERT(aView.m_nSlideLinksChanged > 0);
 }
 
 // Linking a section is one undo step of its own, so undoing it keeps the slide inserted before it

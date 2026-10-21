@@ -3168,11 +3168,21 @@ std::string joinPartIdList(const std::vector<std::string>& parts)
     return list.str();
 }
 
-/// Minimal validation of the time field
-bool isRecordableSourceTime(const std::string& time)
+/// Minimal validation of a value recorded about the source, such as its time or the identifier
+/// and the name of a source section
+bool isRecordableSourceString(const std::string& value)
 {
-    constexpr std::size_t MaxTimeLength = 128;
-    return time.size() <= MaxTimeLength && !Util::holdsControlCharacter(time);
+    constexpr std::size_t MaxLength = 128;
+    return value.size() <= MaxLength && !Util::holdsControlCharacter(value);
+}
+
+/// Minimal validation of a name recorded about the source. The document limits the name to 128
+/// UTF-16 code units, which take at most three UTF-8 bytes each, so a longer name is left for the
+/// document to refuse.
+bool isRecordableSourceName(const std::string& name)
+{
+    constexpr std::size_t MaxLength = 3 * 128;
+    return name.size() <= MaxLength && !Util::holdsControlCharacter(name);
 }
 
 bool isRecordablePersistentLink(const std::string& link)
@@ -3300,12 +3310,18 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
     // The positions the slides of a linked insert hold in the source, which links each page to a
     // position rather than to one slide. Optional.
     std::string sourcePositionList;
+    // The section of the source the slides make up, and its name, which inserts them as a section
+    // of their own, linked to that source section with link=1. Optional.
+    std::string encodedSection;
+    std::string encodedSectionName;
     int at = -1;
     bool keepDesign = false;
     bool link = false;
     bool haveName = false;
     bool haveSource = false;
     bool haveTime = false;
+    bool haveSection = false;
+    bool haveSectionName = false;
     bool malformed = false;
     for (std::size_t i = 2; i < tokens.size() && !malformed; ++i)
     {
@@ -3334,6 +3350,16 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
         else if (getTokenString(tokens[i], "sourcepositions", value))
         {
             sourcePositionList = std::move(value);
+        }
+        else if (getTokenString(tokens[i], "section", value))
+        {
+            malformed = std::exchange(haveSection, true);
+            encodedSection = std::move(value);
+        }
+        else if (getTokenString(tokens[i], "sectionname", value))
+        {
+            malformed = std::exchange(haveSectionName, true);
+            encodedSectionName = std::move(value);
         }
         else if (getTokenInteger(tokens[i], "at", number))
         {
@@ -3394,12 +3420,16 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
 
     std::string source;
     std::string lastModifiedTime;
+    std::string section;
+    std::string sectionName;
     if (!malformed)
     {
         try
         {
             URI::decode(encodedSource, source);
             URI::decode(encodedTime, lastModifiedTime);
+            URI::decode(encodedSection, section);
+            URI::decode(encodedSectionName, sectionName);
         }
         catch (const Poco::Exception& exc)
         {
@@ -3421,7 +3451,16 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
     }
 
     // The time is recorded on the pages the insert links, and is written out with them.
-    if (!isRecordableSourceTime(lastModifiedTime))
+    if (!isRecordableSourceString(lastModifiedTime))
+    {
+        sendTextFrameAndLogError("error: cmd=slideimport kind=syntax");
+        return false;
+    }
+
+    // The slides of a linked section are read by the identifier of each source slide, so a section
+    // takes no positions, linked or not. The identifier and the name are recorded with the section.
+    if ((haveSection || haveSectionName) &&
+        (!isSlideGuid(section) || !sourcePositions.empty() || !isRecordableSourceName(sectionName)))
     {
         sendTextFrameAndLogError("error: cmd=slideimport kind=syntax");
         return false;
@@ -3459,7 +3498,9 @@ bool ChildSession::slideImportInsert(const StringVector& tokens)
             << ",\"keepDesign\":" << (keepDesign ? "true" : "false")
             << ",\"link\":" << (link ? "true" : "false") << ",\"source\":\""
             << JsonUtil::escapeJSONValue(source) << "\",\"lastModifiedTime\":\""
-            << JsonUtil::escapeJSONValue(lastModifiedTime) << "\"}";
+            << JsonUtil::escapeJSONValue(lastModifiedTime) << "\",\"sourceSection\":\""
+            << JsonUtil::escapeJSONValue(section) << "\",\"sourceSectionName\":\""
+            << JsonUtil::escapeJSONValue(sectionName) << "\"}";
 
     const int slidesBefore = getLOKitDocument()->getParts();
 
@@ -3543,7 +3584,7 @@ std::string ChildSession::getSlideLinksJson()
 
     const std::string links = getLOKitDocument()->getSlideLinks();
     if (links.empty())
-        return "{\"links\":[]}";
+        return "{\"sections\":[],\"links\":[]}";
 
     return links;
 }
@@ -3634,7 +3675,7 @@ bool ChildSession::slideLinkUpdate(const StringVector& tokens)
     }
 
     // The refreshed pages record the time, and write it out with them.
-    if (!isRecordableSourceTime(lastModifiedTime))
+    if (!isRecordableSourceString(lastModifiedTime))
     {
         sendTextFrameAndLogError("error: cmd=slidelink kind=syntax" + named);
         return false;

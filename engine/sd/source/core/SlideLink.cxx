@@ -125,22 +125,6 @@ SfxUndoManager* getUndoManager(const SdDrawDocument& rDoc)
     return pDocShell ? pDocShell->GetUndoManager() : nullptr;
 }
 
-/// Tells every view of rDoc that the pages linked to a source document are not what they were.
-void notifyLinksChanged(const SdDrawDocument& rDoc)
-{
-    const SfxObjectShell* pDocShell = rDoc.GetDocSh();
-    if (!pDocShell)
-        return;
-
-    SfxViewShell* pViewShell = SfxViewShell::GetFirst(false);
-    while (pViewShell)
-    {
-        if (pViewShell->GetObjectShell() == pDocShell)
-            pViewShell->viewCallback(COKitCallbackType::SLIDE_LINKS_CHANGED, OString());
-        pViewShell = SfxViewShell::GetNext(*pViewShell, false);
-    }
-}
-
 /// Puts the source document and the source page of one page as they are given, link and all.
 void setPageLink(SdPage& rPage, const OUString& rReference, const OUString& rSourcePage)
 {
@@ -166,13 +150,13 @@ public:
     virtual void Undo() override
     {
         setPageLink(*mpPage, maReference, maSourcePage);
-        notifyLinksChanged(mrDoc);
+        SlideLink::NotifyLinksChanged(mrDoc);
     }
 
     virtual void Redo() override
     {
         setPageLink(*mpPage, OUString(), OUString());
-        notifyLinksChanged(mrDoc);
+        SlideLink::NotifyLinksChanged(mrDoc);
     }
 
 private:
@@ -199,9 +183,24 @@ bool breakPageLink(SdDrawDocument& rDoc, SdPage& rPage)
         pUndoManager->AddUndoAction(std::move(pUndoAction));
 
     rDoc.SetChanged();
-    notifyLinksChanged(rDoc);
+    SlideLink::NotifyLinksChanged(rDoc);
     return true;
 }
+}
+
+void SlideLink::NotifyLinksChanged(const SdDrawDocument& rDoc)
+{
+    const SfxObjectShell* pDocShell = rDoc.GetDocSh();
+    if (!pDocShell)
+        return;
+
+    SfxViewShell* pViewShell = SfxViewShell::GetFirst(false);
+    while (pViewShell)
+    {
+        if (pViewShell->GetObjectShell() == pDocShell)
+            pViewShell->viewCallback(COKitCallbackType::SLIDE_LINKS_CHANGED, OString());
+        pViewShell = SfxViewShell::GetNext(*pViewShell, false);
+    }
 }
 
 OUString SlideLink::MakeSourceReference(const OUString& rSourceName)
@@ -299,8 +298,42 @@ OUString SlideLink::GetSourceFile(const SdDrawDocument& rDoc, const OUString& rR
     return rReference;
 }
 
-void SlideLink::WriteLinks(const SdDrawDocument& rDoc, tools::JsonWriter& rJsonWriter)
+namespace
 {
+/// Writes the sections of rDoc that are linked to a section of a source document.
+void writeSectionLinks(SdDrawDocument& rDoc, tools::JsonWriter& rJsonWriter)
+{
+    const SlideSectionManager& rSections = rDoc.GetSectionManager();
+    auto aSectionsArray = rJsonWriter.startArray("sections");
+    for (sal_Int32 nSection = 0; nSection < rSections.GetSectionCount(); ++nSection)
+    {
+        const SlideSectionLink* pLink = rSections.GetSectionLink(nSection);
+        if (!pLink)
+            continue;
+
+        const SlideSection& rSection = rSections.GetSection(nSection);
+        auto aSectionNode = rJsonWriter.startStruct();
+        rJsonWriter.put("section", rSection.maId);
+        rJsonWriter.put("name", rSection.maName);
+        rJsonWriter.put("source", SlideLink::GetSourceName(pLink->maSourceReference));
+        rJsonWriter.put("sourceSection", pLink->maSourceSectionId);
+        rJsonWriter.put("sourceSectionName", pLink->maSourceSectionName);
+        rJsonWriter.put("lastModifiedTime", pLink->maSourceModifiedTime);
+        auto aSlidesArray = rJsonWriter.startArray("slides");
+        for (size_t nSlide = 0; nSlide < pLink->maPageGuids.size(); ++nSlide)
+        {
+            auto aSlideNode = rJsonWriter.startStruct();
+            rJsonWriter.put("part", pLink->maPageGuids[nSlide]);
+            rJsonWriter.put("sourceGuid", pLink->maSourcePageGuids[nSlide]);
+        }
+    }
+}
+}
+
+void SlideLink::WriteLinks(SdDrawDocument& rDoc, tools::JsonWriter& rJsonWriter)
+{
+    writeSectionLinks(rDoc, rJsonWriter);
+
     // The pages of one source, by the reference they record, in the order the sources first appear.
     std::vector<std::pair<OUString, std::vector<const SdPage*>>> aSources;
 

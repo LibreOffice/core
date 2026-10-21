@@ -2790,7 +2790,11 @@ struct COKitDocument
      *        names the position each inserted page's slide holds in the source, counted from
      *        one, one for every page inserted or none at all: a page given a position is
      *        linked to that position rather than to one slide, so a refresh reads whichever
-     *        slide stands there.
+     *        slide stands there. "sourceSection" names the identifier of the section of the
+     *        source the pages make up, and "sourceSectionName" its name: the pages then go in at
+     *        "at" as a section of their own, linked to that source section when "link" is set,
+     *        and the pages that follow them keep a section apart from it. A section asks for no
+     *        "sourcePositions".
      * @return whether the pages were inserted.
      */
     virtual bool insertPagesFromFile(const char* pUrl, const char* pJsonOptions) = 0;

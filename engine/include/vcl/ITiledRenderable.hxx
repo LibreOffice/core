@@ -545,7 +545,10 @@ public:
         before as "at", whether the pages keep the design of the file they came from as
         "keepDesign", whether they stay linked to the document named by "source" as "link",
         and the time that source was last modified as "lastModifiedTime", recorded on each
-        linked page (Impress only function) */
+        linked page. "sourceSection" names the identifier of the section of the source the
+        pages make up, and "sourceSectionName" its name: the pages then go in as a section of
+        their own at "at", linked to that source section when "link" is set, and the pages that
+        follow them keep a section apart from it (Impress only function) */
     virtual bool insertPagesFromFile(const OUString& /*rFileUrl*/, const OString& /*rJsonOptions*/)
     {
         return false;

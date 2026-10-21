@@ -242,6 +242,7 @@ filepickerresult id=<n> [name=<name>]
 slideimport insert file=<staged name> [source=<source name>] [slides=<i0,i1,...>]
                    [at=<S>] [keepdesign=<0|1>] [link=<0|1>] [time=<source time>]
                    [sourcepositions=<p0,p1,...>]
+                   [section=<source section id> [sectionname=<source section name>]]
 
     Inserts pages of a presentation staged in the jail into the open document.
     Only Impress documents are served. The staged name is the file a remote
@@ -267,7 +268,23 @@ slideimport insert file=<staged name> [source=<source name>] [slides=<i0,i1,...>
     one position per page or none at all. A page inserted with a position is
     linked to that position rather than to one slide, so an update reads
     whichever slide stands there; a page inserted without one is linked to the
-    identifier of the slide it came from. The reply is
+    identifier of the slide it came from.
+
+    <source section id> names the section of the source that the staged pages
+    make up, by the identifier the source reports for it in slidesections:, and
+    <source section name> its name, both percent-encoded. The pages then go in
+    as a section of their own, named like the source section. With link=1 the
+    section is linked to the source section, so that a later update can add
+    and remove slides as the source section gains and loses them; without it
+    the section is a plain section of this document. The pages go in at <S>.
+    A section ends where the next one starts, so the pages that follow them
+    get a section of their own: a section that started at <S> starts after
+    the new pages, and the rest of the section the pages went into keeps its
+    name in a section of its own, or takes the default name when it was in no
+    section. A section insert takes no sourcepositions; an insert of any other
+    shape is answered kind=syntax. The slides, the section and its link are
+    one undo step. A source section id that is no GUID, or a name longer than
+    128 characters, inserts nothing and is answered kind=syntax. The reply is
         slideimport: {"status":"inserted","count":<K>}
 
     Errors are reported as
@@ -331,7 +348,14 @@ slidelink update source=<source name> file=<staged name> [time=<source time>] [p
     record so a later comparison tells whether they are up to date.
 
     list: the reply is
-        slidelinks: {"links":[{"source":"<source document>",
+        slidelinks: {"sections":[{"section":"<section id>","name":"<section name>",
+                                  "source":"<source document>",
+                                  "sourceSection":"<source section id>",
+                                  "sourceSectionName":"<source section name at the last read>",
+                                  "lastModifiedTime":"<source time at the last read>",
+                                  "slides":[{"part":"<part>",
+                                             "sourceGuid":"<source slide id>"},...]},...],
+                     "links":[{"source":"<source document>",
                      "slides":[{"part":"<part>","name":"<source slide>",
                                 "lastModifiedTime":"<source time at the last read>"},...]},...]}
     with the sources in the order their first page appears and the pages of one
@@ -342,6 +366,16 @@ slidelink update source=<source name> file=<staged name> [time=<source time>] [p
     file by its path names no source document and is left out, since a refresh
     has no way to reach it. A document that links to nothing reports an empty
     array.
+
+    sections lists, in document order, the sections that hold a copy of a
+    section of a source document, each with its slides in slide order. A
+    section stops holding that copy when a slide is inserted into it, removed
+    from it or moved within it, and is then left out; undoing the change puts
+    it back. A slide that an edit took its own link off stays listed under its
+    section. The kit sends the list on its own, to every view of the document,
+    whenever the sections listed there change: when a section link is made or
+    taken off, when an edit of the slides of a section unlinks it, and when an
+    undo links it again.
 
     The kit sends that same list on its own, to every view of the document, when a
     page loses the source it records, which is what an edit of a linked page does,

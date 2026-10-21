@@ -3633,17 +3633,26 @@ void ClientSession::recordSlideLinkSources(const std::shared_ptr<Message>& paylo
         // many links, or a long one, names no more than this.
         constexpr std::size_t MaxSources = 64;
         constexpr std::size_t MaxNameLength = 1024;
-        for (std::size_t i = 0; i < links->size() && names.size() < MaxSources; ++i)
+
+        // A linked section names its source too, and its slides stop naming that source once an
+        // edit takes their own links off.
+        Poco::JSON::Array::Ptr sections = rootObject->getArray("sections");
+        for (const Poco::JSON::Array::Ptr& list : { links, sections })
         {
-            Poco::JSON::Object::Ptr link = links->getObject(i);
-            if (link.isNull())
-                continue;
+            for (std::size_t i = 0; !list.isNull() && i < list->size() && names.size() < MaxSources;
+                 ++i)
+            {
+                Poco::JSON::Object::Ptr link = list->getObject(i);
+                if (link.isNull())
+                    continue;
 
-            const std::string source = JsonUtil::getJSONValue<std::string>(link, "source");
-            if (source.empty() || source.size() > MaxNameLength)
-                continue;
+                const std::string source = JsonUtil::getJSONValue<std::string>(link, "source");
+                if (source.empty() || source.size() > MaxNameLength ||
+                    std::find(names.begin(), names.end(), source) != names.end())
+                    continue;
 
-            names.push_back(source);
+                names.push_back(source);
+            }
         }
     }
     catch (const std::exception& exc)

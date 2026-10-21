@@ -115,6 +115,27 @@ public:
     */
     bool SetSectionLink(sal_Int32 nSectionIndex, const SlideSectionLink& rLink);
 
+    /** Add a section named rName for the nSlideCount slides from nStartSlideIndex on, linked to
+        the source section rLink names, or to none when rLink is not linked. The sections and the
+        link each record an undo action of their own.
+
+        The slides that follow keep a section apart from the new one. A section that starts at
+        nStartSlideIndex starts after the new slides instead. Slides that follow inside the section
+        the new slides went into get a section of their own with the name of that section, and
+        slides that follow in no section get a section with the default name.
+
+        @return true when the section was added, and linked when rLink is linked, false when
+                nothing changed.
+    */
+    bool AddInsertedSection(sal_Int32 nStartSlideIndex, sal_Int32 nSlideCount,
+                            const OUString& rName, const SlideSectionLink& rLink);
+
+    /** Announce the slide link list as changed when the sections that hold a copy of their source
+        section are not the ones they were at the last announcement. The linked sections are part
+        of that list, and a section stops holding its copy when the slides it spans change.
+    */
+    void NotifyLinksIfChanged();
+
     /** Record that the slide with the identifier rOldPageGuid was replaced by a slide read from the
         same source slide, which holds the identifier rNewPageGuid, so a linked section that holds
         the old slide holds the new one in its place.
@@ -172,6 +193,14 @@ public:
 
 private:
     SdDrawDocument& mrDoc;
+    std::vector<SlideSection> maSections;
+    /// The identifiers of the sections that held a copy of their source section when the slide link
+    /// list was last announced as changed, in document order.
+    std::vector<OUString> maAnnouncedLinks;
+
+    /// The identifiers of the sections that hold a copy of their source section now, in document
+    /// order.
+    std::vector<OUString> GetLinkedSectionIds() const;
 
     /// The braced identifiers of the slides the section at nSectionIndex spans, in slide order.
     std::vector<OUString> GetSectionPageGuids(sal_Int32 nSectionIndex) const;
@@ -179,8 +208,6 @@ private:
     /// rLink with its identifiers in braced form, holding the slides the section at nSectionIndex
     /// spans now, or a link that is not linked when rLink is not one that section can hold.
     SlideSectionLink ValidateLink(const SlideSectionLink& rLink, sal_Int32 nSectionIndex) const;
-
-    std::vector<SlideSection> maSections;
 
     /// Push the sections via COKitCallbackType::STATE_CHANGED for .uno:SlideSections
     /// so COKit clients update without polling after async UNO dispatch.

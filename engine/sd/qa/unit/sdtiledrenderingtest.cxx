@@ -326,6 +326,9 @@ void SdTestViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayl
             m_bViewSelectionSet = true;
         }
         break;
+        case COKitCallbackType::SLIDE_LINKS_CHANGED:
+            ++m_nSlideLinksChanged;
+            break;
         case COKitCallbackType::COMMENT:
         {
             m_aCommentCallbackResult.clear();
