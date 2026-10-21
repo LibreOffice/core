@@ -27,6 +27,12 @@ interface XBody: XContainerElement {
     double getPageHeight();
 
     double getPageWidth();
+
+    // The images anchored to pages, which GAS's Body does not offer:
+
+    sequence<XPositionedImage> getPositionedImages();
+
+    boolean removePositionedImage([in] string id);
 };
 
 };

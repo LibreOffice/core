@@ -41,6 +41,13 @@ interface XPositionedImage: XBase {
     // Setting the ID, the image's name in the document, which GAS's PositionedImage does not offer:
 
     XPositionedImage setId([in] string id);
+
+    // Anchoring to a page, after which the offsets are measured from the top left corner of the
+    // page, which GAS's PositionedImage does not offer:
+
+    com::sun::star::beans::Optional<long> getPageAnchor();
+
+    XPositionedImage setPageAnchor([in] long page);
 };
 
 };

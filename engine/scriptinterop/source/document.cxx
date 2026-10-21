@@ -64,6 +64,7 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
@@ -2053,6 +2054,32 @@ public:
         return this;
     }
 
+    css::beans::Optional<sal_Int32> getPageAnchor() override {
+        auto anchor = css::text::TextContentAnchorType_AT_PARAGRAPH;
+        props()->getPropertyValue(u"AnchorType"_ustr) >>= anchor;
+        if (anchor != css::text::TextContentAnchorType_AT_PAGE) {
+            return {false, {}};
+        }
+        sal_Int16 page = 0;
+        props()->getPropertyValue(u"AnchorPageNo"_ustr) >>= page;
+        return {true, page};
+    }
+
+    cpo::uno::Reference<scriptinterop::XPositionedImage> setPageAnchor(sal_Int32 page) override {
+        if (page < 1 || page > SAL_MAX_INT16) {
+            throw cpo::uno::RuntimeException(
+                "setPageAnchor: invalid page number " + OUString::number(page));
+        }
+        props()->setPropertyValue(
+            u"AnchorType"_ustr, cpo::uno::Any(css::text::TextContentAnchorType_AT_PAGE));
+        props()->setPropertyValue(u"AnchorPageNo"_ustr, cpo::uno::Any(sal_Int16(page)));
+        props()->setPropertyValue(
+            u"HoriOrientRelation"_ustr, cpo::uno::Any(css::text::RelOrientation::PAGE_FRAME));
+        props()->setPropertyValue(
+            u"VertOrientRelation"_ustr, cpo::uno::Any(css::text::RelOrientation::PAGE_FRAME));
+        return this;
+    }
+
 private:
     cpo::uno::Reference<css::beans::XPropertySet> props() {
         return cpo::uno::Reference<css::beans::XPropertySet>(image_, cpo::uno::UNO_QUERY_THROW);
@@ -2531,6 +2558,9 @@ cpo::uno::Reference<scriptinterop::XParagraph> TextImpl::asParagraph() {
 }
 
 cpo::uno::Reference<scriptinterop::XParagraph> PositionedImageImpl::getParagraph() {
+    if (getPageAnchor().IsPresent) {
+        throw cpo::uno::RuntimeException(u"getParagraph: the image is anchored to a page"_ustr);
+    }
     return new ParagraphImpl(model_, nullptr, paragraph_);
 }
 
@@ -3562,6 +3592,26 @@ public:
 
     double getPageWidth() override { return pageStyleLength(u"Width"_ustr); }
 
+    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XPositionedImage>> getPositionedImages()
+        override
+    {
+        auto const images = pageAnchoredImages();
+        return cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XPositionedImage>>(
+            images.data(), images.size());
+    }
+
+    bool removePositionedImage(OUString const & id) override {
+        for (auto const & image: pageAnchoredImages()) {
+            if (image->getId() == id) {
+                text_->removeTextContent(cpo::uno::Reference<css::text::XTextContent>(
+                    image->getuno(), cpo::uno::UNO_QUERY_THROW));
+                return true;
+            }
+        }
+        throw cpo::uno::RuntimeException(
+            "removePositionedImage: no image with ID " + id + " is anchored to a page");
+    }
+
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getParent() override {
         return {false, {}};
     }
@@ -3585,6 +3635,23 @@ public:
     }
 
 private:
+    std::vector<cpo::uno::Reference<scriptinterop::XPositionedImage>> pageAnchoredImages() {
+        std::vector<cpo::uno::Reference<scriptinterop::XPositionedImage>> images;
+        auto const objects = cpo::uno::Reference<css::text::XTextGraphicObjectsSupplier>(
+            model_, cpo::uno::UNO_QUERY_THROW)->getGraphicObjects();
+        for (auto const & name: objects->getElementNames()) {
+            cpo::uno::Reference<css::text::XTextContent> const frame(
+                objects->getByName(name), cpo::uno::UNO_QUERY_THROW);
+            auto anchor = css::text::TextContentAnchorType_AT_PARAGRAPH;
+            cpo::uno::Reference<css::beans::XPropertySet>(frame, cpo::uno::UNO_QUERY_THROW)
+                ->getPropertyValue(u"AnchorType"_ustr) >>= anchor;
+            if (anchor == css::text::TextContentAnchorType_AT_PAGE) {
+                images.push_back(new PositionedImageImpl(model_, nullptr, frame));
+            }
+        }
+        return images;
+    }
+
     // In points, of the page style that the body starts with, as GAS has one page size and one set
     // of margins for the whole document:
     double pageStyleLength(OUString const & dimension) {

@@ -726,6 +726,37 @@ function test() {
         console.assert(positionedParagraph.getPositionedImage('canvas').getHeight() === 48);
         console.assert(positionedParagraph.removePositionedImage('canvas') === true);
     }
+    // Only COOL can anchor an image to a page, which takes it from its paragraph to the body:
+    if (globalThis.cool) {
+        const anchored = positionedParagraph.addPositionedImage(
+            Utilities.newBlob(png, 'image/png'));
+        console.assert(anchored.getPageAnchor() === null);
+        anchored.setId('page').setPageAnchor(1).setLeftOffset(36).setTopOffset(72);
+        console.assert(anchored.getPageAnchor() === 1);
+        console.assert(anchored.getLeftOffset() === 36);
+        console.assert(anchored.getTopOffset() === 72);
+        console.assert(positionedParagraph.getPositionedImages().length === 0);
+        console.assert(body.getPositionedImages().length === 1);
+        console.assert(body.getPositionedImages()[0].getId() === 'page');
+        {
+            let message = null;
+            try {
+                anchored.getParagraph();
+            } catch (e) {
+                message = e.message;
+            }
+            console.assert(message === 'getParagraph: the image is anchored to a page');
+        }
+        console.assert(body.removePositionedImage('page') === true);
+        console.assert(body.getPositionedImages().length === 0);
+        let removedFromBodyTwice = false;
+        try {
+            body.removePositionedImage('page');
+        } catch (e) {
+            removedFromBodyTwice = true;
+        }
+        console.assert(removedFromBodyTwice);
+    }
 
     // Document properties are strings that a missing key reads as null:
     const docProps = PropertiesService.getDocumentProperties();

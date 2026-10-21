@@ -36,6 +36,9 @@ function kitApply(ops) {
 
 	function removeCanvas() {
 		const body = DocumentApp.getActiveDocument().getBody();
+		if (body.getPositionedImages().some((image) => image.getId() === CANVAS)) {
+			return body.removePositionedImage(CANVAS);
+		}
 		for (const paragraph of bodyParagraphs(body)) {
 			if (paragraph.getPositionedImages().some((image) => image.getId() === CANVAS)) {
 				return paragraph.removePositionedImage(CANVAS);
@@ -44,20 +47,20 @@ function kitApply(ops) {
 		return false;
 	}
 
-	// The drawing as one positioned image on the first paragraph, offset so that
-	// LibreLogo coordinates keep meaning "points from the top-left corner of the
-	// page".
+	// The drawing as one page-anchored image on the first page, so LibreLogo
+	// coordinates keep meaning "points from the top-left corner of the page".
 	function replaceCanvas(op) {
 		removeCanvas();
 		const body = DocumentApp.getActiveDocument().getBody();
 		bodyParagraphs(body)[0]
 			.addPositionedImage(Utilities.newBlob(op.svg, 'image/svg+xml'))
 			.setId(CANVAS)
+			.setPageAnchor(1)
 			.setLayout(DocumentApp.PositionedLayout.ABOVE_TEXT)
 			.setWidth(Math.round(op.w * PT_TO_PX))
 			.setHeight(Math.round(op.h * PT_TO_PX))
-			.setLeftOffset(op.x - body.getMarginLeft())
-			.setTopOffset(op.y - body.getMarginTop());
+			.setLeftOffset(op.x)
+			.setTopOffset(op.y);
 	}
 
 	// The drawing as an inline image at the cursor.
