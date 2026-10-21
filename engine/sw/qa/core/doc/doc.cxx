@@ -13,15 +13,18 @@
 #include <editeng/boxitem.hxx>
 
 #include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/document/XEmbeddedObjectSupplier.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/text/XParagraphCursor.hpp>
 #include <com/sun/star/text/XRedline.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/form/XFormsSupplier.hpp>
 #include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
@@ -1862,6 +1865,40 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testRegisteredDatabaseFormLoadsOnlyAfterLink
     // and loads.
     pDocShell->AllowLinkUpdate();
     CPPUNIT_ASSERT(xLoadable->isLoaded());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testEmbeddedDocumentsFollowOuterLinkUpdateDecision)
+{
+    // Given a Writer document holding a Draw object that itself holds a Writer object. Type
+    // detection of a flat file finds the inner Draw media type too, so name the filter.
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"FilterName"_ustr, u"OpenDocument Text Flat XML"_ustr),
+    };
+    loadWithParams(createFileURL(u"nested-embedded-documents.fodt"), aParams);
+    uno::Reference<text::XTextEmbeddedObjectsSupplier> xObjectsSupplier(mxComponent,
+                                                                        uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xObjects(xObjectsSupplier->getEmbeddedObjects(),
+                                                     uno::UNO_QUERY);
+    uno::Reference<document::XEmbeddedObjectSupplier> xChildSupplier(xObjects->getByIndex(0),
+                                                                     uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xChild(xChildSupplier->getEmbeddedObject(),
+                                               uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(xChild, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xPage(xPagesSupplier->getDrawPages()->getByIndex(0),
+                                             uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xGrandchild(xShape->getPropertyValue(u"Model"_ustr),
+                                                    uno::UNO_QUERY_THROW);
+
+    // After load, link updates are off in every level.
+    CPPUNIT_ASSERT(!xChild->getPropertyValue(u"AllowLinkUpdate"_ustr).get<bool>());
+    CPPUNIT_ASSERT(!xGrandchild->getPropertyValue(u"AllowLinkUpdate"_ustr).get<bool>());
+
+    // When the user allows link updates in the outer document, the embedded documents allow
+    // them too.
+    getSwDocShell()->AllowLinkUpdate();
+    CPPUNIT_ASSERT(xChild->getPropertyValue(u"AllowLinkUpdate"_ustr).get<bool>());
+    CPPUNIT_ASSERT(xGrandchild->getPropertyValue(u"AllowLinkUpdate"_ustr).get<bool>());
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testStripBakedTableStyleComparesThemeAndLineSplit)
