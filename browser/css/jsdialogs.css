@@ -2100,8 +2100,9 @@ img.ui-combobox-value-preview {
 }
 
 /* A checked context menu entry shows a check mark at the end of its row, after
- * the shortcut. */
-[id^='jsd-context-menu'][id$='-entries'] .ui-combobox-entry.context-menu-checked::after {
+ * the shortcut. The sheet tab menu shows it the same way. */
+[id^='jsd-context-menu'][id$='-entries'] .ui-combobox-entry.context-menu-checked::after,
+#spreadsheet-tab-menu-entries .ui-combobox-entry.context-menu-checked::after {
 	content: '\2713';
 	flex-shrink: 0;
 	margin-inline-start: auto;

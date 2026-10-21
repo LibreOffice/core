@@ -444,14 +444,13 @@ window.L.Control.Tabs = window.L.Control.extend({
 			if (Object.prototype.hasOwnProperty.call(data, '_uno')) key = data._uno;
 			let text = isUNO ? _UNO(key, 'spreadsheet', true) : data.text;
 			const checked = Object.prototype.hasOwnProperty.call(data, '_checked')
-				? data._checked()
-				: undefined;
+				&& data._checked();
 			entries.push({
 				id: key,
 				type: 'action',
 				text: text,
 				img: data._image,
-				checked: checked,
+				class: checked ? 'context-menu-checked' : undefined,
 			});
 		}
 
