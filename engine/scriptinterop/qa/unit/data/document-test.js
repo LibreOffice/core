@@ -24,6 +24,15 @@ function test() {
     // The page is US Letter, measured in points:
     console.assert(body.getPageWidth() === 612);
     console.assert(body.getPageHeight() === 792);
+    // The document's language is null or one of GAS's language codes (which can vary for GAS, which
+    // keeps the document between runs, together with any language set on it):
+    {
+        const language = DocumentApp.getActiveDocument().getLanguage();
+        console.assert(language === null || /^[a-z]{2,3}(_[A-Z0-9]+)?$/.test(language));
+        if (globalThis.cool) {
+            console.assert(language === 'en');
+        }
+    }
 
     // Paragraph 0 is a bold "Bold", italic "Italic" and plain "Plain" concatenated, followed by an
     // image anchored to a character with text wrap, which is a positioned image and no child:
@@ -565,6 +574,12 @@ function test() {
         doc.newPosition(before, 3).setBold(null);
         console.assert(before.isBold(0) === null);
         console.assert(before.isBold(5) === null);
+    }
+    // Only COOL has the locales of the text at the cursor:
+    if (globalThis.cool) {
+        console.assert(cursor.getLocale() === 'en-US');
+        console.assert(cursor.getLocaleAsian() === 'zh-CN');
+        console.assert(cursor.getLocaleComplex() === 'hi-IN');
     }
 
     // An inline image can be selected on its own, as one whole range element:

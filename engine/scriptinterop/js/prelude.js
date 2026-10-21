@@ -28,6 +28,7 @@ $internal.installGasServices = function(uiStub, menuItems, pendingAlerts) {
                 getCursor: function() { return activeDoc().getCursor(); },
                 getBody: function() { return activeDoc().getBody(); },
                 getFootnotes: function() { return activeDoc().getFootnotes(); },
+                getLanguage: function() { return activeDoc().getLanguage(); },
                 newPosition: function(element, offset) {
                     return activeDoc().newPosition(element, offset);
                 },

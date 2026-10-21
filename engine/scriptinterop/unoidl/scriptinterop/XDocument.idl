@@ -21,6 +21,8 @@ interface XDocument : XBase
 
     sequence<XFootnote> getFootnotes();
 
+    com::sun::star::beans::Optional<string> getLanguage();
+
     void insertImage([in] sequence<byte> data, [in] ImageOptions opts);
 
     XCursor newPosition([in] XElement element, [in] long offset);

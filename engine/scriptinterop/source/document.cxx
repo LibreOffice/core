@@ -12,6 +12,7 @@
 #include <algorithm>
 #include <cassert>
 #include <cmath>
+#include <iterator>
 #include <optional>
 #include <string_view>
 #include <utility>
@@ -40,6 +41,7 @@
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/io/XTempFile.hpp>
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
+#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
@@ -74,6 +76,7 @@
 #include <cpo/uno/Sequence.hxx>
 #include <cppu/unotype.hxx>
 #include <cppuhelper/implbase.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <o3tl/string_view.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <rtl/character.hxx>
@@ -398,6 +401,36 @@ scriptinterop::TextAlignment textAlignmentArgument(
         throw cpo::uno::RuntimeException(u"Argument cannot be null: textAlignment"_ustr);
     }
     return textAlignment.Value;
+}
+
+// One of the codes that GAS's Document.getSupportedLanguageCodes gives, or empty for a language
+// that GAS does not support:
+OUString gasLanguageCode(css::lang::Locale const & locale) {
+    static constexpr std::u16string_view regional[] = {
+        u"de_CH", u"en_CA", u"en_GB", u"es_419", u"fr_CA", u"pt_BR", u"pt_PT", u"zh_CN", u"zh_TW",
+        u"zh_HK"};
+    static constexpr std::u16string_view plain[] = {
+        u"af", u"az", u"id", u"ms", u"ca", u"cs", u"cy", u"da", u"de", u"et", u"en", u"es", u"eu",
+        u"fil", u"fr", u"gl", u"hr", u"zu", u"is", u"it", u"sw", u"lv", u"lt", u"hu", u"mt", u"nl",
+        u"nn", u"no", u"uz", u"pl", u"ro", u"sq", u"sk", u"sl", u"fi", u"sv", u"vi", u"tr", u"my",
+        u"be", u"bg", u"kk", u"mk", u"mn", u"ru", u"sr", u"uk", u"el", u"hy", u"iw", u"ur", u"ar",
+        u"fa", u"ne", u"mr", u"hi", u"bn", u"pa", u"as", u"gu", u"ta", u"te", u"kn", u"ml", u"si",
+        u"th", u"lo", u"ka", u"am", u"km", u"or", u"ja", u"ko"};
+    if (locale.Language.isEmpty()) {
+        return {};
+    }
+    LanguageTag const tag(locale);
+    // GAS has the old code iw for Hebrew, and no for Norwegian Bokmal:
+    auto const language = tag.getLanguage() == "he" ? u"iw"_ustr
+        : tag.getLanguage() == "nb" ? u"no"_ustr : tag.getLanguage();
+    OUString const withRegion = language + "_" + tag.getCountry();
+    if (std::find(std::begin(regional), std::end(regional), withRegion) != std::end(regional)) {
+        return withRegion;
+    }
+    if (std::find(std::begin(plain), std::end(plain), language) != std::end(plain)) {
+        return language;
+    }
+    return {};
 }
 
 OUString formatColor(sal_Int32 color) {
@@ -2931,6 +2964,12 @@ public:
         return new ParagraphImpl(nullptr, para);
     }
 
+    OUString getLocale() override { return bcp47(u"CharLocale"_ustr); }
+
+    OUString getLocaleAsian() override { return bcp47(u"CharLocaleAsian"_ustr); }
+
+    OUString getLocaleComplex() override { return bcp47(u"CharLocaleComplex"_ustr); }
+
     sal_Int32 getOffset() override { return element_.is() ? offset_ : paragraphOffset(); }
 
     cpo::uno::Reference<scriptinterop::XText> getSurroundingText() override {
@@ -3020,6 +3059,16 @@ public:
     }
 
 private:
+    // An empty Locale is an empty string, rather than the system locale that LanguageTag would make
+    // of it:
+    OUString bcp47(OUString const & name) {
+        auto const locale = property(name).get<css::lang::Locale>();
+        if (locale.Language.isEmpty()) {
+            return {};
+        }
+        return LanguageTag(locale).getBcp47();
+    }
+
     cpo::uno::Any property(OUString const & name) {
         return cpo::uno::Reference<css::beans::XPropertySet>(where(), cpo::uno::UNO_QUERY_THROW)
             ->getPropertyValue(name);
@@ -3594,6 +3643,19 @@ public:
             v.emplace_back(new FootnoteImpl(footnote));
         }
         return cpo::uno::Sequence(v.data(), v.size());
+    }
+
+    css::beans::Optional<OUString> getLanguage() override {
+        css::lang::Locale locale;
+        cpo::uno::Reference<css::beans::XPropertySet>(
+            cpo::uno::Reference<css::lang::XMultiServiceFactory>(model_, cpo::uno::UNO_QUERY_THROW)
+                ->createInstance(u"com.sun.star.text.Defaults"_ustr),
+            cpo::uno::UNO_QUERY_THROW)->getPropertyValue(u"CharLocale"_ustr) >>= locale;
+        auto const code = gasLanguageCode(locale);
+        if (code.isEmpty()) {
+            return {false, {}};
+        }
+        return {true, code};
     }
 
     void insertImage(cpo::uno::Sequence<sal_Int8> const& data,

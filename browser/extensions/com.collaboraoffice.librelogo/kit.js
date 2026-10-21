@@ -152,30 +152,38 @@ function kitPageSize() {
 }
 
 // Runs in the kit: the language the program is written in, taken from the
-// document like desktop LibreLogo does (LibreLogo.py's __setlang__): the view
-// cursor's character locale, Western first, then Asian and Complex, skipping
-// the "no language" locale zxx. Returns a BCP-47 code (nl-NL, hu-HU, en-GB) or
-// null when the document has no usable language, so the caller can fall back.
+// document like desktop LibreLogo does (LibreLogo.py's __setlang__): the
+// character locale at the cursor, or at the start of the selection, Western
+// first, then Asian and Complex, skipping the "no language" locale zxx, else
+// the document's language. Returns a BCP-47 code (nl-NL, hu-HU, ca-ES-valencia),
+// a GAS language code (pt_BR, de), or null when the document has no usable
+// language, so the caller can fall back.
 function kitDocumentLanguage() {
-	const model = cool.getActiveUnoModel();
-	const code = (loc) => {
-		if (!loc || !loc.Language || loc.Language === 'zxx') return null;
-		return loc.Country ? loc.Language + '-' + loc.Country : loc.Language;
+	const doc = DocumentApp.getActiveDocument();
+	const code = (tag) => (tag && tag !== 'zxx' ? tag : null);
+	// GAS has the old code iw for Hebrew, and no for Norwegian Bokmal:
+	const gasLanguage = () => {
+		const language = doc.getLanguage();
+		return language === 'iw' ? 'he' : language === 'no' ? 'nb' : language;
 	};
-	try {
-		const cursor = model.getCurrentController().getViewCursor();
-		for (const prop of ['CharLocale', 'CharLocaleAsian', 'CharLocaleComplex']) {
-			try {
-				const c = code(cursor.getPropertyValue(prop));
-				if (c) return c;
-			} catch (e) {
-				// property absent on this cursor: try the next
-			}
+	let cursor = doc.getCursor();
+	const selection = doc.getSelection();
+	if (!cursor && !selection) return gasLanguage();
+	if (!cursor) {
+		const first = selection.getRangeElements()[0];
+		const element = first.getElement();
+		if (element.getType() === DocumentApp.ElementType.INLINE_IMAGE) {
+			const parent = element.getParent();
+			cursor = doc.newPosition(parent, parent.getChildIndex(element));
+		} else {
+			cursor = doc.newPosition(element, first.isPartial() ? first.getStartOffset() : 0);
 		}
-	} catch (e) {
-		// no view cursor
 	}
-	return null;
+	for (const getter of ['getLocale', 'getLocaleAsian', 'getLocaleComplex']) {
+		const c = code(cursor[getter]());
+		if (c) return c;
+	}
+	return gasLanguage();
 }
 
 // Runs in the kit: the program text - the selection if there is one, else the body.

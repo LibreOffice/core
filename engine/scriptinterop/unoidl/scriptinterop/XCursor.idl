@@ -24,6 +24,26 @@ interface XCursor: XBase {
 
     void insertText([in] string text);
 
+    // The locale of the text at the cursor, which GAS's Position does not have:
+
+    /** @returns
+            the locale of Western text at the cursor, as a BCP 47 language tag, or an empty string
+            if there is none
+     */
+    string getLocale();
+
+    /** @returns
+            the locale of Asian text at the cursor, as a BCP 47 language tag, or an empty string if
+            there is none
+     */
+    string getLocaleAsian();
+
+    /** @returns
+            the locale of complex text at the cursor, as a BCP 47 language tag, or an empty string
+            if there is none
+     */
+    string getLocaleComplex();
+
     // The formatting of text typed at the cursor (or of the word around it), which GAS's Position
     // does not have:
 
