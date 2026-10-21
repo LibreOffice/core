@@ -88,6 +88,9 @@
 #include <ThemeColorChanger.hxx>
 #include <docmodel/color/ComplexColor.hxx>
 #include <editeng/brushitem.hxx>
+#include <svx/svdograf.hxx>
+#include <tools/stream.hxx>
+#include <unotools/tempfile.hxx>
 #include <editeng/memberids.h>
 #include <editeng/colritem.hxx>
 #include <fmtcntnt.hxx>
@@ -1899,6 +1902,47 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testEmbeddedDocumentsFollowOuterLinkUpdateDe
     getSwDocShell()->AllowLinkUpdate();
     CPPUNIT_ASSERT(xChild->getPropertyValue(u"AllowLinkUpdate"_ustr).get<bool>());
     CPPUNIT_ASSERT(xGrandchild->getPropertyValue(u"AllowLinkUpdate"_ustr).get<bool>());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testEmbeddedDrawingLoadsLinkedImageOnceOuterAllowsLinks)
+{
+    // Given a Writer document holding a Draw object whose page has a linked image. An embedded
+    // document has no base URL of its own, so the test points the link at the image's full URL.
+    SvFileStream aTemplate(createFileURL(u"embedded-drawing-linked-image.fodt"), StreamMode::READ);
+    OString aContent = read_uInt8s_ToOString(aTemplate, aTemplate.remainingSize());
+    aContent = aContent.replaceAll(
+        "\"linked-image.png\""_ostr,
+        "\"" + OUStringToOString(createFileURL(u"linked-image.png"), RTL_TEXTENCODING_UTF8)
+            + "\"");
+    utl::TempFileNamed aDocument(u"", true, u".fodt");
+    aDocument.EnableKillingFile();
+    aDocument.GetStream(StreamMode::WRITE)->WriteOString(aContent);
+    aDocument.CloseStream();
+    uno::Sequence<beans::PropertyValue> aParams = {
+        comphelper::makePropertyValue(u"FilterName"_ustr, u"OpenDocument Text Flat XML"_ustr),
+    };
+    loadWithParams(aDocument.GetURL(), aParams);
+    uno::Reference<text::XTextEmbeddedObjectsSupplier> xObjectsSupplier(mxComponent,
+                                                                        uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xObjects(xObjectsSupplier->getEmbeddedObjects(),
+                                                     uno::UNO_QUERY);
+    uno::Reference<document::XEmbeddedObjectSupplier> xChildSupplier(xObjects->getByIndex(0),
+                                                                     uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(
+        xChildSupplier->getEmbeddedObject(), uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xPage(xPagesSupplier->getDrawPages()->getByIndex(0),
+                                             uno::UNO_QUERY);
+    uno::Reference<drawing::XShape> xShape(xPage->getByIndex(0), uno::UNO_QUERY);
+    auto pImage = dynamic_cast<SdrGrafObj*>(SdrObject::getSdrObjectFromXShape(xShape));
+    CPPUNIT_ASSERT(pImage);
+    CPPUNIT_ASSERT(pImage->IsLinkedGraphic());
+
+    // After load, the image is not loaded.
+    CPPUNIT_ASSERT(pImage->GetGraphicType() != GraphicType::Bitmap);
+
+    // When the user allows link updates in the outer document, the embedded drawing loads it.
+    getSwDocShell()->AllowLinkUpdate();
+    CPPUNIT_ASSERT_EQUAL(GraphicType::Bitmap, pImage->GetGraphicType());
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testStripBakedTableStyleComparesThemeAndLineSplit)

@@ -22,6 +22,8 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/ui/dialogs/ExtendedFilePickerElementIds.hpp>
 #include <com/sun/star/util/CloseVetoException.hpp>
+#include <com/sun/star/embed/EmbedStates.hpp>
+#include <com/sun/star/embed/XEmbeddedObject.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
@@ -1745,10 +1747,37 @@ void SfxObjectShell::ShowLinkUpdateInfobar()
     }
 }
 
+namespace
+{
+// Each loaded embedded document updates its links, and in turn those of its own embedded documents.
+void allowLinkUpdateInLoadedEmbeddedDocuments(comphelper::EmbeddedObjectContainer& rContainer)
+{
+    const cpo::uno::Sequence<OUString> aNames = rContainer.GetObjectNames();
+    for (const OUString& rName : aNames)
+    {
+        if (!rContainer.HasInstantiatedEmbeddedObject(rName))
+            continue;
+        try
+        {
+            cpo::uno::Reference<embed::XEmbeddedObject> xObj = rContainer.GetEmbeddedObject(rName);
+            if (!xObj.is() || xObj->getCurrentState() == embed::EmbedStates::LOADED)
+                continue;
+            if (SfxObjectShell* pChild = SfxObjectShell::GetShellFromComponent(xObj->getComponent()))
+                pChild->AllowLinkUpdate();
+        }
+        catch (const cpo::uno::Exception&)
+        {
+            TOOLS_WARN_EXCEPTION("sfx.doc", "allowLinkUpdateInLoadedEmbeddedDocuments");
+        }
+    }
+}
+}
+
 void SfxObjectShell::AllowLinkUpdate()
 {
     getEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
     PerformLinkUpdate();
+    allowLinkUpdateInLoadedEmbeddedDocuments(getEmbeddedObjectContainer());
 
     decltype(maDeferredLinkLoads) aDeferredLoads;
     aDeferredLoads.swap(maDeferredLinkLoads);
