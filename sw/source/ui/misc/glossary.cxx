@@ -1100,7 +1100,8 @@ void SwGlossaryDlg::DeleteEntry()
         if (!aTitle.isEmpty() && m_pGlossaryHdl->DelGlossary(aShortName))
         {
             OSL_ENSURE(xChild, "entry not found!");
-            m_xCategoryBox->select(*xParent);
+            if (xParent)
+                m_xCategoryBox->select(*xParent);
             m_xCategoryBox->remove(*xChild);
             m_xNameED->set_text(OUString());
             NameModify(*m_xNameED);
