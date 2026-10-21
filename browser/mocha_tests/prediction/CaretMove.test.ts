@@ -154,7 +154,7 @@ describe('text prediction caret steps', function () {
 
 	// The measured text of the first object.
 	function textOf(data: cool.VectorPrimitivesData): cool.ObjectText {
-		const text = cool.ObjectText.of(predictionTest.treeOf(data), 1);
+		const text = cool.ObjectText.collectFrom(predictionTest.treeOf(data), 1);
 		nodeassert.ok(text, 'the object has text');
 		return text;
 	}
@@ -222,11 +222,10 @@ describe('text prediction caret steps', function () {
 		const position = findCaretPosition(data, 0, 0, 0, measure, logical, 1);
 		nodeassert.ok(position, 'the caret is in a run');
 		return (
-			cool.ObjectText.of(predictionTest.treeOf(data), 1)?.caretOnNextLine(
-				position.run,
-				x,
-				direction,
-			) ?? null
+			cool.ObjectText.collectFrom(
+				predictionTest.treeOf(data),
+				1,
+			)?.caretOnNextLine(position.run, x, direction) ?? null
 		);
 	}
 

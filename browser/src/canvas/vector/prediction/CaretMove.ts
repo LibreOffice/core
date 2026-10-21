@@ -339,7 +339,10 @@ namespace cool {
 
 		/// The text of the object, or null when the tree lacks it or some of its text is
 		/// rotated.
-		static of(tree: PredictionTree, objectId: number): ObjectText | null {
+		static collectFrom(
+			tree: PredictionTree,
+			objectId: number,
+		): ObjectText | null {
 			const object = tree.data.objects.get(objectId);
 			if (!object) return null;
 			const runs = TextRun.collect(object.primitives);
@@ -348,7 +351,7 @@ namespace cool {
 		}
 
 		/// True while the tree still holds the object this text was collected from.
-		isOf(tree: PredictionTree, objectId: number): boolean {
+		isCollectedFrom(tree: PredictionTree, objectId: number): boolean {
 			return tree.data.objects.get(objectId) === this.object;
 		}
 

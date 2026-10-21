@@ -868,9 +868,13 @@ class VectorManager extends RenderManagerBase {
 		entryId: number,
 	): cool.ObjectText | null {
 		const kept = this._objectText;
-		if (kept && kept.entryId === entryId && kept.text.isOf(tree, entryId))
+		if (
+			kept &&
+			kept.entryId === entryId &&
+			kept.text.isCollectedFrom(tree, entryId)
+		)
 			return kept.text;
-		const text = cool.ObjectText.of(tree, entryId);
+		const text = cool.ObjectText.collectFrom(tree, entryId);
 		this._objectText = text ? { entryId, text } : null;
 		return text;
 	}
