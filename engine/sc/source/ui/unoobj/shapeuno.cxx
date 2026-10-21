@@ -1194,6 +1194,7 @@ void ScShapeObj::insertTextContent( const uno::Reference<text::XTextRange>& xRan
         lcl_CopyOneProperty( *pDrawField, *pCellField, SC_UNONAME_URL );
         lcl_CopyOneProperty( *pDrawField, *pCellField, SC_UNONAME_REPR );
         lcl_CopyOneProperty( *pDrawField, *pCellField, SC_UNONAME_TARGET );
+        lcl_CopyOneProperty( *pDrawField, *pCellField, SC_UNONAME_TITLE );
     }
     else
         xEffContent.set(xContent);

@@ -491,6 +491,22 @@ CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf76949)
                        u"_xlfn.CHISQ.DIST(1,1,1)");
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf173709TextBoxHyperlinkTitleODS)
+{
+    // Given a text box whose hyperlink has an office:title:
+    createScDoc("fods/tdf173709-textbox-hyperlink-title.fods");
+
+    // When saving it to ODS:
+    save(TestFilter::ODS);
+
+    // Then the title is kept:
+    xmlDocUniquePtr pDocXml = parseExport(u"content.xml"_ustr);
+    CPPUNIT_ASSERT(pDocXml);
+    // Without the accompanying fix in place, this test would have failed, the Calc URL field had no
+    // Title property, so the title was dropped on import.
+    assertXPath(pDocXml, "//draw:frame/draw:text-box/text:p/text:a", "title", u"Title tip");
+}
+
 CPPUNIT_TEST_FIXTURE(ScExportTest2, testTdf107586)
 {
     createScDoc("xlsx/tdf107586.xlsx");

@@ -82,6 +82,7 @@ const SfxItemPropertySet* lcl_GetURLPropertySet()
         { SC_UNONAME_REPR,     0,  cppu::UnoType<OUString>::get(),    0, 0},
         { SC_UNONAME_TARGET,   0,  cppu::UnoType<OUString>::get(),    0, 0},
         { SC_UNONAME_TEXTWRAP, 0,  cppu::UnoType<text::WrapTextMode>::get(), beans::PropertyAttribute::READONLY, 0 },
+        { SC_UNONAME_TITLE,    0,  cppu::UnoType<OUString>::get(),    0, 0},
         { SC_UNONAME_URL,      0,  cppu::UnoType<OUString>::get(),    0, 0},
         { SC_UNONAME_FORMAT,   0,  cppu::UnoType<sal_Int16>::get(),   0, 0 },
     };
@@ -677,6 +678,11 @@ void ScEditFieldObj::setPropertyValueURL(const OUString& rName, const cpo::uno::
             if (rVal >>= aStrVal)
                 pURL->SetTargetFrame(aStrVal);
         }
+        else if (rName == SC_UNONAME_TITLE)
+        {
+            if (rVal >>= aStrVal)
+                pURL->SetTitle(aStrVal);
+        }
         else if (rName == SC_UNONAME_FORMAT)
         {
             if (sal_Int16 nVal; rVal >>= nVal)
@@ -713,6 +719,11 @@ void ScEditFieldObj::setPropertyValueURL(const OUString& rName, const cpo::uno::
     {
         if (rVal >>= aStrVal)
             rData.SetTargetFrame(aStrVal);
+    }
+    else if (rName == SC_UNONAME_TITLE)
+    {
+        if (rVal >>= aStrVal)
+            rData.SetTitle(aStrVal);
     }
     else if (rName == SC_UNONAME_FORMAT)
     {
@@ -753,6 +764,8 @@ cpo::uno::Any ScEditFieldObj::getPropertyValueURL(const OUString& rName)
             aRet <<= pURL->GetRepresentation();
         else if (rName == SC_UNONAME_TARGET)
             aRet <<= pURL->GetTargetFrame();
+        else if (rName == SC_UNONAME_TITLE)
+            aRet <<= pURL->GetTitle();
         else if (rName == SC_UNONAME_FORMAT)
             aRet <<= static_cast<sal_Int16>(pURL->GetFormat());
         else
@@ -768,6 +781,8 @@ cpo::uno::Any ScEditFieldObj::getPropertyValueURL(const OUString& rName)
             aRet <<= rURL.GetRepresentation();
         else if (rName == SC_UNONAME_TARGET)
             aRet <<= rURL.GetTargetFrame();
+        else if (rName == SC_UNONAME_TITLE)
+            aRet <<= rURL.GetTitle();
         else if (rName == SC_UNONAME_FORMAT)
             aRet <<= static_cast<sal_Int16>(rURL.GetFormat());
         else

@@ -375,6 +375,35 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf173709HyperlinkTitleTooltip)
     assertXPath(pXmlDoc, "//a:hlinkClick", "tooltip", u"Title tip");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf173709HyperlinkTitleTooltipXLSX)
+{
+    // Given a spreadsheet with a text box whose hyperlink has a title:
+    loadFromFile(u"tdf173709-hyperlink-title.fods");
+
+    // When saving it to XLSX:
+    save(TestFilter::XLSX);
+
+    // Then the title goes out as the tooltip:
+    xmlDocUniquePtr pXmlDoc = parseExport(u"xl/drawings/drawing1.xml"_ustr);
+    assertXPath(pXmlDoc, "//a:hlinkClick", "tooltip", u"Title tip");
+
+    // And it is read back as the title:
+    loadFromURL(maTempFile.GetURL());
+    auto xDoc = mxComponent.queryThrow<drawing::XDrawPagesSupplier>();
+    auto xPage = xDoc->getDrawPages()->getByIndex(0).queryThrow<drawing::XDrawPage>();
+    auto xShape = xPage->getByIndex(0).queryThrow<container::XEnumerationAccess>();
+    auto xParagraphs = xShape->createEnumeration();
+    auto xParagraph = xParagraphs->nextElement().queryThrow<container::XEnumerationAccess>();
+    auto xRuns = xParagraph->createEnumeration();
+    auto xRun = xRuns->nextElement().queryThrow<beans::XPropertySet>();
+    auto xField = xRun->getPropertyValue(u"TextField"_ustr).queryThrow<text::XTextField>();
+    OUString aTitle;
+    xField.queryThrow<beans::XPropertySet>()->getPropertyValue(u"Title"_ustr) >>= aTitle;
+    // Without the accompanying fix in place, this test would have failed, the tooltip was read
+    // back as the name.
+    CPPUNIT_ASSERT_EQUAL(u"Title tip"_ustr, aTitle);
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testHyperlinkNoTooltip)
 {
     // Given a presentation whose hyperlink has no name:
