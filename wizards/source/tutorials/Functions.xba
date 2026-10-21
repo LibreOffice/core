@@ -372,7 +372,7 @@ Sub ExitTutorial()
 	Dim aUrl As new com.sun.star.util.URL
 	oDoc = ThisComponent
     urlTransformer = createUNOService(&quot;com.sun.star.util.URLTransformer&quot;)
-    aUrl.Complete = &quot;slot:5621&quot;
+    aUrl.Complete = &quot;.uno:CloseWin&quot;
     urlTransformer.parseStrict(aUrl)
     xController = oDoc.getCurrentController()
     xDispatcher = xController.queryDispatch(aUrl, &quot;&quot;, 0)
