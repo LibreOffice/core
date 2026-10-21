@@ -92,7 +92,7 @@ class ImpressTransitionTab implements NotebookbarTab {
 					} as TextWidget,
 					{
 						id: 'transition_duration',
-						type: 'spinfield',
+						type: 'formattedfield',
 						text: '',
 						top: '1',
 						left: '1',
@@ -128,7 +128,7 @@ class ImpressTransitionTab implements NotebookbarTab {
 					} as RadioButtonWidget,
 					{
 						id: 'auto_after_value',
-						type: 'spinfield',
+						type: 'formattedfield',
 						text: '',
 						top: '1',
 						left: '1',
