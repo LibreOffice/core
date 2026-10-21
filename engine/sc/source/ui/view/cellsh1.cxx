@@ -3124,7 +3124,7 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     else
                         sLinkText = rURL;
 
-                    pTabViewShell->InsertURL( sLinkText, rURL, rTarget, nType );
+                    pTabViewShell->InsertURL( sLinkText, rURL, rTarget, nType, pHyper->GetTitle() );
                     rReq.Done();
                 }
             }

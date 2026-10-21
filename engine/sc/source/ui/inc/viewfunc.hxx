@@ -162,7 +162,7 @@ public:
 
     void            InsertBookmark( const OUString& rDescription, const OUString& rURL,
                                     SCCOL nPosX, SCROW nPosY, const OUString* pTarget = nullptr,
-                                    bool bTryReplace = false );
+                                    bool bTryReplace = false, const OUString& rTitle = OUString() );
     bool            HasBookmarkAtCursor( SvxHyperlinkItem* pContent );
 
     bool            MoveBlockTo( const ScRange& rSource, const ScAddress& rDestPos,

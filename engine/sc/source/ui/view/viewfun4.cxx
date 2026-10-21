@@ -695,7 +695,7 @@ bool ScViewFunc::PasteBookmark( SotClipboardFormatId nFormatId,
 
 void ScViewFunc::InsertBookmark( const OUString& rDescription, const OUString& rURL,
                                     SCCOL nPosX, SCROW nPosY, const OUString* pTarget,
-                                    bool bTryReplace )
+                                    bool bTryReplace, const OUString& rTitle )
 {
     ScViewData& rViewData = GetViewData();
     if ( rViewData.HasEditView( rViewData.GetActivePart() ) &&
@@ -707,7 +707,7 @@ void ScViewFunc::InsertBookmark( const OUString& rDescription, const OUString& r
         OUString aTargetFrame;
         if (pTarget)
             aTargetFrame = *pTarget;
-        rViewData.GetViewShell()->InsertURLField( rDescription, rURL, aTargetFrame );
+        rViewData.GetViewShell()->InsertURLField( rDescription, rURL, aTargetFrame, rTitle );
         return;
     }
 
@@ -741,6 +741,7 @@ void ScViewFunc::InsertBookmark( const OUString& rDescription, const OUString& r
     SvxURLField aField( rURL, rDescription, SvxURLFormat::AppDefault );
     if (pTarget)
         aField.SetTargetFrame(*pTarget);
+    aField.SetTitle(rTitle);
     aEngine.QuickInsertUrlField(aField, aInsSel);
 
     EditTextObject aData(aEngine.CreateTextObject());
@@ -802,6 +803,7 @@ bool ScViewFunc::HasBookmarkAtCursor( SvxHyperlinkItem* pContent )
         pContent->SetName(aRepresentation);
         pContent->SetURL( pURLField->GetURL() );
         pContent->SetTargetFrame( pURLField->GetTargetFrame() );
+        pContent->SetTitle( pURLField->GetTitle() );
     }
     return true;
 }

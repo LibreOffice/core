@@ -737,6 +737,7 @@ void ScEditShell::Execute( SfxRequest& rReq )
                             // Replace the old link and select the new one.
                             SvxURLField aURLField( rURL, rName, SvxURLFormat::Repr );
                             aURLField.SetTargetFrame( rTarget );
+                            aURLField.SetTitle( pHyper->GetTitle() );
                             SvxFieldItem aURLItem( aURLField, EE_FEATURE_FIELD );
                             pTableView->SelectFieldAtCursor();
                             pTableView->InsertFieldAndSelect( aURLItem );
@@ -770,7 +771,8 @@ void ScEditShell::Execute( SfxRequest& rReq )
                                 lcl_UnlinkURLFieldsOutsideSelection(*pTopView);
                         }
                         rViewData.GetViewShell()->
-                            InsertURL( rName, rURL, rTarget, static_cast<sal_uInt16>(eMode) );
+                            InsertURL( rName, rURL, rTarget, static_cast<sal_uInt16>(eMode),
+                                       pHyper->GetTitle() );
 
                         // when "Button", the InsertURL in ViewShell turns the EditShell  off
                         // thus the immediate return statement
@@ -925,6 +927,7 @@ void ScEditShell::GetState( SfxItemSet& rSet )
                 {
                     SvxHyperlinkItem aHLinkItem;
                     aHLinkItem.SetShowName(false);
+                    aHLinkItem.SetShowTitle(true);
                     const bool bCellLinksOnly = IsCellLinkOnly(pActiveView);
                     std::unique_ptr<const SvxFieldData> aSvxFieldDataPtr(GetURLField());
                     const SvxURLField* pURLField(static_cast<const SvxURLField*>(aSvxFieldDataPtr.get()));
@@ -935,6 +938,7 @@ void ScEditShell::GetState( SfxItemSet& rSet )
                             aHLinkItem.SetName(pURLField->GetRepresentation());
                             aHLinkItem.SetURL(pURLField->GetURL());
                             aHLinkItem.SetTargetFrame(pURLField->GetTargetFrame());
+                            aHLinkItem.SetTitle(pURLField->GetTitle());
                         }
                         else if (pActiveView)
                         {
@@ -956,6 +960,7 @@ void ScEditShell::GetState( SfxItemSet& rSet )
                         {
                             aHLinkItem.SetURL(pURLField->GetURL());
                             aHLinkItem.SetTargetFrame(pURLField->GetTargetFrame());
+                            aHLinkItem.SetTitle(pURLField->GetTitle());
                         }
                         ScDocument& rDoc = rViewData.GetDocument();
                         SCCOL nPosX = rViewData.GetCurX();

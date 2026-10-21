@@ -429,10 +429,11 @@ public:
     virtual       FmFormShell* GetFormShell()       override { return pFormShell.get(); }
 
     void    InsertURL( const OUString& rName, const OUString& rURL, const OUString& rTarget,
-                            sal_uInt16 nMode );
+                            sal_uInt16 nMode, const OUString& rTitle = OUString() );
     void    InsertURLButton( const OUString& rName, const OUString& rURL, const OUString& rTarget,
                             const Point* pInsPos );
-    void    InsertURLField( const OUString& rName, const OUString& rURL, const OUString& rTarget );
+    void    InsertURLField( const OUString& rName, const OUString& rURL, const OUString& rTarget,
+                            const OUString& rTitle = OUString() );
 
     SC_DLLPUBLIC bool SelectObject( std::u16string_view rName );
 

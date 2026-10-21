@@ -274,6 +274,7 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
                         //  insert new field
                         SvxURLField aURLField( rURL, rName, SvxURLFormat::Repr );
                         aURLField.SetTargetFrame( rTarget );
+                        aURLField.SetTitle( pHyper->GetTitle() );
                         SvxFieldItem aURLItem( aURLField, EE_FEATURE_FIELD );
                         pOutView->InsertField( aURLItem );
 
@@ -385,6 +386,7 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
         OutlinerView* pOutView = pView->GetTextEditOutlinerView();
         if ( pOutView )
         {
+            aHLinkItem.SetShowTitle(true);
             bool bField = false;
             const SvxFieldItem* pFieldItem = pOutView->GetFieldAtSelection();
             const SvxFieldData* pField = pFieldItem ? pFieldItem->GetField() : nullptr;
@@ -393,6 +395,7 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
                 aHLinkItem.SetName( pURLField->GetRepresentation() );
                 aHLinkItem.SetURL( pURLField->GetURL() );
                 aHLinkItem.SetTargetFrame( pURLField->GetTargetFrame() );
+                aHLinkItem.SetTitle( pURLField->GetTitle() );
                 bField = true;
             }
 

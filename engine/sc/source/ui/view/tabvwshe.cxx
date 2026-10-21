@@ -116,7 +116,7 @@ OUString ScTabViewShell::GetSelectionText( bool bWholeWord, bool bOnlyASample )
 }
 
 void ScTabViewShell::InsertURL( const OUString& rName, const OUString& rURL, const OUString& rTarget,
-                                sal_uInt16 nMode )
+                                sal_uInt16 nMode, const OUString& rTitle )
 {
     SvxLinkInsertMode eMode = static_cast<SvxLinkInsertMode>(nMode);
     bool bAsText = ( eMode != HLINK_BUTTON );       // default is now text
@@ -128,7 +128,7 @@ void ScTabViewShell::InsertURL( const OUString& rName, const OUString& rURL, con
             //  if the view is active, always use InsertURLField, which starts EditMode
             //  and selects the URL, so it can be changed from the URL bar / dialog
 
-            InsertURLField( rName, rURL, rTarget );
+            InsertURLField( rName, rURL, rTarget, rTitle );
         }
         else
         {
@@ -138,7 +138,7 @@ void ScTabViewShell::InsertURL( const OUString& rName, const OUString& rURL, con
 
             SCCOL nPosX = GetViewData().GetCurX();
             SCROW nPosY = GetViewData().GetCurY();
-            InsertBookmark( rName, rURL, nPosX, nPosY, &rTarget, true );
+            InsertBookmark( rName, rURL, nPosX, nPosY, &rTarget, true, rTitle );
         }
     }
     else
@@ -148,10 +148,12 @@ void ScTabViewShell::InsertURL( const OUString& rName, const OUString& rURL, con
     }
 }
 
-void ScTabViewShell::InsertURLField( const OUString& rName, const OUString& rURL, const OUString& rTarget )
+void ScTabViewShell::InsertURLField( const OUString& rName, const OUString& rURL, const OUString& rTarget,
+                                     const OUString& rTitle )
 {
     SvxURLField aURLField( rURL, rName, SvxURLFormat::Repr );
     aURLField.SetTargetFrame( rTarget );
+    aURLField.SetTitle( rTitle );
     SvxFieldItem aURLItem( aURLField, EE_FEATURE_FIELD );
 
     ScViewData&     rViewData   = GetViewData();

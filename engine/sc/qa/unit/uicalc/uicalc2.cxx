@@ -13,12 +13,21 @@
 #include <docuno.hxx>
 #include <comphelper/kit.hxx>
 #include <editeng/brushitem.hxx>
+#include <editeng/editview.hxx>
 #include <editeng/editobj.hxx>
 #include <editeng/flditem.hxx>
+#include <editeng/outliner.hxx>
 #include <COKit/COKit.hxx>
+#include <sfx2/bindings.hxx>
+#include <sfx2/dispatch.hxx>
 #include <sfx2/printer.hxx>
+#include <sfx2/viewfrm.hxx>
 #include <sfx2/viewsh.hxx>
 #include <sot/exchange.hxx>
+#include <svl/eitem.hxx>
+#include <svx/hlnkitem.hxx>
+#include <svx/svxids.hrc>
+#include <svx/svdorect.hxx>
 #include <svx/svdpage.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <tools/stream.hxx>
@@ -45,6 +54,7 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/view/XRenderable.hpp>
 #include <dbdata.hxx>
+#include <drawview.hxx>
 #include <document.hxx>
 #include <docsh.hxx>
 #include <formulacell.hxx>
@@ -2767,6 +2777,92 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testPasteWriterTextAndImage)
     // - Actual  : 0
     // i.e. the image was lost, only the text was pasted.
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), pPage->GetObjCount());
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf173709HyperlinkTitle)
+{
+    // Given an empty cell:
+    createScDoc();
+    goToCell(u"A1"_ustr);
+    ScTabViewShell* pView = getViewShell();
+
+    // When the Hyperlink dialog sets a link with a title:
+    SvxHyperlinkItem aItem(SID_HYPERLINK_SETLINK);
+    aItem.SetURL(u"https://example.org/"_ustr);
+    aItem.SetName(u"example"_ustr);
+    aItem.SetTitle(u"Example site"_ustr);
+    aItem.SetInsertMode(HLINK_FIELD);
+    pView->GetViewFrame().GetDispatcher()->ExecuteList(SID_HYPERLINK_SETLINK,
+                                                       SfxCallMode::SYNCHRON, { &aItem });
+    // The link is inserted in edit mode, commit it:
+    ScModule::get()->InputEnterHandler();
+
+    // Then the URL field in the cell has the title:
+    ScDocument* pDoc = getScDoc();
+    const EditTextObject* pEditText = pDoc->GetEditText(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pEditText);
+    auto pURLField = dynamic_cast<const SvxURLField*>(
+        pEditText->GetFieldData(0, 0, text::textfield::Type::URL));
+    CPPUNIT_ASSERT(pURLField);
+    // Without the accompanying fix in place, this test would have failed, the title was lost.
+    CPPUNIT_ASSERT_EQUAL(u"Example site"_ustr, pURLField->GetTitle());
+
+    // And the dialog shows the title when the link is edited again:
+    std::unique_ptr<SvxHyperlinkItem> pState;
+    pView->GetViewFrame().GetBindings().QueryState(SID_HYPERLINK_GETLINK, pState);
+    CPPUNIT_ASSERT(pState);
+    CPPUNIT_ASSERT_EQUAL(u"Example site"_ustr, pState->GetTitle());
+    CPPUNIT_ASSERT(pState->GetShowTitle());
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf173709HyperlinkTitleTextBox)
+{
+    // Given a text box with a selected character:
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+    ScDrawLayer* pDrawLayer = pDoc->GetDrawLayer();
+    CPPUNIT_ASSERT(pDrawLayer);
+    rtl::Reference<SdrRectObj> pRect
+        = new SdrRectObj(*pDrawLayer, tools::Rectangle(1000, 1000, 5000, 5000));
+    pDrawLayer->GetPage(0)->InsertObject(pRect.get());
+    ScTabViewShell* pViewShell = getViewShell();
+    SdrView* pView = pViewShell->GetScDrawView();
+    pView->MarkObj(pRect.get(), pView->GetSdrPageView());
+    SfxBoolItem aCreateDirectly(FN_PARAM_1, false);
+    pViewShell->GetViewFrame().GetDispatcher()->ExecuteList(SID_DRAW_TEXT, SfxCallMode::SYNCHRON,
+                                                            { &aCreateDirectly });
+    pView->SdrBeginTextEdit(pRect.get());
+    OutlinerView* pOlView = pView->GetTextEditOutlinerView();
+    CPPUNIT_ASSERT(pOlView);
+    pOlView->InsertText(u"f"_ustr);
+    pOlView->SetSelection(ESelection(0, 0, 0, 1));
+
+    // When the Hyperlink dialog sets a link with a title:
+    SvxHyperlinkItem aItem(SID_HYPERLINK_SETLINK);
+    aItem.SetURL(u"https://example.org/"_ustr);
+    aItem.SetName(u"f"_ustr);
+    aItem.SetTitle(u"Example site"_ustr);
+    aItem.SetInsertMode(HLINK_FIELD);
+    pViewShell->GetViewFrame().GetDispatcher()->ExecuteList(SID_HYPERLINK_SETLINK,
+                                                            SfxCallMode::SYNCHRON, { &aItem });
+
+    // Then the dialog shows the title when the link is edited again:
+    pOlView->SetSelection(ESelection(0, 0, 0, 1));
+    std::unique_ptr<SvxHyperlinkItem> pState;
+    pViewShell->GetViewFrame().GetBindings().QueryState(SID_HYPERLINK_GETLINK, pState);
+    CPPUNIT_ASSERT(pState);
+    // Without the accompanying fix in place, this test would have failed, the title was lost.
+    CPPUNIT_ASSERT_EQUAL(u"Example site"_ustr, pState->GetTitle());
+    CPPUNIT_ASSERT(pState->GetShowTitle());
+
+    // And the URL field has the title:
+    pView->SdrEndTextEdit();
+    const OutlinerParaObject* pOPO = pRect->GetOutlinerParaObject();
+    CPPUNIT_ASSERT(pOPO);
+    auto pURLField = dynamic_cast<const SvxURLField*>(
+        pOPO->GetTextObject().GetFieldData(0, 0, text::textfield::Type::URL));
+    CPPUNIT_ASSERT(pURLField);
+    CPPUNIT_ASSERT_EQUAL(u"Example site"_ustr, pURLField->GetTitle());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

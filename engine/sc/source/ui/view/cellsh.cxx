@@ -713,6 +713,7 @@ void ScCellShell::GetHLinkState( SfxItemSet& rSet )
 
     SvxHyperlinkItem aHLinkItem;
     aHLinkItem.SetShowName(false);
+    aHLinkItem.SetShowTitle(true);
     if ( !GetViewData().GetView()->HasBookmarkAtCursor( &aHLinkItem ) )
     {
         // tdf#80043 - put selected text into item
