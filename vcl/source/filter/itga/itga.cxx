@@ -638,7 +638,7 @@ bool TGAReader::ImplReadBody()
                                 return false;
                             if ( nDummy >= mpFileHeader->nColorMapLength )
                                 return false;
-                            mpBitmap->SetPixel( nY, nX, Color(ColorTransparency, nDummy) );
+                            mpBitmap->SetPixel( nY, nX, mvPalette[nDummy] );
                         }
                         break;
                     default:
