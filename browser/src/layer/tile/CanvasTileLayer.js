@@ -1639,7 +1639,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			return;
 		}
 
-		var strTwips = obj.selection.match(/\d+/g);
+		var strTwips = obj.selection.match(/-?\d+/g);
 
 		// The message names the part by its part identifier; the section
 		// tracks parts by index.
