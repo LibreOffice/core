@@ -506,8 +506,7 @@ bool GtkSalFrame::doKeyCallback( guint state,
 }
 
 GtkSalFrame::GtkSalFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
-    : m_nXScreen( getDisplay()->GetDefaultXScreen() )
-    , m_pHeaderBar(nullptr)
+    : m_pHeaderBar(nullptr)
     , m_bGraphics(false)
     , m_nSetFocusSignalId(0)
 #if !GTK_CHECK_VERSION(4, 0, 0)
@@ -521,8 +520,7 @@ GtkSalFrame::GtkSalFrame( SalFrame* pParent, SalFrameStyleFlags nStyle )
 }
 
 GtkSalFrame::GtkSalFrame( SystemParentData* pSysData )
-    : m_nXScreen( getDisplay()->GetDefaultXScreen() )
-    , m_pHeaderBar(nullptr)
+    : m_pHeaderBar(nullptr)
     , m_bGraphics(false)
     , m_nSetFocusSignalId(0)
 #if !GTK_CHECK_VERSION(4, 0, 0)

@@ -30,7 +30,6 @@
 #include <salframe.hxx>
 #include <vcl/idle.hxx>
 #include <vcl/sysdata.hxx>
-#include <unx/saltype.h>
 #include <unx/sessioninhibitor.hxx>
 
 #include <tools/link.hxx>
@@ -169,7 +168,6 @@ class GtkSalFrame final : public SalFrame
 
     friend class GtkSalObjectWidgetClip;
 
-    SalX11Screen                    m_nXScreen;
     GtkWidget*                      m_pWindow;
     GtkHeaderBar*                   m_pHeaderBar;
     GtkGrid*                        m_pTopLevelGrid;
@@ -457,7 +455,6 @@ public:
     GtkFixed*   getFixedContainer() const { return GTK_FIXED(m_pFixedContainer); }
     GtkWidget*  getMouseEventWidget() const;
     GtkGrid*    getTopLevelGridWidget() const { return m_pTopLevelGrid; }
-    const SalX11Screen& getXScreenNumber() const { return m_nXScreen; }
     int GetDisplayScreen() const { return maGeometry.screen(); }
     void updateScreenNumber();
 
