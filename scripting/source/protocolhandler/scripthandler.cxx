@@ -214,10 +214,10 @@ void SAL_CALL ScriptProtocolHandler::dispatchWithNotification(
             {
                 // obtain the component for our security check
                 Reference< XEmbeddedScripts > xDocumentScripts;
-                if ( getScriptInvocation() )
+                if ( bIsDocumentScript && getScriptInvocation() )
                     xDocumentScripts.set( m_xScriptInvocation->getScriptContainer(), UNO_SET_THROW );
 
-                OSL_ENSURE( xDocumentScripts.is(), "ScriptProtocolHandler::dispatchWithNotification: can't do the security check!" );
+                OSL_ENSURE( !bIsDocumentScript || xDocumentScripts.is(), "ScriptProtocolHandler::dispatchWithNotification: can't do the security check!" );
                 if ( bIsTDocLocation || !xDocumentScripts.is() || !xDocumentScripts->getAllowMacroExecution() )
                 {
                     if ( xListener.is() )
