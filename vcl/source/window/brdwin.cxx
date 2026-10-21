@@ -789,95 +789,95 @@ bool ImplStdBorderWindowView::MouseButtonDown( const MouseEvent& rMEvt )
 
     maFrameData.maMouseOff = rMEvt.GetPosPixel();
     maFrameData.mnHitTest = ImplHitTest(maFrameData, maFrameData.maMouseOff);
-    if ( maFrameData.mnHitTest != BorderWindowHitTest::NONE )
+    if (maFrameData.mnHitTest == BorderWindowHitTest::NONE)
+        return true;
+
+    DragFullOptions nDragFullTest = DragFullOptions::NONE;
+    bool bTracking = true;
+    bool bHitTest = true;
+
+    if ( maFrameData.mnHitTest & BorderWindowHitTest::Close )
     {
-        DragFullOptions nDragFullTest = DragFullOptions::NONE;
-        bool bTracking = true;
-        bool bHitTest = true;
+        maFrameData.mnCloseState |= DrawButtonFlags::Pressed;
+        pBorderWindow->InvalidateBorder();
+    }
+    else if ( maFrameData.mnHitTest & BorderWindowHitTest::Dock )
+    {
+        maFrameData.mnDockState |= DrawButtonFlags::Pressed;
+        pBorderWindow->InvalidateBorder();
+    }
+    else if ( maFrameData.mnHitTest & BorderWindowHitTest::Menu )
+    {
+        maFrameData.mnMenuState |= DrawButtonFlags::Pressed;
+        pBorderWindow->InvalidateBorder();
 
-        if ( maFrameData.mnHitTest & BorderWindowHitTest::Close )
+        // call handler already on mouse down
+        if ( pBorderWindow->ImplGetClientWindow()->IsSystemWindow() )
         {
-            maFrameData.mnCloseState |= DrawButtonFlags::Pressed;
-            pBorderWindow->InvalidateBorder();
+            SystemWindow* pClientWindow = static_cast<SystemWindow*>(pBorderWindow->ImplGetClientWindow());
+            pClientWindow->TitleButtonClick( TitleButton::Menu );
         }
-        else if ( maFrameData.mnHitTest & BorderWindowHitTest::Dock )
-        {
-            maFrameData.mnDockState |= DrawButtonFlags::Pressed;
-            pBorderWindow->InvalidateBorder();
-        }
-        else if ( maFrameData.mnHitTest & BorderWindowHitTest::Menu )
-        {
-            maFrameData.mnMenuState |= DrawButtonFlags::Pressed;
-            pBorderWindow->InvalidateBorder();
 
-            // call handler already on mouse down
-            if ( pBorderWindow->ImplGetClientWindow()->IsSystemWindow() )
-            {
-                SystemWindow* pClientWindow = static_cast<SystemWindow*>(pBorderWindow->ImplGetClientWindow());
-                pClientWindow->TitleButtonClick( TitleButton::Menu );
-            }
+        maFrameData.mnMenuState &= ~DrawButtonFlags::Pressed;
+        pBorderWindow->InvalidateBorder();
 
-            maFrameData.mnMenuState &= ~DrawButtonFlags::Pressed;
-            pBorderWindow->InvalidateBorder();
+        bTracking = false;
+    }
+    else if ( maFrameData.mnHitTest & BorderWindowHitTest::Hide )
+    {
+        maFrameData.mnHideState |= DrawButtonFlags::Pressed;
+        pBorderWindow->InvalidateBorder();
+    }
+    else if ( maFrameData.mnHitTest & BorderWindowHitTest::Help )
+    {
+        maFrameData.mnHelpState |= DrawButtonFlags::Pressed;
+        pBorderWindow->InvalidateBorder();
+    }
+    else
+    {
+        if ( rMEvt.GetClicks() == 1 )
+        {
+            Point aPos  = pBorderWindow->GetPosPixel();
+            Size  aSize = pBorderWindow->GetOutputSizePixel();
+            maFrameData.mnTrackX      = aPos.X();
+            maFrameData.mnTrackY      = aPos.Y();
+            maFrameData.mnTrackWidth  = aSize.Width();
+            maFrameData.mnTrackHeight = aSize.Height();
 
-            bTracking = false;
-        }
-        else if ( maFrameData.mnHitTest & BorderWindowHitTest::Hide )
-        {
-            maFrameData.mnHideState |= DrawButtonFlags::Pressed;
-            pBorderWindow->InvalidateBorder();
-        }
-        else if ( maFrameData.mnHitTest & BorderWindowHitTest::Help )
-        {
-            maFrameData.mnHelpState |= DrawButtonFlags::Pressed;
-            pBorderWindow->InvalidateBorder();
+            if (maFrameData.mnHitTest & BorderWindowHitTest::Title)
+                nDragFullTest = DragFullOptions::WindowMove;
+            else
+                nDragFullTest = DragFullOptions::WindowSize;
         }
         else
         {
-            if ( rMEvt.GetClicks() == 1 )
-            {
-                Point aPos  = pBorderWindow->GetPosPixel();
-                Size  aSize = pBorderWindow->GetOutputSizePixel();
-                maFrameData.mnTrackX      = aPos.X();
-                maFrameData.mnTrackY      = aPos.Y();
-                maFrameData.mnTrackWidth  = aSize.Width();
-                maFrameData.mnTrackHeight = aSize.Height();
+            bTracking = false;
 
-                if (maFrameData.mnHitTest & BorderWindowHitTest::Title)
-                    nDragFullTest = DragFullOptions::WindowMove;
-                else
-                    nDragFullTest = DragFullOptions::WindowSize;
-            }
-            else
+            if ( (maFrameData.mnHitTest & BorderWindowHitTest::Title) &&
+                 ((rMEvt.GetClicks() % 2) == 0) )
             {
-                bTracking = false;
+                maFrameData.mnHitTest = BorderWindowHitTest::NONE;
+                bHitTest = false;
 
-                if ( (maFrameData.mnHitTest & BorderWindowHitTest::Title) &&
-                     ((rMEvt.GetClicks() % 2) == 0) )
+                if ( pBorderWindow->ImplGetClientWindow()->IsSystemWindow() )
                 {
-                    maFrameData.mnHitTest = BorderWindowHitTest::NONE;
-                    bHitTest = false;
-
-                    if ( pBorderWindow->ImplGetClientWindow()->IsSystemWindow() )
-                    {
-                        SystemWindow* pClientWindow = static_cast<SystemWindow*>(pBorderWindow->ImplGetClientWindow());
-                        // always perform docking on double click, no button required
-                        pClientWindow->TitleButtonClick( TitleButton::Docking );
-                    }
+                    SystemWindow* pClientWindow = static_cast<SystemWindow*>(pBorderWindow->ImplGetClientWindow());
+                    // always perform docking on double click, no button required
+                    pClientWindow->TitleButtonClick( TitleButton::Docking );
                 }
             }
         }
-
-        if ( bTracking )
-        {
-            maFrameData.mbDragFull = false;
-            if ( nDragFullTest != DragFullOptions::NONE )
-                maFrameData.mbDragFull = true;   // always fulldrag for proper docking, ignore system settings
-            pBorderWindow->StartTracking();
-        }
-        else if ( bHitTest )
-            maFrameData.mnHitTest = BorderWindowHitTest::NONE;
     }
+
+    if ( bTracking )
+    {
+        maFrameData.mbDragFull = false;
+        if ( nDragFullTest != DragFullOptions::NONE )
+            maFrameData.mbDragFull = true;   // always fulldrag for proper docking, ignore system settings
+        pBorderWindow->StartTracking();
+    }
+    else if ( bHitTest )
+        maFrameData.mnHitTest = BorderWindowHitTest::NONE;
 
     return true;
 }
