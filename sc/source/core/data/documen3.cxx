@@ -638,7 +638,7 @@ bool ScDocument::LinkExternalTab( SCTAB& rTab, const OUString& aDocTab,
 
     bool bWasThere = HasLink( aFileName, aFilterName, aOptions );
     SetLink( rTab, ScLinkMode::VALUE, aFileName, aFilterName, aOptions, aTabName, nRefreshDelay );
-    if ( !bWasThere ) // Add link only once per source document
+    if ( !bWasThere && mpShell ) // Add link only once per source document
     {
         ScTableLink* pLink = new ScTableLink( *mpShell, aFileName, aFilterName, aOptions, nRefreshDelay );
         pLink->SetInCreate( true );
