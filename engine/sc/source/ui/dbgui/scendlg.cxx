@@ -47,8 +47,6 @@ ScNewScenarioDlg::ScNewScenarioDlg(weld::Window* pParent, const OUString& rName,
     , m_xCbProtect(m_xBuilder->weld_check_button(u"preventchanges"_ustr))
     , m_xBtnOk(m_xBuilder->weld_button(u"ok"_ustr))
     , m_xAltTitle(m_xBuilder->weld_label(u"alttitle"_ustr))
-    , m_xCreatedFt(m_xBuilder->weld_label(u"createdft"_ustr))
-    , m_xOnFt(m_xBuilder->weld_label(u"onft"_ustr))
 {
     m_xEdComment->set_size_request(m_xEdComment->get_approximate_digit_width() * 60,
                                    m_xEdComment->get_height_rows(6));
@@ -58,12 +56,10 @@ ScNewScenarioDlg::ScNewScenarioDlg(weld::Window* pParent, const OUString& rName,
 
     SvtUserOptions aUserOpt;
 
-    OUString sCreatedBy(m_xCreatedFt->get_label());
-    OUString sOn(m_xOnFt->get_label());
-
-    OUString aComment(sCreatedBy + " " + aUserOpt.GetFirstName() + " " +aUserOpt.GetLastName()
-              + ", " + sOn + " " + ScGlobal::getLocaleData().getDate(Date(Date::SYSTEM))
-              + ", " + ScGlobal::getLocaleData().getTime(tools::Time(tools::Time::SYSTEM)));
+    OUString aComment = ScResId(STR_SCENARIO_CREATED_BY)
+        .replaceFirst("%1", rtl::Concat2View(aUserOpt.GetFirstName() + " " + aUserOpt.GetLastName()))
+        .replaceFirst("%2", ScGlobal::getLocaleData().getDate(Date(Date::SYSTEM)))
+        .replaceFirst("%3", ScGlobal::getLocaleData().getTime(tools::Time(tools::Time::SYSTEM)));
 
     m_xEdComment->set_text(aComment);
     m_xEdName->set_text(rName);

@@ -48,8 +48,6 @@ private:
     std::unique_ptr<weld::CheckButton> m_xCbProtect;
     std::unique_ptr<weld::Button> m_xBtnOk;
     std::unique_ptr<weld::Label> m_xAltTitle;
-    std::unique_ptr<weld::Label> m_xCreatedFt;
-    std::unique_ptr<weld::Label> m_xOnFt;
 
     DECL_LINK(OkHdl, weld::Button&, void);
     DECL_LINK(EnableHdl, weld::Toggleable&, void);
