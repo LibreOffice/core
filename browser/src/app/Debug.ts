@@ -109,6 +109,15 @@ class DebugManager {
 		return this._messageDelayMs;
 	}
 	private _messageDelayMs: number = 100;
+	public mostInFlightOn: boolean;
+	// The most changes in flight at a time that the tool sets.
+	private _mostInFlight: number = ChangeOutbox.usualMostInFlight;
+	public textWaitOn: boolean;
+	public slideOn: boolean;
+	// How long the caret and the text selection slide while the tool is on, in milliseconds.
+	private _slideMs: number = Cursor.usualSlideTime;
+	// How long typed text waits to be combined while the tool is on, in milliseconds.
+	private _textWaitMs: number = 100;
 
 	public eventDelayWatchdog: boolean;
 	private _eventDelayTimeout: TimeoutHdl | null;
@@ -522,6 +531,31 @@ class DebugManager {
 				},
 			});
 
+		if (vectorDocument)
+			this._addDebugTool({
+				name: 'Caret and selection slide',
+				category: 'Display',
+				startsOn: false,
+				dependsOn: 'Vector',
+				onAdd: function () {
+					self.slideOn = true;
+					Cursor.slideTime = self._slideMs;
+				},
+				onRemove: function () {
+					self.slideOn = false;
+					Cursor.slideTime = Cursor.usualSlideTime;
+				},
+				input: {
+					value: this._slideMs,
+					min: 0,
+					unit: 'ms',
+					onChange: function (value: number) {
+						self._slideMs = value;
+						if (self.slideOn) Cursor.slideTime = value;
+					},
+				},
+			});
+
 		if (tilesDrawn) {
 			this._addDebugTool({
 				name: 'Tile Overlays',
@@ -894,6 +928,56 @@ class DebugManager {
 				},
 			},
 		});
+
+		// The view sends its changes to the engine a few at a time while it draws from the
+		// objects.
+		if (vectorDocument)
+			this._addDebugTool({
+				name: 'Changes in flight',
+				category: 'Functionality',
+				startsOn: false,
+				onAdd: function () {
+					self.mostInFlightOn = true;
+					ChangeOutbox.setMostInFlight(self._mostInFlight);
+				},
+				onRemove: function () {
+					self.mostInFlightOn = false;
+					ChangeOutbox.setMostInFlight(null);
+				},
+				input: {
+					value: this._mostInFlight,
+					min: 1,
+					unit: 'at a time',
+					onChange: function (value: number) {
+						self._mostInFlight = value;
+						if (self.mostInFlightOn) ChangeOutbox.setMostInFlight(value);
+					},
+				},
+			});
+
+		if (vectorDocument)
+			this._addDebugTool({
+				name: 'Combine typed text',
+				category: 'Functionality',
+				startsOn: false,
+				onAdd: function () {
+					self.textWaitOn = true;
+					ChangeOutbox.setTextWait(self._textWaitMs);
+				},
+				onRemove: function () {
+					self.textWaitOn = false;
+					ChangeOutbox.setTextWait(0);
+				},
+				input: {
+					value: this._textWaitMs,
+					min: 0,
+					unit: 'ms wait',
+					onChange: function (value: number) {
+						self._textWaitMs = value;
+						if (self.textWaitOn) ChangeOutbox.setTextWait(value);
+					},
+				},
+			});
 
 		if (tilesDrawn) {
 			this._addDebugTool({

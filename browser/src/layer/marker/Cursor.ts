@@ -321,9 +321,13 @@ class Cursor {
 		this.lastPlace = place;
 	}
 
+	// How long the caret and the text selection usually take to move to a new place, in
+	// milliseconds.
+	static readonly usualSlideTime: number = 60;
+
 	// How long the caret and the text selection take to move to a new place, in milliseconds,
 	// 0 to move them at once.
-	static slideTime: number = 60;
+	static slideTime: number = Cursor.usualSlideTime;
 
 	static hotSpot = new Map<string, cool.Point>([['fill', new cool.Point(7, 16)]]);
 

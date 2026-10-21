@@ -60,8 +60,14 @@ type OutboxEntry =
 	  }
 	| { kind: 'undo' | 'redo'; count: number }
 	| { kind: 'other'; channel: string; message: string; sealed?: boolean }
-	| { kind: 'text'; text: string; sequence: number }
-	| { kind: 'remove'; before: number; after: number; sequence: number };
+	| { kind: 'text'; text: string; sequence: number; ready?: boolean }
+	| {
+			kind: 'remove';
+			before: number;
+			after: number;
+			sequence: number;
+			ready?: boolean;
+	  };
 
 class ChangeOutbox {
 	/// How long a change may go unanswered before the next one goes out anyway, in milliseconds.
@@ -88,9 +94,17 @@ class ChangeOutbox {
 	private static waiting: OutboxEntry[] = [];
 	private static held: Map<string, OutboxEntry> = new Map();
 	private static keysDown: Set<string> = new Set();
-	/// The most changes in flight at a time. More than one keeps a run of key presses going out
-	/// at the pace they are made over a slow connection, few enough for the engine to keep up.
-	private static readonly mostInFlight: number = 4;
+	/// The usual number of changes in flight at a time. More than one keeps a run of key
+	/// presses going out at the pace they are made over a slow connection, few enough for the
+	/// engine to keep up.
+	public static readonly usualMostInFlight: number = 4;
+
+	/// The most changes in flight at a time, 1 or more.
+	private static mostInFlight: number = ChangeOutbox.usualMostInFlight;
+
+	/// How long typed text and deletions wait before they go out, so that more of them combine
+	/// into one message, in milliseconds. At 0 they go out as soon as a change may.
+	private static textWait: number = 0;
 
 	/// One wait for each change in flight, the oldest first.
 	private static inFlight: ReturnType<typeof setTimeout>[] = [];
@@ -152,6 +166,21 @@ class ChangeOutbox {
 		if (entry.kind === 'text' || entry.kind === 'remove') {
 			ChangeOutbox.letGoOfWhatIsHeld();
 			ChangeOutbox.merge(entry);
+			// What merges into the entry afterwards goes out with it once its wait is
+			// over. An entry whose wait is over, kept back by the changes in flight, waits
+			// again from what was just merged into it.
+			const last = ChangeOutbox.waiting[ChangeOutbox.waiting.length - 1];
+			if (
+				(last.kind === 'text' || last.kind === 'remove') &&
+				last.ready !== false &&
+				ChangeOutbox.textWait > 0
+			) {
+				last.ready = false;
+				setTimeout(() => {
+					last.ready = true;
+					ChangeOutbox.sendTheNext();
+				}, ChangeOutbox.textWait);
+			}
 		} else if (entry.kind === 'undo' || entry.kind === 'redo') {
 			if (!ChangeOutbox.undoOnItsWay())
 				ChangeOutbox.undoAskedAt = performance.now();
@@ -192,6 +221,20 @@ class ChangeOutbox {
 
 		while (ChangeOutbox.waiting.length)
 			ChangeOutbox.send(ChangeOutbox.waiting.shift() as OutboxEntry);
+	}
+
+	/// Sets the most changes in flight at a time, or puts back the usual number for null. A
+	/// higher number sends what waits for it at once.
+	public static setMostInFlight(count: number | null): void {
+		ChangeOutbox.mostInFlight =
+			count === null ? ChangeOutbox.usualMostInFlight : Math.max(1, count);
+		ChangeOutbox.sendTheNext();
+	}
+
+	/// Sets how long typed text and deletions wait before they go out, in milliseconds, 0 for
+	/// no wait. Text that waits already keeps its own wait.
+	public static setTextWait(milliseconds: number): void {
+		ChangeOutbox.textWait = Math.max(0, milliseconds);
 	}
 
 	/// Whether an undo or a redo waits to go out or has not been answered yet.
@@ -372,8 +415,16 @@ class ChangeOutbox {
 		while (
 			ChangeOutbox.inFlight.length < ChangeOutbox.mostInFlight &&
 			ChangeOutbox.waiting.length
-		)
+		) {
+			// Text still in its wait holds back what came after it, so the order stays.
+			const next = ChangeOutbox.waiting[0];
+			if (
+				(next.kind === 'text' || next.kind === 'remove') &&
+				next.ready === false
+			)
+				return;
 			ChangeOutbox.send(ChangeOutbox.waiting.shift() as OutboxEntry);
+		}
 	}
 
 	/// Sends the entry, which is in flight from now on.

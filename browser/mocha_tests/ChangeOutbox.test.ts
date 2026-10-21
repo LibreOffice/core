@@ -32,6 +32,8 @@ describe('ChangeOutbox typed text', function () {
 		(app as any).socket.sendMessage = savedSend;
 		(RenderManager as any)._instance = savedInstance;
 		emptyTheOutbox();
+		ChangeOutbox.setMostInFlight(null);
+		ChangeOutbox.setTextWait(0);
 	});
 
 	function emptyTheOutbox(): void {
@@ -231,6 +233,85 @@ describe('ChangeOutbox typed text', function () {
 				'textinput id=0 text=b sequence=12',
 				'textcursor object=5 paragraph=0 index=0 sequence=13',
 				'textinput id=0 text=c sequence=13',
+			]);
+		});
+	});
+
+	it('sends as many changes at a time as it is set to', function () {
+		ChangeOutbox.setMostInFlight(1);
+		ChangeOutbox.take('textinput id=0 text=a sequence=11');
+		ChangeOutbox.take('textinput id=0 text=b sequence=12');
+		ChangeOutbox.take('textinput id=0 text=c sequence=13');
+		nodeassert.deepStrictEqual(sent, ['textinput id=0 text=a sequence=11']);
+
+		// A higher number lets what waits go out at once.
+		ChangeOutbox.setMostInFlight(2);
+		nodeassert.deepStrictEqual(sent, [
+			'textinput id=0 text=a sequence=11',
+			'textinput id=0 text=bc sequence=13',
+		]);
+
+		ChangeOutbox.setMostInFlight(null);
+		nodeassert.strictEqual(
+			(ChangeOutbox as any).mostInFlight,
+			ChangeOutbox.usualMostInFlight,
+		);
+	});
+
+	describe('with a wait for typed text', function () {
+		beforeEach(function () {
+			installFakeClock();
+			ChangeOutbox.setTextWait(100);
+		});
+		afterEach(function () {
+			emptyTheOutbox();
+			restoreClock();
+		});
+
+		it('sends what is typed during the wait as one message once the wait is over', function () {
+			ChangeOutbox.take('textinput id=0 text=a sequence=11');
+			advanceClock(50);
+			ChangeOutbox.take('textinput id=0 text=b sequence=12');
+			advanceClock(49);
+			nodeassert.deepStrictEqual(sent, []);
+			advanceClock(1);
+			nodeassert.deepStrictEqual(sent, ['textinput id=0 text=ab sequence=12']);
+		});
+
+		it('sends a deletion after the text before it, each once its own wait is over', function () {
+			ChangeOutbox.take('textinput id=0 text=a sequence=11');
+			advanceClock(50);
+			ChangeOutbox.take('removetextcontext id=0 before=1 after=0 sequence=12');
+			advanceClock(50);
+			nodeassert.deepStrictEqual(sent, ['textinput id=0 text=a sequence=11']);
+			advanceClock(50);
+			nodeassert.deepStrictEqual(sent, [
+				'textinput id=0 text=a sequence=11',
+				'removetextcontext id=0 before=1 after=0 sequence=12',
+			]);
+		});
+
+		it('sends the text ahead of a key before the wait is over', function () {
+			ChangeOutbox.take('textinput id=0 text=a sequence=11');
+			ChangeOutbox.sendAhead('key type=input char=13 key=1280 sequence=12');
+			nodeassert.deepStrictEqual(sent, ['textinput id=0 text=a sequence=11']);
+		});
+
+		it('waits again for text that merges into text kept back by the changes in flight', function () {
+			ChangeOutbox.setMostInFlight(1);
+			ChangeOutbox.take('textinput id=0 text=a sequence=11');
+			advanceClock(100);
+			ChangeOutbox.take('textinput id=0 text=b sequence=12');
+			advanceClock(100);
+			nodeassert.deepStrictEqual(sent, ['textinput id=0 text=a sequence=11']);
+			ChangeOutbox.take('textinput id=0 text=c sequence=13');
+			answer();
+			advanceClock(99);
+			nodeassert.deepStrictEqual(sent, ['textinput id=0 text=a sequence=11']);
+			advanceClock(1);
+			nodeassert.deepStrictEqual(sent, [
+				'textinput id=0 text=a sequence=11',
+				'textinput id=0 text=bc sequence=13',
 			]);
 		});
 	});
