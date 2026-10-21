@@ -291,6 +291,11 @@ forbidden.
 
 ## Translations
 
-Please submit translations via [Weblate][weblate].
+Please submit translations via [Weblate][weblate]. The project holds every
+string of the product: the browser front end, the document engine (in the
+[Engine](https://hosted.weblate.org/projects/collabora-online/engine/) category)
+and the desktop and mobile apps. Weblate carries the 46 languages that we build.
+If you want to maintain a language that is not there, ask on the
+[forum](https://forum.collaboraonline.com/).
 
 [weblate]: https://hosted.weblate.org/projects/collabora-online

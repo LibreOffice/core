@@ -61,3 +61,6 @@ and waste reviewer time and is forbidden.
 
 ## Translations
 Please submit translations via [Weblate](https://hosted.weblate.org/projects/collabora-online).
+The engine strings are in the [Engine](https://hosted.weblate.org/projects/collabora-online/engine/)
+category, one component per source module. Weblate carries the 46 languages that we build. If you
+want to maintain a language that is not there, ask on the [forum](https://forum.collaboraonline.com/).
