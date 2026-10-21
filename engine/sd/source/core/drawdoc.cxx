@@ -1338,7 +1338,13 @@ void SdDrawDocument::UpdateAllLinks()
         : css::document::UpdateDocMode::NO_UPDATE;
 
     if (nUpdateDocMode == css::document::UpdateDocMode::NO_UPDATE)
+    {
+        // An embedded drawing is loaded with no update mode, and its links wait for the document
+        // that contains it.
+        if (pDocShell->GetCreateMode() == SfxObjectCreateMode::EMBEDDED)
+            pDocShell->SetPendingLinkUpdateInfobar();
         return;
+    }
 
     bool bAskUpdate = true;
     switch (nUpdateDocMode)

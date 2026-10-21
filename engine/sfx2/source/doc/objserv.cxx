@@ -1694,6 +1694,24 @@ void SfxObjectShell::PerformLinkUpdate()
 {
 }
 
+void SfxObjectShell::SetPendingLinkUpdateInfobar()
+{
+    SfxObjectShell& rTop = GetTopShell();
+    if (&rTop == this)
+    {
+        bPendingLinkUpdateInfobar = true;
+        return;
+    }
+
+    // An embedded document offers its links in the infobar of the document the user sees. That
+    // document is usually shown already, because embedded documents load when they are needed.
+    SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst(&rTop);
+    if (!pViewFrame)
+        rTop.bPendingLinkUpdateInfobar = true;
+    else if (!pViewFrame->HasInfoBarWithID(u"enablecontent"))
+        rTop.ShowLinkUpdateInfobar();
+}
+
 void SfxObjectShell::CheckPendingLinkUpdateInfobar()
 {
     if (!bPendingLinkUpdateInfobar)

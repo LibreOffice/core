@@ -5646,16 +5646,6 @@ static void addSharedPresetPaths(std::u16string_view rPresetsUrl)
     reInitDictionaryList();
 }
 
-// The document that holds rShell, following embedded objects up to the top. An object being edited
-// in place is the current shell, and its outer document is the one the user sees.
-static SfxObjectShell& getTopDocumentShell(SfxObjectShell& rShell)
-{
-    SfxObjectShell* pShell = &rShell;
-    while (SfxObjectShell* pParent = SfxObjectShell::GetParentShell(pShell->GetModel()))
-        pShell = pParent;
-    return *pShell;
-}
-
 static void updateConfig(const OUString& rConfigPath)
 {
     osl::Directory aScanRootDir(rConfigPath);
@@ -5825,8 +5815,10 @@ void COKitImpl::setOption(const char *pOption, const char* pValue)
     }
     else if (strcmp(pOption, "allowlinkupdate") == 0)
     {
+        // An object being edited in place is the current shell, and its outer document is the one
+        // the user sees.
         if (SfxObjectShell* pDocSh = SfxObjectShell::Current())
-            getTopDocumentShell(*pDocSh).AllowLinkUpdate();
+            pDocSh->GetTopShell().AllowLinkUpdate();
     }
     else if (strcmp(pOption, "addconfig") == 0 || strcmp(pOption, "resetconfig") == 0)
     {

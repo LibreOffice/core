@@ -1107,6 +1107,14 @@ SfxObjectShell* SfxObjectShell::GetParentShell(const cpo::uno::Reference<cpo::un
     return pResult;
 }
 
+SfxObjectShell& SfxObjectShell::GetTopShell()
+{
+    SfxObjectShell* pShell = this;
+    while (SfxObjectShell* pParent = GetParentShell(pShell->GetModel()))
+        pShell = pParent;
+    return *pShell;
+}
+
 void SfxObjectShell::SetInitialized_Impl( const bool i_fromInitNew )
 {
     pImpl->bInitialized = true;

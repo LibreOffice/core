@@ -242,6 +242,15 @@ void DocumentLinksAdministrationManager::UpdateLinks()
         }
     }
     comphelper::EmbeddedObjectContainer& rEmbeddedObjectContainer = pShell->getEmbeddedObjectContainer();
+    // An embedded document is loaded with no update mode, and follows the document that contains it.
+    if (!bUpdate && pShell->GetCreateMode() == SfxObjectCreateMode::EMBEDDED)
+    {
+        if (rEmbeddedObjectContainer.getUserAllowsLinkUpdate())
+            GetLinkManager().UpdateAllLinks(false, OUString());
+        else
+            pShell->SetPendingLinkUpdateInfobar();
+        return;
+    }
     if (bUpdate)
     {
         if (bAskUpdate)
