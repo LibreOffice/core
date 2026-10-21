@@ -152,3 +152,48 @@ describe(['tagdesktop'], 'Assistant suggestions in a spreadsheet', function() {
 		cy.cGet('#aichat-see-more').should('contain.text', 'See more');
 	});
 });
+
+describe(['tagdesktop'], 'Cell references in an assistant reply', function() {
+	beforeEach(function() {
+		helper.setupAndLoadDocument('calc/aichat_formula.fods');
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+			aichatHelper.enableAIAndStubSocket(win, {
+				content: 'The lookup reads [Sheet1.A1:A2](cell://Sheet1.A1:A2).' +
+					' The totals are in [Budget!A1:A2](cell://Budget!A1:A2).' +
+					' The old range was Sheet1.B1:B2.',
+			});
+		});
+		aichatHelper.openAIChat();
+	});
+
+	it('a link to a range on a named sheet selects that range', function() {
+		aichatHelper.typeIntoAIInput('Where does the lookup read?');
+		aichatHelper.clickSend();
+		helper.waitUntilLayoutingIsIdle(this.win);
+
+		cy.cGet('#aichat-msg-1 .aichat-cell-ref[data-cell="Sheet1.A1:A2"]').click();
+		calcHelper.assertAddressAfterIdle(this.win, 'A1:A2');
+	});
+
+	it('a link to a range on another sheet shows that sheet and selects the range', function() {
+		aichatHelper.typeIntoAIInput('Where are the totals?');
+		aichatHelper.clickSend();
+		helper.waitUntilLayoutingIsIdle(this.win);
+
+		cy.cGet('.spreadsheet-tab.spreadsheet-tab-selected').should('have.text', 'Sheet1');
+		cy.cGet('#aichat-msg-1 .aichat-cell-ref[data-cell="Budget!A1:A2"]').click();
+		helper.processToIdle(this.win);
+		cy.cGet('.spreadsheet-tab.spreadsheet-tab-selected').should('have.text', 'Budget');
+		calcHelper.assertAddressAfterIdle(this.win, 'A1:A2');
+	});
+
+	it('a range written without a link stays plain text', function() {
+		aichatHelper.typeIntoAIInput('Where does the lookup read?');
+		aichatHelper.clickSend();
+		helper.waitUntilLayoutingIsIdle(this.win);
+
+		cy.cGet('#aichat-msg-1').should('contain.text', 'Sheet1.B1:B2');
+		cy.cGet('#aichat-msg-1 a').should('not.exist');
+	});
+});

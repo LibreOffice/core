@@ -16,6 +16,12 @@
      <table:table-cell office:value-type="float" office:value="3"><text:p>3</text:p></table:table-cell>
     </table:table-row>
    </table:table>
+   <table:table table:name="Budget">
+    <table:table-column/>
+    <table:table-row>
+     <table:table-cell office:value-type="float" office:value="4500"><text:p>4500</text:p></table:table-cell>
+    </table:table-row>
+   </table:table>
   </office:spreadsheet>
  </office:body>
 </office:document>

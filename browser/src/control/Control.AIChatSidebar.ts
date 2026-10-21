@@ -3125,24 +3125,57 @@ namespace cool {
 					'</p>';
 			}
 
-			// Convert cell:// links to clickable spans before sanitization
-			// Handles <a href="cell://A1">A1</a> produced by marked from [A1](cell://A1)
+			// Convert cell links to clickable spans before sanitization. marked
+			// turns [A1](cell://A1) into <a href="cell://A1">A1</a>. The target can
+			// also be a range or a cell on another sheet, such as Budget.A5:B10,
+			// with or without the cell:// prefix.
 			html = html.replace(
-				/<a\s+href="cell:\/\/([A-Z]{1,3}\d{1,7})"[^>]*>([^<]*)<\/a>/gi,
-				(_, addr, label) =>
-					'<span class="aichat-cell-ref" data-cell="' +
-					addr.toUpperCase() +
-					'" role="link" tabindex="0">' +
-					label +
-					'</span>',
+				/<a\s+href="(cell:\/\/)?([^"]*)"[^>]*>((?:(?!<\/a>)[\s\S])*)<\/a>/gi,
+				(link, prefix, target, label) => {
+					const reference = this.cellReference(target);
+					if (!reference) return prefix ? label : link;
+					return (
+						'<span class="aichat-cell-ref" data-cell="' +
+						app.LOUtil.escapeHtml(reference).replace(/"/g, '&quot;') +
+						'" role="link" tabindex="0">' +
+						label +
+						'</span>'
+					);
+				},
 			);
 
-			// Autolink bare URLs
+			// Autolink bare URLs. A cell reference such as Budget.A5:B10 reads as a
+			// URL whose scheme is "Budget.A5", so a URL with a scheme is linked only
+			// when the scheme is one for the web or for mail.
 			if (typeof Autolinker !== 'undefined') {
-				html = Autolinker.link(html);
+				html = Autolinker.link(html, {
+					replaceFn: (match: any) =>
+						match.getType() !== 'url' ||
+						match.getUrlMatchType() !== 'scheme' ||
+						/^(https?|ftp|mailto):/i.test(match.getUrl()),
+				});
 			}
 
 			return html;
+		}
+
+		// The cell or range a link target names, or null when it names neither.
+		// marked percent-encodes the target, so it is decoded first. A sheet is
+		// quoted when its name needs it, and is followed by a period or an
+		// exclamation mark.
+		private cellReference(target: string): string | null {
+			let reference: string;
+			try {
+				reference = decodeURIComponent(target);
+			} catch {
+				return null;
+			}
+			const sheet = "(?:\\$?(?:'(?:[^']|'')+'|[^\\s'\"!.:<>]+)[.!])?";
+			const cell = '\\$?[A-Za-z]{1,3}\\$?\\d{1,7}';
+			const pattern = new RegExp(
+				'^' + sheet + cell + '(?::' + sheet + cell + ')?$',
+			);
+			return pattern.test(reference) ? reference : null;
 		}
 
 		private findPrecedingUserMessage(
@@ -3821,14 +3854,11 @@ namespace cool {
 		}
 
 		private navigateToCell(cellAddress: string): void {
-			// Use the Name Box (address input, windowId -4) to navigate
-			const msg = JSON.stringify({
-				id: 'pos_window',
-				cmd: 'change',
-				data: cellAddress,
-				type: 'combobox',
+			// GoToCell reads the address in every reference style, so Budget.A5 and
+			// Budget!A5 both move the cursor, to another sheet if the address names one.
+			app.map.sendUnoCommand('.uno:GoToCell', {
+				ToPoint: { type: 'string', value: cellAddress },
 			});
-			app.socket.sendMessage('dialogevent -4 ' + msg);
 		}
 
 		public async sanityCheckData(): Promise<void> {
