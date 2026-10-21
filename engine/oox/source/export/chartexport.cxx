@@ -1131,9 +1131,17 @@ void ChartExport::WriteChartObj( const Reference< XShape >& xShape, sal_Int32 nI
     if (xNamed.is())
         sName = xNamed->getName();
 
+    OUString sDescr, sTitle;
+    if (GetProperty(xShapeProps, u"Description"_ustr))
+        mAny >>= sDescr;
+    if (GetProperty(xShapeProps, u"Title"_ustr))
+        mAny >>= sTitle;
+
     pFS->startElementNS( mnXmlNamespace, XML_cNvPr,
                           XML_id,     OString::number(nID),
-                          XML_name,   sName);
+                          XML_name,   sName,
+                          XML_descr,  sax_fastparser::UseIf(sDescr, !sDescr.isEmpty()),
+                          XML_title,  sax_fastparser::UseIf(sTitle, !sTitle.isEmpty()));
 
     OUString sURL;
     if ( GetProperty( xShapeProps, u"URL"_ustr ) )

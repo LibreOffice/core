@@ -1791,6 +1791,20 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testCompatibilityFlagsForNewSpreadsheet)
     CPPUNIT_ASSERT(!xSettings->getPropertyValue(u"LegacySingleLineFontwork"_ustr).get<bool>());
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testChartAltTextXLSX)
+{
+    // a chart with a title and a description
+    createScDoc("ods/chart-alt-text.ods");
+
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pDoc = parseExport(u"xl/drawings/drawing1.xml"_ustr);
+    CPPUNIT_ASSERT(pDoc);
+    // Without the fix the chart frame had neither
+    assertXPath(pDoc, "//xdr:graphicFrame/xdr:nvGraphicFramePr/xdr:cNvPr", "descr",
+                u"Sales rise in L2");
+    assertXPath(pDoc, "//xdr:graphicFrame/xdr:nvGraphicFramePr/xdr:cNvPr", "title", u"Sales chart");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
