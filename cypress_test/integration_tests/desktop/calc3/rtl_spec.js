@@ -222,5 +222,73 @@ describe(['tagdesktop'], 'RTL sheet tests', function() {
 
 		// Clean up: delete cell content.
 		helper.typeIntoDocument('{del}');
+
+		// --- Horizontal scrollbar drag. The bar is mirrored: the start of the
+		// sheet is its right end, so dragging the thumb to the left scrolls into
+		// the sheet, and the thumb stays under the pointer after the pointer went
+		// past either end.
+		helper.typeIntoDocument('{ctrl}{home}');
+		helper.processToIdle(win);
+
+		cy.then(function () {
+			const rect = win.document.getElementById('document-canvas').getBoundingClientRect();
+			const dpi = win.app.dpiScale;
+			const section = win.app.sectionContainer.getSectionWithName(win.app.CSections.Scroll.name);
+			const scrollProps = function () {
+				return win.app.activeDocument.activeLayout.scrollProperties;
+			};
+			const thickness = section.sectionProperties.scrollBarThickness;
+			const thumbSize = scrollProps().horizontalScrollSize - thickness;
+			// Left edge of the thumb on screen, where ScrollSection draws it.
+			const thumbLeft = function () {
+				const startX = win.app.sectionContainer.getWidth() - scrollProps().startX - thumbSize;
+				return rect.left + (section.myTopLeft[0] + startX) / dpi;
+			};
+
+			const barX = Math.floor(thumbLeft() + thumbSize / dpi / 2);
+			const barY = Math.floor(rect.top + (section.myTopLeft[1] + section.size[1]
+				- scrollProps().edgeOffset - thickness / 2) / dpi);
+			const grab = barX - thumbLeft();
+			const middleX = Math.floor(rect.left + rect.width / 2);
+			const startViewX = scrollProps().viewX;
+
+			const assertThumbUnderPointer = function (pointerX) {
+				cy.getFrameWindow().should(function () {
+					expect(pointerX - thumbLeft(), 'thumb under the pointer').to.be.closeTo(grab, 3);
+				});
+			};
+
+			cy.cGet('body').realMouseDown({
+				pointer: 'mouse', button: 'left',
+				x: barX, y: barY,
+				scrollBehavior: false
+			});
+
+			helper.retryUntil(
+				function () { cy.cGet('body').realMouseMove(barX - 30, barY); },
+				function () { return scrollProps().viewX !== startViewX; });
+			helper.processToIdle(win);
+			cy.then(function () {
+				expect(scrollProps().viewX, 'dragging to the left scrolls into the sheet')
+					.to.be.greaterThan(startViewX);
+			});
+
+			// Past the right end of the bar, the start of the sheet, then back.
+			cy.cGet('body').realMouseMove(Math.floor(rect.right - 2), barY);
+			helper.processToIdle(win);
+			cy.cGet('body').realMouseMove(middleX, barY);
+			helper.processToIdle(win);
+			assertThumbUnderPointer(middleX);
+
+			// Past the left end of the bar, then back.
+			cy.cGet('body').realMouseMove(Math.floor(rect.left + 2), barY);
+			helper.processToIdle(win);
+			cy.cGet('body').realMouseMove(middleX + 60, barY);
+			helper.processToIdle(win);
+			assertThumbUnderPointer(middleX + 60);
+
+			cy.cGet('body').realMouseUp({ pointer: 'mouse', button: 'left' });
+			helper.processToIdle(win);
+		});
 	});
 });

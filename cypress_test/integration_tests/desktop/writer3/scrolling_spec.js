@@ -147,6 +147,69 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', 
 		desktopHelper.assertScrollbarPosition('vertical', 200, 900);
 	});
 
+	it('A dragged scrollbar is back under the pointer after the pointer went past its ends', function() {
+		desktopHelper.assertScrollbarPosition('vertical', 0, 10);
+
+		helper.processToIdle(this.win);
+		helper.waitForOnDemandRenders(this.win);
+
+		cy.then(() => {
+			var win = this.win;
+			var rect = win.document.getElementById('document-canvas').getBoundingClientRect();
+			var dpi = win.app.dpiScale;
+			var thumbTop = function() {
+				return rect.top + win.app.activeDocument.activeLayout.scrollProperties.startY / dpi;
+			};
+			var thumbSize = win.app.activeDocument.activeLayout.scrollProperties.verticalScrollSize / dpi;
+
+			var barX = Math.floor(rect.right - 10);
+			var barY = Math.floor(thumbTop() + thumbSize / 2);
+			// Where on the thumb the pointer holds it, kept for the whole drag.
+			var grab = barY - thumbTop();
+			var sidebarX = Math.floor(rect.right + 80);
+			var middleY = Math.floor(rect.top + rect.height / 2);
+			var startScroll = parseInt(
+				win.document.querySelector('#test-div-vertical-scrollbar').textContent);
+
+			var assertThumbUnderPointer = function(pointerY) {
+				cy.getFrameWindow().should(function() {
+					expect(pointerY - thumbTop()).to.be.closeTo(grab, 3);
+				});
+			};
+
+			cy.cGet('body').realMouseDown({
+				pointer: 'mouse', button: 'left',
+				x: barX, y: barY,
+				scrollBehavior: false
+			});
+
+			helper.retryUntil(
+				function() { cy.cGet('body').realMouseMove(barX, barY + 30); },
+				function() {
+					var el = win.document.querySelector('#test-div-vertical-scrollbar');
+					return parseInt(el.textContent) !== startScroll;
+				});
+			helper.processToIdle(win);
+
+			// Above the top end of the bar, over the notebookbar, then back over the sidebar.
+			cy.cGet('body').realMouseMove(sidebarX, Math.floor(rect.top - 60));
+			helper.processToIdle(win);
+			cy.cGet('body').realMouseMove(sidebarX, middleY);
+			helper.processToIdle(win);
+			assertThumbUnderPointer(middleY);
+
+			// Below the bottom end of the bar, over the status bar, then back.
+			cy.cGet('body').realMouseMove(sidebarX, Math.floor(rect.bottom + 20));
+			helper.processToIdle(win);
+			cy.cGet('body').realMouseMove(sidebarX, middleY - 60);
+			helper.processToIdle(win);
+			assertThumbUnderPointer(middleY - 60);
+
+			cy.cGet('body').realMouseUp({ pointer: 'mouse', button: 'left' });
+			helper.processToIdle(win);
+		});
+	});
+
 	it('The view stops following the caret once the user scrolls it out of sight', function() {
 		desktopHelper.selectZoomLevel('40');
 

@@ -57,7 +57,8 @@ export class ScrollSection extends CanvasSectionObject {
 	}
 
 	public onInitialize (): void {
-		this.sectionProperties.previousDragDistance = null;
+		// [viewX, viewY] when a bar drag began, null when no bar is dragged.
+		this.sectionProperties.viewAtDragStart = null;
 
 		this.sectionProperties.scrollBarThickness = 6 * app.roundedDpiScale;
 
@@ -633,30 +634,33 @@ export class ScrollSection extends CanvasSectionObject {
 		this.clearQuickScrollTimeout();
 
 		if (this.sectionProperties.clickScrollVertical && this.containerObject.isDraggingSomething()) {
-			if (!this.sectionProperties.previousDragDistance) {
-				this.sectionProperties.previousDragDistance = [0, 0];
-			}
+			if (!this.sectionProperties.viewAtDragStart)
+				this.sectionProperties.viewAtDragStart = [scrollProps.viewX, scrollProps.viewY];
 
 			this.showVerticalScrollBar();
 
-			var diffY: number = dragDistance[1] - this.sectionProperties.previousDragDistance[1];
-			this.scrollVerticalWithOffset(diffY * scrollProps.verticalScrollRatio);
-
-			this.sectionProperties.previousDragDistance[1] = dragDistance[1];
+			// The view is placed from where it stood when the drag began, so a move clamped at an
+			// end of the document is not carried into the next ones and the bar stays under the
+			// pointer.
+			const wantedY = this.sectionProperties.viewAtDragStart[1]
+				+ dragDistance[1] * scrollProps.verticalScrollRatio;
+			this.scrollVerticalWithOffset(wantedY - scrollProps.viewY);
 
 			this.stopPropagating(); // Don't propagate to other sections.
 		}
 		else if (this.sectionProperties.clickScrollHorizontal && this.containerObject.isDraggingSomething()) {
-			if (!this.sectionProperties.previousDragDistance) {
-				this.sectionProperties.previousDragDistance = [0, 0];
-			}
+			if (!this.sectionProperties.viewAtDragStart)
+				this.sectionProperties.viewAtDragStart = [scrollProps.viewX, scrollProps.viewY];
 
 			this.showHorizontalScrollBar();
 
-			var diffX: number = dragDistance[0] - this.sectionProperties.previousDragDistance[0];
-			this.scrollHorizontalWithOffset(scrollProps.horizontalScrollRatio * diffX);
+			// viewX runs in document direction, the drag and the offset scroll() takes run in
+			// screen direction, which is mirrored in an RTL sheet.
+			const sign = this.isRTL() ? -1 : 1;
+			this.scrollHorizontalWithOffset(
+				sign * (this.sectionProperties.viewAtDragStart[0] - scrollProps.viewX)
+				+ dragDistance[0] * scrollProps.horizontalScrollRatio);
 
-			this.sectionProperties.previousDragDistance[0] = dragDistance[0];
 			this.stopPropagating(); // Don't propagate to other sections.
 		}
 		else {
@@ -860,7 +864,7 @@ export class ScrollSection extends CanvasSectionObject {
 
 		this.sectionProperties.clickScrollVertical = false;
 		this.sectionProperties.clickScrollHorizontal = false;
-		this.sectionProperties.previousDragDistance = null;
+		this.sectionProperties.viewAtDragStart = null;
 		this.sectionProperties.viewBeforeTheBarDrag = null;
 		this.listenForEscape(false);
 
@@ -892,7 +896,7 @@ export class ScrollSection extends CanvasSectionObject {
 			this.sectionProperties.clickScrollHorizontal = false;
 		}
 
-		this.sectionProperties.previousDragDistance = null;
+		this.sectionProperties.viewAtDragStart = null;
 		this.sectionProperties.viewBeforeTheBarDrag = null;
 		this.listenForEscape(false);
 
