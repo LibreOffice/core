@@ -586,6 +586,48 @@ function test() {
     // Setting the cursor ends the selection of the image (the cursor itself is not read again here,
     // see above):
     console.assert(doc.setCursor(doc.newPosition(para5, 1)).getSelection() === null);
+    // Selections of objects other than text, made through the UNO model of the document:
+    if (globalThis.cool) {
+        const model = cool.getActiveUnoModel();
+        const controller = model.getCurrentController();
+        // GAS documents have no shapes or text frames.  While one is selected, there is neither a
+        // cursor nor a selection, even if the shape contains text:
+        const shape = model.createInstance('com.sun.star.drawing.RectangleShape');
+        model.getDrawPage().add(shape);
+        controller.select(shape);
+        console.assert(doc.getCursor() === null);
+        console.assert(doc.getSelection() === null);
+        shape.setString('Shape');
+        controller.select(shape);
+        console.assert(doc.getCursor() === null);
+        console.assert(doc.getSelection() === null);
+        model.getDrawPage().remove(shape);
+        const frame = model.createInstance('com.sun.star.text.TextFrame');
+        model.getText().insertTextContent(model.getText().getEnd(), frame, false);
+        frame.getText().setString('Frame');
+        controller.select(frame);
+        console.assert(doc.getCursor() === null);
+        console.assert(doc.getSelection() === null);
+        frame.dispose();
+        // A GAS script cannot select a positioned image, as it is no element of a range.  While one
+        // is selected (here a new graphic object, which is anchored to a paragraph), there is
+        // neither a cursor nor a selection:
+        const graphic = model.createInstance('com.sun.star.text.TextGraphicObject');
+        model.getText().insertTextContent(model.getText().getStart(), graphic, false);
+        controller.select(graphic);
+        console.assert(doc.getCursor() === null);
+        console.assert(doc.getSelection() === null);
+        graphic.dispose();
+        // While table cells are selected, there is no cursor (the selection itself is not checked,
+        // as selected table cells are not yet mapped to range elements):
+        const table = model.createInstance('com.sun.star.text.TextTable');
+        table.initialize(1, 2);
+        model.getText().insertTextContent(model.getText().getEnd(), table, false);
+        controller.select(table.getCellRangeByName('A1:B1'));
+        console.assert(doc.getCursor() === null);
+        table.dispose();
+        console.assert(doc.setCursor(doc.newPosition(para5, 1)).getCursor() !== null);
+    }
 
     // Clearing the body, which still holds a table and a list item here, keeps one empty
     // paragraph:

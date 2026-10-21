@@ -3374,21 +3374,29 @@ public:
         cpo::uno::Reference<css::text::XTextDocument> const doc(model_, cpo::uno::UNO_QUERY_THROW);
         cpo::uno::Reference<css::view::XSelectionSupplier> const sup(
             doc->getCurrentController(), cpo::uno::UNO_QUERY_THROW);
-        auto const selected = sup->getSelection();
+        cpo::uno::Reference<css::lang::XServiceInfo> const info{
+            sup->getSelection(), cpo::uno::UNO_QUERY};
+        // A positioned image is not in the text, so selecting one selects no text of the document:
+        if (info.is() && info->supportsService(u"com.sun.star.text.TextGraphicObject"_ustr)
+            && cpo::uno::Reference<css::beans::XPropertySet>(info, cpo::uno::UNO_QUERY_THROW)
+                ->getPropertyValue(u"AnchorType"_ustr)
+                != cpo::uno::Any(css::text::TextContentAnchorType_AS_CHARACTER)) {
+            return {false, {}};
+        }
         // A selected graphic object is the object itself rather than a collection of ranges:
-        if (cpo::uno::Reference<css::lang::XServiceInfo> const info{selected, cpo::uno::UNO_QUERY};
-            info.is() && info->supportsService(u"com.sun.star.text.TextGraphicObject"_ustr))
-        {
+        if (info.is() && info->supportsService(u"com.sun.star.text.TextGraphicObject"_ustr)) {
             return {
                 true,
                 cpo::uno::Reference<scriptinterop::XSelection>(new ImageSelectionImpl(
                     cpo::uno::Reference<css::text::XTextContent>(info, cpo::uno::UNO_QUERY_THROW)))};
         }
-        cpo::uno::Reference<css::container::XIndexAccess> ranges;
-        selected >>= ranges;
-        if (!ranges.is()) {
+        // Selected shapes are a collection of shapes, and the text in them is not selected text of
+        // the document:
+        if (!(info.is() && info->supportsService(u"com.sun.star.text.TextRanges"_ustr))) {
             return {false, {}};
         }
+        cpo::uno::Reference<css::container::XIndexAccess> const ranges(
+            info, cpo::uno::UNO_QUERY_THROW);
         bool anyContent = false;
         auto const n = ranges->getCount();
         for (sal_Int32 i = 0; i != n; ++i) {
@@ -3413,12 +3421,12 @@ public:
         return new BodyImpl(model_, doc->getText());
     }
 
-    // There is no cursor while there is a selection.  The position given to setCursor stays the
-    // cursor, with its own element and offset, for as long as the view cursor is still at that
-    // position:
+    // There is no cursor while there is a selection, or while the view has no text cursor.  The
+    // position given to setCursor stays the cursor, with its own element and offset, for as long as
+    // the view cursor is still at that position:
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XCursor>> getCursor() override
     {
-        if (getSelection().IsPresent) {
+        if (getSelection().IsPresent || !hasTextCursor()) {
             return {false, {}};
         }
         if (cursorPosition_.is()) {
@@ -3608,6 +3616,16 @@ public:
     }
 
 private:
+    // The view has a text cursor while text is selected, and none while table cells, a shape, a
+    // frame or some other object are selected:
+    bool hasTextCursor() {
+        cpo::uno::Reference<css::view::XSelectionSupplier> const sup(
+            model_->getCurrentController(), cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::lang::XServiceInfo> const info{
+            sup->getSelection(), cpo::uno::UNO_QUERY};
+        return info.is() && info->supportsService(u"com.sun.star.text.TextRanges"_ustr);
+    }
+
     cpo::uno::Reference<css::frame::XModel> model_;
     cpo::uno::Reference<scriptinterop::XCursor> cursorPosition_;
 };
