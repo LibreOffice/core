@@ -279,7 +279,6 @@ void CPropertyHdl::LoadProperties( CMetaInfoReader *pMetaInfoReader )
 
     for ( UINT i = 0; i < UINT(gPropertyTableSize); ++i )
     {
-        PropVariantClear( &propvarValues );
         HRESULT hr = GetItemData( pMetaInfoReader, i, &propvarValues);
         if (hr == S_OK)
         {
@@ -291,6 +290,7 @@ void CPropertyHdl::LoadProperties( CMetaInfoReader *pMetaInfoReader )
                 hr = m_pCache->SetValueAndState( g_rgPROPERTIES[i], &propvarValues, PSC_NORMAL );
             }
         }
+        PropVariantClear( &propvarValues );
     }
 }
 
