@@ -102,6 +102,9 @@ window.L.Control.JSDialog = window.L.Control.extend({
 		delete this.openTabRequests[id];
 		delete this.fillTypes[id];
 
+		if (dialogInfo.isSnackbar)
+			JSDialog.SnackbarController.onSnackbarRemoved();
+
 		return builder;
 	},
 
@@ -137,6 +140,10 @@ window.L.Control.JSDialog = window.L.Control.extend({
 	closeAll: function(leaveSnackbar, leaveAlert) {
 		var alertId = JSDialog.generateModalId('cool_alert');
 		var dialogs = Object.keys(this.dialogs);
+
+		if (!leaveSnackbar)
+			JSDialog.SnackbarController.clearQueue();
+
 		for (var i = 0; i < dialogs.length; i++) {
 			if (leaveSnackbar && dialogs[i] && dialogs[i] === 'snackbar')
 				continue;

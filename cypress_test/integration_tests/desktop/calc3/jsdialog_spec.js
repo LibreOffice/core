@@ -162,6 +162,38 @@ describe(['tagdesktop'], 'JSDialog unit test', { testIsolation: false }, functio
 		cy.cGet('#snackbar').should('not.exist');
 	});
 
+	// Closing every dialog while the user counts as idle removes the snackbar.
+	// A snackbar queued behind it is dropped with it. The next snackbar still
+	// shows.
+	it('Snackbar shows again after all dialogs are closed while idle', function() {
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.uiManager.showSnackbar('first notification', null, null, -1);
+			win.app.map.uiManager.showSnackbar('queued notification', null, null, -1);
+		});
+		cy.cGet('#snackbar').should('be.visible');
+		cy.cGet('#snackbar').should('contain.text', 'first notification');
+
+		cy.getFrameWindow().then(function(win) {
+			const wasActive = win.app.idleHandler._active;
+			win.app.idleHandler._active = false;
+			win.app.map.uiManager.closeAll();
+			win.app.idleHandler._active = wasActive;
+		});
+		cy.cGet('#snackbar').should('not.exist');
+
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.uiManager.showSnackbar('second notification', null, null, -1);
+		});
+		cy.cGet('#snackbar').should('be.visible');
+		cy.cGet('#snackbar').should('contain.text', 'second notification');
+
+		cy.getFrameWindow().then(function(win) {
+			win.app.map.uiManager.closeSnackbar();
+			helper.processToIdle(win);
+		});
+		cy.cGet('#snackbar').should('not.exist');
+	});
+
 	it('Snackbar without an action is announced through the live region', function() {
 		cy.getFrameWindow().then(function(win) {
 			win.app.map.uiManager.showSnackbar('announced notification', null, null, -1);

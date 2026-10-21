@@ -49,10 +49,9 @@ class SnackbarController {
 		});
 	}
 
+	// Sends the close for the snackbar dialog. The dialog removal calls back
+	// into onSnackbarRemoved, which is where the queue state is reset.
 	private removeSnackbar() {
-		app.timerRegistry.clearTimeout(this.fadeOutTimer);
-		this.fadeOutTimer = null;
-
 		var closeMessage = {
 			id: 'snackbar',
 			jsontype: 'dialog',
@@ -62,10 +61,21 @@ class SnackbarController {
 		app.socket._onMessage({
 			textMsg: 'jsdialog: ' + JSON.stringify(closeMessage),
 		});
+	}
+
+	// The snackbar dialog is gone from the DOM
+	public onSnackbarRemoved() {
+		app.timerRegistry.clearTimeout(this.fadeOutTimer);
+		this.fadeOutTimer = null;
 
 		this.showingSnackbar = false;
 		this.writeLiveRegion('');
 		this.scheduleSnackbar();
+	}
+
+	// Drops the snackbars that wait for the one on screen to close.
+	public clearQueue() {
+		this.snackbarQueue = [];
 	}
 
 	public closeSnackbar(byUser: boolean = false) {
