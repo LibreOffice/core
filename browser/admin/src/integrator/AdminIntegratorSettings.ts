@@ -5041,6 +5041,16 @@ class SettingIframe {
 			}),
 		);
 		section.appendChild(providerField);
+		// Which one translates now, so a choice the server does not honour, or
+		// a provider not yet set up, is not a puzzle.
+		const active = infos.providers.find((p) => p.id === infos.active);
+		section.appendChild(
+			this.createParagraph(
+				active
+					? _('Translating with {0}.').replace('{0}', active.name)
+					: _('No provider is set up: the Translate command is not offered.'),
+			),
+		);
 		for (const panel of panels) section.appendChild(panel);
 		return section;
 	}

@@ -40,6 +40,56 @@ interface COOLTouch {
 	currentlyUsingTouchscreen: () => boolean;
 }
 
+// What the engine says about one remote sentence checker, through the
+// .uno:RemoteGrammarCheckers command values: how it is set up, what the
+// server offers, and what the server set up. The key never comes.
+interface RemoteCheckerInfo {
+	id: 'languagetool' | 'duden' | 'grammalecte';
+	enabled: boolean;
+	baseURL: string;
+	username?: string;
+	hasCredentials: boolean;
+	sslVerify: boolean;
+	allowUserSettings: boolean;
+	checksSpelling: boolean;
+	locales: string[];
+	spellcheckingLevel?: number;
+	orthographyStandard?: string;
+	messageLevel?: number;
+	propertySets?: string[];
+	dictionaries?: string[];
+	availablePropertySets?: string[];
+	availableDictionaries?: string[];
+	style?: Record<string, boolean>;
+	options?: Record<string, boolean>;
+	server?: Partial<RemoteCheckerInfo>;
+}
+
+// What the engine says about one translation provider, through the
+// .uno:TranslationProviders command values. The key never comes.
+interface TranslationProviderInfo {
+	id: 'deepl' | 'libretranslate';
+	name: string;
+	enabled: boolean;
+	configured: boolean;
+	allowUserSettings: boolean;
+	hasCredentials: boolean;
+	apiURL?: string;
+	baseURL?: string;
+	sslVerify?: boolean;
+	targetLanguages: string[];
+	server?: Partial<TranslationProviderInfo>;
+}
+
+// The translation providers: which one is asked for, which one the server
+// asks for, which one translates, and each of them.
+interface TranslationProvidersInfo {
+	provider: string;
+	serverProvider?: string;
+	active: string;
+	providers: TranslationProviderInfo[];
+}
+
 interface Window {
 	touch: COOLTouch;
 	setLogging(value: boolean): void;
@@ -259,9 +309,9 @@ interface AppInterface {
 	// The sentence checking rule packages the engine reports as installed.
 	sentenceCheckingPackages?: Array<{ id: string; locale: string }>;
 	// The remote sentence checkers as the engine has them set up.
-	remoteGrammarCheckers?: Array<any>;
+	remoteGrammarCheckers?: RemoteCheckerInfo[];
 	// The translation providers as the engine runs them, for the settings dialog.
-	translationProviders?: any;
+	translationProviders?: TranslationProvidersInfo | null;
 	// Whether this document is running with this user's own document
 	// settings. It is running with whoever opened it first's.
 	userPresetsApplied?: boolean;

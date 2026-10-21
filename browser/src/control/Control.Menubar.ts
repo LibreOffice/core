@@ -2938,6 +2938,12 @@ class Menubar extends window.L.Control {
 		if (window.ThisIsAMobileApp && menuItem.mobileapp === false) {
 			return false;
 		}
+		// An entry hidden while its command is disabled, as the desktop menu
+		// hides it when it opens.
+		if (menuItem.hideWhenDisabled && menuItem.uno
+			&& this._map['stateChangeHandler'].getItemValue(menuItem.uno) === 'disabled') {
+			return false;
+		}
 		if (window.ThisIsTheiOSApp && menuItem.iosapp === false) {
 			return false;
 		}
