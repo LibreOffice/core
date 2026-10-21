@@ -51,10 +51,13 @@ and the Translate dialog lists what the server has.
 Every model translates to or from English, so a translation between two
 other languages goes through English. The languages are chosen when the
 image builds, with the LIBRETRANSLATE_LANGUAGES build argument (en,de,fr,
-es,it,nl,pt by default): each direction is a package of some 100 MB, and
-each loaded model takes a few hundred MB of memory. A paragraph takes a
-CPU core for a few seconds; LT_THREADS in compose.yaml says how many are
-translated at once. Collabora Online waits 30 seconds for each one.
+es,it,nl,pt by default), two at least: each direction is a package of
+some 100 MB, and each loaded model takes a few hundred MB of memory. The
+image holds the models and everything else the server needs, so it runs
+with no network at all, as in compose.yaml. A paragraph takes a CPU core
+for a few seconds; the LT_THREADS environment variable says how many are
+translated at once, four by default. Collabora Online waits 30 seconds
+for each one.
 
 The server has no authentication by default and no TLS. Anyone who can
 reach it can send it text, so keep it on an internal network, as

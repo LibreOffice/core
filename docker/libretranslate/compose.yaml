@@ -31,10 +31,10 @@ services:
       # The languages to build the models for; see the README.
       # args:
       #   LIBRETRANSLATE_LANGUAGES: en,de,fr
-    # How many requests are translated at once; a paragraph takes a CPU
-    # core for a few seconds.
-    environment:
-      - LT_THREADS=4
+    # How many requests are translated at once, four unless set here; a
+    # paragraph takes a CPU core for a few seconds.
+    # environment:
+    #   - LT_THREADS=8
     networks:
       - translators
     restart: unless-stopped
