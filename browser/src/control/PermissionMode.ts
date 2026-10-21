@@ -89,10 +89,11 @@ function reviewModeTransitions(
 		},
 		{ from: Unknown, to: Requested, triggers: [User] },
 
-		// Recording turned on from the Review tab or a shortcut opens the tab. A view that
-		// becomes editable while recording is already on keeps its tab.
-		{ from: Off, to: On, triggers: [CoreState, User], action: showReviewTab },
-		{ from: Off, to: On, triggers: [Permission] },
+		// A core report of recording on keeps the current tab. Recording is shared by the
+		// whole document, so the report can come from another user's action. A view that
+		// becomes editable while recording is already on keeps its tab too.
+		{ from: Off, to: On, triggers: [User], action: showReviewTab },
+		{ from: Off, to: On, triggers: [CoreState, Permission] },
 		{
 			from: Off,
 			to: Starting,
