@@ -186,6 +186,7 @@ public:
     virtual void SetMaxClientSize(tools::Long nWidth, tools::Long nHeight) override;
     virtual void SetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth, tools::Long nHeight,
                             sal_uInt16 nFlags) override;
+    virtual bool StartSystemMove() override;
     virtual Size GetClientSize() override;
     SalFrameGeometry GetUnmirroredGeometry() const override;
     virtual void GetWorkArea(AbsoluteScreenPixelRectangle& rRect) override;

@@ -495,6 +495,18 @@ void QtFrame::SetPosSize(tools::Long nX, tools::Long nY, tools::Long nWidth, too
     asChild()->move(round(nX / devicePixelRatioF()), round(nY / devicePixelRatioF()));
 }
 
+bool QtFrame::StartSystemMove()
+{
+    SolarMutexGuard g;
+
+    bool bRet = false;
+    GetQtInstance().RunInMainThread([&] {
+        if (QWindow* pWindow = windowHandle())
+            bRet = pWindow->startSystemMove();
+    });
+    return bRet;
+}
+
 Size QtFrame::GetClientSize()
 {
     return Size(round(m_pQWidget->width() * devicePixelRatioF()),
