@@ -20,11 +20,11 @@
 // TODO: this uses the legacy com.sun.star UNO API directly. Port each use to
 // the cool/cpo facade, or better to the GAS-compatible replacement, once those
 // cover what LibreLogo needs. Touchpoints to migrate:
-//   - createInstance('com.sun.star.text.TextGraphicObject') (replaceCanvas, insertAtCursor)
+//   - createInstance('com.sun.star.text.TextGraphicObject') (replaceCanvas)
 //   - css.io.TempFile, css.graphic.GraphicProvider (loadGraphic)
 //   - css.beans.PropertyValue / PropertyState (loadGraphic)
 //   - css.text.* enums: TextContentAnchorType, HoriOrientation, VertOrientation,
-//     RelOrientation, WrapTextMode (replaceCanvas, insertAtCursor)
+//     RelOrientation, WrapTextMode (replaceCanvas)
 function kitApply(ops) {
 	const PT_TO_MM100 = 2540 / 72;
 	function utf8(str) {
@@ -105,13 +105,32 @@ function kitApply(ops) {
 
 	// The drawing as an inline image at the cursor.
 	function insertAtCursor(op) {
-		const graphic = loadGraphic(op.svg);
-		const obj = model.createInstance('com.sun.star.text.TextGraphicObject');
-		obj.setPropertyValue('Graphic', graphic);
-		obj.setPropertyValue('Width', Math.round(op.w * PT_TO_MM100));
-		obj.setPropertyValue('Height', Math.round(op.h * PT_TO_MM100));
-		obj.setPropertyValue('AnchorType', css.text.TextContentAnchorType.AS_CHARACTER);
-		model.getText().insertTextContent(anchorRange(), obj, false);
+		const doc = DocumentApp.getActiveDocument();
+		let position = doc.getCursor();
+		const selection = doc.getSelection();
+		// While a shape, a frame, a positioned image or table cells are selected instead of text,
+		// the drawing goes at the start of the document:
+		if (!position && !selection) {
+			const body = doc.getBody();
+			let first = body.getChild(0);
+			for (let i = 1; first.getType() === DocumentApp.ElementType.TABLE; ++i) {
+				first = body.getChild(i);
+			}
+			position = doc.newPosition(first, 0);
+		} else if (!position) {
+			const first = selection.getRangeElements()[0];
+			const element = first.getElement();
+			if (element.getType() === DocumentApp.ElementType.INLINE_IMAGE) {
+				const parent = element.getParent();
+				position = doc.newPosition(parent, parent.getChildIndex(element));
+			} else {
+				position = doc.newPosition(
+					element,
+					first.isPartial() ? first.getStartOffset() : 0,
+				);
+			}
+		}
+		position.insertInlineImage(Utilities.newBlob(op.svg, 'image/svg+xml'));
 	}
 
 	const results = [];
