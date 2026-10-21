@@ -1249,7 +1249,6 @@ void GtkSalFrame::InitCommon()
     m_aSystemData.SetWindowHandle(GetNativeWindowHandle(m_pWindow));
     m_aSystemData.pSalFrame     = this;
     m_aSystemData.pWidget       = m_pWindow;
-    m_aSystemData.nScreen       = m_nXScreen.getXScreen();
 
 #if defined(GDK_WINDOWING_X11)
     GdkDisplay *pDisplay = getGdkDisplay();
