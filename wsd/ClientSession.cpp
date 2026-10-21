@@ -1277,7 +1277,7 @@ bool ClientSession::_handleInput(const char *buffer, int length)
     {
         // A test needs a connection that dies the way a broken network kills one.
         if (const auto ws = std::dynamic_pointer_cast<WebSocketHandler>(_protocol))
-            ws->dropConnection();
+            ws->debugDropConnection();
         return true;
     }
 #endif
