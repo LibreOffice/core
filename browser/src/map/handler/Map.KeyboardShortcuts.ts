@@ -553,11 +553,13 @@ keyboardShortcuts.definitions.set('default', new Array<ShortcutDescriptor>(
     new ShortcutDescriptor({ docType: 'presentation', eventType: 'keydown', key: 'PageDown', dispatchAction: 'nextpart', viewType: ViewType.ReadOnly }),
     new ShortcutDescriptor({ docType: 'presentation', eventType: 'keydown', modifier: Mod.CTRL, key: 'a', dispatchAction: 'selectallslides',
         condition: () => app.map.keyboard._slideSorterFocused() }),
+    new ShortcutDescriptor({ docType: 'presentation', eventType: 'keydown', modifier: Mod.SHIFT, key: 'F3', unoAction: '.uno:CopyObjects', viewType: ViewType.Edit }),
 
     // Draw.
     new ShortcutDescriptor({ docType: 'drawing', eventType: 'keydown', key: 'F5' }),
     new ShortcutDescriptor({ docType: 'drawing', eventType: 'keydown', key: 'PageUp', dispatchAction: 'previouspart', viewType: ViewType.ReadOnly }),
     new ShortcutDescriptor({ docType: 'drawing', eventType: 'keydown', key: 'PageDown', dispatchAction: 'nextpart', viewType: ViewType.ReadOnly }),
+    new ShortcutDescriptor({ docType: 'drawing', eventType: 'keydown', modifier: Mod.SHIFT, key: 'F3', unoAction: '.uno:CopyObjects', viewType: ViewType.Edit }),
     new ShortcutDescriptor({ docType: 'drawing', eventType: 'keydown', key: 'End', dispatchAction: 'lastpart', viewType: ViewType.ReadOnly }),
     new ShortcutDescriptor({ docType: 'drawing', eventType: 'keydown', key: 'Home', dispatchAction: 'firstpart', viewType: ViewType.ReadOnly }),
     new ShortcutDescriptor({ docType: 'drawing', eventType: 'keydown', modifier: Mod.CTRL, key: 'a', dispatchAction: 'selectallslides',

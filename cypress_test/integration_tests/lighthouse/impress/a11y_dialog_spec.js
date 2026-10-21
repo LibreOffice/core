@@ -366,6 +366,20 @@ describe(['taglighthouse'], 'Accessibility Impress Dialog Tests', { testIsolatio
         helper.typeIntoDocument('{esc}');
     });
 
+    it('Duplicate dialog', function () {
+        cy.then(() => {
+            win.app.map.sendUnoCommand('.uno:BasicShapes.octagon');
+        });
+        cy.cGet('#test-div-shapeHandlesSection').should('exist');
+
+        cy.then(() => {
+            win.app.map.sendUnoCommand('.uno:CopyObjects');
+        });
+        a11yHelper.handleDialog(win, 1, '.uno:CopyObjects');
+
+        helper.typeIntoDocument('{esc}');
+    });
+
     it('Interaction dialog', function () {
         cy.then(() => {
             win.app.map.sendUnoCommand('.uno:BasicShapes.octagon');

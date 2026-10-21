@@ -144,6 +144,20 @@ describe(['taglighthouse'], 'Accessibility Draw Dialog Tests', { testIsolation: 
 		helper.typeIntoDocument('{esc}');
 	});
 
+	it('Duplicate dialog', function () {
+		cy.then(() => {
+			win.app.map.sendUnoCommand('.uno:BasicShapes.octagon');
+		});
+		cy.cGet('#test-div-shapeHandlesSection').should('exist');
+
+		cy.then(() => {
+			win.app.map.sendUnoCommand('.uno:CopyObjects');
+		});
+		a11yHelper.handleDialog(win, 1, '.uno:CopyObjects');
+
+		helper.typeIntoDocument('{esc}');
+	});
+
 	it('Object dialog', function () {
 		cy.then(() => {
 			win.app.map.sendUnoCommand('.uno:BasicShapes.octagon');

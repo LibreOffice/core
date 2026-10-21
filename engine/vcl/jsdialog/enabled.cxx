@@ -349,6 +349,7 @@ constexpr auto SimpressDialogList
 constexpr auto SdrawDialogList
     = frozen::make_unordered_set<std::u16string_view>({
     // sdraw
+    { u"modules/sdraw/ui/copydlg.ui" },
     { u"modules/sdraw/ui/drawchardialog.ui" },
     { u"modules/sdraw/ui/drawpagedialog.ui" },
     { u"modules/sdraw/ui/drawparadialog.ui" }
