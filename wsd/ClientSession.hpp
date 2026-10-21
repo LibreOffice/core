@@ -103,8 +103,8 @@ public:
     /// Integer id of the view in the kit process, or -1 if unknown
     int getKitViewId() const { return _kitViewId; }
 
-    /// True when the token is this view's current or previous reconnect token.
-    bool matchesReconnectToken(std::string_view token) const;
+    /// This view's current and previous reconnect tokens.
+    const RotatingToken& getReconnectTokens() const { return _reconnectTokens; }
 
     /// Make a new reconnect token and keep the old one as the previous token, sending the new one
     /// to the browser when notifyClient is set.

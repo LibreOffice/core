@@ -305,11 +305,6 @@ void ClientSession::rotateReconnectToken(bool notifyClient)
         sendTextFrame("reconnecttoken: " + _reconnectTokens.getCurrent());
 }
 
-bool ClientSession::matchesReconnectToken(std::string_view token) const
-{
-    return _reconnectTokens.matches(token);
-}
-
 std::string ClientSession::getClipboardURI(bool encode)
 {
     if (_wopiFileInfo && _wopiFileInfo->getDisableCopy())

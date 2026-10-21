@@ -5566,7 +5566,7 @@ bool DocumentBroker::unparkSession(std::string_view reconnectToken,
     std::shared_ptr<ClientSession> session;
     for (const auto& it : _sessions)
     {
-        if (!it.second->matchesReconnectToken(reconnectToken))
+        if (!it.second->getReconnectTokens().matches(reconnectToken))
             continue;
         if (!it.second->isParked() && !it.second->isLive())
             continue; // Still loading, or already on its way out.
