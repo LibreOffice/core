@@ -72,36 +72,39 @@ std::string LockManager::unlockLink = std::string();
 void LockManager::generateLockedCommandList()
 {
 #ifdef ENABLE_FEATURE_LOCK
-
-    LockedCommandListString = ConfigUtil::getString("feature_lock.locked_commands", "");
-    Util::trim(LockedCommandListString);
-    LockedCommandListString = addRelatedCommands(LockedCommandListString);
-    StringVector commandList = StringVector::tokenize(LockedCommandListString);
-
-    std::string command;
-    for (std::size_t i = 0; i < commandList.size(); i++)
+    // Several threads can ask for the list at the same time. A function-local static is initialised
+    // only once, so only the first of them fills the list and the others wait for it.
+    [[maybe_unused]] static const bool generated = []
     {
-        command = commandList[i];
-        if (!command.empty())
+        LockedCommandListString = ConfigUtil::getString("feature_lock.locked_commands", "");
+        Util::trim(LockedCommandListString);
+        LockedCommandListString = addRelatedCommands(LockedCommandListString);
+        StringVector commandList = StringVector::tokenize(LockedCommandListString);
+
+        std::string command;
+        for (std::size_t i = 0; i < commandList.size(); i++)
         {
-            LockedCommandList.emplace(command);
+            command = commandList[i];
+            if (!command.empty())
+            {
+                LockedCommandList.emplace(command);
+            }
         }
-    }
+        return true;
+    }();
 #endif
 }
 
 const std::unordered_set<std::string>& LockManager::getLockedCommandList()
 {
-    if (LockedCommandList.empty())
-        generateLockedCommandList();
+    generateLockedCommandList();
 
     return LockedCommandList;
 }
 
 std::string LockManager::getLockedCommandListString()
 {
-    if (LockedCommandListString.empty())
-        generateLockedCommandList();
+    generateLockedCommandList();
 
     return LockedCommandListString;
 }
