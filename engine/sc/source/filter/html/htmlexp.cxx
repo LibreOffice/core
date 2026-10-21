@@ -164,7 +164,7 @@ static OString lcl_getColGroupString(sal_Int32 nSpan, sal_Int32 nWidth)
     return aByteStr.makeStringAndClear();
 }
 
-static void lcl_AddStamp( OUString& rStr, std::u16string_view rName,
+static OUString lcl_MakeStamp( const OUString& rName,
     const css::util::DateTime& rDateTime,
     const LocaleDataWrapper& rLoc )
 {
@@ -176,21 +176,10 @@ static void lcl_AddStamp( OUString& rStr, std::u16string_view rName,
     OUString        aStrDate    = rLoc.getDate( aDateTime );
     OUString        aStrTime    = rLoc.getTime( aDateTime );
 
-    rStr += GLOBSTR( STR_BY ) + " ";
-    if (!rName.empty())
-        rStr += rName;
-    else
-        rStr += "???";
-    rStr += " " + GLOBSTR( STR_ON ) + " ";
-    if (!aStrDate.isEmpty())
-        rStr += aStrDate;
-    else
-        rStr += "???";
-    rStr += ", ";
-    if (!aStrTime.isEmpty())
-        rStr += aStrTime;
-    else
-        rStr += "???";
+    return ScResId(STR_DOC_PRINTED_BY)
+        .replaceFirst("%1", rName.isEmpty() ? u"???"_ustr : rName)
+        .replaceFirst("%2", aStrDate.isEmpty() ? u"???"_ustr : aStrDate)
+        .replaceFirst("%3", aStrTime.isEmpty() ? u"???"_ustr : aStrTime);
 }
 
 static OString lcl_makeHTMLColorTriplet(const Color& rColor)
@@ -338,8 +327,7 @@ void ScHTMLExport::WriteHeader()
         if (!xDocProps->getPrintedBy().isEmpty())
         {
             OUT_COMMENT( GLOBSTR( STR_DOC_INFO ) );
-            OUString aStrOut = GLOBSTR( STR_DOC_PRINTED ) + ": ";
-            lcl_AddStamp( aStrOut, xDocProps->getPrintedBy(),
+            OUString aStrOut = lcl_MakeStamp( xDocProps->getPrintedBy(),
                 xDocProps->getPrintDate(), ScGlobal::getLocaleData() );
             OUT_COMMENT( aStrOut );
         }
