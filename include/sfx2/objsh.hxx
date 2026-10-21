@@ -361,7 +361,7 @@ public:
                                     const css::uno::Reference< css::embed::XStorage >& xStorage );
     virtual void                UpdateLinks();
     virtual void                PerformLinkUpdate();
-    void                        SetPendingLinkUpdateInfobar() { bPendingLinkUpdateInfobar = true; }
+    void                        SetPendingLinkUpdateInfobar();
     void                        CheckPendingLinkUpdateInfobar();
     void                        ShowLinkUpdateInfobar();
     void                        AllowLinkUpdate();
@@ -675,6 +675,9 @@ public:
                                 CreateAndLoadComponent( const SfxItemSet& rSet );
     static SfxObjectShell* GetShellFromComponent(const css::uno::Reference< css::uno::XInterface >& xComp);
     static SfxObjectShell* GetParentShell(const css::uno::Reference<css::uno::XInterface>& xChild);
+    /// The document that holds this one, following embedded objects up to the top. This shell
+    /// itself when it is not embedded.
+    SfxObjectShell&             GetTopShell();
     static OUString             GetServiceNameFromFactory( const OUString& rFact );
     bool                        IsInPlaceActive() const;
     bool                        IsUIActive() const;
