@@ -1763,6 +1763,20 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testReferenceUnionXlsxRoundTrip)
     CPPUNIT_ASSERT_EQUAL(10.0, pDoc->GetValue(ScAddress(5, 2, 0)));
 }
 
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testChartAltTextXLSX)
+{
+    // a chart with a title and a description
+    createScDoc("ods/chart-alt-text.ods");
+
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pDoc = parseExport(u"xl/drawings/drawing1.xml"_ustr);
+    CPPUNIT_ASSERT(pDoc);
+    // Without the fix the chart frame had neither
+    assertXPath(pDoc, "//xdr:graphicFrame/xdr:nvGraphicFramePr/xdr:cNvPr", "descr",
+                u"Sales rise in L2");
+    assertXPath(pDoc, "//xdr:graphicFrame/xdr:nvGraphicFramePr/xdr:cNvPr", "title", u"Sales chart");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

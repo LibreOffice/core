@@ -1399,6 +1399,22 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest5, testPresentationKeepsAttributes)
     assertXPathNoAttribute(pXmlDoc, "/p:presentation", "autoCompressPictures");
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest5, testChartAltTextPPTX)
+{
+    // a slide with a chart
+    createSdImpressDoc("odp/tdf169952.odp");
+    uno::Reference<beans::XPropertySet> xChart(getShapeFromPage(0, 0));
+    xChart->setPropertyValue(u"Description"_ustr, uno::Any(u"Sales rise in L2"_ustr));
+    xChart->setPropertyValue(u"Title"_ustr, uno::Any(u"Sales chart"_ustr));
+
+    save(TestFilter::PPTX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    // Without the fix the chart frame had neither
+    assertXPath(pXmlDoc, "//p:graphicFrame/p:nvGraphicFramePr/p:cNvPr", "descr",
+                u"Sales rise in L2");
+    assertXPath(pXmlDoc, "//p:graphicFrame/p:nvGraphicFramePr/p:cNvPr", "title", u"Sales chart");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
