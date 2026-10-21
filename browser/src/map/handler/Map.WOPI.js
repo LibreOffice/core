@@ -58,10 +58,6 @@ window.L.Map.WOPI = window.L.Handler.extend({
 	DisablePresentation: false,
 	PresentationLeader: '',
 
-	// True if we detect our wopi host is Microsoft SharePoint.
-	// See `_detectSharePoint`.
-	WopiHostIsSharePoint: false,
-
 	_appLoadedConditions: {
 		docloaded: false,
 		updatepermission: false,
@@ -148,9 +144,12 @@ window.L.Map.WOPI = window.L.Handler.extend({
 	},
 
 	_detectSharePoint: function(wopiInfo) {
-		let maybeSharePoint = false;
-		maybeSharePoint = maybeSharePoint || (wopiInfo['HostName'] === 'SharePoint');
-		this.WopiHostIsSharePoint = maybeSharePoint;
+		if (Object.prototype.hasOwnProperty.call(wopiInfo, 'HostName')) {
+			let maybeSharePoint = false;
+			maybeSharePoint = maybeSharePoint || (wopiInfo['HostName'] === 'SharePoint');
+			// convention is that if default value (false) it be unset.
+			this.WopiHostIsSharePoint = maybeSharePoint;
+		}
 	},
 
 	_setWopiProps: function(wopiInfo) {
