@@ -1939,6 +1939,7 @@ describe('VectorManager', function () {
 			app.file.textCursor = savedCursor;
 			app.file.inputSequence = savedSequence;
 			LocalCaret.forget();
+			cool.InputSequence.forget();
 		});
 
 		function managerWith(text: string): VectorManager {
@@ -1951,11 +1952,17 @@ describe('VectorManager', function () {
 			return manager;
 		}
 
+		// Sends the message of the edit predicted last, as the input numbered one above the
+		// last one sent.
+		function sendTheEdit(): void {
+			cool.InputSequence.stamp('textinput');
+		}
+
 		// A manager that holds "Hi" and predicted the 'a' sent as input 11.
 		function afterTypingA(): VectorManager {
 			const manager = managerWith('Hi');
 			manager.predictTextInsert('a');
-			app.file.inputSequence = 11;
+			sendTheEdit();
 			return manager;
 		}
 
@@ -2024,7 +2031,7 @@ describe('VectorManager', function () {
 			const manager = managerWith('Hi');
 			nodeassert.ok(manager.predictTextInsert('a'));
 			nodeassert.strictEqual(textOf(manager), 'Hia');
-			app.file.inputSequence = 11;
+			sendTheEdit();
 
 			sendDelta(manager, 10, 'Hi');
 			nodeassert.strictEqual(textOf(manager), 'Hia');
@@ -2052,9 +2059,9 @@ describe('VectorManager', function () {
 		it('keeps the keystrokes a delta does not include yet, in order', function () {
 			const manager = afterTypingA();
 			manager.predictTextInsert('b');
-			app.file.inputSequence = 12;
+			sendTheEdit();
 			manager.predictTextDelete(1, 0);
-			app.file.inputSequence = 13;
+			sendTheEdit();
 			nodeassert.strictEqual(textOf(manager), 'Hia');
 
 			sendDelta(manager, 11, 'Hia');
@@ -2166,7 +2173,7 @@ describe('VectorManager', function () {
 			for (const part of [2, 3]) {
 				(app as any).map._docLayer._selectedPart = part;
 				nodeassert.ok(manager.predictTextInsert('a'));
-				app.file.inputSequence++;
+				sendTheEdit();
 				manager.keepPredictedCaret(caretUpdate(app.file.inputSequence, 2));
 			}
 
@@ -2263,7 +2270,7 @@ describe('VectorManager', function () {
 
 			const confirmed = managerEditing();
 			confirmed.predictTextInsert('a');
-			app.file.inputSequence = 11;
+			sendTheEdit();
 			confirmed.keepPredictedCaret(caretUpdate(11, 3, 5));
 			confirmed.handleVectorPrimitivesDelta(delta());
 			nodeassert.strictEqual(editText(confirmed), 'Hia');
@@ -2278,7 +2285,7 @@ describe('VectorManager', function () {
 			app.file.textCursor.logical = { paragraph: 0, index: 2 };
 			const moved = managerEditing();
 			moved.predictTextInsert('a');
-			app.file.inputSequence = 11;
+			sendTheEdit();
 			moved.keepPredictedCaret(caretUpdate(11, 3, 9));
 			moved.handleVectorPrimitivesDelta(delta());
 			nodeassert.strictEqual(editText(moved), 'Hi');
@@ -2302,7 +2309,7 @@ describe('VectorManager', function () {
 			);
 			app.file.textCursor.logical = { paragraph: 0, index: 5 };
 			nodeassert.ok(manager.predictTextInsert('x'));
-			app.file.inputSequence = 11;
+			sendTheEdit();
 
 			manager.handleVectorPrimitivesDelta({
 				partId: 'S0',
@@ -2349,7 +2356,6 @@ describe('VectorManager', function () {
 		describe('caret moved here', function () {
 			let sent: string[];
 			let savedSend: any;
-			let savedNextInputSequence: any;
 			let savedTimerRegistry: any;
 			// The selection rectangles drawn here, as [x, y, width, height], one entry
 			// per draw.
@@ -2367,9 +2373,6 @@ describe('VectorManager', function () {
 				savedSend = (app as any).socket.sendMessage;
 				(app as any).socket.sendMessage = (message: string) =>
 					sent.push(message);
-				// Each numbered message takes the next input sequence number.
-				savedNextInputSequence = (app as any).nextInputSequence;
-				(app as any).nextInputSequence = () => ++app.file.inputSequence;
 				savedTimerRegistry = (app as any).timerRegistry;
 				(app as any).timerRegistry = new TimerRegistry();
 				drawn = [];
@@ -2388,7 +2391,6 @@ describe('VectorManager', function () {
 			afterEach(function () {
 				LocalCaret.forget();
 				(app as any).socket.sendMessage = savedSend;
-				(app as any).nextInputSequence = savedNextInputSequence;
 				(app as any).timerRegistry = savedTimerRegistry;
 				(TextSelections as any).active = false;
 				TextSelections.setStartRectangle = savedSetStartRectangle;
@@ -2546,7 +2548,7 @@ describe('VectorManager', function () {
 					'textcursor object=5 paragraph=0 index=1 sequence=11',
 				]);
 				// The character goes out as input 12, after the caret.
-				app.file.inputSequence = 12;
+				sendTheEdit();
 				nodeassert.strictEqual(
 					manager.keepPredictedCaret(caretUpdate(11, 1)),
 					true,
@@ -2776,7 +2778,7 @@ describe('VectorManager', function () {
 				]);
 
 				// A delta from before the deletion replays it.
-				app.file.inputSequence = 12;
+				sendTheEdit();
 				sendDelta(manager, 11, 'Hi');
 				nodeassert.strictEqual(textOf(manager), 'H');
 			});
@@ -2852,7 +2854,7 @@ describe('VectorManager', function () {
 				nodeassert.strictEqual(app.file.textCursor.rectangle.x1, 1100);
 
 				// A delta from before the key replays both edits in one.
-				app.file.inputSequence = 12;
+				sendTheEdit();
 				sendDelta(manager, 11, 'Hi');
 				nodeassert.strictEqual(textOf(manager), 'a');
 				nodeassert.deepStrictEqual(app.file.textCursor.logical, {

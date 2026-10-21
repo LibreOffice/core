@@ -29,8 +29,8 @@ interface PredictedChange {
 
 /// A predicted edit the server has not acknowledged yet.
 interface PredictedTextEdit extends PredictedChange {
-	/// The sequence number of the edit's input message.
-	sequence: number;
+	/// The ticket of the edit's input message.
+	ticket: cool.InputTicket;
 	partId: cool.VectorPartGuid;
 	/// The id of the edited entry.
 	objectId: number;
@@ -1751,8 +1751,8 @@ class VectorManager extends RenderManagerBase {
 		this._sendVectorPrimitivesRequest(partId, data.mode);
 	}
 
-	// Record an edit for replay under the next input's sequence number. An edit
-	// without an object id cannot be replayed and is not recorded.
+	// Record an edit for replay until its message is answered. An edit without an object id
+	// is not recorded.
 	private _recordEdit(
 		partId: cool.VectorPartGuid,
 		position: cool.CaretPosition,
@@ -1762,9 +1762,8 @@ class VectorManager extends RenderManagerBase {
 	): void {
 		const objectId = position.objectId;
 		if (objectId === undefined) return;
-		const sequence = app.file.inputSequence + 1;
 		this._pendingEdits.push({
-			sequence,
+			ticket: cool.InputSequence.ticketForTheNextMessage(),
 			partId,
 			objectId,
 			caretBefore: { ...caretBefore, atEnd: position.atEnd },
@@ -1783,9 +1782,10 @@ class VectorManager extends RenderManagerBase {
 		replaced?: number[],
 	): void {
 		if (!this._hasPendingEdits(partId)) return;
-		const acknowledged = inputSequence === undefined ? Infinity : inputSequence;
 		this._pendingEdits = this._pendingEdits.filter(
-			(edit) => edit.partId !== partId || edit.sequence > acknowledged,
+			(edit) =>
+				edit.partId !== partId ||
+				(inputSequence !== undefined && !edit.ticket.appliedBy(inputSequence)),
 		);
 		const remaining = this._pendingEdits.filter(
 			(edit) => edit.partId === partId,
@@ -1816,7 +1816,7 @@ class VectorManager extends RenderManagerBase {
 			const caret =
 				moved &&
 				moved.caret.partId === partId &&
-				moved.sequence > newest.sequence
+				moved.sequence > VectorManager._sentAs(newest)
 					? { entryId: moved.caret.entryId, logical: moved.caret.logical }
 					: { entryId: newest.objectId, logical: newest.caretAfter };
 			const geometry = this._treeOf(data)
@@ -1866,11 +1866,13 @@ class VectorManager extends RenderManagerBase {
 		const inputSequence = VectorManager._numberOf(update.inputSequence);
 		if (inputSequence === undefined) return false;
 		const newest = pending[pending.length - 1];
-		if (inputSequence < newest.sequence) return true;
+		if (!newest.ticket.appliedBy(inputSequence)) return true;
 		// A caret moved here after the newest edit is where the engine's caret answers
 		// from.
 		const expected =
-			moved && moved.caret.partId === partId && moved.sequence > newest.sequence
+			moved &&
+			moved.caret.partId === partId &&
+			moved.sequence > VectorManager._sentAs(newest)
 				? moved.caret.logical
 				: newest.caretAfter;
 		const paragraph = VectorManager._numberOf(update.paragraph);
@@ -1887,6 +1889,12 @@ class VectorManager extends RenderManagerBase {
 			(paragraph !== expected.paragraph || index !== expected.index);
 		if (otherObject || elsewhere) this._abandonEdits(partId);
 		return false;
+	}
+
+	// The number of the edit's message. An edit whose message has no number yet is older than
+	// every caret moved after it, told or not, so it sorts below any number.
+	private static _sentAs(edit: PredictedTextEdit): number {
+		return edit.ticket.sentAs() ?? -Infinity;
 	}
 
 	// The edited object: a running edit entry's parent, or the entry itself.

@@ -644,8 +644,10 @@ class Socket {
 				GraphicSelection.rectangle = null;
 			if (this._map._docLayer._docType === 'presentation') {
 				// The new session starts with no text edit for a caret moved here
-				// to be ahead of.
+				// to be ahead of, and no ticket waiting for a message that never
+				// went out.
 				LocalCaret.forget();
+				cool.InputSequence.forget();
 				app.setCursorVisibility(false);
 			}
 
@@ -3027,9 +3029,7 @@ class Socket {
 		);
 		// The header line carries this view's input sequence, which goes after the command
 		// name, where an uncompressed response has it.
-		const sequence = parseInt(
-			event.textMsg.split('\n')[0].split('inputSequence=')[1] ?? '',
-		);
+		const sequence = cool.InputSequence.readFrom(event.textMsg.split('\n')[0]);
 		let type = 'unknown';
 		let detail = '';
 		try {
@@ -3066,7 +3066,7 @@ class Socket {
 		if (docLayer && docLayer._onCommandValuesMsg)
 			docLayer._onCommandValuesMsg(
 				'commandvalues:' +
-					(sequence > 0 ? ' inputSequence=' + sequence : '') +
+					(sequence !== undefined ? ' inputSequence=' + sequence : '') +
 					' ' +
 					json,
 			);

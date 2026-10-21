@@ -62,6 +62,20 @@ class MessageParser {
 		const tokens = this.tokens.slice();
 		if (at < 0) tokens.push(token);
 		else tokens[at] = token;
+		return this.joined(tokens);
+	}
+
+	/// The message without the named parameter, or as it is where there is none.
+	public without(name: string): string {
+		const at = this.indexOf(name);
+		if (at < 0) return this.joined(this.tokens);
+		const tokens = this.tokens.slice();
+		tokens.splice(at, 1);
+		return this.joined(tokens);
+	}
+
+	/// The message made of those tokens, with the tail the parsed message had after them.
+	private joined(tokens: string[]): string {
 		return tokens.join(' ') + this.tail;
 	}
 

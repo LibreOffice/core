@@ -204,7 +204,6 @@ describe('ChangeOutbox typed text', function () {
 	});
 
 	describe('with a caret moved here', function () {
-		let savedNextInputSequence: any;
 		let savedTimerRegistry: any;
 		let savedSequence: number;
 		beforeEach(function () {
@@ -217,15 +216,12 @@ describe('ChangeOutbox typed text', function () {
 			};
 			savedSequence = app.file.inputSequence;
 			app.file.inputSequence = 12;
-			savedNextInputSequence = (app as any).nextInputSequence;
-			(app as any).nextInputSequence = () => ++app.file.inputSequence;
 			savedTimerRegistry = (app as any).timerRegistry;
 			(app as any).timerRegistry = new TimerRegistry();
 		});
 		afterEach(function () {
 			LocalCaret.forget();
 			app.file.inputSequence = savedSequence;
-			(app as any).nextInputSequence = savedNextInputSequence;
 			(app as any).timerRegistry = savedTimerRegistry;
 		});
 
@@ -242,9 +238,7 @@ describe('ChangeOutbox typed text', function () {
 		it('numbers the caret below the key that it goes ahead of', function () {
 			moveCaret();
 			app.socket.sendMessage(
-				'key type=input char=0 key=1286 sequence=' +
-					app.nextInputSequence() +
-					'\n',
+				cool.InputSequence.stamp('key type=input char=0 key=1286') + '\n',
 			);
 			nodeassert.deepStrictEqual(sent, [
 				'textcursor object=5 paragraph=0 index=0 sequence=13',

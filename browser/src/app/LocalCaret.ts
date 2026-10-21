@@ -83,15 +83,16 @@ class LocalCaret {
 		};
 	}
 
-	/// Tells the engine where the caret is, once for each move, in a message with the given
-	/// sequence number or the next one.
-	public static tell(sequence?: number): void {
+	/// Tells the engine where the caret is, once for each move, in a message with the next
+	/// sequence number.
+	public static tell(): void {
 		LocalCaret.stopRestTimer();
 		const caret = LocalCaret.caret;
 		if (!caret || LocalCaret.sequence) return;
 		// The number is taken before the message goes out, so it is older than the message
-		// itself.
-		LocalCaret.sequence = sequence ?? app.nextInputSequence();
+		// itself. The message carries no change, so the tickets waiting for the next message
+		// keep waiting.
+		LocalCaret.sequence = cool.InputSequence.next([], false);
 		const anchor = caret.anchor
 			? ' anchorparagraph=' +
 				caret.anchor.paragraph +
@@ -117,17 +118,14 @@ class LocalCaret {
 		if (!LocalCaret.caret || LocalCaret.sequence) return message;
 		// What the outbox sends itself was made before the caret moved, so it goes first.
 		if (ChangeOutbox.sending || LocalCaret.isUnrelated(message)) return message;
-		// A message numbered just now gives its number to the caret, which goes out
-		// first, and takes the next one, so the numbers rise in the order the messages
-		// go out.
-		const parser = new MessageParser(message);
-		const sequence = parser.sequence;
-		if (sequence !== app.file.inputSequence) {
-			LocalCaret.tell();
-			return message;
-		}
-		LocalCaret.tell(sequence);
-		return parser.with('sequence', app.nextInputSequence());
+		// A message numbered just now gives its number back, so the caret takes it and goes
+		// out first, and the message is stamped again after that. The numbers rise in the
+		// order the messages go out.
+		const unstamped = cool.InputSequence.unstamp(message);
+		LocalCaret.tell();
+		return unstamped
+			? cool.InputSequence.stamp(unstamped.message, unstamped.tickets)
+			: message;
 	}
 
 	/// True for a message that neither reads nor moves the caret.

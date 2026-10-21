@@ -738,6 +738,12 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                tokens.equals(0, "getslidesections"));
 
         ProfileZone pz("ChildSession::_handleInput:" + tokens[0]);
+
+        // The callbacks go out after the whole batch, so the number covers them. A rejected command
+        // counts as applied too: it changed nothing, so the document the callbacks report already
+        // reflects everything up to its number.
+        noteInputSequence(tokens);
+
         if (tokens.equals(0, "clientzoom"))
         {
             return clientZoom(tokens);
@@ -4003,7 +4009,6 @@ bool ChildSession::extTextInputEvent(const StringVector& tokens)
     getLOKitDocument()->setView(_viewId);
     getLOKitDocument()->postWindowExtTextInputEvent(id, COKitExtTextInputType::TEXTINPUT, decodedText.c_str());
     getLOKitDocument()->postWindowExtTextInputEvent(id, COKitExtTextInputType::TEXTINPUT_END, decodedText.c_str());
-    noteInputSequence(tokens);
 
     return true;
 }
@@ -4076,7 +4081,6 @@ bool ChildSession::keyEvent(const StringVector& tokens,
     }
     else if (winId != 0)
         getLOKitDocument()->postWindowKeyEvent(winId, type, charcode, keycode);
-    noteInputSequence(tokens);
 
     return true;
 }
@@ -4184,7 +4188,6 @@ bool ChildSession::mouseEvent(const StringVector& tokens,
     default:
         assert(false && "Unsupported mouse target type");
     }
-    noteInputSequence(tokens);
 
     return true;
 }
@@ -5772,7 +5775,6 @@ bool ChildSession::removeTextContext(const StringVector& tokens)
 
     getLOKitDocument()->setView(_viewId);
     getLOKitDocument()->removeTextContext(id, before, after);
-    noteInputSequence(tokens);
 
     return true;
 }
@@ -5806,7 +5808,6 @@ bool ChildSession::setTextCursor(const StringVector& tokens)
 
     getLOKitDocument()->setView(_viewId);
     getLOKitDocument()->postUnoCommand(command.c_str(), "", false);
-    noteInputSequence(tokens);
 
     return true;
 }
@@ -7159,10 +7160,13 @@ void ChildSession::updateCursorPositionJSON(const std::string &rect)
     updateCursorPosition(command->get("rectangle").toString());
 }
 
+// The sequence token is the last token of a numbered command. The tokens before it are the
+// command's own, and a payload among them may hold anything.
 void ChildSession::noteInputSequence(const StringVector& tokens)
 {
     int sequence = 0;
-    if (getTokenInteger(tokens, "sequence", sequence) && sequence > _inputSequence)
+    if (tokens.size() > 1 && getTokenInteger(tokens[tokens.size() - 1], "sequence", sequence)
+        && sequence > _inputSequence)
         _inputSequence = sequence;
 }
 

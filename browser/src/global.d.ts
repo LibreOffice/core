@@ -169,7 +169,6 @@ declare namespace L {
 */
 
 interface AppInterface {
-	nextInputSequence(): number;
 	sectionContainer: CanvasSectionContainer;
 	zoomControl: ZoomControl;
 	LOUtil: typeof LOUtil;

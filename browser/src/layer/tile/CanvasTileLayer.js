@@ -1343,9 +1343,8 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 	// Vector primitives can name the newest input they reflect before the JSON. Copy it into
 	// the parsed values.
 	_readInputSequence: function (textMsg, values) {
-		const header = textMsg.substring(0, textMsg.indexOf('{'));
-		const sequence = parseInt(header.split('inputSequence=')[1]);
-		if (!isNaN(sequence))
+		const sequence = cool.InputSequence.readFrom(textMsg.substring(0, textMsg.indexOf('{')));
+		if (sequence !== undefined)
 			values.inputSequence = sequence;
 	},
 
@@ -3009,11 +3008,13 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			this._map.contextToolbar.setLastInputEventType({input: "mouse", type: type});
 
 		// A click moves the caret, so it is numbered like a keystroke. The caret update
-		// after it then reports the click, not an earlier keystroke.
-		app.socket.sendMessage('mouse type=' + type +
+		// after it then reports the click, not an earlier keystroke. A move with no button
+		// down can overtake waiting text, so it is not numbered.
+		const message = 'mouse type=' + type +
 				' x=' + x + ' y=' + y + ' count=' + count +
-				' buttons=' + buttons + ' modifier=' + modifier +
-				' sequence=' + app.nextInputSequence());
+				' buttons=' + buttons + ' modifier=' + modifier;
+		const hover = type === 'move' && buttons === 0;
+		app.socket.sendMessage(hover ? message : cool.InputSequence.stamp(message));
 
 
 		const tempPageLinks = this._map['stateChangeHandler'].getItemValue('PageLinks');

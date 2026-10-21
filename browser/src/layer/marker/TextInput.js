@@ -1122,8 +1122,7 @@ window.L.TextInput = window.L.Layer.extend({
 		// this._logCharCodeSequence(text);
 		this._fancyLog('send-text-to-coolwsd', text);
 
-		// Predict the text. It is recorded under the next message's number, so send it
-		// right after.
+		// Predict the text. Its ticket takes the next number, so send it right after.
 		if (RenderManager.isVectorRendering() && cool.canPredictText(text)) {
 			RenderManager.predictTextInsert(text);
 		}
@@ -1477,8 +1476,7 @@ window.L.TextInput = window.L.Layer.extend({
 			window.app.console.log('Remove ' + before + ' before, and ' + after + ' after');
 		}
 
-		// Predict the deletion. It is recorded under the next message's number, so send it
-		// right after.
+		// Predict the deletion. Its ticket takes the next number, so send it right after.
 		if (RenderManager.isVectorRendering())
 			RenderManager.predictTextDelete(before, after);
 
@@ -1489,10 +1487,11 @@ window.L.TextInput = window.L.Layer.extend({
 		/// TODO: rename the event to 'removetextcontent' as soon as coolwsd supports it
 		/// TODO: Ask Marco about it
 		app.socket.sendMessage(
-			'removetextcontext id=' + windowId +
-			' before=' + before +
-			' after=' + after +
-			' sequence=' + app.nextInputSequence()
+			cool.InputSequence.stamp(
+				'removetextcontext id=' + windowId +
+				' before=' + before +
+				' after=' + after
+			)
 		);
 	},
 
@@ -1529,8 +1528,7 @@ window.L.TextInput = window.L.Layer.extend({
 			var winId = this._map.getWinId();
 			this._followMyCursor();
 			app.socket.sendMessage(
-				'textinput id=' + winId + ' text=' + encodedText +
-				' sequence=' + app.nextInputSequence());
+				cool.InputSequence.stamp('textinput id=' + winId + ' text=' + encodedText));
 		}
 	},
 
@@ -1543,21 +1541,22 @@ window.L.TextInput = window.L.Layer.extend({
 		}
 		if (this._map.editorHasFocus() || this._hasFormulaBarFocus()) {
 			app.socket.sendMessage(
-				'key type=' + type + ' char=' + charCode + ' key=' + unoKeyCode +
-				' sequence=' + app.nextInputSequence() + '\n'
+				cool.InputSequence.stamp(
+					'key type=' + type + ' char=' + charCode + ' key=' + unoKeyCode
+				) + '\n'
 			);
 		} else {
 			app.socket.sendMessage(
-				'windowkey id=' +
-				this._map.getWinId() +
-				' type=' +
-				type +
-				' char=' +
-				charCode +
-				' key=' +
-				unoKeyCode +
-				' sequence=' + app.nextInputSequence() +
-				'\n'
+				cool.InputSequence.stamp(
+					'windowkey id=' +
+					this._map.getWinId() +
+					' type=' +
+					type +
+					' char=' +
+					charCode +
+					' key=' +
+					unoKeyCode
+				) + '\n'
 			);
 		}
 	},

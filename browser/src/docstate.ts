@@ -16,11 +16,6 @@
 		* var cellFillSection = new app.definitions.CellFillMarkerSection();
 */
 (window.app as any) = {
-	// The sequence number for the next input message, see app.file.inputSequence.
-	nextInputSequence(): number {
-		this.file.inputSequence += 1;
-		return this.file.inputSequence;
-	},
 	/*
 	 * These are from <vcl/keycodes.h>. Correspond to the published
 	 * com::sun::star::awt::KeyModifier constants, left-shifted by 12.
@@ -133,8 +128,7 @@
 			logical: null, // { paragraph, index } once a cursor message carries it.
 			anchor: null, // { paragraph, index } of the selection's other end.
 		},
-		// The sequence number of the newest key, mouse, textinput, removetextcontext or
-		// textcursor message sent to the server, 0 before any was sent.
+		// The sequence number of the newest input message, 0 before any. See cool.InputSequence.
 		inputSequence: 0,
 		fileBasedView: false, // (draw-impress only) Default is false. For read-only documents, user can view all parts at once. In that case, this variable is set to "true".
 		writer: {
