@@ -51,6 +51,7 @@
 #include <officecfg/Office/Common.hxx>
 
 #include <algorithm>
+#include <optional>
 #include <unordered_map>
 
 
@@ -1504,10 +1505,36 @@ bool EmbeddedObjectContainer::SetPersistentEntries(const uno::Reference< embed::
     return bError;
 }
 
+namespace
+{
+// The AllowLinkUpdate property of the document that contains rxModel, if it has one.
+std::optional<bool> getParentAllowsLinkUpdate(const uno::Reference<uno::XInterface>& rxModel)
+{
+    try
+    {
+        uno::Reference<container::XChild> xChild(rxModel, uno::UNO_QUERY);
+        if (!xChild)
+            return {};
+        uno::Reference<beans::XPropertySet> xParent(xChild->getParent(), uno::UNO_QUERY);
+        if (!xParent || !xParent->getPropertySetInfo()->hasPropertyByName(u"AllowLinkUpdate"_ustr))
+            return {};
+        bool bAllows = false;
+        xParent->getPropertyValue(u"AllowLinkUpdate"_ustr) >>= bAllows;
+        return {bAllows};
+    }
+    catch (const uno::Exception&)
+    {
+        return {};
+    }
+}
+}
+
 bool EmbeddedObjectContainer::getUserAllowsLinkUpdate() const
 {
     if (officecfg::Office::Common::Security::Scripting::DisableActiveContent::get())
         return false;
+    if (std::optional<bool> oParentAllows = getParentAllowsLinkUpdate(pImpl->m_xModel.get()))
+        return *oParentAllows;
     return pImpl->mbUserAllowsLinkUpdate;
 }
 
