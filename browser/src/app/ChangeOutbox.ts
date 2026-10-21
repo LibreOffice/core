@@ -41,12 +41,17 @@
 	sent earlier.
 
 	Typed text and deleted characters go the same way. What is typed while changes wait merges
-	into one textinput message, and what is deleted into one removetextcontext message, each with
-	the newest sequence number. The engine deletes the characters before the caret first, so a
-	backspace after a forward delete starts a message of its own. Any other message that the
-	engine applies in order sends the waiting text ahead of it. The kit applies the text messages
-	queued for it together and sends one delta for them, so a delta answers everything in flight
-	up to the newest text message that it reflects.
+	into one textinput message, and what is deleted into one removetextcontext message. The
+	engine deletes the characters before the caret first, so a backspace after a forward delete
+	starts a message of its own. Any other message that the engine applies in order sends the
+	waiting text ahead of it. The kit applies the text messages queued for it together and sends
+	one delta for them, so a delta answers everything in flight up to the newest text message
+	that it reflects.
+
+	A change is numbered when it is sent, so the numbers rise in the order the messages go out.
+	Each change of objects taken gets a ticket, and a text message taken gives its number back
+	along with the tickets of the edit it carries. An entry carries the tickets of all the
+	changes merged into it, so one answer covers them all.
 */
 /// A change of the mapping of objects, which goes out as one setobjecttransform message.
 interface TransformEntry {
@@ -57,6 +62,8 @@ interface TransformEntry {
 	mappings: Map<string, string>;
 	/// True for a change that one key press made, which is one step of the undo.
 	sealed?: boolean;
+	/// The tickets of the changes merged into this one.
+	tickets: cool.InputTicket[];
 }
 
 /// That many undos or redos, which go out as one command.
@@ -74,14 +81,16 @@ interface OtherEntry {
 	message: string;
 	/// True for a change that one key press made, which is one step of the undo.
 	sealed?: boolean;
+	/// The tickets of the changes merged into this one.
+	tickets: cool.InputTicket[];
 }
 
 /// Text typed into the document, which goes out as one textinput message.
 interface TextEntry {
 	kind: 'text';
 	text: string;
-	/// The sequence number of the newest keystroke in the text.
-	sequence: number;
+	/// The tickets of the keystrokes merged into this one.
+	tickets: cool.InputTicket[];
 	/// False while the entry waits for more text to combine with, and true or absent once it may
 	/// go out.
 	ready?: boolean;
@@ -93,8 +102,8 @@ interface RemoveEntry {
 	kind: 'remove';
 	before: number;
 	after: number;
-	/// The sequence number of the newest keystroke among the deletions.
-	sequence: number;
+	/// The tickets of the deletions merged into this one.
+	tickets: cool.InputTicket[];
 	/// False while the entry waits for more deletions to combine with, and true or absent once
 	/// it may go out.
 	ready?: boolean;
@@ -148,8 +157,8 @@ class ChangeOutbox {
 	/// into one message, in milliseconds. At 0 they go out as soon as a change may.
 	private static textWait: number = 0;
 
-	/// One wait for each change in flight, the oldest first, with the sequence number of a text
-	/// message.
+	/// One wait for each change in flight, the oldest first, with the number of a numbered
+	/// message. An undo or a redo has none.
 	private static inFlight: {
 		wait: ReturnType<typeof setTimeout>;
 		sequence?: number;
@@ -178,6 +187,10 @@ class ChangeOutbox {
 	/// Empty while no such press is being handled.
 	private static repeatingKey: string = '';
 
+	/// The ticket of the change of objects taken last, or null where the message offered last
+	/// as such a change was not taken as one.
+	private static lastTicket: cool.InputTicket | null = null;
+
 	/*
 		Runs what a key press does with the changes it makes held until the keys are let go. The
 		key is remembered as down until its release is seen.
@@ -201,15 +214,24 @@ class ChangeOutbox {
 		redos and the typed text, in a view that draws from the objects only.
 	*/
 	public static take(message: string): boolean {
-		if (ChangeOutbox.sending || !RenderManager.isVectorRendering())
-			return false;
+		// What the outbox sends itself comes through here too, and is not a new offer.
+		if (ChangeOutbox.sending) return false;
+		if (!RenderManager.isVectorRendering()) return false;
 
 		const entry = ChangeOutbox.entryOf(message);
 		if (!entry) return false;
 
+		if (entry.kind === 'transform' || entry.kind === 'other') {
+			const ticket = new cool.InputTicket();
+			entry.tickets.push(ticket);
+			ChangeOutbox.lastTicket = ticket;
+		}
 		ChangeOutbox.listen();
 
 		if (entry.kind === 'text' || entry.kind === 'remove') {
+			// The message is stamped again when it goes out, so its number goes back and the
+			// tickets of the edit it carries wait with it.
+			entry.tickets = cool.InputSequence.unstamp(message)?.tickets ?? [];
 			ChangeOutbox.letGoOfWhatIsHeld();
 			ChangeOutbox.merge(entry);
 			// What merges into the entry afterwards goes out with it once its wait is
@@ -252,21 +274,43 @@ class ChangeOutbox {
 		return true;
 	}
 
-	/// Sends the waiting text ahead of a message that the engine applies in order after it,
-	/// however many changes are in flight. A message that neither reads nor moves the caret
-	/// goes out on its own.
-	public static sendAhead(message: string): void {
-		if (ChangeOutbox.sending) return;
-		if (
-			!ChangeOutbox.waiting.some(
-				(entry) => entry.kind === 'text' || entry.kind === 'remove',
-			)
-		)
-			return;
-		if (LocalCaret.isUnrelated(message)) return;
+	/*
+		Sends the waiting text ahead of a message that the engine applies in order after it,
+		however many changes are in flight, and returns the message to send after that. A message
+		numbered just now gives its number to what goes ahead of it and is stamped again, so the
+		numbers rise in the order the messages go out. A message that neither reads nor moves
+		the caret goes out on its own.
+	*/
+	public static sendAhead(message: string): string {
+		if (ChangeOutbox.sending || !ChangeOutbox.textWaits()) return message;
+		if (LocalCaret.isUnrelated(message)) return message;
 
+		const unstamped = cool.InputSequence.unstamp(message);
+		ChangeOutbox.sendTheTextAhead();
+		return unstamped
+			? cool.InputSequence.stamp(unstamped.message, unstamped.tickets)
+			: message;
+	}
+
+	/// Sends everything waiting where typed text or a deletion is among it, however many
+	/// changes are in flight, so that a message sent after this goes out after the text. With
+	/// no text waiting, the changes keep to the engine's pace.
+	public static sendTheTextAhead(): void {
+		if (ChangeOutbox.textWaits()) ChangeOutbox.sendAllWaiting();
+	}
+
+	/// Sends everything waiting, however many changes are in flight.
+	public static sendAllWaiting(): void {
+		if (ChangeOutbox.sending) return;
 		while (ChangeOutbox.waiting.length)
 			ChangeOutbox.send(ChangeOutbox.waiting.shift() as OutboxEntry);
+	}
+
+	/// Whether typed text or a deletion waits to go out.
+	private static textWaits(): boolean {
+		return ChangeOutbox.waiting.some(
+			(entry) => entry.kind === 'text' || entry.kind === 'remove',
+		);
 	}
 
 	/// Sets the most changes in flight at a time, or puts back the usual number for null. A
@@ -281,6 +325,14 @@ class ChangeOutbox {
 	/// no wait. Text that waits already keeps its own wait.
 	public static setTextWait(milliseconds: number): void {
 		ChangeOutbox.textWait = Math.max(0, milliseconds);
+	}
+
+	/// Sends a message that changes objects and returns the ticket it was taken with, or null
+	/// where it was not taken as a change of objects, as when the socket let it go unsent.
+	public static sendAChange(message: string): cool.InputTicket | null {
+		ChangeOutbox.lastTicket = null;
+		app.socket.sendMessage(message);
+		return ChangeOutbox.lastTicket;
 	}
 
 	/// Whether an undo or a redo waits to go out or has not been answered yet.
@@ -337,7 +389,7 @@ class ChangeOutbox {
 				if (!one) continue;
 				mappings.set(one.split(',')[0], one);
 			}
-			return { kind: 'transform', what, mappings };
+			return { kind: 'transform', what, mappings, tickets: [] };
 		}
 
 		const stateBegins = ChangeOutbox.namedStates[parser.command];
@@ -348,18 +400,19 @@ class ChangeOutbox {
 			kind: 'other',
 			channel: at < 0 ? message : message.substring(0, at),
 			message,
+			tickets: [],
 		};
 	}
 
 	/*
-		The entry of a message with text typed into the document itself, or null for any other
-		message. Text typed into a dialog gets no delta as an answer. The outbox writes these
-		messages again from their parameters, so a message with a parameter more is left alone.
+		The entry of a numbered message with text typed into the document itself, or null for any
+		other message. Text typed into a dialog gets no delta as an answer. The outbox writes
+		these messages again from their parameters, so a message with a parameter more is left
+		alone.
 	*/
 	private static typedEntryOf(parser: MessageParser): OutboxEntry | null {
 		if (parser.value('id') !== '0') return null;
-		const sequence = parser.sequence;
-		if (sequence === undefined) return null;
+		if (parser.sequence === undefined) return null;
 
 		const text = parser.value('text');
 		if (
@@ -367,7 +420,7 @@ class ChangeOutbox {
 			parser.length === 4 &&
 			text !== undefined
 		)
-			return { kind: 'text', text, sequence };
+			return { kind: 'text', text, tickets: [] };
 
 		const before = parser.count('before');
 		const after = parser.count('after');
@@ -377,7 +430,7 @@ class ChangeOutbox {
 			before !== undefined &&
 			after !== undefined
 		)
-			return { kind: 'remove', before, after, sequence };
+			return { kind: 'remove', before, after, tickets: [] };
 		return null;
 	}
 
@@ -398,11 +451,17 @@ class ChangeOutbox {
 				for (const [objectId, mapping] of entry.mappings)
 					before.mappings.set(objectId, mapping);
 				before.what = entry.what;
+				before.tickets.push(...entry.tickets);
 			} else ChangeOutbox.held.set('transform', entry);
 			return;
 		}
 
-		if (entry.kind === 'other') ChangeOutbox.held.set(entry.channel, entry);
+		if (entry.kind === 'other') {
+			const before = ChangeOutbox.held.get(entry.channel);
+			if (before && before.kind === 'other')
+				entry.tickets.unshift(...before.tickets);
+			ChangeOutbox.held.set(entry.channel, entry);
+		}
 	}
 
 	/// Sends what keys have made, once they are let go or the window loses the keyboard.
@@ -436,6 +495,7 @@ class ChangeOutbox {
 		) {
 			for (const [objectId, mapping] of entry.mappings)
 				last.mappings.set(objectId, mapping);
+			last.tickets.push(...entry.tickets);
 			return;
 		}
 
@@ -447,6 +507,7 @@ class ChangeOutbox {
 			last.channel === entry.channel
 		) {
 			last.message = entry.message;
+			last.tickets.push(...entry.tickets);
 			return;
 		}
 
@@ -461,7 +522,7 @@ class ChangeOutbox {
 
 		if (last && last.kind === 'text' && entry.kind === 'text') {
 			last.text += entry.text;
-			last.sequence = entry.sequence;
+			last.tickets.push(...entry.tickets);
 			return;
 		}
 
@@ -475,7 +536,7 @@ class ChangeOutbox {
 		) {
 			last.before += entry.before;
 			last.after += entry.after;
-			last.sequence = entry.sequence;
+			last.tickets.push(...entry.tickets);
 			return;
 		}
 
@@ -499,51 +560,51 @@ class ChangeOutbox {
 		}
 	}
 
-	/// Sends the entry, which is in flight from now on.
+	/// Sends the entry, numbered now, which is in flight from now on.
 	private static send(entry: OutboxEntry): void {
 		const wait: ReturnType<typeof setTimeout> = setTimeout(
 			() => ChangeOutbox.answered(wait),
 			ChangeOutbox.longestWait,
 		);
-		ChangeOutbox.inFlight.push({
-			wait,
-			sequence:
-				entry.kind === 'text' || entry.kind === 'remove'
-					? entry.sequence
-					: undefined,
-		});
 
+		let message = ChangeOutbox.messageOf(entry);
+		let sequence: number | undefined;
 		if (entry.kind === 'undo' || entry.kind === 'redo') {
 			ChangeOutbox.undosUnanswered++;
 			ChangeOutbox.undoSettling = false;
 			ChangeOutbox.undoKind = entry.kind;
 			ChangeOutbox.awaitTheUndos(ChangeOutbox.longestUndoWait);
 		}
+		// An undo or a redo is not numbered. Everything else goes out with the next number. The
+		// entry holds the tickets of every change merged into it, and only those take the number.
+		if ('tickets' in entry) {
+			sequence = cool.InputSequence.next(entry.tickets, false);
+			message += ' sequence=' + sequence;
+		}
+
+		// The kit sends its callbacks after the whole batch it read, so one delta can answer
+		// several changes at once. The number says which: every change up to it.
+		ChangeOutbox.inFlight.push({ wait, sequence });
 
 		ChangeOutbox.sending = true;
 		try {
-			app.socket.sendMessage(ChangeOutbox.messageOf(entry));
+			app.socket.sendMessage(message);
 		} finally {
 			ChangeOutbox.sending = false;
 		}
 	}
 
-	/// The message an entry goes out as. An undo or a redo of more than one step names the
-	/// number, which the engine's undo takes as an argument.
+	/// The message an entry goes out as, before its sequence token. An undo or a redo of more
+	/// than one step names the number, which the engine's undo takes as an argument.
 	private static messageOf(entry: OutboxEntry): string {
 		if (entry.kind === 'other') return entry.message;
-		if (entry.kind === 'text')
-			return (
-				'textinput id=0 text=' + entry.text + ' sequence=' + entry.sequence
-			);
+		if (entry.kind === 'text') return 'textinput id=0 text=' + entry.text;
 		if (entry.kind === 'remove')
 			return (
 				'removetextcontext id=0 before=' +
 				entry.before +
 				' after=' +
-				entry.after +
-				' sequence=' +
-				entry.sequence
+				entry.after
 			);
 
 		if (entry.kind === 'transform')
@@ -580,15 +641,22 @@ class ChangeOutbox {
 		ChangeOutbox.sendTheNext();
 	}
 
-	/// The engine's delta answered everything in flight up to the newest text message with a
-	/// sequence number at most inputSequence, or only the oldest change where there is none.
+	/*
+		The engine's delta answered everything in flight up to the newest message with a sequence
+		number at most inputSequence. A delta below the number of the oldest change in flight
+		answers none, as it reflects an input sent before that change or another view's edit. An
+		undo or a redo has no number, so where one is the oldest in flight, it takes the delta. A
+		delta without a number answers the oldest change.
+	*/
 	private static deltaArrived(inputSequence?: number): void {
 		let answered = 1;
-		if (inputSequence !== undefined)
+		if (inputSequence !== undefined) {
+			answered = ChangeOutbox.inFlight[0]?.sequence === undefined ? 1 : 0;
 			ChangeOutbox.inFlight.forEach((one, at) => {
 				if (one.sequence !== undefined && one.sequence <= inputSequence)
 					answered = at + 1;
 			});
+		}
 		for (const one of ChangeOutbox.inFlight.splice(0, answered))
 			clearTimeout(one.wait);
 		ChangeOutbox.sendTheNext();

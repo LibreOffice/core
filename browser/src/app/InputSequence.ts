@@ -13,10 +13,10 @@
 	Sequence numbers of the input messages, so the client can tell which of its inputs an answer
 	from the engine reflects.
 
-	Every key, text and caret message, and every mouse message except a move with no button down,
-	carries the next number as its sequence token, the last token of the message. The kit reports
-	the newest number it applied, and as the numbers only grow, such an answer reflects every
-	input up to that number.
+	Every key, text, caret and object change message, and every mouse message except a move with
+	no button down, carries the next number as its sequence token, the last token of the message.
+	The kit reports the newest number it applied, and as the numbers only grow, such an answer
+	reflects every input up to that number.
 
 	A change shown before the engine answers holds a ticket, which takes the number of the message
 	that carries the change. The ticket is for the next message stamped, or is named when its

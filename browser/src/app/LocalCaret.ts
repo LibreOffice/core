@@ -89,9 +89,11 @@ class LocalCaret {
 		LocalCaret.stopRestTimer();
 		const caret = LocalCaret.caret;
 		if (!caret || LocalCaret.sequence) return;
-		// The number is taken before the message goes out, so it is older than the message
-		// itself. The message carries no change, so the tickets waiting for the next message
-		// keep waiting.
+		// The text typed before the caret moved goes out first, so its numbers are below
+		// the caret's. The number is taken before the message goes out, so it is older than
+		// the message itself. The message carries no change, so the tickets waiting for the
+		// next message keep waiting.
+		ChangeOutbox.sendTheTextAhead();
 		LocalCaret.sequence = cool.InputSequence.next([], false);
 		const anchor = caret.anchor
 			? ' anchorparagraph=' +

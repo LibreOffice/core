@@ -465,12 +465,14 @@ key type=<type> char=<charcode> key=<keycode> [sequence=<sequence>]
     <type> is 'input' or 'up', <charcode> and <keycode> are numbers.
 
     sequence is an optional number that the client increments for every
-    key, textinput, removetextcontext and textcursor message, and for every
-    mouse message except a move with no button down. It is always the last
-    token of the message. The kit reports the newest one it has applied, so
-    the client can tell which of its inputs a message reflects. The
-    invalidatecursor payload has it as its inputSequence field. The vector
-    primitives frames have it in their header line:
+    key, textinput, removetextcontext and textcursor message, for every
+    mouse message except a move with no button down, and for every
+    setobjecttransform, setobjecthandle, setobjectcontrolpoint,
+    setobjectgluepoint, setobjectpoints and cropobject message. It is
+    always the last token of the message. The kit reports the newest one
+    it has applied, so the client can tell which of its inputs a message
+    reflects. The invalidatecursor payload has it as its inputSequence
+    field. The vector primitives frames have it in their header line:
     zstdvectorprimitives: inputSequence=<sequence>
     zstdvectorprimitivesdelta: inputSequence=<sequence>
     and an uncompressed response has it after the command name:
@@ -724,7 +726,7 @@ selectobjects ids=<ids>
     of one selection all sit at the same level, directly on the page or in one and the same group;
     an id naming an object elsewhere, or naming nothing on the page the view shows, is left out.
 
-setobjecttransform to=<mappings> as=<what>
+setobjecttransform to=<mappings> as=<what> [sequence=<sequence>]
 
     <mappings> holds one item per object, separated by semicolons. An item is the unique id of a
     drawing object, the one the render geometry of a page names it by, then the six numbers of
@@ -740,7 +742,7 @@ setobjecttransform to=<mappings> as=<what>
     undo. A client that works a drag out for itself hands over what it drew this way, rather than
     asking for a handle of the selection to be moved.
 
-setobjectcontrolpoint id=<id> at=<at> x=<x> y=<y> withtheshape=<withtheshape>
+setobjectcontrolpoint id=<id> at=<at> x=<x> y=<y> withtheshape=<withtheshape> [sequence=<sequence>]
 
     <id> is the unique id of a drawing object, the one the render geometry of a page names it by,
     and <at> counts the points a custom shape is shaped by, from zero, in the order the shape
@@ -752,14 +754,15 @@ setobjectcontrolpoint id=<id> at=<at> x=<x> y=<y> withtheshape=<withtheshape>
     value may be, so the place named here is a wish and what the shape makes of it is the answer.
     One step to undo. Naming an object that is not a custom shape does nothing.
 
-setobjecthandle id=<id> kind=<kind> polygon=<polygon> point=<point> at=<at> x=<x> y=<y>
+setobjecthandle id=<id> kind=<kind> polygon=<polygon> point=<point> at=<at> x=<x> y=<y> [ortho=<ortho>] [sequence=<sequence>]
 
     <id> is the unique id of a drawing object, the one the render geometry of a page names it by,
     and the four after it name one of that object's handles as the render geometry reports it:
     <kind> is the kind of handle, <polygon> and <point> say which point of which polygon it
     belongs to, and <at> is the number the object itself gives the handle, for the handles that
     are told apart by nothing else. <at> is -1 where the three before it already name the handle.
-    <x> and <y> are where the handle is to go on the page, in twips.
+    <x> and <y> are where the handle is to go on the page, in twips. <ortho> is 1 for the move
+    the office makes while Shift is held, and 0 or left out for a free move.
 
     The object reads such a move its own way: the corner radius of a rectangle, the angle a piece
     of a circle begins at, the offset of a measurement. One step to undo. Nothing happens where
@@ -769,7 +772,7 @@ setobjecthandle id=<id> kind=<kind> polygon=<polygon> point=<point> at=<at> x=<x
     which says in the command whether the shape is carried along, where this one would leave
     that to be read off the drag that is driving it.
 
-setobjectgluepoint id=<id> at=<at> x=<x> y=<y>
+setobjectgluepoint id=<id> at=<at> x=<x> y=<y> [sequence=<sequence>]
 
     <id> is the unique id of a drawing object, the one the render geometry of a page names it by,
     and <at> counts the points that object was given for a connector to tie itself to, from zero,
@@ -779,7 +782,7 @@ setobjectgluepoint id=<id> at=<at> x=<x> y=<y>
     object holds such a point either as a share of its own size or as a distance of its own, and
     it keeps the way it holds it.
 
-setobjectpoints id=<id> changes=<changes>
+setobjectpoints id=<id> changes=<changes> [sequence=<sequence>]
 
     <id> is the unique id of a drawing object, the one the render geometry of a page names it by.
     <changes> names the points of that object's path which moved, and where each of them went. It

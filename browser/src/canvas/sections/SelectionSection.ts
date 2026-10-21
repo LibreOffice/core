@@ -1933,11 +1933,12 @@ abstract class SelectionSection extends CanvasSectionObject {
 		ShearingInteraction.forgetTheKeys();
 		TurningInteraction.forgetTheKeys();
 		SelectionSection.sendMappings(reached, kind === 'turn' ? 'turn' : 'shear');
+		const ticket = SelectionSection.takeTheTicket();
 
 		// A tied connector is laid out anew by the engine between what it is tied to.
 		for (const [objectId, change] of changes)
 			if (!ObjectHandles.isATiedConnector(objectId))
-				RenderGeometrySection.changeObject(objectId, change);
+				RenderGeometrySection.changeObject(objectId, change, ticket);
 
 		if (this.isOneObject()) this.square = null;
 		else {
@@ -2624,6 +2625,9 @@ abstract class SelectionSection extends CanvasSectionObject {
 		arrives, so a change it made differently puts itself right then.
 	*/
 	private leaveTheChangeOnTheObjects(matrix: cool.Matrix2D | null): void {
+		// The ticket is taken whether or not anything is laid on, so each one goes with the
+		// change sent just before.
+		const ticket = SelectionSection.takeTheTicket();
 		if (!matrix) return;
 		if (!SelectionSection.withinReason(this.selectedObjects(), matrix)) return;
 
@@ -2650,7 +2654,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 			this.selectedObjects(),
 		))
 			if (!ObjectHandles.isATiedConnector(objectId))
-				RenderGeometrySection.changeObject(objectId, matrix);
+				RenderGeometrySection.changeObject(objectId, matrix, ticket);
 
 		/*
 			A tied connector cannot take the change as a mapping, whether it was moved itself or
@@ -2714,6 +2718,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 		what: string,
 		from?: Map<number, cool.Matrix2D>,
 	): void {
+		SelectionSection.ticketOfTheLastChange = null;
 		if (!SelectionSection.withinReason(objectIds, matrix)) return;
 
 		// A change worked out from what the objects are drawn by now ends a slant keys gave, and
@@ -2734,6 +2739,18 @@ abstract class SelectionSection extends CanvasSectionObject {
 		}
 
 		SelectionSection.sendMappings(reached, what);
+	}
+
+	/// The ticket of the change of objects sent last, or null where the last one sent was not
+	/// numbered, nothing went out for it, or the ticket was taken already.
+	private static ticketOfTheLastChange: cool.InputTicket | null = null;
+
+	/// The ticket of the change of objects sent last, once: a second call gets null until another
+	/// change is sent.
+	private static takeTheTicket(): cool.InputTicket | null {
+		const ticket = SelectionSection.ticketOfTheLastChange;
+		SelectionSection.ticketOfTheLastChange = null;
+		return ticket;
 	}
 
 	/*
@@ -2761,9 +2778,10 @@ abstract class SelectionSection extends CanvasSectionObject {
 						.join(','),
 			);
 
+		SelectionSection.ticketOfTheLastChange = null;
 		if (!mappings.length) return;
 
-		app.socket.sendMessage(
+		SelectionSection.ticketOfTheLastChange = ChangeOutbox.sendAChange(
 			'setobjecttransform to=' +
 				mappings.join(';') +
 				' as=' +

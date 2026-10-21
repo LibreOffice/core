@@ -12,34 +12,46 @@
 
 /*
 	A change laid over an object here that the engine has not answered yet: the change itself and
-	where it left the object, as the mapping that places it and the box it takes up. An answer from
-	the engine is held against both.
+	where it left the object, as the mapping that places it and the box it takes up, and the ticket
+	of its message, null where the outbox did not number it. An answer from the engine is held
+	against the ticket, or against the mapping and the box where it names no input sequence number.
 */
 class PendingChange {
 	public readonly change: cool.Matrix2D;
 	private leftAt: cool.Matrix2D;
 	private leftIn: cool.Range2D;
+	private readonly ticket: cool.InputTicket | null;
 
 	private constructor(
 		change: cool.Matrix2D,
 		leftAt: cool.Matrix2D,
 		leftIn: cool.Range2D,
+		ticket: cool.InputTicket | null,
 	) {
 		this.change = change;
 		this.leftAt = leftAt;
 		this.leftIn = leftIn;
+		this.ticket = ticket;
 	}
 
 	/// The change as it left the object it was just laid over, or null where the object has no
-	/// mapping to hold an answer against.
+	/// mapping to hold an answer against. The ticket is the one of the outbox message that
+	/// carries the change, or null where the outbox numbered none.
 	public static leftOn(
 		change: cool.Matrix2D,
 		object: cool.SlideObject,
+		ticket: cool.InputTicket | null,
 	): PendingChange | null {
 		const leftAt = cool.Matrix2D.fromArray(object.transform);
 		return leftAt
-			? new PendingChange(change, leftAt, PendingChange.boxOf(object))
+			? new PendingChange(change, leftAt, PendingChange.boxOf(object), ticket)
 			: null;
+	}
+
+	/// Whether an answer naming that number as the newest applied input answers this change. A
+	/// change without a ticket takes the first such answer.
+	public appliedBy(inputSequence: number): boolean {
+		return !this.ticket || this.ticket.appliedBy(inputSequence);
 	}
 
 	/// Takes in where the change leaves the object after it was laid over it again.
@@ -179,21 +191,23 @@ class RenderGeometrySection extends CanvasSectionObject {
 		// remembered hit test answer is dropped.
 		if (!RenderGeometrySection._listening) {
 			RenderGeometrySection._listening = true;
-			RenderManager.onVectorChanged((answered?: number[]) => {
-				RenderGeometrySection._lastHit = undefined;
+			RenderManager.onVectorChanged(
+				(answered?: number[], inputSequence?: number) => {
+					RenderGeometrySection._lastHit = undefined;
 
-				// An answer from the engine is held against what was laid on here first, so
-				// that what is shown is the newest state and not a stale answer.
-				RenderGeometrySection.takeUpTheAnswers(answered);
+					// An answer from the engine is held against what was laid on here first, so
+					// that what is shown is the newest state and not a stale answer.
+					RenderGeometrySection.takeUpTheAnswers(answered, inputSequence);
 
-				// The lawn takes in every object, so it is worked out again as they arrive.
-				ViewLayoutVector.takeInTheObjects();
+					// The lawn takes in every object, so it is worked out again as they arrive.
+					ViewLayoutVector.takeInTheObjects();
 
-				// The handles of a selection are worked out from the objects, so they follow
-				// what arrives as well.
-				GraphicSelection.refreshLocalHandles();
-				if (app.sectionContainer) app.sectionContainer.requestReDraw();
-			});
+					// The handles of a selection are worked out from the objects, so they follow
+					// what arrives as well.
+					GraphicSelection.refreshLocalHandles();
+					if (app.sectionContainer) app.sectionContainer.requestReDraw();
+				},
+			);
 		}
 
 		/*
@@ -623,15 +637,20 @@ class RenderGeometrySection extends CanvasSectionObject {
 		The client works a drag out itself and sends what it did, so the object it holds is
 		changed here rather than waiting for the engine to answer with its own version of it.
 		That version replaces this one whenever it arrives, so a change the engine made
-		differently puts itself right then.
+		differently puts itself right then. The ticket is the one of the message that carried
+		the change, or null where none was numbered.
 	*/
-	public static changeObject(objectId: number, matrix: cool.Matrix2D): void {
+	public static changeObject(
+		objectId: number,
+		matrix: cool.Matrix2D,
+		ticket: cool.InputTicket | null,
+	): void {
 		const object = RenderGeometrySection.objectOf(objectId);
 		if (!object) return;
 
 		RenderGeometrySection.layOverTheObject(object, matrix);
 
-		const pending = PendingChange.leftOn(matrix, object);
+		const pending = PendingChange.leftOn(matrix, object, ticket);
 		if (pending) {
 			const laid = RenderGeometrySection.pending.get(objectId) ?? [];
 			laid.push(pending);
@@ -658,15 +677,24 @@ class RenderGeometrySection extends CanvasSectionObject {
 
 	/*
 		Takes up an answer from the engine for the objects it replaced: the ones named, or every
-		object with a change pending where none are named. The answer is held against the
-		mappings the pending changes left the object at, oldest first: the engine answers the
-		changes in the order they were sent, so where the object came back to a place it stood at
-		before, the answer is the one for its first visit there. Where it matches one, the
-		changes up to that one are answered and the ones after it are laid on again over the
-		answer, so the object shows the newest state made here. Where it matches none the engine
-		went its own way, and its answer stands as it is with nothing laid on.
+		object with a change pending where none are named.
+
+		Where the answer names the newest input sequence number the engine applied, the pending
+		changes up to that number are answered and the others are laid on again over it. The answer
+		was foreseen where the newest answered change left the object where the answer has it. An
+		answer older than every pending change answers none and stands as it is under them.
+
+		Where it names none, the answer is held against the mappings the pending changes left the
+		object at, oldest first: the engine answers the changes in the order they were sent, so
+		where the object came back to a place it stood at before, the answer is the one for its
+		first visit there. Where it matches one, the changes up to that one are answered and the
+		ones after it are laid on again over the answer. Where it matches none the engine went its
+		own way, and its answer stands as it is with nothing laid on.
 	*/
-	private static takeUpTheAnswers(answered?: number[]): void {
+	private static takeUpTheAnswers(
+		answered?: number[],
+		inputSequence?: number,
+	): void {
 		const objectIds = answered ?? [...RenderGeometrySection.pending.keys()];
 
 		// A whole part arriving may have changed anything, predicted or not.
@@ -694,17 +722,17 @@ class RenderGeometrySection extends CanvasSectionObject {
 				continue;
 			}
 
-			// The mapping is the surer of the two, so it is asked first and the box only where
-			// no mapping matches.
-			let matched = -1;
-			for (let at = 0; at < laid.length && matched < 0; ++at)
-				if (laid[at].answeredBy(answer)) matched = at;
-			for (let at = 0; at < laid.length && matched < 0; ++at)
-				if (laid[at].answeredInTheBox(object)) matched = at;
+			const { rest, foreseen } =
+				inputSequence === undefined
+					? RenderGeometrySection.heldAgainstThePlace(laid, object, answer)
+					: RenderGeometrySection.heldAgainstTheNumber(
+							laid,
+							inputSequence,
+							object,
+							answer,
+						);
+			if (!foreseen) GraphicSelection.unpredictedAnswer(objectId);
 
-			if (matched < 0) GraphicSelection.unpredictedAnswer(objectId);
-
-			const rest = matched < 0 ? [] : laid.slice(matched + 1);
 			for (const one of rest) {
 				RenderGeometrySection.layOverTheObject(object, one.change);
 				one.laidAgainOn(object);
@@ -713,6 +741,49 @@ class RenderGeometrySection extends CanvasSectionObject {
 			if (rest.length) RenderGeometrySection.pending.set(objectId, rest);
 			else RenderGeometrySection.pending.delete(objectId);
 		}
+	}
+
+	/*
+		The pending changes the engine has not applied by that number, and whether the answer was
+		foreseen: the newest applied change left the object where the answer has it, or none was
+		applied and the answer is older than every change.
+	*/
+	private static heldAgainstTheNumber(
+		laid: PendingChange[],
+		inputSequence: number,
+		object: cool.SlideObject,
+		answer: cool.Matrix2D,
+	): { rest: PendingChange[]; foreseen: boolean } {
+		const rest: PendingChange[] = [];
+		let newest: PendingChange | undefined;
+		for (const one of laid)
+			if (one.appliedBy(inputSequence)) newest = one;
+			else rest.push(one);
+
+		const foreseen =
+			!newest || newest.answeredBy(answer) || newest.answeredInTheBox(object);
+		return { rest, foreseen };
+	}
+
+	/// The pending changes after the one whose mapping or box matches the answer, and whether
+	/// one matches. None where nothing matches.
+	private static heldAgainstThePlace(
+		laid: PendingChange[],
+		object: cool.SlideObject,
+		answer: cool.Matrix2D,
+	): { rest: PendingChange[]; foreseen: boolean } {
+		// The mapping is the surer of the two, so it is asked first and the box only where no
+		// mapping matches.
+		let matched = -1;
+		for (let at = 0; at < laid.length && matched < 0; ++at)
+			if (laid[at].answeredBy(answer)) matched = at;
+		for (let at = 0; at < laid.length && matched < 0; ++at)
+			if (laid[at].answeredInTheBox(object)) matched = at;
+
+		return {
+			rest: matched < 0 ? [] : laid.slice(matched + 1),
+			foreseen: matched >= 0,
+		};
 	}
 
 	/*

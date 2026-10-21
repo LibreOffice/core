@@ -1868,12 +1868,22 @@ bool ChildSession::reportMousePointer(const StringVector& tokens)
     return true;
 }
 
+namespace
+{
+/// Whether the command has that many tokens, or one more that is the client's input sequence.
+bool hasTokens(const StringVector& tokens, std::size_t count)
+{
+    return tokens.size() == count
+           || (tokens.size() == count + 1 && tokens.startsWith(count, "sequence="));
+}
+}
+
 bool ChildSession::setObjectPoints(const StringVector& tokens)
 {
     std::string objectId;
     std::string changes;
 
-    if (tokens.size() != 3 || !getTokenString(tokens[1], "id", objectId)
+    if (!hasTokens(tokens, 3) || !getTokenString(tokens[1], "id", objectId)
         || !getTokenString(tokens[2], "changes", changes))
     {
         sendTextFrameAndLogError("error: cmd=setobjectpoints kind=syntax");
@@ -1894,7 +1904,7 @@ bool ChildSession::setObjectGluePoint(const StringVector& tokens)
     std::string down;
     int nAt = 0;
 
-    if (tokens.size() != 5 || !getTokenString(tokens[1], "id", objectId)
+    if (!hasTokens(tokens, 5) || !getTokenString(tokens[1], "id", objectId)
         || !getTokenInteger(tokens[2], "at", nAt) || !getTokenString(tokens[3], "x", across)
         || !getTokenString(tokens[4], "y", down))
     {
@@ -1919,7 +1929,7 @@ bool ChildSession::setObjectControlPoint(const StringVector& tokens)
     int nY = 0;
     int nWithTheShape = 0;
 
-    if (tokens.size() != 6 || !getTokenString(tokens[1], "id", objectId)
+    if (!hasTokens(tokens, 6) || !getTokenString(tokens[1], "id", objectId)
         || !getTokenInteger(tokens[2], "at", nAt) || !getTokenInteger(tokens[3], "x", nX)
         || !getTokenInteger(tokens[4], "y", nY)
         || !getTokenInteger(tokens[5], "withtheshape", nWithTheShape))
@@ -1947,12 +1957,13 @@ bool ChildSession::setObjectHandle(const StringVector& tokens)
     int nOrtho = 0;
 
     // An ortho=1 after the place asks for the move the office makes while Shift is held.
-    if ((tokens.size() != 8 && tokens.size() != 9) || !getTokenString(tokens[1], "id", objectId)
+    const bool bOrtho = tokens.size() > 8 && tokens.startsWith(8, "ortho=");
+    if (!hasTokens(tokens, bOrtho ? 9 : 8) || !getTokenString(tokens[1], "id", objectId)
         || !getTokenInteger(tokens[2], "kind", nKind)
         || !getTokenInteger(tokens[3], "polygon", nPolygon)
         || !getTokenInteger(tokens[4], "point", nPoint) || !getTokenInteger(tokens[5], "at", nAt)
         || !getTokenInteger(tokens[6], "x", nX) || !getTokenInteger(tokens[7], "y", nY)
-        || (tokens.size() == 9 && !getTokenInteger(tokens[8], "ortho", nOrtho)))
+        || (bOrtho && !getTokenInteger(tokens[8], "ortho", nOrtho)))
     {
         sendTextFrameAndLogError("error: cmd=setobjecthandle kind=syntax");
         return false;
@@ -1975,7 +1986,7 @@ bool ChildSession::cropObject(const StringVector& tokens)
     int nLowerRightX = 0;
     int nLowerRightY = 0;
 
-    if (tokens.size() != 6 || !getTokenString(tokens[1], "id", objectId)
+    if (!hasTokens(tokens, 6) || !getTokenString(tokens[1], "id", objectId)
         || !getTokenInteger(tokens[2], "x1", nUpperLeftX)
         || !getTokenInteger(tokens[3], "y1", nUpperLeftY)
         || !getTokenInteger(tokens[4], "x2", nLowerRightX)
@@ -1997,7 +2008,7 @@ bool ChildSession::setObjectTransform(const StringVector& tokens)
     std::string mappings;
     std::string what;
 
-    if (tokens.size() != 3 || !getTokenString(tokens[1], "to", mappings)
+    if (!hasTokens(tokens, 3) || !getTokenString(tokens[1], "to", mappings)
         || !getTokenString(tokens[2], "as", what))
     {
         sendTextFrameAndLogError("error: cmd=setobjecttransform kind=syntax");

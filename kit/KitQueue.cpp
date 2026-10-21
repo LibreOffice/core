@@ -72,6 +72,19 @@ namespace {
             message.append(sequence);
         }
     }
+
+    /// Whether the queued message changes a drawing object: setobjecttransform, setobjecthandle,
+    /// setobjectcontrolpoint, setobjectgluepoint, setobjectpoints or cropobject. Each of them can
+    /// carry the client's input sequence number.
+    bool isObjectChange(const StringVector& queuedTokens)
+    {
+        return queuedTokens.equals(1, "setobjecttransform")
+               || queuedTokens.equals(1, "setobjecthandle")
+               || queuedTokens.equals(1, "setobjectcontrolpoint")
+               || queuedTokens.equals(1, "setobjectgluepoint")
+               || queuedTokens.equals(1, "setobjectpoints")
+               || queuedTokens.equals(1, "cropobject");
+    }
 }
 
 void KitQueue::put(const Payload& value)
@@ -727,14 +740,17 @@ std::string KitQueue::combineTextInput(const StringVector& tokens)
         StringVector queuedTokens = StringVector::tokenize(it.data(), it.size());
 
         // If any messages of these types are present before the current ("textinput") message,
-        // no combination is possible.
+        // no combination is possible. The combined message goes to the end of the queue, after an
+        // object change that was sent later than the queued text and has a higher sequence number,
+        // so the text stays where it is.
         if (queuedTokens.size() == 1 ||
             (queuedTokens.equals(0, tokens, 0) &&
              (queuedTokens.equals(1, "key") ||
               queuedTokens.equals(1, "mouse") ||
               queuedTokens.equals(1, "removetextcontext") ||
               queuedTokens.equals(1, "textcursor") ||
-              queuedTokens.equals(1, "windowkey"))))
+              queuedTokens.equals(1, "windowkey") ||
+              isObjectChange(queuedTokens))))
             return std::string();
 
         std::string queuedId;
@@ -854,14 +870,17 @@ std::string KitQueue::combineRemoveText(const StringVector& tokens)
         StringVector queuedTokens = StringVector::tokenize(it.data(), it.size());
 
         // If any messages of these types are present before the current (removetextcontext)
-        // message, no combination is possible.
+        // message, no combination is possible. The combined message goes to the end of the queue,
+        // after an object change that was sent later than the queued deletion and has a higher
+        // sequence number, so the deletion stays where it is.
         if (queuedTokens.size() == 1 ||
             (queuedTokens.equals(0, tokens, 0) &&
              (queuedTokens.equals(1, "key") ||
               queuedTokens.equals(1, "mouse") ||
               queuedTokens.equals(1, "textinput") ||
               queuedTokens.equals(1, "textcursor") ||
-              queuedTokens.equals(1, "windowkey"))))
+              queuedTokens.equals(1, "windowkey") ||
+              isObjectChange(queuedTokens))))
             return std::string();
 
         std::string queuedId;

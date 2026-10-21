@@ -228,7 +228,7 @@ class Socket {
 		// ahead of a message that follows it.
 		if (typeof msg === 'string') {
 			if (ChangeOutbox.take(msg)) return;
-			ChangeOutbox.sendAhead(msg);
+			msg = ChangeOutbox.sendAhead(msg);
 		}
 
 		const socketState = this.socket.readyState;
