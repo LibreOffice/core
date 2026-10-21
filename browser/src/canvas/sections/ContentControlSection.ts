@@ -41,6 +41,9 @@ export class ContentControlSection extends CanvasSectionObject {
 		var container = window.L.DomUtil.createWithId('div', 'datepicker');
 		container.style.zIndex = '12';
 		container.style.position = 'absolute';
+		container.setAttribute('role', 'dialog');
+		container.setAttribute('aria-label', _('Choose a date'));
+		container.addEventListener('keydown', this.onDatePickerKeyDown.bind(this));
 		document.getElementById('document-container').appendChild(container);
 		this.sectionProperties.picturePicker = false;
 	}
@@ -61,6 +64,12 @@ export class ContentControlSection extends CanvasSectionObject {
 			return;
 		}
 
+		// Alt+Down is followed by the same control again, which keeps its open calendar
+		if (json.date && $('#datepicker').is(':visible')
+			&& JSON.stringify(json) === JSON.stringify(this.sectionProperties.json))
+			return;
+
+		this.leaveDatePicker();
 		this.removeDropdownSection();
 
 		this.sectionProperties.json = json;
@@ -69,11 +78,27 @@ export class ContentControlSection extends CanvasSectionObject {
 
 		if (json.date) {
 			$.datepicker.setDefaults($.datepicker.regional[(<any>window).langParamLocale.language]);
-			$('#datepicker').datepicker({
-				onSelect: function (date: any, datepicker: any) {
+			// a calendar made already would keep its first date
+			$('#datepicker').datepicker('destroy');
+			// onUpdateDatepicker is newer than the typings of jQuery UI
+			$('#datepicker').datepicker(<any>{
+				defaultDate: this.getCurrentDate(json),
+				dateFormat: 'yy-mm-dd', // YYYY-MM-DD, which executeContentControlEvent() parses
+				// after every redraw, e.g. a click on Prev or Next too, which empties the focused day
+				onUpdateDatepicker: () => {
+					if (this.sectionProperties.turningDatePicker)
+						return; // moveDatePicker() labels the last month only
+					const day = this.labelDatePicker();
+					if (day && document.activeElement === document.body
+						&& $('#datepicker').is(':visible'))
+						day.focus({ preventScroll: true });
+				},
+				onSelect: (date: any) => {
 					if (date != '') {
 						app.socket.sendMessage('contentcontrolevent type=date selected=' + date);
 					}
+					this.leaveDatePicker();
+					$('#datepicker').hide();
 				}
 			});
 			$('#datepicker').hide();
@@ -101,6 +126,158 @@ export class ContentControlSection extends CanvasSectionObject {
 		}
 
 		app.sectionContainer.requestReDraw();
+	}
+
+	// the date of the control, as "YYYY-MM-DDT00:00:00Z", or none for today
+	private getCurrentDate(json: any): Date | null {
+		const match = /^(\d{4})-(\d{2})-(\d{2})/.exec(json.currentDate || '');
+		if (!match)
+			return null;
+		return new Date(parseInt(match[1]), parseInt(match[2]) - 1, parseInt(match[3]));
+	}
+
+	// a grid, as a screen reader passes the keys to one, of days named by their full date, as a
+	// number alone means little; returns the day to focus
+	private labelDatePicker(): HTMLElement | null {
+		const picker = document.getElementById('datepicker');
+		const table = picker.querySelector('table.ui-datepicker-calendar');
+		if (!table)
+			return null;
+		table.setAttribute('role', 'grid');
+		const title = picker.querySelector('.ui-datepicker-title');
+		if (title)
+			table.setAttribute('aria-label', title.textContent);
+		const locale = window.langParam || undefined;
+		const cells: HTMLElement[] = [];
+		picker.querySelectorAll('td[data-handler="selectDay"]').forEach((cell: HTMLElement) => {
+			const day = cell.querySelector('a');
+			if (!day)
+				return;
+			const date = new Date(parseInt(cell.dataset.year), parseInt(cell.dataset.month),
+				parseInt(day.textContent));
+			cell.setAttribute('aria-label', date.toLocaleDateString(locale,
+				{ weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }));
+			cell.setAttribute('aria-selected', String(day.classList.contains('ui-state-active')));
+			cell.tabIndex = -1;
+			day.tabIndex = -1; // the cell takes the focus
+			cells.push(cell);
+		});
+		const current = cells.find((cell) => cell.querySelector('a.ui-state-active'))
+			|| cells.find((cell) => cell.querySelector('a.ui-state-highlight')) || cells[0] || null;
+		if (current)
+			current.tabIndex = 0;
+		return current;
+	}
+
+	public focusDatePicker(): void {
+		const day = this.labelDatePicker();
+		if (day)
+			day.focus({ preventScroll: true });
+	}
+
+	// before the calendar is hidden or emptied, which would leave the focus nowhere
+	public leaveDatePicker(): void {
+		if (document.getElementById('datepicker').contains(document.activeElement))
+			app.map.focus();
+	}
+
+	private onDatePickerKeyDown(e: KeyboardEvent): void {
+		// an Alt chord is the application's, e.g. a repeated Alt+Down
+		if (e.altKey)
+			return;
+		const picker = $('#datepicker');
+		// the focused day, which Prev or Next moves away from the selected date
+		const day = document.activeElement;
+		const cell = day instanceof HTMLElement
+			? day.closest('td[data-handler="selectDay"]') as HTMLElement : null;
+		const date: Date = cell
+			? new Date(parseInt(cell.dataset.year), parseInt(cell.dataset.month),
+				parseInt(cell.textContent))
+			: picker.datepicker('getDate') || new Date();
+		const year = date.getFullYear();
+		const month = date.getMonth();
+		// a calendar for a right-to-left language runs from the right
+		const left = picker.datepicker('option', 'isRTL') ? 1 : -1;
+		let next: Date | null = null;
+		switch (e.key) {
+		case 'ArrowLeft':
+		case 'ArrowRight':
+		case 'ArrowUp':
+		case 'ArrowDown': {
+			const days = { ArrowLeft: left, ArrowRight: -left, ArrowUp: -7, ArrowDown: 7 }[e.key];
+			next = new Date(year, month, date.getDate() + days);
+			break;
+		}
+		case 'PageUp':
+		case 'PageDown': {
+			// a month, or a year with Shift
+			const months = e.shiftKey ? 12 : 1;
+			const target = month + (e.key === 'PageUp' ? -months : months);
+			// the 31st is the 30th or less in a shorter month
+			const last = new Date(year, target + 1, 0).getDate();
+			next = new Date(year, target, Math.min(date.getDate(), last));
+			break;
+		}
+		case 'Home':
+			next = new Date(year, month, 1);
+			break;
+		case 'End':
+			next = new Date(year, month + 1, 0);
+			break;
+		case 'Enter':
+		case ' ':
+			if (cell)
+				(day as HTMLElement).click();
+			break;
+		case 'Escape':
+		case 'Tab': // nothing else in the calendar takes the focus
+			this.leaveDatePicker();
+			picker.hide();
+			break;
+		default:
+			return;
+		}
+		e.preventDefault();
+		e.stopPropagation();
+		if (next)
+			this.moveDatePicker(next);
+	}
+
+	// to a day, turning the months as Prev and Next do, which keep the mark of the chosen date
+	private moveDatePicker(date: Date): void {
+		const picker = document.getElementById('datepicker');
+		const shown = picker.querySelector('td[data-handler="selectDay"]') as HTMLElement;
+		if (!shown)
+			return;
+		let months = (date.getFullYear() - parseInt(shown.dataset.year)) * 12
+			+ date.getMonth() - parseInt(shown.dataset.month);
+		if (months !== 0) {
+			this.sectionProperties.turningDatePicker = true;
+			try {
+				for (; months !== 0; months += months < 0 ? 1 : -1) {
+					const turn = picker.querySelector(months < 0
+						? '[data-handler="prev"]' : '[data-handler="next"]') as HTMLElement;
+					if (!turn)
+						break;
+					turn.click();
+				}
+			} finally {
+				this.sectionProperties.turningDatePicker = false;
+			}
+			this.labelDatePicker();
+		}
+		const cells = Array.from(picker.querySelectorAll('td[data-handler="selectDay"]'));
+		const cell = cells.find((cell: HTMLElement) =>
+			parseInt(cell.dataset.year) === date.getFullYear()
+			&& parseInt(cell.dataset.month) === date.getMonth()
+			&& parseInt(cell.textContent) === date.getDate()) as HTMLElement;
+		if (!cell) {
+			this.focusDatePicker(); // the focused day may be gone with its month
+			return;
+		}
+		cells.forEach((other: HTMLElement) => { other.tabIndex = -1; });
+		cell.tabIndex = 0;
+		cell.focus({ preventScroll: true });
 	}
 
 	private setPositionAndSize (): void {

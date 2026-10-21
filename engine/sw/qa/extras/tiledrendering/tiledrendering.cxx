@@ -4022,6 +4022,54 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDateContentControl)
     CPPUNIT_ASSERT_EQUAL(u"2022-05-30"_ustr, pTextNode->GetExpandText(pWrtShell->GetLayout()));
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testDateContentControlAltDown)
+{
+    // Given a document with a date content control holding a date:
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    setupCOKitViewCallback(pWrtShell->GetSfxViewShell());
+    auto xMSF = mxComponent.queryThrow<lang::XMultiServiceFactory>();
+    uno::Reference<text::XText> xText = mxComponent.queryThrow<text::XTextDocument>()->getText();
+    uno::Reference<text::XTextCursor> xCursor = xText->createTextCursor();
+    xText->insertString(xCursor, u"2026-10-21"_ustr, /*bAbsorb=*/false);
+    xCursor->gotoStart(/*bExpand=*/false);
+    xCursor->gotoEnd(/*bExpand=*/true);
+    auto xContentControl = xMSF->createInstance(u"com.sun.star.text.ContentControl"_ustr)
+                               .queryThrow<text::XTextContent>();
+    auto xContentControlProps = xContentControl.queryThrow<beans::XPropertySet>();
+    xContentControlProps->setPropertyValue(u"Date"_ustr, cpo::uno::Any(true));
+    xContentControlProps->setPropertyValue(u"DateFormat"_ustr, cpo::uno::Any(u"YYYY-MM-DD"_ustr));
+    xContentControlProps->setPropertyValue(u"DateLanguage"_ustr, cpo::uno::Any(u"en-US"_ustr));
+    xContentControlProps->setPropertyValue(u"CurrentDate"_ustr,
+                                           cpo::uno::Any(u"2026-10-21T00:00:00Z"_ustr));
+    xText->insertTextContent(xCursor, xContentControl, /*bAbsorb=*/true);
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    m_aContentControls.clear();
+
+    // When entering it, and pressing Alt+Down there:
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, /*nCount=*/1,
+                     /*bBasicCall=*/false);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_DOWN | KEY_MOD2);
+    pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_DOWN | KEY_MOD2);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the client gets the date to open the calendar on, and is asked to open it:
+    // Without the fix, there was no current date, and no popup was asked for.
+    std::vector<boost::property_tree::ptree> aTrees;
+    for (const OString& rPayload : m_aContentControls)
+    {
+        std::stringstream aStream((std::string(rPayload)));
+        boost::property_tree::read_json(aStream, aTrees.emplace_back());
+    }
+    CPPUNIT_ASSERT(!aTrees.empty());
+    CPPUNIT_ASSERT_EQUAL(std::string("show"), aTrees.front().get<std::string>("action"));
+    CPPUNIT_ASSERT_EQUAL(std::string("2026-10-21T00:00:00Z"),
+                         aTrees.front().get<std::string>("currentDate", ""));
+    CPPUNIT_ASSERT(std::ranges::any_of(aTrees, [](const boost::property_tree::ptree& rTree) {
+        return rTree.get<std::string>("action") == "popup";
+    }));
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testAuthorField)
 {
     SwXTextDocument* pXTextDocument = createDoc();

@@ -1585,9 +1585,10 @@ void SwEditWin::KeyInput(const KeyEvent &rKEvt)
         std::shared_ptr<SwContentControl> pContentControl = rFormatContentControl.GetContentControl();
         if (pContentControl->ShouldOpenPopup(rKeyCode))
         {
-            // the client shows the list, as for a click on its button
+            // the client shows the list or the calendar, as for a click on its button
             if (comphelper::COKit::isActive() && !bIsViewReadOnly
-                && (pContentControl->GetDropDown() || pContentControl->GetComboBox()))
+                && (pContentControl->GetDropDown() || pContentControl->GetComboBox()
+                    || pContentControl->GetDate()))
             {
                 tools::JsonWriter aJson;
                 aJson.put("action", "popup");

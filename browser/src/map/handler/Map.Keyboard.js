@@ -462,6 +462,11 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 			&& URLPopUpSection.getCurrent().getHTMLObject().contains(ev.target))
 			return;
 
+		// the calendar of a date content control, not the document
+		const datePicker = document.getElementById('datepicker');
+		if (datePicker && datePicker.contains(ev.target))
+			return;
+
 		if (this._map._debug.logKeyboardEvents) {
 			window.app.console.log('keyboard handler:', ev.type, ev.key, ev.charCode, this._expectingInput, ev);
 		}

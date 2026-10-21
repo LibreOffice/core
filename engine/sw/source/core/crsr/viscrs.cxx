@@ -735,6 +735,8 @@ void SwSelPaintRects::HighlightContentControl()
             if (pContentControl && pContentControl->GetDate())
             {
                 aJson.put("date", "true");
+                if (!pContentControl->GetCurrentDate().isEmpty())
+                    aJson.put("currentDate", pContentControl->GetCurrentDate());
             }
 
             if (pContentControl && !pContentControl->GetAlias().isEmpty())

@@ -681,6 +681,10 @@ window.L.Clipboard = window.L.Class.extend({
 		if (cool.Comment.isAnyFocus())
 		    return true;
 
+		// the calendar of a date content control
+		if (document.activeElement && document.activeElement.closest('#datepicker'))
+			return true;
+
 		// Editeng JSDialog widgets, e.g. the Impress notes bottom panel.
 		if (this._activeEditEngine())
 			return true;

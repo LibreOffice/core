@@ -59,13 +59,20 @@ class ContentControlDropdownSubSection extends HTMLObjectSection {
 
 	private showDatePicker(): void {
 		if ($('#datepicker').is(':visible')) {
+			this.sectionProperties.parent.leaveDatePicker();
 			$('#datepicker').hide();
 		} else {
 			var datePicker = document.getElementById('datepicker');
 			datePicker.style.left = String(this.myTopLeft[0] / app.dpiScale) + 'px';
 			datePicker.style.top =
 				String((this.myTopLeft[1] + this.size[1]) / app.dpiScale) + 'px';
+			// back on the chosen date, from a month that Prev or Next turned to
+			$('#datepicker').datepicker(
+				'setDate',
+				$('#datepicker').datepicker('getDate'),
+			);
 			$('#datepicker').show();
+			this.sectionProperties.parent.focusDatePicker();
 		}
 	}
 
