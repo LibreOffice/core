@@ -534,8 +534,22 @@ public:
         @returns true if any paragraph properties were written
     */
     bool WriteParagraphProperties(const cpo::uno::Reference< css::text::XTextContent >& rParagraph, float fFirstCharHeight, sal_Int32 nElement);
-    void WriteParagraphNumbering(const cpo::uno::Reference< css::beans::XPropertySet >& rXPropSet, float fFirstCharHeight,
-                                  sal_Int16 nLevel );
+    /** Writes the bullet of a paragraph. With bAutoColorIsTextColor an automatic bullet colour is
+        written as the colour of the text, otherwise as black or white against the background.
+
+        @returns false if the level has no numbering, and nothing was written
+    */
+    bool WriteParagraphNumbering(const cpo::uno::Reference< css::beans::XPropertySet >& rXPropSet, float fFirstCharHeight,
+                                  sal_Int16 nLevel, bool bAutoColorIsTextColor = false );
+    /// Writes nElement (spcBef or spcAft) with a spacing of nMargin in 1/100 mm
+    void WriteParagraphSpacing(sal_Int32 nElement, sal_Int32 nMargin);
+    /** Opens the level nElement (lvl1pPr to lvl9pPr) of a list style and writes the paragraph
+        properties of the style rXStyle into it. nLevel is the outline level whose numbering the
+        style holds, or -1 for a style without numbering. The element is left open for the
+        default run properties.
+    */
+    OOX_DLLPUBLIC void WriteListStyleLevelProperties(const cpo::uno::Reference<css::beans::XPropertySet>& rXStyle,
+                                                     sal_Int32 nElement, sal_Int16 nLevel);
     void WriteParagraphTabStops(const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet);
     void WriteRun( const cpo::uno::Reference< css::text::XTextRange >& rRun,
                    bool& rbOverridingCharHeight, sal_Int32& rnCharHeight,

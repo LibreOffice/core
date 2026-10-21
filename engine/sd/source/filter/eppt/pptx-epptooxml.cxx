@@ -3203,23 +3203,8 @@ void PowerPointExport::WriteTextStyles(const FSHelperPtr& pFS)
             return;
 
         // An outline level is indented by its entry in the numbering rules, which the outline
-        // styles share. A level that states no indent of its own starts at the left edge.
-        sal_Int32 nLeftMargin = 0;
-        sal_Int32 nFirstLineOffset = 0;
-        if (nOutlineLevel >= 0)
-        {
-            nLeftMargin = aDML.getBulletMarginIndentation(xStyle, nOutlineLevel, u"LeftMargin");
-            nFirstLineOffset
-                = aDML.getBulletMarginIndentation(xStyle, nOutlineLevel, u"FirstLineOffset");
-        }
-        pFS->startElementNS(
-            XML_a, nElement, XML_marL,
-            sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nLeftMargin)),
-                                  nLeftMargin > 0),
-            XML_indent,
-            sax_fastparser::UseIf(
-                OString::number(oox::drawingml::convertHmmToEmu(nFirstLineOffset)),
-                nFirstLineOffset != 0));
+        // styles share.
+        aDML.WriteListStyleLevelProperties(xStyle, nElement, nOutlineLevel);
         oox::drawingml::WriteRunInput aInput;
         aDML.WriteRunProperties(xStyle, XML_defRPr, aInput);
         pFS->endElementNS(XML_a, nElement);

@@ -452,6 +452,35 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testMasterTextStyleIndents)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testMasterTextStylesStateEveryValue)
+{
+    // Each level of the master's text styles states its alignment, spacing and bullet, so a
+    // reader lays the text out with the values of the document and not with defaults of its own
+    createSdImpressDoc("pptx/master-and-eleven-layouts.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slideMasters/slideMaster1.xml"_ustr);
+    static constexpr OString aTitle = "/p:sldMaster/p:txStyles/p:titleStyle/a:lvl1pPr"_ostr;
+    assertXPath(pXmlDoc, aTitle + "[@algn][@marL][@indent]", 1);
+    assertXPath(pXmlDoc, aTitle + "/a:lnSpc/a:spcPct", "val", u"90000");
+    assertXPath(pXmlDoc, aTitle + "/a:spcBef/a:spcPts", "val", u"0");
+    assertXPath(pXmlDoc, aTitle + "/a:spcAft/a:spcPts", "val", u"0");
+    assertXPath(pXmlDoc, aTitle + "/a:buNone", 1);
+
+    for (sal_Int32 nLevel = 1; nLevel <= 9; ++nLevel)
+    {
+        const OString aLevel
+            = "/p:sldMaster/p:txStyles/p:bodyStyle/a:lvl" + OString::number(nLevel) + "pPr";
+        assertXPath(pXmlDoc, aLevel, "algn", u"l");
+        assertXPath(pXmlDoc, aLevel, "marL", OUString::number(228600 + 457200 * (nLevel - 1)));
+        assertXPath(pXmlDoc, aLevel, "indent", u"-228600");
+        assertXPath(pXmlDoc, aLevel + "/a:lnSpc/a:spcPct", "val", u"90000");
+        assertXPath(pXmlDoc, aLevel + "/a:spcBef/a:spcPts", 1);
+        assertXPath(pXmlDoc, aLevel + "/a:spcAft/a:spcPts", "val", u"0");
+        assertXPath(pXmlDoc, aLevel + "/a:buChar", 1);
+    }
+}
+
 // A form control on a slide is written with the data that makes it a control, and is read back
 // as one.
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testFormControlExport)

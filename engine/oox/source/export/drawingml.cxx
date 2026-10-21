@@ -3309,15 +3309,16 @@ static OUString GetAutoNumType(SvxNumType nNumberingType, bool bSDot, bool bPBeh
     return OUString();
 }
 
-void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropSet, float fFirstCharHeight, sal_Int16 nLevel )
+bool DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropSet, float fFirstCharHeight, sal_Int16 nLevel,
+                                       bool bAutoColorIsTextColor )
 {
     if (nLevel < 0 || !GetProperty(rXPropSet, u"NumberingRules"_ustr))
-        return;
+        return false;
 
     Reference< XIndexAccess > rXIndexAccess;
 
     if (!(mAny >>= rXIndexAccess) || nLevel >= rXIndexAccess->getCount())
-        return;
+        return false;
 
     SAL_INFO("oox.shape", "numbering rules");
 
@@ -3325,7 +3326,7 @@ void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
     rXIndexAccess->getByIndex(nLevel) >>= aPropertySequence;
 
     if (!aPropertySequence.hasElements())
-        return;
+        return false;
 
     SvxNumType nNumberingType = SVX_NUM_NUMBER_NONE;
     bool bSDot = false;
@@ -3405,7 +3406,7 @@ void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
     }
 
     if (nNumberingType == SVX_NUM_NUMBER_NONE)
-        return;
+        return false;
 
     Graphic aGraphic(xGraphic);
     if (xGraphic.is() && aGraphic.GetType() != GraphicType::NONE)
@@ -3446,7 +3447,9 @@ void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
     }
     else
     {
-        if(bHasBulletColor)
+        if (bAutoColorIsTextColor && (!bHasBulletColor || nBulletColor == COL_AUTO))
+            mpFS->singleElementNS(XML_a, XML_buClrTx);
+        else if(bHasBulletColor)
         {
                if (nBulletColor == COL_AUTO )
                {
@@ -3482,6 +3485,7 @@ void DrawingML::WriteParagraphNumbering(const Reference< XPropertySet >& rXPropS
             mpFS->singleElementNS(XML_a, XML_buChar, XML_char, OUString(aBulletChar));
         }
     }
+    return true;
 }
 
 void DrawingML::WriteParagraphTabStops(const Reference<XPropertySet>& rXPropSet)
@@ -3758,24 +3762,10 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
     }
 
     if( nParaTopMargin != 0 )
-    {
-        mpFS->startElementNS(XML_a, XML_spcBef);
-        {
-            mpFS->singleElementNS( XML_a, XML_spcPts,
-                                   XML_val, OString::number(toTextSpacingPoint(nParaTopMargin)));
-        }
-        mpFS->endElementNS( XML_a, XML_spcBef );
-    }
+        WriteParagraphSpacing(XML_spcBef, nParaTopMargin);
 
     if( nParaBottomMargin != 0 )
-    {
-        mpFS->startElementNS(XML_a, XML_spcAft);
-        {
-            mpFS->singleElementNS( XML_a, XML_spcPts,
-                                   XML_val, OString::number(toTextSpacingPoint(nParaBottomMargin)));
-        }
-        mpFS->endElementNS( XML_a, XML_spcAft );
-    }
+        WriteParagraphSpacing(XML_spcAft, nParaBottomMargin);
 
     if (!bWriteNumbering)
         mpFS->singleElementNS(XML_a, XML_buNone);
@@ -3804,6 +3794,57 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
         mpFS->endElementNS( XML_a, nElement );
 
     return true;
+}
+
+void DrawingML::WriteParagraphSpacing(sal_Int32 nElement, sal_Int32 nMargin)
+{
+    mpFS->startElementNS(XML_a, nElement);
+    mpFS->singleElementNS(XML_a, XML_spcPts, XML_val, OString::number(toTextSpacingPoint(nMargin)));
+    mpFS->endElementNS(XML_a, nElement);
+}
+
+void DrawingML::WriteListStyleLevelProperties(const Reference<XPropertySet>& rXStyle,
+                                              sal_Int32 nElement, sal_Int16 nLevel)
+{
+    // Every value is written, also where it equals the default of the format, so that a reader
+    // gets the values of this level and not ones of its own.
+    const sal_Int32 nLeftMargin
+        = std::max<sal_Int32>(getBulletMarginIndentation(rXStyle, nLevel, u"LeftMargin"), 0);
+    const sal_Int32 nFirstLineOffset
+        = getBulletMarginIndentation(rXStyle, nLevel, u"FirstLineOffset");
+
+    sal_Int16 nAdjust = sal_Int16(style::ParagraphAdjust_LEFT);
+    if (GetProperty(rXStyle, u"ParaAdjust"_ustr))
+        mAny >>= nAdjust;
+
+    mpFS->startElementNS(XML_a, nElement,
+                         XML_marL, OString::number(oox::drawingml::convertHmmToEmu(nLeftMargin)),
+                         XML_indent, OString::number(oox::drawingml::convertHmmToEmu(nFirstLineOffset)),
+                         XML_algn, GetAlignment(static_cast<style::ParagraphAdjust>(nAdjust), true));
+
+    float fCharHeight = 18;
+    if (GetProperty(rXStyle, u"CharHeight"_ustr))
+        mAny >>= fCharHeight;
+
+    LineSpacing aLineSpacing(LineSpacingMode::PROP, 100);
+    if (GetProperty(rXStyle, u"ParaLineSpacing"_ustr))
+        mAny >>= aLineSpacing;
+    mpFS->startElementNS(XML_a, XML_lnSpc);
+    WriteLinespacing(aLineSpacing, fCharHeight);
+    mpFS->endElementNS(XML_a, XML_lnSpc);
+
+    sal_Int32 nTopMargin = 0;
+    if (GetProperty(rXStyle, u"ParaTopMargin"_ustr))
+        mAny >>= nTopMargin;
+    WriteParagraphSpacing(XML_spcBef, nTopMargin);
+
+    sal_Int32 nBottomMargin = 0;
+    if (GetProperty(rXStyle, u"ParaBottomMargin"_ustr))
+        mAny >>= nBottomMargin;
+    WriteParagraphSpacing(XML_spcAft, nBottomMargin);
+
+    if (!WriteParagraphNumbering(rXStyle, fCharHeight, nLevel, true))
+        mpFS->singleElementNS(XML_a, XML_buNone);
 }
 
 void DrawingML::WriteLstStyle(const cpo::uno::Reference<css::text::XTextContent>& rParagraph,
