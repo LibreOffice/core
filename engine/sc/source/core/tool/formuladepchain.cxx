@@ -31,6 +31,15 @@ constexpr int MAX_RANGE_CELLS = 20;
 constexpr int MAX_RANGE_SCAN = 1000;
 constexpr int MAX_ERROR_CELLS = 5;
 
+// The formula as the user's view shows it, and in the English grammar: English function names,
+// a comma between arguments and a reference to another sheet written as Sheet1!A1.
+void writeFormula(tools::JsonWriter& rJsonWriter, const ScFormulaCell& rCell)
+{
+    rJsonWriter.put("formula", rCell.GetFormula());
+    rJsonWriter.put("englishFormula",
+                    rCell.GetFormula(formula::FormulaGrammar::GRAM_ENGLISH_XL_A1));
+}
+
 class DepChainWriter
 {
     ScDocument& m_rDoc;
@@ -135,9 +144,12 @@ void DepChainWriter::writeDependencies(ScTokenArray* pCode, const ScAddress& rPo
             }
             else
             {
-                // Summarize the range
+                // Summarize the range. Its address is written the way the English formula
+                // writes it.
                 auto aStruct = m_rJsonWriter.startStruct();
-                OUString aRangeStr = aRange.Format(m_rDoc, ScRefFlags::VALID | ScRefFlags::TAB_3D);
+                OUString aRangeStr
+                    = aRange.Format(m_rDoc, ScRefFlags::VALID | ScRefFlags::TAB_3D,
+                                    ScAddress::Details(formula::FormulaGrammar::CONV_XL_A1));
                 m_rJsonWriter.put("address", aRangeStr);
                 m_rJsonWriter.put("type", "range");
                 m_rJsonWriter.put("rows", static_cast<sal_Int64>(nRows));
@@ -222,7 +234,7 @@ void DepChainWriter::writeCellInfo(const ScAddress& rPos, int nDepth)
         }
 
         m_rJsonWriter.put("type", "formula");
-        m_rJsonWriter.put("formula", pCell->GetFormula());
+        writeFormula(m_rJsonWriter, *pCell);
 
         FormulaError nErr = pCell->GetRawError();
         if (nErr != FormulaError::NONE)
@@ -293,7 +305,7 @@ void getFormulaDependencyChain(ScDocument& rDoc, const ScAddress& rPos,
         rDoc.GetName(rPos.Tab(), aTabName);
         rJsonWriter.put("sheet", aTabName);
 
-        rJsonWriter.put("formula", pCell->GetFormula());
+        writeFormula(rJsonWriter, *pCell);
         rJsonWriter.put("error", ScGlobal::GetErrorString(nErr));
         rJsonWriter.put("errorCode", static_cast<int>(nErr));
     }

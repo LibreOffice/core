@@ -3701,7 +3701,9 @@ namespace cool {
 				') ' +
 				_('contains') +
 				':\n';
-			context += '  ' + _('Formula') + ': ' + cell.formula + '\n';
+			// The model writes formulas in the English grammar, so it reads them in that
+			// grammar too.
+			context += '  ' + _('Formula') + ': ' + cell.englishFormula + '\n';
 			context += '  ' + _('Error') + ': ' + cell.error + '\n\n';
 
 			if (depChain.dependencies && depChain.dependencies.length > 0) {
@@ -3736,7 +3738,7 @@ namespace cool {
 				const dep = deps[i];
 				if (dep.type === 'formula') {
 					result += prefix + '- ' + dep.address + ': ';
-					result += _('formula') + ' ' + dep.formula;
+					result += _('formula') + ' ' + dep.englishFormula;
 					if (dep.error) {
 						result += ' => ' + _('ERROR') + ': ' + dep.error;
 					} else if (dep.value !== undefined) {

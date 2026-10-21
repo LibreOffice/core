@@ -532,6 +532,43 @@ CPPUNIT_TEST_FIXTURE(ScFormulaDepChainTest, testRangeBoundary)
     }
 }
 
+// Formulas and summarized ranges are also given in the English grammar, where a reference to
+// another sheet reads Sheet1!A1 and a comma separates the arguments.
+CPPUNIT_TEST_FIXTURE(ScFormulaDepChainTest, testEnglishFormula)
+{
+    ScDocument aDoc;
+    aDoc.InsertTab(0, u"test"_ustr);
+    aDoc.InsertTab(1, u"Budget"_ustr);
+    // B1 sums a small range on Budget. A1 divides B1 by zero and adds a large range on Budget.
+    aDoc.SetFormula(ScAddress(1, 0, 0), u"=SUM(Budget!B1:B3)"_ustr,
+                    formula::FormulaGrammar::GRAM_ENGLISH_XL_A1);
+    aDoc.SetFormula(ScAddress(0, 0, 0), u"=ROUND(B1/0,2)+SUM(Budget!B1:Z100)"_ustr,
+                    formula::FormulaGrammar::GRAM_ENGLISH_XL_A1);
+
+    ScFormulaCell* pCell = aDoc.GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pCell);
+    pCell->Interpret();
+
+    auto aTree = runDepChain(aDoc, ScAddress(0, 0, 0));
+
+    CPPUNIT_ASSERT_EQUAL(true, aTree.get<bool>("hasError"));
+    CPPUNIT_ASSERT_EQUAL(std::string("=ROUND(B1/0,2)+SUM(Budget!B1:Z100)"),
+                         aTree.get_child("cell").get<std::string>("englishFormula"));
+
+    std::string sDependencyFormula;
+    std::string sRangeAddress;
+    for (auto& rEntry : aTree.get_child("dependencies"))
+    {
+        std::string sType = rEntry.second.get<std::string>("type");
+        if (sType == "formula")
+            sDependencyFormula = rEntry.second.get<std::string>("englishFormula");
+        else if (sType == "range")
+            sRangeAddress = rEntry.second.get<std::string>("address");
+    }
+    CPPUNIT_ASSERT_EQUAL(std::string("=SUM(Budget!B1:B3)"), sDependencyFormula);
+    CPPUNIT_ASSERT_EQUAL(std::string("Budget!B1:Z100"), sRangeAddress);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
