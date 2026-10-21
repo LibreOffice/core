@@ -854,6 +854,90 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testTdf161592)
     m_pDoc->DeleteTab(0);
 }
 
+CPPUNIT_TEST_FIXTURE(TestFormula2, testTdf161592XLookupOnCalculatedRange)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+    ScSetStringParam aParam;
+    aParam.meStartListening = sc::NoListening;
+    {
+        sc::AutoCalcSwitch aDisableCalc(*m_pDoc, false);
+        m_pDoc->SetValue(1, 0, 0, 50000);
+        m_pDoc->SetValue(1, 1, 0, 15000);
+        m_pDoc->SetString(1, 10, 0, u"=$B$1"_ustr, &aParam);
+        for (SCROW nRow = 11; nRow < 30; ++nRow)
+        {
+            m_pDoc->SetValue(0, nRow - 1, 0, nRow - 10);
+            m_pDoc->SetString(1, nRow, 0, u"=B"_ustr + OUString::number(nRow) + u"*1.03-$B$2",
+                              &aParam);
+        }
+        m_pDoc->SetValue(0, 29, 0, 20);
+        // Put the lookups above their formula range in the same column, as in the attachment.
+        // CalcAll() will encounter these before it reaches the grouped range.
+        m_pDoc->SetString(1, 2, 0, u"=XLOOKUP(0;B11:B30;A11:A30;;1;-2)"_ustr, &aParam);
+        m_pDoc->SetString(1, 3, 0, u"=XMATCH(0;B11:B30;1;-2)"_ustr, &aParam);
+        m_pDoc->SetString(1, 4, 0, u"=XLOOKUP(0;B11:B30;A11:A30;;1;1)"_ustr, &aParam);
+        m_pDoc->StartAllListeners(ScRange(1, 2, 0, 1, 29, 0));
+    }
+    CPPUNIT_ASSERT(m_pDoc->GetFormulaCell(ScAddress(1, 11, 0))->GetCellGroup());
+    m_pDoc->CalcAll();
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(1, 4, 0)); // linear-search control
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(1, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(4.0, m_pDoc->GetValue(1, 3, 0));
+
+    m_pDoc->SetValue(1, 1, 0, 19000);
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(1, 4, 0));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(1, 2, 0));
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(1, 3, 0));
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testInterpretCellsIfNeededGrouped)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+    ScSetStringParam aParam;
+    aParam.meStartListening = sc::NoListening;
+    {
+        sc::AutoCalcSwitch aDisableCalc(*m_pDoc, false);
+        for (SCROW nRow = 10; nRow < 13; ++nRow)
+        {
+            m_pDoc->SetValue(0, nRow, 0, nRow);
+            m_pDoc->SetString(1, nRow, 0, u"=A"_ustr + OUString::number(nRow + 1) + u"+1", &aParam);
+        }
+        m_pDoc->StartAllListeners(ScRange(1, 10, 0, 1, 12, 0));
+    }
+    CPPUNIT_ASSERT(m_pDoc->GetFormulaCell(ScAddress(1, 10, 0))->GetCellGroup());
+    CPPUNIT_ASSERT(m_pDoc->InterpretCellsIfNeeded(ScRange(1, 10, 0, 1, 12, 0)));
+    for (SCROW nRow = 10; nRow < 13; ++nRow)
+        CPPUNIT_ASSERT(!m_pDoc->GetFormulaCell(ScAddress(1, nRow, 0))->NeedsInterpret());
+    CPPUNIT_ASSERT_EQUAL(13.0, m_pDoc->GetValue(1, 12, 0));
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testInterpretCellsIfNeededCircularGroup)
+{
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Test"_ustr);
+    ScSetStringParam aParam;
+    aParam.meStartListening = sc::NoListening;
+    {
+        sc::AutoCalcSwitch aDisableCalc(*m_pDoc, false);
+        for (SCROW nRow = 10; nRow < 13; ++nRow)
+            m_pDoc->SetString(1, nRow, 0, u"=B"_ustr + OUString::number(nRow + 1) + u"+1", &aParam);
+        m_pDoc->StartAllListeners(ScRange(1, 10, 0, 1, 12, 0));
+    }
+    CPPUNIT_ASSERT(m_pDoc->GetFormulaCell(ScAddress(1, 10, 0))->GetCellGroup());
+    CPPUNIT_ASSERT(m_pDoc->InterpretCellsIfNeeded(ScRange(1, 10, 0, 1, 12, 0)));
+    for (SCROW nRow = 10; nRow < 13; ++nRow)
+    {
+        ScAddress aCell(1, nRow, 0);
+        CPPUNIT_ASSERT(!m_pDoc->GetFormulaCell(aCell)->NeedsInterpret());
+        CPPUNIT_ASSERT_EQUAL(FormulaError::CircularReference, m_pDoc->GetErrCode(aCell));
+    }
+    m_pDoc->DeleteTab(0);
+}
+
 CPPUNIT_TEST_FIXTURE(TestFormula2, testLookupRecursionCache)
 {
     sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);

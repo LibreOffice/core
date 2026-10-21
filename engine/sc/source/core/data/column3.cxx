@@ -104,6 +104,7 @@ void ScColumn::BroadcastRows( SCROW nStartRow, SCROW nEndRow, SfxHintId nHint )
 
 namespace {
 
+template<bool bCheckNeedsInterpret>
 class CellInterpreterBase
 {
 protected:
@@ -122,16 +123,29 @@ protected:
         if( !p->GetCellGroup())
         {
             p->Interpret();
+            checkInterpreted(p);
             return;
         }
         groupCells.push_back(p);
 
+    }
+    bool Finish() noexcept
+    {
+        // The last formula group is still pending until this flush.
+        suppress_fun_call_w_exception(flushPending());
+        return allInterpreted;
     }
     ~CellInterpreterBase()
     {
         suppress_fun_call_w_exception(flushPending());
     }
 private:
+    void checkInterpreted(ScFormulaCell* p)
+    {
+        if constexpr (bCheckNeedsInterpret)
+            if (p->NeedsInterpret())
+                allInterpreted = false;
+    }
     void flushPending()
     {
         if(groupCells.empty())
@@ -146,12 +160,17 @@ private:
             for(ScFormulaCell* cell : groupCells)
                 cell->Interpret();
         }
+        if constexpr (bCheckNeedsInterpret)
+            // Group members can only be checked after the group has run.
+            for (ScFormulaCell* cell : groupCells)
+                checkInterpreted(cell);
         groupCells.clear();
     }
     std::vector<ScFormulaCell*> groupCells;
+    bool allInterpreted = true;
 };
 
-class DirtyCellInterpreter : public CellInterpreterBase
+class DirtyCellInterpreter : public CellInterpreterBase<false>
 {
 public:
     void operator() (size_t, ScFormulaCell* p)
@@ -161,22 +180,15 @@ public:
     }
 };
 
-class NeedsInterpretCellInterpreter : public CellInterpreterBase
+class NeedsInterpretCellInterpreter : public CellInterpreterBase<true>
 {
 public:
     void operator() (size_t, ScFormulaCell* p)
     {
         if(p->NeedsInterpret())
-        {
             Interpret(p);
-            // In some cases such as circular dependencies Interpret()
-            // will not reset the dirty flag, check that in order to tell
-            // the caller that the cell range may trigger Interpret() again.
-            if(p->NeedsInterpret())
-                allInterpreted = false;
-        }
     }
-    bool allInterpreted = true;
+    using CellInterpreterBase<true>::Finish;
 };
 
 }
@@ -199,7 +211,7 @@ bool ScColumn::InterpretCellsIfNeeded( SCROW nRow1, SCROW nRow2 )
     sc::MatrixResizeGuard aGuard(GetDoc());
     NeedsInterpretCellInterpreter aFunc;
     sc::ProcessFormula(maCells.begin(), maCells, nRow1, nRow2, aFunc);
-    return aFunc.allInterpreted;
+    return aFunc.Finish();
 }
 
 void ScColumn::DeleteContent( SCROW nRow, bool bBroadcast )
