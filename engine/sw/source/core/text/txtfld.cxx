@@ -439,14 +439,17 @@ static const SwRangeRedline* lcl_GetRedlineAtNodeInsertionOrDeletion( const SwTe
         for( ; nRedlPos < rTable.size() ; ++nRedlPos )
         {
             const SwRangeRedline* pTmp = rTable[ nRedlPos ];
-            SwNodeOffset nStart = pTmp->GetPoint()->GetNodeIndex(),
-                         nEnd = pTmp->GetMark()->GetNodeIndex();
-            if( nStart > nEnd )
-                std::swap(nStart, nEnd);
+            auto [pRStt, pREnd] = pTmp->StartEnd();
+            SwNodeOffset nStart = pRStt->GetNodeIndex(),
+                         nEnd = pREnd->GetNodeIndex();
             if( RedlineType::Delete == pTmp->GetType() ||
                 RedlineType::Insert == pTmp->GetType() )
             {
-                if( nStart <= nNdIdx && nEnd > nNdIdx )
+                // A redline that starts at the start of a paragraph covers that whole paragraph, so
+                // include the start of the range and omit the end of it. Otherwise omit the start
+                // and include the end, to be consistent with the selection rendering.
+                if( pRStt->GetContentIndex() == 0 ? ( nStart <= nNdIdx && nEnd > nNdIdx )
+                                                  : ( nStart < nNdIdx && nEnd >= nNdIdx ) )
                 {
                     bIsMoved = pTmp->IsMoved();
                     return pTmp;

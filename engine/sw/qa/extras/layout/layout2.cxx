@@ -633,9 +633,10 @@ CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumberInNumbering)
         pXmlDoc,
         "/metafile/push/push/push/textcolor[not(@color='#000000') and not(@color='#008000')]", 5);
 
-    // tdf#145068 numbering shows changes in the associated list item, not the next one
-    // This was 1 (black numbering of the first list item previously)
-    assertXPath(pXmlDoc, "/metafile/push/push/push/font[4][@color='#000000']", 0);
+    // A tracked deletion or insertion of only a paragraph mark is shown on the numbering of the
+    // next list item, as that goes away on accepting the deletion or rejecting the insertion:
+    // the numbering of the first list item is black
+    assertXPath(pXmlDoc, "/metafile/push/push/push/font[4][@color='#000000']", 1);
 }
 
 CPPUNIT_TEST_FIXTURE(SwLayoutWriter2, testRedlineNumbering)

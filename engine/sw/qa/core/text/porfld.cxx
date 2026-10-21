@@ -30,7 +30,8 @@ public:
 
 CPPUNIT_TEST_FIXTURE(Test, testNumberPortionRedlineRenderMode)
 {
-    // Given a document with redlines, the "2." number portion is inserted:
+    // Given a document with redlines, the paragraph mark of "Second" is inserted, so the "3."
+    // number portion is shown as inserted:
     createSwDoc("redline-number-portion.docx");
 
     // When redline render mode is standard:
@@ -40,10 +41,10 @@ CPPUNIT_TEST_FIXTURE(Test, testNumberPortionRedlineRenderMode)
     // Then make sure we paint an underline:
     MetafileXmlDump aDumper;
     xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
-    OUString aContent = getXPathContent(pXmlDoc, "(//textarray)[3]/text");
-    CPPUNIT_ASSERT_EQUAL(u"2."_ustr, aContent);
+    OUString aContent = getXPathContent(pXmlDoc, "(//textarray)[5]/text");
+    CPPUNIT_ASSERT_EQUAL(u"3."_ustr, aContent);
     OUString aUnderline
-        = getXPath(pXmlDoc, "(//textarray)[3]/preceding-sibling::font[1]", "underline");
+        = getXPath(pXmlDoc, "(//textarray)[5]/preceding-sibling::font[1]", "underline");
     CPPUNIT_ASSERT_EQUAL(u"1"_ustr, aUnderline);
 
     // And given "omit inserts" redline render mode:
@@ -57,9 +58,9 @@ CPPUNIT_TEST_FIXTURE(Test, testNumberPortionRedlineRenderMode)
 
     // Then make sure we don't paint an underline:
     pXmlDoc = dumpAndParse(aDumper, *xMetaFile);
-    aContent = getXPathContent(pXmlDoc, "(//textarray)[3]/text");
-    CPPUNIT_ASSERT_EQUAL(u"2."_ustr, aContent);
-    aUnderline = getXPath(pXmlDoc, "(//textarray)[3]/preceding-sibling::font[1]", "underline");
+    aContent = getXPathContent(pXmlDoc, "(//textarray)[5]/text");
+    CPPUNIT_ASSERT_EQUAL(u"3."_ustr, aContent);
+    aUnderline = getXPath(pXmlDoc, "(//textarray)[5]/preceding-sibling::font[1]", "underline");
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 0
     // - Actual  : 1
