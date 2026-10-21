@@ -922,7 +922,10 @@ window.L.Map.include({
 			// request filename. SharePoint doesn't support `UI_SaveAs`
 			let fileName = wopi.BaseFileName;
 			if (!format) {
-				format = fileName.substring(fileName.lastIndexOf('.') + 1);
+				let dot = fileName.lastIndexOf('.');
+				if (dot != -1) {
+					format = fileName.substring(dot + 1);
+				}
 			}
 			wopi.requestSaveAsName(fileName, format, wopi.performSaveOrExportAs.bind(wopi));
 			return;

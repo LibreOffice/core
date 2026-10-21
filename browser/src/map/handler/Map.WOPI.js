@@ -1043,12 +1043,21 @@ window.L.Map.WOPI = window.L.Handler.extend({
 	},
 
 	requestSaveAsName: function(fileName, saveAsFormat, action) {
-		let defaultValue = fileName.substring(0, fileName.lastIndexOf('.')) + '.' + saveAsFormat;
+		let dot = fileName.lastIndexOf('.');
+		let defaultValue;
+		if (dot != -1) {
+			defaultValue = fileName.substring(0, dot);
+		} else {
+			defaultValue = fileName;
+		}
+		if (saveAsFormat) {
+			defaultValue += '.' + saveAsFormat;
+		}
 		this._map.uiManager.showInputModal('save-as-modal', '', _('Enter a file name'), defaultValue, _('OK'), () => {
 			let value = document.getElementById('save-as-modal').querySelectorAll('#input-modal-input')[0].value;
 			if (!value) {
 				return;
-			} else if (value.substring(value.lastIndexOf('.') + 1) !== saveAsFormat) {
+			} else if (saveAsFormat && (value.substring(value.lastIndexOf('.') + 1) !== saveAsFormat)) {
 				value += '.' + saveAsFormat;
 			}
 			action(value, saveAsFormat);
