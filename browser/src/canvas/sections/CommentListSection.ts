@@ -428,6 +428,55 @@ export class CommentSection extends CanvasSectionObject {
 		this.addCommentAttention(annotation);
 	}
 
+	public getNavigableComments(): Comment[] {
+		const props = this.sectionProperties;
+		if (props.show === false || !(<any>window).mode.isDesktop())
+			return [];
+		const docType = app.map._docLayer._docType;
+		return props.commentList.filter((comment: Comment) => {
+			const data = comment.sectionProperties.data;
+			if (data.id === 'new' || comment.pendingInit)
+				return false;
+			if (docType === 'text')
+				return data.resolved !== 'true' || props.showResolved;
+			if (docType === 'presentation' || docType === 'drawing')
+				return app.file.fileBasedView || comment.isInsideActivePart();
+			return false;
+		});
+	}
+
+	public getAdjacentComment(comment: Comment, direction: number): Comment | null {
+		const comments = this.getNavigableComments();
+		const index = comments.indexOf(comment);
+		if (index === -1)
+			return null;
+		return comments[index + direction] || null;
+	}
+
+	public focusComment(comment: Comment, stop: 'first' | 'last' | 'body'): void {
+		this.select(comment);
+		app.layoutingService.appendLayoutingTask(() => {
+			comment.focusTabStop(stop);
+		});
+	}
+
+	public focusCommentRegion(): boolean {
+		const comments = this.getNavigableComments();
+		if (!comments.length)
+			return false;
+
+		const props = this.sectionProperties;
+		let target = comments.find((comment) => comment === props.expandedComment)
+			|| comments.find((comment) => comment === props.selectedComment);
+		if (!target) {
+			const viewTop = app.activeDocument.activeLayout.viewedRectangle.y1;
+			target = comments.find((comment) =>
+				Math.abs(comment.sectionProperties.data.anchorPos[1]) >= viewTop) || comments[0];
+		}
+		this.focusComment(target, 'body');
+		return true;
+	}
+
 	private addCommentAttention(annotation: any): void {
 		if (!annotation) return;
 

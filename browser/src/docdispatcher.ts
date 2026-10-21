@@ -587,6 +587,22 @@ class Dispatcher {
 			focus: () => focusFirstIn(URLPopUpSection.getCurrent().getHTMLObject()),
 		};
 
+		const commentList = () =>
+			app.sectionContainer &&
+			(app.sectionContainer.getSectionWithName(
+				app.CSections.CommentList.name,
+			) as cool.CommentSection);
+
+		const comments = {
+			name: 'comments',
+			available: () =>
+				!!commentList() && commentList().getNavigableComments().length > 0,
+			hasFocus: () =>
+				!!document.activeElement &&
+				!!document.activeElement.closest('.cool-annotation'),
+			focus: () => !!commentList() && commentList().focusCommentRegion(),
+		};
+
 		const sidebar = {
 			name: 'sidebar',
 			available: () => !!app.map.sidebar && app.map.sidebar.isVisible(),
@@ -633,6 +649,7 @@ class Dispatcher {
 		regions.push(navigationSidebar);
 		regions.push(documentArea);
 		regions.push(linkPopUp);
+		if (docType !== 'spreadsheet') regions.push(comments);
 		regions.push(sidebar);
 		if (docType === 'spreadsheet') regions.push(sheetTabs);
 		regions.push(statusBar);

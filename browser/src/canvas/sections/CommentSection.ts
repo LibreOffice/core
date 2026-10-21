@@ -271,7 +271,7 @@ export class Comment extends CanvasSectionObject {
 
 		this.sectionProperties.contentNode = window.L.DomUtil.create('div', 'cool-annotation-content cool-dont-break', this.sectionProperties.wrapper);
 		this.sectionProperties.contentNode.id = 'annotation-content-area-' + this.sectionProperties.data.id;
-		this.sectionProperties.contentNode.setAttribute('tabindex', '-1');
+		this.sectionProperties.contentNode.setAttribute('tabindex', '0');
 
 		const commentFooter = window.L.DomUtil.create('div', 'cool-annotation-footer', this.sectionProperties.wrapper);
 		this.sectionProperties.contentDate = window.L.DomUtil.create('div', 'cool-annotation-date', commentFooter);
@@ -341,6 +341,8 @@ export class Comment extends CanvasSectionObject {
 		var isRTL = document.documentElement.dir === 'rtl';
 		this.sectionProperties.container = window.L.DomUtil.create('div', 'cool-annotation' + (isRTL ? ' rtl' : ''));
 		this.sectionProperties.container.id = 'comment-container-' + this.sectionProperties.data.id;
+		this.sectionProperties.container.setAttribute('role', 'article');
+		this.sectionProperties.container.setAttribute('aria-roledescription', _('comment'));
 		window.L.DomEvent.on(this.sectionProperties.container, 'focusout', this.onLostFocus, this);
 
 		var mobileClass = (<any>window).mode.isSmallScreenDevice() ? ' wizard-comment-box': '';
@@ -570,6 +572,19 @@ export class Comment extends CanvasSectionObject {
 		this.sectionProperties.childLinesNode.style.width = this.sectionProperties.childCommentOffset*(this.getChildLevel() + 1) + 'px';
 	}
 
+	private updateReplyLabel (): void {
+		const container = this.sectionProperties.container;
+		const parentComment = this.isRootComment() ? null :
+			this.sectionProperties.commentListSection.getComment(this.getParentCommentId());
+		if (!parentComment) {
+			container.removeAttribute('aria-label');
+			return;
+		}
+		const label = _('Reply to {0}').replace('{0}', () => parentComment.sectionProperties.data.author);
+		if (container.getAttribute('aria-label') !== label)
+			container.setAttribute('aria-label', label);
+	}
+
 	public getContainerPosX(): number {
 		return this.containerPosX;
 	}
@@ -579,6 +594,7 @@ export class Comment extends CanvasSectionObject {
 	}
 
 	public updateChildLines (): void {
+		this.updateReplyLabel();
 		if (!this.isContainerVisible())
 			return;
 		this.sectionProperties.wrapper.style.marginLeft =  this.sectionProperties.childCommentOffset*this.getChildLevel() + 'px';
@@ -785,6 +801,7 @@ export class Comment extends CanvasSectionObject {
 
 	private updateMetadata (): void {
 		this.sectionProperties.contentAuthor.innerText = this.sectionProperties.data.author;
+		this.updateReplyLabel();
 
 		this.updateResolvedField(this.sectionProperties.data.resolved);
 		this.updateRemovedField();
@@ -1486,6 +1503,15 @@ export class Comment extends CanvasSectionObject {
 			return;
 		}
 
+		if (e.key === 'F6' && !this.sectionProperties.nodeModifyText.contains(e.target as Node)
+			&& !this.sectionProperties.nodeReplyText.contains(e.target as Node)) {
+			window.KeyboardShortcuts.processEvent(app.UI.language.fromURL, e);
+			return;
+		}
+
+		if (!this.isEdit() && this.moveFocusByKey(e))
+			return;
+
 		if (e.key === 'Escape') {
 			// When a comment is being edited and focus is in the textbox,
 			// Esc should not close it but mark it with attention, unless
@@ -1509,6 +1535,80 @@ export class Comment extends CanvasSectionObject {
 			this.handleCommentPageNav(e);
 			return;
 		}
+	}
+
+	public getTabStops(): HTMLElement[] {
+		const candidates = this.sectionProperties.container.querySelectorAll('button, a[href], [tabindex="0"]');
+		return (Array.from(candidates) as HTMLElement[]).filter((element) =>
+			element.getClientRects().length > 0 && !element.closest('.cool-annotation-edit'));
+	}
+
+	public focusTabStop(stop: 'first' | 'last' | 'body'): void {
+		const stops = this.getTabStops();
+		let element: HTMLElement = stop === 'first' ? stops[0] : stops[stops.length - 1];
+		if (stop === 'body' && stops.includes(this.sectionProperties.contentNode))
+			element = this.sectionProperties.contentNode;
+		if (!element)
+			return;
+		element.focus({ preventScroll: true });
+		this.scrollDocumentToShow(element.getBoundingClientRect());
+	}
+
+	private moveFocusByKey(e: KeyboardEvent): boolean {
+		if (e.ctrlKey || e.altKey || e.metaKey)
+			return false;
+		const isTab = e.key === 'Tab';
+		const isArrow = (e.key === 'ArrowDown' || e.key === 'ArrowUp') && !e.shiftKey;
+		if (!isTab && !isArrow)
+			return false;
+
+		const commentList = this.sectionProperties.commentListSection;
+		if (!commentList.getNavigableComments().includes(this))
+			return false;
+
+		const stops = this.getTabStops();
+		const current = stops.indexOf(e.target as HTMLElement);
+		if (current === -1)
+			return false;
+
+		const forward = isTab ? !e.shiftKey : e.key === 'ArrowDown';
+		const content = this.sectionProperties.contentNode;
+		if (isArrow && e.target === content) {
+			const canScroll = forward
+				? content.scrollTop + content.clientHeight < content.scrollHeight - 1
+				: content.scrollTop > 0;
+			if (canScroll)
+				return false;
+		}
+
+		e.preventDefault();
+		e.stopPropagation();
+
+		const nextStop = isTab ? stops[current + (forward ? 1 : -1)] : null;
+		if (nextStop) {
+			nextStop.focus({ preventScroll: true });
+			this.scrollDocumentToShow(nextStop.getBoundingClientRect());
+			return true;
+		}
+
+		const next = commentList.getAdjacentComment(this, forward ? 1 : -1);
+		if (next)
+			commentList.focusComment(next, isArrow ? 'body' : (forward ? 'first' : 'last'));
+		else if (isTab)
+			app.map.focus();
+		return true;
+	}
+
+	private scrollDocumentToShow(rect: DOMRect): void {
+		const documentRect = document.getElementById('document-container').getBoundingClientRect();
+		const margin = this.sectionProperties.commentListSection.sectionProperties.marginY / app.dpiScale;
+		let offset = 0;
+		if (rect.top < documentRect.top + margin)
+			offset = rect.top - documentRect.top - margin;
+		else if (rect.bottom > documentRect.bottom - margin)
+			offset = Math.min(rect.bottom - documentRect.bottom + margin, rect.top - documentRect.top - margin);
+		if (offset !== 0)
+			app.activeDocument.activeLayout.scroll(0, Math.round(offset * app.dpiScale));
 	}
 
 	// Tab/Shift+Tab within the modify or reply pane cycles between the text
@@ -2478,16 +2578,7 @@ export class Comment extends CanvasSectionObject {
 				- (contentRect.height - selectionRect.height) / 2;
 		this.searchSelectionPending = false;
 
-		const documentRect = document.getElementById('document-container').getBoundingClientRect();
-		const shownRect = selection.getRangeAt(0).getBoundingClientRect();
-		const margin = this.sectionProperties.commentListSection.sectionProperties.marginY / app.dpiScale;
-		let offset = 0;
-		if (shownRect.bottom > documentRect.bottom - margin)
-			offset = shownRect.bottom - documentRect.bottom + margin;
-		else if (shownRect.top < documentRect.top + margin)
-			offset = shownRect.top - documentRect.top - margin;
-		if (offset !== 0)
-			app.activeDocument.activeLayout.scroll(0, Math.round(offset * app.dpiScale));
+		this.scrollDocumentToShow(selection.getRangeAt(0).getBoundingClientRect());
 	}
 
 	public autoCompleteMention(username: string, profileLink: string, replacement: string): void {
