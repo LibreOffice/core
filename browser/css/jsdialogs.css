@@ -3906,6 +3906,14 @@ button.has-img img {
 	margin-top: 10px;
 }
 
+/* Paste Special: equal-width, left-aligned preset buttons */
+#PasteSpecial #frmPresets .ui-pushbutton-wrapper > .ui-pushbutton {
+	flex: 1 1 auto;
+	gap: 6px;
+	white-space: nowrap;
+	justify-content: flex-start;
+	padding-inline-start: 7px;
+}
 
 div [id^='TemplateDialog'] {
 	min-width: 590px;
