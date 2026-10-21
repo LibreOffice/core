@@ -352,6 +352,20 @@ describe(['taglighthouse'], 'Accessibility Impress Dialog Tests', { testIsolatio
         helper.typeIntoDocument('{esc}');
     });
 
+    it('Dimension line dialog', function () {
+        cy.then(() => {
+            win.app.map.sendUnoCommand('.uno:MeasureLine');
+        });
+        cy.cGet('#test-div-shapeHandlesSection').should('exist');
+
+        cy.then(() => {
+            win.app.map.sendUnoCommand('.uno:MeasureAttributes');
+        });
+        a11yHelper.handleDialog(win, 1, '.uno:MeasureAttributes');
+
+        helper.typeIntoDocument('{esc}');
+    });
+
     it('Interaction dialog', function () {
         cy.then(() => {
             win.app.map.sendUnoCommand('.uno:BasicShapes.octagon');

@@ -75,6 +75,8 @@ constexpr auto CuiDialogList
         { u"cui/ui/comment.ui" },
         { u"cui/ui/croppage.ui" },
         { u"cui/ui/diagramdialog.ui" },
+        { u"cui/ui/dimensionlinesdialog.ui" },
+        { u"cui/ui/dimensionlinestabpage.ui" },
         { u"cui/ui/effectspage.ui" },
         { u"cui/ui/eventassigndialog.ui" },
         { u"cui/ui/fontfeaturesdialog.ui" },
@@ -1011,6 +1013,17 @@ std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUStrin
                 if (entry == u"cui/ui/borderbackgrounddialog.ui" ||
                     entry == u"cui/ui/newtabledialog.ui")
                     continue;
+            }
+
+            // The dimension line dialog opens from a selected dimension line. The Impress run
+            // draws one for it, the Writer and Calc runs do not.
+            if (docType == COKitDocumentType::TEXT || docType == COKitDocumentType::SPREADSHEET)
+            {
+                if (entry == u"cui/ui/dimensionlinesdialog.ui" ||
+                    entry == u"cui/ui/dimensionlinestabpage.ui")
+                {
+                    continue;
+                }
             }
 
             if (docType == COKitDocumentType::PRESENTATION || docType == COKitDocumentType::DRAWING)

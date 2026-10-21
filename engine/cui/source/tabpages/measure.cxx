@@ -47,7 +47,8 @@ const WhichRangesContainer SvxMeasurePage::pRanges(
 \************************************************************************/
 SvxMeasureDialog::SvxMeasureDialog(weld::Window* pParent, const SfxItemSet& rInAttrs,
                                 const SdrView* pSdrView)
-    : SfxSingleTabDialogController(pParent, &rInAttrs)
+    : SfxSingleTabDialogController(pParent, &rInAttrs, u"cui/ui/dimensionlinesdialog.ui"_ustr,
+                                   u"DimensionLinesDialog"_ustr)
 {
     auto xPage = std::make_unique<SvxMeasurePage>(get_content_area(), this, rInAttrs);
 

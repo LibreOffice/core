@@ -94,10 +94,10 @@ const MenuCommands: MenuCommandsInterface = {
 				  'DistributeRows', 'DistributeColumns',
 				  'ObjectAlign', 'ObjectAlignLeft', 'AlignCenter', 'ObjectAlignRight',
 				  'AlignUp', 'AlignMiddle', 'AlignDown', 'AlignOnSlide',
-				  'TextAutoFitToSize'],
+				  'TextAutoFitToSize', 'MeasureAttributes'],
 		drawing: ['ObjectAlign', 'ObjectAlignLeft', 'AlignCenter', 'ObjectAlignRight',
 				  'AlignUp', 'AlignMiddle', 'AlignDown', 'AlignOnPage',
-				  'TextAutoFitToSize']
+				  'TextAutoFitToSize', 'MeasureAttributes']
 	},
 	// UNOCOMMANDS_EXTRACT_END <- don't remove this line, it's used by unocommands.py
 
@@ -112,7 +112,7 @@ const MenuCommands: MenuCommandsInterface = {
 
 	mobileDenylist: [
 		// general
-		'TransformDialog', 'FormatLine', 'FormatArea',
+		'TransformDialog', 'FormatLine', 'FormatArea', 'MeasureAttributes',
 		'InsertTitles', 'InsertRemoveAxes',
 		'DiagramType', 'DataRanges',
 		'FormatWall', 'FormatDataSeries', 'FormatXErrorBars', 'FormatYErrorBars',
