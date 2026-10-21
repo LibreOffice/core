@@ -23,6 +23,7 @@
 #include <sal/log.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svl/undo.hxx>
+#include <tools/Guid.hxx>
 #include <tools/json_writer.hxx>
 #include <tools/urlobj.hxx>
 
@@ -264,6 +265,19 @@ OUString SlideLink::GetSourceName(std::u16string_view rReference)
 
     return rtl::Uri::decode(OUString(rReference.substr(gSourceScheme.getLength())),
                             rtl_UriDecodeWithCharset, RTL_TEXTENCODING_UTF8);
+}
+
+OUString SlideLink::NormaliseGuid(std::u16string_view rGuid)
+{
+    const tools::Guid aGuid(OUStringToOString(rGuid, RTL_TEXTENCODING_ASCII_US));
+    return aGuid.isEmpty() ? OUString() : aGuid.getOUString();
+}
+
+bool SlideLink::IsReadableSourceString(std::u16string_view rValue)
+{
+    constexpr size_t nMaxLength = 128;
+    return rValue.size() <= nMaxLength
+           && std::none_of(rValue.begin(), rValue.end(), [](sal_Unicode c) { return c < 0x20; });
 }
 
 OUString SlideLink::GetSourceFile(const SdDrawDocument& rDoc, const OUString& rReference)

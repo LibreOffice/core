@@ -100,6 +100,18 @@ public:
     */
     SD_DLLPUBLIC static OUString GetSourceName(std::u16string_view rReference);
 
+    /** rGuid in the braced form a slide keeps its own identifier in, or empty when rGuid holds no
+        identifier at all. A value of another shape names no slide or section of a source.
+    */
+    static OUString NormaliseGuid(std::u16string_view rGuid);
+
+    /** Whether rValue can stand as a value a link records about its source, such as the time the
+        source document was last modified or the name of a source section: at most 128 characters,
+        none of them a control character. The value is the integrator's or the source's own
+        string, so nothing else is asked of its form.
+    */
+    static bool IsReadableSourceString(std::u16string_view rValue);
+
     /** The file the pages linked to rReference are read from, or empty when nothing reads them.
 
         A source document that has a file staged for it in rDoc is read from that file. A reference

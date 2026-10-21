@@ -45,6 +45,7 @@
 #include <comphelper/diagnose_ex.hxx>
 #include <vcl/svapp.hxx>
 #include <Annotation.hxx>
+#include <SlideLink.hxx>
 #include <svx/annotation/AnnotationEnumeration.hxx>
 #include <createunopageimpl.hxx>
 #include <unomodel.hxx>
@@ -836,13 +837,8 @@ void SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName, const A
             if( ! ( aValue >>= aSourceModifiedTime ) )
                 throw lang::IllegalArgumentException();
 
-            constexpr sal_Int32 nMaxSourceModifiedTimeLength = 128;
-            if (aSourceModifiedTime.getLength() > nMaxSourceModifiedTimeLength)
+            if (!sd::SlideLink::IsReadableSourceString(aSourceModifiedTime))
                 throw lang::IllegalArgumentException();
-
-            for (sal_Int32 nChar = 0; nChar < aSourceModifiedTime.getLength(); ++nChar)
-                if (aSourceModifiedTime[nChar] < 0x20)
-                    throw lang::IllegalArgumentException();
 
             setSourceModifiedTime( aSourceModifiedTime );
             break;
@@ -857,11 +853,9 @@ void SdGenericDrawPage::setPropertyValue( const OUString& aPropertyName, const A
             // its own identifier in, so a value of another shape names no slide at all.
             if (!aSourcePageGuid.isEmpty())
             {
-                const tools::Guid aGuid(
-                    OUStringToOString(aSourcePageGuid, RTL_TEXTENCODING_ASCII_US));
-                if (aGuid.isEmpty())
+                aSourcePageGuid = sd::SlideLink::NormaliseGuid(aSourcePageGuid);
+                if (aSourcePageGuid.isEmpty())
                     throw lang::IllegalArgumentException();
-                aSourcePageGuid = aGuid.getOUString();
             }
 
             setSourcePageGuid( aSourcePageGuid );
