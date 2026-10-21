@@ -115,6 +115,7 @@ if ${trace} \
 				   --o:admin_console.username=admin --o:admin_console.password=admin \
 				   --o:storage.ssl.enable=false \
 				   --o:experimental_features=true \
+				   --o:net.session_park_timeout_secs=0 \
 				   --unattended \
 				   --unitlib="${abs_top_builddir}/test/.libs/$tst.so" 2> "$tst_log" 1>&2; then
 	echo "Test $tst passed. Finished in ${SECONDS}s."
@@ -142,6 +143,7 @@ else
 	echo "         --o:admin_console.username=admin --o:admin_console.password=admin \\"
 	echo "         --o:storage.ssl.enable=false \\"
 	echo "         --o:experimental_features=true \\"
+	echo "         --o:net.session_park_timeout_secs=0 \\"
 	echo "         --unattended \\"
 	echo "         --unitlib=\"${abs_top_builddir}/test/.libs/$tst.so\""
 	if test "$tst_log" != /dev/stderr; then

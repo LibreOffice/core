@@ -392,7 +392,7 @@ load <pathname>
 
     Deprecated.
 
-load [part=<part>] url=<url> [timestamp=<time>] [lang=<locale>] [deviceFormFactor=<device type>] [timezone=<timezone>] [reconnect=true] [options=<options>]
+load [part=<part>] url=<url> [timestamp=<time>] [lang=<locale>] [deviceFormFactor=<device type>] [timezone=<timezone>] [options=<options>]
 
     part is an optional parameter. <part> is a page identifier, or the
     part's index in document order written in decimal form. The view opens
@@ -408,13 +408,6 @@ load [part=<part>] url=<url> [timestamp=<time>] [lang=<locale>] [deviceFormFacto
     it can be one of the following: 'desktop', 'tablet', 'mobile'
 
     timestamp is in tzfile(5) format. For example: Pacific/Auckland.
-
-    reconnect=true says that the client keeps the token of the
-    'reconnecttoken:' message and presents it as the ReconnectToken URL
-    parameter when it connects again. Only then does the server send that
-    message, and only then does the server keep the view for a while when
-    the connection ends. A close frame with status 4000 says that the client
-    left on purpose, so the server removes the view at once.
 
     options are the whole rest of the line, not URL-encoded, and must be valid JSON.
 
@@ -1022,12 +1015,15 @@ clipboardkey: <token>
 
 reconnecttoken: <token>
 
-    Sent after a load with reconnect=true, again every few minutes, and
-    again after the client reconnected. <token> is 64 hex digits. The
-    current and the previous token are both accepted, so keep only the
-    latest. A connection whose URL has the parameter ReconnectToken=<token>
-    takes over the view that the token belongs to, with its view id, cursor
-    and undo stack, instead of loading a new view.
+    Sent after the load, again every few minutes, and again after the
+    client reconnected. <token> is 64 hex digits. The current and
+    the previous token are both accepted, so keep only the latest. A
+    connection whose URL has the parameter ReconnectToken=<token> takes over
+    the view that the token belongs to, with its view id, cursor and undo
+    stack, instead of loading a new view. When the connection ends, the
+    server keeps the view for a while for the client to come back. A close
+    frame with status 4000 says that the client left on purpose, so the
+    server removes the view at once.
 
 linktoken: <token>
 

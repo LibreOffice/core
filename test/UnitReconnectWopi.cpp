@@ -114,7 +114,7 @@ class UnitReconnectWopi : public WopiTestServer
                            "?access_token=" + accessToken + extraParams);
     }
 
-    /// Connects and loads with reconnect=true. The token, when given, rides on the URL.
+    /// Connects and loads. The token, when given, rides on the URL.
     std::shared_ptr<http::WebSocketSession> connect(const std::string& documentURL,
                                                     const std::string& token = std::string())
     {
@@ -122,7 +122,7 @@ class UnitReconnectWopi : public WopiTestServer
         http::Request request("/cool/" + documentURL + "/ws" +
                               (token.empty() ? std::string() : "?ReconnectToken=" + token));
         session->asyncRequest(request, newPoller());
-        session->sendMessage("load url=" + documentURL + " reconnect=true");
+        session->sendMessage("load url=" + documentURL);
         return session;
     }
 

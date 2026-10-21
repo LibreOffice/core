@@ -30,7 +30,7 @@
 
 /// A browser that loses its connection and comes back with the token the server gave it gets its
 /// session and view back. One that does not come back loses them after the park timeout. One that
-/// leaves on purpose, or never asked to reconnect, is not parked.
+/// leaves on purpose is not parked.
 class UnitReconnect : public UnitWSD
 {
     /// Above the ping interval of 18 seconds, so a client that answers is never dropped.
@@ -87,10 +87,8 @@ class UnitReconnect : public UnitWSD
     /// A token that the server never gave out.
     static std::string makeToken() { return Util::rng::getHexString(64); }
 
-    /// Connects and loads. A reconnectable browser loads with reconnect=true. The token, when
-    /// given, rides on the URL.
+    /// Connects and loads. The token, when given, rides on the URL.
     std::shared_ptr<http::WebSocketSession> connect(const std::string& documentURL,
-                                                    bool reconnectable,
                                                     const std::string& token = std::string(),
                                                     const std::string& loadSuffix = std::string())
     {
@@ -98,8 +96,7 @@ class UnitReconnect : public UnitWSD
         http::Request request(token.empty() ? documentURL
                                             : documentURL + "?ReconnectToken=" + token);
         session->asyncRequest(request, newPoller());
-        session->sendMessage("load url=" + documentURL +
-                             (reconnectable ? " reconnect=true" : "") + loadSuffix);
+        session->sendMessage("load url=" + documentURL + loadSuffix);
         return session;
     }
 
@@ -213,7 +210,6 @@ class UnitReconnect : public UnitWSD
 
     TestResult testReconnectWithToken();
     TestResult testTokenRotatesOnReattach();
-    TestResult testNotReconnectableIsNotParked();
     TestResult testParkExpires();
     TestResult testWrongToken();
     TestResult testUserExitIsNotParked();
@@ -238,7 +234,6 @@ public:
                &UnitReconnect::testTakeoverOfLiveSession,
                &UnitReconnect::testReconnectWithToken,
                &UnitReconnect::testTokenRotatesOnReattach,
-               &UnitReconnect::testNotReconnectableIsNotParked,
                &UnitReconnect::testWrongToken,
                &UnitReconnect::testParkExpires,
                &UnitReconnect::testLastEditorParkExpires })
@@ -266,10 +261,10 @@ UnitBase::TestResult UnitReconnect::testUserExitIsNotParked()
     std::string documentPath, documentURL;
     helpers::getDocumentPathAndURL("hello.odt", documentPath, documentURL, testname);
 
-    auto sessionA = connect(documentURL, true);
+    auto sessionA = connect(documentURL);
     LOK_ASSERT(!waitForToken(*sessionA).empty());
     LOK_ASSERT(waitForViews(*sessionA, 1, 0, std::chrono::seconds(30)));
-    auto sessionB = connect(documentURL, false);
+    auto sessionB = connect(documentURL);
     LOK_ASSERT(waitForViews(*sessionB, 2, 0, std::chrono::seconds(30)));
     LOK_ASSERT(waitForLoaded(*sessionB));
 
@@ -279,12 +274,12 @@ UnitBase::TestResult UnitReconnect::testUserExitIsNotParked()
                        waitForViews(*sessionB, 1, 0, std::chrono::seconds(5), &sawParked));
     LOK_ASSERT_MESSAGE("A view whose user left was parked", !sawParked);
 
-    sessionB->shutdownWS();
+    sessionB->exitWS();
     joinPollers();
     return TestResult::Ok;
 }
 
-// (k) A close frame with any other status can come from a proxy on the way. The view is parked, and
+// (j) A close frame with any other status can come from a proxy on the way. The view is parked, and
 // the browser gets it back with its token.
 UnitBase::TestResult UnitReconnect::testOtherCloseIsParked()
 {
@@ -294,13 +289,13 @@ UnitBase::TestResult UnitReconnect::testOtherCloseIsParked()
     std::string documentPath, documentURL;
     helpers::getDocumentPathAndURL("hello.odt", documentPath, documentURL, testname);
 
-    auto sessionA = connect(documentURL, true);
+    auto sessionA = connect(documentURL);
     const std::string token = waitForToken(*sessionA);
     LOK_ASSERT(!token.empty());
     const int viewIdA = waitForStatusViewId(*sessionA, std::chrono::seconds(30));
     LOK_ASSERT(viewIdA >= 0);
     LOK_ASSERT(waitForViews(*sessionA, 1, 0, std::chrono::seconds(30)));
-    auto sessionB = connect(documentURL, false);
+    auto sessionB = connect(documentURL);
     LOK_ASSERT(waitForViews(*sessionB, 2, 0, std::chrono::seconds(30)));
     LOK_ASSERT(waitForLoaded(*sessionB));
 
@@ -309,14 +304,14 @@ UnitBase::TestResult UnitReconnect::testOtherCloseIsParked()
     LOK_ASSERT_MESSAGE("B did not see A parked",
                        waitForViews(*sessionB, 2, 1, std::chrono::seconds(5)));
 
-    auto sessionA2 = connect(documentURL, true, token, " part=0");
+    auto sessionA2 = connect(documentURL, token, " part=0");
     LOK_ASSERT(!waitForToken(*sessionA2).empty());
     LOK_ASSERT_EQUAL(viewIdA, waitForStatusViewId(*sessionA2, std::chrono::seconds(10)));
     LOK_ASSERT_MESSAGE("B did not see A unparked",
                        waitForViews(*sessionB, 2, 0, std::chrono::seconds(10)));
 
     sessionA2->exitWS();
-    sessionB->shutdownWS();
+    sessionB->exitWS();
     joinPollers();
     return TestResult::Ok;
 }
@@ -331,17 +326,17 @@ UnitBase::TestResult UnitReconnect::testTakeoverOfLiveSession()
     std::string documentPath, documentURL;
     helpers::getDocumentPathAndURL("hello.odt", documentPath, documentURL, testname);
 
-    auto sessionA = connect(documentURL, true);
+    auto sessionA = connect(documentURL);
     const std::string token = waitForToken(*sessionA);
     LOK_ASSERT(!token.empty());
     const int viewIdA = waitForStatusViewId(*sessionA, std::chrono::seconds(30));
     LOK_ASSERT(viewIdA >= 0);
     LOK_ASSERT(waitForViews(*sessionA, 1, 0, std::chrono::seconds(30)));
-    auto sessionB = connect(documentURL, false);
+    auto sessionB = connect(documentURL);
     LOK_ASSERT(waitForViews(*sessionB, 2, 0, std::chrono::seconds(30)));
     LOK_ASSERT(waitForLoaded(*sessionB));
 
-    auto sessionA2 = connect(documentURL, true, token, " part=0");
+    auto sessionA2 = connect(documentURL, token, " part=0");
     bool sawCanonicalId = false;
     const std::string newToken = waitForToken(*sessionA2, &sawCanonicalId);
     LOK_ASSERT_MESSAGE("The reconnected browser got no new token",
@@ -360,7 +355,7 @@ UnitBase::TestResult UnitReconnect::testTakeoverOfLiveSession()
     LOK_ASSERT_EQUAL(2, activeViewsFromMetrics());
 
     sessionA2->exitWS();
-    sessionB->shutdownWS();
+    sessionB->exitWS();
     joinPollers();
     return TestResult::Ok;
 }
@@ -374,13 +369,13 @@ UnitBase::TestResult UnitReconnect::testReconnectWithToken()
     std::string documentPath, documentURL;
     helpers::getDocumentPathAndURL("hello.odt", documentPath, documentURL, testname);
 
-    auto sessionA = connect(documentURL, true);
+    auto sessionA = connect(documentURL);
     const std::string token = waitForToken(*sessionA);
     LOK_ASSERT(!token.empty());
     const int viewIdA = waitForStatusViewId(*sessionA, std::chrono::seconds(30));
     LOK_ASSERT(viewIdA >= 0);
     LOK_ASSERT(waitForViews(*sessionA, 1, 0, std::chrono::seconds(30)));
-    auto sessionB = connect(documentURL, false);
+    auto sessionB = connect(documentURL);
     LOK_ASSERT(waitForViews(*sessionB, 2, 0, std::chrono::seconds(30)));
     LOK_ASSERT(waitForLoaded(*sessionB));
 
@@ -388,7 +383,7 @@ UnitBase::TestResult UnitReconnect::testReconnectWithToken()
     sessionA->freeze();
     LOK_ASSERT_MESSAGE("B did not see A parked", waitForViews(*sessionB, 2, 1, DropNoticed));
 
-    auto sessionA2 = connect(documentURL, true, token, " part=0");
+    auto sessionA2 = connect(documentURL, token, " part=0");
     bool sawCanonicalId = false;
     const std::string newToken = waitForToken(*sessionA2, &sawCanonicalId);
     LOK_ASSERT_MESSAGE("The reconnected browser got no new token",
@@ -404,7 +399,7 @@ UnitBase::TestResult UnitReconnect::testReconnectWithToken()
     LOK_ASSERT_EQUAL(2, activeViewsFromMetrics());
 
     sessionA2->exitWS();
-    sessionB->shutdownWS();
+    sessionB->exitWS();
     joinPollers();
     return TestResult::Ok;
 }
@@ -419,7 +414,7 @@ UnitBase::TestResult UnitReconnect::testTokenRotatesOnReattach()
     std::string documentPath, documentURL;
     helpers::getDocumentPathAndURL("hello.odt", documentPath, documentURL, testname);
 
-    auto sessionA = connect(documentURL, true);
+    auto sessionA = connect(documentURL);
     const std::string token1 = waitForToken(*sessionA);
     LOK_ASSERT(!token1.empty());
     const int viewIdA = waitForStatusViewId(*sessionA, std::chrono::seconds(30));
@@ -428,7 +423,7 @@ UnitBase::TestResult UnitReconnect::testTokenRotatesOnReattach()
     sessionA->dropWS();
     LOK_ASSERT(sessionA->waitForDisconnection(std::chrono::seconds(10)));
 
-    auto sessionA2 = connect(documentURL, true, token1, " part=0");
+    auto sessionA2 = connect(documentURL, token1, " part=0");
     const std::string token2 = waitForToken(*sessionA2);
     LOK_ASSERT(!token2.empty() && token2 != token1);
     LOK_ASSERT_EQUAL(viewIdA, waitForStatusViewId(*sessionA2, std::chrono::seconds(10)));
@@ -436,7 +431,7 @@ UnitBase::TestResult UnitReconnect::testTokenRotatesOnReattach()
     LOK_ASSERT(sessionA2->waitForDisconnection(std::chrono::seconds(10)));
 
     // token1 is now the previous token.
-    auto sessionA3 = connect(documentURL, true, token1, " part=0");
+    auto sessionA3 = connect(documentURL, token1, " part=0");
     const std::string token3 = waitForToken(*sessionA3);
     LOK_ASSERT(!token3.empty() && token3 != token2);
     LOK_ASSERT_EQUAL(viewIdA, waitForStatusViewId(*sessionA3, std::chrono::seconds(10)));
@@ -444,40 +439,13 @@ UnitBase::TestResult UnitReconnect::testTokenRotatesOnReattach()
     LOK_ASSERT(sessionA3->waitForDisconnection(std::chrono::seconds(10)));
 
     // Two rotations later, token1 names no view any more.
-    auto sessionA4 = connect(documentURL, true, token1);
+    auto sessionA4 = connect(documentURL, token1);
     LOK_ASSERT(!waitForToken(*sessionA4).empty());
     const int viewIdA4 = waitForStatusViewId(*sessionA4, std::chrono::seconds(30));
     LOK_ASSERT(viewIdA4 >= 0);
     LOK_ASSERT_MESSAGE("A token two rotations old took over the view", viewIdA4 != viewIdA);
 
     sessionA4->exitWS();
-    joinPollers();
-    return TestResult::Ok;
-}
-
-// (j) A browser whose load did not ask to reconnect has its dropped view go at once instead of
-// being parked.
-UnitBase::TestResult UnitReconnect::testNotReconnectableIsNotParked()
-{
-    setTestname(__func__);
-    TST_LOG("Starting Test: " << testname);
-
-    std::string documentPath, documentURL;
-    helpers::getDocumentPathAndURL("hello.odt", documentPath, documentURL, testname);
-
-    auto sessionA = connect(documentURL, false);
-    LOK_ASSERT(waitForViews(*sessionA, 1, 0, std::chrono::seconds(30)));
-    auto sessionB = connect(documentURL, false);
-    LOK_ASSERT(waitForViews(*sessionB, 2, 0, std::chrono::seconds(30)));
-    LOK_ASSERT(waitForLoaded(*sessionB));
-
-    sessionA->dropWS();
-    bool sawParked = false;
-    LOK_ASSERT(waitForViews(*sessionB, 1, 0, std::chrono::seconds(ParkTimeoutSeconds + 10),
-                            &sawParked));
-    LOK_ASSERT_MESSAGE("A view that never asked to reconnect was parked", !sawParked);
-
-    sessionB->shutdownWS();
     joinPollers();
     return TestResult::Ok;
 }
@@ -491,21 +459,21 @@ UnitBase::TestResult UnitReconnect::testWrongToken()
     std::string documentPath, documentURL;
     helpers::getDocumentPathAndURL("hello.odt", documentPath, documentURL, testname);
 
-    auto sessionA = connect(documentURL, true);
+    auto sessionA = connect(documentURL);
     LOK_ASSERT(waitForViews(*sessionA, 1, 0, std::chrono::seconds(30)));
-    auto sessionB = connect(documentURL, false);
+    auto sessionB = connect(documentURL);
     LOK_ASSERT(waitForViews(*sessionB, 2, 0, std::chrono::seconds(30)));
     LOK_ASSERT(waitForLoaded(*sessionB));
 
     sessionA->freeze();
     LOK_ASSERT(waitForViews(*sessionB, 2, 1, DropNoticed));
 
-    auto sessionA2 = connect(documentURL, true, makeToken());
+    auto sessionA2 = connect(documentURL, makeToken());
     LOK_ASSERT(waitForViews(*sessionB, 3, 1, std::chrono::seconds(30)));
     LOK_ASSERT(waitForViews(*sessionB, 2, 0, std::chrono::seconds(ParkTimeoutSeconds + 10)));
 
     sessionA2->exitWS();
-    sessionB->shutdownWS();
+    sessionB->exitWS();
     joinPollers();
     return TestResult::Ok;
 }
@@ -519,9 +487,9 @@ UnitBase::TestResult UnitReconnect::testParkExpires()
     std::string documentPath, documentURL;
     helpers::getDocumentPathAndURL("hello.odt", documentPath, documentURL, testname);
 
-    auto sessionA = connect(documentURL, true);
+    auto sessionA = connect(documentURL);
     LOK_ASSERT(waitForViews(*sessionA, 1, 0, std::chrono::seconds(30)));
-    auto sessionB = connect(documentURL, false);
+    auto sessionB = connect(documentURL);
     LOK_ASSERT(waitForViews(*sessionB, 2, 0, std::chrono::seconds(30)));
     LOK_ASSERT(waitForLoaded(*sessionB));
 
@@ -530,7 +498,7 @@ UnitBase::TestResult UnitReconnect::testParkExpires()
     LOK_ASSERT(waitForViews(*sessionB, 1, 0, std::chrono::seconds(ParkTimeoutSeconds + 10)));
     LOK_ASSERT_EQUAL(1, activeViewsFromMetrics());
 
-    sessionB->shutdownWS();
+    sessionB->exitWS();
     joinPollers();
     return TestResult::Ok;
 }
@@ -545,7 +513,7 @@ UnitBase::TestResult UnitReconnect::testLastEditorParkExpires()
     std::string documentPath, documentURL;
     helpers::getDocumentPathAndURL("hello.odt", documentPath, documentURL, testname);
 
-    auto sessionA = connect(documentURL, true);
+    auto sessionA = connect(documentURL);
     LOK_ASSERT(waitForViews(*sessionA, 1, 0, std::chrono::seconds(30)));
     sessionA->sendMessage("key type=input char=97 key=0");
     LOK_ASSERT_MESSAGE("The document did not become modified",

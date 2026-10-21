@@ -104,7 +104,7 @@ const int ClipboardTokenLengthBytes = 16;
 const int LinkTokenLengthBytes = 32;
 // home-use, disabled by default.
 const int ProxyAccessTokenLengthBytes = 32;
-// The token that lets a new connection take over a view, sent to the browser that asked for one.
+// The token that lets a new connection take over a view.
 constexpr int ReconnectTokenLengthBytes = 32;
 
 namespace
@@ -170,7 +170,6 @@ ClientSession::ClientSession(const std::shared_ptr<ProtocolHandlerInterface>& ws
     , _isConvertTo(false)
     , _isRemoteDocumentConnection(requestDetails.isRemoteDocument())
     , _resyncOnNextLoad(false)
-    , _reconnectable(false)
 {
     const std::size_t curConnections = ++COOLWSD::NumConnections;
     LOG_INF("ClientSession ctor [" << getName() << "] for URI: [" << _uriPublic.toString()
@@ -301,7 +300,7 @@ void ClientSession::rotateLinkToken(bool notifyClient)
 void ClientSession::rotateReconnectToken(bool notifyClient)
 {
     // A parked view keeps its tokens, so the browser's token still matches when it comes back.
-    if (!_reconnectable || _state == SessionState::WAIT_DISCONNECT || isParked())
+    if (!isReconnectable() || _state == SessionState::WAIT_DISCONNECT || isParked())
         return;
 
     _reconnectTokens[1] = _reconnectTokens[0];
@@ -2825,13 +2824,6 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
                 continue;
             }
 
-            if (name == "reconnect")
-            {
-                // The app builds have no network between the browser and the server to lose.
-                _reconnectable = !Util::isMobileApp() && value == "true";
-                continue;
-            }
-
 #if !MOBILEAPP
             if (name == "remotechain")
             {
@@ -3093,7 +3085,7 @@ bool ClientSession::loadDocument(const char* /*buffer*/, int /*length*/,
             sendTextFrame("slideshowfollow slideshowfollowon");
         }
 
-        // A load with reconnect=true gets its first reconnect token here.
+        // The browser gets its first reconnect token here.
         rotateReconnectToken(true);
 
         return forwardToChild(oss.str(), docBroker);;
@@ -4956,7 +4948,7 @@ bool ClientSession::shouldPark(const std::shared_ptr<DocumentBroker>& docBroker)
     (void)docBroker;
     return false;
 #else
-    if (!_reconnectable || _reconnectTokens[0].empty() || _state != SessionState::LIVE ||
+    if (!isReconnectable() || _reconnectTokens[0].empty() || _state != SessionState::LIVE ||
         isParked() || docBroker->isUnloading() || SigUtil::getShutdownRequestFlag() ||
         SigUtil::getTerminationFlag())
         return false;
@@ -5070,7 +5062,6 @@ void ClientSession::dumpState(std::ostream& os)
        << "\n\t\tproxy access:: " << _proxyAccess
        << "\n\t\tlinkToken set: " << !_linkToken.empty()
        << "\n\t\tisRemoteDocumentConnection: " << _isRemoteDocumentConnection
-       << "\n\t\treconnectable: " << _reconnectable
        << "\n\t\treconnectTokens: " << (_reconnectTokens[0].empty() ? "absent" : "present")
        << "\n\t\tparked: " << isParked()
        << "\n\t\tparkedFor: "

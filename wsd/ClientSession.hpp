@@ -102,8 +102,7 @@ public:
     /// Integer id of the view in the kit process, or -1 if unknown
     int getKitViewId() const { return _kitViewId; }
 
-    /// True when the token is this view's current or previous reconnect token. Never true for a
-    /// view whose browser did not ask to reconnect.
+    /// True when the token is this view's current or previous reconnect token.
     bool matchesReconnectToken(std::string_view token) const;
 
     /// Make a new reconnect token and keep the old one as the previous token, sending the new one
@@ -541,6 +540,11 @@ private:
     /// True when the connection that just ended is to be kept for a reconnect.
     bool shouldPark(const std::shared_ptr<DocumentBroker>& docBroker) const;
 
+    /// True for a connection that can come back with a reconnect token. The app builds have no
+    /// network between the browser and the server to lose, and the headless connection belongs to
+    /// another server.
+    bool isReconnectable() const { return !Util::isMobileApp() && !_isRemoteDocumentConnection; }
+
     /// The load a reconnected browser sends refreshes its view instead of loading again.
     bool resyncAfterReconnect(const StringVector& tokens,
                               const std::shared_ptr<DocumentBroker>& docBroker);
@@ -692,7 +696,7 @@ private:
     std::string _linkToken;
 
     /// The current and the previous token that lets a new connection take over this view, as 64 hex
-    /// digits. Both are empty until the browser's load asks for reconnect=true.
+    /// digits. Both are empty until the first rotation.
     std::string _reconnectTokens[2];
 
     /// Store last sent payload of form field button, so we can filter out redundant messages.
@@ -824,9 +828,6 @@ private:
 
     /// True after a reconnect, until the browser's next load has refreshed the view.
     bool _resyncOnNextLoad;
-
-    /// True when the load message had reconnect=true.
-    bool _reconnectable;
 
     Poco::SharedPtr<Poco::JSON::Object> _viewSettingsJSON;
 
