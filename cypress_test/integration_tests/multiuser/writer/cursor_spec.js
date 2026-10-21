@@ -173,9 +173,12 @@ describe(['tagmultiuser'], 'Keep the view fixed while another view edits', funct
 
 	beforeEach(function() {
 		// Give each iframe a distinct user id so their per-user settings stay
-		// separate and one user's view state does not leak into the other.
+		// separate and one user's view state does not leak into the other. No other
+		// spec uses these ids, and each test starts from empty settings.
+		cy.task('writeUserSetting', { userId: 'cursor-first', settings: {} });
+		cy.task('writeUserSetting', { userId: 'cursor-second', settings: {} });
 		helper.setupAndLoadDocument('writer/cursor_jump.odt', true, false, undefined,
-			'userid1=1&userid2=2');
+			'userid1=cursor-first&userid2=cursor-second');
 		waitForAllPages(['#iframe1', '#iframe2']);
 		desktopHelper.switchUIToNotebookbar();
 	});

@@ -9,9 +9,10 @@ const helper = require('../../common/helper');
 // from the kit. So each client is told which of the two it is, and the dialog
 // uses it to say when a change will only take effect in the next document.
 describe(['tagmultiuser'], 'A joining user is told the document uses other settings', function() {
-	// iframe1 opens the document, iframe2 joins it.
-	const FIRST = 1;
-	const SECOND = 2;
+	// iframe1 opens the document, iframe2 joins it. Other specs run at the same
+	// time and write the settings of their own users, so these ids are only used here.
+	const FIRST = 'settings-scope-first';
+	const SECOND = 'settings-scope-second';
 
 	function presetsApplied() {
 		return cy.getFrameWindow().its('app').its('userPresetsApplied');

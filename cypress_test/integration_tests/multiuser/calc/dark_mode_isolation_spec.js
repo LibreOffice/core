@@ -9,12 +9,13 @@ var desktopHelper = require('../../common/desktop_helper');
 //
 // The default cypress user does not persist browser settings, so each user opts
 // in with an explicit &userid that the test WOPI server routes to its own store.
-// We seed that store first: writing the file both sets the starting theme and
-// makes the client receive a browsersetting: message, which is what turns on
-// persistence of the later change.
+// We seed that store first, so each test starts in light mode whatever an
+// earlier run saved.
 describe(['tagmultiuser'], 'Dark mode is isolated per user', function() {
-	var DARK_USER = 1;   // iframe1
-	var LIGHT_USER = 2;  // iframe2
+	// Other specs run at the same time and write the settings of their own users,
+	// so these ids are only used here.
+	var DARK_USER = 'dark-mode-dark';    // iframe1
+	var LIGHT_USER = 'dark-mode-light';  // iframe2
 
 	function assertThemeIs(theme) {
 		// Re-query each retry so this converges on the freshly reloaded frame.
