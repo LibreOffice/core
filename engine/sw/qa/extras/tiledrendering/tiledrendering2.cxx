@@ -2187,6 +2187,9 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yImageSelection)
         pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_ESCAPE);
         pXTextDocument->postKeyEvent(COKitKeyEventType::UP, 0, KEY_ESCAPE);
         Scheduler::ProcessEventsToIdle();
+        // Switch to the text shell (which handles the .uno:JumpToNextFrame dispatch below) now
+        // rather than after the 120 ms of the view's shell timer, so we don't depend on timing:
+        getSwDocShell()->GetView()->StopShellTimer();
 
         // Then the end of the selection is reported, as the client blocks typing until then:
         CPPUNIT_ASSERT_MESSAGE(pFile, !pWrtShell->IsSelFrameMode());
