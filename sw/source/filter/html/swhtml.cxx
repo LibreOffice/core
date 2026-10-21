@@ -2717,7 +2717,7 @@ SwViewShell *SwHTMLParser::CallEndAction( bool bChkAction, bool bChkPtr )
         {
             const Point aVisSttPos( DOCUMENTBORDER, DOCUMENTBORDER );
             if( GetMedium() && aVisSttPos == m_pActionViewShell->VisArea().Pos() )
-                ::JumpToSwMark( m_pActionViewShell,
+                (void)::JumpToSwMark( m_pActionViewShell,
                                 SwMarkName(GetMedium()->GetURLObject().GetMark()) );
             m_bChkJumpMark = false;
         }
