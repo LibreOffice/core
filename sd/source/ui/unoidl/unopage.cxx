@@ -1421,72 +1421,49 @@ void SAL_CALL SdGenericDrawPage::firePropertiesChangeEvent( const Sequence< OUSt
 
 OUString GetPresObjShapeType(PresObjKind eKind)
 {
-    if (eKind == PresObjKind::NONE)
-        return OUString();
-
-    OUString aShapeType(u"com.sun.star.presentation."_ustr);
-
     switch( eKind )
     {
     case PresObjKind::Title:
-        aShapeType += "TitleTextShape";
-        break;
+        return u"com.sun.star.presentation.TitleTextShape"_ustr;
     case PresObjKind::Outline:
-        aShapeType += "OutlinerShape";
-        break;
+        return u"com.sun.star.presentation.OutlinerShape"_ustr;
     case PresObjKind::Text:
-        aShapeType += "SubtitleShape";
-        break;
+        return u"com.sun.star.presentation.SubtitleShape"_ustr;
     case PresObjKind::Graphic:
-        aShapeType += "GraphicObjectShape";
-        break;
+        return u"com.sun.star.presentation.GraphicObjectShape"_ustr;
     case PresObjKind::Object:
-        aShapeType += "OLE2Shape";
-        break;
+        return u"com.sun.star.presentation.OLE2Shape"_ustr;
     case PresObjKind::Chart:
-        aShapeType += "ChartShape";
-        break;
+        return u"com.sun.star.presentation.ChartShape"_ustr;
     case PresObjKind::OrgChart:
-        aShapeType += "OrgChartShape";
-        break;
+        return u"com.sun.star.presentation.OrgChartShape"_ustr;
     case PresObjKind::Calc:
-        aShapeType += "CalcShape";
-        break;
+        return u"com.sun.star.presentation.CalcShape"_ustr;
     case PresObjKind::Table:
-        aShapeType += "TableShape";
-        break;
+        return u"com.sun.star.presentation.TableShape"_ustr;
     case PresObjKind::Media:
-        aShapeType += "MediaShape";
-        break;
+        return u"com.sun.star.presentation.MediaShape"_ustr;
     case PresObjKind::Page:
-        aShapeType += "PageShape";
-        break;
+        return u"com.sun.star.presentation.PageShape"_ustr;
     case PresObjKind::Handout:
-        aShapeType += "HandoutShape";
-        break;
+        return u"com.sun.star.presentation.HandoutShape"_ustr;
     case PresObjKind::PagePreview:
-        aShapeType += "PageShape";
-        break;
+        return u"com.sun.star.presentation.PageShape"_ustr;
     case PresObjKind::Notes:
-        aShapeType += "NotesShape";
-        break;
+        return u"com.sun.star.presentation.NotesShape"_ustr;
     case PresObjKind::Footer:
-        aShapeType += "FooterShape";
-        break;
+        return u"com.sun.star.presentation.FooterShape"_ustr;
     case PresObjKind::Header:
-        aShapeType += "HeaderShape";
-        break;
+        return u"com.sun.star.presentation.HeaderShape"_ustr;
     case PresObjKind::SlideNumber:
-        aShapeType += "SlideNumberShape";
-        break;
+        return u"com.sun.star.presentation.SlideNumberShape"_ustr;
     case PresObjKind::DateTime:
-        aShapeType += "DateTimeShape";
-        break;
+        return u"com.sun.star.presentation.DateTimeShape"_ustr;
     case PresObjKind::NONE:
-        break;
+        return OUString();
     }
 
-    return aShapeType;
+    return OUString();
 }
 
 Reference< drawing::XShape >  SdGenericDrawPage::CreateShape(SdrObject *pObj) const
