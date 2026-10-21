@@ -625,7 +625,9 @@ Sub StartTestByOptions
         &apos;StarDesktop.Terminate
 
         &apos;EnableReschedule( false )
-        &apos;DispatchSlot( 5300 )
+        &apos;Dim disp As Object
+        &apos;disp = CreateUnoService(&quote;com.sun.star.frame.DispatchHelper&quot;)
+        &apos;disp.executeDispatch(StarDesktop, &quot;.uno:Quit&quot;, &quot;&quot;, 0, Array())
         stop
     End If
 end Sub
@@ -683,55 +685,6 @@ Function StartTestWithDefaultOptions
     next i
     StartTestWithDefaultOptions = result
 end Function
-
-Sub DispatchSlot(SlotID as Integer)
-    Dim oArg() as new com.sun.star.beans.PropertyValue
-    Dim oUrl as new com.sun.star.util.URL
-    Dim oTrans as Object
-    Dim oDisp as Object
-
-    oTrans = createUNOService(&quot;com.sun.star.util.URLTransformer&quot;)
-    oUrl.Complete = &quot;slot:&quot; &amp; CStr(SlotID)
-    oTrans.parsestrict(oUrl)
-
-    oDisp = StarDesktop.queryDispatch(oUrl, &quot;_self&quot;, 0)
-    oDisp.dispatch(oUrl, oArg())
-End Sub
-
-Sub LoadLibrary( LibName As String )
-
-    dim args(1)
-    dim arg as new com.sun.star.beans.PropertyValue
-    arg.Name = &quot;LibraryName&quot;
-    arg.Value = LibName
-    args(0) = arg
-
-    dim url as new com.sun.star.util.URL
-    dim trans as object
-    trans = createUnoService(&quot;com.sun.star.util.URLTransformer&quot; )
-    url.Complete = &quot;slot:6517&quot;
-    trans.parsestrict( url )
-
-    dim disp as object
-    disp = StarDesktop.currentFrame.queryDispatch( url, &quot;&quot;, 0 )
-    disp.dispatch( url, args() )
-
-End Sub
-
-Sub ExecuteSlot( SlotNr As String, oDoc as Object )
-    dim args()
-    dim url as new com.sun.star.util.URL
-    dim trans as object
-    dim disp as object
-
-    trans = createUnoService(&quot;com.sun.star.util.URLTransformer&quot; )
-    url.Complete = &quot;slot:&quot; + SlotNr
-    trans.parsestrict( url )
-
-    disp = oDoc.CurrentController.Frame.queryDispatch( url, &quot;&quot;, 0 )
-    disp.dispatch( url, args() )
-
-End Sub
 
 Sub DelAllUserFields (aDoc as Object)
     Dim aFieldType as Object

@@ -593,26 +593,6 @@ Function TestJava
     TestJava = not IsNull (oObj)
 End Function
 
-Sub LoadLibrary( LibName as String )
-
-    dim args(1)
-    dim arg as new com.sun.star.beans.PropertyValue
-    arg.Name = &quot;LibraryName&quot;
-    arg.Value = LibName
-    args(0) = arg
-
-    dim url as new com.sun.star.util.URL
-    dim trans as object
-    trans = createUnoService(&quot;com.sun.star.util.URLTransformer&quot; )
-    url.Complete = &quot;slot:6517&quot;
-    trans.parsestrict( url )
-
-    dim disp as object
-    disp = StarDesktop.currentFrame.queryDispatch( url, &quot;&quot;, 0 )
-    disp.dispatch( url, args() )
-
-End Sub
-
 Sub LoadDoc (DocName as String) as Object
     dim trans as object
     trans = createUnoService(&quot;com.sun.star.util.URLTransformer&quot; )
