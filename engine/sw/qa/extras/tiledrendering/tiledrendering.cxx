@@ -3950,6 +3950,15 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPictureContentControl)
     OString sAction( aTree.get_child("action").get_value<std::string>() );
     CPPUNIT_ASSERT_EQUAL("change-picture"_ostr, sAction);
 
+    // And when clicking again, as after a cancelled file picker:
+    m_aContentControl.clear();
+    pWrtShell->GotoContentControl(rFormatContentControl);
+
+    // Then make sure that the placeholder still asks for a picture:
+    // Without the accompanying fix in place, this test would have failed, the placeholder was
+    // taken as the picture once the file picker was asked for.
+    CPPUNIT_ASSERT(!m_aContentControl.isEmpty());
+
     // And when replacing the image:
     std::map<OUString, OUString> aArguments;
     aArguments.emplace("type", "picture");
@@ -3964,6 +3973,7 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPictureContentControl)
     // executeContentControlEvent().
     CPPUNIT_ASSERT(xGraphic.is());
     CPPUNIT_ASSERT_EQUAL(u"image/png"_ustr, getProperty<OUString>(xGraphic, u"MimeType"_ustr));
+    CPPUNIT_ASSERT(!rFormatContentControl.GetContentControl()->GetShowingPlaceHolder());
 
 }
 

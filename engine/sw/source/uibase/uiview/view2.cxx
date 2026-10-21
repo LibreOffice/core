@@ -164,6 +164,8 @@
 #include <basegfx/utils/zoomtools.hxx>
 
 #include <ndtxt.hxx>
+#include <fmtanchr.hxx>
+#include <textcontentcontrol.hxx>
 #include <grfatr.hxx>
 
 #include <svx/srchdlg.hxx>
@@ -242,6 +244,29 @@ IMPL_LINK_NOARG(SwNumberInputDlg, InputModifiedHdl, weld::Entry&, void)
         m_xSpinButton->set_value(nValue);
 
     m_xSpinButton->set_position(-1);
+}
+
+// the selected image replaced a picture control's placeholder
+void ClearPicturePlaceholder(SwWrtShell& rShell)
+{
+    const SwFrameFormat* pFlyFormat = rShell.GetFlyFrameFormat();
+    if (!pFlyFormat)
+        return;
+    const SwFormatAnchor& rFormatAnchor = pFlyFormat->GetAnchor();
+    SwNode* pAnchorNode = rFormatAnchor.GetAnchorNode();
+    SwTextNode* pTextNode = pAnchorNode ? pAnchorNode->GetTextNode() : nullptr;
+    if (!pTextNode)
+        return;
+    SwTextAttr* pAttr
+        = pTextNode->GetTextAttrAt(rFormatAnchor.GetAnchorContentOffset(),
+                                   RES_TXTATR_CONTENTCONTROL, sw::GetTextAttrMode::Parent);
+    if (!pAttr)
+        return;
+    auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
+    const std::shared_ptr<SwContentControl>& pContentControl
+        = pTextContentControl->GetContentControl().GetContentControl();
+    if (pContentControl->GetPicture())
+        pContentControl->SetShowingPlaceHolder(false);
 }
 
 }
@@ -359,6 +384,7 @@ ErrCode SwView::InsertGraphic( const OUString &rPath, const OUString &rFilter,
                 bLink ? rPath : OUString(),
                 bLink ? rFilter : OUString(),
                 &aGraphic);
+            ClearPicturePlaceholder(rShell);
         }
         else
         {

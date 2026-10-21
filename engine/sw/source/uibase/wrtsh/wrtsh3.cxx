@@ -119,7 +119,6 @@ bool SwWrtShell::GotoContentControl(const SwFormatContentControl& rContentContro
                 GetView().GetViewFrame().GetDispatcher()->Execute(SID_CHANGE_PICTURE,
                                                                    SfxCallMode::SYNCHRON);
             }
-            pContentControl->SetShowingPlaceHolder(false);
         }
         return true;
     }

@@ -346,8 +346,8 @@ CPPUNIT_TEST_FIXTURE(Test, testReplacePictureContentControl)
         = static_cast<SwFormatContentControl&>(pTextContentControl->GetAttr());
     pWrtShell->GotoContentControl(rFormatContentControl);
 
-    // Then make sure that the picture is replaced:
-    CPPUNIT_ASSERT(!rFormatContentControl.GetContentControl()->GetShowingPlaceHolder());
+    // Then make sure that the placeholder stays until a picture is chosen:
+    CPPUNIT_ASSERT(rFormatContentControl.GetContentControl()->GetShowingPlaceHolder());
     // Without the accompanying fix in place, this test would have failed, there was no special
     // handling for picture content control (how to interact with them), and the default handler
     // killed the image selection.
