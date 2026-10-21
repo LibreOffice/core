@@ -25,6 +25,7 @@
 #include <sfx2/sidebar/ILayoutableWindow.hxx>
 #include <sfx2/sidebar/PanelLayout.hxx>
 #include <svl/lstner.hxx>
+#include <vcl/idle.hxx>
 #include <vcl/weld.hxx>
 
 #include <vector>
@@ -106,6 +107,7 @@ private:
     DECL_LINK( LoopSoundBoxChecked, weld::Toggleable&, void );
     DECL_LINK( EventMultiplexerListener, sdtools::EventMultiplexerEvent&, void );
     DECL_LINK(LateInitCallback, Timer *, void);
+    DECL_LINK(UpdateControlsHdl, Timer *, void);
 
     ViewShellBase &   mrBase;
     SdDrawDocument *  mpDrawDoc;
@@ -140,6 +142,10 @@ private:
     mutable OUString maCurrentSoundFile;
 
     Timer maLateInitTimer;
+
+    /// Brings the controls up to date with the selected slides once the notices about changes
+    /// of the page, the selection or the document stop arriving.
+    Idle maUpdateControlsIdle;
 
     bool mbInApplyToPages = false;
 };

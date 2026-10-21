@@ -380,7 +380,8 @@ SlideTransitionPane::SlideTransitionPane(
         mxRepeatAutoFrame(m_xBuilder->weld_frame(u"repeat_after_frame"_ustr)),
         mbHasSelection( false ),
         mbUpdatingControls( false ),
-        maLateInitTimer("sd SlideTransitionPane maLateInitTimer")
+        maLateInitTimer("sd SlideTransitionPane maLateInitTimer"),
+        maUpdateControlsIdle("sd SlideTransitionPane maUpdateControlsIdle")
 {
     Initialize();
 }
@@ -450,11 +451,14 @@ void SlideTransitionPane::Initialize()
     maLateInitTimer.SetTimeout(200);
     maLateInitTimer.SetInvokeHandler(LINK(this, SlideTransitionPane, LateInitCallback));
     maLateInitTimer.Start();
+
+    maUpdateControlsIdle.SetInvokeHandler(LINK(this, SlideTransitionPane, UpdateControlsHdl));
 }
 
 SlideTransitionPane::~SlideTransitionPane()
 {
     maLateInitTimer.Stop();
+    maUpdateControlsIdle.Stop();
     removeListener();
     mxTransitionsScrollWindow.reset();
     mxTransitionsIconView.reset();
@@ -475,12 +479,19 @@ SlideTransitionPane::~SlideTransitionPane()
     mxCB_AUTO_PREVIEW.reset();
 }
 
+// A change of the document comes once for each object an action changes, so an undo of many
+// objects brings many of them in a row. The controls are set once, after the last.
 void SlideTransitionPane::onSelectionChanged()
 {
-    updateControls();
+    maUpdateControlsIdle.Start();
 }
 
 void SlideTransitionPane::onChangeCurrentPage()
+{
+    maUpdateControlsIdle.Start();
+}
+
+IMPL_LINK_NOARG(SlideTransitionPane, UpdateControlsHdl, Timer *, void)
 {
     updateControls();
 }
