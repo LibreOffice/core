@@ -284,6 +284,7 @@
 #include "kitclipboard.hxx"
 #include "kitremotechecker.hxx"
 #include "kittranslation.hxx"
+#include "kitcommand.hxx"
 #include <officecfg/Office/Common.hxx>
 #include <officecfg/Office/Impress.hxx>
 #include <officecfg/Office/Linguistic.hxx>
@@ -6037,34 +6038,9 @@ void COKitDocumentImpl::postUnoCommand(const char* pCommand, const char* pArgume
         return;
     }
 
-    // Put the caret of the running text edit at the paragraph and offset the client names, with
-    // the text from the anchor selected. The states that follow the caret, such as its font, are
-    // computed again.
     if (aCommand.startsWith(".uno:SetTextCursor?"))
     {
-        const std::map<OUString, OUString> aParameters
-            = KitHelper::parseCommandParameters(aCommand);
-        const auto aObjectIterator = aParameters.find(u"object"_ustr);
-        const auto aParagraphIterator = aParameters.find(u"paragraph"_ustr);
-        const auto aIndexIterator = aParameters.find(u"index"_ustr);
-        if (aObjectIterator == aParameters.end() || aParagraphIterator == aParameters.end()
-            || aIndexIterator == aParameters.end())
-            return;
-
-        const sal_Int32 nParagraph = aParagraphIterator->second.toInt32();
-        const sal_Int32 nIndex = aIndexIterator->second.toInt32();
-        const auto aAnchorParagraphIterator = aParameters.find(u"anchorparagraph"_ustr);
-        const auto aAnchorIndexIterator = aParameters.find(u"anchorindex"_ustr);
-        const bool bHasAnchor = aAnchorParagraphIterator != aParameters.end()
-                                && aAnchorIndexIterator != aParameters.end();
-
-        SdrView* pDrawView = pViewShell->GetDrawView();
-        if (pDrawView
-            && pDrawView->SetKitTextCursor(
-                   aObjectIterator->second.toUInt64(), nParagraph, nIndex,
-                   bHasAnchor ? aAnchorParagraphIterator->second.toInt32() : nParagraph,
-                   bHasAnchor ? aAnchorIndexIterator->second.toInt32() : nIndex))
-            pViewShell->GetViewFrame().GetBindings().InvalidateAll(false);
+        kitcommand::setTextCursor(*pViewShell, aCommand);
         return;
     }
 
