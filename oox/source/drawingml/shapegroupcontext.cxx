@@ -69,6 +69,8 @@ ContextHandlerRef ShapeGroupContext::onCreateContext( sal_Int32 aElementToken, c
         mpGroupShapePtr->setHidden( rAttribs.getBool( XML_hidden, false ) );
         mpGroupShapePtr->setId( rAttribs.getStringDefaulted( XML_id ) );
         mpGroupShapePtr->setName( rAttribs.getStringDefaulted( XML_name ) );
+        mpGroupShapePtr->setDescription(rAttribs.getStringDefaulted(XML_descr));
+        mpGroupShapePtr->setTitle(rAttribs.getStringDefaulted(XML_title));
         break;
     }
     case XML_ph:
