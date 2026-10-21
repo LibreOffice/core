@@ -1909,6 +1909,39 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testNewShapeTakesFileThemeColor)
     CPPUNIT_ASSERT_LESSEQUAL(1, std::abs(nLineColor.GetBlue() - nReloadedLineColor.GetBlue()));
 }
 
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testGroupConnectorDescription)
+{
+    // Given a slide with a group, a line and a rectangle, each with alt text and a title in its
+    // cNvPr:
+    createSdImpressDoc("pptx/group-connector-descr.pptx");
+
+    auto verify = [this]() {
+        // Without the fix the group and the line had neither, only the rectangle had them
+        CPPUNIT_ASSERT_EQUAL(
+            u"Alt text on the group"_ustr,
+            getShapeFromPage(0, 0)->getPropertyValue(u"Description"_ustr).get<OUString>());
+        CPPUNIT_ASSERT_EQUAL(
+            u"Title on the group"_ustr,
+            getShapeFromPage(0, 0)->getPropertyValue(u"Title"_ustr).get<OUString>());
+        CPPUNIT_ASSERT_EQUAL(
+            u"Alt text on the line"_ustr,
+            getShapeFromPage(1, 0)->getPropertyValue(u"Description"_ustr).get<OUString>());
+        CPPUNIT_ASSERT_EQUAL(
+            u"Title on the line"_ustr,
+            getShapeFromPage(1, 0)->getPropertyValue(u"Title"_ustr).get<OUString>());
+    };
+    verify();
+
+    // and they are written back to the group's and the line's cNvPr
+    saveAndReload(TestFilter::PPTX);
+    verify();
+    xmlDocUniquePtr pSlide = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pSlide, "//p:grpSp/p:nvGrpSpPr/p:cNvPr", "descr", u"Alt text on the group");
+    assertXPath(pSlide, "//p:grpSp/p:nvGrpSpPr/p:cNvPr", "title", u"Title on the group");
+    assertXPath(pSlide, "//p:cxnSp/p:nvCxnSpPr/p:cNvPr", "descr", u"Alt text on the line");
+    assertXPath(pSlide, "//p:cxnSp/p:nvCxnSpPr/p:cNvPr", "title", u"Title on the line");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
