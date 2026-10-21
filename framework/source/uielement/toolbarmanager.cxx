@@ -216,7 +216,6 @@ public:
 
         m_pToolBar->SetMenuButtonHdl( LINK( pManager, ToolBarManager, MenuButton ) );
         m_pToolBar->SetMenuExecuteHdl( LINK( pManager, ToolBarManager, MenuPreExecute ) );
-        m_pToolBar->GetMenu()->SetSelectHdl( LINK( pManager, ToolBarManager, MenuSelect ) );
     }
 
     virtual void InsertItem(ToolBoxItemId nId,
@@ -2082,6 +2081,8 @@ IMPL_LINK(ToolBarManager, MenuPreExecute, PopupMenu&, rMenu, void)
         return;
 
     AddCustomizeMenuItems(rMenu);
+
+    rMenu.SetSelectHdl(LINK(this, ToolBarManager, MenuSelect));
 }
 
 IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu, bool )

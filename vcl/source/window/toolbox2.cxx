@@ -59,7 +59,6 @@ using namespace vcl;
 ImplToolBoxPrivateData::ImplToolBoxPrivateData()
 {
     meButtonSize = ToolBoxButtonSize::DontCare;
-    mpMenu = VclPtr<PopupMenu>::Create();
 
     maMenuType = ToolBoxMenuType::NONE;
     maMenubuttonItem.maItemSize = Size( TB_MENUBUTTON_SIZE+TB_MENUBUTTON_OFFSET, TB_MENUBUTTON_SIZE+TB_MENUBUTTON_OFFSET );
@@ -79,11 +78,7 @@ ImplToolBoxPrivateData::ImplToolBoxPrivateData()
     mbDropDownByKeyboard = false;
 }
 
-ImplToolBoxPrivateData::~ImplToolBoxPrivateData()
-{
-    m_pLayoutData.reset();
-    mpMenu.disposeAndClear();
-}
+ImplToolBoxPrivateData::~ImplToolBoxPrivateData() { m_pLayoutData.reset(); }
 
 void ImplToolItem::init(ToolBoxItemId nItemId, ToolBoxItemBits nItemBits,
                         bool bEmptyBtn)
@@ -1487,11 +1482,6 @@ bool ToolBox::IsMenuEnabled() const
     return mpData->maMenuType != ToolBoxMenuType::NONE;
 }
 
-PopupMenu* ToolBox::GetMenu() const
-{
-    return mpData ? mpData->mpMenu : nullptr;
-}
-
 void ToolBox::SetMenuExecuteHdl(const Link<PopupMenu&, void>& rLink)
 {
     mpData->maMenuButtonHdl = rLink;
@@ -1566,10 +1556,10 @@ void ToolBox::UpdateCustomMenu(PopupMenu& rMenu)
 
 IMPL_LINK( ToolBox, ImplCustomMenuListener, VclMenuEvent&, rEvent, void )
 {
-    PopupMenu *pMenu = GetMenu();
-    if( pMenu && rEvent.GetMenu() == pMenu && rEvent.GetId() == VclEventId::MenuSelect )
+    if (mpData && mpData->mpMenu && rEvent.GetMenu() == mpData->mpMenu
+        && rEvent.GetId() == VclEventId::MenuSelect)
     {
-        sal_uInt16 id = pMenu->GetItemId( rEvent.GetItemPos() );
+        sal_uInt16 id = mpData->mpMenu->GetItemId(rEvent.GetItemPos());
         if( id >= TOOLBOX_MENUITEM_START )
             TriggerItem( ToolBoxItemId(id - TOOLBOX_MENUITEM_START) );
     }
@@ -1580,20 +1570,19 @@ void ToolBox::ExecuteCustomMenu( const tools::Rectangle& rRect )
     if ( !IsMenuEnabled() || ImplIsInPopupMode() )
         return;
 
-    PopupMenu *pMenu = GetMenu();
-    if (!pMenu)
-        return;
-    UpdateCustomMenu(*pMenu);
+    assert(!mpData->mpMenu && "There is already an existing menu");
+    mpData->mpMenu = VclPtr<PopupMenu>::Create();
+    UpdateCustomMenu(*mpData->mpMenu);
 
     if( GetMenuType() & ToolBoxMenuType::Customize )
         // call button handler to allow for menu customization
-        mpData->maMenuButtonHdl.Call(*pMenu);
+        mpData->maMenuButtonHdl.Call(*mpData->mpMenu);
 
-    pMenu->AddEventListener( LINK( this, ToolBox, ImplCustomMenuListener ) );
+    mpData->mpMenu->AddEventListener(LINK(this, ToolBox, ImplCustomMenuListener));
 
     // make sure all disabled entries will be shown
-    pMenu->SetMenuFlags(
-        pMenu->GetMenuFlags() | MenuFlags::AlwaysShowDisabledEntries );
+    mpData->mpMenu->SetMenuFlags(mpData->mpMenu->GetMenuFlags()
+                                 | MenuFlags::AlwaysShowDisabledEntries);
 
     // toolbox might be destroyed during execute
     bool bBorderDel = false;
@@ -1613,13 +1602,14 @@ void ToolBox::ExecuteCustomMenu( const tools::Rectangle& rRect )
         }
     }
 
-    sal_uInt16 uId = pMenu->Execute( pWin, tools::Rectangle( ImplGetPopupPosition( aMenuRect ), Size() ),
-                            PopupMenuFlags::ExecuteDown | PopupMenuFlags::NoMouseUpClose );
+    sal_uInt16 uId
+        = mpData->mpMenu->Execute(pWin, tools::Rectangle(ImplGetPopupPosition(aMenuRect), Size()),
+                                  PopupMenuFlags::ExecuteDown | PopupMenuFlags::NoMouseUpClose);
 
     if ( pWin->isDisposed() )
         return;
 
-    pMenu->RemoveEventListener( LINK( this, ToolBox, ImplCustomMenuListener ) );
+    mpData->mpMenu->RemoveEventListener(LINK(this, ToolBox, ImplCustomMenuListener));
     if( bBorderDel )
     {
         if( pBorderWin->isDisposed() )
@@ -1630,6 +1620,8 @@ void ToolBox::ExecuteCustomMenu( const tools::Rectangle& rRect )
 
     if( uId )
         GrabFocusToDocument();
+
+    mpData->mpMenu.disposeAndClear();
 }
 
 // checks override first, useful during calculation of sizes
