@@ -64,12 +64,14 @@
 #include <TableStyleGenerator.hxx>
 #include <docmodel/theme/Theme.hxx>
 
+#include <vcl/kit.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/weld.hxx>
 
 #include <oox/core/fastparser.hxx>
 #include <svx/svdpage.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/threadpool.hxx>
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
@@ -345,6 +347,9 @@ void importSheetFragments( WorkbookFragment& rWorkbookHandler, SheetFragmentVect
     // release the SolarMutex so that the WorkerThreads can proceed:
     SolarMutexReleaser rel;
 #else
+    vcl::kit::pushExpectedReentry();
+    comphelper::ScopeGuard aPopReentry([] { vcl::kit::popExpectedReentry(); });
+
     // coverity[loop_top] - this isn't an infinite loop where nSheetsLeft gets decremented by the above threads
     while( nSheetsLeft > 0 && !Application::IsQuit())
     {
