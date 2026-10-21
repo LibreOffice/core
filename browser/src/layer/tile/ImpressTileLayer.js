@@ -383,6 +383,12 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 		app.activeDocument.activeLayout.viewSize =
 			app.activeDocument.fileSize.clone();
 		this._updateScrollLimits(true);
+		this._refreshAnnotationsForLayout();
+	},
+
+	// Ask for the comments again so they are laid out for the new view.
+	_refreshAnnotationsForLayout: function () {
+		app.socket.sendMessage('commandvalues command=.uno:ViewAnnotations');
 	},
 
 	// Total fileSize for filebased view: width = max width across parts (so
@@ -424,6 +430,7 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 		app.file.fileBasedView = true;
 		this._updateScrollLimits(true);
 		RenderManager.updateFileBasedView();
+		this._refreshAnnotationsForLayout();
 	},
 
 	_onCommandValuesMsg: function (textMsg) {
