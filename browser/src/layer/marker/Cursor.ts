@@ -27,6 +27,9 @@ class Cursor {
 	private visible: boolean = false;
 	private domAttached: boolean = false;
 	private visualsReady: boolean = false;
+	// Where the caret was last put, in document twips, and the top left of the view then, in
+	// core pixels.
+	private lastPlace: { x: number, y: number, viewX: number, viewY: number } | null = null;
 
 	// position and size should be in core pixels.
 	constructor(rectangle: cool.SimpleRectangle, map: any, options: any) {
@@ -103,6 +106,8 @@ class Cursor {
 
 		this.visible = false;
 		this.domAttached = false;
+		// The caret shown again later is put in place at once.
+		this.lastPlace = null;
 
 		window.removeEventListener('blur', this.onFocusBlur);
 		window.removeEventListener('focus', this.onFocusBlur);
@@ -266,6 +271,7 @@ class Cursor {
 				y = Math.round(this.rectangle.v1Y / app.dpiScale);
 			}
 
+			this.slideAlongTheLine();
 			this.container.style.top = y + 'px';
 			this.container.style.left = this.transformX(x) + 'px';
 			this.container.style.zIndex = this.zIndex + '';
@@ -284,6 +290,40 @@ class Cursor {
 			}
 		});
 	}
+
+	// In a vector view the caret slides a character or two along its line, so the eye follows
+	// it. Any other move, to another line, far along the line or of the view, is immediate.
+	private slideAlongTheLine() {
+		const view = app.activeDocument.activeLayout.viewedRectangle;
+		const place = {
+			x: this.rectangle.x1,
+			y: this.rectangle.y1,
+			viewX: view.pX1,
+			viewY: view.pY1,
+		};
+		const last = this.lastPlace;
+		const sameView = last !== null && last.viewX === place.viewX && last.viewY === place.viewY;
+		const sameLine = sameView && last.y === place.y;
+		if (sameLine && last.x === place.x)
+			return;
+
+		// A character or two is as far as the caret slides: twice its height covers that in
+		// any font.
+		const short = sameLine && Math.abs(place.x - last.x) <= 2 * this.rectangle.height;
+		if (short && RenderManager.isVectorRendering() && Cursor.slideTime > 0) {
+			this.container.style.transitionDuration = Cursor.slideTime + 'ms';
+			window.L.DomUtil.addClass(this.container, 'leaflet-cursor-slides');
+		}
+		else {
+			this.container.style.transitionDuration = '';
+			window.L.DomUtil.removeClass(this.container, 'leaflet-cursor-slides');
+		}
+		this.lastPlace = place;
+	}
+
+	// How long the caret and the text selection take to move to a new place, in milliseconds,
+	// 0 to move them at once.
+	static slideTime: number = 60;
 
 	static hotSpot = new Map<string, cool.Point>([['fill', new cool.Point(7, 16)]]);
 

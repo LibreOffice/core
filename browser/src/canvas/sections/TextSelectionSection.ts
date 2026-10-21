@@ -33,6 +33,14 @@ class TextSelectionSection extends CanvasSectionObject {
 	public color: string;
 	private polygons: Array<Array<cool.SimplePoint>> = [[]];
 
+	// The polygons drawn when the selection last changed, while it glides from them to the new
+	// ones, or null while it stands.
+	private glidesFrom: Array<Array<cool.SimplePoint>> | null = null;
+	// When the glide began, in the time of performance.now().
+	private glideStart: number = 0;
+	// The animation frame the glide draws next, or null while none is asked for.
+	private glideFrame: number | null = null;
+
 	constructor(name: string, mode: number, part: number, color: string) {
 		super(name);
 		this.part = part;
@@ -45,9 +53,88 @@ class TextSelectionSection extends CanvasSectionObject {
 		part: number,
 		polygons: Array<Array<cool.SimplePoint>>,
 	) {
+		const glides =
+			RenderManager.isVectorRendering() &&
+			Cursor.slideTime > 0 &&
+			mode === this.mode &&
+			part === this.part &&
+			TextSelectionSection.nearby(this.polygons, polygons) &&
+			window.matchMedia?.('(prefers-reduced-motion: reduce)').matches !== true;
+		this.glidesFrom = glides ? this.shownPolygons(performance.now()) : null;
+		this.glideStart = performance.now();
 		this.mode = mode;
 		this.part = part;
 		this.polygons = polygons;
+		if (glides) this.glide();
+	}
+
+	/*
+		In a view drawn from vector primitives the selection glides to its new place when it
+		keeps its polygons and their corners and no corner moves far, as when Shift and an
+		arrow grow or shrink it on a line, so the eye follows the end that moves. A selection
+		that changes its shape, or one of the same shape elsewhere, is drawn at once.
+	*/
+	private static nearby(
+		before: Array<Array<cool.SimplePoint>>,
+		after: Array<Array<cool.SimplePoint>>,
+	): boolean {
+		if (before.length === 0 || before.length !== after.length) return false;
+		return before.every((polygon, i) => {
+			const other = after[i];
+			if (polygon.length === 0 || polygon.length !== other.length) return false;
+			// A character or two is as far as a corner moves: twice the height of its
+			// polygon covers that in any font.
+			const reach = 2 * TextSelectionSection.heightOf(polygon);
+			return polygon.every(
+				(corner, j) =>
+					Math.abs(corner.x - other[j].x) <= reach &&
+					Math.abs(corner.y - other[j].y) <= reach,
+			);
+		});
+	}
+
+	private static heightOf(polygon: Array<cool.SimplePoint>): number {
+		let top = Infinity;
+		let bottom = -Infinity;
+		for (const corner of polygon) {
+			top = Math.min(top, corner.y);
+			bottom = Math.max(bottom, corner.y);
+		}
+		return bottom - top;
+	}
+
+	// Draws the canvas again on every frame until the glide is over. A change during a glide
+	// restarts its time, and the frames already asked for carry on.
+	private glide(): void {
+		if (this.glideFrame !== null) return;
+		this.glideFrame = requestAnimationFrame(() => {
+			this.glideFrame = null;
+			app.sectionContainer.requestReDraw();
+			if (performance.now() - this.glideStart < Cursor.slideTime) this.glide();
+		});
+	}
+
+	// The polygons to draw at that time: on the way from the ones of the last change to the new
+	// ones while the selection glides, slowing down as it arrives, or the new ones.
+	private shownPolygons(now: number): Array<Array<cool.SimplePoint>> {
+		const from = this.glidesFrom;
+		const progress = (now - this.glideStart) / Cursor.slideTime;
+		if (!from || !(progress < 1)) {
+			this.glidesFrom = null;
+			return this.polygons;
+		}
+
+		const eased = 1 - (1 - progress) * (1 - progress);
+		return this.polygons.map((polygon, i) =>
+			polygon.map((point, j) => {
+				const start = from[i][j];
+				return new cool.SimplePoint(
+					start.x + (point.x - start.x) * eased,
+					start.y + (point.y - start.y) * eased,
+					point.part,
+				);
+			}),
+		);
 	}
 
 	onDraw(frameCount?: number, elapsedTime?: number): void {
@@ -68,8 +155,9 @@ class TextSelectionSection extends CanvasSectionObject {
 		this.context.strokeStyle = this.color;
 		this.context.fillStyle = this.color;
 
-		for (let i = 0; i < this.polygons.length; i++) {
-			const polygon = this.polygons[i];
+		const polygons = this.shownPolygons(performance.now());
+		for (let i = 0; i < polygons.length; i++) {
+			const polygon = polygons[i];
 
 			this.context.beginPath();
 

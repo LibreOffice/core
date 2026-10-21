@@ -541,6 +541,18 @@ a.leaflet-control-buttons:hover:first-child {
 	pointer-events: none;
 }
 
+/* The caret slides along its line to its new place, for as long as its own style says. */
+.leaflet-cursor-container.leaflet-cursor-slides {
+	transition-property: left;
+	transition-timing-function: ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.leaflet-cursor-container.leaflet-cursor-slides {
+		transition: none;
+	}
+}
+
 .leaflet-cursor {
 	background: var(--color-cursor-blink-background);
 	width: 2px;
