@@ -28,6 +28,8 @@
 #include <sdresid.hxx>
 #include <CustomAnimationEffect.hxx>
 #include <drawdoc.hxx>
+#include <DrawDocShell.hxx>
+#include <svl/hint.hxx>
 #include <comphelper/diagnose_ex.hxx>
 
 namespace com::sun::star::animations { class XAnimationNode; }
@@ -199,6 +201,8 @@ struct UndoTransitionImpl
     bool mbNewSoundOn;
     bool mbNewLoopSound;
     bool mbNewStopSound;
+    PresChange meNewPresChange;
+    double mfNewTime;
 
     sal_Int16 mnOldTransitionType;
     sal_Int16 mnOldTransitionSubtype;
@@ -209,7 +213,20 @@ struct UndoTransitionImpl
     bool mbOldSoundOn;
     bool mbOldLoopSound;
     bool mbOldStopSound;
+    PresChange meOldPresChange;
+    double mfOldTime;
 };
+
+namespace
+{
+// Says that the document changed, without touching its modified state: the undo manager keeps
+// that. Whatever shows the transition of a slide then reads it again.
+void tellTransitionChanged(SdDrawDocument& rDoc)
+{
+    if (DrawDocShell* pDocShell = rDoc.GetDocSh())
+        pDocShell->Broadcast(SfxHint(SfxHintId::DocChanged));
+}
+}
 
 UndoTransition::UndoTransition( SdDrawDocument& rDoc, SdPage* pThePage )
 : SdUndoAction( rDoc ), mpImpl( new UndoTransitionImpl )
@@ -226,6 +243,8 @@ UndoTransition::UndoTransition( SdDrawDocument& rDoc, SdPage* pThePage )
     mpImpl->mbOldSoundOn = pThePage->mbSoundOn;
     mpImpl->mbOldLoopSound = pThePage->mbLoopSound;
     mpImpl->mbOldStopSound = pThePage->mbStopSound;
+    mpImpl->meOldPresChange = pThePage->GetPresChange();
+    mpImpl->mfOldTime = pThePage->GetTime();
 }
 
 UndoTransition::~UndoTransition()
@@ -245,6 +264,8 @@ void UndoTransition::Undo()
         mpImpl->mbNewSoundOn = mpImpl->mpPage->mbSoundOn;
         mpImpl->mbNewLoopSound = mpImpl->mpPage->mbLoopSound;
         mpImpl->mbNewStopSound = mpImpl->mpPage->mbStopSound;
+        mpImpl->meNewPresChange = mpImpl->mpPage->GetPresChange();
+        mpImpl->mfNewTime = mpImpl->mpPage->GetTime();
     }
 
     mpImpl->mpPage->mnTransitionType = mpImpl->mnOldTransitionType;
@@ -257,6 +278,10 @@ void UndoTransition::Undo()
     mpImpl->mpPage->mbSoundOn = mpImpl->mbOldSoundOn;
     mpImpl->mpPage->mbLoopSound = mpImpl->mbOldLoopSound;
     mpImpl->mpPage->mbStopSound = mpImpl->mbOldStopSound;
+    mpImpl->mpPage->SetPresChange(mpImpl->meOldPresChange);
+    mpImpl->mpPage->SetTime(mpImpl->mfOldTime);
+
+    tellTransitionChanged(mrDoc);
 }
 
 void UndoTransition::Redo()
@@ -271,6 +296,10 @@ void UndoTransition::Redo()
     mpImpl->mpPage->mbSoundOn = mpImpl->mbNewSoundOn;
     mpImpl->mpPage->mbLoopSound = mpImpl->mbNewLoopSound;
     mpImpl->mpPage->mbStopSound = mpImpl->mbNewStopSound;
+    mpImpl->mpPage->SetPresChange(mpImpl->meNewPresChange);
+    mpImpl->mpPage->SetTime(mpImpl->mfNewTime);
+
+    tellTransitionChanged(mrDoc);
 }
 
 OUString UndoTransition::GetComment() const
