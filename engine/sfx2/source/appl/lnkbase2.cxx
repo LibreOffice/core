@@ -33,6 +33,7 @@
 #include <tools/debug.hxx>
 #include <svl/svdde.hxx>
 #include <osl/diagnose.h>
+#include <rtl/ustrbuf.hxx>
 #include <officecfg/Office/Common.hxx>
 
 using namespace ::com::sun::star;
@@ -496,23 +497,22 @@ bool SvBaseLink::ExecuteEdit( const OUString& _rNewName )
             sfx2::LinkManager::GetDisplayNames( this, &sApp, &sTopic, &sItem );
             if( mnObjType == SvBaseLinkObjectType::ClientDde )
             {
-                sError = SfxResId(STR_DDE_ERROR);
-
-                sal_Int32 nFndPos = sError.indexOf( "%1" );
-                if( -1 != nFndPos )
+                // One pass, so a "%3" inside an inserted file URL is kept as is
+                const OUString aTemplate = SfxResId(STR_DDE_ERROR);
+                OUStringBuffer aBuf(aTemplate.getLength());
+                for (sal_Int32 i = 0; i < aTemplate.getLength(); ++i)
                 {
-                    sError = sError.replaceAt( nFndPos, 2, sApp );
-                    nFndPos = nFndPos + sApp.getLength();
-
-                    if( -1 != ( nFndPos = sError.indexOf( "%2", nFndPos )))
+                    if (aTemplate[i] == '%' && i + 1 < aTemplate.getLength()
+                        && aTemplate[i + 1] >= '1' && aTemplate[i + 1] <= '3')
                     {
-                        sError = sError.replaceAt( nFndPos, 2, sTopic );
-                        nFndPos = nFndPos + sTopic.getLength();
-
-                        if( -1 != ( nFndPos = sError.indexOf( "%3", nFndPos )))
-                            sError = sError.replaceAt( nFndPos, 2, sItem );
+                        const OUString* pArgs[] = { &sApp, &sTopic, &sItem };
+                        aBuf.append(*pArgs[aTemplate[i + 1] - '1']);
+                        ++i;
                     }
+                    else
+                        aBuf.append(aTemplate[i]);
                 }
+                sError = aBuf.makeStringAndClear();
             }
             else
                 return false;
