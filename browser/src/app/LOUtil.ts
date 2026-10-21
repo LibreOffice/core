@@ -136,6 +136,7 @@ class LOUtil {
 	public static presentationMimeFilter = [
 		'application/vnd.oasis.opendocument.presentation',
 		'application/vnd.oasis.opendocument.presentation-template',
+		'application/vnd.oasis.opendocument.presentation-flat-xml',
 		'application/vnd.openxmlformats-officedocument.presentationml.presentation',
 		'application/vnd.openxmlformats-officedocument.presentationml.slideshow',
 		'application/vnd.openxmlformats-officedocument.presentationml.template',
