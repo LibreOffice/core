@@ -1,9 +1,9 @@
 {
   "bomFormat": "CycloneDX",
   "specVersion": "1.6",
-  "version": 2,
+  "version": 3,
   "metadata": {
-    "timestamp": "2026-10-21T11:34:24Z",
+    "timestamp": "2026-10-21T11:47:24Z",
     "supplier": {
       "name": "Collabora Productivity Ltd.",
       "url": [
@@ -40,8 +40,8 @@
       "id": "CVE-2013-6648",
       "description": "skia: SkRegion::setPath in Skia allows remote attackers to cause a denial of service (crash)",
       "analysis": {
-        "state": "in_triage",
-        "detail": "Reported by grype 0.118.0 against skia m142 on 2026-10-07, severity High. No upstream fix published yet. Not yet assessed."
+        "state": "false_positive",
+        "detail": "The flaw is in SkRegion::setPath as shipped in Chrome 31 and was fixed upstream in 2013. The bundled snapshot is skia m142 (f4ed99d2443962782cf5f8b4dd27179f131e7cbe), thirteen years of release branches later. Flagged only because the CPE match treats skia as unversioned."
       }
     },
     {
@@ -374,7 +374,7 @@
       "description": "python: The cleanup of tempfile.TemporaryDirectory is vulnerable to a race condition",
       "analysis": {
         "state": "in_triage",
-        "detail": "Reported by grype 0.118.0 against python 3.14.7 on 2026-10-07, severity Medium. Upstream fix in 3.15.0. Not yet assessed."
+        "detail": "Re-checked on 2026-10-21: still unfixed on the 3.14 series. Python 3.14.8 (2026-09-30) is listed as affected by OSV; the fix is in 3.15.0 only, so there is no 3.14 release to move to. CVSS 4.0 AV:L/AC:L/AT:P - a local attacker who can modify the tree while TemporaryDirectory cleans it up. Awaiting an assessment of whether the bundled python cleans up a temporary directory that is writable by anyone but the jail's own user."
       }
     },
     {
@@ -430,7 +430,7 @@
       "description": "openssl: A certificate with many nameRelativeToCRLIssuer CRL distribution points causes disproportionate heap growth when OpenSSL caches X.509 extensions",
       "analysis": {
         "state": "in_triage",
-        "detail": "Collabora security assessment: low severity for this product, with no argument that the code is unreachable, so it stands until openssl is updated. Fixed upstream in openssl 3.5.9."
+        "detail": "Collabora security assessment: low severity for this product, with no argument that the code is unreachable, so it stands until openssl is updated. Fixed upstream in openssl 3.5.9, released 2026-09-29; engine/download.lst still has openssl-3.5.8."
       }
     },
     {
@@ -488,7 +488,7 @@
       "description": "openssl: The generic elliptic-curve scalar multiplication used for ECDSA and SM2 signature operations with curves that do not have a dedicated implementation leaks information\u2026",
       "analysis": {
         "state": "in_triage",
-        "detail": "Collabora security assessment: low severity for this product, with no argument that the code is unreachable, so it stands until openssl is updated. Fixed upstream in openssl 3.5.9."
+        "detail": "Collabora security assessment: low severity for this product, with no argument that the code is unreachable, so it stands until openssl is updated. Fixed upstream in openssl 3.5.9, released 2026-09-29; engine/download.lst still has openssl-3.5.8."
       }
     },
     {
@@ -505,7 +505,7 @@
       "description": "openssl: A non-constant-time optimized implementation of scalar point multiplication is used for SM2 private key operations on ARM64 and RISC-V platforms",
       "analysis": {
         "state": "in_triage",
-        "detail": "Collabora security assessment: low severity, and only the ARM and RISC-V implementations are affected. We publish an arm64 image, so this is not dismissed as inapplicable. Fixed upstream in openssl 3.5.9."
+        "detail": "Collabora security assessment: low severity, and only the ARM and RISC-V implementations are affected. We publish an arm64 image, so this is not dismissed as inapplicable. Fixed upstream in openssl 3.5.9, released 2026-09-29; engine/download.lst still has openssl-3.5.8."
       }
     },
     {
@@ -573,7 +573,7 @@
       "description": "openssl: SM2 signature generation uses non-constant-time arithmetic on secret values, forming a timing side-channel",
       "analysis": {
         "state": "in_triage",
-        "detail": "Collabora security assessment: low severity for this product, with no argument that the code is unreachable, so it stands until openssl is updated. Fixed upstream in openssl 3.5.9."
+        "detail": "Collabora security assessment: low severity for this product, with no argument that the code is unreachable, so it stands until openssl is updated. Fixed upstream in openssl 3.5.9, released 2026-09-29; engine/download.lst still has openssl-3.5.8."
       }
     },
     {
@@ -599,7 +599,7 @@
       "description": "zlib: zlib versions 1.3.1.2 through 1.3.2 contain a heap buffer overflow vulnerability in the gz_vacate() function when processing non-blocking gzwrite() operations with\u2026",
       "analysis": {
         "state": "in_triage",
-        "detail": "Reported by grype 0.118.0 against zlib 1.3.2 on 2026-10-07, severity High. No upstream fix published yet. Not yet assessed."
+        "detail": "Re-checked on 2026-10-21: an upstream fix now exists but is unreleased. madler/zlib commit df84af25dc19 (2026-09-17, 'Fix buffer overflow bug in non-blocking gzwrite') states 'This addresses CVE-2026-85091'; it resets avail_in and next_in on the ret == -1 path in gz_write(), four lines in gzwrite.c. The latest release is still 1.3.2 (2026-02-17), which is what we bundle, so the choice is to backport the commit or wait for 1.3.3."
       }
     },
     {
@@ -607,55 +607,61 @@
       "description": "python: When tarfile extracts a link on a system that doesn't support links, it falls back to extracting a member from the archive",
       "analysis": {
         "state": "in_triage",
-        "detail": "Reported by grype 0.118.0 against python 3.14.7 on 2026-10-07, severity Medium. Upstream fix in 3.10.22, 3.11.17, 3.12.15, 3.13.16, 3.15.0. Not yet assessed."
+        "detail": "Re-checked on 2026-10-21: fixed in 3.10.22, 3.11.17, 3.12.15, 3.13.16 and 3.15.0, but no 3.14 release carries the fix - OSV still lists 3.14.8 (2026-09-30) as affected, so a version bump does not resolve it. The flaw needs tarfile to extract a link on a filesystem without link support, which the Linux image does not have."
       }
     },
     {
       "id": "CVE-2026-89156",
       "description": "pcre2: PCRE2 before 10.48 has a pcre2_match out-of-bounds read after a JIT fallback when an attacker can provide invalid UTF data",
       "analysis": {
-        "state": "in_triage",
-        "detail": "Reported by grype 0.118.0 against pcre2 10.47 on 2026-10-07, severity Medium. Upstream fix in 10.48. Not yet assessed."
+        "state": "not_affected",
+        "detail": "pcre2 is built through Poco with SUPPORT_JIT undefined (dependencies/pcre2/src/pcre2_config.h) and no sljit backend is compiled: libPocoFoundation.a defines 0 sljit symbols, so pcre2_jit_compile_8 and pcre2_jit_match_8 are the PCRE2_ERROR_JIT_BADOPTION stubs. A JIT fallback cannot occur where no JIT exists. Poco 1.15.4 (2026-09-22) bundles pcre2 10.48 and is the clean fix; engine/download.lst still has poco-1.15.3-all, whose dependencies/pcre2 is 10.47.",
+        "justification": "code_not_present"
       }
     },
     {
       "id": "CVE-2026-89157",
       "description": "pcre2: PCRE2 before 10.48, on 32-bit platforms, has a pcre2_pattern_convert out-of-bounds write when an attacker can provide a large pattern",
       "analysis": {
-        "state": "in_triage",
-        "detail": "Reported by grype 0.118.0 against pcre2 10.47 on 2026-10-07, severity High. Upstream fix in 10.48. Not yet assessed."
+        "state": "not_affected",
+        "detail": "pcre2 is reached only through Poco's RegularExpression - no engine or wsd source calls pcre2 directly. pcre2_pattern_convert_8 is compiled into libPocoFoundation.a but no object in it references the symbol, and Poco exposes no pattern conversion API. The flaw additionally needs a 32-bit platform. Poco 1.15.4 (2026-09-22) bundles pcre2 10.48 and is the clean fix; engine/download.lst still has poco-1.15.3-all, whose dependencies/pcre2 is 10.47.",
+        "justification": "code_not_reachable"
       }
     },
     {
       "id": "CVE-2026-89158",
       "description": "pcre2: PCRE2 before 10.48, on 32-bit platforms, has a pcre2_compile_32 integer overflow and resultant out-of-bounds write",
       "analysis": {
-        "state": "in_triage",
-        "detail": "Reported by grype 0.118.0 against pcre2 10.47 on 2026-10-07, severity Medium. Upstream fix in 10.48. Not yet assessed."
+        "state": "not_affected",
+        "detail": "Only the 8-bit code unit library is built: Poco's pcre2_config.h defines PCRE2_CODE_UNIT_WIDTH 8 and SUPPORT_PCRE2_8, leaving SUPPORT_PCRE2_16 and SUPPORT_PCRE2_32 undefined. libPocoFoundation.a defines no _32 symbol at all, so there is no pcre2_compile_32 to overflow. Poco 1.15.4 (2026-09-22) bundles pcre2 10.48 and is the clean fix; engine/download.lst still has poco-1.15.3-all, whose dependencies/pcre2 is 10.47.",
+        "justification": "code_not_present"
       }
     },
     {
       "id": "CVE-2026-89160",
       "description": "pcre2: PCRE2 before 10.48 has a pcre2_match out-of-bounds read during the PCRE2_MATCH_INVALID_UTF matching of an invalid UTF subject",
       "analysis": {
-        "state": "in_triage",
-        "detail": "Reported by grype 0.118.0 against pcre2 10.47 on 2026-10-07, severity Medium. Upstream fix in 10.48. Not yet assessed."
+        "state": "not_affected",
+        "detail": "pcre2 is reached only through Poco's RegularExpression - no engine or wsd source calls pcre2 directly. The flaw needs PCRE2_MATCH_INVALID_UTF, which Poco never sets - RegularExpression.cpp adds only PCRE2_UTF|PCRE2_UCP at compile time and PCRE2_NO_UTF_CHECK at match time, and Poco's RE_* option set has no equivalent to expose. Poco 1.15.4 (2026-09-22) bundles pcre2 10.48 and is the clean fix; engine/download.lst still has poco-1.15.3-all, whose dependencies/pcre2 is 10.47.",
+        "justification": "code_not_reachable"
       }
     },
     {
       "id": "CVE-2026-89161",
       "description": "pcre2: In PCRE2 before 10.48, pcre2_jit_match mishandles a previously copied subject being passed in as a context",
       "analysis": {
-        "state": "in_triage",
-        "detail": "Reported by grype 0.118.0 against pcre2 10.47 on 2026-10-07, severity High. Upstream fix in 10.48. Not yet assessed."
+        "state": "not_affected",
+        "detail": "pcre2 is built through Poco with SUPPORT_JIT undefined (dependencies/pcre2/src/pcre2_config.h) and no sljit backend is compiled: libPocoFoundation.a defines 0 sljit symbols, so pcre2_jit_compile_8 and pcre2_jit_match_8 are the PCRE2_ERROR_JIT_BADOPTION stubs. pcre2_jit_match cannot mishandle a subject it never matches. Poco 1.15.4 (2026-09-22) bundles pcre2 10.48 and is the clean fix; engine/download.lst still has poco-1.15.3-all, whose dependencies/pcre2 is 10.47.",
+        "justification": "code_not_present"
       }
     },
     {
       "id": "CVE-2026-89162",
       "description": "pcre2: In PCRE2 before 10.48, pcre2_serialize_encode might disclose two bytes to an adversary, typically in a situation where the access available to the adversary is\u2026",
       "analysis": {
-        "state": "in_triage",
-        "detail": "Reported by grype 0.118.0 against pcre2 10.47 on 2026-10-07, severity Low. Upstream fix in 10.48. Not yet assessed."
+        "state": "not_affected",
+        "detail": "pcre2 is reached only through Poco's RegularExpression - no engine or wsd source calls pcre2 directly. pcre2_serialize_encode_8 is compiled into libPocoFoundation.a but no object in it references the symbol; Poco never serializes compiled patterns. Poco 1.15.4 (2026-09-22) bundles pcre2 10.48 and is the clean fix; engine/download.lst still has poco-1.15.3-all, whose dependencies/pcre2 is 10.47.",
+        "justification": "code_not_reachable"
       }
     },
     {
@@ -663,7 +669,7 @@
       "description": "dompurify: DOMPurify: IN_PLACE returns a force-removed rawtext root whose text carries attacker markup \u2014 pure HTML reparse executes",
       "analysis": {
         "state": "in_triage",
-        "detail": "Reported by grype 0.118.0 against dompurify 3.4.14 on 2026-10-07, severity Low. Upstream fix in 3.4.16. Not yet assessed."
+        "detail": "Reported by grype 0.118.0 against dompurify 3.4.14 on 2026-10-07, severity Low. Re-checked on 2026-10-21: fixed in 3.4.16 (2026-09-23), and 3.4.17 (2026-10-12) is current; browser/package.json still pins 3.4.14. The flaw needs IN_PLACE, which has still to be checked against our sanitizer call sites."
       }
     },
     {
@@ -671,7 +677,7 @@
       "description": "dompurify: DOMPurify: IN_PLACE: node-removing afterSanitize hook leaves detached subtree event handlers armed, causing DOM XSS",
       "analysis": {
         "state": "in_triage",
-        "detail": "Reported by grype 0.118.0 against dompurify 3.4.14 on 2026-10-07, severity Low. Upstream fix in 3.4.16. Not yet assessed."
+        "detail": "Reported by grype 0.118.0 against dompurify 3.4.14 on 2026-10-07, severity Low. Re-checked on 2026-10-21: fixed in 3.4.16 (2026-09-23), and 3.4.17 (2026-10-12) is current; browser/package.json still pins 3.4.14. The flaw needs IN_PLACE and a node-removing afterSanitize hook, neither yet checked against our sanitizer call sites."
       }
     }
   ]
