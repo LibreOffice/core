@@ -50,14 +50,8 @@ test::MockHttpServer::Response dudenHandler(const test::MockHttpServer::Request&
 }
 }
 
-static test::MockHttpServer aMockServer(2022, dudenHandler);
-
 class TestRestProtocol : public test::BootstrapFixtureBase
 {
-public:
-    virtual void setUp() override;
-    virtual void tearDown() override;
-
 private:
     CPPUNIT_TEST_SUITE(TestRestProtocol);
     CPPUNIT_TEST(testProofreading);
@@ -68,6 +62,9 @@ private:
 
 void TestRestProtocol::testProofreading()
 {
+    test::MockHttpServer aMockServer(2022, dudenHandler);
+    CPPUNIT_ASSERT(aMockServer.start());
+
     css::lang::Locale aLocale(u"en"_ustr, u"US"_ustr, u""_ustr);
     using DudenCfg = officecfg::Office::Linguistic::GrammarChecking::Duden;
     std::shared_ptr<comphelper::ConfigurationChanges> batch(comphelper::ConfigurationChanges::create());
@@ -98,20 +95,6 @@ void TestRestProtocol::testProofreading()
     // The server's message for the code, when it sent one.
     CPPUNIT_ASSERT_EQUAL(u"Dieses Wort korrigieren?"_ustr, aResult.aErrors[0].aShortComment);
     CPPUNIT_ASSERT(aResult.aErrors[1].aShortComment != "Dieses Wort korrigieren?");
-}
-
-void TestRestProtocol::setUp()
-{
-    test::BootstrapFixtureBase::setUp();
-
-    CPPUNIT_ASSERT(aMockServer.start());
-}
-
-void TestRestProtocol::tearDown()
-{
-    aMockServer.stop();
-
-    test::BootstrapFixtureBase::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestRestProtocol);

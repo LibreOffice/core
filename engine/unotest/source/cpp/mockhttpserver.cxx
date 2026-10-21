@@ -56,7 +56,7 @@ public:
     }
 
 private:
-    virtual void run() override
+    void run() override
     {
         osl::StreamSocket aSocket;
         while (m_aAcceptorSocket.acceptConnection(aSocket) == osl_Socket_Ok)

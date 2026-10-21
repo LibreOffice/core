@@ -8,6 +8,7 @@
  */
 
 #include <config_crypto.h>
+#include <config_features.h>
 #include <config_oox.h>
 #include <cstdlib>
 #include <memory>
@@ -3035,6 +3036,10 @@ void DesktopKitTest::testGetFontSubset()
 
 void DesktopKitTest::testTranslationProviders()
 {
+#if !HAVE_FEATURE_CURL
+    // The providers talk to their services with curl: without it there are none.
+    return;
+#endif
     COKitDocumentImpl* pDocument = loadDoc("blank_text.odt");
 
     // Given a LibreTranslate server set up with a key, and no provider named:

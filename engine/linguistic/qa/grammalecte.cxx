@@ -71,15 +71,9 @@ test::MockHttpServer::Response grammalecteHandler(const test::MockHttpServer::Re
 }
 }
 
-// Started by the test that talks to it, since the port can be bound only
-// once per process.
-static test::MockHttpServer aMockServer(2023, grammalecteHandler);
 
 class TestGrammalecte : public test::BootstrapFixtureBase
 {
-public:
-    virtual void tearDown() override;
-
 private:
     CPPUNIT_TEST_SUITE(TestGrammalecte);
     CPPUNIT_TEST(testProofreading);
@@ -167,6 +161,7 @@ void TestGrammalecte::testStaysConfiguredWhileOff()
 
 void TestGrammalecte::testProofreading()
 {
+    test::MockHttpServer aMockServer(2023, grammalecteHandler);
     CPPUNIT_ASSERT(aMockServer.start());
 
     using GrammalecteCfg = officecfg::Office::Linguistic::GrammarChecking::Grammalecte;
@@ -215,13 +210,6 @@ void TestGrammalecte::testProofreading()
     aResult = xProofreader->doProofreading(u"id"_ustr, aText, aLocale, 0, aText.getLength(), {});
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aResult.aErrors.getLength());
     CPPUNIT_ASSERT_EQUAL(u"gn_test"_ustr, aResult.aErrors[0].aRuleIdentifier);
-}
-
-void TestGrammalecte::tearDown()
-{
-    aMockServer.stop();
-
-    test::BootstrapFixtureBase::tearDown();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestGrammalecte);
