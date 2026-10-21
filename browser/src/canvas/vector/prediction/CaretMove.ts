@@ -314,6 +314,9 @@ namespace cool {
 		if (paragraph === undefined || rightToLeft.test(run.text)) return null;
 
 		let index = nearestGraphemeBoundary(run, target.positions, x);
+		// The end of a wrapped line is the start of the next line, where the engine
+		// shows that caret. A click past the end of the line goes before its last
+		// character instead, which is usually the space that the line breaks at.
 		if (index === run.end && endsWrappedLine(run, objectRuns))
 			index = Math.max(
 				run.start,
