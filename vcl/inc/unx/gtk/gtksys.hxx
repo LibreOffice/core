@@ -9,8 +9,10 @@
 
 #pragma once
 
+#include <salsys.hxx>
+
 #include <gtk/gtk.h>
-#include <unx/X11Helper.hxx>
+
 #include <deque>
 
 class GtkSalSystem final : public SalSystem
