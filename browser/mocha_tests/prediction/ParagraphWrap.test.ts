@@ -172,8 +172,8 @@ describe('text prediction paragraph wrap', function () {
 		const data = makeSharedWrapSlide(
 			'aaaa bbbb',
 			[
-				{ start: 0, length: 4, f: 0, weight: 7 },
-				{ start: 5, length: 4, f: 400, weight: 5 },
+				{ start: 0, length: 4, translateY: 0, weight: 7 },
+				{ start: 5, length: 4, translateY: 400, weight: 5 },
 			],
 			400,
 		);
@@ -194,8 +194,8 @@ describe('text prediction paragraph wrap', function () {
 		const data = makeSharedWrapSlide(
 			'aa bb cc',
 			[
-				{ start: 0, length: 3, e: 0, f: 0, weight: 7 },
-				{ start: 3, length: 5, e: 300, f: 0, weight: 5 },
+				{ start: 0, length: 3, translateX: 0, translateY: 0, weight: 7 },
+				{ start: 3, length: 5, translateX: 300, translateY: 0, weight: 5 },
 			],
 			800,
 		);
@@ -380,7 +380,7 @@ describe('text prediction paragraph wrap', function () {
 		// windowing the same buffer from the same offsets.
 		const data = makeSharedWrapSlide(
 			'\taaa bbb',
-			[{ start: 1, length: 7, f: 0 }],
+			[{ start: 1, length: 7, translateY: 0 }],
 			700,
 		);
 		const { advance } = predictionTest.predictTextInsert(
@@ -412,8 +412,8 @@ describe('text prediction paragraph wrap', function () {
 		const data = makeSharedWrapSlide(
 			'aaaa bbbb',
 			[
-				{ start: 0, length: 5, f: 0 },
-				{ start: 5, length: 4, f: 400 },
+				{ start: 0, length: 5, translateY: 0 },
+				{ start: 5, length: 4, translateY: 400 },
 			],
 			800,
 		);
@@ -449,8 +449,8 @@ describe('text prediction paragraph wrap', function () {
 		const data = makeSharedWrapSlide(
 			'aaaa bbbb',
 			[
-				{ start: 0, length: 5, f: 0, weight: 7 },
-				{ start: 5, length: 4, f: 400 },
+				{ start: 0, length: 5, translateY: 0, weight: 7 },
+				{ start: 5, length: 4, translateY: 400 },
 			],
 			1500,
 		);
@@ -478,7 +478,16 @@ describe('text prediction paragraph wrap', function () {
 		// paragraph wraps and both lines start at the indent.
 		const data = makeIndentedSlide(
 			'aaa b',
-			[{ start: 0, length: 5, e: 200, f: 0, indent: 200, width: 500 }],
+			[
+				{
+					start: 0,
+					length: 5,
+					translateX: 200,
+					translateY: 0,
+					indent: 200,
+					width: 500,
+				},
+			],
 			700,
 		);
 		const { advance } = predictionTest.predictTextInsert(
@@ -508,7 +517,16 @@ describe('text prediction paragraph wrap', function () {
 		// indent. Typing 'x' overflows the 500 wide line, so the paragraph wraps.
 		const data = makeIndentedSlide(
 			'aaa b',
-			[{ start: 0, length: 5, e: 200, f: 0, indent: 200, width: 500 }],
+			[
+				{
+					start: 0,
+					length: 5,
+					translateX: 200,
+					translateY: 0,
+					indent: 200,
+					width: 500,
+				},
+			],
 			700,
 		);
 		const bullet = {
@@ -552,8 +570,22 @@ describe('text prediction paragraph wrap', function () {
 		const data = makeIndentedSlide(
 			'aaaa bbbb',
 			[
-				{ start: 0, length: 5, e: 0, f: 0, indent: 0, width: 700 },
-				{ start: 5, length: 4, e: 200, f: 400, indent: 200, width: 500 },
+				{
+					start: 0,
+					length: 5,
+					translateX: 0,
+					translateY: 0,
+					indent: 0,
+					width: 700,
+				},
+				{
+					start: 5,
+					length: 4,
+					translateX: 200,
+					translateY: 400,
+					indent: 200,
+					width: 500,
+				},
 			],
 			700,
 		);

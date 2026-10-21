@@ -155,8 +155,8 @@ describe('text prediction caret lookup', function () {
 		// One paragraph on two lines. Neither run shows the space at index 7, the wrap
 		// point.
 		const data = makeSharedWrapSlide('aaa bbb ccc', [
-			{ start: 0, length: 7, f: 0 },
-			{ start: 8, length: 3, f: 400 },
+			{ start: 0, length: 7, translateY: 0 },
+			{ start: 8, length: 3, translateY: 400 },
 		]);
 		// Index 8, after the dropped wrap space at index 7, is the start of "ccc" on the
 		// second line.
@@ -226,7 +226,7 @@ describe('text prediction caret lookup', function () {
 		// Index 0 is before the tab, where no run shows the text.
 		const data = predictionTest.makeSharedWrapSlide(
 			'\taaa bbb',
-			[{ start: 1, length: 7, f: 0 }],
+			[{ start: 1, length: 7, translateY: 0 }],
 			700,
 		);
 		const position = predictionTest.findCaretPosition(
@@ -263,8 +263,8 @@ describe('text prediction caret lookup', function () {
 		// "line1" and "line2" are split by a line break with no character, so index 5 ends
 		// line 1 and starts line 2. The caret's line decides.
 		const data = makeSharedWrapSlide('line1line2', [
-			{ start: 0, length: 5, f: 0 },
-			{ start: 5, length: 5, f: 400 },
+			{ start: 0, length: 5, translateY: 0 },
+			{ start: 5, length: 5, translateY: 400 },
 		]);
 		// Caret on the first line maps to the end of "line1".
 		const onLine1 = predictionTest.findCaretPosition(
@@ -355,8 +355,8 @@ describe('text prediction caret lookup', function () {
 		// Index 5 ends "line1" and starts "line2". Without a caret rectangle the edit goes
 		// to the start of the next line, where the caret sits after a wrap.
 		const data = makeSharedWrapSlide('line1line2', [
-			{ start: 0, length: 5, f: 0 },
-			{ start: 5, length: 5, f: 400 },
+			{ start: 0, length: 5, translateY: 0 },
+			{ start: 5, length: 5, translateY: 400 },
 		]);
 		const position = predictionTest.findCaretPosition(
 			data,

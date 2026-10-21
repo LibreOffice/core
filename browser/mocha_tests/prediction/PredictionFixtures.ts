@@ -155,12 +155,12 @@ namespace predictionTest {
 	// x 0 and "Yo" at local x 200, so in slide twips they span 1000..1400 and 1400..1800. The
 	// font size of 180 gives a line 216 local twips high, with its baseline at slide y 2000.
 	export function makeScaledSlide(): cool.VectorPrimitivesData {
-		const run = (text: string, e: number): any => ({
+		const run = (text: string, translateX: number): any => ({
 			type: 'textSimplePortion',
 			text,
 			textPosition: 0,
 			textLength: text.length,
-			matrix: [1, 0, 0, 1, e, 0],
+			matrix: [1, 0, 0, 1, translateX, 0],
 			fontSize: 180,
 			familyname: 'Arial',
 		});
@@ -210,13 +210,13 @@ namespace predictionTest {
 			text: string,
 			textPosition: number,
 			textLength: number,
-			e: number,
+			translateX: number,
 		): any => ({
 			type: 'textSimplePortion',
 			text,
 			textPosition,
 			textLength,
-			matrix: [1, 0, 0, 1, e, 0],
+			matrix: [1, 0, 0, 1, translateX, 0],
 			fontSize: 360,
 			familyname: 'Arial',
 			paragraph: 0,
@@ -289,12 +289,12 @@ namespace predictionTest {
 	}
 
 	// A run of a paragraph in a box at (1000, 2000), with the wrap width, line height and
-	// alignment that let a prediction break the lines again. e and f are the run's local
-	// origin.
+	// alignment that let a prediction break the lines again. translateX and translateY are the
+	// run's local origin.
 	export function wrapRun(
 		text: string,
-		e: number,
-		f: number,
+		translateX: number,
+		translateY: number,
 		options: { width: number; lineHeight: number; align: string },
 	): any {
 		return {
@@ -302,7 +302,7 @@ namespace predictionTest {
 			text,
 			textPosition: 0,
 			textLength: text.length,
-			matrix: [1, 0, 0, 1, e, f],
+			matrix: [1, 0, 0, 1, translateX, translateY],
 			fontSize: 360,
 			familyname: 'Arial',
 			paragraph: 0,
@@ -319,12 +319,12 @@ namespace predictionTest {
 	// Two stacked paragraphs in one box: "Hello" (paragraph 0) on the first line, "World"
 	// (paragraph 1) on the line below.
 	export function makeTwoParaSlide(): cool.VectorPrimitivesData {
-		const run = (text: string, f: number, paragraph: number): any => ({
+		const run = (text: string, translateY: number, paragraph: number): any => ({
 			type: 'textSimplePortion',
 			text,
 			textPosition: 0,
 			textLength: text.length,
-			matrix: [1, 0, 0, 1, 0, f],
+			matrix: [1, 0, 0, 1, 0, translateY],
 			fontSize: 360,
 			familyname: 'Arial',
 			paragraph,
@@ -370,8 +370,8 @@ namespace predictionTest {
 		windows: Array<{
 			start: number;
 			length: number;
-			e?: number;
-			f: number;
+			translateX?: number;
+			translateY: number;
 			weight?: number;
 		}>,
 		width?: number,
@@ -381,7 +381,7 @@ namespace predictionTest {
 			text: full,
 			textPosition: slice.start,
 			textLength: slice.length,
-			matrix: [1, 0, 0, 1, slice.e ?? 0, slice.f],
+			matrix: [1, 0, 0, 1, slice.translateX ?? 0, slice.translateY],
 			fontSize: 360,
 			familyname: 'Arial',
 			weight: slice.weight,
@@ -393,12 +393,12 @@ namespace predictionTest {
 	}
 
 	// One line of an indented paragraph: the window of the buffer it shows, its local origin
-	// e and f, and the indent and width the engine reports for it.
+	// translateX and translateY, and the indent and width the engine reports for it.
 	export interface IndentedLine {
 		start: number;
 		length: number;
-		e: number;
-		f: number;
+		translateX: number;
+		translateY: number;
 		indent: number;
 		width: number;
 	}
@@ -415,7 +415,7 @@ namespace predictionTest {
 			text: full,
 			textPosition: line.start,
 			textLength: line.length,
-			matrix: [1, 0, 0, 1, line.e, line.f],
+			matrix: [1, 0, 0, 1, line.translateX, line.translateY],
 			fontSize: 360,
 			familyname: 'Arial',
 			paragraph: 0,

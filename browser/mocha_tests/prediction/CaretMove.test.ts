@@ -34,12 +34,12 @@ describe('text prediction caret steps', function () {
 		lines: Array<[string, number, number]>,
 	): cool.VectorPrimitivesData {
 		return predictionTest.boxPart(
-			lines.map(([text, f, paragraph]) => ({
+			lines.map(([text, translateY, paragraph]) => ({
 				type: 'textSimplePortion',
 				text,
 				textPosition: 0,
 				textLength: text.length,
-				matrix: [1, 0, 0, 1, 0, f],
+				matrix: [1, 0, 0, 1, 0, translateY],
 				fontSize: 360,
 				familyname: 'Arial',
 				paragraph,
@@ -49,7 +49,9 @@ describe('text prediction caret steps', function () {
 
 	// A single line paragraph in one run.
 	function oneLine(text: string): cool.VectorPrimitivesData {
-		return makeSharedWrapSlide(text, [{ start: 0, length: text.length, f: 0 }]);
+		return makeSharedWrapSlide(text, [
+			{ start: 0, length: text.length, translateY: 0 },
+		]);
 	}
 
 	it('moves the caret one character right and left inside a paragraph', function () {
@@ -93,8 +95,8 @@ describe('text prediction caret steps', function () {
 	it('steps from the end of a wrapped line to the start of the next one', function () {
 		// "Hello " on the first line, "world" on the second.
 		const data = makeSharedWrapSlide('Hello world', [
-			{ start: 0, length: 6, f: 0 },
-			{ start: 6, length: 5, f: 400 },
+			{ start: 0, length: 6, translateY: 0 },
+			{ start: 6, length: 5, translateY: 400 },
 		]);
 		const next = step(data, { paragraph: 0, index: 5 }, 1);
 		nodeassert.deepStrictEqual(next, { paragraph: 0, index: 6 });
@@ -184,8 +186,8 @@ describe('text prediction caret steps', function () {
 	it('keeps the caret on a wrapped line when the click is past its end', function () {
 		// "Hello " ends the first line at 1600, and "world" starts the second.
 		const data = makeSharedWrapSlide('Hello world', [
-			{ start: 0, length: 6, f: 0 },
-			{ start: 6, length: 5, f: 400 },
+			{ start: 0, length: 6, translateY: 0 },
+			{ start: 6, length: 5, translateY: 400 },
 		]);
 		nodeassert.deepStrictEqual(click(data, 1700, 1950), {
 			paragraph: 0,
@@ -196,9 +198,9 @@ describe('text prediction caret steps', function () {
 	it('puts the caret at the end of a run that a raised run follows on the same line', function () {
 		// "x" ends at 1100, and the raised "2" follows it on the same line.
 		const data = makeSharedWrapSlide('x2 y', [
-			{ start: 0, length: 1, f: 0 },
-			{ start: 1, length: 1, e: 100, f: -120 },
-			{ start: 2, length: 2, e: 200, f: 0 },
+			{ start: 0, length: 1, translateY: 0 },
+			{ start: 1, length: 1, translateX: 100, translateY: -120 },
+			{ start: 2, length: 2, translateX: 200, translateY: 0 },
 		]);
 		nodeassert.deepStrictEqual(click(data, 1090, 1950), {
 			paragraph: 0,
@@ -249,8 +251,8 @@ describe('text prediction caret steps', function () {
 
 	it('moves the caret between the lines of a wrapped paragraph', function () {
 		const data = makeSharedWrapSlide('Hello world', [
-			{ start: 0, length: 6, f: 0 },
-			{ start: 6, length: 5, f: 400 },
+			{ start: 0, length: 6, translateY: 0 },
+			{ start: 6, length: 5, translateY: 400 },
 		]);
 		nodeassert.deepStrictEqual(
 			lineStep(data, { paragraph: 0, index: 2 }, 1200, 1),
@@ -270,9 +272,9 @@ describe('text prediction caret steps', function () {
 	it('moves the caret to the line below when that line has a raised run', function () {
 		// "wor" spans 1000..1300 on the second line, and the raised "ld" follows it.
 		const data = makeSharedWrapSlide('Hello world', [
-			{ start: 0, length: 6, f: 0 },
-			{ start: 6, length: 3, f: 400 },
-			{ start: 9, length: 2, e: 300, f: 280 },
+			{ start: 0, length: 6, translateY: 0 },
+			{ start: 6, length: 3, translateY: 400 },
+			{ start: 9, length: 2, translateX: 300, translateY: 280 },
 		]);
 		nodeassert.deepStrictEqual(
 			lineStep(data, { paragraph: 0, index: 2 }, 1200, 1),
@@ -306,8 +308,8 @@ describe('text prediction caret steps', function () {
 	it('covers the selected text of each line with its own rectangle', function () {
 		// "Hello " on the first line, "world" on the second, 400 twips apart.
 		const data = makeSharedWrapSlide('Hello world', [
-			{ start: 0, length: 6, f: 0 },
-			{ start: 6, length: 5, f: 400 },
+			{ start: 0, length: 6, translateY: 0 },
+			{ start: 6, length: 5, translateY: 400 },
 		]);
 		const rectangles = textOf(data).selectionRectangles(
 			{ paragraph: 0, index: 8 },
@@ -334,9 +336,9 @@ describe('text prediction caret steps', function () {
 	it('takes a drag above the text to its first line when that line has a raised run', function () {
 		// "Hel" spans 1000..1300 on the first line, and the raised "lo " follows it.
 		const data = makeSharedWrapSlide('Hello world', [
-			{ start: 0, length: 3, f: 0 },
-			{ start: 3, length: 3, e: 300, f: -120 },
-			{ start: 6, length: 5, f: 400 },
+			{ start: 0, length: 3, translateY: 0 },
+			{ start: 3, length: 3, translateX: 300, translateY: -120 },
+			{ start: 6, length: 5, translateY: 400 },
 		]);
 		nodeassert.deepStrictEqual(textOf(data).caretNearPoint(1220, -5000), {
 			paragraph: 0,

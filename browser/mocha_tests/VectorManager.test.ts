@@ -1834,12 +1834,12 @@ describe('VectorManager', function () {
 		// second.
 		function twoLineBox(first = 'line1'): any {
 			const text = first + 'line2';
-			const run = (start: number, length: number, f: number): any => ({
+			const run = (start: number, length: number, translateY: number): any => ({
 				type: 'textSimplePortion',
 				text,
 				textPosition: start,
 				textLength: length,
-				matrix: [1, 0, 0, 1, 0, f],
+				matrix: [1, 0, 0, 1, 0, translateY],
 				fontSize: 360,
 				familyname: 'Arial',
 				paragraph: 0,

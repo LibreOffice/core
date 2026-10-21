@@ -251,8 +251,8 @@ describe('text prediction text edits', function () {
 
 	it('shifts the following run right when inserting to its left', function () {
 		const data = makeTwoRunSlide('Hi', 'Yo');
-		// Caret in the left run (x = 1100). "Yo", at e = 200, moves right by the inserted
-		// character's width.
+		// Caret in the left run (x = 1100). "Yo", at translateX = 200, moves right by the
+		// inserted character's width.
 		const { advance } = predictionTest.predictTextInsert(
 			data,
 			1100,
@@ -337,7 +337,7 @@ describe('text prediction text edits', function () {
 	it('shifts the following run left when deleting', function () {
 		const data = makeTwoRunSlide('Hi', 'Yo');
 		// Backspace inside the left run (caret x = 1100) removes 'H'. "Yo" moves left by
-		// the removed width, from matrix e = 200 to 100.
+		// the removed width, from translateX = 200 to 100.
 		const result = predictionTest.predictTextDelete(
 			data,
 			1100,
@@ -427,8 +427,8 @@ describe('text prediction text edits', function () {
 		const data = makeSharedWrapSlide(
 			'abcdef',
 			[
-				{ start: 0, length: 3, f: 0 },
-				{ start: 3, length: 3, f: 0, weight: 7 },
+				{ start: 0, length: 3, translateY: 0 },
+				{ start: 3, length: 3, translateY: 0, weight: 7 },
 			],
 			2000,
 		);
