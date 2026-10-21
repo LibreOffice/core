@@ -3898,6 +3898,32 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testStyleNamedStructureTypes)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aRoles20.indexOf("H7="));
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testShapeClickLinkContents)
+{
+    // a picture with a title, a description and a click action that opens a URL
+    loadFromFile(u"picture-link.fodp");
+    save(TestFilter::PDF);
+
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
+    auto pAnnots = dynamic_cast<vcl::filter::PDFArrayElement*>(aPages[0]->Lookup("Annots"_ostr));
+    CPPUNIT_ASSERT(pAnnots);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), pAnnots->GetElements().size());
+    auto pAnnotReference
+        = dynamic_cast<vcl::filter::PDFReferenceElement*>(pAnnots->GetElements()[0]);
+    CPPUNIT_ASSERT(pAnnotReference);
+    vcl::filter::PDFObjectElement* pAnnot = pAnnotReference->LookupObject();
+    CPPUNIT_ASSERT(pAnnot);
+    auto pContents
+        = dynamic_cast<vcl::filter::PDFHexStringElement*>(pAnnot->Lookup("Contents"_ostr));
+    CPPUNIT_ASSERT(pContents);
+    // Without the fix this was "Go to document", the name of the action in the dialog
+    CPPUNIT_ASSERT_EQUAL(u"Logo\nCompany logo, links to example.org"_ustr,
+                         ::vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pContents));
+}
+
 } // end anonymous namespace
 
 CPPUNIT_PLUGIN_IMPLEMENT();
