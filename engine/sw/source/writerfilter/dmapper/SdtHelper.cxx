@@ -99,8 +99,6 @@ SdtHelper::SdtHelper(DomainMapper_Impl& rDM_Impl,
 {
 }
 
-SdtHelper::~SdtHelper() = default;
-
 void SdtHelper::loadPropertiesXMLs()
 {
     // Initialize properties xml storage (m_xPropertiesXMLs)

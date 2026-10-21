@@ -599,6 +599,11 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf173709HyperlinkTitle)
                          getProperty<OUString>(getRun(getParagraph(2), 2), u"HyperLinkName"_ustr));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testTdf158349_SDTstreamStateStack, "tdf158349_SDTstreamStateStack.docx")
+{
+    // should load and reload without reporting a corrupt document
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 

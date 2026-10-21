@@ -19,7 +19,6 @@
 #include <com/sun/star/xml/dom/XDocument.hpp>
 
 #include <rtl/ustrbuf.hxx>
-#include <tools/ref.hxx>
 
 namespace com::sun::star::awt
 {
@@ -51,7 +50,7 @@ enum class SdtControlType
  * w:sdt tokens can't be imported as form fields, as w:sdt supports
  * e.g. date picking as well.
  */
-class SdtHelper final : public virtual SvRefBase
+class SdtHelper
 {
     DomainMapper_Impl& m_rDM_Impl;
     cpo::uno::Reference<cpo::uno::XComponentContext> m_xComponentContext;
@@ -146,7 +145,6 @@ class SdtHelper final : public virtual SvRefBase
 public:
     explicit SdtHelper(DomainMapper_Impl& rDM_Impl,
                        cpo::uno::Reference<cpo::uno::XComponentContext> xContext);
-    ~SdtHelper() override;
 
     std::vector<OUString>& getDropDownItems() { return m_aDropDownItems; }
     std::vector<OUString>& getDropDownDisplayTexts() { return m_aDropDownDisplayTexts; }
