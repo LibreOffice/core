@@ -111,9 +111,13 @@ abstract class HandleGroup {
 		Hands the engine what a drag of one of its handles did, once the drag has ended. What that
 		is differs from group to group: a handle the engine knows is named to it, a point of a
 		path is named as a point of that path, a point to tie a connector to is moved where it
-		was let go.
+		was let go. With ortho set, it was moved while Shift was held.
 	*/
-	public handOver(_handle: SelectionHandle, _to: cool.Point): void {
+	public handOver(
+		_handle: SelectionHandle,
+		_to: cool.Point,
+		_ortho: boolean = false,
+	): void {
 		// A group whose handles do not move tells the engine nothing.
 	}
 
@@ -128,7 +132,11 @@ abstract class HandleGroup {
 		reads the move its own way - a corner radius, the angle a piece of a circle begins at,
 		the offset of a measurement - and nothing about a selection is needed for it.
 	*/
-	protected sendTheHandle(handle: SelectionHandle, to: cool.Point): void {
+	protected sendTheHandle(
+		handle: SelectionHandle,
+		to: cool.Point,
+		ortho: boolean = false,
+	): void {
 		const objectId = this.selection.selectedObjects()[0];
 		if (objectId === undefined) return;
 
@@ -150,7 +158,9 @@ abstract class HandleGroup {
 				' x=' +
 				String(Math.round(to.x)) +
 				' y=' +
-				String(Math.round(to.y)),
+				String(Math.round(to.y)) +
+				// The engine moves the handle as the office does while Shift is held.
+				(ortho ? ' ortho=1' : ''),
 		);
 	}
 
@@ -1103,10 +1113,14 @@ class ShapingHandles extends HandlesMovedOneByOne {
 		a connector's way - are still named as handles, since what they mean lives in rules of
 		their own that nothing here says yet.
 	*/
-	public handOver(handle: SelectionHandle, to: cool.Point): void {
+	public handOver(
+		handle: SelectionHandle,
+		to: cool.Point,
+		ortho: boolean = false,
+	): void {
 		if (handle.kind !== ShapingHandles.shapingPointKind) {
-			this.sendTheHandle(handle, to);
-			this.holdTheStep(handle, to);
+			this.sendTheHandle(handle, to, ortho);
+			this.holdTheStep(handle, to, ortho);
 			return;
 		}
 
@@ -1142,8 +1156,9 @@ class ShapingHandles extends HandlesMovedOneByOne {
 					MeasurementGhost.handlesDuring(
 						this.selection,
 						handle,
-						stepped,
+						stepped.at,
 						known,
+						stepped.ortho,
 					) ?? known
 				);
 		}
@@ -1158,7 +1173,8 @@ class ShapingHandles extends HandlesMovedOneByOne {
 		business, so the handle stands where it was taken and the measurement is drawn thin as it
 		will be, until the engine's answer for the object brings both.
 	*/
-	private static stepped: Map<string, cool.Point> = new Map();
+	private static stepped: Map<string, { at: cool.Point; ortho: boolean }> =
+		new Map();
 
 	/// Whether the answers of the engine are listened to, which is once.
 	private static followingTheAnswers: boolean = false;
@@ -1168,7 +1184,11 @@ class ShapingHandles extends HandlesMovedOneByOne {
 	}
 
 	/// Notes where a handle of a measurement was taken, until the engine answers for its object.
-	private holdTheStep(handle: SelectionHandle, to: cool.Point): void {
+	private holdTheStep(
+		handle: SelectionHandle,
+		to: cool.Point,
+		ortho: boolean,
+	): void {
 		if (!MeasurementGhost.belongsToOne(this.selection, handle)) return;
 
 		if (!ShapingHandles.followingTheAnswers) {
@@ -1187,7 +1207,7 @@ class ShapingHandles extends HandlesMovedOneByOne {
 
 		ShapingHandles.stepped.set(
 			ShapingHandles.keyOf(this.selection.selectedObjects()[0], handle.name),
-			to,
+			{ at: to, ortho: ortho },
 		);
 
 		// The handles are worked out again at once, so the handle stands where it was taken in
@@ -1207,7 +1227,12 @@ class ShapingHandles extends HandlesMovedOneByOne {
 				ShapingHandles.keyOf(objectId, handle.name),
 			);
 			if (stepped)
-				return MeasurementGhost.outline(this.selection, handle, stepped);
+				return MeasurementGhost.outline(
+					this.selection,
+					handle,
+					stepped.at,
+					stepped.ortho,
+				);
 		}
 
 		return null;
@@ -1355,7 +1380,7 @@ class ShapingHandles extends HandlesMovedOneByOne {
 		const stepped = ShapingHandles.stepped.get(
 			ShapingHandles.keyOf(this.selection.selectedObjects()[0], handle.name),
 		);
-		const from = stepped ? { ...handle, point: stepped } : handle;
+		const from = stepped ? { ...handle, point: stepped.at } : handle;
 		const to = this.holdInside(
 			handle,
 			HandleGroup.steppedBy(from, towards, event),

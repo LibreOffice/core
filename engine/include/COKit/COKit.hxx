@@ -2869,9 +2869,11 @@ struct COKitDocument
      * apart by nothing else; -1 where the three above already name it
      * @param nX where the handle goes, on the page, in twips
      * @param nY where the handle goes, on the page, in twips
+     * @param bOrtho whether the handle is moved as the office moves it while Shift is held: held
+     * to the way it runs, or to the other handles, as the object says
      */
     virtual void setObjectHandle(unsigned long long nObjectId, int nKind, int nPolygon,
-                                 int nPoint, int nAt, int nX, int nY)
+                                 int nPoint, int nAt, int nX, int nY, bool bOrtho)
         = 0;
 
     /**

@@ -23,6 +23,9 @@ class ShapingInteraction extends SelectionInteraction {
 	/// Where it has been taken, in twips.
 	private at: cool.SimplePoint;
 
+	/// Whether Shift is held, which moves the handle as the office moves it then.
+	private ortho: boolean = false;
+
 	constructor(selection: SelectionSection, handle: SelectionHandle) {
 		super(selection);
 
@@ -38,14 +41,20 @@ class ShapingInteraction extends SelectionInteraction {
 		to whatever the object allows it. What that is, the object said when it sent the handle.
 	*/
 	private shownAt(): cool.Point {
-		return this.selection.holdTheDrag(
+		const held = this.selection.holdTheDrag(
 			this.handle,
 			new cool.Point(this.at.x, this.at.y),
 		);
+		if (!this.ortho) return held;
+
+		return (
+			MeasurementGhost.heldWithShift(this.selection, this.handle, held) ?? held
+		);
 	}
 
-	public move(to: cool.SimplePoint): void {
+	public move(to: cool.SimplePoint, event?: MouseEvent): void {
 		this.at = this.led(to);
+		if (event) this.ortho = event.shiftKey;
 		this.selection.redraw();
 	}
 
@@ -54,10 +63,10 @@ class ShapingInteraction extends SelectionInteraction {
 		of the group the handle belongs to: a handle the engine knows is named to it, a point of a
 		path is named as a point of that path, a point to tie a connector to is moved.
 	*/
-	public finish(to: cool.SimplePoint): void {
-		this.move(to);
+	public finish(to: cool.SimplePoint, event?: MouseEvent): void {
+		this.move(to, event);
 
-		this.selection.handOverTheDrag(this.handle, this.shownAt());
+		this.selection.handOverTheDrag(this.handle, this.shownAt(), this.ortho);
 	}
 
 	public handles(known: SelectionHandle[]): SelectionHandle[] {
@@ -69,6 +78,7 @@ class ShapingInteraction extends SelectionInteraction {
 			this.handle,
 			shown,
 			known,
+			this.ortho,
 		);
 		if (measured) return measured;
 
@@ -106,7 +116,12 @@ class ShapingInteraction extends SelectionInteraction {
 			path ??
 			this.selection.runWhileAnEndIsDragged(this.handle, this.shownAt()) ??
 			this.selection.runWhileALineIsDragged(this.handle, this.shownAt()) ??
-			MeasurementGhost.outline(this.selection, this.handle, this.shownAt())
+			MeasurementGhost.outline(
+				this.selection,
+				this.handle,
+				this.shownAt(),
+				this.ortho,
+			)
 		);
 	}
 
@@ -116,6 +131,7 @@ class ShapingInteraction extends SelectionInteraction {
 			this.selection,
 			this.handle,
 			this.shownAt(),
+			this.ortho,
 		);
 	}
 }
@@ -156,6 +172,35 @@ class MeasurementGhost {
 	}
 
 	/*
+		Where a handle of a measurement goes while Shift is held, as the office has it: an end of
+		the measured line stays on the line's way, the far end of a help line stays where it is,
+		and the beginning of a help line goes where its rail takes it. Nothing for a handle of
+		anything else.
+	*/
+	public static heldWithShift(
+		selection: SelectionSection,
+		handle: SelectionHandle,
+		at: cool.Point,
+	): cool.Point | null {
+		const found = MeasurementGhost.of(selection, handle);
+		if (!found) return null;
+
+		const which = handle.at ?? 0;
+		const square = found.square;
+		if (which === 2 || which === 3) {
+			const fixed = square.apply(which === 2 ? 1 : 0, 0);
+			const way = square.apply(1, 0).subtract(square.apply(0, 0));
+			const length = way.length();
+			if (!length) return at;
+			const unit = new cool.Point(way.x / length, way.y / length);
+			const reach = at.subtract(fixed).dot(unit);
+			return new cool.Point(fixed.x + unit.x * reach, fixed.y + unit.y * reach);
+		}
+		if (which === 4 || which === 5) return handle.point;
+		return at;
+	}
+
+	/*
 		The measurement and its square as the handle at that point would leave them. An end of the
 		measured line makes a square of its own, along the line from the first end to the second,
 		as high as before. Every other handle changes one length across the square, measured from
@@ -167,6 +212,7 @@ class MeasurementGhost {
 		square: cool.Matrix2D,
 		handle: SelectionHandle,
 		at: cool.Point,
+		ortho: boolean,
 	): { measurement: cool.ObjectMeasurement; square: cool.Matrix2D } | null {
 		const which = handle.at ?? 0;
 
@@ -197,9 +243,13 @@ class MeasurementGhost {
 		const side = measurement.below ? 1 : -1;
 		const changed = { ...measurement };
 
-		if (which === 0) changed.helpLineLength1 = -side * across;
-		else if (which === 1) changed.helpLineLength2 = -side * across;
-		else if (which === 4 || which === 5) {
+		// With Shift, as the office has it, the two help lines keep one length, and the dimension
+		// line keeps its distance.
+		if (which === 0 || which === 1) {
+			const length = -side * across;
+			if (which === 0 || ortho) changed.helpLineLength1 = length;
+			if (which === 1 || ortho) changed.helpLineLength2 = length;
+		} else if ((which === 4 || which === 5) && !ortho) {
 			if (across) changed.below = across > 0;
 			changed.lineDistance = Math.abs(across) - measurement.overhang;
 		}
@@ -213,6 +263,7 @@ class MeasurementGhost {
 		selection: SelectionSection,
 		handle: SelectionHandle,
 		at: cool.Point,
+		ortho: boolean = false,
 	): cool.ObjectPathPolygon[] | null {
 		const found = MeasurementGhost.of(selection, handle);
 		if (!found) return null;
@@ -222,11 +273,12 @@ class MeasurementGhost {
 			found.square,
 			handle,
 			at,
+			ortho,
 		);
 		if (!shaped) return null;
 
 		// The text grows or shrinks with the value it writes, where an end is dragged.
-		const value = MeasurementGhost.reading(selection, handle, at);
+		const value = MeasurementGhost.reading(selection, handle, at, ortho);
 		const written = found.measurement.value + ' ' + found.measurement.unit;
 		const textWidth =
 			value !== null && written.trim().length
@@ -403,6 +455,7 @@ class MeasurementGhost {
 		handle: SelectionHandle,
 		at: cool.Point,
 		known: SelectionHandle[],
+		ortho: boolean = false,
 	): SelectionHandle[] | null {
 		const found = MeasurementGhost.of(selection, handle);
 		if (!found) return null;
@@ -412,6 +465,7 @@ class MeasurementGhost {
 			found.square,
 			handle,
 			at,
+			ortho,
 		);
 		if (!shaped) return null;
 
@@ -446,6 +500,7 @@ class MeasurementGhost {
 		selection: SelectionSection,
 		handle: SelectionHandle,
 		at: cool.Point,
+		ortho: boolean = false,
 	): string | null {
 		const which = handle.at ?? 0;
 		if (which !== 2 && which !== 3) return null;
@@ -458,6 +513,7 @@ class MeasurementGhost {
 			found.square,
 			handle,
 			at,
+			ortho,
 		);
 		if (!shaped) return null;
 

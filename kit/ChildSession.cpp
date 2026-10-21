@@ -1896,12 +1896,15 @@ bool ChildSession::setObjectHandle(const StringVector& tokens)
     int nAt = -1;
     int nX = 0;
     int nY = 0;
+    int nOrtho = 0;
 
-    if (tokens.size() != 8 || !getTokenString(tokens[1], "id", objectId)
+    // An ortho=1 after the place asks for the move the office makes while Shift is held.
+    if ((tokens.size() != 8 && tokens.size() != 9) || !getTokenString(tokens[1], "id", objectId)
         || !getTokenInteger(tokens[2], "kind", nKind)
         || !getTokenInteger(tokens[3], "polygon", nPolygon)
         || !getTokenInteger(tokens[4], "point", nPoint) || !getTokenInteger(tokens[5], "at", nAt)
-        || !getTokenInteger(tokens[6], "x", nX) || !getTokenInteger(tokens[7], "y", nY))
+        || !getTokenInteger(tokens[6], "x", nX) || !getTokenInteger(tokens[7], "y", nY)
+        || (tokens.size() == 9 && !getTokenInteger(tokens[8], "ortho", nOrtho)))
     {
         sendTextFrameAndLogError("error: cmd=setobjecthandle kind=syntax");
         return false;
@@ -1911,7 +1914,7 @@ bool ChildSession::setObjectHandle(const StringVector& tokens)
     getLOKitDocument()->setView(_viewId);
 
     getLOKitDocument()->setObjectHandle(std::strtoull(objectId.c_str(), nullptr, 10), nKind,
-                                        nPolygon, nPoint, nAt, nX, nY);
+                                        nPolygon, nPoint, nAt, nX, nY, nOrtho != 0);
 
     return true;
 }

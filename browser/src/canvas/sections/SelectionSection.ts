@@ -2484,8 +2484,12 @@ abstract class SelectionSection extends CanvasSectionObject {
 	}
 
 	/// Hands the engine what a drag of that handle did, which its own group knows how to say.
-	public handOverTheDrag(handle: SelectionHandle, to: cool.Point): void {
-		this.groupOf(handle)?.handOver(handle, to);
+	public handOverTheDrag(
+		handle: SelectionHandle,
+		to: cool.Point,
+		ortho: boolean = false,
+	): void {
+		this.groupOf(handle)?.handOver(handle, to, ortho);
 	}
 
 	/*

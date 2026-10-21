@@ -7349,7 +7349,8 @@ void COKitDocumentImpl::cropObject(unsigned long long nObjectId, int nUpperLeftX
     nothing selected anywhere.
  */
 void COKitDocumentImpl::setObjectHandle(unsigned long long nObjectId, int nKind,
-                                        int nPolygon, int nPoint, int nAt, int nX, int nY)
+                                        int nPolygon, int nPoint, int nAt, int nX, int nY,
+                                        bool bOrtho)
 {
     comphelper::ProfileZone aZone("COKitDocumentImpl::setObjectHandle");
 
@@ -7445,6 +7446,12 @@ void COKitDocumentImpl::setObjectHandle(unsigned long long nObjectId, int nKind,
     aDrag.SetPageView(pPageView);
     aDrag.SetHdl(pHandle);
     aDrag.SetNoSnap();
+
+    // The drag reads ortho from the view, as the office's own drag does while Shift is held, so
+    // the view is set for this one drag and put back as it was afterwards.
+    const bool bWasOrtho(pView->IsOrtho());
+    pView->SetOrtho(bOrtho);
+    comphelper::ScopeGuard aOrthoBack([pView, bWasOrtho]() { pView->SetOrtho(bWasOrtho); });
 
     if (!pObject->beginSpecialDrag(aDrag))
     {
