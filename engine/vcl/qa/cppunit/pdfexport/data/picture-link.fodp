@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:table="urn:oasis:names:tc:opendocument:xmlns:table:1.0" xmlns:draw="urn:oasis:names:tc:opendocument:xmlns:drawing:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:meta="urn:oasis:names:tc:opendocument:xmlns:meta:1.0" xmlns:presentation="urn:oasis:names:tc:opendocument:xmlns:presentation:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:script="urn:oasis:names:tc:opendocument:xmlns:script:1.0" xmlns:dom="http://www.w3.org/2001/xml-events" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" office:version="1.3" office:mimetype="application/vnd.oasis.opendocument.presentation">
+ <office:meta><dc:title>Test</dc:title></office:meta>
+ <office:styles>
+  <style:default-style style:family="graphic"><style:text-properties fo:language="en" fo:country="US"/></style:default-style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:page-layout style:name="PM1"><style:page-layout-properties fo:page-width="28cm" fo:page-height="15.75cm" style:print-orientation="landscape"/></style:page-layout>
+  <style:style style:name="gr0" style:family="graphic"><style:graphic-properties draw:stroke="none" draw:fill="none"/></style:style>
+ </office:automatic-styles>
+ <office:master-styles><style:master-page style:name="M" style:page-layout-name="PM1"/></office:master-styles>
+ <office:body><office:presentation>
+  <draw:page draw:name="Slide1" draw:master-page-name="M">
+<draw:frame draw:style-name="gr0" draw:name="Logo" svg:x="2cm" svg:y="2cm" svg:width="3cm" svg:height="3cm"><draw:image><office:binary-data>iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAIAAACQkWg2AAAAFklEQVR4nGM4ISdHEmIY1TCqYfhqAADkYgQQ60fIxgAAAABJRU5ErkJggg==</office:binary-data></draw:image><svg:title>Logo</svg:title><svg:desc>Company logo, links to example.org</svg:desc><office:event-listeners><presentation:event-listener script:event-name="dom:click" presentation:action="show" xlink:href="https://example.org/" xlink:type="simple"/></office:event-listeners></draw:frame>
+  </draw:page>
+ </office:presentation></office:body>
+</office:document>
