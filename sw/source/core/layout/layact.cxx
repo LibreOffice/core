@@ -1793,12 +1793,12 @@ bool SwLayAction::FormatContent(SwPageFrame *const pPage)
                            pContent->IsRetouche() || pContent->GetDrawObjs();
 
         auto pText = pContent->DynCastTextFrame();
-        if (!bFull && !pContent->GetDrawObjs() && pContent->IsFollow() && pText)
+        if (!bFull && !pContent->GetDrawObjs() && pContent->IsFollow())
         {
             // This content frame doesn't have to-para anchored objects, but it's a follow, check
             // the master.
             const SwTextFrame* pMaster = pText;
-            while (pMaster->IsFollow())
+            while (pMaster && pMaster->IsFollow())
             {
                 pMaster = pMaster->FindMaster();
             }
