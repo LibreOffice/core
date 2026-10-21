@@ -26,7 +26,7 @@ describe('text prediction caret lookup', function () {
 
 	it('does nothing when the caret is far from any run edge', function () {
 		const data = makeSlide('Hi');
-		const advance = predictionTest.predictTextInsert(
+		const { advance } = predictionTest.predictTextInsert(
 			data,
 			5000,
 			1800,
@@ -41,7 +41,7 @@ describe('text prediction caret lookup', function () {
 	it('ignores a caret where the run would be without its box offset', function () {
 		// Without the box translation the run would end at 200. A caret there finds no run.
 		const data = makeSlide('Hi');
-		const advance = predictionTest.predictTextInsert(
+		const { advance } = predictionTest.predictTextInsert(
 			data,
 			200,
 			1800,
@@ -56,7 +56,7 @@ describe('text prediction caret lookup', function () {
 	it('ignores a caret on a different line', function () {
 		const data = makeSlide('Hi');
 		// The x matches the run's end, but the caret is far below the line.
-		const advance = predictionTest.predictTextInsert(
+		const { advance } = predictionTest.predictTextInsert(
 			data,
 			1200,
 			5000,
@@ -104,7 +104,7 @@ describe('text prediction caret lookup', function () {
 		runOf(data).paragraph = 0;
 		// The caret pixels match the run, and the logical caret names a paragraph the
 		// object does not contain.
-		const advance = predictionTest.predictTextInsert(
+		const { advance } = predictionTest.predictTextInsert(
 			data,
 			1200,
 			1800,
@@ -247,7 +247,7 @@ describe('text prediction caret lookup', function () {
 		// The caret pixels fall inside the field run "example.com" at 1600..2700. The field
 		// is not the paragraph's text, and the runs around it are too far away.
 		const data = predictionTest.makeFieldSlide();
-		const advance = predictionTest.predictTextInsert(
+		const { advance } = predictionTest.predictTextInsert(
 			data,
 			2100,
 			1800,
@@ -302,7 +302,7 @@ describe('text prediction caret lookup', function () {
 		const data = makeTwoIdSlide();
 		// The zeros point at neither box. The id picks the second one and the logical
 		// position places the edit.
-		const advance = predictionTest.predictTextInsert(
+		const { advance } = predictionTest.predictTextInsert(
 			data,
 			0,
 			0,
@@ -338,7 +338,7 @@ describe('text prediction caret lookup', function () {
 
 	it('does nothing for an object id the tree does not carry', function () {
 		const data = makeTwoIdSlide();
-		const advance = predictionTest.predictTextInsert(
+		const { advance } = predictionTest.predictTextInsert(
 			data,
 			0,
 			0,

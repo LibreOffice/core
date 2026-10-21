@@ -12,8 +12,8 @@
 /*
  * Edits the cached tree as the user types, so text shows before the server re-renders.
  *
- * Existing glyphs keep the server's advances, and typed text is measured. Runs after the edit
- * on its line shift by the change in width. A line that crosses its wrap width re-wraps the
+ * Existing glyphs keep the server's advances, and typed text is measured. The line takes the
+ * change in width as its alignment places it. A line that crosses its wrap width re-wraps the
  * paragraph. Rotated runs are left to the server.
  */
 
@@ -26,6 +26,12 @@ namespace cool {
 			text.indexOf('\r') === -1 &&
 			text.indexOf('\t') === -1
 		);
+	}
+
+	/// The width of the typed text and the caret move, both in slide twips.
+	export interface PredictedInsertion {
+		advance: number;
+		caretShift: number;
 	}
 
 	/// The UTF-16 units removed, those before the caret, and the caret move in slide twips.
@@ -93,16 +99,17 @@ namespace cool {
 			};
 		}
 
-		/// Inserts text and returns its width in slide twips, or 0 when nothing changed.
-		insert(text: string): number {
-			if (!canPredictText(text)) return 0;
+		/// Inserts text and returns its width, or a width of 0 when nothing changed.
+		insert(text: string): PredictedInsertion {
+			const nothing: PredictedInsertion = { advance: 0, caretShift: 0 };
+			if (!canPredictText(text)) return nothing;
 			const paragraph = Paragraph.at(this);
 
 			// Typed text is measured and scaled to the server's measure.
 			const scale = this.measurer.serverScale(this.run);
 			const advance = this.measurer.width(this.run.primitive, text) * scale;
 			// Text without width is left to the server.
-			if (!(advance > 0)) return 0;
+			if (!(advance > 0)) return nothing;
 
 			const overflows =
 				paragraph !== null && paragraph.lineOverflows(this, advance);
@@ -110,9 +117,13 @@ namespace cool {
 			this.insertIntoRun(text, scale);
 
 			const slideAdvance = advance * this.run.scaleX;
-			if (paragraph && overflows) paragraph.reflow();
-			else this.shiftRightward(slideAdvance);
-			return slideAdvance;
+			if (paragraph && overflows) {
+				paragraph.reflow();
+				return { advance: slideAdvance, caretShift: slideAdvance };
+			}
+			// The caret moves with the typed text, less what its line moved left.
+			const leftShare = this.alignLine(slideAdvance);
+			return { advance: slideAdvance, caretShift: slideAdvance - leftShare };
 		}
 
 		/// Deletes code points before and after the caret. A wrapped paragraph, or one the
@@ -144,12 +155,15 @@ namespace cool {
 
 			this.deleteRange(from, to);
 
+			let leftShare = 0;
 			if (paragraph && (paragraph.lineCount > 1 || crossed)) paragraph.reflow();
-			else this.shiftRightward(-removedWidth);
+			else leftShare = this.alignLine(-removedWidth);
+			// The caret moves back over the text removed before it, less what its line
+			// moved left.
 			return {
 				removed: to - from,
 				removedBefore: caret - from,
-				caretShift: beforeWidth ? -beforeWidth : 0,
+				caretShift: 0 - beforeWidth - leftShare,
 			};
 		}
 
@@ -252,9 +266,23 @@ namespace cool {
 			}
 		}
 
-		// Moves the runs after the caret by a distance in slide twips.
-		private shiftRightward(delta: number): void {
-			for (const run of this.rightward) run.shift(delta);
+		/*
+			Keeps the caret's line aligned after its width changed by delta, in slide
+			twips, and returns how far the line's start moved left. The runs before the
+			caret move left by half of delta on a centered line and by all of it on a
+			right-aligned one, and the runs after the caret take the rest. A justified
+			line keeps its start and its word spacing, and grows at its end like a
+			left-aligned one, until the server lays it out again.
+		*/
+		private alignLine(delta: number): number {
+			const align = this.run.primitive.align;
+			const leftShare =
+				align === 'center' ? delta / 2 : align === 'right' ? delta : 0;
+			if (leftShare)
+				for (const run of this.lineRuns())
+					if (!this.rightward.includes(run)) run.shift(-leftShare);
+			for (const run of this.rightward) run.shift(delta - leftShare);
+			return leftShare;
 		}
 	}
 }

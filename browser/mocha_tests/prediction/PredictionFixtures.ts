@@ -48,7 +48,7 @@ namespace predictionTest {
 		measureWith: cool.TextRunMeasure,
 		logical?: cool.LogicalCaret,
 		objectId?: number,
-	): number {
+	): cool.PredictedInsertion {
 		const position = findCaretPosition(
 			data,
 			caretX,
@@ -58,7 +58,7 @@ namespace predictionTest {
 			logical,
 			objectId,
 		);
-		return position ? position.insert(text) : 0;
+		return position ? position.insert(text) : { advance: 0, caretShift: 0 };
 	}
 
 	// Deletes around the caret and returns what was removed.

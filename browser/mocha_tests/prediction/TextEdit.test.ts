@@ -20,12 +20,14 @@ describe('text prediction text edits', function () {
 		runsOf,
 		makeTwoObjectSlide,
 		makeSharedWrapSlide,
+		wrapRun,
+		makeWrapSlide,
 	} = predictionTest;
 
 	it('appends a character typed at the trailing edge of a run', function () {
 		const data = makeSlide('Hi');
 		// "Hi" spans 1000..1200, and the caret is at its end.
-		const advance = predictionTest.predictTextInsert(
+		const { advance } = predictionTest.predictTextInsert(
 			data,
 			1200,
 			1800,
@@ -40,7 +42,7 @@ describe('text prediction text edits', function () {
 
 	it('leaves newlines to the server', function () {
 		const data = makeSlide('Hi');
-		const advance = predictionTest.predictTextInsert(
+		const { advance } = predictionTest.predictTextInsert(
 			data,
 			1200,
 			1800,
@@ -55,7 +57,7 @@ describe('text prediction text edits', function () {
 	it('leaves tabs to the server', function () {
 		// A tab advances to a tab stop the client does not know.
 		const data = makeSlide('Hi');
-		const advance = predictionTest.predictTextInsert(
+		const { advance } = predictionTest.predictTextInsert(
 			data,
 			1200,
 			1800,
@@ -70,7 +72,7 @@ describe('text prediction text edits', function () {
 	it('inserts in the middle of a run', function () {
 		const data = makeSlide('Helo');
 		// "Helo" spans 1000..1400. A caret at 1300 is between 'l' and 'o'.
-		const advance = predictionTest.predictTextInsert(
+		const { advance } = predictionTest.predictTextInsert(
 			data,
 			1300,
 			1800,
@@ -127,7 +129,7 @@ describe('text prediction text edits', function () {
 		// enters the advances at 50.
 		runOf(data).advances = [50, 50];
 		// Caret after 'a' (x = 1050).
-		const advance = predictionTest.predictTextInsert(
+		const { advance } = predictionTest.predictTextInsert(
 			data,
 			1050,
 			1800,
@@ -161,7 +163,7 @@ describe('text prediction text edits', function () {
 	it('leaves text that measures to no width to the server', function () {
 		const data = makeSlide('Hi');
 		const zeroMeasure: cool.TextRunMeasure = () => 0;
-		const advance = predictionTest.predictTextInsert(
+		const { advance } = predictionTest.predictTextInsert(
 			data,
 			1000,
 			1800,
@@ -177,7 +179,7 @@ describe('text prediction text edits', function () {
 		// Index 13, the end of " today", maps through the runs that carry the paragraph
 		// text. The field keeps its text and window.
 		const data = makeFieldSlide();
-		const advance = predictionTest.predictTextInsert(
+		const { advance } = predictionTest.predictTextInsert(
 			data,
 			2300,
 			1800,
@@ -203,7 +205,7 @@ describe('text prediction text edits', function () {
 		// today" right by the typed width. The field's window stays, and the run after it
 		// still names the same characters.
 		const data = makeFieldSlide();
-		const advance = predictionTest.predictTextInsert(
+		const { advance } = predictionTest.predictTextInsert(
 			data,
 			1600,
 			1800,
@@ -229,7 +231,7 @@ describe('text prediction text edits', function () {
 		// An insert found by the caret pixels, at the end of "Visit ", edits the paragraph
 		// text. The field run keeps its text and window.
 		const data = makeFieldSlide();
-		const advance = predictionTest.predictTextInsert(
+		const { advance } = predictionTest.predictTextInsert(
 			data,
 			1600,
 			1800,
@@ -251,7 +253,7 @@ describe('text prediction text edits', function () {
 		const data = makeTwoRunSlide('Hi', 'Yo');
 		// Caret in the left run (x = 1100). "Yo", at e = 200, moves right by the inserted
 		// character's width.
-		const advance = predictionTest.predictTextInsert(
+		const { advance } = predictionTest.predictTextInsert(
 			data,
 			1100,
 			1800,
@@ -267,7 +269,7 @@ describe('text prediction text edits', function () {
 	it('types into the last run of a line with several runs', function () {
 		const data = makeTwoRunSlide('Hi', 'Yo');
 		// Caret inside the right run, with no run after it on the line.
-		const advance = predictionTest.predictTextInsert(
+		const { advance } = predictionTest.predictTextInsert(
 			data,
 			1300,
 			1800,
@@ -353,7 +355,7 @@ describe('text prediction text edits', function () {
 	it('does not shift runs that belong to another object', function () {
 		const data = makeTwoObjectSlide();
 		// The second box shares the line further right and stays in place.
-		const advance = predictionTest.predictTextInsert(
+		const { advance } = predictionTest.predictTextInsert(
 			data,
 			1100,
 			1800,
@@ -371,7 +373,7 @@ describe('text prediction text edits', function () {
 		// 'x' is 100 local twips wide. The doubling transform makes that 200 slide twips,
 		// and "Yo" moves from local x 200 to 300.
 		const data = predictionTest.makeScaledSlide();
-		const advance = predictionTest.predictTextInsert(
+		const { advance } = predictionTest.predictTextInsert(
 			data,
 			1390,
 			1800,
@@ -407,7 +409,7 @@ describe('text prediction text edits', function () {
 		// browser's 100, so a typed 'x' is 50 wide.
 		const data = makeSlide('a b');
 		runOf(data).advances = [50, 300, 50];
-		const advance = predictionTest.predictTextInsert(
+		const { advance } = predictionTest.predictTextInsert(
 			data,
 			1400,
 			1800,
@@ -452,5 +454,111 @@ describe('text prediction text edits', function () {
 		nodeassert.strictEqual(runs[1].weight, 7);
 		// The second run follows the first directly on the same line.
 		nodeassert.strictEqual(runs[1].matrix[4], 200);
+	});
+
+	// One line of text in an 800 wide area of a box at (1000, 2000), placed by the alignment
+	// as the server places it. Each character is 100 wide.
+	function alignedLine(text: string, align: string): cool.VectorPrimitivesData {
+		const width = text.length * 100;
+		const left =
+			align === 'center'
+				? (800 - width) / 2
+				: align === 'right'
+					? 800 - width
+					: 0;
+		return makeWrapSlide([
+			wrapRun(text, left, 0, { width: 800, lineHeight: 400, align }),
+		]);
+	}
+
+	it('keeps a centered line centered when a character is typed at its end', function () {
+		// "ab" spans local 300..500, so its end is at slide x 1500.
+		const data = alignedLine('ab', 'center');
+		const typed = predictionTest.predictTextInsert(
+			data,
+			1500,
+			1800,
+			2050,
+			'x',
+			measure,
+		);
+		const runs = runsOf(data);
+		nodeassert.strictEqual(cool.visibleText(runs[0]), 'abx');
+		nodeassert.strictEqual(runs[0].matrix[4], 250);
+		// The caret follows the typed character by half its width, as the line grew to
+		// both sides.
+		nodeassert.strictEqual(typed.caretShift, 50);
+	});
+
+	it('keeps a centered line centered when a character is typed in its middle', function () {
+		// "ab" and "cd" are two runs of one line, 400 wide in all, from local 200.
+		const data = makeWrapSlide([
+			{
+				...wrapRun('abcd', 200, 0, {
+					width: 800,
+					lineHeight: 400,
+					align: 'center',
+				}),
+				textLength: 2,
+			},
+			{
+				...wrapRun('abcd', 400, 0, {
+					width: 800,
+					lineHeight: 400,
+					align: 'center',
+				}),
+				textPosition: 2,
+				textLength: 2,
+				weight: 7,
+			},
+		]);
+		predictionTest.predictTextInsert(data, 1400, 1800, 2050, 'x', measure);
+		const runs = runsOf(data);
+		// The line grows by 100 to both sides: "abx" from local 150, "cd" from 450.
+		nodeassert.strictEqual(runs[0].matrix[4], 150);
+		nodeassert.strictEqual(runs[1].matrix[4], 450);
+	});
+
+	it('keeps a centered line centered when a character is deleted', function () {
+		const data = alignedLine('abc', 'center');
+		const deleted = predictionTest.predictTextDelete(
+			data,
+			1550,
+			1800,
+			2050,
+			1,
+			0,
+			measure,
+		);
+		const runs = runsOf(data);
+		nodeassert.strictEqual(cool.visibleText(runs[0]), 'ab');
+		nodeassert.strictEqual(runs[0].matrix[4], 300);
+		nodeassert.strictEqual(deleted.caretShift, -50);
+	});
+
+	it('keeps a right-aligned line at its right edge when a character is typed or deleted', function () {
+		const data = alignedLine('ab', 'right');
+		const typed = predictionTest.predictTextInsert(
+			data,
+			1800,
+			1800,
+			2050,
+			'x',
+			measure,
+		);
+		nodeassert.strictEqual(runsOf(data)[0].matrix[4], 500);
+		// The caret stays at the right edge, where the typed character ends.
+		nodeassert.strictEqual(typed.caretShift, 0);
+		const deleted = predictionTest.predictTextDelete(
+			data,
+			1800,
+			1800,
+			2050,
+			1,
+			0,
+			measure,
+		);
+		nodeassert.strictEqual(runsOf(data)[0].matrix[4], 600);
+		nodeassert.strictEqual(deleted.caretShift, 0);
 	});
 });

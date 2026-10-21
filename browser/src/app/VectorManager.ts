@@ -1366,11 +1366,11 @@ class VectorManager extends RenderManagerBase {
 			if (!after) return deletion;
 			position = after;
 		}
-		const advance = position.insert(text);
-		if (!(advance > 0)) return deleted ? deletion : null;
+		const inserted = position.insert(text);
+		if (!(inserted.advance > 0)) return deleted ? deletion : null;
 		return {
 			indexShift: indexShift + text.length,
-			caretShift: caretShift + advance,
+			caretShift: caretShift + inserted.caretShift,
 			position,
 			change: deleted ? { text, deleteBefore, deleteAfter } : { text },
 		};

@@ -383,7 +383,7 @@ describe('text prediction paragraph wrap', function () {
 			[{ start: 1, length: 7, f: 0 }],
 			700,
 		);
-		const advance = predictionTest.predictTextInsert(
+		const { advance } = predictionTest.predictTextInsert(
 			data,
 			1700,
 			1800,
@@ -481,7 +481,7 @@ describe('text prediction paragraph wrap', function () {
 			[{ start: 0, length: 5, e: 200, f: 0, indent: 200, width: 500 }],
 			700,
 		);
-		const advance = predictionTest.predictTextInsert(
+		const { advance } = predictionTest.predictTextInsert(
 			data,
 			1700,
 			1800,
@@ -525,7 +525,7 @@ describe('text prediction paragraph wrap', function () {
 		const box = predictionTest.objectAt(data, 0).primitives[0];
 		box.children.unshift(bulletNode);
 
-		const advance = predictionTest.predictTextInsert(
+		const { advance } = predictionTest.predictTextInsert(
 			data,
 			1700,
 			1800,
