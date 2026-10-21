@@ -1579,30 +1579,94 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testLinearRuleVert)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2869), xShape->getSize().Height);
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testHierarchyConnectorsStartAtTheMiddleOfTheTurnedRoot)
+{
+    // the roots are turned by their layout node and keep their text turned (grav); each
+    // elbow connector starts at the middle of its root, upwards or downwards
+    createSdImpressDoc("pptx/smartart-hierarchy-turned-root.pptx");
+    uno::Reference<drawing::XShape> xDiagram(reLayoutDiagram());
+
+    std::vector<sal_Int32> aRootMiddles;
+    std::vector<std::pair<awt::Rectangle, bool>> aConnectors;
+    std::function<void(const uno::Reference<drawing::XShape>&)> aCollect
+        = [&](const uno::Reference<drawing::XShape>& xShape) {
+              uno::Reference<container::XIndexAccess> xChildren(xShape, uno::UNO_QUERY);
+              if (xChildren.is())
+              {
+                  for (sal_Int32 n = 0; n < xChildren->getCount(); ++n)
+                      aCollect(uno::Reference<drawing::XShape>(xChildren->getByIndex(n),
+                                                               uno::UNO_QUERY));
+                  return;
+              }
+              uno::Reference<beans::XPropertySet> xProperties(xShape, uno::UNO_QUERY);
+              comphelper::SequenceAsHashMap aGeometry(
+                  xProperties->getPropertyValue(u"CustomShapeGeometry"_ustr));
+              const OUString aType(aGeometry[u"Type"_ustr].get<OUString>());
+              const awt::Point aAt(xShape->getPosition());
+              const awt::Size aSize(xShape->getSize());
+              if (aType == "ooxml-bentConnector3")
+              {
+                  bool bMirroredY(false);
+                  aGeometry[u"MirroredY"_ustr] >>= bMirroredY;
+                  aConnectors.emplace_back(
+                      awt::Rectangle(aAt.X, aAt.Y, aSize.Width, aSize.Height), bMirroredY);
+                  return;
+              }
+              sal_Int32 nRotation(0);
+              xProperties->getPropertyValue(u"RotateAngle"_ustr) >>= nRotation;
+              if (nRotation == 0)
+                  return;
+              // the root's text runs along the turned shape
+              double fTextTurn(-1.0);
+              aGeometry[u"TextPreRotateAngle"_ustr] >>= fTextTurn;
+              CPPUNIT_ASSERT_EQUAL(0.0, fTextTurn);
+              // the middle of the root as it is drawn, turned
+              awt::Rectangle aDrawn;
+              xProperties->getPropertyValue(u"BoundRect"_ustr) >>= aDrawn;
+              aRootMiddles.push_back(aDrawn.Y + aDrawn.Height / 2);
+          };
+    aCollect(xDiagram);
+    CPPUNIT_ASSERT_EQUAL(size_t(4), aRootMiddles.size());
+    CPPUNIT_ASSERT_GREATER(size_t(4), aConnectors.size());
+
+    // upwards a connector starts at the bottom of its box, downwards at the top
+    for (const auto& [rBox, bMirroredY] : aConnectors)
+    {
+        const sal_Int32 nStart(bMirroredY ? rBox.Y + rBox.Height : rBox.Y);
+        CPPUNIT_ASSERT(std::any_of(aRootMiddles.begin(), aRootMiddles.end(),
+                                   [nStart](sal_Int32 nMiddle) {
+                                       return std::abs(nStart - nMiddle) <= 5;
+                                   }));
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testAutofitSync)
 {
     createSdImpressDoc("pptx/smartart-autofit-sync.pptx");
 
     uno::Reference<drawing::XShape> xDiagram(getShapeFromPage(0, 0), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xMiddle = getChildShape(xDiagram, 2);
-    uno::Reference<beans::XPropertySet> xFirstInner(getChildShape(getChildShape(xMiddle, 0), 0),
-                                                    uno::UNO_QUERY);
-    double fFirstScale = 0;
-    CPPUNIT_ASSERT(xFirstInner->getPropertyValue(u"TextFitToSizeFontScale"_ustr) >>= fFirstScale);
-    CPPUNIT_ASSERT_GREATER(0.0, fFirstScale);
-    CPPUNIT_ASSERT_LESS(100.0, fFirstScale);
+    // the size a text is seen at: the size of its first run, scaled by the shape's autofit
+    const auto aShownSize = [](const uno::Reference<drawing::XShape>& xShape) {
+        uno::Reference<beans::XPropertySet> xShapeProperties(xShape, uno::UNO_QUERY);
+        double fScale = 0;
+        CPPUNIT_ASSERT(xShapeProperties->getPropertyValue(u"TextFitToSizeFontScale"_ustr)
+                       >>= fScale);
+        uno::Reference<text::XText> xText(xShape, uno::UNO_QUERY);
+        uno::Reference<container::XEnumerationAccess> xParagraphs(xText, uno::UNO_QUERY);
+        uno::Reference<container::XEnumerationAccess> xParagraph(
+            xParagraphs->createEnumeration()->nextElement(), uno::UNO_QUERY);
+        uno::Reference<beans::XPropertySet> xRun(xParagraph->createEnumeration()->nextElement(),
+                                                 uno::UNO_QUERY);
+        const double fHeight(xRun->getPropertyValue(u"CharHeight"_ustr).get<double>());
+        return fScale > 0 ? fHeight * fScale / 100.0 : fHeight;
+    };
+    const double fFirstSize(aShownSize(getChildShape(getChildShape(xMiddle, 0), 0)));
+    const double fSecondSize(aShownSize(getChildShape(getChildShape(xMiddle, 2), 0)));
 
-    uno::Reference<beans::XPropertySet> xSecondInner(getChildShape(getChildShape(xMiddle, 2), 0),
-                                                     uno::UNO_QUERY);
-    double fSecondScale = 0;
-    CPPUNIT_ASSERT(xSecondInner->getPropertyValue(u"TextFitToSizeFontScale"_ustr) >>= fSecondScale);
-
-    // Without the accompanying fix in place, this test would have failed with:
-    // - Expected: 56
-    // - Actual  : 100
-    // i.e. the left shape had no scale-down and the right shape was scaled down, even if it was
-    // requested that their scaling matches.
-    CPPUNIT_ASSERT_EQUAL(fSecondScale, fFirstScale);
+    // both texts share one font: one shown size, below the stated 65pt
+    CPPUNIT_ASSERT_LESS(65.0, fFirstSize);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(fSecondSize, fFirstSize, 0.01);
 
     // Without the accompanying fix in place, this test would have failed with:
     // - Expected: 0 (drawing::TextFitToSizeType_NONE)

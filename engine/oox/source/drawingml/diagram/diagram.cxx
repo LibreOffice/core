@@ -191,6 +191,8 @@ void SmartArtDiagram::createShapeHierarchyFromModel( const ShapePtr & pParentSha
     // starts with none of them, so a Diagram laid out a second time is measured afresh.
     maUserVariables.clear();
     maFittedFontSizes.clear();
+    maRunsSizedByLayout.clear();
+    maParagraphsIndentedByLayout.clear();
     maDeferredUserVariables.clear();
     maLaidOutSideways.clear();
     maDeferredSpacers.clear();
@@ -205,6 +207,7 @@ void SmartArtDiagram::createShapeHierarchyFromModel( const ShapePtr & pParentSha
         // texts all fit is laid out once.
         maFontCandidates.clear();
         maGroupsThatShrank.clear();
+        maColumnFits.clear();
         maContentHeights.clear();
         // a column of composites takes their heights from the pass before, so one more pass
         // runs where a column met a composite no pass had measured yet
@@ -212,6 +215,7 @@ void SmartArtDiagram::createShapeHierarchyFromModel( const ShapePtr & pParentSha
         for (int nPass = 0; nPass < 80; ++nPass)
         {
             maGroupsThatDidNotFit.clear();
+            maColumnFitsOfThisPass.clear();
             maNextContentHeights.clear();
             mbContentHeightMissing = false;
             maUserVariables.clear();
@@ -242,6 +246,13 @@ void SmartArtDiagram::createShapeHierarchyFromModel( const ShapePtr & pParentSha
                     continue;
                 aCandidate->second = std::max(mfLeastFont, aCandidate->second - 1.0);
                 maGroupsThatShrank.insert(rGroup);
+                bAnyShrank = true;
+            }
+            // a row whose column did not fit shrinks on the next pass
+            for (const auto& [rName, fPart] : maColumnFitsOfThisPass)
+            {
+                const auto aKept = maColumnFits.find(rName);
+                maColumnFits[rName] = (aKept != maColumnFits.end() ? aKept->second : 1.0) * fPart;
                 bAnyShrank = true;
             }
             const bool bMissing(mbContentHeightMissing && !maNextContentHeights.empty()

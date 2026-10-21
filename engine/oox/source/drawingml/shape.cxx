@@ -2496,10 +2496,9 @@ Reference< XShape > const & Shape::createAndInsert(
 
                 // TextPreRotateAngle. Text rotates inside the text area. Might be used for diagram layout 'upr' and 'grav'.
                 // A Diagram laid out again has the turn on the shape, its text comes back from the shape it replaces.
+                // The turn of a Diagram's text already counts the turn of its layout node.
                 sal_Int32 nTextPreRotateAngle = static_cast< sal_Int32 >( getTextBody()->getTextProperties().moTextPreRotation.value_or(
                     moDiagramTextPreRotation.value_or( 0 ) ) );
-
-                nTextPreRotateAngle -= mnDiagramRotation; // Use of mnDiagramRotation is unclear. It seems to be always 0 here.
 
                 // TextRotateAngle. The text area rotates.
                 sal_Int32 nTextAreaRotateAngle = getTextBody()->getTextProperties().moTextAreaRotation.value_or(0);
@@ -2532,13 +2531,11 @@ Reference< XShape > const & Shape::createAndInsert(
                 if (XML_ellipsis == getTextBody()->getTextProperties().moVertOverflow)
                     putPropertyToGrabBag(u"vertOverflow"_ustr, cpo::uno::Any(u"ellipsis"_ustr));
             }
-            else if (moDiagramTextPreRotation || mnDiagramRotation != 0)
+            else if (moDiagramTextPreRotation)
             {
-                // A shape laid out again has no text body yet; its text turns against the turn
-                // the layout gave the shape as it would with one, so it stays upright.
-                const sal_Int32 nTextPreRotateAngle(moDiagramTextPreRotation.value_or(0)
-                                                    - mnDiagramRotation);
-                mpCustomShapePropertiesPtr->setTextPreRotateAngle(-nTextPreRotateAngle / 60000);
+                // A shape laid out again has no text body yet, use the turn the layout decided.
+                mpCustomShapePropertiesPtr->setTextPreRotateAngle(-*moDiagramTextPreRotation
+                                                                  / 60000);
             }
 
             // Note that the script oox/source/drawingml/customshapes/generatePresetsData.pl looks

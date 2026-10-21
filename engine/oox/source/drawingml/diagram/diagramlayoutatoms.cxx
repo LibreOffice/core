@@ -19,6 +19,7 @@
 
 #include "diagramlayoutatoms.hxx"
 
+#include <array>
 #include <cmath>
 #include <editeng/editeng.hxx>
 #include <editeng/lrspitem.hxx>
@@ -1587,7 +1588,14 @@ void CompositeAlg::applyConstraintToLayout(const SmartArtDiagram& rDgm, const Sh
     if (aRef == rProperties.end())
         return;
 
-    const LayoutProperty::const_iterator aRefType = aRef->second.find(rConstraint.mnRefType);
+    // no refType but a named shape: take the same type of that shape, as in "h refFor ch
+    // refForName child op equ"
+    const sal_Int32 nRefType(
+        rConstraint.mnRefType == XML_none && !rConstraint.msRefForName.isEmpty()
+                && rConstraint.mfValue == 0.0
+            ? rConstraint.mnType
+            : rConstraint.mnRefType);
+    const LayoutProperty::const_iterator aRefType = aRef->second.find(nRefType);
     sal_Int32 nInferredValue = 0;
     if (aRefType != aRef->second.end())
     {
@@ -1597,7 +1605,7 @@ void CompositeAlg::applyConstraintToLayout(const SmartArtDiagram& rDgm, const Sh
         if (isUserVariable(rConstraint.mnType))
             rUserVariables[rConstraint.mnType] = nValue;
     }
-    else if (inferFromLayoutProperty(aRef->second, rConstraint.mnRefType, nInferredValue))
+    else if (inferFromLayoutProperty(aRef->second, nRefType, nInferredValue))
     {
         // Reference can be inferred. A name of the layout's own worked out this way, userC as
         // the right edge of a shape that states its left and its width, is a value like one
@@ -1760,11 +1768,15 @@ static sal_Int64 measureTextHeight(const std::vector<OUString>& rParagraphs, sal
 // The inset of the text area of the shape rShape on each side, as a part of its shorter side:
 // a roundRect holds its text 0.29289 of its corner's radius in, the radius its adjustment, a part
 // of the shorter side, 1/6 where not stated; Vertical_Bullet_List's parent text of 1843 has 1663
-// of room in it. 0 for a shape whose text has the whole of it.
+// of room in it. An ellipse holds its text in the rectangle inside it. 0 for a shape whose
+// text has the whole of it.
 static double textAreaInsetPart(const ShapePtr& rShape)
 {
-    if (!rShape || !rShape->getCustomShapeProperties()
-        || rShape->getCustomShapeProperties()->getShapePresetType() != XML_roundRect)
+    if (!rShape || !rShape->getCustomShapeProperties())
+        return 0.0;
+    if (rShape->getCustomShapeProperties()->getShapePresetType() == XML_ellipse)
+        return (1.0 - std::sqrt(0.5)) / 2.0;
+    if (rShape->getCustomShapeProperties()->getShapePresetType() != XML_roundRect)
         return 0.0;
     double fRadius(1.0 / 6.0);
     for (const CustomShapeGuide& rGuide :
@@ -1777,6 +1789,66 @@ static double textAreaInsetPart(const ShapePtr& rShape)
             fRadius = std::clamp(aValue.toDouble() / 100000.0, 0.0, 0.5);
         }
     return 0.29289 * fRadius;
+}
+
+// parts of the box a preset keeps free of text, left, top, right and bottom, after the
+// preset's own formulas: an arrow holds its text in its stem, a chevron between notch and
+// point. Nothing for a preset that uses the whole box or is handled by textAreaInsetPart
+static std::optional<std::array<double, 4>> textAreaPartsOf(const ShapePtr& rShape,
+                                                             double fWidth, double fHeight)
+{
+    if (!rShape || !rShape->getCustomShapeProperties() || fWidth <= 0.0 || fHeight <= 0.0)
+        return std::nullopt;
+    const sal_Int32 nType(rShape->getCustomShapeProperties()->getShapePresetType());
+    if (nType != XML_downArrow && nType != XML_upArrow && nType != XML_rightArrow
+        && nType != XML_leftArrow && nType != XML_chevron && nType != XML_homePlate)
+        return std::nullopt;
+    double fFirst(50000.0), fSecond(50000.0);
+    for (const CustomShapeGuide& rGuide :
+         rShape->getCustomShapeProperties()->getAdjustmentGuideList())
+    {
+        const OUString aValue(rGuide.maFormula.startsWith("val ") ? rGuide.maFormula.copy(4)
+                                                                  : rGuide.maFormula);
+        if (rGuide.maName == "adj1" || rGuide.maName == "adj")
+            fFirst = aValue.toDouble();
+        else if (rGuide.maName == "adj2")
+            fSecond = aValue.toDouble();
+    }
+    const double fShorter(std::min(fWidth, fHeight));
+    // chevron and homePlate: the text stands between notch and point
+    if (nType == XML_chevron || nType == XML_homePlate)
+    {
+        const double fPoint(std::clamp(fFirst, 0.0, 100000.0 * fWidth / fShorter) / 100000.0
+                            * fShorter);
+        if (nType == XML_homePlate)
+            return std::array<double, 4>{ 0.0, 0.0, fPoint / 2.0 / fWidth, 0.0 };
+        if (fWidth - 2.0 * fPoint <= 0.0)
+            return std::nullopt;
+        return std::array<double, 4>{ fPoint / fWidth, 0.0, fPoint / fWidth, 0.0 };
+    }
+    const bool bUpDown(nType == XML_downArrow || nType == XML_upArrow);
+    // stem across and head along the arrow, both from the adjustments
+    const double fAcross(bUpDown ? fWidth : fHeight);
+    const double fAlong(bUpDown ? fHeight : fWidth);
+    const double fStemPart(std::clamp(fFirst, 0.0, 100000.0) / 100000.0);
+    const double fHead(
+        std::clamp(fSecond, 0.0, 100000.0 * fAlong / fShorter) / 100000.0 * fShorter);
+    const double fStemSide((fAcross - fAcross * fStemPart) / 2.0);
+    // the text reaches into the head up to where stem and head meet
+    const double fIntoHead(fStemSide * fHead / (fAcross / 2.0));
+    const double fAcrossPart(fStemSide / fAcross);
+    const double fAlongPart(std::max(0.0, fHead - fIntoHead) / fAlong);
+    switch (nType)
+    {
+        case XML_downArrow:
+            return std::array<double, 4>{ fAcrossPart, 0.0, fAcrossPart, fAlongPart };
+        case XML_upArrow:
+            return std::array<double, 4>{ fAcrossPart, fAlongPart, fAcrossPart, 0.0 };
+        case XML_rightArrow:
+            return std::array<double, 4>{ 0.0, fAcrossPart, fAlongPart, fAcrossPart };
+        default:
+            return std::array<double, 4>{ fAlongPart, fAcrossPart, 0.0, fAcrossPart };
+    }
 }
 
 // The height the paragraphs rParagraphs take in the shape rShape nWidthEmu wide, in EMU, as
@@ -2036,7 +2108,7 @@ static OUString fontGroupOf(const SmartArtDiagram& rDgm,
         }
         OUString aNext;
         double fLinkPart(1.0);
-        bool bStated(false), bOverSecond(false);
+        bool bStated(false), bOverSecond(false), bEqual(false);
         for (const Constraint& rConstraint : aFor)
         {
             if (rConstraint.mnType != XML_primFontSz)
@@ -2047,6 +2119,7 @@ static OUString fontGroupOf(const SmartArtDiagram& rDgm,
             {
                 aNext = rConstraint.msRefForName;
                 fLinkPart = rConstraint.mfFactor > 0.0 ? rConstraint.mfFactor : 1.0;
+                bEqual = rConstraint.mnOperator == XML_equ;
             }
             else if (rConstraint.mnRefType == XML_secFontSz)
                 bOverSecond = true;
@@ -2056,12 +2129,22 @@ static OUString fontGroupOf(const SmartArtDiagram& rDgm,
                 if (rConstraint.mnType == XML_secFontSz && rConstraint.mnRefType == XML_primFontSz
                     && !rConstraint.msRefForName.isEmpty())
                     aNext = rConstraint.msRefForName;
-        if (bStated || aNext.isEmpty())
+        // an op equ link holds over a size the node states itself
+        if ((bStated && !bEqual) || aNext.isEmpty())
             break;
         if (pPart)
             *pPart *= fLinkPart;
         aFollow = aNext;
     }
+    // no link: all data nodes below a layout node that states one font for them without a name,
+    // "primFontSz for ch ptType node op equ", are one group
+    if (aFollow == rName)
+        for (const Constraint& rConstraint : rConstraints)
+            if (rConstraint.mnType == XML_primFontSz && rConstraint.mnOperator == XML_equ
+                && rConstraint.msForName.isEmpty() && rConstraint.mnPointType == XML_node
+                && (rConstraint.mnFor == XML_ch || rConstraint.mnFor == XML_des)
+                && !rConstraint.msStatedBy.isEmpty())
+                return "ptType node below " + rConstraint.msStatedBy;
     return aFollow;
 }
 
@@ -2137,6 +2220,66 @@ static double unstatedMarginPart(const std::vector<Constraint>& rConstraints,
     return (aStated.count(nFirst) ? 0.0 : 0.56) + (aStated.count(nSecond) ? 0.0 : 0.56);
 }
 
+namespace
+{
+// margin of a text node on one side: a part of its font, a length in EMU and, on the left
+// and the right only, a part of its width
+struct TextMargin
+{
+    double mfPartOfFont = 0.0;
+    sal_Int64 mnLength = 0;
+    double mfPartOfWidth = 0.0;
+};
+}
+
+// the margin nSide of the text node rNode named rName, as stated by the nodes above or by the
+// node itself; a side stated nowhere gets the default of unstatedMarginPart
+static TextMargin textMarginOf(const SmartArtDiagram& rDgm,
+                               const std::vector<Constraint>& rConstraints, const LayoutNode& rNode,
+                               const rtl::Reference<svx::diagram::Point>& rPoint,
+                               std::u16string_view rName, sal_Int32 nSide)
+{
+    TextMargin aMargin;
+    const bool bOverUnder(nSide == XML_tMarg || nSide == XML_bMarg);
+    for (const Constraint& rConstraint : rConstraints)
+    {
+        if (rConstraint.msForName != rName || rConstraint.mnType != nSide)
+            continue;
+        if (rConstraint.mnRefType == XML_primFontSz)
+            aMargin.mfPartOfFont += rConstraint.mfFactor;
+        else if (rConstraint.mnRefType == XML_w && !bOverUnder)
+            aMargin.mfPartOfWidth
+                = 1.0 - (1.0 - aMargin.mfPartOfWidth) * (1.0 - rConstraint.mfFactor);
+        else if (rConstraint.mnRefType == XML_none && rConstraint.mfValue > 0.0 && bOverUnder)
+            aMargin.mnLength += static_cast<sal_Int64>(
+                o3tl::convert(rConstraint.mfValue, o3tl::Length::mm, o3tl::Length::emu));
+    }
+    std::vector<Constraint> aOwn;
+    gatherDecidedConstraints(rDgm, rNode, rPoint, aOwn);
+    for (const Constraint& rConstraint : aOwn)
+    {
+        if (!rConstraint.msForName.isEmpty() || rConstraint.mnType != nSide)
+            continue;
+        if (rConstraint.mnRefType == XML_primFontSz)
+            aMargin.mfPartOfFont += rConstraint.mfFactor;
+        else if (rConstraint.mnRefType == XML_tMarg || rConstraint.mnRefType == XML_bMarg)
+            for (const Constraint& rOther : aOwn)
+                if (rOther.mnType == rConstraint.mnRefType && rOther.mnRefType == XML_primFontSz)
+                {
+                    aMargin.mfPartOfFont += rOther.mfFactor;
+                    break;
+                }
+        break;
+    }
+    // unstatedMarginPart looks at both sides of the axis, so we state the other one
+    Constraint aOtherSide{};
+    aOtherSide.mnType = bOverUnder ? (nSide == XML_tMarg ? XML_bMarg : XML_tMarg)
+                                   : (nSide == XML_lMarg ? XML_rMarg : XML_lMarg);
+    aOwn.push_back(aOtherSide);
+    aMargin.mfPartOfFont += unstatedMarginPart(rConstraints, aOwn, rName, bOverUnder);
+    return aMargin;
+}
+
 // The level of each paragraph of the text the shape rShape shows, in the order of
 // textParagraphsOf: 1 for a paragraph of the node the shape stands for, one more for each step
 // down in the data from there, so the descendants a node shows beside itself are at 2 and the
@@ -2182,48 +2325,21 @@ static std::optional<sal_Int64> textDrivenHeight(const SmartArtDiagram& rDgm,
     }
     double fOverUnder(0.0), fSides(0.0);
     sal_Int64 nFixed(0);
-    for (const Constraint& rConstraint : rConstraints)
+    for (const sal_Int32 nSide : { XML_lMarg, XML_tMarg, XML_rMarg, XML_bMarg })
     {
-        if (rConstraint.msForName != rShape->getInternalName())
-            continue;
-        const bool bOverUnder(rConstraint.mnType == XML_tMarg || rConstraint.mnType == XML_bMarg);
-        const bool bSide(rConstraint.mnType == XML_lMarg || rConstraint.mnType == XML_rMarg);
-        if (!bOverUnder && !bSide)
-            continue;
-        if (rConstraint.mnRefType == XML_primFontSz)
-            (bOverUnder ? fOverUnder : fSides) += rConstraint.mfFactor;
-        else if (rConstraint.mnRefType == XML_w && bSide)
-            nWidth -= static_cast<sal_Int64>(nWidth * rConstraint.mfFactor);
-        else if (rConstraint.mnRefType == XML_none && rConstraint.mfValue > 0.0 && bOverUnder)
-            nFixed += static_cast<sal_Int64>(
-                o3tl::convert(rConstraint.mfValue, o3tl::Length::mm, o3tl::Length::emu));
+        const TextMargin aMargin(
+            textMarginOf(rDgm, rConstraints, rNode, rPoint, rShape->getInternalName(), nSide));
+        if (nSide == XML_lMarg || nSide == XML_rMarg)
+        {
+            fSides += aMargin.mfPartOfFont;
+            nWidth -= static_cast<sal_Int64>(nWidth * aMargin.mfPartOfWidth);
+        }
+        else
+        {
+            fOverUnder += aMargin.mfPartOfFont;
+            nFixed += aMargin.mnLength;
+        }
     }
-    // the node's own statements, the branch of a choose decided by its point, one per margin,
-    // and a margin stated as another margin, "bMarg refType tMarg", is that one's
-    std::vector<Constraint> aOwn;
-    gatherDecidedConstraints(rDgm, rNode, rPoint, aOwn);
-    std::set<sal_Int32> aSeen;
-    for (const Constraint& rConstraint : aOwn)
-    {
-        if (!rConstraint.msForName.isEmpty() || aSeen.count(rConstraint.mnType))
-            continue;
-        aSeen.insert(rConstraint.mnType);
-        const bool bOverUnder(rConstraint.mnType == XML_tMarg || rConstraint.mnType == XML_bMarg);
-        const bool bSide(rConstraint.mnType == XML_lMarg || rConstraint.mnType == XML_rMarg);
-        if (!bOverUnder && !bSide)
-            continue;
-        if (rConstraint.mnRefType == XML_primFontSz)
-            (bOverUnder ? fOverUnder : fSides) += rConstraint.mfFactor;
-        else if (rConstraint.mnRefType == XML_tMarg || rConstraint.mnRefType == XML_bMarg)
-            for (const Constraint& rOther : aOwn)
-                if (rOther.mnType == rConstraint.mnRefType && rOther.mnRefType == XML_primFontSz)
-                {
-                    fOverUnder += rOther.mfFactor;
-                    break;
-                }
-    }
-    fSides += unstatedMarginPart(rConstraints, aOwn, rShape->getInternalName(), false);
-    fOverUnder += unstatedMarginPart(rConstraints, aOwn, rShape->getInternalName(), true);
     nWidth -= static_cast<sal_Int64>(fSides * fFont * fPoint);
     // the words stand in the width the shape leaves its text
     sal_Int64 nInset(0);
@@ -4801,7 +4917,10 @@ void settleUprightText(const SmartArtDiagram& rDgm)
             continue;
         if (pShape->getServiceName() == "com.sun.star.drawing.GroupShape")
             continue;
-        const sal_Int32 nTurn(((pShape->getRotation() / PER_DEGREE) % 360 + 360) % 360);
+        // the turn the shape is drawn with, its own plus the layout node's
+        const sal_Int32 nTurn(
+            (((pShape->getRotation() + pShape->getDiagramRotation()) / PER_DEGREE) % 360 + 360)
+            % 360);
         if (nTurn == 0)
             continue;
         const auto aNode = aNodes.find(rEntry->first->getPresentation().msPresentationLayoutName);
@@ -5659,6 +5778,9 @@ void settleNamedConnectors(const SmartArtDiagram& rDgm)
             pShape->setPosition(awt::Point(
                 std::min(nFromX, nToX) - (nWidth == 91440 ? 45720 : 0) - aParentAt->X,
                 nFromY - aParentAt->Y));
+            // own copy of the custom shape properties, the mirroring is kept there
+            pShape->getCustomShapeProperties()
+                = std::make_shared<CustomShapeProperties>(*pShape->getCustomShapeProperties());
             pShape->setFlip(nToX < nFromX, false);
             continue;
         }
@@ -8205,7 +8327,10 @@ static void placeSidewaysRoot(SmartArtDiagram& rDgm, const SidewaysRoot& rRoot,
             // the bent connector runs from its top left corner to its bottom right one, the
             // bend in the middle of its width; it is mirrored where the row's node stands above
             // the node, and where it stands left of it
+            // each connector needs custom shape properties of its own, the mirroring is kept there
             pChild->setSubType(XML_bentConnector3);
+            pChild->getCustomShapeProperties()
+                = std::make_shared<CustomShapeProperties>(*pChild->getCustomShapeProperties());
             auto& rProperties(*pChild->getCustomShapeProperties());
             rProperties.setShapePresetType(XML_bentConnector3);
             pChild->setFlip((aStop.X < aStart.X), (aStop.Y < aStart.Y));
@@ -8563,7 +8688,10 @@ void placeUpright(SmartArtDiagram& rDgm, const UprightNode& rNode, double fMiddl
         // A bent connector draws the elbow once its corner sits on its own left edge, which is
         // where an adjustment of zero puts it: down from the top left, then across to the bottom
         // right. Where the child stands left of the cell the connector is mirrored.
+        // Each connector needs custom shape properties of its own, the mirroring is kept there.
         pChild->setSubType(XML_bentConnector3);
+        pChild->getCustomShapeProperties()
+            = std::make_shared<CustomShapeProperties>(*pChild->getCustomShapeProperties());
         auto& rProperties(*pChild->getCustomShapeProperties());
         rProperties.setShapePresetType(XML_bentConnector3);
         if (rProperties.getAdjustmentGuideList().GetCustomShapeGuideValue(u"adj1"_ustr) < 0)
@@ -12024,6 +12152,19 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
             // other, is left to the paths below, and so is a row with a child as wide as the
             // whole row among the wishes, a layer behind the others: Continuous_Arrow_Process's
             // arrow of the whole width behind its nodes, reached by a walk back of the whole.
+            // smallest shrink factor a column of this row found on a pass before, 1 where none did
+            double fColumnFit(1.0);
+            if (nIncX)
+                for (const auto& pChild : rShape->getChildren())
+                {
+                    const auto aFit
+                        = const_cast<SmartArtDiagram&>(rDgm).getColumnFits().find(
+                            pChild->getInternalName());
+                    if (aFit != const_cast<SmartArtDiagram&>(rDgm).getColumnFits().end())
+                        fColumnFit = std::min(fColumnFit, aFit->second);
+                }
+            // a shrunk walk stands in the middle of the row
+            sal_Int32 nWalkStart(0);
             bool bWalkBack(false);
             if (!bDivideParent && aExtents.hasBackwards())
             {
@@ -12239,7 +12380,9 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                     }
                 }
                 const double fRoom(nParentExtent * (1.0 - fFixedReach));
-                const double fUnit(fReach > 0.0 && fRoom > 0.0 ? fRoom / fReach : 0.0);
+                const double fUnit(fReach > 0.0 && fRoom > 0.0 ? fRoom / fReach * fColumnFit
+                                                               : 0.0);
+                nWalkStart = static_cast<sal_Int32>(fRoom * (1.0 - fColumnFit) / 2.0);
                 for (const auto& rChild : rShape->getChildren())
                     aWantedExtent.push_back(static_cast<sal_Int32>(
                         *aExtents.get(*rChild)
@@ -12433,7 +12576,7 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
             // a box list's text of 0.7 of the row, keeps them where they are, at the start of
             // the flow unless the alignment says otherwise.
             sal_Int32 nFillGap = 0;
-            sal_Int32 nFillStart = 0;
+            sal_Int32 nFillStart = bWalkBack ? nWalkStart : 0;
             if (bFillAxis && !bWalkBack)
             {
                 sal_Int32 nWanted = 0;
@@ -12599,6 +12742,57 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                 fWidthScale = aScaleToFit(aTotalSize.Width, rShape->getSize().Width);
             if (nIncY)
                 fHeightScale = aScaleToFit(aTotalSize.Height, rShape->getSize().Height);
+            // a column whose children do not fit its height shrinks the whole row on the next pass,
+            // so all keep their proportions. Only where every child is as high as a part of a named
+            // width (the column or a shape beside it in the row) or as a sibling, since only then a
+            // narrower row makes the column lower
+            const auto aHighByAWidth = [&rConstraints, &rShape](const ShapePtr& pChild) {
+                return std::any_of(
+                    rConstraints.begin(), rConstraints.end(),
+                    [&pChild, &rShape](const Constraint& rConstraint) {
+                        if (rConstraint.mnType != XML_h
+                            || rConstraint.msForName != pChild->getInternalName())
+                            return false;
+                        if (rConstraint.mnRefType == XML_w)
+                            return !rConstraint.msRefForName.isEmpty();
+                        return rConstraint.mnRefType == XML_h
+                               && std::any_of(rShape->getChildren().begin(),
+                                              rShape->getChildren().end(),
+                                              [&rConstraint](const ShapePtr& pSibling) {
+                                                  return pSibling->getInternalName()
+                                                         == rConstraint.msRefForName;
+                                              });
+                    });
+            };
+            if (nIncY && fHeightScale < 1.0 - 1e-6
+                && std::all_of(rShape->getChildren().begin(), rShape->getChildren().end(),
+                               aHighByAWidth))
+                if (const LayoutNode* pRowNode = getLayoutNode().getParentLayoutNode())
+                {
+                    std::vector<const AlgAtom*> aRowAlgorithms;
+                    gatherOwnAlgorithms(*pRowNode, aRowAlgorithms);
+                    if (!aRowAlgorithms.empty() && aRowAlgorithms.front()->getType() == XML_lin)
+                    {
+                        const auto aRowDirection
+                            = aRowAlgorithms.front()->getMap().find(XML_linDir);
+                        const sal_Int32 nRowDirection(
+                            aRowDirection != aRowAlgorithms.front()->getMap().end()
+                                ? aRowDirection->second
+                                : XML_fromL);
+                        if (nRowDirection == XML_fromL || nRowDirection == XML_fromR)
+                        {
+                            std::map<OUString, double>& rFits(
+                                const_cast<SmartArtDiagram&>(rDgm).getColumnFitsOfThisPass());
+                            const auto aFound = rFits.find(rShape->getInternalName());
+                            rFits[rShape->getInternalName()]
+                                = aFound != rFits.end() ? std::min(aFound->second, fHeightScale)
+                                                        : fHeightScale;
+                        }
+                    }
+                }
+            // a walk has the part in its unit already
+            if (nIncX && !bWalkBack)
+                fWidthScale *= fColumnFit;
             aSpaceSize.Width *= fWidthScale;
             aSpaceSize.Height *= fHeightScale;
 
@@ -13105,11 +13299,97 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                     fFontSize = rConstr.mfValue;
             }
             // the font a row fitted for a node whose box grows with its text
+            bool bFitted(false);
             {
                 const auto aFitted = const_cast<SmartArtDiagram&>(rDgm).getFittedFontSizes().find(
                     rShape->getInternalName());
                 if (aFitted != const_cast<SmartArtDiagram&>(rDgm).getFittedFontSizes().end())
+                {
                     fFontSize = aFitted->second;
+                    bFitted = true;
+                }
+            }
+
+            // a text in a box of a given size, no rule growing it, takes the font of its group on
+            // this pass; when it does not fit, a word too wide or its lines too high, the group
+            // is a point smaller on the next pass
+            {
+                const sal_Int32 nTurn(
+                    (((rShape->getRotation() + rShape->getDiagramRotation()) / PER_DEGREE) % 360
+                     + 360)
+                    % 360);
+                const bool bUpright(!maMap.count(XML_autoTxRot)
+                                    || maMap.find(XML_autoTxRot)->second == XML_upr);
+                // upr turns the text by a quarter, it then stands across its box
+                const bool bAcross(bUpright
+                                   && ((nTurn > 45 && nTurn < 135)
+                                       || (nTurn > 225 && nTurn < 315)));
+                if (!bFitted && !ownRuleGrows(getLayoutNode(), XML_h)
+                    && !ownRuleFrees(getLayoutNode(), XML_w) && rShape->getSize().Width > 0
+                    && rShape->getSize().Height > 0 && !textParagraphsOf(rDgm, rShape).empty())
+                {
+                    rtl::Reference<svx::diagram::Point> xPoint;
+                    for (const auto& rEntry : rDgm.getLayout()->getPresPointShapeMap())
+                        if (rEntry.second == rShape)
+                        {
+                            xPoint = rEntry.first;
+                            break;
+                        }
+                    // the room the preset leaves the text, turned with the text; a shape its
+                    // layout node turns by a quarter has the turned box here, so its own box lies
+                    // the other way
+                    const sal_Int32 nNodeTurn(
+                        ((rShape->getDiagramRotation() / PER_DEGREE) % 360 + 360) % 360);
+                    const bool bNodeQuarter((nNodeTurn > 45 && nNodeTurn < 135)
+                                            || (nNodeTurn > 225 && nNodeTurn < 315));
+                    double fRoomWidth(bNodeQuarter ? rShape->getSize().Height
+                                                   : rShape->getSize().Width);
+                    double fRoomHeight(bNodeQuarter ? rShape->getSize().Width
+                                                    : rShape->getSize().Height);
+                    if (const std::optional<std::array<double, 4>> oArea
+                        = textAreaPartsOf(rShape, fRoomWidth, fRoomHeight))
+                    {
+                        fRoomWidth *= 1.0 - (*oArea)[0] - (*oArea)[2];
+                        fRoomHeight *= 1.0 - (*oArea)[1] - (*oArea)[3];
+                    }
+                    if (bAcross)
+                        std::swap(fRoomWidth, fRoomHeight);
+                    bool bWordsFit(true);
+                    const std::optional<sal_Int64> oNeed(textDrivenHeight(
+                        rDgm, rConstraints, getLayoutNode(), xPoint, rShape,
+                        static_cast<sal_Int64>(fRoomWidth), bWordsFit, /*bGrowingOnly*/ false));
+                    OUString aGroup;
+                    const double fGroupFont(
+                        fontOfGroup(rDgm, rConstraints, rShape->getInternalName(), aGroup));
+                    if (oNeed && *oNeed > fRoomHeight)
+                        const_cast<SmartArtDiagram&>(rDgm).getGroupsThatDidNotFit().insert(aGroup);
+                    if (oNeed)
+                    {
+                        fFontSize = fGroupFont;
+                        // the shape keeps its text within the margins we fitted with, a side
+                        // stated as a part of the width is set above
+                        for (const sal_Int32 nSide : { XML_lMarg, XML_tMarg, XML_rMarg, XML_bMarg })
+                        {
+                            const TextMargin aMargin(
+                                textMarginOf(rDgm, rConstraints, getLayoutNode(), xPoint,
+                                             rShape->getInternalName(), nSide));
+                            if (aMargin.mfPartOfWidth > 0.0
+                                || std::any_of(rConstraints.begin(), rConstraints.end(),
+                                               [nSide](const Constraint& rConstraint) {
+                                                   return rConstraint.msForName.isEmpty()
+                                                          && rConstraint.mnType == nSide
+                                                          && rConstraint.mnRefType == XML_w;
+                                               }))
+                                continue;
+                            const double fEmu(aMargin.mfPartOfFont * fGroupFont * 12700.0
+                                              + aMargin.mnLength);
+                            rShape->getShapeProperties().setProperty(
+                                getPropertyFromConstraint(nSide),
+                                static_cast<sal_Int32>(o3tl::convert(
+                                    fEmu, o3tl::Length::emu, o3tl::Length::mm100)));
+                        }
+                    }
+                }
             }
 
             // A node whose name the layout gives one font for all, "primFontSz for des forName
@@ -13127,12 +13407,32 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                 break;
 
             // adjust text size to fit shape
+            // deeper paragraphs at the smaller font of their level; runs we sized on a pass
+            // before take the font of this pass, the text body is the same on every pass
             if (fFontSize != 0)
             {
+                std::set<const TextRun*>& rSizedByLayout(
+                    const_cast<SmartArtDiagram&>(rDgm).getRunsSizedByLayout());
+                sal_Int32 nShallowest(
+                    pTextBody->getParagraphs().front()->getProperties().getLevel());
+                for (const auto& aParagraph : pTextBody->getParagraphs())
+                    nShallowest = std::min<sal_Int32>(nShallowest,
+                                                      aParagraph->getProperties().getLevel());
+                const double fSecondPart(
+                    secondFontPartOf(rConstraints, getLayoutNode(), rShape->getInternalName()));
                 for (auto& aParagraph : pTextBody->getParagraphs())
+                {
+                    const double fOwnFont(fontOfLevel(
+                        fFontSize, aParagraph->getProperties().getLevel() - nShallowest + 1,
+                        fSecondPart));
                     for (auto& aRun : aParagraph->getRuns())
-                        if (!aRun->getTextCharacterProperties().moHeight.has_value())
-                            aRun->getTextCharacterProperties().moHeight = fFontSize * 100;
+                        if (!aRun->getTextCharacterProperties().moHeight.has_value()
+                            || rSizedByLayout.count(aRun.get()))
+                        {
+                            aRun->getTextCharacterProperties().moHeight = fOwnFont * 100;
+                            rSizedByLayout.insert(aRun.get());
+                        }
+                }
             }
 
             if (!HasCustomText(rDgm, rShape))
@@ -13144,7 +13444,8 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
 
             // ECMA-376-1:2016 21.4.7.5 ST_AutoTextRotation (Auto Text Rotation)
             const sal_Int32 nautoTxRot = maMap.count(XML_autoTxRot) ? maMap.find(XML_autoTxRot)->second : XML_upr;
-            sal_Int32 nShapeRot = rShape->getRotation();
+            // the turn the shape is drawn with, its own plus the layout node's (shape rot=270)
+            sal_Int32 nShapeRot = rShape->getRotation() + rShape->getDiagramRotation();
             while (nShapeRot < 0)
                 nShapeRot += 360 * PER_DEGREE;
             while (nShapeRot > 360 * PER_DEGREE)
@@ -13227,17 +13528,32 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                 aParagraph->getProperties().setLevel(nLevel);
                 if (nLevel >= nStartBulletsAtLevel)
                 {
-                    if (!aParagraph->getProperties().getParaLeftMargin().has_value())
+                    // the bullet indent goes with the font of the paragraph; a paragraph we
+                    // indented on a pass before takes the indent of this pass, the text body is
+                    // the same on every pass
+                    const double fOwnFont(
+                        fFontSize > 0.0 ? fontOfLevel(fFontSize, nLevel + 1,
+                                                      secondFontPartOf(rConstraints,
+                                                                       getLayoutNode(),
+                                                                       rShape->getInternalName()))
+                                        : 0.0);
+                    const sal_Int64 nIndent(fOwnFont > 0.0 ? bulletIndentFor(fOwnFont)
+                                                           : sal_Int64(285750));
+                    std::set<const TextParagraph*>& rIndentedByLayout(
+                        const_cast<SmartArtDiagram&>(rDgm).getParagraphsIndentedByLayout());
+                    const bool bOurs(rIndentedByLayout.count(aParagraph.get()));
+                    if (bOurs || !aParagraph->getProperties().getParaLeftMargin().has_value())
                     {
                         sal_Int32 nLeftMargin
-                            = o3tl::convert(285750 * (nLevel - nStartBulletsAtLevel + 1),
+                            = o3tl::convert(nIndent * (nLevel - nStartBulletsAtLevel + 1),
                                             o3tl::Length::emu, o3tl::Length::mm100);
                         aParagraph->getProperties().getParaLeftMargin() = nLeftMargin;
+                        rIndentedByLayout.insert(aParagraph.get());
                     }
 
-                    if (!aParagraph->getProperties().getFirstLineIndentation().has_value())
+                    if (bOurs || !aParagraph->getProperties().getFirstLineIndentation().has_value())
                         aParagraph->getProperties().getFirstLineIndentation()
-                            = o3tl::convert(-285750, o3tl::Length::emu, o3tl::Length::mm100);
+                            = o3tl::convert(-nIndent, o3tl::Length::emu, o3tl::Length::mm100);
 
                     // It is not possible to change the bullet style for text.
                     aParagraph->getProperties().getBulletList().setBulletChar(u"•"_ustr);
