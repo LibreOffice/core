@@ -7185,17 +7185,12 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf173773)
     CPPUNIT_ASSERT_EQUAL(3, nL);
 }
 
-CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf173780)
+/// Counts the text objects in tagged and in artifact marked content of the only page, the
+/// artifacts that have text, and the transparency groups.
+void countMarkedText(vcl::filter::PDFDocument& rDocument, int& rTaggedText, int& rArtifactText,
+                     int& rArtifactsWithText, int& rGroups)
 {
-    // A text box and a decorative text box, and both with transparent text
-    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
-    loadFromFile(u"tdf173780.fodp");
-    save(TestFilter::PDF_WRITER,
-         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
-
-    vcl::filter::PDFDocument aDocument;
-    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
-    std::vector<vcl::filter::PDFObjectElement*> aPages = aDocument.GetPages();
+    std::vector<vcl::filter::PDFObjectElement*> aPages = rDocument.GetPages();
     CPPUNIT_ASSERT_EQUAL(size_t(1), aPages.size());
     vcl::filter::PDFObjectElement* pContents = aPages[0]->LookupObject("Contents"_ostr);
     CPPUNIT_ASSERT(pContents);
@@ -7217,7 +7212,7 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf173780)
         ArtifactWithText
     };
     std::vector<MC> aMarkedContent;
-    int nArtifactText = 0, nTaggedText = 0, nArtifactsWithText = 0, nGroups = 0;
+    rTaggedText = rArtifactText = rArtifactsWithText = rGroups = 0;
     for (auto pLine = std::find(pStart, pEnd, '\n'); pLine != pEnd;
          pStart = pLine + 1, pLine = std::find(pStart, pEnd, '\n'))
     {
@@ -7232,36 +7227,71 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf173780)
         {
             CPPUNIT_ASSERT(!aMarkedContent.empty());
             if (aMarkedContent.back() == MC::ArtifactWithText)
-                ++nArtifactsWithText;
+                ++rArtifactsWithText;
             aMarkedContent.pop_back();
         }
         else if (aLine == "BT")
         {
-            // Without the fix in place, the decorative text was in no marked content
+            // all text is in marked content
             CPPUNIT_ASSERT(!aMarkedContent.empty());
             if (aMarkedContent.back() == MC::Tagged)
-                ++nTaggedText;
+                ++rTaggedText;
             else
             {
-                ++nArtifactText;
+                ++rArtifactText;
                 aMarkedContent.back() = MC::ArtifactWithText;
             }
         }
         else if (o3tl::ends_with(aLine, " Do Q"))
         {
-            // Without the fix in place, the marked content of the transparent text began
-            // inside the transparency group, and ended in the page stream
+            // the marked content of transparent text is around its transparency group
             CPPUNIT_ASSERT(!aMarkedContent.empty());
-            ++nGroups;
+            ++rGroups;
         }
     }
     CPPUNIT_ASSERT(aMarkedContent.empty());
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf173780)
+{
+    // A text box and a decorative text box, and both with transparent text
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
+    loadFromFile(u"tdf173780.fodp");
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+    // Without the fix in place, the decorative text was in no marked content, and the marked
+    // content of the transparent text began inside the transparency group, and ended in the
+    // page stream
+    int nTaggedText, nArtifactText, nArtifactsWithText, nGroups;
+    countMarkedText(aDocument, nTaggedText, nArtifactText, nArtifactsWithText, nGroups);
     // the transparent texts of a decorative and a normal text box
     CPPUNIT_ASSERT_EQUAL(2, nGroups);
     CPPUNIT_ASSERT_GREATER(0, nTaggedText);
     CPPUNIT_ASSERT_EQUAL(2, nArtifactText);
     // both paragraphs of the decorative text box are in one artifact
     CPPUNIT_ASSERT_EQUAL(1, nArtifactsWithText);
+}
+
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testDecorativeGroupMember)
+{
+    // A group with a title of a text box and a decorative text box, and a decorative group
+    // with a decorative text box
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
+    loadFromFile(u"decorative-group-member.fodp");
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+    int nTaggedText, nArtifactText, nArtifactsWithText, nGroups;
+    countMarkedText(aDocument, nTaggedText, nArtifactText, nArtifactsWithText, nGroups);
+    CPPUNIT_ASSERT_GREATER(0, nTaggedText);
+    // Without the fix the decorative member of the group was tagged: 1 and 1
+    CPPUNIT_ASSERT_EQUAL(2, nArtifactText);
+    CPPUNIT_ASSERT_EQUAL(2, nArtifactsWithText);
 }
 
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf168462)

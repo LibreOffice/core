@@ -389,9 +389,11 @@ void ViewObjectContact::createStructureTag(drawinglayer::primitive2d::Primitive2
 
     // Check if we need to embed to a StructureTagPrimitive2D, too. This
     // was done at ImplRenderPaintProc::createRedirectedPrimitive2DSequence before
+    // ISO 14289-1:2014, Clause: 7.3: the members of a group are part of its Figure,
+    // except the ones marked decorative, which are artifacts
+    bool const bGroupMember(pSdrObj && pSdrObj->getParentSdrObjectFromSdrObject() != nullptr);
     if (!rNewPrimitiveSequence.empty() && isExportPDFTags()
-        // ISO 14289-1:2014, Clause: 7.3
-        && (!pSdrObj || pSdrObj->getParentSdrObjectFromSdrObject() == nullptr))
+        && (!bGroupMember || pSdrObj->IsDecorative()))
     {
         if (nullptr != pSdrObj && !pSdrObj->IsDecorative())
         {
