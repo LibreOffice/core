@@ -118,24 +118,6 @@ GtkSalSystem::countScreenMonitors()
 }
 #endif
 
-SalX11Screen
-GtkSalSystem::getXScreenFromDisplayScreen(unsigned int nScreen)
-{
-    if (!DLSYM_GDK_IS_X11_DISPLAY(mpDisplay))
-        return SalX11Screen (0);
-
-#if GTK_CHECK_VERSION(4, 0, 0)
-    GdkX11Screen *pScreen = gdk_x11_display_get_screen(mpDisplay);
-    (void)nScreen;
-#else
-    gint nMonitor;
-    GdkScreen *pScreen = getScreenMonitorFromIdx (nScreen, nMonitor);
-    if (!pScreen)
-        return SalX11Screen (0);
-#endif
-    return SalX11Screen(gdk_x11_screen_get_screen_number(pScreen));
-}
-
 #if !GTK_CHECK_VERSION(4, 0, 0)
 GdkScreen *
 GtkSalSystem::getScreenMonitorFromIdx (int nIdx, gint &nMonitor)

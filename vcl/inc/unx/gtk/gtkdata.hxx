@@ -275,7 +275,6 @@ public:
     GdkCursor *getCursor( PointerStyle ePointerStyle );
     int CaptureMouse(GtkSalFrame* pFrame);
 
-    SalX11Screen GetDefaultXScreen() { return m_pSys->GetDisplayDefaultXScreen(); }
     AbsoluteScreenPixelSize GetScreenSize( int nDisplayScreen );
 
     void startupNotificationCompleted() { m_bStartupCompleted = true; }
