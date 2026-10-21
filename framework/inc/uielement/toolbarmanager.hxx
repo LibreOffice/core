@@ -183,7 +183,7 @@ class ToolBarManager final : public ToolbarManager_Base
         DECL_LINK( MiscOptionsChanged, LinkParamNone*, void );
 
         DECL_LINK( MenuButton, ToolBox *, void );
-        DECL_LINK( MenuPreExecute, ToolBox *, void );
+        DECL_LINK(MenuPreExecute, PopupMenu&, void);
         DECL_LINK( MenuSelect, Menu *, bool );
         DECL_LINK(AsyncUpdateControllersHdl, Timer *, void);
         DECL_LINK( OverflowEventListener, VclWindowEvent&, void );

@@ -132,7 +132,7 @@ struct ImplToolBoxPrivateData
     ToolBoxMenuType maMenuType;
 
     // called when menu button is clicked and before the popup menu is executed
-    Link<ToolBox *, void> maMenuButtonHdl;
+    Link<PopupMenu&, void> maMenuButtonHdl;
 
     // a dummy item representing the custom menu button
     ImplToolItem   maMenubuttonItem;

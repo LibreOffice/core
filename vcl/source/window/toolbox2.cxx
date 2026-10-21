@@ -1492,7 +1492,7 @@ PopupMenu* ToolBox::GetMenu() const
     return mpData ? mpData->mpMenu : nullptr;
 }
 
-void ToolBox::SetMenuExecuteHdl( const Link<ToolBox *, void>& rLink )
+void ToolBox::SetMenuExecuteHdl(const Link<PopupMenu&, void>& rLink)
 {
     mpData->maMenuButtonHdl = rLink;
 }
@@ -1587,7 +1587,7 @@ void ToolBox::ExecuteCustomMenu( const tools::Rectangle& rRect )
 
     if( GetMenuType() & ToolBoxMenuType::Customize )
         // call button handler to allow for menu customization
-        mpData->maMenuButtonHdl.Call( this );
+        mpData->maMenuButtonHdl.Call(*pMenu);
 
     pMenu->AddEventListener( LINK( this, ToolBox, ImplCustomMenuListener ) );
 

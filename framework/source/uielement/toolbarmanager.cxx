@@ -2069,14 +2069,14 @@ IMPL_LINK( ToolBarManager, OverflowEventListener, VclWindowEvent&, rWindowEvent,
     }
 }
 
-IMPL_LINK( ToolBarManager, MenuPreExecute, ToolBox*, pToolBar, void )
+IMPL_LINK(ToolBarManager, MenuPreExecute, PopupMenu&, rMenu, void)
 {
     SolarMutexGuard g;
 
     if ( m_bDisposed )
         return;
 
-    AddCustomizeMenuItems(pToolBar->GetMenu());
+    AddCustomizeMenuItems(&rMenu);
 }
 
 IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu, bool )
