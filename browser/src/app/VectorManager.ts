@@ -161,6 +161,8 @@ class VectorManager extends RenderManagerBase {
 		draws it again, as it does when an update arrives.
 	*/
 	changedHere(): void {
+		// The objects changed in place, so text measured from them is out of date.
+		this._objectText = null;
 		this._fireChanged([]);
 	}
 
@@ -856,7 +858,8 @@ class VectorManager extends RenderManagerBase {
 		return new cool.PredictionTree(data, this._measurer());
 	}
 
-	// The measured text of the last entry pointed at, reused while the tree still holds it.
+	// The measured text of the last entry pointed at, reused while the tree still holds it and
+	// nothing changed it here.
 	private _objectText: { entryId: number; text: cool.ObjectText } | null = null;
 
 	private _textOf(

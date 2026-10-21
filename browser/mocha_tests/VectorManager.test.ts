@@ -2402,6 +2402,19 @@ describe('VectorManager', function () {
 				nodeassert.deepStrictEqual(sent, []);
 			});
 
+			it('puts the caret where a click lands in text typed after an earlier click', function () {
+				const manager = managerWith('Hi');
+				nodeassert.ok(manager.placeCaretAt(1120, 1950, 5));
+				nodeassert.ok(manager.predictTextInsert('a'));
+				// "Hai" now spans 1000..1300, so the click lands after the "i".
+				nodeassert.ok(manager.placeCaretAt(1280, 1950, 5));
+				nodeassert.deepStrictEqual(app.file.textCursor.logical, {
+					paragraph: 0,
+					index: 3,
+				});
+				nodeassert.strictEqual(app.file.textCursor.rectangle.x1, 1300);
+			});
+
 			it('selects the word under a double click without telling the server', function () {
 				const manager = managerWith('Hi');
 				nodeassert.ok(manager.selectWordAt(1120, 1950, 5));
