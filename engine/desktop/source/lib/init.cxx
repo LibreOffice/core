@@ -5741,6 +5741,8 @@ static void updateConfig(const OUString& rConfigPath)
 
 void COKitImpl::setOption(const char *pOption, const char* pValue)
 {
+    // Called on the main thread, as every option touches what it owns.
+    SolarMutexGuard aGuard;
     static char* pCurrentSalLogOverride = nullptr;
 
     if (strcmp(pOption, "traceeventrecording") == 0)
@@ -5771,7 +5773,6 @@ void COKitImpl::setOption(const char *pOption, const char* pValue)
     }
     else if (strcmp(pOption, "allowlinkupdate") == 0)
     {
-        SolarMutexGuard aGuard;
         if (SfxObjectShell* pDocSh = SfxObjectShell::Current())
             getTopDocumentShell(*pDocSh).AllowLinkUpdate();
     }
@@ -5793,7 +5794,6 @@ void COKitImpl::setOption(const char *pOption, const char* pValue)
         // A translation provider may have been set up or taken away: every
         // view is told anew whether there is one to translate with, as the
         // client shows the command only while there is.
-        SolarMutexGuard aGuard;
         for (SfxViewShell* pShell = SfxViewShell::GetFirst(false); pShell;
              pShell = SfxViewShell::GetNext(*pShell, false))
             pShell->GetViewFrame().GetBindings().Invalidate(SID_FM_TRANSLATE);
@@ -5826,7 +5826,6 @@ void COKitImpl::setOption(const char *pOption, const char* pValue)
 
         OUString sMagicFileName = "file:///:FD:/" + OUString::number(fd);
 
-        SolarMutexGuard aGuard;
         OutputDevice *pDevice = Application::GetDefaultDevice();
         OutputDevice::ImplClearAllFontData(true);
         const bool bAdded = pDevice->AddTempDevFont(sMagicFileName, u""_ustr);
