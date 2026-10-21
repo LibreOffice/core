@@ -318,33 +318,29 @@ class ChangeOutbox {
 		if (message === 'uno .uno:Undo') return { kind: 'undo', count: 1 };
 		if (message === 'uno .uno:Redo') return { kind: 'redo', count: 1 };
 
-		// Text typed into the document itself. A dialog answers with no delta.
-		const text = /^textinput id=0 text=(\S*) sequence=(\d+)$/.exec(message);
-		if (text) return { kind: 'text', text: text[1], sequence: Number(text[2]) };
-		const remove =
-			/^removetextcontext id=0 before=(\d+) after=(\d+) sequence=(\d+)$/.exec(
-				message,
-			);
-		if (remove)
-			return {
-				kind: 'remove',
-				before: Number(remove[1]),
-				after: Number(remove[2]),
-				sequence: Number(remove[3]),
-			};
+		const parser = new MessageParser(message);
+		const typed = ChangeOutbox.typedEntryOf(parser);
+		if (typed) return typed;
 
-		const transform = /^setobjecttransform to=(\S*) as=(\S+)$/.exec(message);
-		if (transform) {
+		// The outbox writes the message again from its parameters, so one with a parameter
+		// more is left alone.
+		const to = parser.value('to');
+		const what = parser.value('as');
+		if (
+			parser.command === 'setobjecttransform' &&
+			parser.length === 3 &&
+			to !== undefined &&
+			what
+		) {
 			const mappings = new Map<string, string>();
-			for (const one of transform[1].split(';')) {
+			for (const one of to.split(';')) {
 				if (!one) continue;
 				mappings.set(one.split(',')[0], one);
 			}
-			return { kind: 'transform', what: transform[2], mappings };
+			return { kind: 'transform', what, mappings };
 		}
 
-		const command = message.split(' ')[0];
-		const stateBegins = ChangeOutbox.namedStates[command];
+		const stateBegins = ChangeOutbox.namedStates[parser.command];
 		if (stateBegins === undefined) return null;
 
 		const at = message.indexOf(stateBegins);
@@ -353,6 +349,36 @@ class ChangeOutbox {
 			channel: at < 0 ? message : message.substring(0, at),
 			message,
 		};
+	}
+
+	/*
+		The entry of a message with text typed into the document itself, or null for any other
+		message. Text typed into a dialog gets no delta as an answer. The outbox writes these
+		messages again from their parameters, so a message with a parameter more is left alone.
+	*/
+	private static typedEntryOf(parser: MessageParser): OutboxEntry | null {
+		if (parser.value('id') !== '0') return null;
+		const sequence = parser.sequence;
+		if (sequence === undefined) return null;
+
+		const text = parser.value('text');
+		if (
+			parser.command === 'textinput' &&
+			parser.length === 4 &&
+			text !== undefined
+		)
+			return { kind: 'text', text, sequence };
+
+		const before = parser.count('before');
+		const after = parser.count('after');
+		if (
+			parser.command === 'removetextcontext' &&
+			parser.length === 5 &&
+			before !== undefined &&
+			after !== undefined
+		)
+			return { kind: 'remove', before, after, sequence };
+		return null;
 	}
 
 	/// Keeps the entry until the keys are let go, in place of what was held for the same thing:

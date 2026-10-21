@@ -75,19 +75,6 @@ class ServerCommand {
 		return s.substring(i + 1);
 	}
 
-	/// The sequence number of a message, the non-negative integer of its sequence parameter,
-	/// or undefined where the message has none that reads as one.
-	public static sequenceOf(message: string): number | undefined {
-		const token = message
-			.trimEnd()
-			.split(' ')
-			.find((one) => one.startsWith('sequence='));
-		if (token === undefined) return undefined;
-		const text = ServerCommand.getParameterValue(token);
-		const number = Number(text);
-		return text && Number.isInteger(number) && number >= 0 ? number : undefined;
-	}
-
 	private parse(msg: string, map: MapZoomInterface): void {
 		const tokens = msg.split(/[ \n]+/);
 		for (let i = 0; i < tokens.length; i++) {

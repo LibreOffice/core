@@ -42,9 +42,6 @@ class LocalCaret {
 		'userinactive',
 	];
 
-	/// A mouse move with no button down, which neither reads nor moves the caret.
-	private static readonly hover: RegExp = /^mouse type=move .* buttons=0 /;
-
 	/// The newest caret moved here, while the engine has not answered for it, or null.
 	private static caret: MovedCaret | null = null;
 
@@ -127,25 +124,32 @@ class LocalCaret {
 		if (ChangeOutbox.sending || LocalCaret.isUnrelated(message)) return message;
 		// A message numbered just now gives its number to the caret, which goes out
 		// first, and takes the next one, so the numbers rise in the order the messages
-		// go out. A key message ends with a line break after its number.
-		const sequence = ServerCommand.sequenceOf(message);
+		// go out.
+		const parser = new MessageParser(message);
+		const sequence = parser.sequence;
 		if (sequence !== app.file.inputSequence) {
 			LocalCaret.tell();
 			return message;
 		}
 		LocalCaret.tell(sequence);
-		const body = message.trimEnd();
-		const tokens = body.split(' ');
-		const at = tokens.findIndex((one) => one.startsWith('sequence='));
-		tokens[at] = 'sequence=' + app.nextInputSequence();
-		return tokens.join(' ') + message.substring(body.length);
+		return parser.with('sequence', app.nextInputSequence());
 	}
 
 	/// True for a message that neither reads nor moves the caret.
 	public static isUnrelated(message: string): boolean {
 		return (
 			LocalCaret.unrelated.some((prefix) => message.startsWith(prefix)) ||
-			LocalCaret.hover.test(message)
+			LocalCaret.isHover(message)
+		);
+	}
+
+	// True for a mouse move with no button down, which neither reads nor moves the caret.
+	private static isHover(message: string): boolean {
+		const parser = new MessageParser(message);
+		return (
+			parser.command === 'mouse' &&
+			parser.value('type') === 'move' &&
+			parser.value('buttons') === '0'
 		);
 	}
 

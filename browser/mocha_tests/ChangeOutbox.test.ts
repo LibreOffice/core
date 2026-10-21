@@ -368,6 +368,17 @@ describe('ChangeOutbox typed text', function () {
 		});
 	});
 
+	it('leaves a text message alone when it cannot read every parameter', function () {
+		for (const message of [
+			'removetextcontext id=0 before=x after=0 sequence=11',
+			'removetextcontext id=0 before=1 after=0',
+			'textinput id=0 text=a sequence=11 more=1',
+			'textinput id=0 sequence=11',
+		])
+			nodeassert.strictEqual(ChangeOutbox.take(message), false, message);
+		nodeassert.deepStrictEqual(sent, []);
+	});
+
 	it('leaves text typed into a dialog alone', function () {
 		nodeassert.strictEqual(
 			ChangeOutbox.take('textinput id=7 text=a sequence=11'),

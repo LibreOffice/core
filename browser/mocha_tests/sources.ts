@@ -52,6 +52,7 @@
 /// <reference path="../src/app/ViewLayoutWriter.ts" />
 /// <reference path="../src/app/ViewLayoutImpress.ts" />
 /// <reference path="../src/app/ViewLayoutVector.ts" />
+/// <reference path="../src/app/MessageParser.ts" />
 /// <reference path="../src/app/ChangeOutbox.ts" />
 /// <reference path="../src/app/LocalCaret.ts" />
 /// <reference path="../src/app/ViewLayoutCalc.ts" />
