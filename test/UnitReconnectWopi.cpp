@@ -157,8 +157,10 @@ class UnitReconnectWopi : public WopiTestServer
         _pollers.clear();
     }
 
+#if ENABLE_DEBUG
     TestResult testChangedPermissionIsNotReattached();
     TestResult testReconnectRenewsAccessToken();
+#endif
 
 public:
     UnitReconnectWopi()
@@ -170,6 +172,7 @@ public:
     /// Every case runs, so one failure does not hide another. The suite fails if any did.
     void invokeWSDTest() override
     {
+#if ENABLE_DEBUG
         std::vector<std::string> failed;
         for (TestResult (UnitReconnectWopi::*test)() :
              { &UnitReconnectWopi::testChangedPermissionIsNotReattached,
@@ -185,10 +188,12 @@ public:
                 TST_LOG("Failed case: " << name);
             exitTest(TestResult::Failed);
         }
+#endif
         exitTest(TestResult::Ok);
     }
 };
 
+#if ENABLE_DEBUG
 // (g) The same user comes back with permission=readonly. The editable session is not the view the
 // browser asked for, so it gets a new one.
 UnitBase::TestResult UnitReconnectWopi::testChangedPermissionIsNotReattached()
@@ -255,6 +260,7 @@ UnitBase::TestResult UnitReconnectWopi::testReconnectRenewsAccessToken()
     joinPollers();
     return TestResult::Ok;
 }
+#endif
 
 UnitBase* unit_create_wsd(void) { return new UnitReconnectWopi(); }
 

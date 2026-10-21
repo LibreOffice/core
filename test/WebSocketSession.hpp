@@ -324,6 +324,7 @@ public:
         }
     }
 
+#if ENABLE_DEBUG
     /// Closes the connection without a close frame. The peer sees the connection end the way a
     /// broken network ends it.
     void dropWS()
@@ -336,14 +337,15 @@ public:
             poller->addCallback([weakSession=std::move(weakSession)]() {
                 auto session = weakSession.lock();
                 if (session)
-                    session->dropConnection();
+                    session->debugDropConnection();
             });
         }
         else
         {
-            dropConnection();
+            debugDropConnection();
         }
     }
+#endif
 
     /// Closes the connection with status USER_EXIT, as a browser does when the user closes the
     /// document: it sends the Close frame, and goes on reading until the server answers with its

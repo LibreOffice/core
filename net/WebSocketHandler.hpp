@@ -277,15 +277,6 @@ protected:
         }
     }
 
-    /// Closes the connection without a Close frame, as a broken network would. The peer sees an
-    /// abnormal close and nothing is recorded as closing on purpose.
-    void dropConnection()
-    {
-        ASSERT_CORRECT_THREAD();
-        shutdownImpl(_socket.lock(), WebSocketHandler::StatusCodes::POLICY_VIOLATION /* ignored */,
-                     std::string_view(), true /* hard async shutdown and close */, true);
-    }
-
 public:
     void shutdown(const StatusCodes statusCode = StatusCodes::NORMAL_CLOSE,
                   const std::string_view statusMessage = std::string_view(),
@@ -303,8 +294,14 @@ public:
     }
 
 #if ENABLE_DEBUG
-    /// Closes the connection the way dropConnection does.
-    void debugDropConnection() { dropConnection(); }
+    /// Closes the connection without a Close frame, as a broken network would. The peer sees an
+    /// abnormal close and nothing is recorded as closing on purpose.
+    void debugDropConnection()
+    {
+        ASSERT_CORRECT_THREAD();
+        shutdownImpl(_socket.lock(), WebSocketHandler::StatusCodes::POLICY_VIOLATION /* ignored */,
+                     std::string_view(), true /* hard async shutdown and close */, true);
+    }
 #endif
 
     /// Closes the connection once net::Defaults.pongTimeout passes without a pong. Servers only. A

@@ -212,13 +212,17 @@ class UnitReconnect : public UnitWSD
     }
 
     TestResult testReconnectWithToken();
+#if ENABLE_DEBUG
     TestResult testTokenRotatesOnReattach();
+#endif
     TestResult testParkExpires();
     TestResult testWrongToken();
     TestResult testUserExitIsNotParked();
     TestResult testOtherCloseIsParked();
     TestResult testTakeoverOfLiveSession();
+#if ENABLE_DEBUG
     TestResult testLastEditorParkExpires();
+#endif
 
 public:
     UnitReconnect()
@@ -236,10 +240,15 @@ public:
                &UnitReconnect::testOtherCloseIsParked,
                &UnitReconnect::testTakeoverOfLiveSession,
                &UnitReconnect::testReconnectWithToken,
+#if ENABLE_DEBUG
                &UnitReconnect::testTokenRotatesOnReattach,
+#endif
                &UnitReconnect::testWrongToken,
                &UnitReconnect::testParkExpires,
-               &UnitReconnect::testLastEditorParkExpires })
+#if ENABLE_DEBUG
+               &UnitReconnect::testLastEditorParkExpires,
+#endif
+             })
         {
             if ((this->*test)() != TestResult::Ok)
                 failed.push_back(testname);
@@ -412,6 +421,7 @@ UnitBase::TestResult UnitReconnect::testReconnectWithToken()
     return TestResult::Ok;
 }
 
+#if ENABLE_DEBUG
 // (i) Each reattach gives the browser a new token. The token from just before it still works once,
 // as the previous token, and a token two rotations old makes a new view.
 UnitBase::TestResult UnitReconnect::testTokenRotatesOnReattach()
@@ -457,6 +467,7 @@ UnitBase::TestResult UnitReconnect::testTokenRotatesOnReattach()
     joinPollers();
     return TestResult::Ok;
 }
+#endif
 
 // (c) A token the server never gave is a new user: a third view, until A's park expires.
 UnitBase::TestResult UnitReconnect::testWrongToken()
@@ -511,6 +522,7 @@ UnitBase::TestResult UnitReconnect::testParkExpires()
     return TestResult::Ok;
 }
 
+#if ENABLE_DEBUG
 // (f) The parked session was the only editor and the document has unsaved changes. Its expiry saves
 // the document once, then the document unloads. The session is removed once.
 UnitBase::TestResult UnitReconnect::testLastEditorParkExpires()
@@ -553,6 +565,7 @@ UnitBase::TestResult UnitReconnect::testLastEditorParkExpires()
     joinPollers();
     return TestResult::Ok;
 }
+#endif
 
 UnitBase* unit_create_wsd(void) { return new UnitReconnect(); }
 
