@@ -795,6 +795,8 @@ bool ScPivotLayoutDialog::IsDataElement(SCCOL nColumn)
 
 bool ScPivotLayoutDialog::IsCalculatedElement(SCCOL nColumn)
 {
+    if (IsDataElement(nColumn))
+        return false;
     return maPivotParameters.maLabelArray[nColumn]->mbCalculatedField;
 }
 
