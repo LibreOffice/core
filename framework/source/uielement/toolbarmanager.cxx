@@ -1816,7 +1816,7 @@ bool ToolBarManager::IsPluginMode() const
     return bPluginMode;
 }
 
-void ToolBarManager::AddCustomizeMenuItems(ToolBox const * pToolBar)
+void ToolBarManager::AddCustomizeMenuItems(PopupMenu* pMenu)
 {
     if (!m_pToolBar)
         return;
@@ -1838,8 +1838,6 @@ void ToolBarManager::AddCustomizeMenuItems(ToolBox const * pToolBar)
 
     // popup menu for quick customization
     bool bHideDisabledEntries = !officecfg::Office::Common::View::Menu::DontHideDisabledEntry::get();
-
-    ::PopupMenu *pMenu = pToolBar->GetMenu();
 
     // copy all menu items 'Visible buttons, Customize toolbar, Dock toolbar,
     // Dock all Toolbars) from the loaded resource into the toolbar menu
@@ -1863,7 +1861,7 @@ void ToolBarManager::AddCustomizeMenuItems(ToolBox const * pToolBar)
         pMenu->InsertSeparator();
     }
 
-    if (pToolBar->IsFloatingMode())
+    if (m_pToolBar->IsFloatingMode())
     {
         pMenu->InsertItem(MENUITEM_TOOLBAR_DOCKTOOLBAR, FwkResId(STR_TOOLBAR_DOCK_TOOLBAR));
         pMenu->SetAccelKey(MENUITEM_TOOLBAR_DOCKTOOLBAR, vcl::KeyCode(KEY_F10, true, true, false, false));
@@ -1908,7 +1906,7 @@ void ToolBarManager::AddCustomizeMenuItems(ToolBox const * pToolBar)
         }
 
         // Disable menu item CLOSE if the toolbar has no closer
-        if( !(pToolBar->GetFloatStyle() & WB_CLOSEABLE) )
+        if (!(m_pToolBar->GetFloatStyle() & WB_CLOSEABLE))
             pMenu->EnableItem(MENUITEM_TOOLBAR_CLOSE, false);
 
         // Temporary stores a Command --> Url map to update contextual menu with the
@@ -1959,7 +1957,7 @@ void ToolBarManager::AddCustomizeMenuItems(ToolBox const * pToolBar)
     }
 
     // Set the title of the menu
-    pMenu->SetText( pToolBar->GetText() );
+    pMenu->SetText(m_pToolBar->GetText());
 
     if ( bHideDisabledEntries )
         pMenu->RemoveDisabledEntries();
@@ -2078,7 +2076,7 @@ IMPL_LINK( ToolBarManager, MenuPreExecute, ToolBox*, pToolBar, void )
     if ( m_bDisposed )
         return;
 
-    AddCustomizeMenuItems( pToolBar );
+    AddCustomizeMenuItems(pToolBar->GetMenu());
 }
 
 IMPL_LINK( ToolBarManager, MenuSelect, Menu*, pMenu, bool )
