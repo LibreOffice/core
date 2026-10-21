@@ -2963,7 +2963,7 @@ void SAL_CALL ScModelObj::render( sal_Int32 nSelRenderer, const uno::Any& aSelec
     // job. A last count after the final page puts back the page size and the page breaks that
     // the page style describes.
     if (pPrinter && pPrinter->IsUsePrintDialogSetting() && bIsLastPage)
-        pPrintFuncCache.reset(new ScPrintFuncCache(*pDocShell, aMark, aStatus));
+        pPrintFuncCache.reset(new ScPrintFuncCache(*pDocShell, aMark, std::move(aStatus)));
 }
 
 // XLinkTargetSupplier
