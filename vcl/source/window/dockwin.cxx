@@ -829,17 +829,9 @@ void DockingWindow::setPosSizePixel( tools::Long nX, tools::Long nY,
         if (!pWrapper->mpFloatWin)
             Window::setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
     }
-    else
+    else if (!mpFloatWin)
     {
-        if (!mpFloatWin)
-            Window::setPosSizePixel( nX, nY, nWidth, nHeight, nFlags );
-        else if (comphelper::LibreOfficeKit::isActive())
-        {
-            if ((nFlags & PosSizeFlags::Size) == PosSizeFlags::Size)
-                mpFloatWin->SetOutputSizePixel({ nWidth, nHeight });
-            if ((nFlags & PosSizeFlags::Pos) == PosSizeFlags::Pos)
-                mpFloatWin->SetPosPixel({ nX, nY });
-        }
+        Window::setPosSizePixel(nX, nY, nWidth, nHeight, nFlags);
     }
 
     if (::isLayoutEnabled(this))
