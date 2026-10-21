@@ -20,19 +20,14 @@
 #include <iostream>
 #include "mediawindow_impl.hxx"
 #include "mediaevent_impl.hxx"
-#include <mediamisc.hxx>
 #include <bitmaps.hlst>
 #include <helpids.h>
 
 #include <algorithm>
 
-#include <sal/log.hxx>
-#include <comphelper/processfactory.hxx>
-#include <comphelper/diagnose_ex.hxx>
 #include <comphelper/DirectoryHelper.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <tools/urlobj.hxx>
-#include <unotools/securityoptions.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/commandevent.hxx>
@@ -42,8 +37,8 @@
 
 #include <com/sun/star/awt/SystemPointer.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/media/XManager.hpp>
-#include <cpo/uno/XComponentContext.hpp>
+#include <com/sun/star/media/XPlayer.hpp>
+#include <com/sun/star/media/XPlayerWindow.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::cpo;
@@ -170,51 +165,10 @@ void MediaWindowImpl::dispose()
     Control::dispose();
 }
 
-uno::Reference<media::XPlayer> MediaWindowImpl::createPlayer(const OUString& rURL, const OUString& rReferer, const OUString*)
+uno::Reference<media::XPlayer> MediaWindowImpl::createPlayer(std::u16string_view, std::u16string_view, const OUString*)
 {
-    if( rURL.isEmpty() )
-        return nullptr;
-
-    if (SvtSecurityOptions::isUntrustedReferer(rReferer))
-        return nullptr;
-
-    if (INetURLObject(rURL).IsExoticProtocol())
-        return nullptr;
-
-    uno::Reference<media::XPlayer> xPlayer;
-
-    // currently there isn't anything else, throw any mime type to the media players
-    //if (!pMimeType || *pMimeType == AVMEDIA_MIMETYPE_COMMON)
-    {
-        const OUString sToolkitName = Application::GetToolkitName();
-        if (sToolkitName.startsWith(u"kf6") || sToolkitName.startsWith(u"qt6"))
-            xPlayer = createPlayer(rURL, u"com.sun.star.comp.avmedia.Manager_Qt"_ustr);
-        else
-            xPlayer = createPlayer(rURL, AVMEDIA_MANAGER_SERVICE_NAME);
-    }
-
-    return xPlayer;
-}
-
-uno::Reference< media::XPlayer > MediaWindowImpl::createPlayer(
-    const OUString& rURL, const OUString& rManagerServName)
-{
-    uno::Reference< media::XPlayer > xPlayer;
-    const uno::Reference<cpo::uno::XComponentContext>& xContext = ::comphelper::getProcessComponentContext();
-    try
-    {
-        uno::Reference< media::XManager > xManager (
-            xContext->getServiceManager()->createInstanceWithContext(rManagerServName, xContext),
-            uno::UNO_QUERY );
-        if( xManager.is() )
-            xPlayer = xManager->createPlayer( rURL );
-        else
-            SAL_INFO( "avmedia", "failed to create media player service " << rManagerServName );
-    } catch ( const cpo::uno::Exception & )
-    {
-        TOOLS_WARN_EXCEPTION( "avmedia", "couldn't create media player " << rManagerServName);
-    }
-    return xPlayer;
+    // Nothing implements com.sun.star.media.Manager: media is played by the client.
+    return nullptr;
 }
 
 void MediaWindowImpl::setURL( const OUString& rURL,

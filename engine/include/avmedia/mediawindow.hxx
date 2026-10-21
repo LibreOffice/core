@@ -129,16 +129,16 @@ namespace avmedia
         ///                 checkbox and store its state in *o_pbLink
         static bool         executeMediaURLDialog(weld::Window* pParent, OUString& rURL, bool *const o_pbLink);
         static void         executeFormatErrorBox(weld::Window* pParent);
-        static bool         isMediaURL(std::u16string_view rURL, const OUString& rReferer, bool bDeep = false,
+        static bool         isMediaURL(std::u16string_view rURL, std::u16string_view rReferer, bool bDeep = false,
                                        const rtl::Reference<PlayerListener>& xPreferredPixelSizeListener = nullptr);
 
-        static cpo::uno::Reference< css::media::XPlayer > createPlayer( const OUString& rURL, const OUString& rReferer, const OUString* pMimeType = nullptr );
+        static cpo::uno::Reference< css::media::XPlayer > createPlayer( std::u16string_view rURL, std::u16string_view rReferer, const OUString* pMimeType = nullptr );
 
         static cpo::uno::Reference<css::graphic::XGraphic>
         grabFrame(const cpo::uno::Reference<css::media::XPlayer>& rPlayer,
                   const cpo::uno::Reference<css::graphic::XGraphic>& rGraphic = nullptr);
 
-        static cpo::uno::Reference< css::graphic::XGraphic > grabFrame(const OUString& rURL, const OUString& rReferer,
+        static cpo::uno::Reference< css::graphic::XGraphic > grabFrame(std::u16string_view rURL, std::u16string_view rReferer,
             const OUString& sMimeType, const rtl::Reference<PlayerListener>& xPreferredPixelSizeListener);
 
         /** The display size in pixels of the first video track of a local MP4, QuickTime,

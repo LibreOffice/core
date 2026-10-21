@@ -333,7 +333,7 @@ void MediaWindow::executeFormatErrorBox(weld::Window* pParent)
     xBox->run();
 }
 
-bool MediaWindow::isMediaURL(std::u16string_view rURL, const OUString& rReferer, bool bDeep, const rtl::Reference<PlayerListener>& xPreferredPixelSizeListener)
+bool MediaWindow::isMediaURL(std::u16string_view rURL, std::u16string_view rReferer, bool bDeep, const rtl::Reference<PlayerListener>& xPreferredPixelSizeListener)
 {
     const INetURLObject aURL( rURL );
 
@@ -389,7 +389,7 @@ bool MediaWindow::isMediaURL(std::u16string_view rURL, const OUString& rReferer,
     return false;
 }
 
-uno::Reference< media::XPlayer > MediaWindow::createPlayer( const OUString& rURL, const OUString& rReferer, const OUString* pMimeType )
+uno::Reference< media::XPlayer > MediaWindow::createPlayer( std::u16string_view rURL, std::u16string_view rReferer, const OUString* pMimeType )
 {
     return priv::MediaWindowImpl::createPlayer( rURL, rReferer, pMimeType );
 }
@@ -443,8 +443,8 @@ MediaWindow::grabFrame(const uno::Reference<media::XPlayer>& xPlayer,
     return xRet;
 }
 
-uno::Reference< graphic::XGraphic > MediaWindow::grabFrame(const OUString& rURL,
-                                                           const OUString& rReferer,
+uno::Reference< graphic::XGraphic > MediaWindow::grabFrame(std::u16string_view rURL,
+                                                           std::u16string_view rReferer,
                                                            const OUString& sMimeType,
                                                            const rtl::Reference<PlayerListener>& xPreferredPixelSizeListener)
 {

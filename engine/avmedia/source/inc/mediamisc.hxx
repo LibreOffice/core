@@ -21,17 +21,6 @@
 
 #include <unotools/resmgr.hxx>
 
-#ifdef _WIN32
-constexpr OUString AVMEDIA_MANAGER_SERVICE_NAME = u"com.sun.star.comp.avmedia.Manager_DirectX"_ustr;
-#else
-#ifdef MACOSX
-constexpr OUString AVMEDIA_MANAGER_SERVICE_NAME = u"com.sun.star.comp.avmedia.Manager_MacAVF"_ustr;
-#else
-constexpr OUString AVMEDIA_MANAGER_SERVICE_NAME
-    = u"com.sun.star.comp.avmedia.Manager_GStreamer"_ustr;
-#endif
-#endif
-
 inline OUString AvmResId(TranslateId aId)
 {
     return Translate::get(aId, Translate::Create("avmedia"));

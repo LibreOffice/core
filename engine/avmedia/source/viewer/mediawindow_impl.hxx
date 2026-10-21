@@ -19,6 +19,8 @@
 
 #pragma once
 
+#include <string_view>
+
 #include <vcl/transfer.hxx>
 #include <vcl/syschild.hxx>
 #include <vcl/bitmap.hxx>
@@ -78,7 +80,7 @@ public:
 
     virtual void dispose() override;
 
-    static cpo::uno::Reference<css::media::XPlayer> createPlayer(const OUString& rURL, const OUString& rReferer, const OUString* pMimeType);
+    static cpo::uno::Reference<css::media::XPlayer> createPlayer(std::u16string_view rURL, std::u16string_view rReferer, const OUString* pMimeType);
 
     void setURL(const OUString& rURL, OUString const& rTempURL, OUString const& rReferer);
 
@@ -133,8 +135,6 @@ private:
     void stopPlayingInternal( bool );
 
     void onURLChanged();
-
-    static cpo::uno::Reference<css::media::XPlayer> createPlayer(const OUString& rURL, const OUString& rManagerServName);
 
     OUString maFileURL;
     OUString mTempFileURL;
