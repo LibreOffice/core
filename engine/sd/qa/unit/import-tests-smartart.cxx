@@ -1574,9 +1574,9 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testLinearRuleVert)
     // - Expected: 2020
     // - Actual  : 10308
     // i.e. the first item on the vertical linear layout used ~all space, the other items were not
-    // visible. The parent text is stated as 0.82 of the font high, as many millimetres at the
-    // font of 35 points the texts fit at.
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(2869), xShape->getSize().Height);
+    // visible. The parent text is 0.82 of the font high, as millimetres; the child texts are
+    // empty and 0.7 of the font high.
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(3033), xShape->getSize().Height);
 }
 
 CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testHierarchyConnectorsStartAtTheMiddleOfTheTurnedRoot)

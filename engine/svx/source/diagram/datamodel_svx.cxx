@@ -2025,6 +2025,9 @@ uno::Reference<drawing::XShape> DiagramData_svx::getMasterXShapeForPoint(
         // A shape can represent several Points, one paragraph of it each, and maShows of the
         // presentation Point holds them all. A shape that represents a single Point represents all
         // its paragraphs, so -1 asks for the whole text.
+        // A Point of a shared shape is the one paragraph its destOrd names, right as long as every
+        // Point there has a single paragraph. More needs the paragraph counts kept in the model,
+        // which the text editing does not do yet for shared shapes.
         const bool bSharedShape(nullptr != pCandidate->mpDestinationPoint
                                 && pCandidate->mpDestinationPoint->maShows.size() > 1);
         const sal_Int32 nParagraph(bSharedShape ? pCandidate->getParagraphIndex() : -1);

@@ -191,6 +191,10 @@ public:
     /// the size the layout states down to the rule's least until the texts stand in the row.
     std::map<OUString, double>& getFittedFontSizes() { return maFittedFontSizes; }
 
+    /// Latin minor font of the theme, the font a Diagram's text is drawn in; empty without theme
+    const OUString& getTextFont() const { return msTextFont; }
+    void setTextFont(const OUString& rFont) { msTextFont = rFont; }
+
     /// The font size, in points, each group of text nodes is laid out with on this pass, by
     /// the name of the node that states the group's size, "primFontSz for des forName parTx
     /// val 65"; the nodes that take their size from that one, "refType primFontSz refForName
@@ -246,6 +250,12 @@ public:
     /// roots, branches and the shapes in them. Each holds its final place and size already.
     std::set<const Shape*>& getLaidOutSideways() { return maLaidOutSideways; }
 
+    /// width (EMU) the "for des" sizes of a column across a row refer to: that row's width
+    std::map<const Shape*, sal_Int32>& getWidthOfDescendantSizes()
+    {
+        return maWidthOfDescendantSizes;
+    }
+
     /// A spacer in a row whose extent along the row is a part of a shape that a hierarchy
     /// beside it lays out, and so is not known while the row is placed: the row, the spacer
     /// and its place among the row's children when the row was read, the name of that shape
@@ -285,6 +295,7 @@ private:
     oox::core::NamedShapePairs maDiagramFontHeights;
     std::map<sal_Int32, sal_Int32> maUserVariables;
     std::map<OUString, double> maFittedFontSizes;
+    OUString msTextFont;
     std::map<OUString, double> maFontCandidates;
     std::set<OUString> maGroupsThatDidNotFit;
     std::map<OUString, sal_Int64> maContentHeights;
@@ -297,6 +308,7 @@ private:
     std::map<OUString, double> maColumnFitsOfThisPass;
     double mfLeastFont = 5.0;
     std::set<const Shape*> maLaidOutSideways;
+    std::map<const Shape*, sal_Int32> maWidthOfDescendantSizes;
     std::map<sal_Int32, DeferredUserVariable> maDeferredUserVariables;
     std::vector<DeferredSpacer> maDeferredSpacers;
 

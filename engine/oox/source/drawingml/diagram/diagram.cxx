@@ -145,6 +145,22 @@ static void unturnRotatedShapes(const ShapePtr& pShape)
             fWidth = (aBox.Width * fCos - aBox.Height * fSin) / fApart;
             fHeight = (aBox.Height * fCos - aBox.Width * fSin) / fApart;
         }
+        // turned by less than 45 degrees a very flat box would tilt its diagonal against the
+        // turn, so the shape stops where its diagonal lies flat (w sin = h cos) and is as high
+        // as the box; a very high box does the same the other way round
+        if (std::abs(fApart) >= 0.05 && fSin > 0.0 && fSin < fCos)
+        {
+            if (fHeight * fCos < fWidth * fSin)
+            {
+                fWidth = aBox.Height / 2.0 / fSin;
+                fHeight = aBox.Height / 2.0 / fCos;
+            }
+            else if (fWidth * fCos < fHeight * fSin)
+            {
+                fWidth = aBox.Width / 2.0 / fCos;
+                fHeight = aBox.Width / 2.0 / fSin;
+            }
+        }
         if (fWidth <= 1.0 || fHeight <= 1.0)
             continue;
 
@@ -195,6 +211,7 @@ void SmartArtDiagram::createShapeHierarchyFromModel( const ShapePtr & pParentSha
     maParagraphsIndentedByLayout.clear();
     maDeferredUserVariables.clear();
     maLaidOutSideways.clear();
+    maWidthOfDescendantSizes.clear();
     maDeferredSpacers.clear();
 
     const rtl::Reference<svx::diagram::Point> xRootPoint(mpData->getRootPoint());
@@ -222,6 +239,7 @@ void SmartArtDiagram::createShapeHierarchyFromModel( const ShapePtr & pParentSha
             maFittedFontSizes.clear();
             maDeferredUserVariables.clear();
             maLaidOutSideways.clear();
+            maWidthOfDescendantSizes.clear();
             maDeferredSpacers.clear();
             mpLayout->getPresPointShapeMap().clear();
             pParentShape->getChildren().clear();
@@ -337,6 +355,7 @@ SmartArtDiagram::SmartArtDiagram()
 
 SmartArtDiagram::SmartArtDiagram(SmartArtDiagram const& rSource)
 : maDiagramFontHeights()
+, msTextFont(rSource.msTextFont)
 , mpData(rSource.mpData ? new DiagramData_oox(*rSource.mpData) : nullptr)
 , mpLayout(rSource.mpLayout)
 , maStyles(rSource.maStyles)
@@ -841,6 +860,10 @@ void loadDiagram( ShapePtr const & pShape,
         // up
         static bool bIgnoreExtDrawings(nullptr != std::getenv("DIAGRAM_IGNORE_EXTDRAWINGS"));
         const bool bCreate(bIgnoreExtDrawings || pShape->getExtDrawings().empty());
+        // the text font of the theme, the layout measures the text with it
+        if (const std::shared_ptr<::oox::drawingml::Theme> pTheme = rFilter.getCurrentThemePtr();
+            pTheme && pTheme->getTheme())
+            pDiagram->setTextFont(pTheme->getTheme()->getFontScheme().getMinorLatin().maTypeface);
         pDiagram->createShapeHierarchyFromModel(pShape, bCreate);
 
         // Get the oox::Theme definition and - if available - move/secure the

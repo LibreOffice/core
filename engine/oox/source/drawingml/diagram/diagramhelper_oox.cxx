@@ -335,6 +335,11 @@ void DiagramHelper_oox::reLayout()
     // still refer to changed oox::Shape data
     mpDiagramPtr->getLayout()->getPresPointShapeMap().clear();
 
+    // the text font of the theme, the layout measures the text with it
+    if (mpDiagramThemePtr && mpDiagramThemePtr->getTheme())
+        mpDiagramPtr->setTextFont(
+            mpDiagramThemePtr->getTheme()->getFontScheme().getMinorLatin().maTypeface);
+
     // Re-create the oox::Shapes for the diagram content
     mpDiagramPtr->createShapeHierarchyFromModel(pShapePtr, true);
 

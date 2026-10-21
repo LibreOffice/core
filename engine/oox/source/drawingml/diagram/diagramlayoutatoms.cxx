@@ -57,6 +57,8 @@
 #include <drawingml/textrun.hxx>
 #include <drawingml/customshapeproperties.hxx>
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/text/XText.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::cpo::uno;
@@ -170,6 +172,29 @@ bool containsDataNodeType(const oox::drawingml::ShapePtr& pShape, sal_Int32 nTyp
 }
 
 namespace oox::drawingml {
+// set the guide rName to nValue: an existing guide takes the new value in its place, a
+// missing one is added at the end
+static void setGuideValue(CustomShapeGuideContainer& rGuides, const OUString& rName,
+                          sal_Int32 nValue)
+{
+    const OUString aValue(OUString::number(nValue));
+    CustomShapeGuideContainer aGuides;
+    bool bFound(false);
+    for (const CustomShapeGuide& rGuide : rGuides)
+    {
+        if (rGuide.maName == rName)
+        {
+            aGuides.push_back({ rName, aValue });
+            bFound = true;
+        }
+        else
+            aGuides.push_back(rGuide);
+    }
+    if (!bFound)
+        aGuides.push_back({ rName, aValue });
+    rGuides = std::move(aGuides);
+}
+
 // The names of the layout nodes below every loop over the sibTrans points from rAtom down, the
 // nodes that stand for a transition between two nodes of the data.
 static void gatherTransitionNames(const LayoutAtom& rAtom, std::set<OUString>& rOut,
@@ -195,6 +220,95 @@ namespace
 void gatherDecidedConstraints(const SmartArtDiagram& rDgm, const LayoutAtom& rAtom,
                               const rtl::Reference<svx::diagram::Point>& rPoint,
                               std::vector<Constraint>& rOut);
+}
+
+static void gatherLayoutNodes(const LayoutAtom& rAtom,
+                              std::map<OUString, const LayoutNode*>& rOut);
+
+namespace
+{
+// what a composite draws, as parts of its width and height from its top left: the boxes of
+// its drawn children from their "l", "r", "w", "t" and "h", for the branch rPoint decides;
+// 0 and 1 where nothing says more
+struct DrawnParts
+{
+    double fLeft = 0.0, fTop = 0.0, fRight = 1.0, fBottom = 1.0;
+};
+
+DrawnParts drawnPartsOf(const SmartArtDiagram& rDgm, const LayoutNode& rNode,
+                        const rtl::Reference<svx::diagram::Point>& rPoint,
+                        const ShapePtr& rComposite)
+{
+    DrawnParts aOut;
+    std::vector<Constraint> aOwn;
+    gatherDecidedConstraints(rDgm, rNode, rPoint, aOwn);
+    std::map<OUString, double> aWidth, aHeight, aLeft, aRight, aTop;
+    for (int nPass = 0; nPass < 3; ++nPass)
+        for (const Constraint& rOne : aOwn)
+        {
+            if (rOne.mnFor != XML_ch || rOne.msForName.isEmpty()
+                || (rOne.mnRefType != XML_w && rOne.mnRefType != XML_h))
+                continue;
+            const double fPart(rOne.mfFactor);
+            std::optional<double> oOf;
+            if (rOne.msRefForName.isEmpty())
+                oOf = 1.0;
+            else if (rOne.mnRefType == XML_w && aWidth.count(rOne.msRefForName))
+                oOf = aWidth.at(rOne.msRefForName);
+            else if (rOne.mnRefType == XML_h && aHeight.count(rOne.msRefForName))
+                oOf = aHeight.at(rOne.msRefForName);
+            if (!oOf)
+                continue;
+            // only a side against the same side counts: a width of the width, a top of the height
+            const bool bAcross(rOne.mnRefType == XML_w);
+            switch (rOne.mnType)
+            {
+                case XML_w:
+                    if (bAcross)
+                        aWidth[rOne.msForName] = fPart * *oOf;
+                    break;
+                case XML_l:
+                    if (bAcross)
+                        aLeft[rOne.msForName] = fPart * *oOf;
+                    break;
+                case XML_r:
+                    if (bAcross)
+                        aRight[rOne.msForName] = fPart * *oOf;
+                    break;
+                case XML_h:
+                    if (!bAcross)
+                        aHeight[rOne.msForName] = fPart * *oOf;
+                    break;
+                case XML_t:
+                    if (!bAcross)
+                        aTop[rOne.msForName] = fPart * *oOf;
+                    break;
+                default:
+                    break;
+            }
+        }
+    bool bAny(false);
+    double fLeft(1.0), fRight(0.0), fTop(1.0), fBottom(0.0);
+    for (const ShapePtr& pChild : rComposite->getChildren())
+    {
+        const OUString& rName(pChild->getInternalName());
+        if (!aWidth.count(rName) || !aHeight.count(rName)
+            || pChild->getCustomShapeProperties()->getShapePresetType() == 0)
+            continue;
+        const double fAt(aLeft.count(rName)    ? aLeft.at(rName)
+                         : aRight.count(rName) ? aRight.at(rName) - aWidth.at(rName)
+                                               : 0.0);
+        const double fDown(aTop.count(rName) ? aTop.at(rName) : 0.0);
+        fLeft = std::min(fLeft, fAt);
+        fRight = std::max(fRight, fAt + aWidth.at(rName));
+        fTop = std::min(fTop, fDown);
+        fBottom = std::max(fBottom, fDown + aHeight.at(rName));
+        bAny = true;
+    }
+    if (bAny)
+        aOut = DrawnParts{ fLeft, fTop, fRight, fBottom };
+    return aOut;
+}
 }
 
 void SnakeAlg::layoutShapeChildren(const SmartArtDiagram& rDgm, const AlgAtom& rAlg,
@@ -867,7 +981,7 @@ void SnakeAlg::layoutShapeChildren(const SmartArtDiagram& rDgm, const AlgAtom& r
             double fStepWidth(rShape->getSize().Width * fStepOfWidth / fFlight);
             double fBetweenWidth(rShape->getSize().Width * fAdvance / fFlight);
             double fStepHeight(fStepWidth / fChildAspectRatio);
-            const double fPitch(1.0 + fSpace);
+            double fPitch(1.0 + fSpace);
             double fHeight(fStepHeight * (1.0 + (nSteps - 1) * fPitch));
             if (fHeight > rShape->getSize().Height)
             {
@@ -877,9 +991,50 @@ void SnakeAlg::layoutShapeChildren(const SmartArtDiagram& rDgm, const AlgAtom& r
                 fStepHeight *= fShrink;
                 fHeight = rShape->getSize().Height;
             }
-            const double fTop((rShape->getSize().Height - fHeight) / 2.0);
+            double fTop((rShape->getSize().Height - fHeight) / 2.0);
             const double fFlightWidth(nSteps * fStepWidth + (nSteps - 1) * fBetweenWidth);
-            const double fLeft((rShape->getSize().Width - fFlightWidth) / 2.0);
+            double fLeft((rShape->getSize().Width - fFlightWidth) / 2.0);
+            // without transitions the steps stand by what they draw: alignOff of the drawn width
+            // along, (1 + sp) of the height over the square root of the ar down. Why the square
+            // root I do not know, but it matches. The whole is fitted to the room and centred
+            if (aBetween.empty())
+            {
+                std::map<OUString, const LayoutNode*> aStepNodes;
+                gatherLayoutNodes(rAlg.getLayoutNode(), aStepNodes);
+                const auto aPartsOf = [&](const ShapePtr& rStep) {
+                    const auto aNode = aStepNodes.find(rStep->getInternalName());
+                    rtl::Reference<svx::diagram::Point> xPoint;
+                    for (const auto& rEntry : rDgm.getLayout()->getPresPointShapeMap())
+                        if (rEntry.second == rStep)
+                        {
+                            xPoint = rEntry.first;
+                            break;
+                        }
+                    return aNode != aStepNodes.end() && aNode->second
+                               ? drawnPartsOf(rDgm, *aNode->second, xPoint, rStep)
+                               : DrawnParts();
+                };
+                const DrawnParts aFirst(aPartsOf(aSteps.front()));
+                const DrawnParts aLast(aPartsOf(aSteps.back()));
+                const double fAside(fAlignOff * (aFirst.fRight - aFirst.fLeft));
+                const double fDown((1.0 + fSpace) / std::sqrt(fChildAspectRatio));
+                const double fDrawnWide((nSteps - 1) * fAside + aLast.fRight - aFirst.fLeft);
+                const double fDrawnHigh((nSteps - 1) * fDown + aLast.fBottom - aFirst.fTop);
+                if (fDrawnWide > 0.0 && fDrawnHigh > 0.0)
+                {
+                    fStepWidth = std::min(rShape->getSize().Width / fDrawnWide,
+                                          rShape->getSize().Height * fChildAspectRatio
+                                              / fDrawnHigh);
+                    fStepHeight = fStepWidth / fChildAspectRatio;
+                    fBetweenWidth = (fAside - 1.0) * fStepWidth;
+                    fPitch = fDown;
+                    fLeft = (rShape->getSize().Width - fDrawnWide * fStepWidth) / 2.0
+                            - aFirst.fLeft * fStepWidth;
+                    fTop = (rShape->getSize().Height - fDrawnHigh * fStepHeight) / 2.0
+                           - aFirst.fTop * fStepHeight;
+                    fHeight = ((nSteps - 1) * fDown + 1.0) * fStepHeight;
+                }
+            }
             const awt::Size aStepSize(static_cast<sal_Int32>(fStepWidth),
                                       static_cast<sal_Int32>(fStepHeight));
             const awt::Size aBetweenSize(static_cast<sal_Int32>(std::max(fBetweenWidth, 0.0)),
@@ -1257,6 +1412,8 @@ void SnakeAlg::layoutShapeChildren(const SmartArtDiagram& rDgm, const AlgAtom& r
 // has placed as it is; its own constraints for those children, "w val 1", are place holders.
 namespace
 {
+rtl::Reference<svx::diagram::Point> firstDataNodeOf(const SmartArtDiagram& rDgm,
+                                                    const ShapePtr& rShape);
 std::vector<Constraint> collectDirectConstraints(const LayoutNode& rLayoutNode);
 void gatherOwnConstraints(const LayoutAtom& rAtom, std::vector<Constraint>& rOut);
 }
@@ -1638,12 +1795,13 @@ void CompositeAlg::applyConstraintToLayout(const SmartArtDiagram& rDgm, const Sh
 }
 
 
-// The width of the drawings' text font as a part of the width of the stand-in that measures it
-// here: Bar_List's Thirteen at 34 points holds its line in a box at 43 points and not at 44,
-// which puts that font between 0.968 and 0.971 of the stand-in, as the engine measures it;
-// Continuous_Arrow_Process's Thirteen at 27 points beside its bullet holds its box of 114 points,
-// which puts it at 0.9698 or below.
-constexpr double fTextWidthPart(0.969);
+// width of the Diagram's text font as a part of the width of the stand-in, Liberation Sans
+static double textWidthPartFor(std::u16string_view rTextFont)
+{
+    if (rTextFont == u"Arial" || rTextFont == u"Liberation Sans")
+        return 0.9928;
+    return 0.969;
+}
 
 // The height the text rParagraphs takes at fFontPt points in a box nWidthEmu wide, in EMU,
 // laid out by the edit engine with the line spacing and the space after a paragraph as parts of
@@ -1673,35 +1831,36 @@ static sal_Int64 bulletIndentFor(double fFontPt)
 // Header_List's 20 after the deeper ones.
 typedef std::pair<double, double> SpaceAfterParts;
 
-// Puts the paragraphs rParagraphs into rEngine as the Diagram's text at fFontPt points of the
-// font rFontName, each paragraph at its own size from rFontOfParagraph where given, with the
-// line spacing the Diagram's text carries and the space after a paragraph from rSpaceAfter, on
-// a paper nWidthEmu wide, in EMU, and of no bounded height.
+// put rParagraphs into rEngine as the Diagram's text at fFontPt of font rTextFont, measured
+// with the stand-in, paragraph sizes from rFontOfParagraph, the space after from rSpaceAfter,
+// on a paper nWidthEmu (EMU) wide and of no bounded height
 static void setUpTextEngine(EditEngine& rEngine, const std::vector<OUString>& rParagraphs,
-                            sal_Int64 nWidthEmu, double fFontPt, const OUString& rFontName,
+                            sal_Int64 nWidthEmu, double fFontPt, std::u16string_view rTextFont,
                             const std::vector<double>& rFontOfParagraph,
                             const std::vector<sal_Int32>& rLevelOfParagraph,
                             const SpaceAfterParts& rSpaceAfter = SpaceAfterParts(0.35, 0.15))
 {
-    // A line of a Diagram's text is 90 percent of the line of its font, which stands 1.28 of
-    // the size high, so 1.153 of the size; the stand-in's line is 1.117 of the size, which the
-    // proportional spacing brings up to that. Accented_Picture's text of One and three deeper
-    // lines holds its box at 48 points and not at 49, its desText Two and two deeper at 28 and
-    // not at 29, and both read 1.153 within a hundredth.
+    // an Aptos line is a bit higher than the line of the stand-in, the proportional spacing
+    // brings it up to that; an Arial line is its own, the space after a paragraph a part of it
     const sal_uInt16 nLineSpacingPercent(103);
+    const bool bArialLine(rTextFont == u"Arial" || rTextFont == u"Liberation Sans");
     // the width rounded up to the hundredth of a millimetre, so that a line measured as exactly
     // this wide still stands on one line; the paper is wider by the part the stand-in is wider
     // than the drawings' font, so the stand-in breaks its lines where that font does
     rEngine.SetPaperSize(Size(
         static_cast<tools::Long>(std::min<double>(
-            (static_cast<double>(nWidthEmu) / fTextWidthPart + 359) / 360, 0x7fffffff)),
+            (static_cast<double>(nWidthEmu) / textWidthPartFor(rTextFont) + 359) / 360,
+            0x7fffffff)),
         0x7fffffff));
     SfxItemSet aSet(rEngine.GetEmptyItemSet());
-    aSet.Put(SvxFontItem(FAMILY_SWISS, rFontName, OUString(), PITCH_VARIABLE,
+    aSet.Put(SvxFontItem(FAMILY_SWISS, u"Liberation Sans"_ustr, OUString(), PITCH_VARIABLE,
                          RTL_TEXTENCODING_UNICODE, EE_CHAR_FONTINFO));
-    SvxLineSpacingItem aSpacing(LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL);
-    aSpacing.SetPropLineSpace(nLineSpacingPercent);
-    aSet.Put(aSpacing);
+    if (!bArialLine)
+    {
+        SvxLineSpacingItem aSpacing(LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL);
+        aSpacing.SetPropLineSpace(nLineSpacingPercent);
+        aSet.Put(aSpacing);
+    }
     OUStringBuffer aText;
     for (size_t n = 0; n < rParagraphs.size(); ++n)
     {
@@ -1723,9 +1882,19 @@ static void setUpTextEngine(EditEngine& rEngine, const std::vector<OUString>& rP
         SfxItemSet aOwn(aSet);
         aOwn.Put(SvxFontHeightItem(static_cast<sal_uInt32>(fOwnFont * 2540.0 / 72.0), 100,
                                    EE_CHAR_FONTHEIGHT));
-        const double fAfter(nParagraph + 1 == nParagraphs
-                                ? 0.0
-                                : (nLevel <= 1 ? rSpaceAfter.first : rSpaceAfter.second));
+        const double fArialLine(1.0594);
+        const double fAfter((nParagraph + 1 == nParagraphs
+                                 ? 0.0
+                                 : (nLevel <= 1 ? rSpaceAfter.first : rSpaceAfter.second))
+                            * (bArialLine ? fArialLine : 1.0));
+        if (bArialLine)
+        {
+            SvxLineSpacingItem aLine(LINE_SPACE_DEFAULT_HEIGHT, EE_PARA_SBL);
+            aLine.SetLineHeight(static_cast<sal_uInt16>(fArialLine * fOwnFont * 2540.0 / 72.0));
+            aLine.SetLineSpaceRule(SvxLineSpaceRule::Fix);
+            aLine.SetInterLineSpaceRule(SvxInterLineSpaceRule::Off);
+            aOwn.Put(aLine);
+        }
         aOwn.Put(SvxULSpaceItem(0, static_cast<sal_uInt16>(fAfter * fOwnFont * 2540.0 / 72.0),
                                 EE_PARA_ULSPACE));
         // a paragraph below the first level carries a bullet in a hanging indent, in the
@@ -1735,7 +1904,8 @@ static void setUpTextEngine(EditEngine& rEngine, const std::vector<OUString>& rP
         {
             SvxLRSpaceItem aIndent(EE_PARA_LRSPACE);
             aIndent.SetTextLeft(SvxIndentValue::twips(
-                o3tl::convert(bulletIndentFor(fOwnFont) / fTextWidthPart, o3tl::Length::emu,
+                o3tl::convert(bulletIndentFor(fOwnFont) / textWidthPartFor(rTextFont),
+                              o3tl::Length::emu,
                               o3tl::Length::mm100)));
             aOwn.Put(aIndent);
         }
@@ -1747,7 +1917,7 @@ static void setUpTextEngine(EditEngine& rEngine, const std::vector<OUString>& rP
 // rFontName in a box nWidthEmu wide, in EMU, each paragraph at its own size from rFontOfParagraph
 // and with the space after its level from rLevelOfParagraph and rSpaceAfter where given.
 static sal_Int64 measureTextHeight(const std::vector<OUString>& rParagraphs, sal_Int64 nWidthEmu,
-                                   double fFontPt, const OUString& rFontName,
+                                   double fFontPt, std::u16string_view rFontName,
                                    const std::vector<double>& rFontOfParagraph = {},
                                    const std::vector<sal_Int32>& rLevelOfParagraph = {},
                                    const SpaceAfterParts& rSpaceAfter
@@ -1863,14 +2033,15 @@ static sal_Int64 measureTextHeightInShape(const ShapePtr& rShape,
                                           const std::vector<double>& rFontOfParagraph,
                                           const std::vector<sal_Int32>& rLevelOfParagraph,
                                           const SpaceAfterParts& rSpaceAfter,
+                                          std::u16string_view rTextFont,
                                           sal_Int64* pInsetEmu = nullptr)
 {
     const double fPart(textAreaInsetPart(rShape));
     if (pInsetEmu)
         *pInsetEmu = 0;
     if (fPart <= 0.0)
-        return measureTextHeight(rParagraphs, nWidthEmu, fFontPt, u"Liberation Sans"_ustr,
-                                 rFontOfParagraph, rLevelOfParagraph, rSpaceAfter);
+        return measureTextHeight(rParagraphs, nWidthEmu, fFontPt, rTextFont, rFontOfParagraph,
+                                 rLevelOfParagraph, rSpaceAfter);
     // the inset follows the shorter side, which is the height the text makes where the shape
     // is wider than that, so a few rounds settle it
     sal_Int64 nInset(static_cast<sal_Int64>(fPart * nWidthEmu));
@@ -1878,8 +2049,8 @@ static sal_Int64 measureTextHeightInShape(const ShapePtr& rShape,
     for (int nRound = 0; nRound < 4; ++nRound)
     {
         nText = measureTextHeight(rParagraphs, std::max<sal_Int64>(1, nWidthEmu - 2 * nInset),
-                                  fFontPt, u"Liberation Sans"_ustr, rFontOfParagraph,
-                                  rLevelOfParagraph, rSpaceAfter);
+                                  fFontPt, rTextFont, rFontOfParagraph, rLevelOfParagraph,
+                                  rSpaceAfter);
         const double fHeight(static_cast<double>(nText + nOverUnderEmu) / (1.0 - 2.0 * fPart));
         nInset = static_cast<sal_Int64>(fPart * std::min<double>(nWidthEmu, fHeight));
     }
@@ -1892,7 +2063,7 @@ static sal_Int64 measureTextHeightInShape(const ShapePtr& rShape,
 // same engine that measures the height, so that a box of this width holds each on one line; the
 // stand-in's width is taken down to the width of the drawings' font.
 static sal_Int64 measureWidestLine(const std::vector<OUString>& rParagraphs, double fFontPt,
-                                   const OUString& rFontName,
+                                   std::u16string_view rFontName,
                                    const std::vector<double>& rFontOfParagraph = {},
                                    const std::vector<sal_Int32>& rLevelOfParagraph = {})
 {
@@ -1905,13 +2076,13 @@ static sal_Int64 measureWidestLine(const std::vector<OUString>& rParagraphs, dou
     aEngine.SetRefDevice(pDevice.get());
     setUpTextEngine(aEngine, rParagraphs, sal_Int64(0x7fffffff) * 360, fFontPt, rFontName,
                     rFontOfParagraph, rLevelOfParagraph);
-    return static_cast<sal_Int64>(aEngine.CalcTextWidth() * 360 * fTextWidthPart);
+    return static_cast<sal_Int64>(aEngine.CalcTextWidth() * 360 * textWidthPartFor(rFontName));
 }
 
 // The width of the widest word of rParagraphs at fFontPt points, in EMU: the width a box has to
 // have for the text to break between words only.
 static sal_Int64 measureWidestWord(const std::vector<OUString>& rParagraphs, double fFontPt,
-                                   const OUString& rFontName,
+                                   std::u16string_view rFontName,
                                    const std::vector<double>& rFontOfParagraph = {},
                                    const std::vector<sal_Int32>& rLevelOfParagraph = {})
 {
@@ -1949,9 +2120,6 @@ static sal_Int64 measureWidestWord(const std::vector<OUString>& rParagraphs, dou
     }
     return measureWidestLine(aWords, fFontPt, rFontName, aFonts, aLevels);
 }
-
-static void gatherLayoutNodes(const LayoutAtom& rAtom,
-                              std::map<OUString, const LayoutNode*>& rOut);
 
 // How deep in the data the node the shape rShape shows stands: 1 for a node of the document, 2
 // for a child of one, and so on; 0 where the shape shows no node.
@@ -2027,6 +2195,7 @@ void gatherOwnAlgorithms(const LayoutAtom& rAtom, std::vector<const AlgAtom*>& r
 bool ownRuleGrows(const LayoutAtom& rAtom, sal_Int32 nType);
 bool ownRuleStatesFinite(const LayoutAtom& rAtom, sal_Int32 nType);
 bool ownRuleFrees(const LayoutAtom& rAtom, sal_Int32 nType);
+std::optional<std::pair<double, double>> ownRuleFactorOf(const LayoutAtom& rAtom, sal_Int32 nType);
 }
 
 // The space after the paragraphs of the text node rNode, from the parameters of its text
@@ -2199,6 +2368,38 @@ static double fontOfGroup(const SmartArtDiagram& rDgm, const std::vector<Constra
     return aCandidate->second;
 }
 
+// size in points the text of rShape was given by hand (custT), none where it follows the
+// Diagram's font
+static std::optional<double> ownTextSizeOf(const SmartArtDiagram& rDgm, const ShapePtr& rShape)
+{
+    const rtl::Reference<svx::diagram::Point> xData(firstDataNodeOf(rDgm, rShape));
+    if (!xData.is() || !xData->mbCustomText || !rDgm.getData())
+        return std::nullopt;
+    sal_Int32 nParagraph(-1);
+    const Reference<text::XText> xText(
+        rDgm.getData()->getMasterXShapeForPoint(*xData, nParagraph), UNO_QUERY);
+    const Reference<beans::XPropertySet> xStart(
+        xText.is() ? xText->getStart() : Reference<text::XTextRange>(), UNO_QUERY);
+    float fHeight(0.0);
+    if (xStart.is() && (xStart->getPropertyValue(u"CharHeight"_ustr) >>= fHeight)
+        && fHeight > 0.0)
+        return fHeight;
+    return std::nullopt;
+}
+
+// font size in points of the text of rShape: its group's font, or the size given by hand;
+// a text with a size of its own takes no part in the group's fit and rGroup stays empty
+static double textFontOf(const SmartArtDiagram& rDgm, const std::vector<Constraint>& rConstraints,
+                         const ShapePtr& rShape, OUString& rGroup)
+{
+    if (const std::optional<double> oOwn = ownTextSizeOf(rDgm, rShape))
+    {
+        rGroup.clear();
+        return *oOwn;
+    }
+    return fontOfGroup(rDgm, rConstraints, rShape->getInternalName(), rGroup);
+}
+
 // The part of the font the margins of the text node named rName add on one axis where the
 // layout states none for a side: 0.56 of the font for each side of lMarg and rMarg, or of tMarg
 // and bMarg with bOverUnder, that neither the nodes above in rConstraints nor the node itself in
@@ -2309,7 +2510,7 @@ static std::optional<sal_Int64> textDrivenHeight(const SmartArtDiagram& rDgm,
     SmartArtDiagram& rMutable(const_cast<SmartArtDiagram&>(rDgm));
     const double fPoint(12700.0);
     OUString aGroup;
-    const double fFont(fontOfGroup(rDgm, rConstraints, rShape->getInternalName(), aGroup));
+    const double fFont(textFontOf(rDgm, rConstraints, rShape, aGroup));
     const std::vector<OUString> aParagraphs(textParagraphsOf(rDgm, rShape));
     // the levels of the paragraphs, the node the shape stands for being the first
     const std::vector<sal_Int32> aLevels(textParagraphLevelsOf(rDgm, rShape, aParagraphs.size()));
@@ -2349,9 +2550,9 @@ static std::optional<sal_Int64> textDrivenHeight(const SmartArtDiagram& rDgm,
                                   rShape, aParagraphs, std::max<sal_Int64>(nWidth, 1),
                                   nFixed + static_cast<sal_Int64>(fOverUnder * fFont * fPoint),
                                   fTextFont, aFontOfParagraph, aLevels,
-                                  spaceAfterPartsOf(rNode), &nInset));
+                                  spaceAfterPartsOf(rNode), rDgm.getTextFont(), &nInset));
     if (!aParagraphs.empty()
-        && measureWidestWord(aParagraphs, fTextFont, u"Liberation Sans"_ustr, aFontOfParagraph,
+        && measureWidestWord(aParagraphs, fTextFont, rDgm.getTextFont(), aFontOfParagraph,
                              aLevels)
                > nWidth - 2 * nInset)
         rbWordsFit = false;
@@ -2395,7 +2596,7 @@ static std::optional<sal_Int64> textDrivenWidth(const SmartArtDiagram& rDgm,
     SmartArtDiagram& rMutable(const_cast<SmartArtDiagram&>(rDgm));
     const double fPoint(12700.0);
     OUString aGroup;
-    const double fFont(fontOfGroup(rDgm, rConstraints, rShape->getInternalName(), aGroup));
+    const double fFont(textFontOf(rDgm, rConstraints, rShape, aGroup));
     const std::vector<sal_Int32> aLevels(textParagraphLevelsOf(rDgm, rShape, aParagraphs.size()));
     const double fSecondPart(secondFontPartOf(rConstraints, rNode, rShape->getInternalName()));
     const double fTextFont(fontOfLevel(fFont, aLevels.front(), fSecondPart));
@@ -2423,7 +2624,7 @@ static std::optional<sal_Int64> textDrivenWidth(const SmartArtDiagram& rDgm,
     std::vector<double> aFontOfParagraph;
     for (size_t n = 0; n < aParagraphs.size(); ++n)
         aFontOfParagraph.push_back(fontOfLevel(fFont, aLevels[n], fSecondPart));
-    return measureWidestLine(aParagraphs, fTextFont, u"Liberation Sans"_ustr, aFontOfParagraph,
+    return measureWidestLine(aParagraphs, fTextFont, rDgm.getTextFont(), aFontOfParagraph,
                              aLevels)
            + static_cast<sal_Int64>(fSides * fFont * fPoint);
 }
@@ -2587,7 +2788,7 @@ static bool layoutTextDrivenSnake(const SmartArtDiagram& rDgm, const AlgAtom& rA
         if (!oWidthMm || !oHeightMm)
             return false;
         const std::vector<OUString> aParagraphs(textParagraphsOf(rDgm, pChild));
-        const double fFont(fontOfGroup(rDgm, rConstraints, pChild->getInternalName(), aGroup));
+        const double fFont(textFontOf(rDgm, rConstraints, pChild, aGroup));
         const std::vector<sal_Int32> aLevels(
             textParagraphLevelsOf(rDgm, pChild, aParagraphs.size()));
         const double fSecondPart(secondFontPartOf(rConstraints, rNode, pChild->getInternalName()));
@@ -2615,7 +2816,7 @@ static bool layoutTextDrivenSnake(const SmartArtDiagram& rDgm, const AlgAtom& rA
         const sal_Int64 nLine(
             aParagraphs.empty()
                 ? 0
-                : measureWidestLine(aParagraphs, fTextFont, u"Liberation Sans"_ustr,
+                : measureWidestLine(aParagraphs, fTextFont, rDgm.getTextFont(),
                                     aFontOfParagraph, aLevels));
         aCell.mnWidth = aGrown(nStatedWidth, nLine + nSides);
         const sal_Int64 nText(
@@ -2624,7 +2825,7 @@ static bool layoutTextDrivenSnake(const SmartArtDiagram& rDgm, const AlgAtom& rA
                 : measureTextHeightInShape(pChild, aParagraphs,
                                            std::max<sal_Int64>(1, aCell.mnWidth - nSides),
                                            nOverUnder, fTextFont, aFontOfParagraph, aLevels,
-                                           spaceAfterPartsOf(rNode)));
+                                           spaceAfterPartsOf(rNode), rDgm.getTextFont()));
         aCell.mnHeight = aGrown(nStatedHeight, nText + nOverUnder);
         rMutable.getFittedFontSizes()[pChild->getInternalName()] = fTextFont;
         aCells.push_back(aCell);
@@ -3193,17 +3394,23 @@ void CompositeAlg::layoutShapeChildren(const SmartArtDiagram& rDgm, AlgAtom& rAl
                     SmartArtDiagram& rMutable(const_cast<SmartArtDiagram&>(rDgm));
                     LayoutProperty& rOwn(aProperties[aCurrShape->getInternalName()]);
                     const sal_Int32 nTop(rOwn.count(XML_t) ? rOwn.at(XML_t) : 0);
-                    // A text with a stated height grows from it in steps of a thirty-second of
-                    // it, as every growing text of the corpus does: Numbered_List's descriptions
-                    // of 1.19 userA are 32, 64 and 96 thirty-seconds of that. A text that needs
-                    // less keeps the stated height, and what the text needs is still its own
-                    // height: Basic_Chevron_Process's parTx of one line is 1.5 of the font high,
-                    // which its bound brings down to 0.4 of its width.
+                    // a text with a stated height grows from it in steps of a thirty-second of
+                    // it; one stated as a part of a variable of the composite grows by the whole
+                    // stated height. A text that needs less keeps the stated height
                     sal_Int64 nBox(*oNeed);
                     if (rOwn.count(XML_h) && rOwn.at(XML_h) > 0 && *oNeed > rOwn.at(XML_h))
                     {
                         const sal_Int64 nStated(rOwn.at(XML_h));
-                        const sal_Int64 nStep(std::max<sal_Int64>(1, nStated / 32));
+                        const bool bOfVariable(std::any_of(
+                            rConstraints.begin(), rConstraints.end(),
+                            [&aCurrShape](const Constraint& rConstraint) {
+                                return rConstraint.mnType == XML_h
+                                       && rConstraint.mnOperator == XML_none
+                                       && isUserVariable(rConstraint.mnRefType)
+                                       && rConstraint.msForName == aCurrShape->getInternalName();
+                            }));
+                        const sal_Int64 nStep(
+                            std::max<sal_Int64>(1, bOfVariable ? nStated : nStated / 32));
                         oNeed = nStated + ((*oNeed - nStated + nStep - 1) / nStep) * nStep;
                         nBox = *oNeed;
                     }
@@ -3407,6 +3614,13 @@ void CompositeAlg::layoutShapeChildren(const SmartArtDiagram& rDgm, AlgAtom& rAl
 
                 // Either an absolute value or a factor of a property.
                 if (rConstraint.mfValue == 0.0 && rConstraint.mnRefType == XML_none)
+                {
+                    continue;
+                }
+
+                // a bound, op lte or gte, caps or lifts what the equalities gave, and the step
+                // for the child's own bounds above did that already
+                if (rConstraint.mnOperator == XML_lte || rConstraint.mnOperator == XML_gte)
                 {
                     continue;
                 }
@@ -4480,12 +4694,18 @@ void centreDrawnShapes(const SmartArtDiagram& rDgm, const ShapePtr& pRoot)
         {
             const awt::Point aChildAt(aAt.X + pChild->getPosition().X,
                                       aAt.Y + pChild->getPosition().Y);
-            // a group is a box, a shape without a preset geometry is hidden; a connector
-            // and every shape with a geometry are drawn
+            // a group is a box, a shape without a preset geometry is hidden, a connector and
+            // every shape with a geometry are drawn; a transition drawn by a connector is not
+            // centred
             const bool bDrawn(pChild->getServiceName() != "com.sun.star.drawing.GroupShape"
                               && (pChild->getSubType() == XML_conn
                                   || pChild->getCustomShapeProperties()->getShapePresetType()
                                          != 0)
+                              && !((pChild->getDataNodeType() == XML_sibTrans
+                                    || pChild->getDataNodeType() == XML_parTrans)
+                                   && (pChild->getSubType() == XML_conn
+                                       || pChild->getSubType() == XML_circularArrow
+                                       || pChild->getSubType() == XML_leftCircularArrow))
                               && pChild->getSize().Width > 0 && pChild->getSize().Height > 0);
             if (bDrawn)
             {
@@ -4500,10 +4720,30 @@ void centreDrawnShapes(const SmartArtDiagram& rDgm, const ShapePtr& pRoot)
                     + (nDiagramTurn % (90 * 60000) == 0 ? 0 : nDiagramTurn)));
                 const double fCos(std::abs(cos(fAngle)));
                 const double fSin(std::abs(sin(fAngle)));
-                const double fHalfWide(
+                double fHalfWide(
                     (pChild->getSize().Width * fCos + pChild->getSize().Height * fSin) / 2.0);
-                const double fHalfHigh(
+                double fHalfHigh(
                     (pChild->getSize().Width * fSin + pChild->getSize().Height * fCos) / 2.0);
+                // a band round the ring (a blockArc transition) counts as the ring's circle plus
+                // the connector's thickness, the band being 0.6 of it, as the ring was fitted
+                if (pChild->getSubType() == XML_blockArc
+                    && (pChild->getDataNodeType() == XML_sibTrans
+                        || pChild->getDataNodeType() == XML_parTrans))
+                {
+                    const auto& rGuides(
+                        pChild->getCustomShapeProperties()->getAdjustmentGuideList());
+                    const sal_Int32 nAt(rGuides.GetCustomShapeGuideValue(u"adj3"_ustr));
+                    const sal_Int32 nBandPart(nAt >= 0 ? rGuides[nAt].maFormula.toInt32() : 0);
+                    if (nBandPart > 0)
+                    {
+                        const double fBox(std::min(pChild->getSize().Width,
+                                                   pChild->getSize().Height));
+                        const double fBand(fBox * nBandPart / 100000.0);
+                        const double fReach(fBox / 2.0 - fBand / 4.0 + fBand / 0.6);
+                        fHalfWide = std::max(fHalfWide, fReach);
+                        fHalfHigh = std::max(fHalfHigh, fReach);
+                    }
+                }
                 const double fMiddleX(aChildAt.X + pChild->getSize().Width / 2.0);
                 const double fMiddleY(aChildAt.Y + pChild->getSize().Height / 2.0);
                 nLeft = std::min<sal_Int32>(nLeft, std::max<sal_Int32>(0, fMiddleX - fHalfWide));
@@ -5292,8 +5532,12 @@ void settleNamedConnectors(const SmartArtDiagram& rDgm)
                           xParent->getPresentation().msPresentationLayoutName)
                                    : aNodes.end();
                 const auto aParentShape = xParent.is() ? rShapes.find(xParent) : rShapes.end();
+                // diam and h may be parts of the width of a shape the composite holds, as in
+                // "diam for des forName connector1 refType w refFor ch refForName gear1 fact 1.15";
+                // the name of that shape, empty for the composite
                 double fDiamOfWidth(0.0);
                 double fHeightOfWidth(0.0);
+                OUString aDiamOf, aHeightOf;
                 if (aParentNode != aNodes.end() && aParentNode->second
                     && aParentShape != rShapes.end())
                 {
@@ -5301,16 +5545,40 @@ void settleNamedConnectors(const SmartArtDiagram& rDgm)
                     gatherDecidedConstraints(rDgm, *aParentNode->second, xParent, aParents);
                     for (const Constraint& rParent : aParents)
                     {
-                        if (rParent.mnFor != XML_ch || rParent.mnRefType != XML_w
+                        if ((rParent.mnFor != XML_ch && rParent.mnFor != XML_des)
+                            || rParent.mnRefType != XML_w
                             || rParent.msForName != aNode->second->getName()
                             || rParent.mfFactor == 0.0)
                             continue;
                         if (rParent.mnType == XML_diam)
+                        {
                             fDiamOfWidth = rParent.mfFactor;
+                            aDiamOf = rParent.msRefForName;
+                        }
                         else if (rParent.mnType == XML_h && rParent.mfFactor > 0.0)
+                        {
                             fHeightOfWidth = rParent.mfFactor;
+                            aHeightOf = rParent.msRefForName;
+                        }
                     }
                 }
+                // the width of the named shape nearest the arrow, the composite's own where none
+                // is named or found
+                const auto aWidthOfNamed
+                    = [&rDgm, &rShapes, &xOwn](const OUString& rName, double fOwn) {
+                          if (rName.isEmpty())
+                              return fOwn;
+                          rtl::Reference<svx::diagram::Point> xNamed(presentationNamedBeside(
+                              rDgm, xOwn->msModelId, rName, /*bBefore*/ true));
+                          if (!xNamed.is())
+                              xNamed = presentationNamedBeside(rDgm, xOwn->msModelId, rName,
+                                                               /*bBefore*/ false);
+                          const auto aNamed = xNamed.is() ? rShapes.find(xNamed) : rShapes.end();
+                          if (aNamed == rShapes.end() || !aNamed->second
+                              || aNamed->second->getSize().Width <= 0)
+                              return fOwn;
+                          return static_cast<double>(aNamed->second->getSize().Width);
+                      };
                 std::vector<OUString> aEnds;
                 if (fDiamOfWidth != 0.0 && fHeightOfWidth > 0.0)
                 {
@@ -5367,9 +5635,10 @@ void settleNamedConnectors(const SmartArtDiagram& rDgm)
                         if (pParentAlg && pParentAlg->getAspectRatio() > 0.0)
                             fWidth = std::min(fWidth, aParentShape->second->getSize().Height
                                                           * pParentAlg->getAspectRatio());
-                        const double fCircle(
-                            std::max(fWay / 2.0, std::abs(fDiamOfWidth) * fWidth / 2.0));
-                        const double fHead(fHeightOfWidth * fWidth);
+                        const double fCircle(std::max(
+                            fWay / 2.0,
+                            std::abs(fDiamOfWidth) * aWidthOfNamed(aDiamOf, fWidth) / 2.0));
+                        const double fHead(fHeightOfWidth * aWidthOfNamed(aHeightOf, fWidth));
                         if (fWay >= 1.0 && fHead > 0.0)
                         {
                             const double fOff(std::sqrt(
@@ -5432,13 +5701,8 @@ void settleNamedConnectors(const SmartArtDiagram& rDgm)
                             rProperties.setShapePresetType(nPreset);
                             auto& rGuides(rProperties.getAdjustmentGuideList());
                             const auto aSet = [&rGuides](const OUString& rName, double fValue) {
-                                const sal_Int32 nValue(
-                                    static_cast<sal_Int32>(std::lround(fValue)));
-                                if (rGuides.GetCustomShapeGuideValue(rName) < 0)
-                                    rGuides.push_back({ rName, OUString::number(nValue) });
-                                else
-                                    rGuides.SetCustomShapeGuideValue(
-                                        { rName, OUString::number(nValue) });
+                                setGuideValue(rGuides, rName,
+                                              static_cast<sal_Int32>(std::lround(fValue)));
                             };
                             aSet(u"adj1"_ustr, fStem / fBox * 100000.0);
                             aSet(u"adj2"_ustr, fHeadAngle * 60000.0);
@@ -5642,13 +5906,8 @@ void settleNamedConnectors(const SmartArtDiagram& rDgm)
                         rProperties.setShapePresetType(nPreset);
                         auto& rGuides(rProperties.getAdjustmentGuideList());
                         const auto aSet = [&rGuides](const OUString& rName, double fValue) {
-                            const sal_Int32 nValue(
-                                static_cast<sal_Int32>(std::lround(fValue)));
-                            if (rGuides.GetCustomShapeGuideValue(rName) < 0)
-                                rGuides.push_back({ rName, OUString::number(nValue) });
-                            else
-                                rGuides.SetCustomShapeGuideValue(
-                                    { rName, OUString::number(nValue) });
+                            setGuideValue(rGuides, rName,
+                                          static_cast<sal_Int32>(std::lround(fValue)));
                         };
                         aSet(u"adj1"_ustr, fStem / fBox * 100000.0);
                         aSet(u"adj2"_ustr, fHeadAngle * 60000.0);
@@ -5721,13 +5980,44 @@ void settleNamedConnectors(const SmartArtDiagram& rDgm)
                                               + fSide * fOff * -fDy / fWay);
                         const double fMiddleY((aStart.Y + aStop.Y) / 2.0
                                               + fSide * fOff * fDx / fWay);
-                        const awt::Size aSquare(static_cast<sal_Int32>(fDiameter),
-                                                static_cast<sal_Int32>(fDiameter));
+                        // the box holds the band round the circle too, as wide as a layout above
+                        // states the transition, a part of a named shape's width
+                        double fBand(0.0);
+                        for (const LayoutNode* pUp = aNode->second->getParentLayoutNode();
+                             pUp && fBand <= 0.0; pUp = pUp->getParentLayoutNode())
+                        {
+                            std::vector<Constraint> aAbove;
+                            gatherOwnConstraints(*pUp, aAbove);
+                            for (const Constraint& rConstraint : aAbove)
+                            {
+                                if (rConstraint.mnType != XML_w || rConstraint.mnRefType != XML_w
+                                    || rConstraint.mfFactor <= 0.0
+                                    || rConstraint.msRefForName.isEmpty()
+                                    || (rConstraint.msForName != aNode->second->getName()
+                                        && !(rConstraint.msForName.isEmpty()
+                                             && rConstraint.mnPointType == XML_sibTrans)))
+                                    continue;
+                                for (const auto& rEntry : rShapes)
+                                    if (rEntry.second
+                                        && rEntry.second->getInternalName()
+                                               == rConstraint.msRefForName)
+                                    {
+                                        fBand = rConstraint.mfFactor
+                                                * rEntry.second->getSize().Width;
+                                        break;
+                                    }
+                                if (fBand > 0.0)
+                                    break;
+                            }
+                        }
+                        const double fBox(fDiameter + fBand);
+                        const awt::Size aSquare(static_cast<sal_Int32>(fBox),
+                                                static_cast<sal_Int32>(fBox));
                         pShape->setSize(aSquare);
                         pShape->setChildSize(aSquare);
                         pShape->setPosition(awt::Point(
-                            static_cast<sal_Int32>(fMiddleX - fRadius) - aParentAt->X,
-                            static_cast<sal_Int32>(fMiddleY - fRadius) - aParentAt->Y));
+                            static_cast<sal_Int32>(fMiddleX - fBox / 2.0) - aParentAt->X,
+                            static_cast<sal_Int32>(fMiddleY - fBox / 2.0) - aParentAt->Y));
                         pShape->setRotation(0);
                         continue;
                     }
@@ -5879,10 +6169,21 @@ void settleNamedConnectors(const SmartArtDiagram& rDgm)
         if (pAlg->getType() == XML_conn && aSourceName.isEmpty() && aTargetName.isEmpty()
             && pRowAlg && (pRowAlg->getType() == XML_lin || pRowAlg->getType() == XML_snake))
         {
+            // the way the arrow points on the page: its preset's way, turned by its rotation
             const sal_Int32 nArrow(pShape->getSubType());
-            const bool bAlongX(nArrow == XML_rightArrow || nArrow == XML_leftArrow);
-            const bool bAlongY(nArrow == XML_downArrow || nArrow == XML_upArrow);
-            const bool bForward(nArrow == XML_rightArrow || nArrow == XML_downArrow);
+            const bool bLyingPreset(nArrow == XML_rightArrow || nArrow == XML_leftArrow);
+            const bool bStandingPreset(nArrow == XML_downArrow || nArrow == XML_upArrow);
+            const sal_Int32 nTurn(((pShape->getRotation() / PER_DEGREE) % 360 + 360) % 360);
+            const bool bQuarter(std::abs(nTurn - 90) <= 1 || std::abs(nTurn - 270) <= 1);
+            const bool bHalf(std::abs(nTurn - 180) <= 1);
+            const bool bPresetForward(nArrow == XML_rightArrow || nArrow == XML_downArrow);
+            const bool bAlongX((bLyingPreset && !bQuarter) || (bStandingPreset && bQuarter));
+            const bool bAlongY((bStandingPreset && !bQuarter) || (bLyingPreset && bQuarter));
+            // a right arrow turned by 90 points down, by 270 up; a down arrow by 90 left
+            const bool bForward(
+                !bQuarter ? (bPresetForward != bHalf)
+                          : (bLyingPreset ? (bPresetForward == (std::abs(nTurn - 90) <= 1))
+                                          : (bPresetForward != (std::abs(nTurn - 90) <= 1))));
             if (((fBefore + fAfter > 0.0 && fBefore + fAfter < 1.0)
                  || nBeforeLength + nAfterLength > 0 || fArrowHeight > 0.0)
                 && (bAlongX || bAlongY))
@@ -5935,6 +6236,14 @@ void settleNamedConnectors(const SmartArtDiagram& rDgm)
                     absolutePlaceOf(rDgm, presentationParentOf(rDgm, xOwn->msModelId)));
                 awt::Point aAt(pShape->getPosition());
                 awt::Size aSize(pShape->getSize());
+                // a quarter turn has the stored box lying across the way, its sides swap
+                // about its middle
+                if (bQuarter)
+                {
+                    aAt = awt::Point(aAt.X + (aSize.Width - aSize.Height) / 2,
+                                     aAt.Y + (aSize.Height - aSize.Width) / 2);
+                    aSize = awt::Size(aSize.Height, aSize.Width);
+                }
                 sal_Int32 nStart(bAlongX ? aAt.X : aAt.Y);
                 sal_Int32 nWay(bAlongX ? aSize.Width : aSize.Height);
                 if (oFrom && oTo && aParentAt && *oTo > *oFrom)
@@ -5967,6 +6276,13 @@ void settleNamedConnectors(const SmartArtDiagram& rDgm)
                         aAt.X += (aSize.Width - static_cast<sal_Int32>(fArrowHeight)) / 2;
                         aSize.Width = static_cast<sal_Int32>(fArrowHeight);
                     }
+                }
+                // back to the stored box, turned about the same middle
+                if (bQuarter)
+                {
+                    aAt = awt::Point(aAt.X + (aSize.Width - aSize.Height) / 2,
+                                     aAt.Y + (aSize.Height - aSize.Width) / 2);
+                    aSize = awt::Size(aSize.Height, aSize.Width);
                 }
                 pShape->setSize(aSize);
                 pShape->setChildSize(aSize);
@@ -6165,6 +6481,9 @@ void settleNamedConnectors(const SmartArtDiagram& rDgm)
             const sal_Int32 nTo(bForward ? aTargetAt->X : aSourceAt->X);
             sal_Int32& rAlong(bTurned ? aOwnSize.Height : aOwnSize.Width);
             sal_Int32 nMiddleX((nFrom + nTo) / 2);
+            // a line without pads runs the whole way
+            if (bLine && !bPads && nTo > nFrom)
+                rAlong = nTo - nFrom;
             if (bPads && nTo > nFrom)
             {
                 const sal_Int32 nWay(nTo - nFrom);
@@ -6186,6 +6505,8 @@ void settleNamedConnectors(const SmartArtDiagram& rDgm)
             const sal_Int32 nTo(bForward ? aTargetAt->Y : aSourceAt->Y);
             sal_Int32& rAlong(bTurned ? aOwnSize.Width : aOwnSize.Height);
             sal_Int32 nMiddleY((nFrom + nTo) / 2);
+            if (bLine && !bPads && nTo > nFrom)
+                rAlong = nTo - nFrom;
             if (bPads && nTo > nFrom)
             {
                 const sal_Int32 nWay(nTo - nFrom);
@@ -6568,8 +6889,9 @@ sal_Int32 AlgAtom::getVerticalShapesCount(const ShapePtr& rShape)
 
 namespace
 {
-/// Does the first data node of this shape have customized text properties?
-bool HasCustomText(const SmartArtDiagram& rDgm, const ShapePtr& rShape)
+/// first data node the shape rShape shows, or none
+rtl::Reference<svx::diagram::Point> firstDataNodeOf(const SmartArtDiagram& rDgm,
+                                                    const ShapePtr& rShape)
 {
     const PresPointShapeMap& rPresPointShapeMap = rDgm.getLayout()->getPresPointShapeMap();
     const DiagramData_oox::StringMap& rPresOfNameMap = rDgm.getData()->getPresOfNameMap();
@@ -6604,13 +6926,14 @@ bool HasCustomText(const SmartArtDiagram& rDgm, const ShapePtr& rShape)
         }
     }
 
-    // If we have a data node, see if its text is customized or not.
-    if (xDataNode.is())
-    {
-        return xDataNode->mbCustomText;
-    }
+    return xDataNode;
+}
 
-    return false;
+/// Does the first data node of this shape have customized text properties?
+bool HasCustomText(const SmartArtDiagram& rDgm, const ShapePtr& rShape)
+{
+    const rtl::Reference<svx::diagram::Point> xDataNode(firstDataNodeOf(rDgm, rShape));
+    return xDataNode.is() && xDataNode->mbCustomText;
 }
 
 // The part of a shape's own size along nRefType that separates it from the next sibling, or
@@ -7071,6 +7394,38 @@ bool ownRuleFrees(const LayoutAtom& rAtom, sal_Int32 nType)
             return true;
     }
     return false;
+}
+
+// the factor a rule of type nType lets the value grow by (a rule with a factor and no
+// value), and the font the rules before it let the text shrink to first, the last "rule
+// type=primFontSz" before it; nothing where the node states none
+std::optional<std::pair<double, double>> ownRuleFactorOf(const LayoutAtom& rAtom, sal_Int32 nType)
+{
+    double fFloor(0.0);
+    std::optional<std::pair<double, double>> oFound;
+    std::function<void(const LayoutAtom&)> aWalk = [&](const LayoutAtom& rBelow) {
+        for (const LayoutAtomPtr& pChild : rBelow.getChildren())
+        {
+            if (oFound)
+                return;
+            if (dynamic_cast<const LayoutNode*>(pChild.get()))
+                continue;
+            if (const RuleAtom* pRule = dynamic_cast<const RuleAtom*>(pChild.get()))
+            {
+                const Rule& rRule = pRule->getRule();
+                if (rRule.mnType == XML_primFontSz && std::isfinite(rRule.mfValue))
+                    fFloor = rRule.mfValue;
+                else if (rRule.mnType == nType && !std::isfinite(rRule.mfValue)
+                         && !std::isinf(rRule.mfValue) && std::isfinite(rRule.mfFactor)
+                         && rRule.mfFactor > 0.0)
+                    oFound = std::make_pair(rRule.mfFactor, fFloor);
+            }
+            else
+                aWalk(*pChild);
+        }
+    };
+    aWalk(rAtom);
+    return oFound;
 }
 
 /// The extent each child of a linear layout asks for along the axis the children are placed on,
@@ -8931,6 +9286,38 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
 
                 rShape->setSubType(nType);
                 rShape->getCustomShapeProperties()->setShapePresetType(nType);
+
+                // the shaft of such an arrow is its stem over the head's height, stemThick and
+                // hArH as the connector states them, 0.6 where nothing is stated; the head is
+                // half the shorter side
+                if (nType == XML_rightArrow || nType == XML_leftArrow
+                    || nType == XML_leftRightArrow)
+                {
+                    double fStemOfWidth(0.0), fHeadOfWidth(1.0), fStemOfHead(0.0);
+                    for (const Constraint& rOwn : collectDirectConstraints(getLayoutNode()))
+                    {
+                        if (!rOwn.msForName.isEmpty() || rOwn.mfFactor <= 0.0)
+                            continue;
+                        if (rOwn.mnType == XML_stemThick && rOwn.mnRefType == XML_w)
+                            fStemOfWidth = rOwn.mfFactor;
+                        else if (rOwn.mnType == XML_stemThick && rOwn.mnRefType == XML_hArH)
+                            fStemOfHead = rOwn.mfFactor;
+                        else if (rOwn.mnType == XML_hArH && rOwn.mnRefType == XML_w)
+                            fHeadOfWidth = rOwn.mfFactor;
+                    }
+                    double fStem(0.6);
+                    if (fStemOfHead > 0.0)
+                        fStem = fStemOfHead;
+                    else if (fStemOfWidth > 0.0 && fHeadOfWidth > 0.0)
+                        fStem = fStemOfWidth / fHeadOfWidth;
+                    fStem = std::clamp(fStem, 0.0, 1.0);
+                    rShape->getCustomShapeProperties() = std::make_shared<CustomShapeProperties>(
+                        *rShape->getCustomShapeProperties());
+                    auto& rGuides(rShape->getCustomShapeProperties()->getAdjustmentGuideList());
+                    setGuideValue(rGuides, u"adj1"_ustr,
+                                  static_cast<sal_Int32>(std::lround(fStem * 100000.0)));
+                    setGuideValue(rGuides, u"adj2"_ustr, 50000);
+                }
             }
 
             // A spoke the ring has sized as a whole keeps its size.
@@ -9427,15 +9814,11 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
             else if (fReachY > 0.01)
                 fRadius = fRoomY / fReachY;
 
-            // With a node in the middle and sp stated, the ring is not fitted to the room: its
-            // radius is the middle shape's edge, then sp, then the node's edge, along the spoke,
-            // and it is the shapes that are scaled until the whole stands in the room. sp is a
-            // part of a named child's width and scales along, or a length in millimetres, which
-            // does not, so the scale is found in a few rounds. An ellipse reaches as far as its
-            // half width whichever way the spoke runs, a box as far as its side that way.
-            // The edge of a shape along a spoke at an angle: an ellipse reaches as far as its
-            // half width whichever way, a box as far as the side the spoke runs into, and at
-            // most to its corner.
+            // with a node in the middle and sp stated, the ring is not fitted to the room: its
+            // radius is the middle shape's edge, sp and the node's edge along the spoke, and the
+            // shapes are scaled until the whole fits. sp scales along, so this takes a few rounds.
+            // The edge of a shape along a spoke: an ellipse reaches its half width whichever way, a
+            // box the side the spoke runs into, at most its corner
             const auto aEdgeAlong = [](const oox::drawingml::ShapePtr& rChild,
                                        const awt::Size& rSize, double fAt) {
                 if (rChild->getCustomShapeProperties()->getShapePresetType() == XML_ellipse)
@@ -9483,12 +9866,84 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                         double fRing;
                         double fLeft, fTop, fRight, fBottom;
                     };
+                    // the nodes keep the sibSp between them too, from where the line between two
+                    // neighbours leaves one to where it enters the other, and the ring is the
+                    // larger of that and the spokes
+                    double fSiblingPart(0.0);
+                    double fSiblingFixed(0.0);
+                    OUString aSiblingOf;
+                    for (const Constraint& rConstraint : rConstraints)
+                    {
+                        if (rConstraint.mnType != XML_sibSp || !rConstraint.msForName.isEmpty())
+                            continue;
+                        if (rConstraint.mnRefType == XML_w && !rConstraint.msRefForName.isEmpty()
+                            && rConstraint.mfFactor != 0.0)
+                        {
+                            fSiblingPart = rConstraint.mfFactor;
+                            aSiblingOf = rConstraint.msRefForName;
+                        }
+                        else if (rConstraint.mnRefType == XML_none && rConstraint.mfValue > 0.0)
+                            fSiblingFixed = o3tl::convert(rConstraint.mfValue, o3tl::Length::mm,
+                                                          o3tl::Length::emu);
+                    }
+                    // what a composite on the ring draws across, as parts of its width from its
+                    // left: its children's l and w for the branch of its point; 0 and 1 where
+                    // nothing is stated
+                    std::map<OUString, const LayoutNode*> aRingNodes;
+                    gatherLayoutNodes(getLayoutNode(), aRingNodes);
+                    const auto aDrawnAcross = [&](const oox::drawingml::ShapePtr& rChild) {
+                        std::pair<double, double> aAcross(0.0, 1.0);
+                        const auto aNode = aRingNodes.find(rChild->getInternalName());
+                        if (aNode == aRingNodes.end() || !aNode->second)
+                            return aAcross;
+                        rtl::Reference<svx::diagram::Point> xPoint;
+                        for (const auto& rEntry : rDgm.getLayout()->getPresPointShapeMap())
+                            if (rEntry.second == rChild)
+                            {
+                                xPoint = rEntry.first;
+                                break;
+                            }
+                        std::vector<Constraint> aOwn;
+                        gatherDecidedConstraints(rDgm, *aNode->second, xPoint, aOwn);
+                        std::map<OUString, double> aWidthPart, aLeftPart;
+                        for (int nPass = 0; nPass < 3; ++nPass)
+                            for (const Constraint& rOne : aOwn)
+                            {
+                                if (rOne.mnFor != XML_ch || rOne.msForName.isEmpty()
+                                    || rOne.mnRefType != XML_w)
+                                    continue;
+                                const double fPart(rOne.mfFactor != 0.0 ? rOne.mfFactor : 1.0);
+                                std::optional<double> oOf;
+                                if (rOne.msRefForName.isEmpty())
+                                    oOf = 1.0;
+                                else if (aWidthPart.count(rOne.msRefForName))
+                                    oOf = aWidthPart.at(rOne.msRefForName);
+                                if (!oOf)
+                                    continue;
+                                if (rOne.mnType == XML_w)
+                                    aWidthPart[rOne.msForName] = fPart * *oOf;
+                                else if (rOne.mnType == XML_l)
+                                    aLeftPart[rOne.msForName] = fPart * *oOf;
+                            }
+                        if (aWidthPart.empty())
+                            return aAcross;
+                        double fLeft(0.0), fRight(0.0);
+                        for (const auto& [rName, fWidth] : aWidthPart)
+                        {
+                            const double fAt(aLeftPart.count(rName) ? aLeftPart.at(rName)
+                                                                    : 0.0);
+                            fLeft = std::min(fLeft, fAt);
+                            fRight = std::max(fRight, fAt + fWidth);
+                        }
+                        aAcross = std::make_pair(fLeft, std::max(1.0, fRight));
+                        return aAcross;
+                    };
                     const auto aRingFor = [&](double fScale) {
                         const sal_Int32 nWidth(nPlainWidth * fScale);
                         const sal_Int32 nHeight(nPlainHeight * fScale);
                         const awt::Size aMiddle(
                             aSizeOfChild(rMiddle->getInternalName(), nWidth, nHeight));
-                        double fSpace(fSpaceFixed);
+                        double fSpace(fSpaceFixed * fScale);
                         if (fSpacePart != 0.0)
                             fSpace += fSpacePart * aSizeOfChild(aSpaceOf, nWidth, nHeight).Width;
 
@@ -9509,6 +9964,49 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                                                                   + aEdgeAlong(rChild, aOwn, fAt));
                             ++nPlace;
                         }
+                        if (fSiblingPart != 0.0 || fSiblingFixed > 0.0)
+                        {
+                            double fSibling(fSiblingFixed * fScale);
+                            if (fSiblingPart != 0.0)
+                                fSibling += fSiblingPart
+                                            * aSizeOfChild(aSiblingOf, nWidth, nHeight).Width;
+                            struct Placed
+                            {
+                                double fAt;
+                                awt::Size aSize;
+                                oox::drawingml::ShapePtr pShape;
+                            };
+                            std::vector<Placed> aPlaced;
+                            for (size_t nChild = 1; nChild < aCycleChildren.size(); ++nChild)
+                            {
+                                const oox::drawingml::ShapePtr& rChild(aCycleChildren[nChild]);
+                                if (aSpansTheCircle(rChild) || aIsSpoke(rChild)
+                                    || rChild->getSubType() == XML_conn)
+                                    continue;
+                                aPlaced.push_back(
+                                    { basegfx::deg2rad(aPlaced.size() * fStep + nStartAngle),
+                                      aSizeOfChild(rChild->getInternalName(), nWidth, nHeight),
+                                      rChild });
+                            }
+                            const size_t nPairs(bWholeRing ? aPlaced.size()
+                                                           : aPlaced.size() - 1);
+                            const double fHalfStep(basegfx::deg2rad(std::abs(fStep)) / 2.0);
+                            for (size_t nPair = 0; aPlaced.size() >= 2 && nPair < nPairs
+                                                   && sin(fHalfStep) > 0.001;
+                                 ++nPair)
+                            {
+                                const auto& rFrom(aPlaced[nPair]);
+                                const auto& rTo(aPlaced[(nPair + 1) % aPlaced.size()]);
+                                // the line between the two, as an angle from the top like a spoke
+                                const double fAlong(std::atan2(sin(rTo.fAt) - sin(rFrom.fAt),
+                                                               cos(rTo.fAt) - cos(rFrom.fAt)));
+                                aOut.fRing = std::max(
+                                    aOut.fRing,
+                                    (aEdgeAlong(rFrom.pShape, rFrom.aSize, fAlong)
+                                     + aEdgeAlong(rTo.pShape, rTo.aSize, fAlong) + fSibling)
+                                        / (2.0 * sin(fHalfStep)));
+                            }
+                        }
                         nPlace = 0;
                         for (size_t nChild = 1; nChild < aCycleChildren.size(); ++nChild)
                         {
@@ -9521,11 +10019,38 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                                 aSizeOfChild(rChild->getInternalName(), nWidth, nHeight));
                             const double fX(aOut.fRing * sin(fAt));
                             const double fY(-aOut.fRing * cos(fAt));
-                            aOut.fLeft = std::min(aOut.fLeft, fX - aOwn.Width / 2.0);
-                            aOut.fRight = std::max(aOut.fRight, fX + aOwn.Width / 2.0);
+                            const std::pair<double, double> aAcross(aDrawnAcross(rChild));
+                            aOut.fLeft = std::min(aOut.fLeft, fX - aOwn.Width / 2.0
+                                                                  + aAcross.first * aOwn.Width);
+                            aOut.fRight = std::max(aOut.fRight, fX - aOwn.Width / 2.0
+                                                                    + aAcross.second * aOwn.Width);
                             aOut.fTop = std::min(aOut.fTop, fY - aOwn.Height / 2.0);
                             aOut.fBottom = std::max(aOut.fBottom, fY + aOwn.Height / 2.0);
                             ++nPlace;
+                        }
+                        // a connector round the whole ring, as thick as a part of a node, counts
+                        // as a circle of the ring and that thickness round the middle
+                        for (const oox::drawingml::ShapePtr& rChild : aCycleChildren)
+                        {
+                            if (!aSpansTheCircle(rChild) || rChild->getSubType() != XML_conn)
+                                continue;
+                            for (const Constraint& rConstraint : rConstraints)
+                            {
+                                if (rConstraint.mnType != XML_h || rConstraint.mnRefType != XML_w
+                                    || rConstraint.msForName != rChild->getInternalName()
+                                    || rConstraint.msRefForName.isEmpty()
+                                    || rConstraint.mfFactor <= 0.0)
+                                    continue;
+                                const double fReach(
+                                    aOut.fRing
+                                    + rConstraint.mfFactor
+                                          * aSizeOfChild(rConstraint.msRefForName, nWidth, nHeight)
+                                                .Width);
+                                aOut.fLeft = std::min(aOut.fLeft, -fReach);
+                                aOut.fRight = std::max(aOut.fRight, fReach);
+                                aOut.fTop = std::min(aOut.fTop, -fReach);
+                                aOut.fBottom = std::max(aOut.fBottom, fReach);
+                            }
                         }
                         return aOut;
                     };
@@ -9734,6 +10259,13 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                         && rConstraint.mfFactor != 0.0 && rConstraint.mnOperator != XML_lte
                         && rConstraint.mnOperator != XML_gte)
                         fSiblingPart = rConstraint.mfFactor;
+                    // a sibSp of the cycle's own width is that part of a node as wide as the
+                    // cycle
+                    else if (rConstraint.mnRefType == XML_w && rConstraint.mnRefFor != XML_ch
+                             && rConstraint.msRefForName.isEmpty() && rConstraint.mfFactor != 0.0
+                             && rConstraint.mnOperator != XML_lte
+                             && rConstraint.mnOperator != XML_gte)
+                        fSiblingPart = rConstraint.mfFactor;
                     else if (rConstraint.mnRefType == XML_none && rConstraint.mfValue > 0.0
                              && rShape->getSize().Width > 0)
                     {
@@ -9773,8 +10305,7 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                                                        ->getShapePresetType()
                                                    == XML_ellipse });
                 }
-                if (fSiblingPart != 0.0 && aPlaces.size() >= 2 && !aNodeName.isEmpty()
-                    && bWholeRing)
+                if (fSiblingPart != 0.0 && aPlaces.size() >= 2 && !aNodeName.isEmpty())
                 {
                     for (const Constraint& rConstraint : rConstraints)
                         if (rConstraint.mnType == XML_w && rConstraint.mnRefType == XML_sibSp
@@ -9822,10 +10353,13 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                             fLeave = std::min(fLeave, rPlace.fHeight / 2.0 / std::abs(sin(fAlong)));
                         return fLeave;
                     };
-                    const double fPlaceTurn(static_cast<double>(nSpanAngle) / aPlaces.size());
+                    // on a part of the ring the first and the last place are no neighbours, so
+                    // the span is shared between one gap less
+                    const size_t nGaps(bWholeRing ? aPlaces.size() : aPlaces.size() - 1);
+                    const double fPlaceTurn(static_cast<double>(nSpanAngle) / nGaps);
                     const double fPlaceStep(basegfx::deg2rad(std::abs(fPlaceTurn)));
                     double fRingOfWidth(0.0);
-                    for (size_t nPlace = 0; nPlace < aPlaces.size(); ++nPlace)
+                    for (size_t nPlace = 0; nPlace < nGaps; ++nPlace)
                     {
                         const double fFrom(basegfx::deg2rad(nPlace * fPlaceTurn + nStartAngle));
                         const double fTo(
@@ -9882,6 +10416,36 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                         if (bBoxes)
                             fBoxRingSibling = fSiblingPart;
                     }
+                }
+            }
+
+            // a ring with a single node and nothing in the middle is that node alone, as large
+            // as the room lets it be with its own proportions, in the middle
+            if (!bMiddleCounts && nPlacesOnTheCircle == 1)
+            {
+                for (const auto& rCycleChild : aCycleChildren)
+                {
+                    if (aSpansTheCircle(rCycleChild) || rCycleChild->getSubType() == XML_conn
+                        || rCycleChild->getServiceName() == "com.sun.star.drawing.GroupShape")
+                        continue;
+                    const OUString& rName(rCycleChild->getInternalName());
+                    const auto aAspect = aHeightOfWidth.find(rName);
+                    const double fHeightOfWidth(aAspect == aHeightOfWidth.end()
+                                                    ? static_cast<double>(nPlainHeight)
+                                                          / std::max<sal_Int32>(nPlainWidth, 1)
+                                                    : aAspect->second);
+                    double fWidth(rShape->getSize().Width);
+                    if (fHeightOfWidth > 0.0)
+                        fWidth = std::min(fWidth, rShape->getSize().Height / fHeightOfWidth);
+                    const auto aPart = aWidthOf.find(rName);
+                    const double fPart(aPart == aWidthOf.end() || aPart->second <= 0.0
+                                           ? 1.0
+                                           : aPart->second);
+                    nPlainWidth = static_cast<sal_Int32>(fWidth / fPart);
+                    nPlainHeight = static_cast<sal_Int32>(fWidth * fHeightOfWidth);
+                    aChildSize = aLargestChild();
+                    fRadius = 0.0;
+                    break;
                 }
             }
 
@@ -10227,15 +10791,9 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                                 auto& rProperties(*aCurrShape->getCustomShapeProperties());
                                 rProperties.setShapePresetType(nPreset);
                                 auto& rGuides(rProperties.getAdjustmentGuideList());
-                                const auto aSet = [&rGuides](const OUString& rName,
-                                                             double fValue) {
-                                    const sal_Int32 nValue(
-                                        static_cast<sal_Int32>(std::lround(fValue)));
-                                    if (rGuides.GetCustomShapeGuideValue(rName) < 0)
-                                        rGuides.push_back({ rName, OUString::number(nValue) });
-                                    else
-                                        rGuides.SetCustomShapeGuideValue(
-                                            { rName, OUString::number(nValue) });
+                                const auto aSet = [&rGuides](const OUString& rName, double fValue) {
+                                    setGuideValue(rGuides, rName,
+                                                  static_cast<sal_Int32>(std::lround(fValue)));
                                 };
                                 aSet(u"adj1"_ustr, fStem / fBox * 100000.0);
                                 aSet(u"adj2"_ustr, fHeadAngle * 60000.0);
@@ -10388,6 +10946,81 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                     aCurrShape->setSize(aCurrSize);
                     aCurrShape->setChildSize(aCurrSize);
 
+                    // a curved connector round the whole ring with no head at either end (begSty
+                    // and endSty noArr) is a band from the node before it to the next one, the
+                    // blockArc preset, 0.6 of the stated h; a ring turning the other way runs it
+                    // back
+                    if (bSpansTheCircle && !aArrowMiddle && aCurrShape->getSubType() == XML_conn
+                        && aCurrSize.Width > 0)
+                    {
+                        std::map<OUString, const LayoutNode*> aArcNodes;
+                        gatherLayoutNodes(mrLayoutNode, aArcNodes);
+                        const auto aArcNode = aArcNodes.find(aCurrShape->getInternalName());
+                        rtl::Reference<svx::diagram::Point> xArcPoint;
+                        for (const auto& rEntry : rDgm.getLayout()->getPresPointShapeMap())
+                            if (rEntry.second == aCurrShape)
+                            {
+                                xArcPoint = rEntry.first;
+                                break;
+                            }
+                        const AlgAtom* pArcAlgorithm(
+                            aArcNode != aArcNodes.end() && aArcNode->second
+                                ? algorithmOf(rDgm, *aArcNode->second, xArcPoint)
+                                : nullptr);
+                        const auto aParameter = [pArcAlgorithm](sal_Int32 nParameter,
+                                                                sal_Int32 nUnstated) {
+                            const auto aFound = pArcAlgorithm->getMap().find(nParameter);
+                            return aFound != pArcAlgorithm->getMap().end() ? aFound->second
+                                                                           : nUnstated;
+                        };
+                        if (pArcAlgorithm && pArcAlgorithm->getType() == XML_conn
+                            && (aParameter(XML_connRout, XML_stra) == XML_curve
+                                || aParameter(XML_connRout, XML_stra) == XML_longCurve)
+                            && aParameter(XML_begSty, XML_noArr) == XML_noArr
+                            && aParameter(XML_endSty, XML_arr) == XML_noArr)
+                        {
+                            double fBand(0.0);
+                            for (const Constraint& rConstraint : rConstraints)
+                                if (rConstraint.mnType == XML_h && rConstraint.mnRefType == XML_w
+                                    && rConstraint.msForName == aCurrShape->getInternalName()
+                                    && !rConstraint.msRefForName.isEmpty()
+                                    && rConstraint.mfFactor > 0.0)
+                                    fBand = 0.6 * rConstraint.mfFactor
+                                            * aSizeOfChild(rConstraint.msRefForName, nPlainWidth,
+                                                           nPlainHeight)
+                                                  .Width;
+                            if (fBand > 0.0)
+                            {
+                                // the preset's angles run clockwise from the right, the ring's
+                                // from the top
+                                aCurrShape->setSubType(XML_blockArc);
+                                // each arc has angles of its own, and the transitions of a ring
+                                // share one set of properties
+                                aCurrShape->getCustomShapeProperties()
+                                    = std::make_shared<CustomShapeProperties>(
+                                        *aCurrShape->getCustomShapeProperties());
+                                auto& rProperties(*aCurrShape->getCustomShapeProperties());
+                                rProperties.setShapePresetType(XML_blockArc);
+                                auto& rGuides(rProperties.getAdjustmentGuideList());
+                                const auto aSet = [&rGuides](const OUString& rName, double fValue) {
+                                    setGuideValue(rGuides, rName,
+                                                  static_cast<sal_Int32>(std::lround(fValue)));
+                                };
+                                // the band's box reaches a quarter of the band beyond
+                                // the circle through the nodes' middles
+                                const sal_Int32 nArcBox(
+                                    static_cast<sal_Int32>(2.0 * (nRadius + fBand / 4.0)));
+                                aCurrSize = awt::Size(nArcBox, nArcBox);
+                                aCurrShape->setSize(aCurrSize);
+                                aCurrShape->setChildSize(aCurrSize);
+                                aCurrShape->setPosition(
+                                    awt::Point(aRingCentre.Width - nArcBox / 2,
+                                               aRingCentre.Height - nArcBox / 2));
+                                aSet(u"adj3"_ustr, fBand / aCurrSize.Width * 100000.0);
+                            }
+                        }
+                    }
+
                     if (nRotationPath == XML_alongPath && !bSpansTheCircle)
                         aCurrShape->setRotation(fAngle * PER_DEGREE);
 
@@ -10400,6 +11033,52 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                     // so it takes no place of its own
                     if (!bSpansTheCircle)
                         idx++;
+                }
+
+                // once the nodes stand, an arc runs from the middle of the node before it to
+                // the middle of the next one; hidden spacers and a middle shape are not on the ring
+                const auto aDrawnNode = [&](const oox::drawingml::ShapePtr& rOne) {
+                    const double fOffX(rOne->getPosition().X + rOne->getSize().Width / 2.0
+                                       - aRingCentre.Width);
+                    const double fOffY(rOne->getPosition().Y + rOne->getSize().Height / 2.0
+                                       - aRingCentre.Height);
+                    return rOne->getServiceName() != "com.sun.star.drawing.GroupShape"
+                           && rOne->getSubType() != XML_conn
+                           && rOne->getSubType() != XML_blockArc
+                           && !aSpansTheCircle(rOne) && !aIsSpoke(rOne)
+                           && std::hypot(fOffX, fOffY) > 0.01 * std::max<double>(nRadius, 1.0);
+                };
+                const auto aAngleOf = [&aRingCentre](const oox::drawingml::ShapePtr& rOne) {
+                    const double fX(rOne->getPosition().X + rOne->getSize().Width / 2.0
+                                    - aRingCentre.Width);
+                    const double fY(rOne->getPosition().Y + rOne->getSize().Height / 2.0
+                                    - aRingCentre.Height);
+                    return std::fmod(basegfx::rad2deg(std::atan2(fY, fX)) + 360.0, 360.0);
+                };
+                const size_t nChildren(aCycleChildren.size());
+                for (size_t nArc = 0; nArc < nChildren; ++nArc)
+                {
+                    const oox::drawingml::ShapePtr& rArc(aCycleChildren[nArc]);
+                    if (rArc->getSubType() != XML_blockArc)
+                        continue;
+                    oox::drawingml::ShapePtr pFrom, pTo;
+                    for (size_t nStep = 1; nStep < nChildren && !pFrom; ++nStep)
+                        if (aDrawnNode(aCycleChildren[(nArc + nChildren - nStep) % nChildren]))
+                            pFrom = aCycleChildren[(nArc + nChildren - nStep) % nChildren];
+                    for (size_t nStep = 1; nStep < nChildren && !pTo; ++nStep)
+                        if (aDrawnNode(aCycleChildren[(nArc + nStep) % nChildren]))
+                            pTo = aCycleChildren[(nArc + nStep) % nChildren];
+                    if (!pFrom || !pTo || pFrom == pTo)
+                        continue;
+                    double fFrom(aAngleOf(pFrom)), fTo(aAngleOf(pTo));
+                    if (fStep < 0.0)
+                        std::swap(fFrom, fTo);
+                    auto& rGuides(rArc->getCustomShapeProperties()->getAdjustmentGuideList());
+                    const auto aSet = [&rGuides](const OUString& rName, double fValue) {
+                        setGuideValue(rGuides, rName, static_cast<sal_Int32>(std::lround(fValue)));
+                    };
+                    aSet(u"adj1"_ustr, fFrom * 60000.0);
+                    aSet(u"adj2"_ustr, fTo * 60000.0);
                 }
             }
             break;
@@ -10881,10 +11560,22 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                                             aGroup)
                               * 36000.0;
                 }
+                // a "for des" width in a column across a row is a part of the row's width, the
+                // extent the column's need was read against
+                const auto aOfRow
+                    = const_cast<SmartArtDiagram&>(rDgm).getWidthOfDescendantSizes().find(
+                        rShape.get());
+                const bool bOfRow(rConstraint.mnFor == XML_des && rConstraint.mnRefType == XML_w
+                                  && rConstraint.msRefForName.isEmpty()
+                                  && aOfRow
+                                         != const_cast<SmartArtDiagram&>(rDgm)
+                                                .getWidthOfDescendantSizes()
+                                                .end());
                 if (rConstraint.mnType == XML_w)
                 {
                     rProperty[XML_w] = oOfFont ? *oOfFont
                                                : (bOfItself ? rProperty[rConstraint.mnRefType]
+                                                  : bOfRow  ? aOfRow->second
                                                             : rShape->getSize().Width)
                                                      * rConstraint.mfFactor;
                     if (rProperty[XML_w] > rShape->getSize().Width)
@@ -11137,6 +11828,8 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                 bool bAnyTextDriven(false);
                 // false once a text node's widest word is wider than its box at the font tried
                 bool bWordsFit(true);
+                // the width a row in the column gives a child of its own, from its stated part
+                std::map<const Shape*, sal_Int64> aWidthInRow;
                 std::vector<ShapePtr> aTextNodes;
                 // the groups a text of which has a word wider than its box at the font tried
                 std::set<OUString> aGroupsWordsDidNotFit;
@@ -11151,6 +11844,9 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                                                         : fontOfGroup(rDgm, rConstraints,
                                                                       pOne->getInternalName(),
                                                                       aGroup));
+                    // a text of a size of its own is measured at that size with its margins,
+                    // what the layout states against the font stays at the group's
+                    const std::optional<double> oOwnSize(ownTextSizeOf(rDgm, pOne));
                     // the part of the font the shape is stated with along the column, as many
                     // millimetres as the part of the font in points: Vertical_Box_List's parent
                     // text of "h refType primFontSz fact 0.82" at 18 points is 14.76 mm high.
@@ -11181,19 +11877,24 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                     const AlgAtom* pAlg(aAlgorithms.empty() ? nullptr : aAlgorithms.front());
                     if (pAlg && pAlg->getType() == XML_tx && ownRuleGrows(*pNode, nAxisType))
                     {
-                        // a node without text is its margins alone, Vertical_Box_List's third
-                        // child text, 453600 for margins of 1.64 and 0.56 of the font
+                        // a node without text is the part of the font it is stated with, or just
+                        // its margins
                         const std::vector<OUString> aParagraphs(textParagraphsOf(rDgm, pOne));
                         {
                             bAnyTextDriven = true;
                             if (std::find(aTextNodes.begin(), aTextNodes.end(), pOne)
                                 == aTextNodes.end())
                                 aTextNodes.push_back(pOne);
+                            if (aParagraphs.empty() && oPartOfFont)
+                                return oPartOfFont;
                             // the margins, stated for the node by the row or by the node itself
                             // as parts of the font, or as lengths
                             double fOverUnder(0.0), fSides(0.0);
                             sal_Int64 nFixed(0);
-                            sal_Int64 nWidth(rShape->getSize().Width);
+                            const auto aInRow = aWidthInRow.find(pOne.get());
+                            sal_Int64 nWidth(aInRow != aWidthInRow.end()
+                                                 ? aInRow->second
+                                                 : rShape->getSize().Width);
                             const auto aMargins = [&](const Constraint& rConstraint, bool bOwn) {
                                 if (!bOwn && rConstraint.msForName != pOne->getInternalName())
                                     return;
@@ -11270,14 +11971,16 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                                 textParagraphLevelsOf(rDgm, pOne, aParagraphs.size()));
                             const double fSecondPart(
                                 secondFontPartOf(rConstraints, *pNode, pOne->getInternalName()));
+                            const double fOwnFont(oOwnSize ? *oOwnSize : fFont);
                             std::vector<double> aFontOfParagraph;
                             for (size_t n = 0; n < aParagraphs.size(); ++n)
                                 aFontOfParagraph.push_back(
-                                    fontOfLevel(fFont, aLevels[n], fSecondPart));
+                                    oOwnSize ? fOwnFont
+                                             : fontOfLevel(fFont, aLevels[n], fSecondPart));
                             const double fTextFont(aFontOfParagraph.empty()
-                                                       ? fFont
+                                                       ? fOwnFont
                                                        : aFontOfParagraph.front());
-                            nWidth -= static_cast<sal_Int64>(fSides * fFont * fPoint);
+                            nWidth -= static_cast<sal_Int64>(fSides * fOwnFont * fPoint);
                             // the words stand in the width the shape leaves its text
                             sal_Int64 nInset(0);
                             const sal_Int64 nText(
@@ -11286,22 +11989,22 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                                     : measureTextHeightInShape(
                                           pOne, aParagraphs, std::max<sal_Int64>(nWidth, 1),
                                           nFixed
-                                              + static_cast<sal_Int64>(fOverUnder * fFont
+                                              + static_cast<sal_Int64>(fOverUnder * fOwnFont
                                                                        * fPoint),
                                           fTextFont, aFontOfParagraph, aLevels,
-                                          spaceAfterPartsOf(*pNode), &nInset));
+                                          spaceAfterPartsOf(*pNode), rDgm.getTextFont(), &nInset));
                             if (!aParagraphs.empty()
                                 && measureWidestWord(aParagraphs, fTextFont,
-                                                     u"Liberation Sans"_ustr, aFontOfParagraph,
+                                                     rDgm.getTextFont(), aFontOfParagraph,
                                                      aLevels)
                                        > nWidth - 2 * nInset)
                             {
                                 bWordsFit = false;
-                                if (!aGroup.isEmpty())
+                                if (!aGroup.isEmpty() && !oOwnSize)
                                     aGroupsWordsDidNotFit.insert(aGroup);
                             }
                             const sal_Int64 nOverUnder(
-                                static_cast<sal_Int64>(fOverUnder * fFont * fPoint));
+                                static_cast<sal_Int64>(fOverUnder * fOwnFont * fPoint));
                             const double fNeed(static_cast<double>(nText + nFixed + nOverUnder)
                                                / nParentExtent);
                             return std::max(fNeed, oPartOfFont.value_or(0.0));
@@ -11315,8 +12018,26 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                                                                                : XML_fromL);
                         const bool bBelowAlong(nBelowDir == XML_fromT || nBelowDir == XML_fromB);
                         std::optional<double> oBelow;
+                        std::vector<Constraint> aRowOwn;
+                        if (!bBelowAlong)
+                        {
+                            const auto aPoint = aRowPoints.find(pOne.get());
+                            gatherDecidedConstraints(rDgm, *pNode,
+                                                     aPoint != aRowPoints.end()
+                                                         ? aPoint->second
+                                                         : rtl::Reference<svx::diagram::Point>(),
+                                                     aRowOwn);
+                        }
                         for (const ShapePtr& pInside : pOne->getChildren())
                         {
+                            for (const Constraint& rShare : aRowOwn)
+                                if (rShare.mnType == XML_w && rShare.mnRefType == XML_w
+                                    && rShare.mnFor == XML_ch
+                                    && rShare.msForName == pInside->getInternalName()
+                                    && rShare.msRefForName.isEmpty() && rShare.mfFactor > 0.0
+                                    && rShare.mnOperator == XML_none)
+                                    aWidthInRow[pInside.get()] = static_cast<sal_Int64>(
+                                        rShape->getSize().Width * rShare.mfFactor);
                             const std::optional<double> oInside(
                                 aNeedAt(pInside, fFontGiven, bBelowAlong));
                             if (!oInside)
@@ -11442,7 +12163,7 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                     {
                         OUString aGroup;
                         const double fGroupFont(
-                            fontOfGroup(rDgm, rConstraints, pText->getInternalName(), aGroup));
+                            textFontOf(rDgm, rConstraints, pText, aGroup));
                         const auto aTextNode = aRowNodes.find(pText->getInternalName());
                         const double fSecondPart(
                             aTextNode != aRowNodes.end() && aTextNode->second
@@ -11565,6 +12286,8 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
             std::map<const Shape*, sal_Int32> aTextHeightAcross;
             // the height stated for a name before the texts of that name wrote theirs
             std::map<OUString, sal_Int64> aStatedHeightOf;
+            // the children grown from their own proportions by a rule's factor
+            std::set<const Shape*> aGrownByFactor;
             // In a row, lin fromL, a text node that grows with its text, "rule type=h val=INF",
             // is as high as its text at the Diagram's font and the margins over and under it,
             // at least the part of the font it is stated with, and what is bound to it follows:
@@ -11589,7 +12312,7 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                     const std::vector<OUString> aParagraphs(textParagraphsOf(rDgm, pChild));
                     OUString aGroup;
                     const double fFont(
-                        fontOfGroup(rDgm, rConstraints, pChild->getInternalName(), aGroup));
+                        textFontOf(rDgm, rConstraints, pChild, aGroup));
                     const std::vector<sal_Int32> aLevels(
                         textParagraphLevelsOf(rDgm, pChild, aParagraphs.size()));
                     const double fSecondPart(
@@ -11679,9 +12402,9 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                                   pChild, aParagraphs, std::max<sal_Int64>(nWidth, 1),
                                   static_cast<sal_Int64>(fOverUnder * fFont * fPoint), fTextFont,
                                   aFontOfParagraph, aLevels,
-                                  spaceAfterPartsOf(*aNode->second), &nInset));
+                                  spaceAfterPartsOf(*aNode->second), rDgm.getTextFont(), &nInset));
                     if (!aParagraphs.empty()
-                        && measureWidestWord(aParagraphs, fTextFont, u"Liberation Sans"_ustr,
+                        && measureWidestWord(aParagraphs, fTextFont, rDgm.getTextFont(),
                                              aFontOfParagraph, aLevels)
                                > nWidth - 2 * nInset)
                         rMutable.getGroupsThatDidNotFit().insert(aGroup);
@@ -11696,12 +12419,33 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                             rMutable.getGroupsThatDidNotFit().insert(aGroup);
                         continue;
                     }
-                    // A node with a height of its own width grows by a stated factor at most,
-                    // "rule type=h fact=1.5" on Basic_Process's nodes, and its font shrinks to
-                    // the rule's floor, 18, where the drawing is read from; that is not read
-                    // yet, so such a node keeps its proportions.
+                    // a node with a height of its own width grows by the rule's factor at most
+                    // ("rule type=h fact=1.5") once its font is down to the rule's floor before
+                    // it; a text higher than the node, or than the grown node, makes its group a
+                    // point smaller on the next pass. Nodes held equal ("h for ch ptType node op
+                    // equ") are as high as the highest
                     if (nOwnHeight > 0)
+                    {
+                        const std::optional<std::pair<double, double>> oFactor(
+                            ownRuleFactorOf(*aNode->second, XML_h));
+                        if (!oFactor || nNeed <= nOwnHeight)
+                            continue;
+                        const sal_Int64 nMost(
+                            static_cast<sal_Int64>(nOwnHeight * oFactor->first));
+                        if (fFont > oFactor->second + 1e-6 || nNeed > nMost)
+                            rMutable.getGroupsThatDidNotFit().insert(aGroup);
+                        if (fFont > oFactor->second + 1e-6)
+                            continue;
+                        // the node grows in steps of a thirty-second of the room the factor gives
+                        const sal_Int64 nStep(
+                            std::max<sal_Int64>(1, (nMost - nOwnHeight) / 32));
+                        nNeed = nOwnHeight + ((nNeed - nOwnHeight + nStep - 1) / nStep) * nStep;
+                        const sal_Int32 nHeight(static_cast<sal_Int32>(std::min<sal_Int64>(
+                            std::min<sal_Int64>(nNeed, nMost), rShape->getSize().Height)));
+                        aTextHeightAcross[pChild.get()] = nHeight;
+                        aGrownByFactor.insert(pChild.get());
                         continue;
+                    }
                     // A text stated with a length, "h for ch ptType node val 20", grows from it
                     // in steps of a thirty-second of it: Bar_List's bars are 118, 136, 37 and
                     // 136 thirty-seconds of their 20 mm.
@@ -11735,6 +12479,78 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                     aTextHeightAcross[pChild.get()] = nHeight;
                     if (rMutable.getGroupsThatShrank().count(aGroup))
                         rMutable.getFittedFontSizes()[pChild->getInternalName()] = fTextFont;
+                }
+
+                // the nodes grown by a factor are as high as the highest of them where the row
+                // holds its nodes' heights equal, "h for ch ptType node op equ"
+                if (!aGrownByFactor.empty()
+                    && std::any_of(rConstraints.begin(), rConstraints.end(),
+                                   [](const Constraint& rEqual) {
+                                       return rEqual.mnType == XML_h && rEqual.mnFor == XML_ch
+                                              && rEqual.mnPointType == XML_node
+                                              && rEqual.mnOperator == XML_equ
+                                              && rEqual.mnRefType == XML_none;
+                                   }))
+                {
+                    sal_Int32 nHighest(0);
+                    std::set<OUString> aNames;
+                    for (const Shape* pGrown : aGrownByFactor)
+                    {
+                        nHighest = std::max(nHighest, aTextHeightAcross[pGrown]);
+                        aNames.insert(pGrown->getInternalName());
+                    }
+                    for (const ShapePtr& pChild : rShape->getChildren())
+                        if (aNames.count(pChild->getInternalName()))
+                            aTextHeightAcross[pChild.get()] = nHighest;
+                }
+
+                // a child bound to be at least as high as a text of the row ("op gte") is as
+                // high as that text grew
+                if (!aTextHeightAcross.empty())
+                {
+                    rtl::Reference<svx::diagram::Point> xOwn;
+                    for (const auto& rEntry : rDgm.getLayout()->getPresPointShapeMap())
+                        if (rEntry.second == rShape)
+                        {
+                            xOwn = rEntry.first;
+                            break;
+                        }
+                    std::vector<Constraint> aBounds;
+                    gatherDecidedBounds(rDgm, getLayoutNode(), xOwn, aBounds);
+                    for (const ShapePtr& pChild : rShape->getChildren())
+                        for (const Constraint& rBound : aBounds)
+                        {
+                            if (rBound.mnOperator != XML_gte || rBound.mnType != XML_h
+                                || rBound.mnRefType != XML_h || rBound.mnFor != XML_ch
+                                || rBound.mnRefFor != XML_ch
+                                || rBound.msForName != pChild->getInternalName()
+                                || rBound.msRefForName.isEmpty()
+                                || rBound.msRefForName == rBound.msForName)
+                                continue;
+                            const double fFactor(rBound.mfFactor > 0.0 ? rBound.mfFactor : 1.0);
+                            for (const ShapePtr& pText : rShape->getChildren())
+                            {
+                                if (pText->getInternalName() != rBound.msRefForName)
+                                    continue;
+                                const auto aGrown = aTextHeightAcross.find(pText.get());
+                                if (aGrown == aTextHeightAcross.end())
+                                    continue;
+                                const sal_Int32 nAtLeast(static_cast<sal_Int32>(
+                                    std::min<double>(aGrown->second * fFactor,
+                                                     rShape->getSize().Height)));
+                                const std::optional<sal_Int32> oNow(findProperty(
+                                    aProperties, pChild->getInternalName(), XML_h));
+                                const auto aOwnGrown = aTextHeightAcross.find(pChild.get());
+                                const sal_Int32 nNow(aOwnGrown != aTextHeightAcross.end()
+                                                         ? aOwnGrown->second
+                                                         : oNow.value_or(0));
+                                if (nAtLeast > nNow)
+                                {
+                                    aProperties[pChild->getInternalName()][XML_h] = nAtLeast;
+                                    aTextHeightAcross[pChild.get()] = nAtLeast;
+                                }
+                            }
+                        }
                 }
             }
 
@@ -12556,6 +13372,88 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
             aTotalSize.Height += (fCount-1) * aSpaceSize.Height;
 
             const bool bFillAxis = !aWantedExtent.empty();
+            // a column in a row keeps its stated width for its own children, and the row goes
+            // on by what the column draws: the part of its widest child, times the part of that
+            // child its drawn shapes and texts are stated with where the child is a row itself
+            std::vector<double> aAdvancePart(aWantedExtent.size(), 1.0);
+            if (bFillAxis && nIncX && !bWalkBack)
+            {
+                std::map<OUString, const LayoutNode*> aBelowNodes;
+                gatherLayoutNodes(getLayoutNode(), aBelowNodes);
+                const auto aPointOf = [&rDgm](const ShapePtr& rOne) {
+                    for (const auto& rEntry : rDgm.getLayout()->getPresPointShapeMap())
+                        if (rEntry.second == rOne)
+                            return rEntry.first;
+                    return rtl::Reference<svx::diagram::Point>();
+                };
+                // the part of its width each child of rOne is stated with, "w for ch forName X
+                // refType w", for the branch rOne's point decides
+                const auto aWidthParts = [&](const ShapePtr& rOne) {
+                    std::map<OUString, double> aParts;
+                    const auto aNode = aBelowNodes.find(rOne->getInternalName());
+                    if (aNode == aBelowNodes.end() || !aNode->second)
+                        return aParts;
+                    std::vector<Constraint> aOwn;
+                    gatherDecidedConstraints(rDgm, *aNode->second, aPointOf(rOne), aOwn);
+                    for (const Constraint& rOwn : aOwn)
+                        if (rOwn.mnType == XML_w && rOwn.mnFor == XML_ch
+                            && !rOwn.msForName.isEmpty() && rOwn.mnRefType == XML_w
+                            && rOwn.msRefForName.isEmpty() && rOwn.mfFactor > 0.0)
+                            aParts[rOwn.msForName] = rOwn.mfFactor;
+                    return aParts;
+                };
+                const auto aLinDirectionOf = [&](const ShapePtr& rOne) -> std::optional<sal_Int32> {
+                    const auto aNode = aBelowNodes.find(rOne->getInternalName());
+                    if (aNode == aBelowNodes.end() || !aNode->second)
+                        return std::nullopt;
+                    const AlgAtom* pAlgorithm(algorithmOf(rDgm, *aNode->second, aPointOf(rOne)));
+                    if (!pAlgorithm || pAlgorithm->getType() != XML_lin)
+                        return std::nullopt;
+                    const auto aDirection = pAlgorithm->getMap().find(XML_linDir);
+                    return aDirection != pAlgorithm->getMap().end() ? aDirection->second
+                                                                    : XML_fromL;
+                };
+                // a shape that draws something or holds text, a text with its box hidden too;
+                // a bare spacer is a group
+                const auto aHasGeometry = [](const ShapePtr& rOne) {
+                    return rOne->getServiceName() != "com.sun.star.drawing.GroupShape";
+                };
+                size_t nAt(0);
+                for (const ShapePtr& pChild : rShape->getChildren())
+                {
+                    const size_t nIndex(nAt++);
+                    const std::optional<sal_Int32> oDirection(aLinDirectionOf(pChild));
+                    if (!oDirection || (*oDirection != XML_fromT && *oDirection != XML_fromB)
+                        || pChild->getChildren().empty())
+                        continue;
+                    const std::map<OUString, double> aParts(aWidthParts(pChild));
+                    double fDrawn(0.0);
+                    for (const ShapePtr& pInside : pChild->getChildren())
+                    {
+                        const auto aPart = aParts.find(pInside->getInternalName());
+                        if (aPart == aParts.end())
+                            continue;
+                        double fOfIt(aHasGeometry(pInside) ? 1.0 : 0.0);
+                        const std::optional<sal_Int32> oInsideDirection(aLinDirectionOf(pInside));
+                        if (oInsideDirection
+                            && (*oInsideDirection == XML_fromL || *oInsideDirection == XML_fromR))
+                        {
+                            const std::map<OUString, double> aRowParts(aWidthParts(pInside));
+                            fOfIt = 0.0;
+                            for (const ShapePtr& pCell : pInside->getChildren())
+                            {
+                                const auto aCell = aRowParts.find(pCell->getInternalName());
+                                if (aCell != aRowParts.end() && aHasGeometry(pCell))
+                                    fOfIt += aCell->second;
+                            }
+                            fOfIt = std::min(fOfIt, 1.0);
+                        }
+                        fDrawn = std::max(fDrawn, aPart->second * fOfIt);
+                    }
+                    if (fDrawn > 0.0 && fDrawn < 0.999)
+                        aAdvancePart[nIndex] = fDrawn;
+                }
+            }
             // the walk fills the row by its unit, nothing is left to spread or to centre
             if (bWalkBack)
             {
@@ -12580,8 +13478,8 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
             if (bFillAxis && !bWalkBack)
             {
                 sal_Int32 nWanted = 0;
-                for (sal_Int32 nOne : aWantedExtent)
-                    nWanted += nOne;
+                for (size_t n = 0; n < aWantedExtent.size(); ++n)
+                    nWanted += static_cast<sal_Int32>(aWantedExtent[n] * aAdvancePart[n]);
                 if (nWanted < nParentExtent && aWantedExtent.size() >= 1)
                 {
                     // A row that carries its spaces as children of its own, empty groups between
@@ -12689,8 +13587,8 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                     if (nLeft > 0)
                         nFillStart = bAtStart ? 0 : bAtEnd ? nLeft : nLeft / 2;
                     nWanted = 0;
-                    for (sal_Int32 nOne : aWantedExtent)
-                        nWanted += nOne;
+                    for (size_t n = 0; n < aWantedExtent.size(); ++n)
+                        nWanted += static_cast<sal_Int32>(aWantedExtent[n] * aAdvancePart[n]);
                 }
                 if (nIncX)
                     aTotalSize.Width = nWanted;
@@ -13057,6 +13955,25 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
 
                 aCurrShape->setSize(aSize);
                 aCurrShape->setChildSize(aSize);
+                // a column standing across this row reads the widths stated for its children
+                // "for des" against the row
+                const auto aColumnNode = aRowNodes.find(aCurrShape->getInternalName());
+                if (nIncX && aSize.Width < rShape->getSize().Width
+                    && aColumnNode != aRowNodes.end() && aColumnNode->second)
+                {
+                    std::vector<const AlgAtom*> aColumnAlgorithms;
+                    gatherOwnAlgorithms(*aColumnNode->second, aColumnAlgorithms);
+                    for (const AlgAtom* pColumnAlgorithm : aColumnAlgorithms)
+                    {
+                        const auto aDirection = pColumnAlgorithm->getMap().find(XML_linDir);
+                        if (pColumnAlgorithm->getType() == XML_lin
+                            && aDirection != pColumnAlgorithm->getMap().end()
+                            && (aDirection->second == XML_fromT || aDirection->second == XML_fromB))
+                            const_cast<SmartArtDiagram&>(rDgm)
+                                .getWidthOfDescendantSizes()[aCurrShape.get()]
+                                = rShape->getSize().Width;
+                    }
+                }
 
                 // Across the axis a child stands where nodeVertAlign, or nodeHorzAlign in a
                 // column, puts it: at the top, in the middle, or at the bottom of the row, and
@@ -13077,8 +13994,32 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                                                : XML_ctr);
                     const sal_Int32 nRoom(rShape->getSize().Width - aSize.Width);
                     aCurrPos.X = nAlign == XML_l ? 0 : nAlign == XML_r ? nRoom : nRoom / 2;
+                    // a composite stands at the side with what it draws
+                    if ((nAlign == XML_l || nAlign == XML_r) && !aCurrShape->getChildren().empty())
+                    {
+                        std::map<OUString, const LayoutNode*> aAlignNodes;
+                        gatherLayoutNodes(getLayoutNode(), aAlignNodes);
+                        const auto aAlignNode = aAlignNodes.find(aCurrShape->getInternalName());
+                        rtl::Reference<svx::diagram::Point> xAlignPoint;
+                        for (const auto& rEntry : rDgm.getLayout()->getPresPointShapeMap())
+                            if (rEntry.second == aCurrShape)
+                            {
+                                xAlignPoint = rEntry.first;
+                                break;
+                            }
+                        if (aAlignNode != aAlignNodes.end() && aAlignNode->second)
+                        {
+                            const DrawnParts aDrawn(drawnPartsOf(rDgm, *aAlignNode->second,
+                                                                 xAlignPoint, aCurrShape));
+                            if (nAlign == XML_l)
+                                aCurrPos.X -= static_cast<sal_Int32>(aDrawn.fLeft * aSize.Width);
+                            else
+                                aCurrPos.X += static_cast<sal_Int32>((1.0 - aDrawn.fRight)
+                                                                     * aSize.Width);
+                        }
+                    }
                 }
-                if (aCurrPos.X < 0)
+                if (aCurrPos.X < 0 && !nIncY)
                 {
                     aCurrPos.X = 0;
                 }
@@ -13089,13 +14030,24 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
 
                 if (bFillAxis)
                 {
-                    const sal_Int32 nExtent = bWalkBack ? nAdvance : (nIncX ? aSize.Width : aSize.Height);
+                    const double fAdvancePart(nWantedIndex >= 1
+                                                  && nWantedIndex - 1 < aAdvancePart.size()
+                                                  ? aAdvancePart[nWantedIndex - 1]
+                                                  : 1.0);
+                    const sal_Int32 nExtent
+                        = bWalkBack ? nAdvance
+                                    : static_cast<sal_Int32>((nIncX ? aSize.Width : aSize.Height)
+                                                             * fAdvancePart);
                     if (nIncX == -1 || nIncY == -1)
                         nAxisCursor -= nExtent;
                     if (nIncX)
                         aCurrPos.X = nAxisCursor;
                     else
                         aCurrPos.Y = nAxisCursor;
+                    // a column that goes on by what it draws has that in its middle, so its box
+                    // stands back by half of the rest and what it draws fills its place
+                    if (nIncX && !bWalkBack && fAdvancePart < 1.0)
+                        aCurrPos.X -= (aSize.Width - nExtent) / 2;
                     if (nIncX == 1 || nIncY == 1)
                         nAxisCursor += nExtent + nFillGap;
                     else
@@ -13689,6 +14641,9 @@ bool LayoutNode::setupShape( const SmartArtDiagram& rDgm, const ShapePtr& rShape
                     rShape->setTextBody(pTextBody);
                 }
 
+                // a shape showing several Points holds all their paragraphs one after the other,
+                // with nothing marking where one Point's paragraphs end; destOrd gives the order of
+                // the Points, so we need each Point's paragraph count, which only its own text has
                 const TextParagraphVector& rSourceParagraphs
                     = pDataNode2Shape->getTextBody()->getParagraphs();
                 for (const auto& pSourceParagraph : rSourceParagraphs)
