@@ -24,6 +24,8 @@ function test() {
     // The page is US Letter, measured in points:
     console.assert(body.getPageWidth() === 612);
     console.assert(body.getPageHeight() === 792);
+    console.assert(body.getMarginLeft() === 72);
+    console.assert(body.getMarginTop() === 72);
     // The document's language is null or one of GAS's language codes (which can vary for GAS, which
     // keeps the document between runs, together with any language set on it):
     {
@@ -42,6 +44,7 @@ function test() {
     console.assert(p0.isLeftToRight() === true);
     console.assert(p0.getParent().getType() === DocumentApp.ElementType.BODY_SECTION);
     console.assert(p0.copy().getText() === 'BoldItalicPlain');
+    console.assert(p0.getPositionedImages().length === 1);
     console.assert(p0.getNumChildren() === 1);
     console.assert(p0.getChild(0).getType() === DocumentApp.ElementType.TEXT);
     console.assert(p0.getChild(0).getText() === 'BoldItalicPlain');
@@ -672,6 +675,57 @@ function test() {
         .insertInlineImage(Utilities.newBlob(png, 'image/png'));
     console.assert(insertedImage.getWidth() === 300);
     console.assert(insertedImage.getHeight() === 200);
+
+    // A positioned image starts at the top left of its paragraph, with the text wrapped around it,
+    // and is no child of the paragraph:
+    const positionedParagraph = body.appendParagraph('Positioned');
+    const positioned = positionedParagraph.addPositionedImage(Utilities.newBlob(png, 'image/png'));
+    console.assert(positioned.getLeftOffset() === 0);
+    console.assert(positioned.getTopOffset() === 0);
+    console.assert(positioned.getLayout() === DocumentApp.PositionedLayout.WRAP_TEXT);
+    console.assert(positioned.getParagraph().getText() === 'Positioned');
+    console.assert(positionedParagraph.getNumChildren() === 1);
+    console.assert(positionedParagraph.getPositionedImages().length === 1);
+    console.assert(
+        positionedParagraph.getPositionedImage(positioned.getId()).getId() === positioned.getId());
+    positioned.setLeftOffset(36).setTopOffset(-18).setWidth(200).setHeight(100);
+    console.assert(positioned.getLeftOffset() === 36);
+    console.assert(positioned.getTopOffset() === -18);
+    console.assert(positioned.getWidth() === 200);
+    console.assert(positioned.getHeight() === 100);
+    console.assert(
+        positioned.setLayout(DocumentApp.PositionedLayout.ABOVE_TEXT).getLayout()
+        === DocumentApp.PositionedLayout.ABOVE_TEXT);
+    console.assert(
+        positioned.setLayout(DocumentApp.PositionedLayout.BREAK_BOTH).getLayout()
+        === DocumentApp.PositionedLayout.BREAK_BOTH);
+    console.assert(
+        positioned.setLayout(DocumentApp.PositionedLayout.BREAK_LEFT).getLayout()
+        === DocumentApp.PositionedLayout.BREAK_LEFT);
+    console.assert(
+        positioned.setLayout(DocumentApp.PositionedLayout.BREAK_RIGHT).getLayout()
+        === DocumentApp.PositionedLayout.BREAK_RIGHT);
+    console.assert(positionedParagraph.removePositionedImage(positioned.getId()) === true);
+    console.assert(positionedParagraph.getPositionedImages().length === 0);
+    // Removing an image that is not there throws, rather than returning false:
+    let removedTwice = false;
+    try {
+        positionedParagraph.removePositionedImage(positioned.getId());
+    } catch (e) {
+        removedTwice = true;
+    }
+    console.assert(removedTwice);
+    // Only COOL takes an SVG image, and lets a script choose an image's ID:
+    if (globalThis.cool) {
+        const svg = positionedParagraph.addPositionedImage(Utilities.newBlob(
+            '<svg xmlns="http://www.w3.org/2000/svg" width="72pt" height="36pt"'
+                + ' viewBox="0 0 72 36"><rect width="72" height="36" fill="red"/></svg>',
+            'image/svg+xml'));
+        console.assert(svg.setId('canvas').getId() === 'canvas');
+        console.assert(positionedParagraph.getPositionedImage('canvas').getWidth() === 96);
+        console.assert(positionedParagraph.getPositionedImage('canvas').getHeight() === 48);
+        console.assert(positionedParagraph.removePositionedImage('canvas') === true);
+    }
 
     // Document properties are strings that a missing key reads as null:
     const docProps = PropertiesService.getDocumentProperties();

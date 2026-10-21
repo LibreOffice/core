@@ -52,6 +52,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,scriptinterop,scriptinterop,\
     ParagraphAlignment \
     ParagraphHeading \
     PlaceholderType \
+    PositionedLayout \
     PredefinedLayout \
     SelectionType \
     ShapeType \
@@ -109,6 +110,7 @@ $(eval $(call gb_UnoApi_add_idlfiles,scriptinterop,scriptinterop,\
     XPictureFill \
     XPivotTable \
     XPoint \
+    XPositionedImage \
     XPresentation \
     XRange \
     XRangeBuilder \

@@ -84,6 +84,7 @@ $internal.installGasServices = function(uiStub, menuItems, pendingAlerts) {
         HorizontalAlignment: uno.idl.scriptinterop.HorizontalAlignment,
         VerticalAlignment: { TOP: 'TOP', MIDDLE: 'MIDDLE', BOTTOM: 'BOTTOM' },
         ParagraphHeading: uno.idl.scriptinterop.ParagraphHeading,
+        PositionedLayout: uno.idl.scriptinterop.PositionedLayout,
         GlyphType: uno.idl.scriptinterop.GlyphType
     };
 

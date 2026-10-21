@@ -35,6 +35,7 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <com/sun/star/container/XIndexReplace.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
@@ -50,7 +51,11 @@
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/table/XCellRange.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
+#include <com/sun/star/text/HoriOrientation.hpp>
+#include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/text/VertOrientation.hpp>
+#include <com/sun/star/text/WrapTextMode.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
 #include <com/sun/star/text/XFootnote.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
@@ -100,6 +105,7 @@
 #include <scriptinterop/XFootnote.hpp>
 #include <scriptinterop/XInlineImage.hpp>
 #include <scriptinterop/XParagraph.hpp>
+#include <scriptinterop/XPositionedImage.hpp>
 #include <scriptinterop/XRangeBuilder.hpp>
 #include <scriptinterop/XRangeElement.hpp>
 #include <scriptinterop/XSelection.hpp>
@@ -321,10 +327,12 @@ sal_Int32 childIndexOf(
 }
 
 cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XElement>> enumerateElements(
+    cpo::uno::Reference<css::frame::XModel> const & model,
     cpo::uno::Reference<css::text::XText> const & text,
     cpo::uno::Reference<scriptinterop::XElement> const & parent);
 
 cpo::uno::Reference<scriptinterop::XElement> siblingContent(
+    cpo::uno::Reference<css::frame::XModel> const & model,
     cpo::uno::Reference<css::text::XTextContent> const & content,
     cpo::uno::Reference<scriptinterop::XElement> const & parent, bool forward);
 
@@ -495,8 +503,10 @@ cpo::uno::Reference<css::text::XTextContent> createGraphicFromBlob(
 class SelectionImpl : public cppu::WeakImplHelper<scriptinterop::XSelection>
 {
 public:
-    explicit SelectionImpl(cpo::uno::Reference<css::container::XIndexAccess> const& ranges)
-        : ranges_(ranges)
+    SelectionImpl(
+        cpo::uno::Reference<css::frame::XModel> const & model,
+        cpo::uno::Reference<css::container::XIndexAccess> const& ranges)
+        : model_(model), ranges_(ranges)
     {
     }
 
@@ -546,6 +556,7 @@ public:
     }
 
 private:
+    cpo::uno::Reference<css::frame::XModel> model_;
     cpo::uno::Reference<css::container::XIndexAccess> ranges_;
 };
 
@@ -577,6 +588,9 @@ private:
 
 class RangeBuilderImpl: public cppu::WeakImplHelper<scriptinterop::XRangeBuilder> {
 public:
+    explicit RangeBuilderImpl(cpo::uno::Reference<css::frame::XModel> const & model):
+        model_(model) {}
+
     cpo::uno::Reference<scriptinterop::XRangeBuilder> addElement(
         cpo::uno::Reference<scriptinterop::XElement> const & element) override
     {
@@ -662,6 +676,7 @@ private:
         cursor_->gotoRange(end, true);
     }
 
+    cpo::uno::Reference<css::frame::XModel> model_;
     cpo::uno::Reference<css::text::XTextCursor> cursor_;
     cpo::uno::Reference<css::text::XTextContent> image_;
 };
@@ -753,11 +768,12 @@ private:
 
 class TextImpl: public ElementImpl<scriptinterop::XText> {
 public:
-    explicit TextImpl(
+    TextImpl(
+        cpo::uno::Reference<css::frame::XModel> const & model,
         cpo::uno::Reference<scriptinterop::XElement> const & parent,
         cpo::uno::Reference<css::text::XTextContent> const & content,
         scriptinterop::ElementType reportedType):
-        parent_(parent), content_(content), reportedType_(reportedType)
+        model_(model), parent_(parent), content_(content), reportedType_(reportedType)
     {}
 
     cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return content_; }
@@ -1330,6 +1346,7 @@ private:
             value.Value ? css::awt::FontUnderline::SINGLE : css::awt::FontUnderline::NONE)));
     }
 
+    cpo::uno::Reference<css::frame::XModel> model_;
     cpo::uno::Reference<scriptinterop::XElement> parent_;
     cpo::uno::Reference<css::text::XTextContent> content_;
     scriptinterop::ElementType reportedType_;
@@ -1931,20 +1948,174 @@ private:
     cpo::uno::Reference<css::text::XTextContent> content_;
 };
 
+class PositionedImageImpl: public cppu::WeakImplHelper<scriptinterop::XPositionedImage> {
+public:
+    PositionedImageImpl(
+        cpo::uno::Reference<css::frame::XModel> const & model,
+        cpo::uno::Reference<css::text::XTextContent> const & paragraph,
+        cpo::uno::Reference<css::text::XTextContent> const & image):
+        model_(model), paragraph_(paragraph), image_(image) {}
+
+    cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return image_; }
+
+    sal_Int32 getHeight() override {
+        sal_Int32 hundredthMm = 0;
+        props()->getPropertyValue(u"Height"_ustr) >>= hundredthMm;
+        return hundredthMmToPixels(hundredthMm);
+    }
+
+    OUString getId() override {
+        return cpo::uno::Reference<css::container::XNamed>(image_, cpo::uno::UNO_QUERY_THROW)
+            ->getName();
+    }
+
+    scriptinterop::PositionedLayout getLayout() override {
+        css::text::WrapTextMode wrap = css::text::WrapTextMode_PARALLEL;
+        props()->getPropertyValue(u"TextWrap"_ustr) >>= wrap;
+        switch (wrap) {
+        case css::text::WrapTextMode_THROUGH:
+            return scriptinterop::PositionedLayout_ABOVE_TEXT;
+        case css::text::WrapTextMode_NONE:
+            return scriptinterop::PositionedLayout_BREAK_BOTH;
+        case css::text::WrapTextMode_RIGHT:
+            return scriptinterop::PositionedLayout_BREAK_LEFT;
+        case css::text::WrapTextMode_LEFT:
+            return scriptinterop::PositionedLayout_BREAK_RIGHT;
+        default:
+            return scriptinterop::PositionedLayout_WRAP_TEXT;
+        }
+    }
+
+    double getLeftOffset() override { return points(u"HoriOrientPosition"_ustr); }
+
+    cpo::uno::Reference<scriptinterop::XParagraph> getParagraph() override;
+
+    double getTopOffset() override { return points(u"VertOrientPosition"_ustr); }
+
+    sal_Int32 getWidth() override {
+        sal_Int32 hundredthMm = 0;
+        props()->getPropertyValue(u"Width"_ustr) >>= hundredthMm;
+        return hundredthMmToPixels(hundredthMm);
+    }
+
+    cpo::uno::Reference<scriptinterop::XPositionedImage> setHeight(sal_Int32 height) override {
+        props()->setPropertyValue(u"Height"_ustr, cpo::uno::Any(pixelsToHundredthMm(height)));
+        return this;
+    }
+
+    cpo::uno::Reference<scriptinterop::XPositionedImage> setLayout(
+        scriptinterop::PositionedLayout layout) override
+    {
+        auto wrap = css::text::WrapTextMode_PARALLEL;
+        switch (layout) {
+        case scriptinterop::PositionedLayout_ABOVE_TEXT:
+            wrap = css::text::WrapTextMode_THROUGH;
+            props()->setPropertyValue(u"Opaque"_ustr, cpo::uno::Any(true));
+            break;
+        case scriptinterop::PositionedLayout_BREAK_BOTH:
+            wrap = css::text::WrapTextMode_NONE;
+            break;
+        case scriptinterop::PositionedLayout_BREAK_LEFT:
+            wrap = css::text::WrapTextMode_RIGHT;
+            break;
+        case scriptinterop::PositionedLayout_BREAK_RIGHT:
+            wrap = css::text::WrapTextMode_LEFT;
+            break;
+        default:
+            break;
+        }
+        props()->setPropertyValue(u"TextWrap"_ustr, cpo::uno::Any(wrap));
+        return this;
+    }
+
+    cpo::uno::Reference<scriptinterop::XPositionedImage> setLeftOffset(double offset) override {
+        props()->setPropertyValue(
+            u"HoriOrient"_ustr, cpo::uno::Any(css::text::HoriOrientation::NONE));
+        setPoints(u"HoriOrientPosition"_ustr, offset);
+        return this;
+    }
+
+    cpo::uno::Reference<scriptinterop::XPositionedImage> setTopOffset(double offset) override {
+        props()->setPropertyValue(
+            u"VertOrient"_ustr, cpo::uno::Any(css::text::VertOrientation::NONE));
+        setPoints(u"VertOrientPosition"_ustr, offset);
+        return this;
+    }
+
+    cpo::uno::Reference<scriptinterop::XPositionedImage> setWidth(sal_Int32 width) override {
+        props()->setPropertyValue(u"Width"_ustr, cpo::uno::Any(pixelsToHundredthMm(width)));
+        return this;
+    }
+
+    cpo::uno::Reference<scriptinterop::XPositionedImage> setId(OUString const & id) override {
+        cpo::uno::Reference<css::container::XNamed>(image_, cpo::uno::UNO_QUERY_THROW)
+            ->setName(id);
+        return this;
+    }
+
+private:
+    cpo::uno::Reference<css::beans::XPropertySet> props() {
+        return cpo::uno::Reference<css::beans::XPropertySet>(image_, cpo::uno::UNO_QUERY_THROW);
+    }
+
+    double points(OUString const & name) {
+        sal_Int32 hundredthMm = 0;
+        props()->getPropertyValue(name) >>= hundredthMm;
+        return o3tl::convert(double(hundredthMm), o3tl::Length::mm100, o3tl::Length::pt);
+    }
+
+    void setPoints(OUString const & name, double value) {
+        props()->setPropertyValue(name, cpo::uno::Any(static_cast<sal_Int32>(std::round(
+            o3tl::convert(value, o3tl::Length::pt, o3tl::Length::mm100)))));
+    }
+
+    cpo::uno::Reference<css::frame::XModel> model_;
+    cpo::uno::Reference<css::text::XTextContent> paragraph_;
+    cpo::uno::Reference<css::text::XTextContent> image_;
+};
+
 class ParagraphImpl : public ElementImpl<scriptinterop::XParagraph>
 {
 public:
-    explicit ParagraphImpl(
+    ParagraphImpl(
+        cpo::uno::Reference<css::frame::XModel> const & model,
         cpo::uno::Reference<scriptinterop::XElement> const & parent,
         cpo::uno::Reference<css::text::XTextContent> const& content)
-        : parent_(parent), content_(content)
+        : model_(model), parent_(parent), content_(content)
     {
     }
 
     cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return content_; }
 
+    cpo::uno::Reference<scriptinterop::XPositionedImage> addPositionedImage(
+        cpo::uno::Reference<scriptinterop::XBlob> const & image) override
+    {
+        auto const graphic = createGraphicFromBlob(model_, image);
+        cpo::uno::Reference<css::beans::XPropertySet> const props(
+            graphic, cpo::uno::UNO_QUERY_THROW);
+        // As in GAS, the image is positioned relative to the paragraph and has the text wrap
+        // around it:
+        props->setPropertyValue(
+            u"AnchorType"_ustr, cpo::uno::Any(css::text::TextContentAnchorType_AT_PARAGRAPH));
+        props->setPropertyValue(
+            u"HoriOrient"_ustr, cpo::uno::Any(css::text::HoriOrientation::NONE));
+        props->setPropertyValue(
+            u"HoriOrientRelation"_ustr, cpo::uno::Any(css::text::RelOrientation::FRAME));
+        props->setPropertyValue(u"HoriOrientPosition"_ustr, cpo::uno::Any(sal_Int32(0)));
+        props->setPropertyValue(
+            u"VertOrient"_ustr, cpo::uno::Any(css::text::VertOrientation::NONE));
+        props->setPropertyValue(
+            u"VertOrientRelation"_ustr, cpo::uno::Any(css::text::RelOrientation::FRAME));
+        props->setPropertyValue(u"VertOrientPosition"_ustr, cpo::uno::Any(sal_Int32(0)));
+        props->setPropertyValue(
+            u"TextWrap"_ustr, cpo::uno::Any(css::text::WrapTextMode_PARALLEL));
+        cpo::uno::Reference<css::text::XTextRange> const range(content_, cpo::uno::UNO_QUERY_THROW);
+        range->getText()->insertTextContent(range->getStart(), graphic, false);
+        return new PositionedImageImpl(model_, content_, graphic);
+    }
+
     cpo::uno::Reference<scriptinterop::XText> asText() override {
-        return new TextImpl(parent_, content_, getType());
+        return new TextImpl(model_, parent_, content_, getType());
     }
 
     cpo::uno::Reference<scriptinterop::XContainerElement> clear() override {
@@ -1984,9 +2155,9 @@ public:
     // a Text before it and a Text after it:
     cpo::uno::Reference<scriptinterop::XElement> getChild(sal_Int32 index) override {
         if (index == 0) {
-            return new TextImpl(this, content_, scriptinterop::ElementType_TEXT);
+            return new TextImpl(model_, this, content_, scriptinterop::ElementType_TEXT);
         }
-        auto const images = enumerateInlineImages();
+        auto const images = enumerateFramedImages(css::text::TextContentAnchorType_AS_CHARACTER);
         auto const imgIndex = index - 1;
         if (imgIndex < 0 || imgIndex >= static_cast<sal_Int32>(images.size())) {
             return {};
@@ -2165,12 +2336,33 @@ public:
         return level;
     }
 
+    cpo::uno::Reference<scriptinterop::XPositionedImage> getPositionedImage(OUString const & id)
+        override
+    {
+        for (auto const & image: enumeratePositionedImages()) {
+            if (image->getId() == id) {
+                return image;
+            }
+        }
+        throw cpo::uno::RuntimeException(
+            "getPositionedImage: the paragraph has no positioned image with ID " + id);
+    }
+
+    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XPositionedImage>> getPositionedImages()
+        override
+    {
+        auto const images = enumeratePositionedImages();
+        return cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XPositionedImage>>(
+            images.data(), images.size());
+    }
+
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getNextSibling() override {
-        return maybe(siblingContent(content_, parent_, true));
+        return maybe(siblingContent(model_, content_, parent_, true));
     }
 
     sal_Int32 getNumChildren() override {
-        return 1 + static_cast<sal_Int32>(enumerateInlineImages().size());
+        return 1 + static_cast<sal_Int32>(
+            enumerateFramedImages(css::text::TextContentAnchorType_AS_CHARACTER).size());
     }
 
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getParent() override {
@@ -2178,7 +2370,7 @@ public:
     }
 
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getPreviousSibling() override
-    { return maybe(siblingContent(content_, parent_, false)); }
+    { return maybe(siblingContent(model_, content_, parent_, false)); }
 
     OUString getText() override
     {
@@ -2213,7 +2405,41 @@ public:
         return this;
     }
 
+    bool removePositionedImage(OUString const & id) override {
+        auto const image = getPositionedImage(id);
+        cpo::uno::Reference<css::text::XTextContent> const content(
+            image->getuno(), cpo::uno::UNO_QUERY_THROW);
+        cpo::uno::Reference<css::text::XTextRange>(content_, cpo::uno::UNO_QUERY_THROW)->getText()
+            ->removeTextContent(content);
+        return true;
+    }
+
 private:
+    // The images anchored to the paragraph, which its content enumeration has, and those anchored
+    // to one of its characters, which its text portions have:
+    std::vector<cpo::uno::Reference<scriptinterop::XPositionedImage>> enumeratePositionedImages()
+    {
+        std::vector<cpo::uno::Reference<scriptinterop::XPositionedImage>> images;
+        cpo::uno::Reference<css::container::XContentEnumerationAccess> const access(
+            content_, cpo::uno::UNO_QUERY_THROW);
+        auto const contents
+            = access->createContentEnumeration(u"com.sun.star.text.TextContent"_ustr);
+        while (contents.is() && contents->hasMoreElements()) {
+            cpo::uno::Reference<css::text::XTextContent> frame;
+            contents->nextElement() >>= frame;
+            cpo::uno::Reference<css::lang::XServiceInfo> const info(frame, cpo::uno::UNO_QUERY);
+            if (info.is() && info->supportsService(u"com.sun.star.text.TextGraphicObject"_ustr)) {
+                images.push_back(new PositionedImageImpl(model_, content_, frame));
+            }
+        }
+        for (auto const & frame:
+                 enumerateFramedImages(css::text::TextContentAnchorType_AT_CHARACTER))
+        {
+            images.push_back(new PositionedImageImpl(model_, content_, frame));
+        }
+        return images;
+    }
+
     std::optional<cpo::uno::Any> getParaProp(OUString const & name) {
         cpo::uno::Reference<css::beans::XPropertySet> const props(
             content_, cpo::uno::UNO_QUERY_THROW);
@@ -2228,7 +2454,9 @@ private:
         return props->getPropertyValue(name);
     }
 
-    std::vector<cpo::uno::Reference<css::text::XTextContent>> enumerateInlineImages() {
+    std::vector<cpo::uno::Reference<css::text::XTextContent>> enumerateFramedImages(
+        css::text::TextContentAnchorType anchorType)
+    {
         std::vector<cpo::uno::Reference<css::text::XTextContent>> images;
         cpo::uno::Reference<css::container::XEnumerationAccess> const ea(
             content_, cpo::uno::UNO_QUERY);
@@ -2272,7 +2500,7 @@ private:
                 {
                     css::text::TextContentAnchorType anchor;
                     if ((frameProps->getPropertyValue(u"AnchorType"_ustr) >>= anchor)
-                        && anchor == css::text::TextContentAnchorType_AS_CHARACTER)
+                        && anchor == anchorType)
                     {
                         images.push_back(frame);
                     }
@@ -2282,6 +2510,7 @@ private:
         return images;
     }
 
+    cpo::uno::Reference<css::frame::XModel> model_;
     cpo::uno::Reference<scriptinterop::XElement> parent_;
     cpo::uno::Reference<css::text::XTextContent> content_;
 };
@@ -2291,22 +2520,27 @@ cpo::uno::Reference<scriptinterop::XParagraph> TextImpl::asListItem() {
     if (reportedType_ != scriptinterop::ElementType_LIST_ITEM) {
         return ElementImpl::asListItem();
     }
-    return new ParagraphImpl(parent_, content_);
+    return new ParagraphImpl(model_, parent_, content_);
 }
 
 cpo::uno::Reference<scriptinterop::XParagraph> TextImpl::asParagraph() {
     if (reportedType_ != scriptinterop::ElementType_PARAGRAPH) {
         return ElementImpl::asParagraph();
     }
-    return new ParagraphImpl(parent_, content_);
+    return new ParagraphImpl(model_, parent_, content_);
+}
+
+cpo::uno::Reference<scriptinterop::XParagraph> PositionedImageImpl::getParagraph() {
+    return new ParagraphImpl(model_, nullptr, paragraph_);
 }
 
 class TableCellImpl: public ElementImpl<scriptinterop::XTableCell> {
 public:
-    explicit TableCellImpl(
+    TableCellImpl(
+        cpo::uno::Reference<css::frame::XModel> const & model,
         cpo::uno::Reference<scriptinterop::XElement> const & parent,
         cpo::uno::Reference<css::text::XText> const & text):
-        parent_(parent), text_(text) {}
+        model_(model), parent_(parent), text_(text) {}
 
     cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return text_; }
 
@@ -2333,7 +2567,7 @@ public:
     { return childIndexOf(*this, child); }
 
     cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XElement>> getChildren() override {
-        return enumerateElements(text_, this);
+        return enumerateElements(model_, text_, this);
     }
 
     // TODO: Writer text tables encode a horizontal merge in the anchor cell's name (a merged cell
@@ -2384,6 +2618,7 @@ public:
     }
 
 private:
+    cpo::uno::Reference<css::frame::XModel> model_;
     cpo::uno::Reference<scriptinterop::XElement> parent_;
     cpo::uno::Reference<css::text::XText> text_;
 };
@@ -2391,9 +2626,10 @@ private:
 class TableRowImpl: public ElementImpl<scriptinterop::XTableRow> {
 public:
     TableRowImpl(
+        cpo::uno::Reference<css::frame::XModel> const & model,
         cpo::uno::Reference<scriptinterop::XElement> const & parent,
         cpo::uno::Reference<css::text::XTextTable> const & table, sal_Int32 rowIndex):
-        parent_(parent), table_(table), rowIndex_(rowIndex) {}
+        model_(model), parent_(parent), table_(table), rowIndex_(rowIndex) {}
 
     cpo::uno::Reference<cpo::uno::XInterface> getuno() override {
         if (!table_.is()) {
@@ -2433,7 +2669,7 @@ public:
                 "getCell: cell " + OUString::number(index) + " cannot hold text");
         }
         return {true,
-            cpo::uno::Reference<scriptinterop::XTableCell>(new TableCellImpl(this, text))};
+            cpo::uno::Reference<scriptinterop::XTableCell>(new TableCellImpl(model_, this, text))};
     }
 
     cpo::uno::Reference<scriptinterop::XElement> getChild(sal_Int32 index) override {
@@ -2516,6 +2752,7 @@ public:
     }
 
 private:
+    cpo::uno::Reference<css::frame::XModel> model_;
     cpo::uno::Reference<scriptinterop::XElement> parent_;
     cpo::uno::Reference<css::text::XTextTable> table_;
     sal_Int32 rowIndex_;
@@ -2523,10 +2760,11 @@ private:
 
 class TableImpl: public ElementImpl<scriptinterop::XTable> {
 public:
-    explicit TableImpl(
+    TableImpl(
+        cpo::uno::Reference<css::frame::XModel> const & model,
         cpo::uno::Reference<scriptinterop::XElement> const & parent,
         cpo::uno::Reference<css::text::XTextTable> const & table):
-        parent_(parent), table_(table) {}
+        model_(model), parent_(parent), table_(table) {}
 
     cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return table_; }
 
@@ -2560,7 +2798,8 @@ public:
             return {false, {}};
         }
         return {true,
-            cpo::uno::Reference<scriptinterop::XTableRow>(new TableRowImpl(this, table_, index))};
+            cpo::uno::Reference<scriptinterop::XTableRow>(
+                new TableRowImpl(model_, this, table_, index))};
     }
 
     cpo::uno::Reference<scriptinterop::XElement> getChild(sal_Int32 index) override {
@@ -2572,7 +2811,7 @@ public:
     { return childIndexOf(*this, child); }
 
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getNextSibling() override {
-        return maybe(siblingContent(table_, parent_, true));
+        return maybe(siblingContent(model_, table_, parent_, true));
     }
 
     sal_Int32 getNumChildren() override { return getNumRows(); }
@@ -2582,7 +2821,7 @@ public:
     }
 
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getPreviousSibling() override
-    { return maybe(siblingContent(table_, parent_, false)); }
+    { return maybe(siblingContent(model_, table_, parent_, false)); }
 
     OUString getText() override {
         OUStringBuffer buf;
@@ -2607,11 +2846,13 @@ public:
     }
 
 private:
+    cpo::uno::Reference<css::frame::XModel> model_;
     cpo::uno::Reference<scriptinterop::XElement> parent_;
     cpo::uno::Reference<css::text::XTextTable> table_;
 };
 
 cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XElement>> enumerateElements(
+    cpo::uno::Reference<css::frame::XModel> const & model,
     cpo::uno::Reference<css::text::XText> const & text,
     cpo::uno::Reference<scriptinterop::XElement> const & parent)
 {
@@ -2630,11 +2871,11 @@ cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XElement>> enumerateElemen
                 continue;
             }
             if (info->supportsService(u"com.sun.star.text.Paragraph"_ustr)) {
-                v.emplace_back(new ParagraphImpl(parent, xtc));
+                v.emplace_back(new ParagraphImpl(model, parent, xtc));
             } else if (info->supportsService(u"com.sun.star.text.TextTable"_ustr)) {
                 cpo::uno::Reference<css::text::XTextTable> const table(xtc, cpo::uno::UNO_QUERY);
                 if (table.is()) {
-                    v.emplace_back(new TableImpl(parent, table));
+                    v.emplace_back(new TableImpl(model, parent, table));
                 }
             }
         }
@@ -2643,6 +2884,7 @@ cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XElement>> enumerateElemen
 }
 
 cpo::uno::Reference<scriptinterop::XElement> siblingContent(
+    cpo::uno::Reference<css::frame::XModel> const & model,
     cpo::uno::Reference<css::text::XTextContent> const & content,
     cpo::uno::Reference<scriptinterop::XElement> const & parent, bool forward)
 {
@@ -2657,7 +2899,7 @@ cpo::uno::Reference<scriptinterop::XElement> siblingContent(
     if (!host.is()) {
         return nullptr;
     }
-    auto const list = enumerateElements(host, parent);
+    auto const list = enumerateElements(model, host, parent);
     auto const n = list.getLength();
     cpo::uno::Reference<cpo::uno::XInterface> const self(content, cpo::uno::UNO_QUERY);
     for (sal_Int32 i = 0; i != n; ++i) {
@@ -2720,8 +2962,10 @@ cpo::uno::Reference<css::text::XTextContent> findContainingParagraph(
 
 class RangeElementImpl: public cppu::WeakImplHelper<scriptinterop::XRangeElement> {
 public:
-    explicit RangeElementImpl(cpo::uno::Reference<css::text::XTextRange> const & range):
-        range_(range), paragraph_(findContainingParagraph(range))
+    RangeElementImpl(
+        cpo::uno::Reference<css::frame::XModel> const & model,
+        cpo::uno::Reference<css::text::XTextRange> const & range):
+        model_(model), range_(range), paragraph_(findContainingParagraph(range))
     {
         rangeLen_ = textOf(range).getLength();
         if (!paragraph_.is()) {
@@ -2750,7 +2994,7 @@ public:
                 u"getElement: this range element is not inside a paragraph"_ustr);
         }
         cpo::uno::Reference<scriptinterop::XParagraph> const paragraph(
-            new ParagraphImpl(nullptr, paragraph_));
+            new ParagraphImpl(model_, nullptr, paragraph_));
         // Same as in GAS, the element of a partial range element is the Text that the offsets
         // count in:
         return isPartial() ? paragraph->getChild(0) : paragraph;
@@ -2778,6 +3022,7 @@ public:
     }
 
 private:
+    cpo::uno::Reference<css::frame::XModel> model_;
     cpo::uno::Reference<css::text::XTextRange> range_;
     cpo::uno::Reference<css::text::XTextContent> paragraph_;
     sal_Int32 startOffset_ = 0;
@@ -2790,6 +3035,7 @@ private:
 // extent, so a paragraph that lies fully inside the raw range becomes a non-partial element and
 // the first and last paragraphs become partial ones:
 void splitAtParagraphBoundaries(
+    cpo::uno::Reference<css::frame::XModel> const & model,
     cpo::uno::Reference<css::text::XTextRange> const & range,
     std::vector<cpo::uno::Reference<scriptinterop::XRangeElement>> & out)
 {
@@ -2834,7 +3080,7 @@ void splitAtParagraphBoundaries(
                 continue;
             }
             cursor->gotoRange(subEnd, true);
-            out.emplace_back(new RangeElementImpl(cursor));
+            out.emplace_back(new RangeElementImpl(model, cursor));
         } catch (css::lang::IllegalArgumentException const & e) {
             SAL_WARN(
                 "scriptinterop",
@@ -2853,15 +3099,17 @@ SelectionImpl::getRangeElements() {
             throw cpo::uno::RuntimeException(
                 u"getRangeElements: the selection contains something other than text"_ustr);
         }
-        splitAtParagraphBoundaries(range, v);
+        splitAtParagraphBoundaries(model_, range, v);
     }
     return cpo::uno::Sequence(v.data(), v.size());
 }
 
 class ImageRangeElementImpl: public cppu::WeakImplHelper<scriptinterop::XRangeElement> {
 public:
-    explicit ImageRangeElementImpl(cpo::uno::Reference<css::text::XTextContent> const & image):
-        image_(image) {}
+    ImageRangeElementImpl(
+        cpo::uno::Reference<css::frame::XModel> const & model,
+        cpo::uno::Reference<css::text::XTextContent> const & image):
+        model_(model), image_(image) {}
 
     cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return image_; }
 
@@ -2875,7 +3123,7 @@ public:
             throw cpo::uno::RuntimeException(
                 u"getElement: the image is not anchored in a paragraph"_ustr);
         }
-        return new InlineImageImpl(new ParagraphImpl(nullptr, para), image_);
+        return new InlineImageImpl(new ParagraphImpl(model_, nullptr, para), image_);
     }
 
     sal_Int32 getEndOffsetInclusive() override { return -1; }
@@ -2885,20 +3133,23 @@ public:
     bool isPartial() override { return false; }
 
 private:
+    cpo::uno::Reference<css::frame::XModel> model_;
     cpo::uno::Reference<css::text::XTextContent> image_;
 };
 
 // An inline image that is selected on its own, as one whole range element:
 class ImageSelectionImpl: public cppu::WeakImplHelper<scriptinterop::XSelection> {
 public:
-    explicit ImageSelectionImpl(cpo::uno::Reference<css::text::XTextContent> const & image):
-        image_(image) {}
+    ImageSelectionImpl(
+        cpo::uno::Reference<css::frame::XModel> const & model,
+        cpo::uno::Reference<css::text::XTextContent> const & image):
+        model_(model), image_(image) {}
 
     cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return image_; }
 
     cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XRangeElement>> getRangeElements()
         override
-    { return {new ImageRangeElementImpl(image_)}; }
+    { return {new ImageRangeElementImpl(model_, image_)}; }
 
     cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XRangeElement>> getSelectedElements()
         override
@@ -2912,18 +3163,19 @@ public:
     }
 
 private:
+    cpo::uno::Reference<css::frame::XModel> model_;
     cpo::uno::Reference<css::text::XTextContent> image_;
 };
 
 cpo::uno::Reference<scriptinterop::XSelection> RangeBuilderImpl::build() {
     if (image_.is()) {
-        return new ImageSelectionImpl(image_);
+        return new ImageSelectionImpl(model_, image_);
     }
     if (!cursor_.is()) {
         throw cpo::uno::RuntimeException(
             u"build: add at least one element or element range first"_ustr);
     }
-    return new SelectionImpl(new SingleRangeIndex(cursor_));
+    return new SelectionImpl(model_, new SingleRangeIndex(cursor_));
 }
 
 cpo::uno::Reference<css::text::XTextViewCursor> viewCursorOf(
@@ -2961,7 +3213,7 @@ public:
             throw cpo::uno::RuntimeException(
                 u"getElement: the cursor is not inside a paragraph"_ustr);
         }
-        return new ParagraphImpl(nullptr, para);
+        return new ParagraphImpl(model_, nullptr, para);
     }
 
     OUString getLocale() override { return bcp47(u"CharLocale"_ustr); }
@@ -2978,7 +3230,7 @@ public:
             throw cpo::uno::RuntimeException(
                 u"getSurroundingText: the cursor is not inside a paragraph"_ustr);
         }
-        return new TextImpl(nullptr, para, scriptinterop::ElementType_TEXT);
+        return new TextImpl(model_, nullptr, para, scriptinterop::ElementType_TEXT);
     }
 
     sal_Int32 getSurroundingTextOffset() override { return paragraphOffset(); }
@@ -3115,8 +3367,10 @@ private:
 
 class FootnoteSectionImpl: public ElementImpl<scriptinterop::XContainerElement> {
 public:
-    explicit FootnoteSectionImpl(cpo::uno::Reference<css::text::XText> const & text):
-        text_(text) {}
+    FootnoteSectionImpl(
+        cpo::uno::Reference<css::frame::XModel> const & model,
+        cpo::uno::Reference<css::text::XText> const & text):
+        model_(model), text_(text) {}
 
     cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return text_; }
 
@@ -3135,7 +3389,7 @@ public:
     cpo::uno::Reference<scriptinterop::XElement> copy() override { return this; }
 
     cpo::uno::Reference<scriptinterop::XElement> getChild(sal_Int32 index) override {
-        auto const list = enumerateElements(text_, this);
+        auto const list = enumerateElements(model_, text_, this);
         return index >= 0 && index < list.getLength() ? list[index] : nullptr;
     }
 
@@ -3147,7 +3401,9 @@ public:
         return {false, {}};
     }
 
-    sal_Int32 getNumChildren() override { return enumerateElements(text_, this).getLength(); }
+    sal_Int32 getNumChildren() override {
+        return enumerateElements(model_, text_, this).getLength();
+    }
 
     // TODO: no natural container for a footnote section in scriptinterop (GAS's Document analogue
     // would be that parent, but we do not model it):
@@ -3175,13 +3431,16 @@ public:
     }
 
 private:
+    cpo::uno::Reference<css::frame::XModel> model_;
     cpo::uno::Reference<css::text::XText> text_;
 };
 
 class FootnoteImpl: public ElementImpl<scriptinterop::XFootnote> {
 public:
-    explicit FootnoteImpl(cpo::uno::Reference<css::text::XFootnote> const & footnote):
-        footnote_(footnote) {}
+    FootnoteImpl(
+        cpo::uno::Reference<css::frame::XModel> const & model,
+        cpo::uno::Reference<css::text::XFootnote> const & footnote):
+        model_(model), footnote_(footnote) {}
 
     cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return footnote_; }
 
@@ -3194,7 +3453,7 @@ public:
     {
         cpo::uno::Reference<css::text::XText> const text(footnote_, cpo::uno::UNO_QUERY);
         if (!text.is()) return {false, {}};
-        return {true, new FootnoteSectionImpl(text)};
+        return {true, new FootnoteSectionImpl(model_, text)};
     }
 
     // TODO: footnotes are surfaced via Document.getFootnotes rather than a sibling walk in our
@@ -3225,6 +3484,7 @@ public:
     }
 
 private:
+    cpo::uno::Reference<css::frame::XModel> model_;
     cpo::uno::Reference<css::text::XFootnote> footnote_;
 };
 
@@ -3263,7 +3523,7 @@ public:
         cpo::uno::Reference<css::text::XTextContent> const kept(
             paragraphs->createEnumeration()->nextElement(), cpo::uno::UNO_QUERY_THROW);
         makeNormal(
-            new ParagraphImpl(this, kept),
+            new ParagraphImpl(model_, this, kept),
             cpo::uno::Reference<css::beans::XPropertySet>(kept, cpo::uno::UNO_QUERY_THROW));
         return this;
     }
@@ -3285,7 +3545,7 @@ public:
     { return childIndexOf(*this, child); }
 
     cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XElement>> getChildren() override {
-        return enumerateElements(text_, this);
+        return enumerateElements(model_, text_, this);
     }
 
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getNextSibling() override {
@@ -3294,9 +3554,13 @@ public:
 
     sal_Int32 getNumChildren() override { return getChildren().getLength(); }
 
-    double getPageHeight() override { return pageSize(u"Height"_ustr); }
+    double getMarginLeft() override { return pageStyleLength(u"LeftMargin"_ustr); }
 
-    double getPageWidth() override { return pageSize(u"Width"_ustr); }
+    double getMarginTop() override { return pageStyleLength(u"TopMargin"_ustr); }
+
+    double getPageHeight() override { return pageStyleLength(u"Height"_ustr); }
+
+    double getPageWidth() override { return pageStyleLength(u"Width"_ustr); }
 
     css::beans::Optional<cpo::uno::Reference<scriptinterop::XElement>> getParent() override {
         return {false, {}};
@@ -3321,9 +3585,9 @@ public:
     }
 
 private:
-    // In points, of the page style that the body starts with, as GAS has one page size for the
-    // whole document:
-    double pageSize(OUString const & dimension) {
+    // In points, of the page style that the body starts with, as GAS has one page size and one set
+    // of margins for the whole document:
+    double pageStyleLength(OUString const & dimension) {
         OUString name;
         cpo::uno::Reference<css::beans::XPropertySet>(
             text_->createTextCursorByRange(text_->getStart()), cpo::uno::UNO_QUERY_THROW)
@@ -3378,7 +3642,7 @@ private:
             throw cpo::uno::RuntimeException(u"appending the paragraph failed"_ustr);
         }
         cpo::uno::Reference<scriptinterop::XParagraph> const paragraph(
-            new ParagraphImpl(this, lastParagraph));
+            new ParagraphImpl(model_, this, lastParagraph));
         cpo::uno::Reference<css::beans::XPropertySet> const props(
             lastParagraph, cpo::uno::UNO_QUERY_THROW);
         if (paraStyle.isEmpty()) {
@@ -3466,7 +3730,7 @@ public:
         if (info.is() && info->supportsService(u"com.sun.star.text.TextGraphicObject"_ustr)) {
             return {
                 true,
-                cpo::uno::Reference<scriptinterop::XSelection>(new ImageSelectionImpl(
+                cpo::uno::Reference<scriptinterop::XSelection>(new ImageSelectionImpl(model_,
                     cpo::uno::Reference<css::text::XTextContent>(info, cpo::uno::UNO_QUERY_THROW)))};
         }
         // Selected shapes are a collection of shapes, and the text in them is not selected text of
@@ -3491,7 +3755,9 @@ public:
         if (!anyContent) {
             return {false, {}};
         }
-        return {true, cpo::uno::Reference<scriptinterop::XSelection>(new SelectionImpl(ranges))};
+        return {
+            true,
+            cpo::uno::Reference<scriptinterop::XSelection>(new SelectionImpl(model_, ranges))};
     }
 
     cpo::uno::Reference<scriptinterop::XBody> getBody() override
@@ -3576,7 +3842,7 @@ public:
     }
 
     cpo::uno::Reference<scriptinterop::XRangeBuilder> newRange() override {
-        return new RangeBuilderImpl;
+        return new RangeBuilderImpl(model_);
     }
 
     cpo::uno::Reference<scriptinterop::XDocument> setCursor(
@@ -3640,7 +3906,7 @@ public:
                     u"getFootnotes: the document's footnote list contains something that is not a"
                     " footnote"_ustr);
             }
-            v.emplace_back(new FootnoteImpl(footnote));
+            v.emplace_back(new FootnoteImpl(model_, footnote));
         }
         return cpo::uno::Sequence(v.data(), v.size());
     }

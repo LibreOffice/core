@@ -16,91 +16,48 @@
 
 // Runs in the kit (QuickJS with UNO): apply a batch of operations to the
 // active Writer document. Must stay self-contained - only its source is sent.
-//
-// TODO: this uses the legacy com.sun.star UNO API directly. Port each use to
-// the cool/cpo facade, or better to the GAS-compatible replacement, once those
-// cover what LibreLogo needs. Touchpoints to migrate:
-//   - createInstance('com.sun.star.text.TextGraphicObject') (replaceCanvas)
-//   - css.io.TempFile, css.graphic.GraphicProvider (loadGraphic)
-//   - css.beans.PropertyValue / PropertyState (loadGraphic)
-//   - css.text.* enums: TextContentAnchorType, HoriOrientation, VertOrientation,
-//     RelOrientation, WrapTextMode (replaceCanvas)
 function kitApply(ops) {
-	const PT_TO_MM100 = 2540 / 72;
-	function utf8(str) {
-		const out = [];
-		for (let i = 0; i < str.length; i++) {
-			let c = str.charCodeAt(i);
-			if (c >= 0xd800 && c <= 0xdbff && i + 1 < str.length) {
-				c = 0x10000 + ((c - 0xd800) << 10) + (str.charCodeAt(++i) - 0xdc00);
-			}
-			if (c < 0x80) out.push(c);
-			else if (c < 0x800) out.push(0xc0 | (c >> 6), 0x80 | (c & 0x3f));
-			else if (c < 0x10000) out.push(0xe0 | (c >> 12), 0x80 | ((c >> 6) & 0x3f), 0x80 | (c & 0x3f));
-			else out.push(0xf0 | (c >> 18), 0x80 | ((c >> 12) & 0x3f), 0x80 | ((c >> 6) & 0x3f), 0x80 | (c & 0x3f));
-		}
-		// UNO bytes are signed
-		return out.map((b) => (b > 127 ? b - 256 : b));
-	}
-	const css = uno.idl.com.sun.star;
-	const ctx = uno.componentContext;
-	const model = cool.getActiveUnoModel();
+	const PT_TO_PX = 96 / 72;
 	const CANVAS = 'LibreLogo';
-	// Properties typed as short need an explicit Any; a JS number becomes a long.
-	const short = (v) => new uno.Any(uno.type.short, v);
 
-	function loadGraphic(svg) {
-		const tmp = css.io.TempFile.create(ctx);
-		const stream = tmp.getOutputStream();
-		stream.writeBytes(utf8(svg));
-		stream.closeOutput();
-		const provider = css.graphic.GraphicProvider.create(ctx);
-		// XTempFile's Uri is a UNO attribute; the binding exposes attributes
-		// as properties, older builds as getUri().
-		const uri = typeof tmp.getUri === 'function' ? tmp.getUri() : tmp.Uri;
-		const arg = new css.beans.PropertyValue({ Name: 'URL', Handle: 0, Value: new uno.Any(uno.type.string, uri), State: css.beans.PropertyState.DIRECT_VALUE });
-		return provider.queryGraphic([arg]);
+	function bodyParagraphs(body) {
+		const paragraphs = [];
+		for (let i = 0; i < body.getNumChildren(); ++i) {
+			const child = body.getChild(i);
+			const type = child.getType();
+			if (type === DocumentApp.ElementType.PARAGRAPH) {
+				paragraphs.push(child.asParagraph());
+			} else if (type === DocumentApp.ElementType.LIST_ITEM) {
+				paragraphs.push(child.asListItem());
+			}
+		}
+		return paragraphs;
 	}
 
 	function removeCanvas() {
-		const objects = model.getGraphicObjects();
-		if (objects.hasByName(CANVAS)) {
-			const old = objects.getByName(CANVAS);
-			model.getText().removeTextContent(old);
-			return true;
+		const body = DocumentApp.getActiveDocument().getBody();
+		for (const paragraph of bodyParagraphs(body)) {
+			if (paragraph.getPositionedImages().some((image) => image.getId() === CANVAS)) {
+				return paragraph.removePositionedImage(CANVAS);
+			}
 		}
 		return false;
 	}
 
-	function anchorRange() {
-		try {
-			return model.getCurrentController().getViewCursor().getStart();
-		} catch (e) {
-			return model.getText().getStart();
-		}
-	}
-
-	// The drawing as one page-anchored image on the first page, so LibreLogo
-	// coordinates keep meaning "points from the top-left corner of the page".
+	// The drawing as one positioned image on the first paragraph, offset so that
+	// LibreLogo coordinates keep meaning "points from the top-left corner of the
+	// page".
 	function replaceCanvas(op) {
 		removeCanvas();
-		const graphic = loadGraphic(op.svg);
-		const obj = model.createInstance('com.sun.star.text.TextGraphicObject');
-		obj.setPropertyValue('Graphic', graphic);
-		obj.setName(CANVAS); // XNamed, not a property
-		obj.setPropertyValue('AnchorType', css.text.TextContentAnchorType.AT_PAGE);
-		obj.setPropertyValue('AnchorPageNo', short(1));
-		obj.setPropertyValue('Width', Math.round(op.w * PT_TO_MM100));
-		obj.setPropertyValue('Height', Math.round(op.h * PT_TO_MM100));
-		obj.setPropertyValue('HoriOrient', short(css.text.HoriOrientation.NONE));
-		obj.setPropertyValue('VertOrient', short(css.text.VertOrientation.NONE));
-		obj.setPropertyValue('HoriOrientRelation', short(css.text.RelOrientation.PAGE_FRAME));
-		obj.setPropertyValue('VertOrientRelation', short(css.text.RelOrientation.PAGE_FRAME));
-		obj.setPropertyValue('HoriOrientPosition', Math.round(op.x * PT_TO_MM100));
-		obj.setPropertyValue('VertOrientPosition', Math.round(op.y * PT_TO_MM100));
-		obj.setPropertyValue('TextWrap', css.text.WrapTextMode.THROUGH);
-		obj.setPropertyValue('Opaque', true);
-		model.getText().insertTextContent(anchorRange(), obj, false);
+		const body = DocumentApp.getActiveDocument().getBody();
+		bodyParagraphs(body)[0]
+			.addPositionedImage(Utilities.newBlob(op.svg, 'image/svg+xml'))
+			.setId(CANVAS)
+			.setLayout(DocumentApp.PositionedLayout.ABOVE_TEXT)
+			.setWidth(Math.round(op.w * PT_TO_PX))
+			.setHeight(Math.round(op.h * PT_TO_PX))
+			.setLeftOffset(op.x - body.getMarginLeft())
+			.setTopOffset(op.y - body.getMarginTop());
 	}
 
 	// The drawing as an inline image at the cursor.

@@ -20,6 +20,10 @@ interface XBody: XContainerElement {
 
     sequence<XElement> getChildren();
 
+    double getMarginLeft();
+
+    double getMarginTop();
+
     double getPageHeight();
 
     double getPageWidth();

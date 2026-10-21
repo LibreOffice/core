@@ -1,0 +1,48 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
+/*
+ * Copyright the Collabora Office contributors.
+ *
+ * SPDX-License-Identifier: MPL-2.0
+ *
+ * This Source Code Form is subject to the terms of the Mozilla Public
+ * License, v. 2.0. If a copy of the MPL was not distributed with this
+ * file, You can obtain one at http://mozilla.org/MPL/2.0/.
+ */
+
+module scriptinterop {
+
+interface XParagraph;
+
+interface XPositionedImage: XBase {
+    long getHeight();
+
+    string getId();
+
+    PositionedLayout getLayout();
+
+    double getLeftOffset();
+
+    XParagraph getParagraph();
+
+    double getTopOffset();
+
+    long getWidth();
+
+    XPositionedImage setHeight([in] long height);
+
+    XPositionedImage setLayout([in] PositionedLayout layout);
+
+    XPositionedImage setLeftOffset([in] double offset);
+
+    XPositionedImage setTopOffset([in] double offset);
+
+    XPositionedImage setWidth([in] long width);
+
+    // Setting the ID, the image's name in the document, which GAS's PositionedImage does not offer:
+
+    XPositionedImage setId([in] string id);
+};
+
+};
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

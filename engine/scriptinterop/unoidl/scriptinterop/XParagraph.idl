@@ -13,6 +13,8 @@ module scriptinterop {
 
 interface XParagraph: XContainerElement
 {
+    XPositionedImage addPositionedImage([in] XBlob image);
+
     com::sun::star::beans::Optional<HorizontalAlignment> getAlignment();
 
     com::sun::star::beans::Optional<GlyphType> getGlyphType();
@@ -25,7 +27,13 @@ interface XParagraph: XContainerElement
 
     long getNestingLevel();
 
+    XPositionedImage getPositionedImage([in] string id);
+
+    sequence<XPositionedImage> getPositionedImages();
+
     com::sun::star::beans::Optional<boolean> isLeftToRight();
+
+    boolean removePositionedImage([in] string id);
 
     XParagraph setHeading([in] ParagraphHeading heading);
 };
