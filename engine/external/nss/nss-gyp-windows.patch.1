@@ -5,11 +5,6 @@ when cygpath is present, so gyp and ninja can read them. Split set_nspr_path's
 include:lib argument on the separator between two drive-letter paths, since a
 Windows drive letter also contains a colon. Both are no-ops off Windows.
 
-Link nspr as nspr4.lib, plc4.lib, plds4.lib. We build nspr with the WIN95
-target, which names its import libraries without the lib prefix. The coreconf
-build already consumes those unprefixed names, so make the gyp build match
-instead of asking for the lib-prefixed names a WINNT nspr would produce.
-
 Link the Debug configuration against the debug C runtime (/MDd). A build with
 the debug runtime enabled drives the Debug configuration, and nspr and the rest
 of the build already use the debug runtime there, so nss has to match.
@@ -28,8 +23,8 @@ vswhere on PATH that we would otherwise have to satisfy by hand.
 -cwd=$(cd $(dirname $0); pwd -P)
 +cwd=$(cd $(dirname $0); pwd -P); if hash cygpath 2>/dev/null; then cwd=$(cygpath -m "$cwd"); fi
  dist_dir="$cwd/../dist"
- argsfile="$dist_dir/build_args"
- source "$cwd/coreconf/nspr.sh"
+
+ # --dist has to be resolved before the main argument loop, because --rebuild
 @@ -206,7 +206,7 @@
  # Setup build paths.
  target_dir="$cwd/out/$target"
@@ -41,8 +36,8 @@ vswhere on PATH that we would otherwise have to satisfy by hand.
  # This saves a canonical representation of arguments that we are passing to gyp
 --- nss/nss/coreconf/nspr.sh
 +++ nss/nss/coreconf/nspr.sh
-@@ -81,8 +81,14 @@
-
+@@ -132,8 +132,14 @@
+ 
  set_nspr_path()
  {
 -    local include=$(echo "$1" | cut -d: -f1)
@@ -55,20 +50,11 @@ vswhere on PATH that we would otherwise have to satisfy by hand.
 +        include=$(echo "$1" | cut -d: -f1)
 +        lib=$(echo "$1" | cut -d: -f2)
 +    fi
-     gyp_params+=(-Dnspr_include_dir="$include")
-     gyp_params+=(-Dnspr_lib_dir="$lib")
- }
+     # Only the WINNT target defines WINNT in prcpucfg.h.
+     if [[ "$platform" = *_NT* ]] && [ -f "$include/prcpucfg.h" ] &&
+            grep -q 'define WINNT' "$include/prcpucfg.h"; then
 --- nss/nss/coreconf/config.gypi
 +++ nss/nss/coreconf/config.gypi
-@@ -44,7 +44,7 @@
-         }],
-         ['OS=="win"', {
-           'use_system_zlib%': 0,
--          'nspr_libs%': ['libnspr4.lib', 'libplc4.lib', 'libplds4.lib'],
-+          'nspr_libs%': ['nspr4.lib', 'plc4.lib', 'plds4.lib'],
-           'zlib_libs%': [],
-           #TODO
-           'moz_debug_flags%': '',
 @@ -663,7 +663,7 @@
            'VCCLCompilerTool': {
              'Optimization': '<(debug_optimization_level)',

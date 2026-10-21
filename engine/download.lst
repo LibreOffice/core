@@ -517,8 +517,8 @@ GYP_TARBALL := gyp-next-0.22.2.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-NSS_SHA256SUM := c95a4cf93d6939000642254422d71dffccb5c017d0f40733d3e2be18aa93f1be
-NSS_TARBALL := nss-3.126-with-nspr-4.39.tar.gz
+NSS_SHA256SUM := 52408a28cc9edc1ca04a420c74a820b48b63a3390a59fe38c5ec77afc6e2fb1d
+NSS_TARBALL := nss-3.131.1-with-nspr-4.39.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
