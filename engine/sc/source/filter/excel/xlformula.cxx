@@ -614,6 +614,7 @@ const XclFunctionInfo saFuncTable_2021[] =
     EXC_FUNCENTRY_V_VR(  ocRandArray,  0,  5,  0,  "RANDARRAY" ),
     EXC_FUNCENTRY_V_VR(  ocUnique,     1,  3,  0,  "UNIQUE" ),
     EXC_FUNCENTRY_V_VR(  ocArrayToText,1,  2,  0,  "ARRAYTOTEXT" ),
+    EXC_FUNCENTRY_V_VR(  ocPercentOf,  2,  2,  0,  "PERCENTOF" ),
     EXC_FUNCENTRY_V_VR(  ocLet,        3,  3,  0,  "LET"),
     EXC_FUNCENTRY_V_VR(  ocLambda,     1, MX,  0,  "LAMBDA"),
     EXC_FUNCENTRY_V_VR(  ocIsOmitted,  1,  1,  0,  "ISOMITTED"),

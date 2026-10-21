@@ -25,10 +25,13 @@
 #include <dociter.hxx>
 #include <mtvfunctions.hxx>
 #include <scmatrix.hxx>
+#include <formulacell.hxx>
+#include <kahan.hxx>
 
 #include <arraysumfunctor.hxx>
 
 #include <formula/token.hxx>
+#include <comphelper/flagguard.hxx>
 
 using namespace formula;
 
@@ -1011,6 +1014,106 @@ void ScInterpreter::ScSumSQ()
 void ScInterpreter::ScSum()
 {
     IterateParameters( ifSUM );
+}
+
+void ScInterpreter::ScPercentOf()
+{
+    if (!MustHaveParamCount(GetByte(), 2))
+        return;
+
+    // A cell range adds its numbers and skips text, empty cells and logical values. A logical
+    // value is a number with a boolean format, so the cell format or the result type of the
+    // formula tells it apart.
+    auto sumRange = [this](const ScRange& rRange)
+    {
+        KahanSum fSum = 0.0;
+        ScCellIterator aIter(mrDoc, rRange);
+        for (bool bHas = aIter.first(); bHas; bHas = aIter.next())
+        {
+            const ScAddress& rPosition = aIter.GetPos();
+            ScRefCellValue aCell = aIter.getRefCellValue();
+            if (aCell.getType() == CELLTYPE_FORMULA)
+            {
+                ScFormulaCell* pFormulaCell = aCell.getFormula();
+                const FormulaError nError = pFormulaCell->GetErrCode();
+                if (nError != FormulaError::NONE)
+                {
+                    SetError(nError);
+                    continue;
+                }
+                if (!pFormulaCell->IsValue()
+                    || pFormulaCell->GetFormatType() == SvNumFormatType::LOGICAL)
+                    continue;
+            }
+            else if (!aCell.hasNumeric())
+                continue;
+            if (mrContext.NFGetType(mrDoc.GetNumberFormat(mrContext, rPosition))
+                == SvNumFormatType::LOGICAL)
+                continue;
+            fSum += GetCellValue(rPosition, aCell);
+        }
+        return fSum.get();
+    };
+
+    // Text given directly is converted to a number, and an empty argument counts as 0. An array
+    // is summed like SUM sums it.
+    bool bTextIsNoNumber = false;
+    auto sumArgument = [this, &sumRange, &bTextIsNoNumber]() -> double
+    {
+        switch (GetStackType())
+        {
+            case svMissing:
+                Pop();
+                return 0.0;
+            case svString:
+            {
+                const double fValue = GetDouble();
+                if (nGlobalError != FormulaError::NONE)
+                    bTextIsNoNumber = true;
+                return fValue;
+            }
+            case svSingleRef:
+            {
+                ScAddress aAddress;
+                PopSingleRef(aAddress);
+                return nGlobalError == FormulaError::NONE ? sumRange(ScRange(aAddress)) : 0.0;
+            }
+            case svDoubleRef:
+            case svRefList:
+            {
+                KahanSum fSum = 0.0;
+                short nParam = 1;
+                size_t nRefInList = 0;
+                while (nParam-- > 0)
+                {
+                    ScRange aRange;
+                    PopDoubleRef(aRange, nParam, nRefInList);
+                    if (nGlobalError == FormulaError::NONE)
+                        fSum += sumRange(aRange);
+                }
+                return fSum.get();
+            }
+            default:
+            {
+                comphelper::ValueRestorationGuard const aParameterCountGuard(cPar, 1);
+                ScSum();
+                return GetDouble();
+            }
+        }
+    };
+    const double fAll = sumArgument();
+    const double fSubset = sumArgument();
+    if (nGlobalError != FormulaError::NONE)
+    {
+        // An error value in the data gives #NUM!, and text that is no number gives #VALUE!.
+        // PushError keeps an error that is already set, so the error from the data is cleared.
+        nGlobalError = FormulaError::NONE;
+        PushError(bTextIsNoNumber ? FormulaError::NoValue : FormulaError::IllegalFPOperation);
+        return;
+    }
+    // The cell formats of the input describe the amounts. The result is a plain fraction.
+    nFuncFmtType = SvNumFormatType::NUMBER;
+    PushDouble(sc::div(fSubset, fAll));
 }
 
 void ScInterpreter::ScProduct()

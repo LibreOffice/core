@@ -740,6 +740,7 @@ private:
     void IterateParameters( ScIterFunc, bool bTextAsZero = false );
     void ScSumSQ();
     void ScSum();
+    void ScPercentOf();
     void ScProduct();
     void ScAverage( bool bTextAsZero = false );
     void ScCount();

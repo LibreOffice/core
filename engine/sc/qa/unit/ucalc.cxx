@@ -3078,6 +3078,7 @@ CPPUNIT_TEST_FIXTURE(Test, testFunctionLists)
         "LOG10",
         "MOD",
         "ODD",
+        "PERCENTOF",
         "PI",
         "POWER",
         "PRODUCT",

@@ -221,6 +221,7 @@ const ScParameterClassification::RawData ScParameterClassification::pRawData[] =
     { ocOffset,          {{ Reference, Value, Value, Value, Value                }, 0, Reference }},
     { ocOr,              {{ Reference                                            }, 1, Value }},
     { ocPearson,         {{ ForceArray, ForceArray                               }, 0, Value }},
+    { ocPercentOf,       {{ ReferenceOrForceArray, ReferenceOrForceArray         }, 0, Value }},
     { ocPercentSign,     {{ Array                                                }, 0, Value }},
     { ocPercentile,      {{ Reference, Value                                     }, 0, Value }},
     { ocPercentile_Exc,  {{ Reference, Value                                     }, 0, Value }},

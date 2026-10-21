@@ -3880,6 +3880,7 @@ bool IsErrFunc(OpCode oc)
         case ocIfs_MS:
         case ocSwitch_MS:
         case ocXLookup:
+        case ocPercentOf:       // turns any error in its data into #NUM!
             return true;
         default:
             return false;
@@ -4076,6 +4077,7 @@ void ScInterpreter::DispatchOpCode( OpCode eOp )
         case ocMax              : ScMax();                      break;
         case ocMaxA             : ScMax( true );                break;
         case ocSum              : ScSum();                      break;
+        case ocPercentOf        : ScPercentOf();                break;
         case ocProduct          : ScProduct();                  break;
         case ocNPV              : ScNPV();                      break;
         case ocIRR              : ScIRR();                      break;

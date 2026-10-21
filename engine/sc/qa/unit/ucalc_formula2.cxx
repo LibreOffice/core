@@ -26,8 +26,14 @@
 #include <kahan.hxx>
 #include <matrixdecomposition.hxx>
 #include <stringutil.hxx>
+#include <patattr.hxx>
+#include <scitems.hxx>
 
 #include <svl/broadcast.hxx>
+#include <svl/intitem.hxx>
+#include <svl/numformat.hxx>
+#include <svl/zforlist.hxx>
+#include <i18nlangtag/lang.h>
 #include <sfx2/docfile.hxx>
 #include <unotools/saveopt.hxx>
 #include <unotools/syslocaleoptions.hxx>
@@ -8084,6 +8090,7 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testFunctionValueKeepsItsNameThroughOOXML)
     // OOXML formula back gives the same function.
     const std::vector<std::tuple<OUString, OUString, OpCode>> aFormulas{
         { u"BYCOL(A1:B4;SORT)"_ustr, u"_xlfn.BYCOL(A1:B4,_xleta.SORT)"_ustr, ocSort },
+        { u"PERCENTOF(A1;A1:A4)"_ustr, u"_xlfn.PERCENTOF(A1,A1:A4)"_ustr, ocPercentOf },
     };
     for (const auto& [aNative, aOoxml, eFunction] : aFormulas)
     {
@@ -9198,6 +9205,86 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testMalformedNumericTokenRoundTrip)
     OUStringBuffer aBuffer;
     aCompiler.CreateStringFromTokenArray(aBuffer);
     CPPUNIT_ASSERT_EQUAL(u"[.A2]\u202f.50"_ustr, aBuffer.makeStringAndClear());
+    m_pDoc->DeleteTab(0);
+}
+
+CPPUNIT_TEST_FIXTURE(TestFormula2, testFuncPERCENTOFReturnsTheShareOfTheTotal)
+{
+    // PERCENTOF gives the sum of a subset as a fraction of the sum of all values.
+    sc::AutoCalcSwitch aACSwitch(*m_pDoc, true);
+    m_pDoc->InsertTab(0, u"Sheet1"_ustr);
+
+    m_pDoc->SetValue(ScAddress(0, 0, 0), 10.0);
+    m_pDoc->SetValue(ScAddress(0, 1, 0), 20.0);
+    m_pDoc->SetValue(ScAddress(0, 2, 0), 30.0);
+    m_pDoc->SetValue(ScAddress(0, 3, 0), 40.0);
+    m_pDoc->SetString(ScAddress(0, 4, 0), u"text"_ustr);
+
+    // The amounts carry a currency format.
+    SvNumberFormatter* pFormatter = m_pDoc->GetFormatTable();
+    sal_uInt32 nCurrencyFormat
+        = pFormatter->GetFormatIndex(NF_CURRENCY_1000DEC2, LANGUAGE_ENGLISH_US);
+    ScPatternAttr aFormatAttr(m_pDoc->getCellAttributeHelper());
+    aFormatAttr.ItemSetPut(SfxUInt32Item(ATTR_VALUE_FORMAT, nCurrencyFormat));
+    m_pDoc->ApplyPatternAreaTab(0, 0, 0, 3, 0, aFormatAttr);
+
+    m_pDoc->SetString(ScAddress(1, 0, 0), u"=PERCENTOF(A1:A2;A1:A4)"_ustr);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.3, m_pDoc->GetValue(ScAddress(1, 0, 0)), 1e-12);
+    // The result is a plain number, whatever format the amounts carry.
+    ScFormulaCell* pCell = m_pDoc->GetFormulaCell(ScAddress(1, 0, 0));
+    CPPUNIT_ASSERT(pCell);
+    CPPUNIT_ASSERT_EQUAL(SvNumFormatType::NUMBER, pCell->GetFormatType());
+
+    // Text in a range adds nothing to either sum.
+    m_pDoc->SetString(ScAddress(1, 1, 0), u"=PERCENTOF(A4:A5;A1:A5)"_ustr);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.4, m_pDoc->GetValue(ScAddress(1, 1, 0)), 1e-12);
+
+    // The subset can be a single number.
+    m_pDoc->SetString(ScAddress(1, 2, 0), u"=PERCENTOF(10;A1:A4)"_ustr);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.1, m_pDoc->GetValue(ScAddress(1, 2, 0)), 1e-12);
+
+    // An array expression is evaluated as an array without array entry, so the
+    // condition keeps only the values above 15 in the subset.
+    m_pDoc->SetString(ScAddress(1, 3, 0), u"=PERCENTOF(A1:A4*(A1:A4>15);A1:A4)"_ustr);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.9, m_pDoc->GetValue(ScAddress(1, 3, 0)), 1e-12);
+
+    // Empty cells sum to zero, and a zero total gives a division error.
+    m_pDoc->SetString(ScAddress(1, 4, 0), u"=PERCENTOF(A1;C1:C2)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"#DIV/0!"_ustr, m_pDoc->GetString(ScAddress(1, 4, 0)));
+
+    // An error value in either argument gives #NUM!, whatever the error was.
+    m_pDoc->SetString(ScAddress(1, 5, 0), u"=PERCENTOF(NA();A1:A4)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"#NUM!"_ustr, m_pDoc->GetString(ScAddress(1, 5, 0)));
+    m_pDoc->SetString(ScAddress(1, 6, 0), u"=PERCENTOF(A1:A4;NA())"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"#NUM!"_ustr, m_pDoc->GetString(ScAddress(1, 6, 0)));
+    m_pDoc->SetString(ScAddress(3, 0, 0), u"=1/0"_ustr);
+    m_pDoc->SetString(ScAddress(1, 7, 0), u"=PERCENTOF(A1;A1:D1)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"#NUM!"_ustr, m_pDoc->GetString(ScAddress(1, 7, 0)));
+
+    // A logical value in a range adds nothing, both a formula result and a number with a
+    // boolean format.
+    m_pDoc->SetString(ScAddress(4, 0, 0), u"=TRUE()"_ustr);
+    m_pDoc->SetValue(ScAddress(4, 1, 0), 10.0);
+    m_pDoc->SetValue(ScAddress(4, 2, 0), 1.0);
+    const sal_uInt32 nBooleanFormat = pFormatter->GetFormatIndex(NF_BOOLEAN, LANGUAGE_ENGLISH_US);
+    ScPatternAttr aBooleanAttr(m_pDoc->getCellAttributeHelper());
+    aBooleanAttr.ItemSetPut(SfxUInt32Item(ATTR_VALUE_FORMAT, nBooleanFormat));
+    m_pDoc->ApplyPatternAreaTab(4, 2, 4, 2, 0, aBooleanAttr);
+    m_pDoc->SetString(ScAddress(1, 8, 0), u"=PERCENTOF(E1:E3;A1:A4)"_ustr);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.1, m_pDoc->GetValue(ScAddress(1, 8, 0)), 1e-12);
+
+    // A logical value or a number as text given directly counts as its number.
+    m_pDoc->SetString(ScAddress(1, 9, 0), u"=PERCENTOF(TRUE();4)"_ustr);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.25, m_pDoc->GetValue(ScAddress(1, 9, 0)), 1e-12);
+    m_pDoc->SetString(ScAddress(1, 10, 0), u"=PERCENTOF(\"1\";4)"_ustr);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.25, m_pDoc->GetValue(ScAddress(1, 10, 0)), 1e-12);
+    m_pDoc->SetString(ScAddress(1, 11, 0), u"=PERCENTOF(\"abc\";4)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"#VALUE!"_ustr, m_pDoc->GetString(ScAddress(1, 11, 0)));
+
+    // An empty argument counts as 0, so an empty total divides by zero.
+    m_pDoc->SetString(ScAddress(1, 12, 0), u"=PERCENTOF(5;)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(u"#DIV/0!"_ustr, m_pDoc->GetString(ScAddress(1, 12, 0)));
+
     m_pDoc->DeleteTab(0);
 }
 

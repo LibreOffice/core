@@ -1803,6 +1803,58 @@ CPPUNIT_TEST_FIXTURE(ScExportTest4, testChartAltTextXLSX)
     assertXPath(pDoc, "//xdr:graphicFrame/xdr:nvGraphicFramePr/xdr:cNvPr", "title", u"Sales chart");
 }
 
+namespace
+{
+void fillPercentOfDocument(ScDocument& rDoc)
+{
+    rDoc.SetValue(ScAddress(0, 0, 0), 10.0);
+    rDoc.SetValue(ScAddress(0, 1, 0), 20.0);
+    rDoc.SetValue(ScAddress(0, 2, 0), 30.0);
+    rDoc.SetValue(ScAddress(0, 3, 0), 40.0);
+    rDoc.SetString(ScAddress(1, 0, 0), u"=PERCENTOF(A1:A2;A1:A4)"_ustr);
+}
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testPercentOfXlsxRoundTrip)
+{
+    // PERCENTOF is saved to XLSX under the prefix that marks a newer function and loads back
+    // as the same function.
+    createScDoc();
+    fillPercentOfDocument(*getScDoc());
+
+    save(TestFilter::XLSX);
+    xmlDocUniquePtr pSheet = parseExport(u"xl/worksheets/sheet1.xml"_ustr);
+    CPPUNIT_ASSERT(pSheet);
+    assertXPathContent(pSheet, "/x:worksheet/x:sheetData/x:row[1]/x:c[2]/x:f",
+                       u"_xlfn.PERCENTOF(A1:A2,A1:A4)");
+
+    saveAndReload(TestFilter::XLSX);
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc->GetFormula(1, 0, 0).startsWith("=PERCENTOF("));
+    pDoc->CalcAll();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.3, pDoc->GetValue(ScAddress(1, 0, 0)), 1e-12);
+}
+
+CPPUNIT_TEST_FIXTURE(ScExportTest4, testPercentOfOdsRoundTrip)
+{
+    // ODF has no PERCENTOF of its own, so the function is saved in the namespace for
+    // functions from OOXML and loads back as the same function.
+    createScDoc();
+    fillPercentOfDocument(*getScDoc());
+
+    save(TestFilter::ODS);
+    xmlDocUniquePtr pContent = parseExport(u"content.xml"_ustr);
+    CPPUNIT_ASSERT(pContent);
+    assertXPath(pContent, "(//table:table-cell[contains(@table:formula, 'PERCENTOF')])[1]",
+                "formula", u"of:=COM.MICROSOFT.PERCENTOF([.A1:.A2];[.A1:.A4])");
+
+    saveAndReload(TestFilter::ODS);
+    ScDocument* pDoc = getScDoc();
+    CPPUNIT_ASSERT(pDoc->GetFormula(1, 0, 0).startsWith("=PERCENTOF("));
+    pDoc->CalcAll();
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.3, pDoc->GetValue(ScAddress(1, 0, 0)), 1e-12);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

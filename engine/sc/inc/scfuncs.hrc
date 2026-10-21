@@ -4529,6 +4529,16 @@ const TranslateId ocARRAYTOTEXT_ARY[] =
     NC_("ocARRAYTOTEXT", "The format of the returned text. 0 or omitted - concise format, the values separated by the function separator (default). 1 - strict format, an array constant in braces with quoted text and the array column and row separators.")
 };
 
+// -=*# Resource for function PERCENTOF #*=-
+const TranslateId ocPERCENTOF_ARY[] =
+{
+    NC_("ocPERCENTOF", "Returns the sum of a subset of values as a percentage of the sum of all values."),
+    NC_("ocPERCENTOF", "Data subset"),
+    NC_("ocPERCENTOF", "The values that make up the subset."),
+    NC_("ocPERCENTOF", "Data all"),
+    NC_("ocPERCENTOF", "The values that make up the whole set.")
+};
+
 // -=*# Resource for function LAMBDA #*=-
 const TranslateId ocLAMBDA_ARY[] =
 {
