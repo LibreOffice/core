@@ -5849,6 +5849,9 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
     case COKitCallbackType::REDLINE_TABLE_ENTRY_MODIFIED:
         sendTextFrame("redlinetablemodified: " + payload);
         break;
+    case COKitCallbackType::REDLINE_RECORDING_FOR_ALL_VIEWS:
+        sendTextFrame("redlinerecordingforallviews: " + payload);
+        break;
     case COKitCallbackType::COMMENT:
     {
         sendTextFrame("comment: " + payload);

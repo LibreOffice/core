@@ -546,6 +546,65 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerViewEnableBoth)
     CPPUNIT_ASSERT(pWrtShell2->GetViewOptions()->IsRedlineRecordingOn());
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesForAllViewsNotifiesAllViews)
+{
+    // Every view learns which view turned on recording for all views, and only such a request
+    // tells them.
+    SwXTextDocument* pXTextDocument = createDoc();
+    CPPUNIT_ASSERT(pXTextDocument);
+    SwTestViewCallback aView1;
+    int nView1 = KitHelper::getCurrentView();
+    KitHelper::createView();
+    SwTestViewCallback aView2;
+    int nView2 = KitHelper::getCurrentView();
+    auto assertAllToldBy = [&](int nStarter) {
+        for (SwTestViewCallback* pView : { &aView1, &aView2 })
+        {
+            CPPUNIT_ASSERT_EQUAL(size_t(1), pView->m_aRecordingForAllViewsBy.size());
+            CPPUNIT_ASSERT_EQUAL(nStarter, pView->m_aRecordingForAllViewsBy[0]);
+            pView->m_aRecordingForAllViewsBy.clear();
+        }
+    };
+    auto assertNoneTold = [&]() {
+        CPPUNIT_ASSERT(aView1.m_aRecordingForAllViewsBy.empty());
+        CPPUNIT_ASSERT(aView2.m_aRecordingForAllViewsBy.empty());
+    };
+    cpo::uno::Sequence<beans::PropertyValue> aOn = {
+        comphelper::makePropertyValue(u"TrackChanges"_ustr, true),
+    };
+    cpo::uno::Sequence<beans::PropertyValue> aOff = {
+        comphelper::makePropertyValue(u"TrackChanges"_ustr, false),
+    };
+
+    // View1 records for all views.
+    KitHelper::setView(nView1);
+    dispatchCommand(mxComponent, u".uno:TrackChanges"_ustr, aOn);
+    // Without the accompanying fix in place, this test would have failed, no view was told who
+    // turned recording on.
+    assertAllToldBy(nView1);
+
+    // Recording is already on in all views, so asking again changes nothing.
+    KitHelper::setView(nView2);
+    dispatchCommand(mxComponent, u".uno:TrackChangesInAllViews"_ustr, {});
+    assertNoneTold();
+
+    // Each view turns on recording for itself, until every view records.
+    dispatchCommand(mxComponent, u".uno:TrackChanges"_ustr, aOff);
+    dispatchCommand(mxComponent, u".uno:TrackChangesInThisView"_ustr, {});
+    KitHelper::setView(nView1);
+    dispatchCommand(mxComponent, u".uno:TrackChangesInThisView"_ustr, {});
+    CPPUNIT_ASSERT(pXTextDocument->GetDocShell()->IsChangeRecording());
+    assertNoneTold();
+
+    // View2 widens its own recording to all views.
+    dispatchCommand(mxComponent, u".uno:TrackChanges"_ustr, aOff);
+    KitHelper::setView(nView2);
+    dispatchCommand(mxComponent, u".uno:TrackChangesInThisView"_ustr, {});
+    assertNoneTold();
+    dispatchCommand(mxComponent, u".uno:TrackChangesInAllViews"_ustr, {});
+    assertAllToldBy(nView2);
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testTrackChangesPerViewAllToOneTransition)
 {
     // Given 2 views, recording is on in all views:

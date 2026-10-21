@@ -122,6 +122,9 @@
 #include <dbmgr.hxx>
 #include <reffld.hxx>
 #include <comphelper/kit.hxx>
+#include <sstream>
+#include <boost/property_tree/json_parser.hpp>
+#include <boost/property_tree/ptree.hpp>
 #include <comphelper/string.hxx>
 #include <comphelper/docpasswordhelper.hxx>
 #include <svtools/strings.hrc>
@@ -620,14 +623,36 @@ bool SwView::InsertGraphicDlg( SfxRequest& rReq )
 }
 
 /* Applies the track changes mode once any password prompt is out of the way. */
-static void lcl_ApplyTrackChangesMode(SwDocShell *pDocShell, sal_uInt16 nSlot, bool bOn)
+static void lcl_ApplyTrackChangesMode(SwView& rView, sal_uInt16 nSlot, bool bOn)
 {
+    SwDocShell* pDocShell = rView.GetDocShell();
     SfxRedlineRecordingMode eRedlineRecordingMode = SfxRedlineRecordingMode::AllViews;
     if (nSlot == FN_TRACK_CHANGES_IN_THIS_VIEW)
     {
         eRedlineRecordingMode = SfxRedlineRecordingMode::ThisView;
     }
+    const bool bWasRecordingInAllViews = pDocShell->IsChangeRecording(&rView);
     pDocShell->SetChangeRecording( bOn, /*bLockAllViews=*/true, eRedlineRecordingMode );
+
+    // Tell every view of the document which view turned on recording for all views. Each view
+    // that turns on recording for itself only is not such a view, even when that makes every
+    // view record.
+    if (comphelper::COKit::isActive() && eRedlineRecordingMode == SfxRedlineRecordingMode::AllViews
+        && !bWasRecordingInAllViews && pDocShell->IsChangeRecording(&rView))
+    {
+        boost::property_tree::ptree aTree;
+        aTree.put("viewId", KitHelper::getView(rView));
+        std::stringstream aStream;
+        boost::property_tree::write_json(aStream, aTree, /*pretty=*/false);
+        const OString aPayload(o3tl::trim(aStream.str()));
+        for (SfxViewShell* pViewShell = SfxViewShell::GetFirst(); pViewShell;
+             pViewShell = SfxViewShell::GetNext(*pViewShell))
+        {
+            if (pViewShell->GetDocId() == rView.GetDocId())
+                pViewShell->viewCallback(COKitCallbackType::REDLINE_RECORDING_FOR_ALL_VIEWS,
+                                         aPayload);
+        }
+    }
 
     // Notify all view shells of this document, as the track changes mode is document-global.
     for (SfxViewFrame* pViewFrame = SfxViewFrame::GetFirst(pDocShell); pViewFrame; pViewFrame = SfxViewFrame::GetNext(*pViewFrame, pDocShell))
@@ -867,13 +892,13 @@ void SwView::Execute(SfxRequest &rReq)
                         }
 
                         rRedlineAccess.SetRedlinePassword(Sequence <sal_Int8> ());
-                        lcl_ApplyTrackChangesMode(pShell, nSlot, bOn);
+                        lcl_ApplyTrackChangesMode(*this, nSlot, bOn);
                         xRequest->Done();
                     });
                     break;
                 }
 
-                lcl_ApplyTrackChangesMode(GetDocShell(), nSlot, oOn.value());
+                lcl_ApplyTrackChangesMode(*this, nSlot, oOn.value());
             }
         }
         break;

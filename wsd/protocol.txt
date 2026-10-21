@@ -1474,6 +1474,13 @@ redlinetablechanged:
     Signals that the redlines table has been modified.
     Redlines are used for tracking changes.
 
+redlinerecordingforallviews: <payload>
+
+    Signals that a view turned on recording of tracked changes for all
+    views of the document. Sent to every view, the one that turned it on
+    included. <payload> is a JSON object whose "viewId" is the id of that
+    view, for example {"viewId": "1"}.
+
 comment:
 
     Signals that comment has either been added, removed or modified. See

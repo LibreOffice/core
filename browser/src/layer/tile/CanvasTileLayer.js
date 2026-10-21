@@ -992,6 +992,9 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 				section.onACKComment(obj);
 			}
 		}
+		else if (textMsg.startsWith('redlinerecordingforallviews:')) {
+			this._onRedlineRecordingForAllViewsMsg(textMsg);
+		}
 		else if (textMsg.startsWith('redlinetablechanged:')) {
 			obj = JSON.parse(textMsg.substring('redlinetablechanged:'.length + 1));
 			let section = app.sectionContainer.getSectionWithName(app.CSections.CommentList.name);
@@ -1373,6 +1376,27 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 				commandValues: obj.commandValues
 			});
 		}
+	},
+
+	// A user turned on recording of tracked changes for all users. That user sees the Review
+	// tab. The others get a notice naming that user. The snackbar takes no focus, so typing goes
+	// on.
+	_onRedlineRecordingForAllViewsMsg: function (textMsg) {
+		const obj = JSON.parse(textMsg.substring('redlinerecordingforallviews:'.length + 1));
+		const starterViewId = parseInt(obj.viewId);
+		if (starterViewId === parseInt(this._viewId)) {
+			if (this._map.uiManager.notebookbar)
+				this._map.uiManager.notebookbar.selectTab('Review');
+			return;
+		}
+
+		const userName = this._map.getViewName(starterViewId);
+		let message = userName
+			? _('%1 started recording changes for all users.').replace('%1', () => userName)
+			: _('Recording changes was started for all users.');
+		if (this._map.isEditMode())
+			message += ' ' + _('Your changes are tracked now.');
+		this._map.uiManager.showSnackbar(message);
 	},
 
 	_onCellAddressMsg: function (textMsg) {

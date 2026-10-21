@@ -1316,7 +1316,20 @@ enum class COKitCallbackType
      * or a redo gives that source back. The payload is empty; the receiving
      * view reads the link list for itself.
      */
-    SLIDE_LINKS_CHANGED = 77
+    SLIDE_LINKS_CHANGED = 77,
+
+    /**
+     * Recording of tracked changes was turned on for all views of a Writer
+     * document.
+     *
+     * Pushed to every view of the document, the one that turned the recording
+     * on included, when a request to record in all views starts the recording
+     * in at least one view. Views that each turn on recording for themselves
+     * only do not cause it. The payload is a JSON object whose "viewId" is the
+     * id of the view that turned the recording on, for example
+     * { "viewId": "1" }.
+     */
+    REDLINE_RECORDING_FOR_ALL_VIEWS = 78
 };
 
 enum class COKitKeyEventType
@@ -1498,6 +1511,8 @@ static inline const char* kitCallbackTypeToString(COKitCallbackType eType)
         return "KIT_CALLBACK_PRESENTATION_INFO";
     case COKitCallbackType::SLIDE_LINKS_CHANGED:
         return "KIT_CALLBACK_SLIDE_LINKS_CHANGED";
+    case COKitCallbackType::REDLINE_RECORDING_FOR_ALL_VIEWS:
+        return "KIT_CALLBACK_REDLINE_RECORDING_FOR_ALL_VIEWS";
     }
 
     assert(!"Unknown COKitCallbackType type.");
