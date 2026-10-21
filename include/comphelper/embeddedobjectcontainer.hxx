@@ -201,7 +201,8 @@ public:
                         const css::uno::Reference< css::embed::XStorage >& _xStorage,
                         bool _bClearModifiedFlag = true);
 
-    // if DisableActiveContent configuration option is set, this always returns false
+    // if DisableActiveContent configuration option is set, this always returns false. In an embedded
+    // document whose containing document has an AllowLinkUpdate property, it returns that property.
     bool getUserAllowsLinkUpdate() const;
 
     // if DisableActiveContent configuration option is set, this has no effect
