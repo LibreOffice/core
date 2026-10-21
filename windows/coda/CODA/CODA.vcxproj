@@ -258,6 +258,30 @@
     <PackageReference Include="Microsoft.Web.WebView2" Version="1.0.3719.77" GeneratePathProperty="true" />
     <PackageReference Include="Microsoft.Windows.ImplementationLibrary" Version="1.0.260126.7" />
   </ItemGroup>
+  <!--
+    Visual Studio does not restore the PackageReference packages of a C++
+    project, which the command line build does with -restore. So a build in
+    Visual Studio restores them first. The packages bring their include paths
+    and libraries in files that MSBuild reads with the project, before any
+    target runs, so a build that had to restore stops, and the next build uses
+    the restored packages. A restore that has nothing to do leaves
+    project.assets.json as it is, and the build goes on.
+  -->
+  <Target Name="RestorePackagesInVisualStudio" BeforeTargets="PrepareForBuild"
+          Condition="'$(BuildingInsideVisualStudio)' == 'true'">
+    <PropertyGroup>
+      <_AssetsFile>$(MSBuildProjectExtensionsPath)project.assets.json</_AssetsFile>
+      <_AssetsTimeBefore Condition="Exists('$(_AssetsFile)')">$([System.IO.File]::GetLastWriteTime('$(_AssetsFile)').Ticks)</_AssetsTimeBefore>
+    </PropertyGroup>
+    <!-- The extra property gives the restore an evaluation of the project of its own. -->
+    <MSBuild Projects="$(MSBuildProjectFullPath)" Targets="Restore"
+             Properties="ExcludeRestorePackageImports=true;_RestoringInsideBuild=true" />
+    <PropertyGroup>
+      <_AssetsTimeAfter Condition="Exists('$(_AssetsFile)')">$([System.IO.File]::GetLastWriteTime('$(_AssetsFile)').Ticks)</_AssetsTimeAfter>
+    </PropertyGroup>
+    <Error Condition="'$(_AssetsTimeBefore)' != '$(_AssetsTimeAfter)'"
+           Text="The NuGet packages of CODA were restored just now. Build again to use them." />
+  </Target>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
