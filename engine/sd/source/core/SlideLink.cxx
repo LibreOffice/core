@@ -28,6 +28,7 @@
 #include <tools/urlobj.hxx>
 
 #include <DrawDocShell.hxx>
+#include <SlideSectionManager.hxx>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
 #include <sdresid.hxx>
@@ -449,6 +450,9 @@ sal_Int32 SlideLink::Refresh(SdDrawDocument& rDoc, const OUString& rSourceName,
             SdPage* pPage = rDoc.GetSdPage(aPages[nFirst + nPos], PageKind::Standard);
             if (pPage && pPage->GetGuid().getString() != aPageIds[nPos])
             {
+                rDoc.GetSectionManager().ReplaceLinkedPage(
+                    OStringToOUString(aPageIds[nPos], RTL_TEXTENCODING_ASCII_US),
+                    pPage->GetGuid().getOUString());
                 pPage->SetBookmarkName(aRecordedNames[nFirst + nPos]);
                 pPage->SetSourcePageGuid(aSourceGuids[nFirst + nPos]);
                 pPage->SetSourceModifiedTime(rLastModifiedTime);

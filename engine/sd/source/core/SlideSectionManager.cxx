@@ -9,6 +9,7 @@
 
 #include <SlideSectionManager.hxx>
 #include <DrawDocShell.hxx>
+#include <SlideLink.hxx>
 #include <UndoSlideSection.hxx>
 #include <drawdoc.hxx>
 #include <sdpage.hxx>
@@ -19,6 +20,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/drawing/XDrawPages.hpp>
 
+#include <algorithm>
 #include <numeric>
 
 #include <COKit/COKit.hxx>
@@ -27,6 +29,7 @@
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/xmltools.hxx>
+#include <sal/log.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svl/undo.hxx>
 #include <svx/svdmodel.hxx>
@@ -80,6 +83,7 @@ void SlideSectionManager::SetSectionsFromPropertyValues(
 
         SlideSection aSection;
         cpo::uno::Sequence<OUString> aSlideNames;
+        cpo::uno::Sequence<OUString> aSourcePageGuids;
 
         for (const auto& rProp : aSectionProps)
         {
@@ -89,7 +93,19 @@ void SlideSectionManager::SetSectionsFromPropertyValues(
                 rProp.Value >>= aSection.maId;
             else if (rProp.Name == "SlideNameList")
                 rProp.Value >>= aSlideNames;
+            else if (rProp.Name == "SourceReference")
+                rProp.Value >>= aSection.maLink.maSourceReference;
+            else if (rProp.Name == "SourceSectionId")
+                rProp.Value >>= aSection.maLink.maSourceSectionId;
+            else if (rProp.Name == "SourceSectionName")
+                rProp.Value >>= aSection.maLink.maSourceSectionName;
+            else if (rProp.Name == "SourceModifiedTime")
+                rProp.Value >>= aSection.maLink.maSourceModifiedTime;
+            else if (rProp.Name == "SourcePageGuidList")
+                rProp.Value >>= aSourcePageGuids;
         }
+        aSection.maLink.maSourcePageGuids
+            = comphelper::sequenceToContainer<std::vector<OUString>>(aSourcePageGuids);
 
         // The section starts at the first slide in its list.
         // Try name lookup first; fall back to position if names don't match
@@ -116,6 +132,18 @@ void SlideSectionManager::SetSectionsFromPropertyValues(
               [](const SlideSection& a, const SlideSection& b) {
                   return a.mnStartIndex < b.mnStartIndex;
               });
+
+    // A link is read with the slides the section spans once every section has its start, and a
+    // link that does not describe those slides is dropped, so the section keeps its slides alone.
+    for (sal_Int32 i = 0; i < GetSectionCount(); ++i)
+    {
+        SlideSectionLink& rLink = maSections[i].maLink;
+        if (!rLink.IsLinked())
+            continue;
+
+        rLink = ValidateLink(rLink, i);
+        SAL_WARN_IF(!rLink.IsLinked(), "sd", "dropping the unreadable link of a slide section");
+    }
 }
 
 cpo::uno::Sequence<beans::PropertyValue> SlideSectionManager::GetSectionsAsPropertyValues() const
@@ -148,6 +176,22 @@ cpo::uno::Sequence<beans::PropertyValue> SlideSectionManager::GetSectionsAsPrope
         aProps.push_back(comphelper::makePropertyValue(
             u"SlideNameList"_ustr, comphelper::containerToSequence(aSlideNames)));
 
+        if (const SlideSectionLink* pLink = GetSectionLink(i))
+        {
+            aProps.push_back(
+                comphelper::makePropertyValue(u"SourceReference"_ustr, pLink->maSourceReference));
+            aProps.push_back(
+                comphelper::makePropertyValue(u"SourceSectionId"_ustr, pLink->maSourceSectionId));
+            aProps.push_back(comphelper::makePropertyValue(u"SourceSectionName"_ustr,
+                                                           pLink->maSourceSectionName));
+            if (!pLink->maSourceModifiedTime.isEmpty())
+                aProps.push_back(comphelper::makePropertyValue(u"SourceModifiedTime"_ustr,
+                                                               pLink->maSourceModifiedTime));
+            aProps.push_back(comphelper::makePropertyValue(
+                u"SourcePageGuidList"_ustr,
+                comphelper::containerToSequence(pLink->maSourcePageGuids)));
+        }
+
         aSectionsList.push_back(comphelper::makePropertyValue(
             u"Section"_ustr + OUString::number(i), comphelper::containerToSequence(aProps)));
     }
@@ -161,6 +205,124 @@ const SlideSection& SlideSectionManager::GetSection(sal_Int32 nIndex) const
 {
     assert(nIndex >= 0 && o3tl::make_unsigned(nIndex) < maSections.size());
     return maSections[nIndex];
+}
+
+sal_Int32 SlideSectionManager::GetSectionSlideCount(sal_Int32 nSectionIndex) const
+{
+    if (nSectionIndex < 0 || nSectionIndex >= GetSectionCount())
+        return 0;
+
+    const sal_Int32 nEnd = (nSectionIndex + 1 < GetSectionCount())
+                               ? maSections[nSectionIndex + 1].mnStartIndex
+                               : static_cast<sal_Int32>(mrDoc.GetSdPageCount(PageKind::Standard));
+    return std::max<sal_Int32>(0, nEnd - maSections[nSectionIndex].mnStartIndex);
+}
+
+std::vector<OUString> SlideSectionManager::GetSectionPageGuids(sal_Int32 nSectionIndex) const
+{
+    std::vector<OUString> aGuids;
+    const sal_Int32 nCount = GetSectionSlideCount(nSectionIndex);
+    for (sal_Int32 i = 0; i < nCount; ++i)
+    {
+        const SdPage* pPage
+            = mrDoc.GetSdPage(static_cast<sal_uInt16>(maSections[nSectionIndex].mnStartIndex + i),
+                              PageKind::Standard);
+        if (pPage)
+            aGuids.push_back(pPage->GetGuid().getOUString());
+    }
+    return aGuids;
+}
+
+SlideSectionLink SlideSectionManager::ValidateLink(const SlideSectionLink& rLink,
+                                                   sal_Int32 nSectionIndex) const
+{
+    if (!rLink.IsLinked() || SlideLink::GetSourceName(rLink.maSourceReference).isEmpty())
+        return SlideSectionLink();
+
+    if (!SlideLink::IsReadableSourceString(rLink.maSourceModifiedTime)
+        || !SlideLink::IsReadableSourceString(rLink.maSourceSectionName))
+        return SlideSectionLink();
+
+    SlideSectionLink aLink(rLink);
+    aLink.maPageGuids = GetSectionPageGuids(nSectionIndex);
+    if (aLink.maPageGuids.empty() || aLink.maPageGuids.size() != aLink.maSourcePageGuids.size())
+        return SlideSectionLink();
+
+    aLink.maSourceSectionId = SlideLink::NormaliseGuid(rLink.maSourceSectionId);
+    if (aLink.maSourceSectionId.isEmpty())
+        return SlideSectionLink();
+
+    for (OUString& rGuid : aLink.maSourcePageGuids)
+    {
+        rGuid = SlideLink::NormaliseGuid(rGuid);
+        if (rGuid.isEmpty())
+            return SlideSectionLink();
+    }
+
+    return aLink;
+}
+
+const SlideSectionLink* SlideSectionManager::GetSectionLink(sal_Int32 nSectionIndex) const
+{
+    if (nSectionIndex < 0 || nSectionIndex >= GetSectionCount())
+        return nullptr;
+
+    const SlideSectionLink& rLink = maSections[nSectionIndex].maLink;
+    if (!rLink.IsLinked() || rLink.maPageGuids != GetSectionPageGuids(nSectionIndex))
+        return nullptr;
+
+    return &rLink;
+}
+
+bool SlideSectionManager::SetSectionLink(sal_Int32 nSectionIndex, const SlideSectionLink& rLink)
+{
+    if (nSectionIndex < 0 || nSectionIndex >= GetSectionCount())
+        return false;
+
+    SlideSectionLink aLink;
+    if (rLink.IsLinked())
+    {
+        aLink = ValidateLink(rLink, nSectionIndex);
+        if (!aLink.IsLinked())
+            return false;
+    }
+
+    std::vector<SlideSection> aSnapshot;
+    const bool bUndoEnabled = mrDoc.IsUndoEnabled();
+    if (bUndoEnabled)
+        aSnapshot = GetSectionsSnapshot();
+
+    maSections[nSectionIndex].maLink = std::move(aLink);
+
+    if (bUndoEnabled)
+        mrDoc.AddUndo(std::make_unique<UndoSlideSection>(
+            mrDoc,
+            SdResId(rLink.IsLinked() ? STR_UNDO_LINK_SLIDE_SECTION : STR_UNDO_UNLINK_SLIDE_SECTION),
+            std::move(aSnapshot)));
+    NotifySectionsChanged();
+    return true;
+}
+
+void SlideSectionManager::ReplaceLinkedPage(const OUString& rOldPageGuid,
+                                            const OUString& rNewPageGuid)
+{
+    const auto aHoldsOldPage = [&rOldPageGuid](const SlideSection& rSection)
+    {
+        return std::find(rSection.maLink.maPageGuids.begin(), rSection.maLink.maPageGuids.end(),
+                         rOldPageGuid)
+               != rSection.maLink.maPageGuids.end();
+    };
+    if (std::none_of(maSections.begin(), maSections.end(), aHoldsOldPage))
+        return;
+
+    // Undoing the replacement brings the old slide back, and the section holds it again.
+    if (mrDoc.IsUndoEnabled())
+        mrDoc.AddUndo(
+            std::make_unique<UndoSlideSection>(mrDoc, SdResId(STR_UNDO_UPDATE_LINKED_SLIDES)));
+
+    for (SlideSection& rSection : maSections)
+        std::replace(rSection.maLink.maPageGuids.begin(), rSection.maLink.maPageGuids.end(),
+                     rOldPageGuid, rNewPageGuid);
 }
 
 void SlideSectionManager::WriteSectionsJson(::tools::JsonWriter& rJsonWriter,

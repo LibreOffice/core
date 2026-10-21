@@ -1012,6 +1012,47 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkRefreshKeepsSections)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rSections.GetSection(1).mnStartIndex);
 }
 
+// A linked section stays linked when a slide of it is refreshed in place, and when that refresh is
+// undone
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkRefreshKeepsSectionLink)
+{
+    loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering({});
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+
+    const OUString aSourceUrl
+        = m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-source.odp");
+    CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(
+        aSourceUrl, "{\"slides\":[0,1],\"at\":0,\"link\":true,\"source\":\"Q3 deck.odp\"}"_ostr));
+
+    // The two linked slides make up the first section.
+    sd::SlideSectionManager& rSections = pDoc->GetSectionManager();
+    rSections.AddSection(0, u"Q3"_ustr);
+    rSections.AddSection(2, u"Own slides"_ustr);
+    sd::SlideSectionLink aLink;
+    aLink.maSourceReference = u"vnd.collabora.slide-source:Q3 deck.odp"_ustr;
+    aLink.maSourceSectionId = u"{6A4F0F6E-2B6C-4B47-9F43-7C3C1D2E5A10}"_ustr;
+    aLink.maSourceSectionName = u"Q3"_ustr;
+    aLink.maSourcePageGuids = { u"{0B1D2C3E-4F50-4617-8293-A4B5C6D7E810}"_ustr,
+                                u"{0B1D2C3E-4F50-4617-8293-A4B5C6D7E811}"_ustr };
+    CPPUNIT_ASSERT(rSections.SetSectionLink(0, aLink));
+
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<sal_Int32>(1),
+        pXImpressDocument->refreshSlideLinks(
+            u"Q3 deck.odp"_ustr,
+            m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-link-source-changed.odp"),
+            OUString(), nullptr, 0));
+    CPPUNIT_ASSERT_EQUAL(u"Source title, revised"_ustr, getSlideText(*pDoc, 0));
+    CPPUNIT_ASSERT(rSections.GetSectionLink(0));
+
+    pXImpressDocument->GetDocShell()->GetUndoManager()->Undo();
+    CPPUNIT_ASSERT_EQUAL(u"Source title"_ustr, getSlideText(*pDoc, 0));
+    CPPUNIT_ASSERT(rSections.GetSectionLink(0));
+}
+
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkSourceNotFetched)
 {
     loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));

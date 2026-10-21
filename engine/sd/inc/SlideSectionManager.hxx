@@ -27,11 +27,43 @@ class JsonWriter;
 
 namespace sd
 {
+/** The section of another presentation a section is linked to.
+
+    A linked section holds a copy of the slides of its source section, one slide for each, in the
+    order the source holds them. An empty maSourceReference means the link names no source, and
+    every other field is then empty too. A link that names a source holds for its section only while
+    the section spans the slides of maPageGuids, in that order.
+*/
+struct SlideSectionLink
+{
+    /// The source document, in the vnd.collabora.slide-source: form a linked page records.
+    OUString maSourceReference;
+    /// The braced identifier of the section in the source document.
+    OUString maSourceSectionId;
+    /// The name the source section had when its slides were last read.
+    OUString maSourceSectionName;
+    /// The time the source document was last modified when the slides were last read, as the
+    /// integrator reported it. Empty when no time was reported.
+    OUString maSourceModifiedTime;
+    /// The braced identifier of the source slide each slide of the section was read from, one entry
+    /// for each slide of the section, in slide order.
+    std::vector<OUString> maSourcePageGuids;
+    /// The braced identifier of each slide of this document the section held when it was linked,
+    /// in slide order, one entry for each entry of maSourcePageGuids. The section holds a copy of
+    /// its source section while it spans these slides in this order. This list is not saved,
+    /// since a loaded section takes the slides it spans on load.
+    std::vector<OUString> maPageGuids;
+
+    /// Whether the link names a source section.
+    bool IsLinked() const { return !maSourceReference.isEmpty(); }
+};
+
 struct SlideSection
 {
     OUString maName;
     OUString maId; // GUID string, e.g. "{00F38008-1855-4575-B10E-A14737D1CCA5}"
     sal_Int32 mnStartIndex; // 0-based index of first slide in this section
+    SlideSectionLink maLink;
 };
 
 /** Manages slide sections for a presentation document.
@@ -57,6 +89,37 @@ public:
 
     sal_Int32 GetSectionCount() const;
     const SlideSection& GetSection(sal_Int32 nIndex) const;
+
+    /// The number of slides the section at nSectionIndex spans.
+    sal_Int32 GetSectionSlideCount(sal_Int32 nSectionIndex) const;
+
+    /** The link of the section at nSectionIndex to a section of another presentation, or nullptr
+        when the section has none.
+
+        A section stops holding a copy of its source section when a slide is inserted into it,
+        removed from it or moved within it, or when the section is split or merged, so it has no
+        link while it spans other slides than it was linked with. Undoing the change makes the
+        section span those slides again, and gives it its link back.
+    */
+    const SlideSectionLink* GetSectionLink(sal_Int32 nSectionIndex) const;
+
+    /** Link the section at nSectionIndex to the source section rLink names, or take the link off
+        when rLink is not linked. The slides the section spans now are the slides the link holds.
+
+        rLink must name a source document, a source section by a valid identifier, and one valid
+        source slide identifier for each slide of the section, which spans at least one slide. Its
+        identifiers are kept in braced form. The change is one undo action.
+
+        @return true when the section holds rLink afterwards, false when rLink was refused or
+                nSectionIndex names no section.
+    */
+    bool SetSectionLink(sal_Int32 nSectionIndex, const SlideSectionLink& rLink);
+
+    /** Record that the slide with the identifier rOldPageGuid was replaced by a slide read from the
+        same source slide, which holds the identifier rNewPageGuid, so a linked section that holds
+        the old slide holds the new one in its place.
+    */
+    void ReplaceLinkedPage(const OUString& rOldPageGuid, const OUString& rNewPageGuid);
 
     /// Write the sections as a JSON array under the given key. Each entry
     /// carries the section's name, its id when it has one, the 0-based
@@ -109,6 +172,14 @@ public:
 
 private:
     SdDrawDocument& mrDoc;
+
+    /// The braced identifiers of the slides the section at nSectionIndex spans, in slide order.
+    std::vector<OUString> GetSectionPageGuids(sal_Int32 nSectionIndex) const;
+
+    /// rLink with its identifiers in braced form, holding the slides the section at nSectionIndex
+    /// spans now, or a link that is not linked when rLink is not one that section can hold.
+    SlideSectionLink ValidateLink(const SlideSectionLink& rLink, sal_Int32 nSectionIndex) const;
+
     std::vector<SlideSection> maSections;
 
     /// Push the sections via COKitCallbackType::STATE_CHANGED for .uno:SlideSections

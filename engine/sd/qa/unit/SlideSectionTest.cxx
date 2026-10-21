@@ -61,6 +61,22 @@ public:
 
     sd::SlideSectionManager& getSectionManager() { return getDoc()->GetSectionManager(); }
 
+    // Make the slide at nSlideIndex the current slide, the one slide commands act on.
+    void showSlide(sal_Int32 nSlideIndex)
+    {
+        auto* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+        CPPUNIT_ASSERT(pXImpressDocument);
+        pXImpressDocument->setPart(nSlideIndex);
+        Scheduler::ProcessEventsToIdle();
+    }
+
+    // Insert a new slide after the slide at nSlideIndex, the way the user does.
+    void insertSlideAfter(sal_Int32 nSlideIndex)
+    {
+        showSlide(nSlideIndex);
+        dispatchCommand(mxComponent, u".uno:InsertPage"_ustr, {});
+    }
+
     // Collect pointers to the slides currently belonging to a section
     // (i.e. the pages between this section's start and the next section's start).
     // Pointers are stable across MoveSection — MovePages() reorders the page
@@ -732,6 +748,187 @@ CPPUNIT_TEST_FIXTURE(SlideSectionTest, testUndoRestoresSectionsAfterSlideInsert)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(12), rMgr.GetSection(2).mnStartIndex);
 }
 #endif
+
+namespace
+{
+/// A link of a section of nSlideCount slides to the section "Topics" of the presentation deck.odp.
+sd::SlideSectionLink makeTopicsLink(sal_Int32 nSlideCount)
+{
+    sd::SlideSectionLink aLink;
+    aLink.maSourceReference = u"vnd.collabora.slide-source:deck.odp"_ustr;
+    aLink.maSourceSectionId = u"{6A4F0F6E-2B6C-4B47-9F43-7C3C1D2E5A10}"_ustr;
+    aLink.maSourceSectionName = u"Topics"_ustr;
+    aLink.maSourceModifiedTime = u"2026-10-20T09:15:00Z"_ustr;
+    for (sal_Int32 i = 0; i < nSlideCount; ++i)
+        aLink.maSourcePageGuids.push_back(
+            OUString("{0B1D2C3E-4F50-4617-8293-A4B5C6D7E8" + OUString::number(10 + i) + "}"));
+    return aLink;
+}
+}
+
+// A section linked to a section of another presentation keeps that link through an ODP round trip
+CPPUNIT_TEST_FIXTURE(SlideSectionTest, testSectionLinkRoundtripODP)
+{
+    createSdImpressDoc("pptx/slide-section-test.pptx");
+    sd::SlideSectionManager& rMgr = getSectionManager();
+    const sal_Int32 nSlideCount = rMgr.GetSectionSlideCount(1);
+    const sd::SlideSectionLink aLink = makeTopicsLink(nSlideCount);
+    CPPUNIT_ASSERT(rMgr.SetSectionLink(1, aLink));
+
+    skipValidation();
+    save(TestFilter::ODP);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    static constexpr OString sPath
+        = "/office:document-content/office:body/office:presentation/loext:section-list"_ostr;
+    assertXPath(pXmlDoc, sPath + "/loext:section[2]", "source-document",
+                u"vnd.collabora.slide-source:deck.odp");
+    assertXPath(pXmlDoc, sPath + "/loext:section[2]", "source-section-guid",
+                aLink.maSourceSectionId);
+    assertXPath(pXmlDoc, sPath + "/loext:section[2]", "source-section-name", u"Topics");
+    assertXPath(pXmlDoc, sPath + "/loext:section[2]", "source-modified-time",
+                u"2026-10-20T09:15:00Z");
+    assertXPath(pXmlDoc, sPath + "/loext:section[2]/loext:section-slide[1]", "source-page-guid",
+                aLink.maSourcePageGuids.front());
+    // The sections that are not linked name no source.
+    assertXPathNoAttribute(pXmlDoc, sPath + "/loext:section[1]", "source-document");
+    assertXPathNoAttribute(pXmlDoc, sPath + "/loext:section[1]/loext:section-slide[1]",
+                           "source-page-guid");
+
+    saveAndReload(TestFilter::ODP);
+    sd::SlideSectionManager& rReloadedMgr = getSectionManager();
+    CPPUNIT_ASSERT(!rReloadedMgr.GetSectionLink(0));
+    const sd::SlideSectionLink* pReloaded = rReloadedMgr.GetSectionLink(1);
+    CPPUNIT_ASSERT(pReloaded);
+    CPPUNIT_ASSERT_EQUAL(aLink.maSourceReference, pReloaded->maSourceReference);
+    CPPUNIT_ASSERT_EQUAL(aLink.maSourceSectionId, pReloaded->maSourceSectionId);
+    CPPUNIT_ASSERT_EQUAL(aLink.maSourceSectionName, pReloaded->maSourceSectionName);
+    CPPUNIT_ASSERT_EQUAL(aLink.maSourceModifiedTime, pReloaded->maSourceModifiedTime);
+    CPPUNIT_ASSERT(bool(aLink.maSourcePageGuids == pReloaded->maSourcePageGuids));
+}
+
+// A section is linked only when the link names one source slide for each of its slides
+CPPUNIT_TEST_FIXTURE(SlideSectionTest, testSectionLinkNeedsOneSourceSlideForEachSlide)
+{
+    createSdImpressDoc("pptx/slide-section-test.pptx");
+    sd::SlideSectionManager& rMgr = getSectionManager();
+    const sal_Int32 nSlideCount = rMgr.GetSectionSlideCount(1);
+
+    CPPUNIT_ASSERT(!rMgr.SetSectionLink(1, makeTopicsLink(nSlideCount - 1)));
+    CPPUNIT_ASSERT(!rMgr.GetSectionLink(1));
+
+    sd::SlideSectionLink aBadGuid = makeTopicsLink(nSlideCount);
+    aBadGuid.maSourcePageGuids.back() = u"not an identifier"_ustr;
+    CPPUNIT_ASSERT(!rMgr.SetSectionLink(1, aBadGuid));
+
+    // A reference that names a file rather than a source document is no section link either.
+    sd::SlideSectionLink aFileReference = makeTopicsLink(nSlideCount);
+    aFileReference.maSourceReference = u"file:///tmp/deck.odp"_ustr;
+    CPPUNIT_ASSERT(!rMgr.SetSectionLink(1, aFileReference));
+
+    sd::SlideSectionLink aControlCharacterName = makeTopicsLink(nSlideCount);
+    aControlCharacterName.maSourceSectionName = u"Top\x0001ics"_ustr;
+    CPPUNIT_ASSERT(!rMgr.SetSectionLink(1, aControlCharacterName));
+    CPPUNIT_ASSERT(!rMgr.GetSectionLink(1));
+
+    // An identifier written in lowercase is kept in the form a slide keeps its own identifier in.
+    sd::SlideSectionLink aLowercase = makeTopicsLink(nSlideCount);
+    aLowercase.maSourceSectionId = u"{6a4f0f6e-2b6c-4b47-9f43-7c3c1d2e5a10}"_ustr;
+    CPPUNIT_ASSERT(rMgr.SetSectionLink(1, aLowercase));
+    CPPUNIT_ASSERT_EQUAL(u"{6A4F0F6E-2B6C-4B47-9F43-7C3C1D2E5A10}"_ustr,
+                         rMgr.GetSectionLink(1)->maSourceSectionId);
+
+    CPPUNIT_ASSERT(rMgr.SetSectionLink(1, sd::SlideSectionLink()));
+    CPPUNIT_ASSERT(!rMgr.GetSectionLink(1));
+}
+
+// A loaded link that names a different number of slides than its section spans is dropped, and the
+// section keeps its slides and its name
+CPPUNIT_TEST_FIXTURE(SlideSectionTest, testSectionLinkWithOtherSlidesIsDroppedOnLoad)
+{
+    createSdImpressDoc("pptx/slide-section-test.pptx");
+    sd::SlideSectionManager& rMgr = getSectionManager();
+    const sal_Int32 nSlideCount = rMgr.GetSectionSlideCount(1);
+    CPPUNIT_ASSERT(rMgr.SetSectionLink(1, makeTopicsLink(nSlideCount)));
+
+    uno::Reference<beans::XPropertySet> xDocProps(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Sequence<beans::PropertyValue> aSections;
+    xDocProps->getPropertyValue(u"SlideSections"_ustr) >>= aSections;
+    uno::Sequence<beans::PropertyValue> aSecond;
+    aSections[1].Value >>= aSecond;
+    for (beans::PropertyValue& rProp : asNonConstRange(aSecond))
+        if (rProp.Name == "SourcePageGuidList")
+            rProp.Value <<= uno::Sequence<OUString>{ makeTopicsLink(1).maSourcePageGuids.front() };
+    asNonConstRange(aSections)[1].Value <<= aSecond;
+    xDocProps->setPropertyValue(u"SlideSections"_ustr, uno::Any(aSections));
+
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), rMgr.GetSectionCount());
+    CPPUNIT_ASSERT_EQUAL(nSlideCount, rMgr.GetSectionSlideCount(1));
+    CPPUNIT_ASSERT_EQUAL(u"Section-2"_ustr, rMgr.GetSection(1).maName);
+    CPPUNIT_ASSERT(!rMgr.GetSectionLink(1));
+}
+
+// A slide inserted into a linked section unlinks it, and undoing the insert links it again
+CPPUNIT_TEST_FIXTURE(SlideSectionTest, testSectionLinkEndsWhenASlideIsInserted)
+{
+    createSdImpressDoc("pptx/slide-section-test.pptx");
+    sd::SlideSectionManager& rMgr = getSectionManager();
+    CPPUNIT_ASSERT(rMgr.SetSectionLink(1, makeTopicsLink(rMgr.GetSectionSlideCount(1))));
+
+    // A new slide goes in after the first slide of the section.
+    insertSlideAfter(rMgr.GetSection(1).mnStartIndex);
+    CPPUNIT_ASSERT(!rMgr.GetSectionLink(1));
+
+    // Saving writes no link for the section.
+    skipValidation();
+    save(TestFilter::ODP);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPathNoAttribute(pXmlDoc,
+                           "/office:document-content/office:body/office:presentation/"
+                           "loext:section-list/loext:section[2]"_ostr,
+                           "source-document");
+
+    getUndoManager().Undo();
+    CPPUNIT_ASSERT(rMgr.GetSectionLink(1));
+}
+
+// A slide moved within a linked section unlinks it, since the copy no longer follows the order of
+// its source
+CPPUNIT_TEST_FIXTURE(SlideSectionTest, testSectionLinkEndsWhenASlideIsMovedWithinIt)
+{
+    createSdImpressDoc("pptx/slide-section-test.pptx");
+    sd::SlideSectionManager& rMgr = getSectionManager();
+    CPPUNIT_ASSERT(rMgr.SetSectionLink(1, makeTopicsLink(rMgr.GetSectionSlideCount(1))));
+
+    // The first slide of the section moves behind the second.
+    const sal_Int32 nStart = rMgr.GetSection(1).mnStartIndex;
+    SdPage* pMoved = getDoc()->GetSdPage(static_cast<sal_uInt16>(nStart), PageKind::Standard);
+    showSlide(nStart);
+    dispatchCommand(mxComponent, u".uno:MovePageDown"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(
+        pMoved, getDoc()->GetSdPage(static_cast<sal_uInt16>(nStart + 1), PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(nStart, rMgr.GetSection(1).mnStartIndex);
+    CPPUNIT_ASSERT(!rMgr.GetSectionLink(1));
+
+    getUndoManager().Undo();
+    CPPUNIT_ASSERT(rMgr.GetSectionLink(1));
+}
+
+// Linking a section is one undo step of its own, so undoing it keeps the slide inserted before it
+CPPUNIT_TEST_FIXTURE(SlideSectionTest, testSectionLinkIsOneUndoStep)
+{
+    createSdImpressDoc("pptx/slide-section-test.pptx");
+    sd::SlideSectionManager& rMgr = getSectionManager();
+    insertSlideAfter(5);
+    const sal_uInt16 nPageCount = getDoc()->GetSdPageCount(PageKind::Standard);
+    CPPUNIT_ASSERT(rMgr.SetSectionLink(1, makeTopicsLink(rMgr.GetSectionSlideCount(1))));
+
+    getUndoManager().Undo();
+    CPPUNIT_ASSERT_EQUAL(nPageCount, getDoc()->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT(!rMgr.GetSectionLink(1));
+
+    getUndoManager().Redo();
+    CPPUNIT_ASSERT(rMgr.GetSectionLink(1));
+}
 
 CPPUNIT_PLUGIN_IMPLEMENT();
 

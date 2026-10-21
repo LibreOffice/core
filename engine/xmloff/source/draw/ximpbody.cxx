@@ -41,6 +41,7 @@
 #include <animationimport.hxx>
 #include <sal/log.hxx>
 #include <comphelper/diagnose_ex.hxx>
+#include <optional>
 
 using namespace ::com::sun::star;
 using namespace ::cpo;
@@ -349,6 +350,12 @@ class SdXMLSectionContext : public SvXMLImportContext
     OUString maSectionName;
     OUString maSectionId;
     std::vector<OUString> maSlideNames;
+    OUString maSourceReference;
+    OUString maSourceSectionId;
+    OUString maSourceSectionName;
+    OUString maSourceModifiedTime;
+    /// The source slide of each entry of maSlideNames, empty for a slide that names none.
+    std::vector<OUString> maSourcePageGuids;
 
 public:
     SdXMLSectionContext(SvXMLImport& rImport,
@@ -357,10 +364,27 @@ public:
     {
         for (auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
         {
-            if (aIter.getToken() == XML_ELEMENT(LO_EXT, XML_NAME))
-                maSectionName = aIter.toString();
-            else if (aIter.getToken() == XML_ELEMENT(LO_EXT, XML_IDENTIFIER))
-                maSectionId = aIter.toString();
+            switch (aIter.getToken())
+            {
+                case XML_ELEMENT(LO_EXT, XML_NAME):
+                    maSectionName = aIter.toString();
+                    break;
+                case XML_ELEMENT(LO_EXT, XML_IDENTIFIER):
+                    maSectionId = aIter.toString();
+                    break;
+                case XML_ELEMENT(CO_EXT, XML_SOURCE_DOCUMENT):
+                    maSourceReference = aIter.toString();
+                    break;
+                case XML_ELEMENT(CO_EXT, XML_SOURCE_SECTION_GUID):
+                    maSourceSectionId = aIter.toString();
+                    break;
+                case XML_ELEMENT(CO_EXT, XML_SOURCE_SECTION_NAME):
+                    maSourceSectionName = aIter.toString();
+                    break;
+                case XML_ELEMENT(CO_EXT, XML_SOURCE_MODIFIED_TIME):
+                    maSourceModifiedTime = aIter.toString();
+                    break;
+            }
         }
     }
 
@@ -370,10 +394,21 @@ public:
     {
         if (nElement == XML_ELEMENT(LO_EXT, XML_SECTION_SLIDE))
         {
+            std::optional<OUString> oSlideName;
+            OUString sSourcePageGuid;
             for (auto& aIter : sax_fastparser::castToFastAttributeList(xAttrList))
             {
                 if (aIter.getToken() == XML_ELEMENT(LO_EXT, XML_NAME))
-                    maSlideNames.push_back(aIter.toString());
+                    oSlideName = aIter.toString();
+                else if (aIter.getToken() == XML_ELEMENT(CO_EXT, XML_SOURCE_PAGE_GUID))
+                    sSourcePageGuid = aIter.toString();
+            }
+            // The slides are listed by name, and the source slide of each one goes with its name,
+            // so both lists hold one entry for each named slide.
+            if (oSlideName)
+            {
+                maSlideNames.push_back(*oSlideName);
+                maSourcePageGuids.push_back(sSourcePageGuid);
             }
         }
         return nullptr;
@@ -382,6 +417,23 @@ public:
     const OUString& getSectionName() const { return maSectionName; }
     const OUString& getSectionId() const { return maSectionId; }
     const std::vector<OUString>& getSlideNames() const { return maSlideNames; }
+
+    /// Add the link to the source section to rProps, when the section names one.
+    void addLinkProperties(std::vector<beans::PropertyValue>& rProps) const
+    {
+        if (maSourceReference.isEmpty())
+            return;
+
+        rProps.push_back(comphelper::makePropertyValue(u"SourceReference"_ustr, maSourceReference));
+        rProps.push_back(comphelper::makePropertyValue(u"SourceSectionId"_ustr, maSourceSectionId));
+        rProps.push_back(
+            comphelper::makePropertyValue(u"SourceSectionName"_ustr, maSourceSectionName));
+        if (!maSourceModifiedTime.isEmpty())
+            rProps.push_back(
+                comphelper::makePropertyValue(u"SourceModifiedTime"_ustr, maSourceModifiedTime));
+        rProps.push_back(comphelper::makePropertyValue(
+            u"SourcePageGuidList"_ustr, comphelper::containerToSequence(maSourcePageGuids)));
+    }
 };
 
 /// Handles <loext:section-list> inside <office:presentation>
@@ -433,6 +485,7 @@ public:
                 aProps.push_back(comphelper::makePropertyValue(
                     u"SlideNameList"_ustr,
                     comphelper::containerToSequence(pSection->getSlideNames())));
+                pSection->addLinkProperties(aProps);
 
                 aSectionsList.push_back(
                     comphelper::makePropertyValue(u"Section"_ustr + OUString::number(i),

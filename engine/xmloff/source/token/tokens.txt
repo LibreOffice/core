@@ -3373,6 +3373,9 @@ guid
 date-utc
 source-modified-time
 source-page-guid
+source-document
+source-section-guid
+source-section-name
 sheet-views
 sheet-view
 hidden-columns

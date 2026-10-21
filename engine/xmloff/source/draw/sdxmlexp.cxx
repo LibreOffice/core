@@ -1867,6 +1867,11 @@ void SdXMLExport::exportSections()
             OUString sSectionName;
             OUString sSectionId;
             cpo::uno::Sequence<OUString> aSlideNames;
+            OUString sSourceReference;
+            OUString sSourceSectionId;
+            OUString sSourceSectionName;
+            OUString sSourceModifiedTime;
+            cpo::uno::Sequence<OUString> aSourcePageGuids;
 
             for (const auto& rProp : aSectionProps)
             {
@@ -1876,18 +1881,45 @@ void SdXMLExport::exportSections()
                     rProp.Value >>= sSectionId;
                 else if (rProp.Name == "SlideNameList")
                     rProp.Value >>= aSlideNames;
+                else if (rProp.Name == "SourceReference")
+                    rProp.Value >>= sSourceReference;
+                else if (rProp.Name == "SourceSectionId")
+                    rProp.Value >>= sSourceSectionId;
+                else if (rProp.Name == "SourceSectionName")
+                    rProp.Value >>= sSourceSectionName;
+                else if (rProp.Name == "SourceModifiedTime")
+                    rProp.Value >>= sSourceModifiedTime;
+                else if (rProp.Name == "SourcePageGuidList")
+                    rProp.Value >>= aSourcePageGuids;
             }
+
+            // A linked section names its source section, and each of its slides names the source
+            // slide it was read from, in the order the slides are listed.
+            const bool bLinked = !sSourceReference.isEmpty()
+                                 && aSourcePageGuids.getLength() == aSlideNames.getLength();
 
             AddAttribute(XML_NAMESPACE_LO_EXT, XML_NAME, sSectionName);
             if (!sSectionId.isEmpty())
                 AddAttribute(XML_NAMESPACE_LO_EXT, XML_IDENTIFIER, sSectionId);
+            if (bLinked)
+            {
+                AddAttribute(XML_NAMESPACE_CO_EXT, XML_SOURCE_DOCUMENT, sSourceReference);
+                AddAttribute(XML_NAMESPACE_CO_EXT, XML_SOURCE_SECTION_GUID, sSourceSectionId);
+                AddAttribute(XML_NAMESPACE_CO_EXT, XML_SOURCE_SECTION_NAME, sSourceSectionName);
+                if (!sSourceModifiedTime.isEmpty())
+                    AddAttribute(XML_NAMESPACE_CO_EXT, XML_SOURCE_MODIFIED_TIME,
+                                 sSourceModifiedTime);
+            }
             SvXMLElementExport aSectionElem(*this, XML_NAMESPACE_LO_EXT, XML_SECTION,
                                             true, true);
 
             // Write slide page names
-            for (const OUString& rSlideName : aSlideNames)
+            for (sal_Int32 nSlide = 0; nSlide < aSlideNames.getLength(); ++nSlide)
             {
-                AddAttribute(XML_NAMESPACE_LO_EXT, XML_NAME, rSlideName);
+                AddAttribute(XML_NAMESPACE_LO_EXT, XML_NAME, aSlideNames[nSlide]);
+                if (bLinked)
+                    AddAttribute(XML_NAMESPACE_CO_EXT, XML_SOURCE_PAGE_GUID,
+                                 aSourcePageGuids[nSlide]);
                 SvXMLElementExport aSlideElem(*this, XML_NAMESPACE_LO_EXT, XML_SECTION_SLIDE, true,
                                               true);
             }
