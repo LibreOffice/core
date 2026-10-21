@@ -303,6 +303,8 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		// For each held key, whether every press since it was last released moved the caret
 		// here. The release of such a key stays here too.
 		this._heldKeysMoveCaretHere = new Map();
+		// The held keys whose press switched the slide here. Their release stays here too.
+		this._heldKeysSwitchPartHere = new Set();
 		window.KeyboardShortcuts.initialize(map);
 	},
 
@@ -905,7 +907,10 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 					&& this._isFormatPaintbrushActiveOnCalcCell()) {
 					this._clickCellCursor();
 				}
-				if (this._pressMovesCaretHere(ev, keyCode)) {
+				if (this._pressSwitchesPartHere(ev, keyCode)) {
+					ev.preventDefault();
+				}
+				else if (this._pressMovesCaretHere(ev, keyCode)) {
 					ev.preventDefault();
 				}
 				else if (this.handleOnKeyDownKeys[keyCode] && charCode === 0) {
@@ -945,8 +950,10 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 				}
 			}
 			else if (ev.type === 'keyup') {
-				const releaseStaysHere = this._heldKeysMoveCaretHere.get(keyCode) === true;
+				const releaseStaysHere = this._heldKeysMoveCaretHere.get(keyCode) === true ||
+					this._heldKeysSwitchPartHere.has(keyCode);
 				this._heldKeysMoveCaretHere.delete(keyCode);
+				this._heldKeysSwitchPartHere.delete(keyCode);
 				if (!releaseStaysHere &&
 				    ((this.handleOnKeyDownKeys[keyCode] && charCode === 0) ||
 				    (this.modifier) ||
@@ -989,6 +996,26 @@ window.L.Map.Keyboard = window.L.Handler.extend({
 		const held = this._heldKeysMoveCaretHere;
 		held.set(keyCode, here && held.get(keyCode) !== false);
 		return here;
+	},
+
+	// Switches to the slide before or after for a plain PageUp or PageDown, in a presentation or
+	// drawing drawn from objects while no text is edited. The slide shows at once from the
+	// objects the client holds, and the server follows. True when the key was taken here.
+	_pressSwitchesPartHere: function (ev, keyCode) {
+		if (ev.type !== 'keydown' || this.modifier !== 0)
+			return false;
+		if (keyCode !== this.keyCodes.PAGEUP && keyCode !== this.keyCodes.PAGEDOWN)
+			return false;
+		if (!RenderManager.isVectorRendering() || this._map.getWinId() !== 0)
+			return false;
+		const docType = this._map.getDocType();
+		if (docType !== 'presentation' && docType !== 'drawing')
+			return false;
+		if (app.file.textCursor.visible)
+			return false;
+		this._selectPartForKey(ev);
+		this._heldKeysSwitchPartHere.add(keyCode);
+		return true;
 	},
 
 	// Moves the caret here for an arrow key, in a document drawn from objects. Left and Right

@@ -138,6 +138,12 @@ class VectorManager extends RenderManagerBase {
 		this._changeListeners.push(callback);
 	}
 
+	/// The view draws the part that is now selected, from the cache when it holds it, at once
+	/// and without an answer from the engine.
+	updateOnChangePart(): void {
+		this._fireChanged();
+	}
+
 	/// Forget a callback registered with onVectorChanged.
 	offVectorChanged(callback: () => void): void {
 		this._changeListeners = this._changeListeners.filter(
