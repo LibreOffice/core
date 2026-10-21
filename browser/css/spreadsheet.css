@@ -2,6 +2,12 @@
 	cursor: cell !important;
 }
 
+/* Qt WebEngine 6.11 (Chromium 140) has no image for the cell pointer any more and shows a
+   yellow square in its place, so the Qt app brings its own. */
+body.qt-app .spreadsheet-cursor:not(.bucket-cursor) {
+	cursor: url('images/cursors/cell.svg') 12 12, cell !important;
+}
+
 .bucket-cursor.spreadsheet-cursor {
 	cursor: url('images/cursors/fill.svg') 4 18, auto !important;
 }

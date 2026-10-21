@@ -119,7 +119,7 @@ m4_ifelse(APP, [true],
 [<!--%DARK_THEME_CSS%-->])
 </head>
 
-  <body>
+  <body[]m4_ifelse(QTAPP, [true], [ class="qt-app"])>
     <!--The "controls" div holds map controls such as the Zoom button and
         it's separated from the map in order to have the controls on the top
         of the page all the time.
