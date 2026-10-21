@@ -1,9 +1,9 @@
 {
   "bomFormat": "CycloneDX",
   "specVersion": "1.6",
-  "version": 1,
+  "version": 2,
   "metadata": {
-    "timestamp": "2026-10-07T20:27:23Z",
+    "timestamp": "2026-10-21T11:34:24Z",
     "supplier": {
       "name": "Collabora Productivity Ltd.",
       "url": [
@@ -27,11 +27,11 @@
     "properties": [
       {
         "name": "collabora:vex-scope",
-        "value": "components bundled in collaboraoffice and coolwsd, matched by CPE and npm purl; the packages of the base image are covered by the base image supplier's VEX"
+        "value": "components bundled in collaboraoffice and coolwsd, matched by CPE and npm purl, plus Collabora's own published advisories for Collabora Online itself; the packages of the base image are covered by the base image supplier's VEX"
       },
       {
         "name": "collabora:vex-source",
-        "value": "component inventory of the main branch: engine/download.lst and readlicense_oo/license/license.xml, merged with the generated collabora-online-sbom.spdx.json"
+        "value": "component inventory of the main branch: engine/download.lst and readlicense_oo/license/license.xml, merged with the generated collabora-online-sbom.spdx.json; the product-level statements come from https://github.com/CollaboraOnline/online/security/advisories, which carries no package ecosystem and so is matched by no scanner"
       }
     ]
   },
@@ -61,12 +61,120 @@
       }
     },
     {
+      "id": "CVE-2021-25630",
+      "source": {
+        "name": "Collabora Online security advisories",
+        "url": "https://github.com/CollaboraOnline/online/security/advisories/GHSA-49w3-gr3w-m68v"
+      },
+      "description": "loolwsd: the loolforkit privileged program allowed a local root exploit",
+      "analysis": {
+        "state": "resolved",
+        "detail": "Published by Collabora as GHSA-49w3-gr3w-m68v on 2021-01-26, severity High. Fixed in 6.4.3, 4.2.13; this image ships coolwsd 26.04.6.0, later than every patched version."
+      }
+    },
+    {
+      "id": "CVE-2021-32744",
+      "source": {
+        "name": "Collabora Online security advisories",
+        "url": "https://github.com/CollaboraOnline/online/security/advisories/GHSA-32xj-9x82-q9jw"
+      },
+      "description": "loolwsd: an unauthenticated attacker could gain access to currently open files",
+      "analysis": {
+        "state": "resolved",
+        "detail": "Published by Collabora as GHSA-32xj-9x82-q9jw on 2021-07-21, severity Critical. Fixed in 6.4.9-6, 4.2.17-2; this image ships coolwsd 26.04.6.0, later than every patched version."
+      }
+    },
+    {
+      "id": "CVE-2021-32745",
+      "source": {
+        "name": "Collabora Online security advisories",
+        "url": "https://github.com/CollaboraOnline/online/security/advisories/GHSA-w536-654v-cjj9"
+      },
+      "description": "loolwsd: reflected cross-site-scripting vulnerability",
+      "analysis": {
+        "state": "resolved",
+        "detail": "Published by Collabora as GHSA-w536-654v-cjj9 on 2021-07-21, severity High. Fixed in 6.4.9-5; this image ships coolwsd 26.04.6.0, later than every patched version."
+      }
+    },
+    {
+      "id": "CVE-2021-43817",
+      "source": {
+        "name": "Collabora Online security advisories",
+        "url": "https://github.com/CollaboraOnline/online/security/advisories/GHSA-7f6h-v9mx-58q9"
+      },
+      "description": "loolwsd: reflected cross-site-scripting vulnerability",
+      "analysis": {
+        "state": "resolved",
+        "detail": "Published by Collabora as GHSA-7f6h-v9mx-58q9 on 2021-12-13, severity High. Fixed in 6.4.16, 4.2.20; this image ships coolwsd 26.04.6.0, later than every patched version."
+      }
+    },
+    {
+      "id": "CVE-2023-31145",
+      "source": {
+        "name": "Collabora Online security advisories",
+        "url": "https://github.com/CollaboraOnline/online/security/advisories/GHSA-rqj2-2c2x-gjmm"
+      },
+      "description": "coolwsd: reflected cross-site-scripting vulnerability",
+      "analysis": {
+        "state": "resolved",
+        "detail": "Published by Collabora as GHSA-rqj2-2c2x-gjmm on 2023-05-13, severity Medium. Fixed in 22.05.13, 21.11.9, 6.4.27; this image ships coolwsd 26.04.6.0, later than every patched version."
+      }
+    },
+    {
+      "id": "CVE-2023-34088",
+      "source": {
+        "name": "Collabora Online security advisories",
+        "url": "https://github.com/CollaboraOnline/online/security/advisories/GHSA-7582-pwfh-3pwr"
+      },
+      "description": "coolwsd: stored cross-site-scripting vulnerability in the admin interface",
+      "analysis": {
+        "state": "resolved",
+        "detail": "Published by Collabora as GHSA-7582-pwfh-3pwr on 2023-05-31, severity Critical. Fixed in 21.11.9.1, 22.05.13, 6.4.27; this image ships coolwsd 26.04.6.0, later than every patched version."
+      }
+    },
+    {
       "id": "CVE-2023-37769",
       "description": "FPE in pixman's 'stress-test' test utility",
       "analysis": {
         "state": "not_affected",
         "detail": "The flaw is in pixman's stress-test test program, not in the library; the test programs are neither built nor shipped.",
         "justification": "code_not_present"
+      }
+    },
+    {
+      "id": "CVE-2023-48314",
+      "source": {
+        "name": "Collabora Online security advisories",
+        "url": "https://github.com/CollaboraOnline/online/security/advisories/GHSA-qjrm-q4h5-v3r2"
+      },
+      "description": "richdocumentscode: unescaped passing of the request URL",
+      "analysis": {
+        "state": "resolved",
+        "detail": "Published by Collabora as GHSA-qjrm-q4h5-v3r2 on 2023-11-27, severity High. Fixed in 23.5.403; this image ships coolwsd 26.04.6.0, later than every patched version."
+      }
+    },
+    {
+      "id": "CVE-2023-49782",
+      "source": {
+        "name": "Collabora Online security advisories",
+        "url": "https://github.com/CollaboraOnline/online/security/advisories/GHSA-8xm5-pgfr-8mjr"
+      },
+      "description": "richdocumentscode: cross-site-scripting vulnerability in richdocuments error message handling",
+      "analysis": {
+        "state": "resolved",
+        "detail": "Published by Collabora as GHSA-8xm5-pgfr-8mjr on 2023-12-08, severity High. Fixed in 23.5.601; this image ships coolwsd 26.04.6.0, later than every patched version."
+      }
+    },
+    {
+      "id": "CVE-2023-49788",
+      "source": {
+        "name": "Collabora Online security advisories",
+        "url": "https://github.com/CollaboraOnline/online/security/advisories/GHSA-3r69-xvf7-v94j"
+      },
+      "description": "richdocumentscode: improper handling of browser-side provided input in richdocuments path handling",
+      "analysis": {
+        "state": "resolved",
+        "detail": "Published by Collabora as GHSA-3r69-xvf7-v94j on 2023-12-08, severity High. Fixed in 23.5.602; this image ships coolwsd 26.04.6.0, later than every patched version."
       }
     },
     {
@@ -92,6 +200,54 @@
       "analysis": {
         "state": "false_positive",
         "detail": "Fixed upstream in November 2023, first released in libtiff 4.7.0; the bundled 4.7.2 contains the fix."
+      }
+    },
+    {
+      "id": "CVE-2024-25114",
+      "source": {
+        "name": "Collabora Online security advisories",
+        "url": "https://github.com/CollaboraOnline/online/security/advisories/GHSA-2fh2-ppjf-p3xv"
+      },
+      "description": "coolwsd: sensitive information disclosure (JailID) to users",
+      "analysis": {
+        "state": "resolved",
+        "detail": "Published by Collabora as GHSA-2fh2-ppjf-p3xv on 2024-03-11, severity Low. Fixed in 21.11.9.4, 22.05.22, 23.05.9; this image ships coolwsd 26.04.6.0, later than every patched version."
+      }
+    },
+    {
+      "id": "CVE-2024-29182",
+      "source": {
+        "name": "Collabora Online security advisories",
+        "url": "https://github.com/CollaboraOnline/online/security/advisories/GHSA-9gmw-5q2c-4398"
+      },
+      "description": "coolwsd: stored cross-site-scripting vulnerability via tooltip",
+      "analysis": {
+        "state": "resolved",
+        "detail": "Published by Collabora as GHSA-9gmw-5q2c-4398 on 2024-04-02, severity High. Fixed in 23.05.10.1; this image ships coolwsd 26.04.6.0, later than every patched version."
+      }
+    },
+    {
+      "id": "CVE-2024-37311",
+      "source": {
+        "name": "Collabora Online security advisories",
+        "url": "https://github.com/CollaboraOnline/online/security/advisories/GHSA-hvhm-5c44-977x"
+      },
+      "description": "coolwsd: remote host TLS certificates were not fully verified",
+      "analysis": {
+        "state": "resolved",
+        "detail": "Published by Collabora as GHSA-hvhm-5c44-977x on 2024-08-23, severity High. Fixed in 22.05.23.1, 23.05.14.1, 24.04.4.3; this image ships coolwsd 26.04.6.0, later than every patched version."
+      }
+    },
+    {
+      "id": "CVE-2024-5261",
+      "source": {
+        "name": "Collabora Online security advisories",
+        "url": "https://github.com/CollaboraOnline/online/security/advisories/GHSA-crg3-fjm2-xvpq"
+      },
+      "description": "coolwsd: TLS certificates were not properly verified when utilizing LibreOfficeKit",
+      "analysis": {
+        "state": "resolved",
+        "detail": "Published by Collabora as GHSA-crg3-fjm2-xvpq on 2024-07-03, severity Low. Fixed in 22.05.23, 23.05.12, 24.04.3; this image ships coolwsd 26.04.6.0, later than every patched version."
       }
     },
     {
@@ -129,6 +285,30 @@
       }
     },
     {
+      "id": "CVE-2025-24796",
+      "source": {
+        "name": "Collabora Online security advisories",
+        "url": "https://github.com/CollaboraOnline/online/security/advisories/GHSA-4jjq-vgqp-qw45"
+      },
+      "description": "coolwsd: remote code execution within the jail with macros enabled",
+      "analysis": {
+        "state": "resolved",
+        "detail": "Published by Collabora as GHSA-4jjq-vgqp-qw45 on 2025-03-06, severity Medium. Fixed in 22.05.25, 23.05.19, 24.04.12.4; this image ships coolwsd 26.04.6.0, later than every patched version."
+      }
+    },
+    {
+      "id": "CVE-2025-27791",
+      "source": {
+        "name": "Collabora Online security advisories",
+        "url": "https://github.com/CollaboraOnline/online/security/advisories/GHSA-9j32-gg3j-8w25"
+      },
+      "description": "coolwsd: arbitrary file write outside the jail with a malicious WOPI server",
+      "analysis": {
+        "state": "resolved",
+        "detail": "Published by Collabora as GHSA-9j32-gg3j-8w25 on 2025-04-15, severity High. Fixed in 22.05.25, 23.05.19, 24.04.13.1; this image ships coolwsd 26.04.6.0, later than every patched version."
+      }
+    },
+    {
       "id": "CVE-2025-50422",
       "description": "cairo through 1.18.4: assertion failure in _cairo_ft_unscaled_font_fini (DoS)",
       "analysis": {
@@ -155,12 +335,38 @@
       }
     },
     {
+      "id": "CVE-2025-66208",
+      "source": {
+        "name": "Collabora Online security advisories",
+        "url": "https://github.com/CollaboraOnline/online/security/advisories/GHSA-j3q6-q5pc-v5wf"
+      },
+      "description": "richdocumentscode: configuration-dependent OS command injection in the richdocumentscode proxy",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Published by Collabora as GHSA-j3q6-q5pc-v5wf on 2025-12-03, severity Medium. Fixed in 25.04.702. The richdocumentscode proxy (proxy.php) lives in the separate CollaboraOnline/richdocumentscode repository and is not installed in this image - it is fetched only by the cypress proxy tests (cypress_test/Makefile.am:135).",
+        "justification": "code_not_present"
+      }
+    },
+    {
       "id": "CVE-2025-7425",
       "description": "libxslt: use-after-free via attribute type corruption when processing result tree fragments",
       "analysis": {
         "state": "not_affected",
         "detail": "The mitigation for this unfixed libxslt flaw lives in libxml2 >= 2.14 (per the Debian security tracker); the bundled libxml2 is 2.15.3, and libxslt only ever runs against it (both are statically linked together).",
         "justification": "protected_by_mitigating_control"
+      }
+    },
+    {
+      "id": "CVE-2026-110447",
+      "source": {
+        "name": "Collabora Online security advisories",
+        "url": "https://github.com/CollaboraOnline/online/security/advisories/GHSA-g3vx-3m76-fghh"
+      },
+      "description": "richdocumentscode: unauthenticated OS command injection in the richdocumentscode proxy",
+      "analysis": {
+        "state": "not_affected",
+        "detail": "Published by Collabora as GHSA-g3vx-3m76-fghh on 2026-10-14, severity Critical. Fixed in 26.4.303. The richdocumentscode proxy (proxy.php) lives in the separate CollaboraOnline/richdocumentscode repository and is not installed in this image - it is fetched only by the cypress proxy tests (cypress_test/Makefile.am:135).",
+        "justification": "code_not_present"
       }
     },
     {
@@ -208,6 +414,18 @@
       }
     },
     {
+      "id": "CVE-2026-23623",
+      "source": {
+        "name": "Collabora Online security advisories",
+        "url": "https://github.com/CollaboraOnline/online/security/advisories/GHSA-68v6-r6qq-mmq2"
+      },
+      "description": "coolwsd: authorization bypass: ability to download read-only files",
+      "analysis": {
+        "state": "resolved",
+        "detail": "Published by Collabora as GHSA-68v6-r6qq-mmq2 on 2026-02-05, severity Medium. Fixed in 23.05.20.1, 24.04.17.3, 25.04.7.5, 25.04.08.2; this image ships coolwsd 26.04.6.0, later than every patched version."
+      }
+    },
+    {
       "id": "CVE-2026-35189",
       "description": "openssl: A certificate with many nameRelativeToCRLIssuer CRL distribution points causes disproportionate heap growth when OpenSSL caches X.509 extensions",
       "analysis": {
@@ -234,11 +452,35 @@
       }
     },
     {
+      "id": "CVE-2026-46499",
+      "source": {
+        "name": "Collabora Online security advisories",
+        "url": "https://github.com/CollaboraOnline/online/security/advisories/GHSA-27j2-3cqv-cc5q"
+      },
+      "description": "coolwsd: read-only session enforcement bypass allowed document modification within a live session",
+      "analysis": {
+        "state": "resolved",
+        "detail": "Published by Collabora as GHSA-27j2-3cqv-cc5q on 2026-06-24, severity Medium. Fixed in 24.04.18, 25.04.11; this image ships coolwsd 26.04.6.0, later than every patched version."
+      }
+    },
+    {
       "id": "CVE-2026-4775",
       "description": "libtiff: signed integer overflow in putcontig8bitYCbCr44tile leading to heap overflow in YCbCr tile decoding",
       "analysis": {
         "state": "false_positive",
         "detail": "The bundled tiff-4.7.2 tarball already contains the upstream fix (libtiff commit 782a11d6, 'prevent integer overflow ... in YCbCr tile decoding functions'): all four affected 'incr' computations are the fixed const tmsize_t form. Verified in the tarball source; the advisory's version range is inaccurate."
+      }
+    },
+    {
+      "id": "CVE-2026-48164",
+      "source": {
+        "name": "Collabora Online security advisories",
+        "url": "https://github.com/CollaboraOnline/online/security/advisories/GHSA-wgmm-q3ch-64jj"
+      },
+      "description": "coolwsd: reflected HTML injection in cool.html",
+      "analysis": {
+        "state": "resolved",
+        "detail": "Published by Collabora as GHSA-wgmm-q3ch-64jj on 2026-06-24, severity Medium. Fixed in 24.04.18, 25.04.11; this image ships coolwsd 26.04.6.0, later than every patched version."
       }
     },
     {
@@ -264,6 +506,18 @@
       "analysis": {
         "state": "in_triage",
         "detail": "Collabora security assessment: low severity, and only the ARM and RISC-V implementations are affected. We publish an arm64 image, so this is not dismissed as inapplicable. Fixed upstream in openssl 3.5.9."
+      }
+    },
+    {
+      "id": "CVE-2026-55243",
+      "source": {
+        "name": "Collabora Online security advisories",
+        "url": "https://github.com/CollaboraOnline/online/security/advisories/GHSA-2g97-qwj5-fj7f"
+      },
+      "description": "coolwsd: the comment author was not validated, allowing false attribution",
+      "analysis": {
+        "state": "resolved",
+        "detail": "Published by Collabora as GHSA-2g97-qwj5-fj7f on 2026-09-25, severity Medium. Fixed in 24.04.19, 25.04.11, 26.04.2; this image ships coolwsd 26.04.6.0, later than every patched version."
       }
     },
     {
@@ -300,6 +554,18 @@
         "state": "not_affected",
         "justification": "code_not_reachable",
         "detail": "Collabora security assessment: DTLS is not used by Collabora Online, so the vulnerable code is never reached. Rated low severity for this product. Fixed upstream in openssl 3.5.9."
+      }
+    },
+    {
+      "id": "CVE-2026-77276",
+      "source": {
+        "name": "Collabora Online security advisories",
+        "url": "https://github.com/CollaboraOnline/online/security/advisories/GHSA-cf9v-hrj7-8p4v"
+      },
+      "description": "coolwsd: unauthenticated document conversion could run document macros",
+      "analysis": {
+        "state": "resolved",
+        "detail": "Published by Collabora as GHSA-cf9v-hrj7-8p4v on 2026-09-03, severity High. Fixed in 25.04.12.3, 26.04.2.2; this image ships coolwsd 26.04.6.0, later than every patched version."
       }
     },
     {
