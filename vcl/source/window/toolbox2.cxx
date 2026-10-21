@@ -1519,10 +1519,10 @@ namespace
     }
 }
 
-void ToolBox::UpdateCustomMenu(PopupMenu* pMenu)
+void ToolBox::UpdateCustomMenu(PopupMenu& rMenu)
 {
     // fill clipped items into menu
-    pMenu->Clear();
+    rMenu.Clear();
 
     // add menu items: first the overflow items, then hidden items, both in the
     // order they would usually appear in the toolbar. Separators that would be
@@ -1539,15 +1539,15 @@ void ToolBox::UpdateCustomMenu(PopupMenu* pMenu)
         {
             sal_uInt16 id = sal_uInt16(rItem.mnId) + TOOLBOX_MENUITEM_START;
             MenuItemBits nMenuItemBits = ConvertBitsFromToolBoxToMenu(rItem.mnBits);
-            pMenu->InsertItem( id, rItem.maText, rItem.maImage, nMenuItemBits);
-            pMenu->SetItemCommand( id, rItem.maCommandStr );
-            pMenu->EnableItem( id, rItem.mbEnabled );
-            pMenu->CheckItem ( id, rItem.meState == TRISTATE_TRUE );
+            rMenu.InsertItem(id, rItem.maText, rItem.maImage, nMenuItemBits);
+            rMenu.SetItemCommand(id, rItem.maCommandStr);
+            rMenu.EnableItem(id, rItem.mbEnabled);
+            rMenu.CheckItem(id, rItem.meState == TRISTATE_TRUE);
         }
     }
 
     // add a separator below the inserted clipped-items
-    pMenu->InsertSeparator();
+    rMenu.InsertSeparator();
 
     // now append the items that are explicitly disabled
     for ( const auto& rItem : mpData->m_aItems )
@@ -1556,10 +1556,10 @@ void ToolBox::UpdateCustomMenu(PopupMenu* pMenu)
         {
             sal_uInt16 id = sal_uInt16(rItem.mnId) + TOOLBOX_MENUITEM_START;
             MenuItemBits nMenuItemBits = ConvertBitsFromToolBoxToMenu(rItem.mnBits);
-            pMenu->InsertItem( id, rItem.maText, rItem.maImage, nMenuItemBits );
-            pMenu->SetItemCommand( id, rItem.maCommandStr );
-            pMenu->EnableItem( id, rItem.mbEnabled );
-            pMenu->CheckItem( id, rItem.meState == TRISTATE_TRUE );
+            rMenu.InsertItem(id, rItem.maText, rItem.maImage, nMenuItemBits);
+            rMenu.SetItemCommand(id, rItem.maCommandStr);
+            rMenu.EnableItem(id, rItem.mbEnabled);
+            rMenu.CheckItem(id, rItem.meState == TRISTATE_TRUE);
         }
     }
 }
@@ -1583,7 +1583,7 @@ void ToolBox::ExecuteCustomMenu( const tools::Rectangle& rRect )
     PopupMenu *pMenu = GetMenu();
     if (!pMenu)
         return;
-    UpdateCustomMenu(pMenu);
+    UpdateCustomMenu(*pMenu);
 
     if( GetMenuType() & ToolBoxMenuType::Customize )
         // call button handler to allow for menu customization
