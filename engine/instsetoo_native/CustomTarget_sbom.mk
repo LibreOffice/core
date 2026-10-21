@@ -48,7 +48,8 @@ instsetoo_SBOM : $(instsetoo_create_SBOM) \
 	EXTERNALSTATICFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(gb_External_StaticLink)) \
 	EXTERNALPACKAGESTATICFILE=$(call gb_var2file,$(shell $(gb_MKTEMP)),$(gb_ExternalPackage_StaticLink)) \
 	EXTERNALFILESLIST=$(shell $(gb_MKTEMP)) \
-	&& git -C $(SRCDIR) ls-files -z -- external > $${EXTERNALFILESLIST} \
+	&& { git -C $(SRCDIR) ls-files -z -- external 2>/dev/null \
+		|| (cd $(SRCDIR) && find external ! -type d -print0) ; } > $${EXTERNALFILESLIST} \
 	&& $(if $(filter LINUX,$(OS_FOR_BUILD)),$(gb_Python_PRECOMMAND) $(INSTROOT_FOR_BUILD)/program/python.bin,$(call gb_ExternalExecutable_get_command,python)) \
 		$(instsetoo_create_SBOM) \
 		$(gb_CustomTarget_workdir)/instsetoo_native/sbom \
