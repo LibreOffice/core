@@ -14,16 +14,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-13 14:06+0200\n"
-"PO-Revision-Date: 2026-09-23 01:27+0000\n"
-"Last-Translator: Muhammet Kara <muhammet.kara@metu.edu.tr>\n"
+"PO-Revision-Date: 2026-10-21 22:11+0000\n"
+"Last-Translator: \"PhD. Ayhan YALÇINSOY\" "
+"<ayhanyalcinsoy@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Turkish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/tr/>\n"
-"Language: \n"
+"Language: tr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.10.dev0\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -450,12 +451,12 @@ msgstr ""
 #: admin/src/AdminSocketServerAudit.js:54
 #: src/control/Control.ServerAuditDialog.ts:123
 msgid "Slow Kit jail setup with copying, cannot bind-mount."
-msgstr ""
+msgstr "Kopyalama içeren yavaş Kit jail kurulumu; bağlanamıyor."
 
 #: admin/src/AdminSocketServerAudit.js:55
 #: src/control/Control.ServerAuditDialog.ts:138
 msgid "Fast kit jail bind mounting not configured"
-msgstr ""
+msgstr "Hızlı kit jail bağlama yapılandırılmamış"
 
 #: admin/src/AdminSocketServerAudit.js:59
 msgid ""
@@ -541,9 +542,8 @@ msgid "Signature Key"
 msgstr "İmza Anahtarı"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:721
-#, fuzzy
 msgid "Signature CA"
-msgstr "İmza"
+msgstr "İmza Sertifika Yetkilisi"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:722
 #: admin/src/integrator/AdminIntegratorSettings.ts:726
@@ -552,7 +552,6 @@ msgstr "Sağlayıcı"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:723
 #: admin/src/integrator/AdminIntegratorSettings.ts:727
-#, fuzzy
 msgid "API key"
 msgstr "API Anahtarı"
 
@@ -567,21 +566,20 @@ msgid "Base URL"
 msgstr "Ana URL"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:730
-#, fuzzy
 msgid "Image size"
 msgstr "Resim boyutu"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:731
 msgid "Request timeout"
-msgstr ""
+msgstr "İstek zaman aşımı"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:734
 msgid "Client ID"
-msgstr ""
+msgstr "Müşteri Kimliği"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:735
 msgid "Secret"
-msgstr ""
+msgstr "Sır"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:738
 msgid "In-document Screen Reader"
@@ -624,9 +622,8 @@ msgid "Compact layout"
 msgstr "Sıkışık Düzen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:746
-#, fuzzy
 msgid "Show status bar"
-msgstr "Durum Çubuğunu Göster"
+msgstr "Durum çubuğunu göster"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:747
 #: src/control/Control.Menubar.ts:194 src/control/Control.Menubar.ts:522
@@ -663,9 +660,8 @@ msgid "Custom Animation"
 msgstr "Özel Animasyon"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:756
-#, fuzzy
 msgid "Style List"
-msgstr "Stil dizisi"
+msgstr "Biçem Listesi"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:759
 #: src/control/Control.NotebookbarCalc.js:1231
@@ -691,14 +687,12 @@ msgid "Show Grid"
 msgstr "Izgarayı Göster"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:763
-#, fuzzy
 msgid "Snap to grid"
-msgstr "Izgarayı Yakala"
+msgstr "Izgarayı uydur"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:764
-#, fuzzy
 msgid "Synchronize axes"
-msgstr "Eksenleri Senkronize Et"
+msgstr "Eksenleri senkronize et"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:765
 msgid "Empty Pages"
@@ -720,7 +714,7 @@ msgstr "İçerik"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:769
 msgid "Display"
-msgstr ""
+msgstr "Göster"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:770
 msgid "Show Boundaries"
@@ -995,17 +989,23 @@ msgid ""
 "When on, text documents open at the zoom this server chooses. Turn it off "
 "to choose the zoom yourself."
 msgstr ""
+"Bu özellik etkin olduğunda, metin belgeleri bu sunucunun belirlediği "
+"yakınlaştırma oranında açılır. Yakınlaştırma oranını kendiniz seçmek "
+"istiyorsanız bu özelliği devre dışı bırakın."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2005
 msgid ""
 "When on, Writer fits the document to the viewport width on open. When off, "
 "the document opens at the Default Zoom level set below."
 msgstr ""
+"Bu seçenek etkin olduğunda, Writer belgeyi açıldığında görüntü alanının "
+"genişliğine sığdırır. Etkin olmadığında ise belge, aşağıda ayarlanan "
+"Varsayılan Yakınlaştırma düzeyinde açılır."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2058
 #: admin/src/integrator/Xcu.ts:483
 msgid "No settings available for {0}"
-msgstr ""
+msgstr "{0} için herhangi bir ayar bulunmamaktadır"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2070
 msgid "Select a tab to browser settings."
@@ -1078,11 +1078,11 @@ msgstr "Erişilebilirlik"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2856
 msgid "User interface zoom"
-msgstr ""
+msgstr "Kullanıcı arayüzü yakınlaştır"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2861
 msgid "Magnify the whole window, including the document and the menus."
-msgstr ""
+msgstr "Belge ve menüler dahil olmak üzere tüm pencereyi büyüt."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2867
 msgid "As per system"
@@ -1093,6 +1093,7 @@ msgid ""
 "To use Zotero specify your API key here. You can create your API key in "
 "your "
 msgstr ""
+"Zotero'yu kullanmak için API anahtarınızı buraya girin. API anahtarınızı "
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2911
 msgid "Zotero account API settings"
