@@ -192,7 +192,7 @@
     </message>
     <message>
         <source>Preview of %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Поперкдній перегляд %1</translation>
     </message>
 </context>
 <context>
