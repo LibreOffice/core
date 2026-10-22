@@ -1587,8 +1587,8 @@ abstract class SelectionSection extends CanvasSectionObject {
 	/*
 		Writes an angle beside where it is changed, below and to the right, where the pointer
 		leaves it free: what the running interaction reads beside the mouse, and while nothing
-		runs, the turn or the slant beside the handle above the selection when the keyboard is
-		on it. It has a light edge, so it reads on any page. Each of the two can be switched off in
+		runs, the turn or the slant beside the handle above the selection, wherever that one is
+		shown. It has a light edge, so it reads on any page. Each of the two can be switched off in
 		the client's preferences: vectorAngleAtMouse and vectorAngleAtHandle.
 	*/
 	private drawTheReading(): void {
@@ -1605,7 +1605,10 @@ abstract class SelectionSection extends CanvasSectionObject {
 			x = at.vX + 16 * app.dpiScale;
 			y = at.vY + 24 * app.dpiScale;
 		} else {
-			const handle = this.travel.activeHandle() as SelectionHandle | undefined;
+			// the handle above the selection, whether the keyboard is on it or not
+			const handle = this.handles().find(
+				(one: SelectionHandle) => one.kind === SelectionSection.turningKind,
+			);
 			if (
 				handle?.kind !== SelectionSection.turningKind ||
 				handle.deactivated ||
