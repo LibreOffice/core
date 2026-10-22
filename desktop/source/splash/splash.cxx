@@ -67,7 +67,7 @@ class  SplashScreen
 {
     friend class SplashScreenWindow;
 private:
-    VclPtr<SplashScreenWindow> pWindow;
+    VclPtr<SplashScreenWindow> m_pWindow;
 
     DECL_LINK( AppEventListenerHdl, VclSimpleEvent&, void );
     virtual ~SplashScreen() override;
@@ -76,25 +76,25 @@ private:
     void SetScreenBitmap(Bitmap& rBitmap);
     static void determineProgressRatioValues( double& rXRelPos, double& rYRelPos, double& rRelWidth, double& rRelHeight );
 
-    Bitmap          _aIntroBmp;
-    Color           _cProgressFrameColor;
-    Color           _cProgressBarColor;
-    Color           _cProgressTextColor;
-    bool            _bNativeProgress;
-    OUString        _sAppName;
-    OUString        _sProgressText;
+    Bitmap m_aIntroBmp;
+    Color m_aProgressFrameColor;
+    Color m_aProgressBarColor;
+    Color m_aProgressTextColor;
+    bool m_bNativeProgress;
+    OUString m_sAppName;
+    OUString m_sProgressText;
 
-    sal_Int32   _iMax;
-    sal_Int32   _iProgress;
-    bool        _bPaintProgress;
-    bool        _bVisible;
-    bool        _bShowLogo;
-    bool        _bFullScreenSplash;
-    bool        _bProgressEnd;
-    tools::Long        _height, _width, _tlx, _tly, _barwidth;
-    tools::Long        _barheight, _barspace, _textBaseline;
-    double      _fXPos, _fYPos;
-    double      _fWidth, _fHeight;
+    sal_Int32 m_nMax;
+    sal_Int32 m_nProgress;
+    bool m_bPaintProgress;
+    bool m_bVisible;
+    bool m_bShowLogo;
+    bool m_bFullScreenSplash;
+    bool m_bProgressEnd;
+    tools::Long m_nHeight, m_nWidth, m_nTlx, m_nTly, m_nBarwidth;
+    tools::Long m_nBarheight, m_nBarspace, m_nTextBaseline;
+    double m_fXPos, m_fYPos;
+    double m_fWidth, m_fHeight;
     static constexpr tools::Long  _xoffset = 12, _yoffset = 18;
 
 public:
@@ -143,30 +143,30 @@ void SplashScreenWindow::Redraw()
 }
 
 SplashScreen::SplashScreen()
-    : pWindow( VclPtr<SplashScreenWindow>::Create(this) )
-    , _cProgressFrameColor(NOT_LOADED_COLOR)
-    , _cProgressBarColor(NOT_LOADED_COLOR)
-    , _cProgressTextColor(NOT_LOADED_COLOR)
-    , _bNativeProgress(true)
-    , _iMax(100)
-    , _iProgress(0)
-    , _bPaintProgress(false)
-    , _bVisible(true)
-    , _bShowLogo(true)
-    , _bFullScreenSplash(false)
-    , _bProgressEnd(false)
-    , _height(0)
-    , _width(0)
-    , _tlx(NOT_LOADED)
-    , _tly(NOT_LOADED)
-    , _barwidth(NOT_LOADED)
-    , _barheight(NOT_LOADED)
-    , _barspace(2)
-    , _textBaseline(NOT_LOADED)
-    , _fXPos(-1.0)
-    , _fYPos(-1.0)
-    , _fWidth(-1.0)
-    , _fHeight(-1.0)
+    : m_pWindow(VclPtr<SplashScreenWindow>::Create(this))
+    , m_aProgressFrameColor(NOT_LOADED_COLOR)
+    , m_aProgressBarColor(NOT_LOADED_COLOR)
+    , m_aProgressTextColor(NOT_LOADED_COLOR)
+    , m_bNativeProgress(true)
+    , m_nMax(100)
+    , m_nProgress(0)
+    , m_bPaintProgress(false)
+    , m_bVisible(true)
+    , m_bShowLogo(true)
+    , m_bFullScreenSplash(false)
+    , m_bProgressEnd(false)
+    , m_nHeight(0)
+    , m_nWidth(0)
+    , m_nTlx(NOT_LOADED)
+    , m_nTly(NOT_LOADED)
+    , m_nBarwidth(NOT_LOADED)
+    , m_nBarheight(NOT_LOADED)
+    , m_nBarspace(2)
+    , m_nTextBaseline(NOT_LOADED)
+    , m_fXPos(-1.0)
+    , m_fYPos(-1.0)
+    , m_fWidth(-1.0)
+    , m_fHeight(-1.0)
 {
     loadConfig();
 }
@@ -175,37 +175,38 @@ SplashScreen::~SplashScreen()
 {
     Application::RemoveEventListener(
         LINK( this, SplashScreen, AppEventListenerHdl ) );
-    pWindow->Hide();
-    pWindow.disposeAndClear();
+    m_pWindow->Hide();
+    m_pWindow.disposeAndClear();
 }
 
 void SAL_CALL SplashScreen::start(const OUString&, sal_Int32 nRange)
 {
-    _iMax = nRange;
-    if (_bVisible) {
-        _bProgressEnd = false;
+    m_nMax = nRange;
+    if (m_bVisible)
+    {
+        m_bProgressEnd = false;
         SolarMutexGuard aSolarGuard;
-        pWindow->Show();
-        pWindow->Redraw();
+        m_pWindow->Show();
+        m_pWindow->Redraw();
     }
 }
 
 void SAL_CALL SplashScreen::end()
 {
-    _iProgress = _iMax;
-    if (_bVisible )
+    m_nProgress = m_nMax;
+    if (m_bVisible)
     {
-        pWindow->Hide();
+        m_pWindow->Hide();
     }
-    _bProgressEnd = true;
+    m_bProgressEnd = true;
 }
 
 void SAL_CALL SplashScreen::reset()
 {
-    _iProgress = 0;
-    if (_bVisible && !_bProgressEnd )
+    m_nProgress = 0;
+    if (m_bVisible && !m_bProgressEnd)
     {
-        pWindow->Show();
+        m_pWindow->Show();
         updateStatus();
     }
 }
@@ -213,13 +214,13 @@ void SAL_CALL SplashScreen::reset()
 void SAL_CALL SplashScreen::setText(const OUString& rText)
 {
     SolarMutexGuard aSolarGuard;
-    if ( _sProgressText != rText )
+    if (m_sProgressText != rText)
     {
-        _sProgressText = rText;
+        m_sProgressText = rText;
 
-        if (_bVisible && !_bProgressEnd)
+        if (m_bVisible && !m_bProgressEnd)
         {
-            pWindow->Show();
+            m_pWindow->Show();
             updateStatus();
         }
     }
@@ -230,12 +231,13 @@ void SAL_CALL SplashScreen::setValue(sal_Int32 nValue)
     SAL_INFO( "desktop.splash", "setValue: " << nValue );
 
     SolarMutexGuard aSolarGuard;
-    if (_bVisible && !_bProgressEnd) {
-        pWindow->Show();
-        if (nValue >= _iMax)
-            _iProgress = _iMax;
+    if (m_bVisible && !m_bProgressEnd)
+    {
+        m_pWindow->Show();
+        if (nValue >= m_nMax)
+            m_nProgress = m_nMax;
         else
-            _iProgress = nValue;
+            m_nProgress = nValue;
         updateStatus();
     }
 }
@@ -249,61 +251,61 @@ SplashScreen::initialize( const css::uno::Sequence< css::uno::Any>& aArguments )
     if (!aArguments.hasElements())
         return;
 
-    aArguments[0] >>= _bVisible;
+    aArguments[0] >>= m_bVisible;
     if (aArguments.getLength() > 1 )
-        aArguments[1] >>= _sAppName;
+        aArguments[1] >>= m_sAppName;
 
     // start to determine bitmap and all other required value
-    if ( _bShowLogo )
-        SetScreenBitmap (_aIntroBmp);
-    Size aSize = _aIntroBmp.GetSizePixel();
-    pWindow->SetOutputSizePixel( aSize );
-    pWindow->_vdev->SetOutputSizePixel( aSize );
-    _height = aSize.Height();
-    _width = aSize.Width();
-    if (_width > 500)
+    if (m_bShowLogo)
+        SetScreenBitmap(m_aIntroBmp);
+    Size aSize = m_aIntroBmp.GetSizePixel();
+    m_pWindow->SetOutputSizePixel(aSize);
+    m_pWindow->_vdev->SetOutputSizePixel(aSize);
+    m_nHeight = aSize.Height();
+    m_nWidth = aSize.Width();
+    if (m_nWidth > 500)
     {
         Point xtopleft(212,216);
-        if ( NOT_LOADED == _tlx || NOT_LOADED == _tly )
+        if (NOT_LOADED == m_nTlx || NOT_LOADED == m_nTly)
         {
-            _tlx = xtopleft.X();    // top-left x
-            _tly = xtopleft.Y();    // top-left y
+            m_nTlx = xtopleft.X(); // top-left x
+            m_nTly = xtopleft.Y(); // top-left y
         }
-        if ( NOT_LOADED == _barwidth )
-            _barwidth = 263;
-        if ( NOT_LOADED == _barheight )
-            _barheight = 8;
+        if (NOT_LOADED == m_nBarwidth)
+            m_nBarwidth = 263;
+        if (NOT_LOADED == m_nBarheight)
+            m_nBarheight = 8;
     }
     else
     {
-        if ( NOT_LOADED == _barwidth )
-            _barwidth  = _width - (2 * _xoffset);
-        if ( NOT_LOADED == _barheight )
-            _barheight = 6;
-        if ( NOT_LOADED == _tlx || NOT_LOADED == _tly )
+        if (NOT_LOADED == m_nBarwidth)
+            m_nBarwidth = m_nWidth - (2 * _xoffset);
+        if (NOT_LOADED == m_nBarheight)
+            m_nBarheight = 6;
+        if (NOT_LOADED == m_nTlx || NOT_LOADED == m_nTly)
         {
-            _tlx = _xoffset;           // top-left x
-            _tly = _height - _yoffset; // top-left y
+            m_nTlx = _xoffset; // top-left x
+            m_nTly = m_nHeight - _yoffset; // top-left y
         }
     }
 
-    if ( NOT_LOADED == _textBaseline )
-        _textBaseline = _height;
+    if (NOT_LOADED == m_nTextBaseline)
+        m_nTextBaseline = m_nHeight;
 
-    if ( NOT_LOADED_COLOR == _cProgressFrameColor )
-        _cProgressFrameColor = COL_LIGHTGRAY;
+    if (NOT_LOADED_COLOR == m_aProgressFrameColor)
+        m_aProgressFrameColor = COL_LIGHTGRAY;
 
-    if ( NOT_LOADED_COLOR == _cProgressBarColor )
+    if (NOT_LOADED_COLOR == m_aProgressBarColor)
     {
         // progress bar: new color only for big bitmap format
-        if ( _width > 500 )
-            _cProgressBarColor = Color( 157, 202, 18 );
+        if (m_nWidth > 500)
+            m_aProgressBarColor = Color(157, 202, 18);
         else
-            _cProgressBarColor = COL_BLUE;
+            m_aProgressBarColor = COL_BLUE;
     }
 
-    if ( NOT_LOADED_COLOR == _cProgressTextColor )
-        _cProgressTextColor = COL_BLACK;
+    if (NOT_LOADED_COLOR == m_aProgressTextColor)
+        m_aProgressTextColor = COL_BLACK;
 
     Application::AddEventListener(
         LINK( this, SplashScreen, AppEventListenerHdl ) );
@@ -311,22 +313,22 @@ SplashScreen::initialize( const css::uno::Sequence< css::uno::Any>& aArguments )
 
 void SplashScreen::updateStatus()
 {
-    if (!_bVisible || _bProgressEnd)
+    if (!m_bVisible || m_bProgressEnd)
         return;
-    if (!_bPaintProgress)
-        _bPaintProgress = true;
-    pWindow->Redraw();
+    if (!m_bPaintProgress)
+        m_bPaintProgress = true;
+    m_pWindow->Redraw();
 }
 
 // internal private methods
 IMPL_LINK( SplashScreen, AppEventListenerHdl, VclSimpleEvent&, inEvent, void )
 {
-    if (static_cast<VclWindowEvent&>(inEvent).GetWindow() == pWindow)
+    if (static_cast<VclWindowEvent&>(inEvent).GetWindow() == m_pWindow)
     {
         switch ( inEvent.GetId() )
         {
             case VclEventId::WindowShow:
-                pWindow->Redraw();
+                m_pWindow->Redraw();
                 break;
             default:
                 break;
@@ -344,7 +346,7 @@ OUString implReadBootstrapKey( const OUString& _rKey )
 
 void SplashScreen::loadConfig()
 {
-    _bShowLogo = implReadBootstrapKey( u"Logo"_ustr ) != "0";
+    m_bShowLogo = implReadBootstrapKey(u"Logo"_ustr) != "0";
 
     OUString sProgressFrameColor = implReadBootstrapKey( u"ProgressFrameColor"_ustr );
     OUString sProgressBarColor = implReadBootstrapKey( u"ProgressBarColor"_ustr );
@@ -357,13 +359,12 @@ void SplashScreen::loadConfig()
 
 
     // Determine full screen splash mode
-    _bFullScreenSplash = (( !sFullScreenSplash.isEmpty() ) &&
-                          ( sFullScreenSplash != "0" ));
+    m_bFullScreenSplash = ((!sFullScreenSplash.isEmpty()) && (sFullScreenSplash != "0"));
 
     // Try to retrieve the relative values for the progress bar. The current
     // schema uses the screen ratio to retrieve the associated values.
-    if ( _bFullScreenSplash )
-        determineProgressRatioValues( _fXPos, _fYPos, _fWidth, _fHeight );
+    if (m_bFullScreenSplash)
+        determineProgressRatioValues(m_fXPos, m_fYPos, m_fWidth, m_fHeight);
 
     if ( !sProgressFrameColor.isEmpty() )
     {
@@ -379,7 +380,7 @@ void SplashScreen::loadConfig()
         {
             sal_uInt8 nGreen = static_cast< sal_uInt8 >( temp );
             sal_uInt8 nBlue = static_cast< sal_uInt8 >( o3tl::toInt32(o3tl::getToken(sProgressFrameColor, 0, ',', idx )) );
-            _cProgressFrameColor = Color( nRed, nGreen, nBlue );
+            m_aProgressFrameColor = Color(nRed, nGreen, nBlue);
         }
     }
 
@@ -397,7 +398,7 @@ void SplashScreen::loadConfig()
         {
             sal_uInt8 nGreen = static_cast< sal_uInt8 >( temp );
             sal_uInt8 nBlue = static_cast< sal_uInt8 >( o3tl::toInt32(o3tl::getToken(sProgressBarColor, 0, ',', idx )) );
-            _cProgressBarColor = Color( nRed, nGreen, nBlue );
+            m_aProgressBarColor = Color(nRed, nGreen, nBlue);
         }
     }
 
@@ -415,18 +416,18 @@ void SplashScreen::loadConfig()
         {
             sal_uInt8 nGreen = static_cast< sal_uInt8 >( temp );
             sal_uInt8 nBlue = static_cast< sal_uInt8 >( o3tl::toInt32(o3tl::getToken(sProgressTextColor, 0, ',', idx )) );
-            _cProgressTextColor = Color( nRed, nGreen, nBlue );
+            m_aProgressTextColor = Color(nRed, nGreen, nBlue);
         }
     }
 
     if ( !sProgressTextBaseline.isEmpty() )
     {
-        _textBaseline = sProgressTextBaseline.toInt32();
+        m_nTextBaseline = sProgressTextBaseline.toInt32();
     }
 
     if( !sNativeProgress.isEmpty() )
     {
-        _bNativeProgress = sNativeProgress.toBoolean();
+        m_bNativeProgress = sNativeProgress.toBoolean();
     }
 
     if ( !sSize.isEmpty() )
@@ -435,13 +436,13 @@ void SplashScreen::loadConfig()
         sal_Int32 temp = o3tl::toInt32(o3tl::getToken(sSize, 0, ',', idx ));
         if ( idx != -1 )
         {
-            _barwidth = temp;
-            _barheight = o3tl::toInt32(o3tl::getToken(sSize, 0, ',', idx ));
+            m_nBarwidth = temp;
+            m_nBarheight = o3tl::toInt32(o3tl::getToken(sSize, 0, ',', idx));
         }
     }
 
-    if ( _barheight >= 10 )
-        _barspace = 3;  // more space between frame and bar
+    if (m_nBarheight >= 10)
+        m_nBarspace = 3; // more space between frame and bar
 
     if ( !sPosition.isEmpty() )
     {
@@ -449,8 +450,8 @@ void SplashScreen::loadConfig()
         sal_Int32 temp = o3tl::toInt32(o3tl::getToken(sPosition, 0, ',', idx ));
         if ( idx != -1 )
         {
-            _tlx = temp;
-            _tly = o3tl::toInt32(o3tl::getToken(sPosition, 0, ',', idx ));
+            m_nTlx = temp;
+            m_nTly = o3tl::toInt32(o3tl::getToken(sPosition, 0, ',', idx));
         }
     }
 }
@@ -472,8 +473,8 @@ void SplashScreen::SetScreenBitmap(Bitmap& rBitmap)
 
     // create file name from screen resolution information
     OUString aResBuf = "_" + OUString::number(nWidth) + "x" + OUString::number(nHeight);
-    if ( !_sAppName.isEmpty() )
-        if (Application::LoadBrandBitmap(Concat2View("intro_" + _sAppName + aResBuf), rBitmap))
+    if (!m_sAppName.isEmpty())
+        if (Application::LoadBrandBitmap(Concat2View("intro_" + m_sAppName + aResBuf), rBitmap))
             return;
 
     if (Application::LoadBrandBitmap(Concat2View("intro" + aResBuf), rBitmap))
@@ -553,17 +554,19 @@ void SplashScreen::determineProgressRatioValues(
 
 void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    if (!pSpl || !pSpl->_bVisible)
+    if (!pSpl || !pSpl->m_bVisible)
         return;
 
     //native drawing
     // in case of native controls we need to draw directly to the window
-    if (pSpl->_bNativeProgress && rRenderContext.IsNativeControlSupported(ControlType::IntroProgress, ControlPart::Entire))
+    if (pSpl->m_bNativeProgress
+        && rRenderContext.IsNativeControlSupported(ControlType::IntroProgress, ControlPart::Entire))
     {
-        rRenderContext.DrawBitmap(Point(), pSpl->_aIntroBmp);
+        rRenderContext.DrawBitmap(Point(), pSpl->m_aIntroBmp);
 
-        ImplControlValue aValue( pSpl->_iProgress * pSpl->_barwidth / pSpl->_iMax);
-        tools::Rectangle aDrawRect( Point(pSpl->_tlx, pSpl->_tly), Size( pSpl->_barwidth, pSpl->_barheight));
+        ImplControlValue aValue(pSpl->m_nProgress * pSpl->m_nBarwidth / pSpl->m_nMax);
+        tools::Rectangle aDrawRect(Point(pSpl->m_nTlx, pSpl->m_nTly),
+                                   Size(pSpl->m_nBarwidth, pSpl->m_nBarheight));
         tools::Rectangle aNativeControlRegion, aNativeContentRegion;
 
         if (rRenderContext.GetNativeControlRegion(ControlType::IntroProgress, ControlPart::Entire, aDrawRect,
@@ -571,12 +574,13 @@ void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const tools::
                                                   aNativeControlRegion, aNativeContentRegion))
         {
               tools::Long nProgressHeight = aNativeControlRegion.GetHeight();
-              aDrawRect.AdjustTop( -((nProgressHeight - pSpl->_barheight)/2) );
-              aDrawRect.AdjustBottom((nProgressHeight - pSpl->_barheight)/2 );
+              aDrawRect.AdjustTop(-((nProgressHeight - pSpl->m_nBarheight) / 2));
+              aDrawRect.AdjustBottom((nProgressHeight - pSpl->m_nBarheight) / 2);
         }
 
-        if (rRenderContext.DrawNativeControl(ControlType::IntroProgress, ControlPart::Entire, aDrawRect,
-                                             ControlState::ENABLED, aValue, pSpl->_sProgressText))
+        if (rRenderContext.DrawNativeControl(ControlType::IntroProgress, ControlPart::Entire,
+                                             aDrawRect, ControlState::ENABLED, aValue,
+                                             pSpl->m_sProgressText))
         {
             return;
         }
@@ -584,26 +588,33 @@ void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const tools::
 
     // non native drawing
     // draw bitmap
-    _vdev->DrawBitmap(Point(), pSpl->_aIntroBmp);
+    _vdev->DrawBitmap(Point(), pSpl->m_aIntroBmp);
 
-    if (pSpl->_bPaintProgress) {
+    if (pSpl->m_bPaintProgress)
+    {
         // draw progress...
-        tools::Long length = (pSpl->_iProgress * pSpl->_barwidth / pSpl->_iMax) - (2 * pSpl->_barspace);
+        tools::Long length
+            = (pSpl->m_nProgress * pSpl->m_nBarwidth / pSpl->m_nMax) - (2 * pSpl->m_nBarspace);
         if (length < 0) length = 0;
 
         // border
         _vdev->SetFillColor();
-        _vdev->SetLineColor( pSpl->_cProgressFrameColor );
-        _vdev->DrawRect(tools::Rectangle(pSpl->_tlx, pSpl->_tly, pSpl->_tlx+pSpl->_barwidth, pSpl->_tly+pSpl->_barheight));
-        _vdev->SetFillColor( pSpl->_cProgressBarColor );
+        _vdev->SetLineColor(pSpl->m_aProgressFrameColor);
+        _vdev->DrawRect(tools::Rectangle(pSpl->m_nTlx, pSpl->m_nTly,
+                                         pSpl->m_nTlx + pSpl->m_nBarwidth,
+                                         pSpl->m_nTly + pSpl->m_nBarheight));
+        _vdev->SetFillColor(pSpl->m_aProgressBarColor);
         _vdev->SetLineColor();
-        _vdev->DrawRect(tools::Rectangle(pSpl->_tlx+pSpl->_barspace, pSpl->_tly+pSpl->_barspace, pSpl->_tlx+pSpl->_barspace+length, pSpl->_tly+pSpl->_barheight-pSpl->_barspace));
+        _vdev->DrawRect(tools::Rectangle(pSpl->m_nTlx + pSpl->m_nBarspace,
+                                         pSpl->m_nTly + pSpl->m_nBarspace,
+                                         pSpl->m_nTlx + pSpl->m_nBarspace + length,
+                                         pSpl->m_nTly + pSpl->m_nBarheight - pSpl->m_nBarspace));
         vcl::Font aFont;
         aFont.SetFontSize(Size(0, 12));
         aFont.SetAlignment(ALIGN_BASELINE);
         _vdev->SetFont(aFont);
-        _vdev->SetTextColor(pSpl->_cProgressTextColor);
-        _vdev->DrawText(Point(pSpl->_tlx, pSpl->_textBaseline), pSpl->_sProgressText);
+        _vdev->SetTextColor(pSpl->m_aProgressTextColor);
+        _vdev->DrawText(Point(pSpl->m_nTlx, pSpl->m_nTextBaseline), pSpl->m_sProgressText);
     }
     rRenderContext.DrawOutDev(Point(), GetOutputSizePixel(), Point(), _vdev->GetOutputSizePixel(), *_vdev);
 }
