@@ -847,6 +847,50 @@ abstract class SelectionSection extends CanvasSectionObject {
 	}
 
 	/*
+		the runs of the connectors tied to the object's own glue point of that handle, while the
+		point stands at that place on the page. nothing for any other handle
+	*/
+	public runsWhileAGluePointIsDragged(
+		handle: SelectionHandle,
+		at: cool.Point,
+	): cool.ObjectPathPolygon[] | null {
+		if (handle.kind !== 'GluePoint') return null;
+
+		const objectId = this.selectedObjects()[0];
+		const index = Number(handle.name.split('.')[1]);
+		const data = RenderGeometrySection.currentPart();
+		const object = data?.objects.get(objectId);
+		const id = object?.gluePoints?.[index]?.id;
+		const place = RenderGeometrySection.transformOf(objectId)
+			?.invert()
+			?.apply(at.x, at.y);
+		if (!data || id === undefined || !place) return null;
+
+		const runs: cool.ObjectPathPolygon[] = [];
+		for (const connectorId of ConnectorRouter.tiedTo(data, [objectId])) {
+			const connector = data.objects.get(connectorId);
+			const routing = connector?.routing;
+			// only a connector with an end on this very point goes anywhere else
+			const onThePoint =
+				(connector?.tiedToAtStart === objectId &&
+					routing?.tieAtStart.point === id) ||
+				(connector?.tiedToAtEnd === objectId && routing?.tieAtEnd.point === id);
+			if (!connector || !onThePoint) continue;
+
+			const run = ConnectorRouter.routeWithAGluePoint(
+				data,
+				connector,
+				objectId,
+				index,
+				place,
+			);
+			if (run) runs.push({ closed: false, points: run });
+		}
+
+		return runs.length ? runs : null;
+	}
+
+	/*
 		The run a drag of a line handle of a connector shows of itself. Where the client routes
 		the connector, the run is laid out anew with that line moved across itself by what the
 		drag moved, which is what the engine does with such a drag. Otherwise it is the current

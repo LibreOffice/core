@@ -1479,6 +1479,23 @@ class ShapingHandles extends HandlesMovedOneByOne {
 class TiePointHandles extends HandleGroup {
 	public readonly name: string = 'tiePoints';
 
+	/// the connectors tied to a point keys took, or a drag let go of, as they will run
+	public outline(): cool.ObjectPathPolygon[] | null {
+		const objects = this.selection.selectedObjects();
+		if (objects.length !== 1) return null;
+
+		const runs = GluePointHandles.ownPointsOf(objects[0]).flatMap(
+			(handle: SelectionHandle) => {
+				const stepped = HeldSteps.of(this.selection, handle.name);
+				return stepped
+					? (this.selection.runsWhileAGluePointIsDragged(handle, stepped.at) ??
+							[])
+					: [];
+			},
+		);
+		return runs.length ? runs : null;
+	}
+
 	/// The points the selected object was given, which travel with it as it is dragged.
 	public handles(): SelectionHandle[] {
 		const objects = this.selection.selectedObjects();

@@ -1376,15 +1376,6 @@ class ConnectorRouter {
 	): cool.ObjectPathPoint[] | undefined {
 		if (!connector.routing) return undefined;
 
-		const nodeFor = (
-			objectId: number | undefined,
-		): cool.RouteNode | undefined => {
-			if (objectId === undefined) return undefined;
-			const node = ConnectorRouter.nodeOf(data.objects.get(objectId));
-			if (!node || !matrix || !moved.has(objectId)) return node;
-			return ConnectorRouter.nodeThrough(node, matrix);
-		};
-
 		// A move lays the run out whether or not it was set from outside, as the engine does.
 		let routing: cool.ConnectorRouting = {
 			...connector.routing,
@@ -1405,6 +1396,63 @@ class ConnectorRouter {
 				tieAtEnd: movedTie(routing.tieAtEnd),
 			};
 		}
+
+		return ConnectorRouter.routeThrough(
+			data,
+			connector,
+			routing,
+			(objectId: number, node: cool.RouteNode) =>
+				matrix && moved.has(objectId)
+					? ConnectorRouter.nodeThrough(node, matrix)
+					: node,
+		);
+	}
+
+	/*
+		the run of a connector while one glue point of an object it holds on to stands somewhere
+		else, given on the object's own square: an end tied to that point is routed to it
+	*/
+	public static routeWithAGluePoint(
+		data: cool.VectorPrimitivesData,
+		connector: cool.SlideObject,
+		objectId: number,
+		index: number,
+		place: cool.Point,
+	): cool.ObjectPathPoint[] | undefined {
+		if (!connector.routing) return undefined;
+
+		return ConnectorRouter.routeThrough(
+			data,
+			connector,
+			{ ...connector.routing, trackUserDefined: false },
+			(id: number, node: cool.RouteNode) =>
+				id !== objectId
+					? node
+					: {
+							...node,
+							gluePoints: node.gluePoints.map(
+								(one: cool.ObjectGluePoint, at: number) =>
+									at === index ? { ...one, x: place.x, y: place.y } : one,
+							),
+						},
+		);
+	}
+
+	/// the run of a connector laid out from that routing, with the node of each object it holds
+	/// on to as the function gives it
+	private static routeThrough(
+		data: cool.VectorPrimitivesData,
+		connector: cool.SlideObject,
+		routing: cool.ConnectorRouting,
+		changed: (objectId: number, node: cool.RouteNode) => cool.RouteNode,
+	): cool.ObjectPathPoint[] | undefined {
+		const nodeFor = (
+			objectId: number | undefined,
+		): cool.RouteNode | undefined => {
+			if (objectId === undefined) return undefined;
+			const node = ConnectorRouter.nodeOf(data.objects.get(objectId));
+			return node ? changed(objectId, node) : undefined;
+		};
 
 		return ConnectorRouter.route(
 			routing,

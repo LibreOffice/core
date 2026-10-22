@@ -135,7 +135,8 @@ class ShapingInteraction extends SelectionInteraction {
 				this.shownAt(),
 				this.ortho,
 			) ??
-			LineGhost.outline(this.selection, this.handle, this.shownAt())
+			LineGhost.outline(this.selection, this.handle, this.shownAt()) ??
+			this.selection.runsWhileAGluePointIsDragged(this.handle, this.shownAt())
 		);
 	}
 
