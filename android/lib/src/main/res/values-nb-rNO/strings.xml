@@ -23,4 +23,9 @@
     <string name="use_odf">Bruk ODF format</string>
     <string name="ask_for_convert_odf">Bekreft filformat</string>
     <string name="use_text">Bruk tekstformat</string>
+    <string name="all_files_access_title">Åpnet i skrivebeskyttet modus</string>
+    <string name="all_files_access_message">Appen som delte denne filen, tillot ikke at endringer ble lagret tilbake til den.\n\nGi «Tilgang til alle filer» slik at denne appen kan skrive filen der den er lagret, og du kan redigere den her.</string>
+    <string name="all_files_access_grant">Tillat tilgang</string>
+    <string name="do_not_ask_again">Ikke spør igjen</string>
+    <string name="failed_to_save_file">Kunne ikke lagre endringene i filen</string>
 </resources>

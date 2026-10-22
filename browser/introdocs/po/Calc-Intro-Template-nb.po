@@ -1,0 +1,998 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Calc-Intro-Template.ods\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2026-10-17 12:02+0000\n"
+"Last-Translator: Roy-Magne Mo <gaupe@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
+"collabora-online/calc-intro-template/nb/>\n"
+"Language: nb\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2026.11.dev0\n"
+
+#. content.xml (validation title)
+msgid "Try formatting"
+msgstr "Prøv å formatere"
+
+#. content.xml (validation help message)
+msgid "Explore the Format tab to customize your data with styles and formats."
+msgstr ""
+"Utforsk fanen Format for å tilpasse dataene dine med stiler og formater."
+
+#. content.xml (validation title)
+msgid "Help"
+msgstr "Hjelp"
+
+#. content.xml (validation help message)
+msgid ""
+"For Medium Stock use condition \"Values between: 20-80\" and style \"Medium "
+"Stock\"."
+msgstr ""
+"For «Middels lager» bruk vilkåret «Verdier mellom: 20-80» og stilen «Middels "
+"lager»."
+
+#. content.xml (validation help message)
+msgid ""
+"For High Stock use condition \"Values greater than: 80\" and style \"High "
+"Stock\"."
+msgstr ""
+"For «Høyt lager» bruk vilkåret «Verdier større enn: 80» og stilen «Høyt lager"
+"»."
+
+#. content.xml (validation title)
+msgid "Use other options"
+msgstr "Bruk andre valg"
+
+#. content.xml (validation help message)
+msgid ""
+"Use Standard or Advanced Filter to narrow down your data more precisely"
+msgstr ""
+"Bruk standardfilter eller avansert filter for å snevre inn dataene dine mer "
+"nøyaktig"
+
+#. content.xml (validation title)
+msgid "Share document link"
+msgstr "Del dokumentlenken"
+
+#. content.xml (validation help message)
+msgid ""
+"Share a direct link with people who already have access to the document for "
+"quick and easy access."
+msgstr ""
+"Del en direkte lenke med folk som allerede har tilgang til dokumentet, for "
+"rask og enkel tilgang."
+
+#. content.xml (sheet name)
+msgid "👋 Introduction"
+msgstr "👋 Innledning"
+
+#. content.xml (sheet '👋 Introduction')
+msgid "<1>Next Chapter: ✚</1><2> Formulas & Functions</2>"
+msgstr "<1>Neste kapittel: ✚</1><2> Formler og funksjoner</2>"
+
+#. content.xml (sheet '👋 Introduction')
+msgid "👋General information"
+msgstr "👋Generell informasjon"
+
+#. content.xml (sheet '👋 Introduction')
+msgid ""
+"Collabora Office spreadsheet can be used to calculate, analyse, and manage "
+"your data. This introduction template will help you get started and explore "
+"some of the main features of the product."
+msgstr ""
+"Collabora Office-regneark kan brukes til å beregne, analysere og håndtere "
+"dataene dine. Denne introduksjonsmalen vil hjelpe deg med å komme i gang og "
+"utforske noen av hovedfunksjonene i produktet."
+
+#. content.xml (sheet '👋 Introduction')
+msgid "Calc features – key features you can explore"
+msgstr "Calc-funksjoner – de viktigste funksjonene du kan utforske"
+
+#. content.xml (sheet '👋 Introduction')
+msgid "Calculations (Formulas & Functions)"
+msgstr "Beregninger (Formler og funksjoner)"
+
+#. content.xml (sheet '👋 Introduction')
+msgid ""
+"Use built-in functions to perform calculations on your data. Create formulas"
+" easily and get help with the Function Wizard."
+msgstr ""
+"Bruk innebygde funksjoner til å utføre beregninger på dataene dine. Lag "
+"formler enkelt og få hjelp av Funksjonsveiviseren."
+
+#. content.xml (sheet '👋 Introduction')
+msgid "Tables"
+msgstr "Tabeller"
+
+#. content.xml (sheet '👋 Introduction')
+msgid ""
+"Organise your data into structured tables. Quickly edit, sort, and filter "
+"information to keep everything clear and easy to manage."
+msgstr ""
+"Organiser dataene dine i strukturerte tabeller. Rediger, sorter og filtrer "
+"informasjon raskt for å holde alt tydelig og lett å håndtere."
+
+#. content.xml (sheet '👋 Introduction')
+msgid "Charts"
+msgstr "Diagram"
+
+#. content.xml (sheet '👋 Introduction')
+msgid ""
+"Visualise your data with different chart types. Quickly create and customise"
+" charts to better understand trends and comparisons."
+msgstr ""
+"Visualiser dataene dine med ulike diagramtyper. Lag og tilpass diagrammer "
+"raskt for å få bedre forståelse av trender og sammenligninger."
+
+#. content.xml (sheet '👋 Introduction')
+msgid "Sorting & filtering"
+msgstr "Sortering og filtrering"
+
+#. content.xml (sheet '👋 Introduction')
+msgid ""
+"Find what matters faster by sorting and filtering your data. Focus only on "
+"the information you need."
+msgstr ""
+"Finn det som betyr noe raskere ved å sortere og filtrere dataene dine. "
+"Fokuser bare på informasjonen du trenger."
+
+#. content.xml (sheet '👋 Introduction')
+msgid "Data formatting"
+msgstr "Dataformatering"
+
+#. content.xml (sheet '👋 Introduction')
+msgid ""
+"Format your data to improve clarity and readability. Use colours, styles, "
+"and number formats to highlight key information."
+msgstr ""
+"Formater dataene dine for å forbedre tydelighet og lesbarhet. Bruk farger, "
+"stiler og tallformater for å fremheve nøkkelinformasjon."
+
+#. content.xml (sheet '👋 Introduction')
+msgid "Collaboration tools"
+msgstr "Samarbeidsverktøy"
+
+#. content.xml (sheet '👋 Introduction')
+msgid ""
+"Work together in real time. Share, comment, and track changes directly in "
+"the document."
+msgstr ""
+"Arbeid sammen i sanntid. Del, kommenter og spor endringer direkte i "
+"dokumentet."
+
+#. content.xml (sheet '👋 Introduction')
+msgid "Accessibility"
+msgstr "Tilgjengelighet"
+
+#. content.xml (sheet '👋 Introduction')
+msgid ""
+"Calc is designed with accessibility in mind, helping ensure that everyone "
+"can easily create, edit, and work with spreadsheets."
+msgstr ""
+"Calc er laget med tilgjengelighet i tankene, slik at alle enkelt kan lage, "
+"redigere og arbeide med regneark."
+
+#. content.xml (sheet name)
+msgid "✚ Formulas & Functions"
+msgstr "✚ Formler og funksjoner"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid "✚Using simple functions"
+msgstr "✚Bruk av enkle funksjoner"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid ""
+"We will look at a practical case to learn how to use basic Calc features and"
+" simple functions."
+msgstr ""
+"Vi skal se på et praktisk eksempel for å lære hvordan vi bruker "
+"grunnleggende Calc-funksjoner og enkle funksjoner."
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid "Step-by-step guide – Adding values"
+msgstr "Steg-for-steg-veiledning – Legge til verdier"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid ""
+"In this example we want to calculate the total number of items in stock. The"
+" SUM function allows you to quickly add numbers together."
+msgstr ""
+"I dette eksemplet vil vi beregne det totale antallet varer på lager. SUM-"
+"funksjonen lar deg raskt legge sammen tall."
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid "Writing formula into cell"
+msgstr "Skriv formel i celle"
+
+#. content.xml (sheet '✚ Formulas & Functions'); content.xml (sheet '📋
+#. Tables'); content.xml (sheet '🎨 Conditional Formatting'); content.xml
+#. (sheet '📊 Charts'); content.xml (sheet '🔍 Data & filtering')
+msgid "Item"
+msgstr "Vare"
+
+#. content.xml (sheet '✚ Formulas & Functions'); content.xml (sheet '📋
+#. Tables'); content.xml (sheet '🎨 Conditional Formatting'); content.xml
+#. (sheet '📊 Charts'); content.xml (sheet '🔍 Data & filtering')
+msgid "Quantity [pcs]"
+msgstr "Mengde [stk]"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid "1. Click on the cell below the Quantity column"
+msgstr "1. Klikk på cellen under kolonnen Mengde"
+
+#. content.xml (sheet '✚ Formulas & Functions'); content.xml (sheet '📋
+#. Tables'); content.xml (sheet '🎨 Conditional Formatting'); content.xml
+#. (sheet '📊 Charts'); content.xml (sheet '🔍 Data & filtering')
+msgid "Laptop"
+msgstr "Bærbar datamaskin"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid "<1>2. Type the formula </1><2>=SUM(E9:E11)</2>"
+msgstr "<1>2. Skriv formelen </1><2>=SUM(E9:E11)</2>"
+
+#. content.xml (sheet '✚ Formulas & Functions'); content.xml (sheet '📋
+#. Tables'); content.xml (sheet '🎨 Conditional Formatting'); content.xml
+#. (sheet '📊 Charts'); content.xml (sheet '🔍 Data & filtering')
+msgid "Mouse"
+msgstr "Mus"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid ""
+"<1>3. Press </1><2>Enter</2><3> to calculate the total number of items</3>"
+msgstr ""
+"<1>3. Trykk </1><2>Enter</2><3> for å beregne det totale antallet varer</3>"
+
+#. content.xml (sheet '✚ Formulas & Functions'); content.xml (sheet '📋
+#. Tables'); content.xml (sheet '🎨 Conditional Formatting'); content.xml
+#. (sheet '📊 Charts'); content.xml (sheet '🔍 Data & filtering')
+msgid "Notebook"
+msgstr "Notatbok"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid "Inserting formula via Formulas tab – Formula wizard"
+msgstr "Sett inn formel via fanen Formler – Funksjonsveiviser"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid "<1>2. Open </1><2>Formulas tab</2><3> in Notebook bar</3>"
+msgstr "<1>2. Åpne </1><2>fanen Formler</2><3> i verktøybåndet</3>"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid "<1>3. Click on </1><2>Insert Function</2>"
+msgstr "<1>3. Klikk på </1><2>Sett inn funksjon</2>"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid ""
+"<1>4. Choose SUM from the list of functions, </1><2>=SUM ( )</2><3> should "
+"appear</3>"
+msgstr ""
+"<1>4. Velg SUM fra listen over funksjoner, </1><2>=SUM ( )</2><3> skal "
+"vises</3>"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid "5. Select the cells containing the values you want to add"
+msgstr "5. Velg cellene som inneholder verdiene du vil legge til"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid "<1>6. Click </1><2>OK</2><3> to insert the formula</3>"
+msgstr "<1>6. Klikk </1><2>OK</2><3> for å sette inn formelen</3>"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid "Inserting formula via Formulas tab chosen from Category"
+msgstr "Sett inn formel via fanen Formler, valgt fra kategori"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid "<1>3. Click on </1><2>AutoSum</2>"
+msgstr "<1>3. Klikk på </1><2>Autosum</2>"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid "Formulas Structure"
+msgstr "Formelstruktur"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid ""
+"<1>Formulas in Calc always start with the equals sign </1><2>=</2><3>. After"
+" that comes the function name (for example </3><4>sum</4><5>), which defines"
+" what type of calculation will be performed. The </5><6>brackets</6><7> "
+"contain the cells that the formula will use for its calculation.</7>"
+msgstr ""
+"<1>Formler i Calc starter alltid med likhetstegnet </1><2>=</2><3>. Etter "
+"det kommer funksjonsnavnet (for eksempel </3><4>sum</4><5>), som definerer "
+"hvilken type beregning som skal utføres. </5><6>Parentesene</6><7> "
+"inneholder cellene som formelen skal bruke i beregningen.</7>"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid "Function Library"
+msgstr "Funksjonsbibliotek"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid ""
+"Collabora Office Calc provides a large library of built-in functions that "
+"help you perform different types of calculations and data analysis."
+msgstr ""
+"Collabora Office Calc gir et stort bibliotek av innebygde funksjoner som "
+"hjelper deg med å utføre ulike beregninger og dataanalyser."
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid ""
+"<1>Functions are organised into categories such as Database, </1><2>Date & "
+"Time, Financial, Information, Logical, Mathematical, Array, Statistical, "
+"Spreadsheet, Text </2><3>and</3><4> Add-in</4><5>, making it easier to find "
+"the function you need.</5>"
+msgstr ""
+"<1>Funksjoner er organisert i kategorier som Database, </1><2>Dato og tid, "
+"Finans, Informasjon, Logisk, Matematisk, Matrise, Statistikk, Regneark, "
+"Tekst </2><3>og</3><4> Tillegg</4><5>, slik at det er lettere å finne "
+"funksjonen du trenger.</5>"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid ""
+"<1>You can access these functions through the Function Library or by using "
+"the </1><2>Function Wizard.</2>"
+msgstr ""
+"<1>Du kan få tilgang til disse funksjonene gjennom Funksjonsbiblioteket "
+"eller ved å bruke </1><2>Funksjonsveiviseren.</2>"
+
+#. content.xml (sheet '✚ Formulas & Functions')
+msgid "Next Chapter: 📋 Tables"
+msgstr "Neste kapittel: 📋 Tabeller"
+
+#. content.xml (sheet name)
+msgid "📋 Tables"
+msgstr "📋 Tabeller"
+
+#. content.xml (sheet '📋 Tables')
+msgid "📋Create a table"
+msgstr "📋Lag en tabell"
+
+#. content.xml (sheet '📋 Tables')
+msgid ""
+"Tables help you organise large amounts of information in a clear and "
+"structured way. They make it easier to manage data, perform calculations, "
+"and visualise information."
+msgstr ""
+"Tabeller hjelper deg å organisere store mengder informasjon på en tydelig og "
+"strukturert måte. De gjør det lettere å håndtere data, utføre beregninger og "
+"visualisere informasjon."
+
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '🎨 Conditional
+#. Formatting'); content.xml (sheet '📊 Charts'); content.xml (sheet '🔍 Data &
+#. filtering')
+msgid "Step-by-step guide"
+msgstr "Steg-for-steg-veiledning"
+
+#. content.xml (sheet '📋 Tables')
+msgid ""
+"In this example we will learn how to create and use tables to organise data "
+"in a spreadsheet."
+msgstr ""
+"I dette eksemplet skal vi lære hvordan vi lager og bruker tabeller for å "
+"organisere data i et regneark."
+
+#. content.xml (sheet '📋 Tables')
+msgid "Create a table from existing data"
+msgstr "Lag en tabell fra eksisterende data"
+
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
+msgid "Category"
+msgstr "Kategori"
+
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
+msgid "Supplier"
+msgstr "Leverandør"
+
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '📊 Charts'); content.xml
+#. (sheet '🔍 Data & filtering')
+msgid ""
+"1. Select the range of cells that contains your data (including headers)"
+msgstr ""
+"1. Velg området med celler som inneholder dataene dine (inkludert "
+"overskrifter)"
+
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
+msgid "Electronics"
+msgstr "Elektronikk"
+
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
+msgid "Dell"
+msgstr "Dell"
+
+#. content.xml (sheet '📋 Tables')
+msgid "<1>2. Open the </1><2>Insert tab</2><3> in the toolbar</3>"
+msgstr "<1>2. Åpne </1><2>fanen Sett inn</2><3> i verktøylinjen</3>"
+
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
+msgid "Logitech"
+msgstr "Logitech"
+
+#. content.xml (sheet '📋 Tables')
+msgid "<1>3. Click </1><2>Table</2>"
+msgstr "<1>3. Klikk </1><2>Tabell</2>"
+
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
+msgid "Office supplies"
+msgstr "Kontorutstyr"
+
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
+msgid "Staples"
+msgstr "Staples"
+
+#. content.xml (sheet '📋 Tables')
+msgid "<1>4. Click </1><2>OK</2>"
+msgstr "<1>4. Klikk </1><2>OK</2>"
+
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '🎨 Conditional
+#. Formatting'); content.xml (sheet '📊 Charts'); content.xml (sheet '🔍 Data &
+#. filtering')
+msgid "Keyboard"
+msgstr "Tastatur"
+
+#. content.xml (sheet '📋 Tables')
+msgid "5. Your data is now organised as a table"
+msgstr "5. Dataene dine er nå organisert som en tabell"
+
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '🎨 Conditional
+#. Formatting'); content.xml (sheet '📊 Charts'); content.xml (sheet '🔍 Data &
+#. filtering')
+msgid "Pen"
+msgstr "Penn"
+
+#. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
+msgid "Bic"
+msgstr "Bic"
+
+#. content.xml (sheet '📋 Tables')
+msgid "Create a table from scratch"
+msgstr "Lag en tabell fra bunnen av"
+
+#. content.xml (sheet '📋 Tables')
+msgid "<1>1. Open the </1><2>Insert tab</2><3> in the toolbar</3>"
+msgstr "<1>1. Åpne </1><2>fanen Sett inn</2><3> i verktøylinjen</3>"
+
+#. content.xml (sheet '📋 Tables')
+msgid "<1>2. Click </1><2>Table</2>"
+msgstr "<1>2. Klikk </1><2>Tabell</2>"
+
+#. content.xml (sheet '📋 Tables')
+msgid "3. Select the range of cells where you want to create the table"
+msgstr "3. Velg området med celler der du vil lage tabellen"
+
+#. content.xml (sheet '📋 Tables')
+msgid "5. Your table is now ready to be filled with data"
+msgstr "5. Tabellen din er nå klar til å fylles med data"
+
+#. content.xml (sheet '📋 Tables')
+msgid "Editing tables"
+msgstr "Redigering av tabeller"
+
+#. content.xml (sheet '📋 Tables')
+msgid ""
+"When a table is created, additional tools become available in the toolbar. "
+"These tools allow you to customise and manage your table more easily. You "
+"can apply different table styles to improve the visual appearance of your "
+"data. You can also enable or disable options such as header rows, banded "
+"rows, and filter buttons, depending on how you want to display and work with"
+" your data."
+msgstr ""
+"Når du lager en tabell, blir ekstra verktøy tilgjengelige i verktøylinjen. "
+"Med disse verktøyene kan du tilpasse og styre tabellen din enklere. Du kan "
+"bruke ulike tabellstiler for å forbedre det visuelle uttrykket til dataene "
+"dine. Du kan også slå på eller av innstillinger som overskriftsrad, "
+"radstriper og filterknapper, avhengig av hvordan du vil vise og arbeide med "
+"dataene dine."
+
+#. content.xml (sheet '📋 Tables')
+msgid ""
+"These features help you keep your table organised, highlight important "
+"information, and work more efficiently with your data."
+msgstr ""
+"Disse funksjonene hjelper deg med å holde tabellen din organisert, fremheve "
+"viktig informasjon og arbeide mer effektivt med dataene dine."
+
+#. content.xml (sheet '📋 Tables')
+msgid ""
+"<1>➜Try it: </1><2>Select your table, open tab Tables that appears in "
+"toolbar and explore.</2>"
+msgstr ""
+"<1>➜Prøv det: </1><2>Velg tabellen din, åpne fanen Tabeller som dukker opp i "
+"verktøylinjen, og utforsk.</2>"
+
+#. content.xml (sheet '📋 Tables')
+msgid "Pivot table"
+msgstr "Pivottabell"
+
+#. content.xml (sheet '📋 Tables')
+msgid ""
+"The pivot table (formerly known as DataPilot) allows you to combine, "
+"compare, and analyse large amounts of data. You can view different summaries"
+" of the source data, you can display the details of areas of interest, and "
+"you can create reports."
+msgstr ""
+"Pivottabellen (tidligere kjent som DataPilot) lar deg kombinere, sammenligne "
+"og analysere store mengder data. Du kan se ulike sammendrag av kildedata, du "
+"kan vise detaljer for områder du er interessert i, og du kan lage rapporter."
+
+#. content.xml (sheet '📋 Tables')
+msgid ""
+"A table that has been created as a pivot table is an interactive table. Data"
+" can be arranged, rearranged or summarised according to different points of "
+"view."
+msgstr ""
+"En tabell som er opprettet som pivottabell er en interaktiv tabell. Data kan "
+"organiseres, omorganiseres eller oppsummeres etter ulike synspunkter."
+
+#. content.xml (sheet '📋 Tables')
+msgid ""
+"<1>➜Try it: </1><2>Go to the Insert tab and click Pivot Table to create one "
+"from your data.</2>"
+msgstr ""
+"<1>➜Prøv det: </1><2>Gå til fanen Sett inn og klikk Pivottabell for å lage "
+"en fra dataene dine.</2>"
+
+#. content.xml (sheet '📋 Tables')
+msgid "Next Chapter: 🎨 Conditional Formatting"
+msgstr "Neste kapittel: 🎨 Vilkårsformatering"
+
+#. content.xml (sheet name)
+msgid "🎨 Conditional Formatting"
+msgstr "🎨 Vilkårsformatering"
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid "🎨Conditional formatting"
+msgstr "🎨Vilkårsformatering"
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid ""
+"Format your data to make it clearer and easier to understand. You can "
+"highlight important values, show patterns, and improve readability using "
+"colours, styles, and rules."
+msgstr ""
+"Formater dataene dine slik at de blir tydeligere og lettere å forstå. Du kan "
+"fremheve viktige verdier, vise mønstre og forbedre lesbarheten ved hjelp av "
+"farger, stiler og regler."
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid ""
+"Conditional formatting automatically changes how cells look based on their "
+"values, helping you quickly spot trends or important data."
+msgstr ""
+"Vilkårsformatering endrer automatisk utseendet til celler basert på verdiene "
+"deres, slik at du raskt kan oppdage trender eller viktige data."
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid ""
+"In this example, we will apply conditional formatting to highlight key "
+"values in the data and make important information easier to spot at a "
+"glance."
+msgstr ""
+"I dette eksemplet vil vi bruke vilkårsformatering for å fremheve "
+"nøkkelverdier i dataene og gjøre det lettere å få en rask oversikt over "
+"viktig informasjon."
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid "Apply conditional formatting"
+msgstr "Bruk vilkårsformatering"
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid "1. Select the range of cells you want to format"
+msgstr "1. Velg området med celler du vil formatere"
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid "<1>2. Open the </1><2>Format tab</2><3> in the toolbar</3>"
+msgstr "<1>2. Åpne </1><2>fanen Format</2><3> i verktøylinjen</3>"
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid "<1>3. Click </1><2>Conditional formatting</2>"
+msgstr "<1>3. Klikk </1><2>Vilkårsformatering</2>"
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid "<1>4. Select the </1><2>rule</2><3> you want to apply</3>"
+msgstr "<1>4. Velg </1><2>regelen</2><3> du vil bruke</3>"
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid "5. Set the condition and select a cell style"
+msgstr "5. Sett vilkåret og velg en cellestil"
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid "<1>6. Click </1><2>OK</2><3> to apply</3>"
+msgstr "<1>6. Klikk </1><2>OK</2><3> for å bruke</3>"
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid "➜Try it: Inventory stock overview"
+msgstr "➜Prøv det: Lageroversikt"
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid ""
+"Highlight important inventory data to quickly identify products that are "
+"running low on stock."
+msgstr ""
+"Uthev viktige lagerdata for raskt å finne produkter som er i ferd med å gå "
+"tomme på lageret."
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid ""
+"<1>Low Stock</1><2> (less than 20 pcs) → </2><3>Red</3><4> background</4>"
+msgstr ""
+"<1>Lite lager</1><2> (mindre enn 20 stk) → </2><3>Rød</3><4> bakgrunn</4>"
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid ""
+"<1>Medium Stock</1><2> (between 20 and 80 pcs)→ </2><3>Orange</3><4> "
+"background</4>"
+msgstr ""
+"<1>Middels lager</1><2> (mellom 20 og 80 stk)→ </2><3>Oransje</3><4> "
+"bakgrunn</4>"
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid ""
+"<1>High Stock </1><2>(more than</2><3> </3><4>80 pcs)→ </4><5>Green</5><6> "
+"background</6>"
+msgstr ""
+"<1>Høyt lager </1><2>(mer enn</2><3> </3><4>80 stk)→ </4><5>Grønn</5><6> "
+"bakgrunn</6>"
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid ""
+"<1>💡Useful tip: </1><2>To remove formatting, use </2><3>Clear Direct "
+"Formatting</3><4> in the </4><5>Home tab</5><6> or manage and remove rules "
+"in </6><7>Manage Conditional Formatting</7><8> from the </8><9>Format "
+"tab</9><10>.</10>"
+msgstr ""
+"<1>💡Nyttig tips: </1><2>For å fjerne formatering, bruk </2><3>Fjern direkte "
+"formatering</3><4> i </4><5>fanen Hjem</5><6> eller håndter og fjern regler "
+"i </6><7>Håndter vilkårsformatering</7><8> fra </8><9>fanen Format</9><10>.</"
+"10>"
+
+#. content.xml (sheet '🎨 Conditional Formatting')
+msgid "Next Chapter: 📊 Charts"
+msgstr "Neste kapittel: 📊 Diagram"
+
+#. content.xml (sheet name)
+msgid "📊 Charts"
+msgstr "📊 Diagram"
+
+#. content.xml (sheet '📊 Charts')
+msgid "📊Create a chart"
+msgstr "📊Lag et diagram"
+
+#. content.xml (sheet '📊 Charts')
+msgid ""
+"Collabora Office lets you present data graphically in a chart so that you "
+"can visually compare data series and view trends in the data. You can insert"
+" charts into spreadsheets, text documents, drawings and presentations."
+msgstr ""
+"Collabora Office lar deg presentere data grafisk i et diagram slik at du "
+"visuelt kan sammenligne dataserier og se trender i dataene. Du kan sette inn "
+"diagrammer i regneark, tekstdokumenter, tegninger og presentasjoner."
+
+#. content.xml (sheet '📊 Charts')
+msgid ""
+"In this example we will learn how to create chart and explore the different "
+"types of charts available. On the other side, you can see an example table "
+"that can be used as a data source for creating charts."
+msgstr ""
+"I dette eksemplet skal vi lære hvordan vi lager diagram og utforsker de "
+"ulike diagramtypene som finnes. På den andre siden kan du se et eksempel på "
+"en tabell som kan brukes som datakilde for diagrammer."
+
+#. content.xml (sheet '📊 Charts')
+msgid "Create a chart from existing data"
+msgstr "Lag et diagram fra eksisterende data"
+
+#. content.xml (sheet '📊 Charts'); content.xml (sheet '🔍 Data & filtering')
+msgid "Price per piece [£]"
+msgstr "Pris per stykke [£]"
+
+#. content.xml (sheet '📊 Charts')
+msgid "<1>2. Open the </1><2>Insert tab </2><3>in the toolbar</3>"
+msgstr "<1>2. Åpne </1><2>fanen Sett inn </2><3>i verktøylinjen</3>"
+
+#. content.xml (sheet '📊 Charts')
+msgid "<1>3. Click </1><2>Chart</2>"
+msgstr "<1>3. Klikk </1><2>Diagram</2>"
+
+#. content.xml (sheet '📊 Charts')
+msgid "4. Choose the chart type and style that best fits your data"
+msgstr "4. Velg diagramtypen og stilen som passer best til dataene dine"
+
+#. content.xml (sheet '📊 Charts')
+msgid "<1>5. Click </1><2>Finish</2><3> to insert the chart</3>"
+msgstr "<1>5. Klikk </1><2>Fullfør</2><3> for å sette inn diagrammet</3>"
+
+#. content.xml (sheet '📊 Charts')
+msgid "6. Your data is now displayed as a chart"
+msgstr "6. Dataene dine vises nå som et diagram"
+
+#. content.xml (sheet '📊 Charts')
+msgid "Create a chart via Insert tab"
+msgstr "Lag et diagram via fanen Sett inn"
+
+#. content.xml (sheet '📊 Charts')
+msgid "1. Open the Insert tab in the toolbar"
+msgstr "1. Åpne fanen Sett inn i verktøylinjen"
+
+#. content.xml (sheet '📊 Charts')
+msgid "<1>2. Click </1><2>Chart</2>"
+msgstr "<1>2. Klikk </1><2>Diagram</2>"
+
+#. content.xml (sheet '📊 Charts')
+msgid "3. Choose the chart type and style that best fits your data"
+msgstr "3. Velg diagramtypen og stilen som passer best til dataene dine"
+
+#. content.xml (sheet '📊 Charts')
+msgid "<1>4. Click </1><2>Next</2>"
+msgstr "<1>4. Klikk </1><2>Neste</2>"
+
+#. content.xml (sheet '📊 Charts')
+msgid ""
+"5. Select the range of cells that contains your data (including headers)"
+msgstr ""
+"5. Velg området med celler som inneholder dataene dine (inkludert "
+"overskrifter)"
+
+#. content.xml (sheet '📊 Charts')
+msgid "<1>6. Click </1><2>Finish</2><3> to insert the chart</3>"
+msgstr "<1>6. Klikk </1><2>Fullfør</2><3> for å sette inn diagrammet</3>"
+
+#. content.xml (sheet '📊 Charts')
+msgid "7. Your data is now displayed as a chart"
+msgstr "7. Dataene dine vises nå som et diagram"
+
+#. content.xml (sheet '📊 Charts')
+msgid "Editing charts"
+msgstr "Redigering av diagram"
+
+#. content.xml (sheet '📊 Charts')
+msgid ""
+"To edit a chart, double click on it to activate editing mode. Once selected,"
+" you can use the options in the sidebar or open the context menu (right "
+"click) to modify the chart."
+msgstr ""
+"For å redigere et diagram, dobbeltklikk på det for å slå på "
+"redigeringsmodus. Når det er valgt, kan du bruke innstillingene i "
+"sidepanelet eller åpne kontekstmenyen (høyreklikk) for å endre diagrammet."
+
+#. content.xml (sheet '📊 Charts')
+msgid ""
+"You can add or adjust chart elements such as titles, axes, and labels, as "
+"well as change the data range or chart type. These tools allow you to "
+"customise the chart and better present your data."
+msgstr ""
+"Du kan legge til eller justere diagramelementer som titler, akser og "
+"etiketter, og endre dataområdet eller diagramtypen. Disse verktøyene lar deg "
+"tilpasse diagrammet og presentere dataene dine bedre."
+
+#. content.xml (sheet '📊 Charts')
+msgid "Next Chapter:🔍 Data & filtering"
+msgstr "Neste kapittel:🔍 Data og filtrering"
+
+#. content.xml (sheet name); content.xml (sheet '🔍 Data & filtering')
+msgid "🔍 Data & filtering"
+msgstr "🔍 Data og filtrering"
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid ""
+"Data and filtering tools help you organise and explore your data more "
+"efficiently. You can quickly sort information or apply filters to focus only"
+" on the data that matters."
+msgstr ""
+"Data- og filtreringsverktøy hjelper deg å organisere og utforske dataene "
+"dine mer effektivt. Du kan raskt sortere informasjon eller bruke filtre for "
+"å fokusere bare på dataene som er viktige."
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid ""
+"In this example, we will learn how to filter data to quickly find specific "
+"items in an inventory list."
+msgstr ""
+"I dette eksemplet skal vi lære hvordan vi filtrerer data for raskt å finne "
+"bestemte varer i en lagerliste."
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid "Enable filtering"
+msgstr "Slå på filtrering"
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid "<1>2. Open the </1><2>Data tab </2><3>in the toolbar</3>"
+msgstr "<1>2. Åpne </1><2>fanen Data </2><3>i verktøylinjen</3>"
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid "<1>3. Click </1><2>Auto Filter</2>"
+msgstr "<1>3. Klikk </1><2>Autofilter</2>"
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid "➜Try it: Find low stock items"
+msgstr "➜Prøv det: Finn varer med lavt lager"
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid ""
+"Sort the Quantity [pcs] column to see which items have the lowest stock."
+msgstr "Sorter kolonnen Mengde [stk] for å se hvilke varer som har minst lager."
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid "➜Try it: Show only Electronics items"
+msgstr "➜Prøv det: Vis bare varer i kategorien Elektronikk"
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid "Use the filter in the Category column and select Electronics."
+msgstr "Bruk filteret i kolonnen Kategori og velg Elektronikk."
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid ""
+"<1>💡Useful tip: </1><2>To disable the filter, select any cell within the "
+"filtered data, then go to the</2><3> Data tab</3><4> and click </4><5>Reset "
+"Filter</5><6>. All data will be visible again.</6>"
+msgstr ""
+"<1>💡Nyttig tips: </1><2>For å slå av filteret, velg en celle i de filtrerte "
+"dataene, gå til</2><3> fanen Data</3><4> og klikk på </4><5>Tilbakestill "
+"filter</5><6>. Alle data blir synlige igjen.</6>"
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid "Other filtering options"
+msgstr "Andre filtreringsvalg"
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid "Additional filtering options give you more control over your data."
+msgstr "Flere filtreringsvalg gir deg mer kontroll over dataene dine."
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid ""
+"<1>Auto Filter</1><2> lets you quickly filter data directly in the table "
+"using simple selections.</2>"
+msgstr ""
+"<1>Autofilter</1><2> lar deg raskt filtrere data direkte i tabellen ved "
+"hjelp av enkle valg.</2>"
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid ""
+"<1>Standard Filter</1><2> allows you to define ranges that contain values in"
+" specific data fields. You can also combine conditions using logical AND or "
+"OR operators.</2>"
+msgstr ""
+"<1>Standardfilter</1><2> lar deg definere områder som inneholder verdier i "
+"spesifikke datafelt. Du kan også kombinere vilkår ved hjelp av logiske OG- "
+"eller ELLER-operatorer.</2>"
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid ""
+"<1>Advanced Filter</1><2> allows you to define up to eight filter "
+"conditions. You can enter these conditions directly into the sheet for more "
+"precise and flexible filtering.</2>"
+msgstr ""
+"<1>Avansert filter</1><2> lar deg definere opptil åtte filtervilkår. Du kan "
+"legge inn disse vilkårene direkte i arket for mer presis og fleksibel "
+"filtrering.</2>"
+
+#. content.xml (sheet '🔍 Data & filtering')
+msgid "Last Chapter: 🤝 Productivity & collaboration"
+msgstr "Siste kapittel: 🤝 Produktivitet og samarbeid"
+
+#. content.xml (sheet name); content.xml (sheet '🤝 Productivity &
+#. collaboration')
+msgid "🤝 Productivity & collaboration"
+msgstr "🤝 Produktivitet og samarbeid"
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid ""
+"A range of features helps you stay productive and collaborate with others, "
+"making it easier to organise work and share information in real time."
+msgstr ""
+"En rekke funksjoner hjelper deg å være produktiv og samarbeide med andre, "
+"slik at det blir lettere å organisere arbeid og dele informasjon i sanntid."
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid "Document sharing"
+msgstr "Deling av dokument"
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid ""
+"Work together with others in real time. Multiple users can edit the same "
+"document simultaneously, making it easy to share ideas, review changes, and "
+"stay aligned."
+msgstr ""
+"Samarbeid med andre i sanntid. Flere brukere kan redigere det samme "
+"dokumentet samtidig, noe som gjør det enkelt å dele ideer, se gjennom "
+"endringer og holde seg samkjørte."
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid ""
+"Each user is assigned a unique colour, so you can easily see who is editing "
+"what. You can click on a user’s name or avatar to jump directly to their "
+"cursor and follow their activity in the document. Notifications also inform "
+"you when someone joins or leaves."
+msgstr ""
+"Hver bruker er tildelt en unik farge, slik at du enkelt kan se hvem som "
+"redigerer hva. Du kan klikke på en brukers navn eller avatar for å hoppe "
+"direkte til markøren deres og følge aktiviteten deres i dokumentet. "
+"Varslinger informerer deg også når noen blir med eller forlater dokumentet."
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid "Start sharing your document"
+msgstr "Begynn å dele dokumentet ditt"
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid "1. Create new document or open existing one"
+msgstr "1. Lag et nytt dokument eller åpne et eksisterende"
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid "<1>2. Click on </1><2>Share button</2><3> on right top side</3>"
+msgstr "<1>2. Klikk på </1><2>«Del»-knappen</2><3> øverst til høyre</3>"
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid "<1>3. </1><2>Share</2><3> your document with others</3>"
+msgstr "<1>3. </1><2>Del</2><3> dokumentet ditt med andre</3>"
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid "➜Try it: Internal shares"
+msgstr "➜Prøv det: Interne delinger"
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid ""
+"Share files within your organisation. People who already have access to the "
+"document can use the link for quick and easy access."
+msgstr ""
+"Del filer i organisasjonen din. Folk som allerede har tilgang til dokumentet "
+"kan bruke lenken for rask og enkel tilgang."
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid "➜Try it: External shares"
+msgstr "➜Prøv det: Eksterne delinger"
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid ""
+"Share files with others outside your organisation via public links and email"
+" addresses. You can also share to Nextcloud accounts on other instances "
+"using their federated cloud ID."
+msgstr ""
+"Del filer med andre utenfor organisasjonen din via offentlige lenker og e-"
+"postadresser. Du kan også dele til Nextcloud-kontoer på andre tjenere ved å "
+"bruke deres fødererte sky-ID."
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid "Shortcuts"
+msgstr "Hurtigtaster"
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid ""
+"Keyboard shortcuts help you work faster by reducing the need to use menus "
+"and clicks. They allow you to quickly perform common actions, such as "
+"copying, formatting, or navigating through your document, making your "
+"workflow more efficient."
+msgstr ""
+"Hurtigtaster hjelper deg å arbeide raskere ved å redusere behovet for å "
+"bruke menyer og klikk. De lar deg raskt utføre vanlige handlinger, som å "
+"kopiere, formatere eller navigere gjennom dokumentet ditt, slik at "
+"arbeidsflyten din blir mer effektiv."
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid ""
+"<1>💡Useful tip: </1><2>To find a list of all shortcuts, go to the "
+"</2><3>Help tab</3><4> and click on </4><5>Keyboard shortcuts</5><6>. You "
+"can also use the search option to quickly find specific shortcuts.</6>"
+msgstr ""
+"<1>💡Nyttig tips: </1><2>For å finne en liste over alle hurtigtaster, gå til "
+"</2><3>fanen Hjelp</3><4> og klikk på </4><5>Hurtigtaster</5><6>. Du kan "
+"også bruke søkefunksjonen for raskt å finne bestemte hurtigtaster.</6>"
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid "⏯Video tutorials"
+msgstr "⏯Videoopplæring"
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid ""
+"To continue learning, explore short video introductions that cover "
+"additional features. These videos offer quick guidance and help you build on"
+" what you’ve learned, so you can become more confident and efficient in your"
+" work."
+msgstr ""
+"For å fortsette å lære kan du utforske korte videoinnføringer som dekker "
+"flere funksjoner. Disse videoene gir rask veiledning og hjelper deg å bygge "
+"videre på det du har lært, slik at du kan bli tryggere og mer effektiv i "
+"arbeidet ditt."
+
+#. content.xml (sheet '🤝 Productivity & collaboration')
+msgid "Check out video tutorials"
+msgstr "Se videoopplæringene"

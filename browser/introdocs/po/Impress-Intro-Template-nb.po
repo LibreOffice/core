@@ -1,0 +1,376 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Impress-Intro-Template.odp\n"
+"Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2026-10-17 11:45+0000\n"
+"Last-Translator: Roy-Magne Mo <gaupe@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
+"collabora-online/impress-intro-template/nb/>\n"
+"Language: nb\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 2026.11.dev0\n"
+
+#. content.xml (slide 'page1')
+msgid "👋 Introduction"
+msgstr "👋 Innledning"
+
+#. content.xml (slide 'page1')
+msgid ""
+"<1>Collabora Office </1><2>presentation</2><3> is a </3><4>tool</4><5> that "
+"lets you create, edit, and deliver presentations in a simple way. You can "
+"work alone on a document, or collaboratively as part of a team. This "
+"introduction template will help you get started and explore some of the main"
+" features of the product.</5>"
+msgstr ""
+"<1>Collabora Office </1><2>presentasjon</2><3> er et </3><4>verktøy</4><5> "
+"som lar deg lage, redigere og levere presentasjoner på en enkel måte. Du kan "
+"arbeide alene med et dokument eller samarbeide som del av et team. Denne "
+"introduksjonsmalen hjelper deg å komme i gang og utforske noen av "
+"hovedfunksjonene i produktet.</5>"
+
+#. content.xml (slide 'page1'); styles.xml (master page
+#. 'Introduction_20_slide')
+msgid "Next Chapter: 🖼 Slides & Layouts"
+msgstr "Neste kapittel: 🖼 Lysbilder og oppsett"
+
+#. content.xml (slide 'page1')
+msgid "Here's what you'll discover"
+msgstr "Dette kan du oppdage"
+
+#. content.xml (slide 'page1'); content.xml (slide 'page2')
+msgid "🖼 Slides & Layouts"
+msgstr "🖼 Lysbilder og oppsett"
+
+#. content.xml (slide 'page1'); content.xml (slide 'page3')
+msgid "🎨 Design & Master Slides"
+msgstr "🎨 Utforming og hovedlysbilder"
+
+#. content.xml (slide 'page1'); content.xml (slide 'page4')
+msgid "✏️ Style & Visual"
+msgstr "✏️ Stil og visuelt"
+
+#. content.xml (slide 'page1'); content.xml (slide 'page5')
+msgid "🎬 Slide Transitions"
+msgstr "🎬 Overganger mellom lysbilder"
+
+#. content.xml (slide 'page1'); content.xml (slide 'page6')
+msgid "🎤 Presenting"
+msgstr "🎤 Presentasjon"
+
+#. content.xml (slide 'page1'); content.xml (slide 'page7')
+msgid "🤝 Productivity & Collaboration"
+msgstr "🤝 Produktivitet og samarbeid"
+
+#. content.xml (slide 'page2')
+msgid "Every presentation is a sequence of slides."
+msgstr "Hver presentasjon er en rekke lysbilder."
+
+#. content.xml (slide 'page2')
+msgid ""
+"<1>Use the </1><2>Slide navigation</2><3> on the left to reorder them by "
+"dragging, or remove ones you don’t need.</3>"
+msgstr ""
+"<1>Bruk </1><2>Lysbildepanelet</2><3> til venstre for å endre rekkefølgen "
+"ved å dra, eller fjern dem du ikke trenger.</3>"
+
+#. content.xml (slide 'page2')
+msgid ""
+"<1>Each slide can use a </1><2>different layout </2><3>– a predefined "
+"arrangement of placeholders for titles, text, and images. Pick the layout "
+"that fits the slide’s purpose.</3>"
+msgstr ""
+"<1>Hvert lysbilde kan bruke et </1><2>annet oppsett </2><3>– et "
+"forhåndsdefinert oppsett av plassholdere for titler, tekst og bilder. Velg "
+"det oppsettet som passer til lysbildets formål.</3>"
+
+#. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
+#. (slide 'page4'); content.xml (slide 'page5'); content.xml (slide 'page6');
+#. styles.xml (master page 'Content_20_slide'); styles.xml (master page
+#. 'Default')
+msgid "<1>➜</1><2>Try it:</2>"
+msgstr "<1>➜</1><2>Prøv det:</2>"
+
+#. content.xml (slide 'page2')
+msgid "Add a new slide clicking “New” in Notebook bar."
+msgstr "Legg til et nytt lysbilde ved å klikke på «Ny» i verktøybåndet."
+
+#. content.xml (slide 'page2')
+msgid "Choose a layout for it from the layout chooser."
+msgstr "Velg et oppsett for det i oppsettvelgeren."
+
+#. content.xml (slide 'page2')
+msgid "Start editing your slide."
+msgstr "Begynn å redigere lysbildet ditt."
+
+#. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
+#. (slide 'page4'); content.xml (slide 'page5'); styles.xml (master page
+#. 'Content_20_slide'); styles.xml (master page 'Default')
+msgid "Useful tip"
+msgstr "Nyttig tips"
+
+#. content.xml (slide 'page2')
+msgid ""
+"When you’re unsure which layout to pick, start with “Title, Content” – it "
+"works for almost any slide."
+msgstr ""
+"Når du er usikker på hvilket oppsett du skal velge, start med «Tittel, "
+"Innhold» – det fungerer for nesten hvilket som helst lysbilde."
+
+#. content.xml (slide 'page2')
+msgid "Next Chapter: 🎨 Design & Master Slides"
+msgstr "Neste kapittel: 🎨 Utforming og hovedlysbilder"
+
+#. content.xml (slide 'page3')
+msgid ""
+"<1>A </1><2>master slide</2><3> is the template behind every slide. It "
+"defines the colours, fonts, background, and where titles and footers go. "
+"</3><4>Change</4><5> </5><6>the master, and every slide updates at once. "
+"</6><7>This makes master slides the fastest way to keep a deck consistent. "
+"Set the look once (fonts, colours, logo, footer) and every new slide picks "
+"it up automatically. When you need to rebrand or tweak the design later, you"
+" change the master, not 30 slides.</7>"
+msgstr ""
+"<1>Et </1><2>hovedlysbilde</2><3> er malen bak hvert lysbilde. Det definerer "
+"farger, skrifttyper, bakgrunn og hvor titler og bunntekster skal stå. </3><4>"
+"Endrer</4><5> </5><6>du hovedlysbildet, oppdateres alle lysbildene samtidig. "
+"</6><7>Dermed er hovedlysbilder den raskeste måten å holde presentasjonen "
+"konsistent på. Sett utseendet én gang (skrifttyper, farger, logo, bunntekst)"
+", så får hvert nye lysbilde det automatisk. Når du senere skal endre "
+"designet, endrer du hovedlysbildet, ikke 30 lysbilder.</7>"
+
+#. content.xml (slide 'page3')
+msgid "Open the View tab in the Notebook bar."
+msgstr "Åpne fanen Vis i verktøybåndet."
+
+#. content.xml (slide 'page3')
+msgid "Click “Master View” and edit your master design."
+msgstr "Klikk på «Hovedutformingsvisning» og rediger hovedutformingen din."
+
+#. content.xml (slide 'page3')
+msgid "Once your master design is ready, click \"Close Master View\"."
+msgstr ""
+"Når hovedutformingen din er klar, klikk på «Lukk hovedutformingsvisning»."
+
+#. content.xml (slide 'page3')
+msgid "Now your master is set and ready to use across all slides."
+msgstr ""
+"Nå er hovedlysbildet ditt satt opp og klart til bruk på alle lysbildene."
+
+#. content.xml (slide 'page3')
+msgid ""
+"If a single slide needs a different look, create a second master slide and "
+"apply it just to that slide. The rest of your deck stays on the original "
+"master."
+msgstr ""
+"Hvis ett enkelt lysbilde trenger et annet utseende, lag et andre "
+"hovedlysbilde og bruk det bare på det lysbildet. Resten av presentasjonen "
+"blir værende på det opprinnelige hovedlysbildet."
+
+#. content.xml (slide 'page3')
+msgid "Next Chapter: ✏️ Style & Visual"
+msgstr "Neste kapittel: ✏️ Stil og visuelt"
+
+#. content.xml (slide 'page4')
+msgid ""
+"<1>There are two ways to make a slide stand out. First, </1><2>format your "
+"text</2><3> to give it structure and emphasis – fonts, sizes, weights, and "
+"colours guide the reader through your message. Second, </3><4>add visual "
+"elements</4><5> – images, shapes, icons, charts – to support your story.</5>"
+msgstr ""
+"<1>Det finnes to måter å få et lysbilde til å skille seg ut på. Først, </1>"
+"<2>formater teksten din</2><3> for å gi den struktur og vekt – skrifttyper, "
+"størrelser, vekter og farger veileder leseren gjennom budskapet ditt. "
+"Deretter, </3><4>legg til visuelle elementer</4><5> – bilder, former, "
+"ikoner, diagrammer – for å støtte historien din.</5>"
+
+#. content.xml (slide 'page4')
+msgid ""
+"In the Notebook bar, open the Insert tab and add an object, image, table, or"
+" any other element that supports your content."
+msgstr ""
+"Åpne fanen Sett inn i verktøybåndet og legg til et objekt, bilde, tabell "
+"eller et annet element som støtter innholdet ditt."
+
+#. content.xml (slide 'page4')
+msgid ""
+"Click on it to select it, then resize and reposition it to fit your layout."
+msgstr ""
+"Klikk på det for å velge det, og endre størrelsen og plasseringen slik at "
+"det passer til oppsettet ditt."
+
+#. content.xml (slide 'page4')
+msgid ""
+"For editable objects like shapes or images, a contextual tab appears in the "
+"Notebook bar with all the available actions."
+msgstr ""
+"For redigerbare objekter som former eller bilder dukker det opp en "
+"kontekstavhengig fane i verktøybåndet med alle tilgjengelige handlinger."
+
+#. content.xml (slide 'page4')
+msgid ""
+"Less is more. One strong visual, a clear headline, and a few well-formatted "
+"lines will always beat a slide packed with text and decorations."
+msgstr ""
+"Mindre er mer. Et sterkt bilde, en tydelig overskrift og noen få "
+"velformaterte linjer vil alltid slå et lysbilde fullt av tekst og "
+"dekorasjoner."
+
+#. content.xml (slide 'page4')
+msgid "Next Chapter: 🎬 Slide Transitions"
+msgstr "Neste kapittel: 🎬 Overganger mellom lysbilder"
+
+#. content.xml (slide 'page5')
+msgid ""
+"<1>A </1><2>transition</2><3> controls how one slide moves to the next "
+"during your slide show. The right transition makes your deck feel polished "
+"and professional, while the wrong one distracts from your message.</3>"
+msgstr ""
+"<1>En </1><2>overgang</2><3> styrer hvordan et lysbilde går over til det "
+"neste under lysbildefremvisningen. Den riktige overgangen gjør at "
+"presentasjonen virker polert og profesjonell, mens en feil overgang tar "
+"oppmerksomheten bort fra budskapet ditt.</3>"
+
+#. content.xml (slide 'page5')
+msgid "Click Transition tab in Notebook bar."
+msgstr "Klikk på fanen Overgang i verktøybåndet."
+
+#. content.xml (slide 'page5')
+msgid "Pick a transition style you would like to use."
+msgstr "Velg en overgangsstil du vil bruke."
+
+#. content.xml (slide 'page5')
+msgid ""
+"Adjust other properties – set the duration, pick a variant, or choose "
+"timing."
+msgstr ""
+"Juster andre egenskaper – sett varigheten, velg en variant eller velg "
+"tidspunkt."
+
+#. content.xml (slide 'page5')
+msgid "Click \"Apply to All Slides\" to use the same transition across your deck."
+msgstr ""
+"Klikk på «Bruk på alle lysbilder» for å bruke samme overgang i hele "
+"presentasjonen."
+
+#. content.xml (slide 'page5')
+msgid ""
+"Use one transition across your whole deck to keep things consistent. Save a "
+"different transition for the slides you really want to stand out."
+msgstr ""
+"Bruk én overgang gjennom hele presentasjonen for å holde ting konsekvent. "
+"Spar en annen overgang til de lysbildene du virkelig vil skal skille seg ut."
+
+#. content.xml (slide 'page5')
+msgid "Next Chapter: 🎤 Presenting"
+msgstr "Neste kapittel: 🎤 Presentasjon"
+
+#. content.xml (slide 'page6')
+msgid ""
+"<1>When you're ready to present, start your slide show and the "
+"</1><2>Presenter Console</2><3> opens. You'll see your current slide, the "
+"next one coming up, a timer, and your speaker notes, while your audience "
+"sees only the slide.</3>"
+msgstr ""
+"<1>Når du er klar til å presentere, starter du lysbildefremvisningen, og </1>"
+"<2>Presentasjonskonsollen</2><3> åpnes. Du ser det gjeldende lysbildet, det "
+"neste som kommer, en tidtaker og talenotatene dine, mens publikum bare ser "
+"lysbildet.</3>"
+
+#. content.xml (slide 'page6')
+msgid "Switch to the View tab in the Notebook bar and open “Notes view”."
+msgstr "Bytt til fanen Vis i verktøybåndet og åpne «Notatvisning»."
+
+#. content.xml (slide 'page6')
+msgid "Add a speaker note to your slides."
+msgstr "Legg til et talenotat på lysbildene dine."
+
+#. content.xml (slide 'page6')
+msgid "When you're ready to present, open the Slide Show tab."
+msgstr "Når du er klar til å presentere, åpne fanen Lysbildefremvisning."
+
+#. content.xml (slide 'page6')
+msgid "Pick a slide show option to start presenting."
+msgstr "Velg et alternativ for lysbildefremvisning for å begynne å presentere."
+
+#. content.xml (slide 'page6')
+msgid "Next Chapter: 🤝 Productivity & Collaboration"
+msgstr "Neste kapittel: 🤝 Produktivitet og samarbeid"
+
+#. content.xml (slide 'page7')
+msgid ""
+"<1>A range of features helps you </1><2>stay productive</2><3> and "
+"</3><4>collaborate with others</4><5>, making it easier to work together and"
+" share your decks.</5>"
+msgstr ""
+"<1>En rekke funksjoner hjelper deg </1><2>å holde deg produktiv</2><3> og </"
+"3><4>samarbeide med andre</4><5>, slik at det blir lettere å arbeide sammen "
+"og dele presentasjonene dine.</5>"
+
+#. content.xml (slide 'page7')
+msgid "📤 Document sharing"
+msgstr "📤 Deling av dokument"
+
+#. content.xml (slide 'page7')
+msgid ""
+"<1>Work together in real time. Multiple people can edit the same "
+"presentation at once. Click the </1><2>Share button</2><3> in the top right "
+"to share your document with your colleagues.</3>"
+msgstr ""
+"<1>Arbeid sammen i sanntid. Flere personer kan redigere den samme "
+"presentasjonen samtidig. Klikk på </1><2>Del-knappen</2><3> øverst til høyre "
+"for å dele dokumentet ditt med kollegene dine.</3>"
+
+#. content.xml (slide 'page7')
+msgid "⌨️ Shortcuts"
+msgstr "⌨️ Hurtigtaster"
+
+#. content.xml (slide 'page7')
+msgid ""
+"<1>Keyboard shortcuts speed up your workflow. Find the full list under Help "
+"tab in </1><2>Keyboard shortcuts</2>"
+msgstr ""
+"<1>Hurtigtaster gjør at du jobber raskere. Finn den fullstendige listen "
+"under Hjelp-fanen i </1><2>Hurtigtaster</2>"
+
+#. content.xml (slide 'page7')
+msgid "▶️ Video tutorials"
+msgstr "▶️ Videoopplæringer"
+
+#. content.xml (slide 'page7')
+msgid ""
+"Want to keep learning? Short video introductions cover additional features "
+"and help you build on what you’ve learned."
+msgstr ""
+"Vil du fortsette å lære? Korte videoinnføringer dekker flere funksjoner og "
+"hjelper deg å bygge videre på det du har lært."
+
+#. content.xml (slide 'page7')
+msgid "Check out video tutorials."
+msgstr "Se videoopplæringene."
+
+#. styles.xml (master page 'Content_20_slide'); styles.xml (master page
+#. 'Default')
+msgid "Title"
+msgstr "Tittel"
+
+#. styles.xml (master page 'Content_20_slide'); styles.xml (master page
+#. 'Default'); styles.xml (master page 'Introduction_20_slide')
+msgid "Text"
+msgstr "Tekst"
+
+#. styles.xml (master page 'Content_20_slide'); styles.xml (master page
+#. 'Default'); styles.xml (master page 'Introduction_20_slide')
+msgid "Next Chapter: name of next chapter"
+msgstr "Neste kapittel: navn på neste kapittel"
+
+#. styles.xml (master page 'Introduction_20_slide')
+msgid "👋Introduction"
+msgstr "👋Innledning"
+
+#. styles.xml (master page 'Introduction_20_slide')
+msgid "Text title"
+msgstr "Teksttittel"

@@ -45,7 +45,7 @@
     <string name="password">Passord</string>
     <string name="user_name">Brukernavn</string>
     <string name="server_url_and_port">URL og port på skyserveren.</string>
-    <string name="server_url">Server URL</string>
+    <string name="server_url">Tjener-URL</string>
     <string name="otg_warning">Eksperimentell funksjon: Bruk bare hvis OTG-enhet er skrivbar.</string>
     <string name="otg_device_path">OTG enhetssti</string>
     <string name="external_sd_path">Ekstern SD-sti</string>
@@ -84,8 +84,8 @@
     <string name="file_icon_desc">Filikon</string>
     <string name="sort_newest">Nyeste først</string>
     <string name="sort_oldest">Eldste først</string>
-    <string name="sort_za">Z-A</string>
-    <string name="sort_az">A-Z</string>
+    <string name="sort_za">Å–A</string>
+    <string name="sort_az">A–Å</string>
     <string name="sort_largest">Største først</string>
     <string name="sort_smallest">Minste først</string>
     <string name="sort">Sorter etter</string>
@@ -110,4 +110,5 @@
     <string name="pref_user_name">Brukernavn</string>
     <string name="pref_user_name_info">Brukes når du legger til en kommentar</string>
     <string name="pref_user_name_guest">Gjestebruker</string>
+    <string name="app_version_and_hash">Versjon: %1$s\ngit-hash: %2$s</string>
 </resources>

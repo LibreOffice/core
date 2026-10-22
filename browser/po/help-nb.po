@@ -3,16 +3,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-13 14:06+0200\n"
-"PO-Revision-Date: 2026-08-10 18:53+0000\n"
-"Last-Translator: Someone That Is A Christian <helgen77@gmail.com>\n"
+"PO-Revision-Date: 2026-10-17 21:51+0000\n"
+"Last-Translator: Roy-Magne Mo <gaupe@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Norwegian Bokmål <https://hosted.weblate.org/projects/"
-"collabora-online/help/nb_NO/>\n"
+"collabora-online/help/nb/>\n"
 "Language: nb\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:10-5
 msgid "Keyboard Shortcuts"
@@ -39,28 +39,28 @@ msgid "Copy"
 msgstr "Kopier"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:17-69
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>C</kbd>,<br /><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
 "hidden=\"true\">+</span><kbd>Insert</kbd>"
 msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>Enter"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"C</kbd>,<br /><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">"
+"+</span><kbd>Insert</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:18-38
 msgid "Paste as unformatted text"
 msgstr "Lim inn som uformatert tekst"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:18-90
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>V</kbd>"
 msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>Pil opp"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</"
+"kbd>"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:19-38
 msgid "Paste special"
@@ -83,11 +83,12 @@ msgid "Open"
 msgstr "Åpne"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:20-79
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>O</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>0"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"O</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:21-72
 msgid "Print (Download as PDF)"
@@ -114,14 +115,14 @@ msgid "Focus to notebookbar menu"
 msgstr "Fokuser på notatboklinjemenyen"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:26-90
-#, fuzzy
 msgid ""
 "<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>F1</kbd>"
 msgstr ""
-"Alt</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>Piltaster"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>F1</"
+"kbd>"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:27-38
 msgid "Focus to document from menu"
@@ -136,11 +137,12 @@ msgid "Focus to selected comment's menu"
 msgstr "Fokuser på menyen for valgt kommentar"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:28-97
-#, fuzzy
 msgid ""
 "<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>C</kbd>"
-msgstr "Alt</kbd><span class=\"kbd--plus\">+</span><kbd>Delete"
+msgstr ""
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>C</"
+"kbd>"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:29-38
 msgid "Open the context menu at the cursor or the selected cell"
@@ -149,11 +151,12 @@ msgstr "Åpne hurtigmenyen ved markøren eller den valgte cellen"
 #: html/cool-help.html%2Bdiv.div.table.tr.td:29-121
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:166-160
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:167-205
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>F10</kbd>"
-msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>End"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"F10</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:30-38
 msgid ""
@@ -172,11 +175,12 @@ msgid "Move focus to the previous area of the application"
 msgstr "Flytt fokus til forrige område i applikasjonen"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:31-115
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>F6</kbd>"
-msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>End"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"F6</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:36-9
 #: html/cool-help.html%2Bdiv.div.div.h2:208-9
@@ -272,33 +276,36 @@ msgid "Apply Default paragraph style"
 msgstr "Bruk standard avsnittsstil"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:55-94
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>0</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>0"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"0</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:56-38
 msgid "Apply Heading 1 paragraph style"
 msgstr "Bruk avsnittsstilen «Overskrift 1»"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:56-96
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>1</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>1"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"1</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:57-38
 msgid "Apply Heading 2 paragraph style"
 msgstr "Bruk avsnittsstilen «Overskrift 2»"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:57-96
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>2</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>2"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"2</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:58-38
 msgid "Apply Heading 3 paragraph style"
@@ -306,33 +313,36 @@ msgstr "Bruk avsnittsstilen «Overskrift 3»"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:58-96
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:190-89
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>3</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>3"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"3</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:59-38
 msgid "Apply Heading 4 paragraph style"
 msgstr "Bruk avsnittsstilen «Overskrift 4»"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:59-96
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>4</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>4"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"4</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:60-38
 msgid "Apply Heading 5 paragraph style"
 msgstr "Bruk avsnittsstilen «Overskrift 5»"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:60-96
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>5</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>5"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"5</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:64-9
 msgid "Text selection and navigation in document"
@@ -368,11 +378,12 @@ msgstr "Flytt markøren til venstre, og merk samtidig tekst"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:68-103
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:235-103
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:300-103
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Left</kbd>"
-msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>Pil venstre"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Pil venstre</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:69-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:236-38
@@ -383,11 +394,12 @@ msgstr "Gå til begynnelsen av ordet"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:69-90
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:236-90
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:301-90
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Left</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Pil venstre"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Pil venstre</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:70-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:237-38
@@ -398,14 +410,14 @@ msgstr "Marker ord for ord mot venstre"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:70-96
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:237-96
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:302-96
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Left</kbd>"
 msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>Pil venstre"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Pil "
+"venstre</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:71-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:238-38
@@ -423,16 +435,17 @@ msgstr "Pil høyre"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:239-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:304-38
 msgid "Move cursor with selection to the right"
-msgstr "Flytt markøren til høyre, med markerttekst tekst"
+msgstr "Flytt markøren til høyre, med markert tekst"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:72-104
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:239-104
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:304-104
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Right</kbd>"
-msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>Pil høyre"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Pil høyre</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:73-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:240-38
@@ -443,11 +456,12 @@ msgstr "Gå til begynnelsen av neste ord"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:73-93
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:240-93
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:305-93
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Right</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Pil høyre"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Pil høyre</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:74-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:241-38
@@ -458,14 +472,14 @@ msgstr "Merk ord for ord mot høyre"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:74-97
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:241-97
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:306-97
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Right</kbd>"
 msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>Pil høyre"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Pil "
+"høyre</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:75-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:242-38
@@ -488,11 +502,12 @@ msgstr "Merk linjer oppover"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:76-98
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:243-98
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:308-98
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Up</kbd>"
-msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>Pil opp"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Pil opp</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:77-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:244-38
@@ -503,11 +518,12 @@ msgstr "Flytt markøren til begynnelsen av forrige avsnitt"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:77-115
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:244-115
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:309-115
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Up</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Pil opp"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Pil opp</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:78-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:245-38
@@ -518,14 +534,14 @@ msgstr "Marker til begynnelsen av avsnittet"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:78-97
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:245-97
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:310-97
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Up</kbd>"
 msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>Pil opp"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Pil "
+"opp</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:79-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:246-38
@@ -548,11 +564,12 @@ msgstr "Merk linjer nedover"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:80-100
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:247-100
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:312-100
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Down</kbd>"
-msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>Pil ned"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Pil ned</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:81-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:248-38
@@ -563,11 +580,12 @@ msgstr "Flytt markøren til begynnelsen av forrige avsnitt"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:81-111
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:248-111
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:313-111
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Down</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Pil ned"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Pil ned</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:82-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:249-38
@@ -578,14 +596,14 @@ msgstr "Merk til slutten av avsnittet"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:82-91
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:249-91
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:314-91
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Down</kbd>"
 msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>Pil ned"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Pil "
+"ned</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:83-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:250-38
@@ -610,11 +628,12 @@ msgstr "Gå og merk til begynnelsen av linja"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:149-138
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:251-105
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:316-105
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Home</kbd>"
-msgstr "Shift+Hjem"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:85-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:252-38
@@ -627,11 +646,12 @@ msgstr "Gå til begynnelsen av dokumentet"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:145-118
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:252-88
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:317-88
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Home</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Hjem"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:86-38
 msgid "Go and select text to start of document"
@@ -640,14 +660,14 @@ msgstr "Gå og merk til begynnelsen av dokumentet"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:86-104
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:253-103
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:318-103
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Home</kbd>"
 msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>Pil opp"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Home</"
+"kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:87-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:254-38
@@ -672,28 +692,30 @@ msgstr "Gå og merk til slutten av linja"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:150-137
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:255-99
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:320-99
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>End</kbd>"
-msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>End"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:89-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:256-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:321-38
 msgid "Go to end of document"
-msgstr "Gå til slutten av dokumentet."
+msgstr "Gå til slutten av dokumentet"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:89-86
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:108-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:146-131
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:256-86
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:321-86
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>End</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>End"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:90-38
 msgid "Go and select text to end of document"
@@ -702,14 +724,14 @@ msgstr "Gå og merk til slutten av dokumentet"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:90-102
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:257-101
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:322-101
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>End</kbd>"
 msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>Pil opp"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>End</"
+"kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:91-38
 msgid "Move the view up one page"
@@ -724,22 +746,24 @@ msgid "Switch cursor between text and header"
 msgstr "Flytt skrivemerket mellom teksten og toppteksten"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:92-102
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>PageUp</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Side Opp"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"PageUp</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:93-38
 msgid "Extend the selection up one page"
 msgstr "Utvid markeringen opp en side"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:93-97
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>PageUp</kbd>"
-msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>Side Opp"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"PageUp</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:94-38
 msgid "Move the view down one page"
@@ -754,72 +778,76 @@ msgid "Switch cursor between text and footer"
 msgstr "Flytt skrivemerket mellom teksten og bunnteksten"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:95-102
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>PageDown</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Side Ned"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"PageDown</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:96-38
 msgid "Extend the selection down one page"
 msgstr "Utvid markeringen ned en side"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:96-99
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>PageDown</kbd>"
-msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>Side Ned"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"PageDown</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:97-38
 msgid "Delete to beginning of word"
 msgstr "Slett tekst til begynnelsen av ordet"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:97-92
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Backspace</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Rettetast"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Backspace</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:98-38
 msgid "Delete to end of word"
 msgstr "Slett til slutten av ordet"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:98-86
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Del</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Slett"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Del</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:99-38
 msgid "Delete to beginning of sentence"
-msgstr "Slett tekst til begynnelsen av setningen."
+msgstr "Slett tekst til begynnelsen av setningen"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:99-96
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Backspace</kbd>"
 msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>Rettetast"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Backspace</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:100-38
 msgid "Delete to end of sentence"
 msgstr "Slett til slutten av setningen"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:100-90
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Del</kbd>"
 msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>Pil opp"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Del</"
+"kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:104-9
 msgid "Shortcut Keys for Tables"
@@ -828,11 +856,12 @@ msgstr "Hurtigtaster for tabeller"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:106-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:267-84
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:332-91
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>A</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>A"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"A</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:106-144
 msgid ""
@@ -866,11 +895,12 @@ msgstr ""
 "trykk."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:109-38
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Tab</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Tab"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Tab</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:109-146
 msgid ""
@@ -883,11 +913,12 @@ msgstr ""
 ">+</span><kbd>Tab</kbd> brukes istedenfor."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:110-38
-#, fuzzy
 msgid ""
 "<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Keys</kbd>"
-msgstr "Alt</kbd><span class=\"kbd--plus\">+</span><kbd>Piltaster"
+msgstr ""
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Piltastene</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:110-152
 msgid ""
@@ -895,14 +926,14 @@ msgid ""
 msgstr "Øker/minker størrelsen på kolonnen/raden i den nedre høyre cellekanten"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:111-38
-#, fuzzy
 msgid ""
 "<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Keys</kbd>"
 msgstr ""
-"Alt</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>Piltaster"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Piltastene</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:111-219
 msgid "Increase/decrease the size of the column/row on the left/top cell edge"
@@ -910,14 +941,14 @@ msgstr ""
 "Øker/minsker størrelsen på kolonnen/raden i den øvre venstre cellekanten"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:112-38
-#, fuzzy
 msgid ""
 "<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Keys</kbd>"
 msgstr ""
-"Alt</kbd><span class=\"kbd--plus\">+</span><kbd>Ctrl</kbd><span class=\"kbd--"
-"plus\">+</span><kbd>Piltaster"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Piltastene</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:112-218
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:113-285
@@ -925,24 +956,24 @@ msgid "Like Alt, but only the active cell is modified"
 msgstr "Som Alt, men bare den gjeldende cellen blir endret"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:113-38
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Arrow Keys</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>V</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</"
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Piltastene</"
+"kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:114-38
-#, fuzzy
 msgid ""
 "<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Insert</kbd>"
-msgstr "Alt</kbd><span class=\"kbd--plus\">+</span><kbd>Insert"
+msgstr ""
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Insert</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:114-148
 msgid ""
@@ -955,11 +986,12 @@ msgstr ""
 "kbd> sett inn celle"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:115-38
-#, fuzzy
 msgid ""
 "<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Del</kbd>"
-msgstr "Alt</kbd><span class=\"kbd--plus\">+</span><kbd>Delete"
+msgstr ""
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Del</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:115-145
 msgid ""
@@ -972,14 +1004,14 @@ msgstr ""
 "kbd> slår sammen cellen med nabocellen"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:116-38
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Del</kbd>"
 msgstr ""
-"Shift</kbd><span class=\"kbd--plus\">+</span><kbd>Ctrl</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>Delete"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Del</"
+"kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td.p:116-235
 msgid ""
@@ -1014,7 +1046,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h2:123-9
 msgid "Word processor functions"
-msgstr "Ordprosessorfunksjoner"
+msgstr "Tekstbehandlingsfunksjoner"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:125-69
 msgid "Insert footnote"
@@ -1027,7 +1059,7 @@ msgstr "Sett inn sluttnote"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:127-71
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:182-71
 msgid "Insert comment"
-msgstr "Sett inn kommentar"
+msgstr "Sett inn merknad"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:129-71
 msgid "Insert soft hyphen"
@@ -1046,11 +1078,12 @@ msgid "Insert line break"
 msgstr "Sett inn linjeskift"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:133-82
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Enter</kbd>"
-msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>Enter"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Enter</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:134-70
 msgid "Manual page break"
@@ -1064,16 +1097,17 @@ msgstr "Spalteskift i tekster med flere spalter"
 msgid ""
 "Insert new paragraph directly before or after a section, or before a table"
 msgstr ""
-"Innsetting av et nytt avsnitt like før eller etter en seksjpn, eller før en "
-"tabell."
+"Innsetting av et nytt avsnitt like før eller etter en seksjon, eller før en "
+"tabell"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:136-139
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:137-175
-#, fuzzy
 msgid ""
 "<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Enter</kbd>"
-msgstr "Alt</kbd><span class=\"kbd--plus\">+</span><kbd>Enter"
+msgstr ""
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Enter</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:137-38
 msgid ""
@@ -1121,26 +1155,32 @@ msgid ""
 "Selects cells from the current cell up to one page in the current column or "
 "extends the existing selection one page up."
 msgstr ""
+"Velger celler fra den gjeldende cellen og én side opp i den gjeldende "
+"kolonnen, eller utvider det gjeldende utvalget én side opp."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:151-184
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Page Up</kbd>"
-msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>Side Opp"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Page Up</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:152-38
 msgid ""
 "Selects cells from the current cell down to one page in the current column "
 "or extends the existing selection one page down."
 msgstr ""
+"Velger celler fra den gjeldende cellen og én side ned i den gjeldende "
+"kolonnen, eller utvider det gjeldende utvalget én side ned."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:152-188
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Page Down</kbd>"
-msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>Side Ned"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Page Down</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:153-38
 msgid ""
@@ -1148,13 +1188,17 @@ msgid ""
 "to the left of the cell that contains the cursor is empty, the cursor moves "
 "to the next column to the left that contains data"
 msgstr ""
+"Flytter markøren til venstre kant av det gjeldende dataområdet. Om kolonnen "
+"til venstre for cellen med markøren er tom, flytter markøren seg til neste "
+"kolonne til venstre som inneholder data"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:153-265
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Left Arrow</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Enter"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Pil venstre</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:154-38
 msgid ""
@@ -1162,13 +1206,17 @@ msgid ""
 "to the right of the cell that contains the cursor is empty, the cursor moves "
 "to the next column to the right that contains data."
 msgstr ""
+"Flytter markøren til høyre kant av det gjeldende dataområdet. Om kolonnen "
+"til høyre for cellen med markøren er tom, flytter markøren seg til den neste "
+"kolonnen til høyre som inneholder data."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:154-269
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Right Arrow</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Enter"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Pil høyre</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:155-38
 msgid ""
@@ -1176,13 +1224,17 @@ msgid ""
 "the cell that contains the cursor is empty, the cursor moves up to the next "
 "row that contains data."
 msgstr ""
+"Flytter markøren til øvre kant av det gjeldende dataområdet. Hvis raden over "
+"cellen med markøren er tom, flytter markøren seg opp til neste rad som "
+"inneholder data."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:155-241
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Up Arrow</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Pil opp"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Pil opp</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:156-38
 msgid ""
@@ -1190,41 +1242,45 @@ msgid ""
 "below the cell that contains the cursor is empty, the cursor moves down to "
 "the next row that contains data."
 msgstr ""
+"Flytter markøren til nedre kant av det gjeldende dataområdet. Hvis raden "
+"under cellen med markøren er tom, flytter markøren seg ned til neste rad som "
+"inneholder data."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:156-246
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Down Arrow</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Enter"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Pil ned</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:157-38
 msgid "Go to next sheet."
-msgstr ""
+msgstr "Gå til neste ark."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:157-82
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Page Down</kbd>"
 msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>Pil ned"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Page "
+"Down</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:158-38
 msgid "Go to previous sheet."
-msgstr ""
+msgstr "Gå til forrige ark."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:158-86
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Page Up</kbd>"
 msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>Pil opp"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Page "
+"Up</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:159-38
 msgid ""
@@ -1233,38 +1289,44 @@ msgid ""
 "used to select rows and columns together, a rectangular cell range is "
 "selected."
 msgstr ""
+"Velger alle celler som inneholder data, fra den gjeldende cellen til slutten "
+"av det sammenhengende området med dataceller, i retningen til piltasten du "
+"trykket. Hvis du bruker dette til å velge rader og kolonner sammen, velges "
+"et rektangulært celleområde."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:159-292
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Arrow</kbd>"
 msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>Pil opp"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Pil</"
+"kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:160-38
 msgid "Moves one sheet to the left."
-msgstr ""
+msgstr "Flytter ett ark til venstre."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:160-93
-#, fuzzy
 msgid ""
 "<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Page Up</kbd>"
-msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>Side Opp"
+msgstr ""
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Page Up</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:161-38
 msgid "Moves one screen page to the right."
-msgstr ""
+msgstr "Flytter én skjermside til høyre."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:161-100
-#, fuzzy
 msgid ""
 "<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Page Down</kbd>"
-msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>Side Ned"
+msgstr ""
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Page Down</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:162-38
 msgid ""
@@ -1272,16 +1334,19 @@ msgid ""
 "sheets in a spreadsheet are selected, this shortcut key combination only "
 "selects the previous sheet. Makes the previous sheet the current sheet."
 msgstr ""
+"Legger det forrige arket til det gjeldende utvalget av ark. Hvis alle arkene "
+"i et regneark er valgt, velger denne hurtigtasten bare det forrige arket. "
+"Gjør det forrige arket til det gjeldende arket."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:162-280
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Page Up</kbd>"
 msgstr ""
-"Shift</kbd><span class=\"kbd--plus\">+</span><kbd>Ctrl</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>Delete"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Page "
+"Up</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:163-38
 msgid ""
@@ -1289,50 +1354,60 @@ msgid ""
 "a spreadsheet are selected, this shortcut key combination only selects the "
 "next sheet. Makes the next sheet the current sheet."
 msgstr ""
+"Legger det neste arket til det gjeldende utvalget av ark. Hvis alle arkene i "
+"et regneark er valgt, velger denne hurtigtasten bare det neste arket. Gjør "
+"det neste arket til det gjeldende arket."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:163-268
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Page Down</kbd>"
 msgstr ""
-"Shift</kbd><span class=\"kbd--plus\">+</span><kbd>Ctrl</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>Delete"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Page "
+"Down</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:164-38
 msgid "Selects the entire column of the current cell."
-msgstr ""
+msgstr "Velger hele kolonnen til den gjeldende cellen."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:164-111
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Space</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Tab"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Mellomrom</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:165-38
 msgid "Selects the entire row of the current cell."
-msgstr ""
+msgstr "Velger hele raden til den gjeldende cellen."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:165-108
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Space</kbd>"
-msgstr "Shift+Tabulator"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Mellomrom</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:166-38
 msgid ""
 "Opens the context menu of the focused sheet tab (insert, rename, delete, "
 "hide, move, and more)."
 msgstr ""
+"Åpner kontekstmenyen til arkfanen som har fokus (sett inn, gi nytt navn, "
+"slett, skjul, flytt og mer)."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:167-38
 msgid ""
 "With a whole column or row selected, opens the matching column or row header "
 "context menu (insert, delete, width or height, hide, and more)."
 msgstr ""
+"Når en hel kolonne eller rad er valgt, åpnes kontekstmenyen til den "
+"tilsvarende kolonne- eller radoverskriften (sett inn, slett, bredde eller "
+"høyde, skjul og mer)."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:168-38
 msgid ""
@@ -1340,48 +1415,57 @@ msgid ""
 "data range that contains the cursor. A range is a contiguous cell range that "
 "contains data and is bounded by empty row and columns."
 msgstr ""
+"der (*) er multiplikasjonstegnet på talltastaturet. Velger dataområdet som "
+"inneholder markøren. Et område er et sammenhengende celleområde som "
+"inneholder data og er avgrenset av tomme rader og kolonner."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:168-269
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>*</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Z"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"*</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:169-38
 msgid ""
 "where (/) is the division sign on the numeric key pad. Selects the matrix "
 "formula range that contains the cursor."
 msgstr ""
+"der (/) er divisjonstegnet på talltastaturet. Velger området til "
+"matriseformelen som inneholder markøren."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:169-178
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>/</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Z"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>/"
+"</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:170-38
 msgid "Insert cells (as in menu Insert - Cells)"
-msgstr ""
+msgstr "Sett inn celler (som i menyen Sett inn – Celler)"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:170-105
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Plus key</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>P"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Plusstasten</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:171-38
 msgid "Delete cells (as in menu Edit - Delete Cells)"
-msgstr ""
+msgstr "Slett celler (som i menyen Rediger – Slett celler)"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:171-110
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
 "span><kbd>Minus key</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Enter"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Minustasten</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:175-9
 msgid "Cell formatting"
@@ -1392,22 +1476,24 @@ msgid "Display comment"
 msgstr "Vis kommentar"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:183-80
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>F1</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>F1"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"F1</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:184-38
 msgid "Fill Down"
 msgstr "Fyll nedover"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:184-74
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>D</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>D"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"D</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:190-38
 msgid "Set Optimal Column Width"
@@ -1431,7 +1517,7 @@ msgstr "Standard valutaformat"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:195-74
 msgid "Standard percentage format (two decimal places)"
-msgstr "Standard prosentdelformater (to desimaler)"
+msgstr "Standard prosentformat (to desimaler)"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:196-75
 msgid "Standard format"
@@ -1439,18 +1525,19 @@ msgstr "Standard formatering"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:200-9
 msgid "Insert"
-msgstr ""
+msgstr "Sett inn"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:202-38
 msgid "Insert date"
-msgstr ""
+msgstr "Sett inn dato"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:202-76
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>;</kbd> or <kbd>,</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Pil opp"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+";</kbd> eller <kbd>,</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:226-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:291-38
@@ -1473,11 +1560,12 @@ msgstr "Ett nivå opp (listelementet må være markert)"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:265-127
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:292-113
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:330-127
-#, fuzzy
 msgid ""
 "<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Tab</kbd>"
-msgstr "Shift+Tabulator"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Tab</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:231-9
 #: html/cool-help.html%2Bdiv.div.div.h2:296-9
@@ -1515,24 +1603,25 @@ msgstr "Esc"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:264-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:329-38
 msgid "Select objects in the order in which they were created"
-msgstr "Merk objekter i samme rekkefølge som de ble opprettet i."
+msgstr "Merk objekter i samme rekkefølge som de ble opprettet i"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:265-38
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:330-38
 msgid "Select objects in the reverse order in which they were created"
-msgstr "Merk objekter i motsatt rekkefølge av hva de ble opprettet i."
+msgstr "Merk objekter i motsatt rekkefølge av hva de ble opprettet i"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:266-38
 msgid "Move to next text object on slide"
-msgstr "Flytt til neste tekstobject på lysbilde"
+msgstr "Flytt til neste tekstobjekt på lysbildet"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:266-98
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:331-105
-#, fuzzy
 msgid ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
 ">+</span><kbd>Enter</kbd>"
-msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Enter"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Enter</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:267-38
 msgid "Select all in slide"
@@ -1557,7 +1646,7 @@ msgstr "<span class=\"productname\">{productname}</span> Hjelp"
 #: html/cool-help.html%2Bdiv.nav.ul.li:341-13
 #: html/cool-help.html%2Bdiv.div.h3:383-5
 msgid "Collaborative editing"
-msgstr "Fellesredigering"
+msgstr "Samarbeidsredigering"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:342-13
 #: html/cool-help.html%2Bdiv.div.h3:393-5
@@ -1572,7 +1661,7 @@ msgstr "Åpning, lukking, lagring, utskrift og nedlasting av dokumenter"
 #: html/cool-help.html%2Bdiv.nav.ul.li:344-13
 #: html/cool-help.html%2Bdiv.div.h3:439-5
 msgid "Opening, closing, saving and printing documents"
-msgstr ""
+msgstr "Åpne, lukke, lagre og skrive ut dokumenter"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:345-13
 #: html/cool-help.html%2Bdiv.div.h3:478-5
@@ -1677,6 +1766,11 @@ msgid ""
 ">You can work alone on a document, or collaboratively as part of a "
 "team.</span>"
 msgstr ""
+"<span class=\"productname\">{productname}</span> lar deg lage og redigere "
+"vanlige kontordokumenter, det vil si tekstdokumenter, regneark og "
+"presentasjoner, <span class=\"webBasedCOOLOnly\">rett i nettleseren,</span> "
+"på en enkel og grei måte. <span class=\"webBasedCOOLOnly\">Du kan arbeide "
+"alene med et dokument eller sammen med andre i et team.</span>"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:386-7
 msgid ""
@@ -1706,17 +1800,16 @@ msgstr ""
 "forlater."
 
 #: html/cool-help.html%2Bdiv.div.div.p:395-7
-#, fuzzy
 msgid ""
 "<span class=\"webBasedCOOLOnly\"> <span class=\"productname\">{productname}</"
 "span> uses modern browser resources to adapt the user interface to the size "
 "of the viewing area, including small screens found in mobile devices.</span> "
 "The interface is composed of:"
 msgstr ""
-"<span class=\"productname\">{productname}</span> bruker moderne "
-"nettleserressurser for å tilpasse brukergrensesnittet til størrelsen på "
-"visningsområdet, inkludert små skjermer som finnes på mobile enheter. "
-"Grensesnittet er sammensatt av:"
+"<span class=\"webBasedCOOLOnly\"> <span class=\"productname\">{productname}</"
+"span> bruker moderne nettleserfunksjoner til å tilpasse grensesnittet til "
+"størrelsen på visningsområdet, også små skjermer på mobile enheter.</span> "
+"Grensesnittet består av:"
 
 #: html/cool-help.html%2Bdiv.div.div.p:402-5
 msgid ""
@@ -1735,13 +1828,19 @@ msgid ""
 "selected tab again to collapse the tab bar and gain space for the document. "
 "Click any tab to expand it again."
 msgstr ""
+"<span class=\"def\">Fanene:</span> Kommandoene er gruppert på faner øverst: "
+"<span class=\"ui\">Fil</span>, <span class=\"ui\">Hjem</span>, <span "
+"class=\"ui\">Sett inn</span>, <span class=\"ui\">Gjennomgang</span>, <span "
+"class=\"ui\">Vis</span> og andre, avhengig av dokumenttypen. Klikk på den "
+"valgte fanen igjen for å folde sammen fanelinjen og få mer plass til "
+"dokumentet. Klikk på en fane for å utvide den igjen."
 
 #: html/cool-help.html%2Bdiv.div.div.p:408-5
 msgid ""
 "<span class=\"def\">Context menus:</span> On clicking with the right mouse "
 "button, a menu appears with commands associated with the underlying object."
 msgstr ""
-"<span class=\"def\">Kontekstmenyer: </span> Når du klikker med høyre "
+"<span class=\"def\">Kontekstmenyer:</span> Når du klikker med høyre "
 "museknapp, vises en meny med kommandoer tilknyttet det underliggende "
 "objektet."
 
@@ -1758,6 +1857,8 @@ msgid ""
 "Status bar showing page number, word count, insert mode, selection mode, "
 "language, edit mode, navigation, zoom, and search"
 msgstr ""
+"Statuslinje med sidenummer, ordtelling, innsettingsmodus, utvalgsmodus, "
+"språk, redigeringsmodus, navigering, zoom og søk"
 
 #: html/cool-help.html%2Bdiv.div.div.p:415-5
 msgid ""
@@ -1772,7 +1873,6 @@ msgstr ""
 "bokstaver. Det er tre knapper rett ved siden av søkefeltet:"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:417-7
-#, fuzzy
 msgid "Search backwards"
 msgstr "Søk bakover"
 
@@ -1785,17 +1885,16 @@ msgid "Cancel the search (appears only when a text has been searched)"
 msgstr "Avbryt søket (vises bare når en tekst er søkt)"
 
 #: html/cool-help.html%2Bdiv.div.div.p:423-5
-#, fuzzy
 msgid ""
 "<span class=\"def\">The zoom bar:</span> The zoom bar includes buttons to "
 "reset zoom to 100%, zoom out and zoom in. The zoom applies to the document "
 "area, the user interface is not affected. The current level of zoom is shown "
 "in this area."
 msgstr ""
-"<span class=\"def\">Zoom linjen:</span> Til høyre for statuslinjen er det et "
-"sett med knapper som lar deg zoome til 100%, zoome ut og zoome inn. Zoomen "
-"gjelder dokumentområdet, brukergrensesnittet påvirkes ikke. Det nåværende "
-"zoomnivået vises i dette området."
+"<span class=\"def\">Zoomfeltet:</span> Zoomfeltet har knapper for å "
+"tilbakestille zoomen til 100 %, zoome ut og zoome inn. Zoomen gjelder "
+"dokumentområdet, brukergrensesnittet påvirkes ikke. Gjeldende zoomnivå vises "
+"i dette området."
 
 #: html/cool-help.html%2Bdiv.div.div.p:424-5
 msgid ""
@@ -1816,7 +1915,7 @@ msgid ""
 "integrated with <span class=\"productname\">{productname}</span>."
 msgstr ""
 "Dokumentene dine blir lagret og administrert i skylageret som er integrert "
-"med<span class=\"productname\">{productname}</span>."
+"med <span class=\"productname\">{productname}</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.p:431-30
 msgid ""
@@ -1835,8 +1934,8 @@ msgid ""
 "To open document, click on the file to open the <span class=\"productname\""
 ">{productname}</span> module associated to the document format."
 msgstr ""
-"For å åpne dokumentet, klikk på filen for å åpne<span class=\"productname\""
-">{productname}</span> modulen tilknyttet dokumentformatet."
+"For å åpne dokumentet, klikk på filen for å åpne <span class=\"productname\">"
+"{productname}</span> modulen tilknyttet dokumentformatet."
 
 #: html/cool-help.html%2Bdiv.div.div.p:433-30
 msgid ""
@@ -1873,6 +1972,9 @@ msgid ""
 ">{productname}</span> from your platform's file manager or use <span class="
 "\"ui\">Open</span> on the <span class=\"ui\">File</span> tab."
 msgstr ""
+"For å åpne et dokument, åpne det i <span class=\"productname\">{productname}"
+"</span> fra plattformens filbehandler eller bruk <span class=\"ui\">Åpne</"
+"span> på <span class=\"ui\">Fil</span>-fanen."
 
 #: html/cool-help.html%2Bdiv.div.div.p:447-7
 msgid ""
@@ -1881,17 +1983,24 @@ msgid ""
 " in the bottom right corner. New documents and documents created from a "
 "template open ready to edit."
 msgstr ""
+"Et eksisterende dokument åpner i visningsmodus, slik at du kan lese det uten "
+"å endre det ved et uhell. For å begynne å redigere, klikk på "
+"redigeringsknappen (blyanten) nede til høyre. Nye dokumenter og dokumenter "
+"laget fra en mal åpner ferdig til redigering."
 
 #: html/cool-help.html%2Bdiv.div.div.p:452-7
 msgid ""
 "If the document is locked by another application, it stays in view mode."
 msgstr ""
+"Hvis dokumentet er låst av en annen app, blir det stående i visningsmodus."
 
 #: html/cool-help.html%2Bdiv.div.div.p:456-7
 msgid ""
 "To save the document in a different format use <span class=\"ui\">Save As</"
 "span> on the <span class=\"ui\">File</span> tab."
 msgstr ""
+"For å lagre dokumentet i et annet format bruker du <span class=\"ui\">Lagre "
+"som</span> på <span class=\"ui\">Fil</span>-fanen."
 
 #: html/cool-help.html%2Bdiv.div.div.p:461-7
 msgid ""
@@ -1899,12 +2008,17 @@ msgid ""
 "to be saved right away you can use <span class=\"ui\">Save</span> on the "
 "<span class=\"ui\">File</span> tab."
 msgstr ""
+"Dokumenter lagres automatisk med jevne mellomrom, men hvis du vil lagre et "
+"dokument med en gang kan du bruke <span class=\"ui\">Lagre</span> på <span "
+"class=\"ui\">Fil</span>-fanen."
 
 #: html/cool-help.html%2Bdiv.div.div.p:467-7
 msgid ""
 "To print the document, use <span class=\"ui\">Print</span> on the <span "
 "class=\"ui\">File</span> tab."
 msgstr ""
+"For å skrive ut dokumentet, bruker du <span class=\"ui\">Skriv ut</span> på "
+"<span class=\"ui\">Fil</span>-fanen."
 
 #: html/cool-help.html%2Bdiv.div.p:479-5
 msgid ""
@@ -1928,6 +2042,14 @@ msgid ""
 "Android or iOS selecting text by double tapping, and using a long-tap to "
 "access copy/cut/paste via the context menu is required."
 msgstr ""
+"Rikt innhold kan kopieres/klippes ut og limes inn, inkludert bilder og "
+"blandet innhold, ved hjelp av hurtigtaster (<kbd>Ctrl</kbd><span "
+"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>X</kbd>, <kbd>Ctrl</"
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>C</kbd>, "
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"V</kbd>). På Android eller iOS må du velge tekst ved å dobbelttrykke, og "
+"bruke et langt trykk for å få tilgang til kopiering, utklipping og innliming "
+"via kontekstmenyen."
 
 #: html/cool-help.html%2Bdiv.div.div.p:483-5
 msgid ""
@@ -1936,6 +2058,10 @@ msgid ""
 "comes from outside the document, but context menus can be used for cut and "
 "copy."
 msgstr ""
+"Av sikkerhetshensyn er det nødvendig å bruke <kbd>Ctrl</kbd><span "
+"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd> for å lime inn "
+"innhold som kommer fra utsiden av dokumentet, men kontekstmenyene kan brukes "
+"til å klippe ut og kopiere."
 
 #: html/cool-help.html%2Bdiv.div.div.p:484-5
 msgid ""
@@ -1946,6 +2072,12 @@ msgid ""
 ">{productname}</span>. This step also converts complex object types into "
 "static images."
 msgstr ""
+"Når du kopierer et utvalg som inneholder bilder eller andre objekter, dukker "
+"det opp et element kalt <span class=\"ui\">Last ned valgte</span> nede til "
+"høyre. Trykk <span class=\"ui\">Last ned</span>, og kopier på nytt, for å "
+"gjøre innholdet tilgjengelig for apper utenfor <span class=\"productname\">"
+"{productname}</span>. Dette trinnet gjør også om komplekse objekttyper til "
+"statiske bilder."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:487-5
 msgid "Document repair"
@@ -1958,10 +2090,10 @@ msgid ""
 "Repair function allows users to undo other editor’s changes to the document "
 "to a previous state."
 msgstr ""
-"Når flere personer samtidig redigerer det samme dokumentet, er det mulig for "
-"at deres endringer kommer i konflikt, og dette kan forårsake litt "
-"forvirring. Dokumentreparasjonsfunksjonen gjør det mulig for brukere å angre "
-"andre redaktørs endringer i dokumentet til en tidligere tilstand."
+"Når flere personer samtidig redigerer det samme dokumentet, er det mulig at "
+"endringene deres kommer i konflikt, og dette kan forårsake litt forvirring. "
+"Dokumentreparasjonsfunksjonen gjør det mulig for brukere å angre andre "
+"redaktørers endringer i dokumentet til en tidligere tilstand."
 
 #: html/cool-help.html%2Bdiv.div.div.p:489-5
 msgid ""
@@ -1969,21 +2101,25 @@ msgid ""
 "lists the recent changes to the document and lets you take the document back "
 "to an earlier state."
 msgstr ""
+"<span class=\"ui\">Reparer</span> på <span class=\"ui\">Fil</span>-fanen "
+"viser de siste endringene i dokumentet og lar deg føre dokumentet tilbake "
+"til en tidligere tilstand."
 
 #: html/cool-help.html%2Bdiv.div.div.p:490-5
-#, fuzzy
 msgid ""
 "To jump back to the selected state, select it with the mouse and hit <span "
 "class=\"ui\">OK</span>."
 msgstr ""
-"For å gå tilbake til valgt tilstand, velg tilstanden med musen og trykk "
-"<span class=\"ui\">Gå til tilstand </span>."
+"For å hoppe tilbake til den valgte tilstanden, velg den med musa og trykk "
+"<span class=\"ui\">OK</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:491-55
 msgid ""
 "Repair Document dialog listing past document states with columns for action "
 "type, author, and timestamp"
 msgstr ""
+"Dialogvinduet Gjenopprett dokument med en liste over tidligere tilstander og "
+"kolonner for handlingstype, forfatter og tidspunkt"
 
 #: html/cool-help.html%2Bdiv.div.div.p:492-5
 msgid ""
@@ -1999,10 +2135,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:495-5
 msgid "Idle document"
-msgstr ""
+msgstr "Inaktivt dokument"
 
 #: html/cool-help.html%2Bdiv.div.div.p:496-5
-#, fuzzy
 msgid ""
 "When <span class=\"productname\">{productname}</span> detects that there has "
 "not been any activity in the browser for a while, it puts the document in an "
@@ -2010,16 +2145,17 @@ msgid ""
 "the message “Idle document – please click to reload and resume editing”."
 msgstr ""
 "Når <span class=\"productname\">{productname}</span> oppdager at det ikke "
-"har vært noen aktivitet i nettleseren på en stund, det setter dokumentet i "
-"en \"inaktiv\" tilstand. Dokumentet vises med et gjennomsiktig grått "
-"overlegg, med meldingen \"Inaktivt dokument - klikk for å fortsette "
-"redigeringen\"."
+"har vært aktivitet i nettleseren på en stund, settes dokumentet i tilstanden "
+"«inaktivt». Dokumentet vises med et gjennomsiktig grått lag og meldingen «"
+"Inaktivt dokument – klikk for å laste på nytt og fortsette redigeringen»."
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:497-57
 msgid ""
 "Idle document overlay with the message: Idle document - please click to "
 "reload and resume editing"
 msgstr ""
+"Gjennomsiktig lag over inaktivt dokument med meldingen: Inaktivt dokument – "
+"klikk for å laste på nytt og fortsette redigeringen"
 
 #: html/cool-help.html%2Bdiv.div.div.p:498-5
 msgid ""
@@ -2068,13 +2204,12 @@ msgstr ""
 "dokumentet du jobber i."
 
 #: html/cool-help.html%2Bdiv.div.div.p:505-5
-#, fuzzy
 msgid ""
 "When you paste text from outside of the document (another browser window or "
 "a desktop application), it will be pasted as rich text."
 msgstr ""
 "Når du limer inn tekst fra utsiden av dokumentet (et annet nettleservindu "
-"eller en stasjonær applikasjon, limes den inn som rik tekst)."
+"eller et skrivebordsprogram), limes den inn som rik tekst."
 
 #: html/cool-help.html%2Bdiv.div.div.p:506-5
 msgid ""
@@ -2105,19 +2240,20 @@ msgstr ""
 "presentasjon."
 
 #: html/cool-help.html%2Bdiv.div.div.ol.li:516-7
-#, fuzzy
 msgid ""
 "Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Chart</span>. "
 "Customize your chart on the sidebar:"
 msgstr ""
 "Velg <span class=\"ui\">Sett inn</span> → <span class=\"ui\">Diagram</span>. "
-"Tilpass digrammet med hjelp av sidestolpen:"
+"Tilpass diagrammet ditt i sidepanelet:"
 
 #: html/cool-help.html%2Bdiv.div.div.ol.div.img[alt]:519-53
 msgid ""
 "Chart Wizard dialog with chart type list on the left, chart style previews, "
 "3D and shape options"
 msgstr ""
+"Dialogvinduet Diagramveiviser med liste over diagramtyper til venstre, "
+"forhåndsvisning av diagramstiler og valg for 3D og form"
 
 #: html/cool-help.html%2Bdiv.div.div.ol.li:520-7
 msgid "If no table or range was selected, a prototype chart is displayed."
@@ -2128,6 +2264,8 @@ msgid ""
 "Column chart with grouped bars showing data for four rows across three "
 "columns"
 msgstr ""
+"Søylediagram med grupperte søyler som viser data for fire rader i tre "
+"kolonner"
 
 #: html/cool-help.html%2Bdiv.div.div.p:524-28
 msgid ""
@@ -2138,15 +2276,16 @@ msgid ""
 msgstr ""
 "<span class=\"def\">Diagramredigering:</span> Dobbeltklikk på diagrammet for "
 "å velge. Bruk kontekstmenyer for å legge til diagramelementer som tittel, "
-"akse og annet. Velg<span class=\"ui\">Dataområde</span> og <span class=\"ui\""
-">Digram Type</span> for å redigere diagramdata og velge diagramtype."
+"akse og annet. Velg <span class=\"ui\">Dataområde</span> og <span "
+"class=\"ui\">Diagramtype</span> for å redigere diagramdata og velge "
+"diagramtype."
 
 #: html/cool-help.html%2Bdiv.div.div.p:525-28
 msgid ""
 "<span class=\"def\">Chart formatting:</span> The same context menu brings "
 "you to chart data table and chart type selection."
 msgstr ""
-"<span class=\"def\">Diagramformatering: </span> Den samme hurtigmenyen fører "
+"<span class=\"def\">Diagramformatering:</span> Den samme hurtigmenyen fører "
 "deg til diagramdatatabell og valg av diagramtype."
 
 #: html/cool-help.html%2Bdiv.div.div.p:526-28
@@ -2154,12 +2293,12 @@ msgid ""
 "<span class=\"def\">Data series formatting:</span> Open the context menu and "
 "choose <span class=\"ui\">Format data series</span>."
 msgstr ""
-"<span class=\"def\">Dataserieformatering</span>Åpne kontekstmenyen og "
-"velg<span class=\"ui\">Formater dataserier</span>"
+"<span class=\"def\">Dataserieformatering:</span> Åpne kontekstmenyen og velg "
+"<span class=\"ui\">Formater dataserier</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:528-5
 msgid "Handling images"
-msgstr "Håndering av bilder"
+msgstr "Håndtering av bilder"
 
 #: html/cool-help.html%2Bdiv.div.div.p:529-5
 msgid ""
@@ -2177,9 +2316,9 @@ msgid ""
 ">Insert image</span> icon allows you to choose an image from the cloud "
 "storage's folders and shares."
 msgstr ""
-"<span class=\"def\">Sett inn bilde:</span> Klikk på <span class=\"ui\">Sett "
-"inn bilde</span> ikonet gir deg mulighet til å velge et bilde fra "
-"skylagerets mapper og delingsområder."
+"<span class=\"def\">Sett inn bilde:</span> Hvis du klikker på ikonet <span "
+"class=\"ui\">Sett inn bilde</span>, kan du velge et bilde fra mappene og "
+"delingene i skylageret."
 
 #: html/cool-help.html%2Bdiv.div.div.p:531-5
 msgid ""
@@ -2187,6 +2326,9 @@ msgid ""
 ">Insert</span> → <span class=\"ui\">Image</span> to pick an image from your "
 "computer and insert it into the document."
 msgstr ""
+"<span class=\"def\">Sett inn lokalt bilde:</span> Velg <span class=\"ui\">"
+"Sett inn</span> → <span class=\"ui\">Bilde</span> for å velge et bilde fra "
+"datamaskinen og sette det inn i dokumentet."
 
 #: html/cool-help.html%2Bdiv.div.div.p:532-5
 msgid ""
@@ -2200,7 +2342,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:535-5
 msgid "Comments in documents"
-msgstr "Kommentarer i dokumentet."
+msgstr "Kommentarer i dokumentet"
 
 #: html/cool-help.html%2Bdiv.div.div.p:536-5
 msgid ""
@@ -2217,12 +2359,16 @@ msgid ""
 "Comment box showing author name, date, and the comment text, displayed "
 "beside the document"
 msgstr ""
+"Kommentarboks med navnet på forfatteren, dato og kommentarteksten, vist ved "
+"siden av dokumentet"
 
 #: html/cool-help.html%2Bdiv.div.div.p:538-5
 msgid ""
 "Click on the submenu (<span class=\"cool-annotation-menu icon-size\"></span>)"
 " icon to reply, move and delete comments."
 msgstr ""
+"Klikk på undermenyikonet (<span class=\"cool-annotation-menu icon-size\"></"
+"span>) for å svare på, flytte eller slette kommentarer."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:541-5
 msgid "Spellchecking"
@@ -2242,16 +2388,16 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:543-54
 msgid "Text with a red wavy underline beneath a misspelled word"
-msgstr ""
+msgstr "Tekst med en rød bølgelinje under et feilstavet ord"
 
 #: html/cool-help.html%2Bdiv.div.div.p:544-5
-#, fuzzy
 msgid ""
 "To systematically spell-check the whole document use <span class=\"ui\""
 ">Spelling</span> on the <span class=\"ui\">Review</span> tab."
 msgstr ""
-"For å systematisk stavekontrollere hele dokumentet bruker du<span class=\"ui"
-"\">Verktøy</span> menyens <span class=\"ui\">Stavingalternativ</span>."
+"For å stavekontrollere hele dokumentet systematisk bruker du <span "
+"class=\"ui\">Stavekontroll</span> på <span class=\"ui\">Gjennomgang</span>-"
+"fanen."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:551-30
 msgid ""
@@ -2287,19 +2433,20 @@ msgid ""
 "Formula bar showing cell reference B1, function wizard icon, and the formula "
 "=SIN(PI()*A1/10)"
 msgstr ""
+"Formellinjen med cellereferansen B1, ikonet for funksjonsveiviseren og "
+"formelen =SIN(PI()*A1/10)"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:559-5
-#, fuzzy
 msgid ""
 "The formula language should be extremely familiar to any spreadsheet user, "
 "and is specified in great detail in the <a href=\"https://www.oasis-open.org/"
 "committees/download.php/16826/openformula-spec-20060221.html\" target="
 "\"_blank\" rel=\"noopener noreferrer\">OASIS OpenFormula specification</a>."
 msgstr ""
-"Formelspråket skal være ekstremt kjent for alle regnearkbrukere, og er "
-"spesifisert i detalj i <a href=\"https://www.oasis-open.org/committees/"
-"download.php/16826/openformula-spec-20060221.html\">OASIS OpenFormula "
-"spesifikasjonen</a>."
+"Formelspråket bør være godt kjent for alle som har brukt regneark, og det er "
+"beskrevet i detalj i <a href=\"https://www.oasis-open.org/committees/"
+"download.php/16826/openformula-spec-20060221.html\" target=\"_blank\" "
+"rel=\"noopener noreferrer\">OASIS OpenFormula-spesifikasjonen</a>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:565-5
 msgid ""
@@ -2314,10 +2461,10 @@ msgstr ""
 "<span class=\"def\">Direkte formatering:</span> Du kan formatere "
 "regnearkceller, kolonner, rader og ark ved å formatere direkte fra menyene, "
 "verktøylinjen eller kontekstmenyene. Direkte formatering gjelder bare det "
-"valgte objektet som er valgt. For å formatere en celle bruker du menyen "
-"eller trykker <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>1</kbd>. Tdialogboksen lar kompleks og tilpasset "
-"nummerformatering, i tillegg til skrift, kompleks kant, bakgrunn, "
+"objektet som er valgt. For å formatere en celle bruker du menyen eller "
+"trykker <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>1</kbd>. Dialogboksen gir deg avansert og tilpasset "
+"tallformatering, i tillegg til skrift, avanserte kantlinjer, bakgrunn, "
 "cellebeskyttelse og andre alternativer."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:566-51
@@ -2325,6 +2472,8 @@ msgid ""
 "Format Cells dialog on the Numbers tab with category list, format options, "
 "decimal places, and format code"
 msgstr ""
+"Dialogvinduet Formater celler på fanen Tall med kategoriliste, formatvalg, "
+"desimaler og formatkode"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:571-30
 msgid ""
@@ -2334,8 +2483,8 @@ msgid ""
 "to extend the selection."
 msgstr ""
 "<span class=\"def\">Sorter data:</span> Du kan sortere en liste med tall "
-"eller tekst stigende eller synkende.<span class=\"productname\""
-">{productname}</span>oppdager automatisk celler som er overskrifter, og "
+"eller tekst stigende eller synkende. <span class=\"productname\">"
+"{productname}</span> oppdager automatisk celler som er overskrifter, og "
 "tilstøtende kolonner, for å utvide utvalget."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:572-30
@@ -2347,7 +2496,7 @@ msgid ""
 msgstr ""
 "<span class=\"def\">Filtrering av data:</span> Filtre og avanserte filtre "
 "lar deg jobbe med visse filtrerte rader (poster) i et dataområde. I "
-"regnearkene i <span class=\"productname\">{productname}</span>er det "
+"regnearkene i <span class=\"productname\">{productname}</span> er det "
 "forskjellige muligheter for å bruke filtre."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:574-7
@@ -2363,6 +2512,9 @@ msgid ""
 "AutoFilter dropdown menu on a spreadsheet column with sort, filter by color, "
 "filter by condition, and checkboxes for individual values"
 msgstr ""
+"Autofilter-nedtrekksmeny på en kolonne i et regneark med sortering, "
+"filtrering etter farge, filtrering etter vilkår og avkryssingsbokser for "
+"enkeltverdier"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:578-7
 msgid ""
@@ -2371,7 +2523,7 @@ msgid ""
 "standard filter to connect the conditions with either a logical AND or a "
 "logical OR operator."
 msgstr ""
-"I <span class=\"ui\">Standard Filter</span>dialog,en kan du også definere "
+"I <span class=\"ui\">Standard Filter</span> dialog,en kan du også definere "
 "områder som inneholder verdiene i bestemte datafelt. Du kan bruke "
 "standardfilteret til å koble forholdene til enten en logisk OG eller en "
 "logisk ELLER-operatør."
@@ -2382,9 +2534,8 @@ msgid ""
 "filter conditions. With advanced filters you enter the conditions directly "
 "into the sheet."
 msgstr ""
-"<span class=\"ui\">Avanserte Filter</span>tillater opptil totalt åtte "
-"filterfbetingelser. Med avanserte filtre legger du inn betingelsene direkte "
-"i arket."
+"<span class=\"ui\">Avansert filter</span> tillater opptil totalt åtte "
+"filtervilkår. Med avanserte filtre legger du inn vilkårene direkte i arket."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:583-5
 msgid ""
@@ -2392,9 +2543,9 @@ msgid ""
 "and group rows and columns together so that you can collapse and expand the "
 "groups with a single click making it easy to represent hierarchical data."
 msgstr ""
-"<span class=\"def\">Oversikt:</span>Du kan opprette en oversikt over dataene "
-"og gruppere radene og kolonnene sammen, slik at du kan kollapse og utvide "
-"gruppene med et enkelt klikk, noe som gjør det enkelt å representere "
+"<span class=\"def\">Oversikt:</span> Du kan opprette en oversikt over "
+"dataene og gruppere radene og kolonnene sammen, slik at du kan kollapse og "
+"utvide gruppene med et enkelt klikk, noe som gjør det enkelt å representere "
 "hierarkiske data."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:584-49
@@ -2402,6 +2553,8 @@ msgid ""
 "Spreadsheet with row and column grouping controls showing outline level "
 "buttons and collapse/expand toggles"
 msgstr ""
+"Regneark med kontroller for gruppering av rader og kolonner, med knapper for "
+"disposisjonsnivå og brytere for å folde sammen/utvide"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:587-5
 msgid ""
@@ -2409,24 +2562,25 @@ msgid ""
 "entries to be valid. Invalid entries to a cell will be rejected. To enable "
 "data validation:"
 msgstr ""
-"<span class=\"def\">Data validering:</span>For hver celle kan du definere "
+"<span class=\"def\">Data validering:</span> For hver celle kan du definere "
 "oppføringer som skal være gyldige. Ugyldige oppføringer til en celle blir "
 "avvist. Slik aktiverer du validering av data:"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:589-7
-#, fuzzy
 msgid ""
 "Choose <span class=\"ui\">Validity</span> on the <span class=\"ui\">Data</"
 "span> tab. The <span class=\"ui\">Validity</span> dialog opens."
 msgstr ""
-"Velg <span class=\"ui\">Gyldighet</span> fra <span class=\"ui\">Data</span>-"
-"menyen. <span class=\"ui\">Gyldighet</span>-dialogen åpnes."
+"Velg <span class=\"ui\">Validitet</span> på <span class=\"ui\">Data</span>-"
+"fanen. <span class=\"ui\">Validitet</span>-vinduet åpnes."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:592-57
 msgid ""
 "Validity dialog on the Criteria tab with Allow set to List, showing options "
 "for empty cells, selection list, and entry values"
 msgstr ""
+"Dialogvinduet Validitet på fanen Vilkår med Tillat satt til Liste, med valg "
+"for tomme celler, utvalgsliste og verdier"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:593-7
 msgid ""
@@ -2434,9 +2588,9 @@ msgid ""
 "box list. Depending on the criterion, more options show. Fill the required "
 "data."
 msgstr ""
-"Velg gyldighetskriteriet i <span class=\"ui\"> Tillat </span> dropp-boks-"
-"listen. Avhengig av kriteriet vises flere alternativer. Fyll inn de "
-"nødvendige dataene."
+"Velg gyldighetskriteriet i <span class=\"ui\">Tillat</span>-nedtrekkslisten. "
+"Avhengig av kriteriet vises flere alternativer. Fyll inn de nødvendige "
+"dataene."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:594-7
 msgid ""
@@ -2444,23 +2598,25 @@ msgid ""
 "Alert</span> tabs to enhance the user interactions. Click <span class=\"ui\""
 ">OK</span> to close the dialog."
 msgstr ""
-"Bruk <span class=\"ui\">Innputt Hjelp</span> og <span class=\"ui\""
-">Feilmelding</span> fanen for å utvide brukerinteraksjonen. Klikk <span "
-"class=\"ui\">OK</span>for å stenge dialogen."
+"Bruk fanene <span class=\"ui\">Hjelp for inndata</span> og <span "
+"class=\"ui\">Feilvarsel</span> for å gjøre det enklere for brukerne. Klikk "
+"<span class=\"ui\">OK</span> for å lukke dialogen."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:597-56
 msgid ""
 "Cell dropdown list showing validated entries such as Apple, Pear, Banana, "
 "Kiwi, and Lemon"
 msgstr ""
+"Nedtrekksliste i en celle med validerte oppføringer som Apple, Pear, Banana, "
+"Kiwi og Lemon"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:598-7
 msgid ""
 "To remove the validity of the cell, open the dialog and set the <span class="
 "\"ui\">Allow</span> list to “All values”."
 msgstr ""
-"For å fjerne gyldigheten til cellen, åpner du dialogen og setter <span class="
-"\"ui\">Tillat </span> listen til \"Alle verdier\"."
+"For å fjerne gyldigheten til cellen, åpner du dialogen og setter <span "
+"class=\"ui\">Tillat</span> listen til \"Alle verdier\"."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:602-5
 msgid ""
@@ -2470,8 +2626,8 @@ msgid ""
 "dot shows on the top right corner of the cell when it has a comment. Hover "
 "the mouse on the cell to display comments."
 msgstr ""
-"<span class=\"def\">Kommentarer:</span>I et regneark kan du sette inn en "
-"kommentar pr celle. Når du velger <span class=\"ui\"> Sett inn kommentar </"
+"<span class=\"def\">Kommentarer:</span> I et regneark kan du sette inn en "
+"kommentar pr celle. Når du velger <span class=\"ui\">Sett inn kommentar</"
 "span>, vises en popup som lar deg skrive innholdet for kommentaren. En rød "
 "prikk vises i øverste høyre hjørne av cellen når den har en kommentar. Hold "
 "musen på cellen for å vise kommentarer."
@@ -2481,9 +2637,10 @@ msgid ""
 "Spreadsheet cell with a comment popup showing the author, date, comment "
 "text, and Save/Cancel buttons"
 msgstr ""
+"Celle i et regneark med et kommentarvindu som viser forfatter, dato, "
+"kommentartekst og knappene Lagre/Avbryt"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:606-5
-#, fuzzy
 msgid ""
 "<span class=\"def\">Conditional formatting:</span> <span class=\"productname"
 "\">{productname}</span> adds symbols to each cell of a range based on cells "
@@ -2491,10 +2648,10 @@ msgid ""
 "span> on the <span class=\"ui\">Home</span> tab. Select the symbol set to "
 "apply on the range."
 msgstr ""
-"<span class=\"def\">Betinget formatering:</span><span class=\"productname\""
-">{productname}</span>legger til symboler til hver celle i et område basert "
-"på celleforhold. Velg celleområdet og klikk på <span class=\"ui\">Betinget "
-"formatering </span> ikonet på verktøylinjen. Velg symbolsettet som skal "
+"<span class=\"def\">Vilkårsformatering:</span> <span class=\"productname\">"
+"{productname}</span> legger til symboler i hver celle i et område ut fra "
+"vilkår i cellene. Velg celleområdet og klikk <span class=\"ui\">Vilkår</"
+"span> på <span class=\"ui\">Hjem</span>-fanen. Velg symbolsettet som skal "
 "brukes på området."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:607-62
@@ -2502,6 +2659,8 @@ msgid ""
 "Conditional formatting icon set picker showing arrows, circles, traffic "
 "lights, stars, smiley faces, and bar chart symbol sets"
 msgstr ""
+"Ikonvelger for vilkårsformatering med symbolsett av piler, sirkler, "
+"trafikklys, stjerner, smilefjes og stolpediagram"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:615-30
 msgid ""
@@ -2548,12 +2707,12 @@ msgid ""
 "paragraphs individually."
 msgstr ""
 "<span class=\"productname\">{productname}</span> støtter moderne teknikker "
-"for avsnittformatering gjennom stiler. En stil er et sett med "
+"for avsnittsformatering gjennom stiler. En stil er et sett med "
 "tekstegenskaper (skrift, farge, bakgrunn og mange flere) angitt med et navn, "
 "stilnavnet. Bruk stil for å bruke det samme settet med egenskaper på mange "
 "avsnitt i dokumentet og gi et enhetlig, profesjonelt utseende. Hvis du "
-"endrer en av stilformatingsegenskapene, endrer alle avsnitt med samme stil "
-"også formateringen, noe som forenkler formatering av flere avsnitt."
+"endrer en av stilens formateringsegenskaper, endrer alle avsnitt med samme "
+"stil også formateringen, noe som forenkler formatering av flere avsnitt."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:625-5
 msgid ""
@@ -2573,36 +2732,36 @@ msgid ""
 "objects by formatting directly from the menus, toolbar or context menus. "
 "Direct formatting applies only to the current object selected."
 msgstr ""
-"<span class=\"def\">Direkte formatering:</span>Du kan formatere "
+"<span class=\"def\">Direkte formatering:</span> Du kan formatere "
 "tekstdokumentobjekter ved å formatere direkte fra menyene, verktøylinjen "
 "eller kontekstmenyene. Direkte formatering gjelder bare det valgte objektet "
 "som er valgt."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:629-5
-#, fuzzy
 msgid ""
 "<span class=\"def\">Style formatting:</span> <span class=\"productname\""
 ">{productname}</span> supports paragraph styles. You can apply an existing "
 "paragraph style to a paragraph. Select the style in the style list on the "
 "<span class=\"ui\">Home</span> tab."
 msgstr ""
-"<span class=\"def\">Stil formatering:</span> <span class=\"productname\""
-">{productname}</span> støtter avsnittstiler. Du kan bruke en eksisterende "
-"avsnittsstil på et avsnitt. Velg meny<span class=\"ui\">Edit</span> → <span "
-"class=\"ui\">Rediger stiler</span> for å endre stil."
+"<span class=\"def\">Stilformatering:</span> <span class=\"productname\">"
+"{productname}</span> støtter avsnittsstiler. Du kan bruke en avsnittsstil "
+"som allerede finnes på et avsnitt. Velg stilen i stillisten på <span "
+"class=\"ui\">Hjem</span>-fanen."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:630-56
 msgid ""
 "Paragraph dialog on the Indents and Spacing tab with settings for indent, "
 "spacing, and line spacing, and a preview on the right"
 msgstr ""
+"Dialogvinduet Avsnitt på fanen Innrykk og avstand med innstillinger for "
+"innrykk, avstand og linjeavstand, og forhåndsvisning til høyre"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:636-5
 msgid "Handling Tables"
 msgstr "Håndtere Tabeller"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:637-5
-#, fuzzy
 msgid ""
 "Insert tables with <span class=\"ui\">Insert</span> → <span class=\"ui\""
 ">Table</span>. Select the initial number of rows and columns. Add rows and "
@@ -2610,28 +2769,29 @@ msgid ""
 ">Table</span> tab. The default paragraph style inside cells is “Table "
 "contents”."
 msgstr ""
-"Sett inn tabeller med riktig ikon fra verktøylinjen. Velg først antall rader "
-"og kolonner. Legg til rader og kolonner med cellekontekstmenyen. Slå sammen "
-"celler med <span class=\"ui\"> Tabell </span> -menyen. Standard avsnittstil "
-"i celler er \"Tabellinnhold\"."
+"Sett inn tabeller med <span class=\"ui\">Sett inn</span> → <span "
+"class=\"ui\">Tabell</span>. Velg det første antallet rader og kolonner. Legg "
+"til rader og kolonner med cellekontekstmenyen. Slå sammen celler fra <span "
+"class=\"ui\">Tabell</span>-fanen. Standard avsnittsstil inne i cellene er «"
+"Tabellinnhold»."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:638-52
 msgid ""
 "Insert Table picker showing a grid to select the number of rows and columns, "
 "currently showing 5 by 3"
 msgstr ""
+"Velger for Sett inn tabell med et rutenett for å velge antall rader og "
+"kolonner, nå 5 ganger 3"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:641-5
-#, fuzzy
 msgid ""
 "<span class=\"def\">Formatting cells:</span> Click in the cell or range of "
 "cells, open the context menu and choose <span class=\"ui\">Table Properties</"
 "span>. Fine tune the table with the properties dialog."
 msgstr ""
-"<span class=\"def\">Formatere celler:</span> Klikk i cellen eller området "
-"med celler og velg meny<span class=\"ui\"> Tabell </span> → <span class = "
-"\"ui\"> Egenskaper </span>. Finjuster tabellen med hjelp av "
-"egenskapsdialogen."
+"<span class=\"def\">Formatering av celler:</span> Klikk i cellen eller "
+"området med celler, åpne kontekstmenyen og velg <span class=\"ui\">"
+"Tabellegenskaper</span>. Juster tabellen med egenskapsvinduet."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:644-5
 msgid "Track changes"
@@ -2644,7 +2804,7 @@ msgid ""
 "turn it off."
 msgstr ""
 "Når du aktiverer Spor Endringer, <span class=\"productname\">{productname}</"
-"span>markerer nye endringer som er gjort i dokumentet. Velg dette "
+"span> markerer nye endringer som er gjort i dokumentet. Velg dette "
 "alternativet igjen for å slå det av."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:646-61
@@ -2653,6 +2813,8 @@ msgid ""
 "Tracked change shown as a comment box beside the document with author name, "
 "date, and change description"
 msgstr ""
+"Sporet endring vist som en kommentarboks ved siden av dokumentet med navnet "
+"på forfatteren, dato og beskrivelse av endringen"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:647-5
 msgid ""
@@ -2681,8 +2843,8 @@ msgid ""
 "<span class=\"def\">Formatting marks:</span> Paragraph, page and unbreakable "
 "spaces are shown as marks to assist text alignment, editing and formatting."
 msgstr ""
-"<span class=\"def\">Formateringsmarkeringer:</span> Avsnitt, side og "
-"mellomrom som ikke kan brytes, vises som merker for å hjelpe tekstjustering, "
+"<span class=\"def\">Formateringsmerker:</span> Avsnitt, side og mellomrom "
+"som ikke kan brytes, vises som merker for å hjelpe tekstjustering, "
 "redigering og formatering."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:653-5
@@ -2716,8 +2878,8 @@ msgid ""
 "<span class=\"def\">Footnotes and endnotes:</span> Footnotes and endnotes "
 "are supported."
 msgstr ""
-"<span class=\"def\">Fotnoter og sluttnoter:</span> FFotnoter og sluttnoter "
-"er sttøttet."
+"<span class=\"def\">Fotnoter og sluttnoter:</span> Fotnoter og sluttnoter "
+"støttes."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:664-30
 msgid ""
@@ -2788,15 +2950,16 @@ msgid ""
 "Slide properties panel showing format, orientation, background, and master "
 "slide settings, with a layout gallery of thumbnail options below"
 msgstr ""
+"Panelet for lysbildeegenskaper med innstillinger for format, retning, "
+"bakgrunn og hovedlysbilde, og et galleri med miniatyrbilder av oppsett under"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:686-30
 msgid ""
 "<span class=\"def\">Master slide:</span> Select the master slide associated "
 "to the current slide. Format and arrange slide elements in the master slide."
 msgstr ""
-"<span class=\"def\">Master-lysbilde: </span> Velg master-lysbildet som er "
-"knyttet til gjeldende lysbilde. Formater og ordne lysbildeelementer i "
-"hovedbildet."
+"<span class=\"def\">Hovedlysbilde:</span> Velg hovedlysbildet som er knyttet "
+"til gjeldende lysbilde. Formater og ordne lysbildeelementer i hovedlysbildet."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:687-30
 msgid ""
@@ -2805,9 +2968,9 @@ msgid ""
 "slide in the slide show. Slide transitions are property of the slide, use "
 "the side bar to set the slide transition when in edit mode."
 msgstr ""
-"<span class=\"def\">Lysbildeoverganger: </span> <span class=\"productname\""
-">{productname} </span> Impress gir visuelle effekter når du viser et nytt "
-"lysbilde i lysbildefremvisningen. Lysbildeoverganger er egenskapen til "
+"<span class=\"def\">Lysbildeoverganger:</span> <span class=\"productname\">"
+"{productname}</span> Impress gir visuelle effekter når du viser et nytt "
+"lysbilde i lysbildefremvisningen. Lysbildeoverganger er en egenskap ved "
 "lysbildet, bruk sidefeltet til å angi lysbildeovergangen i redigeringsmodus."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:688-30
@@ -2816,9 +2979,9 @@ msgid ""
 "can have animations. Use the side bar to configure the slide transition for "
 "a selected object or set of objects."
 msgstr ""
-"<span class=\"def\">Objektanimasjon: </span> Individuelt objekt i lysbildet "
-"kan ha animasjon. Bruk sidelinjen til å konfigurere lysbildeovergangen for "
-"et valgt objekt eller sett med objekter."
+"<span class=\"def\">Objektanimasjon:</span> Enkeltobjekter i lysbildet kan "
+"ha animasjon. Bruk sidefeltet til å sette opp lysbildeovergangen for et "
+"valgt objekt eller flere valgte objekter."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:689-30
 msgid ""
@@ -2833,8 +2996,8 @@ msgid ""
 "What are the document file formats supported by <span class=\"productname\""
 ">{productname}</span>?"
 msgstr ""
-"Hvilke dokumentfilformater støttes av<span class=\"productname\""
-">{productname}</span>?"
+"Hvilke dokumentfilformater støttes av <span class=\"productname\">"
+"{productname}</span>?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:696-5
 msgid ""
@@ -2849,12 +3012,16 @@ msgid ""
 "Text documents: Microsoft formats DOC, DOCX, RTF. OpenDocument Format ODT. "
 "Plain text TXT and Markdown MD"
 msgstr ""
+"Tekstdokumenter: Microsoft-formatene DOC, DOCX, RTF. OpenDocument-formatet "
+"ODT. Ren tekst TXT og Markdown MD"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:699-7
 msgid ""
 "Spreadsheets: Microsoft formats XLS, XLSX, OpenDocument Format ODS. Comma "
 "separated values CSV"
 msgstr ""
+"Regneark: Microsoft-formatene XLS, XLSX, OpenDocument-formatet ODS. "
+"Kommaseparerte verdier CSV"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:700-7
 msgid "Presentations: Microsoft formats PPT, PPTX, OpenDocument Format ODP"
@@ -2892,9 +3059,10 @@ msgid ""
 ">Revision History </span> in the <span class=\"ui\">File</span> menu."
 msgstr ""
 "<span class=\"productname\">{productname}</span> lagrer dokumentet i "
-"bakgrunnen regelmessig, du kan ikke bare lukke uten å lagre det. For å "
-"kansellere endringene dine, må du enten angre dem, eller bruke <span class="
-"\"ui\"> Revisjonshistorikk </span> i <span class=\"ui\"> Fil </span> -menyen."
+"bakgrunnen regelmessig, så du kan ikke bare lukke uten å lagre det. For å "
+"forkaste endringene dine må du enten angre dem eller bruke <span "
+"class=\"ui\">Revisjonshistorikk</span> i menyen <span class=\"ui\">Fil</span>"
+"."
 
 #: html/cool-help.html%2Bdiv.div.div.p:714-5
 msgid ""
@@ -2902,6 +3070,9 @@ msgid ""
 "background regularly, you can't just close without saving it. To abandon "
 "your changes, undo them."
 msgstr ""
+"<span class=\"productname\">{productname}</span> lagrer dokumentet i "
+"bakgrunnen med jevne mellomrom, så du kan ikke bare lukke uten å lagre det. "
+"For å forkaste endringene dine, angre dem."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:717-5
 msgid ""
@@ -2923,18 +3094,17 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:721-5
 msgid "How can I check spelling in my language?"
-msgstr "Hvordan kan jeg sjekke staveing i språket mitt?"
+msgstr "Hvordan kan jeg sjekke stavingen i språket mitt?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:722-5
-#, fuzzy
 msgid ""
 "Choose <span class=\"ui\">Review</span> → <span class=\"ui\">Language</span> "
 "and select the language for the whole document. Optionally you can set "
 "languages for the selected text and for the current paragraph."
 msgstr ""
-"Velg menyen <span class=\"ui\">Verktøy</span> → <span class=\"ui\">Språk</"
-"span> og velg språket for hele dokumentet. Eventuelt kan du angi språk for "
-"valgt tekst og for gjeldende avsnitt."
+"Velg <span class=\"ui\">Gjennomgang</span> → <span class=\"ui\">Språk</span> "
+"og velg språket for hele dokumentet. Du kan også sette språk for den valgte "
+"teksten og for det gjeldende avsnittet."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:725-5
 msgid "How can I remove the red wavy lines in my document?"
@@ -2945,6 +3115,9 @@ msgid ""
 "On the <span class=\"ui\">Review</span> tab, open <span class=\"ui\""
 ">Spelling</span> and uncheck <span class=\"ui\">Auto Spell Check</span>."
 msgstr ""
+"På <span class=\"ui\">Gjennomgang</span>-fanen åpner du <span class=\"ui\">"
+"Stavekontroll</span> og fjerner merket for <span class=\"ui\">Automatisk "
+"stavekontroll</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:729-5
 msgid "What is the blue wavy underline in some words in the text?"
@@ -2963,26 +3136,26 @@ msgstr ""
 "grammatikkreglene. Velg riktig forslag for å endre teksten."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:733-5
-#, fuzzy
 msgid "Is there a thesaurus?"
-msgstr "Finns det en synonymordbok ?"
+msgstr "Finnes det en synonymordbok?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:734-5
-#, fuzzy
 msgid ""
 "Yes. Click in the word you want and choose <span class=\"ui\">Review</span> →"
 " <span class=\"ui\">Thesaurus</span>. A dialog opens with many suggestions "
 "for replacements."
 msgstr ""
-"Ja. Klikk på ordet du ønsker, og velg <span class=\"ui\">Verktøy</span> → "
-"<span class=\"ui\">Synonymer</span>. En dialog åpnes med mange forslag til "
-"erstatninger."
+"Ja. Klikk på ordet du vil og velg <span class=\"ui\">Gjennomgang</span> → "
+"<span class=\"ui\">Synonymordbok</span>. Et vindu åpnes med mange forslag "
+"til erstatninger."
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:735-49
 msgid ""
 "Thesaurus dialog for the word company, listing alternatives such as "
 "institution, establishment, and troupe, with a Replace with field"
 msgstr ""
+"Dialogvinduet Synonymordbok for ordet company, med alternativer som "
+"institution, establishment og troupe, og feltet Erstatt med"
 
 #: html/cool-help.html%2Bdiv.div.div.h4:738-5
 msgid ""
@@ -2993,38 +3166,38 @@ msgstr ""
 "fjerne de fra tekstdokumentet mitt?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:739-5
-#, fuzzy
 msgid ""
 "The <span class=\"blue\">¶</span> symbol is a formatting mark. It is used to "
 "help text alignment and editing and is not printed. To toggle it in the "
 "document display, choose <span class=\"ui\">View</span> → <span class=\"ui\""
 ">Formatting Marks</span>."
 msgstr ""
-"<span class=\"blue\">¶</span> symbolet er et formateringsmerke. Det brukes "
-"til å hjelpe tekstjustering og redigering og skrives ikke ut. Velg meny for "
-"å slå det av/på i dokumentvisningen<span class=\"ui\">Vis</span> → <span "
-"class=\"ui\">Formateringsmerke</span>."
+"Symbolet <span class=\"blue\">¶</span> er et formateringsmerke. Det brukes "
+"til å hjelpe tekstjustering og redigering og skrives ikke ut. For å slå det "
+"av og på i dokumentvisningen, velg <span class=\"ui\">Vis</span> → <span "
+"class=\"ui\">Formateringsmerker</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:746-5
 msgid "How do I get a word count of my document?"
-msgstr "Hvordan utfører jeg ordtelling i dokumentet ?"
+msgstr "Hvordan utfører jeg ordtelling i dokumentet?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:747-5
-#, fuzzy
 msgid ""
 "Word count is available in <span class=\"ui\">Review</span> → <span class="
 "\"ui\">Word Count</span>. A dialog shows word counts for selection and for "
 "the whole document."
 msgstr ""
-"Ordtelling er tilgjengelig i <span class=\"ui\">Verktøy</span> → <span class="
-"\"ui\">Ordtelling </span>. En dialog viser ordtelling for utvalg og for hele "
-"dokumentet."
+"Ordtelling er tilgjengelig i <span class=\"ui\">Gjennomgang</span> → <span "
+"class=\"ui\">Ordtelling</span>. Et vindu viser ordtelling for utvalget og "
+"for hele dokumentet."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:748-50
 msgid ""
 "Word Count dialog showing word and character counts for the current "
 "selection and for the whole document"
 msgstr ""
+"Dialogvinduet Ordtelling med antall ord og tegn i det valgte området og i "
+"hele dokumentet"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:749-5
 msgid ""
@@ -3048,8 +3221,8 @@ msgid ""
 "You can insert these special characters in the document using the <span "
 "class=\"ui\">Special Character</span> dialog."
 msgstr ""
-"Du kan sette inn disse spesialtegnene i dokumentet ved å bruke <span class="
-"\"ui\">Special Character</span> dialogen."
+"Du kan sette inn disse spesialtegnene i dokumentet ved å bruke dialogen "
+"<span class=\"ui\">Spesialtegn</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:755-7
 msgid "Place the cursor in the position to insert the character."
@@ -3060,6 +3233,8 @@ msgid ""
 "Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Special "
 "Character</span>. A dialog opens."
 msgstr ""
+"Velg <span class=\"ui\">Sett inn</span> → <span class=\"ui\">Spesialtegn</"
+"span>. Et vindu åpnes."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:759-59
 msgid ""
@@ -3067,6 +3242,8 @@ msgid ""
 "hexadecimal and decimal code inputs, and recent and favorite characters at "
 "the bottom"
 msgstr ""
+"Dialogvinduet Spesialtegn med et rutenett av tegn, søke- og skriftfelt, felt "
+"for heksadesimal og desimal kode, og nylig brukte tegn og favoritter nederst"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:760-7
 msgid ""
@@ -3076,24 +3253,23 @@ msgid ""
 "right."
 msgstr ""
 "Du kan enten bla gjennom tegnene som vises med nedtrekkslistene, eller "
-"skrive inn en søketast i <span class=\"ui\">Search</span> boksen. Hvis du "
-"kjenner den unicode-numeriske koden til spesialtegnet, skriver du inn i "
-"boksene til høyre."
+"skrive inn et søkeord i feltet <span class=\"ui\">Søk</span>. Hvis du "
+"kjenner Unicode-koden til spesialtegnet, skriver du den inn i boksene til "
+"høyre."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:761-7
 msgid ""
 "Press <span class=\"ui\">Insert</span> button. To close the dialog, press "
 "<span class=\"ui\">Cancel</span>."
 msgstr ""
-"Trykk <span class=\"ui\"> Sett inn</span> knappen. For å stenge dialogen, "
-"trykk <span class=\"ui\"> Avbryt</span>."
+"Trykk <span class=\"ui\">Sett inn</span> knappen. For å stenge dialogen, "
+"trykk <span class=\"ui\">Avbryt</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:765-5
 msgid "Why can't I delete text? It just gets a strike-through?"
-msgstr "Hvorfor kan jeg ikke slette tekst? Det blir bare gjennstreking?"
+msgstr "Hvorfor kan jeg ikke slette tekst? Det blir bare gjennomstreket?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:766-5
-#, fuzzy
 msgid ""
 "You have the Track Changes feature enabled for the document. Track Changes "
 "records all changes in the text and shows the edits for later revision. "
@@ -3101,11 +3277,11 @@ msgid ""
 "enabled choosing <span class=\"ui\">Review</span> → <span class=\"ui\""
 ">Record</span>."
 msgstr ""
-"Du har sporendring-funksjonen aktivert for dokumentet. Sporendringer "
-"registrerer alle endringer i teksten og viser utgavene for senere revisjon. "
-"Nyttig for å markere endringer i tekst og regneark. Sporendringer er "
-"aktivert ved valg<span class=\"ui\">Rediger</span> → <span class=\"ui\">Spor "
-"Endringer </span> → <span class=\"ui\">Ta opp</span>."
+"Du har slått på sporing av endringer for dokumentet. Sporing av endringer "
+"registrerer alle endringer i teksten og viser redigeringene for senere "
+"gjennomgang. Nyttig for å markere endringer i tekst og regneark. Sporing av "
+"endringer slås på ved å velge <span class=\"ui\">Gjennomgang</span> → <span "
+"class=\"ui\">Registrer</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:767-5
 msgid ""
@@ -3137,21 +3313,19 @@ msgstr ""
 "dokumentet."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:776-5
-#, fuzzy
 msgid ""
 "To display or hide track changes choose <span class=\"ui\">Review</span> → "
 "<span class=\"ui\">View Changes</span> → <span class=\"ui\">Show</span>. "
 "Beware that if track changes are enabled but hidden, you still record "
 "changes and may inadvertently leave unwanted text available in the document."
 msgstr ""
-"Hvis du vil vise eller skjule spor endringer, velger du<span class=\"ui\""
-">Rediger</span> → <span class=\"ui\">Spor Endringer </span> → <span class="
-"\"ui\">Vis</span>.Vær oppmerksom på at hvis spor endringer er aktivert, men "
-"skjult, kan du fremdeles registrere endringer og kan utilsiktet legge igjen "
-"uønsket tekst tilgjengelig i dokumentet."
+"For å vise eller skjule sporing av endringer velger du <span class=\"ui\">"
+"Gjennomgang</span> → <span class=\"ui\">Vis endringene</span> → <span "
+"class=\"ui\">Vis</span>. Vær oppmerksom på at selv om sporing av endringer "
+"er slått på, men skjult, blir endringer fortsatt registrert, og du kan "
+"utilsiktet la uønsket tekst være tilgjengelig i dokumentet."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:777-5
-#, fuzzy
 msgid ""
 "Changes can be accepted or rejected. To accept or reject changes, click on "
 "the corresponding icons in the comment box on the right of the document. "
@@ -3162,20 +3336,23 @@ msgid ""
 ">Manage</span>. A dialog shows a list of all tracked changes. Use the dialog "
 "buttons accordingly."
 msgstr ""
-"Endringer kan aksepteres eller avvises. For å godta eller avvise endringer, "
-"klikk på de tilsvarende ikonene i kommentarfeltet til høyre for dokumentet. "
-"Velg alternativt <span class=\"ui\"> Rediger</span> → <span class=\"ui\""
-">Spor Endringer </span> → <span class=\"ui\">Godta</span> eller <span class="
-"\"ui\">Avvis</span>.Hvis du må filtrere endringer før du godtar eller "
-"avviser, velger du <span class=\"ui\"> Rediger </span> → <span class=\"ui\"> "
-"Spor endringer </span> → <span class=\"ui\"> Behandle </span>. En dialog "
-"viser en liste over alle sporede endringer. Bruk dialogknappene deretter."
+"Endringer kan godtas eller avvises. For å godta eller avvise endringer, "
+"klikk på de aktuelle ikonene i kommentarfeltet til høyre for dokumentet. "
+"Alternativt velg <span class=\"ui\">Gjennomgang</span> → <span class=\"ui\">"
+"Godta</span> eller <span class=\"ui\">Avvis</span>. Hvis du må filtrere "
+"endringer før du godtar eller avviser, velg <span class=\"ui\">Gjennomgang</"
+"span> → <span class=\"ui\">Godta</span> → <span class=\"ui\">Håndter</span>. "
+"Et vindu viser en liste over alle sporede endringer. Bruk knappene i vinduet "
+"etter behov."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:778-54
 msgid ""
 "Manage Changes dialog with a list of tracked changes showing action, author, "
 "date, and comment columns, and Accept, Reject, Accept All, Reject All buttons"
 msgstr ""
+"Dialogvinduet Håndter endringer med en liste over sporede endringer med "
+"kolonnene handling, forfatter, dato og kommentar, og knappene Godta, Avvis, "
+"Godta alle og Avvis alle"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:781-5
 msgid "How do I set the margins of the document?"
@@ -3194,13 +3371,12 @@ msgid "Using the page style"
 msgstr "Bruker sidestilen"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:785-7
-#, fuzzy
 msgid ""
 "Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Page Style</"
 "span> and select the <span class=\"ui\">Page</span> tab"
 msgstr ""
-"Velg <span class=\"ui\">Format</span> → <span class=\"ui\">Side</span> og "
-"velg<span class=\"ui\">Side</span> fanen"
+"Velg <span class=\"ui\">Format</span> → <span class=\"ui\">Sidestil</span> "
+"og velg <span class=\"ui\">Side</span>-fanen"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:786-7
 msgid "Set the page margins in the dialog."
@@ -3211,10 +3387,12 @@ msgid ""
 "Page Style dialog on the Organizer tab showing style name, next style, "
 "inherit from, and category fields, with a summary of page properties"
 msgstr ""
+"Dialogvinduet Sidestil på fanen Organiser med feltene stilnavn, neste stil, "
+"arv fra og kategori, og et sammendrag av sideegenskapene"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:791-5
 msgid "How do I change the page orientation to landscape inside my document?"
-msgstr "Hvordan endrer jeg sideorienteringen til liggende i dokumentet mitt"
+msgstr "Hvordan endrer jeg sideorienteringen til liggende i dokumentet mitt?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:793-7
 msgid ""
@@ -3237,12 +3415,12 @@ msgid ""
 "In the <span class=\"ui\">Breaks</span> area, mark Insert, Type: Page Break, "
 "Position: Before."
 msgstr ""
-"I<span class=\"ui\">Brytninger</span>området, marker Sett Inn, Type: "
+"I <span class=\"ui\">Brytninger</span> området, marker Sett Inn, Type: "
 "Sidebrytning, Posisjon: Før."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:796-7
 msgid "Select Landscape in “With Page Style”"
-msgstr "Velg Liggende i “Med sidestil”"
+msgstr "Velg Liggende i «Med sidestil»"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:797-7
 msgid "Select if you want to change page numbering."
@@ -3277,6 +3455,10 @@ msgid ""
 "svg\" /> on the <span class=\"ui\">Home</span> tab. The mouse pointer turns "
 "to a paint bucket."
 msgstr ""
+"Klikk på ikonet <span class=\"ui\">Klon formatering</span> <img alt=\"format "
+"paintbrush\" class=\"icon-size\" src=\"images/lc_formatpaintbrush.svg\" /> "
+"på <span class=\"ui\">Hjem</span>-fanen. Musepekeren blir til en "
+"malingsbøtte."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:807-7
 msgid "Select the text you want to apply the new format."
@@ -3313,6 +3495,11 @@ msgid ""
 "class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Z</kbd> right after it "
 "was applied."
 msgstr ""
+"Du har Autokorrektur slått på. Autokorrektur sammenligner teksten du nettopp "
+"skrev, med en intern teksttabell. I de fleste tilfeller retter Autokorrektur "
+"skrivefeil mens du skriver. For å angre en korreksjon, trykk <kbd>Ctrl</kbd>"
+"<span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Z</kbd> rett "
+"etter at den ble brukt."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:827-5
 msgid "How can I select data to print?"
@@ -3323,6 +3510,8 @@ msgid ""
 "Insert column and row breaks in the spreadsheet to narrow the print range. "
 "When printing, select the pages of interest."
 msgstr ""
+"Sett inn kolonne- og radskift i regnearket for å snevre inn "
+"utskriftsområdet. Velg sidene du vil skrive ut."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:831-5
 msgid "How can I import CSV data?"
@@ -3349,12 +3538,17 @@ msgid ""
 ">+</span><kbd>V</kbd>. The <span class=\"ui\">Text Import</span> dialog "
 "opens to let you describe the precise format of the CSV data."
 msgstr ""
+"Trykk <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span>"
+"<kbd>V</kbd>. <span class=\"ui\">Tekstimport</span>-vinduet åpnes slik at du "
+"kan beskrive det nøyaktige formatet til CSV-dataene."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:838-53
 msgid ""
 "Text Import dialog with character set, locale, separator options, and a "
 "preview of the imported CSV data"
 msgstr ""
+"Dialogvinduet Tekstimport med valg for tegnsett, lokalitet og skilletegn, og "
+"en forhåndsvisning av de importerte CSV-dataene"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:839-7
 msgid ""
@@ -3378,6 +3572,8 @@ msgid ""
 "This is easy to do using <span class=\"ui\">Clone Formatting</span> on the "
 "<span class=\"ui\">Home</span> tab."
 msgstr ""
+"Dette er enkelt å gjøre ved å bruke <span class=\"ui\">Klon formatering</"
+"span> på <span class=\"ui\">Hjem</span>-fanen."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:847-7
 msgid "Format the source cell with the font, color background and more."
@@ -3392,7 +3588,6 @@ msgid "What is “Clear Direct Formatting” icon?"
 msgstr "Hva er \"Slett Direkte Formatering\" -ikonet?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:854-5
-#, fuzzy
 msgid ""
 "Direct formatting is formatting applied directly to the selected contents of "
 "a paragraph or a spreadsheet cell, and overlaps its assigned style "
@@ -3400,11 +3595,11 @@ msgid ""
 "or spreadsheet cell and choose <span class=\"ui\">Home</span> → <span class="
 "\"ui\">Clear Direct Formatting</span>."
 msgstr ""
-"Direkte formatering er å formatere direkte det valgte innholdet i et avsnitt "
-"eller en regnearkcelle, og overlapper den tildelte stilformateringen. For å "
-"gjenopprette formateringen til stilinnstillingene, velg tekst- eller "
-"regnearkcellen og velg <span class=\"ui\"> Format </span> → <span class=\"ui"
-"\"> Tøm direkte formatering </span> eller bruk knappen på verktøylinjen."
+"Direkte formatering er formatering som brukes direkte på det valgte "
+"innholdet i et avsnitt eller en regnearkcelle, og som overstyrer stilen som "
+"er tildelt. For å gjenopprette formateringen til stilinnstillingene velger "
+"du teksten eller regnearkcellen og velger <span class=\"ui\">Hjem</span> → "
+"<span class=\"ui\">Fjern direkte formatering</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:857-5
 msgid "How do I rename a sheet?"
@@ -3436,11 +3631,13 @@ msgid ""
 "Beginning</span> or click on the left-most icon in the bottom of the slide "
 "panel:"
 msgstr ""
+"Velg enten <span class=\"ui\">Lysbildefremvisning</span> → <span "
+"class=\"ui\">Fra begynnelsen</span> eller klikk på ikonet lengst til venstre "
+"nederst i lysbildepanelet:"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li.img[alt]:869-187
-#, fuzzy
 msgid "slide show"
-msgstr "Lysbildefremvisning"
+msgstr "lysbildefremvisning"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:873-5
 msgid "How can I change the line, area and position of a shape in my slides?"
@@ -3467,6 +3664,8 @@ msgid ""
 "Area dialog on the Color tab with a color palette, active and new color "
 "previews, RGB value fields, and a custom palette section"
 msgstr ""
+"Dialogvinduet Område på fanen Farge med fargepalett, forhåndsvisning av "
+"aktiv og ny farge, felt for RGB-verdier og en del for egendefinert palett"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:880-7
 msgid "Set the properties of the element of the object."
