@@ -251,9 +251,7 @@ SplashScreen::initialize( const css::uno::Sequence< css::uno::Any>& aArguments )
     if (!aArguments.hasElements())
         return;
 
-    aArguments[0] >>= m_bVisible;
-    if (aArguments.getLength() > 1 )
-        aArguments[1] >>= m_sAppName;
+    aArguments[0] >>= m_sAppName;
 
     // start to determine bitmap and all other required value
     if (m_bShowLogo)
