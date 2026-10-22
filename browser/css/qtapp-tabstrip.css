@@ -41,6 +41,9 @@ body {
 	padding-top: 4px;
 	overflow-x: auto;
 	overflow-y: hidden;
+	/* The + button, 28px wide with a 4px margin on each side, stays at the end of a strip that
+	   scrolls, and covers the tabs under it. */
+	scroll-padding-inline-end: 36px;
 }
 .tab {
 	box-sizing: border-box;

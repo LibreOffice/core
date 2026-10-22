@@ -33,6 +33,9 @@
 	// handled here and must not detach the tab into a new window.
 	const dragState = { inStripDropHandled: false };
 
+	// The active tab that the strip last scrolled into view.
+	let activeIdInView = -1;
+
 	// Report a hover to C++ only when the insert index changes.
 	let lastOverInsert = -2;
 
@@ -158,6 +161,34 @@
 
 	function unlockTabWidths() {
 		document.getElementById('strip').classList.remove('widths-locked');
+	}
+
+	// The strip scrolls when its tabs do not fit, and the active tab then stays in view. The +
+	// button at the end of the strip covers a part of it, which scroll-padding-inline-end leaves
+	// out.
+	function scrollActiveTabIntoView() {
+		const active = tabEls.find((tab) => tab.classList.contains('active'));
+		if (active) active.scrollIntoView({ block: 'nearest', inline: 'nearest' });
+		activeIdInView = activeId;
+	}
+
+	// A turn of the mouse wheel scrolls the strip sideways, a turn down towards the end of the
+	// strip.
+	function installStripWheelScroll(strip) {
+		strip.addEventListener(
+			'wheel',
+			(ev) => {
+				if (strip.scrollWidth <= strip.clientWidth) return;
+				if (Math.abs(ev.deltaY) <= Math.abs(ev.deltaX)) return;
+				ev.preventDefault();
+				let pixels = ev.deltaY;
+				if (ev.deltaMode === WheelEvent.DOM_DELTA_LINE) pixels *= 16;
+				else if (ev.deltaMode === WheelEvent.DOM_DELTA_PAGE)
+					pixels *= strip.clientWidth;
+				strip.scrollLeft += isRightToLeft() ? -pixels : pixels;
+			},
+			{ passive: false },
+		);
 	}
 
 	// A pixel that the browser paints a theme colour into, so any CSS colour form reads back as
@@ -303,6 +334,8 @@
 			if (bridge) bridge.newTabRequested();
 		});
 		strip.appendChild(add);
+
+		if (activeId !== activeIdInView) scrollActiveTabIntoView();
 	}
 
 	function onTabsChanged(json) {
@@ -393,6 +426,8 @@
 	// page gets that leave also just after the tab under the pointer has been rebuilt.
 	document.documentElement.addEventListener('mouseleave', unlockTabWidths);
 	window.addEventListener('resize', unlockTabWidths);
+	installStripWheelScroll(document.getElementById('strip'));
+	window.addEventListener('resize', scrollActiveTabIntoView);
 
 	connectTabBridge(function (tabBridge) {
 		bridge = tabBridge;
