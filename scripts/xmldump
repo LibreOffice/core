@@ -1,4 +1,14 @@
 #!/usr/bin/env python3
+# -*- tab-width: 4; indent-tabs-mode: nil; py-indent-offset: 4 -*-
+#
+# Copyright the Collabora Online contributors.
+#
+# SPDX-License-Identifier: MPL-2.0
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
 
 # List streams, elements and attributes from a zipped xml container
 
@@ -92,7 +102,7 @@ def main(zip_paths: List[str]):
     def print_sorted_counter(title, counter: Counter):
         print(title)
         for key, count in sorted(counter.items(), key=lambda kv: (-kv[1], kv[0])):
-            short_key = shorten_tag(key);
+            short_key = shorten_tag(key)
             print(f"\t{short_key}\t{count}")
         print()
 
@@ -108,7 +118,7 @@ def compare_files(before, after):
     attribute_counts = [ Counter(), Counter() ]
     app_info = [ "", "" ]
 
-    for i in range(0,2):
+    for i in range(2):
         try:
             app_info[i] = read_and_aggregate(names[i], file_counts[i], element_counts[i], attribute_counts[i])
         except Exception as e:
@@ -116,13 +126,13 @@ def compare_files(before, after):
 
     def print_compare_counter(title, before: Counter, after: Counter):
         print(title)
-        merged = before + after;
-        same_count = 0;
+        merged = before + after
+        same_count = 0
         for key, count in sorted(merged.items(), key=lambda kv: (-kv[1], kv[0])):
             if before[key] == after[key]:
-                same_count += 1;
+                same_count += 1
             else:
-                short_key = shorten_tag(key);
+                short_key = shorten_tag(key)
                 print(f"\t{before[key]}\t{after[key]}\t{short_key}")
         print(f"\t<identical>\t{same_count}")
         print()
@@ -179,3 +189,5 @@ if __name__ == "__main__":
         roundtrip_file(sys.argv[2])
     else:
         main(sys.argv[1:])
+
+# vim: set shiftwidth=4 softtabstop=4 expandtab:
