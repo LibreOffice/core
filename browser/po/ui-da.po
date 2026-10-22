@@ -8,8 +8,9 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-13 14:06+0200\n"
-"PO-Revision-Date: 2026-10-15 13:24+0000\n"
-"Last-Translator: Simonth <simonth@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-10-22 16:51+0000\n"
+"Last-Translator: Sonia Breuer Bistrup "
+"<sbb_cbrain@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Danish <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/da/>\n"
 "Language: da\n"
@@ -430,6 +431,8 @@ msgid ""
 "BPF filtering of potentially risky system calls (seccomp) is not enabled; a "
 "security hazard."
 msgstr ""
+"BPF-filtrering af potentielt risikable systemkald (seccomp) er ikke "
+"aktiveret. Det er en sikkerhedsrisiko."
 
 #: admin/src/AdminSocketServerAudit.js:50
 #: src/control/Control.ServerAuditDialog.ts:109
@@ -455,6 +458,8 @@ msgid ""
 "Some clients connected with the old WebSocket URL form, which is planned "
 "for removal. Check that your proxy passes the compact form through."
 msgstr ""
+"Nogle klienter er koblet til det gamle WebSocket URL-format, som skal "
+"fjernes. Kontrollér, at din proxy videregiver den kompakte form."
 
 #: admin/src/AdminSocketServerAudit.js:92
 #: admin/src/integrator/AdminIntegratorSettings.ts:5208
@@ -464,7 +469,7 @@ msgstr "Fejl"
 
 #: admin/src/AdminSocketServerAudit.js:108
 msgid "Learn more"
-msgstr ""
+msgstr "Læs mere"
 
 #: admin/src/AdminSocketSettings.js:46
 msgid "Are you sure you want to shut down the server?"
@@ -487,28 +492,30 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:639
 msgid "Invalid request"
-msgstr ""
+msgstr "Ugyldig forespørgsel"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:640
 #: src/control/Control.AIChatSidebar.ts:2187
 msgid "Invalid API key"
-msgstr ""
+msgstr "Ugyldig API-nøgle"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:641
 #: src/control/Control.AIChatSidebar.ts:2188
 msgid "API key lacks permissions"
-msgstr ""
+msgstr "API-nøglen mangler rettigheder"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:644
 msgid ""
 "This AI host is not in the server's allowed host list (lok_allow.host). Ask "
 "your administrator to permit it."
 msgstr ""
+"Denne AI-vært er ikke på serverens liste over tilladte værter "
+"(lok_allow.host). Bed din administrator om at tillade den."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:646
 #: src/control/Control.AIChatSidebar.ts:2192
 msgid "Rate limited - please wait a moment and retry"
-msgstr ""
+msgstr "Forespørgselsgrænsen er nået - vent lidt og prøv igen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:647
 #: src/control/Control.AIChatSidebar.ts:2193
