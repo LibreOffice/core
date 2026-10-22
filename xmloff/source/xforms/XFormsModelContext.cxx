@@ -33,7 +33,11 @@
 
 #include <sal/log.hxx>
 
+#include <com/sun/star/beans/PropertyValue.hpp>
+#include <com/sun/star/container/XSet.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
+#include <com/sun/star/uno/Sequence.h>
+#include <sfx2/objsh.hxx>
 
 
 using com::sun::star::util::XUpdatable;
@@ -93,8 +97,45 @@ SvXMLImportContext* XFormsModelContext::HandleChild(
     return pContext;
 }
 
+static bool lcl_hasInstanceURL(const Reference<css::xforms::XModel>& xModel)
+{
+    Reference<css::container::XSet> xInstances = xModel->getInstances();
+    if (!xInstances.is())
+        return false;
+    Reference<css::container::XEnumeration> xEnum = xInstances->createEnumeration();
+    while (xEnum->hasMoreElements())
+    {
+        Sequence<css::beans::PropertyValue> aInstance;
+        xEnum->nextElement() >>= aInstance;
+        for (const css::beans::PropertyValue& rProp : aInstance)
+        {
+            OUString sURL;
+            if (rProp.Name == "URL" && (rProp.Value >>= sURL) && !sURL.isEmpty())
+                return true;
+        }
+    }
+    return false;
+}
+
+static void lcl_loadInstanceURLs(const Reference<XInterface>& rxModel)
+{
+    Reference<css::beans::XPropertySet> xModel(rxModel, UNO_QUERY);
+    if (xModel.is())
+        xModel->setPropertyValue(u"LoadsInstanceURLs"_ustr, Any(true));
+}
+
 void XFormsModelContext::endFastElement(sal_Int32 )
 {
+    // Instances read the URLs they name once the user allows link updates for the document.
+    if (SfxObjectShell* pShell = SfxObjectShell::GetShellFromComponent(GetImport().GetModel()))
+    {
+        if (lcl_hasInstanceURL(mxModel))
+        {
+            mxModel->setPropertyValue(u"LoadsInstanceURLs"_ustr, Any(false));
+            pShell->AddDeferredLinkLoad(mxModel, lcl_loadInstanceURLs);
+        }
+    }
+
     // update before putting model into document
     Reference<XUpdatable> xUpdate( mxModel, UNO_QUERY );
     if( xUpdate.is() )
