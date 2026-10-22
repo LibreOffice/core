@@ -513,28 +513,21 @@ static void exec_pagein (Args *args)
 
 static void extend_library_path(const char *new_element)
 {
-    rtl_uString *pEnvName=nullptr, *pOrigEnvVar=nullptr, *pNewEnvVar=nullptr;
+    static constexpr OUString sEnvName = u"LD_LIBRARY_PATH"_ustr;
+    OUString sNewEnvVar = OUString::fromUtf8(new_element);
 
-    rtl_uString_newFromAscii(&pEnvName, "LD_LIBRARY_PATH");
-    rtl_string2UString(&pNewEnvVar, new_element, strlen(new_element), RTL_TEXTENCODING_UTF8, OSTRING_TO_OUSTRING_CVTFLAGS);
-
-    osl_getEnvironment(pEnvName, &pOrigEnvVar);
+    rtl_uString* pOrigEnvVar = nullptr;
+    osl_getEnvironment(sEnvName.pData, &pOrigEnvVar);
     if (pOrigEnvVar && pOrigEnvVar->length)
     {
-        rtl_uString *pDelim = nullptr;
-        rtl_uString_newFromAscii(&pDelim, ":");
-        rtl_uString_newConcat(&pNewEnvVar, pNewEnvVar, pDelim);
-        rtl_uString_newConcat(&pNewEnvVar, pNewEnvVar, pOrigEnvVar);
-        rtl_uString_release(pDelim);
+        const OUString sOrigEnvVar(pOrigEnvVar);
+        sNewEnvVar += u":" + sOrigEnvVar;
     }
 
-    osl_setEnvironment(pEnvName, pNewEnvVar);
+    osl_setEnvironment(sEnvName.pData, sNewEnvVar.pData);
 
     if (pOrigEnvVar)
         rtl_uString_release(pOrigEnvVar);
-
-    rtl_uString_release(pNewEnvVar);
-    rtl_uString_release(pEnvName);
 }
 
 static void exec_javaldx(Args *args)
