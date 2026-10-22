@@ -110,6 +110,7 @@ SvxSecurityLabelDialog::SvxSecurityLabelDialog(
     , m_xClassification(m_xBuilder->weld_combo_box(u"classification"_ustr))
     , m_xCategoriesWin(m_xBuilder->weld_scrolled_window(u"categorieswin"_ustr))
     , m_xPreview(m_xBuilder->weld_label(u"preview"_ustr))
+    , m_xOverflow(m_xBuilder->weld_label(u"seclabeloverflow"_ustr))
     , m_xWarning(m_xBuilder->weld_label(u"seclabelwarning"_ustr))
     , m_xOkBtn(m_xBuilder->weld_button(u"ok"_ustr))
     , m_xRelabelBtn(m_xBuilder->weld_button(u"relabel"_ustr))
@@ -157,6 +158,7 @@ SvxSecurityLabelDialog::SvxSecurityLabelDialog(
     m_xRemoveBtn->connect_clicked(LINK(this, SvxSecurityLabelDialog, RemoveHdl));
 
     m_xWarning->set_label_type(weld::LabelType::Warning);
+    m_xOverflow->set_label_type(weld::LabelType::Error);
 
     // The marking preview reads as a banner, like the one the document gets, so it
     // stands out from the form below it. Online styles it from jsdialogs.css instead
@@ -252,8 +254,14 @@ void SvxSecurityLabelDialog::PopulateCategories()
     }
     m_aGroups.clear();
     m_aCheckGroup.clear();
+    m_xOverflow->set_visible(false);
     if (!m_pPolicy)
         return;
+
+    // What the pool cannot show: the tags past the last group slot, and one line per tag
+    // with more categories than a group has checkboxes.
+    std::vector<OUString> aGroupsNotShown;
+    OUString sOverflow;
 
     const OUString sClassification = m_xClassification->get_active_text();
     int g = 0;
@@ -277,6 +285,7 @@ void SvxSecurityLabelDialog::PopulateCategories()
                 SAL_WARN("svx.seclabel", "category groups exceed pool of "
                                              << MAX_GROUPS << "; tag '" << rTag.aName
                                              << "' truncated");
+                aGroupsNotShown.push_back(rTag.aName);
                 continue;
             }
 
@@ -306,8 +315,37 @@ void SvxSecurityLabelDialog::PopulateCategories()
             m_aGroups.push_back(
                 { rTag.bSingleSelection, c, static_cast<int>(aSelectable.size()) });
             ++g;
+
+            const sal_Int32 nSelectable = static_cast<sal_Int32>(aSelectable.size());
+            if (nSelectable > MAX_CATS)
+            {
+                sOverflow += (sOverflow.isEmpty() ? u""_ustr : u"\n"_ustr)
+                             + SvxResId(RID_SVXSTR_SECLABEL_TOO_MANY_CATEGORIES)
+                                   .replaceFirst(u"%1", rTag.aName)
+                                   .replaceFirst(u"%2", OUString::number(nSelectable))
+                                   .replaceFirst(u"%3", OUString::number(MAX_CATS))
+                                   .replaceFirst(u"%4", OUString::number(nSelectable - MAX_CATS));
+            }
         }
     }
+
+    if (!aGroupsNotShown.empty())
+    {
+        OUString sNames;
+        for (const OUString& rName : aGroupsNotShown)
+            sNames += (sNames.isEmpty() ? u""_ustr : u", "_ustr) + "'" + rName + "'";
+
+        const sal_Int32 nGroups = MAX_GROUPS + static_cast<sal_Int32>(aGroupsNotShown.size());
+        sOverflow = SvxResId(RID_SVXSTR_SECLABEL_TOO_MANY_GROUPS)
+                        .replaceFirst(u"%1", m_pPolicy->aName)
+                        .replaceFirst(u"%2", OUString::number(nGroups))
+                        .replaceFirst(u"%3", OUString::number(MAX_GROUPS))
+                        .replaceFirst(u"%4", sNames)
+                    + (sOverflow.isEmpty() ? u""_ustr : u"\n"_ustr) + sOverflow;
+    }
+
+    m_xOverflow->set_label(sOverflow);
+    m_xOverflow->set_visible(!sOverflow.isEmpty());
 }
 
 void SvxSecurityLabelDialog::initFromExistingLabel()
@@ -386,6 +424,7 @@ void SvxSecurityLabelDialog::enterForeignMode(const svx::seclabel::StanagLabel& 
     // View-only: hide the (provisioned-policy) editor and Apply. Offer Re-label only
     // if there is a provisioned policy to re-label under.
     m_xEditBox->set_visible(false);
+    m_xOverflow->set_visible(false);
     m_xOkBtn->set_visible(false);
     m_xRelabelBtn->set_visible(!m_aPolicySet.empty());
 }

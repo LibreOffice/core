@@ -37,7 +37,8 @@ class SvxSecurityLabelDialog final : public weld::GenericDialogController
     // slot is a bold header label plus a box of checkboxes. Runtime relabels/shows one
     // group per securityCategoryTag and one checkbox per selectable tagCategory, and
     // hides the rest. Static widgets stay interactive in JSDialog (runtime-created ones
-    // do not), so the pool is fixed; a policy needing more warns and is truncated.
+    // do not), so the pool is fixed. A policy needing more is truncated, and the dialog
+    // says what it does not show.
     static constexpr int MAX_GROUPS = 10;
     static constexpr int MAX_CATS = 300;
     svx::seclabel::SpifPolicySet m_aPolicySet;
@@ -92,6 +93,9 @@ class SvxSecurityLabelDialog final : public weld::GenericDialogController
     // The marking banner atop the dialog: a title-background strip, hidden while
     // there is no marking to show.
     std::unique_ptr<weld::Label> m_xPreview;
+    // What of the active policy the pool cannot show, with the counts and the pool's
+    // limits. Hidden when the policy fits.
+    std::unique_ptr<weld::Label> m_xOverflow;
     std::unique_ptr<weld::Label> m_xWarning;
     std::unique_ptr<weld::Button> m_xOkBtn;
     std::unique_ptr<weld::Button> m_xRelabelBtn;

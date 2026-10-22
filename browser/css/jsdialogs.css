@@ -392,6 +392,25 @@ div#autoFillPreviewTooltip .lokdialog.ui-dialog-content.ui-widget-content {
 	overflow-y: auto;
 }
 
+/* Wider than the 400px every dialog gets, so the error and warning lines and the category
+   names wrap less, and never wider than a narrow window. */
+#SecurityLabelDialog #contentbox {
+	min-width: min(36rem, 90vw);
+}
+
+/* The error about what of the policy the dialog cannot show leads the dialog: bold, in the
+   theme's error colour (a dark red, or a light red in dark mode), with a bar of that colour
+   beside it. The label renders as a span, hence the display; its lines are separated by
+   newlines. */
+#SecurityLabelDialog #seclabeloverflow {
+	display: block;
+	padding-inline-start: 8px;
+	border-inline-start: 3px solid var(--color-status-error);
+	color: var(--color-status-error);
+	font-weight: bold;
+	white-space: pre-line;
+}
+
 /* The marking preview is a banner atop the dialog, styled like the one the document
    gets (#security-label-banner), so it stands out from the form below it. The label
    renders as a span, hence the display/width; the dialog hides it when there is no
