@@ -62,11 +62,24 @@ static rtl_uString *charp_to_ustr(const char *pStr)
 
 namespace {
 
-typedef struct {
+class ChildInfo
+{
+public:
     int status_fd;
     oslProcess child;
-} ChildInfo;
 
+    ChildInfo() = default;
+    ChildInfo(ChildInfo&&) = default;
+    ChildInfo(const ChildInfo&) = delete;
+    ChildInfo& operator=(const ChildInfo&) = delete;
+    ~ChildInfo();
+};
+
+ChildInfo::~ChildInfo()
+{
+    close(status_fd);
+    osl_freeProcessHandle(child);
+}
 } // namespace
 
 static int
@@ -75,20 +88,10 @@ child_info_get_status_fd(ChildInfo const *info)
     return info->status_fd;
 }
 
-static void
-child_info_destroy(ChildInfo *info)
-{
-    close (info->status_fd);
-    osl_freeProcessHandle (info->child);
-    free (info);
-}
-
-static ChildInfo * child_spawn(Args *args, bool bAllArgs, bool bWithStatus)
+static ChildInfo child_spawn(Args* args, bool bAllArgs, bool bWithStatus)
 {
     rtl_uString *pApp = nullptr, *pTmp = nullptr;
     int status_pipe[2];
-
-    ChildInfo* info = static_cast<ChildInfo*>(calloc(1, sizeof(ChildInfo)));
 
     /* create pipe */
     if (pipe(status_pipe) < 0)
@@ -96,7 +99,8 @@ static ChildInfo * child_spawn(Args *args, bool bAllArgs, bool bWithStatus)
         fprintf(stderr, "ERROR: no file handles\n");
         exit(1);
     }
-    info->status_fd = status_pipe[0];
+    ChildInfo info;
+    info.status_fd = status_pipe[0];
 
     /* application name */
     rtl_uString_newFromAscii(&pApp, "file://");
@@ -125,7 +129,7 @@ static ChildInfo * child_spawn(Args *args, bool bAllArgs, bool bWithStatus)
 
     /* start the main process */
     oslProcessError nError = osl_executeProcess(pApp, ppArgs, nArgs, osl_Process_NORMAL, nullptr,
-                                                nullptr, nullptr, 0, &info->child);
+                                                nullptr, nullptr, 0, &info.child);
 
     if (pTmp)
         rtl_uString_release(pTmp);
@@ -815,15 +819,15 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
             /* Periodically update the splash & the percent according
                to what status_fd says, poll quickly only while starting */
-            ChildInfo* info = child_spawn (args, bAllArgs, bShortWait);
-            g_pProcess = info->child;
+            ChildInfo info = child_spawn(args, bAllArgs, bShortWait);
+            g_pProcess = info.child;
 
-            while (!child_exited_wait(info, bShortWait))
+            while (!child_exited_wait(&info, bShortWait))
             {
                 ProgressStatus eResult;
 
                 splash_draw_progress(splash, nPercent);
-                eResult = read_percent(info, &nPercent);
+                eResult = read_percent(&info, &nPercent);
 
                 if (eResult != ProgressContinue)
                 {
@@ -833,7 +837,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 }
             }
 
-            status = child_get_exit_code(info);
+            status = child_get_exit_code(&info);
             g_pProcess = nullptr; // reset
 
             switch (status)
@@ -849,8 +853,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 default:
                     break;
             }
-
-            child_info_destroy(info);
         } while (bRestart);
     }
 
