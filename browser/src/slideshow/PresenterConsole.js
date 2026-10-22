@@ -283,7 +283,8 @@ class PresenterConsole {
 		// eslint-disable-next-line no-restricted-syntax -- fixed markup, with translated labels and icon URLs
 		this._proxyPresenter.document.write(this._generateHtml());
 		this._proxyPresenter.document.close();
-		this._proxyPresenter.document.title = _('Presenter Console');
+		this._proxyPresenter.document.title =
+			_('Presenter View') + ': ' + document.title;
 
 		this._currentSlideCanvas = this._proxyPresenter.document.querySelector(
 			'#current-presentation',

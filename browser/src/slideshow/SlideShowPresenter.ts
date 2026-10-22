@@ -1193,8 +1193,8 @@ class SlideShowPresenter {
 	}
 
 	_doInWindowPresentation(showSwitchMonitors: boolean) {
-		const popupTitle =
-			_('Windowed Presentation: ') + this._map['wopi'].BaseFileName;
+		// Only the separate full-screen window shows this title, the windowed iframe does not.
+		const popupTitle = _('Slide Show') + ': ' + document.title;
 		const htmlContent = this._generateSlideWindowHtml();
 
 		// On the Qt and macOS shells a full screen show or a presenter-console
