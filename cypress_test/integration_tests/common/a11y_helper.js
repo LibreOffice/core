@@ -116,11 +116,18 @@ function runA11yValidation(win, dispatchCommand) {
 		var spy = Cypress.sinon.spy(win.console, 'error');
 		win.app.dispatcher.dispatch(dispatchCommand);
 
+		// The validator ends every run with a line that says how it went.
+		const summaries = spy.getCalls().filter(call =>
+			/^A11yValidator: \w+ (passed all checks|has \d+ accessibility issues)$/
+				.test(String(call.args[0])));
+
 		checkA11yErrors(win, spy);
 
 		if (spy && spy.restore) {
 			spy.restore();
 		}
+
+		expect(summaries.length, 'the validator ran on ' + dispatchCommand).to.be.greaterThan(0);
 	});
 }
 
