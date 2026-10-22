@@ -70,6 +70,7 @@
 #include "htmlatr.hxx"
 #include "htmlnum.hxx"
 #include "wrthtml.hxx"
+#include "swcss1.hxx"
 #include "htmlfly.hxx"
 #include <numrule.hxx>
 #include <rtl/character.hxx>
@@ -315,7 +316,14 @@ SwHTMLFormatInfo::SwHTMLFormatInfo( const SwFormat *pF, SwDoc *pDoc, SwDoc *pTem
     }
 
     if( !bTextColl )
+    {
+        // A character style with no HTML tag of its own is written as a span
+        // with its name as the class, so a reader that has the style can
+        // apply it again.
+        if( bOutStyles && nDeep == 0 )
+            aClass = SwCSS1Parser::GetClassOfName( pFormat->GetName().toString() );
         return;
+    }
 
     if( bOutStyles )
     {
@@ -1128,6 +1136,7 @@ class HTMLEndPosLst
 
     sal_uLong m_nHTMLMode;
     bool m_bOutStyles : 1; // are styles exported
+    bool m_bCharFormatClasses : 1; // are character styles written as spans with a class
 
     // Insert/remove a SttEndPos in/from the Start and End lists.
     // The end position is known.
@@ -1168,7 +1177,7 @@ class HTMLEndPosLst
 public:
 
     HTMLEndPosLst( SwDoc *pDoc, SwDoc* pTemplate, std::optional<Color> xDfltColor,
-                   bool bOutStyles, sal_uLong nHTMLMode,
+                   bool bOutStyles, bool bCharFormatClasses, sal_uLong nHTMLMode,
                    const OUString& rText, std::set<UIName>& rStyles );
     ~HTMLEndPosLst();
 
@@ -1600,13 +1609,15 @@ const SwHTMLFormatInfo *HTMLEndPosLst::GetFormatInfo( const SwFormat& rFormat,
 }
 
 HTMLEndPosLst::HTMLEndPosLst(SwDoc* pD, SwDoc* pTempl, std::optional<Color> xDfltCol, bool bStyles,
-                             sal_uLong nMode, const OUString& rText, std::set<UIName>& rStyles)
+                             bool bCharFormatClasses, sal_uLong nMode, const OUString& rText,
+                             std::set<UIName>& rStyles)
     : m_pDoc(pD)
     , m_pTemplate(pTempl)
     , m_xDefaultColor(std::move(xDfltCol))
     , m_rScriptTextStyles(rStyles)
     , m_nHTMLMode(nMode)
     , m_bOutStyles(bStyles)
+    , m_bCharFormatClasses(bCharFormatClasses)
 {
     sal_Int32 nEndPos = rText.getLength();
     sal_Int32 nPos = 0;
@@ -1673,13 +1684,17 @@ void HTMLEndPosLst::InsertNoScript( const SfxPoolItem& rItem,
             const SwCharFormat* pFormat = rChrFormat.GetCharFormat();
 
             const SwHTMLFormatInfo *pFormatInfo = GetFormatInfo( *pFormat, rFormatInfos );
-            if( !pFormatInfo->aToken.isEmpty() )
+            // A style with no tag of its own is a span with a class, which
+            // carries the attributes of the style as its inline style.
+            const bool bAsClass = m_bCharFormatClasses && pFormatInfo->aToken.isEmpty()
+                                  && !pFormatInfo->aClass.isEmpty();
+            if( !pFormatInfo->aToken.isEmpty() || bAsClass )
             {
                 // output the character style tag before the hard
                 // attributes
                 InsertItem( rItem, nStart, nEnd );
             }
-            if( pFormatInfo->moItemSet )
+            if( pFormatInfo->moItemSet && !bAsClass )
             {
                 Insert( *pFormatInfo->moItemSet, nStart, nEnd,
                         rFormatInfos, true, bParaAttrs );
@@ -2388,6 +2403,7 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
     aFullText += rStr;
     HTMLEndPosLst aEndPosLst( rWrt.m_pDoc, rWrt.m_xTemplate.get(),
                               rWrt.m_xDfltColor, rWrt.m_bCfgOutStyles,
+                              rWrt.m_bCfgOutStyles && !rWrt.mbReqIF,
                               rWrt.GetHTMLMode(), aFullText,
                                  rWrt.m_aScriptTextStyles );
     if( aFormatInfo.moItemSet )
@@ -3297,6 +3313,13 @@ static SwHTMLWriter& OutHTML_SwTextCharFormat( SwHTMLWriter& rWrt, const SfxPool
             }
             HTMLOutFuncs::Out_String( rWrt.Strm(), aClass );
             sOut = "\""_ostr;
+        }
+        if( pFormatInfo->aToken.isEmpty() && pFormatInfo->moItemSet )
+        {
+            // the attributes of the style, for a reader without it
+            rWrt.Strm().WriteOString( sOut );
+            sOut = ""_ostr;
+            OutCSS1_HintStyleOpt( rWrt, *pFormatInfo->moItemSet );
         }
         sOut += ">";
         rWrt.Strm().WriteOString( sOut );

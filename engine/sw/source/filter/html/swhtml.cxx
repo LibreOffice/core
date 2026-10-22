@@ -3509,6 +3509,16 @@ void SwHTMLParser::NewStdAttr( HtmlTokenId nToken )
     // create a new context
     std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken));
 
+    // A span whose class names a character style of the document gets that
+    // style; the rule of the class and the inline style restate its attributes.
+    SwCharFormat* pCharFormat = nullptr;
+    if( HtmlTokenId::SPAN_ON == nToken && !aClass.isEmpty() )
+    {
+        pCharFormat = m_pCSS1Parser->FindCharFormatByClass( aClass );
+        if( pCharFormat )
+            aClass.clear();
+    }
+
     // parse styles
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
     {
@@ -3517,12 +3527,31 @@ void SwHTMLParser::NewStdAttr( HtmlTokenId nToken )
 
         if( ParseStyleOptions( aStyle, aId, aClass, aItemSet, aPropInfo, &aLang, &aDir ) )
         {
+            if( pCharFormat )
+            {
+                // what the style sets the same way is not hard formatting
+                std::vector<sal_uInt16> aRestated;
+                for( SfxItemIter aIter( aItemSet ); !aIter.IsAtEnd(); aIter.Next() )
+                {
+                    const SfxPoolItem* pItem = aIter.GetCurItem();
+                    const SfxPoolItem* pStyleItem = nullptr;
+                    if( pCharFormat->GetAttrSet().GetItemState( pItem->Which(), true, &pStyleItem )
+                            == SfxItemState::SET
+                        && *pStyleItem == *pItem )
+                        aRestated.push_back( pItem->Which() );
+                }
+                for( sal_uInt16 nWhich : aRestated )
+                    aItemSet.ClearItem( nWhich );
+            }
             if( HtmlTokenId::SPAN_ON != nToken || aClass.isEmpty() ||
                 !CreateContainer( aClass, aItemSet, aPropInfo, xCntxt.get() ) )
                 DoPositioning( aItemSet, aPropInfo, xCntxt.get() );
             InsertAttrs( aItemSet, aPropInfo, xCntxt.get(), true );
         }
     }
+
+    if( pCharFormat )
+        InsertAttr( &m_xAttrTab->pCharFormats, SwFormatCharFormat( pCharFormat ), xCntxt.get() );
 
     // save the context
     PushContext(xCntxt);

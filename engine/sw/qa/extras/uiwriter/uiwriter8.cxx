@@ -1661,6 +1661,16 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateAddsNoDirectFormatting)
                 OUStringToOString(rProperty, RTL_TEXTENCODING_ASCII_US).getStr(),
                 beans::PropertyState_DEFAULT_VALUE, xState->getPropertyState(rProperty));
     }
+
+    // And the run in the character style Strong is in that style again, bold through the
+    // style rather than by direct formatting: it used to come back as a bold run.
+    uno::Reference<text::XTextRange> xStrong = getRun(getParagraph(2), 2);
+    CPPUNIT_ASSERT_EQUAL(u"loose and rich"_ustr, xStrong->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Strong"_ustr, getProperty<OUString>(xStrong, u"CharStyleName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xStrong, u"CharWeight"_ustr));
+    uno::Reference<beans::XPropertyState> xStrongState(xStrong, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DEFAULT_VALUE,
+                         xStrongState->getPropertyState(u"CharWeight"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateKeepsDirectFormatting)

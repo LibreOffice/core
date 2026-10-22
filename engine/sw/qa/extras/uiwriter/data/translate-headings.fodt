@@ -5,11 +5,12 @@
   <style:style style:name="Standard" style:family="paragraph"/>
   <style:style style:name="Title" style:family="paragraph" style:parent-style-name="Standard"><style:paragraph-properties fo:margin-bottom="0.4cm"/><style:text-properties fo:font-size="24pt" fo:font-weight="bold" style:font-name="Liberation Sans"/></style:style>
   <style:style style:name="Heading_20_2" style:display-name="Heading 2" style:family="paragraph" style:parent-style-name="Standard"><style:paragraph-properties fo:margin-top="0.4cm" fo:margin-bottom="0.2cm"/><style:text-properties fo:font-size="15pt" fo:font-weight="bold" style:font-name="Liberation Sans"/></style:style>
+  <style:style style:name="Strong" style:family="text"><style:text-properties fo:font-weight="bold"/></style:style>
  </office:styles>
  <office:body>
   <office:text>
    <text:p text:style-name="Title">A short guide to the kitchen garden</text:p>
-   <text:p text:style-name="Standard">A kitchen garden is a small plot, close to the house, where vegetables and herbs are grown for the table. It does not need much space: a few raised beds in a sunny corner are enough for a family. The soil should be loose and rich, so it is worth adding compost every autumn and letting the worms do the rest over the winter.</text:p>
+   <text:p text:style-name="Standard">A kitchen garden is a small plot, close to the house, where vegetables and herbs are grown for the table. It does not need much space: a few raised beds in a sunny corner are enough for a family. The soil should be <text:span text:style-name="Strong">loose and rich</text:span>, so it is worth adding compost every autumn and letting the worms do the rest over the winter.</text:p>
    <text:h text:style-name="Heading_20_2" text:outline-level="2">What to plant first</text:h>
    <text:p text:style-name="Standard">Beginners do well with lettuce, radishes and beans. They grow quickly, forgive the odd mistake, and give a harvest within a few weeks of sowing. Tomatoes and peppers are more demanding: they want warmth, regular water and a stake to lean on, but a single plant of each can carry fruit all summer long.</text:p>
    <text:p text:style-name="Standard">Herbs belong near the kitchen door. Parsley, chives and thyme are picked a few leaves at a time, and a cook who has to cross the garden for them will soon stop bothering. Mint spreads without limit, so keep it in a pot.</text:p>

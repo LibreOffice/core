@@ -134,6 +134,12 @@ public:
 
     static void AddClassName( UIName& rFormatName, std::u16string_view rClass );
 
+    // the CSS class a style of this name is written with
+    static OUString GetClassOfName( std::u16string_view rName );
+
+    // the character format whose name gives this class, if there is one
+    SwCharFormat* FindCharFormatByClass( std::u16string_view rClass ) const;
+
     static bool MayBePositioned( const SvxCSS1PropertyInfo& rPropInfo,
                                  bool bAutoWidth=false );
 

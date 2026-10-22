@@ -19,6 +19,7 @@
 
 #include <hintids.hxx>
 #include <svl/itemiter.hxx>
+#include <unotools/charclass.hxx>
 #include <svl/urihelper.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <sfx2/docfile.hxx>
@@ -1475,6 +1476,28 @@ void SwCSS1Parser::AddClassName( UIName& rFormatName, std::u16string_view rClass
     OSL_ENSURE( !rClass.empty(), "Style class without length?" );
 
     rFormatName = UIName(rFormatName.toString() + "." + rClass);
+}
+
+OUString SwCSS1Parser::GetClassOfName( std::u16string_view rName )
+{
+    OUString aClass = GetAppCharClass().lowercase( OUString( rName ) );
+    aClass = aClass.replaceAll( ".", "-" );
+    aClass = aClass.replaceAll( " ", "-" );
+    aClass = aClass.replaceAll( "_", "-" );
+    return aClass;
+}
+
+SwCharFormat* SwCSS1Parser::FindCharFormatByClass( std::u16string_view rClass ) const
+{
+    const SwCharFormats& rFormats = *m_pDoc->GetCharFormats();
+    // the first one is the default character format
+    for( size_t i = 1; i < rFormats.size(); ++i )
+    {
+        SwCharFormat* pFormat = rFormats[i];
+        if( !pFormat->IsAuto() && GetClassOfName( pFormat->GetName().toString() ) == rClass )
+            return pFormat;
+    }
+    return nullptr;
 }
 
 void SwCSS1Parser::FillDropCap( SwFormatDrop& rDrop,

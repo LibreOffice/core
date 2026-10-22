@@ -732,6 +732,7 @@ SwHTMLWriter& OutCSS1_ParaTagStyleOpt( SwHTMLWriter& rWrt, const SfxItemSet& rIt
 
 SwHTMLWriter& OutCSS1_HintSpanTag( SwHTMLWriter& rWrt, const SfxPoolItem& rHt );
 SwHTMLWriter& OutCSS1_HintStyleOpt( SwHTMLWriter& rWrt, const SfxPoolItem& rHt );
+SwHTMLWriter& OutCSS1_HintStyleOpt( SwHTMLWriter& rWrt, const SfxItemSet& rItemSet );
 
 /// Writes the background of table rows.
 SwHTMLWriter& OutCSS1_TableBGStyleOpt( SwHTMLWriter& rWrt, const SfxPoolItem& rHt );

@@ -1226,6 +1226,28 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_Tdf160017_spanClosingOrder)
     CPPUNIT_ASSERT(parseXml(maTempFile));
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testCharacterStyleAsClass)
+{
+    // Given a run in a character style of the document's own, Strong, and a run in direct bold:
+    createSwDoc("char-style.fodt");
+
+    // When exporting to HTML:
+    ExportToHTML();
+
+    // Then the styled run is a span with the style as its class and the style's attributes as
+    // its inline style, while the direct bold is still a tag: the style used to be written as
+    // its attributes alone, so a reader with the style could not apply it again.
+    xmlDocUniquePtr pDoc = parseXml(maTempFile);
+    assertXPath(pDoc, "/html/body/p/span[@class='strong']", 1);
+    CPPUNIT_ASSERT_EQUAL(u"loose and rich"_ustr,
+                         getXPathContent(pDoc, "/html/body/p/span[@class='strong']")
+                             .replaceAll(u"\n", u" "));
+    assertXPath(pDoc, "/html/body/p/span[@class='strong']", "style", u"font-weight: bold");
+    assertXPath(pDoc, "/html/body/p/span/b", 0);
+    CPPUNIT_ASSERT_EQUAL(u"dug deep"_ustr,
+                         getXPathContent(pDoc, "/html/body/p/b").replaceAll(u"\n", u" "));
+}
+
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_Tdf160390)
 {
     // This document must not hang infinitely on HTML export

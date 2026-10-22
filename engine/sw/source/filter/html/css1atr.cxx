@@ -89,6 +89,7 @@
 #include <poolfmt.hxx>
 #include "css1kywd.hxx"
 #include "wrthtml.hxx"
+#include "swcss1.hxx"
 #include "htmlnum.hxx"
 #include "css1atr.hxx"
 
@@ -903,10 +904,7 @@ sal_uInt16 SwHTMLWriter::GetCSS1Selector( const SwFormat *pFormat, OString& rTok
             rClass = rClass.replaceAt( 0, nPos+1, u"" );
         }
 
-        rClass = GetAppCharClass().lowercase( rClass );
-        rClass = rClass.replaceAll( ".", "-" );
-        rClass = rClass.replaceAll( " ", "-" );
-        rClass = rClass.replaceAll( "_", "-" );
+        rClass = SwCSS1Parser::GetClassOfName( rClass );
     }
 
     return nDeep;
@@ -3686,6 +3684,20 @@ SwHTMLWriter& OutCSS1_HintStyleOpt( SwHTMLWriter& rWrt, const SfxPoolItem& rHt )
                                    CSS1_OUTMODE_HINT, nullptr );
 
     Out( aCSS1AttrFnTab, rHt, rWrt );
+
+    if( !rWrt.m_bFirstCSS1Property )
+        rWrt.Strm().WriteChar( '\"' );
+
+    return rWrt;
+}
+
+SwHTMLWriter& OutCSS1_HintStyleOpt( SwHTMLWriter& rWrt, const SfxItemSet& rItemSet )
+{
+    SwCSS1OutMode aMode( rWrt, CSS1_OUTMODE_STYLE_OPT_ON |
+                                   CSS1_OUTMODE_ENCODE|
+                                   CSS1_OUTMODE_HINT, nullptr );
+
+    rWrt.OutCSS1_SfxItemSet( rItemSet );
 
     if( !rWrt.m_bFirstCSS1Property )
         rWrt.Strm().WriteChar( '\"' );
