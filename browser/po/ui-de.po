@@ -12,9 +12,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-13 14:06+0200\n"
-"PO-Revision-Date: 2026-10-20 17:01+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@users.noreply.hosted.weblate.org>"
-"\n"
+"PO-Revision-Date: 2026-10-22 21:09+0000\n"
+"Last-Translator: Mr-Update <mr-update@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/de/>\n"
 "Language: de\n"
@@ -1165,7 +1164,7 @@ msgstr "Zurücksetzen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3140
 msgid "Use the AI provider set on the server"
-msgstr "Den serverseitig vorkonfigurierten KI-Provider verwenden"
+msgstr "Verwenden Sie den auf dem Server festgelegten KI-Anbieter"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3190
 msgid "Providers"
@@ -1184,8 +1183,9 @@ msgid ""
 "Add a provider to start using AI for text generation, image generation, or "
 "both. Your administrator's provider is filled in for you."
 msgstr ""
-"KI-Provider für Text- und Bildgenerierung hinzufügen. Administrative "
-"Voreinstellungen wurden als Default übernommen."
+"Fügen Sie einen Anbieter hinzu, um KI zur Text- oder Bildgenerierung oder "
+"für beides zu nutzen. Der Anbieter Ihres Administrators ist bereits für Sie "
+"eingetragen."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3213
 msgid "Add provider..."
@@ -1193,15 +1193,17 @@ msgstr "Anbieter hinzufügen ..."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3233
 msgid "Choose the AI provider to use for text and image generation."
-msgstr "KI-Provider für Text- und Bildgenerierung auswählen."
+msgstr ""
+"Wählen Sie den KI-Anbieter aus, der für die Text- und Bildgenerierung "
+"verwendet werden soll."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3235
 msgid ""
 "Use your own AI provider instead of the one set up by your administrator. "
 "This applies only to you."
 msgstr ""
-"Eigene Voreinstellungen für den KI-Provider verwenden. Diese Einstellung "
-"betrifft nur Ihr persönliches Setup."
+"Verwenden Sie Ihren eigenen KI-Anbieter anstelle des von Ihrem Administrator "
+"eingerichteten Anbieters. Dies gilt nur für Sie."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3390
 msgid "seconds"
@@ -1234,10 +1236,9 @@ msgid ""
 "Models without it (e.g. base llama3, gemma) can still chat but cannot use "
 "document tools."
 msgstr ""
-"Zur Bearbeitung von Dokumenten muss ein KI-Modell mit Werkzeugaufruf-"
-"Funktionen ausgewählt werden, beispielsweise gpt-4o oder llama3.1. Modelle "
-"ohne diese Funktion (z.B. Base llama3 oder Gemma) können nur im Chat-Modus, "
-"aber nicht zur Dokumentbearbeitung verwendet werden."
+"Um Dokumente zu bearbeiten, wählen Sie ein Modell mit Tool-Aufruf aus, z. B. "
+"gpt-4o oder llama3.1. Modelle ohne diese Funktion (z. B. base llama3, gemma) "
+"können zwar weiterhin chatten, aber keine Dokument-Tools nutzen."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3491
 msgid "Image generation"
@@ -1306,7 +1307,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4387
 msgid "Lightproof Sentence Checker"
-msgstr "Lightproof Grammatikprüfung"
+msgstr "Lightproof-Grammatikprüfung"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4390
 msgid "Choose what the sentence checker looks for as you type."
@@ -1407,7 +1408,7 @@ msgstr "Anpassen des Verhaltens von Office-Dokumenten."
 
 #: admin/src/integrator/Xcu.ts:492
 msgid "Select a tab to view settings."
-msgstr "Wählen Sie einen Tab zum Anzeigen der Einstellungen aus."
+msgstr "Wählen Sie eine Registerkarte zum Anzeigen der Einstellungen aus."
 
 #: admin/src/Util.js:26
 msgid "kB"
@@ -1853,7 +1854,7 @@ msgstr "Automatische Farbe"
 #: src/control/Control.AboutDialog.ts:89
 #: src/control/jsdialog/Widget.TreeView.ts:859
 msgid "(opens in new tab)"
-msgstr "(wird in einem neuen Tab geöffnet)"
+msgstr "(wird in einer neuen Registerkarte geöffnet)"
 
 #: src/control/Control.AboutDialog.ts:155
 msgid "Served by: "
@@ -2663,9 +2664,9 @@ msgid ""
 "Here is a proposed outline. Edit the titles or descriptions, remove slides "
 "you do not want, then approve to build the deck:"
 msgstr ""
-"Hier nun der erarbeitete Textentwurf. Bitte noch Überschriften oder "
-"Beschreibungen anpassen, falls gewünscht Folien entfernen, und danach "
-"Freigabe zur Erstellung des Foliensatzes erteilen:"
+"Hier ist ein Vorschlag für eine Gliederung. Bearbeiten Sie die Überschriften "
+"oder Beschreibungen, entfernen Sie nicht gewünschte Folien und geben Sie "
+"anschließend die Freigabe zur Erstellung der Präsentation:"
 
 #: src/control/Control.AIChatSidebar.ts:3365
 msgid "Reject outline"
@@ -2718,8 +2719,7 @@ msgstr "Zeitüberschreitung bei der Formelanalyse"
 #: src/control/Control.AIChatSidebar.ts:3636
 msgid "Select the content you want the assistant to work on first."
 msgstr ""
-"Bitte zunächst Dokumentinhalte auswählen, mit welchen der KI-Assistent "
-"arbeiten soll."
+"Wählen Sie den Inhalt aus, den der Assistent als Erstes bearbeiten soll."
 
 #: src/control/Control.AIChatSidebar.ts:3651
 msgid "Analyzing formula dependencies..."
@@ -2856,12 +2856,12 @@ msgid ""
 "Describe the image you want to generate. For example: \"A watercolour of a "
 "mountain lake at sunrise\"."
 msgstr ""
-"Bitte Bildbeschreibung für das zu generierende Bild erstellen. Beispiel: "
-"\"Aquarell eines Bergsees beim Sonnenaufgang\"."
+"Beschreiben Sie das Bild, das Sie erstellen möchten. Zum Beispiel: „Ein "
+"Aquarell eines Bergsees bei Sonnenaufgang“."
 
 #: src/control/Control.AIChatSidebar.ts:3916
 msgid "Write speaker notes for the current slide."
-msgstr "Bitte Sprechernotizen für die aktuelle Folie erstellen."
+msgstr "Verfassen Sie Sprechernotizen für die aktuelle Folie."
 
 #: src/control/Control.AIChatSidebar.ts:3949
 msgid ""
@@ -2941,12 +2941,14 @@ msgstr ""
 #: src/control/Control.CleanupSidebar.ts:204
 msgid "Images stored with more detail than a slide can show"
 msgstr ""
-"Bilder wurden mit höherer als der auf der Folie möglichen Auflösung "
-"gespeichert"
+"Bilder, die mit einer höheren Detailgenauigkeit gespeichert sind, als eine "
+"Folie darstellen kann"
 
 #: src/control/Control.CleanupSidebar.ts:207
 msgid "Images stored at more than %1 DPI, more detail than a slide can show"
 msgstr ""
+"Bilder, die mit mehr als %1 DPI gespeichert sind, enthalten mehr Details, "
+"als eine Folie darstellen kann"
 
 #: src/control/Control.CleanupSidebar.ts:224
 msgid "High-resolution images"
@@ -3182,8 +3184,8 @@ msgstr ""
 #: src/control/Control.CleanupSidebar.ts:1013
 msgid "Find what makes this presentation large, and clean it up here."
 msgstr ""
-"Analysiere, was die Dateigröße der Präsentation maßgeblich beeinflusst, und "
-"bereinige dies."
+"Finden Sie heraus, was diese Präsentation so umfangreich macht, und "
+"bereinigen Sie sie hier."
 
 #: src/control/Control.CleanupSidebar.ts:1077
 msgid "saves %1"
@@ -3624,7 +3626,7 @@ msgstr ""
 
 #: src/control/onboarding/OnboardingSteps.ts:79
 msgid "The slide panel"
-msgstr "Die Folienübersichtsleiste"
+msgstr "Der Folienbereich"
 
 #: src/control/onboarding/OnboardingSteps.ts:81
 msgid ""
@@ -4395,12 +4397,12 @@ msgstr "Stil-Liste"
 #: src/control/Control.Menubar.ts:1398 src/control/Control.Menubar.ts:1448
 #: src/control/Control.Menubar.ts:1462 src/control/Control.Menubar.ts:1485
 msgid "Local Image..."
-msgstr "Lokales Bild …"
+msgstr "Lokales Bild…"
 
 #: src/control/Control.Menubar.ts:213 src/control/Control.Menubar.ts:549
 #: src/control/Control.Menubar.ts:740 src/control/Control.Menubar.ts:934
 msgid "Shapes ..."
-msgstr "Formen …"
+msgstr "Formen…"
 
 #: src/control/Control.Menubar.ts:234 src/control/Control.Menubar.ts:236
 #: src/control/Control.Menubar.ts:1415 src/control/Control.Menubar.ts:1417
@@ -4559,7 +4561,7 @@ msgstr "Notizen ansehen"
 #: src/control/Control.Menubar.ts:525
 #: src/control/Control.NotebookbarImpress.js:748
 msgid "Bottom Panel"
-msgstr ""
+msgstr "Unterer Bereich"
 
 #: src/control/Control.Menubar.ts:526
 #: src/control/Control.NotebookbarImpress.js:749
@@ -4775,7 +4777,7 @@ msgstr "Suchleiste anzeigen"
 #: src/control/Notebookbar.WriterTableDesignTab.ts:52
 #: src/control/Control.TopToolbar.js:181
 msgid "Borders"
-msgstr "Ränder"
+msgstr "Umrandung"
 
 #: src/control/Control.MobileSearchBar.ts:28
 msgid "Hide the search bar"
@@ -6397,7 +6399,7 @@ msgstr ""
 
 #: src/control/Control.PaneSplitter.tsx:70
 msgid "Resize panels"
-msgstr ""
+msgstr "Bereiche in der Größe anpassen"
 
 #: src/control/Control.Scroll.Annotation.js:19
 msgid "Scroll up annotations"
@@ -6567,7 +6569,8 @@ msgid ""
 "Options under File tab."
 msgstr ""
 "Die Seite an die Fensterbreite anpassen. Intelligenter Zoom beim Öffnen kann "
-"in den Optionen im Tab „Datei“ aktiviert oder deaktiviert werden."
+"in den Optionen in der Registerkarte „Datei“ aktiviert oder deaktiviert "
+"werden."
 
 #: src/control/Control.StatusBar.js:295
 msgid "Fit the page to the window width."
@@ -6620,7 +6623,7 @@ msgstr "Tabelle nach dieser einfügen"
 
 #: src/control/Control.Tabs.js:109 src/control/Control.Tabs.js:116
 msgid "Reset Tab Color"
-msgstr "Tab-Farbe zurücksetzen"
+msgstr "Registerkarten-Farbe zurücksetzen"
 
 #: src/control/Control.Tabs.js:136 src/control/Control.Tabs.js:140
 msgid "Move Sheet Left"
@@ -7070,7 +7073,7 @@ msgstr "{0} öffnete dieses Dokument"
 
 #: src/control/Permission.js:609 src/control/Permission.js:625
 msgid "Choose how you'd like to continue:"
-msgstr "Bitte auswählen, wie weiter vorgegangen werden soll:"
+msgstr "Wählen Sie aus, wie Sie fortfahren möchten:"
 
 #: src/control/Permission.js:619
 msgid "started editing"
@@ -7406,47 +7409,47 @@ msgstr "Selbstdefiniert"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1551
 msgid "DL Envelope"
-msgstr "DL Briefumschlag"
+msgstr "DL-Umschlag"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1552
 msgid "C6 Envelope"
-msgstr "Umschlag C6"
+msgstr "C6-Umschlag"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1553
 msgid "C6/5 Envelope"
-msgstr "C6/5 Briefumschlag"
+msgstr "C6/5-Umschlag"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1554
 msgid "C5 Envelope"
-msgstr "C5 Briefumschlag"
+msgstr "C5-Umschlag"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1555
 msgid "C4 Envelope"
-msgstr "C4 Briefumschlag"
+msgstr "C4-Umschlag"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1558
 msgid "#6¾ Envelope"
-msgstr "#6¾ Briefumschlag"
+msgstr "#6 ¾-Umschlag"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1563
 msgid "#7¾ (Monarch) Envelope"
-msgstr "#7¾ (Monarch) Briefumschlag"
+msgstr "#7 ¾-Umschlag (Monarch)"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1566
 msgid "#9 Envelope"
-msgstr "#9 Briefumschlag"
+msgstr "#9-Umschlag"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1567
 msgid "#10 Envelope"
-msgstr "#10 Briefumschlag"
+msgstr "#10-Umschlag"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1568
 msgid "#11 Envelope"
-msgstr "#11 Briefumschlag"
+msgstr "#11-Umschlag"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1569
 msgid "#12 Envelope"
-msgstr "#12 Briefumschlag"
+msgstr "#12-Umschlag"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1572
 msgid "Japanese Postcard"
@@ -8167,7 +8170,7 @@ msgstr "Standard"
 
 #: src/docstate.ts:299
 msgid "Theme colors"
-msgstr "Themenfarben"
+msgstr "Designfarben"
 
 #: src/docstate.ts:300
 msgid "Document colors"
@@ -8179,7 +8182,7 @@ msgstr ", Fehler in der Clusterkonfiguration: Serverid stimmt nicht überein"
 
 #: src/dom/NotebookbarAccessibility.js:333
 msgid "{0} tab selected"
-msgstr "{0} Tab ausgewählt"
+msgstr "{0} Registerkarte ausgewählt"
 
 #: src/errormessages.ts:16
 msgid "No disk space left."
@@ -8280,8 +8283,8 @@ msgid ""
 "You are leaving the document. The following web page will open in a new "
 "tab: "
 msgstr ""
-"Sie verlassen das Dokument. Die folgende Webseite wird in einem neuen Tab "
-"geöffnet: "
+"Sie verlassen das Dokument. Die folgende Webseite wird in einer neuen "
+"Registerkarte geöffnet: "
 
 #: src/errormessages.ts:52
 msgid ""
@@ -8528,7 +8531,7 @@ msgstr ""
 
 #: src/layer/marker/TextInput.js:573
 msgid "the Help tab"
-msgstr "der Tab Hilfe"
+msgstr "die Registerkarte Hilfe"
 
 #: src/layer/marker/TextInput.js:573
 msgid "the View menu"
