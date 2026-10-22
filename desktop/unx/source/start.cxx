@@ -113,9 +113,9 @@ static ChildInfo child_spawn(Args* args, bool bAllArgs, bool bWithStatus)
 
     /* copy args */
     sal_uInt32 nArgs = bAllArgs ? args->aArgs.size() : args->nArgsEnv;
-    rtl_uString** ppArgs = static_cast<rtl_uString**>(calloc(nArgs + 1, sizeof(rtl_uString*)));
+    std::vector<rtl_uString*> aArguments;
     for (sal_uInt32 i = 0; i < nArgs; ++i)
-        ppArgs[i] = args->aArgs.at(i);
+        aArguments.push_back(args->aArgs.at(i));
 
     if(bWithStatus)
     {
@@ -124,17 +124,16 @@ static ChildInfo child_spawn(Args* args, bool bAllArgs, bool bWithStatus)
         /* add the pipe arg */
         snprintf(buffer, 63, "--splash-pipe=%d", status_pipe[1]);
         rtl_uString_newFromAscii( &pTmp, buffer );
-        ppArgs[nArgs] = pTmp;
-        ++nArgs;
+        aArguments.push_back(pTmp);
     }
 
     /* start the main process */
-    oslProcessError nError = osl_executeProcess(pApp, ppArgs, nArgs, osl_Process_NORMAL, nullptr,
-                                                nullptr, nullptr, 0, &info.child);
+    oslProcessError nError
+        = osl_executeProcess(pApp, aArguments.data(), aArguments.size(), osl_Process_NORMAL,
+                             nullptr, nullptr, nullptr, 0, &info.child);
 
     if (pTmp)
         rtl_uString_release(pTmp);
-    free (ppArgs);
 
     if (nError != osl_Process_E_None)
     {
