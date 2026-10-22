@@ -79,6 +79,13 @@ namespace cool {
 		description: string;
 	}
 
+	interface CustomPrompt {
+		id: string;
+		name: string;
+		// The instruction sent to the assistant together with the selection.
+		prompt: string;
+	}
+
 	interface ChoicePayload {
 		requestId: string;
 		context: 'writer-section';
@@ -140,6 +147,24 @@ namespace cool {
 		private emojiPickerOpen: boolean = false;
 		private deleteConfirmOpen: boolean = false;
 
+		private customPrompts: CustomPrompt[] = [];
+		private promptPickerOpen: boolean = false;
+		private promptFormOpen: boolean = false;
+		private promptFormMode: 'add' | 'edit' = 'add';
+		private promptDraft: CustomPrompt | null = null;
+		private promptDeleteConfirmOpen: boolean = false;
+		// While the input holds a slash and a search text, the list above the
+		// input offers the prompts whose names contain that text. slashIndex is
+		// the highlighted row, or -1 while no row is highlighted. The row after the last prompt
+		// is the one that adds a prompt.
+		private slashMenuOpen: boolean = false;
+		private slashMatches: CustomPrompt[] = [];
+		private slashIndex: number = -1;
+		// The search text the list was last built for, or closed for with Escape.
+		// A key that leaves it unchanged, such as an arrow key, keeps the
+		// highlighted row, and keeps a list closed with Escape closed.
+		private slashQuery: string | null = null;
+
 		private builder: any;
 		private container: HTMLElement;
 		private wrapper: HTMLElement;
@@ -194,6 +219,10 @@ namespace cool {
 		private readonly PREFS_RECENT_ICONS = 'aichat.toneIconRecents';
 		private readonly PREFS_SELECTED_TONE = 'aichat.selectedTone';
 		private readonly PREFS_EMOJIFY = 'aichat.emojify';
+		private readonly PREFS_CUSTOM_PROMPTS = 'aichat.customPrompts';
+		private readonly MAX_CUSTOM_PROMPTS = 20;
+		private readonly MAX_PROMPT_NAME_LEN = 50;
+		private readonly MAX_PROMPT_TEXT_LEN = 2000;
 
 		constructor() {
 			this.container = document.getElementById('aichat-panel') as HTMLElement;
@@ -230,6 +259,16 @@ namespace cool {
 				this.recentIcons = this.DEFAULT_TONE_ICONS.slice();
 			}
 
+			try {
+				const raw = window.prefs.get(this.PREFS_CUSTOM_PROMPTS, '[]');
+				const parsed = JSON.parse(raw);
+				this.customPrompts = Array.isArray(parsed)
+					? parsed.filter(this.isValidCustomPrompt)
+					: [];
+			} catch {
+				this.customPrompts = [];
+			}
+
 			const sel = window.prefs.get(this.PREFS_SELECTED_TONE, '');
 			this.selectedTone = sel || null;
 			this.emojify = window.prefs.getBoolean(this.PREFS_EMOJIFY, false);
@@ -247,6 +286,15 @@ namespace cool {
 				typeof t.name === 'string' &&
 				typeof t.icon === 'string' &&
 				typeof t.description === 'string'
+			);
+		};
+
+		private isValidCustomPrompt = (p: any): p is CustomPrompt => {
+			return (
+				p &&
+				typeof p.id === 'string' &&
+				typeof p.name === 'string' &&
+				typeof p.prompt === 'string'
 			);
 		};
 
@@ -401,9 +449,15 @@ namespace cool {
 			this.applyInputStyles();
 			this.applyRatingBadge();
 			this.setTonePickerOpenClass(this.tonePickerOpen);
+			this.setPromptPickerOpenClass(this.promptPickerOpen);
+			this.renderSlashMenu();
 			this.scrollToBottom();
 			this.attachContainerKeyboardHandler();
-			if (!this.tonePickerOpen && !this.isProcessing) {
+			if (
+				!this.tonePickerOpen &&
+				!this.promptPickerOpen &&
+				!this.isProcessing
+			) {
 				this.focusInput();
 			}
 		}
@@ -633,6 +687,8 @@ namespace cool {
 					this.getMessagesAreaJSON(),
 					this.getHintJSON(),
 					this.getTonePickerJSON(),
+					this.getPromptPickerJSON(),
+					this.getSlashMenuJSON(),
 					this.getInputJSON(),
 				],
 			};
@@ -1029,7 +1085,7 @@ namespace cool {
 								id: 'aichat-input',
 								type: 'multilineedit',
 								text: this.inputText,
-								placeholder: _('Ask AI...'),
+								placeholder: _('Ask AI, or type / for a saved prompt...'),
 								cursor: true,
 								enabled: !this.isProcessing,
 								aria: { label: _('Message input') },
@@ -1039,7 +1095,15 @@ namespace cool {
 								type: 'container',
 								horizontal: true,
 								children: [
-									this.getToneChipJSON(),
+									{
+										id: 'aichat-input-chips',
+										type: 'container',
+										horizontal: true,
+										children: [
+											this.getToneChipJSON(),
+											this.getPromptChipJSON(),
+										],
+									},
 									{
 										id: 'aichat-send-btn',
 										type: 'pushbutton',
@@ -1062,23 +1126,21 @@ namespace cool {
 		}
 
 		private getToneChipLabel(): string {
-			// Caret points up while the picker is open, down while closed.
-			const caret = this.tonePickerOpen ? ' ▴' : ' ▾';
 			if (this.selectedTone === null) {
-				return _('Set tone') + caret;
+				return _('Set Tone');
 			}
 			const preset = this.TONE_PRESETS.find((p) => p.id === this.selectedTone);
 			if (preset) {
 				if (this.emojify) {
-					return preset.icon + ' ' + preset.label + caret;
+					return preset.icon + ' ' + preset.label;
 				}
-				return preset.label + caret;
+				return preset.label;
 			}
 			const custom = this.findCustomTone(this.selectedTone);
 			if (custom) {
-				return custom.icon + ' ' + custom.name + caret;
+				return custom.icon + ' ' + custom.name;
 			}
-			return _('Set tone') + caret;
+			return _('Set Tone');
 		}
 
 		private getToneChipJSON(): any {
@@ -1188,7 +1250,8 @@ namespace cool {
 						actions: [
 							{
 								id: 'aichat-tone-edit-' + t.id,
-								text: '✎',
+								image: 'lc_edit.svg',
+								tooltip: _('Edit tone'),
 								aria: { label: _('Edit tone') },
 							},
 						],
@@ -1243,6 +1306,565 @@ namespace cool {
 			};
 		}
 
+		private getPromptChipJSON(): any {
+			return {
+				id: 'aichat-prompt-chip',
+				type: 'pushbutton',
+				text: _('Add Prompts'),
+				enabled: !this.isProcessing,
+				aria: {
+					label: _('Saved prompts'),
+					expanded: this.promptPickerOpen,
+					haspopup: true,
+				},
+			};
+		}
+
+		private getPromptPickerJSON(): any {
+			if (this.promptFormOpen) {
+				// The picker keeps its own element only while it has more than
+				// one child.
+				const children: any[] = [
+					this.promptDeleteConfirmOpen
+						? this.getPromptDeleteConfirmJSON()
+						: this.getPromptFormJSON(),
+				];
+				this.ensureContainerChildren(children, 'aichat-prompt-picker');
+				return {
+					id: 'aichat-prompt-picker',
+					type: 'container',
+					vertical: true,
+					children: children,
+				};
+			}
+
+			const children: any[] = [
+				{
+					id: 'aichat-prompt-title',
+					type: 'fixedtext',
+					text: _('My prompts'),
+					enabled: true,
+				},
+			];
+
+			if (this.customPrompts.length > 0) {
+				children.push({
+					id: 'aichat-prompt-tip',
+					type: 'fixedtext',
+					text: _('Type / in the message box to run a prompt.'),
+					enabled: true,
+				});
+				const chips: any[] = this.customPrompts.map((p) => ({
+					id: 'aichat-prompt-run-' + p.id,
+					type: 'chip',
+					text: p.name,
+					pressed: false,
+					enabled: !this.isProcessing,
+					aria: { label: _('Run prompt {0}').replace('{0}', p.name) },
+					actions: [
+						{
+							id: 'aichat-prompt-edit-' + p.id,
+							image: 'lc_edit.svg',
+							tooltip: _('Edit prompt'),
+							aria: { label: _('Edit prompt') },
+						},
+					],
+				}));
+				this.ensureContainerChildren(chips, 'aichat-prompt-list');
+				children.push({
+					id: 'aichat-prompt-list',
+					type: 'container',
+					horizontal: true,
+					children: chips,
+				});
+			} else {
+				children.push({
+					id: 'aichat-prompt-empty',
+					type: 'fixedtext',
+					text: _(
+						'Save instructions you use often and run them on the selected text. Type / in the message box to run a prompt.',
+					),
+					enabled: true,
+				});
+			}
+
+			children.push({
+				id: 'aichat-prompt-add',
+				type: 'pushbutton',
+				text: _('+ Add a prompt'),
+				enabled:
+					this.customPrompts.length < this.MAX_CUSTOM_PROMPTS &&
+					!this.isProcessing,
+				aria: { label: _('Add a prompt') },
+			});
+
+			return {
+				id: 'aichat-prompt-picker',
+				type: 'container',
+				vertical: true,
+				children: children,
+			};
+		}
+
+		private getPromptFormJSON(): any {
+			const draft = this.promptDraft || { id: '', name: '', prompt: '' };
+
+			const headerChildren: any[] = [
+				{
+					id: 'aichat-prompt-form-back',
+					type: 'pushbutton',
+					text: '←',
+					enabled: true,
+					aria: { label: _('Back to prompts') },
+				},
+				{
+					id: 'aichat-prompt-form-title',
+					type: 'fixedtext',
+					text:
+						this.promptFormMode === 'edit' ? _('Edit prompt') : _('New prompt'),
+					enabled: true,
+				},
+			];
+			if (this.promptFormMode === 'edit') {
+				headerChildren.push({
+					id: 'aichat-prompt-form-delete',
+					type: 'pushbutton',
+					image: this.ICON_TRASH,
+					enabled: true,
+					aria: { label: _('Delete prompt') },
+				});
+			}
+
+			const actionChildren: any[] = [
+				{
+					id: 'aichat-prompt-form-cancel',
+					type: 'pushbutton',
+					text: _('Cancel'),
+					enabled: true,
+					aria: { label: _('Cancel') },
+				},
+				{
+					id: 'aichat-prompt-form-save',
+					type: 'pushbutton',
+					text: _('Save prompt'),
+					enabled: this.canSavePromptForm(),
+					aria: { label: _('Save prompt') },
+				},
+			];
+
+			return {
+				id: 'aichat-prompt-form',
+				type: 'container',
+				vertical: true,
+				children: [
+					{
+						id: 'aichat-prompt-form-header',
+						type: 'container',
+						horizontal: true,
+						children: headerChildren,
+					},
+					{
+						id: 'aichat-prompt-form-name-label',
+						type: 'fixedtext',
+						text: _('Name'),
+						enabled: true,
+					},
+					{
+						id: 'aichat-prompt-form-name',
+						type: 'edit',
+						text: draft.name,
+						placeholder: _('e.g. Meeting minutes'),
+						enabled: true,
+						aria: { label: _('Prompt name') },
+					},
+					{
+						id: 'aichat-prompt-form-text-label',
+						type: 'fixedtext',
+						text: _('What should AI do with the selected text?'),
+						enabled: true,
+					},
+					{
+						id: 'aichat-prompt-form-text',
+						type: 'multilineedit',
+						text: draft.prompt,
+						placeholder: _(
+							'Turn the selected notes into meeting minutes with decisions and action items.',
+						),
+						cursor: true,
+						enabled: true,
+						aria: { label: _('Prompt instruction') },
+					},
+					{
+						id: 'aichat-prompt-form-actions',
+						type: 'container',
+						horizontal: true,
+						children: actionChildren,
+					},
+				],
+			};
+		}
+
+		private getPromptDeleteConfirmJSON(): any {
+			const name = this.promptDraft ? this.promptDraft.name : '';
+			return {
+				id: 'aichat-prompt-delete-confirm',
+				type: 'container',
+				vertical: true,
+				allyRole: 'group',
+				aria: { label: _('Delete prompt confirmation') },
+				children: [
+					{
+						id: 'aichat-prompt-delete-confirm-title',
+						type: 'fixedtext',
+						text: _('Delete prompt'),
+						enabled: true,
+					},
+					{
+						id: 'aichat-prompt-delete-confirm-desc',
+						type: 'fixedtext',
+						text: _('The prompt "{0}" will be deleted.').replace('{0}', name),
+						enabled: true,
+					},
+					{
+						id: 'aichat-prompt-delete-confirm-actions',
+						type: 'container',
+						horizontal: true,
+						children: [
+							{
+								id: 'aichat-prompt-delete-confirm-cancel',
+								type: 'pushbutton',
+								text: _('Cancel'),
+								enabled: true,
+								aria: { label: _('Cancel delete') },
+							},
+							{
+								id: 'aichat-prompt-delete-confirm-ok',
+								type: 'pushbutton',
+								text: _('Delete'),
+								enabled: true,
+								aria: { label: _('Delete prompt') },
+							},
+						],
+					},
+				],
+			};
+		}
+
+		private findCustomPrompt(id: string): CustomPrompt | undefined {
+			return this.customPrompts.find((p) => p.id === id);
+		}
+
+		private saveCustomPrompts(): void {
+			window.prefs.set(
+				this.PREFS_CUSTOM_PROMPTS,
+				JSON.stringify(this.customPrompts),
+			);
+		}
+
+		private updatePromptChip(): void {
+			this.builder.updateWidget(this.container, this.getPromptChipJSON());
+		}
+
+		private updatePromptPicker(): void {
+			this.builder.updateWidget(this.container, this.getPromptPickerJSON());
+			// updateWidget may have recreated the element, so the open state
+			// goes back on at once, and again once layout has run.
+			this.setPromptPickerOpenClass(this.promptPickerOpen);
+			if (this.promptPickerOpen) {
+				app.layoutingService.onDrain(() =>
+					this.setPromptPickerOpenClass(this.promptPickerOpen),
+				);
+			}
+		}
+
+		private setPromptPickerOpenClass(open: boolean): void {
+			const picker = document.getElementById('aichat-prompt-picker');
+			if (picker) picker.classList.toggle('aichat-prompt-picker-open', open);
+		}
+
+		private openPromptPicker(): void {
+			if (this.promptPickerOpen || this.isProcessing) return;
+			if (this.tonePickerOpen) this.closeTonePicker();
+			this.closeSlashMenu();
+			this.promptPickerOpen = true;
+			this.updatePromptPicker();
+			this.updatePromptChip();
+			this.focusInPromptPicker('.ui-chip-main, #aichat-prompt-add button');
+			this.scrollTonePickerIntoView('aichat-prompt-picker');
+		}
+
+		// With focusChip false the focus stays where it is, which is what a
+		// click into the message box needs.
+		private closePromptPicker(focusChip: boolean = true): void {
+			if (!this.promptPickerOpen) return;
+			this.promptPickerOpen = false;
+			this.promptFormOpen = false;
+			this.promptDraft = null;
+			this.promptDeleteConfirmOpen = false;
+			this.updatePromptPicker();
+			this.updatePromptChip();
+			if (focusChip)
+				this.focusInPromptPicker(
+					'',
+					'#aichat-prompt-chip button.ui-pushbutton',
+				);
+		}
+
+		// Focuses the first element that matches selector inside the picker, or
+		// the element that matches outside when that is given instead.
+		private focusInPromptPicker(selector: string, outside?: string): void {
+			app.layoutingService.onDrain(() => {
+				const el = (
+					outside
+						? document.querySelector(outside)
+						: document
+								.getElementById('aichat-prompt-picker')
+								?.querySelector(selector)
+				) as HTMLElement | null;
+				if (el) el.focus();
+			});
+		}
+
+		private openPromptForm(mode: 'add' | 'edit', id?: string): void {
+			if (this.isProcessing) return;
+			if (
+				mode === 'add' &&
+				this.customPrompts.length >= this.MAX_CUSTOM_PROMPTS
+			) {
+				this.hintText = _(
+					'You have reached the maximum of {0} saved prompts.',
+				).replace('{0}', String(this.MAX_CUSTOM_PROMPTS));
+				this.updateHint();
+				return;
+			}
+			const existing = id ? this.findCustomPrompt(id) : undefined;
+			if (mode === 'edit' && !existing) return;
+			this.promptDraft = existing
+				? { ...existing }
+				: { id: '', name: '', prompt: '' };
+			this.promptFormMode = mode;
+			this.promptFormOpen = true;
+			this.promptDeleteConfirmOpen = false;
+			if (!this.promptPickerOpen) {
+				if (this.tonePickerOpen) this.closeTonePicker();
+				this.promptPickerOpen = true;
+				this.updatePromptChip();
+			}
+			this.updatePromptPicker();
+			this.focusInPromptPicker('#aichat-prompt-form-name input');
+			this.scrollTonePickerIntoView('aichat-prompt-picker');
+		}
+
+		private closePromptForm(): void {
+			this.promptFormOpen = false;
+			this.promptDraft = null;
+			this.promptDeleteConfirmOpen = false;
+			this.updatePromptPicker();
+			this.focusInPromptPicker('#aichat-prompt-add button');
+		}
+
+		private canSavePromptForm(): boolean {
+			return (
+				!!this.promptDraft &&
+				this.promptDraft.name.trim().length > 0 &&
+				this.promptDraft.prompt.trim().length > 0
+			);
+		}
+
+		private savePromptForm(): void {
+			if (!this.promptDraft || !this.canSavePromptForm()) return;
+			const saved: CustomPrompt = {
+				id: this.promptDraft.id || this.generatePromptId(),
+				name: this.promptDraft.name.trim().slice(0, this.MAX_PROMPT_NAME_LEN),
+				prompt: this.promptDraft.prompt
+					.trim()
+					.slice(0, this.MAX_PROMPT_TEXT_LEN),
+			};
+			const index = this.customPrompts.findIndex((p) => p.id === saved.id);
+			if (index >= 0) this.customPrompts[index] = saved;
+			else if (this.customPrompts.length < this.MAX_CUSTOM_PROMPTS)
+				this.customPrompts.push(saved);
+			this.saveCustomPrompts();
+			this.closePromptForm();
+		}
+
+		private generatePromptId(): string {
+			return 'prompt-' + this.generateToneId().substring('tone-'.length);
+		}
+
+		private openPromptDeleteConfirm(): void {
+			if (!this.promptDraft || this.promptFormMode !== 'edit') return;
+			this.promptDeleteConfirmOpen = true;
+			this.updatePromptPicker();
+			this.focusInPromptPicker('#aichat-prompt-delete-confirm-cancel button');
+		}
+
+		private closePromptDeleteConfirm(): void {
+			this.promptDeleteConfirmOpen = false;
+			this.updatePromptPicker();
+			this.focusInPromptPicker('#aichat-prompt-form-delete button');
+		}
+
+		private confirmDeletePrompt(): void {
+			if (!this.promptDraft) return;
+			const id = this.promptDraft.id;
+			this.customPrompts = this.customPrompts.filter((p) => p.id !== id);
+			this.saveCustomPrompts();
+			this.closePromptForm();
+		}
+
+		private handlePromptFormInput(id: string, data: any): void {
+			if (!this.promptDraft) return;
+			if (id === 'aichat-prompt-form-name') {
+				this.promptDraft.name = String(data).slice(0, this.MAX_PROMPT_NAME_LEN);
+			} else {
+				let value = String(data);
+				if (value.length > this.MAX_PROMPT_TEXT_LEN) {
+					value = value.slice(0, this.MAX_PROMPT_TEXT_LEN);
+					const textArea = document.querySelector(
+						'#aichat-prompt-form-text.ui-textarea',
+					) as HTMLTextAreaElement | null;
+					if (textArea) textArea.value = value;
+				}
+				this.promptDraft.prompt = value;
+			}
+			const save = document.querySelector(
+				'#aichat-prompt-form-save button.ui-pushbutton',
+			) as HTMLButtonElement | null;
+			if (save) save.disabled = !this.canSavePromptForm();
+		}
+
+		private runCustomPrompt(prompt: CustomPrompt): void {
+			this.closePromptPicker();
+			this.runOnSelection(prompt.prompt);
+		}
+
+		// The rows offered while the input is a slash followed by a search
+		// text. A prompt whose name starts with the text comes before one that
+		// only contains it.
+		private getSlashMenuJSON(): any {
+			const children: any[] = [];
+			if (this.slashMenuOpen) {
+				if (!this.slashMatches.length)
+					children.push({
+						id: 'aichat-slash-empty',
+						type: 'fixedtext',
+						text: this.customPrompts.length
+							? _('No saved prompt matches this name.')
+							: _('You have no saved prompts yet.'),
+						enabled: true,
+					});
+				this.slashMatches.forEach((p, index) => {
+					children.push({
+						id: 'aichat-slash-item-' + p.id,
+						type: 'pushbutton',
+						text: '/' + p.name,
+						enabled: true,
+						aria: { label: p.name, pressed: index === this.slashIndex },
+					});
+				});
+				children.push({
+					id: 'aichat-slash-add',
+					type: 'pushbutton',
+					text: _('+ Add a prompt'),
+					enabled: this.customPrompts.length < this.MAX_CUSTOM_PROMPTS,
+					aria: {
+						label: _('Add a prompt'),
+						pressed: this.slashIndex === this.slashMatches.length,
+					},
+				});
+			}
+			// The list keeps its own element only while it has more than one
+			// child, so a closed list holds two empty texts.
+			if (!children.length)
+				children.push({
+					id: 'aichat-slash-menu-closed',
+					type: 'fixedtext',
+					text: '',
+					enabled: true,
+				});
+			this.ensureContainerChildren(children, 'aichat-slash-menu');
+			return {
+				id: 'aichat-slash-menu',
+				type: 'container',
+				vertical: true,
+				children: children,
+			};
+		}
+
+		private updateSlashMenu(): void {
+			const match = /^\/([^\n]*)$/.exec(this.inputText);
+			if (!match || this.promptPickerOpen) {
+				this.closeSlashMenu();
+				return;
+			}
+			const query = match[1].trim().toLowerCase();
+			if (query === this.slashQuery) return;
+			this.slashQuery = query;
+			const startsWith = (p: CustomPrompt) =>
+				p.name.toLowerCase().startsWith(query);
+			this.slashMatches = this.customPrompts
+				.filter((p) => p.name.toLowerCase().includes(query))
+				.sort((a, b) => Number(startsWith(b)) - Number(startsWith(a)));
+			// The list opens with no row highlighted, so the user picks one.
+			this.slashIndex = -1;
+			this.slashMenuOpen = true;
+			this.renderSlashMenu();
+		}
+
+		private closeSlashMenu(): void {
+			if (!this.slashMenuOpen) return;
+			this.slashMenuOpen = false;
+			this.slashMatches = [];
+			this.slashQuery = null;
+			this.renderSlashMenu();
+		}
+
+		private moveSlashSelection(step: number): void {
+			const rows = this.slashMatches.length + 1;
+			// From no highlighted row, Down goes to the first row and Up to the last.
+			if (this.slashIndex < 0) this.slashIndex = step > 0 ? 0 : rows - 1;
+			else this.slashIndex = (this.slashIndex + step + rows) % rows;
+			this.renderSlashMenu();
+		}
+
+		private renderSlashMenu(): void {
+			this.builder.updateWidget(this.container, this.getSlashMenuJSON());
+			// updateWidget may replace the element once layout has run, so the
+			// open state goes on at once and again after layout.
+			const applyOpenState = () => {
+				const menu = document.getElementById('aichat-slash-menu');
+				if (menu)
+					menu.classList.toggle('aichat-slash-menu-open', this.slashMenuOpen);
+				const textArea = document.querySelector('#aichat-input.ui-textarea');
+				if (textArea)
+					textArea.setAttribute('aria-expanded', String(this.slashMenuOpen));
+			};
+			applyOpenState();
+			app.layoutingService.onDrain(applyOpenState);
+		}
+
+		// Runs the highlighted row: either a saved prompt, or the form to add
+		// one. The slash text typed so far is removed from the input either
+		// way. Nothing happens while no row is highlighted.
+		private runSlashSelection(): void {
+			if (this.slashIndex < 0) return;
+			const prompt = this.slashMatches[this.slashIndex];
+			if (!prompt && this.customPrompts.length >= this.MAX_CUSTOM_PROMPTS)
+				return;
+			this.clearInput();
+			if (prompt) this.runCustomPrompt(prompt);
+			else this.openPromptForm('add');
+		}
+
+		private clearInput(): void {
+			const textArea = document.querySelector(
+				'#aichat-input.ui-textarea',
+			) as HTMLTextAreaElement | null;
+			if (textArea) textArea.value = '';
+			this.handleInputChange('aichat-input', '');
+		}
+
 		private updateToneChip(): void {
 			this.builder.updateWidget(this.container, this.getToneChipJSON());
 		}
@@ -1291,10 +1913,12 @@ namespace cool {
 		// to be scrolled to. Called only on the transitions that make the picker
 		// the centre of attention - not on every repaint of it, which would yank
 		// the view away while the user clicks around inside.
-		private scrollTonePickerIntoView(): void {
+		private scrollTonePickerIntoView(
+			pickerId: string = 'aichat-tone-picker',
+		): void {
 			app.layoutingService.onDrain(() => {
 				const main = document.getElementById('aichat-main');
-				const picker = document.getElementById('aichat-tone-picker');
+				const picker = document.getElementById(pickerId);
 				if (!main || !picker) return;
 
 				const mainRect = main.getBoundingClientRect();
@@ -1323,6 +1947,8 @@ namespace cool {
 
 		private openTonePicker(): void {
 			if (this.tonePickerOpen || this.isProcessing) return;
+			this.closePromptPicker();
+			this.closeSlashMenu();
 			this.tonePickerOpen = true;
 			this.setTonePickerOpenClass(true);
 			this.updateToneChip();
@@ -1330,7 +1956,9 @@ namespace cool {
 			this.scrollTonePickerIntoView();
 		}
 
-		private closeTonePicker(): void {
+		// With focusChip false the focus stays where it is, which is what a
+		// click into the message box needs.
+		private closeTonePicker(focusChip: boolean = true): void {
 			if (!this.tonePickerOpen) return;
 			this.tonePickerOpen = false;
 			this.formOpen = false;
@@ -1340,7 +1968,7 @@ namespace cool {
 			this.setTonePickerOpenClass(false);
 			this.updateTonePicker();
 			this.updateToneChip();
-			this.focusToneChip();
+			if (focusChip) this.focusToneChip();
 		}
 
 		private toggleTonePicker(): void {
@@ -1458,6 +2086,17 @@ namespace cool {
 							text: _('Tone of voice'),
 							enabled: true,
 						},
+						...(this.formMode === 'edit'
+							? [
+									{
+										id: 'aichat-tone-form-delete',
+										type: 'pushbutton',
+										image: this.ICON_TRASH,
+										enabled: true,
+										aria: { label: _('Delete tone') },
+									},
+								]
+							: []),
 					],
 				},
 				{
@@ -1506,15 +2145,6 @@ namespace cool {
 			];
 
 			const actionChildren: any[] = [];
-			if (this.formMode === 'edit') {
-				actionChildren.push({
-					id: 'aichat-tone-form-delete',
-					type: 'pushbutton',
-					text: _('Delete tone'),
-					enabled: true,
-					aria: { label: _('Delete this tone') },
-				});
-			}
 			actionChildren.push({
 				id: 'aichat-tone-form-cancel',
 				type: 'pushbutton',
@@ -1991,6 +2621,22 @@ namespace cool {
 				'aichat-tone-form-emoji-more': () => this.openEmojiPicker(),
 				'aichat-tone-delete-confirm-cancel': () => this.closeDeleteConfirm(),
 				'aichat-tone-delete-confirm-ok': () => this.confirmDeleteTone(),
+				'aichat-prompt-chip': () =>
+					this.promptPickerOpen
+						? this.closePromptPicker()
+						: this.openPromptPicker(),
+				'aichat-prompt-add': () => this.openPromptForm('add'),
+				'aichat-prompt-form-back': () => this.closePromptForm(),
+				'aichat-prompt-form-cancel': () => this.closePromptForm(),
+				'aichat-prompt-form-save': () => this.savePromptForm(),
+				'aichat-prompt-form-delete': () => this.openPromptDeleteConfirm(),
+				'aichat-prompt-delete-confirm-cancel': () =>
+					this.closePromptDeleteConfirm(),
+				'aichat-prompt-delete-confirm-ok': () => this.confirmDeletePrompt(),
+				'aichat-slash-add': () => {
+					this.slashIndex = this.slashMatches.length;
+					this.runSlashSelection();
+				},
 			};
 
 			if (exactActions[id]) {
@@ -2017,6 +2663,30 @@ namespace cool {
 				const toneId = id.substring('aichat-tone-custom-'.length);
 				if (this.findCustomTone(toneId)) {
 					this.selectTone(toneId);
+				}
+				return;
+			}
+
+			if (id.startsWith('aichat-prompt-edit-')) {
+				this.openPromptForm('edit', id.substring('aichat-prompt-edit-'.length));
+				return;
+			}
+
+			if (id.startsWith('aichat-prompt-run-')) {
+				const prompt = this.findCustomPrompt(
+					id.substring('aichat-prompt-run-'.length),
+				);
+				if (prompt) this.runCustomPrompt(prompt);
+				return;
+			}
+
+			if (id.startsWith('aichat-slash-item-')) {
+				const index = this.slashMatches.findIndex(
+					(p) => p.id === id.substring('aichat-slash-item-'.length),
+				);
+				if (index >= 0) {
+					this.slashIndex = index;
+					this.runSlashSelection();
 				}
 				return;
 			}
@@ -2118,6 +2788,13 @@ namespace cool {
 				this.applyEmojiToForm(String(data));
 				return;
 			}
+			if (
+				id === 'aichat-prompt-form-name' ||
+				id === 'aichat-prompt-form-text'
+			) {
+				this.handlePromptFormInput(id, data);
+				return;
+			}
 			if (id !== 'aichat-input') return;
 
 			const prevEmpty = this.inputText.trim().length === 0;
@@ -2154,6 +2831,8 @@ namespace cool {
 				textarea.style.height =
 					Math.min(textarea.scrollHeight, this.TEXTAREA_MAX_HEIGHT_PX) + 'px';
 			}
+
+			this.updateSlashMenu();
 		}
 
 		private jsdialogCallback(
@@ -3145,10 +3824,42 @@ namespace cool {
 			if (this._keyboardHandlerAttached) return;
 			this._keyboardHandlerAttached = true;
 
+			// Going back to the message box closes an open picker, so the / list
+			// is not hidden behind it.
+			const closePickersForInput = (e: Event) => {
+				const target = e.target as HTMLElement | null;
+				if (!target || !target.closest('#aichat-input')) return;
+				this.closeTonePicker(false);
+				this.closePromptPicker(false);
+			};
+			this.container.addEventListener('focusin', closePickersForInput);
+			this.container.addEventListener('pointerdown', closePickersForInput);
+
 			this.container.addEventListener('keydown', (e: KeyboardEvent) => {
+				const target = e.target as HTMLElement | null;
+				const inChatInput =
+					!!target &&
+					target.classList.contains('ui-textarea') &&
+					!!target.closest('#aichat-input');
+				if (this.slashMenuOpen && inChatInput) {
+					const handled = this.handleSlashMenuKey(e);
+					if (handled) {
+						// The key belongs to the list, so it does not reach the
+						// handlers that close the sidebar or focus the document.
+						e.preventDefault();
+						e.stopPropagation();
+						return;
+					}
+				}
 				if (e.key === 'Escape') {
 					e.preventDefault();
-					if (this.deleteConfirmOpen) {
+					if (this.promptDeleteConfirmOpen) {
+						this.closePromptDeleteConfirm();
+					} else if (this.promptFormOpen) {
+						this.closePromptForm();
+					} else if (this.promptPickerOpen) {
+						this.closePromptPicker();
+					} else if (this.deleteConfirmOpen) {
 						this.closeDeleteConfirm();
 					} else if (this.emojiPickerOpen) {
 						this.closeEmojiPicker();
@@ -3161,18 +3872,35 @@ namespace cool {
 					}
 					return;
 				}
-				if (e.key === 'Enter' && !e.shiftKey) {
-					const target = e.target as HTMLElement;
-					if (
-						target &&
-						target.classList.contains('ui-textarea') &&
-						target.closest('#aichat-input')
-					) {
-						e.preventDefault();
-						this.sendMessage();
-					}
+				if (e.key === 'Enter' && !e.shiftKey && inChatInput) {
+					e.preventDefault();
+					this.sendMessage();
 				}
 			});
+		}
+
+		// Up and Down move through the rows, Enter runs the highlighted one and
+		// Escape closes the list. Returns whether the key was one of these.
+		private handleSlashMenuKey(e: KeyboardEvent): boolean {
+			switch (e.key) {
+				case 'ArrowDown':
+					this.moveSlashSelection(1);
+					return true;
+				case 'ArrowUp':
+					this.moveSlashSelection(-1);
+					return true;
+				case 'Enter':
+					if (e.shiftKey) return false;
+					this.runSlashSelection();
+					return true;
+				case 'Escape': {
+					const query = this.slashQuery;
+					this.closeSlashMenu();
+					this.slashQuery = query;
+					return true;
+				}
+			}
+			return false;
 		}
 
 		private showCopyFeedback(

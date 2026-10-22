@@ -204,6 +204,13 @@
 	);
 }
 
+/* An open picker is what the user asked to see, so the transcript gives up its floor and the
+   picker takes the room it needs. The panel scrolls only when the picker alone is taller than
+   the dock. */
+#aichat-main:has(.aichat-tone-picker-open, .aichat-prompt-picker-open) #aichat-messages-area {
+	min-height: 0;
+}
+
 #aichat-messages-list {
 	display: flex !important;
 	grid-auto-flow: unset !important;
@@ -758,9 +765,15 @@ button.ui-pushbutton:focus-visible {
 
 /* -- Tone chip (inside input toolbar) -- */
 
-#aichat-tone-chip button.ui-pushbutton {
+/* The margin resets the one the generic button rule in btns.css gives every button. The label and
+   the arrow after it are laid out like the language button in the status bar. */
+#aichat-tone-chip button.ui-pushbutton,
+#aichat-prompt-chip button.ui-pushbutton {
+	display: inline-flex;
+	align-items: center;
+	margin: 0;
 	border-radius: var(--border-radius-pill);
-	padding: 0 10px;
+	padding: 0 8px 0 10px;
 	font-size: 12px;
 	height: 26px;
 	background: var(--aichat-tint);
@@ -773,18 +786,40 @@ button.ui-pushbutton:focus-visible {
 	white-space: nowrap;
 }
 
-#aichat-tone-chip button.ui-pushbutton:hover:not([disabled]) {
+/* The same triangle as the dropdown arrow of the language button, pointing up while the panel is
+   open. */
+#aichat-tone-chip button.ui-pushbutton::after,
+#aichat-prompt-chip button.ui-pushbutton::after {
+	content: '';
+	width: 0;
+	height: 0;
+	margin-left: 6px;
+	border-left: 4px solid transparent;
+	border-right: 4px solid transparent;
+	border-top: 5px solid currentColor;
+}
+
+#aichat-tone-chip button.ui-pushbutton[aria-expanded='true']::after,
+#aichat-prompt-chip button.ui-pushbutton[aria-expanded='true']::after {
+	border-top: 0;
+	border-bottom: 5px solid currentColor;
+}
+
+#aichat-tone-chip button.ui-pushbutton:hover:not([disabled]),
+#aichat-prompt-chip button.ui-pushbutton:hover:not([disabled]) {
 	background: rgba(var(--aichat-accent), 0.12);
 }
 
-#aichat-tone-chip button.ui-pushbutton[disabled] {
+#aichat-tone-chip button.ui-pushbutton[disabled],
+#aichat-prompt-chip button.ui-pushbutton[disabled] {
 	opacity: 0.4;
 	cursor: default;
 }
 
 /* -- Tone picker panel -- */
 
-#aichat-tone-picker {
+#aichat-tone-picker,
+#aichat-prompt-picker {
 	display: none !important;
 	grid-auto-flow: unset !important;
 	flex-direction: column;
@@ -813,7 +848,8 @@ button.ui-pushbutton:focus-visible {
 	position: relative;
 }
 
-#aichat-tone-picker.aichat-tone-picker-open {
+#aichat-tone-picker.aichat-tone-picker-open,
+#aichat-prompt-picker.aichat-prompt-picker-open {
 	display: flex !important;
 }
 
@@ -824,7 +860,8 @@ button.ui-pushbutton:focus-visible {
 	align-items: center;
 }
 
-#aichat-tone-title {
+#aichat-tone-title,
+#aichat-prompt-title {
 	font-weight: 600;
 	font-size: 13.5px;
 	letter-spacing: -0.01em;
@@ -937,28 +974,33 @@ button.ui-pushbutton:focus-visible {
 	margin-top: 8px;
 }
 
-#aichat-tone-customs {
+#aichat-tone-customs,
+#aichat-prompt-list {
 	display: flex !important;
 	grid-auto-flow: unset !important;
 	flex-wrap: wrap;
 	gap: 6px;
 }
 
-#aichat-tone-picker .ui-chip {
+#aichat-tone-picker .ui-chip,
+#aichat-prompt-picker .ui-chip {
 	flex: 0 0 auto;
 	align-self: flex-start;
 }
 
-#aichat-tone-picker .ui-chip:hover {
+#aichat-tone-picker .ui-chip:hover,
+#aichat-prompt-picker .ui-chip:hover {
 	border-color: rgba(var(--aichat-accent), 0.4);
 }
 
-#aichat-tone-add {
+#aichat-tone-add,
+#aichat-prompt-add {
 	justify-content: flex-start !important;
 	align-self: flex-start;
 }
 
-#aichat-tone-add button.ui-pushbutton {
+#aichat-tone-add button.ui-pushbutton,
+#aichat-prompt-add button.ui-pushbutton {
 	background: transparent;
 	border: none;
 	padding: 6px 2px;
@@ -970,33 +1012,38 @@ button.ui-pushbutton:focus-visible {
 	transition: color var(--duration-fast) var(--ease-standard);
 }
 
-#aichat-tone-add button.ui-pushbutton:hover:not([disabled]) {
+#aichat-tone-add button.ui-pushbutton:hover:not([disabled]),
+#aichat-prompt-add button.ui-pushbutton:hover:not([disabled]) {
 	color: var(--color-main-text);
 	text-decoration: underline;
 }
 
-#aichat-tone-add button.ui-pushbutton[disabled] {
+#aichat-tone-add button.ui-pushbutton[disabled],
+#aichat-prompt-add button.ui-pushbutton[disabled] {
 	opacity: 0.5;
 	cursor: default;
 }
 
 /* -- Add / edit tone form -- */
 
-#aichat-tone-form {
+#aichat-tone-form,
+#aichat-prompt-form {
 	display: flex !important;
 	grid-auto-flow: unset !important;
 	flex-direction: column;
 	gap: 8px;
 }
 
-#aichat-tone-form-header {
+#aichat-tone-form-header,
+#aichat-prompt-form-header {
 	display: flex !important;
 	grid-auto-flow: unset !important;
 	align-items: center;
 	gap: 6px;
 }
 
-#aichat-tone-form-back button.ui-pushbutton {
+#aichat-tone-form-back button.ui-pushbutton,
+#aichat-prompt-form-back button.ui-pushbutton {
 	background: transparent;
 	border: none;
 	font-size: 16px;
@@ -1007,11 +1054,13 @@ button.ui-pushbutton:focus-visible {
 	border-radius: 6px;
 }
 
-#aichat-tone-form-back button.ui-pushbutton:hover {
+#aichat-tone-form-back button.ui-pushbutton:hover,
+#aichat-prompt-form-back button.ui-pushbutton:hover {
 	background: rgba(var(--aichat-accent), 0.08);
 }
 
-#aichat-tone-form-title {
+#aichat-tone-form-title,
+#aichat-prompt-form-title {
 	font-weight: 600;
 	font-size: 13.5px;
 	color: var(--color-main-text);
@@ -1019,7 +1068,9 @@ button.ui-pushbutton:focus-visible {
 
 #aichat-tone-form-icon-label,
 #aichat-tone-form-name-label,
-#aichat-tone-form-desc-label {
+#aichat-tone-form-desc-label,
+#aichat-prompt-form-name-label,
+#aichat-prompt-form-text-label {
 	font-size: 11.5px;
 	font-weight: 600;
 	color: var(--aichat-text-muted);
@@ -1085,7 +1136,8 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	color: var(--aichat-text-muted);
 }
 
-#aichat-tone-form-name input.ui-edit {
+#aichat-tone-form-name input.ui-edit,
+#aichat-prompt-form-name input.ui-edit {
 	width: 100%;
 	box-sizing: border-box;
 	padding: 8px 10px;
@@ -1097,13 +1149,16 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	font-family: var(--cool-font);
 }
 
-#aichat-tone-form-name input.ui-edit:focus {
+#aichat-tone-form-name input.ui-edit:focus,
+#aichat-prompt-form-name input.ui-edit:focus {
 	border-color: rgb(var(--aichat-accent));
 	outline: none;
 }
 
 #aichat-tone-form-desc.ui-textarea,
-#aichat-tone-form-desc textarea.ui-textarea {
+#aichat-tone-form-desc textarea.ui-textarea,
+#aichat-prompt-form-text.ui-textarea,
+#aichat-prompt-form-text textarea.ui-textarea {
 	width: 100%;
 	box-sizing: border-box;
 	min-height: 78px;
@@ -1119,41 +1174,71 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 }
 
 #aichat-tone-form-desc.ui-textarea:focus,
-#aichat-tone-form-desc textarea.ui-textarea:focus {
+#aichat-tone-form-desc textarea.ui-textarea:focus,
+#aichat-prompt-form-text.ui-textarea:focus,
+#aichat-prompt-form-text textarea.ui-textarea:focus {
 	border-color: rgb(var(--aichat-accent));
 	outline: none;
 }
 
-#aichat-tone-form-actions {
+#aichat-tone-form-actions,
+#aichat-prompt-form-actions {
 	display: flex !important;
 	grid-auto-flow: unset !important;
 	justify-content: flex-end;
 	align-items: center;
-	gap: 8px;
+	gap: 6px;
 	margin-top: 4px;
 }
 
-#aichat-tone-form-actions > .ui-pushbutton-wrapper {
+#aichat-tone-form-actions > .ui-pushbutton-wrapper,
+#aichat-prompt-form-actions > .ui-pushbutton-wrapper {
 	flex: 0 0 auto;
 	margin: 0;
 }
 
-#aichat-tone-form-delete button.ui-pushbutton {
-	margin-right: auto;
+/* The delete button is an icon at the end of the form header, styled like the trash button in
+   the sidebar header. */
+#aichat-tone-form-delete,
+#aichat-prompt-form-delete {
+	margin: 0 0 0 auto;
+}
+
+#aichat-tone-form-delete button.ui-pushbutton,
+#aichat-prompt-form-delete button.ui-pushbutton {
+	padding: var(--spacing-s);
+	width: 28px;
+	height: 28px;
+	margin: 0;
+	border: 1px solid transparent;
+	border-radius: var(--border-radius);
 	background: transparent;
-	border: 1px solid color-mix(in srgb, var(--color-error) 50%, transparent);
-	color: var(--aichat-error-text);
-	border-radius: 999px;
-	padding: 6px 12px;
-	font-size: 12px;
 	cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
-#aichat-tone-form-delete button.ui-pushbutton:hover {
-	background: color-mix(in srgb, var(--color-error) 8%, transparent);
+#aichat-tone-form-delete button.ui-pushbutton:hover,
+#aichat-prompt-form-delete button.ui-pushbutton:hover {
+	background: var(--aichat-tint);
 }
 
-#aichat-tone-form-cancel button.ui-pushbutton {
+#aichat-tone-form-delete button.ui-pushbutton img,
+#aichat-prompt-form-delete button.ui-pushbutton img {
+	width: 16px;
+	height: 16px;
+	opacity: 0.7;
+}
+
+#aichat-tone-form-delete button.ui-pushbutton:hover img,
+#aichat-prompt-form-delete button.ui-pushbutton:hover img {
+	opacity: 1;
+}
+
+#aichat-tone-form-cancel button.ui-pushbutton,
+#aichat-prompt-form-cancel button.ui-pushbutton {
+	margin: 0;
 	background: transparent;
 	border: 1px solid var(--color-border);
 	color: var(--color-main-text);
@@ -1163,12 +1248,15 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	cursor: pointer;
 }
 
-#aichat-tone-form-cancel button.ui-pushbutton:hover {
+#aichat-tone-form-cancel button.ui-pushbutton:hover,
+#aichat-prompt-form-cancel button.ui-pushbutton:hover {
 	background: rgba(var(--aichat-accent), 0.06);
 	border-color: rgba(var(--aichat-accent), 0.4);
 }
 
-#aichat-tone-form-save button.ui-pushbutton {
+#aichat-tone-form-save button.ui-pushbutton,
+#aichat-prompt-form-save button.ui-pushbutton {
+	margin: 0;
 	background: rgb(var(--aichat-accent));
 	border: 1px solid rgb(var(--aichat-accent));
 	color: #fff;
@@ -1178,18 +1266,21 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	cursor: pointer;
 }
 
-#aichat-tone-form-save button.ui-pushbutton:hover:not([disabled]) {
+#aichat-tone-form-save button.ui-pushbutton:hover:not([disabled]),
+#aichat-prompt-form-save button.ui-pushbutton:hover:not([disabled]) {
 	filter: brightness(0.94);
 }
 
-#aichat-tone-form-save button.ui-pushbutton[disabled] {
+#aichat-tone-form-save button.ui-pushbutton[disabled],
+#aichat-prompt-form-save button.ui-pushbutton[disabled] {
 	opacity: 0.5;
 	cursor: default;
 }
 
 /* -- Inline delete-tone confirm panel -- */
 
-#aichat-tone-delete-confirm {
+#aichat-tone-delete-confirm,
+#aichat-prompt-delete-confirm {
 	display: flex !important;
 	grid-auto-flow: unset !important;
 	flex-direction: column;
@@ -1200,13 +1291,15 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	background: var(--color-background-lighter);
 }
 
-#aichat-tone-delete-confirm-title {
+#aichat-tone-delete-confirm-title,
+#aichat-prompt-delete-confirm-title {
 	font-weight: 600;
 	font-size: 14px;
 	color: var(--color-main-text);
 }
 
-#aichat-tone-delete-confirm-desc {
+#aichat-tone-delete-confirm-desc,
+#aichat-prompt-delete-confirm-desc {
 	font-size: 12.5px;
 	color: var(--aichat-text-muted);
 }
@@ -1228,7 +1321,8 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	cursor: default;
 }
 
-#aichat-tone-delete-confirm-actions {
+#aichat-tone-delete-confirm-actions,
+#aichat-prompt-delete-confirm-actions {
 	display: flex !important;
 	grid-auto-flow: unset !important;
 	justify-content: flex-end;
@@ -1236,12 +1330,14 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	gap: 8px;
 }
 
-#aichat-tone-delete-confirm-actions > .ui-pushbutton-wrapper {
+#aichat-tone-delete-confirm-actions > .ui-pushbutton-wrapper,
+#aichat-prompt-delete-confirm-actions > .ui-pushbutton-wrapper {
 	flex: 0 0 auto;
 	margin: 0;
 }
 
-#aichat-tone-delete-confirm-cancel button.ui-pushbutton {
+#aichat-tone-delete-confirm-cancel button.ui-pushbutton,
+#aichat-prompt-delete-confirm-cancel button.ui-pushbutton {
 	background: transparent;
 	border: 1px solid var(--color-border);
 	color: var(--color-main-text);
@@ -1251,12 +1347,14 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	cursor: pointer;
 }
 
-#aichat-tone-delete-confirm-cancel button.ui-pushbutton:hover {
+#aichat-tone-delete-confirm-cancel button.ui-pushbutton:hover,
+#aichat-prompt-delete-confirm-cancel button.ui-pushbutton:hover {
 	background: rgba(var(--aichat-accent), 0.06);
 	border-color: rgba(var(--aichat-accent), 0.4);
 }
 
-#aichat-tone-delete-confirm-ok button.ui-pushbutton {
+#aichat-tone-delete-confirm-ok button.ui-pushbutton,
+#aichat-prompt-delete-confirm-ok button.ui-pushbutton {
 	background: var(--color-error);
 	border: 1px solid var(--color-error);
 	color: #fff;
@@ -1266,14 +1364,93 @@ button.ui-pushbutton[aria-pressed='true']:hover {
 	cursor: pointer;
 }
 
-#aichat-tone-delete-confirm-ok button.ui-pushbutton:hover {
+#aichat-tone-delete-confirm-ok button.ui-pushbutton:hover,
+#aichat-prompt-delete-confirm-ok button.ui-pushbutton:hover {
 	filter: brightness(0.94);
 }
 
-#aichat-tone-delete-confirm-ok button.ui-pushbutton:focus-visible {
+#aichat-tone-delete-confirm-ok button.ui-pushbutton:focus-visible,
+#aichat-prompt-delete-confirm-ok button.ui-pushbutton:focus-visible {
 	outline: 2px solid var(--color-error);
 	outline-offset: 2px;
 }
+
+/* -- Saved prompts: the chips next to the input, the picker texts and the slash list -- */
+
+#aichat-input-chips {
+	display: flex !important;
+	grid-auto-flow: unset !important;
+	align-items: center;
+	gap: 6px;
+}
+
+#aichat-input-chips > .ui-pushbutton-wrapper {
+	margin: 0;
+}
+
+#aichat-prompt-empty,
+#aichat-prompt-tip {
+	font-size: 12px;
+	color: var(--color-text-lighter);
+}
+
+#aichat-prompt-tip {
+	margin-bottom: 4px;
+}
+
+#aichat-slash-menu {
+	display: none !important;
+	grid-auto-flow: unset !important;
+	flex-direction: column;
+	gap: 2px;
+	padding: 6px;
+	margin: 0 12px 8px;
+	border: 1px solid var(--color-border);
+	border-radius: 12px;
+	background: var(--color-background-lighter);
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04),
+		0 1px 2px rgba(0, 0, 0, 0.03);
+	max-height: 240px;
+	overflow-y: auto;
+}
+
+#aichat-slash-menu.aichat-slash-menu-open {
+	display: flex !important;
+}
+
+#aichat-slash-menu > .ui-pushbutton-wrapper {
+	margin: 0;
+	justify-content: stretch !important;
+}
+
+#aichat-slash-menu button.ui-pushbutton {
+	width: 100%;
+	margin: 0;
+	text-align: start;
+	background: transparent;
+	border: none;
+	border-radius: 8px;
+	padding: 6px 10px;
+	font-size: 13px;
+	color: var(--color-main-text);
+	cursor: pointer;
+}
+
+#aichat-slash-menu button.ui-pushbutton:hover:not([disabled]),
+#aichat-slash-menu button.ui-pushbutton[aria-pressed='true'] {
+	background: rgba(var(--aichat-accent), 0.12);
+}
+
+#aichat-slash-add button.ui-pushbutton {
+	color: var(--aichat-text-muted);
+}
+
+#aichat-slash-empty {
+	font-size: 12px;
+	color: var(--color-text-lighter);
+	padding: 4px 10px;
+}
+
 
 /* -- Emoji picker overlay (anchors the generic .ui-emoji-picker widget) -- */
 

@@ -222,6 +222,11 @@ JSDialog.pushButton = function (
 		);
 	}
 
+	if (data.aria && typeof data.aria.expanded === 'boolean')
+		pushbutton.setAttribute('aria-expanded', String(data.aria.expanded));
+	if (data.aria && data.aria.haspopup)
+		pushbutton.setAttribute('aria-haspopup', 'true');
+
 	builder.map.hideRestrictedItems(data, wrapper, pushbutton);
 	builder.map.disableLockedItem(data, wrapper, pushbutton);
 	if (data.hidden) $(wrapper).hide(); // Both pushbutton and its wrapper needs to be hidden.

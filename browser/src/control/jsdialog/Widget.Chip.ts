@@ -27,6 +27,7 @@
  *         {
  *             id: 'my-chip-edit',
  *             text: '✎',                   // or image: 'lc_edit.svg'
+ *             tooltip: 'Edit',             // optional
  *             aria: { label: 'Edit' },
  *         },
  *     ],
@@ -132,6 +133,14 @@ JSDialog.chip = function (
 
 			if (action.aria && action.aria.label) {
 				actionBtn.setAttribute('aria-label', action.aria.label);
+			}
+
+			if (action.tooltip) {
+				actionBtn.setAttribute(
+					'data-cooltip',
+					builder._cleanText(action.tooltip),
+				);
+				window.L.control.attachTooltipEventListener(actionBtn, builder.map);
 			}
 
 			const actionDisabled = action.enabled === false;

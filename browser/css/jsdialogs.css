@@ -781,7 +781,7 @@ algned to the bottom */
 	outline-offset: -2px;
 }
 
-body button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton):not(.form-field-button):not(.notebookbar.ui-tab):not(.ui-expander-btn):not(.arrowbackground):not(.ui-combobox-button):not(.inserttable-grid .col):not(.spinfieldbutton-up):not(.spinfieldbutton-down):not(.slide-import-source-main):not([aria-disabled='true']):not(.snackbar *):hover {
+body button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton):not(.form-field-button):not(.notebookbar.ui-tab):not(.ui-expander-btn):not(.arrowbackground):not(.ui-combobox-button):not(.inserttable-grid .col):not(.spinfieldbutton-up):not(.spinfieldbutton-down):not(.slide-import-source-main):not(.ui-chip-main):not(.ui-chip-action):not([aria-disabled='true']):not(.snackbar *):hover {
 	color: rgba(var(--doc-type), 1) !important;
 	background-color: var(--color-background-darker) !important;
 }
@@ -3311,6 +3311,16 @@ button.has-img img {
 	border-color: rgba(var(--color-primary-rgb, 11, 135, 231), 0.4);
 }
 
+/* Hovering anywhere on an unselected chip, the edit action included, tints the
+   chip and shows its label in the document type colour. */
+.ui-chip:not(:has(.ui-chip-main[aria-pressed='true'])):hover {
+	background: var(--color-background-dark);
+}
+
+.ui-chip:not(:has(.ui-chip-main[aria-pressed='true'])):hover .ui-chip-main {
+	color: rgb(var(--doc-type, 11, 135, 231));
+}
+
 .ui-chip:has(.ui-chip-main[aria-pressed='true']) {
 	background: var(--color-main-text);
 	border-color: var(--color-main-text);
@@ -3381,24 +3391,18 @@ button.has-img img {
 
 .ui-chip-action {
 	flex: 0 0 auto;
-	padding: 0 10px 0 2px;
-	height: 34px;
+	align-self: center;
+	width: 24px;
+	height: 24px;
+	padding: 0;
+	margin-right: 6px;
 	min-width: 0;
-	color: var(--color-text-lighter);
-}
-
-.ui-chip-action img {
-	width: 14px;
-	height: 14px;
-	opacity: 0.7;
-}
-
-.ui-chip-action:hover {
 	color: var(--color-main-text);
 }
 
-.ui-chip-action:hover img {
-	opacity: 1;
+.ui-chip-action img {
+	width: 16px;
+	height: 16px;
 }
 
 .ui-chip:has(.ui-chip-main[aria-pressed='true']) .ui-chip-main,
@@ -3412,6 +3416,11 @@ button.has-img img {
 
 .ui-chip:has(.ui-chip-main[aria-pressed='true']) .ui-chip-action:hover {
 	color: #fff;
+}
+
+/* The selected pill swaps the text and background colours, so its edit icon swaps too. */
+.ui-chip:has(.ui-chip-main[aria-pressed='true']) .ui-chip-action img {
+	filter: invert(1);
 }
 
 .ui-chip-main:focus-visible,

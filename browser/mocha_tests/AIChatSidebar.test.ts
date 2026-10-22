@@ -605,7 +605,7 @@ describe('AI chat sidebar', function () {
 
 			nodeassert.strictEqual(
 				one(input).getAttribute('placeholder'),
-				'Ask AI...',
+				'Ask AI, or type / for a saved prompt...',
 			);
 		});
 

@@ -676,6 +676,7 @@ interface ChipAction {
 	id: string; // unique id; click is dispatched as a 'pushbutton' callback
 	text?: string; // glyph / short label (e.g. '✎')
 	image?: string; // lc_*.svg icon (uses LOUtil.setImage like pushbuttons)
+	tooltip?: string; // text of the tooltip shown on hover
 	enabled?: boolean;
 	aria?: AriaLabelAttributes;
 }
@@ -710,6 +711,8 @@ interface AriaLabelAttributes {
 	description?: string;
 	role?: string;
 	pressed?: boolean; // drives aria-pressed on widgets that honour it (e.g. pushbutton)
+	expanded?: boolean; // whether the panel that the widget opens is open
+	haspopup?: boolean; // whether the widget opens a panel
 	describedBy?: string; // id of the element that describes the widget
 }
 
