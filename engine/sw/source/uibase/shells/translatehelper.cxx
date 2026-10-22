@@ -20,6 +20,7 @@
 #include <sal/config.h>
 
 #include <memory>
+#include <optional>
 #include <string_view>
 #include <vector>
 
@@ -30,6 +31,7 @@
 #include <swtable.hxx>
 #include <tblsel.hxx>
 #include <ndtxt.hxx>
+#include <swatrset.hxx>
 #include <swcrsr.hxx>
 #include <doc.hxx>
 #include <IDocumentContentOperations.hxx>
@@ -40,6 +42,8 @@
 #include <editeng/langitem.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <sal/log.hxx>
+#include <svl/itemiter.hxx>
+#include <svl/itemset.hxx>
 #include <svl/languageoptions.hxx>
 #include <rtl/string.h>
 #include <shellio.hxx>
@@ -79,6 +83,16 @@ OString ExportPaMToHTML(SwPaM* pCursor)
             = OString(static_cast<const char*>(aMemoryStream.GetData()), aMemoryStream.GetSize());
         aResult = aResult.replaceAll("<p"_ostr, "<span"_ostr);
         aResult = aResult.replaceAll("</p>"_ostr, "</span>"_ostr);
+        // A heading is a block element too: pasted as one, it would split the
+        // paragraph and leave the original heading empty. The paragraph style
+        // stays on the node, so the translation can go in as inline text.
+        for (int nLevel = 1; nLevel <= 6; ++nLevel)
+        {
+            const OString aOpen = "<h" + OString::number(nLevel);
+            const OString aClose = "</h" + OString::number(nLevel) + ">";
+            aResult = aResult.replaceAll(aOpen, "<span"_ostr);
+            aResult = aResult.replaceAll(aClose, "</span>"_ostr);
+        }
 
         // HTML has for that <br> and <p> also does new line
         aResult = aResult.replaceAll("<ul>"_ostr, ""_ostr);
@@ -307,7 +321,9 @@ bool TranslateRanges(SwWrtShell& rWrtSh, const TranslateFunc& rTranslate,
     for (const TranslateRange& rRange : aRanges)
     {
         const SwNodeOffset nStartNode = rRange.aStart.nNode.GetIndex();
-        const SwNodeOffset nEndNode = rRange.aEnd.nNode.GetIndex();
+        // The end position is registered, so it follows the content when a
+        // pasted translation changes the number of nodes before it.
+        SwNodeOffset nEndNode = rRange.aEnd.nNode.GetIndex();
         for (SwNodeOffset n(nStartNode); !bStop && n <= nEndNode; ++n)
         {
             if (rCancelTranslation)
@@ -361,13 +377,67 @@ bool TranslateRanges(SwWrtShell& rWrtSh, const TranslateFunc& rTranslate,
                     const SwNodeOffset nNodesAfter = pNodes.Count() - n;
                     const sal_Int32 nCharsAfter
                         = pNode->GetTextNode()->Len() - cursor->End()->GetContentIndex();
+                    SwTextFormatColl* pColl = pNode->GetTextNode()->GetTextColl();
+                    std::optional<SwAttrSet> oNodeAttrs;
+                    if (const SwAttrSet* pNodeAttrs = pNode->GetTextNode()->GetpSwAttrSet())
+                        oNodeAttrs.emplace(*pNodeAttrs);
+                    // The paste re-creates the paragraph's footnotes, whose
+                    // sections sit ahead of the body: the paragraph's index
+                    // moves by as many nodes as those sections grew or shrank.
+                    const SwNodeOffset nExtrasBefore = pNodes.GetEndOfExtras().GetIndex();
                     // One undo step for the paragraph: its translation and its language.
                     rWrtSh.StartUndo(SwUndoId::PASTE_CLIPBOARD);
                     SwTranslateHelper::PasteHTMLToPaM(rWrtSh, cursor.get(), aTranslatedOut);
+                    const SwNodeOffset nFirstPasted
+                        = n + (pNodes.GetEndOfExtras().GetIndex() - nExtrasBefore);
+                    const SwNodeOffset nLastPasted = pNodes.Count() - nNodesAfter;
+                    // The HTML import treats text without a block element as
+                    // a paragraph of its own: it sets its default paragraph
+                    // style, and what the markup says about the paragraph, its
+                    // spacing, alignment, font and list, as hard attributes.
+                    // Put the paragraph's own style and attributes back.
+                    SwDoc& rDoc = *rWrtSh.GetDoc();
+                    for (SwNodeOffset i = nFirstPasted; i <= nLastPasted; ++i)
+                    {
+                        SwTextNode* pPasted = pNodes[i]->GetTextNode();
+                        if (!pPasted)
+                            continue;
+                        const SwPaM aPasted(*pPasted, 0, *pPasted, pPasted->Len());
+                        if (pPasted->GetTextColl() != pColl)
+                            rDoc.SetTextFormatColl(aPasted, pColl, false);
+                        // Character formatting that covers the whole paragraph
+                        // ends up on the paragraph as well. Where it says more
+                        // than the paragraph style does, it is the translation's
+                        // own, bold text for instance, and stays.
+                        SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END - 1> aOwnCharAttrs(
+                            rDoc.GetAttrPool());
+                        if (const SwAttrSet* pPastedAttrs = pPasted->GetpSwAttrSet())
+                        {
+                            for (SfxItemIter aIter(*pPastedAttrs); !aIter.IsAtEnd(); aIter.Next())
+                            {
+                                const SfxPoolItem* pItem = aIter.GetCurItem();
+                                const sal_uInt16 nWhich = pItem->Which();
+                                if (nWhich < RES_CHRATR_BEGIN || nWhich >= RES_CHRATR_END)
+                                    continue;
+                                if (!(pColl->GetAttrSet().Get(nWhich) == *pItem))
+                                    aOwnCharAttrs.Put(*pItem);
+                            }
+                            if (pPastedAttrs->Count())
+                                rDoc.ResetAttrs(aPasted, false, {});
+                        }
+                        if (oNodeAttrs && oNodeAttrs->Count())
+                            rDoc.getIDocumentContentOperations().InsertItemSet(aPasted, *oNodeAttrs);
+                        if (aOwnCharAttrs.Count())
+                            rDoc.getIDocumentContentOperations().InsertItemSet(aPasted, aOwnCharAttrs);
+                    }
                     if (eTargetLanguage != LANGUAGE_DONTKNOW)
-                        SetLanguageOfRange(rWrtSh, n, nStartContent, pNodes.Count() - nNodesAfter,
+                        SetLanguageOfRange(rWrtSh, nFirstPasted, nStartContent, nLastPasted,
                                            nCharsAfter, eTargetLanguage);
                     rWrtSh.EndUndo(SwUndoId::PASTE_CLIPBOARD);
+                    // Continue after the pasted translation, however many
+                    // nodes it took.
+                    n = nLastPasted;
+                    nEndNode = rRange.aEnd.nNode.GetIndex();
                 }
                 else
                 {

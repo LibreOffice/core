@@ -44,6 +44,10 @@
 #include <dcontact.hxx>
 #include <svx/svdpage.hxx>
 #include <ndtxt.hxx>
+#include <numrule.hxx>
+#include <svl/itemset.hxx>
+#include <editeng/wghtitem.hxx>
+#include <o3tl/string_view.hxx>
 #include <txtfld.hxx>
 #include <IDocumentFieldsAccess.hxx>
 #include <IDocumentLinksAdministration.hxx>
@@ -1371,10 +1375,53 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testCool6098TranslateSkipsFooter)
 /// other request with the same fixed translation, regardless of what was asked, so a test can
 /// tell a translated node from an untouched one without a real API key. With bFailLanguageList,
 /// the language list request fails.
-std::unique_ptr<test::MockHttpServer> createMockTranslateServer(bool bFailLanguageList = false)
+/// The HTML sent for translation, out of the form body of a DeepL request.
+OString textOfTranslateRequest(std::string_view rBody)
+{
+    const size_t nStart = rBody.find("text=");
+    if (nStart == std::string_view::npos)
+        return {};
+    std::string_view aEncoded = rBody.substr(nStart + 5);
+    aEncoded = aEncoded.substr(0, aEncoded.find('&'));
+    OStringBuffer aText;
+    for (size_t i = 0; i < aEncoded.size(); ++i)
+    {
+        if (aEncoded[i] == '%' && i + 2 < aEncoded.size())
+        {
+            aText.append(static_cast<char>(o3tl::toInt32(aEncoded.substr(i + 1, 2), 16)));
+            i += 2;
+        }
+        else if (aEncoded[i] == '+')
+            aText.append(' ');
+        else
+            aText.append(aEncoded[i]);
+    }
+    return aText.makeStringAndClear();
+}
+
+/// rText as the value of a JSON string.
+OString jsonString(std::string_view rText)
+{
+    OStringBuffer aJson("\"");
+    for (const char c : rText)
+    {
+        if (c == '"' || c == '\\')
+            aJson.append('\\');
+        if (static_cast<unsigned char>(c) < 0x20)
+            aJson.append(' ');
+        else
+            aJson.append(c);
+    }
+    aJson.append('"');
+    return aJson.makeStringAndClear();
+}
+
+/// With bEcho, a translation is the markup that was sent, as the real services return it.
+std::unique_ptr<test::MockHttpServer> createMockTranslateServer(bool bFailLanguageList = false,
+                                                                bool bEcho = false)
 {
     return std::make_unique<test::MockHttpServer>(
-        18099, [bFailLanguageList](const test::MockHttpServer::Request& rRequest) {
+        18099, [bFailLanguageList, bEcho](const test::MockHttpServer::Request& rRequest) {
             test::MockHttpServer::Response aResponse;
             if (rRequest.aMethod == "GET" && rRequest.aPath.starts_with("/v3/languages"))
             {
@@ -1393,6 +1440,11 @@ std::unique_ptr<test::MockHttpServer> createMockTranslateServer(bool bFailLangua
                                   "{\"lang\":\"zh-Hant\",\"name\":\"Chinese (traditional)\","
                                   "\"usable_as_source\":false,\"usable_as_target\":true}]";
             }
+            else if (bEcho)
+                aResponse.aBody
+                    = OString("{\"translations\":[{\"text\":"
+                              + jsonString(textOfTranslateRequest(rRequest.aBody)) + "}]}")
+                          .getStr();
             else
                 aResponse.aBody = "{\"translations\":[{\"text\":\"TRANSLATED-TEXT\"}]}";
             return aResponse;
@@ -1523,6 +1575,132 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testCool6098TranslateEndToEnd)
     // the body, and the footer's own text must be untouched:
     CPPUNIT_ASSERT_EQUAL(nParagraphsBefore, getParagraphs());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), xFooter->getString().indexOf("TRANSLATED-TEXT"));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateKeepsHeadings)
+{
+    std::unique_ptr<test::MockHttpServer> pMockServer = createMockTranslateServer();
+    CPPUNIT_ASSERT(pMockServer->start());
+    comphelper::ScopeGuard<std::function<void()>> aResetConfig
+        = setTranslationService(u"http://127.0.0.1:18099/v2/translate"_ustr);
+
+    // Given a document with a title, body paragraphs and two headings:
+    createSwDoc("translate-headings.fodt");
+    SwWrtShell* const pWrtSh = getSwDocShell()->GetWrtShell();
+    CPPUNIT_ASSERT_EQUAL(8, getParagraphs());
+    pWrtSh->SttEndDoc(true);
+    const SwNodeOffset nHeadingNode = pWrtSh->GetCursor()->GetPointNode().GetIndex() + 2;
+    const SwNumRule* pOutlineRule
+        = pWrtSh->GetDoc()->GetNodes()[nHeadingNode]->GetTextNode()->GetNumRule();
+    CPPUNIT_ASSERT(pOutlineRule);
+    CPPUNIT_ASSERT(pOutlineRule->IsOutlineRule());
+
+    // When translating the whole document:
+    bool bCancel = false;
+    CPPUNIT_ASSERT(SwTranslateHelper::TranslateDocumentCancellable(*pWrtSh, "DE"_ostr, bCancel));
+
+    // Then every paragraph is translated, the last one included: pasting a
+    // heading as a block element used to split it, leaving an empty heading
+    // behind, and the extra node pushed the last paragraph out of the range.
+    CPPUNIT_ASSERT_EQUAL(8, getParagraphs());
+    for (int i = 1; i <= 8; ++i)
+        CPPUNIT_ASSERT_EQUAL(u"TRANSLATED-TEXT"_ustr, getParagraph(i)->getString());
+
+    // And the title and the heading keep their paragraph style, outline level
+    // and outline numbering: the pasted text used to take the HTML import's
+    // default style and an empty list style of its own.
+    CPPUNIT_ASSERT_EQUAL(u"Title"_ustr,
+                         getProperty<OUString>(getParagraph(1), u"ParaStyleName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Heading 2"_ustr,
+                         getProperty<OUString>(getParagraph(3), u"ParaStyleName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), getProperty<sal_Int32>(getParagraph(3), u"OutlineLevel"_ustr));
+    CPPUNIT_ASSERT_EQUAL(pOutlineRule, static_cast<const SwNumRule*>(
+                                           pWrtSh->GetDoc()->GetNodes()[nHeadingNode]->GetTextNode()->GetNumRule()));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateAddsNoDirectFormatting)
+{
+    // The mock returns the markup it was sent, as the translation services do.
+    std::unique_ptr<test::MockHttpServer> pMockServer = createMockTranslateServer(false, true);
+    CPPUNIT_ASSERT(pMockServer->start());
+    comphelper::ScopeGuard<std::function<void()>> aResetConfig
+        = setTranslationService(u"http://127.0.0.1:18099/v2/translate"_ustr);
+
+    // Given a document whose title and body paragraphs are formatted by their styles alone:
+    createSwDoc("translate-headings.fodt");
+    SwWrtShell* const pWrtSh = getSwDocShell()->GetWrtShell();
+    static constexpr OUString aProperties[]
+        = { u"ParaTopMargin"_ustr, u"ParaBottomMargin"_ustr, u"ParaLineSpacing"_ustr,
+            u"ParaAdjust"_ustr,    u"CharHeight"_ustr,       u"CharWeight"_ustr };
+    for (int nParagraph : { 1, 2, 3 })
+    {
+        uno::Reference<beans::XPropertyState> xState(getParagraph(nParagraph), uno::UNO_QUERY);
+        for (const OUString& rProperty : aProperties)
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                OUStringToOString(rProperty, RTL_TEXTENCODING_ASCII_US).getStr(),
+                beans::PropertyState_DEFAULT_VALUE, xState->getPropertyState(rProperty));
+    }
+    pWrtSh->SttEndDoc(true);
+
+    // When translating the whole document:
+    bool bCancel = false;
+    CPPUNIT_ASSERT(SwTranslateHelper::TranslateDocumentCancellable(*pWrtSh, "DE"_ostr, bCancel));
+
+    // Then the paragraphs are still formatted by their styles alone: the exported markup
+    // carries the spacing, alignment and font of each paragraph, and the paste used to set
+    // all of it as direct formatting.
+    CPPUNIT_ASSERT_EQUAL(8, getParagraphs());
+    CPPUNIT_ASSERT_EQUAL(u"A short guide to the kitchen garden"_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Title"_ustr,
+                         getProperty<OUString>(getParagraph(1), u"ParaStyleName"_ustr));
+    for (int nParagraph : { 1, 2, 3 })
+    {
+        uno::Reference<beans::XPropertyState> xState(getParagraph(nParagraph), uno::UNO_QUERY);
+        for (const OUString& rProperty : aProperties)
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(
+                OUStringToOString(rProperty, RTL_TEXTENCODING_ASCII_US).getStr(),
+                beans::PropertyState_DEFAULT_VALUE, xState->getPropertyState(rProperty));
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateKeepsDirectFormatting)
+{
+    // The mock returns the markup it was sent, as the translation services do.
+    std::unique_ptr<test::MockHttpServer> pMockServer = createMockTranslateServer(false, true);
+    CPPUNIT_ASSERT(pMockServer->start());
+    comphelper::ScopeGuard<std::function<void()>> aResetConfig
+        = setTranslationService(u"http://127.0.0.1:18099/v2/translate"_ustr);
+
+    // Given a paragraph whose bold is a hint over all of its text, not an attribute of the
+    // paragraph: a bold word, with the plain text before it deleted.
+    createSwDoc();
+    SwWrtShell* const pWrtSh = getSwDocShell()->GetWrtShell();
+    pWrtSh->Insert(u"Plain Bold text"_ustr);
+    pWrtSh->Left(SwCursorSkipMode::Chars, /*bSelect=*/true, 9, /*bBasicCall=*/false);
+    pWrtSh->SetAttrItem(SvxWeightItem(WEIGHT_BOLD, RES_CHRATR_WEIGHT));
+    pWrtSh->EnterStdMode();
+    pWrtSh->SttEndDoc(true);
+    pWrtSh->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 6, /*bBasicCall=*/false);
+    pWrtSh->Delete();
+    pWrtSh->EnterStdMode();
+    CPPUNIT_ASSERT_EQUAL(u"Bold text"_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD,
+                         getProperty<float>(getRun(getParagraph(1), 1), u"CharWeight"_ustr));
+    const SwTextNode* pNode = pWrtSh->GetCursor()->GetPointNode().GetTextNode();
+    CPPUNIT_ASSERT(!pNode->GetpSwAttrSet()
+                   || pNode->GetpSwAttrSet()->GetItemState(RES_CHRATR_WEIGHT, false)
+                          != SfxItemState::SET);
+    pWrtSh->SttEndDoc(true);
+
+    // When translating the whole document:
+    bool bCancel = false;
+    CPPUNIT_ASSERT(SwTranslateHelper::TranslateDocumentCancellable(*pWrtSh, "DE"_ostr, bCancel));
+
+    // Then the text is still bold: the bold came back as an attribute of the paragraph, and
+    // the paste's clean-up of paragraph attributes used to drop it.
+    CPPUNIT_ASSERT_EQUAL(u"Bold text"_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD,
+                         getProperty<float>(getRun(getParagraph(1), 1), u"CharWeight"_ustr));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateSetsTargetLanguage)
