@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-22 23:37+0200\n"
+"POT-Creation-Date: 2026-10-23 00:15+0200\n"
 "PO-Revision-Date: 2026-06-23 14:20+0000\n"
 "Last-Translator: தமிழ்நேரம் <tamilneram247@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/collabora-online/"
@@ -40,9 +40,9 @@ msgstr "நகலெடு"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:17-69
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"C</kbd>,<br /><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">"
-"+</span><kbd>Insert</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>C</kbd>,<br /><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
+"hidden=\"true\">+</span><kbd>Insert</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "ஒ</kbd>,<br /><kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">"
@@ -54,9 +54,9 @@ msgstr "வடிவூட்டா உரையாக ஒட்டு"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:18-90
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</"
-"kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>V</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>வ</"
@@ -68,9 +68,10 @@ msgstr "சிறந்ததை ஒட்டவும்"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:19-78
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</"
-"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>V</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "மாற்று</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
@@ -84,8 +85,8 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.table.tr.td:20-79
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"O</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>O</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "0</kbd>"
@@ -116,9 +117,9 @@ msgstr "நோட்புக்ச்பார் பட்டியலில�
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:26-90
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>F1</"
-"kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>F1</kbd>"
 msgstr ""
 "<kbd>மாற்று</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>F1</"
@@ -138,8 +139,8 @@ msgstr "தேர்ந்தெடுக்கப்பட்ட கருத�
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:28-97
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>C</"
-"kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>C</kbd>"
 msgstr ""
 "<kbd>மாற்று</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "ஒ</kbd>"
@@ -150,10 +151,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:29-121
 #, fuzzy
-msgctxt "html/cool-help.html+general-shortcuts.table.tr.td:18-116"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"F10</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>F10</kbd>"
 msgstr ""
 "<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "முடிவு</kbd>"
@@ -175,33 +175,25 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.table.tr.td:31-115
 #, fuzzy
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"F6</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>F6</kbd>"
 msgstr ""
 "<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "முடிவு</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:36-9
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.h2:2-4"
 msgid "Text formatting"
 msgstr "உரை வடிவூட்டல்"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:38-59
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:4-54"
 msgid "Bold"
 msgstr "தடிமன்"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:39-61
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:5-56"
 msgid "Italic"
 msgstr "சாய்வு"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:40-64
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:6-59"
 msgid "Underline"
 msgstr "அடிக்கோடு"
 
@@ -210,56 +202,38 @@ msgid "Double Underline"
 msgstr "இரட்டை அடிக்கோடு"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:42-64
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:8-59"
 msgid "Strikethrough"
 msgstr "குறுக்குக்கோடு"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:43-66
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:9-61"
 msgid "Superscript"
 msgstr "மேலெழுத்து"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:44-64
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:10-59"
 msgid "Subscript"
 msgstr "கீழெழுத்து"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:45-70
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:11-65"
 msgid "Remove direct formatting"
 msgstr "நேரடி வடிவூட்டலை அகற்று"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:49-9
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.h2:15-4"
 msgid "Paragraph formatting"
 msgstr "பத்தி வடிவூட்டல்"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:51-76
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:17-71"
 msgid "Align Center"
 msgstr "நடுவில் சீரமை"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:52-64
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:18-59"
 msgid "Align Left"
 msgstr "இடச் சீரமை"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:53-65
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:19-60"
 msgid "Align Right"
 msgstr "வலச் சீரமை"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:54-65
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:20-60"
 msgid "Justify"
 msgstr "ஓரச்சிரமை"
 
@@ -269,8 +243,8 @@ msgstr "முன்னிருப்பு பத்தி பாணியை�
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:55-94
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"0</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>0</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "0</kbd>"
@@ -281,8 +255,8 @@ msgstr "தலைப்புரை 1 பத்தி பாணியைச் �
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:56-96
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"1</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>1</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "1</kbd>"
@@ -293,8 +267,8 @@ msgstr "தலைப்புரை 2 பத்தி பாணியைச் �
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:57-96
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"2</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>2</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "2</kbd>"
@@ -304,11 +278,9 @@ msgid "Apply Heading 3 paragraph style"
 msgstr "தலைப்புரை 3 பத்தி பாணியைச் செயல்படுத்து"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:58-96
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:24-91"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"3</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>3</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "3</kbd>"
@@ -319,8 +291,8 @@ msgstr "தலைப்புரை 4 பத்தி பாணியைச் �
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:59-96
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"4</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>4</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "4</kbd>"
@@ -331,8 +303,8 @@ msgstr "தலைப்புரை 5 பத்தி பாணியைச் �
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:60-96
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"5</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>5</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "5</kbd>"
@@ -342,299 +314,221 @@ msgid "Text selection and navigation in document"
 msgstr "ஆவணத்தில் உரைத் தேர்வும் வலம்வரலும்"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:66-64
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:32-59"
 msgid "Select All"
 msgstr "அனைத்தையும் தேர்"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:67-38
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:33-33"
 msgid "Move cursor to the left"
 msgstr "இடஞ்சுட்டியை இடம் நகர்த்து"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:67-88
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:33-83"
 msgid "Arrow Left"
 msgstr "அம்பு வலது"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:68-38
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:34-33"
 msgid "Move cursor with selection to the left"
 msgstr "தேர்வுடன் இடஞ்சுட்டியை இடம் நகர்த்து"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:68-103
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:34-98"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Left</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Arrow Left</kbd>"
 msgstr ""
 "<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "அம்பு இடது</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:69-38
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:35-33"
 msgid "Go to beginning of a word"
 msgstr "ஒரு சொல்லின் தொடக்கத்துக்குச் செல்"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:69-90
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:35-85"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Left</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Arrow Left</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "அம்பு இடது </kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:70-38
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:36-33"
 msgid "Select to the left word by word"
 msgstr "ஒவ்வொரு சொல்லாக இடமாகத் தேர்"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:70-96
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:36-91"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
-"Left</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Arrow Left</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "சிப்ட் </kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span> <kbd > "
 "அம்பு இடது</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:71-38
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:37-33"
 msgid "Move cursor to the right"
 msgstr "இடஞ்சுட்டியை வலம் நகர்த்து"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:71-89
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:37-84"
 msgid "Arrow Right"
 msgstr "வலது அம்பு"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:72-38
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:38-33"
 msgid "Move cursor with selection to the right"
 msgstr "தேர்வுடன் இடஞ்சுட்டியை வலம் நகர்த்து"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:72-104
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:38-99"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Right</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Arrow Right</kbd>"
 msgstr ""
 "<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "அம்பு வலது</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:73-38
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:39-33"
 msgid "Go to start of the next word"
 msgstr "அடுத்த சொல்லின் தொடக்கத்துக்குச் செல்"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:73-93
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:39-88"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Right</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Arrow Right</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "அம்பு வலது </kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:74-38
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:40-33"
 msgid "Select to the right word by word"
 msgstr "ஒவ்வொரு சொல்லாக வலமாகத் தேர்"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:74-97
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:40-92"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
-"Right</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Arrow Right</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "சிப்ட் </kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span> <kbd > "
 "அம்பு வலது</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:75-38
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:41-33"
 msgid "Move cursor up one line"
 msgstr "இடஞ்சுட்டியை ஒரு வரி மேல் நகர்த்து"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:75-88
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:41-83"
 msgid "Arrow Up"
 msgstr "அம்பு மேலாக"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:76-38
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:42-33"
 msgid "Select lines in upwards direction"
 msgstr "மேல்நோக்கும் வரிகளைத் தேர்க"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:76-98
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:42-93"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Up</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Arrow Up</kbd>"
 msgstr ""
 "<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "அம்பு அப்</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:77-38
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:43-33"
 msgid "Move cursor to beginning of the previous paragraph"
 msgstr "இடஞ்சுட்டியை முந்தைய பத்தியின் தொடக்கத்துக்கு நகர்த்து"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:77-115
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:43-110"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Up</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Arrow Up</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "அம்புக்குறி </kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:78-38
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:44-33"
 msgid "Select to beginning of paragraph"
 msgstr "பத்தியின் தொடக்கத்துக்குத் தேர்வு"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:78-97
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:44-92"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
-"Up</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Arrow Up</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "சிப்ட் </kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span> <kbd > "
 "அம்பு அப்</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:79-38
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:45-33"
 msgid "Move cursor down one line"
 msgstr "இடஞ்சுட்டியை ஒரு வரி கீழே நகர்த்து"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:79-90
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:45-85"
 msgid "Arrow Down"
 msgstr "கீழ் அம்பு"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:80-38
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:46-33"
 msgid "Select lines in downwards direction"
 msgstr "கீழ் நோக்கும் வரிகளைத் தேர்வு"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:80-100
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:46-95"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Down</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Arrow Down</kbd>"
 msgstr ""
 "<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "அம்பு பேரூர் </kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:81-38
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:47-33"
 msgid "Move cursor to beginning of the next paragraph"
 msgstr "இடஞ்சுட்டியை அடுத்த பத்தித் தொடக்கத்துக்கு நகர்த்து"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:81-111
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:47-106"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Down</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Arrow Down</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "அம்பு பேரூர் </kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:82-38
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:48-33"
 msgid "Select to end of paragraph"
 msgstr "பத்தி முடிவுக்குத் தேர்வு"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:82-91
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:48-86"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
-"Down</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Arrow Down</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "சிப்ட் </kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span> <kbd > "
 "அம்பு கீழே</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:83-38
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:49-33"
 msgid "Go to beginning of line"
 msgstr "வரியின் தொடக்கத்துக்குச் செல்க"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:83-88
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:49-83"
 msgid "Home"
 msgstr "வீடு"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:84-38
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:50-33"
 msgid "Go and select to the beginning of a line"
 msgstr "ஒரு வரியின் தொடக்கத்துக்குச் சென்றுத் தேர்க"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:84-105
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:50-100"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Home</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Home</kbd>"
 msgstr ""
 "<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "முகப்பு</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:85-38
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:51-33"
 msgid "Go to start of document"
 msgstr "ஆவணத் தொடக்கத்துக்குச் செல்க"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:85-88
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:51-83"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Home</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Home</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "முகப்பு </kbd>"
@@ -644,57 +538,43 @@ msgid "Go and select text to start of document"
 msgstr "உரையை ஆவணத் தொடக்கம்வரைத் தேர்"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:86-104
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:52-99"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Home</"
-"kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Home</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "சிப்ட் </kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span> <kbd > "
 "முகப்பு</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:87-38
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:53-33"
 msgid "Go to end of line"
 msgstr "வரி முடிவுக்குச் செல்க"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:87-82
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:53-77"
 msgid "End"
 msgstr "முடிவு"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:88-38
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:54-33"
 msgid "Go and select to the end of a line"
 msgstr "ஒரு வரி முடிவுவரைத் தேர்க"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:88-99
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:54-94"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"End</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>End</kbd>"
 msgstr ""
 "<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "முடிவு</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:89-38
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:55-33"
 msgid "Go to end of document"
 msgstr "ஆவண முடிவுக்குச் செல்க"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:89-86
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:55-81"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"End</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>End</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "end</kbd>"
@@ -704,12 +584,10 @@ msgid "Go and select text to end of document"
 msgstr "உரையை ஆவண முடிவுவரைத் தேர்"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:90-102
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:56-97"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>End</"
-"kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>End</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "சிப்ட் </kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span> <kbd > "
@@ -729,8 +607,8 @@ msgstr "இடஞ்சுட்டியை உரை, தலைப்பகு
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:92-102
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"PageUp</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>PageUp</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "pateup </kbd>"
@@ -741,8 +619,8 @@ msgstr "தெரிவுப் பக்கங்களை மேலே ஒர
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:93-97
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"PageUp</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>PageUp</kbd>"
 msgstr ""
 "<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "pateup</kbd>"
@@ -761,8 +639,8 @@ msgstr "இடஞ்சுட்டியை உரை, அடிப்பகு
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:95-102
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"PageDown</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>PageDown</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "பீடவுன் </kbd>"
@@ -773,8 +651,8 @@ msgstr "தெரிவுப் பக்கங்களைக் கிழே 
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:96-99
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"PageDown</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>PageDown</kbd>"
 msgstr ""
 "<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "பீடவுன்</kbd>"
@@ -785,8 +663,8 @@ msgstr "சொல்லின் தொடக்கத்துக்கு அ�
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:97-92
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Backspace</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Backspace</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "பேக்ச்பேச் </kbd>"
@@ -797,8 +675,8 @@ msgstr "சொல்லின் முடிவு வரை அழி"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:98-86
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Del</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Del</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "del</kbd>"
@@ -809,9 +687,9 @@ msgstr "வாக்கியத்தின் டொடக்கம் வர�
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:99-96
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Backspace</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Backspace</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "சிப்ட் </kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span> <kbd > "
@@ -823,9 +701,9 @@ msgstr "வாக்கியத்தின் முடிவு வரை அ
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:100-90
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Del</"
-"kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Del</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "சிப்ட் </kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span> <kbd > "
@@ -836,33 +714,21 @@ msgid "Shortcut Keys for Tables"
 msgstr "அட்டவணைகளுக்கான குறுக்கு விசைகள்"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:106-38
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:72-33"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"A</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>A</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "a</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:106-144
 msgid ""
-"If the active cell is empty: selects the whole table. Otherwise: selects the "
-"contents of the active cell. Pressing again selects the entire table."
+"If the active cell is empty: selects the whole table. Otherwise: selects "
+"the contents of the active cell. Pressing again selects the entire table."
 msgstr ""
 "செயலில் உள்ள செல் காலியாக இருந்தால்: முழு அட்டவணையையும் தேர்ந்தெடுக்கிறது. இல்லையெனில்: "
 "செயலில் உள்ள கலத்தின் உள்ளடக்கங்களைத் தேர்ந்தெடுக்கிறது. மீண்டும் அழுத்துவது முழு "
 "அட்டவணையையும் தேர்ந்தெடுக்கிறது."
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:107-38
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:73-33"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Home</kbd>"
-msgstr ""
-"<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"முகப்பு </kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:107-147
 msgid ""
@@ -874,16 +740,6 @@ msgstr ""
 "செய்தித் தாள் செயலில் உள்ள கலத்தின் தொடக்கத்திற்கு செல்கிறது, இரண்டாவது செய்தித் தாள் தற்போதைய "
 "அட்டவணையின் தொடக்கத்திற்கு செல்கிறது, மூன்றாவது செய்தித் தாள் ஆவணத்தின் தொடக்கத்திற்கு "
 "செல்கிறது."
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:108-38
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:74-33"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"End</kbd>"
-msgstr ""
-"<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"end</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:108-146
 msgid ""
@@ -897,17 +753,17 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:109-38
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Tab</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Tab</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "தாவல்</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:109-146
 msgid ""
-"Inserts a tab stop (only in tables). Depending on the Window Manager in use, "
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Tab</kbd> may be used instead."
+"Inserts a tab stop (only in tables). Depending on the Window Manager in "
+"use, <kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Tab</kbd> may be used instead."
 msgstr ""
 "ஒரு தாவல் நிறுத்தத்தை செருகும் (அட்டவணையில் மட்டுமே). பயன்பாட்டில் உள்ள சாளர மேலாளரைப் "
 "பொறுத்து,<kbd>மாற்று</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
@@ -915,8 +771,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:110-38
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Keys</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Arrow Keys</kbd>"
 msgstr ""
 "<kbd> மாற்று</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "அம்பு விசைகள் </kbd>"
@@ -929,9 +785,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:111-38
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
-"Keys</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Arrow Keys</kbd>"
 msgstr ""
 "<kbd> மாற்று</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "உயர்த்து</kbd> <span class=\"kbd--plus\" aria-hidden=\"true\">+</span> <kbd > "
@@ -944,50 +800,42 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:112-38
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
-"Keys</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Arrow Keys</kbd>"
 msgstr ""
 "<kbd> மாற்று</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span> <kbd > "
 "அம்பு விசைகள்</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:112-218
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:78-213"
 msgid "Like Alt, but only the active cell is modified"
 msgstr "மாற்று போன்றது, ஆனால் செயலில் உள்ள செல் மட்டுமே மாற்றியமைக்கப்படுகிறது"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:113-38
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</"
-"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow Keys</"
-"kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Arrow Keys</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "மாற்று </kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span> <kbd >"
 "உயர்த்து</kbd> <span class=\"kbd-plus\">+</span><kbd>அம்பு விசைகள்</kbd>"
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:113-285
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:79-280"
-msgid "Like Alt, but only the active cell is modified"
-msgstr "மாற்று போன்றது, ஆனால் செயலில் உள்ள செல் மட்டுமே மாற்றியமைக்கப்படுகிறது"
-
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:114-38
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Insert</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Insert</kbd>"
 msgstr ""
 "<kbd> மாற்று</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "செருக</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:114-148
 msgid ""
-"3 seconds in Insert mode, Arrow Key inserts row/column, <kbd>Ctrl</kbd><span "
-"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow Key</kbd> "
-"inserts cell"
+"3 seconds in Insert mode, Arrow Key inserts row/column, <kbd>Ctrl</"
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow Key</"
+"kbd> inserts cell"
 msgstr ""
 "செருகும் பயன்முறையில் 3 வினாடிகள், அம்பு விசை வரிசை/நெடுவரிசை, <kbd>கட்டு</kbd> "
 "<span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>அம்பு விசை</kbd> "
@@ -995,17 +843,17 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:115-38
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Del</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Del</kbd>"
 msgstr ""
 "<kbd> மாற்று</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "del</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:115-145
 msgid ""
-"3 seconds in Delete mode, Arrow key deletes row/column, <kbd>Ctrl</kbd><span "
-"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow key</kbd> merges "
-"cell with neighboring cell"
+"3 seconds in Delete mode, Arrow key deletes row/column, <kbd>Ctrl</"
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow key</"
+"kbd> merges cell with neighboring cell"
 msgstr ""
 "நீக்குதல் பயன்முறையில் 3 விநாடிகள், அம்பு விசை வரிசை/நெடுவரிசையை நீக்குகிறது,<kbd>"
 "கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>அம்பு "
@@ -1013,9 +861,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:116-38
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Del</"
-"kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Del</kbd>"
 msgstr ""
 "<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span> <kbd > "
@@ -1063,8 +911,6 @@ msgid "Insert endnote"
 msgstr "முடிவுக் குறிப்பைச் செருகவும்"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:127-71
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:93-66"
 msgid "Insert comment"
 msgstr "கருத்தைச் செருகவும்"
 
@@ -1086,8 +932,8 @@ msgstr "வரி இடைவெளியைச் செருகவும்"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:133-82
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Enter</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Enter</kbd>"
 msgstr ""
 "<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "உள்ளிடவும்</kbd>"
@@ -1108,32 +954,20 @@ msgstr ""
 "செருகவும்"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:136-139
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:102-134"
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Enter</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Enter</kbd>"
 msgstr ""
 "<kbd> மாற்று</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "Enter</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:137-38
 msgid ""
-"Insert new paragraph without numbering inside a list. Does not work when the "
-"cursor is at the end of the list."
+"Insert new paragraph without numbering inside a list. Does not work when "
+"the cursor is at the end of the list."
 msgstr ""
 "ஒரு பட்டியலுக்குள் எண்ணாமல் புதிய பத்தியைச் செருகவும். கர்சர் பட்டியலின் முடிவில் "
 "இருக்கும்போது வேலை செய்யாது."
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:137-175
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:103-170"
-msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Enter</kbd>"
-msgstr ""
-"<kbd> மாற்று</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Enter</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:143-9
 msgid "Navigating in Spreadsheets"
@@ -1143,49 +977,17 @@ msgstr "விரிதாள்களில் செல்லவும்"
 msgid "Moves the cursor to the first cell in the sheet (A1)."
 msgstr "கர்சரை தாளில் (A1) முதல் கலத்திற்கு நகர்த்துகிறது."
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:145-118
-#, fuzzy
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:4-113"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Home</kbd>"
-msgstr ""
-"<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"முகப்பு </kbd>"
-
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:146-38
 msgid "Moves the cursor to the last cell on the sheet that contains data."
 msgstr "தரவைக் கொண்ட தாளில் கர்சரை கடைசி கலத்திற்கு நகர்த்துகிறது."
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:146-131
-#, fuzzy
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:5-126"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"End</kbd>"
-msgstr ""
-"<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"end</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:147-38
 msgid "Moves the cursor to the first cell of the current row."
 msgstr "கர்சரை தற்போதைய வரிசையின் முதல் கலத்திற்கு நகர்த்துகிறது."
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:147-119
-#, fuzzy
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:6-114"
-msgid "Home"
-msgstr "வீடு"
-
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:148-38
 msgid "Moves the cursor to the last cell of the current row."
 msgstr "கர்சரை தற்போதைய வரிசையின் கடைசி கலத்திற்கு நகர்த்துகிறது."
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:148-118
-#, fuzzy
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:7-113"
-msgid "End"
-msgstr "முடிவு"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:149-38
 msgid ""
@@ -1193,31 +995,11 @@ msgid ""
 msgstr ""
 "தற்போதைய கலத்திலிருந்து கலங்களை தற்போதைய வரிசையின் முதல் கலத்திற்கு செல்கிறது."
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:149-138
-#, fuzzy
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:8-133"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Home</kbd>"
-msgstr ""
-"<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"முகப்பு</kbd>"
-
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:150-38
 msgid ""
 "Selects cells from the current cell to the last cell of the current row."
 msgstr ""
 "தற்போதைய கலத்திலிருந்து கலங்களை தற்போதைய வரிசையின் கடைசி கலத்திற்கு செல்கிறது."
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:150-137
-#, fuzzy
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:9-132"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"End</kbd>"
-msgstr ""
-"<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"முடிவு</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:151-38
 msgid ""
@@ -1229,8 +1011,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:151-184
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Page Up</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Page Up</kbd>"
 msgstr ""
 "<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "பக்கம் மேலே</kbd>"
@@ -1245,8 +1027,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:152-188
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Page Down</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Page Down</kbd>"
 msgstr ""
 "<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "பக்கம் பேரூர் </kbd>"
@@ -1263,8 +1045,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:153-265
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Left Arrow</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Left Arrow</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "இடது அம்பு </kbd>"
@@ -1272,8 +1054,8 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:154-38
 msgid ""
 "Moves the cursor to the right edge of the current data range. If the column "
-"to the right of the cell that contains the cursor is empty, the cursor moves "
-"to the next column to the right that contains data."
+"to the right of the cell that contains the cursor is empty, the cursor "
+"moves to the next column to the right that contains data."
 msgstr ""
 "கர்சரை தற்போதைய தரவு வரம்பின் வலது விளிம்பிற்கு நகர்த்துகிறது. கர்சரைக் கொண்ட கலத்தின் "
 "வலதுபுறத்தில் உள்ள நெடுவரிசை காலியாக இருந்தால், கர்சர் தரவைக் கொண்டிருக்கும் வலதுபுறத்தில் "
@@ -1281,25 +1063,25 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:154-269
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Right Arrow</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Right Arrow</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "வலது அம்பு </kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:155-38
 msgid ""
-"Moves the cursor to the top edge of the current data range. If the row above "
-"the cell that contains the cursor is empty, the cursor moves up to the next "
-"row that contains data."
+"Moves the cursor to the top edge of the current data range. If the row "
+"above the cell that contains the cursor is empty, the cursor moves up to "
+"the next row that contains data."
 msgstr ""
 "கர்சரை தற்போதைய தரவு வரம்பின் மேல் விளிம்பிற்கு நகர்த்துகிறது. கர்சரைக் கொண்ட கலத்திற்கு "
 "மேலே உள்ள வரிசை காலியாக இருந்தால், கர்சர் தரவைக் கொண்ட அடுத்த வரிசை வரை நகர்கிறது."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:155-241
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Up Arrow</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Up Arrow</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "அப் அம்பு </kbd>"
@@ -1315,8 +1097,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:156-246
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Down Arrow</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Down Arrow</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "பேரூர் அம்பு </kbd>"
@@ -1327,9 +1109,9 @@ msgstr "அடுத்த தாளுக்குச் செல்லுங�
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:157-82
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Page "
-"Down</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Page Down</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "மாற்று </kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span> <kbd > "
@@ -1341,9 +1123,9 @@ msgstr "முந்தைய தாளுக்குச் செல்லு�
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:158-86
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Page "
-"Up</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Page Up</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "மாற்று </kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span> <kbd > "
@@ -1363,9 +1145,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:159-292
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Arrow</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "சிப்ட் </kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span> <kbd > "
@@ -1377,8 +1159,8 @@ msgstr "ஒரு தாளை இடதுபுறமாக நகர்த்
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:160-93
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Page Up</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Page Up</kbd>"
 msgstr ""
 "<kbd> மாற்று</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "பக்கம் மேலே </kbd>"
@@ -1389,8 +1171,8 @@ msgstr "ஒரு திரை பக்கத்தை வலதுபுறம
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:161-100
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Page Down</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Page Down</kbd>"
 msgstr ""
 "<kbd> மாற்று</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "பக்கம் பேரூர் </kbd>"
@@ -1407,9 +1189,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:162-280
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Page "
-"Up</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Page Up</kbd>"
 msgstr ""
 "<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span> <kbd > "
@@ -1417,9 +1199,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:163-38
 msgid ""
-"Adds the next sheet to the current selection of sheets. If all the sheets in "
-"a spreadsheet are selected, this shortcut key combination only selects the "
-"next sheet. Makes the next sheet the current sheet."
+"Adds the next sheet to the current selection of sheets. If all the sheets "
+"in a spreadsheet are selected, this shortcut key combination only selects "
+"the next sheet. Makes the next sheet the current sheet."
 msgstr ""
 "தற்போதைய தாள்களின் தேர்வில் அடுத்த தாளைச் சேர்க்கிறது. ஒரு விரிதாளில் உள்ள அனைத்து தாள்களும் "
 "தேர்ந்தெடுக்கப்பட்டால், இந்த குறுக்குவழி விசை கலவையானது அடுத்த தாளை மட்டுமே "
@@ -1427,9 +1209,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:163-268
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Page "
-"Down</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Page Down</kbd>"
 msgstr ""
 "<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span> <kbd > "
@@ -1442,8 +1224,8 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:164-111
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Space</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Space</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "தாவல்</kbd>"
@@ -1455,8 +1237,8 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:165-108
 #, fuzzy
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Space</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Space</kbd>"
 msgstr ""
 "<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "தாவல்</kbd>"
@@ -1467,37 +1249,17 @@ msgid ""
 "hide, move, and more)."
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:166-160
-#, fuzzy
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:25-155"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"F10</kbd>"
-msgstr ""
-"<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"முடிவு</kbd>"
-
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:167-38
 msgid ""
-"With a whole column or row selected, opens the matching column or row header "
-"context menu (insert, delete, width or height, hide, and more)."
+"With a whole column or row selected, opens the matching column or row "
+"header context menu (insert, delete, width or height, hide, and more)."
 msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:167-205
-#, fuzzy
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:26-200"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"F10</kbd>"
-msgstr ""
-"<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"முடிவு</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:168-38
 msgid ""
 "where (*) is the multiplication sign on the numeric key pad. Selects the "
-"data range that contains the cursor. A range is a contiguous cell range that "
-"contains data and is bounded by empty row and columns."
+"data range that contains the cursor. A range is a contiguous cell range "
+"that contains data and is bounded by empty row and columns."
 msgstr ""
 "எங்கே (*) என்பது எண் விசை திண்டு மீது பெருக்கல் அடையாளம். கர்சரைக் கொண்ட தரவு வரம்பைத் "
 "தேர்ந்தெடுக்கிறது. ஒரு வரம்பு என்பது ஒரு தொடர்ச்சியான செல் வரம்பாகும், இது தரவைக் "
@@ -1505,8 +1267,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:168-269
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"*</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>*</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span> <kbd>"
 "*</kbd>"
@@ -1533,8 +1295,8 @@ msgstr "செல்களைச் செருகவும் (மெனு �
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:170-105
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Plus key</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Plus key</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "பிளச் கீ </kbd>"
@@ -1545,8 +1307,8 @@ msgstr "கலங்களை நீக்கு (மெனு திருத�
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:171-110
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Minus key</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Minus key</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "மைனச் விசை </kbd>"
@@ -1555,50 +1317,14 @@ msgstr ""
 msgid "Cell formatting"
 msgstr "செல் வடிவமைப்பு"
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:177-59
-#, fuzzy
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:36-54"
-msgid "Bold"
-msgstr "தடிமன்"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:178-61
-#, fuzzy
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:37-56"
-msgid "Italic"
-msgstr "சாய்வு"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:179-64
-#, fuzzy
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:38-59"
-msgid "Underline"
-msgstr "அடிக்கோடு"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:180-64
-#, fuzzy
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:39-59"
-msgid "Strikethrough"
-msgstr "குறுக்குக்கோடு"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:181-70
-#, fuzzy
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:40-65"
-msgid "Remove direct formatting"
-msgstr "நேரடி வடிவூட்டலை அகற்று"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:182-71
-#, fuzzy
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:41-66"
-msgid "Insert comment"
-msgstr "கருத்தைச் செருகவும்"
-
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:183-38
 msgid "Display comment"
 msgstr "கருத்து தெரிவிக்கவும்"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:183-80
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"F1</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>F1</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "f1</kbd>"
@@ -1609,55 +1335,15 @@ msgstr "நிரப்பு"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:184-74
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"D</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>D</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "உ</kbd>"
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:185-64
-#, fuzzy
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:44-59"
-msgid "Select All"
-msgstr "அனைத்தையும் தேர்"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:186-76
-#, fuzzy
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:45-71"
-msgid "Align Center"
-msgstr "நடுவில் சீரமை"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:187-64
-#, fuzzy
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:46-59"
-msgid "Align Left"
-msgstr "இடச் சீரமை"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:188-65
-#, fuzzy
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:47-60"
-msgid "Align Right"
-msgstr "வலச் சீரமை"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:189-65
-#, fuzzy
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:48-60"
-msgid "Justify"
-msgstr "ஓரச்சிரமை"
-
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:190-38
 msgid "Set Optimal Column Width"
 msgstr "உகந்த நெடுவரிசை அகலத்தை அமைக்கவும்"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:190-89
-#, fuzzy
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:49-84"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"3</kbd>"
-msgstr ""
-"<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"3</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:191-74
 msgid "Two decimal places, thousands separator"
@@ -1693,511 +1379,51 @@ msgstr "தேதியைச் செருகவும்"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:202-76
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-";</kbd> or <kbd>,</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>;"
+"</kbd> or <kbd>,</kbd>"
 msgstr ""
 "<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 ";</kbd> அல்லது <kbd>,</kbd>"
 
-#: html/cool-help.html%2Bdiv.div.div.h2:208-9
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.h2:2-4"
-msgid "Text formatting"
-msgstr "உரை வடிவூட்டல்"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:210-59
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:4-54"
-msgid "Bold"
-msgstr "தடிமன்"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:211-61
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:5-56"
-msgid "Italic"
-msgstr "சாய்வு"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:212-64
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:6-59"
-msgid "Underline"
-msgstr "அடிக்கோடு"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:213-64
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:7-59"
-msgid "Strikethrough"
-msgstr "குறுக்குக்கோடு"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:214-66
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:8-61"
-msgid "Superscript"
-msgstr "மேலெழுத்து"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:215-64
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:9-59"
-msgid "Subscript"
-msgstr "கீழெழுத்து"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:216-64
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:10-59"
-msgid "Select All"
-msgstr "அனைத்தையும் தேர்"
-
-#: html/cool-help.html%2Bdiv.div.div.h2:220-9
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.h2:14-4"
-msgid "Paragraph formatting"
-msgstr "பத்தி வடிவூட்டல்"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:222-76
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:16-71"
-msgid "Align Center"
-msgstr "நடுவில் சீரமை"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:223-64
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:17-59"
-msgid "Align Left"
-msgstr "இடச் சீரமை"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:224-65
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:18-60"
-msgid "Align Right"
-msgstr "வலச் சீரமை"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:225-65
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:19-60"
-msgid "Justify"
-msgstr "ஓரச்சிரமை"
-
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:226-38
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:20-33"
 msgid "Demote list item (list item has to be selected)"
 msgstr ""
 "பட்டியல் உருப்படியை நீக்குதல் (பட்டியல் உருப்படி தேர்ந்தெடுக்கப்பட வேண்டும்)"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:226-112
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:20-107"
 msgid "Tab"
 msgstr "தாவல்"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:227-38
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:21-33"
 msgid "Promote list item (list item has to be selected)"
 msgstr ""
 "பட்டியல் உருப்படியை விளம்பரப்படுத்தவும் (பட்டியல் உருப்படியைத் தேர்ந்தெடுக்க வேண்டும்)"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:227-113
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:21-108"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Tab</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Tab</kbd>"
 msgstr ""
 "<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "தாவல்</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:231-9
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.h2:25-4"
 msgid "Text selection and navigation in a textbox"
 msgstr "உரைத் தேர்வு மற்றும் வழிசெலுத்தல் ஒரு உரைப்பெட்டியில்"
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:233-64
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:27-59"
-msgid "Select All"
-msgstr "அனைத்தையும் தேர்"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:234-38
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:28-33"
-msgid "Move cursor to the left"
-msgstr "இடஞ்சுட்டியை இடம் நகர்த்து"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:234-88
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:28-83"
-msgid "Arrow Left"
-msgstr "அம்பு வலது"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:235-38
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:29-33"
-msgid "Move cursor with selection to the left"
-msgstr "தேர்வுடன் இடஞ்சுட்டியை இடம் நகர்த்து"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:235-103
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:29-98"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Left</kbd>"
-msgstr ""
-"<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"அம்பு இடது</kbd>"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:236-38
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:30-33"
-msgid "Go to beginning of a word"
-msgstr "ஒரு சொல்லின் தொடக்கத்துக்குச் செல்"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:236-90
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:30-85"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Left</kbd>"
-msgstr ""
-"<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"அம்பு இடது </kbd>"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:237-38
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:31-33"
-msgid "Select to the left word by word"
-msgstr "ஒவ்வொரு சொல்லாக இடமாகத் தேர்"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:237-96
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:31-91"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
-"Left</kbd>"
-msgstr ""
-"<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"சிப்ட் </kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span> <kbd > "
-"அம்பு இடது</kbd>"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:238-38
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:32-33"
-msgid "Move cursor to the right"
-msgstr "இடஞ்சுட்டியை வலம் நகர்த்து"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:238-89
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:32-84"
-msgid "Arrow Right"
-msgstr "வலது அம்பு"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:239-38
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:33-33"
-msgid "Move cursor with selection to the right"
-msgstr "தேர்வுடன் இடஞ்சுட்டியை வலம் நகர்த்து"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:239-104
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:33-99"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Right</kbd>"
-msgstr ""
-"<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"அம்பு வலது</kbd>"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:240-38
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:34-33"
-msgid "Go to start of the next word"
-msgstr "அடுத்த சொல்லின் தொடக்கத்துக்குச் செல்"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:240-93
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:34-88"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Right</kbd>"
-msgstr ""
-"<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"அம்பு வலது </kbd>"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:241-38
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:35-33"
-msgid "Select to the right word by word"
-msgstr "ஒவ்வொரு சொல்லாக வலமாகத் தேர்"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:241-97
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:35-92"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
-"Right</kbd>"
-msgstr ""
-"<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"சிப்ட் </kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span> <kbd > "
-"அம்பு வலது</kbd>"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:242-38
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:36-33"
-msgid "Move cursor up one line"
-msgstr "இடஞ்சுட்டியை ஒரு வரி மேல் நகர்த்து"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:242-88
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:36-83"
-msgid "Arrow Up"
-msgstr "அம்பு மேலாக"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:243-38
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:37-33"
-msgid "Select lines in upwards direction"
-msgstr "மேல்நோக்கும் வரிகளைத் தேர்க"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:243-98
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:37-93"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Up</kbd>"
-msgstr ""
-"<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"அம்பு அப்</kbd>"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:244-38
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:38-33"
-msgid "Move cursor to beginning of the previous paragraph"
-msgstr "இடஞ்சுட்டியை முந்தைய பத்தியின் தொடக்கத்துக்கு நகர்த்து"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:244-115
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:38-110"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Up</kbd>"
-msgstr ""
-"<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"அம்புக்குறி </kbd>"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:245-38
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:39-33"
-msgid "Select to beginning of paragraph"
-msgstr "பத்தியின் தொடக்கத்துக்குத் தேர்வு"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:245-97
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:39-92"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
-"Up</kbd>"
-msgstr ""
-"<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"சிப்ட் </kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span> <kbd > "
-"அம்பு அப்</kbd>"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:246-38
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:40-33"
-msgid "Move cursor down one line"
-msgstr "இடஞ்சுட்டியை ஒரு வரி கீழே நகர்த்து"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:246-90
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:40-85"
-msgid "Arrow Down"
-msgstr "கீழ் அம்பு"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:247-38
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:41-33"
-msgid "Select lines in downwards direction"
-msgstr "கீழ் நோக்கும் வரிகளைத் தேர்வு"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:247-100
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:41-95"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Down</kbd>"
-msgstr ""
-"<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"அம்பு பேரூர் </kbd>"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:248-38
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:42-33"
-msgid "Move cursor to beginning of the next paragraph"
-msgstr "இடஞ்சுட்டியை அடுத்த பத்தித் தொடக்கத்துக்கு நகர்த்து"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:248-111
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:42-106"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Down</kbd>"
-msgstr ""
-"<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"அம்பு பேரூர் </kbd>"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:249-38
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:43-33"
-msgid "Select to end of paragraph"
-msgstr "பத்தி முடிவுக்குத் தேர்வு"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:249-91
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:43-86"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
-"Down</kbd>"
-msgstr ""
-"<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"சிப்ட் </kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span> <kbd > "
-"அம்பு கீழே</kbd>"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:250-38
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:44-33"
-msgid "Go to beginning of line"
-msgstr "வரியின் தொடக்கத்துக்குச் செல்க"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:250-88
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:44-83"
-msgid "Home"
-msgstr "வீடு"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:251-38
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:45-33"
-msgid "Go and select to the beginning of a line"
-msgstr "ஒரு வரியின் தொடக்கத்துக்குச் சென்றுத் தேர்க"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:251-105
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:45-100"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Home</kbd>"
-msgstr ""
-"<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"முகப்பு</kbd>"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:252-38
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:46-33"
-msgid "Go to start of document"
-msgstr "ஆவணத் தொடக்கத்துக்குச் செல்க"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:252-88
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:46-83"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Home</kbd>"
-msgstr ""
-"<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"முகப்பு </kbd>"
-
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:253-38
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:47-33"
 msgid "Go and select text to start of textbox"
 msgstr "உரை பெட்டியைத் தொடங்க உரையைத் தேர்ந்தெடுக்கவும்"
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:253-103
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:47-98"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Home</"
-"kbd>"
-msgstr ""
-"<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"சிப்ட் </kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span> <kbd > "
-"முகப்பு</kbd>"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:254-38
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:48-33"
-msgid "Go to end of line"
-msgstr "வரி முடிவுக்குச் செல்க"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:254-82
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:48-77"
-msgid "End"
-msgstr "முடிவு"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:255-38
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:49-33"
-msgid "Go and select to the end of a line"
-msgstr "ஒரு வரி முடிவுவரைத் தேர்க"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:255-99
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:49-94"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"End</kbd>"
-msgstr ""
-"<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"முடிவு</kbd>"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:256-38
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:50-33"
-msgid "Go to end of document"
-msgstr "ஆவண முடிவுக்குச் செல்க"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:256-86
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:50-81"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"End</kbd>"
-msgstr ""
-"<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"end</kbd>"
-
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:257-38
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:51-33"
 msgid "Go and select text to end of textbox"
 msgstr "சென்று உரைப்பெட்டியின் முடிவுக்கு உரையைத் தேர்ந்தெடுக்கவும்"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:257-101
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:51-96"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>End</"
-"kbd>"
-msgstr ""
-"<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"சிப்ட் </kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span> <kbd > "
-"முடிவு</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:261-9
 msgid "Slide keyboard shortcuts"
 msgstr "விசைப்பலகை குறுக்குவழிகளை ச்லைடு"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:263-38
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:57-33"
 msgid ""
 "Escape current mode, i.e. from edit mode switch to object selection mode, "
 "from object selection mode switch to view mode."
@@ -2206,49 +1432,25 @@ msgstr ""
 "தேர்வு பயன்முறையில், பொருள் தேர்வு முறை சுவிட்சிலிருந்து பார்வை பயன்முறைக்கு."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:263-186
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:57-181"
 msgid "Esc"
 msgstr "தப்பி"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:264-38
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:58-33"
 msgid "Select objects in the order in which they were created"
 msgstr "பொருட்களை அவை உருவாக்கப்பட்ட ஒழுங்கில் தேர்"
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:264-119
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:58-114"
-msgid "Tab"
-msgstr "தாவல்"
-
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:265-38
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:59-33"
 msgid "Select objects in the reverse order in which they were created"
 msgstr "அவை உருவாக்கப்பட்ட தலைகீழ் வரிசையில் பொருள்களைத் தேர்ந்தெடுக்கவும்"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:265-127
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:59-122"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Tab</kbd>"
-msgstr ""
-"<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"தாவல்</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:266-38
 msgid "Move to next text object on slide"
 msgstr "ச்லைடில் அடுத்த உரை பொருளுக்கு நகர்த்தவும்"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:266-98
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:60-93"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Enter</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Enter</kbd>"
 msgstr ""
 "<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
 "Enter </kbd>"
@@ -2257,729 +1459,108 @@ msgstr ""
 msgid "Select all in slide"
 msgstr "ச்லைடில் அனைத்தையும் தேர்ந்தெடுக்கவும்"
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:267-84
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:61-79"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"A</kbd>"
-msgstr ""
-"<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"a</kbd>"
-
-#: html/cool-help.html%2Bdiv.div.div.h2:273-9
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.h2:2-0"
-msgid "Text formatting"
-msgstr "உரை வடிவூட்டல்"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:275-59
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:4-50"
-msgid "Bold"
-msgstr "தடிமன்"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:276-61
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:5-52"
-msgid "Italic"
-msgstr "சாய்வு"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:277-64
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:6-55"
-msgid "Underline"
-msgstr "அடிக்கோடு"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:278-64
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:7-55"
-msgid "Strikethrough"
-msgstr "குறுக்குக்கோடு"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:279-66
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:8-57"
-msgid "Superscript"
-msgstr "மேலெழுத்து"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:280-64
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:9-55"
-msgid "Subscript"
-msgstr "கீழெழுத்து"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:281-64
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:10-55"
-msgid "Select All"
-msgstr "அனைத்தையும் தேர்"
-
-#: html/cool-help.html%2Bdiv.div.div.h2:285-9
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.h2:14-0"
-msgid "Paragraph formatting"
-msgstr "பத்தி வடிவூட்டல்"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:287-76
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:16-67"
-msgid "Align Center"
-msgstr "நடுவில் சீரமை"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:288-64
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:17-55"
-msgid "Align Left"
-msgstr "இடச் சீரமை"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:289-65
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:18-56"
-msgid "Align Right"
-msgstr "வலச் சீரமை"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:290-65
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:19-56"
-msgid "Justify"
-msgstr "ஓரச்சிரமை"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:291-38
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:20-29"
-msgid "Demote list item (list item has to be selected)"
-msgstr ""
-"பட்டியல் உருப்படியை நீக்குதல் (பட்டியல் உருப்படி தேர்ந்தெடுக்கப்பட வேண்டும்)"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:291-112
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:20-103"
-msgid "Tab"
-msgstr "தாவல்"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:292-38
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:21-29"
-msgid "Promote list item (list item has to be selected)"
-msgstr ""
-"பட்டியல் உருப்படியை விளம்பரப்படுத்தவும் (பட்டியல் உருப்படியைத் தேர்ந்தெடுக்க வேண்டும்)"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:292-113
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:21-104"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Tab</kbd>"
-msgstr ""
-"<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"தாவல்</kbd>"
-
-#: html/cool-help.html%2Bdiv.div.div.h2:296-9
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.h2:25-0"
-msgid "Text selection and navigation in a textbox"
-msgstr "உரைத் தேர்வு மற்றும் வழிசெலுத்தல் ஒரு உரைப்பெட்டியில்"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:298-64
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:27-55"
-msgid "Select All"
-msgstr "அனைத்தையும் தேர்"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:299-38
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:28-29"
-msgid "Move cursor to the left"
-msgstr "இடஞ்சுட்டியை இடம் நகர்த்து"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:299-88
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:28-79"
-msgid "Arrow Left"
-msgstr "அம்பு வலது"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:300-38
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:29-29"
-msgid "Move cursor with selection to the left"
-msgstr "தேர்வுடன் இடஞ்சுட்டியை இடம் நகர்த்து"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:300-103
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:29-94"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Left</kbd>"
-msgstr ""
-"<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"அம்பு இடது</kbd>"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:301-38
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:30-29"
-msgid "Go to beginning of a word"
-msgstr "ஒரு சொல்லின் தொடக்கத்துக்குச் செல்"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:301-90
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:30-81"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Left</kbd>"
-msgstr ""
-"<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"அம்பு இடது </kbd>"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:302-38
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:31-29"
-msgid "Select to the left word by word"
-msgstr "ஒவ்வொரு சொல்லாக இடமாகத் தேர்"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:302-96
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:31-87"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
-"Left</kbd>"
-msgstr ""
-"<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"சிப்ட் </kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span> <kbd > "
-"அம்பு இடது</kbd>"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:303-38
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:32-29"
-msgid "Move cursor to the right"
-msgstr "இடஞ்சுட்டியை வலம் நகர்த்து"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:303-89
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:32-80"
-msgid "Arrow Right"
-msgstr "வலது அம்பு"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:304-38
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:33-29"
-msgid "Move cursor with selection to the right"
-msgstr "தேர்வுடன் இடஞ்சுட்டியை வலம் நகர்த்து"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:304-104
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:33-95"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Right</kbd>"
-msgstr ""
-"<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"அம்பு வலது</kbd>"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:305-38
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:34-29"
-msgid "Go to start of the next word"
-msgstr "அடுத்த சொல்லின் தொடக்கத்துக்குச் செல்"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:305-93
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:34-84"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Right</kbd>"
-msgstr ""
-"<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"அம்பு வலது </kbd>"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:306-38
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:35-29"
-msgid "Select to the right word by word"
-msgstr "ஒவ்வொரு சொல்லாக வலமாகத் தேர்"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:306-97
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:35-88"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
-"Right</kbd>"
-msgstr ""
-"<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"சிப்ட் </kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span> <kbd > "
-"அம்பு வலது</kbd>"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:307-38
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:36-29"
-msgid "Move cursor up one line"
-msgstr "இடஞ்சுட்டியை ஒரு வரி மேல் நகர்த்து"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:307-88
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:36-79"
-msgid "Arrow Up"
-msgstr "அம்பு மேலாக"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:308-38
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:37-29"
-msgid "Select lines in upwards direction"
-msgstr "மேல்நோக்கும் வரிகளைத் தேர்க"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:308-98
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:37-89"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Up</kbd>"
-msgstr ""
-"<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"அம்பு அப்</kbd>"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:309-38
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:38-29"
-msgid "Move cursor to beginning of the previous paragraph"
-msgstr "இடஞ்சுட்டியை முந்தைய பத்தியின் தொடக்கத்துக்கு நகர்த்து"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:309-115
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:38-106"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Up</kbd>"
-msgstr ""
-"<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"அம்புக்குறி </kbd>"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:310-38
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:39-29"
-msgid "Select to beginning of paragraph"
-msgstr "பத்தியின் தொடக்கத்துக்குத் தேர்வு"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:310-97
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:39-88"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
-"Up</kbd>"
-msgstr ""
-"<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"சிப்ட் </kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span> <kbd > "
-"அம்பு அப்</kbd>"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:311-38
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:40-29"
-msgid "Move cursor down one line"
-msgstr "இடஞ்சுட்டியை ஒரு வரி கீழே நகர்த்து"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:311-90
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:40-81"
-msgid "Arrow Down"
-msgstr "கீழ் அம்பு"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:312-38
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:41-29"
-msgid "Select lines in downwards direction"
-msgstr "கீழ் நோக்கும் வரிகளைத் தேர்வு"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:312-100
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:41-91"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Down</kbd>"
-msgstr ""
-"<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"அம்பு பேரூர் </kbd>"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:313-38
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:42-29"
-msgid "Move cursor to beginning of the next paragraph"
-msgstr "இடஞ்சுட்டியை அடுத்த பத்தித் தொடக்கத்துக்கு நகர்த்து"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:313-111
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:42-102"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Down</kbd>"
-msgstr ""
-"<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"அம்பு பேரூர் </kbd>"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:314-38
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:43-29"
-msgid "Select to end of paragraph"
-msgstr "பத்தி முடிவுக்குத் தேர்வு"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:314-91
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:43-82"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
-"Down</kbd>"
-msgstr ""
-"<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"சிப்ட் </kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span> <kbd > "
-"அம்பு கீழே</kbd>"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:315-38
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:44-29"
-msgid "Go to beginning of line"
-msgstr "வரியின் தொடக்கத்துக்குச் செல்க"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:315-88
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:44-79"
-msgid "Home"
-msgstr "வீடு"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:316-38
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:45-29"
-msgid "Go and select to the beginning of a line"
-msgstr "ஒரு வரியின் தொடக்கத்துக்குச் சென்றுத் தேர்க"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:316-105
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:45-96"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Home</kbd>"
-msgstr ""
-"<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"முகப்பு</kbd>"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:317-38
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:46-29"
-msgid "Go to start of document"
-msgstr "ஆவணத் தொடக்கத்துக்குச் செல்க"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:317-88
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:46-79"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Home</kbd>"
-msgstr ""
-"<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"முகப்பு </kbd>"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:318-38
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:47-29"
-msgid "Go and select text to start of textbox"
-msgstr "உரை பெட்டியைத் தொடங்க உரையைத் தேர்ந்தெடுக்கவும்"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:318-103
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:47-94"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Home</"
-"kbd>"
-msgstr ""
-"<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"சிப்ட் </kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span> <kbd > "
-"முகப்பு</kbd>"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:319-38
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:48-29"
-msgid "Go to end of line"
-msgstr "வரி முடிவுக்குச் செல்க"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:319-82
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:48-73"
-msgid "End"
-msgstr "முடிவு"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:320-38
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:49-29"
-msgid "Go and select to the end of a line"
-msgstr "ஒரு வரி முடிவுவரைத் தேர்க"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:320-99
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:49-90"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"End</kbd>"
-msgstr ""
-"<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"முடிவு</kbd>"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:321-38
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:50-29"
-msgid "Go to end of document"
-msgstr "ஆவண முடிவுக்குச் செல்க"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:321-86
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:50-77"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"End</kbd>"
-msgstr ""
-"<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"end</kbd>"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:322-38
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:51-29"
-msgid "Go and select text to end of textbox"
-msgstr "சென்று உரைப்பெட்டியின் முடிவுக்கு உரையைத் தேர்ந்தெடுக்கவும்"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:322-101
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:51-92"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>End</"
-"kbd>"
-msgstr ""
-"<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"சிப்ட் </kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span> <kbd > "
-"முடிவு</kbd>"
-
 #: html/cool-help.html%2Bdiv.div.div.h2:326-9
 msgid "Draw page keyboard shortcuts"
 msgstr "பக்க விசைப்பலகை குறுக்குவழிகளை வரையவும்"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:328-38
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:57-29"
-msgid ""
-"Escape current mode, i.e. from edit mode switch to object selection mode, "
-"from object selection mode switch to view mode."
-msgstr ""
-"தற்போதைய பயன்முறையில் இருந்து தப்பிக்க, அதாவது திருத்து பயன்முறை மாற்றத்திலிருந்து பொருள் "
-"தேர்வு பயன்முறையில், பொருள் தேர்வு முறை சுவிட்சிலிருந்து பார்வை பயன்முறைக்கு."
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:328-186
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:57-177"
-msgid "Esc"
-msgstr "தப்பி"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:329-38
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:58-29"
-msgid "Select objects in the order in which they were created"
-msgstr "பொருட்களை அவை உருவாக்கப்பட்ட ஒழுங்கில் தேர்"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:329-119
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:58-110"
-msgid "Tab"
-msgstr "தாவல்"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:330-38
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:59-29"
-msgid "Select objects in the reverse order in which they were created"
-msgstr "அவை உருவாக்கப்பட்ட தலைகீழ் வரிசையில் பொருள்களைத் தேர்ந்தெடுக்கவும்"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:330-127
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:59-118"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Tab</kbd>"
-msgstr ""
-"<kbd>உயர்த்து</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"தாவல்</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:331-38
 msgid "Move to next text object on drawing page"
 msgstr "வரைதல் பக்கத்தில் அடுத்த உரை பொருளுக்கு நகர்த்தவும்"
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:331-105
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:60-96"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Enter</kbd>"
-msgstr ""
-"<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Enter </kbd>"
-
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:332-38
 msgid "Select all in drawing page"
 msgstr "வரைதல் பக்கத்தில் அனைத்தையும் தேர்ந்தெடுக்கவும்"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:332-91
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:61-82"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"A</kbd>"
-msgstr ""
-"<kbd>கட்டு</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"a</kbd>"
 
 #: html/cool-help.html%2Bdiv.h2:338-5
 msgid "<span class=\"productname\">{productname}</span> Help"
 msgstr "<span class=\"productname\"> {productname} </span> உதவி"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:341-13
-#, fuzzy
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:4-12"
 msgid "Collaborative editing"
 msgstr "கூட்டு திருத்துதல்"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:342-13
-#, fuzzy
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:5-12"
 msgid "<span class=\"productname\">{productname}</span> user interface"
 msgstr "<span class=\"productname\"> {productname} </span> பயனர் இடைமுகம்"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:343-13
-#, fuzzy
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:6-12"
 msgid "Opening, closing, saving, printing and downloading documents"
 msgstr ""
 "ஆவணங்களைத் திறத்தல், மூடுவது, சேமித்தல், அச்சிடுதல் மற்றும் பதிவிறக்குதல்"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:344-13
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:7-12"
 msgid "Opening, closing, saving and printing documents"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:345-13
-#, fuzzy
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:8-12"
 msgid "Editing documents"
 msgstr "ஆவணங்களைத் திருத்துதல்"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:346-13
-#, fuzzy
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:9-12"
 msgid "Advanced features"
 msgstr "மேம்பட்ட நற்பொருத்தங்கள்"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:348-13
-#, fuzzy
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:11-12"
 msgid "<span class=\"productname\">{productname}</span> spreadsheets"
 msgstr "<span class=\"productname\"> {productname} </span> விரிதாள்கள்"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:349-13
-#, fuzzy
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:12-12"
 msgid "Editing spreadsheets"
 msgstr "விரிதாள்களைத் திருத்துதல்"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:350-13
-#, fuzzy
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:13-12"
 msgid "Formulas"
 msgstr "சூத்திரங்கள்"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:351-13
-#, fuzzy
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:14-12"
 msgid "Formatting spreadsheets"
 msgstr "விரிதாள்களை வடிவமைத்தல்"
 
-#: html/cool-help.html%2Bdiv.nav.ul.li:352-13
-#, fuzzy
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:15-12"
-msgid "Advanced features"
-msgstr "மேம்பட்ட நற்பொருத்தங்கள்"
-
 #: html/cool-help.html%2Bdiv.nav.ul.li:353-13
-#, fuzzy
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:16-12"
 msgid "Spreadsheets"
 msgstr "விரிதாள்கள்"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:355-13
-#, fuzzy
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:18-12"
 msgid "<span class=\"productname\">{productname}</span> text documents"
 msgstr "<span class=\"productname\"> {productname} </span> உரை ஆவணங்கள்"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:356-13
-#, fuzzy
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:19-12"
 msgid "Editing text documents"
 msgstr "உரை ஆவணங்களைத் திருத்துதல்"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:357-13
-#, fuzzy
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:20-12"
 msgid "Context menus"
 msgstr "சூழல் மெனுக்கள்"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:358-13
-#, fuzzy
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:21-12"
 msgid "Advanced text document editor features"
 msgstr "மேம்பட்ட உரை ஆவண ஆசிரியர் நற்பொருத்தங்கள்"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:359-13
-#, fuzzy
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:22-12"
 msgid "Text documents"
 msgstr "உரை ஆவணங்கள்"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:361-13
-#, fuzzy
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:24-12"
 msgid "<span class=\"productname\">{productname}</span> presentations"
 msgstr "<span class=\"productname\"> {productname} </span> விளக்கக்காட்சிகள்"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:362-13
-#, fuzzy
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:25-12"
 msgid "Editing presentations"
 msgstr "விளக்கக்காட்சிகளைத் திருத்துதல்"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:363-13
-#, fuzzy
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:26-12"
 msgid "Slide show"
 msgstr "ச்லைடு சோ"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:364-13
-#, fuzzy
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:27-12"
 msgid "Slide pane"
 msgstr "ச்லைடு பலகம்"
 
-#: html/cool-help.html%2Bdiv.nav.ul.li:365-13
-#, fuzzy
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:28-12"
-msgid "Advanced features"
-msgstr "மேம்பட்ட நற்பொருத்தங்கள்"
-
 #: html/cool-help.html%2Bdiv.nav.ul.li:366-13
-#, fuzzy
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:29-12"
 msgid "Presentations"
 msgstr "விளக்கக்காட்சிகள்"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:368-13
-#, fuzzy
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:31-12"
 msgid "Frequently Asked Questions"
 msgstr "அடிக்கடி கேட்கப்படும் கேள்விகள்"
 
@@ -2988,16 +1569,10 @@ msgid ""
 "<span class=\"productname\">{productname}</span> allows you to create and "
 "edit typical office documents, that is text documents, spreadsheets and "
 "presentations, <span class=\"webBasedCOOLOnly\">directly in your browser,</"
-"span> in a simple and straight-forward way. <span class=\"webBasedCOOLOnly\">"
-"You can work alone on a document, or collaboratively as part of a team.</"
-"span>"
+"span> in a simple and straight-forward way. <span "
+"class=\"webBasedCOOLOnly\">You can work alone on a document, or "
+"collaboratively as part of a team.</span>"
 msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.h3:383-5
-#, fuzzy
-msgctxt "html/cool-help.html:1327"
-msgid "Collaborative editing"
-msgstr "கூட்டு திருத்துதல்"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:386-7
 msgid ""
@@ -3026,19 +1601,13 @@ msgstr ""
 "போது அல்லது ஒரு பயனர் வெளியேறும்போது அடிக்குறிப்பில் ஒரு சிறிய அறிவிப்பை உங்களுக்கு "
 "அறிவிக்கிறது."
 
-#: html/cool-help.html%2Bdiv.div.h3:393-5
-#, fuzzy
-msgctxt "html/cool-help.html:1333"
-msgid "<span class=\"productname\">{productname}</span> user interface"
-msgstr "<span class=\"productname\"> {productname} </span> பயனர் இடைமுகம்"
-
 #: html/cool-help.html%2Bdiv.div.div.p:395-7
 #, fuzzy
 msgid ""
-"<span class=\"webBasedCOOLOnly\"> <span class=\"productname\">{productname}</"
-"span> uses modern browser resources to adapt the user interface to the size "
-"of the viewing area, including small screens found in mobile devices.</span> "
-"The interface is composed of:"
+"<span class=\"webBasedCOOLOnly\"> <span class=\"productname\">{productname}"
+"</span> uses modern browser resources to adapt the user interface to the "
+"size of the viewing area, including small screens found in mobile devices.</"
+"span> The interface is composed of:"
 msgstr ""
 "<span class=\"productname\"> {productname} </span> மொபைல் சாதனங்களில் காணப்படும் "
 "சிறிய திரைகள் உட்பட, பார்க்கும் பகுதியின் அளவிற்கு பயனர் இடைமுகத்தை மாற்றியமைக்க நவீன உலாவி "
@@ -3046,17 +1615,17 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:402-5
 msgid ""
-"<span class=\"def\">The document area:</span> The application area shows the "
-"document contents, either spreadsheets, presentations or text documents."
+"<span class=\"def\">The document area:</span> The application area shows "
+"the document contents, either spreadsheets, presentations or text documents."
 msgstr ""
 "<span class=\"def\"> ஆவண பகுதி: </span> பயன்பாட்டு பகுதி ஆவண உள்ளடக்கங்களை, "
 "விரிதாள்கள், விளக்கக்காட்சிகள் அல்லது உரை ஆவணங்களைக் காட்டுகிறது."
 
 #: html/cool-help.html%2Bdiv.div.div.p:405-5
 msgid ""
-"<span class=\"def\">The tabs:</span> The commands are grouped on tabs at the "
-"top: <span class=\"ui\">File</span>, <span class=\"ui\">Home</span>, <span "
-"class=\"ui\">Insert</span>, <span class=\"ui\">Review</span>, <span "
+"<span class=\"def\">The tabs:</span> The commands are grouped on tabs at "
+"the top: <span class=\"ui\">File</span>, <span class=\"ui\">Home</span>, "
+"<span class=\"ui\">Insert</span>, <span class=\"ui\">Review</span>, <span "
 "class=\"ui\">View</span> and others, depending on the document type. Click "
 "the selected tab again to collapse the tab bar and gain space for the "
 "document. Click any tab to expand it again."
@@ -3113,8 +1682,8 @@ msgstr "தேடலை ரத்துசெய் (ஒரு உரை தே�
 msgid ""
 "<span class=\"def\">The zoom bar:</span> The zoom bar includes buttons to "
 "reset zoom to 100%, zoom out and zoom in. The zoom applies to the document "
-"area, the user interface is not affected. The current level of zoom is shown "
-"in this area."
+"area, the user interface is not affected. The current level of zoom is "
+"shown in this area."
 msgstr ""
 "<span class=\"def\">சூம் பார்:</span> சூம் பட்டியில் 100% சூம் ரீசெட், சூம் அவுட் மற்றும் "
 "சூம் இன் பொத்தான்கள் உள்ளன. சூம் ஆவணப் பகுதிக்கு பொருந்தும், பயனர் இடைமுகம் பாதிக்கப்படாது. "
@@ -3134,13 +1703,6 @@ msgid "Using the browser zoom affects the document and user interface areas."
 msgstr ""
 "உலாவி சூம் பயன்படுத்துவது ஆவணம் மற்றும் பயனர் இடைமுக பகுதிகளை பாதிக்கிறது."
 
-#: html/cool-help.html%2Bdiv.div.h3:429-5
-#, fuzzy
-msgctxt "html/cool-help.html:1335A"
-msgid "Opening, closing, saving, printing and downloading documents"
-msgstr ""
-"ஆவணங்களைத் திறத்தல், மூடுவது, சேமித்தல், அச்சிடுதல் மற்றும் பதிவிறக்குதல்"
-
 #: html/cool-help.html%2Bdiv.div.p:430-5
 msgid ""
 "Your documents are stored and managed in the cloud storage that is "
@@ -3151,10 +1713,10 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:431-30
 msgid ""
-"To download a document download it from the <span class=\"productname\">"
-"{productname}</span> application’s <span class=\"ui\">File</span> menu. The "
-"download formats available depends on the application. All applications "
-"exports documents in PDF format."
+"To download a document download it from the <span "
+"class=\"productname\">{productname}</span> application’s <span "
+"class=\"ui\">File</span> menu. The download formats available depends on "
+"the application. All applications exports documents in PDF format."
 msgstr ""
 "ஒரு ஆவணத்தைப் பதிவிறக்க <span class=\"productname\"> {productname} </span> "
 "பயன்பாட்டின் <span class=\"ui\">கோப்பு</span> மெனுவிலிருந்து அதைப் பதிவிறக்கவும். "
@@ -3163,8 +1725,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:432-30
 msgid ""
-"To open document, click on the file to open the <span class=\"productname\">"
-"{productname}</span> module associated to the document format."
+"To open document, click on the file to open the <span "
+"class=\"productname\">{productname}</span> module associated to the "
+"document format."
 msgstr ""
 "ஆவணத்தைத் திறக்க, <span class=\"productname\"> {productname} </span> ஆவண "
 "வடிவமைப்போடு தொடர்புடைய தொகுதியைத் திறக்க கோப்பைக் சொடுக்கு செய்க."
@@ -3173,8 +1736,8 @@ msgstr ""
 msgid ""
 "Documents in <span class=\"productname\">{productname}</span> save "
 "automatically, but if you are concerned that a document is synchronized as "
-"quickly as possible you can also force saving using the <span class=\"ui\">"
-"File</span> menu’s <span class=\"ui\">Save</span> entry."
+"quickly as possible you can also force saving using the <span "
+"class=\"ui\">File</span> menu’s <span class=\"ui\">Save</span> entry."
 msgstr ""
 "<span class=\"productname\"> {productname} </span> தானாகவே சேமிக்கவும், ஆனால் ஒரு "
 "ஆவணம் விரைவாக ஒத்திசைக்கப்படுவதாக நீங்கள் கவலைப்பட்டால், <span class=\"யுஐ\"> கோப்பைப் "
@@ -3191,30 +1754,24 @@ msgstr ""
 "பதிவிறக்குங்கள்?” பாப்அப் காட்சிகள். உங்களுக்கு பிடித்த PDF வாசகரில் இந்த PDF ஐ அச்சிடலாம்."
 
 #: html/cool-help.html%2Bdiv.div.div.p:435-30
-#, fuzzy
-msgctxt "html/cool-help.html+online-help-content.div.div.p:98-29"
 msgid ""
 "When closing a document, it is automatically saved if it has been changed."
 msgstr "ஒரு ஆவணத்தை மூடும்போது, அது மாற்றப்பட்டால் தானாகவே சேமிக்கப்படும்."
 
-#: html/cool-help.html%2Bdiv.div.h3:439-5
-msgctxt "html/cool-help.html:1335B"
-msgid "Opening, closing, saving and printing documents"
-msgstr ""
-
 #: html/cool-help.html%2Bdiv.div.div.p:441-7
 msgid ""
-"To open a document, either open it in <span class=\"productname\">"
-"{productname}</span> from your platform's file manager or use <span "
-"class=\"ui\">Open</span> on the <span class=\"ui\">File</span> tab."
+"To open a document, either open it in <span "
+"class=\"productname\">{productname}</span> from your platform's file "
+"manager or use <span class=\"ui\">Open</span> on the <span "
+"class=\"ui\">File</span> tab."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:447-7
 msgid ""
 "An existing document opens in view mode, so that you can read it without "
 "changing it by accident. To start editing, click the edit button (the "
-"pencil) in the bottom right corner. New documents and documents created from "
-"a template open ready to edit."
+"pencil) in the bottom right corner. New documents and documents created "
+"from a template open ready to edit."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:452-7
@@ -3241,19 +1798,6 @@ msgid ""
 "class=\"ui\">File</span> tab."
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:472-7
-#, fuzzy
-msgctxt "html/cool-help.html+online-help-content.div.div.p:135-6"
-msgid ""
-"When closing a document, it is automatically saved if it has been changed."
-msgstr "ஒரு ஆவணத்தை மூடும்போது, அது மாற்றப்பட்டால் தானாகவே சேமிக்கப்படும்."
-
-#: html/cool-help.html%2Bdiv.div.h3:478-5
-#, fuzzy
-msgctxt "html/cool-help.html:1337"
-msgid "Editing documents"
-msgstr "ஆவணங்களைத் திருத்துதல்"
-
 #: html/cool-help.html%2Bdiv.div.p:479-5
 msgid ""
 "Document editing should be familiar to everyone that has used an office "
@@ -3272,8 +1816,8 @@ msgid ""
 "content, using the keyboard shortcuts (<kbd>Ctrl</kbd><span class=\"kbd--"
 "plus\" aria-hidden=\"true\">+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span "
 "class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</"
-"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>). On "
-"Android or iOS selecting text by double tapping, and using a long-tap to "
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>). "
+"On Android or iOS selecting text by double tapping, and using a long-tap to "
 "access copy/cut/paste via the context menu is required."
 msgstr ""
 
@@ -3290,9 +1834,9 @@ msgid ""
 "When you copy a selection that contains images or other objects, a <span "
 "class=\"ui\">Download Selection</span> widget pops up in the bottom-right "
 "corner. Press <span class=\"ui\">Download</span>, then copy again, to make "
-"the content available to applications outside <span class=\"productname\">"
-"{productname}</span>. This step also converts complex object types into "
-"static images."
+"the content available to applications outside <span "
+"class=\"productname\">{productname}</span>. This step also converts complex "
+"object types into static images."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:487-5
@@ -3301,10 +1845,10 @@ msgstr "ஆவண பழுது"
 
 #: html/cool-help.html%2Bdiv.div.div.p:488-5
 msgid ""
-"When multiple people edit the same document concurrently, it is possible for "
-"their changes to conflict and this can cause some confusion. The Document "
-"Repair function allows users to undo other editor’s changes to the document "
-"to a previous state."
+"When multiple people edit the same document concurrently, it is possible "
+"for their changes to conflict and this can cause some confusion. The "
+"Document Repair function allows users to undo other editor’s changes to the "
+"document to a previous state."
 msgstr ""
 "பல நபர்கள் ஒரே ஆவணத்தை ஒரே நேரத்தில் திருத்தும்போது, மோதலுக்கான அவர்களின் மாற்றங்களுக்கு "
 "இது சாத்தியமாகும், இது சில குழப்பங்களை ஏற்படுத்தும். ஆவண பழுதுபார்க்கும் செயல்பாடு பயனர்கள் "
@@ -3313,8 +1857,8 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.p:489-5
 msgid ""
 "<span class=\"ui\">Repair</span> on the <span class=\"ui\">File</span> tab "
-"lists the recent changes to the document and lets you take the document back "
-"to an earlier state."
+"lists the recent changes to the document and lets you take the document "
+"back to an earlier state."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:490-5
@@ -3352,10 +1896,11 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.p:496-5
 #, fuzzy
 msgid ""
-"When <span class=\"productname\">{productname}</span> detects that there has "
-"not been any activity in the browser for a while, it puts the document in an "
-"“Idle” state. The document is shown with a transparent gray overlay, with "
-"the message “Idle document – please click to reload and resume editing”."
+"When <span class=\"productname\">{productname}</span> detects that there "
+"has not been any activity in the browser for a while, it puts the document "
+"in an “Idle” state. The document is shown with a transparent gray overlay, "
+"with the message “Idle document – please click to reload and resume "
+"editing”."
 msgstr ""
 "<span class=\"productname\"> {productname} </span> உலாவியில் சிறிது நேரம் எந்த "
 "செயலும் இல்லை என்பதைக் கண்டறிந்தால், அது ஆவணத்தை ஒரு “செயலற்ற” நிலையில் வைக்கிறது. “"
@@ -3397,9 +1942,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:503-5
 msgid ""
-"You can paste as unformatted text with the keyboard shortcut: <kbd>Ctrl</kbd>"
-"<span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</kbd><span "
-"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>"
+"You can paste as unformatted text with the keyboard shortcut: <kbd>Ctrl</"
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</"
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>"
 msgstr ""
 "விசைப்பலகை குறுக்குவழி மூலம் நீங்கள் வடிவமைக்கப்படாத உரையாக ஒட்டலாம்:<kbd>கட்டுப்பாடு </kbd>"
 "<span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>உயர்த்து</kbd> "
@@ -3429,12 +1974,6 @@ msgid ""
 msgstr ""
 "உங்களிடம் உள் வெட்டு அல்லது நகலெடுக்கப்பட்ட உள்ளடக்கம் இருக்கும்போது, சூழல் மெனுவைப் "
 "பயன்படுத்தி இந்த உள்ளடக்கத்தை ஒட்டலாம்."
-
-#: html/cool-help.html%2Bdiv.div.h3:510-3
-#, fuzzy
-msgctxt "html/cool-help.html:1338"
-msgid "Advanced features"
-msgstr "மேம்பட்ட நற்பொருத்தங்கள்"
 
 #: html/cool-help.html%2Bdiv.div.div.h4:512-5
 msgid "Adding charts"
@@ -3510,8 +2049,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:526-28
 msgid ""
-"<span class=\"def\">Data series formatting:</span> Open the context menu and "
-"choose <span class=\"ui\">Format data series</span>."
+"<span class=\"def\">Data series formatting:</span> Open the context menu "
+"and choose <span class=\"ui\">Format data series</span>."
 msgstr ""
 "<span class=\"def\"> தரவுத் தொடர் வடிவமைப்பு: </span> சூழல் மெனுவைத் திறந்து <span "
 "class=\"Ui\"> வடிவமைப்பு தரவுத் தொடர் </span> ஐத் தேர்வுசெய்க."
@@ -3532,9 +2071,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:530-5
 msgid ""
-"<span class=\"def\">Insert image:</span> Clicking on the <span class=\"ui\">"
-"Insert image</span> icon allows you to choose an image from the cloud "
-"storage's folders and shares."
+"<span class=\"def\">Insert image:</span> Clicking on the <span "
+"class=\"ui\">Insert image</span> icon allows you to choose an image from "
+"the cloud storage's folders and shares."
 msgstr ""
 "<span class=\"def\"> படத்தைச் செருகவும்: </span> <span class=\"ui\"> படத்தை "
 "செருகவும் </span> படவுரு முகில் ச்டோரேசின் கோப்புறைகள் மற்றும் பங்குகளிலிருந்து ஒரு "
@@ -3542,16 +2081,16 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:531-5
 msgid ""
-"<span class=\"def\">Insert local image:</span> Choose <span class=\"ui\">"
-"Insert</span> → <span class=\"ui\">Image</span> to pick an image from your "
-"computer and insert it into the document."
+"<span class=\"def\">Insert local image:</span> Choose <span "
+"class=\"ui\">Insert</span> → <span class=\"ui\">Image</span> to pick an "
+"image from your computer and insert it into the document."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:532-5
 msgid ""
 "Images can be resized, rotated and anchored. Text can be wrapped around the "
-"image. Select the image and open the context menu. Use the images handles to "
-"resize the image with the mouse."
+"image. Select the image and open the context menu. Use the images handles "
+"to resize the image with the mouse."
 msgstr ""
 "படங்களை மறுஅளவிடலாம், சுழற்றலாம் மற்றும் தொகுக்கலாம். உரையை படத்தைச் சுற்றி மூடலாம். படத்தைத் "
 "தேர்ந்தெடுத்து சூழல் மெனுவைத் திறக்கவும். படத்தை சுட்டியுடன் மறுஅளவிடுவதற்கு படங்கள் "
@@ -3611,23 +2150,11 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.p:544-5
 #, fuzzy
 msgid ""
-"To systematically spell-check the whole document use <span class=\"ui\">"
-"Spelling</span> on the <span class=\"ui\">Review</span> tab."
+"To systematically spell-check the whole document use <span "
+"class=\"ui\">Spelling</span> on the <span class=\"ui\">Review</span> tab."
 msgstr ""
 "முழு ஆவணத்தையும் முறையாக உச்சரிக்க:<span class=\"ui\"> கருவிகள் </span> மெனுவின் "
 "<span class=\"ui\"> எழுத்துப்பிழை </span> விருப்பத்தைப் பயன்படுத்தவும்."
-
-#: html/cool-help.html%2Bdiv.div.h3:548-5
-#, fuzzy
-msgctxt "html/cool-help.html:1359"
-msgid "<span class=\"productname\">{productname}</span> spreadsheets"
-msgstr "<span class=\"productname\"> {productname} </span> விரிதாள்கள்"
-
-#: html/cool-help.html%2Bdiv.div.div.h3:550-5
-#, fuzzy
-msgctxt "html/cool-help.html:1361"
-msgid "Editing spreadsheets"
-msgstr "விரிதாள்களைத் திருத்துதல்"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:551-30
 msgid ""
@@ -3649,12 +2176,6 @@ msgstr ""
 "வலதுபுறமாக நகர்த்தும், மேலும்<kbd>உள்ளிடவும்</kbd> உடன் கீழே உள்ள கலத்திற்கு எளிதாக தரவு "
 "உள்ளீட்டிற்கு."
 
-#: html/cool-help.html%2Bdiv.div.div.h3:554-5
-#, fuzzy
-msgctxt "html/cool-help.html:1363"
-msgid "Formulas"
-msgstr "சூத்திரங்கள்"
-
 #: html/cool-help.html%2Bdiv.div.div.div.p:556-5
 msgid ""
 "Formulas are entered in the formula bar. Enter '=' and insert the formula."
@@ -3667,8 +2188,8 @@ msgstr "அனைத்து விரிதாள்களின் செய�
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:558-50
 msgid ""
-"Formula bar showing cell reference B1, function wizard icon, and the formula "
-"=SIN(PI()*A1/10)"
+"Formula bar showing cell reference B1, function wizard icon, and the "
+"formula =SIN(PI()*A1/10)"
 msgstr ""
 "செல் குறிப்பு B1, செயல்பாட்டு வழிகாட்டி படவுரு மற்றும் தேற்றம் =SIN(PI()*A1/10) "
 "ஆகியவற்றைக் காட்டும் ஃபார்முலா பார்"
@@ -3676,8 +2197,8 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.div.p:559-5
 msgid ""
 "The formula language should be extremely familiar to any spreadsheet user, "
-"and is specified in great detail in the <a href=\"https://www.oasis-open.org/"
-"committees/download.php/16826/openformula-spec-20060221.html\" "
+"and is specified in great detail in the <a href=\"https://www.oasis-"
+"open.org/committees/download.php/16826/openformula-spec-20060221.html\" "
 "target=\"_blank\" rel=\"noopener noreferrer\">OASIS OpenFormula "
 "specification</a>."
 msgstr ""
@@ -3686,21 +2207,15 @@ msgstr ""
 "openformula-spec-20060221.html\" target=\"_blank\" rel=\"noopener "
 "noreferrer\"> பாலைவனச் சோலை OpenFormula விவரக்குறிப்பு </a>."
 
-#: html/cool-help.html%2Bdiv.div.div.h3:563-5
-#, fuzzy
-msgctxt "html/cool-help.html:1367"
-msgid "Formatting spreadsheets"
-msgstr "விரிதாள்களை வடிவமைத்தல்"
-
 #: html/cool-help.html%2Bdiv.div.div.div.p:565-5
 msgid ""
 "<span class=\"def\">Direct formatting:</span> You can format spreadsheet "
 "cells, columns, rows and sheets by formatting directly from the menus, "
 "toolbar or context menus. Direct formatting applies only to the current "
-"object selected. To format a cell either use the menu or hit <kbd>Ctrl</kbd>"
-"<span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>1</kbd>. The "
-"dialog allows complex and custom number formatting, as well as font, complex "
-"border, background, cell protection and other options."
+"object selected. To format a cell either use the menu or hit <kbd>Ctrl</"
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>1</kbd>. "
+"The dialog allows complex and custom number formatting, as well as font, "
+"complex border, background, cell protection and other options."
 msgstr ""
 "<span class=\"def\"> நேரடி வடிவமைப்பு: </span> மெனுக்கள், கருவிப்பட்டி அல்லது சூழல் "
 "மெனுக்களிலிருந்து நேரடியாக வடிவமைப்பதன் மூலம் நீங்கள் விரிதாள்கள் செல்கள், நெடுவரிசைகள், "
@@ -3718,12 +2233,6 @@ msgstr ""
 "வகைப் பட்டியல், வடிவமைப்பு விருப்பங்கள், தசம இடங்கள் மற்றும் வடிவமைப்புக் குறியீடு "
 "ஆகியவற்றுடன் எண்கள் தாவலில் கலங்களின் உரையாடலை வடிவமைக்கவும்"
 
-#: html/cool-help.html%2Bdiv.div.div.h3:570-5
-#, fuzzy
-msgctxt "html/cool-help.html:1371"
-msgid "Advanced features"
-msgstr "மேம்பட்ட நற்பொருத்தங்கள்"
-
 #: html/cool-help.html%2Bdiv.div.div.div.p:571-30
 msgid ""
 "<span class=\"def\">Sorting data:</span> You can sort a list of numbers or "
@@ -3739,9 +2248,9 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.div.p:572-30
 msgid ""
 "<span class=\"def\">Filtering data:</span> Filters and advanced filters "
-"allow you to work on certain filtered rows (records) of a data range. In the "
-"spreadsheets in <span class=\"productname\">{productname}</span> there are "
-"various possibilities for applying filters."
+"allow you to work on certain filtered rows (records) of a data range. In "
+"the spreadsheets in <span class=\"productname\">{productname}</span> there "
+"are various possibilities for applying filters."
 msgstr ""
 "<span class=\"def\"> தரவை வடிகட்டுதல்: </span> வடிப்பான்கள் மற்றும் மேம்பட்ட வடிப்பான்கள் "
 "தரவு வரம்பின் சில வடிகட்டப்பட்ட வரிசைகளில் (பதிவுகள்) வேலை செய்ய உங்களை அனுமதிக்கின்றன. "
@@ -3758,8 +2267,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li.div.img[alt]:576-55
 msgid ""
-"AutoFilter dropdown menu on a spreadsheet column with sort, filter by color, "
-"filter by condition, and checkboxes for individual values"
+"AutoFilter dropdown menu on a spreadsheet column with sort, filter by "
+"color, filter by condition, and checkboxes for individual values"
 msgstr ""
 "ஒரு விரிதாள் நெடுவரிசையில் தானியங்கு வடிகட்டி கீழ்தோன்றும் மெனுவை வரிசைப்படுத்தவும், "
 "வண்ணத்தின் அடிப்படையில் வடிகட்டவும், நிபந்தனையின் அடிப்படையில் வடிகட்டவும் மற்றும் தனிப்பட்ட "
@@ -3767,10 +2276,10 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:578-7
 msgid ""
-"In the <span class=\"ui\">Standard Filter</span> dialog, you can also define "
-"ranges which contain the values in particular data fields. You can use the "
-"standard filter to connect the conditions with either a logical AND or a "
-"logical OR operator."
+"In the <span class=\"ui\">Standard Filter</span> dialog, you can also "
+"define ranges which contain the values in particular data fields. You can "
+"use the standard filter to connect the conditions with either a logical AND "
+"or a logical OR operator."
 msgstr ""
 "<span class=\"யுஐ\"> நிலையான வடிகட்டி </span> உரையாடலில், குறிப்பிட்ட தரவு "
 "புலங்களில் மதிப்புகளைக் கொண்ட வரம்புகளையும் நீங்கள் வரையறுக்கலாம். நிபந்தனைகளை ஒரு "
@@ -3787,9 +2296,10 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:583-5
 msgid ""
-"<span class=\"def\">Outlining:</span> You can create an outline of your data "
-"and group rows and columns together so that you can collapse and expand the "
-"groups with a single click making it easy to represent hierarchical data."
+"<span class=\"def\">Outlining:</span> You can create an outline of your "
+"data and group rows and columns together so that you can collapse and "
+"expand the groups with a single click making it easy to represent "
+"hierarchical data."
 msgstr ""
 "<span class=\"def\"> அவுட்லைனிங்: </span> உங்கள் தரவு மற்றும் குழு வரிசைகள் மற்றும் "
 "நெடுவரிசைகளின் ஒரு சுருக்கத்தை நீங்கள் ஒன்றாக உருவாக்கலாம், இதன் மூலம் நீங்கள் ஒற்றை சொடுக்கு "
@@ -3844,8 +2354,8 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:594-7
 msgid ""
 "Use the <span class=\"ui\">Input Help</span> and <span class=\"ui\">Error "
-"Alert</span> tabs to enhance the user interactions. Click <span class=\"ui\">"
-"OK</span> to close the dialog."
+"Alert</span> tabs to enhance the user interactions. Click <span "
+"class=\"ui\">OK</span> to close the dialog."
 msgstr ""
 "பயனர் தொடர்புகளை மேம்படுத்த <span class=\"ui\">உள்ளீட்டு உதவி </span> மற்றும் <span "
 "class=\"ui\"> பிழை எச்சரிக்கை </span> தாவல்களைப் பயன்படுத்தவும். உரையாடலை மூட <span "
@@ -3912,27 +2422,15 @@ msgstr ""
 "அம்புகள், வட்டங்கள், போக்குவரத்து விளக்குகள், நட்சத்திரங்கள், ச்மைலி முகங்கள் மற்றும் பட்டை "
 "விளக்கப்படக் குறியீடுகள் ஆகியவற்றைக் காட்டும் நிபந்தனை வடிவமைத்தல் படவுரு செட் பிக்கர்"
 
-#: html/cool-help.html%2Bdiv.div.h3:612-5
-#, fuzzy
-msgctxt "html/cool-help.html:1373"
-msgid "<span class=\"productname\">{productname}</span> text documents"
-msgstr "<span class=\"productname\"> {productname} </span> உரை ஆவணங்கள்"
-
-#: html/cool-help.html%2Bdiv.div.div.h3:614-5
-#, fuzzy
-msgctxt "html/cool-help.html:1375"
-msgid "Editing text documents"
-msgstr "உரை ஆவணங்களைத் திருத்துதல்"
-
 #: html/cool-help.html%2Bdiv.div.div.div.p:615-30
 msgid ""
-"<span class=\"productname\">{productname}</span> edits text documents in the "
-"same way you edit a desktop document. It provides a What You See Is What You "
-"Get (WYSIWYG) layout – that conveniently lays out the document as it will be "
-"printed. Operations like typing text, cut, copy and pasting contents, "
-"selecting text, inserting, resizing, anchoring images, adding and handling "
-"tables and charts, are similar to a desktop word processor. Use the "
-"keyboard, menus and toolbars to interact with your document."
+"<span class=\"productname\">{productname}</span> edits text documents in "
+"the same way you edit a desktop document. It provides a What You See Is "
+"What You Get (WYSIWYG) layout – that conveniently lays out the document as "
+"it will be printed. Operations like typing text, cut, copy and pasting "
+"contents, selecting text, inserting, resizing, anchoring images, adding and "
+"handling tables and charts, are similar to a desktop word processor. Use "
+"the keyboard, menus and toolbars to interact with your document."
 msgstr ""
 "<span class=\"productname\"> {productname} </span> நீங்கள் ஒரு டெச்க்டாப் ஆவணத்தை "
 "திருத்தும் வகையில் உரை ஆவணங்களைத் திருத்துகிறது. நீங்கள் பார்ப்பதை இது வழங்குகிறது "
@@ -3942,17 +2440,11 @@ msgstr ""
 "சேர்ப்பது மற்றும் கையாளுதல் போன்ற செயல்பாடுகள் டெச்க்டாப் சொல் செயலிக்கு ஒத்தவை. உங்கள் "
 "ஆவணத்துடன் தொடர்பு கொள்ள விசைப்பலகை, மெனுக்கள் மற்றும் கருவிப்பட்டிகளைப் பயன்படுத்தவும்."
 
-#: html/cool-help.html%2Bdiv.div.div.h3:618-5
-#, fuzzy
-msgctxt "html/cool-help.html:1377"
-msgid "Context menus"
-msgstr "சூழல் மெனுக்கள்"
-
 #: html/cool-help.html%2Bdiv.div.div.div.p:619-30
 msgid ""
-"Context menus are available on clicking the right mouse button. The commands "
-"available in the context menu are related - not extensively - to the "
-"underlying object in the document."
+"Context menus are available on clicking the right mouse button. The "
+"commands available in the context menu are related - not extensively - to "
+"the underlying object in the document."
 msgstr ""
 "சரியான சுட்டி பொத்தானைக் சொடுக்கு செய்வதில் சூழல் மெனுக்கள் கிடைக்கின்றன. சூழல் பட்டியலில் "
 "கிடைக்கும் கட்டளைகள் ஆவணத்தில் உள்ள அடிப்படை பொருளுடன் தொடர்புடையவை - விரிவாக இல்லை."
@@ -3964,13 +2456,13 @@ msgstr "உரையை வடிவமைத்தல்"
 #: html/cool-help.html%2Bdiv.div.div.div.p:624-5
 msgid ""
 "<span class=\"productname\">{productname}</span> supports modern techniques "
-"for paragraph formatting through styles. A style is a set of text properties "
-"(font, color, background and many more) labeled with a name, the style name. "
-"Use a style to apply the same set of properties to many paragraphs in the "
-"document and produce a uniform, professional look. Also, if you change one "
-"of the style formatting properties, all paragraphs with the same style "
-"change formatting as well, simplifying the effort of formatting many "
-"paragraphs individually."
+"for paragraph formatting through styles. A style is a set of text "
+"properties (font, color, background and many more) labeled with a name, the "
+"style name. Use a style to apply the same set of properties to many "
+"paragraphs in the document and produce a uniform, professional look. Also, "
+"if you change one of the style formatting properties, all paragraphs with "
+"the same style change formatting as well, simplifying the effort of "
+"formatting many paragraphs individually."
 msgstr ""
 "<span class=\"productname\"> {productname} </span> பாணிகள் மூலம் பத்தி "
 "வடிவமைப்பிற்கான நவீன நுட்பங்களை ஆதரிக்கிறது. ஒரு பாணி என்பது உரை பண்புகளின் தொகுப்பாகும் "
@@ -3983,9 +2475,9 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.div.p:625-5
 msgid ""
 "In contrast, direct formatting applies formatting to selected excerpts of "
-"the document contents. On a long document, direct formatting must be applied "
-"in every text excerpt, turning text formatting a long task, subject to "
-"errors and delays."
+"the document contents. On a long document, direct formatting must be "
+"applied in every text excerpt, turning text formatting a long task, subject "
+"to errors and delays."
 msgstr ""
 "இதற்கு நேர்மாறாக, ஆவண உள்ளடக்கங்களின் தேர்ந்தெடுக்கப்பட்ட பகுதிகளுக்கு நேரடி வடிவமைப்பு "
 "வடிவமைப்பைப் பயன்படுத்துகிறது. ஒரு நீண்ட ஆவணத்தில், ஒவ்வொரு உரை பகுதியிலும் நேரடி "
@@ -4005,10 +2497,10 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.div.p:629-5
 #, fuzzy
 msgid ""
-"<span class=\"def\">Style formatting:</span> <span class=\"productname\">"
-"{productname}</span> supports paragraph styles. You can apply an existing "
-"paragraph style to a paragraph. Select the style in the style list on the "
-"<span class=\"ui\">Home</span> tab."
+"<span class=\"def\">Style formatting:</span> <span "
+"class=\"productname\">{productname}</span> supports paragraph styles. You "
+"can apply an existing paragraph style to a paragraph. Select the style in "
+"the style list on the <span class=\"ui\">Home</span> tab."
 msgstr ""
 "<span class=\"def\"> பாணி வடிவமைப்பு: </span><span class=\"productname\">"
 "{productname} </span> பத்தி பாணிகளை ஆதரிக்கிறது. நீங்கள் ஏற்கனவே இருக்கும் பத்தி பாணியை "
@@ -4023,12 +2515,6 @@ msgstr ""
 "உள்தள்ளல், இடைவெளி மற்றும் வரி இடைவெளிக்கான அமைப்புகளுடன் உள்தள்ளல்கள் மற்றும் இடைவெளி "
 "தாவலில் பத்தி உரையாடல் மற்றும் வலதுபுறத்தில் ஒரு முன்னோட்டம்"
 
-#: html/cool-help.html%2Bdiv.div.div.h3:634-5
-#, fuzzy
-msgctxt "html/cool-help.html:1383"
-msgid "Advanced text document editor features"
-msgstr "மேம்பட்ட உரை ஆவண ஆசிரியர் நற்பொருத்தங்கள்"
-
 #: html/cool-help.html%2Bdiv.div.div.div.h4:636-5
 msgid "Handling Tables"
 msgstr "அட்டவணைகள் கையாளுதல்"
@@ -4036,11 +2522,11 @@ msgstr "அட்டவணைகள் கையாளுதல்"
 #: html/cool-help.html%2Bdiv.div.div.div.p:637-5
 #, fuzzy
 msgid ""
-"Insert tables with <span class=\"ui\">Insert</span> → <span class=\"ui\">"
-"Table</span>. Select the initial number of rows and columns. Add rows and "
-"columns with the cell context menu. Merge cells from the <span class=\"ui\">"
-"Table</span> tab. The default paragraph style inside cells is “Table contents"
-"”."
+"Insert tables with <span class=\"ui\">Insert</span> → <span "
+"class=\"ui\">Table</span>. Select the initial number of rows and columns. "
+"Add rows and columns with the cell context menu. Merge cells from the <span "
+"class=\"ui\">Table</span> tab. The default paragraph style inside cells is "
+"“Table contents”."
 msgstr ""
 "கருவிப்பட்டியில் சரியான ஐகானுடன் அட்டவணைகளைச் செருகவும். வரிசைகள் மற்றும் நெடுவரிசைகளின் "
 "ஆரம்ப எண்ணைத் தேர்ந்தெடுக்கவும். செல் சூழல் மெனுவுடன் வரிசைகள் மற்றும் நெடுவரிசைகளைச் "
@@ -4049,8 +2535,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:638-52
 msgid ""
-"Insert Table picker showing a grid to select the number of rows and columns, "
-"currently showing 5 by 3"
+"Insert Table picker showing a grid to select the number of rows and "
+"columns, currently showing 5 by 3"
 msgstr ""
 "வரிசைகள் மற்றும் நெடுவரிசைகளின் எண்ணிக்கையைத் தேர்ந்தெடுக்க கட்டத்தைக் காட்டும் டேபிள் "
 "பிக்கரைச் செருகவும், தற்போது 5 ஆல் 3ஐக் காட்டுகிறது"
@@ -4059,8 +2545,8 @@ msgstr ""
 #, fuzzy
 msgid ""
 "<span class=\"def\">Formatting cells:</span> Click in the cell or range of "
-"cells, open the context menu and choose <span class=\"ui\">Table Properties</"
-"span>. Fine tune the table with the properties dialog."
+"cells, open the context menu and choose <span class=\"ui\">Table "
+"Properties</span>. Fine tune the table with the properties dialog."
 msgstr ""
 "<span class=\"def\"> வடிவங்கள்: </span> கலங்களின் செல் அல்லது வரம்பில் சொடுக்கு செய்து "
 "பட்டியல் <span class=\"ui\"> அட்டவணை </span> → <span class=\"ui\"> பண்புகள் </"
@@ -4073,16 +2559,14 @@ msgstr "மாற்றங்களை கண்காணிக்கவும�
 #: html/cool-help.html%2Bdiv.div.div.div.p:645-5
 msgid ""
 "When you turn on Track Changes, <span class=\"productname\">{productname}</"
-"span> marks up new changes made to the document. Select this option again to "
-"turn it off."
+"span> marks up new changes made to the document. Select this option again "
+"to turn it off."
 msgstr ""
 "டிராக் மாற்றங்களை நீங்கள் இயக்கும்போது, <span class=\"productname\"> {productname} </"
 "span> ஆவணத்தில் செய்யப்பட்ட புதிய மாற்றங்களைக் குறிக்கிறது. இந்த விருப்பத்தை அணைக்க மீண்டும் "
 "தேர்ந்தெடுக்கவும்."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:646-61
-#, fuzzy
-msgctxt "html/cool-help.html+help-track-changes-comment.img:0-56[alt]"
 msgid ""
 "Tracked change shown as a comment box beside the document with author name, "
 "date, and change description"
@@ -4114,8 +2598,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:652-5
 msgid ""
-"<span class=\"def\">Formatting marks:</span> Paragraph, page and unbreakable "
-"spaces are shown as marks to assist text alignment, editing and formatting."
+"<span class=\"def\">Formatting marks:</span> Paragraph, page and "
+"unbreakable spaces are shown as marks to assist text alignment, editing and "
+"formatting."
 msgstr ""
 "<span class=\"def\"> வடிவமைப்பு மதிப்பெண்கள்: </span> பத்தி, பக்கம் மற்றும் உடைக்க "
 "முடியாத இடங்கள் உரை சீரமைப்பு, திருத்துதல் மற்றும் வடிவத்திற்கு உதவுவதற்கான அடையாளங்களாகக் "
@@ -4155,26 +2640,14 @@ msgstr ""
 "<span class=\"def\"> அடிக்குறிப்புகள் மற்றும் இறுதி குறிப்புகள்: </span> "
 "அடிக்குறிப்புகள் மற்றும் இறுதி குறிப்புகள் ஆதரிக்கப்படுகின்றன."
 
-#: html/cool-help.html%2Bdiv.div.h3:661-5
-#, fuzzy
-msgctxt "html/cool-help.html:1391"
-msgid "<span class=\"productname\">{productname}</span> presentations"
-msgstr "<span class=\"productname\"> {productname} </span> விளக்கக்காட்சிகள்"
-
-#: html/cool-help.html%2Bdiv.div.div.h3:663-5
-#, fuzzy
-msgctxt "html/cool-help.html:1393"
-msgid "Editing presentations"
-msgstr "விளக்கக்காட்சிகளைத் திருத்துதல்"
-
 #: html/cool-help.html%2Bdiv.div.div.div.p:664-30
 msgid ""
-"<span class=\"productname\">{productname}</span> Impress edits presentations "
-"in a way that should be familiar to people. Operations like typing text, "
-"cut, copy and pasting contents, selecting text, inserting, resizing, "
-"anchoring images, adding and handling tables, are similar to a desktop "
-"presentation application. Use the keyboard, menus and toolbars to perform "
-"actions in your document."
+"<span class=\"productname\">{productname}</span> Impress edits "
+"presentations in a way that should be familiar to people. Operations like "
+"typing text, cut, copy and pasting contents, selecting text, inserting, "
+"resizing, anchoring images, adding and handling tables, are similar to a "
+"desktop presentation application. Use the keyboard, menus and toolbars to "
+"perform actions in your document."
 msgstr ""
 "<span class=\"productname\"> {productname} </span> மக்களுக்கு நன்கு தெரிந்திருக்க "
 "வேண்டிய வகையில் விளக்கக்காட்சிகளைத் திருத்துகிறது. உரை, வெட்டு, நகல் மற்றும் ஒட்டுதல், "
@@ -4183,18 +2656,12 @@ msgstr ""
 "உங்கள் ஆவணத்தில் செயல்களைச் செய்ய விசைப்பலகை, மெனுக்கள் மற்றும் கருவிப்பட்டிகளைப் "
 "பயன்படுத்தவும்."
 
-#: html/cool-help.html%2Bdiv.div.div.h3:667-5
-#, fuzzy
-msgctxt "html/cool-help.html:1395"
-msgid "Slide show"
-msgstr "ச்லைடு சோ"
-
 #: html/cool-help.html%2Bdiv.div.div.div.p:669-5
 msgid ""
-"<span class=\"productname\">{productname}</span> displays presentation slide "
-"shows, including a subset of slide transitions and object animations. Choose "
-"the slide show from the menu or click on the icon in the bottom left toolbar "
-"in the slide pane."
+"<span class=\"productname\">{productname}</span> displays presentation "
+"slide shows, including a subset of slide transitions and object animations. "
+"Choose the slide show from the menu or click on the icon in the bottom left "
+"toolbar in the slide pane."
 msgstr ""
 "<span class=\"productname\"> {productname} </span> ச்லைடு மாற்றங்கள் மற்றும் பொருள் "
 "அனிமேசன்களின் துணைக்குழு உட்பட விளக்கக்காட்சி ச்லைடு காட்சிகளைக் காட்டுகிறது. "
@@ -4203,18 +2670,12 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:670-5
 msgid ""
-"To exit a <span class=\"productname\">{productname}</span> slide show, press "
-"the <kbd>Esc</kbd> key to return to the presentation edit mode."
+"To exit a <span class=\"productname\">{productname}</span> slide show, "
+"press the <kbd>Esc</kbd> key to return to the presentation edit mode."
 msgstr ""
 "ஒரு <span class=\"productname\"> {productname} </span> ச்லைடு சோவிலிருந்து "
 "வெளியேற, விளக்கக்காட்சி திருத்து பயன்முறைக்குத் திரும்ப<kbd>தப்பி</kbd> விசையை "
 "அழுத்தவும்."
-
-#: html/cool-help.html%2Bdiv.div.div.h3:674-5
-#, fuzzy
-msgctxt "html/cool-help.html:1397"
-msgid "Slide pane"
-msgstr "ச்லைடு பலகம்"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:676-5
 msgid ""
@@ -4232,17 +2693,11 @@ msgstr ""
 "ச்லைடுசோவைத் தொடங்க, ச்லைடு சேர்க்க, நகல் அல்லது தற்போதைய ச்லைடை நீக்க கீழே உள்ள ச்லைடு பேன் "
 "கருவிப்பட்டியைப் பயன்படுத்தவும்."
 
-#: html/cool-help.html%2Bdiv.div.div.h3:681-5
-#, fuzzy
-msgctxt "html/cool-help.html:1401"
-msgid "Advanced features"
-msgstr "மேம்பட்ட நற்பொருத்தங்கள்"
-
 #: html/cool-help.html%2Bdiv.div.div.div.p:683-5
 msgid ""
-"<span class=\"def\">Slide layouts:</span> <span class=\"productname\">"
-"{productname}</span> Impress lets you change the slide layout. Select the "
-"desired slide layout in the drop-down layout list."
+"<span class=\"def\">Slide layouts:</span> <span "
+"class=\"productname\">{productname}</span> Impress lets you change the "
+"slide layout. Select the desired slide layout in the drop-down layout list."
 msgstr ""
 "<span class=\"def\"> ச்லைடு தளவமைப்புகள்: </span> <span class=\"productName\"> "
 "{productname} </span> ஈர்க்கும் ச்லைடு தளவமைப்பை மாற்றட்டும். கீழ்தோன்றும் தளவமைப்பு "
@@ -4266,10 +2721,11 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:687-30
 msgid ""
-"<span class=\"def\">Slide transitions:</span> <span class=\"productname\">"
-"{productname}</span> Impress provides visual effects when displaying a new "
-"slide in the slide show. Slide transitions are property of the slide, use "
-"the side bar to set the slide transition when in edit mode."
+"<span class=\"def\">Slide transitions:</span> <span "
+"class=\"productname\">{productname}</span> Impress provides visual effects "
+"when displaying a new slide in the slide show. Slide transitions are "
+"property of the slide, use the side bar to set the slide transition when in "
+"edit mode."
 msgstr ""
 "<span class=\"def\"> ச்லைடு மாற்றங்கள்: </span> <span class=\"productName\"> "
 "{productname} </span> ச்லைடு நிகழ்ச்சியில் புதிய ச்லைடைக் காண்பிக்கும் போது காட்சி "
@@ -4278,9 +2734,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:688-30
 msgid ""
-"<span class=\"def\">Object animation:</span> Individual objects in the slide "
-"can have animations. Use the side bar to configure the slide transition for "
-"a selected object or set of objects."
+"<span class=\"def\">Object animation:</span> Individual objects in the "
+"slide can have animations. Use the side bar to configure the slide "
+"transition for a selected object or set of objects."
 msgstr ""
 "<span class=\"def\"> பொருள் அனிமேசன்: </span> ச்லைடில் உள்ள தனிப்பட்ட பொருள் "
 "அனிமேசனைக் கொண்டிருக்கலாம். தேர்ந்தெடுக்கப்பட்ட பொருள் அல்லது பொருள்களின் தொகுப்பிற்கான ச்லைடு "
@@ -4294,16 +2750,10 @@ msgstr ""
 "<span class=\"def\"> அட்டவணைகள்: </span> விளக்கக்காட்சியில் அட்டவணைகளைச் செருகவும். "
 "அட்டவணை கருப்பொருள் தேர்ந்தெடுக்க பக்கப்பட்டியைப் பயன்படுத்தவும்."
 
-#: html/cool-help.html%2Bdiv.div.h3:693-5
-#, fuzzy
-msgctxt "html/cool-help.html:1403"
-msgid "Frequently Asked Questions"
-msgstr "அடிக்கடி கேட்கப்படும் கேள்விகள்"
-
 #: html/cool-help.html%2Bdiv.div.div.h4:695-5
 msgid ""
-"What are the document file formats supported by <span class=\"productname\">"
-"{productname}</span>?"
+"What are the document file formats supported by <span "
+"class=\"productname\">{productname}</span>?"
 msgstr ""
 "<span class=\"productname\"> {productname} </span> ஆல் ஆதரிக்கப்படும் ஆவணங்கள் "
 "கோப்பு வடிவங்கள் யாவை?"
@@ -4362,8 +2812,9 @@ msgstr ""
 msgid ""
 "<span class=\"productname\">{productname}</span> saves the document in the "
 "background regularly, you can't just close without saving it. To abandon "
-"your changes, you must either undo them, or use the <span class=\"ui\">"
-"Revision History </span> in the <span class=\"ui\">File</span> menu."
+"your changes, you must either undo them, or use the <span "
+"class=\"ui\">Revision History </span> in the <span class=\"ui\">File</span> "
+"menu."
 msgstr ""
 "<span class=\"productname\"> {productname} </span> ஆவணத்தைப் பின்னணியில் தவறாமல் "
 "சேமிக்கிறது, அதைச் சேமிக்காமல் நீங்கள் அதை மூட முடியாது. உங்கள் மாற்றங்களைக் கைவிட, நீங்கள் "
@@ -4388,8 +2839,8 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.p:718-5
 msgid ""
 "Yes. <span class=\"productname\">{productname}</span> opens password-"
-"protected documents, but it is necessary to supply the password in the “"
-"Enter password” prompt at load time."
+"protected documents, but it is necessary to supply the password in the "
+"“Enter password” prompt at load time."
 msgstr ""
 "ஆம். <span class=\"productname\"> {productname} </span> கடவுச்சொல் பாதுகாக்கப்பட்ட "
 "ஆவணங்களைத் திறக்கிறது, ஆனால் கடவுச்சொல்லை “கடவுச்சொல்லை உள்ளிடுக” வரியில் சுமை நேரத்தில் "
@@ -4402,9 +2853,9 @@ msgstr "எனது மொழியில் எழுத்துப்பி�
 #: html/cool-help.html%2Bdiv.div.div.p:722-5
 #, fuzzy
 msgid ""
-"Choose <span class=\"ui\">Review</span> → <span class=\"ui\">Language</span> "
-"and select the language for the whole document. Optionally you can set "
-"languages for the selected text and for the current paragraph."
+"Choose <span class=\"ui\">Review</span> → <span class=\"ui\">Language</"
+"span> and select the language for the whole document. Optionally you can "
+"set languages for the selected text and for the current paragraph."
 msgstr ""
 "பட்டியல் <span class=\"ui\"> கருவிகள் </span> → <span class=\"ui\"> மொழிகள் </"
 "span> ஐத் தேர்ந்தெடுத்து முழு ஆவணத்திற்கும் மொழியைத் தேர்ந்தெடுக்கவும். விருப்பமாக நீங்கள் "
@@ -4416,8 +2867,9 @@ msgstr "எனது ஆவணத்தில் உள்ள சிவப்ப
 
 #: html/cool-help.html%2Bdiv.div.div.p:726-5
 msgid ""
-"On the <span class=\"ui\">Review</span> tab, open <span class=\"ui\">"
-"Spelling</span> and uncheck <span class=\"ui\">Auto Spell Check</span>."
+"On the <span class=\"ui\">Review</span> tab, open <span "
+"class=\"ui\">Spelling</span> and uncheck <span class=\"ui\">Auto Spell "
+"Check</span>."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:729-5
@@ -4426,8 +2878,8 @@ msgstr "உரையில் சில வார்த்தைகளில் 
 
 #: html/cool-help.html%2Bdiv.div.div.p:730-5
 msgid ""
-"Grammar errors in the text are marked with the blue wavy underline. Click on "
-"the underlined text with the right mouse button to open a menu with "
+"Grammar errors in the text are marked with the blue wavy underline. Click "
+"on the underlined text with the right mouse button to open a menu with "
 "suggestions to correct the grammar error and the offending grammar rules. "
 "Select the right suggestion to change the text."
 msgstr ""
@@ -4461,8 +2913,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:738-5
 msgid ""
-"What are the blue <span class=\"blue\">¶</span> symbols and how can I remove "
-"them from my text document?"
+"What are the blue <span class=\"blue\">¶</span> symbols and how can I "
+"remove them from my text document?"
 msgstr ""
 "ப்ளூ <span class=\"நீலம்\"> ¶ </span> அடையாளம் என்ன, எனது உரை ஆவணத்திலிருந்து நான் "
 "எவ்வாறு அகற்றுவது?"
@@ -4470,21 +2922,15 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.p:739-5
 #, fuzzy
 msgid ""
-"The <span class=\"blue\">¶</span> symbol is a formatting mark. It is used to "
-"help text alignment and editing and is not printed. To toggle it in the "
-"document display, choose <span class=\"ui\">View</span> → <span class=\"ui\">"
-"Formatting Marks</span>."
+"The <span class=\"blue\">¶</span> symbol is a formatting mark. It is used "
+"to help text alignment and editing and is not printed. To toggle it in the "
+"document display, choose <span class=\"ui\">View</span> → <span "
+"class=\"ui\">Formatting Marks</span>."
 msgstr ""
 "<span class=\"நீலம்\"> ¶ </span> அடையாளம் ஒரு வடிவமைப்பு குறி. இது உரை சீரமைப்பு "
 "மற்றும் திருத்துதல் உதவ பயன்படுகிறது மற்றும் அச்சிடப்படவில்லை. ஆவண காட்சியில் அதை "
 "மாற்றுவதற்கு, பட்டியல் <span class=\"ui\"> பார்வை </span> → <span class=\"ui\"> "
 "வடிவமைத்தல் மார்க் </span> ஐத் தேர்வுசெய்க."
-
-#: html/cool-help.html%2Bdiv.div.div.h3:744-5
-#, fuzzy
-msgctxt "html/cool-help.html:1407"
-msgid "Text documents"
-msgstr "உரை ஆவணங்கள்"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:746-5
 msgid "How do I get a word count of my document?"
@@ -4494,8 +2940,8 @@ msgstr "எனது ஆவணத்தின் சொல் எண்ணிக
 #, fuzzy
 msgid ""
 "Word count is available in <span class=\"ui\">Review</span> → <span "
-"class=\"ui\">Word Count</span>. A dialog shows word counts for selection and "
-"for the whole document."
+"class=\"ui\">Word Count</span>. A dialog shows word counts for selection "
+"and for the whole document."
 msgstr ""
 "சொல் எண்ணிக்கை <span class=\"ui\"> கருவிகள் </span> → <span class=\"ui\"> சொல் "
 "எண்ணிக்கை </span> இல் கிடைக்கிறது. ஒரு உரையாடல் தேர்வு மற்றும் முழு ஆவணத்திற்கும் சொல் "
@@ -4554,8 +3000,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:760-7
 msgid ""
-"You can either browse the characters displayed with the drop lists or type a "
-"search key in the <span class=\"ui\">Search</span> box. If you know the "
+"You can either browse the characters displayed with the drop lists or type "
+"a search key in the <span class=\"ui\">Search</span> box. If you know the "
 "Unicode numeric code of the special character, enter in the boxes on the "
 "right."
 msgstr ""
@@ -4581,8 +3027,8 @@ msgid ""
 "You have the Track Changes feature enabled for the document. Track Changes "
 "records all changes in the text and shows the edits for later revision. "
 "Useful for marking changes in text and spreadsheets. Track changes are "
-"enabled choosing <span class=\"ui\">Review</span> → <span class=\"ui\">"
-"Record</span>."
+"enabled choosing <span class=\"ui\">Review</span> → <span "
+"class=\"ui\">Record</span>."
 msgstr ""
 "ஆவணத்திற்கான டிராக் மாற்றங்கள் நற்பொருத்தம் இயக்கப்பட்டிருக்கும். ட்ராக் மாற்றங்கள் உரையில் உள்ள "
 "அனைத்து மாற்றங்களையும் பதிவு செய்கின்றன மற்றும் பின்னர் திருத்தத்திற்கான பதிப்புகளைக் "
@@ -4614,16 +3060,6 @@ msgstr ""
 msgid "Changes are displayed as comment in the right of the document area."
 msgstr "ஆவணப் பகுதியின் வலதுபுறத்தில் கருத்தாக மாற்றங்கள் காட்டப்படும்."
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:774-61
-#, fuzzy
-msgctxt "html/cool-help.html+help-track-changes-comment:774-5.img:0-56[alt]"
-msgid ""
-"Tracked change shown as a comment box beside the document with author name, "
-"date, and change description"
-msgstr ""
-"ட்ராக் செய்யப்பட்ட மாற்றம், ஆசிரியர் பெயர், தேதி மற்றும் மாற்ற விளக்கத்துடன் ஆவணத்தின் அருகில் "
-"கருத்துப் பெட்டியாகக் காட்டப்பட்டுள்ளது"
-
 #: html/cool-help.html%2Bdiv.div.div.div.p:775-5
 msgid ""
 "The color assigned to the changes depends on the user that changes the "
@@ -4648,12 +3084,12 @@ msgstr ""
 msgid ""
 "Changes can be accepted or rejected. To accept or reject changes, click on "
 "the corresponding icons in the comment box on the right of the document. "
-"Alternatively, choose <span class=\"ui\">Review</span> → <span class=\"ui\">"
-"Accept</span> or <span class=\"ui\">Reject</span>. Furthermore, if you need "
-"to filter changes before accepting or rejecting, choose <span class=\"ui\">"
-"Review</span> → <span class=\"ui\">Accept</span> → <span class=\"ui\">"
-"Manage</span>. A dialog shows a list of all tracked changes. Use the dialog "
-"buttons accordingly."
+"Alternatively, choose <span class=\"ui\">Review</span> → <span "
+"class=\"ui\">Accept</span> or <span class=\"ui\">Reject</span>. "
+"Furthermore, if you need to filter changes before accepting or rejecting, "
+"choose <span class=\"ui\">Review</span> → <span class=\"ui\">Accept</span> "
+"→ <span class=\"ui\">Manage</span>. A dialog shows a list of all tracked "
+"changes. Use the dialog buttons accordingly."
 msgstr ""
 "மாற்றங்களை ஏற்கலாம் அல்லது நிராகரிக்கலாம். மாற்றங்களை ஏற்க அல்லது நிராகரிக்க, ஆவணத்தின் வலது "
 "புறத்தில் உள்ள கருத்து பெட்டியில் தொடர்புடைய ஐகான்களைக் சொடுக்குக. மாற்றாக, <span "
@@ -4667,8 +3103,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:778-54
 msgid ""
-"Manage Changes dialog with a list of tracked changes showing action, author, "
-"date, and comment columns, and Accept, Reject, Accept All, Reject All buttons"
+"Manage Changes dialog with a list of tracked changes showing action, "
+"author, date, and comment columns, and Accept, Reject, Accept All, Reject "
+"All buttons"
 msgstr ""
 "செயல், ஆசிரியர், தேதி மற்றும் கருத்து நெடுவரிசைகளைக் காட்டும் டிராக் செய்யப்பட்ட மாற்றங்களின் "
 "பட்டியலைக் கொண்டு மாற்றங்களை நிர்வகித்தல் உரையாடல் மற்றும் ஏற்றுக்கொள், நிராகரி, அனைத்தையும் "
@@ -4724,16 +3161,16 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:794-7
 msgid ""
-"Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Paragraph</span>"
-", <span class=\"ui\">Text Flow </span> tab"
+"Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Paragraph</"
+"span>, <span class=\"ui\">Text Flow </span> tab"
 msgstr ""
 "<span class=\"ui\"> வடிவம் </span> → <span class=\"ui\"> பத்தி </span>, <span "
 "class=\"ui\"> உரை ஓட்டம் </span> தாவல்"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:795-7
 msgid ""
-"In the <span class=\"ui\">Breaks</span> area, mark Insert, Type: Page Break, "
-"Position: Before."
+"In the <span class=\"ui\">Breaks</span> area, mark Insert, Type: Page "
+"Break, Position: Before."
 msgstr ""
 "<span class=\"ui\"> பிரேக்ச் </span> பகுதியில், குறியீடு, வகை: பக்க இடைவெளி, "
 "நிலை: முன்."
@@ -4767,7 +3204,6 @@ msgid "Select the text with the existing format"
 msgstr "இருக்கும் வடிவத்துடன் உரையைத் தேர்ந்தெடுக்கவும்"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:806-7
-msgctxt "html/cool-help.html:help-format-paintbrush"
 msgid ""
 "Click on the <span class=\"ui\">Clone Formatting</span> icon <img "
 "alt=\"format paintbrush\" class=\"icon-size\" src=\"images/"
@@ -4789,8 +3225,8 @@ msgstr "வடிவமைக்க பத்தியில் கர்சர�
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:814-7
 msgid ""
-"Select the style to apply in the style dropdown list. The paragraph displays "
-"the styles attributes."
+"Select the style to apply in the style dropdown list. The paragraph "
+"displays the styles attributes."
 msgstr ""
 "பாணி கீழ்தோன்றும் பட்டியலில் விண்ணப்பிக்க பாணியைத் தேர்ந்தெடுக்கவும். பத்தி பாணியின் பண்புகளை "
 "காட்டுகிறது."
@@ -4805,15 +3241,9 @@ msgid ""
 "You have the AutoCorrection enabled. AutoCorrection compares the text just "
 "typed to an internal table of text. In most cases, AutoCorrection corrects "
 "typos while you type. To revert a correction, press <kbd>Ctrl</kbd><span "
-"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Z</kbd> right after it "
-"was applied."
+"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Z</kbd> right after "
+"it was applied."
 msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.h3:825-5
-#, fuzzy
-msgctxt "html/cool-help.html:1409"
-msgid "Spreadsheets"
-msgstr "விரிதாள்கள்"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:827-5
 msgid "How can I select data to print?"
@@ -4847,9 +3277,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:835-7
 msgid ""
-"Press <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span>"
-"<kbd>V</kbd>. The <span class=\"ui\">Text Import</span> dialog opens to let "
-"you describe the precise format of the CSV data."
+"Press <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>V</kbd>. The <span class=\"ui\">Text Import</span> dialog opens "
+"to let you describe the precise format of the CSV data."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:838-53
@@ -4868,8 +3298,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:841-5
 msgid ""
-"The CSV data is loaded into the selected cell where you pasted, according to "
-"these settings."
+"The CSV data is loaded into the selected cell where you pasted, according "
+"to these settings."
 msgstr ""
 "இந்த அமைப்புகளின்படி, நீங்கள் ஒட்டிய தேர்ந்தெடுக்கப்பட்ட கலத்தில் காபிம தரவு ஏற்றப்படுகிறது."
 
@@ -4888,15 +3318,6 @@ msgstr ""
 msgid "Format the source cell with the font, color background and more."
 msgstr "எழுத்துரு, வண்ண பின்னணி மற்றும் பலவற்றோடு மூல கலத்தை வடிவமைக்கவும்."
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:848-7
-msgctxt "html/cool-help.html+help-format-paintbrush:848-7"
-msgid ""
-"Click on the <span class=\"ui\">Clone Formatting</span> icon <img "
-"alt=\"format paintbrush\" class=\"icon-size\" src=\"images/"
-"lc_formatpaintbrush.svg\" /> on the <span class=\"ui\">Home</span> tab. The "
-"mouse pointer turns to a paint bucket."
-msgstr ""
-
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:849-7
 msgid "Select the cells you want to format. Release the mouse button."
 msgstr ""
@@ -4909,10 +3330,10 @@ msgstr "“தெளிவான நேரடி வடிவமைப்பு�
 #: html/cool-help.html%2Bdiv.div.div.div.p:854-5
 #, fuzzy
 msgid ""
-"Direct formatting is formatting applied directly to the selected contents of "
-"a paragraph or a spreadsheet cell, and overlaps its assigned style "
-"formatting. To restore the formatting to the style settings, select the text "
-"or spreadsheet cell and choose <span class=\"ui\">Home</span> → <span "
+"Direct formatting is formatting applied directly to the selected contents "
+"of a paragraph or a spreadsheet cell, and overlaps its assigned style "
+"formatting. To restore the formatting to the style settings, select the "
+"text or spreadsheet cell and choose <span class=\"ui\">Home</span> → <span "
 "class=\"ui\">Clear Direct Formatting</span>."
 msgstr ""
 "நேரடி வடிவமைப்பு என்பது ஒரு பத்தி அல்லது ஒரு விரிதாள் கலத்தின் தேர்ந்தெடுக்கப்பட்ட "
@@ -4927,19 +3348,13 @@ msgstr "ஒரு தாளை எவ்வாறு மறுபெயரிட
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:858-5
 msgid ""
-"Rename a sheet in the spreadsheet document using the context menu (using the "
-"right mouse button) over the sheet tab in the bottom. Enter the new sheet "
-"name in the dialog that follows."
+"Rename a sheet in the spreadsheet document using the context menu (using "
+"the right mouse button) over the sheet tab in the bottom. Enter the new "
+"sheet name in the dialog that follows."
 msgstr ""
 "கீழே உள்ள தாள் தாவலில் சூழல் மெனுவைப் பயன்படுத்தி (வலது சுட்டி பொத்தானைப் பயன்படுத்தி) "
 "விரிதாள் ஆவணத்தில் ஒரு தாளை மறுபெயரிடுங்கள். பின்வரும் உரையாடலில் புதிய தாள் பெயரை "
 "உள்ளிடவும்."
-
-#: html/cool-help.html%2Bdiv.div.div.h3:864-5
-#, fuzzy
-msgctxt "html/cool-help.html:1411"
-msgid "Presentations"
-msgstr "விளக்கக்காட்சிகள்"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:866-5
 msgid "How can I run my slide show?"
@@ -4954,9 +3369,9 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:869-7
 #, fuzzy
 msgid ""
-"Either choose <span class=\"ui\">Slide Show</span> → <span class=\"ui\">From "
-"Beginning</span> or click on the left-most icon in the bottom of the slide "
-"panel:"
+"Either choose <span class=\"ui\">Slide Show</span> → <span "
+"class=\"ui\">From Beginning</span> or click on the left-most icon in the "
+"bottom of the slide panel:"
 msgstr ""
 "<span class=\"ui\"> ச்லைடு சோ </span> → <span class=\"ui\"> முழுத்திரை "
 "விளக்கக்காட்சி </span> ஐத் தேர்வுசெய்க அல்லது ச்லைடு பேனலின் அடிப்பகுதியில் உள்ள இடது-மிக "
@@ -4978,9 +3393,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:876-7
 msgid ""
-"Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Line</span> (or "
-"<span class=\"ui\">Area</span>, or <span class=\"ui\">Position and Size</"
-"span>). A dialog opens."
+"Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Line</span> "
+"(or <span class=\"ui\">Area</span>, or <span class=\"ui\">Position and "
+"Size</span>). A dialog opens."
 msgstr ""
 "<span class=\"ui\"> வடிவம் </span> → <span class=\"ui\"> வரி </span> (அல்லது "
 "<span class=\"ui\"> பகுதி </span>, அல்லது <span class=\" இடைமுகம் \"> நிலை "

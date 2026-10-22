@@ -1653,6 +1653,9 @@ libs:
 	@cd $(abs_srcdir)/libs \
 	&& $(call npm_source,$(NODE_MODULES_SRC))
 
+# html2po since Translate Toolkit 3.18 gives a repeated string a context
+# taken from the nearest HTML id. The translations are looked up by msgid
+# only (util/po2json.py), so drop the contexts and merge the repeats.
 pot:
 	xgettext --from-code=UTF-8 --language=JavaScript --keyword=_ --keyword=_n:1,2 --keyword=N_ --add-comments=TRANSLATORS: --output=po/templates/cool-ui.pot \
 		admin/admin.strings.js \
@@ -1837,9 +1840,13 @@ pot:
 		templates/templates.js \
 		introdocs/introdocs.js
 
-	html2po --pot --input=html/cool-help.html --output=po/templates/cool-help.pot --duplicates=merge
+	html2po --pot --input=html/cool-help.html --output=po/templates/cool-help.pot.raw --duplicates=merge
+	msgcat --no-wrap po/templates/cool-help.pot.raw | sed '/^msgctxt /d' | msguniq --use-first -w 78 -t UTF-8 -o po/templates/cool-help.pot
+	rm po/templates/cool-help.pot.raw
 	html2po --pot --input=descriptions/google-play.html --output=po/templates/descriptions.pot --duplicates=merge --keepcomments
-	html2po --pot --input=welcome/welcome.html --output=po/templates/welcome.pot --duplicates=merge
+	html2po --pot --input=welcome/welcome.html --output=po/templates/welcome.pot.raw --duplicates=merge
+	msgcat --no-wrap po/templates/welcome.pot.raw | sed '/^msgctxt /d' | msguniq --use-first -w 78 -t UTF-8 -o po/templates/welcome.pot
+	rm po/templates/welcome.pot.raw
 	for dir in extensions/*/; do \
 		test -f "$$dir/manifest.json" || continue; \
 		$(PYTHON) util/extension-pot.py "$$dir" || exit 1; \

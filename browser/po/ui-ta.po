@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-22 23:37+0200\n"
+"POT-Creation-Date: 2026-10-23 00:15+0200\n"
 "PO-Revision-Date: 2026-06-23 14:20+0000\n"
 "Last-Translator: தமிழ்நேரம் <tamilneram247@gmail.com>\n"
 "Language-Team: Tamil <https://hosted.weblate.org/projects/collabora-online/"
@@ -9233,8 +9233,6 @@ msgid "Explore The New {coolversion}"
 msgstr "புதிய {coolversion} ஐ ஆராயுங்கள்"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:27-7
-#, fuzzy
-msgctxt "welcome/welcome.html:welcome-slide1-heading-2"
 msgid "Collabora Online Development Edition"
 msgstr "ஒத்துழைப்பு நிகழ்நிலை மேம்பாட்டு பதிப்பு"
 
@@ -9254,12 +9252,6 @@ msgstr ""
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h1:37-7
 msgid "Discover All The Changes"
 msgstr "அனைத்து மாற்றங்களையும் கண்டறியவும்"
-
-#: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:38-7
-#, fuzzy
-msgctxt "welcome/welcome.html:welcome-slide2-heading-2"
-msgid "Collabora Online Development Edition"
-msgstr "ஒத்துழைப்பு நிகழ்நிலை மேம்பாட்டு பதிப்பு"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:39-7
 msgid ""

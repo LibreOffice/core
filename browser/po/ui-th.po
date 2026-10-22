@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-22 23:37+0200\n"
+"POT-Creation-Date: 2026-10-23 00:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -9036,7 +9036,6 @@ msgid "Explore The New {coolversion}"
 msgstr ""
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:27-7
-msgctxt "welcome/welcome.html:welcome-slide1-heading-2"
 msgid "Collabora Online Development Edition"
 msgstr ""
 
@@ -9051,11 +9050,6 @@ msgstr ""
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h1:37-7
 msgid "Discover All The Changes"
-msgstr ""
-
-#: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:38-7
-msgctxt "welcome/welcome.html:welcome-slide2-heading-2"
-msgid "Collabora Online Development Edition"
 msgstr ""
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:39-7

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-22 23:37+0200\n"
+"POT-Creation-Date: 2026-10-23 00:15+0200\n"
 "PO-Revision-Date: 2026-06-30 03:40+0000\n"
 "Last-Translator: Jeff Huang <s8321414@gmail.com>\n"
 "Language-Team: Chinese (Traditional Han script) <https://hosted.weblate.org/"
@@ -9099,8 +9099,6 @@ msgid "Explore The New {coolversion}"
 msgstr "探索新的 {coolversion}"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:27-7
-#, fuzzy
-msgctxt "welcome/welcome.html:welcome-slide1-heading-2"
 msgid "Collabora Online Development Edition"
 msgstr "Collabora Online 開發版"
 
@@ -9120,12 +9118,6 @@ msgstr ""
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h1:37-7
 msgid "Discover All The Changes"
 msgstr "探索所有變更"
-
-#: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:38-7
-#, fuzzy
-msgctxt "welcome/welcome.html:welcome-slide2-heading-2"
-msgid "Collabora Online Development Edition"
-msgstr "Collabora Online 開發版"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:39-7
 msgid ""

@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-22 23:37+0200\n"
+"POT-Creation-Date: 2026-10-23 00:15+0200\n"
 "PO-Revision-Date: 2026-10-04 12:51+0000\n"
 "Last-Translator: HM <goodlinuxuser@chmail.ir>\n"
 "Language-Team: Persian <https://hosted.weblate.org/projects/collabora-online/"
@@ -40,9 +40,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:17-69
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"C</kbd>,<br /><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">"
-"+</span><kbd>Insert</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>C</kbd>,<br /><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
+"hidden=\"true\">+</span><kbd>Insert</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:18-38
@@ -51,9 +51,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:18-90
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</"
-"kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>V</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:19-38
@@ -62,9 +62,10 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:19-78
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</"
-"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>V</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:20-48
@@ -73,8 +74,8 @@ msgstr "بازکردن"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:20-79
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"O</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>O</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:21-72
@@ -103,9 +104,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:26-90
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>F1</"
-"kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>F1</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:27-38
@@ -122,8 +123,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:28-97
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>C</"
-"kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>C</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:29-38
@@ -131,10 +132,9 @@ msgid "Open the context menu at the cursor or the selected cell"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:29-121
-msgctxt "html/cool-help.html+general-shortcuts.table.tr.td:18-116"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"F10</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>F10</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:30-38
@@ -153,27 +153,23 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:31-115
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"F6</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>F6</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h2:36-9
-msgctxt "html/cool-help.html+text-shortcuts.div.h2:2-4"
 msgid "Text formatting"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:38-59
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:4-54"
 msgid "Bold"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:39-61
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:5-56"
 msgid "Italic"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:40-64
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:6-59"
 msgid "Underline"
 msgstr ""
 
@@ -182,47 +178,38 @@ msgid "Double Underline"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:42-64
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:8-59"
 msgid "Strikethrough"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:43-66
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:9-61"
 msgid "Superscript"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:44-64
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:10-59"
 msgid "Subscript"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:45-70
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:11-65"
 msgid "Remove direct formatting"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h2:49-9
-msgctxt "html/cool-help.html+text-shortcuts.div.h2:15-4"
 msgid "Paragraph formatting"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:51-76
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:17-71"
 msgid "Align Center"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:52-64
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:18-59"
 msgid "Align Left"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:53-65
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:19-60"
 msgid "Align Right"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:54-65
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:20-60"
 msgid "Justify"
 msgstr ""
 
@@ -232,8 +219,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:55-94
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"0</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>0</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:56-38
@@ -242,8 +229,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:56-96
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"1</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>1</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:57-38
@@ -252,8 +239,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:57-96
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"2</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>2</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:58-38
@@ -261,10 +248,9 @@ msgid "Apply Heading 3 paragraph style"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:58-96
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:24-91"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"3</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>3</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:59-38
@@ -273,8 +259,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:59-96
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"4</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>4</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:60-38
@@ -283,8 +269,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:60-96
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"5</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>5</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h2:64-9
@@ -292,231 +278,191 @@ msgid "Text selection and navigation in document"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:66-64
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:32-59"
 msgid "Select All"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:67-38
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:33-33"
 msgid "Move cursor to the left"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:67-88
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:33-83"
 msgid "Arrow Left"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:68-38
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:34-33"
 msgid "Move cursor with selection to the left"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:68-103
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:34-98"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Left</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Arrow Left</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:69-38
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:35-33"
 msgid "Go to beginning of a word"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:69-90
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:35-85"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Left</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Arrow Left</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:70-38
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:36-33"
 msgid "Select to the left word by word"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:70-96
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:36-91"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
-"Left</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Arrow Left</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:71-38
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:37-33"
 msgid "Move cursor to the right"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:71-89
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:37-84"
 msgid "Arrow Right"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:72-38
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:38-33"
 msgid "Move cursor with selection to the right"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:72-104
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:38-99"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Right</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Arrow Right</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:73-38
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:39-33"
 msgid "Go to start of the next word"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:73-93
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:39-88"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Right</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Arrow Right</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:74-38
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:40-33"
 msgid "Select to the right word by word"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:74-97
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:40-92"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
-"Right</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Arrow Right</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:75-38
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:41-33"
 msgid "Move cursor up one line"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:75-88
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:41-83"
 msgid "Arrow Up"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:76-38
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:42-33"
 msgid "Select lines in upwards direction"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:76-98
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:42-93"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Up</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Arrow Up</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:77-38
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:43-33"
 msgid "Move cursor to beginning of the previous paragraph"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:77-115
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:43-110"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Up</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Arrow Up</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:78-38
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:44-33"
 msgid "Select to beginning of paragraph"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:78-97
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:44-92"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
-"Up</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Arrow Up</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:79-38
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:45-33"
 msgid "Move cursor down one line"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:79-90
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:45-85"
 msgid "Arrow Down"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:80-38
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:46-33"
 msgid "Select lines in downwards direction"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:80-100
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:46-95"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Down</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Arrow Down</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:81-38
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:47-33"
 msgid "Move cursor to beginning of the next paragraph"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:81-111
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:47-106"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Down</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Arrow Down</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:82-38
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:48-33"
 msgid "Select to end of paragraph"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:82-91
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:48-86"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
-"Down</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Arrow Down</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:83-38
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:49-33"
 msgid "Go to beginning of line"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:83-88
-#, fuzzy
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:49-83"
 msgid "Home"
 msgstr "آغازه"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:84-38
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:50-33"
 msgid "Go and select to the beginning of a line"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:84-105
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:50-100"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Home</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Home</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:85-38
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:51-33"
 msgid "Go to start of document"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:85-88
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:51-83"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Home</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Home</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:86-38
@@ -524,45 +470,38 @@ msgid "Go and select text to start of document"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:86-104
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:52-99"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Home</"
-"kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Home</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:87-38
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:53-33"
 msgid "Go to end of line"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:87-82
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:53-77"
 msgid "End"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:88-38
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:54-33"
 msgid "Go and select to the end of a line"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:88-99
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:54-94"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"End</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>End</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:89-38
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:55-33"
 msgid "Go to end of document"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:89-86
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:55-81"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"End</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>End</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:90-38
@@ -570,11 +509,10 @@ msgid "Go and select text to end of document"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:90-102
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:56-97"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>End</"
-"kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>End</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:91-38
@@ -591,8 +529,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:92-102
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"PageUp</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>PageUp</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:93-38
@@ -601,8 +539,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:93-97
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"PageUp</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>PageUp</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:94-38
@@ -619,8 +557,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:95-102
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"PageDown</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>PageDown</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:96-38
@@ -629,8 +567,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:96-99
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"PageDown</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>PageDown</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:97-38
@@ -639,8 +577,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:97-92
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Backspace</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Backspace</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:98-38
@@ -649,8 +587,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:98-86
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Del</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Del</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:99-38
@@ -659,9 +597,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:99-96
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Backspace</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Backspace</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:100-38
@@ -670,9 +608,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:100-90
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Del</"
-"kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Del</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h2:104-9
@@ -680,23 +618,15 @@ msgid "Shortcut Keys for Tables"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:106-38
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:72-33"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"A</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>A</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:106-144
 msgid ""
-"If the active cell is empty: selects the whole table. Otherwise: selects the "
-"contents of the active cell. Pressing again selects the entire table."
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:107-38
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:73-33"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Home</kbd>"
+"If the active cell is empty: selects the whole table. Otherwise: selects "
+"the contents of the active cell. Pressing again selects the entire table."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:107-147
@@ -704,13 +634,6 @@ msgid ""
 "If the active cell is empty: goes to the beginning of the table. Otherwise: "
 "first press goes to beginning of the active cell, second press goes to "
 "beginning of the current table, third press goes to beginning of document."
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:108-38
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:74-33"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"End</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:108-146
@@ -722,21 +645,21 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:109-38
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Tab</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Tab</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:109-146
 msgid ""
-"Inserts a tab stop (only in tables). Depending on the Window Manager in use, "
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Tab</kbd> may be used instead."
+"Inserts a tab stop (only in tables). Depending on the Window Manager in "
+"use, <kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Tab</kbd> may be used instead."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:110-38
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Keys</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Arrow Keys</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:110-152
@@ -746,9 +669,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:111-38
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
-"Keys</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Arrow Keys</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:111-219
@@ -757,60 +680,54 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:112-38
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
-"Keys</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Arrow Keys</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:112-218
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:78-213"
 msgid "Like Alt, but only the active cell is modified"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:113-38
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</"
-"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow Keys</"
-"kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:113-285
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:79-280"
-msgid "Like Alt, but only the active cell is modified"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Arrow Keys</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:114-38
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Insert</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Insert</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:114-148
 msgid ""
-"3 seconds in Insert mode, Arrow Key inserts row/column, <kbd>Ctrl</kbd><span "
-"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow Key</kbd> "
-"inserts cell"
+"3 seconds in Insert mode, Arrow Key inserts row/column, <kbd>Ctrl</"
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow Key</"
+"kbd> inserts cell"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:115-38
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Del</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Del</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:115-145
 msgid ""
-"3 seconds in Delete mode, Arrow key deletes row/column, <kbd>Ctrl</kbd><span "
-"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow key</kbd> merges "
-"cell with neighboring cell"
+"3 seconds in Delete mode, Arrow key deletes row/column, <kbd>Ctrl</"
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow key</"
+"kbd> merges cell with neighboring cell"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:116-38
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Del</"
-"kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Del</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td.p:116-235
@@ -847,7 +764,6 @@ msgid "Insert endnote"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:127-71
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:93-66"
 msgid "Insert comment"
 msgstr ""
 
@@ -869,8 +785,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:133-82
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Enter</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Enter</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:134-70
@@ -887,23 +803,15 @@ msgid ""
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:136-139
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:102-134"
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Enter</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Enter</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:137-38
 msgid ""
-"Insert new paragraph without numbering inside a list. Does not work when the "
-"cursor is at the end of the list."
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:137-175
-msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:103-170"
-msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Enter</kbd>"
+"Insert new paragraph without numbering inside a list. Does not work when "
+"the cursor is at the end of the list."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h2:143-9
@@ -914,41 +822,16 @@ msgstr ""
 msgid "Moves the cursor to the first cell in the sheet (A1)."
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:145-118
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:4-113"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Home</kbd>"
-msgstr ""
-
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:146-38
 msgid "Moves the cursor to the last cell on the sheet that contains data."
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:146-131
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:5-126"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"End</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:147-38
 msgid "Moves the cursor to the first cell of the current row."
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:147-119
-#, fuzzy
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:6-114"
-msgid "Home"
-msgstr "آغازه"
-
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:148-38
 msgid "Moves the cursor to the last cell of the current row."
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:148-118
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:7-113"
-msgid "End"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:149-38
@@ -956,23 +839,9 @@ msgid ""
 "Selects cells from the current cell to the first cell of the current row."
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:149-138
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:8-133"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Home</kbd>"
-msgstr ""
-
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:150-38
 msgid ""
 "Selects cells from the current cell to the last cell of the current row."
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:150-137
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:9-132"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"End</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:151-38
@@ -983,8 +852,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:151-184
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Page Up</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Page Up</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:152-38
@@ -995,8 +864,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:152-188
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Page Down</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Page Down</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:153-38
@@ -1008,34 +877,34 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:153-265
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Left Arrow</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Left Arrow</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:154-38
 msgid ""
 "Moves the cursor to the right edge of the current data range. If the column "
-"to the right of the cell that contains the cursor is empty, the cursor moves "
-"to the next column to the right that contains data."
+"to the right of the cell that contains the cursor is empty, the cursor "
+"moves to the next column to the right that contains data."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:154-269
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Right Arrow</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Right Arrow</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:155-38
 msgid ""
-"Moves the cursor to the top edge of the current data range. If the row above "
-"the cell that contains the cursor is empty, the cursor moves up to the next "
-"row that contains data."
+"Moves the cursor to the top edge of the current data range. If the row "
+"above the cell that contains the cursor is empty, the cursor moves up to "
+"the next row that contains data."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:155-241
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Up Arrow</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Up Arrow</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:156-38
@@ -1047,8 +916,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:156-246
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Down Arrow</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Down Arrow</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:157-38
@@ -1057,9 +926,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:157-82
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Page "
-"Down</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Page Down</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:158-38
@@ -1068,9 +937,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:158-86
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Page "
-"Up</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Page Up</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:159-38
@@ -1083,9 +952,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:159-292
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Arrow</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:160-38
@@ -1094,8 +963,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:160-93
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Page Up</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Page Up</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:161-38
@@ -1104,8 +973,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:161-100
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Page Down</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Page Down</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:162-38
@@ -1117,23 +986,23 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:162-280
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Page "
-"Up</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Page Up</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:163-38
 msgid ""
-"Adds the next sheet to the current selection of sheets. If all the sheets in "
-"a spreadsheet are selected, this shortcut key combination only selects the "
-"next sheet. Makes the next sheet the current sheet."
+"Adds the next sheet to the current selection of sheets. If all the sheets "
+"in a spreadsheet are selected, this shortcut key combination only selects "
+"the next sheet. Makes the next sheet the current sheet."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:163-268
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Page "
-"Down</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Page Down</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:164-38
@@ -1142,8 +1011,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:164-111
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Space</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Space</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:165-38
@@ -1152,8 +1021,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:165-108
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Space</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Space</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:166-38
@@ -1162,37 +1031,23 @@ msgid ""
 "hide, move, and more)."
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:166-160
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:25-155"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"F10</kbd>"
-msgstr ""
-
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:167-38
 msgid ""
-"With a whole column or row selected, opens the matching column or row header "
-"context menu (insert, delete, width or height, hide, and more)."
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:167-205
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:26-200"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"F10</kbd>"
+"With a whole column or row selected, opens the matching column or row "
+"header context menu (insert, delete, width or height, hide, and more)."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:168-38
 msgid ""
 "where (*) is the multiplication sign on the numeric key pad. Selects the "
-"data range that contains the cursor. A range is a contiguous cell range that "
-"contains data and is bounded by empty row and columns."
+"data range that contains the cursor. A range is a contiguous cell range "
+"that contains data and is bounded by empty row and columns."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:168-269
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"*</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>*</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:169-38
@@ -1213,8 +1068,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:170-105
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Plus key</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Plus key</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:171-38
@@ -1223,42 +1078,12 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:171-110
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Minus key</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Minus key</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h2:175-9
 msgid "Cell formatting"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:177-59
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:36-54"
-msgid "Bold"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:178-61
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:37-56"
-msgid "Italic"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:179-64
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:38-59"
-msgid "Underline"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:180-64
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:39-59"
-msgid "Strikethrough"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:181-70
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:40-65"
-msgid "Remove direct formatting"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:182-71
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:41-66"
-msgid "Insert comment"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:183-38
@@ -1267,8 +1092,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:183-80
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"F1</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>F1</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:184-38
@@ -1277,44 +1102,12 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:184-74
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"D</kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:185-64
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:44-59"
-msgid "Select All"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:186-76
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:45-71"
-msgid "Align Center"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:187-64
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:46-59"
-msgid "Align Left"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:188-65
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:47-60"
-msgid "Align Right"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:189-65
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:48-60"
-msgid "Justify"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>D</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:190-38
 msgid "Set Optimal Column Width"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:190-89
-msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:49-84"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"3</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:191-74
@@ -1351,388 +1144,38 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:202-76
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-";</kbd> or <kbd>,</kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.h2:208-9
-msgctxt "html/cool-help.html+presentation-shortcuts.div.h2:2-4"
-msgid "Text formatting"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:210-59
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:4-54"
-msgid "Bold"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:211-61
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:5-56"
-msgid "Italic"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:212-64
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:6-59"
-msgid "Underline"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:213-64
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:7-59"
-msgid "Strikethrough"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:214-66
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:8-61"
-msgid "Superscript"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:215-64
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:9-59"
-msgid "Subscript"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:216-64
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:10-59"
-msgid "Select All"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.h2:220-9
-msgctxt "html/cool-help.html+presentation-shortcuts.div.h2:14-4"
-msgid "Paragraph formatting"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:222-76
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:16-71"
-msgid "Align Center"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:223-64
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:17-59"
-msgid "Align Left"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:224-65
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:18-60"
-msgid "Align Right"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:225-65
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:19-60"
-msgid "Justify"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>;"
+"</kbd> or <kbd>,</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:226-38
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:20-33"
 msgid "Demote list item (list item has to be selected)"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:226-112
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:20-107"
 msgid "Tab"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:227-38
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:21-33"
 msgid "Promote list item (list item has to be selected)"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:227-113
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:21-108"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Tab</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Tab</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h2:231-9
-msgctxt "html/cool-help.html+presentation-shortcuts.div.h2:25-4"
 msgid "Text selection and navigation in a textbox"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:233-64
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:27-59"
-msgid "Select All"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:234-38
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:28-33"
-msgid "Move cursor to the left"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:234-88
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:28-83"
-msgid "Arrow Left"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:235-38
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:29-33"
-msgid "Move cursor with selection to the left"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:235-103
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:29-98"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Left</kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:236-38
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:30-33"
-msgid "Go to beginning of a word"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:236-90
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:30-85"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Left</kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:237-38
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:31-33"
-msgid "Select to the left word by word"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:237-96
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:31-91"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
-"Left</kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:238-38
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:32-33"
-msgid "Move cursor to the right"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:238-89
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:32-84"
-msgid "Arrow Right"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:239-38
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:33-33"
-msgid "Move cursor with selection to the right"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:239-104
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:33-99"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Right</kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:240-38
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:34-33"
-msgid "Go to start of the next word"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:240-93
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:34-88"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Right</kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:241-38
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:35-33"
-msgid "Select to the right word by word"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:241-97
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:35-92"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
-"Right</kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:242-38
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:36-33"
-msgid "Move cursor up one line"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:242-88
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:36-83"
-msgid "Arrow Up"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:243-38
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:37-33"
-msgid "Select lines in upwards direction"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:243-98
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:37-93"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Up</kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:244-38
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:38-33"
-msgid "Move cursor to beginning of the previous paragraph"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:244-115
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:38-110"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Up</kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:245-38
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:39-33"
-msgid "Select to beginning of paragraph"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:245-97
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:39-92"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
-"Up</kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:246-38
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:40-33"
-msgid "Move cursor down one line"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:246-90
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:40-85"
-msgid "Arrow Down"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:247-38
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:41-33"
-msgid "Select lines in downwards direction"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:247-100
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:41-95"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Down</kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:248-38
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:42-33"
-msgid "Move cursor to beginning of the next paragraph"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:248-111
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:42-106"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Down</kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:249-38
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:43-33"
-msgid "Select to end of paragraph"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:249-91
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:43-86"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
-"Down</kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:250-38
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:44-33"
-msgid "Go to beginning of line"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:250-88
-#, fuzzy
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:44-83"
-msgid "Home"
-msgstr "آغازه"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:251-38
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:45-33"
-msgid "Go and select to the beginning of a line"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:251-105
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:45-100"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Home</kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:252-38
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:46-33"
-msgid "Go to start of document"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:252-88
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:46-83"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Home</kbd>"
-msgstr ""
-
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:253-38
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:47-33"
 msgid "Go and select text to start of textbox"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:253-103
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:47-98"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Home</"
-"kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:254-38
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:48-33"
-msgid "Go to end of line"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:254-82
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:48-77"
-msgid "End"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:255-38
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:49-33"
-msgid "Go and select to the end of a line"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:255-99
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:49-94"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"End</kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:256-38
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:50-33"
-msgid "Go to end of document"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:256-86
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:50-81"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"End</kbd>"
-msgstr ""
-
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:257-38
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:51-33"
 msgid "Go and select text to end of textbox"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:257-101
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:51-96"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>End</"
-"kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h2:261-9
@@ -1740,37 +1183,21 @@ msgid "Slide keyboard shortcuts"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:263-38
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:57-33"
 msgid ""
 "Escape current mode, i.e. from edit mode switch to object selection mode, "
 "from object selection mode switch to view mode."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:263-186
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:57-181"
 msgid "Esc"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:264-38
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:58-33"
 msgid "Select objects in the order in which they were created"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:264-119
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:58-114"
-msgid "Tab"
-msgstr ""
-
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:265-38
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:59-33"
 msgid "Select objects in the reverse order in which they were created"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:265-127
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:59-122"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Tab</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:266-38
@@ -1778,461 +1205,25 @@ msgid "Move to next text object on slide"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:266-98
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:60-93"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Enter</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>Enter</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:267-38
 msgid "Select all in slide"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:267-84
-msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:61-79"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"A</kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.h2:273-9
-msgctxt "html/cool-help.html+drawing-shortcuts.div.h2:2-0"
-msgid "Text formatting"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:275-59
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:4-50"
-msgid "Bold"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:276-61
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:5-52"
-msgid "Italic"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:277-64
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:6-55"
-msgid "Underline"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:278-64
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:7-55"
-msgid "Strikethrough"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:279-66
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:8-57"
-msgid "Superscript"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:280-64
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:9-55"
-msgid "Subscript"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:281-64
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:10-55"
-msgid "Select All"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.h2:285-9
-msgctxt "html/cool-help.html+drawing-shortcuts.div.h2:14-0"
-msgid "Paragraph formatting"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:287-76
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:16-67"
-msgid "Align Center"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:288-64
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:17-55"
-msgid "Align Left"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:289-65
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:18-56"
-msgid "Align Right"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:290-65
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:19-56"
-msgid "Justify"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:291-38
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:20-29"
-msgid "Demote list item (list item has to be selected)"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:291-112
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:20-103"
-msgid "Tab"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:292-38
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:21-29"
-msgid "Promote list item (list item has to be selected)"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:292-113
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:21-104"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Tab</kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.h2:296-9
-msgctxt "html/cool-help.html+drawing-shortcuts.div.h2:25-0"
-msgid "Text selection and navigation in a textbox"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:298-64
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:27-55"
-msgid "Select All"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:299-38
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:28-29"
-msgid "Move cursor to the left"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:299-88
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:28-79"
-msgid "Arrow Left"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:300-38
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:29-29"
-msgid "Move cursor with selection to the left"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:300-103
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:29-94"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Left</kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:301-38
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:30-29"
-msgid "Go to beginning of a word"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:301-90
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:30-81"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Left</kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:302-38
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:31-29"
-msgid "Select to the left word by word"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:302-96
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:31-87"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
-"Left</kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:303-38
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:32-29"
-msgid "Move cursor to the right"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:303-89
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:32-80"
-msgid "Arrow Right"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:304-38
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:33-29"
-msgid "Move cursor with selection to the right"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:304-104
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:33-95"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Right</kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:305-38
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:34-29"
-msgid "Go to start of the next word"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:305-93
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:34-84"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Right</kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:306-38
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:35-29"
-msgid "Select to the right word by word"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:306-97
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:35-88"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
-"Right</kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:307-38
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:36-29"
-msgid "Move cursor up one line"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:307-88
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:36-79"
-msgid "Arrow Up"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:308-38
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:37-29"
-msgid "Select lines in upwards direction"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:308-98
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:37-89"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Up</kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:309-38
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:38-29"
-msgid "Move cursor to beginning of the previous paragraph"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:309-115
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:38-106"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Up</kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:310-38
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:39-29"
-msgid "Select to beginning of paragraph"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:310-97
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:39-88"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
-"Up</kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:311-38
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:40-29"
-msgid "Move cursor down one line"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:311-90
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:40-81"
-msgid "Arrow Down"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:312-38
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:41-29"
-msgid "Select lines in downwards direction"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:312-100
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:41-91"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Down</kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:313-38
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:42-29"
-msgid "Move cursor to beginning of the next paragraph"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:313-111
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:42-102"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Arrow Down</kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:314-38
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:43-29"
-msgid "Select to end of paragraph"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:314-91
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:43-82"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
-"Down</kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:315-38
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:44-29"
-msgid "Go to beginning of line"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:315-88
-#, fuzzy
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:44-79"
-msgid "Home"
-msgstr "آغازه"
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:316-38
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:45-29"
-msgid "Go and select to the beginning of a line"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:316-105
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:45-96"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Home</kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:317-38
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:46-29"
-msgid "Go to start of document"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:317-88
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:46-79"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Home</kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:318-38
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:47-29"
-msgid "Go and select text to start of textbox"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:318-103
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:47-94"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Home</"
-"kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:319-38
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:48-29"
-msgid "Go to end of line"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:319-82
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:48-73"
-msgid "End"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:320-38
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:49-29"
-msgid "Go and select to the end of a line"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:320-99
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:49-90"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"End</kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:321-38
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:50-29"
-msgid "Go to end of document"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:321-86
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:50-77"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"End</kbd>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:322-38
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:51-29"
-msgid "Go and select text to end of textbox"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:322-101
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:51-92"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>End</"
-"kbd>"
-msgstr ""
-
 #: html/cool-help.html%2Bdiv.div.div.h2:326-9
 msgid "Draw page keyboard shortcuts"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:328-38
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:57-29"
-msgid ""
-"Escape current mode, i.e. from edit mode switch to object selection mode, "
-"from object selection mode switch to view mode."
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:328-186
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:57-177"
-msgid "Esc"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:329-38
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:58-29"
-msgid "Select objects in the order in which they were created"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:329-119
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:58-110"
-msgid "Tab"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:330-38
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:59-29"
-msgid "Select objects in the reverse order in which they were created"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:330-127
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:59-118"
-msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Tab</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:331-38
 msgid "Move to next text object on drawing page"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:331-105
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:60-96"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"Enter</kbd>"
-msgstr ""
-
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:332-38
 msgid "Select all in drawing page"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:332-91
-msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:61-82"
-msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
-"A</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.h2:338-5
@@ -2240,122 +1231,90 @@ msgid "<span class=\"productname\">{productname}</span> Help"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:341-13
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:4-12"
 msgid "Collaborative editing"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:342-13
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:5-12"
 msgid "<span class=\"productname\">{productname}</span> user interface"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:343-13
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:6-12"
 msgid "Opening, closing, saving, printing and downloading documents"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:344-13
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:7-12"
 msgid "Opening, closing, saving and printing documents"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:345-13
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:8-12"
 msgid "Editing documents"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:346-13
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:9-12"
 msgid "Advanced features"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:348-13
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:11-12"
 msgid "<span class=\"productname\">{productname}</span> spreadsheets"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:349-13
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:12-12"
 msgid "Editing spreadsheets"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:350-13
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:13-12"
 msgid "Formulas"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:351-13
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:14-12"
 msgid "Formatting spreadsheets"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.nav.ul.li:352-13
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:15-12"
-msgid "Advanced features"
-msgstr ""
-
 #: html/cool-help.html%2Bdiv.nav.ul.li:353-13
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:16-12"
 msgid "Spreadsheets"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:355-13
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:18-12"
 msgid "<span class=\"productname\">{productname}</span> text documents"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:356-13
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:19-12"
 msgid "Editing text documents"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:357-13
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:20-12"
 msgid "Context menus"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:358-13
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:21-12"
 msgid "Advanced text document editor features"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:359-13
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:22-12"
 msgid "Text documents"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:361-13
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:24-12"
 msgid "<span class=\"productname\">{productname}</span> presentations"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:362-13
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:25-12"
 msgid "Editing presentations"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:363-13
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:26-12"
 msgid "Slide show"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:364-13
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:27-12"
 msgid "Slide pane"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.nav.ul.li:365-13
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:28-12"
-msgid "Advanced features"
-msgstr ""
-
 #: html/cool-help.html%2Bdiv.nav.ul.li:366-13
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:29-12"
 msgid "Presentations"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:368-13
-msgctxt "html/cool-help.html+online-help-content.nav.ul.li:31-12"
 msgid "Frequently Asked Questions"
 msgstr ""
 
@@ -2364,14 +1323,9 @@ msgid ""
 "<span class=\"productname\">{productname}</span> allows you to create and "
 "edit typical office documents, that is text documents, spreadsheets and "
 "presentations, <span class=\"webBasedCOOLOnly\">directly in your browser,</"
-"span> in a simple and straight-forward way. <span class=\"webBasedCOOLOnly\">"
-"You can work alone on a document, or collaboratively as part of a team.</"
-"span>"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.h3:383-5
-msgctxt "html/cool-help.html:1327"
-msgid "Collaborative editing"
+"span> in a simple and straight-forward way. <span "
+"class=\"webBasedCOOLOnly\">You can work alone on a document, or "
+"collaboratively as part of a team.</span>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:386-7
@@ -2393,30 +1347,25 @@ msgid ""
 "notification in the footer when a new user enters or when a user leaves."
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.h3:393-5
-msgctxt "html/cool-help.html:1333"
-msgid "<span class=\"productname\">{productname}</span> user interface"
-msgstr ""
-
 #: html/cool-help.html%2Bdiv.div.div.p:395-7
 msgid ""
-"<span class=\"webBasedCOOLOnly\"> <span class=\"productname\">{productname}</"
-"span> uses modern browser resources to adapt the user interface to the size "
-"of the viewing area, including small screens found in mobile devices.</span> "
-"The interface is composed of:"
+"<span class=\"webBasedCOOLOnly\"> <span class=\"productname\">{productname}"
+"</span> uses modern browser resources to adapt the user interface to the "
+"size of the viewing area, including small screens found in mobile devices.</"
+"span> The interface is composed of:"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:402-5
 msgid ""
-"<span class=\"def\">The document area:</span> The application area shows the "
-"document contents, either spreadsheets, presentations or text documents."
+"<span class=\"def\">The document area:</span> The application area shows "
+"the document contents, either spreadsheets, presentations or text documents."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:405-5
 msgid ""
-"<span class=\"def\">The tabs:</span> The commands are grouped on tabs at the "
-"top: <span class=\"ui\">File</span>, <span class=\"ui\">Home</span>, <span "
-"class=\"ui\">Insert</span>, <span class=\"ui\">Review</span>, <span "
+"<span class=\"def\">The tabs:</span> The commands are grouped on tabs at "
+"the top: <span class=\"ui\">File</span>, <span class=\"ui\">Home</span>, "
+"<span class=\"ui\">Insert</span>, <span class=\"ui\">Review</span>, <span "
 "class=\"ui\">View</span> and others, depending on the document type. Click "
 "the selected tab again to collapse the tab bar and gain space for the "
 "document. Click any tab to expand it again."
@@ -2464,8 +1413,8 @@ msgstr ""
 msgid ""
 "<span class=\"def\">The zoom bar:</span> The zoom bar includes buttons to "
 "reset zoom to 100%, zoom out and zoom in. The zoom applies to the document "
-"area, the user interface is not affected. The current level of zoom is shown "
-"in this area."
+"area, the user interface is not affected. The current level of zoom is "
+"shown in this area."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:424-5
@@ -2478,11 +1427,6 @@ msgstr ""
 msgid "Using the browser zoom affects the document and user interface areas."
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.h3:429-5
-msgctxt "html/cool-help.html:1335A"
-msgid "Opening, closing, saving, printing and downloading documents"
-msgstr ""
-
 #: html/cool-help.html%2Bdiv.div.p:430-5
 msgid ""
 "Your documents are stored and managed in the cloud storage that is "
@@ -2491,24 +1435,25 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:431-30
 msgid ""
-"To download a document download it from the <span class=\"productname\">"
-"{productname}</span> application’s <span class=\"ui\">File</span> menu. The "
-"download formats available depends on the application. All applications "
-"exports documents in PDF format."
+"To download a document download it from the <span "
+"class=\"productname\">{productname}</span> application’s <span "
+"class=\"ui\">File</span> menu. The download formats available depends on "
+"the application. All applications exports documents in PDF format."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:432-30
 msgid ""
-"To open document, click on the file to open the <span class=\"productname\">"
-"{productname}</span> module associated to the document format."
+"To open document, click on the file to open the <span "
+"class=\"productname\">{productname}</span> module associated to the "
+"document format."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:433-30
 msgid ""
 "Documents in <span class=\"productname\">{productname}</span> save "
 "automatically, but if you are concerned that a document is synchronized as "
-"quickly as possible you can also force saving using the <span class=\"ui\">"
-"File</span> menu’s <span class=\"ui\">Save</span> entry."
+"quickly as possible you can also force saving using the <span "
+"class=\"ui\">File</span> menu’s <span class=\"ui\">Save</span> entry."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:434-30
@@ -2519,29 +1464,24 @@ msgid ""
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:435-30
-msgctxt "html/cool-help.html+online-help-content.div.div.p:98-29"
 msgid ""
 "When closing a document, it is automatically saved if it has been changed."
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.h3:439-5
-msgctxt "html/cool-help.html:1335B"
-msgid "Opening, closing, saving and printing documents"
-msgstr ""
-
 #: html/cool-help.html%2Bdiv.div.div.p:441-7
 msgid ""
-"To open a document, either open it in <span class=\"productname\">"
-"{productname}</span> from your platform's file manager or use <span "
-"class=\"ui\">Open</span> on the <span class=\"ui\">File</span> tab."
+"To open a document, either open it in <span "
+"class=\"productname\">{productname}</span> from your platform's file "
+"manager or use <span class=\"ui\">Open</span> on the <span "
+"class=\"ui\">File</span> tab."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:447-7
 msgid ""
 "An existing document opens in view mode, so that you can read it without "
 "changing it by accident. To start editing, click the edit button (the "
-"pencil) in the bottom right corner. New documents and documents created from "
-"a template open ready to edit."
+"pencil) in the bottom right corner. New documents and documents created "
+"from a template open ready to edit."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:452-7
@@ -2568,17 +1508,6 @@ msgid ""
 "class=\"ui\">File</span> tab."
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.p:472-7
-msgctxt "html/cool-help.html+online-help-content.div.div.p:135-6"
-msgid ""
-"When closing a document, it is automatically saved if it has been changed."
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.h3:478-5
-msgctxt "html/cool-help.html:1337"
-msgid "Editing documents"
-msgstr ""
-
 #: html/cool-help.html%2Bdiv.div.p:479-5
 msgid ""
 "Document editing should be familiar to everyone that has used an office "
@@ -2595,8 +1524,8 @@ msgid ""
 "content, using the keyboard shortcuts (<kbd>Ctrl</kbd><span class=\"kbd--"
 "plus\" aria-hidden=\"true\">+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span "
 "class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</"
-"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>). On "
-"Android or iOS selecting text by double tapping, and using a long-tap to "
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>). "
+"On Android or iOS selecting text by double tapping, and using a long-tap to "
 "access copy/cut/paste via the context menu is required."
 msgstr ""
 
@@ -2613,9 +1542,9 @@ msgid ""
 "When you copy a selection that contains images or other objects, a <span "
 "class=\"ui\">Download Selection</span> widget pops up in the bottom-right "
 "corner. Press <span class=\"ui\">Download</span>, then copy again, to make "
-"the content available to applications outside <span class=\"productname\">"
-"{productname}</span>. This step also converts complex object types into "
-"static images."
+"the content available to applications outside <span "
+"class=\"productname\">{productname}</span>. This step also converts complex "
+"object types into static images."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:487-5
@@ -2624,17 +1553,17 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:488-5
 msgid ""
-"When multiple people edit the same document concurrently, it is possible for "
-"their changes to conflict and this can cause some confusion. The Document "
-"Repair function allows users to undo other editor’s changes to the document "
-"to a previous state."
+"When multiple people edit the same document concurrently, it is possible "
+"for their changes to conflict and this can cause some confusion. The "
+"Document Repair function allows users to undo other editor’s changes to the "
+"document to a previous state."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:489-5
 msgid ""
 "<span class=\"ui\">Repair</span> on the <span class=\"ui\">File</span> tab "
-"lists the recent changes to the document and lets you take the document back "
-"to an earlier state."
+"lists the recent changes to the document and lets you take the document "
+"back to an earlier state."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:490-5
@@ -2663,10 +1592,11 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:496-5
 msgid ""
-"When <span class=\"productname\">{productname}</span> detects that there has "
-"not been any activity in the browser for a while, it puts the document in an "
-"“Idle” state. The document is shown with a transparent gray overlay, with "
-"the message “Idle document – please click to reload and resume editing”."
+"When <span class=\"productname\">{productname}</span> detects that there "
+"has not been any activity in the browser for a while, it puts the document "
+"in an “Idle” state. The document is shown with a transparent gray overlay, "
+"with the message “Idle document – please click to reload and resume "
+"editing”."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:497-57
@@ -2696,9 +1626,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:503-5
 msgid ""
-"You can paste as unformatted text with the keyboard shortcut: <kbd>Ctrl</kbd>"
-"<span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</kbd><span "
-"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>"
+"You can paste as unformatted text with the keyboard shortcut: <kbd>Ctrl</"
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</"
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:504-5
@@ -2718,11 +1648,6 @@ msgstr ""
 msgid ""
 "When you have internal cut or copied content, you can paste this content "
 "using the context menu."
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.h3:510-3
-msgctxt "html/cool-help.html:1338"
-msgid "Advanced features"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:512-5
@@ -2779,8 +1704,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:526-28
 msgid ""
-"<span class=\"def\">Data series formatting:</span> Open the context menu and "
-"choose <span class=\"ui\">Format data series</span>."
+"<span class=\"def\">Data series formatting:</span> Open the context menu "
+"and choose <span class=\"ui\">Format data series</span>."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:528-5
@@ -2796,23 +1721,23 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:530-5
 msgid ""
-"<span class=\"def\">Insert image:</span> Clicking on the <span class=\"ui\">"
-"Insert image</span> icon allows you to choose an image from the cloud "
-"storage's folders and shares."
+"<span class=\"def\">Insert image:</span> Clicking on the <span "
+"class=\"ui\">Insert image</span> icon allows you to choose an image from "
+"the cloud storage's folders and shares."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:531-5
 msgid ""
-"<span class=\"def\">Insert local image:</span> Choose <span class=\"ui\">"
-"Insert</span> → <span class=\"ui\">Image</span> to pick an image from your "
-"computer and insert it into the document."
+"<span class=\"def\">Insert local image:</span> Choose <span "
+"class=\"ui\">Insert</span> → <span class=\"ui\">Image</span> to pick an "
+"image from your computer and insert it into the document."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:532-5
 msgid ""
 "Images can be resized, rotated and anchored. Text can be wrapped around the "
-"image. Select the image and open the context menu. Use the images handles to "
-"resize the image with the mouse."
+"image. Select the image and open the context menu. Use the images handles "
+"to resize the image with the mouse."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:535-5
@@ -2856,18 +1781,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:544-5
 msgid ""
-"To systematically spell-check the whole document use <span class=\"ui\">"
-"Spelling</span> on the <span class=\"ui\">Review</span> tab."
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.h3:548-5
-msgctxt "html/cool-help.html:1359"
-msgid "<span class=\"productname\">{productname}</span> spreadsheets"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.h3:550-5
-msgctxt "html/cool-help.html:1361"
-msgid "Editing spreadsheets"
+"To systematically spell-check the whole document use <span "
+"class=\"ui\">Spelling</span> on the <span class=\"ui\">Review</span> tab."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:551-30
@@ -2882,11 +1797,6 @@ msgid ""
 "cell below for easy further data entry."
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.h3:554-5
-msgctxt "html/cool-help.html:1363"
-msgid "Formulas"
-msgstr ""
-
 #: html/cool-help.html%2Bdiv.div.div.div.p:556-5
 msgid ""
 "Formulas are entered in the formula bar. Enter '=' and insert the formula."
@@ -2898,22 +1808,17 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:558-50
 msgid ""
-"Formula bar showing cell reference B1, function wizard icon, and the formula "
-"=SIN(PI()*A1/10)"
+"Formula bar showing cell reference B1, function wizard icon, and the "
+"formula =SIN(PI()*A1/10)"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:559-5
 msgid ""
 "The formula language should be extremely familiar to any spreadsheet user, "
-"and is specified in great detail in the <a href=\"https://www.oasis-open.org/"
-"committees/download.php/16826/openformula-spec-20060221.html\" "
+"and is specified in great detail in the <a href=\"https://www.oasis-"
+"open.org/committees/download.php/16826/openformula-spec-20060221.html\" "
 "target=\"_blank\" rel=\"noopener noreferrer\">OASIS OpenFormula "
 "specification</a>."
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.h3:563-5
-msgctxt "html/cool-help.html:1367"
-msgid "Formatting spreadsheets"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:565-5
@@ -2921,21 +1826,16 @@ msgid ""
 "<span class=\"def\">Direct formatting:</span> You can format spreadsheet "
 "cells, columns, rows and sheets by formatting directly from the menus, "
 "toolbar or context menus. Direct formatting applies only to the current "
-"object selected. To format a cell either use the menu or hit <kbd>Ctrl</kbd>"
-"<span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>1</kbd>. The "
-"dialog allows complex and custom number formatting, as well as font, complex "
-"border, background, cell protection and other options."
+"object selected. To format a cell either use the menu or hit <kbd>Ctrl</"
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>1</kbd>. "
+"The dialog allows complex and custom number formatting, as well as font, "
+"complex border, background, cell protection and other options."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:566-51
 msgid ""
 "Format Cells dialog on the Numbers tab with category list, format options, "
 "decimal places, and format code"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.h3:570-5
-msgctxt "html/cool-help.html:1371"
-msgid "Advanced features"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:571-30
@@ -2949,9 +1849,9 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.div.p:572-30
 msgid ""
 "<span class=\"def\">Filtering data:</span> Filters and advanced filters "
-"allow you to work on certain filtered rows (records) of a data range. In the "
-"spreadsheets in <span class=\"productname\">{productname}</span> there are "
-"various possibilities for applying filters."
+"allow you to work on certain filtered rows (records) of a data range. In "
+"the spreadsheets in <span class=\"productname\">{productname}</span> there "
+"are various possibilities for applying filters."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:574-7
@@ -2962,16 +1862,16 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li.div.img[alt]:576-55
 msgid ""
-"AutoFilter dropdown menu on a spreadsheet column with sort, filter by color, "
-"filter by condition, and checkboxes for individual values"
+"AutoFilter dropdown menu on a spreadsheet column with sort, filter by "
+"color, filter by condition, and checkboxes for individual values"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:578-7
 msgid ""
-"In the <span class=\"ui\">Standard Filter</span> dialog, you can also define "
-"ranges which contain the values in particular data fields. You can use the "
-"standard filter to connect the conditions with either a logical AND or a "
-"logical OR operator."
+"In the <span class=\"ui\">Standard Filter</span> dialog, you can also "
+"define ranges which contain the values in particular data fields. You can "
+"use the standard filter to connect the conditions with either a logical AND "
+"or a logical OR operator."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:579-7
@@ -2983,9 +1883,10 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:583-5
 msgid ""
-"<span class=\"def\">Outlining:</span> You can create an outline of your data "
-"and group rows and columns together so that you can collapse and expand the "
-"groups with a single click making it easy to represent hierarchical data."
+"<span class=\"def\">Outlining:</span> You can create an outline of your "
+"data and group rows and columns together so that you can collapse and "
+"expand the groups with a single click making it easy to represent "
+"hierarchical data."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:584-49
@@ -3023,8 +1924,8 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:594-7
 msgid ""
 "Use the <span class=\"ui\">Input Help</span> and <span class=\"ui\">Error "
-"Alert</span> tabs to enhance the user interactions. Click <span class=\"ui\">"
-"OK</span> to close the dialog."
+"Alert</span> tabs to enhance the user interactions. Click <span "
+"class=\"ui\">OK</span> to close the dialog."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:597-56
@@ -3069,37 +1970,22 @@ msgid ""
 "lights, stars, smiley faces, and bar chart symbol sets"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.h3:612-5
-msgctxt "html/cool-help.html:1373"
-msgid "<span class=\"productname\">{productname}</span> text documents"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.h3:614-5
-msgctxt "html/cool-help.html:1375"
-msgid "Editing text documents"
-msgstr ""
-
 #: html/cool-help.html%2Bdiv.div.div.div.p:615-30
 msgid ""
-"<span class=\"productname\">{productname}</span> edits text documents in the "
-"same way you edit a desktop document. It provides a What You See Is What You "
-"Get (WYSIWYG) layout – that conveniently lays out the document as it will be "
-"printed. Operations like typing text, cut, copy and pasting contents, "
-"selecting text, inserting, resizing, anchoring images, adding and handling "
-"tables and charts, are similar to a desktop word processor. Use the "
-"keyboard, menus and toolbars to interact with your document."
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.h3:618-5
-msgctxt "html/cool-help.html:1377"
-msgid "Context menus"
+"<span class=\"productname\">{productname}</span> edits text documents in "
+"the same way you edit a desktop document. It provides a What You See Is "
+"What You Get (WYSIWYG) layout – that conveniently lays out the document as "
+"it will be printed. Operations like typing text, cut, copy and pasting "
+"contents, selecting text, inserting, resizing, anchoring images, adding and "
+"handling tables and charts, are similar to a desktop word processor. Use "
+"the keyboard, menus and toolbars to interact with your document."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:619-30
 msgid ""
-"Context menus are available on clicking the right mouse button. The commands "
-"available in the context menu are related - not extensively - to the "
-"underlying object in the document."
+"Context menus are available on clicking the right mouse button. The "
+"commands available in the context menu are related - not extensively - to "
+"the underlying object in the document."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h3:622-5
@@ -3109,21 +1995,21 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.div.p:624-5
 msgid ""
 "<span class=\"productname\">{productname}</span> supports modern techniques "
-"for paragraph formatting through styles. A style is a set of text properties "
-"(font, color, background and many more) labeled with a name, the style name. "
-"Use a style to apply the same set of properties to many paragraphs in the "
-"document and produce a uniform, professional look. Also, if you change one "
-"of the style formatting properties, all paragraphs with the same style "
-"change formatting as well, simplifying the effort of formatting many "
-"paragraphs individually."
+"for paragraph formatting through styles. A style is a set of text "
+"properties (font, color, background and many more) labeled with a name, the "
+"style name. Use a style to apply the same set of properties to many "
+"paragraphs in the document and produce a uniform, professional look. Also, "
+"if you change one of the style formatting properties, all paragraphs with "
+"the same style change formatting as well, simplifying the effort of "
+"formatting many paragraphs individually."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:625-5
 msgid ""
 "In contrast, direct formatting applies formatting to selected excerpts of "
-"the document contents. On a long document, direct formatting must be applied "
-"in every text excerpt, turning text formatting a long task, subject to "
-"errors and delays."
+"the document contents. On a long document, direct formatting must be "
+"applied in every text excerpt, turning text formatting a long task, subject "
+"to errors and delays."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:627-30
@@ -3135,10 +2021,10 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:629-5
 msgid ""
-"<span class=\"def\">Style formatting:</span> <span class=\"productname\">"
-"{productname}</span> supports paragraph styles. You can apply an existing "
-"paragraph style to a paragraph. Select the style in the style list on the "
-"<span class=\"ui\">Home</span> tab."
+"<span class=\"def\">Style formatting:</span> <span "
+"class=\"productname\">{productname}</span> supports paragraph styles. You "
+"can apply an existing paragraph style to a paragraph. Select the style in "
+"the style list on the <span class=\"ui\">Home</span> tab."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:630-56
@@ -3147,35 +2033,30 @@ msgid ""
 "spacing, and line spacing, and a preview on the right"
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.h3:634-5
-msgctxt "html/cool-help.html:1383"
-msgid "Advanced text document editor features"
-msgstr ""
-
 #: html/cool-help.html%2Bdiv.div.div.div.h4:636-5
 msgid "Handling Tables"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:637-5
 msgid ""
-"Insert tables with <span class=\"ui\">Insert</span> → <span class=\"ui\">"
-"Table</span>. Select the initial number of rows and columns. Add rows and "
-"columns with the cell context menu. Merge cells from the <span class=\"ui\">"
-"Table</span> tab. The default paragraph style inside cells is “Table contents"
-"”."
+"Insert tables with <span class=\"ui\">Insert</span> → <span "
+"class=\"ui\">Table</span>. Select the initial number of rows and columns. "
+"Add rows and columns with the cell context menu. Merge cells from the <span "
+"class=\"ui\">Table</span> tab. The default paragraph style inside cells is "
+"“Table contents”."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:638-52
 msgid ""
-"Insert Table picker showing a grid to select the number of rows and columns, "
-"currently showing 5 by 3"
+"Insert Table picker showing a grid to select the number of rows and "
+"columns, currently showing 5 by 3"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:641-5
 msgid ""
 "<span class=\"def\">Formatting cells:</span> Click in the cell or range of "
-"cells, open the context menu and choose <span class=\"ui\">Table Properties</"
-"span>. Fine tune the table with the properties dialog."
+"cells, open the context menu and choose <span class=\"ui\">Table "
+"Properties</span>. Fine tune the table with the properties dialog."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:644-5
@@ -3185,12 +2066,11 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.div.p:645-5
 msgid ""
 "When you turn on Track Changes, <span class=\"productname\">{productname}</"
-"span> marks up new changes made to the document. Select this option again to "
-"turn it off."
+"span> marks up new changes made to the document. Select this option again "
+"to turn it off."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:646-61
-msgctxt "html/cool-help.html+help-track-changes-comment.img:0-56[alt]"
 msgid ""
 "Tracked change shown as a comment box beside the document with author name, "
 "date, and change description"
@@ -3215,8 +2095,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:652-5
 msgid ""
-"<span class=\"def\">Formatting marks:</span> Paragraph, page and unbreakable "
-"spaces are shown as marks to assist text alignment, editing and formatting."
+"<span class=\"def\">Formatting marks:</span> Paragraph, page and "
+"unbreakable spaces are shown as marks to assist text alignment, editing and "
+"formatting."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:653-5
@@ -3244,48 +2125,28 @@ msgid ""
 "are supported."
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.h3:661-5
-msgctxt "html/cool-help.html:1391"
-msgid "<span class=\"productname\">{productname}</span> presentations"
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.h3:663-5
-msgctxt "html/cool-help.html:1393"
-msgid "Editing presentations"
-msgstr ""
-
 #: html/cool-help.html%2Bdiv.div.div.div.p:664-30
 msgid ""
-"<span class=\"productname\">{productname}</span> Impress edits presentations "
-"in a way that should be familiar to people. Operations like typing text, "
-"cut, copy and pasting contents, selecting text, inserting, resizing, "
-"anchoring images, adding and handling tables, are similar to a desktop "
-"presentation application. Use the keyboard, menus and toolbars to perform "
-"actions in your document."
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.h3:667-5
-msgctxt "html/cool-help.html:1395"
-msgid "Slide show"
+"<span class=\"productname\">{productname}</span> Impress edits "
+"presentations in a way that should be familiar to people. Operations like "
+"typing text, cut, copy and pasting contents, selecting text, inserting, "
+"resizing, anchoring images, adding and handling tables, are similar to a "
+"desktop presentation application. Use the keyboard, menus and toolbars to "
+"perform actions in your document."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:669-5
 msgid ""
-"<span class=\"productname\">{productname}</span> displays presentation slide "
-"shows, including a subset of slide transitions and object animations. Choose "
-"the slide show from the menu or click on the icon in the bottom left toolbar "
-"in the slide pane."
+"<span class=\"productname\">{productname}</span> displays presentation "
+"slide shows, including a subset of slide transitions and object animations. "
+"Choose the slide show from the menu or click on the icon in the bottom left "
+"toolbar in the slide pane."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:670-5
 msgid ""
-"To exit a <span class=\"productname\">{productname}</span> slide show, press "
-"the <kbd>Esc</kbd> key to return to the presentation edit mode."
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.h3:674-5
-msgctxt "html/cool-help.html:1397"
-msgid "Slide pane"
+"To exit a <span class=\"productname\">{productname}</span> slide show, "
+"press the <kbd>Esc</kbd> key to return to the presentation edit mode."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:676-5
@@ -3300,16 +2161,11 @@ msgid ""
 "duplicate or delete the current slide."
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.h3:681-5
-msgctxt "html/cool-help.html:1401"
-msgid "Advanced features"
-msgstr ""
-
 #: html/cool-help.html%2Bdiv.div.div.div.p:683-5
 msgid ""
-"<span class=\"def\">Slide layouts:</span> <span class=\"productname\">"
-"{productname}</span> Impress lets you change the slide layout. Select the "
-"desired slide layout in the drop-down layout list."
+"<span class=\"def\">Slide layouts:</span> <span "
+"class=\"productname\">{productname}</span> Impress lets you change the "
+"slide layout. Select the desired slide layout in the drop-down layout list."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:684-53
@@ -3326,17 +2182,18 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:687-30
 msgid ""
-"<span class=\"def\">Slide transitions:</span> <span class=\"productname\">"
-"{productname}</span> Impress provides visual effects when displaying a new "
-"slide in the slide show. Slide transitions are property of the slide, use "
-"the side bar to set the slide transition when in edit mode."
+"<span class=\"def\">Slide transitions:</span> <span "
+"class=\"productname\">{productname}</span> Impress provides visual effects "
+"when displaying a new slide in the slide show. Slide transitions are "
+"property of the slide, use the side bar to set the slide transition when in "
+"edit mode."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:688-30
 msgid ""
-"<span class=\"def\">Object animation:</span> Individual objects in the slide "
-"can have animations. Use the side bar to configure the slide transition for "
-"a selected object or set of objects."
+"<span class=\"def\">Object animation:</span> Individual objects in the "
+"slide can have animations. Use the side bar to configure the slide "
+"transition for a selected object or set of objects."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:689-30
@@ -3345,15 +2202,10 @@ msgid ""
 "the sidebar to select the table theme."
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.h3:693-5
-msgctxt "html/cool-help.html:1403"
-msgid "Frequently Asked Questions"
-msgstr ""
-
 #: html/cool-help.html%2Bdiv.div.div.h4:695-5
 msgid ""
-"What are the document file formats supported by <span class=\"productname\">"
-"{productname}</span>?"
+"What are the document file formats supported by <span "
+"class=\"productname\">{productname}</span>?"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:696-5
@@ -3404,8 +2256,9 @@ msgstr ""
 msgid ""
 "<span class=\"productname\">{productname}</span> saves the document in the "
 "background regularly, you can't just close without saving it. To abandon "
-"your changes, you must either undo them, or use the <span class=\"ui\">"
-"Revision History </span> in the <span class=\"ui\">File</span> menu."
+"your changes, you must either undo them, or use the <span "
+"class=\"ui\">Revision History </span> in the <span class=\"ui\">File</span> "
+"menu."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:714-5
@@ -3424,8 +2277,8 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.p:718-5
 msgid ""
 "Yes. <span class=\"productname\">{productname}</span> opens password-"
-"protected documents, but it is necessary to supply the password in the “"
-"Enter password” prompt at load time."
+"protected documents, but it is necessary to supply the password in the "
+"“Enter password” prompt at load time."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:721-5
@@ -3434,9 +2287,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:722-5
 msgid ""
-"Choose <span class=\"ui\">Review</span> → <span class=\"ui\">Language</span> "
-"and select the language for the whole document. Optionally you can set "
-"languages for the selected text and for the current paragraph."
+"Choose <span class=\"ui\">Review</span> → <span class=\"ui\">Language</"
+"span> and select the language for the whole document. Optionally you can "
+"set languages for the selected text and for the current paragraph."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:725-5
@@ -3445,8 +2298,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:726-5
 msgid ""
-"On the <span class=\"ui\">Review</span> tab, open <span class=\"ui\">"
-"Spelling</span> and uncheck <span class=\"ui\">Auto Spell Check</span>."
+"On the <span class=\"ui\">Review</span> tab, open <span "
+"class=\"ui\">Spelling</span> and uncheck <span class=\"ui\">Auto Spell "
+"Check</span>."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:729-5
@@ -3455,8 +2309,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:730-5
 msgid ""
-"Grammar errors in the text are marked with the blue wavy underline. Click on "
-"the underlined text with the right mouse button to open a menu with "
+"Grammar errors in the text are marked with the blue wavy underline. Click "
+"on the underlined text with the right mouse button to open a menu with "
 "suggestions to correct the grammar error and the offending grammar rules. "
 "Select the right suggestion to change the text."
 msgstr ""
@@ -3480,21 +2334,16 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:738-5
 msgid ""
-"What are the blue <span class=\"blue\">¶</span> symbols and how can I remove "
-"them from my text document?"
+"What are the blue <span class=\"blue\">¶</span> symbols and how can I "
+"remove them from my text document?"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:739-5
 msgid ""
-"The <span class=\"blue\">¶</span> symbol is a formatting mark. It is used to "
-"help text alignment and editing and is not printed. To toggle it in the "
-"document display, choose <span class=\"ui\">View</span> → <span class=\"ui\">"
-"Formatting Marks</span>."
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.h3:744-5
-msgctxt "html/cool-help.html:1407"
-msgid "Text documents"
+"The <span class=\"blue\">¶</span> symbol is a formatting mark. It is used "
+"to help text alignment and editing and is not printed. To toggle it in the "
+"document display, choose <span class=\"ui\">View</span> → <span "
+"class=\"ui\">Formatting Marks</span>."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:746-5
@@ -3504,8 +2353,8 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.div.p:747-5
 msgid ""
 "Word count is available in <span class=\"ui\">Review</span> → <span "
-"class=\"ui\">Word Count</span>. A dialog shows word counts for selection and "
-"for the whole document."
+"class=\"ui\">Word Count</span>. A dialog shows word counts for selection "
+"and for the whole document."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:748-50
@@ -3551,8 +2400,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:760-7
 msgid ""
-"You can either browse the characters displayed with the drop lists or type a "
-"search key in the <span class=\"ui\">Search</span> box. If you know the "
+"You can either browse the characters displayed with the drop lists or type "
+"a search key in the <span class=\"ui\">Search</span> box. If you know the "
 "Unicode numeric code of the special character, enter in the boxes on the "
 "right."
 msgstr ""
@@ -3572,8 +2421,8 @@ msgid ""
 "You have the Track Changes feature enabled for the document. Track Changes "
 "records all changes in the text and shows the edits for later revision. "
 "Useful for marking changes in text and spreadsheets. Track changes are "
-"enabled choosing <span class=\"ui\">Review</span> → <span class=\"ui\">"
-"Record</span>."
+"enabled choosing <span class=\"ui\">Review</span> → <span "
+"class=\"ui\">Record</span>."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:767-5
@@ -3597,13 +2446,6 @@ msgstr ""
 msgid "Changes are displayed as comment in the right of the document area."
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:774-61
-msgctxt "html/cool-help.html+help-track-changes-comment:774-5.img:0-56[alt]"
-msgid ""
-"Tracked change shown as a comment box beside the document with author name, "
-"date, and change description"
-msgstr ""
-
 #: html/cool-help.html%2Bdiv.div.div.div.p:775-5
 msgid ""
 "The color assigned to the changes depends on the user that changes the "
@@ -3622,18 +2464,19 @@ msgstr ""
 msgid ""
 "Changes can be accepted or rejected. To accept or reject changes, click on "
 "the corresponding icons in the comment box on the right of the document. "
-"Alternatively, choose <span class=\"ui\">Review</span> → <span class=\"ui\">"
-"Accept</span> or <span class=\"ui\">Reject</span>. Furthermore, if you need "
-"to filter changes before accepting or rejecting, choose <span class=\"ui\">"
-"Review</span> → <span class=\"ui\">Accept</span> → <span class=\"ui\">"
-"Manage</span>. A dialog shows a list of all tracked changes. Use the dialog "
-"buttons accordingly."
+"Alternatively, choose <span class=\"ui\">Review</span> → <span "
+"class=\"ui\">Accept</span> or <span class=\"ui\">Reject</span>. "
+"Furthermore, if you need to filter changes before accepting or rejecting, "
+"choose <span class=\"ui\">Review</span> → <span class=\"ui\">Accept</span> "
+"→ <span class=\"ui\">Manage</span>. A dialog shows a list of all tracked "
+"changes. Use the dialog buttons accordingly."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:778-54
 msgid ""
-"Manage Changes dialog with a list of tracked changes showing action, author, "
-"date, and comment columns, and Accept, Reject, Accept All, Reject All buttons"
+"Manage Changes dialog with a list of tracked changes showing action, "
+"author, date, and comment columns, and Accept, Reject, Accept All, Reject "
+"All buttons"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:781-5
@@ -3678,14 +2521,14 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:794-7
 msgid ""
-"Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Paragraph</span>"
-", <span class=\"ui\">Text Flow </span> tab"
+"Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Paragraph</"
+"span>, <span class=\"ui\">Text Flow </span> tab"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:795-7
 msgid ""
-"In the <span class=\"ui\">Breaks</span> area, mark Insert, Type: Page Break, "
-"Position: Before."
+"In the <span class=\"ui\">Breaks</span> area, mark Insert, Type: Page "
+"Break, Position: Before."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:796-7
@@ -3715,7 +2558,6 @@ msgid "Select the text with the existing format"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:806-7
-msgctxt "html/cool-help.html:help-format-paintbrush"
 msgid ""
 "Click on the <span class=\"ui\">Clone Formatting</span> icon <img "
 "alt=\"format paintbrush\" class=\"icon-size\" src=\"images/"
@@ -3737,8 +2579,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:814-7
 msgid ""
-"Select the style to apply in the style dropdown list. The paragraph displays "
-"the styles attributes."
+"Select the style to apply in the style dropdown list. The paragraph "
+"displays the styles attributes."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:818-5
@@ -3751,13 +2593,8 @@ msgid ""
 "You have the AutoCorrection enabled. AutoCorrection compares the text just "
 "typed to an internal table of text. In most cases, AutoCorrection corrects "
 "typos while you type. To revert a correction, press <kbd>Ctrl</kbd><span "
-"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Z</kbd> right after it "
-"was applied."
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.h3:825-5
-msgctxt "html/cool-help.html:1409"
-msgid "Spreadsheets"
+"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Z</kbd> right after "
+"it was applied."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:827-5
@@ -3788,9 +2625,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:835-7
 msgid ""
-"Press <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span>"
-"<kbd>V</kbd>. The <span class=\"ui\">Text Import</span> dialog opens to let "
-"you describe the precise format of the CSV data."
+"Press <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>V</kbd>. The <span class=\"ui\">Text Import</span> dialog opens "
+"to let you describe the precise format of the CSV data."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:838-53
@@ -3806,8 +2643,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:841-5
 msgid ""
-"The CSV data is loaded into the selected cell where you pasted, according to "
-"these settings."
+"The CSV data is loaded into the selected cell where you pasted, according "
+"to these settings."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:844-5
@@ -3824,15 +2661,6 @@ msgstr ""
 msgid "Format the source cell with the font, color background and more."
 msgstr ""
 
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:848-7
-msgctxt "html/cool-help.html+help-format-paintbrush:848-7"
-msgid ""
-"Click on the <span class=\"ui\">Clone Formatting</span> icon <img "
-"alt=\"format paintbrush\" class=\"icon-size\" src=\"images/"
-"lc_formatpaintbrush.svg\" /> on the <span class=\"ui\">Home</span> tab. The "
-"mouse pointer turns to a paint bucket."
-msgstr ""
-
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:849-7
 msgid "Select the cells you want to format. Release the mouse button."
 msgstr ""
@@ -3843,10 +2671,10 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:854-5
 msgid ""
-"Direct formatting is formatting applied directly to the selected contents of "
-"a paragraph or a spreadsheet cell, and overlaps its assigned style "
-"formatting. To restore the formatting to the style settings, select the text "
-"or spreadsheet cell and choose <span class=\"ui\">Home</span> → <span "
+"Direct formatting is formatting applied directly to the selected contents "
+"of a paragraph or a spreadsheet cell, and overlaps its assigned style "
+"formatting. To restore the formatting to the style settings, select the "
+"text or spreadsheet cell and choose <span class=\"ui\">Home</span> → <span "
 "class=\"ui\">Clear Direct Formatting</span>."
 msgstr ""
 
@@ -3856,14 +2684,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:858-5
 msgid ""
-"Rename a sheet in the spreadsheet document using the context menu (using the "
-"right mouse button) over the sheet tab in the bottom. Enter the new sheet "
-"name in the dialog that follows."
-msgstr ""
-
-#: html/cool-help.html%2Bdiv.div.div.h3:864-5
-msgctxt "html/cool-help.html:1411"
-msgid "Presentations"
+"Rename a sheet in the spreadsheet document using the context menu (using "
+"the right mouse button) over the sheet tab in the bottom. Enter the new "
+"sheet name in the dialog that follows."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:866-5
@@ -3877,9 +2700,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:869-7
 msgid ""
-"Either choose <span class=\"ui\">Slide Show</span> → <span class=\"ui\">From "
-"Beginning</span> or click on the left-most icon in the bottom of the slide "
-"panel:"
+"Either choose <span class=\"ui\">Slide Show</span> → <span "
+"class=\"ui\">From Beginning</span> or click on the left-most icon in the "
+"bottom of the slide panel:"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li.img[alt]:869-187
@@ -3896,9 +2719,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:876-7
 msgid ""
-"Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Line</span> (or "
-"<span class=\"ui\">Area</span>, or <span class=\"ui\">Position and Size</"
-"span>). A dialog opens."
+"Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Line</span> "
+"(or <span class=\"ui\">Area</span>, or <span class=\"ui\">Position and "
+"Size</span>). A dialog opens."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:879-53
