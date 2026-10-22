@@ -81,6 +81,20 @@ OString ExportPaMToHTML(SwPaM* pCursor)
         }
         aResult
             = OString(static_cast<const char*>(aMemoryStream.GetData()), aMemoryStream.GetSize());
+        // The blocks of footnotes and endnotes come after the text: they are
+        // re-created on paste, and their paragraph tags give them the note's
+        // style, so they stay as they are.
+        sal_Int32 nNotes = aResult.getLength();
+        for (const OString& rBlock : { "<div id=\"sdfootnote"_ostr, "<div id=\"sdendnote"_ostr })
+        {
+            const sal_Int32 nPos = aResult.indexOf(rBlock);
+            if (nPos != -1 && nPos < nNotes)
+                nNotes = nPos;
+        }
+        const OString aNotes = aResult.copy(nNotes);
+        aResult = aResult.copy(0, nNotes);
+        // The text itself goes in as inline text, so it replaces what the
+        // paragraph had rather than splitting the paragraph.
         aResult = aResult.replaceAll("<p"_ostr, "<span"_ostr);
         aResult = aResult.replaceAll("</p>"_ostr, "</span>"_ostr);
         // A heading is a block element too: pasted as one, it would split the
@@ -93,6 +107,7 @@ OString ExportPaMToHTML(SwPaM* pCursor)
             aResult = aResult.replaceAll(aOpen, "<span"_ostr);
             aResult = aResult.replaceAll(aClose, "</span>"_ostr);
         }
+        aResult += aNotes;
 
         // HTML has for that <br> and <p> also does new line
         aResult = aResult.replaceAll("<ul>"_ostr, ""_ostr);

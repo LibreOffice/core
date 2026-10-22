@@ -373,8 +373,9 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
         InsertAttr(&m_xAttrTab->pAdjust, SvxAdjustItem(eAdjust, RES_PARATR_ADJUST), xCntxt.get());
     }
 
-    // parse style
-    if( bStyleParsed )
+    // parse style. The block of a note sets nothing on the note's
+    // paragraphs: the indents would be the ones of the body.
+    if( bStyleParsed && !pFootEndNoteIdx )
         InsertAttrs( aItemSet, aPropInfo, xCntxt.get(), true );
 
     xCntxt->SetVisible(aPropInfo.m_bVisible);

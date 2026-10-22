@@ -1712,6 +1712,23 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateKeepsFootnotes)
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xFootnotes->getCount());
     uno::Reference<text::XTextRange> xNote(xFootnotes->getByIndex(0), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"Note text"_ustr, xNote->getString());
+
+    // And the footnote's text is one paragraph in the Footnote style, with its indents from
+    // the style: the paste used to set the indents of a plain paragraph on it.
+    uno::Reference<container::XEnumerationAccess> xNoteParagraphs(xNote, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xNoteEnumeration
+        = xNoteParagraphs->createEnumeration();
+    uno::Reference<beans::XPropertySet> xNoteParagraph(xNoteEnumeration->nextElement(),
+                                                       uno::UNO_QUERY);
+    CPPUNIT_ASSERT(!xNoteEnumeration->hasMoreElements());
+    CPPUNIT_ASSERT_EQUAL(u"Footnote"_ustr,
+                         getProperty<OUString>(xNoteParagraph, u"ParaStyleName"_ustr));
+    uno::Reference<beans::XPropertyState> xNoteState(xNoteParagraph, uno::UNO_QUERY);
+    for (const OUString& rProperty :
+         { u"ParaLeftMargin"_ustr, u"ParaRightMargin"_ustr, u"ParaFirstLineIndent"_ustr })
+        CPPUNIT_ASSERT_EQUAL_MESSAGE(
+            OUStringToOString(rProperty, RTL_TEXTENCODING_ASCII_US).getStr(),
+            beans::PropertyState_DEFAULT_VALUE, xNoteState->getPropertyState(rProperty));
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateKeepsDirectFormatting)
