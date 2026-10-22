@@ -766,6 +766,16 @@ class TurningHandle extends HandleGroup {
 			objectIds.length === 1 &&
 			ObjectHandles.hasHandlesOfItsOwnOnly(objectIds[0])
 		) {
+			// without a length it stands straight above the spot and does nothing
+			const spot = ObjectHandles.spotWithoutLength(objectIds[0]);
+			if (spot)
+				return this.placedOut(
+					spot,
+					new cool.Point(0, -1),
+					TurningHandle.distance,
+					true,
+				);
+
 			if (!square) return [];
 			return RenderGeometrySection.objectOf(objectIds[0])?.measurement
 				? this.placedBeyondTheLine(objectIds[0], square)
@@ -840,6 +850,7 @@ class TurningHandle extends HandleGroup {
 		middle: cool.Point,
 		out: cool.Point,
 		distance: number,
+		dead: boolean = false,
 	): SelectionHandle[] {
 		const away = distance * app.dpiScale;
 		const step = cool.SimplePoint.fromCorePixels([away, away]);
@@ -848,7 +859,7 @@ class TurningHandle extends HandleGroup {
 			middle.y + out.y * step.y,
 		);
 
-		return this.handlesAt(point, Math.atan2(out.x, -out.y));
+		return this.handlesAt(point, Math.atan2(out.x, -out.y), dead);
 	}
 
 	/*
@@ -897,8 +908,14 @@ class TurningHandle extends HandleGroup {
 	/// The handle at that point, turned by that angle, and the handle of the other mode beside it
 	/// while that one is shown. Where the objects say they cannot be turned it is there but dead,
 	/// so the selection looks the same whatever may be done to it.
-	private handlesAt(point: cool.Point, turnedBy: number): SelectionHandle[] {
-		const dead = !ObjectHandles.canBeTurned(this.selection.selectedObjects());
+	private handlesAt(
+		point: cool.Point,
+		turnedBy: number,
+		deadAnyway: boolean = false,
+	): SelectionHandle[] {
+		const dead =
+			deadAnyway ||
+			!ObjectHandles.canBeTurned(this.selection.selectedObjects());
 		const handles: SelectionHandle[] = [
 			{
 				name: SelectionSection.turningKind,

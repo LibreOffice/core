@@ -271,6 +271,9 @@ class MeasurementGhost {
 		const which = handle.at ?? 0;
 		const square = found.square;
 		if (which === 2 || which === 3) {
+			// a measured line without a length has no way to hold the end to
+			if (ObjectHandles.spotWithoutLength(selection.selectedObjects()[0]))
+				return at;
 			return EndOnAWay.heldTo(
 				square.apply(which === 2 ? 1 : 0, 0),
 				square.apply(1, 0).subtract(square.apply(0, 0)),

@@ -490,6 +490,31 @@ class ObjectHandles implements HandleSource {
 		return { start, way: square.apply(1 - atX, 1 - atY).subtract(start) };
 	}
 
+	/*
+		the spot where both ends of a line or of the measured line of a measurement stand, where
+		they stand on one, as a file may bring them. such an object has no way to turn or to hold
+		an end to. nothing for any other object
+	*/
+	public static spotWithoutLength(objectId: number): cool.Point | null {
+		const object = RenderGeometrySection.objectOf(objectId);
+		if (!object) return null;
+
+		const isALine = ObjectHandles.isALine(objectId);
+		const ends = (object.handles ?? []).filter((handle: cool.ObjectHandle) =>
+			isALine
+				? handle.kind === 9
+				: !!object.measurement &&
+					handle.kind === 20 &&
+					(handle.at === 2 || handle.at === 3),
+		);
+		if (ends.length !== 2) return null;
+
+		const [one, other] = ends;
+		return one.x === other.x && one.y === other.y
+			? new cool.Point(one.x, one.y)
+			: null;
+	}
+
 	/// Whether the object of that id is shaped by its own handles alone, without the eight.
 	public static hasHandlesOfItsOwnOnly(objectId: number): boolean {
 		return (
@@ -632,6 +657,12 @@ class ObjectHandles implements HandleSource {
 
 		const object = RenderGeometrySection.objectOf(this.objectIds[0]);
 
+		// without a length the help lines of a measurement stand on the ends of the measured
+		// line, so their handles do nothing and a press reaches an end, to pull a length out
+		const withoutLength =
+			!!object?.measurement &&
+			ObjectHandles.spotWithoutLength(this.objectIds[0]) !== null;
+
 		// The number the object gives a handle ends the name where there is one, since the
 		// handles of a measurement are alike in kind, polygon and point.
 		return (object?.handles ?? []).map((handle: cool.ObjectHandle) => ({
@@ -648,6 +679,7 @@ class ObjectHandles implements HandleSource {
 			at: handle.at,
 			rails: handle.rails,
 			larger: handle.larger,
+			deactivated: withoutLength && handle.at !== 2 && handle.at !== 3,
 		}));
 	}
 }
