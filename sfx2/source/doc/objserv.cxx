@@ -41,7 +41,6 @@
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #include <com/sun/star/security/DocumentDigitalSignatures.hpp>
 #include <comphelper/diagnose_ex.hxx>
-#include <com/sun/star/form/XLoadable.hpp>
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
@@ -1776,20 +1775,20 @@ void SfxObjectShell::AllowLinkUpdate()
     getEmbeddedObjectContainer().setUserAllowsLinkUpdate(true);
     PerformLinkUpdate();
 
-    std::vector<uno::WeakReference<css::form::XLoadable>> aDeferredForms;
-    aDeferredForms.swap(maDeferredDatabaseForms);
-    for (const auto& rxDeferred : aDeferredForms)
+    decltype(maDeferredLinkLoads) aDeferredLoads;
+    aDeferredLoads.swap(maDeferredLinkLoads);
+    for (const auto& [rxWeakOwner, rLoad] : aDeferredLoads)
     {
-        uno::Reference<css::form::XLoadable> xForm(rxDeferred);
-        if (!xForm.is() || xForm->isLoaded())
+        uno::Reference<uno::XInterface> xOwner(rxWeakOwner);
+        if (!xOwner.is())
             continue;
         try
         {
-            xForm->load();
+            rLoad(xOwner);
         }
         catch (const uno::Exception&)
         {
-            TOOLS_WARN_EXCEPTION("sfx.doc", "SfxObjectShell::AllowLinkUpdate: form load");
+            TOOLS_WARN_EXCEPTION("sfx.doc", "SfxObjectShell::AllowLinkUpdate: deferred load");
         }
     }
 

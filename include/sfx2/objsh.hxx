@@ -107,7 +107,6 @@ namespace com::sun::star::beans { struct PropertyValue; }
 namespace com::sun::star::document { struct CmisVersion; }
 namespace com::sun::star::document { class XDocumentProperties; }
 namespace com::sun::star::embed { class XStorage; }
-namespace com::sun::star::form { class XLoadable; }
 namespace com::sun::star::frame { class XModel3; }
 namespace com::sun::star::graphic { class XGraphic; }
 namespace com::sun::star::io { class XStream; }
@@ -217,8 +216,9 @@ private:
     std::vector<std::pair<css::uno::WeakReference<css::beans::XPropertySet>, OUString>>
                                 maDeferredFormControlImages;
     bool                        mbHasExternalDatabaseForms;
-    std::vector<css::uno::WeakReference<css::form::XLoadable>>
-                                maDeferredDatabaseForms;
+    std::vector<std::pair<css::uno::WeakReference<css::uno::XInterface>,
+                          std::function<void(const css::uno::Reference<css::uno::XInterface>&)>>>
+                                maDeferredLinkLoads;
 
     enum TriState               {undefined, yes, no};
     TriState                    mbContinueImportOnFilterExceptions = undefined; // try to import as much as possible
@@ -379,8 +379,11 @@ public:
     void                        SetHasExternalDatabaseForms() { mbHasExternalDatabaseForms = true; }
     bool                        HasExternalDatabaseForms() const
                                     { return mbHasExternalDatabaseForms; }
-    void                        AddDeferredDatabaseForm(
-                                    const css::uno::Reference<css::form::XLoadable>& rxForm);
+    /// Run aLoad on rxOwner when the user allows link updates for this document, if rxOwner
+    /// still exists then. An owner that is already waiting is not added again.
+    void                        AddDeferredLinkLoad(
+                                    const css::uno::Reference<css::uno::XInterface>& rxOwner,
+                                    std::function<void(const css::uno::Reference<css::uno::XInterface>&)> aLoad);
     virtual bool                LoadExternal( SfxMedium& rMedium );
     bool                        IsConfigOptionsChecked() const;
     void                        SetConfigOptionsChecked( bool bChecked );
