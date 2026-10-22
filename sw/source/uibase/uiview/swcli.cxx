@@ -52,6 +52,12 @@ void SwOleClient::RequestNewObjectArea( tools::Rectangle& aLogRect )
     // If the Ole-Frame is formatted, then the CalcAndSetScale() of the WrtShell
     // will be called. There the scaling of the SwOleClient is set if necessary.
 
+    // A protected object can be viewed, but its frame keeps its size:
+    if (IsProtected()) {
+        aLogRect = GetScaledObjArea();
+        return;
+    }
+
     SwWrtShell &rSh  = static_cast<SwView*>(GetViewShell())->GetWrtShell();
 
     rSh.StartAllAction();
@@ -98,6 +104,11 @@ void SwOleClient::ViewChanged()
 {
     if (m_IsInDoVerb)
         return;
+
+    // A protected object can be viewed, but its frame keeps its size:
+    if (IsProtected()) {
+        return;
+    }
 
     if ( GetAspect() == embed::Aspects::MSOLE_ICON )
     {
