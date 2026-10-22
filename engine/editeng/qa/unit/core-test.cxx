@@ -143,8 +143,11 @@ public:
     /// A word inside a hyperlink span is not split by automatic hyphenation.
     void testHyperlinkSpanNoHyphenation();
 
-    /// A hyperlink span keeps its width when the line is justified.
-    void testHyperlinkSpanRigidInJustifiedText();
+    /// A hyperlink span stretches like ordinary text when the line is justified.
+    void testHyperlinkSpanJustifiedLikeText();
+
+    /// A legacy wrap link keeps its width when the line is justified, like a placeholder field.
+    void testHyperlinkSpanLegacyRigidInJustifiedText();
 
     /// Test Copy/Paste using Legacy Format
     void testCopyPaste();
@@ -263,7 +266,8 @@ public:
     CPPUNIT_TEST(testHyperlinkSpanLegacyLineEndsAfterLink);
     CPPUNIT_TEST(testHyperlinkSpanLegacyGluedText);
     CPPUNIT_TEST(testHyperlinkSpanNoHyphenation);
-    CPPUNIT_TEST(testHyperlinkSpanRigidInJustifiedText);
+    CPPUNIT_TEST(testHyperlinkSpanJustifiedLikeText);
+    CPPUNIT_TEST(testHyperlinkSpanLegacyRigidInJustifiedText);
     CPPUNIT_TEST(testCopyPaste);
     CPPUNIT_TEST(testHTMLPaste);
     CPPUNIT_TEST(testHTMLFragmentPaste);
@@ -1087,42 +1091,61 @@ void Test::testHyperlinkSpanNoHyphenation()
                          aEditEngine.GetParaPortions().getRef(0).GetLines()[1].GetStart());
 }
 
-void Test::testHyperlinkSpanRigidInJustifiedText()
+// Lays out "aa bb cc dd end" on two lines with "bb cc" as a hyperlink span, then justifies the
+// paragraph. Returns how much the blank inside the link and the blank before it widen.
+std::pair<double, double> lcl_getJustifiedGapGrowth(EditEngine& rEditEngine, bool bLegacyWrap)
 {
-    EditEngine aEditEngine(mpItemPool.get());
-    aEditEngine.SetPaperSize(Size(10000, 2000));
-    aEditEngine.SetText(u"aa bb cc dd end"_ustr);
-
-    // Mark "bb cc" as a hyperlink span. The blank at 5 is inside it, the ones at 2, 8 and 11 are
-    // outside.
-    SvxURLField aURLField(u"http://example.com/"_ustr, u"bb cc"_ustr, SvxURLFormat::Repr);
-    SfxItemSet aSet(aEditEngine.GetEmptyItemSet());
-    aSet.Put(SvxFieldItem(aURLField, EE_CHAR_URL));
-    aEditEngine.QuickSetAttribs(aSet, ESelection(0, 3, 0, 8));
-
-    aEditEngine.QuickFormatDoc(false);
-    const tools::Long nFullWidth = aEditEngine.CalcTextWidth();
+    rEditEngine.SetPaperSize(Size(10000, 2000));
+    rEditEngine.SetText(u"aa bb cc dd end"_ustr);
+    // The blank at 5 is inside the link, the ones at 2, 8 and 11 are outside.
+    lcl_markLink(rEditEngine, 3, 8, bLegacyWrap);
+    rEditEngine.QuickFormatDoc(false);
+    const tools::Long nFullWidth = rEditEngine.CalcTextWidth();
 
     // Two lines: "aa bb cc dd " and "end". Only the first line is justified.
-    aEditEngine.SetPaperSize(Size(nFullWidth - 10, 2000));
-    aEditEngine.QuickFormatDoc(false);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aEditEngine.GetLineCount(0));
+    rEditEngine.SetPaperSize(Size(nFullWidth - 10, 2000));
+    rEditEngine.QuickFormatDoc(false);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rEditEngine.GetLineCount(0));
 
-    const auto aGapAt = [&aEditEngine](sal_Int32 nChar) {
-        EditLine const& rLine = aEditEngine.GetParaPortions().getRef(0).GetLines()[0];
-        return rLine.GetCharPosArray()[nChar] - rLine.GetCharPosArray()[nChar - 1];
+    const auto aGapAt = [&rEditEngine](sal_Int32 nCharacter) {
+        EditLine const& rLine = rEditEngine.GetParaPortions().getRef(0).GetLines()[0];
+        return rLine.GetCharPosArray()[nCharacter] - rLine.GetCharPosArray()[nCharacter - 1];
     };
+    // Justification widens a blank by moving the character positions up to the end of its text
+    // portion. The blank at 8 starts the portion after the link, so its width does not show as a
+    // difference of two positions, while the blank at 2 and the one at 5 sit inside a portion.
     const double fInsideGap = aGapAt(5);
-    const double fOutsideGap = aGapAt(8);
+    const double fOutsideGap = aGapAt(2);
 
-    SfxItemSet aParaSet(aEditEngine.GetEmptyItemSet());
-    aParaSet.Put(SvxAdjustItem(SvxAdjust::Block, EE_PARA_JUST));
-    aEditEngine.SetParaAttribs(0, aParaSet);
-    aEditEngine.QuickFormatDoc(false);
+    SfxItemSet aParagraphSet(rEditEngine.GetEmptyItemSet());
+    aParagraphSet.Put(SvxAdjustItem(SvxAdjust::Block, EE_PARA_JUST));
+    rEditEngine.SetParaAttribs(0, aParagraphSet);
+    rEditEngine.QuickFormatDoc(false);
+
+    return { aGapAt(5) - fInsideGap, aGapAt(2) - fOutsideGap };
+}
+
+void Test::testHyperlinkSpanJustifiedLikeText()
+{
+    EditEngine aEditEngine(mpItemPool.get());
+    const auto [fInsideGrowth, fOutsideGrowth]
+        = lcl_getJustifiedGapGrowth(aEditEngine, /*bLegacyWrap=*/false);
+
+    // The blank inside the link stretches like the one outside it. The space left over after an
+    // even split goes to some blanks only, one unit each.
+    CPPUNIT_ASSERT(fOutsideGrowth > 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(fOutsideGrowth, fInsideGrowth, 1.01);
+}
+
+void Test::testHyperlinkSpanLegacyRigidInJustifiedText()
+{
+    EditEngine aEditEngine(mpItemPool.get());
+    const auto [fInsideGrowth, fOutsideGrowth]
+        = lcl_getJustifiedGapGrowth(aEditEngine, /*bLegacyWrap=*/true);
 
     // Only the blank outside the link stretches.
-    CPPUNIT_ASSERT(aGapAt(8) > fOutsideGap);
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(fInsideGap, aGapAt(5), 0.01);
+    CPPUNIT_ASSERT(fOutsideGrowth > 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(0.0, fInsideGrowth, 0.01);
 }
 
 void Test::testCopyPaste()

@@ -2579,9 +2579,10 @@ void ImpEditEngine::ImpAdjustBlocks(ParaPortion& rParaPortion, EditLine& rLine, 
         nLastScript = nScript;
     }
 
-    // A hyperlink span takes no justification stretch.
+    // A legacy wrap link takes no justification stretch, like the placeholder field it was laid
+    // out as. Any other link stretches like ordinary text.
     std::erase_if(aPositions, [&rNode](sal_Int32 nPos) {
-        return rNode.GetCharAttribs().FindAttribRightOpen(EE_CHAR_URL, nPos) != nullptr;
+        return isLegacyWrapUrlSpan(rNode.GetCharAttribs().FindAttribRightOpen(EE_CHAR_URL, nPos));
     });
 
     // Kashidas ?
