@@ -57,6 +57,7 @@
 /// <reference path="./ViewLayout.test.ts" />
 /// <reference path="./ServerCommand.test.ts" />
 /// <reference path="./SocketReload.test.ts" />
+/// <reference path="./AccessibilityNotice.test.ts" />
 /// <reference path="./DomUtil.test.ts" />
 /// <reference path="./Shortcuts.test.ts" />
 /// <reference path="./VectorPrimitiveRenderer.test.ts" />
