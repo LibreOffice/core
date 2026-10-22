@@ -540,27 +540,23 @@ static void extend_library_path(const char *new_element)
 static void exec_javaldx(Args *args)
 {
     char newpath[4096];
-    sal_uInt32 nArgs;
 
     oslProcess javaldx = nullptr;
     oslFileHandle fileOut = nullptr;
     oslProcessError err;
 
-    rtl_uString** ppArgs
-        = static_cast<rtl_uString**>(calloc(args->nArgsEnv + 2, sizeof(rtl_uString*)));
-
-    for (nArgs = 0; nArgs < args->nArgsEnv; ++nArgs)
-        ppArgs[nArgs] = args->aArgs.at(nArgs);
+    std::vector<rtl_uString*> aArguments;
+    for (sal_uInt32 nArgs = 0; nArgs < args->nArgsEnv; ++nArgs)
+        aArguments.push_back(args->aArgs.at(nArgs));
 
     /* Use absolute path to redirectrc */
     const OUString sRedirectRcArg
         = u"-env:INIFILENAME=vnd.sun.star.pathname:" + args->sAppPath + u"redirectrc";
-    ppArgs[nArgs] = sRedirectRcArg.pData;
-    nArgs++;
+    aArguments.push_back(sRedirectRcArg.pData);
 
     /* And also to javaldx */
     const OUString sApp = u"file://" + args->sAppPath + u"javaldx";
-    err = osl_executeProcess_WithRedirectedIO(sApp.pData, ppArgs, nArgs,
+    err = osl_executeProcess_WithRedirectedIO(sApp.pData, aArguments.data(), aArguments.size(),
                                               osl_Process_NORMAL,
                                               nullptr, // security
                                               nullptr, // work dir
@@ -569,8 +565,6 @@ static void exec_javaldx(Args *args)
                                               nullptr,
                                               &fileOut,
                                               nullptr);
-
-    free(ppArgs);
 
     if(err != osl_Process_E_None)
     {
