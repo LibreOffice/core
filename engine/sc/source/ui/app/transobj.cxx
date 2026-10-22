@@ -44,6 +44,7 @@
 #include <address.hxx>
 #include <clipparam.hxx>
 #include <patattr.hxx>
+#include <attrib.hxx>
 #include <cellvalue.hxx>
 #include <cellform.hxx>
 #include <document.hxx>
@@ -69,6 +70,7 @@
 #include <cellsuno.hxx>
 #include <stringutil.hxx>
 #include <formulaiter.hxx>
+#include <tokenstringcontext.hxx>
 
 using namespace com::sun::star;
 using namespace ::cpo;
@@ -286,6 +288,67 @@ static ScRange lcl_reduceBlock(const ScDocument& rDoc, ScRange aReducedBlock, bo
     return aReducedBlock;
 }
 
+// The ranges of a multi-range clipboard (ctrl-clicked non-adjacent columns or rows), whose
+// bounding rectangle includes gap columns and rows that the user never selected. Null for a
+// single range.
+static const ScRangeList* lcl_getClipRanges(ScDocument& rDoc)
+{
+    if (rDoc.IsClipboard())
+    {
+        const ScRangeList& rClipRanges = rDoc.GetClipParam().maRanges;
+        if (rClipRanges.size() > 1)
+            return &rClipRanges;
+    }
+    return nullptr;
+}
+
+OUString ScTransferObj::GetFormulaListFromRange(ScDocument& rDoc, const ScRange& rRange)
+{
+    // Formulas past this count are only counted. A filled-down column repeats one formula, so
+    // its first rows already show it.
+    constexpr sal_Int32 nMaxFormulas = 100;
+
+    sc::CompileFormulaContext aCxt(rDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_A1);
+    const SCTAB nTab = rRange.aStart.Tab();
+    const bool bProtected = rDoc.IsTabProtected(nTab);
+    const ScRangeList* pRanges = lcl_getClipRanges(rDoc);
+    OUStringBuffer aBuf;
+    sal_Int32 nCount = 0;
+    for (SCROW nRow = rRange.aStart.Row(); nRow <= rRange.aEnd.Row(); nRow++)
+    {
+        for (SCCOL nCol = rRange.aStart.Col(); nCol <= rRange.aEnd.Col(); nCol++)
+        {
+            const ScAddress aPos(nCol, nRow, nTab);
+            if (pRanges && !pRanges->Contains(ScRange(aPos)))
+                continue;
+            const ScFormulaCell* pCell = rDoc.GetFormulaCell(aPos);
+            if (!pCell)
+                continue;
+            if (bProtected)
+            {
+                const ScProtectionAttr& rProtection = rDoc.GetAttr(aPos, ATTR_PROTECTION);
+                if (rProtection.GetHideFormula() || rProtection.GetHideCell())
+                    continue;
+            }
+            if (nCount < nMaxFormulas)
+            {
+                OUString aFormula
+                    = pCell->GetFormula(aCxt).replaceAll(u"\n", u" ").replaceAll(u"\r", u"");
+                aBuf.append("- " + ScColToAlpha(nCol) + OUString::number(nRow + 1) + ": "
+                            + aFormula + "\n");
+            }
+            nCount++;
+        }
+    }
+
+    if (nCount == 0)
+        return OUString();
+    if (nCount > nMaxFormulas)
+        aBuf.append("- " + OUString::number(nCount - nMaxFormulas) + " more formula cells\n");
+    aBuf.insert(0, "Formulas:\n");
+    return aBuf.makeStringAndClear();
+}
+
 OUString ScTransferObj::GetMarkdownFromRange(ScDocument& rDoc, const ScRange& rRange,
                                              bool bAnnotated)
 {
@@ -295,18 +358,10 @@ OUString ScTransferObj::GetMarkdownFromRange(ScDocument& rDoc, const ScRange& rR
     const SCCOL nEndCol = rRange.aEnd.Col();
     const SCROW nEndRow = rRange.aEnd.Row();
 
-    // When the source is a multi-range clipboard (ctrl-clicked
-    // non-adjacent columns or rows), the bounding rectangle includes gap
-    // columns/rows that the user never selected. Filter them out so the
+    // Filter out the gap columns/rows of a multi-range clipboard so the
     // markdown table only contains the originally selected ranges
     // instead of confusing readers with rows of empty cells.
-    const ScRangeList* pRanges = nullptr;
-    if (rDoc.IsClipboard())
-    {
-        const ScRangeList& rClipRanges = rDoc.GetClipParam().maRanges;
-        if (rClipRanges.size() > 1)
-            pRanges = &rClipRanges;
-    }
+    const ScRangeList* pRanges = lcl_getClipRanges(rDoc);
 
     auto fnColInRanges = [pRanges](SCCOL nCol) -> bool
     {
@@ -478,6 +533,13 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
                 bOK = aEditHelper.GetString(SotClipboardFormatId::MARKDOWN, aMarkdown);
                 if (bOK)
                 {
+                    if (nFormat == SotClipboardFormatId::MARKDOWN_ANNOTATED)
+                    {
+                        OUString aFormulas = GetFormulaListFromRange(*m_pDoc, ScRange(aPos));
+                        if (!aFormulas.isEmpty())
+                            aMarkdown += (aMarkdown.isEmpty() ? u""_ustr : u"\n\n"_ustr)
+                                         + aFormulas;
+                    }
                     bOK = SetAny(cpo::uno::Any(aMarkdown));
                 }
             }
@@ -489,8 +551,15 @@ bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor, const OUSt
             // Markdown table from multi-cell range
             ScRange aRange = lcl_reduceBlock(*m_pDoc, m_aBlock);
             bool bAnnotated = (nFormat == SotClipboardFormatId::MARKDOWN_ANNOTATED);
-            bOK = SetAny(cpo::uno::Any(
-                ScTransferObj::GetMarkdownFromRange(*m_pDoc, aRange, bAnnotated)));
+            OUString aMarkdown = GetMarkdownFromRange(*m_pDoc, aRange, bAnnotated);
+            // The table shows what each cell displays. The formulas follow it as a list.
+            if (bAnnotated)
+            {
+                OUString aFormulas = GetFormulaListFromRange(*m_pDoc, aRange);
+                if (!aFormulas.isEmpty())
+                    aMarkdown += "\n" + aFormulas;
+            }
+            bOK = SetAny(cpo::uno::Any(aMarkdown));
         }
         else if ( ( nFormat == SotClipboardFormatId::RTF || nFormat == SotClipboardFormatId::RICHTEXT ||
             nFormat == SotClipboardFormatId::EDITENGINE_ODF_TEXT_FLAT ) && m_aBlock.aStart == m_aBlock.aEnd )

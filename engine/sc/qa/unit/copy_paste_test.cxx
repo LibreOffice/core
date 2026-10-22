@@ -25,10 +25,12 @@
 #include <impex.hxx>
 #include <scitems.hxx>
 #include <attrib.hxx>
+#include <tabprotection.hxx>
 #include <userlist.hxx>
 #include <undomanager.hxx>
 
 #include <editeng/editobj.hxx>
+#include <tools/json_writer.hxx>
 #include <editeng/editdata.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/fhgtitem.hxx>
@@ -75,6 +77,11 @@ public:
     void testMarkdownExportEscaping();
     void testMarkdownExportSingleCell();
     void testMarkdownExportMultiRangeColumns();
+    void testMarkdownExportAnnotatedFormulas();
+    void testMarkdownExportAnnotatedFormulaOtherSheet();
+    void testMarkdownExportAnnotatedFormulaLimit();
+    void testExtractDocumentStructureProtectedFormula();
+    void testExtractDocumentStructureTruncatedKeepsFormulas();
     void testMarkdownRoundtripFormattedText();
     void testMarkdownRoundtripTable();
     void testRTFFontHeight();
@@ -113,6 +120,11 @@ public:
     CPPUNIT_TEST(testMarkdownExportEscaping);
     CPPUNIT_TEST(testMarkdownExportSingleCell);
     CPPUNIT_TEST(testMarkdownExportMultiRangeColumns);
+    CPPUNIT_TEST(testMarkdownExportAnnotatedFormulas);
+    CPPUNIT_TEST(testMarkdownExportAnnotatedFormulaOtherSheet);
+    CPPUNIT_TEST(testMarkdownExportAnnotatedFormulaLimit);
+    CPPUNIT_TEST(testExtractDocumentStructureProtectedFormula);
+    CPPUNIT_TEST(testExtractDocumentStructureTruncatedKeepsFormulas);
     CPPUNIT_TEST(testMarkdownRoundtripFormattedText);
     CPPUNIT_TEST(testMarkdownRoundtripTable);
     CPPUNIT_TEST(testRTFFontHeight);
@@ -1327,6 +1339,150 @@ void ScCopyPasteTest::testMarkdownExportMultiRangeColumns()
     // confuses LLM consumers about which columns the user selected.
     CPPUNIT_ASSERT_EQUAL_MESSAGE("annotated markdown leaked gap column B", sal_Int32(-1),
                                  aAnnotated.indexOf("| B |"));
+}
+
+void ScCopyPasteTest::testMarkdownExportAnnotatedFormulas()
+{
+    // Given a range where the last row holds formulas:
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+    ScTabViewShell* pViewShell = getViewShell();
+
+    pDoc->SetValue(ScAddress(0, 0, 0), 10);
+    pDoc->SetValue(ScAddress(1, 0, 0), 2);
+    pDoc->SetValue(ScAddress(0, 1, 0), 20);
+    pDoc->SetValue(ScAddress(1, 1, 0), 3);
+    pDoc->SetString(ScAddress(0, 2, 0), u"=SUM(A1:A2)"_ustr);
+    pDoc->SetString(ScAddress(1, 2, 0), u"=A3*B1"_ustr);
+
+    // Select A1:B3:
+    ScRange aRange(0, 0, 0, 1, 2, 0);
+    pViewShell->GetViewData().GetMarkData().SetMarkArea(aRange);
+
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    CPPUNIT_ASSERT(pModelObj);
+
+    // When exporting as annotated markdown:
+    OString aAnnotated = lcl_getAnnotatedMarkdownExport(pModelObj);
+
+    // Then the table shows the results and the formulas are listed below it:
+    CPPUNIT_ASSERT_EQUAL("| Row | A | B |\n"
+        "| --- | --- | --- |\n"
+        "| 1 | 10 | 2 |\n"
+        "| 2 | 20 | 3 |\n"
+        "| 3 | 30 | 60 |\n"
+        "\n"
+        "Formulas:\n"
+        "- A3: =SUM(A1:A2)\n"
+        "- B3: =A3*B1\n"_ostr, aAnnotated);
+
+    // And the plain markdown, which is pasted into other documents, has only the table:
+    OString aPlain = lcl_getMarkdownExport(pModelObj);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aPlain.indexOf("Formulas"));
+}
+
+void ScCopyPasteTest::testMarkdownExportAnnotatedFormulaOtherSheet()
+{
+    // Given a single cell whose formula reads a cell on another sheet:
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+    pDoc->InsertTab(1, u"Rates"_ustr);
+    pDoc->SetValue(ScAddress(0, 0, 1), 5);
+    pDoc->SetString(ScAddress(0, 0, 0), u"=$Rates.A1*2"_ustr);
+
+    // Cursor is on A1 of the first sheet by default (no range mark):
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    CPPUNIT_ASSERT(pModelObj);
+
+    // When exporting as annotated markdown:
+    OString aAnnotated = lcl_getAnnotatedMarkdownExport(pModelObj);
+
+    // Then the result is followed by the formula, with the sheet name in the English grammar:
+    CPPUNIT_ASSERT_MESSAGE(aAnnotated.getStr(), aAnnotated.startsWith("10"));
+    CPPUNIT_ASSERT_MESSAGE(aAnnotated.getStr(),
+                           aAnnotated.endsWith("\n\nFormulas:\n- A1: =Rates!A1*2\n"));
+}
+
+void ScCopyPasteTest::testMarkdownExportAnnotatedFormulaLimit()
+{
+    // Given a column of 150 formulas:
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+    ScTabViewShell* pViewShell = getViewShell();
+
+    for (SCROW nRow = 0; nRow < 150; ++nRow)
+        pDoc->SetString(ScAddress(0, nRow, 0), u"=ROW()"_ustr);
+
+    // Select A1:A150:
+    ScRange aRange(0, 0, 0, 0, 149, 0);
+    pViewShell->GetViewData().GetMarkData().SetMarkArea(aRange);
+
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    CPPUNIT_ASSERT(pModelObj);
+
+    // When exporting as annotated markdown:
+    OString aAnnotated = lcl_getAnnotatedMarkdownExport(pModelObj);
+
+    // Then the first 100 formulas are listed and the rest are counted:
+    CPPUNIT_ASSERT(aAnnotated.indexOf("- A100: =ROW()\n") >= 0);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aAnnotated.indexOf("- A101:"));
+    CPPUNIT_ASSERT(aAnnotated.endsWith("- 50 more formula cells\n"));
+}
+
+void ScCopyPasteTest::testExtractDocumentStructureProtectedFormula()
+{
+    // Given a protected sheet where A2 hides its formula and A3 shows it:
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    pDoc->SetValue(ScAddress(0, 0, 0), 10);
+    pDoc->SetString(ScAddress(0, 1, 0), u"=A1*2"_ustr);
+    pDoc->SetString(ScAddress(0, 2, 0), u"=A1+1"_ustr);
+    pDoc->ApplyAttr(0, 1, 0, ScProtectionAttr(/*bProtect*/ true, /*bHFormula*/ true));
+    ScTableProtection aProtection;
+    aProtection.setProtected(true);
+    pDoc->SetTabProtection(0, &aProtection);
+
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    CPPUNIT_ASSERT(pModelObj);
+
+    // When reading the sheet as text:
+    tools::JsonWriter aJsonWriter;
+    pModelObj->getCommandValues(aJsonWriter,
+                                ".uno:ExtractDocumentStructure?filter=text,range:A1:A3"_ostr);
+    OString aJson = aJsonWriter.finishAndGetAsOString();
+
+    // Then the table has every value, and only the formula that the user can see is listed:
+    CPPUNIT_ASSERT_MESSAGE(aJson.getStr(), aJson.indexOf("| 2 | 20 |") >= 0);
+    CPPUNIT_ASSERT_MESSAGE(aJson.getStr(), aJson.indexOf("- A3: =A1+1") >= 0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(aJson.getStr(), sal_Int32(-1), aJson.indexOf("- A2:"));
+}
+
+void ScCopyPasteTest::testExtractDocumentStructureTruncatedKeepsFormulas()
+{
+    // Given a sheet whose text is longer than the limit, with a formula in its first row:
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    OUStringBuffer aLongText;
+    for (int i = 0; i < 1000; ++i)
+        aLongText.append('x');
+    for (SCROW nRow = 0; nRow < 100; ++nRow)
+        pDoc->SetString(ScAddress(0, nRow, 0), aLongText.toString());
+    pDoc->SetString(ScAddress(1, 0, 0), u"=LEN(A1)"_ustr);
+
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    CPPUNIT_ASSERT(pModelObj);
+
+    // When reading the whole sheet as text:
+    tools::JsonWriter aJsonWriter;
+    pModelObj->getCommandValues(aJsonWriter, ".uno:ExtractDocumentStructure?filter=text"_ostr);
+    OString aJson = aJsonWriter.finishAndGetAsOString();
+
+    // Then the table is cut, and the formula list after it is still there:
+    CPPUNIT_ASSERT_MESSAGE(aJson.getStr(), aJson.indexOf("\"truncated\": true") >= 0);
+    CPPUNIT_ASSERT_MESSAGE(aJson.getStr(), aJson.indexOf("- B1: =LEN(A1)") >= 0);
+    CPPUNIT_ASSERT_MESSAGE(aJson.getStr(), aJson.indexOf("| 100 |") < 0);
 }
 
 void ScCopyPasteTest::testMarkdownRoundtripFormattedText()

@@ -103,6 +103,13 @@ public:
     // assistant can resolve cell addresses.
     static OUString GetMarkdownFromRange(ScDocument& rDoc, const ScRange& rRange, bool bAnnotated);
 
+    // The formula cells of a range, one line each such as "- B10: =SUM(B2:B9)", under a
+    // "Formulas:" heading. The formulas use English function names and sheet references such as
+    // Rates!A1. In a multi-range clipboard, only the cells of the copied ranges are listed. A
+    // formula that the protection of the sheet hides is not listed, as in a copy. Empty when the
+    // range has no formula to list.
+    static OUString GetFormulaListFromRange(ScDocument& rDoc, const ScRange& rRange);
+
     static  SC_DLLPUBLIC ScTransferObj* GetOwnClipboard(const cpo::uno::Reference<css::datatransfer::XTransferable2>&);
 
     static SfxObjectShell* SetDrawClipDoc(bool bAnyOle, const std::shared_ptr<ScDocument>& = {} );     // update ScGlobal::xDrawClipDocShellRef

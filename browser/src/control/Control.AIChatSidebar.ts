@@ -3989,6 +3989,10 @@ namespace cool {
 				_(
 					'Reference a cell by combining its column header with the row number (e.g., column B + row 2 = B2).',
 				) + ' ';
+			instructions +=
+				_(
+					'The table shows what each cell displays. The "Formulas:" list below it gives the formula of each cell that has one.',
+				) + ' ';
 			instructions += _(
 				'When referencing specific cells, format each cell as a clickable link: [B2](cell://B2).',
 			);

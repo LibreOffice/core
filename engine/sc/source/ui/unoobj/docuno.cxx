@@ -1761,12 +1761,21 @@ void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_vi
         }
 
         OUString aText = ScTransferObj::GetMarkdownFromRange(rDoc, aRange, /*bAnnotated*/ true);
+        OUString aFormulas = ScTransferObj::GetFormulaListFromRange(rDoc, aRange);
+        if (!aFormulas.isEmpty())
+            aFormulas = "\n" + aFormulas;
+        // A text that is too long loses the end of the table first, so the formula list after
+        // the table is kept.
         bool bTruncated = false;
-        if (aText.getLength() > KitHelper::AIBodyTextMaxChars)
+        if (aText.getLength() + aFormulas.getLength() > KitHelper::AIBodyTextMaxChars)
         {
-            aText = aText.copy(0, KitHelper::AIBodyTextMaxChars);
+            const sal_Int32 nTableChars = KitHelper::AIBodyTextMaxChars - aFormulas.getLength();
+            aText = aText.copy(0, nTableChars > 0 ? nTableChars : 0);
             bTruncated = true;
         }
+        aText += aFormulas;
+        if (aText.getLength() > KitHelper::AIBodyTextMaxChars)
+            aText = aText.copy(0, KitHelper::AIBodyTextMaxChars);
 
         // Emit the truncation flag and an explicit instruction before the text,
         // so the model acts on it rather than overlooking a flag buried after a
