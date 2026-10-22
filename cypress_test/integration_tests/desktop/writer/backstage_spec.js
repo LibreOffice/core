@@ -17,6 +17,8 @@ function ensureBackstage(win) {
 describe(['tagdesktop'], 'Backstage View Tests', { testIsolation: false }, function() {
 
 	let win;
+	var originalCall = null;
+	var originalMessage = null;
 
 	before(function() {
 		helper.setupAndLoadDocument('writer/help_dialog.odt');
@@ -37,6 +39,15 @@ describe(['tagdesktop'], 'Backstage View Tests', { testIsolation: false }, funct
 		cy.then(() => {
 			if (win.app.map.backstageView) {
 				win.app.map.backstageView.hide();
+				delete win.app.map.backstageView.hasUserTemplates;
+			}
+			if (originalCall) {
+				win.postMobileCall = originalCall;
+				originalCall = null;
+			}
+			if (originalMessage) {
+				win.postMobileMessage = originalMessage;
+				originalMessage = null;
 			}
 		});
 	});
@@ -157,6 +168,85 @@ describe(['tagdesktop'], 'Backstage View Tests', { testIsolation: false }, funct
 
 		cy.cGet('body').contains('.template-type-button', 'All').click();
 		cy.cGet('.template-grid-empty').should('not.exist');
+	});
+
+	it('Shows no My templates section outside the Qt app', function() {
+		cy.then(() => {
+			ensureBackstage(win).show();
+		});
+
+		cy.cGet('#backstage-new').click();
+		cy.cGet('body').contains('.backstage-template-section-title', 'Built-in templates');
+		cy.cGet('.backstage-my-templates-grid').should('not.exist');
+	});
+
+	it('Lists the templates of the user in the Qt app, and manages them', function() {
+		cy.then(() => {
+			// Only the Qt app keeps templates of the user, so this test stands in for it.
+			var backstage = ensureBackstage(win);
+			backstage.hasUserTemplates = function() { return true; };
+			originalCall = win.postMobileCall;
+			win.postMobileCall = function(message) {
+				if (message === 'GETUSERTEMPLATES')
+					return Promise.resolve([
+						{ id: 'A1', name: 'Invoice', type: 'calc', path: '/templates/A1/Invoice.ots', size: 2048 },
+					]);
+				return Promise.resolve(undefined);
+			};
+			backstage.show();
+		});
+
+		cy.cGet('#backstage-new').click();
+		cy.cGet('.backstage-my-templates-grid .backstage-template-card').should(function(cards) {
+			expect(cards.toArray().map(function(card) { return card.id; }))
+				.to.deep.equal(['', 'user-template-A1']);
+		});
+		cy.cGet('.backstage-add-template-card').should('contain.text', 'Add template');
+
+		// The chips filter the templates of the user too, but the Add template card stays.
+		cy.cGet('body').contains('.template-type-button', 'Document').click();
+		cy.cGet('#user-template-A1').should('not.exist');
+		cy.cGet('.backstage-add-template-card').should('exist');
+		cy.cGet('body').contains('.template-type-button', 'All').click();
+		cy.cGet('#user-template-A1').should('exist');
+
+		cy.cGet('.backstage-manage-templates-button').click();
+		cy.cGet('#backstage-new').should('have.class', 'active');
+		cy.cGet('#backstage-user-template-A1 .backstage-manage-templates-name').should('have.text', 'Invoice');
+		cy.cGet('#backstage-user-template-A1 .backstage-template-type-tag').should('have.text', 'Spreadsheet');
+
+		cy.cGet('#backstage-user-template-A1 .backstage-remove-template-button').click();
+		cy.cGet('.backstage-modal-subtitle').should('contain.text', '"Invoice" will be removed');
+		cy.cGet('body').contains('.backstage-modal .button', 'Cancel').click();
+		cy.cGet('.backstage-modal-overlay').should('not.exist');
+
+		cy.cGet('.backstage-manage-templates-back').click();
+		cy.cGet('.backstage-my-templates-grid').should('exist');
+	});
+
+	it('Creates a new document from a template of the user, named after the template', function() {
+		var messages = [];
+		cy.then(() => {
+			var backstage = ensureBackstage(win);
+			backstage.hasUserTemplates = function() { return true; };
+			originalCall = win.postMobileCall;
+			win.postMobileCall = function(message) {
+				if (message === 'GETUSERTEMPLATES')
+					return Promise.resolve([
+						{ id: 'B2', name: 'Monthly Letter', type: 'writer', path: '/templates/B2/Monthly Letter.dotx', size: 1024 },
+					]);
+				return Promise.resolve(undefined);
+			};
+			originalMessage = win.postMobileMessage;
+			win.postMobileMessage = function(message) { messages.push(message); };
+			backstage.show();
+		});
+
+		cy.cGet('#backstage-new').click();
+		cy.cGet('#user-template-B2').click();
+		cy.wrap(messages).should('deep.equal', [
+			'newdoc type=writer template=%2Ftemplates%2FB2%2FMonthly%20Letter.dotx basename=Monthly%20Letter',
+		]);
 	});
 
 	it('Closes via the sidebar back button', function() {

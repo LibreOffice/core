@@ -29,9 +29,13 @@ namespace BackstageTemplates {
   }
 
   export interface TemplateSectionsProps {
+    // Null where the app keeps no templates of the user.
+    userTemplates: TemplateData[] | null;
     builtInTemplates: TemplateData[];
     searchQuery: string;
     onClick: (template: TemplateData) => void;
+    onAddTemplate: () => void;
+    onManageTemplates: () => void;
   }
 
   export interface TemplateCardOptions {
@@ -161,6 +165,14 @@ namespace BackstageTemplates {
   export function templateSections(props: TemplateSectionsProps): HTMLElement {
     return (
       <div class="backstage-template-sections">
+        {props.userTemplates
+          ? myTemplatesSection({
+              templates: props.userTemplates,
+              onTemplateClick: props.onClick,
+              onAddClick: props.onAddTemplate,
+              onManageClick: props.onManageTemplates,
+            })
+          : null}
         <div class="backstage-template-section-header">
           <h4 class="backstage-template-section-title">
             {_('Built-in templates')}

@@ -599,6 +599,303 @@
 	font-size: var(--medium-font-size);
 }
 
+/* My templates and Manage templates */
+#backstage-view .backstage-manage-templates-button {
+	margin: 0;
+}
+
+.backstage-add-template-card .template-name {
+	color: var(--doc-type-color);
+}
+
+[data-theme='dark'] .backstage-add-template-card {
+	--doc-type-color: var(--color-main-text);
+}
+
+.backstage-add-template-card .template-thumbnail {
+	box-sizing: border-box;
+	width: 70px;
+	height: 98px;
+	align-items: center;
+	border: none;
+}
+
+/* A dashed border draws short dashes, so four gradients draw the outline with 11px dashes. */
+.backstage-add-template-card .template-thumbnail,
+.backstage-template-drop-zone {
+	--add-template-dash-color: var(--color-border-dark);
+	--add-template-dash: var(--add-template-dash-color) 0 11px, transparent 11px 22px;
+	background-image: repeating-linear-gradient(90deg, var(--add-template-dash)),
+		repeating-linear-gradient(90deg, var(--add-template-dash)),
+		repeating-linear-gradient(180deg, var(--add-template-dash)),
+		repeating-linear-gradient(180deg, var(--add-template-dash));
+	background-position: top, bottom, left, right;
+	background-size: 100% 1px, 100% 1px, 1px 100%, 1px 100%;
+	background-repeat: no-repeat;
+}
+
+.backstage-add-template-card:hover .template-thumbnail,
+.backstage-add-template-card:focus-visible .template-thumbnail {
+	--add-template-dash-color: var(--doc-type-color);
+}
+
+.backstage-add-template-plus {
+	position: relative;
+	width: 14px;
+	height: 14px;
+}
+
+/* The plus has lines of 1.5px with round ends. */
+.backstage-add-template-plus::before,
+.backstage-add-template-plus::after {
+	content: '';
+	position: absolute;
+	border-radius: 1px;
+	background-color: var(--doc-type-color);
+}
+
+.backstage-add-template-plus::before {
+	top: 0;
+	left: calc(50% - 0.75px);
+	width: 1.5px;
+	height: 100%;
+}
+
+.backstage-add-template-plus::after {
+	top: calc(50% - 0.75px);
+	left: 0;
+	width: 100%;
+	height: 1.5px;
+}
+
+.backstage-manage-templates-title {
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-m);
+	margin-top: var(--spacing-m);
+}
+
+.backstage-manage-templates .backstage-content-description {
+	margin-bottom: var(--spacing-xl);
+}
+
+.backstage-manage-templates-title .backstage-content-title {
+	margin: 0;
+}
+
+#backstage-view .backstage-manage-templates-back {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: var(--btn-size);
+	height: var(--btn-size);
+	padding: 0;
+	border: 1px solid transparent;
+	border-radius: var(--border-radius);
+	background: transparent;
+	cursor: pointer;
+}
+
+#backstage-view .backstage-manage-templates-back:hover {
+	border-color: var(--color-btn-border);
+	background-color: var(--color-background-tabs-group);
+}
+
+.backstage-manage-templates-actions {
+	display: flex;
+	justify-content: flex-end;
+	margin-bottom: var(--spacing-l);
+}
+
+#backstage-view .backstage-manage-templates-actions .button,
+#backstage-view .backstage-manage-templates-row-actions .button {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--spacing-s);
+	margin: 0;
+	line-height: normal;
+}
+
+.backstage-template-action-icon {
+	width: var(--btn-img-size-s);
+	height: var(--btn-img-size-s);
+	background: no-repeat center / contain;
+}
+
+.backstage-rename-template-button .backstage-template-action-icon {
+	background-image: url('images/lc_edit.svg');
+}
+
+.backstage-remove-template-button .backstage-template-action-icon {
+	background-image: url('images/lc_trash.svg');
+}
+
+[data-theme='dark'] .backstage-rename-template-button .backstage-template-action-icon {
+	background-image: url('images/dark/lc_edit.svg');
+}
+
+[data-theme='dark'] .backstage-remove-template-button .backstage-template-action-icon {
+	background-image: url('images/dark/lc_trash.svg');
+}
+
+/* A text button: the icon toolbar button look, with a label. */
+#backstage-view .backstage-remove-template-button {
+	background-color: transparent;
+	border-color: transparent;
+}
+
+#backstage-view .backstage-remove-template-button:hover,
+#backstage-view .backstage-remove-template-button:focus-visible {
+	background-color: var(--color-background-tabs-group);
+	border-color: var(--color-btn-border);
+	outline: none;
+}
+
+.backstage-manage-templates-table {
+	width: 100%;
+	border-collapse: collapse;
+	font-size: var(--default-font-size);
+	color: var(--color-main-text);
+}
+
+.backstage-manage-templates-table th {
+	text-align: start;
+	font-weight: normal;
+	color: var(--color-text-light);
+	padding: var(--spacing-m) var(--spacing-l);
+	border-bottom: 1px solid var(--color-border);
+}
+
+.backstage-manage-templates-table th:first-child {
+	width: 50%;
+}
+
+.backstage-manage-templates-table th:last-child {
+	width: 1%;
+}
+
+.backstage-manage-templates-table td {
+	height: var(--list-row-height);
+	padding: 0 var(--spacing-l);
+	border-bottom: 1px solid var(--color-border);
+}
+
+.backstage-manage-templates-row:hover td {
+	background-color: var(--color-background-dark);
+}
+
+.backstage-manage-templates-row-actions {
+	text-align: end;
+	white-space: nowrap;
+}
+
+.backstage-manage-templates-name-wrapper {
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-l);
+}
+
+.backstage-manage-templates-name-wrapper .backstage-recent-document-icon {
+	width: 24px;
+	height: 24px;
+}
+
+#backstage-view .backstage-manage-templates-row-actions .button + .button {
+	margin-inline-start: var(--spacing-m);
+}
+
+.backstage-template-type-tag {
+	display: inline-block;
+	padding: 5px;
+	border-radius: var(--border-radius);
+	background-color: var(--color-background-darker);
+	font-size: var(--default-font-size);
+}
+
+/* The dialog takes the widest size of .backstage-modal, 480px less its padding. */
+.backstage-template-file-area {
+	width: 432px;
+	max-width: 100%;
+}
+
+.backstage-template-drop-zone {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	gap: var(--spacing-m);
+	min-height: 110px;
+	background-color: var(--color-main-background);
+	color: var(--color-text-dark);
+	font-size: var(--default-font-size);
+}
+
+#backstage-view .backstage-template-drop-zone .button {
+	margin: 0;
+	background-color: var(--color-background-lighter);
+	color: var(--doc-type-color);
+	font-weight: 600;
+}
+
+#backstage-view .backstage-template-drop-zone .button:hover,
+#backstage-view .backstage-template-drop-zone .button:focus-visible {
+	background-color: var(--color-background-dark);
+	border-color: var(--doc-type-color);
+}
+
+[data-theme='dark'] #backstage-view .backstage-template-drop-zone .button {
+	--doc-type-color: var(--color-main-text);
+}
+
+.backstage-template-file {
+	display: flex;
+	align-items: center;
+	gap: var(--spacing-l);
+	padding: var(--spacing-m) var(--spacing-l);
+	border: 1px solid var(--color-border);
+	border-radius: var(--border-radius);
+	background-color: var(--color-main-background);
+}
+
+.backstage-template-file-page {
+	display: flex;
+	flex: 0 0 auto;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	width: 34px;
+	height: 46px;
+	border: 1px solid var(--color-border);
+	background-color: var(--color-background-lighter);
+}
+
+.backstage-template-file-info {
+	flex: 1;
+	min-width: 0;
+}
+
+.backstage-template-file-name {
+	font-size: var(--default-font-size);
+	font-weight: 600;
+	color: var(--color-main-text);
+	overflow-wrap: anywhere;
+}
+
+.backstage-template-file-details {
+	color: var(--color-text-light);
+	font-size: var(--default-font-size);
+}
+
+.backstage-modal-error {
+	margin: 0;
+	color: var(--color-error);
+	font-size: var(--default-font-size);
+}
+
+.backstage-modal-error:empty {
+	display: none;
+}
+
 
 .backstage-formats-grid {
 	display: grid;

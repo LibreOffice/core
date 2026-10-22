@@ -29,6 +29,12 @@ class BackstageView extends window.L.Class {
 	private templateSearchQuery: string = '';
 	private templateFilter: TemplateFilter = 'all';
 	private templateSectionsContainer: HTMLElement | null = null;
+	private userTemplates: UserTemplate[] = [];
+	// Shows a dropped file in the open Add template dialog. Null while that dialog is closed.
+	private templateDropHandler: ((file: TemplateFileInfo) => void) | null = null;
+	private closeAddTemplateDialog: (() => void) | null = null;
+	// Counts the views asked for. A view that waits for data renders only if it is the latest.
+	private viewRequest: number = 0;
 	private saveTabElement: HTMLElement | null = null;
 	private readonly isStarterMode: boolean;
 	private boundOnKeyDown: (e: KeyboardEvent) => void;
@@ -711,7 +717,13 @@ class BackstageView extends window.L.Class {
 		);
 	}
 
-	private renderNewView(): void {
+	private renderNewView(userTemplatesLoaded: boolean = false): void {
+		// Other windows can add or remove templates, so the list is read each time the view opens.
+		if (this.hasUserTemplates() && !userTemplatesLoaded) {
+			this.afterUserTemplatesLoad(() => this.renderNewView(true));
+			return;
+		}
+
 		this.setActiveTab('backstage-new');
 		this.clearContent();
 		this.templateSectionsContainer = null;
@@ -752,10 +764,144 @@ class BackstageView extends window.L.Class {
 			...this.getTemplatesData(),
 		];
 		return BackstageTemplates.templateSections({
+			userTemplates: this.hasUserTemplates()
+				? this.getFilteredTemplates(this.getUserTemplateCards())
+				: null,
 			builtInTemplates: this.getFilteredTemplates(builtInTemplates),
 			searchQuery: this.templateSearchQuery,
 			onClick: (t) => this.triggerNewDocument(t),
+			onAddTemplate: () =>
+				this.showAddTemplateDialog(() => this.renderNewView()),
+			onManageTemplates: () => this.renderManageTemplatesView(),
 		});
+	}
+
+	// Only the Qt app keeps templates of the user so far.
+	private hasUserTemplates(): boolean {
+		return !!window.ThisIsTheQtApp;
+	}
+
+	private async loadUserTemplates(): Promise<void> {
+		const list = await window.postMobileCall('GETUSERTEMPLATES');
+		this.userTemplates = Array.isArray(list) ? list : [];
+	}
+
+	// Renders the view when the list arrives, if the backstage still shows the same view. When the
+	// list cannot be read, the view shows the templates that it had before.
+	private afterUserTemplatesLoad(render: () => void): void {
+		const request = ++this.viewRequest;
+		this.loadUserTemplates()
+			.catch((e) => console.error('Failed to read user templates:', e))
+			.then(() => {
+				if (this.isVisible && request === this.viewRequest) render();
+			});
+	}
+
+	private getUserTemplateCards(): TemplateData[] {
+		return this.userTemplates.map((template) => ({
+			id: 'user-template-' + template.id,
+			name: template.name,
+			type: template.type,
+			path: template.path,
+			basename: template.name,
+			searchText: [template.name, template.type].join(' ').toLowerCase(),
+		}));
+	}
+
+	private renderManageTemplatesView(
+		userTemplatesLoaded: boolean = false,
+	): void {
+		if (!userTemplatesLoaded) {
+			this.afterUserTemplatesLoad(() => this.renderManageTemplatesView(true));
+			return;
+		}
+
+		this.setActiveTab('backstage-new');
+		this.clearContent();
+		this.templateSectionsContainer = null;
+
+		this.contentArea.appendChild(
+			BackstageTemplates.manageTemplatesView({
+				templates: this.userTemplates,
+				onAdd: () =>
+					this.showAddTemplateDialog(() => this.renderManageTemplatesView()),
+				onRename: (template) => this.showRenameTemplateDialog(template),
+				onRemove: (template) => this.showRemoveTemplateDialog(template),
+				onBack: () => this.renderNewView(),
+			}),
+		);
+	}
+
+	private showAddTemplateDialog(onAdded: () => void): void {
+		this.mountDialog((close) => {
+			const finish = () => {
+				this.closeAddTemplateDialog = null;
+				this.templateDropHandler = null;
+				window.postMobileMessage('SETTEMPLATEDROPTARGET off');
+				close();
+			};
+			const dialog = BackstageTemplates.addTemplateDialog({
+				onBrowse: async () =>
+					(await window.postMobileCall('PICKUSERTEMPLATE')) || null,
+				onCancel: finish,
+				onAdd: async (file, name) => {
+					const added = await window.postMobileCall(
+						'ADDUSERTEMPLATE name=' +
+							encodeURIComponent(name) +
+							' source=' +
+							encodeURIComponent(file.path),
+					);
+					if (!added) return false;
+					finish();
+					onAdded();
+					return true;
+				},
+			});
+			this.closeAddTemplateDialog = finish;
+			this.templateDropHandler = dialog.setFile;
+			window.postMobileMessage('SETTEMPLATEDROPTARGET on');
+			return dialog.element;
+		});
+	}
+
+	// Takes a file dropped on the window as the file to add as a template.
+	public onTemplateFileDropped(file: TemplateFileInfo): void {
+		if (this.templateDropHandler) this.templateDropHandler(file);
+	}
+
+	private showRenameTemplateDialog(template: UserTemplate): void {
+		this.mountDialog((close) =>
+			BackstageTemplates.renameTemplateDialog({
+				name: template.name,
+				onCancel: close,
+				onRename: async (name) => {
+					const renamed = await window.postMobileCall(
+						'RENAMEUSERTEMPLATE id=' +
+							template.id +
+							' name=' +
+							encodeURIComponent(name),
+					);
+					if (!renamed) return false;
+					close();
+					this.renderManageTemplatesView();
+					return true;
+				},
+			}),
+		);
+	}
+
+	private showRemoveTemplateDialog(template: UserTemplate): void {
+		this.mountDialog((close) =>
+			BackstageTemplates.removeTemplateDialog({
+				name: template.name,
+				onCancel: close,
+				onConfirm: async () => {
+					close();
+					await window.postMobileCall('REMOVEUSERTEMPLATE id=' + template.id);
+					this.renderManageTemplatesView();
+				},
+			}),
+		);
 	}
 
 	private updateTemplateSections(): void {
@@ -941,6 +1087,7 @@ class BackstageView extends window.L.Class {
 	}
 
 	private setActiveTab(tabId: string): void {
+		++this.viewRequest;
 		document
 			.querySelectorAll('.backstage-sidebar-item')
 			.forEach((el) => el.classList.remove('active'));
@@ -1195,8 +1342,8 @@ class BackstageView extends window.L.Class {
 		// style of messages doesn't allow spaces inside a value, and a translation of
 		// the template file basename might contains a space.
 
-		// Such basenames should be in the templates.js file. If a template doesn't
-		// have one, the localisation of "Untitled" is the default.
+		// A built-in template has its basename in the templates.js file, and a template of
+		// the user has its own name. Otherwise the localisation of "Untitled" is the default.
 		const basename = template.basename || _('Untitled');
 		params.push('basename=' + encodeURIComponent(basename));
 
@@ -1298,6 +1445,7 @@ class BackstageView extends window.L.Class {
 		}
 
 		this.isVisible = false;
+		this.closeAddTemplateDialog?.();
 		$(this.container).addClass('hidden');
 		this.showDocumentContainer();
 		this.focusMap();

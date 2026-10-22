@@ -53,6 +53,38 @@ namespace BackstageTemplates {
     );
   }
 
+  /** The Cancel and Remove buttons of a removal dialog. Cancel has the focus when it opens. */
+  export interface RemoveActionsProps {
+    onCancel: () => void;
+    onConfirm: () => void;
+  }
+
+  export function removeActions(props: RemoveActionsProps): HTMLElement {
+    let cancelButton: HTMLButtonElement;
+    setTimeout(() => cancelButton?.focus(), 0);
+    return (
+      <div class="backstage-modal-actions">
+        <button
+          type="button"
+          class="button backstage-modal-cancel"
+          onClick={props.onCancel}
+          ref={(element: HTMLButtonElement) => {
+            cancelButton = element;
+          }}
+        >
+          {_('Cancel')}
+        </button>
+        <button
+          type="button"
+          class="button button-danger"
+          onClick={props.onConfirm}
+        >
+          {_('Remove')}
+        </button>
+      </div>
+    );
+  }
+
   // ---- Add / Edit dialog ----
 
   export interface AddCloudDialogProps {
@@ -272,7 +304,6 @@ namespace BackstageTemplates {
   export function removeConfirmDialog(
     props: RemoveConfirmDialogProps,
   ): HTMLElement {
-    let cancelBtn: HTMLButtonElement;
     const overlay = modalShell({
       titleId: 'backstage-remove-confirm-title',
       title: _('Remove this account?'),
@@ -287,29 +318,13 @@ namespace BackstageTemplates {
             kind: props.kind,
             userName: props.userName,
           })}
-          <div class="backstage-modal-actions">
-            <button
-              type="button"
-              class="button backstage-modal-cancel"
-              onClick={props.onCancel}
-              ref={(el: HTMLButtonElement) => {
-                cancelBtn = el;
-              }}
-            >
-              {_('Cancel')}
-            </button>
-            <button
-              type="button"
-              class="button button-danger"
-              onClick={props.onConfirm}
-            >
-              {_('Remove')}
-            </button>
-          </div>
+          {removeActions({
+            onCancel: props.onCancel,
+            onConfirm: props.onConfirm,
+          })}
         </>
       ),
     });
-    setTimeout(() => cancelBtn?.focus(), 0);
     return overlay;
   }
 

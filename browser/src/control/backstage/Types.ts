@@ -63,6 +63,23 @@ interface TemplateData {
 	searchText: string;
 }
 
+// A template that the user added, as the Qt app lists it.
+interface UserTemplate {
+	id: string;
+	name: string;
+	type: TemplateType;
+	path: string;
+}
+
+// A file that the user picked or dropped to add as a template. The type is empty for a file that
+// is neither a template nor a document.
+interface TemplateFileInfo {
+	path: string;
+	fileName: string;
+	type: TemplateType | '';
+	size: number;
+}
+
 interface TemplateManifestEntry {
 	id?: string;
 	name?: string;
