@@ -8474,7 +8474,7 @@ std::string SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                             auto* pMediaObject = static_cast<SdrMediaObj*>(pObject);
                             auto const& rRectangle = pMediaObject->GetLogicRect();
                             auto aRectangle = o3tl::convert(rRectangle, o3tl::Length::mm100, o3tl::Length::twip);
-                            aJsonWriter.put("id", reinterpret_cast<sal_uInt64>(pMediaObject));
+                            aJsonWriter.put("id", pMediaObject->GetUniqueID());
                             aJsonWriter.put("url", pMediaObject->getTempURL());
                             aJsonWriter.put("x", aRectangle.Left());
                             aJsonWriter.put("y", aRectangle.Top());
