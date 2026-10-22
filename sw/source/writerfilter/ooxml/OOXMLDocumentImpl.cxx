@@ -780,12 +780,18 @@ void OOXMLDocument::resolveEmbeddingsStream(const OOXMLStream::Pointer_t& pStrea
     xRelationshipAccess.set(dynamic_cast<OOXMLStreamImpl&>(*pStream).accessDocumentStream(), uno::UNO_QUERY);
     if (xRelationshipAccess.is())
     {
-        static constexpr OUStringLiteral sChartType(u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart");
-        static constexpr OUStringLiteral sChartTypeStrict(u"http://purl.oclc.org/ooxml/officeDocument/relationships/chart");
-        static constexpr OUStringLiteral sFootersType(u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer");
-        static constexpr OUStringLiteral sFootersTypeStrict(u"http://purl.oclc.org/ooxml/officeDocument/relationships/footer");
-        static constexpr OUStringLiteral sHeaderType(u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/header");
-        static constexpr OUStringLiteral sHeaderTypeStrict(u"http://purl.oclc.org/ooxml/officeDocument/relationships/header");
+        static constexpr OUString sChartType(
+            u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/chart"_ustr);
+        static constexpr OUString sChartTypeStrict(
+            u"http://purl.oclc.org/ooxml/officeDocument/relationships/chart"_ustr);
+        static constexpr OUString sFootersType(
+            u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/footer"_ustr);
+        static constexpr OUString sFootersTypeStrict(
+            u"http://purl.oclc.org/ooxml/officeDocument/relationships/footer"_ustr);
+        static constexpr OUString sHeaderType(
+            u"http://schemas.openxmlformats.org/officeDocument/2006/relationships/header"_ustr);
+        static constexpr OUString sHeaderTypeStrict(
+            u"http://purl.oclc.org/ooxml/officeDocument/relationships/header"_ustr);
 
         bool bFound = false;
         bool bHeaderFooterFound = false;

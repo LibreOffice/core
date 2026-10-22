@@ -63,26 +63,10 @@ using com::sun::star::uno::Reference;
 
 // Implementation class SfxDialogLibraryContainer
 
-OUString SfxDialogLibraryContainer::getInfoFileName() const
-{
-    static constexpr OUStringLiteral dialog = u"dialog";
-    return dialog;
-}
-OUString SfxDialogLibraryContainer::getOldInfoFileName() const
-{
-    static constexpr OUStringLiteral dialogs = u"dialogs";
-    return dialogs;
-}
-OUString SfxDialogLibraryContainer::getLibElementFileExtension() const
-{
-    static constexpr OUStringLiteral xdl = u"xdl";
-    return xdl;
-}
-OUString SfxDialogLibraryContainer::getLibrariesDir() const
-{
-    static constexpr OUStringLiteral Dialogs = u"Dialogs";
-    return Dialogs;
-}
+OUString SfxDialogLibraryContainer::getInfoFileName() const { return u"dialog"_ustr; }
+OUString SfxDialogLibraryContainer::getOldInfoFileName() const { return u"dialogs"_ustr; }
+OUString SfxDialogLibraryContainer::getLibElementFileExtension() const { return u"xdl"_ustr; }
+OUString SfxDialogLibraryContainer::getLibrariesDir() const { return u"Dialogs"_ustr; }
 
 // Ctor for service
 SfxDialogLibraryContainer::SfxDialogLibraryContainer()

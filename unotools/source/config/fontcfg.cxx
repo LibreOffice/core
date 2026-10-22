@@ -231,14 +231,22 @@ OUString DefaultFontConfiguration::getUserInterfaceFont( const LanguageTag& rLan
 
     // fallback mechanism (either no configuration or no entry in configuration
 
-    static constexpr OUStringLiteral FALLBACKFONT_UI_SANS = u"Andale Sans UI;Albany;Albany AMT;Tahoma;Arial Unicode MS;Arial;Nimbus Sans L;Bitstream Vera Sans;gnu-unifont;Interface User;Geneva;WarpSans;Dialog;Swiss;Lucida;Helvetica;Charcoal;Chicago;MS Sans Serif;Helv;Times;Times New Roman;Interface System";
-    static constexpr OUStringLiteral FALLBACKFONT_UI_SANS_LATIN2 = u"Andale Sans UI;Albany;Albany AMT;Tahoma;Arial Unicode MS;Arial;Nimbus Sans L;Luxi Sans;Bitstream Vera Sans;Interface User;Geneva;WarpSans;Dialog;Swiss;Lucida;Helvetica;Charcoal;Chicago;MS Sans Serif;Helv;Times;Times New Roman;Interface System";
-    static constexpr OUStringLiteral FALLBACKFONT_UI_SANS_ARABIC = u"Tahoma;Traditional Arabic;Simplified Arabic;Lucidasans;Lucida Sans;Supplement;Andale Sans UI;clearlyU;Interface User;Arial Unicode MS;Lucida Sans Unicode;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif";
-    static constexpr OUStringLiteral FALLBACKFONT_UI_SANS_THAI = u"OONaksit;Tahoma;Lucidasans;Arial Unicode MS";
-    static constexpr OUStringLiteral FALLBACKFONT_UI_SANS_KOREAN = u"Noto Sans KR;Noto Sans CJK KR;Noto Serif KR;Noto Serif CJK KR;Source Han Sans KR;NanumGothic;NanumBarunGothic;NanumBarunGothic YetHangul;KoPubWorld Dotum;Malgun Gothic;Apple SD Gothic Neo;Dotum;DotumChe;Gulim;GulimChe;Batang;BatangChe;Apple Gothic;UnDotum;Baekmuk Gulim;Arial Unicode MS;Lucida Sans Unicode;gnu-unifont;Andale Sans UI";
-    static constexpr OUStringLiteral FALLBACKFONT_UI_SANS_JAPANESE = u"Noto Sans CJK JP;Noto Sans JP;Source Han Sans;Source Han Sans JP;Yu Gothic UI;Yu Gothic;YuGothic;Hiragino Sans;Hiragino Kaku Gothic ProN;Hiragino Kaku Gothic Pro;Hiragino Kaku Gothic StdN;Meiryo UI;Meiryo;IPAexGothic;IPAPGothic;IPAGothic;MS UI Gothic;MS PGothic;MS Gothic;Osaka;Unifont;gnu-unifont;Arial Unicode MS;Interface System";
-    static constexpr OUStringLiteral FALLBACKFONT_UI_SANS_CHINSIM = u"Andale Sans UI;Arial Unicode MS;ZYSong18030;AR PL SungtiL GB;AR PL KaitiM GB;SimSun;Lucida Sans Unicode;Fangsong;Hei;Song;Kai;Ming;gnu-unifont;Interface User;";
-    static constexpr OUStringLiteral FALLBACKFONT_UI_SANS_CHINTRD = u"Andale Sans UI;Arial Unicode MS;AR PL Mingti2L Big5;AR PL KaitiM Big5;Kai;PMingLiU;MingLiU;Ming;Lucida Sans Unicode;gnu-unifont;Interface User;";
+    static constexpr OUString FALLBACKFONT_UI_SANS
+        = u"Andale Sans UI;Albany;Albany AMT;Tahoma;Arial Unicode MS;Arial;Nimbus Sans L;Bitstream Vera Sans;gnu-unifont;Interface User;Geneva;WarpSans;Dialog;Swiss;Lucida;Helvetica;Charcoal;Chicago;MS Sans Serif;Helv;Times;Times New Roman;Interface System"_ustr;
+    static constexpr OUString FALLBACKFONT_UI_SANS_LATIN2
+        = u"Andale Sans UI;Albany;Albany AMT;Tahoma;Arial Unicode MS;Arial;Nimbus Sans L;Luxi Sans;Bitstream Vera Sans;Interface User;Geneva;WarpSans;Dialog;Swiss;Lucida;Helvetica;Charcoal;Chicago;MS Sans Serif;Helv;Times;Times New Roman;Interface System"_ustr;
+    static constexpr OUString FALLBACKFONT_UI_SANS_ARABIC
+        = u"Tahoma;Traditional Arabic;Simplified Arabic;Lucidasans;Lucida Sans;Supplement;Andale Sans UI;clearlyU;Interface User;Arial Unicode MS;Lucida Sans Unicode;WarpSans;Geneva;MS Sans Serif;Helv;Dialog;Albany;Lucida;Helvetica;Charcoal;Chicago;Arial;Helmet;Interface System;Sans Serif"_ustr;
+    static constexpr OUString FALLBACKFONT_UI_SANS_THAI
+        = u"OONaksit;Tahoma;Lucidasans;Arial Unicode MS"_ustr;
+    static constexpr OUString FALLBACKFONT_UI_SANS_KOREAN
+        = u"Noto Sans KR;Noto Sans CJK KR;Noto Serif KR;Noto Serif CJK KR;Source Han Sans KR;NanumGothic;NanumBarunGothic;NanumBarunGothic YetHangul;KoPubWorld Dotum;Malgun Gothic;Apple SD Gothic Neo;Dotum;DotumChe;Gulim;GulimChe;Batang;BatangChe;Apple Gothic;UnDotum;Baekmuk Gulim;Arial Unicode MS;Lucida Sans Unicode;gnu-unifont;Andale Sans UI"_ustr;
+    static constexpr OUString FALLBACKFONT_UI_SANS_JAPANESE
+        = u"Noto Sans CJK JP;Noto Sans JP;Source Han Sans;Source Han Sans JP;Yu Gothic UI;Yu Gothic;YuGothic;Hiragino Sans;Hiragino Kaku Gothic ProN;Hiragino Kaku Gothic Pro;Hiragino Kaku Gothic StdN;Meiryo UI;Meiryo;IPAexGothic;IPAPGothic;IPAGothic;MS UI Gothic;MS PGothic;MS Gothic;Osaka;Unifont;gnu-unifont;Arial Unicode MS;Interface System"_ustr;
+    static constexpr OUString FALLBACKFONT_UI_SANS_CHINSIM
+        = u"Andale Sans UI;Arial Unicode MS;ZYSong18030;AR PL SungtiL GB;AR PL KaitiM GB;SimSun;Lucida Sans Unicode;Fangsong;Hei;Song;Kai;Ming;gnu-unifont;Interface User;"_ustr;
+    static constexpr OUString FALLBACKFONT_UI_SANS_CHINTRD
+        = u"Andale Sans UI;Arial Unicode MS;AR PL Mingti2L Big5;AR PL KaitiM Big5;Kai;PMingLiU;MingLiU;Ming;Lucida Sans Unicode;gnu-unifont;Interface User;"_ustr;
 
     const OUString aLanguage( aLanguageTag.getLanguage());
 
@@ -997,11 +1005,11 @@ void FontSubstConfiguration::readLocaleSubst( const OUString& rBcp47 ) const
     it->second.aSubstAttributes.reserve( nFonts );
 
     // strings for subst retrieval, construct only once
-    static constexpr OUStringLiteral aSubstFontsStr  ( u"SubstFonts" );
-    static constexpr OUStringLiteral aSubstFontsMSStr( u"SubstFontsMS" );
-    static constexpr OUStringLiteral aSubstWeightStr ( u"FontWeight" );
-    static constexpr OUStringLiteral aSubstWidthStr  ( u"FontWidth" );
-    static constexpr OUStringLiteral aSubstTypeStr   ( u"FontType" );
+    static constexpr OUString aSubstFontsStr(u"SubstFonts"_ustr);
+    static constexpr OUString aSubstFontsMSStr(u"SubstFontsMS"_ustr);
+    static constexpr OUString aSubstWeightStr(u"FontWeight"_ustr);
+    static constexpr OUString aSubstWidthStr(u"FontWidth"_ustr);
+    static constexpr OUString aSubstTypeStr(u"FontType"_ustr);
     for( const OUString& rFontName : aFonts )
     {
         Reference< XNameAccess > xFont;
