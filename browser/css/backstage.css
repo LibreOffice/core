@@ -439,6 +439,15 @@
 	transition: all var(--duration-normal) var(--ease-standard);
 }
 
+/* The icon of the document type stands in for a missing preview, on a box of page size. */
+.template-thumbnail img.is-type-icon {
+	width: 70px;
+	height: 98px;
+	padding: 33px 19px;
+	object-fit: contain;
+	background-color: var(--color-background-lighter);
+}
+
 .backstage-template-card:hover .template-thumbnail img {
 	border-color: var(--doc-type-color);
 }

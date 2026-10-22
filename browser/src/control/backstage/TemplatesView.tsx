@@ -58,6 +58,7 @@ namespace BackstageTemplates {
       <div class={cls} id={template.id} onClick={onClick}>
         <div class="template-thumbnail">
           <img
+            class={template.preview ? null : 'is-type-icon'}
             alt={template.name}
             src={template.preview || defaultPreview(template.type)}
             onError={nextPreview}
@@ -70,12 +71,12 @@ namespace BackstageTemplates {
 
   function defaultPreview(type: TemplateType): string {
     const previews: Record<TemplateType, string> = {
-      writer: 'images/filetype/writer.svg',
-      calc: 'images/filetype/calc.svg',
-      impress: 'images/filetype/impress.svg',
-      draw: 'images/filetype/draw.svg',
+      writer: 'images/x-office-document.svg',
+      calc: 'images/x-office-spreadsheet.svg',
+      impress: 'images/x-office-presentation.svg',
+      draw: 'images/x-office-drawing.svg',
     };
-    return previews[type] || 'images/filetype/document.svg';
+    return previews[type] || 'images/x-office-document.svg';
   }
 
   export function templateExplorer(props: TemplateExplorerProps): HTMLElement {
