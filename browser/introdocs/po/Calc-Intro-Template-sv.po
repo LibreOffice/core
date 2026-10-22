@@ -3,11 +3,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Calc-Intro-Template.ods\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-10-14 12:57+0000\n"
-"Last-Translator: bittin1ddc447d824349b2 "
-"<bittin1ddc447d824349b2@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-10-19 17:22+0000\n"
+"Last-Translator: Andras Timar <timar@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Swedish <https://hosted.weblate.org/projects/collabora-online/"
-"calc-intro-template/sv/>\n"
+"desktop-apps/calc-intro-template/sv/>\n"
 "Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -399,7 +398,7 @@ msgstr "Dell"
 
 #. content.xml (sheet '📋 Tables')
 msgid "<1>2. Open the </1><2>Insert tab</2><3> in the toolbar</3>"
-msgstr "<1>2. Öppna </1><2 Infoga fliken</2><3> i verktygsfältet</3>"
+msgstr "<1>2. Öppna </1><2>Infoga fliken</2><3> i verktygsfältet</3>"
 
 #. content.xml (sheet '📋 Tables'); content.xml (sheet '🔍 Data & filtering')
 msgid "Logitech"
@@ -447,7 +446,7 @@ msgstr "Skapa en tabell från grunden"
 
 #. content.xml (sheet '📋 Tables')
 msgid "<1>1. Open the </1><2>Insert tab</2><3> in the toolbar</3>"
-msgstr "<1>1. Öppna </1><2< Infoga fliken</2><3> i verktygsfältet</3>"
+msgstr "<1>1. Öppna </1><2>Infoga fliken</2><3> i verktygsfältet</3>"
 
 #. content.xml (sheet '📋 Tables')
 msgid "<1>2. Click </1><2>Table</2>"
@@ -971,8 +970,8 @@ msgid ""
 "also use the search option to quickly find specific shortcuts.</6>"
 msgstr ""
 "<1>💡Användbart tips: </1><2>För att hitta en lista över alla genvägar, gå "
-"till </2><3<Hjälp fliken</3><4> och klicka på </4><5>Tangentbordsgenvägar</"
-"5><6>. Du kan också använda sökfunktionen för att snabbt hitta en specifik "
+"till </2><3>Hjälp fliken</3><4> och klicka på </4><5>Tangentbordsgenvägar</5>"
+"<6>. Du kan också använda sökfunktionen för att snabbt hitta en specifik "
 "tangentbordsgenväg.</6>"
 
 #. content.xml (sheet '🤝 Productivity & collaboration')

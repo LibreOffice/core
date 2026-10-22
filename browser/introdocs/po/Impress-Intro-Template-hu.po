@@ -3,10 +3,10 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Impress-Intro-Template.odp\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-10-13 18:14+0000\n"
+"PO-Revision-Date: 2026-10-22 10:46+0000\n"
 "Last-Translator: Andras Timar <timar@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/collabora-"
-"online/impress-intro-template/hu/>\n"
+"online/desktop-apps/impress-intro-template/hu/>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -47,7 +47,7 @@ msgstr "🖼 Diák és elrendezések"
 
 #. content.xml (slide 'page1'); content.xml (slide 'page3')
 msgid "🎨 Design & Master Slides"
-msgstr "🎨 Tervezés és diasablonok"
+msgstr "🎨 Tervezés és diaminták"
 
 #. content.xml (slide 'page1'); content.xml (slide 'page4')
 msgid "✏️ Style & Visual"
@@ -122,7 +122,7 @@ msgstr ""
 
 #. content.xml (slide 'page2')
 msgid "Next Chapter: 🎨 Design & Master Slides"
-msgstr "Következő fejezet: 🎨 Tervezés és diasablonok"
+msgstr "Következő fejezet: 🎨 Tervezés és diaminták"
 
 #. content.xml (slide 'page3')
 msgid ""
@@ -134,14 +134,14 @@ msgid ""
 "it up automatically. When you need to rebrand or tweak the design later, you"
 " change the master, not 30 slides.</7>"
 msgstr ""
-"<1>A </1><2>diasablon</2><3> a minden dia mögött álló sablon. Meghatározza a "
+"<1>A </1><2>diaminta</2><3> a minden dia mögött álló sablon. Meghatározza a "
 "színeket, a betűkészleteket, a hátteret, valamint a címek és láblécek "
-"helyét. </3><4>Módosítsa</4><5> </5><6>a diasablont, és minden dia egyszerre "
-"frissül. </6><7>Ezért a diasablon a leggyorsabb módja annak, hogy a bemutató "
+"helyét. </3><4>Módosítsa</4><5> </5><6>a diamintát, és minden dia egyszerre "
+"frissül. </6><7>Ezért a diaminta a leggyorsabb módja annak, hogy a bemutató "
 "egységes maradjon. Állítsa be egyszer a megjelenést (betűkészletek, színek, "
 "logó, lábléc), és minden új dia automatikusan átveszi. Ha később újra kell "
-"márkázni vagy finomítani kell a tervet, a diasablont módosítja, nem 30 "
-"diát.</7>"
+"márkázni vagy finomítani kell a tervet, a diamintát módosítja, nem 30 diát.</"
+"7>"
 
 #. content.xml (slide 'page3')
 msgid "Open the View tab in the Notebook bar."
@@ -149,16 +149,16 @@ msgstr "Nyissa meg a Nézet lapot a menüszalagon."
 
 #. content.xml (slide 'page3')
 msgid "Click “Master View” and edit your master design."
-msgstr "Kattintson a „Mintanézet” gombra, és szerkessze a diasablon tervét."
+msgstr "Kattintson a „Mintanézet” gombra, és szerkessze a diaminta tervét."
 
 #. content.xml (slide 'page3')
 msgid "Once your master design is ready, click \"Close Master View\"."
 msgstr ""
-"Ha a diasablon terve elkészült, kattintson a „Mintanézet bezárása” gombra."
+"Ha a diaminta terve elkészült, kattintson a „Mintanézet bezárása” gombra."
 
 #. content.xml (slide 'page3')
 msgid "Now your master is set and ready to use across all slides."
-msgstr "A diasablon most be van állítva, és minden dián használható."
+msgstr "A diaminta most be van állítva, és minden dián használható."
 
 #. content.xml (slide 'page3')
 msgid ""
@@ -167,8 +167,8 @@ msgid ""
 "master."
 msgstr ""
 "Ha egyetlen diának más megjelenésre van szüksége, hozzon létre egy második "
-"diasablont, és alkalmazza csak arra a diára. A bemutató többi része az "
-"eredeti diasablonon marad."
+"diamintát, és alkalmazza csak arra a diára. A bemutató többi része az "
+"eredeti diamintán marad."
 
 #. content.xml (slide 'page3')
 msgid "Next Chapter: ✏️ Style & Visual"

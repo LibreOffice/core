@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-13 14:06+0200\n"
-"PO-Revision-Date: 2026-10-13 18:14+0000\n"
+"PO-Revision-Date: 2026-10-22 10:46+0000\n"
 "Last-Translator: Andras Timar <timar@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Hungarian <https://hosted.weblate.org/projects/collabora-"
 "online/collabora-ui/hu/>\n"
@@ -1794,7 +1794,7 @@ msgstr "Vizsgálat a Függvénytündérrel"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:90
 msgid "Edit in Formula Bar"
-msgstr "Szerkesztés a képletsávon"
+msgstr "Szerkesztés a képletsorban"
 
 #: src/canvas/sections/FormulaErrorHelpSection.ts:98
 msgid "Help fix this error with AI"
@@ -2931,7 +2931,7 @@ msgstr "Rejtett diák"
 
 #: src/control/Control.CleanupSidebar.ts:246
 msgid "Unused master slides"
-msgstr "Nem használt diasablonok"
+msgstr "Nem használt diaminták"
 
 #: src/control/Control.CleanupSidebar.ts:252
 msgid "For sharing"
@@ -2989,11 +2989,11 @@ msgstr "Javítás: %1"
 
 #: src/control/Control.CleanupSidebar.ts:545
 msgid "Master slide"
-msgstr "Diasablon"
+msgstr "Diaminta"
 
 #: src/control/Control.CleanupSidebar.ts:546
 msgid "Master slide, image %1"
-msgstr "Diasablon, %1. kép"
+msgstr "Diaminta, %1. kép"
 
 #: src/control/Control.CleanupSidebar.ts:549
 #: src/control/Control.PartsPreview.js:965
@@ -3010,7 +3010,7 @@ msgstr "A(z) %1. dia rejtett, eltávolítható"
 
 #: src/control/Control.CleanupSidebar.ts:556
 msgid "Master slide '%1' is not used by any slide"
-msgstr "A(z) „%1” diasablont egyetlen dia sem használja"
+msgstr "A(z) „%1” diamintát egyetlen dia sem használja"
 
 #: src/control/Control.CleanupSidebar.ts:561
 msgid "Slide %1 has speaker notes"
@@ -4073,7 +4073,7 @@ msgstr "Elektronikus aláírás hozzáadása"
 
 #: src/control/Control.FormulaBarJSDialog.js:18
 msgid "Expand Formula Bar"
-msgstr "Képlet eszköztár lenyitása"
+msgstr "Képletsor lenyitása"
 
 #: src/control/Control.FormulaBarJSDialog.js:19
 msgid "Function Wizard"
@@ -4090,7 +4090,7 @@ msgstr "Elfogadás"
 
 #: src/control/Control.FormulaBarJSDialog.js:211
 msgid "Collapse Formula Bar"
-msgstr "Képlet eszköztár összecsukása"
+msgstr "Képletsor összecsukása"
 
 #: src/control/Control.IdleHandler.ts:45
 msgid "Idle document - please click to reload and resume editing"
@@ -5674,7 +5674,7 @@ msgstr "Diavetítés"
 
 #: src/control/Control.NotebookbarImpress.js:157
 msgid "Master"
-msgstr "Diasablon"
+msgstr "Minta"
 
 #: src/control/Control.NotebookbarImpress.js:539
 msgid "Start Slide Show"
@@ -5783,7 +5783,7 @@ msgstr "Csatolások frissítése"
 
 #: src/control/Control.NotebookbarImpress.js:1942
 msgid "Master Slide Templates"
-msgstr "Diasablonok"
+msgstr "Diamintasablonok"
 
 #: src/control/Control.NotebookbarImpress.js:1954
 msgid "This Presentation"
