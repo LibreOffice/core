@@ -335,13 +335,9 @@ bool SelectionHelper::findNamedParent( SdrObject*& pInOutObject
 
     while( pObj && !ObjectIdentifier::isCID( aName  )  )
     {
-        SdrObjList* pObjList = pObj->getParentSdrObjListFromSdrObject();
-        if( !pObjList )
+        pObj = pObj->getParentSdrObjectFromSdrObject();
+        if (!pObj)
             return false;
-        SdrObject* pOwner = pObjList->getSdrObjectFromSdrObjList();
-        if( !pOwner )
-            return false;
-        pObj = pOwner;
         aName = lcl_getObjectName( pObj );
     }
 

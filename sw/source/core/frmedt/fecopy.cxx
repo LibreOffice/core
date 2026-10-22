@@ -747,13 +747,10 @@ namespace {
                 rDrawView.InsertObjectAtView(xNew.get(), *rImp.GetPageView());
 
                 Point aGrpAnchor(0, 0);
-                SdrObjList* pList = xNew->getParentSdrObjListFromSdrObject();
-                if(pList)
+                if (SdrObjGroup* pOwner
+                    = dynamic_cast<SdrObjGroup*>(xNew->getParentSdrObjectFromSdrObject()))
                 {
-                    SdrObjGroup* pOwner(dynamic_cast<SdrObjGroup*>(pList->getSdrObjectFromSdrObjList()));
-
-                    if(nullptr != pOwner)
-                        aGrpAnchor = pOwner->GetAnchorPos();
+                    aGrpAnchor = pOwner->GetAnchorPos();
                 }
 
                 // OD 2004-04-05 #i26791# - direct drawing object
