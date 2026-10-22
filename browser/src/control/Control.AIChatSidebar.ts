@@ -33,6 +33,12 @@ namespace cool {
 		imageData?: string;
 		isApproval?: boolean;
 		approvalType?: 'inspect' | 'modify';
+		// An approval that the sidebar decides itself, before any request
+		// starts: the cells a formula diagnosis will send.
+		isDiagnosisConfirmation?: boolean;
+		// A message shown in the chat that the user has not agreed to send, or
+		// has declined to send. It is never part of a request to the model.
+		withheld?: boolean;
 		isOutline?: boolean;
 		outline?: OutlineCardState;
 		decided?: boolean;
@@ -94,6 +100,13 @@ namespace cool {
 		// branch of extract_document_structure); consumed when the
 		// matching assistant reply lands.
 		private pendingChoices: ChoicePayload | null = null;
+		// The formula diagnosis message waiting for the user to agree to send
+		// the cells it lists, and the card that lists them. Null when no
+		// diagnosis is waiting.
+		private pendingDiagnosis: {
+			request: ChatMessage;
+			card: ChatMessage;
+		} | null = null;
 
 		private selectedTone: string | null = null;
 		private emojify: boolean = false;
@@ -549,7 +562,11 @@ namespace cool {
 			}
 
 			if (msg.isApproval && !el.querySelector('.aichat-approval-buttons')) {
-				el.appendChild(this.buildApprovalButtons());
+				el.appendChild(
+					msg.isDiagnosisConfirmation
+						? this.buildDiagnosisButtons()
+						: this.buildApprovalButtons(),
+				);
 			}
 		}
 
@@ -2375,7 +2392,12 @@ namespace cool {
 		private buildApiMessages(): { role: string; content: string }[] {
 			const apiMessages: { role: string; content: string }[] = [];
 			const textMessages = this.messages.filter(
-				(m) => !m.imageData && !m.isError && !m.isApproval && !m.isOutline,
+				(m) =>
+					!m.imageData &&
+					!m.isError &&
+					!m.isApproval &&
+					!m.isOutline &&
+					!m.withheld,
 			);
 			const recent = textMessages.slice(-this.MAX_API_MESSAGES);
 			for (const msg of recent) {
@@ -2429,6 +2451,7 @@ namespace cool {
 				this.tonePickerOpen = false;
 			}
 
+			this.dropPendingDiagnosis();
 			this.hintText = '';
 			if (prompt === undefined) {
 				this.inputText = '';
@@ -2758,6 +2781,52 @@ namespace cool {
 			return btnContainer;
 		}
 
+		// The send and cancel buttons for a pending formula diagnosis. They look
+		// like the approval buttons, and nothing leaves the sidebar until the
+		// user presses send.
+		private buildDiagnosisButtons(): HTMLElement {
+			const btnContainer = document.createElement('div');
+			btnContainer.className = 'aichat-approval-buttons';
+
+			const sendBtn = document.createElement('button');
+			sendBtn.textContent = _('Send');
+			sendBtn.className = 'aichat-approve-btn';
+			sendBtn.setAttribute('aria-label', _('Send these cells'));
+			sendBtn.onclick = () => this.decideDiagnosis(true);
+
+			const cancelBtn = document.createElement('button');
+			cancelBtn.textContent = _('Cancel');
+			cancelBtn.className = 'aichat-reject-btn';
+			cancelBtn.setAttribute('aria-label', _('Do not send these cells'));
+			cancelBtn.onclick = () => this.decideDiagnosis(false);
+
+			btnContainer.appendChild(sendBtn);
+			btnContainer.appendChild(cancelBtn);
+			return btnContainer;
+		}
+
+		private decideDiagnosis(send: boolean): void {
+			const pending = this.pendingDiagnosis;
+			if (!pending) return;
+			this.pendingDiagnosis = null;
+			this.markApprovalDecided(pending.card);
+			if (send) {
+				pending.request.withheld = false;
+				this.startDiagnosisRequest();
+			} else {
+				this.hintText = _('Nothing was sent.');
+				this.updateHint();
+			}
+		}
+
+		// Withdraws a diagnosis that is still waiting for the user, so its card
+		// no longer offers to send it.
+		private dropPendingDiagnosis(): void {
+			if (!this.pendingDiagnosis) return;
+			this.markApprovalDecided(this.pendingDiagnosis.card);
+			this.pendingDiagnosis = null;
+		}
+
 		private sendApprovalAction(action: string): void {
 			this.awaitingUserDecision = false;
 			this.markApprovalDecided();
@@ -2784,13 +2853,14 @@ namespace cool {
 			}
 		}
 
-		// Records the decision on the approval still awaiting one and removes its
-		// buttons, so the transcript keeps the message without offering the
-		// decision a second time.
-		private markApprovalDecided(): void {
+		// Records the decision on an approval and removes its buttons, so the
+		// transcript keeps the message without offering the decision a second
+		// time. Without a target, the approval is the newest one still awaiting
+		// a decision.
+		private markApprovalDecided(target?: ChatMessage): void {
 			for (let i = this.messages.length - 1; i >= 0; i--) {
 				const msg = this.messages[i];
-				if (msg.decided || !msg.isApproval) continue;
+				if (target ? msg !== target : msg.decided || !msg.isApproval) continue;
 				msg.decided = true;
 				const el = document.getElementById('aichat-msg-' + i);
 				const buttons = el
@@ -2897,6 +2967,7 @@ namespace cool {
 			this.emojiPickerOpen = false;
 			this.deleteConfirmOpen = false;
 			this.pendingChoices = null;
+			this.pendingDiagnosis = null;
 			this.designTemplate = null;
 			this.render();
 		}
@@ -3684,6 +3755,7 @@ namespace cool {
 
 		public async diagnoseFormulaError(): Promise<void> {
 			if (this.isProcessing) return;
+			this.dropPendingDiagnosis();
 
 			this.progressText = _('Analyzing formula dependencies...');
 			this.updateMessagesArea();
@@ -3719,14 +3791,48 @@ namespace cool {
 				cell.address +
 				': ' +
 				cell.formula;
-			this.messages.push({
+			const cellList = this.listDependencyCells(depChain.dependencies || []);
+			// The formula alone is what the user asked about. The cells it reads
+			// go out only once the user has seen them listed and agreed, so until
+			// then the request stays in the chat without being sent.
+			const msg: ChatMessage = {
 				role: 'user',
 				content: content,
 				displayContent: displayContent,
 				timestamp: Date.now(),
-			});
+				withheld: !!cellList,
+			};
 			this.inputText = '';
 			this.hintText = '';
+			this.messages.push(msg);
+
+			if (!cellList) {
+				this.startDiagnosisRequest();
+				return;
+			}
+
+			this.appendMessage(msg, this.messages.length - 1);
+			const card: ChatMessage = {
+				role: 'assistant',
+				content:
+					_('To diagnose the error in %1, these cells will be sent to %2:')
+						.replace('%1', cell.address)
+						.replace('%2', this.getModelDisplayName()) +
+					'\n\n' +
+					cellList +
+					'\n\n' +
+					_('Do you want to send them?'),
+				timestamp: Date.now(),
+				isApproval: true,
+				approvalType: 'inspect',
+				isDiagnosisConfirmation: true,
+			};
+			this.messages.push(card);
+			this.appendMessage(card, this.messages.length - 1);
+			this.pendingDiagnosis = { request: msg, card: card };
+		}
+
+		private startDiagnosisRequest(): void {
 			this.isProcessing = true;
 			this.updateChatState(true);
 			this.updateHint();
@@ -3773,6 +3879,44 @@ namespace cool {
 				);
 
 			return context;
+		}
+
+		// The cells of a dependency chain as a markdown list, one line per sheet
+		// such as "- Budget: A5, B6", followed by each summarized range and each
+		// reference to another file. Empty when the chain reads no cell.
+		private listDependencyCells(deps: any[]): string {
+			const cellsBySheet = new Map<string, string[]>();
+			const others: string[] = [];
+			const collect = (list: any[]) => {
+				for (const dep of list) {
+					if (dep.type === 'range') {
+						others.push(
+							dep.address + ' (' + _('only the cells with errors') + ')',
+						);
+					} else if (dep.type === 'external') {
+						others.push(
+							(dep.file || '') +
+								(dep.sheet ? ' ' + dep.sheet : '') +
+								' (' +
+								_('another file, its name only') +
+								')',
+						);
+					} else if (dep.sheet && dep.address) {
+						const cells = cellsBySheet.get(dep.sheet) || [];
+						if (!cells.includes(dep.address)) cells.push(dep.address);
+						cellsBySheet.set(dep.sheet, cells);
+					}
+					if (dep.dependencies) collect(dep.dependencies);
+				}
+			};
+			collect(deps);
+
+			let result = '';
+			cellsBySheet.forEach((cells, sheet) => {
+				result += '- ' + sheet + ': ' + cells.join(', ') + '\n';
+			});
+			for (const other of others) result += '- ' + other + '\n';
+			return result.trimEnd();
 		}
 
 		private formatDependencies(deps: any[], indent: number): string {
@@ -3876,6 +4020,7 @@ namespace cool {
 
 		public async sanityCheckData(): Promise<void> {
 			if (this.isProcessing) return;
+			this.dropPendingDiagnosis();
 
 			if (!TextSelections.isActive()) {
 				this.hintText = _('Select the data you want to sanity-check first.');

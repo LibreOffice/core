@@ -264,3 +264,118 @@ describe(['tagdesktop'], 'The cell under the cursor as context', function() {
 		});
 	});
 });
+
+describe(['tagdesktop'], 'Formula error diagnosis', function() {
+	beforeEach(function() {
+		// A1 holds 2 and A2 holds 3, so B1 divides by zero.
+		helper.setupAndLoadDocument('calc/aichat_formula.fods');
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+			setCellFormula(win, 'B1', '=A1/(A2-3)');
+			aichatHelper.enableAIWithCaptureSocket(win, {});
+		});
+		aichatHelper.openAIChat();
+	});
+
+	function diagnoseB1(win) {
+		calcHelper.enterCellAddressAndConfirm(win, 'B1');
+		cy.getFrameWindow().then(function(win) {
+			win.app.dispatcher.dispatch('helpfixformulaerror');
+		});
+		// The request comes first and the card that asks about it follows.
+		cy.cGet('#aichat-msg-0').should('contain.text', 'Diagnose formula error in B1');
+		cy.cGet('#aichat-msg-1')
+			.should('contain.text', 'these cells will be sent')
+			.should('contain.text', 'Sheet1: A1, A2');
+	}
+
+	it('the cells are listed first and go out only after Send', function() {
+		diagnoseB1(this.win);
+		cy.getFrameWindow().should(function(win) {
+			expect(win.__aichatPayloads).to.have.length(0);
+		});
+
+		cy.cGet('.aichat-approve-btn').click();
+
+		cy.getFrameWindow().should(function(win) {
+			expect(win.__aichatPayloads).to.have.length(1);
+			var messages = win.__aichatPayloads[0].messages;
+			expect(messages[messages.length - 1].content).to.contain('A2');
+		});
+	});
+
+	it('Cancel sends nothing', function() {
+		diagnoseB1(this.win);
+
+		cy.cGet('.aichat-reject-btn').click();
+
+		cy.cGet('#aichat-hint').should('contain.text', 'Nothing was sent.');
+		cy.cGet('.aichat-approve-btn').should('not.exist');
+		cy.getFrameWindow().should(function(win) {
+			expect(win.__aichatPayloads).to.have.length(0);
+		});
+	});
+
+	it('a cancelled diagnosis stays out of the next request', function() {
+		diagnoseB1(this.win);
+		cy.cGet('.aichat-reject-btn').click();
+
+		// A1 holds a plain value, so the typed message carries no cell.
+		calcHelper.enterCellAddressAndConfirm(this.win, 'A1');
+		cy.getFrameWindow().should(function(win) {
+			expect(win.app.map._docLayer._lastFormula).to.eq('2');
+		});
+		aichatHelper.typeIntoAIInput('What can you do?');
+		aichatHelper.clickSend();
+
+		cy.getFrameWindow().should(function(win) {
+			expect(win.__aichatPayloads).to.have.length(1);
+			var messages = win.__aichatPayloads[0].messages;
+			expect(messages).to.have.length(1);
+			expect(messages[0].content).to.eq('What can you do?');
+		});
+	});
+});
+
+describe(['tagdesktop'], 'A waiting diagnosis and another request', function() {
+	beforeEach(function() {
+		// A1 holds 2 and A2 holds 3, so B1 divides by zero.
+		helper.setupAndLoadDocument('calc/aichat_formula.fods');
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+			setCellFormula(win, 'B1', '=A1/(A2-3)');
+			// Each request asks to inspect the document before it answers.
+			aichatHelper.enableAIWithCaptureSocket(win, {
+				approvalToolName: 'extract_document_structure',
+			});
+		});
+		aichatHelper.openAIChat();
+	});
+
+	it('a sanity check withdraws the diagnosis and keeps its own approval', function() {
+		calcHelper.enterCellAddressAndConfirm(this.win, 'B1');
+		cy.getFrameWindow().then(function(win) {
+			win.app.dispatcher.dispatch('helpfixformulaerror');
+		});
+		cy.cGet('#aichat-msg-1 .aichat-approve-btn').should('exist');
+
+		calcHelper.enterCellAddressAndConfirm(this.win, 'A1:A2');
+		cy.getFrameWindow().then(function(win) {
+			win.app.dispatcher.dispatch('aichatcleanupdata');
+		});
+
+		// The diagnosis card no longer offers Send, and the approval the sanity
+		// check asks for still has its buttons.
+		cy.cGet('#aichat-msg-3').should('contain.text', 'Mock change');
+		cy.cGet('#aichat-msg-1 .aichat-approve-btn').should('not.exist');
+		cy.cGet('#aichat-msg-3 .aichat-reject-btn').click();
+
+		cy.getFrameWindow().should(function(win) {
+			expect(win.__aichatApprovePayloads).to.have.length(1);
+			expect(win.__aichatPayloads).to.have.length(1);
+			var messages = win.__aichatPayloads[0].messages;
+			expect(messages).to.have.length(1);
+			expect(messages[0].content).to.not.contain('formula error');
+		});
+	});
+});
