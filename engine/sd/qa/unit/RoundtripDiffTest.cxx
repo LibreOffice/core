@@ -25,6 +25,8 @@
  *
  *   SD_RT_RUN      run at all; without it, and without SD_RT_CORPUS, this is a no-op
  *   SD_RT_CORPUS   directory of documents to process (default sd/qa/unit/data/pptx)
+ *                  A document is read and written in the format its name carries, so a folder
+ *                  can hold both the current presentation format and the older binary one
  *   SD_RT_REPORT   report file, appended to and resumable (default sd-roundtrip.log)
  *   SD_RT_LIMIT    stop after that many documents
  *   SD_RT_DUMPDIR  if set, write the A, B and C dumps of every document there
@@ -476,7 +478,9 @@ std::vector<OUString> SdRoundtripDiffTest::collectCorpus(const OUString& rDirect
             continue;
         if (aStatus.getFileType() != osl::FileStatus::Regular)
             continue;
-        if (!aStatus.getFileName().endsWithIgnoreAsciiCase(u".pptx"))
+        const OUString aFileName = aStatus.getFileName();
+        if (!aFileName.endsWithIgnoreAsciiCase(u".pptx")
+            && !aFileName.endsWithIgnoreAsciiCase(u".ppt"))
             continue;
         aFiles.push_back(aStatus.getFileURL());
     }
@@ -556,11 +560,16 @@ void SdRoundtripDiffTest::testCorpus()
         ModelDumper aFirst, aSecond, aThird;
         try
         {
+            // A document is written in the format it was read in, so that each round trip
+            // measures one pair of filters rather than two.
+            const TestFilter eFilter
+                = rUrl.endsWithIgnoreAsciiCase(u".ppt") ? TestFilter::PPT : TestFilter::PPTX;
+
             loadFromURL(rUrl);
             aFirst.dump(mxComponent);
-            saveAndReload(TestFilter::PPTX);
+            saveAndReload(eFilter);
             aSecond.dump(mxComponent);
-            saveAndReload(TestFilter::PPTX);
+            saveAndReload(eFilter);
             aThird.dump(mxComponent);
         }
         catch (const std::exception& rException)
