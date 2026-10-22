@@ -3,8 +3,9 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-13 14:06+0200\n"
-"PO-Revision-Date: 2026-10-19 09:51+0000\n"
-"Last-Translator: Sebastiaan Veld <notify@virtfields.nl>\n"
+"PO-Revision-Date: 2026-10-22 16:50+0000\n"
+"Last-Translator: Stephan Paternotte <stephan-"
+"p@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/collabora-online/"
 "help/nl/>\n"
 "Language: nl\n"
@@ -1060,7 +1061,7 @@ msgstr "Eindnoot invoegen"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:127-71
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:182-71
 msgid "Insert comment"
-msgstr "Opmerking toevoegen"
+msgstr "Commentaar invoegen"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:129-71
 msgid "Insert soft hyphen"

@@ -8,8 +8,9 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-13 14:06+0200\n"
-"PO-Revision-Date: 2026-10-19 09:51+0000\n"
-"Last-Translator: Sebastiaan Veld <notify@virtfields.nl>\n"
+"PO-Revision-Date: 2026-10-22 16:51+0000\n"
+"Last-Translator: Stephan Paternotte <stephan-"
+"p@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/nl/>\n"
 "Language: nl\n"
@@ -7610,7 +7611,7 @@ msgstr "Watermerk"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2433
 msgid "Insert comment"
-msgstr "Opmerking toevoegen"
+msgstr "Commentaar invoegen"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2437
 #: src/control/jsdialog/Definitions.Menu.ts:2452
@@ -7620,7 +7621,7 @@ msgstr "Opmerkingenoverzicht"
 #: src/control/jsdialog/Definitions.Menu.ts:2444
 #: src/control/jsdialog/Widget.Comment.ts:58
 msgid "Insert Comment"
-msgstr "Opmerking toevoegen"
+msgstr "Commentaar invoegen"
 
 #: src/control/jsdialog/Definitions.Menu.ts:2448
 msgid "Insert Note"
