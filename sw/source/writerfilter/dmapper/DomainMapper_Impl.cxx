@@ -34,6 +34,7 @@
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/document/PrinterIndependentLayout.hpp>
+#include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.hpp>
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/embed/XEmbeddedObject.hpp>
@@ -78,6 +79,8 @@
 #include <com/sun/star/util/NumberFormatter.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormatter.hpp>
+#include <com/sun/star/xml/dom/DocumentBuilder.hpp>
+#include <com/sun/star/xml/xpath/XPathAPI.hpp>
 #include <com/sun/star/document/XViewDataSupplier.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
@@ -160,6 +163,7 @@
 #include <unoparagraph.hxx>
 
 using namespace ::com::sun::star;
+using namespace ::css::xml::xpath;
 using namespace oox;
 namespace writerfilter::dmapper{
 
@@ -1301,6 +1305,97 @@ void DomainMapper_Impl::PopSdt()
     }
 
     GetSdtHelper().clear();
+}
+
+std::unordered_map<OUString, css::uno::Reference<css::xml::dom::XDocument>>&
+DomainMapper_Impl::GetPropertiesXMLs()
+{
+    if (!m_bPropertiesXMLsLoaded)
+        loadPropertiesXMLs();
+
+    return m_xPropertiesXMLs;
+}
+
+void DomainMapper_Impl::loadPropertiesXMLs()
+{
+    // Initialize properties xml storage (m_xPropertiesXMLs)
+    uno::Reference<uno::XInterface> xTemp
+        = m_xComponentContext->getServiceManager()->createInstanceWithContext(
+            u"com.sun.star.document.OOXMLDocumentPropertiesImporter"_ustr, m_xComponentContext);
+    uno::Reference<document::XOOXMLDocumentPropertiesImporter> xImporter(xTemp, uno::UNO_QUERY);
+    if (!xImporter.is())
+        return;
+
+    uno::Reference<xml::dom::XDocumentBuilder> xDomBuilder(
+        xml::dom::DocumentBuilder::create(m_xComponentContext));
+    if (!xDomBuilder.is())
+        return;
+
+    // Load core properties
+    try
+    {
+        auto xCorePropsStream = xImporter->getCorePropertiesStream(m_xDocumentStorage);
+        m_xPropertiesXMLs.insert(
+            { u"{6C3C8BC8-F283-45AE-878A-BAB7291924A1}"_ustr, // hardcoded id for core props
+              xDomBuilder->parse(xCorePropsStream) });
+    }
+    catch (const uno::Exception&)
+    {
+        SAL_WARN("writerfilter", "loadPropertiesXMLs: failed loading core properties XML");
+    }
+
+    // Load extended properties
+    try
+    {
+        auto xExtPropsStream = xImporter->getExtendedPropertiesStream(m_xDocumentStorage);
+        m_xPropertiesXMLs.insert(
+            { u"{6668398D-A668-4E3E-A5EB-62B293D839F1}"_ustr, // hardcoded id for extended props
+              xDomBuilder->parse(xExtPropsStream) });
+    }
+    catch (const uno::Exception&)
+    {
+        SAL_WARN("writerfilter", "loadPropertiesXMLs: failed loading extended properties XML");
+    }
+
+    // TODO: some other property items?
+
+    // Add custom XMLs
+    uno::Sequence<uno::Reference<xml::dom::XDocument>> aCustomXmls
+        = getDocumentReference()->getCustomXmlDomList();
+    uno::Sequence<uno::Reference<xml::dom::XDocument>> aCustomXmlProps
+        = getDocumentReference()->getCustomXmlDomPropsList();
+    if (aCustomXmls.getLength())
+    {
+        uno::Reference<XXPathAPI> xXpathAPI = XPathAPI::create(m_xComponentContext);
+        xXpathAPI->registerNS(
+            u"ds"_ustr, u"http://schemas.openxmlformats.org/officeDocument/2006/customXml"_ustr);
+        sal_Int32 nItem = 0;
+        // Hereby we assume that items from getCustomXmlDomList() and getCustomXmlDomPropsList()
+        // are matching each other:
+        // item1.xml -> itemProps1.xml, item2.xml -> itemProps2.xml
+        // This does works practically, but is it true in general?
+        for (const auto& xDoc : aCustomXmls)
+        {
+            // Retrieve storeid from properties xml
+            OUString aStoreId;
+            uno::Reference<XXPathObject> xResult = xXpathAPI->eval(
+                aCustomXmlProps[nItem], u"string(/ds:datastoreItem/@ds:itemID)"_ustr);
+
+            if (xResult.is() && xResult->getString().getLength())
+            {
+                aStoreId = xResult->getString();
+            }
+            else
+            {
+                SAL_WARN("writerfilter", "loadPropertiesXMLs: can't fetch storeid for custom doc!");
+            }
+
+            m_xPropertiesXMLs.insert({ aStoreId, xDoc });
+            nItem++;
+        }
+    }
+
+    m_bPropertiesXMLsLoaded = true;
 }
 
 void DomainMapper_Impl::PushProperties(ContextType eId)

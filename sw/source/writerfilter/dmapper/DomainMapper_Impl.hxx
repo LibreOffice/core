@@ -23,6 +23,7 @@
 #include <com/sun/star/text/XTextCursor.hpp>
 #include <com/sun/star/text/XTextAppend.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
+#include <com/sun/star/xml/dom/XDocument.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/embed/XStorage.hpp>
@@ -738,6 +739,14 @@ private:
     css::uno::Reference<css::text::XTextRange> m_xGlossaryEntryStart;
     std::stack<BookmarkInsertPosition> m_xSdtStarts;
 
+    /// Storage for all properties documents as xml::dom::XDocument for later querying xpath for data
+    std::unordered_map<OUString, css::uno::Reference<css::xml::dom::XDocument>> m_xPropertiesXMLs;
+
+    /// Check if m_xPropertiesXMLs is initialized and loaded
+    /// (need extra flag to distinguish empty sequence from not yet initialized)
+    bool m_bPropertiesXMLsLoaded = false;
+    void loadPropertiesXMLs();
+
     std::queue< rtl::Reference< SwXTextFrame > > m_xPendingTextBoxFrames;
 
 public:
@@ -851,6 +860,7 @@ public:
     /// Gives access to the currently open run/inline SDTs.
     const std::stack<BookmarkInsertPosition>& GetSdtStarts() const;
 
+    std::unordered_map<OUString, css::uno::Reference<css::xml::dom::XDocument>>& GetPropertiesXMLs();
 
     bool GetParaChanged() const { return m_StreamStateStack.top().bParaChanged; }
     bool GetParaHadField() const { return m_StreamStateStack.top().bParaHadField; }
