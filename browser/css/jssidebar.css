@@ -713,6 +713,7 @@ span.jsdialog.sidebar.ui-treeview-notexpandable {
 
 .navigation-search-wrapper > .sidebar.ui-grid-cell {
 	align-items: center;
+	grid-template-columns: minmax(0, 1fr);
 }
 
 /* Close Button Styling */
@@ -843,14 +844,9 @@ span.jsdialog.sidebar.ui-treeview-notexpandable {
 	color: var(--color-text-light);
 }
 
-/* search field box */
-#navigator-search {
-	max-width: 174px;
-}
-
 #navigator-search-input {
 	height: 24px;
-	padding-inline: var(--spacing-m);
+	padding-inline: var(--spacing-s);
 }
 /* search button */
 #navigator-search-button {
