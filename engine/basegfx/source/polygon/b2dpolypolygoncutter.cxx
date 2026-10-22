@@ -470,7 +470,7 @@ namespace basegfx
             }
 
         public:
-            explicit solver(const B2DPolygon& rOriginal)
+            explicit solver(const B2DPolygon& rOriginal, size_t* pPointLimit = nullptr)
             :   maOriginal(B2DPolyPolygon(rOriginal)),
                 mbIsCurve(false),
                 mbChanged(false)
@@ -480,7 +480,7 @@ namespace basegfx
                 if(!nOriginalCount)
                     return;
 
-                B2DPolygon aGeometry(utils::addPointsAtCutsAndTouches(rOriginal));
+                B2DPolygon aGeometry(utils::addPointsAtCutsAndTouches(rOriginal, pPointLimit));
                 aGeometry.removeDoublePoints();
                 aGeometry = utils::simplifyCurveSegments(aGeometry);
                 mbIsCurve = aGeometry.areControlPointsUsed();
@@ -676,9 +676,9 @@ namespace basegfx::utils
             }
         }
 
-        B2DPolyPolygon solveCrossovers(const B2DPolygon& rCandidate)
+        B2DPolyPolygon solveCrossovers(const B2DPolygon& rCandidate, size_t* pPointLimit)
         {
-            solver aSolver(rCandidate);
+            solver aSolver(rCandidate, pPointLimit);
             return aSolver.getB2DPolyPolygon();
         }
 
@@ -700,6 +700,7 @@ namespace basegfx::utils
         B2DPolyPolygon createNonzeroConform(const B2DPolyPolygon& rCandidate)
         {
             constexpr sal_uInt32 nMaxPolygons(1000);
+            constexpr size_t nMaxCutPoints(65536);
             if (rCandidate.count() > nMaxPolygons)
             {
                 SAL_WARN("basegfx", "this poly is too large, " << rCandidate.count() << " elements, to be able to process timeously, falling back to ignoring the winding rule, which is likely to cause rendering artifacts");
@@ -709,13 +710,20 @@ namespace basegfx::utils
             B2DPolyPolygon aCandidate;
 
             // remove all self-intersections and intersections
+            size_t nPointLimit(nMaxCutPoints);
             if(rCandidate.count() == 1)
             {
-                aCandidate = basegfx::utils::solveCrossovers(rCandidate.getB2DPolygon(0));
+                aCandidate = basegfx::utils::solveCrossovers(rCandidate.getB2DPolygon(0), &nPointLimit);
             }
             else
             {
-                aCandidate = basegfx::utils::solveCrossovers(rCandidate);
+                aCandidate = basegfx::utils::solveCrossovers(rCandidate, &nPointLimit);
+            }
+
+            if (!nPointLimit)
+            {
+                SAL_WARN("basegfx", "this poly crosses itself more than " << nMaxCutPoints << " times, too many to process timeously, falling back to ignoring the winding rule, which is likely to cause rendering artifacts");
+                return rCandidate;
             }
 
             // cleanup evtl. neutral polygons

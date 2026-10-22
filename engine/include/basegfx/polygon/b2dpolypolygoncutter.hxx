@@ -50,7 +50,8 @@ namespace basegfx::utils
             orientations since holes may have been created (possibly use
             correctOrientations).
         */
-        BASEGFX_DLLPUBLIC B2DPolyPolygon solveCrossovers(const B2DPolygon& rCandidate);
+        BASEGFX_DLLPUBLIC B2DPolyPolygon solveCrossovers(const B2DPolygon& rCandidate,
+                                                         size_t* pPointLimit = nullptr);
 
         /** Strip neutral polygons from PolyPolygon.
 
