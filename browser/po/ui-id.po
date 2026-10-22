@@ -12,16 +12,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-13 14:06+0200\n"
-"PO-Revision-Date: 2026-09-29 03:51+0000\n"
-"Last-Translator: Arif Budiman <arifpedia@gmail.com>\n"
-"Language-Team: Indonesian <https://hosted.weblate.org/projects/"
-"collabora-online/collabora-ui/id/>\n"
-"Language: \n"
+"PO-Revision-Date: 2026-10-20 17:01+0000\n"
+"Last-Translator: Arif Budiman <arifpedia@users.noreply.hosted.weblate.org>\n"
+"Language-Team: Indonesian <https://hosted.weblate.org/projects/collabora-"
+"online/collabora-ui/id/>\n"
+"Language: id\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 2026.10.dev0\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -551,7 +551,6 @@ msgstr "Penyedia"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:723
 #: admin/src/integrator/AdminIntegratorSettings.ts:727
-#, fuzzy
 msgid "API key"
 msgstr "Kunci API"
 
@@ -566,9 +565,8 @@ msgid "Base URL"
 msgstr "URL Dasar"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:730
-#, fuzzy
 msgid "Image size"
-msgstr "Ukuran Citra"
+msgstr "Ukuran gambar"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:731
 msgid "Request timeout"
@@ -576,11 +574,11 @@ msgstr "Waktu permintaan habis"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:734
 msgid "Client ID"
-msgstr ""
+msgstr "ID klien"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:735
 msgid "Secret"
-msgstr ""
+msgstr "Rahasia"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:738
 msgid "In-document Screen Reader"
@@ -1075,15 +1073,15 @@ msgstr "Aksesibilitas"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2856
 msgid "User interface zoom"
-msgstr ""
+msgstr "Zoom antarmuka pengguna"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2861
 msgid "Magnify the whole window, including the document and the menus."
-msgstr ""
+msgstr "Perbesar seluruh jendela, termasuk dokumen dan menu."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2867
 msgid "As per system"
-msgstr ""
+msgstr "Sesuai sistem"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2902
 msgid ""
@@ -1103,15 +1101,16 @@ msgstr "Pengaturan Zotero"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3005
 #: admin/src/integrator/AdminIntegratorSettings.ts:3033
-#, fuzzy
 msgid "Electronic Signature"
-msgstr "Tanda tangan elektronik ..."
+msgstr "Tanda Tangan Elektronik"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3008
 msgid ""
 "Credentials for the electronic signature service. They are shared by "
 "everyone on this server."
 msgstr ""
+"Kredensial untuk layanan tanda tangan elektronik. Kredensial ini digunakan "
+"bersama oleh semua orang di server ini."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3060
 #: admin/src/integrator/AdminIntegratorSettings.ts:4719
@@ -1149,49 +1148,53 @@ msgstr "Atur Ulang"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3140
 msgid "Use the AI provider set on the server"
-msgstr ""
+msgstr "Gunakan penyedia AI yang ditetapkan di server"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3190
-#, fuzzy
 msgid "Providers"
 msgstr "Penyedia"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3193
 msgid "Managed by your admin"
-msgstr ""
+msgstr "Dikelola oleh administrator Anda"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3199
 msgid "No providers added yet"
-msgstr ""
+msgstr "Belum ada penyedia yang ditambahkan"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3205
 msgid ""
 "Add a provider to start using AI for text generation, image generation, or "
 "both. Your administrator's provider is filled in for you."
 msgstr ""
+"Tambahkan penyedia untuk mulai menggunakan AI guna menghasilkan teks, "
+"gambar, atau keduanya. Penyedia dari administrator Anda telah diisikan untuk "
+"Anda."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3213
 msgid "Add provider..."
-msgstr ""
+msgstr "Tambahkan penyedia..."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3233
 msgid "Choose the AI provider to use for text and image generation."
 msgstr ""
+"Pilih penyedia AI yang akan digunakan untuk menghasilkan teks dan gambar."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3235
 msgid ""
 "Use your own AI provider instead of the one set up by your administrator. "
 "This applies only to you."
 msgstr ""
+"Gunakan penyedia AI Anda sendiri sebagai pengganti penyedia yang disiapkan "
+"oleh administrator Anda. Pengaturan ini hanya berlaku untuk Anda."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3390
 msgid "seconds"
-msgstr ""
+msgstr "detik"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3399
-#, fuzzy
 msgid "Text generation"
-msgstr "Pembuatan Teks"
+msgstr "Pembuatan teks"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3409
 #: src/control/Control.NotebookbarCalc.js:1048
@@ -1216,23 +1219,27 @@ msgid ""
 "Models without it (e.g. base llama3, gemma) can still chat but cannot use "
 "document tools."
 msgstr ""
+"Untuk mengedit dokumen, pilih model yang mendukung tool calling, misalnya "
+"gpt-4o atau llama3.1. Model tanpa dukungan ini (misalnya llama3 dasar, "
+"gemma) tetap dapat digunakan untuk mengobrol, tetapi tidak dapat menggunakan "
+"alat dokumen."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3491
-#, fuzzy
 msgid "Image generation"
-msgstr "Pembuatan Gambar"
+msgstr "Pembuatan gambar"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3499
 msgid "Same as text provider"
-msgstr ""
+msgstr "Sama dengan penyedia teks"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3854
 msgid "Required for this provider"
-msgstr ""
+msgstr "Wajib diisi untuk penyedia ini"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3947
 msgid "Enter an API key for this provider to list its models."
 msgstr ""
+"Masukkan kunci API untuk penyedia ini agar daftar modelnya dapat ditampilkan."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3963
 #: admin/src/integrator/AdminIntegratorSettings.ts:4085
@@ -1249,7 +1256,7 @@ msgstr "Tidak ada model ditemukan"
 #: admin/src/integrator/AdminIntegratorSettings.ts:4035
 #: admin/src/integrator/AdminIntegratorSettings.ts:4151
 msgid "Connected"
-msgstr ""
+msgstr "Terhubung"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4041
 #: admin/src/integrator/AdminIntegratorSettings.ts:4157
@@ -1319,7 +1326,7 @@ msgstr "Enter {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4991
 msgid "Delete {0}"
-msgstr ""
+msgstr "Hapus {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5054
 msgid "Reset to default {0}"
@@ -2661,6 +2668,8 @@ msgstr "Waktu analisis formula habis"
 #: src/control/Control.AIChatSidebar.ts:3636
 msgid "Select the content you want the assistant to work on first."
 msgstr ""
+"Pilih terlebih dahulu konten yang ingin Anda minta untuk dikerjakan oleh "
+"asisten."
 
 #: src/control/Control.AIChatSidebar.ts:3651
 msgid "Analyzing formula dependencies..."
@@ -2794,10 +2803,12 @@ msgid ""
 "Describe the image you want to generate. For example: \"A watercolour of a "
 "mountain lake at sunrise\"."
 msgstr ""
+"Jelaskan gambar yang ingin Anda buat. Misalnya: \"Lukisan cat air danau "
+"pegunungan saat matahari terbit\"."
 
 #: src/control/Control.AIChatSidebar.ts:3916
 msgid "Write speaker notes for the current slide."
-msgstr ""
+msgstr "Tulis catatan pembicara untuk slide saat ini."
 
 #: src/control/Control.AIChatSidebar.ts:3949
 msgid ""
@@ -2876,18 +2887,22 @@ msgstr ""
 #: src/control/Control.CleanupSidebar.ts:204
 msgid "Images stored with more detail than a slide can show"
 msgstr ""
+"Gambar yang disimpan memiliki detail lebih tinggi daripada yang dapat "
+"ditampilkan pada slide"
 
 #: src/control/Control.CleanupSidebar.ts:207
 msgid "Images stored at more than %1 DPI, more detail than a slide can show"
 msgstr ""
+"Gambar yang disimpan memiliki resolusi lebih dari %1 DPI, dengan detail "
+"lebih tinggi daripada yang dapat ditampilkan pada slide"
 
 #: src/control/Control.CleanupSidebar.ts:224
 msgid "High-resolution images"
-msgstr ""
+msgstr "Gambar beresolusi tinggi"
 
 #: src/control/Control.CleanupSidebar.ts:230
 msgid "Cropped images"
-msgstr ""
+msgstr "Gambar yang dipangkas"
 
 #: src/control/Control.CleanupSidebar.ts:236
 #: src/control/Control.BackstageView.ts:891
@@ -2899,43 +2914,40 @@ msgid "Slides"
 msgstr "Salindia"
 
 #: src/control/Control.CleanupSidebar.ts:241
-#, fuzzy
 msgid "Hidden slides"
-msgstr "Sembunyikan slide"
+msgstr "Slide tersembunyi"
 
 #: src/control/Control.CleanupSidebar.ts:246
-#, fuzzy
 msgid "Unused master slides"
-msgstr "Slide master yang tidak digunakan (%1)"
+msgstr "Slide induk yang tidak digunakan"
 
 #: src/control/Control.CleanupSidebar.ts:252
 msgid "For sharing"
-msgstr ""
+msgstr "Untuk dibagikan"
 
 #: src/control/Control.CleanupSidebar.ts:254
 msgid "Speaker notes"
-msgstr ""
+msgstr "Catatan pembicara"
 
 #: src/control/Control.CleanupSidebar.ts:258
-#, fuzzy
 msgid "Embedded objects"
-msgstr "Objek tersemat (%1)"
+msgstr "Objek tersemat"
 
 #: src/control/Control.CleanupSidebar.ts:359
 msgid "images left alone"
-msgstr ""
+msgstr "gambar dibiarkan tanpa perubahan"
 
 #: src/control/Control.CleanupSidebar.ts:361
 msgid "%1 DPI, quality %2 %"
-msgstr ""
+msgstr "%1 DPI, kualitas %2%"
 
 #: src/control/Control.CleanupSidebar.ts:374
 msgid "%1 can be cleaned up"
-msgstr ""
+msgstr "%1 dapat dibersihkan"
 
 #: src/control/Control.CleanupSidebar.ts:376
 msgid "%1 (%2%) can be cleaned up"
-msgstr ""
+msgstr "%1 (%2%) dapat dibersihkan"
 
 #: src/control/Control.CleanupSidebar.ts:384
 msgid "Fix"
@@ -2956,7 +2968,7 @@ msgstr "%1 MB"
 
 #: src/control/Control.CleanupSidebar.ts:479
 msgid "Remove %1"
-msgstr ""
+msgstr "Hapus %1"
 
 #: src/control/Control.CleanupSidebar.ts:481
 msgid "Fix %1"
@@ -3010,11 +3022,11 @@ msgstr "%1 pada %2 DPI"
 #: src/control/Control.CleanupSidebar.ts:586
 #, javascript-format
 msgid "%1% cropped away"
-msgstr ""
+msgstr "%1% dipangkas"
 
 #: src/control/Control.CleanupSidebar.ts:588
 msgid "%1, %2% cropped away"
-msgstr ""
+msgstr "%1, %2% dipangkas"
 
 #: src/control/Control.CleanupSidebar.ts:655
 msgid "Leave images alone"
@@ -3079,9 +3091,8 @@ msgid "Image resolution"
 msgstr "Resolusi gambar"
 
 #: src/control/Control.CleanupSidebar.ts:805
-#, fuzzy
 msgid "JPEG quality (%)"
-msgstr "Kualitas JPEG dalam %"
+msgstr "Kualitas JPEG (%)"
 
 #: src/control/Control.CleanupSidebar.ts:830
 msgid "Prepare for sharing"
@@ -3100,9 +3111,8 @@ msgid "Stop"
 msgstr "Berhenti"
 
 #: src/control/Control.CleanupSidebar.ts:926
-#, fuzzy
 msgid "Scan presentation"
-msgstr "Presentasi Kosong"
+msgstr "Pindai presentasi"
 
 #: src/control/Control.CleanupSidebar.ts:962
 msgid "Fix all"
@@ -3116,7 +3126,7 @@ msgstr ""
 
 #: src/control/Control.CleanupSidebar.ts:1013
 msgid "Find what makes this presentation large, and clean it up here."
-msgstr ""
+msgstr "Temukan penyebab ukuran besar presentasi ini dan bersihkan di sini."
 
 #: src/control/Control.CleanupSidebar.ts:1077
 msgid "saves %1"
@@ -3136,7 +3146,7 @@ msgstr "Bersihkan"
 
 #: src/control/Control.CleanupSidebar.ts:2439
 msgid "The cleanup did not answer. Please try again."
-msgstr ""
+msgstr "Proses pembersihan tidak merespons. Silakan coba lagi."
 
 #: src/control/Control.AlertDialog.js:55
 msgid "External link"
@@ -3492,111 +3502,123 @@ msgstr "Singkirkan"
 
 #: src/control/onboarding/OnboardingSteps.ts:25
 msgid "Welcome to Collabora Online"
-msgstr ""
+msgstr "Selamat datang di Collabora Online"
 
 #: src/control/onboarding/OnboardingSteps.ts:27
 msgid "This short tour points out the parts of the screen you will use most."
 msgstr ""
+"Tur singkat ini memperkenalkan bagian layar yang paling sering Anda gunakan."
 
 #: src/control/onboarding/OnboardingSteps.ts:32
 msgid "The document name"
-msgstr ""
+msgstr "Nama dokumen"
 
 #: src/control/onboarding/OnboardingSteps.ts:34
 msgid ""
 "Select the name to rename the document. Every change is saved as you work."
 msgstr ""
+"Pilih nama dokumen untuk menggantinya. Setiap perubahan disimpan selama Anda "
+"bekerja."
 
 #: src/control/onboarding/OnboardingSteps.ts:40
 msgid "The tabs"
-msgstr ""
+msgstr "Tab"
 
 #: src/control/onboarding/OnboardingSteps.ts:42
 msgid ""
 "Each tab gathers the tools for one kind of work, such as inserting or "
 "reviewing."
 msgstr ""
+"Setiap tab mengelompokkan alat untuk satu jenis pekerjaan, seperti "
+"menyisipkan atau meninjau."
 
 #: src/control/onboarding/OnboardingSteps.ts:49
 msgid "The menus"
-msgstr ""
+msgstr "Menu"
 
 #: src/control/onboarding/OnboardingSteps.ts:50
 msgid "Every command of the editor is in one of these menus."
-msgstr ""
+msgstr "Semua perintah editor tersedia di salah satu menu ini."
 
 #: src/control/onboarding/OnboardingSteps.ts:56
 msgid "The tools"
-msgstr ""
+msgstr "Alat"
 
 #: src/control/onboarding/OnboardingSteps.ts:57
 msgid "The buttons of the tab you selected appear along this row."
-msgstr ""
+msgstr "Tombol pada tab yang Anda pilih ditampilkan di sepanjang baris ini."
 
 #: src/control/onboarding/OnboardingSteps.ts:63
 msgid "The toolbar"
-msgstr ""
+msgstr "Bilah alat"
 
 #: src/control/onboarding/OnboardingSteps.ts:64
 msgid "The buttons you need most often sit here, under the menus."
 msgstr ""
+"Tombol yang paling sering Anda perlukan tersedia di sini, di bawah menu."
 
 #: src/control/onboarding/OnboardingSteps.ts:70
 msgid "The formula bar"
-msgstr ""
+msgstr "Bilah rumus"
 
 #: src/control/onboarding/OnboardingSteps.ts:72
 msgid ""
 "The contents of the selected cell appear here. Type an equals sign to start "
 "a formula."
 msgstr ""
+"Isi sel yang dipilih ditampilkan di sini. Ketik tanda sama dengan untuk "
+"memulai rumus."
 
 #: src/control/onboarding/OnboardingSteps.ts:79
 msgid "The slide panel"
-msgstr ""
+msgstr "Panel slide"
 
 #: src/control/onboarding/OnboardingSteps.ts:81
 msgid ""
 "Every slide or page of the document is listed here. Select one to work on "
 "it."
 msgstr ""
+"Semua slide atau halaman dokumen tercantum di sini. Pilih salah satunya "
+"untuk mulai mengerjakannya."
 
 #: src/control/onboarding/OnboardingSteps.ts:89
 msgid "The sidebar"
-msgstr ""
+msgstr "Bilah samping"
 
 #: src/control/onboarding/OnboardingSteps.ts:91
 msgid ""
 "The sidebar holds the settings for whatever you have selected, such as "
 "text, a shape or a cell."
 msgstr ""
+"Bilah samping memuat pengaturan untuk apa pun yang Anda pilih, seperti teks, "
+"bentuk, atau sel."
 
 #: src/control/onboarding/OnboardingSteps.ts:98
 msgid "The people in the document"
-msgstr ""
+msgstr "Orang dalam dokumen"
 
 #: src/control/onboarding/OnboardingSteps.ts:99
 msgid "See who else is editing and share the document."
-msgstr ""
+msgstr "Lihat siapa saja yang sedang mengedit dan bagikan dokumen."
 
 #: src/control/onboarding/OnboardingSteps.ts:109
-#, fuzzy
 msgid "The status bar"
-msgstr "Tampilkan bilah status"
+msgstr "Bilah status"
 
 #: src/control/onboarding/OnboardingSteps.ts:111
 msgid ""
 "The state of the document, the language of the text and the zoom level are "
 "along the bottom."
 msgstr ""
+"Status dokumen, bahasa teks, dan tingkat zoom ditampilkan di bagian bawah."
 
 #: src/control/onboarding/OnboardingSteps.ts:118
 msgid "You are ready to work"
-msgstr ""
+msgstr "Anda siap bekerja"
 
 #: src/control/onboarding/OnboardingSteps.ts:119
 msgid "You can walk through this tour again from the Help menu."
-msgstr ""
+msgstr "Anda dapat mengikuti tur ini lagi melalui menu Bantuan."
 
 #: src/control/onboarding/Control.OnboardingTour.ts:245
 #: src/slideshow/engine/SlideShowHandler.ts:116
@@ -3605,12 +3627,11 @@ msgstr "Lewati"
 
 #: src/control/onboarding/Control.OnboardingTour.ts:251
 msgid "Back"
-msgstr ""
+msgstr "Kembali"
 
 #: src/control/onboarding/Control.OnboardingTour.ts:258
-#, fuzzy
 msgid "Done"
-msgstr "Nihil"
+msgstr "Selesai"
 
 #: src/control/onboarding/Control.OnboardingTour.ts:258
 #: src/control/Control.Zotero.js:270 src/control/Control.Zotero.js:469
@@ -4424,7 +4445,7 @@ msgstr "Bantuan daring"
 #: src/control/Control.Menubar.ts:834 src/control/Control.Menubar.ts:1152
 #: src/control/Control.NotebookbarWriter.js:541
 msgid "Show tour"
-msgstr ""
+msgstr "Tampilkan tur"
 
 #: src/control/Control.Menubar.ts:455 src/control/Control.Menubar.ts:668
 #: src/control/Control.Menubar.ts:836 src/control/Control.Menubar.ts:1154
@@ -4754,119 +4775,117 @@ msgstr "Ketik di kotak pencarian untuk menemukan apapun di dalam dokumen Anda"
 #: src/control/Notebookbar.AIAssistantTab.ts:79
 #: src/control/Notebookbar.AIAssistantTab.ts:122
 msgid "Text Tools"
-msgstr ""
+msgstr "Alat Teks"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:93
 msgid "Slide Tools"
-msgstr ""
+msgstr "Alat Slide"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:106
 msgid "Formula Tools"
-msgstr ""
+msgstr "Alat Rumus"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:116
 msgid "Data Tools"
-msgstr ""
+msgstr "Alat Data"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:143
 msgid "Shorten"
-msgstr ""
+msgstr "Persingkat"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:145
 msgid "Rewrite the selected text so it is shorter."
-msgstr ""
+msgstr "Tulis ulang teks yang dipilih agar lebih singkat."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:150
 msgid "Formalize"
-msgstr ""
+msgstr "Jadikan Formal"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:152
 msgid "Rewrite the selected text in a formal tone."
-msgstr ""
+msgstr "Tulis ulang teks yang dipilih dengan gaya bahasa formal."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:157
 msgid "Casualize"
-msgstr ""
+msgstr "Jadikan Santai"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:159
 msgid "Rewrite the selected text in a casual, friendly tone."
-msgstr ""
+msgstr "Tulis ulang teks yang dipilih dengan gaya bahasa santai dan ramah."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:164
 msgid "Summarize"
-msgstr ""
+msgstr "Ringkas"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:166
-#, fuzzy
 msgid "Summarize the key points of the selected text."
-msgstr "Rangkum poin-poin utama teks ini"
+msgstr "Ringkas poin-poin utama teks yang dipilih."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:171
 msgid "Expand"
-msgstr ""
+msgstr "Kembangkan"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:173
 msgid "Expand the selected text and add more detail."
-msgstr ""
+msgstr "Kembangkan teks yang dipilih dan tambahkan detail."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:178
 msgid "Fix Grammar"
-msgstr ""
+msgstr "Perbaiki Tata Bahasa"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:181
 msgid "Fix grammar, spelling, and punctuation errors in the selected text."
 msgstr ""
+"Perbaiki kesalahan tata bahasa, ejaan, dan tanda baca dalam teks yang "
+"dipilih."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:187
 msgid "Make Bullets"
-msgstr ""
+msgstr "Buat Poin-Poin"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:189
 msgid "Rewrite the selected text as short bullet points."
-msgstr ""
+msgstr "Tulis ulang teks yang dipilih menjadi poin-poin singkat."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:194
-#, fuzzy
 msgid "Create Slides"
-msgstr "Buat slide"
+msgstr "Buat Slide"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:201
-#, fuzzy
 msgid "Generate Image"
-msgstr "Citra yang dihasilkan"
+msgstr "Buat Gambar"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:208
 msgid "Generate Speaker Notes"
-msgstr ""
+msgstr "Buat Catatan Pembicara"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:215
-#, fuzzy
 msgid "Create Formula"
-msgstr "Buat formula"
+msgstr "Buat Rumus"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:222
 msgid "Explain Formula"
-msgstr ""
+msgstr "Jelaskan Rumus"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:224
 msgid "Explain the formula in the selected cell."
-msgstr ""
+msgstr "Jelaskan rumus dalam sel yang dipilih."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:229
 msgid "Fix Formula Error"
-msgstr ""
+msgstr "Perbaiki Kesalahan Rumus"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:236
 msgid "Clean Up Data"
-msgstr ""
+msgstr "Bersihkan Data"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:243
 msgid "Suggest Chart"
-msgstr ""
+msgstr "Sarankan Bagan"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:245
 msgid "Suggest a chart for the selected data."
-msgstr ""
+msgstr "Sarankan bagan untuk data yang dipilih."
 
 #: src/control/Notebookbar.CalcTableTab.ts:45
 #: src/control/Notebookbar.TableDesignTabBase.ts:54
@@ -5075,12 +5094,11 @@ msgstr "Animasi"
 #: src/control/Control.Notebookbar.js:650
 #: src/control/Control.NotebookbarWriter.js:3077
 msgid "Fill Color (Transparent Pictures Only)"
-msgstr ""
+msgstr "Warna Isian (Hanya Gambar Transparan)"
 
 #: src/control/Control.Notebookbar.js:661
-#, fuzzy
 msgid "Line"
-msgstr "Tautan"
+msgstr "Garis"
 
 #: src/control/Control.Notebookbar.js:704
 msgid "Line Width"
@@ -5088,11 +5106,11 @@ msgstr "Lebar Garis"
 
 #: src/control/Control.Notebookbar.js:737
 msgid "Transparency:"
-msgstr ""
+msgstr "Transparansi:"
 
 #: src/control/Control.Notebookbar.js:756
 msgid "Thickness:"
-msgstr ""
+msgstr "Ketebalan:"
 
 #: src/control/Control.NotebookbarBuilder.js:205
 #: src/control/Control.NotebookbarBuilder.js:610
@@ -5720,7 +5738,7 @@ msgstr "Lengket ke Kisi"
 
 #: src/control/Control.NotebookbarImpress.js:823
 msgid "Shapes Sidebar"
-msgstr ""
+msgstr "Bilah Samping Bentuk"
 
 #: src/control/Control.NotebookbarImpress.js:924
 #: src/control/Control.NotebookbarImpress.js:2005
@@ -5850,7 +5868,7 @@ msgstr "Lihat Perubahan"
 
 #: src/control/Control.NotebookbarWriter.js:2656
 msgid "Element categories"
-msgstr ""
+msgstr "Kategori elemen"
 
 #: src/control/Control.ContextToolbar.ts:154
 msgid "Switch to Editing"
@@ -5988,19 +6006,23 @@ msgstr "Membaca slide..."
 
 #: src/control/Control.SlideImportPane.tsx:742
 msgid "Looking for the file..."
-msgstr ""
+msgstr "Mencari berkas..."
 
 #: src/control/Control.SlideImportPane.tsx:745
 msgid ""
 "The slides are in this presentation. You do not have permission to open the "
 "file they came from."
 msgstr ""
+"Slide tersedia dalam presentasi ini. Anda tidak memiliki izin untuk membuka "
+"berkas asalnya."
 
 #: src/control/Control.SlideImportPane.tsx:749
 msgid ""
 "The slides are in this presentation. Looking for the file they came from "
 "did not work this time."
 msgstr ""
+"Slide tersedia dalam presentasi ini. Pencarian berkas asalnya tidak berhasil "
+"kali ini."
 
 #: src/control/Control.SlideImportPane.tsx:752
 msgid ""
@@ -6021,7 +6043,7 @@ msgstr "Berkas ini tidak dapat dibaca saat ini."
 #: src/control/Control.SlideImportPane.tsx:769
 #: src/control/Control.SlideImportPane.tsx:1292
 msgid "Look again"
-msgstr ""
+msgstr "Cari lagi"
 
 #: src/control/Control.SlideImportPane.tsx:774
 #: src/control/Control.SlideImportPane.tsx:1297
@@ -6309,7 +6331,7 @@ msgstr "Maksimalkan ke kisi"
 
 #: src/control/Control.PaneExpander.ts:115
 msgid "Exit grid"
-msgstr ""
+msgstr "Keluar dari kisi"
 
 #: src/control/Control.PaneSplitter.tsx:70
 msgid "Resize panels"
@@ -6973,15 +6995,15 @@ msgstr ""
 
 #: src/control/Permission.js:607
 msgid "opened this document"
-msgstr ""
+msgstr "membuka dokumen ini"
 
 #: src/control/Permission.js:608
 msgid "{0} opened this document"
-msgstr ""
+msgstr "{0} membuka dokumen ini"
 
 #: src/control/Permission.js:609 src/control/Permission.js:625
 msgid "Choose how you'd like to continue:"
-msgstr ""
+msgstr "Pilih cara Anda ingin melanjutkan:"
 
 #: src/control/Permission.js:619
 msgid "started editing"
@@ -7138,7 +7160,7 @@ msgstr "Pemilihan blok"
 
 #: src/control/Toolbar.js:70
 msgid "The current font is not available and will be substituted."
-msgstr ""
+msgstr "Font saat ini tidak tersedia dan akan diganti."
 
 #: src/control/Toolbar.js:205 src/control/Toolbar.js:218
 msgid "Downloading..."
@@ -7846,7 +7868,7 @@ msgstr "Pilih rentang"
 
 #: src/control/jsdialog/Widget.ProgressDots.tsx:57
 msgid "Step %1 of %2"
-msgstr ""
+msgstr "Langkah %1 dari %2"
 
 #: src/control/jsdialog/Widget.Comment.ts:151
 msgid "reply"
@@ -8042,26 +8064,25 @@ msgstr "AI belum dikonfigurasi, hubungi administrator Anda"
 
 #: src/docdispatcher.ts:979
 msgid "Delete section"
-msgstr ""
+msgstr "Hapus bagian"
 
 #: src/docdispatcher.ts:986
 msgid "Delete slides"
-msgstr ""
+msgstr "Hapus slide"
 
 #: src/docdispatcher.ts:987
-#, fuzzy
 msgid "Delete %n slide?"
 msgid_plural "Delete %n slides?"
-msgstr[0] "hapus %n slide"
+msgstr[0] "Hapus %n slide?"
 
 #: src/docdispatcher.ts:991
 msgid "Delete pages"
-msgstr ""
+msgstr "Hapus halaman"
 
 #: src/docdispatcher.ts:992
 msgid "Delete %n page?"
 msgid_plural "Delete %n pages?"
-msgstr[0] ""
+msgstr[0] "Hapus %n halaman?"
 
 #: src/docstate.ts:154
 msgid "Standard"
@@ -8324,7 +8345,7 @@ msgstr "Slide"
 
 #: src/layer/marker/A11yTextInput.js:348
 msgid "Heading level {0}"
-msgstr ""
+msgstr "Tingkat judul {0}"
 
 #: src/layer/marker/A11yTextInput.js:884
 msgid "Out of table"
@@ -8828,7 +8849,7 @@ msgstr "Surat Bisnis"
 
 #: templates/templates.js:16 templates/templates.js:20
 msgid "Classic Business Letter"
-msgstr ""
+msgstr "Surat Bisnis Klasik"
 
 #: templates/templates.js:26 templates/templates.js:30
 msgid "CV"
