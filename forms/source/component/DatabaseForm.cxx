@@ -2816,6 +2816,13 @@ namespace
     }
 }
 
+static void lcl_loadDeferred(const Reference<XInterface>& rxForm)
+{
+    Reference<XLoadable> xForm(rxForm, UNO_QUERY);
+    if (xForm.is() && !xForm->isLoaded())
+        xForm->load();
+}
+
 bool ODatabaseForm::implEnsureConnection()
 {
     try
@@ -2862,7 +2869,7 @@ bool ODatabaseForm::implEnsureConnection()
             if (!pShell->getEmbeddedObjectContainer().getUserAllowsLinkUpdate()
                 && SfxObjectShell::IsExternalDatabaseForm(xThis))
             {
-                pShell->AddDeferredDatabaseForm(Reference<XLoadable>(xThis, UNO_QUERY));
+                pShell->AddDeferredLinkLoad(xThis, lcl_loadDeferred);
                 return false;
             }
         }
