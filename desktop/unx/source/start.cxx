@@ -685,7 +685,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     bool bSentArgs = false;
     int status = 0;
-    struct splash* splash = nullptr;
     struct sigaction sigpipe_action;
     struct sigaction sigterm_action;
 
@@ -746,6 +745,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         system_checks();
 
         /* load splash image and create window */
+        struct splash* splash = nullptr;
         if (!args->bInhibitSplash)
             splash = splash_create(args->sAppPath.pData, argc, argv);
 
