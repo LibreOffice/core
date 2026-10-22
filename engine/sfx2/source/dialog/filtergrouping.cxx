@@ -714,40 +714,6 @@ namespace sfx2
         rGlobalFilters.swap( aNonEmptyGlobalFilters );
     }
 
-    namespace {
-
-    struct AppendFilter
-    {
-        protected:
-            Reference< XFilterManager >         m_xFilterManager;
-            FileDialogHelper_Impl*              m_pFileDlgImpl;
-            bool                                m_bAddExtension;
-
-        public:
-            AppendFilter( const Reference< XFilterManager >& _rxFilterManager,
-                          FileDialogHelper_Impl* _pImpl, bool _bAddExtension ) :
-
-                m_xFilterManager( _rxFilterManager ),
-                m_pFileDlgImpl  ( _pImpl ),
-                m_bAddExtension ( _bAddExtension )
-
-            {
-                DBG_ASSERT( m_xFilterManager.is(), "AppendFilter::AppendFilter: invalid filter manager!" );
-                DBG_ASSERT( m_pFileDlgImpl, "AppendFilter::AppendFilter: invalid filedlg impl!" );
-            }
-
-            // operate on a single filter
-            void operator() ( const FilterDescriptor& _rFilterEntry )
-            {
-                OUString sDisplayText = m_bAddExtension
-                    ? addExtension( _rFilterEntry.First, _rFilterEntry.Second, true, *m_pFileDlgImpl )
-                    : _rFilterEntry.First;
-                m_xFilterManager->appendFilter( sDisplayText, _rFilterEntry.Second );
-            }
-    };
-
-    }
-
 // = handling for the "all files" entry
 
 
@@ -801,34 +767,36 @@ namespace sfx2
             ,m_xFilterGroupManager  ( _rxFilterManager, UNO_QUERY )
             ,m_pFileDlgImpl         ( _pImpl )
         {
-            DBG_ASSERT( m_xFilterManager.is(), "AppendFilterGroup::AppendFilterGroup: invalid filter manager!" );
             DBG_ASSERT( m_pFileDlgImpl, "AppendFilterGroup::AppendFilterGroup: invalid filedlg impl!" );
         }
 
         void appendGroup( const FilterGroup& _rGroup, bool _bAddExtension )
         {
+            if ( _rGroup.empty() )
+                return;
+
+            // Record each filter in the helper, with or without a picker service.
+            Sequence< StringPair > aFilters( comphelper::containerToSequence(_rGroup) );
+            for ( StringPair & rFilter : asNonConstRange(aFilters) )
+            {
+                if ( _bAddExtension )
+                    rFilter.First = addExtension( rFilter.First, rFilter.Second, true, *m_pFileDlgImpl );
+                m_pFileDlgImpl->addPickerFilter( rFilter.First, rFilter.Second );
+            }
+
+            if ( !m_xFilterManager.is() )
+                return;
+
             try
             {
                 if ( m_xFilterGroupManager.is() )
                 {   // the file dialog implementation supports visual grouping of filters
-                    // create a representation of the group which is understandable by the XFilterGroupManager
-                    if ( !_rGroup.empty() )
-                    {
-                        Sequence< StringPair > aFilters( comphelper::containerToSequence(_rGroup) );
-                        if ( _bAddExtension )
-                        {
-                            for ( StringPair & filter : asNonConstRange(aFilters) )
-                                filter.First = addExtension( filter.First, filter.Second, true, *m_pFileDlgImpl );
-                        }
-                        m_xFilterGroupManager->appendFilterGroup( OUString(), aFilters );
-                    }
+                    m_xFilterGroupManager->appendFilterGroup( OUString(), aFilters );
                 }
                 else
                 {
-                    ::std::for_each(
-                        _rGroup.begin(),
-                        _rGroup.end(),
-                        AppendFilter( m_xFilterManager, m_pFileDlgImpl, _bAddExtension ) );
+                    for ( const StringPair & rFilter : aFilters )
+                        m_xFilterManager->appendFilter( rFilter.First, rFilter.Second );
                 }
             }
             catch( const Exception& )
@@ -1102,11 +1070,6 @@ namespace sfx2
                                const Reference< XFilterManager >& _rxFilterManager,
                                OUString& _rFirstNonEmpty, FileDialogHelper_Impl& _rFileDlgImpl )
     {
-        DBG_ASSERT( _rxFilterManager.is(), "sfx2::appendFiltersForOpen: invalid manager!" );
-        if ( !_rxFilterManager.is() )
-            return;
-
-
         // group and classify the filters
         GroupedFilterList aAllFilters;
         lcl_GroupAndClassify( _rFilterMatcher, aAllFilters );

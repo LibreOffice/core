@@ -52,6 +52,9 @@ namespace sfx2
 
         std::vector< css::beans::StringPair >   maFilters;
 
+        /// The filters added so far: name and semicolon separated wildcards ("*.png;*.jpg").
+        std::vector< css::beans::StringPair >   maPickerFilters;
+
         SfxFilterMatcher*           mpMatcher;
         std::unique_ptr<GraphicFilter> mpGraphicFilter;
         FileDialogHelper*           mpAntiImpl;
@@ -198,6 +201,8 @@ namespace sfx2
         bool                    isShowFilterExtensionEnabled() const;
         void                    addFilterPair( const OUString& rFilter,
                                                const OUString& rFilterWithExtension );
+        void                    addPickerFilter( const OUString& rName,
+                                                 const OUString& rWildcards );
         OUString                getFilterName( std::u16string_view rFilterWithExtension ) const;
         OUString                getFilterWithExtension( std::u16string_view rFilter ) const;
 

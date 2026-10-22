@@ -1700,9 +1700,6 @@ void FileDialogHelper_Impl::addFilters( const OUString& rFactory,
                                         SfxFilterFlags nMust,
                                         SfxFilterFlags nDont )
 {
-    if ( ! mxFileDlg.is() )
-        return;
-
     if (mbDeleteMatcher)
         delete mpMatcher;
 
@@ -1768,6 +1765,8 @@ void FileDialogHelper_Impl::addFilters( const OUString& rFactory,
 void FileDialogHelper_Impl::addFilter( const OUString& rFilterName,
                                        const OUString& rExtension )
 {
+    addPickerFilter( rFilterName, rExtension );
+
     if ( ! mxFileDlg.is() )
         return;
 
@@ -1786,9 +1785,6 @@ void FileDialogHelper_Impl::addFilter( const OUString& rFilterName,
 
 void FileDialogHelper_Impl::addGraphicFilter()
 {
-    if ( ! mxFileDlg.is() )
-        return;
-
     // create the list of filters
     mpGraphicFilter.reset( new GraphicFilter );
     sal_uInt16 i, j, nCount = mpGraphicFilter->GetImportFormatCount();
@@ -1819,30 +1815,25 @@ void FileDialogHelper_Impl::addGraphicFilter()
 #endif
     bool bIsInOpenMode = isInOpenMode();
 
-    try
-    {
-        // if the extension is not "All files", insert "All images"
-        if (aExtensions != FILEDIALOG_FILTER_ALL)
-        {
-            OUString aAllFilterName = SfxResId(STR_SFX_IMPORT_ALL_IMAGES);
-            aAllFilterName = ::sfx2::addExtension( aAllFilterName, aExtensions, bIsInOpenMode, *this );
-            mxFileDlg->appendFilter( aAllFilterName, aExtensions );
-            maSelectFilter = aAllFilterName; // and make it the default
-        }
+    const size_t nFirstGraphicFilter = maPickerFilters.size();
 
-        // rhbz#1715109 always include All files *.* or *
-        OUString aAllFilesName = SfxResId( STR_SFX_FILTERNAME_ALL );
-        aAllFilesName = ::sfx2::addExtension( aAllFilesName, FILEDIALOG_FILTER_ALL, bIsInOpenMode, *this );
-        mxFileDlg->appendFilter( aAllFilesName, FILEDIALOG_FILTER_ALL );
-
-        // if the extension is "All files", make that the default
-        if (aExtensions == FILEDIALOG_FILTER_ALL)
-            maSelectFilter = aAllFilesName;
-    }
-    catch( const IllegalArgumentException& )
+    // if the extension is not "All files", insert "All images"
+    if (aExtensions != FILEDIALOG_FILTER_ALL)
     {
-        SAL_WARN( "sfx.dialog", "Could not append Filter" );
+        OUString aAllFilterName = SfxResId(STR_SFX_IMPORT_ALL_IMAGES);
+        aAllFilterName = ::sfx2::addExtension( aAllFilterName, aExtensions, bIsInOpenMode, *this );
+        addPickerFilter( aAllFilterName, aExtensions );
+        maSelectFilter = aAllFilterName; // and make it the default
     }
+
+    // rhbz#1715109 always include All files *.* or *
+    OUString aAllFilesName = SfxResId( STR_SFX_FILTERNAME_ALL );
+    aAllFilesName = ::sfx2::addExtension( aAllFilesName, FILEDIALOG_FILTER_ALL, bIsInOpenMode, *this );
+    addPickerFilter( aAllFilesName, FILEDIALOG_FILTER_ALL );
+
+    // if the extension is "All files", make that the default
+    if (aExtensions == FILEDIALOG_FILTER_ALL)
+        maSelectFilter = aAllFilesName;
 
     // Now add the filter
     for ( i = 0; i < nCount; i++ )
@@ -1863,9 +1854,18 @@ void FileDialogHelper_Impl::addGraphicFilter()
             }
         }
         aName = ::sfx2::addExtension( aName, aExt, bIsInOpenMode, *this );
+        addPickerFilter( aName, aExt );
+    }
+
+    if ( ! mxFileDlg.is() )
+        return;
+
+    for ( size_t nFilter = nFirstGraphicFilter; nFilter < maPickerFilters.size(); ++nFilter )
+    {
         try
         {
-            mxFileDlg->appendFilter( aName, aExt );
+            const css::beans::StringPair& rFilter = maPickerFilters[nFilter];
+            mxFileDlg->appendFilter( rFilter.First, rFilter.Second );
         }
         catch( const IllegalArgumentException& )
         {
@@ -2236,6 +2236,12 @@ void FileDialogHelper_Impl::addFilterPair( const OUString& rFilter,
 
 }
 
+void FileDialogHelper_Impl::addPickerFilter( const OUString& rName,
+                                             const OUString& rWildcards )
+{
+    maPickerFilters.emplace_back( rName, rWildcards );
+}
+
 OUString FileDialogHelper_Impl::getFilterName( std::u16string_view rFilterWithExtension ) const
 {
     OUString sRet;
@@ -2540,7 +2546,7 @@ void FileDialogHelper::StartExecuteModal( const Link<FileDialogHelper*,void>& rE
     if (lclIsOpenDialog(mpImpl->m_nDialogType) && sfx2::COKitFilePicker::isAvailable())
     {
         std::vector<sfx2::COKitFilePicker::Filter> aFilters;
-        for (const css::beans::StringPair& rFilter : mpImpl->maFilters)
+        for (const css::beans::StringPair& rFilter : mpImpl->maPickerFilters)
             aFilters.push_back({ rFilter.First, rFilter.Second });
 
         if (!m_xKitPickToken)
