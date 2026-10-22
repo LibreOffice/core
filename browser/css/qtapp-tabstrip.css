@@ -57,6 +57,14 @@ body {
 	   padding, so that width is the whole tab. */
 	container-type: inline-size;
 }
+/* In a strip with the class widths-locked, the tabs keep fixed widths, whatever the width of the
+   strip: the active tab --locked-active-tab-width and every other tab --locked-tab-width. */
+#strip.widths-locked .tab {
+	flex: 0 0 var(--locked-tab-width);
+}
+#strip.widths-locked .tab.active {
+	flex-basis: var(--locked-active-tab-width, var(--locked-tab-width));
+}
 .tab .content {
 	box-sizing: border-box;
 	display: flex;

@@ -140,6 +140,26 @@
 		});
 	}
 
+	// After a close by mouse, every tab keeps the width it has now until the pointer leaves the
+	// strip, so the close button of the next tab comes to rest under the pointer. The space that
+	// the closed tab leaves stays empty at the end of the strip.
+	function lockTabWidths() {
+		const inactive = tabEls.find((tab) => !tab.classList.contains('active'));
+		if (!inactive) return;
+		const strip = document.getElementById('strip');
+		const width = (tab) => tab.getBoundingClientRect().width + 'px';
+		strip.style.setProperty('--locked-tab-width', width(inactive));
+		// The active tab has a width of its own, between its minimum and maximum.
+		const active = tabEls.find((tab) => tab.classList.contains('active'));
+		if (active)
+			strip.style.setProperty('--locked-active-tab-width', width(active));
+		strip.classList.add('widths-locked');
+	}
+
+	function unlockTabWidths() {
+		document.getElementById('strip').classList.remove('widths-locked');
+	}
+
 	// A pixel that the browser paints a theme colour into, so any CSS colour form reads back as
 	// its four channels.
 	const colorProbe = document
@@ -231,6 +251,7 @@
 			close.title = 'Close tab';
 			close.addEventListener('click', (ev) => {
 				ev.stopPropagation();
+				lockTabWidths();
 				if (bridge) bridge.tabCloseRequested(t.id);
 			});
 
@@ -238,7 +259,9 @@
 				if (bridge) bridge.tabActivated(t.id);
 			});
 			tab.addEventListener('auxclick', (ev) => {
-				if (ev.button === 1 && bridge) bridge.tabCloseRequested(t.id);
+				if (ev.button !== 1) return;
+				lockTabWidths();
+				if (bridge) bridge.tabCloseRequested(t.id);
 			});
 			tab.addEventListener('contextmenu', (ev) => {
 				ev.preventDefault();
@@ -283,6 +306,7 @@
 	}
 
 	function onTabsChanged(json) {
+		const previousCount = tabs.length;
 		try {
 			tabs = JSON.parse(json) || [];
 		} catch (e) {
@@ -290,6 +314,8 @@
 		}
 		const active = tabs.find((t) => t.active);
 		if (active) activeId = active.id;
+		// A new tab takes its share of the strip at once.
+		if (tabs.length > previousCount) unlockTabWidths();
 		render();
 	}
 
@@ -363,6 +389,10 @@
 	}
 
 	installStripDropTarget(document.getElementById('strip'));
+	// The page holds only the strip, so the pointer leaves the strip when it leaves the page. The
+	// page gets that leave also just after the tab under the pointer has been rebuilt.
+	document.documentElement.addEventListener('mouseleave', unlockTabWidths);
+	window.addEventListener('resize', unlockTabWidths);
 
 	connectTabBridge(function (tabBridge) {
 		bridge = tabBridge;
