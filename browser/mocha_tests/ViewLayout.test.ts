@@ -1657,6 +1657,38 @@ describe('ViewLayout', function () {
 			nodeassert.strictEqual(bounds.min.y, layout.viewedRectangle.pY1);
 		});
 
+		// A read-only document has no cursor marker, while its text cursor can still count as
+		// visible.
+		it('A zoom finishes in a read-only document with a visible text cursor', function () {
+			const layout = setupBaseLayoutForTest();
+			const map: any = app.map;
+			nodeassert.ok(!map._docLayer._cursorMarker);
+			map._docLayer._painter = { _paintContext: () => ({ viewBounds: null }) };
+			const cursorHandler = { opacity: 0, setOpacity: (value: number) => {} };
+			cursorHandler.setOpacity = (value: number) =>
+				(cursorHandler.opacity = value);
+			map._textInput = { _cursorHandler: cursorHandler };
+			app.file.textCursor.visible = true;
+			// The selection handles are built when a document loads. Here there are none to show.
+			const selections: any = TextSelections;
+			const handles = { start: selections.start, end: selections.end };
+			const hiddenHandle = { isSectionShown: () => false };
+			selections.start = selections.end = hiddenHandle;
+
+			const anchor = layout.zoomAnchorPoint();
+			try {
+				layout.beginZoom(anchor);
+				layout.endZoom(11, anchor);
+			} finally {
+				selections.start = handles.start;
+				selections.end = handles.end;
+			}
+
+			nodeassert.strictEqual(map._zoom, 11);
+			nodeassert.strictEqual(map._docLayer._painter._inZoomAnim, false);
+			nodeassert.strictEqual(cursorHandler.opacity, 1);
+		});
+
 		// A page-stack layout builds its viewed rectangle from the pages that are on
 		// screen, so the rebuild a zoom runs at once leaves the scroll position alone.
 		// The view is placed again later, with the pages, in the layout task.

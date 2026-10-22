@@ -188,38 +188,3 @@ describe(['tagdesktop'], 'Writer comments can be scrolled into view.', function(
 		});
 	});
 });
-
-// A read-only document has no cursor marker, and a zoom still ends.
-describe(['tagdesktop'], 'Writer zoom in a read-only document.', function() {
-
-	beforeEach(function() {
-		// A read-only view has no notebookbar, which the usual load checks wait for.
-		var filePath = helper.setupDocument('writer/scrolling.odt');
-		helper.loadDocument(filePath, true, undefined, undefined, 'permission=readonly');
-		cy.getFrameWindow().should((win) => {
-			expect(win.app.map._docLoaded, 'document loaded').to.equal(true);
-			this.win = win;
-		});
-		cy.then(() => {
-			return helper.processToIdle(this.win);
-		});
-	});
-
-	it('A zoom finishes in a read-only document with a visible text cursor.', function() {
-		cy.then(() => {
-			var win = this.win;
-			// A read-only document has no cursor marker, while its text cursor can
-			// still count as visible.
-			expect(win.app.map._docLayer._cursorMarker, 'cursor marker').to.not.be.ok;
-			win.app.file.textCursor.visible = true;
-
-			var layout = win.app.activeDocument.activeLayout;
-			var target = win.app.map.getZoom() + 1;
-			var anchor = layout.zoomAnchorPoint();
-			layout.beginZoom(anchor);
-			layout.endZoom(target, anchor);
-
-			expect(win.app.map.getZoom(), 'zoom').to.equal(target);
-		});
-	});
-});
