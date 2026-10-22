@@ -25,10 +25,7 @@ $(eval $(call gb_Module_add_targets,sot,\
 
 $(eval $(call gb_Module_add_check_targets,sot,\
     CppunitTest_sot_test_sot \
-))
-
-$(eval $(call gb_Module_add_subsequentcheck_targets,sot,\
-    JunitTest_sot_complex \
+    CppunitTest_sot_ole \
 ))
 
 # vim: set noet sw=4 ts=4:
