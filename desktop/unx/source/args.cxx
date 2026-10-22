@@ -58,19 +58,16 @@ const struct {
 
 Args *args_parse (void)
 {
-    Args *args;
-    sal_uInt32 nArgs, i, j;
-
-    nArgs = osl_getCommandArgCount();
-    i = sizeof (Args) + sizeof (rtl_uString *) * nArgs;
-    args = static_cast<Args*>(malloc(i));
-    memset (args, 0, i);
+    const sal_uInt32 nArgs = osl_getCommandArgCount();
+    const sal_uInt32 nAllocSize = sizeof(Args) + sizeof(rtl_uString*) * nArgs;
+    Args* args = static_cast<Args*>(malloc(nAllocSize));
+    memset (args, 0, nAllocSize);
     args->nArgsTotal = nArgs;
 
-    j = 0;
+    sal_uInt32 j = 0;
 
     /* sort the -env: args to the front */
-    for ( i = 0; i < nArgs; ++i )
+    for (sal_uInt32 i = 0; i < nArgs; ++i)
     {
         rtl_uString *pTmp = nullptr;
         osl_getCommandArg( i, &pTmp );
@@ -82,7 +79,7 @@ Args *args_parse (void)
     args->nArgsEnv = j;
 
     /* Then the other args */
-    for ( i = 0; i < nArgs; ++i )
+    for (sal_uInt32 i = 0; i < nArgs; ++i)
     {
         rtl_uString *pTmp = nullptr;
 
@@ -93,7 +90,7 @@ Args *args_parse (void)
             rtl_uString_release (pTmp);
     }
 
-    for ( i = args->nArgsEnv; i < args->nArgsTotal; i++ )
+    for (sal_uInt32 i = args->nArgsEnv; i < args->nArgsTotal; i++)
     {
         const sal_Unicode *arg = args->ppArgs[i]->buffer;
         sal_Int32 length = args->ppArgs[i]->length;
