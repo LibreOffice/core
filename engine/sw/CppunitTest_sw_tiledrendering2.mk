@@ -23,6 +23,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_tiledrendering2, \
     cppuhelper \
     editeng \
     docmodel \
+    i18nlangtag \
     sal \
     sfx \
     subsequenttest \

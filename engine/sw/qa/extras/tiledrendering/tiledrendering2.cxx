@@ -29,6 +29,8 @@
 #include <o3tl/string_view.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfxsids.hrc>
+#include <svl/slstitm.hxx>
+#include <i18nlangtag/languagetag.hxx>
 #include <vcl/jsdialog/executor.hxx>
 #include <vcl/keycodes.hxx>
 #include <tools/json_writer.hxx>
@@ -61,6 +63,7 @@
 #include <fmtinfmt.hxx>
 #include <rootfrm.hxx>
 #include <pagefrm.hxx>
+#include <doc.hxx>
 #include <docsh.hxx>
 #include <wrtsh.hxx>
 #include <swtestviewcallback.hxx>
@@ -2792,6 +2795,38 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testPasteShapeFromPresentationAtCaret
     CPPUNIT_ASSERT_DOUBLES_EQUAL(double(aCaret.Left()), double(aPasted.Left()), fTolerance);
     CPPUNIT_ASSERT_DOUBLES_EQUAL(double(aCaret.Top()), double(aPasted.Top()), fTolerance);
 }
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testInsertPageHeaderStateUserPageStyle)
+{
+    // Given a document opened in a UI language where the built-in page styles have translated
+    // names, with a page style that carries the English name of the default page style plus the
+    // " (user)" suffix, and that has a header:
+    comphelper::ScopeGuard aGuard(
+        [] { comphelper::COKit::setLanguageTag(LanguageTag(u"en-US"_ustr)); });
+    comphelper::COKit::setLanguageTag(LanguageTag(u"qtz"_ustr));
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwDocShell* pDocShell = pXTextDocument->GetDocShell();
+    SwWrtShell* pWrtShell = pDocShell->GetWrtShell();
+    KitHelper::setViewLanguage(KitHelper::getView(*pWrtShell->GetSfxViewShell()), u"qtz"_ustr);
+    const UIName aStyleName(u"Default Page Style (user)"_ustr);
+    pDocShell->GetDoc()->MakePageDesc(aStyleName);
+    pWrtShell->ChangeHeaderOrFooter(aStyleName, /*bHeader=*/true, /*bOn=*/true,
+                                    /*bShowWarning=*/false);
+
+    // When querying the state of the Insert Header command:
+    std::unique_ptr<SfxPoolItem> pItem;
+    pDocShell->GetView()->GetViewFrame().GetBindings().QueryState(FN_INSERT_PAGEHEADER, pItem);
+
+    // Then make sure the page style is reported with its header on:
+    // Without the accompanying fix in place, this test would have failed with a
+    // NoSuchElementException for "Default Page Style": the state handler looked the style up
+    // by a name that the current UI language maps to nothing.
+    const SfxStringListItem* pList = dynamic_cast<const SfxStringListItem*>(pItem.get());
+    CPPUNIT_ASSERT(pList);
+    const std::vector<OUString>& rList = pList->GetList();
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rList.size());
+    CPPUNIT_ASSERT_EQUAL(aStyleName.toString(), rList[0]);
+}
+
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

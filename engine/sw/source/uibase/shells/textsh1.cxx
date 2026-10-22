@@ -63,7 +63,9 @@
 #include <svx/xflgrit.hxx>
 #include <svx/xflhtit.hxx>
 #include <svx/xfillit0.hxx>
+#include <fmthdft.hxx>
 #include <fmtinfmt.hxx>
+#include <pagedesc.hxx>
 #include <wrtsh.hxx>
 #include <wview.hxx>
 #include <swmodule.hxx>
@@ -93,7 +95,6 @@
 #include <editeng/acorrcfg.hxx>
 #include <swabstdlg.hxx>
 #include <sfx2/sfxdlg.hxx>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <cpo/uno/Any.hxx>
@@ -137,7 +138,6 @@
 #include <boost/property_tree/json_parser.hpp>
 #include <formatcontentcontrol.hxx>
 #include <rtl/uri.hxx>
-#include <unotxdoc.hxx>
 #include <expfld.hxx>
 #include <sax/tools/converter.hxx>
 
@@ -3879,41 +3879,24 @@ void SwTextShell::GetState( SfxItemSet &rSet )
         case FN_INSERT_PAGEFOOTER:
             if (comphelper::COKit::isActive())
             {
-                bool bState = false;
+                // Report the page styles that already have a header (or
+                // footer) by their UI names, the same set and the same names
+                // that ChangeHeaderOrFooter walks when the slot is executed.
+                const bool bHeader = nWhich == FN_INSERT_PAGEHEADER;
                 bool bAllState = true;
-                bool bIsPhysical = false;
-
-                OUString aStyleName;
                 std::vector<OUString> aList;
-                const OUString sHeaderOn(nWhich == FN_INSERT_PAGEHEADER ? u"HeaderIsOn"_ustr : u"FooterIsOn"_ustr);
-
-                rtl::Reference< SwXTextDocument > xSupplier(GetView().GetDocShell()->GetBaseModel());
-                if (xSupplier.is())
+                const size_t nCount = rSh.GetPageDescCnt();
+                for (size_t i = 0; i < nCount; ++i)
                 {
-                    uno::Reference< XNameContainer > xContainer;
-                    uno::Reference< XNameAccess > xFamilies = xSupplier->getStyleFamilies();
-                    if (xFamilies->getByName(u"PageStyles"_ustr) >>= xContainer)
-                    {
-                        const cpo::uno::Sequence< OUString > aSeqNames = xContainer->getElementNames();
-                        for (const auto& rName : aSeqNames)
-                        {
-                            aStyleName = rName;
-                            uno::Reference<XPropertySet> xPropSet(xContainer->getByName(aStyleName), uno::UNO_QUERY);
-                            if (xPropSet.is() && (xPropSet->getPropertyValue(u"IsPhysical"_ustr) >>= bIsPhysical) && bIsPhysical)
-                            {
-                                xPropSet->getPropertyValue(u"DisplayName"_ustr) >>= aStyleName;
-                                if ((xPropSet->getPropertyValue(sHeaderOn)>>= bState) && bState)
-                                    aList.push_back(aStyleName);
-                                else
-                                    bState = false;
+                    const SwPageDesc& rDesc = rSh.GetPageDesc(i);
+                    const SwFrameFormat& rMaster = rDesc.GetMaster();
+                    const bool bOn = bHeader ? rMaster.GetHeader().IsActive()
+                                             : rMaster.GetFooter().IsActive();
+                    if (bOn)
+                        aList.push_back(rDesc.GetName().toString());
 
-                                // Check if all entries have the same state
-                                bAllState &= bState;
-                            }
-                            else
-                                bIsPhysical = false;
-                        }
-                    }
+                    // Check if all entries have the same state
+                    bAllState &= bOn;
                 }
 
                 if (bAllState && aList.size() > 1)
