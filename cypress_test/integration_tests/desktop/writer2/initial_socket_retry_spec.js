@@ -1,4 +1,4 @@
-/* global describe it require cy Cypress */
+/* global describe it require cy Cypress expect */
 
 var helper = require('../../common/helper');
 
@@ -28,16 +28,11 @@ describe(['tagdesktop'], 'Initial WebSocket connection retry', function() {
 			},
 		});
 
-		// With the fix the first WebSocket closes but the client
-		// retries and the document loads on the second attempt.
-		// Without the fix this times out.
-		//
-		// Only check that the document actually loaded. The full
-		// documentChecks() also waits for notebookbar and sidebar
-		// initialization which can be disrupted by the socket
-		// retry flow (the notebookbar container is replaced during
-		// re-initialization but the initialized flag is not reset).
+		// The first WebSocket closes, the client retries, and the document loads on
+		// the second socket. Without the retry this times out.
 		cy.cGet('#document-canvas').should('be.visible');
-		cy.cGet('#map').should('have.class', 'initialized');
+		cy.getFrameWindow().should(function(win) {
+			expect(win.app.map._docLoaded, 'document loaded').to.equal(true);
+		});
 	});
 });
