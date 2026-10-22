@@ -102,8 +102,20 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
         }
     }
 
+    // The block of a footnote or endnote goes into the note itself, so no
+    // paragraph of the body is started for it.
+    SwNodeIndex *pFootEndNoteIdx = nullptr;
+    if( aId.getLength() > 9 &&
+        (aId[0] == 's' || aId[0] == 'S' ) &&
+        (aId[1] == 'd' || aId[1] == 'D' ) &&
+        (aId.startsWithIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_sdendnote ) ||
+         aId.startsWithIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_sdfootnote )) )
+    {
+        pFootEndNoteIdx = GetFootEndNoteSection( aId );
+    }
+
     bool bAppended = false;
-    if( m_pPam->GetPoint()->GetContentIndex() )
+    if( m_pPam->GetPoint()->GetContentIndex() && !pFootEndNoteIdx )
     {
         AppendTextNode( bHeader||bFooter||!aId.isEmpty()|| !aHRef.isEmpty() ? AM_NORMAL
                                                                 : AM_NOSPACE );
@@ -223,29 +235,15 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
         SwPosition aNewPos( rContentStIdx, SwNodeOffset(1) );
         SaveDocContext(xCntxt.get(), nFlags, &aNewPos);
     }
-    else if( !bPositioned && aId.getLength() > 9 &&
-             (aId[0] == 's' || aId[0] == 'S' ) &&
-             (aId[1] == 'd' || aId[1] == 'D' ) )
+    else if( !bPositioned && pFootEndNoteIdx )
     {
-        bool bEndNote = false, bFootNote = false;
-        if( aId.startsWithIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_sdendnote ) )
-            bEndNote = true;
-        else if( aId.startsWithIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_sdfootnote ) )
-            bFootNote = true;
-        if( bFootNote || bEndNote )
-        {
-            SwNodeIndex *pStartNdIdx = GetFootEndNoteSection( aId );
-            if( pStartNdIdx )
-            {
-                SwContentNode *pCNd =
-                    m_xDoc->GetNodes()[pStartNdIdx->GetIndex()+1]->GetContentNode();
-                SwNodeIndex aTmpSwNodeIndex(*pCNd);
-                SwPosition aNewPos( aTmpSwNodeIndex, pCNd, 0 );
-                SaveDocContext(xCntxt.get(), HtmlContextFlags::MultiColMask, &aNewPos);
-                aId.clear();
-                aPropInfo.m_aId.clear();
-            }
-        }
+        SwContentNode *pCNd =
+            m_xDoc->GetNodes()[pFootEndNoteIdx->GetIndex()+1]->GetContentNode();
+        SwNodeIndex aTmpSwNodeIndex(*pCNd);
+        SwPosition aNewPos( aTmpSwNodeIndex, pCNd, 0 );
+        SaveDocContext(xCntxt.get(), HtmlContextFlags::MultiColMask, &aNewPos);
+        aId.clear();
+        aPropInfo.m_aId.clear();
     }
 
     // We only insert sections into frames if the section is linked.
@@ -364,8 +362,9 @@ void SwHTMLParser::NewDivision( HtmlTokenId nToken )
         if( !aPropInfo.m_aId.isEmpty() && aPropInfo.m_aId==aName )
             aPropInfo.m_aId.clear();
     }
-    else
+    else if( !pFootEndNoteIdx )
     {
+        // no paragraph of the body after the block of a note either
         xCntxt->SetAppendMode( AM_NOSPACE );
     }
 

@@ -13,6 +13,7 @@
 #include <vcl/scheduler.hxx>
 #include <vcl/TypeSerializer.hxx>
 #include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
 #include <com/sun/star/lang/Locale.hpp>
@@ -1671,6 +1672,46 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateAddsNoDirectFormatting)
     uno::Reference<beans::XPropertyState> xStrongState(xStrong, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(beans::PropertyState_DEFAULT_VALUE,
                          xStrongState->getPropertyState(u"CharWeight"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateKeepsFootnotes)
+{
+    // The mock returns the markup it was sent, as the translation services do.
+    std::unique_ptr<test::MockHttpServer> pMockServer = createMockTranslateServer(false, true);
+    CPPUNIT_ASSERT(pMockServer->start());
+    comphelper::ScopeGuard<std::function<void()>> aResetConfig
+        = setTranslationService(u"http://127.0.0.1:18099/v2/translate"_ustr);
+
+    // Given a paragraph with a footnote, followed by another paragraph:
+    createSwDoc();
+    SwWrtShell* const pWrtSh = getSwDocShell()->GetWrtShell();
+    pWrtSh->Insert(u"Body text"_ustr);
+    pWrtSh->InsertFootnote(u""_ustr);
+    pWrtSh->Insert(u"Note text"_ustr);
+    pWrtSh->SttEndDoc(true);
+    pWrtSh->EndPara();
+    pWrtSh->SplitNode();
+    pWrtSh->Insert(u"Second paragraph"_ustr);
+    pWrtSh->SttEndDoc(true);
+    CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
+    // the text of the paragraph with the footnote's anchor in it
+    const OUString aFirstParagraph = getParagraph(1)->getString();
+
+    // When translating the whole document:
+    bool bCancel = false;
+    CPPUNIT_ASSERT(SwTranslateHelper::TranslateDocumentCancellable(*pWrtSh, "DE"_ostr, bCancel));
+
+    // Then the footnote and its text are still there, and no paragraph was added: the
+    // footnote's text travels in a block after the paragraph, and the paste used to leave an
+    // empty paragraph behind for that block.
+    CPPUNIT_ASSERT_EQUAL(2, getParagraphs());
+    CPPUNIT_ASSERT_EQUAL(aFirstParagraph, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Second paragraph"_ustr, getParagraph(2)->getString());
+    uno::Reference<text::XFootnotesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFootnotes = xSupplier->getFootnotes();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xFootnotes->getCount());
+    uno::Reference<text::XTextRange> xNote(xFootnotes->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"Note text"_ustr, xNote->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateKeepsDirectFormatting)
