@@ -94,8 +94,8 @@ void DrawViewShell::GetCtrlState(SfxItemSet &rSet)
             aHLinkItem.SetShowName(true);
             aHLinkItem.SetShowTitle(true);
 
-            const SvxFieldItem* pFieldItem = pOLV->GetFieldAtSelection();
-            const SvxFieldData* pField = pFieldItem ? pFieldItem->GetField() : nullptr;
+            const std::optional<SvxFieldItem> oFieldItem = pOLV->GetFieldAtSelection();
+            const SvxFieldData* pField = oFieldItem ? oFieldItem->GetField() : nullptr;
             if( auto pUrlField = dynamic_cast< const SvxURLField *>( pField ) )
             {
                 aHLinkItem.SetName(pUrlField->GetRepresentation());

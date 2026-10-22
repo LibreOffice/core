@@ -1515,10 +1515,10 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
                 if (pActiveView && URLFieldHelper::IsCursorAtURLField(*pActiveView,
                                                                        /*bAlsoCheckBeforeCursor=*/true))
                 {
-                    const SvxFieldItem* pFieldItem
+                    const std::optional<SvxFieldItem> oFieldItem
                         = pActiveView->GetFieldAtSelection(/*bAlsoCheckBeforeCursor=*/true);
                     if (auto pUrlField = dynamic_cast<const SvxURLField*>(
-                            pFieldItem ? pFieldItem->GetField() : nullptr))
+                            oFieldItem ? oFieldItem->GetField() : nullptr))
                     {
                         aHyperlinkTree = getHyperlinkPropTree(pUrlField->GetRepresentation(), pUrlField->GetURL());
                     }
@@ -1527,10 +1527,11 @@ void ImpEditView::ShowCursor( bool bGotoCursor, bool bForceVisCursor )
                 {
                     if (pActiveView)
                     {
-                        const SvxFieldItem* pFieldItem = pActiveView->GetFieldAtSelection();
-                        if (pFieldItem)
+                        const std::optional<SvxFieldItem> oFieldItem
+                            = pActiveView->GetFieldAtSelection();
+                        if (oFieldItem)
                         {
-                            const SvxFieldData* pField = pFieldItem->GetField();
+                            const SvxFieldData* pField = oFieldItem->GetField();
                             if ( auto pUrlField = dynamic_cast<const SvxURLField*>( pField) )
                             {
                                 aHyperlinkTree = getHyperlinkPropTree(pUrlField->GetRepresentation(), pUrlField->GetURL());
@@ -1959,34 +1960,32 @@ void ImpEditView::DeleteSelected()
     ShowCursor( DoAutoScroll(), true );
 }
 
-const SvxFieldItem* ImpEditView::SynthesizeUrlFieldItem(const SvxFieldItem& rBacking, const OUString& rLiveText) const
+std::optional<SvxFieldItem> ImpEditView::SynthesizeUrlFieldItem(const SvxFieldItem& rBacking,
+                                                                const OUString& rLiveText)
 {
     const SvxURLField* pUrl = dynamic_cast<const SvxURLField*>(rBacking.GetField());
     if (!pUrl)
-    {
-        mpSynthesizedUrlFieldItem.reset();
-        return nullptr;
-    }
+        return std::nullopt;
     SvxURLField aLive(*pUrl);
     aLive.SetRepresentation(rLiveText);
-    mpSynthesizedUrlFieldItem.reset(new SvxFieldItem(aLive, EE_CHAR_URL));
-    return mpSynthesizedUrlFieldItem.get();
+    return SvxFieldItem(aLive, EE_CHAR_URL);
 }
 
-const SvxFieldItem* ImpEditView::GetField( const Point& rPos, sal_Int32* pPara, sal_Int32* pPos ) const
+std::optional<SvxFieldItem> ImpEditView::GetField( const Point& rPosition, sal_Int32* pParagraph,
+                                                   sal_Int32* pPosition ) const
 {
-    if( !GetOutputArea().Contains( rPos ) )
-        return nullptr;
+    if( !GetOutputArea().Contains( rPosition ) )
+        return std::nullopt;
 
-    Point aDocPos( GetDocPos( rPos ) );
-    EditPaM aPaM = getEditEngine().GetPaM(aDocPos, false);
+    Point aDocumentPosition( GetDocPos( rPosition ) );
+    EditPaM aPaM = getEditEngine().GetPaM(aDocumentPosition, false);
     if (!aPaM)
-        return nullptr;
+        return std::nullopt;
 
     if ( aPaM.GetIndex() == aPaM.GetNode()->Len() )
     {
         // Otherwise, whenever the Field at the very end and mouse under the text
-        return nullptr;
+        return std::nullopt;
     }
 
     const CharAttribList::AttribsType& rAttrs = aPaM.GetNode()->GetCharAttribs().GetAttribs();
@@ -1997,24 +1996,24 @@ const SvxFieldItem* ImpEditView::GetField( const Point& rPos, sal_Int32* pPara, 
         if (rAttr.Which() == EE_FEATURE_FIELD && (rAttr.GetStart() == nXPos || rAttr.GetEnd() == nXPos))
         {
             DBG_ASSERT(dynamic_cast<const SvxFieldItem*>(rAttr.GetItem()), "No FieldItem...");
-            if (pPara)
-                *pPara = getEditEngine().GetEditDoc().GetPos( aPaM.GetNode() );
-            if (pPos)
-                *pPos = rAttr.GetStart();
-            return static_cast<const SvxFieldItem*>(rAttr.GetItem());
+            if (pParagraph)
+                *pParagraph = getEditEngine().GetEditDoc().GetPos( aPaM.GetNode() );
+            if (pPosition)
+                *pPosition = rAttr.GetStart();
+            return *static_cast<const SvxFieldItem*>(rAttr.GetItem());
         }
         // The point is on the link when it falls inside the span.
         if (rAttr.Which() == EE_CHAR_URL && rAttr.GetStart() <= nXPos && nXPos < rAttr.GetEnd())
         {
-            if (pPara)
-                *pPara = getEditEngine().GetEditDoc().GetPos( aPaM.GetNode() );
-            if (pPos)
-                *pPos = rAttr.GetStart();
+            if (pParagraph)
+                *pParagraph = getEditEngine().GetEditDoc().GetPos( aPaM.GetNode() );
+            if (pPosition)
+                *pPosition = rAttr.GetStart();
             OUString aLiveText = aPaM.GetNode()->Copy(rAttr.GetStart(), rAttr.GetEnd() - rAttr.GetStart());
             return SynthesizeUrlFieldItem(*static_cast<const SvxFieldItem*>(rAttr.GetItem()), aLiveText);
         }
     }
-    return nullptr;
+    return std::nullopt;
 }
 
 bool ImpEditView::IsBulletArea( const Point& rPos, sal_Int32* pPara )
@@ -2275,7 +2274,7 @@ void ImpEditView::DeselectAll()
 
 bool ImpEditView::IsSelectionAtPoint( const Point& rPosPixel )
 {
-    if (mpDragAndDropInfo && mpDragAndDropInfo->pField)
+    if (mpDragAndDropInfo && mpDragAndDropInfo->mbDragsField)
         return true;
 
     // Logical units ...
@@ -2436,11 +2435,10 @@ void ImpEditView::dragGestureRecognized(const css::datatransfer::dnd::DragGestur
         sal_Int32 nPara;
         sal_Int32 nPos;
         Point aMousePos = GetOutputDevice().PixelToLogic( aMousePosPixel );
-        const SvxFieldItem* pField = GetField( aMousePos, &nPara, &nPos );
-        if ( pField )
+        if ( GetField( aMousePos, &nPara, &nPos ) )
         {
             mpDragAndDropInfo.reset(new DragAndDropInfo);
-            mpDragAndDropInfo->pField = pField;
+            mpDragAndDropInfo->mbDragsField = true;
             ContentNode& rNode = getEditEngine().GetEditDoc().GetObject( nPara );
             aCopySel = EditSelection( EditPaM( rNode, nPos ), EditPaM( rNode, nPos+1 ) );
             SetEditSelection(aCopySel);

@@ -3019,20 +3019,20 @@ void ScGridWindow::MouseMove( const MouseEvent& rMEvt )
                 return;
             }
 
-            const SvxFieldItem* pFld;
+            bool bHasField;
             if ( comphelper::COKit::isActive() )
             {
                 Point aLogicClick = pEditView->GetOutputDevice().PixelToLogic(aPos);
-                pFld = pEditView->GetField( aLogicClick );
+                bHasField = pEditView->GetField(aLogicClick).has_value();
             }
             else
             {
-                pFld = pEditView->GetFieldUnderMousePointer();
+                bHasField = pEditView->GetFieldUnderMousePointer().has_value();
             }
             //  Field can only be URL field
             bool bAlt = rMEvt.IsMod2();
             if ( !bAlt && !nButtonDown
-                 && (ScGlobal::ShouldOpenURL() || comphelper::COKit::isActive()) && pFld )
+                 && (ScGlobal::ShouldOpenURL() || comphelper::COKit::isActive()) && bHasField)
                 SetPointer( PointerStyle::RefHand );
             else if (pEditView->getEditEngine().IsEffectivelyVertical())
                 SetPointer( PointerStyle::TextVertical );
@@ -5963,6 +5963,12 @@ bool extractURLInfo( const SvxFieldItem* pFieldItem, OUString* pName, OUString* 
         *pTarget = pURLField->GetTargetFrame();
 
     return true;
+}
+
+bool extractURLInfo(const std::optional<SvxFieldItem>& oFieldItem, OUString* pName, OUString* pUrl,
+                    OUString* pTarget)
+{
+    return extractURLInfo(oFieldItem ? &*oFieldItem : nullptr, pName, pUrl, pTarget);
 }
 
 }

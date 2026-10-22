@@ -1330,19 +1330,21 @@ void EditView::InsertField( const SvxFieldItem& rFld )
         rEditEngine.FormatAndLayout( this );
 }
 
-const SvxFieldItem* EditView::GetFieldUnderMousePointer() const
+std::optional<SvxFieldItem> EditView::GetFieldUnderMousePointer() const
 {
     sal_Int32 nPara;
     sal_Int32 nPos;
     return GetFieldUnderMousePointer( nPara, nPos );
 }
 
-const SvxFieldItem* EditView::GetField( const Point& rPos, sal_Int32* pPara, sal_Int32* pPos ) const
+std::optional<SvxFieldItem> EditView::GetField( const Point& rPosition, sal_Int32* pParagraph,
+                                                sal_Int32* pPosition ) const
 {
-    return getImpl().GetField( rPos, pPara, pPos );
+    return getImpl().GetField( rPosition, pParagraph, pPosition );
 }
 
-const SvxFieldItem* EditView::GetFieldUnderMousePointer( sal_Int32& nPara, sal_Int32& nPos ) const
+std::optional<SvxFieldItem> EditView::GetFieldUnderMousePointer( sal_Int32& rParagraph,
+                                                                 sal_Int32& rPosition ) const
 {
     Point aPos;
     if (EditViewCallbacks* pEditViewCallbacks = getImpl().getEditViewCallbacks())
@@ -1351,10 +1353,10 @@ const SvxFieldItem* EditView::GetFieldUnderMousePointer( sal_Int32& nPara, sal_I
         aPos = getImpl().GetWindow()->GetPointerPosPixel();
     OutputDevice& rDevice = getImpl().GetOutputDevice();
     aPos = rDevice.PixelToLogic(aPos);
-    return GetField( aPos, &nPara, &nPos );
+    return GetField( aPos, &rParagraph, &rPosition );
 }
 
-const SvxFieldItem* EditView::GetFieldAtSelection(bool bAlsoCheckBeforeCursor) const
+std::optional<SvxFieldItem> EditView::GetFieldAtSelection(bool bAlsoCheckBeforeCursor) const
 {
     bool* pIsBeforeCursor = bAlsoCheckBeforeCursor ? &bAlsoCheckBeforeCursor : nullptr;
     return GetFieldAtSelection(pIsBeforeCursor);
@@ -1363,14 +1365,14 @@ const SvxFieldItem* EditView::GetFieldAtSelection(bool bAlsoCheckBeforeCursor) c
 // If pIsBeforeCursor != nullptr, the position before the cursor will also be checked for a field
 // and pIsBeforeCursor will return true if that fallback field is returned.
 // If no field is returned, the value in pIsBeforeCursor is meaningless.
-const SvxFieldItem* EditView::GetFieldAtSelection(bool* pIsBeforeCursor) const
+std::optional<SvxFieldItem> EditView::GetFieldAtSelection(bool* pIsBeforeCursor) const
 {
     if (pIsBeforeCursor)
         *pIsBeforeCursor = false;
 
     EditSelection aSel( getImpl().GetEditSelection() );
     if (aSel.Min().GetNode() != aSel.Max().GetNode())
-        return nullptr;
+        return std::nullopt;
 
     // normalize: min < max
     aSel.Adjust(getEditEngine().GetEditDoc());
@@ -1384,7 +1386,7 @@ const SvxFieldItem* EditView::GetFieldAtSelection(bool* pIsBeforeCursor) const
     if (const EditCharAttrib* pSpan = lcl_findUrlSpanAt(rAttrs, nMinIndex, nMaxIndex))
     {
         OUString aLiveText = pNode->Copy(pSpan->GetStart(), pSpan->GetEnd() - pSpan->GetStart());
-        return getImpl().SynthesizeUrlFieldItem(
+        return ImpEditView::SynthesizeUrlFieldItem(
             *static_cast<const SvxFieldItem*>(pSpan->GetItem()), aLiveText);
     }
 
@@ -1400,7 +1402,7 @@ const SvxFieldItem* EditView::GetFieldAtSelection(bool* pIsBeforeCursor) const
             {
                 DBG_ASSERT(dynamic_cast<const SvxFieldItem*>(rAttr->GetItem()), "No FieldItem...");
                 if (rAttr->GetStart() == nMinIndex)
-                    return static_cast<const SvxFieldItem*>(rAttr->GetItem());
+                    return *static_cast<const SvxFieldItem*>(rAttr->GetItem());
 
                 // perhaps the cursor is behind the field?
                 if (nMinIndex && rAttr->GetStart() == nMinIndex - 1)
@@ -1410,7 +1412,7 @@ const SvxFieldItem* EditView::GetFieldAtSelection(bool* pIsBeforeCursor) const
         if (bAlsoCheckBeforeCursor && pFoundBeforeCursor)
         {
             *pIsBeforeCursor = true;
-            return pFoundBeforeCursor;
+            return *pFoundBeforeCursor;
         }
     }
 
@@ -1421,24 +1423,24 @@ const SvxFieldItem* EditView::GetFieldAtSelection(bool* pIsBeforeCursor) const
         {
             *pIsBeforeCursor = true;
             OUString aLiveText = pNode->Copy(pSpan->GetStart(), pSpan->GetEnd() - pSpan->GetStart());
-            return getImpl().SynthesizeUrlFieldItem(
+            return ImpEditView::SynthesizeUrlFieldItem(
                 *static_cast<const SvxFieldItem*>(pSpan->GetItem()), aLiveText);
         }
     }
-    return nullptr;
+    return std::nullopt;
 }
 
 void EditView::SelectFieldAtCursor()
 {
     bool bIsBeforeCursor = false;
-    const SvxFieldItem* pFieldItem = GetFieldAtSelection(&bIsBeforeCursor);
-    if (!pFieldItem)
+    const std::optional<SvxFieldItem> oFieldItem = GetFieldAtSelection(&bIsBeforeCursor);
+    if (!oFieldItem)
         return;
 
     ESelection aSel = GetSelection();
 
     // A hyperlink span covers real text, so select the whole span.
-    if (pFieldItem->Which() == EE_CHAR_URL)
+    if (oFieldItem->Which() == EE_CHAR_URL)
     {
         EditSelection aEditSel(getImpl().GetEditSelection());
         aEditSel.Adjust(getEditEngine().GetEditDoc());
@@ -1486,13 +1488,16 @@ void EditView::InsertFieldAndSelect(const SvxFieldItem& rFld)
     SetSelection(aSel);
 }
 
-const SvxFieldData* EditView::GetFieldUnderMouseOrInSelectionOrAtCursor(bool bAlsoCheckBeforeCursor) const
+std::unique_ptr<SvxFieldData>
+EditView::GetFieldUnderMouseOrInSelectionOrAtCursor(bool bAlsoCheckBeforeCursor) const
 {
-    const SvxFieldItem* pFieldItem = GetFieldUnderMousePointer();
-    if (!pFieldItem)
-        pFieldItem = GetFieldAtSelection(bAlsoCheckBeforeCursor);
+    const std::optional<SvxFieldItem> oUnderMouse = GetFieldUnderMousePointer();
+    const std::optional<SvxFieldItem> oFieldItem
+        = oUnderMouse ? oUnderMouse : GetFieldAtSelection(bAlsoCheckBeforeCursor);
 
-    return pFieldItem ? pFieldItem->GetField() : nullptr;
+    if (!oFieldItem || !oFieldItem->GetField())
+        return nullptr;
+    return oFieldItem->GetField()->Clone();
 }
 
 sal_Int32 EditView::countFieldsOffsetSum(sal_Int32 nPara, sal_Int32 nPos, bool bCanOverflow) const

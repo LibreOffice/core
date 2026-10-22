@@ -494,16 +494,16 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
                 break;
             }
 
-            const SvxFieldItem* pOldFldItem = pOutlinerView->GetFieldAtSelection();
+            const std::optional<SvxFieldItem> oOldFieldItem = pOutlinerView->GetFieldAtSelection();
 
-            if( pOldFldItem && ( nullptr != dynamic_cast< const SvxURLField *>( pOldFldItem->GetField() ) ||
-                                nullptr != dynamic_cast< const SvxDateField *>( pOldFldItem->GetField() ) ||
-                                nullptr != dynamic_cast< const SvxTimeField *>( pOldFldItem->GetField() ) ||
-                                nullptr != dynamic_cast< const SvxExtTimeField *>( pOldFldItem->GetField() ) ||
-                                nullptr != dynamic_cast< const SvxExtFileField *>( pOldFldItem->GetField() ) ||
-                                nullptr != dynamic_cast< const SvxAuthorField *>( pOldFldItem->GetField() ) ||
-                                nullptr != dynamic_cast< const SvxPageField *>( pOldFldItem->GetField() ) ||
-                                nullptr != dynamic_cast< const SvxPagesField *>( pOldFldItem->GetField() )) )
+            if (oOldFieldItem && (nullptr != dynamic_cast<const SvxURLField *>(oOldFieldItem->GetField()) ||
+                                  nullptr != dynamic_cast<const SvxDateField *>(oOldFieldItem->GetField()) ||
+                                  nullptr != dynamic_cast<const SvxTimeField *>(oOldFieldItem->GetField()) ||
+                                  nullptr != dynamic_cast<const SvxExtTimeField *>(oOldFieldItem->GetField()) ||
+                                  nullptr != dynamic_cast<const SvxExtFileField *>(oOldFieldItem->GetField()) ||
+                                  nullptr != dynamic_cast<const SvxAuthorField *>(oOldFieldItem->GetField()) ||
+                                  nullptr != dynamic_cast<const SvxPageField *>(oOldFieldItem->GetField()) ||
+                                  nullptr != dynamic_cast<const SvxPagesField *>(oOldFieldItem->GetField())))
             {
                 // Select the whole field, so the insert replaces it.
                 pOutlinerView->SelectFieldAtCursor();
@@ -520,17 +520,17 @@ void OutlineViewShell::FuTemporaryModify(SfxRequest &rReq)
 
         case SID_MODIFY_FIELD:
         {
-            const SvxFieldItem* pFldItem = pOutlinerView->GetFieldAtSelection();
+            const std::optional<SvxFieldItem> oFieldItem = pOutlinerView->GetFieldAtSelection();
 
-            if( pFldItem && (nullptr != dynamic_cast< const SvxDateField *>( pFldItem->GetField() ) ||
-                                nullptr != dynamic_cast< const SvxAuthorField *>( pFldItem->GetField() ) ||
-                                nullptr != dynamic_cast< const SvxExtFileField *>( pFldItem->GetField() ) ||
-                                nullptr != dynamic_cast< const SvxExtTimeField *>( pFldItem->GetField() ) ) )
+            if (oFieldItem && (nullptr != dynamic_cast<const SvxDateField *>(oFieldItem->GetField()) ||
+                               nullptr != dynamic_cast<const SvxAuthorField *>(oFieldItem->GetField()) ||
+                               nullptr != dynamic_cast<const SvxExtFileField *>(oFieldItem->GetField()) ||
+                               nullptr != dynamic_cast<const SvxExtTimeField *>(oFieldItem->GetField())))
             {
                 // Dialog...
                 SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
                 vcl::Window* pWin = GetActiveWindow();
-                ScopedVclPtr<AbstractSdModifyFieldDlg> pDlg(pFact->CreateSdModifyFieldDlg(pWin ? pWin->GetFrameWeld() : nullptr, pFldItem->GetField(), pOutlinerView->GetAttribs() ));
+                ScopedVclPtr<AbstractSdModifyFieldDlg> pDlg(pFact->CreateSdModifyFieldDlg(pWin ? pWin->GetFrameWeld() : nullptr, oFieldItem->GetField(), pOutlinerView->GetAttribs()));
                 if( pDlg->Execute() == RET_OK )
                 {
                     std::unique_ptr<SvxFieldData> pField(pDlg->GetField());

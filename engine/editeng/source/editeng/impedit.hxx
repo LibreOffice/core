@@ -109,7 +109,7 @@ struct DragAndDropInfo
     sal_Int32 nOutlinerDropDest = 0;
     ESelection aDropSel;
     VclPtr<VirtualDevice> pBackground = nullptr;
-    const SvxFieldItem* pField = nullptr;
+    bool mbDragsField : 1 = false;
     bool bVisCursor : 1 = false;
     bool bDroppedInMe : 1 = false;
     bool bStarterOfDD : 1 = false;
@@ -289,10 +289,6 @@ private:
     EditView::OutWindowSet maOutWindowSet;
     std::optional<PointerStyle> mxPointer;
     std::unique_ptr<DragAndDropInfo> mpDragAndDropInfo;
-
-    /// The field item last built from an EE_CHAR_URL span. A returned pointer to it stays valid
-    /// until the next request.
-    mutable std::unique_ptr<SvxFieldItem> mpSynthesizedUrlFieldItem;
 
     rtl::Reference<vcl::unohelper::DragAndDropWrapper> mxDnDListener;
 
@@ -525,11 +521,13 @@ public:
     bool            IsWrongSpelledWord( const EditPaM& rPaM, bool bMarkIfWrong );
     OUString        SpellIgnoreWord();
 
-    const SvxFieldItem* GetField( const Point& rPos, sal_Int32* pPara, sal_Int32* pPos ) const;
+    std::optional<SvxFieldItem> GetField(const Point& rPosition, sal_Int32* pParagraph,
+                                         sal_Int32* pPosition) const;
 
     /// Builds a field item from an EE_CHAR_URL span item, with rLiveText as its representation.
-    /// Returns nullptr when the item holds no URL field.
-    const SvxFieldItem* SynthesizeUrlFieldItem(const SvxFieldItem& rBacking, const OUString& rLiveText) const;
+    /// Returns no item when the span item holds no URL field.
+    static std::optional<SvxFieldItem> SynthesizeUrlFieldItem(const SvxFieldItem& rBacking,
+                                                              const OUString& rLiveText);
 
     void            DeleteSelected();
 

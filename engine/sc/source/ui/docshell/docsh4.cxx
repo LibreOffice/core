@@ -459,8 +459,9 @@ void ScDocShell::Execute( SfxRequest& rReq )
                 {
                     if (EditView* pEditView = pViewData->GetEditView(pViewData->GetActivePart()))
                     {
-                        const SvxFieldItem* pFieldItem = pEditView->GetFieldAtSelection(/*bAlsoCheckBeforeCursor=*/true);
-                        const SvxFieldData* pField = pFieldItem ? pFieldItem->GetField() : nullptr;
+                        const std::optional<SvxFieldItem> oFieldItem
+                            = pEditView->GetFieldAtSelection(/*bAlsoCheckBeforeCursor=*/true);
+                        const SvxFieldData* pField = oFieldItem ? oFieldItem->GetField() : nullptr;
                         if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
                         {
                             ScGlobal::OpenURL(pURLField->GetURL(), pURLField->GetTargetFrame(), true);

@@ -355,13 +355,13 @@ void OutlineViewShell::GetCtrlState(SfxItemSet &rSet)
         if (pOLV)
         {
             aHLinkItem.SetShowTitle(true);
-            const SvxFieldItem* pFieldItem = pOLV->GetFieldAtSelection();
-            if (pFieldItem)
+            const std::optional<SvxFieldItem> oFieldItem = pOLV->GetFieldAtSelection();
+            if (oFieldItem)
             {
                 ESelection aSel = pOLV->GetSelection();
                 if (abs(aSel.end.nIndex - aSel.start.nIndex) == 1)
                 {
-                    const SvxFieldData* pField = pFieldItem->GetField();
+                    const SvxFieldData* pField = oFieldItem->GetField();
                     if ( auto pUrlField = dynamic_cast< const SvxURLField *>( pField ) )
                     {
                         aHLinkItem.SetName(pUrlField->GetRepresentation());
@@ -931,12 +931,12 @@ void OutlineViewShell::GetMenuState( SfxItemSet &rSet )
     // field commands
     if( SfxItemState::DEFAULT == rSet.GetItemState( SID_MODIFY_FIELD ) )
     {
-        const SvxFieldItem* pFldItem = pOutlinerView->GetFieldAtSelection();
+        const std::optional<SvxFieldItem> oFieldItem = pOutlinerView->GetFieldAtSelection();
 
-        if( !( pFldItem && (nullptr != dynamic_cast< const SvxDateField *>( pFldItem->GetField() ) ||
-                            nullptr != dynamic_cast< const SvxAuthorField *>( pFldItem->GetField() ) ||
-                            nullptr != dynamic_cast< const SvxExtFileField *>( pFldItem->GetField() ) ||
-                            nullptr != dynamic_cast< const SvxExtTimeField *>( pFldItem->GetField() ) ) ) )
+        if (!(oFieldItem && (nullptr != dynamic_cast<const SvxDateField *>(oFieldItem->GetField()) ||
+                              nullptr != dynamic_cast<const SvxAuthorField *>(oFieldItem->GetField()) ||
+                              nullptr != dynamic_cast<const SvxExtFileField *>(oFieldItem->GetField()) ||
+                              nullptr != dynamic_cast<const SvxExtTimeField *>(oFieldItem->GetField()))))
         {
             rSet.DisableItem( SID_MODIFY_FIELD );
         }

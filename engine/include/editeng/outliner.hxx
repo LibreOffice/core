@@ -253,8 +253,8 @@ public:
     bool        HasSelection() const;
 
     void                InsertField( const SvxFieldItem& rFld );
-    const SvxFieldItem* GetFieldUnderMousePointer() const;
-    const SvxFieldItem* GetFieldAtSelection(bool bAlsoCheckBeforeCursor = false) const;
+    std::optional<SvxFieldItem> GetFieldUnderMousePointer() const;
+    std::optional<SvxFieldItem> GetFieldAtSelection(bool bAlsoCheckBeforeCursor = false) const;
     /// if no selection, select the field immediately after or before the current cursor
     void SelectFieldAtCursor();
     /// Inserts rFld over the selection and selects the inserted field.

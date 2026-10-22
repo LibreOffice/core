@@ -284,8 +284,8 @@ sal_Int32 OutlinerView::ImpCheckMousePos(const Point& rPosPix, MouseTarget& reTa
             else
             {
                 // Check for hyperlink
-                const SvxFieldItem* pFieldItem = pEditView->GetField( aMousePosWin );
-                if ( pFieldItem && pFieldItem->GetField() && dynamic_cast< const SvxURLField* >(pFieldItem->GetField()) != nullptr )
+                const std::optional<SvxFieldItem> oFieldItem = pEditView->GetField( aMousePosWin );
+                if ( oFieldItem && oFieldItem->GetField() && dynamic_cast< const SvxURLField* >(oFieldItem->GetField()) != nullptr )
                     reTarget = MouseTarget::Hypertext;
             }
         }
@@ -1371,12 +1371,12 @@ void OutlinerView::InsertField( const SvxFieldItem& rFld )
     pEditView->InsertField( rFld );
 }
 
-const SvxFieldItem* OutlinerView::GetFieldUnderMousePointer() const
+std::optional<SvxFieldItem> OutlinerView::GetFieldUnderMousePointer() const
 {
     return pEditView->GetFieldUnderMousePointer();
 }
 
-const SvxFieldItem* OutlinerView::GetFieldAtSelection(bool bAlsoCheckBeforeCursor) const
+std::optional<SvxFieldItem> OutlinerView::GetFieldAtSelection(bool bAlsoCheckBeforeCursor) const
 {
     return pEditView->GetFieldAtSelection(bAlsoCheckBeforeCursor);
 }

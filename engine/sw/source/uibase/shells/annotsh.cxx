@@ -414,9 +414,9 @@ void SwAnnotationShell::Exec( SfxRequest &rReq )
                 SvxURLField aField(rHLinkItem.GetURL(), rHLinkItem.GetName(), SvxURLFormat::AppDefault);
                 aField.SetTargetFrame(rHLinkItem.GetTargetFrame());
 
-                const SvxFieldItem* pFieldItem = pOLV->GetFieldAtSelection();
+                const std::optional<SvxFieldItem> oFieldItem = pOLV->GetFieldAtSelection();
 
-                if (pFieldItem && dynamic_cast<const SvxURLField *>(pFieldItem->GetField()) != nullptr)
+                if (oFieldItem && dynamic_cast<const SvxURLField *>(oFieldItem->GetField()) != nullptr)
                 {
                     // Select the whole hyperlink so the insert replaces it.
                     pOLV->SelectFieldAtCursor();
@@ -1123,11 +1123,11 @@ void SwAnnotationShell::StateInsert(SfxItemSet &rSet)
                     aHLinkItem.SetShowText(true);
                     aHLinkItem.SetInsertMode(HLINK_FIELD);
 
-                    const SvxFieldItem* pFieldItem = pOLV->GetFieldAtSelection();
+                    const std::optional<SvxFieldItem> oFieldItem = pOLV->GetFieldAtSelection();
 
-                    if (pFieldItem)
+                    if (oFieldItem)
                     {
-                        if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField *>(pFieldItem->GetField()))
+                        if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField *>(oFieldItem->GetField()))
                         {
                             aHLinkItem.SetName(pURLField->GetRepresentation());
                             aHLinkItem.SetURL(pURLField->GetURL());

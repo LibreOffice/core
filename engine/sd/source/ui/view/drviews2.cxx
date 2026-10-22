@@ -4371,9 +4371,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             OutlinerView* pOutView = mpDrawView->GetTextEditOutlinerView();
             if ( pOutView )
             {
-                const SvxFieldItem* pFieldItem
+                const std::optional<SvxFieldItem> oFieldItem
                     = pOutView->GetFieldAtSelection(/*AlsoCheckBeforeCursor=*/true);
-                const SvxFieldData* pField = pFieldItem ? pFieldItem->GetField() : nullptr;
+                const SvxFieldData* pField = oFieldItem ? oFieldItem->GetField() : nullptr;
                 if( auto pURLField = dynamic_cast< const SvxURLField *>( pField ) )
                 {
                     SfxStringItem aUrl( SID_FILE_NAME, pURLField->GetURL() );
@@ -4410,9 +4410,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
             OutlinerView* pOutView = mpDrawView->GetTextEditOutlinerView();
             if ( pOutView )
             {
-                const SvxFieldItem* pFieldItem
+                const std::optional<SvxFieldItem> oFieldItem
                     = pOutView->GetFieldAtSelection(/*AlsoCheckBeforeCursor=*/true);
-                const SvxFieldData* pField = pFieldItem ? pFieldItem->GetField() : nullptr;
+                const SvxFieldData* pField = oFieldItem ? oFieldItem->GetField() : nullptr;
                 if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
                 {
                     uno::Reference<datatransfer::clipboard::XClipboard> xClipboard
@@ -4618,15 +4618,15 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
             if( pOLV )
             {
-                const SvxFieldItem* pOldFldItem = pOLV->GetFieldAtSelection();
+                const std::optional<SvxFieldItem> oOldFieldItem = pOLV->GetFieldAtSelection();
 
-                if( pOldFldItem && ( nullptr != dynamic_cast< const SvxURLField *>( pOldFldItem->GetField() ) ||
-                                    nullptr != dynamic_cast< const SvxDateField *>( pOldFldItem->GetField() ) ||
-                                    nullptr != dynamic_cast< const SvxTimeField *>( pOldFldItem->GetField() ) ||
-                                    nullptr != dynamic_cast< const SvxExtTimeField *>( pOldFldItem->GetField() ) ||
-                                    nullptr != dynamic_cast< const SvxExtFileField *>( pOldFldItem->GetField() ) ||
-                                    nullptr != dynamic_cast< const SvxAuthorField *>( pOldFldItem->GetField() ) ||
-                                    nullptr != dynamic_cast< const SvxPageField *>( pOldFldItem->GetField() ) ) )
+                if (oOldFieldItem && (nullptr != dynamic_cast<const SvxURLField *>(oOldFieldItem->GetField()) ||
+                                      nullptr != dynamic_cast<const SvxDateField *>(oOldFieldItem->GetField()) ||
+                                      nullptr != dynamic_cast<const SvxTimeField *>(oOldFieldItem->GetField()) ||
+                                      nullptr != dynamic_cast<const SvxExtTimeField *>(oOldFieldItem->GetField()) ||
+                                      nullptr != dynamic_cast<const SvxExtFileField *>(oOldFieldItem->GetField()) ||
+                                      nullptr != dynamic_cast<const SvxAuthorField *>(oOldFieldItem->GetField()) ||
+                                      nullptr != dynamic_cast<const SvxPageField *>(oOldFieldItem->GetField())))
                 {
                     // Select the whole field, so the insert replaces it.
                     pOLV->SelectFieldAtCursor();
@@ -4680,17 +4680,17 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
             if( pOLV )
             {
-                const SvxFieldItem* pFldItem = pOLV->GetFieldAtSelection();
+                const std::optional<SvxFieldItem> oFieldItem = pOLV->GetFieldAtSelection();
 
-                if( pFldItem && (nullptr != dynamic_cast< const SvxDateField *>( pFldItem->GetField() ) ||
-                                 nullptr != dynamic_cast< const SvxAuthorField *>( pFldItem->GetField() ) ||
-                                 nullptr != dynamic_cast< const SvxExtFileField *>( pFldItem->GetField() ) ||
-                                 nullptr != dynamic_cast< const SvxExtTimeField *>( pFldItem->GetField() ) ) )
+                if (oFieldItem && (nullptr != dynamic_cast<const SvxDateField *>(oFieldItem->GetField()) ||
+                                   nullptr != dynamic_cast<const SvxAuthorField *>(oFieldItem->GetField()) ||
+                                   nullptr != dynamic_cast<const SvxExtFileField *>(oFieldItem->GetField()) ||
+                                   nullptr != dynamic_cast<const SvxExtTimeField *>(oFieldItem->GetField())))
                 {
                     // Dialog...
                     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
                     vcl::Window* pWin = GetActiveWindow();
-                    ScopedVclPtr<AbstractSdModifyFieldDlg> pDlg( pFact->CreateSdModifyFieldDlg(pWin ? pWin->GetFrameWeld() : nullptr, pFldItem->GetField(), pOLV->GetAttribs() ) );
+                    ScopedVclPtr<AbstractSdModifyFieldDlg> pDlg(pFact->CreateSdModifyFieldDlg(pWin ? pWin->GetFrameWeld() : nullptr, oFieldItem->GetField(), pOLV->GetAttribs()));
                     if( pDlg->Execute() == RET_OK )
                     {
                         // To make a correct SetAttribs() call at the utlinerView

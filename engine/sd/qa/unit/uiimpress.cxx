@@ -1842,9 +1842,9 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testTdf173709HyperlinkTitleOutline)
                                                              SfxCallMode::SYNCHRON, { &aItem });
 
     // Then the URL field has the title:
-    const SvxFieldItem* pFieldItem = pOutlinerView->GetFieldAtSelection();
-    CPPUNIT_ASSERT(pFieldItem);
-    auto* pURLField = dynamic_cast<const SvxURLField*>(pFieldItem->GetField());
+    const std::optional<SvxFieldItem> oFieldItem = pOutlinerView->GetFieldAtSelection();
+    CPPUNIT_ASSERT(oFieldItem);
+    auto* pURLField = dynamic_cast<const SvxURLField*>(oFieldItem->GetField());
     CPPUNIT_ASSERT(pURLField);
     // Without the accompanying fix in place, this test would have failed, the title was lost.
     CPPUNIT_ASSERT_EQUAL(u"Example site"_ustr, pURLField->GetTitle());

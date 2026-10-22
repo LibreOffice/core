@@ -291,9 +291,9 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
 
         case SID_OPEN_HYPERLINK:
             {
-                const SvxFieldItem* pFieldItem
+                const std::optional<SvxFieldItem> oFieldItem
                     = pOutView->GetFieldAtSelection(/*AlsoCheckBeforeCursor=*/true);
-                const SvxFieldData* pField = pFieldItem ? pFieldItem->GetField() : nullptr;
+                const SvxFieldData* pField = oFieldItem ? oFieldItem->GetField() : nullptr;
                 if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
                 {
                     ScGlobal::OpenURL(pURLField->GetURL(), pURLField->GetTargetFrame(), true);
@@ -315,9 +315,9 @@ void ScDrawTextObjectBar::Execute( SfxRequest &rReq )
 
         case SID_COPY_HYPERLINK_LOCATION:
             {
-                const SvxFieldItem* pFieldItem
+                const std::optional<SvxFieldItem> oFieldItem
                     = pOutView->GetFieldAtSelection(/*AlsoCheckBeforeCursor=*/true);
-                const SvxFieldData* pField = pFieldItem ? pFieldItem->GetField() : nullptr;
+                const SvxFieldData* pField = oFieldItem ? oFieldItem->GetField() : nullptr;
                 if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
                 {
                     uno::Reference<datatransfer::clipboard::XClipboard> xClipboard
@@ -388,8 +388,8 @@ void ScDrawTextObjectBar::GetState( SfxItemSet& rSet )
         {
             aHLinkItem.SetShowTitle(true);
             bool bField = false;
-            const SvxFieldItem* pFieldItem = pOutView->GetFieldAtSelection();
-            const SvxFieldData* pField = pFieldItem ? pFieldItem->GetField() : nullptr;
+            const std::optional<SvxFieldItem> oFieldItem = pOutView->GetFieldAtSelection();
+            const SvxFieldData* pField = oFieldItem ? oFieldItem->GetField() : nullptr;
             if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
             {
                 aHLinkItem.SetName( pURLField->GetRepresentation() );

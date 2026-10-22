@@ -17,14 +17,14 @@
 void URLFieldHelper::RemoveURLField(EditView& pEditView)
 {
     pEditView.SelectFieldAtCursor();
-    const SvxFieldItem* pFieldItem = pEditView.GetFieldAtSelection();
-    const SvxFieldData* pField = pFieldItem ? pFieldItem->GetField() : nullptr;
+    const std::optional<SvxFieldItem> oFieldItem = pEditView.GetFieldAtSelection();
+    const SvxFieldData* pField = oFieldItem ? oFieldItem->GetField() : nullptr;
     auto pUrlField = dynamic_cast<const SvxURLField*>(pField);
     if (!pUrlField)
         return;
 
     ESelection aSel = pEditView.GetSelection();
-    if (pFieldItem->Which() == EE_CHAR_URL)
+    if (oFieldItem->Which() == EE_CHAR_URL)
     {
         // The link text is real text, so only the link attribute goes.
         pEditView.getEditEngine().RemoveAttribs(aSel, false, EE_CHAR_URL);
@@ -44,8 +44,9 @@ bool URLFieldHelper::IsCursorAtURLField(const EditView& pEditView, bool bAlsoChe
     if (aSel.start.nPara != aSel.end.nPara || std::abs(aSel.end.nIndex - aSel.start.nIndex) > 1)
         return false;
 
-    const SvxFieldItem* pFieldItem = pEditView.GetFieldAtSelection(bAlsoCheckBeforeCursor);
-    if (dynamic_cast<const SvxURLField*>(pFieldItem ? pFieldItem->GetField() : nullptr))
+    const std::optional<SvxFieldItem> oFieldItem
+        = pEditView.GetFieldAtSelection(bAlsoCheckBeforeCursor);
+    if (dynamic_cast<const SvxURLField*>(oFieldItem ? oFieldItem->GetField() : nullptr))
         return true;
 
     return false;

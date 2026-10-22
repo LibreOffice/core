@@ -524,9 +524,9 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
                 SvxURLField aField(rHLinkItem.GetURL(), rHLinkItem.GetName(), SvxURLFormat::AppDefault);
                 aField.SetTargetFrame(rHLinkItem.GetTargetFrame());
 
-                const SvxFieldItem* pFieldItem = pOLV->GetFieldAtSelection();
+                const std::optional<SvxFieldItem> oFieldItem = pOLV->GetFieldAtSelection();
 
-                if (pFieldItem && dynamic_cast< const SvxURLField *>( pFieldItem->GetField() ) != nullptr )
+                if (oFieldItem && dynamic_cast<const SvxURLField *>(oFieldItem->GetField() ) != nullptr)
                 {
                     // Select the whole hyperlink so the insert replaces it.
                     pOLV->SelectFieldAtCursor();
@@ -552,9 +552,9 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 
         case SID_OPEN_HYPERLINK:
         {
-            const SvxFieldItem* pFieldItem
+            const std::optional<SvxFieldItem> oFieldItem
                 = pOLV->GetFieldAtSelection(/*AlsoCheckBeforeCursor=*/true);
-            const SvxFieldData* pField = pFieldItem ? pFieldItem->GetField() : nullptr;
+            const SvxFieldData* pField = oFieldItem ? oFieldItem->GetField() : nullptr;
             if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
             {
                 ::LoadURL(GetShell(), pURLField->GetURL(), LoadUrlFlags::NONE,
@@ -565,9 +565,9 @@ void SwDrawTextShell::Execute( SfxRequest &rReq )
 
         case SID_COPY_HYPERLINK_LOCATION:
         {
-            const SvxFieldItem* pFieldItem
+            const std::optional<SvxFieldItem> oFieldItem
                 = pOLV->GetFieldAtSelection(/*AlsoCheckBeforeCursor=*/true);
-            const SvxFieldData* pField = pFieldItem ? pFieldItem->GetField() : nullptr;
+            const SvxFieldData* pField = oFieldItem ? oFieldItem->GetField() : nullptr;
             if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
             {
                 uno::Reference<datatransfer::clipboard::XClipboard> xClipboard
@@ -1283,11 +1283,11 @@ void SwDrawTextShell::StateInsert(SfxItemSet &rSet)
                     aHLinkItem.SetShowText(false);
                     aHLinkItem.SetInsertMode(HLINK_FIELD);
 
-                    const SvxFieldItem* pFieldItem = pOLV->GetFieldAtSelection();
+                    const std::optional<SvxFieldItem> oFieldItem = pOLV->GetFieldAtSelection();
 
-                    if (pFieldItem)
+                    if (oFieldItem)
                     {
-                        const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pFieldItem->GetField());
+                        const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(oFieldItem->GetField());
 
                         if (pURLField)
                         {

@@ -190,10 +190,11 @@ bool FuSimpleOutlinerText::MouseButtonUp(const MouseEvent& rMEvt)
     }
     else
     {
-        const SvxFieldItem* pFieldItem = mpSimpleOutlinerView->GetViewByWindow( mpWindow )->GetFieldUnderMousePointer();
-        if( pFieldItem )
+        const std::optional<SvxFieldItem> oFieldItem
+            = mpSimpleOutlinerView->GetViewByWindow( mpWindow )->GetFieldUnderMousePointer();
+        if( oFieldItem )
         {
-            const SvxFieldData* pField = pFieldItem->GetField();
+            const SvxFieldData* pField = oFieldItem->GetField();
 
             if( auto pURLField = dynamic_cast< const SvxURLField *>( pField ) )
             {

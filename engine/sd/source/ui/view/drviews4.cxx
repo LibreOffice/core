@@ -597,9 +597,8 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
         sal_uInt16      nPickId = 0;
         // for field command
         OutlinerView* pOLV = mpDrawView->GetTextEditOutlinerView();
-        const SvxFieldItem* pFldItem = nullptr;
-        if( pOLV )
-            pFldItem = pOLV->GetFieldAtSelection();
+        const std::optional<SvxFieldItem> oFieldItem
+            = pOLV ? pOLV->GetFieldAtSelection() : std::nullopt;
 
         // helper line
         if ( mpDrawView->PickHelpLine( aMPos, nHitLog, *GetActiveWindow()->GetOutDev(), nHelpLine, pPV) )
@@ -616,10 +615,10 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
             aPopupId = u"gluepoint"_ustr;
         }
         // field command?
-        else if( pFldItem && (nullptr != dynamic_cast< const SvxDateField *>( pFldItem->GetField() ) ||
-                             nullptr != dynamic_cast< const SvxExtTimeField *>( pFldItem->GetField() ) ||
-                             nullptr != dynamic_cast< const SvxExtFileField *>( pFldItem->GetField() ) ||
-                             nullptr != dynamic_cast< const SvxAuthorField *>( pFldItem->GetField() ) ) )
+        else if (oFieldItem && (nullptr != dynamic_cast<const SvxDateField *>(oFieldItem->GetField()) ||
+                                nullptr != dynamic_cast<const SvxExtTimeField *>(oFieldItem->GetField()) ||
+                                nullptr != dynamic_cast<const SvxExtFileField *>(oFieldItem->GetField()) ||
+                                nullptr != dynamic_cast<const SvxAuthorField *>(oFieldItem->GetField())))
         {
             LanguageType eLanguage( LANGUAGE_SYSTEM );
 
@@ -630,7 +629,7 @@ void DrawViewShell::Command(const CommandEvent& rCEvt, ::sd::Window* pWin)
             //fdo#44998 if the outliner has captured the mouse events release the lock
             //so the SdFieldPopup can get them
             pOLV->ReleaseMouse();
-            SdFieldPopup aFieldPopup(pFldItem->GetField(), eLanguage);
+            SdFieldPopup aFieldPopup(oFieldItem->GetField(), eLanguage);
 
             if ( rCEvt.IsMouseEvent() )
                 aMPos = rCEvt.GetMousePosPixel();

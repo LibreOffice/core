@@ -169,10 +169,10 @@ OUString SidebarTextControl::RequestHelp(tools::Rectangle& rHelpRect)
 
         const OutputDevice& rOutDev = pEditView->GetOutputDevice();
         Point aLogicClick = rOutDev.PixelToLogic(aPos);
-        const SvxFieldItem* pItem = pEditView->GetField(aLogicClick);
-        if (pItem)
+        const std::optional<SvxFieldItem> oItem = pEditView->GetField(aLogicClick);
+        if (oItem)
         {
-            const SvxFieldData* pField = pItem->GetField();
+            const SvxFieldData* pField = oItem->GetField();
             const SvxURLField* pURL = dynamic_cast<const SvxURLField*>( pField  );
             if (pURL)
             {
@@ -400,9 +400,9 @@ bool SidebarTextControl::MouseButtonDown(const MouseEvent& rMEvt)
         {
             const OutputDevice& rOutDev = pEditView->GetOutputDevice();
             Point aLogicClick = rOutDev.PixelToLogic(rMEvt.GetPosPixel());
-            if (const SvxFieldItem* pItem = pEditView->GetField(aLogicClick))
+            if (const std::optional<SvxFieldItem> oItem = pEditView->GetField(aLogicClick))
             {
-                const SvxFieldData* pField = pItem->GetField();
+                const SvxFieldData* pField = oItem->GetField();
                 const SvxURLField* pURL = dynamic_cast<const SvxURLField*>( pField  );
                 if ( pURL )
                 {

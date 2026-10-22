@@ -261,24 +261,23 @@ bool FuText::MouseButtonDown(const MouseEvent& rMEvt)
     SdrHitKind eHit = mpView->PickAnything(rMEvt, SdrMouseEventKind::BUTTONDOWN, aVEvt);
 
     // handle URL also during the text editing
+    OutlinerView* pOutlinerView = nullptr;
     if (rMEvt.GetClicks() == 1 && rMEvt.IsLeft() && rMEvt.IsMod1())
+        pOutlinerView = mpView->GetTextEditOutlinerView();
+
+    // aVEvt.mpURLField points into oFieldItem.
+    const std::optional<SvxFieldItem> oFieldItem
+        = mxTextObj.get().is() && pOutlinerView ? pOutlinerView->GetFieldUnderMousePointer()
+                                                : std::nullopt;
+    if (oFieldItem)
     {
-        OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
+        const SvxFieldData* pField = oFieldItem->GetField();
 
-        if (mxTextObj.get().is() && pOLV && pOLV->GetFieldUnderMousePointer())
+        if (auto pURLField = dynamic_cast< const SvxURLField *>( pField ))
         {
-            const SvxFieldItem* pFieldItem = pOLV->GetFieldUnderMousePointer();
-            if (pFieldItem)
-            {
-                const SvxFieldData* pField = pFieldItem->GetField();
-
-                if (auto pURLField = dynamic_cast< const SvxURLField *>( pField ))
-                {
-                    eHit = SdrHitKind::MarkedObject;
-                    aVEvt.meEvent = SdrEventKind::ExecuteUrl;
-                    aVEvt.mpURLField = pURLField;
-                }
-            }
+            eHit = SdrHitKind::MarkedObject;
+            aVEvt.meEvent = SdrEventKind::ExecuteUrl;
+            aVEvt.mpURLField = pURLField;
         }
     }
 
@@ -598,8 +597,8 @@ bool FuText::MouseButtonUp(const MouseEvent& rMEvt)
         OutlinerView* pOLV = mpView->GetTextEditOutlinerView();
         if (pViewShell && pViewShell->isKitMobilePhone() && pOLV)
         {
-            const SvxFieldItem* pFieldItem = pOLV->GetEditView().GetField(aPnt);
-            const SvxFieldData* pField = pFieldItem ? pFieldItem->GetField() : nullptr;
+            const std::optional<SvxFieldItem> oFieldItem = pOLV->GetEditView().GetField(aPnt);
+            const SvxFieldData* pField = oFieldItem ? oFieldItem->GetField() : nullptr;
             if (auto pURLField = dynamic_cast<const SvxURLField*>(pField))
                 pViewShell->viewCallback(COKitCallbackType::HYPERLINK_CLICKED,
                                          pURLField->GetURL().toUtf8());
@@ -1189,8 +1188,8 @@ bool FuText::RequestHelp(const HelpEvent& rHEvt)
         mxTextObj.get().is() && pOLV && pOLV->GetFieldUnderMousePointer())
     {
         OUString aHelpText;
-        const SvxFieldItem* pFieldItem = pOLV->GetFieldUnderMousePointer();
-        const SvxFieldData* pField = pFieldItem->GetField();
+        const std::optional<SvxFieldItem> oFieldItem = pOLV->GetFieldUnderMousePointer();
+        const SvxFieldData* pField = oFieldItem->GetField();
 
         if (auto pURLField = dynamic_cast< const SvxURLField *>( pField ))
         {

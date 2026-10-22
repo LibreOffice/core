@@ -21,6 +21,7 @@
 #define INCLUDED_EDITENG_EDITVIEW_HXX
 
 #include <memory>
+#include <optional>
 #include <com/sun/star/i18n/WordType.hpp>
 
 #include <i18nlangtag/lang.h>
@@ -339,16 +340,20 @@ public:
     OUString        SpellIgnoreWord();
 
     void                InsertField( const SvxFieldItem& rFld );
-    const SvxFieldItem* GetFieldUnderMousePointer() const;
-    SAL_DLLPRIVATE const SvxFieldItem* GetFieldUnderMousePointer( sal_Int32& nPara, sal_Int32& nPos ) const;
-    const SvxFieldItem* GetField( const Point& rPos, sal_Int32* pnPara = nullptr, sal_Int32* pnPos = nullptr ) const;
+    std::optional<SvxFieldItem> GetFieldUnderMousePointer() const;
+    SAL_DLLPRIVATE std::optional<SvxFieldItem>
+    GetFieldUnderMousePointer(sal_Int32& rParagraph, sal_Int32& rPosition) const;
+    std::optional<SvxFieldItem> GetField(const Point& rPosition, sal_Int32* pParagraph = nullptr,
+                                         sal_Int32* pPosition = nullptr) const;
 
     /// return the selected field or the field immediately after (or before) the current cursor
-    const SvxFieldItem* GetFieldAtSelection(bool bAlsoCheckBeforeCursor = false) const;
-    SAL_DLLPRIVATE const SvxFieldItem* GetFieldAtSelection(bool* pIsBeforeCursor) const;
+    std::optional<SvxFieldItem> GetFieldAtSelection(bool bAlsoCheckBeforeCursor = false) const;
+    SAL_DLLPRIVATE std::optional<SvxFieldItem> GetFieldAtSelection(bool* pIsBeforeCursor) const;
 
-    /// return field under mouse, at selection, or immediately after (or before) the current cursor
-    const SvxFieldData* GetFieldUnderMouseOrInSelectionOrAtCursor(bool bAlsoCheckBeforeCursor = false) const;
+    /// return a copy of the field under mouse, at selection, or immediately after (or before) the
+    /// current cursor
+    std::unique_ptr<SvxFieldData>
+    GetFieldUnderMouseOrInSelectionOrAtCursor(bool bAlsoCheckBeforeCursor = false) const;
     /// if no selection, select the field immediately after or before the current cursor
     void SelectFieldAtCursor();
     /// Inserts rFld over the selection and selects the inserted field.

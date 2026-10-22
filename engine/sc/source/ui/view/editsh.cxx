@@ -797,9 +797,9 @@ void ScEditShell::Execute( SfxRequest& rReq )
         break;
         case SID_COPY_HYPERLINK_LOCATION:
             {
-                const SvxFieldItem* pFieldItem
+                const std::optional<SvxFieldItem> oFieldItem
                     = pEditView->GetFieldAtSelection(/*AlsoCheckBeforeCursor=*/true);
-                const SvxFieldData* pField = pFieldItem ? pFieldItem->GetField() : nullptr;
+                const SvxFieldData* pField = oFieldItem ? oFieldItem->GetField() : nullptr;
                 if (const SvxURLField* pURLField = dynamic_cast<const SvxURLField*>(pField))
                 {
                     uno::Reference<datatransfer::clipboard::XClipboard> xClipboard
@@ -1040,9 +1040,9 @@ std::unique_ptr<const SvxFieldData> ScEditShell::GetURLField()
     if (!pActiveView)
         return std::unique_ptr<const SvxFieldData>();
 
-    const SvxFieldData* pField = pActiveView->GetFieldUnderMouseOrInSelectionOrAtCursor();
-    if (auto pURLField = dynamic_cast<const SvxURLField*>(pField))
-        return pURLField->Clone();
+    std::unique_ptr<SvxFieldData> pField = pActiveView->GetFieldUnderMouseOrInSelectionOrAtCursor();
+    if (dynamic_cast<const SvxURLField*>(pField.get()))
+        return pField;
 
     return std::unique_ptr<const SvxFieldData>();
 }
