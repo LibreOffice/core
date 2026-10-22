@@ -220,6 +220,13 @@ interface AppInterface {
 		isSlideImportSupported(): boolean;
 		getSelectedSlidesCount(): number;
 		getSelectedSectionName(): string | null;
+		// The slide sections of the document, in slide order.
+		sections: Array<{
+			name: string;
+			id?: string;
+			startIndex: number;
+			slideCount: number;
+		}> | null;
 		// Canvas-space preview rectangles, twips.
 		previewRects: Array<{ part: number; rectangle: any }> | null;
 		previewEditMode: {

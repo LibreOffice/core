@@ -828,4 +828,41 @@ describe('SlideLinks', function () {
 		nodeassert.equal(links.isSectionMissing(openingSection), true);
 		nodeassert.equal(links.isSectionUpdatable(openingSection), false);
 	});
+
+	it('offers Update Links in a document whose only links are sections', function () {
+		deliver('slidelinks', { message: sectionList });
+		nodeassert.equal(links.hasLinks(), true);
+		nodeassert.equal(hidden, false);
+		nodeassert.equal(itemShown.get('insert-update-slide-links'), true);
+	});
+
+	it('updates every linked section from Update Links after one question', function () {
+		const second = {
+			...sectionList.sections[0],
+			section: '{4B1D2C3E-0002-4F00-8A00-1234567890AB}',
+		};
+		deliver('slidelinks', {
+			message: { sections: [sectionList.sections[0], second], links: [] },
+		});
+		sent = [];
+
+		links.updateAll();
+		nodeassert.equal(confirmed.length, 1);
+		nodeassert.ok(confirmed[0].indexOf('2 linked sections') >= 0);
+		// The updates go one after another, so the first one asks its source.
+		nodeassert.deepEqual(sent, [infoOf('Sales deck.odp')]);
+	});
+
+	it('says which linked sections Update Links leaves as they are', function () {
+		(app as any).remoteLinks = [linkOf('Sales deck.odp', 'noaccess')];
+		deliver('slidelinks', { message: sectionList });
+		sent = [];
+
+		links.updateAll();
+		nodeassert.deepEqual(confirmed, []);
+		nodeassert.deepEqual(sent, []);
+		nodeassert.deepEqual(told, [
+			'One linked section cannot be updated, because its source is not available.',
+		]);
+	});
 });

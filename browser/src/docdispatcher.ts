@@ -221,10 +221,14 @@ class Dispatcher {
 		this.actionsMap['updateslidelinks'] = function () {
 			if (app.map.slideLinks) app.map.slideLinks.updateAll();
 		};
-		// The two act on the slide on show alone.
+		// These act on the slide on show, or on the section that holds it.
 		this.actionsMap['updatelinkedslide'] = function () {
 			const links = app.map.slideLinks;
 			if (links) links.updatePage(links.currentPart());
+		};
+		this.actionsMap['updatelinkedsection'] = function () {
+			const links = app.map.slideLinks;
+			if (links) links.updateSection(links.currentSection());
 		};
 		this.actionsMap['unlinkslide'] = function () {
 			const links = app.map.slideLinks;

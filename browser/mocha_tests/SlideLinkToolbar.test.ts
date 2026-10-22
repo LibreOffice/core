@@ -23,6 +23,10 @@ describe('SlideLinkToolbar', function () {
 	let outdated: Set<string>;
 	// The state of every source, as the storage announced it.
 	let sourceState: string;
+	// The slides that sit in a linked section, and whether its source section
+	// has moved on since the section was read.
+	let inSection: Set<string>;
+	let sectionOutdated: boolean;
 	let toolbar: SlideLinkToolbar;
 	let savedDispatcher: any;
 	let savedEvents: any;
@@ -32,6 +36,10 @@ describe('SlideLinkToolbar', function () {
 	const outlookPart = '{6A1C31B0-0002-4C5B-9E77-2F3D4A5B6C7D}';
 	// A page this document does not hold.
 	const unknownPart = '{6A1C31B0-0099-4C5B-9E77-2F3D4A5B6C7D}';
+	// A slide of the linked section that was edited here, so it lost its own
+	// link.
+	const editedPart = '{6A1C31B0-0003-4C5B-9E77-2F3D4A5B6C7D}';
+	const sectionId = '{6A1C31B0-0100-4C5B-9E77-2F3D4A5B6C7D}';
 
 	function element(): HTMLElement | null {
 		return document.getElementById('slide-link-toolbar');
@@ -80,6 +88,8 @@ describe('SlideLinkToolbar', function () {
 		]);
 		outdated = new Set();
 		sourceState = 'connected';
+		inSection = new Set();
+		sectionOutdated = false;
 
 		const map: any = {
 			on: function (name: string, callback: any, context: any) {
@@ -95,6 +105,15 @@ describe('SlideLinkToolbar', function () {
 					linked.has(part) ? sourceState : '',
 				isPageUpdatable: (part: string) =>
 					linked.has(part) &&
+					sourceState !== '' &&
+					sourceState !== 'noaccess' &&
+					sourceState !== 'missing',
+				currentSection: () => (inSection.has(current) ? sectionId : ''),
+				getSectionLink: (section: string) =>
+					section === sectionId ? { source: 'Sales deck.odp' } : null,
+				isSectionOutdated: () => sectionOutdated,
+				getSectionSourceState: () => sourceState,
+				isSectionUpdatable: () =>
 					sourceState !== '' &&
 					sourceState !== 'noaccess' &&
 					sourceState !== 'missing',
@@ -233,5 +252,44 @@ describe('SlideLinkToolbar', function () {
 		nodeassert.ok(
 			(element().getAttribute('aria-label') || '').indexOf('Outlook') >= 0,
 		);
+	});
+
+	it('offers an update of the section that holds the slide on show', function () {
+		inSection.add(numbersPart);
+		slideShown(numbersPart);
+		nodeassert.deepEqual(actions(), []);
+
+		toolbar.setExpanded(true);
+		nodeassert.deepEqual(actions(), ['Unlink', 'Update', 'Update section']);
+		action('update-section').click();
+		nodeassert.deepEqual(dispatched, ['updatelinkedsection']);
+	});
+
+	it('offers a section update alone while folded when the source section has moved on', function () {
+		inSection.add(numbersPart);
+		sectionOutdated = true;
+		slideShown(numbersPart);
+		nodeassert.deepEqual(actions(), ['Update section']);
+	});
+
+	it('stays on a slide edited here while its section is still linked', function () {
+		inSection.add(editedPart);
+		slideShown(editedPart);
+		nodeassert.ok(
+			(element().getAttribute('aria-label') || '').indexOf('Sales deck.odp') >=
+				0,
+		);
+
+		// The slide has no link of its own, so only the section can be updated.
+		toolbar.setExpanded(true);
+		nodeassert.deepEqual(actions(), ['Update section']);
+	});
+
+	it('offers no section update from a source that cannot be read', function () {
+		inSection.add(numbersPart);
+		sourceState = 'missing';
+		slideShown(numbersPart);
+		toolbar.setExpanded(true);
+		nodeassert.equal(action('update-section').disabled, true);
 	});
 });

@@ -164,15 +164,16 @@ class SlideLinks {
 		map.on('slideimport', this.onImportMessage, this);
 	}
 
+	// Whether a page or a section of this document is linked to another file.
 	public hasLinks(): boolean {
-		return this.sources.length > 0;
+		return this.sources.length > 0 || this.sections.size > 0;
 	}
 
 	// The source of this document's links that names the given remote
-	// link, or an empty string when no page is linked to it.
+	// link, or an empty string when no page and no section is linked to it.
 	public linkedSourceOf(doc: { persistentLink?: string }): string {
 		return (
-			this.sources.find((source) =>
+			this.linkedSources().find((source) =>
 				SlideImportSession.matchesDocument(doc, source),
 			) || ''
 		);
@@ -369,8 +370,26 @@ class SlideLinks {
 			this.say(_('No slide of this presentation is linked to another file.'));
 			return;
 		}
-		// This run covers the sources the document holds now.
-		for (const source of this.sources) this.updateSource(source);
+		// This run covers the sources and the sections the document holds now.
+		for (const source of this.sources) this.updatePagesOf(source);
+		this.confirmSectionUpdate(Array.from(this.sections.keys()));
+	}
+
+	// The identifier of the linked section that holds the slide on show, or an
+	// empty string when that slide is in no linked section.
+	public currentSection(): string {
+		const layer = this.map._docLayer;
+		const index = layer ? layer._selectedPart : -1;
+		const sections = (app.impress && app.impress.sections) || [];
+		for (const section of sections) {
+			if (!section.id || !this.sections.has(section.id)) continue;
+			if (
+				index >= section.startIndex &&
+				index < section.startIndex + section.slideCount
+			)
+				return section.id;
+		}
+		return '';
 	}
 
 	// The page keeps the content it holds and becomes a regular page
@@ -475,11 +494,22 @@ class SlideLinks {
 		return updates(this.running) || this.queue.some(updates);
 	}
 
-	// Refreshes the pages of one source. A source that is already being read,
-	// or waiting for its turn, is left where it is, so asking twice refreshes
-	// it once.
+	// Refreshes the pages of one source, and the sections linked to it once the
+	// user confirms. A source that is already being read, or waiting for its
+	// turn, is left where it is, so asking twice refreshes it once.
 	public updateSource(source: string): void {
 		if (!this.map.isEditMode()) return;
+		this.updatePagesOf(source);
+		const sections: string[] = [];
+		this.sections.forEach((link, section) => {
+			if (link.source === source) sections.push(section);
+		});
+		this.confirmSectionUpdate(sections);
+	}
+
+	// Refreshes the pages linked to one source, and leaves its sections as they
+	// are.
+	private updatePagesOf(source: string): void {
 		if (this.sources.indexOf(source) < 0) return;
 		if (this.covers(this.running, source)) return;
 		if (this.queue.some((refresh) => this.covers(refresh, source))) return;

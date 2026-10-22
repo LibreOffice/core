@@ -11,24 +11,25 @@
  */
 
 /*
- * SlideLinkToolbar - the small toolbar over the slide on show when that slide
- * is linked to another file. It says that the slide is linked and offers what
- * can be done about this one slide: take the link off, and read the slide
- * again from the file it came from.
+ * SlideLinkToolbar - the small toolbar over the slide on show when that slide,
+ * or the section that holds it, is linked to another file. It says that the
+ * slide is linked and offers what can be done about this one slide: take the
+ * link off, and read the slide again from the file it came from. For a slide
+ * of a linked section it also offers to update that section.
  *
- * The toolbar follows the slide on show and acts on that slide alone. Folded,
- * it names the link and offers an update when the file has moved on since the
- * slide was read from it. Unfolded, it offers every action. Taking the link
- * off and reading the slide again change the document, so a view that cannot
- * edit is offered neither.
+ * The toolbar follows the slide on show and acts on that slide or its section.
+ * Folded, it names the link and offers an update when the file has moved on
+ * since the slide or the section was read from it. Unfolded, it offers every
+ * action. Each action changes the document, so a view that cannot edit is
+ * offered none.
  */
 
 /* global app _ */
 
 class SlideLinkToolbar {
   private map: any;
-  // The element the toolbar is drawn in, or null when the slide on show is
-  // linked to nothing.
+  // The element the toolbar is drawn in, or null when the slide on show, and
+  // the section that holds it, are linked to nothing.
   private element: HTMLElement | null = null;
   // Whether every action is on show, or the link alone with an update when
   // one is due. The user's choice, kept while the document is open.
@@ -53,13 +54,16 @@ class SlideLinkToolbar {
     this.refresh();
   }
 
-  // The identifier of the slide on show when that slide is linked to another
-  // file, or an empty string for a slide that is linked to nothing.
+  // The identifier of the slide on show when that slide, or the section that
+  // holds it, is linked to another file, or an empty string otherwise.
   private linkedPart(): string {
     const links = this.map.slideLinks;
     if (!links || !this.map.isPresentationOrDrawing()) return '';
     const part = links.currentPart();
-    return part && links.getPageLink(part) !== null ? part : '';
+    if (!part) return '';
+    return links.getPageLink(part) !== null || links.currentSection()
+      ? part
+      : '';
   }
 
   // Draws the toolbar for the slide on show, or takes it away when that slide
@@ -92,16 +96,31 @@ class SlideLinkToolbar {
 
   private render(part: string): HTMLElement {
     const links = this.map.slideLinks;
+    // A slide edited here loses its own link and stays in its linked section,
+    // so either link can be absent.
     const link = links.getPageLink(part);
+    const section = links.currentSection();
+    const sectionLink = section ? links.getSectionLink(section) : null;
     const editable = this.map.isEditMode();
-    const outdated = links.isPageOutdated(part);
-    const readable = links.isPageUpdatable(part);
-    const stateLabel = this.sourceStateLabel(links.getPageSourceState(part));
+    const outdated = link !== null && links.isPageOutdated(part);
+    const readable = link !== null && links.isPageUpdatable(part);
+    const sectionOutdated = section !== '' && links.isSectionOutdated(section);
+    const sectionReadable = section !== '' && links.isSectionUpdatable(section);
+    const stateLabel = this.sourceStateLabel(
+      link !== null
+        ? links.getPageSourceState(part)
+        : links.getSectionSourceState(section),
+    );
 
     // The label describes the link the way the slide's thumbnail does.
-    const description = _('Linked to {0} in {1}')
-      .replace('{0}', () => link.name)
-      .replace('{1}', () => link.source);
+    const description = link
+      ? _('Linked to {0} in {1}')
+          .replace('{0}', () => link.name)
+          .replace('{1}', () => link.source)
+      : _('In a section linked to {0}').replace(
+          '{0}',
+          () => sectionLink.source,
+        );
 
     const element = (
       <div
@@ -128,7 +147,7 @@ class SlideLinkToolbar {
           }
           onClick={() => this.setExpanded(!this.expanded)}
         ></button>
-        {this.expanded && editable ? (
+        {this.expanded && editable && link ? (
           <button
             type="button"
             class="button slide-link-toolbar-action unlink"
@@ -137,7 +156,7 @@ class SlideLinkToolbar {
             {_('Unlink')}
           </button>
         ) : null}
-        {(this.expanded || outdated) && editable ? (
+        {(this.expanded || outdated) && editable && link ? (
           <button
             type="button"
             class="button slide-link-toolbar-action update"
@@ -145,6 +164,16 @@ class SlideLinkToolbar {
             onClick={() => app.dispatcher.dispatch('updatelinkedslide')}
           >
             {_('Update')}
+          </button>
+        ) : null}
+        {(this.expanded || sectionOutdated) && editable && section ? (
+          <button
+            type="button"
+            class="button slide-link-toolbar-action update-section"
+            disabled={!sectionReadable}
+            onClick={() => app.dispatcher.dispatch('updatelinkedsection')}
+          >
+            {_('Update section')}
           </button>
         ) : null}
       </div>
