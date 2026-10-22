@@ -546,7 +546,11 @@ class UIManager extends window.L.Control {
 		// already receives the integrator theme through the document load
 		// command, so there is nothing to reconcile.
 		const storedTheme = prefs._userBrowserSetting['darkTheme'];
-		if (storedTheme === undefined || storedTheme === integratorTheme)
+		if (
+			storedTheme === undefined ||
+			storedTheme === '' ||
+			storedTheme === integratorTheme
+		)
 			return false;
 
 		this.integratorThemeReconciled = true;

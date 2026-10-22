@@ -1171,11 +1171,13 @@ function showWelcomeSVG() {
 				global.prefs._settingUpdateJSON[key] = value;
 				// The cached value is replaced right away, so a read of the key
 				// returns the value the dialog saved. An empty value is no choice:
-				// its key leaves the cache, and a read then falls through to the
-				// defaults, as it does for an empty stored value.
-				if (value === '')
+				// its key leaves the cache and the local storage, and a read then
+				// falls through to the defaults, as it does for an empty stored value.
+				if (value === '') {
 					delete global.prefs._localStorageCache[key];
-				else
+					if (global.prefs.canPersist)
+						global.localStorage.removeItem(global.prefs._lsKey(key));
+				} else
 					global.prefs._localStorageCache[key] = value;
 			}
 			global.prefs._sendBrowserSettingsUpdate(upload);
@@ -1282,8 +1284,9 @@ function showWelcomeSVG() {
 		// stored sources get() honours, but not the runtime cache (which we seed
 		// with the OS value below).
 		hasExplicitDarkModePref: function() {
+			const storedTheme = global.prefs._userBrowserSetting['darkTheme'];
 			return global.prefs._getUIDefault('darkTheme') !== undefined ||
-				global.prefs._userBrowserSetting['darkTheme'] !== undefined ||
+				(storedTheme !== undefined && storedTheme !== '') ||
 				(global.prefs.canPersist &&
 					global.localStorage.getItem(global.prefs._lsKey('darkTheme')) !== null);
 		},

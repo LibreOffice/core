@@ -189,6 +189,71 @@ describe(['tagdesktop'], 'Options view toggles persist across reload', function 
 			.should('eq', true);
 	});
 
+	it('keeps following the host theme when the dialog is saved without a theme choice', function () {
+		cy.cframe().find('html').should('have.attr', 'data-theme', 'light');
+
+		cy.then(function () {
+			win.app.map.settings.showSettingsDialog('browser-setting');
+		});
+		cy.cGet('.iframe-settings-wrap').should('be.visible');
+		settingsIframeBody()
+			.find('#bs-tab-spreadsheet.active', { timeout: 20000 })
+			.should('exist');
+
+		// With no theme saved, the toggle shows the theme in use and is left as
+		// it is.
+		settingsIframeBody()
+			.find('#common-darkTheme-input')
+			.should('not.be.checked');
+
+		cy.cGet('#iframe-settings-save').click();
+
+		// The save records no theme of the user's own, so the host or the
+		// system goes on choosing it, and the document keeps its theme.
+		cy.getFrameWindow()
+			.its('prefs')
+			.its('_userBrowserSetting')
+			.its('darkTheme')
+			.should('eq', '');
+		cy.cframe().find('html').should('have.attr', 'data-theme', 'light');
+
+		// A dark theme is left in the local storage, while the settings file
+		// holds no theme.
+		cy.then(function () {
+			win.localStorage.setItem('darkTheme', 'true');
+			win.app.map.uiManager.applyDarkMode(true, false);
+		});
+		cy.cframe().find('html').should('have.attr', 'data-theme', 'dark');
+
+		cy.then(function () {
+			win.app.map.settings.showSettingsDialog('browser-setting');
+		});
+		cy.cGet('.iframe-settings-wrap').should('be.visible');
+		settingsIframeBody()
+			.find('#bs-tab-spreadsheet.active', { timeout: 20000 })
+			.should('exist');
+
+		// The toggle shows the dark theme in use and is left as it is.
+		settingsIframeBody()
+			.find('#common-darkTheme-input')
+			.should('be.checked');
+
+		cy.cGet('#iframe-settings-save').click();
+
+		// The stored theme is gone from the local storage too, so the system
+		// theme applies again.
+		cy.getFrameWindow()
+			.its('prefs')
+			.its('_userBrowserSetting')
+			.its('darkTheme')
+			.should('eq', '');
+		cy.getFrameWindow()
+			.its('localStorage')
+			.invoke('getItem', 'darkTheme')
+			.should('be.null');
+		cy.cframe().find('html').should('have.attr', 'data-theme', 'light');
+	});
+
 	it('tells the server every setting the Options dialog saved', function () {
 		cy.then(function () {
 			win.app.map.settings.showSettingsDialog('browser-setting');

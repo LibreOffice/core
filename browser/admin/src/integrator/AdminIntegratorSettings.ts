@@ -331,7 +331,7 @@ const onMessage = (e) => {
 // Zoom keys as per browsersetting.json.
 const ZOOM_SETTING_KEYS: Array<string> = ['smartZoom', 'defaultZoom'];
 
-/* 
+/*
 	`defaultZoom` - index of the default zoom level in ZOOM_LEVELS (when smartZoom is set to false).
 				  - used as `index+1` internally as the fist zoom level in the list has the zoom value of 1)
 */
@@ -1357,6 +1357,7 @@ class SettingIframe {
 	// built-in defaults are merged in. A key is absent or empty when the user has
 	// saved no choice of their own for it.
 	private storedBrowserSetting: Record<string, any> = {};
+	private darkThemeInUse: boolean | null = null;
 
 	getViewSettings(): ViewSettings {
 		return this._viewSetting;
@@ -2123,12 +2124,36 @@ class SettingIframe {
 	// server configured applies then, and goes on applying as the server changes
 	// it.
 	private isFollowingServerZoom(): boolean {
-		const isChosen = (value: any) =>
-			value !== undefined && value !== null && value !== '';
 		return (
-			!isChosen(this.storedBrowserSetting.smartZoom) &&
-			!isChosen(this.storedBrowserSetting.defaultZoom)
+			!SettingIframe.isChosen(this.storedBrowserSetting.smartZoom) &&
+			!SettingIframe.isChosen(this.storedBrowserSetting.defaultZoom)
 		);
+	}
+
+	private static isChosen(value: any): boolean {
+		return value !== undefined && value !== null && value !== '';
+	}
+
+	// While the file holds no theme choice, the Dark Mode toggle opens showing
+	// the theme in use: the one the document runs with when this page is inside
+	// a document, otherwise the system's.
+	private showThemeInUseWhenUnchosen(): void {
+		this.darkThemeInUse = null;
+		if (SettingIframe.isChosen(this.storedBrowserSetting.darkTheme)) return;
+
+		let parentPreferences: any = null;
+		try {
+			parentPreferences = (window.parent as any)?.prefs;
+		} catch {
+			// A parent of another origin is not readable; the system theme is used.
+		}
+		const dark =
+			parentPreferences && typeof parentPreferences.getBoolean === 'function'
+				? parentPreferences.getBoolean('darkTheme')
+				: !!window.matchMedia?.('(prefers-color-scheme: dark)').matches;
+
+		this.darkThemeInUse = dark;
+		this.browserSettingOptions.darkTheme = dark;
 	}
 
 	private _updateZoomControlsState() {
@@ -2314,6 +2339,7 @@ class SettingIframe {
 				this.browserSettingOptions = defaultBrowserSettingCopy();
 				// A reset drops every choice the user had saved.
 				this.storedBrowserSetting = {};
+				this.showThemeInUseWhenUnchosen();
 				this.createBrowserSettingForm(sharedConfigsContainer);
 			},
 			true, // icon-only
@@ -2742,6 +2768,15 @@ class SettingIframe {
 			settings.smartZoom = '';
 			settings.defaultZoom = '';
 		}
+
+		// A Dark Mode toggle left at the theme in use is no choice of the user's
+		// own. The file then says nothing about the theme, and the host or the
+		// system goes on choosing it.
+		if (
+			this.darkThemeInUse !== null &&
+			settings.darkTheme === (this.darkThemeInUse ? 'true' : 'false')
+		)
+			settings.darkTheme = '';
 
 		return JSON.stringify(settings);
 	}
@@ -5489,6 +5524,7 @@ class SettingIframe {
 					this.storedBrowserSetting = {};
 					this.browserSettingOptions = defaultBrowserSettingCopy();
 				}
+				this.showThemeInUseWhenUnchosen();
 				this.createBrowserSettingForm(settingsContainer);
 			}
 		}

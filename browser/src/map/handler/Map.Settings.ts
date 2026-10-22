@@ -330,7 +330,12 @@ window.L.Map.Settings = window.L.Handler.extend({
 			if (layoutSwitched)
 				uiManager.onChangeUIMode({ mode: mode, force: false });
 		}
-		if (settings.darkTheme !== undefined) {
+		if (settings.darkTheme === '') {
+			// With no theme chosen, the system theme applies, and it can differ
+			// from the theme the document showed before the save.
+			const dark = window.prefs.seedDarkModeDefault();
+			if (dark !== wasDark) uiManager.applyDarkMode(dark, false);
+		} else if (settings.darkTheme !== undefined) {
 			const dark = settings.darkTheme === 'true';
 			if (dark !== wasDark) uiManager.applyDarkMode(dark, true);
 		}
