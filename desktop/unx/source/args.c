@@ -6,6 +6,7 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
 #include <osl/process.h>
@@ -13,8 +14,7 @@
 #include "args.h"
 
 /* do we start -env: */
-static int
-is_env_arg (rtl_uString const *str)
+static bool is_env_arg(rtl_uString const* str)
 {
     return !rtl_ustr_ascii_compare_WithLength (str->buffer, 5, "-env:");
 }
