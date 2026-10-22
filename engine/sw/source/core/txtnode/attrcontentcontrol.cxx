@@ -27,6 +27,7 @@
 #include <svl/numformat.hxx>
 #include <vcl/keycod.hxx>
 
+#include <fmtanchr.hxx>
 #include <ndtxt.hxx>
 #include <textcontentcontrol.hxx>
 #include <doc.hxx>
@@ -780,6 +781,17 @@ void SwTextContentControl::Delete(bool bSaveContents)
         GetTextNode()->GetDoc().ResetAttrs(aPaM, /*bTextAttr=*/true, { RES_TXTATR_CONTENTCONTROL });
     else
         GetTextNode()->GetDoc().getIDocumentContentOperations().DeleteAndJoin(aPaM);
+}
+
+SwTextContentControl* SwTextContentControl::FindAtAnchor(const SwFormatAnchor& rAnchor)
+{
+    SwNode* pAnchorNode = rAnchor.GetAnchorNode();
+    SwTextNode* pTextNode = pAnchorNode ? pAnchorNode->GetTextNode() : nullptr;
+    if (!pTextNode)
+        return nullptr;
+    SwTextAttr* pAttr = pTextNode->GetTextAttrAt(
+        rAnchor.GetAnchorContentOffset(), RES_TXTATR_CONTENTCONTROL, sw::GetTextAttrMode::Parent);
+    return pAttr ? static_txtattr_cast<SwTextContentControl*>(pAttr) : nullptr;
 }
 
 SwTextNode* SwTextContentControl::GetTextNode() const

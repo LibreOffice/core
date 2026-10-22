@@ -29,6 +29,7 @@
 #include <unotools/weakref.hxx>
 #include <vector>
 #include <memory>
+#include <optional>
 #include <o3tl/sorted_vector.hxx>
 
 class SwAccessibleParagraph;
@@ -53,9 +54,11 @@ namespace vcl { class Window; }
 namespace com::sun::star::accessibility
 {
 class XAccessible;
+class XAccessibleContext;
 class XAccessibleText;
 }
 struct SfxParagraphComment;
+struct SfxContentControl;
 struct SfxParagraphContentControl;
 
 enum class AccessibleStates
@@ -189,6 +192,10 @@ public:
     /// SfxViewShell::getKitParagraphContentControls()
     static std::vector<SfxParagraphContentControl> GetParagraphContentControls(
         const cpo::uno::Reference<css::accessibility::XAccessibleText>& xText);
+    /// The content control holding an accessible frame, see
+    /// SfxViewShell::getKitObjectContentControl()
+    static std::optional<SfxContentControl> GetObjectContentControl(
+        const cpo::uno::Reference<css::accessibility::XAccessibleContext>& xContext);
     void AddShapeContext(const SdrObject *pObj,
                              rtl::Reference < ::accessibility::AccessibleShape > const & xAccShape);
 

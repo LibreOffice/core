@@ -2171,6 +2171,12 @@ std::vector<SfxParagraphContentControl> SwView::getKitParagraphContentControls(
     return SwAccessibleMap::GetParagraphContentControls(xText);
 }
 
+std::optional<SfxContentControl> SwView::getKitObjectContentControl(
+    const uno::Reference<css::accessibility::XAccessibleContext>& xContext) const
+{
+    return SwAccessibleMap::GetObjectContentControl(xContext);
+}
+
 void SwView::flushPendingKitInvalidateTiles()
 {
     if (SwWrtShell* pSh = GetWrtShellPtr())

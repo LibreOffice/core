@@ -20,6 +20,7 @@
 #include <rtl/ref.hxx>
 #include <cppuhelper/weakref.hxx>
 #include <utility>
+#include <vcl/svapp.hxx>
 #include <vcl/window.hxx>
 #include <svx/svdmodel.hxx>
 #include <svx/unomod.hxx>
@@ -76,6 +77,9 @@
 #include <prevwpage.hxx>
 #include <calbck.hxx>
 #include <undobj.hxx>
+#include <fmtanchr.hxx>
+#include <formatcontentcontrol.hxx>
+#include <textcontentcontrol.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <tools/debug.hxx>
 #include <sfx2/viewsh.hxx>
@@ -1857,6 +1861,26 @@ SwAccessibleMap::GetParagraphContentControls(const uno::Reference<XAccessibleTex
     if (auto pParagraph = dynamic_cast<SwAccessibleParagraph*>(xText.get()))
         return pParagraph->GetContentControls();
     return {};
+}
+
+std::optional<SfxContentControl>
+SwAccessibleMap::GetObjectContentControl(const uno::Reference<XAccessibleContext>& xContext)
+{
+    SolarMutexGuard aGuard;
+
+    auto pContext = dynamic_cast<SwAccessibleContext*>(xContext.get());
+    const SwFrame* pFrame = pContext ? pContext->GetFrame() : nullptr;
+    if (!pFrame || !pFrame->IsFlyFrame())
+        return {};
+    const SwTextContentControl* pTextContentControl = SwTextContentControl::FindAtAnchor(
+        static_cast<const SwFlyFrame*>(pFrame)->GetFormat()->GetAnchor());
+    if (!pTextContentControl)
+        return {};
+    const std::shared_ptr<SwContentControl>& pControl
+        = pTextContentControl->GetContentControl().GetContentControl();
+    if (!pControl)
+        return {};
+    return SwAccessibleParagraph::GetContentControl(*pControl);
 }
 
 void SwAccessibleMap::AddShapeContext(const SdrObject *pObj, rtl::Reference < ::accessibility::AccessibleShape > const & xAccShape)

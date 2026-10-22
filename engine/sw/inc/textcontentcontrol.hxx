@@ -21,6 +21,7 @@
 #include "txatbase.hxx"
 
 class SwContentControlManager;
+class SwFormatAnchor;
 
 /// SwTextAttr subclass that tracks the location of the wrapped SwFormatContentControl.
 class SW_DLLPUBLIC SwTextContentControl final : public SwTextAttrNesting
@@ -37,6 +38,9 @@ public:
                                                           bool bIsCopy);
 
     ~SwTextContentControl() override;
+
+    /// the content control around the anchor of a fly frame, e.g. a picture control
+    static SwTextContentControl* FindAtAnchor(const SwFormatAnchor& rAnchor);
 
     void ChgTextNode(SwTextNode* pNode);
 

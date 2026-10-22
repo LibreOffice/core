@@ -66,6 +66,7 @@ namespace vcl { class PrinterController; }
 
 namespace com::sun::star::accessibility
 {
+class XAccessibleContext;
 class XAccessibleText;
 }
 namespace com::sun::star::beans { struct PropertyValue; }
@@ -175,16 +176,23 @@ struct SfxParagraphComment
     bool operator==(const SfxParagraphComment&) const = default;
 };
 
-/// A content control in a paragraph, by the range of its content in the accessible text of the
-/// paragraph
-struct SfxParagraphContentControl
+/// A content control, as the client of the Kit reads it
+struct SfxContentControl
 {
-    sal_Int32 nStart;
-    sal_Int32 nEnd;
     OUString aType; // e.g. "checkbox", see SwAccessibleParagraph::GetContentControls()
     OUString aAlias;
     bool bChecked;
     bool bPlaceholder; // the content is the placeholder text
+
+    bool operator==(const SfxContentControl&) const = default;
+};
+
+/// A content control in a paragraph, by the range of its content in the accessible text of the
+/// paragraph
+struct SfxParagraphContentControl : SfxContentControl
+{
+    sal_Int32 nStart;
+    sal_Int32 nEnd;
 
     bool operator==(const SfxParagraphContentControl&) const = default;
 };
@@ -572,6 +580,13 @@ public:
     /// lacks
     virtual std::vector<SfxParagraphContentControl> getKitParagraphContentControls(
         const cpo::uno::Reference<css::accessibility::XAccessibleText>&) const
+    {
+        return {};
+    }
+    /// The content control holding an accessible object of this view, e.g. a picture control
+    /// holding an image
+    virtual std::optional<SfxContentControl> getKitObjectContentControl(
+        const cpo::uno::Reference<css::accessibility::XAccessibleContext>&) const
     {
         return {};
     }

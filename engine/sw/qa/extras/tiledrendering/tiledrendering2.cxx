@@ -2774,6 +2774,8 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yImageSelection)
                                      aView.m_aA11ySelection.get<std::string>("action"));
         CPPUNIT_ASSERT_EQUAL_MESSAGE(pFile, std::string("A red square"),
                                      aView.m_aA11ySelection.get<std::string>("name"));
+        // in no content control
+        CPPUNIT_ASSERT_MESSAGE(pFile, !aView.m_aA11ySelection.get_child_optional("contentControl"));
 
         // And when the cursor goes back to the text:
         pXTextDocument->postKeyEvent(COKitKeyEventType::DOWN, 0, KEY_ESCAPE);
@@ -2838,6 +2840,34 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yRenamedImageDeselection)
         CPPUNIT_ASSERT_EQUAL_MESSAGE(pFile, std::string("A blue square"),
                                      aView.m_aA11ySelection.get<std::string>("name"));
     }
+}
+
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yPictureControlSelection)
+{
+    // Given a picture content control showing its placeholder image, and the cursor in its
+    // paragraph:
+    createDoc("a11y-picture-control.fodt");
+    SwTestViewCallback aView;
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+    pWrtShell->Down(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+
+    // When the image is selected from the keyboard (Shift+F4):
+    dispatchCommand(mxComponent, u".uno:JumpToNextFrame"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the selection of the image is reported with its control:
+    CPPUNIT_ASSERT(pWrtShell->IsSelFrameMode());
+    CPPUNIT_ASSERT_EQUAL(std::string("create"), aView.m_aA11ySelection.get<std::string>("action"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Image1"), aView.m_aA11ySelection.get<std::string>("name"));
+    // Without the fix, there was no "contentControl" node.
+    CPPUNIT_ASSERT(aView.m_aA11ySelection.get_child_optional("contentControl"));
+    const boost::property_tree::ptree& rControl
+        = aView.m_aA11ySelection.get_child("contentControl");
+    CPPUNIT_ASSERT_EQUAL(std::string("picture"), rControl.get<std::string>("type"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Portrait"), rControl.get<std::string>("alias", ""));
+    CPPUNIT_ASSERT_EQUAL(std::string("true"), rControl.get<std::string>("placeholder", ""));
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphBlockQuote)

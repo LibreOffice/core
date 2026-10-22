@@ -1088,7 +1088,7 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 			else if (textMsg.startsWith('a11yselectionchanged:')) {
 				obj = JSON.parse(textMsg.substring('a11yselectionchanged:'.length + 1));
 				this._map._textInput.onAccessibilitySelectionChanged(
-					parseInt(obj.cell) > 0, obj.action, obj.name, obj.text);
+					parseInt(obj.cell) > 0, obj.action, obj.name, obj.text, obj.contentControl);
 			}
 			else if (textMsg.startsWith('a11yfocusedparagraph:')) {
 				obj = JSON.parse(textMsg.substring('a11yfocusedparagraph:'.length + 1));

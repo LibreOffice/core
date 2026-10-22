@@ -891,22 +891,28 @@ boost::property_tree::ptree makeCommentsTree(const std::vector<SfxParagraphComme
     return aComments;
 }
 
+boost::property_tree::ptree makeContentControlTree(const SfxContentControl& rControl)
+{
+    boost::property_tree::ptree aControl;
+    aControl.put("type", rControl.aType.toUtf8().getStr());
+    if (!rControl.aAlias.isEmpty())
+        aControl.put("alias", rControl.aAlias.toUtf8().getStr());
+    if (rControl.aType == "checkbox")
+        aControl.put("checked", rControl.bChecked);
+    if (rControl.bPlaceholder)
+        aControl.put("placeholder", true);
+    return aControl;
+}
+
 boost::property_tree::ptree
 makeContentControlsTree(const std::vector<SfxParagraphContentControl>& rControls)
 {
     boost::property_tree::ptree aControls;
     for (const SfxParagraphContentControl& rControl : rControls)
     {
-        boost::property_tree::ptree aControl;
+        boost::property_tree::ptree aControl = makeContentControlTree(rControl);
         aControl.put("start", rControl.nStart);
         aControl.put("end", rControl.nEnd);
-        aControl.put("type", rControl.aType.toUtf8().getStr());
-        if (!rControl.aAlias.isEmpty())
-            aControl.put("alias", rControl.aAlias.toUtf8().getStr());
-        if (rControl.aType == "checkbox")
-            aControl.put("checked", rControl.bChecked);
-        if (rControl.bPlaceholder)
-            aControl.put("placeholder", true);
         aControls.push_back(std::make_pair("", aControl));
     }
     return aControls;
@@ -1735,7 +1741,8 @@ public:
     void notifyFocusedCellChanged(sal_Int32 nOutCount, const std::vector<TableSizeType>& aInList, sal_Int32 nRow, sal_Int32 nCol, sal_Int32 nRowSpan, sal_Int32 nColSpan);
     void notifySelectionChanged(const uno::Reference<accessibility::XAccessible>& xAccObj, const OUString& sAction);
     void notifySelectionChanged(bool bIsCell, const OUString& sAction, const OUString& sName,
-                                const OUString& sTextContent);
+                                const OUString& sTextContent,
+                                const std::optional<SfxContentControl>& oContentControl = {});
 
     std::string getFocusedParagraph();
     tools::Rectangle visibleArea() const;
@@ -2156,8 +2163,11 @@ void KitDocumentFocusListener::notifySelectionChanged(const uno::Reference<acces
         // no more than 10 paragraphs, no more than 1000 chars
         bool bIsCell = xContext->getAccessibleRole() == AccessibleRole::TABLE_CELL;
         OUString sTextContent;
+        std::optional<SfxContentControl> oContentControl;
         if (sAction == "create" || sAction == "add")
         {
+            if (m_pViewShell)
+                oContentControl = m_pViewShell->getKitObjectContentControl(xContext);
             const sal_Int64 nMaxJoinedParagraphs = 10;
             // a sentence or so of a text frame, which may hold any amount of text
             const sal_Int32 nMaxTextContentLength
@@ -2230,13 +2240,13 @@ void KitDocumentFocusListener::notifySelectionChanged(const uno::Reference<acces
             }
         }
 
-        notifySelectionChanged(bIsCell, sAction, sName, sTextContent);
+        notifySelectionChanged(bIsCell, sAction, sName, sTextContent, oContentControl);
     }
 }
 
-void KitDocumentFocusListener::notifySelectionChanged(bool bIsCell, const OUString& sAction,
-                                                      const OUString& sName,
-                                                      const OUString& sTextContent)
+void KitDocumentFocusListener::notifySelectionChanged(
+    bool bIsCell, const OUString& sAction, const OUString& sName, const OUString& sTextContent,
+    const std::optional<SfxContentControl>& oContentControl)
 {
     boost::property_tree::ptree aPayloadTree;
     aPayloadTree.put("cell", bIsCell ? 1 : 0);
@@ -2244,6 +2254,8 @@ void KitDocumentFocusListener::notifySelectionChanged(bool bIsCell, const OUStri
     aPayloadTree.put("name", sName);
     if (!sTextContent.isEmpty())
         aPayloadTree.put("text", sTextContent);
+    if (oContentControl)
+        aPayloadTree.add_child("contentControl", makeContentControlTree(*oContentControl));
     std::stringstream aStream;
     boost::property_tree::write_json(aStream, aPayloadTree);
     std::string aPayload = aStream.str();

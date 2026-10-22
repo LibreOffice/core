@@ -752,6 +752,8 @@ public:
         const cpo::uno::Reference<css::accessibility::XAccessibleText>& xText) const override;
     virtual std::vector<SfxParagraphContentControl> getKitParagraphContentControls(
         const cpo::uno::Reference<css::accessibility::XAccessibleText>& xText) const override;
+    virtual std::optional<SfxContentControl> getKitObjectContentControl(
+        const cpo::uno::Reference<css::accessibility::XAccessibleContext>& xContext) const override;
     virtual void flushPendingKitInvalidateTiles() override;
     virtual std::optional<OString> getKitPayload(COKitCallbackType eType, int nViewId) const override;
     /// See SfxViewShell::getEditMode().

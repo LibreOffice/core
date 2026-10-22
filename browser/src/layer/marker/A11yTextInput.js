@@ -1185,7 +1185,8 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		}
 	},
 
-	onAccessibilitySelectionChanged: function(cell, action, name, textContent) {
+	// control: the content control holding the object, e.g. a picture control holding an image
+	onAccessibilitySelectionChanged: function(cell, action, name, textContent, control) {
 		this._log('onAccessibilitySelectionChanged: cell: ' + cell + ', action: ' + action + ', name: ' + name);
 		if (this._timeoutForA11yDescription)
 			clearTimeout(this._timeoutForA11yDescription);
@@ -1193,6 +1194,8 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 			this._emptyArea();
 		var eventDescription = '';
 		if (action === 'create' || action === 'add') {
+			if (control)
+				name = [this._getContentControlDescription(control), name].filter(Boolean).join(', ');
 			this._hasAnySelection = true;
 			// the selected object is now what this element stands for, so that is
 			// what a screen reader reads when the focus next enters the document

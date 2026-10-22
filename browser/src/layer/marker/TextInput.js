@@ -484,10 +484,7 @@ window.L.TextInput = window.L.Layer.extend({
 			return element;
 		}
 		// in an editable, a reader in focus mode reads the description of a span but not its label
-		// a checkbox shows its state, never placeholder text
-		const placeholder = control.type !== 'checkbox' && String(control.placeholder) === 'true';
-		const description = [(control.alias || '').trim(), placeholder ? _('Placeholder') : '']
-			.filter(Boolean).join(', ');
+		const description = this._getContentControlDescription(control);
 		if (description)
 			element.setAttribute('aria-description', description);
 		if (control.type === 'checkbox') {
@@ -502,6 +499,14 @@ window.L.TextInput = window.L.Layer.extend({
 		return element;
 	},
 
+	// the title of a content control, and whether it shows its placeholder
+	_getContentControlDescription: function(control) {
+		// a checkbox shows its state, never placeholder text
+		const placeholder = control.type !== 'checkbox' && String(control.placeholder) === 'true';
+		return [(control.alias || '').trim(), placeholder ? _('Placeholder') : '']
+			.filter(Boolean).join(', ');
+	},
+
 	// read in place of "mark"
 	_getContentControlLabel: function(control) {
 		switch (control.type) {
@@ -511,6 +516,8 @@ window.L.TextInput = window.L.Layer.extend({
 			return _('Combo box');
 		case 'date':
 			return _('Date');
+		case 'picture':
+			return _('Picture');
 		}
 		return _('Content control');
 	},

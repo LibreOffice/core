@@ -41,7 +41,9 @@ class SwAccessibleHyperTextData;
 class SwRangeRedline;
 class SwXTextPortion;
 class SwParaChangeTrackingInfo; //#i108125#
+class SwContentControl;
 struct SfxParagraphComment;
+struct SfxContentControl;
 struct SfxParagraphContentControl;
 
 namespace com::sun::star {
@@ -167,6 +169,8 @@ public:
     std::vector<SfxParagraphComment> GetComments();
     /// the content controls in this paragraph, by positions in its accessible text
     std::vector<SfxParagraphContentControl> GetContentControls();
+    /// a content control, as the client of the Kit reads it
+    static SfxContentControl GetContentControl(const SwContentControl& rControl);
 
 protected:
 

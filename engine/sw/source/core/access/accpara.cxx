@@ -3430,18 +3430,23 @@ std::vector<SfxParagraphContentControl> SwAccessibleParagraph::GetContentControl
         if (!pControl)
             continue;
         // the content, between the dummy chars at either end
-        aControls.push_back({ .nStart = toAccessible(pNode, pHt->GetStart() + 1),
-                              .nEnd = toAccessible(pNode, *pHt->End() - 1),
-                              .aType = lcl_GetContentControlType(pControl->GetType()),
-                              .aAlias = pControl->GetAlias(),
-                              .bChecked = pControl->GetChecked(),
-                              .bPlaceholder = pControl->GetShowingPlaceHolder() });
+        aControls.push_back({ GetContentControl(*pControl),
+                              toAccessible(pNode, pHt->GetStart() + 1),
+                              toAccessible(pNode, *pHt->End() - 1) });
     }
     // empty, or on another page
     std::erase_if(aControls, [](const SfxParagraphContentControl& rControl) {
         return rControl.nStart >= rControl.nEnd;
     });
     return aControls;
+}
+
+SfxContentControl SwAccessibleParagraph::GetContentControl(const SwContentControl& rControl)
+{
+    return { .aType = lcl_GetContentControlType(rControl.GetType()),
+             .aAlias = rControl.GetAlias(),
+             .bChecked = rControl.GetChecked(),
+             .bPlaceholder = rControl.GetShowingPlaceHolder() };
 }
 
 //Get the real heading level, Heading1 ~ Heading10

@@ -252,17 +252,10 @@ void ClearPicturePlaceholder(SwWrtShell& rShell)
     const SwFrameFormat* pFlyFormat = rShell.GetFlyFrameFormat();
     if (!pFlyFormat)
         return;
-    const SwFormatAnchor& rFormatAnchor = pFlyFormat->GetAnchor();
-    SwNode* pAnchorNode = rFormatAnchor.GetAnchorNode();
-    SwTextNode* pTextNode = pAnchorNode ? pAnchorNode->GetTextNode() : nullptr;
-    if (!pTextNode)
+    SwTextContentControl* pTextContentControl
+        = SwTextContentControl::FindAtAnchor(pFlyFormat->GetAnchor());
+    if (!pTextContentControl)
         return;
-    SwTextAttr* pAttr
-        = pTextNode->GetTextAttrAt(rFormatAnchor.GetAnchorContentOffset(),
-                                   RES_TXTATR_CONTENTCONTROL, sw::GetTextAttrMode::Parent);
-    if (!pAttr)
-        return;
-    auto pTextContentControl = static_txtattr_cast<SwTextContentControl*>(pAttr);
     const std::shared_ptr<SwContentControl>& pContentControl
         = pTextContentControl->GetContentControl().GetContentControl();
     if (pContentControl->GetPicture())

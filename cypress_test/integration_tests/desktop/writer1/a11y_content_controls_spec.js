@@ -168,4 +168,24 @@ describe(['tagdesktop'], 'Writer content controls for the reader', { testIsolati
 			expect($area.text(), 'the date chosen').to.contain('2025-03-15 day.');
 		});
 	});
+
+	it('a picture control is read as a picture, and announced with its image selected', function () {
+		// into the fourth paragraph, holding the picture control
+		helper.typeIntoDocument('{ctrl}{home}');
+		helper.typeIntoDocument('{downarrow}{downarrow}{downarrow}');
+		cy.then(function () {
+			return helper.processToIdle(win);
+		});
+		cy.cGet('#clipboard-area [role="mark"]').should(function ($marks) {
+			expect($marks, 'the marks').to.have.length(1);
+			expect($marks.attr('aria-roledescription'), 'the type').to.equal('Picture');
+			expect($marks.attr('aria-description'), 'the title').to.equal('Portrait, Placeholder');
+			expect($marks.find('[role="img"]').attr('aria-label'), 'the image').to.equal('Image1');
+		});
+
+		cy.realPress(['Shift', 'F4']);
+		cy.cGet('#clipboard-area').should('have.attr', 'aria-description',
+			'Portrait, Placeholder, Image1 selected. ');
+		cy.realPress('Escape');
+	});
 });
