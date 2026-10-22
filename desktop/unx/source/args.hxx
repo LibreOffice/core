@@ -23,8 +23,8 @@ struct Args
     bool bInhibitPipe = false; // for --help and --version
 
     sal_uInt32 nArgsEnv = 0; // number of -env: style args
-    sal_uInt32 nArgsTotal = 0; // number of -env: as well as -writer style args
-    std::vector<rtl_uString*> aArgs; // sorted argument vector
+    // sorted argument vector (including both, -env: as well as -writer style args)
+    std::vector<rtl_uString*> aArgs;
 };
 
 Args *args_parse (void);

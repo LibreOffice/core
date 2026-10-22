@@ -111,7 +111,7 @@ static ChildInfo child_spawn(Args* args, bool bAllArgs, bool bWithStatus)
     pTmp = nullptr;
 
     /* copy args */
-    sal_uInt32 nArgs = bAllArgs ? args->nArgsTotal : args->nArgsEnv;
+    sal_uInt32 nArgs = bAllArgs ? args->aArgs.size() : args->nArgsEnv;
     rtl_uString** ppArgs = static_cast<rtl_uString**>(calloc(nArgs + 1, sizeof(rtl_uString*)));
     for (sal_uInt32 i = 0; i < nArgs; ++i)
         ppArgs[i] = args->aArgs.at(i);

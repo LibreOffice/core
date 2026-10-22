@@ -60,7 +60,6 @@ Args *args_parse (void)
 {
     const sal_uInt32 nArgs = osl_getCommandArgCount();
     Args* args = new Args;
-    args->nArgsTotal = nArgs;
 
     sal_uInt32 j = 0;
 
@@ -82,7 +81,7 @@ Args *args_parse (void)
     }
     args->nArgsEnv = j;
 
-    for (sal_uInt32 i = args->nArgsEnv; i < args->nArgsTotal; i++)
+    for (size_t i = args->nArgsEnv; i < args->aArgs.size(); i++)
     {
         const sal_Unicode* arg = args->aArgs.at(i)->buffer;
         sal_Int32 length = args->aArgs.at(i)->length;
