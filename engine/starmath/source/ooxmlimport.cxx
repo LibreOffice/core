@@ -87,6 +87,24 @@ static OUString lcl_ApplyRunCommand( SmParser5& rParser, const OUString& rText,
     return OUString::Concat( sCommand ) + " {" + rText + "}";
 }
 
+// A formula may start or end with an operator that has nothing on that side, such as "= x"
+// or "x =". The parser needs an operand on each side of a binary operator, so an empty
+// group is added where the operand is missing, and the operator keeps its math glyph. The
+// empty group is written as "{ }", which the end of the import turns into "{}". A sign at
+// the start, as in "- x", is a unary operator and gets no empty group.
+static OUString lcl_AddMissingOperands( SmParser5& rParser, const OUString& rText )
+{
+    const OUString sTrimmed = rText.trim();
+    if( sTrimmed.isEmpty() || lcl_ParsesAsExpression( rParser, rText ))
+        return rText;
+    OUString sRet = rText;
+    if( isSingleCharMathOperator( sTrimmed[sTrimmed.getLength() - 1] ))
+        sRet += " { }";
+    if( isSingleCharMathOperator( sTrimmed[0] ) && !lcl_ParsesAsExpression( rParser, sRet ))
+        sRet = "{ } " + sRet;
+    return sRet;
+}
+
 static bool lcl_HasLetter( const OUString& rText )
 {
     for( sal_Int32 nIndex = 0; nIndex < rText.getLength(); )
@@ -238,9 +256,10 @@ OUString SmOoxmlImport::handleStream()
         ret.append(item);
     }
     m_rStream.ensureClosingTag( M_TOKEN( oMath ));
+    OUString ret1 = lcl_AddMissingOperands( getParser(), ret.makeStringAndClear());
     // Placeholders are written out as nothing (i.e. nothing inside e.g. the <e> element),
     // which will result in "{}" in the formula text. Fix this up.
-    OUString ret2 = ret.makeStringAndClear().replaceAll( "{}", "<?>" );
+    OUString ret2 = ret1.replaceAll( "{}", "<?>" );
     // And as a result, empty parts of the formula that are not placeholders are written out
     // as a single space, so fix that up too.
     ret2 = ret2.replaceAll( "{ }", "{}" );
@@ -329,8 +348,8 @@ OUString SmOoxmlImport::readOMathArgInElement( int token )
     m_rStream.ensureClosingTag( token );
     // A bare operator alone in braces (e.g. rsup {+}) is a StarMath parse error.
     if (ret.getLength() == 1 && isSingleCharMathOperator(ret[0]))
-        ret = "\"" + ret + "\"";
-    return ret;
+        return "\"" + ret + "\"";
+    return lcl_AddMissingOperands( getParser(), ret );
 }
 
 OUString SmOoxmlImport::handleAcc()
