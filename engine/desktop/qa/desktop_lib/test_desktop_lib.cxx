@@ -56,6 +56,7 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
+#include <unotools/confignode.hxx>
 #include <unotools/datetime.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <comphelper/string.hxx>
@@ -263,6 +264,7 @@ public:
     void testMultiViewTableSelection();
     void testColorPaletteCallback();
     void testTableContextOnLoad();
+    void testNotebookbarAfterViewClosedEarly();
 
     CPPUNIT_TEST_SUITE(DesktopKitTest);
     CPPUNIT_TEST(testGetStyles);
@@ -364,6 +366,7 @@ public:
     CPPUNIT_TEST(testMultiViewTableSelection);
     CPPUNIT_TEST(testColorPaletteCallback);
     CPPUNIT_TEST(testTableContextOnLoad);
+    CPPUNIT_TEST(testNotebookbarAfterViewClosedEarly);
     CPPUNIT_TEST_SUITE_END();
 
     OString m_aTextSelection;
@@ -2550,6 +2553,7 @@ public:
     int m_nComments = 0;
     int m_nDocSizeChanged = 0;
     int m_nTextViewSelection = 0;
+    int m_nNotebookbarMessages = 0;
     OString m_aLastContext;
     boost::property_tree::ptree m_aColorPaletteCallbackResult;
     RedlineInfo m_aLastRedlineInfo;
@@ -2673,6 +2677,10 @@ public:
             m_JSONDialog.clear();
             std::stringstream aStream(pPayload);
             boost::property_tree::read_json(aStream, m_JSONDialog);
+
+            if (m_JSONDialog.find("jsontype") != m_JSONDialog.not_found()
+                && m_JSONDialog.get_child("jsontype").get_value<std::string>() == "notebookbar")
+                ++m_nNotebookbarMessages;
 
             if (m_JSONDialog.find("jsontype") != m_JSONDialog.not_found() && m_JSONDialog.get_child("jsontype").get_value<std::string>() == "dialog")
             {
@@ -4858,6 +4866,60 @@ void DesktopKitTest::testTableContextOnLoad()
     // - Actual  : false
     // i.e. no context ever reached this view.
     CPPUNIT_ASSERT(aView1.m_aLastContext.indexOf("Table"_ostr) != -1);
+}
+
+namespace
+{
+/// Asks for the notebookbar the way the browser does once its view has loaded.
+void requestNotebookbar(COKitDocumentImpl* pDocument)
+{
+    pDocument->postUnoCommand(".uno:ToolbarMode",
+                              R"({"Mode":{"type":"string","value":"Default"}})", false);
+    pDocument->postUnoCommand(".uno:ToolbarMode",
+                              R"({"Mode":{"type":"string","value":"notebookbar_online.ui"}})",
+                              false);
+    Scheduler::ProcessEventsToIdle();
+}
+}
+
+void DesktopKitTest::testNotebookbarAfterViewClosedEarly()
+{
+    // The kit starts with the online notebookbar as the active Writer toolbar mode.
+    utl::OConfigurationTreeRoot aWriterMode(comphelper::getProcessComponentContext(),
+        u"org.openoffice.Office.UI.ToolbarMode/Applications/Writer"_ustr, true);
+    CPPUNIT_ASSERT(aWriterMode.isValid());
+    aWriterMode.setNodeValue(u"Active"_ustr, uno::Any(u"notebookbar_online.ui"_ustr));
+    aWriterMode.commit();
+
+    COKitDocumentImpl* pDocument = loadDoc("blank_text.odt");
+    pDocument->initializeForRendering("{}");
+    ViewCallback aView1(pDocument);
+    Scheduler::ProcessEventsToIdle();
+
+    requestNotebookbar(pDocument);
+    CPPUNIT_ASSERT_MESSAGE("the first view gets its notebookbar",
+                           aView1.m_nNotebookbarMessages > 0);
+
+    // A view that goes away before its client asks for the notebookbar, as when a tab is
+    // closed while the document is still loading.
+    const int nShortLivedView = pDocument->createView();
+    pDocument->initializeForRendering("{}");
+    Scheduler::ProcessEventsToIdle();
+    pDocument->destroyView(nShortLivedView);
+
+    // The next view asks for the notebookbar the usual way and must get it.
+    pDocument->createView();
+    pDocument->initializeForRendering("{}");
+    ViewCallback aView3(pDocument);
+    Scheduler::ProcessEventsToIdle();
+
+    requestNotebookbar(pDocument);
+    // Without the fix in place, this test would have failed with:
+    // - assertion failed
+    // - Expression: aView3.m_nNotebookbarMessages > 0
+    // i.e. the view asked for the notebookbar and nothing came back, so the browser's style
+    // gallery stayed empty.
+    CPPUNIT_ASSERT_MESSAGE("a later view gets its notebookbar", aView3.m_nNotebookbarMessages > 0);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopKitTest);

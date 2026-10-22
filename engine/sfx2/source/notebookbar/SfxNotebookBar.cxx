@@ -30,6 +30,7 @@
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <comphelper/diagnose_ex.hxx>
 #include <memory>
+#include <set>
 #include <vector>
 #include <unordered_map>
 #include <vcl/WeldedTabbedNotebookbar.hxx>
@@ -114,6 +115,10 @@ CreateExtraPanelController(const OUString& rServiceName,
 
     return nullptr;
 }
+
+/** The views whose first notebookbar request has been seen already. A Writer view's first request
+    is the one the view's own creation makes, which comes before its document has loaded. */
+std::set<const void*> g_aViewsPastFirstRequest;
 
 /** Notebookbar instance manager is a singleton that is used for track the
  *  per-view instances of view specific data contained in NotebookBarViewData
@@ -349,6 +354,9 @@ void SfxNotebookBar::ExecMethod(SfxBindings& rBindings, const OUString& rUIName)
         }
     }
 
+    if (const SfxViewShell* pViewShell = SfxViewShell::Current())
+        g_aViewsPastFirstRequest.insert(pViewShell);
+
     StateMethod(rBindings);
 }
 
@@ -416,11 +424,9 @@ bool SfxNotebookBar::StateMethod(SystemWindow* pSysWindow,
     // Notebookbar was loaded too early what caused:
     //   * in COKit: Paste Special feature was incorrectly initialized
     // Skip first request so Notebookbar will be initialized after document was loaded
-    static std::map<const void*, bool> bSkippedFirstInit;
     if (eApp == vcl::EnumContext::Application::Writer
-        && bSkippedFirstInit.find(pViewShell) == bSkippedFirstInit.end())
+        && g_aViewsPastFirstRequest.insert(pViewShell).second)
     {
-        bSkippedFirstInit[pViewShell] = true;
         ResetActiveToolbarModeToDefault(eApp);
         return false;
     }
