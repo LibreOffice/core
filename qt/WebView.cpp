@@ -619,6 +619,8 @@ QWebEngineView* CODAWebEngineView::createWindow(QWebEnginePage::WebWindowType /*
 
     QWebEngineView* childView = child->webEngineView();
     QWebEnginePage* page = childView->page();
+    // Just connect the signal because the title is not yet loaded.
+    QObject::connect(page, &QWebEnginePage::titleChanged, childWindow, &QWidget::setWindowTitle);
     QObject::connect(page, &QWebEnginePage::windowCloseRequested, page,
                      [child]() {
                          // StandaloneWindow::closeEvent deletes the WebView and with it the
@@ -693,9 +695,6 @@ void CODAWebEngineView::claimChildWindow(WebView* child, const QUrl& url)
             dialogWindow->setWindowModality(Qt::WindowModal);
 
         QWebEnginePage* childPage = child->webEngineView()->page();
-        dialogWindow->setWindowTitle(childPage->title());
-        QObject::connect(childPage, &QWebEnginePage::titleChanged, dialogWindow,
-                         &QWidget::setWindowTitle);
 
         // The page requests the size that fits its content; the window is shown for the first
         // time centered over the document window at that size. That size is also the smallest
