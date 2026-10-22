@@ -411,24 +411,13 @@ static bool implIsInsideGroup( SdrObject const * pObj )
     // TTTT for current state of transition, SdrObject has a parent*
     // to a SdrObjList. That may be a SdrPage or a SdrObjGroup, both
     // are already derived from SdrObjList. To finally check, use
-    // the method 'getSdrObjectFromSdrObjList' - if it's not a SdrPage,
+    // the method 'getSdrObjectFromSdrObjList' (called internally from
+    // 'getParentSdrObjectFromSdrObject') - if it's not a SdrPage,
     // it will return SdrObjGroup or E3dScene -> SdrObject.
     // For future states, test for SdrObject. Trying to get the SdrPage
     // will in the future depend on the Object(this) to be inserted to a
     // SdrPage, regardless of e.g. being a group member.
-    if(nullptr == pObj)
-    {
-        return false;
-    }
-
-    SdrObjList* pSdrObjList(pObj->getParentSdrObjListFromSdrObject());
-
-    if(nullptr == pSdrObjList)
-    {
-        return false;
-    }
-
-    return (nullptr != pSdrObjList->getSdrObjectFromSdrObjList());
+    return pObj && pObj->getParentSdrObjectFromSdrObject();
 }
 
 void EffectMigration::SetAnimationEffect( SvxShape* pShape, AnimationEffect eEffect )
