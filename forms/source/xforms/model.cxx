@@ -34,6 +34,7 @@
 #include <rtl/ustrbuf.hxx>
 #include <sal/log.hxx>
 #include <tools/debug.hxx>
+#include <tools/hostfilter.hxx>
 #include <tools/urlobj.hxx>
 
 #include <comphelper/processfactory.hxx>
@@ -337,6 +338,12 @@ void Model::loadInstance( sal_Int32 nInstance )
     if( INetURLObject( sURL ).IsExoticProtocol() )
     {
         SAL_WARN("forms.xforms", "Model::loadInstance: blocked exotic protocol: \"" << sURL << "\"");
+        return;
+    }
+
+    if (HostFilter::isFileUrlForbidden(sURL))
+    {
+        SAL_WARN("forms.xforms", "Model::loadInstance: blocked file path: \"" << sURL << "\"");
         return;
     }
 
