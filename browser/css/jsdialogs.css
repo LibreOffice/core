@@ -1864,8 +1864,11 @@ img.ui-combobox-value-preview {
 	}
 	/* stylelint-enable selector-pseudo-element-no-unknown -- see above */
 
-	/* Match the dropdown row text, from .ui-combobox-entry span. */
+	/* Match the dropdown row text, from .ui-combobox-entry span. A flex row,
+	   so that the check mark can move to its end, see below. */
 	.ui-listbox option {
+		display: flex;
+		align-items: center;
 		padding: 5px;
 		font-size: var(--default-font-size);
 		font-family: var(--cool-font);
@@ -1886,6 +1889,16 @@ img.ui-combobox-value-preview {
 	.ui-listbox option:hover {
 		background-color: var(--color-background-hover);
 	}
+
+	/* Show the check mark of the selected option at the end of the row. */
+	/* stylelint-disable selector-pseudo-element-no-unknown */
+	.ui-listbox option::checkmark {
+		order: 1;
+		margin-inline-start: auto;
+		padding-inline-start: 16px;
+		color: var(--color-primary);
+	}
+	/* stylelint-enable selector-pseudo-element-no-unknown -- see above */
 }
 
 /* Draw vector border as downwards arrow. */
