@@ -64,6 +64,9 @@ interface DocLayerInterface {
 
 	filterSlurpedMessage(e: SlurpMessageEvent): boolean;
 	_documentInfo?: string;
+	/// Spreadsheet only: the content of the cell under the cursor, as the formula bar shows
+	/// it. Undefined until the first cell content arrives.
+	_lastFormula?: string;
 
 	removeAllViews(): void;
 	_resetClientVisArea(): void;

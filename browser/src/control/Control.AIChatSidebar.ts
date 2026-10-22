@@ -2308,9 +2308,22 @@ namespace cool {
 			}, ms);
 		}
 
+		// In a spreadsheet the cell under the cursor counts as the selection
+		// when no range is selected. The formula bar text of a formula cell
+		// starts with "=", or with "{=" for an array formula.
+		private cursorCellHasFormula(): boolean {
+			if (app.map.getDocType() !== 'spreadsheet') return false;
+			const content: string | undefined = app.map._docLayer?._lastFormula;
+			return !!content && (content.startsWith('=') || content.startsWith('{='));
+		}
+
+		private hasSelectionToSend(): boolean {
+			return TextSelections.isActive() || this.cursorCellHasFormula();
+		}
+
 		private async buildUserMessage(text: string): Promise<ChatMessage | null> {
 			let selectedText = '';
-			if (TextSelections.isActive()) {
+			if (this.hasSelectionToSend()) {
 				try {
 					selectedText = await this.fetchSelectedMarkdown();
 				} catch (e: any) {
@@ -3655,7 +3668,7 @@ namespace cool {
 		public runOnSelection(prompt: string): void {
 			if (!this.isVisible()) this.show();
 
-			if (!TextSelections.isActive()) {
+			if (!this.hasSelectionToSend()) {
 				this.hintText = _(
 					'Select the content you want the assistant to work on first.',
 				);

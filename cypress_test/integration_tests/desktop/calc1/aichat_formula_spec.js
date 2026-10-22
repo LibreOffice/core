@@ -197,3 +197,70 @@ describe(['tagdesktop'], 'Cell references in an assistant reply', function() {
 		cy.cGet('#aichat-msg-1 a').should('not.exist');
 	});
 });
+
+describe(['tagdesktop'], 'The cell under the cursor as context', function() {
+	beforeEach(function() {
+		// A1 holds 2 and A2 holds 3.
+		helper.setupAndLoadDocument('calc/aichat_formula.fods');
+		cy.getFrameWindow().then((win) => {
+			this.win = win;
+			setCellFormula(win, 'A3', '=SUM(A1,A2)');
+			aichatHelper.enableAIWithCaptureSocket(win, {});
+		});
+		aichatHelper.openAIChat();
+	});
+
+	function lastUserContent(win) {
+		var messages = win.__aichatPayloads[0].messages;
+		return messages[messages.length - 1].content;
+	}
+
+	it('a formula cell sends its value and its formula', function() {
+		calcHelper.enterCellAddressAndConfirm(this.win, 'A3');
+		cy.getFrameWindow().should(function(win) {
+			expect(win.app.map._docLayer._lastFormula).to.eq('=SUM(A1,A2)');
+		});
+
+		aichatHelper.typeIntoAIInput('Explain the formula');
+		aichatHelper.clickSend();
+
+		cy.getFrameWindow().should(function(win) {
+			expect(win.__aichatPayloads).to.have.length(1);
+			// The cell's value, 5, comes first and its formula follows.
+			expect(lastUserContent(win)).to.match(
+				/```\n\s*5\s+Formulas:\n- A3: =SUM\(A1,A2\)\n/);
+		});
+	});
+
+	it('Explain Formula on a formula cell sends the cell', function() {
+		calcHelper.enterCellAddressAndConfirm(this.win, 'A3');
+		cy.getFrameWindow().should(function(win) {
+			expect(win.app.map._docLayer._lastFormula).to.eq('=SUM(A1,A2)');
+		});
+
+		cy.getFrameWindow().then(function(win) {
+			win.app.dispatcher.dispatch('aichatquick-explainformula');
+		});
+
+		cy.cGet('#aichat-panel').should('not.contain.text', 'Select the content you want');
+		cy.getFrameWindow().should(function(win) {
+			expect(win.__aichatPayloads).to.have.length(1);
+			expect(lastUserContent(win)).to.contain('- A3: =SUM(A1,A2)');
+		});
+	});
+
+	it('a cell with a plain value sends no cell', function() {
+		calcHelper.enterCellAddressAndConfirm(this.win, 'A1');
+		cy.getFrameWindow().should(function(win) {
+			expect(win.app.map._docLayer._lastFormula).to.eq('2');
+		});
+
+		aichatHelper.typeIntoAIInput('What can you do?');
+		aichatHelper.clickSend();
+
+		cy.getFrameWindow().should(function(win) {
+			expect(win.__aichatPayloads).to.have.length(1);
+			expect(lastUserContent(win)).to.eq('What can you do?');
+		});
+	});
+});
