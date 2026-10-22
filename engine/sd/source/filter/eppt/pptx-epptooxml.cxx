@@ -561,6 +561,34 @@ OString statedPlaceholderName(const Reference<css::drawing::XDrawPage>& rxPage,
     return OUStringToOString(aStated, RTL_TEXTENCODING_UTF8);
 }
 
+/** The number the document gave the area this shape stands for.
+
+    A page may state several areas of one kind, and a slide names the one of its layout that it
+    fills, so the number belongs to the area itself and stays with it however the page changes
+    around it. Empty where the document stated none. */
+std::optional<sal_Int32> statedPlaceholderIndex(const Reference<css::drawing::XShape>& rxShape)
+{
+    SdrObject* pObject = SdrObject::getSdrObjectFromXShape(rxShape);
+    if (!pObject)
+        return {};
+
+    try
+    {
+        uno::Any aHeld;
+        pObject->GetGrabBagItem(aHeld);
+        comphelper::SequenceAsHashMap aGrabBag(aHeld);
+        const auto aEntry = aGrabBag.find(u"mso-ph-idx"_ustr);
+        sal_Int32 nIndex = 0;
+        if (aEntry == aGrabBag.end() || !(aEntry->second >>= nIndex))
+            return {};
+        return nIndex;
+    }
+    catch (const uno::Exception&)
+    {
+        return {};
+    }
+}
+
 /** Whether the document stated any text for the nth placeholder of this kind on this page.
 
     Unknown where the import kept nothing, which is every document it did not read. */
@@ -3543,18 +3571,20 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
         = ePlaceholder == Footer || ePlaceholder == DateAndTime || ePlaceholder == SlideNumber;
     OString aTypeName(getPlaceholderTypeName(ePlaceholder));
 
-    // The format knows more kinds of placeholder than the model does, so the name the document
-    // gave this one is given back where the model still stands for the same thing. A master
-    // states none of those names, and keeps the one it has.
     // How many of this kind this part has already written, which is what tells one of several
     // areas of one kind from the next
     const sal_Int32 nOrdinal = mbSlideMasterPart ? 0 : maWrittenPlaceholders[aTypeName]++;
 
+    // The format knows more kinds of placeholder than the model does, so the name the document
+    // gave this one is given back where the model still stands for the same thing. A master
+    // states none of those names, and keeps the one it has.
+    std::optional<sal_Int32> oStatedIndex;
     if (!mbSlideMasterPart)
     {
         auto* pExport = static_cast<PowerPointExport*>(GetFB());
         const OString aStated = statedPlaceholderName(pExport->GetCurrentPage(),
                                                       pExport->GetModel(), aTypeName);
+        oStatedIndex = statedPlaceholderIndex(xShape);
         if (!aStated.isEmpty())
             aTypeName = aStated;
     }
@@ -3581,6 +3611,14 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
             OString::number(
                 static_cast<PowerPointExport*>(GetFB())->GetOrCreatePlaceholderIndex(xShape)),
                     XML_hasCustomPrompt, sax_fastparser::UseIf("1", bUseCustomPrompt));
+    }
+    else if (oStatedIndex)
+    {
+        // The number the document gave this area, so that a page stating several of one kind
+        // still says which is which.
+        mpFS->singleElementNS(XML_p, XML_ph, XML_type, pType, XML_idx,
+                              OString::number(*oStatedIndex), XML_hasCustomPrompt,
+                              sax_fastparser::UseIf("1", bUseCustomPrompt));
     }
     else
     {
@@ -4319,6 +4357,17 @@ const std::set<sal_Int32>& PowerPointExport::GetStatedPlaceholderIndexes()
     try
     {
         comphelper::SequenceAsHashMap aGrabBag(mXModel->getPropertyValue(u"InteropGrabBag"_ustr));
+
+        // Every number the document states for an area its pages hold, so that one made up
+        // here stands on its own.
+        const auto aIndexes = aGrabBag.find(u"OOXPlaceholderIndexes"_ustr);
+        uno::Sequence<sal_Int32> aStatedIndexes;
+        if (aIndexes != aGrabBag.end() && (aIndexes->second >>= aStatedIndexes))
+        {
+            for (const sal_Int32 nIndex : aStatedIndexes)
+                moStatedPlaceholderIndexes->insert(nIndex);
+        }
+
         const auto aEntry = aGrabBag.find(u"OOXMasterPlaceholders"_ustr);
         if (aEntry != aGrabBag.end())
         {

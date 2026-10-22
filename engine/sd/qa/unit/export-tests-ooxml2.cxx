@@ -1491,6 +1491,39 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testLayoutsKeepTheirEmptyAreas)
     // this leaves as it is.
 }
 
+// Every area of a layout keeps a number of its own.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testPlaceholderNumbersStayApart)
+{
+    // Given a layout whose areas for text state the numbers 13, 15 and 16, beside a date, a
+    // footer and a slide number that are numbered as they are written:
+    createSdImpressDoc("pptx/tdf103477.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pLayout = parseExport(u"ppt/slideLayouts/slideLayout5.xml"_ustr);
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 2
+    // i.e. the date and the slide number were given numbers two of the areas for text already
+    // held, so a slide could no longer say which of them it fills.
+    assertXPath(pLayout, "//p:ph[@idx='13']", 1);
+    assertXPath(pLayout, "//p:ph[@idx='15']", 1);
+    assertXPath(pLayout, "//p:ph[@idx='16']", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testLayoutTellsItsPlaceholdersApart)
+{
+    // The layout states two areas for the text of a slide, and a slide says which of them it
+    // fills by the number the layout gave it. Without the fix both came out under the same name
+    // with no number, so nothing could say which was which.
+    createSdImpressDoc("pptx/narrow-placeholder-no-wrap.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pLayout = parseExport(u"ppt/slideLayouts/slideLayout1.xml"_ustr);
+    static constexpr OString aTree("/p:sldLayout/p:cSld/p:spTree"_ostr);
+    assertXPath(pLayout, aTree + "/p:sp/p:nvSpPr/p:nvPr/p:ph[@type='body'][@idx='15']", 1);
+    assertXPath(pLayout, aTree + "/p:sp/p:nvSpPr/p:nvPr/p:ph[@type='body'][@idx='16']", 1);
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testCentredTitleKeepsItsName)
 {
     // The format has a name of its own for the title of a title slide, and the model has no kind
@@ -2029,14 +2062,17 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf59323_slideFooters)
     }
 
     // The date, the footer and the slide number are numbered as they are written, past the
-    // numbers the master keeps for the areas it states, so each of them keeps a number of its
-    // own. A slide names the same numbers as its layout.
+    // numbers the master keeps for the areas it states and past the one the document gives its
+    // subtitle, so each area of the layout keeps a number of its own. A slide names the same
+    // numbers as its layout.
     xmlDocUniquePtr pXmlDocLayout = parseExport(u"ppt/slideLayouts/slideLayout1.xml"_ustr);
+    assertXPath(pXmlDocLayout, "//p:ph [@type='subTitle']", "idx", u"1");
     assertXPath(pXmlDocLayout, "//p:ph [@type='dt']", "idx", u"5");
     assertXPath(pXmlDocLayout, "//p:ph [@type='ftr']", "idx", u"6");
     assertXPath(pXmlDocLayout, "//p:ph [@type='sldNum']", "idx", u"7");
 
     xmlDocUniquePtr pXmlDocSlide1 = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDocSlide1, "//p:ph [@type='subTitle']", "idx", u"1");
     assertXPath(pXmlDocSlide1, "//p:ph [@type='dt']", "idx", u"5");
     assertXPath(pXmlDocSlide1, "//p:ph [@type='ftr']", "idx", u"6");
     assertXPath(pXmlDocSlide1, "//p:ph [@type='sldNum']", "idx", u"7");
@@ -2081,6 +2117,47 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf53970)
                                xShape->getPropertyValue(u"MediaURL"_ustr) >>= sVideoURL);
         CPPUNIT_ASSERT_MESSAGE("MediaURL is empty", !sVideoURL.isEmpty());
     }
+}
+
+// A slide keeps the area of its layout that it fills.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testSlideKeepsTheAreaItFills)
+{
+    // Given a layout stating two areas and a slide that fills the second of them:
+    createSdImpressDoc("pptx/two-content-right-only.pptx");
+
+    save(TestFilter::PPTX);
+
+    // Without the fix in place, the slide took the numbers of its layout in the order the
+    // layout states them, so the one area it holds was given the number of the first.
+    xmlDocUniquePtr pSlide = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pSlide, "//p:ph[not(@type='title')]", 1);
+    assertXPath(pSlide, "//p:ph[not(@type='title')]", "idx", u"2");
+}
+
+// A slide fills both areas its layout states. Once the first of them is gone, the one that is
+// left still names the area of the layout it fills, and not the one that was deleted.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testSlideKeepsTheAreaItFillsWhenAnotherGoes)
+{
+    createSdImpressDoc("pptx/two-content-both.pptx");
+    uno::Reference<drawing::XDrawPage> xPage = getPage(0);
+    bool bRemoved = false;
+    for (sal_Int32 i = 0; i < xPage->getCount(); ++i)
+    {
+        uno::Reference<text::XTextRange> xText(xPage->getByIndex(i), uno::UNO_QUERY);
+        if (xText.is() && xText->getString() == "Left")
+        {
+            xPage->remove(uno::Reference<drawing::XShape>(xText, uno::UNO_QUERY_THROW));
+            bRemoved = true;
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(bRemoved);
+
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pSlide = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pSlide, "//p:ph[not(@type='title')]", 1);
+    assertXPath(pSlide, "//p:ph[not(@type='title')]", "idx", u"2");
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

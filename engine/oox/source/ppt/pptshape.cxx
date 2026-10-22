@@ -27,6 +27,7 @@
 #include <drawingml/textparagraph.hxx>
 #include <drawingml/textfield.hxx>
 #include <editeng/flditem.hxx>
+#include <svx/svdobj.hxx>
 
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/style/XStyle.hpp>
@@ -285,6 +286,55 @@ OUString writtenPlaceholderName(sal_Int32 nSubType)
     }
 }
 
+/** Keeps the number the document gives an area, on the shape that stands for it.
+
+    A page may state several areas of one kind, and a slide names the one of its layout that it
+    fills, so the number belongs to the area itself and stays with it however the page changes
+    around it. The document is also told every number it handed out, so that one made up on the
+    way back stands on its own. */
+void keepStatedPlaceholderIndex(const Reference<XShape>& rxShape,
+                                oox::core::XmlFilterBase& rFilterBase,
+                                const std::optional<sal_Int32>& roIndex)
+{
+    if (!roIndex)
+        return;
+
+    try
+    {
+        if (SdrObject* pObject = SdrObject::getSdrObjectFromXShape(rxShape))
+        {
+            Any aHeld;
+            pObject->GetGrabBagItem(aHeld);
+            comphelper::SequenceAsHashMap aShapeBag(aHeld);
+            aShapeBag[u"mso-ph-idx"_ustr] <<= *roIndex;
+            pObject->SetGrabBagItem(Any(aShapeBag.getAsConstPropertyValueList()));
+        }
+
+        Reference<XPropertySet> xDocProps(rFilterBase.getModel(), UNO_QUERY);
+        if (!xDocProps.is()
+            || !xDocProps->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
+            return;
+
+        static constexpr OUString aKey = u"OOXPlaceholderIndexes"_ustr;
+        comphelper::SequenceAsHashMap aGrabBag(
+            xDocProps->getPropertyValue(u"InteropGrabBag"_ustr));
+
+        cpo::uno::Sequence<sal_Int32> aIndexes;
+        const auto aEntry = aGrabBag.find(aKey);
+        if (aEntry != aGrabBag.end())
+            aEntry->second >>= aIndexes;
+        aIndexes.realloc(aIndexes.getLength() + 1);
+        aIndexes.getArray()[aIndexes.getLength() - 1] = *roIndex;
+        aGrabBag[aKey] <<= aIndexes;
+
+        xDocProps->setPropertyValue(u"InteropGrabBag"_ustr,
+                                    Any(aGrabBag.getAsConstPropertyValueList()));
+    }
+    catch (const Exception&)
+    {
+    }
+}
+
 /// Keeps what a document states about a placeholder that the model has no room for
 void keepStatedPlaceholder(const SlidePersist& rSlidePersist,
                            oox::core::XmlFilterBase& rFilterBase, sal_Int32 nSubType,
@@ -322,8 +372,6 @@ void keepStatedPlaceholder(const SlidePersist& rSlidePersist,
         if (aStated != aModel)
             aOnPage[aModel] <<= aStated;
 
-        // A page may state several areas of one kind, and a slide tells them apart by the
-        // numbers stated here, so they are kept in the order the page states them.
         // Whether the document stated any text of its own here. A page that states none shows
         // the prompt of whoever reads it, and that prompt belongs to the reader, not to the
         // document, so it is not written back as though the document had said it.
@@ -654,6 +702,7 @@ void PPTShape::addShape(
             // the document gave it is kept beside the model, to be given back on the way out.
             keepStatedPlaceholder(rSlidePersist, rFilterBase, mnSubType,
                                   getTextBody() && !getTextBody()->isEmpty());
+            keepStatedPlaceholderIndex(xShape, rFilterBase, getSubTypeIndex());
 
             // Apply text properties on placeholder text inside this placeholder shape
             if (meShapeLocation == Slide && mpPlaceholder && getTextBody() && getTextBody()->isEmpty())
