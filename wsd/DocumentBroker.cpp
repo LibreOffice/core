@@ -6948,35 +6948,42 @@ void DocumentBroker::handleMediaRequest(const std::string_view range,
     if (it == _embeddedMedia.end())
     {
         LOG_ERR("Invalid media request in Doc [" << _docId << "] with tag [" << tag << ']');
+        HttpHelper::sendErrorAndShutdown(http::StatusCode::NotFound, streamSocket);
         return;
     }
 
     LOG_DBG("Media: " << it->second);
     Poco::JSON::Object::Ptr object;
+    std::string url;
     if (JsonUtil::parseJSON(it->second, object))
     {
         LOG_ASSERT(JsonUtil::getJSONValue<std::string>(object, "id") == tag);
-        const std::string url = JsonUtil::getJSONValue<std::string>(object, field);
-        LOG_ASSERT(!url.empty());
-        if (Util::toLower(url).starts_with("file://"))
-        {
-            // For now, we only support file:// schemes.
-            // In the future, we may/should support http.
-            std::string localPath = url.substr(sizeof("file:///") - 1);
-            std::string path = getAbsoluteMediaPath(std::move(localPath));
-
-            std::string contentType = JsonUtil::getJSONValue<std::string>(object, "mimeType");
-            // FIXME: fallback, but we can define it every time and remove below code
-            if (contentType.empty())
-                contentType = (field == "url" ? "video/mp4" : "text/plain");
-
-            auto session = std::make_shared<http::ServerSession>();
-            http::ServerSession::ResponseHeaders responseHeaders;
-            responseHeaders.emplace_back("Content-Type", contentType);
-            session->asyncUpload(std::move(path), std::move(responseHeaders), range);
-            streamSocket->setHandler(std::static_pointer_cast<ProtocolHandlerInterface>(session));
-        }
+        url = JsonUtil::getJSONValue<std::string>(object, field);
     }
+
+    // For now, we only support file:// schemes.
+    // In the future, we may/should support http.
+    if (!Util::toLower(url).starts_with("file://"))
+    {
+        LOG_ERR("Media request in Doc [" << _docId << "] with tag [" << tag
+                                         << "] has no file to serve");
+        HttpHelper::sendErrorAndShutdown(http::StatusCode::NotFound, streamSocket);
+        return;
+    }
+
+    std::string localPath = url.substr(sizeof("file:///") - 1);
+    std::string path = getAbsoluteMediaPath(std::move(localPath));
+
+    std::string contentType = JsonUtil::getJSONValue<std::string>(object, "mimeType");
+    // FIXME: fallback, but we can define it every time and remove below code
+    if (contentType.empty())
+        contentType = (field == "url" ? "video/mp4" : "text/plain");
+
+    auto session = std::make_shared<http::ServerSession>();
+    http::ServerSession::ResponseHeaders responseHeaders;
+    responseHeaders.emplace_back("Content-Type", contentType);
+    session->asyncUpload(std::move(path), std::move(responseHeaders), range);
+    streamSocket->setHandler(std::static_pointer_cast<ProtocolHandlerInterface>(session));
 }
 
 #endif

@@ -2551,8 +2551,12 @@ bool ClientRequestDispatcher::handleMediaRequest(const Poco::Net::HTTPRequest& r
              mediaKey = std::move(mediaKey), field = std::string(bVTT ? MEDIA_STR : MEDIA_MP4)](
                 const std::shared_ptr<Socket>& moveSocket)
             { docBroker->handleMediaRequest(range, moveSocket, tag, mediaKey, field); });
+        return false; // async
     }
-    return false; // async
+
+    LOG_ERR_S("DocBroker with docKey [" << docKey << "] is not alive for media request");
+    HttpHelper::sendErrorAndShutdown(http::StatusCode::BadRequest, socket);
+    return true;
 }
 
 bool ClientRequestDispatcher::handlePostRequest(const RequestDetails& requestDetails,
