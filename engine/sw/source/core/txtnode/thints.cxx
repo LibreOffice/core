@@ -2972,6 +2972,36 @@ bool SwpHints::MergePortions( SwTextNode& rNode )
 }
 
 
+// Whether two item sets hold the same items, apart from the RSID, the number of the editing
+// session the text was typed in. The items of a set are in no particular order, so each item of
+// the first set is looked up by its item ID in the second set.
+static bool lcl_IsSameItemSetIgnoringRsid(const SfxItemSet& rSet1, const SfxItemSet& rSet2)
+{
+    auto CountWithoutRsid = [](const SfxItemSet& rSet) {
+        return rSet.Count()
+               - (rSet.GetItemState(RES_CHRATR_RSID, false) == SfxItemState::DEFAULT ? 0 : 1);
+    };
+    if (CountWithoutRsid(rSet1) != CountWithoutRsid(rSet2))
+        return false;
+
+    for (SfxItemIter aIter(rSet1); !aIter.IsAtEnd(); aIter.Next())
+    {
+        const sal_uInt16 nWhich = aIter.GetCurWhich();
+        if (nWhich == RES_CHRATR_RSID)
+            continue;
+
+        const SfxPoolItem* pItem1 = nullptr;
+        const SfxPoolItem* pItem2 = nullptr;
+        const SfxItemState eState1 = rSet1.GetItemState(nWhich, false, &pItem1);
+        const SfxItemState eState2 = rSet2.GetItemState(nWhich, false, &pItem2);
+        if (eState1 != eState2)
+            return false;
+        if (eState1 == SfxItemState::SET && !SfxPoolItem::areSame(*pItem1, *pItem2))
+            return false;
+    }
+    return true;
+}
+
 static MergeResult lcl_Compare_Attributes(
         int i, int j,
         const std::pair< PortionMap::const_iterator, PortionMap::const_iterator >& aRange1,
@@ -3046,40 +3076,9 @@ static MergeResult lcl_Compare_Attributes(
             const SfxItemSet& rSet1 = *p1->GetAutoFormat().GetStyleHandle();
             const SfxItemSet& rSet2 = *p2->GetAutoFormat().GetStyleHandle();
 
-            // sadly SfxItemSet::operator== does not seem to work?
-            SfxItemIter iter1(rSet1);
-            SfxItemIter iter2(rSet2);
-            for (;;)
-            {
-                SfxPoolItem const* pItem1 = iter1.IsAtEnd() ? nullptr : iter1.GetCurItem();
-                SfxPoolItem const* pItem2 = iter2.IsAtEnd() ? nullptr : iter2.GetCurItem();
-                if (pItem1 && pItem1->Which() == RES_CHRATR_RSID)
-                    pItem1 = iter1.NextItem();
-                if (pItem2 && pItem2->Which() == RES_CHRATR_RSID)
-                    pItem2 = iter2.NextItem();
-
-                if (nullptr == pItem1 && nullptr == pItem2)
-                {
-                    eMerge = DIFFER_ONLY_RSID;
-                    break;
-                }
-
-                if (nullptr == pItem1 || nullptr == pItem2)
-                {
-                    // one ptr is nullptr, not both, that would
-                    // have triggered above
-                    return DIFFER;
-                }
-
-                if (!SfxPoolItem::areSame(*pItem1, *pItem2))
-                {
-                    return DIFFER;
-                }
-                if (!iter1.IsAtEnd())
-                    iter1.Next();
-                if (!iter2.IsAtEnd())
-                    iter2.Next();
-            }
+            if (!lcl_IsSameItemSetIgnoringRsid(rSet1, rSet2))
+                return DIFFER;
+            eMerge = DIFFER_ONLY_RSID;
         }
         ++aIter1;
         ++aIter2;

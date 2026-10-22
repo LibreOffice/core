@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<office:document xmlns:office="urn:oasis:names:tc:opendocument:xmlns:office:1.0" xmlns:style="urn:oasis:names:tc:opendocument:xmlns:style:1.0" xmlns:text="urn:oasis:names:tc:opendocument:xmlns:text:1.0" xmlns:fo="urn:oasis:names:tc:opendocument:xmlns:xsl-fo-compatible:1.0" xmlns:svg="urn:oasis:names:tc:opendocument:xmlns:svg-compatible:1.0" xmlns:officeooo="http://openoffice.org/2009/office" xmlns:loext="urn:org:documentfoundation:names:experimental:office:xmlns:loext:1.0" office:version="1.4" office:mimetype="application/vnd.oasis.opendocument.text">
+ <office:font-face-decls>
+  <style:font-face style:name="Arial" svg:font-family="Arial" style:font-family-generic="swiss" style:font-pitch="variable"/>
+ </office:font-face-decls>
+ <office:styles>
+  <style:style style:name="Emphasis" style:family="text">
+   <style:text-properties fo:font-style="italic" style:font-style-asian="italic" style:font-style-complex="italic"/>
+  </style:style>
+ </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="T1" style:family="text">
+   <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#000000" loext:opacity="100%" style:font-name="Arial" fo:font-size="11pt" fo:letter-spacing="normal" fo:font-style="normal" fo:font-weight="normal" style:font-size-asian="11pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="11pt" style:font-weight-complex="normal"/>
+  </style:style>
+  <style:style style:name="T2" style:family="text">
+   <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#000000" loext:opacity="100%" style:font-name="Arial" fo:font-size="11pt" fo:letter-spacing="normal" fo:font-style="normal" fo:font-weight="normal" officeooo:rsid="0020da3f" style:font-size-asian="11pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="11pt" style:font-weight-complex="normal"/>
+  </style:style>
+ </office:automatic-styles>
+ <office:body>
+  <office:text>
+   <text:p><text:span text:style-name="Emphasis"><text:span text:style-name="T1">The cat sat on the </text:span></text:span><text:span text:style-name="Emphasis"><text:span text:style-name="T2">door</text:span></text:span><text:span text:style-name="Emphasis"><text:span text:style-name="T1">mat. It was happy.</text:span></text:span></text:p>
+  </office:text>
+ </office:body>
+</office:document>

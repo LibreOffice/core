@@ -5633,31 +5633,31 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf159817)
                                  std::floor(p.getY() * 10) / 10.0);
     };
     // before the fix these co-ordinates would have been way further down the page
-    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(8.6, 677.3), roundPoint(13));
-    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(9.3, 677.9), roundPoint(14));
-    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(9.8, 678.5), roundPoint(15));
-    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(85.0, 677.3), roundPoint(16));
-    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(85.6, 677.9), roundPoint(17));
-    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(170.1, 677.3), roundPoint(18));
-    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(170.6, 677.9), roundPoint(19));
-    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(0.0, 654.0), roundPoint(20));
-    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(0.6, 654.6), roundPoint(21));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(8.6, 677.3), roundPoint(12));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(9.3, 677.9), roundPoint(13));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(9.8, 678.5), roundPoint(14));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(85.0, 677.3), roundPoint(15));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(85.6, 677.9), roundPoint(16));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(170.1, 677.3), roundPoint(17));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(170.6, 677.9), roundPoint(18));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(0.0, 654.0), roundPoint(19));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(0.6, 654.6), roundPoint(20));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(1.3, 655.5), roundPoint(21));
     CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(1.3, 655.5), roundPoint(22));
-    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(1.3, 655.5), roundPoint(23));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(1.2, 655.5), roundPoint(23));
     CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(1.2, 655.5), roundPoint(24));
-    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(1.2, 655.5), roundPoint(25));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(1.4, 655.5), roundPoint(25));
     CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(1.4, 655.5), roundPoint(26));
-    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(1.4, 655.5), roundPoint(27));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(1.1, 655.5), roundPoint(27));
     CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(1.1, 655.5), roundPoint(28));
-    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(1.1, 655.5), roundPoint(29));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(1.5, 655.5), roundPoint(29));
     CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(1.5, 655.5), roundPoint(30));
-    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(1.5, 655.5), roundPoint(31));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(1.0, 655.5), roundPoint(31));
     CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(1.0, 655.5), roundPoint(32));
-    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(1.0, 655.5), roundPoint(33));
-    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(28.3, 641.4), roundPoint(34));
-    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(28.3, 623.7), roundPoint(35));
-    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(28.3, 623.8), roundPoint(36));
-    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(138.6, 623.7), roundPoint(37));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(28.3, 641.4), roundPoint(33));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(28.3, 623.7), roundPoint(34));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(28.3, 623.8), roundPoint(35));
+    CPPUNIT_ASSERT_EQUAL(basegfx::B2DPoint(138.6, 623.7), roundPoint(36));
 }
 
 // Tests that kerning is correctly applied across color changes

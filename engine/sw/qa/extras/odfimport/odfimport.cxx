@@ -1952,6 +1952,36 @@ CPPUNIT_TEST_FIXTURE(Test, testFlatOdfRsidOnlySpanIgnoredForPortions)
     CPPUNIT_ASSERT(pSpan->IsFormatIgnoreEnd());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testSpansDifferingOnlyInRsidContinueEachOther)
+{
+    // Given a paragraph of three spans, each with the same character style and a dozen direct
+    // character attributes. Only the middle span has an RSID, because it was typed in another
+    // editing session:
+    createSwDoc("rsid-differs-styled-spans.fodt");
+
+    // Then each span is marked as continuing into the next one, so the text is formatted and
+    // exported as one run:
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    SwTextNode* pTextNode = pWrtShell->GetCursor()->GetPointNode().GetTextNode();
+    CPPUNIT_ASSERT(pTextNode);
+    CPPUNIT_ASSERT(pTextNode->GetpSwpHints());
+    const SwpHints& rHints = *pTextNode->GetpSwpHints();
+    size_t nAutoFormats = 0;
+    for (size_t i = 0; i < rHints.Count(); ++i)
+    {
+        const SwTextAttr* pHint = rHints.Get(i);
+        if (pHint->Which() != RES_TXTATR_AUTOFMT)
+            continue;
+        ++nAutoFormats;
+        // Without the fix in place, this test would have failed, the order of the attributes
+        // of the two automatic styles decided whether they compared as equal apart from the
+        // RSID.
+        CPPUNIT_ASSERT_EQUAL(pHint->GetStart() != 0, pHint->IsFormatIgnoreStart());
+        CPPUNIT_ASSERT_EQUAL(*pHint->End() != pTextNode->Len(), pHint->IsFormatIgnoreEnd());
+    }
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(3), nAutoFormats);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
