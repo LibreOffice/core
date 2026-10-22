@@ -116,9 +116,7 @@ GtkSalSystem::countScreenMonitors()
         maScreenMonitors.emplace_back(pScreen, nMonitors);
     }
 }
-#endif
 
-#if !GTK_CHECK_VERSION(4, 0, 0)
 GdkScreen *
 GtkSalSystem::getScreenMonitorFromIdx (int nIdx, gint &nMonitor)
 {
