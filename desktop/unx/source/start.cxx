@@ -40,17 +40,6 @@
 #define PIPEDEFAULTPATH      "/tmp"
 #define PIPEALTERNATEPATH    "/var/tmp"
 
-/* Easier conversions: rtl_uString to rtl_String */
-static rtl_String *ustr_to_str(rtl_uString *pStr)
-{
-    rtl_String *pOut = nullptr;
-
-    rtl_uString2String(&pOut, rtl_uString_getStr(pStr),
-            rtl_uString_getLength(pStr), osl_getThreadTextEncoding(), OUSTRING_TO_OSTRING_CVTFLAGS);
-
-    return pOut;
-}
-
 /* Easier conversions: char * to rtl_uString */
 static rtl_uString *charp_to_ustr(const char *pStr)
 {
@@ -513,13 +502,11 @@ static void system_checks(void)
 
 static void exec_pagein (Args *args)
 {
-    rtl_String * path = ustr_to_str(args->sAppPath.pData);
-    pagein_execute(rtl_string_getStr(path), "pagein-common");
+    const OString sPath = rtl::OUStringToOString(args->sAppPath, osl_getThreadTextEncoding());
+    pagein_execute(sPath.getStr(), "pagein-common");
 
     if (args->pPageinType)
-        pagein_execute(rtl_string_getStr(path), args->pPageinType);
-
-    rtl_string_release(path);
+        pagein_execute(sPath.getStr(), args->pPageinType);
 }
 
 #if HAVE_FEATURE_JAVA
