@@ -51,8 +51,8 @@ class SplashScreen;
 class SplashScreenWindow : public IntroWindow
 {
 public:
-    SplashScreen *pSpl;
-    ScopedVclPtr<VirtualDevice> _vdev;
+    SplashScreen* m_pSplash;
+    ScopedVclPtr<VirtualDevice> m_pVDev;
     explicit SplashScreenWindow(SplashScreen *);
     virtual ~SplashScreenWindow() override { disposeOnce(); }
     virtual void dispose() override;
@@ -120,16 +120,16 @@ public:
     { return { u"com.sun.star.office.SplashScreen"_ustr }; }
 };
 
-SplashScreenWindow::SplashScreenWindow(SplashScreen *pSplash)
-    : pSpl( pSplash )
-    , _vdev(VclPtr<VirtualDevice>::Create(*GetOutDev()))
+SplashScreenWindow::SplashScreenWindow(SplashScreen* pSplash)
+    : m_pSplash(pSplash)
+    , m_pVDev(VclPtr<VirtualDevice>::Create(*GetOutDev()))
 {
-    _vdev->EnableRTL(IsRTLEnabled());
+    m_pVDev->EnableRTL(IsRTLEnabled());
 }
 
 void SplashScreenWindow::dispose()
 {
-    pSpl = nullptr;
+    m_pSplash = nullptr;
     IntroWindow::dispose();
 }
 
@@ -260,7 +260,7 @@ SplashScreen::initialize( const css::uno::Sequence< css::uno::Any>& aArguments )
         SetScreenBitmap(m_aIntroBmp);
     Size aSize = m_aIntroBmp.GetSizePixel();
     m_pWindow->SetOutputSizePixel(aSize);
-    m_pWindow->_vdev->SetOutputSizePixel(aSize);
+    m_pWindow->m_pVDev->SetOutputSizePixel(aSize);
     m_nHeight = aSize.Height();
     m_nWidth = aSize.Width();
     if (m_nWidth > 500)
@@ -554,19 +554,20 @@ void SplashScreen::determineProgressRatioValues(
 
 void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    if (!pSpl || !pSpl->m_bVisible)
+    if (!m_pSplash || !m_pSplash->m_bVisible)
         return;
 
     //native drawing
     // in case of native controls we need to draw directly to the window
-    if (pSpl->m_bNativeProgress
+    if (m_pSplash->m_bNativeProgress
         && rRenderContext.IsNativeControlSupported(ControlType::IntroProgress, ControlPart::Entire))
     {
-        rRenderContext.DrawBitmap(Point(), pSpl->m_aIntroBmp);
+        rRenderContext.DrawBitmap(Point(), m_pSplash->m_aIntroBmp);
 
-        ImplControlValue aValue(pSpl->m_nProgress * pSpl->m_nBarwidth / pSpl->m_nMax);
-        tools::Rectangle aDrawRect(Point(pSpl->m_nTlx, pSpl->m_nTly),
-                                   Size(pSpl->m_nBarwidth, pSpl->m_nBarheight));
+        ImplControlValue aValue(m_pSplash->m_nProgress * m_pSplash->m_nBarwidth
+                                / m_pSplash->m_nMax);
+        tools::Rectangle aDrawRect(Point(m_pSplash->m_nTlx, m_pSplash->m_nTly),
+                                   Size(m_pSplash->m_nBarwidth, m_pSplash->m_nBarheight));
         tools::Rectangle aNativeControlRegion, aNativeContentRegion;
 
         if (rRenderContext.GetNativeControlRegion(ControlType::IntroProgress, ControlPart::Entire, aDrawRect,
@@ -574,13 +575,13 @@ void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const tools::
                                                   aNativeControlRegion, aNativeContentRegion))
         {
               tools::Long nProgressHeight = aNativeControlRegion.GetHeight();
-              aDrawRect.AdjustTop(-((nProgressHeight - pSpl->m_nBarheight) / 2));
-              aDrawRect.AdjustBottom((nProgressHeight - pSpl->m_nBarheight) / 2);
+              aDrawRect.AdjustTop(-((nProgressHeight - m_pSplash->m_nBarheight) / 2));
+              aDrawRect.AdjustBottom((nProgressHeight - m_pSplash->m_nBarheight) / 2);
         }
 
         if (rRenderContext.DrawNativeControl(ControlType::IntroProgress, ControlPart::Entire,
                                              aDrawRect, ControlState::ENABLED, aValue,
-                                             pSpl->m_sProgressText))
+                                             m_pSplash->m_sProgressText))
         {
             return;
         }
@@ -588,35 +589,37 @@ void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const tools::
 
     // non native drawing
     // draw bitmap
-    _vdev->DrawBitmap(Point(), pSpl->m_aIntroBmp);
+    m_pVDev->DrawBitmap(Point(), m_pSplash->m_aIntroBmp);
 
-    if (pSpl->m_bPaintProgress)
+    if (m_pSplash->m_bPaintProgress)
     {
         // draw progress...
-        tools::Long length
-            = (pSpl->m_nProgress * pSpl->m_nBarwidth / pSpl->m_nMax) - (2 * pSpl->m_nBarspace);
+        tools::Long length = (m_pSplash->m_nProgress * m_pSplash->m_nBarwidth / m_pSplash->m_nMax)
+                             - (2 * m_pSplash->m_nBarspace);
         if (length < 0) length = 0;
 
         // border
-        _vdev->SetFillColor();
-        _vdev->SetLineColor(pSpl->m_aProgressFrameColor);
-        _vdev->DrawRect(tools::Rectangle(pSpl->m_nTlx, pSpl->m_nTly,
-                                         pSpl->m_nTlx + pSpl->m_nBarwidth,
-                                         pSpl->m_nTly + pSpl->m_nBarheight));
-        _vdev->SetFillColor(pSpl->m_aProgressBarColor);
-        _vdev->SetLineColor();
-        _vdev->DrawRect(tools::Rectangle(pSpl->m_nTlx + pSpl->m_nBarspace,
-                                         pSpl->m_nTly + pSpl->m_nBarspace,
-                                         pSpl->m_nTlx + pSpl->m_nBarspace + length,
-                                         pSpl->m_nTly + pSpl->m_nBarheight - pSpl->m_nBarspace));
+        m_pVDev->SetFillColor();
+        m_pVDev->SetLineColor(m_pSplash->m_aProgressFrameColor);
+        m_pVDev->DrawRect(tools::Rectangle(m_pSplash->m_nTlx, m_pSplash->m_nTly,
+                                           m_pSplash->m_nTlx + m_pSplash->m_nBarwidth,
+                                           m_pSplash->m_nTly + m_pSplash->m_nBarheight));
+        m_pVDev->SetFillColor(m_pSplash->m_aProgressBarColor);
+        m_pVDev->SetLineColor();
+        m_pVDev->DrawRect(tools::Rectangle(
+            m_pSplash->m_nTlx + m_pSplash->m_nBarspace, m_pSplash->m_nTly + m_pSplash->m_nBarspace,
+            m_pSplash->m_nTlx + m_pSplash->m_nBarspace + length,
+            m_pSplash->m_nTly + m_pSplash->m_nBarheight - m_pSplash->m_nBarspace));
         vcl::Font aFont;
         aFont.SetFontSize(Size(0, 12));
         aFont.SetAlignment(ALIGN_BASELINE);
-        _vdev->SetFont(aFont);
-        _vdev->SetTextColor(pSpl->m_aProgressTextColor);
-        _vdev->DrawText(Point(pSpl->m_nTlx, pSpl->m_nTextBaseline), pSpl->m_sProgressText);
+        m_pVDev->SetFont(aFont);
+        m_pVDev->SetTextColor(m_pSplash->m_aProgressTextColor);
+        m_pVDev->DrawText(Point(m_pSplash->m_nTlx, m_pSplash->m_nTextBaseline),
+                          m_pSplash->m_sProgressText);
     }
-    rRenderContext.DrawOutDev(Point(), GetOutputSizePixel(), Point(), _vdev->GetOutputSizePixel(), *_vdev);
+    rRenderContext.DrawOutDev(Point(), GetOutputSizePixel(), Point(), m_pVDev->GetOutputSizePixel(),
+                              *m_pVDev);
 }
 
 }
