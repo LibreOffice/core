@@ -41,7 +41,6 @@ std::set<std::string> HostUtil::hostList;
 std::string HostUtil::FirstHost;
 bool HostUtil::FirstHostRejectionLogged;
 bool HostUtil::WopiEnabled;
-std::set<std::string> HostUtil::AllowedWSOriginList;
 
 void HostUtil::parseWopiHost()
 {
@@ -371,31 +370,6 @@ void HostUtil::setFirstHost(const Poco::URI& uri)
                                           "in configuration. Later rejections are logged at debug "
                                           "level");
     }
-}
-
-void HostUtil::parseAllowedWSOrigins()
-{
-    for (size_t i = 0;; i++)
-    {
-        const std::string path =
-            "indirection_endpoint.geolocation_setup.allowed_websocket_origins.origin[" +
-            std::to_string(i) + ']';
-        if (!ConfigUtil::has(path))
-        {
-            break;
-        }
-        std::string origin = ConfigUtil::getString(path, "");
-        if (!origin.empty())
-        {
-            LOG_INF("Adding Origin[" << origin << "] to allowed websocket origin list");
-            HostUtil::AllowedWSOriginList.insert(std::move(origin));
-        }
-    }
-}
-
-bool HostUtil::allowedWSOrigin(const std::string& origin)
-{
-    return AllowedWSOriginList.find(origin) != AllowedWSOriginList.end();
 }
 
 bool HostUtil::isWopiHostsEmpty()

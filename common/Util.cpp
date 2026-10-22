@@ -271,7 +271,7 @@ namespace Util
         return id;
     }
 
-    std::string getVersionJSON(bool enableExperimental, const std::string& timezone)
+    std::string getVersionJSON(bool enableExperimental)
     {
         std::string version, hash;
         Util::getVersionInfo(version, hash);
@@ -312,9 +312,6 @@ namespace Util
                            "\", "
                            "\"Id\":          \"" +
                            Util::getProcessIdentifier() + "\", ";
-
-        if (!timezone.empty())
-            json += R"("TimeZone":     ")" + timezone + "\", ";
 
         json += R"("Options":     ")" + std::string(enableExperimental ? " (E)" : "") + "\" }";
         return json;

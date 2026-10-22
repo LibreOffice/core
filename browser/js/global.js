@@ -313,7 +313,6 @@ class InitializerBase {
 		window.extraExportFormats = [];
 		window.wasmEnabled = false;
 		window.indirectionUrl = "";
-		window.geolocationSetup = false;
 		window.canvasSlideshowEnabled = false;
 		window.remoteLinksEnabled = false;
 		window.wopiSettingBaseUrl = element.dataset.wopiSettingBaseUrl;
@@ -500,7 +499,6 @@ class BrowserInitializer extends InitializerBase {
 		window.extraExportFormats = Array.from(element.dataset.extraExportFormats.split(" "));
 		window.wasmEnabled = element.dataset.wasmEnabled.toLowerCase().trim() === "true";
 		window.indirectionUrl = element.dataset.indirectionUrl;
-		window.geolocationSetup = element.dataset.geolocationSetup.toLowerCase().trim() === "true";
 		window.canvasSlideshowEnabled = element.dataset.canvasSlideshowEnabled.toLowerCase().trim() === "true";
 		window.remoteLinksEnabled = element.dataset.remoteLinksEnabled.toLowerCase().trim() === "true";
 		window.wopiSettingBaseUrl = element.dataset.wopiSettingBaseUrl;
@@ -2272,11 +2270,7 @@ function showWelcomeSVG() {
 			http.send();
 		};
 
-		let requestUri = global.indirectionUrl + '?Uri=' + encodeURIComponent(that.uri);
-		if (global.geolocationSetup) {
-			let timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-			requestUri += "&TimeZone=" + timeZone;
-		}
+		const requestUri = global.indirectionUrl + '?Uri=' + encodeURIComponent(that.uri);
 		this.sendRouteTokenRequest(requestUri);
 	};
 

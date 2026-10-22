@@ -178,14 +178,10 @@ void RemoteConfigPoll::handleJSON(const Poco::JSON::Object::Ptr& remoteJson)
 
     HostUtil::parseAliases(_conf);
 
-    HostUtil::parseAllowedWSOrigins();
-
     COOLWSD::setLokitEnvironmentVariables(_conf);
 
     COOLWSD::IndirectionServerEnabled =
         !ConfigUtil::getConfigValue<std::string>(_conf, "indirection_endpoint.url", "").empty();
-    COOLWSD::GeolocationSetup = ConfigUtil::getConfigValue(
-        _conf, "indirection_endpoint.geolocation_setup.enable", false);
 
     handleOptions(remoteJson);
 }
@@ -513,55 +509,6 @@ void RemoteConfigPoll::fetchIndirectionEndpoint(std::map<std::string, std::strin
                                 controllerMonitorUrl))
         newAppConfig.insert(std::make_pair(indrectionEndpointKey + ".controller_monitor_url",
                                            controllerMonitorUrl));
-
-    const std::string geolocationKey = indrectionEndpointKey + ".geolocation_setup";
-    if (!indirectionEndpoint->isObject("geolocation_setup"))
-    {
-        LOG_DBG(geolocationKey << " doesn't exist, ignoring");
-        return;
-    }
-
-    Poco::JSON::Object::Ptr geolocationSetupObj =
-        indirectionEndpoint->getObject("geolocation_setup");
-
-    bool geolocationEnabled;
-    if (JsonUtil::findJSONValue(geolocationSetupObj, "enable", geolocationEnabled))
-        newAppConfig.insert(
-            std::make_pair(geolocationKey + ".enable", std::to_string(geolocationEnabled ? 1 : 0)));
-
-    std::string geolocationTimezone;
-    if (JsonUtil::findJSONValue(geolocationSetupObj, "timezone", geolocationTimezone))
-        newAppConfig.insert(std::make_pair(geolocationKey + ".timezone", geolocationTimezone));
-
-    Poco::JSON::Array::Ptr allowedOrigins =
-        geolocationSetupObj->getArray("allowed_websocket_origins");
-
-    const std::string allowedWebsocketKey = geolocationKey + ".allowed_websocket_origins.origin";
-    if (allowedOrigins.isNull() || allowedOrigins->size() == 0)
-    {
-        LOG_INF("Overriding " << allowedWebsocketKey << " failed because array is empty or null");
-        return;
-    }
-
-    size_t i;
-    for (i = 0; i < allowedOrigins->size(); i++)
-    {
-        newAppConfig.insert(std::make_pair(allowedWebsocketKey + '[' + std::to_string(i) + ']',
-                                           allowedOrigins->get(i).toString()));
-    }
-
-    //if number of allowed_websocket_origins defined in configuration are greater than number of allowed_websocket_origins
-    //fetched from json or if the number of monitors shrinks with new json,
-    //overwrite the remaining allowed_websocket_origins from config file to empty strings
-    bool haveMorePaths = true;
-    do
-    {
-        const std::string path = allowedWebsocketKey + '[' + std::to_string(i) + ']';
-        haveMorePaths = _conf.has(path);
-        if (haveMorePaths)
-            newAppConfig.insert(std::make_pair(path, ""));
-        i++;
-    } while (haveMorePaths);
 }
 
 void RemoteConfigPoll::fetchMonitors(std::map<std::string, std::string>& newAppConfig,

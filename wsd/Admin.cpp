@@ -143,12 +143,7 @@ void AdminSocketHandler::handleMessage(const std::vector<char> &payload)
     else if (tokens.equals(0, "version"))
     {
         // Send COOL version information
-        std::string timezoneName;
-        if (COOLWSD::IndirectionServerEnabled && COOLWSD::GeolocationSetup)
-            timezoneName =
-                ConfigUtil::getString("indirection_endpoint.geolocation_setup.timezone", "");
-
-        sendTextFrame("coolserver " + Util::getVersionJSON(EnableExperimental, timezoneName));
+        sendTextFrame("coolserver " + Util::getVersionJSON(EnableExperimental));
 
         // Send LOKit version information
         sendTextFrame("lokitversion " + COOLWSD::LOKitVersion);

@@ -143,8 +143,6 @@ const Util::UnorderedStringMap<std::string> DefAppConfig = {
     { "hide_legacy_script_warning", "false" },
     { "home_mode.enable", "false" },
     { "indirection_endpoint.controller_monitor_url", "" },
-    { "indirection_endpoint.geolocation_setup.enable", "false" },
-    { "indirection_endpoint.geolocation_setup.timezone", "" },
     { "indirection_endpoint.migration_timeout_secs", "180" },
     { "indirection_endpoint.server_name", "" },
     { "indirection_endpoint.url", "" },
@@ -476,7 +474,6 @@ std::map<std::string, std::string> extractAll(const Poco::Util::AbstractConfigur
     // E.g. logging.file: /tmp/coolwsd.lognevertimestamptrue10 days10truefalse
     map.erase("admin_console.logging");
     map.erase("feature_lock.locked_hosts");
-    map.erase("indirection_endpoint.geolocation_setup");
     map.erase("logging.anonymize");
     map.erase("logging.file");
     map.erase("logging_ui_cmd.file");

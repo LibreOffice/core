@@ -115,7 +115,6 @@ data = data.replace(/%DOCUMENT_SIGNING_ENABLED%/g, 'false');
 data = data.replace(/%SAVED_UI_STATE%/g, 'false');
 data = data.replace(/%WASM_ENABLED%/g, 'false');
 data = data.replace(/%INDIRECTION_URL%/g, '');
-data = data.replace(/%GEOLOCATION_SETUP%/g, 'false');
 data = data.replace(/%CANVAS_SLIDESHOW_ENABLED%/g, 'true');
 
 data = data.replace(/%WELCOME_URL%/g, '');

@@ -23,7 +23,6 @@ class Socket {
 		Hash: '',
 		Protocol: '',
 		Options: '',
-		TimeZone: '',
 	};
 	private IndirectSocketReconnectCount: number = 0;
 	// Runs while the document is being handed to another server. See beginMigration.

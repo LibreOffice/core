@@ -890,7 +890,6 @@ std::string COOLWSD::OverrideWatermark;
 std::chrono::steady_clock::time_point COOLWSD::StartTime;
 bool COOLWSD::IsBindMountingEnabled = true;
 bool COOLWSD::IndirectionServerEnabled = false;
-bool COOLWSD::GeolocationSetup = false;
 
 // If you add global state please update dumpState below too
 
@@ -2356,8 +2355,6 @@ void COOLWSD::innerInitialize(Poco::Util::Application& self)
     AdminEnabled = ConfigUtil::getConfigValue<bool>(conf, "admin_console.enable", true);
     IndirectionServerEnabled =
         !ConfigUtil::getConfigValue<std::string>(conf, "indirection_endpoint.url", "").empty();
-    GeolocationSetup =
-        ConfigUtil::getConfigValue("indirection_endpoint.geolocation_setup.enable", false);
 
 #if ENABLE_DEBUG
     if (Util::isKitInProcess())

@@ -1092,15 +1092,6 @@ template <typename T> bool allowedOrigin(const T& request, const RequestDetails&
         return true;
     }
 
-    if (COOLWSD::IndirectionServerEnabled && COOLWSD::GeolocationSetup)
-    {
-        if (HostUtil::allowedWSOrigin(actualOrigin))
-        {
-            LOG_TRC("Allowed Origin: " << actualOrigin << " to match AllowedWSOriginList");
-            return true;
-        }
-    }
-
     const std::string host = request.get("Host");
     if (allowedOriginByHost(host, actualOrigin))
     {
@@ -3309,14 +3300,6 @@ std::string getCapabilitiesJson(bool convertToAvailable)
         capabilities->set("podName", podName);
     else if (!serverName.empty())
         capabilities->set("podName", serverName);
-
-    if (COOLWSD::IndirectionServerEnabled && COOLWSD::GeolocationSetup)
-    {
-        std::string timezoneName =
-            ConfigUtil::getString("indirection_endpoint.geolocation_setup.timezone", "");
-        if (!timezoneName.empty())
-            capabilities->set("timezone", timezoneName);
-    }
 
     std::ostringstream ostrJSON;
     capabilities->stringify(ostrJSON);

@@ -95,8 +95,8 @@ public:
     static void fetchUnlockImageUrl(std::map<std::string, std::string>& newAppConfig,
                              const Poco::JSON::Object::Ptr& remoteJson);
 
-    void fetchIndirectionEndpoint(std::map<std::string, std::string>& newAppConfig,
-                                  const Poco::JSON::Object::Ptr& remoteJson);
+    static void fetchIndirectionEndpoint(std::map<std::string, std::string>& newAppConfig,
+                                         const Poco::JSON::Object::Ptr& remoteJson);
 
     void fetchMonitors(std::map<std::string, std::string>& newAppConfig,
                        const Poco::JSON::Object::Ptr& remoteJson);

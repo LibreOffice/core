@@ -125,9 +125,6 @@ void StorageBase::initialize()
     const auto& app = Poco::Util::Application::instance();
     HostUtil::parseAliases(app.config());
 
-    if (COOLWSD::IndirectionServerEnabled && COOLWSD::GeolocationSetup)
-        HostUtil::parseAllowedWSOrigins();
-
 #else // MOBILEAPP
     FilesystemEnabled = true;
 #endif // MOBILEAPP

@@ -121,7 +121,7 @@ public:
     /// socket: the TCP socket which received the upgrade request
     /// request: the HTTP upgrade request to WebSocket
     /// expectedOrigin: derived from serverurl
-    /// allowedOrigin: if origin is allowed using setting "indirection_endpoint.geolocation_setup.allowed_websocket_origins"
+    /// allowedOrigin: true if the Origin header of the request is one this server accepts
     template <typename T>
     WebSocketHandler(const std::shared_ptr<StreamSocket>& socket, const T& request,
                      bool allowedOrigin)

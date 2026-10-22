@@ -504,7 +504,6 @@ interface Window {
 	logoURL?: string;
 	accessibilityStatementUrl: string;
 	MobileAppName: string;
-	geolocationSetup: boolean;
 	wopiHostId: string;
 	vendor: string;
 	copyrightYear: string;

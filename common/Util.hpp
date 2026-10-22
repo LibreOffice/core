@@ -327,7 +327,7 @@ namespace Util
     ///< A random hex string that identifies the current process.
     const std::string& getProcessIdentifier();
 
-    std::string getVersionJSON(bool enableExperimental, const std::string& timezone);
+    std::string getVersionJSON(bool enableExperimental);
 
 #if ENABLE_DEBUG
     /// Returns the offset of the first invalid-UTF8 character.

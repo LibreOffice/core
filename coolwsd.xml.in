@@ -468,13 +468,6 @@
     <indirection_endpoint>
       <url desc="URL endpoint to server which servers routeToken in json format" type="string" default=""></url>
       <migration_timeout_secs desc="The maximum number of seconds waiting for shutdown migration message from indirection server before unloading an document. Defaults to 180 second." type="uint" default="180">180</migration_timeout_secs>
-      <geolocation_setup>
-        <enable desc="Enable geolocation_setup when using indirection server with geolocation configuration" type="bool" default="false">false</enable>
-        <timezone desc="IANA timezone of server. For example: Europe/Berlin" type="string"></timezone>
-        <allowed_websocket_origins desc="Origin header to get accepted during websocket upgrade">
-          <!-- <origin></origin> -->
-        </allowed_websocket_origins>
-      </geolocation_setup>
       <server_name desc="server name to show in cluster overview admin panel" type="string" default=""></server_name>
       <controller_monitor_url desc="Which of the monitors.monitor entries is the controller. Documents are handed over to it before this server shuts down. When left empty, a monitor whose address contains the word controller is taken to be the controller." type="string" default=""></controller_monitor_url>
     </indirection_endpoint>

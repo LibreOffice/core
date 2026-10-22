@@ -1794,9 +1794,6 @@ FileServerRequestHandler::ResourceAccessDetails FileServerRequestHandler::prepro
         extraExportFormats += " impress_tiff";
     Poco::replaceInPlace(preprocess, std::string("%EXTRA_EXPORT_FORMATS%"), extraExportFormats);
 
-    Poco::replaceInPlace(preprocess, std::string("%GEOLOCATION_SETUP%"),
-                         boolToString(COOLWSD::GeolocationSetup));
-
     ContentSecurityPolicy csp;
     csp.appendDirective("default-src", "'none'");
     csp.appendDirective("frame-src", "'self'");

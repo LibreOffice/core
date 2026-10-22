@@ -46,8 +46,6 @@ private:
     static bool FirstHostRejectionLogged;
     /// list of host (not aliases) in alias_groups
     static std::set<std::string> hostList;
-    /// list of allowed websocket origin, used only when indirection_endpoint.geolocation is enabled
-    static std::set<std::string> AllowedWSOriginList;
 
     static bool WopiEnabled;
 
@@ -57,9 +55,6 @@ public:
 
     /// parse wopi.storage.alias_groups.group
     static void parseAliases(Poco::Util::LayeredConfiguration& conf);
-
-    /// parse indirection_endpoint.geolocation_setup.allowed_websocket_origins
-    static void parseAllowedWSOrigins();
 
     /// if request uri is an alias, replace request uri host and port with
     /// original hostname and port defined by group tag from coolwsd.xml
@@ -85,8 +80,6 @@ public:
     static bool isFirstHostTrusted() { return !FirstHost.empty(); }
 
     static bool isWopiHostsEmpty();
-
-    [[nodiscard]] static bool allowedWSOrigin(const std::string& origin);
 
     [[nodiscard]] static bool isForbiddenKitHost(const std::string& host);
 

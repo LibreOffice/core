@@ -25,7 +25,6 @@ interface AboutDialogElements {
 	slowProxy: HTMLElement;
 	jsDialog: HTMLElement;
 	routeToken: HTMLElement;
-	timeZone: HTMLElement;
 	wopiHostId: HTMLElement;
 	licenseInfo: HTMLElement;
 	copyright: HTMLElement;
@@ -215,10 +214,6 @@ class AboutDialog {
 
 		if (window.indirectSocket) {
 			elements.routeToken.innerText = 'RouteToken: ' + window.routeToken;
-			if (window.geolocationSetup) {
-				elements.timeZone.innerText =
-					_('Time zone:') + ' ' + app.socket.WSDServer.TimeZone;
-			}
 		}
 	}
 
@@ -461,9 +456,6 @@ class AboutDialog {
 		const routeToken = AboutDialog.createElement('div', { id: 'routeToken' });
 		infoDiv.appendChild(routeToken);
 
-		const timeZone = AboutDialog.createElement('div', { id: 'timeZone' });
-		infoDiv.appendChild(timeZone);
-
 		const wopiHostId = AboutDialog.createElement('div', { id: 'wopi-host-id' });
 		if (!window.ThisIsAMobileApp) {
 			infoDiv.appendChild(wopiHostId);
@@ -489,7 +481,6 @@ class AboutDialog {
 			slowProxy,
 			jsDialog,
 			routeToken,
-			timeZone,
 			wopiHostId,
 			licenseInfo,
 			copyright,

@@ -15,7 +15,6 @@ interface WSDServerInfo {
 	Hash: string;
 	Protocol: string;
 	Options: string;
-	TimeZone: string;
 }
 
 type MessageInterface =

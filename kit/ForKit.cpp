@@ -1017,7 +1017,7 @@ int forkit_main(int argc, char** argv)
 
         else if (std::strstr(cmd, "--libversions") == cmd)
         {
-            std::cout << Util::getVersionJSON(false, "") << std::endl;
+            std::cout << Util::getVersionJSON(false) << std::endl;
             std::cerr << "Note: Library versions are compile-time versions, so they are accurate "
                          "when these libraries are statically linked (as in production builds)."
                       << std::endl;

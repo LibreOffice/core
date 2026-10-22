@@ -320,7 +320,6 @@ m4_ifelse(APP, [true],
       data-enable-welcome-message = "%ENABLE_WELCOME_MSG%"
       data-extra-export-formats = "%EXTRA_EXPORT_FORMATS%"
       data-frame-ancestors = "%FRAME_ANCESTORS%"
-      data-geolocation-setup = "%GEOLOCATION_SETUP%"
       data-hexify-url = "%HEXIFY_URL%"
       data-hide-legacy-script-warning = "%HIDE_LEGACY_SCRIPT_WARNING%"
       data-host = "%HOST%"
