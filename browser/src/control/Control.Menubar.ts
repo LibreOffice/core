@@ -654,7 +654,7 @@ class Menubar extends window.L.Control {
 				{name: _('Fullscreen presentation'), id: 'fullscreen-presentation', type: 'action'},
 				{name: _('Present current slide'), id: 'presentation-currentslide', type: 'action'},
 				...((!window.ThisIsAMobileApp || window.mode.isCODesktop()) ? [
-					{name: _('Presenter Console'), id: 'presentation-in-console', type: 'action'}
+					{name: _('Presenter View'), id: 'presentation-in-console', type: 'action'}
 				] : []),
 				{type: 'separator'},
 				{name: _('Present in Window'), id: 'present-in-window', type: 'action'}
