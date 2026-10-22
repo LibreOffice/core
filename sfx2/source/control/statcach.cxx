@@ -436,14 +436,20 @@ void SfxStateCache::SetState_Impl
         if ( !IsInvalidItem(pLastItem) && !IsDisabledItem(pLastItem) )
         {
             delete pLastItem;
-            pLastItem = nullptr;
         }
 
-        // tdf#164745 clone when it exists and it's really an item
-        if ( pState && !IsInvalidItem(pState) && !IsDisabledItem(pState) )
+        // always reset to nullptr
+        pLastItem = nullptr;
+        if (IsDisabledItem(pState))
+        {
+            // tdf#162666 if disabled, use DISABLED_POOL_ITEM
+            pLastItem = DISABLED_POOL_ITEM;
+        }
+        else if (pState && !IsInvalidItem(pState))
+        {
+            // tdf#164745 clone when it exists and it's really an item
             pLastItem = pState->Clone();
-        else
-            pLastItem = nullptr;
+        }
 
         eLastState = eState;
         bItemDirty = false;
