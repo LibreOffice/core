@@ -778,12 +778,13 @@ void SfxStyleSheetBasePool::Remove( SfxStyleSheetBase* p )
 
     // Reference to keep p alive until after Broadcast call!
     rtl::Reference<SfxStyleSheetBase> xP(p);
-    bool bWasRemoved = pImpl->mxIndexedStyleSheets->RemoveStyleSheet(xP);
-    if( !bWasRemoved )
+    if (!pImpl->mxIndexedStyleSheets->HasStyleSheet(xP))
         return;
 
-    // Adapt all styles which have this style as parent
+    // Adapt all styles which have this style as parent. The style is still in the pool here, so
+    // each of them finds it and stops listening to it.
     ChangeParent(p->GetName(), p->GetParent(), p->GetFamily());
+    pImpl->mxIndexedStyleSheets->RemoveStyleSheet(xP);
 
     // #120015# Do not dispose, the removed StyleSheet may still be used in
     // existing SdrUndoAttrObj incarnations. Rely on refcounting for disposal,

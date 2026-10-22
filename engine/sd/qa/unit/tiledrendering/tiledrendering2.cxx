@@ -1376,6 +1376,59 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportSectionWithoutLink)
     CPPUNIT_ASSERT_EQUAL(SdResId(STR_DEFAULT_SLIDE_SECTION_NAME), sectionStartingAt(*pDoc, 3));
 }
 
+namespace
+{
+/// Writes the slides rPages of the presentation xComponent out to a file of its own at rFileUrl,
+/// the way a source document writes out the slides another document reads.
+void exportSlides(const uno::Reference<lang::XComponent>& xComponent,
+                  const std::vector<sal_Int32>& rPages, const OUString& rFileUrl)
+{
+    SdXImpressDocument* pDocument = dynamic_cast<SdXImpressDocument*>(xComponent.get());
+    CPPUNIT_ASSERT(pDocument);
+    pDocument->initializeForTiledRendering({});
+    CPPUNIT_ASSERT(pDocument->exportPages(rPages, rFileUrl));
+}
+}
+
+// Slides inserted with the design of their source can be undone and redone, and each step brings
+// the slides and their design back
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideImportKeepDesignUndoRedo)
+{
+    utl::TempFileNamed aSourceDeck(u"", true, u".odp");
+    aSourceDeck.EnableKillingFile();
+    loadFromURL(
+        m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-unnamed-source.fodp"));
+    exportSlides(mxComponent, { 0, 1 }, aSourceDeck.GetURL());
+
+    loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering({});
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    const sal_uInt16 nMasters = pDoc->GetMasterSdPageCount(PageKind::Standard);
+
+    CPPUNIT_ASSERT(pXImpressDocument->insertPagesFromFile(aSourceDeck.GetURL(),
+                                                          "{\"keepDesign\":true}"_ostr));
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), pDoc->GetSdPageCount(PageKind::Standard));
+    const sal_uInt16 nMastersInserted = pDoc->GetMasterSdPageCount(PageKind::Standard);
+    CPPUNIT_ASSERT(nMastersInserted > nMasters);
+
+    SfxUndoManager* pUndoManager = pDoc->GetDocSh()->GetUndoManager();
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(2), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(nMasters, pDoc->GetMasterSdPageCount(PageKind::Standard));
+
+    pUndoManager->Redo();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(nMastersInserted, pDoc->GetMasterSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(u"Source one"_ustr, getSlideText(*pDoc, 2));
+
+    // A second round goes the same way.
+    pUndoManager->Undo();
+    pUndoManager->Redo();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(4), pDoc->GetSdPageCount(PageKind::Standard));
+}
+
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkSourceNotFetched)
 {
     loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));
