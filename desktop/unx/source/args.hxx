@@ -10,12 +10,13 @@
 
 #include <sal/types.h>
 #include <rtl/ustring.h>
+#include <rtl/ustring.hxx>
 
 #include <vector>
 
 struct Args
 {
-    rtl_uString* pAppPath = nullptr;
+    OUString sAppPath;
     const char* pPageinType = nullptr; // @pagein-writer for - writer etc. else NULL
     bool bInhibitSplash = false; // should we show a splash screen
     bool bInhibitPagein = false; // should we run pagein ?

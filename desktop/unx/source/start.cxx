@@ -30,6 +30,7 @@
 #include <rtl/bootstrap.h>
 #include <rtl/process.h>
 #include <rtl/ustrbuf.h>
+#include <rtl/ustring.hxx>
 #include <sal/main.h>
 
 #include "args.hxx"
@@ -104,7 +105,7 @@ static ChildInfo child_spawn(Args* args, bool bAllArgs, bool bWithStatus)
 
     /* application name */
     rtl_uString_newFromAscii(&pApp, "file://");
-    rtl_uString_newConcat(&pApp, pApp, args->pAppPath);
+    rtl_uString_newConcat(&pApp, pApp, args->sAppPath.pData);
     rtl_uString_newFromAscii(&pTmp, "soffice.bin");
     rtl_uString_newConcat(&pApp, pApp, pTmp);
     rtl_uString_release(pTmp);
@@ -180,7 +181,7 @@ typedef enum { ProgressContinue, ProgressRestart, ProgressExit } ProgressStatus;
 } // namespace
 
 /* Path of the application, with trailing slash. */
-static rtl_uString *get_app_path(const char *pAppExec)
+static OUString get_app_path(const char *pAppExec)
 {
     char pRealPath[PATH_MAX];
     char* dummy;
@@ -190,19 +191,14 @@ static rtl_uString *get_app_path(const char *pAppExec)
 
     dummy = realpath(pPath, pRealPath);
     (void)dummy;
-    rtl_uString* pResult = charp_to_ustr(pRealPath);
+    OUString sResult(charp_to_ustr(pRealPath), SAL_NO_ACQUIRE);
     free(pOrigPath);
 
-    const sal_Int32 len = rtl_uString_getLength(pResult);
-    if (len > 0 && rtl_uString_getStr(pResult)[len - 1] != '/')
-    {
-        rtl_uString *pSlash = nullptr;
-        rtl_uString_newFromAscii(&pSlash, "/");
-        rtl_uString_newConcat(&pResult, pResult, pSlash);
-        rtl_uString_release(pSlash);
-    }
+    const sal_Int32 len = sResult.getLength();
+    if (len > 0 && sResult[len - 1] != u'/')
+        sResult += u"/";
 
-    return pResult;
+    return sResult;
 }
 
 /* Compute the OOo md5 hash from 'pText' */
@@ -543,7 +539,7 @@ static void system_checks(void)
 
 static void exec_pagein (Args *args)
 {
-    rtl_String * path = ustr_to_str(args->pAppPath);
+    rtl_String * path = ustr_to_str(args->sAppPath.pData);
     pagein_execute(rtl_string_getStr(path), "pagein-common");
 
     if (args->pPageinType)
@@ -598,7 +594,7 @@ static void exec_javaldx(Args *args)
     /* Use absolute path to redirectrc */
     rtl_uString* pTmp = nullptr;
     rtl_uString_newFromAscii(&pTmp, "-env:INIFILENAME=vnd.sun.star.pathname:");
-    rtl_uString_newConcat(&pTmp, pTmp, args->pAppPath);
+    rtl_uString_newConcat(&pTmp, pTmp, args->sAppPath.pData);
     rtl_uString* pTmp2 = nullptr;
     rtl_uString_newFromAscii(&pTmp2, "redirectrc");
     rtl_uString_newConcat(&pTmp, pTmp, pTmp2);
@@ -609,7 +605,7 @@ static void exec_javaldx(Args *args)
     /* And also to javaldx */
     rtl_uString* pApp = nullptr;
     rtl_uString_newFromAscii(&pApp, "file://");
-    rtl_uString_newConcat(&pApp, pApp, args->pAppPath);
+    rtl_uString_newConcat(&pApp, pApp, args->sAppPath.pData);
     pTmp = nullptr;
     rtl_uString_newFromAscii(&pTmp, "javaldx");
     rtl_uString_newConcat(&pApp, pApp, pTmp);
@@ -728,12 +724,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     sigaction(SIGTERM, &sigterm_action, nullptr);
 
     Args* args = args_parse();
-    args->pAppPath = get_app_path(argv[0]);
-    if (!args->pAppPath)
-    {
-        fprintf(stderr, "ERROR: Can't read app link\n");
-        exit(1);
-    }
+    args->sAppPath = get_app_path(argv[0]);
 
 #ifndef ENABLE_QUICKSTART_LIBPNG
     /* we can't load and render it anyway */
@@ -747,7 +738,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     if (!args->bInhibitPipe && !getenv("LIBO_FLATPAK"))
     {
         int fd = 0;
-        pPipePath = get_pipe_path(args->pAppPath);
+        pPipePath = get_pipe_path(args->sAppPath.pData);
 
         if ((fd=connect_pipe(pPipePath)) >= 0)
         {
@@ -781,7 +772,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
         /* load splash image and create window */
         if (!args->bInhibitSplash)
-            splash = splash_create(args->pAppPath, argc, argv);
+            splash = splash_create(args->sAppPath.pData, argc, argv);
 
         /* pagein */
         if (!args->bInhibitPagein)

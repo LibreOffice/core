@@ -118,7 +118,6 @@ void
 args_free (Args *args)
 {
     /* FIXME: free ppArgs */
-    rtl_uString_release( args->pAppPath );
     delete args;
 }
 
