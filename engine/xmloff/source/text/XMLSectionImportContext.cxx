@@ -160,7 +160,7 @@ void XMLSectionImportContext::startFastElement( sal_Int32 nElement,
     Reference<XTextRange> xStart =
         rHelper->GetCursor()->getStart();
 #ifndef DBG_UTIL
-    OUString sMarkerString(" ");
+    OUString sMarkerString(u" "_ustr);
 #else
     OUString sMarkerString(u"X"_ustr);
 #endif
