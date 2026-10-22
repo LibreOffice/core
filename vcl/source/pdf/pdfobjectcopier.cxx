@@ -17,6 +17,7 @@
 #include <vcl/filter/pdfdocument.hxx>
 #include <vcl/filter/pdfobjectcontainer.hxx>
 
+#include <pdf/COSWriter.hxx>
 #include <pdf/objectcopier.hxx>
 #include <pdf/pdfwriter_impl.hxx>
 
@@ -164,7 +165,7 @@ void PDFObjectCopier::copyRecursively(OStringBuffer& rLine, filter::PDFElement& 
         for (auto const& pPair : pInputDictionary->GetItems())
         {
             rLine.append("/");
-            rLine.append(pPair.first);
+            pdf::COSWriter::appendName(pPair.first, rLine);
             rLine.append(" ");
             copyRecursively(rLine, *pPair.second, rDocBuffer, rCopiedResources, nObject);
             rLine.append(" ");
@@ -222,7 +223,9 @@ sal_Int32 PDFObjectCopier::copyExternalResource(SvMemoryStream& rDocBuffer,
             else
                 aLine.append(" ");
 
-            aLine.append("/" + rPair.first + " ");
+            aLine.append('/');
+            pdf::COSWriter::appendName(rPair.first, aLine);
+            aLine.append(" ");
             if (rPair.first == "Length" && pStream && nStreamSize != nDataSize)
             {
                 aLine.append(static_cast<sal_Int64>(nStreamSize));
@@ -394,14 +397,21 @@ OString PDFObjectCopier::copyExternalResources(filter::PDFObjectElement& rPage,
     if (bHasDictValue && pKindObject)
     {
         sal_Int32 nObject = copyExternalResource(rDocBuffer, *pKindObject, rCopiedResources);
-        return "/" + rKind + " " + OString::number(nObject) + " 0 R";
+        OStringBuffer sRet("/");
+        pdf::COSWriter::appendName(rKind, sRet);
+        sRet.append(" " + OString::number(nObject) + " 0 R");
+        return sRet.makeStringAndClear();
     }
 
     // Build the dictionary entry string.
-    OStringBuffer sRet("/" + rKind + "<<");
+    OStringBuffer sRet("/");
+    pdf::COSWriter::appendName(rKind, sRet);
+    sRet.append(" <<");
     for (const auto& rPair : aRet)
     {
-        sRet.append("/" + rPair.first + " " + OString::number(rPair.second) + " 0 R");
+        sRet.append('/');
+        pdf::COSWriter::appendName(rPair.first, sRet);
+        sRet.append(" " + OString::number(rPair.second) + " 0 R ");
     }
     sRet.append(">>");
 
