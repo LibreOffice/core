@@ -138,7 +138,6 @@ protected:
 
 private:
 
-    static cpo::uno::Reference< css::graphic::XGraphic > implLoadMemory( std::u16string_view rResourceURL );
     static cpo::uno::Reference< css::graphic::XGraphic > implLoadRepositoryImage( std::u16string_view rResourceURL );
     static cpo::uno::Reference< css::graphic::XGraphic > implLoadStandardImage( std::u16string_view rResourceURL );
 };
@@ -175,20 +174,6 @@ cpo::uno::Sequence< cpo::uno::Type > GraphicProvider::getTypes()
 cpo::uno::Sequence< sal_Int8 > GraphicProvider::getImplementationId()
 {
     return cpo::uno::Sequence<sal_Int8>();
-}
-
-uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadMemory( std::u16string_view rResourceURL )
-{
-    sal_Int32                               nIndex = 0;
-
-    if( o3tl::getToken(rResourceURL, 0, '/', nIndex ) != u"private:memorygraphic" )
-        return nullptr;
-
-    sal_Int64 nGraphicAddress = o3tl::toInt64(o3tl::getToken(rResourceURL, 0, '/', nIndex ));
-    if( nGraphicAddress == 0 )
-        return nullptr;
-
-    return reinterpret_cast<::Graphic*>(nGraphicAddress)->GetXGraphic();
 }
 
 uno::Reference< ::graphic::XGraphic > GraphicProvider::implLoadRepositoryImage( std::u16string_view rResourceURL )
@@ -273,10 +258,7 @@ uno::Reference< beans::XPropertySet > GraphicProvider::queryGraphicDescriptor( c
     }
     else if( !aURL.isEmpty() )
     {
-        uno::Reference< ::graphic::XGraphic > xGraphic( implLoadMemory( aURL ) );
-
-        if ( !xGraphic.is() )
-            xGraphic = implLoadRepositoryImage( aURL );
+        uno::Reference< ::graphic::XGraphic > xGraphic( implLoadRepositoryImage( aURL ) );
 
         if ( !xGraphic.is() )
             xGraphic = implLoadStandardImage( aURL );
@@ -367,10 +349,7 @@ uno::Reference< ::graphic::XGraphic > GraphicProvider::queryGraphic( const cpo::
     }
     else if( !aPath.isEmpty() )
     {
-        xRet = implLoadMemory( aPath );
-
-        if ( !xRet.is() )
-            xRet = implLoadRepositoryImage( aPath );
+        xRet = implLoadRepositoryImage( aPath );
 
         if ( !xRet.is() )
             xRet = implLoadStandardImage( aPath );
