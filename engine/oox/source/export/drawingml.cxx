@@ -4437,9 +4437,26 @@ void DrawingML::WriteBodyProps(const cpo::uno::Reference< cpo::uno::XInterface >
     bool bWrap = false;
     const char* pWrap = nullptr;
 
+    // A placeholder states whether the text that fills it wraps, and keeps that answer where the
+    // document gives it one.
+    const bool bIsPlaceholder
+        = GetProperty(rXPropSet, u"IsPresentationObject"_ustr) && mAny.get<bool>();
+
     if (xShape) {
-        // Only custom shapes obey the TextWordWrap option, normal text always wraps.
-        if (dynamic_cast<SvxCustomShape*>(rXIface.get()) && GetProperty(rXPropSet, u"TextWordWrap"_ustr))
+        // A custom shape states whether its text wraps, and so does a placeholder for which the
+        // document gives an answer of its own. The text of an ordinary text box always wraps.
+        bool bShapeStatesWrapping = dynamic_cast<SvxCustomShape*>(rXIface.get()) != nullptr;
+        if (!bShapeStatesWrapping && bIsPlaceholder)
+        {
+            uno::Reference<XPropertyState> xWrapState(rXIface, UNO_QUERY);
+            PropertyState eWrapState;
+            bShapeStatesWrapping
+                = xWrapState.is()
+                  && GetPropertyAndState(rXPropSet, xWrapState, u"TextWordWrap"_ustr, eWrapState)
+                  && eWrapState == beans::PropertyState_DIRECT_VALUE;
+        }
+
+        if (bShapeStatesWrapping && GetProperty(rXPropSet, u"TextWordWrap"_ustr))
         {
             mAny >>= bWrap;
             bHasWrap = true;
@@ -4496,7 +4513,7 @@ void DrawingML::WriteBodyProps(const cpo::uno::Reference< cpo::uno::XInterface >
     }
 
     // tdf#151134 When writing placeholder shapes, inset must be explicitly specified
-    bool bRequireInset = GetProperty(rXPropSet, u"IsPresentationObject"_ustr) && rXPropSet->getPropertyValue(u"IsPresentationObject"_ustr).get<bool>();
+    bool bRequireInset = bIsPlaceholder;
 
     mpFS->startElementNS( (nXmlNamespace ? nXmlNamespace : XML_a), XML_bodyPr,
                            XML_rot, sTextRotateAngleMSUnit,

@@ -572,6 +572,25 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testCharColorOverThemedStyle)
     assertXPath(pXmlDoc, "//p:txBody/a:p/a:r[1]/a:rPr/a:solidFill/a:srgbClr", "val", u"FF0000");
 }
 
+// A placeholder whose text does not wrap keeps that answer through a save.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testPlaceholderKeepsItsWrapping)
+{
+    // Given a document whose layout holds two placeholders that state that their text does not
+    // wrap:
+    createSdImpressDoc("pptx/narrow-placeholder-no-wrap.pptx");
+    save(TestFilter::PPTX);
+
+    xmlDocUniquePtr pLayout = parseExport(u"ppt/slideLayouts/slideLayout1.xml"_ustr);
+    // Without the fix in place, this test would have failed with:
+    // - Attribute 'wrap' not found on element
+    // i.e. the answer was left out and the text of the placeholder wrapped when the document was
+    // read again.
+    assertXPath(pLayout, "/p:sldLayout/p:cSld/p:spTree/p:sp[1]/p:txBody/a:bodyPr", "wrap",
+                u"none");
+    assertXPath(pLayout, "/p:sldLayout/p:cSld/p:spTree/p:sp[2]/p:txBody/a:bodyPr", "wrap",
+                u"none");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
