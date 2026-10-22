@@ -69,6 +69,8 @@ interface UserTemplate {
 	name: string;
 	type: TemplateType;
 	path: string;
+	// A file URL of an image of the first page, when the template carries one.
+	preview?: string;
 }
 
 // A file that the user picked or dropped to add as a template. The type is empty for a file that

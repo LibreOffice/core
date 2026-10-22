@@ -15,8 +15,12 @@
 #include <common/UserTemplates.hpp>
 #include <common/Util.hpp>
 
+#include <Poco/Zip/ZipArchive.h>
+#include <Poco/Zip/ZipStream.h>
+
 #include <algorithm>
 #include <cctype>
+#include <fstream>
 #include <map>
 
 namespace filesystem = std::filesystem;
@@ -92,6 +96,49 @@ std::string typeOfExtension(const std::map<std::string, std::string>& types,
     return it == types.end() ? std::string() : it->second;
 }
 
+constexpr const char* previewFileName = "preview.png";
+
+// An ODF file carries an image of its first page as Thumbnails/thumbnail.png. Copies that image to
+// the target path, and nothing when the file has no such image.
+void extractPreview(const filesystem::path& templatePath, const filesystem::path& target)
+{
+    // An image of one page is far smaller than this.
+    constexpr std::size_t maxPreviewSize = 1024 * 1024;
+    try
+    {
+        std::ifstream in(templatePath, std::ios::binary);
+        const Poco::Zip::ZipArchive archive(in);
+        const auto header = archive.findHeader("Thumbnails/thumbnail.png");
+        if (header == archive.headerEnd() || header->second.getUncompressedSize() > maxPreviewSize)
+            return;
+
+        Poco::Zip::ZipInputStream zipStream(in, header->second);
+        std::string image;
+        char buffer[8192];
+        while (zipStream.read(buffer, sizeof(buffer)) || zipStream.gcount() > 0)
+        {
+            image.append(buffer, zipStream.gcount());
+            if (image.size() > maxPreviewSize)
+                return;
+        }
+
+        std::ofstream out(target, std::ios::binary);
+        out.write(image.data(), image.size());
+        out.close();
+        if (!out)
+        {
+            LOG_DBG("UserTemplates: could not write the preview '" << target.string() << '\'');
+            std::error_code error;
+            filesystem::remove(target, error);
+        }
+    }
+    catch (const std::exception& exception)
+    {
+        LOG_DBG("UserTemplates: no preview in '" << templatePath.string()
+                                                 << "': " << exception.what());
+    }
+}
+
 // The ids are made of hexadecimal digits only, so an id is always one plain folder name.
 bool isPlainId(const std::string& id)
 {
@@ -163,6 +210,7 @@ std::optional<UserTemplates::Entry> UserTemplates::addFile(const std::string& so
         return std::nullopt;
     }
 
+    extractPreview(target, folder / previewFileName);
     return entryInFolder(folder);
 }
 
@@ -250,8 +298,15 @@ UserTemplates::entryInFolder(const filesystem::path& templateFolder) const
         if (type.empty())
             continue;
 
-        return Entry{ templateFolder.filename().string(), path.stem().string(), type,
-                      path.string() };
+        Entry entry{ templateFolder.filename().string(),
+                     path.stem().string(),
+                     type,
+                     path.string(),
+                     std::string() };
+        const filesystem::path preview = templateFolder / previewFileName;
+        if (!filesystem::is_symlink(preview, error) && filesystem::is_regular_file(preview, error))
+            entry.previewPath = preview.string();
+        return entry;
     }
     return std::nullopt;
 }

@@ -804,6 +804,7 @@ class BackstageView extends window.L.Class {
 			type: template.type,
 			path: template.path,
 			basename: template.name,
+			preview: template.preview,
 			searchText: [template.name, template.type].join(' ').toLowerCase(),
 		}));
 	}

@@ -92,6 +92,9 @@ namespace
         result["name"] = QString::fromStdString(entry.name);
         result["type"] = QString::fromStdString(entry.type);
         result["path"] = QString::fromStdString(entry.path);
+        if (!entry.previewPath.empty())
+            result["preview"] =
+                QUrl::fromLocalFile(QString::fromStdString(entry.previewPath)).toString();
         return result;
     }
 
