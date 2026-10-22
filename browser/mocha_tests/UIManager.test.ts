@@ -103,4 +103,82 @@ describe('UIManager', function () {
 			nodeassert.deepStrictEqual(themeCommands(), []);
 		});
 	});
+
+	describe('a redline tooltip', function () {
+		const realActiveDocument = app.activeDocument;
+		const realDomUtil = window.L.DomUtil;
+		const realSectionContainer = app.sectionContainer;
+		const sections: any = app.CSections;
+		// The tooltip is a jQuery UI widget, and jQuery is not loaded here. The calls the
+		// widget would get are kept instead.
+		let tooltipCalls: any[][];
+
+		beforeEach(function () {
+			tooltipCalls = [];
+			(globalThis as any).$ = () => ({
+				tooltip: (...args: any[]) => tooltipCalls.push(args),
+			});
+			window.L.DomUtil = {
+				create: (tag: string) => document.createElement(tag),
+			} as any;
+			app.activeDocument = { activeLayout: null } as any;
+			// A tooltip that closes looks for the anchor sections of the side by side view.
+			sections.TooltipAnchorLeft = { name: 'tooltip anchor left' };
+			sections.TooltipAnchorRight = { name: 'tooltip anchor right' };
+			app.sectionContainer = { doesSectionExist: () => false } as any;
+		});
+
+		afterEach(function () {
+			// A pointer move closes an open tooltip, which takes its listeners off the document.
+			moveThePointer();
+			delete (globalThis as any).$;
+			delete sections.TooltipAnchorLeft;
+			delete sections.TooltipAnchorRight;
+			app.sectionContainer = realSectionContainer;
+			window.L.DomUtil = realDomUtil;
+			app.activeDocument = realActiveDocument;
+		});
+
+		function hoverRedlineWhileTrackedChangesShow(shown: string): void {
+			const manager: any = new UIManager();
+			manager.map = {
+				stateChangeHandler: {
+					getItemValue: (command: string) =>
+						command === '.uno:ShowTrackedChanges' ? shown : undefined,
+				},
+			};
+			manager.showDocumentTooltip({
+				type: 'generaltooltip',
+				text: 'Inserted: LocalUser#0 - 02/11/2026 11:44:56',
+				rectangle: '5785, 2293, 1240, 275',
+				redlineType: 'Insert',
+			});
+		}
+
+		function opened(): boolean {
+			return tooltipCalls.some((args) => args[0] === 'open');
+		}
+
+		function moveThePointer(): void {
+			document.dispatchEvent(new window.MouseEvent('mousemove'));
+		}
+
+		it('is shown when tracked changes are visible', function () {
+			hoverRedlineWhileTrackedChangesShow('true');
+			nodeassert.ok(opened());
+		});
+
+		it('closes once when the pointer moves', function () {
+			hoverRedlineWhileTrackedChangesShow('true');
+			moveThePointer();
+			moveThePointer();
+			const closes = tooltipCalls.filter((args) => args[0] === 'close');
+			nodeassert.strictEqual(closes.length, 1);
+		});
+
+		it('is suppressed when tracked changes are hidden', function () {
+			hoverRedlineWhileTrackedChangesShow('false');
+			nodeassert.deepStrictEqual(tooltipCalls, []);
+		});
+	});
 });
