@@ -61,7 +61,6 @@ Args *args_parse (void)
     const sal_uInt32 nArgs = osl_getCommandArgCount();
     const sal_uInt32 nAllocSize = sizeof(Args) + sizeof(rtl_uString*) * nArgs;
     Args* args = static_cast<Args*>(malloc(nAllocSize));
-    memset (args, 0, nAllocSize);
     args->nArgsTotal = nArgs;
 
     sal_uInt32 j = 0;
