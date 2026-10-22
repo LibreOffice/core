@@ -76,8 +76,10 @@ import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
 import java.nio.channels.ReadableByteChannel;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -594,9 +596,9 @@ public class LOActivity extends AppCompatActivity {
 
                     valueCallback = filePathCallback;
                     Intent intent = fileChooserParams.createIntent();
+                    restrictToAcceptedTypes(intent, fileChooserParams.getAcceptTypes());
 
                     try {
-                        intent.setType("image/*");
                         startActivityForResult(intent, REQUEST_SELECT_IMAGE_FILE);
                     } catch (ActivityNotFoundException e) {
                         valueCallback = null;
@@ -626,6 +628,53 @@ public class LOActivity extends AppCompatActivity {
                 loadDocument();
             }
         }
+    }
+
+    /**
+     * Limit the file chooser to the accept types of the file input. The intent type is the kind
+     * most of the types share ("image/*"), so apps of that kind offer themselves in the chooser.
+     * The full list goes along as EXTRA_MIME_TYPES for the documents picker, which filters on it.
+     * Extensions the platform knows map to their type, unknown ones are left out. No known type
+     * means any file.
+     */
+    private static void restrictToAcceptedTypes(Intent intent, String[] acceptTypes) {
+        ArrayList<String> mimeTypes = new ArrayList<>();
+        HashMap<String, Integer> kindCounts = new HashMap<>();
+        if (acceptTypes != null) {
+            for (String acceptType : acceptTypes) {
+                if (acceptType == null)
+                    continue;
+                for (String part : acceptType.split(",")) {
+                    String type = part.trim().toLowerCase(Locale.ROOT);
+                    if (type.startsWith("."))
+                        type = MimeTypeMap.getSingleton()
+                                .getMimeTypeFromExtension(type.substring(1));
+                    if (type == null || type.indexOf('/') < 1 || mimeTypes.contains(type))
+                        continue;
+                    mimeTypes.add(type);
+                    String kind = type.substring(0, type.indexOf('/'));
+                    Integer count = kindCounts.get(kind);
+                    kindCounts.put(kind, count == null ? 1 : count + 1);
+                }
+            }
+        }
+
+        String dominantKind = null;
+        int dominantCount = 0;
+        for (Map.Entry<String, Integer> entry : kindCounts.entrySet()) {
+            if (entry.getValue() > dominantCount) {
+                dominantKind = entry.getKey();
+                dominantCount = entry.getValue();
+            }
+        }
+
+        intent.removeExtra(Intent.EXTRA_MIME_TYPES);
+        if (dominantKind == null) {
+            intent.setType("*/*");
+            return;
+        }
+        intent.setType(dominantKind + "/*");
+        intent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes.toArray(new String[0]));
     }
 
     /** True when "All files access" permission can help edit the document. */
