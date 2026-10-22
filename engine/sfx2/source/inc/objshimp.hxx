@@ -37,10 +37,11 @@ class AutoReloadTimer_Impl final : public Timer
 {
     OUString          aUrl;
     SfxObjectShell*   pObjSh;
+    bool              bLinkUpdateAllowed;
 
 public:
     AutoReloadTimer_Impl( OUString aURL, sal_uInt32 nTime,
-                          SfxObjectShell* pSh );
+                          SfxObjectShell* pSh, bool bLinkUpdateAllowed = false );
     virtual void Invoke() override;
 };
 
