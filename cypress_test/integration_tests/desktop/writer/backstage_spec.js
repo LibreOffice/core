@@ -1,5 +1,5 @@
 /* -*- js-indent-level: 8 -*- */
-/* global describe it cy before beforeEach afterEach require */
+/* global describe it cy before beforeEach afterEach require expect */
 
 var helper = require('../../common/helper');
 
@@ -113,6 +113,20 @@ describe(['tagdesktop'], 'Backstage View Tests', { testIsolation: false }, funct
 		// Clearing the search should remove the empty-state message.
 		cy.cGet('.template-search-input').clear();
 		cy.cGet('.template-grid-empty').should('not.exist');
+	});
+
+	it('Offers four blank documents on Home', function() {
+		cy.then(() => {
+			ensureBackstage(win).show();
+		});
+
+		cy.cGet('#backstage-home').click();
+		cy.cGet('.backstage-home-templates-row .backstage-template-card').should(function(cards) {
+			var ids = cards.toArray().map(function(card) { return card.id; });
+			expect(ids).to.deep.equal([
+				'blank-writer', 'blank-calc', 'blank-impress', 'blank-draw',
+			]);
+		});
 	});
 
 	it('Closes via the sidebar back button', function() {

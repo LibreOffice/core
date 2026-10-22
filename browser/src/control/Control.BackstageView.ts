@@ -295,23 +295,14 @@ class BackstageView extends window.L.Class {
 			return;
 		}
 
-		const templateType = this.isStarterMode
-			? 'writer'
-			: this.detectTemplateTypeFromDoc();
-
-		const allTemplates = this.getTemplatesData();
-		const appSpecificTemplates = allTemplates.filter(
-			(template) => template.type === templateType,
-		);
-
-		const blankTemplate = this.getBlankTemplate(templateType);
-		const templatesForHome: TemplateData[] = [];
-		if (blankTemplate) templatesForHome.push(blankTemplate);
-		templatesForHome.push(...appSpecificTemplates);
-
 		this.contentArea.appendChild(
 			BackstageTemplates.homeTemplatesSection({
-				templates: templatesForHome,
+				blankTemplates: [
+					this.getBlankTemplate('writer'),
+					this.getBlankTemplate('calc'),
+					this.getBlankTemplate('impress'),
+					this.getBlankTemplate('draw'),
+				],
 				onTemplateClick: (t) => this.triggerNewDocument(t),
 				onMoreTemplatesClick: () => {
 					const newTabElement = document.getElementById('backstage-new');

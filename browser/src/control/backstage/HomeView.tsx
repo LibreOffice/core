@@ -19,7 +19,7 @@
 
 namespace BackstageTemplates {
   export interface HomeTemplatesProps {
-    templates: TemplateData[];
+    blankTemplates: TemplateData[];
     onTemplateClick: (template: TemplateData) => void;
     onMoreTemplatesClick: () => void;
   }
@@ -36,9 +36,9 @@ namespace BackstageTemplates {
   export function homeTemplatesSection(props: HomeTemplatesProps): HTMLElement {
     return (
       <>
-        {props.templates.length > 0 ? (
+        {props.blankTemplates.length > 0 ? (
           <div class="backstage-home-templates-row">
-            {props.templates.map((t) =>
+            {props.blankTemplates.map((t) =>
               templateCard(t, () => props.onTemplateClick(t)),
             )}
           </div>

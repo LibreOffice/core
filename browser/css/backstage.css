@@ -323,9 +323,9 @@
 .backstage-home-templates-row {
 	display: flex;
 	flex-wrap: nowrap;
-	gap: 1.5rem;
-	margin-bottom: 1.5rem;
-	padding: 0 12px 0.5rem;
+	gap: calc(var(--spacing-xl) + var(--spacing-s));
+	margin-bottom: var(--spacing-m);
+	padding: 0 0 0.5rem;
 	justify-content: flex-start;
 	max-width: 100%;
 	overflow: hidden;
@@ -333,7 +333,8 @@
 
 .backstage-home-templates-row .backstage-template-card {
 	flex: 0 0 auto;
-	max-width: 148px;
+	box-sizing: border-box;
+	width: 124px;
 }
 
 .backstage-home-more-templates {
@@ -399,7 +400,7 @@
 }
 
 .backstage-template-card {
-	padding: var(--spacing-l);
+	padding: var(--spacing-m) var(--spacing-s) var(--spacing-s);
 	cursor: pointer;
 	text-align: center;
 	transition: all var(--duration-normal) var(--ease-standard);
@@ -443,7 +444,7 @@
 	font-size: var(--medium-font-size);
 	color: var(--color-main-text);
 	font-weight: 500;
-	margin-top: 10px;
+	margin-top: var(--spacing-m);
 	width: 100%;
 	white-space: normal;
 	overflow: hidden;
