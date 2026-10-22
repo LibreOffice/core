@@ -95,6 +95,9 @@ function test() {
     console.assert(table.getNumChildren() === 2);
     console.assert(table.getChild(0).getType() === DocumentApp.ElementType.TABLE_ROW);
     console.assert(table.getParent().getType() === DocumentApp.ElementType.BODY_SECTION);
+    console.assert(table.getPreviousSibling().getText() === body.getChild(2).getText());
+    console.assert(table.getNextSibling().getText() === 'Trailing');
+    console.assert(body.getChild(2).getNextSibling().getType() === DocumentApp.ElementType.TABLE);
     const row0 = table.getRow(0);
     console.assert(row0.getNumCells() === 2);
     console.assert(row0.getNumChildren() === 2);
@@ -695,9 +698,16 @@ function test() {
     body.appendParagraph('Appended');
     console.assert(body.getNumChildren() === count + 1);
     console.assert(body.getChild(count).asParagraph().getText() === 'Appended');
+    console.assert(body.getChild(count - 1).getNextSibling().getText() === 'Appended');
+    const beforeRemoved = body.getChild(count - 2);
     doc.getBody().getChild(count - 1).removeFromParent();
+    console.assert(beforeRemoved.getNextSibling().getText() === 'Appended');
     console.assert(body.getNumChildren() === count);
     console.assert(body.getChild(count - 1).asParagraph().getText() === 'Appended');
+    console.assert(body.getChild(count - 2).getNextSibling().getText() === 'Appended');
+    console.assert(
+        body.getChild(count - 1).getPreviousSibling().getText()
+        === body.getChild(count - 2).getText());
     const secondImage = doc.newPosition(doc.getBody().getChild(0), 0)
         .insertInlineImage(Utilities.newBlob(png, 'image/png'));
     console.assert(imageParagraph.getNumChildren() === imageParagraphCount + 1);

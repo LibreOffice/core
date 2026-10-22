@@ -446,6 +446,15 @@ cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XElement>> elementsOf(
     cpo::uno::Reference<scriptinterop::XElement> const & parent,
     std::vector<cpo::uno::Reference<css::text::XTextContent>> const & contents);
 
+// A container whose children are the paragraphs and tables of a text:
+class SAL_LOPLUGIN_ANNOTATE("crosscast") ContentsContainer {
+public:
+    virtual std::vector<cpo::uno::Reference<css::text::XTextContent>> const & contents() = 0;
+
+protected:
+    ~ContentsContainer() = default;
+};
+
 cpo::uno::Reference<scriptinterop::XElement> siblingContent(
     std::shared_ptr<Model> const & model,
     cpo::uno::Reference<css::text::XTextContent> const & content,
@@ -2684,7 +2693,7 @@ cpo::uno::Reference<scriptinterop::XParagraph> PositionedImageImpl::getParagraph
     return new ParagraphImpl(model_, nullptr, paragraph_);
 }
 
-class TableCellImpl: public ElementImpl<scriptinterop::XTableCell> {
+class TableCellImpl: public ElementImpl<scriptinterop::XTableCell>, public ContentsContainer {
 public:
     TableCellImpl(
         std::shared_ptr<Model> const & model,
@@ -2768,11 +2777,11 @@ public:
             u"a table cell cannot be removed on its own; remove its row instead"_ustr);
     }
 
-private:
-    std::vector<cpo::uno::Reference<css::text::XTextContent>> const & contents() {
+    std::vector<cpo::uno::Reference<css::text::XTextContent>> const & contents() override {
         return contents_.get(model_->generation(), [this] { return enumerateContents(text_); });
     }
 
+private:
     std::shared_ptr<Model> model_;
     cpo::uno::Reference<scriptinterop::XElement> parent_;
     cpo::uno::Reference<css::text::XText> text_;
@@ -3075,6 +3084,26 @@ cpo::uno::Reference<scriptinterop::XElement> siblingContent(
 {
     if (!content.is()) {
         return nullptr;
+    }
+    // A parent that caches its children has the content among them, unless the content has moved to
+    // another text since; the raw pointers match for a paragraph, while a table is held as its
+    // XTextTable, so that only a comparison of the objects is guaranteed to find it:
+    if (auto const container = dynamic_cast<ContentsContainer *>(parent.get())) {
+        auto const & contents = container->contents();
+        auto i = std::find_if(contents.begin(), contents.end(), [&content](auto const & other) {
+            return other.get() == content.get();
+        });
+        if (i == contents.end()) {
+            i = std::find(contents.begin(), contents.end(), content);
+        }
+        if (i != contents.end()) {
+            if (forward) {
+                ++i;
+                return i == contents.end() ? nullptr : elementOf(model, parent, *i);
+            } else {
+                return i == contents.begin() ? nullptr : elementOf(model, parent, *(i - 1));
+            }
+        }
     }
     cpo::uno::Reference<css::text::XTextRange> const range(content, cpo::uno::UNO_QUERY);
     if (!range.is()) {
@@ -3550,7 +3579,8 @@ private:
     sal_Int32 offset_ = 0;
 };
 
-class FootnoteSectionImpl: public ElementImpl<scriptinterop::XContainerElement> {
+class FootnoteSectionImpl:
+    public ElementImpl<scriptinterop::XContainerElement>, public ContentsContainer {
 public:
     FootnoteSectionImpl(
         std::shared_ptr<Model> const & model,
@@ -3614,11 +3644,11 @@ public:
             u"a footnote section cannot be removed on its own; remove its footnote instead"_ustr);
     }
 
-private:
-    std::vector<cpo::uno::Reference<css::text::XTextContent>> const & contents() {
+    std::vector<cpo::uno::Reference<css::text::XTextContent>> const & contents() override {
         return contents_.get(model_->generation(), [this] { return enumerateContents(text_); });
     }
 
+private:
     std::shared_ptr<Model> model_;
     cpo::uno::Reference<css::text::XText> text_;
     Cached<std::vector<cpo::uno::Reference<css::text::XTextContent>>> contents_;
@@ -3677,7 +3707,7 @@ private:
     cpo::uno::Reference<css::text::XFootnote> footnote_;
 };
 
-class BodyImpl: public ElementImpl<scriptinterop::XBody> {
+class BodyImpl: public ElementImpl<scriptinterop::XBody>, public ContentsContainer {
 public:
     explicit BodyImpl(
         std::shared_ptr<Model> const & model,
@@ -3794,12 +3824,12 @@ public:
         throw cpo::uno::RuntimeException(u"the body has no parent to remove it from"_ustr);
     }
 
-private:
-    std::vector<cpo::uno::Reference<css::text::XTextContent>> const & contents() {
+    std::vector<cpo::uno::Reference<css::text::XTextContent>> const & contents() override {
         return model_->bodyContents().get(
             model_->generation(), [this] { return enumerateContents(text_); });
     }
 
+private:
     std::vector<cpo::uno::Reference<scriptinterop::XPositionedImage>> pageAnchoredImages() {
         std::vector<cpo::uno::Reference<scriptinterop::XPositionedImage>> images;
         auto const objects = cpo::uno::Reference<css::text::XTextGraphicObjectsSupplier>(
