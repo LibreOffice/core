@@ -38,11 +38,8 @@ $(eval $(call gb_Module_add_check_targets,svl,\
 	CppunitTest_svl_lockfileliveness \
 	CppunitTest_svl_notify \
 	CppunitTest_svl_qa_cppunit \
+	CppunitTest_svl_passwordcontainer \
 	CppunitTest_svl_urihelper \
-))
-
-$(eval $(call gb_Module_add_subsequentcheck_targets,svl,\
-    JunitTest_svl_complex \
 ))
 
 #todo: dde platform dependent
