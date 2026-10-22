@@ -23,19 +23,26 @@
 #include <test/kitcallback.hxx>
 #include <comphelper/string.hxx>
 
+#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XLayoutManager.hpp>
 #include <com/sun/star/frame/XDispatchHelper.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
+#include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/frame/XStorable2.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
+#include <com/sun/star/text/ControlCharacter.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XParagraphCursor.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/XCell.hpp>
 #include <com/sun/star/table/XTableRows.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
 #include <editeng/borderline.hxx>
 #include <editeng/boxitem.hxx>
 #include <svx/fmshell.hxx>
@@ -696,6 +703,52 @@ CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testPrintPreviewPopsViewShells)
     // SwTextShell stayed and a state query read a reset SwWrtShell
     CPPUNIT_ASSERT(!hasTextShell());
     CPPUNIT_ASSERT_EQUAL(sal_uInt16(1), pDispatcher->GetShellLevel(*getSwDocShell()));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseUiviewTest, testChangeWhileProtectedOleIsSelected) {
+    // Given a document with a formula in a protected section, with the formula selected...
+    createSwDoc();
+    cpo::uno::Reference<css::lang::XMultiServiceFactory> factory(
+        mxComponent, cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::text::XText> text
+        = cpo::uno::Reference<css::text::XTextDocument>(mxComponent, cpo::uno::UNO_QUERY_THROW)
+            ->getText();
+    cpo::uno::Reference<css::text::XTextContent> formula(
+        factory->createInstance(u"com.sun.star.text.TextEmbeddedObject"_ustr),
+        cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::beans::XPropertySet> formulaProperties(
+        formula, cpo::uno::UNO_QUERY_THROW);
+    formulaProperties->setPropertyValue(
+        u"CLSID"_ustr, cpo::uno::Any(u"078B7ABA-54FC-457F-8551-6147e776a997"_ustr));
+    formulaProperties->setPropertyValue(
+        u"AnchorType"_ustr, cpo::uno::Any(css::text::TextContentAnchorType_AS_CHARACTER));
+    text->insertTextContent(text->getStart(), formula, false);
+    auto const cursor = text->createTextCursor();
+    cursor->gotoEnd(true);
+    cpo::uno::Reference<css::text::XTextContent> section(
+        factory->createInstance(u"com.sun.star.text.TextSection"_ustr), cpo::uno::UNO_QUERY_THROW);
+    text->insertTextContent(cursor, section, true);
+    text->insertControlCharacter(
+        text->getEnd(), css::text::ControlCharacter::PARAGRAPH_BREAK, false);
+    cpo::uno::Reference<css::beans::XPropertySet>(section, cpo::uno::UNO_QUERY_THROW)
+        ->setPropertyValue(u"IsProtected"_ustr, cpo::uno::Any(true));
+    cpo::uno::Reference<css::view::XSelectionSupplier> selection(
+        cpo::uno::Reference<css::frame::XModel>(mxComponent, cpo::uno::UNO_QUERY_THROW)
+            ->getCurrentController(),
+        cpo::uno::UNO_QUERY_THROW);
+    selection->select(cpo::uno::Any(formula));
+    CPPUNIT_ASSERT(
+        cpo::uno::Reference<css::lang::XServiceInfo>(
+            selection->getSelection(), cpo::uno::UNO_QUERY_THROW)
+            ->supportsService(u"com.sun.star.text.TextEmbeddedObject"_ustr));
+    cpo::uno::Reference<css::util::XModifiable> modifiable(mxComponent, cpo::uno::UNO_QUERY_THROW);
+    modifiable->setModified(false);
+
+    // ...when changing the document outside the protected section...
+    text->insertString(text->getEnd(), u"Changed"_ustr, false);
+
+    // ...then the document is modified:
+    CPPUNIT_ASSERT(modifiable->isModified());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
