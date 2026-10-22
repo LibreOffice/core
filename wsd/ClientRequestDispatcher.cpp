@@ -2468,8 +2468,6 @@ bool ClientRequestDispatcher::handleMediaRequest(const Poco::Net::HTTPRequest& r
 {
     assert(socket && "Must have a valid socket");
 
-    LOG_DBG_S("Media request: " << request.getURI());
-
     const std::string decoded = Uri::decode(request.getURI());
     Poco::URI requestUri(decoded);
     Poco::URI::QueryParameters params = requestUri.getQueryParameters();
@@ -2490,14 +2488,14 @@ bool ClientRequestDispatcher::handleMediaRequest(const Poco::Net::HTTPRequest& r
             mediaKey = it.second;
     }
 
-    LOG_TRC_S("Media request for us: [" << serverId << "] with tag [" << tag << "] and viewId ["
+    LOG_DBG_S("Media request for us: [" << serverId << "] with tag [" << tag << "] and viewId ["
                                         << viewId << ']');
 
     if (serverId != Util::getProcessIdentifier())
     {
         LOG_ERR_S("Cluster configuration error: mis-matching serverid ["
                   << serverId << "] vs. [" << Util::getProcessIdentifier()
-                  << "] on request to URL: " << request.getURI());
+                  << "] on media request with tag [" << tag << ']');
 
         // we got the wrong request.
         http::Response httpResponse(http::StatusCode::BadRequest);
@@ -2515,8 +2513,7 @@ bool ClientRequestDispatcher::handleMediaRequest(const Poco::Net::HTTPRequest& r
 
     const auto docKey = RequestDetails::getDocKey(WOPISrc);
     LOG_TRC_S("Looking up DocBroker with docKey [" << docKey << "] referenced in WOPISrc ["
-                                                   << WOPISrc
-                                                   << "] in media URL: " + request.getURI());
+                                                   << WOPISrc << "] in media request");
 
     std::shared_ptr<DocumentBroker> docBroker;
     {
@@ -2525,8 +2522,7 @@ bool ClientRequestDispatcher::handleMediaRequest(const Poco::Net::HTTPRequest& r
         if (it == DocBrokers.end())
         {
             LOG_ERR_S("Unknown DocBroker with docKey [" << docKey << "] referenced in WOPISrc ["
-                                                        << WOPISrc
-                                                        << "] in media URL: " + request.getURI());
+                                                        << WOPISrc << "] in media request");
 
             http::Response httpResponse(http::StatusCode::BadRequest);
             httpResponse.setContentLength(0);
