@@ -1154,7 +1154,9 @@ void SfxObjectShell::SetAutoLoad(
     const INetURLObject& rUrl, sal_uInt32 nTime, bool bReload )
 {
     pImpl->pReloadTimer.reset();
-    if ( bReload )
+    // In a kit the client decides when a document reloads, so the document's own reload time and
+    // URL stay in its properties only.
+    if ( bReload && !comphelper::COKit::isActive() )
     {
         pImpl->pReloadTimer.reset(new AutoReloadTimer_Impl(
                                 rUrl.GetMainURL( INetURLObject::DecodeMechanism::ToIUri ),
