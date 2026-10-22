@@ -86,13 +86,9 @@ child_info_destroy(ChildInfo *info)
 static ChildInfo * child_spawn(Args *args, bool bAllArgs, bool bWithStatus)
 {
     rtl_uString *pApp = nullptr, *pTmp = nullptr;
-    rtl_uString **ppArgs;
-    sal_uInt32 nArgs, i;
-    ChildInfo *info;
     int status_pipe[2];
-    oslProcessError nError;
 
-    info = static_cast<ChildInfo*>(calloc (1, sizeof (ChildInfo)));
+    ChildInfo* info = static_cast<ChildInfo*>(calloc(1, sizeof(ChildInfo)));
 
     /* create pipe */
     if (pipe(status_pipe) < 0)
@@ -111,9 +107,9 @@ static ChildInfo * child_spawn(Args *args, bool bAllArgs, bool bWithStatus)
     pTmp = nullptr;
 
     /* copy args */
-    nArgs = bAllArgs ? args->nArgsTotal : args->nArgsEnv;
-    ppArgs = static_cast<rtl_uString **>(calloc(nArgs + 1, sizeof(rtl_uString*)));
-    for (i = 0; i < nArgs; ++i)
+    sal_uInt32 nArgs = bAllArgs ? args->nArgsTotal : args->nArgsEnv;
+    rtl_uString** ppArgs = static_cast<rtl_uString**>(calloc(nArgs + 1, sizeof(rtl_uString*)));
+    for (sal_uInt32 i = 0; i < nArgs; ++i)
         ppArgs[i] = args->ppArgs[i];
 
     if(bWithStatus)
@@ -128,12 +124,8 @@ static ChildInfo * child_spawn(Args *args, bool bAllArgs, bool bWithStatus)
     }
 
     /* start the main process */
-    nError = osl_executeProcess(pApp, ppArgs, nArgs,
-                                osl_Process_NORMAL,
-                                nullptr,
-                                nullptr,
-                                nullptr, 0,
-                                &info->child );
+    oslProcessError nError = osl_executeProcess(pApp, ppArgs, nArgs, osl_Process_NORMAL, nullptr,
+                                                nullptr, nullptr, 0, &info->child);
 
     if (pTmp)
         rtl_uString_release(pTmp);
