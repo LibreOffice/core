@@ -83,9 +83,9 @@ ChildInfo::~ChildInfo()
 } // namespace
 
 static int
-child_info_get_status_fd(ChildInfo const *info)
+child_info_get_status_fd(const ChildInfo& rInfo)
 {
-    return info->status_fd;
+    return rInfo.status_fd;
 }
 
 static ChildInfo child_spawn(Args* args, bool bAllArgs, bool bWithStatus)
@@ -148,23 +148,23 @@ static ChildInfo child_spawn(Args* args, bool bAllArgs, bool bWithStatus)
     return info;
 }
 
-static bool child_exited_wait(ChildInfo *info, bool bShortWait)
+static bool child_exited_wait(ChildInfo& rInfo, bool bShortWait)
 {
     TimeValue t = { 0, 250 /* ms */ * 1000 * 1000 };
     if (!bShortWait)
         t.Seconds = 1024;
 
-    return osl_joinProcessWithTimeout(info->child, &t) != osl_Process_E_TimedOut;
+    return osl_joinProcessWithTimeout(rInfo.child, &t) != osl_Process_E_TimedOut;
 }
 
-static int child_get_exit_code(ChildInfo *info)
+static int child_get_exit_code(ChildInfo& rInfo)
 {
     oslProcessInfo inf;
 
     inf.Code = -1;
     inf.Size = sizeof(inf);
 
-    if (osl_getProcessInfo(info->child, osl_Process_EXITCODE, &inf) != osl_Process_E_None)
+    if (osl_getProcessInfo(rInfo.child, osl_Process_EXITCODE, &inf) != osl_Process_E_None)
     {
         fprintf(stderr, "Warning: failed to fetch libreoffice exit status\n");
         return -1;
@@ -484,7 +484,7 @@ static bool send_args(int fd, rtl_uString const *pCwdPath)
 #define BUFFER_LEN 255
 
 /* Read the percent to show in splash. */
-static ProgressStatus read_percent(ChildInfo const *info, int *pPercent)
+static ProgressStatus read_percent(const ChildInfo& rInfo, int *pPercent)
 {
     static char pBuffer[BUFFER_LEN + 1];
     static char *pNext = pBuffer;
@@ -502,7 +502,7 @@ static ProgressStatus read_percent(ChildInfo const *info, int *pPercent)
     memmove(pBuffer, pNext, nNotProcessed);
 
     /* read data */
-    ssize_t nThisRead = read(child_info_get_status_fd(info),
+    ssize_t nThisRead = read(child_info_get_status_fd(rInfo),
                              pBuffer + nNotProcessed, BUFFER_LEN - nNotProcessed);
 
     if (nThisRead < 0)
@@ -822,12 +822,12 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             ChildInfo info = child_spawn(args, bAllArgs, bShortWait);
             g_pProcess = info.child;
 
-            while (!child_exited_wait(&info, bShortWait))
+            while (!child_exited_wait(info, bShortWait))
             {
                 ProgressStatus eResult;
 
                 splash_draw_progress(splash, nPercent);
-                eResult = read_percent(&info, &nPercent);
+                eResult = read_percent(info, &nPercent);
 
                 if (eResult != ProgressContinue)
                 {
@@ -837,7 +837,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
                 }
             }
 
-            status = child_get_exit_code(&info);
+            status = child_get_exit_code(info);
             g_pProcess = nullptr; // reset
 
             switch (status)
