@@ -4526,8 +4526,23 @@ void DrawingML::WriteBodyProps(const cpo::uno::Reference< cpo::uno::XInterface >
         sVertOverflow = u"clip"_ustr;
     }
 
-    // tdf#151134 When writing placeholder shapes, inset must be explicitly specified
-    bool bRequireInset = bIsPlaceholder;
+    // tdf#151134 A placeholder states each distance, since one it leaves out is taken from the
+    // layout it follows rather than from any default.
+    const bool bRequireInset = bIsPlaceholder;
+
+    // A shape of a presentation is read with distances of its own where a file states none. A
+    // shape of another kind of document, a text area that is turned, and text that stands on
+    // its side are all read with the distances the format states. A distance is left out only
+    // where it is the one the shape will be read with anyway.
+    const bool bReadWithItsOwnInsets
+        = GetDocumentType() == DOCUMENT_PPTX && !sTextRotateAngleMSUnit.has_value()
+          && !(sWritingMode.has_value()
+               && (sWritingMode.value() == "eaVert" || sWritingMode.value() == "vert"
+                   || sWritingMode.value() == "vert270"));
+    const sal_Int32 nReadLeftRightInset
+        = bReadWithItsOwnInsets ? mconstReadLeftRightInset : mconstDefaultLeftRightInset;
+    const sal_Int32 nReadTopBottomInset
+        = bReadWithItsOwnInsets ? mconstReadTopBottomInset : mconstDefaultTopBottomInset;
 
     mpFS->startElementNS( (nXmlNamespace ? nXmlNamespace : XML_a), XML_bodyPr,
                            XML_rot, sTextRotateAngleMSUnit,
@@ -4536,13 +4551,13 @@ void DrawingML::WriteBodyProps(const cpo::uno::Reference< cpo::uno::XInterface >
                            XML_vert, sWritingMode,
                            XML_wrap, pWrap,
                            XML_lIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nLeft)),
-                                                           bRequireInset || nLeft != mconstDefaultLeftRightInset),
+                                                           bRequireInset || nLeft != nReadLeftRightInset),
                            XML_tIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nTop)),
-                                                           bRequireInset || nTop != mconstDefaultTopBottomInset),
+                                                           bRequireInset || nTop != nReadTopBottomInset),
                            XML_rIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nRight)),
-                                                           bRequireInset || nRight != mconstDefaultLeftRightInset),
+                                                           bRequireInset || nRight != nReadLeftRightInset),
                            XML_bIns, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nBottom)),
-                                                           bRequireInset || nBottom != mconstDefaultTopBottomInset),
+                                                           bRequireInset || nBottom != nReadTopBottomInset),
                            XML_numCol, sax_fastparser::UseIf(OString::number(nCols), nCols > 0),
                            XML_spcCol, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nColSpacing)), nCols > 0 && nColSpacing >= 0),
                            XML_fromWordArt, sax_fastparser::UseIf("1", bFromWordArt),

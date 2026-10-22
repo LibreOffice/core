@@ -306,8 +306,13 @@ private:
     /// Parent exporter, used for text callback.
     DMLTextExport* mpTextExport;
 
+    // The distances the format leaves text from the edges of a shape that names none.
     static constexpr const sal_Int32 mconstDefaultLeftRightInset = 254;
     static constexpr const sal_Int32 mconstDefaultTopBottomInset = 127;
+    // The distances a shape is read with where a file names none of its own, which is what a
+    // reader arrives at when the attribute is left out.
+    static constexpr const sal_Int32 mconstReadLeftRightInset = 250;
+    static constexpr const sal_Int32 mconstReadTopBottomInset = 125;
 
 protected:
     cpo::uno::Any                             mAny;

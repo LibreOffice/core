@@ -15,10 +15,12 @@
 #include <com/sun/star/text/XTextSectionsSupplier.hpp>
 #include <com/sun/star/drawing/ShadingPattern.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/style/DropCapFormat.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 #include <com/sun/star/text/HoriOrientation.hpp>
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
 
 #include <comphelper/propertyvalue.hxx>
 #include <docmodel/color/ComplexColor.hxx>
@@ -881,6 +883,35 @@ CPPUNIT_TEST_FIXTURE(Test, testListIndentComesFromTheListLevel)
                 "start", u"754");
     assertXPath(pXmlDoc, "//w:p[w:pPr/w:pStyle[@w:val='ListAndIndents']][1]/w:pPr/w:ind",
                 "hanging", u"397");
+}
+
+// A drawing shape keeps the distances its text holds from its edges over a save to DOCX.
+CPPUNIT_TEST_FIXTURE(Test, testShapeTextDistancesSurviveASave)
+{
+    createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XShape> xShape(
+        xFactory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr),
+        uno::UNO_QUERY_THROW);
+    xShape->setSize(awt::Size(5000, 3000));
+    uno::Reference<text::XTextDocument> xTextDoc(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<text::XText> xBodyText = xTextDoc->getText();
+    uno::Reference<text::XTextContent> xContent(xShape, uno::UNO_QUERY_THROW);
+    xBodyText->insertTextContent(xBodyText->getStart(), xContent, false);
+    uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY_THROW)->setString(u"Text"_ustr);
+    uno::Reference<beans::XPropertySet> xProps(xShape, uno::UNO_QUERY_THROW);
+    xProps->setPropertyValue(u"TextLeftDistance"_ustr, uno::Any(sal_Int32(250)));
+    xProps->setPropertyValue(u"TextRightDistance"_ustr, uno::Any(sal_Int32(250)));
+    xProps->setPropertyValue(u"TextUpperDistance"_ustr, uno::Any(sal_Int32(125)));
+    xProps->setPropertyValue(u"TextLowerDistance"_ustr, uno::Any(sal_Int32(125)));
+
+    saveAndReload(TestFilter::DOCX);
+
+    uno::Reference<beans::XPropertySet> xReloaded(getShape(1), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(250),
+                         xReloaded->getPropertyValue(u"TextLeftDistance"_ustr).get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(125),
+                         xReloaded->getPropertyValue(u"TextUpperDistance"_ustr).get<sal_Int32>());
 }
 
 } // end of anonymous namespace

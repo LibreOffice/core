@@ -620,6 +620,56 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testPlaceholderKeepsItsWrapping)
                 u"none");
 }
 
+// The distance text keeps from the edges of a shape survives a save.
+// Text that stands on its side keeps the distances it is given over a save.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testTextDistancesOfSidewaysTextSurviveASave)
+{
+    // Given a shape whose text stands on its side and keeps a quarter of a millimetre from each
+    // edge:
+    createSdImpressDoc("pptx/vertical-text-distances.pptx");
+    uno::Reference<beans::XPropertySet> xBefore(getShapeFromPage(1, 0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(250),
+                         xBefore->getPropertyValue(u"TextLeftDistance"_ustr).get<sal_Int32>());
+
+    saveAndReload(TestFilter::PPTX);
+
+    // A text standing on its side is read with the distances the format states wherever the file
+    // names none, so the file names each one and the shape comes back as it was.
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(1, 0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(250),
+                         xShape->getPropertyValue(u"TextLeftDistance"_ustr).get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(250),
+                         xShape->getPropertyValue(u"TextRightDistance"_ustr).get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(250),
+                         xShape->getPropertyValue(u"TextUpperDistance"_ustr).get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(250),
+                         xShape->getPropertyValue(u"TextLowerDistance"_ustr).get<sal_Int32>());
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testTextDistancesSurviveASave)
+{
+    // Given a document whose shape states the distances the format itself assumes, a tenth of an
+    // inch at the sides and half of that above and below:
+    createSdImpressDoc("pptx/numfmt.pptx");
+
+    saveAndReload(TestFilter::PPTX);
+
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 254
+    // - Actual  : 250
+    // i.e. the distances were left out of the file and the shape came back with the ones a shape
+    // starts from.
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(254),
+                         xShape->getPropertyValue(u"TextLeftDistance"_ustr).get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(254),
+                         xShape->getPropertyValue(u"TextRightDistance"_ustr).get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(127),
+                         xShape->getPropertyValue(u"TextUpperDistance"_ustr).get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(127),
+                         xShape->getPropertyValue(u"TextLowerDistance"_ustr).get<sal_Int32>());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
