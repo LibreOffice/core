@@ -1468,6 +1468,29 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testTdf128049)
                 "fmla", u"val 12500");
 }
 
+// A layout whose areas were read without text is written without any.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testLayoutsKeepTheirEmptyAreas)
+{
+    // Given the document of cool#16327, whose twelve layouts state no text in any of their areas:
+    createSdImpressDoc("pptx/bnc887230.pptx");
+    save(TestFilter::PPTX);
+
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 1
+    // i.e. the words a reader shows in an empty area were written to the file, in whichever
+    // language that reader happened to run in.
+    for (int nLayout = 1; nLayout <= 12; ++nLayout)
+    {
+        xmlDocUniquePtr pLayout = parseExport("ppt/slideLayouts/slideLayout"
+                                              + OUString::number(nLayout) + ".xml");
+        assertXPath(pLayout, "//p:sp/p:txBody/a:p/a:r", 0);
+    }
+
+    // The text a slide master states for itself is written from the text styles it holds, which
+    // this leaves as it is.
+}
+
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest2, testCentredTitleKeepsItsName)
 {
     // The format has a name of its own for the title of a title slide, and the model has no kind

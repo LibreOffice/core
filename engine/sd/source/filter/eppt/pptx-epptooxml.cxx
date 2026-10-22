@@ -189,6 +189,8 @@ class PowerPointShapeExport : public ShapeExport
     bool                mbSlideMasterPart = false;
     /// How many placeholders of each name, such as title or body, the slideMaster part states
     std::map<OString, sal_Int32> maSlideMasterPlaceholders;
+    /// How many placeholders of each name this part has written, so the next one is the next
+    std::map<OString, sal_Int32> maWrittenPlaceholders;
 public:
     sal_Int32 CountStatedOnSlideMaster(std::string_view aType) const
     {
@@ -557,6 +559,46 @@ OString statedPlaceholderName(const Reference<css::drawing::XDrawPage>& rxPage,
         return OString();
     }
     return OUStringToOString(aStated, RTL_TEXTENCODING_UTF8);
+}
+
+/** Whether the document stated any text for the nth placeholder of this kind on this page.
+
+    Unknown where the import kept nothing, which is every document it did not read. */
+std::optional<bool> statedPlaceholderText(const Reference<css::drawing::XDrawPage>& rxPage,
+                                          const rtl::Reference<SdXImpressDocument>& rxModel,
+                                          std::string_view aModelName, sal_Int32 nOrdinal)
+{
+    const OUString aPageKey = placeholderPageKey(rxPage);
+    if (aPageKey.isEmpty() || !rxModel.is()
+        || !rxModel->getPropertySetInfo()->hasPropertyByName(u"InteropGrabBag"_ustr))
+        return {};
+
+    try
+    {
+        comphelper::SequenceAsHashMap aGrabBag(
+            rxModel->getPropertyValue(u"InteropGrabBag"_ustr));
+        const auto aEntry = aGrabBag.find(u"OOXPlaceholderTypes"_ustr);
+        if (aEntry == aGrabBag.end())
+            return {};
+
+        comphelper::SequenceAsHashMap aPerPage(aEntry->second);
+        const auto aPage = aPerPage.find(aPageKey);
+        if (aPage == aPerPage.end())
+            return {};
+
+        comphelper::SequenceAsHashMap aOnPage(aPage->second);
+        const auto aList = aOnPage.find(
+            "text:" + OStringToOUString(aModelName, RTL_TEXTENCODING_UTF8));
+        uno::Sequence<sal_Int32> aStated;
+        if (aList == aOnPage.end() || !(aList->second >>= aStated)
+            || nOrdinal >= aStated.getLength())
+            return {};
+        return aStated[nOrdinal] != 0;
+    }
+    catch (const uno::Exception&)
+    {
+        return {};
+    }
 }
 
 /** The name a master states a placeholder by.
@@ -3481,6 +3523,10 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
     // The format knows more kinds of placeholder than the model does, so the name the document
     // gave this one is given back where the model still stands for the same thing. A master
     // states none of those names, and keeps the one it has.
+    // How many of this kind this part has already written, which is what tells one of several
+    // areas of one kind from the next
+    const sal_Int32 nOrdinal = mbSlideMasterPart ? 0 : maWrittenPlaceholders[aTypeName]++;
+
     if (!mbSlideMasterPart)
     {
         auto* pExport = static_cast<PowerPointExport*>(GetFB());
@@ -3568,9 +3614,20 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
     if (xProps
         && xProps->getPropertySetInfo()->hasPropertyByName(u"IsEmptyPresentationObject"_ustr))
         xProps->getPropertyValue(u"IsEmptyPresentationObject"_ustr) >>= bIsEmptyPresObj;
+    // A layout keeps the formatting of each outline level in its list style whether or not it
+    // states text as well, and the model fills an outline one with the prompt rather than
+    // marking it as waiting for content. So the document itself says whether there was text
+    // here: where it stated none, what the shape now holds is the prompt of whoever read it.
+    bool bIsPrompt = bIsEmptyPresObj;
+    if (mbMaster && !mbSlideMasterPart && !bIsPrompt)
+    {
+        auto* pExport = static_cast<PowerPointExport*>(GetFB());
+        const std::optional<bool> oStatedText = statedPlaceholderText(
+            pExport->GetCurrentPage(), pExport->GetModel(), aTypeName, nOrdinal);
+        bIsPrompt = oStatedText.has_value() && !*oStatedText;
+    }
     // Field placeholders carry their field content.
-    const bool bTextIsDefaultPrompt
-        = bIsEmptyPresObj && !bUseCustomPrompt && !bUsePlaceholderIndex;
+    const bool bTextIsDefaultPrompt = bIsPrompt && !bUseCustomPrompt && !bUsePlaceholderIndex;
 
     // A slide-side empty picture placeholder inherits the prompt from the layout, so it writes no
     // text; one that is not empty was typed into, and that text is the slide's own content. The

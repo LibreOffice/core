@@ -265,15 +265,36 @@ OUString modelPlaceholderName(sal_Int32 nSubType)
     return oox::TokenMap::getUnicodeTokenName(nSubType);
 }
 
-/// Keeps the name a document gave a placeholder where the model has no kind of that name
-void keepStatedPlaceholderName(const SlidePersist& rSlidePersist,
-                               oox::core::XmlFilterBase& rFilterBase, sal_Int32 nSubType)
+/** The name the model writes a placeholder of this kind back under.
+
+    The names that stand for the text of a slide all read as that text, so they are written back
+    under the one name. A number tells them apart, which is why the numbers are kept in a list
+    rather than one for each name. */
+OUString writtenPlaceholderName(sal_Int32 nSubType)
+{
+    switch (nSubType)
+    {
+        case XML_obj:
+        case XML_chart:
+        case XML_dgm:
+        case XML_tbl:
+        case XML_clipArt:
+            return u"body"_ustr;
+        default:
+            return modelPlaceholderName(nSubType);
+    }
+}
+
+/// Keeps what a document states about a placeholder that the model has no room for
+void keepStatedPlaceholder(const SlidePersist& rSlidePersist,
+                           oox::core::XmlFilterBase& rFilterBase, sal_Int32 nSubType,
+                           bool bHasText)
 {
     const OUString aStated = oox::TokenMap::getUnicodeTokenName(nSubType);
     const OUString aModel = modelPlaceholderName(nSubType);
     // A slide is named after its own text once the whole document is read, so it would not be
-    // found again under the name it has here. It takes the name of its layout on the way out.
-    if (aStated == aModel || !rSlidePersist.isMasterPage())
+    // found again under the name it has here. It takes what its layout kept on the way out.
+    if (!rSlidePersist.isMasterPage())
         return;
 
     try
@@ -298,7 +319,24 @@ void keepStatedPlaceholderName(const SlidePersist& rSlidePersist,
         if (aPage != aPerPage.end())
             aOnPage << aPage->second;
 
-        aOnPage[aModel] <<= aStated;
+        if (aStated != aModel)
+            aOnPage[aModel] <<= aStated;
+
+        // A page may state several areas of one kind, and a slide tells them apart by the
+        // numbers stated here, so they are kept in the order the page states them.
+        // Whether the document stated any text of its own here. A page that states none shows
+        // the prompt of whoever reads it, and that prompt belongs to the reader, not to the
+        // document, so it is not written back as though the document had said it.
+        {
+            const OUString aTextKey = "text:" + writtenPlaceholderName(nSubType);
+            cpo::uno::Sequence<sal_Int32> aHadText;
+            const auto aHeldText = aOnPage.find(aTextKey);
+            if (aHeldText != aOnPage.end())
+                aHeldText->second >>= aHadText;
+            aHadText.realloc(aHadText.getLength() + 1);
+            aHadText.getArray()[aHadText.getLength() - 1] = bHasText ? 1 : 0;
+            aOnPage[aTextKey] <<= aHadText;
+        }
         aPerPage[aPageKey] <<= aOnPage.getAsConstPropertyValueList();
         aGrabBag[aKey] <<= aPerPage.getAsConstPropertyValueList();
         xDocProps->setPropertyValue(u"InteropGrabBag"_ustr,
@@ -614,7 +652,8 @@ void PPTShape::addShape(
             // The format knows more kinds of placeholder than the model does, so a centred title
             // reads as a title and a chart or a diagram reads as the text of a slide. The name
             // the document gave it is kept beside the model, to be given back on the way out.
-            keepStatedPlaceholderName(rSlidePersist, rFilterBase, mnSubType);
+            keepStatedPlaceholder(rSlidePersist, rFilterBase, mnSubType,
+                                  getTextBody() && !getTextBody()->isEmpty());
 
             // Apply text properties on placeholder text inside this placeholder shape
             if (meShapeLocation == Slide && mpPlaceholder && getTextBody() && getTextBody()->isEmpty())
