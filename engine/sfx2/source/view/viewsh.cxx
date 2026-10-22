@@ -2288,8 +2288,10 @@ void KitDocumentFocusListener::collectAndAttachContextWindow(
     const uno::Reference<css::accessibility::XAccessibleText>& xAccText)
 {
     collectContextWindow(xAccText);
+    // a selection reported while attaching resets the list
+    const auto aListParagraphs = m_aList.aParagraphs;
     // Writer announces no new child for a paragraph the context walk created first.
-    for (const auto& xItem : m_aList.aParagraphs)
+    for (const auto& xItem : aListParagraphs)
         attachRecursive(uno::Reference<accessibility::XAccessible>(xItem, uno::UNO_QUERY), xItem,
                         xItem->getAccessibleStateSet());
     attachContextParagraphs();
