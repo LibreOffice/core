@@ -1815,9 +1815,10 @@ CPPUNIT_TEST_FIXTURE(SdImportTestSmartArt, testTdf145528Matrix)
     // 'round1Rect'.
     createSdImpressDoc("pptx/tdf145528_SmartArt_Matrix.pptx");
     uno::Reference<drawing::XShape> xGroup(getShapeFromPage(0, 0), uno::UNO_QUERY);
-    // expected values
-    sal_Int32 nLeft[]{ 4001, 12001, 12001, 18501 };
-    sal_Int32 nTop[]{ 9999, 1999, 12499, 5999 };
+    // expected values; for turned text the corner inset of round1Rect is in the turned
+    // text area, so the turned shapes are off by half of it
+    sal_Int32 nLeft[]{ 3854, 12001, 12294, 18355 };
+    sal_Int32 nTop[]{ 10145, 1999, 12499, 5852 };
     // nWidth = 10292, nHeight = 4499
     // Without the fix in place the values were
     // nLeft {2001, 12001, 12001, 22001}

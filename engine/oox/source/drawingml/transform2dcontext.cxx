@@ -24,6 +24,7 @@
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/point/b2dpoint.hxx>
+#include <basegfx/vector/b2dvector.hxx>
 #include <drawingml/customshapeproperties.hxx>
 #include <drawingml/textbody.hxx>
 #include <oox/drawingml/shape.hxx>
@@ -161,10 +162,12 @@ bool ConstructPresetTextRectangle(Shape& rShape, awt::Rectangle& rRect)
             double maxAdj4 = 100000.0 - q2;
             adj4 = std::clamp<double>(adj4, 0, maxAdj4);
 
+            // the text box is below the arrow of upArrowCallout, above it for downArrowCallout
             rRect.X = rShape.getPosition().X;
-            rRect.Y = rShape.getPosition().Y;
-            rRect.Width = rShape.getSize().Width;
             rRect.Height = nHeight * adj4 / 100000.0;
+            rRect.Y = rShape.getPosition().Y
+                      + (nType == XML_upArrowCallout ? nHeight - rRect.Height : 0);
+            rRect.Width = rShape.getSize().Width;
             return true;
         }
         case XML_gear6:
@@ -272,14 +275,49 @@ bool ConstructPresetTextRectangle(Shape& rShape, awt::Rectangle& rRect)
             double dx1 = std::min(nWidth, nHeight) * a2 / 100000.0;
             double x1 = nWidth - dx1;
             double dy1 = nHeight * a1 / 200000.0;
-            double y1 = nHeight / 2.0 - dy1; // top
-            double y2 = nHeight / 2.0 + dy1; // bottom
+            double y1 = nHeight / 2.0 - dy1; // top of shaft
+            double y2 = nHeight / 2.0 + dy1; // bottom of shaft
             double dx2 = y1 * dx1 / (nHeight / 2.0);
-            double x2 = x1 + dx2; // right
+            double x2 = x1 + dx2; // right of text area rectangle
             rRect.X = rShape.getPosition().X; // left = 0
             rRect.Y = rShape.getPosition().Y + y1;
             rRect.Width = x2;
             rRect.Height = y2 - y1;
+            return true;
+        }
+        case XML_downArrow: // used in template "Converging Arrows"
+        {
+            // The identifiers here reflect the guides name value in presetShapeDefinitions.xml
+            sal_Int32 nWidth = rShape.getSize().Width;
+            sal_Int32 nHeight = rShape.getSize().Height;
+            if (nWidth == 0 || nHeight == 0)
+                return false;
+            double a1(50000.0);
+            double a2(50000.0);
+            const auto& aAdjGdList = rShape.getCustomShapeProperties()->getAdjustmentGuideList();
+            if (aAdjGdList.size() == 2)
+            {
+                a1 = aAdjGdList[0].maFormula.toDouble();
+                a2 = aAdjGdList[1].maFormula.toDouble();
+                a1 = std::clamp<double>(a1, 0, 100000);
+            }
+            double maxAdj2 = 100000.0 * nHeight / std::min(nWidth, nHeight);
+            a2 = std::clamp<double>(a2, 0, maxAdj2);
+            double dx1 = nWidth * a1 / 200000.0;
+            double x1 = nWidth / 2.0 - dx1; // left of arrow shaft
+            double x2 = nWidth / 2.0 + dx1; // right of arrow shaft
+            // distance from tip to base line of the arrow head
+            double dy1 = std::min(nWidth, nHeight) * a2 / 100000.0;
+            double y1 = nHeight - dy1;
+            // Since l=0 and t=0 for preset geometry, the intercept theorem works with adj2-handle
+            // as center, thus x1/wd2 = dy2/dy1.
+            double dy2 = x1 * dy1 / (nWidth / 2.0);
+            double y2 = y1 + dy2;
+            // The output rectangle needs same coordinate system as the shape, thus shift.
+            rRect.X = rShape.getPosition().X + x1;
+            rRect.Y = rShape.getPosition().Y;
+            rRect.Width = x2 - x1;
+            rRect.Height = y2;
             return true;
         }
         default:
@@ -337,38 +375,44 @@ ContextHandlerRef Transform2DContext::onCreateContext( sal_Int32 aElementToken, 
                     aUnrotatedTxXfrm.Y = mno_txXfrmOffY.value();
                 }
 
-                // Has the txXfrm an own rotation beyond compensation of the shape rotation?
-                // Happens e.g. in diagram type 'Detailed Process'.
-                sal_Int32 nAngleDiff
-                    = (mrShape.getRotation() + mno_txXfrmRot.value_or(0)) % 21600000;
-                if (nAngleDiff != 0)
+                // txXfrm is turned with the shape around the shape's centre, whatever its own turn
+                // is, so we turn its centre back the same way
+                if (mrShape.getRotation() % 21600000 != 0)
                 {
-                    // Rectangle aUnrotatedTxXfrm rotates around its center not around text area
-                    // center from preset. We shift aUnrotatedTxXfrm so that it is at the original
-                    // position after rotation of text area rectangle from preset.
-                    basegfx::B2DPoint aXfrmCenter(getCenter(aUnrotatedTxXfrm));
-                    basegfx::B2DPoint aPresetCenter(getCenter(aPresetTextRectangle));
-
-                    if (!aXfrmCenter.equal(aPresetCenter))
-                    {
-                        double fAngleRad = basegfx::deg2rad(nAngleDiff / 60000.0);
-                        basegfx::B2DHomMatrix aRotMatrix(
-                            basegfx::utils::createRotateAroundPoint(aPresetCenter, -fAngleRad));
-                        basegfx::B2DPoint aNewCenter(aRotMatrix * aXfrmCenter);
-                        aUnrotatedTxXfrm.X += aNewCenter.getX() - aXfrmCenter.getX();
-                        aUnrotatedTxXfrm.Y += aNewCenter.getY() - aXfrmCenter.getY();
-                    }
+                    const basegfx::B2DPoint aShapeCenter(
+                        mrShape.getPosition().X + mrShape.getSize().Width / 2.0,
+                        mrShape.getPosition().Y + mrShape.getSize().Height / 2.0);
+                    const basegfx::B2DPoint aXfrmCenter(getCenter(aUnrotatedTxXfrm));
+                    const double fAngleRad(basegfx::deg2rad(mrShape.getRotation() / 60000.0));
+                    const basegfx::B2DPoint aNewCenter(
+                        basegfx::utils::createRotateAroundPoint(aShapeCenter, -fAngleRad)
+                        * aXfrmCenter);
+                    aUnrotatedTxXfrm.X += aNewCenter.getX() - aXfrmCenter.getX();
+                    aUnrotatedTxXfrm.Y += aNewCenter.getY() - aXfrmCenter.getY();
                 }
 
                 if(mrShape.getTextBody())
                 {
-                    // Calculate indent offsets
-                    sal_Int32 nOffsetLeft = aUnrotatedTxXfrm.X - aPresetTextRectangle.X;
-                    sal_Int32 nOffsetTop = aUnrotatedTxXfrm.Y - aPresetTextRectangle.Y;
-                    sal_Int32 nOffsetRight
-                        = aPresetTextRectangle.Width - aUnrotatedTxXfrm.Width - nOffsetLeft;
-                    sal_Int32 nOffsetBottom
-                        = aPresetTextRectangle.Height - aUnrotatedTxXfrm.Height - nOffsetTop;
+                    // Calculate indent offsets. The indents are inside the text area turned by the
+                    // own turn of txXfrm, so we turn the shift of the centre back into it first
+                    const basegfx::B2DPoint aTextCenter(getCenter(aUnrotatedTxXfrm));
+                    const basegfx::B2DPoint aPresetCenter(getCenter(aPresetTextRectangle));
+                    const basegfx::B2DVector aShift(aTextCenter.getX() - aPresetCenter.getX(),
+                                                    aTextCenter.getY() - aPresetCenter.getY());
+                    const double fTextTurn(
+                        basegfx::deg2rad(mno_txXfrmRot.value_or(0) / 60000.0));
+                    const double fShiftX(aShift.getX() * std::cos(fTextTurn)
+                                         + aShift.getY() * std::sin(fTextTurn));
+                    const double fShiftY(-aShift.getX() * std::sin(fTextTurn)
+                                         + aShift.getY() * std::cos(fTextTurn));
+                    const double fFreeX((aPresetTextRectangle.Width - aUnrotatedTxXfrm.Width)
+                                        / 2.0);
+                    const double fFreeY((aPresetTextRectangle.Height - aUnrotatedTxXfrm.Height)
+                                        / 2.0);
+                    sal_Int32 nOffsetLeft = std::lround(fFreeX + fShiftX);
+                    sal_Int32 nOffsetTop = std::lround(fFreeY + fShiftY);
+                    sal_Int32 nOffsetRight = std::lround(fFreeX - fShiftX);
+                    sal_Int32 nOffsetBottom = std::lround(fFreeY - fShiftY);
 
                     if (nOffsetLeft)
                         mrShape.getTextBody()->getTextProperties().moTextOffLeft
