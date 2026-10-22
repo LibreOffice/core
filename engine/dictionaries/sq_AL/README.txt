@@ -1,7 +1,23 @@
-Myspell dictionary for Albanian
-Version 1.6.4 (15.07.2011)
+Hunspell Dictionary for Albanian (sq_AL)
+========================================
+Version: 1.26.10 (21.10.2026)
+Source Project: https://github.com/bgodole/korrektor
+Maintainer: Besmir Godolja <bgodole@gmail.com>
 
-This dictionary is released under GPL license version 2.0 or later.
-You can find the text of the license on http://www.gnu.org/ (http://www.gnu.org/licenses/gpl.txt)
+Linguistic Grounding:
+This dictionary has been completely built from scratch. It is based on the
+authoritative "Big Dictionary of the Albanian Language" (2026) and
+systematically applies the structural rules of "The Orthography of the
+Albanian Language" (1973). It features a completely overhaul, flag-driven
+architecture mapping nearly 1.3 million valid grammatical wordforms.
 
-You can find new Albanian dictionary versions here: http://shkenca.org/k6i/
+Licensing:
+This dictionary is free software; you can redistribute it and/or modify it
+under the terms of the GNU General Public License as published by the Free
+Software Foundation, either version 3 of the License, or (at your option)
+any later version.
+
+You should have received a copy of the GNU General Public License along with
+this program. If not, see <https://www.gnu.org/licenses/>.
+
+Copyright (c) 2026, by Besmir Godolja. All rights reserved.

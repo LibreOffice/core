@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <description xmlns="http://openoffice.org/extensions/description/2006" xmlns:d="http://openoffice.org/extensions/description/2006"  xmlns:xlink="http://www.w3.org/1999/xlink">
-    <version value="2021.01.07" />
-    <identifier value="Albanian.dictionary.from.shkenca.org" />
+    <version value="1.26.10" />
+    <identifier value="bgodolja.hunspell.dictionary.albanian" />
     <display-name>
-        <name lang="en-US">Albanian spelling dictionary, and hyphenation rules</name>
+        <name lang="en">Albanian spellchecker</name>
+        <name lang="sq">Korrektor i gjuhës shqipe</name>
     </display-name>
     <platform value="all" />
     <dependencies>
         <OpenOffice.org-minimal-version value="3.0" d:name="OpenOffice.org 3.0" />
     </dependencies>
     <publisher>
-        <name xlink:href="http://shkenca.org/" lang="en-US">shkenca.org</name>
+        <name xlink:href="mailto:bgodole@gmail.com" lang="en-US">Besmir Godolja</name>
      </publisher>
 </description>
