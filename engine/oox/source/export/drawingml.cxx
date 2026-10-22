@@ -2953,11 +2953,13 @@ void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int3
         mAny >>= sURL;
         if (!sURL.isEmpty())
         {
-            OUString sName;
-            if (GetProperty(rXPropSet, u"Name"_ustr))
-                mAny >>= sName;
-            // OOXML keeps the accessible name in the tooltip attribute
-            const auto oTooltip = sax_fastparser::UseIf(sName, !sName.isEmpty());
+            // The tooltip is the Title; the Name serves older documents
+            OUString sTooltip;
+            if (GetProperty(rXPropSet, u"Title"_ustr))
+                mAny >>= sTooltip;
+            if (sTooltip.isEmpty() && GetProperty(rXPropSet, u"Name"_ustr))
+                mAny >>= sTooltip;
+            const auto oTooltip = sax_fastparser::UseIf(sTooltip, !sTooltip.isEmpty());
 
             if (!sURL.match("#action?jump="))
             {

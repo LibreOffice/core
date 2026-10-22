@@ -343,8 +343,8 @@ CPPUNIT_TEST_FIXTURE(Test, testHyperlinkTooltip)
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPath(pXmlDoc, "//a:hlinkClick", "tooltip", u"Collabora Office home page");
 
-    // and it survives reading that file back; the tooltip used to land in Representation,
-    // which TextRun overwrites with the link's visible text
+    // and it survives reading that file back as the title; the tooltip used to land in
+    // Representation, which TextRun overwrites with the link's visible text
     loadFromURL(maTempFile.GetURL());
     auto xDoc = mxComponent.queryThrow<drawing::XDrawPagesSupplier>();
     auto xPage = xDoc->getDrawPages()->getByIndex(0).queryThrow<drawing::XDrawPage>();
@@ -354,9 +354,25 @@ CPPUNIT_TEST_FIXTURE(Test, testHyperlinkTooltip)
     auto xRuns = xParagraph->createEnumeration();
     auto xRun = xRuns->nextElement().queryThrow<beans::XPropertySet>();
     auto xField = xRun->getPropertyValue(u"TextField"_ustr).queryThrow<text::XTextField>();
-    OUString aName;
-    xField.queryThrow<beans::XPropertySet>()->getPropertyValue(u"Name"_ustr) >>= aName;
-    CPPUNIT_ASSERT_EQUAL(u"Collabora Office home page"_ustr, aName);
+    OUString aTitle;
+    xField.queryThrow<beans::XPropertySet>()->getPropertyValue(u"Title"_ustr) >>= aTitle;
+    CPPUNIT_ASSERT_EQUAL(u"Collabora Office home page"_ustr, aTitle);
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testTdf173709HyperlinkTitleTooltip)
+{
+    // Given a presentation whose hyperlink has both a name and a title:
+    loadFromFile(u"tdf173709-hyperlink-title.fodp");
+
+    // When saving it to PPTX:
+    save(TestFilter::PPTX);
+
+    // Then the title goes out as the tooltip:
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: Title tip
+    // - Actual  : Name tip
+    assertXPath(pXmlDoc, "//a:hlinkClick", "tooltip", u"Title tip");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testHyperlinkNoTooltip)

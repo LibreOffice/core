@@ -59,9 +59,10 @@ HyperLinkContext::HyperLinkContext( ContextHandler2Helper const & rParent,
     OUString sTooltip = rAttribs.getStringDefaulted( XML_tooltip );
     if ( !sTooltip.isEmpty() )
     {
-        // a shape's map is the shape's own, where Name is its name and Shape::finalizeXShape
-        // expects the tooltip in Representation
-        maProperties.setProperty(bTextRun ? PROP_Name : PROP_Representation, sTooltip);
+        // a text run's tooltip describes the link, so it is the URL field's Title; a shape's map
+        // is the shape's own, where Name is its name and Shape::finalizeXShape expects the tooltip
+        // in Representation
+        maProperties.setProperty(bTextRun ? PROP_Title : PROP_Representation, sTooltip);
     }
 
     OUString sFrame = rAttribs.getStringDefaulted( XML_tgtFrame );
