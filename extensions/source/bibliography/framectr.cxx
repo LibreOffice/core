@@ -142,11 +142,11 @@ void BibFrameCtrl_Impl::frameAction(const FrameActionEvent& )
 {
 }
 
-void BibFrameCtrl_Impl::disposing( const lang::EventObject& /*Source*/ )
+void BibFrameCtrl_Impl::disposing(const lang::EventObject& Source)
 {
     ::SolarMutexGuard aGuard;
-    if ( pController )
-        pController->getFrame()->removeFrameActionListener( this );
+    if (pController && Source.Source == pController->m_xFrame)
+        pController->m_xFrame.clear();
 }
 
 BibFrameController_Impl::BibFrameController_Impl( uno::Reference< awt::XWindow > xComponent,

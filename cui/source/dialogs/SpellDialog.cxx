@@ -118,7 +118,7 @@ void DictionaryEventListener::stopListening()
 void DictionaryEventListener::disposing(const css::lang::EventObject& rSource)
 {
     if (rSource.Source == m_xDict)
-        m_xDict->removeDictionaryEventListener(this);
+        m_xDict.clear(); // no method should be invoked on the broadcaster anymore
 }
 
 void DictionaryEventListener::processDictionaryEvent(const DictionaryEvent& rDicEvt)

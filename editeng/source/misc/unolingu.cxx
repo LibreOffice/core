@@ -410,8 +410,7 @@ void LinguMgrExitLstnr::disposing(const EventObject& rSource)
 {
     if (xDesktop.is()  &&  rSource.Source == xDesktop)
     {
-        xDesktop->removeEventListener( this );
-        xDesktop = nullptr;    //! release reference to desktop
+        xDesktop = nullptr; // just release the reference to desktop
 
         AtExit();
     }
