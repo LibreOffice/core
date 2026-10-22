@@ -202,6 +202,42 @@ CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownExportLink)
     CPPUNIT_ASSERT(aMd.find("[here](https://example.com)") != std::string::npos);
 }
 
+CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownExportLinkSpanWithFormatting)
+{
+    // A link with a bold character in the middle is written as one markdown link, with the bold
+    // text inside the link text.
+    EditEngine aEditEngine(mpItemPool.get());
+    aEditEngine.SetText(u"Click ABC now"_ustr);
+    SvxURLField aURLField(u"https://example.com"_ustr, u"ABC"_ustr, SvxURLFormat::Repr);
+    SfxItemSet aUrlSet(aEditEngine.GetEmptyItemSet());
+    aUrlSet.Put(SvxFieldItem(aURLField, EE_CHAR_URL));
+    aEditEngine.QuickSetAttribs(aUrlSet, ESelection(0, 6, 0, 9));
+    SfxItemSet aBoldSet(aEditEngine.GetEmptyItemSet());
+    aBoldSet.Put(SvxWeightItem(WEIGHT_BOLD, EE_CHAR_WEIGHT));
+    aEditEngine.QuickSetAttribs(aBoldSet, ESelection(0, 7, 0, 8));
+
+    std::string aMarkdown = exportAsMarkdown(aEditEngine);
+    CPPUNIT_ASSERT_EQUAL(std::string("Click [A**B**C](https://example.com) now"), aMarkdown);
+}
+
+CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownExportWrappedLinkSpan)
+{
+    // A link that wraps over several lines is written as one markdown link around all of its text.
+    EditEngine aEditEngine(mpItemPool.get());
+    aEditEngine.SetPaperSize(Size(2000, 10000));
+    aEditEngine.SetText(u"Click this rather long link text now"_ustr);
+    SvxURLField aURLField(u"https://example.com"_ustr, u"this rather long link text"_ustr,
+                          SvxURLFormat::Repr);
+    SfxItemSet aUrlSet(aEditEngine.GetEmptyItemSet());
+    aUrlSet.Put(SvxFieldItem(aURLField, EE_CHAR_URL));
+    aEditEngine.QuickSetAttribs(aUrlSet, ESelection(0, 6, 0, 32));
+    CPPUNIT_ASSERT_GREATER(sal_Int32(1), aEditEngine.GetLineCount(0));
+
+    std::string aMarkdown = exportAsMarkdown(aEditEngine);
+    CPPUNIT_ASSERT_EQUAL(std::string("Click [this rather long link text](https://example.com) now"),
+                         aMarkdown);
+}
+
 CPPUNIT_TEST_FIXTURE(MarkdownTest, testMarkdownImportBold)
 {
     // Given markdown with bold text:

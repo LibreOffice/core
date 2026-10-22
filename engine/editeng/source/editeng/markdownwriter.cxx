@@ -32,6 +32,27 @@
 
 namespace editeng
 {
+namespace
+{
+const SvxURLField* lcl_getSpanUrlField(const EditCharAttrib& rAttribute)
+{
+    return dynamic_cast<const SvxURLField*>(
+        static_cast<const SvxFieldItem*>(rAttribute.GetItem())->GetField());
+}
+
+// The hyperlink span with a URL field that covers the character at nPosition.
+const EditCharAttrib* lcl_findUrlSpanAt(const ContentNode& rNode, sal_Int32 nPosition)
+{
+    for (const auto& rAttribute : rNode.GetCharAttribs().GetAttribs())
+    {
+        if (rAttribute->Which() == EE_CHAR_URL && rAttribute->IsInLeftClosedRightOpen(nPosition)
+            && lcl_getSpanUrlField(*rAttribute))
+            return rAttribute.get();
+    }
+    return nullptr;
+}
+}
+
 MarkdownWriter::MarkdownWriter(const EditEngine& rEngine)
     : mrEngine(rEngine)
 {
@@ -296,6 +317,20 @@ void MarkdownWriter::WriteContent(const std::function<void(std::string_view)>& r
         sal_Int32 nIndex = 0;
         sal_Int32 nPortionCount = pParaPortion->GetTextPortions().Count();
 
+        // A hyperlink span splits into several portions where its formatting changes or a line
+        // wraps inside it, so the link opens before its first portion and closes after its last.
+        const EditCharAttrib* pOpenUrlSpan = nullptr;
+        auto aCloseUrlSpan = [&rOut, &pOpenUrlSpan]()
+        {
+            if (!pOpenUrlSpan)
+                return;
+            OString aUrl = OUStringToOString(lcl_getSpanUrlField(*pOpenUrlSpan)->GetURL(),
+                                             RTL_TEXTENCODING_UTF8);
+            aUrl = aUrl.replaceAll(")"_ostr, "\\)"_ostr);
+            rOut(Concat2View("](" + aUrl + ")"));
+            pOpenUrlSpan = nullptr;
+        };
+
         for (sal_Int32 nPortion = 0; nPortion < nPortionCount; nPortion++)
         {
             const TextPortion& rTextPortion = pParaPortion->GetTextPortions()[nPortion];
@@ -315,7 +350,6 @@ void MarkdownWriter::WriteContent(const std::function<void(std::string_view)>& r
 
             // Check for URL field
             const SvxURLField* pURLField = nullptr;
-            bool bUrlSpan = false;
             if (rTextPortion.GetKind() == PortionKind::FIELD)
             {
                 const EditCharAttrib* pAttr = rNode.GetCharAttribs().FindFeature(nPortionStart);
@@ -331,6 +365,18 @@ void MarkdownWriter::WriteContent(const std::function<void(std::string_view)>& r
                 }
             }
 
+            const EditCharAttrib* pUrlSpan
+                = pURLField ? nullptr : lcl_findUrlSpanAt(rNode, nEffStart);
+            if (pUrlSpan != pOpenUrlSpan)
+            {
+                aCloseUrlSpan();
+                if (pUrlSpan)
+                {
+                    rOut("[");
+                    pOpenUrlSpan = pUrlSpan;
+                }
+            }
+
             // Get text for this portion
             OUString aText = EditDoc::GetParaAsString(&rNode, nEffStart, nEffEnd);
 
@@ -342,16 +388,6 @@ void MarkdownWriter::WriteContent(const std::function<void(std::string_view)>& r
 
             SfxItemSet aAttribs
                 = mrEngine.GetAttribs(nNode, nEffStart, nEffEnd, GetAttribsFlags::CHARATTRIBS);
-
-            // A hyperlink span is a text portion with the URL as a character attribute.
-            if (!pURLField)
-            {
-                if (const SvxFieldItem* pUrlItem = aAttribs.GetItemIfSet(EE_CHAR_URL, false))
-                {
-                    pURLField = dynamic_cast<const SvxURLField*>(pUrlItem->GetField());
-                    bUrlSpan = pURLField != nullptr;
-                }
-            }
 
             const SvxWeightItem& rWeight = aAttribs.Get(EE_CHAR_WEIGHT);
             if (rWeight.GetWeight() == WEIGHT_BOLD)
@@ -388,14 +424,13 @@ void MarkdownWriter::WriteContent(const std::function<void(std::string_view)>& r
 
             if (pURLField)
             {
-                // A span shows its portion text, a placeholder field its representation.
-                OUString aLinkText = bUrlSpan ? aText : pURLField->GetRepresentation();
-                OString aRepr = OUStringToOString(aLinkText, RTL_TEXTENCODING_UTF8);
+                OString aRepresentation
+                    = OUStringToOString(pURLField->GetRepresentation(), RTL_TEXTENCODING_UTF8);
                 OString aUrl = OUStringToOString(pURLField->GetURL(), RTL_TEXTENCODING_UTF8);
                 // Escape ] in link text and ) in URL
-                aRepr = aRepr.replaceAll("]"_ostr, "\\]"_ostr);
+                aRepresentation = aRepresentation.replaceAll("]"_ostr, "\\]"_ostr);
                 aUrl = aUrl.replaceAll(")"_ostr, "\\)"_ostr);
-                aPortionBuf.append("[" + aRepr + "](" + aUrl + ")");
+                aPortionBuf.append("[" + aRepresentation + "](" + aUrl + ")");
             }
             else if (bCode)
             {
@@ -423,6 +458,7 @@ void MarkdownWriter::WriteContent(const std::function<void(std::string_view)>& r
 
             rOut(std::string_view(aPortionBuf));
         }
+        aCloseUrlSpan();
     }
 
     // Close any open code block
