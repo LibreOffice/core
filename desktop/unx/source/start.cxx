@@ -707,7 +707,6 @@ static void sigterm_handler(int /*ignored*/)
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     bool bSentArgs = false;
-    rtl_uString *pPipePath = nullptr;
     int status = 0;
     struct splash* splash = nullptr;
     struct sigaction sigpipe_action;
@@ -738,7 +737,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     if (!args->bInhibitPipe && !getenv("LIBO_FLATPAK"))
     {
         int fd = 0;
-        pPipePath = get_pipe_path(args->sAppPath.pData);
+        rtl_uString* pPipePath = get_pipe_path(args->sAppPath.pData);
 
         if ((fd=connect_pipe(pPipePath)) >= 0)
         {
@@ -758,6 +757,10 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
             close(fd);
         }
+
+        /* cleanup */
+        if (pPipePath)
+            rtl_uString_release(pPipePath);
     }
 
     if (!bSentArgs)
@@ -829,10 +832,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             }
         } while (bRestart);
     }
-
-    /* cleanup */
-    if (pPipePath)
-        rtl_uString_release(pPipePath);
 
     args_free(args);
 
