@@ -726,9 +726,7 @@ static void sigterm_handler(int /*ignored*/)
 SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 {
     bool bSentArgs = false;
-    const char* pUsePlugin;
     rtl_uString *pPipePath = nullptr;
-    Args *args;
     int status = 0;
     struct splash* splash = nullptr;
     struct sigaction sigpipe_action;
@@ -744,7 +742,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     sigemptyset(&sigterm_action.sa_mask);
     sigaction(SIGTERM, &sigterm_action, nullptr);
 
-    args = args_parse();
+    Args* args = args_parse();
     args->pAppPath = get_app_path(argv[0]);
     if (!args->pAppPath)
     {
@@ -757,7 +755,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     args->bInhibitSplash = true;
 #endif
 
-    pUsePlugin = getenv("SAL_USE_VCLPLUGIN");
+    const char* pUsePlugin = getenv("SAL_USE_VCLPLUGIN");
     if (pUsePlugin && !strcmp(pUsePlugin, "svp"))
         args->bInhibitSplash = true;
 
