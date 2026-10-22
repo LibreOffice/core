@@ -7294,6 +7294,48 @@ CPPUNIT_TEST_FIXTURE(PdfExportTest2, testDecorativeGroupMember)
     CPPUNIT_ASSERT_EQUAL(2, nArtifactsWithText);
 }
 
+CPPUNIT_TEST_FIXTURE(PdfExportTest2, testGroupWithoutAlt)
+{
+    // A group without a title of a text box and a picture with a title, a group with a title
+    // of a text box and a picture without one, and a group without a title of a text box and
+    // a 3D scene with a title
+    uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };
+    loadFromFile(u"group-without-alt.fodp");
+    save(TestFilter::PDF_WRITER,
+         { comphelper::makePropertyValue(u"FilterData"_ustr, aFilterData) });
+
+    vcl::filter::PDFDocument aDocument;
+    CPPUNIT_ASSERT(aDocument.Read(*maTempFile.GetStream(StreamMode::READ)));
+    std::unordered_map<OUString, int> aFigureChildren;
+    for (auto* pObject : aDocument.GetObjects())
+    {
+        auto pS = dynamic_cast<vcl::filter::PDFNameElement*>(pObject->Lookup("S"_ostr));
+        if (!pS || pS->GetValue() != "Figure")
+            continue;
+        auto pAlt = dynamic_cast<vcl::filter::PDFHexStringElement*>(pObject->Lookup("Alt"_ostr));
+        CPPUNIT_ASSERT(pAlt);
+        int nChildren = 0;
+        if (auto pKids = dynamic_cast<vcl::filter::PDFArrayElement*>(pObject->Lookup("K"_ostr)))
+        {
+            for (auto* pKid : pKids->GetElements())
+            {
+                if (dynamic_cast<vcl::filter::PDFReferenceElement*>(pKid))
+                    ++nChildren;
+            }
+        }
+        aFigureChildren[vcl::filter::PDFDocument::DecodeHexStringUTF16BE(*pAlt)] = nChildren;
+    }
+    // the group without a title is not a Figure, the picture in it is one; without the fix
+    // the group was a Figure with the title of the picture and the text of the text box
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aFigureChildren.size());
+    CPPUNIT_ASSERT_EQUAL(0, aFigureChildren[u"Arrow icon"_ustr]);
+    // a 3D scene is one Figure; without the fix it had no element, and its title went to the
+    // group around it
+    CPPUNIT_ASSERT_EQUAL(0, aFigureChildren[u"Cube"_ustr]);
+    // the group with a title is one Figure with its members inside
+    CPPUNIT_ASSERT_EQUAL(1, aFigureChildren[u"Workflow diagram"_ustr]);
+}
+
 CPPUNIT_TEST_FIXTURE(PdfExportTest2, testTdf168462)
 {
     cpo::uno::Sequence aFilterData{ comphelper::makePropertyValue(u"UseTaggedPDF"_ustr, true) };

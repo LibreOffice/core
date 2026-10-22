@@ -380,6 +380,16 @@ bool ViewObjectContact::isExportPDFTags() const
     return GetObjectContact().isExportTaggedPDF();
 }
 
+namespace
+{
+// a group without a title or a description only keeps its members together; a group with them
+// is one image, and a decorative group is one artifact
+bool isLayoutGroup(SdrObject const& rObj)
+{
+    return rObj.GetTitle().isEmpty() && rObj.GetDescription().isEmpty() && !rObj.IsDecorative();
+}
+}
+
 /** Check if we need to embed to a StructureTagPrimitive2D, too. This
     was done at ImplRenderPaintProc::createRedirectedPrimitive2DSequence before
 */
@@ -389,11 +399,15 @@ void ViewObjectContact::createStructureTag(drawinglayer::primitive2d::Primitive2
 
     // Check if we need to embed to a StructureTagPrimitive2D, too. This
     // was done at ImplRenderPaintProc::createRedirectedPrimitive2DSequence before
-    // ISO 14289-1:2014, Clause: 7.3: the members of a group are part of its Figure,
-    // except the ones marked decorative, which are artifacts
-    bool const bGroupMember(pSdrObj && pSdrObj->getParentSdrObjectFromSdrObject() != nullptr);
+    // ISO 14289-1:2014, Clause: 7.3: the members of a group that is an image are part of
+    // its Figure, except the ones marked decorative, which are artifacts; the members of a
+    // group that only keeps them together are tagged as if they were not grouped
+    SdrObject const* pParent(pSdrObj ? pSdrObj->getParentSdrObjectFromSdrObject() : nullptr);
+    while (pParent && isLayoutGroup(*pParent))
+        pParent = pParent->getParentSdrObjectFromSdrObject();
+    bool const bInFigureGroup(pParent != nullptr);
     if (!rNewPrimitiveSequence.empty() && isExportPDFTags()
-        && (!bGroupMember || pSdrObj->IsDecorative()))
+        && (!bInFigureGroup || pSdrObj->IsDecorative()))
     {
         if (nullptr != pSdrObj && !pSdrObj->IsDecorative())
         {
@@ -409,7 +423,8 @@ void ViewObjectContact::createStructureTag(drawinglayer::primitive2d::Primitive2
             if ( nInventor == SdrInventor::Default )
             {
                 if ( nIdentifier == SdrObjKind::Group )
-                    eElement = vcl::pdf::StructElement::Figure;
+                    eElement = isLayoutGroup(*pSdrObj) ? vcl::pdf::StructElement::Division
+                                                       : vcl::pdf::StructElement::Figure;
                 else if (nIdentifier == SdrObjKind::Table)
                     eElement = vcl::pdf::StructElement::Table;
                 else if (nIdentifier == SdrObjKind::Media)
@@ -423,6 +438,9 @@ void ViewObjectContact::createStructureTag(drawinglayer::primitive2d::Primitive2
                 else
                     eElement = vcl::pdf::StructElement::Division;
             }
+            // a 3D scene is painted as one image
+            else if (nIdentifier == SdrObjKind::E3D_Scene)
+                eElement = vcl::pdf::StructElement::Figure;
 
             if(vcl::pdf::StructElement::NonStructElement != eElement)
             {
