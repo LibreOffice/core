@@ -488,8 +488,8 @@ MYTHES_TARBALL := mythes-1.2.6.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-NSS_SHA256SUM := 52408a28cc9edc1ca04a420c74a820b48b63a3390a59fe38c5ec77afc6e2fb1d
-NSS_TARBALL := nss-3.131.1-with-nspr-4.39.tar.gz
+NSS_SHA256SUM := c220ea83378e55f2e4d7f7d83477756d622f79b5b91d1ff4157d5e3f494d2b49
+NSS_TARBALL := nss-3.132-with-nspr-4.39.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
