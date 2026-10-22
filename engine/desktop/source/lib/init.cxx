@@ -1917,6 +1917,9 @@ void CallbackFlushHandler::queue(const COKitCallbackType type, CallbackData& aCa
             case COKitCallbackType::INVALIDATE_VISIBLE_CURSOR:
             case COKitCallbackType::INVALIDATE_TILES:
             case COKitCallbackType::TOOLTIP:
+            // The callback carries no payload, so the last queued copy says what every earlier
+            // copy says.
+            case COKitCallbackType::SLIDE_LINKS_CHANGED:
                 if (removeAll(type))
                     SAL_INFO("kit", "Removed dups of [" << type << "]: [" << aCallbackData.getPayload() << "].");
                 break;
