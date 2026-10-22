@@ -27,6 +27,10 @@
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/style/DropCapFormat.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/xforms/XFormsSupplier.hpp>
+#include <com/sun/star/xforms/XModel.hpp>
+#include <com/sun/star/xml/dom/XDocument.hpp>
+#include <com/sun/star/xml/dom/XNodeList.hpp>
 
 #include <comphelper/classids.hxx>
 #include <comphelper/configuration.hxx>
@@ -41,6 +45,7 @@
 #include <vcl/event.hxx>
 #include <editeng/langitem.hxx>
 #include <vcl/scheduler.hxx>
+#include <tools/stream.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/scopeguard.hxx>
 
@@ -229,6 +234,14 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testBulletsOnSpace)
 
 namespace
 {
+/// The text of the name element in the default instance of an XForms model.
+OUString getInstanceName(const uno::Reference<xforms::XModel>& xModel)
+{
+    uno::Reference<xml::dom::XNodeList> xNames
+        = xModel->getDefaultInstance()->getElementsByTagName(u"name"_ustr);
+    return xNames->item(0)->getFirstChild()->getNodeValue();
+}
+
 /// Types the text and then Enter into the edit window of the document.
 void TypeLineWithEnter(SwDocShell& rDocShell, std::u16string_view aText)
 {
@@ -1731,6 +1744,41 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testExternalDatabaseFormLoadsOnlyAfterLinkUp
     // When the user then allows link updates, the form connects and loads.
     pDocShell->AllowLinkUpdate();
     CPPUNIT_ASSERT(xLoadable->isLoaded());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testXFormsInstanceURLLoadsOnlyAfterLinkUpdateAllowed)
+{
+    // Given a document whose XForms instance has inline data and also names a file. A document in
+    // the source tree cannot hold the file's absolute URL, so write one with it:
+    const OString aInstanceURL
+        = OUStringToOString(createFileURL(u"xforms-instance.xml"), RTL_TEXTENCODING_UTF8);
+    {
+        SvFileStream aStream(maTempFile.GetURL(), StreamMode::WRITE | StreamMode::TRUNC);
+        aStream.WriteOString(Concat2View(
+            "<?xml version=\"1.0\" encoding=\"UTF-8\"?>"
+            "<office:document xmlns:office=\"urn:oasis:names:tc:opendocument:xmlns:office:1.0\""
+            " xmlns:text=\"urn:oasis:names:tc:opendocument:xmlns:text:1.0\""
+            " xmlns:xforms=\"http://www.w3.org/2002/xforms\" office:version=\"1.4\""
+            " office:mimetype=\"application/vnd.oasis.opendocument.text\">"
+            "<office:body><office:text><office:forms>"
+            "<xforms:model id=\"Model\">"
+            "<xforms:instance src=\""
+            + aInstanceURL
+            + "\"><data xmlns=\"\"><name>inline</name></data></xforms:instance>"
+              "</xforms:model>"
+              "</office:forms><text:p/></office:text></office:body></office:document>"));
+    }
+
+    // When the document is loaded, the instance keeps its inline data:
+    loadFromURL(maTempFile.GetURL());
+    uno::Reference<xforms::XFormsSupplier> xFormsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<xforms::XModel> xModel(xFormsSupplier->getXForms()->getByName(u"Model"_ustr),
+                                          uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"inline"_ustr, getInstanceName(xModel));
+
+    // When the user then allows link updates, the instance holds the data of the file it names.
+    getSwDocShell()->AllowLinkUpdate();
+    CPPUNIT_ASSERT_EQUAL(u"loaded"_ustr, getInstanceName(xModel));
 }
 
 CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testRegisteredDatabaseFormLoadsOnlyAfterLinkUpdateAllowed)
