@@ -77,6 +77,7 @@ class SwFootnoteInfo;
 class SwEndNoteInfo;
 class SwLineNumberInfo;
 class SwDBManager;
+class SwNode;
 class SwNodeIndex;
 class SwNodeRange;
 class SwNumRule;
@@ -346,6 +347,8 @@ private:
     std::shared_ptr<SfxItemSet> m_pMergedPasteParaAttrs;
     /// The paste position's character properties, that the pasted content's hints should inherit.
     std::shared_ptr<SfxItemSet> m_pMergedPasteCharAttrs;
+    /// The destination text node at the paste position, vs new text nodes created during paste.
+    const SwNode* m_pMergedPasteOrigDestNode = nullptr;
 
     enum MissingDictionary { False = -1, Undefined = 0, True = 1 };
     MissingDictionary meDictionaryMissing;
@@ -1007,6 +1010,9 @@ public:
 
     const SfxItemSet* GetMergedPasteCharAttrs() const { return m_pMergedPasteCharAttrs.get(); }
     void SetMergedPasteCharAttrs(std::shared_ptr<SfxItemSet> pAttrs) { m_pMergedPasteCharAttrs = std::move(pAttrs); }
+
+    const SwNode* GetMergedPasteOrigDestNode() const { return m_pMergedPasteOrigDestNode; }
+    void SetMergedPasteOrigDestNode(const SwNode* pNode) { m_pMergedPasteOrigDestNode = pNode; }
 
     bool IsInWriting() const { return mbInWriting; }
     void SetInWriting(bool bNew) { mbInWriting = bNew; }

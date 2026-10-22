@@ -414,10 +414,6 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                         {
                             // Remember the destination paragraph's own properties:
                             auto pParaAttrs = std::make_shared<SfxItemSet>(pDestNode->GetSwAttrSet());
-                            // Remember the destination's character properties:
-                            auto pCharAttrs = std::make_shared<SfxItemSet>(pDestNode->GetSwAttrSet());
-                            pCharAttrs->ClearItem();
-                            rSh.GetCurAttr(*pCharAttrs);
                             SfxWhichIter aParaIter(*pParaAttrs);
                             for (sal_uInt16 nWhich = aParaIter.FirstWhich(); nWhich; nWhich = aParaIter.NextWhich())
                             {
@@ -426,6 +422,11 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                                     pParaAttrs->ClearItem(nWhich);
                                 }
                             }
+                            // Remember the char properties of a hint over the paste position:
+                            auto pCharAttrs = std::make_shared<SfxItemSet>(pDestNode->GetSwAttrSet());
+                            pCharAttrs->ClearItem();
+                            const sal_Int32 nContent = rSh.GetCursor()->GetPoint()->GetContentIndex();
+                            pDestNode->GetParaAttr(*pCharAttrs, nContent, nContent, /*bOnlyTextAttr=*/true);
                             SfxWhichIter aCharIter(*pCharAttrs);
                             for (sal_uInt16 nWhich = aCharIter.FirstWhich(); nWhich; nWhich = aCharIter.NextWhich())
                             {
@@ -436,6 +437,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                             }
                             pDoc->SetMergedPasteParaAttrs(std::move(pParaAttrs));
                             pDoc->SetMergedPasteCharAttrs(std::move(pCharAttrs));
+                            pDoc->SetMergedPasteOrigDestNode(pDestNode);
                         }
                     }
                     comphelper::ScopeGuard g(
@@ -445,6 +447,7 @@ void SwBaseShell::ExecClpbrd(SfxRequest &rReq)
                                 pDoc->SetInMergedPaste(false);
                                 pDoc->SetMergedPasteParaAttrs(nullptr);
                                 pDoc->SetMergedPasteCharAttrs(nullptr);
+                                pDoc->SetMergedPasteOrigDestNode(nullptr);
                             }
                         });
 

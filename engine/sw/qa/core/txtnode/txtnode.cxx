@@ -1059,15 +1059,16 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testMergedPasteHintDestColor)
     SwTextNode* pDestNode = pWrtShell->GetCursor()->GetPoint()->GetNode().GetTextNode();
     CPPUNIT_ASSERT(pDestNode);
     auto pParaAttrs = std::make_shared<SfxItemSet>(pDestNode->GetSwAttrSet());
-    auto pCharAttrs = std::make_shared<SfxItemSet>(pDestNode->GetSwAttrSet());
-    pCharAttrs->ClearItem();
-    pWrtShell->GetCurAttr(*pCharAttrs);
     SfxWhichIter aParaIter(*pParaAttrs);
     for (sal_uInt16 nWhich = aParaIter.FirstWhich(); nWhich; nWhich = aParaIter.NextWhich())
     {
         if (SwTextNode::IsParaItemKeptInMergedPaste(nWhich))
             pParaAttrs->ClearItem(nWhich);
     }
+    auto pCharAttrs = std::make_shared<SfxItemSet>(pDestNode->GetSwAttrSet());
+    pCharAttrs->ClearItem();
+    const sal_Int32 nContent = pWrtShell->GetCursor()->GetPoint()->GetContentIndex();
+    pDestNode->GetParaAttr(*pCharAttrs, nContent, nContent, /*bOnlyTextAttr=*/true);
     SfxWhichIter aCharIter(*pCharAttrs);
     for (sal_uInt16 nWhich = aCharIter.FirstWhich(); nWhich; nWhich = aCharIter.NextWhich())
     {
@@ -1076,10 +1077,12 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testMergedPasteHintDestColor)
     }
     pDoc->SetMergedPasteParaAttrs(std::move(pParaAttrs));
     pDoc->SetMergedPasteCharAttrs(std::move(pCharAttrs));
+    pDoc->SetMergedPasteOrigDestNode(pDestNode);
     comphelper::ScopeGuard g([pDoc] {
         pDoc->SetInMergedPaste(false);
         pDoc->SetMergedPasteParaAttrs(nullptr);
         pDoc->SetMergedPasteCharAttrs(nullptr);
+        pDoc->SetMergedPasteOrigDestNode(nullptr);
     });
     cpo::uno::Sequence<beans::PropertyValue> aArgs
         = { comphelper::makePropertyValue(u"Name"_ustr, createFileURL(u"merged-paste-hint.html")) };
@@ -1116,6 +1119,79 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testMergedPasteHintDestColor)
     SfxItemSetFixed<RES_CHRATR_COLOR, RES_CHRATR_COLOR> aBefore(pDoc->GetAttrPool());
     pTextNode->GetParaAttr(aBefore, 0, 6);
     CPPUNIT_ASSERT(!aBefore.GetItemIfSet(RES_CHRATR_COLOR));
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testMergedPasteMultiParaHintDestColor)
+{
+    // Given a Writer document whose destination font color comes from a hint:
+    createSwDoc();
+    SwDoc* pDoc = getSwDocShell()->GetDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert(u"beforeAAAZZZafter"_ustr);
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 6, /*bBasicCall=*/false);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 6, /*bBasicCall=*/false);
+    SfxItemSetFixed<RES_CHRATR_COLOR, RES_CHRATR_COLOR> aColorSet(pWrtShell->GetAttrPool());
+    Color nOrange(0xffcc00);
+    aColorSet.Put(SvxColorItem(nOrange, RES_CHRATR_COLOR));
+    pWrtShell->SetAttrSet(aColorSet);
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 9, /*bBasicCall=*/false);
+
+    // When merged-pasting an HTML snippet that is multiple whole paragraphs:
+    pDoc->SetInMergedPaste(true);
+    SwTextNode* pDestNode = pWrtShell->GetCursor()->GetPoint()->GetNode().GetTextNode();
+    CPPUNIT_ASSERT(pDestNode);
+    auto pParaAttrs = std::make_shared<SfxItemSet>(pDestNode->GetSwAttrSet());
+    SfxWhichIter aParaIter(*pParaAttrs);
+    for (sal_uInt16 nWhich = aParaIter.FirstWhich(); nWhich; nWhich = aParaIter.NextWhich())
+    {
+        if (SwTextNode::IsParaItemKeptInMergedPaste(nWhich))
+            pParaAttrs->ClearItem(nWhich);
+    }
+    auto pCharAttrs = std::make_shared<SfxItemSet>(pDestNode->GetSwAttrSet());
+    pCharAttrs->ClearItem();
+    const sal_Int32 nContent = pWrtShell->GetCursor()->GetPoint()->GetContentIndex();
+    pDestNode->GetParaAttr(*pCharAttrs, nContent, nContent, /*bOnlyTextAttr=*/true);
+    SfxWhichIter aCharIter(*pCharAttrs);
+    for (sal_uInt16 nWhich = aCharIter.FirstWhich(); nWhich; nWhich = aCharIter.NextWhich())
+    {
+        if (SwTextNode::IsCharItemKeptInMergedPaste(nWhich))
+            pCharAttrs->ClearItem(nWhich);
+    }
+    pDoc->SetMergedPasteParaAttrs(std::move(pParaAttrs));
+    pDoc->SetMergedPasteCharAttrs(std::move(pCharAttrs));
+    pDoc->SetMergedPasteOrigDestNode(pDestNode);
+    comphelper::ScopeGuard g([pDoc] {
+        pDoc->SetInMergedPaste(false);
+        pDoc->SetMergedPasteParaAttrs(nullptr);
+        pDoc->SetMergedPasteCharAttrs(nullptr);
+        pDoc->SetMergedPasteOrigDestNode(nullptr);
+    });
+    cpo::uno::Sequence<beans::PropertyValue> aArgs
+        = { comphelper::makePropertyValue(u"Name"_ustr, createFileURL(u"merged-paste-multi-hint.html")) };
+    dispatchCommand(mxComponent, u".uno:InsertDoc"_ustr, aArgs);
+
+    // Then the middle paragraph also inherits the hint's font color:
+    SwTextNode* pMiddleNode = nullptr;
+    SwNodes& rNodes = pDoc->GetNodes();
+    for (SwNodeOffset i(0); i < rNodes.Count(); ++i)
+    {
+        SwTextNode* pCandidate = rNodes[i]->GetTextNode();
+        if (pCandidate && pCandidate->GetText() == u"second")
+        {
+            pMiddleNode = pCandidate;
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(pMiddleNode);
+    SfxItemSetFixed<RES_CHRATR_COLOR, RES_CHRATR_COLOR> aQuery(pDoc->GetAttrPool());
+    pMiddleNode->GetParaAttr(aQuery, 0, pMiddleNode->GetText().getLength());
+    const SvxColorItem* pColor = aQuery.GetItemIfSet(RES_CHRATR_COLOR);
+    // Without the accompanying fix in place, this test would have failed, the middle paragraph was
+    // black.
+    CPPUNIT_ASSERT(pColor);
+    CPPUNIT_ASSERT_EQUAL(nOrange, pColor->GetValue());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

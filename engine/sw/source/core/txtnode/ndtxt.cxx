@@ -5421,6 +5421,14 @@ bool SwTextNode::SetAttr( const SfxItemSet& rSet, std::optional<bool> oInMergedP
         {
             aFiltered.Put(*pParaAttrs);
         }
+        if (this != GetDoc().GetMergedPasteOrigDestNode() && !GetText().isEmpty())
+        {
+            // Apply char properties to the entire paragraph for new paragraphs.
+            if (const SfxItemSet* pCharAttrs = GetDoc().GetMergedPasteCharAttrs())
+            {
+                aFiltered.Put(*pCharAttrs);
+            }
+        }
     }
 
     HandleSetAttrAtTextNode aHandleSetAttr( *this, aFiltered );

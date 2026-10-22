@@ -1201,7 +1201,11 @@ SwTextAttr* MakeTextAttr( SwDoc & rDoc, const SfxItemSet& rSet,
                 aFiltered.ClearItem(nWhich);
             }
         }
-        // Propagate the destination's char-level properties as well:
+        // Propagate the destination properties:
+        if (const SfxItemSet* pParaAttrs = rDoc.GetMergedPasteParaAttrs())
+        {
+            aFiltered.Put(*pParaAttrs);
+        }
         if (const SfxItemSet* pCharAttrs = rDoc.GetMergedPasteCharAttrs())
         {
             aFiltered.Put(*pCharAttrs);
