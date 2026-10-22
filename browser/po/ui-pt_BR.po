@@ -12,16 +12,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-13 14:06+0200\n"
-"PO-Revision-Date: 2026-10-10 17:57+0000\n"
+"PO-Revision-Date: 2026-10-19 17:22+0000\n"
 "Last-Translator: H2Oufoe <regularwater@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
 "collabora-online/collabora-ui/pt_BR/>\n"
-"Language: \n"
+"Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.10.1.dev0\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #: admin/admin.strings.js:15
 msgid "Admin console"
@@ -558,7 +558,6 @@ msgstr "Provedor"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:723
 #: admin/src/integrator/AdminIntegratorSettings.ts:727
-#, fuzzy
 msgid "API key"
 msgstr "Chave de API"
 
@@ -573,7 +572,6 @@ msgid "Base URL"
 msgstr "URL base"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:730
-#, fuzzy
 msgid "Image size"
 msgstr "Tamanho da imagem"
 
@@ -583,11 +581,11 @@ msgstr "Tempo limite da solicitação"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:734
 msgid "Client ID"
-msgstr ""
+msgstr "ID do Cliente"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:735
 msgid "Secret"
-msgstr ""
+msgstr "Segredo"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:738
 msgid "In-document Screen Reader"
@@ -980,7 +978,7 @@ msgstr ""
 #: admin/src/integrator/AdminIntegratorSettings.ts:1776
 #: admin/src/integrator/AdminIntegratorSettings.ts:4500
 msgid "Interface Settings"
-msgstr "Configurações de Visual"
+msgstr "Configurações da interface"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1778
 msgid "Set default interface preferences."
@@ -1082,19 +1080,19 @@ msgstr "Editar"
 #: admin/src/integrator/AdminIntegratorSettings.ts:2849
 #: admin/src/integrator/AdminIntegratorSettings.ts:4485
 msgid "Accessibility"
-msgstr ""
+msgstr "Acessibilidade"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2856
 msgid "User interface zoom"
-msgstr ""
+msgstr "Zoom da interface do usuário"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2861
 msgid "Magnify the whole window, including the document and the menus."
-msgstr ""
+msgstr "Aumentar toda a janela, incluindo o documento e os menus."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2867
 msgid "As per system"
-msgstr ""
+msgstr "Igual ao sistema"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2902
 msgid ""
@@ -1115,13 +1113,15 @@ msgstr "Configurações do Zotero"
 #: admin/src/integrator/AdminIntegratorSettings.ts:3005
 #: admin/src/integrator/AdminIntegratorSettings.ts:3033
 msgid "Electronic Signature"
-msgstr ""
+msgstr "Assinatura Eletrônica"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3008
 msgid ""
 "Credentials for the electronic signature service. They are shared by "
 "everyone on this server."
 msgstr ""
+"Credenciais para o serviço de assinatura eletrônica. Eles são compartilhados "
+"por todos neste servidor."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3060
 #: admin/src/integrator/AdminIntegratorSettings.ts:4719
@@ -1159,47 +1159,50 @@ msgstr "Reiniciar"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3140
 msgid "Use the AI provider set on the server"
-msgstr ""
+msgstr "Usar o provedor de IA definido no servidor"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3190
-#, fuzzy
 msgid "Providers"
-msgstr "Provedor"
+msgstr "Provedores"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3193
 msgid "Managed by your admin"
-msgstr ""
+msgstr "Gerenciado pelo seu administrador"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3199
 msgid "No providers added yet"
-msgstr ""
+msgstr "Nenhum provedor adicionado ainda"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3205
 msgid ""
 "Add a provider to start using AI for text generation, image generation, or "
 "both. Your administrator's provider is filled in for you."
 msgstr ""
+"Adicione um provedor para começar a usar a IA para geração de texto, geração "
+"de imagens ou ambos. O provedor do seu administrador será preenchido para "
+"você."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3213
 msgid "Add provider..."
-msgstr ""
+msgstr "Adicionar provedor..."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3233
 msgid "Choose the AI provider to use for text and image generation."
-msgstr ""
+msgstr "Escolha o provedor de IA para usar para geração de texto e imagem."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3235
 msgid ""
 "Use your own AI provider instead of the one set up by your administrator. "
 "This applies only to you."
 msgstr ""
+"Use seu próprio provedor de IA em vez do configurado pelo administrador. "
+"Isso se aplica apenas a você."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3390
 msgid "seconds"
-msgstr ""
+msgstr "segundos"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3399
-#, fuzzy
 msgid "Text generation"
 msgstr "Geração de texto"
 
@@ -1226,23 +1229,25 @@ msgid ""
 "Models without it (e.g. base llama3, gemma) can still chat but cannot use "
 "document tools."
 msgstr ""
+"Para editar documentos, escolha um modelo com chamada de ferramenta, por "
+"exemplo, gpt-4o ou llama3.1. Modelos sem ele (por exemplo, base lhama3, "
+"gemma) ainda podem conversar, mas não podem usar ferramentas de documentos."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3491
-#, fuzzy
 msgid "Image generation"
 msgstr "Geração de imagem"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3499
 msgid "Same as text provider"
-msgstr ""
+msgstr "O mesmo que o provedor de texto"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3854
 msgid "Required for this provider"
-msgstr ""
+msgstr "Necessário para este provedor"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3947
 msgid "Enter an API key for this provider to list its models."
-msgstr ""
+msgstr "Insira uma chave de API para que este provedor liste seus modelos."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3963
 #: admin/src/integrator/AdminIntegratorSettings.ts:4085
@@ -1259,7 +1264,7 @@ msgstr "Nenhum modelo encontrado"
 #: admin/src/integrator/AdminIntegratorSettings.ts:4035
 #: admin/src/integrator/AdminIntegratorSettings.ts:4151
 msgid "Connected"
-msgstr ""
+msgstr "Conectado"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4041
 #: admin/src/integrator/AdminIntegratorSettings.ts:4157
@@ -1290,9 +1295,8 @@ msgstr ""
 "a chave da API."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4387
-#, fuzzy
 msgid "Lightproof Sentence Checker"
-msgstr "Verificador de sentença à prova de luz"
+msgstr "Verificador de sentença leve"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4390
 msgid "Choose what the sentence checker looks for as you type."
@@ -1329,7 +1333,7 @@ msgstr "Insira {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4991
 msgid "Delete {0}"
-msgstr ""
+msgstr "Apagar {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5054
 msgid "Reset to default {0}"
@@ -2311,7 +2315,6 @@ msgid "No response from AI"
 msgstr "Nenhuma resposta da AI"
 
 #: src/control/Control.AIChatSidebar.ts:2166
-#, fuzzy
 msgid "AI used too many tool steps"
 msgstr "AI usou muitos passos de ferramenta"
 
@@ -2350,9 +2353,8 @@ msgstr ""
 "novamente."
 
 #: src/control/Control.AIChatSidebar.ts:2180
-#, fuzzy
 msgid "AI image settings not configured"
-msgstr "Configurações de IA não configuradas"
+msgstr "As Imagens com IA não estão configuradas"
 
 #: src/control/Control.AIChatSidebar.ts:2181
 msgid "Image model not configured"
@@ -2692,6 +2694,7 @@ msgstr "Tempo limite de análise de fórmula"
 #: src/control/Control.AIChatSidebar.ts:3636
 msgid "Select the content you want the assistant to work on first."
 msgstr ""
+"Selecione o conteúdo que você deseja que o assistente trabalhe primeiro."
 
 #: src/control/Control.AIChatSidebar.ts:3651
 msgid "Analyzing formula dependencies..."
@@ -2825,10 +2828,12 @@ msgid ""
 "Describe the image you want to generate. For example: \"A watercolour of a "
 "mountain lake at sunrise\"."
 msgstr ""
+"Descreva a imagem que você deseja gerar. Por exemplo: \"Uma aquarela de um "
+"lago de montanha ao nascer do sol\"."
 
 #: src/control/Control.AIChatSidebar.ts:3916
 msgid "Write speaker notes for the current slide."
-msgstr ""
+msgstr "Escreva notas do apresentador para o slide atual."
 
 #: src/control/Control.AIChatSidebar.ts:3949
 msgid ""
@@ -2907,18 +2912,21 @@ msgstr ""
 #: src/control/Control.CleanupSidebar.ts:204
 msgid "Images stored with more detail than a slide can show"
 msgstr ""
+"Imagens estão armazenadas com mais detalhes do que um slide pode mostrar"
 
 #: src/control/Control.CleanupSidebar.ts:207
 msgid "Images stored at more than %1 DPI, more detail than a slide can show"
 msgstr ""
+"Imagens estão armazenadas em mais de % 1 DPI, mais detalhes do que um slide "
+"podem mostrar"
 
 #: src/control/Control.CleanupSidebar.ts:224
 msgid "High-resolution images"
-msgstr ""
+msgstr "Imagens de alta resolução"
 
 #: src/control/Control.CleanupSidebar.ts:230
 msgid "Cropped images"
-msgstr ""
+msgstr "Imagens cortadas"
 
 #: src/control/Control.CleanupSidebar.ts:236
 #: src/control/Control.BackstageView.ts:891
@@ -2930,43 +2938,40 @@ msgid "Slides"
 msgstr "Slides"
 
 #: src/control/Control.CleanupSidebar.ts:241
-#, fuzzy
 msgid "Hidden slides"
-msgstr "Ocultar slides"
+msgstr "Slides ocultos"
 
 #: src/control/Control.CleanupSidebar.ts:246
-#, fuzzy
 msgid "Unused master slides"
-msgstr "Slides mestre não utilizados (%1)"
+msgstr "Slides mestre não utilizados"
 
 #: src/control/Control.CleanupSidebar.ts:252
 msgid "For sharing"
-msgstr ""
+msgstr "Para compartilhar"
 
 #: src/control/Control.CleanupSidebar.ts:254
 msgid "Speaker notes"
-msgstr ""
+msgstr "Notas do apresentador"
 
 #: src/control/Control.CleanupSidebar.ts:258
-#, fuzzy
 msgid "Embedded objects"
-msgstr "Objetos incorporados (%1)"
+msgstr "Objetos incorporados"
 
 #: src/control/Control.CleanupSidebar.ts:359
 msgid "images left alone"
-msgstr ""
+msgstr "imagens deixadas sozinhas"
 
 #: src/control/Control.CleanupSidebar.ts:361
 msgid "%1 DPI, quality %2 %"
-msgstr ""
+msgstr "%1 DPI, qualidade %2 %"
 
 #: src/control/Control.CleanupSidebar.ts:374
 msgid "%1 can be cleaned up"
-msgstr ""
+msgstr "%1 pode ser limpo"
 
 #: src/control/Control.CleanupSidebar.ts:376
 msgid "%1 (%2%) can be cleaned up"
-msgstr ""
+msgstr "%1 (%2%) pode ser limpo"
 
 #: src/control/Control.CleanupSidebar.ts:384
 msgid "Fix"
@@ -2988,7 +2993,7 @@ msgstr "%1 MB"
 
 #: src/control/Control.CleanupSidebar.ts:479
 msgid "Remove %1"
-msgstr ""
+msgstr "Remover %1"
 
 #: src/control/Control.CleanupSidebar.ts:481
 msgid "Fix %1"
@@ -3042,11 +3047,11 @@ msgstr "%1 em %2 DPI"
 #: src/control/Control.CleanupSidebar.ts:586
 #, javascript-format
 msgid "%1% cropped away"
-msgstr ""
+msgstr "%1% recortado"
 
 #: src/control/Control.CleanupSidebar.ts:588
 msgid "%1, %2% cropped away"
-msgstr ""
+msgstr "%1, %2% recortados"
 
 #: src/control/Control.CleanupSidebar.ts:655
 msgid "Leave images alone"
@@ -3112,9 +3117,8 @@ msgid "Image resolution"
 msgstr "Resolução de imagem"
 
 #: src/control/Control.CleanupSidebar.ts:805
-#, fuzzy
 msgid "JPEG quality (%)"
-msgstr "Qualidade JPEG em %"
+msgstr "Qualidade do JPEG (%)"
 
 #: src/control/Control.CleanupSidebar.ts:830
 msgid "Prepare for sharing"
@@ -3133,9 +3137,8 @@ msgid "Stop"
 msgstr "Parar"
 
 #: src/control/Control.CleanupSidebar.ts:926
-#, fuzzy
 msgid "Scan presentation"
-msgstr "Apresentação em branco"
+msgstr "Escanear apresentação"
 
 #: src/control/Control.CleanupSidebar.ts:962
 msgid "Fix all"
@@ -3148,7 +3151,7 @@ msgstr ""
 
 #: src/control/Control.CleanupSidebar.ts:1013
 msgid "Find what makes this presentation large, and clean it up here."
-msgstr ""
+msgstr "Encontre o que torna essa apresentação grande e limpe-a aqui."
 
 #: src/control/Control.CleanupSidebar.ts:1077
 msgid "saves %1"
@@ -3168,7 +3171,7 @@ msgstr "Limpar"
 
 #: src/control/Control.CleanupSidebar.ts:2439
 msgid "The cleanup did not answer. Please try again."
-msgstr ""
+msgstr "A limpeza não respondeu. Por favor, tente de novo."
 
 #: src/control/Control.AlertDialog.js:55
 msgid "External link"
@@ -3318,9 +3321,8 @@ msgstr "Documentos texto"
 #: src/control/Control.BackstageView.ts:889
 #: src/control/Control.BackstageView.ts:892
 #: src/control/Control.PartsPreview.js:136
-#, fuzzy
 msgid "Pages"
-msgstr "Página"
+msgstr "Páginas"
 
 #: src/control/Control.BackstageView.ts:890
 msgid "Spreadsheet"
@@ -3524,125 +3526,138 @@ msgstr "Ignorar"
 
 #: src/control/onboarding/OnboardingSteps.ts:25
 msgid "Welcome to Collabora Online"
-msgstr ""
+msgstr "Bem-vindo(a) ao Collabora Online"
 
 #: src/control/onboarding/OnboardingSteps.ts:27
 msgid "This short tour points out the parts of the screen you will use most."
 msgstr ""
+"Essa pequena apresentação irá te mostrar as partes da tela que você mais "
+"usará."
 
 #: src/control/onboarding/OnboardingSteps.ts:32
 msgid "The document name"
-msgstr ""
+msgstr "O nome do documento"
 
 #: src/control/onboarding/OnboardingSteps.ts:34
 msgid ""
 "Select the name to rename the document. Every change is saved as you work."
 msgstr ""
+"Selecione o nome para renomear o documento. Toda mudança é salva "
+"automaticamente enquanto você trabalha."
 
 #: src/control/onboarding/OnboardingSteps.ts:40
 msgid "The tabs"
-msgstr ""
+msgstr "As guias"
 
 #: src/control/onboarding/OnboardingSteps.ts:42
 msgid ""
 "Each tab gathers the tools for one kind of work, such as inserting or "
 "reviewing."
 msgstr ""
+"Cada guia reúne as ferramentas para um tipo de trabalho, como inserir ou "
+"revisar."
 
 #: src/control/onboarding/OnboardingSteps.ts:49
 msgid "The menus"
-msgstr ""
+msgstr "Os menus"
 
 #: src/control/onboarding/OnboardingSteps.ts:50
 msgid "Every command of the editor is in one of these menus."
-msgstr ""
+msgstr "Cada comando do editor está em um desses menus."
 
 #: src/control/onboarding/OnboardingSteps.ts:56
 msgid "The tools"
-msgstr ""
+msgstr "As ferramentas"
 
 #: src/control/onboarding/OnboardingSteps.ts:57
 msgid "The buttons of the tab you selected appear along this row."
-msgstr ""
+msgstr "Os botões da guia que você selecionou aparecem ao longo desta linha."
 
 #: src/control/onboarding/OnboardingSteps.ts:63
 msgid "The toolbar"
-msgstr ""
+msgstr "A barra de ferramentas"
 
 #: src/control/onboarding/OnboardingSteps.ts:64
 msgid "The buttons you need most often sit here, under the menus."
 msgstr ""
+"Os botões que você precisa mais frequentemente ficam aqui, sob os menus."
 
 #: src/control/onboarding/OnboardingSteps.ts:70
 msgid "The formula bar"
-msgstr ""
+msgstr "A barra de fórmulas"
 
 #: src/control/onboarding/OnboardingSteps.ts:72
 msgid ""
 "The contents of the selected cell appear here. Type an equals sign to start "
 "a formula."
 msgstr ""
+"O conteúdo da célula selecionada aparece aqui. Digite um sinal de igual para "
+"iniciar uma fórmula."
 
 #: src/control/onboarding/OnboardingSteps.ts:79
 msgid "The slide panel"
-msgstr ""
+msgstr "O painel deslizante"
 
 #: src/control/onboarding/OnboardingSteps.ts:81
 msgid ""
 "Every slide or page of the document is listed here. Select one to work on "
 "it."
 msgstr ""
+"Cada slide ou página do documento está listada aqui. Selecione um para "
+"trabalhar nele."
 
 #: src/control/onboarding/OnboardingSteps.ts:89
 msgid "The sidebar"
-msgstr ""
+msgstr "A barra lateral"
 
 #: src/control/onboarding/OnboardingSteps.ts:91
 msgid ""
 "The sidebar holds the settings for whatever you have selected, such as "
 "text, a shape or a cell."
 msgstr ""
+"A barra lateral contém as configurações para o que você selecionou, como "
+"texto, um formato ou uma célula."
 
 #: src/control/onboarding/OnboardingSteps.ts:98
 msgid "The people in the document"
-msgstr ""
+msgstr "As pessoas no documento"
 
 #: src/control/onboarding/OnboardingSteps.ts:99
 msgid "See who else is editing and share the document."
-msgstr ""
+msgstr "Veja quem mais está editando e compartilhe o documento."
 
 #: src/control/onboarding/OnboardingSteps.ts:109
-#, fuzzy
 msgid "The status bar"
-msgstr "Mostrar Barra de Status"
+msgstr "A barra de status"
 
 #: src/control/onboarding/OnboardingSteps.ts:111
 msgid ""
 "The state of the document, the language of the text and the zoom level are "
 "along the bottom."
 msgstr ""
+"O status do documento, o idioma do texto e o nível de zoom estão ao longo da "
+"linha inferior."
 
 #: src/control/onboarding/OnboardingSteps.ts:118
 msgid "You are ready to work"
-msgstr ""
+msgstr "Você está pronto para trabalhar"
 
 #: src/control/onboarding/OnboardingSteps.ts:119
 msgid "You can walk through this tour again from the Help menu."
-msgstr ""
+msgstr "Você pode refazer esse tour novamente no menu Ajuda."
 
 #: src/control/onboarding/Control.OnboardingTour.ts:245
 #: src/slideshow/engine/SlideShowHandler.ts:116
 msgid "Skip"
-msgstr ""
+msgstr "Pular"
 
 #: src/control/onboarding/Control.OnboardingTour.ts:251
 msgid "Back"
-msgstr ""
+msgstr "Voltar"
 
 #: src/control/onboarding/Control.OnboardingTour.ts:258
-#, fuzzy
 msgid "Done"
-msgstr "Nenhum"
+msgstr "Feito"
 
 #: src/control/onboarding/Control.OnboardingTour.ts:258
 #: src/control/Control.Zotero.js:270 src/control/Control.Zotero.js:469
@@ -4455,7 +4470,7 @@ msgstr "Ajuda Online"
 #: src/control/Control.Menubar.ts:834 src/control/Control.Menubar.ts:1152
 #: src/control/Control.NotebookbarWriter.js:541
 msgid "Show tour"
-msgstr ""
+msgstr "Mostrar tour"
 
 #: src/control/Control.Menubar.ts:455 src/control/Control.Menubar.ts:668
 #: src/control/Control.Menubar.ts:836 src/control/Control.Menubar.ts:1154
@@ -4786,86 +4801,84 @@ msgstr ""
 #: src/control/Notebookbar.AIAssistantTab.ts:79
 #: src/control/Notebookbar.AIAssistantTab.ts:122
 msgid "Text Tools"
-msgstr ""
+msgstr "Ferramentas de texto"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:93
 msgid "Slide Tools"
-msgstr ""
+msgstr "Ferramentas de Slides"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:106
 msgid "Formula Tools"
-msgstr ""
+msgstr "Ferramentas de fórmula"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:116
 msgid "Data Tools"
-msgstr ""
+msgstr "Ferramentas de dados"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:143
 msgid "Shorten"
-msgstr ""
+msgstr "Reduzir"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:145
 msgid "Rewrite the selected text so it is shorter."
-msgstr ""
+msgstr "Reescreva o texto selecionado para que seja mais curto."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:150
 msgid "Formalize"
-msgstr ""
+msgstr "Formalize"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:152
 msgid "Rewrite the selected text in a formal tone."
-msgstr ""
+msgstr "Reescreva o texto selecionado em um tom formal."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:157
 msgid "Casualize"
-msgstr ""
+msgstr "Mais casual"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:159
 msgid "Rewrite the selected text in a casual, friendly tone."
-msgstr ""
+msgstr "Reescreva o texto selecionado em um tom casual e amigável."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:164
 msgid "Summarize"
-msgstr ""
+msgstr "Resuma"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:166
-#, fuzzy
 msgid "Summarize the key points of the selected text."
-msgstr "Resuma os pontos principais deste texto"
+msgstr "Resuma os pontos principais do texto selecionado"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:171
 msgid "Expand"
-msgstr ""
+msgstr "Expandir"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:173
 msgid "Expand the selected text and add more detail."
-msgstr ""
+msgstr "Expanda o texto selecionado e adicione mais detalhes."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:178
 msgid "Fix Grammar"
-msgstr ""
+msgstr "Corrigir gramática"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:181
 msgid "Fix grammar, spelling, and punctuation errors in the selected text."
 msgstr ""
+"Corrigir erros de gramática, ortografia e pontuação no texto selecionado."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:187
 msgid "Make Bullets"
-msgstr ""
+msgstr "Faça textos curtos"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:189
 msgid "Rewrite the selected text as short bullet points."
-msgstr ""
+msgstr "Reescreva o texto selecionado como textos curtos."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:194
-#, fuzzy
 msgid "Create Slides"
 msgstr "Crie slides"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:201
-#, fuzzy
 msgid "Generate Image"
-msgstr "Imagem gerada"
+msgstr "Gere imagem"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:208
 msgid "Generate Speaker Notes"
