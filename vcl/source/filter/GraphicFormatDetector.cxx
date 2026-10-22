@@ -1386,27 +1386,119 @@ bool GraphicFormatDetector::checkSVG()
 bool GraphicFormatDetector::checkTGA()
 {
     SeekGuard aGuard(mrStream, mnStreamPosition);
-    // Check TGA ver.2 footer bytes
-    if (mnStreamLength > 18)
+
+    // Spec indicates:
+    // "Reading the last 26 bytes from the file will either retrieve the last 26 bytes of image data (if the
+    // file is in the Original TGA Format), or it will retrieve the TGA File Footer (if the file is
+    // in the New TGA Format)"
+    // Let's suppose it could the footer
+    // from spec https://raw.githubusercontent.com/DEAKSoftware/Truevision-TGA/master/truevision-tga.pdf
+    // TGA 2.0 footer has a size of 26 bytes/
+    // Bytes 0-3: The Extension Area Offset
+    // Bytes 4-7: The Developer Directory Offset
+    // Bytes 8-23: The Signature (TRUEVISION-XFILE)
+    // Byte 24: ASCII Character "."
+    // Byte 25: Binary zero string terminator (0x00)
+
+    constexpr int FOOTER_LENGTH = 26;
+    // relevant part which interests us is from signature
+    constexpr int FOOTER_LENGTH_FROM_SIGNATURE = 18;
+    if (mnStreamLength >= FOOTER_LENGTH)
     {
-        char sFooterBytes[18];
+        char sFooterBytes[FOOTER_LENGTH_FROM_SIGNATURE];
 
         mrStream.Seek(STREAM_SEEK_TO_END);
-        mrStream.SeekRel(-18);
-        if (mrStream.ReadBytes(sFooterBytes, 18) == 18
-            && memcmp(sFooterBytes, "TRUEVISION-XFILE.", SAL_N_ELEMENTS(sFooterBytes)) == 0)
+        mrStream.SeekRel(-FOOTER_LENGTH_FROM_SIGNATURE);
+
+        if (mrStream.ReadBytes(sFooterBytes, sizeof(sFooterBytes)) == sizeof(sFooterBytes)
+            && memcmp(sFooterBytes, "TRUEVISION-XFILE.", FOOTER_LENGTH_FROM_SIGNATURE - 1) == 0
+            && sFooterBytes[FOOTER_LENGTH_FROM_SIGNATURE - 1] == '\0')
         {
             maMetadata.mnFormat = GraphicFileFormat::TGA;
             return true;
         }
     }
 
-    // Fallback to file extension check
-    if (maExtension.startsWith("TGA"))
+    constexpr int HEADER_LENGTH = 18;
+    constexpr int OFFSET_COLOR_MAP = 1;
+    constexpr int OFFSET_IMAGE_TYPE = 2;
+    constexpr int OFFSET_WIDTH = 12;
+    constexpr int OFFSET_HEIGHT = 14;
+    constexpr int OFFSET_BITS_PER_PIXEL = 16;
+
+    // Check TGA header
+    if (mnStreamLength >= HEADER_LENGTH)
+    {
+        unsigned char sHeader[HEADER_LENGTH];
+
+        mrStream.Seek(0);
+        if (mrStream.ReadBytes(sHeader, sizeof(sHeader)) == sizeof(sHeader))
+        {
+            const unsigned int nColorMapType = sHeader[OFFSET_COLOR_MAP];
+            const unsigned int nImageType = sHeader[OFFSET_IMAGE_TYPE];
+            // nWidth is 2 bytes long
+            const unsigned int nWidth = sHeader[OFFSET_WIDTH] | (sHeader[OFFSET_WIDTH + 1] << 8);
+            // nHeight is 2 bytes long
+            const unsigned int nHeight = sHeader[OFFSET_HEIGHT] | (sHeader[OFFSET_HEIGHT + 1] << 8);
+            const unsigned int nBitsPerPixel = sHeader[OFFSET_BITS_PER_PIXEL];
+
+            // not used constexpr int COLOR_MAP_NOT_INCLUDED_IN_IMAGE = 0;
+            constexpr int COLOR_MAP_INCLUDED_IN_IMAGE = 1;
+
+            constexpr int IMAGE_TYPE_COLOR_MAPPED = 1;
+            constexpr int IMAGE_TYPE_TRUE_COLOR = 2;
+            constexpr int IMAGE_TYPE_BLACK_AND_WHITE = 3;
+            constexpr int IMAGE_TYPE_RLE_COLOR_MAPPED = 9; // Run Length Encoded
+            constexpr int IMAGE_TYPE_RLE_TRUE_COLOR = 10;
+            constexpr int IMAGE_TYPE_RLE_BLACK_AND_WHITE = 11;
+
+            const bool bValidImageType = nImageType == IMAGE_TYPE_COLOR_MAPPED
+                                         || nImageType == IMAGE_TYPE_TRUE_COLOR
+                                         || nImageType == IMAGE_TYPE_BLACK_AND_WHITE
+                                         || nImageType == IMAGE_TYPE_RLE_COLOR_MAPPED
+                                         || nImageType == IMAGE_TYPE_RLE_TRUE_COLOR
+                                         || nImageType == IMAGE_TYPE_RLE_BLACK_AND_WHITE;
+
+            bool bValidBitsPerPixel = false;
+
+            switch (nImageType)
+            {
+                case IMAGE_TYPE_COLOR_MAPPED:
+                case IMAGE_TYPE_RLE_COLOR_MAPPED: // Indexed
+                    bValidBitsPerPixel = nBitsPerPixel == 8 || nBitsPerPixel == 16;
+                    break;
+
+                case IMAGE_TYPE_TRUE_COLOR:
+                case IMAGE_TYPE_RLE_TRUE_COLOR: // True-color
+                    bValidBitsPerPixel = nBitsPerPixel == 15 || nBitsPerPixel == 16
+                                         || nBitsPerPixel == 24 || nBitsPerPixel == 32;
+                    break;
+
+                case IMAGE_TYPE_BLACK_AND_WHITE:
+                case IMAGE_TYPE_RLE_BLACK_AND_WHITE: // Grayscale
+                    bValidBitsPerPixel = nBitsPerPixel == 8 || nBitsPerPixel == 16;
+                    break;
+            }
+
+            if (nColorMapType <= COLOR_MAP_INCLUDED_IN_IMAGE && bValidImageType && nWidth != 0
+                && nHeight != 0 && bValidBitsPerPixel
+                && ((nImageType != IMAGE_TYPE_COLOR_MAPPED
+                     && nImageType != IMAGE_TYPE_RLE_COLOR_MAPPED)
+                    || nColorMapType == COLOR_MAP_INCLUDED_IN_IMAGE))
+            {
+                maMetadata.mnFormat = GraphicFileFormat::TGA;
+                return true;
+            }
+        }
+    }
+
+    // Fallback to file extension check.
+    if (maExtension.equalsIgnoreAsciiCase("TGA"))
     {
         maMetadata.mnFormat = GraphicFileFormat::TGA;
         return true;
     }
+
     return false;
 }
 
