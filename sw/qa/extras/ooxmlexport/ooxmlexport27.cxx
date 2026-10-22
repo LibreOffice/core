@@ -420,6 +420,62 @@ CPPUNIT_TEST_FIXTURE(Test, testTableAlignmentFromTableStyle)
     verify();
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testEquationFontSizeFromRunsOnly)
+{
+    // Runs of different sizes give the formula the largest of them. A size elsewhere in the
+    // formula, such as in the control properties of a fraction, is not a run size.
+    createSwDoc("math-font-size-mixed.docx");
+
+    const sal_Int16 aExpectedSizes[] = { 12, 12 };
+    for (size_t i = 0; i < std::size(aExpectedSizes); ++i)
+    {
+        uno::Reference<document::XEmbeddedObjectSupplier2> xFormula(getShape(i + 1),
+                                                                    uno::UNO_QUERY);
+        CPPUNIT_ASSERT(xFormula.is());
+        CPPUNIT_ASSERT_EQUAL(
+            aExpectedSizes[i],
+            getProperty<sal_Int16>(xFormula->getEmbeddedObject(), u"BaseFontHeight"_ustr));
+    }
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testEquationFontSizeOnEveryConstruct)
+{
+    createSwDoc("math-construct-sizes.docx");
+    save(TestFilter::DOCX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+
+    // Every construct carries the size of the formula in its control properties, so the
+    // parts it draws itself come out at that size
+    assertXPath(pXmlDoc, "//w:p[1]//m:sSub/m:sSubPr/m:ctrlPr/w:rPr/w:sz", "val", u"28");
+    assertXPath(pXmlDoc, "//w:p[2]//m:sSup/m:sSupPr/m:ctrlPr/w:rPr/w:sz", "val", u"28");
+    assertXPath(pXmlDoc, "//w:p[3]//m:sSubSup/m:sSubSupPr/m:ctrlPr/w:rPr/w:sz", "val", u"28");
+    assertXPath(pXmlDoc, "//w:p[4]//m:sPre/m:sPrePr/m:ctrlPr/w:rPr/w:sz", "val", u"28");
+    assertXPath(pXmlDoc, "//w:p[5]//m:limLow/m:limLowPr/m:ctrlPr/w:rPr/w:sz", "val", u"28");
+    assertXPath(pXmlDoc, "//w:p[6]//m:limUpp/m:limUppPr/m:ctrlPr/w:rPr/w:sz", "val", u"28");
+    assertXPath(pXmlDoc, "//w:p[7]//m:func/m:funcPr/m:ctrlPr/w:rPr/w:sz", "val", u"28");
+    assertXPath(pXmlDoc, "//w:p[7]//m:limLow/m:limLowPr/m:ctrlPr/w:rPr/w:sz", "val", u"28");
+    assertXPath(pXmlDoc, "//w:p[8]//m:m/m:mPr/m:ctrlPr/w:rPr/w:sz", "val", u"28");
+    assertXPath(pXmlDoc, "//w:p[9]//m:eqArr/m:eqArrPr/m:ctrlPr/w:rPr/w:sz", "val", u"28");
+    assertXPath(pXmlDoc, "//w:p[10]//m:limUpp/m:limUppPr/m:ctrlPr/w:rPr/w:sz", "val", u"28");
+    assertXPath(pXmlDoc, "//w:p[11]//m:rad/m:radPr/m:ctrlPr/w:rPr/w:sz", "val", u"28");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testEquationBlankAndFirstEdition)
+{
+    createSwDoc("math-construct-sizes.docx");
+    uno::Reference<document::XEmbeddedObjectSupplier2> xFormula(getShape(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xFormula.is());
+    uno::Reference<beans::XPropertySet> xModel(xFormula->getEmbeddedObject(), uno::UNO_QUERY);
+    xModel->setPropertyValue(u"Formula"_ustr, uno::Any(u"a ~ b"_ustr));
+    save(TestFilter::DOCX_2007);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+
+    // A blank draws no glyph, but it still takes up space at the size of the formula
+    assertXPath(pXmlDoc, "//w:p[1]//m:r[m:t=' ']/w:rPr/w:sz", "val", u"28");
+    // The first edition of OOXML names the math font on every run
+    assertXPath(pXmlDoc, "//w:p[1]//m:r[m:t='a']/w:rPr/w:rFonts", "ascii", u"Cambria Math");
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testEquationFontSize)
 {
     // Each equation is drawn at the size its run properties give it, and an equation whose runs

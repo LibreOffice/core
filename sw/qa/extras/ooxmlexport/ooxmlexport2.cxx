@@ -394,6 +394,63 @@ CPPUNIT_TEST_FIXTURE(Test, testMathFractionBarColor)
     assertXPath(pXmlDoc, "//w:p[4]//m:oMath/m:r[1]/w:rPr/w:color", "val", u"FF0000");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testMathColorConstructs)
+{
+    createSwDoc("math-color-constructs.docx");
+
+    // Each construct that draws a part of itself takes the color of its m:ctrlPr, and one
+    // command colors the whole construct
+    CHECK_FORMULA(u"color red {widehat {a}}"_ustr, getFormula(getRun(getParagraph(1), 1)));
+    CHECK_FORMULA(u"color red {underline {b}}"_ustr, getFormula(getRun(getParagraph(2), 1)));
+    CHECK_FORMULA(u"color red {overstrike {c}}"_ustr, getFormula(getRun(getParagraph(3), 1)));
+    CHECK_FORMULA(u"color red {left (d right )}"_ustr, getFormula(getRun(getParagraph(4), 1)));
+    CHECK_FORMULA(u"color red {{e} overbrace {}}"_ustr, getFormula(getRun(getParagraph(5), 1)));
+    CHECK_FORMULA(u"color red {{e} csub {\u2192}}"_ustr,
+                  getFormula(getRun(getParagraph(6), 1)));
+    CHECK_FORMULA(u"color red {{e} csup {\u2192}}"_ustr,
+                  getFormula(getRun(getParagraph(7), 1)));
+    CHECK_FORMULA(u"color red {sum from {i} to {n} {i}}"_ustr,
+                  getFormula(getRun(getParagraph(8), 1)));
+    CHECK_FORMULA(u"color red {{x} / {y}}"_ustr, getFormula(getRun(getParagraph(9), 1)));
+    CHECK_FORMULA(u"color red {binom {x} {y}}"_ustr, getFormula(getRun(getParagraph(10), 1)));
+    CHECK_FORMULA(u"color red {nroot {3} {z}}"_ustr, getFormula(getRun(getParagraph(11), 1)));
+    // A construct inside another of the same color is already colored, so the color is
+    // named once
+    CHECK_FORMULA(u"color red {left ({x} over {y} right )}"_ustr,
+                  getFormula(getRun(getParagraph(12), 1)));
+    // A value that is not six hexadecimal digits is no color, and black is the default
+    // color, so neither run gets a command
+    CHECK_FORMULA(u"p"_ustr, getFormula(getRun(getParagraph(13), 1)));
+    CHECK_FORMULA(u"q"_ustr, getFormula(getRun(getParagraph(14), 1)));
+
+    saveAndReload(TestFilter::DOCX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+
+    // The color goes back on the m:ctrlPr of each construct
+    assertXPath(pXmlDoc, "//w:p[1]//m:acc/m:accPr/m:ctrlPr/w:rPr/w:color", "val", u"FF0000");
+    assertXPath(pXmlDoc, "//w:p[2]//m:bar/m:barPr/m:ctrlPr/w:rPr/w:color", "val", u"FF0000");
+    assertXPath(pXmlDoc, "//w:p[3]//m:borderBox/m:borderBoxPr/m:ctrlPr/w:rPr/w:color", "val",
+                u"FF0000");
+    assertXPath(pXmlDoc, "//w:p[4]//m:d/m:dPr/m:ctrlPr/w:rPr/w:color", "val", u"FF0000");
+    assertXPath(pXmlDoc, "//w:p[5]//m:groupChr/m:groupChrPr/m:ctrlPr/w:rPr/w:color", "val",
+                u"FF0000");
+    assertXPath(pXmlDoc, "//w:p[11]//m:rad/m:radPr/m:ctrlPr/w:rPr/w:color", "val", u"FF0000");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testMathRunStyles)
+{
+    createSwDoc("math-run-styles.docx");
+
+    // Normal text keeps the italic of its w:rPr, alone and together with bold
+    CHECK_FORMULA(u"ital {\"if\"}"_ustr, getFormula(getRun(getParagraph(1), 1)));
+    // This one is compared with its spaces, which keep the two commands apart
+    CPPUNIT_ASSERT_EQUAL(u"bold ital {\"if\"}"_ustr, getFormula(getRun(getParagraph(2), 1)));
+    // A bold in the m:ctrlPr of a function belongs to the function name
+    CHECK_FORMULA(u"bold {sin} {x}"_ustr, getFormula(getRun(getParagraph(3), 1)));
+    // A digit is upright in any style, so a bold digit is only bold
+    CHECK_FORMULA(u"bold {2}"_ustr, getFormula(getRun(getParagraph(4), 1)));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testMathBoldItalic)
 {
     createSwDoc("math-bold-italic.docx");
@@ -509,6 +566,11 @@ DECLARE_OOXMLEXPORT_TEST(testMathOperatorWithoutOperand, "math-operator-without-
     CHECK_FORMULA(u"{x = {}} over {2}"_ustr, getFormula(getRun(getParagraph(4), 1)));
     // A minus sign at the start is a sign of its own and needs nothing added
     CHECK_FORMULA(u"- x"_ustr, getFormula(getRun(getParagraph(5), 1)));
+    // An operator that is all there is of a superscript is written as text, which has no
+    // operand to miss
+    CHECK_FORMULA(u"{x} ^ {\"+\"}"_ustr, getFormula(getRun(getParagraph(6), 1)));
+    // An operator in a run with its operands stays a math operator rather than text
+    CHECK_FORMULA(u"x-4"_ustr, getFormula(getRun(getParagraph(7), 1)));
 }
 
 DECLARE_OOXMLEXPORT_TEST(testMathLim, "math-lim.docx")
