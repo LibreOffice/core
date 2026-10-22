@@ -22,6 +22,7 @@
 #include <cstdlib>
 
 #include <tools/debug.hxx>
+#include <tools/hostfilter.hxx>
 #include <tools/inetmsg.hxx>
 #include <comphelper/configuration.hxx>
 #include <comphelper/diagnose_ex.hxx>
@@ -1437,12 +1438,23 @@ void SfxObjectShell::CancelTransfers()
 
 
 AutoReloadTimer_Impl::AutoReloadTimer_Impl(
-    OUString _aURL, sal_uInt32 nTime, SfxObjectShell* pSh )
+    OUString _aURL, sal_uInt32 nTime, SfxObjectShell* pSh, bool _bLinkUpdateAllowed )
     : Timer("sfx2 AutoReloadTimer_Impl"), aUrl(std::move( _aURL )), pObjSh( pSh )
+    , bLinkUpdateAllowed( _bLinkUpdateAllowed )
 {
     SetTimeout( nTime );
 }
 
+
+static void lcl_allowAutoReload(const Reference<XInterface>& rxModel, const OUString& rURL)
+{
+    SfxObjectShell* pObjSh = SfxObjectShell::GetShellFromComponent(rxModel);
+    if (!pObjSh)
+        return;
+    pObjSh->Get_Impl()->pReloadTimer.reset(
+        new AutoReloadTimer_Impl(rURL, 0, pObjSh, /*bLinkUpdateAllowed=*/true));
+    pObjSh->Get_Impl()->pReloadTimer->Start();
+}
 
 void AutoReloadTimer_Impl::Invoke()
 {
@@ -1458,17 +1470,35 @@ void AutoReloadTimer_Impl::Invoke()
             return;
         }
 
+        SfxObjectShell* pSh = pObjSh;
+        const OUString sURL = aUrl;
+        const bool bAllowed = bLinkUpdateAllowed;
+        // Resetting pReloadTimer deletes this timer, so only the copies above are used after it.
+        pSh->Get_Impl()->pReloadTimer.reset();
+
+        if (HostFilter::isFileUrlForbidden(sURL))
+        {
+            SAL_WARN("sfx.doc",
+                     "AutoReloadTimer_Impl::Invoke: blocked file path: \"" << sURL << "\"");
+            return;
+        }
+        if (!sURL.isEmpty() && !bAllowed)
+        {
+            pSh->AddDeferredLinkLoad(pSh->GetModel(),
+                                     [sURL](const Reference<XInterface>& rxModel)
+                                     { lcl_allowAutoReload(rxModel, sURL); });
+            return;
+        }
+
         SfxAllItemSet aSet( SfxGetpApp()->GetPool() );
         aSet.Put( SfxBoolItem( SID_AUTOLOAD, true ) );
-        if ( !aUrl.isEmpty() )
-            aSet.Put(  SfxStringItem( SID_FILE_NAME, aUrl ) );
-        if (pObjSh->HasName()) {
+        if ( !sURL.isEmpty() )
+            aSet.Put(  SfxStringItem( SID_FILE_NAME, sURL ) );
+        if (pSh->HasName()) {
             aSet.Put(
-                SfxStringItem(SID_REFERER, pObjSh->GetMedium()->GetName()));
+                SfxStringItem(SID_REFERER, pSh->GetMedium()->GetName()));
         }
         SfxRequest aReq( SID_RELOAD, SfxCallMode::SLOT, aSet );
-        // this will delete this
-        pObjSh->Get_Impl()->pReloadTimer.reset();
         pFrame->ExecReload_Impl( aReq );
         return;
     }
