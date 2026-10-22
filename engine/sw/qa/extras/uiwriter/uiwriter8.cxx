@@ -19,6 +19,11 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <IDocumentDrawModelAccess.hxx>
 #include <com/sun/star/text/XTextFrame.hpp>
+#include <com/sun/star/text/XBookmarksSupplier.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/text/SetVariableType.hpp>
+#include <com/sun/star/text/ReferenceFieldSource.hpp>
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
@@ -1819,6 +1824,85 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateKeepsFootnotes)
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             OUStringToOString(rProperty, RTL_TEXTENCODING_ASCII_US).getStr(),
             beans::PropertyState_DEFAULT_VALUE, xNoteState->getPropertyState(rProperty));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateKeepsFields)
+{
+    // The mock returns the markup it was sent, as the translation services do.
+    std::unique_ptr<test::MockHttpServer> pMockServer = createMockTranslateServer(false, true);
+    CPPUNIT_ASSERT(pMockServer->start());
+    comphelper::ScopeGuard<std::function<void()>> aResetConfig
+        = setTranslationService(u"http://127.0.0.1:18099/v2/translate"_ustr);
+
+    // Given a document with a date field, a sequence field and a reference to the sequence:
+    createSwDoc("translate-headings.fodt");
+    SwWrtShell* const pWrtSh = getSwDocShell()->GetWrtShell();
+    std::function<std::vector<OUString>()> fieldServices = [this]() {
+        std::vector<OUString> aServices;
+        uno::Reference<text::XTextFieldsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xFields
+            = xSupplier->getTextFields()->createEnumeration();
+        while (xFields->hasMoreElements())
+        {
+            uno::Reference<lang::XServiceInfo> xInfo(xFields->nextElement(), uno::UNO_QUERY);
+            for (const OUString& rService :
+                 { u"com.sun.star.text.TextField.DateTime"_ustr,
+                   u"com.sun.star.text.TextField.SetExpression"_ustr,
+                   u"com.sun.star.text.TextField.GetReference"_ustr })
+                if (xInfo->supportsService(rService))
+                    aServices.push_back(rService);
+        }
+        std::sort(aServices.begin(), aServices.end());
+        return aServices;
+    };
+    const std::vector<OUString> aFieldsBefore = fieldServices();
+    CPPUNIT_ASSERT_EQUAL(size_t(4), aFieldsBefore.size());
+    pWrtSh->SttEndDoc(true);
+
+    // When translating the whole document:
+    bool bCancel = false;
+    CPPUNIT_ASSERT(SwTranslateHelper::TranslateDocumentCancellable(*pWrtSh, "DE"_ostr, bCancel));
+
+    // Then the fields are fields still: the sequence field and the reference used to come
+    // back as the text they showed.
+    const std::vector<OUString> aFieldsAfter = fieldServices();
+    CPPUNIT_ASSERT_EQUAL(aFieldsBefore.size(), aFieldsAfter.size());
+    for (size_t i = 0; i < aFieldsBefore.size(); ++i)
+        CPPUNIT_ASSERT_EQUAL(aFieldsBefore[i], aFieldsAfter[i]);
+
+    // And the reference still points at the figure, by the number the sequence field kept:
+    uno::Reference<text::XTextFieldsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xFields = xSupplier->getTextFields()->createEnumeration();
+    bool bReferenceChecked = false, bSequenceChecked = false;
+    while (xFields->hasMoreElements())
+    {
+        uno::Reference<beans::XPropertySet> xField(xFields->nextElement(), uno::UNO_QUERY);
+        uno::Reference<lang::XServiceInfo> xInfo(xField, uno::UNO_QUERY);
+        if (xInfo->supportsService(u"com.sun.star.text.TextField.GetReference"_ustr)
+            && getProperty<sal_Int16>(xField, u"ReferenceFieldSource"_ustr)
+                   == text::ReferenceFieldSource::SEQUENCE_FIELD)
+        {
+            CPPUNIT_ASSERT_EQUAL(u"Figure"_ustr, getProperty<OUString>(xField, u"SourceName"_ustr));
+            CPPUNIT_ASSERT_EQUAL(sal_Int16(0), getProperty<sal_Int16>(xField, u"SequenceNumber"_ustr));
+            bReferenceChecked = true;
+        }
+        else if (xInfo->supportsService(u"com.sun.star.text.TextField.SetExpression"_ustr))
+        {
+            CPPUNIT_ASSERT_EQUAL(text::SetVariableType::SEQUENCE,
+                                 getProperty<sal_Int16>(xField, u"SubType"_ustr));
+            CPPUNIT_ASSERT_EQUAL(u"Figure"_ustr, getProperty<OUString>(xField, u"VariableName"_ustr));
+            bSequenceChecked = true;
+        }
+    }
+    CPPUNIT_ASSERT(bReferenceChecked);
+    CPPUNIT_ASSERT(bSequenceChecked);
+
+    // And the bookmark on the heading still spans the heading's text, so the reference to it
+    // shows that text: replacing the text used to leave the bookmark empty.
+    uno::Reference<text::XBookmarksSupplier> xBookmarks(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> xBookmark(
+        xBookmarks->getBookmarks()->getByName(u"plant"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"What to plant first"_ustr, xBookmark->getAnchor()->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateKeepsDirectFormatting)

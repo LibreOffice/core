@@ -37,7 +37,9 @@
 #include <swcrsr.hxx>
 #include <doc.hxx>
 #include <IDocumentContentOperations.hxx>
+#include <IDocumentMarkAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
+#include <IMark.hxx>
 #include <hintids.hxx>
 #include <pagedesc.hxx>
 #include <fmthdft.hxx>
@@ -115,6 +117,20 @@ OString ExportPaMToHTML(SwPaM* pCursor)
             aResult = aResult.replaceAll(aClose, "</span>"_ostr);
         }
         aResult += aNotes;
+        // A bookmark goes out as an empty named anchor at its start. Pasted,
+        // that would be a second bookmark of the same name, while the
+        // document's own is kept: drop them.
+        for (sal_Int32 nAnchor = aResult.indexOf("<a name=\""); nAnchor != -1;
+             nAnchor = aResult.indexOf("<a name=\"", nAnchor))
+        {
+            const sal_Int32 nClose = aResult.indexOf('>', nAnchor);
+            if (nClose == -1)
+                break;
+            if (aResult.match("</a>", nClose + 1))
+                aResult = aResult.replaceAt(nAnchor, nClose + 5 - nAnchor, "");
+            else
+                nAnchor = nClose;
+        }
 
         // HTML has for that <br> and <p> also does new line
         aResult = aResult.replaceAll("<ul>"_ostr, ""_ostr);
@@ -454,6 +470,18 @@ bool TranslateRanges(SwWrtShell& rWrtSh, const TranslateFunc& rTranslate,
                     const SwNodeOffset nNodesAfter = pNodes.Count() - n;
                     const sal_Int32 nCharsAfter
                         = pNode->GetTextNode()->Len() - cursor->End()->GetContentIndex();
+                    // The bookmarks that span the text being replaced: the
+                    // paste leaves them empty, and a reference to one of them
+                    // would show nothing.
+                    std::vector<sw::mark::MarkBase*> aSpanningMarks;
+                    IDocumentMarkAccess& rMarks = *rWrtSh.GetDoc()->getIDocumentMarkAccess();
+                    for (auto it = rMarks.getBookmarksBegin(); it != rMarks.getBookmarksEnd(); ++it)
+                    {
+                        sw::mark::MarkBase* pMark = *it;
+                        if (pMark->IsExpanded() && pMark->GetMarkStart() == *cursor->Start()
+                            && pMark->GetMarkEnd() == *cursor->End())
+                            aSpanningMarks.push_back(pMark);
+                    }
                     SwTextFormatColl* pColl = pNode->GetTextNode()->GetTextColl();
                     std::optional<SwAttrSet> oNodeAttrs;
                     if (const SwAttrSet* pNodeAttrs = pNode->GetTextNode()->GetpSwAttrSet())
@@ -510,6 +538,19 @@ bool TranslateRanges(SwWrtShell& rWrtSh, const TranslateFunc& rTranslate,
                     if (eTargetLanguage != LANGUAGE_DONTKNOW)
                         SetLanguageOfRange(rWrtSh, nFirstPasted, nStartContent, nLastPasted,
                                            nCharsAfter, eTargetLanguage);
+                    if (!aSpanningMarks.empty())
+                    {
+                        SwTextNode* pLastNode = pNodes[nLastPasted]->GetTextNode();
+                        const sal_Int32 nEndContent
+                            = pLastNode ? pLastNode->Len() - nCharsAfter : 0;
+                        if (pLastNode && nEndContent >= 0)
+                        {
+                            const SwPaM aTranslated(*pNodes[nFirstPasted], nStartContent,
+                                                    *pLastNode, nEndContent);
+                            for (sw::mark::MarkBase* pMark : aSpanningMarks)
+                                rMarks.repositionMark(pMark, aTranslated);
+                        }
+                    }
                     rWrtSh.EndUndo(SwUndoId::PASTE_CLIPBOARD);
                     // Continue after the pasted translation, however many
                     // nodes it took.

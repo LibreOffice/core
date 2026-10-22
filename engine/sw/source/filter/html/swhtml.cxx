@@ -841,15 +841,17 @@ void SwHTMLParser::Continue( HtmlTokenId nToken )
                     }
                 }
             }
-            else if( nullptr != ( pCurrentNd = m_xDoc->GetNodes()[ nNodeIdx ]->GetTextNode()) && !bHasFlysOrMarks )
+            else if( nullptr != ( pCurrentNd = m_xDoc->GetNodes()[ nNodeIdx ]->GetTextNode()) && !HasCurrentParaFlys() )
             {
+                // The bookmarks of the paragraph move to the next one with
+                // the join; only deleting the paragraph would lose them.
                 if( pCurrentNd->CanJoinNext( pPos ))
                 {
                     SwTextNode* pNextNd = pPos->GetNode().GetTextNode();
                     m_pPam->SetMark(); m_pPam->DeleteMark();
                     pNextNd->JoinPrev();
                 }
-                else if (pCurrentNd->GetText().isEmpty())
+                else if (pCurrentNd->GetText().isEmpty() && !bHasFlysOrMarks)
                 {
                     m_pPam->SetMark(); m_pPam->DeleteMark();
                     SwNode& rDelNode = pPos->GetNode();
