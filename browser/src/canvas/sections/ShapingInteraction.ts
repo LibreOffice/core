@@ -161,14 +161,6 @@ class MeasurementGhost {
 	/// The kind the engine gives the handles of a measurement.
 	private static readonly handleKind: string = '20';
 
-	/// Whether the handle is one of a measurement's own.
-	public static belongsToOne(
-		selection: SelectionSection,
-		handle: SelectionHandle,
-	): boolean {
-		return MeasurementGhost.of(selection, handle) !== null;
-	}
-
 	/// The measurement the handle belongs to and the square it stands on, or nothing where the
 	/// handle belongs to no measurement.
 	private static of(
@@ -654,14 +646,6 @@ class LineGhost {
 				one.kind === LineGhost.handleKind && one.name !== handle.name,
 		);
 		return other ? other.point : null;
-	}
-
-	/// whether the handle is an end of the line selected
-	public static belongsToOne(
-		selection: SelectionSection,
-		handle: SelectionHandle,
-	): boolean {
-		return LineGhost.otherEnd(selection, handle) !== null;
 	}
 
 	public static heldWithShift(

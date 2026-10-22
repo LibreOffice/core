@@ -868,7 +868,8 @@ abstract class SelectionSection extends CanvasSectionObject {
 		const data = RenderGeometrySection.currentPart();
 		const routedFrom = data?.objects.get(connector);
 		const number = Number(handle.name.split('.')[2]);
-		const startedAt = this.known.find(
+		// where the engine has the handle, which keys held back may have taken elsewhere
+		const startedAt = ObjectHandles.shapingOf([connector]).find(
 			(one: SelectionHandle) => one.name === handle.name,
 		);
 		if (data && routedFrom && startedAt && number >= 2) {
@@ -885,9 +886,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 		const run = object ? ConnectorRouter.trackOf(object) : undefined;
 		if (!run || run.length < 2) return null;
 
-		const stood = this.known.find(
-			(one: SelectionHandle) => one.name === handle.name,
-		);
+		const stood = startedAt;
 		if (!stood) return null;
 
 		let line = -1;
