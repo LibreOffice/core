@@ -19,6 +19,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <IDocumentDrawModelAccess.hxx>
 #include <com/sun/star/text/XTextFrame.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
@@ -1573,9 +1574,98 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testCool6098TranslateEndToEnd)
     CPPUNIT_ASSERT_EQUAL(u"TRANSLATED-TEXT"_ustr, getParagraph(1)->getString());
 
     // And no extra paragraph carrying the footer's translated field markup must appear in
-    // the body, and the footer's own text must be untouched:
+    // the body: the footer is translated in place, as a range of its own.
     CPPUNIT_ASSERT_EQUAL(nParagraphsBefore, getParagraphs());
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), xFooter->getString().indexOf("TRANSLATED-TEXT"));
+    CPPUNIT_ASSERT_EQUAL(u"TRANSLATED-TEXT"_ustr, xFooter->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateHeaderFooterFrame)
+{
+    std::unique_ptr<test::MockHttpServer> pMockServer = createMockTranslateServer();
+    CPPUNIT_ASSERT(pMockServer->start());
+    comphelper::ScopeGuard<std::function<void()>> aResetConfig
+        = setTranslationService(u"http://127.0.0.1:18099/v2/translate"_ustr);
+
+    // Given a document with a header, a footer, a text frame and a body paragraph:
+    createSwDoc();
+    SwWrtShell* const pWrtSh = getSwDocShell()->GetWrtShell();
+    pWrtSh->Insert(u"Body text"_ustr);
+    uno::Reference<beans::XPropertySet> xPageStyle(
+        getStyles(u"PageStyles"_ustr)->getByName(u"Standard"_ustr), uno::UNO_QUERY);
+    xPageStyle->setPropertyValue(u"HeaderIsOn"_ustr, cpo::uno::Any(true));
+    xPageStyle->setPropertyValue(u"FooterIsOn"_ustr, cpo::uno::Any(true));
+    uno::Reference<text::XText> xHeader(
+        getProperty<uno::Reference<text::XText>>(xPageStyle, u"HeaderText"_ustr));
+    uno::Reference<text::XText> xFooter(
+        getProperty<uno::Reference<text::XText>>(xPageStyle, u"FooterText"_ustr));
+    xHeader->setString(u"Header text"_ustr);
+    xFooter->setString(u"Footer text"_ustr);
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextFrame> xFrame(
+        xFactory->createInstance(u"com.sun.star.text.TextFrame"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrameProperties(xFrame, uno::UNO_QUERY);
+    xFrameProperties->setPropertyValue(u"AnchorType"_ustr,
+                                       uno::Any(text::TextContentAnchorType_AT_PARAGRAPH));
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xBody = xTextDocument->getText();
+    xBody->insertTextContent(xBody->getEnd(), xFrame, false);
+    xFrame->getText()->setString(u"Frame text"_ustr);
+    xFrame.clear();
+    pWrtSh->SttEndDoc(true);
+    CPPUNIT_ASSERT(!pWrtSh->HasSelection());
+    const int nParagraphsBefore = getParagraphs();
+
+    // When translating with no selection, the whole document:
+    bool bCancel = false;
+    CPPUNIT_ASSERT(SwTranslateHelper::TranslateDocumentCancellable(*pWrtSh, "DE"_ostr, bCancel));
+
+    // Then the header, the footer and the frame are translated too, each in its place, and
+    // the body has no paragraph more than before: these used to be left out, as the walk
+    // covered the body only.
+    CPPUNIT_ASSERT_EQUAL(u"TRANSLATED-TEXT"_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(nParagraphsBefore, getParagraphs());
+    CPPUNIT_ASSERT_EQUAL(u"TRANSLATED-TEXT"_ustr, xHeader->getString());
+    CPPUNIT_ASSERT_EQUAL(u"TRANSLATED-TEXT"_ustr, xFooter->getString());
+    uno::Reference<text::XTextFramesSupplier> xFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFrames(xFramesSupplier->getTextFrames(),
+                                                    uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xFrames->getCount());
+    xFrame.set(xFrames->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"TRANSLATED-TEXT"_ustr, xFrame->getText()->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateSelectionOverParagraphs)
+{
+    std::unique_ptr<test::MockHttpServer> pMockServer = createMockTranslateServer();
+    CPPUNIT_ASSERT(pMockServer->start());
+    comphelper::ScopeGuard<std::function<void()>> aResetConfig
+        = setTranslationService(u"http://127.0.0.1:18099/v2/translate"_ustr);
+
+    // Given three paragraphs, selected from the middle of the first to the middle of the
+    // third:
+    createSwDoc();
+    SwWrtShell* const pWrtSh = getSwDocShell()->GetWrtShell();
+    pWrtSh->Insert(u"First one"_ustr);
+    pWrtSh->SplitNode();
+    pWrtSh->Insert(u"Second two"_ustr);
+    pWrtSh->SplitNode();
+    pWrtSh->Insert(u"Third three"_ustr);
+    pWrtSh->SttEndDoc(true);
+    pWrtSh->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 6, /*bBasicCall=*/false);
+    pWrtSh->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 20, /*bBasicCall=*/false);
+    CPPUNIT_ASSERT(pWrtSh->HasSelection());
+
+    // When translating the selection:
+    bool bCancel = false;
+    CPPUNIT_ASSERT(SwTranslateHelper::TranslateDocumentCancellable(*pWrtSh, "DE"_ostr, bCancel));
+
+    // Then each paragraph has its selected part translated, and the text outside the
+    // selection stays. The paste of the first paragraph used to replace everything up to
+    // the end of the selection, as the shell's cursor kept the selection's mark.
+    CPPUNIT_ASSERT_EQUAL(3, getParagraphs());
+    CPPUNIT_ASSERT_EQUAL(u"First TRANSLATED-TEXT"_ustr, getParagraph(1)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"TRANSLATED-TEXT"_ustr, getParagraph(2)->getString());
+    CPPUNIT_ASSERT_EQUAL(u"TRANSLATED-TEXT three"_ustr, getParagraph(3)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateKeepsHeadings)

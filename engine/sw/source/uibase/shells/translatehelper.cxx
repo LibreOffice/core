@@ -19,8 +19,10 @@
 
 #include <sal/config.h>
 
+#include <functional>
 #include <memory>
 #include <optional>
+#include <set>
 #include <string_view>
 #include <vector>
 
@@ -37,6 +39,11 @@
 #include <IDocumentContentOperations.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <hintids.hxx>
+#include <pagedesc.hxx>
+#include <fmthdft.hxx>
+#include <fmtcntnt.hxx>
+#include <frmfmt.hxx>
+#include <frameformats.hxx>
 #include <translatehelper.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <editeng/langitem.hxx>
@@ -137,7 +144,21 @@ void PasteHTMLToPaM(SwWrtShell& rWrtSh, const SwPaM* pCursor, const OString& rDa
             // range: collapse it first.
             if (rWrtSh.IsTableMode())
                 rWrtSh.ClearMark();
-            rWrtSh.SetSelection(*pCursor);
+            // Delete the text here, as an artificial selection: with the
+            // whole paragraph selected, the paste would take the frames
+            // anchored to the paragraph with the text.
+            if (pCursor->HasMark() && *pCursor->GetPoint() != *pCursor->GetMark())
+            {
+                SwPaM aDelete(*pCursor->Start(), *pCursor->End());
+                rWrtSh.GetDoc()->getIDocumentContentOperations().DeleteAndJoin(
+                    aDelete, SwDeleteFlags::ArtificialSelection);
+            }
+            // SetSelection keeps the shell cursor's mark when given a bare
+            // position: a selection over several paragraphs would leave it
+            // at its end, and the paste would replace everything up to it.
+            const SwPaM aInsert(*pCursor->Start());
+            rWrtSh.ClearMark();
+            rWrtSh.SetSelection(aInsert);
             SwTransferable::Paste(rWrtSh, aDataHelper);
             rWrtSh.KillSelection(nullptr, false);
         }
@@ -293,6 +314,47 @@ bool TranslateRanges(SwWrtShell& rWrtSh, const TranslateFunc& rTranslate,
         SwNodeOffset nStartNode, nEndNode;
         GetTranslationNodeRange(rWrtSh, nStartNode, nEndNode);
         SwNodes& rNodes = rWrtSh.GetDoc()->GetNodes();
+
+        // The headers and footers of the page styles in use and the text
+        // frames are sections of their own outside the body: each is a
+        // range of its own, so nothing of one is ever pasted into another.
+        // They come before the body: a frame anchored in a paragraph is
+        // re-created when the paragraph's translation is pasted.
+        std::set<SwNodeOffset> aSeen;
+        std::function<void(const SwFrameFormat*)> addSection = [&](const SwFrameFormat* pFormat)
+        {
+            if (!pFormat)
+                return;
+            const SwNodeIndex* pContentIdx = pFormat->GetContent().GetContentIdx();
+            if (!pContentIdx || !aSeen.insert(pContentIdx->GetIndex()).second)
+                return;
+            const SwNodeOffset nFirst = pContentIdx->GetIndex() + 1;
+            const SwNodeOffset nLast = pContentIdx->GetNode().EndOfSectionIndex() - 1;
+            // a graphic or an object, not text
+            if (nLast < nFirst || !rNodes[nFirst]->IsTextNode())
+                return;
+            const SwNodeIndex aFirstIdx(rNodes, nFirst);
+            const SwNodeIndex aLastIdx(rNodes, nLast);
+            aRanges.push_back({ SwPosition(aFirstIdx), SwPosition(aLastIdx) });
+        };
+        SwDoc& rDoc = *rWrtSh.GetDoc();
+        for (size_t i = 0; i < rDoc.GetPageDescCnt(); ++i)
+        {
+            const SwPageDesc& rPageDesc = rDoc.GetPageDesc(i);
+            if (!rPageDesc.IsUsed())
+                continue;
+            for (const SwFrameFormat* pPage :
+                 { &rPageDesc.GetMaster(), &rPageDesc.GetLeft(), &rPageDesc.GetFirstMaster(),
+                   &rPageDesc.GetFirstLeft() })
+            {
+                addSection(pPage->GetHeader().GetHeaderFormat());
+                addSection(pPage->GetFooter().GetFooterFormat());
+            }
+        }
+        for (const sw::SpzFrameFormat* pFly : *rDoc.GetSpzFrameFormats())
+            if (pFly->Which() == RES_FLYFRMFMT)
+                addSection(pFly);
+
         const SwNodeIndex aStartIdx(rNodes, nStartNode);
         const SwNodeIndex aEndIdx(rNodes, nEndNode);
         aRanges.push_back({ SwPosition(aStartIdx), SwPosition(aEndIdx) });
