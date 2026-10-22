@@ -6919,6 +6919,8 @@ void DocumentBroker::handleMediaRequest(const std::string_view range,
                                         const std::string& tag,
                                         const std::string& field)
 {
+    assertCorrectThread();
+
     LOG_DBG("handleMediaRequest: " << tag);
 
     auto streamSocket = std::static_pointer_cast<StreamSocket>(socket);

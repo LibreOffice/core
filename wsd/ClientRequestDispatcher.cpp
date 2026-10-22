@@ -2462,7 +2462,7 @@ bool ClientRequestDispatcher::handleRobotsTxtRequest(const Poco::Net::HTTPReques
 }
 
 bool ClientRequestDispatcher::handleMediaRequest(const Poco::Net::HTTPRequest& request,
-                                                 SocketDisposition& /*disposition*/,
+                                                 SocketDisposition& disposition,
                                                  const std::shared_ptr<StreamSocket>& socket,
                                                  bool bVTT)
 {
@@ -2547,9 +2547,12 @@ bool ClientRequestDispatcher::handleMediaRequest(const Poco::Net::HTTPRequest& r
         // Do things in the right thread.
         LOG_TRC_S("Move media request " << tag << " to docbroker thread");
 
-        std::string range = request.get("Range", "none");
-        docBroker->handleMediaRequest(std::move(range), socket, tag, (bVTT ? std::string(MEDIA_STR)
-                                                                      : std::string(MEDIA_MP4)));
+        docBroker->setupTransfer(
+            disposition,
+            [docBroker, range = request.get("Range", "none"), tag = std::move(tag),
+             field = std::string(bVTT ? MEDIA_STR : MEDIA_MP4)](
+                const std::shared_ptr<Socket>& moveSocket)
+            { docBroker->handleMediaRequest(range, moveSocket, tag, field); });
     }
     return false; // async
 }

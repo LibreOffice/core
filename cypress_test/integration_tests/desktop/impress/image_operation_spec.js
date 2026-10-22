@@ -43,6 +43,13 @@ describe(['tagdesktop'], 'Image Operation Tests', function() {
 			cy.cGet('#document-container svg svg').should('have.attr', 'width', foWidth);
 			cy.cGet('#document-container svg svg').should('have.attr', 'height', foHeight);
 		});
+
+		// The view can fetch the video it shows.
+		cy.cGet('#document-container svg svg foreignObject video source')
+			.invoke('attr', 'src')
+			.then(function (src) {
+				cy.request(src).its('status').should('eq', 200);
+			});
 	});
 
 	it('Insert an animated GIF as multimedia', function () {
