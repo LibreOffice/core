@@ -2611,6 +2611,10 @@ void FileDialogHelper::SetTitle( const OUString& rNewTitle )
 
 OUString FileDialogHelper::GetPath() const
 {
+    // A COKit app's native picker delivered the file. The UNO picker never ran.
+    if (m_oKitPickedFiles)
+        return m_oKitPickedFiles->hasElements() ? (*m_oKitPickedFiles)[0] : OUString();
+
     if (mpImpl->mxFileDlg)
         if (auto aPathSeq = mpImpl->mxFileDlg->getSelectedFiles(); aPathSeq.hasElements())
             return aPathSeq[0];
@@ -2620,7 +2624,7 @@ OUString FileDialogHelper::GetPath() const
 
 Sequence< OUString > FileDialogHelper::GetSelectedFiles() const
 {
-    // A COKit app's native picker delivers here; the UNO picker never ran.
+    // A COKit app's native picker delivered the files. The UNO picker never ran.
     if (m_oKitPickedFiles)
         return *m_oKitPickedFiles;
 
