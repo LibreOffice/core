@@ -8,11 +8,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-13 14:06+0200\n"
-"PO-Revision-Date: 2026-10-13 04:01+0000\n"
+"PO-Revision-Date: 2026-10-21 05:38+0000\n"
 "Last-Translator: Joan Montané <jmontane@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/ca/>\n"
-"Language: \n"
+"Language: ca\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -2953,11 +2953,11 @@ msgstr ""
 #: src/control/Control.CleanupSidebar.ts:586
 #, javascript-format
 msgid "%1% cropped away"
-msgstr ""
+msgstr "%1% escapçat"
 
 #: src/control/Control.CleanupSidebar.ts:588
 msgid "%1, %2% cropped away"
-msgstr ""
+msgstr "%1, %2% escapçat"
 
 #: src/control/Control.CleanupSidebar.ts:655
 msgid "Leave images alone"
