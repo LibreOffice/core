@@ -5064,10 +5064,13 @@ void ScInputHandler::RestoreURLFieldsInEditEngine()
             }
         }
 
-        // The link text is the address itself, so the positions of the other addresses stay the
-        // same.
+        // The address text becomes the link as it is, keeping its formatting.
         for (const auto& [rSelection, rField] : aFoundFields)
-            mpEditEngine->QuickInsertUrlField(rField, rSelection);
+        {
+            SfxItemSet aUrlSet(mpEditEngine->GetEmptyItemSet());
+            aUrlSet.Put(SvxFieldItem(rField, EE_CHAR_URL));
+            mpEditEngine->QuickSetAttribs(aUrlSet, rSelection);
+        }
     }
 }
 
