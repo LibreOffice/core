@@ -47,15 +47,12 @@
 // force them to take a 1/3 of the available space
 #define CommonWidgetWidth 10
 
-static bool isKitMobilePhone()
-{
-    SfxViewShell* pCurrent = SfxViewShell::Current();
-    return pCurrent && pCurrent->isKitMobilePhone();
-}
-
 ScCondFrmtEntry::ScCondFrmtEntry(ScCondFormatList* pParent, ScDocument& rDoc, const ScAddress& rPos)
     : mpParent(pParent)
-    , mxBuilder(Application::CreateBuilder(pParent->GetGrid(), isKitMobilePhone()?u"modules/scalc/ui/conditionalentrymobile.ui"_ustr:u"modules/scalc/ui/conditionalentry.ui"_ustr))
+    , mxBuilder(Application::CreateBuilder(pParent->GetGrid(),
+                                           SfxViewShell::IsCurrentKitMobilePhone()
+                                               ? u"modules/scalc/ui/conditionalentrymobile.ui"_ustr
+                                               : u"modules/scalc/ui/conditionalentry.ui"_ustr))
     , mxBorder(mxBuilder->weld_widget(u"border"_ustr))
     , mxGrid(mxBuilder->weld_container(u"grid"_ustr))
     , mxFtCondNr(mxBuilder->weld_label(u"number"_ustr))

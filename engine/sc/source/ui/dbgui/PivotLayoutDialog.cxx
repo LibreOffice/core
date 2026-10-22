@@ -53,10 +53,9 @@ ScItemValue::~ScItemValue()
 namespace
 {
 
-OUString lclGetDialogUIFile(const ScViewData& rViewData)
+OUString lclGetDialogUIFile()
 {
-    const ScTabViewShell* pViewShell = rViewData.GetViewShell();
-    if (pViewShell && pViewShell->isKitMobilePhone())
+    if (SfxViewShell::IsCurrentKitMobilePhone())
         return u"modules/scalc/ui/pivottablelayoutdialog-mobile.ui"_ustr;
     return u"modules/scalc/ui/pivottablelayoutdialog.ui"_ustr;
 }
@@ -82,7 +81,7 @@ ScRange lclGetRangeForNamedRange(OUString const & aName, const ScDocument& rDocu
 ScPivotLayoutDialog::ScPivotLayoutDialog(
                             SfxBindings* pSfxBindings, SfxChildWindow* pChildWindow, weld::Window* pParent,
                             ScViewData& rViewData, const ScDPObject* pPivotTableObject, bool bNewPivotTable)
-    : ScAnyRefDlgController(pSfxBindings, pChildWindow, pParent, lclGetDialogUIFile(rViewData), u"PivotTableLayout"_ustr)
+    : ScAnyRefDlgController(pSfxBindings, pChildWindow, pParent, lclGetDialogUIFile(), u"PivotTableLayout"_ustr)
     , maPivotTableObject(*pPivotTableObject)
     , mpPreviouslyFocusedListBox(nullptr)
     , mrViewData(rViewData)

@@ -43,7 +43,7 @@
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/childwin.hxx>
 #include <reffact.hxx>
-#include <comphelper/kit.hxx>
+#include <sfx2/viewsh.hxx>
 
 #include <vcl/tabs.hrc>
 
@@ -80,14 +80,6 @@ const WhichRangesContainer ScTPValidationValue::pValueRanges(svl::Items<
     FID_VALID_MODE, FID_VALID_ERRTEXT
 >);
 
-static bool isKitMobilePhone()
-{
-    if (!comphelper::COKit::isActive())
-        return false;
-    SfxViewShell* pViewShell = SfxViewShell::Current();
-    return pViewShell && pViewShell->isKitMobilePhone();
-}
-
 ScValidationDlg::ScValidationDlg(weld::Window* pParent, const SfxItemSet* pArgSet,
     ScTabViewShell *pTabViewSh)
     : ScValidationDlgBase(pParent,
@@ -105,7 +97,7 @@ ScValidationDlg::ScValidationDlg(weld::Window* pParent, const SfxItemSet* pArgSe
     AddTabPage(u"erroralert"_ustr, TabResId(RID_TAB_VALIDITY_ERROR.aLabel),
                ScTPValidationError::Create, RID_L + RID_TAB_VALIDITY_ERROR.sIconName);
 
-    if (isKitMobilePhone())
+    if (SfxViewShell::IsCurrentKitMobilePhone())
     {
         m_xBuilder->weld_button(u"cancel"_ustr)->hide();
         m_xBuilder->weld_button(u"help"_ustr)->hide();

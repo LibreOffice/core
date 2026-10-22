@@ -29,7 +29,6 @@
 #include <sfx2/childwin.hxx>
 #include <sfx2/viewsh.hxx>
 #include <workwin.hxx>
-#include <comphelper/kit.hxx>
 
 using namespace ::cpo::uno;
 using namespace cpo::uno;
@@ -201,17 +200,9 @@ void SfxModelessDialogController::Close()
     SfxDialogController::Close();
 }
 
-static bool isKitMobilePhone()
-{
-    if (!comphelper::COKit::isActive())
-        return false;
-    const SfxViewShell* pCurrentShell = SfxViewShell::Current();
-    return pCurrentShell && pCurrentShell->isKitMobilePhone();
-}
-
 SfxDialogController::SfxDialogController(weld::Widget* pParent, const OUString& rUIFile,
                                          const OUString& rDialogId)
-    : GenericDialogController(pParent, rUIFile, rDialogId, isKitMobilePhone())
+    : GenericDialogController(pParent, rUIFile, rDialogId, SfxViewShell::IsCurrentKitMobilePhone())
 {
     m_xDialog->SetInstallKitNotifierHdl(LINK(this, SfxDialogController, InstallKitNotifierHdl));
     m_xDialog->connect_container_focus_changed(LINK(this, SfxDialogController, FocusChangeHdl));

@@ -17,8 +17,6 @@
 #include "tp_Wizard_TitlesAndObjects.hxx"
 #include "DialogModel.hxx"
 
-#include <KitDevice.hxx>
-
 namespace chart
 {
 

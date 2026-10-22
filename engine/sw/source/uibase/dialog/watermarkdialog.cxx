@@ -19,15 +19,8 @@
 #include <vcl/svapp.hxx>
 #include <sfx2/watermarkitem.hxx>
 #include <svtools/ctrltool.hxx>
-#include <comphelper/kit.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svl/itemset.hxx>
-
-static bool isKitMobilePhone()
-{
-    SfxViewShell* pCurrent = SfxViewShell::Current();
-    return pCurrent && pCurrent->isKitMobilePhone();
-}
 
 SwWatermarkDialog::SwWatermarkDialog(weld::Window* pParent, SfxBindings& rBindings)
     : SfxDialogController(pParent, u"modules/swriter/ui/watermarkdialog.ui"_ustr, u"WatermarkDialog"_ustr)
@@ -41,7 +34,7 @@ SwWatermarkDialog::SwWatermarkDialog(weld::Window* pParent, SfxBindings& rBindin
 {
     InitFields();
 
-    if (isKitMobilePhone())
+    if (SfxViewShell::IsCurrentKitMobilePhone())
     {
         m_xBuilder->weld_label(u"ColorLabel"_ustr)->hide();
         m_xColor->hide();

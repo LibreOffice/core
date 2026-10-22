@@ -30,7 +30,7 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <officecfg/Office/Common.hxx>
 #include <osl/diagnose.h>
-#include <KitDevice.hxx>
+#include <sfx2/viewsh.hxx>
 
 namespace
 {
@@ -123,7 +123,7 @@ void RangeChooserTabPage::Activate()
 {
     OWizardPage::Activate();
     initControlsFromModel();
-    if (!isKitMobilePhone())
+    if (!SfxViewShell::IsCurrentKitMobilePhone())
         m_xED_Range->grab_focus();
 }
 
@@ -306,7 +306,7 @@ bool RangeChooserTabPage::isValid()
     }
 
     bool bShowIB = m_rDialogModel.getRangeSelectionHelper()->hasRangeSelection()
-        && !isKitMobilePhone();
+        && !SfxViewShell::IsCurrentKitMobilePhone();
     lcl_ShowChooserButton( *m_xIB_Range, bShowIB );
 
     return bIsValid;

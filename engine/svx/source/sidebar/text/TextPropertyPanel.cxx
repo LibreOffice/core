@@ -20,7 +20,6 @@
 #include "TextPropertyPanel.hxx"
 
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
-#include <comphelper/kit.hxx>
 #include <sfx2/viewsh.hxx>
 
 using namespace css;
@@ -66,11 +65,7 @@ TextPropertyPanel::TextPropertyPanel(weld::Widget* pParent, const cpo::uno::Refe
     , mxSpacingBar(m_xBuilder->weld_toolbar(u"spacingbar"_ustr))
     , mxSpacingBarDispatch(new ToolbarUnoDispatcher(*mxSpacingBar, *m_xBuilder, rxFrame))
 {
-    bool isMobilePhone = false;
-    const SfxViewShell* pViewShell = SfxViewShell::Current();
-    if (pViewShell && pViewShell->isKitMobilePhone())
-        isMobilePhone = true;
-    mxSpacingBar->set_visible(!isMobilePhone);
+    mxSpacingBar->set_visible(!SfxViewShell::IsCurrentKitMobilePhone());
 }
 
 TextPropertyPanel::~TextPropertyPanel()

@@ -32,13 +32,13 @@
 #include <vcl/outdev.hxx>
 #include <comphelper/diagnose_ex.hxx>
 #include <officecfg/Office/Common.hxx>
-#include <KitDevice.hxx>
+#include <sfx2/viewsh.hxx>
 
 namespace
 {
 OUString lcl_getUIFile()
 {
-    if (chart::isKitMobilePhone())
+    if (SfxViewShell::IsCurrentKitMobilePhone())
         return u"modules/schart/ui/tp_ChartType-mobile.ui"_ustr;
     return u"modules/schart/ui/tp_ChartType.ui"_ustr;
 }
@@ -52,7 +52,7 @@ using namespace ::cpo;
 ChartTypeTabPage::ChartTypeTabPage(weld::Container* pPage, weld::DialogController* pController, rtl::Reference<::chart::ChartModel> xChartModel,
                                    bool bShowDescription)
     : OWizardPage(pPage, pController, lcl_getUIFile(), u"tp_ChartType"_ustr,
-                  isKitMobilePhone())
+                  SfxViewShell::IsCurrentKitMobilePhone())
     , m_pDim3DLookResourceGroup( new Dim3DLookResourceGroup(m_xBuilder.get()) )
     , m_pStackingResourceGroup( new StackingResourceGroup(m_xBuilder.get()) )
     , m_pSplineResourceGroup( new SplineResourceGroup(m_xBuilder.get(), pController->getDialog()) )
