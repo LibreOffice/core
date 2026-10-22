@@ -16,6 +16,10 @@
 
 #include <docsh.hxx>
 #include <docfunc.hxx>
+#include <clipparam.hxx>
+#include <formulacell.hxx>
+#include <markdata.hxx>
+#include <tokenstringcontext.hxx>
 #include <cellmergeoption.hxx>
 #include <tabvwsh.hxx>
 #include <impex.hxx>
@@ -43,6 +47,7 @@ public:
     void testTdf84411();
     void testTdf124565();
     void testTdf126421();
+    void testClipboardFormulaUncopiedSheet();
     void testTdf107394();
     void testTdf53431_fillOnAutofilter();
     void testTdf40993_fillMergedCells();
@@ -80,6 +85,7 @@ public:
     CPPUNIT_TEST(testTdf84411);
     CPPUNIT_TEST(testTdf124565);
     CPPUNIT_TEST(testTdf126421);
+    CPPUNIT_TEST(testClipboardFormulaUncopiedSheet);
     CPPUNIT_TEST(testTdf107394);
     CPPUNIT_TEST(testTdf53431_fillOnAutofilter);
     CPPUNIT_TEST(testTdf40993_fillMergedCells);
@@ -295,6 +301,31 @@ void ScCopyPasteTest::testTdf126421()
     for (int r = 0; r < 2; ++r)
         for (int c = 0; c < 1024; ++c)
             CPPUNIT_ASSERT_EQUAL(double((c + 1) * 100 + (r + 1)), pDoc->GetValue(c, r, n2ndTab));
+}
+
+void ScCopyPasteTest::testClipboardFormulaUncopiedSheet()
+{
+    // Given a formula that reads a cell on another sheet:
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+    pDoc->InsertTab(1, u"Rates"_ustr);
+    pDoc->SetValue(ScAddress(0, 0, 1), 5);
+    pDoc->SetString(ScAddress(0, 0, 0), u"=$Rates.A1*2"_ustr);
+
+    // When only the formula cell is copied:
+    ScDocument aClipDoc(SCDOCMODE_CLIP);
+    ScClipParam aClipParam(ScRange(0, 0, 0), false);
+    ScMarkData aMark(pDoc->GetSheetLimits());
+    aMark.SetMarkArea(ScRange(0, 0, 0));
+    pDoc->CopyToClip(aClipParam, &aClipDoc, &aMark, false, false);
+
+    // Then the formula in the clipboard still names the sheet that was not copied, in the
+    // document's grammar and in the English one:
+    const ScFormulaCell* pCell = aClipDoc.GetFormulaCell(ScAddress(0, 0, 0));
+    CPPUNIT_ASSERT(pCell);
+    CPPUNIT_ASSERT_EQUAL(u"=$Rates.A1*2"_ustr, pCell->GetFormula());
+    sc::CompileFormulaContext aCxt(aClipDoc, formula::FormulaGrammar::GRAM_ENGLISH_XL_A1);
+    CPPUNIT_ASSERT_EQUAL(u"=Rates!A1*2"_ustr, pCell->GetFormula(aCxt));
 }
 
 void ScCopyPasteTest::testTdf107394()

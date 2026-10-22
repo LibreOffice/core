@@ -301,6 +301,19 @@ std::vector<OUString> ScDocument::GetAllTableNames() const
         aNames.push_back(aName);
     }
 
+    // A clipboard document holds only the copied sheets, but it keeps the names of all the source
+    // sheets, so a reference to a sheet that was not copied still shows that sheet's name.
+    if (IsClipboard())
+    {
+        for (size_t i = 0; i < maTabNames.size(); ++i)
+        {
+            if (i >= aNames.size())
+                aNames.push_back(maTabNames[i]);
+            else if (aNames[i].isEmpty())
+                aNames[i] = maTabNames[i];
+        }
+    }
+
     return aNames;
 }
 
