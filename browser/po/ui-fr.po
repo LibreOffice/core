@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-13 14:06+0200\n"
-"PO-Revision-Date: 2026-10-15 13:25+0000\n"
+"PO-Revision-Date: 2026-10-22 10:03+0000\n"
 "Last-Translator: Méven Car <meven@users.noreply.hosted.weblate.org>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/fr/>\n"
@@ -941,8 +941,8 @@ msgid ""
 "Upload a packaged extension as a .zip; its contents (manifest.json, ...) "
 "are unpacked on the server."
 msgstr ""
-"Envoyer une extension compresser en tant que .zip, sont contenu ("
-"manifest.json, ...) sera décompresser sur le serveur."
+"Envoyer une extension compresser en tant que .zip, son contenu "
+"(manifest.json, ...) sera décompressé sur le serveur."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:1460
 msgid "Upload Extension"
@@ -1619,7 +1619,7 @@ msgstr "Sombre"
 #: src/app/TableStylesService.ts:112
 #: src/control/jsdialog/Widget.ColorPicker.ts:367
 msgid "Custom"
-msgstr "Perso"
+msgstr "Personnalisé"
 
 #: src/app/TableStylesService.ts:251 src/app/TableStylesService.ts:263
 #: src/app/TableStylesService.ts:266 src/app/TableStyleGalleryService.ts:99
