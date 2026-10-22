@@ -36,6 +36,9 @@ interface SlideImportSlide {
 
 interface SlideImportSection {
 	name: string;
+	// The identifier of the section, a braced GUID, or an empty string for a
+	// section that has none.
+	id: string;
 	// 0-based index of the section's first slide.
 	startIndex: number;
 	// Number of consecutive slides the section spans.
@@ -68,6 +71,10 @@ class SlideImportSession {
 	// Whether the inserted slides are linked to the position their slides hold in the source
 	// rather than to the slides themselves. The user's choice, kept across files.
 	public linkByPosition: boolean = false;
+	// Whether slides that make up a whole section of the source go in as a
+	// section of their own rather than as plain slides. The user's choice, kept
+	// across files.
+	public insertAsSection: boolean = true;
 	// Whether the open of the current file named it as a source. Slides can
 	// only be linked to a source the open named.
 	public canLink: boolean = false;
@@ -89,8 +96,14 @@ class SlideImportSession {
 	}
 
 	// The pages the source wrote are staged in this document's jail, and the insert takes that
-	// file. The pane asks for the export and hands the staged name over.
-	public insertStaged(stagedName: string, at: number): void {
+	// file. The pane asks for the export and hands the staged name over. section is the section
+	// of the source the slides go in as, which they make up all of and nothing else, or null for
+	// slides that go in as slides. A linked section follows that source section.
+	public insertStaged(
+		stagedName: string,
+		at: number,
+		section: SlideImportSection | null,
+	): void {
 		const link = this.linkToSource && this.canLink;
 		const source = this.sourceName();
 		// A linked page records the time its source was last modified now, so a
@@ -113,7 +126,13 @@ class SlideImportSession {
 				' link=' +
 				(link ? '1' : '0') +
 				(positions.length ? ' sourcepositions=' + positions.join(',') : '') +
-				(time ? ' time=' + encodeURIComponent(time) : ''),
+				(time ? ' time=' + encodeURIComponent(time) : '') +
+				(section
+					? ' section=' +
+						encodeURIComponent(section.id) +
+						' sectionname=' +
+						encodeURIComponent(section.name)
+					: ''),
 		);
 	}
 
@@ -144,6 +163,10 @@ class SlideImportSession {
 
 	public setLinkToSource(value: boolean): void {
 		this.linkToSource = value;
+	}
+
+	public setInsertAsSection(value: boolean): void {
+		this.insertAsSection = value;
 	}
 
 	public setLinkByPosition(value: boolean): void {

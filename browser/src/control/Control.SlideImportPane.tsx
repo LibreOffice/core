@@ -533,7 +533,35 @@ class SlideImportPane {
       return;
     }
 
-    this.session.insertStaged(stagedName, insert.at);
+    const source = this.activeSource();
+    this.session.insertStaged(
+      stagedName,
+      insert.at,
+      source && this.session.insertAsSection
+        ? this.wholeSectionOf(source, insert.slides)
+        : null,
+    );
+  }
+
+  // The section of the source that the given slides make up, every slide of
+  // it in order and no other slide, when they can go in as that section, or
+  // null. A slide linked by position belongs to no section of the source, so
+  // such slides go in as slides.
+  private wholeSectionOf(
+    source: SlideImportPaneSource,
+    slides: number[],
+  ): SlideImportSection | null {
+    const session = this.session;
+    if (session.linkToSource && session.canLink && session.linkByPosition)
+      return null;
+    if (slides.length === 0) return null;
+    const section = this.sectionOf(source, slides[0]);
+    if (!section || !section.id || section.startIndex !== slides[0])
+      return null;
+    if (section.slideCount !== slides.length) return null;
+    for (let i = 0; i < slides.length; i++)
+      if (slides[i] !== section.startIndex + i) return null;
+    return section;
   }
 
   private onRemotePresentationInfo(
@@ -577,6 +605,7 @@ class SlideImportPane {
       source.sections = Array.isArray(sections)
         ? sections.map((s: any) => ({
             name: s.name || '',
+            id: s.id || '',
             startIndex: s.startIndex || 0,
             slideCount: s.slideCount || 0,
           }))
@@ -868,6 +897,9 @@ class SlideImportPane {
   private insertButtonLabel(): string {
     const count = this.session.selection.size;
     if (!count) return _('Insert slides');
+    const section = this.pickedSection();
+    if (section && this.session.insertAsSection)
+      return _('Insert section "{0}"').replace('{0}', () => section.name);
     // With several decks open more than one may hold picks, so the button
     // names the file whose picks it will send.
     const elsewhere = Array.from(this.picks.entries()).some(
@@ -893,6 +925,96 @@ class SlideImportPane {
     button.setAttribute('aria-description', lands);
     button.disabled =
       this.session.selection.size === 0 || this.session.state !== 'ready';
+
+    // The choice is drawn afresh, and a radio of it that held the focus hands
+    // the focus to the one drawn in its place.
+    const choice = this.panel.querySelector('.slide-import-section-choice');
+    if (choice) {
+      const focused =
+        choice.contains(document.activeElement) && document.activeElement
+          ? document.activeElement.id
+          : '';
+      const redrawn = this.renderSectionChoice();
+      choice.replaceWith(redrawn);
+      if (focused) {
+        const radio = redrawn.querySelector(
+          '#' + focused,
+        ) as HTMLElement | null;
+        if (radio) radio.focus();
+      }
+    }
+  }
+
+  // The section of the active source that the picks make up, all of it and
+  // nothing else, when it can go in as a section.
+  private pickedSection(): SlideImportSection | null {
+    const source = this.activeSource();
+    if (!source) return null;
+    const slides = Array.from(this.session.selection).sort((a, b) => a - b);
+    return this.wholeSectionOf(source, slides);
+  }
+
+  // Whether picks that make up a whole section go in as that section or as
+  // separate slides, offered only while the picks make up a whole section. A
+  // linked section follows its source section, which the line under the
+  // choice says.
+  private renderSectionChoice(): HTMLElement {
+    const session = this.session;
+    const section = this.pickedSection();
+    const linked = session.linkToSource && session.canLink;
+    const source = this.activeSource();
+    const choice = (
+      <div
+        class="slide-import-section-choice"
+        role="radiogroup"
+        aria-label={_('How the section goes in')}
+      >
+        {section &&
+          this.renderSectionChoiceOption(
+            'section',
+            _('Insert as section "{0}"').replace('{0}', () => section.name),
+            true,
+          )}
+        {section &&
+          this.renderSectionChoiceOption(
+            'slides',
+            _('Insert as separate slides'),
+            false,
+          )}
+        {section && session.insertAsSection && linked && (
+          <span class="slide-import-section-choice-note">
+            {_(
+              'Linked to its section in {0}. Update Links brings in later changes.',
+            ).replace('{0}', () => (source ? source.name : session.fileName))}
+          </span>
+        )}
+      </div>
+    ) as HTMLElement;
+    choice.hidden = !section;
+    return choice;
+  }
+
+  private renderSectionChoiceOption(
+    key: string,
+    label: string,
+    asSection: boolean,
+  ): HTMLElement {
+    const id = 'slide-import-section-choice-' + key;
+    return (
+      <div class="radiobutton ui-radiobutton jsdialog">
+        <input
+          type="radio"
+          id={id}
+          name="slide-import-section-choice"
+          checked={this.session.insertAsSection === asSection}
+          onChange={() => {
+            this.session.setInsertAsSection(asSection);
+            this.updateInsertButton();
+          }}
+        />
+        <label for={id}>{label}</label>
+      </div>
+    );
   }
 
   private updateLinkMode(): void {
@@ -1180,6 +1302,7 @@ class SlideImportPane {
           </div>
         )}
         {this.renderOptions()}
+        {this.renderSectionChoice()}
         <div class="slide-import-footer">
           <button
             class="button slide-import-insert"
@@ -1490,6 +1613,7 @@ class SlideImportPane {
               session.setLinkToSource((e.target as HTMLInputElement).checked);
               this.updateLinkMode();
               this.updateOptionsSummary();
+              this.updateInsertButton();
             }}
           />
           <span id="slide-import-linksource-label">
@@ -1553,6 +1677,7 @@ class SlideImportPane {
           onChange={() => {
             this.session.setLinkByPosition(byPosition);
             this.updateOptionsSummary();
+            this.updateInsertButton();
           }}
         />
         <label for={id}>{label}</label>

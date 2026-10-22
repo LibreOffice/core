@@ -813,6 +813,40 @@
 	display: flex;
 }
 
+/* Whether picks that make up a whole section go in as that section or as
+ * separate slides. It sits right above Insert, which it changes. */
+.slide-import-section-choice {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-s);
+	margin-block-end: var(--spacing-m);
+}
+
+.slide-import-section-choice[hidden] {
+	display: none;
+}
+
+.slide-import-section-choice .radiobutton {
+	min-height: 22px;
+}
+
+.slide-import-section-choice .radiobutton label {
+	padding-inline-start: 0;
+	line-height: 1.2;
+	cursor: pointer;
+}
+
+.slide-import-section-choice .radiobutton.jsdialog input[type='radio'] {
+	margin-block: 1px;
+	margin-inline: 0 8px;
+}
+
+/* What a linked section does later, under the choice that makes one. */
+.slide-import-section-choice-note {
+	padding-inline-start: 26px;
+	color: var(--color-text-light);
+}
+
 
 .slide-import-insert {
 	width: 100%;
