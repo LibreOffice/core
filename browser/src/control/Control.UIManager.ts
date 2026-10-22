@@ -1148,7 +1148,6 @@ class UIManager extends window.L.Control {
 	 */
 	initializeLateComponents(): boolean {
 		app.console.debug('UIManager: late components init');
-		this.initializeNotebookbarInCore();
 		const sidebarRequested = this.initializeSidebar();
 		this.initializeNavigator();
 		this.initializeQuickFindInCore();
@@ -2077,18 +2076,6 @@ class UIManager extends window.L.Control {
 			return false;
 		else
 			return true;
-	}
-
-	// Notebookbar helpers
-
-	initializeNotebookbarInCore(): void {
-		// do it always apart of mobile as we need it for contextual toolbar
-		if (window.mode.isSmallScreenDevice() || window.mode.isInteractivePreview()) return;
-
-		if (!this.notebookbar.impl.initialized) {
-			this.map.sendUnoCommand('.uno:ToolbarMode?Mode:string=Default');
-			this.map.sendUnoCommand('.uno:ToolbarMode?Mode:string=notebookbar_online.ui');
-		}
 	}
 
 	// QuickFindPanel

@@ -1171,9 +1171,6 @@ class Socket {
 				this._map.uiManager.applyInvert();
 				this._map.uiManager.setCanvasColorAfterModeChange();
 
-				if (!window.mode.isSmallScreenDevice())
-					this._map.uiManager.initializeNotebookbarInCore();
-
 				// close all the popups otherwise document textArea will not get focus
 				this._map.uiManager.closeAll();
 			}

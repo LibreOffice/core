@@ -41,13 +41,17 @@ public:
 
     static bool IsActive(bool bConsiderSingleToolbar = false);
 
-    /// Stores the notebookbar UI file name for the current module and updates the notebookbar.
-    static void ExecMethod(SfxBindings& rBindings, const OUString& rUIName);
+    /// Creates the online notebookbar for the current view.
+    static void ExecMethod(SfxBindings& rBindings);
 
-    /// Creates the online notebookbar for the current view when it is active.
+    /// Creates the online notebookbar for the current view.
     static bool StateMethod(SfxBindings& rBindings);
     static bool StateMethod(SystemWindow* pSysWindow,
                             const cpo::uno::Reference<css::frame::XFrame>& xFrame);
+
+    /// Creates the online notebookbar for the view when it has none yet. Returns whether the view
+    /// has one afterwards. Only a desktop or tablet view gets one.
+    static bool CreateForView(SfxViewShell& rViewShell);
 
     /** Show menu bar in all frames of current application */
     static void ShowMenubar(bool bShow);
@@ -56,7 +60,6 @@ public:
 private:
     static bool m_bLock;
 
-    static void ResetActiveToolbarModeToDefault(vcl::EnumContext::Application eApp);
     static void RemoveCurrentKitWrapper();
 
     DECL_DLLPRIVATE_STATIC_LINK(SfxNotebookBar, VclDisposeHdl, const SfxViewShell*, void);

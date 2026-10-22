@@ -8,6 +8,7 @@
  */
 
 #include <sfx2/kit/helper.hxx>
+#include <sfx2/notebookbar/SfxNotebookBar.hxx>
 #include <sal/types.h>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/svdpage.hxx>
@@ -4966,6 +4967,10 @@ void COKitDocumentImpl::registerCallback(COKitCallback pCallback, void* pData)
             if (pShell && pShell != static_cast<SfxShell*>(pViewShell))
                 pShell->BroadcastContextForActivation(/*bIsActivated=*/true);
         }
+
+        // The notebookbar sends its widgets as JSON to the view's callback, and the document
+        // has loaded by now, so this is the one place that builds it.
+        sfx2::SfxNotebookBar::CreateForView(*pViewShell);
 
         if (!maFontsMissing.empty())
         {

@@ -56,7 +56,6 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/bindings.hxx>
-#include <unotools/confignode.hxx>
 #include <unotools/datetime.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <comphelper/string.hxx>
@@ -4868,57 +4867,32 @@ void DesktopKitTest::testTableContextOnLoad()
     CPPUNIT_ASSERT(aView1.m_aLastContext.indexOf("Table"_ostr) != -1);
 }
 
-namespace
-{
-/// Asks for the notebookbar the way the browser does once its view has loaded.
-void requestNotebookbar(COKitDocumentImpl* pDocument)
-{
-    pDocument->postUnoCommand(".uno:ToolbarMode",
-                              R"({"Mode":{"type":"string","value":"Default"}})", false);
-    pDocument->postUnoCommand(".uno:ToolbarMode",
-                              R"({"Mode":{"type":"string","value":"notebookbar_online.ui"}})",
-                              false);
-    Scheduler::ProcessEventsToIdle();
-}
-}
-
 void DesktopKitTest::testNotebookbarAfterViewClosedEarly()
 {
-    // The kit starts with the online notebookbar as the active Writer toolbar mode.
-    utl::OConfigurationTreeRoot aWriterMode(comphelper::getProcessComponentContext(),
-        u"org.openoffice.Office.UI.ToolbarMode/Applications/Writer"_ustr, true);
-    CPPUNIT_ASSERT(aWriterMode.isValid());
-    aWriterMode.setNodeValue(u"Active"_ustr, uno::Any(u"notebookbar_online.ui"_ustr));
-    aWriterMode.commit();
+    // The notebookbar is built for a desktop view. The form factor is read when a view is
+    // created, and the later tests make their views without one.
+    KitHelper::setDeviceFormFactor(u"desktop");
+    comphelper::ScopeGuard aFormFactorGuard([] { KitHelper::setDeviceFormFactor(u""); });
 
     COKitDocumentImpl* pDocument = loadDoc("blank_text.odt");
     pDocument->initializeForRendering("{}");
     ViewCallback aView1(pDocument);
     Scheduler::ProcessEventsToIdle();
-
-    requestNotebookbar(pDocument);
     CPPUNIT_ASSERT_MESSAGE("the first view gets its notebookbar",
                            aView1.m_nNotebookbarMessages > 0);
 
-    // A view that goes away before its client asks for the notebookbar, as when a tab is
-    // closed while the document is still loading.
-    const int nShortLivedView = pDocument->createView();
+    // A view that goes away before it is set up any further, as when a tab is closed while
+    // the document is still loading.
+    const int nShortLivedView = pDocument->createViewWithOptions("DeviceFormFactor=desktop");
     pDocument->initializeForRendering("{}");
     Scheduler::ProcessEventsToIdle();
     pDocument->destroyView(nShortLivedView);
 
-    // The next view asks for the notebookbar the usual way and must get it.
-    pDocument->createView();
+    // The next view gets its notebookbar as soon as it can receive it.
+    pDocument->createViewWithOptions("DeviceFormFactor=desktop");
     pDocument->initializeForRendering("{}");
     ViewCallback aView3(pDocument);
     Scheduler::ProcessEventsToIdle();
-
-    requestNotebookbar(pDocument);
-    // Without the fix in place, this test would have failed with:
-    // - assertion failed
-    // - Expression: aView3.m_nNotebookbarMessages > 0
-    // i.e. the view asked for the notebookbar and nothing came back, so the browser's style
-    // gallery stayed empty.
     CPPUNIT_ASSERT_MESSAGE("a later view gets its notebookbar", aView3.m_nNotebookbarMessages > 0);
 }
 

@@ -938,7 +938,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
                     // Show/Hide the Notebookbar
                     SfxBindings& rBindings = pViewFrame->GetBindings();
                     if (sfx2::SfxNotebookBar::IsActive())
-                        sfx2::SfxNotebookBar::ExecMethod(rBindings, aNewName);
+                        sfx2::SfxNotebookBar::ExecMethod(rBindings);
                     else
                         sfx2::SfxNotebookBar::CloseMethod(rBindings);
 
