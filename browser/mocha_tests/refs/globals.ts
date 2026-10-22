@@ -144,6 +144,9 @@ globalThis.document = globalThis.window.document;
 // jsdom keeps these on its own window, and the bundled sources name them bare.
 (globalThis as any).Element = (globalThis.window as any).Element;
 (globalThis as any).CSS = (globalThis.window as any).CSS;
+(globalThis as any).MutationObserver = (
+	globalThis.window as any
+).MutationObserver;
 
 (globalThis.window as any).prefs = {
 	canPersist: false,

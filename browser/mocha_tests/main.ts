@@ -49,6 +49,7 @@
 /// <reference path="./CPointSet.test.ts" />
 /// <reference path="./Events.test.ts" />
 /// <reference path="./LOUtil.test.ts" />
+/// <reference path="./JSDialogAria.test.ts" />
 /// <reference path="./Rectangle.test.ts" />
 /// <reference path="./SheetGeometry.test.ts" />
 /// <reference path="./Util.test.ts" />

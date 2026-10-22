@@ -155,31 +155,6 @@ describe(['tagdesktop'], 'Notebookbar items', { testIsolation: false }, function
 			'items that look pressed and do not say so').to.be.empty;
 	});
 
-	// No item of a Calc notebookbar declares a purpose yet, so what is asserted
-	// here is the mechanism that would carry one.
-	it('writes a description only when there is one to write', function () {
-		cy.then(function () {
-			const item = win.document.querySelector('#Home-container .unotoolbutton');
-			const button = item.querySelector('button') || item;
-			const purpose = 'Lets a screen reader follow the cursor';
-
-			expect(win.JSDialog.AddAriaDescription, 'the helper').to.be.a('function');
-
-			win.JSDialog.AddAriaDescription(button, { aria: { description: purpose } });
-			expect(button.getAttribute('aria-description'), item.id + ' describes itself')
-				.to.equal(purpose);
-
-			button.removeAttribute('aria-description');
-			win.JSDialog.AddAriaDescription(button, { aria: { description: '   ' } });
-			expect(button.getAttribute('aria-description'), 'a blank description')
-				.to.be.null;
-
-			win.JSDialog.AddAriaDescription(button, {});
-			expect(button.getAttribute('aria-description'), 'no description at all')
-				.to.be.null;
-		});
-	});
-
 	it('says when it is greyed out', function () {
 		const greyed = swept.filter(function (item) { return item.disabled; });
 
