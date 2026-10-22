@@ -20,40 +20,40 @@ static bool is_env_arg(rtl_uString const* str)
 
 const struct {
     const char   *name;
-    unsigned int  bInhibitSplash : 1;
-    unsigned int  bInhibitPagein : 1;
-    unsigned int  bInhibitJavaLdx : 1;
-    unsigned int  bInhibitPipe : 1;
+    bool bInhibitSplash : 1;
+    bool bInhibitPagein : 1;
+    bool bInhibitJavaLdx : 1;
+    bool bInhibitPipe : 1;
     const char   *pPageinType;
 } pArgDescr[] = {
     /* have a trailing argument */
-    { "pt",         1, 0, 0, 0, nullptr },
-    { "p",          1, 0, 0, 0, nullptr },
-    { "display",    0, 0, 0, 0, nullptr },
+    { "pt", true, false, false, false, nullptr },
+    { "p", true, false, false, false, nullptr },
+    { "display", false, false, false, false, nullptr },
 
     /* no splash */
-    { "nologo",     1, 0, 0, 0, nullptr },
-    { "headless",   1, 0, 0, 0, nullptr },
-    { "invisible",  1, 0, 0, 0, nullptr },
-    { "quickstart", 1, 0, 0, 0, nullptr },
-    { "minimized",  1, 0, 0, 0, nullptr },
-    { "convert-to", 1, 0, 0, 0, nullptr },
-    { "cat",        1, 0, 0, 0, nullptr },
+    { "nologo", true, false, false, false, nullptr },
+    { "headless", true, false, false, false, nullptr },
+    { "invisible", true, false, false, false, nullptr },
+    { "quickstart", true, false, false, false, nullptr },
+    { "minimized", true, false, false, false, nullptr },
+    { "convert-to", true, false, false, false, nullptr },
+    { "cat", true, false, false, false, nullptr },
 
     /* pagein bits */
-    { "writer",     0, 0, 0, 0, "pagein-writer"  },
-    { "calc",       0, 0, 0, 0, "pagein-calc"    },
-    { "draw",       0, 0, 0, 0, "pagein-draw"    },
-    { "impress",    0, 0, 0, 0, "pagein-impress" },
+    { "writer", false, false, false, false, "pagein-writer" },
+    { "calc", false, false, false, false, "pagein-calc" },
+    { "draw", false, false, false, false, "pagein-draw" },
+    { "impress", false, false, false, false, "pagein-impress" },
 
     /* Do not send --help/--version over the pipe, as their output shall go to
        the calling process's stdout (ideally, this would also happen in the
        presence of unknown options); also prevent splash/pagein/javaldx overhead
        (as these options will be processed early in soffice_main): */
-    { "version",    1, 1, 1, 1, nullptr },
-    { "help",       1, 1, 1, 1, nullptr },
-    { "h",          1, 1, 1, 1, nullptr },
-    { "?",          1, 1, 1, 1, nullptr },
+    { "version", true, true, true, true, nullptr },
+    { "help", true, true, true, true, nullptr },
+    { "h", true, true, true, true, nullptr },
+    { "?", true, true, true, true, nullptr },
 };
 
 Args *args_parse (void)
