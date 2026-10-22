@@ -1150,7 +1150,7 @@ void SwHTMLParser::NewAnchor()
     }
 
     SvxMacroTableDtor aMacroTable;
-    OUString sHRef, aName, sTarget;
+    OUString sHRef, aName, sTarget, aValue;
     OUString aId, aStyle, aClass, aLang, aDir;
     bool bHasHRef = false, bFixed = false;
 
@@ -1189,6 +1189,9 @@ void SwHTMLParser::NewAnchor()
                 break;
             case HtmlOptionId::SDFIXED:
                 bFixed = true;
+                break;
+            case HtmlOptionId::VALUE:
+                aValue = rOption.GetString();
                 break;
             case HtmlOptionId::LANG:
                 aLang = rOption.GetString();
@@ -1335,7 +1338,8 @@ ANCHOR_SETEVENT:
 
     if( bEnAnchor || bFootnoteAnchor )
     {
-        InsertFootEndNote( aFootnoteName, bEnAnchor, bFixed );
+        InsertFootEndNote( aFootnoteName, bEnAnchor, bFixed,
+                           aValue.isEmpty() ? USHRT_MAX : static_cast<sal_uInt16>(aValue.toInt32()) );
         m_bInFootEndNoteAnchor = m_bCallNextToken = true;
     }
     else if( bFootnoteEnSymbol )

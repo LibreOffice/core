@@ -19,6 +19,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <IDocumentDrawModelAccess.hxx>
 #include <com/sun/star/text/XTextFrame.hpp>
+#include <com/sun/star/text/ReferenceFieldPart.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
@@ -53,6 +54,8 @@
 #include <svx/svdpage.hxx>
 #include <ndtxt.hxx>
 #include <numrule.hxx>
+#include <txtftn.hxx>
+#include <ftnidx.hxx>
 #include <svl/itemset.hxx>
 #include <editeng/wghtitem.hxx>
 #include <o3tl/string_view.hxx>
@@ -2035,6 +2038,62 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateKeepsSpaceAfterField)
     // Then the text around the fields is as it was, the blank after a field included:
     pWrtSh->GetDoc()->getIDocumentFieldsAccess().UpdateFields(false);
     CPPUNIT_ASSERT_EQUAL(aParagraph, getParagraph(1)->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateKeepsFootnoteReferences)
+{
+    // The mock returns the markup it was sent, as the translation services do.
+    std::unique_ptr<test::MockHttpServer> pMockServer = createMockTranslateServer(false, true);
+    CPPUNIT_ASSERT(pMockServer->start());
+    comphelper::ScopeGuard<std::function<void()>> aResetConfig
+        = setTranslationService(u"http://127.0.0.1:18099/v2/translate"_ustr);
+
+    // Given three paragraphs with a footnote each, a reference to the third note, and the
+    // first paragraph deleted after that, so a footnote number lower than the third's is free:
+    createSwDoc();
+    SwWrtShell* const pWrtSh = getSwDocShell()->GetWrtShell();
+    for (int i = 0; i < 3; ++i)
+    {
+        pWrtSh->Insert(u"Paragraph " + OUString::number(i + 1));
+        pWrtSh->InsertFootnote(u""_ustr);
+        pWrtSh->Insert(u"Note " + OUString::number(i + 1));
+        pWrtSh->SttEndDoc(false);
+        if (i < 2)
+            pWrtSh->SplitNode();
+    }
+    pWrtSh->SplitNode();
+    pWrtSh->Insert(u"See note "_ustr);
+    const SwFootnoteIdxs& rFootnotes = pWrtSh->GetDoc()->GetFootnoteIdxs();
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xBody = xTextDocument->getText();
+    uno::Reference<beans::XPropertySet> xReference(
+        xFactory->createInstance(u"com.sun.star.text.TextField.GetReference"_ustr), uno::UNO_QUERY);
+    xReference->setPropertyValue(u"ReferenceFieldSource"_ustr,
+                                 uno::Any(text::ReferenceFieldSource::FOOTNOTE));
+    xReference->setPropertyValue(u"SequenceNumber"_ustr,
+                                 uno::Any(sal_Int16(rFootnotes[2]->GetSeqRefNo())));
+    xReference->setPropertyValue(u"ReferenceFieldPart"_ustr,
+                                 uno::Any(sal_Int16(text::ReferenceFieldPart::TEXT)));
+    uno::Reference<text::XTextContent> xReferenceContent(xReference, uno::UNO_QUERY);
+    xBody->insertTextContent(xBody->getEnd(), xReferenceContent, false);
+    pWrtSh->SttEndDoc(true);
+    pWrtSh->EndPara(/*bSelect=*/true);
+    pWrtSh->Delete();
+    pWrtSh->GetDoc()->getIDocumentFieldsAccess().UpdateFields(false);
+    CPPUNIT_ASSERT_EQUAL(u"See note 2"_ustr, getParagraph(4)->getString());
+    const sal_uInt16 nNumber = rFootnotes[1]->GetSeqRefNo();
+    pWrtSh->SttEndDoc(true);
+
+    // When translating the whole document:
+    bool bCancel = false;
+    CPPUNIT_ASSERT(SwTranslateHelper::TranslateDocumentCancellable(*pWrtSh, "DE"_ostr, bCancel));
+
+    // Then the re-created note has the number it had, and the reference to it still resolves:
+    // the note used to get the lowest free number, and the reference its old one.
+    pWrtSh->GetDoc()->getIDocumentFieldsAccess().UpdateFields(false);
+    CPPUNIT_ASSERT_EQUAL(nNumber, rFootnotes[1]->GetSeqRefNo());
+    CPPUNIT_ASSERT_EQUAL(u"See note 2"_ustr, getParagraph(4)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateSetsTargetLanguage)

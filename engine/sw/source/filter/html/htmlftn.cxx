@@ -29,6 +29,7 @@
 #include <ndindex.hxx>
 #include <fmtftn.hxx>
 #include <txtftn.hxx>
+#include <ftnidx.hxx>
 #include <ftninfo.hxx>
 #include <doc.hxx>
 #include <ndtxt.hxx>
@@ -176,12 +177,13 @@ void SwHTMLParser::FillFootNoteInfo( std::u16string_view aContent )
 }
 
 void SwHTMLParser::InsertFootEndNote( const OUString& rName, bool bEndNote,
-                                      bool bFixed )
+                                      bool bFixed, sal_uInt16 nSeqNo )
 {
     if( !m_pFootEndNoteImpl )
         m_pFootEndNoteImpl.reset(new SwHTMLFootEndNote_Impl);
 
     m_pFootEndNoteImpl->sName = rName;
+    m_pFootEndNoteImpl->nSeqNo = nSeqNo;
     if( m_pFootEndNoteImpl->sName.getLength() > 3 )
         m_pFootEndNoteImpl->sName = m_pFootEndNoteImpl->sName.copy( 0, m_pFootEndNoteImpl->sName.getLength() - 3 );
     m_pFootEndNoteImpl->sName = m_pFootEndNoteImpl->sName.toAsciiUpperCase();
@@ -205,7 +207,24 @@ void SwHTMLParser::FinishFootEndNote()
             m_pPam->GetPoint()->GetContentIndex() - 1, RES_TXTATR_FTN ) );
     // In header and footer no footnotes can be inserted.
     if (pTextFootnote)
+    {
+        // The number the note had, as long as no other note has it: a
+        // reference to the note knows it by that number.
+        const sal_uInt16 nSeqNo = m_pFootEndNoteImpl->nSeqNo;
+        if( nSeqNo != USHRT_MAX && nSeqNo != pTextFootnote->GetSeqRefNo() )
+        {
+            bool bTaken = false;
+            for( const SwTextFootnote* pOther : m_xDoc->GetFootnoteIdxs() )
+                if( pOther != pTextFootnote && pOther->GetSeqRefNo() == nSeqNo )
+                {
+                    bTaken = true;
+                    break;
+                }
+            if( !bTaken )
+                pTextFootnote->SetSeqNo( nSeqNo );
+        }
         m_pFootEndNoteImpl->aTextFootnotes.emplace_back(m_pFootEndNoteImpl->sName,pTextFootnote);
+    }
     m_pFootEndNoteImpl->sName.clear();
     m_pFootEndNoteImpl->sContent.clear();
     m_pFootEndNoteImpl->bFixed = false;
@@ -314,6 +333,11 @@ SwHTMLWriter& OutHTML_SwFormatFootnote( SwHTMLWriter& rWrt, const SfxPoolItem& r
     sOut.setLength(0);
     HTMLOutFuncs::Out_String( rWrt.Strm(), sFootnoteName );
     sOut.append(OOO_STRING_SVTOOLS_HTML_FTN_symbol "\"");
+    // The number a reference to the note knows it by, so that a reader that
+    // makes the note again can give it that number.
+    if( !rWrt.mbXHTML )
+        sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_value "=\""
+                    + OString::number( pTextFootnote->GetSeqRefNo() ) + "\"");
     if( !rFormatFootnote.GetNumStr().isEmpty() )
         sOut.append(" " OOO_STRING_SVTOOLS_HTML_O_sdfixed);
     sOut.append(">");

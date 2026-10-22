@@ -867,7 +867,8 @@ private:
 
     void FillEndNoteInfo( std::u16string_view aContent );
     void FillFootNoteInfo( std::u16string_view aContent );
-    void InsertFootEndNote( const OUString& rName, bool bEndNote, bool bFixed );
+    void InsertFootEndNote( const OUString& rName, bool bEndNote, bool bFixed,
+                            sal_uInt16 nSeqNo );
     void FinishFootEndNote();
     void InsertFootEndNoteText();
     SwNodeIndex *GetFootEndNoteSection( const OUString& rName );
@@ -1074,6 +1075,7 @@ struct SwHTMLFootEndNote_Impl
     OUString sContent;            // information for the last footnote
     bool bEndNote;
     bool bFixed;
+    sal_uInt16 nSeqNo;            // the number the note had, USHRT_MAX for none
 };
 
 #endif
