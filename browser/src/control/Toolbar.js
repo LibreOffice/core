@@ -347,7 +347,7 @@ window.L.Map.include({
 		var allowedCommands = ['.uno:Save', '.uno:SaveAs', '.uno:WordCountDialog',
 			'.uno:Signature', '.uno:PrepareSignature', '.uno:DownloadSignature', '.uno:InsertSignatureLine',
 			'.uno:SetDocumentProperties',
-			'.uno:ShowResolvedAnnotations', '.uno:Open', '.uno:CloseWin', '.uno:Quit',
+			'.uno:ShowResolvedAnnotations', '.uno:Open', '.uno:CloseWin', '.uno:Quit', '.uno:NextDocumentTab', '.uno:PreviousDocumentTab', '.uno:RecentlyUsedDocumentTab',
 			'.uno:ToolbarMode?Mode:string=notebookbar_online.ui', '.uno:ToolbarMode?Mode:string=Default',
 			'.uno:ExportToEPUB', '.uno:ExportToPDF', '.uno:ExportDirectToPDF', '.uno:MoveKeepInsertMode', '.uno:ShowRuler',
 			'.uno:Navigator', '.uno:Navigator?Navigator:bool=true', '.uno:Navigator?Navigator:bool=false',

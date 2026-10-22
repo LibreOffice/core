@@ -724,6 +724,38 @@ void TabManager::activateTab(int tabId)
     scheduleLiveViewLimit(kLiveViewLimitDelayMilliseconds);
 }
 
+void TabManager::activateAdjacentTab(int delta)
+{
+    const int size = static_cast<int>(_tabs.size());
+    if (size < 2)
+        return;
+    auto it = findTab(_activeTabId);
+    if (it == _tabs.end())
+        return;
+    const int index = static_cast<int>(it - _tabs.begin());
+    activateTab(_tabs[(index + delta + size) % size].id);
+}
+
+void TabManager::activateRecentlyUsedTab()
+{
+    if (_tabs.size() < 2)
+        return;
+    const Entry* pick = nullptr;
+    for (const Entry& e : _tabs)
+    {
+        if (e.id == _activeTabId)
+            continue;
+        if (!pick || e.lastActiveTick > pick->lastActiveTick)
+            pick = &e;
+    }
+    if (pick)
+    {
+        // activateTab() changes the entries, so take the id first.
+        const int id = pick->id;
+        activateTab(id);
+    }
+}
+
 void TabManager::restoreActiveTabView()
 {
     auto it = findTab(_activeTabId);

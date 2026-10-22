@@ -1158,6 +1158,26 @@ QVariant Bridge::cool(const QString& messageStr)
                 window->close();
         });
     }
+    else if (message == "uno .uno:NextDocumentTab" ||
+             message == "uno .uno:PreviousDocumentTab" ||
+             message == "uno .uno:RecentlyUsedDocumentTab")
+    {
+        const bool recentlyUsed = (message == "uno .uno:RecentlyUsedDocumentTab");
+        const int delta = (message == "uno .uno:PreviousDocumentTab") ? -1 : 1;
+        // Defer, as CloseWin does: the tab switch runs from the event loop.
+        QPointer<WebView> owner = _owner;
+        QTimer::singleShot(0, [owner, recentlyUsed, delta]() {
+            if (!owner)
+                return;
+            if (auto* tw = qobject_cast<TabbedWindow*>(owner->mainWindow()))
+            {
+                if (recentlyUsed)
+                    tw->manager()->activateRecentlyUsedTab();
+                else
+                    tw->manager()->activateAdjacentTab(delta);
+            }
+        });
+    }
     else if (message == "uno .uno:Quit")
     {
         // The application exits when the last window has gone. The close runs from the event

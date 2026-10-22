@@ -78,6 +78,14 @@ public:
     void requestCloseAll();
 
     void activateTab(int tabId);
+
+    // Activate the tab after (delta = 1) or before (delta = -1) the active one,
+    // wrapping around at the ends.
+    void activateAdjacentTab(int delta);
+
+    // Activate the most recently used tab other than the active one.
+    void activateRecentlyUsedTab();
+
     void reorderTab(int fromIndex, int toIndex);
 
     // Cross-window drag. Wayland freezes the source's cursor and drag coords
