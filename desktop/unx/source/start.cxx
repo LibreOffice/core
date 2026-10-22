@@ -242,7 +242,6 @@ static OUString get_pipe_path(const OUString& rAppPath)
     /* setup bootstrap filename */
     rtl_uString_newFromAscii(&pPath, "file://");
     rtl_uString_newConcat(&pPath, pPath, rAppPath.pData);
-    rtl_uString_newConcat(&pPath, pPath, pTmp);
     rtl_uString_newFromAscii(&pTmp, SAL_CONFIGFILE("bootstrap"));
     rtl_uString_newConcat(&pPath, pPath, pTmp);
 
