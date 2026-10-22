@@ -383,7 +383,8 @@ bool SwHyphPortion::Format( SwTextFormatInfo &rInf )
 
     PrtWidth( rInf.GetTextSize( aText ).Width() );
     const bool bFull = rInf.Width() <= rInf.X() + PrtWidth();
-    if( bFull && !rInf.IsUnderflow() ) {
+    // at the start of the line there is nothing to break before, so the hyphen stays
+    if (bFull && !rInf.IsUnderflow() && rInf.GetIdx() != rInf.GetLineStart()) {
         Truncate();
         rInf.SetUnderflow( this );
     }
