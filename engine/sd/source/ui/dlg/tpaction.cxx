@@ -371,16 +371,13 @@ void SdTPAction::OpenFileDialog()
 
         if (bSound)
         {
-            SdOpenSoundFileDialog aFileDialog(GetFrameWeld());
+            // COKit answers later from its own picker
+            m_xSoundFileDialog.reset(new SdOpenSoundFileDialog(GetFrameWeld()));
 
             if( !aFile.isEmpty() )
-                aFileDialog.SetPath( aFile );
+                m_xSoundFileDialog->SetPath( aFile );
 
-            if( aFileDialog.Execute() == ERRCODE_NONE )
-            {
-                aFile = aFileDialog.GetPath();
-                SetEditText( aFile );
-            }
+            m_xSoundFileDialog->StartExecuteModal(LINK(this, SdTPAction, SoundFileDialogClosedHdl));
         }
         else if (bMacro)
         {
@@ -421,6 +418,24 @@ void SdTPAction::OpenFileDialog()
 IMPL_LINK_NOARG(SdTPAction, ClickSearchHdl, weld::Button&, void)
 {
     OpenFileDialog();
+}
+
+IMPL_LINK_NOARG(SdTPAction, SoundFileDialogClosedHdl, sfx2::FileDialogHelper*, void)
+{
+    m_xSoundFileDialog->StopPlaying();
+
+    if (m_xSoundFileDialog->GetError() != ERRCODE_NONE)
+        return;
+
+    // Action can change while the app picker is open
+    if (GetActualClickAction() != presentation::ClickAction_SOUND)
+        return;
+
+    OUString aFile = m_xSoundFileDialog->GetPath();
+    if (aFile.isEmpty())
+        return;
+
+    SetEditText( aFile );
 }
 
 IMPL_LINK_NOARG(SdTPAction, ClickActionHdl, weld::ComboBox&, void)

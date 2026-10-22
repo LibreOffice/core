@@ -56,6 +56,8 @@ public:
     explicit SdFileDialog_Imp(weld::Window *pParent);
     virtual ~SdFileDialog_Imp() override;
 
+    void StopPlaying();
+
     // overwritten from FileDialogHelper, to receive user feedback
     virtual void ControlStateChanged( const css::ui::dialogs::FilePickerEvent& aEvent ) override;
 };
@@ -78,10 +80,15 @@ void SdFileDialog_Imp::ControlStateChanged( const css::ui::dialogs::FilePickerEv
     }
 }
 
-IMPL_LINK_NOARG(SdFileDialog_Imp, PlayMusicHdl, void*, void)
+void SdFileDialog_Imp::StopPlaying()
 {
     maUpdateIdle.Stop();
-    mnPlaySoundEvent = nullptr;
+
+    if (mnPlaySoundEvent)
+    {
+        Application::RemoveUserEvent( mnPlaySoundEvent );
+        mnPlaySoundEvent = nullptr;
+    }
 
     if (mxPlayer.is())
     {
@@ -89,6 +96,12 @@ IMPL_LINK_NOARG(SdFileDialog_Imp, PlayMusicHdl, void*, void)
             mxPlayer->stop();
         mxPlayer.clear();
     }
+}
+
+IMPL_LINK_NOARG(SdFileDialog_Imp, PlayMusicHdl, void*, void)
+{
+    mnPlaySoundEvent = nullptr;
+    StopPlaying();
 
 #if HAVE_FEATURE_AVMEDIA
     if( mbLabelPlaying )
@@ -201,8 +214,7 @@ SdFileDialog_Imp::SdFileDialog_Imp(weld::Window* pParent)
 
 SdFileDialog_Imp::~SdFileDialog_Imp()
 {
-    if( mnPlaySoundEvent )
-        Application::RemoveUserEvent( mnPlaySoundEvent );
+    StopPlaying();
 }
 
 // -----------      SdOpenSoundFileDialog       -----------------------
@@ -242,6 +254,22 @@ SdOpenSoundFileDialog::~SdOpenSoundFileDialog()
 ErrCode SdOpenSoundFileDialog::Execute()
 {
     return mpImpl->Execute();
+}
+
+void SdOpenSoundFileDialog::StartExecuteModal(
+    const Link<sfx2::FileDialogHelper*, void>& rEndDialogHdl)
+{
+    mpImpl->StartExecuteModal(rEndDialogHdl);
+}
+
+ErrCode SdOpenSoundFileDialog::GetError() const
+{
+    return mpImpl->GetError();
+}
+
+void SdOpenSoundFileDialog::StopPlaying()
+{
+    mpImpl->StopPlaying();
 }
 
 OUString SdOpenSoundFileDialog::GetPath() const

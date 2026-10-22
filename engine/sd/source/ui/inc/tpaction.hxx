@@ -26,12 +26,17 @@
 #include <unotools/resmgr.hxx>
 #include "sdtreelb.hxx"
 
+#include <memory>
 #include <vector>
 
 namespace sd {
     class View;
 }
+namespace sfx2 {
+    class FileDialogHelper;
+}
 class SdDrawDocument;
+class SdOpenSoundFileDialog;
 
 /**
  * Effect-SingleTab-Dialog
@@ -70,8 +75,10 @@ private:
     std::unique_ptr<weld::Entry> m_xEdtMacro;
     std::unique_ptr<weld::Button> m_xBtnSearch;
     std::unique_ptr<weld::Button> m_xBtnSeek;
+    std::unique_ptr<SdOpenSoundFileDialog> m_xSoundFileDialog;
 
     DECL_LINK( ClickSearchHdl, weld::Button&, void );
+    DECL_LINK( SoundFileDialogClosedHdl, sfx2::FileDialogHelper*, void );
     DECL_LINK( ClickActionHdl, weld::ComboBox&, void );
     DECL_LINK( SelectTreeHdl, weld::TreeView&, void );
     DECL_LINK( CheckFileHdl, weld::Widget&, void );

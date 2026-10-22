@@ -20,6 +20,7 @@
 #pragma once
 
 #include <comphelper/errcode.hxx>
+#include <tools/link.hxx>
 #include <vcl/weld.hxx>
 
 #include <memory>
@@ -27,6 +28,7 @@
 #include <sddllapi.h>
 
 class SdFileDialog_Imp;
+namespace sfx2 { class FileDialogHelper; }
 
 /******************************************************************************/
 
@@ -48,6 +50,9 @@ public:
     ~SdOpenSoundFileDialog();
 
     ErrCode Execute();
+    void StartExecuteModal(const Link<sfx2::FileDialogHelper*, void>& rEndDialogHdl);
+    ErrCode GetError() const;
+    void StopPlaying();
     OUString GetPath() const;
     void SetPath(const OUString& rPath);
     // WIP, please don't remove, dear Clang plugins
