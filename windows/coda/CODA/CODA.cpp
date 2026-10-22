@@ -5795,15 +5795,15 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
                 load_next_document();
 
                 // The picked document opens in a tab of its own; return the
-                // originating document to its document view.
+                // originating document to its document view, and close the
+                // starter it was picked from.
                 if (data.mode != DocumentMode::STARTER)
                     PostMessageW(data.hWnd, CODA_WM_EXECUTESCRIPT,
                                  (WPARAM)_strdup("window.app?.map?.backstageView?.returnToDocumentView()"),
                                  (LPARAM)data.tabId);
+                else
+                    PostMessageW(data.hWnd, CODA_WM_CLOSETAB, (WPARAM)data.tabId, 0);
             }
-            // Close the starter window
-            if (data.mode == DocumentMode::STARTER)
-                PostMessageW(data.hWnd, CODA_WM_CLOSETAB, (WPARAM)data.tabId, 0);
         }
         else if (s == L"uno .uno:SaveAs")
         {
