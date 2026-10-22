@@ -183,8 +183,6 @@ typedef enum { ProgressContinue, ProgressRestart, ProgressExit } ProgressStatus;
 static rtl_uString *get_app_path(const char *pAppExec)
 {
     char pRealPath[PATH_MAX];
-    rtl_uString *pResult;
-    sal_Int32 len;
     char* dummy;
 
     char *pOrigPath = strdup(pAppExec);
@@ -192,10 +190,10 @@ static rtl_uString *get_app_path(const char *pAppExec)
 
     dummy = realpath(pPath, pRealPath);
     (void)dummy;
-    pResult = charp_to_ustr(pRealPath);
+    rtl_uString* pResult = charp_to_ustr(pRealPath);
     free(pOrigPath);
 
-    len = rtl_uString_getLength(pResult);
+    const sal_Int32 len = rtl_uString_getLength(pResult);
     if (len > 0 && rtl_uString_getStr(pResult)[len - 1] != '/')
     {
         rtl_uString *pSlash = nullptr;
@@ -212,14 +210,12 @@ static rtl_uString *get_md5hash(rtl_uString *pText)
 {
     rtl_uString *pResult = nullptr;
     sal_Int32 nCapacity = 100;
-    unsigned char *pData = nullptr;
-    sal_uInt32 nSize = 0;
 
     if ( !pText )
         return nullptr;
 
-    pData = reinterpret_cast<unsigned char *>(rtl_uString_getStr(pText));
-    nSize = rtl_uString_getLength(pText) * sizeof(sal_Unicode);
+    unsigned char* pData = reinterpret_cast<unsigned char*>(rtl_uString_getStr(pText));
+    sal_uInt32 nSize = rtl_uString_getLength(pText) * sizeof(sal_Unicode);
     if (!pData)
         return nullptr;
 
@@ -246,8 +242,6 @@ static rtl_uString *get_pipe_path(rtl_uString *pAppPath)
 {
     rtl_uString *pPath = nullptr, *pTmp = nullptr, *pUserInstallation = nullptr;
     rtl_uString *pResult = nullptr, *pBasePath = nullptr, *pAbsUserInstallation = nullptr;
-    rtlBootstrapHandle handle;
-    rtl_uString *pMd5hash = nullptr;
     sal_Unicode pUnicode[RTL_USTR_MAX_VALUEOFINT32];
 
     /* setup bootstrap filename */
@@ -258,7 +252,7 @@ static rtl_uString *get_pipe_path(rtl_uString *pAppPath)
     rtl_uString_newConcat(&pPath, pPath, pTmp);
 
     /* read userinstallation value */
-    handle = rtl_bootstrap_args_open(pPath);
+    rtlBootstrapHandle handle = rtl_bootstrap_args_open(pPath);
 
     rtl_uString_newFromAscii(&pTmp, "UserInstallation");
     rtl_bootstrap_get_from_handle(handle, pTmp, &pUserInstallation, nullptr);
@@ -271,7 +265,7 @@ static rtl_uString *get_pipe_path(rtl_uString *pAppPath)
         rtl_uString_newFromString(&pAbsUserInstallation, pUserInstallation);
 
     /* create the pipe name */
-    pMd5hash = get_md5hash(pAbsUserInstallation);
+    rtl_uString* pMd5hash = get_md5hash(pAbsUserInstallation);
     if (!pMd5hash)
         rtl_uString_new(&pMd5hash);
 
@@ -319,7 +313,6 @@ static rtl_uString *get_pipe_path(rtl_uString *pAppPath)
 static int connect_pipe(rtl_uString *pPipePath)
 {
     int fd;
-    size_t len;
     struct sockaddr_un addr;
 
     rtl_String *pPipeStr = ustr_to_str(pPipePath);
@@ -337,9 +330,9 @@ static int connect_pipe(rtl_uString *pPipePath)
 
 /* cut / paste from osl's pipe.c */
 #if defined(FREEBSD)
-    len = SUN_LEN(&addr);
+    size_t len = SUN_LEN(&addr);
 #else
-    len = sizeof(addr);
+    size_t len = sizeof(addr);
 #endif
 
     if (connect(fd, reinterpret_cast<struct sockaddr *>(&addr), len) < 0)
@@ -355,12 +348,11 @@ static rtl_uString *escape_path(rtl_uString const *pToEscape)
 {
     rtl_uString *pBuffer = nullptr;
     sal_Int32 nCapacity = 1000;
-    sal_Int32 i = 0;
     sal_Int32 nEscapeLength = rtl_uString_getLength(pToEscape);
 
     rtl_uString_new_WithLength(&pBuffer, nCapacity);
 
-    for (; i < nEscapeLength; ++i)
+    for (sal_Int32 i = 0; i < nEscapeLength; ++i)
     {
         sal_Unicode c = pToEscape->buffer[i];
         switch (c)
@@ -396,10 +388,7 @@ static bool send_args(int fd, rtl_uString const *pCwdPath)
     rtl_uString *pBuffer = nullptr, *pTmp = nullptr;
     sal_Int32 nCapacity = 1000;
     rtl_String *pOut = nullptr;
-    bool bResult;
-    size_t nLen;
     rtl_uString *pEscapedCwdPath = escape_path(pCwdPath);
-    sal_uInt32 nArg = 0;
     sal_uInt32 nArgCount = rtl_getAppCommandArgCount();
 
     rtl_uString_new_WithLength(&pBuffer, nCapacity);
@@ -427,7 +416,7 @@ static bool send_args(int fd, rtl_uString const *pCwdPath)
             RTL_CONSTASCII_STRINGPARAM("0"));
     }
 
-    for (nArg = 0; nArg < nArgCount; ++nArg)
+    for (sal_uInt32 nArg = 0; nArg < nArgCount; ++nArg)
     {
         rtl_uString *pEscapedTmp = nullptr;
         rtl_uStringbuffer_insert_ascii(&pBuffer, &nCapacity,
@@ -456,9 +445,9 @@ static bool send_args(int fd, rtl_uString const *pCwdPath)
         exit(1);
     }
 
-    nLen = rtl_string_getLength(pOut) + 1;
+    const size_t nLen = rtl_string_getLength(pOut) + 1;
     ssize_t n = write(fd, rtl_string_getStr(pOut), nLen);
-    bResult = (n >= 0 && static_cast<size_t>(n) == nLen);
+    bool bResult = (n >= 0 && static_cast<size_t>(n) == nLen);
 
     if ( bResult )
     {
@@ -490,8 +479,6 @@ static ProgressStatus read_percent(const ChildInfo& rInfo, int *pPercent)
     static char *pNext = pBuffer;
     static ssize_t nRead = 0;
 
-    char *pBegin;
-    char *pIter;
     char c;
 
     /* from the last call */
@@ -517,9 +504,9 @@ static ProgressStatus read_percent(const ChildInfo& rInfo, int *pPercent)
     pBuffer[nRead] = '\0';
 
     /* skip old data */
-    pBegin = pBuffer;
+    char* pBegin = pBuffer;
     pNext = pBuffer;
-    for (pIter = pBuffer; *pIter; ++pIter)
+    for (char* pIter = pBuffer; *pIter; ++pIter)
     {
         if (*pIter == '\n')
         {
@@ -597,24 +584,22 @@ static void exec_javaldx(Args *args)
 {
     char newpath[4096];
     sal_uInt32 nArgs;
-    rtl_uString *pApp;
-    rtl_uString **ppArgs;
-    rtl_uString *pTmp, *pTmp2;
 
     oslProcess javaldx = nullptr;
     oslFileHandle fileOut = nullptr;
     oslProcessError err;
 
-    ppArgs = static_cast<rtl_uString **>(calloc(args->nArgsEnv + 2, sizeof(rtl_uString*)));
+    rtl_uString** ppArgs
+        = static_cast<rtl_uString**>(calloc(args->nArgsEnv + 2, sizeof(rtl_uString*)));
 
     for (nArgs = 0; nArgs < args->nArgsEnv; ++nArgs)
         ppArgs[nArgs] = args->aArgs.at(nArgs);
 
     /* Use absolute path to redirectrc */
-    pTmp = nullptr;
+    rtl_uString* pTmp = nullptr;
     rtl_uString_newFromAscii(&pTmp, "-env:INIFILENAME=vnd.sun.star.pathname:");
     rtl_uString_newConcat(&pTmp, pTmp, args->pAppPath);
-    pTmp2 = nullptr;
+    rtl_uString* pTmp2 = nullptr;
     rtl_uString_newFromAscii(&pTmp2, "redirectrc");
     rtl_uString_newConcat(&pTmp, pTmp, pTmp2);
     ppArgs[nArgs] = pTmp;
@@ -622,7 +607,7 @@ static void exec_javaldx(Args *args)
     nArgs++;
 
     /* And also to javaldx */
-    pApp = nullptr;
+    rtl_uString* pApp = nullptr;
     rtl_uString_newFromAscii(&pApp, "file://");
     rtl_uString_newConcat(&pApp, pApp, args->pAppPath);
     pTmp = nullptr;
