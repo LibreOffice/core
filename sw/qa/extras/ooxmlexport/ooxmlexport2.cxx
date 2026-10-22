@@ -498,6 +498,19 @@ DECLARE_OOXMLEXPORT_TEST(testMathEscaping, "math-escaping.docx")
                   getFormula(getRun(getParagraph(1), 1)));
 }
 
+DECLARE_OOXMLEXPORT_TEST(testMathOperatorWithoutOperand, "math-operator-without-operand.docx")
+{
+    // An equals sign with nothing on one side gets an empty group there, so the formula
+    // parses and the sign keeps its math glyph
+    CHECK_FORMULA(u"{} = {x} over {2}"_ustr, getFormula(getRun(getParagraph(1), 1)));
+    CHECK_FORMULA(u"{x} over {2} = {}"_ustr, getFormula(getRun(getParagraph(2), 1)));
+    CHECK_FORMULA(u"{} = {}"_ustr, getFormula(getRun(getParagraph(3), 1)));
+    // The same holds inside a part of the formula, such as a numerator
+    CHECK_FORMULA(u"{x = {}} over {2}"_ustr, getFormula(getRun(getParagraph(4), 1)));
+    // A minus sign at the start is a sign of its own and needs nothing added
+    CHECK_FORMULA(u"- x"_ustr, getFormula(getRun(getParagraph(5), 1)));
+}
+
 DECLARE_OOXMLEXPORT_TEST(testMathLim, "math-lim.docx")
 {
     CHECK_FORMULA(u"lim from {x \u2192 1} {x}"_ustr, getFormula(getRun(getParagraph(1), 1)));
