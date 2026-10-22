@@ -33,6 +33,8 @@
 #include <doc.hxx>
 #include <fldbas.hxx>
 #include <docufld.hxx>
+#include <reffld.hxx>
+#include <expfld.hxx>
 #include <flddat.hxx>
 #include "htmlfld.hxx"
 #include "swhtml.hxx"
@@ -61,7 +63,36 @@ HTMLOptionEnum<SwFieldIds> const aHTMLFieldTypeTable[] =
     { OOO_STRING_SW_HTML_FT_docinfo,  SwFieldIds::DocInfo     },
     { OOO_STRING_SW_HTML_FT_docstat,  SwFieldIds::DocStat     },
     { OOO_STRING_SW_HTML_FT_filename, SwFieldIds::Filename    },
+    { OOO_STRING_SW_HTML_FT_sequence, SwFieldIds::SetExp      },
+    { OOO_STRING_SW_HTML_FT_reference, SwFieldIds::GetRef     },
     { nullptr,                        SwFieldIds(0)           }
+};
+
+HTMLOptionEnum<ReferencesSubtype> const aHTMLRefFieldSubTable[] =
+{
+    { OOO_STRING_SW_HTML_FS_sequence, ReferencesSubtype::SequenceField },
+    { OOO_STRING_SW_HTML_FS_bookmark, ReferencesSubtype::Bookmark },
+    { OOO_STRING_SW_HTML_FS_outline,  ReferencesSubtype::Outline },
+    { OOO_STRING_SW_HTML_FS_footnote, ReferencesSubtype::Footnote },
+    { OOO_STRING_SW_HTML_FS_endnote,  ReferencesSubtype::Endnote },
+    { OOO_STRING_SW_HTML_FS_style,    ReferencesSubtype::Style },
+    { nullptr,                        ReferencesSubtype(0) }
+};
+
+HTMLOptionEnum<RefFieldFormat> const aHTMLRefFieldFormatTable[] =
+{
+    { OOO_STRING_SW_HTML_FF_page,           RefFieldFormat::Page },
+    { OOO_STRING_SW_HTML_FF_chapter,        RefFieldFormat::Chapter },
+    { OOO_STRING_SW_HTML_FF_content,        RefFieldFormat::Content },
+    { OOO_STRING_SW_HTML_FF_updown,         RefFieldFormat::UpDown },
+    { OOO_STRING_SW_HTML_FF_aspagestyle,    RefFieldFormat::AsPageStyle },
+    { OOO_STRING_SW_HTML_FF_catnumber,      RefFieldFormat::CategoryAndNumber },
+    { OOO_STRING_SW_HTML_FF_caption,        RefFieldFormat::CaptionText },
+    { OOO_STRING_SW_HTML_FF_numbering,      RefFieldFormat::Numbering },
+    { OOO_STRING_SW_HTML_FF_number,         RefFieldFormat::Number },
+    { OOO_STRING_SW_HTML_FF_number_noctx,   RefFieldFormat::NumberNoContext },
+    { OOO_STRING_SW_HTML_FF_number_fullctx, RefFieldFormat::NumberFullContext },
+    { nullptr,                              RefFieldFormat(0) }
 };
 
 HTMLNumFormatTableEntry const aHTMLDateFieldFormatTable[] =
@@ -279,7 +310,10 @@ void SwHTMLParser::NewField()
     if( SwFieldIds::Date==nType || SwFieldIds::Time==nType )
         nWhich = SwFieldIds::DateTime;
 
-    SwFieldType* pType = m_xDoc->getIDocumentFieldsAccess().GetSysFieldType( nWhich );
+    // a sequence has a field type of its own, by name
+    SwFieldType* pType = SwFieldIds::SetExp == nWhich
+        ? nullptr
+        : m_xDoc->getIDocumentFieldsAccess().GetSysFieldType( nWhich );
     std::unique_ptr<SwField> xNewField;
     bool bInsOnEndTag = false;
 
@@ -507,6 +541,55 @@ void SwHTMLParser::NewField()
             }
 
             xNewField.reset(new SwFileNameField(static_cast<SwFileNameFieldType*>(pType), nFormat));
+        }
+        break;
+    case SwFieldIds::SetExp:
+        if( !aName.isEmpty() )
+        {
+            // A sequence field. It keeps the number it had, as long as that
+            // is free, so references to it still hold.
+            IDocumentFieldsAccess& rFields = m_xDoc->getIDocumentFieldsAccess();
+            SwFieldType* pSeqType = rFields.GetFieldType( SwFieldIds::SetExp, aName, false );
+            if( !pSeqType )
+                pSeqType = rFields.InsertFieldType(
+                    SwSetExpFieldType( m_xDoc.get(), UIName( aName ), SwGetSetExpType::Sequence ) );
+            if( pSeqType &&
+                bool(static_cast<SwSetExpFieldType*>(pSeqType)->GetType() & SwGetSetExpType::Sequence) )
+            {
+                SvxNumType nFormat = SVX_NUM_ARABIC;
+                if( pFormatOption )
+                    pFormatOption->GetEnum( nFormat, aHTMLPageNumFieldFormatTable );
+                std::unique_ptr<SwSetExpField> xSeqField( new SwSetExpField(
+                    static_cast<SwSetExpFieldType*>(pSeqType), aName + "+1",
+                    static_cast<sal_uLong>(nFormat) ) );
+                if( !aValue.isEmpty() )
+                    xSeqField->SetSeqNumber( static_cast<sal_uInt16>(aValue.toInt32()) );
+                xNewField = std::move( xSeqField );
+            }
+        }
+        break;
+    case SwFieldIds::GetRef:
+        if( pSubOption )
+        {
+            ReferencesSubtype nSub;
+            if( pSubOption->GetEnum( nSub, aHTMLRefFieldSubTable ) )
+            {
+                RefFieldFormat nFormat = RefFieldFormat::Content;
+                if( pFormatOption )
+                    pFormatOption->GetEnum( nFormat, aHTMLRefFieldFormatTable );
+                // the sequence number of the target, and the flags of a style reference
+                sal_uInt16 nSeqNo = 0, nFlags = 0;
+                if( !aValue.isEmpty() )
+                {
+                    sal_Int32 nIdx = 0;
+                    nSeqNo = static_cast<sal_uInt16>(o3tl::toInt32(o3tl::getToken(aValue, 0, ',', nIdx)));
+                    if( nIdx != -1 )
+                        nFlags = static_cast<sal_uInt16>(o3tl::toInt32(o3tl::getToken(aValue, 0, ',', nIdx)));
+                }
+                xNewField.reset( new SwGetRefField( static_cast<SwGetRefFieldType*>(pType),
+                                                    SwMarkName( aName ), OUString(), nSub, nSeqNo,
+                                                    nFlags, nFormat ) );
+            }
         }
         break;
     default:

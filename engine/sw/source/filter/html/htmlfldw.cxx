@@ -34,6 +34,7 @@
 #include <txtfld.hxx>
 #include <fldbas.hxx>
 #include <docufld.hxx>
+#include <reffld.hxx>
 #include <flddat.hxx>
 #include <viewopt.hxx>
 #include <expfld.hxx>
@@ -266,6 +267,58 @@ static SwHTMLWriter& OutHTML_SwField( SwHTMLWriter& rWrt, const SwField* pField,
             bFixed = static_cast<const SwFileNameField*>(pField)->IsFixed();
             OSL_ENSURE( pFormatStr, "unknown format for SwFileNameField" );
             break;
+        case SwFieldIds::SetExp:
+        {
+            // A sequence field, with its number, so that references to it
+            // still hold after a round trip.
+            const SwSetExpField* pSetExpField = static_cast<const SwSetExpField*>(pField);
+            if( !pSetExpField->IsSequenceField() )
+                break;
+            pTypeStr = OOO_STRING_SW_HTML_FT_sequence;
+            aName = pFieldTyp->GetName().toString();
+            pFormatStr = SwHTMLWriter::GetNumFormat( static_cast< sal_uInt16 >(pSetExpField->GetFormat()) );
+            aValue = OUString::number( pSetExpField->GetSeqNumber() );
+            break;
+        }
+        case SwFieldIds::GetRef:
+        {
+            const SwGetRefField* pRefField = static_cast<const SwGetRefField*>(pField);
+            // A reference mark has no HTML of its own, so a reference to one
+            // goes out as the text it shows: as a field it would point at
+            // nothing after a round trip.
+            if( pRefField->GetSubType() == ReferencesSubtype::SetRefAttr )
+                break;
+            pTypeStr = OOO_STRING_SW_HTML_FT_reference;
+            switch( pRefField->GetSubType() )
+            {
+                case ReferencesSubtype::SetRefAttr:                                               break;
+                case ReferencesSubtype::SequenceField: pSubStr = OOO_STRING_SW_HTML_FS_sequence; break;
+                case ReferencesSubtype::Bookmark:      pSubStr = OOO_STRING_SW_HTML_FS_bookmark; break;
+                case ReferencesSubtype::Outline:       pSubStr = OOO_STRING_SW_HTML_FS_outline;  break;
+                case ReferencesSubtype::Footnote:      pSubStr = OOO_STRING_SW_HTML_FS_footnote; break;
+                case ReferencesSubtype::Endnote:       pSubStr = OOO_STRING_SW_HTML_FS_endnote;  break;
+                case ReferencesSubtype::Style:         pSubStr = OOO_STRING_SW_HTML_FS_style;    break;
+            }
+            switch( pRefField->GetFormat() )
+            {
+                case RefFieldFormat::Page:              pFormatStr = OOO_STRING_SW_HTML_FF_page;           break;
+                case RefFieldFormat::Chapter:           pFormatStr = OOO_STRING_SW_HTML_FF_chapter;        break;
+                case RefFieldFormat::Content:           pFormatStr = OOO_STRING_SW_HTML_FF_content;        break;
+                case RefFieldFormat::UpDown:            pFormatStr = OOO_STRING_SW_HTML_FF_updown;         break;
+                case RefFieldFormat::AsPageStyle:       pFormatStr = OOO_STRING_SW_HTML_FF_aspagestyle;    break;
+                case RefFieldFormat::CategoryAndNumber: pFormatStr = OOO_STRING_SW_HTML_FF_catnumber;      break;
+                case RefFieldFormat::CaptionText:       pFormatStr = OOO_STRING_SW_HTML_FF_caption;        break;
+                case RefFieldFormat::Numbering:         pFormatStr = OOO_STRING_SW_HTML_FF_numbering;      break;
+                case RefFieldFormat::Number:            pFormatStr = OOO_STRING_SW_HTML_FF_number;         break;
+                case RefFieldFormat::NumberNoContext:   pFormatStr = OOO_STRING_SW_HTML_FF_number_noctx;   break;
+                case RefFieldFormat::NumberFullContext: pFormatStr = OOO_STRING_SW_HTML_FF_number_fullctx; break;
+            }
+            aName = pRefField->GetSetRefName().toString();
+            aValue = OUString::number( pRefField->GetSeqNo() );
+            if( pRefField->GetFlags() )
+                aValue += "," + OUString::number( pRefField->GetFlags() );
+            break;
+        }
         default: break;
     }
 

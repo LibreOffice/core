@@ -1248,6 +1248,38 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testCharacterStyleAsClass)
                          getXPathContent(pDoc, "/html/body/p/b").replaceAll(u"\n", u" "));
 }
 
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testSequenceAndReferenceFields)
+{
+    // Given a sequence field, a reference to it, a reference to a bookmark and a reference to
+    // a reference mark:
+    createSwDoc("fields.fodt");
+
+    // When exporting to HTML:
+    ExportToHTML();
+
+    // Then each is a field tag that carries what it takes to make the field again, the
+    // sequence with its number, so the reference to it still holds: these used to be written
+    // as the text they showed.
+    OString aHtml;
+    {
+        SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+        OStringBuffer aBuffer;
+        OString aLine;
+        while (aStream.ReadLine(aLine))
+            aBuffer.append(aLine);
+        aHtml = aBuffer.makeStringAndClear();
+    }
+    CPPUNIT_ASSERT(aHtml.indexOf("<sdfield type=SEQUENCE format=ARABIC name=\"Figure\" value=\"0\">1</sdfield>") != -1);
+    CPPUNIT_ASSERT(aHtml.indexOf("<sdfield type=REFERENCE subtype=SEQUENCE format=CATNUMBER name=\"Figure\" value=\"0\">") != -1);
+    CPPUNIT_ASSERT(aHtml.indexOf("<sdfield type=REFERENCE subtype=BOOKMARK format=PAGE name=\"notes\" value=\"0\">") != -1);
+    // A reference mark is not written to HTML, so the reference to one stays its text: as a
+    // field it would show an error once read back.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aHtml.indexOf("name=\"tip\""));
+    const sal_Int32 nMarkText = aHtml.indexOf("Water daily");
+    CPPUNIT_ASSERT(nMarkText != -1);
+    CPPUNIT_ASSERT(aHtml.indexOf("Water daily", nMarkText + 1) != -1);
+}
+
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_Tdf160390)
 {
     // This document must not hang infinitely on HTML export
