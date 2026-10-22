@@ -19,6 +19,7 @@
 
 #include <sal/config.h>
 #include <sal/log.hxx>
+#include <rtl/ref.hxx>
 #include <rtl/uuid.h>
 
 #include <xmlsec/xmldsig.h>
