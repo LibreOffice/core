@@ -2473,7 +2473,7 @@ bool ClientRequestDispatcher::handleMediaRequest(const Poco::Net::HTTPRequest& r
     const std::string decoded = Uri::decode(request.getURI());
     Poco::URI requestUri(decoded);
     Poco::URI::QueryParameters params = requestUri.getQueryParameters();
-    std::string WOPISrc, serverId, viewId, tag, mime;
+    std::string WOPISrc, serverId, viewId, tag, mime, mediaKey;
     for (const auto& it : params)
     {
         if (it.first == "WOPISrc")
@@ -2486,6 +2486,8 @@ bool ClientRequestDispatcher::handleMediaRequest(const Poco::Net::HTTPRequest& r
             tag = it.second;
         else if (it.first == "MimeType")
             mime = it.second;
+        else if (it.first == "MediaKey")
+            mediaKey = it.second;
     }
 
     LOG_TRC_S("Media request for us: [" << serverId << "] with tag [" << tag << "] and viewId ["
@@ -2550,9 +2552,9 @@ bool ClientRequestDispatcher::handleMediaRequest(const Poco::Net::HTTPRequest& r
         docBroker->setupTransfer(
             disposition,
             [docBroker, range = request.get("Range", "none"), tag = std::move(tag),
-             field = std::string(bVTT ? MEDIA_STR : MEDIA_MP4)](
+             mediaKey = std::move(mediaKey), field = std::string(bVTT ? MEDIA_STR : MEDIA_MP4)](
                 const std::shared_ptr<Socket>& moveSocket)
-            { docBroker->handleMediaRequest(range, moveSocket, tag, field); });
+            { docBroker->handleMediaRequest(range, moveSocket, tag, mediaKey, field); });
     }
     return false; // async
 }

@@ -6917,6 +6917,7 @@ void DocumentBroker::handleClipboardRequest(ClipboardRequest type, const std::sh
 void DocumentBroker::handleMediaRequest(const std::string_view range,
                                         const std::shared_ptr<Socket>& socket,
                                         const std::string& tag,
+                                        const std::string& mediaKey,
                                         const std::string& field)
 {
     assertCorrectThread();
@@ -6928,6 +6929,18 @@ void DocumentBroker::handleMediaRequest(const std::string_view range,
     {
         LOG_ERR("Invalid socket to handle media request in Doc [" << _docId << "] with tag [" << tag
                                                                   << ']');
+        return;
+    }
+
+    // A media URL is served to the view of this document whose key it carries.
+    const bool knownKey =
+        std::any_of(_sessions.begin(), _sessions.end(),
+                    [&mediaKey](const auto& it) { return it.second->matchesMediaKey(mediaKey); });
+    if (!knownKey)
+    {
+        LOG_ERR("Media request in Doc [" << _docId << "] with tag [" << tag
+                                         << "] matches no view");
+        HttpHelper::sendErrorAndShutdown(http::StatusCode::Forbidden, streamSocket);
         return;
     }
 

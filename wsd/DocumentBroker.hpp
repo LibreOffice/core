@@ -685,7 +685,8 @@ public:
                                                  const std::string &tag, bool sendError = false);
 
     void handleMediaRequest(std::string_view range, const std::shared_ptr<Socket>& socket,
-                            const std::string& tag, const std::string& field);
+                            const std::string& tag, const std::string& mediaKey,
+                            const std::string& field);
 
     /// True if any flag to close, terminate, or to unload is set.
     bool isUnloading() const { return isUnloadingUnrecoverably() || _docState.isUnloadRequested(); }

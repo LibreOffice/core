@@ -409,8 +409,13 @@ public:
     /// Create URI for transient clipboard content.
     std::string getClipboardURI(bool encode = true);
 
-    /// Utility to create a publicly accessible URI.
-    std::string createPublicURI(const std::string& subPath, const std::string& tag, bool encode);
+    /// Utility to create a publicly accessible URI. The query, if any, is more parameters that
+    /// follow Tag, each with its leading '&'.
+    std::string createPublicURI(const std::string& subPath, const std::string& tag, bool encode,
+                                const std::string& query = std::string());
+
+    /// Create the unencoded public URI of the embedded media with the given id, for this view.
+    std::string createMediaURI(const std::string& subPath, const std::string& id);
 
     /// Adds and/or modified the copied payload before sending on to the client.
     void postProcessCopyPayload(const std::shared_ptr<Message>& payload);
@@ -436,6 +441,12 @@ public:
     bool matchesLinkToken(const std::string& token) const
     {
         return !token.empty() && token == _linkToken;
+    }
+
+    /// True when the given key is the one this view's media URLs carry, and not empty.
+    bool matchesMediaKey(const std::string& key) const
+    {
+        return !key.empty() && key == _mediaKey;
     }
 
     /// Generate an access token for this session via proxy protocol.
@@ -711,6 +722,10 @@ private:
 
     /// The token that lets a new connection take over this view, as 64 hex digits.
     RotatingToken _reconnectTokens;
+
+    /// The key that every media URL of this view carries, as 32 hex digits. It stays the same for
+    /// the life of the view, so a player can keep seeking with the one URL.
+    const std::string _mediaKey;
 
     /// Store last sent payload of form field button, so we can filter out redundant messages.
     std::string _lastSentFormFielButtonMessage;
