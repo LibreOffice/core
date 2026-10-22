@@ -10,7 +10,9 @@
 #include <unotest/filters-test.hxx>
 #include <test/bootstrapfixture.hxx>
 #include <tools/stream.hxx>
+#include <vcl/BitmapWriteAccess.hxx>
 #include <vcl/filter/ImportOutput.hxx>
+#include <vcl/graphicfilter.hxx>
 #include <filter/TgaReader.hxx>
 
 using namespace ::com::sun::star;
@@ -32,9 +34,11 @@ public:
      * Ensure CVEs remain unbroken
      */
     void testCVEs();
+    void testTdf174105();
 
     CPPUNIT_TEST_SUITE(TgaFilterTest);
     CPPUNIT_TEST(testCVEs);
+    CPPUNIT_TEST(testTdf174105);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -55,5 +59,29 @@ void TgaFilterTest::testCVEs()
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TgaFilterTest);
+
+void TgaFilterTest::testTdf174105()
+{
+    OUString aURL
+        = m_directories.getURLFromSrc(u"/vcl/qa/cppunit/graphicfilter/data/tga/tdf174105.tga");
+    SvFileStream aFileStream(aURL, StreamMode::READ);
+    Graphic aGraphic;
+    GraphicFilter& rFilter = GraphicFilter::GetGraphicFilter();
+
+    ErrCode bResult = rFilter.ImportGraphic(aGraphic, aURL, aFileStream);
+
+    CPPUNIT_ASSERT_EQUAL(ERRCODE_NONE, bResult);
+
+    Bitmap aBitmap = aGraphic.GetBitmap().CreateColorBitmap();
+    BitmapScopedReadAccess pReadAccess(aBitmap);
+
+    // Check the image contains white in position 0,0
+    const Color aColor = pReadAccess->GetColor(0, 0);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: rgba[fefefeff]
+    // - Actual  : rgba[0000ffff]
+    CPPUNIT_ASSERT_EQUAL(Color(254, 254, 254), aColor);
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
