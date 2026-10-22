@@ -283,13 +283,10 @@ static OUString get_pipe_path(std::u16string_view sAppPath)
 }
 
 /* Get fd of the pipe of the already running OOo. */
-static int connect_pipe(rtl_uString *pPipePath)
+static int connect_pipe(const OUString& sPipePath)
 {
     int fd;
     struct sockaddr_un addr;
-
-    rtl_String *pPipeStr = ustr_to_str(pPipePath);
-
     memset(&addr, 0, sizeof(addr));
 
     if ((fd = socket(AF_UNIX, SOCK_STREAM, 0)) < 0)
@@ -298,8 +295,8 @@ static int connect_pipe(rtl_uString *pPipePath)
     (void)fcntl(fd, F_SETFD, FD_CLOEXEC);
 
     addr.sun_family = AF_UNIX;
-    strncpy(addr.sun_path, rtl_string_getStr(pPipeStr), sizeof(addr.sun_path) - 1);
-    rtl_string_release(pPipeStr);
+    const OString sPipeStr = rtl::OUStringToOString(sPipePath, osl_getThreadTextEncoding());
+    strncpy(addr.sun_path, sPipeStr.getStr(), sizeof(addr.sun_path) - 1);
 
 /* cut / paste from osl's pipe.c */
 #if defined(FREEBSD)
@@ -714,7 +711,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     {
         int fd = 0;
         const OUString sPipePath = get_pipe_path(args->sAppPath);
-        if ((fd = connect_pipe(sPipePath.pData)) >= 0)
+        if ((fd = connect_pipe(sPipePath)) >= 0)
         {
             // Wait for answer
             char resp[27]; // strlen("InternalIPC::SendArguments") + 1
