@@ -1824,6 +1824,10 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateKeepsFootnotes)
         CPPUNIT_ASSERT_EQUAL_MESSAGE(
             OUStringToOString(rProperty, RTL_TEXTENCODING_ASCII_US).getStr(),
             beans::PropertyState_DEFAULT_VALUE, xNoteState->getPropertyState(rProperty));
+
+    // And the note's text is in the target language, like the text of the paragraph.
+    CPPUNIT_ASSERT_EQUAL(u"de"_ustr,
+                         getProperty<lang::Locale>(xNoteParagraph, u"CharLocale"_ustr).Language);
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateKeepsFields)

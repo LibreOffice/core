@@ -33,6 +33,9 @@
 #include <swtable.hxx>
 #include <tblsel.hxx>
 #include <ndtxt.hxx>
+#include <txatbase.hxx>
+#include <ndhints.hxx>
+#include <txtftn.hxx>
 #include <swatrset.hxx>
 #include <swcrsr.hxx>
 #include <doc.hxx>
@@ -256,6 +259,34 @@ void SetLanguageOfRange(SwWrtShell& rWrtSh, SwNodeOffset nStartNode, sal_Int32 n
     const SwPaM aPaM(*pStartNode, nStartContent, *pEndNode, nEndContent);
     rWrtSh.GetDoc()->getIDocumentContentOperations().InsertPoolItem(
         aPaM, SvxLanguageItem(eLanguage, nWhich));
+}
+
+/// Sets eLanguage on the text of the footnotes of the nodes nFirstNode to nLastNode: their
+/// text came with the paragraph's translation, but lives in a section of its own.
+void SetLanguageOfFootnotes(SwWrtShell& rWrtSh, SwNodeOffset nFirstNode, SwNodeOffset nLastNode,
+                            LanguageType eLanguage)
+{
+    const SwNodes& rNodes = rWrtSh.GetNodes();
+    for (SwNodeOffset n = nFirstNode; n <= nLastNode && n < rNodes.Count(); ++n)
+    {
+        const SwTextNode* pTextNode = rNodes[n]->GetTextNode();
+        if (!pTextNode || !pTextNode->HasHints())
+            continue;
+        const SwpHints& rHints = pTextNode->GetSwpHints();
+        for (size_t i = 0; i < rHints.Count(); ++i)
+        {
+            const SwTextAttr* pHint = rHints.Get(i);
+            if (pHint->Which() != RES_TXTATR_FTN)
+                continue;
+            const SwNodeIndex* pStart = static_cast<const SwTextFootnote*>(pHint)->GetStartNode();
+            if (!pStart)
+                continue;
+            const SwNodeOffset nEnd = pStart->GetNode().EndOfSectionIndex();
+            for (SwNodeOffset nNote = pStart->GetIndex() + 1; nNote < nEnd; ++nNote)
+                if (rNodes[nNote]->IsTextNode())
+                    SetLanguageOfRange(rWrtSh, nNote, 0, nNote, 0, eLanguage);
+        }
+    }
 }
 }
 
@@ -536,8 +567,11 @@ bool TranslateRanges(SwWrtShell& rWrtSh, const TranslateFunc& rTranslate,
                             rDoc.getIDocumentContentOperations().InsertItemSet(aPasted, aOwnCharAttrs);
                     }
                     if (eTargetLanguage != LANGUAGE_DONTKNOW)
+                    {
                         SetLanguageOfRange(rWrtSh, nFirstPasted, nStartContent, nLastPasted,
                                            nCharsAfter, eTargetLanguage);
+                        SetLanguageOfFootnotes(rWrtSh, nFirstPasted, nLastPasted, eTargetLanguage);
+                    }
                     if (!aSpanningMarks.empty())
                     {
                         SwTextNode* pLastNode = pNodes[nLastPasted]->GetTextNode();
