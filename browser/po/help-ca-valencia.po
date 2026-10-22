@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-13 14:06+0200\n"
+"POT-Creation-Date: 2026-10-22 23:37+0200\n"
 "PO-Revision-Date: 2020-10-12 07:13+0000\n"
 "Last-Translator: Andras Timar <andras.timar@collabora.com>\n"
 "Language-Team: Catalan <https://hosted.weblate.org/projects/collabora-online/"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Translate Toolkit 3.18.1\n"
 "X-POOTLE-MTIME: 1463059002.000000\n"
 
 #: html/cool-help.html%2Bdiv.h1:10-5
@@ -42,9 +42,9 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.table.tr.td:17-69
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>C</kbd>,<br /><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
-"hidden=\"true\">+</span><kbd>Insert</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"C</kbd>,<br /><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">"
+"+</span><kbd>Insert</kbd>"
 msgstr ""
 "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
 "plus\">+</span><kbd>Retorn"
@@ -56,9 +56,9 @@ msgstr "Enganxa com a text sense format"
 #: html/cool-help.html%2Bdiv.div.table.tr.td:18-90
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>V</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</"
+"kbd>"
 msgstr ""
 "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
 "plus\">+</span><kbd>Fletxa amunt"
@@ -69,10 +69,9 @@ msgstr "Enganxament especial"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:19-78
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>V</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</"
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:20-48
@@ -82,8 +81,8 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.table.tr.td:20-79
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>O</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"O</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>0"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:21-72
@@ -113,9 +112,9 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.table.tr.td:26-90
 #, fuzzy
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>F1</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>F1</"
+"kbd>"
 msgstr ""
 "Alt</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
 "plus\">+</span><kbd>Fletxes de direcció"
@@ -135,8 +134,8 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.table.tr.td:28-97
 #, fuzzy
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>C</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>C</"
+"kbd>"
 msgstr "Alt</kbd><span class=\"kbd--plus\">+</span><kbd>Supr"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:29-38
@@ -144,12 +143,11 @@ msgid "Open the context menu at the cursor or the selected cell"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:29-121
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:166-160
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:167-205
 #, fuzzy
+msgctxt "html/cool-help.html+general-shortcuts.table.tr.td:18-116"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>F10</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"F10</kbd>"
 msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>Finalització"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:30-38
@@ -169,34 +167,31 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.table.tr.td:31-115
 #, fuzzy
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>F6</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"F6</kbd>"
 msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>Finalització"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:36-9
-#: html/cool-help.html%2Bdiv.div.div.h2:208-9
-#: html/cool-help.html%2Bdiv.div.div.h2:273-9
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.h2:2-4"
 msgid "Text formatting"
 msgstr "Formatació de text"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:38-59
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:177-59
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:210-59
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:275-59
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:4-54"
 msgid "Bold"
 msgstr "Negreta"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:39-61
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:178-61
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:211-61
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:276-61
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:5-56"
 msgid "Italic"
 msgstr "Cursiva"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:40-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:179-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:212-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:277-64
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:6-59"
 msgid "Underline"
 msgstr "Subratllat"
 
@@ -205,60 +200,56 @@ msgid "Double Underline"
 msgstr "Subratllat doble"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:42-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:180-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:213-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:278-64
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:8-59"
 msgid "Strikethrough"
 msgstr "Barrat"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:43-66
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:214-66
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:279-66
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:9-61"
 msgid "Superscript"
 msgstr "Superíndex"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:44-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:215-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:280-64
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:10-59"
 msgid "Subscript"
 msgstr "Subíndex"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:45-70
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:181-70
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:11-65"
 msgid "Remove direct formatting"
 msgstr "Suprimeix la formatació directa"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:49-9
-#: html/cool-help.html%2Bdiv.div.div.h2:220-9
-#: html/cool-help.html%2Bdiv.div.div.h2:285-9
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.h2:15-4"
 msgid "Paragraph formatting"
 msgstr "Formatació de paràgrafs"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:51-76
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:186-76
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:222-76
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:287-76
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:17-71"
 msgid "Align Center"
 msgstr "Alinea al centre"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:52-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:187-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:223-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:288-64
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:18-59"
 msgid "Align Left"
 msgstr "Alinea a l'esquerra"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:53-65
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:188-65
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:224-65
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:289-65
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:19-60"
 msgid "Align Right"
 msgstr "Alinea a la dreta"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:54-65
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:189-65
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:225-65
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:290-65
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:20-60"
 msgid "Justify"
 msgstr "Justifica"
 
@@ -269,8 +260,8 @@ msgstr "Aplica l'estil de paràgraf predeterminat"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:55-94
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>0</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"0</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>0"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:56-38
@@ -280,8 +271,8 @@ msgstr "Aplica l'estil de paràgraf d'encapçalament 1"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:56-96
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>1</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"1</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>1"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:57-38
@@ -291,8 +282,8 @@ msgstr "Aplica l'estil de paràgraf d'encapçalament 2"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:57-96
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>2</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"2</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>2"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:58-38
@@ -300,11 +291,11 @@ msgid "Apply Heading 3 paragraph style"
 msgstr "Aplica l'estil de paràgraf d'encapçalament 3"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:58-96
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:190-89
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:24-91"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>3</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"3</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>3"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:59-38
@@ -314,8 +305,8 @@ msgstr "Aplica l'estil de paràgraf d'encapçalament 4"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:59-96
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>4</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"4</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>4"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:60-38
@@ -325,8 +316,8 @@ msgstr "Aplica l'estil de paràgraf d'encapçalament 5"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:60-96
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>5</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"5</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>5"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:64-9
@@ -334,298 +325,277 @@ msgid "Text selection and navigation in document"
 msgstr "Selecció de text i navegació en el document"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:66-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:185-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:216-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:233-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:281-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:298-64
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:32-59"
 msgid "Select All"
 msgstr "Ho selecciona tot"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:67-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:234-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:299-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:33-33"
 msgid "Move cursor to the left"
 msgstr "Mou el cursor cap a l'esquerra"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:67-88
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:234-88
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:299-88
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:33-83"
 msgid "Arrow Left"
 msgstr "Fletxa esquerra"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:68-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:235-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:300-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:34-33"
 msgid "Move cursor with selection to the left"
 msgstr "Mou el cursor amb la selecció cap a l'esquerra"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:68-103
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:235-103
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:300-103
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:34-98"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Left</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Left</kbd>"
 msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>Fletxa esquerra"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:69-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:236-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:301-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:35-33"
 msgid "Go to beginning of a word"
 msgstr "Va al començament d'una paraula"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:69-90
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:236-90
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:301-90
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:35-85"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Left</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Left</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Fletxa esquerra"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:70-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:237-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:302-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:36-33"
 msgid "Select to the left word by word"
 msgstr "Selecciona cap a l'esquerra paraula per paraula"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:70-96
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:237-96
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:302-96
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:36-91"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Left</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Left</kbd>"
 msgstr ""
 "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
 "plus\">+</span><kbd>Fletxa esquerra"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:71-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:238-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:303-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:37-33"
 msgid "Move cursor to the right"
 msgstr "Mou el cursor cap a la dreta"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:71-89
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:238-89
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:303-89
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:37-84"
 msgid "Arrow Right"
 msgstr "Fletxa dreta"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:72-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:239-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:304-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:38-33"
 msgid "Move cursor with selection to the right"
 msgstr "Mou el cursor amb la selecció cap a la dreta"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:72-104
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:239-104
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:304-104
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:38-99"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Right</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Right</kbd>"
 msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>Fletxa dreta"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:73-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:240-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:305-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:39-33"
 msgid "Go to start of the next word"
 msgstr "Va al començament de la paraula següent"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:73-93
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:240-93
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:305-93
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:39-88"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Right</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Right</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Fletxa dreta"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:74-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:241-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:306-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:40-33"
 msgid "Select to the right word by word"
 msgstr "Selecciona cap a la dreta paraula per paraula"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:74-97
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:241-97
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:306-97
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:40-92"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Right</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Right</kbd>"
 msgstr ""
 "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
 "plus\">+</span><kbd>Fletxa dreta"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:75-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:242-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:307-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:41-33"
 msgid "Move cursor up one line"
 msgstr "Mou el cursor una línia cap amunt"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:75-88
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:242-88
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:307-88
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:41-83"
 msgid "Arrow Up"
 msgstr "Fletxa amunt"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:76-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:243-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:308-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:42-33"
 msgid "Select lines in upwards direction"
 msgstr "Selecciona línies en direcció ascendent"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:76-98
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:243-98
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:308-98
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:42-93"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Up</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Up</kbd>"
 msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>Fletxa amunt"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:77-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:244-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:309-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:43-33"
 msgid "Move cursor to beginning of the previous paragraph"
 msgstr "Mou el cursor al principi del paràgraf anterior"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:77-115
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:244-115
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:309-115
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:43-110"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Up</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Up</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Fletxa amunt"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:78-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:245-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:310-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:44-33"
 msgid "Select to beginning of paragraph"
 msgstr "Selecciona cap al principi del paràgraf"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:78-97
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:245-97
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:310-97
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:44-92"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Up</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Up</kbd>"
 msgstr ""
 "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
 "plus\">+</span><kbd>Fletxa amunt"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:79-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:246-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:311-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:45-33"
 msgid "Move cursor down one line"
 msgstr "Mou el cursor una línia avall"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:79-90
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:246-90
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:311-90
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:45-85"
 msgid "Arrow Down"
 msgstr "Fletxa avall"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:80-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:247-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:312-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:46-33"
 msgid "Select lines in downwards direction"
 msgstr "Selecciona línies en direcció descendent"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:80-100
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:247-100
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:312-100
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:46-95"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Down</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Down</kbd>"
 msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>Fletxa avall"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:81-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:248-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:313-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:47-33"
 msgid "Move cursor to beginning of the next paragraph"
 msgstr "Mou el cursor al principi del paràgraf següent"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:81-111
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:248-111
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:313-111
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:47-106"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Down</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Down</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Fletxa avall"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:82-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:249-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:314-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:48-33"
 msgid "Select to end of paragraph"
 msgstr "Selecciona cap el final del paràgraf"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:82-91
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:249-91
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:314-91
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:48-86"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Down</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Down</kbd>"
 msgstr ""
 "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
 "plus\">+</span><kbd>Fletxa avall"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:83-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:250-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:315-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:49-33"
 msgid "Go to beginning of line"
 msgstr "Va al començament de la línia"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:83-88
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:147-119
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:250-88
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:315-88
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:49-83"
 msgid "Home"
 msgstr "Inici"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:84-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:251-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:316-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:50-33"
 msgid "Go and select to the beginning of a line"
 msgstr "Va i selecciona fins al començament d'una línia"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:84-105
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:149-138
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:251-105
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:316-105
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:50-100"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Home</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
 msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>Inici"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:85-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:252-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:317-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:51-33"
 msgid "Go to start of document"
 msgstr "Va al començament del document"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:85-88
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:107-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:145-118
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:252-88
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:317-88
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:51-83"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Home</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Inici"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:86-38
@@ -633,61 +603,54 @@ msgid "Go and select text to start of document"
 msgstr "Va i selecciona el text fins al començament del document"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:86-104
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:253-103
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:318-103
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:52-99"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Home</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Home</"
+"kbd>"
 msgstr ""
 "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
 "plus\">+</span><kbd>Fletxa amunt"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:87-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:254-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:319-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:53-33"
 msgid "Go to end of line"
 msgstr "Va al final de la línia"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:87-82
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:148-118
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:254-82
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:319-82
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:53-77"
 msgid "End"
 msgstr "Finalització"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:88-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:255-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:320-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:54-33"
 msgid "Go and select to the end of a line"
 msgstr "Va i selecciona fins al final de la línia"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:88-99
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:150-137
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:255-99
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:320-99
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:54-94"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>End</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
 msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>Finalització"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:89-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:256-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:321-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:55-33"
 msgid "Go to end of document"
 msgstr "Va al final del document"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:89-86
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:108-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:146-131
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:256-86
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:321-86
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:55-81"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>End</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Finalització"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:90-38
@@ -695,13 +658,12 @@ msgid "Go and select text to end of document"
 msgstr "Va i selecciona el text fins al final del document"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:90-102
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:257-101
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:322-101
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:56-97"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>End</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>End</"
+"kbd>"
 msgstr ""
 "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
 "plus\">+</span><kbd>Fletxa amunt"
@@ -721,8 +683,8 @@ msgstr "Canvia el cursor entre el text i la capçalera"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:92-102
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>PageUp</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"PageUp</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>RePàg"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:93-38
@@ -732,8 +694,8 @@ msgstr "Amplia la selecció una pàgina cap amunt"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:93-97
 #, fuzzy
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>PageUp</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"PageUp</kbd>"
 msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>RePàg"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:94-38
@@ -751,8 +713,8 @@ msgstr "Canvia el cursor entre el text i el peu"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:95-102
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>PageDown</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"PageDown</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>AvPàg"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:96-38
@@ -762,8 +724,8 @@ msgstr "Amplia la selecció una pàgina cap avall"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:96-99
 #, fuzzy
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>PageDown</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"PageDown</kbd>"
 msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>AvPàg"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:97-38
@@ -773,8 +735,8 @@ msgstr "Suprimeix fins al començament de la paraula"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:97-92
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Backspace</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Backspace</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Retrocés"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:98-38
@@ -784,8 +746,8 @@ msgstr "Suprimeix fins a la fi de la paraula"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:98-86
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Del</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Del</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Supr"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:99-38
@@ -795,9 +757,9 @@ msgstr "Suprimeix fins al principi de la frase"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:99-96
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Backspace</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Backspace</kbd>"
 msgstr ""
 "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
 "plus\">+</span><kbd>Retrocés"
@@ -809,9 +771,9 @@ msgstr "Suprimeix fins a la fi de la frase"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:100-90
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Del</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Del</"
+"kbd>"
 msgstr ""
 "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
 "plus\">+</span><kbd>Fletxa amunt"
@@ -821,12 +783,11 @@ msgid "Shortcut Keys for Tables"
 msgstr "Tecles de drecera per a les taules"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:106-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:267-84
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:332-91
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:72-33"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>A</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"A</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>A"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:106-144
@@ -838,6 +799,14 @@ msgstr ""
 "selecciona el contingut de la cel·la activa. Si es torna a prémer selecciona "
 "tota la taula."
 
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:107-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:73-33"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Inici"
+
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:107-147
 msgid ""
 "If the active cell is empty: goes to the beginning of the table. Otherwise: "
@@ -848,6 +817,14 @@ msgstr ""
 "amb la primera premuda va al començament de la cel·la activa, amb la segona "
 "premuda va al començament de la taula actual, amb la tercera premuda va al "
 "començament del document."
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:108-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:74-33"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Finalització"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:108-146
 msgid ""
@@ -862,26 +839,26 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:109-38
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Tab</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Tab</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Tab"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:109-146
 #, fuzzy
 msgid ""
 "Inserts a tab stop (only in tables). Depending on the Window Manager in use, "
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Tab</kbd> may be used instead."
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Tab</kbd> may be used instead."
 msgstr ""
 "Insereix una tabulació (només en les taules). En funció del gestor de "
-"finestres usat, podeu usar Alt</kbd><span class=\"kbd--plus\">+</"
-"span><kbd>Tab com a alternativa."
+"finestres usat, podeu usar Alt</kbd><span class=\"kbd--plus\">+</span><kbd>"
+"Tab com a alternativa."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:110-38
 #, fuzzy
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Keys</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Keys</kbd>"
 msgstr "Alt</kbd><span class=\"kbd--plus\">+</span><kbd>Fletxes de direcció"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:110-152
@@ -894,9 +871,9 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:111-38
 #, fuzzy
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Keys</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Keys</kbd>"
 msgstr ""
 "Alt</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
 "plus\">+</span><kbd>Fletxes de direcció"
@@ -910,31 +887,38 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:112-38
 #, fuzzy
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Keys</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Keys</kbd>"
 msgstr ""
 "Alt</kbd><span class=\"kbd--plus\">+</span><kbd>Ctrl</kbd><span class=\"kbd--"
 "plus\">+</span><kbd>Fletxes de direcció"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:112-218
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:113-285
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:78-213"
 msgid "Like Alt, but only the active cell is modified"
 msgstr "Com l'Alt, però només es modifica la cel·la activa"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:113-38
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Keys</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</"
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow Keys</"
+"kbd>"
 msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:113-285
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:79-280"
+msgid "Like Alt, but only the active cell is modified"
+msgstr "Com l'Alt, però només es modifica la cel·la activa"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:114-38
 #, fuzzy
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Insert</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Insert</kbd>"
 msgstr "Alt</kbd><span class=\"kbd--plus\">+</span><kbd>Ins"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:114-148
@@ -950,8 +934,8 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:115-38
 #, fuzzy
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Del</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Del</kbd>"
 msgstr "Alt</kbd><span class=\"kbd--plus\">+</span><kbd>Supr"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:115-145
@@ -967,9 +951,9 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:116-38
 #, fuzzy
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Del</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Del</"
+"kbd>"
 msgstr ""
 "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>Ctrl</kbd><span class=\"kbd--"
 "plus\">+</span><kbd>Supr"
@@ -1018,7 +1002,8 @@ msgid "Insert endnote"
 msgstr "Insereix una nota final"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:127-71
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:182-71
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:93-66"
 msgid "Insert comment"
 msgstr "Insereix un comentari"
 
@@ -1041,8 +1026,8 @@ msgstr "Insereix un salt de línia"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:133-82
 #, fuzzy
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Enter</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Enter</kbd>"
 msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>Retorn"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:134-70
@@ -1061,11 +1046,11 @@ msgstr ""
 "d'una taula"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:136-139
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:137-175
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:102-134"
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Enter</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Enter</kbd>"
 msgstr "Alt</kbd><span class=\"kbd--plus\">+</span><kbd>Retorn"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:137-38
@@ -1076,6 +1061,14 @@ msgstr ""
 "Insereix un paràgraf nou sense numeració dins una llista. No funciona si el "
 "cursor és al final de la llista."
 
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:137-175
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:103-170"
+msgid ""
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Enter</kbd>"
+msgstr "Alt</kbd><span class=\"kbd--plus\">+</span><kbd>Retorn"
+
 #: html/cool-help.html%2Bdiv.div.div.h2:143-9
 msgid "Navigating in Spreadsheets"
 msgstr ""
@@ -1084,27 +1077,71 @@ msgstr ""
 msgid "Moves the cursor to the first cell in the sheet (A1)."
 msgstr ""
 
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:145-118
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:4-113"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Inici"
+
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:146-38
 msgid "Moves the cursor to the last cell on the sheet that contains data."
 msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:146-131
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:5-126"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Finalització"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:147-38
 msgid "Moves the cursor to the first cell of the current row."
 msgstr ""
 
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:147-119
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:6-114"
+msgid "Home"
+msgstr "Inici"
+
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:148-38
 msgid "Moves the cursor to the last cell of the current row."
 msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:148-118
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:7-113"
+msgid "End"
+msgstr "Finalització"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:149-38
 msgid ""
 "Selects cells from the current cell to the first cell of the current row."
 msgstr ""
 
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:149-138
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:8-133"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
+msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>Inici"
+
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:150-38
 msgid ""
 "Selects cells from the current cell to the last cell of the current row."
 msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:150-137
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:9-132"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
+msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>Finalització"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:151-38
 msgid ""
@@ -1115,8 +1152,8 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:151-184
 #, fuzzy
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Page Up</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Page Up</kbd>"
 msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>RePàg"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:152-38
@@ -1128,8 +1165,8 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:152-188
 #, fuzzy
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Page Down</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Page Down</kbd>"
 msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>AvPàg"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:153-38
@@ -1142,8 +1179,8 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:153-265
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Left Arrow</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Left Arrow</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Retorn"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:154-38
@@ -1156,8 +1193,8 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:154-269
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Right Arrow</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Right Arrow</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Retorn"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:155-38
@@ -1170,8 +1207,8 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:155-241
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Up Arrow</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Up Arrow</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Fletxa amunt"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:156-38
@@ -1184,8 +1221,8 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:156-246
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Down Arrow</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Down Arrow</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Retorn"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:157-38
@@ -1195,9 +1232,9 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:157-82
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Page Down</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Page "
+"Down</kbd>"
 msgstr ""
 "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
 "plus\">+</span><kbd>Fletxa avall"
@@ -1209,9 +1246,9 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:158-86
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Page Up</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Page "
+"Up</kbd>"
 msgstr ""
 "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
 "plus\">+</span><kbd>Fletxa amunt"
@@ -1227,9 +1264,9 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:159-292
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Arrow</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow</kbd>"
 msgstr ""
 "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
 "plus\">+</span><kbd>Fletxa amunt"
@@ -1241,8 +1278,8 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:160-93
 #, fuzzy
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Page Up</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Page Up</kbd>"
 msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>RePàg"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:161-38
@@ -1252,8 +1289,8 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:161-100
 #, fuzzy
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Page Down</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Page Down</kbd>"
 msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>AvPàg"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:162-38
@@ -1266,9 +1303,9 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:162-280
 #, fuzzy
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Page Up</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Page "
+"Up</kbd>"
 msgstr ""
 "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>Ctrl</kbd><span class=\"kbd--"
 "plus\">+</span><kbd>Supr"
@@ -1283,9 +1320,9 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:163-268
 #, fuzzy
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Page Down</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Page "
+"Down</kbd>"
 msgstr ""
 "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>Ctrl</kbd><span class=\"kbd--"
 "plus\">+</span><kbd>Supr"
@@ -1297,8 +1334,8 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:164-111
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Space</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Space</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Tab"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:165-38
@@ -1308,8 +1345,8 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:165-108
 #, fuzzy
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Space</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Space</kbd>"
 msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>Tabulació"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:166-38
@@ -1318,11 +1355,27 @@ msgid ""
 "hide, move, and more)."
 msgstr ""
 
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:166-160
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:25-155"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"F10</kbd>"
+msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>Finalització"
+
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:167-38
 msgid ""
 "With a whole column or row selected, opens the matching column or row header "
 "context menu (insert, delete, width or height, hide, and more)."
 msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:167-205
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:26-200"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"F10</kbd>"
+msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>Finalització"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:168-38
 msgid ""
@@ -1334,8 +1387,8 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:168-269
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>*</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"*</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Z"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:169-38
@@ -1347,8 +1400,8 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:169-178
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>/</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>/"
+"</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Z"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:170-38
@@ -1358,8 +1411,8 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:170-105
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Plus key</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Plus key</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>P"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:171-38
@@ -1369,13 +1422,49 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:171-110
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Minus key</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Minus key</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Retorn"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:175-9
 msgid "Cell formatting"
 msgstr "Formatació de cel·les"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:177-59
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:36-54"
+msgid "Bold"
+msgstr "Negreta"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:178-61
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:37-56"
+msgid "Italic"
+msgstr "Cursiva"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:179-64
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:38-59"
+msgid "Underline"
+msgstr "Subratllat"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:180-64
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:39-59"
+msgid "Strikethrough"
+msgstr "Barrat"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:181-70
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:40-65"
+msgid "Remove direct formatting"
+msgstr "Suprimeix la formatació directa"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:182-71
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:41-66"
+msgid "Insert comment"
+msgstr "Insereix un comentari"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:183-38
 msgid "Display comment"
@@ -1384,8 +1473,8 @@ msgstr "Mostra un comentari"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:183-80
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>F1</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"F1</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>F1"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:184-38
@@ -1395,13 +1484,51 @@ msgstr "Omple cap a avall"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:184-74
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>D</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"D</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>D"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:185-64
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:44-59"
+msgid "Select All"
+msgstr "Ho selecciona tot"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:186-76
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:45-71"
+msgid "Align Center"
+msgstr "Alinea al centre"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:187-64
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:46-59"
+msgid "Align Left"
+msgstr "Alinea a l'esquerra"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:188-65
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:47-60"
+msgid "Align Right"
+msgstr "Alinea a la dreta"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:189-65
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:48-60"
+msgid "Justify"
+msgstr "Justifica"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:190-38
 msgid "Set Optimal Column Width"
 msgstr "Estableix l'amplària òptima de columna"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:190-89
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:49-84"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"3</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>3"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:191-74
 msgid "Two decimal places, thousands separator"
@@ -1438,58 +1565,475 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:202-76
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>;</kbd> or <kbd>,</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+";</kbd> or <kbd>,</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Fletxa amunt"
 
+#: html/cool-help.html%2Bdiv.div.div.h2:208-9
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.h2:2-4"
+msgid "Text formatting"
+msgstr "Formatació de text"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:210-59
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:4-54"
+msgid "Bold"
+msgstr "Negreta"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:211-61
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:5-56"
+msgid "Italic"
+msgstr "Cursiva"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:212-64
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:6-59"
+msgid "Underline"
+msgstr "Subratllat"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:213-64
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:7-59"
+msgid "Strikethrough"
+msgstr "Barrat"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:214-66
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:8-61"
+msgid "Superscript"
+msgstr "Superíndex"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:215-64
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:9-59"
+msgid "Subscript"
+msgstr "Subíndex"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:216-64
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:10-59"
+msgid "Select All"
+msgstr "Ho selecciona tot"
+
+#: html/cool-help.html%2Bdiv.div.div.h2:220-9
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.h2:14-4"
+msgid "Paragraph formatting"
+msgstr "Formatació de paràgrafs"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:222-76
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:16-71"
+msgid "Align Center"
+msgstr "Alinea al centre"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:223-64
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:17-59"
+msgid "Align Left"
+msgstr "Alinea a l'esquerra"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:224-65
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:18-60"
+msgid "Align Right"
+msgstr "Alinea a la dreta"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:225-65
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:19-60"
+msgid "Justify"
+msgstr "Justifica"
+
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:226-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:291-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:20-33"
 msgid "Demote list item (list item has to be selected)"
 msgstr "Mou avall un element de llista (cal que l'element estiga seleccionat)"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:226-112
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:264-119
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:291-112
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:329-119
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:20-107"
 msgid "Tab"
 msgstr "Tabulació"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:227-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:292-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:21-33"
 msgid "Promote list item (list item has to be selected)"
 msgstr "Mou amunt un element de llista (cal que l'element estiga seleccionat)"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:227-113
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:265-127
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:292-113
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:330-127
 #, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:21-108"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Tab</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Tab</kbd>"
 msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>Tabulació"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:231-9
-#: html/cool-help.html%2Bdiv.div.div.h2:296-9
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.h2:25-4"
 msgid "Text selection and navigation in a textbox"
 msgstr "Selecció de text i navegació en un quadre de text"
 
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:233-64
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:27-59"
+msgid "Select All"
+msgstr "Ho selecciona tot"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:234-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:28-33"
+msgid "Move cursor to the left"
+msgstr "Mou el cursor cap a l'esquerra"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:234-88
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:28-83"
+msgid "Arrow Left"
+msgstr "Fletxa esquerra"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:235-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:29-33"
+msgid "Move cursor with selection to the left"
+msgstr "Mou el cursor amb la selecció cap a l'esquerra"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:235-103
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:29-98"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Left</kbd>"
+msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>Fletxa esquerra"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:236-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:30-33"
+msgid "Go to beginning of a word"
+msgstr "Va al començament d'una paraula"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:236-90
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:30-85"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Left</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Fletxa esquerra"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:237-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:31-33"
+msgid "Select to the left word by word"
+msgstr "Selecciona cap a l'esquerra paraula per paraula"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:237-96
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:31-91"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Left</kbd>"
+msgstr ""
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
+"plus\">+</span><kbd>Fletxa esquerra"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:238-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:32-33"
+msgid "Move cursor to the right"
+msgstr "Mou el cursor cap a la dreta"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:238-89
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:32-84"
+msgid "Arrow Right"
+msgstr "Fletxa dreta"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:239-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:33-33"
+msgid "Move cursor with selection to the right"
+msgstr "Mou el cursor amb la selecció cap a la dreta"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:239-104
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:33-99"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Right</kbd>"
+msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>Fletxa dreta"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:240-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:34-33"
+msgid "Go to start of the next word"
+msgstr "Va al començament de la paraula següent"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:240-93
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:34-88"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Right</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Fletxa dreta"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:241-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:35-33"
+msgid "Select to the right word by word"
+msgstr "Selecciona cap a la dreta paraula per paraula"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:241-97
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:35-92"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Right</kbd>"
+msgstr ""
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
+"plus\">+</span><kbd>Fletxa dreta"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:242-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:36-33"
+msgid "Move cursor up one line"
+msgstr "Mou el cursor una línia cap amunt"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:242-88
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:36-83"
+msgid "Arrow Up"
+msgstr "Fletxa amunt"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:243-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:37-33"
+msgid "Select lines in upwards direction"
+msgstr "Selecciona línies en direcció ascendent"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:243-98
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:37-93"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Up</kbd>"
+msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>Fletxa amunt"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:244-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:38-33"
+msgid "Move cursor to beginning of the previous paragraph"
+msgstr "Mou el cursor al principi del paràgraf anterior"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:244-115
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:38-110"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Up</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Fletxa amunt"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:245-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:39-33"
+msgid "Select to beginning of paragraph"
+msgstr "Selecciona cap al principi del paràgraf"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:245-97
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:39-92"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Up</kbd>"
+msgstr ""
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
+"plus\">+</span><kbd>Fletxa amunt"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:246-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:40-33"
+msgid "Move cursor down one line"
+msgstr "Mou el cursor una línia avall"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:246-90
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:40-85"
+msgid "Arrow Down"
+msgstr "Fletxa avall"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:247-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:41-33"
+msgid "Select lines in downwards direction"
+msgstr "Selecciona línies en direcció descendent"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:247-100
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:41-95"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Down</kbd>"
+msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>Fletxa avall"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:248-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:42-33"
+msgid "Move cursor to beginning of the next paragraph"
+msgstr "Mou el cursor al principi del paràgraf següent"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:248-111
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:42-106"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Down</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Fletxa avall"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:249-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:43-33"
+msgid "Select to end of paragraph"
+msgstr "Selecciona cap el final del paràgraf"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:249-91
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:43-86"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Down</kbd>"
+msgstr ""
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
+"plus\">+</span><kbd>Fletxa avall"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:250-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:44-33"
+msgid "Go to beginning of line"
+msgstr "Va al començament de la línia"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:250-88
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:44-83"
+msgid "Home"
+msgstr "Inici"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:251-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:45-33"
+msgid "Go and select to the beginning of a line"
+msgstr "Va i selecciona fins al començament d'una línia"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:251-105
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:45-100"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
+msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>Inici"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:252-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:46-33"
+msgid "Go to start of document"
+msgstr "Va al començament del document"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:252-88
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:46-83"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Inici"
+
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:253-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:318-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:47-33"
 msgid "Go and select text to start of textbox"
 msgstr "Va i selecciona el text des del començament del quadre de text"
 
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:253-103
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:47-98"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Home</"
+"kbd>"
+msgstr ""
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
+"plus\">+</span><kbd>Fletxa amunt"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:254-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:48-33"
+msgid "Go to end of line"
+msgstr "Va al final de la línia"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:254-82
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:48-77"
+msgid "End"
+msgstr "Finalització"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:255-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:49-33"
+msgid "Go and select to the end of a line"
+msgstr "Va i selecciona fins al final de la línia"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:255-99
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:49-94"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
+msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>Finalització"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:256-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:50-33"
+msgid "Go to end of document"
+msgstr "Va al final del document"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:256-86
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:50-81"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Finalització"
+
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:257-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:322-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:51-33"
 msgid "Go and select text to end of textbox"
 msgstr "Va i selecciona el text fins al final del quadre de text"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:257-101
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:51-96"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>End</"
+"kbd>"
+msgstr ""
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
+"plus\">+</span><kbd>Fletxa amunt"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:261-9
 msgid "Slide keyboard shortcuts"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:263-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:328-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:57-33"
 msgid ""
 "Escape current mode, i.e. from edit mode switch to object selection mode, "
 "from object selection mode switch to view mode."
@@ -1498,19 +2042,36 @@ msgstr ""
 "d'objecte, i del mode de selecció canvia al mode de visualització."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:263-186
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:328-186
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:57-181"
 msgid "Esc"
 msgstr "Esc"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:264-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:329-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:58-33"
 msgid "Select objects in the order in which they were created"
 msgstr "Selecciona els objectes en l'ordre en el qual han estat creats"
 
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:264-119
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:58-114"
+msgid "Tab"
+msgstr "Tabulació"
+
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:265-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:330-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:59-33"
 msgid "Select objects in the reverse order in which they were created"
 msgstr "Selecciona els objectes en l'ordre invers en el qual han estat creats"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:265-127
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:59-122"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Tab</kbd>"
+msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>Tabulació"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:266-38
 #, fuzzy
@@ -1518,148 +2079,701 @@ msgid "Move to next text object on slide"
 msgstr "Va al següent objecte de text de la diapositiva o pàgina de dibuix"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:266-98
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:331-105
 #, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:60-93"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Enter</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Enter</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Retorn"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:267-38
 msgid "Select all in slide"
 msgstr ""
 
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:267-84
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:61-79"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"A</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>A"
+
+#: html/cool-help.html%2Bdiv.div.div.h2:273-9
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.h2:2-0"
+msgid "Text formatting"
+msgstr "Formatació de text"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:275-59
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:4-50"
+msgid "Bold"
+msgstr "Negreta"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:276-61
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:5-52"
+msgid "Italic"
+msgstr "Cursiva"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:277-64
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:6-55"
+msgid "Underline"
+msgstr "Subratllat"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:278-64
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:7-55"
+msgid "Strikethrough"
+msgstr "Barrat"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:279-66
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:8-57"
+msgid "Superscript"
+msgstr "Superíndex"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:280-64
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:9-55"
+msgid "Subscript"
+msgstr "Subíndex"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:281-64
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:10-55"
+msgid "Select All"
+msgstr "Ho selecciona tot"
+
+#: html/cool-help.html%2Bdiv.div.div.h2:285-9
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.h2:14-0"
+msgid "Paragraph formatting"
+msgstr "Formatació de paràgrafs"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:287-76
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:16-67"
+msgid "Align Center"
+msgstr "Alinea al centre"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:288-64
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:17-55"
+msgid "Align Left"
+msgstr "Alinea a l'esquerra"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:289-65
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:18-56"
+msgid "Align Right"
+msgstr "Alinea a la dreta"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:290-65
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:19-56"
+msgid "Justify"
+msgstr "Justifica"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:291-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:20-29"
+msgid "Demote list item (list item has to be selected)"
+msgstr "Mou avall un element de llista (cal que l'element estiga seleccionat)"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:291-112
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:20-103"
+msgid "Tab"
+msgstr "Tabulació"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:292-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:21-29"
+msgid "Promote list item (list item has to be selected)"
+msgstr "Mou amunt un element de llista (cal que l'element estiga seleccionat)"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:292-113
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:21-104"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Tab</kbd>"
+msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>Tabulació"
+
+#: html/cool-help.html%2Bdiv.div.div.h2:296-9
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.h2:25-0"
+msgid "Text selection and navigation in a textbox"
+msgstr "Selecció de text i navegació en un quadre de text"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:298-64
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:27-55"
+msgid "Select All"
+msgstr "Ho selecciona tot"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:299-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:28-29"
+msgid "Move cursor to the left"
+msgstr "Mou el cursor cap a l'esquerra"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:299-88
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:28-79"
+msgid "Arrow Left"
+msgstr "Fletxa esquerra"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:300-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:29-29"
+msgid "Move cursor with selection to the left"
+msgstr "Mou el cursor amb la selecció cap a l'esquerra"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:300-103
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:29-94"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Left</kbd>"
+msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>Fletxa esquerra"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:301-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:30-29"
+msgid "Go to beginning of a word"
+msgstr "Va al començament d'una paraula"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:301-90
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:30-81"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Left</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Fletxa esquerra"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:302-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:31-29"
+msgid "Select to the left word by word"
+msgstr "Selecciona cap a l'esquerra paraula per paraula"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:302-96
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:31-87"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Left</kbd>"
+msgstr ""
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
+"plus\">+</span><kbd>Fletxa esquerra"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:303-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:32-29"
+msgid "Move cursor to the right"
+msgstr "Mou el cursor cap a la dreta"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:303-89
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:32-80"
+msgid "Arrow Right"
+msgstr "Fletxa dreta"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:304-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:33-29"
+msgid "Move cursor with selection to the right"
+msgstr "Mou el cursor amb la selecció cap a la dreta"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:304-104
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:33-95"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Right</kbd>"
+msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>Fletxa dreta"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:305-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:34-29"
+msgid "Go to start of the next word"
+msgstr "Va al començament de la paraula següent"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:305-93
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:34-84"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Right</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Fletxa dreta"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:306-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:35-29"
+msgid "Select to the right word by word"
+msgstr "Selecciona cap a la dreta paraula per paraula"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:306-97
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:35-88"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Right</kbd>"
+msgstr ""
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
+"plus\">+</span><kbd>Fletxa dreta"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:307-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:36-29"
+msgid "Move cursor up one line"
+msgstr "Mou el cursor una línia cap amunt"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:307-88
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:36-79"
+msgid "Arrow Up"
+msgstr "Fletxa amunt"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:308-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:37-29"
+msgid "Select lines in upwards direction"
+msgstr "Selecciona línies en direcció ascendent"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:308-98
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:37-89"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Up</kbd>"
+msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>Fletxa amunt"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:309-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:38-29"
+msgid "Move cursor to beginning of the previous paragraph"
+msgstr "Mou el cursor al principi del paràgraf anterior"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:309-115
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:38-106"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Up</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Fletxa amunt"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:310-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:39-29"
+msgid "Select to beginning of paragraph"
+msgstr "Selecciona cap al principi del paràgraf"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:310-97
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:39-88"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Up</kbd>"
+msgstr ""
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
+"plus\">+</span><kbd>Fletxa amunt"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:311-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:40-29"
+msgid "Move cursor down one line"
+msgstr "Mou el cursor una línia avall"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:311-90
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:40-81"
+msgid "Arrow Down"
+msgstr "Fletxa avall"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:312-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:41-29"
+msgid "Select lines in downwards direction"
+msgstr "Selecciona línies en direcció descendent"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:312-100
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:41-91"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Down</kbd>"
+msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>Fletxa avall"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:313-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:42-29"
+msgid "Move cursor to beginning of the next paragraph"
+msgstr "Mou el cursor al principi del paràgraf següent"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:313-111
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:42-102"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Down</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Fletxa avall"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:314-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:43-29"
+msgid "Select to end of paragraph"
+msgstr "Selecciona cap el final del paràgraf"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:314-91
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:43-82"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Down</kbd>"
+msgstr ""
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
+"plus\">+</span><kbd>Fletxa avall"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:315-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:44-29"
+msgid "Go to beginning of line"
+msgstr "Va al començament de la línia"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:315-88
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:44-79"
+msgid "Home"
+msgstr "Inici"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:316-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:45-29"
+msgid "Go and select to the beginning of a line"
+msgstr "Va i selecciona fins al començament d'una línia"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:316-105
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:45-96"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
+msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>Inici"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:317-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:46-29"
+msgid "Go to start of document"
+msgstr "Va al començament del document"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:317-88
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:46-79"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Inici"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:318-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:47-29"
+msgid "Go and select text to start of textbox"
+msgstr "Va i selecciona el text des del començament del quadre de text"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:318-103
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:47-94"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Home</"
+"kbd>"
+msgstr ""
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
+"plus\">+</span><kbd>Fletxa amunt"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:319-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:48-29"
+msgid "Go to end of line"
+msgstr "Va al final de la línia"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:319-82
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:48-73"
+msgid "End"
+msgstr "Finalització"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:320-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:49-29"
+msgid "Go and select to the end of a line"
+msgstr "Va i selecciona fins al final de la línia"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:320-99
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:49-90"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
+msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>Finalització"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:321-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:50-29"
+msgid "Go to end of document"
+msgstr "Va al final del document"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:321-86
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:50-77"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Finalització"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:322-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:51-29"
+msgid "Go and select text to end of textbox"
+msgstr "Va i selecciona el text fins al final del quadre de text"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:322-101
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:51-92"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>End</"
+"kbd>"
+msgstr ""
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Maj</kbd><span class=\"kbd--"
+"plus\">+</span><kbd>Fletxa amunt"
+
 #: html/cool-help.html%2Bdiv.div.div.h2:326-9
 #, fuzzy
 msgid "Draw page keyboard shortcuts"
 msgstr "Dreceres de teclat en diapositives i pàgines de dibuix"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:328-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:57-29"
+msgid ""
+"Escape current mode, i.e. from edit mode switch to object selection mode, "
+"from object selection mode switch to view mode."
+msgstr ""
+"Canvia el mode actual. Això és, del mode edició passa al mode de selecció "
+"d'objecte, i del mode de selecció canvia al mode de visualització."
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:328-186
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:57-177"
+msgid "Esc"
+msgstr "Esc"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:329-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:58-29"
+msgid "Select objects in the order in which they were created"
+msgstr "Selecciona els objectes en l'ordre en el qual han estat creats"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:329-119
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:58-110"
+msgid "Tab"
+msgstr "Tabulació"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:330-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:59-29"
+msgid "Select objects in the reverse order in which they were created"
+msgstr "Selecciona els objectes en l'ordre invers en el qual han estat creats"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:330-127
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:59-118"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Tab</kbd>"
+msgstr "Maj</kbd><span class=\"kbd--plus\">+</span><kbd>Tabulació"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:331-38
 #, fuzzy
 msgid "Move to next text object on drawing page"
 msgstr "Va al següent objecte de text de la diapositiva o pàgina de dibuix"
 
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:331-105
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:60-96"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Enter</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Retorn"
+
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:332-38
 #, fuzzy
 msgid "Select all in drawing page"
 msgstr "Ho selecciona tot en la diapositiva o pàgina de dibuix"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:332-91
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:61-82"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"A</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>A"
 
 #: html/cool-help.html%2Bdiv.h2:338-5
 msgid "<span class=\"productname\">{productname}</span> Help"
 msgstr "Ajuda del <span class=\"productname\">{productname}</span>"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:341-13
-#: html/cool-help.html%2Bdiv.div.h3:383-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:4-12"
 msgid "Collaborative editing"
 msgstr "Edició col·laborativa"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:342-13
-#: html/cool-help.html%2Bdiv.div.h3:393-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:5-12"
 msgid "<span class=\"productname\">{productname}</span> user interface"
 msgstr ""
 "Interfície d'usuari del <span class=\"productname\">{productname}</span>"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:343-13
-#: html/cool-help.html%2Bdiv.div.h3:429-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:6-12"
 msgid "Opening, closing, saving, printing and downloading documents"
 msgstr "Obertura, tancament, desament, impressió i baixada de documents"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:344-13
-#: html/cool-help.html%2Bdiv.div.h3:439-5
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:7-12"
 msgid "Opening, closing, saving and printing documents"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:345-13
-#: html/cool-help.html%2Bdiv.div.h3:478-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:8-12"
 msgid "Editing documents"
 msgstr "Edició de documents"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:346-13
-#: html/cool-help.html%2Bdiv.nav.ul.li:352-13
-#: html/cool-help.html%2Bdiv.nav.ul.li:365-13
-#: html/cool-help.html%2Bdiv.div.h3:510-3
-#: html/cool-help.html%2Bdiv.div.div.h3:570-5
-#: html/cool-help.html%2Bdiv.div.div.h3:681-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:9-12"
 msgid "Advanced features"
 msgstr "Funcionalitats avançades"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:348-13
-#: html/cool-help.html%2Bdiv.div.h3:548-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:11-12"
 msgid "<span class=\"productname\">{productname}</span> spreadsheets"
 msgstr "Fulls de càlcul del <span class=\"productname\">{productname}</span>"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:349-13
-#: html/cool-help.html%2Bdiv.div.div.h3:550-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:12-12"
 msgid "Editing spreadsheets"
 msgstr "Edició de fulls de càlcul"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:350-13
-#: html/cool-help.html%2Bdiv.div.div.h3:554-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:13-12"
 msgid "Formulas"
 msgstr "Fórmules"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:351-13
-#: html/cool-help.html%2Bdiv.div.div.h3:563-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:14-12"
 msgid "Formatting spreadsheets"
 msgstr "Formatació de fulls de càlcul"
 
+#: html/cool-help.html%2Bdiv.nav.ul.li:352-13
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:15-12"
+msgid "Advanced features"
+msgstr "Funcionalitats avançades"
+
 #: html/cool-help.html%2Bdiv.nav.ul.li:353-13
-#: html/cool-help.html%2Bdiv.div.div.h3:825-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:16-12"
 msgid "Spreadsheets"
 msgstr "Fulls de càlcul"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:355-13
-#: html/cool-help.html%2Bdiv.div.h3:612-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:18-12"
 msgid "<span class=\"productname\">{productname}</span> text documents"
 msgstr "Documents de text del <span class=\"productname\">{productname}</span>"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:356-13
-#: html/cool-help.html%2Bdiv.div.div.h3:614-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:19-12"
 msgid "Editing text documents"
 msgstr "Edició de documents de text"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:357-13
-#: html/cool-help.html%2Bdiv.div.div.h3:618-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:20-12"
 msgid "Context menus"
 msgstr "Menús contextuals"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:358-13
-#: html/cool-help.html%2Bdiv.div.div.h3:634-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:21-12"
 msgid "Advanced text document editor features"
 msgstr "Funcionalitats avançades de l'editor de documents de text"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:359-13
-#: html/cool-help.html%2Bdiv.div.div.h3:744-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:22-12"
 msgid "Text documents"
 msgstr "Documents de text"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:361-13
-#: html/cool-help.html%2Bdiv.div.h3:661-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:24-12"
 msgid "<span class=\"productname\">{productname}</span> presentations"
 msgstr "Presentacions del <span class=\"productname\">{productname}</span>"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:362-13
-#: html/cool-help.html%2Bdiv.div.div.h3:663-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:25-12"
 msgid "Editing presentations"
 msgstr "Edició de presentacions"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:363-13
-#: html/cool-help.html%2Bdiv.div.div.h3:667-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:26-12"
 msgid "Slide show"
 msgstr "Presentació de diapositives"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:364-13
-#: html/cool-help.html%2Bdiv.div.div.h3:674-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:27-12"
 msgid "Slide pane"
 msgstr "Subfinestra de diapositives"
 
+#: html/cool-help.html%2Bdiv.nav.ul.li:365-13
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:28-12"
+msgid "Advanced features"
+msgstr "Funcionalitats avançades"
+
 #: html/cool-help.html%2Bdiv.nav.ul.li:366-13
-#: html/cool-help.html%2Bdiv.div.div.h3:864-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:29-12"
 msgid "Presentations"
 msgstr "Presentacions"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:368-13
-#: html/cool-help.html%2Bdiv.div.h3:693-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:31-12"
 msgid "Frequently Asked Questions"
 msgstr "Preguntes freqüents"
 
@@ -1668,10 +2782,16 @@ msgid ""
 "<span class=\"productname\">{productname}</span> allows you to create and "
 "edit typical office documents, that is text documents, spreadsheets and "
 "presentations, <span class=\"webBasedCOOLOnly\">directly in your browser,</"
-"span> in a simple and straight-forward way. <span class=\"webBasedCOOLOnly\""
-">You can work alone on a document, or collaboratively as part of a "
-"team.</span>"
+"span> in a simple and straight-forward way. <span class=\"webBasedCOOLOnly\">"
+"You can work alone on a document, or collaboratively as part of a team.</"
+"span>"
 msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.h3:383-5
+#, fuzzy
+msgctxt "html/cool-help.html:1327"
+msgid "Collaborative editing"
+msgstr "Edició col·laborativa"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:386-7
 msgid ""
@@ -1699,6 +2819,13 @@ msgstr ""
 "El <span class=\"productname\">{productname}</span> vos indica amb una "
 "petita notificació en la part inferior si entra un nou usuari o en ix."
 
+#: html/cool-help.html%2Bdiv.div.h3:393-5
+#, fuzzy
+msgctxt "html/cool-help.html:1333"
+msgid "<span class=\"productname\">{productname}</span> user interface"
+msgstr ""
+"Interfície d'usuari del <span class=\"productname\">{productname}</span>"
+
 #: html/cool-help.html%2Bdiv.div.div.p:395-7
 #, fuzzy
 msgid ""
@@ -1724,10 +2851,10 @@ msgstr ""
 msgid ""
 "<span class=\"def\">The tabs:</span> The commands are grouped on tabs at the "
 "top: <span class=\"ui\">File</span>, <span class=\"ui\">Home</span>, <span "
-"class=\"ui\">Insert</span>, <span class=\"ui\">Review</span>, <span class="
-"\"ui\">View</span> and others, depending on the document type. Click the "
-"selected tab again to collapse the tab bar and gain space for the document. "
-"Click any tab to expand it again."
+"class=\"ui\">Insert</span>, <span class=\"ui\">Review</span>, <span "
+"class=\"ui\">View</span> and others, depending on the document type. Click "
+"the selected tab again to collapse the tab bar and gain space for the "
+"document. Click any tab to expand it again."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:408-5
@@ -1808,6 +2935,12 @@ msgstr ""
 "L'ús del zoom del navegador afecta les àrees del document i la interfície "
 "d'usuari."
 
+#: html/cool-help.html%2Bdiv.div.h3:429-5
+#, fuzzy
+msgctxt "html/cool-help.html:1335A"
+msgid "Opening, closing, saving, printing and downloading documents"
+msgstr "Obertura, tancament, desament, impressió i baixada de documents"
+
 #: html/cool-help.html%2Bdiv.div.p:430-5
 msgid ""
 "Your documents are stored and managed in the cloud storage that is "
@@ -1818,8 +2951,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:431-30
 msgid ""
-"To download a document download it from the <span class=\"productname\""
-">{productname}</span> application’s <span class=\"ui\">File</span> menu. The "
+"To download a document download it from the <span class=\"productname\">"
+"{productname}</span> application’s <span class=\"ui\">File</span> menu. The "
 "download formats available depends on the application. All applications "
 "exports documents in PDF format."
 msgstr ""
@@ -1830,8 +2963,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:432-30
 msgid ""
-"To open document, click on the file to open the <span class=\"productname\""
-">{productname}</span> module associated to the document format."
+"To open document, click on the file to open the <span class=\"productname\">"
+"{productname}</span> module associated to the document format."
 msgstr ""
 "Per a obrir el document, feu clic al fitxer per a obrir el mòdul del <span "
 "class=\"productname\">{productname}</span> associat al format del document."
@@ -1840,8 +2973,8 @@ msgstr ""
 msgid ""
 "Documents in <span class=\"productname\">{productname}</span> save "
 "automatically, but if you are concerned that a document is synchronized as "
-"quickly as possible you can also force saving using the <span class=\"ui\""
-">File</span> menu’s <span class=\"ui\">Save</span> entry."
+"quickly as possible you can also force saving using the <span class=\"ui\">"
+"File</span> menu’s <span class=\"ui\">Save</span> entry."
 msgstr ""
 "Els documents en el <span class=\"productname\">{productname}</span> es "
 "guarden automàticament, però si vos voleu que un document se sincronitzi tan "
@@ -1860,26 +2993,32 @@ msgstr ""
 "PDF preferit."
 
 #: html/cool-help.html%2Bdiv.div.div.p:435-30
-#: html/cool-help.html%2Bdiv.div.div.p:472-7
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.div.div.p:98-29"
 msgid ""
 "When closing a document, it is automatically saved if it has been changed."
 msgstr ""
 "Si s'ha modificat el document en moment de tancar-lo es guardarà "
 "automàticament."
 
+#: html/cool-help.html%2Bdiv.div.h3:439-5
+msgctxt "html/cool-help.html:1335B"
+msgid "Opening, closing, saving and printing documents"
+msgstr ""
+
 #: html/cool-help.html%2Bdiv.div.div.p:441-7
 msgid ""
-"To open a document, either open it in <span class=\"productname\""
-">{productname}</span> from your platform's file manager or use <span class="
-"\"ui\">Open</span> on the <span class=\"ui\">File</span> tab."
+"To open a document, either open it in <span class=\"productname\">"
+"{productname}</span> from your platform's file manager or use <span "
+"class=\"ui\">Open</span> on the <span class=\"ui\">File</span> tab."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:447-7
 msgid ""
 "An existing document opens in view mode, so that you can read it without "
-"changing it by accident. To start editing, click the edit button (the pencil)"
-" in the bottom right corner. New documents and documents created from a "
-"template open ready to edit."
+"changing it by accident. To start editing, click the edit button (the "
+"pencil) in the bottom right corner. New documents and documents created from "
+"a template open ready to edit."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:452-7
@@ -1906,6 +3045,21 @@ msgid ""
 "class=\"ui\">File</span> tab."
 msgstr ""
 
+#: html/cool-help.html%2Bdiv.div.div.p:472-7
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.div.div.p:135-6"
+msgid ""
+"When closing a document, it is automatically saved if it has been changed."
+msgstr ""
+"Si s'ha modificat el document en moment de tancar-lo es guardarà "
+"automàticament."
+
+#: html/cool-help.html%2Bdiv.div.h3:478-5
+#, fuzzy
+msgctxt "html/cool-help.html:1337"
+msgid "Editing documents"
+msgstr "Edició de documents"
+
 #: html/cool-help.html%2Bdiv.div.p:479-5
 msgid ""
 "Document editing should be familiar to everyone that has used an office "
@@ -1923,8 +3077,8 @@ msgstr "Còpia i enganxament"
 msgid ""
 "Rich content copy/cut and paste is supported, including images and mixed "
 "content, using the keyboard shortcuts (<kbd>Ctrl</kbd><span class=\"kbd--"
-"plus\" aria-hidden=\"true\">+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span class="
-"\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</"
+"plus\" aria-hidden=\"true\">+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span "
+"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</"
 "kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>). On "
 "Android or iOS selecting text by double tapping, and using a long-tap to "
 "access copy/cut/paste via the context menu is required."
@@ -1932,10 +3086,10 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:483-5
 msgid ""
-"For security reasons it is necessary to use <kbd>Ctrl</kbd><span class=\"kbd"
-"--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd> to paste content that "
-"comes from outside the document, but context menus can be used for cut and "
-"copy."
+"For security reasons it is necessary to use <kbd>Ctrl</kbd><span "
+"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd> to paste "
+"content that comes from outside the document, but context menus can be used "
+"for cut and copy."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:484-5
@@ -1943,8 +3097,8 @@ msgid ""
 "When you copy a selection that contains images or other objects, a <span "
 "class=\"ui\">Download Selection</span> widget pops up in the bottom-right "
 "corner. Press <span class=\"ui\">Download</span>, then copy again, to make "
-"the content available to applications outside <span class=\"productname\""
-">{productname}</span>. This step also converts complex object types into "
+"the content available to applications outside <span class=\"productname\">"
+"{productname}</span>. This step also converts complex object types into "
 "static images."
 msgstr ""
 
@@ -2010,10 +3164,9 @@ msgid ""
 "the message “Idle document – please click to reload and resume editing”."
 msgstr ""
 "Si el <span class=\"productname\">{productname}</span> detecta que no hi ha "
-"activitat en el navegador durant un temps, posa el document en estat "
-"«Inactiu». El document es mostra amb una superposició de color gris "
-"transparent, amb un missatge «Document inactiu - feu clic per a reprendre "
-"l'edició»."
+"activitat en el navegador durant un temps, posa el document en estat «Inactiu"
+"». El document es mostra amb una superposició de color gris transparent, amb "
+"un missatge «Document inactiu - feu clic per a reprendre l'edició»."
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:497-57
 msgid ""
@@ -2049,12 +3202,12 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:503-5
 msgid ""
-"You can paste as unformatted text with the keyboard shortcut: <kbd>Ctrl</"
-"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</"
-"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>"
+"You can paste as unformatted text with the keyboard shortcut: <kbd>Ctrl</kbd>"
+"<span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</kbd><span "
+"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>"
 msgstr ""
-"Podeu enganxar com a text sense format amb la drecera de teclat: "
-"<kbd>Ctrl</kbd>+<kbd>Maj</kbd>+<kbd>V</kbd>"
+"Podeu enganxar com a text sense format amb la drecera de teclat: <kbd>Ctrl</"
+"kbd>+<kbd>Maj</kbd>+<kbd>V</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.p:504-5
 msgid ""
@@ -2082,6 +3235,12 @@ msgid ""
 msgstr ""
 "Si retalleu o copieu contingut intern, podeu enganxar-lo usant el menú "
 "contextual."
+
+#: html/cool-help.html%2Bdiv.div.h3:510-3
+#, fuzzy
+msgctxt "html/cool-help.html:1338"
+msgid "Advanced features"
+msgstr "Funcionalitats avançades"
 
 #: html/cool-help.html%2Bdiv.div.div.h4:512-5
 msgid "Adding charts"
@@ -2176,8 +3335,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:530-5
 msgid ""
-"<span class=\"def\">Insert image:</span> Clicking on the <span class=\"ui\""
-">Insert image</span> icon allows you to choose an image from the cloud "
+"<span class=\"def\">Insert image:</span> Clicking on the <span class=\"ui\">"
+"Insert image</span> icon allows you to choose an image from the cloud "
 "storage's folders and shares."
 msgstr ""
 "<span class=\"def\">Inserció d'una imatge:</span> fer clic en la icona "
@@ -2186,8 +3345,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:531-5
 msgid ""
-"<span class=\"def\">Insert local image:</span> Choose <span class=\"ui\""
-">Insert</span> → <span class=\"ui\">Image</span> to pick an image from your "
+"<span class=\"def\">Insert local image:</span> Choose <span class=\"ui\">"
+"Insert</span> → <span class=\"ui\">Image</span> to pick an image from your "
 "computer and insert it into the document."
 msgstr ""
 
@@ -2223,8 +3382,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:538-5
 msgid ""
-"Click on the submenu (<span class=\"cool-annotation-menu icon-size\"></span>)"
-" icon to reply, move and delete comments."
+"Click on the submenu (<span class=\"cool-annotation-menu icon-size\"></"
+"span>) icon to reply, move and delete comments."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:541-5
@@ -2251,11 +3410,23 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.p:544-5
 #, fuzzy
 msgid ""
-"To systematically spell-check the whole document use <span class=\"ui\""
-">Spelling</span> on the <span class=\"ui\">Review</span> tab."
+"To systematically spell-check the whole document use <span class=\"ui\">"
+"Spelling</span> on the <span class=\"ui\">Review</span> tab."
 msgstr ""
 "Per a comprovar sistemàticament l'ortografia de tot el document, trieu <span "
 "class=\"ui\">Eines</span> ▸ <span class=\"ui\">Ortografia</span>."
+
+#: html/cool-help.html%2Bdiv.div.h3:548-5
+#, fuzzy
+msgctxt "html/cool-help.html:1359"
+msgid "<span class=\"productname\">{productname}</span> spreadsheets"
+msgstr "Fulls de càlcul del <span class=\"productname\">{productname}</span>"
+
+#: html/cool-help.html%2Bdiv.div.div.h3:550-5
+#, fuzzy
+msgctxt "html/cool-help.html:1361"
+msgid "Editing spreadsheets"
+msgstr "Edició de fulls de càlcul"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:551-30
 msgid ""
@@ -2277,6 +3448,12 @@ msgstr ""
 "contextual. Després d'introduir dades en una cel·la, la tecla <kbd>Tab</kbd> "
 "mou el cursor a la cel·la següent cap a la dreta, i amb <kbd>Retorn</kbd> es "
 "mou cap a la cel·la inferior, per a facilitar l'entrada de més dades."
+
+#: html/cool-help.html%2Bdiv.div.div.h3:554-5
+#, fuzzy
+msgctxt "html/cool-help.html:1363"
+msgid "Formulas"
+msgstr "Fórmules"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:556-5
 msgid ""
@@ -2301,21 +3478,28 @@ msgstr ""
 msgid ""
 "The formula language should be extremely familiar to any spreadsheet user, "
 "and is specified in great detail in the <a href=\"https://www.oasis-open.org/"
-"committees/download.php/16826/openformula-spec-20060221.html\" target="
-"\"_blank\" rel=\"noopener noreferrer\">OASIS OpenFormula specification</a>."
+"committees/download.php/16826/openformula-spec-20060221.html\" "
+"target=\"_blank\" rel=\"noopener noreferrer\">OASIS OpenFormula "
+"specification</a>."
 msgstr ""
 "El llenguatge de les fórmules hauria de ser molt familiar per a qualsevol "
-"usuari de full de càlcul, i s'explica en detall en  l'<a href=\"https://www."
-"oasis-open.org/committees/download.php/16826/openformula-spec-20060221.html\""
-">especificació OASIS OpenFormula</a>."
+"usuari de full de càlcul, i s'explica en detall en  l'<a href=\"https://"
+"www.oasis-open.org/committees/download.php/16826/openformula-spec-"
+"20060221.html\">especificació OASIS OpenFormula</a>."
+
+#: html/cool-help.html%2Bdiv.div.div.h3:563-5
+#, fuzzy
+msgctxt "html/cool-help.html:1367"
+msgid "Formatting spreadsheets"
+msgstr "Formatació de fulls de càlcul"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:565-5
 msgid ""
 "<span class=\"def\">Direct formatting:</span> You can format spreadsheet "
 "cells, columns, rows and sheets by formatting directly from the menus, "
 "toolbar or context menus. Direct formatting applies only to the current "
-"object selected. To format a cell either use the menu or hit <kbd>Ctrl</"
-"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>1</kbd>. The "
+"object selected. To format a cell either use the menu or hit <kbd>Ctrl</kbd>"
+"<span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>1</kbd>. The "
 "dialog allows complex and custom number formatting, as well as font, complex "
 "border, background, cell protection and other options."
 msgstr ""
@@ -2333,6 +3517,12 @@ msgid ""
 "decimal places, and format code"
 msgstr ""
 
+#: html/cool-help.html%2Bdiv.div.div.h3:570-5
+#, fuzzy
+msgctxt "html/cool-help.html:1371"
+msgid "Advanced features"
+msgstr "Funcionalitats avançades"
+
 #: html/cool-help.html%2Bdiv.div.div.div.p:571-30
 msgid ""
 "<span class=\"def\">Sorting data:</span> You can sort a list of numbers or "
@@ -2341,10 +3531,10 @@ msgid ""
 "to extend the selection."
 msgstr ""
 "<span class=\"def\">Ordenació de dades:</span> podeu ordenar una llista de "
-"nombres o de text de forma ascendent o descendent. El <span class="
-"\"productname\">{productname}</span> detecta automàticament les cel·les que "
-"són capçalera i les columnes adjacents per a ampliar la selecció i ordenar "
-"el conjunt."
+"nombres o de text de forma ascendent o descendent. El <span "
+"class=\"productname\">{productname}</span> detecta automàticament les "
+"cel·les que són capçalera i les columnes adjacents per a ampliar la selecció "
+"i ordenar el conjunt."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:572-30
 msgid ""
@@ -2355,8 +3545,8 @@ msgid ""
 msgstr ""
 "<span class=\"def\">Filtratge de dades:</span> els filtres estàndards i "
 "avançats vos permeten treballar amb determinades files filtrades (registres) "
-"d'un interval de dades. Els fulls de càlcul del <span class=\"productname\""
-">{productname}</span> vos ofereixen diverses possibilitats d'aplicació de "
+"d'un interval de dades. Els fulls de càlcul del <span class=\"productname\">"
+"{productname}</span> vos ofereixen diverses possibilitats d'aplicació de "
 "filtres."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:574-7
@@ -2443,15 +3633,15 @@ msgid ""
 "box list. Depending on the criterion, more options show. Fill the required "
 "data."
 msgstr ""
-"Seleccioneu els criteris de validació en la llista <span class=\"ui\""
-">Permet</span>. Depenent dels criteris, poden aparèixer més opcions. Ompliu "
+"Seleccioneu els criteris de validació en la llista <span class=\"ui\">"
+"Permet</span>. Depenent dels criteris, poden aparèixer més opcions. Ompliu "
 "les dades sol·licitades."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:594-7
 msgid ""
 "Use the <span class=\"ui\">Input Help</span> and <span class=\"ui\">Error "
-"Alert</span> tabs to enhance the user interactions. Click <span class=\"ui\""
-">OK</span> to close the dialog."
+"Alert</span> tabs to enhance the user interactions. Click <span class=\"ui\">"
+"OK</span> to close the dialog."
 msgstr ""
 "Utilitzeu les pestanyes <span class=\"ui\">Ajuda d'entrada</span> i <span "
 "class=\"ui\">Avís d'error</span> per a millorar les interaccions de "
@@ -2466,8 +3656,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:598-7
 msgid ""
-"To remove the validity of the cell, open the dialog and set the <span class="
-"\"ui\">Allow</span> list to “All values”."
+"To remove the validity of the cell, open the dialog and set the <span "
+"class=\"ui\">Allow</span> list to “All values”."
 msgstr ""
 "Per a suprimir la validesa d'una cel·la, obriu el diàleg i definiu «Tots els "
 "valors» a la llista <span class=\"ui\">Permet</span>."
@@ -2481,8 +3671,8 @@ msgid ""
 "the mouse on the cell to display comments."
 msgstr ""
 "<span class=\"def\">Comentaris:</span> en un full de càlcul, hi podeu "
-"inserir un comentari per cel·la. Quan seleccioneu <span class=\"ui\""
-">Insereix un comentari</span>, apareix una finestra emergent que vos permet "
+"inserir un comentari per cel·la. Quan seleccioneu <span class=\"ui\">"
+"Insereix un comentari</span>, apareix una finestra emergent que vos permet "
 "escriure el contingut del comentari. Quan la cel·la té un comentari, apareix "
 "un punt roig a l'extrem superior dret. Passeu per sobre la cel·la amb el "
 "ratolí per a veure els comentaris."
@@ -2496,23 +3686,35 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.div.p:606-5
 #, fuzzy
 msgid ""
-"<span class=\"def\">Conditional formatting:</span> <span class=\"productname"
-"\">{productname}</span> adds symbols to each cell of a range based on cells "
-"conditions. Select the cell range and click <span class=\"ui\">Conditional</"
-"span> on the <span class=\"ui\">Home</span> tab. Select the symbol set to "
-"apply on the range."
+"<span class=\"def\">Conditional formatting:</span> <span "
+"class=\"productname\">{productname}</span> adds symbols to each cell of a "
+"range based on cells conditions. Select the cell range and click <span "
+"class=\"ui\">Conditional</span> on the <span class=\"ui\">Home</span> tab. "
+"Select the symbol set to apply on the range."
 msgstr ""
-"<span class=\"def\">Formatació condicionada:</span> el <span class="
-"\"productname\">{productname}</span> afig símbols a cada cel·la d'un "
-"interval basat en condicions de les cel·les. Seleccioneu l'interval de cel·"
-"les i feu clic a la icona <span class=\"ui\">Formatació condicionada</span> "
-"de la barra d'eines."
+"<span class=\"def\">Formatació condicionada:</span> el <span "
+"class=\"productname\">{productname}</span> afig símbols a cada cel·la d'un "
+"interval basat en condicions de les cel·les. Seleccioneu l'interval de "
+"cel·les i feu clic a la icona <span class=\"ui\">Formatació condicionada</"
+"span> de la barra d'eines."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:607-62
 msgid ""
 "Conditional formatting icon set picker showing arrows, circles, traffic "
 "lights, stars, smiley faces, and bar chart symbol sets"
 msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.h3:612-5
+#, fuzzy
+msgctxt "html/cool-help.html:1373"
+msgid "<span class=\"productname\">{productname}</span> text documents"
+msgstr "Documents de text del <span class=\"productname\">{productname}</span>"
+
+#: html/cool-help.html%2Bdiv.div.div.h3:614-5
+#, fuzzy
+msgctxt "html/cool-help.html:1375"
+msgid "Editing text documents"
+msgstr "Edició de documents de text"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:615-30
 msgid ""
@@ -2532,6 +3734,12 @@ msgstr ""
 "mida, ancorar imatges, afegir taules i diagrames, són similars al "
 "processador de text d'escriptori. Utilitzeu el teclat, menús i barres "
 "d'eines per a interactuar amb el document."
+
+#: html/cool-help.html%2Bdiv.div.div.h3:618-5
+#, fuzzy
+msgctxt "html/cool-help.html:1377"
+msgid "Context menus"
+msgstr "Menús contextuals"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:619-30
 msgid ""
@@ -2594,22 +3802,28 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.div.p:629-5
 #, fuzzy
 msgid ""
-"<span class=\"def\">Style formatting:</span> <span class=\"productname\""
-">{productname}</span> supports paragraph styles. You can apply an existing "
+"<span class=\"def\">Style formatting:</span> <span class=\"productname\">"
+"{productname}</span> supports paragraph styles. You can apply an existing "
 "paragraph style to a paragraph. Select the style in the style list on the "
 "<span class=\"ui\">Home</span> tab."
 msgstr ""
-"<span class=\"def\">Formatació per estils:</span> el <span class="
-"\"productname\">{productname}</span> admet estils de paràgraf. Podeu aplicar "
-"un estil de paràgraf existent a un paràgraf. Trieu el menú <span class=\"ui\""
-">Edita</span> ▸ <span class=\"ui\">Edita l'estil</span> per a canviar "
-"l'estil."
+"<span class=\"def\">Formatació per estils:</span> el <span "
+"class=\"productname\">{productname}</span> admet estils de paràgraf. Podeu "
+"aplicar un estil de paràgraf existent a un paràgraf. Trieu el menú <span "
+"class=\"ui\">Edita</span> ▸ <span class=\"ui\">Edita l'estil</span> per a "
+"canviar l'estil."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:630-56
 msgid ""
 "Paragraph dialog on the Indents and Spacing tab with settings for indent, "
 "spacing, and line spacing, and a preview on the right"
 msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.h3:634-5
+#, fuzzy
+msgctxt "html/cool-help.html:1383"
+msgid "Advanced text document editor features"
+msgstr "Funcionalitats avançades de l'editor de documents de text"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:636-5
 msgid "Handling Tables"
@@ -2618,17 +3832,17 @@ msgstr "Manipulació de taules"
 #: html/cool-help.html%2Bdiv.div.div.div.p:637-5
 #, fuzzy
 msgid ""
-"Insert tables with <span class=\"ui\">Insert</span> → <span class=\"ui\""
-">Table</span>. Select the initial number of rows and columns. Add rows and "
-"columns with the cell context menu. Merge cells from the <span class=\"ui\""
-">Table</span> tab. The default paragraph style inside cells is “Table "
-"contents”."
+"Insert tables with <span class=\"ui\">Insert</span> → <span class=\"ui\">"
+"Table</span>. Select the initial number of rows and columns. Add rows and "
+"columns with the cell context menu. Merge cells from the <span class=\"ui\">"
+"Table</span> tab. The default paragraph style inside cells is “Table contents"
+"”."
 msgstr ""
 "Inseriu taules amb la icona de la barra d'eines corresponent. Seleccioneu  "
 "el nombre inicial de files i columnes. Afegiu-hi files i columnes amb el "
-"menú contextual de les cel·les. Fusioneu cel·les amb el menú <span class=\"ui"
-"\">Taula</span>. L'estil de paràgraf predeterminat de les cel·les és «"
-"Contingut de la taula»."
+"menú contextual de les cel·les. Fusioneu cel·les amb el menú <span "
+"class=\"ui\">Taula</span>. L'estil de paràgraf predeterminat de les cel·les "
+"és «Contingut de la taula»."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:638-52
 msgid ""
@@ -2658,12 +3872,12 @@ msgid ""
 "span> marks up new changes made to the document. Select this option again to "
 "turn it off."
 msgstr ""
-"Quan activeu el seguiment de canvis, el <span class=\"productname\""
-">{productname}</span> marca els canvis nous fets al document. Torneu a "
+"Quan activeu el seguiment de canvis, el <span class=\"productname\">"
+"{productname}</span> marca els canvis nous fets al document. Torneu a "
 "seleccionar aquesta opció per a desactivar-la."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:646-61
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:774-61
+msgctxt "html/cool-help.html+help-track-changes-comment.img:0-56[alt]"
 msgid ""
 "Tracked change shown as a comment box beside the document with author name, "
 "date, and change description"
@@ -2734,6 +3948,18 @@ msgstr ""
 "<span class=\"def\">Notes al peu i finals:</span> s'admet l'ús de notes al "
 "peu i finals."
 
+#: html/cool-help.html%2Bdiv.div.h3:661-5
+#, fuzzy
+msgctxt "html/cool-help.html:1391"
+msgid "<span class=\"productname\">{productname}</span> presentations"
+msgstr "Presentacions del <span class=\"productname\">{productname}</span>"
+
+#: html/cool-help.html%2Bdiv.div.div.h3:663-5
+#, fuzzy
+msgctxt "html/cool-help.html:1393"
+msgid "Editing presentations"
+msgstr "Edició de presentacions"
+
 #: html/cool-help.html%2Bdiv.div.div.div.p:664-30
 msgid ""
 "<span class=\"productname\">{productname}</span> Impress edits presentations "
@@ -2750,6 +3976,12 @@ msgstr ""
 "semblants a les d'una aplicació de presentacions d'escriptori. Feu servir el "
 "teclat, els menús i les barres d'eines per a efectuar accions al vostre "
 "document."
+
+#: html/cool-help.html%2Bdiv.div.div.h3:667-5
+#, fuzzy
+msgctxt "html/cool-help.html:1395"
+msgid "Slide show"
+msgstr "Presentació de diapositives"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:669-5
 msgid ""
@@ -2769,9 +4001,15 @@ msgid ""
 "To exit a <span class=\"productname\">{productname}</span> slide show, press "
 "the <kbd>Esc</kbd> key to return to the presentation edit mode."
 msgstr ""
-"Per a eixir d'una presentació de diapositives del <span class=\"productname\""
-">{productname}</span> i tornar al mode d'edició, premeu la tecla "
-"<kbd>Esc</kbd>."
+"Per a eixir d'una presentació de diapositives del <span "
+"class=\"productname\">{productname}</span> i tornar al mode d'edició, premeu "
+"la tecla <kbd>Esc</kbd>."
+
+#: html/cool-help.html%2Bdiv.div.div.h3:674-5
+#, fuzzy
+msgctxt "html/cool-help.html:1397"
+msgid "Slide pane"
+msgstr "Subfinestra de diapositives"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:676-5
 msgid ""
@@ -2790,16 +4028,22 @@ msgstr ""
 "diapositives per a iniciar la presentació o afegir, duplicar o suprimir "
 "diapositives."
 
+#: html/cool-help.html%2Bdiv.div.div.h3:681-5
+#, fuzzy
+msgctxt "html/cool-help.html:1401"
+msgid "Advanced features"
+msgstr "Funcionalitats avançades"
+
 #: html/cool-help.html%2Bdiv.div.div.div.p:683-5
 msgid ""
-"<span class=\"def\">Slide layouts:</span> <span class=\"productname\""
-">{productname}</span> Impress lets you change the slide layout. Select the "
+"<span class=\"def\">Slide layouts:</span> <span class=\"productname\">"
+"{productname}</span> Impress lets you change the slide layout. Select the "
 "desired slide layout in the drop-down layout list."
 msgstr ""
-"<span class=\"def\">Disposició de les diapositives:</span> el <span class="
-"\"productname\">{productname}</span>Impress permet canviar la disposició de "
-"les diapositives. Seleccioneu la disposició que vulgueu a la llista "
-"desplegable de disposicions."
+"<span class=\"def\">Disposició de les diapositives:</span> el <span "
+"class=\"productname\">{productname}</span>Impress permet canviar la "
+"disposició de les diapositives. Seleccioneu la disposició que vulgueu a la "
+"llista desplegable de disposicions."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:684-53
 msgid ""
@@ -2818,16 +4062,16 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:687-30
 msgid ""
-"<span class=\"def\">Slide transitions:</span> <span class=\"productname\""
-">{productname}</span> Impress provides visual effects when displaying a new "
+"<span class=\"def\">Slide transitions:</span> <span class=\"productname\">"
+"{productname}</span> Impress provides visual effects when displaying a new "
 "slide in the slide show. Slide transitions are property of the slide, use "
 "the side bar to set the slide transition when in edit mode."
 msgstr ""
-"<span class=\"def\">Transicions de diapositives: el </span><span class="
-"\"productname\">{productname}</span> Impress proporciona efectes visuals en "
-"mostrar una diapositiva d'una presentació. Les transicions de diapositiva "
-"són una propietat de la diapositiva. En el mode edició, utilitzeu la barra "
-"lateral per a establir la transició de la diapositiva."
+"<span class=\"def\">Transicions de diapositives: el </span><span "
+"class=\"productname\">{productname}</span> Impress proporciona efectes "
+"visuals en mostrar una diapositiva d'una presentació. Les transicions de "
+"diapositiva són una propietat de la diapositiva. En el mode edició, "
+"utilitzeu la barra lateral per a establir la transició de la diapositiva."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:688-30
 msgid ""
@@ -2847,13 +4091,19 @@ msgstr ""
 "<span class=\"def\">Taules:</span> podeu inserir taules a la presentació. "
 "Utilitzeu la barra lateral per a seleccionar el tema de la taula."
 
+#: html/cool-help.html%2Bdiv.div.h3:693-5
+#, fuzzy
+msgctxt "html/cool-help.html:1403"
+msgid "Frequently Asked Questions"
+msgstr "Preguntes freqüents"
+
 #: html/cool-help.html%2Bdiv.div.div.h4:695-5
 msgid ""
-"What are the document file formats supported by <span class=\"productname\""
-">{productname}</span>?"
+"What are the document file formats supported by <span class=\"productname\">"
+"{productname}</span>?"
 msgstr ""
-"Quins són els formats de fitxer compatibles amb el <span class=\"productname"
-"\">{productname}</span>?"
+"Quins són els formats de fitxer compatibles amb el <span "
+"class=\"productname\">{productname}</span>?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:696-5
 msgid ""
@@ -2891,8 +4141,8 @@ msgstr "Passeu el ratolí en el nom del document en la barra de menú."
 #: html/cool-help.html%2Bdiv.div.div.ol.li:707-7
 msgid "Type the new file name in the text box and press <kbd>Enter</kbd>."
 msgstr ""
-"Escriviu el nom de fitxer nou en el quadre de text i premeu "
-"<kbd>Retorn</kbd>."
+"Escriviu el nom de fitxer nou en el quadre de text i premeu <kbd>Retorn</kbd>"
+"."
 
 #: html/cool-help.html%2Bdiv.div.div.p:709-5
 msgid "A copy of the document is saved with the new name in the same folder."
@@ -2911,13 +4161,13 @@ msgstr ""
 msgid ""
 "<span class=\"productname\">{productname}</span> saves the document in the "
 "background regularly, you can't just close without saving it. To abandon "
-"your changes, you must either undo them, or use the <span class=\"ui\""
-">Revision History </span> in the <span class=\"ui\">File</span> menu."
+"your changes, you must either undo them, or use the <span class=\"ui\">"
+"Revision History </span> in the <span class=\"ui\">File</span> menu."
 msgstr ""
 "El <span class=\"productname\">{productname}</span> guarda el document en "
 "segon pla regularment, no podeu tancar-lo sense guardar els canvis. Per a "
-"perdre els canvis, cal que els desfeu, o que useu l'<span class=\"ui\""
-">Historial de versions</span> en el menú <span class=\"ui\">Fitxer</span>."
+"perdre els canvis, cal que els desfeu, o que useu l'<span class=\"ui\">"
+"Historial de versions</span> en el menú <span class=\"ui\">Fitxer</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.p:714-5
 msgid ""
@@ -2931,8 +4181,8 @@ msgid ""
 "Can <span class=\"productname\">{productname}</span> open a password-"
 "protected document?"
 msgstr ""
-"Es pot obrir un document protegit per contrasenya al <span class="
-"\"productname\">{productname}</span>?"
+"Es pot obrir un document protegit per contrasenya al <span "
+"class=\"productname\">{productname}</span>?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:718-5
 msgid ""
@@ -2966,8 +4216,8 @@ msgstr "Com puc llevar les línies vermelles ondulades del document?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:726-5
 msgid ""
-"On the <span class=\"ui\">Review</span> tab, open <span class=\"ui\""
-">Spelling</span> and uncheck <span class=\"ui\">Auto Spell Check</span>."
+"On the <span class=\"ui\">Review</span> tab, open <span class=\"ui\">"
+"Spelling</span> and uncheck <span class=\"ui\">Auto Spell Check</span>."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:729-5
@@ -2994,8 +4244,8 @@ msgstr "Hi ha un tesaurus?"
 #: html/cool-help.html%2Bdiv.div.div.p:734-5
 #, fuzzy
 msgid ""
-"Yes. Click in the word you want and choose <span class=\"ui\">Review</span> →"
-" <span class=\"ui\">Thesaurus</span>. A dialog opens with many suggestions "
+"Yes. Click in the word you want and choose <span class=\"ui\">Review</span> "
+"→ <span class=\"ui\">Thesaurus</span>. A dialog opens with many suggestions "
 "for replacements."
 msgstr ""
 "Sí. Feu clic al mot que voleu reemplaçar i trieu <span class=\"ui\">Eines</"
@@ -3021,13 +4271,20 @@ msgstr ""
 msgid ""
 "The <span class=\"blue\">¶</span> symbol is a formatting mark. It is used to "
 "help text alignment and editing and is not printed. To toggle it in the "
-"document display, choose <span class=\"ui\">View</span> → <span class=\"ui\""
-">Formatting Marks</span>."
+"document display, choose <span class=\"ui\">View</span> → <span class=\"ui\">"
+"Formatting Marks</span>."
 msgstr ""
 "El símbol <span class=\"blue\">¶</span> és una marca de formatació. Es fa "
 "servir com a ajuda per a l'alineació i l'edició del text i mai no "
-"s'imprimeix. Per a desactivar-ne la visualització, trieu l'ordre <span class="
-"\"ui\">Visualitza</span> ▸ <span class=\"ui\">Marques de formatació</span>."
+"s'imprimeix. Per a desactivar-ne la visualització, trieu l'ordre <span "
+"class=\"ui\">Visualitza</span> ▸ <span class=\"ui\">Marques de formatació</"
+"span>."
+
+#: html/cool-help.html%2Bdiv.div.div.h3:744-5
+#, fuzzy
+msgctxt "html/cool-help.html:1407"
+msgid "Text documents"
+msgstr "Documents de text"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:746-5
 msgid "How do I get a word count of my document?"
@@ -3036,9 +4293,9 @@ msgstr "Com puc obtindre un recompte de les paraules del document?"
 #: html/cool-help.html%2Bdiv.div.div.div.p:747-5
 #, fuzzy
 msgid ""
-"Word count is available in <span class=\"ui\">Review</span> → <span class="
-"\"ui\">Word Count</span>. A dialog shows word counts for selection and for "
-"the whole document."
+"Word count is available in <span class=\"ui\">Review</span> → <span "
+"class=\"ui\">Word Count</span>. A dialog shows word counts for selection and "
+"for the whole document."
 msgstr ""
 "El recompte de paraules és disponible a <span class=\"ui\">Eines</span> ▸ "
 "<span class=\"ui\">Comptador de paraules</span>. Es mostra el nombre de "
@@ -3072,8 +4329,8 @@ msgid ""
 "You can insert these special characters in the document using the <span "
 "class=\"ui\">Special Character</span> dialog."
 msgstr ""
-"Podeu inserir aquests símbols fent servir el diàleg <span class=\"ui\""
-">Caràcter especial</span>."
+"Podeu inserir aquests símbols fent servir el diàleg <span class=\"ui\">"
+"Caràcter especial</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:755-7
 msgid "Place the cursor in the position to insert the character."
@@ -3123,8 +4380,8 @@ msgid ""
 "You have the Track Changes feature enabled for the document. Track Changes "
 "records all changes in the text and shows the edits for later revision. "
 "Useful for marking changes in text and spreadsheets. Track changes are "
-"enabled choosing <span class=\"ui\">Review</span> → <span class=\"ui\""
-">Record</span>."
+"enabled choosing <span class=\"ui\">Review</span> → <span class=\"ui\">"
+"Record</span>."
 msgstr ""
 "El document té activada la funció de seguiment de canvis. El seguiment de "
 "canvis enregistra totes les modificacions que es fan al text i les mostra "
@@ -3157,6 +4414,13 @@ msgid "Changes are displayed as comment in the right of the document area."
 msgstr ""
 "Els canvis es mostren com a comentari a la dreta de l'àrea del document."
 
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:774-61
+msgctxt "html/cool-help.html+help-track-changes-comment:774-5.img:0-56[alt]"
+msgid ""
+"Tracked change shown as a comment box beside the document with author name, "
+"date, and change description"
+msgstr ""
+
 #: html/cool-help.html%2Bdiv.div.div.div.p:775-5
 msgid ""
 "The color assigned to the changes depends on the user that changes the "
@@ -3183,11 +4447,11 @@ msgstr ""
 msgid ""
 "Changes can be accepted or rejected. To accept or reject changes, click on "
 "the corresponding icons in the comment box on the right of the document. "
-"Alternatively, choose <span class=\"ui\">Review</span> → <span class=\"ui\""
-">Accept</span> or <span class=\"ui\">Reject</span>. Furthermore, if you need "
-"to filter changes before accepting or rejecting, choose <span class=\"ui\""
-">Review</span> → <span class=\"ui\">Accept</span> → <span class=\"ui\""
-">Manage</span>. A dialog shows a list of all tracked changes. Use the dialog "
+"Alternatively, choose <span class=\"ui\">Review</span> → <span class=\"ui\">"
+"Accept</span> or <span class=\"ui\">Reject</span>. Furthermore, if you need "
+"to filter changes before accepting or rejecting, choose <span class=\"ui\">"
+"Review</span> → <span class=\"ui\">Accept</span> → <span class=\"ui\">"
+"Manage</span>. A dialog shows a list of all tracked changes. Use the dialog "
 "buttons accordingly."
 msgstr ""
 "Els canvis es poden acceptar o rebutjar. Per a acceptar o rebutjar canvis, "
@@ -3196,8 +4460,8 @@ msgstr ""
 "class=\"ui\">Seguiment de canvis</span> ▸ <span class=\"ui\">Accepta</span> "
 "o <span class=\"ui\">Rebutja</span>. A més a més, si voleu filtrar els "
 "canvis abans d'acceptar-los o rebutjar-los, trieu <span class=\"ui\">Edita</"
-"span> ▸ <span class=\"ui\">Seguiment de canvis</span> ▸ <span class=\"ui\""
-">Gestiona</span>. Es mostra una llista de tots els canvis  seguits. Useu els "
+"span> ▸ <span class=\"ui\">Seguiment de canvis</span> ▸ <span class=\"ui\">"
+"Gestiona</span>. Es mostra una llista de tots els canvis  seguits. Useu els "
 "botons del diàleg corresponents."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:778-54
@@ -3255,8 +4519,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:794-7
 msgid ""
-"Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Paragraph</"
-"span>, <span class=\"ui\">Text Flow </span> tab"
+"Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Paragraph</span>"
+", <span class=\"ui\">Text Flow </span> tab"
 msgstr ""
 "Trieu <span class=\"ui\">Format</span> ▸ <span class=\"ui\">Paràgraf</span>, "
 "pestanya <span class=\"ui\">Flux de text</span>"
@@ -3299,12 +4563,12 @@ msgid "Select the text with the existing format"
 msgstr "Seleccioneu el text amb la formatació desitjada"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:806-7
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:848-7
+msgctxt "html/cool-help.html:help-format-paintbrush"
 msgid ""
-"Click on the <span class=\"ui\">Clone Formatting</span> icon <img alt="
-"\"format paintbrush\" class=\"icon-size\" src=\"images/lc_formatpaintbrush."
-"svg\" /> on the <span class=\"ui\">Home</span> tab. The mouse pointer turns "
-"to a paint bucket."
+"Click on the <span class=\"ui\">Clone Formatting</span> icon <img "
+"alt=\"format paintbrush\" class=\"icon-size\" src=\"images/"
+"lc_formatpaintbrush.svg\" /> on the <span class=\"ui\">Home</span> tab. The "
+"mouse pointer turns to a paint bucket."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:807-7
@@ -3343,6 +4607,12 @@ msgid ""
 "was applied."
 msgstr ""
 
+#: html/cool-help.html%2Bdiv.div.div.h3:825-5
+#, fuzzy
+msgctxt "html/cool-help.html:1409"
+msgid "Spreadsheets"
+msgstr "Fulls de càlcul"
+
 #: html/cool-help.html%2Bdiv.div.div.div.h4:827-5
 msgid "How can I select data to print?"
 msgstr "Com puc seleccionar les dades a imprimir?"
@@ -3370,14 +4640,14 @@ msgid ""
 "Activate the <span class=\"productname\">{productname}</span> spreadsheet "
 "window."
 msgstr ""
-"Activeu la finestra del full de càcul del <span class=\"productname\""
-">{productname}</span>."
+"Activeu la finestra del full de càcul del <span class=\"productname\">"
+"{productname}</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:835-7
 msgid ""
-"Press <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>V</kbd>. The <span class=\"ui\">Text Import</span> dialog "
-"opens to let you describe the precise format of the CSV data."
+"Press <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span>"
+"<kbd>V</kbd>. The <span class=\"ui\">Text Import</span> dialog opens to let "
+"you describe the precise format of the CSV data."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:838-53
@@ -3416,6 +4686,15 @@ msgid "Format the source cell with the font, color background and more."
 msgstr ""
 "Formateu la cel·la font amb un tipus de lletra, un color de fons, etcètera."
 
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:848-7
+msgctxt "html/cool-help.html+help-format-paintbrush:848-7"
+msgid ""
+"Click on the <span class=\"ui\">Clone Formatting</span> icon <img "
+"alt=\"format paintbrush\" class=\"icon-size\" src=\"images/"
+"lc_formatpaintbrush.svg\" /> on the <span class=\"ui\">Home</span> tab. The "
+"mouse pointer turns to a paint bucket."
+msgstr ""
+
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:849-7
 msgid "Select the cells you want to format. Release the mouse button."
 msgstr ""
@@ -3431,15 +4710,15 @@ msgid ""
 "Direct formatting is formatting applied directly to the selected contents of "
 "a paragraph or a spreadsheet cell, and overlaps its assigned style "
 "formatting. To restore the formatting to the style settings, select the text "
-"or spreadsheet cell and choose <span class=\"ui\">Home</span> → <span class="
-"\"ui\">Clear Direct Formatting</span>."
+"or spreadsheet cell and choose <span class=\"ui\">Home</span> → <span "
+"class=\"ui\">Clear Direct Formatting</span>."
 msgstr ""
 "La formatació directa és la formatació aplicada directament en el contingut "
 "seleccionat d'un paràgraf o cel·la de full de càlcul, i se superposa a la "
 "formatació de l'estil aplicat. Per a restablir la formatació a l'estil "
-"aplicat, seleccioneu el text o cel·la de full de càlcul i trieu <span class="
-"\"ui\">Format</span> ▸ <span class=\"ui\">Neteja la formatació directa</"
-"span> o utilitzeu el botó de la barra d'eines."
+"aplicat, seleccioneu el text o cel·la de full de càlcul i trieu <span "
+"class=\"ui\">Format</span> ▸ <span class=\"ui\">Neteja la formatació "
+"directa</span> o utilitzeu el botó de la barra d'eines."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:857-5
 msgid "How do I rename a sheet?"
@@ -3454,6 +4733,12 @@ msgstr ""
 "Trobareu l'opció per a canviar-ne el nom al menú contextual (utilitzeu el "
 "botó secundari del ratolí) de la pestanya del full que és a la part inferior "
 "de la pantalla. Escriviu el nom nou del full al diàleg que es mostrarà."
+
+#: html/cool-help.html%2Bdiv.div.div.h3:864-5
+#, fuzzy
+msgctxt "html/cool-help.html:1411"
+msgid "Presentations"
+msgstr "Presentacions"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:866-5
 msgid "How can I run my slide show?"
@@ -3490,8 +4775,8 @@ msgstr "Seleccioneu la forma de la diapositiva. Es mostra un conjunt d'anses."
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:876-7
 msgid ""
 "Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Line</span> (or "
-"<span class=\"ui\">Area</span>, or <span class=\"ui\">Position and "
-"Size</span>). A dialog opens."
+"<span class=\"ui\">Area</span>, or <span class=\"ui\">Position and Size</"
+"span>). A dialog opens."
 msgstr ""
 "Trieu <span class=\"ui\">Format</span> ▸ <span class=\"ui\">Línia</span> (o "
 "bé <span class=\"ui\">Àrea</span> o <span class=\"ui\">Posició i mida</span>)"

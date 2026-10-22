@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-13 14:06+0200\n"
+"POT-Creation-Date: 2026-10-22 23:37+0200\n"
 "PO-Revision-Date: 2026-10-14 12:57+0000\n"
 "Last-Translator: tigran54 <tigran54@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Armenian <https://hosted.weblate.org/projects/collabora-"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 2026.11.dev0\n"
+"X-Generator: Translate Toolkit 3.18.1\n"
 
 #: html/cool-help.html%2Bdiv.h1:10-5
 msgid "Keyboard Shortcuts"
@@ -40,13 +40,13 @@ msgstr "Պատճեն"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:17-69
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>C</kbd>,<br /><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
-"hidden=\"true\">+</span><kbd>Insert</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"C</kbd>,<br /><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">"
+"+</span><kbd>Insert</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>C</kbd>,<br /><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
-"hidden=\"true\">+</span><kbd>Insert</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"C</kbd>,<br /><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">"
+"+</span><kbd>Insert</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:18-38
 msgid "Paste as unformatted text"
@@ -54,13 +54,13 @@ msgstr "Տեղադրել որպես չձևաչափված տեքստ"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:18-90
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>V</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</"
+"kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>V</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</"
+"kbd>"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:19-38
 msgid "Paste special"
@@ -68,15 +68,13 @@ msgstr "Տեղադրել հատուկ"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:19-78
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>V</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</"
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>V</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</"
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:20-48
 msgid "Open"
@@ -84,11 +82,11 @@ msgstr "Բացել"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:20-79
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>O</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"O</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>O</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"O</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:21-72
 msgid "Print (Download as PDF)"
@@ -116,13 +114,13 @@ msgstr "Կենտրոնանալ նոթատետրի վահանակի ընտրաց�
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:26-90
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>F1</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>F1</"
+"kbd>"
 msgstr ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>F1</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>F1</"
+"kbd>"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:27-38
 msgid "Focus to document from menu"
@@ -138,25 +136,25 @@ msgstr "Կենտրոնանալ ընտրված մեկնաբանության ըն�
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:28-97
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>C</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>C</"
+"kbd>"
 msgstr ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>C</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>C</"
+"kbd>"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:29-38
 msgid "Open the context menu at the cursor or the selected cell"
 msgstr "Բացեք համատեքստային ցանկը կուրսորի կամ ընտրված բջջի մոտ"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:29-121
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:166-160
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:167-205
+#, fuzzy
+msgctxt "html/cool-help.html+general-shortcuts.table.tr.td:18-116"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>F10</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"F10</kbd>"
 msgstr ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>F10</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"F10</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:30-38
 msgid ""
@@ -176,36 +174,33 @@ msgstr "Տեղափոխել կիզակետը ծրագրի նախորդ հատվա
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:31-115
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>F6</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"F6</kbd>"
 msgstr ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>F6</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"F6</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:36-9
-#: html/cool-help.html%2Bdiv.div.div.h2:208-9
-#: html/cool-help.html%2Bdiv.div.div.h2:273-9
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.h2:2-4"
 msgid "Text formatting"
 msgstr "Տեքստի ձևաչափում"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:38-59
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:177-59
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:210-59
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:275-59
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:4-54"
 msgid "Bold"
 msgstr "Թավ"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:39-61
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:178-61
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:211-61
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:276-61
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:5-56"
 msgid "Italic"
 msgstr "Շեղ"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:40-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:179-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:212-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:277-64
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:6-59"
 msgid "Underline"
 msgstr "Ընդգծել"
 
@@ -214,60 +209,56 @@ msgid "Double Underline"
 msgstr "Կրկնակի ընդգծում"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:42-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:180-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:213-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:278-64
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:8-59"
 msgid "Strikethrough"
 msgstr "Վրագծում"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:43-66
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:214-66
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:279-66
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:9-61"
 msgid "Superscript"
 msgstr "Վերին ցուցիչ"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:44-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:215-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:280-64
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:10-59"
 msgid "Subscript"
 msgstr "Ենթագիր"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:45-70
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:181-70
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:11-65"
 msgid "Remove direct formatting"
 msgstr "Հեռացնել ուղղակի ձևաչափումը"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:49-9
-#: html/cool-help.html%2Bdiv.div.div.h2:220-9
-#: html/cool-help.html%2Bdiv.div.div.h2:285-9
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.h2:15-4"
 msgid "Paragraph formatting"
 msgstr "Պարբերության ձևաչափում"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:51-76
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:186-76
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:222-76
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:287-76
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:17-71"
 msgid "Align Center"
 msgstr "Հավասարեցնել կենտրոնում"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:52-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:187-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:223-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:288-64
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:18-59"
 msgid "Align Left"
 msgstr "Հավասարեցնել ձախ կողմում"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:53-65
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:188-65
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:224-65
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:289-65
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:19-60"
 msgid "Align Right"
 msgstr "Հավասարեցնել աջ"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:54-65
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:189-65
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:225-65
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:290-65
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:20-60"
 msgid "Justify"
 msgstr "Հարմարեցնել"
 
@@ -277,11 +268,11 @@ msgstr "Կիրառել լռելյայն պարբերության ոճը"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:55-94
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>0</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"0</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>0</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"0</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:56-38
 msgid "Apply Heading 1 paragraph style"
@@ -289,11 +280,11 @@ msgstr "Կիրառել Heading 1 պարբերության ոճը"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:56-96
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>1</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"1</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>1</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"1</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:57-38
 msgid "Apply Heading 2 paragraph style"
@@ -301,24 +292,25 @@ msgstr "Կիրառել Heading 2 պարբերության ոճը"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:57-96
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>2</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"2</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>2</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"2</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:58-38
 msgid "Apply Heading 3 paragraph style"
 msgstr "Կիրառել Heading 3 պարբերության ոճը"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:58-96
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:190-89
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:24-91"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>3</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"3</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>3</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"3</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:59-38
 msgid "Apply Heading 4 paragraph style"
@@ -326,11 +318,11 @@ msgstr "Կիրառել Heading 4 պարբերության ոճը"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:59-96
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>4</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"4</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>4</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"4</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:60-38
 msgid "Apply Heading 5 paragraph style"
@@ -338,400 +330,389 @@ msgstr "Կիրառել Heading 5 պարբերության ոճը"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:60-96
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>5</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"5</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>5</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"5</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:64-9
 msgid "Text selection and navigation in document"
 msgstr "Տեքստի ընտրություն և նավարկություն փաստաթղթում"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:66-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:185-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:216-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:233-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:281-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:298-64
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:32-59"
 msgid "Select All"
 msgstr "Ընտրել բոլորը"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:67-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:234-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:299-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:33-33"
 msgid "Move cursor to the left"
 msgstr "Տեղափոխեք կուրսորը ձախ"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:67-88
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:234-88
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:299-88
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:33-83"
 msgid "Arrow Left"
 msgstr "Ձախ սլաք"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:68-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:235-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:300-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:34-33"
 msgid "Move cursor with selection to the left"
 msgstr "Կուրսորը ընտրության հետ տեղափոխեք դեպի ձախ"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:68-103
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:235-103
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:300-103
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:34-98"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Left</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Left</kbd>"
 msgstr ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Ձախ ստեղն</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Ձախ ստեղն</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:69-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:236-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:301-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:35-33"
 msgid "Go to beginning of a word"
 msgstr "Անցնել բառի սկզբին"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:69-90
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:236-90
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:301-90
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:35-85"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Left</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Left</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Ձախ ստեղն</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Ձախ ստեղն</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:70-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:237-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:302-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:36-33"
 msgid "Select to the left word by word"
 msgstr "Ընտրեք դեպի ձախ բառ առ բառ"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:70-96
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:237-96
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:302-96
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:36-91"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Left</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Left</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Ձախ ստեղն</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Ձախ "
+"ստեղն</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:71-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:238-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:303-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:37-33"
 msgid "Move cursor to the right"
 msgstr "Տեղափոխեք կուրսորը աջ"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:71-89
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:238-89
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:303-89
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:37-84"
 msgid "Arrow Right"
 msgstr "Սլաքը աջ"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:72-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:239-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:304-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:38-33"
 msgid "Move cursor with selection to the right"
 msgstr "Կուրսորը ընտրության հետ տեղափոխեք դեպի աջ"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:72-104
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:239-104
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:304-104
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:38-99"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Right</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Right</kbd>"
 msgstr ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Աջ ստեղն</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Աջ ստեղն</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:73-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:240-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:305-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:39-33"
 msgid "Go to start of the next word"
 msgstr "Անցնել հաջորդ բառի սկզբին"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:73-93
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:240-93
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:305-93
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:39-88"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Right</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Right</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Սլաքը աջ</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Սլաքը աջ</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:74-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:241-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:306-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:40-33"
 msgid "Select to the right word by word"
 msgstr "Ընտրեք դեպի աջ բառ առ բառ"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:74-97
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:241-97
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:306-97
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:40-92"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Right</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Right</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Սլաքը աջ</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Սլաքը "
+"աջ</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:75-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:242-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:307-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:41-33"
 msgid "Move cursor up one line"
 msgstr "Տեղափոխեք կուրսորը մեկ տող վերև"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:75-88
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:242-88
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:307-88
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:41-83"
 msgid "Arrow Up"
 msgstr "Սլաքը վեր"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:76-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:243-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:308-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:42-33"
 msgid "Select lines in upwards direction"
 msgstr "Ընտրեք դեպի վեր ուղղված գծերը"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:76-98
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:243-98
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:308-98
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:42-93"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Up</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Up</kbd>"
 msgstr ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Սլաքը վեր</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Սլաքը վեր</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:77-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:244-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:309-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:43-33"
 msgid "Move cursor to beginning of the previous paragraph"
 msgstr "Տեղափոխեք կուրսորը նախորդ պարբերության սկիզբ"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:77-115
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:244-115
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:309-115
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:43-110"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Up</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Up</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Սլաքը վեր</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Սլաքը վեր</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:78-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:245-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:310-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:44-33"
 msgid "Select to beginning of paragraph"
 msgstr "Ընտրեք մինչև պարբերության սկիզբը"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:78-97
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:245-97
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:310-97
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:44-92"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Up</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Up</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Սլաքը վեր</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Սլաքը "
+"վեր</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:79-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:246-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:311-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:45-33"
 msgid "Move cursor down one line"
 msgstr "Տեղափոխեք կուրսորը մեկ տող ներքև"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:79-90
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:246-90
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:311-90
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:45-85"
 msgid "Arrow Down"
 msgstr "Սլաքը ներքև"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:80-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:247-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:312-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:46-33"
 msgid "Select lines in downwards direction"
 msgstr "Ընտրեք գծերը դեպի ներքևի ուղղությամբ"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:80-100
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:247-100
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:312-100
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:46-95"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Down</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Down</kbd>"
 msgstr ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Սլաքը ներքև</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Սլաքը ներքև</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:81-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:248-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:313-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:47-33"
 msgid "Move cursor to beginning of the next paragraph"
 msgstr "Տեղափոխեք կուրսորը հաջորդ պարբերության սկզբին"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:81-111
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:248-111
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:313-111
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:47-106"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Down</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Down</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Սլաքը ներքև</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Սլաքը ներքև</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:82-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:249-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:314-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:48-33"
 msgid "Select to end of paragraph"
 msgstr "Ընտրեք մինչև պարբերության վերջը"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:82-91
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:249-91
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:314-91
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:48-86"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Down</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Down</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Սլաքը ներքև</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Սլաքը "
+"ներքև</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:83-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:250-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:315-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:49-33"
 msgid "Go to beginning of line"
 msgstr "Անցնել տողի սկզբին"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:83-88
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:147-119
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:250-88
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:315-88
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:49-83"
 msgid "Home"
 msgstr "Տուն"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:84-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:251-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:316-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:50-33"
 msgid "Go and select to the beginning of a line"
 msgstr "Գնալ և ընտրել մինչև տողի սկիզբը"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:84-105
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:149-138
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:251-105
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:316-105
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:50-100"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Home</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
 msgstr ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Home</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:85-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:252-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:317-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:51-33"
 msgid "Go to start of document"
 msgstr "Անցնել փաստաթղթի սկզբին"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:85-88
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:107-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:145-118
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:252-88
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:317-88
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:51-83"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Home</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Home</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:86-38
 msgid "Go and select text to start of document"
 msgstr "Գնալ և ընտրել տեքստը փաստաթղթի սկզբում"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:86-104
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:253-103
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:318-103
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:52-99"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Home</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Home</"
+"kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Home</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Home</"
+"kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:87-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:254-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:319-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:53-33"
 msgid "Go to end of line"
 msgstr "Անցնել տողի վերջ"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:87-82
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:148-118
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:254-82
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:319-82
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:53-77"
 msgid "End"
 msgstr "Ավարտ"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:88-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:255-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:320-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:54-33"
 msgid "Go and select to the end of a line"
 msgstr "Գնալ և ընտրել մինչև տողի վերջը"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:88-99
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:150-137
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:255-99
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:320-99
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:54-94"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>End</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
 msgstr ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>End</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:89-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:256-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:321-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:55-33"
 msgid "Go to end of document"
 msgstr "Անցնել փաստաթղթի վերջ"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:89-86
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:108-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:146-131
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:256-86
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:321-86
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:55-81"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>End</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>End</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:90-38
 msgid "Go and select text to end of document"
 msgstr "Անցնել և ընտրել տեքստը մինչև փաստաթղթի վերջը"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:90-102
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:257-101
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:322-101
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:56-97"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>End</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>End</"
+"kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>End</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>End</"
+"kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:91-38
 msgid "Move the view up one page"
@@ -747,11 +728,11 @@ msgstr "Փոխեք կուրսորը տեքստի և վերնագրի միջև"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:92-102
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>PageUp</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"PageUp</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>PageUp</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"PageUp</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:93-38
 msgid "Extend the selection up one page"
@@ -759,11 +740,11 @@ msgstr "Ընդլայնեք ընտրությունը մեկ էջով վերև"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:93-97
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>PageUp</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"PageUp</kbd>"
 msgstr ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>PageUp</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"PageUp</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:94-38
 msgid "Move the view down one page"
@@ -779,11 +760,11 @@ msgstr "Փոխեք կուրսորը տեքստի և տողատակի միջև"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:95-102
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>PageDown</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"PageDown</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>PageDown</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"PageDown</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:96-38
 msgid "Extend the selection down one page"
@@ -791,11 +772,11 @@ msgstr "Ընդլայնեք ընտրությունը մեկ էջ ներքև"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:96-99
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>PageDown</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"PageDown</kbd>"
 msgstr ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>PageDown</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"PageDown</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:97-38
 msgid "Delete to beginning of word"
@@ -803,11 +784,11 @@ msgstr "Ջնջել մինչև բառի սկիզբը"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:97-92
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Backspace</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Backspace</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Backspace</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Backspace</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:98-38
 msgid "Delete to end of word"
@@ -815,11 +796,11 @@ msgstr "Ջնջել մինչև բառի վերջ"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:98-86
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Del</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Del</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Del</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Del</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:99-38
 msgid "Delete to beginning of sentence"
@@ -827,13 +808,13 @@ msgstr "Ջնջել մինչև նախադասության սկիզբը"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:99-96
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Backspace</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Backspace</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Backspace</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Backspace</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:100-38
 msgid "Delete to end of sentence"
@@ -841,27 +822,27 @@ msgstr "Ջնջել մինչև նախադասության վերջը"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:100-90
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Del</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Del</"
+"kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Del</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Del</"
+"kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:104-9
 msgid "Shortcut Keys for Tables"
 msgstr "Աղյուսակների համար նախատեսված կարճանցման ստեղներ"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:106-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:267-84
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:332-91
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:72-33"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>A</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"A</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>A</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"A</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:106-144
 msgid ""
@@ -872,6 +853,16 @@ msgstr ""
 "ընտրում է ակտիվ բջջի պարունակությունը։ Կրկին սեղմելով՝ ընտրում է ամբողջ "
 "աղյուսակը։"
 
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:107-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:73-33"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
+
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:107-147
 msgid ""
 "If the active cell is empty: goes to the beginning of the table. Otherwise: "
@@ -881,6 +872,16 @@ msgstr ""
 "Եթե ակտիվ բջիջը դատարկ է՝ անցնում է աղյուսակի սկիզբ։ Հակառակ դեպքում՝ առաջին "
 "սեղմումով անցնում է ակտիվ բջջի սկիզբ, երկրորդ սեղմումով անցնում է ընթացիկ "
 "աղյուսակի սկիզբ, երրորդ սեղմումով անցնում է փաստաթղթի սկիզբ։"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:108-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:74-33"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:108-146
 msgid ""
@@ -894,17 +895,17 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:109-38
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Tab</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Tab</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Tab</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Tab</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:109-146
 msgid ""
 "Inserts a tab stop (only in tables). Depending on the Window Manager in use, "
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Tab</kbd> may be used instead."
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Tab</kbd> may be used instead."
 msgstr ""
 "Տեղադրում է ներդիրի կանգ (միայն աղյուսակներում): Կախված օգտագործվող Window "
 "Manager-ից, դրա փոխարեն կարող է օգտագործվել <kbd>Alt</kbd><span class=\"kbd--"
@@ -912,11 +913,11 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:110-38
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Keys</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Keys</kbd>"
 msgstr ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Սլաքներով ստեղներ</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Սլաքներով ստեղներ</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:110-152
 msgid ""
@@ -925,13 +926,13 @@ msgstr "Մեծացնում/փոքրացնում է սյունակի/տողի չ�
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:111-38
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Keys</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Keys</kbd>"
 msgstr ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Սլաքներով ստեղներ</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Սլաքներով ստեղներ</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:111-219
 msgid "Increase/decrease the size of the column/row on the left/top cell edge"
@@ -939,38 +940,45 @@ msgstr "Մեծացնել/փոքրացնել սյունակի/տողի չափը �
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:112-38
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Keys</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Keys</kbd>"
 msgstr ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Սլաքներով ստեղներ</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Սլաքներով ստեղներ</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:112-218
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:113-285
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:78-213"
 msgid "Like Alt, but only the active cell is modified"
 msgstr "Ինչպես Alt-ն է, բայց միայն ակտիվ բջիջն է փոփոխվում"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:113-38
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Keys</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</"
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow Keys</"
+"kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Սլաքի ստեղներ</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</"
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Սլաքի "
+"ստեղներ</kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:113-285
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:79-280"
+msgid "Like Alt, but only the active cell is modified"
+msgstr "Ինչպես Alt-ն է, բայց միայն ակտիվ բջիջն է փոփոխվում"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:114-38
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Insert</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Insert</kbd>"
 msgstr ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Insert</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Insert</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:114-148
 msgid ""
@@ -978,17 +986,17 @@ msgid ""
 "class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow Key</kbd> "
 "inserts cell"
 msgstr ""
-"3 վայրկյան «Ներդնել» ռեժիմում, Սլաքի ստեղնը տեղադրում է տող/սյունակ, "
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Սլաքի ստեղն</kbd> տեղադրում է բջիջ"
+"3 վայրկյան «Ներդնել» ռեժիմում, Սլաքի ստեղնը տեղադրում է տող/սյունակ, <kbd>"
+"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Սլաքի "
+"ստեղն</kbd> տեղադրում է բջիջ"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:115-38
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Del</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Del</kbd>"
 msgstr ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Del</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Del</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:115-145
 msgid ""
@@ -1002,13 +1010,13 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:116-38
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Del</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Del</"
+"kbd>"
 msgstr ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Del</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Del</"
+"kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td.p:116-235
 msgid ""
@@ -1053,7 +1061,8 @@ msgid "Insert endnote"
 msgstr "Ներդնել էջատակ"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:127-71
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:182-71
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:93-66"
 msgid "Insert comment"
 msgstr "Ներդնել մեկնաբանություն"
 
@@ -1075,11 +1084,11 @@ msgstr "Տեղադրել տողի ընդհատում"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:133-82
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Enter</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Enter</kbd>"
 msgstr ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Enter</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Enter</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:134-70
 msgid "Manual page break"
@@ -1097,13 +1106,14 @@ msgstr ""
 "առաջ"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:136-139
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:137-175
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:102-134"
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Enter</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Enter</kbd>"
 msgstr ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Enter</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Enter</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:137-38
 msgid ""
@@ -1113,6 +1123,16 @@ msgstr ""
 "Ցանկի ներսում նոր պարբերություն ավելացնել առանց համարակալման: Չի աշխատում, "
 "երբ կուրսորը ցանկի վերջում է:"
 
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:137-175
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:103-170"
+msgid ""
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Enter</kbd>"
+msgstr ""
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Enter</kbd>"
+
 #: html/cool-help.html%2Bdiv.div.div.h2:143-9
 msgid "Navigating in Spreadsheets"
 msgstr "Նավարկություն աշխատաթերթիկում"
@@ -1121,27 +1141,79 @@ msgstr "Նավարկություն աշխատաթերթիկում"
 msgid "Moves the cursor to the first cell in the sheet (A1)."
 msgstr "Տեղափոխում է կուրսորը թերթի առաջին բջիջ (A1):"
 
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:145-118
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:4-113"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
+
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:146-38
 msgid "Moves the cursor to the last cell on the sheet that contains data."
 msgstr "Տեղափոխում է կուրսորը թերթի վերջին բջիջ, որը պարունակում է տվյալներ։"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:146-131
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:5-126"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:147-38
 msgid "Moves the cursor to the first cell of the current row."
 msgstr "Տեղափոխում է կուրսորը ընթացիկ տողի առաջին բջիջ։"
 
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:147-119
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:6-114"
+msgid "Home"
+msgstr "Տուն"
+
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:148-38
 msgid "Moves the cursor to the last cell of the current row."
 msgstr "Տեղափոխում է կուրսորը ընթացիկ տողի վերջին բջիջ։"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:148-118
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:7-113"
+msgid "End"
+msgstr "Ավարտ"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:149-38
 msgid ""
 "Selects cells from the current cell to the first cell of the current row."
 msgstr "Ընտրում է բջիջները ընթացիկ բջջից մինչև ընթացիկ տողի առաջին բջիջը։"
 
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:149-138
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:8-133"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
+
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:150-38
 msgid ""
 "Selects cells from the current cell to the last cell of the current row."
 msgstr "Ընտրում է բջիջները ընթացիկ բջջից մինչև ընթացիկ տողի վերջին բջիջը։"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:150-137
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:9-132"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:151-38
 msgid ""
@@ -1153,11 +1225,11 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:151-184
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Page Up</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Page Up</kbd>"
 msgstr ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Page Up</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Page Up</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:152-38
 msgid ""
@@ -1169,11 +1241,11 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:152-188
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Page Down</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Page Down</kbd>"
 msgstr ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Page Down</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Page Down</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:153-38
 msgid ""
@@ -1187,11 +1259,11 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:153-265
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Left Arrow</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Left Arrow</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Ձախ սլաք</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Ձախ սլաք</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:154-38
 msgid ""
@@ -1205,11 +1277,11 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:154-269
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Right Arrow</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Right Arrow</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Աջ սլաք</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Աջ սլաք</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:155-38
 msgid ""
@@ -1223,11 +1295,11 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:155-241
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Up Arrow</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Up Arrow</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Սլաքը վերև</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Սլաքը վերև</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:156-38
 msgid ""
@@ -1241,11 +1313,11 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:156-246
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Down Arrow</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Down Arrow</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Ներքև ստեղն</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Ներքև ստեղն</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:157-38
 msgid "Go to next sheet."
@@ -1253,13 +1325,13 @@ msgstr "Անցեք հաջորդ թերթիկին։"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:157-82
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Page Down</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Page "
+"Down</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Page Down</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Page "
+"Down</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:158-38
 msgid "Go to previous sheet."
@@ -1267,13 +1339,13 @@ msgstr "Անցնել նախորդ թերթիկին։"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:158-86
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Page Up</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Page "
+"Up</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Page Up</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Page "
+"Up</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:159-38
 msgid ""
@@ -1289,13 +1361,13 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:159-292
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Arrow</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Սլաք</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Սլաք</"
+"kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:160-38
 msgid "Moves one sheet to the left."
@@ -1303,11 +1375,11 @@ msgstr "Տեղափոխում է մեկ թերթիկ դեպի ձախ։"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:160-93
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Page Up</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Page Up</kbd>"
 msgstr ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Page Up</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Page Up</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:161-38
 msgid "Moves one screen page to the right."
@@ -1315,11 +1387,11 @@ msgstr "Տեղափոխում է մեկ էկրանի էջ դեպի աջ։"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:161-100
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Page Down</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Page Down</kbd>"
 msgstr ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Page Down</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Page Down</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:162-38
 msgid ""
@@ -1333,13 +1405,13 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:162-280
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Page Up</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Page "
+"Up</kbd>"
 msgstr ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Page Up</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Page "
+"Up</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:163-38
 msgid ""
@@ -1353,13 +1425,13 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:163-268
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Page Down</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Page "
+"Down</kbd>"
 msgstr ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Page Down</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Page "
+"Down</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:164-38
 msgid "Selects the entire column of the current cell."
@@ -1367,11 +1439,11 @@ msgstr "Ընտրում է ընթացիկ բջջի ամբողջ սյունը։"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:164-111
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Space</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Space</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Space</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Space</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:165-38
 msgid "Selects the entire row of the current cell."
@@ -1379,11 +1451,11 @@ msgstr "Ընտրում է ընթացիկ բջջի ամբողջ տողը։"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:165-108
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Space</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Space</kbd>"
 msgstr ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Space</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Space</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:166-38
 msgid ""
@@ -1393,6 +1465,16 @@ msgstr ""
 "Բացում է կենտրոնացված թերթիկի ներդիրի համատեքստային ցանկը (տեղադրել, "
 "վերանվանել, ջնջել, թաքցնել, տեղափոխել և այլն):"
 
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:166-160
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:25-155"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"F10</kbd>"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"F10</kbd>"
+
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:167-38
 msgid ""
 "With a whole column or row selected, opens the matching column or row header "
@@ -1401,6 +1483,16 @@ msgstr ""
 "Ամբողջ սյունը կամ տողը ընտրելուց հետո բացվում է համապատասխան սյունակի կամ "
 "տողի վերնագրի համատեքստային ցանկը (ներդնել, ջնջել, լայնություն կամ "
 "բարձրություն, թաքցնել և այլն):"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:167-205
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:26-200"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"F10</kbd>"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"F10</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:168-38
 msgid ""
@@ -1414,11 +1506,11 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:168-269
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>*</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"*</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>*</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"*</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:169-38
 msgid ""
@@ -1430,11 +1522,11 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:169-178
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>/</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>/"
+"</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>/</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>/"
+"</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:170-38
 msgid "Insert cells (as in menu Insert - Cells)"
@@ -1442,11 +1534,11 @@ msgstr "Տեղադրեք բջիջներ (ինչպես «Ներդնել» - «Բ�
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:170-105
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Plus key</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Plus key</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Plus ստեղն</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Plus ստեղն</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:171-38
 msgid "Delete cells (as in menu Edit - Delete Cells)"
@@ -1454,15 +1546,51 @@ msgstr "Ջնջել բջիջները (ինչպես \"Խմբագրել\" - \"Ջն�
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:171-110
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Minus key</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Minus key</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Minus ստեղն</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Minus ստեղն</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:175-9
 msgid "Cell formatting"
 msgstr "Բջջի ձևաչափում"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:177-59
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:36-54"
+msgid "Bold"
+msgstr "Թավ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:178-61
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:37-56"
+msgid "Italic"
+msgstr "Շեղ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:179-64
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:38-59"
+msgid "Underline"
+msgstr "Ընդգծել"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:180-64
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:39-59"
+msgid "Strikethrough"
+msgstr "Վրագծում"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:181-70
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:40-65"
+msgid "Remove direct formatting"
+msgstr "Հեռացնել ուղղակի ձևաչափումը"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:182-71
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:41-66"
+msgid "Insert comment"
+msgstr "Ներդնել մեկնաբանություն"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:183-38
 msgid "Display comment"
@@ -1470,11 +1598,11 @@ msgstr "Ցուցադրել մեկնաբանությունը"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:183-80
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>F1</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"F1</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>F1</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"F1</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:184-38
 msgid "Fill Down"
@@ -1482,15 +1610,55 @@ msgstr "Լրացնել ներքև"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:184-74
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>D</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"D</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>D</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"D</kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:185-64
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:44-59"
+msgid "Select All"
+msgstr "Ընտրել բոլորը"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:186-76
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:45-71"
+msgid "Align Center"
+msgstr "Հավասարեցնել կենտրոնում"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:187-64
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:46-59"
+msgid "Align Left"
+msgstr "Հավասարեցնել ձախ կողմում"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:188-65
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:47-60"
+msgid "Align Right"
+msgstr "Հավասարեցնել աջ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:189-65
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:48-60"
+msgid "Justify"
+msgstr "Հարմարեցնել"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:190-38
 msgid "Set Optimal Column Width"
 msgstr "Սահմանել սյունակի օպտիմալ լայնությունը"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:190-89
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:49-84"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"3</kbd>"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"3</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:191-74
 msgid "Two decimal places, thousands separator"
@@ -1526,61 +1694,509 @@ msgstr "Զետեղեք ամսաթիվը"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:202-76
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>;</kbd> or <kbd>,</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+";</kbd> or <kbd>,</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>;</kbd> կամ <kbd>,</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+";</kbd> կամ <kbd>,</kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.h2:208-9
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.h2:2-4"
+msgid "Text formatting"
+msgstr "Տեքստի ձևաչափում"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:210-59
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:4-54"
+msgid "Bold"
+msgstr "Թավ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:211-61
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:5-56"
+msgid "Italic"
+msgstr "Շեղ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:212-64
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:6-59"
+msgid "Underline"
+msgstr "Ընդգծել"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:213-64
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:7-59"
+msgid "Strikethrough"
+msgstr "Վրագծում"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:214-66
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:8-61"
+msgid "Superscript"
+msgstr "Վերին ցուցիչ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:215-64
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:9-59"
+msgid "Subscript"
+msgstr "Ենթագիր"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:216-64
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:10-59"
+msgid "Select All"
+msgstr "Ընտրել բոլորը"
+
+#: html/cool-help.html%2Bdiv.div.div.h2:220-9
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.h2:14-4"
+msgid "Paragraph formatting"
+msgstr "Պարբերության ձևաչափում"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:222-76
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:16-71"
+msgid "Align Center"
+msgstr "Հավասարեցնել կենտրոնում"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:223-64
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:17-59"
+msgid "Align Left"
+msgstr "Հավասարեցնել ձախ կողմում"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:224-65
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:18-60"
+msgid "Align Right"
+msgstr "Հավասարեցնել աջ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:225-65
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:19-60"
+msgid "Justify"
+msgstr "Հարմարեցնել"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:226-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:291-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:20-33"
 msgid "Demote list item (list item has to be selected)"
 msgstr "Ցուցակի տարրի իջեցում (ցանկի տարրը պետք է ընտրվի)"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:226-112
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:264-119
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:291-112
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:329-119
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:20-107"
 msgid "Tab"
 msgstr "Tab"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:227-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:292-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:21-33"
 msgid "Promote list item (list item has to be selected)"
 msgstr "Առաջխաղացնել ցուցակի տարրը (ցանկի տարրը պետք է ընտրվի)"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:227-113
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:265-127
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:292-113
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:330-127
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:21-108"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Tab</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Tab</kbd>"
 msgstr ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Tab</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Tab</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:231-9
-#: html/cool-help.html%2Bdiv.div.div.h2:296-9
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.h2:25-4"
 msgid "Text selection and navigation in a textbox"
 msgstr "Տեքստի ընտրություն և նավարկություն տեքստային դաշտում"
 
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:233-64
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:27-59"
+msgid "Select All"
+msgstr "Ընտրել բոլորը"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:234-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:28-33"
+msgid "Move cursor to the left"
+msgstr "Տեղափոխեք կուրսորը ձախ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:234-88
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:28-83"
+msgid "Arrow Left"
+msgstr "Ձախ սլաք"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:235-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:29-33"
+msgid "Move cursor with selection to the left"
+msgstr "Կուրսորը ընտրության հետ տեղափոխեք դեպի ձախ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:235-103
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:29-98"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Left</kbd>"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Ձախ ստեղն</kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:236-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:30-33"
+msgid "Go to beginning of a word"
+msgstr "Անցնել բառի սկզբին"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:236-90
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:30-85"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Left</kbd>"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Ձախ ստեղն</kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:237-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:31-33"
+msgid "Select to the left word by word"
+msgstr "Ընտրեք դեպի ձախ բառ առ բառ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:237-96
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:31-91"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Left</kbd>"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Ձախ "
+"ստեղն</kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:238-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:32-33"
+msgid "Move cursor to the right"
+msgstr "Տեղափոխեք կուրսորը աջ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:238-89
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:32-84"
+msgid "Arrow Right"
+msgstr "Սլաքը աջ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:239-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:33-33"
+msgid "Move cursor with selection to the right"
+msgstr "Կուրսորը ընտրության հետ տեղափոխեք դեպի աջ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:239-104
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:33-99"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Right</kbd>"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Աջ ստեղն</kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:240-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:34-33"
+msgid "Go to start of the next word"
+msgstr "Անցնել հաջորդ բառի սկզբին"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:240-93
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:34-88"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Right</kbd>"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Սլաքը աջ</kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:241-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:35-33"
+msgid "Select to the right word by word"
+msgstr "Ընտրեք դեպի աջ բառ առ բառ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:241-97
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:35-92"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Right</kbd>"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Սլաքը "
+"աջ</kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:242-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:36-33"
+msgid "Move cursor up one line"
+msgstr "Տեղափոխեք կուրսորը մեկ տող վերև"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:242-88
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:36-83"
+msgid "Arrow Up"
+msgstr "Սլաքը վեր"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:243-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:37-33"
+msgid "Select lines in upwards direction"
+msgstr "Ընտրեք դեպի վեր ուղղված գծերը"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:243-98
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:37-93"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Up</kbd>"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Սլաքը վեր</kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:244-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:38-33"
+msgid "Move cursor to beginning of the previous paragraph"
+msgstr "Տեղափոխեք կուրսորը նախորդ պարբերության սկիզբ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:244-115
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:38-110"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Up</kbd>"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Սլաքը վեր</kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:245-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:39-33"
+msgid "Select to beginning of paragraph"
+msgstr "Ընտրեք մինչև պարբերության սկիզբը"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:245-97
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:39-92"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Up</kbd>"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Սլաքը "
+"վեր</kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:246-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:40-33"
+msgid "Move cursor down one line"
+msgstr "Տեղափոխեք կուրսորը մեկ տող ներքև"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:246-90
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:40-85"
+msgid "Arrow Down"
+msgstr "Սլաքը ներքև"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:247-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:41-33"
+msgid "Select lines in downwards direction"
+msgstr "Ընտրեք գծերը դեպի ներքևի ուղղությամբ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:247-100
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:41-95"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Down</kbd>"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Սլաքը ներքև</kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:248-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:42-33"
+msgid "Move cursor to beginning of the next paragraph"
+msgstr "Տեղափոխեք կուրսորը հաջորդ պարբերության սկզբին"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:248-111
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:42-106"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Down</kbd>"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Սլաքը ներքև</kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:249-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:43-33"
+msgid "Select to end of paragraph"
+msgstr "Ընտրեք մինչև պարբերության վերջը"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:249-91
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:43-86"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Down</kbd>"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Սլաքը "
+"ներքև</kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:250-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:44-33"
+msgid "Go to beginning of line"
+msgstr "Անցնել տողի սկզբին"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:250-88
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:44-83"
+msgid "Home"
+msgstr "Տուն"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:251-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:45-33"
+msgid "Go and select to the beginning of a line"
+msgstr "Գնալ և ընտրել մինչև տողի սկիզբը"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:251-105
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:45-100"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:252-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:46-33"
+msgid "Go to start of document"
+msgstr "Անցնել փաստաթղթի սկզբին"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:252-88
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:46-83"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
+
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:253-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:318-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:47-33"
 msgid "Go and select text to start of textbox"
 msgstr "Գնացեք և ընտրեք տեքստը տեքստային դաշտի սկզբում"
 
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:253-103
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:47-98"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Home</"
+"kbd>"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Home</"
+"kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:254-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:48-33"
+msgid "Go to end of line"
+msgstr "Անցնել տողի վերջ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:254-82
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:48-77"
+msgid "End"
+msgstr "Ավարտ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:255-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:49-33"
+msgid "Go and select to the end of a line"
+msgstr "Գնալ և ընտրել մինչև տողի վերջը"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:255-99
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:49-94"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:256-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:50-33"
+msgid "Go to end of document"
+msgstr "Անցնել փաստաթղթի վերջ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:256-86
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:50-81"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
+
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:257-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:322-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:51-33"
 msgid "Go and select text to end of textbox"
 msgstr "Գնալ և ընտրել տեքստը մինչև տեքստային դաշտի վերջը"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:257-101
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:51-96"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>End</"
+"kbd>"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>End</"
+"kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:261-9
 msgid "Slide keyboard shortcuts"
 msgstr "Սահեցնելով ստեղնաշարի դյուրանցումները"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:263-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:328-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:57-33"
 msgid ""
 "Escape current mode, i.e. from edit mode switch to object selection mode, "
 "from object selection mode switch to view mode."
@@ -1589,164 +2205,778 @@ msgstr ""
 "ռեժիմի, օբյեկտի ընտրության ռեժիմից անցնել դիտման ռեժիմի։"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:263-186
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:328-186
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:57-181"
 msgid "Esc"
 msgstr "Esc"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:264-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:329-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:58-33"
 msgid "Select objects in the order in which they were created"
 msgstr "Ընտրեք օբյեկտները այն հերթականությամբ, որով դրանք ստեղծվել են"
 
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:264-119
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:58-114"
+msgid "Tab"
+msgstr "Tab"
+
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:265-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:330-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:59-33"
 msgid "Select objects in the reverse order in which they were created"
 msgstr "Ընտրեք օբյեկտները հակառակ հերթականությամբ, որով դրանք ստեղծվել են"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:265-127
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:59-122"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Tab</kbd>"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Tab</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:266-38
 msgid "Move to next text object on slide"
 msgstr "Անցնել սահիկի հաջորդ տեքստային օբյեկտին"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:266-98
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:331-105
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:60-93"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Enter</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Enter</kbd>"
 msgstr ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Enter</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Enter</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:267-38
 msgid "Select all in slide"
 msgstr "Ընտրել բոլորը սահիկում"
 
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:267-84
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:61-79"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"A</kbd>"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"A</kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.h2:273-9
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.h2:2-0"
+msgid "Text formatting"
+msgstr "Տեքստի ձևաչափում"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:275-59
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:4-50"
+msgid "Bold"
+msgstr "Թավ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:276-61
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:5-52"
+msgid "Italic"
+msgstr "Շեղ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:277-64
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:6-55"
+msgid "Underline"
+msgstr "Ընդգծել"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:278-64
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:7-55"
+msgid "Strikethrough"
+msgstr "Վրագծում"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:279-66
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:8-57"
+msgid "Superscript"
+msgstr "Վերին ցուցիչ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:280-64
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:9-55"
+msgid "Subscript"
+msgstr "Ենթագիր"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:281-64
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:10-55"
+msgid "Select All"
+msgstr "Ընտրել բոլորը"
+
+#: html/cool-help.html%2Bdiv.div.div.h2:285-9
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.h2:14-0"
+msgid "Paragraph formatting"
+msgstr "Պարբերության ձևաչափում"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:287-76
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:16-67"
+msgid "Align Center"
+msgstr "Հավասարեցնել կենտրոնում"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:288-64
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:17-55"
+msgid "Align Left"
+msgstr "Հավասարեցնել ձախ կողմում"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:289-65
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:18-56"
+msgid "Align Right"
+msgstr "Հավասարեցնել աջ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:290-65
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:19-56"
+msgid "Justify"
+msgstr "Հարմարեցնել"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:291-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:20-29"
+msgid "Demote list item (list item has to be selected)"
+msgstr "Ցուցակի տարրի իջեցում (ցանկի տարրը պետք է ընտրվի)"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:291-112
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:20-103"
+msgid "Tab"
+msgstr "Tab"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:292-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:21-29"
+msgid "Promote list item (list item has to be selected)"
+msgstr "Առաջխաղացնել ցուցակի տարրը (ցանկի տարրը պետք է ընտրվի)"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:292-113
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:21-104"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Tab</kbd>"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Tab</kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.h2:296-9
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.h2:25-0"
+msgid "Text selection and navigation in a textbox"
+msgstr "Տեքստի ընտրություն և նավարկություն տեքստային դաշտում"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:298-64
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:27-55"
+msgid "Select All"
+msgstr "Ընտրել բոլորը"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:299-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:28-29"
+msgid "Move cursor to the left"
+msgstr "Տեղափոխեք կուրսորը ձախ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:299-88
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:28-79"
+msgid "Arrow Left"
+msgstr "Ձախ սլաք"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:300-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:29-29"
+msgid "Move cursor with selection to the left"
+msgstr "Կուրսորը ընտրության հետ տեղափոխեք դեպի ձախ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:300-103
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:29-94"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Left</kbd>"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Ձախ ստեղն</kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:301-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:30-29"
+msgid "Go to beginning of a word"
+msgstr "Անցնել բառի սկզբին"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:301-90
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:30-81"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Left</kbd>"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Ձախ ստեղն</kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:302-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:31-29"
+msgid "Select to the left word by word"
+msgstr "Ընտրեք դեպի ձախ բառ առ բառ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:302-96
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:31-87"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Left</kbd>"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Ձախ "
+"ստեղն</kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:303-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:32-29"
+msgid "Move cursor to the right"
+msgstr "Տեղափոխեք կուրսորը աջ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:303-89
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:32-80"
+msgid "Arrow Right"
+msgstr "Սլաքը աջ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:304-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:33-29"
+msgid "Move cursor with selection to the right"
+msgstr "Կուրսորը ընտրության հետ տեղափոխեք դեպի աջ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:304-104
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:33-95"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Right</kbd>"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Աջ ստեղն</kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:305-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:34-29"
+msgid "Go to start of the next word"
+msgstr "Անցնել հաջորդ բառի սկզբին"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:305-93
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:34-84"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Right</kbd>"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Սլաքը աջ</kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:306-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:35-29"
+msgid "Select to the right word by word"
+msgstr "Ընտրեք դեպի աջ բառ առ բառ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:306-97
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:35-88"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Right</kbd>"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Սլաքը "
+"աջ</kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:307-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:36-29"
+msgid "Move cursor up one line"
+msgstr "Տեղափոխեք կուրսորը մեկ տող վերև"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:307-88
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:36-79"
+msgid "Arrow Up"
+msgstr "Սլաքը վեր"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:308-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:37-29"
+msgid "Select lines in upwards direction"
+msgstr "Ընտրեք դեպի վեր ուղղված գծերը"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:308-98
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:37-89"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Up</kbd>"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Սլաքը վեր</kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:309-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:38-29"
+msgid "Move cursor to beginning of the previous paragraph"
+msgstr "Տեղափոխեք կուրսորը նախորդ պարբերության սկիզբ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:309-115
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:38-106"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Up</kbd>"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Սլաքը վեր</kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:310-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:39-29"
+msgid "Select to beginning of paragraph"
+msgstr "Ընտրեք մինչև պարբերության սկիզբը"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:310-97
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:39-88"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Up</kbd>"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Սլաքը "
+"վեր</kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:311-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:40-29"
+msgid "Move cursor down one line"
+msgstr "Տեղափոխեք կուրսորը մեկ տող ներքև"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:311-90
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:40-81"
+msgid "Arrow Down"
+msgstr "Սլաքը ներքև"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:312-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:41-29"
+msgid "Select lines in downwards direction"
+msgstr "Ընտրեք գծերը դեպի ներքևի ուղղությամբ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:312-100
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:41-91"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Down</kbd>"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Սլաքը ներքև</kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:313-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:42-29"
+msgid "Move cursor to beginning of the next paragraph"
+msgstr "Տեղափոխեք կուրսորը հաջորդ պարբերության սկզբին"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:313-111
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:42-102"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Down</kbd>"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Սլաքը ներքև</kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:314-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:43-29"
+msgid "Select to end of paragraph"
+msgstr "Ընտրեք մինչև պարբերության վերջը"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:314-91
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:43-82"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Down</kbd>"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Սլաքը "
+"ներքև</kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:315-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:44-29"
+msgid "Go to beginning of line"
+msgstr "Անցնել տողի սկզբին"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:315-88
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:44-79"
+msgid "Home"
+msgstr "Տուն"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:316-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:45-29"
+msgid "Go and select to the beginning of a line"
+msgstr "Գնալ և ընտրել մինչև տողի սկիզբը"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:316-105
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:45-96"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:317-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:46-29"
+msgid "Go to start of document"
+msgstr "Անցնել փաստաթղթի սկզբին"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:317-88
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:46-79"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:318-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:47-29"
+msgid "Go and select text to start of textbox"
+msgstr "Գնացեք և ընտրեք տեքստը տեքստային դաշտի սկզբում"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:318-103
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:47-94"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Home</"
+"kbd>"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Home</"
+"kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:319-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:48-29"
+msgid "Go to end of line"
+msgstr "Անցնել տողի վերջ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:319-82
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:48-73"
+msgid "End"
+msgstr "Ավարտ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:320-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:49-29"
+msgid "Go and select to the end of a line"
+msgstr "Գնալ և ընտրել մինչև տողի վերջը"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:320-99
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:49-90"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:321-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:50-29"
+msgid "Go to end of document"
+msgstr "Անցնել փաստաթղթի վերջ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:321-86
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:50-77"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:322-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:51-29"
+msgid "Go and select text to end of textbox"
+msgstr "Գնալ և ընտրել տեքստը մինչև տեքստային դաշտի վերջը"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:322-101
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:51-92"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>End</"
+"kbd>"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>End</"
+"kbd>"
+
 #: html/cool-help.html%2Bdiv.div.div.h2:326-9
 msgid "Draw page keyboard shortcuts"
 msgstr "Նկարել էջի ստեղնաշարի դյուրանցումներ"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:328-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:57-29"
+msgid ""
+"Escape current mode, i.e. from edit mode switch to object selection mode, "
+"from object selection mode switch to view mode."
+msgstr ""
+"Լքեք ընթացիկ ռեժիմը, այսինքն՝ խմբագրման ռեժիմից անցնել օբյեկտի ընտրության "
+"ռեժիմի, օբյեկտի ընտրության ռեժիմից անցնել դիտման ռեժիմի։"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:328-186
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:57-177"
+msgid "Esc"
+msgstr "Esc"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:329-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:58-29"
+msgid "Select objects in the order in which they were created"
+msgstr "Ընտրեք օբյեկտները այն հերթականությամբ, որով դրանք ստեղծվել են"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:329-119
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:58-110"
+msgid "Tab"
+msgstr "Tab"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:330-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:59-29"
+msgid "Select objects in the reverse order in which they were created"
+msgstr "Ընտրեք օբյեկտները հակառակ հերթականությամբ, որով դրանք ստեղծվել են"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:330-127
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:59-118"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Tab</kbd>"
+msgstr ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Tab</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:331-38
 msgid "Move to next text object on drawing page"
 msgstr "Անցնել նկարչական էջի հաջորդ տեքստային օբյեկտին"
 
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:331-105
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:60-96"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Enter</kbd>"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Enter</kbd>"
+
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:332-38
 msgid "Select all in drawing page"
 msgstr "Ընտրել բոլորը նկարչական էջում"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:332-91
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:61-82"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"A</kbd>"
+msgstr ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"A</kbd>"
 
 #: html/cool-help.html%2Bdiv.h2:338-5
 msgid "<span class=\"productname\">{productname}</span> Help"
 msgstr "<span class=\"productname\">{productname}</span> Օգնություն"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:341-13
-#: html/cool-help.html%2Bdiv.div.h3:383-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:4-12"
 msgid "Collaborative editing"
 msgstr "Համագործակցային խմբագրում"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:342-13
-#: html/cool-help.html%2Bdiv.div.h3:393-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:5-12"
 msgid "<span class=\"productname\">{productname}</span> user interface"
 msgstr "<span class=\"productname\">{productname}</span> օգտվողի միջերես"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:343-13
-#: html/cool-help.html%2Bdiv.div.h3:429-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:6-12"
 msgid "Opening, closing, saving, printing and downloading documents"
 msgstr "Փաստաթղթերի բացում, փակում, պահպանում, տպում և ներբեռնում"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:344-13
-#: html/cool-help.html%2Bdiv.div.h3:439-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:7-12"
 msgid "Opening, closing, saving and printing documents"
 msgstr "Փաստաթղթերի բացում, փակում, պահպանում և տպում"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:345-13
-#: html/cool-help.html%2Bdiv.div.h3:478-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:8-12"
 msgid "Editing documents"
 msgstr "Փաստաթղթերի խմբագրում"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:346-13
-#: html/cool-help.html%2Bdiv.nav.ul.li:352-13
-#: html/cool-help.html%2Bdiv.nav.ul.li:365-13
-#: html/cool-help.html%2Bdiv.div.h3:510-3
-#: html/cool-help.html%2Bdiv.div.div.h3:570-5
-#: html/cool-help.html%2Bdiv.div.div.h3:681-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:9-12"
 msgid "Advanced features"
 msgstr "Ընդլայնված գործառույթներ"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:348-13
-#: html/cool-help.html%2Bdiv.div.h3:548-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:11-12"
 msgid "<span class=\"productname\">{productname}</span> spreadsheets"
 msgstr "<span class=\"productname\">{productname}</span> աղյուսակաթերթեր"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:349-13
-#: html/cool-help.html%2Bdiv.div.div.h3:550-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:12-12"
 msgid "Editing spreadsheets"
 msgstr "Աղյուսակաթերթերի խմբագրում"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:350-13
-#: html/cool-help.html%2Bdiv.div.div.h3:554-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:13-12"
 msgid "Formulas"
 msgstr "Բանաձևեր"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:351-13
-#: html/cool-help.html%2Bdiv.div.div.h3:563-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:14-12"
 msgid "Formatting spreadsheets"
 msgstr "Աղյուսակաթերթիկների ձևաչափում"
 
+#: html/cool-help.html%2Bdiv.nav.ul.li:352-13
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:15-12"
+msgid "Advanced features"
+msgstr "Ընդլայնված գործառույթներ"
+
 #: html/cool-help.html%2Bdiv.nav.ul.li:353-13
-#: html/cool-help.html%2Bdiv.div.div.h3:825-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:16-12"
 msgid "Spreadsheets"
 msgstr "Աղյուսակաթերթեր"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:355-13
-#: html/cool-help.html%2Bdiv.div.h3:612-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:18-12"
 msgid "<span class=\"productname\">{productname}</span> text documents"
 msgstr "<span class=\"productname\">{productname}</span> տեքստային փաստաթղթեր"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:356-13
-#: html/cool-help.html%2Bdiv.div.div.h3:614-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:19-12"
 msgid "Editing text documents"
 msgstr "Տեքստային փաստաթղթերի խմբագրում"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:357-13
-#: html/cool-help.html%2Bdiv.div.div.h3:618-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:20-12"
 msgid "Context menus"
 msgstr "Համատեքստային ընտրացանկեր"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:358-13
-#: html/cool-help.html%2Bdiv.div.div.h3:634-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:21-12"
 msgid "Advanced text document editor features"
 msgstr "Տեքստային փաստաթղթերի խմբագրիչի խորացված գործառույթներ"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:359-13
-#: html/cool-help.html%2Bdiv.div.div.h3:744-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:22-12"
 msgid "Text documents"
 msgstr "Տեքստային փաստաթղթեր"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:361-13
-#: html/cool-help.html%2Bdiv.div.h3:661-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:24-12"
 msgid "<span class=\"productname\">{productname}</span> presentations"
 msgstr "<span class=\"productname\">{productname}</span> շնորհանդեսներ"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:362-13
-#: html/cool-help.html%2Bdiv.div.div.h3:663-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:25-12"
 msgid "Editing presentations"
 msgstr "Շնորհանդեսների խմբագրում"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:363-13
-#: html/cool-help.html%2Bdiv.div.div.h3:667-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:26-12"
 msgid "Slide show"
 msgstr "Սահիկահանդես"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:364-13
-#: html/cool-help.html%2Bdiv.div.div.h3:674-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:27-12"
 msgid "Slide pane"
 msgstr "Սահիկների վահանակ"
 
+#: html/cool-help.html%2Bdiv.nav.ul.li:365-13
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:28-12"
+msgid "Advanced features"
+msgstr "Ընդլայնված գործառույթներ"
+
 #: html/cool-help.html%2Bdiv.nav.ul.li:366-13
-#: html/cool-help.html%2Bdiv.div.div.h3:864-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:29-12"
 msgid "Presentations"
 msgstr "Շնորհանդեսներ"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:368-13
-#: html/cool-help.html%2Bdiv.div.h3:693-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:31-12"
 msgid "Frequently Asked Questions"
 msgstr "Հաճախակի տրվող հարցեր"
 
@@ -1755,16 +2985,22 @@ msgid ""
 "<span class=\"productname\">{productname}</span> allows you to create and "
 "edit typical office documents, that is text documents, spreadsheets and "
 "presentations, <span class=\"webBasedCOOLOnly\">directly in your browser,</"
-"span> in a simple and straight-forward way. <span class=\"webBasedCOOLOnly\""
-">You can work alone on a document, or collaboratively as part of a "
-"team.</span>"
+"span> in a simple and straight-forward way. <span class=\"webBasedCOOLOnly\">"
+"You can work alone on a document, or collaboratively as part of a team.</"
+"span>"
 msgstr ""
 "<span class=\"productname\">{productname}</span> թույլ է տալիս ստեղծել և "
 "խմբագրել տիպիկ գրասենյակային փաստաթղթեր, այսինքն՝ տեքստային փաստաթղթեր, "
 "աղյուսակներ և ներկայացումներ, <span class=\"webBasedCOOLonly\">անմիջապես ձեր "
-"զննարկչում՝</span> պարզ և անմիջական ձևով։ <span class=\"webBasedCOOLonly\""
-">Դուք կարող եք աշխատել փաստաթղթի վրա մենակ կամ համագործակցաբար՝ որպես թիմի "
-"մաս։</span>"
+"զննարկչում՝</span> պարզ և անմիջական ձևով։ <span class=\"webBasedCOOLonly\">"
+"Դուք կարող եք աշխատել փաստաթղթի վրա մենակ կամ համագործակցաբար՝ որպես թիմի մաս"
+"։</span>"
+
+#: html/cool-help.html%2Bdiv.div.h3:383-5
+#, fuzzy
+msgctxt "html/cool-help.html:1327"
+msgid "Collaborative editing"
+msgstr "Համագործակցային խմբագրում"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:386-7
 msgid ""
@@ -1792,6 +3028,12 @@ msgstr ""
 "<span class=\"productname\">{productname}</span> -ը ձեզ կտեղեկացնի ստորին "
 "մասում փոքրիկ ծանուցմամբ, երբ նոր օգտատեր է մտնում կամ դուրս գալիս։"
 
+#: html/cool-help.html%2Bdiv.div.h3:393-5
+#, fuzzy
+msgctxt "html/cool-help.html:1333"
+msgid "<span class=\"productname\">{productname}</span> user interface"
+msgstr "<span class=\"productname\">{productname}</span> օգտվողի միջերես"
+
 #: html/cool-help.html%2Bdiv.div.div.p:395-7
 msgid ""
 "<span class=\"webBasedCOOLOnly\"> <span class=\"productname\">{productname}</"
@@ -1817,10 +3059,10 @@ msgstr ""
 msgid ""
 "<span class=\"def\">The tabs:</span> The commands are grouped on tabs at the "
 "top: <span class=\"ui\">File</span>, <span class=\"ui\">Home</span>, <span "
-"class=\"ui\">Insert</span>, <span class=\"ui\">Review</span>, <span class="
-"\"ui\">View</span> and others, depending on the document type. Click the "
-"selected tab again to collapse the tab bar and gain space for the document. "
-"Click any tab to expand it again."
+"class=\"ui\">Insert</span>, <span class=\"ui\">Review</span>, <span "
+"class=\"ui\">View</span> and others, depending on the document type. Click "
+"the selected tab again to collapse the tab bar and gain space for the "
+"document. Click any tab to expand it again."
 msgstr ""
 "<span class=\"def\">Ներդիրները:</span> Հրամանները խմբավորված են վերևի մասում "
 "գտնվող ներդիրներում: <span class=\"ui\">Նիշք</span>, <span class=\"ui\">"
@@ -1897,8 +3139,8 @@ msgid ""
 "will only see pixels appear at inserted images, such as jpg’s or png’s."
 msgstr ""
 "Տեքստը, դիագրամները, ձևերը և svg պատկերները կմնան սուր, մեծացնելիս դուք "
-"կտեսնեք պիքսելներ միայն տեղադրված պատկերների, օրինակ՝ jpg կամ png նիշքերի "
-"վրա։"
+"կտեսնեք պիքսելներ միայն տեղադրված պատկերների, օրինակ՝ jpg կամ png նիշքերի վրա"
+"։"
 
 #: html/cool-help.html%2Bdiv.div.div.p:425-5
 msgid "Using the browser zoom affects the document and user interface areas."
@@ -1906,30 +3148,36 @@ msgstr ""
 "Դիտակի խոշորացումը օգտագործելը ազդում է փաստաթղթի և օգտագործողի միջերեսի "
 "տարածքների վրա։"
 
+#: html/cool-help.html%2Bdiv.div.h3:429-5
+#, fuzzy
+msgctxt "html/cool-help.html:1335A"
+msgid "Opening, closing, saving, printing and downloading documents"
+msgstr "Փաստաթղթերի բացում, փակում, պահպանում, տպում և ներբեռնում"
+
 #: html/cool-help.html%2Bdiv.div.p:430-5
 msgid ""
 "Your documents are stored and managed in the cloud storage that is "
 "integrated with <span class=\"productname\">{productname}</span>."
 msgstr ""
-"Ձեր փաստաթղթերը պահվում և կառավարվում են <span class=\"productname\""
-">{productname}</span>-ի հետ ինտեգրված ամպային պահեստում։"
+"Ձեր փաստաթղթերը պահվում և կառավարվում են <span class=\"productname\">"
+"{productname}</span>-ի հետ ինտեգրված ամպային պահեստում։"
 
 #: html/cool-help.html%2Bdiv.div.div.p:431-30
 msgid ""
-"To download a document download it from the <span class=\"productname\""
-">{productname}</span> application’s <span class=\"ui\">File</span> menu. The "
+"To download a document download it from the <span class=\"productname\">"
+"{productname}</span> application’s <span class=\"ui\">File</span> menu. The "
 "download formats available depends on the application. All applications "
 "exports documents in PDF format."
 msgstr ""
-"Փաստաթուղթ ներբեռնելու համար այն ներբեռնեք <span class=\"productname\""
-">{productname}</span> ծրագրի <span class=\"ui\">Նիշք</span> ընտրացանկից: "
+"Փաստաթուղթ ներբեռնելու համար այն ներբեռնեք <span class=\"productname\">"
+"{productname}</span> ծրագրի <span class=\"ui\">Նիշք</span> ընտրացանկից: "
 "Ներբեռնման հասանելի ձևաչափերը կախված են ծրագրից: Բոլոր ծրագրերը փաստաթղթերը "
 "արտահանում են PDF ձևաչափով:"
 
 #: html/cool-help.html%2Bdiv.div.div.p:432-30
 msgid ""
-"To open document, click on the file to open the <span class=\"productname\""
-">{productname}</span> module associated to the document format."
+"To open document, click on the file to open the <span class=\"productname\">"
+"{productname}</span> module associated to the document format."
 msgstr ""
 "Փաստաթուղթը բացելու համար սեղմեք նիշքի վրա՝ փաստաթղթի ձևաչափին կից <span "
 "class=\"productname\">{productname}</span> մոդուլը բացելու համար։"
@@ -1938,13 +3186,14 @@ msgstr ""
 msgid ""
 "Documents in <span class=\"productname\">{productname}</span> save "
 "automatically, but if you are concerned that a document is synchronized as "
-"quickly as possible you can also force saving using the <span class=\"ui\""
-">File</span> menu’s <span class=\"ui\">Save</span> entry."
+"quickly as possible you can also force saving using the <span class=\"ui\">"
+"File</span> menu’s <span class=\"ui\">Save</span> entry."
 msgstr ""
 "<span class=\"productname\">{productname}</span>-ում փաստաթղթերը պահվում են "
 "ինքնաշխատ կերպով, բայց եթե անհանգստանում եք, որ փաստաթուղթը հնարավորինս արագ "
-"կհամաժամեցվի, կարող եք նաև պարտադրել պահպանումը՝ օգտագործելով <span class="
-"\"ui\">Նիշք</span> Ընտրացանկի <span class=\"ui\">Պահպանել</span> գրառումը։"
+"կհամաժամեցվի, կարող եք նաև պարտադրել պահպանումը՝ օգտագործելով <span "
+"class=\"ui\">Նիշք</span> Ընտրացանկի <span class=\"ui\">Պահպանել</span> "
+"գրառումը։"
 
 #: html/cool-help.html%2Bdiv.div.div.p:434-30
 msgid ""
@@ -1957,17 +3206,24 @@ msgstr ""
 "ձեր նախընտրած PDF ընթերցիչում։"
 
 #: html/cool-help.html%2Bdiv.div.div.p:435-30
-#: html/cool-help.html%2Bdiv.div.div.p:472-7
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.div.div.p:98-29"
 msgid ""
 "When closing a document, it is automatically saved if it has been changed."
 msgstr ""
 "Փաստաթուղթը փակելիս այն ինքնաշխատ կերպով պահպանվում է, եթե այն փոփոխվել է։"
 
+#: html/cool-help.html%2Bdiv.div.h3:439-5
+#, fuzzy
+msgctxt "html/cool-help.html:1335B"
+msgid "Opening, closing, saving and printing documents"
+msgstr "Փաստաթղթերի բացում, փակում, պահպանում և տպում"
+
 #: html/cool-help.html%2Bdiv.div.div.p:441-7
 msgid ""
-"To open a document, either open it in <span class=\"productname\""
-">{productname}</span> from your platform's file manager or use <span class="
-"\"ui\">Open</span> on the <span class=\"ui\">File</span> tab."
+"To open a document, either open it in <span class=\"productname\">"
+"{productname}</span> from your platform's file manager or use <span "
+"class=\"ui\">Open</span> on the <span class=\"ui\">File</span> tab."
 msgstr ""
 "Փաստաթուղթը բացելու համար կամ բացեք այն ձեր հարթակի նիշքերի կառավարիչից "
 "<span class=\"productname\">{productname}</span>-ում, կամ օգտագործեք <span "
@@ -1976,9 +3232,9 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.p:447-7
 msgid ""
 "An existing document opens in view mode, so that you can read it without "
-"changing it by accident. To start editing, click the edit button (the pencil)"
-" in the bottom right corner. New documents and documents created from a "
-"template open ready to edit."
+"changing it by accident. To start editing, click the edit button (the "
+"pencil) in the bottom right corner. New documents and documents created from "
+"a template open ready to edit."
 msgstr ""
 "Գոյություն ունեցող փաստաթուղթը բացվում է դիտման ռեժիմում, որպեսզի կարողանաք "
 "կարդալ այն՝ առանց պատահաբար փոխելու: Խմբագրումը սկսելու համար սեղմեք ներքևի "
@@ -2017,6 +3273,20 @@ msgstr ""
 "Փաստաթուղթը տպելու համար օգտագործեք <span class=\"ui\">Տպել</span> կոճակը "
 "<span class=\"ui\">Նիշք</span> ներդիրում։"
 
+#: html/cool-help.html%2Bdiv.div.div.p:472-7
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.div.div.p:135-6"
+msgid ""
+"When closing a document, it is automatically saved if it has been changed."
+msgstr ""
+"Փաստաթուղթը փակելիս այն ինքնաշխատ կերպով պահպանվում է, եթե այն փոփոխվել է։"
+
+#: html/cool-help.html%2Bdiv.div.h3:478-5
+#, fuzzy
+msgctxt "html/cool-help.html:1337"
+msgid "Editing documents"
+msgstr "Փաստաթղթերի խմբագրում"
+
 #: html/cool-help.html%2Bdiv.div.p:479-5
 msgid ""
 "Document editing should be familiar to everyone that has used an office "
@@ -2034,8 +3304,8 @@ msgstr "Պատճենել և հետ գրել"
 msgid ""
 "Rich content copy/cut and paste is supported, including images and mixed "
 "content, using the keyboard shortcuts (<kbd>Ctrl</kbd><span class=\"kbd--"
-"plus\" aria-hidden=\"true\">+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span class="
-"\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</"
+"plus\" aria-hidden=\"true\">+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span "
+"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</"
 "kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>). On "
 "Android or iOS selecting text by double tapping, and using a long-tap to "
 "access copy/cut/paste via the context menu is required."
@@ -2051,10 +3321,10 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:483-5
 msgid ""
-"For security reasons it is necessary to use <kbd>Ctrl</kbd><span class=\"kbd"
-"--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd> to paste content that "
-"comes from outside the document, but context menus can be used for cut and "
-"copy."
+"For security reasons it is necessary to use <kbd>Ctrl</kbd><span "
+"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd> to paste "
+"content that comes from outside the document, but context menus can be used "
+"for cut and copy."
 msgstr ""
 "Անվտանգության նկատառումներից ելնելով՝ փաստաթղթից դուրս եկող բովանդակությունը "
 "տեղադրելու համար անհրաժեշտ է օգտագործել <kbd>Ctrl</kbd><span class=\"kbd--"
@@ -2066,8 +3336,8 @@ msgid ""
 "When you copy a selection that contains images or other objects, a <span "
 "class=\"ui\">Download Selection</span> widget pops up in the bottom-right "
 "corner. Press <span class=\"ui\">Download</span>, then copy again, to make "
-"the content available to applications outside <span class=\"productname\""
-">{productname}</span>. This step also converts complex object types into "
+"the content available to applications outside <span class=\"productname\">"
+"{productname}</span>. This step also converts complex object types into "
 "static images."
 msgstr ""
 "Երբ դուք պատճենում եք պատկերներ կամ այլ օբյեկտներ պարունակող ընտրություն, "
@@ -2128,8 +3398,8 @@ msgid ""
 "destroying it – while you were concurrently editing."
 msgstr ""
 "Սա հատկապես օգտակար է, օրինակ, երբ գործընկերը պատահաբար ընտրել է փաստաթղթի "
-"ամբողջ տեքստը <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>A</kbd> ստեղներով և շարունակել է այն վերաշարադրել՝ ոչնչացնելով "
+"ամբողջ տեքստը <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">"
+"+</span><kbd>A</kbd> ստեղներով և շարունակել է այն վերաշարադրել՝ ոչնչացնելով "
 "այն, մինչդեռ դուք միաժամանակ խմբագրում էիք։"
 
 #: html/cool-help.html%2Bdiv.div.div.h4:495-5
@@ -2185,14 +3455,14 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:503-5
 msgid ""
-"You can paste as unformatted text with the keyboard shortcut: <kbd>Ctrl</"
-"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</"
-"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>"
+"You can paste as unformatted text with the keyboard shortcut: <kbd>Ctrl</kbd>"
+"<span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</kbd><span "
+"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>"
 msgstr ""
 "Դուք կարող եք տեղադրել որպես չձևաչափված տեքստ՝ օգտագործելով ստեղնաշարի "
-"կարճանցումը՝ <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>V</kbd>"
+"կարճանցումը՝ <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">"
+"+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>V</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.p:504-5
 msgid ""
@@ -2219,6 +3489,12 @@ msgid ""
 msgstr ""
 "Երբ ունեք ներքին կտրված կամ պատճենված բովանդակություն, կարող եք տեղադրել այն "
 "համատեքստային ցանկի միջոցով։"
+
+#: html/cool-help.html%2Bdiv.div.h3:510-3
+#, fuzzy
+msgctxt "html/cool-help.html:1338"
+msgid "Advanced features"
+msgstr "Ընդլայնված գործառույթներ"
 
 #: html/cool-help.html%2Bdiv.div.div.h4:512-5
 msgid "Adding charts"
@@ -2278,9 +3554,9 @@ msgid ""
 msgstr ""
 "<span class=\"def\">Գծապատկերի խմբագրում.</span> Կրկնակի սեղմեք գծապատկերի "
 "վրա՝ ընտրելու համար: Օգտագործեք համատեքստային ցանկերը՝ գծապատկերի տարրեր "
-"ավելացնելու համար, ինչպիսիք են վերնագիրը, առանցքը և այլն: Ընտրեք <span class="
-"\"ui\">Տվյալների տիրույթ</span> և <span class=\"ui\">Գծապատկերի տեսակ</span>՝"
-" գծապատկերի տվյալները խմբագրելու և գծապատկերի տեսակը ընտրելու համար:"
+"ավելացնելու համար, ինչպիսիք են վերնագիրը, առանցքը և այլն: Ընտրեք <span "
+"class=\"ui\">Տվյալների տիրույթ</span> և <span class=\"ui\">Գծապատկերի տեսակ</"
+"span>՝ գծապատկերի տվյալները խմբագրելու և գծապատկերի տեսակը ընտրելու համար:"
 
 #: html/cool-help.html%2Bdiv.div.div.p:525-28
 msgid ""
@@ -2314,8 +3590,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:530-5
 msgid ""
-"<span class=\"def\">Insert image:</span> Clicking on the <span class=\"ui\""
-">Insert image</span> icon allows you to choose an image from the cloud "
+"<span class=\"def\">Insert image:</span> Clicking on the <span class=\"ui\">"
+"Insert image</span> icon allows you to choose an image from the cloud "
 "storage's folders and shares."
 msgstr ""
 "<span class=\"def\">Տեղադրեք նկար:</span> Սեղմելով <span class=\"ui\">Նկարի "
@@ -2324,8 +3600,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:531-5
 msgid ""
-"<span class=\"def\">Insert local image:</span> Choose <span class=\"ui\""
-">Insert</span> → <span class=\"ui\">Image</span> to pick an image from your "
+"<span class=\"def\">Insert local image:</span> Choose <span class=\"ui\">"
+"Insert</span> → <span class=\"ui\">Image</span> to pick an image from your "
 "computer and insert it into the document."
 msgstr ""
 "<span class=\"def\">Տեղային պատկերի տեղադրում:</span> Ընտրեք <span "
@@ -2367,11 +3643,11 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:538-5
 msgid ""
-"Click on the submenu (<span class=\"cool-annotation-menu icon-size\"></span>)"
-" icon to reply, move and delete comments."
+"Click on the submenu (<span class=\"cool-annotation-menu icon-size\"></"
+"span>) icon to reply, move and delete comments."
 msgstr ""
-"Սեղմեք ենթաընտրացանկի (<span class=\"cool-annotation-menu icon-size\""
-"></span>) պատկերակի վրա՝ մեկնաբանություններին պատասխանելու, տեղափոխելու և "
+"Սեղմեք ենթաընտրացանկի (<span class=\"cool-annotation-menu icon-size\"></"
+"span>) պատկերակի վրա՝ մեկնաբանություններին պատասխանելու, տեղափոխելու և "
 "ջնջելու համար։"
 
 #: html/cool-help.html%2Bdiv.div.div.h4:541-5
@@ -2397,12 +3673,24 @@ msgstr "Սխալ գրված բառի տակ կարմիր ալիքավոր ընդ
 
 #: html/cool-help.html%2Bdiv.div.div.p:544-5
 msgid ""
-"To systematically spell-check the whole document use <span class=\"ui\""
-">Spelling</span> on the <span class=\"ui\">Review</span> tab."
+"To systematically spell-check the whole document use <span class=\"ui\">"
+"Spelling</span> on the <span class=\"ui\">Review</span> tab."
 msgstr ""
 "Ամբողջ փաստաթղթում ուղղագրության համակարգված ստուգման համար օգտագործեք <span "
 "class=\"ui\">Վերանայել</span> ներդիրի <span class=\"ui\">Ուղղագրություն</"
 "span> -ը։"
+
+#: html/cool-help.html%2Bdiv.div.h3:548-5
+#, fuzzy
+msgctxt "html/cool-help.html:1359"
+msgid "<span class=\"productname\">{productname}</span> spreadsheets"
+msgstr "<span class=\"productname\">{productname}</span> աղյուսակաթերթեր"
+
+#: html/cool-help.html%2Bdiv.div.div.h3:550-5
+#, fuzzy
+msgctxt "html/cool-help.html:1361"
+msgid "Editing spreadsheets"
+msgstr "Աղյուսակաթերթերի խմբագրում"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:551-30
 msgid ""
@@ -2422,8 +3710,14 @@ msgstr ""
 "կատարելու համար: Աջակցվում է նաև բջիջների պարունակությունը քաշելով՝ բջիջները "
 "տվյալներով լցնելու համար: Պատճենելու, կտրելու և տեղադրելու հրամանները "
 "հասանելի են համատեքստային ընտրացանկից: Մուտքագրված տվյալներին հաջորդելով՝ "
-"<kbd>Tab</kbd> կտեղափոխի կուրսորը աջ կողմում գտնվող հաջորդ բջիջ, իսկ "
-"<kbd>Enter</kbd>-ով՝ ներքևի բջիջ՝ հետագա տվյալների հեշտ մուտքագրման համար:"
+"<kbd>Tab</kbd> կտեղափոխի կուրսորը աջ կողմում գտնվող հաջորդ բջիջ, իսկ <kbd>"
+"Enter</kbd>-ով՝ ներքևի բջիջ՝ հետագա տվյալների հեշտ մուտքագրման համար:"
+
+#: html/cool-help.html%2Bdiv.div.div.h3:554-5
+#, fuzzy
+msgctxt "html/cool-help.html:1363"
+msgid "Formulas"
+msgstr "Բանաձևեր"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:556-5
 msgid ""
@@ -2448,22 +3742,29 @@ msgstr ""
 msgid ""
 "The formula language should be extremely familiar to any spreadsheet user, "
 "and is specified in great detail in the <a href=\"https://www.oasis-open.org/"
-"committees/download.php/16826/openformula-spec-20060221.html\" target="
-"\"_blank\" rel=\"noopener noreferrer\">OASIS OpenFormula specification</a>."
+"committees/download.php/16826/openformula-spec-20060221.html\" "
+"target=\"_blank\" rel=\"noopener noreferrer\">OASIS OpenFormula "
+"specification</a>."
 msgstr ""
 "Բանաձևերի լեզուն պետք է չափազանց ծանոթ լինի ցանկացած աղյուսակ օգտագործողի "
 "համար և մանրամասն նկարագրված է <a href=\"https://www.oasis-open.org/"
-"committees/download.php/16826/openformula-spec-20060221.html\" target="
-"\"_blank\" rel=\"noopener noreferrer\">OASIS OpenFormula specification</a> "
-"-ում:"
+"committees/download.php/16826/openformula-spec-20060221.html\" "
+"target=\"_blank\" rel=\"noopener noreferrer\">OASIS OpenFormula "
+"specification</a> -ում:"
+
+#: html/cool-help.html%2Bdiv.div.div.h3:563-5
+#, fuzzy
+msgctxt "html/cool-help.html:1367"
+msgid "Formatting spreadsheets"
+msgstr "Աղյուսակաթերթիկների ձևաչափում"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:565-5
 msgid ""
 "<span class=\"def\">Direct formatting:</span> You can format spreadsheet "
 "cells, columns, rows and sheets by formatting directly from the menus, "
 "toolbar or context menus. Direct formatting applies only to the current "
-"object selected. To format a cell either use the menu or hit <kbd>Ctrl</"
-"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>1</kbd>. The "
+"object selected. To format a cell either use the menu or hit <kbd>Ctrl</kbd>"
+"<span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>1</kbd>. The "
 "dialog allows complex and custom number formatting, as well as font, complex "
 "border, background, cell protection and other options."
 msgstr ""
@@ -2484,6 +3785,12 @@ msgstr ""
 "«Ձևաչափել բջիջները» երկխոսության պատուհանը «Թվեր» ներդիրում՝ դասերի ցանկով, "
 "ձևաչափի ընտրանքներով, տասնորդական նիշերով և ձևաչափի կոդով"
 
+#: html/cool-help.html%2Bdiv.div.div.h3:570-5
+#, fuzzy
+msgctxt "html/cool-help.html:1371"
+msgid "Advanced features"
+msgstr "Ընդլայնված գործառույթներ"
+
 #: html/cool-help.html%2Bdiv.div.div.div.p:571-30
 msgid ""
 "<span class=\"def\">Sorting data:</span> You can sort a list of numbers or "
@@ -2492,8 +3799,8 @@ msgid ""
 "to extend the selection."
 msgstr ""
 "<span class=\"def\">Տվյալների տեսակավորում:</span> Դուք կարող եք թվերի կամ "
-"տեքստի ցանկերը տեսակավորել աճման կամ նվազման կարգով: <span class="
-"\"productname\">{productname}</span>-ը ինքնաշխատ կերպով հայտնաբերում է "
+"տեքստի ցանկերը տեսակավորել աճման կամ նվազման կարգով: <span "
+"class=\"productname\">{productname}</span>-ը ինքնաշխատ կերպով հայտնաբերում է "
 "վերնագրեր հանդիսացող բջիջները և հարակից սյունակները՝ ընտրությունը "
 "ընդլայնելու համար:"
 
@@ -2591,9 +3898,9 @@ msgid ""
 "Validity dialog on the Criteria tab with Allow set to List, showing options "
 "for empty cells, selection list, and entry values"
 msgstr ""
-"«Չափանիշներ» ներդիրում գործող վավերականության երկխոսության պատուհան՝ "
-"«Թույլատրել» կարգավորումով որպես «Ցուցակ» արտահայտությունը ցույց տալով "
-"դատարկ բջիջների, ընտրության ցանկի և մուտքագրման արժեքների տարբերակները"
+"«Չափանիշներ» ներդիրում գործող վավերականության երկխոսության պատուհան՝ «"
+"Թույլատրել» կարգավորումով որպես «Ցուցակ» արտահայտությունը ցույց տալով դատարկ "
+"բջիջների, ընտրության ցանկի և մուտքագրման արժեքների տարբերակները"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:593-7
 msgid ""
@@ -2608,13 +3915,13 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:594-7
 msgid ""
 "Use the <span class=\"ui\">Input Help</span> and <span class=\"ui\">Error "
-"Alert</span> tabs to enhance the user interactions. Click <span class=\"ui\""
-">OK</span> to close the dialog."
+"Alert</span> tabs to enhance the user interactions. Click <span class=\"ui\">"
+"OK</span> to close the dialog."
 msgstr ""
-"Օգտագործեք <span class=\"ui\">Մուտքագրման օգնություն</span> և <span class="
-"\"ui\">Սխալի մասին ահազանգ</span> ներդիրները՝ օգտատիրոջ փոխազդեցությունները "
-"բարելավելու համար: Սեղմեք <span class=\"ui\">Լավ</span>՝ երկխոսության "
-"պատուհանը փակելու համար:"
+"Օգտագործեք <span class=\"ui\">Մուտքագրման օգնություն</span> և <span "
+"class=\"ui\">Սխալի մասին ահազանգ</span> ներդիրները՝ օգտատիրոջ "
+"փոխազդեցությունները բարելավելու համար: Սեղմեք <span class=\"ui\">Լավ</span>՝ "
+"երկխոսության պատուհանը փակելու համար:"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:597-56
 msgid ""
@@ -2626,8 +3933,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:598-7
 msgid ""
-"To remove the validity of the cell, open the dialog and set the <span class="
-"\"ui\">Allow</span> list to “All values”."
+"To remove the validity of the cell, open the dialog and set the <span "
+"class=\"ui\">Allow</span> list to “All values”."
 msgstr ""
 "Բջջի վավերականությունը հեռացնելու համար բացեք երկխոսության պատուհանը և <span "
 "class=\"ui\">Թույլատրել</span> ցանկը դարձրեք «Բոլոր արժեքները»։"
@@ -2657,11 +3964,11 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:606-5
 msgid ""
-"<span class=\"def\">Conditional formatting:</span> <span class=\"productname"
-"\">{productname}</span> adds symbols to each cell of a range based on cells "
-"conditions. Select the cell range and click <span class=\"ui\">Conditional</"
-"span> on the <span class=\"ui\">Home</span> tab. Select the symbol set to "
-"apply on the range."
+"<span class=\"def\">Conditional formatting:</span> <span "
+"class=\"productname\">{productname}</span> adds symbols to each cell of a "
+"range based on cells conditions. Select the cell range and click <span "
+"class=\"ui\">Conditional</span> on the <span class=\"ui\">Home</span> tab. "
+"Select the symbol set to apply on the range."
 msgstr ""
 "<span class=\"def\">Պայմանական ձևաչափում:</span> <span class=\"productname\">"
 "{productname}</span>-ը միջակայքի յուրաքանչյուր բջիջին ավելացնում է նիշեր՝ "
@@ -2677,6 +3984,18 @@ msgstr ""
 "Պայմանական ձևաչափման պատկերակների հավաքածուի ընտրիչ, որը ցույց է տալիս "
 "սլաքներ, շրջանակներ, լուսացույցեր, աստղեր, ժպտացող դեմքեր և սյունակային "
 "դիագրամի խորհրդանիշների հավաքածուներ"
+
+#: html/cool-help.html%2Bdiv.div.h3:612-5
+#, fuzzy
+msgctxt "html/cool-help.html:1373"
+msgid "<span class=\"productname\">{productname}</span> text documents"
+msgstr "<span class=\"productname\">{productname}</span> տեքստային փաստաթղթեր"
+
+#: html/cool-help.html%2Bdiv.div.div.h3:614-5
+#, fuzzy
+msgctxt "html/cool-help.html:1375"
+msgid "Editing text documents"
+msgstr "Տեքստային փաստաթղթերի խմբագրում"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:615-30
 msgid ""
@@ -2697,6 +4016,12 @@ msgstr ""
 "ավելացում ու մշակում, նման են աշխատասեղանի տեքստային խմբագրիչի "
 "գործողություններին: Օգտագործեք ստեղնաշարը, ընտրացանկերը և գործիքագոտիները՝ "
 "ձեր փաստաթղթի հետ փոխազդելու համար:"
+
+#: html/cool-help.html%2Bdiv.div.div.h3:618-5
+#, fuzzy
+msgctxt "html/cool-help.html:1377"
+msgid "Context menus"
+msgstr "Համատեքստային ընտրացանկեր"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:619-30
 msgid ""
@@ -2758,8 +4083,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:629-5
 msgid ""
-"<span class=\"def\">Style formatting:</span> <span class=\"productname\""
-">{productname}</span> supports paragraph styles. You can apply an existing "
+"<span class=\"def\">Style formatting:</span> <span class=\"productname\">"
+"{productname}</span> supports paragraph styles. You can apply an existing "
 "paragraph style to a paragraph. Select the style in the style list on the "
 "<span class=\"ui\">Home</span> tab."
 msgstr ""
@@ -2777,17 +4102,23 @@ msgstr ""
 "ելուստների, բացատների և տողերի միջև ընկած տարածության կարգավորումներով, "
 "ինչպես նաև աջ կողմում նախադիտումով"
 
+#: html/cool-help.html%2Bdiv.div.div.h3:634-5
+#, fuzzy
+msgctxt "html/cool-help.html:1383"
+msgid "Advanced text document editor features"
+msgstr "Տեքստային փաստաթղթերի խմբագրիչի խորացված գործառույթներ"
+
 #: html/cool-help.html%2Bdiv.div.div.div.h4:636-5
 msgid "Handling Tables"
 msgstr "Աղյուսակների մշակում"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:637-5
 msgid ""
-"Insert tables with <span class=\"ui\">Insert</span> → <span class=\"ui\""
-">Table</span>. Select the initial number of rows and columns. Add rows and "
-"columns with the cell context menu. Merge cells from the <span class=\"ui\""
-">Table</span> tab. The default paragraph style inside cells is “Table "
-"contents”."
+"Insert tables with <span class=\"ui\">Insert</span> → <span class=\"ui\">"
+"Table</span>. Select the initial number of rows and columns. Add rows and "
+"columns with the cell context menu. Merge cells from the <span class=\"ui\">"
+"Table</span> tab. The default paragraph style inside cells is “Table contents"
+"”."
 msgstr ""
 "Աղյուսակները տեղադրեք <span class=\"ui\">Ներդնել</span> → <span class=\"ui\">"
 "Աղյուսակ</span> հրամանով: Ընտրեք տողերի և սյուների սկզբնական քանակը: "
@@ -2824,12 +4155,13 @@ msgid ""
 "span> marks up new changes made to the document. Select this option again to "
 "turn it off."
 msgstr ""
-"Երբ միացնում եք «Փոփոխությունների հետևում» գործառույթը, <span class="
-"\"productname\">{productname}</span>-ը նշում է փաստաթղթում կատարված նոր "
-"փոփոխությունները: Կրկին ընտրեք այս տարբերակը՝ այն անջատելու համար:"
+"Երբ միացնում եք «Փոփոխությունների հետևում» գործառույթը, <span "
+"class=\"productname\">{productname}</span>-ը նշում է փաստաթղթում կատարված "
+"նոր փոփոխությունները: Կրկին ընտրեք այս տարբերակը՝ այն անջատելու համար:"
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:646-61
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:774-61
+#, fuzzy
+msgctxt "html/cool-help.html+help-track-changes-comment.img:0-56[alt]"
 msgid ""
 "Tracked change shown as a comment box beside the document with author name, "
 "date, and change description"
@@ -2844,9 +4176,9 @@ msgid ""
 "the right. You can also add a comment there."
 msgstr ""
 "Տարբեր մարդկանց կողմից կատարված փոփոխությունները ցուցադրվում են տարբեր "
-"գույներով, և յուրաքանչյուր հետևված փոփոխություն կարող է ընդունվել կամ "
-"մերժվել՝ օգտագործելով աջ կողմում հայտնվող վանդակը: Կարող եք նաև "
-"մեկնաբանություն ավելացնել այնտեղ:"
+"գույներով, և յուրաքանչյուր հետևված փոփոխություն կարող է ընդունվել կամ մերժվել"
+"՝ օգտագործելով աջ կողմում հայտնվող վանդակը: Կարող եք նաև մեկնաբանություն "
+"ավելացնել այնտեղ:"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:650-5
 msgid "Other advanced features"
@@ -2903,6 +4235,18 @@ msgstr ""
 "<span class=\"def\">Տողատակեր և էջատակեր։</span> Տողատակերը ու էջատակերը "
 "աջակցվում են։"
 
+#: html/cool-help.html%2Bdiv.div.h3:661-5
+#, fuzzy
+msgctxt "html/cool-help.html:1391"
+msgid "<span class=\"productname\">{productname}</span> presentations"
+msgstr "<span class=\"productname\">{productname}</span> շնորհանդեսներ"
+
+#: html/cool-help.html%2Bdiv.div.div.h3:663-5
+#, fuzzy
+msgctxt "html/cool-help.html:1393"
+msgid "Editing presentations"
+msgstr "Շնորհանդեսների խմբագրում"
+
 #: html/cool-help.html%2Bdiv.div.div.div.p:664-30
 msgid ""
 "<span class=\"productname\">{productname}</span> Impress edits presentations "
@@ -2918,6 +4262,12 @@ msgstr ""
 "պատկերների ամրացումը, աղյուսակների ավելացումը և մշակումը նման են "
 "աշխատասեղանի շնորհանդեսների ծրագրին: Օգտագործեք ստեղնաշարը, ընտրացանկերը և "
 "գործիքագոտիները՝ ձեր փաստաթղթում գործողություններ կատարելու համար:"
+
+#: html/cool-help.html%2Bdiv.div.div.h3:667-5
+#, fuzzy
+msgctxt "html/cool-help.html:1395"
+msgid "Slide show"
+msgstr "Սահիկահանդես"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:669-5
 msgid ""
@@ -2941,6 +4291,12 @@ msgstr ""
 "դուրս գալու համար սեղմեք <kbd>Esc</kbd> ստեղնը՝ շնորհանդեսի խմբագրման "
 "ռեժիմին վերադառնալու համար։"
 
+#: html/cool-help.html%2Bdiv.div.div.h3:674-5
+#, fuzzy
+msgctxt "html/cool-help.html:1397"
+msgid "Slide pane"
+msgstr "Սահիկների վահանակ"
+
 #: html/cool-help.html%2Bdiv.div.div.div.p:676-5
 msgid ""
 "Click on any slide thumbnail in the pane to switch to this slide to view or "
@@ -2958,16 +4314,22 @@ msgstr ""
 "կրկնօրինակելու կամ ջնջելու համար օգտագործեք սահիկների վահանակի ներքևի մասում "
 "գտնվող գործիքագոտին։"
 
+#: html/cool-help.html%2Bdiv.div.div.h3:681-5
+#, fuzzy
+msgctxt "html/cool-help.html:1401"
+msgid "Advanced features"
+msgstr "Ընդլայնված գործառույթներ"
+
 #: html/cool-help.html%2Bdiv.div.div.div.p:683-5
 msgid ""
-"<span class=\"def\">Slide layouts:</span> <span class=\"productname\""
-">{productname}</span> Impress lets you change the slide layout. Select the "
+"<span class=\"def\">Slide layouts:</span> <span class=\"productname\">"
+"{productname}</span> Impress lets you change the slide layout. Select the "
 "desired slide layout in the drop-down layout list."
 msgstr ""
-"<span class=\"def\">Սահիկի դասավորություններ։</span> <span class="
-"\"productname\">{productname}</span> Impress-ը թույլ է տալիս փոխել սահիկների "
-"դասավորությունը: Ընտրեք սահիկի ցանկալի դասավորությունը՝ դասավորության բացվող "
-"ցանկից:"
+"<span class=\"def\">Սահիկի դասավորություններ։</span> <span "
+"class=\"productname\">{productname}</span> Impress-ը թույլ է տալիս փոխել "
+"սահիկների դասավորությունը: Ընտրեք սահիկի ցանկալի դասավորությունը՝ "
+"դասավորության բացվող ցանկից:"
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:684-53
 msgid ""
@@ -2988,13 +4350,13 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:687-30
 msgid ""
-"<span class=\"def\">Slide transitions:</span> <span class=\"productname\""
-">{productname}</span> Impress provides visual effects when displaying a new "
+"<span class=\"def\">Slide transitions:</span> <span class=\"productname\">"
+"{productname}</span> Impress provides visual effects when displaying a new "
 "slide in the slide show. Slide transitions are property of the slide, use "
 "the side bar to set the slide transition when in edit mode."
 msgstr ""
-"<span class=\"def\">Սահիկի անցումներ։</span> <span class=\"productname\""
-">{productname}</span> Impress-ը տրամադրում է տեսողական էֆեկտներ "
+"<span class=\"def\">Սահիկի անցումներ։</span> <span class=\"productname\">"
+"{productname}</span> Impress-ը տրամադրում է տեսողական էֆեկտներ "
 "սահիկացուցադրությունում նոր սահիկ ցուցադրելիս: Սահիկի անցումները սահիկի "
 "սեփականությունն են, օգտագործեք կողային վահանակը՝ խմբագրման ռեժիմում սահիկի "
 "անցումը կարգավորելու համար:"
@@ -3014,16 +4376,22 @@ msgid ""
 "<span class=\"def\">Tables:</span> Insert tables in the presentation. Use "
 "the sidebar to select the table theme."
 msgstr ""
-"<span class=\"def\">Աղյուսակներ։</span> Տեղադրեք աղյուսակներ շնորհանդեսի մեջ:"
-" Օգտագործեք կողային վահանակը՝ աղյուսակի թեման ընտրելու համար:"
+"<span class=\"def\">Աղյուսակներ։</span> Տեղադրեք աղյուսակներ շնորհանդեսի "
+"մեջ: Օգտագործեք կողային վահանակը՝ աղյուսակի թեման ընտրելու համար:"
+
+#: html/cool-help.html%2Bdiv.div.h3:693-5
+#, fuzzy
+msgctxt "html/cool-help.html:1403"
+msgid "Frequently Asked Questions"
+msgstr "Հաճախակի տրվող հարցեր"
 
 #: html/cool-help.html%2Bdiv.div.div.h4:695-5
 msgid ""
-"What are the document file formats supported by <span class=\"productname\""
-">{productname}</span>?"
+"What are the document file formats supported by <span class=\"productname\">"
+"{productname}</span>?"
 msgstr ""
-"Ի՞նչ փաստաթղթերի նիշքի ձևաչափեր է աջակցում <span class=\"productname\""
-">{productname}</span>-ը։"
+"Ի՞նչ փաստաթղթերի նիշքի ձևաչափեր է աջակցում <span class=\"productname\">"
+"{productname}</span>-ը։"
 
 #: html/cool-help.html%2Bdiv.div.div.p:696-5
 msgid ""
@@ -3076,15 +4444,15 @@ msgid ""
 "How can I quit <span class=\"productname\">{productname}</span> without "
 "saving my edits?"
 msgstr ""
-"Ինչպե՞ս կարող եմ դուրս գալ <span class=\"productname\""
-">{productname}</span>-ից՝ առանց իմ փոփոխությունները պահպանելու։"
+"Ինչպե՞ս կարող եմ դուրս գալ <span class=\"productname\">{productname}</span>-"
+"ից՝ առանց իմ փոփոխությունները պահպանելու։"
 
 #: html/cool-help.html%2Bdiv.div.div.p:713-5
 msgid ""
 "<span class=\"productname\">{productname}</span> saves the document in the "
 "background regularly, you can't just close without saving it. To abandon "
-"your changes, you must either undo them, or use the <span class=\"ui\""
-">Revision History </span> in the <span class=\"ui\">File</span> menu."
+"your changes, you must either undo them, or use the <span class=\"ui\">"
+"Revision History </span> in the <span class=\"ui\">File</span> menu."
 msgstr ""
 "<span class=\"productname\">{productname}</span> պարբերաբար պահպանում է "
 "փաստաթուղթը ֆոնային ռեժիմով, դուք չեք կարող պարզապես փակել այն առանց այն "
@@ -3140,8 +4508,8 @@ msgstr "Ինչպե՞ս կարող եմ հեռացնել կարմիր ալիքա�
 
 #: html/cool-help.html%2Bdiv.div.div.p:726-5
 msgid ""
-"On the <span class=\"ui\">Review</span> tab, open <span class=\"ui\""
-">Spelling</span> and uncheck <span class=\"ui\">Auto Spell Check</span>."
+"On the <span class=\"ui\">Review</span> tab, open <span class=\"ui\">"
+"Spelling</span> and uncheck <span class=\"ui\">Auto Spell Check</span>."
 msgstr ""
 "<span class=\"ui\">Վերանայում</span> ներդիրում բացեք <span class=\"ui\">"
 "Ուղղագրություն</span>-ը և ապաընտրեք <span class=\"ui\">Ինքնաշխատ "
@@ -3160,8 +4528,8 @@ msgid ""
 msgstr ""
 "Տեքստում քերականական սխալները նշված են կապույտ ալիքավոր ընդգծմամբ: Մկնիկի աջ "
 "կոճակով սեղմեք ընդգծված տեքստի վրա՝ քերականական սխալը և խախտված քերականական "
-"կանոնները շտկելու առաջարկներով ընտրացանկ բացելու համար: Ընտրեք ճիշտ առաջարկը՝"
-" տեքստը փոխելու համար:"
+"կանոնները շտկելու առաջարկներով ընտրացանկ բացելու համար: Ընտրեք ճիշտ առաջարկը"
+"՝ տեքստը փոխելու համար:"
 
 #: html/cool-help.html%2Bdiv.div.div.h4:733-5
 msgid "Is there a thesaurus?"
@@ -3169,8 +4537,8 @@ msgstr "Կա՞ թեզաուրուս։"
 
 #: html/cool-help.html%2Bdiv.div.div.p:734-5
 msgid ""
-"Yes. Click in the word you want and choose <span class=\"ui\">Review</span> →"
-" <span class=\"ui\">Thesaurus</span>. A dialog opens with many suggestions "
+"Yes. Click in the word you want and choose <span class=\"ui\">Review</span> "
+"→ <span class=\"ui\">Thesaurus</span>. A dialog opens with many suggestions "
 "for replacements."
 msgstr ""
 "Այո։ Սեղմեք ցանկալի բառի վրա և ընտրեք <span class=\"ui\">Գործիքներ</span> → "
@@ -3198,13 +4566,19 @@ msgstr ""
 msgid ""
 "The <span class=\"blue\">¶</span> symbol is a formatting mark. It is used to "
 "help text alignment and editing and is not printed. To toggle it in the "
-"document display, choose <span class=\"ui\">View</span> → <span class=\"ui\""
-">Formatting Marks</span>."
+"document display, choose <span class=\"ui\">View</span> → <span class=\"ui\">"
+"Formatting Marks</span>."
 msgstr ""
 "<span class=\"blue\">¶</span> նիշը ձևաչափման նշան է։ Այն օգտագործվում է "
 "տեքստի հավասարեցման և խմբագրման համար և չի տպվում։ Փաստաթղթի ցուցադրման "
 "ժամանակ այն միացնելու/անջատելու համար ընտրեք <span class=\"ui\">Դիտում</"
 "span> → <span class=\"ui\">Ձևաչափման նշաններ</span>։"
+
+#: html/cool-help.html%2Bdiv.div.div.h3:744-5
+#, fuzzy
+msgctxt "html/cool-help.html:1407"
+msgid "Text documents"
+msgstr "Տեքստային փաստաթղթեր"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:746-5
 msgid "How do I get a word count of my document?"
@@ -3212,9 +4586,9 @@ msgstr "Ինչպե՞ս կարող եմ իմանալ իմ փաստաթղթի բա
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:747-5
 msgid ""
-"Word count is available in <span class=\"ui\">Review</span> → <span class="
-"\"ui\">Word Count</span>. A dialog shows word counts for selection and for "
-"the whole document."
+"Word count is available in <span class=\"ui\">Review</span> → <span "
+"class=\"ui\">Word Count</span>. A dialog shows word counts for selection and "
+"for the whole document."
 msgstr ""
 "Բառերի քանակը հասանելի է <span class=\"ui\">Գործիքներ</span> → <span "
 "class=\"ui\">Բառերի քանակ</span> բաժնում: Երկխոսության պատուհանը ցույց է "
@@ -3303,8 +4677,8 @@ msgid ""
 "You have the Track Changes feature enabled for the document. Track Changes "
 "records all changes in the text and shows the edits for later revision. "
 "Useful for marking changes in text and spreadsheets. Track changes are "
-"enabled choosing <span class=\"ui\">Review</span> → <span class=\"ui\""
-">Record</span>."
+"enabled choosing <span class=\"ui\">Review</span> → <span class=\"ui\">"
+"Record</span>."
 msgstr ""
 "Դուք միացրել եք «Փոփոխությունների հետևում» գործառույթը փաստաթղթի համար: «"
 "Փոփոխությունների հետևում» գործառույթը գրանցում է տեքստի բոլոր "
@@ -3338,6 +4712,16 @@ msgstr ""
 "Փոփոխությունները ցուցադրվում են որպես մեկնաբանություն փաստաթղթի տարածքի աջ "
 "կողմում։"
 
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:774-61
+#, fuzzy
+msgctxt "html/cool-help.html+help-track-changes-comment:774-5.img:0-56[alt]"
+msgid ""
+"Tracked change shown as a comment box beside the document with author name, "
+"date, and change description"
+msgstr ""
+"Հետևված փոփոխությունը ցուցադրվում է որպես մեկնաբանության դաշտ փաստաթղթի "
+"կողքին՝ հեղինակի անունով, ամսաթվով և փոփոխության նկարագրությամբ"
+
 #: html/cool-help.html%2Bdiv.div.div.div.p:775-5
 msgid ""
 "The color assigned to the changes depends on the user that changes the "
@@ -3364,11 +4748,11 @@ msgstr ""
 msgid ""
 "Changes can be accepted or rejected. To accept or reject changes, click on "
 "the corresponding icons in the comment box on the right of the document. "
-"Alternatively, choose <span class=\"ui\">Review</span> → <span class=\"ui\""
-">Accept</span> or <span class=\"ui\">Reject</span>. Furthermore, if you need "
-"to filter changes before accepting or rejecting, choose <span class=\"ui\""
-">Review</span> → <span class=\"ui\">Accept</span> → <span class=\"ui\""
-">Manage</span>. A dialog shows a list of all tracked changes. Use the dialog "
+"Alternatively, choose <span class=\"ui\">Review</span> → <span class=\"ui\">"
+"Accept</span> or <span class=\"ui\">Reject</span>. Furthermore, if you need "
+"to filter changes before accepting or rejecting, choose <span class=\"ui\">"
+"Review</span> → <span class=\"ui\">Accept</span> → <span class=\"ui\">"
+"Manage</span>. A dialog shows a list of all tracked changes. Use the dialog "
 "buttons accordingly."
 msgstr ""
 "Փոփոխությունները կարող են ընդունվել կամ մերժվել: Փոփոխությունները ընդունելու "
@@ -3444,8 +4828,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:794-7
 msgid ""
-"Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Paragraph</"
-"span>, <span class=\"ui\">Text Flow </span> tab"
+"Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Paragraph</span>"
+", <span class=\"ui\">Text Flow </span> tab"
 msgstr ""
 "Ընտրեք <span class=\"ui\">Ձևաչափ</span> → <span class=\"ui\">Պարբերություն</"
 "span>, <span class=\"ui\">Տեքստի հոսք </span> ներդիրը"
@@ -3487,12 +4871,13 @@ msgid "Select the text with the existing format"
 msgstr "Ընտրեք տեքստը առկա ձևաչափով"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:806-7
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:848-7
+#, fuzzy
+msgctxt "html/cool-help.html:help-format-paintbrush"
 msgid ""
-"Click on the <span class=\"ui\">Clone Formatting</span> icon <img alt="
-"\"format paintbrush\" class=\"icon-size\" src=\"images/lc_formatpaintbrush."
-"svg\" /> on the <span class=\"ui\">Home</span> tab. The mouse pointer turns "
-"to a paint bucket."
+"Click on the <span class=\"ui\">Clone Formatting</span> icon <img "
+"alt=\"format paintbrush\" class=\"icon-size\" src=\"images/"
+"lc_formatpaintbrush.svg\" /> on the <span class=\"ui\">Home</span> tab. The "
+"mouse pointer turns to a paint bucket."
 msgstr ""
 "Սեղմեք <span class=\"ui\">Կլոնավորել ձևաչափումը</span> պատկերակի վրա՝ <img "
 "alt=\"format paintbrush\" class=\"icon-size\" src=\"images/"
@@ -3540,6 +4925,12 @@ msgstr ""
 "չեղարկելու համար սեղմեք <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
 "hidden=\"true\">+</span><kbd>Z</kbd> անմիջապես կիրառվելուց հետո:"
 
+#: html/cool-help.html%2Bdiv.div.div.h3:825-5
+#, fuzzy
+msgctxt "html/cool-help.html:1409"
+msgid "Spreadsheets"
+msgstr "Աղյուսակաթերթեր"
+
 #: html/cool-help.html%2Bdiv.div.div.div.h4:827-5
 msgid "How can I select data to print?"
 msgstr "Ինչպե՞ս կարող եմ տպելու համար ընտրել տվյալները։"
@@ -3574,9 +4965,9 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:835-7
 msgid ""
-"Press <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>V</kbd>. The <span class=\"ui\">Text Import</span> dialog "
-"opens to let you describe the precise format of the CSV data."
+"Press <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span>"
+"<kbd>V</kbd>. The <span class=\"ui\">Text Import</span> dialog opens to let "
+"you describe the precise format of the CSV data."
 msgstr ""
 "Սեղմեք <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span>"
 "<kbd>V</kbd>: Բացվում է <span class=\"ui\">Տեքստի ներմուծում</span> "
@@ -3620,6 +5011,20 @@ msgid "Format the source cell with the font, color background and more."
 msgstr ""
 "Ձևաչափեք սկզբնաղբյուրի բջիջը՝ օգտագործելով տառատեսակը, ֆոնի գույնը և այլն։"
 
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:848-7
+#, fuzzy
+msgctxt "html/cool-help.html+help-format-paintbrush:848-7"
+msgid ""
+"Click on the <span class=\"ui\">Clone Formatting</span> icon <img "
+"alt=\"format paintbrush\" class=\"icon-size\" src=\"images/"
+"lc_formatpaintbrush.svg\" /> on the <span class=\"ui\">Home</span> tab. The "
+"mouse pointer turns to a paint bucket."
+msgstr ""
+"Սեղմեք <span class=\"ui\">Կլոնավորել ձևաչափումը</span> պատկերակի վրա՝ <img "
+"alt=\"format paintbrush\" class=\"icon-size\" src=\"images/"
+"lc_formatpaintbrush.svg\" />, որը գտնվում է <span class=\"ui\">Տուն</span> "
+"ներդիրում: Մկնիկի ցուցիչը վերածվում է ներկի դույլի:"
+
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:849-7
 msgid "Select the cells you want to format. Release the mouse button."
 msgstr ""
@@ -3634,8 +5039,8 @@ msgid ""
 "Direct formatting is formatting applied directly to the selected contents of "
 "a paragraph or a spreadsheet cell, and overlaps its assigned style "
 "formatting. To restore the formatting to the style settings, select the text "
-"or spreadsheet cell and choose <span class=\"ui\">Home</span> → <span class="
-"\"ui\">Clear Direct Formatting</span>."
+"or spreadsheet cell and choose <span class=\"ui\">Home</span> → <span "
+"class=\"ui\">Clear Direct Formatting</span>."
 msgstr ""
 "Ուղիղ ձևաչափումը այն է, որը կիրառվում է անմիջապես պարբերության կամ "
 "աղյուսակաթերթի բջջի ընտրված բովանդակության վրա և համընկնում է դրան տրված ոճի "
@@ -3656,6 +5061,12 @@ msgstr ""
 "Վերանվանեք աղյուսակաթերթի թերթիկը՝ օգտագործելով ներքևի մասում գտնվող թերթիկի "
 "ներդիրի վերևում գտնվող համատեքստային ցանկը (օգտագործելով մկնիկի աջ կոճակը): "
 "Մուտքագրեք թերթիկի նոր անունը հաջորդող երկխոսությունում:"
+
+#: html/cool-help.html%2Bdiv.div.div.h3:864-5
+#, fuzzy
+msgctxt "html/cool-help.html:1411"
+msgid "Presentations"
+msgstr "Շնորհանդեսներ"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:866-5
 msgid "How can I run my slide show?"
@@ -3692,8 +5103,8 @@ msgstr "Ընտրեք ուրվագիծը ձեր սահիկում: Ցուցադր�
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:876-7
 msgid ""
 "Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Line</span> (or "
-"<span class=\"ui\">Area</span>, or <span class=\"ui\">Position and "
-"Size</span>). A dialog opens."
+"<span class=\"ui\">Area</span>, or <span class=\"ui\">Position and Size</"
+"span>). A dialog opens."
 msgstr ""
 "Ընտրեք <span class=\"ui\">Ձևաչափ</span> → <span class=\"ui\">Գիծ</span> (կամ "
 "<span class=\"ui\">Տիրույթ</span> կամ <span class=\"ui\">Դիրք և չափ</span>): "

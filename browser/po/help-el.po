@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-13 14:06+0200\n"
+"POT-Creation-Date: 2026-10-22 23:37+0200\n"
 "PO-Revision-Date: 2026-10-13 11:59+0000\n"
 "Last-Translator: geonetor <geonetor@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/collabora-online/"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Translate Toolkit 3.18.1\n"
 
 #: html/cool-help.html%2Bdiv.h1:10-5
 msgid "Keyboard Shortcuts"
@@ -41,12 +41,12 @@ msgstr "Αντιγραφή"
 #: html/cool-help.html%2Bdiv.div.table.tr.td:17-69
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>C</kbd>,<br /><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
-"hidden=\"true\">+</span><kbd>Insert</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"C</kbd>,<br /><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">"
+"+</span><kbd>Insert</kbd>"
 msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>Enter"
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span "
+"class=\"kbd--plus\">+</span><kbd>Enter"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:18-38
 msgid "Paste as unformatted text"
@@ -55,12 +55,12 @@ msgstr "Επικόλληση ως αμορφοποίητο κείμενο"
 #: html/cool-help.html%2Bdiv.div.table.tr.td:18-90
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>V</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</"
+"kbd>"
 msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>βέλος προς τα πάνω"
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span "
+"class=\"kbd--plus\">+</span><kbd>βέλος προς τα πάνω"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:19-38
 msgid "Paste special"
@@ -68,10 +68,9 @@ msgstr "Ειδική επικόλληση"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:19-78
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>V</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</"
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:20-48
@@ -81,8 +80,8 @@ msgstr "Άνοιγμα"
 #: html/cool-help.html%2Bdiv.div.table.tr.td:20-79
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>O</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"O</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>0"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:21-72
@@ -112,12 +111,12 @@ msgstr "Εστίαση στο μενού της γραμμής σημειωμα�
 #: html/cool-help.html%2Bdiv.div.table.tr.td:26-90
 #, fuzzy
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>F1</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>F1</"
+"kbd>"
 msgstr ""
-"Alt</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>πλήκτρα βελών"
+"Alt</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span "
+"class=\"kbd--plus\">+</span><kbd>πλήκτρα βελών"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:27-38
 msgid "Focus to document from menu"
@@ -134,8 +133,8 @@ msgstr "Εστίαση στο επιλεγμένο μενού σχολίων"
 #: html/cool-help.html%2Bdiv.div.table.tr.td:28-97
 #, fuzzy
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>C</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>C</"
+"kbd>"
 msgstr "Alt</kbd><span class=\"kbd--plus\">+</span><kbd>Del"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:29-38
@@ -143,12 +142,11 @@ msgid "Open the context menu at the cursor or the selected cell"
 msgstr "Ανοίξτε το μενού περιβάλλοντος στον κέρσορα ή στο επιλεγμένο κελί"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:29-121
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:166-160
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:167-205
 #, fuzzy
+msgctxt "html/cool-help.html+general-shortcuts.table.tr.td:18-116"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>F10</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"F10</kbd>"
 msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>End"
 
 #: html/cool-help.html%2Bdiv.div.table.tr.td:30-38
@@ -170,34 +168,31 @@ msgstr "Μετακινήστε την εστίαση στην προηγούμε
 #: html/cool-help.html%2Bdiv.div.table.tr.td:31-115
 #, fuzzy
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>F6</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"F6</kbd>"
 msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>End"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:36-9
-#: html/cool-help.html%2Bdiv.div.div.h2:208-9
-#: html/cool-help.html%2Bdiv.div.div.h2:273-9
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.h2:2-4"
 msgid "Text formatting"
 msgstr "Μορφοποίηση κειμένου"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:38-59
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:177-59
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:210-59
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:275-59
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:4-54"
 msgid "Bold"
 msgstr "Έντονα"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:39-61
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:178-61
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:211-61
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:276-61
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:5-56"
 msgid "Italic"
 msgstr "Πλάγια"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:40-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:179-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:212-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:277-64
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:6-59"
 msgid "Underline"
 msgstr "Υπογραμμισμένο"
 
@@ -206,60 +201,56 @@ msgid "Double Underline"
 msgstr "Διπλή υπογράμμιση"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:42-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:180-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:213-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:278-64
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:8-59"
 msgid "Strikethrough"
 msgstr "Διαγράμμιση"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:43-66
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:214-66
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:279-66
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:9-61"
 msgid "Superscript"
 msgstr "Εκθέτης"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:44-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:215-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:280-64
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:10-59"
 msgid "Subscript"
 msgstr "Δείκτης"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:45-70
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:181-70
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:11-65"
 msgid "Remove direct formatting"
 msgstr "Αφαίρεση άμεσης μορφοποίησης"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:49-9
-#: html/cool-help.html%2Bdiv.div.div.h2:220-9
-#: html/cool-help.html%2Bdiv.div.div.h2:285-9
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.h2:15-4"
 msgid "Paragraph formatting"
 msgstr "Μορφοποίηση παραγράφου"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:51-76
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:186-76
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:222-76
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:287-76
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:17-71"
 msgid "Align Center"
 msgstr "Στοίχιση στο κέντρο"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:52-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:187-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:223-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:288-64
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:18-59"
 msgid "Align Left"
 msgstr "Στοίχιση αριστερά"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:53-65
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:188-65
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:224-65
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:289-65
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:19-60"
 msgid "Align Right"
 msgstr "Στοίχιση δεξιά"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:54-65
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:189-65
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:225-65
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:290-65
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:20-60"
 msgid "Justify"
 msgstr "Πλήρης στοίχιση"
 
@@ -270,8 +261,8 @@ msgstr "Εφαρμογή προεπιλεγμένης τεχνοτροπίας �
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:55-94
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>0</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"0</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>0"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:56-38
@@ -281,8 +272,8 @@ msgstr "Εφαρμογή τεχνοτροπίας παραγράφου επικ�
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:56-96
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>1</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"1</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>1"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:57-38
@@ -292,8 +283,8 @@ msgstr "Εφαρμογή τεχνοτροπίας παραγράφου επικ�
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:57-96
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>2</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"2</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>2"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:58-38
@@ -301,11 +292,11 @@ msgid "Apply Heading 3 paragraph style"
 msgstr "Εφαρμογή τεχνοτροπίας παραγράφου επικεφαλίδας 3"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:58-96
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:190-89
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:24-91"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>3</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"3</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>3"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:59-38
@@ -315,8 +306,8 @@ msgstr "Εφαρμογή τεχνοτροπίας παραγράφου επικ�
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:59-96
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>4</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"4</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>4"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:60-38
@@ -326,8 +317,8 @@ msgstr "Εφαρμογή τεχνοτροπίας παραγράφου επικ�
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:60-96
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>5</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"5</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>5"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:64-9
@@ -335,298 +326,277 @@ msgid "Text selection and navigation in document"
 msgstr "Επιλογή κειμένου και περιήγηση στο έγγραφο"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:66-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:185-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:216-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:233-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:281-64
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:298-64
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:32-59"
 msgid "Select All"
 msgstr "Επιλογή όλων"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:67-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:234-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:299-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:33-33"
 msgid "Move cursor to the left"
 msgstr "Μετακίνηση δρομέα προς τα αριστερά"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:67-88
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:234-88
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:299-88
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:33-83"
 msgid "Arrow Left"
 msgstr "Αριστερό βέλος"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:68-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:235-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:300-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:34-33"
 msgid "Move cursor with selection to the left"
 msgstr "Μετακίνηση του δρομέα με επιλογή προς τα αριστερά"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:68-103
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:235-103
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:300-103
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:34-98"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Left</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Left</kbd>"
 msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>αριστερό βέλος"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:69-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:236-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:301-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:35-33"
 msgid "Go to beginning of a word"
 msgstr "Μετάβαση στην αρχή μιας λέξης"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:69-90
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:236-90
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:301-90
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:35-85"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Left</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Left</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>αριστερό βέλος"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:70-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:237-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:302-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:36-33"
 msgid "Select to the left word by word"
 msgstr "Επιλογή προς τα αριστερά λέξη-λέξη"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:70-96
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:237-96
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:302-96
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:36-91"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Left</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Left</kbd>"
 msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>αριστερό βέλος"
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span "
+"class=\"kbd--plus\">+</span><kbd>αριστερό βέλος"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:71-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:238-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:303-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:37-33"
 msgid "Move cursor to the right"
 msgstr "Μετακίνηση δρομέα προς τα δεξιά"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:71-89
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:238-89
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:303-89
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:37-84"
 msgid "Arrow Right"
 msgstr "Δεξιό βέλος"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:72-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:239-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:304-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:38-33"
 msgid "Move cursor with selection to the right"
 msgstr "Μετακίνηση του δρομέα με επιλογή προς τα δεξιά"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:72-104
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:239-104
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:304-104
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:38-99"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Right</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Right</kbd>"
 msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>δεξιό βέλος"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:73-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:240-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:305-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:39-33"
 msgid "Go to start of the next word"
 msgstr "Μετάβαση στην αρχή της επόμενης λέξης"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:73-93
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:240-93
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:305-93
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:39-88"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Right</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Right</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>δεξιό βέλος"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:74-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:241-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:306-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:40-33"
 msgid "Select to the right word by word"
 msgstr "Επιλογή προς τα δεξιά λέξη-λέξη"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:74-97
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:241-97
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:306-97
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:40-92"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Right</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Right</kbd>"
 msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>δεξιό βέλος"
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span "
+"class=\"kbd--plus\">+</span><kbd>δεξιό βέλος"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:75-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:242-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:307-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:41-33"
 msgid "Move cursor up one line"
 msgstr "Μετακίνηση του δρομέα κατά μια γραμμή προς τα πάνω"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:75-88
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:242-88
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:307-88
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:41-83"
 msgid "Arrow Up"
 msgstr "Βέλος προς τα πάνω"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:76-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:243-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:308-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:42-33"
 msgid "Select lines in upwards direction"
 msgstr "Επιλογή γραμμών με κατεύθυνση προς τα πάνω"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:76-98
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:243-98
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:308-98
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:42-93"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Up</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Up</kbd>"
 msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>βέλος προς τα πάνω"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:77-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:244-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:309-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:43-33"
 msgid "Move cursor to beginning of the previous paragraph"
 msgstr "Μετακίνηση του δρομέα στην αρχή της προηγούμενης παραγράφου"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:77-115
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:244-115
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:309-115
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:43-110"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Up</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Up</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>βέλος προς τα πάνω"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:78-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:245-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:310-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:44-33"
 msgid "Select to beginning of paragraph"
 msgstr "Επιλογή μέχρι την αρχή της παραγράφου"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:78-97
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:245-97
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:310-97
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:44-92"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Up</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Up</kbd>"
 msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>βέλος προς τα πάνω"
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span "
+"class=\"kbd--plus\">+</span><kbd>βέλος προς τα πάνω"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:79-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:246-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:311-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:45-33"
 msgid "Move cursor down one line"
 msgstr "Μετακίνηση του δρομέα κατά μια γραμμή προς τα κάτω"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:79-90
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:246-90
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:311-90
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:45-85"
 msgid "Arrow Down"
 msgstr "Βέλος προς τα κάτω"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:80-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:247-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:312-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:46-33"
 msgid "Select lines in downwards direction"
 msgstr "Επιλογή γραμμών με κατεύθυνση προς τα κάτω"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:80-100
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:247-100
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:312-100
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:46-95"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Down</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Down</kbd>"
 msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>βέλος προς τα κάτω"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:81-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:248-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:313-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:47-33"
 msgid "Move cursor to beginning of the next paragraph"
 msgstr "Μετακίνηση του δρομέα στην αρχή της επόμενης παραγράφου"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:81-111
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:248-111
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:313-111
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:47-106"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Down</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Down</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>βέλος προς τα κάτω"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:82-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:249-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:314-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:48-33"
 msgid "Select to end of paragraph"
 msgstr "Επιλογή μέχρι το τέλος της παραγράφου"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:82-91
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:249-91
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:314-91
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:48-86"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Down</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Down</kbd>"
 msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>βέλος προς τα κάτω"
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span "
+"class=\"kbd--plus\">+</span><kbd>βέλος προς τα κάτω"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:83-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:250-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:315-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:49-33"
 msgid "Go to beginning of line"
 msgstr "Μετάβαση στην αρχή της γραμμής"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:83-88
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:147-119
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:250-88
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:315-88
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:49-83"
 msgid "Home"
 msgstr "Αρχή"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:84-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:251-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:316-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:50-33"
 msgid "Go and select to the beginning of a line"
 msgstr "Μετάβαση και επιλογή μέχρι την αρχή μιας γραμμής"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:84-105
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:149-138
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:251-105
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:316-105
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:50-100"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Home</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
 msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>Home"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:85-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:252-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:317-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:51-33"
 msgid "Go to start of document"
 msgstr "Μετάβαση στην αρχή του εγγράφου"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:85-88
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:107-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:145-118
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:252-88
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:317-88
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:51-83"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Home</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Home"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:86-38
@@ -634,61 +604,54 @@ msgid "Go and select text to start of document"
 msgstr "Μετάβαση και επιλογή κειμένου μέχρι την αρχή του εγγράφου"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:86-104
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:253-103
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:318-103
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:52-99"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Home</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Home</"
+"kbd>"
 msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>βέλος προς τα πάνω"
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span "
+"class=\"kbd--plus\">+</span><kbd>βέλος προς τα πάνω"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:87-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:254-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:319-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:53-33"
 msgid "Go to end of line"
 msgstr "Μετάβαση στο τέλος της γραμμής"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:87-82
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:148-118
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:254-82
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:319-82
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:53-77"
 msgid "End"
 msgstr "End (Τέλος)"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:88-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:255-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:320-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:54-33"
 msgid "Go and select to the end of a line"
 msgstr "Μετάβαση και επιλογή μέχρι το τέλος μιας γραμμής"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:88-99
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:150-137
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:255-99
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:320-99
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:54-94"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>End</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
 msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>End"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:89-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:256-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:321-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:55-33"
 msgid "Go to end of document"
 msgstr "Μετάβαση στο τέλος του εγγράφου"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:89-86
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:108-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:146-131
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:256-86
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:321-86
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:55-81"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>End</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>End"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:90-38
@@ -696,16 +659,15 @@ msgid "Go and select text to end of document"
 msgstr "Μετάβαση και επιλογή κειμένου μέχρι το τέλος του εγγράφου"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:90-102
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:257-101
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:322-101
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:56-97"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>End</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>End</"
+"kbd>"
 msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>βέλος προς τα πάνω"
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span "
+"class=\"kbd--plus\">+</span><kbd>βέλος προς τα πάνω"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:91-38
 msgid "Move the view up one page"
@@ -722,8 +684,8 @@ msgstr "Εναλλαγή δρομέα μεταξύ κειμένου και κε�
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:92-102
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>PageUp</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"PageUp</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>PageUp"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:93-38
@@ -733,8 +695,8 @@ msgstr "Επέκταση της επιλογής κατά μια σελίδα π
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:93-97
 #, fuzzy
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>PageUp</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"PageUp</kbd>"
 msgstr "Μετατόπιση</kbd><span class=\"kbd--plus\">+</span><kbd>ΣελίδαUp"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:94-38
@@ -752,8 +714,8 @@ msgstr "Εναλλαγή δρομέα μεταξύ κειμένου και υπ�
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:95-102
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>PageDown</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"PageDown</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>PageDown"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:96-38
@@ -763,8 +725,8 @@ msgstr "Επέκταση της επιλογής κατά μία σελίδα π
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:96-99
 #, fuzzy
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>PageDown</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"PageDown</kbd>"
 msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>PageDown"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:97-38
@@ -774,8 +736,8 @@ msgstr "Διαγραφή μέχρι την αρχή της λέξης"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:97-92
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Backspace</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Backspace</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Backspace"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:98-38
@@ -785,8 +747,8 @@ msgstr "Διαγραφή έως το τέλος της λέξης"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:98-86
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Del</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Del</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Del"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:99-38
@@ -796,12 +758,12 @@ msgstr "Διαγραφή μέχρι την αρχή της πρότασης"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:99-96
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Backspace</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Backspace</kbd>"
 msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>Backspace"
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span "
+"class=\"kbd--plus\">+</span><kbd>Backspace"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:100-38
 msgid "Delete to end of sentence"
@@ -810,24 +772,23 @@ msgstr "Διαγραφή έως το τέλος της πρότασης"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:100-90
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Del</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Del</"
+"kbd>"
 msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>βέλος προς τα πάνω"
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span "
+"class=\"kbd--plus\">+</span><kbd>βέλος προς τα πάνω"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:104-9
 msgid "Shortcut Keys for Tables"
 msgstr "Πλήκτρα συντόμευσης για πίνακες"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:106-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:267-84
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:332-91
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:72-33"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>A</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"A</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>A"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:106-144
@@ -839,6 +800,14 @@ msgstr ""
 "επιλέγει τα περιεχόμενα του ενεργού κελιού. Πιέζοντας ξανά επιλέγει ολόκληρο "
 "τον πίνακα."
 
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:107-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:73-33"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Home"
+
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:107-147
 msgid ""
 "If the active cell is empty: goes to the beginning of the table. Otherwise: "
@@ -849,6 +818,14 @@ msgstr ""
 "πρώτο πάτημα πηγαίνει στην αρχή του ενεργού κελιού, με το δεύτερο πάτημα "
 "πηγαίνει στην αρχή του τρέχοντος πίνακα και με το τρίτο πάτημα πηγαίνει στην "
 "αρχή του εγγράφου."
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:108-38
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:74-33"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>End"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:108-146
 msgid ""
@@ -864,26 +841,26 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:109-38
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Tab</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Tab</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Tab"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:109-146
 msgid ""
 "Inserts a tab stop (only in tables). Depending on the Window Manager in use, "
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Tab</kbd> may be used instead."
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Tab</kbd> may be used instead."
 msgstr ""
 "Εισάγει μια στάση στηλοθέτη (μόνο σε πίνακες). Ανάλογα με τον "
 "χρησιμοποιούμενο διαχειριστή παραθύρου, μπορεί να χρησιμοποιηθεί στη θέση "
-"του το <kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Tab</kbd>."
+"του το <kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span>"
+"<kbd>Tab</kbd>."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:110-38
 #, fuzzy
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Keys</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Keys</kbd>"
 msgstr "Alt</kbd><span class=\"kbd--plus\">+</span><kbd>πλήκτρα βελών"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:110-152
@@ -895,12 +872,12 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:111-38
 #, fuzzy
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Keys</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Keys</kbd>"
 msgstr ""
-"Alt</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>πλήκτρα βελών"
+"Alt</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span "
+"class=\"kbd--plus\">+</span><kbd>πλήκτρα βελών"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:111-219
 msgid "Increase/decrease the size of the column/row on the left/top cell edge"
@@ -911,31 +888,38 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:112-38
 #, fuzzy
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Keys</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Keys</kbd>"
 msgstr ""
 "Alt</kbd><span class=\"kbd--plus\">+</span><kbd>Ctrl</kbd><span class=\"kbd--"
 "plus\">+</span><kbd>πλήκτρα βελών"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:112-218
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:113-285
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:78-213"
 msgid "Like Alt, but only the active cell is modified"
 msgstr "Όπως το Alt, αλλά τροποποιείται μόνο το ενεργό κελί"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:113-38
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Arrow Keys</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</"
+"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow Keys</"
+"kbd>"
 msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:113-285
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:79-280"
+msgid "Like Alt, but only the active cell is modified"
+msgstr "Όπως το Alt, αλλά τροποποιείται μόνο το ενεργό κελί"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:114-38
 #, fuzzy
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Insert</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Insert</kbd>"
 msgstr "Alt</kbd><span class=\"kbd--plus\">+</span><kbd>Insert"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:114-148
@@ -945,14 +929,14 @@ msgid ""
 "inserts cell"
 msgstr ""
 "Με 3 δευτερόλεπτα στην κατάσταση εισαγωγής, το πλήκτρο βέλους εισάγει γραμμή/"
-"στήλη, ενώ το <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>πλήκτρο βέλους</kbd> εισάγει κελί"
+"στήλη, ενώ το <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">"
+"+</span><kbd>πλήκτρο βέλους</kbd> εισάγει κελί"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:115-38
 #, fuzzy
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Del</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Del</kbd>"
 msgstr "Alt</kbd><span class=\"kbd--plus\">+</span><kbd>Del"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:115-145
@@ -962,18 +946,19 @@ msgid ""
 "cell with neighboring cell"
 msgstr ""
 "3 δευτερόλεπτα σε λειτουργία διαγραφής, το πλήκτρο βέλους διαγράφει τη "
-"γραμμή/στήλη, το <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true"
-"\">+</span><kbd>πλήκτρο βέλους</kbd> συγχωνεύει το κελί με γειτονικό"
+"γραμμή/στήλη, το <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-"
+"hidden=\"true\">+</span><kbd>πλήκτρο βέλους</kbd> συγχωνεύει το κελί με "
+"γειτονικό"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:116-38
 #, fuzzy
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Del</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Del</"
+"kbd>"
 msgstr ""
-"Shift</kbd><span class=\"kbd--plus\">+</span><kbd>Ctrl</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>Del"
+"Shift</kbd><span class=\"kbd--plus\">+</span><kbd>Ctrl</kbd><span "
+"class=\"kbd--plus\">+</span><kbd>Del"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td.p:116-235
 msgid ""
@@ -1019,7 +1004,8 @@ msgid "Insert endnote"
 msgstr "Εισαγωγή σημείωσης τέλους"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:127-71
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:182-71
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:93-66"
 msgid "Insert comment"
 msgstr "Εισαγωγή σχολίου"
 
@@ -1042,8 +1028,8 @@ msgstr "Εισαγωγή αλλαγής γραμμής"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:133-82
 #, fuzzy
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Enter</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Enter</kbd>"
 msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>Enter"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:134-70
@@ -1062,11 +1048,11 @@ msgstr ""
 "πίνακα"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:136-139
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:137-175
 #, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:102-134"
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Enter</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Enter</kbd>"
 msgstr "Alt</kbd><span class=\"kbd--plus\">+</span><kbd>Enter"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:137-38
@@ -1077,6 +1063,14 @@ msgstr ""
 "Εισαγωγή νέας παραγράφου χωρίς αρίθμηση μέσα σε κατάλογο. Δεν δουλεύει όταν "
 "ο δρομέας είναι στο τέλος του καταλόγου."
 
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:137-175
+#, fuzzy
+msgctxt "html/cool-help.html+text-shortcuts.div.table.tr.td:103-170"
+msgid ""
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Enter</kbd>"
+msgstr "Alt</kbd><span class=\"kbd--plus\">+</span><kbd>Enter"
+
 #: html/cool-help.html%2Bdiv.div.div.h2:143-9
 msgid "Navigating in Spreadsheets"
 msgstr "Περιήγηση στα υπολογιστικά φύλλα"
@@ -1085,18 +1079,46 @@ msgstr "Περιήγηση στα υπολογιστικά φύλλα"
 msgid "Moves the cursor to the first cell in the sheet (A1)."
 msgstr "Μετακίνηση του δείκτη στο πρώτο κελί του φύλλου (Α1)."
 
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:145-118
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:4-113"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Home"
+
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:146-38
 msgid "Moves the cursor to the last cell on the sheet that contains data."
 msgstr ""
 "Μετακίνηση του δείκτη στο τελευταίο κελί του φύλλου που περιέχει δεδομένα."
 
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:146-131
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:5-126"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>End"
+
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:147-38
 msgid "Moves the cursor to the first cell of the current row."
 msgstr "Μετακίνηση του δείκτη στο πρώτο κελί της επιλεγμένης γραμμής."
 
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:147-119
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:6-114"
+msgid "Home"
+msgstr "Αρχή"
+
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:148-38
 msgid "Moves the cursor to the last cell of the current row."
 msgstr "Μετακίνηση του δείκτη στο τελευταίο κελί της επιλεγμένης γραμμής."
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:148-118
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:7-113"
+msgid "End"
+msgstr "End (Τέλος)"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:149-38
 msgid ""
@@ -1105,6 +1127,14 @@ msgstr ""
 "Επιλέγει τα κελιά από το τρέχων κελί έως το πρώτο κελί της επιλεγμένης "
 "γραμμής."
 
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:149-138
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:8-133"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
+msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>Home"
+
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:150-38
 #, fuzzy
 msgid ""
@@ -1112,6 +1142,14 @@ msgid ""
 msgstr ""
 "Επιλέγει τα κελιά από το τρέχων κελί έως το πρώτο κελί της επιλεγμένης "
 "γραμμής."
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:150-137
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:9-132"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
+msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>End"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:151-38
 msgid ""
@@ -1124,8 +1162,8 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:151-184
 #, fuzzy
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Page Up</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Page Up</kbd>"
 msgstr "Μετατόπιση</kbd><span class=\"kbd--plus\">+</span><kbd>ΣελίδαUp"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:152-38
@@ -1139,8 +1177,8 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:152-188
 #, fuzzy
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Page Down</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Page Down</kbd>"
 msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>PageDown"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:153-38
@@ -1157,8 +1195,8 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:153-265
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Left Arrow</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Left Arrow</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Enter"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:154-38
@@ -1174,8 +1212,8 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:154-269
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Right Arrow</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Right Arrow</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Enter"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:155-38
@@ -1191,8 +1229,8 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:155-241
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Up Arrow</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Up Arrow</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>βέλος προς τα πάνω"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:156-38
@@ -1208,8 +1246,8 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:156-246
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Down Arrow</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Down Arrow</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Enter"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:157-38
@@ -1219,12 +1257,12 @@ msgstr "Μετάβαση στο επόμενο φύλλο."
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:157-82
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Page Down</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Page "
+"Down</kbd>"
 msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>βέλος προς τα κάτω"
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span "
+"class=\"kbd--plus\">+</span><kbd>βέλος προς τα κάτω"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:158-38
 msgid "Go to previous sheet."
@@ -1233,12 +1271,12 @@ msgstr "Μετάβαση στο προηγούμενο φύλλο."
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:158-86
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Page Up</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Page "
+"Up</kbd>"
 msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>βέλος προς τα πάνω"
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span "
+"class=\"kbd--plus\">+</span><kbd>βέλος προς τα πάνω"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:159-38
 msgid ""
@@ -1255,12 +1293,12 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:159-292
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Arrow</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow</kbd>"
 msgstr ""
-"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>βέλος προς τα πάνω"
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span "
+"class=\"kbd--plus\">+</span><kbd>βέλος προς τα πάνω"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:160-38
 msgid "Moves one sheet to the left."
@@ -1269,8 +1307,8 @@ msgstr "Μετακινεί ένα φύλλο προς τα αριστερά."
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:160-93
 #, fuzzy
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Page Up</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Page Up</kbd>"
 msgstr "Μετατόπιση</kbd><span class=\"kbd--plus\">+</span><kbd>ΣελίδαUp"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:161-38
@@ -1280,8 +1318,8 @@ msgstr "Μετακινεί μία σελίδα οθόνης προς τα δεξ
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:161-100
 #, fuzzy
 msgid ""
-"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Page Down</kbd>"
+"<kbd>Alt</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Page Down</kbd>"
 msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>PageDown"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:162-38
@@ -1298,12 +1336,12 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:162-280
 #, fuzzy
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Page Up</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Page "
+"Up</kbd>"
 msgstr ""
-"Shift</kbd><span class=\"kbd--plus\">+</span><kbd>Ctrl</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>Del"
+"Shift</kbd><span class=\"kbd--plus\">+</span><kbd>Ctrl</kbd><span "
+"class=\"kbd--plus\">+</span><kbd>Del"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:163-38
 msgid ""
@@ -1318,12 +1356,12 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:163-268
 #, fuzzy
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Page Down</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Page "
+"Down</kbd>"
 msgstr ""
-"Shift</kbd><span class=\"kbd--plus\">+</span><kbd>Ctrl</kbd><span class=\"kbd"
-"--plus\">+</span><kbd>Del"
+"Shift</kbd><span class=\"kbd--plus\">+</span><kbd>Ctrl</kbd><span "
+"class=\"kbd--plus\">+</span><kbd>Del"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:164-38
 msgid "Selects the entire column of the current cell."
@@ -1332,8 +1370,8 @@ msgstr "Επιλέγει ολόκληρη τη στήλη του τρέχοντ�
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:164-111
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Space</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Space</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Tab"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:165-38
@@ -1343,8 +1381,8 @@ msgstr "Επιλέγει ολόκληρη τη σειρά του τρέχοντ�
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:165-108
 #, fuzzy
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Space</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Space</kbd>"
 msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>Tab"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:166-38
@@ -1352,8 +1390,16 @@ msgid ""
 "Opens the context menu of the focused sheet tab (insert, rename, delete, "
 "hide, move, and more)."
 msgstr ""
-"Ανοίγει το μενού περιβάλλοντος της καρτέλας του εστιασμένου φύλλου ("
-"εισαγωγή, μετονομασία, διαγραφή, απόκρυψη, μετακίνηση και άλλα)."
+"Ανοίγει το μενού περιβάλλοντος της καρτέλας του εστιασμένου φύλλου "
+"(εισαγωγή, μετονομασία, διαγραφή, απόκρυψη, μετακίνηση και άλλα)."
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:166-160
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:25-155"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"F10</kbd>"
+msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>End"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:167-38
 msgid ""
@@ -1363,6 +1409,14 @@ msgstr ""
 "Με επιλεγμένη μια ολόκληρη στήλη ή σειρά, ανοίγει το αντίστοιχο μενού "
 "περιβάλλοντος της κεφαλίδας στήλης ή σειράς (εισαγωγή, διαγραφή, πλάτος ή "
 "ύψος, απόκρυψη και άλλα)."
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:167-205
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:26-200"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"F10</kbd>"
+msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>End"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:168-38
 msgid ""
@@ -1378,8 +1432,8 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:168-269
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>*</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"*</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Z"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:169-38
@@ -1393,8 +1447,8 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:169-178
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>/</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>/"
+"</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Z"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:170-38
@@ -1404,8 +1458,8 @@ msgstr "Εισαγωγή κελιών (όπως στο μενού Εισαγωγ
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:170-105
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Plus key</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Plus key</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>P"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:171-38
@@ -1415,13 +1469,49 @@ msgstr "Διαγραφή κελιών (όπως στο μενού Επεξεργ
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:171-110
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
-"span><kbd>Minus key</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Minus key</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Enter"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:175-9
 msgid "Cell formatting"
 msgstr "Μορφοποίηση κελιού"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:177-59
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:36-54"
+msgid "Bold"
+msgstr "Έντονα"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:178-61
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:37-56"
+msgid "Italic"
+msgstr "Πλάγια"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:179-64
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:38-59"
+msgid "Underline"
+msgstr "Υπογραμμισμένο"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:180-64
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:39-59"
+msgid "Strikethrough"
+msgstr "Διαγράμμιση"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:181-70
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:40-65"
+msgid "Remove direct formatting"
+msgstr "Αφαίρεση άμεσης μορφοποίησης"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:182-71
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:41-66"
+msgid "Insert comment"
+msgstr "Εισαγωγή σχολίου"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:183-38
 msgid "Display comment"
@@ -1430,8 +1520,8 @@ msgstr "Εμφάνιση σχολίου"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:183-80
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>F1</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"F1</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>F1"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:184-38
@@ -1441,13 +1531,51 @@ msgstr "Συμπλήρωση προς τα κάτω"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:184-74
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>D</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"D</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>D"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:185-64
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:44-59"
+msgid "Select All"
+msgstr "Επιλογή όλων"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:186-76
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:45-71"
+msgid "Align Center"
+msgstr "Στοίχιση στο κέντρο"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:187-64
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:46-59"
+msgid "Align Left"
+msgstr "Στοίχιση αριστερά"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:188-65
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:47-60"
+msgid "Align Right"
+msgstr "Στοίχιση δεξιά"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:189-65
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:48-60"
+msgid "Justify"
+msgstr "Πλήρης στοίχιση"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:190-38
 msgid "Set Optimal Column Width"
 msgstr "Ορισμός βέλτιστου πλάτους στήλης"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:190-89
+#, fuzzy
+msgctxt "html/cool-help.html+spreadsheet-shortcuts.div.table.tr.td:49-84"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"3</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>3"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:191-74
 msgid "Two decimal places, thousands separator"
@@ -1484,62 +1612,479 @@ msgstr "Εισάγετε ημερομηνία"
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:202-76
 #, fuzzy
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>;</kbd> or <kbd>,</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+";</kbd> or <kbd>,</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>βέλος προς τα πάνω"
 
+#: html/cool-help.html%2Bdiv.div.div.h2:208-9
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.h2:2-4"
+msgid "Text formatting"
+msgstr "Μορφοποίηση κειμένου"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:210-59
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:4-54"
+msgid "Bold"
+msgstr "Έντονα"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:211-61
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:5-56"
+msgid "Italic"
+msgstr "Πλάγια"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:212-64
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:6-59"
+msgid "Underline"
+msgstr "Υπογραμμισμένο"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:213-64
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:7-59"
+msgid "Strikethrough"
+msgstr "Διαγράμμιση"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:214-66
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:8-61"
+msgid "Superscript"
+msgstr "Εκθέτης"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:215-64
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:9-59"
+msgid "Subscript"
+msgstr "Δείκτης"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:216-64
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:10-59"
+msgid "Select All"
+msgstr "Επιλογή όλων"
+
+#: html/cool-help.html%2Bdiv.div.div.h2:220-9
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.h2:14-4"
+msgid "Paragraph formatting"
+msgstr "Μορφοποίηση παραγράφου"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:222-76
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:16-71"
+msgid "Align Center"
+msgstr "Στοίχιση στο κέντρο"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:223-64
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:17-59"
+msgid "Align Left"
+msgstr "Στοίχιση αριστερά"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:224-65
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:18-60"
+msgid "Align Right"
+msgstr "Στοίχιση δεξιά"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:225-65
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:19-60"
+msgid "Justify"
+msgstr "Πλήρης στοίχιση"
+
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:226-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:291-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:20-33"
 msgid "Demote list item (list item has to be selected)"
 msgstr ""
 "Υποβιβασμός αντικειμένου καταλόγου (το αντικείμενο του καταλόγου πρέπει να "
 "είναι επιλεγμένο)"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:226-112
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:264-119
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:291-112
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:329-119
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:20-107"
 msgid "Tab"
 msgstr "Στηλοθέτης"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:227-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:292-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:21-33"
 msgid "Promote list item (list item has to be selected)"
 msgstr ""
 "Προβιβασμός αντικειμένου καταλόγου (το αντικείμενο του καταλόγου πρέπει να "
 "είναι επιλεγμένο)"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:227-113
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:265-127
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:292-113
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:330-127
 #, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:21-108"
 msgid ""
-"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Tab</kbd>"
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Tab</kbd>"
 msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>Tab"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:231-9
-#: html/cool-help.html%2Bdiv.div.div.h2:296-9
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.h2:25-4"
 msgid "Text selection and navigation in a textbox"
 msgstr "Επιλογή κειμένου και περιήγηση σε ένα πλαίσιο κειμένου"
 
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:233-64
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:27-59"
+msgid "Select All"
+msgstr "Επιλογή όλων"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:234-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:28-33"
+msgid "Move cursor to the left"
+msgstr "Μετακίνηση δρομέα προς τα αριστερά"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:234-88
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:28-83"
+msgid "Arrow Left"
+msgstr "Αριστερό βέλος"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:235-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:29-33"
+msgid "Move cursor with selection to the left"
+msgstr "Μετακίνηση του δρομέα με επιλογή προς τα αριστερά"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:235-103
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:29-98"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Left</kbd>"
+msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>αριστερό βέλος"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:236-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:30-33"
+msgid "Go to beginning of a word"
+msgstr "Μετάβαση στην αρχή μιας λέξης"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:236-90
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:30-85"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Left</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>αριστερό βέλος"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:237-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:31-33"
+msgid "Select to the left word by word"
+msgstr "Επιλογή προς τα αριστερά λέξη-λέξη"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:237-96
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:31-91"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Left</kbd>"
+msgstr ""
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span "
+"class=\"kbd--plus\">+</span><kbd>αριστερό βέλος"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:238-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:32-33"
+msgid "Move cursor to the right"
+msgstr "Μετακίνηση δρομέα προς τα δεξιά"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:238-89
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:32-84"
+msgid "Arrow Right"
+msgstr "Δεξιό βέλος"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:239-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:33-33"
+msgid "Move cursor with selection to the right"
+msgstr "Μετακίνηση του δρομέα με επιλογή προς τα δεξιά"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:239-104
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:33-99"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Right</kbd>"
+msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>δεξιό βέλος"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:240-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:34-33"
+msgid "Go to start of the next word"
+msgstr "Μετάβαση στην αρχή της επόμενης λέξης"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:240-93
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:34-88"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Right</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>δεξιό βέλος"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:241-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:35-33"
+msgid "Select to the right word by word"
+msgstr "Επιλογή προς τα δεξιά λέξη-λέξη"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:241-97
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:35-92"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Right</kbd>"
+msgstr ""
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span "
+"class=\"kbd--plus\">+</span><kbd>δεξιό βέλος"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:242-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:36-33"
+msgid "Move cursor up one line"
+msgstr "Μετακίνηση του δρομέα κατά μια γραμμή προς τα πάνω"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:242-88
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:36-83"
+msgid "Arrow Up"
+msgstr "Βέλος προς τα πάνω"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:243-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:37-33"
+msgid "Select lines in upwards direction"
+msgstr "Επιλογή γραμμών με κατεύθυνση προς τα πάνω"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:243-98
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:37-93"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Up</kbd>"
+msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>βέλος προς τα πάνω"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:244-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:38-33"
+msgid "Move cursor to beginning of the previous paragraph"
+msgstr "Μετακίνηση του δρομέα στην αρχή της προηγούμενης παραγράφου"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:244-115
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:38-110"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Up</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>βέλος προς τα πάνω"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:245-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:39-33"
+msgid "Select to beginning of paragraph"
+msgstr "Επιλογή μέχρι την αρχή της παραγράφου"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:245-97
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:39-92"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Up</kbd>"
+msgstr ""
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span "
+"class=\"kbd--plus\">+</span><kbd>βέλος προς τα πάνω"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:246-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:40-33"
+msgid "Move cursor down one line"
+msgstr "Μετακίνηση του δρομέα κατά μια γραμμή προς τα κάτω"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:246-90
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:40-85"
+msgid "Arrow Down"
+msgstr "Βέλος προς τα κάτω"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:247-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:41-33"
+msgid "Select lines in downwards direction"
+msgstr "Επιλογή γραμμών με κατεύθυνση προς τα κάτω"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:247-100
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:41-95"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Down</kbd>"
+msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>βέλος προς τα κάτω"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:248-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:42-33"
+msgid "Move cursor to beginning of the next paragraph"
+msgstr "Μετακίνηση του δρομέα στην αρχή της επόμενης παραγράφου"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:248-111
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:42-106"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Down</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>βέλος προς τα κάτω"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:249-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:43-33"
+msgid "Select to end of paragraph"
+msgstr "Επιλογή μέχρι το τέλος της παραγράφου"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:249-91
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:43-86"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Down</kbd>"
+msgstr ""
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span "
+"class=\"kbd--plus\">+</span><kbd>βέλος προς τα κάτω"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:250-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:44-33"
+msgid "Go to beginning of line"
+msgstr "Μετάβαση στην αρχή της γραμμής"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:250-88
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:44-83"
+msgid "Home"
+msgstr "Αρχή"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:251-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:45-33"
+msgid "Go and select to the beginning of a line"
+msgstr "Μετάβαση και επιλογή μέχρι την αρχή μιας γραμμής"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:251-105
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:45-100"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
+msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>Home"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:252-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:46-33"
+msgid "Go to start of document"
+msgstr "Μετάβαση στην αρχή του εγγράφου"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:252-88
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:46-83"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Home"
+
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:253-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:318-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:47-33"
 msgid "Go and select text to start of textbox"
 msgstr "Μετάβαση και επιλογή κειμένου μέχρι την αρχή του πλαισίου κειμένου"
 
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:253-103
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:47-98"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Home</"
+"kbd>"
+msgstr ""
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span "
+"class=\"kbd--plus\">+</span><kbd>βέλος προς τα πάνω"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:254-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:48-33"
+msgid "Go to end of line"
+msgstr "Μετάβαση στο τέλος της γραμμής"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:254-82
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:48-77"
+msgid "End"
+msgstr "End (Τέλος)"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:255-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:49-33"
+msgid "Go and select to the end of a line"
+msgstr "Μετάβαση και επιλογή μέχρι το τέλος μιας γραμμής"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:255-99
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:49-94"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
+msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>End"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:256-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:50-33"
+msgid "Go to end of document"
+msgstr "Μετάβαση στο τέλος του εγγράφου"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:256-86
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:50-81"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>End"
+
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:257-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:322-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:51-33"
 msgid "Go and select text to end of textbox"
 msgstr "Μετάβαση και επιλογή κειμένου μέχρι το τέλος του πλαισίου κειμένου"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:257-101
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:51-96"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>End</"
+"kbd>"
+msgstr ""
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span "
+"class=\"kbd--plus\">+</span><kbd>βέλος προς τα πάνω"
 
 #: html/cool-help.html%2Bdiv.div.div.h2:261-9
 msgid "Slide keyboard shortcuts"
 msgstr "Συντομεύσεις πληκτρολογίου διαφάνειας"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:263-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:328-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:57-33"
 msgid ""
 "Escape current mode, i.e. from edit mode switch to object selection mode, "
 "from object selection mode switch to view mode."
@@ -1549,164 +2094,741 @@ msgstr ""
 "επιλογής αντικειμένου αλλαγή στην κατάσταση προβολής."
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:263-186
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:328-186
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:57-181"
 msgid "Esc"
 msgstr "Esc"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:264-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:329-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:58-33"
 msgid "Select objects in the order in which they were created"
 msgstr "Επιλογή αντικειμένων με τη σειρά με την οποία δημιουργήθηκαν"
 
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:264-119
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:58-114"
+msgid "Tab"
+msgstr "Στηλοθέτης"
+
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:265-38
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:330-38
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:59-33"
 msgid "Select objects in the reverse order in which they were created"
 msgstr ""
 "Επιλογή αντικειμένων με την αντίστροφη σειρά με την οποία δημιουργήθηκαν"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:265-127
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:59-122"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Tab</kbd>"
+msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>Tab"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:266-38
 msgid "Move to next text object on slide"
 msgstr "Μετακίνηση στο επόμενο αντικείμενο κειμένου της διαφάνειας"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:266-98
-#: html/cool-help.html%2Bdiv.div.div.table.tr.td:331-105
 #, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:60-93"
 msgid ""
-"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Enter</kbd>"
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Enter</kbd>"
 msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Enter"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:267-38
 msgid "Select all in slide"
 msgstr "Επιλογή όλων στη διαφάνεια"
 
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:267-84
+#, fuzzy
+msgctxt "html/cool-help.html+presentation-shortcuts.div.table.tr.td:61-79"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"A</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>A"
+
+#: html/cool-help.html%2Bdiv.div.div.h2:273-9
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.h2:2-0"
+msgid "Text formatting"
+msgstr "Μορφοποίηση κειμένου"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:275-59
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:4-50"
+msgid "Bold"
+msgstr "Έντονα"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:276-61
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:5-52"
+msgid "Italic"
+msgstr "Πλάγια"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:277-64
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:6-55"
+msgid "Underline"
+msgstr "Υπογραμμισμένο"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:278-64
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:7-55"
+msgid "Strikethrough"
+msgstr "Διαγράμμιση"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:279-66
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:8-57"
+msgid "Superscript"
+msgstr "Εκθέτης"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:280-64
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:9-55"
+msgid "Subscript"
+msgstr "Δείκτης"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:281-64
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:10-55"
+msgid "Select All"
+msgstr "Επιλογή όλων"
+
+#: html/cool-help.html%2Bdiv.div.div.h2:285-9
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.h2:14-0"
+msgid "Paragraph formatting"
+msgstr "Μορφοποίηση παραγράφου"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:287-76
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:16-67"
+msgid "Align Center"
+msgstr "Στοίχιση στο κέντρο"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:288-64
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:17-55"
+msgid "Align Left"
+msgstr "Στοίχιση αριστερά"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:289-65
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:18-56"
+msgid "Align Right"
+msgstr "Στοίχιση δεξιά"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:290-65
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:19-56"
+msgid "Justify"
+msgstr "Πλήρης στοίχιση"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:291-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:20-29"
+msgid "Demote list item (list item has to be selected)"
+msgstr ""
+"Υποβιβασμός αντικειμένου καταλόγου (το αντικείμενο του καταλόγου πρέπει να "
+"είναι επιλεγμένο)"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:291-112
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:20-103"
+msgid "Tab"
+msgstr "Στηλοθέτης"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:292-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:21-29"
+msgid "Promote list item (list item has to be selected)"
+msgstr ""
+"Προβιβασμός αντικειμένου καταλόγου (το αντικείμενο του καταλόγου πρέπει να "
+"είναι επιλεγμένο)"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:292-113
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:21-104"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Tab</kbd>"
+msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>Tab"
+
+#: html/cool-help.html%2Bdiv.div.div.h2:296-9
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.h2:25-0"
+msgid "Text selection and navigation in a textbox"
+msgstr "Επιλογή κειμένου και περιήγηση σε ένα πλαίσιο κειμένου"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:298-64
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:27-55"
+msgid "Select All"
+msgstr "Επιλογή όλων"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:299-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:28-29"
+msgid "Move cursor to the left"
+msgstr "Μετακίνηση δρομέα προς τα αριστερά"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:299-88
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:28-79"
+msgid "Arrow Left"
+msgstr "Αριστερό βέλος"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:300-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:29-29"
+msgid "Move cursor with selection to the left"
+msgstr "Μετακίνηση του δρομέα με επιλογή προς τα αριστερά"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:300-103
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:29-94"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Left</kbd>"
+msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>αριστερό βέλος"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:301-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:30-29"
+msgid "Go to beginning of a word"
+msgstr "Μετάβαση στην αρχή μιας λέξης"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:301-90
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:30-81"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Left</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>αριστερό βέλος"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:302-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:31-29"
+msgid "Select to the left word by word"
+msgstr "Επιλογή προς τα αριστερά λέξη-λέξη"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:302-96
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:31-87"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Left</kbd>"
+msgstr ""
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span "
+"class=\"kbd--plus\">+</span><kbd>αριστερό βέλος"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:303-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:32-29"
+msgid "Move cursor to the right"
+msgstr "Μετακίνηση δρομέα προς τα δεξιά"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:303-89
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:32-80"
+msgid "Arrow Right"
+msgstr "Δεξιό βέλος"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:304-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:33-29"
+msgid "Move cursor with selection to the right"
+msgstr "Μετακίνηση του δρομέα με επιλογή προς τα δεξιά"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:304-104
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:33-95"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Right</kbd>"
+msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>δεξιό βέλος"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:305-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:34-29"
+msgid "Go to start of the next word"
+msgstr "Μετάβαση στην αρχή της επόμενης λέξης"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:305-93
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:34-84"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Right</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>δεξιό βέλος"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:306-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:35-29"
+msgid "Select to the right word by word"
+msgstr "Επιλογή προς τα δεξιά λέξη-λέξη"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:306-97
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:35-88"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Right</kbd>"
+msgstr ""
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span "
+"class=\"kbd--plus\">+</span><kbd>δεξιό βέλος"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:307-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:36-29"
+msgid "Move cursor up one line"
+msgstr "Μετακίνηση του δρομέα κατά μια γραμμή προς τα πάνω"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:307-88
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:36-79"
+msgid "Arrow Up"
+msgstr "Βέλος προς τα πάνω"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:308-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:37-29"
+msgid "Select lines in upwards direction"
+msgstr "Επιλογή γραμμών με κατεύθυνση προς τα πάνω"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:308-98
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:37-89"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Up</kbd>"
+msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>βέλος προς τα πάνω"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:309-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:38-29"
+msgid "Move cursor to beginning of the previous paragraph"
+msgstr "Μετακίνηση του δρομέα στην αρχή της προηγούμενης παραγράφου"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:309-115
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:38-106"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Up</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>βέλος προς τα πάνω"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:310-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:39-29"
+msgid "Select to beginning of paragraph"
+msgstr "Επιλογή μέχρι την αρχή της παραγράφου"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:310-97
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:39-88"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Up</kbd>"
+msgstr ""
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span "
+"class=\"kbd--plus\">+</span><kbd>βέλος προς τα πάνω"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:311-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:40-29"
+msgid "Move cursor down one line"
+msgstr "Μετακίνηση του δρομέα κατά μια γραμμή προς τα κάτω"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:311-90
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:40-81"
+msgid "Arrow Down"
+msgstr "Βέλος προς τα κάτω"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:312-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:41-29"
+msgid "Select lines in downwards direction"
+msgstr "Επιλογή γραμμών με κατεύθυνση προς τα κάτω"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:312-100
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:41-91"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Down</kbd>"
+msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>βέλος προς τα κάτω"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:313-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:42-29"
+msgid "Move cursor to beginning of the next paragraph"
+msgstr "Μετακίνηση του δρομέα στην αρχή της επόμενης παραγράφου"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:313-111
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:42-102"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Arrow Down</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>βέλος προς τα κάτω"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:314-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:43-29"
+msgid "Select to end of paragraph"
+msgstr "Επιλογή μέχρι το τέλος της παραγράφου"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:314-91
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:43-82"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Arrow "
+"Down</kbd>"
+msgstr ""
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span "
+"class=\"kbd--plus\">+</span><kbd>βέλος προς τα κάτω"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:315-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:44-29"
+msgid "Go to beginning of line"
+msgstr "Μετάβαση στην αρχή της γραμμής"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:315-88
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:44-79"
+msgid "Home"
+msgstr "Αρχή"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:316-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:45-29"
+msgid "Go and select to the beginning of a line"
+msgstr "Μετάβαση και επιλογή μέχρι την αρχή μιας γραμμής"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:316-105
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:45-96"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
+msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>Home"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:317-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:46-29"
+msgid "Go to start of document"
+msgstr "Μετάβαση στην αρχή του εγγράφου"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:317-88
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:46-79"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Home</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Home"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:318-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:47-29"
+msgid "Go and select text to start of textbox"
+msgstr "Μετάβαση και επιλογή κειμένου μέχρι την αρχή του πλαισίου κειμένου"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:318-103
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:47-94"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Home</"
+"kbd>"
+msgstr ""
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span "
+"class=\"kbd--plus\">+</span><kbd>βέλος προς τα πάνω"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:319-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:48-29"
+msgid "Go to end of line"
+msgstr "Μετάβαση στο τέλος της γραμμής"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:319-82
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:48-73"
+msgid "End"
+msgstr "End (Τέλος)"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:320-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:49-29"
+msgid "Go and select to the end of a line"
+msgstr "Μετάβαση και επιλογή μέχρι το τέλος μιας γραμμής"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:320-99
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:49-90"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
+msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>End"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:321-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:50-29"
+msgid "Go to end of document"
+msgstr "Μετάβαση στο τέλος του εγγράφου"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:321-86
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:50-77"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"End</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>End"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:322-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:51-29"
+msgid "Go and select text to end of textbox"
+msgstr "Μετάβαση και επιλογή κειμένου μέχρι το τέλος του πλαισίου κειμένου"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:322-101
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:51-92"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>End</"
+"kbd>"
+msgstr ""
+"Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Shift</kbd><span "
+"class=\"kbd--plus\">+</span><kbd>βέλος προς τα πάνω"
+
 #: html/cool-help.html%2Bdiv.div.div.h2:326-9
 msgid "Draw page keyboard shortcuts"
 msgstr "Συντομεύσεις πληκτρολογίου σελίδας σχεδίασης"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:328-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:57-29"
+msgid ""
+"Escape current mode, i.e. from edit mode switch to object selection mode, "
+"from object selection mode switch to view mode."
+msgstr ""
+"Απομάκρυνση από την τρέχουσα κατάσταση, δηλαδή από την κατάσταση "
+"επεξεργασίας αλλαγή στην κατάσταση επιλογής αντικειμένου, από την κατάσταση "
+"επιλογής αντικειμένου αλλαγή στην κατάσταση προβολής."
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:328-186
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:57-177"
+msgid "Esc"
+msgstr "Esc"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:329-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:58-29"
+msgid "Select objects in the order in which they were created"
+msgstr "Επιλογή αντικειμένων με τη σειρά με την οποία δημιουργήθηκαν"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:329-119
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:58-110"
+msgid "Tab"
+msgstr "Στηλοθέτης"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:330-38
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:59-29"
+msgid "Select objects in the reverse order in which they were created"
+msgstr ""
+"Επιλογή αντικειμένων με την αντίστροφη σειρά με την οποία δημιουργήθηκαν"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:330-127
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:59-118"
+msgid ""
+"<kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Tab</kbd>"
+msgstr "Shift</kbd><span class=\"kbd--plus\">+</span><kbd>Tab"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:331-38
 msgid "Move to next text object on drawing page"
 msgstr "Μετάβαση στο επόμενο αντικείμενο κειμένου στη σελίδα σχεδίασης"
 
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:331-105
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:60-96"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"Enter</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>Enter"
+
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:332-38
 msgid "Select all in drawing page"
 msgstr "Επιλογή όλων στη σελίδα σχεδίασης"
+
+#: html/cool-help.html%2Bdiv.div.div.table.tr.td:332-91
+#, fuzzy
+msgctxt "html/cool-help.html+drawing-shortcuts.div.table.tr.td:61-82"
+msgid ""
+"<kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>"
+"A</kbd>"
+msgstr "Ctrl</kbd><span class=\"kbd--plus\">+</span><kbd>A"
 
 #: html/cool-help.html%2Bdiv.h2:338-5
 msgid "<span class=\"productname\">{productname}</span> Help"
 msgstr "Βοήθεια του <span class=\"productname\">{productname}</span>"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:341-13
-#: html/cool-help.html%2Bdiv.div.h3:383-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:4-12"
 msgid "Collaborative editing"
 msgstr "Συνεργατική επεξεργασία"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:342-13
-#: html/cool-help.html%2Bdiv.div.h3:393-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:5-12"
 msgid "<span class=\"productname\">{productname}</span> user interface"
 msgstr "Διεπαφή χρήστη του <span class=\"productname\">{productname}</span>"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:343-13
-#: html/cool-help.html%2Bdiv.div.h3:429-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:6-12"
 msgid "Opening, closing, saving, printing and downloading documents"
 msgstr "Άνοιγμα, κλείσιμο, αποθήκευση, εκτύπωση και λήψη εγγράφων"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:344-13
-#: html/cool-help.html%2Bdiv.div.h3:439-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:7-12"
 msgid "Opening, closing, saving and printing documents"
 msgstr "Άνοιγμα, κλείσιμο, αποθήκευση και εκτύπωση εγγράφων"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:345-13
-#: html/cool-help.html%2Bdiv.div.h3:478-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:8-12"
 msgid "Editing documents"
 msgstr "Επεξεργασία εγγράφων"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:346-13
-#: html/cool-help.html%2Bdiv.nav.ul.li:352-13
-#: html/cool-help.html%2Bdiv.nav.ul.li:365-13
-#: html/cool-help.html%2Bdiv.div.h3:510-3
-#: html/cool-help.html%2Bdiv.div.div.h3:570-5
-#: html/cool-help.html%2Bdiv.div.div.h3:681-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:9-12"
 msgid "Advanced features"
 msgstr "Προχωρημένα χαρακτηριστικά"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:348-13
-#: html/cool-help.html%2Bdiv.div.h3:548-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:11-12"
 msgid "<span class=\"productname\">{productname}</span> spreadsheets"
 msgstr "Υπολογιστικά φύλλα του <span class=\"productname\">{productname}</span>"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:349-13
-#: html/cool-help.html%2Bdiv.div.div.h3:550-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:12-12"
 msgid "Editing spreadsheets"
 msgstr "Επεξεργασία υπολογιστικών φύλλων"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:350-13
-#: html/cool-help.html%2Bdiv.div.div.h3:554-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:13-12"
 msgid "Formulas"
 msgstr "Τύποι"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:351-13
-#: html/cool-help.html%2Bdiv.div.div.h3:563-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:14-12"
 msgid "Formatting spreadsheets"
 msgstr "Μορφοποίηση υπολογιστικών φύλλων"
 
+#: html/cool-help.html%2Bdiv.nav.ul.li:352-13
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:15-12"
+msgid "Advanced features"
+msgstr "Προχωρημένα χαρακτηριστικά"
+
 #: html/cool-help.html%2Bdiv.nav.ul.li:353-13
-#: html/cool-help.html%2Bdiv.div.div.h3:825-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:16-12"
 msgid "Spreadsheets"
 msgstr "Υπολογιστικά φύλλα"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:355-13
-#: html/cool-help.html%2Bdiv.div.h3:612-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:18-12"
 msgid "<span class=\"productname\">{productname}</span> text documents"
 msgstr "Έγγραφα κειμένου του <span class=\"productname\">{productname}</span>"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:356-13
-#: html/cool-help.html%2Bdiv.div.div.h3:614-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:19-12"
 msgid "Editing text documents"
 msgstr "Επεξεργασία εγγράφων κειμένου"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:357-13
-#: html/cool-help.html%2Bdiv.div.div.h3:618-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:20-12"
 msgid "Context menus"
 msgstr "Μενού περιβάλλοντος"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:358-13
-#: html/cool-help.html%2Bdiv.div.div.h3:634-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:21-12"
 msgid "Advanced text document editor features"
 msgstr "Προχωρημένα χαρακτηριστικά επεξεργαστή εγγράφων κειμένου"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:359-13
-#: html/cool-help.html%2Bdiv.div.div.h3:744-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:22-12"
 msgid "Text documents"
 msgstr "Έγγραφα κειμένου"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:361-13
-#: html/cool-help.html%2Bdiv.div.h3:661-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:24-12"
 msgid "<span class=\"productname\">{productname}</span> presentations"
 msgstr "Παρουσιάσεις <span class=\"productname\">{productname}</span>"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:362-13
-#: html/cool-help.html%2Bdiv.div.div.h3:663-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:25-12"
 msgid "Editing presentations"
 msgstr "Επεξεργασία παρουσιάσεων"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:363-13
-#: html/cool-help.html%2Bdiv.div.div.h3:667-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:26-12"
 msgid "Slide show"
 msgstr "Προβολή παρουσίασης"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:364-13
-#: html/cool-help.html%2Bdiv.div.div.h3:674-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:27-12"
 msgid "Slide pane"
 msgstr "Παράθυρο διαφανειών"
 
+#: html/cool-help.html%2Bdiv.nav.ul.li:365-13
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:28-12"
+msgid "Advanced features"
+msgstr "Προχωρημένα χαρακτηριστικά"
+
 #: html/cool-help.html%2Bdiv.nav.ul.li:366-13
-#: html/cool-help.html%2Bdiv.div.div.h3:864-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:29-12"
 msgid "Presentations"
 msgstr "Παρουσιάσεις"
 
 #: html/cool-help.html%2Bdiv.nav.ul.li:368-13
-#: html/cool-help.html%2Bdiv.div.h3:693-5
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.nav.ul.li:31-12"
 msgid "Frequently Asked Questions"
 msgstr "Συχνές Ερωτήσεις"
 
@@ -1715,10 +2837,16 @@ msgid ""
 "<span class=\"productname\">{productname}</span> allows you to create and "
 "edit typical office documents, that is text documents, spreadsheets and "
 "presentations, <span class=\"webBasedCOOLOnly\">directly in your browser,</"
-"span> in a simple and straight-forward way. <span class=\"webBasedCOOLOnly\""
-">You can work alone on a document, or collaboratively as part of a "
-"team.</span>"
+"span> in a simple and straight-forward way. <span class=\"webBasedCOOLOnly\">"
+"You can work alone on a document, or collaboratively as part of a team.</"
+"span>"
 msgstr ""
+
+#: html/cool-help.html%2Bdiv.div.h3:383-5
+#, fuzzy
+msgctxt "html/cool-help.html:1327"
+msgid "Collaborative editing"
+msgstr "Συνεργατική επεξεργασία"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:386-7
 msgid ""
@@ -1747,6 +2875,12 @@ msgstr ""
 "μικρή ειδοποίηση στο υποσέλιδο όταν μπαίνει ένας νέος χρήστης ή όταν φεύγει "
 "κάποιος."
 
+#: html/cool-help.html%2Bdiv.div.h3:393-5
+#, fuzzy
+msgctxt "html/cool-help.html:1333"
+msgid "<span class=\"productname\">{productname}</span> user interface"
+msgstr "Διεπαφή χρήστη του <span class=\"productname\">{productname}</span>"
+
 #: html/cool-help.html%2Bdiv.div.div.p:395-7
 #, fuzzy
 msgid ""
@@ -1773,10 +2907,10 @@ msgstr ""
 msgid ""
 "<span class=\"def\">The tabs:</span> The commands are grouped on tabs at the "
 "top: <span class=\"ui\">File</span>, <span class=\"ui\">Home</span>, <span "
-"class=\"ui\">Insert</span>, <span class=\"ui\">Review</span>, <span class="
-"\"ui\">View</span> and others, depending on the document type. Click the "
-"selected tab again to collapse the tab bar and gain space for the document. "
-"Click any tab to expand it again."
+"class=\"ui\">Insert</span>, <span class=\"ui\">Review</span>, <span "
+"class=\"ui\">View</span> and others, depending on the document type. Click "
+"the selected tab again to collapse the tab bar and gain space for the "
+"document. Click any tab to expand it again."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:408-5
@@ -1861,6 +2995,12 @@ msgstr ""
 "Η χρήση της εστίασης του πλοηγητή επηρεάζει το έγγραφο και τις περιοχές "
 "διεπαφής χρήστη."
 
+#: html/cool-help.html%2Bdiv.div.h3:429-5
+#, fuzzy
+msgctxt "html/cool-help.html:1335A"
+msgid "Opening, closing, saving, printing and downloading documents"
+msgstr "Άνοιγμα, κλείσιμο, αποθήκευση, εκτύπωση και λήψη εγγράφων"
+
 #: html/cool-help.html%2Bdiv.div.p:430-5
 msgid ""
 "Your documents are stored and managed in the cloud storage that is "
@@ -1871,20 +3011,20 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:431-30
 msgid ""
-"To download a document download it from the <span class=\"productname\""
-">{productname}</span> application’s <span class=\"ui\">File</span> menu. The "
+"To download a document download it from the <span class=\"productname\">"
+"{productname}</span> application’s <span class=\"ui\">File</span> menu. The "
 "download formats available depends on the application. All applications "
 "exports documents in PDF format."
 msgstr ""
-"Για λήψη εγγράφου μεταφορτώστε το από την εφαρμογή <span class=\"productname"
-"\">{productname}</span> και το μενού <span class=\"ui\">Αρχείο</span>. Οι "
-"διαθέσιμες μορφές μεταφόρτωσης εξαρτώνται από την εφαρμογή. Όλες οι "
-"εφαρμογές εξάγουν έγγραφα σε μορφή PDF."
+"Για λήψη εγγράφου μεταφορτώστε το από την εφαρμογή <span "
+"class=\"productname\">{productname}</span> και το μενού <span class=\"ui\">"
+"Αρχείο</span>. Οι διαθέσιμες μορφές μεταφόρτωσης εξαρτώνται από την "
+"εφαρμογή. Όλες οι εφαρμογές εξάγουν έγγραφα σε μορφή PDF."
 
 #: html/cool-help.html%2Bdiv.div.div.p:432-30
 msgid ""
-"To open document, click on the file to open the <span class=\"productname\""
-">{productname}</span> module associated to the document format."
+"To open document, click on the file to open the <span class=\"productname\">"
+"{productname}</span> module associated to the document format."
 msgstr ""
 "Για ανοίξετε ένα έγγραφο, πατήστε στο αρχείο για να ανοίξετε το άρθρωμα του "
 "<span class=\"productname\">{productname}</span> που σχετίζεται με τη μορφή "
@@ -1894,14 +3034,14 @@ msgstr ""
 msgid ""
 "Documents in <span class=\"productname\">{productname}</span> save "
 "automatically, but if you are concerned that a document is synchronized as "
-"quickly as possible you can also force saving using the <span class=\"ui\""
-">File</span> menu’s <span class=\"ui\">Save</span> entry."
+"quickly as possible you can also force saving using the <span class=\"ui\">"
+"File</span> menu’s <span class=\"ui\">Save</span> entry."
 msgstr ""
 "Έγγραφα στο <span class=\"productname\">{productname}</span> αποθηκεύονται "
 "αυτόματα, αλλά εάν ανησυχείτε εάν το έγγραφο συγχρονίζεται όσο το δυνατόν "
 "πιο γρήγορα, μπορείτε επίσης να εξαναγκάσετε την αποθήκευση χρησιμοποιώντας "
-"στο μενού <span class=\"ui\">Αρχείο</span> την καταχώριση <span class=\"ui\""
-">Αποθήκευση</span>."
+"στο μενού <span class=\"ui\">Αρχείο</span> την καταχώριση <span class=\"ui\">"
+"Αποθήκευση</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.p:434-30
 msgid ""
@@ -1914,24 +3054,31 @@ msgstr ""
 "το PDF στον αγαπημένο σας αναγνώστη PDF."
 
 #: html/cool-help.html%2Bdiv.div.div.p:435-30
-#: html/cool-help.html%2Bdiv.div.div.p:472-7
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.div.div.p:98-29"
 msgid ""
 "When closing a document, it is automatically saved if it has been changed."
 msgstr "Κατά το κλείσιμο εγγράφου, αποθηκεύεται αυτόματα εάν έχει αλλαχθεί."
 
+#: html/cool-help.html%2Bdiv.div.h3:439-5
+#, fuzzy
+msgctxt "html/cool-help.html:1335B"
+msgid "Opening, closing, saving and printing documents"
+msgstr "Άνοιγμα, κλείσιμο, αποθήκευση και εκτύπωση εγγράφων"
+
 #: html/cool-help.html%2Bdiv.div.div.p:441-7
 msgid ""
-"To open a document, either open it in <span class=\"productname\""
-">{productname}</span> from your platform's file manager or use <span class="
-"\"ui\">Open</span> on the <span class=\"ui\">File</span> tab."
+"To open a document, either open it in <span class=\"productname\">"
+"{productname}</span> from your platform's file manager or use <span "
+"class=\"ui\">Open</span> on the <span class=\"ui\">File</span> tab."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:447-7
 msgid ""
 "An existing document opens in view mode, so that you can read it without "
-"changing it by accident. To start editing, click the edit button (the pencil)"
-" in the bottom right corner. New documents and documents created from a "
-"template open ready to edit."
+"changing it by accident. To start editing, click the edit button (the "
+"pencil) in the bottom right corner. New documents and documents created from "
+"a template open ready to edit."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:452-7
@@ -1958,6 +3105,19 @@ msgid ""
 "class=\"ui\">File</span> tab."
 msgstr ""
 
+#: html/cool-help.html%2Bdiv.div.div.p:472-7
+#, fuzzy
+msgctxt "html/cool-help.html+online-help-content.div.div.p:135-6"
+msgid ""
+"When closing a document, it is automatically saved if it has been changed."
+msgstr "Κατά το κλείσιμο εγγράφου, αποθηκεύεται αυτόματα εάν έχει αλλαχθεί."
+
+#: html/cool-help.html%2Bdiv.div.h3:478-5
+#, fuzzy
+msgctxt "html/cool-help.html:1337"
+msgid "Editing documents"
+msgstr "Επεξεργασία εγγράφων"
+
 #: html/cool-help.html%2Bdiv.div.p:479-5
 msgid ""
 "Document editing should be familiar to everyone that has used an office "
@@ -1975,8 +3135,8 @@ msgstr "Αντιγραφή και επικόλληση"
 msgid ""
 "Rich content copy/cut and paste is supported, including images and mixed "
 "content, using the keyboard shortcuts (<kbd>Ctrl</kbd><span class=\"kbd--"
-"plus\" aria-hidden=\"true\">+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span class="
-"\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</"
+"plus\" aria-hidden=\"true\">+</span><kbd>X</kbd>, <kbd>Ctrl</kbd><span "
+"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>C</kbd>, <kbd>Ctrl</"
 "kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>). On "
 "Android or iOS selecting text by double tapping, and using a long-tap to "
 "access copy/cut/paste via the context menu is required."
@@ -1984,10 +3144,10 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:483-5
 msgid ""
-"For security reasons it is necessary to use <kbd>Ctrl</kbd><span class=\"kbd"
-"--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd> to paste content that "
-"comes from outside the document, but context menus can be used for cut and "
-"copy."
+"For security reasons it is necessary to use <kbd>Ctrl</kbd><span "
+"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd> to paste "
+"content that comes from outside the document, but context menus can be used "
+"for cut and copy."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:484-5
@@ -1995,8 +3155,8 @@ msgid ""
 "When you copy a selection that contains images or other objects, a <span "
 "class=\"ui\">Download Selection</span> widget pops up in the bottom-right "
 "corner. Press <span class=\"ui\">Download</span>, then copy again, to make "
-"the content available to applications outside <span class=\"productname\""
-">{productname}</span>. This step also converts complex object types into "
+"the content available to applications outside <span class=\"productname\">"
+"{productname}</span>. This step also converts complex object types into "
 "static images."
 msgstr ""
 
@@ -2066,9 +3226,9 @@ msgid ""
 "the message “Idle document – please click to reload and resume editing”."
 msgstr ""
 "Όταν το <span class=\"productname\">{productname}</span> εντοπίζει ότι δεν "
-"υπήρξε δραστηριότητα στον πλοηγητή για κάμποσο, βάζει το έγγραφο σε "
-"“ανενεργή” κατάσταση. Το έγγραφο εμφανίζεται με διαφανή γκρίζα επικάλυψη, με "
-"το μήνυμα “Ανενεργό έγγραφο - παρακαλούμε, πατήστε για να συνεχιστεί η "
+"υπήρξε δραστηριότητα στον πλοηγητή για κάμποσο, βάζει το έγγραφο σε “ανενεργή"
+"” κατάσταση. Το έγγραφο εμφανίζεται με διαφανή γκρίζα επικάλυψη, με το "
+"μήνυμα “Ανενεργό έγγραφο - παρακαλούμε, πατήστε για να συνεχιστεί η "
 "επεξεργασία”."
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:497-57
@@ -2108,14 +3268,14 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:503-5
 msgid ""
-"You can paste as unformatted text with the keyboard shortcut: <kbd>Ctrl</"
-"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</"
-"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>"
+"You can paste as unformatted text with the keyboard shortcut: <kbd>Ctrl</kbd>"
+"<span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>Shift</kbd><span "
+"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd>"
 msgstr ""
 "Μπορείτε να επικολλήσετε ως αμορφοποίητο κείμενο με τη συντόμευση "
-"πληκτρολογίου: <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>V</kbd>"
+"πληκτρολογίου: <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">"
+"+</span><kbd>Shift</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</"
+"span><kbd>V</kbd>"
 
 #: html/cool-help.html%2Bdiv.div.div.p:504-5
 msgid ""
@@ -2144,6 +3304,12 @@ msgstr ""
 "Όταν έχετε εσωτερική αποκοπή ή αντιγραφή περιεχομένου, μπορείτε να "
 "επικολλήσετε αυτό το περιεχόμενο με το μενού περιβάλλοντος."
 
+#: html/cool-help.html%2Bdiv.div.h3:510-3
+#, fuzzy
+msgctxt "html/cool-help.html:1338"
+msgid "Advanced features"
+msgstr "Προχωρημένα χαρακτηριστικά"
+
 #: html/cool-help.html%2Bdiv.div.div.h4:512-5
 msgid "Adding charts"
 msgstr "Προσθήκη διαγραμμάτων"
@@ -2170,8 +3336,8 @@ msgid ""
 "Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Chart</span>. "
 "Customize your chart on the sidebar:"
 msgstr ""
-"Επιλέξτε <span class=\"ui\">Εισαγωγή</span> → <span class=\"ui\""
-">Διαγράμματα</span>. Προσαρμόστε το διάγραμμά σας στην πλευρική γραμμή:"
+"Επιλέξτε <span class=\"ui\">Εισαγωγή</span> → <span class=\"ui\">"
+"Διαγράμματα</span>. Προσαρμόστε το διάγραμμά σας στην πλευρική γραμμή:"
 
 #: html/cool-help.html%2Bdiv.div.div.ol.div.img[alt]:519-53
 msgid ""
@@ -2240,8 +3406,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:530-5
 msgid ""
-"<span class=\"def\">Insert image:</span> Clicking on the <span class=\"ui\""
-">Insert image</span> icon allows you to choose an image from the cloud "
+"<span class=\"def\">Insert image:</span> Clicking on the <span class=\"ui\">"
+"Insert image</span> icon allows you to choose an image from the cloud "
 "storage's folders and shares."
 msgstr ""
 "<span class=\"def\">Εισαγωγή εικόνας:</span> Πατώντας το εικονίδιο <span "
@@ -2250,8 +3416,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:531-5
 msgid ""
-"<span class=\"def\">Insert local image:</span> Choose <span class=\"ui\""
-">Insert</span> → <span class=\"ui\">Image</span> to pick an image from your "
+"<span class=\"def\">Insert local image:</span> Choose <span class=\"ui\">"
+"Insert</span> → <span class=\"ui\">Image</span> to pick an image from your "
 "computer and insert it into the document."
 msgstr ""
 
@@ -2290,8 +3456,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:538-5
 msgid ""
-"Click on the submenu (<span class=\"cool-annotation-menu icon-size\"></span>)"
-" icon to reply, move and delete comments."
+"Click on the submenu (<span class=\"cool-annotation-menu icon-size\"></"
+"span>) icon to reply, move and delete comments."
 msgstr ""
 "Κάντε κλικ στο εικονίδιο υπομενού (<span class=\"cool-annotation-menu icon-"
 "size\"></span>) για να απαντήσετε, να μετακινήσετε και να διαγράψετε σχόλια."
@@ -2321,12 +3487,24 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.p:544-5
 #, fuzzy
 msgid ""
-"To systematically spell-check the whole document use <span class=\"ui\""
-">Spelling</span> on the <span class=\"ui\">Review</span> tab."
+"To systematically spell-check the whole document use <span class=\"ui\">"
+"Spelling</span> on the <span class=\"ui\">Review</span> tab."
 msgstr ""
 "Για συστηματικό ορθογραφικό έλεγχο όλου του εγγράφου χρησιμοποιήστε στο "
-"μενού <span class=\"ui\">Εργαλεία</span> την επιλογή <span class=\"ui\""
-">Ορθογραφία</span>."
+"μενού <span class=\"ui\">Εργαλεία</span> την επιλογή <span class=\"ui\">"
+"Ορθογραφία</span>."
+
+#: html/cool-help.html%2Bdiv.div.h3:548-5
+#, fuzzy
+msgctxt "html/cool-help.html:1359"
+msgid "<span class=\"productname\">{productname}</span> spreadsheets"
+msgstr "Υπολογιστικά φύλλα του <span class=\"productname\">{productname}</span>"
+
+#: html/cool-help.html%2Bdiv.div.div.h3:550-5
+#, fuzzy
+msgctxt "html/cool-help.html:1361"
+msgid "Editing spreadsheets"
+msgstr "Επεξεργασία υπολογιστικών φύλλων"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:551-30
 msgid ""
@@ -2346,10 +3524,16 @@ msgstr ""
 "ενέργειες εντολών στο υπολογιστικό φύλλο. Υποστηρίζεται επίσης η μεταφορά "
 "περιεχομένων κελιών για συμπλήρωση κελιών με δεδομένα. Οι εντολές "
 "αντιγραφής, αποκοπής και επικόλλησης είναι διαθέσιμες από το μενού "
-"περιβάλλοντος. Η παρακολούθηση των εισερχόμενων δεδομένων με τον "
-"<kbd>στηλοθέτη (Tab)</kbd> θα μετακινήσει τον δρομέα στο επόμενο κελί στα "
-"δεξιά και με <kbd>Enter</kbd> στο παρακάτω κελί για εύκολη παραπέρα "
-"καταχώριση δεδομένων."
+"περιβάλλοντος. Η παρακολούθηση των εισερχόμενων δεδομένων με τον <kbd>"
+"στηλοθέτη (Tab)</kbd> θα μετακινήσει τον δρομέα στο επόμενο κελί στα δεξιά "
+"και με <kbd>Enter</kbd> στο παρακάτω κελί για εύκολη παραπέρα καταχώριση "
+"δεδομένων."
+
+#: html/cool-help.html%2Bdiv.div.div.h3:554-5
+#, fuzzy
+msgctxt "html/cool-help.html:1363"
+msgid "Formulas"
+msgstr "Τύποι"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:556-5
 msgid ""
@@ -2376,21 +3560,28 @@ msgstr ""
 msgid ""
 "The formula language should be extremely familiar to any spreadsheet user, "
 "and is specified in great detail in the <a href=\"https://www.oasis-open.org/"
-"committees/download.php/16826/openformula-spec-20060221.html\" target="
-"\"_blank\" rel=\"noopener noreferrer\">OASIS OpenFormula specification</a>."
+"committees/download.php/16826/openformula-spec-20060221.html\" "
+"target=\"_blank\" rel=\"noopener noreferrer\">OASIS OpenFormula "
+"specification</a>."
 msgstr ""
 "Η γλώσσα τύπων πρέπει να είναι πολύ οικεία σε οποιονδήποτε χρήστη "
-"υπολογιστικών φύλλων και καθορίζεται με μεγάλη λεπτομέρεια στο <a href="
-"\"https://www.oasis-open.org/committees/download.php/16826/openformula-"
+"υπολογιστικών φύλλων και καθορίζεται με μεγάλη λεπτομέρεια στο <a "
+"href=\"https://www.oasis-open.org/committees/download.php/16826/openformula-"
 "spec-20060221.html\">OASIS OpenFormula specification</a>."
+
+#: html/cool-help.html%2Bdiv.div.div.h3:563-5
+#, fuzzy
+msgctxt "html/cool-help.html:1367"
+msgid "Formatting spreadsheets"
+msgstr "Μορφοποίηση υπολογιστικών φύλλων"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:565-5
 msgid ""
 "<span class=\"def\">Direct formatting:</span> You can format spreadsheet "
 "cells, columns, rows and sheets by formatting directly from the menus, "
 "toolbar or context menus. Direct formatting applies only to the current "
-"object selected. To format a cell either use the menu or hit <kbd>Ctrl</"
-"kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>1</kbd>. The "
+"object selected. To format a cell either use the menu or hit <kbd>Ctrl</kbd>"
+"<span class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>1</kbd>. The "
 "dialog allows complex and custom number formatting, as well as font, complex "
 "border, background, cell protection and other options."
 msgstr ""
@@ -2412,6 +3603,12 @@ msgstr ""
 "Παράθυρο διαλόγου Μορφοποίηση Κελιών στην καρτέλα Αριθμοί με λίστα "
 "κατηγοριών, επιλογές μορφοποίησης, δεκαδικά ψηφία και κωδικό μορφοποίησης"
 
+#: html/cool-help.html%2Bdiv.div.div.h3:570-5
+#, fuzzy
+msgctxt "html/cool-help.html:1371"
+msgid "Advanced features"
+msgstr "Προχωρημένα χαρακτηριστικά"
+
 #: html/cool-help.html%2Bdiv.div.div.div.p:571-30
 msgid ""
 "<span class=\"def\">Sorting data:</span> You can sort a list of numbers or "
@@ -2420,9 +3617,9 @@ msgid ""
 "to extend the selection."
 msgstr ""
 "<span class=\"def\">Ταξινόμηση δεδομένων:</span> Μπορείτε να ταξινομήσετε "
-"κατάλογο αριθμών ή κείμενο σε αύξουσα ή φθίνουσα σειρά. Το <span class="
-"\"productname\">{productname}</span> εντοπίζει αυτόματα κελιά που είναι "
-"κεφαλίδες και γειτονικές στήλες, για να επεκτείνει την επιλογή."
+"κατάλογο αριθμών ή κείμενο σε αύξουσα ή φθίνουσα σειρά. Το <span "
+"class=\"productname\">{productname}</span> εντοπίζει αυτόματα κελιά που "
+"είναι κεφαλίδες και γειτονικές στήλες, για να επεκτείνει την επιλογή."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:572-30
 msgid ""
@@ -2433,9 +3630,9 @@ msgid ""
 msgstr ""
 "<span class=\"def\">Φιλτράρισμα δεδομένων:</span> Φίλτρα και προηγμένα "
 "φίλτρα σας επιτρέπουν να εργαστείτε σε συγκεκριμένες φιλτραρισμένες γραμμές "
-"(καταχωρίσεις) περιοχής δεδομένων. Στα υπολογιστικά φύλλα στο <span class="
-"\"productname\">{productname}</span> υπάρχουν ποικίλες δυνατότητες εφαρμογής "
-"φίλτρων."
+"(καταχωρίσεις) περιοχής δεδομένων. Στα υπολογιστικά φύλλα στο <span "
+"class=\"productname\">{productname}</span> υπάρχουν ποικίλες δυνατότητες "
+"εφαρμογής φίλτρων."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:574-7
 msgid ""
@@ -2512,8 +3709,9 @@ msgid ""
 "Choose <span class=\"ui\">Validity</span> on the <span class=\"ui\">Data</"
 "span> tab. The <span class=\"ui\">Validity</span> dialog opens."
 msgstr ""
-"Επιλέξτε <span class=\"ui\">Εγκυρότητα</span> από το μενού <span class=\"ui\""
-">Δεδομένα</span>. Ο διάλογος <span class=\"ui\">Εγκυρότητα</span> ανοίγει."
+"Επιλέξτε <span class=\"ui\">Εγκυρότητα</span> από το μενού <span "
+"class=\"ui\">Δεδομένα</span>. Ο διάλογος <span class=\"ui\">Εγκυρότητα</"
+"span> ανοίγει."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:592-57
 msgid ""
@@ -2530,15 +3728,15 @@ msgid ""
 "box list. Depending on the criterion, more options show. Fill the required "
 "data."
 msgstr ""
-"Επιλέξτε το κριτήριο εγκυρότητας στον πτυσσόμενο κατάλογο <span class=\"ui\""
-">Να επιτρέπεται</span>. Ανάλογα με το κριτήριο, εμφανίζονται περισσότερες "
+"Επιλέξτε το κριτήριο εγκυρότητας στον πτυσσόμενο κατάλογο <span class=\"ui\">"
+"Να επιτρέπεται</span>. Ανάλογα με το κριτήριο, εμφανίζονται περισσότερες "
 "επιλογές. Συμπληρώστε τα ζητούμενα δεδομένα."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:594-7
 msgid ""
 "Use the <span class=\"ui\">Input Help</span> and <span class=\"ui\">Error "
-"Alert</span> tabs to enhance the user interactions. Click <span class=\"ui\""
-">OK</span> to close the dialog."
+"Alert</span> tabs to enhance the user interactions. Click <span class=\"ui\">"
+"OK</span> to close the dialog."
 msgstr ""
 "Χρησιμοποιήστε τις καρτέλες <span class=\"ui\">Βοήθεια εισόδου</span> και "
 "<span class=\"ui\">Ειδοποίηση σφάλματος</span> για να βελτιώσετε τις "
@@ -2555,8 +3753,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:598-7
 msgid ""
-"To remove the validity of the cell, open the dialog and set the <span class="
-"\"ui\">Allow</span> list to “All values”."
+"To remove the validity of the cell, open the dialog and set the <span "
+"class=\"ui\">Allow</span> list to “All values”."
 msgstr ""
 "Για να αφαιρέσετε την εγκυρότητα του κελιού, ανοίξτε τον διάλογο και ορίστε "
 "τον κατάλογο <span class=\"ui\">Να επιτρέπεται</span> σε “Όλες οι τιμές”."
@@ -2582,23 +3780,23 @@ msgid ""
 "text, and Save/Cancel buttons"
 msgstr ""
 "Κελλί υπολογιστικού φύλλου με ένα αναδυόμενο παράθυρο σχολίου που δείχνει "
-"τον συγγραφέα, την ημερομηνία, το κείμενο σχολίου και τα κουμπιά "
-"Αποθήκευση/Ακύρωση"
+"τον συγγραφέα, την ημερομηνία, το κείμενο σχολίου και τα κουμπιά Αποθήκευση/"
+"Ακύρωση"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:606-5
 #, fuzzy
 msgid ""
-"<span class=\"def\">Conditional formatting:</span> <span class=\"productname"
-"\">{productname}</span> adds symbols to each cell of a range based on cells "
-"conditions. Select the cell range and click <span class=\"ui\">Conditional</"
-"span> on the <span class=\"ui\">Home</span> tab. Select the symbol set to "
-"apply on the range."
+"<span class=\"def\">Conditional formatting:</span> <span "
+"class=\"productname\">{productname}</span> adds symbols to each cell of a "
+"range based on cells conditions. Select the cell range and click <span "
+"class=\"ui\">Conditional</span> on the <span class=\"ui\">Home</span> tab. "
+"Select the symbol set to apply on the range."
 msgstr ""
-"<span class=\"def\">Μορφοποίηση υπό όρους:</span> Το <span class="
-"\"productname\">{productname}</span> προσθέτει σύμβολα σε κάθε κελί περιοχής "
-"με βάση τις συνθήκες των κελιών. Επιλέξτε την περιοχή κελιών και πατήστε το "
-"εικονίδιο <span class=\"ui\">Μορφοποίηση υπό όρους</span> στη γραμμή "
-"εργαλείων. Επιλέξτε το ορισμένο σύμβολο για εφαρμογή στην περιοχή."
+"<span class=\"def\">Μορφοποίηση υπό όρους:</span> Το <span "
+"class=\"productname\">{productname}</span> προσθέτει σύμβολα σε κάθε κελί "
+"περιοχής με βάση τις συνθήκες των κελιών. Επιλέξτε την περιοχή κελιών και "
+"πατήστε το εικονίδιο <span class=\"ui\">Μορφοποίηση υπό όρους</span> στη "
+"γραμμή εργαλείων. Επιλέξτε το ορισμένο σύμβολο για εφαρμογή στην περιοχή."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:607-62
 msgid ""
@@ -2607,6 +3805,18 @@ msgid ""
 msgstr ""
 "Επιλογέας σετ εικονιδίων μορφοποίησης υπό όρους που εμφανίζει βέλη, κύκλους, "
 "φανάρια, αστέρια, πρόσωπα με χαμόγελο και σύμβολα γραφημάτων ράβδων"
+
+#: html/cool-help.html%2Bdiv.div.h3:612-5
+#, fuzzy
+msgctxt "html/cool-help.html:1373"
+msgid "<span class=\"productname\">{productname}</span> text documents"
+msgstr "Έγγραφα κειμένου του <span class=\"productname\">{productname}</span>"
+
+#: html/cool-help.html%2Bdiv.div.div.h3:614-5
+#, fuzzy
+msgctxt "html/cool-help.html:1375"
+msgid "Editing text documents"
+msgstr "Επεξεργασία εγγράφων κειμένου"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:615-30
 msgid ""
@@ -2627,6 +3837,12 @@ msgstr ""
 "διαγραμμάτων, είναι παρόμοιες με επεξεργαστή κειμένου στον υπολογιστή. "
 "Χρησιμοποιήστε το πληκτρολόγιο, μενού και γραμμές εργαλείων για να "
 "αλληλεπιδράσετε με το έγγραφό σας."
+
+#: html/cool-help.html%2Bdiv.div.div.h3:618-5
+#, fuzzy
+msgctxt "html/cool-help.html:1377"
+msgid "Context menus"
+msgstr "Μενού περιβάλλοντος"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:619-30
 msgid ""
@@ -2690,16 +3906,16 @@ msgstr ""
 #: html/cool-help.html%2Bdiv.div.div.div.p:629-5
 #, fuzzy
 msgid ""
-"<span class=\"def\">Style formatting:</span> <span class=\"productname\""
-">{productname}</span> supports paragraph styles. You can apply an existing "
+"<span class=\"def\">Style formatting:</span> <span class=\"productname\">"
+"{productname}</span> supports paragraph styles. You can apply an existing "
 "paragraph style to a paragraph. Select the style in the style list on the "
 "<span class=\"ui\">Home</span> tab."
 msgstr ""
-"<span class=\"def\">Μορφοποίηση τεχνοτροπίας:</span> Το <span class="
-"\"productname\">{productname}</span> υποστηρίζει τεχνοτροπίες παραγράφου. "
-"Μπορείτε να εφαρμόσετε τεχνοτροπία υφιστάμενης παραγράφου σε παράγραφο. "
-"Επιλέξτε το μενού <span class=\"ui\">Επεξεργασία</span> → <span class=\"ui\""
-">Επεξεργασία τεχνοτροπιών</span> για να αλλάξετε τεχνοτροπία."
+"<span class=\"def\">Μορφοποίηση τεχνοτροπίας:</span> Το <span "
+"class=\"productname\">{productname}</span> υποστηρίζει τεχνοτροπίες "
+"παραγράφου. Μπορείτε να εφαρμόσετε τεχνοτροπία υφιστάμενης παραγράφου σε "
+"παράγραφο. Επιλέξτε το μενού <span class=\"ui\">Επεξεργασία</span> → <span "
+"class=\"ui\">Επεξεργασία τεχνοτροπιών</span> για να αλλάξετε τεχνοτροπία."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:630-56
 msgid ""
@@ -2709,6 +3925,12 @@ msgstr ""
 "Διάλογος παραγράφου στην καρτέλα Εσοχές και Διάστιχο με ρυθμίσεις για την "
 "εσοχή, το διάστιχο και το διάκενο γραμμής, και μια προεπισκόπηση στα δεξιά"
 
+#: html/cool-help.html%2Bdiv.div.div.h3:634-5
+#, fuzzy
+msgctxt "html/cool-help.html:1383"
+msgid "Advanced text document editor features"
+msgstr "Προχωρημένα χαρακτηριστικά επεξεργαστή εγγράφων κειμένου"
+
 #: html/cool-help.html%2Bdiv.div.div.div.h4:636-5
 msgid "Handling Tables"
 msgstr "Διαχείριση πινάκων"
@@ -2716,16 +3938,16 @@ msgstr "Διαχείριση πινάκων"
 #: html/cool-help.html%2Bdiv.div.div.div.p:637-5
 #, fuzzy
 msgid ""
-"Insert tables with <span class=\"ui\">Insert</span> → <span class=\"ui\""
-">Table</span>. Select the initial number of rows and columns. Add rows and "
-"columns with the cell context menu. Merge cells from the <span class=\"ui\""
-">Table</span> tab. The default paragraph style inside cells is “Table "
-"contents”."
+"Insert tables with <span class=\"ui\">Insert</span> → <span class=\"ui\">"
+"Table</span>. Select the initial number of rows and columns. Add rows and "
+"columns with the cell context menu. Merge cells from the <span class=\"ui\">"
+"Table</span> tab. The default paragraph style inside cells is “Table contents"
+"”."
 msgstr ""
 "Εισάγετε πίνακες με το κατάλληλο εικονίδιο στη γραμμή εργαλείων. Επιλέξτε "
 "τον αρχικό αριθμό γραμμών και στηλών. Προσθέστε γραμμές και στήλες με το "
-"μενού περιβάλλοντος κελιού. Συγχωνεύστε κελιά με το μενού <span class=\"ui\""
-">Πίνακας</span>. Η προεπιλεγμένη τεχνοτροπία παραγράφου στα κελιά είναι “"
+"μενού περιβάλλοντος κελιού. Συγχωνεύστε κελιά με το μενού <span class=\"ui\">"
+"Πίνακας</span>. Η προεπιλεγμένη τεχνοτροπία παραγράφου στα κελιά είναι “"
 "Περιεχόμενα πίνακα”."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:638-52
@@ -2744,9 +3966,9 @@ msgid ""
 "span>. Fine tune the table with the properties dialog."
 msgstr ""
 "<span class=\"def\">Μορφοποίηση κελιών:</span> Πατήστε στο κελί ή περιοχή "
-"κελιών και επιλέξτε το μενού <span class=\"ui\">Πίνακας</span> → <span class="
-"\"ui\">Ιδιότητες</span>. Ρυθμίστε με ακρίβεια τον πίνακα με τον διάλογο "
-"ιδιοτήτων."
+"κελιών και επιλέξτε το μενού <span class=\"ui\">Πίνακας</span> → <span "
+"class=\"ui\">Ιδιότητες</span>. Ρυθμίστε με ακρίβεια τον πίνακα με τον "
+"διάλογο ιδιοτήτων."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:644-5
 msgid "Track changes"
@@ -2758,12 +3980,13 @@ msgid ""
 "span> marks up new changes made to the document. Select this option again to "
 "turn it off."
 msgstr ""
-"Όταν ενεργοποιείτε την παρακολούθηση αλλαγών, το <span class=\"productname\""
-">{productname}</span> επισημαίνονται οι νέες αλλαγές που γίνονται στο "
+"Όταν ενεργοποιείτε την παρακολούθηση αλλαγών, το <span class=\"productname\">"
+"{productname}</span> επισημαίνονται οι νέες αλλαγές που γίνονται στο "
 "έγγραφο. Ξαναεπιλέξτε αυτήν την επιλογή για να την απενεργοποιήσετε."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:646-61
-#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:774-61
+#, fuzzy
+msgctxt "html/cool-help.html+help-track-changes-comment.img:0-56[alt]"
 msgid ""
 "Tracked change shown as a comment box beside the document with author name, "
 "date, and change description"
@@ -2837,6 +4060,18 @@ msgstr ""
 "<span class=\"def\">Υποσημειώσεις και σημειώσεις τέλους:</span> "
 "Υποστηρίζονται οι υποσημειώσεις και οι σημειώσεις τέλους."
 
+#: html/cool-help.html%2Bdiv.div.h3:661-5
+#, fuzzy
+msgctxt "html/cool-help.html:1391"
+msgid "<span class=\"productname\">{productname}</span> presentations"
+msgstr "Παρουσιάσεις <span class=\"productname\">{productname}</span>"
+
+#: html/cool-help.html%2Bdiv.div.div.h3:663-5
+#, fuzzy
+msgctxt "html/cool-help.html:1393"
+msgid "Editing presentations"
+msgstr "Επεξεργασία παρουσιάσεων"
+
 #: html/cool-help.html%2Bdiv.div.div.div.p:664-30
 msgid ""
 "<span class=\"productname\">{productname}</span> Impress edits presentations "
@@ -2853,6 +4088,12 @@ msgstr ""
 "είναι παρόμοιες με μια εφαρμογή παρουσίασης υπολογιστή. Χρησιμοποιήστε το "
 "πληκτρολόγιο, τα μενού και τις γραμμές εργαλείων για να επενεργήσετε στο "
 "έγγραφο."
+
+#: html/cool-help.html%2Bdiv.div.div.h3:667-5
+#, fuzzy
+msgctxt "html/cool-help.html:1395"
+msgid "Slide show"
+msgstr "Προβολή παρουσίασης"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:669-5
 msgid ""
@@ -2871,9 +4112,15 @@ msgid ""
 "To exit a <span class=\"productname\">{productname}</span> slide show, press "
 "the <kbd>Esc</kbd> key to return to the presentation edit mode."
 msgstr ""
-"Για να βγείτε από προβολή παρουσίασης του <span class=\"productname\""
-">{productname}</span>, πατήστε το πλήκτρο <kbd>Esc</kbd> για να επιστρέψετε "
+"Για να βγείτε από προβολή παρουσίασης του <span class=\"productname\">"
+"{productname}</span>, πατήστε το πλήκτρο <kbd>Esc</kbd> για να επιστρέψετε "
 "στην κατάσταση επεξεργασίας παρουσίασης."
+
+#: html/cool-help.html%2Bdiv.div.div.h3:674-5
+#, fuzzy
+msgctxt "html/cool-help.html:1397"
+msgid "Slide pane"
+msgstr "Παράθυρο διαφανειών"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:676-5
 msgid ""
@@ -2892,16 +4139,22 @@ msgstr ""
 "ξεκινήσετε την προβολή παρουσίασης, προσθέστε διαφάνεια, διπλασιάστε ή "
 "διαγράψτε την τρέχουσα διαφάνεια."
 
+#: html/cool-help.html%2Bdiv.div.div.h3:681-5
+#, fuzzy
+msgctxt "html/cool-help.html:1401"
+msgid "Advanced features"
+msgstr "Προχωρημένα χαρακτηριστικά"
+
 #: html/cool-help.html%2Bdiv.div.div.div.p:683-5
 msgid ""
-"<span class=\"def\">Slide layouts:</span> <span class=\"productname\""
-">{productname}</span> Impress lets you change the slide layout. Select the "
+"<span class=\"def\">Slide layouts:</span> <span class=\"productname\">"
+"{productname}</span> Impress lets you change the slide layout. Select the "
 "desired slide layout in the drop-down layout list."
 msgstr ""
-"<span class=\"def\">Διατάξεις διαφανειών:</span> Το <span class=\"productname"
-"\">{productname}</span> Impress σας επιτρέπει να αλλάξετε τη διάταξη "
-"διαφανειών. Επιλέξτε την επιθυμητή διάταξη διαφανειών από τον πτυσσόμενο "
-"κατάλογο."
+"<span class=\"def\">Διατάξεις διαφανειών:</span> Το <span "
+"class=\"productname\">{productname}</span> Impress σας επιτρέπει να αλλάξετε "
+"τη διάταξη διαφανειών. Επιλέξτε την επιθυμητή διάταξη διαφανειών από τον "
+"πτυσσόμενο κατάλογο."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:684-53
 msgid ""
@@ -2922,13 +4175,13 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:687-30
 msgid ""
-"<span class=\"def\">Slide transitions:</span> <span class=\"productname\""
-">{productname}</span> Impress provides visual effects when displaying a new "
+"<span class=\"def\">Slide transitions:</span> <span class=\"productname\">"
+"{productname}</span> Impress provides visual effects when displaying a new "
 "slide in the slide show. Slide transitions are property of the slide, use "
 "the side bar to set the slide transition when in edit mode."
 msgstr ""
-"<span class=\"def\">Μεταβάσεις διαφανειών:</span> Το <span class="
-"\"productname\">{productname}</span> Impress παρέχει οπτικά εφέ όταν "
+"<span class=\"def\">Μεταβάσεις διαφανειών:</span> Το <span "
+"class=\"productname\">{productname}</span> Impress παρέχει οπτικά εφέ όταν "
 "εμφανίζει μια νέα διαφάνεια στη προβολή παρουσιάσεων. Οι μεταβάσεις "
 "διαφανειών είναι ιδιότητα της διαφάνειας, χρησιμοποιήστε την πλευρική γραμμή "
 "για να ορίσετε τη μετάβαση διαφάνειας όταν είναι στην κατάσταση επεξεργασίας."
@@ -2952,13 +4205,19 @@ msgstr ""
 "<span class=\"def\">Πίνακες:</span> Εισάγετε πίνακες στην παρουσίαση. "
 "Χρησιμοποιήστε τη πλευρική γραμμή για να επιλέξετε το θέμα του πίνακα."
 
+#: html/cool-help.html%2Bdiv.div.h3:693-5
+#, fuzzy
+msgctxt "html/cool-help.html:1403"
+msgid "Frequently Asked Questions"
+msgstr "Συχνές Ερωτήσεις"
+
 #: html/cool-help.html%2Bdiv.div.div.h4:695-5
 msgid ""
-"What are the document file formats supported by <span class=\"productname\""
-">{productname}</span>?"
+"What are the document file formats supported by <span class=\"productname\">"
+"{productname}</span>?"
 msgstr ""
-"Ποιες μορφές αρχείων κειμένου υποστηρίζονται από το <span class=\"productname"
-"\">{productname}</span>;"
+"Ποιες μορφές αρχείων κειμένου υποστηρίζονται από το <span "
+"class=\"productname\">{productname}</span>;"
 
 #: html/cool-help.html%2Bdiv.div.div.p:696-5
 msgid ""
@@ -3015,8 +4274,8 @@ msgstr ""
 msgid ""
 "<span class=\"productname\">{productname}</span> saves the document in the "
 "background regularly, you can't just close without saving it. To abandon "
-"your changes, you must either undo them, or use the <span class=\"ui\""
-">Revision History </span> in the <span class=\"ui\">File</span> menu."
+"your changes, you must either undo them, or use the <span class=\"ui\">"
+"Revision History </span> in the <span class=\"ui\">File</span> menu."
 msgstr ""
 "Το <span class=\"productname\">{productname}</span> αποθηκεύει το έγγραφο "
 "στο παρασκήνιο τακτικά, δεν μπορείτε να το κλείσετε χωρίς να το "
@@ -3060,8 +4319,8 @@ msgid ""
 "and select the language for the whole document. Optionally you can set "
 "languages for the selected text and for the current paragraph."
 msgstr ""
-"Επιλέξτε το μενού <span class=\"ui\">Εργαλεία</span> → <span class=\"ui\""
-">Γλώσσες</span> και επιλέξτε τη γλώσσα για όλο το έγγραφο. Προαιρετικά, "
+"Επιλέξτε το μενού <span class=\"ui\">Εργαλεία</span> → <span class=\"ui\">"
+"Γλώσσες</span> και επιλέξτε τη γλώσσα για όλο το έγγραφο. Προαιρετικά, "
 "μπορείτε να ορίσετε γλώσσες για το επιλεγμένο κείμενο και για την τρέχουσα "
 "παράγραφο."
 
@@ -3071,8 +4330,8 @@ msgstr "Πώς αφαιρώ τις κόκκινες κυματιστές γρα�
 
 #: html/cool-help.html%2Bdiv.div.div.p:726-5
 msgid ""
-"On the <span class=\"ui\">Review</span> tab, open <span class=\"ui\""
-">Spelling</span> and uncheck <span class=\"ui\">Auto Spell Check</span>."
+"On the <span class=\"ui\">Review</span> tab, open <span class=\"ui\">"
+"Spelling</span> and uncheck <span class=\"ui\">Auto Spell Check</span>."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:729-5
@@ -3100,8 +4359,8 @@ msgstr "Υπάρχει θησαυρός;"
 #: html/cool-help.html%2Bdiv.div.div.p:734-5
 #, fuzzy
 msgid ""
-"Yes. Click in the word you want and choose <span class=\"ui\">Review</span> →"
-" <span class=\"ui\">Thesaurus</span>. A dialog opens with many suggestions "
+"Yes. Click in the word you want and choose <span class=\"ui\">Review</span> "
+"→ <span class=\"ui\">Thesaurus</span>. A dialog opens with many suggestions "
 "for replacements."
 msgstr ""
 "Ναι. Πατήστε τη λέξη που θέλετε και επιλέξτε <span class=\"ui\">Εργαλεία</"
@@ -3129,14 +4388,20 @@ msgstr ""
 msgid ""
 "The <span class=\"blue\">¶</span> symbol is a formatting mark. It is used to "
 "help text alignment and editing and is not printed. To toggle it in the "
-"document display, choose <span class=\"ui\">View</span> → <span class=\"ui\""
-">Formatting Marks</span>."
+"document display, choose <span class=\"ui\">View</span> → <span class=\"ui\">"
+"Formatting Marks</span>."
 msgstr ""
 "Το σύμβολο <span class=\"blue\">¶</span> είναι σημάδι μορφοποίησης. "
 "Χρησιμοποιείται για να βοηθήσει τη στοίχιση κειμένου και την επεξεργασία και "
 "δεν εκτυπώνεται. Για να το εναλλάξετε στην προβολή εγγράφου, επιλέξτε το "
 "μενού <span class=\"ui\">Προβολή</span> → <span class=\"ui\">Σημάδι "
 "μορφοποίησης</span>."
+
+#: html/cool-help.html%2Bdiv.div.div.h3:744-5
+#, fuzzy
+msgctxt "html/cool-help.html:1407"
+msgid "Text documents"
+msgstr "Έγγραφα κειμένου"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:746-5
 msgid "How do I get a word count of my document?"
@@ -3145,9 +4410,9 @@ msgstr "Πώς παίρνω το πλήθος των λέξεων του εγγ�
 #: html/cool-help.html%2Bdiv.div.div.div.p:747-5
 #, fuzzy
 msgid ""
-"Word count is available in <span class=\"ui\">Review</span> → <span class="
-"\"ui\">Word Count</span>. A dialog shows word counts for selection and for "
-"the whole document."
+"Word count is available in <span class=\"ui\">Review</span> → <span "
+"class=\"ui\">Word Count</span>. A dialog shows word counts for selection and "
+"for the whole document."
 msgstr ""
 "Το πλήθος των λέξεων διατίθεται στο <span class=\"ui\">Εργαλεία</span> → "
 "<span class=\"ui\">Πλήθος λέξεων</span>. Ένας διάλογος εμφανίζει το πλήθος "
@@ -3236,16 +4501,16 @@ msgid ""
 "You have the Track Changes feature enabled for the document. Track Changes "
 "records all changes in the text and shows the edits for later revision. "
 "Useful for marking changes in text and spreadsheets. Track changes are "
-"enabled choosing <span class=\"ui\">Review</span> → <span class=\"ui\""
-">Record</span>."
+"enabled choosing <span class=\"ui\">Review</span> → <span class=\"ui\">"
+"Record</span>."
 msgstr ""
 "Έχετε ενεργό το γνώρισμα παρακολούθησης αλλαγών για το έγγραφο. Η "
 "παρακολούθηση αλλαγών καταγράφει όλες τις αλλαγές στο κείμενο και εμφανίζει "
 "τις επεξεργασίες για μεταγενέστερη αναθεώρηση. Χρήσιμο για σημείωση αλλαγών "
 "στο κείμενο και σε υπολογιστικά φύλλα. Η παρακολούθηση αλλαγών "
 "ενεργοποιείται επιλέγοντας <span class=\"ui\">Επεξεργασία</span> → <span "
-"class=\"ui\">Παρακολούθηση αλλαγών</span> → <span class=\"ui\""
-">Καταγραφή</span>."
+"class=\"ui\">Παρακολούθηση αλλαγών</span> → <span class=\"ui\">Καταγραφή</"
+"span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:767-5
 msgid ""
@@ -3270,6 +4535,16 @@ msgstr "Όλες οι αλλαγές σημειώνονται με κάθετη 
 msgid "Changes are displayed as comment in the right of the document area."
 msgstr "Οι αλλαγές εμφανίζονται ως σχόλια στα δεξιά της περιοχής του εγγράφου."
 
+#: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:774-61
+#, fuzzy
+msgctxt "html/cool-help.html+help-track-changes-comment:774-5.img:0-56[alt]"
+msgid ""
+"Tracked change shown as a comment box beside the document with author name, "
+"date, and change description"
+msgstr ""
+"Η παρακολουθούμενη αλλαγή εμφανίζεται ως πλαίσιο σχολίου δίπλα στο έγγραφο "
+"με το όνομα του συγγραφέα, την ημερομηνία και την περιγραφή της αλλαγής"
+
 #: html/cool-help.html%2Bdiv.div.div.div.p:775-5
 msgid ""
 "The color assigned to the changes depends on the user that changes the "
@@ -3286,32 +4561,32 @@ msgid ""
 "Beware that if track changes are enabled but hidden, you still record "
 "changes and may inadvertently leave unwanted text available in the document."
 msgstr ""
-"Για να εμφανίσετε ή να αποκρύψετε τις αλλαγές επιλέξτε <span class=\"ui\""
-">Επεξεργασία</span> → <span class=\"ui\">Παρακολούθηση αλλαγών</span> → "
-"<span class=\"ui\">Εμφάνιση</span>. Προσέξτε ότι εάν η παρακολούθηση αλλαγών "
-"είναι ενεργή αλλά κρυφή, εξακολουθείτε να καταγράφετε τις αλλαγές και ίσως "
-"αφήσετε αθέλητα ανεπιθύμητο κείμενο διαθέσιμο στο έγγραφο."
+"Για να εμφανίσετε ή να αποκρύψετε τις αλλαγές επιλέξτε <span class=\"ui\">"
+"Επεξεργασία</span> → <span class=\"ui\">Παρακολούθηση αλλαγών</span> → <span "
+"class=\"ui\">Εμφάνιση</span>. Προσέξτε ότι εάν η παρακολούθηση αλλαγών είναι "
+"ενεργή αλλά κρυφή, εξακολουθείτε να καταγράφετε τις αλλαγές και ίσως αφήσετε "
+"αθέλητα ανεπιθύμητο κείμενο διαθέσιμο στο έγγραφο."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:777-5
 #, fuzzy
 msgid ""
 "Changes can be accepted or rejected. To accept or reject changes, click on "
 "the corresponding icons in the comment box on the right of the document. "
-"Alternatively, choose <span class=\"ui\">Review</span> → <span class=\"ui\""
-">Accept</span> or <span class=\"ui\">Reject</span>. Furthermore, if you need "
-"to filter changes before accepting or rejecting, choose <span class=\"ui\""
-">Review</span> → <span class=\"ui\">Accept</span> → <span class=\"ui\""
-">Manage</span>. A dialog shows a list of all tracked changes. Use the dialog "
+"Alternatively, choose <span class=\"ui\">Review</span> → <span class=\"ui\">"
+"Accept</span> or <span class=\"ui\">Reject</span>. Furthermore, if you need "
+"to filter changes before accepting or rejecting, choose <span class=\"ui\">"
+"Review</span> → <span class=\"ui\">Accept</span> → <span class=\"ui\">"
+"Manage</span>. A dialog shows a list of all tracked changes. Use the dialog "
 "buttons accordingly."
 msgstr ""
 "Οι αλλαγές μπορεί να γίνουν αποδεκτές ή να απορριφθούν. Για να αποδεχθείτε ή "
 "να απορρίψετε τις αλλαγές, πατήστε στα αντίστοιχα εικονίδια στο πλαίσιο "
-"σχολίων στα δεξιά του εγγράφου. Εναλλακτικά, επιλέξτε <span class=\"ui\""
-">Επεξεργασία</span> → <span class=\"ui\">Παρακολούθηση αλλαγών</span> → "
-"<span class=\"ui\">Αποδοχή</span> ή <span class=\"ui\">Απόρριψη</span>. "
-"Επιπλέον, εάν χρειάζεται να φιλτράρετε τις αλλαγές πριν την αποδοχή ή την "
-"απόρριψη, επιλέξτε <span class=\"ui\">Επεξεργασία</span> → <span class=\"ui\""
-">Παρακολούθηση αλλαγών</span> → <span class=\"ui\">Διαχείριση</span>. Ένας "
+"σχολίων στα δεξιά του εγγράφου. Εναλλακτικά, επιλέξτε <span class=\"ui\">"
+"Επεξεργασία</span> → <span class=\"ui\">Παρακολούθηση αλλαγών</span> → <span "
+"class=\"ui\">Αποδοχή</span> ή <span class=\"ui\">Απόρριψη</span>. Επιπλέον, "
+"εάν χρειάζεται να φιλτράρετε τις αλλαγές πριν την αποδοχή ή την απόρριψη, "
+"επιλέξτε <span class=\"ui\">Επεξεργασία</span> → <span class=\"ui\">"
+"Παρακολούθηση αλλαγών</span> → <span class=\"ui\">Διαχείριση</span>. Ένας "
 "διάλογος εμφανίζει έναν κατάλογο όλων των παρακολουθούμενων αλλαγών. "
 "Χρησιμοποιήστε τα πλήκτρα του διαλόγου ανάλογα."
 
@@ -3376,8 +4651,8 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:794-7
 msgid ""
-"Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Paragraph</"
-"span>, <span class=\"ui\">Text Flow </span> tab"
+"Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Paragraph</span>"
+", <span class=\"ui\">Text Flow </span> tab"
 msgstr ""
 "Επιλέξτε <span class=\"ui\">Μορφή</span> → <span class=\"ui\">Παράγραφος</"
 "span>, καρτέλα <span class=\"ui\">Ροή κειμένου</span>"
@@ -3421,12 +4696,12 @@ msgid "Select the text with the existing format"
 msgstr "Επιλέξτε το κείμενο με την υφιστάμενη μορφή"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:806-7
-#: html/cool-help.html%2Bdiv.div.div.div.ol.li:848-7
+msgctxt "html/cool-help.html:help-format-paintbrush"
 msgid ""
-"Click on the <span class=\"ui\">Clone Formatting</span> icon <img alt="
-"\"format paintbrush\" class=\"icon-size\" src=\"images/lc_formatpaintbrush."
-"svg\" /> on the <span class=\"ui\">Home</span> tab. The mouse pointer turns "
-"to a paint bucket."
+"Click on the <span class=\"ui\">Clone Formatting</span> icon <img "
+"alt=\"format paintbrush\" class=\"icon-size\" src=\"images/"
+"lc_formatpaintbrush.svg\" /> on the <span class=\"ui\">Home</span> tab. The "
+"mouse pointer turns to a paint bucket."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:807-7
@@ -3465,6 +4740,12 @@ msgid ""
 "was applied."
 msgstr ""
 
+#: html/cool-help.html%2Bdiv.div.div.h3:825-5
+#, fuzzy
+msgctxt "html/cool-help.html:1409"
+msgid "Spreadsheets"
+msgstr "Υπολογιστικά φύλλα"
+
 #: html/cool-help.html%2Bdiv.div.div.div.h4:827-5
 msgid "How can I select data to print?"
 msgstr "Πώς μπορώ να επιλέξω τα προς εκτύπωση δεδομένα;"
@@ -3492,14 +4773,14 @@ msgid ""
 "Activate the <span class=\"productname\">{productname}</span> spreadsheet "
 "window."
 msgstr ""
-"Ενεργοποιήστε το παράθυρο υπολογιστικού φύλλου του <span class=\"productname"
-"\">{productname}</span>."
+"Ενεργοποιήστε το παράθυρο υπολογιστικού φύλλου του <span "
+"class=\"productname\">{productname}</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:835-7
 msgid ""
-"Press <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\""
-">+</span><kbd>V</kbd>. The <span class=\"ui\">Text Import</span> dialog "
-"opens to let you describe the precise format of the CSV data."
+"Press <kbd>Ctrl</kbd><span class=\"kbd--plus\" aria-hidden=\"true\">+</span>"
+"<kbd>V</kbd>. The <span class=\"ui\">Text Import</span> dialog opens to let "
+"you describe the precise format of the CSV data."
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:838-53
@@ -3541,6 +4822,15 @@ msgstr ""
 "Μορφοποιήστε το κελί προέλευσης με τη γραμματοσειρά, χρώμα παρασκηνίου και "
 "άλλα."
 
+#: html/cool-help.html%2Bdiv.div.div.div.ol.li:848-7
+msgctxt "html/cool-help.html+help-format-paintbrush:848-7"
+msgid ""
+"Click on the <span class=\"ui\">Clone Formatting</span> icon <img "
+"alt=\"format paintbrush\" class=\"icon-size\" src=\"images/"
+"lc_formatpaintbrush.svg\" /> on the <span class=\"ui\">Home</span> tab. The "
+"mouse pointer turns to a paint bucket."
+msgstr ""
+
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:849-7
 msgid "Select the cells you want to format. Release the mouse button."
 msgstr ""
@@ -3557,8 +4847,8 @@ msgid ""
 "Direct formatting is formatting applied directly to the selected contents of "
 "a paragraph or a spreadsheet cell, and overlaps its assigned style "
 "formatting. To restore the formatting to the style settings, select the text "
-"or spreadsheet cell and choose <span class=\"ui\">Home</span> → <span class="
-"\"ui\">Clear Direct Formatting</span>."
+"or spreadsheet cell and choose <span class=\"ui\">Home</span> → <span "
+"class=\"ui\">Clear Direct Formatting</span>."
 msgstr ""
 "Η άμεση μορφοποίηση είναι η μορφοποίηση που εφαρμόζεται απευθείας στα "
 "επιλεγμένα περιεχόμενα παραγράφου ή κελιού υπολογιστικού φύλλου και "
@@ -3582,6 +4872,12 @@ msgstr ""
 "περιβάλλοντος (χρησιμοποιώντας το δεξιό πλήκτρο του ποντικιού) πάνω από την "
 "καρτέλα φύλλου στο τέλος. Εισάγετε το νέο όνομα του φύλλου στον διάλογο που "
 "ακολουθεί."
+
+#: html/cool-help.html%2Bdiv.div.div.h3:864-5
+#, fuzzy
+msgctxt "html/cool-help.html:1411"
+msgid "Presentations"
+msgstr "Παρουσιάσεις"
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:866-5
 msgid "How can I run my slide show?"
@@ -3617,12 +4913,12 @@ msgstr "Επιλέξτε το σχήμα στη διαφάνειά σας. Εμ�
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:876-7
 msgid ""
 "Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Line</span> (or "
-"<span class=\"ui\">Area</span>, or <span class=\"ui\">Position and "
-"Size</span>). A dialog opens."
+"<span class=\"ui\">Area</span>, or <span class=\"ui\">Position and Size</"
+"span>). A dialog opens."
 msgstr ""
-"Επιλέξτε <span class=\"ui\">Μορφή</span> → <span class=\"ui\">Γραμμή</span> ("
-"ή <span class=\"ui\">Περιοχή</span>, ή <span class=\"ui\">Θέση και "
-"μέγεθος</span>). Ανοίγει ένας διάλογος."
+"Επιλέξτε <span class=\"ui\">Μορφή</span> → <span class=\"ui\">Γραμμή</span> "
+"(ή <span class=\"ui\">Περιοχή</span>, ή <span class=\"ui\">Θέση και μέγεθος</"
+"span>). Ανοίγει ένας διάλογος."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:879-53
 msgid ""

@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: com.collaboraoffice.demo-wordcloud\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-10-13 12:06+0000\n"
+"POT-Creation-Date: 2026-10-22 21:37+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -47,7 +47,7 @@ msgstr ""
 msgid "gathering text..."
 msgstr ""
 
-#: index.html:205
+#: index.html:225
 msgid "inserted %1 word"
 msgid_plural "inserted %1 words"
 msgstr[0] ""
