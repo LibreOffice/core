@@ -11,6 +11,8 @@
 #include <sal/types.h>
 #include <rtl/ustring.h>
 
+#include <vector>
+
 struct Args
 {
     rtl_uString* pAppPath = nullptr;
@@ -22,7 +24,7 @@ struct Args
 
     sal_uInt32 nArgsEnv = 0; // number of -env: style args
     sal_uInt32 nArgsTotal = 0; // number of -env: as well as -writer style args
-    rtl_uString* ppArgs[1]; // sorted argument array
+    std::vector<rtl_uString*> aArgs; // sorted argument vector
 };
 
 Args *args_parse (void);

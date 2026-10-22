@@ -114,7 +114,7 @@ static ChildInfo child_spawn(Args* args, bool bAllArgs, bool bWithStatus)
     sal_uInt32 nArgs = bAllArgs ? args->nArgsTotal : args->nArgsEnv;
     rtl_uString** ppArgs = static_cast<rtl_uString**>(calloc(nArgs + 1, sizeof(rtl_uString*)));
     for (sal_uInt32 i = 0; i < nArgs; ++i)
-        ppArgs[i] = args->ppArgs[i];
+        ppArgs[i] = args->aArgs.at(i);
 
     if(bWithStatus)
     {
@@ -608,7 +608,7 @@ static void exec_javaldx(Args *args)
     ppArgs = static_cast<rtl_uString **>(calloc(args->nArgsEnv + 2, sizeof(rtl_uString*)));
 
     for (nArgs = 0; nArgs < args->nArgsEnv; ++nArgs)
-        ppArgs[nArgs] = args->ppArgs[nArgs];
+        ppArgs[nArgs] = args->aArgs.at(nArgs);
 
     /* Use absolute path to redirectrc */
     pTmp = nullptr;

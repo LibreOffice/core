@@ -59,8 +59,7 @@ const struct {
 Args *args_parse (void)
 {
     const sal_uInt32 nArgs = osl_getCommandArgCount();
-    const sal_uInt32 nAllocSize = sizeof(Args) + sizeof(rtl_uString*) * nArgs;
-    Args* args = static_cast<Args*>(malloc(nAllocSize));
+    Args* args = new Args;
     args->nArgsTotal = nArgs;
 
     sal_uInt32 j = 0;
@@ -71,9 +70,14 @@ Args *args_parse (void)
         rtl_uString *pTmp = nullptr;
         osl_getCommandArg( i, &pTmp );
         if (is_env_arg (pTmp))
-            args->ppArgs[j++] = pTmp;
+        {
+            args->aArgs.insert(args->aArgs.begin() + j, pTmp);
+            ++j;
+        }
         else
+        {
             rtl_uString_release (pTmp);
+        }
     }
     args->nArgsEnv = j;
 
@@ -84,15 +88,20 @@ Args *args_parse (void)
 
         osl_getCommandArg( i, &pTmp );
         if (!is_env_arg (pTmp))
-            args->ppArgs[j++] = pTmp;
+        {
+            args->aArgs.insert(args->aArgs.begin() + j, pTmp);
+            ++j;
+        }
         else
+        {
             rtl_uString_release (pTmp);
+        }
     }
 
     for (sal_uInt32 i = args->nArgsEnv; i < args->nArgsTotal; i++)
     {
-        const sal_Unicode *arg = args->ppArgs[i]->buffer;
-        sal_Int32 length = args->ppArgs[i]->length;
+        const sal_Unicode* arg = args->aArgs.at(i)->buffer;
+        sal_Int32 length = args->aArgs.at(i)->length;
 
         /* grok only parameters */
         if (arg[0] != '-')
@@ -127,7 +136,7 @@ args_free (Args *args)
 {
     /* FIXME: free ppArgs */
     rtl_uString_release( args->pAppPath );
-    free (args);
+    delete args;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
