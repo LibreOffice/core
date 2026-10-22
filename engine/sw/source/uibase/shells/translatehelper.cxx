@@ -489,128 +489,176 @@ bool TranslateRanges(SwWrtShell& rWrtSh, const TranslateFunc& rTranslate,
                     }
                 }
 
-                const auto aOut = SwTranslateHelper::ExportPaMToHTML(cursor.get());
-                OString aError;
-                const auto aTranslatedOut = rTranslate(aOut, aError);
-                if (!aTranslatedOut.isEmpty())
+                // A text frame anchored as a character stays where it is: the
+                // text is translated in the pieces between such frames, the
+                // last piece first, so the earlier ones keep their positions.
+                std::vector<std::pair<sal_Int32, sal_Int32>> aPieces;
                 {
-                    // The translation replaces the range and the text after the range stays,
-                    // so the end of the translation is found by counting back from there:
-                    // the paste can change the number of paragraphs.
-                    const sal_Int32 nStartContent = cursor->Start()->GetContentIndex();
-                    const SwNodeOffset nNodesAfter = pNodes.Count() - n;
-                    const sal_Int32 nCharsAfter
-                        = pNode->GetTextNode()->Len() - cursor->End()->GetContentIndex();
-                    // The bookmarks that span the text being replaced: the
-                    // paste leaves them empty, and a reference to one of them
-                    // would show nothing.
-                    std::vector<sw::mark::MarkBase*> aSpanningMarks;
-                    IDocumentMarkAccess& rMarks = *rWrtSh.GetDoc()->getIDocumentMarkAccess();
-                    for (auto it = rMarks.getBookmarksBegin(); it != rMarks.getBookmarksEnd(); ++it)
+                    const sal_Int32 nFrom = cursor->Start()->GetContentIndex();
+                    const sal_Int32 nTo = cursor->End()->GetContentIndex();
+                    sal_Int32 nPieceStart = nFrom;
+                    if (const SwpHints* pHints = pNode->GetTextNode()->GetpSwpHints())
                     {
-                        sw::mark::MarkBase* pMark = *it;
-                        if (pMark->IsExpanded() && pMark->GetMarkStart() == *cursor->Start()
-                            && pMark->GetMarkEnd() == *cursor->End())
-                            aSpanningMarks.push_back(pMark);
-                    }
-                    SwTextFormatColl* pColl = pNode->GetTextNode()->GetTextColl();
-                    std::optional<SwAttrSet> oNodeAttrs;
-                    if (const SwAttrSet* pNodeAttrs = pNode->GetTextNode()->GetpSwAttrSet())
-                        oNodeAttrs.emplace(*pNodeAttrs);
-                    // The paste re-creates the paragraph's footnotes, whose
-                    // sections sit ahead of the body: the paragraph's index
-                    // moves by as many nodes as those sections grew or shrank.
-                    const SwNodeOffset nExtrasBefore = pNodes.GetEndOfExtras().GetIndex();
-                    // One undo step for the paragraph: its translation and its language.
-                    rWrtSh.StartUndo(SwUndoId::PASTE_CLIPBOARD);
-                    SwTranslateHelper::PasteHTMLToPaM(rWrtSh, cursor.get(), aTranslatedOut);
-                    const SwNodeOffset nFirstPasted
-                        = n + (pNodes.GetEndOfExtras().GetIndex() - nExtrasBefore);
-                    const SwNodeOffset nLastPasted = pNodes.Count() - nNodesAfter;
-                    // The HTML import treats text without a block element as
-                    // a paragraph of its own: it sets its default paragraph
-                    // style, and what the markup says about the paragraph, its
-                    // spacing, alignment, font and list, as hard attributes.
-                    // Put the paragraph's own style and attributes back.
-                    SwDoc& rDoc = *rWrtSh.GetDoc();
-                    for (SwNodeOffset i = nFirstPasted; i <= nLastPasted; ++i)
-                    {
-                        SwTextNode* pPasted = pNodes[i]->GetTextNode();
-                        if (!pPasted)
-                            continue;
-                        const SwPaM aPasted(*pPasted, 0, *pPasted, pPasted->Len());
-                        if (pPasted->GetTextColl() != pColl)
-                            rDoc.SetTextFormatColl(aPasted, pColl, false);
-                        // Character formatting that covers the whole paragraph
-                        // ends up on the paragraph as well. Where it says more
-                        // than the paragraph style does, it is the translation's
-                        // own, bold text for instance, and stays.
-                        SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END - 1> aOwnCharAttrs(
-                            rDoc.GetAttrPool());
-                        if (const SwAttrSet* pPastedAttrs = pPasted->GetpSwAttrSet())
+                        for (size_t i = 0; i < pHints->Count(); ++i)
                         {
-                            for (SfxItemIter aIter(*pPastedAttrs); !aIter.IsAtEnd(); aIter.Next())
+                            const SwTextAttr* pHint = pHints->Get(i);
+                            if (pHint->Which() != RES_TXTATR_FLYCNT)
+                                continue;
+                            const sal_Int32 nAt = pHint->GetStart();
+                            if (nAt < nFrom || nAt >= nTo)
+                                continue;
+                            if (nAt > nPieceStart)
+                                aPieces.emplace_back(nPieceStart, nAt);
+                            nPieceStart = nAt + 1;
+                        }
+                    }
+                    if (nTo > nPieceStart)
+                        aPieces.emplace_back(nPieceStart, nTo);
+                    // The blanks at the ends of a piece stay as they are: the
+                    // round trip through HTML would drop a leading one.
+                    const OUString& rText = pNode->GetTextNode()->GetText();
+                    for (std::pair<sal_Int32, sal_Int32>& rPiece : aPieces)
+                    {
+                        while (rPiece.first < rPiece.second && rText[rPiece.first] == ' ')
+                            ++rPiece.first;
+                        while (rPiece.second > rPiece.first && rText[rPiece.second - 1] == ' ')
+                            --rPiece.second;
+                    }
+                    std::erase_if(aPieces, [](const std::pair<sal_Int32, sal_Int32>& rPiece) {
+                        return rPiece.first >= rPiece.second;
+                    });
+                }
+                for (size_t nPiece = aPieces.size(); nPiece > 0 && !bStop; --nPiece)
+                {
+                    cursor->GetPoint()->nContent = aPieces[nPiece - 1].first;
+                    cursor->SetMark();
+                    cursor->GetMark()->nContent = aPieces[nPiece - 1].second;
+
+                    const auto aOut = SwTranslateHelper::ExportPaMToHTML(cursor.get());
+                    OString aError;
+                    const auto aTranslatedOut = rTranslate(aOut, aError);
+                    if (!aTranslatedOut.isEmpty())
+                    {
+                        // The translation replaces the range and the text after the range stays,
+                        // so the end of the translation is found by counting back from there:
+                        // the paste can change the number of paragraphs.
+                        const sal_Int32 nStartContent = cursor->Start()->GetContentIndex();
+                        const SwNodeOffset nNodesAfter = pNodes.Count() - n;
+                        const sal_Int32 nCharsAfter
+                            = pNode->GetTextNode()->Len() - cursor->End()->GetContentIndex();
+                        // The bookmarks that span the text being replaced: the
+                        // paste leaves them empty, and a reference to one of them
+                        // would show nothing.
+                        std::vector<sw::mark::MarkBase*> aSpanningMarks;
+                        IDocumentMarkAccess& rMarks = *rWrtSh.GetDoc()->getIDocumentMarkAccess();
+                        for (auto it = rMarks.getBookmarksBegin(); it != rMarks.getBookmarksEnd(); ++it)
+                        {
+                            sw::mark::MarkBase* pMark = *it;
+                            if (pMark->IsExpanded() && pMark->GetMarkStart() == *cursor->Start()
+                                && pMark->GetMarkEnd() == *cursor->End())
+                                aSpanningMarks.push_back(pMark);
+                        }
+                        SwTextFormatColl* pColl = pNode->GetTextNode()->GetTextColl();
+                        std::optional<SwAttrSet> oNodeAttrs;
+                        if (const SwAttrSet* pNodeAttrs = pNode->GetTextNode()->GetpSwAttrSet())
+                            oNodeAttrs.emplace(*pNodeAttrs);
+                        // The paste re-creates the paragraph's footnotes, whose
+                        // sections sit ahead of the body: the paragraph's index
+                        // moves by as many nodes as those sections grew or shrank.
+                        const SwNodeOffset nExtrasBefore = pNodes.GetEndOfExtras().GetIndex();
+                        // One undo step for the paragraph: its translation and its language.
+                        rWrtSh.StartUndo(SwUndoId::PASTE_CLIPBOARD);
+                        SwTranslateHelper::PasteHTMLToPaM(rWrtSh, cursor.get(), aTranslatedOut);
+                        const SwNodeOffset nFirstPasted
+                            = n + (pNodes.GetEndOfExtras().GetIndex() - nExtrasBefore);
+                        const SwNodeOffset nLastPasted = pNodes.Count() - nNodesAfter;
+                        // The HTML import treats text without a block element as
+                        // a paragraph of its own: it sets its default paragraph
+                        // style, and what the markup says about the paragraph, its
+                        // spacing, alignment, font and list, as hard attributes.
+                        // Put the paragraph's own style and attributes back.
+                        SwDoc& rDoc = *rWrtSh.GetDoc();
+                        for (SwNodeOffset i = nFirstPasted; i <= nLastPasted; ++i)
+                        {
+                            SwTextNode* pPasted = pNodes[i]->GetTextNode();
+                            if (!pPasted)
+                                continue;
+                            const SwPaM aPasted(*pPasted, 0, *pPasted, pPasted->Len());
+                            if (pPasted->GetTextColl() != pColl)
+                                rDoc.SetTextFormatColl(aPasted, pColl, false);
+                            // Character formatting that covers the whole paragraph
+                            // ends up on the paragraph as well. Where it says more
+                            // than the paragraph style does, it is the translation's
+                            // own, bold text for instance, and stays.
+                            SfxItemSetFixed<RES_CHRATR_BEGIN, RES_CHRATR_END - 1> aOwnCharAttrs(
+                                rDoc.GetAttrPool());
+                            if (const SwAttrSet* pPastedAttrs = pPasted->GetpSwAttrSet())
                             {
-                                const SfxPoolItem* pItem = aIter.GetCurItem();
-                                const sal_uInt16 nWhich = pItem->Which();
-                                if (nWhich < RES_CHRATR_BEGIN || nWhich >= RES_CHRATR_END)
-                                    continue;
-                                if (!(pColl->GetAttrSet().Get(nWhich) == *pItem))
-                                    aOwnCharAttrs.Put(*pItem);
+                                for (SfxItemIter aIter(*pPastedAttrs); !aIter.IsAtEnd(); aIter.Next())
+                                {
+                                    const SfxPoolItem* pItem = aIter.GetCurItem();
+                                    const sal_uInt16 nWhich = pItem->Which();
+                                    if (nWhich < RES_CHRATR_BEGIN || nWhich >= RES_CHRATR_END)
+                                        continue;
+                                    if (!(pColl->GetAttrSet().Get(nWhich) == *pItem))
+                                        aOwnCharAttrs.Put(*pItem);
+                                }
+                                if (pPastedAttrs->Count())
+                                    rDoc.ResetAttrs(aPasted, false, {});
                             }
-                            if (pPastedAttrs->Count())
-                                rDoc.ResetAttrs(aPasted, false, {});
+                            if (oNodeAttrs && oNodeAttrs->Count())
+                                rDoc.getIDocumentContentOperations().InsertItemSet(aPasted, *oNodeAttrs);
+                            if (aOwnCharAttrs.Count())
+                                rDoc.getIDocumentContentOperations().InsertItemSet(aPasted, aOwnCharAttrs);
                         }
-                        if (oNodeAttrs && oNodeAttrs->Count())
-                            rDoc.getIDocumentContentOperations().InsertItemSet(aPasted, *oNodeAttrs);
-                        if (aOwnCharAttrs.Count())
-                            rDoc.getIDocumentContentOperations().InsertItemSet(aPasted, aOwnCharAttrs);
-                    }
-                    if (eTargetLanguage != LANGUAGE_DONTKNOW)
-                    {
-                        SetLanguageOfRange(rWrtSh, nFirstPasted, nStartContent, nLastPasted,
-                                           nCharsAfter, eTargetLanguage);
-                        SetLanguageOfFootnotes(rWrtSh, nFirstPasted, nLastPasted, eTargetLanguage);
-                    }
-                    if (!aSpanningMarks.empty())
-                    {
-                        SwTextNode* pLastNode = pNodes[nLastPasted]->GetTextNode();
-                        const sal_Int32 nEndContent
-                            = pLastNode ? pLastNode->Len() - nCharsAfter : 0;
-                        if (pLastNode && nEndContent >= 0)
+                        if (eTargetLanguage != LANGUAGE_DONTKNOW)
                         {
-                            const SwPaM aTranslated(*pNodes[nFirstPasted], nStartContent,
-                                                    *pLastNode, nEndContent);
-                            for (sw::mark::MarkBase* pMark : aSpanningMarks)
-                                rMarks.repositionMark(pMark, aTranslated);
+                            SetLanguageOfRange(rWrtSh, nFirstPasted, nStartContent, nLastPasted,
+                                               nCharsAfter, eTargetLanguage);
+                            SetLanguageOfFootnotes(rWrtSh, nFirstPasted, nLastPasted, eTargetLanguage);
                         }
+                        if (!aSpanningMarks.empty())
+                        {
+                            SwTextNode* pLastNode = pNodes[nLastPasted]->GetTextNode();
+                            const sal_Int32 nEndContent
+                                = pLastNode ? pLastNode->Len() - nCharsAfter : 0;
+                            if (pLastNode && nEndContent >= 0)
+                            {
+                                const SwPaM aTranslated(*pNodes[nFirstPasted], nStartContent,
+                                                        *pLastNode, nEndContent);
+                                for (sw::mark::MarkBase* pMark : aSpanningMarks)
+                                    rMarks.repositionMark(pMark, aTranslated);
+                            }
+                        }
+                        rWrtSh.EndUndo(SwUndoId::PASTE_CLIPBOARD);
+                        // Continue after the pasted translation, however many
+                        // nodes it took.
+                        n = nLastPasted;
+                        nEndNode = rRange.aEnd.nNode.GetIndex();
                     }
-                    rWrtSh.EndUndo(SwUndoId::PASTE_CLIPBOARD);
-                    // Continue after the pasted translation, however many
-                    // nodes it took.
-                    n = nLastPasted;
-                    nEndNode = rRange.aEnd.nNode.GetIndex();
-                }
-                else
-                {
-                    // Close the progress indicator first: in the LOK case it is a
-                    // dialog of its own, which would cover the error.
-                    if (xStatusIndicator.is())
+                    else
                     {
-                        xStatusIndicator->end();
-                        xStatusIndicator.clear();
+                        // Close the progress indicator first: in the LOK case it is a
+                        // dialog of its own, which would cover the error.
+                        if (xStatusIndicator.is())
+                        {
+                            xStatusIndicator->end();
+                            xStatusIndicator.clear();
+                        }
+                        // Parent the dialog to the frame: a parentless dialog has no
+                        // notifier in the LOK case, so it would never reach the client.
+                        std::shared_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
+                            rWrtSh.GetView().GetFrameWeld(), VclMessageType::Error,
+                            VclButtonsType::Ok, SwResId(STR_SWTRANSLATE_ERROR)));
+                        if (!aError.isEmpty())
+                            xBox->set_secondary_text(OStringToOUString(aError, RTL_TEXTENCODING_UTF8));
+                        xBox->runAsync(xBox, [](sal_uInt32) {});
+                        bStop = true;
+                        break;
                     }
-                    // Parent the dialog to the frame: a parentless dialog has no
-                    // notifier in the LOK case, so it would never reach the client.
-                    std::shared_ptr<weld::MessageDialog> xBox(Application::CreateMessageDialog(
-                        rWrtSh.GetView().GetFrameWeld(), VclMessageType::Error,
-                        VclButtonsType::Ok, SwResId(STR_SWTRANSLATE_ERROR)));
-                    if (!aError.isEmpty())
-                        xBox->set_secondary_text(OStringToOUString(aError, RTL_TEXTENCODING_UTF8));
-                    xBox->runAsync(xBox, [](sal_uInt32) {});
-                    bStop = true;
-                    break;
                 }
+                if (bStop)
+                    break;
 
                 if (xStatusIndicator.is() && nCount)
                     xStatusIndicator->setValue((100 * ++nProgress) / nCount);

@@ -1949,6 +1949,52 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateKeepsDirectFormatting)
                          getProperty<float>(getRun(getParagraph(1), 1), u"CharWeight"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateFrameAsCharacter)
+{
+    // The mock returns the markup it was sent, as the translation services do.
+    std::unique_ptr<test::MockHttpServer> pMockServer = createMockTranslateServer(false, true);
+    CPPUNIT_ASSERT(pMockServer->start());
+    comphelper::ScopeGuard<std::function<void()>> aResetConfig
+        = setTranslationService(u"http://127.0.0.1:18099/v2/translate"_ustr);
+
+    // Given a paragraph with a text frame anchored as a character in the middle of its text:
+    createSwDoc();
+    SwWrtShell* const pWrtSh = getSwDocShell()->GetWrtShell();
+    pWrtSh->Insert(u"Body text"_ustr);
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextFrame> xFrame(
+        xFactory->createInstance(u"com.sun.star.text.TextFrame"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrameProperties(xFrame, uno::UNO_QUERY);
+    xFrameProperties->setPropertyValue(u"AnchorType"_ustr,
+                                       uno::Any(text::TextContentAnchorType_AS_CHARACTER));
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xBody = xTextDocument->getText();
+    xBody->insertTextContent(xBody->getEnd(), xFrame, false);
+    xFrame->getText()->setString(u"Frame text"_ustr);
+    xFrame.clear();
+    pWrtSh->SttEndDoc(false);
+    pWrtSh->Insert(u" more text"_ustr);
+    const OUString aParagraph = getParagraph(1)->getString();
+    pWrtSh->SttEndDoc(true);
+
+    // When translating the whole document:
+    bool bCancel = false;
+    CPPUNIT_ASSERT(SwTranslateHelper::TranslateDocumentCancellable(*pWrtSh, "DE"_ostr, bCancel));
+
+    // Then the frame is still there, in its place, with its text: the paragraph's text used
+    // to be replaced as a whole, and the frame's anchor went with it.
+    CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
+    CPPUNIT_ASSERT_EQUAL(aParagraph, getParagraph(1)->getString());
+    uno::Reference<text::XTextFramesSupplier> xFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFrames(xFramesSupplier->getTextFrames(),
+                                                    uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xFrames->getCount());
+    xFrame.set(xFrames->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"Frame text"_ustr, xFrame->getText()->getString());
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER,
+                         getProperty<text::TextContentAnchorType>(xFrame, u"AnchorType"_ustr));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateSetsTargetLanguage)
 {
     std::unique_ptr<test::MockHttpServer> pMockServer = createMockTranslateServer();
