@@ -553,14 +553,9 @@ static void exec_javaldx(Args *args)
         ppArgs[nArgs] = args->aArgs.at(nArgs);
 
     /* Use absolute path to redirectrc */
-    rtl_uString* pTmp = nullptr;
-    rtl_uString_newFromAscii(&pTmp, "-env:INIFILENAME=vnd.sun.star.pathname:");
-    rtl_uString_newConcat(&pTmp, pTmp, args->sAppPath.pData);
-    rtl_uString* pTmp2 = nullptr;
-    rtl_uString_newFromAscii(&pTmp2, "redirectrc");
-    rtl_uString_newConcat(&pTmp, pTmp, pTmp2);
-    ppArgs[nArgs] = pTmp;
-    rtl_uString_release (pTmp2);
+    const OUString sRedirectRcArg
+        = u"-env:INIFILENAME=vnd.sun.star.pathname:" + args->sAppPath + u"redirectrc";
+    ppArgs[nArgs] = sRedirectRcArg.pData;
     nArgs++;
 
     /* And also to javaldx */
@@ -575,7 +570,6 @@ static void exec_javaldx(Args *args)
                                               &fileOut,
                                               nullptr);
 
-    rtl_uString_release(ppArgs[nArgs-1]);
     free(ppArgs);
 
     if(err != osl_Process_E_None)
