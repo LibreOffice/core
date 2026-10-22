@@ -2048,6 +2048,73 @@ static bool NeedPreserveWhitespace(std::u16string_view str, bool xml)
     return false;
 }
 
+// Whether rNext continues rHint. The document model marks two adjacent hints that set the same
+// formatting apart from the RSID, the number of the editing session the text was typed in, with
+// the format ignore end flag on the first and the format ignore start flag on the second. A range
+// can carry several character styles, so a character style hint continues only the hint with the
+// same style.
+static bool IsContinuationIgnoringRsid(const SwTextAttr& rHint, const SwTextAttr& rNext)
+{
+    if (!rHint.IsFormatIgnoreEnd() || !rNext.IsFormatIgnoreStart()
+        || rNext.GetStart() != rHint.GetAnyEnd() || rNext.GetStart() == rNext.GetAnyEnd()
+        || rNext.Which() != rHint.Which())
+        return false;
+
+    if (rHint.Which() == RES_TXTATR_CHARFMT)
+        return rHint.GetCharFormat().GetCharFormat() == rNext.GetCharFormat().GetCharFormat();
+
+    return rHint.Which() == RES_TXTATR_AUTOFMT;
+}
+
+// The end of the text each hint of the node covers, by hint position. Adjacent character style
+// and automatic style hints that differ only in the RSID count as one hint: the first one covers
+// the text of all of them, and each following one ends where it starts, so it covers no text.
+static std::vector<sal_Int32> GetHintEndsIgnoringRsid(const SwTextNode& rNode)
+{
+    std::vector<sal_Int32> aHintEnds;
+    if (!rNode.HasHints())
+        return aHintEnds;
+
+    const SwpHints& rHints = rNode.GetSwpHints();
+    aHintEnds.reserve(rHints.Count());
+
+    // A run of hints that a later hint may still continue: the position of its first hint, which
+    // covers the text of the whole run, and its last hint so far.
+    struct OpenRun
+    {
+        size_t nFirst;
+        const SwTextAttr* pLast;
+    };
+    std::vector<OpenRun> aOpenRuns;
+
+    // The hints are sorted by start, so a run that ends before the current hint starts cannot be
+    // continued any more.
+    for (size_t i = 0; i < rHints.Count(); ++i)
+    {
+        const SwTextAttr* pHt = rHints.Get(i);
+        aHintEnds.push_back(pHt->GetAnyEnd());
+
+        std::erase_if(aOpenRuns, [pHt](const OpenRun& rRun) {
+            return rRun.pLast->GetAnyEnd() < pHt->GetStart();
+        });
+        auto itRun = std::find_if(aOpenRuns.begin(), aOpenRuns.end(), [pHt](const OpenRun& rRun) {
+            return IsContinuationIgnoringRsid(*rRun.pLast, *pHt);
+        });
+        if (itRun != aOpenRuns.end())
+        {
+            aHintEnds[itRun->nFirst] = pHt->GetAnyEnd();
+            aHintEnds[i] = pHt->GetStart();
+            itRun->pLast = pHt;
+            if (!pHt->IsFormatIgnoreEnd())
+                aOpenRuns.erase(itRun);
+        }
+        else if (pHt->IsFormatIgnoreEnd() && pHt->GetStart() != pHt->GetAnyEnd())
+            aOpenRuns.push_back({ i, pHt });
+    }
+
+    return aHintEnds;
+}
+
 /* Output of the nodes*/
 SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode )
 {
@@ -2358,6 +2425,7 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
     sal_Int32 nStrPos = rWrt.m_pCurrentPam->GetPoint()->GetContentIndex();
     const SwTextAttr * pHt = nullptr;
     const size_t nCntAttr = pNd->HasHints() ? pNd->GetSwpHints().Count() : 0;
+    const std::vector<sal_Int32> aHintEnds = GetHintEndsIgnoringRsid(*pNd);
     if( nCntAttr && nStrPos > ( pHt = pNd->GetSwpHints().Get(0) )->GetStart() )
     {
         // Ok, there are earlier attributes that we must output
@@ -2371,7 +2439,7 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
 
             if ( pHt->End() && !pHt->HasDummyChar() )
             {
-                const sal_Int32 nHtEnd = *pHt->End(),
+                const sal_Int32 nHtEnd = aHintEnds[nAttrPos - 1],
                        nHtStt = pHt->GetStart();
                 if( !rWrt.m_bWriteAll && nHtEnd <= nStrPos )
                     continue;
@@ -2432,13 +2500,13 @@ SwHTMLWriter& OutHTML_SwTextNode( SwHTMLWriter& rWrt, const SwContentNode& rNode
                 do {
                     if ( pHt->End() && !pHt->HasDummyChar() )
                     {
-                        if( *pHt->End() != nStrPos )
+                        if( aHintEnds[nAttrPos] != nStrPos )
                         {
                             // insert hints with end, if they don't start
                             // an empty range (hints that don't start a range
                             // are ignored)
                             aEndPosLst.Insert( pHt->GetAttr(), nStrPos + nOffset,
-                                               *pHt->End() + nOffset,
+                                               aHintEnds[nAttrPos] + nOffset,
                                                rWrt.m_CharFormatInfos );
                         }
                     }

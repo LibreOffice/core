@@ -1720,6 +1720,26 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTableStyleLiveExport)
     assertXPath(pHtmlDoc, "(//td)[1]/p/font", "color", u"#ffffff");
     assertXPath(pHtmlDoc, "(//td)[1]/p/font/b", 1);
 }
+
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testTextSplitByRsidExportsAsOneRun)
+{
+    // A paragraph of three spans, each with the same character style and a dozen direct character
+    // attributes. Only the middle span has an RSID, because it was typed in another editing
+    // session.
+    createSwDoc("text_split_by_rsid.fodt");
+    save(TestFilter::HTML_WRITER);
+
+    htmlDocUniquePtr pHtmlDoc = parseHtml(maTempFile);
+    CPPUNIT_ASSERT(pHtmlDoc);
+    // The paragraph is one run of text with one set of formatting tags.
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 1
+    // - Actual  : 3
+    assertXPath(pHtmlDoc, "/html/body/p/em", 1);
+    assertXPath(pHtmlDoc, "/html/body/p/em//font[@color]", 1);
+    CPPUNIT_ASSERT_EQUAL(u"The cat sat on the doormat. It was happy."_ustr,
+                         getXPathContent(pHtmlDoc, "/html/body/p/em").replaceAll("\n", " "));
+}
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
