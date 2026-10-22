@@ -22,6 +22,7 @@
 #include <string_view>
 
 #include <sfx2/cokitfilepicker.hxx>
+#include <sfx2/kit/helper.hxx>
 #include <sfx2/filedlghelper.hxx>
 #include <sal/types.h>
 #include <com/sun/star/lang/XInitialization.hpp>
@@ -2552,15 +2553,21 @@ void FileDialogHelper::StartExecuteModal( const Link<FileDialogHelper*,void>& rE
         if (!m_xKitPickToken)
             m_xKitPickToken = std::make_shared<int>(0);
         std::weak_ptr<void> xAlive = m_xKitPickToken;
+        const int nView = KitHelper::getCurrentView();
 
         sfx2::COKitFilePicker::pick(
             OUString(), aFilters,
-            [this, xAlive](const std::optional<OUString>& roUrl)
+            [this, xAlive, nView](const std::optional<OUString>& roUrl)
             {
                 // The helper can be gone by the time the user picks; the pick then
                 // belongs to nobody.
                 if (xAlive.expired())
                     return;
+
+                // Another view can have become current while the picker was open. The
+                // closed handler runs on the view that opened the dialog.
+                if (nView >= 0 && KitHelper::getCurrentView() != nView)
+                    KitHelper::setView(nView);
 
                 if (roUrl)
                 {
