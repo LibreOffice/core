@@ -2345,6 +2345,32 @@ static bool statesOneFontFor(const SmartArtDiagram& rDgm, std::u16string_view rN
     return bFound;
 }
 
+// the names the font of rName is at most as large as, primFontSz with op lte
+static std::set<OUString> fontAtMostAsOf(const SmartArtDiagram& rDgm, std::u16string_view rName)
+{
+    std::set<OUString> aNames;
+    if (!rDgm.getLayout() || !rDgm.getLayout()->getNode())
+        return aNames;
+    std::function<void(const LayoutAtom&)> aWalk = [&](const LayoutAtom& rAtom) {
+        for (const LayoutAtomPtr& pBelow : rAtom.getChildren())
+        {
+            if (const ConstraintAtom* pConstraint
+                = dynamic_cast<const ConstraintAtom*>(pBelow.get()))
+            {
+                const Constraint& rOne(pConstraint->getConstraint());
+                if (rOne.mnType == XML_primFontSz && rOne.mnRefType == XML_primFontSz
+                    && rOne.mnOperator == XML_lte && rOne.msForName == rName
+                    && !rOne.msRefForName.isEmpty() && rOne.msRefForName != rName)
+                    aNames.insert(rOne.msRefForName);
+            }
+            else
+                aWalk(*pBelow);
+        }
+    };
+    aWalk(*rDgm.getLayout()->getNode());
+    return aNames;
+}
+
 // The font the group of rName is laid out with on this pass, in points, the stated size on the
 // first pass or 65 where none is stated.
 static double fontOfGroup(const SmartArtDiagram& rDgm, const std::vector<Constraint>& rConstraints,
@@ -2359,6 +2385,14 @@ static double fontOfGroup(const SmartArtDiagram& rDgm, const std::vector<Constra
         aCandidate = rMutable.getFontCandidates()
                          .emplace(rGroup, statedFontFor(rConstraints, rName).value_or(65.0))
                          .first;
+    }
+    // a group bound to be at most as large as another one comes down with it
+    for (const OUString& rOther : fontAtMostAsOf(rDgm, rName))
+    {
+        const auto aOther = rMutable.getFontCandidates().find(
+            fontGroupOf(rDgm, rConstraints, rOther, nullptr));
+        if (aOther != rMutable.getFontCandidates().end() && aOther != aCandidate)
+            aCandidate->second = std::min(aCandidate->second, aOther->second);
     }
     // A node stated as a part of its group's font, "primFontSz forName txLvl2 refType
     // primFontSz refForName txLvl1 fact 0.78" on Vertical_Circle_List, is at that part, rounded
@@ -2423,12 +2457,17 @@ static double unstatedMarginPart(const std::vector<Constraint>& rConstraints,
 
 namespace
 {
-// margin of a text node on one side: a part of its font, a length in EMU and, on the left
-// and the right only, a part of its width
+// margin of one side of a text node, stated in points, as a length and as parts of what it
+// refers to
 struct TextMargin
 {
+    // part of the font size
     double mfPartOfFont = 0.0;
-    sal_Int64 mnLength = 0;
+    // a length stated as a value
+    sal_Int64 mnLengthEmu = 0;
+    // part of the height of the node, the points of the margin already in millimetres
+    double mfPartOfHeight = 0.0;
+    // left and right only, part of the width the parent gives
     double mfPartOfWidth = 0.0;
 };
 }
@@ -2452,8 +2491,7 @@ static TextMargin textMarginOf(const SmartArtDiagram& rDgm,
             aMargin.mfPartOfWidth
                 = 1.0 - (1.0 - aMargin.mfPartOfWidth) * (1.0 - rConstraint.mfFactor);
         else if (rConstraint.mnRefType == XML_none && rConstraint.mfValue > 0.0 && bOverUnder)
-            aMargin.mnLength += static_cast<sal_Int64>(
-                o3tl::convert(rConstraint.mfValue, o3tl::Length::mm, o3tl::Length::emu));
+            aMargin.mnLengthEmu += static_cast<sal_Int64>(rConstraint.mfValue * 12700.0);
     }
     std::vector<Constraint> aOwn;
     gatherDecidedConstraints(rDgm, rNode, rPoint, aOwn);
@@ -2463,6 +2501,11 @@ static TextMargin textMarginOf(const SmartArtDiagram& rDgm,
             continue;
         if (rConstraint.mnRefType == XML_primFontSz)
             aMargin.mfPartOfFont += rConstraint.mfFactor;
+        // margin in points, height in mm: the part of the height carries the conversion
+        else if (rConstraint.mnRefType == XML_h)
+            aMargin.mfPartOfHeight += convertPointToMms(rConstraint.mfFactor);
+        else if (rConstraint.mnRefType == XML_none)
+            aMargin.mnLengthEmu += static_cast<sal_Int64>(rConstraint.mfValue * 12700.0);
         else if (rConstraint.mnRefType == XML_tMarg || rConstraint.mnRefType == XML_bMarg)
             for (const Constraint& rOther : aOwn)
                 if (rOther.mnType == rConstraint.mnRefType && rOther.mnRefType == XML_primFontSz)
@@ -2530,15 +2573,18 @@ static std::optional<sal_Int64> textDrivenHeight(const SmartArtDiagram& rDgm,
     {
         const TextMargin aMargin(
             textMarginOf(rDgm, rConstraints, rNode, rPoint, rShape->getInternalName(), nSide));
+        const sal_Int64 nLength(
+            aMargin.mnLengthEmu
+            + static_cast<sal_Int64>(aMargin.mfPartOfHeight * rShape->getSize().Height));
         if (nSide == XML_lMarg || nSide == XML_rMarg)
         {
             fSides += aMargin.mfPartOfFont;
-            nWidth -= static_cast<sal_Int64>(nWidth * aMargin.mfPartOfWidth);
+            nWidth -= static_cast<sal_Int64>(nWidth * aMargin.mfPartOfWidth) + nLength;
         }
         else
         {
             fOverUnder += aMargin.mfPartOfFont;
-            nFixed += aMargin.mnLength;
+            nFixed += nLength;
         }
     }
     nWidth -= static_cast<sal_Int64>(fSides * fFont * fPoint);
@@ -14334,7 +14380,9 @@ void AlgAtom::layoutShape(const SmartArtDiagram& rDgm, const ShapePtr& rShape, c
                                                }))
                                 continue;
                             const double fEmu(aMargin.mfPartOfFont * fGroupFont * 12700.0
-                                              + aMargin.mnLength);
+                                              + aMargin.mnLengthEmu
+                                              + aMargin.mfPartOfHeight
+                                                    * rShape->getSize().Height);
                             rShape->getShapeProperties().setProperty(
                                 getPropertyFromConstraint(nSide),
                                 static_cast<sal_Int32>(o3tl::convert(
