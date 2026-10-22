@@ -12,6 +12,12 @@
 #include <COKit/COKit.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/lang/XMultiServiceFactory.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <sfx2/viewsh.hxx>
 #include <vcl/gdimtf.hxx>
@@ -1192,6 +1198,59 @@ CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testMergedPasteMultiParaHintDestColor)
     // black.
     CPPUNIT_ASSERT(pColor);
     CPPUNIT_ASSERT_EQUAL(nOrange, pColor->GetValue());
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreTxtnodeTest, testInsertTableSplittingParagraphWithAnchoredObjects) {
+    // Given a document with a single paragraph that anchors a shape, a text frame and two images
+    // anchored as characters...
+    createSwDoc();
+    cpo::uno::Reference<css::lang::XMultiServiceFactory> factory(
+        mxComponent, cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::text::XText> text
+        = cpo::uno::Reference<css::text::XTextDocument>(mxComponent, cpo::uno::UNO_QUERY_THROW)
+            ->getText();
+    cpo::uno::Reference<css::drawing::XDrawPageSupplier>(mxComponent, cpo::uno::UNO_QUERY_THROW)
+        ->getDrawPage()
+        ->add(
+            cpo::uno::Reference<css::drawing::XShape>(
+                factory->createInstance(u"com.sun.star.drawing.RectangleShape"_ustr),
+                cpo::uno::UNO_QUERY_THROW));
+    text->insertTextContent(
+        text->getEnd(),
+        cpo::uno::Reference<css::text::XTextContent>(
+            factory->createInstance(u"com.sun.star.text.TextFrame"_ustr),
+            cpo::uno::UNO_QUERY_THROW),
+        false);
+    cpo::uno::Reference<css::text::XTextContent> image1(
+        factory->createInstance(u"com.sun.star.text.TextGraphicObject"_ustr),
+        cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::beans::XPropertySet>(image1, cpo::uno::UNO_QUERY_THROW)
+        ->setPropertyValue(
+            u"AnchorType"_ustr, cpo::uno::Any(css::text::TextContentAnchorType_AS_CHARACTER));
+    text->insertTextContent(text->getStart(), image1, false);
+    cpo::uno::Reference<css::text::XTextContent> image2(
+        factory->createInstance(u"com.sun.star.text.TextGraphicObject"_ustr),
+        cpo::uno::UNO_QUERY_THROW);
+    cpo::uno::Reference<css::beans::XPropertySet>(image2, cpo::uno::UNO_QUERY_THROW)
+        ->setPropertyValue(
+            u"AnchorType"_ustr, cpo::uno::Any(css::text::TextContentAnchorType_AS_CHARACTER));
+    text->insertTextContent(text->getStart(), image2, false);
+
+    // ...when inserting a table at the end of the document, which splits that paragraph...
+    cpo::uno::Reference<css::text::XTextTable> table(
+        factory->createInstance(u"com.sun.star.text.TextTable"_ustr), cpo::uno::UNO_QUERY_THROW);
+    table->initialize(2, 2);
+    text->insertTextContent(text->getEnd(), table, false);
+
+    // ...then the table is inserted.  Without the accompanying fix in place, this test would have
+    // hit
+    //   Assertion `!m_pDrawObjs || m_pDrawObjs->is_sorted()' failed.
+    // in SwFrame::RemoveDrawObj:
+    cpo::uno::Reference<css::container::XIndexAccess> tables(
+        cpo::uno::Reference<css::text::XTextTablesSupplier>(mxComponent, cpo::uno::UNO_QUERY_THROW)
+            ->getTextTables(),
+        cpo::uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), tables->getCount());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

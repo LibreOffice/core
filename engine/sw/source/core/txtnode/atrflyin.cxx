@@ -193,6 +193,12 @@ void SwTextFlyCnt::SetAnchor( const SwTextNode *pNode )
         pOldNode->RemoveAnchoredFly(pFormat);
         oPos->GetNode().AddAnchoredFly(pFormat);
         pFormat->UnlockModify();
+        // The frames stay with the text frames that move to the new node, and the anchor orders
+        // them in the sorted object lists of those text frames:
+        SwIterator<SwFlyFrame, SwFormat> iter(*pFormat);
+        for (auto pFly = iter.First(); pFly != nullptr; pFly = iter.Next()) {
+            pFly->UpdateObjInSortedList();
+        }
     }
     else
     {
