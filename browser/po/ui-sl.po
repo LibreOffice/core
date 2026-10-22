@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: Collabora Online UI\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-13 14:06+0200\n"
-"PO-Revision-Date: 2026-10-15 13:25+0000\n"
+"PO-Revision-Date: 2026-10-19 09:51+0000\n"
 "Last-Translator: Martin Srebotnjak <filmsi@users.noreply.hosted.weblate.org>"
 "\n"
 "Language-Team: Slovenian <https://hosted.weblate.org/projects/collabora-"
@@ -551,7 +551,6 @@ msgstr "Ponudnik"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:723
 #: admin/src/integrator/AdminIntegratorSettings.ts:727
-#, fuzzy
 msgid "API key"
 msgstr "Ključ API"
 
@@ -566,7 +565,6 @@ msgid "Base URL"
 msgstr "Osnovni URL"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:730
-#, fuzzy
 msgid "Image size"
 msgstr "Velikost slike"
 
@@ -1073,7 +1071,7 @@ msgstr "Dostopnost"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2856
 msgid "User interface zoom"
-msgstr ""
+msgstr "Povečava uporabniškega vmesnika"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2861
 msgid "Magnify the whole window, including the document and the menus."
@@ -1149,9 +1147,8 @@ msgid "Use the AI provider set on the server"
 msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3190
-#, fuzzy
 msgid "Providers"
-msgstr "Ponudnik"
+msgstr "Ponudniki"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3193
 msgid "Managed by your admin"
@@ -1159,7 +1156,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3199
 msgid "No providers added yet"
-msgstr ""
+msgstr "Noben ponudnik še ni dodan"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3205
 msgid ""
@@ -1173,7 +1170,7 @@ msgstr "Dodaj ponudnika ..."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3233
 msgid "Choose the AI provider to use for text and image generation."
-msgstr ""
+msgstr "Izberite ponudnika UI za rabo pri tvorbi besedil in slik."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3235
 msgid ""
@@ -1183,10 +1180,9 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3390
 msgid "seconds"
-msgstr ""
+msgstr "sekund"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3399
-#, fuzzy
 msgid "Text generation"
 msgstr "Tvorjenje besedila"
 
@@ -1215,9 +1211,8 @@ msgid ""
 msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3491
-#, fuzzy
 msgid "Image generation"
-msgstr "Tvorjenje slike"
+msgstr "Tvorjenje slik"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3499
 msgid "Same as text provider"
@@ -1315,7 +1310,7 @@ msgstr "Vnesite: {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4991
 msgid "Delete {0}"
-msgstr ""
+msgstr "Izbriši {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5054
 msgid "Reset to default {0}"
@@ -2817,7 +2812,7 @@ msgstr ""
 
 #: src/control/Control.AIChatSidebar.ts:3916
 msgid "Write speaker notes for the current slide."
-msgstr ""
+msgstr "Napiši opombe za govorca za trenutno prosojnico."
 
 #: src/control/Control.AIChatSidebar.ts:3949
 msgid ""
@@ -2895,19 +2890,21 @@ msgstr ""
 
 #: src/control/Control.CleanupSidebar.ts:204
 msgid "Images stored with more detail than a slide can show"
-msgstr ""
+msgstr "Slike so shranjene z več podrobnostmi, kot jih lahko prikaže prosojnica"
 
 #: src/control/Control.CleanupSidebar.ts:207
 msgid "Images stored at more than %1 DPI, more detail than a slide can show"
 msgstr ""
+"Slike so shranjene z več kot %1 DPI, z več podrobnostmi, kot jih lahko "
+"prikaže prosojnica"
 
 #: src/control/Control.CleanupSidebar.ts:224
 msgid "High-resolution images"
-msgstr ""
+msgstr "Visoko ločljivostne slike"
 
 #: src/control/Control.CleanupSidebar.ts:230
 msgid "Cropped images"
-msgstr ""
+msgstr "Obrezane slike"
 
 #: src/control/Control.CleanupSidebar.ts:236
 #: src/control/Control.BackstageView.ts:891
@@ -2919,13 +2916,12 @@ msgid "Slides"
 msgstr "Prosojnice"
 
 #: src/control/Control.CleanupSidebar.ts:241
-#, fuzzy
 msgid "Hidden slides"
-msgstr "Skrij prosojnice"
+msgstr "Skrite prosojnice"
 
 #: src/control/Control.CleanupSidebar.ts:246
 msgid "Unused master slides"
-msgstr ""
+msgstr "Neuporabljene matrice prosojnic"
 
 #: src/control/Control.CleanupSidebar.ts:252
 msgid "For sharing"
@@ -2933,11 +2929,11 @@ msgstr ""
 
 #: src/control/Control.CleanupSidebar.ts:254
 msgid "Speaker notes"
-msgstr ""
+msgstr "Opombe govorca"
 
 #: src/control/Control.CleanupSidebar.ts:258
 msgid "Embedded objects"
-msgstr ""
+msgstr "Vdelani predmeti"
 
 #: src/control/Control.CleanupSidebar.ts:359
 msgid "images left alone"
@@ -3014,7 +3010,7 @@ msgstr ""
 
 #: src/control/Control.CleanupSidebar.ts:564
 msgid "Slide %1: embedded object"
-msgstr ""
+msgstr "Prosojnica %1: vdelan predmet"
 
 #: src/control/Control.CleanupSidebar.ts:565
 msgid "Slide %1: embedded object, no image to replace it with"
@@ -3022,11 +3018,11 @@ msgstr ""
 
 #: src/control/Control.CleanupSidebar.ts:579
 msgid "%1 DPI"
-msgstr ""
+msgstr "%1 DPI"
 
 #: src/control/Control.CleanupSidebar.ts:581
 msgid "%1 at %2 DPI"
-msgstr ""
+msgstr "%1 pri %2 DPI"
 
 #: src/control/Control.CleanupSidebar.ts:586
 #, javascript-format
@@ -3039,23 +3035,23 @@ msgstr ""
 
 #: src/control/Control.CleanupSidebar.ts:655
 msgid "Leave images alone"
-msgstr ""
+msgstr "Pusti slike pri miru"
 
 #: src/control/Control.CleanupSidebar.ts:656
 msgid "96 DPI"
-msgstr ""
+msgstr "96 DPI"
 
 #: src/control/Control.CleanupSidebar.ts:657
 msgid "150 DPI"
-msgstr ""
+msgstr "150 DPI"
 
 #: src/control/Control.CleanupSidebar.ts:658
 msgid "220 DPI"
-msgstr ""
+msgstr "220 DPI"
 
 #: src/control/Control.CleanupSidebar.ts:659
 msgid "300 DPI"
-msgstr ""
+msgstr "300 DPI"
 
 #: src/control/Control.CleanupSidebar.ts:683
 msgid "Scanning..."
@@ -3600,9 +3596,8 @@ msgid "See who else is editing and share the document."
 msgstr ""
 
 #: src/control/onboarding/OnboardingSteps.ts:109
-#, fuzzy
 msgid "The status bar"
-msgstr "Pokaži vrstico stanja"
+msgstr "Vrstica stanja"
 
 #: src/control/onboarding/OnboardingSteps.ts:111
 msgid ""
@@ -3628,9 +3623,8 @@ msgid "Back"
 msgstr ""
 
 #: src/control/onboarding/Control.OnboardingTour.ts:258
-#, fuzzy
 msgid "Done"
-msgstr "Brez"
+msgstr "Dokončano"
 
 #: src/control/onboarding/Control.OnboardingTour.ts:258
 #: src/control/Control.Zotero.js:270 src/control/Control.Zotero.js:469
@@ -4813,9 +4807,8 @@ msgid "Summarize"
 msgstr ""
 
 #: src/control/Notebookbar.AIAssistantTab.ts:166
-#, fuzzy
 msgid "Summarize the key points of the selected text."
-msgstr "Povzemi ključne točke tega besedila"
+msgstr "Povzemite ključne točke izbranega besedila."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:171
 msgid "Expand"
@@ -4842,12 +4835,10 @@ msgid "Rewrite the selected text as short bullet points."
 msgstr ""
 
 #: src/control/Notebookbar.AIAssistantTab.ts:194
-#, fuzzy
 msgid "Create Slides"
 msgstr "Izdelaj prosojnice"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:201
-#, fuzzy
 msgid "Generate Image"
 msgstr "Tvorjena slika"
 
@@ -4856,7 +4847,6 @@ msgid "Generate Speaker Notes"
 msgstr ""
 
 #: src/control/Notebookbar.AIAssistantTab.ts:215
-#, fuzzy
 msgid "Create Formula"
 msgstr "Izdelaj formulo"
 
@@ -5094,9 +5084,8 @@ msgid "Fill Color (Transparent Pictures Only)"
 msgstr ""
 
 #: src/control/Control.Notebookbar.js:661
-#, fuzzy
 msgid "Line"
-msgstr "Povezava"
+msgstr "Črta"
 
 #: src/control/Control.Notebookbar.js:704
 msgid "Line Width"
