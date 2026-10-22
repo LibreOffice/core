@@ -464,6 +464,7 @@ shared_headers = \
                  common/TraceEvent.hpp \
                  common/Unit.hpp \
                  common/Uri.hpp \
+                 common/UserTemplates.hpp \
                  common/Util.hpp \
                  common/ViewSettings.hpp \
                  common/Watchdog.hpp \

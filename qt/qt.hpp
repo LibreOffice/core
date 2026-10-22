@@ -13,6 +13,7 @@
 #include <QWebEngineProfile>
 #include "common/Prefs.hpp"
 #include "common/RecentFiles.hpp"
+#include "common/UserTemplates.hpp"
 
 #include <Poco/File.h>
 #include <Poco/Path.h>
@@ -35,6 +36,7 @@ private:
     static QWebEngineProfile* globalProfile;
     static RecentFiles recentFiles;
     static std::unique_ptr<Prefs> prefs;
+    static std::unique_ptr<UserTemplates> userTemplates;
 
 public:
     static void initialize();
@@ -49,6 +51,7 @@ public:
     static void deleteAccountProfile(const QString& accountId);
     static RecentFiles& getRecentFiles();
     static Prefs& getPrefs();
+    static UserTemplates& getUserTemplates();
 };
 
 namespace

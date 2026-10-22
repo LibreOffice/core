@@ -30,6 +30,7 @@
 #include <common/LangUtil.hpp>
 #include <common/Log.hpp>
 #include <common/MobileApp.hpp>
+#include <common/UserTemplates.hpp>
 #include <qt/qt.hpp>
 
 #include <o3tl/unreachable.hxx>
@@ -518,6 +519,18 @@ bool CODAWebEngineView::dropInsertsIntoDocument(const QMimeData* mimeData) const
            && hasOnlyInsertableFiles(droppedLocalFiles(mimeData));
 }
 
+QJsonObject CODAWebEngineView::templateFileToJson(const QString& path)
+{
+    const QFileInfo fileInfo(path);
+    QJsonObject result;
+    result["path"] = fileInfo.absoluteFilePath();
+    result["fileName"] = fileInfo.fileName();
+    result["type"] = QString::fromStdString(
+        UserTemplates::documentTypeOfFile(fileInfo.fileName().toStdString()));
+    result["size"] = static_cast<double>(fileInfo.size());
+    return result;
+}
+
 void CODAWebEngineView::dragEnterEvent(QDragEnterEvent* event)
 {
     // Drags started inside the web content have a non-null source.
@@ -525,6 +538,12 @@ void CODAWebEngineView::dragEnterEvent(QDragEnterEvent* event)
     if (event->source())
     {
         QWebEngineView::dragEnterEvent(event);
+        return;
+    }
+
+    if (_templateDropTarget && hasDroppableFiles(event->mimeData()))
+    {
+        event->acceptProposedAction();
         return;
     }
 
@@ -549,6 +568,12 @@ void CODAWebEngineView::dragMoveEvent(QDragMoveEvent* event)
         return;
     }
 
+    if (_templateDropTarget && hasDroppableFiles(event->mimeData()))
+    {
+        event->acceptProposedAction();
+        return;
+    }
+
     if (dropInsertsIntoDocument(event->mimeData()) || hasDroppableFiles(event->mimeData()))
         event->acceptProposedAction();
 }
@@ -565,6 +590,24 @@ void CODAWebEngineView::dropEvent(QDropEvent* event)
     {
         QWebEngineView::dropEvent(event);
         return;
+    }
+
+    // The first dropped file goes to the drop zone of the page, which adds it as a template.
+    if (_templateDropTarget)
+    {
+        QStringList files = filesFromPortalTransfer(event->mimeData());
+        if (files.isEmpty())
+            files = droppedLocalFiles(event->mimeData());
+        if (!files.isEmpty())
+        {
+            event->acceptProposedAction();
+            const QByteArray file =
+                QJsonDocument(templateFileToJson(files.first())).toJson(QJsonDocument::Compact);
+            page()->runJavaScript(
+                QStringLiteral("window.app?.map?.backstageView?.onTemplateFileDropped(%1);")
+                    .arg(QString::fromUtf8(file)));
+            return;
+        }
     }
 
     setDropFeedbackVisible(false);
@@ -1346,6 +1389,16 @@ QString WebView::createNewDocumentFile(const std::string& templateType, const st
     // Get document name prefix and extension based on template type
     auto [docNamePrefix, extension] = getDocumentNameInfo(templateType, basename);
 
+    // The copy is named as the document that the template creates, for example .docx for a .dotx
+    // template. The engine converts a template that it loads under such a name to that document.
+    if (bUsedRequestedTemplate)
+    {
+        const std::string documentExtension =
+            UserTemplates::documentExtensionOfFile(templatePathObj.getFileName());
+        if (!documentExtension.empty())
+            extension = QString::fromStdString(documentExtension);
+    }
+
     // Copy an intro document once and reopen that copy on later clicks;
     // deleting it gives a fresh copy.  A request naming a template that does
     // not resolve gets the blank document, which is a new file every time.
@@ -1374,25 +1427,9 @@ QString WebView::createNewDocumentFile(const std::string& templateType, const st
 
 bool WebView::isTemplate(const std::string& fileName)
 {
-    // Document-template extensions across the formats we load: ODF, the older
-    // StarOffice formats, the OOXML templates and the older binary templates.
-    // Opening one of these creates a new document based on it rather than
-    // editing the template itself.
-    static const std::set<std::string> templateExtensions = {
-        // ODF templates
-        "ott", "ots", "otp", "otg", "otm",
-        // StarOffice templates
-        "stw", "stc", "sti", "std",
-        // OOXML templates
-        "dotx", "dotm", "xltx", "xltm", "potx", "potm",
-        // Older binary templates
-        "dot", "xlt", "pot",
-    };
-
-    std::string extension = Poco::Path(fileName).getExtension();
-    std::transform(extension.begin(), extension.end(), extension.begin(),
-                   [](unsigned char c) { return std::tolower(c); });
-    return templateExtensions.find(extension) != templateExtensions.end();
+    // Opening a template creates a new document based on it rather than editing the template
+    // itself.
+    return !UserTemplates::documentTypeOfTemplate(fileName).empty();
 }
 
 WebView* WebView::openTemplateAsNewDocument(QWebEngineProfile* profile,

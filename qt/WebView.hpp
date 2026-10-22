@@ -17,6 +17,7 @@
 
 #include <QElapsedTimer>
 #include <QImage>
+#include <QJsonObject>
 #include <QList>
 #include <QMainWindow>
 #include <QObject>
@@ -76,6 +77,8 @@ public:
         , _presentationView(nullptr)
         , _presenterConsole(nullptr)
     {
+        // A page that starts to load has no drop zone open yet.
+        connect(this, &QWebEngineView::loadStarted, this, [this] { _templateDropTarget = false; });
     }
 
     ~CODAWebEngineView();
@@ -95,6 +98,12 @@ public:
 
     // True while this view is running a presentation.
     bool isPresenting() const { return _presentationView != nullptr; }
+
+    // True while the page shows a drop zone for template files.
+    void setTemplateDropTarget(bool enabled) { _templateDropTarget = enabled; }
+
+    // The path, file name, document type and size of a template file, as a JSON object.
+    static QJsonObject templateFileToJson(const QString& path);
 
 protected:
     // Intercept files dropped onto the window from the OS
@@ -133,6 +142,7 @@ private:
     QList<QPointer<QMainWindow>> _dialogWindows;
     QMetaObject::Connection _screenAdded;
     QMetaObject::Connection _screenRemoved;
+    bool _templateDropTarget = false;
 
     QWebEngineView* createWindow(QWebEnginePage::WebWindowType type) override;
 };

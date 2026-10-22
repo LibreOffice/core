@@ -127,6 +127,7 @@ QMap<QString, QWebEngineProfile*>& accountProfiles()
 QWebEngineProfile* Application::globalProfile = nullptr;
 RecentFiles Application::recentFiles;
 std::unique_ptr<Prefs> Application::prefs;
+std::unique_ptr<UserTemplates> Application::userTemplates;
 
 void Application::initialize()
 {
@@ -161,6 +162,9 @@ void Application::initialize()
     // Initialize persistent prefs
     prefs = std::make_unique<Prefs>(
         Poco::Path(configDir).append("coda-prefs.json").toString());
+
+    userTemplates =
+        std::make_unique<UserTemplates>(Poco::Path(configDir).append("templates").toString());
 
     // Provide AIChatSession with an HTTP transport (the COOL http::Session stack
     // isn't available here).
@@ -312,5 +316,7 @@ void Application::deleteAccountProfile(const QString& accountId)
 RecentFiles& Application::getRecentFiles() { return recentFiles; }
 
 Prefs& Application::getPrefs() { return *prefs; }
+
+UserTemplates& Application::getUserTemplates() { return *userTemplates; }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

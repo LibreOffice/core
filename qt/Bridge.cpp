@@ -50,6 +50,7 @@
 #include <QFile>
 #include <QFileDialog>
 #include <QFileInfo>
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QMainWindow>
@@ -77,6 +78,21 @@ namespace
                     starter->requestClose();
             });
         }
+    }
+
+    std::string percentDecoded(const std::string& value)
+    {
+        return QUrl::fromPercentEncoding(QByteArray::fromStdString(value)).toStdString();
+    }
+
+    QJsonObject userTemplateToJson(const UserTemplates::Entry& entry)
+    {
+        QJsonObject result;
+        result["id"] = QString::fromStdString(entry.id);
+        result["name"] = QString::fromStdString(entry.name);
+        result["type"] = QString::fromStdString(entry.type);
+        result["path"] = QString::fromStdString(entry.path);
+        return result;
     }
 
     std::mutex BridgeRegistryMutex;
@@ -1075,6 +1091,65 @@ QVariant Bridge::cool(const QString& messageStr)
         QString result = QString::fromStdString(Application::getRecentFiles().serialise());
         LOG_TRC_NOFILE("GETRECENTDOCS: returning recent documents");
         return result;
+    }
+    else if (tokens.equals(0, "GETUSERTEMPLATES"))
+    {
+        QJsonArray result;
+        for (const UserTemplates::Entry& entry : Application::getUserTemplates().list())
+            result.append(userTemplateToJson(entry));
+        return result;
+    }
+    else if (tokens.equals(0, "PICKUSERTEMPLATE"))
+    {
+        QStringList patterns;
+        for (const std::string& extension : UserTemplates::acceptedExtensions())
+            patterns << QStringLiteral("*.") + QString::fromStdString(extension);
+
+        QFileDialog dialog(_webView, QObject::tr("Add Template"), QString(),
+                           QObject::tr("Templates and documents") + " (" + patterns.join(' ') +
+                               ")");
+        dialog.setFileMode(QFileDialog::ExistingFile);
+        if (dialog.exec() != QDialog::Accepted || dialog.selectedFiles().isEmpty())
+            return {};
+
+        return CODAWebEngineView::templateFileToJson(dialog.selectedFiles().first());
+    }
+    else if (tokens.equals(0, "SETTEMPLATEDROPTARGET"))
+    {
+        // e.g. "SETTEMPLATEDROPTARGET on" while the page shows a drop zone for template files
+        if (auto* coda = dynamic_cast<CODAWebEngineView*>(_webView))
+            coda->setTemplateDropTarget(tokens.equals(1, "on"));
+    }
+    else if (tokens.equals(0, "ADDUSERTEMPLATE"))
+    {
+        // e.g. "ADDUSERTEMPLATE name=Invoice source=%2Fhome%2F...%2FInvoice.ott"
+        std::string name, source;
+        COOLProtocol::getTokenString(tokens, "name", name);
+        COOLProtocol::getTokenString(tokens, "source", source);
+        const std::optional<UserTemplates::Entry> entry =
+            Application::getUserTemplates().addFile(percentDecoded(source), percentDecoded(name));
+        if (!entry)
+            return {};
+        return userTemplateToJson(*entry);
+    }
+    else if (tokens.equals(0, "RENAMEUSERTEMPLATE"))
+    {
+        std::string id, name;
+        COOLProtocol::getTokenString(tokens, "id", id);
+        COOLProtocol::getTokenString(tokens, "name", name);
+        const std::optional<UserTemplates::Entry> entry =
+            Application::getUserTemplates().rename(id, percentDecoded(name));
+        if (!entry)
+            return {};
+        return userTemplateToJson(*entry);
+    }
+    else if (tokens.equals(0, "REMOVEUSERTEMPLATE"))
+    {
+        std::string id;
+        COOLProtocol::getTokenString(tokens, "id", id);
+        if (!Application::getUserTemplates().remove(id))
+            return {};
+        return true;
     }
     else if (tokens.equals(0, "openremote"))
     {

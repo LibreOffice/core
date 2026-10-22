@@ -36,6 +36,7 @@ cmake_list= \
             ../common/Unit-mobile.cpp \
             ../common/Util-mobile.cpp \
             ../common/RecentFiles.cpp \
+            ../common/UserTemplates.cpp \
             ../kit/ChildSession.cpp \
             ../kit/DeltaSimd.c \
             ../kit/Kit.cpp \
