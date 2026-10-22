@@ -794,9 +794,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     {
         /* we have to prepare for, and exec the binary */
         int nPercent = 0;
-        ChildInfo *info;
         bool bAllArgs = true;
-        bool bShortWait, bRestart;
+        bool bRestart;
 
         /* sanity check pieces */
         system_checks();
@@ -820,11 +819,11 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
             bRestart = false;
 
             /* fast updates if we have somewhere to update it to */
-            bShortWait = splash != nullptr;
+            bool bShortWait = splash != nullptr;
 
             /* Periodically update the splash & the percent according
                to what status_fd says, poll quickly only while starting */
-            info = child_spawn (args, bAllArgs, bShortWait);
+            ChildInfo* info = child_spawn (args, bAllArgs, bShortWait);
             g_pProcess = info->child;
 
             while (!child_exited_wait(info, bShortWait))
