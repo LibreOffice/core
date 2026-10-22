@@ -47,6 +47,9 @@ interface TemplateTypeMap {
 
 type TemplateType = TemplateTypeMap[keyof TemplateTypeMap];
 
+// The type of template shown in the New view, or 'all' for every type.
+type TemplateFilter = 'all' | TemplateType;
+
 interface TemplateData {
 	id: string;
 	name: string;

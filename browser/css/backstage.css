@@ -395,8 +395,8 @@
 
 .backstage-templates-grid {
 	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
-	gap: var(--spacing-xl);
+	grid-template-columns: repeat(auto-fill, 124px);
+	gap: calc(var(--spacing-xl) + var(--spacing-m));
 }
 
 .backstage-template-card {
@@ -407,7 +407,7 @@
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	max-width: 10rem;
+	box-sizing: border-box;
 }
 
 
@@ -416,18 +416,21 @@
 	box-shadow: 0 4px 8px var(--color-black-10);
 }
 
+/* Page and landscape previews share one height, so the names of a row line up. */
 .template-thumbnail {
 	padding: 0;
 	display: flex;
 	justify-content: center;
-	align-items: end;
+	align-items: center;
+	height: 98px;
 	background: transparent;
 	flex: 0 0 auto;
 }
 
 .template-thumbnail img {
-	max-width: 150px;
-	max-height: 180px;
+	box-sizing: border-box;
+	max-width: 98px;
+	max-height: 98px;
 	width: auto;
 	height: auto;
 	display: block;
@@ -441,7 +444,7 @@
 }
 
 .template-name {
-	font-size: var(--medium-font-size);
+	font-size: var(--default-font-size);
 	color: var(--color-main-text);
 	font-weight: 500;
 	margin-top: var(--spacing-m);
@@ -458,41 +461,110 @@
 	gap: var(--spacing-l);
 }
 
+.backstage-templates-heading,
+.backstage-template-section-title {
+	font-size: var(--header-font-size);
+	font-weight: 600;
+	color: var(--color-main-text);
+	margin: 0;
+}
+
+.backstage-templates-heading {
+	margin-top: var(--spacing-xl);
+}
+
+.backstage-template-sections {
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-s);
+}
+
+.backstage-template-section-header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--spacing-m);
+	min-height: 28px;
+	margin-top: var(--spacing-s);
+}
+
 .template-filter-bar {
 	display: flex;
 	gap: var(--spacing-m);
 	flex-wrap: wrap;
 }
 
-.template-type-button {
+#backstage-view .template-type-button {
+	height: var(--btn-size);
+	margin: 0;
 	border: 1px solid var(--color-border);
-	background: var(--color-background);
-	border-radius: 999px;
-	padding: 6px 16px;
-	font-size: 14px;
+	background: transparent;
+	border-radius: var(--border-radius);
+	padding: 0 var(--spacing-l);
+	font-size: var(--default-font-size);
+	font-weight: 500;
+	color: var(--color-main-text);
 	cursor: pointer;
-	transition: all var(--duration-normal) var(--ease-standard);
 }
 
-.template-type-button.active,
-.template-type-button:hover {
-	background: var(--doc-type-color);
+/* The desktop button hover colours in device-desktop.css are !important. */
+#backstage-view .template-type-button:hover {
+	background-color: var(--color-background-dark) !important;
+	color: var(--color-main-text) !important;
+	border-color: var(--color-border);
+}
+
+#backstage-view .template-type-button.active {
+	background-color: var(--doc-type-color) !important;
 	border-color: var(--doc-type-color);
-	color: var(--color-on-primary);
+	color: var(--color-on-primary) !important;
+}
+
+/* The search field and the chips stay at the top while the templates scroll under them. The
+   offset is the padding of .backstage-content, so the bar sticks to the edge of the view. */
+.template-search-bar {
+	position: sticky;
+	top: -20px;
+	z-index: 1;
+	display: flex;
+	flex-direction: column;
+	gap: var(--spacing-l);
+	/* The top padding covers the edge of the view while the bar sticks. In the layout the
+	   negative margin cancels it, so the field stays close to the content above. */
+	margin-top: calc(-1 * var(--spacing-m));
+	padding-block: var(--spacing-m);
+	background-color: var(--color-backstage-background);
 }
 
 .template-search {
+	position: relative;
 	display: flex;
-	margin: 0px 1rem;
+}
+
+.template-search-icon {
+	position: absolute;
+	inset-inline-start: var(--spacing-l);
+	top: 50%;
+	width: var(--btn-img-size-s);
+	height: var(--btn-img-size-s);
+	transform: translateY(-50%);
+	pointer-events: none;
+	background: url('images/lc_recsearch.svg') no-repeat center / contain;
+}
+
+[data-theme='dark'] .template-search-icon {
+	background-image: url('images/dark/lc_recsearch.svg');
 }
 
 .template-search-input {
 	flex: 1;
-	padding: 6px 12px;
+	height: 32px;
+	padding: 0 var(--spacing-l);
+	padding-inline-start: calc(var(--spacing-l) + var(--btn-img-size-s) + var(--spacing-m));
 	border: 1px solid var(--color-border);
-	border-radius: var(--border-radius-large);
-	font-size: 12px;
-	background: var(--color-background);
+	border-radius: var(--border-radius);
+	font-size: var(--default-font-size);
+	background: var(--color-background-lighter);
 	color: var(--color-main-text);
 }
 
@@ -502,28 +574,12 @@
 	box-shadow: 0 0 0 1px var(--doc-type-color);
 }
 
-.template-featured-row {
+.template-blank-row {
 	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(10rem, 1fr));
-	gap: var(--spacing-xl);
+	grid-template-columns: repeat(auto-fill, 124px);
+	gap: calc(var(--spacing-xl) + var(--spacing-m));
 	overflow-x: auto;
-	padding-bottom: 8px;
-}
-
-.template-featured-row .backstage-template-card {
-	flex: 0 0 auto;
-}
-
-.template-introdocs-row {
-	display: flex;
-}
-
-.template-introdocs-row .backstage-template-card {
-	max-width: none;
-}
-
-.template-introdocs-row .template-thumbnail img {
-	max-width: 100%;
+	padding-block: var(--spacing-m);
 }
 
 .template-grid-empty {
@@ -531,7 +587,7 @@
 	text-align: center;
 	color: var(--color-text-light);
 	padding: 24px 0;
-	font-size: 14px;
+	font-size: var(--medium-font-size);
 }
 
 

@@ -12,27 +12,29 @@
 /* global _ */
 
 /*
- * "New" view: featured row of blank templates, search box, and a grid of
- * filtered templates. Also exposes templateCard, reused by HomeView.
+ * "New" view: a row of blank documents, then the templates under a search box
+ * and type filter chips. Also exposes templateCard, reused by HomeView.
  */
 
 namespace BackstageTemplates {
   export interface TemplateExplorerProps {
-    featuredTemplates: TemplateData[];
-    introDocs: TemplateData[];
-    gridTemplates: TemplateData[];
+    blankTemplates: TemplateData[];
     searchQuery: string;
-    showSearch: boolean;
+    filter: TemplateFilter;
+    // The part below the search field and the filter chips.
+    sections: HTMLElement;
     onTemplateClick: (template: TemplateData) => void;
-    onIntroDocClick: (template: TemplateData) => void;
     onSearchInput: (value: string) => void;
-    featuredRowRef: (el: HTMLElement | null) => void;
-    searchContainerRef: (el: HTMLElement | null) => void;
-    gridContainerRef: (el: HTMLElement) => void;
+    onFilterChange: (filter: TemplateFilter) => void;
+  }
+
+  export interface TemplateSectionsProps {
+    builtInTemplates: TemplateData[];
+    searchQuery: string;
+    onClick: (template: TemplateData) => void;
   }
 
   export interface TemplateCardOptions {
-    variant?: 'featured';
     isBlank?: boolean;
   }
 
@@ -41,11 +43,7 @@ namespace BackstageTemplates {
     onClick: () => void,
     options: TemplateCardOptions = {},
   ): HTMLElement {
-    const cls = [
-      'backstage-template-card',
-      options.variant === 'featured' ? 'is-featured' : '',
-      options.isBlank ? 'is-blank' : '',
-    ]
+    const cls = ['backstage-template-card', options.isBlank ? 'is-blank' : '']
       .filter(Boolean)
       .join(' ');
 
@@ -81,81 +79,110 @@ namespace BackstageTemplates {
   }
 
   export function templateExplorer(props: TemplateExplorerProps): HTMLElement {
-    const featuredRow =
-      props.featuredTemplates.length > 0
-        ? featuredTemplatesRow(props.featuredTemplates, props.onTemplateClick)
-        : null;
-    props.featuredRowRef(featuredRow);
-
-    const introRow =
-      props.introDocs && props.introDocs.length > 0
-        ? introDocsRow(props.introDocs, props.onIntroDocClick)
-        : null;
-
-    const searchEl = props.showSearch
-      ? searchInput(props.searchQuery, props.onSearchInput)
-      : null;
-    props.searchContainerRef(searchEl);
-
-    const gridEl = templateGrid(
-      props.gridTemplates,
-      props.searchQuery,
-      props.onTemplateClick,
-    );
-    props.gridContainerRef(gridEl);
-
     return (
       <div class="backstage-template-explorer">
-        {featuredRow}
-        {introRow}
-        {searchEl}
-        {gridEl}
+        {blankTemplatesRow(props.blankTemplates, props.onTemplateClick)}
+        <h3 class="backstage-templates-heading">{_('Templates')}</h3>
+        <div class="template-search-bar">
+          {searchInput(props.searchQuery, props.onSearchInput)}
+          {filterChips(props.filter, props.onFilterChange)}
+        </div>
+        {props.sections}
       </div>
     );
   }
 
-  export function featuredTemplatesRow(
+  function blankTemplatesRow(
     templates: TemplateData[],
     onClick: (t: TemplateData) => void,
   ): HTMLElement {
     return (
-      <div class="template-featured-row">
+      <div class="template-blank-row">
         {templates.map((t) =>
-          templateCard(t, () => onClick(t), {
-            variant: 'featured',
-            isBlank: true,
-          }),
+          templateCard(t, () => onClick(t), { isBlank: true }),
         )}
       </div>
     );
   }
 
-  export function introDocsRow(
-    docs: TemplateData[],
-    onClick: (t: TemplateData) => void,
+  export function typeLabel(type: TemplateType): string {
+    const labels: Record<TemplateType, string> = {
+      writer: _('Document'),
+      calc: _('Spreadsheet'),
+      impress: _('Presentation'),
+      draw: _('Drawing'),
+    };
+    return labels[type];
+  }
+
+  function filterChips(
+    active: TemplateFilter,
+    onChange: (filter: TemplateFilter) => void,
   ): HTMLElement {
+    const chips: [TemplateFilter, string][] = [
+      ['all', _('All')],
+      ...(['writer', 'calc', 'impress', 'draw'] as TemplateType[]).map(
+        (type): [TemplateFilter, string] => [type, typeLabel(type)],
+      ),
+    ];
+
+    const select = (event: Event, filter: TemplateFilter) => {
+      const chosen = event.currentTarget as HTMLElement;
+      chosen.parentElement
+        .querySelectorAll('.template-type-button')
+        .forEach((chip) => {
+          chip.classList.toggle('active', chip === chosen);
+          chip.setAttribute('aria-pressed', String(chip === chosen));
+        });
+      onChange(filter);
+    };
+
     return (
-      <div class="template-featured-row template-introdocs-row">
-        {docs.map((d) =>
-          templateCard(d, () => onClick(d), { variant: 'featured' }),
-        )}
+      <div class="template-filter-bar" role="group" aria-label={_('Type')}>
+        {chips.map(([filter, label]) => (
+          <button
+            type="button"
+            class={
+              filter === active
+                ? 'template-type-button active'
+                : 'template-type-button'
+            }
+            aria-pressed={String(filter === active)}
+            onClick={(event: Event) => select(event, filter)}
+          >
+            {label}
+          </button>
+        ))}
       </div>
     );
   }
 
-  export function templateGrid(
+  export function templateSections(props: TemplateSectionsProps): HTMLElement {
+    return (
+      <div class="backstage-template-sections">
+        <div class="backstage-template-section-header">
+          <h4 class="backstage-template-section-title">
+            {_('Built-in templates')}
+          </h4>
+        </div>
+        {templateGrid(props.builtInTemplates, props.searchQuery, props.onClick)}
+      </div>
+    );
+  }
+
+  function templateGrid(
     templates: TemplateData[],
     searchQuery: string,
     onClick: (t: TemplateData) => void,
   ): HTMLElement {
-    const noMatches = !templates.length && searchQuery.trim();
+    let emptyText: string | null = null;
+    if (!templates.length)
+      emptyText = searchQuery.trim()
+        ? _('No templates match your search.')
+        : _('No templates of this type.');
     return (
       <div class="backstage-templates-grid">
-        {noMatches ? (
-          <div class="template-grid-empty">
-            {_('No templates match your search.')}
-          </div>
-        ) : null}
+        {emptyText ? <div class="template-grid-empty">{emptyText}</div> : null}
         {templates.map((t) => templateCard(t, () => onClick(t)))}
       </div>
     );
@@ -167,6 +194,7 @@ namespace BackstageTemplates {
   ): HTMLElement {
     return (
       <div class="template-search">
+        <span class="template-search-icon" aria-hidden="true" />
         <input
           type="search"
           class="template-search-input"

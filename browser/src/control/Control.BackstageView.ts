@@ -26,11 +26,9 @@ class BackstageView extends window.L.Class {
 	private templates: TemplateManifestEntry[] | null = null;
 	private templatesPromise: Promise<void> | null = null;
 	private templatesLoadError: boolean = false;
-	private activeTemplateType: TemplateType = 'writer';
 	private templateSearchQuery: string = '';
-	private templateGridContainer: HTMLElement | null = null;
-	private templateFeaturedRowContainer: HTMLElement | null = null;
-	private templateSearchContainer: HTMLElement | null = null;
+	private templateFilter: TemplateFilter = 'all';
+	private templateSectionsContainer: HTMLElement | null = null;
 	private saveTabElement: HTMLElement | null = null;
 	private readonly isStarterMode: boolean;
 	private boundOnKeyDown: (e: KeyboardEvent) => void;
@@ -716,9 +714,7 @@ class BackstageView extends window.L.Class {
 	private renderNewView(): void {
 		this.setActiveTab('backstage-new');
 		this.clearContent();
-		this.templateGridContainer = null;
-		this.templateFeaturedRowContainer = null;
-		this.templateSearchContainer = null;
+		this.templateSectionsContainer = null;
 
 		this.contentArea.appendChild(BackstageTemplates.sectionHeader(_('New')));
 
@@ -730,50 +726,53 @@ class BackstageView extends window.L.Class {
 			return;
 		}
 
-		const allTemplates = this.getTemplatesData();
-		this.activeTemplateType = this.detectTemplateTypeFromDoc();
-
-		this.contentArea.appendChild(this.buildTemplateExplorer(allTemplates));
+		this.templateSectionsContainer = this.buildTemplateSections();
+		this.contentArea.appendChild(
+			BackstageTemplates.templateExplorer({
+				blankTemplates: this.getNewViewBlankTemplates(),
+				searchQuery: this.templateSearchQuery,
+				filter: this.templateFilter,
+				sections: this.templateSectionsContainer,
+				onTemplateClick: (t) => this.triggerNewDocument(t),
+				onSearchInput: (value) => {
+					this.templateSearchQuery = value;
+					this.updateTemplateSections();
+				},
+				onFilterChange: (filter) => {
+					this.templateFilter = filter;
+					this.updateTemplateSections();
+				},
+			}),
+		);
 	}
 
-	private buildTemplateExplorer(allTemplates: TemplateData[]): HTMLElement {
-		const filteredTemplates = this.getFilteredTemplates(allTemplates);
-		return BackstageTemplates.templateExplorer({
-			featuredTemplates: this.getFeaturedTemplates(),
-			introDocs: this.getIntroDocsData(),
-			gridTemplates: filteredTemplates,
+	private buildTemplateSections(): HTMLElement {
+		const builtInTemplates = [
+			...this.getIntroDocsData(),
+			...this.getTemplatesData(),
+		];
+		return BackstageTemplates.templateSections({
+			builtInTemplates: this.getFilteredTemplates(builtInTemplates),
 			searchQuery: this.templateSearchQuery,
-			showSearch: allTemplates.length > 0,
-			onTemplateClick: (t) => this.triggerNewDocument(t),
-			onIntroDocClick: (t) => this.triggerNewDocument(t),
-			onSearchInput: (value) => {
-				this.templateSearchQuery = value;
-				this.updateTemplateGrid();
-			},
-			featuredRowRef: (el) => {
-				this.templateFeaturedRowContainer = el;
-			},
-			searchContainerRef: (el) => {
-				this.templateSearchContainer = el;
-			},
-			gridContainerRef: (el) => {
-				this.templateGridContainer = el;
-			},
+			onClick: (t) => this.triggerNewDocument(t),
 		});
 	}
 
-	private getFeaturedTemplates(): TemplateData[] {
-		const blankTemplates = [
-			this.getBlankTemplate('writer'),
-			this.getBlankTemplate('calc'),
-			this.getBlankTemplate('impress'),
-			this.getBlankTemplate('draw'),
-		].filter((t): t is TemplateData => t !== null);
+	private updateTemplateSections(): void {
+		if (!this.templateSectionsContainer) return;
+		const sections = this.buildTemplateSections();
+		this.templateSectionsContainer.replaceWith(sections);
+		this.templateSectionsContainer = sections;
+	}
 
-		const query = this.templateSearchQuery.trim().toLowerCase();
-		return query
-			? blankTemplates.filter((t) => t.searchText.includes(query))
-			: blankTemplates;
+	// The New view names the blank documents by their type alone.
+	private getNewViewBlankTemplates(): TemplateData[] {
+		return (['writer', 'calc', 'impress', 'draw'] as TemplateType[]).map(
+			(type) => ({
+				...this.getBlankTemplate(type),
+				name: BackstageTemplates.typeLabel(type),
+			}),
+		);
 	}
 
 	private getIntroDocsData(): TemplateData[] {
@@ -1023,53 +1022,12 @@ class BackstageView extends window.L.Class {
 
 	private getFilteredTemplates(allTemplates: TemplateData[]): TemplateData[] {
 		const query = this.templateSearchQuery.trim().toLowerCase();
-		return allTemplates.filter((template) => {
-			if (!query) return true;
-			return template.searchText.includes(query);
-		});
-	}
-
-	private updateTemplateGrid(): void {
-		if (!this.templates || !this.templateGridContainer) return;
-
-		const allTemplates = this.getTemplatesData();
-		const filteredTemplates = this.getFilteredTemplates(allTemplates);
-		const newGrid = BackstageTemplates.templateGrid(
-			filteredTemplates,
-			this.templateSearchQuery,
-			(t) => this.triggerNewDocument(t),
+		return allTemplates.filter(
+			(template) =>
+				(this.templateFilter === 'all' ||
+					template.type === this.templateFilter) &&
+				(!query || template.searchText.includes(query)),
 		);
-		this.templateGridContainer.replaceWith(newGrid);
-		this.templateGridContainer = newGrid;
-
-		const featured = this.getFeaturedTemplates();
-		const newFeaturedRow = featured.length
-			? BackstageTemplates.featuredTemplatesRow(featured, (t) =>
-					this.triggerNewDocument(t),
-				)
-			: null;
-
-		if (this.templateFeaturedRowContainer) {
-			if (newFeaturedRow) {
-				this.templateFeaturedRowContainer.replaceWith(newFeaturedRow);
-				this.templateFeaturedRowContainer = newFeaturedRow;
-			} else {
-				this.templateFeaturedRowContainer.remove();
-				this.templateFeaturedRowContainer = null;
-			}
-		} else if (newFeaturedRow && this.templateSearchContainer?.parentElement) {
-			this.templateSearchContainer.parentElement.insertBefore(
-				newFeaturedRow,
-				this.templateSearchContainer,
-			);
-			this.templateFeaturedRowContainer = newFeaturedRow;
-		} else if (newFeaturedRow && this.templateGridContainer.parentElement) {
-			this.templateGridContainer.parentElement.insertBefore(
-				newFeaturedRow,
-				this.templateGridContainer,
-			);
-			this.templateFeaturedRowContainer = newFeaturedRow;
-		}
 	}
 
 	private getBlankTemplate(type: TemplateType): TemplateData | null {
@@ -1369,21 +1327,6 @@ class BackstageView extends window.L.Class {
 	private focusMap(): void {
 		if (this.map && this.map.focus) {
 			this.map.focus();
-		}
-	}
-
-	private detectTemplateTypeFromDoc(): TemplateType {
-		const docLayer = this.map && this.map._docLayer;
-		const docType = docLayer && docLayer._docType;
-		switch (docType) {
-			case 'spreadsheet':
-				return 'calc';
-			case 'presentation':
-				return 'impress';
-			case 'drawing':
-				return 'draw';
-			default:
-				return 'writer';
 		}
 	}
 

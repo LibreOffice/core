@@ -129,6 +129,36 @@ describe(['tagdesktop'], 'Backstage View Tests', { testIsolation: false }, funct
 		});
 	});
 
+	it('Filters templates by type with the chips', function() {
+		cy.then(() => {
+			ensureBackstage(win).show();
+		});
+
+		cy.cGet('#backstage-new').click();
+		cy.cGet('.template-type-button.active').should('have.text', 'All');
+		cy.cGet('.backstage-template-sections .backstage-template-card')
+			.should('have.length.greaterThan', 0);
+
+		cy.cGet('body').contains('.template-type-button', 'Presentation').click();
+		cy.cGet('.template-type-button.active').should('have.text', 'Presentation');
+		cy.cGet('.backstage-template-sections .backstage-template-card').should(function(cards) {
+			expect(cards.length).to.be.greaterThan(0);
+			cards.toArray().forEach(function(card) {
+				expect(card.id).to.match(/^(impress-|introdoc-impress$)/);
+			});
+		});
+
+		// The blank documents are not templates and stay whatever the filter.
+		cy.cGet('.template-blank-row .backstage-template-card').should('have.length', 4);
+
+		// No built-in template is a drawing.
+		cy.cGet('body').contains('.template-type-button', 'Drawing').click();
+		cy.cGet('.template-grid-empty').should('contain.text', 'No templates of this type');
+
+		cy.cGet('body').contains('.template-type-button', 'All').click();
+		cy.cGet('.template-grid-empty').should('not.exist');
+	});
+
 	it('Closes via the sidebar back button', function() {
 		cy.then(() => {
 			ensureBackstage(win).show();
