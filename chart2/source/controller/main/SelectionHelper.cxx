@@ -329,26 +329,19 @@ bool SelectionHelper::findNamedParent( SdrObject*& pInOutObject
     SolarMutexGuard aSolarGuard;
     //find the deepest named group
     SdrObject* pObj = pInOutObject;
-    OUString aName;
-    if( bGivenObjectMayBeResult )
-        aName = lcl_getObjectName( pObj );
-
-    while( pObj && !ObjectIdentifier::isCID( aName  )  )
-    {
+    if (!bGivenObjectMayBeResult && pObj)
         pObj = pObj->getParentSdrObjectFromSdrObject();
-        if (!pObj)
-            return false;
-        aName = lcl_getObjectName( pObj );
+
+    for (; pObj; pObj = pObj->getParentSdrObjectFromSdrObject())
+    {
+        if (OUString aName = lcl_getObjectName(pObj); ObjectIdentifier::isCID(aName))
+        {
+            pInOutObject = pObj;
+            rOutName = aName;
+            return true;
+        }
     }
-
-    if(!pObj)
-        return false;
-    if(aName.isEmpty())
-        return false;
-
-    pInOutObject = pObj;
-    rOutName = aName;
-    return true;
+    return false;
 }
 
 bool SelectionHelper::findNamedParent( SdrObject*& pInOutObject
