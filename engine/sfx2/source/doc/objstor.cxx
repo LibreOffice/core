@@ -42,7 +42,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
-#include <com/sun/star/form/XLoadable.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/EmbedStates.hpp>
@@ -4125,14 +4124,16 @@ bool SfxObjectShell::IsExternalDatabaseForm(const uno::Reference<beans::XPropert
     return true;
 }
 
-void SfxObjectShell::AddDeferredDatabaseForm(const uno::Reference<form::XLoadable>& rxForm)
+void SfxObjectShell::AddDeferredLinkLoad(
+    const uno::Reference<uno::XInterface>& rxOwner,
+    std::function<void(const uno::Reference<uno::XInterface>&)> aLoad)
 {
-    for (const auto& rxDeferred : maDeferredDatabaseForms)
-        if (uno::Reference<form::XLoadable>(rxDeferred) == rxForm)
+    for (const auto& [rxWeakOwner, rLoad] : maDeferredLinkLoads)
+        if (uno::Reference<uno::XInterface>(rxWeakOwner) == rxOwner)
             return;
 
-    const bool bFirst = maDeferredDatabaseForms.empty();
-    maDeferredDatabaseForms.emplace_back(rxForm);
+    const bool bFirst = maDeferredLinkLoads.empty();
+    maDeferredLinkLoads.emplace_back(rxOwner, std::move(aLoad));
     if (!bFirst)
         return;
 
