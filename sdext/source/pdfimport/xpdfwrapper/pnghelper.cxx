@@ -29,15 +29,6 @@ namespace
 {
     const sal_Int32 nMaxPixelsAllowed = SAL_MAX_INT32/2/4;
 
-    bool isReasonableSize( int width, int height )
-    {
-        sal_Int32 nPixels;
-        if( width < 1 || height < 1 )
-            return false;
-        return !o3tl::checked_multiply( sal_Int32( width ), sal_Int32( height ), nPixels )
-               && nPixels <= nMaxPixelsAllowed;
-    }
-
     sal_Int64 alphaOffsetForMaskPixel( int y, int x,
                                        int width, int height,
                                        int maskWidth, int maskHeight )
@@ -46,6 +37,15 @@ namespace
         const sal_Int64 nColumn = sal_Int64( x ) * width / maskWidth;
         return nLine * ( sal_Int64( width ) * 4 + 1 ) + nColumn * 4 + 4;
     }
+}
+
+bool PngHelper::isReasonableSize( int width, int height )
+{
+    sal_Int32 nPixels;
+    if( width < 1 || height < 1 )
+        return false;
+    return !o3tl::checked_multiply( sal_Int32( width ), sal_Int32( height ), nPixels )
+           && nPixels <= nMaxPixelsAllowed;
 }
 
 // checksum helpers, courtesy of libpng.org

@@ -254,10 +254,12 @@ static void writeJpeg_( OutputBuffer& o_rOutputBuf, Stream* str )
     str->close();
 }
 
-static void writePbm_(OutputBuffer& o_rOutputBuf, Stream* str, int width, int height, bool bInvert )
+static void fillPbm_(OutputBuffer& o_rOutputBuf, Stream* str, int width, int height, bool bInvert )
 {
     // write as PBM (char by char, to avoid stdlib lineend messing)
     o_rOutputBuf.clear();
+    if( !PngHelper::isReasonableSize( width, height ) )
+        return;
     o_rOutputBuf.resize(WRITE_BUFFER_SIZE);
     o_rOutputBuf[0] = 'P';
     o_rOutputBuf[1] = '4';
@@ -271,9 +273,6 @@ static void writePbm_(OutputBuffer& o_rOutputBuf, Stream* str, int width, int he
 
     const int header_size = 3+nOutLen+1;
     const int size = height * ((width + 7) / 8);
-
-    printf( " PBM %d", size + header_size );
-    printf("\n");
 
     // trim buffer to exact header length
     o_rOutputBuf.resize(header_size);
@@ -304,7 +303,15 @@ static void writePbm_(OutputBuffer& o_rOutputBuf, Stream* str, int width, int he
     str->close();
 }
 
-static void writePpm_( OutputBuffer&     o_rOutputBuf,
+static void writePbm_(OutputBuffer& o_rOutputBuf, Stream* str, int width, int height, bool bInvert )
+{
+    fillPbm_( o_rOutputBuf, str, width, height, bInvert );
+
+    printf( " PBM %d", static_cast<int>(o_rOutputBuf.size()) );
+    printf("\n");
+}
+
+static void fillPpm_( OutputBuffer&     o_rOutputBuf,
                 Stream*           str,
                 int               width,
                 int               height,
@@ -312,6 +319,8 @@ static void writePpm_( OutputBuffer&     o_rOutputBuf,
 {
     // write as PPM (char by char, to avoid stdlib lineend messing)
     o_rOutputBuf.clear();
+    if( !PngHelper::isReasonableSize( width, height ) )
+        return;
     o_rOutputBuf.resize(WRITE_BUFFER_SIZE);
     o_rOutputBuf[0] = 'P';
     o_rOutputBuf[1] = '6';
@@ -328,10 +337,6 @@ static void writePpm_( OutputBuffer&     o_rOutputBuf,
     o_rOutputBuf[3+nOutLen+5]=0;
 
     const int header_size = 3+nOutLen+5;
-    const int size = width*height*3 + header_size;
-
-    printf( " PPM %d", size );
-    printf("\n");
 
     // trim buffer to exact header size
     o_rOutputBuf.resize(header_size);
@@ -357,6 +362,8 @@ static void writePpm_( OutputBuffer&     o_rOutputBuf,
     for( int y=0; y<height; ++y)
     {
         p = imgStr->getLine();
+        if( !p )
+            return;
         for( int x=0; x<width; ++x)
         {
             colorMap->getRGB(p, &rgb);
@@ -367,6 +374,18 @@ static void writePpm_( OutputBuffer&     o_rOutputBuf,
             p +=colorMap->getNumPixelComps();
         }
     }
+}
+
+static void writePpm_( OutputBuffer&     o_rOutputBuf,
+                Stream*           str,
+                int               width,
+                int               height,
+                GfxImageColorMap* colorMap )
+{
+    fillPpm_( o_rOutputBuf, str, width, height, colorMap );
+
+    printf( " PPM %d", static_cast<int>(o_rOutputBuf.size()) );
+    printf("\n");
 }
 
 // call this only for 1 bit image streams !

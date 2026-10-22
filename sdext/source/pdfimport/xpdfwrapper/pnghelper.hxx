@@ -48,6 +48,9 @@ namespace pdfi
         static void appendIEND( OutputBuffer& o_rOutputBuf );
 
     public:
+        // true when width and height are both positive and their product fits the pixel limit
+        static bool isReasonableSize( int width, int height );
+
         static void updateCRC( sal_uInt32& io_rCRC, const sal_uInt8* i_pBuf, size_t i_nLen );
         static sal_uInt32 getCRC( const sal_uInt8* i_pBuf, size_t i_nLen );
 
