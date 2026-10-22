@@ -2681,7 +2681,11 @@ class SettingIframe {
 				entry !== null && typeof entry === 'object' && !Array.isArray(entry);
 			const value = isWidget ? entry.value : entry;
 
-			if (Array.isArray(value)) text[key] = JSON.stringify(value);
+			// A value with no text form is stored as the empty text, which every
+			// reader takes as "not chosen".
+			if (value === null || value === undefined || Number.isNaN(value))
+				text[key] = '';
+			else if (Array.isArray(value)) text[key] = JSON.stringify(value);
 			else if (typeof value === 'boolean') text[key] = value ? 'true' : 'false';
 			else if (typeof value === 'number') text[key] = String(value);
 			else if (typeof value === 'string') text[key] = value;
