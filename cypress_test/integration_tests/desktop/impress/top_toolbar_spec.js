@@ -69,7 +69,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Top toolbar tests.', { tes
 	});
 
 	it('Apply font color on text shape.', function() {
-		desktopHelper.getCompactIconArrow('FontColor').click();
+		desktopHelper.openOverflowGroup('overflow-button-fontcolor-toptoolbar');
 		desktopHelper.getCompactIconArrow('Color').click();
 		desktopHelper.selectColorFromPalette('FFFF00');
 
@@ -79,7 +79,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Top toolbar tests.', { tes
 	});
 
 	it('Apply highlight color on text shape.', function() {
-		desktopHelper.getCompactIconArrow('FontColor').click();
+		desktopHelper.openOverflowGroup('overflow-button-fontcolor-toptoolbar');
 		desktopHelper.getCompactIconArrow('CharBackColor').click();
 		desktopHelper.selectColorFromPalette('FFBF00');
 
@@ -160,7 +160,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Top toolbar tests.', { tes
 	it('Click shape hyperlink.', function() {
 		// Insert shape - this creates and selects the shape
 		// immediately, no additional click needed to select it.
-		desktopHelper.getCompactIconArrow('DefaultNumbering').click();
+		desktopHelper.openOverflowGroup('overflow-button-other-toptoolbar');
 		desktopHelper.getCompactIconArrow('BasicShapes').click();
 		cy.cGet('.col.w2ui-icon.basicshapes_round-quadrat').click();
 		cy.cGet('#test-div-shapeHandlesSection').should('exist');

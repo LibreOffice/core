@@ -9,7 +9,8 @@ describe(['tagmultiuser'], 'Check cell cursor and view behavior', function() {
 	beforeEach(function() {
 		helper.setupAndLoadDocument('calc/cell_cursor_jump.ods',true);
 		desktopHelper.switchUIToNotebookbar();
-		cy.viewport(1920,1080);
+		// wide enough that the Home tab's cells group stays open in both views
+		cy.viewport(3000,1080);
 	});
 
 	it('Jump on modification above in the sheet', function() {

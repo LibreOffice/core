@@ -12,6 +12,8 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Preset tests.', function()
 		cy.cGet('div.clipboard').as('clipboard');
 		helper.setDummyClipboardForCopy();
 		desktopHelper.switchUIToNotebookbar();
+		// wide enough that the Review tab's spelling group stays open
+		cy.viewport(1920, 1080);
 	});
 
 	// Ensure that shared autotext was installed.

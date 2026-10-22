@@ -293,7 +293,12 @@ function insertImage() {
 
 	if (mode === 'notebookbar') {
 		cy.cGet('#Insert-tab-label').click();
-		cy.cGet('#Insert-container .unoInsertGraphic').filter(':visible').click();
+		cy.cGet('#Insert-container').then(function($container) {
+			// A narrow window folds the Illustrations group, so open it first.
+			if ($container.find('[modelId="overflow-button-insert-illustrations"]:visible').length)
+				openOverflowGroup('overflow-button-insert-illustrations');
+		});
+		cy.cGet('.unoInsertGraphic').filter(':visible').click();
 	} else {
 		cy.cGet('#toolbar-up .unoInsertGraphic').filter(':visible').click();
 	}
@@ -755,6 +760,11 @@ function isWidgetButtonShown(win, modelId) {
 	return !!button && button.checkVisibility();
 }
 
+/// open the popup of a folded overflow group, which holds the buttons the group hides
+function openOverflowGroup(overflowId) {
+	getWidgetButton(overflowId).filter(':visible').click();
+}
+
 /// click the button of a widget declared in an overflow group - a folded group shows its
 /// buttons only in the popup that its own overflow button opens
 function clickWidgetButtonInOverflowGroup(win, modelId, overflowId) {
@@ -1053,6 +1063,7 @@ module.exports.getOpenMenuEntries = getOpenMenuEntries;
 module.exports.getWidgetButton = getWidgetButton;
 module.exports.isWidgetButtonShown = isWidgetButtonShown;
 module.exports.clickWidgetButtonInOverflowGroup = clickWidgetButtonInOverflowGroup;
+module.exports.openOverflowGroup = openOverflowGroup;
 module.exports.findStatelessMenuButton = findStatelessMenuButton;
 module.exports.getUndoCount = getUndoCount;
 module.exports.undoAll = undoAll;

@@ -127,7 +127,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test jumping on large cell
 		// Put cell cursor somewhere else.
 		helper.typeIntoInputField(helper.addressInputSelector, 'B10');
 
-		desktopHelper.getNbIconArrow('AlignTop').click();
+		desktopHelper.openOverflowGroup('overflow-button-home-alignment');
 		desktopHelper.getNbIcon('WrapText').click();
 
 		closeNotebookbarPopup();

@@ -130,6 +130,43 @@ describe(['tagdesktop'], 'Notebookbar tests.', function() {
 		cy.cGet('.notebookbar .unoSpellOnline').should('be.visible');
 		cy.cGet('.notebookbar .unoSpellOnline span').contains('Auto Spell Check');
 	});
+
+	it('A folded group opens from anywhere on its button', function() {
+		cy.viewport(700, 600);
+		helper.processToIdle(this.win);
+
+		cy.then(() => {
+			this.fontHeight = this.win.app.map.stateChangeHandler.getItemValue('.uno:FontHeight');
+		});
+
+		// the main part of the button, not its arrow
+		cy.cGet('#Home-container .unotoolbutton[id^="overflow-button-home-font"] > button.unobutton').click();
+		cy.cGet('[id^="overflow-button-home-font"].modalpopup').should('be.visible');
+		cy.cGet('[id^="overflow-button-home-font"].modalpopup .unoBold').should('be.visible');
+
+		// the click opens the group and applies nothing
+		cy.then(() => helper.processToIdle(this.win));
+		cy.then(() => {
+			expect(this.win.app.map.stateChangeHandler.getItemValue('.uno:FontHeight')).to.equal(this.fontHeight);
+		});
+	});
+
+	it('A folded group shows no state of the commands inside it', function() {
+		cy.viewport(700, 600);
+		helper.processToIdle(this.win);
+
+		// Bullets are the first command of the Paragraph group.
+		helper.typeIntoDocument('text');
+		cy.then(() => this.win.app.map.sendUnoCommand('.uno:DefaultBullet'));
+		helper.waitForMapState('.uno:DefaultBullet', 'true');
+
+		const button = '#Home-container .unotoolbutton[id^="overflow-button-home-paragraph"]';
+		cy.cGet(button).should('be.visible').should('not.have.class', 'selected');
+		cy.cGet(button + ' > button.unobutton').should('not.have.attr', 'aria-pressed');
+		cy.cGet(button + ' > button.unobutton').should('have.attr', 'aria-haspopup', 'true');
+		// The arrow is part of the one button, so it takes no focus of its own.
+		cy.cGet(button + ' .arrowbackground').should('have.attr', 'aria-hidden', 'true');
+	});
 });
 
 describe(['tagdesktop'], 'Notebookbar checkbox widgets', function() {

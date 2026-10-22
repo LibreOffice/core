@@ -1500,7 +1500,10 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 			if (data.command)
 				window.L.DomUtil.addClass(div, data.command.replace(':', '').replace('.', ''));
 
-			if (isRealUnoCommand) {
+			// The button of a folded overflow group carries its group id as the command.
+			const isOverflowButton = !!id && id.startsWith('overflow-button');
+
+			if (isRealUnoCommand || isOverflowButton) {
 				// there is a problem with JSON crafted manually on the JS side
 				// we do not have warranty the id we passed is the one used in the DOM
 				// updates might then fail to find such item

@@ -248,7 +248,7 @@ describe(['tagdesktop'], 'Top toolbar tests.', { testIsolation: false }, functio
 	it('Add/Delete decimal places', function() {
 		helper.setDummyClipboardForCopy();
 		// Add decimal place
-		desktopHelper.getCompactIconArrow('DefaultNumbering').click();
+		desktopHelper.openOverflowGroup('overflow-button-other-toptoolbar');
 		desktopHelper.getCompactIcon('NumberFormatIncDecimals').click();
 		calcHelper.selectEntireSheet();
 		helper.copy();
@@ -261,7 +261,7 @@ describe(['tagdesktop'], 'Top toolbar tests.', { testIsolation: false }, functio
 		// Delete Decimal place
 		calcHelper.clickOnFirstCell();
 
-		desktopHelper.getCompactIconArrow('DefaultNumbering').click();
+		desktopHelper.openOverflowGroup('overflow-button-other-toptoolbar');
 		desktopHelper.getCompactIcon('NumberFormatDecDecimals').click();
 
 		calcHelper.selectEntireSheet();
@@ -274,7 +274,7 @@ describe(['tagdesktop'], 'Top toolbar tests.', { testIsolation: false }, functio
 
 	it('Format as currency.', function() {
 		helper.setDummyClipboardForCopy();
-		desktopHelper.getCompactIconArrow('DefaultNumbering').click();
+		desktopHelper.openOverflowGroup('overflow-button-other-toptoolbar');
 		desktopHelper.getCompactIcon('NumberFormatCurrency').click();
 
 		calcHelper.selectEntireSheet();
@@ -288,7 +288,7 @@ describe(['tagdesktop'], 'Top toolbar tests.', { testIsolation: false }, functio
 
 	it('Format as Percent.', function() {
 		helper.setDummyClipboardForCopy();
-		desktopHelper.getCompactIconArrow('DefaultNumbering').click();
+		desktopHelper.openOverflowGroup('overflow-button-other-toptoolbar');
 		desktopHelper.getCompactIcon('NumberFormatPercent').click();
 
 		calcHelper.selectEntireSheet();

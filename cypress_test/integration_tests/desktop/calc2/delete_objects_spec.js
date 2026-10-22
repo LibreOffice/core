@@ -22,7 +22,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Delete Objects', function(
 	});
 
 	it('Delete Shapes', function() {
-		desktopHelper.getCompactIconArrow('DefaultNumbering').click();
+		desktopHelper.openOverflowGroup('overflow-button-other-toptoolbar');
 		desktopHelper.getCompactIcon('BasicShapes').click();
 
 		cy.cGet('.col.w2ui-icon.symbolshapes').click();
@@ -39,7 +39,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Delete Objects', function(
 
 	it('Delete Chart' , function() {
 		// Insert chart button not visible yet so click on the overflow button.
-		desktopHelper.getCompactIconArrow('DefaultNumbering').click();
+		desktopHelper.openOverflowGroup('overflow-button-other-toptoolbar');
 		// Click on insert chart button.
 		desktopHelper.getCompactIcon('InsertObjectChart').click();
 

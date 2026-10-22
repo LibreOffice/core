@@ -566,17 +566,11 @@ JSDialog.OverflowGroup = function (
 				id: id,
 				text: data.name ? data.name : firstItem ? (firstItem as any).text : '',
 				icon: data.icon ? data.icon : getToolitemIcon(firstItem),
-				command: firstItem ? (firstItem as any).command : '',
+				// The button opens the group and runs no command of its own, so it has
+				// no state, shortcut or enabled state to take from the first item.
+				command: id,
 				noLabel: !data.name,
 				menu: builtMenu,
-				applyCallback:
-					firstItem && firstItem.type === 'toolitem'
-						? () => {
-								firstItem.type.includes('custom')
-									? app.dispatcher.dispatch((firstItem as any).command)
-									: app.map.sendUnoCommand((firstItem as any).command);
-							}
-						: undefined,
 			} as MenuButtonWidgetJSON,
 		],
 		false,

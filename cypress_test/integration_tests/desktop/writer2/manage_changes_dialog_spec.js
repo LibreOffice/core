@@ -15,7 +15,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagscreenshot'], 'Manage Changes Dialog
 
 	it('Manage changes dialog visual test', function () {
 		cy.cGet('.notebookbar #Review-tab-label').click();
-		desktopHelper.getNbIconArrow('TrackChanges', 'Review').click();
+		desktopHelper.openOverflowGroup('overflow-button-review-tracking');
 		desktopHelper.getNbIcon('AcceptTrackedChanges', 'Review').click();
 		cy.cGet('#AcceptRejectChangesDialog').should('be.visible');
 		cy.cGet('#writerchanges .ui-treeview-entry.ui-treeview-expandable[aria-level="1"] .ui-treeview-expander-column').click();
@@ -47,7 +47,7 @@ describe(['tagdesktop'], 'Manage Changes Dialog comments', function () {
 
 	it('A change comment of several paragraphs shows on one line', function () {
 		cy.cGet('.notebookbar #Review-tab-label').click();
-		desktopHelper.getNbIconArrow('TrackChanges', 'Review').click();
+		desktopHelper.openOverflowGroup('overflow-button-review-tracking');
 		desktopHelper.getNbIcon('AcceptTrackedChanges', 'Review').click();
 		cy.cGet('#AcceptRejectChangesDialog').should('be.visible');
 		helper.processToIdle(this.win);

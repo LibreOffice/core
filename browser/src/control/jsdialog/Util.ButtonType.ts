@@ -204,56 +204,15 @@ function getDropdownButtons() {
 	];
 }
 
-function getOverflowGroupDropdownButtons() {
-	return [
-		'.uno:AutoSumMenu',
-		'.uno:ConditionalFormatMenu',
-		'.uno:DataDataPilotRun',
-		'.uno:DataFilterAutoFilter',
-		'.uno:DefineDBName',
-		'.uno:DrawText',
-		'.uno:EntireCell',
-		'.uno:FontDialog',
-		'.uno:FormatBulletsMenu',
-		'.uno:FormatGroup',
-		'.uno:FreezePanes',
-		'.uno:FullScreen',
-		'.uno:GrafLuminance',
-		'.uno:Group',
-		'.uno:InsertAnnotation',
-		'.uno:InsertCalcTable',
-		'.uno:InsertFieldCtrl',
-		'.uno:InsertFootnote',
-		'.uno:InsertGraphic',
-		'.uno:InsertMultiIndex',
-		'.uno:InsertObjectChart',
-		'.uno:InsertPagebreak',
-		'.uno:InsertSymbol',
-		'.uno:InsertTable',
-		'.uno:Paste',
-		'.uno:ToggleSheetGrid',
-		'MenuMargins',
-		'notespanel',
-		'zoomreset',
-	];
-}
-
-function getOverflowGroupToggleButtons() {
-	return ['.uno:DefaultBullet', '.uno:ObjectAlignLeft', '.uno:TrackChanges'];
-}
-
-function getOverflowGroupDialogButtons() {
-	return ['.uno:InsertSection', '.uno:SplitCell'];
-}
-
 JSDialog.IsToggleButton = function (
 	id: string,
 	commandName: string,
 	builder: any,
 ) {
-	const toggleBtnCommands = isOverFlowButtonId(id)
-		? getOverflowGroupToggleButtons()
-		: getToggleButtons();
+	// A folded group's button only opens the group.
+	if (isOverFlowButtonId(id)) return false;
+
+	const toggleBtnCommands = getToggleButtons();
 
 	// fallback: if any command is not included in above list
 	const stateValue = builder.map['stateChangeHandler']
@@ -266,17 +225,13 @@ JSDialog.IsToggleButton = function (
 };
 
 JSDialog.IsDialogButton = function (id: string, commandName: string) {
-	const dialogBtnCommands = isOverFlowButtonId(id)
-		? getOverflowGroupDialogButtons()
-		: getDialogButtons();
+	if (isOverFlowButtonId(id)) return false;
 
-	return dialogBtnCommands.includes(commandName);
+	return getDialogButtons().includes(commandName);
 };
 
 JSDialog.IsDropdownButton = function (id: string, commandName: string) {
-	const dropdownBtnCommands = isOverFlowButtonId(id)
-		? getOverflowGroupDropdownButtons()
-		: getDropdownButtons();
+	if (isOverFlowButtonId(id)) return true;
 
-	return dropdownBtnCommands.includes(commandName);
+	return getDropdownButtons().includes(commandName);
 };

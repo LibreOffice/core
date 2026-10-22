@@ -13,7 +13,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Compare Changes view.', fu
 	}
 
 	function enterCompareChangesMode() {
-		desktopHelper.getNbIconArrow('TrackChanges', 'Review').click();
+		desktopHelper.openOverflowGroup('overflow-button-review-tracking');
 		cy.cGet('#compare-tracked-change-button').filter(':visible').click();
 		cy.cGet('#compare-tracked-change-entry-1').click();
 		cy.cGet('.compare-changes-labels').should('not.have.css', 'display', 'none');

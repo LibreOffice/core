@@ -149,7 +149,7 @@ describe(['tagdesktop'], 'Stylesview Iconview Tests', { testIsolation: false }, 
 		cy.cGet('#stylesview-iconview-list-dropdown').should('not.exist');
 
 		// re-open after the resize, the narrow window folds the styles view into a button
-		cy.cGet('#overflow-button-home-stylesview-group').should('be.visible').click();
+		desktopHelper.openOverflowGroup('overflow-button-home-stylesview-group');
 		desktopHelper.getDropdown('stylesview-iconview-list').should('exist');
 		cy.cGet('.jsdialog #stylesview').should('exist').should('be.visible');
 

@@ -469,7 +469,7 @@ describe(['tagdesktop'], 'Writer drag and drop of a text selection in the compar
 		var win = this.win;
 
 		// Given the compare view, with Test2 selected:
-		desktopHelper.getNbIconArrow('TrackChanges', 'Review').click();
+		desktopHelper.openOverflowGroup('overflow-button-review-tracking');
 		cy.cGet('#compare-tracked-change-button').filter(':visible').click();
 		cy.cGet('#compare-tracked-change-entry-1').click();
 		cy.cGet('.compare-changes-labels').should('not.have.css', 'display', 'none');

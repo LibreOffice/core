@@ -68,7 +68,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Apply paragraph properties
 		cy.cGet('#document-container g.Page .BulletChars')
 			.should('not.exist');
 
-		desktopHelper.getCompactIconArrow('DefaultNumbering').click();
+		desktopHelper.openOverflowGroup('overflow-button-other-toptoolbar');
 
 		// Apply bulleting
 		desktopHelper.getCompactIcon('DefaultBullet').click();
@@ -85,7 +85,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Apply paragraph properties
 		cy.cGet('#document-container g.Page .SVGTextShape tspan[ooo\\:numbering-type]')
 			.should('not.exist');
 
-		desktopHelper.getCompactIconArrow('DefaultNumbering').click();
+		desktopHelper.openOverflowGroup('overflow-button-other-toptoolbar');
 
 		// Apply numbering
 		desktopHelper.getCompactIcon('DefaultNumbering').click();

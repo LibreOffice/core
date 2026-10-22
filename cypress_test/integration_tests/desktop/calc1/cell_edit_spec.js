@@ -47,10 +47,10 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Test rendering of a cell o
 		// type something
 		const testString = 'TEST STRING';
 
-		desktopHelper.getNbIconArrow('Grow').click();
+		desktopHelper.openOverflowGroup('overflow-button-home-font');
 		desktopHelper.getNbIcon('Bold').click();
 		cy.cGet('.jsdialog-overlay').click();
-		desktopHelper.getNbIconArrow('Grow').click();
+		desktopHelper.openOverflowGroup('overflow-button-home-font');
 		desktopHelper.getNbIcon('Underline').click();
 		cy.cGet('.jsdialog-overlay').click();
 
