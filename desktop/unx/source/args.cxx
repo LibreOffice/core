@@ -64,39 +64,23 @@ Args *args_parse (void)
 
     sal_uInt32 j = 0;
 
-    /* sort the -env: args to the front */
     for (sal_uInt32 i = 0; i < nArgs; ++i)
     {
         rtl_uString *pTmp = nullptr;
         osl_getCommandArg( i, &pTmp );
         if (is_env_arg (pTmp))
         {
+            /* sort the -env: args to the front */
             args->aArgs.insert(args->aArgs.begin() + j, pTmp);
             ++j;
         }
         else
         {
-            rtl_uString_release (pTmp);
+            /* Then the other args */
+            args->aArgs.push_back(pTmp);
         }
     }
     args->nArgsEnv = j;
-
-    /* Then the other args */
-    for (sal_uInt32 i = 0; i < nArgs; ++i)
-    {
-        rtl_uString *pTmp = nullptr;
-
-        osl_getCommandArg( i, &pTmp );
-        if (!is_env_arg (pTmp))
-        {
-            args->aArgs.insert(args->aArgs.begin() + j, pTmp);
-            ++j;
-        }
-        else
-        {
-            rtl_uString_release (pTmp);
-        }
-    }
 
     for (sal_uInt32 i = args->nArgsEnv; i < args->nArgsTotal; i++)
     {
