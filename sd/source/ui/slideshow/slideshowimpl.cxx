@@ -1815,7 +1815,7 @@ void SlideshowImpl::click( const Reference< XShape >& xShape )
             Sequence< Any >* pInArgs = new Sequence< Any >(0);
             mpDocSh->CallXScript( aMacro, *pInArgs, aRet, aOutArgsIndex, aOutArgs);
         }
-        else
+        else if (SfxObjectShell::isScriptAccessAllowed(mpDocSh->GetModel()))
         {
             // aMacro has the following syntax:
             // "Macroname.Modulname.Libname.Documentname" or
