@@ -192,7 +192,7 @@
     </message>
     <message>
         <source>Preview of %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Förhandsgranskning av %1</translation>
     </message>
 </context>
 <context>
