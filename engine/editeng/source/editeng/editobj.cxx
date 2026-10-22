@@ -145,7 +145,7 @@ void EditTextObjectParagraph::SetText( const OUString& rStr )
 
 void EditTextObjectParagraph::dumpAsXml(xmlTextWriterPtr pWriter) const
 {
-    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("ContentInfo"));
+    (void)xmlTextWriterStartElement(pWriter, BAD_CAST("EditTextObjectParagraph"));
     (void)xmlTextWriterWriteAttribute(pWriter, BAD_CAST("style"), BAD_CAST(aStyle.toUtf8().getStr()));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("nNumberingDepth"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(mnNumberingDepth));
     (void)xmlTextWriterWriteFormatAttribute(pWriter, BAD_CAST("mnNumberingStartValue"), "%" SAL_PRIdINT32, static_cast<sal_Int32>(mnNumberingStartValue));

@@ -1969,8 +1969,8 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTdf105502)
     // Assert that the selected A1 has now a larger font than the unselected
     // A2.
     xmlDocUniquePtr pXmlDoc = parseXmlDump();
-    sal_Int32 nA1Height = getXPath(pXmlDoc, "//Cell[1]/SdrText/OutlinerParaObject/EditTextObject/ContentInfo/SfxItemSet/SvxFontHeightItem[1]", "height").toInt32();
-    sal_Int32 nA2Height = getXPath(pXmlDoc, "//Cell[3]/SdrText/OutlinerParaObject/EditTextObject/ContentInfo/attribs[1]/SvxFontHeightItem", "height").toInt32();
+    sal_Int32 nA1Height = getXPath(pXmlDoc, "//Cell[1]/SdrText/OutlinerParaObject/EditTextObject/EditTextObjectParagraph/SfxItemSet/SvxFontHeightItem[1]", "height").toInt32();
+    sal_Int32 nA2Height = getXPath(pXmlDoc, "//Cell[3]/SdrText/OutlinerParaObject/EditTextObject/EditTextObjectParagraph/attribs[1]/SvxFontHeightItem", "height").toInt32();
     // This failed when FuText::ChangeFontSize() never did "continue" in the
     // text loop, instead of doing so depending on what IsInSelection() returns.
     CPPUNIT_ASSERT(nA1Height > nA2Height);
