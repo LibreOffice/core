@@ -2839,6 +2839,28 @@ struct COKitDocument
                                   const char* pPart) = 0;
 
     /**
+     * Bring a linked section up to date with the section of the source document it is linked to.
+     *
+     * @param pSourceName the source document as the user knows it, as getSlideLinks reports it.
+     * @param pSection the section, by the identifier getSlideLinks reports for it.
+     * @param pUrl a file: URL of a file on this machine holding the slides of the source section,
+     *        in the order the source holds them, and no other slide. The section then holds a fresh
+     *        copy of each of those slides and no other slide, in that order, so a slide edited in
+     *        this document is replaced as well, and the parts of its slides change.
+     * @param pLastModifiedTime the time the source document was last modified now.
+     * @param pSourceSectionName the name the source section has now. The section takes it when
+     *        the section still has the name the source section had at the last read, and keeps a
+     *        name given to it in this document.
+     * @return the number of slides the section holds afterwards, or -1 when no section with that
+     *         identifier is linked to that source document, when the URL is not a file on this
+     *         machine, when the time or the name is longer than 128 characters or holds a control
+     *         character, when the view cannot edit, or when the file could not be read.
+     */
+    virtual int updateLinkedSection(const char* pSourceName, const char* pSection,
+                                    const char* pUrl, const char* pLastModifiedTime,
+                                    const char* pSourceSectionName) = 0;
+
+    /**
      * Take the source document off one linked page.
      *
      * The page keeps the content it holds and becomes a page of this document alone, so a refresh

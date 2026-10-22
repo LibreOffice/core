@@ -561,6 +561,12 @@ public:
                                              const OUString& rLastModifiedTime,
                                              std::vector<OString>* pNotUpdated = nullptr,
                                              sal_Int32 nPageIndex = -1) override;
+    /// @see vcl::ITiledRenderable::updateLinkedSection().
+    SD_DLLPUBLIC sal_Int32 updateLinkedSection(const OUString& rSectionId,
+                                               const OUString& rSourceName,
+                                               const OUString& rFileUrl,
+                                               const OUString& rLastModifiedTime,
+                                               const OUString& rSourceSectionName) override;
     /// @see vcl::ITiledRenderable::breakSlideLink().
     SD_DLLPUBLIC bool breakSlideLink(sal_Int32 nIndex) override;
 

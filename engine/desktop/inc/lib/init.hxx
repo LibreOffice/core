@@ -445,6 +445,9 @@ namespace desktop {
         int refreshSlideLinks(const char* pSourceName, const char* pUrl,
                               const char* pLastModifiedTime, std::string* pNotUpdated,
                               const char* pPart) override;
+        int updateLinkedSection(const char* pSourceName, const char* pSection,
+                                const char* pUrl, const char* pLastModifiedTime,
+                                const char* pSourceSectionName) override;
         bool breakSlideLink(const char* pPart) override;
         bool exportPages(const char* pParts, const char* pUrl) override;
         void selectObjects(const char* pObjectIds) override;

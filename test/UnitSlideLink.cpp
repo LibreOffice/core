@@ -311,6 +311,41 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkSection()
                          section->getValue<std::string>("lastModifiedTime"));
         LOK_ASSERT_EQUAL(static_cast<std::size_t>(2), section->getArray("slides")->size());
 
+        // An update of the section gives it every slide of the staged file, which holds the
+        // slides its source section holds now, and the new name of that source section.
+        const std::string sectionId = section->getValue<std::string>("section");
+        const std::string encodedSectionId =
+            "%7B" + sectionId.substr(1, sectionId.size() - 2) + "%7D";
+        stageSource(socket, documentURL, "staged.odp");
+        sendAsWsd(std::string("slidelink update source=") + EncodedSourceName +
+                  " file=staged.odp time=2021-06-06T10:00:00Z section=" + encodedSectionId +
+                  " sectionname=Opening%20slides%2C%20revised");
+        const std::string updateListReply =
+            helpers::getResponseString(socket, "slidelinks:", testname);
+        sections = helpers::parseJsonReply(updateListReply, "slidelinks:")->getArray("sections");
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(1), sections->size());
+        section = sections->getObject(0);
+        LOK_ASSERT_EQUAL(sectionId, section->getValue<std::string>("section"));
+        LOK_ASSERT_EQUAL(std::string("Opening slides, revised"),
+                         section->getValue<std::string>("name"));
+        LOK_ASSERT_EQUAL(std::string("2021-06-06T10:00:00Z"),
+                         section->getValue<std::string>("lastModifiedTime"));
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(10), section->getArray("slides")->size());
+
+        const std::string updateReply = helpers::getResponseString(socket, "slidelink:", testname);
+        Poco::JSON::Object::Ptr updateObject = helpers::parseJsonReply(updateReply, "slidelink:");
+        LOK_ASSERT_EQUAL(sectionId, updateObject->getValue<std::string>("section"));
+        LOK_ASSERT_EQUAL(10, updateObject->getValue<int>("count"));
+
+        // A section that is not linked has no source section to follow.
+        stageSource(socket, documentURL, "staged.odp");
+        const std::string otherSection = "%7B00000000-0000-4000-8000-000000000000%7D";
+        assertErrorAsWsd(socket,
+                         std::string("slidelink update source=") + EncodedSourceName +
+                             " file=staged.odp section=" + otherSection,
+                         "notlinked",
+                         std::string(" source=") + EncodedSourceName + " section=" + otherSection);
+
         socketPoll->joinThread();
     }
     catch (const Poco::Exception& exc)
@@ -576,6 +611,29 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkErrors()
         assertErrorAsWsd(socket, std::string("slidelink update source=") + EncodedSourceName +
                                      " file=staged.odp",
                          "failed", std::string(" source=") + EncodedSourceName);
+
+        // A section update reads every slide of the section, so it takes no part, a name of a
+        // source section goes with a section, and a section is named by its identifier. The
+        // answers name the section as well.
+        const std::string anySection = "%7B00000000-0000-4000-8000-000000000000%7D";
+        assertErrorAsWsd(socket,
+                         std::string("slidelink update source=") + EncodedSourceName +
+                             " file=staged.odp part=1 section=" + anySection,
+                         "syntax",
+                         std::string(" source=") + EncodedSourceName + " section=" + anySection);
+        assertErrorAsWsd(socket,
+                         std::string("slidelink update source=") + EncodedSourceName +
+                             " file=staged.odp section=",
+                         "syntax", std::string(" source=") + EncodedSourceName + " section=");
+        assertErrorAsWsd(socket,
+                         std::string("slidelink update source=") + EncodedSourceName +
+                             " file=staged.odp sectionname=Opening",
+                         "syntax", std::string(" source=") + EncodedSourceName);
+        assertErrorAsWsd(socket,
+                         std::string("slidelink update source=") + EncodedSourceName +
+                             " file=staged.odp section=Opening",
+                         "syntax",
+                         std::string(" source=") + EncodedSourceName + " section=Opening");
 
         // None of the failures changed the document, which still holds one
         // slide and no link at all.

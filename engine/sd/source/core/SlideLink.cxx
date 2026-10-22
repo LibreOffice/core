@@ -273,6 +273,8 @@ OUString SlideLink::NormaliseGuid(std::u16string_view rGuid)
     return aGuid.isEmpty() ? OUString() : aGuid.getOUString();
 }
 
+bool SlideLink::IsLocalFile(std::u16string_view rUrl) { return isLocalFile(rUrl); }
+
 bool SlideLink::IsReadableSourceString(std::u16string_view rValue)
 {
     constexpr size_t nMaxLength = 128;

@@ -8166,6 +8166,99 @@ bool SdXImpressDocument::insertPagesFromFile(const OUString& rFileUrl, const OSt
     return true;
 }
 
+sal_Int32 SdXImpressDocument::updateLinkedSection(const OUString& rSectionId,
+                                                  const OUString& rSourceName,
+                                                  const OUString& rFileUrl,
+                                                  const OUString& rLastModifiedTime,
+                                                  const OUString& rSourceSectionName)
+{
+    // The slides are read from a file staged on this machine, as a refresh of linked pages reads
+    // them.
+    if (!mpDoc || !sd::SlideLink::IsLocalFile(rFileUrl))
+        return -1;
+
+    if (!sd::SlideLink::IsReadableSourceString(rLastModifiedTime)
+        || !sd::SlideLink::IsReadableSourceString(rSourceSectionName))
+        return -1;
+
+    sd::SlideSectionManager& rSections = mpDoc->GetSectionManager();
+    const sal_Int32 nSection
+        = rSections.GetSectionIndexForId(sd::SlideLink::NormaliseGuid(rSectionId));
+    const sd::SlideSectionLink* pLink = rSections.GetSectionLink(nSection);
+    if (!pLink || pLink->maSourceReference != sd::SlideLink::MakeSourceReference(rSourceName))
+        return -1;
+
+    // The link changes below, and the old one says what the section was linked with.
+    const sd::SlideSectionLink aOldLink = *pLink;
+    const OUString aSectionId = rSections.GetSection(nSection).maId;
+
+    // A file staged under a name used before holds other slides this time.
+    mpDoc->CloseBookmarkDoc();
+    SdDrawDocument* pSource = mpDoc->OpenBookmarkDoc(rFileUrl, /*bNoDialogs=*/true);
+    if (!pSource)
+        return -1;
+
+    comphelper::ScopeGuard aCloseSource([this] { mpDoc->CloseBookmarkDoc(); });
+
+    std::vector<OUString> aBookmarkList;
+    if (!collectPageNames(*pSource, {}, aBookmarkList))
+        return -1;
+
+    SfxUndoManager* pUndoManager
+        = mpDoc->beginUndoAction(SdResId(STR_UNDO_UPDATE_LINKED_SECTION));
+    comphelper::ScopeGuard aLeaveUndo([this, pUndoManager]
+                                      { mpDoc->endUndoAction(/*bUndo=*/false, pUndoManager); });
+
+    // The fresh slides go in after the old ones, so they join the section and the section always
+    // holds slides. Then the old slides go. The slides keep the design of the source, as a refresh
+    // of a linked slide does.
+    const sal_Int32 nStart = rSections.GetSection(nSection).mnStartIndex;
+    const sal_Int32 nOldCount = rSections.GetSectionSlideCount(nSection);
+    const sal_Int32 nEnd = nStart + nOldCount;
+    const sal_uInt16 nInsertPos = nEnd < mpDoc->GetSdPageCount(PageKind::Standard)
+                                      ? static_cast<sal_uInt16>(2 * nEnd + 1)
+                                      : 0xFFFF;
+
+    InsertBookmarkOptions aOptions = InsertBookmarkOptions::ForSlideImport(/*bKeepDesign=*/true);
+    aOptions.bLink = true;
+    aOptions.aLinkSourceUrl = aOldLink.maSourceReference;
+    const sal_Int32 nInsertedCount
+        = insertSourcePages(*mpDoc, *pSource, aBookmarkList, aOptions, nInsertPos,
+                            static_cast<sal_uInt16>(nEnd), {}, rLastModifiedTime);
+    if (nInsertedCount < 0)
+        return -1;
+
+    rtl::Reference<SdDrawPagesAccess> xPages = getSdDrawPages();
+    for (sal_Int32 nSlide = nEnd - 1; nSlide >= nStart; --nSlide)
+    {
+        uno::Reference<drawing::XDrawPage> xPage(xPages->getByIndex(nSlide), uno::UNO_QUERY);
+        xPages->remove(xPage);
+    }
+
+    // The section follows the name of its source section until somebody renames it here.
+    const sal_Int32 nUpdated = rSections.GetSectionIndexForId(aSectionId);
+    const OUString aSourceSectionName
+        = rSourceSectionName.isEmpty() ? aOldLink.maSourceSectionName : rSourceSectionName;
+    const OUString& rName = rSections.GetSection(nUpdated).maName;
+    if (rName == aOldLink.maSourceSectionName && !aSourceSectionName.isEmpty()
+        && rName != aSourceSectionName)
+    {
+        if (mpDoc->IsUndoEnabled())
+            mpDoc->AddUndo(std::make_unique<UndoSlideSection>(
+                *mpDoc, SdResId(STR_UNDO_RENAME_SLIDE_SECTION)));
+        rSections.RenameSection(nUpdated, aSourceSectionName);
+    }
+
+    // The slides stay in when the section cannot be linked, as pages linked one by one.
+    if (!rSections.SetSectionLink(
+            nUpdated, makeSectionLink(*mpDoc, nStart, nInsertedCount, aOldLink.maSourceReference,
+                                      aOldLink.maSourceSectionId, aSourceSectionName,
+                                      rLastModifiedTime)))
+        SAL_WARN("sd", "the updated section could not be linked again");
+
+    return nInsertedCount;
+}
+
 sal_Int32 SdXImpressDocument::getSlideIndexOfGuid(const OUString& rGuid)
 {
     if (!mpDoc || rGuid.isEmpty())

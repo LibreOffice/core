@@ -147,6 +147,10 @@ public:
     /// index of its first slide and the number of slides it spans.
     void WriteSectionsJson(::tools::JsonWriter& rJsonWriter, std::string_view aArrayName) const;
 
+    /// The index of the section with the identifier rId, in braced form, or -1 when no section
+    /// holds it.
+    sal_Int32 GetSectionIndexForId(std::u16string_view rId) const;
+
     /// Returns the section index that contains the given slide, or -1.
     sal_Int32 GetSectionIndexForSlide(sal_Int32 nSlideIndex) const;
 

@@ -486,6 +486,7 @@
 #define STR_UNDO_MOVE_SLIDE_SECTION                     NC_("STR_UNDO_MOVE_SLIDE_SECTION", "Move section")
 #define STR_UNDO_REMOVE_SLIDE_SECTION_AND_SLIDES        NC_("STR_UNDO_REMOVE_SLIDE_SECTION_AND_SLIDES", "Remove section and slides")
 #define STR_UNDO_LINK_SLIDE_SECTION                     NC_("STR_UNDO_LINK_SLIDE_SECTION", "Link section")
+#define STR_UNDO_UPDATE_LINKED_SECTION                  NC_("STR_UNDO_UPDATE_LINKED_SECTION", "Update linked section")
 #define STR_UNDO_UNLINK_SLIDE_SECTION                   NC_("STR_UNDO_UNLINK_SLIDE_SECTION", "Unlink section")
 
 // The rows of the presentation cleanup list. An image row reads as two lines: the first says where

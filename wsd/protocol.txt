@@ -328,6 +328,8 @@ exportslides [slides=<p0,p1,...>|guids=<g0,g1,...>]
 slidelink list
 slidelink break part=<part>
 slidelink update source=<source name> file=<staged name> [time=<source time>] [part=<part>]
+slidelink update source=<source name> file=<staged name> [time=<source time>]
+                 section=<section id> [sectionname=<source section name>]
 
     Reads the pages of the document that are linked to a source document,
     refreshes the pages of one source, and takes the source off one page. Only
@@ -406,11 +408,34 @@ slidelink update source=<source name> file=<staged name> [time=<source time>] [p
         slidelink: {"status":"updated","source":"<source document>","count":<K>}
     where <K> counts the pages refreshed.
 
+    update with section=<section id>: brings the linked section <section id>,
+    named as the sections array of the list names it, up to date with its
+    source section. <staged name> holds the slides that source section holds
+    now, in the order the source holds them, and no other slide: what an
+    exportslides of those slides of the source writes. The section then holds
+    a fresh copy of each of those slides and no other slide, in that order, so
+    slides added to the source section come in, slides taken out of it go, and
+    a slide edited in this document is replaced as well. A client asks the user
+    before it sends this. The slides keep the design of the source, as a
+    refreshed page does. <source section name> is the name the source section
+    has now, percent-encoded; the section takes it when its own name is still
+    the name the source section had at the last read, and keeps a name given to
+    it in this document. A section update takes no part=. The whole update is
+    one undo step. The reply is the fresh link list followed by
+        slidelink: {"status":"updated","source":"<source document>",
+                    "section":"<section id>","count":<K>}
+    where <K> counts the slides the section holds now. A section that is not
+    listed in the sections array as linked to <source name> is answered
+    kind=notlinked, and the answers name the section as well, as
+    section=<section id>.
+
     Errors are reported as
-        error: cmd=slidelink kind=<syntax|notlinked|failed> [source=<source name>]
+        error: cmd=slidelink kind=<syntax|notlinked|failed>
+               [source=<source name> [section=<section id>]]
         error: cmd=slidelink kind=<syntax|notlinked|failed> [part=<part>]
-    where notlinked means no page of the document is linked to that source, or
-    that the page a break names is linked to nothing, and failed means the staged
+    where notlinked means no page of the document is linked to that source,
+    that the section an update names is not linked to it, or that the page a
+    break names is linked to nothing, and failed means the staged
     file could not be read, or the view cannot edit. An answer of an update names
     the source it was sent for and an answer of a break names the page it was
     asked for, both percent-encoded as the command was, so that a reader of these

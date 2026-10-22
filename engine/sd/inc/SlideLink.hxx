@@ -112,6 +112,9 @@ public:
     */
     static bool IsReadableSourceString(std::u16string_view rValue);
 
+    /// Whether rUrl names a file on this machine: a file URL with no host.
+    static bool IsLocalFile(std::u16string_view rUrl);
+
     /** The file the pages linked to rReference are read from, or empty when nothing reads them.
 
         A source document that has a file staged for it in rDoc is read from that file. A reference

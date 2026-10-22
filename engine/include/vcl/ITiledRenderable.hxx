@@ -574,6 +574,26 @@ public:
         return -1;
     }
 
+    /** Brings the linked section with the identifier rSectionId up to date with its source
+        section, from a local file holding the slides of that source section in source order. The
+        section then holds a fresh copy of each of those slides and no other slide, in that order,
+        so a slide edited in the document is replaced as well. rSourceName is the source document
+        the section is linked to, rLastModifiedTime the time it was last modified now, and
+        rSourceSectionName the name the source section has now. The whole update is one undo step.
+        Returns the number of slides the section holds afterwards; -1 when no section with that
+        identifier is linked to that source, when rFileUrl is not a file on this machine, when the
+        time or the name is longer than 128 characters or holds a control character, or when the
+        file could not be read (Impress only function)
+    */
+    virtual sal_Int32 updateLinkedSection(const OUString& /*rSectionId*/,
+                                          const OUString& /*rSourceName*/,
+                                          const OUString& /*rFileUrl*/,
+                                          const OUString& /*rLastModifiedTime*/,
+                                          const OUString& /*rSourceSectionName*/)
+    {
+        return -1;
+    }
+
     /** Takes the source document off the page at nIndex in the page list of the standard pages,
         which keeps the content it holds, and returns whether that page was linked to a source
         (Impress only function) */

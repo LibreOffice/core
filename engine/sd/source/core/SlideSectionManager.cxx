@@ -420,6 +420,19 @@ void SlideSectionManager::WriteSectionsJson(::tools::JsonWriter& rJsonWriter,
     }
 }
 
+sal_Int32 SlideSectionManager::GetSectionIndexForId(std::u16string_view rId) const
+{
+    if (rId.empty())
+        return -1;
+
+    for (sal_Int32 i = 0; i < GetSectionCount(); ++i)
+    {
+        if (maSections[i].maId == rId)
+            return i;
+    }
+    return -1;
+}
+
 sal_Int32 SlideSectionManager::GetSectionIndexForSlide(sal_Int32 nSlideIndex) const
 {
     // Sections are sorted by start index; find the last section whose start <= nSlideIndex

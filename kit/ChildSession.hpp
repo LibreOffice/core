@@ -262,6 +262,12 @@ private:
     bool slideLink(const StringVector& tokens);
     bool slideLinkList();
     bool slideLinkUpdate(const StringVector& tokens);
+    /// Brings the linked section with the identifier section up to date with its source
+    /// section, from the staged file at url, and answers the client. named is what every
+    /// answer names the command by.
+    bool slideLinkUpdateSection(const std::string& source, const std::string& section,
+                                const std::string& url, const std::string& lastModifiedTime,
+                                const std::string& sectionName, const std::string& named);
     bool slideLinkBreak(const StringVector& tokens);
     /// The sections and the pages of the document that are linked to a source
     /// document, as the JSON body of a slidelinks: message; empty lists for a

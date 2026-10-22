@@ -7819,6 +7819,35 @@ int COKitDocumentImpl::refreshSlideLinks(const char* pSourceName, const char* pU
     return nRefreshed;
 }
 
+int COKitDocumentImpl::updateLinkedSection(const char* pSourceName, const char* pSection,
+                                           const char* pUrl, const char* pLastModifiedTime,
+                                           const char* pSourceSectionName)
+{
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    if (SfxViewShell::IsCurrentKitViewReadOnly())
+        return -1;
+
+    ITiledRenderable* pDoc = getTiledRenderable(this);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
+        return -1;
+    }
+
+    // The slides are read from a file staged on this machine, so that an update needs no network.
+    if (!pUrl || !std::string_view(pUrl).starts_with("file://"))
+    {
+        SetLastExceptionMsg(u"Slides are read from a file and from nowhere else"_ustr);
+        return -1;
+    }
+
+    return pDoc->updateLinkedSection(getUString(pSection), getUString(pSourceName),
+                                     getUString(pUrl), getUString(pLastModifiedTime),
+                                     getUString(pSourceSectionName));
+}
+
 bool COKitDocumentImpl::breakSlideLink(const char* pPart)
 {
     SolarMutexGuard aGuard;
