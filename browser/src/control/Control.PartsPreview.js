@@ -1021,33 +1021,17 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 	// read and holds no slide the page came from is marked as broken.
 	_setPreviewLinkMark: function (img, i) {
 		const links = this._map.slideLinks;
-		const linked = this._pageLink(img) !== null;
-		img._linkBadge.classList.toggle('linked', linked);
-		const broken =
-			linked && links && img._part && links.isPageBroken(img._part);
-		img._linkBadge.classList.toggle('broken', !!broken);
-		const outdated =
-			!broken &&
-			linked &&
-			links &&
-			img._part &&
-			links.isPageOutdated(img._part);
-		img._linkBadge.classList.toggle('outdated', !!outdated);
-		const connected =
-			!broken &&
-			!outdated &&
-			linked &&
-			links &&
-			img._part &&
-			links.isPageConnected(img._part);
-		img._linkBadge.classList.toggle('connected', !!connected);
-		const disconnected =
-			!broken &&
-			!outdated &&
-			linked &&
-			links.getPageSourceState(img._part) === 'disconnected';
-		img._linkBadge.classList.toggle('disconnected', disconnected);
+		const state =
+			links && img._part ? links.getPageLinkState(img._part) : '';
+		img._linkBadge.classList.toggle('linked', state !== '');
+		this._setLinkStateClasses(img._linkBadge, state);
 		this._setPreviewPositionLabels(img, i);
+	},
+
+	// Marks element with the state a link mark shows, as SlideLinks reports it.
+	_setLinkStateClasses: function (element, state) {
+		for (const name of ['broken', 'outdated', 'connected', 'disconnected'])
+			element.classList.toggle(name, state === name);
 	},
 
 	// Brings the link marks of every preview to what the document reports
@@ -1057,6 +1041,8 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 			if (this._previewTiles[i])
 				this._setPreviewLinkMark(this._previewTiles[i], i);
 		}
+		for (let h = 0; h < this._sectionHeaders.length; h++)
+			this._setSectionLinkMark(this._sectionHeaders[h]);
 	},
 
 	// Relabels every preview from startIndex onward to match its current
@@ -1180,6 +1166,9 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				},
 			});
 
+		header._section = section;
+		this._setSectionLinkMark(header);
+
 		const toggleBtn = header.querySelector('.slide-section-toggle');
 
 		// The second press of a double-click on the header (but not on the toggle) opens
@@ -1212,6 +1201,41 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 		}
 
 		return header;
+	},
+
+	// Shows the link mark on the header of a section that holds a copy of a
+	// section of another file, and describes the link in its tooltip.
+	_setSectionLinkMark: function (header) {
+		const section = header._section;
+		const links = this._map.slideLinks;
+		const link =
+			links && section && section.id ? links.getSectionLink(section.id) : null;
+		let badge = header.querySelector('.slide-section-link');
+		if (!link) {
+			if (badge) badge.remove();
+			return;
+		}
+		if (!badge) {
+			badge = document.createElement('span');
+			badge.className = 'slide-section-link';
+			badge.setAttribute('role', 'img');
+			header.querySelector('.slide-section-name').after(badge);
+		}
+
+		const state = links.getSectionLinkState(section.id);
+		this._setLinkStateClasses(badge, state);
+
+		let label;
+		if (state === 'broken')
+			label = _('Linked to a section of %1 that is missing');
+		else if (state === 'outdated')
+			label = _('Linked to a section of %1 that has changed');
+		else if (state === 'disconnected')
+			label = _('Linked to a section of %1, disconnected');
+		else label = _('Linked to a section of %1');
+		label = label.replace('%1', () => link.source);
+		badge.setAttribute('aria-label', label);
+		badge.title = label;
 	},
 
 	_selectSection: function (sectionIndex) {
@@ -1390,6 +1414,32 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				pos: 0,
 			});
 		}
+		const links = this._map.slideLinks;
+		if (links && section.id && links.getSectionLink(section.id)) {
+			if (links.isSectionUpdatable(section.id)) {
+				entries.push({
+					id: 'updateSection',
+					type: 'comboboxentry',
+					text: _('Update Section'),
+					img: 'updateall',
+					pos: 0,
+				});
+			}
+			entries.push({
+				id: 'unlinkSection',
+				type: 'comboboxentry',
+				text: _('Unlink Section'),
+				img: 'removehyperlink',
+				pos: 0,
+			});
+			entries.push({
+				id: 'unlinkSectionAndSlides',
+				type: 'comboboxentry',
+				text: _('Unlink Section & Slides'),
+				img: 'removehyperlink',
+				pos: 0,
+			});
+		}
 		if (sections.length > 1 && hasExpanded) {
 			entries.push({
 				id: 'collapseAllSections',
@@ -1456,6 +1506,15 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				);
 				break;
 			}
+			case 'updateSection':
+				that._map.slideLinks.updateSection(section.id);
+				break;
+			case 'unlinkSection':
+				that._map.slideLinks.breakSectionLink(section.id, false);
+				break;
+			case 'unlinkSectionAndSlides':
+				that._map.slideLinks.breakSectionLink(section.id, true);
+				break;
 			case 'collapseAllSections':
 				that._collapseAllSections();
 				break;

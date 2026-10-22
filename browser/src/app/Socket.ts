@@ -2762,15 +2762,18 @@ class Socket {
 		) {
 			// An answer of an update names the source it was sent for and an
 			// answer of a break names the page it was asked for, so the two
-			// travel on and a reader takes the answers it is waiting for.
+			// travel on and a reader takes the answers it is waiting for. An
+			// answer about a section names that section as well, percent-encoded.
 			// A page is named by a part identifier, which is a decimal page index
 			// or a page identifier in braced form, and neither holds a space.
 			const named = textMsg.match(/\bsource=(\S+)/);
 			const page = textMsg.match(/\bpart=(\S+)/);
+			const section = textMsg.match(/\bsection=(\S+)/);
 			this._map.fire('slidelinkerror', {
 				kind: command.errorKind ? command.errorKind : '',
 				source: named ? decodeURIComponent(named[1]) : '',
 				part: page ? page[1] : '',
+				section: section ? decodeURIComponent(section[1]) : '',
 			});
 			return true; // caller should exit immediately.
 		} else if (textMsg.startsWith('error:') && !this._map._docLayer) {

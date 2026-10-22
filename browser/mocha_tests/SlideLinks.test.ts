@@ -17,6 +17,8 @@ describe('SlideLinks', function () {
 	let sent: string[];
 	let told: string[];
 	let posted: any[];
+	// The questions the class put to the user before it went on.
+	let confirmed: string[];
 	// What the class told the menubar and the notebookbar about the update
 	// command. hidden starts true and itemShown starts empty, so a test
 	// that reads them shown proves the show was really called.
@@ -103,6 +105,59 @@ describe('SlideLinks', function () {
 		);
 	}
 
+	// A section of this document linked to the section "Opening" of the sales
+	// deck, and the identifier that section has in the source.
+	const openingSection = '{4B1D2C3E-0001-4F00-8A00-1234567890AB}';
+	const sourceOpening = '{D2A46A4F-3C82-4E7B-A6B3-9F1E5C0D7A21}';
+
+	const sectionList = {
+		sections: [
+			{
+				section: openingSection,
+				name: 'Opening',
+				source: 'Sales deck.odp',
+				sourceSection: sourceOpening,
+				sourceSectionName: 'Opening',
+				lastModifiedTime: '',
+				slides: [],
+			},
+		],
+		links: [],
+	};
+
+	// The source answers what it holds: three slides, the last two in the
+	// section "Opening" under the name given, unless the source lost it.
+	function sourceInfo(source: string, sectionName: string | null): void {
+		const sections = [
+			{
+				name: 'Intro',
+				id: '{AAAAAAAA-0000-4000-8000-000000000000}',
+				startIndex: 0,
+				slideCount: 1,
+			},
+		];
+		if (sectionName !== null)
+			sections.push({
+				name: sectionName,
+				id: sourceOpening,
+				startIndex: 1,
+				slideCount: 2,
+			});
+		deliver('remotedoccommandresult', {
+			source: source,
+			textMsg:
+				'presentationinfo: ' +
+				JSON.stringify({
+					slides: [
+						{ part: 'p0', guid: 'g0' },
+						{ part: 'p1', guid: 'g1' },
+						{ part: 'p2', guid: 'g2' },
+					],
+					sections: sections,
+				}),
+		});
+	}
+
 	// The server stages the pages a source wrote and names the file.
 	function pagesStaged(staged: string): void {
 		deliver('remotedoccommandresult', {
@@ -122,6 +177,7 @@ describe('SlideLinks', function () {
 		sent = [];
 		told = [];
 		posted = [];
+		confirmed = [];
 		hidden = true;
 		itemShown = new Map();
 		editable = true;
@@ -137,6 +193,17 @@ describe('SlideLinks', function () {
 			isPresentationOrDrawing: () => true,
 			uiManager: {
 				showSnackbar: (message: string) => told.push(message),
+				// The user agrees to every question.
+				showConfirmModal: (
+					id: string,
+					title: string,
+					message: string,
+					button: string,
+					callback: () => void,
+				) => {
+					confirmed.push(message);
+					callback();
+				},
 				notebookbar: {
 					showItem: (id: string) => {
 						itemShown.set(id, true);
@@ -667,5 +734,98 @@ describe('SlideLinks', function () {
 		nodeassert.deepEqual(sent, [
 			'remotelinkresolve source=Q3%20%231%20100%25.odp',
 		]);
+	});
+
+	it('updates a linked section from the slides its source section holds now', function () {
+		deliver('slidelinks', { message: sectionList });
+		sent = [];
+
+		links.updateSection(openingSection);
+		nodeassert.equal(confirmed.length, 1);
+		nodeassert.deepEqual(sent, [infoOf('Sales deck.odp')]);
+
+		// An export that the import pane asked of the same source is no answer
+		// to the update, which has not asked for one yet.
+		pagesStaged('picked.odp');
+		nodeassert.deepEqual(sent, [infoOf('Sales deck.odp')]);
+
+		sourceInfo('Sales deck.odp', 'Opening, revised');
+		nodeassert.equal(
+			sent[1],
+			'remotedoccommand source=Sales%20deck.odp exportslides slides=p1,p2',
+		);
+
+		pagesStaged('staged.odp');
+		nodeassert.equal(
+			sent[2],
+			updateOf('Sales deck.odp', 'staged.odp') +
+				' section=' +
+				encodeURIComponent(openingSection) +
+				' sectionname=' +
+				encodeURIComponent('Opening, revised'),
+		);
+
+		// The answer for another section is not the answer of this update.
+		deliver('slidelink', {
+			message: {
+				status: 'updated',
+				source: 'Sales deck.odp',
+				section: '{4B1D2C3E-0002-4F00-8A00-1234567890AB}',
+				count: 2,
+			},
+		});
+		nodeassert.deepEqual(told, []);
+
+		deliver('slidelink', {
+			message: {
+				status: 'updated',
+				source: 'Sales deck.odp',
+				section: openingSection,
+				count: 2,
+			},
+		});
+		nodeassert.deepEqual(told, [
+			'The section was updated from Sales deck.odp.',
+		]);
+	});
+
+	it('ends a section update when the source no longer holds its section', function () {
+		deliver('slidelinks', { message: sectionList });
+		sent = [];
+
+		links.updateSection(openingSection);
+		sourceInfo('Sales deck.odp', null);
+		nodeassert.equal(told.length, 1);
+		nodeassert.deepEqual(sent, [infoOf('Sales deck.odp')]);
+
+		// The update ended, so a new one runs once the source holds the section
+		// again.
+		sourceInfo('Sales deck.odp', 'Opening');
+		sent = [];
+		links.updateSection(openingSection);
+		nodeassert.deepEqual(sent, [infoOf('Sales deck.odp')]);
+	});
+
+	it('takes the link off a section, and off its slides when asked', function () {
+		deliver('slidelinks', { message: sectionList });
+		sent = [];
+
+		links.breakSectionLink(openingSection, false);
+		links.breakSectionLink(openingSection, true);
+		nodeassert.deepEqual(sent, [
+			'slidelink break section=' + encodeURIComponent(openingSection),
+			'slidelink break section=' +
+				encodeURIComponent(openingSection) +
+				' slides=1',
+		]);
+	});
+
+	it('marks a linked section as missing once its source holds no such section', function () {
+		deliver('slidelinks', { message: sectionList });
+		nodeassert.equal(links.isSectionMissing(openingSection), false);
+
+		sourceInfo('Sales deck.odp', null);
+		nodeassert.equal(links.isSectionMissing(openingSection), true);
+		nodeassert.equal(links.isSectionUpdatable(openingSection), false);
 	});
 });

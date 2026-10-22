@@ -231,32 +231,42 @@
 	background-size: 16px 16px;
 }
 
-.preview-link-badge.outdated::before {
+.preview-link-badge.outdated::before,
+.slide-section-link.outdated {
 	background-image: url('images/sc_linkedslideoutdated.svg');
 }
 
-.preview-link-badge.broken::before {
+.preview-link-badge.broken::before,
+.slide-section-link.broken {
 	background-image: url('images/sc_linkedslidebroken.svg');
+}
+
+.preview-link-badge.broken::before {
 	border-color: var(--color-status-error);
 }
 
-.preview-link-badge.disconnected::before {
+.preview-link-badge.disconnected::before,
+.slide-section-link.disconnected {
 	background-image: url('images/sc_linkedslidedisconnected.svg');
 }
 
-[data-theme='dark'] .preview-link-badge::before {
+[data-theme='dark'] .preview-link-badge::before,
+[data-theme='dark'] .slide-section-link {
 	background-image: url('images/dark/sc_linkedslide.svg');
 }
 
-[data-theme='dark'] .preview-link-badge.outdated::before {
+[data-theme='dark'] .preview-link-badge.outdated::before,
+[data-theme='dark'] .slide-section-link.outdated {
 	background-image: url('images/dark/sc_linkedslideoutdated.svg');
 }
 
-[data-theme='dark'] .preview-link-badge.broken::before {
+[data-theme='dark'] .preview-link-badge.broken::before,
+[data-theme='dark'] .slide-section-link.broken {
 	background-image: url('images/dark/sc_linkedslidebroken.svg');
 }
 
-[data-theme='dark'] .preview-link-badge.disconnected::before {
+[data-theme='dark'] .preview-link-badge.disconnected::before,
+[data-theme='dark'] .slide-section-link.disconnected {
 	background-image: url('images/dark/sc_linkedslidedisconnected.svg');
 }
 
@@ -318,6 +328,17 @@
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	flex: 1;
+}
+
+/* The mark of a section that holds a copy of a section of another file, next
+   to the section name. */
+.slide-section-link {
+	flex: 0 0 auto;
+	width: 16px;
+	height: 16px;
+	margin-inline-start: 6px;
+	background: url('images/sc_linkedslide.svg') no-repeat center;
+	background-size: 16px 16px;
 }
 
 .preview-frame.section-collapsed {

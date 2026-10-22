@@ -586,7 +586,9 @@ class SlideImportPane {
       return;
     }
 
-    if (this.isActive(source)) {
+    // The link updates ask the same source for its presentation info, and an
+    // answer that reaches the pane while it inserts leaves the insert running.
+    if (this.isActive(source) && this.session.state !== 'inserting') {
       this.session.slideCount = source.slides.length;
       // The slides are on show, so they can be chosen and inserted.
       this.session.slidesShown();
