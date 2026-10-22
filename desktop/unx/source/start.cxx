@@ -564,15 +564,8 @@ static void exec_javaldx(Args *args)
     nArgs++;
 
     /* And also to javaldx */
-    rtl_uString* pApp = nullptr;
-    rtl_uString_newFromAscii(&pApp, "file://");
-    rtl_uString_newConcat(&pApp, pApp, args->sAppPath.pData);
-    pTmp = nullptr;
-    rtl_uString_newFromAscii(&pTmp, "javaldx");
-    rtl_uString_newConcat(&pApp, pApp, pTmp);
-    rtl_uString_release(pTmp);
-
-    err = osl_executeProcess_WithRedirectedIO(pApp, ppArgs, nArgs,
+    const OUString sApp = u"file://" + args->sAppPath + u"javaldx";
+    err = osl_executeProcess_WithRedirectedIO(sApp.pData, ppArgs, nArgs,
                                               osl_Process_NORMAL,
                                               nullptr, // security
                                               nullptr, // work dir
@@ -583,7 +576,6 @@ static void exec_javaldx(Args *args)
                                               nullptr);
 
     rtl_uString_release(ppArgs[nArgs-1]);
-    rtl_uString_release(pApp);
     free(ppArgs);
 
     if(err != osl_Process_E_None)
