@@ -509,6 +509,35 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testSubtitleKeepsItsParagraphSpacing)
     CPPUNIT_ASSERT_EQUAL(aLineSpacing.Height, aReloadedLineSpacing.Height);
 }
 
+// A list style level with no numbering, such as that of a subtitle or a title, states the indent of
+// its own style.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testListStyleLevelWithoutNumberingKeepsItsIndent)
+{
+    createSdImpressDoc();
+    for (int nShape : { 0, 1 })
+    {
+        uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(nShape, 0));
+        uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY_THROW)->setString(u"a"_ustr);
+        uno::Reference<beans::XPropertySet> xStyle(xShape->getPropertyValue(u"Style"_ustr),
+                                                   uno::UNO_QUERY_THROW);
+        xStyle->setPropertyValue(u"ParaLeftMargin"_ustr, uno::Any(sal_Int32(1000)));
+        xStyle->setPropertyValue(u"ParaFirstLineIndent"_ustr, uno::Any(sal_Int32(-500)));
+    }
+    save(TestFilter::PPTX);
+
+    // 1000 and -500 in 1/100 mm are 360000 and -180000 EMU
+    xmlDocUniquePtr pSlide = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    static constexpr OString aSubtitle
+        = "//p:sp[p:nvSpPr/p:nvPr/p:ph/@type='subTitle']/p:txBody/a:lstStyle/a:lvl1pPr"_ostr;
+    assertXPath(pSlide, aSubtitle, "marL", u"360000");
+    assertXPath(pSlide, aSubtitle, "indent", u"-180000");
+
+    xmlDocUniquePtr pMaster = parseExport(u"ppt/slideMasters/slideMaster1.xml"_ustr);
+    static constexpr OString aTitle = "/p:sldMaster/p:txStyles/p:titleStyle/a:lvl1pPr"_ostr;
+    assertXPath(pMaster, aTitle, "marL", u"360000");
+    assertXPath(pMaster, aTitle, "indent", u"-180000");
+}
+
 // A form control on a slide is written with the data that makes it a control, and is read back
 // as one.
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testFormControlExport)

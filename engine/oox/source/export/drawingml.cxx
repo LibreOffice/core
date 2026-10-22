@@ -3818,10 +3818,23 @@ void DrawingML::WriteListStyleLevelProperties(const Reference<XPropertySet>& rXS
 {
     // Every value is written, also where it equals the default of the format, so that a reader
     // gets the values of this level and not ones of its own.
-    const sal_Int32 nLeftMargin
-        = std::max<sal_Int32>(getBulletMarginIndentation(rXStyle, nLevel, u"LeftMargin"), 0);
-    const sal_Int32 nFirstLineOffset
-        = getBulletMarginIndentation(rXStyle, nLevel, u"FirstLineOffset");
+    // A level with numbering is indented by its entry in the numbering rules, one without by the
+    // paragraph margins of the style.
+    sal_Int32 nLeftMargin = 0;
+    sal_Int32 nFirstLineOffset = 0;
+    if (nLevel >= 0)
+    {
+        nLeftMargin = getBulletMarginIndentation(rXStyle, nLevel, u"LeftMargin");
+        nFirstLineOffset = getBulletMarginIndentation(rXStyle, nLevel, u"FirstLineOffset");
+    }
+    else
+    {
+        if (GetProperty(rXStyle, u"ParaLeftMargin"_ustr))
+            mAny >>= nLeftMargin;
+        if (GetProperty(rXStyle, u"ParaFirstLineIndent"_ustr))
+            mAny >>= nFirstLineOffset;
+    }
+    nLeftMargin = std::max<sal_Int32>(nLeftMargin, 0);
 
     sal_Int16 nAdjust = sal_Int16(style::ParagraphAdjust_LEFT);
     if (GetProperty(rXStyle, u"ParaAdjust"_ustr))
