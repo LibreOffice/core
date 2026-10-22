@@ -165,34 +165,34 @@
     </message>
     <message>
         <source>New Document Error</source>
-        <translation type="unfinished"></translation>
+        <translation>Fehler bei neuem Dokument</translation>
     </message>
     <message>
         <source>Could not create a new document.</source>
-        <translation type="unfinished"></translation>
+        <translation>Ein neues Dokument konnte nicht erstellt werden.</translation>
     </message>
     <message>
         <source>Supported files</source>
-        <translation type="unfinished"></translation>
+        <translation>Unterstützte Dateien</translation>
     </message>
 </context>
 <context>
     <name>TabManager</name>
     <message>
         <source>Close</source>
-        <translation type="unfinished"></translation>
+        <translation>Schließen</translation>
     </message>
     <message>
         <source>Close Others</source>
-        <translation type="unfinished"></translation>
+        <translation>Andere schließen</translation>
     </message>
     <message>
         <source>Move Tab to New Window</source>
-        <translation type="unfinished"></translation>
+        <translation>Registerkarte in neues Fenster verschieben</translation>
     </message>
     <message>
         <source>Preview of %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Vorschau von %1</translation>
     </message>
 </context>
 <context>
