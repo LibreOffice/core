@@ -508,7 +508,11 @@ public:
     void WriteTransformation(const cpo::uno::Reference< css::drawing::XShape >& xShape, const tools::Rectangle& rRectangle,
                   sal_Int32 nXmlNamespace, bool bFlipH = false, bool bFlipV = false, sal_Int32 nRotation = 0, bool bIsGroupShape = false);
 
-    void WriteText( const cpo::uno::Reference< cpo::uno::XInterface >& rXIface, bool bBodyPr, bool bText = true, sal_Int32 nXmlNamespace = 0, bool bWritePropertiesAsLstStyles = false);
+    /** rXListStyle, when set, is a style whose paragraph and character properties are written as
+        the first level of the list style of the text body.
+    */
+    void WriteText( const cpo::uno::Reference< cpo::uno::XInterface >& rXIface, bool bBodyPr, bool bText = true, sal_Int32 nXmlNamespace = 0, bool bWritePropertiesAsLstStyles = false,
+                    const cpo::uno::Reference<css::beans::XPropertySet>& rXListStyle = nullptr);
 
     /** Writes a paragraph with no text, carrying the properties text put in it would get. */
     void WriteTextlessParagraph(const cpo::uno::Reference<cpo::uno::XInterface>& rXIface);
@@ -550,6 +554,10 @@ public:
     */
     OOX_DLLPUBLIC void WriteListStyleLevelProperties(const cpo::uno::Reference<css::beans::XPropertySet>& rXStyle,
                                                      sal_Int32 nElement, sal_Int16 nLevel);
+    /// Writes the level nElement of a list style, with the paragraph and default run properties
+    /// of the style rXStyle. nLevel is as for WriteListStyleLevelProperties.
+    OOX_DLLPUBLIC void WriteListStyleLevel(const cpo::uno::Reference<css::beans::XPropertySet>& rXStyle,
+                                           sal_Int32 nElement, sal_Int16 nLevel);
     void WriteParagraphTabStops(const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet);
     void WriteRun( const cpo::uno::Reference< css::text::XTextRange >& rRun,
                    bool& rbOverridingCharHeight, sal_Int32& rnCharHeight,

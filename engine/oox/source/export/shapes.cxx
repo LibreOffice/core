@@ -2414,7 +2414,8 @@ bool lcl_HasOwnCharacterHeight(const Reference<cpo::uno::XInterface>& xIface)
 }
 }
 
-ShapeExport& ShapeExport::WriteTextBox( const Reference< cpo::uno::XInterface >& xIface, sal_Int32 nXmlNamespace, bool bWritePropertiesAsLstStyles, bool bText )
+ShapeExport& ShapeExport::WriteTextBox( const Reference< cpo::uno::XInterface >& xIface, sal_Int32 nXmlNamespace, bool bWritePropertiesAsLstStyles, bool bText,
+                                        const Reference<XPropertySet>& rXListStyle )
 {
     // In case this shape has an associated textbox, then export that, and we're done.
     if (GetDocumentType() == DOCUMENT_DOCX && !mbUserShapes && GetTextExport())
@@ -2442,7 +2443,8 @@ ShapeExport& ShapeExport::WriteTextBox( const Reference< cpo::uno::XInterface >&
         pFS->startElementNS(nXmlNamespace,
                             (GetDocumentType() != DOCUMENT_DOCX || mbUserShapes ? XML_txBody : XML_txbx));
         WriteText(xIface, /*bBodyPr=*/(GetDocumentType() != DOCUMENT_DOCX || mbUserShapes), bText,
-                  /*nXmlNamespace=*/0, /*bWritePropertiesAsLstStyles=*/bWritePropertiesAsLstStyles);
+                  /*nXmlNamespace=*/0, /*bWritePropertiesAsLstStyles=*/bWritePropertiesAsLstStyles,
+                  rXListStyle);
         if (!bText)
             // A text body holds at least one paragraph, and an empty one says the shape has no text
             WriteTextlessParagraph(xIface);

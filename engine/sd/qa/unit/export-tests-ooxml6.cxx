@@ -45,6 +45,7 @@
 #include <com/sun/star/lang/IndexOutOfBoundsException.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
 #include <com/sun/star/text/WritingMode2.hpp>
@@ -479,6 +480,33 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testMasterTextStylesStateEveryValue)
         assertXPath(pXmlDoc, aLevel + "/a:spcAft/a:spcPts", "val", u"0");
         assertXPath(pXmlDoc, aLevel + "/a:buChar", 1);
     }
+}
+
+// A subtitle comes back from a PPTX file with the paragraph spacing of its own style. A reader
+// takes the values of a subtitle from the body level of the master's text styles otherwise.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testSubtitleKeepsItsParagraphSpacing)
+{
+    createSdImpressDoc();
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(1, 0));
+    CPPUNIT_ASSERT_EQUAL(u"com.sun.star.presentation.SubtitleShape"_ustr,
+                         uno::Reference<drawing::XShape>(xShape, uno::UNO_QUERY_THROW)->getShapeType());
+    uno::Reference<text::XTextRange>(xShape, uno::UNO_QUERY_THROW)->setString(u"a"_ustr);
+    uno::Reference<beans::XPropertySet> xStyle(xShape->getPropertyValue(u"Style"_ustr),
+                                               uno::UNO_QUERY_THROW);
+    const sal_Int32 nTopMargin = xStyle->getPropertyValue(u"ParaTopMargin"_ustr).get<sal_Int32>();
+    const style::LineSpacing aLineSpacing
+        = xStyle->getPropertyValue(u"ParaLineSpacing"_ustr).get<style::LineSpacing>();
+
+    saveAndReload(TestFilter::PPTX);
+
+    uno::Reference<beans::XPropertySet> xParagraph(
+        getParagraphFromShape(0, getShapeFromPage(1, 0)), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(nTopMargin,
+                         xParagraph->getPropertyValue(u"ParaTopMargin"_ustr).get<sal_Int32>());
+    const style::LineSpacing aReloadedLineSpacing
+        = xParagraph->getPropertyValue(u"ParaLineSpacing"_ustr).get<style::LineSpacing>();
+    CPPUNIT_ASSERT_EQUAL(aLineSpacing.Mode, aReloadedLineSpacing.Mode);
+    CPPUNIT_ASSERT_EQUAL(aLineSpacing.Height, aReloadedLineSpacing.Height);
 }
 
 // A form control on a slide is written with the data that makes it a control, and is read back

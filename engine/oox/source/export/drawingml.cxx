@@ -3855,6 +3855,15 @@ void DrawingML::WriteListStyleLevelProperties(const Reference<XPropertySet>& rXS
         mpFS->singleElementNS(XML_a, XML_buNone);
 }
 
+void DrawingML::WriteListStyleLevel(const Reference<XPropertySet>& rXStyle, sal_Int32 nElement,
+                                    sal_Int16 nLevel)
+{
+    WriteListStyleLevelProperties(rXStyle, nElement, nLevel);
+    WriteRunInput aInput;
+    WriteRunProperties(rXStyle, XML_defRPr, aInput);
+    mpFS->endElementNS(XML_a, nElement);
+}
+
 void DrawingML::WriteLstStyle(const cpo::uno::Reference<css::text::XTextContent>& rParagraph,
                                bool& rbOverridingCharHeight, sal_Int32& rnCharHeight,
                                const cpo::uno::Reference<css::beans::XPropertySet>& rXShapePropSet,
@@ -4690,7 +4699,8 @@ void DrawingML::WriteTextlessParagraph(const Reference<XInterface>& rXIface)
 }
 
 void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bool bText,
-                          sal_Int32 nXmlNamespace, bool bWritePropertiesAsLstStyles)
+                          sal_Int32 nXmlNamespace, bool bWritePropertiesAsLstStyles,
+                          const Reference<XPropertySet>& rXListStyle)
 {
     // ToDo: Fontwork in DOCX
     uno::Reference<XText> xXText(rXIface, UNO_QUERY);
@@ -4767,6 +4777,13 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
     {
         mpFS->singleElementNS(XML_a, XML_bodyPr);
     } // end of bodyPr
+
+    if (rXListStyle.is())
+    {
+        mpFS->startElementNS(XML_a, XML_lstStyle);
+        WriteListStyleLevel(rXListStyle, XML_lvl1pPr, -1);
+        mpFS->endElementNS(XML_a, XML_lstStyle);
+    }
 
     Reference< XEnumerationAccess > access( xXText, UNO_QUERY );
     // The list styles of a master live on its first paragraph, so they are read from the text
@@ -4857,7 +4874,7 @@ void DrawingML::WriteText(const Reference<XInterface>& rXIface, bool bBodyPr, bo
             if (bOtherPoint)
                 continue;
 
-            if (bFirstParagraph && bWritePropertiesAsLstStyles)
+            if (bFirstParagraph && bWritePropertiesAsLstStyles && !rXListStyle.is())
                 WriteLstStyles(paragraph, bOverridingCharHeight, nCharHeight, rXPropSet);
 
             if (!bText)

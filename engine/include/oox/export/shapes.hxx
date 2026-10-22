@@ -178,7 +178,8 @@ public:
     ShapeExport&       WriteShape( const cpo::uno::Reference< css::drawing::XShape >& xShape );
     /** @param bText false writes the body properties and an empty paragraph, for a shape whose
         text belongs to the application rather than to the file - a placeholder's prompt. */
-    ShapeExport&       WriteTextBox( const cpo::uno::Reference< cpo::uno::XInterface >& xIface, sal_Int32 nXmlNamespace, bool bWritePropertiesAsLstStyles = false, bool bText = true );
+    ShapeExport&       WriteTextBox( const cpo::uno::Reference< cpo::uno::XInterface >& xIface, sal_Int32 nXmlNamespace, bool bWritePropertiesAsLstStyles = false, bool bText = true,
+                                     const cpo::uno::Reference<css::beans::XPropertySet>& rXListStyle = nullptr );
     virtual ShapeExport&
                         WriteTextShape( const cpo::uno::Reference< css::drawing::XShape >& xShape );
     ShapeExport&

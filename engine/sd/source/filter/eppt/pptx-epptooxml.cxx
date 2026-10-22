@@ -3321,8 +3321,8 @@ void PowerPointExport::WriteTextStyles(const FSHelperPtr& pFS)
     PowerPointShapeExport aDML(pFS, &maShapeMap, this);
 
     // nOutlineLevel is the outline level a body style formats, or -1 for the title
-    auto writeLevel = [&aDML, &pFS, &xStyles](const OUString& rStyleName, sal_Int32 nElement,
-                                              sal_Int16 nOutlineLevel) {
+    auto writeLevel = [&aDML, &xStyles](const OUString& rStyleName, sal_Int32 nElement,
+                                        sal_Int16 nOutlineLevel) {
         if (!xStyles->hasByName(rStyleName))
             return;
         uno::Reference<beans::XPropertySet> xStyle(xStyles->getByName(rStyleName), uno::UNO_QUERY);
@@ -3331,10 +3331,7 @@ void PowerPointExport::WriteTextStyles(const FSHelperPtr& pFS)
 
         // An outline level is indented by its entry in the numbering rules, which the outline
         // styles share.
-        aDML.WriteListStyleLevelProperties(xStyle, nElement, nOutlineLevel);
-        oox::drawingml::WriteRunInput aInput;
-        aDML.WriteRunProperties(xStyle, XML_defRPr, aInput);
-        pFS->endElementNS(XML_a, nElement);
+        aDML.WriteListStyleLevel(xStyle, nElement, nOutlineLevel);
     };
 
     static const sal_Int32 aLevelTokens[]
@@ -3635,8 +3632,15 @@ ShapeExport& PowerPointShapeExport::WritePlaceholderShape(const Reference< XShap
     // and the autofit.
     const bool bInheritsItsPrompt = isGraphicPlaceholder(ePlaceholder) && !mbMaster
                                     && bIsEmptyPresObj;
+
+    // A reader takes the paragraph values of a subtitle from the body level of the master's text
+    // styles, so the shape states those of its own presentation style.
+    uno::Reference<beans::XPropertySet> xListStyle;
+    if (ePlaceholder == Subtitle && mePageType != PageType::MASTER && xProps)
+        xProps->getPropertyValue(u"Style"_ustr) >>= xListStyle;
+
     WriteTextBox(xShape, XML_p, bUsePlaceholderIndex || bWritePropertiesAsLstStyles,
-                 /*bText=*/!bTextIsDefaultPrompt && !bInheritsItsPrompt);
+                 /*bText=*/!bTextIsDefaultPrompt && !bInheritsItsPrompt, xListStyle);
 
     mpFS->endElementNS(XML_p, XML_sp);
 
