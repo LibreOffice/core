@@ -41,7 +41,7 @@ class TurningInteraction extends SelectionInteraction {
 		this.middle = middle;
 		this.from = TurningInteraction.angleAt(middle, at);
 		this.radius = Math.hypot(at.x - middle.x, at.y - middle.y);
-		this.stood = selection.squareNow()?.rotation() ?? 0;
+		this.stood = selection.angleOfTheSquare();
 	}
 
 	/// The angle from the middle to that point, as the canvas counts angles.
@@ -99,9 +99,8 @@ class TurningInteraction extends SelectionInteraction {
 		this.turned = TurningInteraction.angleAt(this.middle, to) - this.from;
 
 		const step = EditSteps.turnSnap(event);
-		const square = this.selection.squareNow();
-		if (step && square) {
-			const stands = square.rotation();
+		if (step && this.selection.squareNow()) {
+			const stands = this.selection.angleOfTheSquare();
 			const stepInRadians = (step * Math.PI) / 180;
 			const snapped =
 				Math.round((stands + this.turned) / stepInRadians) * stepInRadians;

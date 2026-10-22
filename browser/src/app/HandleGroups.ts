@@ -765,8 +765,12 @@ class TurningHandle extends HandleGroup {
 		if (
 			objectIds.length === 1 &&
 			ObjectHandles.hasHandlesOfItsOwnOnly(objectIds[0])
-		)
-			return square ? this.placedBeyondTheLine(objectIds[0], square) : [];
+		) {
+			if (!square) return [];
+			return RenderGeometrySection.objectOf(objectIds[0])?.measurement
+				? this.placedBeyondTheLine(objectIds[0], square)
+				: this.placedBesideTheLine(objectIds[0], square);
+		}
 
 		return this.placedAbove(ObjectHandles.framingOf(objectIds, square) ?? []);
 	}
@@ -810,7 +814,34 @@ class TurningHandle extends HandleGroup {
 			(outwards * below.y) / length,
 		);
 
-		const away = TurningHandle.distanceFromMeasureLine * app.dpiScale;
+		return this.placedOut(middle, out, TurningHandle.distanceFromMeasureLine);
+	}
+
+	/*
+		the handle of a line: out from its middle at a right angle, on the left of the way from
+		its first point to its second, so it is above a line drawn from left to right
+	*/
+	private placedBesideTheLine(
+		objectId: number,
+		square: cool.Matrix2D,
+	): SelectionHandle[] {
+		const way = ObjectHandles.wayOfTheLine(objectId, square)?.way;
+		if (!way) return [];
+		const length = way.length();
+		if (!length) return [];
+
+		const out = new cool.Point(way.y / length, -way.x / length);
+		return this.placedOut(square.apply(0.5, 0.5), out, TurningHandle.distance);
+	}
+
+	/// the handle that far out from the middle, in core pixels, the way out points, turned to
+	/// stand along it
+	private placedOut(
+		middle: cool.Point,
+		out: cool.Point,
+		distance: number,
+	): SelectionHandle[] {
+		const away = distance * app.dpiScale;
 		const step = cool.SimplePoint.fromCorePixels([away, away]);
 		const point = new cool.Point(
 			middle.x + out.x * step.x,
@@ -1151,6 +1182,7 @@ class ShapingHandles extends HandlesMovedOneByOne {
 			const stepped = ShapingHandles.stepped.get(
 				ShapingHandles.keyOf(objectId, handle.name),
 			);
+			// the end of a line goes alone
 			if (stepped)
 				return (
 					MeasurementGhost.handlesDuring(
@@ -1159,7 +1191,10 @@ class ShapingHandles extends HandlesMovedOneByOne {
 						stepped.at,
 						known,
 						stepped.ortho,
-					) ?? known
+					) ??
+					known.map((one: SelectionHandle) =>
+						one.name === handle.name ? { ...one, point: stepped.at } : one,
+					)
 				);
 		}
 
@@ -1167,11 +1202,11 @@ class ShapingHandles extends HandlesMovedOneByOne {
 	}
 
 	/*
-		Where keys, or a drag that was let go, have taken handles of a measurement, which the
-		engine has not answered for yet, by the object and the name of the handle. Nothing is
-		laid on the object here for such a handle, since what it does is the object's own
-		business, so the handle stands where it was taken and the measurement is drawn thin as it
-		will be, until the engine's answer for the object brings both.
+		Where keys, or a drag that was let go, have taken handles of a measurement or a line,
+		which the engine has not answered for yet, by the object and the name of the handle.
+		Nothing is laid on the object here for such a handle, since what it does is the object's
+		own business, so the handle stands where it was taken and the measurement is drawn thin
+		as it will be, until the engine's answer for the object brings both.
 	*/
 	private static stepped: Map<string, { at: cool.Point; ortho: boolean }> =
 		new Map();
@@ -1183,13 +1218,18 @@ class ShapingHandles extends HandlesMovedOneByOne {
 		return String(objectId) + ':' + name;
 	}
 
-	/// Notes where a handle of a measurement was taken, until the engine answers for its object.
+	/// Notes where a handle of a measurement or a line was taken, until the engine answers for
+	/// its object.
 	private holdTheStep(
 		handle: SelectionHandle,
 		to: cool.Point,
 		ortho: boolean,
 	): void {
-		if (!MeasurementGhost.belongsToOne(this.selection, handle)) return;
+		if (
+			!MeasurementGhost.belongsToOne(this.selection, handle) &&
+			!LineGhost.belongsToOne(this.selection, handle)
+		)
+			return;
 
 		if (!ShapingHandles.followingTheAnswers) {
 			ShapingHandles.followingTheAnswers = true;
@@ -1216,7 +1256,7 @@ class ShapingHandles extends HandlesMovedOneByOne {
 		this.selection.redraw();
 	}
 
-	/// The measurement as the handles keys took, or a drag let go of, will leave it.
+	/// The measurement or the line as the handles keys took, or a drag let go of, will leave it.
 	public outline(): cool.ObjectPathPolygon[] | null {
 		const objectId = this.selection.selectedObjects()[0];
 
@@ -1227,11 +1267,13 @@ class ShapingHandles extends HandlesMovedOneByOne {
 				ShapingHandles.keyOf(objectId, handle.name),
 			);
 			if (stepped)
-				return MeasurementGhost.outline(
-					this.selection,
-					handle,
-					stepped.at,
-					stepped.ortho,
+				return (
+					MeasurementGhost.outline(
+						this.selection,
+						handle,
+						stepped.at,
+						stepped.ortho,
+					) ?? LineGhost.outline(this.selection, handle, stepped.at)
 				);
 		}
 
@@ -1368,9 +1410,9 @@ class ShapingHandles extends HandlesMovedOneByOne {
 	}
 
 	/*
-		A key moves the handle as a drag would, held on its rail. A handle of a measurement goes
-		on from where keys have taken it so far, so that a key held down goes on step by step
-		before the engine has answered.
+		A key moves the handle as a drag would, held on its rail. A handle of a measurement or a
+		line goes on from where keys have taken it so far, so that a key held down goes on step
+		by step before the engine has answered.
 	*/
 	public moveByKey(
 		handle: SelectionHandle,

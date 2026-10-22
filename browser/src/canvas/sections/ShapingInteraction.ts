@@ -50,12 +50,14 @@ class ShapingInteraction extends SelectionInteraction {
 		);
 		const kept = this.ortho
 			? (MeasurementGhost.heldWithShift(this.selection, this.handle, held) ??
+				LineGhost.heldWithShift(this.selection, this.handle, held) ??
 				held)
 			: held;
 		if (!this.snap) return kept;
 
 		return (
 			MeasurementGhost.snapped(this.selection, this.handle, kept, this.snap) ??
+			LineGhost.snapped(this.selection, this.handle, kept, this.snap) ??
 			kept
 		);
 	}
@@ -132,7 +134,8 @@ class ShapingInteraction extends SelectionInteraction {
 				this.handle,
 				this.shownAt(),
 				this.ortho,
-			)
+			) ??
+			LineGhost.outline(this.selection, this.handle, this.shownAt())
 		);
 	}
 
@@ -235,16 +238,11 @@ class MeasurementGhost {
 
 		const which = handle.at ?? 0;
 		if (which === 2 || which === 3) {
-			const fixed = square.apply(which === 2 ? 1 : 0, 0);
-			const way = at.subtract(fixed);
-			const reach = way.length();
-			if (!reach) return null;
-
 			// The way goes in twips, the step in the units of the model.
-			const snappedReach = onAStep(reach / unit) * unit;
-			return new cool.Point(
-				fixed.x + (way.x / reach) * snappedReach,
-				fixed.y + (way.y / reach) * snappedReach,
+			return EndOnAWay.snapped(
+				square.apply(which === 2 ? 1 : 0, 0),
+				at,
+				step * unit,
 			);
 		}
 
@@ -281,13 +279,11 @@ class MeasurementGhost {
 		const which = handle.at ?? 0;
 		const square = found.square;
 		if (which === 2 || which === 3) {
-			const fixed = square.apply(which === 2 ? 1 : 0, 0);
-			const way = square.apply(1, 0).subtract(square.apply(0, 0));
-			const length = way.length();
-			if (!length) return at;
-			const unit = new cool.Point(way.x / length, way.y / length);
-			const reach = at.subtract(fixed).dot(unit);
-			return new cool.Point(fixed.x + unit.x * reach, fixed.y + unit.y * reach);
+			return EndOnAWay.heldTo(
+				square.apply(which === 2 ? 1 : 0, 0),
+				square.apply(1, 0).subtract(square.apply(0, 0)),
+				at,
+			);
 		}
 		if (which === 4 || which === 5) return handle.point;
 		return at;
@@ -629,5 +625,118 @@ class MeasurementGhost {
 		return found.measurement.unit
 			? written + ' ' + found.measurement.unit
 			: written;
+	}
+}
+
+/*
+	a line while one of its two ends is dragged: drawn thin from the end that stays to the one
+	that moves. with Shift the end keeps to the way the line runs, as the office has it
+*/
+class LineGhost {
+	/// the kind the engine gives the two ends of a line
+	private static readonly handleKind: string = '9';
+
+	/// the end that stays where it is, while the other one is dragged
+	private static otherEnd(
+		selection: SelectionSection,
+		handle: SelectionHandle,
+	): cool.Point | null {
+		if (handle.kind !== LineGhost.handleKind) return null;
+
+		const objectIds = selection.selectedObjects();
+		if (objectIds.length !== 1) return null;
+
+		// a line, and not a connector, which has these handles too
+		if (!ObjectHandles.isALine(objectIds[0])) return null;
+
+		const other = ObjectHandles.shapingOf(objectIds).find(
+			(one: SelectionHandle) =>
+				one.kind === LineGhost.handleKind && one.name !== handle.name,
+		);
+		return other ? other.point : null;
+	}
+
+	/// whether the handle is an end of the line selected
+	public static belongsToOne(
+		selection: SelectionSection,
+		handle: SelectionHandle,
+	): boolean {
+		return LineGhost.otherEnd(selection, handle) !== null;
+	}
+
+	public static heldWithShift(
+		selection: SelectionSection,
+		handle: SelectionHandle,
+		at: cool.Point,
+	): cool.Point | null {
+		const fixed = LineGhost.otherEnd(selection, handle);
+		if (!fixed) return null;
+
+		return EndOnAWay.heldTo(fixed, handle.point.subtract(fixed), at);
+	}
+
+	/// the end at that point with the length of the line snapped to the step of the modifier,
+	/// on the way it goes from the other end
+	public static snapped(
+		selection: SelectionSection,
+		handle: SelectionHandle,
+		at: cool.Point,
+		steps: 'whole' | 'tenth',
+	): cool.Point | null {
+		const fixed = LineGhost.otherEnd(selection, handle);
+		if (!fixed) return null;
+
+		return EndOnAWay.snapped(fixed, at, EditSteps.lengthSnap(steps));
+	}
+
+	public static outline(
+		selection: SelectionSection,
+		handle: SelectionHandle,
+		at: cool.Point,
+	): cool.ObjectPathPolygon[] | null {
+		const fixed = LineGhost.otherEnd(selection, handle);
+		if (!fixed) return null;
+
+		return [
+			{
+				points: [
+					{ x: fixed.x, y: fixed.y },
+					{ x: at.x, y: at.y },
+				],
+			},
+		];
+	}
+}
+
+/*
+	an end that moves away from one that stays: held to a way through the one that stays, or with
+	its distance from it snapped to a step
+*/
+class EndOnAWay {
+	/// the place on the way through fixed that lies nearest to at
+	public static heldTo(
+		fixed: cool.Point,
+		way: cool.Point,
+		at: cool.Point,
+	): cool.Point {
+		const length = way.length();
+		if (!length) return at;
+
+		const unit = way.divideBy(length);
+		return fixed.add(unit.multiplyBy(at.subtract(fixed).dot(unit)));
+	}
+
+	/// at, with its distance from fixed snapped to steps of that size, and never less than one
+	public static snapped(
+		fixed: cool.Point,
+		at: cool.Point,
+		step: number,
+	): cool.Point | null {
+		const way = at.subtract(fixed);
+		const reach = way.length();
+		if (!reach || !step) return null;
+
+		const snappedReach = Math.max(step, Math.round(reach / step) * step);
+		return fixed.add(way.multiplyBy(snappedReach / reach));
 	}
 }

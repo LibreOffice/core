@@ -459,6 +459,37 @@ class ObjectHandles implements HandleSource {
 		return new ObjectHandles(objectIds).framingHandles(square);
 	}
 
+	/// whether the object of that id is a line, a straight path of two points
+	public static isALine(objectId: number): boolean {
+		return RenderGeometrySection.objectOf(objectId)?.objectKind === 2;
+	}
+
+	/*
+		where a line starts and the way it runs to its other end, through that square. the
+		square of a line is the box round it, so each end sits on a corner of it, and the
+		corners taken through the square as it is now follow a turn not yet answered
+	*/
+	public static wayOfTheLine(
+		objectId: number,
+		square: cool.Matrix2D,
+	): { start: cool.Point; way: cool.Point } | null {
+		if (!ObjectHandles.isALine(objectId)) return null;
+
+		const ends = (
+			RenderGeometrySection.objectOf(objectId)?.handles ?? []
+		).filter((handle: cool.ObjectHandle) => handle.kind === 9);
+		if (ends.length !== 2) return null;
+
+		const [first, second] = ends.sort(
+			(one: cool.ObjectHandle, other: cool.ObjectHandle) =>
+				(one.point ?? 0) - (other.point ?? 0),
+		);
+		const atX = first.x > second.x ? 1 : 0;
+		const atY = first.y > second.y ? 1 : 0;
+		const start = square.apply(atX, atY);
+		return { start, way: square.apply(1 - atX, 1 - atY).subtract(start) };
+	}
+
 	/// Whether the object of that id is shaped by its own handles alone, without the eight.
 	public static hasHandlesOfItsOwnOnly(objectId: number): boolean {
 		return (

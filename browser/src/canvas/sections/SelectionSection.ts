@@ -1730,7 +1730,10 @@ abstract class SelectionSection extends CanvasSectionObject {
 		if (event.shiftKey || event.ctrlKey || event.altKey || event.metaKey)
 			return false;
 
-		if (this.anglesOf('turn').any && this.takeTheAnglesAway('turn'))
+		if (
+			(this.anglesOf('turn').any || this.aLineStandsAslant()) &&
+			this.takeTheAnglesAway('turn')
+		)
 			return true;
 		return this.anglesOf('slant').any && this.takeTheAnglesAway('slant');
 	}
@@ -1765,7 +1768,10 @@ abstract class SelectionSection extends CanvasSectionObject {
 					: cool.Matrix2D.IDENTITY.rotateAround(
 							middle.x,
 							middle.y,
-							-SelectionSection.turnOfTheMapping(mapping),
+							-(
+								SelectionSection.slopeOfALine(objectId, mapping) ??
+								SelectionSection.turnOfTheMapping(mapping)
+							),
 						);
 			changes.set(objectId, change);
 			reached.set(objectId, mapping.then(change));
@@ -1833,7 +1839,51 @@ abstract class SelectionSection extends CanvasSectionObject {
 		if (byKeys) return (-byKeys.stands * Math.PI) / 180;
 
 		const shared = this.isOneObject() ? null : this.anglesOf('turn').shared;
-		return shared ?? this.squareNow()?.rotation() ?? 0;
+		return shared ?? this.angleOfTheSquare();
+	}
+
+	/// the angle the square stands at, as the canvas counts angles. a line has no turn of its
+	/// own, its square is the box round it, so for a line it is the way from its start to its end
+	public angleOfTheSquare(): number {
+		const square = this.squareNow();
+		if (!square) return 0;
+
+		const objectIds = this.selectedObjects();
+		const way =
+			objectIds.length === 1
+				? ObjectHandles.wayOfTheLine(objectIds[0], square)?.way
+				: undefined;
+		return way && way.length() ? Math.atan2(way.y, way.x) : square.rotation();
+	}
+
+	/// how far a line stands off the level, the shorter way to it, as the canvas counts angles.
+	/// nothing for any other object
+	private static slopeOfALine(
+		objectId: number,
+		mapping: cool.Matrix2D,
+	): number | null {
+		const way = ObjectHandles.wayOfTheLine(objectId, mapping)?.way;
+		if (!way || !way.length()) return null;
+
+		const angle = Math.atan2(way.y, way.x);
+		return angle > Math.PI / 2
+			? angle - Math.PI
+			: angle <= -Math.PI / 2
+				? angle + Math.PI
+				: angle;
+	}
+
+	/// whether some line of the selection stands off the level
+	private aLineStandsAslant(): boolean {
+		return RenderGeometrySection.theOnesThatDraw(
+			RenderGeometrySection.standingFor(this.selectedObjects()),
+		).some((objectId: number) => {
+			const mapping = RenderGeometrySection.transformOf(objectId);
+			const slope = mapping
+				? SelectionSection.slopeOfALine(objectId, mapping)
+				: null;
+			return slope !== null && Math.abs(slope) > 0.0005;
+		});
 	}
 
 	/*

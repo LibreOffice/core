@@ -3927,11 +3927,14 @@ private:
         aContent.mbCanBeMirrored = aWhatItAllows.bMirrorFreeAllowed && !bPlaceHeldFast;
         // The office lets a measurement be sheared, but the measurement stays at right angles to
         // its line whatever the two points do, so nothing comes of it, and none is offered.
-        aContent.mbCanBeSheared = aWhatItAllows.bShearAllowed && !bSizeHeldFast
-                                  && SdrObjKind::Measure != rObject.GetObjIdentifier();
+        // a sheared line is just another line, same thing
+        const SdrObjKind eKind(rObject.GetObjIdentifier());
+        const bool bLineLike(SdrObjKind::Measure == eKind || SdrObjKind::Line == eKind);
+        aContent.mbCanBeSheared = aWhatItAllows.bShearAllowed && !bSizeHeldFast && !bLineLike;
         aContent.mbCanBeFlipped = aWhatItAllows.bMirror90Allowed && !bPlaceHeldFast;
         aContent.mbCanBeChangedToCurves = aWhatItAllows.bCanConvToPath;
-        aContent.mbHandlesOfItsOwnOnly = SdrObjKind::Measure == rObject.GetObjIdentifier();
+        // a line is shaped by its two ends only, as a measurement is
+        aContent.mbHandlesOfItsOwnOnly = bLineLike;
 
         aContent.maPaintedBox = paintedRectangleInTwips(rObject, aContent.maPrimitives);
         aContent.maTransformation = transformationInTwips(rObject);
@@ -4306,9 +4309,12 @@ private:
             */
             const SdrHdlKind eKind = pHandle->GetKind();
             const bool bMeasurement(SdrObjKind::Measure == rObject.GetObjIdentifier());
+            // a line sends its two ends as handles and no path, as a measurement does
+            const bool bLine(SdrObjKind::Line == rObject.GetObjIdentifier());
             const bool bWanted(eKind == SdrHdlKind::Circle || eKind == SdrHdlKind::CustomShape1
                                || (eKind == SdrHdlKind::Poly
-                                   && nullptr == dynamic_cast<const SdrPathObj*>(&rObject))
+                                   && (bLine
+                                       || nullptr == dynamic_cast<const SdrPathObj*>(&rObject)))
                                || (eKind == SdrHdlKind::User && bMeasurement));
             if (!bWanted)
                 continue;
@@ -4356,7 +4362,8 @@ private:
     static basegfx::B2DPolyPolygon pathOf(const SdrObject& rObject)
     {
         const auto* pPathObject = dynamic_cast<const SdrPathObj*>(&rObject);
-        if (!pPathObject)
+        // a line has its two ends in the handles instead
+        if (!pPathObject || SdrObjKind::Line == pPathObject->GetObjIdentifier())
             return basegfx::B2DPolyPolygon();
 
         basegfx::B2DPolyPolygon aPath(pPathObject->GetPathPoly());

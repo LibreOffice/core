@@ -100,6 +100,19 @@ class EditSteps {
 	}
 
 	/*
+		the step the length of a line snaps to while one of its ends is dragged, in twips: 10
+		millimetres with Ctrl (vectorLengthSnapControl), 1 with Alt (vectorLengthSnapAlt), each
+		grown with the page
+	*/
+	public static lengthSnap(steps: 'whole' | 'tenth'): number {
+		const millimetres =
+			steps === 'whole'
+				? EditSteps.setting('vectorLengthSnapControl', 10)
+				: EditSteps.setting('vectorLengthSnapAlt', 1);
+		return millimetres * EditSteps.millimetre * EditSteps.pageFactor();
+	}
+
+	/*
 		The step in degrees a turn snaps to, counted from the page: 45 with Ctrl
 		(vectorTurnSnapControl), 15 with Shift (vectorTurnSnapShift), 5 with Alt
 		(vectorTurnSnapAlt). With no modifier the mouse has no step, and a key the one below.
