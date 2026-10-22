@@ -471,11 +471,15 @@ window.L.Map = window.L.Evented.extend({
 
 	// A11y
 
+	// Screen reading works in text, presentation and spreadsheet documents. A drawing
+	// document keeps the plain text input whatever the preference says.
+	supportsScreenReading: function(docType) {
+		return docType === 'text' || docType === 'presentation' || docType === 'spreadsheet';
+	},
+
 	initTextInput: function(docType) {
-		var hasAccessibilitySupport =
-			window.enableAccessibility && window.prefs.getBoolean('accessibilityState');
-		hasAccessibilitySupport = hasAccessibilitySupport &&
-			(docType === 'text' || docType === 'presentation'|| docType === 'spreadsheet');
+		var hasAccessibilitySupport = window.enableAccessibility &&
+			window.prefs.getBoolean('accessibilityState') && this.supportsScreenReading(docType);
 
 		this.setupCoreAccessibility(hasAccessibilitySupport);
 		this.createTextInput(hasAccessibilitySupport);
@@ -491,23 +495,25 @@ window.L.Map = window.L.Evented.extend({
 	},
 
 	setAccessibilityState: function(enable) {
-		// The preference can already hold the new value while the text input still has the
-		// old state, so both are compared. With no text input yet, the preference alone
-		// carries the state.
-		const inputMatches =
-			!this._textInput || this._textInput.hasAccessibilitySupport() === enable;
-		if (inputMatches && window.prefs.getBoolean('accessibilityState') === enable)
-			return;
-
 		window.prefs.set('accessibilityState', enable);
-		this.setupCoreAccessibility(enable);
-		this.removeLayer(this._textInput);
-		this.createTextInput(enable);
 		this.fire('a11ystatechanged');
 
-		if (enable)
-			this._textInput._requestFocusedParagraph();
-		this._textInput.showCursor();
+		const accessibilityEnabledForDocument =
+			enable && this.supportsScreenReading(this.getDocType());
+
+		if (!this._textInput) {
+			// Before the status message the document has no text input; the preference
+			// alone carries the state until initTextInput creates one.
+		} else if (this._textInput.hasAccessibilitySupport() === accessibilityEnabledForDocument) {
+			// The text input is already in the wanted state.
+		} else {
+			this.setupCoreAccessibility(accessibilityEnabledForDocument);
+			this.removeLayer(this._textInput);
+			this.createTextInput(accessibilityEnabledForDocument);
+			if (accessibilityEnabledForDocument)
+				this._textInput._requestFocusedParagraph();
+			this._textInput.showCursor();
+		}
 	},
 
 	lockAccessibilityOn: function() {
