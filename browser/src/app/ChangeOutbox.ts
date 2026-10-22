@@ -47,27 +47,68 @@
 	a message of its own. Any other message that the engine applies in order sends the waiting
 	text ahead of it.
 */
+/// A change of the mapping of objects, which goes out as one setobjecttransform message.
+interface TransformEntry {
+	kind: 'transform';
+	/// What the change is, as the "as" parameter of the message names it.
+	what: string;
+	/// The newest mapping of each changed object, keyed by the object's id.
+	mappings: Map<string, string>;
+	/// True for a change that one key press made, which is one step of the undo.
+	sealed?: boolean;
+}
+
+/// That many undos or redos, which go out as one command.
+interface UndoEntry {
+	kind: 'undo' | 'redo';
+	count: number;
+}
+
+/// A change of one other thing to the state its message names: a handle, a control point, a
+/// glue point, a crop window or the points of a path.
+interface OtherEntry {
+	kind: 'other';
+	/// The part of the message that names the thing, up to where the state begins.
+	channel: string;
+	message: string;
+	/// True for a change that one key press made, which is one step of the undo.
+	sealed?: boolean;
+}
+
+/// Text typed into the document, which goes out as one textinput message.
+interface TextEntry {
+	kind: 'text';
+	text: string;
+	/// The sequence number of the newest keystroke in the text.
+	sequence: number;
+	/// False while the entry waits for more text to combine with, and true or absent once it may
+	/// go out.
+	ready?: boolean;
+}
+
+/// Characters deleted before and after the caret, which go out as one removetextcontext
+/// message.
+interface RemoveEntry {
+	kind: 'remove';
+	before: number;
+	after: number;
+	/// The sequence number of the newest keystroke among the deletions.
+	sequence: number;
+	/// False while the entry waits for more deletions to combine with, and true or absent once
+	/// it may go out.
+	ready?: boolean;
+}
+
 /*
 	One change waiting to go out. A change of objects or of another thing is sealed where it is
 	what one key press made, which is one step of the undo: nothing after it is merged into it.
 */
 type OutboxEntry =
-	| {
-			kind: 'transform';
-			what: string;
-			mappings: Map<string, string>;
-			sealed?: boolean;
-	  }
-	| { kind: 'undo' | 'redo'; count: number }
-	| { kind: 'other'; channel: string; message: string; sealed?: boolean }
-	| { kind: 'text'; text: string; sequence: number; ready?: boolean }
-	| {
-			kind: 'remove';
-			before: number;
-			after: number;
-			sequence: number;
-			ready?: boolean;
-	  };
+	| TransformEntry
+	| UndoEntry
+	| OtherEntry
+	| TextEntry
+	| RemoveEntry;
 
 class ChangeOutbox {
 	/// How long a change may go unanswered before the next one goes out anyway, in milliseconds.
@@ -383,7 +424,7 @@ class ChangeOutbox {
 			(last.kind === 'undo' || last.kind === 'redo') &&
 			last.kind === entry.kind
 		) {
-			last.count += (entry as { count: number }).count;
+			last.count += (entry as UndoEntry).count;
 			return;
 		}
 
