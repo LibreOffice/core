@@ -91,7 +91,8 @@ Model::Model() :
     mxInstances( new InstanceCollection ),
     mxNamespaces( new NameContainer<OUString>() ),
     mbInitialized( false ),
-    mbExternalData( true )
+    mbExternalData( true ),
+    mbLoadsInstanceURLs( true )
 {
     initializePropertySet();
 
@@ -152,6 +153,19 @@ void Model::setNamespaces( const css::uno::Reference<css::container::XNameContai
 void Model::setExternalData( bool _bData )
 {
     mbExternalData = _bData;
+}
+
+void Model::setLoadsInstanceURLs(bool bLoads)
+{
+    const bool bStarts = bLoads && !mbLoadsInstanceURLs;
+    mbLoadsInstanceURLs = bLoads;
+    // An initialized model reads its instance URLs, and rebinds to the new data, when it starts
+    // to load them.
+    if (bStarts && mbInitialized)
+    {
+        loadInstances();
+        rebind();
+    }
 }
 
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
@@ -317,7 +331,7 @@ void Model::loadInstance( sal_Int32 nInstance )
     getInstanceData( aSequence, nullptr, nullptr, &sURL, &bOnce );
 
     // if we have a URL, load the document and set it into the instance
-    if( sURL.isEmpty() )
+    if( sURL.isEmpty() || !mbLoadsInstanceURLs )
         return;
 
     if( INetURLObject( sURL ).IsExoticProtocol() )
@@ -559,6 +573,7 @@ css::uno::Reference<css::container::XSet> Model::getSubmissions()
 #define HANDLE_SchemaRef 4
 #define HANDLE_Namespaces 5
 #define HANDLE_ExternalData 6
+#define HANDLE_LoadsInstanceURLs 7
 
 void Model::initializePropertySet()
 {
@@ -575,6 +590,9 @@ void Model::initializePropertySet()
 
     registerProperty( css::beans::Property(u"ExternalData"_ustr, HANDLE_ExternalData, cppu::UnoType<sal_Bool>::get(), css::beans::PropertyAttribute::BOUND ),
     new BooleanPropertyAccessor< Model >( this, &Model::setExternalData, &Model::getExternalData ) );
+
+    registerProperty( css::beans::Property(u"LoadsInstanceURLs"_ustr, HANDLE_LoadsInstanceURLs, cppu::UnoType<bool>::get(), css::beans::PropertyAttribute::BOUND ),
+    new BooleanPropertyAccessor< Model >( this, &Model::setLoadsInstanceURLs, &Model::getLoadsInstanceURLs ) );
 }
 
 void Model::update()

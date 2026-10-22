@@ -94,6 +94,7 @@ private:
 
     bool mbInitialized;                     /// has model been initialized ?
     bool mbExternalData;                    /// is the data of this model to be considered an integral part of the document?
+    bool mbLoadsInstanceURLs;
 
     void initializePropertySet();
 
@@ -123,6 +124,10 @@ public:
     // get/set the ExternalData property
     bool getExternalData() const { return mbExternalData;}
     void setExternalData( bool _bData );
+
+    // get/set the LoadsInstanceURLs property
+    bool getLoadsInstanceURLs() const { return mbLoadsInstanceURLs; }
+    void setLoadsInstanceURLs(bool bLoads);
 
 
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG
