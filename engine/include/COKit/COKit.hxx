@@ -2873,6 +2873,21 @@ struct COKitDocument
     virtual bool breakSlideLink(const char* pPart) = 0;
 
     /**
+     * Take the link to its source section off one linked section.
+     *
+     * The section keeps the slides it holds and becomes a section of this document alone, so it no
+     * longer follows its source section. This is one undo action, and undoing it gives the section
+     * its link back.
+     *
+     * @param pSection the section, by the identifier getSlideLinks reports for it.
+     * @param bBreakSlides whether each slide of the section loses its source document too, as
+     *        breakSlideLink does for one page, so a refresh of that source leaves those slides as
+     *        they are. Without it, each slide stays linked to its source slide.
+     * @return true when the section was linked to a source section and is not any more.
+     */
+    virtual bool breakSectionLink(const char* pSection, bool bBreakSlides) = 0;
+
+    /**
      * Writes the given pages out as a document of their own, in the order they are given.
      *
      * @param pParts a comma separated list of the pages to write, named the way this document

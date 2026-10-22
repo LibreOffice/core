@@ -269,6 +269,9 @@ private:
                                 const std::string& url, const std::string& lastModifiedTime,
                                 const std::string& sectionName, const std::string& named);
     bool slideLinkBreak(const StringVector& tokens);
+    /// Takes the link to its source section off the section encodedSection names, and answers the
+    /// client.
+    bool slideLinkBreakSection(const StringVector& tokens, const std::string& encodedSection);
     /// The sections and the pages of the document that are linked to a source
     /// document, as the JSON body of a slidelinks: message; empty lists for a
     /// document that reports none.

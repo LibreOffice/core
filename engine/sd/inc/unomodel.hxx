@@ -569,6 +569,8 @@ public:
                                                const OUString& rSourceSectionName) override;
     /// @see vcl::ITiledRenderable::breakSlideLink().
     SD_DLLPUBLIC bool breakSlideLink(sal_Int32 nIndex) override;
+    /// @see vcl::ITiledRenderable::breakSectionLink().
+    SD_DLLPUBLIC bool breakSectionLink(const OUString& rSectionId, bool bBreakSlides) override;
 
     /// @see vcl::ITiledRenderable::getSlideIndexOfGuid().
     SD_DLLPUBLIC sal_Int32 getSlideIndexOfGuid(const OUString& rGuid) override;

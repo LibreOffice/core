@@ -7872,6 +7872,37 @@ bool SdXImpressDocument::breakSlideLink(sal_Int32 nIndex)
     return sd::SlideLink::Break(*mpDoc, nIndex);
 }
 
+bool SdXImpressDocument::breakSectionLink(const OUString& rSectionId, bool bBreakSlides)
+{
+    if (!mpDoc)
+        return false;
+
+    sd::SlideSectionManager& rSections = mpDoc->GetSectionManager();
+    const sal_Int32 nSection
+        = rSections.GetSectionIndexForId(sd::SlideLink::NormaliseGuid(rSectionId));
+    if (!rSections.GetSectionLink(nSection))
+        return false;
+
+    SfxUndoManager* pUndoManager = mpDoc->beginUndoAction(SdResId(STR_UNDO_UNLINK_SLIDE_SECTION));
+    comphelper::ScopeGuard aLeaveUndo([this, pUndoManager]
+                                      { mpDoc->endUndoAction(/*bUndo=*/false, pUndoManager); });
+
+    if (!rSections.SetSectionLink(nSection, sd::SlideSectionLink()))
+        return false;
+
+    // A slide keeps its identifier when its source comes off, so the section spans the same slides
+    // and only the link of each slide changes.
+    if (bBreakSlides)
+    {
+        const sal_Int32 nStart = rSections.GetSection(nSection).mnStartIndex;
+        const sal_Int32 nEnd = nStart + rSections.GetSectionSlideCount(nSection);
+        for (sal_Int32 nSlide = nStart; nSlide < nEnd; ++nSlide)
+            sd::SlideLink::Break(*mpDoc, nSlide);
+    }
+
+    return true;
+}
+
 namespace
 {
 /// Names the standard pages the given indices ask for, by the name each carries in the

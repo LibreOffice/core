@@ -1655,6 +1655,104 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkUpdateSectionNeedsLinked
     CPPUNIT_ASSERT_EQUAL(u"Source one"_ustr, getSlideText(*pDoc, 2));
 }
 
+// A section unlinked from its source section keeps its slides, and each of them stays linked to its
+// source slide. Undo links the section again, and redo unlinks it again.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkBreakSection)
+{
+    utl::TempFileNamed aSectionDeck(u"", true, u".odp");
+    aSectionDeck.EnableKillingFile();
+    loadFromURL(
+        m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-unnamed-source.fodp"));
+    exportSlides(mxComponent, { 0, 1 }, aSectionDeck.GetURL());
+
+    loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering({});
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    const OUString aSectionId = insertLinkedSection(*pXImpressDocument, aSectionDeck.GetURL());
+    sd::SlideSectionManager& rSections = pDoc->GetSectionManager();
+
+    SfxUndoManager* pUndoManager = pDoc->GetDocSh()->GetUndoManager();
+    const size_t nUndoActions = pUndoManager->GetUndoActionCount();
+
+    CPPUNIT_ASSERT(pXImpressDocument->breakSectionLink(aSectionId, /*bBreakSlides=*/false));
+    CPPUNIT_ASSERT_EQUAL(nUndoActions + 1, pUndoManager->GetUndoActionCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), rSections.GetSectionCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rSections.GetSectionSlideCount(0));
+    CPPUNIT_ASSERT(!rSections.GetSectionLink(0));
+    CPPUNIT_ASSERT(readLinks(*pXImpressDocument).get_child("sections").empty());
+    for (sal_uInt16 nSlide = 2; nSlide < 4; ++nSlide)
+        CPPUNIT_ASSERT_EQUAL(u"vnd.collabora.slide-source:Q3%20deck.odp"_ustr,
+                             pDoc->GetSdPage(nSlide, PageKind::Standard)->GetFileName());
+
+    // A section that is no longer linked has no link to take off.
+    CPPUNIT_ASSERT(!pXImpressDocument->breakSectionLink(aSectionId, /*bBreakSlides=*/false));
+    CPPUNIT_ASSERT_EQUAL(nUndoActions + 1, pUndoManager->GetUndoActionCount());
+
+    pUndoManager->Undo();
+    const sd::SlideSectionLink* pLink = rSections.GetSectionLink(0);
+    CPPUNIT_ASSERT(pLink);
+    CPPUNIT_ASSERT_EQUAL(u"{D2A46A4F-3C82-4E7B-A6B3-9F1E5C0D7A21}"_ustr, pLink->maSourceSectionId);
+
+    pUndoManager->Redo();
+    CPPUNIT_ASSERT(!rSections.GetSectionLink(0));
+    CPPUNIT_ASSERT_EQUAL(u"vnd.collabora.slide-source:Q3%20deck.odp"_ustr,
+                         pDoc->GetSdPage(2, PageKind::Standard)->GetFileName());
+}
+
+// A section unlinked together with its slides keeps its slides as slides of this document alone.
+// One undo gives the section and each slide their links back, and redo takes them off again.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkBreakSectionAndSlides)
+{
+    utl::TempFileNamed aSectionDeck(u"", true, u".odp");
+    aSectionDeck.EnableKillingFile();
+    loadFromURL(
+        m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-unnamed-source.fodp"));
+    exportSlides(mxComponent, { 0, 1 }, aSectionDeck.GetURL());
+
+    loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));
+    SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pXImpressDocument);
+    pXImpressDocument->initializeForTiledRendering({});
+    SdDrawDocument* pDoc = pXImpressDocument->GetDoc();
+    const OUString aSectionId = insertLinkedSection(*pXImpressDocument, aSectionDeck.GetURL());
+    sd::SlideSectionManager& rSections = pDoc->GetSectionManager();
+
+    SfxUndoManager* pUndoManager = pDoc->GetDocSh()->GetUndoManager();
+    const size_t nUndoActions = pUndoManager->GetUndoActionCount();
+
+    // An identifier that names no section changes nothing.
+    CPPUNIT_ASSERT(!pXImpressDocument->breakSectionLink(
+        u"{00000000-0000-0000-0000-000000000000}"_ustr, /*bBreakSlides=*/true));
+    CPPUNIT_ASSERT_EQUAL(nUndoActions, pUndoManager->GetUndoActionCount());
+
+    CPPUNIT_ASSERT(pXImpressDocument->breakSectionLink(aSectionId, /*bBreakSlides=*/true));
+    CPPUNIT_ASSERT_EQUAL(nUndoActions + 1, pUndoManager->GetUndoActionCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), rSections.GetSectionSlideCount(0));
+    CPPUNIT_ASSERT(!rSections.GetSectionLink(0));
+    CPPUNIT_ASSERT_EQUAL(u"Source one"_ustr, getSlideText(*pDoc, 2));
+    CPPUNIT_ASSERT_EQUAL(u"Source two"_ustr, getSlideText(*pDoc, 3));
+    for (sal_uInt16 nSlide = 2; nSlide < 4; ++nSlide)
+        CPPUNIT_ASSERT_EQUAL(OUString(),
+                             pDoc->GetSdPage(nSlide, PageKind::Standard)->GetFileName());
+    const boost::property_tree::ptree aLinks = readLinks(*pXImpressDocument);
+    CPPUNIT_ASSERT(aLinks.get_child("sections").empty());
+    CPPUNIT_ASSERT(aLinks.get_child("links").empty());
+
+    pUndoManager->Undo();
+    CPPUNIT_ASSERT(rSections.GetSectionLink(0));
+    for (sal_uInt16 nSlide = 2; nSlide < 4; ++nSlide)
+        CPPUNIT_ASSERT_EQUAL(u"vnd.collabora.slide-source:Q3%20deck.odp"_ustr,
+                             pDoc->GetSdPage(nSlide, PageKind::Standard)->GetFileName());
+
+    pUndoManager->Redo();
+    CPPUNIT_ASSERT(!rSections.GetSectionLink(0));
+    for (sal_uInt16 nSlide = 2; nSlide < 4; ++nSlide)
+        CPPUNIT_ASSERT_EQUAL(OUString(),
+                             pDoc->GetSdPage(nSlide, PageKind::Standard)->GetFileName());
+}
+
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLinkSourceNotFetched)
 {
     loadFromURL(m_directories.getURLFromSrc(gSlideImportDataDir, u"slide-import-target.odp"));

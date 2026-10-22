@@ -346,6 +346,33 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkSection()
                          "notlinked",
                          std::string(" source=") + EncodedSourceName + " section=" + otherSection);
 
+        // Taking the link off the section, and off each of its slides, leaves no link at all.
+        // slides= may come before section=.
+        helpers::sendTextFrame(socket, "slidelink break slides=1 section=" + encodedSectionId,
+                               testname);
+        const std::string breakReply = helpers::getResponseString(socket, "slidelink:", testname);
+        Poco::JSON::Object::Ptr breakObject = helpers::parseJsonReply(breakReply, "slidelink:");
+        LOK_ASSERT_EQUAL(std::string("broken"), breakObject->getValue<std::string>("status"));
+        LOK_ASSERT_EQUAL(sectionId, breakObject->getValue<std::string>("section"));
+
+        const std::string breakListReply =
+            helpers::getResponseString(socket, "slidelinks:", testname);
+        Poco::JSON::Object::Ptr breakList =
+            helpers::parseJsonReply(breakListReply, "slidelinks:");
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(0), breakList->getArray("sections")->size());
+        LOK_ASSERT_EQUAL(static_cast<std::size_t>(0), breakList->getArray("links")->size());
+
+        // The section is linked to nothing now, and a break names a section by a GUID.
+        helpers::assertErrorReply(socket, "slidelink break section=" + encodedSectionId,
+                                  "slidelink", "notlinked", testname,
+                                  " section=" + encodedSectionId);
+        helpers::assertErrorReply(socket, "slidelink break section=opening", "slidelink",
+                                  "syntax", testname, " section=opening");
+        helpers::assertErrorReply(socket,
+                                  "slidelink break section=" + encodedSectionId + " slides=all",
+                                  "slidelink", "syntax", testname,
+                                  " section=" + encodedSectionId);
+
         socketPoll->joinThread();
     }
     catch (const Poco::Exception& exc)

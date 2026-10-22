@@ -3828,6 +3828,13 @@ bool ChildSession::slideLinkUpdateSection(const std::string& source, const std::
 
 bool ChildSession::slideLinkBreak(const StringVector& tokens)
 {
+    std::string encodedSection;
+    for (std::size_t i = 2; i < tokens.size(); ++i)
+    {
+        if (getTokenString(tokens[i], "section", encodedSection))
+            return slideLinkBreakSection(tokens, encodedSection);
+    }
+
     std::string part;
     if (tokens.size() != 3 || !getTokenString(tokens[2], "part", part) || !isValidPartId(part))
     {
@@ -3861,6 +3868,84 @@ bool ChildSession::slideLinkBreak(const StringVector& tokens)
     }
 
     return sendTextFrame("slidelink: {\"status\":\"broken\",\"part\":\"" + part + "\"}");
+}
+
+bool ChildSession::slideLinkBreakSection(const StringVector& tokens,
+                                         const std::string& encodedSection)
+{
+    // Every answer of a break of a section names the section it was asked for.
+    const std::string named = " section=" + encodedSection;
+
+    // slides=1 takes the source off each slide of the section as well. It may come before or
+    // after section=, and each of the two comes once.
+    int slides = 0;
+    bool haveSection = false;
+    bool haveSlides = false;
+    bool malformed = tokens.size() > 4;
+    for (std::size_t i = 2; i < tokens.size() && !malformed; ++i)
+    {
+        std::string value;
+        if (getTokenString(tokens[i], "section", value))
+        {
+            malformed = haveSection;
+            haveSection = true;
+        }
+        else if (getTokenInteger(tokens[i], "slides", slides) && !haveSlides &&
+                 (slides == 0 || slides == 1))
+            haveSlides = true;
+        else
+            malformed = true;
+    }
+    if (malformed)
+    {
+        sendTextFrameAndLogError("error: cmd=slidelink kind=syntax" + named);
+        return false;
+    }
+
+    std::string section;
+    try
+    {
+        URI::decode(encodedSection, section);
+    }
+    catch (const Poco::Exception& exc)
+    {
+        LOG_ERR("slidelink break: cannot decode the section: " << exc.displayText());
+        sendTextFrameAndLogError("error: cmd=slidelink kind=syntax" + named);
+        return false;
+    }
+
+    if (!isSlideGuid(section))
+    {
+        sendTextFrameAndLogError("error: cmd=slidelink kind=syntax" + named);
+        return false;
+    }
+
+    // The document spells a section identifier in upper case.
+    std::transform(section.begin(), section.end(), section.begin(),
+                   [](unsigned char c) { return std::toupper(c); });
+
+    // Taking the link off a section changes the document.
+    if (isReadOnly())
+    {
+        LOG_ERR("slidelink break: a read-only view does not change links");
+        sendTextFrameAndLogError("error: cmd=slidelink kind=failed" + named);
+        return false;
+    }
+
+    SigUtil::addActivity(getId(), "slidelink break section");
+
+    getLOKitDocument()->setView(_viewId);
+
+    // The document reports its links again when a section loses its link, so the fresh list goes
+    // out on its own and the reply names the section alone.
+    if (!getLOKitDocument()->breakSectionLink(section.c_str(), slides != 0))
+    {
+        sendTextFrameAndLogError("error: cmd=slidelink kind=notlinked" + named);
+        return false;
+    }
+
+    return sendTextFrame("slidelink: {\"status\":\"broken\",\"section\":\"" +
+                         JsonUtil::escapeJSONValue(section) + "\"}");
 }
 
 bool ChildSession::extTextInputEvent(const StringVector& tokens)

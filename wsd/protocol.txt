@@ -327,6 +327,7 @@ exportslides [slides=<p0,p1,...>|guids=<g0,g1,...>]
 
 slidelink list
 slidelink break part=<part>
+slidelink break section=<section id> [slides=<0|1>]
 slidelink update source=<source name> file=<staged name> [time=<source time>] [part=<part>]
 slidelink update source=<source name> file=<staged name> [time=<source time>]
                  section=<section id> [sectionname=<source section name>]
@@ -394,6 +395,21 @@ slidelink update source=<source name> file=<staged name> [time=<source time>]
     A page that is linked to nothing is answered kind=notlinked, and a view that
     cannot edit kind=failed. The fresh link list arrives on its own, as above.
 
+    break with section=<section id>: takes the link to its source section off
+    the linked section <section id>, named as the sections array of the list
+    names it and percent-encoded. The section keeps the slides it holds and no
+    longer follows its source section. With slides=1 each slide of the section
+    loses its source document as well, as a break of each page would do, so a
+    later refresh of that source leaves those slides as they are. With slides=0,
+    or with no slides=, each slide stays linked to its source slide. This is one
+    undo step, and undoing it gives the section its link back, and the slides
+    theirs. The reply is
+        slidelink: {"status":"broken","section":"<section id>"}
+    A section that is not linked is answered kind=notlinked, a view that cannot
+    edit kind=failed, and a section id that is not a GUID, or a slides= that is
+    neither 0 nor 1, kind=syntax. The answers name the section as
+    section=<section id>.
+
     update: refreshes every page linked to <source name> from <staged name>, a
     file previously uploaded using the insertfile POST that holds the slides of
     that source. This is the message wsd sends the kit once it has the content
@@ -433,14 +449,16 @@ slidelink update source=<source name> file=<staged name> [time=<source time>]
         error: cmd=slidelink kind=<syntax|notlinked|failed>
                [source=<source name> [section=<section id>]]
         error: cmd=slidelink kind=<syntax|notlinked|failed> [part=<part>]
+        error: cmd=slidelink kind=<syntax|notlinked|failed> [section=<section id>]
     where notlinked means no page of the document is linked to that source,
-    that the section an update names is not linked to it, or that the page a
-    break names is linked to nothing, and failed means the staged
-    file could not be read, or the view cannot edit. An answer of an update names
-    the source it was sent for and an answer of a break names the page it was
-    asked for, both percent-encoded as the command was, so that a reader of these
-    messages tells the answers of one command of the family from those of
-    another. A command too malformed to say what it was for names neither.
+    that the section an update names is not linked to it, or that the page or
+    the section a break names is linked to nothing, and failed means the staged
+    file could not be read, or the view cannot edit. An answer of an update
+    names the source it was sent for and an answer of a break names the page or
+    the section it was asked for, all percent-encoded as the command was, so
+    that a reader of these messages tells the answers of one command of the
+    family from those of another. A command too malformed to say what it was
+    for names neither.
 
 key type=<type> char=<charcode> key=<keycode> [sequence=<sequence>]
 

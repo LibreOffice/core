@@ -599,6 +599,15 @@ public:
         (Impress only function) */
     virtual bool breakSlideLink(sal_Int32 /*nIndex*/) { return false; }
 
+    /** Takes the link to its source section off the section with the identifier rSectionId, which
+        keeps the slides it holds. With bBreakSlides, each slide of the section loses its source
+        document as well, as breakSlideLink does for one page. The whole change is one undo step.
+        Returns whether the section was linked to a source section (Impress only function) */
+    virtual bool breakSectionLink(const OUString& /*rSectionId*/, bool /*bBreakSlides*/)
+    {
+        return false;
+    }
+
     /** The index in the page list of the standard pages of the page holding the identifier
         rGuid, a braced GUID string as ODF keeps it; -1 when no standard page of the document
         holds it (Impress only function) */

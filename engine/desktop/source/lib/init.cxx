@@ -7871,6 +7871,24 @@ bool COKitDocumentImpl::breakSlideLink(const char* pPart)
     return pDoc->breakSlideLink(nIndex);
 }
 
+bool COKitDocumentImpl::breakSectionLink(const char* pSection, bool bBreakSlides)
+{
+    SolarMutexGuard aGuard;
+    SetLastExceptionMsg();
+
+    if (SfxViewShell::IsCurrentKitViewReadOnly())
+        return false;
+
+    ITiledRenderable* pDoc = getTiledRenderable(this);
+    if (!pDoc)
+    {
+        SetLastExceptionMsg(u"Document doesn't support tiled rendering"_ustr);
+        return false;
+    }
+
+    return pSection && pDoc->breakSectionLink(getUString(pSection), bBreakSlides);
+}
+
 bool COKitDocumentImpl::exportPages(const char* pParts, const char* pUrl)
 {
     SolarMutexGuard aGuard;

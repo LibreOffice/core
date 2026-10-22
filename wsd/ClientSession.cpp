@@ -1817,11 +1817,13 @@ bool ClientSession::_handleInput(const char *buffer, int length)
 #endif // !MOBILEAPP && !WASMAPP
     else if (tokens.equals(0, "slidelink"))
     {
-        // A client reads the links its own document holds, takes the source off one page of
-        // it, and refreshes the pages of one source from a presentation that source wrote and
-        // the server staged in the jail.
+        // A client reads the links its own document holds, takes the source off one page or one
+        // section of it, and refreshes the pages or a section of one source from a presentation
+        // that source wrote and the server staged in the jail.
         const bool readsLinks = tokens.size() == 2 && tokens.equals(1, "list");
-        const bool breaksLink = tokens.size() == 3 && tokens.equals(1, "break");
+        // A break of a section may carry slides= as well.
+        const bool breaksLink =
+            (tokens.size() == 3 || tokens.size() == 4) && tokens.equals(1, "break");
         // An update may carry optional time= and part= tokens besides source= and file=, or
         // section= and sectionname= in place of part=.
         const bool updatesLinks =
