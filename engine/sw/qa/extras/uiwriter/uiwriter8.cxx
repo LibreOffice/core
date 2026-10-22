@@ -19,6 +19,7 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <IDocumentDrawModelAccess.hxx>
 #include <com/sun/star/text/XTextFrame.hpp>
+#include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/text/XBookmarksSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/SetVariableType.hpp>
@@ -1993,6 +1994,47 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateFrameAsCharacter)
     CPPUNIT_ASSERT_EQUAL(u"Frame text"_ustr, xFrame->getText()->getString());
     CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AS_CHARACTER,
                          getProperty<text::TextContentAnchorType>(xFrame, u"AnchorType"_ustr));
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateKeepsSpaceAfterField)
+{
+    // The mock returns the markup it was sent, as the translation services do.
+    std::unique_ptr<test::MockHttpServer> pMockServer = createMockTranslateServer(false, true);
+    CPPUNIT_ASSERT(pMockServer->start());
+    comphelper::ScopeGuard<std::function<void()>> aResetConfig
+        = setTranslationService(u"http://127.0.0.1:18099/v2/translate"_ustr);
+
+    // Given a paragraph with text on both sides of a field: "Page 1 of 1" from two fields:
+    createSwDoc();
+    SwWrtShell* const pWrtSh = getSwDocShell()->GetWrtShell();
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xBody = xTextDocument->getText();
+    pWrtSh->Insert(u"Page "_ustr);
+    uno::Reference<text::XTextContent> xPageNumber(
+        xFactory->createInstance(u"com.sun.star.text.TextField.PageNumber"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet>(xPageNumber, uno::UNO_QUERY_THROW)
+        ->setPropertyValue(u"NumberingType"_ustr, uno::Any(style::NumberingType::ARABIC));
+    xBody->insertTextContent(xBody->getEnd(), xPageNumber, false);
+    pWrtSh->SttEndDoc(false);
+    pWrtSh->Insert(u" of "_ustr);
+    uno::Reference<text::XTextContent> xPageCount(
+        xFactory->createInstance(u"com.sun.star.text.TextField.PageCount"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet>(xPageCount, uno::UNO_QUERY_THROW)
+        ->setPropertyValue(u"NumberingType"_ustr, uno::Any(style::NumberingType::ARABIC));
+    xBody->insertTextContent(xBody->getEnd(), xPageCount, false);
+    pWrtSh->GetDoc()->getIDocumentFieldsAccess().UpdateFields(false);
+    const OUString aParagraph = getParagraph(1)->getString();
+    CPPUNIT_ASSERT_EQUAL(u"Page 1 of 1"_ustr, aParagraph);
+    pWrtSh->SttEndDoc(true);
+
+    // When translating the whole document:
+    bool bCancel = false;
+    CPPUNIT_ASSERT(SwTranslateHelper::TranslateDocumentCancellable(*pWrtSh, "DE"_ostr, bCancel));
+
+    // Then the text around the fields is as it was, the blank after a field included:
+    pWrtSh->GetDoc()->getIDocumentFieldsAccess().UpdateFields(false);
+    CPPUNIT_ASSERT_EQUAL(aParagraph, getParagraph(1)->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateSetsTargetLanguage)
