@@ -841,6 +841,44 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testEditingHyperlinkCellAllowsCursorI
                          lcl_getCellTextWithLinks(*pDoc, aA1));
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testRemoveHyperlinkFromAddressCell)
+{
+    // The Remove button of the hyperlink popup leaves the address as plain text in the cell.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+    ScDocument* pDoc = pModelObj->GetDocument();
+
+    const ScAddress aA1(0, 0, 0);
+    typeCharsInCell("foo@example.com", aA1.Col(), aA1.Row(), pView, pModelObj, /*bInEdit*/ false,
+                    /*bCommit*/ true);
+    pView->SetCursor(aA1.Col(), aA1.Row());
+
+    lcl_selectInCell(pView, 0, 15);
+    dispatchCommand(mxComponent, u".uno:SetHyperlink"_ustr,
+                    lcl_hyperlinkArgs(u"foo@example.com"_ustr, u"mailto:foo@example.com"_ustr));
+    ScModule::get()->InputEnterHandler();
+    CPPUNIT_ASSERT_EQUAL(u"[foo@example.com](mailto:foo@example.com)"_ustr,
+                         lcl_getCellTextWithLinks(*pDoc, aA1));
+
+    // The popup passes the position of the click on the link, which is near the start of the
+    // address because the text is left-aligned.
+    ScViewData& rViewData = pView->GetViewData();
+    const Point aCellStart = rViewData.GetScrPos(aA1.Col(), aA1.Row(), SC_SPLIT_TOPLEFT, true);
+    const Point aCellEnd
+        = rViewData.GetScrPos(aA1.Col() + 1, aA1.Row() + 1, SC_SPLIT_TOPLEFT, true);
+    const sal_Int32 nClickX = (aCellStart.X() + 10) / rViewData.GetPPTX();
+    const sal_Int32 nClickY = (aCellStart.Y() + aCellEnd.Y()) / 2 / rViewData.GetPPTY();
+    dispatchCommand(mxComponent, u".uno:RemoveHyperlink"_ustr,
+                    { comphelper::makePropertyValue(u"PositionX"_ustr, nClickX),
+                      comphelper::makePropertyValue(u"PositionY"_ustr, nClickY) });
+
+    // Without the fix in place, this test would have failed with:
+    // - Expected: foo@example.com
+    // - Actual  : [foo@example.com](mailto:foo@example.com)
+    CPPUNIT_ASSERT_EQUAL(u"foo@example.com"_ustr, lcl_getCellTextWithLinks(*pDoc, aA1));
+}
+
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testHyperlinkCellKeepsLinkWhenTextIsTypedBeforeIt)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");

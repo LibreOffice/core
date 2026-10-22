@@ -118,6 +118,8 @@ private:
     /// To indicate if there is a partial prefix completion.
     bool                    mbPartialPrefix:1;
     bool                    mbEditingExistingContent:1;
+    /// True while editing starts with the address links of the cell left as fields.
+    bool                    mbKeepURLFields:1;
 
     sal_uLong                   nValidation;
     SvxCellHorJustify       eAttrAdjust;
@@ -275,6 +277,8 @@ public:
 
     bool            GetSelIsRef() const     { return bSelIsRef; }
     void            SetSelIsRef(bool bSet)  { bSelIsRef = bSet; }
+
+    void            SetKeepURLFields(bool bSet) { mbKeepURLFields = bSet; }
 
     void            ShowRefFrame();
 

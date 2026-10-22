@@ -3507,8 +3507,14 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                     {
                         pTabViewShell->SetCursor(nPosX, nPosY);
                         pTabViewShell->UpdateInputHandler();
-                        pScMod->SetInputMode(SC_INPUT_TABLE);
+                        // Both commands act on the link field under the cursor, so editing
+                        // starts with an address link still a field rather than plain text.
                         ScInputHandler* pHdl = pScMod->GetInputHdl(pTabViewShell);
+                        if (pHdl)
+                            pHdl->SetKeepURLFields(true);
+                        pScMod->SetInputMode(SC_INPUT_TABLE);
+                        if (pHdl)
+                            pHdl->SetKeepURLFields(false);
                         if (rData.HasEditView(eWhich) && pHdl)
                         {
                             // Set text cursor where clicked
@@ -3520,8 +3526,16 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             if (nSlot == SID_REMOVE_HYPERLINK)
                             {
                                 pHdl->DataChanging();
+                                pEditView->SelectFieldAtCursor();
+                                ESelection aFieldSel = pEditView->GetSelection();
+                                aFieldSel.Adjust();
                                 URLFieldHelper::RemoveURLField(*pEditView);
                                 pHdl->DataChanged();
+
+                                // Committing reads an address that ends at the cursor back into
+                                // a link, and leaves an address with the cursor at its start as
+                                // plain text, so the cursor goes to the start of the old link.
+                                pEditView->SetSelection(ESelection(aFieldSel.start));
                                 pHdl->EnterHandler();
                             }
                             else

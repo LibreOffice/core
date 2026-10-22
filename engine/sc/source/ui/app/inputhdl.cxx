@@ -979,6 +979,7 @@ ScInputHandler::ScInputHandler()
         mbDocumentDisposing(false),
         mbPartialPrefix(false),
         mbEditingExistingContent(false),
+        mbKeepURLFields(false),
         nValidation( 0 ),
         eAttrAdjust( SvxCellHorJustify::Standard ),
         fScaleX( 1.0 ),
@@ -4932,7 +4933,7 @@ static bool lcl_IsLinkTextItsAddress(const SvxURLField& rUrlField, const OUStrin
 void ScInputHandler::RemoveURLFieldsFromEditEngine()
 {
     maUnlinkedURLFields.clear();
-    if (!mpEditEngine)
+    if (!mpEditEngine || mbKeepURLFields)
         return;
 
     // GetFieldInfo lists the placeholder fields and the hyperlink spans.
