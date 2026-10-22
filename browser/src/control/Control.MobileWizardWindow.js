@@ -16,7 +16,7 @@
 /* global app $ _ */
 
 /// Dialogs shown full screen.
-const fullScreenDialogs = ['ChartWizard', 'PivotTableLayout'];
+const fullScreenDialogs = ['ChartWizard', 'PdfOptionsDialog', 'PivotTableLayout'];
 
 window.L.Control.MobileWizardWindow = window.L.Control.extend({
 	options: {

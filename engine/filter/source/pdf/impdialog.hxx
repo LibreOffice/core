@@ -164,6 +164,7 @@ public:
     ImpPDFTabGeneralPage*       getGeneralPage() const;
 
 private:
+    void                        AddOtherTabPages();
     virtual void                PageCreated(const OUString& rId, SfxTabPage& rPage) override;
 };
 

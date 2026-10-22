@@ -243,6 +243,7 @@ public:
                    const std::function<bool ( const SfxViewShell& )>& isViewShell = nullptr );
     SAL_RET_MAYBENULL static SfxViewShell* Current();
     [[nodiscard]] static bool IsCurrentKitViewReadOnly();
+    [[nodiscard]] static bool IsCurrentKitMobilePhone();
 
     SAL_RET_MAYBENULL static SfxViewShell* Get( const cpo::uno::Reference< css::frame::XController>& i_rController );
 

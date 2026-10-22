@@ -44,7 +44,7 @@ function makeExportFormat(
 }
 
 app.getExportFormats = function (docType: string): ExportFormat[] {
-	// the mobile apps have no export dialogs, they download the file instead
+	// the mobile apps download the file directly
 	const pdf = makeExportFormat(
 		'pdf',
 		_('PDF Document (.pdf)'),

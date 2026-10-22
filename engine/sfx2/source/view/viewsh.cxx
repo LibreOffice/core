@@ -4122,6 +4122,14 @@ bool SfxViewShell::IsCurrentKitViewReadOnly()
     return pCurrent && pCurrent->IsKitReadOnlyView();
 }
 
+bool SfxViewShell::IsCurrentKitMobilePhone()
+{
+    if (!comphelper::COKit::isActive())
+        return false;
+    SfxViewShell* pCurrent = Current();
+    return pCurrent && pCurrent->isKitMobilePhone();
+}
+
 SfxViewShell* SfxViewShell::Get( const Reference< XController>& i_rController )
 {
     if ( !i_rController.is() )

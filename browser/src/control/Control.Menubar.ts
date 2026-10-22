@@ -3026,9 +3026,6 @@ class Menubar extends window.L.Control {
 		if (menuItem.id && (menuItem.id.startsWith('exportas')) && this._map['wopi'].UserCanNotWriteRelative)
 			return false;
 
-		if (menuItem.id && menuItem.id === 'exportpdf' && window.ThisIsTheAndroidApp)
-			return false;
-
 		// On Android the app's own settings choose the theme, so the
 		// editor offers no theme toggle of its own.
 		if (menuItem.id === 'toggledarktheme' && window.ThisIsTheAndroidApp)

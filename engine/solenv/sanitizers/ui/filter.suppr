@@ -1,5 +1,7 @@
 filter/uiconfig/ui/pdfgeneralpage.ui://GtkLabel[@id='slides'] orphan-label
 filter/uiconfig/ui/pdfgeneralpage.ui://GtkLabel[@id='selectedsheets'] orphan-label
+filter/uiconfig/ui/pdfgeneralpage-mobile.ui://GtkLabel[@id='slides'] orphan-label
+filter/uiconfig/ui/pdfgeneralpage-mobile.ui://GtkLabel[@id='selectedsheets'] orphan-label
 filter/uiconfig/ui/pdfsecuritypage.ui://GtkLabel[@id='label5'] orphan-label
 filter/uiconfig/ui/pdfsecuritypage.ui://GtkLabel[@id='label6'] orphan-label
 filter/uiconfig/ui/pdfsecuritypage.ui://GtkLabel[@id='label7'] orphan-label

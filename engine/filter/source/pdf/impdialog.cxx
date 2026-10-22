@@ -205,6 +205,29 @@ ImpPDFTabDialog::ImpPDFTabDialog(weld::Window* pParent, const Sequence< Property
     // queue the tab pages for later creation (created when first shown)
     AddTabPage(u"general"_ustr, TabResId(RID_TAB_ORGANIZER.aLabel), ImpPDFTabGeneralPage::Create,
                RID_L + RID_TAB_ORGANIZER.sIconName);
+    // a phone gets the General page only, the other pages keep the configuration values
+    if (!SfxViewShell::IsCurrentKitMobilePhone())
+        AddOtherTabPages();
+
+    SetCurPageId(u"general"_ustr);
+
+    // get the string property value to overwrite the text for the Ok button
+    OUString sOkButtonText = maConfigItem.ReadString( u"_OkButtonString"_ustr, OUString() );
+
+    // change text on the Ok button: get the relevant string from resources, update it on the button
+    // according to the exported pdf file destination: send as e-mail or write to file?
+    if (!sOkButtonText.isEmpty())
+        GetOKButton().set_label(sOkButtonText);
+
+    GetCancelButton().connect_clicked(LINK(this, ImpPDFTabDialog, CancelHdl));
+    GetOKButton().connect_clicked(LINK(this, ImpPDFTabDialog, OkHdl));
+
+    // remove the reset button, not needed in this tabbed dialog
+    RemoveResetButton();
+}
+
+void ImpPDFTabDialog::AddOtherTabPages()
+{
     AddTabPage(u"initialview"_ustr, TabResId(RID_TAB_PDFINITIAL.aLabel),
                ImpPDFTabOpnFtrPage::Create, RID_L + RID_TAB_PDFINITIAL.sIconName);
     AddTabPage(u"userinterface"_ustr, TabResId(RID_TAB_PDFUI.aLabel), ImpPDFTabViewerPage::Create,
@@ -232,22 +255,6 @@ ImpPDFTabDialog::ImpPDFTabDialog(weld::Window* pParent, const Sequence< Property
     if (bCanSign)
         AddTabPage(u"digitalsignatures"_ustr, TabResId(RID_TAB_PDFSIGN.aLabel),
                    ImpPDFTabSigningPage::Create, RID_L + RID_TAB_PDFSIGN.sIconName);
-
-    SetCurPageId(u"general"_ustr);
-
-    // get the string property value (from sfx2/source/dialog/mailmodel.cxx) to overwrite the text for the Ok button
-    OUString sOkButtonText = maConfigItem.ReadString( u"_OkButtonString"_ustr, OUString() );
-
-    // change text on the Ok button: get the relevant string from resources, update it on the button
-    // according to the exported pdf file destination: send as e-mail or write to file?
-    if (!sOkButtonText.isEmpty())
-        GetOKButton().set_label(sOkButtonText);
-
-    GetCancelButton().connect_clicked(LINK(this, ImpPDFTabDialog, CancelHdl));
-    GetOKButton().connect_clicked(LINK(this, ImpPDFTabDialog, OkHdl));
-
-    // remove the reset button, not needed in this tabbed dialog
-    RemoveResetButton();
 }
 
 ImpPDFTabSecurityPage* ImpPDFTabDialog::getSecurityPage() const
@@ -501,7 +508,11 @@ Sequence< PropertyValue > ImpPDFTabDialog::GetFilterData()
 
 
 ImpPDFTabGeneralPage::ImpPDFTabGeneralPage(weld::Container* pPage, weld::DialogController* pController, const SfxItemSet& rCoreSet)
-    : SfxTabPage(pPage, pController, u"filter/ui/pdfgeneralpage.ui"_ustr, u"PdfGeneralPage"_ustr, &rCoreSet)
+    : SfxTabPage(pPage, pController,
+                 SfxViewShell::IsCurrentKitMobilePhone()
+                     ? u"filter/ui/pdfgeneralpage-mobile.ui"_ustr
+                     : u"filter/ui/pdfgeneralpage.ui"_ustr,
+                 u"PdfGeneralPage"_ustr, &rCoreSet)
     , mbUseTaggedPDFUserSelection(false)
     , mbIsPresentation(false)
     , mbIsSpreadsheet(false)

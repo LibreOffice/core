@@ -11,6 +11,7 @@ $(eval $(call gb_UIConfig_UIConfig,filter))
 
 $(eval $(call gb_UIConfig_add_uifiles,filter,\
     filter/uiconfig/ui/pdfgeneralpage \
+    filter/uiconfig/ui/pdfgeneralpage-mobile \
     filter/uiconfig/ui/pdflinkspage \
     filter/uiconfig/ui/pdfoptionsdialog \
     filter/uiconfig/ui/pdfsecuritypage \
