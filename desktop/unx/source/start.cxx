@@ -91,7 +91,7 @@ child_info_get_status_fd(const ChildInfo& rInfo)
 
 static ChildInfo child_spawn(Args* args, bool bAllArgs, bool bWithStatus)
 {
-    rtl_uString *pApp = nullptr, *pTmp = nullptr;
+    rtl_uString* pTmp = nullptr;
     int status_pipe[2];
 
     /* create pipe */
@@ -104,12 +104,7 @@ static ChildInfo child_spawn(Args* args, bool bAllArgs, bool bWithStatus)
     info.status_fd = status_pipe[0];
 
     /* application name */
-    rtl_uString_newFromAscii(&pApp, "file://");
-    rtl_uString_newConcat(&pApp, pApp, args->sAppPath.pData);
-    rtl_uString_newFromAscii(&pTmp, "soffice.bin");
-    rtl_uString_newConcat(&pApp, pApp, pTmp);
-    rtl_uString_release(pTmp);
-    pTmp = nullptr;
+    const OUString sApp = u"file://" + args->sAppPath + u"soffice.bin";
 
     /* copy args */
     sal_uInt32 nArgs = bAllArgs ? args->aArgs.size() : args->nArgsEnv;
@@ -129,7 +124,7 @@ static ChildInfo child_spawn(Args* args, bool bAllArgs, bool bWithStatus)
 
     /* start the main process */
     oslProcessError nError
-        = osl_executeProcess(pApp, aArguments.data(), aArguments.size(), osl_Process_NORMAL,
+        = osl_executeProcess(sApp.pData, aArguments.data(), aArguments.size(), osl_Process_NORMAL,
                              nullptr, nullptr, nullptr, 0, &info.child);
 
     if (pTmp)
@@ -138,11 +133,9 @@ static ChildInfo child_spawn(Args* args, bool bAllArgs, bool bWithStatus)
     if (nError != osl_Process_E_None)
     {
         fprintf(stderr, "ERROR %d forking process\n", nError);
-        rtl_uString_release(pApp);
         _exit (1);
     }
 
-    rtl_uString_release(pApp);
     close( status_pipe[1] );
 
     return info;
