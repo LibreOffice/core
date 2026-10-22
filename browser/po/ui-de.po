@@ -12,8 +12,9 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-13 14:06+0200\n"
-"PO-Revision-Date: 2026-10-17 20:54+0000\n"
-"Last-Translator: Mr-Update <mr-update@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-10-19 17:22+0000\n"
+"Last-Translator: Thorsten Behrens <tbehrens@users.noreply.hosted.weblate.org>"
+"\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/de/>\n"
 "Language: de\n"
@@ -1164,7 +1165,7 @@ msgstr "Zurücksetzen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3140
 msgid "Use the AI provider set on the server"
-msgstr ""
+msgstr "Den serverseitig vorkonfigurierten KI-Provider verwenden"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3190
 msgid "Providers"
@@ -1183,6 +1184,8 @@ msgid ""
 "Add a provider to start using AI for text generation, image generation, or "
 "both. Your administrator's provider is filled in for you."
 msgstr ""
+"KI-Provider für Text- und Bildgenerierung hinzufügen. Administrative "
+"Voreinstellungen wurden als Default übernommen."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3213
 msgid "Add provider..."
@@ -1190,13 +1193,15 @@ msgstr "Anbieter hinzufügen ..."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3233
 msgid "Choose the AI provider to use for text and image generation."
-msgstr ""
+msgstr "KI-Provider für Text- und Bildgenerierung auswählen."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3235
 msgid ""
 "Use your own AI provider instead of the one set up by your administrator. "
 "This applies only to you."
 msgstr ""
+"Eigene Voreinstellungen für den KI-Provider verwenden. Diese Einstellung "
+"betrifft nur Ihr persönliches Setup."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3390
 msgid "seconds"
@@ -1229,6 +1234,10 @@ msgid ""
 "Models without it (e.g. base llama3, gemma) can still chat but cannot use "
 "document tools."
 msgstr ""
+"Zur Bearbeitung von Dokumenten muss ein KI-Modell mit Werkzeugaufruf-"
+"Funktionen ausgewählt werden, beispielsweise gpt-4o oder llama3.1. Modelle "
+"ohne diese Funktion (z.B. Base llama3 oder Gemma) können nur im Chat-Modus, "
+"aber nicht zur Dokumentbearbeitung verwendet werden."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3491
 msgid "Image generation"
@@ -2376,7 +2385,7 @@ msgstr "Kein Bild generiert"
 
 #: src/control/Control.AIChatSidebar.ts:2184
 msgid "Failed to parse the AI response"
-msgstr ""
+msgstr "Fehler beim Verarbeiten der KI-Antwort"
 
 #: src/control/Control.AIChatSidebar.ts:2186
 msgid "The AI provider rejected the request as invalid"
@@ -2450,6 +2459,8 @@ msgstr ""
 #: src/control/Control.AIChatSidebar.ts:2272
 msgid "Your deck is ready: {0} slides built from the approved outline."
 msgstr ""
+"Folien sind erstellt: {0} Folien wurden aus dem vereinbarten Entwurfstext "
+"generiert."
 
 #: src/control/Control.AIChatSidebar.ts:2280
 msgid "{0} slide(s) could not be built and were skipped."
@@ -2652,6 +2663,9 @@ msgid ""
 "Here is a proposed outline. Edit the titles or descriptions, remove slides "
 "you do not want, then approve to build the deck:"
 msgstr ""
+"Hier nun der erarbeitete Textentwurf. Bitte noch Überschriften oder "
+"Beschreibungen anpassen, falls gewünscht Folien entfernen, und danach "
+"Freigabe zur Erstellung des Foliensatzes erteilen:"
 
 #: src/control/Control.AIChatSidebar.ts:3365
 msgid "Reject outline"
@@ -2704,6 +2718,8 @@ msgstr "Zeitüberschreitung bei der Formelanalyse"
 #: src/control/Control.AIChatSidebar.ts:3636
 msgid "Select the content you want the assistant to work on first."
 msgstr ""
+"Bitte zunächst Dokumentinhalte auswählen, mit welchen der KI-Assistent "
+"arbeiten soll."
 
 #: src/control/Control.AIChatSidebar.ts:3651
 msgid "Analyzing formula dependencies..."
@@ -2840,10 +2856,12 @@ msgid ""
 "Describe the image you want to generate. For example: \"A watercolour of a "
 "mountain lake at sunrise\"."
 msgstr ""
+"Bitte Bildbeschreibung für das zu generierende Bild erstellen. Beispiel: "
+"\"Aquarell eines Bergsees beim Sonnenaufgang\"."
 
 #: src/control/Control.AIChatSidebar.ts:3916
 msgid "Write speaker notes for the current slide."
-msgstr ""
+msgstr "Bitte Sprechernotizen für die aktuelle Folie erstellen."
 
 #: src/control/Control.AIChatSidebar.ts:3949
 msgid ""
@@ -2923,6 +2941,8 @@ msgstr ""
 #: src/control/Control.CleanupSidebar.ts:204
 msgid "Images stored with more detail than a slide can show"
 msgstr ""
+"Bilder wurden mit höherer als der auf der Folie möglichen Auflösung "
+"gespeichert"
 
 #: src/control/Control.CleanupSidebar.ts:207
 msgid "Images stored at more than %1 DPI, more detail than a slide can show"
@@ -2959,7 +2979,7 @@ msgstr "Zum Teilen"
 
 #: src/control/Control.CleanupSidebar.ts:254
 msgid "Speaker notes"
-msgstr ""
+msgstr "Sprechernotizen"
 
 #: src/control/Control.CleanupSidebar.ts:258
 msgid "Embedded objects"
@@ -3162,6 +3182,8 @@ msgstr ""
 #: src/control/Control.CleanupSidebar.ts:1013
 msgid "Find what makes this presentation large, and clean it up here."
 msgstr ""
+"Analysiere, was die Dateigröße der Präsentation maßgeblich beeinflusst, und "
+"bereinige dies."
 
 #: src/control/Control.CleanupSidebar.ts:1077
 msgid "saves %1"
@@ -3182,6 +3204,8 @@ msgstr "Bereinigen"
 #: src/control/Control.CleanupSidebar.ts:2439
 msgid "The cleanup did not answer. Please try again."
 msgstr ""
+"Der Bereinigungsprozess konnte nicht beendet werden. Bitte nochmals "
+"versuchen."
 
 #: src/control/Control.AlertDialog.js:55
 msgid "External link"
@@ -3600,7 +3624,7 @@ msgstr ""
 
 #: src/control/onboarding/OnboardingSteps.ts:79
 msgid "The slide panel"
-msgstr ""
+msgstr "Die Folienübersichtsleiste"
 
 #: src/control/onboarding/OnboardingSteps.ts:81
 msgid ""
@@ -4540,7 +4564,7 @@ msgstr ""
 #: src/control/Control.Menubar.ts:526
 #: src/control/Control.NotebookbarImpress.js:749
 msgid "Handout Page"
-msgstr ""
+msgstr "Handzettel-Seite"
 
 #: src/control/Control.Menubar.ts:527
 #: src/control/Control.NotebookbarImpress.js:750
@@ -4824,7 +4848,7 @@ msgstr "Kürzen"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:145
 msgid "Rewrite the selected text so it is shorter."
-msgstr ""
+msgstr "Ausgewählten Text kürzen."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:150
 msgid "Formalize"
@@ -4832,7 +4856,7 @@ msgstr "Formalisieren"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:152
 msgid "Rewrite the selected text in a formal tone."
-msgstr ""
+msgstr "Ausgewählten Text in formelle Ausdrucksweise umformulieren."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:157
 msgid "Casualize"
@@ -4875,6 +4899,7 @@ msgstr "Aufzählungszeichen erstellen"
 #: src/control/Notebookbar.AIAssistantTab.ts:189
 msgid "Rewrite the selected text as short bullet points."
 msgstr ""
+"Ausgewählten Text in eine Reihe von kurzen Aufzählungspunkten umformulieren."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:194
 msgid "Create Slides"
@@ -4886,7 +4911,7 @@ msgstr "Bild generieren"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:208
 msgid "Generate Speaker Notes"
-msgstr ""
+msgstr "Sprechernotizen generieren"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:215
 msgid "Create Formula"
@@ -7045,7 +7070,7 @@ msgstr "{0} öffnete dieses Dokument"
 
 #: src/control/Permission.js:609 src/control/Permission.js:625
 msgid "Choose how you'd like to continue:"
-msgstr ""
+msgstr "Bitte auswählen, wie weiter vorgegangen werden soll:"
 
 #: src/control/Permission.js:619
 msgid "started editing"
