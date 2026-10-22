@@ -234,22 +234,19 @@ static rtl_uString *get_md5hash(rtl_uString *pText)
 }
 
 /* Construct the pipe name */
-static OUString get_pipe_path(const OUString& rAppPath)
+static OUString get_pipe_path(std::u16string_view sAppPath)
 {
-    rtl_uString *pPath = nullptr, *pTmp = nullptr, *pUserInstallation = nullptr;
+    rtl_uString* pUserInstallation = nullptr;
     rtl_uString *pBasePath = nullptr, *pAbsUserInstallation = nullptr;
 
     /* setup bootstrap filename */
-    rtl_uString_newFromAscii(&pPath, "file://");
-    rtl_uString_newConcat(&pPath, pPath, rAppPath.pData);
-    rtl_uString_newFromAscii(&pTmp, SAL_CONFIGFILE("bootstrap"));
-    rtl_uString_newConcat(&pPath, pPath, pTmp);
+    const OUString sPath = u"file://"_ustr + sAppPath + SAL_CONFIGFILE("bootstrap");
 
     /* read userinstallation value */
-    rtlBootstrapHandle handle = rtl_bootstrap_args_open(pPath);
+    rtlBootstrapHandle handle = rtl_bootstrap_args_open(sPath.pData);
 
-    rtl_uString_newFromAscii(&pTmp, "UserInstallation");
-    rtl_bootstrap_get_from_handle(handle, pTmp, &pUserInstallation, nullptr);
+    static constexpr OUString sUserInstallationName = u"UserInstallation"_ustr;
+    rtl_bootstrap_get_from_handle(handle, sUserInstallationName.pData, &pUserInstallation, nullptr);
 
     rtl_bootstrap_args_close(handle);
 
@@ -283,8 +280,6 @@ static OUString get_pipe_path(const OUString& rAppPath)
 
     /* cleanup */
     rtl_uString_release(pMd5hash);
-    rtl_uString_release(pPath);
-    rtl_uString_release(pTmp);
 
     if (pBasePath)
         rtl_uString_release(pBasePath);
