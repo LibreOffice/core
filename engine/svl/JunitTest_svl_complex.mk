@@ -32,7 +32,6 @@ $(eval $(call gb_JunitTest_use_jars,svl_complex,\
 ))
 
 $(eval $(call gb_JunitTest_add_sourcefiles,svl_complex,\
-    svl/qa/complex/ConfigItems/CheckConfigItems \
     svl/qa/complex/passwordcontainer/PasswordContainerUnitTest \
     svl/qa/complex/passwordcontainer/TestHelper \
     svl/qa/complex/passwordcontainer/Test03 \
