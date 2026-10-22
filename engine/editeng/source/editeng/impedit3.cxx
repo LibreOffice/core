@@ -2225,7 +2225,6 @@ void ImpEditEngine::ImpBreakLine(ParaPortion& rParaPortion, EditLine& rLine, Tex
 
     // A legacy wrap link breaks like a placeholder field. Starting the line, it breaks at the first
     // character cell that does not fit. Starting later, it moves to the next line whole.
-    bool bLegacyUrlBreak = false;
     if (const EditCharAttrib* pUrlAttr
         = rNode.GetCharAttribs().FindAttribRightOpen(EE_CHAR_URL, rLine.GetStart());
         isLegacyWrapUrlSpan(pUrlAttr) && nMaxBreakPos < pUrlAttr->GetEnd())
@@ -2244,19 +2243,12 @@ void ImpEditEngine::ImpBreakLine(ParaPortion& rParaPortion, EditLine& rLine, Tex
                                                        aLocale,
                                                        i18n::CharacterIteratorMode::SKIPCELL, 1,
                                                        nDone);
-        bLegacyUrlBreak = true;
     }
     else if (const EditCharAttrib* pOverflowAttr
              = rNode.GetCharAttribs().FindAttribRightOpen(EE_CHAR_URL, nMaxBreakPos);
              isLegacyWrapUrlSpan(pOverflowAttr) && pOverflowAttr->GetStart() > rLine.GetStart())
     {
         nBreakPos = pOverflowAttr->GetStart();
-        bLegacyUrlBreak = true;
-    }
-
-    if (bLegacyUrlBreak)
-    {
-        // nBreakPos is already set.
     }
     else if ( ( nMaxBreakPos < ( nMax + rLine.GetStart() ) ) && ( rNode.GetChar( nMaxBreakPos ) == ' ' ) )
     {
