@@ -89,13 +89,6 @@ class SdtHelper
     /// The last stored SDT element is outside paragraphs.
     bool m_bOutsideAParagraph;
 
-    /// Storage for all properties documents as xml::dom::XDocument for later querying xpath for data
-    std::unordered_map<OUString, cpo::uno::Reference<css::xml::dom::XDocument>> m_xPropertiesXMLs;
-
-    /// Check if m_xPropertiesXMLs is initialized and loaded (need extra flag to distinguish
-    /// empty sequence from not yet initialized)
-    bool m_bPropertiesXMLsLoaded;
-
     /// Current contents are placeholder text.
     bool m_bShowingPlcHdr = false;
 
@@ -112,8 +105,6 @@ class SdtHelper
     void createControlShape(css::awt::Size aSize,
                             cpo::uno::Reference<css::awt::XControlModel> const& xControlModel,
                             const cpo::uno::Sequence<css::beans::PropertyValue>& rGrabBag);
-
-    void loadPropertiesXMLs();
 
     /// <w:placeholder>'s <w:docPart w:val="...">.
     OUString m_aPlaceholderDocPart;
