@@ -173,7 +173,7 @@
     </message>
     <message>
         <source>Supported files</source>
-        <translation type="unfinished"></translation>
+        <translation>Υποστηριζόμενα αρχεία</translation>
     </message>
 </context>
 <context>
@@ -192,7 +192,7 @@
     </message>
     <message>
         <source>Preview of %1</source>
-        <translation type="unfinished"></translation>
+        <translation>Προεπισκόπηση του %1</translation>
     </message>
 </context>
 <context>

@@ -26,4 +26,6 @@
     <string name="all_files_access_grant">Επιτρέψτε την πρόσβαση</string>
     <string name="do_not_ask_again">Μην ξαναρωτήσετε</string>
     <string name="failed_to_save_file">Δεν ήταν δυνατή η αποθήκευση των αλλαγών στο αρχείο</string>
+    <string name="all_files_access_title">Άνοιξε σε λειτουργία μόνο για ανάγνωση</string>
+    <string name="all_files_access_message">Η εφαρμογή που μοιράστηκε αυτό το αρχείο δεν επέτρεψε την αποθήκευση αλλαγών σε αυτό.\n\nΠαραχωρήστε \"Πρόσβαση σε όλα τα αρχεία\" για να επιτρέψετε σε αυτήν την εφαρμογή να γράψει το αρχείο όπου είναι αποθηκευμένο, ώστε να μπορείτε να το επεξεργαστείτε εδώ.</string>
 </resources>

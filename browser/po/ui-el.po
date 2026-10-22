@@ -8,11 +8,11 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-13 14:06+0200\n"
-"PO-Revision-Date: 2026-10-13 11:59+0000\n"
+"PO-Revision-Date: 2026-10-20 17:01+0000\n"
 "Last-Translator: geonetor <geonetor@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Greek <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/el/>\n"
-"Language: \n"
+"Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -552,7 +552,6 @@ msgstr "Πάροχος"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:723
 #: admin/src/integrator/AdminIntegratorSettings.ts:727
-#, fuzzy
 msgid "API key"
 msgstr "Κλειδί API"
 
@@ -567,21 +566,20 @@ msgid "Base URL"
 msgstr "Βασικό URL"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:730
-#, fuzzy
 msgid "Image size"
 msgstr "Μέγεθος εικόνας"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:731
 msgid "Request timeout"
-msgstr ""
+msgstr "Αίτημα λήξης χρονικού ορίου"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:734
 msgid "Client ID"
-msgstr ""
+msgstr "Αναγνωριστικό πελάτη"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:735
 msgid "Secret"
-msgstr ""
+msgstr "Μυστικό"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:738
 msgid "In-document Screen Reader"
@@ -1081,19 +1079,21 @@ msgstr "Επεξεργασία"
 #: admin/src/integrator/AdminIntegratorSettings.ts:2849
 #: admin/src/integrator/AdminIntegratorSettings.ts:4485
 msgid "Accessibility"
-msgstr ""
+msgstr "Προσβασιμότητα"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2856
 msgid "User interface zoom"
-msgstr ""
+msgstr "Ζουμ διεπαφής χρήστη"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2861
 msgid "Magnify the whole window, including the document and the menus."
 msgstr ""
+"Μεγεθύνετε ολόκληρο το παράθυρο, συμπεριλαμβανομένου του εγγράφου και των "
+"μενού."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2867
 msgid "As per system"
-msgstr ""
+msgstr "Σύμφωνα με το σύστημα"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:2902
 msgid ""
@@ -1114,13 +1114,15 @@ msgstr "Ρυθμίσεις Zotero"
 #: admin/src/integrator/AdminIntegratorSettings.ts:3005
 #: admin/src/integrator/AdminIntegratorSettings.ts:3033
 msgid "Electronic Signature"
-msgstr ""
+msgstr "Ηλεκτρονική Υπογραφή"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3008
 msgid ""
 "Credentials for the electronic signature service. They are shared by "
 "everyone on this server."
 msgstr ""
+"Διαπιστευτήρια για την υπηρεσία ηλεκτρονικής υπογραφής. Είναι κοινόχρηστα "
+"από όλους σε αυτόν τον διακομιστή."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3060
 #: admin/src/integrator/AdminIntegratorSettings.ts:4719
@@ -1158,47 +1160,52 @@ msgstr "Επαναφορά"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3140
 msgid "Use the AI provider set on the server"
-msgstr ""
+msgstr "Χρησιμοποιήστε το σύνολο παρόχου AI στον διακομιστή"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3190
-#, fuzzy
 msgid "Providers"
-msgstr "Πάροχος"
+msgstr "Πάροχοι"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3193
 msgid "Managed by your admin"
-msgstr ""
+msgstr "Διαχειρίζεται από τον διαχειριστή σας"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3199
 msgid "No providers added yet"
-msgstr ""
+msgstr "Δεν έχουν προστεθεί ακόμη πάροχοι"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3205
 msgid ""
 "Add a provider to start using AI for text generation, image generation, or "
 "both. Your administrator's provider is filled in for you."
 msgstr ""
+"Προσθέστε έναν πάροχο για να ξεκινήσετε να χρησιμοποιείτε τεχνητή νοημοσύνη "
+"για δημιουργία κειμένου, δημιουργία εικόνας ή και τα δύο. Ο πάροχος του "
+"διαχειριστή σας έχει καταχωριστεί για εσάς."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3213
 msgid "Add provider..."
-msgstr ""
+msgstr "Προσθήκη παρόχου..."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3233
 msgid "Choose the AI provider to use for text and image generation."
 msgstr ""
+"Επιλέξτε τον πάροχο ΑΙ που θα χρησιμοποιήσετε για τη δημιουργία κειμένου και "
+"εικόνων."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3235
 msgid ""
 "Use your own AI provider instead of the one set up by your administrator. "
 "This applies only to you."
 msgstr ""
+"Χρησιμοποιήστε τον δικό σας πάροχο ΑΙ αντί για αυτόν που έχει ρυθμίσει ο "
+"διαχειριστής σας. Αυτό ισχύει μόνο για εσάς."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3390
 msgid "seconds"
-msgstr ""
+msgstr "δευτερόλεπτα"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3399
-#, fuzzy
 msgid "Text generation"
 msgstr "Δημιουργία κειμένου"
 
@@ -1225,23 +1232,28 @@ msgid ""
 "Models without it (e.g. base llama3, gemma) can still chat but cannot use "
 "document tools."
 msgstr ""
+"Για να επεξεργαστείτε έγγραφα, επιλέξτε ένα μοντέλο με κλήση εργαλείου, π.χ. "
+"gpt-4o ή λάμα3.1. Τα μοντέλα χωρίς αυτό (π.χ. βασική λάμα3, gemma) "
+"εξακολουθούν να μπορούν να συνομιλούν αλλά δεν μπορούν να χρησιμοποιήσουν "
+"εργαλεία εγγράφων."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3491
-#, fuzzy
 msgid "Image generation"
-msgstr "Δημιουργία εικόνων"
+msgstr "Δημιουργία εικόνας"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3499
 msgid "Same as text provider"
-msgstr ""
+msgstr "Το ίδιο με τον πάροχο κειμένου"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3854
 msgid "Required for this provider"
-msgstr ""
+msgstr "Απαιτείται για αυτόν τον πάροχο"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3947
 msgid "Enter an API key for this provider to list its models."
 msgstr ""
+"Εισάγετε ένα κλειδί API για αυτόν τον πάροχο για να εμφανιστεί η λίστα με τα "
+"μοντέλα του."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:3963
 #: admin/src/integrator/AdminIntegratorSettings.ts:4085
@@ -1258,7 +1270,7 @@ msgstr "Δε βρέθηκαν μοντέλα"
 #: admin/src/integrator/AdminIntegratorSettings.ts:4035
 #: admin/src/integrator/AdminIntegratorSettings.ts:4151
 msgid "Connected"
-msgstr ""
+msgstr "Συνδεδεμένο"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4041
 #: admin/src/integrator/AdminIntegratorSettings.ts:4157
@@ -1331,7 +1343,7 @@ msgstr "Εισάγετε {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4991
 msgid "Delete {0}"
-msgstr ""
+msgstr "Διαγραφή {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5054
 msgid "Reset to default {0}"
@@ -2700,6 +2712,7 @@ msgstr "Χρονικό όριο ανάλυσης τύπου"
 #: src/control/Control.AIChatSidebar.ts:3636
 msgid "Select the content you want the assistant to work on first."
 msgstr ""
+"Επιλέξτε το περιεχόμενο πάνω στο οποίο θέλετε να εργαστεί πρώτα ο βοηθός."
 
 #: src/control/Control.AIChatSidebar.ts:3651
 msgid "Analyzing formula dependencies..."
@@ -2834,10 +2847,12 @@ msgid ""
 "Describe the image you want to generate. For example: \"A watercolour of a "
 "mountain lake at sunrise\"."
 msgstr ""
+"Περιγράψτε την εικόνα που θέλετε να δημιουργήσετε. Για παράδειγμα: «Μια "
+"ακουαρέλα μιας ορεινής λίμνης κατά την ανατολή του ηλίου»."
 
 #: src/control/Control.AIChatSidebar.ts:3916
 msgid "Write speaker notes for the current slide."
-msgstr ""
+msgstr "Γράψτε σημειώσεις ομιλητή για την τρέχουσα διαφάνεια."
 
 #: src/control/Control.AIChatSidebar.ts:3949
 msgid ""
@@ -2917,18 +2932,22 @@ msgstr ""
 #: src/control/Control.CleanupSidebar.ts:204
 msgid "Images stored with more detail than a slide can show"
 msgstr ""
+"Εικόνες που είναι αποθηκευμένες με περισσότερες λεπτομέρειες από αυτές που "
+"μπορεί να δείξει μια διαφάνεια"
 
 #: src/control/Control.CleanupSidebar.ts:207
 msgid "Images stored at more than %1 DPI, more detail than a slide can show"
 msgstr ""
+"Εικόνες που αποθηκεύονται σε περισσότερα από %1 DPI, περισσότερη λεπτομέρεια "
+"από ό,τι μπορεί να δείξει μια διαφάνεια"
 
 #: src/control/Control.CleanupSidebar.ts:224
 msgid "High-resolution images"
-msgstr ""
+msgstr "Εικόνες υψηλής ανάλυσης"
 
 #: src/control/Control.CleanupSidebar.ts:230
 msgid "Cropped images"
-msgstr ""
+msgstr "Περικομμένες εικόνες"
 
 #: src/control/Control.CleanupSidebar.ts:236
 #: src/control/Control.BackstageView.ts:891
@@ -2940,43 +2959,40 @@ msgid "Slides"
 msgstr "Διαφάνειες"
 
 #: src/control/Control.CleanupSidebar.ts:241
-#, fuzzy
 msgid "Hidden slides"
-msgstr "Απόκρυψη διαφανειών"
+msgstr "Κρυμμένες διαφάνειες"
 
 #: src/control/Control.CleanupSidebar.ts:246
-#, fuzzy
 msgid "Unused master slides"
-msgstr "Μη χρησιμοποιημένες κύριες διαφάνειες (%1)"
+msgstr "Μη χρησιμοποιούμενες κύριες διαφάνειες"
 
 #: src/control/Control.CleanupSidebar.ts:252
 msgid "For sharing"
-msgstr ""
+msgstr "Για κοινή χρήση"
 
 #: src/control/Control.CleanupSidebar.ts:254
 msgid "Speaker notes"
-msgstr ""
+msgstr "Σημειώσεις ομιλητή"
 
 #: src/control/Control.CleanupSidebar.ts:258
-#, fuzzy
 msgid "Embedded objects"
-msgstr "Ενσωματωμένα αντικείμενα (%1)"
+msgstr "Ενσωματωμένα αντικείμενα"
 
 #: src/control/Control.CleanupSidebar.ts:359
 msgid "images left alone"
-msgstr ""
+msgstr "εικόνες μόνες"
 
 #: src/control/Control.CleanupSidebar.ts:361
 msgid "%1 DPI, quality %2 %"
-msgstr ""
+msgstr "% 1 DPI, ποιότητα % 2 %"
 
 #: src/control/Control.CleanupSidebar.ts:374
 msgid "%1 can be cleaned up"
-msgstr ""
+msgstr "Το %1 μπορεί να καθαριστεί"
 
 #: src/control/Control.CleanupSidebar.ts:376
 msgid "%1 (%2%) can be cleaned up"
-msgstr ""
+msgstr "Το %1 (%2%) μπορεί να καθαριστεί"
 
 #: src/control/Control.CleanupSidebar.ts:384
 msgid "Fix"
@@ -2998,7 +3014,7 @@ msgstr "%1 MB"
 
 #: src/control/Control.CleanupSidebar.ts:479
 msgid "Remove %1"
-msgstr ""
+msgstr "Αφαίρεση %1"
 
 #: src/control/Control.CleanupSidebar.ts:481
 msgid "Fix %1"
@@ -3054,11 +3070,11 @@ msgstr "%1 σε %2 DPI"
 #: src/control/Control.CleanupSidebar.ts:586
 #, javascript-format
 msgid "%1% cropped away"
-msgstr ""
+msgstr "Το %1% αφαιρέθηκε"
 
 #: src/control/Control.CleanupSidebar.ts:588
 msgid "%1, %2% cropped away"
-msgstr ""
+msgstr "Το %1, %2% κόπηκε"
 
 #: src/control/Control.CleanupSidebar.ts:655
 msgid "Leave images alone"
@@ -3124,9 +3140,8 @@ msgid "Image resolution"
 msgstr "Ανάλυση εικόνας"
 
 #: src/control/Control.CleanupSidebar.ts:805
-#, fuzzy
 msgid "JPEG quality (%)"
-msgstr "Ποιότητα JPEG σε %"
+msgstr "Ποιότητα JPEG (%)"
 
 #: src/control/Control.CleanupSidebar.ts:830
 msgid "Prepare for sharing"
@@ -3145,9 +3160,8 @@ msgid "Stop"
 msgstr "Διακοπή"
 
 #: src/control/Control.CleanupSidebar.ts:926
-#, fuzzy
 msgid "Scan presentation"
-msgstr "Κενή παρουσίαση"
+msgstr "Σάρωση παρουσίασης"
 
 #: src/control/Control.CleanupSidebar.ts:962
 msgid "Fix all"
@@ -3161,7 +3175,7 @@ msgstr ""
 
 #: src/control/Control.CleanupSidebar.ts:1013
 msgid "Find what makes this presentation large, and clean it up here."
-msgstr ""
+msgstr "Βρείτε τι κάνει αυτή την παρουσίαση μεγάλη και καθαρίστε την εδώ."
 
 #: src/control/Control.CleanupSidebar.ts:1077
 msgid "saves %1"
@@ -3181,7 +3195,7 @@ msgstr "Εκκαθάριση"
 
 #: src/control/Control.CleanupSidebar.ts:2439
 msgid "The cleanup did not answer. Please try again."
-msgstr ""
+msgstr "Ο καθαρισμός δεν ανταποκρίθηκε. Δοκιμάστε ξανά."
 
 #: src/control/Control.AlertDialog.js:55
 msgid "External link"
@@ -3538,111 +3552,126 @@ msgstr "Απόλυση"
 
 #: src/control/onboarding/OnboardingSteps.ts:25
 msgid "Welcome to Collabora Online"
-msgstr ""
+msgstr "Καλώς ήρθατε στο Collabora Online"
 
 #: src/control/onboarding/OnboardingSteps.ts:27
 msgid "This short tour points out the parts of the screen you will use most."
 msgstr ""
+"Αυτή η σύντομη περιήγηση επισημαίνει τα μέρη της οθόνης που θα "
+"χρησιμοποιήσετε περισσότερο."
 
 #: src/control/onboarding/OnboardingSteps.ts:32
 msgid "The document name"
-msgstr ""
+msgstr "Το όνομα του εγγράφου"
 
 #: src/control/onboarding/OnboardingSteps.ts:34
 msgid ""
 "Select the name to rename the document. Every change is saved as you work."
 msgstr ""
+"Επιλέξτε το όνομα για να μετονομάσετε το έγγραφο. Κάθε αλλαγή αποθηκεύεται "
+"καθώς εργάζεστε."
 
 #: src/control/onboarding/OnboardingSteps.ts:40
 msgid "The tabs"
-msgstr ""
+msgstr "Οι καρτέλες"
 
 #: src/control/onboarding/OnboardingSteps.ts:42
 msgid ""
 "Each tab gathers the tools for one kind of work, such as inserting or "
 "reviewing."
 msgstr ""
+"Κάθε καρτέλα συγκεντρώνει τα εργαλεία για ένα είδος εργασίας, όπως εισαγωγή "
+"ή αναθεώρηση."
 
 #: src/control/onboarding/OnboardingSteps.ts:49
 msgid "The menus"
-msgstr ""
+msgstr "Τα μενού"
 
 #: src/control/onboarding/OnboardingSteps.ts:50
 msgid "Every command of the editor is in one of these menus."
-msgstr ""
+msgstr "Κάθε εντολή του προγράμματος βρίσκεται σε ένα από αυτά τα μενού."
 
 #: src/control/onboarding/OnboardingSteps.ts:56
 msgid "The tools"
-msgstr ""
+msgstr "Τα εργαλεία"
 
 #: src/control/onboarding/OnboardingSteps.ts:57
 msgid "The buttons of the tab you selected appear along this row."
 msgstr ""
+"Τα κουμπιά της καρτέλας που επιλέξατε εμφανίζονται κατά μήκος αυτής της "
+"σειράς."
 
 #: src/control/onboarding/OnboardingSteps.ts:63
 msgid "The toolbar"
-msgstr ""
+msgstr "Η γραμμή εργαλείων"
 
 #: src/control/onboarding/OnboardingSteps.ts:64
 msgid "The buttons you need most often sit here, under the menus."
-msgstr ""
+msgstr "Τα κουμπιά που χρειάζεστε πιο συχνά βρίσκονται εδώ, κάτω από τα μενού."
 
 #: src/control/onboarding/OnboardingSteps.ts:70
 msgid "The formula bar"
-msgstr ""
+msgstr "Η γραμμή τύπων"
 
 #: src/control/onboarding/OnboardingSteps.ts:72
 msgid ""
 "The contents of the selected cell appear here. Type an equals sign to start "
 "a formula."
 msgstr ""
+"Τα περιεχόμενα του επιλεγμένου κελιού εμφανίζονται εδώ. Πληκτρολογήστε ένα "
+"σύμβολο ίσον για να ξεκινήσετε έναν τύπο."
 
 #: src/control/onboarding/OnboardingSteps.ts:79
 msgid "The slide panel"
-msgstr ""
+msgstr "Ο πίνακας διαφανειών"
 
 #: src/control/onboarding/OnboardingSteps.ts:81
 msgid ""
 "Every slide or page of the document is listed here. Select one to work on "
 "it."
 msgstr ""
+"Κάθε διαφάνεια ή σελίδα του εγγράφου καταγράφεται εδώ. Επιλέξτε μία για να "
+"εργαστείτε σε αυτήν."
 
 #: src/control/onboarding/OnboardingSteps.ts:89
 msgid "The sidebar"
-msgstr ""
+msgstr "Η πλαϊνή στήλη"
 
 #: src/control/onboarding/OnboardingSteps.ts:91
 msgid ""
 "The sidebar holds the settings for whatever you have selected, such as "
 "text, a shape or a cell."
 msgstr ""
+"Η πλαϊνή στήλη περιέχει τις ρυθμίσεις για οτιδήποτε έχετε επιλέξει, όπως "
+"κείμενο, σχήμα ή κελί."
 
 #: src/control/onboarding/OnboardingSteps.ts:98
 msgid "The people in the document"
-msgstr ""
+msgstr "Τα άτομα στο έγγραφο"
 
 #: src/control/onboarding/OnboardingSteps.ts:99
 msgid "See who else is editing and share the document."
-msgstr ""
+msgstr "Δείτε ποιος άλλος επεξεργάζεται και μοιραστείτε το έγγραφο."
 
 #: src/control/onboarding/OnboardingSteps.ts:109
-#, fuzzy
 msgid "The status bar"
-msgstr "Εμφάνιση γραμμής κατάστασης"
+msgstr "Η γραμμή κατάστασης"
 
 #: src/control/onboarding/OnboardingSteps.ts:111
 msgid ""
 "The state of the document, the language of the text and the zoom level are "
 "along the bottom."
 msgstr ""
+"Η κατάσταση του εγγράφου, η γλώσσα του κειμένου και το επίπεδο ζουμ "
+"βρίσκονται στο κάτω μέρος."
 
 #: src/control/onboarding/OnboardingSteps.ts:118
 msgid "You are ready to work"
-msgstr ""
+msgstr "Είστε έτοιμοι να εργαστείτε"
 
 #: src/control/onboarding/OnboardingSteps.ts:119
 msgid "You can walk through this tour again from the Help menu."
-msgstr ""
+msgstr "Μπορείτε να έρθετε ξανά σε αυτήν την ξενάγηση από το μενού Βοήθεια."
 
 #: src/control/onboarding/Control.OnboardingTour.ts:245
 #: src/slideshow/engine/SlideShowHandler.ts:116
@@ -3651,12 +3680,11 @@ msgstr "Παράλειψη"
 
 #: src/control/onboarding/Control.OnboardingTour.ts:251
 msgid "Back"
-msgstr ""
+msgstr "Πίσω"
 
 #: src/control/onboarding/Control.OnboardingTour.ts:258
-#, fuzzy
 msgid "Done"
-msgstr "Καμία"
+msgstr "Έγινε"
 
 #: src/control/onboarding/Control.OnboardingTour.ts:258
 #: src/control/Control.Zotero.js:270 src/control/Control.Zotero.js:469
@@ -4470,7 +4498,7 @@ msgstr "Διαδικτυακή βοήθεια"
 #: src/control/Control.Menubar.ts:834 src/control/Control.Menubar.ts:1152
 #: src/control/Control.NotebookbarWriter.js:541
 msgid "Show tour"
-msgstr ""
+msgstr "Προβολή ξενάγησης"
 
 #: src/control/Control.Menubar.ts:455 src/control/Control.Menubar.ts:668
 #: src/control/Control.Menubar.ts:836 src/control/Control.Menubar.ts:1154
@@ -4801,119 +4829,117 @@ msgstr ""
 #: src/control/Notebookbar.AIAssistantTab.ts:79
 #: src/control/Notebookbar.AIAssistantTab.ts:122
 msgid "Text Tools"
-msgstr ""
+msgstr "Εργαλεία κειμένου"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:93
 msgid "Slide Tools"
-msgstr ""
+msgstr "Εργαλεία διαφανειών"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:106
 msgid "Formula Tools"
-msgstr ""
+msgstr "Εργαλεία συναρτήσεων"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:116
 msgid "Data Tools"
-msgstr ""
+msgstr "Εργαλεία δεδομένων"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:143
 msgid "Shorten"
-msgstr ""
+msgstr "Σύντμηση"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:145
 msgid "Rewrite the selected text so it is shorter."
-msgstr ""
+msgstr "Ξαναγράψτε το επιλεγμένο κείμενο ώστε να είναι πιο σύντομο."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:150
 msgid "Formalize"
-msgstr ""
+msgstr "Επισημοποίηση"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:152
 msgid "Rewrite the selected text in a formal tone."
-msgstr ""
+msgstr "Ξαναγράψτε το επιλεγμένο κείμενο σε επίσημο ύφος."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:157
 msgid "Casualize"
-msgstr ""
+msgstr "Απλοποίηση"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:159
 msgid "Rewrite the selected text in a casual, friendly tone."
-msgstr ""
+msgstr "Ξαναγράψτε το επιλεγμένο κείμενο σε έναν απλό, φιλικό τόνο."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:164
 msgid "Summarize"
-msgstr ""
+msgstr "Σύνοψη"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:166
-#, fuzzy
 msgid "Summarize the key points of the selected text."
-msgstr "Σύνοψη των βασικών σημείων αυτού του κειμένου"
+msgstr "Σύνοψη των βασικών σημείων αυτού του κειμένου."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:171
 msgid "Expand"
-msgstr ""
+msgstr "Ανάπτυξη"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:173
 msgid "Expand the selected text and add more detail."
 msgstr ""
+"Αναπτύξτε το επιλεγμένο κείμενο και προσθέστε περισσότερες λεπτομέρειες."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:178
 msgid "Fix Grammar"
-msgstr ""
+msgstr "Γραμματική διόρθωση"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:181
 msgid "Fix grammar, spelling, and punctuation errors in the selected text."
 msgstr ""
+"Διορθώστε τα λάθη γραμματικής, ορθογραφίας και στίξης στο επιλεγμένο κείμενο."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:187
 msgid "Make Bullets"
-msgstr ""
+msgstr "Σε τίτλους"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:189
 msgid "Rewrite the selected text as short bullet points."
-msgstr ""
+msgstr "Ξαναγράψτε το επιλεγμένο κείμενο ως σύντομους τίτλους με κουκκίδες."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:194
-#, fuzzy
 msgid "Create Slides"
-msgstr "Δημιουργήστε διαφάνειες"
+msgstr "Δημιουργία διαφανειών"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:201
-#, fuzzy
 msgid "Generate Image"
-msgstr "Δημιουργημένη εικόνα"
+msgstr "Δημιουργία εικόνας"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:208
 msgid "Generate Speaker Notes"
-msgstr ""
+msgstr "Δημιουργία σημειώσεων ομιλητή"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:215
-#, fuzzy
 msgid "Create Formula"
-msgstr "Δημιουργήστε μια φόρμουλα"
+msgstr "Δημιουργία φόρμουλας"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:222
 msgid "Explain Formula"
-msgstr ""
+msgstr "Εξήγηση του τύπου"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:224
 msgid "Explain the formula in the selected cell."
-msgstr ""
+msgstr "Εξήγησε τον τύπο στο επιλεγμένο κελί."
 
 #: src/control/Notebookbar.AIAssistantTab.ts:229
 msgid "Fix Formula Error"
-msgstr ""
+msgstr "Διόρθωση σφάλματος τύπου"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:236
 msgid "Clean Up Data"
-msgstr ""
+msgstr "Εκκαθάριση δεδομένων"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:243
 msgid "Suggest Chart"
-msgstr ""
+msgstr "Πρόταση γραφήματος"
 
 #: src/control/Notebookbar.AIAssistantTab.ts:245
 msgid "Suggest a chart for the selected data."
-msgstr ""
+msgstr "Προτείνετε ένα γράφημα για τα επιλεγμένα δεδομένα."
 
 #: src/control/Notebookbar.CalcTableTab.ts:45
 #: src/control/Notebookbar.TableDesignTabBase.ts:54
@@ -5122,12 +5148,11 @@ msgstr "Κινούμενα σχέδια"
 #: src/control/Control.Notebookbar.js:650
 #: src/control/Control.NotebookbarWriter.js:3077
 msgid "Fill Color (Transparent Pictures Only)"
-msgstr ""
+msgstr "Χρώμα πλήρωσης (Μόνο διαφανείς εικόνες)"
 
 #: src/control/Control.Notebookbar.js:661
-#, fuzzy
 msgid "Line"
-msgstr "Σύνδεσμος"
+msgstr "Γραμμή"
 
 #: src/control/Control.Notebookbar.js:704
 msgid "Line Width"
@@ -5135,11 +5160,11 @@ msgstr "Πλάτος γραμμής"
 
 #: src/control/Control.Notebookbar.js:737
 msgid "Transparency:"
-msgstr ""
+msgstr "Διαφάνεια:"
 
 #: src/control/Control.Notebookbar.js:756
 msgid "Thickness:"
-msgstr ""
+msgstr "Πάχος:"
 
 #: src/control/Control.NotebookbarBuilder.js:205
 #: src/control/Control.NotebookbarBuilder.js:610
@@ -5575,9 +5600,8 @@ msgid "Function Library"
 msgstr "Βιβλιοθήκη συναρτήσεων"
 
 #: src/control/Control.NotebookbarCalc.js:2165
-#, fuzzy
 msgid "AutoSum"
-msgstr "AutoSum"
+msgstr "ΑυτόματοΣύνολο"
 
 #: src/control/Control.NotebookbarCalc.js:2178
 msgid "Financial"
@@ -5772,7 +5796,7 @@ msgstr "Προσαρμογή στο πλέγμα"
 
 #: src/control/Control.NotebookbarImpress.js:823
 msgid "Shapes Sidebar"
-msgstr ""
+msgstr "Πλευρική στήλη Σχημάτων"
 
 #: src/control/Control.NotebookbarImpress.js:924
 #: src/control/Control.NotebookbarImpress.js:2005
@@ -5904,7 +5928,7 @@ msgstr "Προβολή αλλαγών"
 
 #: src/control/Control.NotebookbarWriter.js:2656
 msgid "Element categories"
-msgstr ""
+msgstr "Κατηγορίες στοιχείων"
 
 #: src/control/Control.ContextToolbar.ts:154
 msgid "Switch to Editing"
@@ -6045,19 +6069,23 @@ msgstr "Ανάγνωση διαφανειών..."
 
 #: src/control/Control.SlideImportPane.tsx:742
 msgid "Looking for the file..."
-msgstr ""
+msgstr "Αναζήτηση αρχείου..."
 
 #: src/control/Control.SlideImportPane.tsx:745
 msgid ""
 "The slides are in this presentation. You do not have permission to open the "
 "file they came from."
 msgstr ""
+"Οι διαφάνειες είναι σε αυτήν την παρουσίαση. Δεν έχετε άδεια να ανοίξετε το "
+"αρχείο από το οποίο προήλθαν."
 
 #: src/control/Control.SlideImportPane.tsx:749
 msgid ""
 "The slides are in this presentation. Looking for the file they came from "
 "did not work this time."
 msgstr ""
+"Οι διαφάνειες είναι σε αυτήν την παρουσίαση. Η αναζήτηση του αρχείου από το "
+"οποίο προέρχονταν δεν λειτούργησε αυτή τη φορά."
 
 #: src/control/Control.SlideImportPane.tsx:752
 msgid ""
@@ -6078,7 +6106,7 @@ msgstr "Δεν ήταν δυνατή η ανάγνωση αυτού του αρ�
 #: src/control/Control.SlideImportPane.tsx:769
 #: src/control/Control.SlideImportPane.tsx:1292
 msgid "Look again"
-msgstr ""
+msgstr "Κοιτάξτε ξανά"
 
 #: src/control/Control.SlideImportPane.tsx:774
 #: src/control/Control.SlideImportPane.tsx:1297
@@ -6368,7 +6396,7 @@ msgstr "Μεγιστοποίηση στο πλέγμα"
 
 #: src/control/Control.PaneExpander.ts:115
 msgid "Exit grid"
-msgstr ""
+msgstr "Έξοδος πλέγματος"
 
 #: src/control/Control.PaneSplitter.tsx:70
 msgid "Resize panels"
@@ -6452,11 +6480,11 @@ msgstr "Η ιδιότητα IsAdminUser user ορίζεται από την εν
 
 #: src/control/Control.ServerAuditDialog.ts:191
 msgid "PostMessage API is initialized"
-msgstr ""
+msgstr "Το API PostMessage έχει αρχικοποιηθεί"
 
 #: src/control/Control.ServerAuditDialog.ts:196
 msgid "Integrator is not ready for PostMessage calls"
-msgstr ""
+msgstr "Το Integrator δεν είναι έτοιμο για κλήσεις PostMessage"
 
 #: src/control/Control.ServerAuditDialog.ts:276
 msgid "Document container started in {1} ms"
@@ -7038,15 +7066,15 @@ msgstr ""
 
 #: src/control/Permission.js:607
 msgid "opened this document"
-msgstr ""
+msgstr "άνοιξε αυτό το έγγραφο"
 
 #: src/control/Permission.js:608
 msgid "{0} opened this document"
-msgstr ""
+msgstr "Ο χρήστης {0} άνοιξε αυτό το έγγραφο"
 
 #: src/control/Permission.js:609 src/control/Permission.js:625
 msgid "Choose how you'd like to continue:"
-msgstr ""
+msgstr "Επιλέξτε πώς θέλετε να συνεχίσετε:"
 
 #: src/control/Permission.js:619
 msgid "started editing"
@@ -7207,7 +7235,7 @@ msgstr "Αποκλεισμός επιλογής"
 
 #: src/control/Toolbar.js:70
 msgid "The current font is not available and will be substituted."
-msgstr ""
+msgstr "Η τρέχουσα γραμματοσειρά δεν είναι διαθέσιμη και θα αντικατασταθεί."
 
 #: src/control/Toolbar.js:205 src/control/Toolbar.js:218
 msgid "Downloading..."
@@ -7296,7 +7324,7 @@ msgstr "Μέγιστο"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1468
 msgid "Edit Single Sparkline"
-msgstr ""
+msgstr "Επεξεργασία μονής Sparkline"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1479
 msgid "Delete Single Sparkline"
@@ -7917,7 +7945,7 @@ msgstr "Επιλογή περιοχής"
 
 #: src/control/jsdialog/Widget.ProgressDots.tsx:57
 msgid "Step %1 of %2"
-msgstr ""
+msgstr "Βήμα %1 από %2"
 
 #: src/control/jsdialog/Widget.Comment.ts:151
 msgid "reply"
@@ -8116,28 +8144,27 @@ msgstr "Το AI δεν έχει διαμορφωθεί, επικοινωνήστ
 
 #: src/docdispatcher.ts:979
 msgid "Delete section"
-msgstr ""
+msgstr "Διαγραφή ενότητας"
 
 #: src/docdispatcher.ts:986
 msgid "Delete slides"
-msgstr ""
+msgstr "Διαγραφή διαφανειών"
 
 #: src/docdispatcher.ts:987
-#, fuzzy
 msgid "Delete %n slide?"
 msgid_plural "Delete %n slides?"
-msgstr[0] "διαγράψτε %n διαφάνεια"
-msgstr[1] "διαγράψτε %n διαφάνειες"
+msgstr[0] "Διαγραφή %n διαφάνειας;"
+msgstr[1] "Διαγραφή %n διαφάνειών;"
 
 #: src/docdispatcher.ts:991
 msgid "Delete pages"
-msgstr ""
+msgstr "Διαγραφή σελίδων"
 
 #: src/docdispatcher.ts:992
 msgid "Delete %n page?"
 msgid_plural "Delete %n pages?"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Διαγραφή %n σελίδας;"
+msgstr[1] "Διαγραφή %n σελίδων;"
 
 #: src/docstate.ts:154
 msgid "Standard"
@@ -8411,7 +8438,7 @@ msgstr "Διαφάνεια"
 
 #: src/layer/marker/A11yTextInput.js:348
 msgid "Heading level {0}"
-msgstr ""
+msgstr "Επίπεδο επικεφαλίδας {0}"
 
 #: src/layer/marker/A11yTextInput.js:884
 msgid "Out of table"
@@ -8928,11 +8955,11 @@ msgstr "Η εντολή επέκτασης απέτυχε: %1"
 
 #: templates/templates.js:6 templates/templates.js:10
 msgid "Business Letter"
-msgstr ""
+msgstr "Επαγγελματική επιστολή"
 
 #: templates/templates.js:16 templates/templates.js:20
 msgid "Classic Business Letter"
-msgstr ""
+msgstr "Κλασική επαγγελματική επιστολή"
 
 #: templates/templates.js:26 templates/templates.js:30
 msgid "CV"
@@ -9060,9 +9087,8 @@ msgstr "Εξερευνήστε το νέο {coolversion}"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:27-7
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h2:38-7
-#, fuzzy
 msgid "Collabora Online Development Edition"
-msgstr "Collabora Online Development Edition"
+msgstr "Collabora Online Έκδοση Ανάπτυξης"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.p:28-7
 msgid ""
