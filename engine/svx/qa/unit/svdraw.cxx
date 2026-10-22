@@ -37,6 +37,8 @@
 #include <svx/xlineit0.hxx>
 #include <svx/xlnstwit.hxx>
 #include <svx/svdogrp.hxx>
+#include <svx/svdocirc.hxx>
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <comphelper/propertyvalue.hxx>
 #include <sfx2/viewsh.hxx>
 #include <svl/itempool.hxx>
@@ -888,6 +890,54 @@ CPPUNIT_TEST_FIXTURE(SvdrawTest, testRectangleObjectRotate)
 
         pPage->RemoveObject(0);
     }
+}
+
+CPPUNIT_TEST_FIXTURE(SvdrawTest, testCirclePieceTakesItsTransformationAsTheWholeEllipse)
+{
+    // a piece of a circle reads a transformation as its whole ellipse, the way it hands it out
+    std::unique_ptr<SdrModel> pModel(new SdrModel(nullptr, nullptr, true));
+    rtl::Reference<SdrPage> pPage(new SdrPage(*pModel, false));
+    pPage->SetSize(Size(50000, 50000));
+    pModel->InsertPage(pPage.get(), 0);
+
+    const tools::Rectangle aEllipse(Point(1000, 1000), Size(4000, 3000));
+    for (const SdrCircKind eKind : { SdrCircKind::Section, SdrCircKind::Arc, SdrCircKind::Cut })
+    {
+        // a quarter, so the box round the piece is much smaller than its ellipse
+        rtl::Reference<SdrCircObj> pPiece
+            = new SdrCircObj(*pModel, eKind, aEllipse, 0_deg100, 9000_deg100);
+        pPage->NbcInsertObject(pPiece.get());
+
+        // given back what it handed out, it stays as it is
+        basegfx::B2DHomMatrix aTransformation;
+        basegfx::B2DPolyPolygon aPolyPolygon;
+        pPiece->TRGetBaseGeometry(aTransformation, aPolyPolygon);
+        pPiece->TRSetBaseGeometry(aTransformation, aPolyPolygon);
+        CPPUNIT_ASSERT_EQUAL(aEllipse, pPiece->GetLogicRect());
+
+        // twice as wide, the left side staying
+        pPiece->TRSetBaseGeometry(
+            basegfx::utils::createScaleTranslateB2DHomMatrix(8000, 3000, 1000, 1000),
+            aPolyPolygon);
+        CPPUNIT_ASSERT_EQUAL(tools::Rectangle(Point(1000, 1000), Size(8000, 3000)),
+                             pPiece->GetLogicRect());
+
+        pPage->RemoveObject(0);
+    }
+
+    // a mirror turns the quarter over, from 0 to 90 degrees to 90 to 180, on an ellipse of the
+    // same size
+    rtl::Reference<SdrCircObj> pSection
+        = new SdrCircObj(*pModel, SdrCircKind::Section, aEllipse, 0_deg100, 9000_deg100);
+    pPage->NbcInsertObject(pSection.get());
+    pSection->TRSetBaseGeometry(
+        basegfx::utils::createScaleTranslateB2DHomMatrix(-4000, 3000, 5000, 1000),
+        basegfx::B2DPolyPolygon());
+    CPPUNIT_ASSERT_EQUAL(aEllipse.GetSize(), pSection->GetLogicRect().GetSize());
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(9000.0, double(pSection->GetStartAngle().get()), 5.0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL(18000.0, double(pSection->GetEndAngle().get()), 5.0);
+
+    pPage->RemoveObject(0);
 }
 
 CPPUNIT_TEST_FIXTURE(SvdrawTest, testRotatePoint)

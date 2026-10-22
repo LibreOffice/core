@@ -1615,7 +1615,15 @@ void SdrTextObj::TRSetBaseGeometry(const basegfx::B2DHomMatrix& rMatrix, const b
     Size aSize(basegfx::fround<tools::Long>(aScale.getX()),
                basegfx::fround<tools::Long>(aScale.getY()));
     tools::Rectangle aBaseRect(Point(), aSize);
-    SetSnapRect(aBaseRect);
+
+    // the size is the one of the logic rect, as TRGetBaseGeometry gives it. for a piece of a
+    // circle the snap rect is only the box round the piece, so it takes the logic rect
+    const SdrObjKind eKind(GetObjIdentifier());
+    if (SdrObjKind::CircleSection == eKind || SdrObjKind::CircleArc == eKind
+        || SdrObjKind::CircleCut == eKind)
+        SetLogicRect(aBaseRect);
+    else
+        SetSnapRect(aBaseRect);
 
     // flip?
     if (bFlipX)
