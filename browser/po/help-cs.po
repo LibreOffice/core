@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-13 14:06+0200\n"
-"PO-Revision-Date: 2026-10-14 12:57+0000\n"
+"PO-Revision-Date: 2026-10-18 04:28+0000\n"
 "Last-Translator: Michal Várady <majkl82@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Czech <https://hosted.weblate.org/projects/collabora-online/"
 "help/cs/>\n"
@@ -1961,16 +1961,15 @@ msgstr ""
 "Dokument se při zavírání automaticky uloží, jestliže byl předtím změněn."
 
 #: html/cool-help.html%2Bdiv.div.div.p:441-7
-#, fuzzy
 msgid ""
 "To open a document, either open it in <span class=\"productname\""
 ">{productname}</span> from your platform's file manager or use <span class="
 "\"ui\">Open</span> on the <span class=\"ui\">File</span> tab."
 msgstr ""
-"Chcete-li otevřít dokument, otevřete jej v aplikaci <span class=\"productname"
-"\">{productname}</span> ze správce souborů své platformy nebo použijte "
-"tlačítko <span class=\"ui\">Otevřít</span> na stránce, kterou zobrazíte "
-"tlačítkem <span class=\"ui\">Soubor</span> na hlavní liště nabídek."
+"Chcete-li otevřít dokument, otevřete jej v aplikaci <span "
+"class=\"productname\">{productname}</span> ze správce souborů své platformy "
+"nebo použijte příkaz <span class=\"ui\">Otevřít</span> na kartě <span "
+"class=\"ui\">Soubor</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.p:447-7
 msgid ""
@@ -1998,16 +1997,14 @@ msgstr ""
 "class=\"ui\">Uložit jako</span> na kartě <span class=\"ui\">Soubor</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.p:461-7
-#, fuzzy
 msgid ""
 "Documents are automatically saved periodically, but if you want a document "
 "to be saved right away you can use <span class=\"ui\">Save</span> on the "
 "<span class=\"ui\">File</span> tab."
 msgstr ""
 "Dokumenty se automaticky pravidelně ukládají. Chcete-li však dokument uložit "
-"okamžitě, použijte tlačítko <span class=\"ui\">Uložit</span> na stránce, "
-"kterou zobrazíte tlačítkem <span class=\"ui\">Soubor</span> na hlavní liště "
-"nabídek."
+"okamžitě, použijte příkaz <span class=\"ui\">Uložit</span> na kartě <span "
+"class=\"ui\">Soubor</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.p:467-7
 msgid ""
@@ -2102,13 +2099,12 @@ msgstr ""
 "dřívějšího stavu."
 
 #: html/cool-help.html%2Bdiv.div.div.p:490-5
-#, fuzzy
 msgid ""
 "To jump back to the selected state, select it with the mouse and hit <span "
 "class=\"ui\">OK</span>."
 msgstr ""
-"Na daný stav přejdete zpět tím, že jej vyberete myší a stisknete <span class="
-"\"ui\">Přejít na stav</span>."
+"Chcete-li se vrátit k vybranému stavu, vyberte jej myší a stiskněte <span "
+"class=\"ui\">OK</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:491-55
 msgid ""
@@ -2135,17 +2131,17 @@ msgid "Idle document"
 msgstr "Neaktivní dokument"
 
 #: html/cool-help.html%2Bdiv.div.div.p:496-5
-#, fuzzy
 msgid ""
 "When <span class=\"productname\">{productname}</span> detects that there has "
 "not been any activity in the browser for a while, it puts the document in an "
 "“Idle” state. The document is shown with a transparent gray overlay, with "
 "the message “Idle document – please click to reload and resume editing”."
 msgstr ""
-"Když <span class=\"productname\">{productname}</span> zaznamená, že po "
-"nějaký čas neprobíhala v prohlížeči žádná aktivita, nastaví dokumentu stav "
-"„neaktivní“. Dokument se zobrazí s průhledným šedým popředím a zprávou „"
-"Dokument je neaktivní - pro pokračování v úpravách klikněte“."
+"Když <span class=\"productname\">{productname}</span> zaznamená, že v "
+"prohlížeči po nějakou dobu neprobíhá žádná aktivita, přepne dokument do "
+"stavu „Neaktivní“. Dokument se zobrazí s průhlednou šedou vrstvou a zprávou „"
+"Neaktivní dokument – kliknutím ho znovu načtete a budete moci pokračovat v "
+"úpravách“."
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:497-57
 msgid ""
@@ -2238,12 +2234,11 @@ msgstr ""
 "prezentaci."
 
 #: html/cool-help.html%2Bdiv.div.div.ol.li:516-7
-#, fuzzy
 msgid ""
 "Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Chart</span>. "
 "Customize your chart on the sidebar:"
 msgstr ""
-"Zvolte <span class=\"ui\">Vložit</span> → <span class=\"ui\">Grafy</span>. "
+"Zvolte <span class=\"ui\">Vložit</span> → <span class=\"ui\">Graf</span>. "
 "Graf přizpůsobte na postranní liště:"
 
 #: html/cool-help.html%2Bdiv.div.div.ol.div.img[alt]:519-53
@@ -2389,13 +2384,13 @@ msgid "Text with a red wavy underline beneath a misspelled word"
 msgstr "Text s červeným vlnitým podtržením pod chybně napsaným slovem"
 
 #: html/cool-help.html%2Bdiv.div.div.p:544-5
-#, fuzzy
 msgid ""
 "To systematically spell-check the whole document use <span class=\"ui\""
 ">Spelling</span> on the <span class=\"ui\">Review</span> tab."
 msgstr ""
-"Systematickou kontrolu pravopisu celého dokumentu zahájíte volbou <span "
-"class=\"ui\">Pravopis</span> z nabídky <span class=\"ui\">Nástroje</span>."
+"Systematickou kontrolu pravopisu celého dokumentu zahájíte příkazem <span "
+"class=\"ui\">Kontrola pravopisu</span> na kartě <span class=\"ui\">Revize</"
+"span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:551-30
 msgid ""
@@ -2563,12 +2558,11 @@ msgstr ""
 "povolit:"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:589-7
-#, fuzzy
 msgid ""
 "Choose <span class=\"ui\">Validity</span> on the <span class=\"ui\">Data</"
 "span> tab. The <span class=\"ui\">Validity</span> dialog opens."
 msgstr ""
-"Zvolte <span class=\"ui\">Platnost</span> z nabídky <span class=\"ui\">Data</"
+"Zvolte <span class=\"ui\">Platnost</span> na kartě <span class=\"ui\">Data</"
 "span>. Otevře se dialogové okno <span class=\"ui\">Platnost</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:592-57
@@ -2639,7 +2633,6 @@ msgstr ""
 "komentáře a tlačítky Uložit a Zrušit"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:606-5
-#, fuzzy
 msgid ""
 "<span class=\"def\">Conditional formatting:</span> <span class=\"productname"
 "\">{productname}</span> adds symbols to each cell of a range based on cells "
@@ -2647,11 +2640,11 @@ msgid ""
 "span> on the <span class=\"ui\">Home</span> tab. Select the symbol set to "
 "apply on the range."
 msgstr ""
-"<span class=\"def\">Podmíněné formátování:</span> <span class=\"productname\""
-">{productname}</span> přidá ke každé buňce oblasti symbol, a to podle "
-"stanovených podmínek. Vyberte oblast buněk a na nástrojové liště klepněte na "
-"ikonu <span class=\"ui\">Podmíněné formátování</span>. Vyberte symbol, který "
-"se má v oblasti použít."
+"<span class=\"def\">Podmíněné formátování:</span> <span "
+"class=\"productname\">{productname}</span> přidává symboly do každé buňky "
+"oblasti podle podmínek pro buňky. Vyberte oblast buněk a na kartě <span "
+"class=\"ui\">Domů</span> klepněte na <span class=\"ui\">Podmíněný</span>. "
+"Vyberte sadu symbolů, která se má v oblasti použít."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:607-62
 msgid ""
@@ -2735,17 +2728,16 @@ msgstr ""
 "nabídek. Přímé formátování se použije pouze na aktuálně vybraný objekt."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:629-5
-#, fuzzy
 msgid ""
 "<span class=\"def\">Style formatting:</span> <span class=\"productname\""
 ">{productname}</span> supports paragraph styles. You can apply an existing "
 "paragraph style to a paragraph. Select the style in the style list on the "
 "<span class=\"ui\">Home</span> tab."
 msgstr ""
-"<span class=\"def\">Formátování stylu:</span> <span class=\"productname\""
-">{productname}</span> podporuje styly odstavce. Na odstavec můžete použít "
-"jakýkoliv stávající styl odstavce. Styl změníte volbou z nabídky <span class="
-"\"ui\">Úpravy</span> → <span class=\"ui\">Upravit styl</span>."
+"<span class=\"def\">Formátování pomocí stylů:</span> <span "
+"class=\"productname\">{productname}</span> podporuje odstavcové styly. Na "
+"odstavec můžete použít existující odstavcový styl. Vyberte styl v seznamu "
+"stylů na kartě <span class=\"ui\">Domů</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:630-56
 msgid ""
@@ -2760,7 +2752,6 @@ msgid "Handling Tables"
 msgstr "Práce s tabulkami"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:637-5
-#, fuzzy
 msgid ""
 "Insert tables with <span class=\"ui\">Insert</span> → <span class=\"ui\""
 ">Table</span>. Select the initial number of rows and columns. Add rows and "
@@ -2768,10 +2759,10 @@ msgid ""
 ">Table</span> tab. The default paragraph style inside cells is “Table "
 "contents”."
 msgstr ""
-"Tabulku vložíte pomocí příslušné ikony na nástrojové liště. Vyberte výchozí "
-"počet řádků a sloupců. Další řádky a sloupce přidáte pomocí místní nabídky "
-"pro buňku tabulky. Buňky sloučíte volbou z nabídky <span class=\"ui\""
-">Tabulka</span>. Buňky tabulky mají jako výchozí styl odstavce „Obsah "
+"Tabulky vložíte příkazem <span class=\"ui\">Vložit</span> → <span "
+"class=\"ui\">Tabulka</span>. Vyberte počáteční počet řádků a sloupců. Řádky "
+"a sloupce přidáte pomocí místní nabídky buňky. Buňky sloučíte na kartě <span "
+"class=\"ui\">Tabulka</span>. Výchozí odstavcový styl uvnitř buněk je „Obsah "
 "tabulky“."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:638-52
@@ -2783,15 +2774,14 @@ msgstr ""
 "3"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:641-5
-#, fuzzy
 msgid ""
 "<span class=\"def\">Formatting cells:</span> Click in the cell or range of "
 "cells, open the context menu and choose <span class=\"ui\">Table Properties</"
 "span>. Fine tune the table with the properties dialog."
 msgstr ""
-"<span class=\"def\">Formátování buněk:</span> Klepněte na buňku nebo oblast "
-"a zvolte z nabídky <span class=\"ui\">Tabulka</span> → <span class=\"ui\""
-">Vlastnosti</span>. V dialogovém okně upravte vlastnosti tabulky."
+"<span class=\"def\">Formátování buněk:</span> Klepněte do buňky nebo oblasti "
+"buněk, otevřete místní nabídku a zvolte <span class=\"ui\">Vlastnosti "
+"tabulky</span>. V dialogovém okně vlastností dolaďte tabulku."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:644-5
 msgid "Track changes"
@@ -3094,15 +3084,14 @@ msgid "How can I check spelling in my language?"
 msgstr "Jak zkontroluji pravopis ve svém jazyce?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:722-5
-#, fuzzy
 msgid ""
 "Choose <span class=\"ui\">Review</span> → <span class=\"ui\">Language</span> "
 "and select the language for the whole document. Optionally you can set "
 "languages for the selected text and for the current paragraph."
 msgstr ""
-"Zvolte v nabídce <span class=\"ui\">Nástroje</span> → <span class=\"ui\""
-">Jazyky</span> a vyberte jazyk pro celý dokument. Můžete také nastavit jazyk "
-"pro vybraný text a pro aktuální odstavec."
+"Zvolte <span class=\"ui\">Revize</span> → <span class=\"ui\">Jazyk</span> a "
+"vyberte jazyk pro celý dokument. Můžete také nastavit jazyk pro vybraný text "
+"a aktuální odstavec."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:725-5
 msgid "How can I remove the red wavy lines in my document?"
@@ -3137,15 +3126,14 @@ msgid "Is there a thesaurus?"
 msgstr "Je k dispozici slovník synonym?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:734-5
-#, fuzzy
 msgid ""
 "Yes. Click in the word you want and choose <span class=\"ui\">Review</span> →"
 " <span class=\"ui\">Thesaurus</span>. A dialog opens with many suggestions "
 "for replacements."
 msgstr ""
-"Ano. Klepněte na požadované slovo a zvolte <span class=\"ui\">Nástroje</"
+"Ano. Klepněte do požadovaného slova a zvolte <span class=\"ui\">Revize</"
 "span> → <span class=\"ui\">Slovník synonym</span>. Otevře se dialogové okno "
-"s návrhy na nahrazení."
+"s mnoha návrhy na nahrazení."
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:735-49
 msgid ""
@@ -3164,32 +3152,30 @@ msgstr ""
 "textového dokumentu?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:739-5
-#, fuzzy
 msgid ""
 "The <span class=\"blue\">¶</span> symbol is a formatting mark. It is used to "
 "help text alignment and editing and is not printed. To toggle it in the "
 "document display, choose <span class=\"ui\">View</span> → <span class=\"ui\""
 ">Formatting Marks</span>."
 msgstr ""
-"Modrý symbol <span class=\"blue\">¶</span> představuje řídicí znak. Napomáhá "
-"při zarovnávání a úpravách textu a netiskne se. Chcete-li přepnout jeho "
-"zobrazování v dokumentu, zvolte v nabídce <span class=\"ui\">Zobrazit</span> "
-"→ <span class=\"ui\">Řídicí znaky</span>."
+"Symbol <span class=\"blue\">¶</span> je řídicí znak. Pomáhá při zarovnávání "
+"a úpravách textu a netiskne se. Chcete-li přepnout jeho zobrazení v "
+"dokumentu, zvolte <span class=\"ui\">Zobrazit</span> → <span class=\"ui\">"
+"Řídicí znaky</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:746-5
 msgid "How do I get a word count of my document?"
 msgstr "Jak zjistím počet slov v dokumentu?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:747-5
-#, fuzzy
 msgid ""
 "Word count is available in <span class=\"ui\">Review</span> → <span class="
 "\"ui\">Word Count</span>. A dialog shows word counts for selection and for "
 "the whole document."
 msgstr ""
-"Počet slov je k dispozici v nabídce <span class=\"ui\">Nástroje</span> → "
-"<span class=\"ui\">Počet slov</span>. Zobrazí se dialogové okno s počtem "
-"slov pro výběr a pro celý dokument."
+"Počet slov je k dispozici v <span class=\"ui\">Revize</span> → <span "
+"class=\"ui\">Počet slov</span>. Dialogové okno zobrazí počet slov ve výběru "
+"a v celém dokumentu."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:748-50
 msgid ""
@@ -3269,7 +3255,6 @@ msgid "Why can't I delete text? It just gets a strike-through?"
 msgstr "Proč se text přeškrtává místo toho, aby se smazal?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:766-5
-#, fuzzy
 msgid ""
 "You have the Track Changes feature enabled for the document. Track Changes "
 "records all changes in the text and shows the edits for later revision. "
@@ -3277,10 +3262,10 @@ msgid ""
 "enabled choosing <span class=\"ui\">Review</span> → <span class=\"ui\""
 ">Record</span>."
 msgstr ""
-"Máte v dokumentu zapnuto sledování změn. V důsledku toho se zaznamenávají "
-"všechny změny textu a zobrazují se, aby je bylo možné později projít. "
-"Sledování změn se povoluje volbou <span class=\"ui\">Úpravy</span> → <span "
-"class=\"ui\">Sledování změn </span> → <span class=\"ui\">Záznam</span>."
+"V dokumentu máte zapnuto sledování změn. Sledování změn zaznamenává všechny "
+"změny textu a zobrazuje úpravy pro pozdější revizi. Je užitečné pro "
+"označování změn v textu a sešitech. Sledování změn zapnete volbou <span "
+"class=\"ui\">Revize</span> → <span class=\"ui\">Záznam</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:767-5
 msgid ""
@@ -3311,21 +3296,19 @@ msgstr ""
 "Barvy přiřazené ke změnám závisí na tom, který uživatel dokument změnil."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:776-5
-#, fuzzy
 msgid ""
 "To display or hide track changes choose <span class=\"ui\">Review</span> → "
 "<span class=\"ui\">View Changes</span> → <span class=\"ui\">Show</span>. "
 "Beware that if track changes are enabled but hidden, you still record "
 "changes and may inadvertently leave unwanted text available in the document."
 msgstr ""
-"Chcete-li sledované změny zobrazit nebo skrýt, zvolte <span class=\"ui\""
-">Úpravy</span> → <span class=\"ui\">Sledování změn</span> → <span class=\"ui"
-"\">Zobrazit</span>. Mějte na paměti, že je-li sledování změn povoleno, ale "
-"změny jsou skryty, změny se stále zaznamenávají a můžete tím v dokumentu "
-"nechtěně zanechat nežádoucí text."
+"Chcete-li sledované změny zobrazit nebo skrýt, zvolte <span class=\"ui\">"
+"Revize</span> → <span class=\"ui\">Zobrazit změny</span> → <span "
+"class=\"ui\">Zobrazit</span>. Mějte na paměti, že je-li sledování změn "
+"zapnuto, ale změny jsou skryté, stále je zaznamenáváte a můžete v dokumentu "
+"nechtěně ponechat nežádoucí text."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:777-5
-#, fuzzy
 msgid ""
 "Changes can be accepted or rejected. To accept or reject changes, click on "
 "the corresponding icons in the comment box on the right of the document. "
@@ -3336,14 +3319,14 @@ msgid ""
 ">Manage</span>. A dialog shows a list of all tracked changes. Use the dialog "
 "buttons accordingly."
 msgstr ""
-"Změny lze přijmout nebo odmítnout. Chcete-li tak učinit, klepněte na "
-"odpovídající ikony v poli komentáře vpravo od dokumentu. Můžete také zvolit "
-"<span class=\"ui\">Úpravy</span> → <span class=\"ui\">Sledování změn </span> "
-"→ <span class=\"ui\">Přijmout</span> nebo <span class=\"ui\">Odmítnout</"
-"span>. Potřebujete-li změny před přijetím či odmítnutím filtrovat, zvolte "
-"<span class=\"ui\">Úpravy</span> → <span class=\"ui\">Sledování změn </span> "
-"→ <span class=\"ui\">Spravovat</span>. Zobrazí se dialogové okno se seznamem "
-"všech sledovaných změn; použijte v něm příslušná tlačítka."
+"Změny lze přijmout nebo odmítnout. Chcete-li změny přijmout či odmítnout, "
+"klepněte na příslušné ikony v poli komentáře napravo od dokumentu. Můžete "
+"také zvolit <span class=\"ui\">Revize</span> → <span class=\"ui\">Přijmout</"
+"span> nebo <span class=\"ui\">Odmítnout</span>. Potřebujete-li změny před "
+"přijetím či odmítnutím filtrovat, zvolte <span class=\"ui\">Revize</span> → "
+"<span class=\"ui\">Přijmout</span> → <span class=\"ui\">Spravovat</span>. "
+"Dialogové okno zobrazí seznam všech sledovaných změn. Použijte příslušná "
+"tlačítka dialogového okna."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:778-54
 msgid ""
@@ -3371,13 +3354,12 @@ msgid "Using the page style"
 msgstr "Pomocí stylu stránky"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:785-7
-#, fuzzy
 msgid ""
 "Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Page Style</"
 "span> and select the <span class=\"ui\">Page</span> tab"
 msgstr ""
-"Zvolte <span class=\"ui\">Formát</span> → <span class=\"ui\">Stránka</span> "
-"a vyberte kartu <span class=\"ui\">Stránka</span>"
+"Zvolte <span class=\"ui\">Formát</span> → <span class=\"ui\">Styl stránky</"
+"span> a vyberte kartu <span class=\"ui\">Stránka</span>"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:786-7
 msgid "Set the page margins in the dialog."
@@ -3587,7 +3569,6 @@ msgid "What is “Clear Direct Formatting” icon?"
 msgstr "Co značí ikona „Vymazat přímé formátování“?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:854-5
-#, fuzzy
 msgid ""
 "Direct formatting is formatting applied directly to the selected contents of "
 "a paragraph or a spreadsheet cell, and overlaps its assigned style "
@@ -3595,11 +3576,11 @@ msgid ""
 "or spreadsheet cell and choose <span class=\"ui\">Home</span> → <span class="
 "\"ui\">Clear Direct Formatting</span>."
 msgstr ""
-"Přímé formátování je takové formátování, které bylo použito přímo na vybraný "
-"odstavec nebo buňku sešitu a které překrývá formátování dané stylem. Chcete-"
-"li obnovit formátování podle nastavení stylu, vyberte text nebo buňku sešitu "
-"a zvolte <span class=\"ui\">Formát</span> → <span class=\"ui\">Vymazat přímé "
-"formátování</span> nebo použijte tlačítko na nástrojové liště."
+"Přímé formátování je formátování použité přímo na vybraný obsah odstavce "
+"nebo buňky sešitu, které překrývá formátování přiřazeného stylu. Chcete-li "
+"obnovit formátování podle nastavení stylu, vyberte text nebo buňku sešitu a "
+"zvolte <span class=\"ui\">Domů</span> → <span class=\"ui\">Vymazat přímé "
+"formátování</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:857-5
 msgid "How do I rename a sheet?"
@@ -3625,15 +3606,13 @@ msgid ""
 msgstr "Otevřete v <span class=\"productname\">{productname}</span> prezentaci"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:869-7
-#, fuzzy
 msgid ""
 "Either choose <span class=\"ui\">Slide Show</span> → <span class=\"ui\">From "
 "Beginning</span> or click on the left-most icon in the bottom of the slide "
 "panel:"
 msgstr ""
-"Zvolte <span class=\"ui\">Prezentace</span> → <span class=\"ui\">Prezentace "
-"na celou obrazovku</span> nebo klepněte v dolní části panelu snímků na ikonu "
-"nejvíc vlevo:"
+"Zvolte <span class=\"ui\">Prezentace</span> → <span class=\"ui\">Od začátku</"
+"span> nebo klepněte na ikonu nejvíce vlevo v dolní části panelu snímků:"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li.img[alt]:869-187
 msgid "slide show"
