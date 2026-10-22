@@ -1167,6 +1167,19 @@ CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testAutoGrowHeightEmptyText)
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(442), xShape->getSize().Height);
 }
 
+CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testPageLayoutWithoutStyles)
+{
+    // A document with no office:styles still takes its page size from the page layout of its
+    // master page
+    loadFromFile(u"page-layout-without-styles.fodp");
+    auto xPage = mxComponent.queryThrow<drawing::XDrawPagesSupplier>()
+                     ->getDrawPages()
+                     ->getByIndex(0)
+                     .queryThrow<beans::XPropertySet>();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(20000), xPage->getPropertyValue(u"Width"_ustr).get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(10000), xPage->getPropertyValue(u"Height"_ustr).get<sal_Int32>());
+}
+
 CPPUNIT_TEST_FIXTURE(XmloffDrawTest, testEmptyGraphicShapeOdf)
 {
     // Create a draw document with an empty graphic-object shape:

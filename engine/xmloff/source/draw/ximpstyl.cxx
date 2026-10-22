@@ -1432,14 +1432,13 @@ cpo::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLMasterStylesConte
 
             // new page, create and insert
 
-            if(GetSdImport().GetShapeImport()->GetStylesContext())
-            {
-                const rtl::Reference<SdXMLMasterPageContext> xLclContext{
-                    new SdXMLMasterPageContext(GetSdImport(),
-                        nElement, xAttrList, xMasterPages)};
-                maMasterPageList.push_back(xLclContext);
-                return xLclContext;
-            }
+            // A document without office:styles gets an empty styles context here
+            GetSdImport().CreateStylesContext();
+            const rtl::Reference<SdXMLMasterPageContext> xLclContext{
+                new SdXMLMasterPageContext(GetSdImport(),
+                    nElement, xAttrList, xMasterPages)};
+            maMasterPageList.push_back(xLclContext);
+            return xLclContext;
         }
     }
     else if( nElement == XML_ELEMENT(STYLE, XML_HANDOUT_MASTER) )
@@ -1448,8 +1447,9 @@ cpo::uno::Reference< css::xml::sax::XFastContextHandler > SdXMLMasterStylesConte
         if( xHandoutSupp.is() )
         {
             uno::Reference< drawing::XShapes > xHandoutPage = xHandoutSupp->getHandoutMasterPage();
-            if(xHandoutPage.is() && GetSdImport().GetShapeImport()->GetStylesContext())
+            if(xHandoutPage.is())
             {
+                GetSdImport().CreateStylesContext();
                 return new SdXMLMasterPageContext(GetSdImport(),
                     nElement, xAttrList, xHandoutPage);
             }
