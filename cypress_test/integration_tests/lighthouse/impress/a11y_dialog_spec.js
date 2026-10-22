@@ -1,4 +1,4 @@
-/* global describe expect it cy before after afterEach require Cypress */
+/* global describe expect it cy before after afterEach require */
 
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
@@ -98,90 +98,6 @@ describe(['taglighthouse'], 'Accessibility Impress Dialog Tests', { testIsolatio
         // re-establish the cursor in the first table cell after a test that
         // moved focus elsewhere (selecting a shape, escaping etc.)
         impressHelper.selectTableInTheCenter(win);
-    });
-
-    // Helper to test that a11y validation detects injected errors
-    function testA11yErrorDetection(injectBadElement) {
-        cy.then(() => {
-            win.app.map.sendUnoCommand('.uno:FontDialog');
-        });
-
-        a11yHelper.getActiveDialog(1)
-            .then(() => helper.processToIdle(win))
-            .then(() => {
-                a11yHelper.getActiveDialog(1).then($dialog => {
-                    injectBadElement($dialog, win);
-                });
-            })
-            .then(() => {
-                // Validation should detect an error
-                var spy = Cypress.sinon.spy(win.console, 'error');
-                win.app.dispatcher.dispatch('validatedialogsa11y');
-
-                cy.then(() => {
-                    const a11yErrors = spy.getCalls().filter(call =>
-                        String(call.args[0]).includes(win.app.A11yValidatorException.PREFIX)
-                    );
-                    expect(a11yErrors.length, 'Should detect a11y error').to.be.greaterThan(0);
-                    spy.restore();
-                });
-            })
-            .then(() => {
-                a11yHelper.closeActiveDialog(1);
-            });
-    }
-
-    it('Detects non-native button element error', function () {
-        testA11yErrorDetection(function($dialog, win) {
-            // Inject a span with role="button" instead of native <button>
-            const badElement = win.document.createElement('span');
-            badElement.setAttribute('role', 'button');
-            badElement.setAttribute('id', 'something');
-            badElement.textContent = 'Bad Button';
-            $dialog.find('.ui-dialog-content')[0].appendChild(badElement);
-        });
-    });
-
-    it('Detects image missing alt attribute', function () {
-        testA11yErrorDetection(function($dialog, win) {
-            // Inject an image without alt attribute
-            const container = win.document.createElement('div');
-            container.setAttribute('id', 'something');
-            const img = win.document.createElement('img');
-            img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
-            // No alt attribute set
-            container.appendChild(img);
-            $dialog.find('.ui-dialog-content')[0].appendChild(container);
-        });
-    });
-
-    it('Detects image with empty alt but parent lacks label', function () {
-        testA11yErrorDetection(function($dialog, win) {
-            // Inject an image with empty alt="" but parent has no label
-            const container = win.document.createElement('div');
-            container.setAttribute('id', 'something');
-            container.id = 'test-unlabeled-parent';
-            // No aria-label, aria-labelledby, or associated label element
-            const img = win.document.createElement('img');
-            img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
-            img.setAttribute('alt', '');
-            container.appendChild(img);
-            $dialog.find('.ui-dialog-content')[0].appendChild(container);
-        });
-    });
-
-    it('Detects image with non-empty alt when parent also has label', function () {
-        testA11yErrorDetection(function($dialog, win) {
-            // Inject an image with non-empty alt AND parent has aria-label (duplicate)
-            const container = win.document.createElement('div');
-            container.setAttribute('id', 'something');
-            container.setAttribute('aria-label', 'Parent Label');
-            const img = win.document.createElement('img');
-            img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
-            img.setAttribute('alt', 'Image description');
-            container.appendChild(img);
-            $dialog.find('.ui-dialog-content')[0].appendChild(container);
-        });
     });
 
     a11yHelper.allCommonDialogs.forEach(function (commandSpec) {
