@@ -64,8 +64,8 @@ struct VCL_DLLPUBLIC SystemEnvData
     // Nothing
 #elif defined( UNX )
     void*               pDisplay;       // the relevant display connection
-    void*               pVisual;        // the visual in use
 #if ENABLE_GEN
+    void*               pVisual;        // the visual in use
     int                 nScreen;        // the current screen of the window
 #endif
 private:
@@ -95,8 +95,8 @@ public:
 #elif defined( IOS )
 #elif defined( UNX )
         , pDisplay(nullptr)
-        , pVisual(nullptr)
 #if ENABLE_GEN
+        , pVisual(nullptr)
         , nScreen(0)
 #endif
         , aWindow(0)
