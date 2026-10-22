@@ -234,15 +234,14 @@ static rtl_uString *get_md5hash(rtl_uString *pText)
 }
 
 /* Construct the pipe name */
-static rtl_uString *get_pipe_path(rtl_uString *pAppPath)
+static OUString get_pipe_path(const OUString& rAppPath)
 {
     rtl_uString *pPath = nullptr, *pTmp = nullptr, *pUserInstallation = nullptr;
-    rtl_uString *pResult = nullptr, *pBasePath = nullptr, *pAbsUserInstallation = nullptr;
-    sal_Unicode pUnicode[RTL_USTR_MAX_VALUEOFINT32];
+    rtl_uString *pBasePath = nullptr, *pAbsUserInstallation = nullptr;
 
     /* setup bootstrap filename */
     rtl_uString_newFromAscii(&pPath, "file://");
-    rtl_uString_newConcat(&pPath, pPath, pAppPath);
+    rtl_uString_newConcat(&pPath, pPath, rAppPath.pData);
     rtl_uString_newConcat(&pPath, pPath, pTmp);
     rtl_uString_newFromAscii(&pTmp, SAL_CONFIGFILE("bootstrap"));
     rtl_uString_newConcat(&pPath, pPath, pTmp);
@@ -265,13 +264,14 @@ static rtl_uString *get_pipe_path(rtl_uString *pAppPath)
     if (!pMd5hash)
         rtl_uString_new(&pMd5hash);
 
+    OUString sResult;
     if (access(PIPEDEFAULTPATH, W_OK) == 0)
     {
-        rtl_uString_newFromAscii(&pResult, PIPEDEFAULTPATH);
+        sResult = PIPEDEFAULTPATH;
     }
     else if (access(PIPEALTERNATEPATH, W_OK) == 0)
     {
-        rtl_uString_newFromAscii(&pResult, PIPEALTERNATEPATH);
+        sResult = PIPEALTERNATEPATH;
     }
     else
     {
@@ -279,17 +279,8 @@ static rtl_uString *get_pipe_path(rtl_uString *pAppPath)
         exit(1);
     }
 
-    rtl_uString_newFromAscii(&pTmp, "/OSL_PIPE_");
-    rtl_uString_newConcat(&pResult, pResult, pTmp);
-
-    rtl_ustr_valueOfInt32(pUnicode, static_cast<int>(getuid()), 10);
-    rtl_uString_newFromStr(&pTmp, pUnicode);
-    rtl_uString_newConcat(&pResult, pResult, pTmp);
-
-    rtl_uString_newFromAscii(&pTmp, "_SingleOfficeIPC_");
-    rtl_uString_newConcat(&pResult, pResult, pTmp);
-
-    rtl_uString_newConcat(&pResult, pResult, pMd5hash);
+    const OUString sMd5hash(pMd5hash);
+    sResult += u"/OSL_PIPE_" + OUString::number(static_cast<int>(getuid())) + u"_SingleOfficeIPC_" + sMd5hash;
 
     /* cleanup */
     rtl_uString_release(pMd5hash);
@@ -302,7 +293,7 @@ static rtl_uString *get_pipe_path(rtl_uString *pAppPath)
     rtl_uString_release(pUserInstallation);
     rtl_uString_release(pAbsUserInstallation);
 
-    return pResult;
+    return sResult;
 }
 
 /* Get fd of the pipe of the already running OOo. */
@@ -737,9 +728,8 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
     if (!args->bInhibitPipe && !getenv("LIBO_FLATPAK"))
     {
         int fd = 0;
-        rtl_uString* pPipePath = get_pipe_path(args->sAppPath.pData);
-
-        if ((fd=connect_pipe(pPipePath)) >= 0)
+        const OUString sPipePath = get_pipe_path(args->sAppPath);
+        if ((fd = connect_pipe(sPipePath.pData)) >= 0)
         {
             // Wait for answer
             char resp[27]; // strlen("InternalIPC::SendArguments") + 1
@@ -757,10 +747,6 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
 
             close(fd);
         }
-
-        /* cleanup */
-        if (pPipePath)
-            rtl_uString_release(pPipePath);
     }
 
     if (!bSentArgs)
