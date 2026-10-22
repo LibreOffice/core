@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Impress-Intro-Template.odp\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-10-14 12:57+0000\n"
+"PO-Revision-Date: 2026-10-17 10:12+0000\n"
 "Last-Translator: Stephan Paternotte <stephan-"
 "p@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/collabora-online/"
@@ -36,7 +36,7 @@ msgstr ""
 #. content.xml (slide 'page1'); styles.xml (master page
 #. 'Introduction_20_slide')
 msgid "Next Chapter: 🖼 Slides & Layouts"
-msgstr "Volgens hoofdstuk: 🖼 Dia's & Opmaak"
+msgstr "Volgens hoofdstuk: 🖼 Dia's & Indelingen"
 
 #. content.xml (slide 'page1')
 msgid "Here's what you'll discover"
@@ -44,7 +44,7 @@ msgstr "Dit is wat u zult ontdekken"
 
 #. content.xml (slide 'page1'); content.xml (slide 'page2')
 msgid "🖼 Slides & Layouts"
-msgstr "🖼 Dia's & Opmaak"
+msgstr "🖼 Dia's & Indelingen"
 
 #. content.xml (slide 'page1'); content.xml (slide 'page3')
 msgid "🎨 Design & Master Slides"
@@ -84,9 +84,9 @@ msgid ""
 "arrangement of placeholders for titles, text, and images. Pick the layout "
 "that fits the slide’s purpose.</3>"
 msgstr ""
-"<1>Elke dia kan een </1><2>andere opmaak </2> gebruiken<3>– een vooraf "
+"<1>Elke dia kan een </1><2>andere indeling</2> gebruiken<3>– een vooraf "
 "gedefinieerde rangschikking van tijdelijke aanduidingen voor titels, tekst "
-"en afbeeldingen. Kies de opmaak die past bij het doel van de dia.</3>"
+"en afbeeldingen. Kies de indeling die past bij het doel van de dia.</3>"
 
 #. content.xml (slide 'page2'); content.xml (slide 'page3'); content.xml
 #. (slide 'page4'); content.xml (slide 'page5'); content.xml (slide 'page6');
@@ -101,7 +101,7 @@ msgstr "Voeg een nieuwe dia toe door op “Nieuw” te klikken in de notebookbal
 
 #. content.xml (slide 'page2')
 msgid "Choose a layout for it from the layout chooser."
-msgstr "Kies er een opmaak voor in de opmaakkiezer."
+msgstr "Kies een indeling voor in de indelingkiezer."
 
 #. content.xml (slide 'page2')
 msgid "Start editing your slide."
@@ -118,7 +118,7 @@ msgid ""
 "When you’re unsure which layout to pick, start with “Title, Content” – it "
 "works for almost any slide."
 msgstr ""
-"Als u niet zeker weet welk ontwerp u moet kiezen, begin dan met “Titel, "
+"Als u niet zeker weet welk indeling u moet kiezen, begin dan met “Titel, "
 "Inhoud” – dit werkt voor bijna elke dia."
 
 #. content.xml (slide 'page2')
@@ -201,7 +201,7 @@ msgid ""
 "Click on it to select it, then resize and reposition it to fit your layout."
 msgstr ""
 "Klik erop om het te selecteren, wijzig vervolgens het formaat en positioneer "
-"het zodat het bij uw opmaak past."
+"het zodat het bij uw indeling past."
 
 #. content.xml (slide 'page4')
 msgid ""

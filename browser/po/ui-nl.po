@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-13 14:06+0200\n"
-"PO-Revision-Date: 2026-10-16 10:34+0000\n"
+"PO-Revision-Date: 2026-10-17 10:12+0000\n"
 "Last-Translator: Stephan Paternotte <stephan-"
 "p@users.noreply.hosted.weblate.org>\n"
 "Language-Team: Dutch <https://hosted.weblate.org/projects/collabora-online/"
@@ -2515,8 +2515,8 @@ msgstr[1] "%n dia's hernoemen"
 #: src/control/Control.AIChatSidebar.ts:2597
 msgid "change %n layout"
 msgid_plural "change %n layouts"
-msgstr[0] "%n opmaak wijzigen"
-msgstr[1] "%n opmaken wijzigen"
+msgstr[0] "%n indeling wijzigen"
+msgstr[1] "%n indelingen wijzigen"
 
 #: src/control/Control.AIChatSidebar.ts:2601
 msgid "set text in %n place"
@@ -4504,7 +4504,7 @@ msgstr "Meld een probleem"
 #: src/control/Control.Menubar.ts:1323 src/control/Control.Menubar.ts:1390
 #: src/control/Control.NotebookbarWriter.js:593
 msgid "Latest Updates"
-msgstr "Versie informatie"
+msgstr "Laatste updates"
 
 #: src/control/Control.Menubar.ts:460 src/control/Control.Menubar.ts:673
 #: src/control/Control.Menubar.ts:841 src/control/Control.Menubar.ts:1159
@@ -5101,7 +5101,7 @@ msgstr "Uitlijning"
 #: src/control/Control.NotebookbarImpress.js:122
 #: src/control/Control.NotebookbarWriter.js:100
 msgid "Format"
-msgstr "Indeling"
+msgstr "Opmaak"
 
 #: src/control/Notebookbar.WriterTableTab.ts:530
 #: src/control/Control.NotebookbarCalc.js:2403
@@ -5183,7 +5183,7 @@ msgstr "Bestand"
 #: src/control/Control.NotebookbarCalc.js:48
 #: src/control/Control.NotebookbarDraw.js:1332
 msgid "Page Layout"
-msgstr "Pagina-opmaak"
+msgstr "Pagina-indeling"
 
 #: src/control/Control.NotebookbarCalc.js:54
 msgid "Formulas"
@@ -5666,7 +5666,7 @@ msgstr "Afbeelding instellen"
 #: src/control/Control.NotebookbarDraw.js:82
 #: src/control/Control.NotebookbarWriter.js:87
 msgid "Layout"
-msgstr "Lay-out"
+msgstr "Indeling"
 
 #: src/control/Control.NotebookbarDraw.js:354
 msgid "PDF Document (.pdf) - Expert"
@@ -5776,18 +5776,18 @@ msgstr "Zijbalk Vormen"
 #: src/control/Control.NotebookbarImpress.js:924
 #: src/control/Control.NotebookbarImpress.js:2005
 msgid "Slide Layout"
-msgstr "Dia-opmaak"
+msgstr "Dia-indeling"
 
 #: src/control/Control.NotebookbarImpress.js:946
 #: src/control/Control.NotebookbarImpress.js:2015
 #: src/control/Control.TopToolbar.js:264
 msgid "Change Layout"
-msgstr "Opmaak wijzigen"
+msgstr "Indeling wijzigen"
 
 #: src/control/Control.NotebookbarImpress.js:954
 #: src/control/Control.NotebookbarImpress.js:2022
 msgid "Reset Layout"
-msgstr "Opmaak herstellen"
+msgstr "Indeling herstellen"
 
 #: src/control/Control.NotebookbarImpress.js:968
 msgid "Character"
