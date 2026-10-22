@@ -2178,9 +2178,12 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM l
 
         case WM_DESTROY:
             if (WindowState* window = findWindow(hWnd))
+            {
                 destroyDropOverlay(*window);
-            if (DocumentData::count() == 0)
-                stopServer();
+                // The kits drop the documents' data later, so count the windows.
+                if (windows.size() == 1)
+                    stopServer();
+            }
             break;
 
         case WM_NCDESTROY:
@@ -3858,7 +3861,7 @@ static void closeTab(WindowState& window, int tabId)
         }
 
         // A document whose page never said hello has no forwarding thread to
-        // wake and no socket of its own to close yet.
+        // wake and no socket of its own to close yet. Once it has, the kit frees its data.
         if (tab->app2js.joinable())
         {
             do_bye_handling_things(*tab);
@@ -3867,8 +3870,8 @@ static void closeTab(WindowState& window, int tabId)
             // is on its way out and joins straight away.
             tab->app2js.join();
         }
-
-        DocumentData::deallocate(tab->appDocId);
+        else
+            DocumentData::deallocate(tab->appDocId);
     }
 
     if (tab->webViewController)
@@ -5737,9 +5740,10 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
                 fakeSocketClose(data.closeNotificationPipeForForwardingThread[0]);
                 data.app2js.join();
             }
+            else
+                DocumentData::deallocate(data.appDocId);
 
             data.fakeClientFd = fakeSocketSocket();
-            DocumentData::deallocate(data.appDocId);
             data.appDocId = generate_new_app_doc_id();
             auto path = Poco::URI(url).getPath();
             auto lastSlash = path.find_last_of('/');
