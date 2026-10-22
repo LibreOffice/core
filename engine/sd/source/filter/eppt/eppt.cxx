@@ -20,6 +20,7 @@
 #include "eppt.hxx"
 #include "epptdef.hxx"
 #include "pptexanimations.hxx"
+#include <sdpage.hxx>
 #include <o3tl/any.hxx>
 #include <tools/globname.hxx>
 #include <rtl/ustring.hxx>
@@ -218,11 +219,13 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
         }
         else if ( aAny >>= aSoundURL )
         {
-            // a silent slide reports an empty sound string here; emit the
-            // slide-info record anyway, since it also carries the transition
-            // speed. A bare string carries no allow decision, so deny it.
-            nSoundRef = maSoundCollection.GetId( SdSoundLink(aSoundURL, false) );
-            bIsSound = true;
+            // A slide that plays a sound names it here, and a silent slide reports an empty
+            // name. A bare string carries no allow decision, so deny it.
+            if ( !aSoundURL.isEmpty() )
+            {
+                nSoundRef = maSoundCollection.GetId( SdSoundLink(aSoundURL, false) );
+                bIsSound = true;
+            }
         }
         else
             aAny >>= bStopSound;
@@ -230,11 +233,30 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
     if ( GetPropertyValue( aAny, mXPagePropSet, u"LoopSound"_ustr ) )
         aAny >>= bLoopSound;
 
+    // The kind of transition a slide states, which a document can give either as one of the
+    // effects this format knows or as one of the richer kinds, where the older answer is none.
+    sal_Int16 nTT = 0;
+    if ( GetPropertyValue( aAny, mXPagePropSet, u"TransitionType"_ustr ) )
+        aAny >>= nTT;
+
+    // How long the slide takes to arrive. A slide carries the time every slide starts with
+    // until a document gives it one of its own, and such a time is a speed to keep even where
+    // the slide names no transition.
+    double fTransitionDuration = -1.0;
+    if ( GetPropertyValue( aAny, mXPagePropSet, u"TransitionDuration"_ustr ) )
+        aAny >>= fTransitionDuration;
+    const bool bStatesDuration
+        = fTransitionDuration >= 0 && fTransitionDuration != SdPage::DEFAULT_TRANSITION_DURATION;
+
+    // The record carries what a slide show does with this slide, so it is written for a slide
+    // that states any of it and left out for a slide that states none.
     bool bNeedsSSSlideInfoAtom = !bVisible
                                 || ( mnDiaMode == 2 )
                                 || bIsSound
                                 || bStopSound
-                                || ( eFe != css::presentation::FadeEffect_NONE );
+                                || ( eFe != css::presentation::FadeEffect_NONE )
+                                || ( nTT != 0 )
+                                || bStatesDuration;
     if ( bNeedsSSSlideInfoAtom )
     {
         sal_uInt8   nDirection = 0;
@@ -243,11 +265,8 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
         sal_Int32   nSlideTime = 0;         // still has to !!!
         sal_uInt8   nSpeed = 1;
 
-        if ( GetPropertyValue( aAny, mXPagePropSet, u"TransitionDuration"_ustr ) )
         {
             css::presentation::AnimationSpeed aAs;
-            double fTransitionDuration = -1.0;
-            aAny >>= fTransitionDuration;
 
             if (fTransitionDuration >= 0)
             {
@@ -269,9 +288,7 @@ void PPTWriter::ImplWriteSlide( sal_uInt32 nPageNum, sal_uInt32 nMasterNum, sal_
 
             nSpeed = static_cast<sal_uInt8>(aAs);
         }
-        sal_Int16 nTT = 0;
-        if ( GetPropertyValue( aAny, mXPagePropSet, u"TransitionType"_ustr )
-            && ( aAny >>= nTT ) )
+        if ( nTT )
         {
             sal_Int16 nTST = 0;
             if ( GetPropertyValue( aAny, mXPagePropSet, u"TransitionSubtype"_ustr )

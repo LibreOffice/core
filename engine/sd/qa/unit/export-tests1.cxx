@@ -11,6 +11,7 @@
 
 #include "sdmodeltestbase.hxx"
 #include <sdpage.hxx>
+#include <com/sun/star/presentation/AnimationSpeed.hpp>
 #include <sdtiledrenderingtest.hxx>
 
 #include <comphelper/scopeguard.hxx>
@@ -580,6 +581,28 @@ CPPUNIT_TEST_FIXTURE(SdExportTest1, testCool16078_placeholderOutlineToODF)
                              - aOutline.replaceAll(u"M"_ustr, u""_ustr).getLength());
     // The frame's own corner, where the outline starts.
     CPPUNIT_ASSERT(aOutline.startsWith("M0 0"));
+}
+
+// A slide that plays no sound keeps advancing the way it did.
+CPPUNIT_TEST_FIXTURE(SdExportTest1, testSilentSlideKeepsItsAdvance)
+{
+    // Given a presentation whose slide states no transition, no sound and no time to wait:
+    createSdImpressDoc("ppt/FillPatterns.ppt");
+
+    uno::Reference<beans::XPropertySet> xBefore(getPage(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xBefore->getPropertyValue(u"Change"_ustr).get<sal_Int32>());
+
+    saveAndReload(TestFilter::PPT);
+
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 2
+    // i.e. the slide was written as one that advances on a click or on its own, and at a speed
+    // the document never gave it.
+    uno::Reference<beans::XPropertySet> xAfter(getPage(0), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xAfter->getPropertyValue(u"Change"_ustr).get<sal_Int32>());
+    CPPUNIT_ASSERT_EQUAL(presentation::AnimationSpeed_MEDIUM,
+                         xAfter->getPropertyValue(u"Speed"_ustr).get<presentation::AnimationSpeed>());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
