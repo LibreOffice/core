@@ -16,6 +16,7 @@
 #include <cppunit/extensions/HelperMacros.h>
 #include <cppunit/plugin/TestPlugIn.h>
 
+#include "com/sun/star/io/XInputStream.hpp"
 #include "rtl/ustring.hxx"
 
 #define TEST1 CPPUNIT_ASSERT(b1 == b2)
@@ -88,6 +89,16 @@ void test(
     CPPUNIT_ASSERT_LESSEQUAL(i, 1); // expected-error {{CPPUNIT_ASSERT_LESSEQUAL parameters look switched, expected value should be first param [loplugin:cppunitassertequals]}}
     CPPUNIT_ASSERT_GREATER(i, 1); // expected-error {{CPPUNIT_ASSERT_GREATER parameters look switched, expected value should be first param [loplugin:cppunitassertequals]}}
     CPPUNIT_ASSERT_GREATEREQUAL(i, 1); // expected-error {{CPPUNIT_ASSERT_GREATEREQUAL parameters look switched, expected value should be first param [loplugin:cppunitassertequals]}}
+}
+
+void test2(const cpo::uno::Reference<cpo::uno::XInterface>& xInt1,
+            const cpo::uno::Reference<cpo::uno::XInterface>& xInt2,
+            const cpo::uno::Reference<css::io::XInputStream>& xFoo)
+{
+    CPPUNIT_ASSERT(xInt1 == xInt2); // expected-error {{rather call CPPUNIT_ASSERT_EQUAL when comparing 'const cpo::uno::Reference<cpo::uno::XInterface>' and 'const cpo::uno::Reference<cpo::uno::XInterface>' (or rewrite as an explicit operator == call when the operator itself is the topic) [loplugin:cppunitassertequals]}}
+
+    // no warning expected
+    CPPUNIT_ASSERT(xInt1 == xFoo);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

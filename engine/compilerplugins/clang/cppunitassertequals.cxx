@@ -292,11 +292,20 @@ void CppunitAssertEquals::checkExpr(
 void CppunitAssertEquals::reportEquals(
     SourceRange range, StringRef name, bool negative, Expr const * lhs, Expr const * rhs)
 {
-    if (lhs->IgnoreImpCasts()->getType()->isNullPtrType()
-        != rhs->IgnoreImpCasts()->getType()->isNullPtrType())
+    auto lhsType = lhs->IgnoreImpCasts()->getType();
+    auto rhsType = rhs->IgnoreImpCasts()->getType();
+
+    if (lhsType->isNullPtrType() != rhsType->isNullPtrType())
     {
         return;
     }
+
+    // there is no way to make CPPUNIT_ASSERT_EQUAL handle uno::Reference<T1> == uno::Reference<T2>
+    if (loplugin::TypeCheck(lhsType).Class("Reference").Namespace("uno").Namespace("cpo").GlobalNamespace()
+        && loplugin::TypeCheck(rhsType).Class("Reference").Namespace("uno").Namespace("cpo").GlobalNamespace()
+        && !compiler.getASTContext().hasSameUnqualifiedType(lhsType, rhsType))
+        return;
+
     report(
         DiagnosticsEngine::Warning,
         ("rather call"
