@@ -87,7 +87,6 @@ private:
     sal_Int32 m_nMax;
     sal_Int32 m_nProgress;
     bool m_bPaintProgress;
-    bool m_bVisible;
     bool m_bShowLogo;
     bool m_bFullScreenSplash;
     bool m_bProgressEnd;
@@ -151,7 +150,6 @@ SplashScreen::SplashScreen()
     , m_nMax(100)
     , m_nProgress(0)
     , m_bPaintProgress(false)
-    , m_bVisible(true)
     , m_bShowLogo(true)
     , m_bFullScreenSplash(false)
     , m_bProgressEnd(false)
@@ -182,29 +180,23 @@ SplashScreen::~SplashScreen()
 void SAL_CALL SplashScreen::start(const OUString&, sal_Int32 nRange)
 {
     m_nMax = nRange;
-    if (m_bVisible)
-    {
-        m_bProgressEnd = false;
-        SolarMutexGuard aSolarGuard;
-        m_pWindow->Show();
-        m_pWindow->Redraw();
-    }
+    m_bProgressEnd = false;
+    SolarMutexGuard aSolarGuard;
+    m_pWindow->Show();
+    m_pWindow->Redraw();
 }
 
 void SAL_CALL SplashScreen::end()
 {
     m_nProgress = m_nMax;
-    if (m_bVisible)
-    {
-        m_pWindow->Hide();
-    }
+    m_pWindow->Hide();
     m_bProgressEnd = true;
 }
 
 void SAL_CALL SplashScreen::reset()
 {
     m_nProgress = 0;
-    if (m_bVisible && !m_bProgressEnd)
+    if (!m_bProgressEnd)
     {
         m_pWindow->Show();
         updateStatus();
@@ -218,7 +210,7 @@ void SAL_CALL SplashScreen::setText(const OUString& rText)
     {
         m_sProgressText = rText;
 
-        if (m_bVisible && !m_bProgressEnd)
+        if (!m_bProgressEnd)
         {
             m_pWindow->Show();
             updateStatus();
@@ -231,7 +223,7 @@ void SAL_CALL SplashScreen::setValue(sal_Int32 nValue)
     SAL_INFO( "desktop.splash", "setValue: " << nValue );
 
     SolarMutexGuard aSolarGuard;
-    if (m_bVisible && !m_bProgressEnd)
+    if (!m_bProgressEnd)
     {
         m_pWindow->Show();
         if (nValue >= m_nMax)
@@ -311,7 +303,7 @@ SplashScreen::initialize( const css::uno::Sequence< css::uno::Any>& aArguments )
 
 void SplashScreen::updateStatus()
 {
-    if (!m_bVisible || m_bProgressEnd)
+    if (m_bProgressEnd)
         return;
     if (!m_bPaintProgress)
         m_bPaintProgress = true;
@@ -552,7 +544,7 @@ void SplashScreen::determineProgressRatioValues(
 
 void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&)
 {
-    if (!m_pSplash || !m_pSplash->m_bVisible)
+    if (!m_pSplash)
         return;
 
     //native drawing
