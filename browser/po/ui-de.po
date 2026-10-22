@@ -12,9 +12,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-13 14:06+0200\n"
-"PO-Revision-Date: 2026-10-17 06:29+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@users.noreply.hosted.weblate.org>"
-"\n"
+"PO-Revision-Date: 2026-10-17 20:54+0000\n"
+"Last-Translator: Mr-Update <mr-update@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/de/>\n"
 "Language: de\n"
@@ -3147,9 +3146,8 @@ msgid "Stop"
 msgstr "Stopp"
 
 #: src/control/Control.CleanupSidebar.ts:926
-#, fuzzy
 msgid "Scan presentation"
-msgstr "Leere Präsentation"
+msgstr "Präsentation scannen"
 
 #: src/control/Control.CleanupSidebar.ts:962
 msgid "Fix all"
@@ -7387,7 +7385,7 @@ msgstr "DL Briefumschlag"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1552
 msgid "C6 Envelope"
-msgstr "C6 Briefumschlag"
+msgstr "Umschlag C6"
 
 #: src/control/jsdialog/Definitions.Menu.ts:1553
 msgid "C6/5 Envelope"
@@ -8980,7 +8978,7 @@ msgstr "Süßigkeiten"
 
 #: templates/templates.js:116 templates/templates.js:120
 msgid "DNA"
-msgstr "DNS"
+msgstr "DNA"
 
 #: templates/templates.js:126 templates/templates.js:130
 msgid "Focus"
@@ -9064,7 +9062,7 @@ msgstr "Willkommen bei der Präsentation"
 
 #: welcome/welcome.html%2Bhtml.head.title:9-3
 msgid "Collabora Online Welcome"
-msgstr "Collabora Online Begrüßung"
+msgstr "Begrüßung bei Collabora Online"
 
 #: welcome/welcome.html%2Bhtml.body.div.div.div.div.h1:26-7
 msgid "Explore The New {coolversion}"

@@ -3,8 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-13 14:06+0200\n"
-"PO-Revision-Date: 2026-10-05 21:51+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"PO-Revision-Date: 2026-10-21 05:38+0000\n"
+"Last-Translator: Mr-Update <mr-update@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collabora-online/"
 "help/de/>\n"
 "Language: de\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Translate Toolkit 3.6.0\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:10-5
 msgid "Keyboard Shortcuts"
@@ -1805,17 +1805,16 @@ msgstr ""
 "oder einer das Dokument verlässt."
 
 #: html/cool-help.html%2Bdiv.div.div.p:395-7
-#, fuzzy
 msgid ""
 "<span class=\"webBasedCOOLOnly\"> <span class=\"productname\">{productname}</"
 "span> uses modern browser resources to adapt the user interface to the size "
 "of the viewing area, including small screens found in mobile devices.</span> "
 "The interface is composed of:"
 msgstr ""
-"<span class=\"productname\">{productname}</span> verwendet moderne Browser-"
-"Ressourcen, um die Benutzeroberfläche an die Größe des Anzeigebereichs "
-"anzupassen, einschließlich kleiner Bildschirme auf Mobilgeräten. Die "
-"Schnittstelle besteht aus:"
+"<span class=\"webBasedCOOLOnly\"><span class=\"productname\">{productname}</"
+"span> verwendet moderne Browser-Ressourcen, um die Benutzeroberfläche an die "
+"Größe des Anzeigebereichs anzupassen, einschließlich kleiner Bildschirme auf "
+"Mobilgeräten.</span> Die Schnittstelle besteht aus:"
 
 #: html/cool-help.html%2Bdiv.div.div.p:402-5
 msgid ""
@@ -2076,13 +2075,12 @@ msgid ""
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:490-5
-#, fuzzy
 msgid ""
 "To jump back to the selected state, select it with the mouse and hit <span "
 "class=\"ui\">OK</span>."
 msgstr ""
 "Um zum ausgewählten Status zurückzukehren, wählen Sie ihn mit der Maus aus "
-"und klicken Sie auf <span class=\"ui\">Zum Status springen</span>."
+"und klicken Sie auf <span class=\"ui\">OK</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:491-55
 msgid ""
@@ -2109,7 +2107,6 @@ msgid "Idle document"
 msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.p:496-5
-#, fuzzy
 msgid ""
 "When <span class=\"productname\">{productname}</span> detects that there has "
 "not been any activity in the browser for a while, it puts the document in an "
@@ -2120,7 +2117,7 @@ msgstr ""
 "Browser eine Zeit lang keine Aktivität stattgefunden hat, versetzt es das "
 "Dokument in den Status „Inaktiv“. Das Dokument wird mit einer transparenten "
 "grauen Überlagerung mit der Meldung „Inaktives Dokument - bitte klicken, um "
-"die Bearbeitung fortzusetzen“ angezeigt."
+"neu zu laden und die Bearbeitung fortzusetzen“ angezeigt."
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:497-57
 msgid ""
@@ -2215,7 +2212,6 @@ msgstr ""
 "Tabellendokument oder eine Tabelle in einer Präsentation aus."
 
 #: html/cool-help.html%2Bdiv.div.div.ol.li:516-7
-#, fuzzy
 msgid ""
 "Choose <span class=\"ui\">Insert</span> → <span class=\"ui\">Chart</span>. "
 "Customize your chart on the sidebar:"
@@ -2370,14 +2366,13 @@ msgstr ""
 "geschriebenen Wort"
 
 #: html/cool-help.html%2Bdiv.div.div.p:544-5
-#, fuzzy
 msgid ""
 "To systematically spell-check the whole document use <span class=\"ui\""
 ">Spelling</span> on the <span class=\"ui\">Review</span> tab."
 msgstr ""
 "Um das gesamte Dokument systematisch auf Rechtschreibung zu überprüfen, "
-"verwenden Sie im Menü <span class=\"ui\">Extras</span> die Option <span "
-"class=\"ui\">Rechtschreibung</span>."
+"verwenden Sie die Funktion <span class=\"ui\">Rechtschreibung</span> auf dem "
+"Tab <span class=\"ui\">Überprüfen</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:551-30
 msgid ""
@@ -2556,13 +2551,13 @@ msgstr ""
 "abgelehnt. So aktivieren Sie die Datengültigkeit:"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:589-7
-#, fuzzy
 msgid ""
 "Choose <span class=\"ui\">Validity</span> on the <span class=\"ui\">Data</"
 "span> tab. The <span class=\"ui\">Validity</span> dialog opens."
 msgstr ""
-"Wählen Sie <span class=\"ui\">Daten</span> – <span class=\"ui\">Gültigkeit</"
-"span>. Der Dialog <span class=\"ui\">Gültigkeit</span> wird geöffnet."
+"Wählen Sie <span class=\"ui\">Gültigkeit</span> auf dem Tab <span "
+"class=\"ui\">Daten</span>. Der Dialog <span class=\"ui\">Gültigkeit</span> "
+"wird geöffnet."
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.div.img[alt]:592-57
 msgid ""
@@ -2634,7 +2629,6 @@ msgstr ""
 "Kommentartext sowie die Schaltflächen „Speichern“ und „Abbrechen“ anzeigt"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:606-5
-#, fuzzy
 msgid ""
 "<span class=\"def\">Conditional formatting:</span> <span class=\"productname"
 "\">{productname}</span> adds symbols to each cell of a range based on cells "
@@ -2642,12 +2636,12 @@ msgid ""
 "span> on the <span class=\"ui\">Home</span> tab. Select the symbol set to "
 "apply on the range."
 msgstr ""
-"<span class=\"def\">Bedingte Formatierung:</span> <span class=\"productname\""
-">{productname}</span> fügt jeder Zelle eines Bereichs basierend auf den "
-"Zellenbedingungen Symbole hinzu. Wählen Sie den Zellbereich aus und klicken "
-"Sie in der Symbolleiste auf das Symbol <span class=\"ui\">Bedingte "
-"Formatierung</span>. Wählen Sie den Symbolsatz aus, der auf den Bereich "
-"angewendet werden soll."
+"<span class=\"def\">Bedingte Formatierung:</span> <span "
+"class=\"productname\">{productname}</span> fügt jeder Zelle eines Bereichs "
+"basierend auf den Zellenbedingungen Symbole hinzu. Wählen Sie den "
+"Zellbereich aus und klicken Sie in der Symbolleiste auf das Symbol <span "
+"class=\"ui\">Bedingte Formatierung</span>. Wählen Sie den Symbolsatz aus, "
+"der auf den Bereich angewendet werden soll."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:607-62
 msgid ""
@@ -2737,18 +2731,17 @@ msgstr ""
 "gilt nur für das aktuell ausgewählte Objekt."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:629-5
-#, fuzzy
 msgid ""
 "<span class=\"def\">Style formatting:</span> <span class=\"productname\""
 ">{productname}</span> supports paragraph styles. You can apply an existing "
 "paragraph style to a paragraph. Select the style in the style list on the "
 "<span class=\"ui\">Home</span> tab."
 msgstr ""
-"<span class=\"def\">Formatierung mit Vorlagen:</span> <span class="
-"\"productname\">{productname}</span> unterstützt Absatzvorlagen. Sie können "
-"eine vorhandenen Absatzvorlage auf einen Absatz anwenden. Wählen Sie <span "
-"class=\"ui\">Bearbeiten</span> → <span class=\"ui\">Absatzvorlage "
-"bearbeiten…</span>, um eine Vorlage zu ändern."
+"<span class=\"def\">Formatierung mit Vorlagen:</span> <span "
+"class=\"productname\">{productname}</span> unterstützt Absatzvorlagen. Sie "
+"können eine vorhandenen Absatzvorlage auf einen Absatz anwenden. Wählen Sie "
+"das Format in der Formatliste auf dem Tab <span class=\"ui\">Startseite</"
+"span> aus."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:630-56
 msgid ""
@@ -2764,7 +2757,6 @@ msgid "Handling Tables"
 msgstr "Umgang mit Tabellen"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:637-5
-#, fuzzy
 msgid ""
 "Insert tables with <span class=\"ui\">Insert</span> → <span class=\"ui\""
 ">Table</span>. Select the initial number of rows and columns. Add rows and "
@@ -2772,11 +2764,12 @@ msgid ""
 ">Table</span> tab. The default paragraph style inside cells is “Table "
 "contents”."
 msgstr ""
-"Fügen Sie Tabellen mit dem Symbol in der Symbolleiste ein. Wählen Sie die "
-"anfängliche Anzahl von Zeilen und Spalten. Fügen Sie über das Kontextmenü "
-"Zeilen und Spalten hinzu. Verbinden Sie Zellen, indem Sie <span class=\"ui\""
-">Tabellen</span> wählen. Der Standard-Absatzvorlage in Zellen lautet "
-"„Tabelleninhalt“."
+"Fügen Sie Tabellen mit <span class=\"ui\">Einfügen</span> → <span "
+"class=\"ui\">Tabelle</span> ein. Wählen Sie die anfängliche Anzahl von "
+"Zeilen und Spalten aus. Fügen Sie über das Zellkontextmenü Zeilen und "
+"Spalten hinzu. Verbinden Sie Zellen, indem Sie den Tab <span class=\"ui\">"
+"Tabellen</span> wählen. Die Standard-Absatzvorlage in Zellen lautet „"
+"Tabelleninhalt“."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:638-52
 msgid ""
@@ -2787,16 +2780,15 @@ msgstr ""
 "Spalten, derzeit wird 5 × 3 angezeigt"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:641-5
-#, fuzzy
 msgid ""
 "<span class=\"def\">Formatting cells:</span> Click in the cell or range of "
 "cells, open the context menu and choose <span class=\"ui\">Table Properties</"
 "span>. Fine tune the table with the properties dialog."
 msgstr ""
 "<span class=\"def\">Zellen formatieren:</span> Klicken Sie in die Zelle oder "
-"den Zellbereich und wählen Sie <span class=\"ui\">Tabelle</span> → <span "
-"class=\"ui\">Eigenschaften…</span>. Passen Sie die Tabelle im Eigenschaften-"
-"Dialogfeld an."
+"den Zellbereich, öffnen Sie das Kontextmenü und wählen Sie <span "
+"class=\"ui\">Tabelleneigenschaften</span>. Passen Sie die Tabelle im "
+"Eigenschaften-Dialogfeld an."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:644-5
 msgid "Track changes"
@@ -3105,16 +3097,15 @@ msgid "How can I check spelling in my language?"
 msgstr "Wie kann ich die Rechtschreibung in meiner Sprache prüfen?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:722-5
-#, fuzzy
 msgid ""
 "Choose <span class=\"ui\">Review</span> → <span class=\"ui\">Language</span> "
 "and select the language for the whole document. Optionally you can set "
 "languages for the selected text and for the current paragraph."
 msgstr ""
-"Wählen Sie <span class=\"ui\">Extras</span> → <span class=\"ui\">Sprachen</"
-"span> und wählen Sie die Sprache für das gesamte Dokument aus. Optional "
-"können Sie Sprachen für den ausgewählten Text und für den aktuellen Absatz "
-"festlegen."
+"Wählen Sie <span class=\"ui\">Überprüfen</span> → <span class=\"ui\">"
+"Sprachen</span> und wählen Sie die Sprache für das gesamte Dokument aus. "
+"Optional können Sie Sprachen für den ausgewählten Text und für den aktuellen "
+"Absatz festlegen."
 
 #: html/cool-help.html%2Bdiv.div.div.h4:725-5
 msgid "How can I remove the red wavy lines in my document?"
@@ -3148,15 +3139,14 @@ msgid "Is there a thesaurus?"
 msgstr "Gibt es einen Thesaurus?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:734-5
-#, fuzzy
 msgid ""
 "Yes. Click in the word you want and choose <span class=\"ui\">Review</span> →"
 " <span class=\"ui\">Thesaurus</span>. A dialog opens with many suggestions "
 "for replacements."
 msgstr ""
-"Ja. Klicken Sie auf das gewünschte Wort und wählen Sie <span class=\"ui\""
-">Extras</span> → <span class=\"ui\">Thesaurus…</span>. Ein Dialog mit vielen "
-"Vorschlägen für Ersetzungen wird geöffnet."
+"Ja. Klicken Sie auf das gewünschte Wort und wählen Sie <span class=\"ui\">"
+"Überprüfen</span> → <span class=\"ui\">Thesaurus</span>. Ein Dialog mit "
+"vielen Vorschlägen für Ersetzungen wird geöffnet."
 
 #: html/cool-help.html%2Bdiv.div.div.div.img[alt]:735-49
 msgid ""
@@ -3193,14 +3183,13 @@ msgid "How do I get a word count of my document?"
 msgstr "Wie kann ich Anzahl der Wörter für mein Dokument herausfinden?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:747-5
-#, fuzzy
 msgid ""
 "Word count is available in <span class=\"ui\">Review</span> → <span class="
 "\"ui\">Word Count</span>. A dialog shows word counts for selection and for "
 "the whole document."
 msgstr ""
-"Um die Anzahl der Wörter herauszufinden, wählen Sie <span class=\"ui\""
-">Extras</span> → <span class=\"ui\">Wortzählung…</span>. Ein Dialog zeigt "
+"Um die Anzahl der Wörter herauszufinden, wählen Sie <span class=\"ui\">"
+"Überprüfen</span> → <span class=\"ui\">Wortanzahl</span>. Ein Dialog zeigt "
 "die Anzahl der Wörter der Auswahl und des gesamten Dokuments an."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:748-50
@@ -3283,7 +3272,6 @@ msgid "Why can't I delete text? It just gets a strike-through?"
 msgstr "Warum kann ich keinen Text löschen? Er wird nur durchgestrichen?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:766-5
-#, fuzzy
 msgid ""
 "You have the Track Changes feature enabled for the document. Track Changes "
 "records all changes in the text and shows the edits for later revision. "
@@ -3295,8 +3283,8 @@ msgstr ""
 "Änderungen verfolgen“ zeichnet alle Änderungen im Text auf und zeigt die "
 "Änderungen zur späteren Überprüfung an. Nützlich zum Markieren von "
 "Änderungen in Texten und Tabellen. Um „Änderungen verfolgen“ zu aktivieren, "
-"wählen Sie <span class=\"ui\">Bearbeiten</span> → <span class=\"ui\""
-">Änderungen verfolgen</span> → <span class=\"ui\">Aufzeichnen</span>."
+"wählen Sie <span class=\"ui\">Überprüfen</span> → <span class=\"ui\">"
+"Aufzeichnen</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:767-5
 msgid ""
@@ -3346,7 +3334,6 @@ msgstr ""
 "möglicherweise unbeabsichtigt unerwünschter Text im Dokument verbleibt."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:777-5
-#, fuzzy
 msgid ""
 "Changes can be accepted or rejected. To accept or reject changes, click on "
 "the corresponding icons in the comment box on the right of the document. "
@@ -3359,14 +3346,13 @@ msgid ""
 msgstr ""
 "Änderungen können akzeptiert oder abgelehnt werden. Um Änderungen zu "
 "akzeptieren oder abzulehnen, klicken Sie auf die entsprechenden Symbole im "
-"Kommentarfeld rechts neben dem Dokument. Alternativ wählen Sie <span class="
-"\"ui\">Bearbeiten</span> → <span class=\"ui\">Änderungen</span> → <span "
-"class=\"ui\">Akzeptieren</span> oder <span class=\"ui\">Ablehnen</span>. "
-"Wenn Sie Änderungen vor dem Akzeptieren oder Ablehnen filtern möchten, "
-"wählen Sie <span class=\"ui\">Bearbeiten</span> → <span class=\"ui\""
-">Änderungen</span> → <span class=\"ui\">Verwalten…</span>. Ein Dialog zeigt "
-"eine Liste aller nachverfolgten Änderungen. Verwenden Sie die "
-"Dialogschaltflächen entsprechend."
+"Kommentarfeld rechts neben dem Dokument. Alternativ wählen Sie <span "
+"class=\"ui\">Überprüfen</span> → <span class=\"ui\">Akzeptieren</span> oder "
+"<span class=\"ui\">Ablehnen</span>. Wenn Sie Änderungen vor dem Akzeptieren "
+"oder Ablehnen filtern möchten, wählen Sie <span class=\"ui\">Überprüfen</"
+"span> → <span class=\"ui\">Akzeptieren</span> → <span class=\"ui\">"
+"Verwalten</span>. Ein Dialog zeigt eine Liste aller nachverfolgten "
+"Änderungen. Verwenden Sie die Dialogschaltflächen entsprechend."
 
 #: html/cool-help.html%2Bdiv.div.div.div.div.img[alt]:778-54
 msgid ""
@@ -3395,13 +3381,13 @@ msgid "Using the page style"
 msgstr "Verwenden von Seitenvorlagen"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:785-7
-#, fuzzy
 msgid ""
 "Choose <span class=\"ui\">Format</span> → <span class=\"ui\">Page Style</"
 "span> and select the <span class=\"ui\">Page</span> tab"
 msgstr ""
-"Wählen Sie <span class=\"ui\">Format</span> → <span class=\"ui\">Seite…</"
-"span> und wählen Sie den Tab <span class=\"ui\">Seite</span>"
+"Wählen Sie <span class=\"ui\">Format</span> → <span class=\"ui\">"
+"Seitenlayout</span> und wählen Sie den Tab <span class=\"ui\">Seite</span> "
+"aus"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:786-7
 msgid "Set the page margins in the dialog."
@@ -3648,15 +3634,14 @@ msgstr ""
 ">{productname}</span>"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li:869-7
-#, fuzzy
 msgid ""
 "Either choose <span class=\"ui\">Slide Show</span> → <span class=\"ui\">From "
 "Beginning</span> or click on the left-most icon in the bottom of the slide "
 "panel:"
 msgstr ""
-"Wählen Sie entweder <span class=\"ui\">Folie</span> → <span class=\"ui\""
-">Vollbildpräsentation</span> oder klicken Sie auf das Symbol ganz links am "
-"unteren Rand des Folienbereichs:"
+"Wählen Sie entweder <span class=\"ui\">Folie</span> → <span class=\"ui\">Von "
+"Anfang an</span> oder klicken Sie auf das Symbol ganz links am unteren Rand "
+"des Folienbereichs:"
 
 #: html/cool-help.html%2Bdiv.div.div.div.ol.li.img[alt]:869-187
 msgid "slide show"

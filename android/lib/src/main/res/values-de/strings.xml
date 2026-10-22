@@ -26,4 +26,5 @@
     <string name="all_files_access_grant">Zugriff zulassen</string>
     <string name="do_not_ask_again">Nicht erneut nachfragen</string>
     <string name="failed_to_save_file">Die Änderungen konnten nicht in der Datei gespeichert werden</string>
+    <string name="all_files_access_message">Die App, die diese Datei geteilt hat, hat es nicht zugelassen, Änderungen wieder in der Datei zu speichern.\n\nGewähren Sie die Berechtigung „Zugriff auf alle Dateien“, damit diese App in die Datei schreiben kann, in der sie gespeichert ist, und Sie sie dort bearbeiten können.</string>
 </resources>

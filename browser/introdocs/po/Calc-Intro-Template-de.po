@@ -3,8 +3,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Calc-Intro-Template.ods\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2026-10-05 21:51+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@googlemail.com>\n"
+"PO-Revision-Date: 2026-10-17 20:54+0000\n"
+"Last-Translator: Mr-Update <mr-update@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collabora-online/"
 "calc-intro-template/de/>\n"
 "Language: de\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 2026.10.1.dev0\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #. content.xml (validation title)
 msgid "Try formatting"
@@ -895,9 +895,8 @@ msgid ""
 msgstr ""
 
 #. content.xml (sheet '🤝 Productivity & collaboration')
-#, fuzzy
 msgid "Check out video tutorials"
-msgstr "⏯Video-Tutorials"
+msgstr "Sehen Sie sich die Video-Tutorials an"
 
 #~ msgid "5"
 #~ msgstr "5"
