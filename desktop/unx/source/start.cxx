@@ -32,7 +32,7 @@
 #include <rtl/ustrbuf.h>
 #include <sal/main.h>
 
-#include "args.h"
+#include "args.hxx"
 #include "pagein.h"
 #include "splashx.h"
 

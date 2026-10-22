@@ -6,12 +6,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
+#pragma once
+
 #include <sal/types.h>
 #include <rtl/ustring.h>
-
-#ifdef __cplusplus
-extern "C" {
-#endif
 
 typedef struct {
   rtl_uString *pAppPath;
@@ -28,9 +26,5 @@ typedef struct {
 
 Args *args_parse (void);
 void  args_free  (Args *args);
-
-#ifdef __cplusplus
-}
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

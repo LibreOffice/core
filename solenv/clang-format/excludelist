@@ -3004,8 +3004,8 @@ desktop/source/splash/unxsplash.cxx
 desktop/source/splash/unxsplash.hxx
 desktop/test/deployment/active/active_native.cxx
 desktop/test/deployment/passive/passive_native.cxx
-desktop/unx/source/args.c
-desktop/unx/source/args.h
+desktop/unx/source/args.cxx
+desktop/unx/source/args.hxx
 desktop/unx/source/file_image.h
 desktop/unx/source/file_image_unx.c
 desktop/unx/source/pagein.c

@@ -6,12 +6,11 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
  */
-#include <stdbool.h>
-#include <stdlib.h>
+
+#include "args.hxx"
+
 #include <string.h>
 #include <osl/process.h>
-
-#include "args.h"
 
 /* do we start -env: */
 static bool is_env_arg(rtl_uString const* str)
@@ -19,7 +18,7 @@ static bool is_env_arg(rtl_uString const* str)
     return !rtl_ustr_ascii_compare_WithLength (str->buffer, 5, "-env:");
 }
 
-static const struct {
+const struct {
     const char   *name;
     unsigned int  bInhibitSplash : 1;
     unsigned int  bInhibitPagein : 1;
@@ -28,18 +27,18 @@ static const struct {
     const char   *pPageinType;
 } pArgDescr[] = {
     /* have a trailing argument */
-    { "pt",         1, 0, 0, 0, NULL },
-    { "p",          1, 0, 0, 0, NULL },
-    { "display",    0, 0, 0, 0, NULL },
+    { "pt",         1, 0, 0, 0, nullptr },
+    { "p",          1, 0, 0, 0, nullptr },
+    { "display",    0, 0, 0, 0, nullptr },
 
     /* no splash */
-    { "nologo",     1, 0, 0, 0, NULL },
-    { "headless",   1, 0, 0, 0, NULL },
-    { "invisible",  1, 0, 0, 0, NULL },
-    { "quickstart", 1, 0, 0, 0, NULL },
-    { "minimized",  1, 0, 0, 0, NULL },
-    { "convert-to", 1, 0, 0, 0, NULL },
-    { "cat",        1, 0, 0, 0, NULL },
+    { "nologo",     1, 0, 0, 0, nullptr },
+    { "headless",   1, 0, 0, 0, nullptr },
+    { "invisible",  1, 0, 0, 0, nullptr },
+    { "quickstart", 1, 0, 0, 0, nullptr },
+    { "minimized",  1, 0, 0, 0, nullptr },
+    { "convert-to", 1, 0, 0, 0, nullptr },
+    { "cat",        1, 0, 0, 0, nullptr },
 
     /* pagein bits */
     { "writer",     0, 0, 0, 0, "pagein-writer"  },
@@ -51,10 +50,10 @@ static const struct {
        the calling process's stdout (ideally, this would also happen in the
        presence of unknown options); also prevent splash/pagein/javaldx overhead
        (as these options will be processed early in soffice_main): */
-    { "version",    1, 1, 1, 1, NULL },
-    { "help",       1, 1, 1, 1, NULL },
-    { "h",          1, 1, 1, 1, NULL },
-    { "?",          1, 1, 1, 1, NULL },
+    { "version",    1, 1, 1, 1, nullptr },
+    { "help",       1, 1, 1, 1, nullptr },
+    { "h",          1, 1, 1, 1, nullptr },
+    { "?",          1, 1, 1, 1, nullptr },
 };
 
 Args *args_parse (void)
@@ -64,7 +63,7 @@ Args *args_parse (void)
 
     nArgs = osl_getCommandArgCount();
     i = sizeof (Args) + sizeof (rtl_uString *) * nArgs;
-    args = malloc (i);
+    args = static_cast<Args*>(malloc(i));
     memset (args, 0, i);
     args->nArgsTotal = nArgs;
 
@@ -73,7 +72,7 @@ Args *args_parse (void)
     /* sort the -env: args to the front */
     for ( i = 0; i < nArgs; ++i )
     {
-        rtl_uString *pTmp = NULL;
+        rtl_uString *pTmp = nullptr;
         osl_getCommandArg( i, &pTmp );
         if (is_env_arg (pTmp))
             args->ppArgs[j++] = pTmp;
@@ -85,7 +84,7 @@ Args *args_parse (void)
     /* Then the other args */
     for ( i = 0; i < nArgs; ++i )
     {
-        rtl_uString *pTmp = NULL;
+        rtl_uString *pTmp = nullptr;
 
         osl_getCommandArg( i, &pTmp );
         if (!is_env_arg (pTmp))
