@@ -144,13 +144,30 @@ globalThis.document = globalThis.window.document;
 (globalThis as any).Element = (globalThis.window as any).Element;
 (globalThis as any).HTMLElement = (globalThis.window as any).HTMLElement;
 (globalThis as any).Node = (globalThis.window as any).Node;
-(globalThis as any).CSS = (globalThis.window as any).CSS;
+// jsdom has no CSS object. CSS.escape puts a backslash before each character that is not
+// allowed in an identifier, and writes a leading digit as a code point.
+(globalThis as any).CSS = (globalThis.window as any).CSS || {
+	escape: (value: string) =>
+		String(value)
+			.replace(/[^a-zA-Z0-9_\u00a0-\uffff-]/g, '\\$&')
+			.replace(
+				/^(-?)([0-9])/,
+				(match, dash, digit) => dash + '\\3' + digit + ' ',
+			),
+};
 (globalThis as any).DocumentFragment = (
 	globalThis.window as any
 ).DocumentFragment;
 (globalThis as any).MutationObserver = (
 	globalThis.window as any
 ).MutationObserver;
+// Node has its own Event, and jsdom only dispatches its own.
+(globalThis as any).Event = (globalThis.window as any).Event;
+
+// src/UNO/Key.js sets window.UNOKey, and the sources read it as a bare name.
+Object.defineProperty(globalThis, 'UNOKey', {
+	get: () => (globalThis.window as any).UNOKey,
+});
 
 (globalThis.window as any).app = (globalThis as any).app;
 
@@ -230,6 +247,15 @@ const jqueryModule = require('jquery');
 	isCODesktop: () => false,
 };
 
+// The browser builds window.touch in js/global.js. Here every event comes from a mouse.
+(globalThis.window as any).touch = {
+	isTouchEvent: () => false,
+	touchOnly: (handler: any) => () => {},
+	mouseOnly: (handler: any) => handler,
+	hasPrimaryTouchscreen: () => false,
+	hasAnyTouchscreen: () => false,
+};
+
 // The preferences live in memory only. reset() empties them.
 (globalThis.window as any).prefs = {
 	_values: {} as { [key: string]: string },
@@ -270,6 +296,15 @@ if (!('innerText' in jsdomElement))
 		},
 		configurable: true,
 	});
+
+// jsdom has no checkVisibility. An element in the page counts as visible.
+if (!jsdomElement.checkVisibility)
+	jsdomElement.checkVisibility = function () {
+		return this.isConnected;
+	};
+
+// jsdom has no layout, so scrolling an element into view does nothing.
+if (!jsdomElement.scrollIntoView) jsdomElement.scrollIntoView = function () {};
 
 // jsdom implements no DOMRect.
 (globalThis as any).DOMRect = class _DOMRect {

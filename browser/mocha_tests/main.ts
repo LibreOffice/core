@@ -39,6 +39,7 @@
 /// <reference path="./helper/ImageRecorder.ts"/>
 /// <reference path="./helper/VectorRenderingReference.ts"/>
 /// <reference path="./helper/aiChat.ts"/>
+/// <reference path="./helper/jsDialog.ts"/>
 /// <reference path="./data/LOUtilTestData.ts"/>
 /// <reference path="./data/SheetGeometryTestData.ts" />
 
