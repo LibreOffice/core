@@ -28,6 +28,7 @@
 
 #include <docsh.hxx>
 #include <frameformats.hxx>
+#include <ndgrf.hxx>
 #include <ndtxt.hxx>
 #include <swtable.hxx>
 #include <txatbase.hxx>
@@ -169,6 +170,27 @@ CPPUNIT_TEST_FIXTURE(Test, testAltChunkHtml)
     CPPUNIT_ASSERT_EQUAL(u"HTML AltChunk"_ustr, xPara->getString());
     xPara.set(xParaEnum->nextElement(), uno::UNO_QUERY_THROW);
     CPPUNIT_ASSERT_EQUAL(u"outer para 2"_ustr, xPara->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testAltChunkHtmlImageLink)
+{
+    // An image in an HTML altChunk is a link relative to the DOCX file, like an image in a loaded
+    // HTML file.
+    loadFromFile(u"alt-chunk-html-image.docx");
+    SwDoc* pDoc = getSwDoc();
+    SwNodeOffset nNodes = pDoc->GetNodes().Count();
+    for (SwNodeOffset i(0); i < nNodes; ++i)
+    {
+        if (SwGrfNode* pGrfNode = pDoc->GetNodes()[i]->GetGrfNode())
+        {
+            CPPUNIT_ASSERT(pGrfNode->IsLinkedFile());
+            OUString aFileName;
+            pGrfNode->GetFileFilterNms(&aFileName, nullptr);
+            CPPUNIT_ASSERT_EQUAL(createFileURL(u"alt-chunk-html-image.png"), aFileName);
+            return;
+        }
+    }
+    CPPUNIT_FAIL("no graphic node in the document");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf174049AltChunkPageBreak)
