@@ -116,6 +116,8 @@ namespace FileUtil
                                             const std::string& filename);
 
     /// return the local path to the jailPath under localJailRoot
+    /// "." and ".." in jailPath are resolved first, as text, and an empty string is returned when a
+    /// ".." would go above the root
     /// localJailRoot /chroot/jailId
     /// jailPath /tmp/user/doc/childId
     /// with usingMountNamespaces false then simply return:

@@ -32,6 +32,8 @@
 #include <test/lokassert.hpp>
 #include <test/testlog.hpp>
 
+#include <Poco/Path.h>
+
 #include <cppunit/TestAssert.h>
 #include <cppunit/extensions/HelperMacros.h>
 
@@ -71,6 +73,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testStat);
     CPPUNIT_TEST(testReadFile);
     CPPUNIT_TEST(testIsPlainFileName);
+    CPPUNIT_TEST(testBuildLocalPathToJail);
     CPPUNIT_TEST(testStringCompare);
     CPPUNIT_TEST(testJsonUtilEscapeJSONValue);
     CPPUNIT_TEST(testStateEnum);
@@ -102,6 +105,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     void testStat();
     void testReadFile();
     void testIsPlainFileName();
+    void testBuildLocalPathToJail();
     void testStringCompare();
     void testJsonUtilEscapeJSONValue();
     void testStateEnum();
@@ -1056,6 +1060,54 @@ void WhiteBoxTests::testIsPlainFileName()
     LOK_ASSERT(!FileUtil::isPlainFileName("file.odt/"));
     LOK_ASSERT(!FileUtil::isPlainFileName("file\nname.odt"));
     LOK_ASSERT(!FileUtil::isPlainFileName("file\x7fname.odt"));
+}
+
+namespace
+{
+/// The path buildLocalPathToJail gives, with each "//" made a single "/".
+std::string jailPath(bool usingMountNamespaces, const std::string& jailRoot,
+                     const std::string& path)
+{
+    return Poco::Path(FileUtil::buildLocalPathToJail(usingMountNamespaces, jailRoot, path))
+        .toString();
+}
+} // namespace
+
+void WhiteBoxTests::testBuildLocalPathToJail()
+{
+    constexpr std::string_view testname = __func__;
+
+    const std::string dir = FileUtil::createRandomTmpDir();
+    FileUtil::OwnedFile dirCleanup(dir, /*recursive=*/true);
+    const std::string jailRoot = dir + "/jails/jailid";
+
+    LOK_ASSERT_EQUAL(jailRoot + "/user/docs/hello.odt",
+                     jailPath(false, jailRoot, "/user/docs/hello.odt"));
+    LOK_ASSERT_EQUAL(jailRoot + "/tmp/", jailPath(false, jailRoot, "/tmp/"));
+    LOK_ASSERT_EQUAL(jailRoot + "/user/hello.odt",
+                     jailPath(false, jailRoot, "user/./docs/../hello.odt"));
+
+    LOK_ASSERT_EQUAL(jailRoot + "/", jailPath(false, jailRoot, ""));
+    LOK_ASSERT_EQUAL(jailRoot + "/", jailPath(false, jailRoot, "/"));
+    LOK_ASSERT_EQUAL(jailRoot + "/user/", jailPath(false, jailRoot, "/user/docs/.."));
+    // A ".." after "//" removes the name before the "//".
+    LOK_ASSERT_EQUAL(jailRoot + "/hello.odt", jailPath(false, jailRoot, "/user//../hello.odt"));
+
+    // A path with a ".." above the jail root gives no path.
+    LOK_ASSERT_EQUAL(std::string(), jailPath(false, jailRoot, "../../hello.odt"));
+    LOK_ASSERT_EQUAL(std::string(), jailPath(false, jailRoot, "/user/../../user/hello.odt"));
+    LOK_ASSERT_EQUAL(std::string(), jailPath(false, jailRoot, "/.."));
+    LOK_ASSERT_EQUAL(std::string(), jailPath(false, jailRoot, "//.."));
+    LOK_ASSERT(!FileUtil::Stat(dir + "/hello.odt").exists());
+
+    // With mount namespaces, the jail's /tmp is where it is mounted from.
+    LOK_ASSERT_EQUAL(dir + "/jails/tmp/cool-jailid/hello.odt",
+                     jailPath(true, jailRoot, "/tmp/hello.odt"));
+    LOK_ASSERT_EQUAL(std::string(), jailPath(true, jailRoot, "../tmp/hello.odt"));
+    LOK_ASSERT_EQUAL(jailRoot + "/user/hello.odt",
+                     jailPath(true, jailRoot, "/user/hello.odt"));
+    LOK_ASSERT_EQUAL(jailRoot + "/user/hello.odt",
+                     jailPath(true, jailRoot, "/tmp/../user/hello.odt"));
 }
 
 void WhiteBoxTests::testStringCompare()

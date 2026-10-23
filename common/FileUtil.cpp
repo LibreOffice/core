@@ -37,6 +37,7 @@
 #include <filesystem>
 #include <fstream>
 #include <mutex>
+#include <optional>
 #include <set>
 #include <stdexcept>
 #include <string>
@@ -287,8 +288,49 @@ namespace FileUtil
     }
 #endif
 
+    namespace
+    {
+    // The path with each "." dropped and each ".." removing the name before it, as text and without
+    // following links, or nothing when a ".." would go above the root.
+    std::optional<std::string> resolveFromJailRoot(const std::string& path)
+    {
+        std::vector<std::string> components;
+        for (const std::string& component : Util::splitStringToVector(path, '/'))
+        {
+            if (component == "..")
+            {
+                if (components.empty())
+                    return std::nullopt;
+                components.pop_back();
+            }
+            else if (component != ".")
+                components.push_back(component);
+        }
+
+        std::string resolved = path.starts_with('/') ? "/" : "";
+        for (std::size_t i = 0; i < components.size(); ++i)
+        {
+            if (i > 0)
+                resolved += '/';
+            resolved += components[i];
+        }
+        if (!components.empty() &&
+            (path.ends_with('/') || path.ends_with("/.") || path.ends_with("/..")))
+            resolved += '/';
+        return resolved;
+    }
+    } // namespace
+
     std::string buildLocalPathToJail(bool usingMountNamespaces, std::string localStorePath, std::string localPath)
     {
+        std::optional<std::string> resolved = resolveFromJailRoot(localPath);
+        if (!resolved)
+        {
+            LOG_WRN("Path [" << Anonymizer::anonymizeUrl(localPath) << "] goes above the jail root");
+            return std::string();
+        }
+        localPath = std::move(*resolved);
+
         // Use where mountJail of kit/Kit.cpp mounts /tmp for this path *from* rather than
         // where it is mounted *to*, so this process doesn't need the mount visible to it
         if (usingMountNamespaces && !localPath.empty())

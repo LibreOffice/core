@@ -379,7 +379,7 @@ static std::string getLocalPathToJail(std::string filePath, const DocumentBroker
         const Path path(FileUtil::buildLocalPathToJail(COOLWSD::EnableMountNamespaces,
                                                        docBroker.getJailRoot(),
                                                        filePath));
-        if (Poco::File(path).exists())
+        if (!path.toString().empty() && Poco::File(path).exists())
             filePath = path.toString();
         else
         {
@@ -4699,7 +4699,7 @@ bool ClientSession::handleSaveAs(const std::shared_ptr<Message>& payload,
         // Rewrite file:// URLs to be visible to the outside world.
         const Path path(FileUtil::buildLocalPathToJail(
             COOLWSD::EnableMountNamespaces, docBroker->getJailRoot(), std::move(relative)));
-        if (Poco::File(path).exists())
+        if (!path.toString().empty() && Poco::File(path).exists())
         {
             // Encode path for special characters (i.e '%') since Poco::URI::setPath implicitly decodes the input param
             std::string encodedPath;

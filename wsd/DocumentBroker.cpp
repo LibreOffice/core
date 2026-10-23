@@ -6516,7 +6516,7 @@ bool DocumentBroker::handleInput(const std::shared_ptr<Message>& message)
             // /tmp, which the client has no way to reach. Reading and rewriting a whole
             // spreadsheet or PDF here would cost the same as the export itself, and on
             // the thread every session of this document shares.
-            if (FileUtil::extractFileExtension(decoded) == "svg")
+            if (!filePath.empty() && FileUtil::extractFileExtension(decoded) == "svg")
             {
                 std::ifstream ifs(filePath);
                 const std::string svg((std::istreambuf_iterator<char>(ifs)),
