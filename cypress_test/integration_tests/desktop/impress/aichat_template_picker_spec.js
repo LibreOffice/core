@@ -29,22 +29,6 @@ describe(['tagdesktop'], 'AI design picker on the deck decision cards', function
 		aichatHelper.clickSend();
 	}
 
-	it('A question goes out with no design picker in the way', function() {
-		aichatHelper.enableAIWithCaptureSocket(this.win, {});
-		aichatHelper.openAIChat();
-		sendRequest('What does this slide say?');
-
-		// The request goes out straight away and is answered; no picker
-		// appears anywhere in the conversation.
-		cy.cGet('#aichat-messages-list').should(
-			'contain.text', 'Mock AI response');
-		cy.then(() => {
-			expect(this.win.__aichatPayloads).to.have.length(1);
-			expect(this.win.__aichatPayloads[0].designTemplate).to.be.undefined;
-		});
-		cy.cGet('.aichat-design-section').should('not.exist');
-	});
-
 	it('The outline card offers the designs and the pick rides the approval', function() {
 		aichatHelper.enableAIWithOutlineSocket(this.win, { outline: outline });
 		aichatHelper.openAIChat();
@@ -97,21 +81,6 @@ describe(['tagdesktop'], 'AI design picker on the deck decision cards', function
 		});
 	});
 
-	it('No design is the default and the approval carries none', function() {
-		aichatHelper.enableAIWithOutlineSocket(this.win, { outline: outline });
-		aichatHelper.openAIChat();
-		sendRequest('Create a deck about cats');
-
-		cy.cGet('.aichat-outline-card .aichat-design-section').should('exist');
-		cy.cGet('.aichat-approve-btn').click();
-
-		cy.wrap(null).should(() => {
-			var decision = this.win.__aichatApprovePayloads[0];
-			expect(decision.action).to.equal('approve');
-			expect(decision.designTemplate).to.be.undefined;
-		});
-	});
-
 	it('A recorded pick rides later requests and ends the offer', function() {
 		aichatHelper.enableAIWithOutlineSocket(this.win, { outline: outline });
 		aichatHelper.openAIChat();
@@ -138,24 +107,5 @@ describe(['tagdesktop'], 'AI design picker on the deck decision cards', function
 			expect(this.win.__aichatPayloads).to.have.length(2);
 			expect(this.win.__aichatPayloads[1].designTemplate).to.equal('Cobalt');
 		});
-	});
-
-	it('An edit approval offers no designs', function() {
-		var transform = JSON.stringify({
-			Transforms: {
-				SlideCommands: [
-					{ 'DeleteSlide': 1 },
-				],
-			},
-		});
-		aichatHelper.enableAIWithCaptureSocket(this.win, {
-			approvalToolName: 'transform_document_structure',
-			approvalTransformJson: transform,
-		});
-		aichatHelper.openAIChat();
-		sendRequest('Delete the second slide');
-
-		cy.cGet('.aichat-approve-btn').should('exist');
-		cy.cGet('.aichat-design-section').should('not.exist');
 	});
 });

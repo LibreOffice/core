@@ -272,3 +272,22 @@ function aiMessagesText(): string {
 	const list = document.getElementById('aichat-messages-list');
 	return list ? list.textContent : '';
 }
+
+// Presses a key in the element, as keydown, and lets the sidebar react.
+async function pressKey(
+	selector: string,
+	key: string,
+	shiftKey: boolean = false,
+): Promise<void> {
+	const element = document.querySelector(selector);
+	if (!element) throw new Error('nothing matches ' + selector);
+	element.dispatchEvent(
+		new (window as any).KeyboardEvent('keydown', {
+			key: key,
+			shiftKey: shiftKey,
+			bubbles: true,
+			cancelable: true,
+		}),
+	);
+	await settleAIChat();
+}

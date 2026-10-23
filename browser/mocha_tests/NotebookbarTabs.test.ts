@@ -19,8 +19,10 @@ describe('Notebookbar tabs', function () {
 			windowMap: window.app.map,
 			isSlideImportSupported: app.impress.isSlideImportSupported,
 			params: window.L.Params,
+			showAINotebookbar: window.showAINotebookbar,
 			tableStyles: app.tableStyles,
 			makeHttpUrl: (window as any).makeHttpUrl,
+			isAIAssistantAvailable: app.LOUtil.isAIAssistantAvailable,
 		};
 		window.L.Params = {};
 		(window as any).makeHttpUrl = (path: string) => 'http://localhost' + path;
@@ -61,8 +63,10 @@ describe('Notebookbar tabs', function () {
 		window.app.map = saved.windowMap;
 		app.impress.isSlideImportSupported = saved.isSlideImportSupported;
 		window.L.Params = saved.params;
+		window.showAINotebookbar = saved.showAINotebookbar;
 		app.tableStyles = saved.tableStyles;
 		(window as any).makeHttpUrl = saved.makeHttpUrl;
+		app.LOUtil.isAIAssistantAvailable = saved.isAIAssistantAvailable;
 	});
 
 	// The notebookbar of the given kind, for a document of the given type and file name.
@@ -73,6 +77,10 @@ describe('Notebookbar tabs', function () {
 		nb.map = map;
 		nb._map = map;
 		return nb;
+	}
+
+	function writer(): any {
+		return notebookbar('NotebookbarWriter', 'text', 'help_dialog.odt');
 	}
 
 	function impress(): any {
@@ -128,5 +136,22 @@ describe('Notebookbar tabs', function () {
 			container.remove();
 			closeAllDialogs();
 		}
+	});
+
+	it('the notebookbar opens on the AI Assistant tab only once AI is configured', function () {
+		// The tab is offered to an unconfigured user as the way in to the setup dialog, so
+		// it is offered either way here and only the choice of the first tab is checked.
+		app.LOUtil.isAIAssistantAvailable = () => true;
+		window.showAINotebookbar = true;
+		const nb = writer();
+
+		map.isAIConfigured = false;
+		nodeassert.strictEqual(nb.getInitialTabId(), 'Home-tab-label');
+
+		map.isAIConfigured = true;
+		nodeassert.strictEqual(nb.getInitialTabId(), 'AIAssistant-tab-label');
+
+		window.showAINotebookbar = false;
+		nodeassert.strictEqual(nb.getInitialTabId(), 'Home-tab-label');
 	});
 });
