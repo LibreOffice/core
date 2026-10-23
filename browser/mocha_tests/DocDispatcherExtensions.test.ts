@@ -10,6 +10,19 @@
  */
 
 describe('Dispatcher ext: routing', function () {
+	let realMode: typeof window.mode;
+	let realMap: typeof app.map;
+
+	beforeEach(function () {
+		realMode = window.mode;
+		realMap = app.map;
+	});
+
+	afterEach(function () {
+		window.mode = realMode;
+		app.map = realMap;
+	});
+
 	// Enough of app.map for the constructor and the "is a dialog already open"
 	// guard at the top of dispatch() to run without touching anything else;
 	// _extensions is what the ext: branch actually reads.

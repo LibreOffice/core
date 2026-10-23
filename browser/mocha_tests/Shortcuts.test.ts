@@ -131,6 +131,19 @@ describe('ShortcutsUtil per document type', function () {
 });
 
 describe('KeyboardShortcuts', function () {
+	let realMode: any;
+	let realDispatcher: any;
+
+	beforeEach(function () {
+		realMode = window.mode;
+		realDispatcher = app.dispatcher;
+	});
+
+	afterEach(function () {
+		window.mode = realMode;
+		app.dispatcher = realDispatcher;
+	});
+
 	describe('processEvent()', function () {
 		it('reads a region-tagged language from its base language table', function () {
 			const dispatched: string[] = [];
