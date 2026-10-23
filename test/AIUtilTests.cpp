@@ -157,7 +157,7 @@ void AIUtilTests::testBuildAIEndpointUri()
 {
     constexpr std::string_view testname = __func__;
 
-    const auto build = [](const std::string& baseUrl)
+    const auto build = [](const std::string& baseUrl) -> std::string
     {
         Poco::URI uri;
         return AIUtil::buildAIEndpointUri(baseUrl, "/v1/models", uri) ? uri.toString()
