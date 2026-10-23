@@ -18,6 +18,7 @@
 #include <qt/CursorFix.hpp>
 #include <qt/DBusService.hpp>
 #include <net/FakeSocket.hpp>
+#include <common/DraftStore.hpp>
 #include <common/Log.hpp>
 #include <common/SettingsStorage.hpp>
 #include <common/Util.hpp>
@@ -38,6 +39,7 @@
 #include <QDir>
 #include <QLocale>
 #include <QLoggingCategory>
+#include <QStandardPaths>
 #include <QString>
 #include <QTranslator>
 #include <QWebEngineProfile>
@@ -380,6 +382,10 @@ int main(int argc, char** argv)
     DBusService* dbusService = new DBusService(&app);
     DBusService::registerService(dbusService);
 
+    drafts::initialize(
+        QStandardPaths::writableLocation(QStandardPaths::AppDataLocation).toStdString());
+    drafts::deleteMarked();
+
     if (!absoluteFiles.isEmpty())
     {
         coda::openFiles(absoluteFiles);
@@ -394,7 +400,7 @@ int main(int argc, char** argv)
         // the app.
         WebView* starterView = new WebView(Application::getProfile());
         StandaloneWindow::wrap(starterView);
-        starterView->load(Poco::URI(), false, true);
+        starterView->load(Poco::URI(), /*isStarterMode*/ true);
     }
 
     auto const ret = app.exec();

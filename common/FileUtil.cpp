@@ -173,6 +173,29 @@ namespace FileUtil
         return false;
     }
 
+    std::string hostPath(const std::string& path)
+    {
+        if (std::optional<std::string> host = portalHostPath(path))
+            return *host;
+        return realpath(path);
+    }
+
+    std::string hostPathOfTarget(const std::string& path)
+    {
+        if (Stat(path).exists())
+            return hostPath(path);
+        if (std::optional<std::string> host = portalHostPath(path))
+            return *host;
+
+        const std::size_t slash = path.find_last_of('/');
+        if (slash == std::string::npos || slash == 0)
+            return path;
+        const std::string folder = path.substr(0, slash);
+        if (!Stat(folder).exists())
+            return path;
+        return hostPath(folder) + path.substr(slash);
+    }
+
     std::string createRandomTmpDir(std::string root)
     {
         return createTmpDir("cool-" + Util::rng::getFilename(16), std::move(root));

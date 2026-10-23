@@ -238,6 +238,7 @@ interface MapInterface extends Evented {
 		extendedData?: string,
 	): void;
 	_everModified: boolean;
+	_isDraft: boolean;
 	print(options?: string): void;
 	openRevisionHistory(): void;
 	openShare(): void;

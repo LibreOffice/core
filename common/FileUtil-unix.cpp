@@ -11,7 +11,7 @@
 
 /*
  * Unix-specific file utility implementations.
- * Functions: linkOrCopyFile(), realpath(), file operations
+ * Functions: linkOrCopyFile(), realpath(), portalHostPath(), file operations
  */
 
 #include <config.h>
@@ -19,6 +19,7 @@
 #include <common/Anonymizer.hpp>
 #include <common/FileUtil.hpp>
 #include <common/Log.hpp>
+#include <cerrno>
 #include <climits>
 #include <dirent.h>
 #include <filesystem>
@@ -36,6 +37,7 @@
 
 #ifdef __linux__
 #include <sys/vfs.h>
+#include <sys/xattr.h>
 #elif defined IOS
 #import <Foundation/Foundation.h>
 #elif defined __FreeBSD__
@@ -79,6 +81,35 @@ namespace FileUtil
 
         LOG_SYS("Failed to get the realpath of [" << path << ']');
         return path;
+    }
+
+    std::optional<std::string> portalHostPath(const std::string& path)
+    {
+#ifdef __linux__
+        static constexpr const char* HostPathXAttr = "user.document-portal.host-path";
+
+        // The value can change between asking its size and reading it; ask again then.
+        for (int attempt = 0; attempt < 3; ++attempt)
+        {
+            const ssize_t size = ::getxattr(path.c_str(), HostPathXAttr, nullptr, 0);
+            if (size <= 0)
+                return std::nullopt;
+
+            std::string hostPath(size, '\0');
+            const ssize_t length = ::getxattr(path.c_str(), HostPathXAttr, hostPath.data(), size);
+            if (length > 0)
+            {
+                hostPath.resize(length);
+                return hostPath;
+            }
+            if (length == 0 || errno != ERANGE)
+                return std::nullopt;
+        }
+        LOG_WRN("The portal host path of [" << path << "] keeps changing");
+#else
+        (void)path;
+#endif
+        return std::nullopt;
     }
 
 #if !defined(__APPLE__) // iOS-specific implementation in FileUtil-apple.cpp

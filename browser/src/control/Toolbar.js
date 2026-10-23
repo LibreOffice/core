@@ -283,6 +283,11 @@ window.L.Map.include({
 	},
 
 	save: function(dontTerminateEdit, dontSaveIfUnmodified, extendedData) {
+		if (this._isDraft) {
+			this.sendUnoCommand('.uno:SaveAs');
+			return;
+		}
+
 		this.fire('updatemodificationindicator', { status: 'SAVING' });
 
 		// Every save sent from here was asked for by the user or the integration. A save
@@ -333,6 +338,10 @@ window.L.Map.include({
 			ClassicCreateContext.start(line);
 			return;
 		}
+
+		// A localized Save shortcut sends the command without passing save().
+		if (command === '.uno:Save' && this._isDraft)
+			command = '.uno:SaveAs';
 
 		if (command.indexOf('.uno:') < 0 && command.indexOf('vnd.sun.star.script') < 0)
 			console.error('Trying to send uno command without prefix: "' + command + '"');

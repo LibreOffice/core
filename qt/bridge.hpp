@@ -90,9 +90,6 @@ class Bridge : public QObject
     // template working copy is never written back as if it were the document.
     bool _requiresSaveAs = false;
 
-    // The user has not yet chosen a name for this new document.
-    bool _isNewDocument = false;
-
     void promptSaveLocation(std::function<void(const std::string&, const std::string&)> callback);
     void saveDocumentAs();
     void createAndStartMessagePumpThread();
@@ -115,8 +112,6 @@ public:
 
     // Redirect the first save of a template-based document to Save As.
     void setRequiresSaveAs(bool requiresSaveAs) { _requiresSaveAs = requiresSaveAs; }
-
-    void setNewDocument(bool isNewDocument) { _isNewDocument = isNewDocument; }
 
     // Run the page's JavaScript in frame instead of the page's main frame.
     void setFrame(const QWebEngineFrame& frame) { _frame = frame; }

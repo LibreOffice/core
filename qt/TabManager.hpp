@@ -56,11 +56,11 @@ public:
     WebView* webViewForTab(int tabId) const;
     int tabIdForWebView(WebView* wv) const;
 
-    // Return the new tab's id. requiresSaveAs turns the document's first save
-    // into a Save As, so the file at fileURL is never written to (see
-    // WebView::openTemplateAsNewDocument).
+    // Return the new tab's id. For asDraft see WebView::load. requiresSaveAs
+    // turns the document's first save into a Save As, so the file at fileURL
+    // is never written to (see WebView::openTemplateAsNewDocument).
     int addStarterTab();
-    int addDocumentTab(const Poco::URI& fileURL, bool newFile = false,
+    int addDocumentTab(const Poco::URI& fileURL, bool asDraft = false,
                        bool requiresSaveAs = false);
 
     int adoptTab(WebView* webView, int insertAt);

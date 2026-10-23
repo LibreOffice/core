@@ -106,6 +106,11 @@ namespace FileUtil
         return std::string(path);
     }
 
+    std::optional<std::string> portalHostPath(const std::string&)
+    {
+        return std::nullopt;
+    }
+
     bool platformDependentCheckDiskSpace(const std::string& path, int64_t enoughSpace)
     {
         // FIXME

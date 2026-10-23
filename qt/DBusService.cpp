@@ -17,6 +17,8 @@
 #include <qt/WebView.hpp>
 #include <qt/WindowUtils.hpp>
 #include <common/CODAConfig.hpp>
+#include <common/DraftStore.hpp>
+#include <common/FileUtil.hpp>
 #include <common/Log.hpp>
 #include <COKit/COKit.hxx>
 #include <qt/qt.hpp>
@@ -29,9 +31,6 @@
 #include <QFile>
 #include <QFileInfo>
 #include <QMessageBox>
-#ifdef __linux__
-#include <sys/xattr.h>
-#endif
 
 constexpr const char* SERVICE_NAME = "com.collaboraoffice.Office";
 constexpr const char* OBJECT_PATH = "/com/collaboraoffice/Office";
@@ -40,34 +39,12 @@ namespace coda
 {
     std::string hostDisplayUriForPath(const QString& path)
     {
-#ifdef __linux__
-        // The xdg-document-portal FUSE filesystem exposes the real host location
-        // of an exported file through this extended attribute.
-        constexpr const char* HOST_PATH_XATTR = "user.document-portal.host-path";
-
-        const QByteArray local = QFile::encodeName(path);
-
-        const ssize_t needed = getxattr(local.constData(), HOST_PATH_XATTR, nullptr, 0);
-        if (needed <= 0)
+        const std::optional<std::string> hostPath =
+            FileUtil::portalHostPath(QFile::encodeName(path).toStdString());
+        if (!hostPath)
             return {};
 
-        QByteArray buf(needed, Qt::Uninitialized);
-        const ssize_t len = getxattr(local.constData(), HOST_PATH_XATTR, buf.data(), buf.size());
-        if (len <= 0)
-            return {};
-        buf.resize(len);
-
-        const QString hostPath = QFile::decodeName(buf);
-        if (hostPath.isEmpty())
-            return {};
-
-        return Poco::URI(Poco::Path(hostPath.toStdString())).toString();
-#else
-        // The document portal is a Linux desktop facility, so elsewhere the
-        // path the caller has is already the host path.
-        (void)path;
-        return {};
-#endif
+        return Poco::URI(Poco::Path(*hostPath)).toString();
     }
 
     void openFiles(const QStringList& files, const QStringList& displayUris)
@@ -133,14 +110,9 @@ namespace coda
             return false;
         }
         Poco::URI newDocumentURI(Poco::Path(path.toStdString()));
-        if (WebView* existingDocument = WebView::findOpenDocument(newDocumentURI))
-        {
-            existingDocument->activateWindow();
-            return true;
-        }
         TabbedWindow* tw = TabbedWindow::getOrCreate(Application::getProfile());
-        tw->manager()->addDocumentTab(newDocumentURI, /*newFile*/ true);
-        Application::getRecentFiles().add(newDocumentURI.toString());
+        // A draft enters the recent files list only after its first Save As.
+        tw->manager()->addDocumentTab(newDocumentURI, /*asDraft*/ true);
         return true;
     }
 }

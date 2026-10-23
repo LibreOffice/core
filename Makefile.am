@@ -210,6 +210,7 @@ shared_sources = \
                  common/CommandControl.cpp \
                  common/ConfigUtil.cpp \
                  common/CoolMount.cpp \
+                 common/DraftStore.cpp \
                  common/FileUtil-unix.cpp \
                  common/FileUtil.cpp \
                  common/JailUtil.cpp \
@@ -438,6 +439,7 @@ shared_headers = \
                  common/ContainerUtil.hpp \
                  common/CoolMount.hpp \
                  common/Crypto.hpp \
+                 common/DraftStore.hpp \
                  common/EditorFrameForm.hpp \
                  common/EditorFrameMessages.hpp \
                  common/EditorFrameScripts.hpp \

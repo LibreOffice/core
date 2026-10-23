@@ -2121,6 +2121,7 @@ class Socket {
 				// doc then re-open it again in order to be able to
 				// edit.
 				app.setPermission('edit');
+				this._map._isDraft = false;
 				this.close();
 				if (window.ThisIsTheQtApp || window.ThisIsTheWindowsApp) {
 					window.postMobileMessage('loaddocument url=' + this._map.options.doc);

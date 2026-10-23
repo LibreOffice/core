@@ -153,10 +153,13 @@ public:
     void setMainWindow(QMainWindow* window);
     QMainWindow* mainWindow() const { return _mainWindow; }
 
-    // When requiresSaveAs is true the document opens editable and its first save
-    // is turned into a Save As, so the file at fileURL is never written to.
-    void load(const Poco::URI& fileURL = Poco::URI(), bool newFile = false,
-              bool isStarterMode = false, bool requiresSaveAs = false);
+    // When asDraft is true the fileURL names a draft working copy: the
+    // document opens editable and its first user save is turned into a
+    // Save As (see isDraft()). When requiresSaveAs is true the document
+    // opens editable and its first save is turned into a Save As, so the
+    // file at fileURL is never written to.
+    void load(const Poco::URI& fileURL = Poco::URI(), bool isStarterMode = false,
+              bool asDraft = false, bool requiresSaveAs = false);
 
     // The owner installs these; Bridge calls requestClose()/updateTitle().
     void setOnCloseRequest(CloseRequestFn cb) { _onCloseRequest = std::move(cb); }
@@ -188,10 +191,16 @@ public:
     QString documentType() const { return _docType; }
 
     // Copies the template for `templateType` (or `templatePath` if set) into the
-    // user's Documents dir under a free name. Returns the path, or empty on failure.
+    // app-private drafts dir under a free name. Returns the path, or empty on failure.
     static QString createNewDocumentFile(const std::string& templateType,
                                          const std::string& templatePath,
                                          const std::string& baseName);
+
+    // A draft is a document that has no user-chosen location yet; its backing
+    // file lives in the drafts directory until the first Save As.
+    bool isDraft() const { return !_draftPath.isEmpty(); }
+    // Best effort: the file can be re-created afterwards; see drafts::discard.
+    void discardDraft();
     static QString docTypeFromExtension(const QString& filePath);
 
     // True when the file name has a document-template extension (.ott, .xltx, ...).
@@ -297,6 +306,7 @@ private:
 
     // Make the webview and its page, and wire up the page signals.
     void createWebEngineView();
+    QUrl pageUrl() const;
 
     // Join the document of `first` as one more session, under the same appDocId.
     void loadAsSecondaryView(const WebView& first);
@@ -325,6 +335,7 @@ private:
     // Holds the temporary copy of a template while it is open as a new document,
     // so the copy is removed when the window closes.
     std::unique_ptr<QTemporaryDir> _templateWorkingDir;
+    QString _draftPath;
 
     CloseRequestFn _onCloseRequest;
     CloseCancelledFn _onCloseCancelled;

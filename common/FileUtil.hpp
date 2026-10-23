@@ -252,6 +252,18 @@ namespace FileUtil
         return realpath(path.c_str());
     }
 
+    /// The real host path of a file the flatpak document portal exports into the sandbox;
+    /// nullopt for any other file. Linux only.
+    std::optional<std::string> portalHostPath(const std::string& path);
+
+    /// portalHostPath() if any, else realpath(). Portal mount paths change between sessions,
+    /// host paths do not.
+    std::string hostPath(const std::string& path);
+
+    /// hostPath() of a path whose last part need not exist yet, such as a Save As target: a
+    /// missing file is named by the hostPath() of its folder plus its name.
+    std::string hostPathOfTarget(const std::string& path);
+
     /// Returns file extension from the path
     std::string extractFileExtension(const std::string& path);
 

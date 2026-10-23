@@ -16,6 +16,7 @@
 #include <COKit/COKit.hxx>
 
 #include <qt/DBusService.hpp>
+#include <common/DraftStore.hpp>
 #include <qt/RemoteOpen.hpp>
 #include <qt/DocumentOperations.hpp>
 #include <wsd/DocumentBroker.hpp>
@@ -855,18 +856,40 @@ void Bridge::closeAccountWindow() {
 
 void Bridge::saveDocumentAs()
 {
+    QPointer<Bridge> self = this;
     promptSaveLocation(
-        [self = QPointer<Bridge>(this), fakeClientFd = _document._fakeClientFd,
+        [self, fakeClientFd = _document._fakeClientFd,
          currentUri = _document._fileURL](const std::string& destPath, const std::string& format)
         {
             const QFileInfo destInfo(QString::fromStdString(destPath));
 
             const Poco::URI destUri(Poco::Path(destInfo.absoluteFilePath().toStdString()));
 
-            if (destUri.getPath() == currentUri.getPath())
+            // A file in the drafts folder is deleted behind the user's back: on
+            // discard, or at the next start once it is marked. Keep the Save As
+            // open until a place outside it is chosen.
+            if (drafts::contains(destUri.getPath()))
             {
                 if (self)
-                    self->_isNewDocument = false;
+                    QMetaObject::invokeMethod(
+                        self,
+                        [self]
+                        {
+                            if (!self)
+                                return;
+                            QMessageBox::warning(
+                                self->_webView, QObject::tr("Save Document"),
+                                QObject::tr("This folder holds the drafts and is cleaned up "
+                                            "automatically. Choose another location."));
+                            self->saveDocumentAs();
+                        },
+                        Qt::QueuedConnection);
+                return;
+            }
+
+            if (FileUtil::hostPathOfTarget(destUri.getPath())
+                == FileUtil::hostPath(currentUri.getPath()))
+            {
                 // Send save command if the saveas destination is the same as the current document.
                 const std::string saveCmd = "save dontTerminateEdit=0 dontSaveIfUnmodified=0";
                 fakeSocketWriteQueue(fakeClientFd, saveCmd.data(), saveCmd.size());
@@ -965,6 +988,8 @@ QVariant Bridge::cool(const QString& messageStr)
         // The document is now bound to a real file the user chose, so a plain
         // save is no longer redirected to Save As.
         _requiresSaveAs = false;
+        if (_owner && _owner->isDraft())
+            _owner->discardDraft();
 
         // A different document gets its own retry budget for the case where it
         // too is still unloading from an earlier use.
@@ -987,7 +1012,6 @@ QVariant Bridge::cool(const QString& messageStr)
         _document._appDocId = coda::generateNewAppDocId();
         coda::unregisterBridge(this);
         coda::registerBridge(_document._appDocId, this);
-        const std::string previousUri = _document._fileURL.toString();
         // Update the file URL
         _document._fileURL = Poco::URI(newFileUrl);
 
@@ -1012,13 +1036,6 @@ QVariant Bridge::cool(const QString& messageStr)
         QString fileName = QString::fromStdString(uriPath.getFileName());
         if (_owner)
             _owner->updateTitle(fileName);
-
-        // Drop the app-picked name of a new document from the recent list.
-        if (_isNewDocument)
-        {
-            Application::getRecentFiles().remove(previousUri);
-            _isNewDocument = false;
-        }
 
         // Add the new document location to recent files.
         // For flatpak use the host location

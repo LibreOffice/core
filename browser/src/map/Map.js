@@ -245,6 +245,9 @@ window.L.Map = window.L.Evented.extend({
 		// This becomes true if document was ever modified by the user
 		this._everModified = false;
 
+		// A draft has no file the user chose yet, so every Save asks for one.
+		this._isDraft = !!window.ThisIsAMobileApp && window.coolParams.get('draft') === '1';
+
 		// This is the new file name, if the document is renamed, which is used on uno:Save's result.
 		this._renameFilename = '';
 

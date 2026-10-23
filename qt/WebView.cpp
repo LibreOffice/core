@@ -26,6 +26,7 @@
 #include <common/CODAConfig.hpp>
 #include <common/FileExtensions.hpp>
 #include <qt/DBusService.hpp>
+#include <common/DraftStore.hpp>
 #include <net/FakeSocket.hpp>
 #include <wsd/DocumentBroker.hpp>
 #include <common/LangUtil.hpp>
@@ -47,7 +48,6 @@
 #include <QDBusPendingReply>
 #include <QDBusReply>
 #include <QDBusVariant>
-#include <QDir>
 #include <QDragEnterEvent>
 #include <QDragLeaveEvent>
 #include <QDragMoveEvent>
@@ -60,7 +60,6 @@
 #include <QObject>
 #include <QScreen>
 #include <QWindow>
-#include <QStandardPaths>
 #include <QTemporaryDir>
 #include <QTimer>
 #include <QUrl>
@@ -160,22 +159,6 @@ std::string getUILanguage()
 namespace
 {
 
-/// The directory new documents are created in.  XDG only tells us where the
-/// documents directory belongs; on a fresh account it does not exist yet, so
-/// create it here and fall back to the home directory when it cannot be
-/// created.
-QString getDocumentsDirectory()
-{
-    const QString documentsDir =
-        QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);
-    if (!documentsDir.isEmpty() && QDir().mkpath(documentsDir))
-        return documentsDir;
-
-    LOG_WRN("Cannot create the documents directory " << documentsDir.toStdString()
-            << ", falling back to the home directory");
-    return QDir::homePath();
-}
-
 /// A template copy keeps the template's permissions, and a file that cannot be written opens
 /// read-only.
 void makeOwnerWritable(const QString& path)
@@ -235,14 +218,6 @@ Poco::Path getTemplatePath(const std::string& templateType, const std::string& t
     return resolvedPath;
 }
 
-// True when the template is one of the introductory documents
-bool isIntroDocument(const Poco::Path& templatePath)
-{
-    const QString introDir = QDir::cleanPath(QString::fromStdString(getBrowserDistDir()) + "/introdocs") + "/";
-    const QString path = QDir::cleanPath(QString::fromStdString(templatePath.toString()));
-    return path.startsWith(introDir);
-}
-
 std::pair<QString, QString> getDocumentNameInfo(const std::string& templateType,
                                                 const std::string& baseName)
 {
@@ -281,34 +256,6 @@ std::pair<QString, QString> getDocumentNameInfo(const std::string& templateType,
         docNamePrefix = QString::fromStdString(baseName);
 
     return {docNamePrefix, extension};
-}
-
-QString findNextAvailableDocumentName(const QString& documentsDir, const QString& docNamePrefix, const QString& extension)
-{
-    // First try without number: "Text Document.odt"
-    // Then try with numbers: "Text Document (1).odt", "Text Document (2).odt", etc.
-    QString baseFileName = QString("%1.%2").arg(docNamePrefix).arg(extension);
-    QString baseFilePath = QDir(documentsDir).filePath(baseFileName);
-
-    if (!QFileInfo::exists(baseFilePath))
-    {
-        // Use base name without number
-        return baseFilePath;
-    }
-
-    // Base name exists, find next available number
-    int docNumber = 1;
-    QString newFilePath;
-    while (true)
-    {
-        QString fileName = QString("%1 (%2).%3").arg(docNamePrefix).arg(docNumber).arg(extension);
-        newFilePath = QDir(documentsDir).filePath(fileName);
-        if (!QFileInfo::exists(newFilePath))
-            break;
-        docNumber++;
-    }
-
-    return newFilePath;
 }
 
 // Move a window onto a given screen and show it full screen there.
@@ -982,10 +929,11 @@ bool WebView::mayDiscardView() const
     // The starter screen and the welcome page hold no document of their own. A remote
     // document is driven by the page's collab connection, which a rebuilt page does not
     // take up again. A template working copy carries the redirect of its first save in
-    // the bridge, which a rebuilt bridge does not have.
+    // the bridge, which a rebuilt bridge does not have. A draft turns the save that comes
+    // before the drop into a Save As.
     if (_viewDiscarded || !_bridge || isStarterScreen() || _isWelcome)
         return false;
-    if (_document._remoteInfo || _templateWorkingDir)
+    if (_document._remoteInfo || _templateWorkingDir || isDraft())
         return false;
     if (_document._fileURL.getPath().empty())
         return false;
@@ -1066,7 +1014,13 @@ void WebView::restoreDiscardedView()
     channel->registerObject("bridge", _bridge);
     _webView->page()->setWebChannel(channel);
 
-    _webView->load(QUrl(_loadedUrl));
+    _webView->load(pageUrl());
+}
+
+QUrl WebView::pageUrl() const
+{
+    // A draft stops being one at its Save As, so the flag is not part of _loadedUrl.
+    return QUrl(isDraft() ? _loadedUrl + QStringLiteral("&draft=1") : _loadedUrl);
 }
 
 void WebView::onWindowActiveChanged(bool active)
@@ -1109,6 +1063,21 @@ void WebView::closeCancelled()
 {
     if (_onCloseCancelled)
         _onCloseCancelled();
+}
+
+void WebView::discardDraft()
+{
+    if (_draftPath.isEmpty())
+        return;
+    // Closing the last session saves a modified document; unmodified, the save is skipped.
+    if (_document._fakeClientFd != -1)
+    {
+        const std::string unmodified =
+            "uno .uno:Modified {\"Modified\":{\"type\":\"boolean\",\"value\":\"false\"}}";
+        fakeSocketWriteQueue(_document._fakeClientFd, unmodified.data(), unmodified.size());
+    }
+    drafts::discard(_draftPath.toStdString());
+    _draftPath.clear();
 }
 
 void WebView::updateTitle(const QString& docTitle)
@@ -1198,7 +1167,8 @@ QString WebView::docTypeFromExtension(const QString& filePath)
     return QString::fromStdString(FileExtensions::docTypeFromSuffix(ext.toStdString()));
 }
 
-void WebView::load(const Poco::URI& fileURL, bool newFile, bool isStarterMode, bool requiresSaveAs)
+void WebView::load(const Poco::URI& fileURL, bool isStarterMode, bool asDraft,
+                   bool requiresSaveAs)
 {
     if (isStarterMode)
     {
@@ -1227,6 +1197,14 @@ void WebView::load(const Poco::URI& fileURL, bool newFile, bool isStarterMode, b
                                                    << _document._fileURL.toString());
     }
 
+    if (asDraft)
+    {
+        _draftPath = QString::fromStdString(fileURL.getPath());
+        // The name may have belonged to a draft discarded earlier in this
+        // run; unmark it so the next startup cannot delete the live draft.
+        drafts::unmarkForDeletion(fileURL.getPath());
+    }
+
     // setup js c++ communication
     QWebChannel* channel = new QWebChannel(_webView->page());
 
@@ -1234,8 +1212,6 @@ void WebView::load(const Poco::URI& fileURL, bool newFile, bool isStarterMode, b
     _bridge = new Bridge(channel, this, _document, _webView.get());
     if (requiresSaveAs)
         _bridge->setRequiresSaveAs(true);
-    if (newFile)
-        _bridge->setNewDocument(true);
     channel->registerObject("bridge", _bridge);
     _webView->page()->setWebChannel(channel);
 
@@ -1261,10 +1237,10 @@ void WebView::load(const Poco::URI& fileURL, bool newFile, bool isStarterMode, b
 
     if (!isStarterMode)
     {
-        // A brand new file and a template-based document both open ready to edit. An existing
-        // file opens read-only until the user chooses to edit it, unless it was asked to open
+        // A draft and a template-based document both open ready to edit. An existing file
+        // opens read-only until the user chooses to edit it, unless it was asked to open
         // ready to edit.
-        if (!newFile && !requiresSaveAs && !CODAConfig::instance().startsInEditMode())
+        if (!asDraft && !requiresSaveAs && !CODAConfig::instance().startsInEditMode())
             urlAndQuery.addQueryParameter("startreadonly", "true");
         if (_isWelcome)
             urlAndQuery.addQueryParameter("welcome", "true");
@@ -1284,7 +1260,7 @@ void WebView::load(const Poco::URI& fileURL, bool newFile, bool isStarterMode, b
         updateTitle(QString::fromStdString(uriPath.getFileName()));
     }
 
-    _webView->load(QUrl(QString::fromStdString(urlAndQueryStr)));
+    _webView->load(pageUrl());
 }
 
 void WebView::openSecondaryView()
@@ -1370,9 +1346,6 @@ QString WebView::createNewDocumentFile(const std::string& templateType, const st
     Poco::Path templatePathObj =
         getTemplatePath(templateType, templatePath, &bUsedRequestedTemplate);
 
-    // Get user's Documents directory
-    QString documentsDir = getDocumentsDirectory();
-
     // Get document name prefix and extension based on template type
     auto [docNamePrefix, extension] = getDocumentNameInfo(templateType, basename);
 
@@ -1386,30 +1359,10 @@ QString WebView::createNewDocumentFile(const std::string& templateType, const st
             extension = QString::fromStdString(documentExtension);
     }
 
-    // Copy an intro document once and reopen that copy on later clicks;
-    // deleting it gives a fresh copy.  A request naming a template that does
-    // not resolve gets the blank document, which is a new file every time.
-    const bool reuseCopy = bUsedRequestedTemplate && isIntroDocument(templatePathObj);
-    QString newFilePath =
-        QDir(documentsDir).filePath(QString("%1.%2").arg(docNamePrefix).arg(extension));
-    if (!reuseCopy || !QFileInfo::exists(newFilePath))
-    {
-        if (!reuseCopy)
-            newFilePath = findNextAvailableDocumentName(documentsDir, docNamePrefix, extension);
-
-        // Copy the template to the new location; a template carrying an l10n
-        // stream is translated in place by the kit when the copy is loaded.
-        QString templateFilePath = QString::fromStdString(templatePathObj.toString());
-        if (!QFile::copy(templateFilePath, newFilePath))
-        {
-            LOG_ERR("Failed to copy template from " << templateFilePath.toStdString()
-                    << " to " << newFilePath.toStdString());
-            return {};
-        }
-        makeOwnerWritable(newFilePath);
-    }
-
-    return newFilePath;
+    // A template carrying an l10n stream is translated in place by the kit when the copy is
+    // loaded.
+    return QString::fromStdString(drafts::createFromTemplate(
+        templatePathObj.toString(), docNamePrefix.toStdString(), extension.toStdString()));
 }
 
 bool WebView::isTemplate(const std::string& fileName)
@@ -1446,7 +1399,7 @@ WebView* WebView::openTemplateAsNewDocument(QWebEngineProfile* profile,
 
     Poco::URI workingCopyURI(Poco::Path(workingCopyPath.toStdString()));
     TabbedWindow* window = TabbedWindow::getOrCreate(profile);
-    const int tabId = window->manager()->addDocumentTab(workingCopyURI, /*newFile*/ false,
+    const int tabId = window->manager()->addDocumentTab(workingCopyURI, /*asDraft*/ false,
                                                         /*requiresSaveAs*/ true);
     WebView* webViewInstance = window->manager()->webViewForTab(tabId);
     webViewInstance->_templateWorkingDir = std::move(workingDir);
