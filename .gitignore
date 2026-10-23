@@ -177,7 +177,9 @@ zstdinclude-symlink
 zstdlib-symlink
 ICU.dat
 ios/Mobile/Assets.xcassets/AppIcon.appiconset
-ios/FakeQuickLook/Assets.xcassets/Icon.imageset
+ios/FakeQuickLook/Assets.xcassets/AppIcon.appiconset
+ios/Mobile/AppIcon.icon
+ios/FakeQuickLook/AppIcon.icon
 
 # build numbers/versions
 BUNDLE-VERSION

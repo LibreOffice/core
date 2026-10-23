@@ -39,7 +39,7 @@ class PreviewViewController: UIViewController, QLPreviewingController {
         view.addSubview(subtitleText);
         
         let icon = UIImageView()
-        icon.image = UIImage(named: "Icon");
+        icon.image = UIImage(named: "AppIcon1024x1024");
         icon.translatesAutoresizingMaskIntoConstraints = false;
         view.addSubview(icon);
         

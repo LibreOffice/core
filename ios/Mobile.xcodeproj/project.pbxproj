@@ -61,7 +61,6 @@
 		BE8D77322136762500AC58EA /* DocumentViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = BE8D77312136762500AC58EA /* DocumentViewController.mm */; };
 		BE8D77352136762500AC58EA /* CODocument.mm in Sources */ = {isa = PBXBuildFile; fileRef = BE8D77342136762500AC58EA /* CODocument.mm */; };
 		BE8D77382136762500AC58EA /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BE8D77362136762500AC58EA /* Main.storyboard */; };
-		BE8D773A2136762600AC58EA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = BE8D77392136762600AC58EA /* Assets.xcassets */; };
 		BE8D773D2136762600AC58EA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BE8D773B2136762600AC58EA /* LaunchScreen.storyboard */; };
 		BE8D77402136762600AC58EA /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = BE8D773F2136762600AC58EA /* main.m */; };
 		BE8D85CA214055F3009F1860 /* offapi.rdb in Resources */ = {isa = PBXBuildFile; fileRef = BE8D85BC214055F2009F1860 /* offapi.rdb */; };
@@ -98,6 +97,10 @@
 		BEDCC84E2452F82800FB02BD /* MobileApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEDCC84C2452F82800FB02BD /* MobileApp.cpp */; };
 		BEDCC8992456FFAD00FB02BD /* SceneDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = BEDCC8982456FFAC00FB02BD /* SceneDelegate.mm */; };
 		BEFB1EE121C29CC70081D757 /* L10n.mm in Sources */ = {isa = PBXBuildFile; fileRef = BEFB1EE021C29CC70081D757 /* L10n.mm */; };
+		C75AA5C1308B9E6400ED15D4 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = C75AA5C0308B9E6400ED15D4 /* AppIcon.icon */; };
+		C75AA5C2308B9E6400ED15D4 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = C75AA5C0308B9E6400ED15D4 /* AppIcon.icon */; };
+		C75AA5C4308B9EA500ED15D4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C75AA5C3308B9EA500ED15D4 /* Assets.xcassets */; };
+		C75AA5C5308B9EA500ED15D4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C75AA5C3308B9EA500ED15D4 /* Assets.xcassets */; };
 		C78C8ED62E90027E0011B574 /* data in Resources */ = {isa = PBXBuildFile; fileRef = C78C8ED32E9001F00011B574 /* data */; };
 		C79282312DF89BB2001EA43B /* MobileSocket.mm in Sources */ = {isa = PBXBuildFile; fileRef = C79282302DF89BB2001EA43B /* MobileSocket.mm */; };
 		C7CA44012F430DCC0087DA36 /* QuickLook.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7CA44002F430DCC0087DA36 /* QuickLook.framework */; };
@@ -928,7 +931,6 @@
 		BE8D77332136762500AC58EA /* CODocument.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CODocument.h; sourceTree = "<group>"; };
 		BE8D77342136762500AC58EA /* CODocument.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objcpp; path = CODocument.mm; sourceTree = "<group>"; };
 		BE8D77372136762500AC58EA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		BE8D77392136762600AC58EA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		BE8D773C2136762600AC58EA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BE8D773E2136762600AC58EA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		C7C0F1A02F5B00010000A001 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
@@ -1532,6 +1534,8 @@
 		BEFB1EDF21C29CC70081D757 /* L10n.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = L10n.h; sourceTree = "<group>"; };
 		BEFB1EE021C29CC70081D757 /* L10n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = L10n.mm; sourceTree = "<group>"; };
 		C73BEA612E8429C4009E12D3 /* MobileUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MobileUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C75AA5C0308B9E6400ED15D4 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
+		C75AA5C3308B9EA500ED15D4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C78C8ED32E9001F00011B574 /* data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = data; path = ../test/data; sourceTree = "<group>"; };
 		C792822F2DF89BB2001EA43B /* MobileSocket.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MobileSocket.h; sourceTree = "<group>"; };
 		C79282302DF89BB2001EA43B /* MobileSocket.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = MobileSocket.mm; sourceTree = "<group>"; };
@@ -2743,6 +2747,8 @@
 		BE8D77292136762500AC58EA /* Mobile */ = {
 			isa = PBXGroup;
 			children = (
+				C75AA5C3308B9EA500ED15D4 /* Assets.xcassets */,
+				C75AA5C0308B9E6400ED15D4 /* AppIcon.icon */,
 				C792822F2DF89BB2001EA43B /* MobileSocket.h */,
 				C79282302DF89BB2001EA43B /* MobileSocket.mm */,
 				D4A0F3D82D663A0000472DEE /* CoolURLSchemeHandler.h */,
@@ -2767,7 +2773,6 @@
 				BE80E45621B68F5000859C97 /* TemplateCollectionViewController.h */,
 				BE80E45721B68F5700859C97 /* TemplateCollectionViewController.mm */,
 				BE8D77362136762500AC58EA /* Main.storyboard */,
-				BE8D77392136762600AC58EA /* Assets.xcassets */,
 				BE8D773B2136762600AC58EA /* LaunchScreen.storyboard */,
 				C7C0F1A02F5B00010000A001 /* Config.xcconfig */,
 				BE8D773E2136762600AC58EA /* Info.plist */,
@@ -3784,6 +3789,7 @@
 				BE8D85D6214055F3009F1860 /* rc in Resources */,
 				BECD984124336DD400016117 /* device-tablet.css in Resources */,
 				BE8D85D0214055F3009F1860 /* services in Resources */,
+				C75AA5C5308B9EA500ED15D4 /* Assets.xcassets in Resources */,
 				BE8D85D4214055F3009F1860 /* fundamentalrc in Resources */,
 				BECD984024336DD400016117 /* device-mobile.css in Resources */,
 				BE80E43221AD92F700859C97 /* Fonts in Resources */,
@@ -3800,8 +3806,8 @@
 				3F3A77D22C59B04000947249 /* global.js in Resources */,
 				F5298224F045BF70EF05D82D /* app-dark-theme.js in Resources */,
 				BE00F8A021396585001CE2D4 /* cool.html in Resources */,
+				C75AA5C1308B9E6400ED15D4 /* AppIcon.icon in Resources */,
 				BE8D85CA214055F3009F1860 /* offapi.rdb in Resources */,
-				BE8D773A2136762600AC58EA /* Assets.xcassets in Resources */,
 				BE8D85CC214055F3009F1860 /* config in Resources */,
 				BE00F8A321396585001CE2D4 /* bundle.js in Resources */,
 				BE8D77382136762500AC58EA /* Main.storyboard in Resources */,
@@ -3823,6 +3829,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C75AA5C4308B9EA500ED15D4 /* Assets.xcassets in Resources */,
+				C75AA5C2308B9E6400ED15D4 /* AppIcon.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4284,7 +4292,9 @@
 		C7CA440F2F430DCC0087DA36 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_STANDALONE_ICON_BEHAVIOR = all;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_STYLE = Automatic;
@@ -4329,7 +4339,9 @@
 		C7CA44102F430DCC0087DA36 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				ASSETCATALOG_COMPILER_STANDALONE_ICON_BEHAVIOR = all;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
 				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
 				CODE_SIGN_STYLE = Automatic;

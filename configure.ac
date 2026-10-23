@@ -263,7 +263,7 @@ AC_ARG_WITH([wasm-additional-files],
 
 AC_ARG_WITH([iosapp-appicon],
               AS_HELP_STRING([--with-iosapp-appicon=<path>],
-                             [Point to a directory containing an icon set to use instead of the default empty one.]))
+                             [Point to a directory containing an icon set or a .icon directory to use instead of the default empty one.]))
 
 AC_ARG_WITH([iosapp-fonts],
               AS_HELP_STRING([--with-iosapp-fonts=<path>],
@@ -1289,10 +1289,14 @@ if test "$enable_iosapp" = "yes"; then
     echo $IOSAPP_BUNDLE_VERSION >BUNDLE-VERSION
 fi
 
+# Space-separated source files to exclude from an iOS build - added to at various points later
+IOSAPP_EXCLUDED_SOURCE_FILE_NAMES=
+
 AC_SUBST(ENABLE_IOSAPP)
 AM_CONDITIONAL([ENABLE_IOSAPP], [test "$ENABLE_IOSAPP" = "true"])
 AC_SUBST(IOSAPP_BUNDLE_SHORT_VERSION)
 AC_SUBST(IOSAPP_BUNDLE_VERSION)
+AC_SUBST(IOSAPP_EXCLUDED_SOURCE_FILE_NAMES)
 
 # Check if we are on macOS (darwin) to define "MACOS" in config.h
 # We want this to be general, regardless of using --enable-macosapp, and it
@@ -3008,10 +3012,6 @@ else
     AC_MSG_RESULT([no])
 fi
 
-AC_OUTPUT
-
-AC_LANG_POP
-
 AS_IF([test "$ENABLE_IOSAPP" = "true"],
       [
        if test `uname -s` = "Darwin"; then
@@ -3069,20 +3069,30 @@ AS_IF([test "$ENABLE_IOSAPP" = "true"],
           # symlink, so make it a directory of symlinks to the actual png
           # and json files.
           rm -rf ios/Mobile/Assets.xcassets/AppIcon.appiconset
-          rm -rf ios/FakeQuickLook/Assets.xcassets/Icon.imageset
-          mkdir ios/Mobile/Assets.xcassets/AppIcon.appiconset
-          mkdir ios/FakeQuickLook/Assets.xcassets/Icon.imageset
+          rm -rf ios/Mobile/AppIcon.icon
           if test -n "$with_iosapp_appicon"; then
-             ln -s "$with_iosapp_appicon"/* ios/Mobile/Assets.xcassets/AppIcon.appiconset
-             ln -s "$with_iosapp_appicon"/* ios/FakeQuickLook/Assets.xcassets/Icon.imageset
+             if test "${with_iosapp_appicon%%".icon"}" != "$with_iosapp_appicon"; then
+                # .icon files are even stricter - they can't contain symlinks so we need to copy the directory over
+                # luckily the format is such that we don't have to copy lots of different sizes of icon at least
+                cp -r "$with_iosapp_appicon" ios/Mobile/AppIcon.icon
+             else
+                mkdir ios/Mobile/Assets.xcassets/AppIcon.appiconset
+                ln -s "$with_iosapp_appicon"/* ios/Mobile/Assets.xcassets/AppIcon.appiconset
+                IOSAPP_EXCLUDED_SOURCE_FILE_NAMES="$IOSAPP_EXCLUDED_SOURCE_FILE_NAMES AppIcon.icon"
+             fi
           else
+             mkdir ios/Mobile/Assets.xcassets/AppIcon.appiconset
              ln -s ios/Mobile/Assets.xcassets/Empty.appiconset/* ios/Mobile/Assets.xcassets/AppIcon.appiconset
-             ln -s ios/Mobile/Assets.xcassets/Empty.appiconset/* ios/FakeQuickLook/Assets.xcassets/Icon.imageset
+             IOSAPP_EXCLUDED_SOURCE_FILE_NAMES="$IOSAPP_EXCLUDED_SOURCE_FILE_NAMES AppIcon.icon"
           fi
        fi
       ],
       [
       ])
+
+AC_OUTPUT
+
+AC_LANG_POP
 
 echo "
 Configuration:
