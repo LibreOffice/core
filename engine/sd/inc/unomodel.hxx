@@ -475,6 +475,33 @@ public:
 
         /// Nothing for any object that is not a measurement.
         std::optional<Measurement> moMeasurement;
+        /** What lays out the tail of a caption from its end and its box, as the caption's own
+            settings say: the lengths are in twips, the box is the one of the mapping.
+         */
+        struct Caption
+        {
+            /// The kind of tail, 1 to 4: 1 a line bent once, 2 a straight line, 3 and 4 a line
+            /// with a piece of its own length coming out of the box.
+            sal_Int32 mnType = 3;
+            /// How far from the box the tail begins.
+            double mfGap = 0.0;
+            /// Which sides the tail may leave the box at: 0 left or right, 1 top or bottom, 2
+            /// whichever is nearest to the end.
+            sal_Int32 mnEscapeDirection = 0;
+            /// Where along the side the tail leaves, in 1/10000 of the side where relative, or
+            /// as a length from the upper left corner.
+            bool mbEscapeRelative = true;
+            sal_Int32 mnEscapeRelative = 5000;
+            double mfEscapeAbsolute = 0.0;
+            /// How long the piece coming out of the box is, unless it is fitted to half the way.
+            double mfLineLength = 0.0;
+            bool mbFitLineLength = true;
+
+            bool operator==(const Caption&) const = default;
+        };
+
+        /// Nothing for any object that is not a caption.
+        std::optional<Caption> moCaption;
         /// The name the object carries, empty for an entry that stands for no object.
         OUString maName;
         /// The layer the entry draws with, nothing for an entry that belongs to no object. For
@@ -493,7 +520,8 @@ public:
         {
             return maPaintedBox == rOther.maPaintedBox
                    && maTransformation == rOther.maTransformation
-                   && moMeasurement == rOther.moMeasurement && maName == rOther.maName
+                   && moMeasurement == rOther.moMeasurement && moCaption == rOther.moCaption
+                   && maName == rOther.maName
                    && moLayer == rOther.moLayer && mbEmptyPlaceholder == rOther.mbEmptyPlaceholder
                    && mbTextEdit == rOther.mbTextEdit && mnParentId == rOther.mnParentId
                    && maDrawn == rOther.maDrawn && maAids == rOther.maAids

@@ -373,10 +373,14 @@ class ScalingInteraction extends SelectionInteraction {
 		const matrix = this.transformation();
 		if (!matrix) return known;
 
-		const mapped = known.map((handle: SelectionHandle) => ({
-			...handle,
-			point: matrix.apply(handle.point.x, handle.point.y).round(),
-		}));
+		const mapped = known.map((handle: SelectionHandle) =>
+			this.selection.keepsItsPlace(handle)
+				? handle
+				: {
+						...handle,
+						point: matrix.apply(handle.point.x, handle.point.y).round(),
+					},
+		);
 
 		// A scale can turn the selection over, and the axes turn with it, so the way each of the
 		// eight faces is worked out again from where they stand now.

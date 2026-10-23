@@ -504,6 +504,7 @@ COOL_JS_LST =\
 	src/canvas/vector/primitive/BackgroundColorPrimitive.ts \
 	src/canvas/vector/primitive/BitmapAlphaPrimitive.ts \
 	src/canvas/vector/primitive/BitmapPrimitive.ts \
+	src/canvas/vector/primitive/CaptionTailPrimitive.ts \
 	src/canvas/vector/primitive/ExclusiveEditViewPrimitive.ts \
 	src/canvas/vector/primitive/FilledRectanglePrimitive.ts \
 	src/canvas/vector/primitive/GraphicPrimitive.ts \
@@ -561,6 +562,7 @@ COOL_JS_LST =\
 	src/canvas/vector/VectorPrimitiveRenderer.ts \
 	src/canvas/vector/VectorHitTest.ts \
 	src/canvas/vector/VectorLineGeometryExtractor.ts \
+	src/canvas/vector/CaptionTail.ts \
 	src/canvas/vector/VectorRenderingConfig.ts \
 	src/canvas/vector/VectorRenderingGraphicsResponse.ts \
 	src/canvas/vector/VectorRenderingFontResponse.ts \

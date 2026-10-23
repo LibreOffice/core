@@ -398,10 +398,12 @@ class VectorManager extends RenderManagerBase {
 			const object = data.objects.get(id);
 			if (!object?.primitives) continue;
 
+			// the tail of a caption keeps its end, so it is laid out anew rather than carried
 			this._renderer.renderPrimitive(context, {
 				type: cool.TransformPrimitive.type,
 				matrix: matrix.toArray(),
-				children: object.primitives,
+				children:
+					cool.CaptionTail.changedBy(object, matrix) ?? object.primitives,
 			} as cool.TransformPrimitive);
 		}
 	}

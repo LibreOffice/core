@@ -799,6 +799,9 @@ class RenderGeometrySection extends CanvasSectionObject {
 		const mapping = cool.Matrix2D.fromArray(object.transform);
 		if (mapping) object.transform = mapping.then(matrix).toArray();
 
+		// the tail of a caption keeps its end and is laid out anew between it and the box
+		cool.CaptionTail.layAnew(object);
+
 		const box = RenderGeometrySection.boxOfTheObject(object);
 		if (box) {
 			const reached =
@@ -824,6 +827,7 @@ class RenderGeometrySection extends CanvasSectionObject {
 		const stood = new Map<cool.ObjectHandle, cool.Point>();
 		for (const one of object.handles ?? []) {
 			stood.set(one, new cool.Point(one.x, one.y));
+			if (object.caption && one.kind === 9) continue;
 
 			const at = matrix.apply(one.x, one.y);
 			one.x = at.x;

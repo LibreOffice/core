@@ -26,6 +26,7 @@
 #include <drawinglayer/primitive2d/pagepreviewprimitive2d.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <drawinglayer/primitive2d/hiddengeometryprimitive2d.hxx>
+#include <drawinglayer/primitive2d/captiontailprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textdecoratedprimitive2d.hxx>
 #include <drawinglayer/primitive2d/textprimitive2d.hxx>
 #include <drawinglayer/primitive2d/texthierarchyprimitive2d.hxx>
@@ -848,6 +849,19 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
             mrWriter.put("name", rPrimitive.getName());
             mrWriter.put("title", rPrimitive.getTitle());
             mrWriter.put("desc", rPrimitive.getDesc());
+            {
+                auto aChildArray = mrWriter.startArray("children");
+                decomposeAndWrite(rPrimitive.getChildren());
+            }
+        }
+        break;
+
+        case PRIMITIVE2D_ID_CAPTIONTAILPRIMITIVE2D:
+        {
+            // the tail of a caption travels named, so a reader can lay it out itself while the
+            // caption changes
+            const auto& rPrimitive = static_cast<const CaptionTailPrimitive2D&>(rBasePrimitive);
+            mrWriter.put("type", "captionTail");
             {
                 auto aChildArray = mrWriter.startArray("children");
                 decomposeAndWrite(rPrimitive.getChildren());

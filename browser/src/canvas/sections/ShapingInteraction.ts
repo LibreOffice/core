@@ -136,6 +136,7 @@ class ShapingInteraction extends SelectionInteraction {
 				this.ortho,
 			) ??
 			LineGhost.outline(this.selection, this.handle, this.shownAt()) ??
+			CaptionGhost.outline(this.selection, this.handle, this.shownAt()) ??
 			this.selection.runsWhileAGluePointIsDragged(this.handle, this.shownAt())
 		);
 	}
@@ -691,6 +692,42 @@ class LineGhost {
 					{ x: fixed.x, y: fixed.y },
 					{ x: at.x, y: at.y },
 				],
+			},
+		];
+	}
+}
+
+/// the box and the tail of a caption while the end of its tail is dragged
+class CaptionGhost {
+	public static outline(
+		selection: SelectionSection,
+		handle: SelectionHandle,
+		at: cool.Point,
+	): cool.ObjectPathPolygon[] | null {
+		if (handle.kind !== '9') return null;
+
+		const objectIds = selection.selectedObjects();
+		if (objectIds.length !== 1) return null;
+
+		const object = RenderGeometrySection.objectOf(objectIds[0]);
+		const mapping = cool.Matrix2D.fromArray(object?.transform);
+		if (!object?.caption || !mapping) return null;
+
+		const box = cool.CaptionTail.boxOf(mapping);
+		return [
+			{
+				closed: true,
+				points: [
+					{ x: box.minX, y: box.minY },
+					{ x: box.maxX, y: box.minY },
+					{ x: box.maxX, y: box.maxY },
+					{ x: box.minX, y: box.maxY },
+				],
+			},
+			{
+				points: cool.CaptionTail.laidOut(object.caption, at, box).map(
+					(point: cool.Point) => ({ x: point.x, y: point.y }),
+				),
 			},
 		];
 	}

@@ -255,6 +255,8 @@ OUString idToString(sal_uInt32 nId)
             return u"PDFPRIMITIVE2D"_ustr;
         case PRIMITIVE2D_ID_REFLECTIONPRIMITIVE2D:
             return u"REFLECTIONPRIMITIVE2D"_ustr;
+        case PRIMITIVE2D_ID_CAPTIONTAILPRIMITIVE2D:
+            return u"CAPTIONTAILPRIMITIVE2D"_ustr;
         default:
             return OUString::number((nId >> 16) & 0xFF) + "|" + OUString::number(nId & 0xFF);
     }

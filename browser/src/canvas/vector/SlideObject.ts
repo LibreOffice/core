@@ -169,6 +169,27 @@ namespace cool {
 	 * model, which are the units across the measurement's square: its second side is one unit
 	 * long, at a right angle down from the measured line.
 	 */
+	/** What lays out the tail of a caption from its end and its box, the box being the one of
+	 * the caption's mapping. The lengths are in twips.
+	 */
+	export interface ObjectCaption {
+		/// The kind of tail, 1 to 4: 1 a line bent once, 2 a straight line, 3 and 4 a line with
+		/// a piece of its own length coming out of the box.
+		type: number;
+		/// How far from the box the tail begins.
+		gap: number;
+		/// Which sides the tail may leave the box at: 0 left or right, 1 top or bottom, 2
+		/// whichever is nearest to the end.
+		escapeDirection: number;
+		/// Where along the side the tail leaves: in 1/10000 of the side, or as a length from the
+		/// upper left corner where that is absent.
+		escapeRelative?: number;
+		escapeAbsolute?: number;
+		/// How long the piece coming out of the box is, or half the way where fitted.
+		fitLineLength?: boolean;
+		lineLength?: number;
+	}
+
 	export interface ObjectMeasurement {
 		/// How far the dimension line stands from the measured line.
 		lineDistance: number;
@@ -340,6 +361,8 @@ namespace cool {
 		handlesOfItsOwnOnly?: boolean;
 		/// What shapes a measurement beyond its two points. Absent for any other object.
 		measurement?: ObjectMeasurement;
+		/// What lays out the tail of a caption. Absent for any other object.
+		caption?: ObjectCaption;
 		gluePoints?: ObjectGluePoint[];
 		/** The four glue points the object has at the middles of its sides - the upper, the
 		 * right, the lower and the left one - where they lie on the object, as gluePoints are

@@ -23,6 +23,7 @@
 #include <sdr/primitive2d/sdrdecompositiontools.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
 #include <drawinglayer/primitive2d/sdrdecompositiontools2d.hxx>
+#include <drawinglayer/primitive2d/captiontailprimitive2d.hxx>
 #include <drawinglayer/primitive2d/groupprimitive2d.hxx>
 #include <utility>
 
@@ -74,11 +75,12 @@ namespace drawinglayer::primitive2d
                         basegfx::B2DPolyPolygon(aUnitOutline),
                         getTransform()));
 
-                aRetval.push_back(
+                // the tail is named, it is laid out from its end and not transformed with the rest
+                aRetval.push_back(new CaptionTailPrimitive2D(Primitive2DContainer{
                     createHiddenGeometryPrimitives2D(
                         false,
                         basegfx::B2DPolyPolygon(getTail()),
-                        {}));
+                        {}) }));
             }
             else
             {
@@ -91,11 +93,11 @@ namespace drawinglayer::primitive2d
                         getSdrLFSTAttribute().getLine(),
                         attribute::SdrLineStartEndAttribute()));
 
-                aRetval.push_back(
+                aRetval.push_back(new CaptionTailPrimitive2D(Primitive2DContainer{
                     createPolygonLinePrimitive(
                         getTail(),
                         getSdrLFSTAttribute().getLine(),
-                        getSdrLFSTAttribute().getLineStartEnd()));
+                        getSdrLFSTAttribute().getLineStartEnd()) }));
             }
 
             // add text

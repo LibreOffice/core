@@ -115,6 +115,7 @@
 #define PRIMITIVE2D_ID_TEXTHIERARCHYEMPHASISMARKPRIMITIVE2D (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 81)
 #define PRIMITIVE2D_ID_PDFPRIMITIVE2D                      (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 82)
 #define PRIMITIVE2D_ID_REFLECTIONPRIMITIVE2D               (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 83)
+#define PRIMITIVE2D_ID_CAPTIONTAILPRIMITIVE2D              (PRIMITIVE2D_ID_RANGE_DRAWINGLAYER| 84)
 // When you add a new primitive, please update the drawinglayer::primitive2d::idToString() function
 // in drawinglayer/source/primitive2d/Tools.cxx.
 

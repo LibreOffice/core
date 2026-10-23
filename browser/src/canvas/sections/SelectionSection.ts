@@ -441,6 +441,12 @@ abstract class SelectionSection extends CanvasSectionObject {
 	}
 
 	/// The group a handle belongs to, or nothing for a handle of no group.
+	/// Whether that handle keeps its place on the page while the objects are moved or scaled,
+	/// as the group it belongs to says.
+	public keepsItsPlace(handle: SelectionHandle): boolean {
+		return this.groupOf(handle)?.keepsItsPlace(handle) ?? false;
+	}
+
 	private groupOf(handle: SelectionHandle): HandleGroup | undefined {
 		return this.groups().find(
 			(group: HandleGroup) => group.name === handle.group,

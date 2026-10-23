@@ -121,6 +121,11 @@
 #include <svx/svdomedia.hxx>
 #include <svx/svdomeas.hxx>
 #include <svx/svdoedge.hxx>
+#include <svx/svdocapt.hxx>
+#include <svx/sxcecitm.hxx>
+#include <svx/sxcgitm.hxx>
+#include <svx/sxcllitm.hxx>
+#include <svx/sxctitm.hxx>
 #include <svx/sxekitm.hxx>
 #include <svx/sxelditm.hxx>
 #include <svx/sxenditm.hxx>
@@ -4008,6 +4013,24 @@ private:
 
             aContent.moMeasurement = aMeasurement;
         }
+        if (dynamic_cast<const SdrCaptionObj*>(&rObject))
+        {
+            // read as SdrCaptionObj::ImpGetCaptParams reads it
+            const SfxItemSet& rSet = rObject.GetMergedItemSet();
+            const double fToTwips(o3tl::convert(1.0, o3tl::Length::mm100, o3tl::Length::twip));
+            SdXImpressDocument::VectorObjectContent::Caption aCaption;
+            aCaption.mnType = sal_Int32(rSet.Get(SDRATTR_CAPTIONTYPE).GetValue()) + 1;
+            aCaption.mfGap
+                = static_cast<const SdrCaptionGapItem&>(rSet.Get(SDRATTR_CAPTIONGAP)).GetValue()
+                  * fToTwips;
+            aCaption.mnEscapeDirection = sal_Int32(rSet.Get(SDRATTR_CAPTIONESCDIR).GetValue());
+            aCaption.mbEscapeRelative = rSet.Get(SDRATTR_CAPTIONESCISREL).GetValue();
+            aCaption.mnEscapeRelative = rSet.Get(SDRATTR_CAPTIONESCREL).GetValue();
+            aCaption.mfEscapeAbsolute = rSet.Get(SDRATTR_CAPTIONESCABS).GetValue() * fToTwips;
+            aCaption.mfLineLength = rSet.Get(SDRATTR_CAPTIONLINELEN).GetValue() * fToTwips;
+            aCaption.mbFitLineLength = rSet.Get(SDRATTR_CAPTIONFITLINELEN).GetValue();
+            aContent.moCaption = aCaption;
+        }
         aContent.maName = rObject.GetName();
         aContent.moLayer = sal_Int32(rObject.GetLayer().get());
         aContent.mbEmptyPlaceholder = rObject.IsEmptyPresObj();
@@ -4654,6 +4677,23 @@ private:
                 rWriter.put("textTurnedRightAngle", true);
             if (rMeasurement.mbTextTurnsItself)
                 rWriter.put("textTurnsItself", true);
+        }
+
+        if (rContent.moCaption)
+        {
+            const auto& rCaption = *rContent.moCaption;
+            auto aNode = rWriter.startNode("caption");
+            rWriter.put("type", sal_Int64(rCaption.mnType));
+            rWriter.put("gap", rCaption.mfGap);
+            rWriter.put("escapeDirection", sal_Int64(rCaption.mnEscapeDirection));
+            if (rCaption.mbEscapeRelative)
+                rWriter.put("escapeRelative", sal_Int64(rCaption.mnEscapeRelative));
+            else
+                rWriter.put("escapeAbsolute", rCaption.mfEscapeAbsolute);
+            if (rCaption.mbFitLineLength)
+                rWriter.put("fitLineLength", true);
+            else
+                rWriter.put("lineLength", rCaption.mfLineLength);
         }
 
         // In the order a canvas takes it: x' = a * x + c * y + e and y' = b * x + d * y + f.

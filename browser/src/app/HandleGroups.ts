@@ -86,6 +86,12 @@ abstract class HandleGroup {
 		return null;
 	}
 
+	/// Whether that handle keeps its place on the page while the objects are moved or scaled,
+	/// rather than going along with them. None does for most groups.
+	public keepsItsPlace(_handle: SelectionHandle): boolean {
+		return false;
+	}
+
 	/*
 		Whether a press this group took is handed to the engine as a click of its own when it
 		turns out not to be a drag. The engine hit tests it and selects what it finds, which is
@@ -1280,6 +1286,16 @@ class ShapingHandles extends HandlesMovedOneByOne {
 		);
 	}
 
+	/// the end of the tail of a caption stays where it is, the tail is laid out anew to it
+	public keepsItsPlace(handle: SelectionHandle): boolean {
+		const objectIds = this.selection.selectedObjects();
+		return (
+			handle.kind === '9' &&
+			objectIds.length === 1 &&
+			RenderGeometrySection.objectOf(objectIds[0])?.caption !== undefined
+		);
+	}
+
 	public handles(): SelectionHandle[] {
 		const known = ObjectHandles.shapingOf(this.selection.selectedObjects());
 
@@ -1318,6 +1334,7 @@ class ShapingHandles extends HandlesMovedOneByOne {
 						stepped.ortho,
 					) ??
 					LineGhost.outline(this.selection, handle, stepped.at) ??
+					CaptionGhost.outline(this.selection, handle, stepped.at) ??
 					// a connector as a drag of that handle shows it
 					this.selection.runWhileAnEndIsDragged(handle, stepped.at) ??
 					this.selection.runWhileALineIsDragged(handle, stepped.at)
