@@ -83,6 +83,10 @@ protected:
 
     virtual bool isGetThumbnail() const { return false; }
 
+    /// True when the answer is the document saved in the requested format once it has loaded,
+    /// false when the answer is what the kit extracts from it.
+    virtual bool answersWithDocument() const { return true; }
+
     virtual void sendStartMessage(const std::shared_ptr<ClientSession>& clientSession,
                                   const std::string& encodedFrom);
 };
@@ -98,6 +102,8 @@ public:
     }
 
 private:
+    bool answersWithDocument() const override { return false; }
+
     void sendStartMessage(const std::shared_ptr<ClientSession>& clientSession,
                           const std::string& encodedFrom) override;
 };
@@ -116,6 +122,8 @@ public:
     }
 
 private:
+    bool answersWithDocument() const override { return false; }
+
     void sendStartMessage(const std::shared_ptr<ClientSession>& clientSession,
                           const std::string& encodedFrom) override;
 };

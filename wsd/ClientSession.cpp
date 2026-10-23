@@ -3840,6 +3840,15 @@ bool ClientSession::handleKitToClientMessage(const std::shared_ptr<Message>& pay
                 abortConversion(docBroker, saveAsSocket, std::move(errorKind));
                 return false;
             }
+            else if (_isConvertTo &&
+                     (errorCommand == "extractlinktargets" ||
+                      errorCommand == "extractdocumentstructure" ||
+                      errorCommand == "transformdocumentstructure"))
+            {
+                // The command the request was made for failed, so its failure is the answer.
+                abortConversion(docBroker, saveAsSocket, std::move(errorKind));
+                return false;
+            }
 #if !MOBILEAPP || defined(QTAPP) || defined(MACOSAPP) || defined(_WIN32)
             else if (_aiChat->tryConsumeKitError(errorCommand, errorKind))
             {

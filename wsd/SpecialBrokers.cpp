@@ -213,7 +213,7 @@ void ConvertToBroker::setLoaded()
 {
     DocumentBroker::setLoaded();
 
-    if (isGetThumbnail())
+    if (isGetThumbnail() || !answersWithDocument())
         return;
 
     auto it = getAdditionalFileUrisJailed().find("compare");
