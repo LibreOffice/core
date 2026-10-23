@@ -287,6 +287,16 @@ describe(['tagdesktop'], 'Annotation Tests', function() {
 		// The comment should be visible and the anchor cell (B2) selected.
 		cy.cGet('#comment-container-1').should('be.visible');
 		cy.cGet(helper.addressInputSelector).should('have.prop', 'value', 'B2');
+
+		// The host page hears that the first of the two sheets is shown again.
+		cy.get('@postMessage').should(stub => {
+			var values = stub.getCalls().map(call => {
+				try {
+					return typeof call.args[0] === 'string' ? JSON.parse(call.args[0]) : call.args[0];
+				} catch (e) { return null; }
+			}).filter(msg => msg && msg.MessageId === 'Doc_PartChanged').map(msg => msg.Values);
+			expect(values).to.deep.include({ Part: 1, PartCount: 2, DocType: 'spreadsheet' });
+		});
 	});
 
 	it('Get_Comments postMessage returns note and threaded comments from all sheets', function() {
