@@ -60,7 +60,7 @@ void CollabFileProxy::handleFetchRequest(const std::string& streamUrl,
 
     // Transfer to poll and start download directly (bypassing CheckFileInfo)
     disposition.setTransfer(*poll,
-        [this, poll, uri, keepalive = shared_from_this()](
+        [this, poll, uri = std::move(uri), keepalive = shared_from_this()](
             const std::shared_ptr<Socket>& moveSocket)
         {
             LOG_TRC('#' << moveSocket->getFD()
@@ -95,7 +95,7 @@ void CollabFileProxy::handleUploadRequest(const std::string& targetUrl, std::ist
 
     // Transfer to poll and start upload directly (bypassing CheckFileInfo)
     disposition.setTransfer(*poll,
-        [this, poll, uri, keepalive = shared_from_this()](
+        [this, poll, uri = std::move(uri), keepalive = shared_from_this()](
             const std::shared_ptr<Socket>& moveSocket)
         {
             LOG_TRC('#' << moveSocket->getFD()

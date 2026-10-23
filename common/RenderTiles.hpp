@@ -162,7 +162,7 @@ namespace RenderTiles
 
                 // Queue to be executed later in parallel inside 'run'
                 pngPool.pushWork([=,&output,&pixmap,&tiles,&renderedTiles,
-                                  &pngMutex,&deltaGen]()
+                                  &pngMutex,&deltaGen,&tileCombined,&errorMessage]()
                     {
                         std::vector< char > data;
                         data.reserve(pixmapWidth * pixmapHeight * 1);

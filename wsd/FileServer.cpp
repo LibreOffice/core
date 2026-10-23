@@ -2496,7 +2496,8 @@ void FileServerRequestHandler::fetchModels(const Poco::Net::HTTPRequest& request
     std::weak_ptr<StreamSocket> socketWeak(socket);
 
     // Fetch the model list with the given key (client's, or read back from storage).
-    auto fetchWithKey = [uri, uriAnonym, socketWeak, requestPath = getRequestPath(request),
+    auto fetchWithKey = [uri = std::move(uri), uriAnonym, socketWeak,
+                         requestPath = getRequestPath(request),
                          shortMessage](const std::string& effectiveKey)
     {
         // With an empty key, mark the token as header-less so no Authorization
@@ -2909,8 +2910,8 @@ void FileServerRequestHandler::handleSettingsUploadWithSecrets(
     std::weak_ptr<StreamSocket> socketWeak(socket);
 
     // Send the final merged body to the WOPI host and report the outcome.
-    auto postBody = [wopiUri, uriAnonym, accessToken, requestPath, shortMessage,
-                     socketWeak](const std::string& body)
+    auto postBody = [wopiUri = std::move(wopiUri), uriAnonym, accessToken, requestPath,
+                     shortMessage, socketWeak](const std::string& body)
     {
         Authorization auth(Authorization::Type::Token, accessToken, false);
         auto httpRequest = StorageConnectionManager::createHttpRequest(wopiUri, auth);
