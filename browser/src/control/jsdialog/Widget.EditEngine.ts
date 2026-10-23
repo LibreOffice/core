@@ -494,7 +494,11 @@ function editEngineFontSize(points: number): string {
 	);
 }
 
-function editEngineRenderRun(run: EditEngineRun, text: string): HTMLElement {
+function editEngineRenderRun(
+	run: EditEngineRun,
+	text: string,
+	placeholder: boolean,
+): HTMLElement {
 	const span = document.createElement('span');
 
 	if (run.spellError) {
@@ -511,7 +515,7 @@ function editEngineRenderRun(run: EditEngineRun, text: string): HTMLElement {
 
 	if (run.bold) span.style.fontWeight = 'bold';
 	if (run.italic) span.style.fontStyle = 'italic';
-	if (run.color) span.style.color = run.color;
+	if (run.color && !placeholder) span.style.color = run.color;
 	if (run.family) span.style.fontFamily = run.family;
 	if (run.size) span.style.fontSize = editEngineFontSize(run.size);
 
@@ -533,6 +537,7 @@ function editEngineRenderRun(run: EditEngineRun, text: string): HTMLElement {
 
 function editEngineRenderParagraph(
 	paragraph: EditEngineParagraph,
+	placeholder: boolean,
 ): HTMLElement {
 	const element = document.createElement('div');
 	element.classList.add(EDITENGINE_PARAGRAPH_CLASS);
@@ -547,7 +552,7 @@ function editEngineRenderParagraph(
 	if (paragraph.family) element.style.fontFamily = paragraph.family;
 	if (paragraph.size)
 		element.style.fontSize = editEngineFontSize(paragraph.size);
-	if (paragraph.color) element.style.color = paragraph.color;
+	if (paragraph.color && !placeholder) element.style.color = paragraph.color;
 
 	// The bullet is rendered as generated content from this attribute, so its characters stay out
 	// of the paragraph text. Selection offsets then line up with the engine, which numbers indices
@@ -572,7 +577,7 @@ function editEngineRenderParagraph(
 	for (const run of runs) {
 		const part = text.substring(run.start, run.end);
 		if (!part) continue;
-		element.appendChild(editEngineRenderRun(run, part));
+		element.appendChild(editEngineRenderRun(run, part, placeholder));
 	}
 
 	return element;
@@ -631,8 +636,10 @@ function editEngineUpdateInPlace(
 	)
 		editEngineSendAction(container, 'focus', {});
 
-	const paragraphs = (widgetData.paragraphs || []).map(
-		editEngineRenderParagraph,
+	const placeholder = widgetData.placeholder === true;
+	container.classList.toggle('ui-editengine-placeholder', placeholder);
+	const paragraphs = (widgetData.paragraphs || []).map((paragraph) =>
+		editEngineRenderParagraph(paragraph, placeholder),
 	);
 
 	container.replaceChildren(...paragraphs);
@@ -686,8 +693,10 @@ function _editEngineControl(
 	container.setAttribute('autocorrect', 'off');
 	container.tabIndex = 0;
 
+	const placeholder = widgetData.placeholder === true;
+	container.classList.toggle('ui-editengine-placeholder', placeholder);
 	for (const paragraph of widgetData.paragraphs || [])
-		container.appendChild(editEngineRenderParagraph(paragraph));
+		container.appendChild(editEngineRenderParagraph(paragraph, placeholder));
 
 	const readOnly = widgetData.readOnly === true;
 	container.setAttribute('contenteditable', readOnly ? 'false' : 'true');

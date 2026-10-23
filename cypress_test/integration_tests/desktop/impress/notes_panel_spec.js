@@ -77,6 +77,28 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 		cy.cGet(paragraph).should('have.text', 'Remember the demo');
 	});
 
+	it('the placeholder shows apart from typed text', function () {
+		openNotesPane();
+
+		var editEngine = '#notespanel-container .ui-editengine';
+		cy.cGet(editEngine).should('have.class', 'ui-editengine-placeholder');
+
+		cy.cGet(editEngine).click();
+		cy.cGet(editEngine).should('not.have.class', 'ui-editengine-placeholder');
+
+		leaveNotes();
+		cy.cGet(editEngine).should('have.class', 'ui-editengine-placeholder');
+
+		cy.cGet(editEngine).click();
+		cy.cGet(editEngine).type('Remember the demo');
+		leaveNotes();
+		cy.cGet('#notespanel-container .ui-editengine-paragraph').should(
+			'have.text',
+			'Remember the demo'
+		);
+		cy.cGet(editEngine).should('not.have.class', 'ui-editengine-placeholder');
+	});
+
 	// Once the slide has notes, a click only places the caret.
 	it('a click into existing notes keeps the text', function () {
 		openNotesPane();

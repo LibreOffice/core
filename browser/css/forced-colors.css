@@ -174,4 +174,7 @@
 		background-color: Highlight;
 	}
 
+	.ui-editengine.ui-editengine-placeholder {
+		color: GrayText;
+	}
 }

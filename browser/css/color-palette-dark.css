@@ -10,6 +10,7 @@
 	--color-text-dark: #e8e8e8;  /* select */
 	--color-text-darker: #c0bfbc;  /* hover */
 	--color-text-light: #fff; /* secondard text, disabled */
+	--color-text-placeholder: #a0a0a0;
 	--color-text-lighter: #f8f9fa;
 	--color-status-badge: #d6d6d6;
 

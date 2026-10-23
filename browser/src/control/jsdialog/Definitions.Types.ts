@@ -779,5 +779,6 @@ interface EditEngineWidgetJSON {
 	selection: EditEngineSelection;
 	readOnly?: boolean;
 	lockedBy?: number; // view id of another view that edits the same text, so this one only shows it
+	placeholder?: boolean; // the text is a placeholder that stands for empty text
 	extra?: any; // whatever the concrete engine-side widget adds
 }

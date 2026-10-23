@@ -11,6 +11,7 @@
 	--color-text-dark: #333333;  /* select */
 	--color-text-darker: #000;  /* hover */
 	--color-text-light: #696969; /* secondard text, disabled */
+	--color-text-placeholder: var(--color-text-light);
 	--color-text-calc-header: #e8e8e8;
 	--color-status-badge: #616161;
 

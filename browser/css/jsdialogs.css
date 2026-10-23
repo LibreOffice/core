@@ -4361,6 +4361,10 @@ kbd,
 	flex-direction: column;
 }
 
+.ui-editengine.ui-editengine-placeholder {
+	color: var(--color-text-placeholder);
+}
+
 .ui-editengine:focus-visible {
 	outline: 2px solid var(--color-primary);
 	outline-offset: -2px;
