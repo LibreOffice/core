@@ -979,6 +979,15 @@ ContextParagraph contextParagraph(const SfxViewShell* pViewShell,
     return aParagraph;
 }
 
+// A paragraph of a cell covered by a merged one has the table for its parent, which does not list
+// it among its children.
+bool isSkipped(const uno::Reference<accessibility::XAccessibleContext>& xContext,
+               const std::vector<uno::Reference<accessibility::XAccessibleContext>>& rSkip)
+{
+    return std::ranges::find(rSkip, xContext) != rSkip.end()
+           || std::ranges::find(rSkip, getParentContext(xContext)) != rSkip.end();
+}
+
 void walkParagraphFlow(const SfxViewShell* pViewShell,
                        const uno::Reference<accessibility::XAccessibleContext>& xStart,
                        bool bBackward, const uno::Reference<accessibility::XAccessible>& xParent,
@@ -1005,8 +1014,7 @@ void walkParagraphFlow(const SfxViewShell* pViewShell,
         }
         else if (static_cast<sal_Int32>(rOut.size()) >= nRadius)
             break;
-        if (isSiblingParagraph(xContext, xParent)
-            && std::ranges::find(rSkip, xContext) == rSkip.end())
+        if (isSiblingParagraph(xContext, xParent) && !isSkipped(xContext, rSkip))
             rOut.push_back(contextParagraph(pViewShell, xContext, rOriginOnScreen));
     }
     if (bBackward)
@@ -1140,7 +1148,7 @@ void collectParagraphWindow(
     std::vector<ContextParagraph>& rOut = eCaretSide == WindowSide::Below ? rBefore : rAfter;
     walkParagraphFlow(pViewShell, xAnchor, true, xParent, aParentOnScreen, aOriginOnScreen, true,
                       nTop, nBottom, 0, rSkip, rOut);
-    if (isSiblingParagraph(xAnchor, xParent) && std::ranges::find(rSkip, xAnchor) == rSkip.end())
+    if (isSiblingParagraph(xAnchor, xParent) && !isSkipped(xAnchor, rSkip))
         rOut.push_back(contextParagraph(pViewShell, xAnchor, aOriginOnScreen));
     std::vector<ContextParagraph> aFollowing;
     walkParagraphFlow(pViewShell, xAnchor, false, xParent, aParentOnScreen, aOriginOnScreen, true,
@@ -1264,9 +1272,12 @@ struct TableWindow
     sal_Int32 nRowCount = 0;
     sal_Int32 nColCount = 0;
     std::vector<TableRowText> aRows;
+    std::vector<uno::Reference<accessibility::XAccessibleContext>> aParagraphs;
+    uno::Reference<accessibility::XAccessibleContext> xTable;
 };
 
-OUString getCellText(const uno::Reference<accessibility::XAccessible>& xCell)
+OUString getCellText(const uno::Reference<accessibility::XAccessible>& xCell,
+                     std::vector<uno::Reference<accessibility::XAccessibleContext>>& rParagraphs)
 {
     uno::Reference<accessibility::XAccessibleContext> xCellContext
         = xCell.is() ? xCell->getAccessibleContext() : nullptr;
@@ -1286,6 +1297,7 @@ OUString getCellText(const uno::Reference<accessibility::XAccessible>& xCell)
         uno::Reference<accessibility::XAccessibleText> xChildText(xChild, uno::UNO_QUERY);
         if (!isParagraphRole(xChildContext->getAccessibleRole()) || !xChildText.is())
             continue;
+        rParagraphs.push_back(xChildContext);
 
         if (!aText.isEmpty())
             aText.append('\n');
@@ -1312,6 +1324,7 @@ void collectTableWindow(const uno::Reference<css::accessibility::XAccessibleText
 
     try
     {
+        rTable.xTable.set(xTable, uno::UNO_QUERY);
         rTable.nRowCount = xTable->getAccessibleRowCount();
         rTable.nColCount = xTable->getAccessibleColumnCount();
         const sal_Int32 nCaretRow = xTable->getAccessibleRow(nChildIndex);
@@ -1328,9 +1341,10 @@ void collectTableWindow(const uno::Reference<css::accessibility::XAccessibleText
                 if (xTable->getAccessibleRow(nIndex) != nRow
                     || xTable->getAccessibleColumn(nIndex) != nCol)
                     continue;
-                aRow.aCells.push_back({ nCol, xTable->getAccessibleRowExtentAt(nRow, nCol),
-                                        xTable->getAccessibleColumnExtentAt(nRow, nCol),
-                                        getCellText(xTable->getAccessibleCellAt(nRow, nCol)) });
+                aRow.aCells.push_back(
+                    { nCol, xTable->getAccessibleRowExtentAt(nRow, nCol),
+                      xTable->getAccessibleColumnExtentAt(nRow, nCol),
+                      getCellText(xTable->getAccessibleCellAt(nRow, nCol), rTable.aParagraphs) });
             }
             rTable.aRows.push_back(std::move(aRow));
         }
@@ -1840,18 +1854,20 @@ tools::Rectangle KitDocumentFocusListener::visibleArea() const
 void KitDocumentFocusListener::collectContextWindow(
     const uno::Reference<css::accessibility::XAccessibleText>& xAccText) const
 {
+    m_aList = ListWindow();
+    m_aTable = TableWindow();
     if (isText(m_nDocumentType))
     {
-        collectListWindow(xAccText, LIST_ITEM_WINDOW, m_aList);
         collectTableWindow(xAccText, TABLE_ROW_WINDOW, m_aTable);
+        if (m_aTable.aRows.empty())
+            collectListWindow(xAccText, LIST_ITEM_WINDOW, m_aList);
     }
-    else
-    {
-        m_aList = ListWindow();
-        m_aTable = TableWindow();
-    }
-    collectParagraphWindow(m_pViewShell, xAccText, PARAGRAPH_WINDOW, visibleArea(),
-                           m_aList.aParagraphs, m_aParagraphsBefore, m_aParagraphsAfter);
+    std::vector<uno::Reference<accessibility::XAccessibleContext>> aSkip = m_aList.aParagraphs;
+    aSkip.insert(aSkip.end(), m_aTable.aParagraphs.begin(), m_aTable.aParagraphs.end());
+    if (m_aTable.xTable.is())
+        aSkip.push_back(m_aTable.xTable);
+    collectParagraphWindow(m_pViewShell, xAccText, PARAGRAPH_WINDOW, visibleArea(), aSkip,
+                           m_aParagraphsBefore, m_aParagraphsAfter);
 }
 
 std::string KitDocumentFocusListener::getFocusedParagraph()

@@ -26,7 +26,6 @@
 #include <sfx2/kit/helper.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/scopeguard.hxx>
-#include <o3tl/string_view.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/sfxsids.hrc>
 #include <svl/slstitm.hxx>
@@ -1998,18 +1997,19 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yContextParagraphInCell)
     pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
     pWrtShell->Down(/*bSelect=*/false, 2);
     Scheduler::ProcessEventsToIdle();
-    const std::string aRect = aView.m_aA11yFocusedCell.get_child("paragraph.afterRects")
-                                  .begin()
-                                  ->second.get_value<std::string>();
-    const double fRectTop = o3tl::toInt32(o3tl::getToken(aRect, 1, ','));
 
-    // When the cursor moves into the second paragraph:
-    pWrtShell->Down(/*bSelect=*/false);
-    const double fParagraphTop = pWrtShell->GetCharRect().Top();
-
-    // Then the rectangle sent for it is in document coordinates:
-    // Without the fix, there was no rectangle, or it was relative to the cell.
-    CPPUNIT_ASSERT_DOUBLES_EQUAL(fParagraphTop, fRectTop, 45.0);
+    // Then the second paragraph of the cell is given with the table, not after the caret:
+    const boost::property_tree::ptree& rParagraph = aView.m_aA11yFocusedCell.get_child("paragraph");
+    const boost::property_tree::ptree& rCell
+        = rParagraph.get_child("table.rows").begin()->second.get_child("cells").begin()->second;
+    CPPUNIT_ASSERT_EQUAL(std::string("Cell, first.\nCell, second."),
+                         rCell.get<std::string>("text"));
+    // Without the fix, it was also the first paragraph after the caret.
+    if (auto oAfter = rParagraph.get_child_optional("after"))
+    {
+        for (const auto& rAfter : *oAfter)
+            CPPUNIT_ASSERT(rAfter.second.get_value<std::string>() != "Cell, second.");
+    }
 }
 
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphLinks)
