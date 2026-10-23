@@ -154,6 +154,54 @@ CPPUNIT_TEST_FIXTURE(EditEngineWidgetTest, testParagraphCarriesTheFontInEffect)
 
     aEditEngine.RemoveView(&aEditView);
 }
+
+class PlaceholderWidgetController : public EditEngineWidgetController
+{
+public:
+    using EditEngineWidgetController::EditEngineWidgetController;
+
+protected:
+    bool IsShowingPlaceholder() override { return true; }
+};
+
+CPPUNIT_TEST_FIXTURE(EditEngineWidgetTest, testPlaceholderIsMarked)
+{
+    // Given one widget that shows ordinary text and one that shows a placeholder.
+    EditEngine aEditEngine(mpItemPool.get());
+    aEditEngine.SetPaperSize(Size(5000, 5000));
+    aEditEngine.SetText(u"Click to add Notes"_ustr);
+
+    ScopedVclPtrInstance<WorkWindow> xWin(nullptr, WB_APP | WB_STDWORK);
+    EditView aEditView(aEditEngine, xWin.get());
+    aEditEngine.InsertView(&aEditView);
+
+    const auto aDump = [](EditEngineWidgetController& rController) {
+        tools::JsonWriter aWriter;
+        rController.DumpWidgetData(aWriter);
+        std::stringstream aStream(std::string(aWriter.finishAndGetAsOString()));
+        boost::property_tree::ptree aTree;
+        boost::property_tree::read_json(aStream, aTree);
+        return aTree;
+    };
+
+    // When each widget writes its model for the client.
+    boost::property_tree::ptree aText;
+    {
+        EditEngineWidgetController aController(aEditView);
+        aText = aDump(aController);
+    }
+    boost::property_tree::ptree aPlaceholder;
+    {
+        PlaceholderWidgetController aController(aEditView);
+        aPlaceholder = aDump(aController);
+    }
+
+    // Then only the placeholder is marked. Without the accompanying fix in place, neither was.
+    CPPUNIT_ASSERT(!aText.get_optional<bool>("placeholder").has_value());
+    CPPUNIT_ASSERT(aPlaceholder.get<bool>("placeholder", false));
+
+    aEditEngine.RemoveView(&aEditView);
+}
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

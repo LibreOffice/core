@@ -382,6 +382,8 @@ void EditEngineWidgetController::DumpWidgetData(tools::JsonWriter& rWriter)
     const sal_Int32 nLockingViewId = GetLockingViewId();
     if (nLockingViewId >= 0)
         rWriter.put("lockedBy", nLockingViewId);
+    if (IsShowingPlaceholder())
+        rWriter.put("placeholder", true);
 
     {
         auto aExtraNode = rWriter.startNode("extra");

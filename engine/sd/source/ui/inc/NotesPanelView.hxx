@@ -65,6 +65,7 @@ public:
     void onGrabFocus();
     void onLoseFocus();
     bool isInFocus() const { return mbInFocus; }
+    bool isShowingPlaceholder();
 
     /// The notes pane of another view that has the focus on the notes shown here, or null. That
     /// view holds the notes, and this one only shows them.

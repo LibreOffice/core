@@ -385,6 +385,12 @@ void NotesPanelView::invalidateUndoState()
     pViewFrame->GetBindings().Invalidate(aUndoSlots);
 }
 
+bool NotesPanelView::isShowingPlaceholder()
+{
+    SdrTextObj* pNotesTextObj = getEditedNotesObj();
+    return !mbInFocus && pNotesTextObj && pNotesTextObj->IsEmptyPresObj();
+}
+
 void NotesPanelView::clearPlaceholder()
 {
     SdrTextObj* pNotesTextObj = getEditedNotesObj();

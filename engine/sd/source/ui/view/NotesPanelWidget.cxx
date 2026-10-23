@@ -90,6 +90,8 @@ public:
 protected:
     sal_Int32 GetLockingViewId() override { return mrNotesPanelView.getLockingViewId(); }
 
+    bool IsShowingPlaceholder() override { return mrNotesPanelView.isShowingPlaceholder(); }
+
     /// The notes are plain paragraphs, so Ctrl+Enter starts a new paragraph at the same level, as
     /// Enter does.
     KeyEvent AdjustKeyEvent(const KeyEvent& rKeyEvent) override
