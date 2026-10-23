@@ -60,11 +60,6 @@ $(eval $(call gb_Module_add_check_targets,filter,\
 ))
 endif
 
-# TODO
-#$(eval $(call gb_Module_add_subsequentcheck_targets,filter,\
-	JunitTest_filter_complex \
-))
-
 # screenshots
 $(eval $(call gb_Module_add_screenshot_targets,filter,\
     CppunitTest_filter_dialogs_test \
