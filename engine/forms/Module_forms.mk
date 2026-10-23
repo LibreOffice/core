@@ -17,8 +17,8 @@ $(eval $(call gb_Module_add_l10n_targets,forms,\
     AllLangMoTarget_frm \
 ))
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,forms,\
-    JunitTest_forms_complex \
+$(eval $(call gb_Module_add_check_targets,forms,\
+    CppunitTest_forms_complex \
 ))
 
 # vim: set noet sw=4 ts=4:
