@@ -232,6 +232,26 @@ CPPUNIT_TEST_FIXTURE(HtmlImportTest, testImageLazyRead)
     CPPUNIT_ASSERT(!aGraphic.isAvailable());
 }
 
+CPPUNIT_TEST_FIXTURE(HtmlImportTest, testImgDataAttributeIsLink)
+{
+    // An img with a data attribute is imported as a link to its src, like any other img.
+    createSwWebDoc("img-data-attribute.html");
+    SwDoc* pDoc = getSwDoc();
+    SwNodeOffset nNodes = pDoc->GetNodes().Count();
+    for (SwNodeOffset i(0); i < nNodes; ++i)
+    {
+        if (SwGrfNode* pGrfNode = pDoc->GetNodes()[i]->GetGrfNode())
+        {
+            CPPUNIT_ASSERT(pGrfNode->IsLinkedFile());
+            OUString aFileName;
+            pGrfNode->GetFileFilterNms(&aFileName, nullptr);
+            CPPUNIT_ASSERT_EQUAL(createFileURL(u"img-data-attribute.png"), aFileName);
+            return;
+        }
+    }
+    CPPUNIT_FAIL("no graphic node in the document");
+}
+
 CPPUNIT_TEST_FIXTURE(HtmlImportTest, testChangedby)
 {
     createSwWebDoc("meta-changedby.html");

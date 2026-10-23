@@ -350,6 +350,8 @@ void SwHTMLParser::InsertImage()
                     sGrfNm = INetURLObject::GetAbsURL( m_sBaseURL, sGrfNm );
                 break;
             case HtmlOptionId::DATA:
+                if (!m_bXHTML)
+                    break;
                 aGraphicData = rOption.GetString();
                 if (!InternalImgToPrivateURL(aGraphicData))
                     aGraphicData = INetURLObject::GetAbsURL(
