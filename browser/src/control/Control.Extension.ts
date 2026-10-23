@@ -1534,7 +1534,6 @@ async function tryLoadAppsScriptExtension(
 		scripts?: string[];
 		supports?: string[];
 		name?: string;
-		icon?: string;
 	} = {};
 	try {
 		const listResp = await fetch(app.LOUtil.getURL(baseRel + '_cool-gas.json'));
@@ -1542,14 +1541,54 @@ async function tryLoadAppsScriptExtension(
 	} catch {
 		// Missing sidecar is not fatal; discovery continues with no scripts.
 	}
+	// An add-on can have a _cool-gas-manifest.json with fields of a native extension's
+	// manifest.json, which take precedence over what discovery derived from its sources:
+	let gasManifest: {
+		manifestVersion?: string;
+		name?: string;
+		icon?: string;
+		supports?: string[];
+		contributes?: string;
+	} = {};
+	let gasManifestResp: Response | null = null;
+	try {
+		gasManifestResp = await fetch(
+			app.LOUtil.getURL(baseRel + '_cool-gas-manifest.json'),
+		);
+	} catch {
+		// A file: URL of a missing file fails the fetch rather than answering 404.
+	}
+	if (gasManifestResp && responseSucceeded(gasManifestResp)) {
+		try {
+			const parsed = await gasManifestResp.json();
+			if (
+				typeof parsed !== 'object' ||
+				parsed === null ||
+				Array.isArray(parsed)
+			)
+				throw new Error('not an object');
+			gasManifest = parsed;
+		} catch (e) {
+			console.warn(
+				'extension ' + id + ': malformed _cool-gas-manifest.json: ' + e,
+			);
+		}
+	}
 	const manifest: ExtensionManifest = {
-		manifestVersion: '0.1',
-		name: listing.name && listing.name.length ? listing.name : id,
+		manifestVersion:
+			gasManifest.manifestVersion === undefined
+				? '0.1'
+				: gasManifest.manifestVersion,
+		name: gasManifest.name || listing.name || id,
 		isGasExtension: true,
 	};
-	if (listing.icon) manifest.icon = listing.icon;
-	if (listing.supports && listing.supports.length) {
-		manifest.supports = listing.supports;
+	if (gasManifest.icon) manifest.icon = gasManifest.icon;
+	const supports =
+		gasManifest.supports !== undefined
+			? gasManifest.supports
+			: listing.supports;
+	if (supports && supports.length) {
+		manifest.supports = supports;
 	}
 	const scriptNames = listing.scripts || [];
 
@@ -1610,24 +1649,26 @@ async function tryLoadAppsScriptExtension(
 		placement.pop();
 	}
 
-	// An add-on can have the same contributions as a native extension, in a
-	// _cool-gas-contributes.json whose commands each name one of the add-on's own server files
+	// An add-on can have the same contributions as a native extension, in the file that its
+	// _cool-gas-manifest.json names, whose commands each name one of the add-on's own server files
 	// as their script, where the add-on's __coolGasCommands object has the command's function:
 	let contributes: ExtensionContributes = {};
-	let contributesResp: Response | null = null;
-	try {
-		contributesResp = await fetch(
-			app.LOUtil.getURL(baseRel + '_cool-gas-contributes.json'),
-		);
-	} catch {
-		// A file: URL of a missing file fails the fetch rather than answering 404.
-	}
-	if (contributesResp && responseSucceeded(contributesResp)) {
+	if (gasManifest.contributes) {
 		try {
+			const contributesResp = await fetch(
+				app.LOUtil.getURL(baseRel + gasManifest.contributes),
+			);
+			if (!responseSucceeded(contributesResp))
+				throw new Error('HTTP ' + contributesResp.status);
 			contributes = await contributesResp.json();
-		} catch (e) {
+		} catch (err) {
 			console.warn(
-				'extension ' + id + ': malformed _cool-gas-contributes.json: ' + e,
+				'extension ' +
+					id +
+					': contributes file "' +
+					gasManifest.contributes +
+					'" unreadable:',
+				err,
 			);
 		}
 	}

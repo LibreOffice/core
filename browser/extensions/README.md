@@ -10,7 +10,7 @@ An extension is a directory (or zip, for the integrator preset pipeline) contain
 | `manifestVersion` | Currently always `"0.1"`. Bumped on backwards-incompatible format changes. |
 | `name` | Human-readable name shown in the notebookbar tab, menu, and panel header when `entry` is set. Unused for a commands-only extension. |
 | `entry` | Path (relative to the manifest) to the HTML page loaded into the sidebar panel's iframe. Omit it for a commands-only extension with no sidebar UI. |
-| `icon` | Path (relative to the manifest) to an icon shown wherever the extension is referenced, when `entry` is set. Unused for a commands-only extension - see `contributes.commands[].icon` for a per-command icon instead. |
+| `icon` | Path (relative to the manifest) to an icon shown in the notebookbar's "Extensions" tab, on the extension's toggle button when `entry` is set, and on the dropdown that offers its `contributes.extensionsMenu` commands. A generic icon stands in when it is absent. See `contributes.commands[].icon` for a per-command icon. |
 | `supports` | Array of doc classes: `"text"`, `"spreadsheet"`, `"presentation"`, `"drawing"`. Absent or empty means all. |
 | `contributes` | See below. |
 
@@ -309,6 +309,13 @@ a `setTitle("...")` call or an `APP_TITLE`-style constant in the sources, and
 the target document types come from which of `DocumentApp`, `SpreadsheetApp`
 and `SlidesApp` the sources mention.
 
+An add-on can have a `_cool-gas-manifest.json` next to its `appsscript.json`, with the fields
+`manifestVersion`, `name`, `icon`, `supports` and `contributes` of a native extension's
+`manifest.json` (see above).  Each of them is optional, and `name`, `icon` and `supports` take
+precedence over what discovery derives.  An empty `supports` stands for all document types, while an
+absent one keeps what discovery derives.  (There is no `entry`, as an add-on opens its sidebar
+itself.)
+
 The pieces:
 
 | File | Role |
@@ -349,9 +356,9 @@ dialog in the document window, which the script waits on.
 ### Contributions beyond the menu
 
 Apps Script gives an add-on no way to add to the context menu, the notebookbar
-or the keyboard shortcuts. An add-on that wants to can have a
-`_cool-gas-contributes.json` next to its `appsscript.json`, with the same
-content as the `contributes` file of a native extension (see above). Only its
+or the keyboard shortcuts. An add-on that wants to can name a file in the
+`contributes` field of its `_cool-gas-manifest.json`, with the same content as
+the `contributes` file of a native extension (see above). Only its
 `extensionsMenu` is not used, as the menu that `onOpen()` builds takes that
 place.
 

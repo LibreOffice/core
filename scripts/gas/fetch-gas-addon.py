@@ -22,6 +22,7 @@
 
 Usage:
     fetch-gas-addon.py <source> [--id ID] [--dest PATH] [--subpath PATH] [--use-clasp] [--force]
+                       [--external-icon PATH-OR-URL] [--internal-icon PATH]
 
 <source> is either
 
@@ -66,17 +67,29 @@ an account that may read it, which for a public library is anyone.
 A <source> that is a directory directly in <dest> is an add-on already in place,
 for which only the libraries are fetched.  A library already in place is kept
 unless --force is given.
+
+--internal-icon names an icon file inside the add-on, relative to the add-on's
+directory (the one --subpath selects, or the one holding the appsscript.json).
+--external-icon names an icon file elsewhere, or an http(s) URL to download it
+from, which is copied into the add-on's directory, under its own name (for a URL
+whose path has no file extension, "icon" with the extension of the content type
+it is served with) or, when --internal-icon is also given, to that path.  Either
+way the icon is recorded as "icon" in the add-on's _cool-gas-manifest.json,
+which is created if it does not exist yet.  Both also work for an add-on already
+in place.
 """
 
 import argparse
 import json
+import mimetypes
 import pathlib
 import shutil
 import subprocess
 import sys
 import tempfile
+import urllib.request
 from pathlib import Path
-from urllib.parse import urlparse
+from urllib.parse import unquote, urlparse
 
 from googleapiclient.discovery import build
 
@@ -247,6 +260,51 @@ def ensure_appsscript_json(dest, use_clasp):
         path.write_text(json.dumps(MINIMAL_APPSSCRIPT_JSON, indent=2) + "\n")
 
 
+def read_external_icon(external):
+    """Return the name and the content of an icon file or of an icon that a URL serves."""
+    if urlparse(external).scheme in ("http", "https"):
+        try:
+            with urllib.request.urlopen(external) as response:
+                data = response.read()
+                content_type = response.headers.get_content_type()
+        except OSError as e:
+            sys.exit(f"external icon {external!r} cannot be downloaded: {e}")
+        name = Path(unquote(Path(urlparse(external).path).name)).name
+        if not Path(name).suffix:
+            name = "icon" + (mimetypes.guess_extension(content_type) or "")
+        return name, data
+    if not Path(external).is_file():
+        sys.exit(f"external icon {external!r} is not a file")
+    return Path(external).name, Path(external).read_bytes()
+
+
+def record_icon(dest, external, internal):
+    """Put the add-on's icon in place and name it in its _cool-gas-manifest.json."""
+    dest = dest.resolve()
+    if internal:
+        target = (dest / internal).resolve()
+        if not target.is_relative_to(dest):
+            sys.exit(f"internal icon {internal!r} is not inside the add-on")
+    else:
+        target = dest / external[0]
+    if external:
+        target.parent.mkdir(parents=True, exist_ok=True)
+        target.write_bytes(external[1])
+    elif not target.is_file():
+        sys.exit(f"internal icon {internal!r} is not a file in the add-on")
+    path = dest / "_cool-gas-manifest.json"
+    manifest = {"manifestVersion": "0.1"}
+    if path.exists():
+        try:
+            manifest = json.loads(path.read_text())
+        except ValueError as e:
+            sys.exit(f"{path} is malformed: {e}")
+        if not isinstance(manifest, dict):
+            sys.exit(f"{path} is not a JSON object")
+    manifest["icon"] = target.relative_to(dest).as_posix()
+    path.write_text(json.dumps(manifest, indent=2) + "\n")
+
+
 def main():
     ap = argparse.ArgumentParser(
         description="Fetch a Google Apps Script add-on as a COOL extension",
@@ -264,12 +322,20 @@ def main():
     )
     ap.add_argument(
         "--force", action="store_true", help="fetch libraries again that are already in place")
+    ap.add_argument(
+        "--external-icon",
+        help="icon file outside the add-on, or URL serving it, to copy into it and record")
+    ap.add_argument(
+        "--internal-icon", help="icon file inside the add-on to record, relative to it")
     add_state_dir_argument(ap)
     args = ap.parse_args()
+    external = read_external_icon(args.external_icon) if args.external_icon else None
 
     in_place = Path(args.source).resolve()
     if in_place.is_dir() and in_place.parent == Path(args.dest).resolve():
         fetch_libraries(in_place, args.force, args.state_dir)
+        if external or args.internal_icon:
+            record_icon(in_place, external, args.internal_icon)
         return
 
     subpath = args.subpath or ""
@@ -312,6 +378,8 @@ def main():
         add_on = fetch(source, subpath, work)
         copy_into_dest(add_on, dest)
         ensure_appsscript_json(dest, args.use_clasp)
+    if external or args.internal_icon:
+        record_icon(dest, external, args.internal_icon)
     fetch_libraries(dest, args.force, args.state_dir)
 
     print(f"fetched as {ext_id} to {dest}")
