@@ -2346,6 +2346,45 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureReportsWhatItDidNo
     CPPUNIT_ASSERT(aTree.get<bool>("success"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureReplacesText)
+{
+    // A ReplaceText transform replaces every match in the case it is given, and a search that
+    // matches nothing comes back as a warning. One undo takes back every replacement.
+    createSwDoc();
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert(u"ACME Ltd moves offices. Call acme ltd or ACME Ltd."_ustr);
+
+    static constexpr OUString aJson = uR"json(
+{
+    "Transforms": {
+        "ReplaceText": [
+            {"search": "ACME Ltd", "replace": "Contoso GmbH"},
+            {"search": "Nowhere", "replace": "Somewhere"}
+        ]
+    }
+}
+)json"_ustr;
+
+    css::frame::DispatchResultEvent aEvent;
+    CPPUNIT_ASSERT(dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr,
+                                   { comphelper::makePropertyValue(u"DataJson"_ustr, aJson) })
+                   >>= aEvent);
+    OUString aResult;
+    aEvent.Result >>= aResult;
+    boost::property_tree::ptree aTree;
+    std::stringstream aStream(aResult.toUtf8().getStr());
+    boost::property_tree::read_json(aStream, aTree);
+    CPPUNIT_ASSERT(aTree.get<bool>("success"));
+    CPPUNIT_ASSERT(aResult.indexOf("no match for 'Nowhere'") >= 0);
+
+    CPPUNIT_ASSERT_EQUAL(u"Contoso GmbH moves offices. Call acme ltd or Contoso GmbH."_ustr,
+                         getParagraph(1)->getString());
+
+    dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(u"ACME Ltd moves offices. Call acme ltd or ACME Ltd."_ustr,
+                         getParagraph(1)->getString());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

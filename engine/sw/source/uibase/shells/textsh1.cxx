@@ -152,6 +152,8 @@
 #include <com/sun/star/chart2/XTitled.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/util/XModifiable.hpp>
+#include <com/sun/star/util/XReplaceDescriptor.hpp>
+#include <com/sun/star/util/XReplaceable.hpp>
 
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
@@ -834,6 +836,48 @@ void lcl_NotApplied(const std::string& rName)
 {
     if (gpTransformReport)
         gpTransformReport->maNotApplied.push_back(rName);
+}
+
+// Replace text throughout the document, as a ReplaceText transform asks. The value is one object,
+// or an array of them, each with "search", "replace" and the optional "matchCase" (true when left
+// out) and "wholeWords" (false when left out). A search that matches nothing is a warning.
+void lcl_ReplaceText(const uno::Reference<frame::XModel>& xModel,
+                     const boost::property_tree::ptree& rTree)
+{
+    uno::Reference<util::XReplaceable> xReplaceable(xModel, uno::UNO_QUERY);
+    if (!xReplaceable.is())
+        return;
+
+    const auto replaceOne = [&xReplaceable](const boost::property_tree::ptree& rReplace)
+    {
+        const std::string aSearch = rReplace.get<std::string>("search", "");
+        if (aSearch.empty())
+        {
+            lcl_LogWarning("FillApi ReplaceText: the search text is empty");
+            return;
+        }
+
+        uno::Reference<util::XReplaceDescriptor> xDescriptor
+            = xReplaceable->createReplaceDescriptor();
+        xDescriptor->setSearchString(OUString::fromUtf8(aSearch));
+        xDescriptor->setReplaceString(
+            OUString::fromUtf8(rReplace.get<std::string>("replace", "")));
+        uno::Reference<beans::XPropertySet> xProperties(xDescriptor, uno::UNO_QUERY_THROW);
+        xProperties->setPropertyValue(u"SearchCaseSensitive"_ustr,
+                                      uno::Any(rReplace.get<bool>("matchCase", true)));
+        xProperties->setPropertyValue(u"SearchWords"_ustr,
+                                      uno::Any(rReplace.get<bool>("wholeWords", false)));
+        if (xReplaceable->replaceAll(xDescriptor) == 0)
+            lcl_LogWarning("FillApi ReplaceText: no match for '" + aSearch + "'");
+    };
+
+    if (rTree.count("search"))
+        replaceOne(rTree);
+    else
+    {
+        for (const auto& rItem : rTree)
+            replaceOne(rItem.second);
+    }
 }
 
 bool lcl_ChangeChartColumnCount(const uno::Reference<chart2::XChartDocument>& xChartDoc, sal_Int32 nId,
@@ -2574,10 +2618,18 @@ void SwTextShell::Execute(SfxRequest &rReq)
                         const auto& aItem2
                             = aItem2Obj.first == "" ? *aItem2Obj.second.ordered_begin() : aItem2Obj;
 
-                        if (aItem2.first != "DocumentProperties"
+                        if (aItem2.first != "DocumentProperties" && aItem2.first != "ReplaceText"
                             && !aItem2.first.starts_with("Charts")
                             && !aItem2.first.starts_with("ContentControls"))
                             lcl_NotApplied(aItem2.first);
+
+                        // Every replacement of the transform is taken back by one undo.
+                        if (aItem2.first == "ReplaceText")
+                        {
+                            rWrtSh.StartUndo(SwUndoId::REPLACE);
+                            lcl_ReplaceText(GetView().GetDocShell()->GetModel(), aItem2.second);
+                            rWrtSh.EndUndo(SwUndoId::REPLACE);
+                        }
 
                         if (aItem2.first == "DocumentProperties")
                         {
