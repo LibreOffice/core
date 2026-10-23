@@ -2552,10 +2552,10 @@
         Foundation; either version 2.1 of the License, or (at your option) any later version.</p>
         <h2>Albanian</h2>
         <h3>Spelling dictionary</h3>
-        <!-- Name: dict-sq-spell, Vendor:, Source: sq_AL, URL:, PURL:, Declared: GPL-2.0, Concluded: GPL-2.0 -->
+        <!-- Name: dict-sq-spell, Vendor:, Source: sq_AL, URL: https://github.com/bgodole/korrektor, PURL:, Declared: GPL-3.0-or-later, Concluded: GPL-3.0-or-later -->
         <p>The following software may be included in this product: Albanian spelling dictionary. Use of any of this
         software is governed by the terms of the license below:</p>
-        <p><a href="#a__GPL_version_2">Jump to GNU GPL version 2.0</a></p>
+        <p><a href="#a__GPL_version_3">Jump to GPL version 3</a></p>
         <h3>Hyphenation patterns</h3>
         <!-- Name: dict-sq-hyph, Vendor:, Source: sq_AL, URL:, PURL:, Declared: GPL-2.0, Concluded: MPL-2.0 -->
         <p>The following software may be included in this product: Albanian hyphenation patterns. Use of any of this
