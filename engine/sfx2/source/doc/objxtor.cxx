@@ -341,6 +341,9 @@ void SfxObjectShell::InternalCloseAndRemoveFiles()
 #endif
         delete pMedium;
         pMedium = nullptr;
+        // Callers take a name as the promise of a medium to read it from, and
+        // a forked background-save child keeps running idle jobs after this.
+        bHasName = false;
     }
 
     // The removing of the temporary file must be done as the latest step in the document destruction
