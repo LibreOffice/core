@@ -402,6 +402,8 @@ public:
     bool            IsTopToBottom() const;
 
     bool            PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window const * pFrameWin );
+    // Puts a selection that the text left behind back into the text, before a key reads it.
+    void            FitSelectionIntoText();
 
     bool            MouseButtonUp( const MouseEvent& rMouseEvent );
     bool            MouseButtonDown( const MouseEvent& rMouseEvent );

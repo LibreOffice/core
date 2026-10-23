@@ -28,6 +28,8 @@
 #include <editeng/editview.hxx>
 #include <editeng/editund2.hxx>
 #include <vcl/commandevent.hxx>
+#include <vcl/event.hxx>
+#include <vcl/keycodes.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/lspcitem.hxx>
@@ -235,6 +237,8 @@ public:
 
     /// Test that a character typed over a selection through an input method is one undo step
     void testExtTextInputOverSelectionIsOneUndoStep();
+    void testKeyInDeletedParagraph();
+    void testOutlinerKeyInDeletedParagraph();
     void testCursorReachesTheSameDepthBelowTheBaseline();
 
     // Fills rOutliner's edit engine so that paragraph 0 holds one URL field
@@ -309,6 +313,8 @@ public:
     CPPUNIT_TEST(testOutlinerUndoParaFlag);
     CPPUNIT_TEST(testOutlinerReadDepth);
     CPPUNIT_TEST(testExtTextInputOverSelectionIsOneUndoStep);
+    CPPUNIT_TEST(testKeyInDeletedParagraph);
+    CPPUNIT_TEST(testOutlinerKeyInDeletedParagraph);
     CPPUNIT_TEST(testCursorReachesTheSameDepthBelowTheBaseline);
     CPPUNIT_TEST_SUITE_END();
 
@@ -3649,6 +3655,65 @@ void Test::testExtTextInputOverSelectionIsOneUndoStep()
     CPPUNIT_ASSERT_EQUAL(u"Hello"_ustr, aEditEngine.GetText());
 
     aEditEngine.RemoveView(&aEditView);
+}
+
+/*
+ * A key press has to cope with a selection in a paragraph that is gone, as Impress saw it on Enter:
+ * the paragraphs were merged without the view being told, and the key read the deleted paragraph.
+ */
+void Test::testKeyInDeletedParagraph()
+{
+    // Given a view that selects text in the second paragraph:
+    EditEngine aEditEngine(mpItemPool.get());
+    aEditEngine.SetText(u"Hello\nworld"_ustr);
+    ScopedVclPtrInstance<WorkWindow> xWindow(nullptr, WB_APP | WB_STDWORK);
+    EditView aEditView(aEditEngine, xWindow.get());
+    aEditEngine.InsertView(&aEditView);
+    aEditView.SetOutputArea(tools::Rectangle(Point(0, 0), Size(2000, 2000)));
+    aEditView.SetSelection(ESelection(1, 1, 1, 4));
+
+    // When the two paragraphs are merged without the view being told, and Enter is pressed:
+    EditDoc& rDoc = aEditEngine.GetEditDoc();
+    aEditEngine.ConnectParagraphs(&rDoc.GetObject(0), &rDoc.GetObject(1), /*bBackward=*/false);
+    aEditView.PostKeyEvent(KeyEvent(0, vcl::KeyCode(KEY_RETURN)));
+
+    // Then make sure the key went to a position that is in the text:
+    // Without the accompanying fix in place, this test would have failed, the key worked with the
+    // selection in the deleted paragraph.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aEditEngine.GetParagraphCount());
+    CPPUNIT_ASSERT_EQUAL(u"Helloworld"_ustr, aEditEngine.GetText(0));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, aEditEngine.GetText(1));
+
+    aEditEngine.RemoveView(&aEditView);
+}
+
+/*
+ * The same in an outliner view, as a text shape in Impress has: the outliner reads the selection
+ * before the key reaches the edit engine.
+ */
+void Test::testOutlinerKeyInDeletedParagraph()
+{
+    // Given an outliner view that selects text in the second paragraph:
+    Outliner aOutliner(mpItemPool.get(), OutlinerMode::TextObject);
+    ScopedVclPtrInstance<WorkWindow> xWindow(nullptr, WB_APP | WB_STDWORK);
+    OutlinerView aView(aOutliner, xWindow.get());
+    aOutliner.InsertView(&aView);
+    comphelper::ScopeGuard aGuard([&aOutliner, &aView] { aOutliner.RemoveView(&aView); });
+    aView.SetOutputArea(tools::Rectangle(Point(0, 0), Size(2000, 2000)));
+    aOutliner.SetText(u"Hello\nworld"_ustr, 0);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), aOutliner.GetParagraphCount());
+    aView.GetEditView().SetSelection(ESelection(1, 1, 1, 4));
+
+    // When the two paragraphs are merged without the view being told, and Enter is pressed:
+    EditEngine& rEditEngine = aOutliner.GetEditEngine();
+    EditDoc& rDoc = rEditEngine.GetEditDoc();
+    rEditEngine.ConnectParagraphs(&rDoc.GetObject(0), &rDoc.GetObject(1), /*bBackward=*/false);
+    aView.PostKeyEvent(KeyEvent(0, vcl::KeyCode(KEY_RETURN)));
+
+    // Then make sure the key went to a position that is in the text:
+    // Without the accompanying fix in place, this test would have failed, the outliner looked up
+    // the flags of the deleted paragraph.
+    CPPUNIT_ASSERT_EQUAL(u"Helloworld"_ustr, rEditEngine.GetText(0));
 }
 
 /*

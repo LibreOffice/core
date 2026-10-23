@@ -46,6 +46,7 @@
 #include <sal/log.hxx>
 #include <osl/diagnose.h>
 #include <tools/debug.hxx>
+#include <impedit.hxx>
 
 using namespace ::com::sun::star;
 
@@ -82,6 +83,8 @@ bool OutlinerView::PostKeyEvent( const KeyEvent& rKEvt, vcl::Window const * pFra
     // an Outliner with exactly one paragraph.
     if( rOwner.bFirstParaIsEmpty )
         rOwner.Insert( OUString() );
+
+    pEditView->getImpl().FitSelectionIntoText();
 
     bool bKeyProcessed = false;
     ESelection aSel( pEditView->GetSelection() );

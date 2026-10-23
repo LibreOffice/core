@@ -1774,8 +1774,37 @@ uno::Reference<datatransfer::clipboard::XClipboard> ImpEditView::GetClipboard() 
     return GetSystemClipboard();
 }
 
+namespace
+{
+// The position in rDoc nearest to rPaM: a paragraph that is gone gives way to the end of the text,
+// an index past the end of its paragraph to the end of that paragraph.
+EditPaM lcl_FitIntoDoc(EditPaM aPaM, const EditDoc& rDoc)
+{
+    if (!aPaM.GetNode() || rDoc.GetPos(aPaM.GetNode()) >= rDoc.Count())
+        return rDoc.GetEndPaM();
+    if (aPaM.GetIndex() > aPaM.GetNode()->Len())
+        aPaM.SetIndex(aPaM.GetNode()->Len());
+    return aPaM;
+}
+}
+
+void ImpEditView::FitSelectionIntoText()
+{
+    // The text changed without the selection of this view moving along. A key would read the
+    // selection through a paragraph that is too short or already deleted.
+    const EditDoc& rDoc = getEditEngine().GetEditDoc();
+    if (!maEditSelection.DbgIsBuggy(rDoc))
+        return;
+
+    SAL_WARN("editeng", "PostKeyEvent: the selection of the view does not fit the text");
+    SetEditSelection(EditSelection(lcl_FitIntoDoc(maEditSelection.Min(), rDoc),
+                                   lcl_FitIntoDoc(maEditSelection.Max(), rDoc)));
+}
+
 bool ImpEditView::PostKeyEvent( const KeyEvent& rKeyEvent, vcl::Window const * pFrameWin )
 {
+    FitSelectionIntoText();
+
     bool bDone = false;
 
     KeyFuncType eFunc = rKeyEvent.GetKeyCode().GetFunction();
