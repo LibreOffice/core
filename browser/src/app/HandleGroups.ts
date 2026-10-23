@@ -166,14 +166,23 @@ abstract class HandleGroup {
 
 	/*
 		Moves the handle a key step and hands the engine where it landed, the way the end of a
-		drag of it would. Answers where it landed.
+		drag of it would, held where a drag of it is held. Answers where it landed. A handle goes
+		on from where keys have taken it so far, so that a key held down goes on step by step
+		before the engine has answered.
 	*/
 	protected stepAndHandOver(
 		handle: SelectionHandle,
 		towards: cool.Point,
 		event: KeyboardEvent,
 	): cool.Point {
-		const to = HandleGroup.steppedBy(handle, towards, event);
+		const to = this.holdInside(
+			handle,
+			HandleGroup.steppedBy(
+				HeldSteps.from(this.selection, handle),
+				towards,
+				event,
+			),
+		);
 		this.handOver(handle, to);
 
 		return to;
@@ -1446,29 +1455,6 @@ class ShapingHandles extends HandlesMovedOneByOne {
 			grown + (handle.larger ? HandleLook.largerBy('shaping') : 0),
 		);
 	}
-
-	/*
-		A key moves the handle as a drag would, held on its rail. A handle goes on from where
-		keys have taken it so far, so that a key held down goes on step by step before the
-		engine has answered.
-	*/
-	public moveByKey(
-		handle: SelectionHandle,
-		towards: cool.Point,
-		event: KeyboardEvent,
-	): cool.Point | null {
-		const to = this.holdInside(
-			handle,
-			HandleGroup.steppedBy(
-				HeldSteps.from(this.selection, handle),
-				towards,
-				event,
-			),
-		);
-		this.handOver(handle, to);
-
-		return to;
-	}
 }
 
 /*
@@ -1706,18 +1692,7 @@ class TiePointHandles extends HandleGroup {
 	): cool.Point | null {
 		if (!handle.name) return null;
 
-		// on from where keys have taken it so far, and inside the object as a drag is
-		const to = this.holdInside(
-			handle,
-			HandleGroup.steppedBy(
-				HeldSteps.from(this.selection, handle),
-				towards,
-				event,
-			),
-		);
-		this.handOver(handle, to);
-
-		return to;
+		return this.stepAndHandOver(handle, towards, event);
 	}
 
 	/// What the object holds about the point that handle stands for, or nothing for one of the
@@ -1903,10 +1878,32 @@ class PathHandles extends HandlesMovedOneByOne {
 		SelectionSection.sendPathChanges(this.selection.selectedObjects()[0], [
 			change,
 		]);
+		HeldSteps.hold(this.selection, handle, to);
 	}
 
+	/// The point that was taken stands where it was taken, with its weights.
 	public handles(): SelectionHandle[] {
-		return this.selection.pathEditor()?.handles() ?? [];
+		const editor = this.selection.pathEditor();
+		const known = editor?.handles() ?? [];
+
+		for (const handle of known) {
+			const stepped = HeldSteps.of(this.selection, handle.name);
+			if (stepped)
+				return editor?.handlesDuring(handle.name, stepped.at, known) ?? known;
+		}
+
+		return known;
+	}
+
+	/// The pieces of the path at the point keys took, or a drag let go of, as they will be.
+	public outline(): cool.ObjectPathPolygon[] | null {
+		const editor = this.selection.pathEditor();
+		for (const handle of editor?.handles() ?? []) {
+			const stepped = HeldSteps.of(this.selection, handle.name);
+			if (stepped) return editor?.outlineFor(handle.name, stepped.at) ?? null;
+		}
+
+		return null;
 	}
 
 	public paint(section: SelectionSection, shown: SelectionHandle[]): void {
