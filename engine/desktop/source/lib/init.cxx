@@ -3297,6 +3297,8 @@ COKitTranslateResult COKitImpl::translateDocument(const char* pInputPath, const 
 
 std::string COKitImpl::extractRequest(const char* pFilePath)
 {
+    SolarMutexGuard aGuard;
+
     uno::Reference<frame::XDesktop> xComponentLoader = frame::Desktop::create(xContext);
     uno::Reference< css::lang::XComponent > xComp;
     OUString aURL(getAbsoluteURL(pFilePath));
@@ -3326,6 +3328,9 @@ std::string COKitImpl::extractRequest(const char* pFilePath)
 
             if (xComp.is())
             {
+                // The document is loaded only to read it, so it is closed again on the way out.
+                comphelper::ScopeGuard aDisposeGuard([&xComp] { xComp->dispose(); });
+
                 uno::Reference< document::XLinkTargetSupplier > xLTS( xComp, uno::UNO_QUERY );
 
                 if( xLTS.is() )
@@ -3337,7 +3342,6 @@ std::string COKitImpl::extractRequest(const char* pFilePath)
                     }
                     return aJson.finishAndGetAsStdString();
                 }
-                xComp->dispose();
             }
         }
     }
@@ -3377,6 +3381,9 @@ std::string COKitImpl::extractDocumentStructureRequest(const char* pFilePath, co
 
             if (xComp.is())
             {
+                // The document is loaded only to read it, so it is closed again on the way out.
+                comphelper::ScopeGuard aDisposeGuard([&xComp] { xComp->dispose(); });
+
                 ITiledRenderable* pDoc = dynamic_cast<ITiledRenderable*>(xComp.get());
                 if (!pDoc)
                     return {};
@@ -3408,8 +3415,6 @@ std::string COKitImpl::extractDocumentStructureRequest(const char* pFilePath, co
                     }
                     return aJson.finishAndGetAsStdString();
                 }
-
-                xComp->dispose();
             }
         }
     }
