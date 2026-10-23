@@ -28,6 +28,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
+#include <set>
 #include <vector>
 
 #include <osl/file.hxx>
@@ -2291,11 +2292,18 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
                     bFirstApplication = false;
             }
 
+            // The masters the slides leave behind on a first application. Each is held, because
+            // moving the last slide off a master that is not marked to be kept removes it.
+            std::set<rtl::Reference<SdPage>> aReplacedMasters;
+
             for (sal_uInt16 i = 0; i < nStdCount; ++i)
             {
                 SdPage* pPage = GetDoc()->GetSdPage(i, PageKind::Standard);
                 if (!bFirstApplication && !aCtx.maTouchedPages.contains(pPage))
                     continue;
+
+                if (bFirstApplication && pPage->TRG_HasMasterPage())
+                    aReplacedMasters.insert(static_cast<SdPage*>(&pPage->TRG_GetMasterPage()));
 
                 // An intent the manifest maps to a master wins; then the part;
                 // then the slide's position in the deck.
@@ -2331,6 +2339,18 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
                 // master and can sit over a master's side band or run off the
                 // designed text area.
                 pPage->SetAutoLayout(pPage->GetAutoLayout(), true);
+            }
+
+            // A first application themes every slide, so a master it replaced on every slide is
+            // left unused, and it is removed. A master some slide still uses stays. A master is
+            // kept unless it is marked otherwise, so the mark is cleared first.
+            for (const rtl::Reference<SdPage>& pReplaced : aReplacedMasters)
+            {
+                if (!pReplaced->IsInserted()
+                    || GetDoc()->GetMasterPageUserCount(pReplaced.get()) != 0)
+                    continue;
+                pReplaced->SetPrecious(false);
+                GetDoc()->RemoveUnnecessaryMasterPages(pReplaced.get());
             }
         }
         if (pTemplate)

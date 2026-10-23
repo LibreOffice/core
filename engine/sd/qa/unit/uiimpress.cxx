@@ -624,6 +624,11 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureApplyTemplate)
     CPPUNIT_ASSERT(masterName(0) != masterName(1));
     CPPUNIT_ASSERT(masterName(1) != masterName(2));
     CPPUNIT_ASSERT(masterName(0) != masterName(2));
+
+    // The master the slides had before is used by no slide now, and the deck no longer carries
+    // it.
+    for (sal_uInt16 i = 0; i < pDoc->GetMasterSdPageCount(PageKind::Standard); ++i)
+        CPPUNIT_ASSERT(pDoc->GetMasterSdPage(i, PageKind::Standard)->GetName() != aBeforeMaster);
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDesignMasterRoleFromName)
