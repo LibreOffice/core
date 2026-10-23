@@ -346,7 +346,7 @@ window.L.Map.include({
 		var isAllowedInReadOnly = false;
 		var allowedCommands = ['.uno:Save', '.uno:SaveAs', '.uno:WordCountDialog',
 			'.uno:Signature', '.uno:PrepareSignature', '.uno:DownloadSignature', '.uno:InsertSignatureLine',
-			'.uno:SetDocumentProperties',
+			'.uno:SetDocumentProperties', '.uno:JumpToNextTable', '.uno:JumpToPrevTable',
 			'.uno:ShowResolvedAnnotations', '.uno:Open', '.uno:CloseWin', '.uno:Quit', '.uno:NextDocumentTab', '.uno:PreviousDocumentTab', '.uno:RecentlyUsedDocumentTab',
 			'.uno:ToolbarMode?Mode:string=notebookbar_online.ui', '.uno:ToolbarMode?Mode:string=Default',
 			'.uno:ExportToEPUB', '.uno:ExportToPDF', '.uno:ExportDirectToPDF', '.uno:MoveKeepInsertMode', '.uno:ShowRuler',

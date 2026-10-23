@@ -491,6 +491,11 @@ keyboardShortcuts.definitions.set('default', new Array<ShortcutDescriptor>(
 
     new ShortcutDescriptor({ eventType: 'keydown', modifier: Mod.CTRL, key: 'w', platform: Platform.CODAWINDOWS | Platform.CODAQT, unoAction: '.uno:CloseWin', showViewModeAttention: false }),
 
+    // Document tabs, like the tab navigation of web browsers (Qt app only for now).
+    new ShortcutDescriptor({ eventType: 'keydown', modifier: Mod.CTRL, key: 'PageDown', platform: Platform.CODAQT, unoAction: '.uno:NextDocumentTab', showViewModeAttention: false }),
+    new ShortcutDescriptor({ eventType: 'keydown', modifier: Mod.CTRL, key: 'PageUp', platform: Platform.CODAQT, unoAction: '.uno:PreviousDocumentTab', showViewModeAttention: false }),
+    new ShortcutDescriptor({ eventType: 'keydown', modifier: Mod.CTRL, key: 'Tab', platform: Platform.CODAQT, unoAction: '.uno:RecentlyUsedDocumentTab', showViewModeAttention: false }),
+
     new ShortcutDescriptor({ eventType: 'keydown', modifier: Mod.CTRL | Mod.SHIFT, key: 'E', dispatchAction: 'switchtoedit', viewType: ViewType.ReadOnly, showViewModeAttention: false }),
 
     /*
@@ -517,8 +522,10 @@ keyboardShortcuts.definitions.set('default', new Array<ShortcutDescriptor>(
     // Calc.
     new ShortcutDescriptor({ docType: 'spreadsheet', eventType: 'keydown', key: 'PageUp', dispatchAction: 'scrollpageup', viewType: ViewType.ReadOnly }),
     new ShortcutDescriptor({ docType: 'spreadsheet', eventType: 'keydown', key: 'PageDown', dispatchAction: 'scrollpagedown', viewType: ViewType.ReadOnly }),
-    new ShortcutDescriptor({ docType: 'spreadsheet', eventType: 'keydown', modifier: Mod.CTRL | Mod.SHIFT, key: 'PageUp' }),
-    new ShortcutDescriptor({ docType: 'spreadsheet', eventType: 'keydown', modifier: Mod.CTRL | Mod.SHIFT, key: 'PageDown' }),
+    new ShortcutDescriptor({ docType: 'spreadsheet', eventType: 'keydown', modifier: Mod.CTRL | Mod.SHIFT, key: 'PageUp', platform: Platform.CODAQT, unoAction: '.uno:JumpToPrevTable', showViewModeAttention: false }),
+    new ShortcutDescriptor({ docType: 'spreadsheet', eventType: 'keydown', modifier: Mod.CTRL | Mod.SHIFT, key: 'PageDown', platform: Platform.CODAQT, unoAction: '.uno:JumpToNextTable', showViewModeAttention: false }),
+    new ShortcutDescriptor({ docType: 'spreadsheet', eventType: 'keydown', modifier: Mod.CTRL | Mod.SHIFT, key: 'PageUp', platform: ~Platform.CODAQT }),
+    new ShortcutDescriptor({ docType: 'spreadsheet', eventType: 'keydown', modifier: Mod.CTRL | Mod.SHIFT, key: 'PageDown', platform: ~Platform.CODAQT }),
     new ShortcutDescriptor({ docType: 'spreadsheet', eventType: 'keydown', key: 'F5' }),
     new ShortcutDescriptor({ docType: 'spreadsheet', eventType: 'keydown', key: 'F9', unoAction: '.uno:Calculate' }),
     new ShortcutDescriptor({ docType: 'spreadsheet', eventType: 'keydown', modifier: Mod.CTRL, key: ',', unoAction: '.uno:InsertCurrentDate' }),
