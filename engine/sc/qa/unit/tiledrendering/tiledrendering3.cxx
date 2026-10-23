@@ -4355,6 +4355,52 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testLinkedRangeRefreshInReadOnlyView)
     CPPUNIT_ASSERT(pDocSh->IsModified());
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testExtractTextListsSheetsAndReadsANamedSheet)
+{
+    // The text view of a workbook names every sheet and the sheet it shows, and a sheet argument
+    // shows another sheet.
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    ScDocument* pDoc = pModelObj->GetDocument();
+    pDoc->InsertTab(1, u"Figures, 2026"_ustr);
+    pDoc->SetString(ScAddress(0, 0, 0), u"on the first sheet"_ustr);
+    pDoc->SetString(ScAddress(0, 0, 1), u"on the second sheet"_ustr);
+
+    {
+        tools::JsonWriter aJsonWriter;
+        pModelObj->getCommandValues(aJsonWriter, ".uno:ExtractDocumentStructure?filter=text");
+        const OString aText = aJsonWriter.finishAndGetAsOString();
+        CPPUNIT_ASSERT(aText.indexOf("\"Figures, 2026\"") >= 0);
+        CPPUNIT_ASSERT(aText.indexOf("on the first sheet") >= 0);
+        CPPUNIT_ASSERT(aText.indexOf("on the second sheet") < 0);
+    }
+    {
+        tools::JsonWriter aJsonWriter;
+        pModelObj->getCommandValues(
+            aJsonWriter, ".uno:ExtractDocumentStructure?filter=text,sheet:Figures%2C%202026");
+        const OString aText = aJsonWriter.finishAndGetAsOString();
+        CPPUNIT_ASSERT(aText.indexOf("\"Sheet\": \"Figures, 2026\"") >= 0);
+        CPPUNIT_ASSERT(aText.indexOf("on the second sheet") >= 0);
+    }
+    {
+        tools::JsonWriter aJsonWriter;
+        pModelObj->getCommandValues(aJsonWriter,
+                                    ".uno:ExtractDocumentStructure?filter=text,sheet:Nothing");
+        const OString aText = aJsonWriter.finishAndGetAsOString();
+        CPPUNIT_ASSERT(aText.indexOf("There is no sheet named 'Nothing'") >= 0);
+    }
+    {
+        // A range that names its own sheet shows that sheet, and names it.
+        pDoc->InsertTab(2, u"Plain"_ustr);
+        pDoc->SetString(ScAddress(0, 0, 2), u"on the third sheet"_ustr);
+        tools::JsonWriter aJsonWriter;
+        pModelObj->getCommandValues(aJsonWriter,
+                                    ".uno:ExtractDocumentStructure?filter=text,range:Plain.A1:A1");
+        const OString aText = aJsonWriter.finishAndGetAsOString();
+        CPPUNIT_ASSERT(aText.indexOf("\"Sheet\": \"Plain\"") >= 0);
+        CPPUNIT_ASSERT(aText.indexOf("on the third sheet") >= 0);
+    }
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

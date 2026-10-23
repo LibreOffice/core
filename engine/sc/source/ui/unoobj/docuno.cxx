@@ -1807,18 +1807,48 @@ void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_vi
         if (filterStr != u"text" && !filterStr.startsWith(u"text,"))
             return;
 
+        // The arguments after the filter name: "range:A1:D100" limits the text to a cell range,
+        // and "sheet:<name>" reads that sheet in place of the active one. The sheet comes last
+        // and runs to the end, so a sheet name may hold a comma.
         OUString rangeStr;
-        sal_Int32 nComma = filterStr.indexOf(',');
-        if (nComma >= 0)
+        OUString aRequestedSheet;
+        if (sal_Int32 nComma = filterStr.indexOf(','); nComma >= 0)
         {
-            OUString args = filterStr.copy(nComma + 1); // e.g. "range:A1:D100"
+            OUString args = filterStr.copy(nComma + 1); // e.g. "range:A1:D100,sheet:Sales"
+            if (sal_Int32 nSheet = args.indexOf(u"sheet:"); nSheet >= 0)
+            {
+                aRequestedSheet = args.copy(nSheet + 6);
+                args = args.copy(0, nSheet);
+            }
             if (args.startsWith(u"range:"))
-                rangeStr = args.copy(6);
+                rangeStr = OUString(comphelper::string::stripEnd(args.subView(6), u','));
         }
 
         ScDocument& rDoc = pDocShell->GetDocument();
         ScTabViewShell* pViewShell = pDocShell->GetBestViewShell(false);
-        const SCTAB nActiveTab = pViewShell ? pViewShell->GetViewData().GetTabNumber() : SCTAB(0);
+        SCTAB nActiveTab = pViewShell ? pViewShell->GetViewData().GetTabNumber() : SCTAB(0);
+
+        // The names of all sheets come first, so a reader can ask for another one.
+        {
+            auto aSheetsNode = rJsonWriter.startArray("Sheets");
+            for (SCTAB nTab = 0; nTab < rDoc.GetTableCount(); ++nTab)
+            {
+                OUString aName;
+                rDoc.GetName(nTab, aName);
+                rJsonWriter.putSimpleValue(aName);
+            }
+        }
+
+        if (!aRequestedSheet.isEmpty() && !rDoc.GetTable(aRequestedSheet, nActiveTab))
+        {
+            auto aBodyNode = rJsonWriter.startNode("BodyText");
+            rJsonWriter.put("format", "markdown");
+            rJsonWriter.put("truncated", false);
+            rJsonWriter.put("error", "There is no sheet named '" + aRequestedSheet
+                                         + "'. Sheets lists the names of the sheets.");
+            rJsonWriter.put("text", "");
+            return;
+        }
 
         ScRange aRange;
         // Default to the active sheet so an unprefixed range like B5:B10 parses
@@ -1835,6 +1865,12 @@ void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_vi
             rDoc.GetCellArea(nActiveTab, nEndCol, nEndRow);
             aRange = ScRange(0, 0, nActiveTab, nEndCol, nEndRow, nActiveTab);
         }
+
+        // A range that names its own sheet is read from that sheet, so the name comes from the
+        // range.
+        OUString aSheetName;
+        rDoc.GetName(aRange.aStart.Tab(), aSheetName);
+        rJsonWriter.put("Sheet", aSheetName);
 
         OUString aText = ScTransferObj::GetMarkdownFromRange(rDoc, aRange, /*bAnnotated*/ true);
         OUString aFormulas = ScTransferObj::GetFormulaListFromRange(rDoc, aRange);
