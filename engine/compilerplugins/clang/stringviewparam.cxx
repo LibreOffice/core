@@ -505,11 +505,12 @@ private:
             }
             auto const t = relevantStringType(i->getType().getNonReferenceType());
             assert(t != StringType::None);
-            report(DiagnosticsEngine::Warning,
-                   "replace function parameter of type %0 with "
-                   "'%select{std::string_view|std::u16string_view}1'",
-                   i->getLocation())
-                << i->getType() << (int(t) - 1) << i->getSourceRange();
+            if (!suppressWarningAt(i->getLocation()))
+                report(DiagnosticsEngine::Warning,
+                       "replace function parameter of type %0 with "
+                       "'%select{std::string_view|std::u16string_view}1'",
+                       i->getLocation())
+                    << i->getType() << (int(t) - 1) << i->getSourceRange();
             for (auto d2 = d1;;)
             {
                 d2 = d2->getPreviousDecl();

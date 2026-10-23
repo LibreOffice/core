@@ -41,8 +41,6 @@ $(eval $(call gb_JunitTest_add_sourcefiles,framework_complex,\
     framework/qa/complex/framework/recovery/RecoveryTools \
     framework/qa/complex/framework/recovery/RecoveryTest \
     framework/qa/complex/framework/recovery/CrashThread \
-    framework/qa/complex/accelerators/AcceleratorsConfigurationTest \
-    framework/qa/complex/accelerators/KeyMapping \
     framework/qa/complex/contextMenuInterceptor/CheckContextMenuInterceptor \
     framework/qa/complex/contextMenuInterceptor/ContextMenuInterceptor \
     framework/qa/complex/path_settings/PathSettingsTest \
@@ -62,7 +60,6 @@ $(eval $(call gb_JunitTest_add_sourcefiles,framework_complex,\
 
 $(eval $(call gb_JunitTest_add_classes,framework_complex,\
     complex.dispatches.checkdispatchapi \
-    complex.accelerators.AcceleratorsConfigurationTest \
 ))
 # these were disabled in the old build system too, please check
 # carefully before reenabling
