@@ -6018,16 +6018,18 @@ SfxVoidItem ChangeTheme FN_CHANGE_THEME
     GroupId = SfxGroupId::Application;
 ]
 
-SfxVoidItem InvertBackground FN_INVERT_BACKGROUND
-(SfxStringItem NewTheme FN_PARAM_NEW_THEME)
+SfxBoolItem InvertBackground FN_INVERT_BACKGROUND
 [
-    AutoUpdate = FALSE,
+    AutoUpdate = TRUE,
     FastCall = FALSE,
-    ReadOnlyDoc = FALSE,
-    Toggle = FALSE,
+    ReadOnlyDoc = TRUE,
+    Toggle = TRUE,
     Container = FALSE,
     RecordAbsolute = FALSE,
     RecordPerSet;
 
+    AccelConfig = TRUE,
+    MenuConfig = TRUE,
+    ToolBoxConfig = TRUE,
     GroupId = SfxGroupId::Application;
 ]

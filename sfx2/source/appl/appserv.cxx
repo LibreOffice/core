@@ -742,37 +742,19 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             }
 
             Invalidate(FN_CHANGE_THEME);
+            Invalidate(FN_INVERT_BACKGROUND); //enable in dark mode only
+            bDone = true;
             break;
         }
         case FN_INVERT_BACKGROUND:
         {
-            const SfxStringItem* pNewThemeArg = rReq.GetArg(FN_PARAM_NEW_THEME);
+            const SfxBoolItem* pOnItem = rReq.GetArg(FN_INVERT_BACKGROUND);
+            bool bOn = pOnItem ? pOnItem->GetValue() : false;
+            ThemeColors::SetUseOnlyWhiteDocBackground(bOn);
+            aEditableConfig.Commit(true); // force configuration update
 
-            svtools::EditableColorConfig aColorConfig;
-            ::Color aDefLightColor = svtools::ColorConfig::GetDefaultColor(svtools::DOCCOLOR, 0);
-            ::Color aDefDarkColor = svtools::ColorConfig::GetDefaultColor(svtools::DOCCOLOR, 1);
-
-            OUString aNewTheme;
-            if (!pNewThemeArg) {
-                ::Color aCurrentColor = aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;
-
-                if (aCurrentColor == aDefLightColor) {
-                    aNewTheme = OUString("Dark");
-                } else {
-                    aNewTheme = OUString("Light");
-                }
-            } else {
-                aNewTheme = pNewThemeArg->GetValue();
-            }
-
-            svtools::ColorConfigValue aValue;
-
-            if(aNewTheme == "Dark")
-                aValue.nColor = aDefDarkColor;
-            else
-                aValue.nColor = aDefLightColor;
-
-            aColorConfig.SetColorValue(svtools::DOCCOLOR, aValue);
+            Invalidate(FN_INVERT_BACKGROUND);
+            bDone = true;
             break;
         }
         // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
@@ -1359,6 +1341,18 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                           || (MiscSettings::GetAppColorMode() == AppearanceMode::AUTO
                               && MiscSettings::GetUseDarkMode());
                     rSet.Put(SfxBoolItem(FN_CHANGE_THEME, bIsDarkMode));
+                    break;
+                }
+                case FN_INVERT_BACKGROUND:
+                {
+                    const bool bIsDarkMode
+                        = MiscSettings::GetAppColorMode() == AppearanceMode::DARK
+                          || (MiscSettings::GetAppColorMode() == AppearanceMode::AUTO
+                              && MiscSettings::GetUseDarkMode());
+                    if (!bIsDarkMode)
+                        rSet.DisableItem(nWhich);
+                    else
+                        rSet.Put( SfxBoolItem(nWhich, ThemeColors::UseOnlyWhiteDocBackground()) );
                     break;
                 }
                 case SID_HELPTIPS:

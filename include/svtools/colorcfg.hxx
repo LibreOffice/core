@@ -298,7 +298,7 @@ public:
     void                        SetModified();
     void                        ClearModified() {m_bModified = false;}
     bool                        IsModified() const {return m_bModified;}
-    void                        Commit();
+    void                        Commit(const bool bForceUpdate = false);
 
     void                        DisableBroadcast();
     void                        EnableBroadcast();

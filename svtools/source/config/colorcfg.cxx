@@ -854,9 +854,9 @@ void EditableColorConfig::SetModified()
     m_bModified = true;
 }
 
-void EditableColorConfig::Commit()
+void EditableColorConfig::Commit(const bool bForceUpdate)
 {
-    if(m_bModified)
+    if(m_bModified || bForceUpdate)
         m_pImpl->SetModified();
     if(m_pImpl->IsModified())
     {
