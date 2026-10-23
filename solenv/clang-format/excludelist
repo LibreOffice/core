@@ -3008,7 +3008,7 @@ desktop/unx/source/args.cxx
 desktop/unx/source/args.hxx
 desktop/unx/source/file_image.h
 desktop/unx/source/file_image_unx.c
-desktop/unx/source/pagein.c
+desktop/unx/source/pagein.cxx
 desktop/unx/source/splashx.c
 desktop/unx/source/start.cxx
 desktop/win32/source/QuickStart/QuickStart.cxx

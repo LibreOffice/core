@@ -18,10 +18,9 @@
  */
 
 #include "file_image.h"
-#include "pagein.h"
+#include "pagein.hxx"
 
 #include <errno.h>
-#include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -50,7 +49,7 @@ static bool isRotational(char const * path)
 {
     bool ret = true;
 #ifdef LINUX
-    FILE * fp = NULL;
+    FILE * fp = nullptr;
     char fullpath[4096];
     struct stat out;
     int major, minor;
@@ -60,7 +59,7 @@ static bool isRotational(char const * path)
     major = major(out.st_dev);
     minor = 0; /* minor(out.st_dev); only the device itself has a queue */
     sprintf(fullpath,"/sys/dev/block/%d:%d/queue/rotational",major,minor);
-    if ((fp = fopen(fullpath, "r")) == NULL)
+    if ((fp = fopen(fullpath, "r")) == nullptr)
         return ret;
     if (fgets(&type, 1, fp))
         ret = type == '1';
@@ -72,8 +71,8 @@ static bool isRotational(char const * path)
 void pagein_execute(char const * path, char const * file)
 {
     char fullpath[4096];
-    char *p = NULL;
-    FILE   * fp = NULL;
+    char *p = nullptr;
+    FILE   * fp = nullptr;
     if(!isRotational(path))
         return;
     memset(fullpath, 0, sizeof(fullpath));
@@ -84,13 +83,13 @@ void pagein_execute(char const * path, char const * file)
         p++;
     strncpy(p, file, 1024);
     p[strlen(p)] = '\0';
-    if ((fp = fopen (fullpath, "r")) == NULL)
+    if ((fp = fopen (fullpath, "r")) == nullptr)
     {
 
         fprintf (stderr, "fopen %s: %s\n", fullpath, strerror(errno));
         return;
     }
-    while (fgets (p, 1024, fp) != NULL)
+    while (fgets (p, 1024, fp) != nullptr)
     {
         p[strlen(p) - 1] = '\0';
 

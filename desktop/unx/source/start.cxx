@@ -34,7 +34,7 @@
 #include <sal/main.h>
 
 #include "args.hxx"
-#include "pagein.h"
+#include "pagein.hxx"
 #include "splashx.h"
 
 #define PIPEDEFAULTPATH      "/tmp"
