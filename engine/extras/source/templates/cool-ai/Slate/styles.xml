@@ -164,7 +164,7 @@
       <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#6d7886" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Mono" fo:font-family="'Liberation Mono'" style:font-pitch="variable" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-name-asian="Noto Sans CJK SC" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
     </style:style>
     <style:style style:name="Slate-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:wrap-option="wrap">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true" fo:wrap-option="wrap">
         <text:list-style style:name="Slate-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="&#x25AA;">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -354,7 +354,7 @@
       <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#b9c2cc" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Mono" fo:font-family="'Liberation Mono'" style:font-pitch="variable" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-name-asian="Noto Sans CJK SC" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
     </style:style>
     <style:style style:name="Slate1-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" fo:wrap-option="wrap">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true" fo:wrap-option="wrap">
         <text:list-style style:name="Slate1-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="&#x25AA;">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -544,7 +544,7 @@
       <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#6d7886" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Mono" fo:font-family="'Liberation Mono'" style:font-pitch="variable" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-name-asian="Noto Sans CJK SC" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
     </style:style>
     <style:style style:name="Slate2-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:wrap-option="wrap">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true" fo:wrap-option="wrap">
         <text:list-style style:name="Slate2-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="&#x25AA;">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -734,7 +734,7 @@
       <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#b9c2cc" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Liberation Mono" fo:font-family="'Liberation Mono'" style:font-pitch="variable" fo:font-size="12pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-name-asian="Noto Sans CJK SC" style:font-size-asian="12pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="12pt" style:font-style-complex="normal" style:font-weight-complex="normal"/>
     </style:style>
     <style:style style:name="Slate3-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:wrap-option="wrap">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true" fo:wrap-option="wrap">
         <text:list-style style:name="Slate3-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="&#x25AA;">
             <style:list-level-properties text:min-label-width="0.6cm"/>

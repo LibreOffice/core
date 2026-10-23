@@ -323,7 +323,7 @@
       <style:text-properties fo:color="#234f3d" loext:opacity="100%" style:font-name="Linux Libertine G" fo:font-family="'Linux Libertine G'" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="15" style:font-size-asian="15" style:font-size-complex="15" fo:font-style="italic" style:font-style-asian="italic" style:font-style-complex="italic" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true"/>
     </style:style>
     <style:style style:name="Ivory-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:wrap-option="wrap">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true" fo:wrap-option="wrap">
         <text:list-style style:name="Ivory-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="&#x25CF;">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -513,7 +513,7 @@
       <style:text-properties fo:color="#234f3d" loext:opacity="100%" style:font-name="Linux Libertine G" fo:font-family="'Linux Libertine G'" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="15" style:font-size-asian="15" style:font-size-complex="15" fo:font-style="italic" style:font-style-asian="italic" style:font-style-complex="italic" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true"/>
     </style:style>
     <style:style style:name="Ivory1-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:wrap-option="wrap">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true" fo:wrap-option="wrap">
         <text:list-style style:name="Ivory1-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="&#x25CF;">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -703,7 +703,7 @@
       <style:text-properties fo:color="#a98d4b" loext:opacity="100%" style:font-name="Linux Libertine G" fo:font-family="'Linux Libertine G'" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="15" style:font-size-asian="15" style:font-size-complex="15" fo:font-style="italic" style:font-style-asian="italic" style:font-style-complex="italic" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true"/>
     </style:style>
     <style:style style:name="Ivory2-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:wrap-option="wrap">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true" fo:wrap-option="wrap">
         <text:list-style style:name="Ivory2-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="&#x25CF;">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -893,7 +893,7 @@
       <style:text-properties fo:color="#234f3d" loext:opacity="100%" style:font-name="Linux Libertine G" fo:font-family="'Linux Libertine G'" style:font-family-generic="roman" style:font-pitch="variable" fo:font-size="15" style:font-size-asian="15" style:font-size-complex="15" fo:font-style="italic" style:font-style-asian="italic" style:font-style-complex="italic" fo:font-weight="normal" style:font-weight-asian="normal" style:font-weight-complex="normal" style:letter-kerning="true"/>
     </style:style>
     <style:style style:name="Ivory3-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:wrap-option="wrap">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true" fo:wrap-option="wrap">
         <text:list-style style:name="Ivory3-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="&#x25CF;">
             <style:list-level-properties text:min-label-width="0.6cm"/>

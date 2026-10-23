@@ -355,7 +355,7 @@
       <style:text-properties fo:font-variant="normal" fo:text-transform="uppercase" fo:color="#d1a13d" loext:opacity="100%" fo:letter-spacing="0.06cm" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Open Sans" fo:font-family="'Open Sans'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="16pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="16pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="16pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Onyx-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:wrap-option="wrap" draw:shadow-color="#000000">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="justify" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true" fo:wrap-option="wrap" draw:shadow-color="#000000">
         <text:list-style style:name="Onyx-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="&#x25CF;">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -531,7 +531,7 @@
       <style:text-properties fo:font-variant="normal" fo:text-transform="uppercase" fo:color="#d1a13d" loext:opacity="100%" fo:letter-spacing="0.08cm" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Open Sans" fo:font-family="'Open Sans'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="13pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="13pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="13pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Onyx1-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="middle" draw:auto-grow-height="true" fo:wrap-option="wrap">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true" fo:wrap-option="wrap">
         <text:list-style style:name="Onyx1-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="&#x25CF;">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -709,7 +709,7 @@
       <style:text-properties fo:font-variant="normal" fo:text-transform="none" fo:color="#ffffff" loext:opacity="100%" style:text-outline="false" style:text-line-through-style="none" style:text-line-through-type="none" style:font-name="Carlito" fo:font-family="Carlito" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="22pt" fo:font-style="normal" fo:text-shadow="none" style:text-underline-style="none" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="22pt" style:font-style-asian="normal" style:font-weight-asian="normal" style:font-size-complex="22pt" style:font-style-complex="normal" style:font-weight-complex="normal" style:text-emphasize="none" style:font-relief="none" style:text-overline-style="none" style:text-overline-color="font-color"/>
     </style:style>
     <style:style style:name="Onyx2-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:wrap-option="wrap">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true" fo:wrap-option="wrap">
         <text:list-style style:name="Onyx2-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="&#x25CF;">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -800,7 +800,7 @@
       <style:text-properties fo:font-variant="normal" fo:text-transform="uppercase" fo:color="#d1a13d" loext:opacity="100%" fo:letter-spacing="0.08cm" style:font-name="Open Sans" fo:font-family="'Open Sans'" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="13pt" fo:font-style="normal" fo:font-weight="normal" style:letter-kerning="true" style:font-size-asian="13pt" style:font-size-complex="13pt"/>
     </style:style>
     <style:style style:name="Onyx3-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:wrap-option="wrap">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:fill-image-width="0cm" draw:fill-image-height="0cm" draw:textarea-horizontal-align="center" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true" fo:wrap-option="wrap">
         <text:list-style style:name="Onyx3-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="&#x25CF;">
             <style:list-level-properties text:min-label-width="0.6cm"/>

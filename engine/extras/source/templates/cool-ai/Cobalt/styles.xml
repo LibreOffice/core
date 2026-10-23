@@ -316,7 +316,7 @@
       <style:text-properties fo:color="#5a6478" loext:opacity="100%" style:font-name="Source Sans Pro" fo:font-family="Source Sans Pro" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="16pt" fo:font-style="normal" fo:font-weight="normal" style:font-size-asian="16pt" style:font-weight-asian="normal" style:font-size-complex="16pt" style:font-weight-complex="normal"/>
     </style:style>
     <style:style style:name="Cobalt-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:wrap-option="wrap">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true" fo:wrap-option="wrap">
         <text:list-style style:name="Cobalt-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="&#x2022;">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -494,7 +494,7 @@
       <style:text-properties fo:color="#5a6478" loext:opacity="100%" style:font-name="Source Sans Pro" fo:font-family="Source Sans Pro" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="16pt" fo:font-style="normal" fo:font-weight="normal" style:font-size-asian="16pt" style:font-weight-asian="normal" style:font-size-complex="16pt" style:font-weight-complex="normal"/>
     </style:style>
     <style:style style:name="Cobalt1-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="top" draw:auto-grow-height="false" fo:wrap-option="wrap">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="top" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true" fo:wrap-option="wrap">
         <text:list-style style:name="Cobalt1-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="&#x2022;">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -672,7 +672,7 @@
       <style:text-properties fo:color="#dfe7fa" loext:opacity="100%" style:font-name="Source Sans Pro" fo:font-family="Source Sans Pro" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="18pt" fo:font-style="normal" fo:font-weight="normal" style:font-size-asian="18pt" style:font-weight-asian="normal" style:font-size-complex="18pt" style:font-weight-complex="normal"/>
     </style:style>
     <style:style style:name="Cobalt2-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" fo:wrap-option="wrap">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="bottom" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true" fo:wrap-option="wrap">
         <text:list-style style:name="Cobalt2-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="&#x2022;">
             <style:list-level-properties text:min-label-width="0.6cm"/>
@@ -850,7 +850,7 @@
       <style:text-properties fo:color="#dfe7fa" loext:opacity="100%" style:font-name="Source Sans Pro" fo:font-family="Source Sans Pro" style:font-family-generic="swiss" style:font-pitch="variable" fo:font-size="16pt" fo:font-style="normal" fo:font-weight="normal" style:font-size-asian="16pt" style:font-weight-asian="normal" style:font-size-complex="16pt" style:font-weight-complex="normal"/>
     </style:style>
     <style:style style:name="Cobalt3-title" style:family="presentation">
-      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" fo:wrap-option="wrap">
+      <style:graphic-properties draw:stroke="none" draw:fill="none" draw:textarea-horizontal-align="left" draw:textarea-vertical-align="middle" draw:auto-grow-height="false" draw:fit-to-size="false" style:shrink-to-fit="true" fo:wrap-option="wrap">
         <text:list-style style:name="Cobalt3-title">
           <text:list-level-style-bullet text:level="1" text:bullet-char="&#x2022;">
             <style:list-level-properties text:min-label-width="0.6cm"/>
