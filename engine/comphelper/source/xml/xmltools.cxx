@@ -83,6 +83,7 @@ namespace comphelper::xml
             sal_Int32 nLength = 1024+n;
             // coverity[tainted_data] - 1024 deliberate random minus max -127/plus max 128
             std::vector<sal_uInt8> aChaff(nLength);
+            // coverity[tainted_data] - nLength is the size of aChaff
             rtl_random_getBytes(aChaff.data(), nLength);
 
             encodeChaff(aChaff);
