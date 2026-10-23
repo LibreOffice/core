@@ -2938,7 +2938,8 @@ void COOLWSD::handleOption(const std::string& optionName,
     {
         std::string optName;
         std::string optValue;
-        COOLProtocol::parseNameValuePair(value, optName, optValue);
+        if (!COOLProtocol::parseNameValuePair(value, optName, optValue))
+            throw Poco::Util::InvalidArgumentException("--o:" + value + " is not xmlpath=value");
         _overrideSettings[optName] = std::move(optValue);
     }
     else if (optionName == "config-file")
