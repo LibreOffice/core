@@ -31,6 +31,7 @@
 #include <wsd/Exceptions.hpp>
 #include <wsd/RequestDetails.hpp>
 #include <wsd/ServerAuditUtil.hpp>
+#include <wsd/SharedSettings.hpp>
 #include <wsd/Storage.hpp>
 
 #include <Poco/File.h>
@@ -144,43 +145,6 @@ void RequestVettingStation::sendUnauthorizedErrorAndShutdown()
 }
 
 #if !MOBILEAPP
-
-namespace
-{
-
-class SharedSettings
-{
-public:
-    explicit SharedSettings(const Poco::JSON::Object::Ptr& wopiInfo)
-    {
-        if (auto settingsJSON = wopiInfo->getObject("SharedSettings"))
-        {
-            JsonUtil::findJSONValue(settingsJSON, "uri", _uri);
-            _configId = "shared-" + Cache::getConfigId(_uri);
-
-            std::string stamp;
-            JsonUtil::findJSONValue(settingsJSON, "stamp", stamp);
-            if (!stamp.empty())
-                _configId.append("-").append(stamp);
-        }
-    }
-
-    const std::string& getConfigId() const
-    {
-        return _configId;
-    }
-
-    const std::string& getUri() const
-    {
-        return _uri;
-    }
-
-private:
-    std::string _uri;
-    std::string _configId;
-};
-
-}
 
 void RequestVettingStation::launchInstallPresets()
 {

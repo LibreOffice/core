@@ -387,6 +387,7 @@ wsd_headers = \
               wsd/RequestVettingStation.hpp \
               wsd/SenderQueue.hpp \
               wsd/ServerAuditUtil.hpp \
+              wsd/SharedSettings.hpp \
               wsd/ServerURL.hpp \
               wsd/SlideCache.hpp \
               wsd/SpecialBrokers.hpp \
