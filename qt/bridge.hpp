@@ -55,9 +55,14 @@ class Bridge : public QObject
     // where core's status indicator has already gone away but the
     // save is not actually finished.
     bool _saveInFlight = false;
-    // One-shot callback to run when _saveInFlight transitions back to
-    // false, told whether the save succeeded.  Used by closeEvent paths
-    // to defer the window-close until the in-flight save has fully
+    // true from opening the Save As dialog until it is rejected, the
+    // saveas fails in the kit, or the loaddocument rebind.  Kept apart
+    // from _saveInFlight so an autosave's SAVECOMPLETED while the dialog
+    // is open does not end the Save As.
+    bool _saveAsInFlight = false;
+    // One-shot callback to run when both flags above are false again,
+    // told whether the save succeeded.  Used by closeEvent paths to
+    // defer the window-close until the in-flight save has fully
     // completed.
     std::function<void(bool)> _onSaveComplete;
     // A close waits on _onSaveComplete, see closeWaitsForSave.
@@ -94,9 +99,13 @@ class Bridge : public QObject
 
     void closeSnackbar();
 
-    /// Mark the current save as complete: clear _saveInFlight and
-    /// invoke (then drop) any pending _onSaveComplete callback.
     void finishSave(bool saved);
+    void finishSaveAs(bool saved);
+    void runSaveCompleteCallback(bool saved);
+    void closeWhenReady();
+    // Save As for the close of a draft: close once saved, or stop the close when the Save As
+    // does not end in a saved file.
+    void saveAsAndClose();
 
 
 public:
@@ -117,12 +126,12 @@ public:
 
     /// True while a user-initiated .uno:Save is in flight (between
     /// the JS-side SAVESTARTED hand-off and the COMMANDRESULT, plus -
-    /// for remote docs - the subsequent integrator upload).  Close
-    /// handlers consult this so they don't show the "unsaved changes"
-    /// prompt during the window after core's "Saving..." status
-    /// indicator has gone away but the dispatch has not yet round-
-    /// tripped back through the COMMANDRESULT path.
-    bool isSaveInFlight() const { return _saveInFlight; }
+    /// for remote docs - the subsequent integrator upload), or while a
+    /// Save As is pending.  Close handlers consult this so they don't
+    /// show the "unsaved changes" prompt during the window after core's
+    /// "Saving..." status indicator has gone away but the dispatch has
+    /// not yet round-tripped back through the COMMANDRESULT path.
+    bool isSaveInFlight() const { return _saveInFlight || _saveAsInFlight; }
 
     /// Register a one-shot callback to run when the in-flight save
     /// completes, told whether it succeeded.  Replaces any previously

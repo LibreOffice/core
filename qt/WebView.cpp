@@ -871,17 +871,23 @@ void WebView::createWebEngineView()
 
                          _bridge->detachFromView();
 
+                         // The new page cannot tell whether the draft was changed before,
+                         // and its changes may already be only in its file, so closing it
+                         // asks as for a recovered draft.
+                         if (isDraft())
+                             _draftRecovered = true;
+
                          // Load the page again, which gives the view a fresh renderer.
                          // The document keeps its appDocId, so the new connection rejoins
                          // the document still loaded in the engine, with any unsaved
-                         // changes. The reload waits for the event loop, so it runs after
+                         // changes. The load waits for the event loop, so it runs after
                          // this handler returns.
                          QPointer<QWebEngineView> view(_webView.get());
                          QTimer::singleShot(0, this,
-                                            [view]
+                                            [this, view]
                                             {
                                                 if (view)
-                                                    view->reload();
+                                                    view->load(pageUrl());
                                             });
                      });
 
@@ -1005,8 +1011,11 @@ void WebView::restoreDiscardedView()
 
 QUrl WebView::pageUrl() const
 {
-    // A draft stops being one at its Save As, so the flag is not part of _loadedUrl.
-    return QUrl(isDraft() ? _loadedUrl + QStringLiteral("&draft=1") : _loadedUrl);
+    // A draft stops being one at its Save As, so the flags are not part of _loadedUrl.
+    if (!isDraft())
+        return QUrl(_loadedUrl);
+    return QUrl(_loadedUrl + QStringLiteral("&draft=1")
+                + (_draftRecovered ? QStringLiteral("&recovered=1") : QString()));
 }
 
 void WebView::onWindowActiveChanged(bool active)

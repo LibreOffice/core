@@ -489,22 +489,17 @@ std::unique_ptr<WebView> TabManager::detachAt(std::vector<Entry>::iterator it)
 {
     if (it == _tabs.end())
         return nullptr;
-    // A close parked on this tab's save (see closeTab) holds an override
-    // cursor and a callback that would close the tab in whichever window
-    // ends up hosting it; release both, the tab is leaving another way.
+    // A close waiting on this tab's save (see closeTab) holds an override
+    // cursor; release it here, the tab is leaving another way.
     if (it->closeWaitsForSave)
     {
         it->closeWaitsForSave = false;
-        it->webView->onSaveComplete(nullptr);
         QApplication::restoreOverrideCursor();
     }
-    // A drop parked on this tab's save names a tab id that means nothing in whichever
-    // window ends up hosting it, so drop the callback with it.
-    if (it->dropWaitsForSave)
-    {
-        it->dropWaitsForSave = false;
-        it->webView->onSaveComplete(nullptr);
-    }
+    // A close or a drop parked on this tab's save would act on the tab in whichever
+    // window ends up hosting it, so drop the callback.
+    it->dropWaitsForSave = false;
+    it->webView->onSaveComplete(nullptr);
     it->webView->endPresentation();
     const int detachedIndex = static_cast<int>(std::distance(_tabs.begin(), it));
     const int detachedId = it->id;
@@ -595,6 +590,9 @@ void TabManager::onTargetDragOver(int insertAt)
 
 std::unique_ptr<WebView> TabManager::releaseTab(int tabId)
 {
+    // A tab moved out while this window closes its tabs takes any close prompt with it, and
+    // the window would wait for its answer forever.
+    _closingAll = false;
     auto it = findTab(tabId);
     if (it != _tabs.end())
         restoreTabView(it);
@@ -654,9 +652,8 @@ void TabManager::closeTab(int tabId)
             return;
         }
 
-        // Hand off to JS to save if dirty and post CLOSE_WINDOW on
-        // completion; its handler trips _readyToClose and re-enters here.
-        // No-op for a clean doc or one with no bridge.
+        // Hand off to JS to save if dirty, or to settle a draft, and post CLOSE_WINDOW once
+        // done; its handler trips _readyToClose and re-enters here.
         LOG_TRC("TabManager::closeTab: save-if-dirty round-trip");
         wv->saveAndClose();
         return;

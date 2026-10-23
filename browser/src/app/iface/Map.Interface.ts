@@ -239,6 +239,7 @@ interface MapInterface extends Evented {
 	): void;
 	_everModified: boolean;
 	_isDraft: boolean;
+	_isRecoveredDraft: boolean;
 	print(options?: string): void;
 	openRevisionHistory(): void;
 	openShare(): void;
