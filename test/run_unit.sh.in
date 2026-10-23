@@ -134,7 +134,7 @@ else
 	echo "Test failed on $tst after ${SECONDS}s. Re-run with (remove --unattended to run without gdb and get prompted):"
 	echo "   $ gdb --args ${abs_top_builddir}/coolwsd --o:sys_template_path=\"$systemplate_path\" \\"
 	echo "         --o:child_root_path=\"$jails_path\" \\"
-	echo "         --o:cache_files.path\"$cache_path\" \\"
+	echo "         --o:cache_files.path=\"$cache_path\" \\"
 	echo "         --o:storage.filesystem[@allow]=true \\"
 	echo "         --o:logging.level=error\\" # logs and gdb don't go well together
 	echo "         --o:ssl.key_file_path=\"@abs_top_srcdir@/etc/key.pem\" \\"
