@@ -318,13 +318,17 @@ void SdPage::EnsureMasterPageDefaultBackground()
         return;
 
     // no hard attributes on MasterPage attributes
-    getSdrPageProperties().ClearItem();
+    // Clearing the attributes or setting the style announces a change of the master to every page
+    // that uses it, so each step runs only when it changes something.
+    if (getSdrPageProperties().GetItemSet().Count() != 0)
+        getSdrPageProperties().ClearItem();
     SfxStyleSheet* pSheetForPresObj = GetStyleSheetForMasterPageBackground();
 
     if(pSheetForPresObj)
     {
         // set StyleSheet for background fill attributes
-        getSdrPageProperties().SetStyleSheet(pSheetForPresObj);
+        if (getSdrPageProperties().GetStyleSheet() != pSheetForPresObj)
+            getSdrPageProperties().SetStyleSheet(pSheetForPresObj);
     }
     else
     {

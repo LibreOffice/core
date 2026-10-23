@@ -2753,6 +2753,52 @@ void bumpMasterChangeForUsers(
         }
     }
 }
+
+/// The master's own properties changed, and its background shows on every page that uses it. Each
+/// such page is invalidated whole on every view of the document, in the edit mode of the page list
+/// that holds it, whatever mode the view is in. A slide master shows on the notes page of each of
+/// its slides too, through the slide preview there, so those notes pages are invalidated in the
+/// notes mode. A notes master shows on its notes pages only.
+void invalidateTilesOfMasterUsers(SdDrawDocument& rDocument, const SfxObjectShell* pDocShell,
+                                  const SdPage* pMasterPage)
+{
+    if (!comphelper::COKit::isActive() || !pDocShell)
+        return;
+
+    const PageKind ePageKind = pMasterPage->GetPageKind();
+    if (ePageKind != PageKind::Standard && ePageKind != PageKind::Notes)
+        return;
+    const int nMode
+        = ePageKind == PageKind::Standard ? constVectorModeSlides : constVectorModeNotesPages;
+
+    std::vector<sal_uInt16> aUserPages;
+    const sal_uInt16 nPageCount = rDocument.GetSdPageCount(ePageKind);
+    for (sal_uInt16 nPage = 0; nPage < nPageCount; ++nPage)
+    {
+        const SdPage* pUserPage = rDocument.GetSdPage(nPage, ePageKind);
+        if (pUserPage && pUserPage->TRG_HasMasterPage()
+            && &pUserPage->TRG_GetMasterPage() == pMasterPage)
+            aUserPages.push_back(nPage);
+    }
+    if (aUserPages.empty())
+        return;
+
+    SfxViewShell* pShell = SfxViewShell::GetFirst(false);
+    while (pShell)
+    {
+        if (pShell->GetObjectShell() == pDocShell)
+        {
+            for (const sal_uInt16 nPage : aUserPages)
+            {
+                pShell->viewInvalidateTilesCallback(nullptr, nPage, nMode);
+                if (nMode == constVectorModeSlides)
+                    pShell->viewInvalidateTilesCallback(nullptr, nPage,
+                                                        constVectorModeNotesPages);
+            }
+        }
+        pShell = SfxViewShell::GetNext(*pShell, false);
+    }
+}
 }
 
 void SdXImpressDocument::notifyTextEditChanged(const SdrObject& rEdited)
@@ -2920,6 +2966,7 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                 else if (pPage && pPage->IsMasterPage())
                 {
                     bumpMasterChangeForUsers(*mpDoc, mpDocShell, maVectorParts, pPage);
+                    invalidateTilesOfMasterUsers(*mpDoc, mpDocShell, pPage);
 
                     // In master view the master is the page itself, so its
                     // background is part of its own master-page content.

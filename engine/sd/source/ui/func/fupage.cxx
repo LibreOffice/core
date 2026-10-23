@@ -488,7 +488,10 @@ void FuPage::ApplyItemSet(SdStyleSheet& styleSheet, const std::shared_ptr<SfxIte
         // BackgroundFill of Masterpage: no hard attributes allowed
         SdrPage& rUsedMasterPage = mpPage->IsMasterPage() ? *mpPage : mpPage->TRG_GetMasterPage();
         OSL_ENSURE(rUsedMasterPage.IsMasterPage(), "No MasterPage (!)");
-        rUsedMasterPage.getSdrPageProperties().ClearItem();
+        // Clearing announces a change of the master to every page that uses it, so it runs only
+        // when the master holds hard attributes.
+        if (rUsedMasterPage.getSdrPageProperties().GetItemSet().Count() != 0)
+            rUsedMasterPage.getSdrPageProperties().ClearItem();
         OSL_ENSURE(nullptr != rUsedMasterPage.getSdrPageProperties().GetStyleSheet(),
             "MasterPage without StyleSheet detected (!)");
     }

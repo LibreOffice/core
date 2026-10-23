@@ -15,6 +15,11 @@
 #include <sfx2/sidebar/Sidebar.hxx>
 #include <vcl/scheduler.hxx>
 #include <com/sun/star/document/UpdateDocMode.hpp>
+#include <com/sun/star/drawing/FillStyle.hpp>
+#include <com/sun/star/drawing/XDrawPages.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
+#include <com/sun/star/drawing/XMasterPageTarget.hpp>
+#include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <comphelper/propertyvalue.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <editeng/editobj.hxx>
@@ -25,17 +30,23 @@
 #include <editeng/lspcitem.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/kernitem.hxx>
+#include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <svl/cryptosign.hxx>
+#include <svl/style.hxx>
 #include <svl/undo.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdotext.hxx>
+#include <svx/xfillit0.hxx>
+#include <svx/xflclit.hxx>
 #include <sfx2/linkmgr.hxx>
 #include <tools/json_writer.hxx>
 
 #include <vcl/virdev.hxx>
 
 #include <tools/UnitConversion.hxx>
+
+#include <set>
 
 #include <DrawDocShell.hxx>
 #include <SlideSectionManager.hxx>
@@ -1312,6 +1323,83 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testAnimatedGifSelectableOutsidePaint
     const SdrMarkList& rMarkList = pViewShell->GetView()->GetMarkedObjectList();
     CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), rMarkList.GetMarkCount());
     CPPUNIT_ASSERT_EQUAL(pGif, rMarkList.GetMark(0)->GetMarkedSdrObj());
+}
+
+namespace
+{
+/// The parts that the view saw invalidated whole in the given edit mode, in ascending order and
+/// each followed by a space. The part nLeftOutPart is not listed.
+OString wholePartInvalidationsInMode(const SdTestViewCallback& rView, int nWantedMode,
+                                     int nLeftOutPart = -1)
+{
+    std::set<int> aParts;
+    for (const auto& [nPart, nMode] : rView.m_aWholePartInvalidations)
+    {
+        if (nMode == nWantedMode && nPart != nLeftOutPart)
+            aParts.insert(nPart);
+    }
+    OStringBuffer aBuffer;
+    for (const int nPart : aParts)
+        aBuffer.append(OString::number(nPart) + " ");
+    return aBuffer.makeStringAndClear();
+}
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testMasterBackgroundInvalidatesItsSlides)
+{
+    // Given a presentation of 8 slides, whose third slide uses a master of its own while the others
+    // share the first master:
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SdDrawDocument* pDoc = pXImpressDocument->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(8), pDoc->GetSdPageCount(PageKind::Standard));
+    uno::Reference<drawing::XMasterPagesSupplier> xMastersSupplier(mxComponent,
+                                                                   uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPage> xOtherMaster
+        = xMastersSupplier->getMasterPages()->insertNewByIndex(1);
+    uno::Reference<drawing::XDrawPagesSupplier> xPagesSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XMasterPageTarget> xThirdSlide(
+        xPagesSupplier->getDrawPages()->getByIndex(2), uno::UNO_QUERY_THROW);
+    xThirdSlide->setMasterPage(xOtherMaster);
+    SdPage* pMasterPage = pDoc->GetMasterSdPage(0, PageKind::Standard);
+
+    // When the view is in master view and the background of the first master changes:
+    SdTestViewCallback aView;
+    dispatchCommand(mxComponent, u".uno:SlideMasterPage"_ustr, {});
+    CPPUNIT_ASSERT_EQUAL(1, pXImpressDocument->getEditMode());
+    aView.m_aWholePartInvalidations.clear();
+    SfxStyleSheet* pStyleSheet = pMasterPage->getSdrPageProperties().GetStyleSheet();
+    CPPUNIT_ASSERT(pStyleSheet);
+    pStyleSheet->GetItemSet().Put(XFillStyleItem(drawing::FillStyle_SOLID));
+    pStyleSheet->GetItemSet().Put(XFillColorItem(OUString(), COL_LIGHTRED));
+    pStyleSheet->Broadcast(SfxHint(SfxHintId::DataChanged));
+
+    // Then every slide that uses the master, and the notes page of each, is invalidated whole,
+    // although the view shows none of them, and the slide with the other master is left alone.
+    // Without the accompanying fix in place, this test would have failed: only the master itself
+    // was invalidated.
+    CPPUNIT_ASSERT_EQUAL("0 1 3 4 5 6 7 "_ostr, wholePartInvalidationsInMode(aView, 0));
+    CPPUNIT_ASSERT_EQUAL("0 1 3 4 5 6 7 "_ostr, wholePartInvalidationsInMode(aView, 2));
+}
+
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideLayoutKeepsOtherSlidesOfItsMaster)
+{
+    // Given a presentation of 8 slides that share one master, shown in normal view:
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SdDrawDocument* pDoc = pXImpressDocument->GetDocShell()->GetDoc();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt16(8), pDoc->GetSdPageCount(PageKind::Standard));
+    CPPUNIT_ASSERT_EQUAL(0, pXImpressDocument->getEditMode());
+    SdTestViewCallback aView;
+    aView.m_aWholePartInvalidations.clear();
+
+    // When the second slide gets another layout, which leaves the background of the master as it
+    // was:
+    pDoc->GetSdPage(1, PageKind::Standard)->SetAutoLayout(AUTOLAYOUT_TITLE_CONTENT, true);
+
+    // Then no other slide of the master and no notes page is invalidated whole. Without the
+    // accompanying fix in place, this test would have failed: the master announced a change of its
+    // background, and every slide of the master was invalidated.
+    CPPUNIT_ASSERT_EQUAL(""_ostr, wholePartInvalidationsInMode(aView, 0, 1));
+    CPPUNIT_ASSERT_EQUAL(""_ostr, wholePartInvalidationsInMode(aView, 2));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

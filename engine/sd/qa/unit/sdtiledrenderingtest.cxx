@@ -249,6 +249,12 @@ void SdTestViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayl
             }
             else
             {
+                // The payload is "EMPTY, <part>, <mode>".
+                cpo::uno::Sequence<OUString> aSeq = comphelper::string::convertCommaSeparated(
+                    OUString::createFromAscii(pPayload));
+                if (aSeq.getLength() >= 3)
+                    m_aWholePartInvalidations.emplace_back(aSeq[1].toInt32(),
+                                                           aSeq[2].toInt32());
                 editModeOfInvalidation = mpViewShell->getEditMode();
                 partOfInvalidation = mpViewShell->getPart();
                 invalidatedAll = true;
