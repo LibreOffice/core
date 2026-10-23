@@ -1,0 +1,125 @@
+Remove vendored `certifi`; `pip` will use `truststore` by default, which
+uses the OS certificate store.
+
+--- a/Lib/pip/_internal/cli/index_command.py
++++ b/Lib/pip/_internal/cli/index_command.py
+@@ -16,8 +16,6 @@
+ from optparse import Values
+ from typing import TYPE_CHECKING
+ 
+-from pip._vendor import certifi
+-
+ from pip._internal.cli.base_command import Command
+ from pip._internal.cli.command_context import CommandContextMixIn
+ 
+@@ -46,9 +44,7 @@
+         logger.warning("Disabling truststore because platform isn't supported")
+         return None
+ 
+-    ctx = truststore.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+-    ctx.load_verify_locations(certifi.where())
+-    return ctx
++    return truststore.SSLContext(ssl.PROTOCOL_TLS_CLIENT)
+ 
+ 
+ class SessionCommandMixin(CommandContextMixIn):
+--- a/Lib/pip/_internal/commands/debug.py
++++ b/Lib/pip/_internal/commands/debug.py
+@@ -8,7 +8,6 @@
+ from typing import Any
+ 
+ import pip._vendor
+-from pip._vendor.certifi import where
+ from pip._vendor.packaging.version import parse as parse_version
+ 
+ from pip._internal.cli import cmdoptions
+@@ -185,7 +184,6 @@
+         show_value("'cert' config value", ca_bundle_info(self.parser.config))
+         show_value("REQUESTS_CA_BUNDLE", os.environ.get("REQUESTS_CA_BUNDLE"))
+         show_value("CURL_CA_BUNDLE", os.environ.get("CURL_CA_BUNDLE"))
+-        show_value("pip._vendor.certifi.where()", where())
+         show_value("pip._vendor.DEBUNDLED", pip._vendor.DEBUNDLED)
+ 
+         show_vendor_versions()
+--- a/Lib/pip/_internal/network/session.py
++++ b/Lib/pip/_internal/network/session.py
+@@ -272,6 +272,21 @@
+             proxy_kwargs.setdefault("proxy_ssl_context", self._ssl_context)
+         return super().proxy_manager_for(proxy, **proxy_kwargs)  # type: ignore[misc]
+ 
++    def cert_verify(
++        self,
++        conn: ConnectionPool,
++        url: str,
++        verify: bool | str,
++        cert: str | tuple[str, str] | None,
++    ) -> None:
++        if self._ssl_context is not None and verify is True:
++            # The SSL context brings certificates via truststore.
++            # Turn verification on manually.
++            super().cert_verify(conn=conn, url=url, verify=False, cert=cert)
++            conn.cert_reqs = "CERT_REQUIRED"
++            return
++        super().cert_verify(conn=conn, url=url, verify=verify, cert=cert)
++
+ 
+ class HTTPAdapter(_SSLContextAdapterMixin, _BaseHTTPAdapter):
+     pass
+--- a/Lib/pip/_vendor/bom.cdx.json
++++ b/Lib/pip/_vendor/bom.cdx.json
+@@ -15,13 +15,6 @@
+       "version": "0.14.4"
+     },
+     {
+-      "bom-ref": "pkg:pypi/certifi@2026.10.19",
+-      "name": "certifi",
+-      "purl": "pkg:pypi/certifi@2026.10.19",
+-      "type": "library",
+-      "version": "2026.10.19"
+-    },
+-    {
+       "bom-ref": "pkg:pypi/distlib@0.4.2",
+       "name": "distlib",
+       "purl": "pkg:pypi/distlib@0.4.2",
+@@ -138,7 +131,6 @@
+     {
+       "dependsOn": [
+         "pkg:pypi/CacheControl@0.14.4",
+-        "pkg:pypi/certifi@2026.10.19",
+         "pkg:pypi/distlib@0.4.2",
+         "pkg:pypi/distro@1.9.0",
+         "pkg:pypi/idna@3.18",
+@@ -162,9 +154,6 @@
+       "ref": "pkg:pypi/CacheControl@0.14.4"
+     },
+     {
+-      "ref": "pkg:pypi/certifi@2026.10.19"
+-    },
+-    {
+       "ref": "pkg:pypi/distlib@0.4.2"
+     },
+     {
+--- a/Lib/pip/_vendor/requests/certs.py
++++ b/Lib/pip/_vendor/requests/certs.py
+@@ -12,7 +12,10 @@
+ packaged CA bundle.
+ """
+ 
+-from pip._vendor.certifi import where
++
++def where():
++    return None
++
+ 
+ if __name__ == "__main__":
+     print(where())
+--- a/Lib/pip/_vendor/vendor.txt
++++ b/Lib/pip/_vendor/vendor.txt
+@@ -6,7 +6,6 @@
+ platformdirs==4.10.0
+ pyproject-hooks==1.2.0
+ requests==2.34.2
+-    certifi==2026.10.19
+     idna==3.18
+     urllib3==2.7.0
+ rich==14.2.0
