@@ -22,7 +22,7 @@
 declare var JSDialog: any;
 
 const NOTES_PANEL_MIN_HEIGHT = 60;
-const NOTES_PANEL_DEFAULT_HEIGHT = 180;
+const NOTES_PANEL_DEFAULT_HEIGHT = 76;
 
 class NotesPanel extends JSDialogComponent {
 	private wrapper: HTMLElement | null = null;
