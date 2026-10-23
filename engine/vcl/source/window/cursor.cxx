@@ -26,6 +26,8 @@
 #include <vcl/window.hxx>
 #include <vcl/cursor.hxx>
 
+#include <cassert>
+
 #include <window.h>
 
 #include <tools/poly.hxx>
@@ -415,6 +417,29 @@ vcl::Cursor::~Cursor()
 {
     if (mpData && mpData->mbCurVisible)
         ImplRestore();
+
+    // The window still showing this cursor would otherwise be left with a
+    // pointer to freed memory, and its next SetCursor() would hide it.
+    if (mpRegisteredWindow && mpRegisteredWindow->mpWindowImpl
+        && mpRegisteredWindow->mpWindowImpl->mpCursor == this)
+        mpRegisteredWindow->mpWindowImpl->mpCursor = nullptr;
+}
+
+void vcl::Cursor::ImplRegister( vcl::Window* pWindow )
+{
+    // Only one window can be told about the destruction, so no other window may still show this
+    // cursor. A window that was disposed while showing it does not count, it shows nothing.
+    assert((!mpRegisteredWindow || !mpRegisteredWindow->mpWindowImpl
+            || mpRegisteredWindow->mpWindowImpl->mpCursor != this)
+           && "cursor shown in two windows at once");
+    mpRegisteredWindow = pWindow;
+}
+
+void vcl::Cursor::ImplUnregister( const vcl::Window* pWindow )
+{
+    assert(mpRegisteredWindow.get() == pWindow && "cursor taken from a window it was not given to");
+    (void)pWindow;
+    mpRegisteredWindow.reset();
 }
 
 void vcl::Cursor::SetStyle( sal_uInt16 nStyle )

@@ -48,6 +48,10 @@ class VCL_DLLPUBLIC Cursor
 private:
     std::unique_ptr<ImplCursorData> mpData;
     VclPtr<vcl::Window> mpWindow;           // only for shadow cursor
+    // The window whose vcl::Window::SetCursor() last took this cursor. That
+    // window keeps a plain pointer to the cursor, so the cursor takes itself
+    // away from it when it is destroyed.
+    VclPtr<vcl::Window> mpRegisteredWindow;
     Size            maSize;
     Point           maPos;
     Degree10        mnOrientation;
@@ -63,6 +67,8 @@ public:
     SAL_DLLPRIVATE void         ImplResume( bool bRestore = false );
     SAL_DLLPRIVATE bool         ImplSuspend();
     SAL_DLLPRIVATE void         ImplNew();
+    SAL_DLLPRIVATE void         ImplRegister( vcl::Window* pWindow );
+    SAL_DLLPRIVATE void         ImplUnregister( const vcl::Window* pWindow );
 
 public:
                     Cursor();

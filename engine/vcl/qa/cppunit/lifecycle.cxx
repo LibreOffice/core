@@ -10,6 +10,7 @@
 #include <test/bootstrapfixture.hxx>
 
 #include <vcl/wrkwin.hxx>
+#include <vcl/cursor.hxx>
 #include <vcl/toolkit/edit.hxx>
 #include <vcl/toolkit/button.hxx>
 #include <vcl/toolkit/combobox.hxx>
@@ -37,6 +38,7 @@ public:
     void testPostDispose();
     void testLeakage();
     void testToolkit();
+    void testCursorDeleted();
 
     CPPUNIT_TEST_SUITE(LifecycleTest);
     CPPUNIT_TEST(testCast);
@@ -48,6 +50,7 @@ public:
     CPPUNIT_TEST(testPostDispose);
     CPPUNIT_TEST(testLeakage);
     CPPUNIT_TEST(testToolkit);
+    CPPUNIT_TEST(testCursorDeleted);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -303,6 +306,28 @@ void LifecycleTest::testToolkit()
     pVclWin->assertDeleted();
 
     delete pVclWin;
+}
+
+void LifecycleTest::testCursorDeleted()
+{
+    // Given a window that shows a cursor:
+    ScopedVclPtrInstance<WorkWindow> xWin(nullptr, WB_APP | WB_STDWORK);
+    std::unique_ptr<vcl::Cursor> pCursor(new vcl::Cursor);
+    pCursor->Show();
+    xWin->SetCursor(pCursor.get());
+    CPPUNIT_ASSERT_EQUAL(pCursor.get(), xWin->GetCursor());
+
+    // When the cursor is destroyed while the window still shows it:
+    pCursor.reset();
+
+    // Then make sure the window no longer refers to it:
+    // Without the accompanying fix in place, this test would have failed, the window kept the
+    // pointer to the destroyed cursor and the next SetCursor() hid it through freed memory.
+    CPPUNIT_ASSERT(!xWin->GetCursor());
+    vcl::Cursor aOther;
+    xWin->SetCursor(&aOther);
+    CPPUNIT_ASSERT_EQUAL(&aOther, xWin->GetCursor());
+    xWin->SetCursor(nullptr);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(LifecycleTest);
