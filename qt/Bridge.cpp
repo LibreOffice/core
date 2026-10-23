@@ -860,6 +860,14 @@ void Bridge::closeWhenReady()
 
 void Bridge::saveAndClose()
 {
+    // A remote document goes through the page even when clean: its save also uploads. A draft
+    // goes through it too, as only the page knows whether the draft was ever changed.
+    if (!_modified && !_document._remoteInfo && !(_owner && _owner->isDraft()))
+    {
+        LOG_TRC_NOFILE("Bridge::saveAndClose: unmodified, closing without a save");
+        closeWhenReady();
+        return;
+    }
     static constexpr char script[] =
         "if (window.app && window.app.map "
         "    && typeof window.app.map._saveAndClose === 'function')"
