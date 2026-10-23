@@ -21,6 +21,7 @@
 #include "pagein.h"
 
 #include <errno.h>
+#include <stdbool.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
@@ -45,9 +46,9 @@ static void do_pagein (const char * filename)
     file_image_close (&image);
 }
 
-static int isRotational(char const * path)
+static bool isRotational(char const * path)
 {
-    int ret = 1;
+    bool ret = true;
 #ifdef LINUX
     FILE * fp = NULL;
     char fullpath[4096];
