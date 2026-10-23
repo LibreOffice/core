@@ -754,21 +754,67 @@ namespace cool {
 			}
 		}
 
+		// The first name of the user, or an empty string for a guest, an anonymous user, or a
+		// user whose storage gave no name.
+		private getUserFirstName(): string {
+			if (app.map.wopi && app.map.wopi.IsAnonymousUser) return '';
+			if (app.map.welcome && app.map.welcome.isGuest()) return '';
+			const docLayer = app.map._docLayer;
+			if (!docLayer) return '';
+			const name = (app.map.getViewName(docLayer._viewId) || '').trim();
+			// The server names a user without a friendly name UnknownUser, or LocalUser#<id>
+			// when the document comes from local storage.
+			if (name === 'UnknownUser' || name.startsWith('LocalUser#')) return '';
+			return name.split(/\s+/)[0];
+		}
+
+		// The greeting follows the local time of the browser: morning from 05:00 to 11:59,
+		// afternoon from 12:00 to 17:59 and evening from 18:00 to 04:59. It is HTML, with the
+		// name in a span of class aichat-greeting-name and every piece of text escaped.
+		private getGreetingHtml(): string {
+			const hour = new Date().getHours();
+			const name = this.getUserFirstName();
+			let withName: string;
+			let withoutName: string;
+			if (hour >= 5 && hour < 12) {
+				withName = _('Good morning, {0}!');
+				withoutName = _('Good morning!');
+			} else if (hour >= 12 && hour < 18) {
+				withName = _('Good afternoon, {0}!');
+				withoutName = _('Good afternoon!');
+			} else {
+				withName = _('Good evening, {0}!');
+				withoutName = _('Good evening!');
+			}
+			const escape = app.LOUtil.escapeHtml;
+			if (!name) return escape(withoutName);
+			const nameHtml =
+				'<span class="aichat-greeting-name">' + escape(name) + '</span>';
+			return withName.split('{0}').map(escape).join(nameHtml);
+		}
+
 		private getMessagesListJSON(): any {
 			const children: any[] = [];
 
 			if (this.messages.length === 0) {
 				children.push({
-					id: 'aichat-empty-state',
-					type: 'fixedtext',
-					text: this.getEmptyStateQuestion(),
-					enabled: true,
-				});
-				children.push({
-					id: 'aichat-empty-state-hint',
-					type: 'fixedtext',
-					text: _('Select some content first to work on just that part.'),
-					enabled: true,
+					id: 'aichat-empty-title',
+					type: 'container',
+					vertical: true,
+					children: [
+						{
+							id: 'aichat-empty-state-greeting',
+							type: 'fixedtext',
+							html: app.LOUtil.sanitize(this.getGreetingHtml()),
+							enabled: true,
+						},
+						{
+							id: 'aichat-empty-state',
+							type: 'fixedtext',
+							text: this.getEmptyStateQuestion(),
+							enabled: true,
+						},
+					],
 				});
 				children.push(this.getPromptChipsJSON());
 			} else {

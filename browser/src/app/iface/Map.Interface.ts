@@ -103,6 +103,7 @@ interface MapInterface extends Evented {
 		EnableRemoteSlideImport: boolean;
 		EnableInsertRemoteFile: boolean;
 		HideSaveOption: boolean;
+		IsAnonymousUser: boolean;
 	};
 
 	loadDocument(socket?: SockInterface): void;
@@ -162,6 +163,8 @@ interface MapInterface extends Evented {
 	sidebar: Sidebar;
 	notesPanel: NotesPanel;
 	getViewColor(viewId: number): number;
+	// The user name of a view, or null when the view is not known yet.
+	getViewName(viewId: number): string | null;
 
 	// TODO fix types:
 	jsdialog: any;

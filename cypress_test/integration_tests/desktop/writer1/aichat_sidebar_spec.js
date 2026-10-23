@@ -79,6 +79,12 @@ describe(['tagdesktop'], 'AI Chat Sidebar', { testIsolation: false }, function()
 			cy.cGet('#aichat-empty-state').should('contain.text', 'What would you like to do with this document?');
 		});
 
+		it('Greets the user for the local time of day', function() {
+			const hour = new Date().getHours();
+			const partOfDay = hour >= 5 && hour < 12 ? 'morning' : hour >= 12 && hour < 18 ? 'afternoon' : 'evening';
+			cy.cGet('#aichat-empty-state-greeting').should('contain.text', 'Good ' + partOfDay);
+		});
+
 		it('Shows all four text suggestions without See more', function() {
 			cy.cGet('#aichat-chip-0').should('exist');
 			cy.cGet('#aichat-chip-1').should('exist');

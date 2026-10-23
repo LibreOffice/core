@@ -224,28 +224,43 @@
 }
 
 /* -- Empty state --
-   The question stands at the top. The hint and the suggestions sit at the bottom, next to the
-   input box: the auto top margin of the hint takes up the room in between. */
+   The greeting, the question and the suggestions all sit at the bottom, next to the input box:
+   the auto top margin of the title takes up the room above them. */
 
-#aichat-empty-state {
+#aichat-empty-title {
+	display: flex !important;
+	grid-auto-flow: unset !important;
+	flex-direction: column;
+	gap: 6px;
+	margin: auto 0 0;
+	padding: 0 4px;
+}
+
+#aichat-empty-state-greeting {
 	color: var(--color-main-text);
 	text-align: start;
 	text-wrap: balance;
-	padding: 12px 4px 0;
+	padding: 0;
 	margin: 0;
-	font-size: 21px;
+	font-size: 24px;
 	font-weight: 600;
 	letter-spacing: -0.02em;
-	line-height: 1.25;
+	line-height: 1.2;
 }
 
-#aichat-empty-state-hint {
+/* The name takes the colour of the app: Writer, Calc, Impress or Draw. */
+#aichat-empty-state-greeting .aichat-greeting-name {
+	color: rgb(var(--aichat-accent));
+}
+
+#aichat-empty-state {
 	color: var(--aichat-text-muted);
 	text-align: start;
-	padding: 0 2px;
-	margin: auto 0 0;
-	font-size: 12px;
-	line-height: 1.45;
+	text-wrap: balance;
+	padding: 0;
+	margin: 0;
+	font-size: 15px;
+	line-height: 1.35;
 }
 
 #aichat-eu-wrapper {
