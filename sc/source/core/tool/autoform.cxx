@@ -372,7 +372,7 @@ const ScAutoFormatData* ScAutoFormat::GetData(size_t nIndex) const
 
 ScAutoFormatData* ScAutoFormat::GetData(size_t nIndex) { return &*mpImpl->maAutoFormats[nIndex]; }
 
-bool ScAutoFormat::InsertAutoFormat(SvxAutoFormatData* pFormat)
+bool ScAutoFormat::InsertAutoFormat(const SvxAutoFormatData* pFormat)
 {
     if (!pFormat)
     {
