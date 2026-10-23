@@ -37,7 +37,6 @@ class QDragMoveEvent;
 class QDragLeaveEvent;
 class QDropEvent;
 class QMimeData;
-class QTemporaryDir;
 
 namespace coda
 {
@@ -155,11 +154,9 @@ public:
 
     // When asDraft is true the fileURL names a draft working copy: the
     // document opens editable and its first user save is turned into a
-    // Save As (see isDraft()). When requiresSaveAs is true the document
-    // opens editable and its first save is turned into a Save As, so the
-    // file at fileURL is never written to.
+    // Save As (see isDraft()).
     void load(const Poco::URI& fileURL = Poco::URI(), bool isStarterMode = false,
-              bool asDraft = false, bool requiresSaveAs = false);
+              bool asDraft = false);
 
     // The owner installs these; Bridge calls requestClose()/updateTitle().
     void setOnCloseRequest(CloseRequestFn cb) { _onCloseRequest = std::move(cb); }
@@ -206,10 +203,9 @@ public:
     // True when the file name has a document-template extension (.ott, .xltx, ...).
     static bool isTemplate(const std::string& fileName);
 
-    // Open a template as a fresh editable document. The template is copied to a
-    // temporary working file that is loaded instead of the original, and the
-    // first save is redirected to Save As. The original template is never
-    // modified. Returns nullptr if the working copy could not be created.
+    // Copy the template into the drafts dir and open the copy as a draft, so
+    // the original template is never modified. Returns nullptr if the working
+    // copy could not be created.
     static WebView* openTemplateAsNewDocument(QWebEngineProfile* profile,
                                               const Poco::URI& templateURL);
 
@@ -332,9 +328,6 @@ private:
     int _nextViewNumber = 2;
     QImage _thumbnail;
     Bridge* _bridge;
-    // Holds the temporary copy of a template while it is open as a new document,
-    // so the copy is removed when the window closes.
-    std::unique_ptr<QTemporaryDir> _templateWorkingDir;
     QString _draftPath;
 
     CloseRequestFn _onCloseRequest;

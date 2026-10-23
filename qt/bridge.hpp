@@ -85,11 +85,6 @@ class Bridge : public QObject
     // switchToServerMode), so that its appDocId has no document to rejoin:
     bool _localSessionEnded = false;
 
-    // true while the document was opened from a template and has not yet been
-    // saved to a real file. While set, a save is turned into a Save As so the
-    // template working copy is never written back as if it were the document.
-    bool _requiresSaveAs = false;
-
     void promptSaveLocation(std::function<void(const std::string&, const std::string&)> callback);
     void saveDocumentAs();
     void createAndStartMessagePumpThread();
@@ -109,9 +104,6 @@ public:
                     QWebEngineView* webView, bool secondaryView = false);
 
     ~Bridge() override;
-
-    // Redirect the first save of a template-based document to Save As.
-    void setRequiresSaveAs(bool requiresSaveAs) { _requiresSaveAs = requiresSaveAs; }
 
     // Run the page's JavaScript in frame instead of the page's main frame.
     void setFrame(const QWebEngineFrame& frame) { _frame = frame; }

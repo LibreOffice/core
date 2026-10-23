@@ -635,7 +635,8 @@ void Bridge::promptSaveLocation(std::function<void(const std::string&, const std
                                ? QStringLiteral("document")
                                : docInfo.completeBaseName();
 
-    const QString docSuffix = _requiresSaveAs ? QString() : docInfo.suffix();
+    const bool isDraft = _owner && _owner->isDraft();
+    const QString docSuffix = isDraft ? QString() : docInfo.suffix();
     size_t formatIndex = 0;
     if (!docSuffix.isEmpty())
     {
@@ -665,7 +666,7 @@ void Bridge::promptSaveLocation(std::function<void(const std::string&, const std
         baseName + QStringLiteral(".") + (docSuffix.isEmpty() ? defaultExtension : docSuffix);
 
     QString startFolder = QDir::homePath();
-    if (docUrl.isLocalFile() && !_requiresSaveAs)
+    if (docUrl.isLocalFile() && !isDraft)
     {
         const QString hostUri = QString::fromStdString(coda::hostDisplayUriForPath(docPath));
         const QString docFolder = hostUri.isEmpty()
@@ -985,9 +986,6 @@ QVariant Bridge::cool(const QString& messageStr)
 
         LOG_TRC_NOFILE("loaddocument: switching to URL: " << newFileUrl);
 
-        // The document is now bound to a real file the user chose, so a plain
-        // save is no longer redirected to Save As.
-        _requiresSaveAs = false;
         if (_owner && _owner->isDraft())
             _owner->discardDraft();
 
@@ -1741,14 +1739,6 @@ QVariant Bridge::cool(const QString& messageStr)
         else if (_frame) {
             closeAccountWindow();
         }
-    }
-    else if (_requiresSaveAs && tokens.equals(0, "save"))
-    {
-        // The document was opened from a template and has no real file yet, so
-        // it loads from a temporary working copy. Turn the save into a Save As
-        // so the user picks a destination and format, and the working copy is
-        // never treated as the saved document.
-        saveDocumentAs();
     }
     else
     {
