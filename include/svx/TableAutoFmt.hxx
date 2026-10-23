@@ -194,7 +194,7 @@ public:
     virtual const SvxAutoFormatData* GetData(size_t nIndex) const = 0;
     virtual SvxAutoFormatData* GetData(size_t nIndex) = 0;
     virtual bool InsertAutoFormat(SvxAutoFormatData* pFormat) = 0;
-    virtual SvxAutoFormatData* ReleaseAutoFormat(const OUString& rName) = 0;
+    virtual std::unique_ptr<SvxAutoFormatData> ReleaseAutoFormat(const OUString& rName) = 0;
     virtual SvxAutoFormatData* FindAutoFormat(const OUString& rName) const = 0;
     virtual SvxAutoFormatData* GetDefaultData() = 0;
     virtual SvxAutoFormatDataField* GetDefaultField() = 0;
