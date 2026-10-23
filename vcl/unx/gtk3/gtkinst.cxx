@@ -24,7 +24,6 @@
 #include <unx/gtk/gtkdata.hxx>
 #include <unx/gtk/gtkinst.hxx>
 #include <unx/genprn.h>
-#include <unx/salobj.h>
 #include <unx/gtk/gtkgdi.hxx>
 #include <unx/gtk/gtkframe.hxx>
 #include <unx/gtk/gtkobject.hxx>
