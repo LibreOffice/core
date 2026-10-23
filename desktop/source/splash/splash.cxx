@@ -17,22 +17,14 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <splash/splash.hxx>
 
 #include <sal/log.hxx>
-#include <vcl/bitmap.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/salnativewidgets.hxx>
 
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/task/XStatusIndicator.hpp>
-#include <cppuhelper/implbase.hxx>
-#include <cppuhelper/supportsservice.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/math.hxx>
-#include <vcl/introwin.hxx>
-#include <vcl/vclevent.hxx>
-#include <vcl/virdev.hxx>
 #include <o3tl/string_view.hxx>
 
 #include <mutex>
@@ -43,81 +35,6 @@
 using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::task;
 using namespace ::com::sun::star::uno;
-
-namespace {
-
-class SplashScreen;
-
-class SplashScreenWindow : public IntroWindow
-{
-public:
-    SplashScreen* m_pSplash;
-    ScopedVclPtr<VirtualDevice> m_pVDev;
-    explicit SplashScreenWindow(SplashScreen *);
-    virtual ~SplashScreenWindow() override { disposeOnce(); }
-    virtual void dispose() override;
-    // workwindow
-    virtual void Paint(vcl::RenderContext& rRenderContext, const tools::Rectangle&) override;
-    void Redraw();
-
-};
-
-class  SplashScreen
-    : public ::cppu::WeakImplHelper< XStatusIndicator, XInitialization, XServiceInfo >
-{
-    friend class SplashScreenWindow;
-private:
-    VclPtr<SplashScreenWindow> m_pWindow;
-
-    DECL_LINK( AppEventListenerHdl, VclSimpleEvent&, void );
-    virtual ~SplashScreen() override;
-    void loadConfig();
-    void updateStatus();
-    void SetScreenBitmap(Bitmap& rBitmap);
-    static void determineProgressRatioValues( double& rXRelPos, double& rYRelPos, double& rRelWidth, double& rRelHeight );
-
-    Bitmap m_aIntroBmp;
-    Color m_aProgressFrameColor;
-    Color m_aProgressBarColor;
-    Color m_aProgressTextColor;
-    bool m_bNativeProgress;
-    OUString m_sAppName;
-    OUString m_sProgressText;
-
-    sal_Int32 m_nMax;
-    sal_Int32 m_nProgress;
-    bool m_bPaintProgress;
-    bool m_bShowLogo;
-    bool m_bFullScreenSplash;
-    bool m_bProgressEnd;
-    tools::Long m_nHeight, m_nWidth, m_nTlx, m_nTly, m_nBarwidth;
-    tools::Long m_nBarheight, m_nBarspace, m_nTextBaseline;
-    double m_fXPos, m_fYPos;
-    double m_fWidth, m_fHeight;
-    static constexpr tools::Long  _xoffset = 12, _yoffset = 18;
-
-public:
-    SplashScreen();
-
-    // XStatusIndicator
-    virtual void SAL_CALL end() override;
-    virtual void SAL_CALL reset() override;
-    virtual void SAL_CALL setText(const OUString& aText) override;
-    virtual void SAL_CALL setValue(sal_Int32 nValue) override;
-    virtual void SAL_CALL start(const OUString& aText, sal_Int32 nRange) override;
-
-    // XInitialize
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any>& aArguments ) override;
-
-    virtual OUString SAL_CALL getImplementationName() override
-    { return u"com.sun.star.office.comp.SplashScreen"_ustr; }
-
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override
-    { return cppu::supportsService(this, ServiceName); }
-
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
-    { return { u"com.sun.star.office.SplashScreen"_ustr }; }
-};
 
 SplashScreenWindow::SplashScreenWindow(SplashScreen* pSplash)
     : m_pSplash(pSplash)
@@ -327,7 +244,7 @@ IMPL_LINK( SplashScreen, AppEventListenerHdl, VclSimpleEvent&, inEvent, void )
 }
 
 // Read keys from soffice{.ini|rc}:
-OUString implReadBootstrapKey( const OUString& _rKey )
+static OUString implReadBootstrapKey(const OUString& _rKey)
 {
     OUString sValue;
     rtl::Bootstrap::get(_rKey, sValue);
@@ -610,8 +527,6 @@ void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const tools::
     }
     rRenderContext.DrawOutDev(Point(), GetOutputSizePixel(), Point(), m_pVDev->GetOutputSizePixel(),
                               *m_pVDev);
-}
-
 }
 
 extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
