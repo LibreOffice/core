@@ -745,6 +745,7 @@ window.L.Map.WOPI = window.L.Handler.extend({
 				// single-arg form of the resetaccesstoken protocol command.
 				var ttl = msg.Values.ttl ? msg.Values['ttl'] : '0';
 				app.socket.sendMessage('resetaccesstoken ' + msg.Values.token + ' ' + ttl);
+				this._map.options.docParams.access_token = msg.Values.token;
 				this._map.options.docParams.access_token_ttl = ttl;
 				app.socket.resetTokenExpiryTimer();
 			}
