@@ -2787,9 +2787,9 @@ bool ClientRequestDispatcher::handlePostRequest(const RequestDetails& requestDet
 
         const std::string decoded = Uri::decode(url);
 
-        const Poco::Path filePath(FileUtil::buildLocalPathToJail(COOLWSD::EnableMountNamespaces,
-                                                                 COOLWSD::ChildRoot + jailId,
-                                                                 JAILED_DOCUMENT_ROOT + decoded));
+        const Poco::Path filePath(FileUtil::findFileInJail(COOLWSD::EnableMountNamespaces,
+                                                           COOLWSD::ChildRoot + jailId,
+                                                           JAILED_DOCUMENT_ROOT + decoded));
         const std::string filePathAnonym = Anonymizer::anonymizeUrl(filePath.toString());
 
         if (foundDownloadId && filePath.isAbsolute() && Poco::File(filePath).exists())

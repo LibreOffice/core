@@ -319,15 +319,18 @@ namespace FileUtil
             resolved += '/';
         return resolved;
     }
-    } // namespace
 
-    std::string buildLocalPathToJail(bool usingMountNamespaces, std::string localStorePath, std::string localPath)
+    // The local directory that the jail's root, or its /tmp, maps to, and the local path to
+    // localPath under it. Both are empty when a ".." in localPath goes above the root.
+    std::pair<std::string, std::string> localPathToJail(bool usingMountNamespaces,
+                                                        std::string localStorePath,
+                                                        std::string localPath)
     {
         std::optional<std::string> resolved = resolveFromJailRoot(localPath);
         if (!resolved)
         {
             LOG_WRN("Path [" << Anonymizer::anonymizeUrl(localPath) << "] goes above the jail root");
-            return std::string();
+            return {};
         }
         localPath = std::move(*resolved);
 
@@ -361,9 +364,42 @@ namespace FileUtil
 
         // /chroot/jailId/user/doc/childId
         const Poco::Path rootPath(localStorePath, localPath);
-        Poco::File(rootPath).createDirectories();
 
-        return rootPath.toString();
+        return { localStorePath, rootPath.toString() };
+    }
+    } // namespace
+
+    std::string buildLocalPathToJail(bool usingMountNamespaces, std::string localStorePath, std::string localPath)
+    {
+        const std::string path =
+            localPathToJail(usingMountNamespaces, std::move(localStorePath), std::move(localPath))
+                .second;
+        if (!path.empty())
+            Poco::File(path).createDirectories();
+
+        return path;
+    }
+
+    std::string findFileInJail(bool usingMountNamespaces, std::string localJailRoot,
+                               std::string jailPath)
+    {
+        const auto [localDir, localPath] =
+            localPathToJail(usingMountNamespaces, std::move(localJailRoot), std::move(jailPath));
+        if (localPath.empty() || !Poco::File(localPath).exists())
+            return std::string();
+
+        // realpath follows every link, so the file is inside the jail only when its real path is
+        // under the real path of the directory the jail maps to.
+        std::string realDir = realpath(localDir);
+        if (!realDir.ends_with('/'))
+            realDir += '/';
+        if (!realpath(localPath).starts_with(realDir))
+        {
+            LOG_WRN("File [" << Anonymizer::anonymizeUrl(localPath) << "] is outside the jail");
+            return std::string();
+        }
+
+        return localPath;
     }
 
     std::pair<std::string, std::string> buildPathsToJail(bool usingMountNamespaces, bool noCapsForKit,

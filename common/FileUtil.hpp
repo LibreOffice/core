@@ -127,6 +127,12 @@ namespace FileUtil
     /// -> /chroot/tmp/cool-jailId/tmp/user/doc/childId
     std::string buildLocalPathToJail(bool usingMountNamespaces, std::string localJailRoot, std::string jailPath);
 
+    /// The local path to the existing file that jailPath names in the jail under localJailRoot,
+    /// mapped as buildLocalPathToJail maps it, or an empty string when there is no such file or
+    /// its real path, with every link followed, is outside the jail. Creates no directories.
+    std::string findFileInJail(bool usingMountNamespaces, std::string localJailRoot,
+                               std::string jailPath);
+
     // returns two strings
     //   the first is the local path to the jailPath under localJailRoot as seen outside the jail
     //   the second is that path as seen inside the jail, taking into account if capabilities are available.

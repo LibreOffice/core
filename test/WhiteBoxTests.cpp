@@ -32,6 +32,7 @@
 #include <test/lokassert.hpp>
 #include <test/testlog.hpp>
 
+#include <Poco/File.h>
 #include <Poco/Path.h>
 
 #include <cppunit/TestAssert.h>
@@ -74,6 +75,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testReadFile);
     CPPUNIT_TEST(testIsPlainFileName);
     CPPUNIT_TEST(testBuildLocalPathToJail);
+    CPPUNIT_TEST(testFindFileInJail);
     CPPUNIT_TEST(testStringCompare);
     CPPUNIT_TEST(testJsonUtilEscapeJSONValue);
     CPPUNIT_TEST(testStateEnum);
@@ -106,6 +108,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     void testReadFile();
     void testIsPlainFileName();
     void testBuildLocalPathToJail();
+    void testFindFileInJail();
     void testStringCompare();
     void testJsonUtilEscapeJSONValue();
     void testStateEnum();
@@ -1108,6 +1111,49 @@ void WhiteBoxTests::testBuildLocalPathToJail()
                      jailPath(true, jailRoot, "/user/hello.odt"));
     LOK_ASSERT_EQUAL(jailRoot + "/user/hello.odt",
                      jailPath(true, jailRoot, "/tmp/../user/hello.odt"));
+}
+
+void WhiteBoxTests::testFindFileInJail()
+{
+    constexpr std::string_view testname = __func__;
+
+    const std::string dir = FileUtil::createRandomTmpDir();
+    FileUtil::OwnedFile dirCleanup(dir, /*recursive=*/true);
+    const std::string jailRoot = dir + "/jails/jailid";
+    Poco::File(jailRoot + "/user/docs").createDirectories();
+    std::ofstream(jailRoot + "/user/docs/hello.odt") << "hello";
+    std::ofstream(dir + "/outside.odt") << "outside";
+    LOK_ASSERT_EQUAL(0, symlink("hello.odt", (jailRoot + "/user/docs/same.odt").c_str()));
+    LOK_ASSERT_EQUAL(0, symlink((dir + "/outside.odt").c_str(),
+                                (jailRoot + "/user/docs/outside.odt").c_str()));
+    LOK_ASSERT_EQUAL(0, symlink(dir.c_str(), (jailRoot + "/user/out").c_str()));
+
+    LOK_ASSERT_EQUAL(jailRoot + "/user/docs/hello.odt",
+                     FileUtil::findFileInJail(false, jailRoot, "user/docs/hello.odt"));
+    LOK_ASSERT_EQUAL(std::string(),
+                     FileUtil::findFileInJail(false, jailRoot, "../user/docs/hello.odt"));
+    LOK_ASSERT_EQUAL(jailRoot + "/user/docs/same.odt",
+                     FileUtil::findFileInJail(false, jailRoot, "user/docs/same.odt"));
+
+    // A link whose target is outside the jail names no file in it.
+    LOK_ASSERT_EQUAL(std::string(),
+                     FileUtil::findFileInJail(false, jailRoot, "user/docs/outside.odt"));
+    LOK_ASSERT_EQUAL(std::string(),
+                     FileUtil::findFileInJail(false, jailRoot, "user/out/outside.odt"));
+
+    // A missing file is not found, and no directory is made for it.
+    LOK_ASSERT_EQUAL(std::string(),
+                     FileUtil::findFileInJail(false, jailRoot, "user/docs/missing/hello.odt"));
+    LOK_ASSERT(!FileUtil::Stat(jailRoot + "/user/docs/missing").exists());
+
+    // With mount namespaces, a file in the jail's /tmp is found where /tmp is mounted from.
+    Poco::File(dir + "/jails/tmp/cool-jailid").createDirectories();
+    std::ofstream(dir + "/jails/tmp/cool-jailid/media.mp4") << "media";
+    LOK_ASSERT_EQUAL(dir + "/jails/tmp/cool-jailid/media.mp4",
+                     FileUtil::findFileInJail(true, jailRoot, "tmp/media.mp4"));
+    LOK_ASSERT_EQUAL(0, symlink((dir + "/outside.odt").c_str(),
+                                (dir + "/jails/tmp/cool-jailid/outside.mp4").c_str()));
+    LOK_ASSERT_EQUAL(std::string(), FileUtil::findFileInJail(true, jailRoot, "tmp/outside.mp4"));
 }
 
 void WhiteBoxTests::testStringCompare()

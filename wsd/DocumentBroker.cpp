@@ -6504,9 +6504,9 @@ bool DocumentBroker::handleInput(const std::shared_ptr<Message>& message)
             LOG_CHECK_RET(!clientId.empty(), false);
 
             const std::string decoded = Uri::decode(url);
-            const std::string filePath(FileUtil::buildLocalPathToJail(COOLWSD::EnableMountNamespaces,
-                                                                      COOLWSD::ChildRoot + getJailId(),
-                                                                      JAILED_DOCUMENT_ROOT + decoded));
+            const std::string filePath(FileUtil::findFileInJail(COOLWSD::EnableMountNamespaces,
+                                                                COOLWSD::ChildRoot + getJailId(),
+                                                                JAILED_DOCUMENT_ROOT + decoded));
 
             const FileUtil::Stat downloadStat(filePath);
             if (!downloadStat.good() || downloadStat.size() == 0)
@@ -8571,8 +8571,8 @@ std::string DocumentBroker::getAbsoluteMediaPath(std::string localPath)
     if (COOLWSD::NoCapsForKit)
         return "/" + localPath;
 
-    return FileUtil::buildLocalPathToJail(COOLWSD::EnableMountNamespaces,
-                                          COOLWSD::ChildRoot + _jailId, std::move(localPath));
+    return FileUtil::findFileInJail(COOLWSD::EnableMountNamespaces, COOLWSD::ChildRoot + _jailId,
+                                    std::move(localPath));
 #else // MOBILEAPP
     return getJailRoot() + "/" + localPath;
 #endif // MOBILEAPP

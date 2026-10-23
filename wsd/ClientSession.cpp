@@ -376,16 +376,9 @@ static std::string getLocalPathToJail(std::string filePath, const DocumentBroker
         if (filePath.size() > 0 && filePath[0] == '/')
             filePath = filePath.substr(1);
 
-        const Path path(FileUtil::buildLocalPathToJail(COOLWSD::EnableMountNamespaces,
-                                                       docBroker.getJailRoot(),
-                                                       filePath));
-        if (!path.toString().empty() && Poco::File(path).exists())
-            filePath = path.toString();
-        else
-        {
-            // Blank for failure.
-            filePath.clear();
-        }
+        // Blank for failure.
+        filePath = FileUtil::findFileInJail(COOLWSD::EnableMountNamespaces,
+                                            docBroker.getJailRoot(), filePath);
     }
 #else
     (void)docBroker;
@@ -4697,21 +4690,20 @@ bool ClientSession::handleSaveAs(const std::shared_ptr<Message>& payload,
             relative = relative.substr(1);
 
         // Rewrite file:// URLs to be visible to the outside world.
-        const Path path(FileUtil::buildLocalPathToJail(
-            COOLWSD::EnableMountNamespaces, docBroker->getJailRoot(), std::move(relative)));
-        if (!path.toString().empty() && Poco::File(path).exists())
+        const std::string path = FileUtil::findFileInJail(
+            COOLWSD::EnableMountNamespaces, docBroker->getJailRoot(), relative);
+        if (!path.empty())
         {
             // Encode path for special characters (i.e '%') since Poco::URI::setPath implicitly decodes the input param
             std::string encodedPath;
-            Poco::URI::encode(path.toString(), "", encodedPath);
+            Poco::URI::encode(path, "", encodedPath);
 
             resultURL.setPath(encodedPath);
         }
         else
         {
             // Blank for failure.
-            LOG_DBG("SaveAs produced no output in '" << path.toString()
-                                                     << "', producing blank url.");
+            LOG_DBG("SaveAs produced no output in '" << relative << "', producing blank url.");
             resultURL.clear();
         }
     }
