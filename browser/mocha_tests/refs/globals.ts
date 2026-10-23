@@ -150,10 +150,6 @@ globalThis.document = globalThis.window.document;
 	globalThis.window as any
 ).MutationObserver;
 
-(globalThis.window as any).prefs = {
-	canPersist: false,
-};
-
 (globalThis.window as any).app = (globalThis as any).app;
 
 (globalThis as any).L = {
@@ -202,6 +198,76 @@ globalThis.window.L = (globalThis as any).L;
 	(Sub as any).extend = Parent.extend;
 	return Sub;
 };
+
+// Leaflet's Class.initialize stores the constructor options on the instance, over the defaults the
+// prototype holds. JSDialog and the sidebars read their settings from there.
+(globalThis as any).L.Control.prototype.initialize = function (
+	this: any,
+	options: any,
+) {
+	(globalThis as any).L.setOptions(this, options);
+};
+
+// jQuery is bound to the jsdom window, so it finds what the tests put in the page. The module
+// binds itself when a document exists at load time, and returns a factory for a window otherwise.
+const jqueryModule = require('jquery');
+(globalThis as any).$ = (globalThis as any).jQuery = jqueryModule.fn
+	? jqueryModule
+	: jqueryModule(globalThis.window);
+(globalThis.window as any).$ = (globalThis.window as any).jQuery = (
+	globalThis as any
+).$;
+
+// The browser builds window.mode in js/global.js. This one is a desktop browser.
+(globalThis.window as any).mode = {
+	isDesktop: () => true,
+	isMobile: () => false,
+	isTablet: () => false,
+	isSmallScreenDevice: () => false,
+	isInteractivePreview: () => false,
+	isCODesktop: () => false,
+};
+
+// The preferences live in memory only. reset() empties them.
+(globalThis.window as any).prefs = {
+	_values: {} as { [key: string]: string },
+	canPersist: false,
+	get(key: string, defaultValue?: any) {
+		return key in this._values ? this._values[key] : defaultValue;
+	},
+	set(key: string, value: any) {
+		this._values[key] = String(value);
+	},
+	getBoolean(key: string, defaultValue = false) {
+		const value = String(this.get(key, '')).toLowerCase();
+		if (value === 'true') return true;
+		if (value === 'false') return false;
+		return defaultValue;
+	},
+	remove(key: string) {
+		delete this._values[key];
+	},
+	_getUIDefault(key: string, defaultValue?: any) {
+		return defaultValue;
+	},
+	reset() {
+		this._values = {};
+	},
+};
+
+// jsdom has no element scrolling and no innerText. innerText reads and writes the text content.
+const jsdomElement = (globalThis.window as any).HTMLElement.prototype;
+if (!jsdomElement.scrollTo) jsdomElement.scrollTo = function () {};
+if (!('innerText' in jsdomElement))
+	Object.defineProperty(jsdomElement, 'innerText', {
+		get() {
+			return this.textContent;
+		},
+		set(value: string) {
+			this.textContent = value;
+		},
+		configurable: true,
+	});
 
 // jsdom implements no DOMRect.
 (globalThis as any).DOMRect = class _DOMRect {

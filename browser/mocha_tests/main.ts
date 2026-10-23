@@ -38,6 +38,7 @@
 /// <reference path="./helper/Path2DRecorder.ts"/>
 /// <reference path="./helper/ImageRecorder.ts"/>
 /// <reference path="./helper/VectorRenderingReference.ts"/>
+/// <reference path="./helper/aiChat.ts"/>
 /// <reference path="./data/LOUtilTestData.ts"/>
 /// <reference path="./data/SheetGeometryTestData.ts" />
 
@@ -102,4 +103,5 @@
 /// <reference path="./prediction/ParagraphWrap.test.ts" />
 /// <reference path="./prediction/CaretMove.test.ts" />
 /// <reference path="./VectorColors.test.ts" />
+/// <reference path="./MochaHarness.test.ts" />
 // NOTE: reference new tests here ...

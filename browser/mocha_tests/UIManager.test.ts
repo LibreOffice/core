@@ -109,7 +109,8 @@ describe('UIManager', function () {
 		const realDomUtil = window.L.DomUtil;
 		const realSectionContainer = app.sectionContainer;
 		const sections: any = app.CSections;
-		// The tooltip is a jQuery UI widget, and jQuery is not loaded here. The calls the
+		const realJQuery = (globalThis as any).$;
+		// The tooltip is a jQuery UI widget, and jQuery UI is not loaded here. The calls the
 		// widget would get are kept instead.
 		let tooltipCalls: any[][];
 
@@ -131,7 +132,7 @@ describe('UIManager', function () {
 		afterEach(function () {
 			// A pointer move closes an open tooltip, which takes its listeners off the document.
 			moveThePointer();
-			delete (globalThis as any).$;
+			(globalThis as any).$ = realJQuery;
 			delete sections.TooltipAnchorLeft;
 			delete sections.TooltipAnchorRight;
 			app.sectionContainer = realSectionContainer;
