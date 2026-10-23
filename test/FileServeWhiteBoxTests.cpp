@@ -124,6 +124,11 @@ void FileServeTests::testUIDefaults()
         "{\"text\":{\"ShowAINotebookbar\":\"true\",\"ShowAISidebar\":\"false\"}}",
         FileServerRequestHandler::uiDefaultsToJSON("TextAINotebookbar=true;TextAISidebar=false",
                                                    uiMode, uiTheme, savedUIState));
+
+    LOK_ASSERT_EQUAL_STR(
+        "{\"presentation\":{\"ShowNotesPanel\":\"false\"}}",
+        FileServerRequestHandler::uiDefaultsToJSON("PresentationNotesPanel=false", uiMode,
+                                                   uiTheme, savedUIState));
 }
 
 void FileServeTests::testCSSVars()

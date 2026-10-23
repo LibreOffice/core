@@ -306,7 +306,7 @@ std::string FileServerRequestHandler::uiDefaultsToJSON(const std::string& uiDefa
         // ("AISidebar" is the AI Assistant, which docks beside "Sidebar";
         // "AINotebookbar" is its notebookbar tab.)
         if (key == "Ruler" || key == "Sidebar" || key == "Statusbar" || key == "Toolbar" ||
-            key == "AISidebar" || key == "AINotebookbar")
+            key == "AISidebar" || key == "AINotebookbar" || key == "NotesPanel")
         {
             std::string value("true");
             if (keyValue.equals(1, "false") || keyValue.equals(1, "False") || keyValue.equals(1, "0"))
