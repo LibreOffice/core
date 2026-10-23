@@ -75,7 +75,12 @@ public:
     // requestWindowClose. Used by TabbedWindow::closeEvent.
     void requestCloseAll();
 
-    // End a requestCloseAll() chain that has not finished, and say so with closeAllStopped.
+    // Close every tab but this one, one at a time like requestCloseAll(). A close that
+    // stops, such as a Cancel in a prompt, keeps that tab and the tabs not reached yet.
+    void closeOthers(int keepTabId);
+
+    // End a requestCloseAll() or closeOthers() chain that has not finished, and say so with
+    // closeAllStopped.
     void stopCloseAll();
 
     void activateTab(int tabId);
@@ -176,6 +181,7 @@ private:
     std::unique_ptr<WebView> detachAt(std::vector<Entry>::iterator it);
     std::vector<Entry>::iterator findTab(int tabId);
     std::vector<Entry>::const_iterator findTab(int tabId) const;
+    void continueCloseChain();
     QString currentTabsJson() const;
 
     void onThumbnailChanged(WebView* wv, bool isFirstThumbnail);
@@ -198,9 +204,13 @@ private:
     int _activeTabId = -1;
     // Counts activations. Each tab records the value it saw when it was last activated.
     unsigned long long _activationTick = 0;
-    // Set by requestCloseAll(): after each tab finishes closing, closeTab()
-    // continues with the next one until none remain.
+    // Set by requestCloseAll() and closeOthers(): after each tab finishes closing, closeTab()
+    // continues with the next one until only _keepTabId, or no tab, remains.
     bool _closingAll = false;
+    // The tab a closeOthers() chain leaves open, -1 when the chain closes every tab.
+    int _keepTabId = -1;
+    // The tab the chain is closing now, -1 when no chain runs.
+    int _chainTabId = -1;
     // Single-shot, and holds the pending run of the live-view limit.
     QTimer* _liveViewLimitTimer;
     // Single-shot, and holds the pending view build for the active tab.

@@ -608,10 +608,9 @@ void TabManager::closeTab(int tabId)
     if (it == _tabs.end())
         return;
 
-    // The close-everything chain only ever closes the current front tab, so a
-    // close aimed anywhere else is direct user interaction; abandon the chain
-    // rather than resume it when this close completes.
-    if (it != _tabs.begin())
+    // A close chain closes one tab at a time, so a close aimed anywhere else is direct user
+    // interaction; abandon the chain rather than resume it when this close completes.
+    if (tabId != _chainTabId)
         stopCloseAll();
 
     WebView* wv = it->webView.get();
@@ -667,7 +666,7 @@ void TabManager::closeTab(int tabId)
     if (_tabs.empty())
         emit requestWindowClose();
     else if (_closingAll)
-        closeTab(_tabs.front().id);
+        continueCloseChain();
 }
 
 void TabManager::requestCloseAll()
@@ -677,8 +676,26 @@ void TabManager::requestCloseAll()
         emit requestWindowClose();
         return;
     }
+    // A chain under way asks again about the tab it is closing, and then goes on with every
+    // tab.
+    _keepTabId = -1;
+    if (_closingAll)
+    {
+        closeTab(_chainTabId);
+        return;
+    }
     _closingAll = true;
-    closeTab(_tabs.front().id);
+    continueCloseChain();
+}
+
+void TabManager::closeOthers(int keepTabId)
+{
+    if (findTab(keepTabId) == _tabs.end())
+        return;
+    stopCloseAll();
+    _closingAll = true;
+    _keepTabId = keepTabId;
+    continueCloseChain();
 }
 
 void TabManager::stopCloseAll()
@@ -686,7 +703,25 @@ void TabManager::stopCloseAll()
     if (!_closingAll)
         return;
     _closingAll = false;
+    _keepTabId = -1;
+    _chainTabId = -1;
     emit closeAllStopped();
+}
+
+void TabManager::continueCloseChain()
+{
+    for (const Entry& e : _tabs)
+    {
+        if (e.id != _keepTabId)
+        {
+            _chainTabId = e.id;
+            closeTab(e.id);
+            return;
+        }
+    }
+    _closingAll = false;
+    _keepTabId = -1;
+    _chainTabId = -1;
 }
 
 void TabManager::activateTab(int tabId)
@@ -866,14 +901,7 @@ void TabManager::showTabContextMenu(int tabId, int x, int y)
 
     QAction* closeOthersAction = menu.addAction(tr("Close Others"));
     connect(closeOthersAction, &QAction::triggered, this, [this, tabId]() {
-        std::vector<int> toClose;
-        for (const auto& e : _tabs) {
-            if (e.id != tabId)
-                toClose.push_back(e.id);
-        }
-        for (int id : toClose) {
-            closeTab(id);
-        }
+        closeOthers(tabId);
     });
     closeOthersAction->setEnabled(_tabs.size() > 1);
 
