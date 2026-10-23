@@ -24,7 +24,4 @@ $(eval $(call gb_Module_add_subsequentcheck_targets,linguistic,\
 ))
 endif
 
-# was disabled in old build system
-# JunitTest_linguistic_complex \
-
 # vim: set noet sw=4 ts=4:
