@@ -17,7 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "file_image.h"
+#include "file_image.hxx"
 
 #include <unistd.h>
 
@@ -39,7 +39,7 @@ int file_image_open (file_image * image, const char * filename)
     struct stat st;
     void *      p;
 
-    if (image == NULL)
+    if (image == nullptr)
         return EINVAL;
 
     image->m_base = MAP_FAILED;
@@ -54,7 +54,7 @@ int file_image_open (file_image * image, const char * filename)
         goto cleanup_and_leave;
     }
 
-    p = mmap (NULL, st.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
+    p = mmap (nullptr, st.st_size, PROT_READ, MAP_PRIVATE, fd, 0);
     if (p == MAP_FAILED)
     {
         result = errno;
@@ -78,9 +78,9 @@ int file_image_pagein (file_image * image)
     volatile char c =0;
     size_t idx;
 
-    if (image == NULL)
+    if (image == nullptr)
         return EINVAL;
-    if (image->m_base == NULL)
+    if (image->m_base == nullptr)
         return EINVAL;
     if (image->m_size == 0)
         return 0;
@@ -92,11 +92,11 @@ int file_image_pagein (file_image * image)
     if (s == -1)
         s = 0x1000;
     // force touching of each page despite the optimizer
-    for(idx = 0; idx < image->m_size; idx += (size_t)s)
+    for(idx = 0; idx < image->m_size; idx += static_cast<size_t>(s))
     {
-        c ^= ((volatile const char*)(image->m_base))[idx];
+        c ^= static_cast<volatile const char*>(image->m_base)[idx];
     }
-    c ^= ((volatile const char*)(image->m_base))[image->m_size-1];
+    c ^= static_cast<volatile const char*>(image->m_base)[image->m_size-1];
     (void)c; // silence Clang 13 trunk -Wunused-but-set-variable
 
     return 0;
@@ -107,13 +107,13 @@ int file_image_pagein (file_image * image)
  */
 int file_image_close (file_image * image)
 {
-    if (image == NULL)
+    if (image == nullptr)
         return EINVAL;
 
     if (munmap (image->m_base, image->m_size) == -1)
         return errno;
 
-    image->m_base = NULL;
+    image->m_base = nullptr;
     image->m_size = 0;
     return 0;
 }

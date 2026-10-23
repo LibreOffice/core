@@ -19,14 +19,7 @@
 
 #pragma once
 
-#ifndef INCLUDED_STDDEF_H
-#include <stddef.h>
-#define INCLUDED_STDDEF_H
-#endif
-
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include <cstddef>
 
 /** file_image.
  */
@@ -38,7 +31,7 @@ struct file_image_st
 
 typedef struct file_image_st file_image;
 
-#define FILE_IMAGE_INITIALIZER { NULL, 0 }
+#define FILE_IMAGE_INITIALIZER { nullptr, 0 }
 
 
 /** file_image_open.
@@ -58,12 +51,5 @@ int file_image_pagein (
  */
 int file_image_close (
     file_image * image);
-
-
-/** Epilog.
- */
-#ifdef __cplusplus
-}
-#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
