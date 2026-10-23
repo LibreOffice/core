@@ -17,7 +17,8 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include "unxsplash.hxx"
+#include <splash/unxsplash.hxx>
+
 #include <stdio.h>
 #include <osl/process.h>
 #include <cppuhelper/supportsservice.hxx>
