@@ -63,6 +63,7 @@ class DocumentBroker;
 class LockContext;
 class PresetsInstallTask;
 class TileCache;
+class PreviewSession;
 class Message;
 class SlideLayerCacheMap;
 
@@ -387,6 +388,21 @@ public:
                           std::shared_ptr<ClientSession>& clientSession, const std::string& id,
                           const Poco::URI& uriPublic, bool isReadOnly,
                           const RequestDetails& requestDetails);
+
+#if !MOBILEAPP
+    /// Answers an HTTP request for the preview index of this document through the preview
+    /// session opened for the given public URI, opening one when none is live. The URI
+    /// carries the access token the storage accepted, and the file information is the
+    /// storage's answer for it.
+    void handlePreviewIndex(const std::shared_ptr<StreamSocket>& socket, const std::string& id,
+                            const Poco::URI& uriPublic,
+                            std::unique_ptr<WOPIFileInfo> wopiFileInfo);
+
+    /// Answers an HTTP request for the picture of one slide through the preview session with
+    /// the given tag. A tag no live session holds is answered as gone.
+    void handlePreviewContent(const std::shared_ptr<StreamSocket>& socket,
+                              const std::string& tag, const std::string& guid);
+#endif
 
     /// Thread safe termination of this broker if it has a lingering thread
     void joinThread();
@@ -2112,6 +2128,17 @@ private:
     /// The remote links this document may subscribe to, with their
     /// subscriptions and the client-facing view of them.
     RemoteLinks _remoteLinks;
+
+    /// The preview sessions of this document, by tag. Each holds one read-only view.
+    std::map<std::string, std::shared_ptr<PreviewSession>> _previewSessions;
+
+    /// Answers the preview requests whose deadline passed, and drops the preview sessions
+    /// that expired or failed, with their views.
+    void sweepPreviewSessions(std::chrono::steady_clock::time_point now);
+
+    /// Answers every pending preview request as unavailable and drops the preview sessions
+    /// without touching their views, for when the document is closing.
+    void abandonPreviewSessions();
 
     /// Embedded media map [id, json].
     std::map<std::string, std::string> _embeddedMedia;

@@ -41,6 +41,8 @@ findOrCreateDocBroker(DocumentBroker::ChildType type, const std::string& uri,
                       const Poco::URI& uriPublic, unsigned mobileAppDocId);
 
 /// Handles incoming connections and dispatches to the appropriate handler.
+class CheckFileInfo;
+
 class ClientRequestDispatcher final : public SimpleSocketHandler
 {
     static constexpr int MaxInMemoryHttpRequestSize = 16 * 1024;
@@ -126,6 +128,23 @@ private:
                                    std::istream& message,
                                    SocketDisposition& disposition,
                                    const std::shared_ptr<StreamSocket>& socket);
+
+#if !MOBILEAPP
+    /// GET /cool/preview?WOPISrc=<enc>&access_token=<tok>: the index of the slides of a
+    /// presentation, with a tag that its content requests carry. The storage is asked whether
+    /// the token reaches the document before a view of it is opened.
+    /// @return true if request has been handled synchronously and response sent, otherwise false
+    bool handlePreviewIndexRequest(const Poco::Net::HTTPRequest& request,
+                                   const std::shared_ptr<StreamSocket>& socket);
+
+    /// GET /cool/preview/<tag>/content?WOPISrc=<enc>&ServerId=<id>&slide=<guid>: the picture
+    /// of one slide, through the preview session the tag names. The tag is the path segment
+    /// before "content".
+    /// @return true if request has been handled synchronously and response sent, otherwise false
+    static bool handlePreviewContentRequest(const Poco::Net::HTTPRequest& request,
+                                            std::string tag, SocketDisposition& disposition,
+                                            const std::shared_ptr<StreamSocket>& socket);
+#endif
 
     /// @return true if request has been handled synchronously and response sent, otherwise false
     static bool handleSignatureRequest(const Poco::Net::HTTPRequest& request,
@@ -223,6 +242,11 @@ private:
     /// The private RequestVettingStation. Held privately after the
     /// WS is created and as long as it is connected.
     std::shared_ptr<RequestVettingStation> _rvs;
+
+#if !MOBILEAPP
+    /// The storage request a preview index request waits on.
+    std::shared_ptr<CheckFileInfo> _previewCheckFileInfo;
+#endif
 
     /// scratch dir that POSTs are streamed to
     std::unique_ptr<FileUtil::OwnedFile> _postFileDir;

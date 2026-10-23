@@ -477,6 +477,7 @@
       <max_links_per_document desc="The maximum number of remote documents one document may subscribe to. 0 for unlimited." type="uint" default="0">0</max_links_per_document>
       <max_chain_depth desc="The maximum length of a chain of documents linked to each other" type="uint" default="3">3</max_chain_depth>
       <reconnect_attempts desc="How many times a lost connection to a remote document is retried" type="uint" default="5">5</reconnect_attempts>
+      <preview_timeout_secs desc="How many seconds one slide preview request may wait for the document" type="uint" default="60">60</preview_timeout_secs>
     </remote_links>
 
     @HOME_MODE_CONFIGURATION@

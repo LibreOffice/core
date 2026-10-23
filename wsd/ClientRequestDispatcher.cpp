@@ -58,6 +58,10 @@
 #include <wsd/CollabBroker.hpp>
 #include <wsd/CollabFileProxy.hpp>
 #include <wsd/CollabSocketHandler.hpp>
+#include <wsd/PreviewSession.hpp>
+#include <wsd/SharedSettings.hpp>
+#include <wsd/Storage.hpp>
+#include <wsd/wopi/CheckFileInfo.hpp>
 #include <net/WebSocketHandler.hpp>
 #endif // !MOBILEAPP
 
@@ -1398,6 +1402,22 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
         {
             servedSync = handleSignatureRequest(request, socket);
         }
+#if !MOBILEAPP
+        else if (requestDetails.equals(RequestDetails::Field::Type, "cool") &&
+                 requestDetails.equals(1, "preview") && requestDetails.equals(3, "content") &&
+                 request.getMethod() == Poco::Net::HTTPRequest::HTTP_GET)
+        {
+            // /cool/preview/<tag>/content: the tag is the third segment of the path.
+            servedSync = handlePreviewContentRequest(request, requestDetails[2], disposition,
+                                                     socket);
+        }
+        else if (requestDetails.equals(RequestDetails::Field::Type, "cool") &&
+                 requestDetails.equals(1, "preview") &&
+                 request.getMethod() == Poco::Net::HTTPRequest::HTTP_GET)
+        {
+            servedSync = handlePreviewIndexRequest(request, socket);
+        }
+#endif // !MOBILEAPP
 
         else if (requestDetails.isProxy() &&
                  (requestDetails.equals(1, "ws") || requestDetails.equals(2, "ws")))
@@ -2221,6 +2241,267 @@ bool ClientRequestDispatcher::handleClipboardRequest(const Poco::Net::HTTPReques
     }
     return false;
 }
+
+#if !MOBILEAPP
+namespace
+{
+/// The HTTP status a storage answer to CheckFileInfo maps to when the answer is not a pass.
+http::StatusCode statusForCheckFileInfo(const CheckFileInfo::State state)
+{
+    switch (state)
+    {
+        case CheckFileInfo::State::Unauthorized:
+            return http::StatusCode::Unauthorized;
+        case CheckFileInfo::State::Fail:
+            return http::StatusCode::NotFound;
+        case CheckFileInfo::State::None:
+        case CheckFileInfo::State::Active:
+        case CheckFileInfo::State::NoAnswer:
+        case CheckFileInfo::State::Transient:
+        case CheckFileInfo::State::Pass:
+            break;
+    }
+    return http::StatusCode::BadGateway;
+}
+} // namespace
+
+bool ClientRequestDispatcher::handlePreviewIndexRequest(const Poco::Net::HTTPRequest& request,
+                                                        const std::shared_ptr<StreamSocket>& socket)
+{
+    assert(socket && "Must have a valid socket");
+
+    // The URI carries the token, so it is logged anonymized only.
+    LOG_DBG_S("Preview index request: " << Anonymizer::anonymizeUrl(request.getURI()));
+
+    if (!RemoteDocumentBroker::isEnabled())
+    {
+        LOG_ERR_S("Preview index request rejected: remote_links is disabled in the configuration");
+        HttpHelper::sendErrorAndShutdown(http::StatusCode::ServiceUnavailable, socket,
+                                         "slide previews are disabled");
+        return true;
+    }
+
+    std::string wopiSrc;
+    std::string accessToken;
+    const Poco::URI requestUri(request.getURI());
+    for (const auto& param : requestUri.getQueryParameters())
+    {
+        if (param.first == "WOPISrc")
+            wopiSrc = param.second;
+        else if (param.first == "access_token")
+            accessToken = param.second;
+    }
+
+    if (wopiSrc.empty())
+    {
+        LOG_ERR_S("Preview index request without a WOPISrc query parameter");
+        HttpHelper::sendErrorAndShutdown(http::StatusCode::BadRequest, socket, "missing WOPISrc");
+        return true;
+    }
+
+    // Verify that the WOPISrc is properly encoded.
+    if (!HttpHelper::verifyWOPISrc(request.getURI(), wopiSrc, socket))
+    {
+        LOG_ERR_S("Preview index request with an unencoded WOPISrc, rejected");
+        return false;
+    }
+
+    if (accessToken.empty())
+    {
+        LOG_ERR_S("Preview index request without an access_token query parameter");
+        HttpHelper::sendErrorAndShutdown(http::StatusCode::BadRequest, socket,
+                                         "missing access_token");
+        return true;
+    }
+
+    // The document without the token names the storage to check and the document to key on.
+    Poco::URI wopiUri = RequestDetails::sanitizeURI(wopiSrc);
+    Poco::URI::QueryParameters queryParams = wopiUri.getQueryParameters();
+    std::erase_if(queryParams, [](const auto& param)
+                  { return param.first == "access_token" || param.first == "permission"; });
+    wopiUri.setQueryParameters(queryParams);
+
+    if (StorageBase::validate(wopiUri, /*takeOwnership=*/false) != StorageBase::StorageType::Wopi)
+    {
+        LOG_ERR_S("Preview index request rejected: the WOPISrc is not an allowed WOPI host: "
+                  << Anonymizer::anonymizeUrl(wopiUri.toString()));
+        HttpHelper::sendErrorAndShutdown(http::StatusCode::Forbidden, socket,
+                                         "the storage is not allowed");
+        return true;
+    }
+
+    // The view the previews are read through is read-only, whatever the token allows.
+    Poco::URI uriPublic(wopiUri);
+    uriPublic.addQueryParameter("access_token", accessToken);
+    uriPublic.addQueryParameter("permission", "readonly");
+
+    LOG_INF_S("Preview index request for [" << Anonymizer::anonymizeUrl(wopiUri.toString())
+                                            << "], asking the storage");
+
+    // The storage decides whether the token reaches the document. Nothing here outlives the
+    // socket, so the answer is handled from what is captured and never from this handler.
+    auto onFinish = [weakSocket = std::weak_ptr<StreamSocket>(socket),
+                     id = _id](CheckFileInfo& checkFileInfo)
+    {
+        const std::shared_ptr<StreamSocket> requestSocket = weakSocket.lock();
+        if (!requestSocket)
+        {
+            LOG_DBG_S("Preview index request abandoned before the storage answered");
+            return;
+        }
+
+        const CheckFileInfo::State state = checkFileInfo.state();
+        if (state != CheckFileInfo::State::Pass || !checkFileInfo.wopiInfo())
+        {
+            LOG_ERR_S("Preview index request refused by the storage: "
+                      << CheckFileInfo::name(state));
+            HttpHelper::sendErrorAndShutdown(statusForCheckFileInfo(state), requestSocket,
+                                             "the storage refused the request");
+            return;
+        }
+
+        const Poco::URI documentUri = checkFileInfo.url();
+        const std::string docKey = RequestDetails::getDocKey(documentUri);
+        const SharedSettings sharedSettings(checkFileInfo.wopiInfo());
+
+        auto [docBroker, error] =
+            findOrCreateDocBroker(DocumentBroker::ChildType::Interactive, documentUri.toString(),
+                                  docKey, sharedSettings.getConfigId(), id, documentUri,
+                                  /*mobileAppDocId=*/0);
+        if (!docBroker)
+        {
+            LOG_ERR_S("Preview index request for [" << docKey << "] has no document: " << error);
+            HttpHelper::sendErrorAndShutdown(http::StatusCode::ServiceUnavailable, requestSocket,
+                                             "the document cannot be opened");
+            return;
+        }
+
+        auto wopiFileInfo = std::make_shared<std::unique_ptr<WopiStorage::WOPIFileInfo>>(
+            checkFileInfo.wopiFileInfo(documentUri));
+
+        // The document's own thread opens the view and answers on the moved socket.
+        docBroker->setupTransfer(
+            *COOLWSD::getWebServerPoll(), weakSocket,
+            [docBroker, id, documentUri, wopiFileInfo](const std::shared_ptr<Socket>& moveSocket)
+            {
+                docBroker->handlePreviewIndex(std::static_pointer_cast<StreamSocket>(moveSocket),
+                                              id, documentUri, std::move(*wopiFileInfo));
+            });
+    };
+
+    _previewCheckFileInfo = std::make_shared<CheckFileInfo>(COOLWSD::getWebServerPoll(),
+                                                            uriPublic, std::move(onFinish));
+    if (!_previewCheckFileInfo->checkFileInfo(HTTP_REDIRECTION_LIMIT))
+    {
+        LOG_ERR_S("Preview index request could not ask the storage");
+        HttpHelper::sendErrorAndShutdown(http::StatusCode::BadGateway, socket,
+                                         "the storage cannot be reached");
+        return true;
+    }
+
+    return false;
+}
+
+bool ClientRequestDispatcher::handlePreviewContentRequest(
+    const Poco::Net::HTTPRequest& request, std::string tag, SocketDisposition& disposition,
+    const std::shared_ptr<StreamSocket>& socket)
+{
+    assert(socket && "Must have a valid socket");
+
+    LOG_DBG_S("Preview content request: " << Anonymizer::anonymizeUrl(request.getURI()));
+
+    if (!RemoteDocumentBroker::isEnabled())
+    {
+        LOG_ERR_S("Preview content request rejected: remote_links is disabled in the "
+                  "configuration");
+        HttpHelper::sendErrorAndShutdown(http::StatusCode::ServiceUnavailable, socket,
+                                         "slide previews are disabled");
+        return true;
+    }
+
+    std::string wopiSrc;
+    std::string serverId;
+    std::string guid;
+    const Poco::URI requestUri(request.getURI());
+    for (const auto& param : requestUri.getQueryParameters())
+    {
+        if (param.first == "WOPISrc")
+            wopiSrc = param.second;
+        else if (param.first == "ServerId")
+            serverId = param.second;
+        else if (param.first == "slide")
+            guid = param.second;
+    }
+
+    if (serverId != Util::getProcessIdentifier())
+    {
+        LOG_ERR_S("Cluster configuration error: mis-matching serverid ["
+                  << serverId << "] vs. [" << Util::getProcessIdentifier()
+                  << "] on a preview content request");
+        HttpHelper::sendErrorAndShutdown(
+            http::StatusCode::BadRequest, socket,
+            "wrong server, this is likely an issue with your reverse proxy configuration, See "
+            "https://sdk.collaboraonline.com/docs/installation/Proxy_settings.html");
+        return true;
+    }
+
+    if (wopiSrc.empty())
+    {
+        LOG_ERR_S("Preview content request without a WOPISrc query parameter");
+        HttpHelper::sendErrorAndShutdown(http::StatusCode::BadRequest, socket, "missing WOPISrc");
+        return true;
+    }
+
+    if (!HttpHelper::verifyWOPISrc(request.getURI(), wopiSrc, socket))
+    {
+        LOG_ERR_S("Preview content request with an unencoded WOPISrc, rejected");
+        return false;
+    }
+
+    if (!PreviewSession::isWellFormedTag(tag))
+    {
+        LOG_ERR_S("Preview content request with a tag of an unexpected syntax, rejected");
+        HttpHelper::sendErrorAndShutdown(http::StatusCode::BadRequest, socket, "bad tag");
+        return true;
+    }
+
+    if (guid.empty())
+    {
+        LOG_ERR_S("Preview content request without a slide query parameter");
+        HttpHelper::sendErrorAndShutdown(http::StatusCode::BadRequest, socket, "missing slide");
+        return true;
+    }
+
+    const std::string docKey = RequestDetails::getDocKey(wopiSrc);
+    std::shared_ptr<DocumentBroker> docBroker;
+    {
+        std::unique_lock<std::mutex> docBrokersLock(DocBrokersMutex);
+        const auto it = DocBrokers.find(docKey);
+        if (it != DocBrokers.end())
+            docBroker = it->second;
+    }
+
+    // A tag lives with its document, so a document that is gone has no tag to answer with.
+    if (!docBroker || !docBroker->isAlive())
+    {
+        LOG_DBG_S("Preview content request for a document that is not open: [" << docKey << ']');
+        HttpHelper::sendErrorAndShutdown(http::StatusCode::Gone, socket,
+                                         "the preview tag is gone");
+        return true;
+    }
+
+    docBroker->setupTransfer(disposition,
+                             [docBroker, tag = std::move(tag),
+                              guid = std::move(guid)](const std::shared_ptr<Socket>& moveSocket)
+                             {
+                                 docBroker->handlePreviewContent(
+                                     std::static_pointer_cast<StreamSocket>(moveSocket), tag,
+                                     guid);
+                             });
+
+    return true;
+}
+#endif // !MOBILEAPP
 
 bool ClientRequestDispatcher::handleLinksRequest(
     const Poco::Net::HTTPRequest& request, std::istream& message, SocketDisposition& disposition,
@@ -3310,6 +3591,10 @@ std::string getCapabilitiesJson(bool convertToAvailable)
     // That builds on the live links between documents, so it follows the same
     // remote_links switch in the configuration.
     capabilities->set("hasSlideImportSupport", RemoteDocumentBroker::isEnabled());
+
+    // Set if this instance answers /cool/preview with the slides of a presentation. The
+    // endpoint serves the slide import, so it follows the same switch.
+    capabilities->set("hasPreviewEndpoint", RemoteDocumentBroker::isEnabled());
 
     const std::string serverName = ConfigUtil::getString("indirection_endpoint.server_name", "");
     if (const char* podName = std::getenv("POD_NAME"))

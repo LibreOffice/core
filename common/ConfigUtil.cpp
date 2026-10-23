@@ -220,6 +220,7 @@ const Util::UnorderedStringMap<std::string> DefAppConfig = {
     { "remote_links.max_chain_depth", "3" },
     { "remote_links.max_links_per_document", "0" },
     { "remote_links.max_remote_docs", "0" },
+    { "remote_links.preview_timeout_secs", "60" },
     { "remote_links.reconnect_attempts", "5" },
     { "remote_links.server_url", "" },
 #if ENABLE_FEATURE_RESTRICTION

@@ -67,6 +67,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,wsd, \
     wsd/HealthCheck \
     wsd/HostUtil \
     wsd/ProofKey \
+    wsd/PreviewSession \
     wsd/ProxyProtocol \
     wsd/ProxyRequestHandler \
     wsd/QuarantineUtil \

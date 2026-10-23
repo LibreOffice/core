@@ -41,6 +41,7 @@
 #include <common/Uri.hpp>
 #include <common/Util.hpp>
 #include <net/HttpServer.hpp>
+#include <net/HttpHelper.hpp>
 #include <net/Socket.hpp>
 #include <net/WebSocketHandler.hpp>
 #include <wsd/COOLWSD.hpp>
@@ -48,6 +49,7 @@
 #include <wsd/ClientSession.hpp>
 #if !MOBILEAPP
 #include <wsd/CollabBroker.hpp>
+#include <wsd/PreviewSession.hpp>
 #endif
 #include <wsd/Exceptions.hpp>
 #include <wsd/FileServer.hpp>
@@ -536,6 +538,13 @@ void DocumentBroker::pollThread()
         if (_lockCtx)
             capPollTimeout(_lockCtx->nextRefresh());
 
+#if !MOBILEAPP
+        // A preview session's expiry and request deadlines have to wake the poll too, since
+        // nothing else does while the document is idle.
+        for (const auto& it : _previewSessions)
+            capPollTimeout(it.second->nextDeadline());
+#endif
+
         // A parked session's deadline has to wake the poll too, since its browser is away and
         // nothing else does. A deadline already passed polls once without sleeping.
         for (const auto& it : _sessions)
@@ -551,6 +560,13 @@ void DocumentBroker::pollThread()
         }
 
         _poll->poll(pollTimeout);
+
+#if !MOBILEAPP
+        // A preview view has no socket to write its frames to, so they are handed over here.
+        for (const auto& it : _previewSessions)
+            it.second->pumpView();
+        sweepPreviewSessions(std::chrono::steady_clock::now());
+#endif
 
         // Consolidate updates across multiple processed events.
         processBatchUpdates();
@@ -939,6 +955,7 @@ void DocumentBroker::pollThread()
     // The user's settings saved since the last session left would be lost with
     // the document otherwise.
     flushUserConfigUpload();
+    abandonPreviewSessions();
 #endif
 
     LOG_INF("Finished polling doc ["
@@ -8402,6 +8419,11 @@ void DocumentBroker::dumpState(std::ostream& os)
         if (it.second->isParked())
             ++parkedSessions;
     os << "\n  parked sessions: " << parkedSessions;
+#if !MOBILEAPP
+    os << "\n  preview sessions: " << _previewSessions.size();
+    for (const auto& it : _previewSessions)
+        it.second->dumpState(os);
+#endif
     os << "\n  last view position: part " << _lastViewPosition.part << ", zoom "
        << _lastViewPosition.zoomPercent << ", edit mode "
        << _lastViewPosition.editMode << ", area "
@@ -8908,5 +8930,109 @@ void closeDetachedDocument(unsigned mobileAppDocId)
 
 #  include "Exceptions.cpp"
 #endif
+
+#if !MOBILEAPP
+void DocumentBroker::handlePreviewIndex(const std::shared_ptr<StreamSocket>& socket,
+                                        const std::string& id, const Poco::URI& uriPublic,
+                                        std::unique_ptr<WOPIFileInfo> wopiFileInfo)
+{
+    ASSERT_CORRECT_THREAD();
+
+    const auto now = std::chrono::steady_clock::now();
+
+    // A live session opened for the same document and token answers again, with its tag.
+    for (const auto& it : _previewSessions)
+    {
+        if (it.second->getState() != PreviewSession::State::Failed &&
+            it.second->matches(uriPublic))
+        {
+            LOG_DBG("Preview index of [" << _docKey << "] answered by the live session ["
+                                         << it.first << ']');
+            it.second->requestIndex(socket, now);
+            return;
+        }
+    }
+
+    const std::chrono::seconds ttl = PreviewSession::TagTtl;
+    const std::chrono::seconds timeout(
+        ConfigUtil::getConfigValue<int>("remote_links.preview_timeout_secs", 60));
+
+    std::string fileName;
+    std::string lastModifiedTime;
+    std::size_t fileSize = 0;
+    if (wopiFileInfo)
+    {
+        fileName = wopiFileInfo->getFilename();
+        lastModifiedTime = wopiFileInfo->getLastModifiedServerTimeString();
+        fileSize = wopiFileInfo->getSize();
+    }
+
+    auto session = std::make_shared<PreviewSession>(PreviewSession::generateTag(), uriPublic,
+                                                    std::move(fileName),
+                                                    std::move(lastModifiedTime), fileSize, ttl,
+                                                    timeout);
+    LOG_INF("Preview session [" << session->getTag() << "] opens a view of [" << _docKey << ']');
+
+    // The request waits in the session, so a failure to open the view answers it.
+    session->requestIndex(socket, now);
+    session->attach(*this, id, std::move(wopiFileInfo));
+    if (session->getState() == PreviewSession::State::Failed)
+        return;
+
+    _previewSessions.emplace(session->getTag(), std::move(session));
+}
+
+void DocumentBroker::handlePreviewContent(const std::shared_ptr<StreamSocket>& socket,
+                                          const std::string& tag, const std::string& guid)
+{
+    ASSERT_CORRECT_THREAD();
+
+    const auto now = std::chrono::steady_clock::now();
+    const auto it = _previewSessions.find(tag);
+    if (it == _previewSessions.end() || it->second->isExpired(now) ||
+        it->second->getState() == PreviewSession::State::Failed)
+    {
+        LOG_DBG("Preview content of [" << _docKey << "] asked with a tag no live session holds");
+        HttpHelper::sendErrorAndShutdown(http::StatusCode::Gone, socket,
+                                         "the preview tag is gone");
+        return;
+    }
+
+    it->second->requestContent(socket, guid, now);
+}
+
+void DocumentBroker::sweepPreviewSessions(const std::chrono::steady_clock::time_point now)
+{
+    ASSERT_CORRECT_THREAD();
+
+    for (auto it = _previewSessions.begin(); it != _previewSessions.end();)
+    {
+        it->second->checkTimers(now);
+
+        const bool expired = it->second->isExpired(now);
+        const bool done = it->second->getState() == PreviewSession::State::Failed &&
+                          !it->second->hasPendingRequests();
+        if (expired || done)
+        {
+            LOG_DBG("Preview session [" << it->first << "] of [" << _docKey << "] is "
+                                        << (expired ? "expired" : "done") << ", dropped");
+            it->second->close(*this, http::StatusCode::Gone);
+            it = _previewSessions.erase(it);
+            continue;
+        }
+
+        ++it;
+    }
+}
+
+void DocumentBroker::abandonPreviewSessions()
+{
+    ASSERT_CORRECT_THREAD();
+
+    for (const auto& it : _previewSessions)
+        it.second->abandon(http::StatusCode::ServiceUnavailable);
+    _previewSessions.clear();
+}
+#endif // !MOBILEAPP
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
