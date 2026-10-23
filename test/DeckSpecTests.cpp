@@ -180,7 +180,7 @@ void DeckSpecTests::testValidateSlideAccepts()
 
     // A quote needs exactly one text block.
     LOK_ASSERT(!slideError(
-                    R"({"part":"divider","intent":"quote","title":"Wisdom",
+                    R"({"part":"body","intent":"quote","title":"Wisdom",
                         "blocks":[{"kind":"text","text":"Stay curious."}]})")
                     .has_value());
 
@@ -212,6 +212,20 @@ void DeckSpecTests::testValidateSlideRejects()
     auto intentErr = errorFor(R"({"part":"body","intent":"chart","title":"X"})");
     LOK_ASSERT(intentErr.has_value());
     LOK_ASSERT(intentErr->find("intent") != std::string::npos);
+
+    // An intent that carries content, on a part other than body, names the part it needs.
+    for (const char* slide :
+         { R"({"part":"closing","intent":"bullets","title":"X",
+               "blocks":[{"kind":"bullets","items":["a"]}]})",
+           R"({"part":"divider","intent":"quote","title":"X",
+               "blocks":[{"kind":"text","text":"q"}]})",
+           R"({"part":"opening","intent":"big-number","title":"X",
+               "blocks":[{"kind":"text","text":"42"}]})" })
+    {
+        auto partIntentErr = errorFor(slide);
+        LOK_ASSERT(partIntentErr.has_value());
+        LOK_ASSERT(partIntentErr->find("needs the part \"body\"") != std::string::npos);
+    }
 
     // A missing title names the field.
     auto titleErr = errorFor(R"({"part":"body","intent":"section","title":""})");
@@ -854,7 +868,7 @@ void DeckSpecTests::testCompileSlideSpecValidates()
             "blocks":[{"kind":"bullets","items":["x"]},{"kind":"bullets","items":["y"]}]})",
         R"({"part":"body","intent":"comparison","title":"D",
             "blocks":[{"kind":"bullets","items":["x"]},{"kind":"bullets","items":["y"]}]})",
-        R"({"part":"divider","intent":"quote","title":"E","blocks":[{"kind":"text","text":"q"}]})",
+        R"({"part":"body","intent":"quote","title":"E","blocks":[{"kind":"text","text":"q"}]})",
         R"({"part":"body","intent":"big-number","title":"F","blocks":[{"kind":"text","text":"42"}]})",
         R"({"part":"body","intent":"image","title":"G","image":{"brief":"pic","alt":"pic"}})",
         R"({"part":"divider","intent":"section","title":"H"})",

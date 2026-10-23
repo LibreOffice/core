@@ -35,7 +35,9 @@ constexpr std::string_view PartNames[] = { "opening", "divider", "body", "closin
 /// The layout and block-count rules for one slide intent. The bullets and text
 /// counts are inclusive ranges; a slide's blocks must fall within them. The
 /// layout name is one of AIUtil::getSlideLayouts(), and it offers a placeholder
-/// for the title plus one for every block the counts allow.
+/// for the title plus one for every block the counts allow. bodyOnly is true for
+/// an intent whose content needs the content box that only a body slide's master
+/// carries.
 struct IntentRule
 {
     std::string_view intent;
@@ -45,21 +47,22 @@ struct IntentRule
     int minText;
     int maxText;
     bool requiresImage;
+    bool bodyOnly;
 };
 
 /// The intent table. Each intent maps to one auto layout and a shape rule for
 /// the blocks a slide of that intent may carry.
 constexpr IntentRule IntentRules[] = {
-    { "title", "AUTOLAYOUT_TITLE", 0, 0, 0, 1, false },
-    { "agenda", "AUTOLAYOUT_TITLE_CONTENT", 1, 1, 0, 0, false },
-    { "bullets", "AUTOLAYOUT_TITLE_CONTENT", 1, 1, 0, 0, false },
-    { "two-column", "AUTOLAYOUT_TITLE_2CONTENT", 2, 2, 0, 0, false },
-    { "comparison", "AUTOLAYOUT_TITLE_2CONTENT", 2, 2, 0, 0, false },
-    { "quote", "AUTOLAYOUT_TITLE_CONTENT", 0, 0, 1, 1, false },
-    { "big-number", "AUTOLAYOUT_TITLE_CONTENT", 0, 0, 1, 1, false },
-    { "image", "AUTOLAYOUT_TITLE_CONTENT", 0, 0, 0, 0, true },
-    { "section", "AUTOLAYOUT_TITLE_ONLY", 0, 0, 0, 0, false },
-    { "closing", "AUTOLAYOUT_TITLE", 0, 0, 0, 1, false },
+    { "title", "AUTOLAYOUT_TITLE", 0, 0, 0, 1, false, false },
+    { "agenda", "AUTOLAYOUT_TITLE_CONTENT", 1, 1, 0, 0, false, true },
+    { "bullets", "AUTOLAYOUT_TITLE_CONTENT", 1, 1, 0, 0, false, true },
+    { "two-column", "AUTOLAYOUT_TITLE_2CONTENT", 2, 2, 0, 0, false, true },
+    { "comparison", "AUTOLAYOUT_TITLE_2CONTENT", 2, 2, 0, 0, false, true },
+    { "quote", "AUTOLAYOUT_TITLE_CONTENT", 0, 0, 1, 1, false, true },
+    { "big-number", "AUTOLAYOUT_TITLE_CONTENT", 0, 0, 1, 1, false, true },
+    { "image", "AUTOLAYOUT_TITLE_CONTENT", 0, 0, 0, 0, true, true },
+    { "section", "AUTOLAYOUT_TITLE_ONLY", 0, 0, 0, 0, false, false },
+    { "closing", "AUTOLAYOUT_TITLE", 0, 0, 0, 1, false, false },
 };
 
 const IntentRule* findIntentRule(const std::string& intent)
@@ -623,6 +626,17 @@ void emitSlideCommands(Poco::JSON::Array::Ptr& cmds, const Poco::JSON::Object::P
     pushCommand(cmds, "SetSlideIntent", intent);
 }
 
+/// A failure naming the slide when its intent needs the body part and the part is another one.
+std::optional<std::string> checkPartFitsIntent(unsigned index, const std::string& part,
+                                               const IntentRule& rule)
+{
+    if (!rule.bodyOnly || part == "body")
+        return std::nullopt;
+    return slidePrefix(index, std::string(rule.intent)) + "this intent needs the part \"body\", "
+           "because only a body slide has room for its content. Set \"part\" to \"body\", or "
+           "use the intent \"title\", \"section\" or \"closing\".";
+}
+
 } // anonymous namespace
 
 namespace DeckSpec
@@ -689,6 +703,8 @@ std::optional<std::string> validateSlideSpec(const Poco::JSON::Object::Ptr& slid
     if (!rule)
         return slidePrefix(index, std::string()) + "\"intent\" must be one of " + intentList() +
                ".";
+    if (std::optional<std::string> error = checkPartFitsIntent(index, part, *rule))
+        return error;
 
     const std::string title = getString(slideObj, "title");
     if (title.empty())
@@ -758,9 +774,12 @@ std::optional<std::string> validateOutline(const Poco::JSON::Object::Ptr& outlin
             return slidePrefix(i, std::string()) + "\"part\" must be one of " + partList() + ".";
 
         const std::string intent = getString(slide, "intent");
-        if (!isKnownIntent(intent))
+        const IntentRule* rule = findIntentRule(intent);
+        if (!rule)
             return slidePrefix(i, std::string()) + "\"intent\" must be one of " + intentList() +
                    ".";
+        if (std::optional<std::string> error = checkPartFitsIntent(i, part, *rule))
+            return error;
 
         const std::string title = getString(slide, "title");
         if (title.empty())

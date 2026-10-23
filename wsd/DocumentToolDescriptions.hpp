@@ -123,7 +123,7 @@ Example - edit existing slides: jump to slide 2, change its layout, rewrite the 
 constexpr const char* DECK_SLIDE_SHAPE =
     R"(Each slide is an object with:
 - "part": one of "opening", "divider", "body", "closing" - the slide's role in the deck. Use opening for the first slide, divider for a section break, closing for the last slide, and body for the rest.
-- "intent": one of "title", "agenda", "bullets", "two-column", "comparison", "quote", "big-number", "image", "section", "closing" - what the slide is for. The intent chooses the layout.
+- "intent": one of "title", "agenda", "bullets", "two-column", "comparison", "quote", "big-number", "image", "section", "closing" - what the slide is for. The intent chooses the layout. The intents that carry content (agenda, bullets, two-column, comparison, quote, big-number, image) need the part "body", and the other parts take title, section or closing.
 - "title": the slide title (required).
 - "blocks": the content as an array of blocks. A bullets block is {"kind": "bullets", "items": ["...", "..."]}. A text block is {"kind": "text", "text": "..."}.
 - "image": only for the "image" intent, {"brief": "a description to generate an image from", "alt": "short alt text"}.
@@ -147,7 +147,7 @@ constexpr const char* PROPOSE_OUTLINE_HEAD =
 
 Pass an "outline" object of the form {"title": "deck title", "slides": [ ... ]}. Each slide entry is an object with:
 - "part": one of "opening", "divider", "body", "closing" - the slide's role in the deck.
-- "intent": one of "title", "agenda", "bullets", "two-column", "comparison", "quote", "big-number", "image", "section", "closing" - what the slide is for. The intent chooses the layout.
+- "intent": one of "title", "agenda", "bullets", "two-column", "comparison", "quote", "big-number", "image", "section", "closing" - what the slide is for. The intent chooses the layout. The intents that carry content (agenda, bullets, two-column, comparison, quote, big-number, image) need the part "body", and the other parts take title, section or closing.
 - "title": a short slide title (required).
 - "gist": one or two sentences saying specifically what this slide should cover. This drives the content the server writes for the slide, so make it concrete.
 
