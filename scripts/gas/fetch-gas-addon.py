@@ -83,6 +83,7 @@ import argparse
 import json
 import mimetypes
 import pathlib
+import re
 import shutil
 import subprocess
 import sys
@@ -161,6 +162,13 @@ def fetch_libraries(add_on, force, state_dir):
     done = set()
     for library in libraries:
         fetch_library(script, library, root, force, done)
+
+
+def is_clone_url(source):
+    """Return whether git clone takes the source as a URL, or as an scp-like user@host:path."""
+    if urlparse(source).scheme in ("http", "https", "ssh", "git", "file"):
+        return True
+    return re.match(r"[^/@:]+@[^/:]+:", source) is not None
 
 
 def parse_github_url(url):
@@ -329,6 +337,9 @@ def main():
         "--internal-icon", help="icon file inside the add-on to record, relative to it")
     add_state_dir_argument(ap)
     args = ap.parse_args()
+    if not Path(args.source).is_dir() and not is_clone_url(args.source):
+        sys.exit(f"source {args.source!r} is neither a directory nor a URL")
+
     external = read_external_icon(args.external_icon) if args.external_icon else None
 
     in_place = Path(args.source).resolve()
