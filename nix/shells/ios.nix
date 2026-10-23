@@ -3,7 +3,7 @@
 let
   developerDir = "/Applications/Xcode.app/Contents/Developer";
 
-  allowedXcodeVersions = [ "26.4" ]; # what version does `xcodebuild -version` show?
+  allowedXcodeVersions = [ "26.4" "27.1" ]; # what version does `xcodebuild -version` show?
 
   xcrun = pkgs.writeShellScriptBin "xcrun" ''
     if [ ! -x /usr/bin/xcrun ]; then

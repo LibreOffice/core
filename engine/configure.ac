@@ -3624,10 +3624,10 @@ if test $_os = iOS; then
 
     if test "$enable_ios_simulator" = "yes"; then
         platformlc=iphonesimulator
-        versionmin=-mios-simulator-version-min=14.5
+        versionmin=-mios-simulator-version-min=15.0
     else
         platformlc=iphoneos
-        versionmin=-miphoneos-version-min=14.5
+        versionmin=-miphoneos-version-min=15.0
     fi
 
     sysroot=`xcrun --sdk $platformlc --show-sdk-path`
