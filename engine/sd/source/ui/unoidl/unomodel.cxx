@@ -103,6 +103,7 @@
 #include <sfx2/viewsh.hxx>
 #include <svl/cryptosign.hxx>
 #include <vcl/svapp.hxx>
+#include <rtl/strbuf.hxx>
 #include <Outliner.hxx>
 #include <COKit/COKit.hxx>
 
@@ -7638,6 +7639,35 @@ void SdXImpressDocument::setDrawnFromModel(bool bDrawnFromModel)
     if (mpDoc)
         mpDoc->SetDrawnFromModel(bDrawnFromModel);
 }
+
+// What the model remembers of each object is a cache. It spares the compare that decides whether
+// a change is one a client can see, and the rebuild of an entry that a full response writes
+// again. Without it a dirty object counts as changed and travels once more, and a full response
+// builds every entry anew. The versions stay, so a client that holds the part is still answered
+// from where it stands.
+bool SdXImpressDocument::dropCaches()
+{
+    for (auto& rPart : maVectorParts)
+    {
+        rPart.second.maObjectContent.clear();
+        rPart.second.moPageContent.reset();
+    }
+    return true;
+}
+
+void SdXImpressDocument::dumpState(rtl::OStringBuffer& rState)
+{
+    size_t nObjects = 0;
+    for (const auto& rPart : maVectorParts)
+        nObjects += rPart.second.maObjectContent.size();
+    rState.append("\nSdXImpressDocument vector content:\t");
+    rState.append(sal_Int64(nObjects));
+    rState.append(" objects in ");
+    rState.append(sal_Int32(maVectorParts.size()));
+    rState.append(" parts");
+}
+
+OUString SdXImpressDocument::getCacheName() const { return u"SdXImpressDocument"_ustr; }
 
 void SdXImpressDocument::setEditMode(int nMode)
 {

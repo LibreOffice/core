@@ -25,6 +25,7 @@
 #include <com/sun/star/table/XTable.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
 
+#include <vcl/kit.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/virdev.hxx>
 
@@ -1501,6 +1502,39 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testDeltaSkipsAnObjectThatOnlyBroadcas
     // Moving it really does change it, so then it travels.
     moveObject(pObject, Size(500, 0));
     auto aMoved = getVectorPrimitives(u"testUnchangedMovedDelta", nVersion);
+    CPPUNIT_ASSERT_EQUAL(size_t(1), aMoved.getSize("/objects").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(pObject->GetUniqueID()),
+                         aMoved.getInt("/objects/0/id").value_or(-1));
+}
+
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTrimmedMemoryKeepsTheVersions)
+{
+    // Trimming memory drops what the model remembers of each object. The versions stay, so a
+    // client that holds the part is still answered from where it stands: nothing changed, so
+    // nothing travels, a full response carries every object again, and a change after the trim
+    // travels as one step.
+    createBlankDoc();
+    addRectangle(tools::Rectangle(Point(1000, 1000), Size(3000, 2000)), Color(0x4472c4), COL_BLACK);
+    SdrObject* pObject = page(1)->GetObj(0);
+
+    auto aFull = getVectorPrimitives(u"testTrimmedFull");
+    const sal_Int64 nVersion = aFull.getInt("/version").value_or(-1);
+    const size_t nObjects = aFull.getSize("/objects").value_or(0);
+
+    vcl::kit::trimMemory(1024);
+
+    assertNothingMoved(getVectorPrimitives(u"testTrimmedDelta", nVersion), nVersion);
+
+    auto aAgain = getVectorPrimitives(u"testTrimmedFullAgain");
+    CPPUNIT_ASSERT_EQUAL(nVersion, aAgain.getInt("/version").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(nObjects, aAgain.getSize("/objects").value_or(0));
+    const auto oEntry = findEntryOfObject(aAgain, pObject->GetUniqueID());
+    CPPUNIT_ASSERT(oEntry.has_value());
+    CPPUNIT_ASSERT_GREATER(size_t(0), oEntry->getSize("primitives").value_or(0));
+
+    moveObject(pObject, Size(500, 0));
+    auto aMoved = getVectorPrimitives(u"testTrimmedMoved", nVersion);
+    CPPUNIT_ASSERT_EQUAL(nVersion + 1, aMoved.getInt("/version").value_or(-1));
     CPPUNIT_ASSERT_EQUAL(size_t(1), aMoved.getSize("/objects").value_or(0));
     CPPUNIT_ASSERT_EQUAL(sal_Int64(pObject->GetUniqueID()),
                          aMoved.getInt("/objects/0/id").value_or(-1));

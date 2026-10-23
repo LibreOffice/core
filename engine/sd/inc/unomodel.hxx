@@ -59,6 +59,7 @@
 #include <svx/fmdmod.hxx>
 
 #include <vcl/ITiledRenderable.hxx>
+#include <vcl/dropcache.hxx>
 
 #include <comphelper/servicehelper.hxx>
 #include <cppuhelper/implbase.hxx>
@@ -108,7 +109,8 @@ class SAL_DLLPUBLIC_RTTI SdXImpressDocument final : public SfxBaseModel, // impl
                            public css::ucb::XAnyCompareFactory,
                            public css::presentation::XHandoutMasterSupplier,
                            public css::view::XRenderable,
-                           public vcl::ITiledRenderable
+                           public vcl::ITiledRenderable,
+                           public CacheOwner
 {
     friend class SdDrawPagesAccess;
     friend class SdMasterPagesAccess;
@@ -630,7 +632,9 @@ public:
     ///
     /// maObjectContent holds what was last written per object, and maDirtyObjects the objects a
     /// change asked for a fresh look at. An object stays in maDirtyObjects until a write
-    /// compares it against maObjectContent.
+    /// compares it against maObjectContent. A memory trim empties maObjectContent and
+    /// moPageContent while the versions stay, so until the next write records an object again
+    /// it has nothing to be compared against and counts as changed.
     struct VectorPartState
     {
         sal_uInt64 mnVersion = 0;
@@ -875,6 +879,14 @@ public:
 
     /// @see vcl::ITiledRenderable::setDrawnFromModel().
     virtual void setDrawnFromModel(bool bDrawnFromModel) override;
+
+    /// @see CacheOwner::dropCaches(). Drops what the model remembers of the vector content of
+    /// every part. The versions stay.
+    SD_DLLPUBLIC virtual bool dropCaches() override;
+    /// @see CacheOwner::dumpState().
+    virtual void dumpState(rtl::OStringBuffer& rState) override;
+    /// @see CacheOwner::getCacheName().
+    virtual OUString getCacheName() const override;
     /// @see vcl::ITiledRenderable::initializeForTiledRendering().
     SD_DLLPUBLIC virtual void initializeForTiledRendering(const cpo::uno::Sequence<css::beans::PropertyValue>& rArguments) override;
     /// @see vcl::ITiledRenderable::postKeyEvent().
