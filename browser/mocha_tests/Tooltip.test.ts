@@ -88,6 +88,8 @@ describe('Tooltip', function () {
 	});
 
 	afterEach(function () {
+		// The tooltip keeps listening on the window, so a switched off one ignores the keys.
+		tooltip.disable();
 		restoreClock();
 		container.remove();
 		trigger.remove();
