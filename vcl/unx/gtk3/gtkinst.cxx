@@ -29,12 +29,14 @@
 #include <unx/gtk/gtkframe.hxx>
 #include <unx/gtk/gtkobject.hxx>
 #include <unx/gtk/gtksalmenu.hxx>
+#include <vclpluginapi.h>
 #include <headless/svpvd.hxx>
 #include <headless/svpbmp.hxx>
 #include <utility>
 #include <unotools/localedatawrapper.hxx>
 #include <vcl/builder.hxx>
 #include <vcl/inputtypes.hxx>
+#include <vcl/opengl/OpenGLContext.hxx>
 #include <vcl/specialchars.hxx>
 #include <vcl/sysdata.hxx>
 #include <vcl/transfer.hxx>
@@ -145,6 +147,8 @@
 #include <numeric>
 #include <boost/property_tree/ptree.hpp>
 #include <opengl/zone.hxx>
+
+#include <epoxy/gl.h>
 
 using namespace com::sun::star;
 using namespace com::sun::star::uno;

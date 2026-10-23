@@ -33,7 +33,7 @@
 #include <com/sun/star/accessibility/XAccessibleContext.hpp>
 #include <com/sun/star/accessibility/XAccessibleEventListener.hpp>
 #include <unx/gendata.hxx>
-#include <unx/saldisp.hxx>
+#include <unx/gendisp.hxx>
 #include <unx/gtk/gtksys.hxx>
 #include <vcl/ptrstyle.hxx>
 #include <osl/conditn.hxx>
