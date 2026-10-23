@@ -58,6 +58,9 @@
 #include <swcrsr.hxx>
 #include <editeng/prntitem.hxx>
 #include <pagedesc.hxx>
+#include <ftnidx.hxx>
+#include <txtftn.hxx>
+#include <fmtftn.hxx>
 
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -228,7 +231,10 @@ public:
     void InsertLine( SwCompareLine aLine )
         { m_aLines.push_back( aLine ); }
 
-    void SetRedlinesToDoc( bool bUseDocInfo );
+    // Tracks the differences. Adds to pInsertedNotes, when it is given, the footnotes and the
+    // endnotes whose anchors are tracked as inserted.
+    void SetRedlinesToDoc( bool bUseDocInfo,
+                           o3tl::sorted_vector<const SwTextFootnote*>* pInsertedNotes );
 
 private:
     // Moves the end of a range off the end node of the section.
@@ -409,6 +415,25 @@ public:
     bool Compare( int nIdx1, int nIdx2 ) const override;
     int GetLen1() const override { return m_nLen1; }
     int GetLen2() const override { return m_nLen2; }
+};
+
+// Compares footnotes or endnotes by their text. Each entry is the start node of the text of a note.
+class NoteArrayComparator : public ArrayComparator
+{
+private:
+    const vector<const SwNodeIndex*>& m_rNotes1;
+    const vector<const SwNodeIndex*>& m_rNotes2;
+
+public:
+    NoteArrayComparator( const vector<const SwNodeIndex*>& rNotes1,
+                         const vector<const SwNodeIndex*>& rNotes2 )
+        : m_rNotes1( rNotes1 ), m_rNotes2( rNotes2 )
+    {
+    }
+
+    bool Compare( int nIdx1, int nIdx2 ) const override;
+    int GetLen1() const override { return m_rNotes1.size(); }
+    int GetLen2() const override { return m_rNotes2.size(); }
 };
 
 class WordArrayComparator : public ArrayComparator
@@ -2194,6 +2219,31 @@ namespace
             }
         }
     }
+
+    /// Adds the footnotes and the endnotes whose anchors are in rRange.
+    void lcl_AddNotesInRange(const SwPaM& rRange,
+                             o3tl::sorted_vector<const SwTextFootnote*>& rNotes)
+    {
+        const SwPosition& rStart = *rRange.Start();
+        const SwPosition& rEnd = *rRange.End();
+        const SwNodes& rNodes = rStart.GetNodes();
+        for (SwNodeOffset nIndex = rStart.GetNodeIndex(); nIndex <= rEnd.GetNodeIndex(); ++nIndex)
+        {
+            const SwTextNode* pTextNode = rNodes[nIndex]->GetTextNode();
+            const SwpHints* pHints = pTextNode ? pTextNode->GetpSwpHints() : nullptr;
+            if (!pHints)
+                continue;
+            for (size_t i = 0; i < pHints->Count(); ++i)
+            {
+                const SwTextAttr* pHint = pHints->Get(i);
+                if (pHint->Which() != RES_TXTATR_FTN)
+                    continue;
+                SwPosition aAnchor(*pTextNode, pHint->GetStart());
+                if (rStart <= aAnchor && aAnchor < rEnd)
+                    rNotes.insert(static_cast<const SwTextFootnote*>(pHint));
+            }
+        }
+    }
 }
 
 void CompareData::AddSameText( const SwNode& rDstNd, const SwNode& rSrcNd )
@@ -2691,7 +2741,8 @@ void CompareData::TrackInsertedRow( const SwTableLine& rLine,
     }
 }
 
-void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
+void CompareData::SetRedlinesToDoc( bool bUseDocInfo,
+                                    o3tl::sorted_vector<const SwTextFootnote*>* pInsertedNotes )
 {
     // get the Author / TimeStamp from the "other" document info
     std::size_t nAuthor = m_rDoc.getIDocumentRedlineAccess().GetRedlineAuthor();
@@ -2797,6 +2848,8 @@ void CompareData::SetRedlinesToDoc( bool bUseDocInfo )
                                OUString(), nullptr );
     for (SwPaM* pTmp : aInserts)
     {
+        if (pInsertedNotes)
+            lcl_AddNotesInRange(*pTmp, *pInsertedNotes);
         if (IDocumentRedlineAccess::AppendResult::APPENDED ==
                 m_rDoc.getIDocumentRedlineAccess().AppendRedline(
                     new SwRangeRedline(aInsertData, *pTmp), true) &&
@@ -2832,19 +2885,26 @@ namespace
         return pFormat->GetContent().GetContentIdx();
     }
 
+    void addSectionComparator(Comparators& rComparisons, SwDoc& rSrcDoc,
+                              const SwNodeIndex& rSrcIndex, SwDoc& rDestDoc,
+                              const SwNodeIndex& rDestIndex)
+    {
+        if (rSrcIndex.GetNodes()[rSrcIndex.GetIndex() + 1]->IsNoTextNode()
+            || rDestIndex.GetNodes()[rDestIndex.GetIndex() + 1]->IsNoTextNode())
+        {
+            return; // tdf#125660 don't redline GrfNode/OLENode
+        }
+        rComparisons.emplace_back(
+            std::make_shared<CompareSectionText>(rSrcDoc, rSrcIndex.GetNode()),
+            std::make_shared<CompareSectionText>(rDestDoc, rDestIndex.GetNode()));
+    }
+
     Comparators buildComparators(SwDoc &rSrcDoc, SwDoc &rDestDoc)
     {
         Comparators aComparisons;
         auto addTextComparator = [&](const SwNodeIndex& rSrcIndex, const SwNodeIndex& rDestIndex)
         {
-            if (rSrcIndex.GetNodes()[rSrcIndex.GetIndex() + 1]->IsNoTextNode()
-                || rDestIndex.GetNodes()[rDestIndex.GetIndex() + 1]->IsNoTextNode())
-            {
-                return; // tdf#125660 don't redline GrfNode/OLENode
-            }
-            aComparisons.emplace_back(
-                std::make_shared<CompareSectionText>(rSrcDoc, rSrcIndex.GetNode()),
-                std::make_shared<CompareSectionText>(rDestDoc, rDestIndex.GetNode()));
+            addSectionComparator(aComparisons, rSrcDoc, rSrcIndex, rDestDoc, rDestIndex);
         };
 
         //compare main text
@@ -2912,6 +2972,116 @@ namespace
         }
         return aComparisons;
     }
+
+    // The footnotes or the endnotes of rDoc in the order of their anchors.
+    vector<const SwTextFootnote*> getNotes(const SwDoc& rDoc, bool bEndNote)
+    {
+        vector<const SwTextFootnote*> aNotes;
+        for (const SwTextFootnote* pNote : rDoc.GetFootnoteIdxs())
+        {
+            if (pNote->GetFootnote().IsEndNote() == bEndNote && pNote->GetStartNode())
+                aNotes.push_back(pNote);
+        }
+        return aNotes;
+    }
+
+    // Pairs old notes with new notes whose anchors were deleted and inserted at the same place.
+    // Notes with the same text match, and between two matches the notes are paired in order
+    // when there are as many old notes as new ones.
+    void addReplacedNoteComparators(Comparators& rComparisons, SwDoc& rSrcDoc,
+                                    const vector<const SwNodeIndex*>& rSrcNotes, SwDoc& rDestDoc,
+                                    const vector<const SwNodeIndex*>& rDestNotes)
+    {
+        if (rSrcNotes.empty() || rDestNotes.empty())
+            return;
+        NoteArrayComparator aCmp(rSrcNotes, rDestNotes);
+        const int nMinLen = std::min(aCmp.GetLen1(), aCmp.GetLen2());
+        std::unique_ptr<int[]> pLcs1(new int[nMinLen]);
+        std::unique_ptr<int[]> pLcs2(new int[nMinLen]);
+        LgstCommonSubseq aSubseq(aCmp);
+        const int nLcsLen = aSubseq.Find(pLcs1.get(), pLcs2.get());
+        int nStt1 = 0, nStt2 = 0;
+        for (int i = 0; i <= nLcsLen; ++i)
+        {
+            const int nEnd1 = i < nLcsLen ? pLcs1[i] : aCmp.GetLen1();
+            const int nEnd2 = i < nLcsLen ? pLcs2[i] : aCmp.GetLen2();
+            if (nEnd1 - nStt1 == nEnd2 - nStt2)
+            {
+                for (int j = 0; j < nEnd1 - nStt1; ++j)
+                    addSectionComparator(rComparisons, rSrcDoc, *rSrcNotes[nStt1 + j], rDestDoc,
+                                         *rDestNotes[nStt2 + j]);
+            }
+            nStt1 = nEnd1 + 1;
+            nStt2 = nEnd2 + 1;
+        }
+    }
+
+    // Pairs the footnotes and the endnotes of the two documents by their anchors, once the main
+    // text has its tracked changes. rKeptNotes are the notes rDestDoc had before the comparison.
+    // rShownNotes are the notes in text that was already tracked as deleted. They were hidden
+    // during the comparison, so they have no old note. Any other note is a copy of an old note in
+    // deleted text. rInsertedNotes are the notes whose anchors the comparison tracked as inserted.
+    // So the old notes are, in order, the new notes that are in neither rShownNotes nor
+    // rInsertedNotes.
+    Comparators buildNoteComparators(SwDoc& rSrcDoc, SwDoc& rDestDoc,
+                                     const o3tl::sorted_vector<const SwTextFootnote*>& rKeptNotes,
+                                     const o3tl::sorted_vector<const SwTextFootnote*>& rShownNotes,
+                                     const o3tl::sorted_vector<const SwTextFootnote*>&
+                                         rInsertedNotes)
+    {
+        Comparators aComparisons;
+        for (bool bEndNote : { false, true })
+        {
+            const vector<const SwTextFootnote*> aSrcNotes = getNotes(rSrcDoc, bEndNote);
+            vector<const SwTextFootnote*> aDestNotes = getNotes(rDestDoc, bEndNote);
+            std::erase_if(aDestNotes, [&rShownNotes](const SwTextFootnote* pNote)
+                          { return rShownNotes.contains(pNote); });
+            vector<RedlineType> aAnchorTypes;
+            for (const SwTextFootnote* pNote : aDestNotes)
+            {
+                if (!rKeptNotes.contains(pNote))
+                    aAnchorTypes.push_back(RedlineType::Delete);
+                else if (rInsertedNotes.contains(pNote))
+                    aAnchorTypes.push_back(RedlineType::Insert);
+                else
+                    aAnchorTypes.push_back(RedlineType::None);
+            }
+            const size_t nInserted
+                = std::count(aAnchorTypes.begin(), aAnchorTypes.end(), RedlineType::Insert);
+            if (aDestNotes.size() - nInserted != aSrcNotes.size())
+            {
+                SAL_WARN("sw.core", "buildNoteComparators: the old notes do not match the anchors");
+                continue;
+            }
+
+            // The notes since the last kept anchor whose anchors are deleted or inserted.
+            vector<const SwNodeIndex*> aDeletedNotes, aInsertedNotes;
+            size_t nSrc = 0;
+            for (size_t i = 0; i <= aDestNotes.size(); ++i)
+            {
+                const RedlineType eType
+                    = i < aDestNotes.size() ? aAnchorTypes[i] : RedlineType::None;
+                if (eType == RedlineType::Insert)
+                {
+                    aInsertedNotes.push_back(aDestNotes[i]->GetStartNode());
+                    continue;
+                }
+                if (eType == RedlineType::Delete)
+                {
+                    aDeletedNotes.push_back(aSrcNotes[nSrc++]->GetStartNode());
+                    continue;
+                }
+                addReplacedNoteComparators(aComparisons, rSrcDoc, aDeletedNotes, rDestDoc,
+                                           aInsertedNotes);
+                aDeletedNotes.clear();
+                aInsertedNotes.clear();
+                if (i < aDestNotes.size())
+                    addSectionComparator(aComparisons, rSrcDoc, *aSrcNotes[nSrc++]->GetStartNode(),
+                                         rDestDoc, *aDestNotes[i]->GetStartNode());
+            }
+        }
+        return aComparisons;
+    }
 }
 
 // Returns (the difference count?) if something is different
@@ -2956,29 +3126,60 @@ tools::Long SwDoc::CompareDoc( const SwDoc& rDoc )
     rSrcDoc.getIDocumentRedlineAccess().SetRedlineFlags( RedlineFlags::ShowInsert );
     getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On | RedlineFlags::ShowInsert);
 
-    Comparators aComparisons(buildComparators(rSrcDoc, *this));
-
-    for (auto& a : aComparisons)
+    auto compare = [&](const Comparators& rComparisons,
+                       o3tl::sorted_vector<const SwTextFootnote*>* pShownNotes,
+                       o3tl::sorted_vector<const SwTextFootnote*>* pInsertedNotes)
     {
-        CompareData& rD0 = *a.first;
-        CompareData& rD1 = *a.second;
-        rD1.CompareLines( rD0 );
-        nRet |= rD1.ShowDiffs( rD0 );
-        nRet |= rD1.CompareFormatting();
-    }
-
-    if( nRet )
-    {
-        getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On |
-                       RedlineFlags::ShowInsert | RedlineFlags::ShowDelete);
-
-        for (auto& a : aComparisons)
+        tools::Long nDiffs = 0;
+        for (auto& a : rComparisons)
         {
+            CompareData& rD0 = *a.first;
             CompareData& rD1 = *a.second;
-            rD1.SetRedlinesToDoc( !bDocWasModified );
+            rD1.CompareLines( rD0 );
+            nDiffs |= rD1.ShowDiffs( rD0 );
+            nDiffs |= rD1.CompareFormatting();
         }
+
+        if( nDiffs )
+        {
+            // Showing the deletions puts the text that was deleted before back with new notes.
+            o3tl::sorted_vector<const SwTextFootnote*> aVisibleNotes;
+            if (pShownNotes)
+            {
+                for (const SwTextFootnote* pNote : GetFootnoteIdxs())
+                    aVisibleNotes.insert(pNote);
+            }
+            getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::On |
+                           RedlineFlags::ShowInsert | RedlineFlags::ShowDelete);
+            if (pShownNotes)
+            {
+                for (const SwTextFootnote* pNote : GetFootnoteIdxs())
+                {
+                    if (!aVisibleNotes.contains(pNote))
+                        pShownNotes->insert(pNote);
+                }
+            }
+
+            for (auto& a : rComparisons)
+            {
+                CompareData& rD1 = *a.second;
+                rD1.SetRedlinesToDoc( !bDocWasModified, pInsertedNotes );
+            }
+        }
+        return nDiffs;
+    };
+
+    // The notes are paired by their anchors, which the comparison of the main text tracks.
+    o3tl::sorted_vector<const SwTextFootnote*> aKeptNotes;
+    for (const SwTextFootnote* pNote : GetFootnoteIdxs())
+        aKeptNotes.insert(pNote);
+    o3tl::sorted_vector<const SwTextFootnote*> aShownNotes, aInsertedNotes;
+    nRet |= compare(buildComparators(rSrcDoc, *this), &aShownNotes, &aInsertedNotes);
+    // The deletions in the main text stay shown, so the copies of the old notes stay in place.
+    nRet |= compare(buildNoteComparators(rSrcDoc, *this, aKeptNotes, aShownNotes, aInsertedNotes),
+                    nullptr, nullptr);
+    if( nRet )
         getIDocumentState().SetModified();
-    }
 
     rSrcDoc.getIDocumentRedlineAccess().SetRedlineFlags( eSrcRedlMode );
     getIDocumentRedlineAccess().SetRedlineFlags(RedlineFlags::ShowInsert | RedlineFlags::ShowDelete);
@@ -3275,6 +3476,37 @@ bool RowArrayComparator::Compare( int nIdx1, int nIdx2 ) const
     // Each shared word is in both rows, so 2 * nCommonWords of the nWords words are shared.
     return (nTextCells > 0 && 2 * nEqualTextCells >= nTextCells)
            || 2 * (2 * nCommonWords) >= nWords;
+}
+
+bool NoteArrayComparator::Compare( int nIdx1, int nIdx2 ) const
+{
+    if( nIdx1 < 0 || nIdx2 < 0 || nIdx1 >= GetLen1() || nIdx2 >= GetLen2() )
+    {
+        SAL_WARN("sw.core", "NoteArrayComparator::Compare: index out of range");
+        return false;
+    }
+
+    const SwNode& rStart1 = m_rNotes1[nIdx1]->GetNode();
+    const SwNode& rStart2 = m_rNotes2[nIdx2]->GetNode();
+    const SwNodeOffset nLen = rStart1.EndOfSectionIndex() - rStart1.GetIndex();
+    if (nLen != rStart2.EndOfSectionIndex() - rStart2.GetIndex())
+        return false;
+
+    const SwNodes& rNodes1 = rStart1.GetNodes();
+    const SwNodes& rNodes2 = rStart2.GetNodes();
+    SwNodeOffset nOffset(1);
+    while (nOffset < nLen)
+    {
+        const SwNode& rNode1 = *rNodes1[rStart1.GetIndex() + nOffset];
+        const SwNode& rNode2 = *rNodes2[rStart2.GetIndex() + nOffset];
+        if (!SwCompareLine::CompareNode(rNode2, rNode1))
+            return false;
+        // A table is compared as a whole, and equal tables have the same number of nodes.
+        if (rNode1.IsTableNode())
+            nOffset += rNode1.EndOfSectionIndex() - rNode1.GetIndex();
+        ++nOffset;
+    }
+    return true;
 }
 
 bool LineArrayComparator::Compare( int nIdx1, int nIdx2 ) const

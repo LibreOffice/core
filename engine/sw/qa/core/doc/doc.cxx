@@ -98,6 +98,10 @@
 #include <fmtcntnt.hxx>
 #include <fmthdft.hxx>
 #include <pagedesc.hxx>
+#include <ftnidx.hxx>
+#include <txtftn.hxx>
+
+#include <map>
 
 using namespace css;
 using namespace ::cpo;
@@ -153,6 +157,19 @@ public:
                              [eType](const SwRangeRedline* pRedline) {
                                  return pRedline->GetType() == eType;
                              });
+    }
+
+    /// Whether the text of the footnote or endnote rNote has a tracked change.
+    bool noteHasRedline(const SwTextFootnote& rNote)
+    {
+        const SwNode& rNoteStart = rNote.GetStartNode()->GetNode();
+        const SwRedlineTable& rRedlines
+            = getSwDoc()->getIDocumentRedlineAccess().GetRedlineTable();
+        return std::any_of(rRedlines.begin(), rRedlines.end(),
+                           [&rNoteStart](const SwRangeRedline* pRedline) {
+                               return pRedline->Start()->GetNode().FindFootnoteStartNode()
+                                      == &rNoteStart;
+                           });
     }
 };
 
@@ -3057,6 +3074,78 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareDocumentsHeaderFooter)
     CPPUNIT_ASSERT(bHeaderRedline);
     CPPUNIT_ASSERT(bFooterRedline);
     CPPUNIT_ASSERT(!bUnusedHeaderRedline);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareDocumentsFootnotes)
+{
+    // Given a document whose footnote and endnote texts differ from an older version. The first
+    // footnote is in a paragraph that is the same in both versions. The second footnote is in a
+    // paragraph whose text is all new, so its anchor is deleted and inserted:
+    createSwDoc("compare-footnote-new.fodt");
+    SwDoc* pDoc = getSwDoc();
+
+    // When comparing it with the older version:
+    compareWith(u"compare-footnote-old.fodt");
+
+    // Then make sure the text of each note of the new version has a tracked change:
+    IDocumentRedlineAccess& rIDRA = pDoc->getIDocumentRedlineAccess();
+    std::map<OUString, bool> aNoteHasRedline;
+    for (const SwTextFootnote* pNote : pDoc->GetFootnoteIdxs())
+    {
+        SwPosition aAnchor(pNote->GetTextNode(), pNote->GetStart());
+        const SwRangeRedline* pAnchorRedline = rIDRA.GetRedline(aAnchor, nullptr);
+        if (pAnchorRedline && pAnchorRedline->GetType() == RedlineType::Delete)
+            continue;
+        const SwNodeIndex& rNoteStart = *pNote->GetStartNode();
+        OUString aText = rNoteStart.GetNodes()[rNoteStart.GetIndex() + 1]->GetTextNode()->GetText();
+        aNoteHasRedline[aText.getToken(0, ' ')] = noteHasRedline(*pNote);
+    }
+    // Without the fix in place, this test would have failed with:
+    // - Expression: aNoteHasRedline[u"First"_ustr]
+    // i.e. only the anchors of the notes were compared, not their text.
+    CPPUNIT_ASSERT(aNoteHasRedline[u"First"_ustr]);
+    CPPUNIT_ASSERT(aNoteHasRedline[u"Second"_ustr]);
+    CPPUNIT_ASSERT(aNoteHasRedline[u"Endnote"_ustr]);
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareDocumentsFootnotesTrackedBefore)
+{
+    // Given a document with two footnotes. The text of the first footnote differs from an older
+    // version. The second footnote is the same in both versions, but its paragraph is in a tracked
+    // insertion that was made before the comparison:
+    createSwDoc("compare-footnote-tracked-new.fodt");
+    SwDoc* pDoc = getSwDoc();
+
+    // When comparing it with the older version:
+    compareWith(u"compare-footnote-tracked-old.fodt");
+
+    // Then make sure the text of the first footnote has a tracked change:
+    const SwTextFootnote* pFirstNote = pDoc->GetFootnoteIdxs()[0];
+    // Without the fix in place, this test would have failed with:
+    // - Expression: noteHasRedline(*pFirstNote)
+    // i.e. the tracked insertion from before the comparison was taken as one the comparison made,
+    // so the notes did not add up and none of them was compared.
+    CPPUNIT_ASSERT(noteHasRedline(*pFirstNote));
+}
+
+CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testCompareDocumentsFootnotesTrackedDeleteBefore)
+{
+    // Given a document with two footnotes. The text of the first footnote differs from an older
+    // version. The second footnote is the same in both versions, but its paragraph is in a tracked
+    // deletion that was made before the comparison:
+    createSwDoc("compare-footnote-tracked-del-new.fodt");
+    SwDoc* pDoc = getSwDoc();
+
+    // When comparing it with the older version:
+    compareWith(u"compare-footnote-tracked-old.fodt");
+
+    // Then make sure the text of the first footnote has a tracked change:
+    const SwTextFootnote* pFirstNote = pDoc->GetFootnoteIdxs()[0];
+    // Without the fix in place, this test would have failed with:
+    // - Expression: noteHasRedline(*pFirstNote)
+    // i.e. the footnote in the text deleted before the comparison was taken as a copy of an old
+    // footnote, so the notes did not add up and none of them was compared.
+    CPPUNIT_ASSERT(noteHasRedline(*pFirstNote));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
