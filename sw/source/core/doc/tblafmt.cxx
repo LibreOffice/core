@@ -790,13 +790,9 @@ SwTableAutoFormatTable::GetResolvedStyle(const SvxAutoFormatData* pStyle) const
 
 std::unique_ptr<SvxAutoFormatData> SwTableAutoFormatTable::ReleaseAutoFormat(const OUString& rName)
 {
-    SwTableAutoFormat* pFormat = FindAutoFormat(rName);
-
     auto iter = std::find_if(m_pImpl->m_AutoFormats.begin(), m_pImpl->m_AutoFormats.end(),
-                             [&pFormat](const std::unique_ptr<SwTableAutoFormat>& rpFormat)
-                             {
-                                 return rpFormat->SvxAutoFormatData::GetName()
-                                        == pFormat->SvxAutoFormatData::GetName();
+                             [&rName](const std::unique_ptr<SwTableAutoFormat>& rpFormat) {
+                                 return rpFormat->SvxAutoFormatData::GetName() == rName;
                              });
 
     std::unique_ptr<SvxAutoFormatData> pRet;

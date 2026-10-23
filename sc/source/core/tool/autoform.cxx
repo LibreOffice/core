@@ -389,12 +389,11 @@ bool ScAutoFormat::InsertAutoFormat(SvxAutoFormatData* pFormat)
 
 std::unique_ptr<SvxAutoFormatData> ScAutoFormat::ReleaseAutoFormat(const OUString& rName)
 {
-    ScAutoFormatData* pFormat = FindAutoFormat(rName);
-
     std::unique_ptr<SvxAutoFormatData> pRet;
     auto iter = std::find_if(mpImpl->maAutoFormats.begin(), mpImpl->maAutoFormats.end(),
-                             [&pFormat](const std::unique_ptr<ScAutoFormatData>& rpFormat)
-                             { return rpFormat->GetName() == pFormat->GetName(); });
+                             [&rName](const std::unique_ptr<ScAutoFormatData>& rpFormat) {
+                                 return rpFormat->GetName() == rName;
+                             });
     if (iter != mpImpl->maAutoFormats.end())
     {
         pRet = std::move(*iter);
