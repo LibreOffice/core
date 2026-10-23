@@ -14,15 +14,11 @@
 #include <cppuhelper/implbase.hxx>
 
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
 class SplashScreenBase
-    : public cppu::WeakImplHelper<css::task::XStatusIndicator, css::lang::XInitialization,
-                                  css::lang::XServiceInfo>
+    : public cppu::WeakImplHelper<css::task::XStatusIndicator, css::lang::XInitialization>
 {
-public:
-    virtual sal_Bool SAL_CALL supportsService(OUString const& ServiceName) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

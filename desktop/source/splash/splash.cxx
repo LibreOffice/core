@@ -529,12 +529,4 @@ void SplashScreenWindow::Paint(vcl::RenderContext& rRenderContext, const tools::
                               *m_pVDev);
 }
 
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-desktop_SplashScreen_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
-{
-    return cppu::acquire(new SplashScreen());
-}
-
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

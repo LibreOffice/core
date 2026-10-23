@@ -40,10 +40,6 @@ public:
 
     // XInitialize
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any>& aArguments ) override;
-
-    virtual OUString SAL_CALL getImplementationName() override;
-
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
 
 }

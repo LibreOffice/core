@@ -102,23 +102,6 @@ UnxSplashScreen::initialize( const css::uno::Sequence< css::uno::Any>& )
     }
 }
 
-OUString UnxSplashScreen::getImplementationName()
-{
-    return u"com.sun.star.office.comp.PipeSplashScreen"_ustr;
-}
-
-css::uno::Sequence<OUString> UnxSplashScreen::getSupportedServiceNames()
-{
-    return { u"com.sun.star.office.PipeSplashScreen"_ustr };
-}
-
-}
-
-extern "C" SAL_DLLPUBLIC_EXPORT css::uno::XInterface*
-desktop_UnxSplash_get_implementation(
-    css::uno::XComponentContext* , css::uno::Sequence<css::uno::Any> const&)
-{
-    return cppu::acquire(new desktop::UnxSplashScreen());
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

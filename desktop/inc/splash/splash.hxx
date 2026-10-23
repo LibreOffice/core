@@ -92,16 +92,6 @@ public:
 
     // XInitialize
     virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& aArguments) override;
-
-    virtual OUString SAL_CALL getImplementationName() override
-    {
-        return u"com.sun.star.office.comp.SplashScreen"_ustr;
-    }
-
-    virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override
-    {
-        return { u"com.sun.star.office.SplashScreen"_ustr };
-    }
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
