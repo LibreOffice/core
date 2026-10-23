@@ -418,6 +418,12 @@ JSDialog.CloseDropdown = function (id: string, focusHandled?: boolean) {
 	});
 };
 
+// True from the moment the dropdown is opened until it is closed, by any path.
+JSDialog.IsDropdownOpen = function (id: string): boolean {
+	const jsdialog = window.L.Map.THIS.jsdialog;
+	return !!jsdialog && !!jsdialog.dialogs[_createDropdownId(id)];
+};
+
 JSDialog.CloseAllDropdowns = function () {
 	window.L.Map.THIS.jsdialog.closeAllDropdowns();
 	if (window.L.Map.THIS.contextToolbar)

@@ -709,4 +709,33 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 			win._testHandlesObserver.disconnect();
 		});
 	});
+
+	// Each time the context menu of the notes is closed with Escape, the notes are ready for typing
+	// again, and the typed text replaces the selection the menu was opened on.
+	it('typing goes on in the notes after the context menu is closed', function () {
+		var editEngine = '#notespanel-container .ui-editengine';
+		var paragraph = editEngine + ' .ui-editengine-paragraph';
+
+		openNotesPane();
+		cy.cGet(editEngine).click();
+		cy.cGet(editEngine).type('Remember the demo');
+		cy.cGet(paragraph).should('have.text', 'Remember the demo');
+
+		cy.cGet(editEngine).type('{shift}{home}');
+		cy.getFrameWindow().then((win) => { helper.processToIdle(win); });
+
+		// A real right click on the selection keeps it, and real key presses go to whatever has
+		// the focus. The second menu is opened after the first one was closed with Escape.
+		[1, 2].forEach(function () {
+			cy.cGet(paragraph).realClick({ button: 'right', x: 30, y: 10 });
+			helper.getContextMenuItem('Paste').should('be.visible');
+
+			cy.realPress('Escape');
+			cy.cGet('#jsd-context-menu-dropdown-overlay').should('not.exist');
+			cy.cGet(editEngine).should('have.focus');
+		});
+
+		cy.realType('show');
+		cy.cGet(paragraph).should('have.text', 'show');
+	});
 });

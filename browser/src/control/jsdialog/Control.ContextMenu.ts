@@ -82,8 +82,13 @@ class ContextMenuControl extends JSControl {
 			this._autoFillContextMenu = false;
 			app.map._docLayer._resetReferencesMarks();
 		}
-		JSDialog.CloseDropdown(this._menuID);
 		this.hasContextMenu = false;
+
+		// Escape or a click outside closes the menu on its own and returns the focus to where it
+		// was before the menu opened, for example the notes, so the focus stays there.
+		if (!JSDialog.IsDropdownOpen(this._menuID)) return;
+
+		JSDialog.CloseDropdown(this._menuID);
 
 		// Give the stolen focus back to map
 		app.map.focus();
