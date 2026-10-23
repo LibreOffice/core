@@ -3143,8 +3143,12 @@ abstract class SelectionSection extends CanvasSectionObject {
 			return;
 		}
 
-		app.map._docLayer._postMouseEvent('buttondown', at.x, at.y, 2, 1, 0);
-		app.map._docLayer._postMouseEvent('buttonup', at.x, at.y, 2, 1, 0);
+		// the engine hears both presses, as in the office: the first starts the text edit where
+		// it lands and the second, inside the edit, selects the word there
+		for (const count of [1, 2]) {
+			app.map._docLayer._postMouseEvent('buttondown', at.x, at.y, count, 1, 0);
+			app.map._docLayer._postMouseEvent('buttonup', at.x, at.y, count, 1, 0);
+		}
 
 		this.stopPropagating();
 		e.stopPropagation();
