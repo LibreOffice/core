@@ -28,6 +28,7 @@
 #include <view.hxx>
 #include <tblafmt.hxx>
 
+#include <doc.hxx>
 #include <strings.hrc>
 #include <swabstdlg.hxx>
 #include <swuiexp.hxx>
@@ -188,6 +189,18 @@ SwConvertTableDlg::SwConvertTableDlg(SwView& rView, bool bToTable)
     m_xRepeatHeaderCB->connect_toggled(LINK(this, SwConvertTableDlg, RepeatHeaderCheckBoxHdl));
     RepeatHeaderCheckBoxHdl(*m_xRepeatHeaderCB);
     CheckBoxHdl(*m_xHeaderCB);
+
+    if (rView.GetWrtShell().GetDoc())
+    {
+        // add the document's table styles: replacing the user-profile table styles
+        SwTableAutoFormatTable& rTableStyles = rView.GetWrtShell().GetDoc()->GetTableStyles();
+        for (size_t i = 0; i < rTableStyles.size(); ++i)
+        {
+            m_xTableTable->ReleaseAutoFormat(rTableStyles[i].GetName());
+            m_xTableTable->AddAutoFormat(rTableStyles[i]);
+        }
+    }
+
     Init();
 }
 

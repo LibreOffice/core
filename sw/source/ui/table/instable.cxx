@@ -17,6 +17,7 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <doc.hxx>
 #include <instable.hxx>
 #include <shellres.hxx>
 #include <modcfg.hxx>
@@ -137,6 +138,16 @@ void SwInsTableDlg::InitAutoTableFormat()
     m_xLbFormat->connect_selection_changed(LINK(this, SwInsTableDlg, SelFormatHdl));
 
     m_xTableTable.reset(new SwTableAutoFormatTable);
+    if (m_pShell->GetDoc())
+    {
+        // add the document's table styles: replacing the user-profile table styles
+        SwTableAutoFormatTable& rTableStyles = m_pShell->GetDoc()->GetTableStyles();
+        for (size_t i = 0; i < rTableStyles.size(); ++i)
+        {
+            m_xTableTable->ReleaseAutoFormat(rTableStyles[i].GetName());
+            m_xTableTable->AddAutoFormat(rTableStyles[i]);
+        }
+    }
 
     for (size_t i = 0; i < m_xTableTable->size(); i++)
     {
