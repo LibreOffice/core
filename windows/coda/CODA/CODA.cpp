@@ -4266,6 +4266,15 @@ static void createTabStrip(WindowState& window)
                                     .Get(),
                                 &readyToken);
 
+                        // A text of the strip in the user interface language, as a parameter
+                        // of the query string.
+                        const auto textParameter = [](const char* name, const std::wstring& text)
+                        {
+                            std::string encoded;
+                            Poco::URI::encode(Util::wide_string_to_string(text), "&=+#?", encoded);
+                            return std::string("&") + name + "=" + encoded;
+                        };
+
                         // The page reads the theme out of the query string, so
                         // it is in the right colours from its first paint.
                         const std::string stripURL =
@@ -4273,7 +4282,13 @@ static void createTabStrip(WindowState& window)
                             (currentStripTheme() == "dark" ? "true" : "false") + "&titleBar=true" +
                             // The tabs run from right to left in a language written that way, as
                             // the document UI does.
-                            (LangUtil::isRtlLanguage(uiLanguage) ? "&dir=rtl" : "");
+                            (LangUtil::isRtlLanguage(uiLanguage) ? "&dir=rtl" : "") +
+                            //: Tooltip of the button that closes a tab
+                            textParameter("closeTabText", translate("TabManager", "Close tab")) +
+                            //: Tooltip of the + button at the end of the tab strip
+                            textParameter("newText", translate("TabManager", "New")) +
+                            //: The name in a tab whose document has no name
+                            textParameter("untitledText", translate("TabManager", "(untitled)"));
                         webView->Navigate(Util::string_to_wide_string(stripURL).c_str());
 
                         return S_OK;

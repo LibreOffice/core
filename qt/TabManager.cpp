@@ -210,6 +210,13 @@ TabManager::TabManager(TabbedWindow* window, QWebEngineProfile* profile)
     // The tabs run from right to left in a language written that way, as the document UI does.
     if (LangUtil::isRtlLanguage(getUILanguage()))
         stripUrl.addQueryParameter("dir", "rtl");
+    // The texts of the strip, in the user interface language.
+    //: Tooltip of the button that closes a tab
+    stripUrl.addQueryParameter("closeTabText", tr("Close tab").toStdString());
+    //: Tooltip of the + button at the end of the tab strip
+    stripUrl.addQueryParameter("newText", tr("New").toStdString());
+    //: The name in a tab whose document has no name
+    stripUrl.addQueryParameter("untitledText", tr("(untitled)").toStdString());
     _shellView->load(QUrl(QString::fromStdString(stripUrl.toString())));
 
     _shellView->setFocusPolicy(Qt::NoFocus);

@@ -24,6 +24,13 @@
 		other: 'images/x-office-document.svg',
 	};
 
+	// The texts of the strip in the user interface language, which the app passes in the query
+	// string, and in English otherwise.
+	const parameters = new URLSearchParams(window.location.search);
+	const closeTabText = parameters.get('closeTabText') || 'Close tab';
+	const newText = parameters.get('newText') || 'New';
+	const untitledText = parameters.get('untitledText') || '(untitled)';
+
 	let bridge = null;
 	let tabs = [];
 	let activeId = -1;
@@ -274,12 +281,12 @@
 
 			const title = el('span');
 			title.className = 'title' + (t.modified ? ' modified' : '');
-			title.textContent = t.title || '(untitled)';
+			title.textContent = t.title || untitledText;
 
 			const close = el('span');
 			close.className = 'close';
 			close.textContent = '×';
-			close.title = 'Close tab';
+			close.title = closeTabText;
 			close.addEventListener('click', (ev) => {
 				ev.stopPropagation();
 				lockTabWidths();
@@ -329,7 +336,7 @@
 		const add = el('div');
 		add.id = 'new-tab';
 		add.textContent = '+';
-		add.title = 'New';
+		add.title = newText;
 		add.addEventListener('click', () => {
 			if (bridge) bridge.newTabRequested();
 		});
