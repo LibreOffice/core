@@ -72,6 +72,7 @@ $(eval $(call gb_Library_use_libraries,sofficeapp,\
     salhelper \
     sb \
     sfx \
+    $(if $(or $(DISABLE_GUI),$(ENABLE_WASM_STRIP_SPLASH)),,spl) \
     svl \
     svx \
     svxcore \

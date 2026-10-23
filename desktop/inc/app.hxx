@@ -19,7 +19,10 @@
 
 #pragma once
 
+#include "splash/SplashScreenBase.hxx"
+
 #include <optional>
+#include <rtl/ref.hxx>
 #include <sal/log.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/timer.hxx>
@@ -142,7 +145,7 @@ class Desktop final : public Application
         static OUString         CreateErrorMsgString( utl::Bootstrap::FailureCode nFailureCode,
                                                       const OUString& aFileURL );
 
-        css::uno::Reference<css::task::XStatusIndicator> m_rSplashScreen;
+        rtl::Reference<SplashScreenBase> m_pSplashScreen;
         void                    OpenSplashScreen();
         void                    CloseSplashScreen();
 

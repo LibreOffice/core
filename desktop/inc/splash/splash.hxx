@@ -21,6 +21,7 @@
 #include <sal/config.h>
 
 #include "SplashScreenBase.hxx"
+#include "splash_dllapi.h"
 
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/bitmap.hxx>
@@ -43,7 +44,7 @@ public:
     void Redraw();
 };
 
-class SplashScreen : public SplashScreenBase
+class SPLASH_DLLPUBLIC SplashScreen : public SplashScreenBase
 {
     friend class SplashScreenWindow;
 
@@ -76,7 +77,8 @@ private:
     tools::Long m_nBarheight, m_nBarspace, m_nTextBaseline;
     double m_fXPos, m_fYPos;
     double m_fWidth, m_fHeight;
-    static constexpr tools::Long _xoffset = 12, _yoffset = 18;
+    static constexpr tools::Long _xoffset = 12;
+    static constexpr tools::Long _yoffset = 18;
 
 public:
     SplashScreen();

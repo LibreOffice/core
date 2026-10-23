@@ -39,6 +39,7 @@ $(eval $(call gb_CppunitTest_use_libraries,desktop_app, \
     salhelper \
     sb \
     sfx \
+    $(if $(or $(DISABLE_GUI),$(ENABLE_WASM_STRIP_SPLASH)),,spl) \
     svl \
     svx \
     svxcore \

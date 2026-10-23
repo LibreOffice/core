@@ -10,6 +10,7 @@
 #pragma once
 
 #include "SplashScreenBase.hxx"
+#include "splash_dllapi.h"
 
 #include <stdio.h>
 
@@ -17,7 +18,7 @@
 
 namespace desktop {
 
-class UnxSplashScreen : public SplashScreenBase
+class SPLASH_DLLPUBLIC UnxSplashScreen : public SplashScreenBase
 {
 private:
     UnxSplashScreen( const UnxSplashScreen& ) = delete;

@@ -18,6 +18,10 @@ $(eval $(call gb_Library_use_external,spl,boost_headers))
 
 $(eval $(call gb_Library_use_sdk_api,spl))
 
+$(eval $(call gb_Library_add_defs,spl,\
+    -DSPLASH_DLLIMPLEMENTATION \
+))
+
 $(eval $(call gb_Library_use_libraries,spl,\
     comphelper \
     cppu \

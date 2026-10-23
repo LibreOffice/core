@@ -29,6 +29,9 @@
 
 #include <sal/config.h>
 
+#include <splash/splash.hxx>
+#include <splash/unxsplash.hxx>
+
 #include <cstdlib>
 #include <iostream>
 #include <string_view>
@@ -1232,8 +1235,8 @@ void Desktop::Exception(ExceptionCategory nCategory)
 
         restartOnMac(false);
 #if !ENABLE_WASM_STRIP_SPLASH
-        if ( m_rSplashScreen.is() )
-            m_rSplashScreen->reset();
+        if (m_pSplashScreen.is())
+            m_pSplashScreen->reset();
 #endif
 
         _exit( EXITHELPER_CRASH_WITH_RESTART );
@@ -1781,8 +1784,8 @@ int Desktop::doShutdown()
     {
         restartOnMac(true);
 #if !ENABLE_WASM_STRIP_SPLASH
-        if ( m_rSplashScreen.is() )
-            m_rSplashScreen->reset();
+        if (m_pSplashScreen.is())
+            m_pSplashScreen->reset();
 #endif
 
         return EXITHELPER_NORMAL_RESTART;
@@ -2546,20 +2549,14 @@ void Desktop::OpenSplashScreen()
     else if ( rCmdLine.IsWeb() )
         aAppName = "web";
 
-    // Which splash to use
-    OUString aSplashService( u"com.sun.star.office.SplashScreen"_ustr );
     if ( rCmdLine.HasSplashPipe() )
-        aSplashService = "com.sun.star.office.PipeSplashScreen";
+        m_pSplashScreen.set(new UnxSplashScreen);
+    else
+        m_pSplashScreen.set(new SplashScreen);
 
     Sequence<Any> aSeq{ Any(aAppName) };
-    const css::uno::Reference< css::uno::XComponentContext >& xContext = ::comphelper::getProcessComponentContext();
-    m_rSplashScreen.set(
-        xContext->getServiceManager()->createInstanceWithArgumentsAndContext(aSplashService, aSeq, xContext),
-        UNO_QUERY);
-
-    if(m_rSplashScreen.is())
-            m_rSplashScreen->start(u"SplashScreen"_ustr, 100);
-
+    m_pSplashScreen->initialize(aSeq);
+    m_pSplashScreen->start(u"SplashScreen"_ustr, 100);
 }
 #endif
 
@@ -2568,9 +2565,9 @@ void Desktop::SetSplashScreenProgress(sal_Int32 iProgress)
 #if ENABLE_WASM_STRIP_SPLASH
     (void) iProgress;
 #else
-    if(m_rSplashScreen.is())
+    if (m_pSplashScreen.is())
     {
-        m_rSplashScreen->setValue(iProgress);
+        m_pSplashScreen->setValue(iProgress);
     }
 #endif
 }
@@ -2580,9 +2577,9 @@ void Desktop::SetSplashScreenText( const OUString& rText )
 #if ENABLE_WASM_STRIP_SPLASH
     (void) rText;
 #else
-    if( m_rSplashScreen.is() )
+    if (m_pSplashScreen.is())
     {
-        m_rSplashScreen->setText( rText );
+        m_pSplashScreen->setText(rText);
     }
 #endif
 }
@@ -2590,11 +2587,11 @@ void Desktop::SetSplashScreenText( const OUString& rText )
 void Desktop::CloseSplashScreen()
 {
 #if !ENABLE_WASM_STRIP_SPLASH
-    if(m_rSplashScreen.is())
+    if (m_pSplashScreen.is())
     {
         SolarMutexGuard ensureSolarMutex;
-        m_rSplashScreen->end();
-        m_rSplashScreen = nullptr;
+        m_pSplashScreen->end();
+        m_pSplashScreen = nullptr;
     }
 #endif
 }
