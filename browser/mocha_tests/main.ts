@@ -106,4 +106,5 @@
 /// <reference path="./VectorColors.test.ts" />
 /// <reference path="./MochaHarness.test.ts" />
 /// <reference path="./AIChatSidebar.test.ts" />
+/// <reference path="./NotebookbarTabs.test.ts" />
 // NOTE: reference new tests here ...

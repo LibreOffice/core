@@ -33,6 +33,7 @@ describe('Dispatcher ext: routing', function () {
 		};
 		app.map = {
 			dialog: { hasOpenedDialog: () => false, blinkOpenDialog: () => {} },
+			getDocType: () => 'none',
 			_extensions: {} as { [id: string]: any },
 		} as any;
 		return new Dispatcher('none');

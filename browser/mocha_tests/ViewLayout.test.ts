@@ -1421,6 +1421,9 @@ describe('ViewLayout', function () {
 			map.fire = function () {};
 			map.sendUnoCommand = function () {};
 			map._docLayer._docType = 'text';
+			map.getDocType = function () {
+				return 'text';
+			};
 			map._docLayer._fitWidthZoom = function () {};
 			const itemValues: Record<string, string> = {};
 			map.stateChangeHandler = {
