@@ -1111,6 +1111,8 @@ void WhiteBoxTests::testBuildLocalPathToJail()
                      jailPath(true, jailRoot, "/user/hello.odt"));
     LOK_ASSERT_EQUAL(jailRoot + "/user/hello.odt",
                      jailPath(true, jailRoot, "/tmp/../user/hello.odt"));
+    LOK_ASSERT_EQUAL(dir + "/jails/tmp/cool-jailid/", jailPath(true, jailRoot, "/tmp"));
+    LOK_ASSERT_EQUAL(dir + "/jails/tmp/cool-jailid/", jailPath(true, jailRoot, "tmp"));
 }
 
 void WhiteBoxTests::testFindFileInJail()

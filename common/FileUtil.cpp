@@ -342,7 +342,11 @@ namespace FileUtil
             const std::string jailPathDir = jailPath[0];
             if (jailPathDir == "tmp")
             {
-                jailPath.popFrontDirectory();
+                // A bare "tmp" is the directory itself.
+                if (jailPath.depth() > 0)
+                    jailPath.popFrontDirectory();
+                else
+                    jailPath.setFileName(std::string());
 
                 Poco::Path localStorageDir(localStorePath);
                 localStorageDir.makeDirectory();
