@@ -30,6 +30,7 @@
 	const closeTabText = parameters.get('closeTabText') || 'Close tab';
 	const newText = parameters.get('newText') || 'New';
 	const untitledText = parameters.get('untitledText') || '(untitled)';
+	const draftText = parameters.get('draftText') || 'Draft';
 
 	let bridge = null;
 	let tabs = [];
@@ -283,6 +284,13 @@
 			title.className = 'title' + (t.modified ? ' modified' : '');
 			title.textContent = t.title || untitledText;
 
+			let draft = null;
+			if (t.draft) {
+				draft = el('span');
+				draft.className = 'draft';
+				draft.textContent = draftText;
+			}
+
 			const close = el('span');
 			close.className = 'close';
 			close.textContent = '×';
@@ -327,6 +335,7 @@
 			content.className = 'content';
 			content.appendChild(icon);
 			content.appendChild(title);
+			if (draft) content.appendChild(draft);
 			tab.appendChild(content);
 			tab.appendChild(close);
 			strip.appendChild(tab);

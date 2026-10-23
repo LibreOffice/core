@@ -1124,8 +1124,11 @@ QString WebView::documentPath() const
 
 QString WebView::composedWindowTitle() const
 {
-    return _docTitle.isEmpty() ? QStringLiteral(APP_NAME)
-                               : (_docTitle + QStringLiteral(" - ") + QStringLiteral(APP_NAME));
+    if (_docTitle.isEmpty())
+        return QStringLiteral(APP_NAME);
+    const QString docPart =
+        isDraft() ? QObject::tr("%1 (Draft)").arg(_docTitle) : _docTitle;
+    return docPart + QStringLiteral(" - ") + QStringLiteral(APP_NAME);
 }
 
 std::optional<bool> portalPrefersDark()

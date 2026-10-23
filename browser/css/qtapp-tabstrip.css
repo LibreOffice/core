@@ -190,6 +190,15 @@ body {
 	content: ' *';
 	color: var(--color-text-lighter);
 }
+.tab .draft {
+	flex: 0 0 auto;
+	font-size: 0.85em;
+	line-height: 1.4;
+	padding: 0 6px;
+	border: 1px solid var(--tab-accent, var(--color-primary));
+	border-radius: 8px;
+	color: var(--tab-accent, var(--color-primary));
+}
 .tab .close {
 	width: 16px;
 	height: 16px;

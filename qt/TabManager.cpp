@@ -217,6 +217,8 @@ TabManager::TabManager(TabbedWindow* window, QWebEngineProfile* profile)
     stripUrl.addQueryParameter("newText", tr("New").toStdString());
     //: The name in a tab whose document has no name
     stripUrl.addQueryParameter("untitledText", tr("(untitled)").toStdString());
+    //: Badge in a tab whose document is a draft, not yet saved to a file of its own
+    stripUrl.addQueryParameter("draftText", tr("Draft").toStdString());
     _shellView->load(QUrl(QString::fromStdString(stripUrl.toString())));
 
     _shellView->setFocusPolicy(Qt::NoFocus);
@@ -856,6 +858,7 @@ QString TabManager::currentTabsJson() const
         obj["path"] = e.webView->documentPath();
         obj["docType"] = e.webView->documentType();
         obj["modified"] = e.webView->isDocumentModified();
+        obj["draft"] = e.webView->isDraft();
         obj["active"] = (e.id == _activeTabId);
         obj["hasThumbnail"] = !e.webView->thumbnail().isNull();
         arr.append(obj);

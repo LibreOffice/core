@@ -46,7 +46,7 @@ public slots:
     void debug(const QString& message);
 
 signals:
-    // tabsJson: JSON array of {id, title, docType, modified, active, hasThumbnail}.
+    // tabsJson: JSON array of {id, title, docType, modified, draft, active, hasThumbnail}.
     void tabsChanged(const QString& tabsJson);
     void themeChanged(const QString& theme);
     // The native drag left the strip's view; the page clears its markers.
