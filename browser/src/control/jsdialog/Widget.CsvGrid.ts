@@ -434,7 +434,6 @@ function createGridTable(
 	rowNumberHeader.className = 'ui-csv-grid-row-header';
 	rowNumberHeader.setAttribute('role', 'columnheader');
 	rowNumberHeader.setAttribute('aria-label', _('Line number'));
-	rowNumberHeader.textContent = '#';
 	headerRow.appendChild(rowNumberHeader);
 
 	columns.forEach((col: CsvColumn) => {

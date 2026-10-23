@@ -4195,6 +4195,7 @@ kbd,
 	position: sticky;
 	top: 0;
 	user-select: none;
+	text-align: start;
 }
 
 .ui-csv-grid-container.fixed-mode .ui-csv-grid th {
