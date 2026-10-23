@@ -13,6 +13,9 @@
 
 #include "WindowUtils.hpp"
 
+#include "TabManager.hpp"
+#include "TabbedWindow.hpp"
+
 #include <QApplication>
 #include <QGuiApplication>
 #include <QKeySequence>
@@ -24,6 +27,7 @@
 
 #include <algorithm>
 #include <cmath>
+#include <memory>
 #include <vector>
 
 QSize defaultWindowMinimumSize()
@@ -65,28 +69,78 @@ void surfaceWindow(QWidget* window)
     window->activateWindow();
 }
 
-void closeEveryWindow()
+namespace
 {
-    // Every visible window is asked to close, the same way the window manager's close button
-    // closes it, so a document that has changed is saved before its window closes. A window is
-    // free to answer by deferring its close and closing itself later, and the windows after it
-    // in the walk are asked anyway.
-    //
-    // A window can be visible without being drawn on screen, and one of those keeps the
-    // application running just as a drawn one does, so visibility is the whole test.
-    std::vector<QPointer<QWidget>> windows;
-    for (QWidget* widget : QApplication::topLevelWidgets())
+struct Quit
+{
+    std::vector<QPointer<TabbedWindow>> tabbedWindows;
+    std::vector<QPointer<QWidget>> otherWindows;
+};
+
+// The quit under way, if any. A quit asked for again starts over in place of the old one.
+std::shared_ptr<Quit> currentQuit;
+
+void continueQuit(const std::shared_ptr<Quit>& quit)
+{
+    if (quit != currentQuit)
+        return;
+
+    // One document window at a time, so that a close stopped in one window (a Cancel in its
+    // prompt) stops the quit before the windows after it are touched. A window closes its tabs
+    // one at a time and goes away after the last one.
+    while (!quit->tabbedWindows.empty())
     {
-        if (widget->isVisible())
-            windows.emplace_back(widget);
+        QPointer<TabbedWindow> window = quit->tabbedWindows.front();
+        quit->tabbedWindows.erase(quit->tabbedWindows.begin());
+        if (!window || !window->isVisible())
+            continue;
+
+        QObject::connect(window, &QObject::destroyed, window, [quit]() { continueQuit(quit); });
+        QObject::connect(window->manager(), &TabManager::closeAllStopped, window->manager(),
+                         [quit]()
+                         {
+                             if (quit == currentQuit)
+                                 currentQuit.reset();
+                         });
+        window->close();
+        return;
     }
 
     // The pointers are guarded because closing one window destroys the windows parented to it.
-    for (const QPointer<QWidget>& window : windows)
+    for (const QPointer<QWidget>& window : quit->otherWindows)
     {
         if (window)
             window->close();
     }
+    currentQuit.reset();
+}
+}
+
+void closeEveryWindow()
+{
+    // Every visible window is asked to close, the same way the window manager's close button
+    // closes it, so a document that has changed is saved before its window closes. The document
+    // windows go first, the most recently active one first. The other windows, the dialogs
+    // among them, are closed once every document window is gone, so a dialog that a document
+    // window still waits on stays up.
+    //
+    // A window can be visible without being drawn on screen, and one of those keeps the
+    // application running just as a drawn one does, so visibility is the whole test.
+    auto quit = std::make_shared<Quit>();
+    const QList<TabbedWindow*> tabbedWindows = TabbedWindow::allWindows();
+    for (auto it = tabbedWindows.rbegin(); it != tabbedWindows.rend(); ++it)
+    {
+        if ((*it)->isVisible())
+            quit->tabbedWindows.emplace_back(*it);
+    }
+    for (QWidget* widget : QApplication::topLevelWidgets())
+    {
+        if (widget->isVisible() && !qobject_cast<TabbedWindow*>(widget))
+            quit->otherWindows.emplace_back(widget);
+    }
+
+    currentQuit = quit;
+    continueQuit(quit);
 }
 
 void installQuitShortcut(QWidget* window)

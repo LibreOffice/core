@@ -75,6 +75,9 @@ public:
     // requestWindowClose. Used by TabbedWindow::closeEvent.
     void requestCloseAll();
 
+    // End a requestCloseAll() chain that has not finished, and say so with closeAllStopped.
+    void stopCloseAll();
+
     void activateTab(int tabId);
 
     // Activate the tab after (delta = 1) or before (delta = -1) the active one,
@@ -120,6 +123,7 @@ public:
 
 signals:
     void requestWindowClose();
+    void closeAllStopped();
 
 private:
     struct Entry

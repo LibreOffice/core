@@ -457,7 +457,7 @@ int TabManager::registerTab(std::unique_ptr<WebView> wv, int insertAt)
 
     // A new or adopted tab means this window is not going away; abandon any
     // close-everything chain before it sweeps the new tab up.
-    _closingAll = false;
+    stopCloseAll();
 
     const int id = s_nextTabId++;
     WebView* raw = wv.get();
@@ -472,7 +472,7 @@ int TabManager::registerTab(std::unique_ptr<WebView> wv, int insertAt)
     });
     // The user kept a document from the page's close prompt, so this window
     // is not going away; abandon any close-everything chain.
-    raw->setOnCloseCancelled([this]() { _closingAll = false; });
+    raw->setOnCloseCancelled([this]() { stopCloseAll(); });
     raw->setOnTitleChange([this, raw](const QString& title) { onWebViewTitleChanged(raw, title); });
     raw->setOnModifiedStatusChange([this](bool) { emitTabsChangedNow(); });
     raw->setOnThumbnailChange([this, raw](bool isFirstThumbnail)
@@ -592,7 +592,7 @@ std::unique_ptr<WebView> TabManager::releaseTab(int tabId)
 {
     // A tab moved out while this window closes its tabs takes any close prompt with it, and
     // the window would wait for its answer forever.
-    _closingAll = false;
+    stopCloseAll();
     auto it = findTab(tabId);
     if (it != _tabs.end())
         restoreTabView(it);
@@ -611,8 +611,8 @@ void TabManager::closeTab(int tabId)
     // The close-everything chain only ever closes the current front tab, so a
     // close aimed anywhere else is direct user interaction; abandon the chain
     // rather than resume it when this close completes.
-    if (_closingAll && it != _tabs.begin())
-        _closingAll = false;
+    if (it != _tabs.begin())
+        stopCloseAll();
 
     WebView* wv = it->webView.get();
 
@@ -679,6 +679,14 @@ void TabManager::requestCloseAll()
     }
     _closingAll = true;
     closeTab(_tabs.front().id);
+}
+
+void TabManager::stopCloseAll()
+{
+    if (!_closingAll)
+        return;
+    _closingAll = false;
+    emit closeAllStopped();
 }
 
 void TabManager::activateTab(int tabId)

@@ -23,7 +23,8 @@ void centerOnWorkArea(QWidget* window);
 // Un-minimizes and raises; activation is best effort.
 void surfaceWindow(QWidget* window);
 
-// Asks every visible top-level window to close, and continues past one that defers its close.
+// Asks every visible top-level window to close, one document window at a time. A document
+// window that stops its close stops the rest of it.
 void closeEveryWindow();
 
 // Ctrl+Q closes every window (each with its save round-trip), quitting the app.
