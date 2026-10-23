@@ -975,7 +975,6 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     }
     else if( rAttrs->GetItemState( XATTR_LINESTART ) != SfxItemState::INVALID )
     {
-        // #86265# select entry using list and polygon, not string
         bool bSelected(false);
 
         for(tools::Long a(0);!bSelected &&  a < m_pLineEndList->Count(); a++)
@@ -1005,7 +1004,6 @@ void SvxLineTabPage::Reset( const SfxItemSet* rAttrs )
     }
     else if( rAttrs->GetItemState( XATTR_LINEEND ) != SfxItemState::INVALID )
     {
-        // #86265# select entry using list and polygon, not string
         bool bSelected(false);
 
         for(tools::Long a(0);!bSelected &&  a < m_pLineEndList->Count(); a++)
