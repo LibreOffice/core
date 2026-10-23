@@ -268,7 +268,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf125346)
     // There are two themes in the test document, make sure we use the right theme
 
     createSdImpressDoc("pptx/tdf125346.pptx");
-    save(TestFilter::PPTX);
+    saveAndReload(TestFilter::PPTX);
 
     uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
     uno::Reference<beans::XPropertySet> xPropSet(xShape, uno::UNO_SET_THROW);
@@ -288,7 +288,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf125346_2)
     // Test more slides with different themes
 
     createSdImpressDoc("pptx/tdf125346_2.pptx");
-    save(TestFilter::PPTX);
+    saveAndReload(TestFilter::PPTX);
 
     {
         uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
@@ -341,7 +341,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf125360)
 
     xShape->setPropertyValue(u"FillTransparence"_ustr, cpo::uno::Any(static_cast<sal_Int32>(23)));
 
-    save(TestFilter::PPTX);
+    saveAndReload(TestFilter::PPTX);
 
     xShape.set(getShapeFromPage(0, 0));
 
@@ -361,7 +361,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf125360_1)
 
     xShape->setPropertyValue(u"FillTransparence"_ustr, cpo::uno::Any(static_cast<sal_Int32>(23)));
 
-    save(TestFilter::PPTX);
+    saveAndReload(TestFilter::PPTX);
 
     xShape.set(getShapeFromPage(0, 0));
 
@@ -385,7 +385,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf125360_2)
 
     xShape->setPropertyValue(u"FillTransparence"_ustr, cpo::uno::Any(static_cast<sal_Int32>(23)));
 
-    save(TestFilter::PPTX);
+    saveAndReload(TestFilter::PPTX);
 
     xShape.set(getShapeFromPage(0, 0));
 
@@ -397,21 +397,22 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf125360_2)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf125551)
 {
     createSdImpressDoc("pptx/tdf125551.pptx");
-    save(TestFilter::PPTX);
+    saveAndReload(TestFilter::PPTX);
 
     uno::Reference<drawing::XShapes> xGroupShape(getShapeFromPage(0, 0), uno::UNO_QUERY);
     uno::Reference<drawing::XShape> xShapeBg(xGroupShape->getByIndex(0), uno::UNO_QUERY);
 
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1024), xShapeBg->getPosition().X);
     CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(576), xShapeBg->getPosition().Y);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(10816), xShapeBg->getSize().Width);
-    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8588), xShapeBg->getSize().Height);
+    // Differences of 1 because of rounding
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(10815), xShapeBg->getSize().Width);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(8587), xShapeBg->getSize().Height);
 }
 
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf136830)
 {
     createSdImpressDoc("pptx/tdf136830.pptx");
-    save(TestFilter::PPTX);
+    saveAndReload(TestFilter::PPTX);
 
     // Without the fix in place, the X position of the shapes would have been 0
     uno::Reference<drawing::XShapes> xGroupShape(getShapeFromPage(0, 0), uno::UNO_QUERY);
@@ -432,7 +433,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf136830)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf126234)
 {
     createSdImpressDoc("pptx/tdf126234.pptx");
-    save(TestFilter::PPTX);
+    saveAndReload(TestFilter::PPTX);
 
     // check relative size of the bullet, 400% is a legitimate value for MS Office document
     // Without a fix, it will fail to set the size correctly
@@ -448,7 +449,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf126234)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest4, testTdf126741)
 {
     createSdImpressDoc("pptx/tdf126741.pptx");
-    save(TestFilter::PPTX);
+    saveAndReload(TestFilter::PPTX);
 
     // dash dot dot line style import fix
     // The original fixed values are replaced with the percent values, because
