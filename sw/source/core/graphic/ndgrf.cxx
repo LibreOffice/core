@@ -483,6 +483,11 @@ bool SwGrfNode::SwapIn(bool bWaitForData)
     return bRet;
 }
 
+bool SwGrfNode::IsLinkedFile() const
+{
+    return mxLink.is() && sfx2::SvBaseLinkObjectType::ClientGraphic == mxLink->GetObjType();
+}
+
 bool SwGrfNode::GetFileFilterNms( OUString* pFileNm, OUString* pFilterNm ) const
 {
     bool bRet = false;

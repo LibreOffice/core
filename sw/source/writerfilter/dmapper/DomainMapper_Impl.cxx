@@ -5642,6 +5642,7 @@ void DomainMapper_Impl::HandleAltChunk(const OUString& rStreamName)
             { "TextInsertModeRange", uno::Any(xInsertTextRange) },
             { "AltChunkMode", uno::Any(true) },
             { "AltChunkStartingRange", uno::Any(xSectionStartingRange) },
+            { u"DocumentBaseURL"_ustr, uno::Any(m_aBaseUrl) },
         }));
 
         uno::Reference<lang::XMultiServiceFactory> xMultiServiceFactory(

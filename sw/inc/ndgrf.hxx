@@ -123,7 +123,7 @@ public:
 
     /// Query link-data.
     bool IsGrfLink() const                  { return mxLink.is(); }
-    bool IsLinkedFile() const;
+    SW_DLLPUBLIC bool IsLinkedFile() const;
     bool IsLinkedDDE() const;
     const tools::SvRef<SwBaseLink>& GetLink() const { return mxLink; }
     SW_DLLPUBLIC bool GetFileFilterNms( OUString* pFileNm, OUString* pFilterNm ) const;
@@ -155,11 +155,6 @@ inline       SwGrfNode   *SwNode::GetGrfNode()
 inline const SwGrfNode   *SwNode::GetGrfNode() const
 {
      return SwNodeType::Grf == m_nNodeType ? static_cast<const SwGrfNode*>(this) : nullptr;
-}
-
-inline bool SwGrfNode::IsLinkedFile() const
-{
-    return mxLink.is() && sfx2::SvBaseLinkObjectType::ClientGraphic == mxLink->GetObjType();
 }
 
 inline bool SwGrfNode::IsLinkedDDE() const
