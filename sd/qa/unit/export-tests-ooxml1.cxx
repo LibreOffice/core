@@ -541,6 +541,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testN828390_5)
 CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testLostPlaceholders)
 {
     createSdImpressDoc("pptx/LostPlaceholder.odp");
+    saveAndReload(TestFilter::PPTX);
 
     SdXImpressDocument* pXImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
     CPPUNIT_ASSERT(pXImpressDocument);
@@ -1245,7 +1246,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testTdf94238)
 {
     // Load document and export it to a temporary file.
     createSdImpressDoc("pptx/tdf94238.pptx");
-    save(TestFilter::PPTX);
+    saveAndReload(TestFilter::PPTX);
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDoc.is());
 
@@ -1288,7 +1289,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testPictureTransparency)
 {
     // Load document and export it to a temporary file.
     createSdImpressDoc("odp/image_transparency.odp");
-    save(TestFilter::PPTX);
+    saveAndReload(TestFilter::PPTX);
     uno::Reference<drawing::XDrawPagesSupplier> xDoc(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDoc.is());
 
@@ -1335,7 +1336,7 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest1, testRoundtripOwnLineStyles)
     }
 
     // Save to pptx, reload and compare the LineDash values
-    save(TestFilter::PPTX);
+    saveAndReload(TestFilter::PPTX);
     uno::Reference<drawing::XDrawPagesSupplier> xDocpptx(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT(xDocpptx.is());
     uno::Reference<drawing::XDrawPage> xPagepptx(xDocpptx->getDrawPages()->getByIndex(0),
