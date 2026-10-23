@@ -2,6 +2,7 @@
 **/js/Autolinker.js
 **/js/sanitize-url.js
 **/js/l10n.js
+**/js/omggif.js
 **/src/unocommands.js
 **/src/app/TaskWorker.js
 node_modules
