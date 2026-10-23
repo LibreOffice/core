@@ -33,7 +33,7 @@ describe(['tagmultiuser'], 'Impress speaker notes pane with two users', function
 	function openNotesPane(win) {
 		helper.processToIdle(win);
 		cy.then(function () {
-			win.app.dispatcher.dispatch('notespanel');
+			win.app.dispatcher.dispatch('notespanelbottom');
 		});
 		helper.retryUntil(
 			function () { helper.processToIdle(win); },

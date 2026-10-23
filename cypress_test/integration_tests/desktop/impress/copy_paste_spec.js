@@ -9,7 +9,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Impress clipboard tests.',
 		// Given an open notes panel with its editengine widget focused:
 		helper.setupAndLoadDocument('impress/empty-placeholder.fodp');
 		cy.getFrameWindow().then(function(win) {
-			win.app.dispatcher.dispatch('notespanel');
+			win.app.dispatcher.dispatch('notespanelbottom');
 		});
 		cy.cGet('#notespanel-dock-wrapper').should('be.visible');
 		cy.cGet('#notespanel-container .ui-editengine').should('exist');
@@ -65,7 +65,7 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Impress clipboard tests.',
 		// Given an open notes panel with 'hello' and selected:
 		helper.setupAndLoadDocument('impress/empty-placeholder.fodp');
 		cy.getFrameWindow().then(function(win) {
-			win.app.dispatcher.dispatch('notespanel');
+			win.app.dispatcher.dispatch('notespanelbottom');
 		});
 		cy.cGet('#notespanel-dock-wrapper').should('be.visible');
 		cy.cGet('#notespanel-container .ui-editengine').should('exist');

@@ -35,16 +35,21 @@ Cypress.on('window:before:load', function(appWindow) {
 			userIds.push(userId);
 	});
 
-	['text', 'spreadsheet', 'presentation', 'drawing'].forEach(function(docType) {
-		const key = docType + '.onboardingTourSeen';
+	const seed = function(key, value) {
 		const names = [key].concat(userIds.map(function(userId) {
 			return key + '__u' + userId;
 		}));
 		names.forEach(function(name) {
 			if (appWindow.localStorage.getItem(name) === null)
-				appWindow.localStorage.setItem(name, 'true');
+				appWindow.localStorage.setItem(name, value);
 		});
+	};
+
+	['text', 'spreadsheet', 'presentation', 'drawing'].forEach(function(docType) {
+		seed(docType + '.onboardingTourSeen', 'true');
 	});
+
+	seed('presentation.ShowNotesPanel', 'false');
 });
 
 // This afterEach must be before installLogsCollector, otherwise the

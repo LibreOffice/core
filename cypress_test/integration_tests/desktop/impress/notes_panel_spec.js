@@ -15,7 +15,7 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 
 	function openNotesPane() {
 		cy.getFrameWindow().then(function (win) {
-			win.app.dispatcher.dispatch('notespanel');
+			win.app.dispatcher.dispatch('notespanelbottom');
 		});
 
 		cy.cGet('#notespanel-dock-wrapper').should('be.visible');
@@ -43,6 +43,9 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 	}
 
 	it('opens on request and shows an editable notes area', function () {
+		cy.getFrameWindow().then(function (win) {
+			helper.processToIdle(win);
+		});
 		cy.cGet('#notespanel-dock-wrapper').should('not.be.visible');
 
 		openNotesPane();
@@ -900,5 +903,38 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 		cy.cGet(paragraph).realClick({ button: 'right', x: 30, y: 10 });
 		helper.getContextMenuItem('Cut').should('be.visible');
 		helper.getContextMenuItem('Copy').should('be.visible');
+	});
+});
+
+describe(['tagdesktop'], 'Impress speaker notes pane on load', function () {
+	it('opens with the presentation, with room for two lines', function () {
+		cy.on('window:before:load', function (appWindow) {
+			Object.keys(appWindow.localStorage)
+				.filter(function (name) {
+					return name.startsWith('presentation.ShowNotesPanel');
+				})
+				.forEach(function (name) {
+					appWindow.localStorage.removeItem(name);
+				});
+		});
+		helper.setupAndLoadDocument('impress/empty-placeholder.fodp');
+
+		cy.cGet('#notespanel-dock-wrapper').should('be.visible');
+		cy.cGet('#notespanel-container .ui-editengine').should(
+			'have.class',
+			'ui-editengine-placeholder'
+		);
+		cy.cGet('#notespanel-container .ui-editengine').should(function (element) {
+			var editor = element[0];
+			var style = editor.ownerDocument.defaultView.getComputedStyle(editor);
+			var text =
+				editor.clientHeight -
+				parseFloat(style.paddingTop) -
+				parseFloat(style.paddingBottom);
+			var line = parseFloat(style.lineHeight);
+			expect(text).to.be.at.least(2 * line - 0.5);
+			expect(text).to.be.below(3 * line);
+			expect(editor.scrollHeight).to.be.at.most(editor.clientHeight);
+		});
 	});
 });

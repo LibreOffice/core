@@ -64,6 +64,7 @@ class UIManager extends window.L.Control {
 	// values the load message carried, then whatever a later change sent it.
 	// Undefined until the load message of the session is composed.
 	private themeSentToCore: boolean | undefined = undefined;
+	private notesPanelOpenedOnLoad: boolean = false;
 	private backgroundSentToCore: boolean | undefined = undefined;
 	// Live OS light/dark tracking in the browser (see the constructor and
 	// followSystemDarkMode); null on native apps, which own dark mode.
@@ -1150,6 +1151,7 @@ class UIManager extends window.L.Control {
 		app.console.debug('UIManager: late components init');
 		const sidebarRequested = this.initializeSidebar();
 		this.initializeNavigator();
+		this.initializeNotesPanel();
 		this.initializeQuickFindInCore();
 		return sidebarRequested;
 	}
@@ -1251,6 +1253,16 @@ class UIManager extends window.L.Control {
 		// open when this runs again for the same view.
 		if (this.getBooleanDocTypePref('ShowNavigator', false))
 			app.socket.sendMessage('uno .uno:Navigator?Navigator:bool=true');
+	}
+
+	initializeNotesPanel(): void {
+		if (this.notesPanelOpenedOnLoad) return;
+		if (!this.map.notesPanel || !window.mode.isDesktop()) return;
+
+		if (!this.map.isEditMode() || (app.impress && app.impress.notesMode)) return;
+		this.notesPanelOpenedOnLoad = true;
+		if (this.getBooleanDocTypePref('ShowNotesPanel', true))
+			this.map.notesPanel.setOpen(true);
 	}
 
 	/**
@@ -2289,6 +2301,8 @@ class UIManager extends window.L.Control {
 
 		if (this._menubarHiddenByUser && this.getCurrentMode() === 'classic')
 			this.updateMenubarForPermission(e.detail.perm === 'edit');
+
+		if (e.detail.perm === 'edit') this.initializeNotesPanel();
 	}
 
 	updateMenubarForPermission(canEdit: boolean): void {
