@@ -183,7 +183,7 @@ public:
     bool InsertAutoFormat(SvxAutoFormatData* pFormat) override;
     SwTableAutoFormat* FindAutoFormat(const OUString& rName) const override;
     const SwTableAutoFormat* GetResolvedStyle(const SvxAutoFormatData* pData) const override;
-    SwTableAutoFormat* ReleaseAutoFormat(const OUString& rName) override;
+    std::unique_ptr<SvxAutoFormatData> ReleaseAutoFormat(const OUString& rName) override;
     SwTableAutoFormat* GetDefaultData() override
     {
         return new SwTableAutoFormat(TableStyleName(""));
