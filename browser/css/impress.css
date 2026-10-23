@@ -52,6 +52,12 @@
 	flex: 1;
 	min-height: 0;
 	overflow: hidden;
+	--editengine-font-scale: 0.7;
+	--editengine-min-font-size: 11pt;
+}
+
+#notespanel-container .ui-editengine {
+	font-size: 14pt;
 }
 
 #notespanel-container > .jsdialog {

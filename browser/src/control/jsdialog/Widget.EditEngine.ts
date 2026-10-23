@@ -486,6 +486,14 @@ function editEngineAttachHandlers(container: EditEngineContainer): void {
 	);
 }
 
+function editEngineFontSize(points: number): string {
+	return (
+		'max(var(--editengine-min-font-size, 0pt), calc(' +
+		points +
+		'pt * var(--editengine-font-scale, 1)))'
+	);
+}
+
 function editEngineRenderRun(run: EditEngineRun, text: string): HTMLElement {
 	const span = document.createElement('span');
 
@@ -505,7 +513,7 @@ function editEngineRenderRun(run: EditEngineRun, text: string): HTMLElement {
 	if (run.italic) span.style.fontStyle = 'italic';
 	if (run.color) span.style.color = run.color;
 	if (run.family) span.style.fontFamily = run.family;
-	if (run.size) span.style.fontSize = run.size + 'pt';
+	if (run.size) span.style.fontSize = editEngineFontSize(run.size);
 
 	const decorations = [];
 	if (run.underline) decorations.push('underline');
@@ -537,7 +545,8 @@ function editEngineRenderParagraph(
 
 	// The paragraph's default font, which its runs inherit unless they carry their own.
 	if (paragraph.family) element.style.fontFamily = paragraph.family;
-	if (paragraph.size) element.style.fontSize = paragraph.size + 'pt';
+	if (paragraph.size)
+		element.style.fontSize = editEngineFontSize(paragraph.size);
 	if (paragraph.color) element.style.color = paragraph.color;
 
 	// The bullet is rendered as generated content from this attribute, so its characters stay out

@@ -441,7 +441,7 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 
 	// Text that has no formatting of its own shows in the font of the notes style, the same font
 	// as text that has.
-	it('the notes show in the font they have in the document', function () {
+	it('the notes show in the font they have in the document, 20pt as 14pt', function () {
 		openNotesPane();
 
 		var editEngine = '#notespanel-container .ui-editengine';
@@ -453,7 +453,32 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 		// The paragraph names the family and the size of the notes style.
 		cy.cGet(paragraph).should(function (element) {
 			expect(element[0].style.fontFamily).to.not.equal('');
-			expect(element[0].style.fontSize).to.match(/^\d+pt$/);
+			var style = element[0].ownerDocument.defaultView.getComputedStyle(element[0]);
+			var points = parseFloat(style.fontSize) * 0.75;
+			expect(points).to.be.closeTo(14, 0.1);
+		});
+	});
+
+	it('small notes text shows at 11pt at least', function () {
+		openNotesPane();
+
+		var editEngine = '#notespanel-container .ui-editengine';
+		var paragraph = editEngine + ' .ui-editengine-paragraph';
+		cy.cGet(editEngine).click();
+		cy.cGet(editEngine).type('Small print');
+		cy.cGet(paragraph).should('have.text', 'Small print');
+
+		cy.getFrameWindow().then(function (win) {
+			win.app.map.sendUnoCommand('.uno:SelectAll');
+			helper.processToIdle(win);
+			win.app.map.applyFontSize('8');
+			helper.processToIdle(win);
+		});
+
+		cy.cGet(paragraph).contains('Small print').should(function (element) {
+			var style = element[0].ownerDocument.defaultView.getComputedStyle(element[0]);
+			var points = parseFloat(style.fontSize) * 0.75;
+			expect(points).to.be.closeTo(11, 0.1);
 		});
 	});
 
