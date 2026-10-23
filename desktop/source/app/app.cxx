@@ -1235,7 +1235,7 @@ void Desktop::Exception(ExceptionCategory nCategory)
 
         restartOnMac(false);
 #if !ENABLE_WASM_STRIP_SPLASH
-        if (m_pSplashScreen.is())
+        if (m_pSplashScreen)
             m_pSplashScreen->reset();
 #endif
 
@@ -1784,7 +1784,7 @@ int Desktop::doShutdown()
     {
         restartOnMac(true);
 #if !ENABLE_WASM_STRIP_SPLASH
-        if (m_pSplashScreen.is())
+        if (m_pSplashScreen)
             m_pSplashScreen->reset();
 #endif
 
@@ -2550,9 +2550,9 @@ void Desktop::OpenSplashScreen()
         aAppName = "web";
 
     if ( rCmdLine.HasSplashPipe() )
-        m_pSplashScreen.set(new UnxSplashScreen);
+        m_pSplashScreen = std::make_unique<UnxSplashScreen>();
     else
-        m_pSplashScreen.set(new SplashScreen(aAppName));
+        m_pSplashScreen = std::make_unique<SplashScreen>(aAppName);
 
     m_pSplashScreen->start(u"SplashScreen"_ustr, 100);
 }
@@ -2563,7 +2563,7 @@ void Desktop::SetSplashScreenProgress(sal_Int32 iProgress)
 #if ENABLE_WASM_STRIP_SPLASH
     (void) iProgress;
 #else
-    if (m_pSplashScreen.is())
+    if (m_pSplashScreen)
     {
         m_pSplashScreen->setValue(iProgress);
     }
@@ -2575,7 +2575,7 @@ void Desktop::SetSplashScreenText( const OUString& rText )
 #if ENABLE_WASM_STRIP_SPLASH
     (void) rText;
 #else
-    if (m_pSplashScreen.is())
+    if (m_pSplashScreen)
     {
         m_pSplashScreen->setText(rText);
     }
@@ -2585,11 +2585,11 @@ void Desktop::SetSplashScreenText( const OUString& rText )
 void Desktop::CloseSplashScreen()
 {
 #if !ENABLE_WASM_STRIP_SPLASH
-    if (m_pSplashScreen.is())
+    if (m_pSplashScreen)
     {
         SolarMutexGuard ensureSolarMutex;
         m_pSplashScreen->end();
-        m_pSplashScreen = nullptr;
+        m_pSplashScreen.reset();
     }
 #endif
 }

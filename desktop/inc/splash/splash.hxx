@@ -52,7 +52,6 @@ private:
     VclPtr<SplashScreenWindow> m_pWindow;
 
     DECL_LINK(AppEventListenerHdl, VclSimpleEvent&, void);
-    virtual ~SplashScreen() override;
     void loadConfig();
     void updateStatus();
     void SetScreenBitmap(Bitmap& rBitmap);
@@ -82,6 +81,7 @@ private:
 
 public:
     SplashScreen(const OUString& rAppName);
+    virtual ~SplashScreen() override;
 
     virtual void end() override;
     virtual void reset() override;

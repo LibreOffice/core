@@ -24,12 +24,12 @@ private:
     UnxSplashScreen( const UnxSplashScreen& ) = delete;
     UnxSplashScreen operator =( const UnxSplashScreen& ) = delete;
 
-    virtual ~UnxSplashScreen() override;
 
     FILE *m_pOutFd;
 
 public:
     explicit UnxSplashScreen();
+    virtual ~UnxSplashScreen() override;
 
     virtual void start(const OUString& aText, sal_Int32 nRange) override;
     virtual void end() override;

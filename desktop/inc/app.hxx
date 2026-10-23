@@ -145,7 +145,7 @@ class Desktop final : public Application
         static OUString         CreateErrorMsgString( utl::Bootstrap::FailureCode nFailureCode,
                                                       const OUString& aFileURL );
 
-        rtl::Reference<SplashScreenBase> m_pSplashScreen;
+        std::unique_ptr<SplashScreenBase> m_pSplashScreen;
         void                    OpenSplashScreen();
         void                    CloseSplashScreen();
 
