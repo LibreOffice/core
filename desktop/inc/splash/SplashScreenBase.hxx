@@ -13,11 +13,9 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/task/XStatusIndicator.hpp>
 
-class SplashScreenBase
-    : public cppu::WeakImplHelper<css::task::XStatusIndicator, css::lang::XInitialization>
+class SplashScreenBase : public cppu::WeakImplHelper<css::task::XStatusIndicator>
 {
 };
 

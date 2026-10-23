@@ -37,9 +37,6 @@ public:
     virtual void SAL_CALL reset() override;
     virtual void SAL_CALL setText( const OUString& aText ) override;
     virtual void SAL_CALL setValue( sal_Int32 nValue ) override;
-
-    // XInitialize
-    virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any>& aArguments ) override;
 };
 
 }

@@ -2552,10 +2552,8 @@ void Desktop::OpenSplashScreen()
     if ( rCmdLine.HasSplashPipe() )
         m_pSplashScreen.set(new UnxSplashScreen);
     else
-        m_pSplashScreen.set(new SplashScreen);
+        m_pSplashScreen.set(new SplashScreen(aAppName));
 
-    Sequence<Any> aSeq{ Any(aAppName) };
-    m_pSplashScreen->initialize(aSeq);
     m_pSplashScreen->start(u"SplashScreen"_ustr, 100);
 }
 #endif

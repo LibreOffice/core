@@ -58,12 +58,13 @@ void SplashScreenWindow::Redraw()
     GetOutDev()->Flush();
 }
 
-SplashScreen::SplashScreen()
+SplashScreen::SplashScreen(const OUString& rAppName)
     : m_pWindow(VclPtr<SplashScreenWindow>::Create(this))
     , m_aProgressFrameColor(NOT_LOADED_COLOR)
     , m_aProgressBarColor(NOT_LOADED_COLOR)
     , m_aProgressTextColor(NOT_LOADED_COLOR)
     , m_bNativeProgress(true)
+    , m_sAppName(rAppName)
     , m_nMax(100)
     , m_nProgress(0)
     , m_bPaintProgress(false)
@@ -84,6 +85,60 @@ SplashScreen::SplashScreen()
     , m_fHeight(-1.0)
 {
     loadConfig();
+
+    // start to determine bitmap and all other required value
+    if (m_bShowLogo)
+        SetScreenBitmap(m_aIntroBmp);
+    Size aSize = m_aIntroBmp.GetSizePixel();
+    m_pWindow->SetOutputSizePixel(aSize);
+    m_pWindow->m_pVDev->SetOutputSizePixel(aSize);
+    m_nHeight = aSize.Height();
+    m_nWidth = aSize.Width();
+    if (m_nWidth > 500)
+    {
+        Point xtopleft(212, 216);
+        if (NOT_LOADED == m_nTlx || NOT_LOADED == m_nTly)
+        {
+            m_nTlx = xtopleft.X(); // top-left x
+            m_nTly = xtopleft.Y(); // top-left y
+        }
+        if (NOT_LOADED == m_nBarwidth)
+            m_nBarwidth = 263;
+        if (NOT_LOADED == m_nBarheight)
+            m_nBarheight = 8;
+    }
+    else
+    {
+        if (NOT_LOADED == m_nBarwidth)
+            m_nBarwidth = m_nWidth - (2 * _xoffset);
+        if (NOT_LOADED == m_nBarheight)
+            m_nBarheight = 6;
+        if (NOT_LOADED == m_nTlx || NOT_LOADED == m_nTly)
+        {
+            m_nTlx = _xoffset; // top-left x
+            m_nTly = m_nHeight - _yoffset; // top-left y
+        }
+    }
+
+    if (NOT_LOADED == m_nTextBaseline)
+        m_nTextBaseline = m_nHeight;
+
+    if (NOT_LOADED_COLOR == m_aProgressFrameColor)
+        m_aProgressFrameColor = COL_LIGHTGRAY;
+
+    if (NOT_LOADED_COLOR == m_aProgressBarColor)
+    {
+        // progress bar: new color only for big bitmap format
+        if (m_nWidth > 500)
+            m_aProgressBarColor = Color(157, 202, 18);
+        else
+            m_aProgressBarColor = COL_BLUE;
+    }
+
+    if (NOT_LOADED_COLOR == m_aProgressTextColor)
+        m_aProgressTextColor = COL_BLACK;
+
+    Application::AddEventListener(LINK(this, SplashScreen, AppEventListenerHdl));
 }
 
 SplashScreen::~SplashScreen()
@@ -149,73 +204,6 @@ void SAL_CALL SplashScreen::setValue(sal_Int32 nValue)
             m_nProgress = nValue;
         updateStatus();
     }
-}
-
-// XInitialize
-void SAL_CALL
-SplashScreen::initialize( const css::uno::Sequence< css::uno::Any>& aArguments )
-{
-    static std::mutex aMutex;
-    std::lock_guard  aGuard( aMutex );
-    if (!aArguments.hasElements())
-        return;
-
-    aArguments[0] >>= m_sAppName;
-
-    // start to determine bitmap and all other required value
-    if (m_bShowLogo)
-        SetScreenBitmap(m_aIntroBmp);
-    Size aSize = m_aIntroBmp.GetSizePixel();
-    m_pWindow->SetOutputSizePixel(aSize);
-    m_pWindow->m_pVDev->SetOutputSizePixel(aSize);
-    m_nHeight = aSize.Height();
-    m_nWidth = aSize.Width();
-    if (m_nWidth > 500)
-    {
-        Point xtopleft(212,216);
-        if (NOT_LOADED == m_nTlx || NOT_LOADED == m_nTly)
-        {
-            m_nTlx = xtopleft.X(); // top-left x
-            m_nTly = xtopleft.Y(); // top-left y
-        }
-        if (NOT_LOADED == m_nBarwidth)
-            m_nBarwidth = 263;
-        if (NOT_LOADED == m_nBarheight)
-            m_nBarheight = 8;
-    }
-    else
-    {
-        if (NOT_LOADED == m_nBarwidth)
-            m_nBarwidth = m_nWidth - (2 * _xoffset);
-        if (NOT_LOADED == m_nBarheight)
-            m_nBarheight = 6;
-        if (NOT_LOADED == m_nTlx || NOT_LOADED == m_nTly)
-        {
-            m_nTlx = _xoffset; // top-left x
-            m_nTly = m_nHeight - _yoffset; // top-left y
-        }
-    }
-
-    if (NOT_LOADED == m_nTextBaseline)
-        m_nTextBaseline = m_nHeight;
-
-    if (NOT_LOADED_COLOR == m_aProgressFrameColor)
-        m_aProgressFrameColor = COL_LIGHTGRAY;
-
-    if (NOT_LOADED_COLOR == m_aProgressBarColor)
-    {
-        // progress bar: new color only for big bitmap format
-        if (m_nWidth > 500)
-            m_aProgressBarColor = Color(157, 202, 18);
-        else
-            m_aProgressBarColor = COL_BLUE;
-    }
-
-    if (NOT_LOADED_COLOR == m_aProgressTextColor)
-        m_aProgressTextColor = COL_BLACK;
-
-    Application::AddEventListener(
-        LINK( this, SplashScreen, AppEventListenerHdl ) );
 }
 
 void SplashScreen::updateStatus()

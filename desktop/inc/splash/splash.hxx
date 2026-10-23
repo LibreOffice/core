@@ -81,7 +81,7 @@ private:
     static constexpr tools::Long _yoffset = 18;
 
 public:
-    SplashScreen();
+    SplashScreen(const OUString& rAppName);
 
     // XStatusIndicator
     virtual void SAL_CALL end() override;
@@ -89,9 +89,6 @@ public:
     virtual void SAL_CALL setText(const OUString& aText) override;
     virtual void SAL_CALL setValue(sal_Int32 nValue) override;
     virtual void SAL_CALL start(const OUString& aText, sal_Int32 nRange) override;
-
-    // XInitialize
-    virtual void SAL_CALL initialize(const css::uno::Sequence<css::uno::Any>& aArguments) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */
