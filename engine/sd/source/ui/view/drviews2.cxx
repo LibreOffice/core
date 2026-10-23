@@ -2205,8 +2205,9 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
                                 aCtx.mnNextPageId = aCtx.mnPageCount - 1;
 
                             aCtx.mnActPageId = aCtx.mnNextPageId;
-                            // Make the view show the page the command runs on
-                            maTabControl->SetCurPageId(aCtx.mnActPageId);
+                            // Make the view show the page the command runs on. The tab control
+                            // names its pages by id, so the index is turned into the id first.
+                            maTabControl->SetCurPageId(maTabControl->GetPageId(aCtx.mnActPageId));
                             SdPage* pPageStandard
                                 = GetDoc()->GetSdPage(aCtx.mnActPageId, PageKind::Standard);
                             mpDrawView->ShowSdrPage(pPageStandard);
@@ -2215,6 +2216,12 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
                         if (pCommand)
                             pCommand->mpHandler(aCtx, aItem3.first, aItem3.second);
                     }
+
+                    // The commands move the draw view to the slide each one runs on. Switch to
+                    // the last of them, so the current part, the tab control and the view all
+                    // name the same slide.
+                    if (aCtx.mnActPageId >= 0)
+                        SwitchPage(aCtx.mnActPageId);
                 }
             }
         }

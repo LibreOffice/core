@@ -497,6 +497,44 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureUndo)
     CPPUNIT_ASSERT_EQUAL(u"Generated title"_ustr, getSlide0Title());
 }
 
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureCurrentSlideIsTheShownSlide)
+{
+    // After a transform, the current slide, which a paint of the current part relies on, is the
+    // slide the view shows: the last slide the commands ran on.
+    createSdImpressDoc();
+
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    auto pViewShell
+        = dynamic_cast<sd::DrawViewShell*>(pImpressDocument->GetDocShell()->GetViewShell());
+    CPPUNIT_ASSERT(pViewShell);
+
+    static constexpr OUString aJson = uR"json(
+{
+    "Transforms": {
+        "SlideCommands": [
+            {"SetText.0": "First slide"},
+            {"InsertMasterSlide": 0},
+            {"SetText.0": "Second slide"},
+            {"InsertMasterSlide": 0},
+            {"SetText.0": "Third slide"}
+        ]
+    }
+}
+)json"_ustr;
+
+    dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr,
+                    { comphelper::makePropertyValue(u"DataJson"_ustr, aJson) });
+
+    SdDrawDocument* pDoc = pImpressDocument->GetDoc();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), pImpressDocument->getDrawPages()->getCount());
+    SdPage* pShownPage = pDoc->GetSdPage(2, PageKind::Standard);
+    CPPUNIT_ASSERT_EQUAL(static_cast<SdrPage*>(pShownPage),
+                         pViewShell->GetView()->GetSdrPageView()->GetPage());
+    CPPUNIT_ASSERT_EQUAL(2, pImpressDocument->getPart());
+    CPPUNIT_ASSERT_EQUAL(pShownPage, pViewShell->GetActualPage());
+}
+
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureInsertSlideNotesMaster)
 {
     // An inserted slide's notes page must keep a notes master. If it instead
