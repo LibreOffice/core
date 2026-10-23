@@ -165,6 +165,50 @@ CPPUNIT_TEST_FIXTURE(SdImportTest, testN820786)
     testDocumentLayout(u"n820786.pptx", u"xml/n820786_", TestFilter::NONE);
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest, testTdf173410)
+{
+    // Given a pptx with two tables that use a style which defines distinct fills for
+    // firstRow/lastRow/firstCol/lastCol and for the four corner cells (nwCell, neCell,
+    // swCell, seCell). Table 1 enables only firstRow and lastRow; table 2 enables all four.
+    createSdImpressDoc("pptx/tdf173410.pptx");
+    const SdrPage* pPage = GetPage(1);
+    CPPUNIT_ASSERT(pPage);
+
+    auto getFill = [](const sdr::table::SdrTableObj* pTableObj, sal_Int32 nCol, sal_Int32 nRow) {
+        uno::Reference<table::XCellRange> xTable(pTableObj->getTable(), uno::UNO_QUERY_THROW);
+        uno::Reference<beans::XPropertySet> xCell(xTable->getCellByPosition(nCol, nRow),
+                                                  uno::UNO_QUERY_THROW);
+        Color nFillColor;
+        xCell->getPropertyValue(u"FillColor"_ustr) >>= nFillColor;
+        return nFillColor;
+    };
+
+    // Table 1: a corner cell only uses its special style if BOTH its row and its column are enabled.
+    auto* pTable1 = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(0));
+    CPPUNIT_ASSERT(pTable1);
+    // Without the fix the first column/last column are disabled, yet the corners used the
+    // nwCell/neCell/swCell/seCell fill (red) instead of the firstRow/lastRow fill.
+    CPPUNIT_ASSERT_EQUAL(Color(0x00ff00), getFill(pTable1, 0, 0)); // NW: firstRow
+    CPPUNIT_ASSERT_EQUAL(Color(0x00ff00), getFill(pTable1, 1, 0)); // firstRow
+    CPPUNIT_ASSERT_EQUAL(Color(0x00ff00), getFill(pTable1, 2, 0)); // NE: firstRow
+    CPPUNIT_ASSERT_EQUAL(Color(0xffffff), getFill(pTable1, 1, 1)); // wholeTbl
+    CPPUNIT_ASSERT_EQUAL(Color(0x0000ff), getFill(pTable1, 0, 2)); // SW: lastRow
+    CPPUNIT_ASSERT_EQUAL(Color(0x0000ff), getFill(pTable1, 1, 2)); // lastRow
+    CPPUNIT_ASSERT_EQUAL(Color(0x0000ff), getFill(pTable1, 2, 2)); // SE: lastRow
+
+    // Table 2: with all four special rows/columns enabled, the corner definitions still apply.
+    auto* pTable2 = dynamic_cast<sdr::table::SdrTableObj*>(pPage->GetObj(1));
+    CPPUNIT_ASSERT(pTable2);
+    CPPUNIT_ASSERT_EQUAL(Color(0xff0000), getFill(pTable2, 0, 0)); // nwCell
+    CPPUNIT_ASSERT_EQUAL(Color(0xff0000), getFill(pTable2, 2, 0)); // neCell
+    CPPUNIT_ASSERT_EQUAL(Color(0xff0000), getFill(pTable2, 0, 2)); // swCell
+    CPPUNIT_ASSERT_EQUAL(Color(0xff0000), getFill(pTable2, 2, 2)); // seCell
+    CPPUNIT_ASSERT_EQUAL(Color(0x00ff00), getFill(pTable2, 1, 0)); // firstRow
+    CPPUNIT_ASSERT_EQUAL(Color(0x0000ff), getFill(pTable2, 1, 2)); // lastRow
+    CPPUNIT_ASSERT_EQUAL(Color(0xffff00), getFill(pTable2, 0, 1)); // firstCol
+    CPPUNIT_ASSERT_EQUAL(Color(0xff00ff), getFill(pTable2, 2, 1)); // lastCol
+}
+
 CPPUNIT_TEST_FIXTURE(SdImportTest, testN762695)
 {
     testDocumentLayout(u"n762695.pptx", u"xml/n762695_", TestFilter::NONE);
