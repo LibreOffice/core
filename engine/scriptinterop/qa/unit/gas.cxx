@@ -128,10 +128,11 @@ protected:
             "var window = globalThis;\n$internal.runGasAddOn('scriptinterop_document_test', ["
             + jsLiteral(read(url)) + "], ["
             + jsLiteral(url) + "], 'test', [], 'scriptinterop_test', [" + libraries + "]);");
-        std::function<void(std::string_view)> hook;
+        std::function<bool(std::string_view)> hook;
         if (proxyCallHook) {
             hook = [proxyCallHook](std::string_view payload) {
                 proxyCallHook(OUString::fromUtf8(payload));
+                return true;
             };
         }
         auto const utf8 = script.toUtf8();

@@ -84,6 +84,8 @@ public:
         Document& document);
     virtual ~ChildSession();
 
+    void cancelPendingProxyCalls();
+
     bool getStatus();
     bool getPartStatus();
     int getViewId() const { return _viewId; }
@@ -153,6 +155,7 @@ public:
     void resetDocManager()
     {
         disconnect();
+        cancelPendingProxyCalls();
         _docManager = nullptr;
     }
 

@@ -10008,6 +10008,23 @@ void COKitDocumentImpl::setColorPreviewState(int nId, bool bEnabled)
     KitHelper::setColorPreviewState(nId, bEnabled);
 }
 
+#if HAVE_FEATURE_QUICKJS
+namespace {
+
+// Whether the proxy callbacks passed to executeScript with some data pointer are detached; the
+// mutex is held while such a callback runs:
+struct ProxyCallbackState {
+    std::mutex mutex;
+    bool detached = false;
+};
+
+// The states of the data pointers passed to executeScript that are not detached yet:
+std::mutex g_proxyCallbackStatesMutex;
+std::map<void *, std::shared_ptr<ProxyCallbackState>> g_proxyCallbackStates;
+
+}
+#endif
+
 COKitScriptResult COKitImpl::executeScript(
     std::string const & script, std::string_view source, int line,
     std::function<void(void * data, std::string_view level, std::string_view message)>
@@ -10020,10 +10037,24 @@ COKitScriptResult COKitImpl::executeScript(
     SetLastExceptionMsg();
     COKitScriptResult aScriptResult;
 #if HAVE_FEATURE_QUICKJS
-    std::function<void(std::string_view)> hook;
+    std::function<bool(std::string_view)> hook;
     if (proxyCallback != nullptr) {
-        hook = [proxyCallback, proxyCallbackData](std::string_view payload) {
+        std::shared_ptr<ProxyCallbackState> state;
+        {
+            std::scoped_lock lock(g_proxyCallbackStatesMutex);
+            auto & entry = g_proxyCallbackStates[proxyCallbackData];
+            if (!entry) {
+                entry = std::make_shared<ProxyCallbackState>();
+            }
+            state = entry;
+        }
+        hook = [proxyCallback, proxyCallbackData, state](std::string_view payload) {
+            std::scoped_lock lock(state->mutex);
+            if (state->detached) {
+                return false;
+            }
             proxyCallback(proxyCallbackData, payload);
+            return true;
         };
     }
     try {
@@ -10095,6 +10126,27 @@ void COKitImpl::cancelProxyCall(std::string_view callId)
     jsuno::cancelProxyCall(callId);
 #else
     (void) callId;
+#endif
+}
+
+void COKitImpl::detachProxyCallback(void * proxyCallbackData)
+{
+    comphelper::ProfileZone zone("lo_detachProxyCallback");
+#if HAVE_FEATURE_QUICKJS
+    std::shared_ptr<ProxyCallbackState> state;
+    {
+        std::scoped_lock lock(g_proxyCallbackStatesMutex);
+        auto const it = g_proxyCallbackStates.find(proxyCallbackData);
+        if (it == g_proxyCallbackStates.end()) {
+            return;
+        }
+        state = std::move(it->second);
+        g_proxyCallbackStates.erase(it);
+    }
+    std::scoped_lock lock(state->mutex);
+    state->detached = true;
+#else
+    (void) proxyCallbackData;
 #endif
 }
 

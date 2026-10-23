@@ -34,6 +34,7 @@
 #include <com/sun/star/beans/XIntrospectionAccess.hpp>
 #include <com/sun/star/container/XEnumeration.hpp>
 #include <com/sun/star/container/XHierarchicalNameAccess.hpp>
+#include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/reflection/InvocationTargetException.hpp>
 #include <com/sun/star/reflection/XCompoundTypeDescription.hpp>
@@ -268,7 +269,7 @@ struct RuntimeData
         JSRuntime* rt,
         std::string_view source_, int line_,
         std::function<void(std::string_view level, std::string_view message)> consoleHook_,
-        std::function<void(std::string_view payload)> proxyCallHook_)
+        std::function<bool(std::string_view payload)> proxyCallHook_)
         : source(source_)
         , line(line_)
         , consoleHook(std::move(consoleHook_))
@@ -298,7 +299,7 @@ struct RuntimeData
     std::function<void(std::string_view level, std::string_view message)> consoleHook;
 
     // Hook captured by every ProxyInvocation created during this execute() call:
-    std::function<void(std::string_view payload)> proxyCallHook;
+    std::function<bool(std::string_view payload)> proxyCallHook;
 
     // Set whenever the script touches the legacy UNO API outside a suppression scope:
     bool usedLegacyUnoApi = false;
@@ -2949,10 +2950,11 @@ std::mutex g_proxyMapMutex;
 std::map<OUString, cpo::uno::Reference<cpo::uno::XInterface>> g_proxyMap;
 
 // Per-callId rendezvous between ProxyInvocation::invoke (spinning Application::Yield) and
-// jsuno::deliverProxyResult:
+// jsuno::deliverProxyResult or jsuno::cancelProxyCall:
 struct PendingProxyResult
 {
-    bool delivered = false;
+    enum class State { Pending, Delivered, Cancelled };
+    State state = State::Pending;
     std::string json;
 };
 std::mutex g_pendingProxyResultsMutex;
@@ -3004,7 +3006,7 @@ class ProxyInvocation final : public cppu::WeakImplHelper<css::script::XInvocati
 {
 public:
     ProxyInvocation(cpo::uno::Type interfaceType, OUString proxyId,
-                    std::function<void(std::string_view payload)> proxyCallHook)
+                    std::function<bool(std::string_view payload)> proxyCallHook)
         : m_interfaceType(std::move(interfaceType))
         , m_proxyId(std::move(proxyId))
         , m_proxyCallHook(std::move(proxyCallHook))
@@ -3079,7 +3081,17 @@ public:
         }
         if (m_proxyCallHook)
         {
-            m_proxyCallHook(payload);
+            if (!m_proxyCallHook(payload)) {
+                if (isVoid) {
+                    return {};
+                }
+                {
+                    std::lock_guard lock(g_pendingProxyResultsMutex);
+                    g_pendingProxyResults.erase(callId);
+                }
+                throw css::lang::DisposedException(
+                    "proxy call " + OUString::fromUtf8(callId) + " not made, as its session ended");
+            }
         }
 
         if (isVoid)
@@ -3103,19 +3115,26 @@ public:
         comphelper::ScopeGuard restoreView(
             [view = KitHelper::getCurrentView()] { KitHelper::setView(view); });
         std::string jsonResult;
+        auto state = PendingProxyResult::State::Pending;
         for (;;)
         {
             {
                 std::lock_guard lock(g_pendingProxyResultsMutex);
                 auto const it = g_pendingProxyResults.find(callId);
-                if (it != g_pendingProxyResults.end() && it->second.delivered)
+                if (it != g_pendingProxyResults.end()
+                    && it->second.state != PendingProxyResult::State::Pending)
                 {
                     jsonResult = std::move(it->second.json);
+                    state = it->second.state;
                     g_pendingProxyResults.erase(it);
                     break;
                 }
             }
             Application::Yield();
+        }
+        if (state == PendingProxyResult::State::Cancelled) {
+            throw css::lang::DisposedException(
+                "proxy call " + OUString::fromUtf8(callId) + " cancelled, as its session ended");
         }
         return comphelper::parseJsonToAny(OUString::fromUtf8(jsonResult), returnType);
     }
@@ -3131,7 +3150,7 @@ public:
 private:
     cpo::uno::Type m_interfaceType;
     OUString m_proxyId;
-    std::function<void(std::string_view payload)> m_proxyCallHook;
+    std::function<bool(std::string_view payload)> m_proxyCallHook;
 };
 
 JSValue internalCreateProxy(JSContext* ctx, JSValueConst, [[maybe_unused]] int argc, JSValueConst* argv)
@@ -3437,7 +3456,7 @@ jsuno::Exception::~Exception() = default;
 jsuno::Result jsuno::execute(
     std::u8string_view prelude, std::string_view script, std::string_view source, int line,
     std::function<void(std::string_view level, std::string_view message)> consoleHook,
-    std::function<void(std::string_view payload)> proxyCallHook)
+    std::function<bool(std::string_view payload)> proxyCallHook)
 {
     auto const rt = JS_NewRuntime();
     JS_SetMaxStackSize(rt, 4 * 1024 * 1024); // from default 256 KiB to 4 MiB
@@ -3660,20 +3679,19 @@ void jsuno::deliverProxyResult(std::string_view callId, std::string_view jsonVal
     {
         return;
     }
-    it->second.delivered = true;
+    it->second.state = PendingProxyResult::State::Delivered;
     it->second.json = jsonValue;
 }
 
-// Unblock the ProxyInvocation::invoke spinning on callId by marking its pending entry as delivered
-// with an empty JSON body, so a closed iframe can't leave the kit waiting forever:
+// Unblock the ProxyInvocation::invoke spinning on callId by marking its pending entry as
+// cancelled, so a closed iframe can't leave the kit waiting forever:
 void jsuno::cancelProxyCall(std::string_view callId)
 {
     std::lock_guard lock(g_pendingProxyResultsMutex);
     auto const it = g_pendingProxyResults.find(callId);
     if (it != g_pendingProxyResults.end())
     {
-        it->second.delivered = true;
-        it->second.json.clear();
+        it->second.state = PendingProxyResult::State::Cancelled;
     }
 }
 

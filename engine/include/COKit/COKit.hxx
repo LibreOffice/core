@@ -1839,8 +1839,9 @@ struct COKit
      * with the @c proxyCallbackData pointer and a UTF-8 JSON payload describing the call (see
      * jsuno::execute), valid only for the duration of the callback.  The callback may fire
      * synchronously while @c script runs, or later from any thread for as long as the proxy is
-     * registered.  Each proxy keeps the callback it captured at creation time, so a later
-     * executeScript with a different callback only affects proxies created by that later call.
+     * registered, until detachProxyCallback is called for @c proxyCallbackData.  Each proxy keeps
+     * the callback it captured at creation time, so a later executeScript with a different
+     * callback only affects proxies created by that later call.
      *
      * @param script the script source.
      * @param source used for any exception stack frames that are reported back.
@@ -1879,14 +1880,27 @@ struct COKit
 
     /**
      * Cancel one in-flight JS-UNO proxy listener call by unblocking the
-     * ProxyInvocation::invoke waiting for it in Application::Yield, treating the call as if the
-     * iframe had returned an empty value.
+     * ProxyInvocation::invoke waiting for it in Application::Yield, which then throws a
+     * DisposedException.
      *
      * Spurious callIds (no matching pending invoke) are silently ignored.
      *
      * @param callId opaque token matching one previously delivered to proxyCallback.
      */
     virtual void cancelProxyCall(std::string_view callId) = 0;
+
+    /**
+     * Detach the proxy callbacks that executeScript was given together with @c proxyCallbackData.
+     * Once this returns, none of them is called again.  A call to a JS-UNO proxy listener that
+     * captured one of them then does nothing for a method with a void return type, and throws a
+     * DisposedException for any other method.  This waits for a call of such a callback that runs
+     * on another thread, so it must not be called from within the callback.
+     *
+     * Unknown proxyCallbackData pointers are silently ignored.
+     *
+     * @param proxyCallbackData opaque pointer previously passed to executeScript.
+     */
+    virtual void detachProxyCallback(void * proxyCallbackData) = 0;
 
     /**
      * Whether the current thread is inside a window where it has explicitly opted into a kitPoll

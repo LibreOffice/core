@@ -2779,6 +2779,7 @@ bool Document::forwardToChild(const std::string_view prefix, const std::vector<c
                 session->sendTextFrame("disconnected:");
 
                 _sessions.erase(it);
+                session->cancelPendingProxyCalls();
                 const std::size_t count = _sessions.size();
                 LOG_DBG("Have " << count << " child" << (count == 1 ? "" : "ren") <<
                         " after removing ChildSession [" << sessionId << "].");

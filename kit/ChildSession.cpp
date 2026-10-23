@@ -159,8 +159,13 @@ ChildSession::~ChildSession()
     }
 
     // The iframe that would have answered this session's in-flight proxy listener calls is gone:
+    cancelPendingProxyCalls();
+}
+
+void ChildSession::cancelPendingProxyCalls() {
     if (_docManager != nullptr)
     {
+        _docManager->getLOKit()->detachProxyCallback(this);
         std::set<std::string> callIds;
         {
             std::scoped_lock lock(_pendingProxyCallIdsMutex);
@@ -5226,9 +5231,8 @@ bool ChildSession::executeScript(char const * buffer, int length, StringVector c
 
     getLOKitDocument()->setView(_viewId);
 
-    // Capturing `this` is safe even though the proxy callback can fire long after
-    // executeScript has returned, since the callback runs only while the proxy stays
-    // attached and ChildSession outlives that:
+    // The proxy callback can fire long after executeScript has returned, until
+    // cancelPendingProxyCalls detaches it from this session:
     const COKitScriptResult aScriptResult = _docManager->getLOKit()->executeScript(
         script, source, line,
         [](void * data, std::string_view level, std::string_view message) {

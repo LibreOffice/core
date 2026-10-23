@@ -67,20 +67,22 @@ struct Result {
 //     { "proxyId": "...", "callId": "...", "method": "...", "args": [...] }
 //
 // where `callId` is present iff the proxy's invoke is going to wait for a value back via
-// deliverProxyResult (i.e. the listener method has a non-void return type).
+// deliverProxyResult (i.e. the listener method has a non-void return type).  The hook returns false
+// when it can no longer pass calls on; a void call then does nothing, and a non-void call throws a
+// DisposedException.
 //
 // @throws jsuno::Exception
 LO_DLLPUBLIC_JSUNO Result execute(
     std::u8string_view prelude, std::string_view script, std::string_view source, int line,
     std::function<void(std::string_view level, std::string_view message)> consoleHook,
-    std::function<void(std::string_view payload)> proxyCallHook);
+    std::function<bool(std::string_view payload)> proxyCallHook);
 
 // Deliver an iframe-side `jsonValue` to a `ProxyInvocation::invoke` blocked in Application::
 // Yield on `callId`; spurious callIds are silently ignored:
 LO_DLLPUBLIC_JSUNO void deliverProxyResult(std::string_view callId, std::string_view jsonValue);
 
-// Unblock the ProxyInvocation::invoke spinning on `callId` by marking the call as delivered with an
-// empty JSON value; spurious callIds are silently ignored:
+// Unblock the ProxyInvocation::invoke spinning on `callId` by ending the call with a
+// DisposedException; spurious callIds are silently ignored:
 LO_DLLPUBLIC_JSUNO void cancelProxyCall(std::string_view callId);
 }
 
