@@ -42,7 +42,8 @@ constexpr const char* EXTRACT_WRITER =
     "specific part without reading the whole body, first call "
     "extract_link_targets to get the heading or section target, then call this "
     "with filter=\"text\" and the target argument set to that target string "
-    "(e.g. \"Introduction|outline\" for a heading's section, \"Summary|region\" "
+    "copied exactly as extract_link_targets gives it (e.g. \"1.Introduction|outline\" for "
+    "the first heading's section, \"Summary|region\" "
     "for a named section). If the document is too large to read in full, "
     "filter=\"text\" with no target returns no body text and instead supplies "
     "link_targets and an instruction: show the listed sections to the user, "
@@ -105,7 +106,7 @@ UnoCommand levels - there are three places to use UnoCommand, each for a differe
 2. Inside SlideCommands but outside EditTextObject - applies a command in the slide context without entering text edit mode. Use for: operations on the slide or selected objects that do not require text selection.
    Format: {"UnoCommand": ".uno:CommandName"}
 
-3. Top-level (outside SlideCommands, works for all doc types) - dispatches a command at the document level. Use for: document-wide settings like change tracking, spell checking, or other global toggles.
+3. Top-level (outside SlideCommands, works for text documents and presentations) - dispatches a command at the document level. Use for: document-wide settings like change tracking, spell checking, or other global toggles.
    Format: {"UnoCommand": {"name": ".uno:CommandName", "arguments": {"ArgName": {"type": "string|long|boolean", "value": "..."}}}}
    Example - enable change tracking:
    {"UnoCommand": {"name": ".uno:TrackChanges", "arguments": {"TrackChanges": {"type": "boolean", "value": "true"}}}}
@@ -128,7 +129,7 @@ constexpr const char* DECK_SLIDE_SHAPE =
 - "image": only for the "image" intent, {"brief": "a description to generate an image from", "alt": "short alt text"}.
 - "notes": optional speaker notes for the slide. Put depth in the notes and keep the slide text scannable.
 
-Inside bullet items and text blocks you may emphasise words with **bold** and *italic*. No other markdown is supported.
+Inside bullet items and text blocks you may emphasise words with **bold** and *italic*. No other markdown is supported. Some designs set body text in bold, so *italic* is the emphasis that always shows.
 
 Which blocks each intent expects:
 - title, closing: no blocks, or a single text block used as a subtitle.
@@ -166,6 +167,10 @@ constexpr const char* TRANSFORM_WRITER =
 For Writer, address content control items by selector:
 {"Transforms": {"ContentControls.ByIndex.0": {"content": "new value"}}}
 Selectors: ContentControls.ByIndex.N, ContentControls.ByTag.tagname, ContentControls.ByAlias.aliasname. Use extract_document_structure with filter="contentcontrol" first to discover available controls.
+
+Replace text throughout the document with ReplaceText, one replacement or an array of them:
+{"Transforms": {"ReplaceText": [{"search": "old text", "replace": "new text", "matchCase": true, "wholeWords": false}]}}
+matchCase is true and wholeWords is false when left out. A search that matches nothing comes back as a warning.
 
 Top-level UnoCommand (document-wide) dispatches a command at the document level. Use for global toggles like change tracking.
 Format: {"UnoCommand": {"name": ".uno:CommandName", "arguments": {"ArgName": {"type": "string|long|boolean", "value": "..."}}}}
