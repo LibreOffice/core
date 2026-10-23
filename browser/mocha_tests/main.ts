@@ -107,4 +107,5 @@
 /// <reference path="./MochaHarness.test.ts" />
 /// <reference path="./AIChatSidebar.test.ts" />
 /// <reference path="./NotebookbarTabs.test.ts" />
+/// <reference path="./DocPartChanged.test.ts" />
 // NOTE: reference new tests here ...

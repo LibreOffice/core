@@ -86,6 +86,7 @@
 /// <reference path="../src/geometry/Matrix2D.ts" />
 /// <reference path="../src/geometry/Range2D.ts" />
 /// <reference path="../src/app/dom/DomUtil.ts" />
+/// <reference path="../src/map/DocPartChanged.ts" />
 /// <reference path="../src/control/Control.IdleHandler.ts" />
 /// <reference path="../src/layer/tile/SheetSwitch.ts" />
 /// <reference path="../src/layer/tile/SheetGeometry.ts" />

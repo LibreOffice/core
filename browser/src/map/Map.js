@@ -3,7 +3,7 @@
  * window.L.Map is the central class of the API - it is used to create a map.
  */
 
-/* global app _ Cursor JSDialog RenderManager cool InternPointUtil SecurityLabelBanner */
+/* global app _ Cursor JSDialog RenderManager cool InternPointUtil SecurityLabelBanner DocPartChanged */
 
 window.L.Map = window.L.Evented.extend({
 
@@ -257,50 +257,10 @@ window.L.Map = window.L.Evented.extend({
 		//Last modified time of document saved state
 		this._lastModDateValue = '';
 
-		// Last part for which Doc_PartChanged was fired
-		this._lastPart = -1;
-		this._lastPartCount = -1;
-		this._lastPartDocType = '';
-
-		var fireDocPartChanged = function(part, partCount, docType) {
-			var normalizedPart = Number(part);
-			var normalizedPartCount = Number(partCount);
-
-			if (!Number.isInteger(normalizedPart) || !Number.isInteger(normalizedPartCount)) {
-				return;
-			}
-
-			if (normalizedPart !== this._lastPart || normalizedPartCount !== this._lastPartCount || docType !== this._lastPartDocType) {
-				this._lastPart = normalizedPart;
-				this._lastPartCount = normalizedPartCount;
-				this._lastPartDocType = docType;
-				this.fire('postMessage', {msgId: 'Doc_PartChanged', args: { Part: normalizedPart + 1, PartCount: normalizedPartCount, DocType: docType }});
-			}
-		}.bind(this);
-
-		this.on('pagenumberchanged', function(e) {
-			if (!e) {
-				return;
-			}
-
-			fireDocPartChanged(e.currentPage, e.pages, e.docType);
-		}, this);
-
-		this.on('setpart', function(e) {
-			if (!e || e.selectedPart === undefined || e.parts === undefined || e.docType === undefined) {
-				return;
-			}
-
-			fireDocPartChanged(e.selectedPart, e.parts, e.docType);
-		}, this);
-
-		this.on('updateparts', function(e) {
-			if (!e || e.selectedPart === undefined || e.parts === undefined || e.docType === undefined) {
-				return;
-			}
-
-			fireDocPartChanged(e.selectedPart, e.parts, e.docType);
-		}, this);
+		this._docPartChanged = new DocPartChanged(function(message) {
+			this.fire('postMessage', message);
+		}.bind(this));
+		this._docPartChanged.listenTo(this);
 
 		this.on('commandstatechanged', function(e) {
 			if (e.commandName === '.uno:ModifiedStatus') {

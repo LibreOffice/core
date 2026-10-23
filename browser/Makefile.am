@@ -503,6 +503,7 @@ COOL_JS_LST =\
 	src/app/dom/DomUtil.ts \
 	src/app/InternUtil.ts \
 	src/control/IFrameDialog.js \
+	src/map/DocPartChanged.ts \
 	src/map/Map.js \
 	src/control/Control.IdleHandler.ts \
 	src/map/Clipboard.js \
