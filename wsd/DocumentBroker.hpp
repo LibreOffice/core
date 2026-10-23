@@ -2405,6 +2405,8 @@ private:
     Util::LoadTimings _loadTimings;
     bool _firstTileSent = false;
     bool _loadStampsSent = false;
+    /// App builds: the version store still owes a copy of the file as opened.
+    bool _snapshotBeforeFirstWrite = false;
 
     /// Versioning is used to prevent races between
     /// painting and invalidation.

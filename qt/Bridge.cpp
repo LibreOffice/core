@@ -567,7 +567,8 @@ QString Bridge::writeRemoteDocFile(const QString& filename,
     }
 
     const QString ext = QString::fromStdString(extension);
-    QTemporaryFile tmp(QDir::tempPath() + "/coda-XXXXXX." + ext);
+    // The version store excludes this prefix (see initializeVersionStore).
+    QTemporaryFile tmp(QDir::tempPath() + "/coda-remote-XXXXXX." + ext);
     if (!tmp.open())
     {
         LOG_ERR("writeRemoteDocFile: cannot open temp file");

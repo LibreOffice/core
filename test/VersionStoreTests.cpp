@@ -19,6 +19,8 @@
 #include <test/lokassert.hpp>
 
 #include <common/FileUtil.hpp>
+#include <common/Prefs.hpp>
+#include <common/VersionSettings.hpp>
 #include <common/VersionStore.hpp>
 
 #include <cppunit/extensions/HelperMacros.h>
@@ -61,6 +63,7 @@ class VersionStoreTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testClearHistory);
     CPPUNIT_TEST(testScanRebuildAndOrphanSweep);
     CPPUNIT_TEST(testGlobalCapEviction);
+    CPPUNIT_TEST(testLimitsFromPrefs);
     CPPUNIT_TEST(testDocKeyFromPortalHostPath);
     CPPUNIT_TEST(testDocKeyPlainAndSymlinkedPath);
     CPPUNIT_TEST(testPortalHostPath);
@@ -87,6 +90,7 @@ class VersionStoreTests : public CPPUNIT_NS::TestFixture
     void testClearHistory();
     void testScanRebuildAndOrphanSweep();
     void testGlobalCapEviction();
+    void testLimitsFromPrefs();
     void testDocKeyFromPortalHostPath();
     void testDocKeyPlainAndSymlinkedPath();
     void testPortalHostPath();
@@ -105,6 +109,7 @@ public:
 private:
     std::string versionsRoot() const { return _root + "/versions"; }
     std::string exportsDir() const { return _root + "/exports"; }
+    std::string prefsFile() const { return _root + "/coda-prefs.json"; }
 
     void initStore(versioning::Limits limits,
                    std::vector<std::string> excluded = std::vector<std::string>())
@@ -604,6 +609,43 @@ void VersionStoreTests::testGlobalCapEviction()
     std::string survivorContent((std::istreambuf_iterator<char>(stream)),
                                 std::istreambuf_iterator<char>());
     LOK_ASSERT_EQUAL(content + "a3", survivorContent);
+}
+
+void VersionStoreTests::testLimitsFromPrefs()
+{
+    constexpr std::string_view testname = __func__;
+
+    Prefs prefs(prefsFile());
+    versioning::Limits limits = versioning::limitsFromPrefs(prefs);
+    LOK_ASSERT(limits.enabled);
+    LOK_ASSERT_EQUAL(static_cast<std::int64_t>(600),
+                     static_cast<std::int64_t>(limits.mergeWindow.count()));
+    LOK_ASSERT_EQUAL(static_cast<std::size_t>(120), limits.maxVersionsPerDoc);
+    LOK_ASSERT_EQUAL(static_cast<std::uint64_t>(128) << 20, limits.maxFileSizeBytes);
+    LOK_ASSERT_EQUAL(static_cast<std::uint64_t>(4096) << 20, limits.maxStoreSizeBytes);
+
+    prefs.set("versions.enabled", "false");
+    prefs.set("versions.mergeWindowSecs", "0");
+    prefs.set("versions.maxPerDoc", "0");
+    prefs.set("versions.maxFileSizeMB", "garbage");
+    prefs.set("versions.maxStoreSizeMB", "7");
+    limits = versioning::limitsFromPrefs(prefs);
+    LOK_ASSERT(!limits.enabled);
+    LOK_ASSERT_EQUAL(static_cast<std::int64_t>(0),
+                     static_cast<std::int64_t>(limits.mergeWindow.count()));
+    // A zero cap would delete every version kept so far.
+    LOK_ASSERT_EQUAL(static_cast<std::size_t>(1), limits.maxVersionsPerDoc);
+    LOK_ASSERT_EQUAL(static_cast<std::uint64_t>(128) << 20, limits.maxFileSizeBytes);
+    // The storage limit is at least the file size limit.
+    LOK_ASSERT_EQUAL(static_cast<std::uint64_t>(128) << 20, limits.maxStoreSizeBytes);
+
+    prefs.set("versions.maxFileSizeMB", "5");
+    limits = versioning::limitsFromPrefs(prefs);
+    LOK_ASSERT_EQUAL(static_cast<std::uint64_t>(5) << 20, limits.maxFileSizeBytes);
+    LOK_ASSERT_EQUAL(static_cast<std::uint64_t>(7) << 20, limits.maxStoreSizeBytes);
+
+    // The clamp is not written back.
+    LOK_ASSERT_EQUAL(std::string("0"), Prefs(prefsFile()).get("versions.maxPerDoc"));
 }
 
 void VersionStoreTests::testDocKeyFromPortalHostPath()

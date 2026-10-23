@@ -20,6 +20,8 @@
 #include <common/DraftStore.hpp>
 #include <common/FileUtil.hpp>
 #include <common/Log.hpp>
+#include <common/Prefs.hpp>
+#include <common/VersionSettings.hpp>
 #include <COKit/COKit.hxx>
 #include <qt/qt.hpp>
 #include <Poco/URI.h>
@@ -28,9 +30,11 @@
 #include <QDBusMessage>
 #include <QDBusReply>
 #include <QDBusConnectionInterface>
+#include <QDir>
 #include <QFile>
 #include <QFileInfo>
 #include <QMessageBox>
+#include <QStandardPaths>
 
 constexpr const char* SERVICE_NAME = "com.collaboraoffice.Office";
 constexpr const char* OBJECT_PATH = "/com/collaboraoffice/Office";
@@ -130,6 +134,18 @@ namespace coda
         }
         surfaceWindow(tw);
         return true;
+    }
+
+    void initializeVersionStore()
+    {
+        const QString appData =
+            QStandardPaths::writableLocation(QStandardPaths::AppDataLocation);
+        std::vector<std::string> excluded;
+        excluded.push_back((QDir::tempPath() + QStringLiteral("/coda-remote-")).toStdString());
+        excluded.push_back(getDataDir());
+
+        versioning::initializeForApp(appData.toStdString(), Application::getPrefs(),
+                                     std::move(excluded), drafts::directory());
     }
 }
 

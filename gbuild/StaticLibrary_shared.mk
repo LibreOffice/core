@@ -58,6 +58,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,shared, \
     common/Log-common \
     common/Log-poco \
     common/MobileApp \
+    common/Prefs \
     common/ProcUtil \
     common/Protocol \
     common/RegexUtil \
@@ -77,6 +78,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,shared, \
     common/Util-linux \
     common/Util-server \
     common/Util-unix \
+    common/VersionSettings \
     common/VersionStore \
     common/Watchdog-unix \
     kit/KitQueue \

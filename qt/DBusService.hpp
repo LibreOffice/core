@@ -33,6 +33,10 @@ namespace coda
     // Call after drafts::deleteMarked(). Returns whether anything was
     // recovered.
     bool recoverDrafts();
+
+    // Call at startup before any document opens. Retention pruning and
+    // the orphan sweep run here because nothing runs after Util::forcedExit.
+    void initializeVersionStore();
 }
 
 class DBusService : public QObject

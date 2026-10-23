@@ -386,6 +386,8 @@ int main(int argc, char** argv)
         QStandardPaths::writableLocation(QStandardPaths::AppDataLocation).toStdString());
     drafts::deleteMarked();
 
+    coda::initializeVersionStore();
+
     // Forced read-only mode could not save the drafts; the files stay for
     // the next normal run.
     bool recoveredDrafts = false;

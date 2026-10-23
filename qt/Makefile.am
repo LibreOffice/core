@@ -31,7 +31,6 @@ cmake_list= \
             ../common/SettingsStorage.cpp \
             ../common/Crypto-stub.cpp \
             ../common/MobileApp.cpp \
-            ../common/Prefs.cpp \
             ../common/SigUtil-mobile.cpp \
             ../common/Unit-mobile.cpp \
             ../common/Util-mobile.cpp \
