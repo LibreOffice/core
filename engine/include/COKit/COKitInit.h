@@ -340,6 +340,7 @@ static void *cok_dlopen( const char *install_path, char ** _imp_lib )
         return dlhandle;
     }
 
+    free(imp_lib);
     return NULL;
 }
 #endif
