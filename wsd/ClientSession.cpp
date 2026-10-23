@@ -173,6 +173,7 @@ ClientSession::ClientSession(const std::shared_ptr<ProtocolHandlerInterface>& ws
     , _isRemoteDocumentConnection(requestDetails.isRemoteDocument())
     , _resyncOnNextLoad(false)
     , _nextStatusReattached(false)
+    , _firstTileSent(false)
 {
     const std::size_t curConnections = ++COOLWSD::NumConnections;
     LOG_INF("ClientSession ctor [" << getName() << "] for URI: [" << _uriPublic.toString()

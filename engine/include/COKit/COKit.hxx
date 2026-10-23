@@ -2595,6 +2595,14 @@ struct COKitDocument
     virtual void setAccessibilityState(int nId, bool nEnabled) = 0;
 
     /**
+     * The client of the view has received its first tile, so the view shows the document
+     * now.
+     *
+     * @param nId a view ID, returned by createView().
+     */
+    virtual void viewGotFirstTile(int nId) = 0;
+
+    /**
      *  Get the current focused paragraph info:
      *  {
      *      "content": paragraph content

@@ -715,6 +715,7 @@ bool ChildSession::_handleInput(const char *buffer, int length)
                tokens.equals(0, "rendersearchresult") ||
                tokens.equals(0, "contentcontrolevent") ||
                tokens.equals(0, "a11ystate") ||
+               tokens.equals(0, "firsttilesent") ||
                tokens.equals(0, "geta11yfocusedparagraph") ||
                tokens.equals(0, "geta11ycaretposition") ||
                tokens.equals(0, "toggletiledumping") ||
@@ -1114,6 +1115,10 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         else if (tokens.equals(0, "a11ystate"))
         {
             return setAccessibilityState(tokens[1] == "true");
+        }
+        else if (tokens.equals(0, "firsttilesent"))
+        {
+            return firstTileSent();
         }
         else if (tokens.equals(0, "geta11yfocusedparagraph"))
         {
@@ -5118,6 +5123,12 @@ bool ChildSession::setTextCursor(const StringVector& tokens)
 bool ChildSession::setAccessibilityState(bool enable)
 {
     getLOKitDocument()->setAccessibilityState(_viewId, enable);
+    return true;
+}
+
+bool ChildSession::firstTileSent()
+{
+    getLOKitDocument()->viewGotFirstTile(_viewId);
     return true;
 }
 

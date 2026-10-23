@@ -419,6 +419,7 @@ namespace desktop {
         int getEditMode() override;
         void setViewTimezone(int nId, const char* pTimezone) override;
         void setAccessibilityState(int nId, bool nEnabled) override;
+        void viewGotFirstTile(int nId) override;
         std::string getA11yFocusedParagraph() override;
         int getA11yCaretPosition() override;
         void setViewReadOnly(int nId, const bool readOnly) override;

@@ -53,6 +53,11 @@ public:
     /// has one afterwards. Only a desktop or tablet view gets one.
     static bool CreateForView(SfxViewShell& rViewShell);
 
+    /// Creates the online notebookbar for the view from the main loop, once the work that is
+    /// running now has finished. A view that has one already, or whose creation is pending, is
+    /// left as it is.
+    static void CreateForViewWhenIdle(SfxViewShell& rViewShell);
+
     /** Show menu bar in all frames of current application */
     static void ShowMenubar(bool bShow);
     static void ToggleMenubar();
@@ -63,6 +68,7 @@ private:
     static void RemoveCurrentKitWrapper();
 
     DECL_DLLPRIVATE_STATIC_LINK(SfxNotebookBar, VclDisposeHdl, const SfxViewShell*, void);
+    DECL_DLLPRIVATE_STATIC_LINK(SfxNotebookBar, CreateForViewHdl, void*, void);
 };
 
 } // namespace sfx2

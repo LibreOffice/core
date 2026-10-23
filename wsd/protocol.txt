@@ -731,6 +731,13 @@ viewparked value=<0|1>
     On value=0 this view also receives its 'canonicalidchange:' again, since the
     browser rebuilt its tile layer and fetches no tiles until it has the id.
 
+firsttilesent
+
+    Sent by coolwsd for its own view, never by a client, right after the first
+    tile went to this view's browser, whether that tile came from the tile cache
+    or was rendered. The view's online notebookbar is built in the kit after it,
+    so the notebookbar JSON follows the first tile.
+
 closedocument
 
     This gives document owners the ability to terminate all sessions currently

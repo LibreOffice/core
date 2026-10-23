@@ -2553,6 +2553,7 @@ public:
     int m_nDocSizeChanged = 0;
     int m_nTextViewSelection = 0;
     int m_nNotebookbarMessages = 0;
+    bool m_bNotebookbarHasOwnFontNameBox = false;
     OString m_aLastContext;
     boost::property_tree::ptree m_aColorPaletteCallbackResult;
     RedlineInfo m_aLastRedlineInfo;
@@ -2679,7 +2680,12 @@ public:
 
             if (m_JSONDialog.find("jsontype") != m_JSONDialog.not_found()
                 && m_JSONDialog.get_child("jsontype").get_value<std::string>() == "notebookbar")
+            {
                 ++m_nNotebookbarMessages;
+                if (std::string_view(pPayload).find("\"id\": \"fontnamecombobox\"")
+                    != std::string_view::npos)
+                    m_bNotebookbarHasOwnFontNameBox = true;
+            }
 
             if (m_JSONDialog.find("jsontype") != m_JSONDialog.not_found() && m_JSONDialog.get_child("jsontype").get_value<std::string>() == "dialog")
             {
@@ -4867,6 +4873,15 @@ void DesktopKitTest::testTableContextOnLoad()
     CPPUNIT_ASSERT(aView1.m_aLastContext.indexOf("Table"_ostr) != -1);
 }
 
+namespace
+{
+void firstTileReachedClient(COKitDocumentImpl* pDocument, int nViewId)
+{
+    pDocument->viewGotFirstTile(nViewId);
+    Scheduler::ProcessEventsToIdle();
+}
+}
+
 void DesktopKitTest::testNotebookbarAfterViewClosedEarly()
 {
     // The notebookbar is built for a desktop view. The form factor is read when a view is
@@ -4876,10 +4891,16 @@ void DesktopKitTest::testNotebookbarAfterViewClosedEarly()
 
     COKitDocumentImpl* pDocument = loadDoc("blank_text.odt");
     pDocument->initializeForRendering("{}");
+    const int nFirstView = pDocument->getView();
     ViewCallback aView1(pDocument);
     Scheduler::ProcessEventsToIdle();
-    CPPUNIT_ASSERT_MESSAGE("the first view gets its notebookbar",
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("nothing is built before the view shows anything", 0,
+                                 aView1.m_nNotebookbarMessages);
+
+    firstTileReachedClient(pDocument, nFirstView);
+    CPPUNIT_ASSERT_MESSAGE("the first view gets its notebookbar after its first tile",
                            aView1.m_nNotebookbarMessages > 0);
+    CPPUNIT_ASSERT(aView1.m_bNotebookbarHasOwnFontNameBox);
 
     // A view that goes away before it is set up any further, as when a tab is closed while
     // the document is still loading.
@@ -4888,12 +4909,18 @@ void DesktopKitTest::testNotebookbarAfterViewClosedEarly()
     Scheduler::ProcessEventsToIdle();
     pDocument->destroyView(nShortLivedView);
 
-    // The next view gets its notebookbar as soon as it can receive it.
-    pDocument->createViewWithOptions("DeviceFormFactor=desktop");
+    // The next view gets its notebookbar once its client shows something too. Its first tile
+    // reaches that client while the first view is the current one, as when the first user is
+    // the one typing, and the notebookbar is still the later view's own.
+    const int nThirdView = pDocument->createViewWithOptions("DeviceFormFactor=desktop");
     pDocument->initializeForRendering("{}");
     ViewCallback aView3(pDocument);
-    Scheduler::ProcessEventsToIdle();
+    pDocument->setView(nFirstView);
+    CPPUNIT_ASSERT_EQUAL(nFirstView, pDocument->getView());
+    firstTileReachedClient(pDocument, nThirdView);
     CPPUNIT_ASSERT_MESSAGE("a later view gets its notebookbar", aView3.m_nNotebookbarMessages > 0);
+    CPPUNIT_ASSERT_MESSAGE("the later view's notebookbar has its own item windows",
+                           aView3.m_bNotebookbarHasOwnFontNameBox);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopKitTest);

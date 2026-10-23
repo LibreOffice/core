@@ -11,6 +11,8 @@
 #include <sfx2/viewsh.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/notebookbar/SfxNotebookBar.hxx>
+#include <sfx2/kit/helper.hxx>
+#include <vcl/svapp.hxx>
 #include <vcl/syswin.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <sfx2/weldutils.hxx>
@@ -26,6 +28,7 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XMultiComponentFactory.hpp>
 #include <comphelper/diagnose_ex.hxx>
+#include <algorithm>
 #include <memory>
 #include <vector>
 #include <unordered_map>
@@ -69,6 +72,10 @@ struct NotebookBarViewData
         m_aExtraToolbarUnoDispatchers.clear();
     }
 };
+
+/** The ids of the views whose notebookbar creation is posted to the main loop and has not run
+    yet. */
+std::vector<int> g_aViewsWithCreationPending;
 
 /** Creates the UNO component which drives the non-toolbar widgets of a welded
     notebookbar panel, handing it the builder of that panel's .ui. */
@@ -326,6 +333,53 @@ bool SfxNotebookBar::CreateForView(SfxViewShell& rViewShell)
     }
 
     return true;
+}
+
+void SfxNotebookBar::CreateForViewWhenIdle(SfxViewShell& rViewShell)
+{
+    if (!comphelper::COKit::isActive())
+        return;
+
+    // The same checks that decide whether the view gets one at all, so that nothing is posted
+    // for a phone view or for a view that has its notebookbar already.
+    if (!rViewShell.isKitDesktop() && !rViewShell.isKitTablet())
+        return;
+
+    const int nViewId = rViewShell.GetViewShellId().get();
+    if (std::find(g_aViewsWithCreationPending.begin(), g_aViewsWithCreationPending.end(), nViewId)
+        != g_aViewsWithCreationPending.end())
+        return;
+
+    if (NotebookBarViewManager::get().getViewData(&rViewShell).m_pWeldedWrapper)
+        return;
+
+    g_aViewsWithCreationPending.push_back(nViewId);
+
+    // The view is named by its id rather than by pointer, because it can go away before the
+    // event runs.
+    Application::PostUserEvent(LINK(nullptr, SfxNotebookBar, CreateForViewHdl),
+                               reinterpret_cast<void*>(static_cast<sal_IntPtr>(nViewId)));
+}
+
+IMPL_STATIC_LINK(SfxNotebookBar, CreateForViewHdl, void*, pData, void)
+{
+    const int nViewId = static_cast<int>(reinterpret_cast<sal_IntPtr>(pData));
+    std::erase(g_aViewsWithCreationPending, nViewId);
+
+    SfxViewShell* pViewShell = KitHelper::getViewOfId(nViewId);
+    if (!pViewShell)
+        return;
+
+    // The item windows of the notebookbar, such as the font name box and the styles preview,
+    // register their widgets under the view that is current while they are made. This runs
+    // from the main loop, where the current view is the one of the last message handled, so
+    // the view is made current for its build, and the view that was current comes back after.
+    const SfxViewShell* pCurrentViewShell = SfxViewShell::Current();
+    const int nCurrentViewId = pCurrentViewShell ? pCurrentViewShell->GetViewShellId().get() : -1;
+    KitHelper::setView(nViewId);
+    CreateForView(*pViewShell);
+    if (nCurrentViewId >= 0 && nCurrentViewId != nViewId && KitHelper::getViewOfId(nCurrentViewId))
+        KitHelper::setView(nCurrentViewId);
 }
 
 void SfxNotebookBar::ShowMenubar(bool bShow)

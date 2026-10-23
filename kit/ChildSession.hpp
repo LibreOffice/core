@@ -322,6 +322,7 @@ private:
     bool contentControlEvent(const StringVector& tokens);
     bool renderSearchResult(const char* buffer, int length, const StringVector& tokens);
     bool setAccessibilityState(bool enable);
+    bool firstTileSent();
     bool getA11yFocusedParagraph();
     bool getA11yCaretPosition();
     bool getPresentationInfo();

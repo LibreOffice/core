@@ -191,9 +191,18 @@ public:
             return false;
 
         // The load timing marks the first tile that reached a client, so it is taken here, where
-        // every tile a client receives passes through.
+        // every tile a client receives passes through. The kit hears of this session's first
+        // tile the same way, whether the tile came from the cache or was rendered for another
+        // session, and only now, so what it sends in reply follows the tile.
         if (const std::shared_ptr<DocumentBroker> docBroker = getDocumentBroker())
+        {
             docBroker->recordFirstTileSent();
+            if (!_firstTileSent)
+            {
+                _firstTileSent = true;
+                docBroker->forwardToChild(client_from_this(), "firsttilesent");
+            }
+        }
 
         return true;
     }
@@ -835,6 +844,9 @@ private:
 
     /// True from the resync of a reconnected view until the next status goes to the browser.
     bool _nextStatusReattached;
+
+    /// True once a tile has gone to this session's client.
+    bool _firstTileSent;
 
     Poco::SharedPtr<Poco::JSON::Object> _viewSettingsJSON;
 

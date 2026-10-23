@@ -4968,10 +4968,6 @@ void COKitDocumentImpl::registerCallback(COKitCallback pCallback, void* pData)
                 pShell->BroadcastContextForActivation(/*bIsActivated=*/true);
         }
 
-        // The notebookbar sends its widgets as JSON to the view's callback, and the document
-        // has loaded by now, so this is the one place that builds it.
-        sfx2::SfxNotebookBar::CreateForView(*pViewShell);
-
         if (!maFontsMissing.empty())
         {
             OStringBuffer sPayload("{ \"fontsmissing\": [ ");
@@ -9059,6 +9055,10 @@ std::string COKitDocumentImpl::getCommandValues(const char* pCommand)
             // things how the handles of a selection of several objects are laid out.
             pViewShell->setDrawsFromObjects(true);
 
+            // A view that draws from primitives paints no bitmap tiles, so the request for the
+            // primitives is its first content.
+            sfx2::SfxNotebookBar::CreateForViewWhenIdle(*pViewShell);
+
             /*
                 How long a cursor stays shown and then hidden here, as the desktop of the person
                 using it says. A client that draws something of its own that blinks - the handle
@@ -9990,6 +9990,14 @@ void COKitDocumentImpl::setAccessibilityState(int nId, bool nEnabled)
         return;
 
     KitHelper::setAccessibilityState(nId, nEnabled);
+}
+
+void COKitDocumentImpl::viewGotFirstTile(int nId)
+{
+    SolarMutexGuard aGuard;
+
+    if (SfxViewShell* pViewShell = KitHelper::getViewOfId(nId))
+        sfx2::SfxNotebookBar::CreateForViewWhenIdle(*pViewShell);
 }
 
 void COKitDocumentImpl::setColorPreviewState(int nId, bool bEnabled)
