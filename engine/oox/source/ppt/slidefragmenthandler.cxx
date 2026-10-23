@@ -303,7 +303,19 @@ void SlideFragmentHandler::finalizeImport()
         {
             Reference< XNamed > xNamed( xSlide, UNO_QUERY );
             if( xNamed.is() )
-                xNamed->setName( maSlideName );
+            {
+                // A master keeps a name no other page has, so a master whose name is taken gets
+                // the name with the first free number after it.
+                OUString aName = maSlideName;
+                xNamed->setName( aName );
+                for (sal_Int32 nNumber = 2; mpSlidePersistPtr->isMasterPage()
+                                            && xNamed->getName() != aName && nNumber < 100;
+                     ++nNumber)
+                {
+                    aName = maSlideName + " " + OUString::number(nNumber);
+                    xNamed->setName( aName );
+                }
+            }
         }
     }
     catch( cpo::uno::Exception& )

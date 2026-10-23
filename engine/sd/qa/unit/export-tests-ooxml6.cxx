@@ -8,11 +8,15 @@
  */
 
 #include "sdmodeltestbase.hxx"
+
+#include <set>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <test/unoapi_test.hxx>
 #include <tools/color.hxx>
 #include <tools/stream.hxx>
 #include <com/sun/star/container/XNamed.hpp>
+#include <com/sun/star/drawing/XDrawPages.hpp>
+#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
 #include <com/sun/star/drawing/XMasterPagesSupplier.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <comphelper/propertyvalue.hxx>
@@ -949,6 +953,37 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testTableKeepsTheNameOfItsStyle)
     // the style the document means.
     xmlDocUniquePtr pStyles = parseExport(u"ppt/tableStyles.xml"_ustr);
     assertXPath(pStyles, "//a:tblStyleLst/a:tblStyle[@styleId='" + aStyleName.toUtf8() + "']", 1);
+}
+
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testLayoutsOfOneMasterKeepDistinctNames)
+{
+    // Given two slides with different layouts on one master named Cobalt, whose layouts are
+    // written under the master's name and come back as two masters:
+    createSdImpressDoc();
+    mxComponent.queryThrow<drawing::XMasterPagesSupplier>()
+        ->getMasterPages()
+        ->getByIndex(0)
+        .queryThrow<container::XNamed>()
+        ->setName(u"Cobalt"_ustr);
+    uno::Reference<drawing::XDrawPages> xPages
+        = mxComponent.queryThrow<drawing::XDrawPagesSupplier>()->getDrawPages();
+    xPages->insertNewByIndex(0);
+    xPages->getByIndex(0).queryThrow<beans::XPropertySet>()->setPropertyValue(
+        u"Layout"_ustr, uno::Any(sal_Int16(AUTOLAYOUT_TITLE)));
+    xPages->getByIndex(1).queryThrow<beans::XPropertySet>()->setPropertyValue(
+        u"Layout"_ustr, uno::Any(sal_Int16(AUTOLAYOUT_TITLE_CONTENT)));
+
+    saveAndReload(TestFilter::PPTX);
+
+    // Then every master has a name of its own, made from the master's name.
+    auto xMasterPages = mxComponent.queryThrow<drawing::XMasterPagesSupplier>()->getMasterPages();
+    CPPUNIT_ASSERT_GREATEREQUAL(sal_Int32(2), xMasterPages->getCount());
+    std::set<OUString> aNames;
+    for (sal_Int32 i = 0; i < xMasterPages->getCount(); ++i)
+        aNames.insert(xMasterPages->getByIndex(i).queryThrow<container::XNamed>()->getName());
+    CPPUNIT_ASSERT_EQUAL(static_cast<std::size_t>(xMasterPages->getCount()), aNames.size());
+    CPPUNIT_ASSERT(aNames.contains(u"Cobalt"_ustr));
+    CPPUNIT_ASSERT(aNames.contains(u"Cobalt 2"_ustr));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
