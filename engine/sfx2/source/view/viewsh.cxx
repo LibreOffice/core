@@ -1276,6 +1276,7 @@ struct TableWindow
     uno::Reference<accessibility::XAccessibleContext> xTable;
 };
 
+// A table in the cell is given as its cells' text, one cell per line.
 OUString getCellText(const uno::Reference<accessibility::XAccessible>& xCell,
                      std::vector<uno::Reference<accessibility::XAccessibleContext>>& rParagraphs)
 {
@@ -1294,14 +1295,38 @@ OUString getCellText(const uno::Reference<accessibility::XAccessible>& xCell,
         if (!xChildContext.is())
             continue;
 
-        uno::Reference<accessibility::XAccessibleText> xChildText(xChild, uno::UNO_QUERY);
-        if (!isParagraphRole(xChildContext->getAccessibleRole()) || !xChildText.is())
+        OUString sChildText;
+        const sal_Int16 nRole = xChildContext->getAccessibleRole();
+        if (nRole == accessibility::AccessibleRole::TABLE)
+        {
+            OUStringBuffer aNested;
+            const sal_Int64 nCells = xChildContext->getAccessibleChildCount();
+            for (sal_Int64 nCell = 0; nCell < nCells; ++nCell)
+            {
+                const OUString sCell
+                    = getCellText(xChildContext->getAccessibleChild(nCell), rParagraphs);
+                if (sCell.isEmpty())
+                    continue;
+                if (!aNested.isEmpty())
+                    aNested.append('\n');
+                aNested.append(sCell);
+            }
+            sChildText = aNested.makeStringAndClear();
+        }
+        else if (isParagraphRole(nRole))
+        {
+            uno::Reference<accessibility::XAccessibleText> xChildText(xChild, uno::UNO_QUERY);
+            if (!xChildText.is())
+                continue;
+            sChildText = xChildText->getText();
+            rParagraphs.push_back(xChildContext);
+        }
+        else
             continue;
-        rParagraphs.push_back(xChildContext);
 
         if (!aText.isEmpty())
             aText.append('\n');
-        aText.append(xChildText->getText());
+        aText.append(sChildText);
     }
     return aText.makeStringAndClear();
 }
