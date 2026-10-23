@@ -1974,6 +1974,29 @@ void SubsetMap::InitList()
                     aAllSubsets.emplace_back( 0x11DB0, 0x11DEF, SvxResId(RID_SUBSETSTR_TOLONG_SIKI) );
                     break;
 #endif
+#if (U_ICU_VERSION_MAJOR_NUM >= 79)
+                case UBLOCK_ARCHAIC_CUNEIFORM_NUMERALS:
+                    aAllSubsets.emplace_back( 0x12550, 0x1268F, SvxResId(RID_SUBSETSTR_ARCHAIC_CUNEIFORM_NUMERALS) );
+                    break;
+                case UBLOCK_BENGALI_SUPPLEMENT:
+                    aAllSubsets.emplace_back( 0x11DF0, 0x11DFF, SvxResId(RID_SUBSETSTR_BENGALI_SUPPLEMENT) );
+                    break;
+                case UBLOCK_JURCHEN:
+                    aAllSubsets.emplace_back( 0x18E00, 0x1919F, SvxResId(RID_SUBSETSTR_JURCHEN) );
+                    break;
+                case UBLOCK_JURCHEN_RADICALS:
+                    aAllSubsets.emplace_back( 0x191A0, 0x191DF, SvxResId(RID_SUBSETSTR_JURCHEN_RADICALS) );
+                    break;
+                case UBLOCK_MISCELLANEOUS_SYMBOLS_AND_ARROWS_EXTENDED:
+                    aAllSubsets.emplace_back( 0x1DB00, 0x1DBFF, SvxResId(RID_SUBSETSTR_MISCELLANEOUS_SYMBOLS_AND_ARROWS_EXTENDED) );
+                    break;
+                case UBLOCK_MUSICAL_SYMBOLS_SUPPLEMENT:
+                    aAllSubsets.emplace_back( 0x1D250, 0x1D28F, SvxResId(RID_SUBSETSTR_MUSICAL_SYMBOLS_SUPPLEMENT) );
+                    break;
+                case UBLOCK_SEAL:
+                    aAllSubsets.emplace_back( 0x3D000, 0x3FC3F, SvxResId(RID_SUBSETSTR_SEAL) );
+                    break;
+#endif
             }
 
 #if OSL_DEBUG_LEVEL > 0 && !defined NDEBUG

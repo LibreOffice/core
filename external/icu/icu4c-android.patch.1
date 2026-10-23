@@ -34,7 +34,7 @@ diff -ur icu.org/source/configure icu/source/configure
  i[34567]86-*-cygwin)
  	if test "$GCC" = yes; then
  		icu_cv_host_frag=mh-cygwin
-@@ -6472,6 +6466,10 @@
+@@ -7009,6 +7009,10 @@
  # Check to see if genccode can generate simple assembly.
  GENCCODE_ASSEMBLY=
  case "${host}" in
@@ -42,7 +42,7 @@ diff -ur icu.org/source/configure icu/source/configure
 +    if test "$GCC" = yes; then
 +        GENCCODE_ASSEMBLY="-a gcc-android-arm"
 +    fi ;;
- *-linux*|*-kfreebsd*-gnu*|i*86-*-*bsd*|i*86-pc-gnu)
+ *-linux*|*-kfreebsd*-gnu*|i*86-*-*bsd*|*-pc-gnu)
      if test "$GCC" = yes; then
          # We're using gcc, and the simple -a gcc command line works for genccode
 @@ -7594,6 +7592,10 @@

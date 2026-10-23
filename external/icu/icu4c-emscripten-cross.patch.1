@@ -1,13 +1,14 @@
 --- icu/source/acinclude.m4.orig	2020-04-22 22:04:20.000000000 +0200
 +++ icu/source/acinclude.m4	2020-11-04 06:10:29.993070072 +0100
-@@ -84,6 +84,7 @@
+@@ -91,6 +91,7 @@
  *-dec-osf*) icu_cv_host_frag=mh-alpha-osf ;;
  *-*-nto*)	icu_cv_host_frag=mh-qnx ;;
  *-ncr-*)	icu_cv_host_frag=mh-mpras ;;
 +wasm*-*-emscripten*)	icu_cv_host_frag=mh-emscripten ;;
+ *-wasi*)	icu_cv_host_frag=mh-wasi ;;
  *) 		icu_cv_host_frag=mh-unknown ;;
  esac
- 		]
+
 --- /dev/null
 +++ icu/source/config/mh-emscripten	2015-10-06 12:01:00.497972406 +0200
 @@ -0,0 +1,86 @@

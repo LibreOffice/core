@@ -41,7 +41,7 @@ diff -ur icu.org/source/extra/scrptrun/scrptrun.h icu/source/extra/scrptrun/scrp
  
  U_NAMESPACE_BEGIN
  
-@@ -81,7 +82,7 @@
+@@ -84,7 +84,7 @@
      int32_t scriptEnd;
      UScriptCode scriptCode;
  
@@ -49,7 +49,7 @@ diff -ur icu.org/source/extra/scrptrun/scrptrun.h icu/source/extra/scrptrun/scrp
 +    std::vector<ParenStackEntry> parenStack;
      int32_t parenSP;
  
-     static int8_t highBit(int32_t value);
+     static int32_t getPairIndex(UChar32 ch);
 @@ -135,6 +136,7 @@
      scriptEnd   = charStart;
      scriptCode  = USCRIPT_INVALID_CODE;

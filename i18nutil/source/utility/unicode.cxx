@@ -1043,6 +1043,14 @@ OString unicode::getExemplarLanguageForUScriptCode(UScriptCode eScript)
             sRet = "zh-Hntl"_ostr;
             break;
 #endif
+#if (U_ICU_VERSION_MAJOR_NUM >= 79)
+        case USCRIPT_PROTO_CUNEIFORM:
+            sRet = "mis-Pcun"_ostr;
+            break;
+        case USCRIPT_SEAL:
+            sRet = "zh-Zslh"_ostr;
+            break;
+#endif
     }
     return sRet;
 }
