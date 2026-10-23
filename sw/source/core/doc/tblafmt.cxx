@@ -714,10 +714,10 @@ void SwTableAutoFormatTable::AddAutoFormat(const SwTableAutoFormat& rTableStyle)
     if (FindAutoFormat(rTableStyle.GetName()))
         return;
 
-    InsertAutoFormat(new SwTableAutoFormat(rTableStyle));
+    InsertAutoFormat(&rTableStyle);
 }
 
-bool SwTableAutoFormatTable::InsertAutoFormat(SvxAutoFormatData* pFormat)
+bool SwTableAutoFormatTable::InsertAutoFormat(const SvxAutoFormatData* pFormat)
 {
     if (!pFormat)
     {
