@@ -25,9 +25,12 @@ engine_include="engine/($(echo "$ENGINE_MODULES" | tr ' ' '|'))/"
 rm -rf cov-int
 
 # Capture watches for compiler invocations, so an already-built tree gives it
-# nothing to see. Clean first. The rest of the engine stays built, so the make
-# below only compiles these modules again.
-make -C engine $(for m in $ENGINE_MODULES; do printf '%s.clean ' "$m"; done)
+# nothing to see. Delete only the object files of these modules. Each library
+# keeps its record of exported symbols, so cppumaker and the generated UNO
+# headers stay as they are, and the make below only compiles these modules again.
+for m in $ENGINE_MODULES; do
+    rm -rf "engine/workdir/CxxObject/$m" "engine/workdir/CObject/$m"
+done
 
 # cov-emit stops on a suppressible assertion when it meets the _ostr and
 # _ustr string literal operators, which take a class type as a template
@@ -37,8 +40,7 @@ make -C engine $(for m in $ENGINE_MODULES; do printf '%s.clean ' "$m"; done)
 export COVERITY_SUPPRESS_ASSERT=1519
 
 # A full make, not "make <module>". The per-module target builds only that one
-# module and takes the libraries it links against from workdir, which the clean
-# above just emptied.
+# module, not the generated headers it needs.
 coverity capture --dir cov-int --language c-family \
     --file-include-regex "$engine_include" \
     -- make -C engine
