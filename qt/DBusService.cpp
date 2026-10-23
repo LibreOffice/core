@@ -147,6 +147,14 @@ namespace coda
         versioning::initializeForApp(appData.toStdString(), Application::getPrefs(),
                                      std::move(excluded), drafts::directory());
     }
+
+    void openDraftCopy(const QString& path)
+    {
+        TabbedWindow* tw = TabbedWindow::getOrCreate(Application::getProfile());
+        Poco::URI uri(Poco::Path(path.toStdString()));
+        tw->manager()->addDocumentTab(uri, /*asDraft*/ true);
+        surfaceWindow(tw);
+    }
 }
 
 DBusService::DBusService(QObject* parent)

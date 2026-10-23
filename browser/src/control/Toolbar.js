@@ -932,6 +932,11 @@ window.L.Map.include({
 
 	openRevisionHistory: function () {
 		var map = this;
+		if (window.mode.isCODesktop()) {
+			// The reply opens the dialog (see Control.VersionHistory.js).
+			app.socket.sendMessage('versionhistory list');
+			return;
+		}
 		// if we are being loaded inside an iframe, ask
 		// our host to show revision history mode
 		map.fire('postMessage', {msgId: 'rev-history', args: {Deprecated: true}});

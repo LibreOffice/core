@@ -702,6 +702,11 @@ private:
     bool handleGetSlideRequest(const StringVector& tokens,
                                const std::shared_ptr<DocumentBroker>& docBroker);
 
+    /// Handles the apps' local version-history commands:
+    /// "versionhistory list|opencopy name=<file>|clear".
+    bool handleVersionHistory(const StringVector& tokens,
+                              const std::shared_ptr<DocumentBroker>& docBroker);
+
     bool forwardToChild(const std::string& message,
                         const std::shared_ptr<DocumentBroker>& docBroker);
 

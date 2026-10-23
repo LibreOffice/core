@@ -40,6 +40,7 @@
 #include <common/SettingsSecrets.hpp>
 #include <common/TraceEvent.hpp>
 #include <common/Util.hpp>
+#include <common/VersionStore.hpp>
 #include <common/ViewSettings.hpp>
 #include <net/HttpHelper.hpp>
 #include <net/HttpServer.hpp>
@@ -1698,6 +1699,14 @@ bool ClientSession::_handleInput(const char *buffer, int length)
             // any unsaved changes, if any, to the storage
             docBroker->closeDocument("versionrestore: prerestore_ack");
         }
+    }
+    else if (tokens.equals(0, "versionhistory"))
+    {
+        // The server delegates revision history to the WOPI host.
+        if constexpr (Util::isMobileAppBuild())
+            return handleVersionHistory(tokens, docBroker);
+        else
+            sendTextFrameAndLogError("error: cmd=versionhistory kind=unknown");
     }
     else if (tokens.equals(0, "partpagerectangles"))
     {
@@ -3918,6 +3927,67 @@ bool ClientSession::handleGetSlideRequest(const StringVector& tokens,
                                           const std::shared_ptr<DocumentBroker>& docBroker)
 {
     docBroker->handleGetSlideRequest(tokens, client_from_this());
+    return true;
+}
+
+bool ClientSession::handleVersionHistory(const StringVector& tokens,
+                                         const std::shared_ptr<DocumentBroker>& docBroker)
+{
+    StorageBase* storage = docBroker->getStorage();
+    const std::string docPath = storage ? storage->getRootFilePath() : std::string();
+    if (docPath.empty())
+    {
+        sendTextFrameAndLogError("error: cmd=versionhistory kind=nodocument");
+        return true;
+    }
+
+    if (tokens.size() >= 3 && tokens.equals(1, "opencopy"))
+    {
+        std::string name;
+        if (!getTokenString(tokens[2], "name", name) || name.empty())
+        {
+            sendTextFrameAndLogError("error: cmd=versionhistory kind=syntax");
+            return true;
+        }
+
+        const std::string exported = versioning::exportVersion(docPath, name);
+        if (exported.empty())
+        {
+            sendTextFrameAndLogError("error: cmd=versionhistory kind=exportfailed");
+            return true;
+        }
+
+        Poco::JSON::Object::Ptr json = new Poco::JSON::Object();
+        json->set("exportedUri", Poco::URI(Poco::Path(exported)).toString());
+        sendTextFrame("versionhistory: " + JsonUtil::jsonToString(json));
+        return true;
+    }
+
+    if (tokens.size() >= 2 && tokens.equals(1, "clear"))
+        versioning::clearHistory(docPath);
+    else if (tokens.size() < 2 || !tokens.equals(1, "list"))
+    {
+        sendTextFrameAndLogError("error: cmd=versionhistory kind=syntax");
+        return true;
+    }
+
+    // The list, also sent as the refreshed (now empty) state after a clear.
+    Poco::JSON::Object::Ptr json = new Poco::JSON::Object();
+    Poco::JSON::Array::Ptr entries = new Poco::JSON::Array();
+    for (const versioning::VersionInfo& version : versioning::listVersions(docPath))
+    {
+        Poco::JSON::Object::Ptr entry = new Poco::JSON::Object();
+        entry->set("name", version.fileName);
+        entry->set("timestamp", std::chrono::duration_cast<std::chrono::milliseconds>(
+                                    version.timestamp.time_since_epoch())
+                                    .count());
+        entry->set("size", version.size);
+        entries->add(entry);
+    }
+    json->set("entries", entries);
+    json->set("storeSize", versioning::storeSizeBytes());
+    json->set("enabled", versioning::isEnabled());
+    sendTextFrame("versionhistory: " + JsonUtil::jsonToString(json));
     return true;
 }
 

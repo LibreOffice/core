@@ -1515,7 +1515,7 @@ class BackstageView extends window.L.Class {
 	}
 
 	private executeRevisionHistory(): void {
-		this.fireMapEvent('postMessage', { msgId: 'rev-history' });
+		window.app.dispatcher.dispatch('rev-history');
 		this.hide();
 	}
 

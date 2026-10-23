@@ -1607,6 +1607,11 @@ class Socket {
 			this._onJSDialog(textMsg, e.callback);
 		} else if (textMsg.startsWith('hyperlinkclicked:')) {
 			this._onHyperlinkClickedMsg(textMsg);
+		} else if (textMsg.startsWith('versionhistory:')) {
+			window.L.Control.VersionHistory.handleMessage(
+				this._map,
+				JSON.parse(textMsg.substring('versionhistory:'.length).trim()),
+			);
 		} else if (textMsg.startsWith('browsersetting:')) {
 			window.prefs._initializeBrowserSetting(textMsg);
 		} else if (textMsg.startsWith('remotelinks:')) {

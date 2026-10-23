@@ -1671,7 +1671,7 @@ QVariant Bridge::cool(const QString& messageStr)
     }
     else if (tokens.equals(0, "opendoc"))
     {
-        // e.g. "opendoc file=%2Fhome%2F...something.odt"
+        // e.g. "opendoc file=file%3A%2F%2F%2Fhome%2F...something.odt draft=true"
         std::string fileArg;
         if (!COOLProtocol::getTokenString(tokens, "file", fileArg))
         {
@@ -1698,6 +1698,22 @@ QVariant Bridge::cool(const QString& messageStr)
         }
 
         QString absolutePath = fileInfo.absoluteFilePath();
+
+        // A draft closed unsaved is deleted, so only files in the drafts folder open as drafts.
+        std::string draftArg;
+        if (COOLProtocol::getTokenString(tokens, "draft", draftArg) && draftArg == "true")
+        {
+            if (drafts::contains(absolutePath.toStdString()))
+            {
+                coda::openDraftCopy(absolutePath);
+                closeStarterScreen(_owner);
+                LOG_INF("opendoc: opened draft: " << absolutePath.toStdString());
+                return {};
+            }
+            LOG_WRN("opendoc: not opening a file outside the drafts folder as a draft: "
+                    << absolutePath.toStdString());
+        }
+
         const QStringList displayUri{ QString::fromStdString(
             coda::hostDisplayUriForPath(absolutePath)) };
         coda::openFiles(QStringList() << absolutePath, displayUri);

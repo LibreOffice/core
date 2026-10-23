@@ -787,6 +787,7 @@ COOL_JS_LST =\
 	src/control/Control.RowHeader.ts \
 	src/control/Control.DocumentRepair.js \
 	src/control/Control.DownloadProgress.js \
+	src/control/Control.VersionHistory.js \
 	src/control/Control.Menubar.ts \
 	src/control/Control.Tabs.js \
 	src/control/Control.Permission.js \
@@ -1873,6 +1874,7 @@ pot:
 		src/control/Control.DocumentNameInput.js \
 		src/control/Control.DocumentRepair.js \
 		src/control/Control.DownloadProgress.js \
+		src/control/Control.VersionHistory.js \
 		src/control/Control.ESignature.ts \
 		src/control/Control.ESignatureDialog.ts \
 		src/control/Control.FormulaBarJSDialog.js \

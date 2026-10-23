@@ -1230,6 +1230,8 @@ void WebView::load(const Poco::URI& fileURL, bool isStarterMode, bool asDraft,
             "permission", CODAConfig::instance().isForcedReadOnly() ? "readonly" : "edit");
         urlAndQuery.addQueryParameter("appdocid", std::to_string(_document._appDocId));
         urlAndQuery.addQueryParameter("userinterfacemode", "notebookbar");
+        // Enables the "See revision history" menu and backstage entries.
+        urlAndQuery.addQueryParameter("revisionhistory", "1");
     }
 
     if (!isStarterMode)

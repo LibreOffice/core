@@ -37,6 +37,8 @@ namespace coda
     // Call at startup before any document opens. Retention pruning and
     // the orphan sweep run here because nothing runs after Util::forcedExit.
     void initializeVersionStore();
+
+    void openDraftCopy(const QString& path);
 }
 
 class DBusService : public QObject
