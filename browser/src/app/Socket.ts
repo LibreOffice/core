@@ -2257,6 +2257,11 @@ class Socket {
 	private _onLastModTimeMsg(textMsg: string): void {
 		const time = textMsg.substring(textMsg.indexOf(' ') + 1);
 		this._map.updateModificationIndicator(time);
+		// Sent on load and after every upload, so the WOPI host can track the mtime in storage
+		this._map.fire('postMessage', {
+			msgId: 'Doc_LastModifiedTime',
+			args: { LastModifiedTime: time },
+		});
 	}
 
 	private _onServerLoadTimingsMsg(payload: string): void {
