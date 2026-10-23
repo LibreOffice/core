@@ -97,13 +97,13 @@ class ScalingInteraction extends SelectionInteraction {
 		return this;
 	}
 
-	/// Whether the objects keep the way they face through this drag: a crop does, and so does a
-	/// selection holding an object that may not be turned over.
+	/*
+		Whether the objects keep the way they face through this drag, which a crop does. Any
+		object may be scaled past its other side, as in the office: one that may not be mirrored,
+		as a text frame, is laid out the right way round again by the engine.
+	*/
 	private facingKept(): boolean {
-		return (
-			this.keepsItsFacing ||
-			!ObjectHandles.canBeMirrored(this.selection.selectedObjects())
-		);
+		return this.keepsItsFacing;
 	}
 
 	/// The shape the mouse at that point leads to. Its width or its height counts backwards where

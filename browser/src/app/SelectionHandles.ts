@@ -372,13 +372,6 @@ class ObjectHandles implements HandleSource {
 		);
 	}
 
-	public static canBeMirrored(objectIds: number[]): boolean {
-		return ObjectHandles.allOfThem(objectIds).every(
-			(objectId: number) =>
-				RenderGeometrySection.objectOf(objectId)?.cannotBeMirrored !== true,
-		);
-	}
-
 	/*
 		Gives each of the eight the way it is drawn away from the place it stands on: one step
 		along each of the two axes of the selection, worked out from where the eight stand now.
