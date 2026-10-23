@@ -2828,6 +2828,58 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testViewRenderStateMarksTheDarkView)
     CPPUNIT_ASSERT(hasDarkBackgroundLetter(pXImpressDocument->getViewRenderState()));
 }
 
+// The vector primitives of a page, as the document answers a request for them.
+static OString vectorPrimitivesOf(SdXImpressDocument* pXImpressDocument, const SdPage* pPage)
+{
+    const OString aCommand = ".uno:VectorPrimitives?partid=" + pPage->GetGuid().getString();
+    tools::JsonWriter aJsonWriter;
+    pXImpressDocument->getCommandValues(aJsonWriter,
+                                        std::string_view(aCommand.getStr(), aCommand.getLength()));
+    return aJsonWriter.finishAndGetAsOString();
+}
+
+// One payload serves every view, so it reads the same from each of them. Whether a graphic on the
+// document background is inverted is for the view that paints.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testVectorPrimitivesAreTheSameForEveryView)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    SdTestViewCallback aView1;
+
+    svtools::EditableColorConfig aColorConfig;
+    const Color aDocColorBefore = aColorConfig.GetColorValue(svtools::DOCCOLOR).nColor;
+    comphelper::ScopeGuard aRestoreDocColor(
+        [aDocColorBefore]
+        {
+            svtools::EditableColorConfig aRestore;
+            svtools::ColorConfigValue aValue;
+            aValue.nColor = aDocColorBefore;
+            aRestore.SetColorValue(svtools::DOCCOLOR, aValue);
+        });
+
+    // A slide without a fill, its own or the master's, shows the document background.
+    SdDrawDocument* pDocument = pXImpressDocument->GetDoc();
+    SdPage* pSlide = pDocument->GetSdPage(0, PageKind::Standard);
+    pSlide->getSdrPageProperties().PutItem(XFillStyleItem(drawing::FillStyle_NONE));
+    pSlide->TRG_GetMasterPage().getSdrPageProperties().PutItem(
+        XFillStyleItem(drawing::FillStyle_NONE));
+    Bitmap aBitmap(Size(4, 4), vcl::PixelFormat::N24_BPP);
+    aBitmap.Erase(COL_LIGHTBLUE);
+    rtl::Reference<SdrGrafObj> pGraphic = new SdrGrafObj(
+        *pDocument, Graphic(aBitmap), ::tools::Rectangle(Point(1000, 1000), Size(3000, 3000)));
+    pSlide->InsertObject(pGraphic.get());
+
+    dispatchThemeCommand(mxComponent, u".uno:InvertBackground"_ustr, u"Dark"_ustr);
+    const OString aFromDarkView = vectorPrimitivesOf(pXImpressDocument, pSlide);
+
+    KitHelper::createView();
+    SdTestViewCallback aView2;
+    dispatchThemeCommand(mxComponent, u".uno:InvertBackground"_ustr, u"Light"_ustr);
+    const OString aFromLightView = vectorPrimitivesOf(pXImpressDocument, pSlide);
+
+    CPPUNIT_ASSERT_EQUAL(aFromDarkView, aFromLightView);
+    CPPUNIT_ASSERT_MESSAGE(aFromDarkView.getStr(), aFromDarkView.indexOf("\"invert\"") < 0);
+}
+
 // Helper function to paint a tile of the first slide and return it as a bitmap. The painted area
 // is smaller than the page, so every pixel of the tile is page and none of it is the area around
 // the page.

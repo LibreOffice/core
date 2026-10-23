@@ -3171,6 +3171,32 @@ private:
         rWriter.put("version", sal_Int64(mpModel->getVectorPartVersion(*pPage)));
     }
 
+    /// The view information the part is decomposed with. One payload serves every view, so
+    /// nothing a view chooses goes in.
+    drawinglayer::geometry::ViewInformation2D viewInformationFor(SdPage* pPage)
+    {
+        drawinglayer::geometry::ViewInformation2D aViewInformation;
+        cpo::uno::Reference<css::drawing::XDrawPage> xDrawPage(pPage->getUnoPage());
+        if (xDrawPage.is())
+            aViewInformation.setVisualizedPage(xDrawPage);
+
+        // The automatic color resolves against the page fill. Without one it is the document
+        // background, which each view chooses, so the color stays automatic for the reader.
+        aViewInformation.setAutoColor(pPage->GetPageBackgroundColor(COL_AUTO));
+
+        // Some content is kept for an editing view alone: the prompt of an empty placeholder
+        // and the stand-in graphic of an empty picture. The drawing layer empties the wrapper
+        // holding it unless the output says it is such a view, and the payload serves one, so
+        // the content travels.
+        aViewInformation.setEditViewActive(true);
+
+        // While a text edit runs, the object it runs on hides its own text and the entry for the
+        // edit carries what has been typed so far. Saying the edit is active is what makes the
+        // object hide it, so the text is not drawn twice.
+        aViewInformation.setTextEditActive(anyViewIsEditing(pPage));
+        return aViewInformation;
+    }
+
     void setupProcessor(tools::JsonWriter& rWriter, SdPage* pPage)
     {
         maProcessor.emplace(rWriter);
@@ -3178,29 +3204,8 @@ private:
         maProcessor->setBitmapCache(mpModel->getBitmapCache());
         maProcessor->setFontCache(mpModel->getVectorFontCache(), mpModel->getVectorFontFaceByKey());
 
-        // Set up ViewInformation2D with visualized page
-        drawinglayer::geometry::ViewInformation2D aViewInfo;
-        cpo::uno::Reference<css::drawing::XDrawPage> xDrawPage(pPage->getUnoPage());
-        if (xDrawPage.is())
-            aViewInfo.setVisualizedPage(xDrawPage);
-
-        // Text and lines with the automatic color resolve against what lies behind them. On a
-        // page that is the page background, the master page's when the page defines none.
-        aViewInfo.setAutoColor(pPage->GetPageBackgroundColor());
-
-        // Some content is kept for an editing view alone: the prompt of an empty placeholder
-        // and the stand-in graphic of an empty picture. The drawing layer empties the wrapper
-        // holding it unless the output says it is such a view, and the payload serves one, so
-        // the content travels.
-        aViewInfo.setEditViewActive(true);
-
-        // While a text edit runs, the object it runs on hides its own text and the entry for the
-        // edit carries what has been typed so far. Saying the edit is active is what makes the
-        // object hide it, so the text is not drawn twice.
-        aViewInfo.setTextEditActive(anyViewIsEditing(pPage));
-
-        maViewInformation = aViewInfo;
-        maProcessor->setViewInformation2D(aViewInfo);
+        maViewInformation = viewInformationFor(pPage);
+        maProcessor->setViewInformation2D(maViewInformation);
     }
 
     /// The entry that stands for the page itself. It is drawn first and holds what lies
