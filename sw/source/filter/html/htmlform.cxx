@@ -1796,9 +1796,16 @@ void SwHTMLParser::InsertInput()
     {
         // Set the URL after inserting the graphic because the Download can
         // only register with XModel after the control has been inserted.
-        aTmp <<= URIHelper::SmartRel2Abs(INetURLObject(m_sBaseURL), sImgSrc, Link<OUString *, bool>(), false);
-        xPropSet->setPropertyValue(u"ImageURL"_ustr,
-                                    aTmp );
+        const OUString sImageURL = URIHelper::SmartRel2Abs(
+            INetURLObject(m_sBaseURL), sImgSrc, Link<OUString*, bool>(), false);
+        // In a loaded document the picture is set once the user allows link updates.
+        SwDocShell* pDocSh = m_xDoc->GetDocShell();
+        if (pDocSh && !m_bFromClipboard
+            && INetURLObject(sImageURL).GetProtocol() != INetProtocol::Data)
+            comphelper::DocumentInfo::notifyRemoteContentFound(pDocSh->GetModel(), xPropSet,
+                                                               sImageURL);
+        else
+            xPropSet->setPropertyValue(u"ImageURL"_ustr, uno::Any(sImageURL));
     }
 
     if( bSetGrfWidth || bSetGrfHeight )
