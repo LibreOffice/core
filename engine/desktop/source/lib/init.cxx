@@ -20,6 +20,7 @@
 #include <cmath>
 
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <basegfx/range/b2drange.hxx>
 #include <basegfx/numeric/ftools.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>
 #include <svx/svdpagv.hxx>
@@ -6991,15 +6992,16 @@ void COKitDocumentImpl::setObjectTransform(const char* pMappings,
             mapping arrives in the way it is drawn, so it is turned over before the object is
             given it.
         */
-        const basegfx::B2DHomMatrix aReached(lcl_turnTheShearOver(aWanted));
+        basegfx::B2DHomMatrix aReached(lcl_turnTheShearOver(aWanted));
 
         /*
             What the object allows is asked before anything is done to it: a turn where it says
             it cannot be turned, a mirror where it cannot be turned over, and a resize with two
             different factors where it allows a resize in ratio only, are refused. Its place held
             fast holds the turn and the mirror fast too, and its size held fast the shear, as the
-            office's own view has it. The client keeps to the same rules while a drag runs, so a
-            mapping refused here is one that was not meant.
+            office's own view has it, but for a scale past the other side, see below. The client
+            keeps to the same rules while a drag runs, so a mapping refused here is one that was
+            not meant.
         */
         {
             SdrObjTransformInfoRec aAllows;
@@ -7015,7 +7017,7 @@ void COKitDocumentImpl::setObjectTransform(const char* pMappings,
             aOfTheObject.decompose(aScaleWas, aTranslate, fRotateWas, fShearWas);
             aReached.decompose(aScaleBecomes, aTranslate, fRotateBecomes, fShearBecomes);
 
-            const bool bTurns(!basegfx::fTools::equal(
+            bool bTurns(!basegfx::fTools::equal(
                 basegfx::normalizeToRange(fRotateWas, 2.0 * M_PI),
                 basegfx::normalizeToRange(fRotateBecomes, 2.0 * M_PI), 0.0001));
             // A mapping that turns the object over has a determinant below zero.
@@ -7023,12 +7025,26 @@ void COKitDocumentImpl::setObjectTransform(const char* pMappings,
                 return rMatrix.get(0, 0) * rMatrix.get(1, 1)
                        - rMatrix.get(0, 1) * rMatrix.get(1, 0);
             };
-            const bool bTurnsOver((determinantOf(aOfTheObject) < 0.0)
-                                  != (determinantOf(aReached) < 0.0));
-            const bool bShears(!basegfx::fTools::equal(fShearWas, fShearBecomes, 0.0001));
+            bool bTurnsOver((determinantOf(aOfTheObject) < 0.0)
+                            != (determinantOf(aReached) < 0.0));
+            bool bShears(!basegfx::fTools::equal(fShearWas, fShearBecomes, 0.0001));
 
             const bool bPlaceHeldFast(pObject->IsMoveProtect());
             const bool bSizeHeldFast(pObject->IsResizeProtect());
+
+            // a scale may take an object past its other side, as the office's resize does. an
+            // upright one that cannot be mirrored is laid out upright over the same place then
+            if (aWhat == "scale" && (bTurnsOver || bTurns) && !aAllows.bMirrorFreeAllowed
+                && basegfx::fTools::equalZero(fRotateWas) && basegfx::fTools::equalZero(fShearWas))
+            {
+                basegfx::B2DRange aPlace(0.0, 0.0, 1.0, 1.0);
+                aPlace.transform(aReached);
+                aReached = basegfx::utils::createScaleTranslateB2DHomMatrix(
+                    aPlace.getWidth(), aPlace.getHeight(), aPlace.getMinX(), aPlace.getMinY());
+                bTurns = false;
+                bTurnsOver = false;
+                bShears = false;
+            }
 
             if (bTurns && (!aAllows.bRotateFreeAllowed || bPlaceHeldFast))
             {
