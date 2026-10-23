@@ -104,4 +104,5 @@
 /// <reference path="./prediction/CaretMove.test.ts" />
 /// <reference path="./VectorColors.test.ts" />
 /// <reference path="./MochaHarness.test.ts" />
+/// <reference path="./AIChatSidebar.test.ts" />
 // NOTE: reference new tests here ...

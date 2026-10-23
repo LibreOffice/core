@@ -26,12 +26,11 @@
 // (and `_` resolves to the identity on untranslated strings).
 (globalThis as any)._ = (s: string) => s;
 
-// gettext plural shim. In the browser js/plural.js puts _n on the window,
+// gettext plural function. In the browser js/plural.js puts _n on the window,
 // which is the global object there. Here the window is a jsdom one instead,
-// so that name never reaches the sources and the shim stands in for it. An
-// untranslated string takes the English rule, which is the rule below.
+// so the global _n passes each call on to the one js/plural.js puts there.
 (globalThis as any)._n = (singular: string, plural: string, count: number) =>
-	Number(count) === 1 ? singular : plural;
+	(globalThis.window as any)._n(singular, plural, count);
 
 // Leaflet's `L` namespace is a script-loaded global in the browser. Source
 // files run mixin calls (L.Map.include, L.Handler.extend, ...) at module
@@ -146,6 +145,9 @@ globalThis.document = globalThis.window.document;
 (globalThis as any).HTMLElement = (globalThis.window as any).HTMLElement;
 (globalThis as any).Node = (globalThis.window as any).Node;
 (globalThis as any).CSS = (globalThis.window as any).CSS;
+(globalThis as any).DocumentFragment = (
+	globalThis.window as any
+).DocumentFragment;
 (globalThis as any).MutationObserver = (
 	globalThis.window as any
 ).MutationObserver;
