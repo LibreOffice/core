@@ -1987,6 +1987,35 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslatePartOfReferenceMark)
     CPPUNIT_ASSERT_EQUAL(u"Water "_ustr, xMark->getAnchor()->getString());
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testPasteHTMLCharacterStyleClassRule)
+{
+    // Given a document with a bold character style "Highlight":
+    createSwDoc();
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xStyle(
+        xFactory->createInstance(u"com.sun.star.style.CharacterStyle"_ustr), uno::UNO_QUERY);
+    uno::Reference<container::XNameContainer> xCharStyles(getStyles(u"CharacterStyles"_ustr),
+                                                          uno::UNO_QUERY_THROW);
+    xCharStyles->insertByName(u"Highlight"_ustr, uno::Any(xStyle));
+    xStyle->setPropertyValue(u"CharWeight"_ustr, uno::Any(awt::FontWeight::BOLD));
+    SwWrtShell* const pWrtSh = getSwDocShell()->GetWrtShell();
+
+    // When pasting HTML whose span has the class of the style, and a rule for that class
+    // which says more than the style does:
+    SwTranslateHelper::PasteHTMLToPaM(
+        *pWrtSh, pWrtSh->GetCursor(),
+        "<html><head><style>.highlight { color: red }</style></head>"
+        "<body><p>Plain <span class=\"highlight\">red</span></p></body></html>"_ostr);
+
+    // Then the text has the style, and the colour of the rule as well: the rule of the class
+    // used to be ignored once the class named a style.
+    uno::Reference<text::XTextRange> xRun = getRun(getParagraph(1), 2);
+    CPPUNIT_ASSERT_EQUAL(u"red"_ustr, xRun->getString());
+    CPPUNIT_ASSERT_EQUAL(u"Highlight"_ustr, getProperty<OUString>(xRun, u"CharStyleName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(awt::FontWeight::BOLD, getProperty<float>(xRun, u"CharWeight"_ustr));
+    CPPUNIT_ASSERT_EQUAL(COL_LIGHTRED, getProperty<Color>(xRun, u"CharColor"_ustr));
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateKeepsDirectFormatting)
 {
     // The mock returns the markup it was sent, as the translation services do.

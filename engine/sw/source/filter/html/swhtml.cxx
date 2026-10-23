@@ -3529,14 +3529,11 @@ void SwHTMLParser::NewStdAttr( HtmlTokenId nToken )
     }
 
     // A span whose class names a character style of the document gets that
-    // style; the rule of the class and the inline style restate its attributes.
+    // style. The rule of the class and the inline style apply as well,
+    // except what the style sets the same way.
     SwCharFormat* pCharFormat = nullptr;
     if( HtmlTokenId::SPAN_ON == nToken && !aClass.isEmpty() )
-    {
         pCharFormat = m_pCSS1Parser->FindCharFormatByClass( aClass );
-        if( pCharFormat )
-            aClass.clear();
-    }
 
     // parse styles
     if( HasStyleOptions( aStyle, aId, aClass, &aLang, &aDir ) )
