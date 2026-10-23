@@ -13,10 +13,14 @@
 
 #include <cppuhelper/implbase.hxx>
 
-#include <com/sun/star/task/XStatusIndicator.hpp>
-
-class SplashScreenBase : public cppu::WeakImplHelper<css::task::XStatusIndicator>
+class SplashScreenBase : public cppu::WeakImplHelper<>
 {
+public:
+    virtual void start(const OUString& rText, sal_Int32 nRange) = 0;
+    virtual void end() = 0;
+    virtual void setText(const OUString& rText) = 0;
+    virtual void setValue(sal_Int32 nValue) = 0;
+    virtual void reset() = 0;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

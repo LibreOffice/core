@@ -83,12 +83,11 @@ private:
 public:
     SplashScreen(const OUString& rAppName);
 
-    // XStatusIndicator
-    virtual void SAL_CALL end() override;
-    virtual void SAL_CALL reset() override;
-    virtual void SAL_CALL setText(const OUString& aText) override;
-    virtual void SAL_CALL setValue(sal_Int32 nValue) override;
-    virtual void SAL_CALL start(const OUString& aText, sal_Int32 nRange) override;
+    virtual void end() override;
+    virtual void reset() override;
+    virtual void setText(const OUString& aText) override;
+    virtual void setValue(sal_Int32 nValue) override;
+    virtual void start(const OUString& aText, sal_Int32 nRange) override;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

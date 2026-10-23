@@ -31,12 +31,11 @@ private:
 public:
     explicit UnxSplashScreen();
 
-    // XStatusIndicator
-    virtual void SAL_CALL start( const OUString& aText, sal_Int32 nRange ) override;
-    virtual void SAL_CALL end() override;
-    virtual void SAL_CALL reset() override;
-    virtual void SAL_CALL setText( const OUString& aText ) override;
-    virtual void SAL_CALL setValue( sal_Int32 nValue ) override;
+    virtual void start(const OUString& aText, sal_Int32 nRange) override;
+    virtual void end() override;
+    virtual void reset() override;
+    virtual void setText(const OUString& aText) override;
+    virtual void setValue(sal_Int32 nValue) override;
 };
 
 }

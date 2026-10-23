@@ -27,14 +27,8 @@
 #include <rtl/math.hxx>
 #include <o3tl/string_view.hxx>
 
-#include <mutex>
-
 #define NOT_LOADED  (tools::Long(-1))
 #define NOT_LOADED_COLOR  (Color(ColorTransparency, 0xffffffff))
-
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::task;
-using namespace ::com::sun::star::uno;
 
 SplashScreenWindow::SplashScreenWindow(SplashScreen* pSplash)
     : m_pSplash(pSplash)
@@ -149,7 +143,7 @@ SplashScreen::~SplashScreen()
     m_pWindow.disposeAndClear();
 }
 
-void SAL_CALL SplashScreen::start(const OUString&, sal_Int32 nRange)
+void SplashScreen::start(const OUString&, sal_Int32 nRange)
 {
     m_nMax = nRange;
     m_bProgressEnd = false;
@@ -158,14 +152,14 @@ void SAL_CALL SplashScreen::start(const OUString&, sal_Int32 nRange)
     m_pWindow->Redraw();
 }
 
-void SAL_CALL SplashScreen::end()
+void SplashScreen::end()
 {
     m_nProgress = m_nMax;
     m_pWindow->Hide();
     m_bProgressEnd = true;
 }
 
-void SAL_CALL SplashScreen::reset()
+void SplashScreen::reset()
 {
     m_nProgress = 0;
     if (!m_bProgressEnd)
@@ -175,7 +169,7 @@ void SAL_CALL SplashScreen::reset()
     }
 }
 
-void SAL_CALL SplashScreen::setText(const OUString& rText)
+void SplashScreen::setText(const OUString& rText)
 {
     SolarMutexGuard aSolarGuard;
     if (m_sProgressText != rText)
@@ -190,7 +184,7 @@ void SAL_CALL SplashScreen::setText(const OUString& rText)
     }
 }
 
-void SAL_CALL SplashScreen::setValue(sal_Int32 nValue)
+void SplashScreen::setValue(sal_Int32 nValue)
 {
     SAL_INFO( "desktop.splash", "setValue: " << nValue );
 
