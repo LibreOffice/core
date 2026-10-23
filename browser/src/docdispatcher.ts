@@ -1159,7 +1159,7 @@ class Dispatcher {
 
 		this.actionsMap['notespanelbottom'] = function () {
 			const openPanel = function () {
-				if (!app.map.notesPanel.isVisible()) app.map.notesPanel.toggle();
+				app.map.notesPanel.setOpen(true);
 			};
 
 			if (!app.impress.notesMode) {
@@ -1182,12 +1182,12 @@ class Dispatcher {
 		};
 
 		this.actionsMap['notespanelhandout'] = function () {
-			if (app.map.notesPanel.isVisible()) app.map.notesPanel.toggle();
+			app.map.notesPanel.setOpen(false);
 			if (!app.impress.notesMode) app.map.sendUnoCommand('.uno:NotesMode');
 		};
 
 		this.actionsMap['notespanelhidden'] = function () {
-			if (app.map.notesPanel.isVisible()) app.map.notesPanel.toggle();
+			app.map.notesPanel.setOpen(false);
 			if (app.impress.notesMode)
 				app.map.sendUnoCommand('.uno:NormalMultiPaneGUI');
 		};

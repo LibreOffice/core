@@ -136,9 +136,11 @@ class NotesPanel extends JSDialogComponent {
 	}
 
 	/// Asks the engine to open or close the notes pane.
-	public toggle() {
-		this.map.sendUnoCommand('.uno:BottomPaneImpress');
-		if (this.isVisible()) this.setVisible(false);
+	public setOpen(open: boolean) {
+		this.map.sendUnoCommand(
+			'.uno:BottomPaneImpress?BottomPaneImpress:bool=' + open,
+		);
+		if (!open && this.isVisible()) this.setVisible(false);
 	}
 
 	private heightPrefKey(): string {
