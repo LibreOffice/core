@@ -2591,6 +2591,10 @@ bool ClientRequestDispatcher::handlePostRequest(const RequestDetails& requestDet
         if (requestDetails.equals(1, "convert-to") && format.empty())
             hasRequiredParameters = false;
 
+        // The format becomes the extension of the output file name.
+        if (!format.empty() && !FileUtil::isPlainFileName(format))
+            hasRequiredParameters = false;
+
         const AdditionalFilePaths& fromPaths = handler.getFilenames();
         std::string fromPath;
         auto it = fromPaths.find("data");

@@ -83,6 +83,22 @@ public:
         }
     }
 
+    /// A conversion is refused when its format is not a single file extension.
+    void testFormatIsOneExtension()
+    {
+        TST_LOG("testFormatIsOneExtension");
+        auto httpSession = http::Session::create(helpers::getTestServerURI());
+
+        http::Request request("/cool/convert-to", http::Request::VERB_POST);
+        helpers::MultipartFormBody form;
+        form.addField("format", "txt/txt");
+        form.addStringPart("data", "Hello world test\n", "text/plain", "foobaa.txt");
+        form.applyTo(request);
+
+        const auto httpResponse = httpSession->syncRequest(request);
+        LOK_ASSERT_EQUAL(http::StatusCode::BadRequest, httpResponse->statusCode());
+    }
+
     void writeString(const std::shared_ptr<Poco::Net::StreamSocket> &socket, const std::string& str)
     {
         TST_LOG("Sending " << str.size() << " bytes:\n" << str);
@@ -245,6 +261,7 @@ public:
     {
         testChunks();
         testContinue();
+        testFormatIsOneExtension();
         TST_LOG("All tests passed.");
         exitTest(TestResult::Ok);
     }
