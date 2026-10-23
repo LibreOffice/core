@@ -3,7 +3,7 @@
     <version value="1.26.10" />
     <identifier value="bgodolja.hunspell.dictionary.albanian" />
     <display-name>
-        <name lang="en">Albanian spellchecker</name>
+        <name lang="en-US">Albanian spelling dictionary, and hyphenation rules</name>
         <name lang="sq">Korrektor i gjuhës shqipe</name>
     </display-name>
     <platform value="all" />

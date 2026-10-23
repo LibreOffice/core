@@ -1,6 +1,5 @@
 Hunspell Dictionary for Albanian (sq_AL)
 ========================================
-Version: 1.26.10 (21.10.2026)
 Source Project: https://github.com/bgodole/korrektor
 Maintainer: Besmir Godolja <bgodole@gmail.com>
 
@@ -8,7 +7,7 @@ Linguistic Grounding:
 This dictionary has been completely built from scratch. It is based on the
 authoritative "Big Dictionary of the Albanian Language" (2026) and
 systematically applies the structural rules of "The Orthography of the
-Albanian Language" (1973). It features a completely overhaul, flag-driven
+Albanian Language" (1973). It features a complete overhaul, flag-driven
 architecture mapping nearly 1.3 million valid grammatical wordforms.
 
 Licensing:
@@ -20,4 +19,4 @@ any later version.
 You should have received a copy of the GNU General Public License along with
 this program. If not, see <https://www.gnu.org/licenses/>.
 
-Copyright (c) 2026, by Besmir Godolja. All rights reserved.
+Copyright (c) 2026, by Besmir Godolja.
