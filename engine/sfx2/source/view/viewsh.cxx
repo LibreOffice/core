@@ -1245,6 +1245,102 @@ void collectListWindow(const uno::Reference<css::accessibility::XAccessibleText>
                              aAfter.aParagraphs.end());
 }
 
+struct TableCellText
+{
+    sal_Int32 nCol;
+    sal_Int32 nRowSpan;
+    sal_Int32 nColSpan;
+    OUString sText;
+};
+
+struct TableRowText
+{
+    sal_Int32 nRow;
+    std::vector<TableCellText> aCells;
+};
+
+struct TableWindow
+{
+    sal_Int32 nRowCount = 0;
+    sal_Int32 nColCount = 0;
+    std::vector<TableRowText> aRows;
+};
+
+OUString getCellText(const uno::Reference<accessibility::XAccessible>& xCell)
+{
+    uno::Reference<accessibility::XAccessibleContext> xCellContext
+        = xCell.is() ? xCell->getAccessibleContext() : nullptr;
+    if (!xCellContext.is())
+        return OUString();
+
+    OUStringBuffer aText;
+    const sal_Int64 nCount = xCellContext->getAccessibleChildCount();
+    for (sal_Int64 i = 0; i < nCount; ++i)
+    {
+        uno::Reference<accessibility::XAccessible> xChild = xCellContext->getAccessibleChild(i);
+        uno::Reference<accessibility::XAccessibleContext> xChildContext
+            = xChild.is() ? xChild->getAccessibleContext() : nullptr;
+        if (!xChildContext.is())
+            continue;
+
+        uno::Reference<accessibility::XAccessibleText> xChildText(xChild, uno::UNO_QUERY);
+        if (!isParagraphRole(xChildContext->getAccessibleRole()) || !xChildText.is())
+            continue;
+
+        if (!aText.isEmpty())
+            aText.append('\n');
+        aText.append(xChildText->getText());
+    }
+    return aText.makeStringAndClear();
+}
+
+// The rows around the caret's row of the innermost table holding the paragraph.
+void collectTableWindow(const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
+                        sal_Int32 nRadius, TableWindow& rTable)
+{
+    rTable = TableWindow();
+
+    uno::Reference<accessibility::XAccessibleContext> xContext(xAccText, uno::UNO_QUERY);
+    if (!xContext.is())
+        return;
+
+    uno::Reference<accessibility::XAccessibleTable> xTable;
+    sal_Int64 nChildIndex = 0;
+    lookForParentTable(xContext, xTable, nChildIndex);
+    if (!xTable.is())
+        return;
+
+    try
+    {
+        rTable.nRowCount = xTable->getAccessibleRowCount();
+        rTable.nColCount = xTable->getAccessibleColumnCount();
+        const sal_Int32 nCaretRow = xTable->getAccessibleRow(nChildIndex);
+        const sal_Int32 nFirst = std::max<sal_Int32>(0, nCaretRow - nRadius);
+        const sal_Int32 nLast = std::min<sal_Int32>(rTable.nRowCount - 1, nCaretRow + nRadius);
+
+        for (sal_Int32 nRow = nFirst; nRow <= nLast; ++nRow)
+        {
+            TableRowText aRow{ nRow, {} };
+            for (sal_Int32 nCol = 0; nCol < rTable.nColCount; ++nCol)
+            {
+                const sal_Int64 nIndex = xTable->getAccessibleIndex(nRow, nCol);
+                // a merged cell is listed once, at its top left position
+                if (xTable->getAccessibleRow(nIndex) != nRow
+                    || xTable->getAccessibleColumn(nIndex) != nCol)
+                    continue;
+                aRow.aCells.push_back({ nCol, xTable->getAccessibleRowExtentAt(nRow, nCol),
+                                        xTable->getAccessibleColumnExtentAt(nRow, nCol),
+                                        getCellText(xTable->getAccessibleCellAt(nRow, nCol)) });
+            }
+            rTable.aRows.push_back(std::move(aRow));
+        }
+    }
+    catch (const lang::IndexOutOfBoundsException&)
+    {
+        rTable = TableWindow();
+    }
+}
+
 // A deleted paragraph outlives its frame, and Writer reads its markup through
 // the frame without checking.
 bool isDefunct(const uno::Reference<css::accessibility::XAccessibleText>& xAccText)
@@ -1461,6 +1557,7 @@ class KitDocumentFocusListener :
     static constexpr sal_Int64 MAX_ATTACHABLE_CHILDREN = 100;
     static constexpr sal_Int32 PARAGRAPH_WINDOW = 10;
     static constexpr sal_Int32 LIST_ITEM_WINDOW = 25;
+    static constexpr sal_Int32 TABLE_ROW_WINDOW = 25;
 
     const SfxViewShell* m_pViewShell;
     sal_Int16 m_nDocumentType;
@@ -1478,6 +1575,7 @@ class KitDocumentFocusListener :
     mutable std::vector<ContextParagraph> m_aParagraphsBefore;
     mutable std::vector<ContextParagraph> m_aParagraphsAfter;
     mutable ListWindow m_aList;
+    mutable TableWindow m_aTable;
     uno::Reference<accessibility::XAccessibleText> m_xFocusedText;
     uno::Reference<accessibility::XAccessibleTable> m_xLastTable;
     OUString m_sSelectedText;
@@ -1693,6 +1791,34 @@ void KitDocumentFocusListener::paragraphPropertiesToTree(boost::property_tree::p
         aList.add_child("items", aItems);
         aPayloadTree.add_child("list", aList);
     }
+    if (!m_aTable.aRows.empty())
+    {
+        boost::property_tree::ptree aRows;
+        for (const TableRowText& rRow : m_aTable.aRows)
+        {
+            boost::property_tree::ptree aCells;
+            for (const TableCellText& rCell : rRow.aCells)
+            {
+                boost::property_tree::ptree aCell;
+                aCell.put("col", rCell.nCol);
+                aCell.put("text", rCell.sText.toUtf8().getStr());
+                if (rCell.nRowSpan > 1)
+                    aCell.put("rowSpan", rCell.nRowSpan);
+                if (rCell.nColSpan > 1)
+                    aCell.put("colSpan", rCell.nColSpan);
+                aCells.push_back(std::make_pair("", aCell));
+            }
+            boost::property_tree::ptree aRow;
+            aRow.put("row", rRow.nRow);
+            aRow.add_child("cells", aCells);
+            aRows.push_back(std::make_pair("", aRow));
+        }
+        boost::property_tree::ptree aTable;
+        aTable.put("rowCount", m_aTable.nRowCount);
+        aTable.put("colCount", m_aTable.nColCount);
+        aTable.add_child("rows", aRows);
+        aPayloadTree.add_child("table", aTable);
+    }
     if (force)
         aPayloadTree.put("force", 1);
 }
@@ -1715,9 +1841,15 @@ void KitDocumentFocusListener::collectContextWindow(
     const uno::Reference<css::accessibility::XAccessibleText>& xAccText) const
 {
     if (isText(m_nDocumentType))
+    {
         collectListWindow(xAccText, LIST_ITEM_WINDOW, m_aList);
+        collectTableWindow(xAccText, TABLE_ROW_WINDOW, m_aTable);
+    }
     else
+    {
         m_aList = ListWindow();
+        m_aTable = TableWindow();
+    }
     collectParagraphWindow(m_pViewShell, xAccText, PARAGRAPH_WINDOW, visibleArea(),
                            m_aList.aParagraphs, m_aParagraphsBefore, m_aParagraphsAfter);
 }
@@ -1734,6 +1866,7 @@ std::string KitDocumentFocusListener::getFocusedParagraph()
         m_aParagraphsBefore.clear();
         m_aParagraphsAfter.clear();
         m_aList = ListWindow();
+        m_aTable = TableWindow();
     }
     else if (m_xFocusedText.is())
     {
@@ -2171,6 +2304,7 @@ void KitDocumentFocusListener::resetParagraphInfo()
     m_aParagraphsBefore.clear();
     m_aParagraphsAfter.clear();
     m_aList = ListWindow();
+    m_aTable = TableWindow();
     m_xFocusedText.clear();
 }
 
