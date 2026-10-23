@@ -350,6 +350,7 @@ NODE_MODULES_JS =\
 
 COOL_LIBS_JS =\
 	Autolinker.js \
+	omggif.js \
 	plural.js \
 	sanitize-url.js
 
@@ -429,6 +430,7 @@ COOL_JS_LST =\
 	src/app/BitmapTileManager.ts \
 	src/app/VectorResourceTracker.ts \
 	src/app/VectorManager.ts \
+	src/app/ImageDecoderPolyfill.ts \
 	src/app/GifFrameSource.ts \
 	src/app/AnimatedGifManager.ts \
 	src/app/TilesMiddleware.ts \

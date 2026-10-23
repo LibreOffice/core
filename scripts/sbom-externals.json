@@ -196,6 +196,17 @@
             "thirdparty": "sanitize-url"
         },
         {
+            "name": "omggif",
+            "vendor": "dean_mcnamee",
+            "version": "1.0.10-0ec9069a525e",
+            "source": "browser/js/omggif.js",
+            "url": "https://github.com/deanm/omggif",
+            "declared": "MIT",
+            "concluded": "MIT",
+            "comment": "decoder only, from upstream git after the 1.0.10 release",
+            "thirdparty": "omggif"
+        },
+        {
             "name": "Base.js",
             "vendor": "dean_edwards",
             "version": "1.1a",

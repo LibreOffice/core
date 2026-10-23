@@ -352,6 +352,10 @@ gl-matrix - High performance matrix and vector operations
 Copyright (c) 2015-2021, Brandon Jones, Colin MacKenzie IV.
 MIT License
 
+omggif - GIF decoder in JavaScript
+Copyright (c) 2013 Dean McNamee
+MIT License
+
 hammer.js – A javascript library for multi-touch gestures
 Copyright (C) 2011-2017 by Jorik Tangelder (Eight Media)
 MIT License
