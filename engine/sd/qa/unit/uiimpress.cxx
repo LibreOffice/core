@@ -790,9 +790,58 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureSetNotes)
 
     CPPUNIT_ASSERT_EQUAL(u"Speak to the roadmap here."_ustr, notesText());
 
+    // The text view and the slides view both show the notes.
+    {
+        tools::JsonWriter aJsonWriter;
+        pImpressDocument->getCommandValues(aJsonWriter,
+                                           ".uno:ExtractDocumentStructure?filter=text");
+        const OString aText = aJsonWriter.finishAndGetAsOString();
+        CPPUNIT_ASSERT(aText.indexOf("Speaker notes:") >= 0);
+        CPPUNIT_ASSERT(aText.indexOf("Speak to the roadmap here.") >= 0);
+    }
+    {
+        tools::JsonWriter aJsonWriter;
+        pImpressDocument->getCommandValues(aJsonWriter,
+                                           ".uno:ExtractDocumentStructure?filter=slides");
+        const OString aSlides = aJsonWriter.finishAndGetAsOString();
+        CPPUNIT_ASSERT(aSlides.indexOf("\"Notes\": \"Speak to the roadmap here.\"") >= 0);
+    }
+
     // One undo clears the notes again.
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT(notesText() != u"Speak to the roadmap here."_ustr);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureNotesBeingTyped)
+{
+    // Notes someone is typing into the empty notes placeholder are in the extracted structure
+    // before the typing ends.
+    createSdImpressDoc();
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+
+    dispatchCommand(mxComponent, u".uno:NotesMode"_ustr, {});
+    sd::ViewShell* pViewShell = getSdDocShell()->GetViewShell();
+    sd::View* pView = pViewShell->GetView();
+    SdPage* pNotesPage = pImpressDocument->GetDoc()->GetSdPage(0, PageKind::Notes);
+    SdrObject* pNotesObj = pNotesPage->GetPresObj(PresObjKind::Notes);
+    CPPUNIT_ASSERT(pNotesObj);
+    CPPUNIT_ASSERT(pNotesObj->IsEmptyPresObj());
+
+    SdrPageView* pPageView = pView->GetSdrPageView();
+    pView->MarkObj(pNotesObj, pPageView);
+    pView->SdrBeginTextEdit(pNotesObj, pPageView, pViewShell->GetActiveWindow());
+    CPPUNIT_ASSERT(pView->GetTextEditOutlinerView());
+    pView->GetTextEditOutlinerView()->GetEditView().SetSelection(ESelection::All());
+    pView->GetTextEditOutlinerView()->GetEditView().InsertText(u"Typed into the notes"_ustr);
+
+    tools::JsonWriter aJsonWriter;
+    pImpressDocument->getCommandValues(aJsonWriter,
+                                       ".uno:ExtractDocumentStructure?filter=slides");
+    const OString aSlides = aJsonWriter.finishAndGetAsOString();
+    CPPUNIT_ASSERT(aSlides.indexOf("\"Notes\": \"Typed into the notes\"") >= 0);
+
+    pView->SdrEndTextEdit();
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureReportsWhatItDidNotApply)

@@ -1903,6 +1903,34 @@ OUString lcl_PresObjKindName(PresObjKind eKind)
     return OUString();
 }
 
+/// The speaker notes of the given slide, one line per paragraph, or an empty string when the
+/// slide has none.
+OUString lcl_GetSlideNotes(SdDrawDocument* pDrawDoc, sal_uInt16 nPage)
+{
+    SdPage* pNotesPage = pDrawDoc->GetSdPage(nPage, PageKind::Notes);
+    SdrTextObj* pNotesObj
+        = pNotesPage ? DynCastSdrTextObj(pNotesPage->GetPresObj(PresObjKind::Notes)) : nullptr;
+    // A placeholder still marked empty holds notes while someone types into it.
+    if (!pNotesObj || !pNotesObj->HasText()
+        || (pNotesObj->IsEmptyPresObj() && !pNotesObj->IsInEditMode()))
+        return OUString();
+
+    std::optional<OutlinerParaObject> oParagraphs
+        = getTextParagraphSnapshot(pNotesObj, pNotesObj->getText(0));
+    if (!oParagraphs)
+        return OUString();
+
+    const EditTextObject& rTextObject = oParagraphs->GetTextObject();
+    OUStringBuffer aNotes;
+    for (sal_Int32 nPara = 0; nPara < rTextObject.GetParagraphCount(); ++nPara)
+    {
+        if (nPara > 0)
+            aNotes.append("\n");
+        aNotes.append(rTextObject.GetText(nPara));
+    }
+    return aNotes.makeStringAndClear();
+}
+
 void GetDocStructureSlides(::tools::JsonWriter& rJsonWriter, const SdXImpressDocument* pDoc,
                            const std::map<OUString, OUString>& rArguments)
 {
@@ -1962,6 +1990,11 @@ void GetDocStructureSlides(::tools::JsonWriter& rJsonWriter, const SdXImpressDoc
             AutoLayout nLayout = pPageStandard->GetAutoLayout();
             rJsonWriter.put("LayoutId", static_cast<int>(nLayout));
             rJsonWriter.put("LayoutName", SdPage::autoLayoutToString(nLayout));
+
+            // Speaker notes, when the slide has any.
+            const OUString aNotes = lcl_GetSlideNotes(pDoc->GetDoc(), nPId);
+            if (!aNotes.isEmpty())
+                rJsonWriter.put("Notes", aNotes);
 
             // Every Objects in the page
             int nObjCount = pPageStandard->GetObjCount();
@@ -2023,7 +2056,8 @@ void GetDocStructureSlides(::tools::JsonWriter& rJsonWriter, const SdXImpressDoc
 }
 
 /// Writes the text of every slide as markdown into a "BodyText" node, one
-/// "## Slide N: <name>" section per slide. Reads the live document, so
+/// "## Slide N: <name>" section per slide, which ends with the slide's speaker
+/// notes when it has any. Reads the live document, so
 /// unsaved edits and text still being typed are reflected. Whole slides are
 /// appended until the size cap is reached, so a truncated result ends at a
 /// slide boundary.
@@ -2073,6 +2107,10 @@ void GetDocStructureSlidesText(::tools::JsonWriter& rJsonWriter, const SdXImpres
                     aSlideBuffer.append(rTextObject.GetText(nPara) + "\n");
             }
         }
+
+        const OUString aNotes = lcl_GetSlideNotes(pDrawDoc, nPage);
+        if (!aNotes.isEmpty())
+            aSlideBuffer.append("\nSpeaker notes:\n" + aNotes + "\n");
 
         const OUString aSlideText = aSlideBuffer.makeStringAndClear();
         if (aBody.getLength() + aSlideText.getLength() > KitHelper::AIBodyTextMaxChars)
