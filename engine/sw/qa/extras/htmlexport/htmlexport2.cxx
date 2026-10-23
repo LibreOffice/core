@@ -11,10 +11,17 @@
 
 #include "htmlmodeltestbase.hxx"
 #include <config_pdfimport.h>
+#include <functional>
 #include <memory>
+#include <set>
 
 #include <com/sun/star/document/XTypeDetection.hpp>
 #include <com/sun/star/table/TableBorder2.hpp>
+#include <com/sun/star/text/ReferenceFieldSource.hpp>
+#include <com/sun/star/text/XParagraphCursor.hpp>
+#include <com/sun/star/text/XReferenceMarksSupplier.hpp>
+#include <com/sun/star/text/XTextFieldsSupplier.hpp>
+#include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 
 #include <officecfg/Office/Common.hxx>
@@ -1272,12 +1279,91 @@ CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testSequenceAndReferenceFields)
     CPPUNIT_ASSERT(aHtml.indexOf("<sdfield type=SEQUENCE format=ARABIC name=\"Figure\" value=\"0\">1</sdfield>") != -1);
     CPPUNIT_ASSERT(aHtml.indexOf("<sdfield type=REFERENCE subtype=SEQUENCE format=CATNUMBER name=\"Figure\" value=\"0\">") != -1);
     CPPUNIT_ASSERT(aHtml.indexOf("<sdfield type=REFERENCE subtype=BOOKMARK format=PAGE name=\"notes\" value=\"0\">") != -1);
-    // A reference mark is not written to HTML, so the reference to one stays its text: as a
-    // field it would show an error once read back.
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aHtml.indexOf("name=\"tip\""));
-    const sal_Int32 nMarkText = aHtml.indexOf("Water daily");
-    CPPUNIT_ASSERT(nMarkText != -1);
-    CPPUNIT_ASSERT(aHtml.indexOf("Water daily", nMarkText + 1) != -1);
+    CPPUNIT_ASSERT(aHtml.indexOf("<sdfield type=REFERENCE subtype=SETREF format=CONTENT name=\"tip\" value=\"0\">") != -1);
+}
+
+CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testReferenceMarks)
+{
+    // Given a reference mark over text with a mark at a point inside it, a mark that starts in
+    // bold text and ends after it, a mark at a point, and a reference to each but the inner one:
+    createSwDoc("fields.fodt");
+
+    // When exporting to HTML:
+    ExportToHTML();
+
+    // Then each mark is a span with its name as its id, an empty one for a mark at a point, and
+    // one per piece for the mark around the bold text:
+    OString aHtml;
+    {
+        SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+        OStringBuffer aBuffer;
+        OString aLine;
+        while (aStream.ReadLine(aLine))
+            aBuffer.append(aLine);
+        aHtml = aBuffer.makeStringAndClear();
+    }
+    CPPUNIT_ASSERT(aHtml.indexOf("<span class=\"sdrefmark\" id=\"tip\">") != -1);
+    const sal_Int32 nRule = aHtml.indexOf("<span class=\"sdrefmark\" id=\"rule\">");
+    CPPUNIT_ASSERT(nRule != -1);
+    CPPUNIT_ASSERT(aHtml.indexOf("<span class=\"sdrefmark\" id=\"rule\">", nRule + 1) != -1);
+    CPPUNIT_ASSERT(aHtml.indexOf("<span class=\"sdrefmark\" id=\"here\"></span>") != -1);
+    CPPUNIT_ASSERT(aHtml.indexOf("<span class=\"sdrefmark\" id=\"now\"></span>") != -1);
+
+    // And when reading the HTML back:
+    setImportFilterName(TestFilter::HTML_WRITER);
+    loadFromURL(maTempFile.GetURL());
+
+    // Then the marks are there again, each over its own text, the one written in two pieces
+    // as one mark, and the references show their targets: the marks used to be left out, and
+    // the references to them came back as text.
+    uno::Reference<text::XReferenceMarksSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xMarks = xSupplier->getReferenceMarks();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(4),
+                         uno::Reference<container::XIndexAccess>(xMarks, uno::UNO_QUERY_THROW)->getCount());
+    std::function<OUString(const OUString&)> markText = [&xMarks](const OUString& rName) {
+        uno::Reference<text::XTextContent> xMark(xMarks->getByName(rName), uno::UNO_QUERY);
+        return xMark->getAnchor()->getString();
+    };
+    CPPUNIT_ASSERT_EQUAL(u"Water daily"_ustr, markText(u"tip"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"watering daily"_ustr, markText(u"rule"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, markText(u"here"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u""_ustr, markText(u"now"_ustr));
+    // the marks at a point are where they were
+    std::function<OUString(const OUString&)> textBefore = [&xMarks](const OUString& rName) {
+        uno::Reference<text::XTextContent> xMark(xMarks->getByName(rName), uno::UNO_QUERY);
+        uno::Reference<text::XTextRange> xPoint = xMark->getAnchor();
+        uno::Reference<text::XParagraphCursor> xCursor(
+            xPoint->getText()->createTextCursorByRange(xPoint->getStart()), uno::UNO_QUERY_THROW);
+        xCursor->gotoStartOfParagraph(/*bExpand=*/true);
+        return xCursor->getString();
+    };
+    CPPUNIT_ASSERT_EQUAL(u"Sow "_ustr, textBefore(u"here"_ustr));
+    // The first paragraph may start with comments: a document without dates gets meta tags
+    // that come back as comments there, before the marks.
+    CPPUNIT_ASSERT(textBefore(u"now"_ustr).endsWith("Water "));
+
+    // a reference looks its target up when the fields are updated
+    uno::Reference<text::XTextFieldsSupplier> xFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<util::XRefreshable>(xFieldsSupplier->getTextFields(), uno::UNO_QUERY_THROW)
+        ->refresh();
+    uno::Reference<container::XEnumeration> xFields
+        = xFieldsSupplier->getTextFields()->createEnumeration();
+    std::set<OUString> aReferenced;
+    while (xFields->hasMoreElements())
+    {
+        uno::Reference<beans::XPropertySet> xField(xFields->nextElement(), uno::UNO_QUERY);
+        uno::Reference<lang::XServiceInfo> xInfo(xField, uno::UNO_QUERY);
+        if (!xInfo->supportsService(u"com.sun.star.text.TextField.GetReference"_ustr)
+            || getProperty<sal_Int16>(xField, u"ReferenceFieldSource"_ustr)
+                   != text::ReferenceFieldSource::REFERENCE_MARK)
+            continue;
+        const OUString aName = getProperty<OUString>(xField, u"SourceName"_ustr);
+        aReferenced.insert(aName);
+        if (aName != u"here")
+            CPPUNIT_ASSERT_EQUAL(markText(aName),
+                                 getProperty<OUString>(xField, u"CurrentPresentation"_ustr));
+    }
+    CPPUNIT_ASSERT_EQUAL(size_t(3), aReferenced.size());
 }
 
 CPPUNIT_TEST_FIXTURE(SwHtmlDomExportTest, testHTML_Tdf160390)

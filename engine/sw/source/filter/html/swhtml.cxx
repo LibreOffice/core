@@ -73,6 +73,8 @@
 #include <frmatr.hxx>
 #include <charatr.hxx>
 #include <fmtfld.hxx>
+#include <fmtrfmrk.hxx>
+#include <txtrfmrk.hxx>
 #include <fmtpdsc.hxx>
 #include <fmtanchr.hxx>
 #include <fmtsrnd.hxx>
@@ -2934,6 +2936,11 @@ void SwHTMLParser::SetAttr_( bool bChkEnd, bool bBeforeTable,
                     pAttr = pPrev;
                     continue;
 
+                case RES_TXTATR_REFMARK:
+                    InsertRefMark( aAttrPam,
+                                   static_cast<const SwFormatRefMark&>(*pAttr->m_pItem) );
+                    break;
+
                 // tdf#94088 expand RES_BACKGROUND to the new fill attribute
                 // definitions in the range [XATTR_FILL_FIRST .. XATTR_FILL_LAST].
                 // This is the right place in the future if the adapted fill attributes
@@ -3511,6 +3518,16 @@ void SwHTMLParser::NewStdAttr( HtmlTokenId nToken )
     // create a new context
     std::unique_ptr<HTMLAttrContext> xCntxt(new HTMLAttrContext(nToken));
 
+    // A span of the class for reference marks is a reference mark, named by
+    // its id; the id makes no bookmark then.
+    if( HtmlTokenId::SPAN_ON == nToken && !aId.isEmpty() &&
+        aClass.equalsIgnoreAsciiCase( OOO_STRING_SVTOOLS_HTML_sdrefmark ) )
+    {
+        StartRefMark( aId, *xCntxt );
+        aId.clear();
+        aClass.clear();
+    }
+
     // A span whose class names a character style of the document gets that
     // style; the rule of the class and the inline style restate its attributes.
     SwCharFormat* pCharFormat = nullptr;
@@ -3628,6 +3645,60 @@ void SwHTMLParser::NewStdAttr( HtmlTokenId nToken,
 
     // save the context
     PushContext(xCntxt);
+}
+
+void SwHTMLParser::StartRefMark( const OUString& rName, HTMLAttrContext& rContext )
+{
+    // A mark over text is an attribute like the others: it is set with them,
+    // so it keeps its place when fields set with them take a character.
+    rContext.SetRefMark( rName, *m_pPam->GetPoint() );
+    InsertAttr( &m_xAttrTab->pRefMark, SwFormatRefMark( SwMarkName( rName ) ), &rContext );
+}
+
+void SwHTMLParser::EndRefMark( const HTMLAttrContext& rContext )
+{
+    // An empty span is a mark at a point. Its attribute had no text to span
+    // and is gone; the mark goes in here, as a field does.
+    if( rContext.GetRefMark().isEmpty() || !rContext.IsRefMarkEmptyAt( *m_pPam->GetPoint() ) )
+        return;
+    const SwMarkName aName( rContext.GetRefMark() );
+    if( m_xDoc->GetRefMark( aName ) )
+        return;
+    m_xDoc->getIDocumentContentOperations().InsertPoolItem( *m_pPam, SwFormatRefMark( aName ) );
+    m_aRefMarkNames.insert( rContext.GetRefMark() );
+}
+
+void SwHTMLParser::InsertRefMark( const SwPaM& rPaM, const SwFormatRefMark& rRefMark )
+{
+    const SwMarkName& rName = rRefMark.GetRefName();
+    const SwFormatRefMark* pOld = m_xDoc->GetRefMark( rName );
+    if( !pOld )
+    {
+        m_xDoc->getIDocumentContentOperations().InsertPoolItem( rPaM, rRefMark );
+        m_aRefMarkNames.insert( rName.toString() );
+        return;
+    }
+
+    // A mark that began before other formatting and ended after it is
+    // written as one span per piece: a piece next to a mark this import
+    // made joins it. Otherwise the mark of the document stays, as when
+    // pasting only a part of the text it spans.
+    const SwTextRefMark* pOldText = pOld->GetTextRefMark();
+    if( !m_aRefMarkNames.count( rName.toString() ) || !pOldText || !pOldText->End() ||
+        &pOldText->GetTextNode() != rPaM.Start()->GetNode().GetTextNode() ||
+        rPaM.Start()->GetNode() != rPaM.End()->GetNode() )
+        return;
+    const sal_Int32 nOldStart = pOldText->GetStart();
+    const sal_Int32 nOldEnd = *pOldText->End();
+    const sal_Int32 nStart = rPaM.Start()->GetContentIndex();
+    const sal_Int32 nEnd = rPaM.End()->GetContentIndex();
+    if( nOldEnd != nStart && nEnd != nOldStart )
+        return;
+    SwTextNode& rTextNode = *rPaM.Start()->GetNode().GetTextNode();
+    m_xDoc->DeleteFormatRefMark( pOld );
+    const SwPaM aJoined( rTextNode, std::min( nOldStart, nStart ),
+                         rTextNode, std::max( nOldEnd, nEnd ) );
+    m_xDoc->getIDocumentContentOperations().InsertPoolItem( aJoined, SwFormatRefMark( rName ) );
 }
 
 void SwHTMLParser::EndTag( HtmlTokenId nToken )

@@ -38,6 +38,7 @@
 #include <vcl/vclptr.hxx>
 
 #include <memory>
+#include <optional>
 #include <utility>
 #include <vector>
 #include <deque>
@@ -54,6 +55,7 @@ class SwViewShell;
 class SwStartNode;
 class SwFormatColl;
 class SwField;
+class SwFormatRefMark;
 class SwHTMLForm_Impl;
 struct SwHTMLFootEndNote_Impl;
 class HTMLTableCnts;
@@ -103,6 +105,7 @@ struct HTMLAttrTable
 
     HTMLAttr* pCharFormats; // text attributes
     HTMLAttr* pINetFormat;
+    HTMLAttr* pRefMark;
 
     HTMLAttr* pBold; // character attributes
     HTMLAttr* pBoldCJK;
@@ -248,6 +251,11 @@ class HTMLAttrContext
 
     bool m_bVisible = true;
 
+    // the reference mark the context opened, and where it starts
+    OUString m_aRefMark;
+    std::optional<SwNodeIndex> m_oRefMarkNode;
+    sal_Int32 m_nRefMarkContent = 0;
+
 public:
     void ClearSaveDocContext();
 
@@ -309,6 +317,20 @@ public:
 
     void SetVisible(bool bVisible) { m_bVisible = bVisible; }
     bool IsVisible() const { return m_bVisible; }
+
+    void SetRefMark(const OUString& rName, const SwPosition& rStart)
+    {
+        m_aRefMark = rName;
+        m_oRefMarkNode.emplace(rStart.GetNode());
+        m_nRefMarkContent = rStart.GetContentIndex();
+    }
+    const OUString& GetRefMark() const { return m_aRefMark; }
+    // whether nothing came between the start of the reference mark and rPos
+    bool IsRefMarkEmptyAt(const SwPosition& rPos) const
+    {
+        return m_oRefMarkNode && rPos.GetNode() == m_oRefMarkNode->GetNode()
+               && rPos.GetContentIndex() == m_nRefMarkContent;
+    }
 
     void SetSavedNumRule(SwNumRule* pRule) { m_pSavedNumRule = pRule; }
     SwNumRule* GetSavedNumRule() const { return m_pSavedNumRule; }
@@ -414,6 +436,8 @@ class SwHTMLParser : public SfxHTMLParser, public SvtListener
     ImageMap        *m_pImageMap;   // current image map
     std::unique_ptr<ImageMaps> m_pImageMaps;  ///< all Image-Maps that have been read
     std::unique_ptr<SwHTMLFootEndNote_Impl> m_pFootEndNoteImpl;
+
+    std::set<OUString> m_aRefMarkNames; // the reference marks the import made
 
     Size    m_aHTMLPageSize;      // page size of HTML template
 
@@ -871,6 +895,10 @@ private:
                             sal_uInt16 nSeqNo );
     void FinishFootEndNote();
     void InsertFootEndNoteText();
+
+    void StartRefMark( const OUString& rName, HTMLAttrContext& rContext );
+    void EndRefMark( const HTMLAttrContext& rContext );
+    void InsertRefMark( const SwPaM& rPaM, const SwFormatRefMark& rRefMark );
     SwNodeIndex *GetFootEndNoteSection( const OUString& rName );
 
     sal_Int32 StripTrailingLF();

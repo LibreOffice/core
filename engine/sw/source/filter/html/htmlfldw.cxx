@@ -283,15 +283,10 @@ static SwHTMLWriter& OutHTML_SwField( SwHTMLWriter& rWrt, const SwField* pField,
         case SwFieldIds::GetRef:
         {
             const SwGetRefField* pRefField = static_cast<const SwGetRefField*>(pField);
-            // A reference mark has no HTML of its own, so a reference to one
-            // goes out as the text it shows: as a field it would point at
-            // nothing after a round trip.
-            if( pRefField->GetSubType() == ReferencesSubtype::SetRefAttr )
-                break;
             pTypeStr = OOO_STRING_SW_HTML_FT_reference;
             switch( pRefField->GetSubType() )
             {
-                case ReferencesSubtype::SetRefAttr:                                               break;
+                case ReferencesSubtype::SetRefAttr:    pSubStr = OOO_STRING_SW_HTML_FS_setref;   break;
                 case ReferencesSubtype::SequenceField: pSubStr = OOO_STRING_SW_HTML_FS_sequence; break;
                 case ReferencesSubtype::Bookmark:      pSubStr = OOO_STRING_SW_HTML_FS_bookmark; break;
                 case ReferencesSubtype::Outline:       pSubStr = OOO_STRING_SW_HTML_FS_outline;  break;

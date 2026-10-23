@@ -391,6 +391,8 @@ void SwHTMLParser::EndContext( HTMLAttrContext *pContext )
     if( pContext->HasAttrs() )
         EndContextAttrs( pContext );
 
+    EndRefMark( *pContext );
+
     // If a section has been opened, end it. Since sections can be part of absolute-positioned
     // objects, this needs to be done before restoring document context
     if( pContext->GetSpansSection() )

@@ -53,6 +53,8 @@
 #include <fmtpdsc.hxx>
 #include <fmtflcnt.hxx>
 #include <fmtinfmt.hxx>
+#include <fmtrfmrk.hxx>
+#include <txtrfmrk.hxx>
 #include <txatbase.hxx>
 #include <frmatr.hxx>
 #include <charfmt.hxx>
@@ -1353,6 +1355,7 @@ HTMLOnOffState HTMLEndPosLst::GetHTMLItemState( const SfxPoolItem& rItem )
     case RES_CHRATR_CTL_FONTSIZE:
     case RES_CHRATR_CTL_LANGUAGE:
     case RES_TXTATR_INETFMT:
+    case RES_TXTATR_REFMARK:
         eState = HTML_REAL_VALUE;
         break;
 
@@ -3211,6 +3214,33 @@ SwHTMLWriter& OutHTML_INetFormat( SwHTMLWriter& rWrt, const SwFormatINetFormat& 
     return rWrt;
 }
 
+static SwHTMLWriter& OutHTML_SwFormatRefMark( SwHTMLWriter& rWrt, const SfxPoolItem& rHt )
+{
+    if( rWrt.m_bOutOpts || rWrt.mbReqIF )
+        return rWrt;
+
+    // A reference mark is a span with the mark's name as its id, an empty
+    // one for a mark at a point. A mark over text comes here at its start
+    // and at its end as a copy of the item, which knows no text attribute;
+    // a mark at a point comes once, as the item of its text attribute.
+    const SwFormatRefMark& rRefMark = static_cast<const SwFormatRefMark&>(rHt);
+    const SwTextRefMark* pTextRefMark = rRefMark.GetTextRefMark();
+    const bool bPoint = pTextRefMark && !pTextRefMark->End();
+    if( rWrt.m_bTagOn || bPoint )
+    {
+        rWrt.Strm().WriteOString( Concat2View( "<" + rWrt.GetNamespace()
+            + OOO_STRING_SVTOOLS_HTML_span " " OOO_STRING_SVTOOLS_HTML_O_class "=\""
+            OOO_STRING_SVTOOLS_HTML_sdrefmark "\" " OOO_STRING_SVTOOLS_HTML_O_id "=\"" ) );
+        HTMLOutFuncs::Out_String( rWrt.Strm(), rRefMark.GetRefName().toString() );
+        rWrt.Strm().WriteOString( "\">" );
+    }
+    if( !rWrt.m_bTagOn || bPoint )
+        HTMLOutFuncs::Out_AsciiTag( rWrt.Strm(),
+            Concat2View( rWrt.GetNamespace() + OOO_STRING_SVTOOLS_HTML_span ), false );
+
+    return rWrt;
+}
+
 static SwHTMLWriter& OutHTML_SwFormatINetFormat( SwHTMLWriter& rWrt, const SfxPoolItem& rHt )
 {
     if( rWrt.m_bOutOpts )
@@ -3414,7 +3444,7 @@ const SwAttrFnTab aHTMLAttrFnTab = {
 /* RES_CHRATR_SCRIPT_HINT */        nullptr,
 /* RES_CHRATR_OPTICAL_SIZING */     OutHTML_CSS1Attr,
 
-/* RES_TXTATR_REFMARK */            nullptr,
+/* RES_TXTATR_REFMARK */            OutHTML_SwFormatRefMark,
 /* RES_TXTATR_TOXMARK */            nullptr,
 /* RES_TXTATR_META */               nullptr,
 /* RES_TXTATR_METAFIELD */          nullptr,

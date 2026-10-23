@@ -3,13 +3,18 @@
  <office:styles>
   <style:style style:name="Standard" style:family="paragraph"/>
  </office:styles>
+ <office:automatic-styles>
+  <style:style style:name="T1" style:family="text"><style:text-properties fo:font-weight="bold"/></style:style>
+ </office:automatic-styles>
  <office:body>
   <office:text>
    <text:sequence-decls><text:sequence-decl text:display-outline-level="0" text:name="Figure"/></text:sequence-decls>
+   <text:p text:style-name="Standard"><text:reference-mark-start text:name="tip"/>Water <text:reference-mark text:name="now"/>daily<text:reference-mark-end text:name="tip"/>, the tip says: <text:reference-ref text:reference-format="text" text:ref-name="tip">Water daily</text:reference-ref>.</text:p>
    <text:p text:style-name="Standard">Figure <text:sequence text:ref-name="refFigure0" text:name="Figure" text:formula="ooow:Figure+1" style:num-format="1">1</text:sequence>: Beds in spring.</text:p>
    <text:p text:style-name="Standard">See <text:sequence-ref text:reference-format="category-and-value" text:ref-name="refFigure0">Figure 1</text:sequence-ref> and <text:bookmark-ref text:reference-format="page" text:ref-name="notes">1</text:bookmark-ref>.</text:p>
    <text:p text:style-name="Standard"><text:bookmark-start text:name="notes"/>Notes<text:bookmark-end text:name="notes"/></text:p>
-   <text:p text:style-name="Standard"><text:reference-mark-start text:name="tip"/>Water daily<text:reference-mark-end text:name="tip"/>, the tip says: <text:reference-ref text:reference-format="text" text:ref-name="tip">Water daily</text:reference-ref>.</text:p>
+   <text:p text:style-name="Standard"><text:span text:style-name="T1">Keep <text:reference-mark-start text:name="rule"/>wa</text:span>tering daily<text:reference-mark-end text:name="rule"/>, the rule says: <text:reference-ref text:reference-format="text" text:ref-name="rule">watering daily</text:reference-ref>.</text:p>
+   <text:p text:style-name="Standard">Sow <text:reference-mark text:name="here"/>here, see page <text:reference-ref text:reference-format="page" text:ref-name="here">1</text:reference-ref>.</text:p>
   </office:text>
  </office:body>
 </office:document>

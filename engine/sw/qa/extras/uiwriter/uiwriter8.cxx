@@ -25,7 +25,9 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/SetVariableType.hpp>
 #include <com/sun/star/text/ReferenceFieldSource.hpp>
+#include <com/sun/star/text/XReferenceMarksSupplier.hpp>
 #include <com/sun/star/text/XTextFieldsSupplier.hpp>
+#include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
@@ -1911,6 +1913,78 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateKeepsFields)
     uno::Reference<text::XTextContent> xBookmark(
         xBookmarks->getBookmarks()->getByName(u"plant"_ustr), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(u"What to plant first"_ustr, xBookmark->getAnchor()->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateKeepsReferenceMarks)
+{
+    // The mock returns the markup it was sent, as the translation services do.
+    std::unique_ptr<test::MockHttpServer> pMockServer = createMockTranslateServer(false, true);
+    CPPUNIT_ASSERT(pMockServer->start());
+    comphelper::ScopeGuard<std::function<void()>> aResetConfig
+        = setTranslationService(u"http://127.0.0.1:18099/v2/translate"_ustr);
+
+    // Given a reference mark over text, and a reference to it in another paragraph:
+    createSwDoc("translate-reference-mark.fodt");
+    SwWrtShell* const pWrtSh = getSwDocShell()->GetWrtShell();
+    pWrtSh->SttEndDoc(true);
+
+    // When translating the whole document:
+    bool bCancel = false;
+    CPPUNIT_ASSERT(SwTranslateHelper::TranslateDocumentCancellable(*pWrtSh, "DE"_ostr, bCancel));
+
+    // Then the mark spans the translation of its text, and the reference is a reference still
+    // and finds it: the mark used to go with the replaced text, and the reference came back
+    // as text.
+    uno::Reference<text::XReferenceMarksSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xMarks = xSupplier->getReferenceMarks();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1),
+                         uno::Reference<container::XIndexAccess>(xMarks, uno::UNO_QUERY_THROW)->getCount());
+    uno::Reference<text::XTextContent> xMark(xMarks->getByName(u"tip"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"Water daily"_ustr, xMark->getAnchor()->getString());
+
+    uno::Reference<text::XTextFieldsSupplier> xFieldsSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<util::XRefreshable>(xFieldsSupplier->getTextFields(), uno::UNO_QUERY_THROW)
+        ->refresh();
+    uno::Reference<container::XEnumeration> xFields
+        = xFieldsSupplier->getTextFields()->createEnumeration();
+    CPPUNIT_ASSERT(xFields->hasMoreElements());
+    uno::Reference<beans::XPropertySet> xField(xFields->nextElement(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(text::ReferenceFieldSource::REFERENCE_MARK,
+                         getProperty<sal_Int16>(xField, u"ReferenceFieldSource"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"tip"_ustr, getProperty<OUString>(xField, u"SourceName"_ustr));
+    CPPUNIT_ASSERT_EQUAL(u"Water daily"_ustr,
+                         getProperty<OUString>(xField, u"CurrentPresentation"_ustr));
+    CPPUNIT_ASSERT(!xFields->hasMoreElements());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslatePartOfReferenceMark)
+{
+    std::unique_ptr<test::MockHttpServer> pMockServer = createMockTranslateServer(false, true);
+    CPPUNIT_ASSERT(pMockServer->start());
+    comphelper::ScopeGuard<std::function<void()>> aResetConfig
+        = setTranslationService(u"http://127.0.0.1:18099/v2/translate"_ustr);
+
+    // Given a reference mark over "Water daily", and a selection from inside the mark to
+    // beyond it, "daily in":
+    createSwDoc("translate-reference-mark.fodt");
+    SwWrtShell* const pWrtSh = getSwDocShell()->GetWrtShell();
+    pWrtSh->SttEndDoc(true);
+    pWrtSh->Right(SwCursorSkipMode::Chars, /*bSelect=*/false, 6, /*bBasicCall=*/false);
+    pWrtSh->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 8, /*bBasicCall=*/false);
+
+    // When translating the selection:
+    bool bCancel = false;
+    CPPUNIT_ASSERT(SwTranslateHelper::TranslateDocumentCancellable(*pWrtSh, "DE"_ostr, bCancel));
+
+    // Then the document keeps its one mark, over the text that was not translated: the
+    // translation brings the selected part of the mark along, under the same name.
+    CPPUNIT_ASSERT_EQUAL(u"Water daily in the morning."_ustr, getParagraph(1)->getString());
+    uno::Reference<text::XReferenceMarksSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xMarks = xSupplier->getReferenceMarks();
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1),
+                         uno::Reference<container::XIndexAccess>(xMarks, uno::UNO_QUERY_THROW)->getCount());
+    uno::Reference<text::XTextContent> xMark(xMarks->getByName(u"tip"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"Water "_ustr, xMark->getAnchor()->getString());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateKeepsDirectFormatting)

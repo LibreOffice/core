@@ -70,6 +70,7 @@ HTMLOptionEnum<SwFieldIds> const aHTMLFieldTypeTable[] =
 
 HTMLOptionEnum<ReferencesSubtype> const aHTMLRefFieldSubTable[] =
 {
+    { OOO_STRING_SW_HTML_FS_setref,   ReferencesSubtype::SetRefAttr },
     { OOO_STRING_SW_HTML_FS_sequence, ReferencesSubtype::SequenceField },
     { OOO_STRING_SW_HTML_FS_bookmark, ReferencesSubtype::Bookmark },
     { OOO_STRING_SW_HTML_FS_outline,  ReferencesSubtype::Outline },

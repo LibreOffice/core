@@ -60,6 +60,7 @@
 #define OOO_STRING_SW_HTML_FS_tbl "TABLE"
 #define OOO_STRING_SW_HTML_FS_grf "GRAPHIC"
 #define OOO_STRING_SW_HTML_FS_ole "OLE"
+#define OOO_STRING_SW_HTML_FS_setref "SETREF"
 #define OOO_STRING_SW_HTML_FS_sequence "SEQUENCE"
 #define OOO_STRING_SW_HTML_FS_bookmark "BOOKMARK"
 #define OOO_STRING_SW_HTML_FS_outline "OUTLINE"

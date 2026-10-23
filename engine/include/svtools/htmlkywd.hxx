@@ -668,6 +668,7 @@
 #define OOO_STRING_SVTOOLS_HTML_sdfootnote "sdfootnote"
 #define OOO_STRING_SVTOOLS_HTML_sdfootnote_anc "sdfootnoteanc"
 #define OOO_STRING_SVTOOLS_HTML_sdfootnote_sym "sdfootnotesym"
+#define OOO_STRING_SVTOOLS_HTML_sdrefmark "sdrefmark"
 #define OOO_STRING_SVTOOLS_HTML_FTN_anchor "anc"
 #define OOO_STRING_SVTOOLS_HTML_FTN_symbol "sym"
 #define OOO_STRING_SVTOOLS_HTML_WW_off "off"
