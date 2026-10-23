@@ -1203,7 +1203,7 @@ void AIChatSession::postChatCompletion(
     if (Util::isMobileApp())
     {
         postViaTransport(docBroker, _toolLoop->requestUrl, authHeader, std::move(payloadStr),
-                         [onResponse](int statusCode, std::string body)
+                         [onResponse = std::move(onResponse)](int statusCode, std::string body)
                          { onResponse(statusCode, body, std::string()); });
         return;
     }

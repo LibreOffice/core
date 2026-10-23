@@ -1437,7 +1437,7 @@ bool ChildSession::loadDocument(const StringVector& tokens)
         if (COOLProtocol::stringToInteger(part, index))
             partId = getLOKitDocument()->getPartId(index, 0);
         else if (COOLProtocol::isValidPartId(part))
-            partId = part;
+            partId = std::move(part);
 
         if (!partId.empty())
             getLOKitDocument()->setPart(partId.c_str());
@@ -2881,7 +2881,7 @@ bool ChildSession::insertFile(const StringVector& tokens)
             }
             else
             {
-                decodedName = name;
+                decodedName = std::move(name);
             }
             url = writeFileToJail(FileUtil::createRandomTmpDir() + '/' + decodedName,
                                   binaryData.data(), binaryData.size());

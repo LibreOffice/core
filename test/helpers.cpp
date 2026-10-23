@@ -50,7 +50,7 @@ void MultipartFormBody::addFile(const std::string& name, const std::string& file
     const auto pos = filePath.find_last_of('/');
     if (pos != std::string::npos)
         filename = filePath.substr(pos + 1);
-    _parts.emplace_back(Part{ name, std::move(content), filename, contentType });
+    _parts.emplace_back(Part{ name, std::move(content), std::move(filename), contentType });
 }
 
 void MultipartFormBody::applyTo(http::Request& request) const
@@ -568,7 +568,7 @@ http::StatusCode postToInsertFile(const std::string& documentURL, const std::str
     path.replace(path.rfind("/ws"), 3, "/insertfile");
 
     auto httpSession = http::Session::create(getTestServerURI());
-    http::Request request(path, http::Request::VERB_POST);
+    http::Request request(std::move(path), http::Request::VERB_POST);
     MultipartFormBody form;
     form.addField("name", name);
     form.addField("childid", childId);
