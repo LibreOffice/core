@@ -77,6 +77,12 @@ void initialize(const std::string& rootPath, const Limits& limits,
 /// True when initialized and snapshots are enabled.
 bool isEnabled();
 
+/// The limits currently in force (the defaults until initialize()).
+Limits currentLimits();
+
+/// Replace the limits and prune to fit them immediately.
+void setLimits(const Limits& limits);
+
 /// Queue an asynchronous snapshot of @docPath. Cheap no-op when disabled;
 /// a request while a snapshot of the same path is in flight runs once
 /// that one ends. Failures are logged, never surfaced.
@@ -99,6 +105,9 @@ std::vector<VersionInfo> listVersions(const std::string& docPath);
 std::string exportVersion(const std::string& docPath, const std::string& versionFileName);
 
 void clearHistory(const std::string& docPath);
+
+/// Delete every stored version of every document.
+void clearAll();
 
 std::uint64_t storeSizeBytes();
 

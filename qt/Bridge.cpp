@@ -38,6 +38,7 @@
 #include <common/JsonUtil.hpp>
 #include <common/SettingsStorage.hpp>
 #include <common/StringVector.hpp>
+#include <common/VersionSettings.hpp>
 #include <Poco/Path.h>
 #include <Poco/URI.h>
 
@@ -1213,6 +1214,19 @@ QVariant Bridge::cool(const QString& messageStr)
             send2JS(data);
         }, !_document._remoteInfo);
         return {};
+    }
+    else if (tokens.equals(0, "VERSIONSTORESTATUS"))
+    {
+        return QString::fromStdString(versioning::statusJson());
+    }
+    else if (tokens.equals(0, "SETVERSIONSTORELIMITS"))
+    {
+        versioning::applyLimitsJson(tokens.substrFromToken(1), Application::getPrefs());
+        return {};
+    }
+    else if (tokens.equals(0, "CLEARALLVERSIONS"))
+    {
+        return QString::fromStdString(versioning::clearAllJson());
     }
     else if (tokens.equals(0, "SETDARKMODE"))
     {

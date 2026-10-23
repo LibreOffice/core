@@ -19,9 +19,12 @@
 #include <test/lokassert.hpp>
 
 #include <common/FileUtil.hpp>
+#include <common/JsonUtil.hpp>
 #include <common/Prefs.hpp>
 #include <common/VersionSettings.hpp>
 #include <common/VersionStore.hpp>
+
+#include <Poco/JSON/Object.h>
 
 #include <cppunit/extensions/HelperMacros.h>
 
@@ -57,13 +60,21 @@ class VersionStoreTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testSnapshotLargerThanStore);
     CPPUNIT_TEST(testClearHistoryDuringCopy);
     CPPUNIT_TEST(testSnapshotDuringCopy);
+    CPPUNIT_TEST(testDisableDuringCopy);
     CPPUNIT_TEST(testSnapshotExcluded);
     CPPUNIT_TEST(testUncreatableDirectory);
     CPPUNIT_TEST(testExportVersion);
     CPPUNIT_TEST(testClearHistory);
+    CPPUNIT_TEST(testClearAll);
+    CPPUNIT_TEST(testClearAllDuringCopy);
+    CPPUNIT_TEST(testSetLimits);
     CPPUNIT_TEST(testScanRebuildAndOrphanSweep);
     CPPUNIT_TEST(testGlobalCapEviction);
     CPPUNIT_TEST(testLimitsFromPrefs);
+    CPPUNIT_TEST(testApplyLimitsJson);
+    CPPUNIT_TEST(testStatusJson);
+    CPPUNIT_TEST(testClearAllJson);
+    CPPUNIT_TEST(testInitializeForApp);
     CPPUNIT_TEST(testDocKeyFromPortalHostPath);
     CPPUNIT_TEST(testDocKeyPlainAndSymlinkedPath);
     CPPUNIT_TEST(testPortalHostPath);
@@ -84,13 +95,21 @@ class VersionStoreTests : public CPPUNIT_NS::TestFixture
     void testSnapshotLargerThanStore();
     void testClearHistoryDuringCopy();
     void testSnapshotDuringCopy();
+    void testDisableDuringCopy();
     void testSnapshotExcluded();
     void testUncreatableDirectory();
     void testExportVersion();
     void testClearHistory();
+    void testClearAll();
+    void testClearAllDuringCopy();
+    void testSetLimits();
     void testScanRebuildAndOrphanSweep();
     void testGlobalCapEviction();
     void testLimitsFromPrefs();
+    void testApplyLimitsJson();
+    void testStatusJson();
+    void testClearAllJson();
+    void testInitializeForApp();
     void testDocKeyFromPortalHostPath();
     void testDocKeyPlainAndSymlinkedPath();
     void testPortalHostPath();
@@ -458,6 +477,30 @@ void VersionStoreTests::testSnapshotDuringCopy()
     LOK_ASSERT_EQUAL(static_cast<std::size_t>(1), FileUtil::getDirEntries(versionsRoot()).size());
 }
 
+void VersionStoreTests::testDisableDuringCopy()
+{
+    constexpr std::string_view testname = __func__;
+
+    versioning::Limits limits;
+    initStore(limits);
+
+    const std::string doc = writeDoc("report.odt", "some content");
+    versioning::setCopyHookForTest(
+        []
+        {
+            versioning::Limits disabled;
+            disabled.enabled = false;
+            versioning::setLimits(disabled);
+        });
+    const SnapshotResult result = versioning::snapshotSync(doc, true);
+    versioning::setCopyHookForTest(nullptr);
+
+    LOK_ASSERT(SnapshotResult::Disabled == result);
+    LOK_ASSERT(versioning::listVersions(doc).empty());
+    LOK_ASSERT(FileUtil::getDirEntries(versionsRoot()).empty());
+    LOK_ASSERT_EQUAL(static_cast<std::uint64_t>(0), versioning::storeSizeBytes());
+}
+
 void VersionStoreTests::testSnapshotExcluded()
 {
     constexpr std::string_view testname = __func__;
@@ -483,6 +526,9 @@ void VersionStoreTests::testUncreatableDirectory()
     const std::string doc = writeDoc("report.odt", "content");
     LOK_ASSERT(SnapshotResult::Failed == versioning::snapshotSync(doc, true));
     LOK_ASSERT(versioning::listVersions(doc).empty());
+
+    versioning::setLimits(limits);
+    LOK_ASSERT(!versioning::isEnabled());
 
     initStore(limits);
     LOK_ASSERT(!versioning::isEnabled());
@@ -535,6 +581,81 @@ void VersionStoreTests::testClearHistory()
     LOK_ASSERT(versioning::listVersions(doc).empty());
     LOK_ASSERT(!FileUtil::Stat(versioning::docDirectory(doc)).exists());
     LOK_ASSERT_EQUAL(static_cast<std::uint64_t>(0), versioning::storeSizeBytes());
+}
+
+void VersionStoreTests::testClearAll()
+{
+    constexpr std::string_view testname = __func__;
+
+    versioning::Limits limits;
+    initStore(limits);
+
+    const std::string docA = writeDoc("a.odt", "content a");
+    const std::string docB = writeDoc("b.ods", "content b");
+    LOK_ASSERT(SnapshotResult::Created == versioning::snapshotSync(docA, true));
+    LOK_ASSERT(SnapshotResult::Created == versioning::snapshotSync(docB, true));
+    LOK_ASSERT(versioning::storeSizeBytes() > 0);
+
+    versioning::clearAll();
+    LOK_ASSERT(versioning::listVersions(docA).empty());
+    LOK_ASSERT(versioning::listVersions(docB).empty());
+    LOK_ASSERT(!FileUtil::Stat(versioning::docDirectory(docA)).exists());
+    LOK_ASSERT(!FileUtil::Stat(versioning::docDirectory(docB)).exists());
+    LOK_ASSERT_EQUAL(static_cast<std::uint64_t>(0), versioning::storeSizeBytes());
+}
+
+void VersionStoreTests::testClearAllDuringCopy()
+{
+    constexpr std::string_view testname = __func__;
+
+    versioning::Limits limits;
+    initStore(limits);
+
+    // The copy under way is no version yet, so the delete leaves it.
+    const std::string doc = writeDoc("report.odt", "some content");
+    versioning::setCopyHookForTest([] { versioning::clearAll(); });
+    const SnapshotResult result = versioning::snapshotSync(doc, true);
+    versioning::setCopyHookForTest(nullptr);
+
+    LOK_ASSERT(SnapshotResult::Created == result);
+    LOK_ASSERT_EQUAL(static_cast<std::size_t>(1), versioning::listVersions(doc).size());
+    LOK_ASSERT_EQUAL(static_cast<std::uint64_t>(12), versioning::storeSizeBytes());
+}
+
+void VersionStoreTests::testSetLimits()
+{
+    constexpr std::string_view testname = __func__;
+
+    versioning::Limits limits;
+    initStore(limits);
+
+    const std::string doc = writeDoc("report.odt", "v0");
+    for (int i = 0; i < 5; ++i)
+    {
+        writeDoc("report.odt", "content " + std::to_string(i));
+        LOK_ASSERT(SnapshotResult::Created == versioning::snapshotSync(doc, true));
+    }
+    LOK_ASSERT_EQUAL(static_cast<std::size_t>(5), versioning::listVersions(doc).size());
+
+    // New limits apply immediately: the count cap prunes down to three.
+    versioning::Limits tighter;
+    tighter.maxVersionsPerDoc = 3;
+    versioning::setLimits(tighter);
+    LOK_ASSERT_EQUAL(static_cast<std::size_t>(3), versioning::currentLimits().maxVersionsPerDoc);
+    LOK_ASSERT_EQUAL(static_cast<std::size_t>(3), versioning::listVersions(doc).size());
+
+    // Disabling stops snapshots but keeps the history browsable.
+    tighter.enabled = false;
+    versioning::setLimits(tighter);
+    LOK_ASSERT(!versioning::isEnabled());
+    LOK_ASSERT(SnapshotResult::Disabled == versioning::snapshotSync(doc, true));
+    LOK_ASSERT_EQUAL(static_cast<std::size_t>(3), versioning::listVersions(doc).size());
+
+    // Re-enabled with a tiny file cap: the document is now too large.
+    tighter.enabled = true;
+    tighter.maxFileSizeBytes = 4;
+    versioning::setLimits(tighter);
+    LOK_ASSERT(SnapshotResult::TooLarge == versioning::snapshotSync(doc, true));
 }
 
 void VersionStoreTests::testScanRebuildAndOrphanSweep()
@@ -646,6 +767,107 @@ void VersionStoreTests::testLimitsFromPrefs()
 
     // The clamp is not written back.
     LOK_ASSERT_EQUAL(std::string("0"), Prefs(prefsFile()).get("versions.maxPerDoc"));
+}
+
+void VersionStoreTests::testApplyLimitsJson()
+{
+    constexpr std::string_view testname = __func__;
+
+    initStore(versioning::Limits());
+    Prefs prefs(prefsFile());
+
+    versioning::applyLimitsJson(R"({"maxPerDoc": 7, "enabled": false})", prefs);
+    LOK_ASSERT_EQUAL(std::string("7"), prefs.get("versions.maxPerDoc"));
+    LOK_ASSERT_EQUAL(std::string("false"), prefs.get("versions.enabled"));
+    // Fields that were not sent stay unset.
+    LOK_ASSERT_EQUAL(std::string(), prefs.get("versions.maxFileSizeMB"));
+    LOK_ASSERT_EQUAL(static_cast<std::size_t>(7), versioning::currentLimits().maxVersionsPerDoc);
+    LOK_ASSERT(!versioning::currentLimits().enabled);
+
+    // A bad value skips only its own field.
+    versioning::applyLimitsJson(R"({"maxPerDoc": "lots", "maxStoreSizeMB": 900})", prefs);
+    LOK_ASSERT_EQUAL(std::string("7"), prefs.get("versions.maxPerDoc"));
+    LOK_ASSERT_EQUAL(std::string("900"), prefs.get("versions.maxStoreSizeMB"));
+    LOK_ASSERT_EQUAL(static_cast<std::uint64_t>(900) << 20,
+                     versioning::currentLimits().maxStoreSizeBytes);
+
+    // A zero is stored as sent and clamped when applied.
+    versioning::applyLimitsJson(R"({"maxPerDoc": 0})", prefs);
+    LOK_ASSERT_EQUAL(std::string("0"), prefs.get("versions.maxPerDoc"));
+    LOK_ASSERT_EQUAL(static_cast<std::size_t>(1), versioning::currentLimits().maxVersionsPerDoc);
+
+    versioning::applyLimitsJson("{not json", prefs);
+    LOK_ASSERT_EQUAL(std::string("0"), prefs.get("versions.maxPerDoc"));
+    LOK_ASSERT_EQUAL(static_cast<std::size_t>(1), versioning::currentLimits().maxVersionsPerDoc);
+}
+
+void VersionStoreTests::testStatusJson()
+{
+    constexpr std::string_view testname = __func__;
+
+    versioning::Limits limits;
+    limits.mergeWindow = std::chrono::seconds(90);
+    limits.maxVersionsPerDoc = 5;
+    // Partial megabytes round down.
+    limits.maxFileSizeBytes = 3 * 1024 * 1024 + 1000;
+    limits.maxStoreSizeBytes = 40ULL * 1024 * 1024;
+    initStore(limits);
+    const std::string doc = writeDoc("status.odt", "twelve bytes");
+    LOK_ASSERT(SnapshotResult::Created == versioning::snapshotSync(doc, true));
+
+    Poco::JSON::Object::Ptr status;
+    LOK_ASSERT(JsonUtil::parseJSON(versioning::statusJson(), status));
+    LOK_ASSERT_EQUAL(true, status->getValue<bool>("enabled"));
+    LOK_ASSERT_EQUAL(static_cast<std::uint64_t>(90),
+                     status->getValue<std::uint64_t>("mergeWindowSecs"));
+    LOK_ASSERT_EQUAL(static_cast<std::uint64_t>(5), status->getValue<std::uint64_t>("maxPerDoc"));
+    LOK_ASSERT_EQUAL(static_cast<std::uint64_t>(3),
+                     status->getValue<std::uint64_t>("maxFileSizeMB"));
+    LOK_ASSERT_EQUAL(static_cast<std::uint64_t>(40),
+                     status->getValue<std::uint64_t>("maxStoreSizeMB"));
+    LOK_ASSERT_EQUAL(static_cast<std::uint64_t>(12),
+                     status->getValue<std::uint64_t>("storeSizeBytes"));
+}
+
+void VersionStoreTests::testClearAllJson()
+{
+    constexpr std::string_view testname = __func__;
+
+    versioning::Limits limits;
+    limits.mergeWindow = std::chrono::seconds::zero();
+    initStore(limits);
+    const std::string docA = writeDoc("a.odt", "first");
+    const std::string docB = writeDoc("b.odt", "second");
+    LOK_ASSERT(SnapshotResult::Created == versioning::snapshotSync(docA, true));
+    LOK_ASSERT(SnapshotResult::Created == versioning::snapshotSync(docB, true));
+
+    LOK_ASSERT_EQUAL(std::string("0"), versioning::clearAllJson());
+    LOK_ASSERT(versioning::listVersions(docA).empty());
+    LOK_ASSERT(versioning::listVersions(docB).empty());
+}
+
+void VersionStoreTests::testInitializeForApp()
+{
+    constexpr std::string_view testname = __func__;
+
+    const std::string appData = _root + "/app";
+    FileUtil::createDirectory(appData);
+    FileUtil::createDirectory(appData + "/drafts");
+    Prefs prefs(prefsFile());
+    prefs.set("versions.maxPerDoc", "3");
+    versioning::initializeForApp(appData, prefs, { _root + "/scratch-" }, exportsDir());
+
+    LOK_ASSERT_EQUAL(static_cast<std::size_t>(3), versioning::currentLimits().maxVersionsPerDoc);
+
+    const std::string doc = writeDoc("report.odt", "content");
+    LOK_ASSERT(SnapshotResult::Created == versioning::snapshotSync(doc, true));
+    LOK_ASSERT(versioning::docDirectory(doc).starts_with(appData + "/versions/"));
+
+    // The app's own folder and the shell's extra prefixes are never versioned.
+    const std::string draft = writeDoc("app/drafts/Untitled 1.odt", "draft");
+    LOK_ASSERT(SnapshotResult::Excluded == versioning::snapshotSync(draft, true));
+    const std::string remote = writeDoc("scratch-abc.odt", "remote");
+    LOK_ASSERT(SnapshotResult::Excluded == versioning::snapshotSync(remote, true));
 }
 
 void VersionStoreTests::testDocKeyFromPortalHostPath()

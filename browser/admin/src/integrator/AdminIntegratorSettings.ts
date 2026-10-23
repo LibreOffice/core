@@ -1329,6 +1329,10 @@ class SettingIframe {
 	private _aiSection: HTMLElement | null = null;
 	private _docSigningSection: HTMLElement | null = null;
 	private _zoteroSection: HTMLElement | null = null;
+	private _versionStoreSection: HTMLElement | null = null;
+	// The Version History inputs as the user typed them; parsed on save.
+	private _versionStoreEdits: Record<string, any> | null = null;
+	private _versionStoreShown: Record<string, any> | null = null;
 	private _configSections: SectionConfig[] | null = null;
 
 	// The zoom of the whole application window, as a percentage. Zero means
@@ -1435,6 +1439,19 @@ class SettingIframe {
 		if (this.xcuEditor) {
 			saves.push(this.xcuEditor.generateXcuAndUpload());
 			documentSettings = true;
+		}
+
+		// Version store limits (Qt app only; persisted through the bridge)
+		const versionStoreLimits = this.collectVersionStoreLimits();
+		await this.confirmVersionStoreCap(versionStoreLimits);
+		if (Object.keys(versionStoreLimits).length) {
+			saves.push(
+				Promise.resolve(
+					(window.parent as any).postMobileMessage(
+						'SETVERSIONSTORELIMITS ' + JSON.stringify(versionStoreLimits),
+					),
+				),
+			);
 		}
 
 		// View settings
@@ -3351,6 +3368,207 @@ class SettingIframe {
 			this._serverPrivateSection,
 			container,
 		);
+	}
+
+	private static humanizeBytes(bytes: number): string {
+		const units = ['B', 'KB', 'MB', 'GB'];
+		let size = bytes || 0;
+		let unit = 0;
+		while (size >= 1024 && unit < units.length - 1) {
+			size /= 1024;
+			unit++;
+		}
+		return (unit ? size.toFixed(1) : size) + ' ' + units[unit];
+	}
+
+	private async generateVersionStoreUI(settingsContainer: HTMLElement) {
+		let status: any;
+		try {
+			status = JSON.parse(
+				await (window.parent as any).postMobileCall('VERSIONSTORESTATUS'),
+			);
+		} catch (error) {
+			console.error('Failed to fetch the version store status:', error);
+			this._versionStoreSection?.remove();
+			this._versionStoreSection = null;
+			return;
+		}
+
+		const edits: Record<string, any> = {
+			enabled: !!status.enabled,
+			mergeWindowMins: String(Math.round((status.mergeWindowSecs || 0) / 60)),
+			maxPerDoc: String(status.maxPerDoc),
+			maxFileSizeMB: String(status.maxFileSizeMB),
+			maxStoreSizeMB: String(status.maxStoreSizeMB),
+		};
+		this._versionStoreEdits = edits;
+		this._versionStoreShown = { ...edits };
+
+		const container = document.createElement('div');
+		container.id = 'version-history-section';
+		container.classList.add('section');
+		container.appendChild(this.createHeading(_('Version History')));
+
+		const desc = this.createParagraph(
+			_(
+				'Copies of your documents are kept on this computer as you save, so you can go back to an earlier version.',
+			),
+		);
+		desc.className = 'view-setting-description';
+		container.appendChild(desc);
+
+		container.appendChild(
+			this.createCheckbox(
+				'versionStoreEnabled',
+				edits.enabled,
+				_('Keep versions of my documents'),
+				(inputCheckbox, checkboxWrapper) => {
+					checkboxWrapper.classList.toggle(
+						'checkbox-radio-switch--checked',
+						!inputCheckbox.checked,
+					);
+					edits.enabled = inputCheckbox.checked;
+				},
+			),
+		);
+
+		const numberField = (key: string, label: string, min: number) => {
+			const field = this.createInputField(
+				key,
+				label,
+				edits[key],
+				edits,
+				false,
+				true,
+			);
+			const input = field.querySelector('#' + key) as HTMLInputElement | null;
+			if (input) {
+				input.type = 'number';
+				input.min = String(min);
+			}
+			return field;
+		};
+		container.appendChild(
+			numberField('maxPerDoc', _('Maximum versions per document'), 1),
+		);
+		container.appendChild(
+			numberField('mergeWindowMins', _('Minutes between kept versions'), 0),
+		);
+		container.appendChild(
+			numberField(
+				'maxFileSizeMB',
+				_('Maximum document size to version (MB)'),
+				1,
+			),
+		);
+		container.appendChild(
+			numberField(
+				'maxStoreSizeMB',
+				_('Maximum storage for versions (MB)'),
+				status.maxFileSizeMB,
+			),
+		);
+
+		const usage = this.createParagraph('');
+		usage.id = 'version-store-usage';
+		usage.className = 'view-setting-description';
+		const updateUsage = (bytes: number) => {
+			usage.textContent =
+				SettingIframe.humanizeBytes(bytes) +
+				' ' +
+				_('in use for all documents.');
+		};
+		updateUsage(status.storeSizeBytes || 0);
+		container.appendChild(usage);
+
+		container.appendChild(
+			this.createButtonWithText(
+				'version-store-delete-all',
+				_('Delete all versions'),
+				_('Delete all kept versions of all documents from this computer'),
+				['button--vue-secondary'],
+				async (button) => {
+					const confirmed = window.confirm(
+						_('Delete all kept versions of all documents from this computer?'),
+					);
+					if (!confirmed) return;
+					button.disabled = true;
+					try {
+						await (window.parent as any).postMobileCall('CLEARALLVERSIONS');
+						updateUsage(0);
+					} finally {
+						button.disabled = false;
+					}
+				},
+			),
+		);
+
+		this._versionStoreSection = this.mountConfigSection(
+			settingsContainer,
+			this._versionStoreSection,
+			container,
+		);
+	}
+
+	// Only the fields the user changed, so a merge window that is not a
+	// whole number of minutes survives a Save.
+	private collectVersionStoreLimits() {
+		const limits: Record<string, any> = {};
+		const edits = this._versionStoreEdits;
+		const shown = this._versionStoreShown;
+		if (!edits || !shown) return limits;
+		const changed = (key: string) => edits[key] !== shown[key];
+		const number = (value: any, fallback: number, min: number) => {
+			const parsed = parseInt(value, 10);
+			return isNaN(parsed) ? fallback : Math.max(min, parsed);
+		};
+		if (changed('enabled')) limits.enabled = !!edits.enabled;
+		if (changed('mergeWindowMins'))
+			limits.mergeWindowSecs = number(edits.mergeWindowMins, 10, 0) * 60;
+		if (changed('maxPerDoc'))
+			limits.maxPerDoc = number(edits.maxPerDoc, 120, 1);
+		const fileSizeMB = number(edits.maxFileSizeMB, 128, 1);
+		if (changed('maxFileSizeMB')) limits.maxFileSizeMB = fileSizeMB;
+		// The store keeps no version of a document above the storage limit,
+		// so the storage limit is at least the file size limit. It is sent
+		// also when only the file size limit moved above it.
+		const storeSizeMB = number(edits.maxStoreSizeMB, 4096, fileSizeMB);
+		if (storeSizeMB !== number(shown.maxStoreSizeMB, 4096, 1))
+			limits.maxStoreSizeMB = storeSizeMB;
+		return limits;
+	}
+
+	// A storage limit below what the store holds deletes versions at once,
+	// so the user confirms it. On No the limit stays as it was, and also
+	// when the store does not tell what it holds.
+	private async confirmVersionStoreCap(limits: Record<string, any>) {
+		if (limits.maxStoreSizeMB === undefined) return;
+		let confirmed = false;
+		try {
+			const status = JSON.parse(
+				await (window.parent as any).postMobileCall('VERSIONSTORESTATUS'),
+			);
+			const excessBytes =
+				(status.storeSizeBytes || 0) - limits.maxStoreSizeMB * 1024 * 1024;
+			confirmed =
+				excessBytes <= 0 ||
+				window.confirm(
+					_(
+						'The new storage limit is below the storage in use. At least %1 of kept versions will be deleted. Continue?',
+					).replace('%1', SettingIframe.humanizeBytes(excessBytes)),
+				);
+		} catch (error) {
+			console.error('Failed to fetch the version store status:', error);
+		}
+		if (confirmed) return;
+
+		delete limits.maxStoreSizeMB;
+		const shown = this._versionStoreShown!.maxStoreSizeMB;
+		this._versionStoreEdits!.maxStoreSizeMB = shown;
+		const input = document.getElementById(
+			'maxStoreSizeMB',
+		) as HTMLInputElement | null;
+		if (input) input.value = shown;
 	}
 
 	private generateDocSigningUI(
@@ -5770,6 +5988,19 @@ class SettingIframe {
 				if (!usesNativeCertStore)
 					this.generateDocSigningUI(this._viewSetting, settingsContainer);
 				this.generateZoteroUI(this._viewSetting, settingsContainer);
+			}
+		}
+
+		// Version History (the Qt app's local version store)
+		if (isUserConfig && isQtApp) {
+			if (!data) {
+				this._versionStoreSection = this.createEmptySection(
+					this._versionStoreSection,
+					'version-history-section',
+					_('Version History'),
+				);
+			} else {
+				await this.generateVersionStoreUI(settingsContainer);
 			}
 		}
 

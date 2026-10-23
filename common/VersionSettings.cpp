@@ -11,12 +11,16 @@
 
 #include <config.h>
 
+#include <common/JsonUtil.hpp>
+#include <common/Log.hpp>
 #include <common/Prefs.hpp>
 #include <common/VersionSettings.hpp>
 
 #include <algorithm>
 #include <cstdint>
 #include <utility>
+
+#include <Poco/JSON/Object.h>
 
 namespace versioning
 {
@@ -59,6 +63,59 @@ void initializeForApp(const std::string& appDataDir, const Prefs& prefs,
     extraExcludedPrefixes.push_back(appDataDir);
     initialize(appDataDir + "/versions", limitsFromPrefs(prefs), std::move(extraExcludedPrefixes),
                exportDirectory);
+}
+
+std::string statusJson()
+{
+    const Limits limits = currentLimits();
+    Poco::JSON::Object::Ptr json = new Poco::JSON::Object();
+    json->set("enabled", limits.enabled);
+    json->set("mergeWindowSecs", static_cast<Poco::UInt64>(limits.mergeWindow.count()));
+    json->set("maxPerDoc", static_cast<Poco::UInt64>(limits.maxVersionsPerDoc));
+    json->set("maxFileSizeMB", static_cast<Poco::UInt64>(limits.maxFileSizeBytes / (1024 * 1024)));
+    json->set("maxStoreSizeMB",
+              static_cast<Poco::UInt64>(limits.maxStoreSizeBytes / (1024 * 1024)));
+    json->set("storeSizeBytes", static_cast<Poco::UInt64>(storeSizeBytes()));
+    return JsonUtil::jsonToString(json);
+}
+
+void applyLimitsJson(const std::string& payload, Prefs& prefs)
+{
+    Poco::JSON::Object::Ptr object;
+    if (!JsonUtil::parseJSON(payload, object))
+    {
+        LOG_ERR("SETVERSIONSTORELIMITS: malformed payload");
+        return;
+    }
+
+    std::vector<std::pair<std::string, std::string>> values;
+    if (object->has("enabled"))
+        values.emplace_back("versions.enabled",
+                            object->optValue<bool>("enabled", true) ? "true" : "false");
+    for (const char* key : { "mergeWindowSecs", "maxPerDoc", "maxFileSizeMB", "maxStoreSizeMB" })
+    {
+        if (!object->has(key))
+            continue;
+        try
+        {
+            values.emplace_back(std::string("versions.") + key,
+                                std::to_string(object->getValue<std::uint64_t>(key)));
+        }
+        catch (const std::exception&)
+        {
+            LOG_ERR("SETVERSIONSTORELIMITS: bad value for " << key);
+        }
+    }
+
+    for (const auto& [key, value] : values)
+        prefs.set(key, value);
+    setLimits(limitsFromPrefs(prefs));
+}
+
+std::string clearAllJson()
+{
+    clearAll();
+    return std::to_string(storeSizeBytes());
 }
 } // namespace versioning
 

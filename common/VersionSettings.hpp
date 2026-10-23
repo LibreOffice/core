@@ -29,6 +29,16 @@ Limits limitsFromPrefs(const Prefs& prefs);
 void initializeForApp(const std::string& appDataDir, const Prefs& prefs,
                       std::vector<std::string> extraExcludedPrefixes,
                       const std::string& exportDirectory);
+
+/// Reply to VERSIONSTORESTATUS: the limits in force and the store size, as JSON.
+std::string statusJson();
+
+/// Handle SETVERSIONSTORELIMITS: store the fields present in @payload in
+/// @prefs, then apply the resulting limits. A malformed payload changes nothing.
+void applyLimitsJson(const std::string& payload, Prefs& prefs);
+
+/// Handle CLEARALLVERSIONS: delete every version, return the size left.
+std::string clearAllJson();
 } // namespace versioning
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

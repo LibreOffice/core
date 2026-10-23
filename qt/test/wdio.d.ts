@@ -55,6 +55,10 @@ declare const app: {
 		setPart(part: number): void;
 		deselectAll(): void;
 		isEditMode(): boolean;
+		settings: {
+			// Opens the Options dialog in an iframe.iframe-settings-modal.
+			showSettingsDialog(target?: string): Promise<void>;
+		};
 		_enterEditMode(permission: string): void;
 		sendUnoCommand(command: string, json?: unknown, force?: boolean): void;
 		// Save the document. dontTerminateEdit keeps an in-progress cell edit;

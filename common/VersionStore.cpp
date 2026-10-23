@@ -514,6 +514,31 @@ bool isEnabled()
     return Initialized && StoreLimits.enabled;
 }
 
+Limits currentLimits()
+{
+    std::scoped_lock lock(StoreMutex);
+    return StoreLimits;
+}
+
+void setLimits(const Limits& limits)
+{
+    std::scoped_lock lock(StoreMutex);
+    StoreLimits = limits;
+    TooLargeWarned.clear();
+    if (!Initialized)
+        return;
+
+    if (StoreLimits.enabled && !ensureDirectory(RootPath))
+    {
+        Initialized = false;
+        return;
+    }
+    pruneLocked(std::chrono::system_clock::now());
+
+    LOG_INF("VersionStore: limits changed, now " << Index.size() << " documents, "
+                                                 << Util::getHumanizedBytes(TotalSizeBytes));
+}
+
 SnapshotResult snapshotSync(const std::string& docPath, bool bypassMergeWindow)
 {
     std::unique_lock lock(StoreMutex);
@@ -807,6 +832,17 @@ void clearHistory(const std::string& docPath)
         return;
 
     removeDocDir(hashDirName(FileUtil::hostPath(docPath)));
+}
+
+void clearAll()
+{
+    std::scoped_lock lock(StoreMutex);
+    if (!Initialized)
+        return;
+
+    LOG_INF("VersionStore: deleting all versions of all " << Index.size() << " documents");
+    while (!Index.empty())
+        removeDocDir(Index.begin()->first);
 }
 
 std::uint64_t storeSizeBytes()
