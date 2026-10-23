@@ -32,18 +32,11 @@ export function copyFixture(fixture: string): string {
 }
 
 /**
- * Open a file from the test fixtures directory via the native file dialog.
- *
- * Triggers .uno:Open, locates the dialog with platform-appropriate
- * selectors, fills the path, clicks Open, switches to the new
- * WebView, and waits for the document to finish loading.
- *
- * On Qt the selectors target QFileDialog's accessibility IDs.  On
- * macOS they target NSOpenPanel by Obj-C class plus an "Open" button
- * by title.  On Windows they target the control IDs of the common
- * file dialog: 1148 is the file name box and 1 the Open button.  The
- * post-conditions (switch to new webview + doc loaded) are the same
- * on all platforms.
+ * On Qt the selectors target QFileDialog's accessibility IDs, the same
+ * dialog in open and save mode.  On macOS they target NSOpenPanel by
+ * Obj-C class plus an "Open" button by title.  On Windows they target
+ * the control IDs of the common file dialog: 1148 is the file name box
+ * and 1 the Open button.
  */
 const FILE_DIALOG_SELECTORS: { [platform: string]: { file: string; open: string } } = {
 	qt: {
@@ -60,14 +53,32 @@ const FILE_DIALOG_SELECTORS: { [platform: string]: { file: string; open: string 
 	},
 };
 
+const qtFileNameSel = FILE_DIALOG_SELECTORS.qt.file;
+
+export async function fillAndAccept(
+	native: WebdriverIO.Browser,
+	filePath: string,
+): Promise<void> {
+	const { file: fileSel, open: acceptSel } =
+		FILE_DIALOG_SELECTORS[process.env.CODA_PLATFORM || 'qt'];
+
+	const fileTarget = await native.$(fileSel);
+	await fileTarget.waitForExist({ timeout: 10000 });
+	await fileTarget.setValue(filePath);
+
+	const acceptBtn = await native.$(acceptSel);
+	await acceptBtn.waitForExist({ timeout: 5000 });
+	await acceptBtn.click();
+}
+
+/**
+ * Open a file from the test fixtures directory via the native file dialog.
+ */
 export async function openFixture(
 	webEngine: WebdriverIO.Browser,
 	native: WebdriverIO.Browser,
 	fileName: string,
 ): Promise<string> {
-	const { file: fileSel, open: openSel } =
-		FILE_DIALOG_SELECTORS[process.env.CODA_PLATFORM || 'qt'];
-
 	// Snapshot the current WebView handles BEFORE dispatching .uno:Open.
 	// switchToNewWebView() below uses this snapshot to identify the
 	// WebView created by this action; the native side may register it
@@ -82,15 +93,7 @@ export async function openFixture(
 		}, 100);
 	});
 
-	const filePath = join(process.env.CODA_TEST_DOCUMENTS_DIR!, fileName);
-
-	const fileTarget = await native.$(fileSel);
-	await fileTarget.waitForExist({ timeout: 10000 });
-	await fileTarget.setValue(filePath);
-
-	const openBtn = await native.$(openSel);
-	await openBtn.waitForExist({ timeout: 5000 });
-	await openBtn.click();
+	await fillAndAccept(native, join(process.env.CODA_TEST_DOCUMENTS_DIR!, fileName));
 
 	const newHandle = await webview.switchToNewWebView(webEngine, beforeHandles);
 
@@ -106,4 +109,23 @@ export async function openFixture(
 	);
 
 	return newHandle;
+}
+
+export async function isOpen(native: WebdriverIO.Browser): Promise<boolean> {
+	return (await native.$$(qtFileNameSel)).length > 0;
+}
+
+export async function cancelSave(
+	native: WebdriverIO.Browser,
+	timeoutMsg: string,
+): Promise<void> {
+	await native.$(qtFileNameSel).waitForExist({ timeout: 10000, timeoutMsg });
+	const cancelBtn = await native.$(
+		'//*[@accessibility-id="QApplication.QFileDialog.buttonBox.QPushButton" and @name="Cancel"]',
+	);
+	await cancelBtn.click();
+	await native.waitUntil(async () => !(await isOpen(native)), {
+		timeout: 10000,
+		timeoutMsg: 'the Save dialog did not close on Cancel',
+	});
 }

@@ -189,6 +189,12 @@ check-qtapp: coda-qt $(TEST_DIR)/node_modules
 	    CODA_QT_BINARY=$(abs_builddir)/coda-qt \
 	    CODA_APP_NAME='$(APP_NAME)' \
 	    ./run-tests.sh
+	@echo "Running draft recovery suite..."
+	cd $(TEST_DIR) && AT_SPI_DRIVER_PATH='@AT_SPI_DRIVER_PATH@' \
+	    CODA_QT_BINARY=$(abs_builddir)/coda-qt \
+	    CODA_APP_NAME='$(APP_NAME)' \
+	    CODA_TEST_SEED_DRAFT=1 \
+	    ./run-tests.sh --suite recovery
 
 # Clean test artifacts
 clean-local:
@@ -209,6 +215,9 @@ EXTRA_DIST += \
 	$(TEST_DIR)/lib/processes.ts \
 	$(TEST_DIR)/lib/webview.ts \
 	$(TEST_DIR)/lib/file-dialog.ts \
+	$(TEST_DIR)/lib/draft.ts \
+	$(TEST_DIR)/specs/draft-lifecycle.spec.ts \
+	$(TEST_DIR)/recovery/draft-recovery.spec.ts \
 	$(TEST_DIR)/fixtures/simple.odt \
 	$(TEST_DIR)/fixtures/slide_navigation.odp \
 	$(TEST_DIR)/fixtures/empty-presentation.odp \

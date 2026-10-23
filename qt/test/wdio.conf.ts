@@ -81,6 +81,11 @@ export const config = {
 		]],
 		// The cross-window slide copy/paste cases.
 		gui: ['./specs/slide-copy-paste.spec.ts'],
+		// Startup recovery of a pre-seeded draft. Lives outside specs/ so
+		// the default glob never runs it: it needs a fresh app instance
+		// with CODA_TEST_SEED_DRAFT=1 (see coda-qt.service.ts), and the
+		// recovered draft suppresses the starter screen other specs use.
+		recovery: ['./recovery/draft-recovery.spec.ts'],
 	},
 
 	exclude: [],

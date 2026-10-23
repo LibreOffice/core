@@ -149,6 +149,33 @@ export class CodaQtServiceLauncher {
 		);
 		process.env.CODA_PLATFORM = 'qt';
 
+		// Where the app keeps drafts and its recent-files list; specs
+		// assert on both.
+		const draftsDir = join(
+			this.#testHomeDir,
+			'.local',
+			'share',
+			appName,
+			'drafts',
+		);
+		mkdirSync(draftsDir, { recursive: true });
+		process.env.CODA_TEST_DRAFTS_DIR = draftsDir;
+		process.env.CODA_TEST_RECENTS_FILE = join(
+			this.#testHomeDir,
+			'.config',
+			appName,
+			'RecentDocuments.conf',
+		);
+
+		// The recovery suite plants a draft before coda-qt starts - the
+		// on-disk state an unexpected exit leaves behind.
+		if (process.env.CODA_TEST_SEED_DRAFT) {
+			cpSync(
+				join(fixturesDir, 'simple.odt'),
+				join(draftsDir, 'Recovered Draft.odt'),
+			);
+		}
+
 		console.log('Starting coda-qt...');
 		this.#codaQtProcess = spawn(codaQtBinary, [], {
 			env: {
