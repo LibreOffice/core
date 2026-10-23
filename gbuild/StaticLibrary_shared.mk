@@ -77,6 +77,7 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,shared, \
     common/Util-linux \
     common/Util-server \
     common/Util-unix \
+    common/VersionStore \
     common/Watchdog-unix \
     kit/KitQueue \
     kit/LogUI \

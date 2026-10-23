@@ -86,6 +86,7 @@
 		BEA263732CBE38E20007435A /* Session.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA2635D2CBE38E20007435A /* Session.cpp */; };
 		BEA263742CBE38E20007435A /* TraceEvent.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA263662CBE38E20007435A /* TraceEvent.cpp */; };
 		BEA263762CBE38E20007435A /* SpookyV2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA263622CBE38E20007435A /* SpookyV2.cpp */; };
+		6A00B0E081B9FD2AFECD823A /* VersionStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 583424E5D6BF145486AD54E9 /* VersionStore.cpp */; };
 		BEA263772CBE38E20007435A /* ConfigUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA263552CBE38E20007435A /* ConfigUtil.cpp */; };
 		BEA263782CBE38E20007435A /* StringVector.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEA263642CBE38E20007435A /* StringVector.cpp */; };
 		BE5C4E062F13A0000007435A /* Syscall.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE5C4E052F13A0000007435A /* Syscall.cpp */; };
@@ -323,6 +324,8 @@
 		BEA263602CBE38E20007435A /* Simd.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = Simd.hpp; path = Simd.hpp; sourceTree = "<group>"; };
 		BEA263612CBE38E20007435A /* Simd.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Simd.cpp; path = Simd.cpp; sourceTree = "<group>"; };
 		BEA263622CBE38E20007435A /* SpookyV2.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = SpookyV2.cpp; path = SpookyV2.cpp; sourceTree = "<group>"; };
+		583424E5D6BF145486AD54E9 /* VersionStore.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = VersionStore.cpp; path = VersionStore.cpp; sourceTree = "<group>"; };
+		3660E032ACC3DF0D350EE17C /* VersionStore.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = VersionStore.hpp; path = VersionStore.hpp; sourceTree = "<group>"; };
 		BEA263632CBE38E20007435A /* StringVector.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; name = StringVector.hpp; path = StringVector.hpp; sourceTree = "<group>"; };
 		BEA263642CBE38E20007435A /* StringVector.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = StringVector.cpp; path = StringVector.cpp; sourceTree = "<group>"; };
 		BE5C4E052F13A0000007435A /* Syscall.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = Syscall.cpp; path = Syscall.cpp; sourceTree = "<group>"; };
@@ -582,6 +585,8 @@
 				BE4C620C2D59E85500047DF2 /* Util-macos.cpp */,
 				BE44ACC12D7EFF1500BFA3B2 /* Util-mobile.cpp */,
 				BE9115AF2CECBECF00C597B2 /* Util-unix.cpp */,
+				3660E032ACC3DF0D350EE17C /* VersionStore.hpp */,
+				583424E5D6BF145486AD54E9 /* VersionStore.cpp */,
 				BE5C4E032F13A0000007435A /* Watchdog-unix.cpp */,
 			);
 			path = common;
@@ -1078,6 +1083,7 @@
 				BE44ACC72D7F011F00BFA3B2 /* FileUtil-apple.mm in Sources */,
 				BEA264A32CBE98CD0007435A /* FakeSocket.cpp in Sources */,
 				BEA263762CBE38E20007435A /* SpookyV2.cpp in Sources */,
+				6A00B0E081B9FD2AFECD823A /* VersionStore.cpp in Sources */,
 				BE44ACCA2D7F018700BFA3B2 /* SigUtil-mobile.cpp in Sources */,
 				BEA264AD2CBE99340007435A /* Storage.cpp in Sources */,
 				BEA264AE2CBE99340007435A /* TileCache.cpp in Sources */,

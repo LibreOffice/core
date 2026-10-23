@@ -92,6 +92,9 @@
     <ClCompile Include="..\..\..\common\Util.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\common\VersionStore.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\..\kit\ChildSession.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

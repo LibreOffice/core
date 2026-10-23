@@ -220,6 +220,7 @@
     <ClCompile Include="..\..\..\common\Util-mobile.cpp" />
     <ClCompile Include="..\..\..\common\Util-windows.cpp" />
     <ClCompile Include="..\..\..\common\Util.cpp" />
+    <ClCompile Include="..\..\..\common\VersionStore.cpp" />
     <ClCompile Include="..\..\..\kit\ChildSession.cpp" />
     <ClCompile Include="..\..\..\kit\DeltaSimd.c" />
     <ClCompile Include="..\..\..\kit\Kit.cpp" />

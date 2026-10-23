@@ -85,6 +85,27 @@ namespace FileUtil
         return empty;
     }
 
+    std::vector<std::string> getDirEntries(const std::string& dirPath)
+    {
+        std::vector<std::string> names;
+        std::error_code ec;
+        std::filesystem::directory_iterator it(Util::string_to_wide_string(dirPath), ec);
+        if (ec)
+        {
+            LOG_DBG("Read from non-existent directory " << dirPath);
+            return names;
+        }
+        const std::filesystem::directory_iterator end{};
+        for (; !ec && it != end; it.increment(ec))
+        {
+            const std::wstring name = it->path().filename().wstring();
+            if (name[0] == L'.')
+                continue;
+            names.push_back(Util::wide_string_to_string(name));
+        }
+        return names;
+    }
+
     bool linkOrCopyFile(const std::string& source, const std::string& newPath)
     {
         return FileUtil::copy(source, newPath, /*log=*/true, /*throw_on_error=*/false);

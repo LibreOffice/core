@@ -32,6 +32,7 @@
 		BE5EB5C1213FE29900E0826C /* Log-poco.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE5EB5B9213FE29900E0826C /* Log-poco.cpp */; };
 		BE5EB5C1213FE29900E0826D /* Log-common.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE5EB5B9213FE29900E0826D /* Log-common.cpp */; };
 		BE5EB5C2213FE29900E0826C /* SpookyV2.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE5EB5BA213FE29900E0826C /* SpookyV2.cpp */; };
+		EFBEF031E2120258249CE6DE /* VersionStore.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 27F304B4AE87B8B7A9789FD6 /* VersionStore.cpp */; };
 		BE5EB5C3213FE29900E0826C /* Session.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE5EB5BB213FE29900E0826C /* Session.cpp */; };
 		BE5EB5C4213FE29900E0826C /* Util.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE5EB5BC213FE29900E0826C /* Util.cpp */; };
 		BE5EB5C4213FE29901E0826C /* RegexUtil.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BE5EB5BC213FE29901E0826C /* RegexUtil.cpp */; };
@@ -654,6 +655,8 @@
 		BE5EB5B9213FE29900E0826C /* Log-poco.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "Log-poco.cpp"; sourceTree = "<group>"; };
 		BE5EB5B9213FE29900E0826D /* Log-common.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = "Log-common.cpp"; sourceTree = "<group>"; };
 		BE5EB5BA213FE29900E0826C /* SpookyV2.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = SpookyV2.cpp; sourceTree = "<group>"; };
+		27F304B4AE87B8B7A9789FD6 /* VersionStore.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = VersionStore.cpp; sourceTree = "<group>"; };
+		271BADCBF2F2E84B0472613D /* VersionStore.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = VersionStore.hpp; sourceTree = "<group>"; };
 		BE5EB5BB213FE29900E0826C /* Session.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Session.cpp; sourceTree = "<group>"; };
 		BE5EB5BC213FE29900E0826C /* Util.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Util.cpp; sourceTree = "<group>"; };
 		BE5EB5BC213FE29901E0826C /* RegexUtil.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = RegexUtil.cpp; sourceTree = "<group>"; };
@@ -2372,6 +2375,8 @@
 				BE5EB5BC213FE29900E0826C /* Util.cpp */,
 				1F957DC12BA82296006C9E78 /* Util-mobile.cpp */,
 				BE980C522CE3499900FED7BC /* Util-unix.cpp */,
+				271BADCBF2F2E84B0472613D /* VersionStore.hpp */,
+				27F304B4AE87B8B7A9789FD6 /* VersionStore.cpp */,
 				BE5C4E032F13A00000848631 /* Watchdog-unix.cpp */,
 			);
 			path = common;
@@ -3976,6 +3981,7 @@
 				BEC2DE5A29366171002AFDC2 /* SlideCache.cpp in Sources */,
 				C79282312DF89BB2001EA43B /* MobileSocket.mm in Sources */,
 				BE5EB5C2213FE29900E0826C /* SpookyV2.cpp in Sources */,
+				EFBEF031E2120258249CE6DE /* VersionStore.cpp in Sources */,
 				BE8D77402136762600AC58EA /* main.m in Sources */,
 				BE5315372CF5C48200A384A4 /* Unit-mobile.cpp in Sources */,
 				BE5EB5C8213FE29900E0826C /* FileUtil.cpp in Sources */,

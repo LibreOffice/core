@@ -224,6 +224,7 @@ test_base_sources = \
 	TestGlobals.cpp \
 	UriTests.cpp \
 	UtilTests.cpp \
+	VersionStoreTests.cpp \
 	WhiteBoxTests.cpp \
 	WopiProofTests.cpp
 
