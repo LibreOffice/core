@@ -17,7 +17,7 @@
 # ca-certificates, tzdata; no shell, no package manager) and covers ppc64le,
 # s390x and riscv64 - keep its Debian release in step with the builder stage
 # below. Plain debian:stable-slim also works, but is not distroless.
-ARG runtime_base="registry.opencode.de/oci-community/images/zendis/base:1.0.0-rc.6-minimal"
+ARG runtime_base="registry.opencode.de/oci-community/images/zendis/base:1.0.1-minimal"
 
 # Metadata, applied to the final image (see the runtime stage below).
 ARG author
