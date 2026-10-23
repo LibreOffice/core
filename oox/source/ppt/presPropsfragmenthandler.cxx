@@ -49,18 +49,25 @@ void PresPropsFragmentHandler::finalizeImport()
         css::uno::Reference<css::container::XNameContainer> mxCustShows;
         mxCustShows = XCustPresentationSupplier->getCustomPresentations();
         const css::uno::Sequence<OUString> aNameSeq(mxCustShows->getElementNames());
-        xPresentationProps->setPropertyValue(u"CustomShow"_ustr,
-                                             css::uno::Any(aNameSeq[m_sId.toInt32()]));
+        const sal_Int32 nShow = m_sId.toInt32();
+        if (nShow >= 0 && nShow < aNameSeq.getLength())
+            xPresentationProps->setPropertyValue(u"CustomShow"_ustr,
+                                                 css::uno::Any(aNameSeq[nShow]));
     }
 
     if (!m_sSt.isEmpty())
     {
         Reference<drawing::XDrawPagesSupplier> xDPS(getFilter().getModel(), uno::UNO_QUERY_THROW);
         Reference<drawing::XDrawPages> xDrawPages(xDPS->getDrawPages(), uno::UNO_SET_THROW);
-        Reference<drawing::XDrawPage> xDrawPage;
-        xDrawPages->getByIndex(m_sSt.toInt32() - 1) >>= xDrawPage;
-        Reference<container::XNamed> xNamed(xDrawPage, uno::UNO_QUERY_THROW);
-        xPresentationProps->setPropertyValue(u"FirstPage"_ustr, uno::Any(xNamed->getName()));
+        const sal_Int32 nFirstPage = m_sSt.toInt32() - 1;
+        if (nFirstPage >= 0 && nFirstPage < xDrawPages->getCount())
+        {
+            Reference<drawing::XDrawPage> xDrawPage;
+            xDrawPages->getByIndex(nFirstPage) >>= xDrawPage;
+            Reference<container::XNamed> xNamed(xDrawPage, uno::UNO_QUERY_THROW);
+            xPresentationProps->setPropertyValue(u"FirstPage"_ustr,
+                                                 css::uno::Any(xNamed->getName()));
+        }
     }
 }
 
