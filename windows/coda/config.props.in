@@ -22,6 +22,10 @@
          bundling decision so the deploy and the browser build can never
          disagree. -->
     <CoolSrcExclude Condition="'@ENABLE_BUNDLE@' == 'true'">/XD src</CoolSrcExclude>
+    <!-- Exclude l10n-all.js from the deploy only when JS is bundled, as
+         bundle.js then holds the translations. When unbundled, cool.html
+         loads l10n-all.js as a file of its own. -->
+    <CoolL10nExclude Condition="'@ENABLE_BUNDLE@' == 'true'">l10n-all.js</CoolL10nExclude>
   </PropertyGroup>
   <!-- Run the clang-cl compiles through the ccache directory the engine's
        configure built. When CODA_CCACHE is empty the condition is false and the
