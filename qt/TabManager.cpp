@@ -546,12 +546,12 @@ int TabManager::addStarterTab()
     return id;
 }
 
-int TabManager::addDocumentTab(const Poco::URI& fileURL, bool asDraft)
+int TabManager::addDocumentTab(const Poco::URI& fileURL, bool asDraft, bool recoveredDraft)
 {
     auto wv = std::make_unique<WebView>(_profile);
     WebView* raw = wv.get();
     int id = registerTab(std::move(wv), -1);
-    raw->load(fileURL, /*isStarterMode*/ false, asDraft);
+    raw->load(fileURL, /*isStarterMode*/ false, asDraft, recoveredDraft);
     return id;
 }
 

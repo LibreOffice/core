@@ -28,6 +28,11 @@ namespace coda
 
     // Returns the host filepath for sandboxed filepaths
     std::string hostDisplayUriForPath(const QString& path);
+
+    // Reopen every draft left behind by an unexpected exit as a draft tab.
+    // Call after drafts::deleteMarked(). Returns whether anything was
+    // recovered.
+    bool recoverDrafts();
 }
 
 class DBusService : public QObject

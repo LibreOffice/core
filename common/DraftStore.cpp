@@ -50,6 +50,20 @@ bool removeIfPresent(const std::string& path)
 {
     return FileUtil::unlinkFile(path) == 0 || errno == ENOENT;
 }
+
+// The engine saves through a "lu<pid>...tmp" file next to the document.
+bool isEngineTemporary(const std::string& name)
+{
+    return name.starts_with("lu") && name.ends_with(".tmp");
+}
+
+// A copyAtomic temporary is the final name plus 12 random characters, which no real extension
+// is as long as.
+bool isCopyTemporary(const std::string& name)
+{
+    const std::size_t dot = name.rfind('.');
+    return dot != std::string::npos && name.size() - dot - 1 > 10;
+}
 } // namespace
 
 bool initialize(const std::string& appDataDir)
@@ -164,6 +178,26 @@ void deleteMarked()
         else
             LOG_WRN_SYS("Drafts: cannot delete [" << name << "], trying again at the next start");
     }
+}
+
+std::vector<std::string> leftovers()
+{
+    std::vector<std::string> names;
+    for (std::string& name : FileUtil::getDirEntries(Directory))
+    {
+        if (isEngineTemporary(name) || isCopyTemporary(name) || isMarkedName(name))
+            continue;
+        if (!FileUtil::Stat(Directory + '/' + name, /*link=*/true).isFile())
+            continue;
+        names.push_back(std::move(name));
+    }
+    std::sort(names.begin(), names.end());
+
+    std::vector<std::string> paths;
+    paths.reserve(names.size());
+    for (const std::string& name : names)
+        paths.push_back(Directory + '/' + name);
+    return paths;
 }
 
 bool contains(const std::string& path)

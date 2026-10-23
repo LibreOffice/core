@@ -386,6 +386,12 @@ int main(int argc, char** argv)
         QStandardPaths::writableLocation(QStandardPaths::AppDataLocation).toStdString());
     drafts::deleteMarked();
 
+    // Forced read-only mode could not save the drafts; the files stay for
+    // the next normal run.
+    bool recoveredDrafts = false;
+    if (!CODAConfig::instance().isForcedReadOnly())
+        recoveredDrafts = coda::recoverDrafts();
+
     if (!absoluteFiles.isEmpty())
     {
         coda::openFiles(absoluteFiles);
@@ -394,7 +400,7 @@ int main(int argc, char** argv)
     {
         coda::openNewDocument(templateType.toStdString(), {}, {});
     }
-    else
+    else if (!recoveredDrafts)
     {
         // The starter screen runs standalone, not as a tab; closing it quits
         // the app.

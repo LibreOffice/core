@@ -12,6 +12,7 @@
 #pragma once
 
 #include <string>
+#include <vector>
 
 /// Drafts: documents the app created that have no place the user chose yet. They live in an
 /// app-private folder until a Save As moves them out.
@@ -49,6 +50,10 @@ bool discard(const std::string& path);
 
 /// A mark stays while its draft cannot be deleted.
 void deleteMarked();
+
+/// The drafts left over from an earlier run, sorted by name: regular files, not marked, and
+/// none of the dot files, engine "lu*.tmp" files or FileUtil::copyAtomic temporaries.
+std::vector<std::string> leftovers();
 
 /// Whether @path, which need not exist, is inside the drafts folder, comparing host paths.
 bool contains(const std::string& path);

@@ -115,6 +115,22 @@ namespace coda
         tw->manager()->addDocumentTab(newDocumentURI, /*asDraft*/ true);
         return true;
     }
+
+    bool recoverDrafts()
+    {
+        const std::vector<std::string> leftovers = drafts::leftovers();
+        if (leftovers.empty())
+            return false;
+
+        TabbedWindow* tw = TabbedWindow::getOrCreate(Application::getProfile());
+        for (const std::string& path : leftovers)
+        {
+            Poco::URI draftURI{ Poco::Path(path) };
+            tw->manager()->addDocumentTab(draftURI, /*asDraft*/ true, /*recoveredDraft*/ true);
+        }
+        surfaceWindow(tw);
+        return true;
+    }
 }
 
 DBusService::DBusService(QObject* parent)

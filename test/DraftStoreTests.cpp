@@ -25,6 +25,7 @@
 #include <fstream>
 #include <iterator>
 #include <string>
+#include <vector>
 
 #include <sys/stat.h>
 #include <unistd.h>
@@ -37,6 +38,8 @@ class DraftStoreTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testMarkedNameIsTaken);
     CPPUNIT_TEST(testCreateFromTemplate);
     CPPUNIT_TEST(testDiscardAndDeleteMarked);
+    CPPUNIT_TEST(testDeleteMarkedKeepsMarkOfUndeletable);
+    CPPUNIT_TEST(testLeftovers);
     CPPUNIT_TEST(testContains);
     CPPUNIT_TEST(testHostPathOfTarget);
 
@@ -46,6 +49,8 @@ class DraftStoreTests : public CPPUNIT_NS::TestFixture
     void testMarkedNameIsTaken();
     void testCreateFromTemplate();
     void testDiscardAndDeleteMarked();
+    void testDeleteMarkedKeepsMarkOfUndeletable();
+    void testLeftovers();
     void testContains();
     void testHostPathOfTarget();
 
@@ -205,6 +210,58 @@ void DraftStoreTests::testDiscardAndDeleteMarked()
     drafts::markForDeletion(draftsDir() + "/Never Written.odt");
     drafts::deleteMarked();
     LOK_ASSERT(!drafts::isMarkedForDeletion(draftsDir() + "/Never Written.odt"));
+}
+
+void DraftStoreTests::testDeleteMarkedKeepsMarkOfUndeletable()
+{
+    constexpr std::string_view testname = __func__;
+
+    if (::geteuid() == 0)
+        return; // root deletes from a read-only folder.
+
+    const std::string draft = draftsDir() + "/Locked.odt";
+    writeFile(draft);
+    drafts::markForDeletion(draft);
+
+    ::chmod(draftsDir().c_str(), 0500);
+    drafts::deleteMarked();
+    const std::vector<std::string> recovered = drafts::leftovers();
+    ::chmod(draftsDir().c_str(), 0700);
+
+    LOK_ASSERT(exists(draft));
+    LOK_ASSERT(drafts::isMarkedForDeletion(draft));
+    // Discarded, so not offered back as a draft.
+    LOK_ASSERT(recovered.empty());
+
+    drafts::deleteMarked();
+    LOK_ASSERT(!exists(draft));
+}
+
+void DraftStoreTests::testLeftovers()
+{
+    constexpr std::string_view testname = __func__;
+
+    LOK_ASSERT(drafts::leftovers().empty());
+
+    writeFile(draftsDir() + "/b.odt");
+    writeFile(draftsDir() + "/A.odt");
+    writeFile(draftsDir() + "/a (1).ods");
+    writeFile(draftsDir() + "/marked.odt");
+    drafts::markForDeletion(draftsDir() + "/marked.odt");
+    writeFile(draftsDir() + "/.hidden.odt");
+    // The engine's save temporary and a copyAtomic temporary.
+    writeFile(draftsDir() + "/lu12345abcd.tmp");
+    writeFile(draftsDir() + "/report (2026-10-23 10.00).odtAbCdEfGhIjKl");
+    ::mkdir((draftsDir() + "/folder.odt").c_str(), 0700);
+    LOK_ASSERT_EQUAL(0, ::symlink((_root + "/elsewhere.odt").c_str(),
+                                  (draftsDir() + "/link.odt").c_str()));
+    writeFile(_root + "/elsewhere.odt");
+
+    // Sorted by bytes.
+    const std::vector<std::string> expected = { draftsDir() + "/A.odt",
+                                                draftsDir() + "/a (1).ods",
+                                                draftsDir() + "/b.odt" };
+    LOK_ASSERT(expected == drafts::leftovers());
 }
 
 void DraftStoreTests::testContains()

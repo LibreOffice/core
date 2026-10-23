@@ -56,9 +56,10 @@ public:
     WebView* webViewForTab(int tabId) const;
     int tabIdForWebView(WebView* wv) const;
 
-    // Return the new tab's id. For asDraft see WebView::load.
+    // Return the new tab's id. For asDraft and recoveredDraft see WebView::load.
     int addStarterTab();
-    int addDocumentTab(const Poco::URI& fileURL, bool asDraft = false);
+    int addDocumentTab(const Poco::URI& fileURL, bool asDraft = false,
+                       bool recoveredDraft = false);
 
     int adoptTab(WebView* webView, int insertAt);
     std::unique_ptr<WebView> releaseTab(int tabId);

@@ -1162,7 +1162,8 @@ QString WebView::docTypeFromExtension(const QString& filePath)
     return QString::fromStdString(FileExtensions::docTypeFromSuffix(ext.toStdString()));
 }
 
-void WebView::load(const Poco::URI& fileURL, bool isStarterMode, bool asDraft)
+void WebView::load(const Poco::URI& fileURL, bool isStarterMode, bool asDraft,
+                   bool recoveredDraft)
 {
     if (isStarterMode)
     {
@@ -1194,6 +1195,7 @@ void WebView::load(const Poco::URI& fileURL, bool isStarterMode, bool asDraft)
     if (asDraft)
     {
         _draftPath = QString::fromStdString(fileURL.getPath());
+        _draftRecovered = recoveredDraft;
         // The name may have belonged to a draft discarded earlier in this
         // run; unmark it so the next startup cannot delete the live draft.
         drafts::unmarkForDeletion(fileURL.getPath());
