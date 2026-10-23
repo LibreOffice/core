@@ -21,6 +21,7 @@
 #include <cerrno>
 #include <fcntl.h>
 #include <filesystem>
+#include <memory>
 
 namespace drafts
 {
@@ -28,6 +29,7 @@ namespace
 {
 std::string Directory;
 std::string MarkedDirectory;
+std::unique_ptr<FileUtil::FileLock> OwnerLock;
 
 constexpr int MaxNumber = 100000;
 constexpr int MaxCreateAttempts = 100;
@@ -68,7 +70,10 @@ bool isCopyTemporary(const std::string& name)
 
 bool initialize(const std::string& appDataDir)
 {
-    Directory = appDataDir + "/drafts";
+    const std::string directory = appDataDir + "/drafts";
+    if (directory != Directory)
+        OwnerLock.reset();
+    Directory = directory;
     MarkedDirectory = Directory + "/.marked";
     try
     {
@@ -79,10 +84,22 @@ bool initialize(const std::string& appDataDir)
         LOG_ERR("Drafts: cannot create [" << MarkedDirectory << "]: " << e.what());
         return false;
     }
+
+    if (!OwnerLock)
+    {
+        auto lock = std::make_unique<FileUtil::FileLock>(Directory + "/.lock");
+        if (lock->isHeld())
+            OwnerLock = std::move(lock);
+        else
+            LOG_WRN("Drafts: another instance owns [" << Directory
+                                                      << "], its drafts are left alone");
+    }
     return true;
 }
 
 const std::string& directory() { return Directory; }
+
+bool isOwner() { return OwnerLock != nullptr; }
 
 std::string nextFreeName(const std::string& stem, const std::string& extension)
 {
@@ -171,6 +188,8 @@ bool discard(const std::string& path)
 
 void deleteMarked()
 {
+    if (!isOwner())
+        return;
     for (const std::string& name : FileUtil::getDirEntries(MarkedDirectory))
     {
         if (removeIfPresent(Directory + '/' + name))
@@ -182,6 +201,9 @@ void deleteMarked()
 
 std::vector<std::string> leftovers()
 {
+    if (!isOwner())
+        return {};
+
     std::vector<std::string> names;
     for (std::string& name : FileUtil::getDirEntries(Directory))
     {

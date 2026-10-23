@@ -13,6 +13,7 @@ import { join } from 'path';
 
 import * as dialog from '../lib/file-dialog.js';
 import * as draft from '../lib/draft.js';
+import { SecondInstance } from '../lib/second-instance.js';
 import * as webview from '../lib/webview.js';
 
 function recentsContain(needle: string): boolean {
@@ -121,6 +122,47 @@ describe('Draft lifecycle', () => {
 		expect(anchorTab?.pill).toBeNull();
 
 		await browser.webEngine.switchToWindow(draftHandle);
+	});
+
+	it('leaves an open draft alone when a second instance starts', async () => {
+		// The wait below is long enough for the onboarding tour to open, and
+		// its modal dialog would hold back the edits of the cases after this.
+		await browser.webEngine.switchToWindow(draftHandle);
+		await browser.webEngine.execute(() => {
+			app.map.uiManager.setDocTypePref('onboardingTourSeen', true);
+		});
+
+		const second = new SecondInstance();
+		let urls: string[] = [];
+		try {
+			// Startup shows recovered drafts, or the starter screen when
+			// there are none.
+			await browser.webEngine.waitUntil(
+				async () => {
+					urls = await second.pageUrls();
+					return urls.some(
+						(u) => u.includes('starterMode=true') || u.includes('PromptTest'),
+					);
+				},
+				{
+					timeout: 60000,
+					timeoutMsg: 'the second instance did not start',
+				},
+			);
+			// The page list can lag behind the tabs the instance opened.
+			await browser.pause(3000);
+			urls = await second.pageUrls();
+		} finally {
+			await second.stop();
+		}
+		expect(urls.filter((u) => u.includes('PromptTest'))).toEqual([]);
+
+		await browser.webEngine.switchToWindow(draftHandle);
+		const loaded = await browser.webEngine.execute(
+			() => app.map._docLoaded === true,
+		);
+		expect(loaded).toBe(true);
+		expect(existsSync(join(draft.draftsDir(), 'PromptTest.odt'))).toBe(true);
 	});
 
 	it('keeps a modified draft open on Cancel', async () => {

@@ -66,6 +66,22 @@ namespace FileUtil
     // As close().
     int closeFD(int fd);
 
+    /// An exclusive lock on the file at @path, created if missing. It never waits: isHeld() is
+    /// false while another holder has it, in this process or another. A crash releases it too.
+    class FileLock
+    {
+    public:
+        explicit FileLock(const std::string& path);
+        ~FileLock();
+        FileLock(const FileLock&) = delete;
+        FileLock& operator=(const FileLock&) = delete;
+
+        bool isHeld() const { return _fd >= 0; }
+
+    private:
+        int _fd;
+    };
+
     // As std::ifstream::open.
     void openFileToIFStream(const std::string& file, std::ifstream& stream, std::ios_base::openmode mode = std::ios_base::in);
 

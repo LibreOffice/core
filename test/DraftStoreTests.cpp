@@ -40,6 +40,7 @@ class DraftStoreTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testDiscardAndDeleteMarked);
     CPPUNIT_TEST(testDeleteMarkedKeepsMarkOfUndeletable);
     CPPUNIT_TEST(testLeftovers);
+    CPPUNIT_TEST(testOwnerLock);
     CPPUNIT_TEST(testContains);
     CPPUNIT_TEST(testHostPathOfTarget);
 
@@ -51,6 +52,7 @@ class DraftStoreTests : public CPPUNIT_NS::TestFixture
     void testDiscardAndDeleteMarked();
     void testDeleteMarkedKeepsMarkOfUndeletable();
     void testLeftovers();
+    void testOwnerLock();
     void testContains();
     void testHostPathOfTarget();
 
@@ -262,6 +264,52 @@ void DraftStoreTests::testLeftovers()
                                                 draftsDir() + "/a (1).ods",
                                                 draftsDir() + "/b.odt" };
     LOK_ASSERT(expected == drafts::leftovers());
+}
+
+void DraftStoreTests::testOwnerLock()
+{
+    constexpr std::string_view testname = __func__;
+
+    // Another instance starting on the same folder gets no lock.
+    LOK_ASSERT(drafts::isOwner());
+    LOK_ASSERT(!FileUtil::FileLock(draftsDir() + "/.lock").isHeld());
+    LOK_ASSERT(drafts::initialize(_root));
+    LOK_ASSERT(drafts::isOwner());
+
+    const std::string otherRoot = _root + "/other";
+    const std::string otherDrafts = otherRoot + "/drafts";
+    FileUtil::createDirectories(otherDrafts);
+    const std::string open = otherDrafts + "/Open.odt";
+    writeFile(open);
+    const std::string discarded = otherDrafts + "/Discarded.odt";
+    writeFile(discarded);
+
+    {
+        FileUtil::FileLock firstInstance(otherDrafts + "/.lock");
+        LOK_ASSERT(firstInstance.isHeld());
+
+        LOK_ASSERT(drafts::initialize(otherRoot));
+        LOK_ASSERT(!drafts::isOwner());
+        // The first instance has these open, or deletes them itself.
+        drafts::markForDeletion(discarded);
+        drafts::deleteMarked();
+        LOK_ASSERT(exists(discarded));
+        LOK_ASSERT(drafts::leftovers().empty());
+        // Drafts of its own still work.
+        LOK_ASSERT_EQUAL(otherDrafts + "/Open (1).odt", drafts::nextFreeName("Open", "odt"));
+    }
+
+    // The lock went with its holder; the next start takes over.
+    LOK_ASSERT(drafts::initialize(otherRoot));
+    LOK_ASSERT(drafts::isOwner());
+    drafts::deleteMarked();
+    LOK_ASSERT(!exists(discarded));
+    const std::vector<std::string> expected = { open };
+    LOK_ASSERT(expected == drafts::leftovers());
+
+    // Moving to another folder gives up the old one.
+    LOK_ASSERT(drafts::initialize(_root));
+    LOK_ASSERT(FileUtil::FileLock(otherDrafts + "/.lock").isHeld());
 }
 
 void DraftStoreTests::testContains()

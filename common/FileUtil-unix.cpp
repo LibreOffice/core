@@ -29,6 +29,7 @@
 #include <iostream>
 #include <pwd.h>
 #include <string>
+#include <sys/file.h>
 #include <sys/stat.h>
 #include <sys/time.h>
 #include <unistd.h>
@@ -429,6 +430,23 @@ namespace FileUtil
         }
         closedir(dir);
         return names;
+    }
+
+    FileLock::FileLock(const std::string& path)
+        : _fd(::open(path.c_str(), O_RDWR | O_CREAT | O_CLOEXEC, 0600))
+    {
+        // flock(), unlike fcntl() locks, conflicts between two descriptors of one process too.
+        if (_fd >= 0 && ::flock(_fd, LOCK_EX | LOCK_NB) != 0)
+        {
+            ::close(_fd);
+            _fd = -1;
+        }
+    }
+
+    FileLock::~FileLock()
+    {
+        if (_fd >= 0)
+            ::close(_fd);
     }
 
     int openFileAsFD(const std::string& file, int oflag, int mode)

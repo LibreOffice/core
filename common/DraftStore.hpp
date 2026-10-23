@@ -21,13 +21,19 @@
 /// deferred to the next start: a deletion mark is an empty file of the same name under
 /// <drafts>/.marked.
 ///
+/// Instances can share the folder; the first to start owns it through the lock file
+/// <drafts>/.lock until it exits, so no other instance touches a draft the owner has open.
+///
 /// Paths are UTF-8. initialize() comes before any other call.
 namespace drafts
 {
-/// Use @appDataDir/drafts, creating it. Returns false when it cannot be created.
+/// Use @appDataDir/drafts, creating it, and take ownership of it unless another instance has
+/// it. Returns false when it cannot be created.
 bool initialize(const std::string& appDataDir);
 
 const std::string& directory();
+
+bool isOwner();
 
 /// The path of a draft "<stem>.<extension>", or "<stem> (<n>).<extension>" with the lowest n
 /// from 1, whose name is neither taken by a file nor marked for deletion. Empty when the name
@@ -48,11 +54,12 @@ bool isMarkedForDeletion(const std::string& path);
 /// whether the file is gone.
 bool discard(const std::string& path);
 
-/// A mark stays while its draft cannot be deleted.
+/// A mark stays while its draft cannot be deleted. Does nothing unless isOwner().
 void deleteMarked();
 
 /// The drafts left over from an earlier run, sorted by name: regular files, not marked, and
-/// none of the dot files, engine "lu*.tmp" files or FileUtil::copyAtomic temporaries.
+/// none of the dot files, engine "lu*.tmp" files or FileUtil::copyAtomic temporaries. Empty
+/// unless isOwner().
 std::vector<std::string> leftovers();
 
 /// Whether @path, which need not exist, is inside the drafts folder, comparing host paths.

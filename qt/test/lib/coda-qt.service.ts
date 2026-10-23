@@ -147,6 +147,9 @@ export class CodaQtServiceLauncher {
 			join(configHome, appName, 'coda-prefs.json'),
 			JSON.stringify(prefs),
 		);
+		// For specs that start another instance on the same app data.
+		process.env.CODA_TEST_HOME = this.#testHomeDir;
+		process.env.CODA_TEST_BINARY = codaQtBinary;
 		process.env.CODA_PLATFORM = 'qt';
 
 		// Where the app keeps drafts and its recent-files list; specs
