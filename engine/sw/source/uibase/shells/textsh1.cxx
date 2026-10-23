@@ -121,6 +121,7 @@
 #include <linguistic/misc.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <tools/json_writer.hxx>
 #include <authfld.hxx>
 #include <config_wasm_strip.h>
 #if !ENABLE_WASM_STRIP_EXTRA
@@ -811,9 +812,28 @@ void DeleteFields(const SfxRequest& rReq, SwWrtShell& rWrtSh)
     }
 }
 
+// What one transform reports back while it runs: warnings about commands that ran with a
+// problem, and the names of the commands and keys it did not apply at all.
+struct TransformReport
+{
+    std::vector<std::string> maWarnings;
+    std::vector<std::string> maNotApplied;
+};
+
+// The report of the transform that is running, or null between transforms.
+TransformReport* gpTransformReport = nullptr;
+
 void lcl_LogWarning(std::string sWarning)
 {
     KIT_WARN("sw.transform",  sWarning);
+    if (gpTransformReport)
+        gpTransformReport->maWarnings.push_back(std::move(sWarning));
+}
+
+void lcl_NotApplied(const std::string& rName)
+{
+    if (gpTransformReport)
+        gpTransformReport->maNotApplied.push_back(rName);
 }
 
 bool lcl_ChangeChartColumnCount(const uno::Reference<chart2::XChartDocument>& xChartDoc, sal_Int32 nId,
@@ -2536,6 +2556,11 @@ void SwTextShell::Execute(SfxRequest &rReq)
             std::vector<std::string> aIdChartTexts
                 = { ".ByEmbedIndex.", ".ByEmbedName.", ".ByTitle.", ".BySubTitle." };
 
+            // Collect what the transform reports while it runs, until the end of this case.
+            TransformReport aReport;
+            gpTransformReport = &aReport;
+            comphelper::ScopeGuard aReportGuard([] { gpTransformReport = nullptr; });
+
             // Iterate through the JSON data loaded into a tree structure
             for (const auto& aItem : aTree)
             {
@@ -2548,6 +2573,11 @@ void SwTextShell::Execute(SfxRequest &rReq)
                         // if an element is an object `{...}`, then get the first element of the object
                         const auto& aItem2
                             = aItem2Obj.first == "" ? *aItem2Obj.second.ordered_begin() : aItem2Obj;
+
+                        if (aItem2.first != "DocumentProperties"
+                            && !aItem2.first.starts_with("Charts")
+                            && !aItem2.first.starts_with("ContentControls"))
+                            lcl_NotApplied(aItem2.first);
 
                         if (aItem2.first == "DocumentProperties")
                         {
@@ -3587,9 +3617,34 @@ void SwTextShell::Execute(SfxRequest &rReq)
                 }
                 else if (aItem.first == "UnoCommand")
                 {
-                    KitHelper::dispatchUnoCommand(aItem.second);
+                    if (!KitHelper::dispatchUnoCommand(aItem.second))
+                        lcl_NotApplied("UnoCommand " + aItem.second.get<std::string>("name", "")
+                                       + ", which is not an allowed command");
                 }
+                else
+                    lcl_NotApplied(aItem.first);
             }
+
+            // The result says whether every part of the transform was known and allowed, names
+            // the parts that were not, and lists the warnings of the parts that ran with a problem.
+            tools::JsonWriter aJson;
+            aJson.put("success", aReport.maNotApplied.empty());
+            if (!aReport.maNotApplied.empty())
+            {
+                std::string aMessage = "These parts of the transform are not known or not "
+                                       "allowed, and were not applied:";
+                for (const std::string& rName : aReport.maNotApplied)
+                    aMessage += " '" + rName + "'";
+                aJson.put("message", aMessage);
+            }
+            if (!aReport.maWarnings.empty())
+            {
+                auto aNode = aJson.startArray("warnings");
+                for (const std::string& rWarning : aReport.maWarnings)
+                    aJson.putSimpleValue(OUString::fromUtf8(rWarning));
+            }
+            rReq.SetReturnValue(
+                SfxStringItem(FN_PARAM_1, OUString::fromUtf8(aJson.finishAndGetAsOString())));
         }
         break;
     default:

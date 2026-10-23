@@ -665,9 +665,12 @@ OUString getWeightString(SfxItemSet const & rItemSet)
     return sWeightString;
 }
 
+// What one transform reports back while it runs: warnings about commands that ran with a
+// problem, and the names of the commands and keys it did not apply at all.
 class TransformWarningCollector
 {
     std::vector<std::string> maWarnings;
+    std::vector<std::string> maNotApplied;
     static inline TransformWarningCollector* gpCurrent = nullptr;
 public:
     TransformWarningCollector() { gpCurrent = this; }
@@ -677,7 +680,13 @@ public:
         if (gpCurrent)
             gpCurrent->maWarnings.push_back(rWarning);
     }
+    static void addNotApplied(const std::string& rName)
+    {
+        if (gpCurrent)
+            gpCurrent->maNotApplied.push_back(rName);
+    }
     const std::vector<std::string>& getWarnings() const { return maWarnings; }
+    const std::vector<std::string>& getNotApplied() const { return maNotApplied; }
 };
 
 void lcl_LogWarning(const std::string& rWarning)
@@ -713,6 +722,8 @@ void lcl_UnoCommand(const std::string& rText)
         else
         {
             lcl_LogWarning("FillApi SlideCmd: uno command not recognized'" + rText + "'");
+            TransformWarningCollector::addNotApplied("UnoCommand " + rText
+                                                     + ", which does not start with .uno:");
             return;
         }
 
@@ -731,6 +742,8 @@ void lcl_UnoCommand(const std::string& rText)
         else
         {
             lcl_LogWarning("FillApi SlideCmd: uno command not recognized'" + rText + "'");
+            TransformWarningCollector::addNotApplied("UnoCommand " + rText
+                                                     + ", which is not an allowed command");
         }
     }
 }
@@ -1665,6 +1678,8 @@ void handleEditTextObject(SlideCommandContext& rCtx, const std::string& rKey,
             std::string aText = aItem4.second.get_value<std::string>();
             lcl_UnoCommand(aText);
         }
+        else
+            TransformWarningCollector::addNotApplied(rKey + "." + aItem4.first);
     }
     pView1->SdrEndTextEdit();
 }
@@ -2215,6 +2230,8 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
 
                         if (pCommand)
                             pCommand->mpHandler(aCtx, aItem3.first, aItem3.second);
+                        else
+                            TransformWarningCollector::addNotApplied(aItem3.first);
                     }
 
                     // The commands move the draw view to the slide each one runs on. Switch to
@@ -2223,12 +2240,19 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
                     if (aCtx.mnActPageId >= 0)
                         SwitchPage(aCtx.mnActPageId);
                 }
+                else
+                    TransformWarningCollector::addNotApplied(aItem2.first);
             }
         }
         else if (aItem.first == "UnoCommand")
         {
-            KitHelper::dispatchUnoCommand(aItem.second);
+            if (!KitHelper::dispatchUnoCommand(aItem.second))
+                TransformWarningCollector::addNotApplied(
+                    "UnoCommand " + aItem.second.get<std::string>("name", "")
+                    + ", which is not an allowed command");
         }
+        else
+            TransformWarningCollector::addNotApplied(aItem.first);
     }
 
     // Apply the chosen design template once all slides exist, so slides inserted
@@ -2313,9 +2337,20 @@ void DrawViewShell::FuTransformDocumentStructure(SfxRequest& rReq)
             GetDoc()->CloseBookmarkDoc();
     }
 
-    // Build a JSON result so the caller knows what happened.
+    // Build a JSON result so the caller knows what happened. A transform that names a command or
+    // a key this handler does not know, or a command that is not allowed, is reported as not
+    // successful, with a message naming each one. Everything else in it has still been applied.
     tools::JsonWriter aJson;
-    aJson.put("success", true);
+    const std::vector<std::string>& rNotApplied = aWarnings.getNotApplied();
+    aJson.put("success", rNotApplied.empty());
+    if (!rNotApplied.empty())
+    {
+        std::string aMessage = "These parts of the transform are not known or not allowed, and "
+                               "were not applied:";
+        for (const std::string& rName : rNotApplied)
+            aMessage += " '" + rName + "'";
+        aJson.put("message", aMessage);
+    }
     if (!aWarnings.getWarnings().empty())
     {
         auto aNode = aJson.startArray("warnings");

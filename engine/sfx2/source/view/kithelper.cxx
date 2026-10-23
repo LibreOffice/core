@@ -1358,7 +1358,7 @@ void KitHelper::registerViewCallbacks()
     });
 }
 
-void KitHelper::dispatchUnoCommand(const boost::property_tree::ptree& tree)
+bool KitHelper::dispatchUnoCommand(const boost::property_tree::ptree& tree)
 {
     auto command = OStringToOUString(tree.get_child("name").get_value<std::string>(),
                                      RTL_TEXTENCODING_UTF8);
@@ -1368,7 +1368,7 @@ void KitHelper::dispatchUnoCommand(const boost::property_tree::ptree& tree)
     {
         KIT_WARN("kit.transform",
                  "UnoCommand command is not recognized: '" << command << "'");
-        return;
+        return false;
     }
     std::vector<beans::PropertyValue> arguments;
     if (auto args = tree.get_child_optional("arguments"))
@@ -1379,6 +1379,7 @@ void KitHelper::dispatchUnoCommand(const boost::property_tree::ptree& tree)
     arguments.push_back(comphelper::makePropertyValue(u"SynchronMode"_ustr, true));
 
     comphelper::dispatchCommand(command, comphelper::containerToSequence(arguments));
+    return true;
 }
 
 namespace

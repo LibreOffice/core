@@ -343,7 +343,10 @@ public:
     /// Registers function pointers in comphelper/ to set/get of the current COKit view.
     static void registerViewCallbacks();
 
-    static void dispatchUnoCommand(const boost::property_tree::ptree& tree);
+    /// Dispatches the command a transform names, as {"name": ".uno:Name", "arguments": {...}}.
+    /// Returns false when the command is not on the list the kit allows, and true once it has
+    /// been dispatched.
+    static bool dispatchUnoCommand(const boost::property_tree::ptree& tree);
 
 private:
     static int createView(SfxViewFrame& rViewFrame, ViewShellDocId docId);

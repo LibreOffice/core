@@ -10,10 +10,13 @@
 #include <swmodeltestbase.hxx>
 
 #include <cmath>
+#include <sstream>
 
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
+#include <com/sun/star/frame/DispatchResultEvent.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 #include <com/sun/star/text/BibliographyDataType.hpp>
@@ -2299,6 +2302,48 @@ CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testSidebarHeightOfImageWithCaptionAfte
     CPPUNIT_ASSERT(pWrtShell->GotoFly(UIName(u"Frame1"_ustr), FLYCNTTYPE_FRM));
     SwRect aCaptionRect = pWrtShell->GetAnyCurRect(CurRectType::FlyEmbedded);
     CPPUNIT_ASSERT_EQUAL(static_cast<tools::Long>(6480), aCaptionRect.Width());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUibaseShellsTest, testDocumentStructureReportsWhatItDidNotApply)
+{
+    // A transform reports its outcome. One that names a key the handler does not know still
+    // applies the rest, and reports that it was not successful, naming the unknown key.
+    createSwDoc();
+
+    static constexpr OUString aJson = uR"json(
+{
+    "Transforms": {
+        "DocumentProperties": {"Title": "Kept title"}
+    },
+    "NoSuchKey": 1
+}
+)json"_ustr;
+
+    css::frame::DispatchResultEvent aEvent;
+    CPPUNIT_ASSERT(dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr,
+                                   { comphelper::makePropertyValue(u"DataJson"_ustr, aJson) })
+                   >>= aEvent);
+    OUString aResult;
+    aEvent.Result >>= aResult;
+    boost::property_tree::ptree aTree;
+    std::stringstream aStream(aResult.toUtf8().getStr());
+    boost::property_tree::read_json(aStream, aTree);
+    CPPUNIT_ASSERT(!aTree.get<bool>("success"));
+    CPPUNIT_ASSERT(aTree.get<std::string>("message").find("NoSuchKey") != std::string::npos);
+
+    uno::Reference<document::XDocumentPropertiesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"Kept title"_ustr, xSupplier->getDocumentProperties()->getTitle());
+
+    // A transform made only of known keys reports success.
+    static constexpr OUString aKnownJson
+        = uR"json({"Transforms": {"DocumentProperties": {"Title": "T"}}})json"_ustr;
+    CPPUNIT_ASSERT(dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr,
+                                   { comphelper::makePropertyValue(u"DataJson"_ustr, aKnownJson) })
+                   >>= aEvent);
+    aEvent.Result >>= aResult;
+    std::stringstream aKnownStream(aResult.toUtf8().getStr());
+    boost::property_tree::read_json(aKnownStream, aTree);
+    CPPUNIT_ASSERT(aTree.get<bool>("success"));
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

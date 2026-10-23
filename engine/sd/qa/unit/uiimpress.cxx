@@ -27,6 +27,7 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/DispatchResultEvent.hpp>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <cpo/uno/Reference.hxx>
 #include <com/sun/star/drawing/LineStyle.hpp>
@@ -131,6 +132,7 @@
 #include <svx/svdotext.hxx>
 #include <svx/svdoutl.hxx>
 #include <set>
+#include <sstream>
 #include <vector>
 
 #include <tools/color.hxx>
@@ -145,6 +147,8 @@
 #include <vcl/gfxlink.hxx>
 #include <vcl/mapmod.hxx>
 #include <xmloff/autolayout.hxx>
+
+#include <boost/property_tree/json_parser.hpp>
 
 using namespace ::com::sun::star;
 using namespace ::cpo;
@@ -789,6 +793,57 @@ CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureSetNotes)
     // One undo clears the notes again.
     dispatchCommand(mxComponent, u".uno:Undo"_ustr, {});
     CPPUNIT_ASSERT(notesText() != u"Speak to the roadmap here."_ustr);
+}
+
+CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureReportsWhatItDidNotApply)
+{
+    // A transform that names a command the handler does not know still applies the rest, and
+    // reports that it was not successful, naming the unknown command.
+    createSdImpressDoc();
+
+    static constexpr OUString aJson = uR"json(
+{
+    "Transforms": {
+        "SlideCommands": [
+            {"SetText.0": "Kept title"},
+            {"NoSuchCommand": 1}
+        ]
+    }
+}
+)json"_ustr;
+
+    css::frame::DispatchResultEvent aEvent;
+    CPPUNIT_ASSERT(dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr,
+                                   { comphelper::makePropertyValue(u"DataJson"_ustr, aJson) })
+                   >>= aEvent);
+    OUString aResult;
+    aEvent.Result >>= aResult;
+    boost::property_tree::ptree aTree;
+    std::stringstream aStream(aResult.toUtf8().getStr());
+    boost::property_tree::read_json(aStream, aTree);
+    CPPUNIT_ASSERT(!aTree.get<bool>("success"));
+    CPPUNIT_ASSERT(aTree.get<std::string>("message").find("NoSuchCommand") != std::string::npos);
+
+    // The title the transform set before the unknown command is in place.
+    auto pImpressDocument = dynamic_cast<SdXImpressDocument*>(mxComponent.get());
+    CPPUNIT_ASSERT(pImpressDocument);
+    SdPage* pPage = pImpressDocument->GetDoc()->GetSdPage(0, PageKind::Standard);
+    SdrTextObj* pTitle = DynCastSdrTextObj(pPage->GetPresObj(PresObjKind::Title));
+    CPPUNIT_ASSERT(pTitle);
+    CPPUNIT_ASSERT(pTitle->GetOutlinerParaObject());
+    CPPUNIT_ASSERT_EQUAL(u"Kept title"_ustr,
+                         pTitle->GetOutlinerParaObject()->GetTextObject().GetText(0));
+
+    // A transform made only of known commands reports success.
+    static constexpr OUString aKnownJson
+        = uR"json({"Transforms": {"SlideCommands": [{"SetText.0": "Title"}]}})json"_ustr;
+    CPPUNIT_ASSERT(dispatchCommand(mxComponent, u".uno:TransformDocumentStructure"_ustr,
+                                   { comphelper::makePropertyValue(u"DataJson"_ustr, aKnownJson) })
+                   >>= aEvent);
+    aEvent.Result >>= aResult;
+    std::stringstream aKnownStream(aResult.toUtf8().getStr());
+    boost::property_tree::read_json(aKnownStream, aTree);
+    CPPUNIT_ASSERT(aTree.get<bool>("success"));
 }
 
 CPPUNIT_TEST_FIXTURE(SdUiImpressTest, testDocumentStructureApplyTemplateKeepsUntouchedSlides)
