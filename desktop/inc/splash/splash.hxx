@@ -20,16 +20,13 @@
 
 #include <sal/config.h>
 
-#include <cppuhelper/implbase.hxx>
+#include "SplashScreenBase.hxx"
+
 #include <cppuhelper/supportsservice.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/introwin.hxx>
 #include <vcl/vclevent.hxx>
 #include <vcl/virdev.hxx>
-
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/task/XStatusIndicator.hpp>
 
 class SplashScreen;
 
@@ -46,9 +43,7 @@ public:
     void Redraw();
 };
 
-class SplashScreen
-    : public ::cppu::WeakImplHelper<css::task::XStatusIndicator, css::lang::XInitialization,
-                                    css::lang::XServiceInfo>
+class SplashScreen : public SplashScreenBase
 {
     friend class SplashScreenWindow;
 
@@ -99,11 +94,6 @@ public:
     virtual OUString SAL_CALL getImplementationName() override
     {
         return u"com.sun.star.office.comp.SplashScreen"_ustr;
-    }
-
-    virtual sal_Bool SAL_CALL supportsService(OUString const& ServiceName) override
-    {
-        return cppu::supportsService(this, ServiceName);
     }
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override

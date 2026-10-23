@@ -32,6 +32,7 @@ $(eval $(call gb_Library_use_libraries,spl,\
 $(eval $(call gb_Library_set_componentfile,spl,desktop/source/splash/spl,services))
 
 $(eval $(call gb_Library_add_exception_objects,spl,\
+    desktop/source/splash/SplashScreenBase \
     desktop/source/splash/splash \
     desktop/source/splash/unxsplash \
 ))

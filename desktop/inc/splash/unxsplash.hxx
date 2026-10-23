@@ -9,16 +9,15 @@
 
 #pragma once
 
+#include "SplashScreenBase.hxx"
+
 #include <stdio.h>
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/task/XStatusIndicator.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <cppuhelper/implbase.hxx>
 
 namespace desktop {
 
-class  UnxSplashScreen : public ::cppu::WeakImplHelper< css::task::XStatusIndicator, css::lang::XInitialization, css::lang::XServiceInfo >
+class UnxSplashScreen : public SplashScreenBase
 {
 private:
     UnxSplashScreen( const UnxSplashScreen& ) = delete;
@@ -42,8 +41,6 @@ public:
     virtual void SAL_CALL initialize( const css::uno::Sequence< css::uno::Any>& aArguments ) override;
 
     virtual OUString SAL_CALL getImplementationName() override;
-
-    virtual sal_Bool SAL_CALL supportsService(OUString const & ServiceName) override;
 
     virtual css::uno::Sequence<OUString> SAL_CALL getSupportedServiceNames() override;
 };
