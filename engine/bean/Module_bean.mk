@@ -19,10 +19,6 @@ $(eval $(call gb_Module_add_targets,bean,\
 	Library_officebean \
 ))
 
-# complex tests compilable but fail at runtime
-#$(eval $(call gb_Module_add_subsequentcheck_targets,bean,\
-#	JunitTest_bean_complex \
-#))
 endif
 endif
 
