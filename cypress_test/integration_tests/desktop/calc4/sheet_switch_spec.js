@@ -139,8 +139,8 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Sheet switching tests', fu
 		cy.cGet(helper.addressInputSelector).type('{selectAll}A2{enter}');
 		desktopHelper.assertScrollbarPosition('vertical', 15, 25);
 
-		// validate we didn't jump back after some time
-		cy.wait(1000);
+		// validate we didn't jump back once core has sent everything for the move
+		helper.processToIdle(this.win);
 		desktopHelper.assertScrollbarPosition('vertical', 15, 25);
 	});
 
