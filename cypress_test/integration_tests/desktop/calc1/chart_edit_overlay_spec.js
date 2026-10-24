@@ -118,20 +118,36 @@ describe(['tagdesktop'], 'Chart edit mode dark overlay', function() {
 		// on, stretch it, and zoom one level in.
 		cy.getFrameWindow().then(function(win) {
 			win.L.Browser.cypressTest = false;
-			win.app.zoomControl.zoomDurationMs = 8000;
+			win.app.zoomControl.zoomDurationMs = 4000;
 			win.app.zoomControl.zoomTo(win.app.map.getZoom() + 1);
 		});
-		cy.wait(3000);
+
+		// The tiles section holds the scale of the frame being drawn until the
+		// animation ends. Sample once the zoom is a third of the way there.
+		cy.getFrameWindow().should(function(win) {
+			var tiles = win.app.sectionContainer.getSectionWithName(win.app.CSections.Tiles.name);
+			var props = tiles.sectionProperties;
+			var endScale = win.app.zoomControl.zoomEndScale;
+			expect(props.effectiveTwipsToPixels).to.be.greaterThan(
+				props.zoomBaseTwipsToPixels * (1 + (endScale - 1) / 3));
+		});
 
 		// Mid-animation the dimming covers the sheet but leaves the chart alone,
 		// so a clear share of the document area is still white.
 		cy.getFrameWindow().then(function(win) {
+			var tiles = win.app.sectionContainer.getSectionWithName(win.app.CSections.Tiles.name);
+			expect(tiles.sectionProperties.effectiveTwipsToPixels).to.not.be.undefined;
 			var shaded = readShadedFraction(win);
 			expect(shaded).to.be.greaterThan(0.5);
 			expect(shaded).to.be.lessThan(0.95);
 		});
 
-		cy.wait(6000);
+		cy.getFrameWindow().should(function(win) {
+			expect(win.app.sectionContainer.getAnimatingSectionName()).to.be.null;
+		});
+		cy.getFrameWindow().then(function(win) {
+			helper.processToIdle(win);
+		});
 		cy.getFrameWindow().then(function(win) {
 			win.L.Browser.cypressTest = true;
 			expect(readShadedFraction(win)).to.be.greaterThan(0.5);
