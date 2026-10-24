@@ -2292,6 +2292,9 @@ ScPosWnd::ScPosWnd(vcl::Window* pParent)
     m_xWidget->set_size_request(aSize.Width(), -1);
     SetSizePixel(m_xContainer->get_preferred_size());
 
+    // tdf#142472 - use case-sensitive autocompletion to keep the case of the typed text
+    m_xWidget->set_entry_completion(true, true);
+
     FillRangeNames(true);
 
     StartListening( *SfxGetpApp() ); // For Navigator rangename updates
