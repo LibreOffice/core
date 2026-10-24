@@ -73,13 +73,6 @@ $(eval $(call gb_Module_add_targets,connectivity,\
 
 endif
 
-ifneq ($(filter QADEVOOO,$(BUILD_TYPE)),)
-$(eval $(call gb_Module_add_subsequentcheck_targets,connectivity,\
-	Jar_ConnectivityTools \
-))
-
-endif
-
 # general tests
 $(eval $(call gb_Module_add_check_targets,connectivity,\
 	CppunitTest_connectivity_commontools \

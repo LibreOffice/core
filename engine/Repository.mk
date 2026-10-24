@@ -588,7 +588,6 @@ $(eval $(call gb_Helper_register_jars_for_install,OOO,ooo, \
 ))
 
 $(eval $(call gb_Helper_register_jars,NONE,\
-	ConnectivityTools \
 	HelloWorld \
 	Highlight \
 	MemoryUsage \
