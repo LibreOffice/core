@@ -412,8 +412,10 @@ describe(['tagmultiuser'], 'Comment inserted on another slide', function() {
 		cy.cGet('.cool-annotation').each(function($el) {
 			expect($el[0].style.left).to.not.equal('');
 		});
-		// Let the layouting task and the position transition settle.
-		cy.wait(1000);
+		// The layout writes the positions in a layouting task, which the idle wait drains.
+		cy.getFrameWindow().then(function(win) {
+			return helper.processToIdle(win);
+		});
 
 		var baseline = null;
 		cy.getFrameWindow().then(function(win) {
@@ -437,12 +439,14 @@ describe(['tagmultiuser'], 'Comment inserted on another slide', function() {
 			});
 
 			// The new comment reaches the second view but shows nothing there,
-			// and the slide 2 comments stay exactly where they were. The wait
-			// gives a buggy relayout and its position transition time to move
-			// things before the position check.
+			// and the slide 2 comments stay exactly where they were. A buggy
+			// relayout writes the new positions in a layouting task, which the
+			// idle wait drains before the position check.
 			cy.cSetActiveFrame('#iframe2');
 			cy.cGet('.cool-annotation').should('have.length', 3 + round);
-			cy.wait(1000);
+			cy.getFrameWindow().then(function(win) {
+				return helper.processToIdle(win);
+			});
 			cy.getFrameWindow().then(function(win) {
 				var current = commentPositions(win);
 				Object.keys(baseline).forEach(function(id) {
