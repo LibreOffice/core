@@ -29,7 +29,7 @@
 #include <thread>
 #include <vector>
 
-/// A reconnecting browser gets its session back only when the host still gives it the same
+/// A reconnecting browser gets its session back only when the host still gives it the same user and
 /// permissions, and the session then uses the access token the browser brought.
 class UnitReconnectWopi : public WopiTestServer
 {
@@ -150,6 +150,21 @@ class UnitReconnectWopi : public WopiTestServer
         return pos == std::string::npos ? -1 : std::atoi(text.c_str() + pos + 9);
     }
 
+    /// Waits for a viewinfo: message that lists a view with this user name. Returns false when
+    /// none comes or the connection closes first.
+    static bool waitForViewInfoNaming(http::WebSocketSession& session, const std::string& userName)
+    {
+        const std::string entry = "\"username\":\"" + userName + '"';
+        const std::vector<char> message = session.poll(
+            [&entry](const std::vector<char>& candidate)
+            {
+                const std::string text(candidate.begin(), candidate.end());
+                return text.starts_with("viewinfo:") && text.find(entry) != std::string::npos;
+            },
+            std::chrono::seconds(30));
+        return !message.empty();
+    }
+
     void joinPollers()
     {
         for (const auto& poller : _pollers)
@@ -160,6 +175,7 @@ class UnitReconnectWopi : public WopiTestServer
 #if ENABLE_DEBUG
     TestResult testChangedPermissionIsNotReattached();
     TestResult testReconnectRenewsAccessToken();
+    TestResult testOtherUserGetsOwnView();
 #endif
 
 public:
@@ -176,7 +192,8 @@ public:
         std::vector<std::string> failed;
         for (TestResult (UnitReconnectWopi::*test)() :
              { &UnitReconnectWopi::testChangedPermissionIsNotReattached,
-               &UnitReconnectWopi::testReconnectRenewsAccessToken })
+               &UnitReconnectWopi::testReconnectRenewsAccessToken,
+               &UnitReconnectWopi::testOtherUserGetsOwnView })
         {
             if ((this->*test)() != TestResult::Ok)
                 failed.push_back(testname);
@@ -257,6 +274,34 @@ UnitBase::TestResult UnitReconnectWopi::testReconnectRenewsAccessToken()
                              std::string("alice-renewed"), lastPutFileToken());
 
     sessionA2->exitWS();
+    joinPollers();
+    return TestResult::Ok;
+}
+
+// (i) Another user connects with the reconnect token of a view that is still open. The other user
+// gets a view of its own, and the first view keeps its connection and sees the new user join.
+UnitBase::TestResult UnitReconnectWopi::testOtherUserGetsOwnView()
+{
+    setTestname(__func__);
+    TST_LOG("Starting Test: " << testname);
+
+    _viewsLoaded = 0;
+    auto sessionA = connect(wopiSrc("other-user.odt", "alice"));
+    const std::string token = waitForToken(*sessionA);
+    LOK_ASSERT(!token.empty());
+    const int viewIdA = waitForStatusViewId(*sessionA, std::chrono::seconds(30));
+    LOK_ASSERT(viewIdA >= 0);
+    LOK_ASSERT(waitForViewsLoaded(1));
+
+    auto sessionB = connect(wopiSrc("other-user.odt", "bob"), token);
+    const int viewIdB = waitForStatusViewId(*sessionB, std::chrono::seconds(30));
+    LOK_ASSERT(viewIdB >= 0);
+    LOK_ASSERT_MESSAGE("The other user did not get a view of its own", viewIdA != viewIdB);
+    LOK_ASSERT_MESSAGE("The first view did not see the other user join",
+                       waitForViewInfoNaming(*sessionA, "bob"));
+
+    sessionB->exitWS();
+    sessionA->exitWS();
     joinPollers();
     return TestResult::Ok;
 }

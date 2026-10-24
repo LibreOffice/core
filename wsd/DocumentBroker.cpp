@@ -5686,12 +5686,14 @@ bool DocumentBroker::unparkSession(std::string_view reconnectToken,
     if (!session)
         return false;
 
-    // The view the browser asks for has the permissions of this request. A session with other
-    // permissions is a different view, so a new one is made.
+    // The view the browser asks for has the user and permissions of this request. A session with
+    // another user or other permissions is a different view, so a new one is made.
     if (session->isReadOnly() != isReadOnly ||
-        (wopiFileInfo && session->getWritePermission() != wopiFileInfo->getUserCanWrite()))
+        (wopiFileInfo && (session->getUserId() != wopiFileInfo->getUserId() ||
+                          session->getWritePermission() != wopiFileInfo->getUserCanWrite())))
     {
-        LOG_INF("Session [" << session->getName() << "] has other permissions than this request");
+        LOG_INF("Session [" << session->getName()
+                            << "] has another user or other permissions than this request");
         return false;
     }
 
