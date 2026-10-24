@@ -23,6 +23,7 @@
 #include <rtl/strbuf.hxx>
 #include <sal/log.hxx>
 #include <svl/urihelper.hxx>
+#include <tools/hostfilter.hxx>
 #include <vcl/svapp.hxx>
 #include <sfx2/frmhtml.hxx>
 #include <sfx2/frmhtmlw.hxx>
@@ -504,6 +505,17 @@ bool SwHTMLParser::InsertEmbed()
     if ((bHasURL || bHasData)
         && (!m_xDoc->AllowAccessLink() || aURLObj.IsExoticProtocol()))
         return true;
+
+    if (bHasURL || bHasData)
+    {
+        const OUString aFileURL = aURLObj.GetMainURL(INetURLObject::DecodeMechanism::NONE);
+        if (HostFilter::isFileUrlForbidden(aFileURL))
+        {
+            SAL_WARN("sw.html",
+                     "SwHTMLParser::InsertEmbed: blocked file path: \"" << aFileURL << "\"");
+            return true;
+        }
+    }
 
     if (!m_aEmbeds.empty())
     {
