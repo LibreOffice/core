@@ -100,6 +100,12 @@ describe(['tagdesktop'], 'Long Writer comment threads', function() {
 			cy.cGet('#document-canvas').click(point.vX / this.win.app.dpiScale, point.vY / this.win.app.dpiScale);
 		});
 		cy.cGet('#comment-container-' + id).should('have.class', 'annotation-active');
+		// The box scrolls a newly selected thread into view in a later layout pass, which
+		// would undo a scroll made before it.
+		cy.wrap(null).should(() => {
+			var section = commentSection(this.win);
+			expect(section.selectionShownInBox, 'selection laid out in the box').to.equal(section.sectionProperties.selectedComment);
+		});
 	}
 
 	// Runs check with the top of a card on screen, retried until it holds.
