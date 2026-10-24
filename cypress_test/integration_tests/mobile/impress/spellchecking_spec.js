@@ -22,7 +22,11 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Spell checking menu.', func
 		// The double click selects the misspelled word by a core round trip.
 		// Sending the arrow key before that selection lands moves the cursor
 		// off the word, and the context menu opens with no suggestion for it.
-		cy.wait(500);
+		// The client sends the double click once its click-merge timer has run.
+		cy.getFrameWindow().then(function(win) {
+			helper.waitForTimers(win, 'clicktimer');
+			helper.processToIdle(win);
+		});
 
 		helper.typeIntoDocument('{leftArrow}');
 
