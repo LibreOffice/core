@@ -1,14 +1,23 @@
 #!/usr/bin/env bash
+#
+# Copyright the Collabora Online contributors.
+#
+# SPDX-License-Identifier: MPL-2.0
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
 # set -x
 
-test $# -eq 2 || { echo "Usage: $0 <chroot template directory for system libs to create> <LO installation directory>"; exit 1; }
+test $# -eq 2 || { echo "Usage: $0 <chroot template directory for system libs to create> <Collabora Office installation directory>"; exit 1; }
 
 # No provision for spaces or other weird characters in pathnames. So sue me.
 
 # First parameter is the pathname where this script will create the "systemplate" tree
 CHROOT=$1
 
-# Second parameter is the instdir directory of the LibreOffice installation to be used
+# Second parameter is the instdir directory of the Collabora Office installation to be used
 INSTDIR=$2
 
 test -d "$INSTDIR" || { echo "$0: No such directory: $INSTDIR"; exit 1; }

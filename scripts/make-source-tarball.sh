@@ -1,4 +1,13 @@
 #!/bin/sh
+#
+# Copyright the Collabora Online contributors.
+#
+# SPDX-License-Identifier: MPL-2.0
+#
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
+#
 # Create the release source tarball for a tag: the monorepo tree at that tag
 # with the translations repository, which carries the same tag, placed at
 # engine/translations. The result is what the FreeBSD port and other
