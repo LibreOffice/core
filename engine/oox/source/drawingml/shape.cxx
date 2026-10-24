@@ -39,6 +39,7 @@
 #include <drawingml/ThemeOverrideFragmentHandler.hxx>
 #include <drawingml/table/tableproperties.hxx>
 #include <oox/drawingml/chart/chartconverter.hxx>
+#include <oox/drawingml/drawingmltypes.hxx>
 #include <drawingml/chart/chartspacefragment.hxx>
 #include <drawingml/chart/stylefragment.hxx>
 #include <drawingml/chart/stylemodel.hxx>
@@ -1239,15 +1240,6 @@ lcl_getClipPolygon(CustomShapeProperties& rProperties, const awt::Rectangle& rSh
     return aCoords;
 }
 
-Degree100 lcl_MSORotateAngleToAPIAngle(const sal_Int32 nMSORotationAngle)
-{
-    // Converts a shape rotation angle from MSO to angle for API property RotateAngle
-    // from unit 1/60000 deg to unit 1/100 deg
-    Degree100 nAngle(nMSORotationAngle / 600);
-    // API RotateAngle has opposite direction than nMSORotationAngle, thus 'minus'.
-    return NormAngle36000(-nAngle);
-}
-
 void PushMasterTextListStyleToMasterShapeParagraphs(TextListStyle& rMasterTextListStyle, const uno::Reference<drawing::XShape>& xShape)
 {
     uno::Reference<text::XTextRange> xShapeText(xShape, UNO_QUERY);
@@ -1387,7 +1379,8 @@ Reference< XShape > const & Shape::createAndInsert(
         mp3DPropertiesPtr, mnRotation, getCustomShapeProperties()->getExtrusionPropertyMap(),
         fShapeRotateInclCamera, aExtrusionColor, bBlockExtrusion);
     // Currently the other places use unit 1/60000deg and MSO shape rotate orientation.
-    sal_Int32 nShapeRotateInclCamera = -basegfx::rad2deg<60000>(fShapeRotateInclCamera);
+    sal_Int32 nShapeRotateInclCamera
+        = -basegfx::fround(basegfx::rad2deg<60000>(fShapeRotateInclCamera));
     bool bIs3DGraphic = aServiceName == "com.sun.star.drawing.GraphicObjectShape" && bHas3DEffect;
     bIsCustomShape |= bIs3DGraphic;
 
@@ -2013,7 +2006,7 @@ Reference< XShape > const & Shape::createAndInsert(
         aShapeProps.assignUsed( maDefaultShapeProperties );
         if(nShapeRotateInclCamera != 0 && bIsCustomShape)
             aShapeProps.setProperty(PROP_RotateAngle,
-                                    sal_Int32(lcl_MSORotateAngleToAPIAngle(nShapeRotateInclCamera)));
+                                    sal_Int32(MSORotateAngleToAPIAngle(nShapeRotateInclCamera)));
         if( bIsEmbMedia ||
             bIsCustomShape ||
             aServiceName == "com.sun.star.drawing.GraphicObjectShape" ||
@@ -2574,7 +2567,7 @@ Reference< XShape > const & Shape::createAndInsert(
         PropertySet aPropertySet(mxShape);
         if ( !bUseRotationTransform && (nShapeRotateInclCamera !=0) )
         {
-            Degree100 nAngle(lcl_MSORotateAngleToAPIAngle(nShapeRotateInclCamera));
+            Degree100 nAngle(MSORotateAngleToAPIAngle(nShapeRotateInclCamera));
             aPropertySet.setAnyProperty(PROP_RotateAngle, Any( sal_Int32(nAngle)));
             aPropertySet.setAnyProperty( PROP_HoriOrientPosition, Any( maPosition.X ) );
             aPropertySet.setAnyProperty( PROP_VertOrientPosition, Any( maPosition.Y ) );

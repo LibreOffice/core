@@ -2468,7 +2468,7 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
                         {
                             sal_Int32 nTmp = 0;
                             pZRotationProp->Value >>= nTmp;
-                            nCameraRotation = NormAngle36000(Degree100(nTmp / -600));
+                            nCameraRotation = MSORotateAngleToAPIAngle(nTmp);
                             // FixMe tdf#160327. Vertical flip will be false.
                         }
                     }

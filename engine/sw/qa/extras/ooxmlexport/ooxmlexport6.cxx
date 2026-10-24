@@ -784,8 +784,9 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo73247)
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
+    // The file has rot="1969698", 32.8283 degrees, which is saved as 32.83 degrees.
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:xfrm",
-                "rot", u"1969200");
+                "rot", u"1969800");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo70942)
