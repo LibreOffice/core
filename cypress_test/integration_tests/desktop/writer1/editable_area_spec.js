@@ -239,8 +239,10 @@ describe(['taga11yenabled'], 'Editable area', { testIsolation: false }, function
 		helper.clickAt('P1');
 		ceHelper.checkPlainContent('');
 		ceHelper.checkCaretPosition(0);
-		// Need to wait between clicks
-		cy.wait(200);
+		// Two clicks within the click-merge timer become a double click.
+		cy.getFrameWindow().then(function(win) {
+			return helper.waitForTimers(win, 'clicktimer');
+		});
 		// click on paragraph 4
 		helper.clickAt('P2');
 		ceHelper.checkPlainContent('green red');
