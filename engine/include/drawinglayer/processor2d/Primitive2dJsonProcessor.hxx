@@ -18,7 +18,9 @@
 #include <rtl/ustring.hxx>
 #include <tools/color.hxx>
 
+#include <functional>
 #include <optional>
+#include <set>
 #include <unordered_map>
 #include <vector>
 
@@ -56,6 +58,23 @@ class StrokeAttribute;
 
 namespace drawinglayer
 {
+/** The font attributes of text portions (family, cut, size, color, resolved face), each kept once
+    under an id. An id stays valid for the life of the table, so content written at different times
+    can name it.
+ */
+class DRAWINGLAYER_DLLPUBLIC TextStyleTable
+{
+public:
+    /// The id of the style with these fields. A style that is not in the table yet is added.
+    sal_Int32 idOf(const OString& rFields);
+    /// The fields of the style with the id.
+    const OString& fieldsOf(sal_Int32 nId) const { return maFields[nId]; }
+
+private:
+    std::unordered_map<OString, sal_Int32> maIds;
+    std::vector<OString> maFields;
+};
+
 /** Primitive processor that converts primitives into a JSON resolution independent representation. */
 class DRAWINGLAYER_DLLPUBLIC Primitive2dJsonProcessor
 {
@@ -104,6 +123,24 @@ public:
     void setFontCache(std::unordered_map<sal_uInt64, BinaryDataContainer>& rCache,
                       std::unordered_map<OUString, ResolvedFace>& rFaceByKey);
 
+    /// Writes the type and fields of a primitive defined outside drawinglayer, or returns false for
+    /// a primitive it does not know. Its decomposition is written as children either way.
+    using ExternalPrimitiveWriter
+        = std::function<bool(const drawinglayer::primitive2d::BasePrimitive2D&, tools::JsonWriter&,
+                             double fScaleFactor)>;
+
+    void setExternalPrimitiveWriter(ExternalPrimitiveWriter aWriter)
+    {
+        maExternalPrimitiveWriter = std::move(aWriter);
+    }
+
+    /// Write text portions compact. A portion names its font attributes in the table by id as
+    /// "style". Text that is not rotated, sheared or stretched is placed by "x" and "y" in whole
+    /// units. A window into the text that shows all of it is left out.
+    void setTextStyles(TextStyleTable* pTable) { mpTextStyles = pTable; }
+    /// The ids of the styles that the portions written so far name.
+    const std::set<sal_Int32>& getUsedTextStyles() const { return maUsedTextStyles; }
+
 private:
     void processPrimitive(const drawinglayer::primitive2d::BasePrimitive2D& rPrimitive);
 
@@ -132,6 +169,10 @@ private:
     void writeGraphicColorModifiers(const GraphicAttr& rAttributes);
     void
     writeTextPortionScaled(const drawinglayer::primitive2d::TextSimplePortionPrimitive2D& rPrim);
+    /// Write the font attributes of a portion: its size, colors, family, cut and face.
+    void writeTextStyleFields(tools::JsonWriter& rWriter,
+                              const drawinglayer::primitive2d::TextSimplePortionPrimitive2D& rPrim,
+                              double fFontSize);
 
     void writeSvgGradientCommon(const drawinglayer::primitive2d::SvgGradientHelper& rGradient);
     void writeGraphicData(const Graphic& rGraphic);
@@ -150,6 +191,9 @@ private:
     /// inside one that sits on whatever the page shows there.
     std::optional<Color> moTextSurface;
     double mfTextSurfaceTransparency = 0.0;
+    ExternalPrimitiveWriter maExternalPrimitiveWriter;
+    TextStyleTable* mpTextStyles = nullptr;
+    std::set<sal_Int32> maUsedTextStyles;
 };
 
 } // namespace drawinglayer

@@ -41,6 +41,7 @@
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
 #include <drawinglayer/processor2d/Primitive2dJsonProcessor.hxx>
+#include <drawinglayer/processor2d/VectorResourceCache.hxx>
 #include <tools/gen.hxx>
 #include <tools/Guid.hxx>
 #include <rtl/ref.hxx>
@@ -118,21 +119,27 @@ class SAL_DLLPUBLIC_RTTI SdXImpressDocument final : public SfxBaseModel, // impl
 
 public:
     /// Cache of graphics from vector rendering, keyed by checksum.
-    std::unordered_map<sal_Int64, Graphic>& getBitmapCache() { return maBitmapCache; }
+    std::unordered_map<sal_Int64, Graphic>& getBitmapCache()
+    {
+        return maVectorResources.getBitmapCache();
+    }
 
     /// Cache of font files used by vector-rendering text, keyed by a
     /// content hash of the font bytes.
     std::unordered_map<sal_uInt64, BinaryDataContainer>& getVectorFontCache()
     {
-        return maVectorFontCache;
+        return maVectorResources.getFontCache();
     }
 
     /// What each font key resolved to, once per document.
     std::unordered_map<OUString, drawinglayer::Primitive2dJsonProcessor::ResolvedFace>&
     getVectorFontFaceByKey()
     {
-        return maVectorFontFaceByKey;
+        return maVectorResources.getFaceByKey();
     }
+
+    /// The graphics and fonts the vector primitives of this document name.
+    drawinglayer::VectorResourceCache& getVectorResources() { return maVectorResources; }
 
     /// What was last written for one object. A change that leaves none of this different is a
     /// change nobody can see, so it need not travel. The box and the transformation are held
@@ -675,10 +682,8 @@ private:
     bool mbDisposed;
 
     std::unique_ptr<sd::SlideshowLayerRenderer> mpSlideshowLayerRenderer;
-    std::unordered_map<sal_Int64, Graphic> maBitmapCache;
-    std::unordered_map<sal_uInt64, BinaryDataContainer> maVectorFontCache;
-    std::unordered_map<OUString, drawinglayer::Primitive2dJsonProcessor::ResolvedFace>
-        maVectorFontFaceByKey;
+    /// The graphics and fonts the vector primitives name, and the epoch their versions count in.
+    drawinglayer::VectorResourceCache maVectorResources;
 
     struct AnimatedGifTempFile
     {
@@ -694,14 +699,6 @@ private:
     /// page's part id. The state stays with the page when pages are inserted, removed or moved
     /// and its index in the page list changes.
     std::unordered_map<tools::Guid, VectorPartState> maVectorParts;
-
-    /// The version space the part versions count in, drawn once for this model. 0 until it is
-    /// first asked for.
-    mutable sal_Int32 mnVectorEpoch = 0;
-
-    /// A number that names one model's version space, different from the number every other
-    /// model draws.
-    static sal_Int32 newVectorEpoch();
 
     /// Writes the primitives of the page rPartId names in the page list nMode. A non-negative
     /// nSinceVersion asks for the delta against that version instead of the whole page. A push

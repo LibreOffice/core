@@ -17,7 +17,6 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
-#include <chrono>
 #include <memory>
 #include <set>
 
@@ -80,7 +79,6 @@
 #include <comphelper/kit.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/propertyvalue.hxx>
-#include <comphelper/random.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/servicehelper.hxx>
@@ -110,7 +108,6 @@
 #include <editeng/UnoForbiddenCharsTable.hxx>
 #include <svx/svdoutl.hxx>
 #include <o3tl/any.hxx>
-#include <o3tl/hash_combine.hxx>
 #include <o3tl/safeint.hxx>
 #include <o3tl/string_view.hxx>
 #include <o3tl/test_info.hxx>
@@ -2283,23 +2280,9 @@ cpo::uno::Sequence< sal_Int8 > SdXImpressDocument::getImplementationId(  )
     return cpo::uno::Sequence<sal_Int8>();
 }
 
-sal_Int32 SdXImpressDocument::newVectorEpoch()
-{
-    // Every model counts its versions up from 0, so each draws its own epoch. The clock is mixed
-    // in because a fixed random seed makes a restarted kit draw the same number again.
-    sal_uInt32 nEpoch = sal_uInt32(comphelper::rng::uniform_int_distribution(1, SAL_MAX_INT32));
-    o3tl::hash_combine(nEpoch, std::chrono::steady_clock::now().time_since_epoch().count());
-    nEpoch &= SAL_MAX_INT32;
-    return nEpoch == 0 ? 1 : sal_Int32(nEpoch);
-}
-
 sal_Int32 SdXImpressDocument::getVectorEpoch() const
 {
-    // The epoch is drawn on first use, so only a model that serves vector content draws from the
-    // shared random sequence.
-    if (mnVectorEpoch == 0)
-        mnVectorEpoch = newVectorEpoch();
-    return mnVectorEpoch;
+    return maVectorResources.getEpoch();
 }
 
 /// The key the vector content state of a page is filed under: the page's GUID, which the part id
@@ -3201,8 +3184,7 @@ private:
     {
         maProcessor.emplace(rWriter);
         maProcessor->setScaleFactor(constTwipConversionFactor);
-        maProcessor->setBitmapCache(mpModel->getBitmapCache());
-        maProcessor->setFontCache(mpModel->getVectorFontCache(), mpModel->getVectorFontFaceByKey());
+        mpModel->getVectorResources().attachTo(*maProcessor);
 
         maViewInformation = viewInformationFor(pPage);
         maProcessor->setViewInformation2D(maViewInformation);
@@ -5208,46 +5190,13 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
     {
         auto it = aMap.find(u"checksum"_ustr);
         if (it != aMap.end())
-        {
-            sal_Int64 nChecksum = it->second.toInt64();
-            // The response always carries the type and the requested
-            // checksum, and then either the image data or an error
-            // attribute naming why there is none.
-            rJsonWriter.put("type", "vectorrenderinggraphics");
-            rJsonWriter.put("checksum", nChecksum);
-            auto itGraphic = maBitmapCache.find(nChecksum);
-            if (itGraphic != maBitmapCache.end())
-            {
-                drawinglayer::Primitive2dJsonProcessor::writeGraphicBase64(
-                    rJsonWriter, itGraphic->second);
-            }
-            else
-            {
-                rJsonWriter.put("error", "notfound");
-            }
-        }
+            maVectorResources.writeGraphic(rJsonWriter, it->second.toInt64());
     }
     else if (o3tl::starts_with(rCommand, ".uno:VectorRenderingFont"))
     {
         auto aIdIterator = aMap.find(u"id"_ustr);
         if (aIdIterator != aMap.end())
-        {
-            sal_uInt64 nFontId = aIdIterator->second.toUInt64(16);
-            rJsonWriter.put("type", "vectorrenderingfont");
-            rJsonWriter.put("fontId", OString::number(nFontId, 16));
-
-            auto aFontIterator = maVectorFontCache.find(nFontId);
-            if (aFontIterator != maVectorFontCache.end())
-            {
-                const BinaryDataContainer& rBytes = aFontIterator->second;
-                const cpo::uno::Sequence<sal_Int8> aSequence(
-                    reinterpret_cast<const sal_Int8*>(rBytes.getData()),
-                    static_cast<sal_Int32>(rBytes.getSize()));
-                OStringBuffer aBase64;
-                comphelper::Base64::encode(aBase64, aSequence);
-                rJsonWriter.put("data", aBase64.makeStringAndClear());
-            }
-        }
+            maVectorResources.writeFont(rJsonWriter, aIdIterator->second.toUInt64(16));
     }
     else if (o3tl::starts_with(rCommand, ".uno:VectorPrimitives"))
     {

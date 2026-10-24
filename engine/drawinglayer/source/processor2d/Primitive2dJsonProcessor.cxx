@@ -510,53 +510,45 @@ void Primitive2dJsonProcessor::writeBoundsScaled(const BasePrimitive2D& rPrimiti
         writeRange("bounds", aRange, mfScaleFactor);
 }
 
-void Primitive2dJsonProcessor::writeTextPortionScaled(
-    const TextSimplePortionPrimitive2D& rPrimitive)
+sal_Int32 TextStyleTable::idOf(const OString& rFields)
 {
-    writeMatrixScaled("matrix", rPrimitive.getTextTransform());
+    auto [aIterator, bInserted] = maIds.try_emplace(rFields, sal_Int32(maFields.size()));
+    if (bInserted)
+        maFields.push_back(rFields);
+    return aIterator->second;
+}
 
-    // Extract font size from the text transform matrix scale
-    const basegfx::B2DHomMatrix& rMatrix = rPrimitive.getTextTransform();
-    const double fFontScaleY = std::hypot(rMatrix.get(1, 0), rMatrix.get(1, 1)) * mfScaleFactor;
-    mrWriter.put("fontSize", fFontScaleY);
-    mrWriter.put("text", rPrimitive.getText());
-    mrWriter.put("textPosition", rPrimitive.getTextPosition());
-    mrWriter.put("textLength", rPrimitive.getTextLength());
-    mrWriter.put("fontcolor", textColorToJson(rPrimitive.getFontColor()));
+void Primitive2dJsonProcessor::writeTextStyleFields(tools::JsonWriter& rWriter,
+                                                    const TextSimplePortionPrimitive2D& rPrimitive,
+                                                    double fFontSize)
+{
+    rWriter.put("fontSize", fFontSize);
+    rWriter.put("fontcolor", textColorToJson(rPrimitive.getFontColor()));
 
     if (rPrimitive.getTextFillColor() != COL_TRANSPARENT)
-        mrWriter.put("fillcolor", colorToHex(rPrimitive.getTextFillColor().getBColor()));
-
-    // The fill right under the text, which an automatic color of the text is chosen against,
-    // and the share of what lies behind that fill that shows through.
-    if (moTextSurface)
-    {
-        mrWriter.put("backdrop", colorToHex(moTextSurface->getBColor()));
-        if (mfTextSurfaceTransparency != 0.0)
-            mrWriter.put("backdropTransparency", mfTextSurfaceTransparency);
-    }
+        rWriter.put("fillcolor", colorToHex(rPrimitive.getTextFillColor().getBColor()));
 
     if (rPrimitive.getLetterSpacing() != 0)
-        mrWriter.put("letterSpacing",
-                     static_cast<double>(rPrimitive.getLetterSpacing()) * mfScaleFactor);
+        rWriter.put("letterSpacing",
+                    static_cast<double>(rPrimitive.getLetterSpacing()) * mfScaleFactor);
 
     // Font attributes
     const drawinglayer::attribute::FontAttribute& rFontAttr = rPrimitive.getFontAttribute();
-    mrWriter.put("familyname", rFontAttr.getFamilyName());
+    rWriter.put("familyname", rFontAttr.getFamilyName());
 
     if (!rFontAttr.getStyleName().isEmpty())
-        mrWriter.put("stylename", rFontAttr.getStyleName());
+        rWriter.put("stylename", rFontAttr.getStyleName());
 
-    mrWriter.put("weight", rFontAttr.getWeight());
+    rWriter.put("weight", rFontAttr.getWeight());
 
     if (rFontAttr.getItalic())
-        mrWriter.put("italic", true);
+        rWriter.put("italic", true);
     if (rFontAttr.getOutline())
-        mrWriter.put("outline", true);
+        rWriter.put("outline", true);
     if (rFontAttr.getRTL())
-        mrWriter.put("rtl", true);
+        rWriter.put("rtl", true);
     if (rFontAttr.getMonospaced())
-        mrWriter.put("monospaced", true);
+        rWriter.put("monospaced", true);
 
     // The exact face the engine resolved for this portion, named by a
     // content-hash id. The font command serves the bytes on demand.
@@ -598,12 +590,61 @@ void Primitive2dJsonProcessor::writeTextPortionScaled(
         }
         if (aFace.mnFontId != 0)
         {
-            mrWriter.put("fontId", OString::number(aFace.mnFontId, 16));
+            rWriter.put("fontId", OString::number(aFace.mnFontId, 16));
             if (aFace.mbSyntheticBold)
-                mrWriter.put("syntheticBold", true);
+                rWriter.put("syntheticBold", true);
             if (aFace.mbSyntheticItalic)
-                mrWriter.put("syntheticItalic", true);
+                rWriter.put("syntheticItalic", true);
         }
+    }
+}
+
+void Primitive2dJsonProcessor::writeTextPortionScaled(
+    const TextSimplePortionPrimitive2D& rPrimitive)
+{
+    // Extract font size from the text transform matrix scale
+    const basegfx::B2DHomMatrix& rMatrix = rPrimitive.getTextTransform();
+    const double fFontScaleY = std::hypot(rMatrix.get(1, 0), rMatrix.get(1, 1)) * mfScaleFactor;
+    const OUString& rText = rPrimitive.getText();
+    if (mpTextStyles)
+    {
+        tools::JsonWriter aStyleWriter;
+        writeTextStyleFields(aStyleWriter, rPrimitive, fFontScaleY);
+        const sal_Int32 nStyle = mpTextStyles->idOf(aStyleWriter.finishAndGetAsOString());
+        maUsedTextStyles.insert(nStyle);
+        mrWriter.put("style", nStyle);
+
+        // A text that stands upright at the size of its font is placed by its origin alone.
+        if (rMatrix.get(1, 0) == 0.0 && rMatrix.get(0, 1) == 0.0
+            && rMatrix.get(0, 0) == rMatrix.get(1, 1))
+        {
+            mrWriter.put("x", sal_Int64(std::llround(rMatrix.get(0, 2) * mfScaleFactor)));
+            mrWriter.put("y", sal_Int64(std::llround(rMatrix.get(1, 2) * mfScaleFactor)));
+        }
+        else
+            writeMatrixScaled("matrix", rMatrix);
+
+        mrWriter.put("text", rText);
+        if (rPrimitive.getTextPosition() != 0)
+            mrWriter.put("textPosition", rPrimitive.getTextPosition());
+        if (rPrimitive.getTextLength() != rText.getLength() - rPrimitive.getTextPosition())
+            mrWriter.put("textLength", rPrimitive.getTextLength());
+    }
+    else
+    {
+        writeMatrixScaled("matrix", rMatrix);
+        mrWriter.put("text", rText);
+        mrWriter.put("textPosition", rPrimitive.getTextPosition());
+        mrWriter.put("textLength", rPrimitive.getTextLength());
+        writeTextStyleFields(mrWriter, rPrimitive, fFontScaleY);
+    }
+
+    // The backdrop is the fill under the text, which an automatic text color is chosen against.
+    if (moTextSurface)
+    {
+        mrWriter.put("backdrop", colorToHex(moTextSurface->getBColor()));
+        if (mfTextSurfaceTransparency != 0.0)
+            mrWriter.put("backdropTransparency", mfTextSurfaceTransparency);
     }
 
     // How far each glyph advances from the one before it, in whole twips. A whole twip is finer
@@ -1451,6 +1492,11 @@ void Primitive2dJsonProcessor::processPrimitive(const BasePrimitive2D& rBasePrim
             if (pTypeName)
             {
                 mrWriter.put("type", pTypeName);
+            }
+            else if (maExternalPrimitiveWriter
+                     && maExternalPrimitiveWriter(rBasePrimitive, mrWriter, mfScaleFactor))
+            {
+                // The module that defines the primitive wrote its type and fields.
             }
             else
             {
