@@ -31,11 +31,15 @@ describe(['tagdesktop'], 'Calc: freeze columns with leading hidden columns (cool
 			cy.wrap(sg).should(function(sgLive) {
 				expect(sgLive.getCellRect(4, 0).min.x).to.be.lessThan(colELeftBeforeHide);
 			});
-			// The corrupting round trip fires from a client-side geometry event a
-			// little after the column actually moves, so this needs a plain wait
-			// (there is nothing to poll for: the bug is that a wrong follow-up
-			// correction gets sent a moment later, not that a value fails to arrive).
-			cy.wait(3000);
+			// A wrong follow-up correction, if the client sends one, goes out while it handles
+			// core's reply. The second idle round trip makes core process that correction and
+			// report the result before the test moves on.
+			cy.then(function() {
+				return helper.processToIdle(win);
+			});
+			cy.then(function() {
+				return helper.processToIdle(win);
+			});
 
 			// Select E2 (column index 4, row index 1), matching the issue's
 			// "select column 5, row 2", and freeze there.
@@ -44,9 +48,11 @@ describe(['tagdesktop'], 'Calc: freeze columns with leading hidden columns (cool
 				win.app.map.sendUnoCommand('.uno:FreezePanes');
 				return helper.processToIdle(win);
 			});
-			// Same reasoning as above: give the wrong follow-up correction, if any,
-			// time to arrive and overwrite the correct value before asserting on it.
-			cy.wait(2000);
+			// Same reasoning as above: one more idle round trip lets a wrong follow-up
+			// correction, if any, reach core and come back before the assertion.
+			cy.then(function() {
+				return helper.processToIdle(win);
+			});
 
 			// Without the fix, this settled on splitCell.x === 3 (the count of
 			// leading hidden columns) instead of 4 (the cursor's own column).
