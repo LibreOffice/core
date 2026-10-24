@@ -2321,7 +2321,15 @@ static const tools::Guid& vectorPartKeyOf(const SdrPage& rPage) { return rPage.G
 sal_uInt64 SdXImpressDocument::getVectorPartVersion(const SdrPage& rPage) const
 {
     auto aIterator = maVectorParts.find(vectorPartKeyOf(rPage));
-    return aIterator != maVectorParts.end() ? aIterator->second.mnVersion : 0;
+    return aIterator != maVectorParts.end() ? aIterator->second.maVersions.getVersion() : 0;
+}
+
+bool SdXImpressDocument::isVectorPartChangedSince(const SdrPage& rPage, sal_Int64 nSince) const
+{
+    auto aIterator = maVectorParts.find(vectorPartKeyOf(rPage));
+    return aIterator != maVectorParts.end()
+               ? aIterator->second.maVersions.isChangedSince(nSince)
+               : svx::vector::PartVersions().isChangedSince(nSince);
 }
 
 bool SdXImpressDocument::isVectorObjectChangedSince(const SdrPage& rPage, sal_uInt64 nObjectId,
@@ -2339,7 +2347,7 @@ bool SdXImpressDocument::isVectorOrderChangedSince(const SdrPage& rPage, sal_uIn
 {
     auto aIterator = maVectorParts.find(vectorPartKeyOf(rPage));
     return aIterator != maVectorParts.end()
-           && aIterator->second.mnOrderChangeVersion > nSince;
+           && aIterator->second.maVersions.getOrderVersion() > nSince;
 }
 
 std::unordered_set<sal_uInt64> SdXImpressDocument::takeVectorDirtyObjects(const SdrPage& rPage)
@@ -2362,7 +2370,7 @@ bool SdXImpressDocument::recordVectorObjectContent(const SdrPage& rPage, sal_uIn
         return false;
 
     rState.maObjectContent[nObjectId] = rContent;
-    rState.maObjectChangeVersions[nObjectId] = ++rState.mnVersion;
+    rState.maObjectChangeVersions[nObjectId] = rState.maVersions.countUp();
     return true;
 }
 
@@ -2412,10 +2420,7 @@ bool SdXImpressDocument::recordVectorPaintOrder(const SdrPage& rPage,
     const bool bMoved = rState.moPaintOrder.has_value() && *rState.moPaintOrder != rOrder;
     rState.moPaintOrder = rOrder;
     if (bMoved)
-    {
-        ++rState.mnVersion;
-        rState.mnOrderChangeVersion = rState.mnVersion;
-    }
+        rState.maVersions.countUpOrder();
     return bMoved;
 }
 
@@ -2455,14 +2460,7 @@ constexpr sal_Int32 constVectorModeNotesPages = 2;
 void notifyViewsVectorPartChanged(const SfxObjectShell* pDocShell, const SdrPage& rPage,
                                   sal_Int32 nMode)
 {
-    const OString aPartId = rPage.GetGuid().getString();
-    SfxViewShell* pShell = SfxViewShell::GetFirst(false);
-    while (pShell)
-    {
-        if (pShell->GetObjectShell() == pDocShell)
-            pShell->viewVectorPartChanged(aPartId, nMode);
-        pShell = SfxViewShell::GetNext(*pShell, false);
-    }
+    KitHelper::notifyVectorPartChanged(pDocShell, rPage.GetGuid().getString(), nMode);
 }
 
 /// Position of a master page in the master-page list of the standard
@@ -2594,14 +2592,6 @@ std::optional<VectorPartAddress> partAndModeOfPage(const SdPage* pPage)
         return VectorPartAddress{ nMasterPart, constVectorModeMasterPages };
 
     return {};
-}
-
-/// Count the part's version up and remember it as the version the object set, or the order it
-/// paints in, last changed at.
-void recordOrderChange(SdXImpressDocument::VectorPartState& rState)
-{
-    ++rState.mnVersion;
-    rState.mnOrderChangeVersion = rState.mnVersion;
 }
 
 /// Marks the object and, when it is a group, everything inside it.
@@ -2853,10 +2843,7 @@ bool SdXImpressDocument::recordVectorPageContent(const SdrPage& rPage,
     rState.maPageMasterPartId = rMasterPartId;
     rState.maPageMasterHiddenLayers = rMasterHiddenLayers;
     if (bMoved)
-    {
-        ++rState.mnVersion;
-        rState.mnMasterChangeVersion = rState.mnVersion;
-    }
+        rState.mnMasterChangeVersion = rState.maVersions.countUp();
     return bMoved;
 }
 
@@ -2946,7 +2933,7 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     {
                         SdXImpressDocument::VectorPartState& rState
                             = maVectorParts[vectorPartKeyOf(*pPage)];
-                        recordOrderChange(rState);
+                        rState.maVersions.countUpOrder();
                         recordObjectChange(rState, pObject, SdrHintKind::ObjectChange);
                         notifyViewsVectorPartChanged(mpDocShell, *pPage, oPart->mnMode);
                     }
@@ -2969,9 +2956,7 @@ void SdXImpressDocument::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
                     if (aIterator != maVectorParts.end())
                     {
                         SdXImpressDocument::VectorPartState aKept;
-                        aKept.mnVersion = aIterator->second.mnVersion;
-                        aKept.mnLastSentVersion = aIterator->second.mnLastSentVersion;
-                        aKept.mbServed = aIterator->second.mbServed;
+                        aKept.maVersions = aIterator->second.maVersions;
                         aIterator->second = std::move(aKept);
                     }
                 }
@@ -3100,7 +3085,7 @@ public:
         // A trigger only says that something may have changed. When the comparison finds
         // nothing changed, a push writes nothing at all and a pull is answered with the header
         // alone.
-        if (isDelta() && mbPush && !hasContentToSend(pPage))
+        if (mbPush && !mpModel->isVectorPartChangedSince(*pPage, mnSinceVersion))
             return;
 
         writeHeader(rWriter, pPage);
@@ -3129,19 +3114,8 @@ private:
     /// and an answer it can read lets it drop the request and ask again.
     void writeMissingPage(tools::JsonWriter& rWriter)
     {
-        writeCommonHeader(rWriter, "vectorprimitives", maPartId);
-    }
-
-    /// The fields every payload opens with: its type, the mode and the id of the page it
-    /// describes, and the epoch its versions count in.
-    void writeCommonHeader(tools::JsonWriter& rWriter, std::string_view aType,
-                           std::string_view aPartId)
-    {
-        rWriter.put("type", aType);
-        rWriter.put("mode", mnMode);
-        if (!aPartId.empty())
-            rWriter.put("partId", aPartId);
-        rWriter.put("epoch", mpModel->getVectorEpoch());
+        svx::vector::writeAnswerHeader(rWriter, /*bDelta*/ false, mnMode, maPartId,
+                                       mpModel->getVectorEpoch());
     }
 
     /// The page the part id names, in the list the mode names. A slide is served in the slides
@@ -3172,15 +3146,12 @@ private:
 
     void writeHeader(tools::JsonWriter& rWriter, SdPage* pPage)
     {
-        writeCommonHeader(rWriter, isDelta() ? "vectorprimitivesdelta" : "vectorprimitives",
-                          pPage->GetGuid().getString());
+        svx::vector::writeAnswerHeader(rWriter, isDelta(), mnMode, pPage->GetGuid().getString(),
+                                       mpModel->getVectorEpoch());
 
-        // A delta names the version it was compared against and the version it brings the part
-        // to. Only the objects that moved between those two versions are in it.
-        if (isDelta())
-            rWriter.put("from", mnSinceVersion);
-
-        rWriter.put("version", sal_Int64(mpModel->getVectorPartVersion(*pPage)));
+        // Only the objects that moved between the two versions are in a delta.
+        svx::vector::writeAnswerVersions(rWriter, mnSinceVersion,
+                                         mpModel->getVectorPartVersion(*pPage));
     }
 
     /// The view information the part is decomposed with. One payload serves every view, so
@@ -3751,40 +3722,6 @@ private:
         }
     }
 
-    /// True when a delta would carry something: the page's own content changed, the object set
-    /// or its order moved, or at least one object differs from what the client holds.
-    bool hasContentToSend(SdPage* pPage)
-    {
-        if (mpModel->isVectorMasterChangedSince(*pPage, sal_uInt64(mnSinceVersion))
-            || mpModel->isVectorOrderChangedSince(*pPage, sal_uInt64(mnSinceVersion)))
-        {
-            return true;
-        }
-
-        // The text of a running edit, when a keystroke moved it.
-        for (const EditingView& rView : views(pPage))
-        {
-            if (mpModel->isVectorObjectChangedSince(*pPage, textEditEntryKey(rView.mnViewId),
-                                                    sal_uInt64(mnSinceVersion)))
-            {
-                return true;
-            }
-        }
-
-        const std::vector<SdrObject*>& rObjects = partObjects(pPage);
-
-        for (const SdrObject* pObject : rObjects)
-        {
-            if (mpModel->isVectorObjectChangedSince(*pPage, svx::vector::idOf(*pObject),
-                                                    sal_uInt64(mnSinceVersion)))
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     /// The entry that carries the text of a running text edit, into the open objects array.
     /// The object it runs on hides its own text, so this is what shows what has been typed.
     void writeTextEditEntry(tools::JsonWriter& rWriter, SdPage* pPage)
@@ -3806,10 +3743,10 @@ private:
             // An edit whose text is empty still gets its entry, with an empty primitive list.
             // The order names the entry for as long as the edit runs, and a client that holds
             // the text from before the last deletion replaces it with nothing.
-            const SdrObject* pEdited = rView.mpView->GetTextEditObject();
-            writeEntry(rWriter, textEditEntryId(rView.mnViewId),
-                       pEdited ? svx::vector::idOf(*pEdited) : 0, "texteditoverlay",
-                       textEditContentOf(rView), rView.mnViewId);
+            auto pEntryNode = rWriter.startStruct();
+            rWriter.put("id", textEditEntryId(rView.mnViewId));
+            svx::vector::writeTextEditEntry(rWriter, rView.mnViewId, textEditContentOf(rView),
+                                            *moProcessor);
         }
     }
 
@@ -3822,26 +3759,9 @@ private:
         if (aFound != maTextEditContent.end())
             return aFound->second;
 
-        auto aAdded = maTextEditContent.emplace(rView.mnViewId, textEditContent(*rView.mpView));
+        auto aAdded = maTextEditContent.emplace(
+            rView.mnViewId, svx::vector::textEditContentOf(*rView.mpView, maViewInformation));
         return aAdded.first->second;
-    }
-
-    SdXImpressDocument::VectorObjectContent textEditContent(SdrObjEditView& rView)
-    {
-        SdXImpressDocument::VectorObjectContent aContent;
-        aContent.maPrimitives = rView.getTextEditPrimitives();
-        aContent.maDrawn = aContent.maPrimitives;
-        aContent.maPaintedBox
-            = svx::vector::rangeInTwips(aContent.maPrimitives.getB2DRange(maViewInformation));
-        aContent.maTransformation = svx::vector::boxTransformation(aContent.maPaintedBox);
-        // The entry names the object the edit runs on as its parent and draws on that object's
-        // layer, so moving the edit to another object, or that object to another layer, is a
-        // change of the entry.
-        const SdrObject* pEdited = rView.GetTextEditObject();
-        aContent.mnParentId = pEdited ? svx::vector::idOf(*pEdited) : 0;
-        if (pEdited)
-            aContent.moLayer = sal_Int32(pEdited->GetLayer().get());
-        return aContent;
     }
 
     /// Looks at the text of a running edit and counts the part's version up when it moved, the
@@ -3977,26 +3897,6 @@ private:
                         "#" + rSet.Get(XATTR_LINECOLOR).GetColorValue().AsRGBHexString());
     }
 
-    /// An entry that stands for something other than an object on the page, named by a kind
-    /// rather than by a name of its own.
-    void writeEntry(tools::JsonWriter& rWriter, sal_Int64 nId, sal_uInt64 nParentId,
-                    const char* pKind, const SdXImpressDocument::VectorObjectContent& rContent,
-                    std::optional<sal_Int32> oViewId = std::nullopt)
-    {
-        auto pEntryNode = rWriter.startStruct();
-        rWriter.put("id", nId);
-        rWriter.put("parent", sal_Int64(nParentId));
-        rWriter.put("kind", pKind);
-        // Whose edit it is, so a reader can tell its own from another user's.
-        if (oViewId)
-            rWriter.put("viewId", sal_Int32(*oViewId));
-        // The layer of the object the entry belongs to, so the entry is hidden with it.
-        if (rContent.moLayer)
-            rWriter.put("layer", *rContent.moLayer);
-
-        svx::vector::writeEntryGeometry(rWriter, rContent, *moProcessor);
-    }
-
     SdDrawDocument* mpDocument;
     SdXImpressDocument* mpModel;
     OString maPartId;
@@ -4025,8 +3925,7 @@ private:
 
 bool SdXImpressDocument::supportsCommand(std::u16string_view rCommand)
 {
-    if (rCommand == u"VectorPrimitives" || rCommand == u"VectorRenderingGraphics"
-        || rCommand == u"VectorRenderingFont" || rCommand == u"ExtractDocumentStructure"
+    if (svx::vector::isPartCommand(rCommand) || rCommand == u"ExtractDocumentStructure"
         || rCommand == u"GetDesignTemplates" || rCommand == u"GetDesignTemplateDesigns"
         || rCommand == u"SecurityLabel")
         return true;
@@ -4089,6 +3988,17 @@ OUString lcl_ReadTemplateThumbnailDataUrl(const OUString& rUrl)
 void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
                                           std::string_view rCommand)
 {
+    // A page is named by its part id, the page GUID, and no mode named means the slides.
+    if (svx::vector::answerPartCommand(
+            rJsonWriter, rCommand, maVectorResources,
+            [this, &rJsonWriter](const svx::vector::PartRequest& rRequest)
+            {
+                writeVectorPrimitives(rJsonWriter, rRequest.maPartId,
+                                      rRequest.moMode.value_or(constVectorModeSlides),
+                                      rRequest.mnSinceVersion, /*bPush*/ false);
+            }))
+        return;
+
     std::map<OUString, OUString> aMap
         = KitHelper::parseCommandParameters(OUString::fromUtf8(rCommand));
 
@@ -4230,48 +4140,6 @@ void SdXImpressDocument::getCommandValues(::tools::JsonWriter& rJsonWriter,
                 rJsonWriter.put("thumbnail", aThumbnail);
         }
     }
-    else if (o3tl::starts_with(rCommand, ".uno:VectorRenderingGraphics"))
-    {
-        auto it = aMap.find(u"checksum"_ustr);
-        if (it != aMap.end())
-            maVectorResources.writeGraphic(rJsonWriter, it->second.toInt64());
-    }
-    else if (o3tl::starts_with(rCommand, ".uno:VectorRenderingFont"))
-    {
-        auto aIdIterator = aMap.find(u"id"_ustr);
-        if (aIdIterator != aMap.end())
-            maVectorResources.writeFont(rJsonWriter, aIdIterator->second.toUInt64(16));
-    }
-    else if (o3tl::starts_with(rCommand, ".uno:VectorPrimitives"))
-    {
-        // A page is named by its part id, the page GUID.
-        OString aPartId;
-        auto aPartIdIterator = aMap.find(u"partid"_ustr);
-        if (aPartIdIterator != aMap.end())
-            aPartId = OUStringToOString(aPartIdIterator->second, RTL_TEXTENCODING_ASCII_US);
-
-        // No mode named means the slides.
-        sal_Int32 nMode = constVectorModeSlides;
-        auto aModeIterator = aMap.find(u"mode"_ustr);
-        if (aModeIterator != aMap.end())
-            nMode = aModeIterator->second.toInt32();
-
-        // A "since" version asks for a delta: only the objects that
-        // changed after that version, plus the current object order.
-        sal_Int64 nSinceVersion = -1;
-        auto aSinceIterator = aMap.find(u"since"_ustr);
-        if (aSinceIterator != aMap.end())
-            nSinceVersion = aSinceIterator->second.toInt64();
-
-        // The epoch names the version space the client's version counts in. A version from
-        // another epoch, or one that names no epoch, says nothing about this model, so the client
-        // is served the page whole.
-        auto aEpochIterator = aMap.find(u"epoch"_ustr);
-        if (aEpochIterator == aMap.end() || aEpochIterator->second.toInt32() != getVectorEpoch())
-            nSinceVersion = -1;
-
-        writeVectorPrimitives(rJsonWriter, aPartId, nMode, nSinceVersion, /*bPush*/ false);
-    }
 }
 
 void SdXImpressDocument::pushVectorPrimitivesDelta(::tools::JsonWriter& rJsonWriter,
@@ -4301,50 +4169,24 @@ void SdXImpressDocument::writeVectorPrimitives(::tools::JsonWriter& rJsonWriter,
     VectorContentWriter aContentWriter(mpDoc, this, rPartId, nMode);
     SdPage* pPage = aContentWriter.resolvePage();
 
-    // A version above the part's own comes from content this model never served, so the page
-    // is sent whole.
-    if (pPage && nSinceVersion > sal_Int64(getVectorPartVersion(*pPage)))
-        nSinceVersion = -1;
+    // A page the document does not hold has no mark to move, and a push writes nothing for it.
+    if (bPush && !pPage)
+        return;
 
-    // A push steps from the version the part was last pushed at, then advances that mark. One
-    // delta is written for the part and every client that holds the part reads that same one. A
-    // page the document does not hold has no mark to move.
-    if (bPush)
-    {
-        if (!pPage)
-            return;
-        nSinceVersion = sal_Int64(maVectorParts[vectorPartKeyOf(*pPage)].mnLastSentVersion);
-    }
+    // One delta is written for the part and every client that holds the part reads that same
+    // one, so a push steps from the mark of the part.
+    if (pPage)
+        nSinceVersion
+            = maVectorParts[vectorPartKeyOf(*pPage)].maVersions.stepFrom(nSinceVersion, bPush);
 
     aContentWriter.setSinceVersion(nSinceVersion);
     aContentWriter.setPush(bPush);
     aContentWriter.write(rJsonWriter);
 
-    if (!pPage)
-        return;
-
-    VectorPartState& rState = maVectorParts[vectorPartKeyOf(*pPage)];
-    if (bPush)
-    {
-        rState.mnLastSentVersion = getVectorPartVersion(*pPage);
-    }
-    else
-    {
-        // A pull moves the mark only when nothing has served the part yet. Nothing holds the
-        // part at that point, so no reader has a step to make, and starting the mark at what
-        // this response carries keeps the delta after it down to what moved after it.
-        //
-        // A later pull leaves the mark where it is. It serves the one reader that asked, while
-        // the mark stands for where all of them are, and the readers behind it still need the
-        // step from there written for them. That holds when the pull itself counted the version
-        // up: the readers were not told, so the step from where they stand is still to be
-        // written.
-        if (!rState.mbServed)
-        {
-            rState.mbServed = true;
-            rState.mnLastSentVersion = getVectorPartVersion(*pPage);
-        }
-    }
+    // A pull that counted the version up leaves the mark where the readers stand. They were not
+    // told, so the step from there is still to be written for them.
+    if (pPage)
+        maVectorParts[vectorPartKeyOf(*pPage)].maVersions.noteWritten(bPush);
 }
 
 /******************************************************************************

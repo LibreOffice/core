@@ -912,6 +912,17 @@ void KitHelper::notifyPartSizeChangedAllViews(vcl::ITiledRenderable* pDoc, int n
     }
 }
 
+void KitHelper::notifyVectorPartChanged(const SfxObjectShell* pDocShell, const OString& rPartId,
+                                        int nMode)
+{
+    for (SfxViewShell* pViewShell = SfxViewShell::GetFirst(false); pViewShell;
+         pViewShell = SfxViewShell::GetNext(*pViewShell, false))
+    {
+        if (pViewShell->GetObjectShell() == pDocShell)
+            pViewShell->viewVectorPartChanged(rPartId, nMode);
+    }
+}
+
 void KitHelper::notifyInvalidationAllViews(vcl::ITiledRenderable* pDoc, int nPart,
                                            tools::Rectangle const* pRect,
                                            bool bSkipViewShowingPart)

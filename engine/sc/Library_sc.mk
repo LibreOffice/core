@@ -889,6 +889,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/unoobj/tokenuno \
     sc/source/ui/unoobj/unodoc \
     sc/source/ui/unoobj/unoreflist \
+    sc/source/ui/unoobj/VectorContent \
     sc/source/ui/unoobj/viewuno \
     sc/source/ui/unoobj/warnpassword \
     sc/source/ui/view/auditsh \

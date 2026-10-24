@@ -138,6 +138,7 @@
 #include <styleuno.hxx>
 #include <tabprotection.hxx>
 #include <tabvwsh.hxx>
+#include <VectorContent.hxx>
 #include <targuno.hxx>
 #include <unonames.hxx>
 #include <ViewSettingsSequenceDefines.hxx>
@@ -1516,12 +1517,44 @@ bool ScModelObj::supportsCommand(std::u16string_view rCommand)
 {
     return rCommand == u"FormulaDepChain" || rCommand == u"CalcFunctionList"
            || rCommand == u"EvaluateFormula" || rCommand == u"ExtractDocumentStructure"
-           || rCommand == u"SecurityLabel";
+           || rCommand == u"SecurityLabel" || svx::vector::isPartCommand(rCommand);
+}
+
+void ScModelObj::pushVectorPrimitivesDelta(tools::JsonWriter& rJsonWriter,
+                                           std::string_view rPartId, int nMode)
+{
+    if (mpVectorContent)
+        mpVectorContent->pushDelta(rJsonWriter, rPartId, nMode);
+}
+
+void ScModelObj::vectorTextEditChanged(SCTAB nTab)
+{
+    if (mpVectorContent)
+        mpVectorContent->textEditChanged(nTab);
+}
+
+void ScModelObj::setDrawnFromModel(bool bDrawnFromModel)
+{
+    if (!pDocShell)
+        return;
+    if (ScDrawLayer* pDrawLayer = pDocShell->GetDocument().GetDrawLayer())
+        pDrawLayer->SetDrawnFromModel(bDrawnFromModel);
 }
 
 void ScModelObj::getCommandValues(tools::JsonWriter& rJsonWriter, std::string_view rCommand)
 {
     OString aCommand(rCommand);
+    if (aCommand.startsWith(".uno:VectorPrimitives")
+        || aCommand.startsWith(".uno:VectorRenderingGraphics")
+        || aCommand.startsWith(".uno:VectorRenderingFont"))
+    {
+        if (!pDocShell)
+            return;
+        if (!mpVectorContent)
+            mpVectorContent = std::make_unique<sc::VectorContent>(*pDocShell);
+        mpVectorContent->getCommandValues(rJsonWriter, rCommand);
+        return;
+    }
     if (aCommand.startsWith(".uno:SecurityLabel"))
     {
         // The document's STANAG marking (empty when unlabelled), for the browser's
@@ -1992,6 +2025,14 @@ void ScModelObj::Notify( SfxBroadcaster& rBC, const SfxHint& rHint )
     //  Not interested in reference update hints here
 
     const SfxHintId nId = rHint.GetId();
+    if (mpVectorContent)
+    {
+        if (nId == SfxHintId::Dying)
+            mpVectorContent.reset();
+        else
+            mpVectorContent->documentHint(rHint);
+    }
+
     if ( nId == SfxHintId::Dying )
     {
         pDocShell = nullptr;       // has become invalid

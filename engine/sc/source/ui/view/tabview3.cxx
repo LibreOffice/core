@@ -2653,6 +2653,13 @@ void ScTabView::MakeEditView( ScEditEngineDefaulter& rEngine, SCCOL nCol, SCROW 
 
     if (aViewData.GetViewShell()->HasAccessibilityObjects())
         aViewData.GetViewShell()->BroadcastAccessibility(SfxHint(SfxHintId::ScAccEnterEditMode));
+
+    // The vector content of the sheet holds the text of every in-place edit.
+    if (comphelper::COKit::isActive())
+    {
+        if (ScModelObj* pModel = aViewData.GetDocShell()->GetModel())
+            pModel->vectorTextEditChanged(aViewData.GetRefTabNo());
+    }
 }
 
 void ScTabView::UpdateEditView()
@@ -2755,6 +2762,14 @@ void ScTabView::KillEditView( bool bNoPaint )
     }
 
     aViewData.ResetEditView();
+
+    // This in-place edit ended. Its sheet is the reference input sheet, which stays the same while
+    // another sheet is shown to pick a reference.
+    if (comphelper::COKit::isActive() && bNotifyAcc)
+    {
+        if (ScModelObj* pModel = aViewData.GetDocShell()->GetModel())
+            pModel->vectorTextEditChanged(aViewData.GetRefTabNo());
+    }
 
     for (auto& [pWin, aForeignRect] : aForeignInvalidations)
         pWin->LogicInvalidatePart(&aForeignRect, nTab);

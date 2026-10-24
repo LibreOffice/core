@@ -20,6 +20,7 @@
 #include <scitems.hxx>
 #include <sfx2/viewfrm.hxx>
 #include <drawview.hxx>
+#include <docuno.hxx>
 #include <sfx2/childwin.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svx/theme/ThemeColorChangerCommon.hxx>
@@ -83,6 +84,7 @@
 #include <SparklineDataRangeDialog.hxx>
 
 #include <svtools/colorcfg.hxx>
+#include <svx/svdpage.hxx>
 #include <comphelper/kit.hxx>
 #include <o3tl/unreachable.hxx>
 #include <o3tl/make_shared.hxx>
@@ -483,6 +485,18 @@ std::shared_ptr<SfxModelessDialogController> ScTabViewShell::CreateRefDialogCont
 int ScTabViewShell::getPart() const
 {
     return GetViewData().GetTabNumber();
+}
+
+void ScTabViewShell::textEditContentChanged()
+{
+    // The edit belongs to this view, so the sheet comes from the object it runs on here.
+    const ScDrawView* pView = GetScDrawView();
+    const SdrObject* pEdited = pView && pView->IsTextEdit() ? pView->GetTextEditObject() : nullptr;
+    const SdrPage* pPage = pEdited ? pEdited->getSdrPageFromSdrObject() : nullptr;
+    if (!pPage)
+        return;
+    if (ScModelObj* pModel = GetViewData().GetDocShell()->GetModel())
+        pModel->vectorTextEditChanged(static_cast<SCTAB>(pPage->GetPageNum()));
 }
 
 void ScTabViewShell::afterCallbackRegistered()

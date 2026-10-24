@@ -37,6 +37,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/point/b2dpoint.hxx>
 #include <svx/VectorObjectContent.hxx>
+#include <svx/VectorPart.hxx>
 #include <svx/sdrhandlerails.hxx>
 #include <svx/svdobjkind.hxx>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
@@ -153,6 +154,10 @@ public:
     /// change. 0 when nothing changed since the document was opened.
     sal_uInt64 getVectorPartVersion(const SdrPage& rPage) const;
 
+    /// True when an answer about the part that steps from nSince carries a change: the whole
+    /// part always does, and a delta does when the version of the part moved after nSince.
+    bool isVectorPartChangedSince(const SdrPage& rPage, sal_Int64 nSince) const;
+
     /// True when the object with the given unique id last changed on the
     /// part at a version later than nSince.
     bool isVectorObjectChangedSince(const SdrPage& rPage, sal_uInt64 nObjectId,
@@ -213,9 +218,9 @@ public:
                                  const OString& rMasterPartId,
                                  const std::vector<sal_Int32>& rMasterHiddenLayers);
 
-    /// Content state of one vector-rendering part: its current version, the version the last
-    /// delta written for it was computed up to, the version at which its master page last
-    /// changed, and, per object unique id, the version at which that object last changed.
+    /// Content state of one vector-rendering part: its versions and the mark of its readers,
+    /// the version at which its master page last changed, and, per object unique id, the
+    /// version at which that object last changed.
     ///
     /// maObjectContent holds what was last written per object, and maDirtyObjects the objects a
     /// change asked for a fresh look at. An object stays in maDirtyObjects until a write
@@ -224,22 +229,12 @@ public:
     /// it has nothing to be compared against and counts as changed.
     struct VectorPartState
     {
-        sal_uInt64 mnVersion = 0;
-        /// Where the readers of the part stand: a delta written for the part steps from here
-        /// and ends at the version it carries. The first response to serve the part sets it,
-        /// since nothing holds the part before that. One delta is written per part rather than
-        /// one per reader, so the mark counts for the part.
-        sal_uInt64 mnLastSentVersion = 0;
-        /// True once a response has served the part, so a reader may hold it. The first full
-        /// response leaves the version where it found it, which can be zero, so the version
-        /// alone does not say whether anyone holds the part.
-        bool mbServed = false;
+        /// The version of the part, the version its readers stand at, and the version at which
+        /// the set of objects on the part, or the order they paint in, last changed.
+        svx::vector::PartVersions maVersions;
         /// The version at which the page entry last changed: the page's own properties, its
         /// background, the master it names or the master content it carries inline.
         sal_uInt64 mnMasterChangeVersion = 0;
-        /// The version at which the set of objects on the part, or the order they paint in,
-        /// last changed. A client whose content is newer than this already holds the order.
-        sal_uInt64 mnOrderChangeVersion = 0;
         /// True while a change marked the page entry for comparison.
         bool mbPageDirty = false;
         /// What was last written for the page entry, and the id of the master part it named.

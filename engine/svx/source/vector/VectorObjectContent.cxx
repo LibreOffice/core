@@ -43,6 +43,7 @@
 #include <svx/sdgcpitm.hxx>
 #include <svx/sdmetitm.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
+#include <svx/svdedxv.hxx>
 #include <svx/svdglue.hxx>
 #include <svx/svdhdl.hxx>
 #include <svx/svditer.hxx>
@@ -1780,6 +1781,36 @@ void writeEntryGeometry(tools::JsonWriter& rWriter, const ObjectContent& rConten
             }
         }
     }
+}
+
+ObjectContent textEditContentOf(const SdrObjEditView& rView,
+                                const drawinglayer::geometry::ViewInformation2D& rViewInformation)
+{
+    ObjectContent aContent;
+    aContent.maPrimitives = rView.getTextEditPrimitives();
+    aContent.maDrawn = aContent.maPrimitives;
+    aContent.maPaintedBox = rangeInTwips(aContent.maPrimitives.getB2DRange(rViewInformation));
+    aContent.maTransformation = boxTransformation(aContent.maPaintedBox);
+    const SdrObject* pEdited = rView.GetTextEditObject();
+    aContent.mnParentId = pEdited ? idOf(*pEdited) : 0;
+    if (pEdited)
+        aContent.moLayer = sal_Int32(pEdited->GetLayer().get());
+    return aContent;
+}
+
+void writeTextEditEntry(tools::JsonWriter& rWriter, sal_Int32 nViewId,
+                        const ObjectContent& rContent,
+                        drawinglayer::Primitive2dJsonProcessor& rProcessor)
+{
+    rWriter.put("kind", "texteditoverlay");
+    // Whose edit it is, so a reader can tell its own from another user's.
+    rWriter.put("viewId", nViewId);
+    rWriter.put("parent", sal_Int64(rContent.mnParentId));
+    // The layer of the object the edit runs on, so the entry is hidden with it.
+    if (rContent.moLayer)
+        rWriter.put("layer", *rContent.moLayer);
+
+    writeEntryGeometry(rWriter, rContent, rProcessor);
 }
 }
 

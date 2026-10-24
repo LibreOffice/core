@@ -25,6 +25,7 @@
 #include <optional>
 #include <vector>
 
+class SdrObjEditView;
 class SdrObject;
 class SdrObjList;
 
@@ -586,6 +587,22 @@ decomposeForComparison(ObjectContent& rContent,
 /// Writes where an entry paints, how the unit rectangle maps onto it, and how it looks, into the
 /// open entry.
 SVXCORE_DLLPUBLIC void writeEntryGeometry(tools::JsonWriter& rWriter, const ObjectContent& rContent,
+                                          drawinglayer::Primitive2dJsonProcessor& rProcessor);
+
+/** The content of the entry that carries the text of the edit running in rView: the primitives of
+    what has been typed so far, the box they paint in twips, and the id and the layer of the
+    object the edit runs on. The entry names that object as its parent and draws on its layer, so
+    moving the edit to another object, or that object to another layer, changes the content.
+ */
+SVXCORE_DLLPUBLIC ObjectContent
+textEditContentOf(const SdrObjEditView& rView,
+                  const drawinglayer::geometry::ViewInformation2D& rViewInformation);
+
+/// Writes the entry carrying the text of the edit that the view with the id nViewId runs into the
+/// open entry: the kind "texteditoverlay", the view id, the object the edit runs on as the
+/// parent, its layer, and the geometry of rContent.
+SVXCORE_DLLPUBLIC void writeTextEditEntry(tools::JsonWriter& rWriter, sal_Int32 nViewId,
+                                          const ObjectContent& rContent,
                                           drawinglayer::Primitive2dJsonProcessor& rProcessor);
 
 /// The range, in 1/100 mm, as an upright box in twips, empty for an empty range.

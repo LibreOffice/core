@@ -73,6 +73,7 @@
 #include <inputwin.hxx>
 #include <tabvwsh.hxx>
 #include <docsh.hxx>
+#include <docuno.hxx>
 #include <scmod.hxx>
 #include <formulaopt.hxx>
 #include <uiitems.hxx>
@@ -3298,6 +3299,14 @@ void ScInputHandler::DataChanged( bool bFromTopNotify, bool bSetModified, bool b
         RemoveRangeFinder(); // Delete attributes and labels
 
     UpdateParenthesis(); // Highlight parentheses anew
+
+    // The vector content of the sheet holds the text of the in-place edit.
+    if (comphelper::COKit::isActive() && pActiveViewSh)
+    {
+        ScViewData& rViewData = pActiveViewSh->GetViewData();
+        if (ScModelObj* pModel = rViewData.GetDocShell()->GetModel())
+            pModel->vectorTextEditChanged(rViewData.GetRefTabNo());
+    }
 
     const bool bUpdateKit = comphelper::COKit::isActive() && pActiveViewSh && pInputWin;
 

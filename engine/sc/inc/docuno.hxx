@@ -70,6 +70,7 @@ class ScSheetSaveData;
 struct ScFormatSaveData;
 class ScTableSheetsObj;
 class SolarMutexGuard;
+namespace sc { class VectorContent; }
 
 class SAL_DLLPUBLIC_RTTI ScModelObj : public SfxBaseModel,
                     public vcl::ITiledRenderable,
@@ -126,6 +127,9 @@ private:
     std::vector<sal_Int32>  maValidPages;
     /// the sheet the previously rendered page belonged to; a page range can leave out its first
     SCTAB mnPreviousRenderTab = -1;
+
+    /// The content of the sheets as vector primitives. Made when a client first asks for it.
+    std::unique_ptr<sc::VectorContent> mpVectorContent;
 
 protected:
     const SfxItemPropertySet&   GetPropertySet() const { return aPropSet; }
@@ -409,6 +413,16 @@ public:
 
     /// @see vcl::ITiledRenderable::getPostItsPos().
     void getPostItsPos(tools::JsonWriter& rJsonWriter) override;
+
+    /// @see vcl::ITiledRenderable::pushVectorPrimitivesDelta().
+    void pushVectorPrimitivesDelta(tools::JsonWriter& rJsonWriter, std::string_view rPartId,
+                                   int nMode) override;
+
+    /// The text of a cell or a shape that is edited in place on sheet nTab changed.
+    void vectorTextEditChanged(SCTAB nTab);
+
+    /// @see vcl::ITiledRenderable::setDrawnFromModel().
+    void setDrawnFromModel(bool bDrawnFromModel) override;
 
     /// @see vcl::ITiledRenderable::completeFunction().
     virtual void completeFunction(const OUString& rFunctionName) override;

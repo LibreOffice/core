@@ -493,6 +493,8 @@ public:
     int getPart() const override;
     /// See SfxViewShell::afterCallbackRegistered().
     void afterCallbackRegistered() override;
+    /// See SfxViewShell::textEditContentChanged().
+    void textEditContentChanged() override;
     /// See SfxViewShell::NotifyCursor().
     void NotifyCursor(SfxViewShell* pViewShell) const override;
     /// See SfxViewShell::GetColorConfigColor().

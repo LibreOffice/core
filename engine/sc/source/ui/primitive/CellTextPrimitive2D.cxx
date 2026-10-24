@@ -76,6 +76,10 @@ drawinglayer::primitive2d::Primitive2DReference CellTextPrimitive2D::create2DDec
     if (maText.empty())
         return nullptr;
 
+    // Text that is not clipped is its single portion as it is, without a group around it.
+    if (!mbClip && maText.size() == 1)
+        return maText[0];
+
     drawinglayer::primitive2d::Primitive2DContainer aText(maText);
     if (!mbClip)
         return new drawinglayer::primitive2d::GroupPrimitive2D(std::move(aText));

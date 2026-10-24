@@ -227,6 +227,10 @@ public:
     static void notifyCurrentPageSizeChangedAllViews(const vcl::ITiledRenderable* pDoc);
     /// Emits a COKitCallbackType::DOCUMENT_SIZE_CHANGED for all views of the same document with the same part
     static void notifyPartSizeChangedAllViews(vcl::ITiledRenderable* pDoc, int nPart);
+    /// Tells every view of pDocShell that the vector content of the part with the id rPartId, in
+    /// the page list nMode names, changed.
+    static void notifyVectorPartChanged(const SfxObjectShell* pDocShell, const OString& rPartId,
+                                        int nMode);
     /// Emits a COKitCallbackType::INVALIDATE_TILES for the given part on the views of
     /// the document. A null rectangle invalidates the whole part. When
     /// bSkipViewShowingPart is true the views currently showing that part are
