@@ -852,6 +852,9 @@ private:
     /// Client is using a text document?
     bool _isTextDocument;
 
+    /// The client draws from vector primitives and gets no tiles until it sends .uno:DrawFromTiles.
+    bool _isVectorRendering = false;
+
     /// Session used to generate thumbnail
     bool _thumbnailSession;
 

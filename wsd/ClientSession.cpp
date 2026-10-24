@@ -3171,6 +3171,11 @@ bool ClientSession::getCommandValues(const char *buffer, int length, const Strin
     if (tokens.size() != 2 || !getTokenString(tokens[1], "command", command))
         return sendTextFrameAndLogError("error: cmd=commandvalues kind=syntax");
 
+    if (command.starts_with(".uno:VectorPrimitives"))
+        _isVectorRendering = true;
+    else if (command == ".uno:DrawFromTiles")
+        _isVectorRendering = false;
+
     std::string cmdValues;
     if (docBroker->hasTileCache() && docBroker->tileCache().getTextStream(TileCache::StreamType::CmdValues, commandValuesCacheKey(command), cmdValues))
         return sendTextFrame(cmdValues);
@@ -5132,6 +5137,7 @@ void ClientSession::dumpState(std::ostream& os)
        << "\n\t\tkit ViewId: " << _kitViewId
        << "\n\t\tour URL (un-trusted): " << _serverURL.getSubURLForEndpoint("")
        << "\n\t\tisTextDocument: " << _isTextDocument
+       << "\n\t\tisVectorRendering: " << _isVectorRendering
        << "\n\t\tclipboardKeys[0]: " << _clipboardKeys.getCurrent()
        << "\n\t\tclipboardKeys[1]: " << _clipboardKeys.getPrevious()
        << "\n\t\tclip sockets: " << _clipSockets.size()
@@ -5189,6 +5195,13 @@ void ClientSession::handleTileInvalidation(const std::string& message,
     const std::shared_ptr<DocumentBroker>& docBroker)
 {
     docBroker->invalidateTiles(message, getCanonicalViewId());
+
+    // A client that draws from vector primitives gets its changes as pushed deltas.
+    if (_isVectorRendering)
+    {
+        LOG_TRC("Session [" << getId() << "] draws from vector primitives - skip invalidation");
+        return;
+    }
 
     // Skip requesting new tiles if we don't have client visible area data yet.
     if(!_clientVisibleArea.hasSurface() ||
