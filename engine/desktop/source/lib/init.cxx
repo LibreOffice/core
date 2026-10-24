@@ -5873,6 +5873,12 @@ void COKitImpl::dumpState(rtl::OStringBuffer &rState)
     vcl::kit::dumpState(rState);
 }
 
+// The command without its arguments, which follow a '?'.
+static std::u16string_view getCommandName(std::u16string_view command)
+{
+    return command.substr(0, command.find('?'));
+}
+
 // We have special handling for some uno commands and it seems we need to check for readonly state.
 static bool isCommandAllowed(std::u16string_view command)
 {
@@ -5886,18 +5892,20 @@ static bool isCommandAllowed(std::u16string_view command)
     if (!pViewShell || !pViewShell->IsKitReadOnlyView())
         return true;
 
-    if (command == u".uno:Save")
+    const std::u16string_view name = getCommandName(command);
+
+    if (name == u".uno:Save")
     {
         return pViewShell->IsAllowChangeComments() || pViewShell->IsAllowManageRedlines();
     }
 
-    if (command == u".uno:TransformDialog")
+    if (name == u".uno:TransformDialog")
     {
         // If the just added signature line shape is selected, allow moving it.
         return pViewShell->GetSignPDFCertificate().Is();
     }
 
-    return std::find(std::begin(denyList), std::end(denyList), command) == std::end(denyList);
+    return std::find(std::begin(denyList), std::end(denyList), name) == std::end(denyList);
 }
 
 static void lcl_reportSaveResult(COKitDocumentImpl* pDocument, int nView, const OString& rResult)
@@ -5963,7 +5971,7 @@ void COKitDocumentImpl::postUnoCommand(const char* pCommand, const char* pArgume
 
     if (!isCommandAllowed(aCommand))
     {
-        if (aCommand == ".uno:Save")
+        if (getCommandName(aCommand) == u".uno:Save")
         {
             tools::JsonWriter aJson;
             aJson.put("commandName", pCommand);
