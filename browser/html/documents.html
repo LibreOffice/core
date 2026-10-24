@@ -161,6 +161,23 @@
         margin-top: 0.75rem;
       }
 
+      .user {
+        display: flex;
+        align-items: baseline;
+        gap: 0.5rem;
+        margin: 0.5rem 0 0;
+      }
+
+      .user input {
+        padding: 0.25rem 0.5rem;
+        border: 1px solid var(--border);
+        border-radius: 0.25rem;
+        background: var(--page-background);
+        color: var(--text);
+        font: inherit;
+        width: 10rem;
+      }
+
       /* A label styled as a button stands in for the file input, which stays reachable
          by keyboard. */
       .visually-hidden {
@@ -249,6 +266,12 @@
     </table>
     <p id="documentsHint" class="hint"></p>
 
+    <p class="user">
+      <label for="userid">Open as user</label>
+      <input id="userid" type="text" autocomplete="off" spellcheck="false">
+    </p>
+    <p class="hint">The user owns the documents and keeps the settings saved in the Options dialog, until the server is started again. The ids "test" and "test2" are the shared users of the automated tests, whose settings are never kept. Two tabs with different ids are two users, and both own the document.</p>
+
     <div class="actions">
       <input id="upload" type="file" class="visually-hidden">
       <label class="button" for="upload" title="Upload a document from this machine and add it to the table. It stays on the server, and saving keeps the changes in that copy. A presentation in the table can also be added to an open presentation from its slide import pane.">Add document</label>
@@ -272,10 +295,28 @@
         messageElement.className = isError ? 'error' : '';
       }
 
+      // The user the documents open as. The server keeps a settings store per user,
+      // except for the shared users of the automated tests, so the default is a user
+      // of its own, remembered in this browser.
+      const userInput = document.getElementById('userid');
+      const userKey = 'documents.html userid';
+      try {
+        userInput.value = localStorage.getItem(userKey) || 'dev';
+      } catch (error) {
+        userInput.value = 'dev';
+      }
+
+      function currentUser() {
+        return userInput.value.trim();
+      }
+
       function launchUrl(path, options) {
         // The frame that talks postMessage is a page of its own around the editor.
         const page = options.postMessage ? 'framed.doc.html' : 'debug.html';
         let url = page + '?file_path=' + encodeURIComponent(path);
+        if (currentUser())
+          url += '&userid=' + encodeURIComponent(currentUser()) +
+            '&ownerid=' + encodeURIComponent(currentUser());
         if (options.readonly)
           url += '&permission=readonly';
         if (options.vector)
@@ -322,6 +363,7 @@
           link.href = launchUrl(entry.path, options);
         }
         followOptions();
+        rowUpdaters.push(followOptions);
 
         const name = document.createElement('td');
         name.appendChild(link);
@@ -365,9 +407,22 @@
         return row;
       }
 
+      // Every row follows the user field, so the links are built again when it changes.
+      const rowUpdaters = [];
+      userInput.addEventListener('input', function() {
+        try {
+          localStorage.setItem(userKey, currentUser());
+        } catch (error) {
+          // Not remembered, still used for this page.
+        }
+        for (const update of rowUpdaters)
+          update();
+      });
+
       function listDocuments(documents) {
         const body = document.getElementById('documents');
         body.textContent = '';
+        rowUpdaters.length = 0;
 
         for (const entry of documents.samples)
           body.appendChild(documentRow(entry, 'test document'));

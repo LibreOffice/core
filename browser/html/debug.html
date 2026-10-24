@@ -147,7 +147,8 @@
             // and collaboration are unaffected. When present it already rode
             // along in params above. When omitted the (test) WOPI host falls back
             // to its default user "test", which stays the document owner
-            // (UserId == OwnerId), so add nothing here.
+            // (UserId == OwnerId), so add nothing here. An &ownerid rides along
+            // the same way and names another owner.
             return localUrl
           }
         var form = document.getElementById("form");

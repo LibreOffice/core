@@ -332,7 +332,6 @@ void handleWopiRequest(const Poco::Net::HTTPRequest& request, const RequestDetai
         fileInfo->set("BaseFileName", localFile->fileName);
         fileInfo->set("Size", localFile->getSize());
         fileInfo->set("Version", "1.0");
-        fileInfo->set("OwnerId", "test");
         // The WOPI host identifies the user; mirror that here by taking the user
         // id from the request (debug.html sends &userid on the WOPISrc; a real
         // host resolves it from the access token). Same userid across tabs/reloads
@@ -343,6 +342,13 @@ void handleWopiRequest(const Poco::Net::HTTPRequest& request, const RequestDetai
         std::string userId = requestDetails.getParam("userid");
         if (userId.empty())
             userId = "test";
+        // The owner is "test", so in the multiuser tests the second user is not
+        // the owner. An explicit &ownerid (documents.html sends one) names
+        // another owner.
+        std::string ownerId = requestDetails.getParam("ownerid");
+        if (ownerId.empty())
+            ownerId = "test";
+        fileInfo->set("OwnerId", ownerId);
         fileInfo->set("UserId", userId);
         fileInfo->set("UserFriendlyName", userNameString);
 

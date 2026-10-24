@@ -714,6 +714,9 @@ void launchAsyncCheckFileInfo(
     // access token and cannot otherwise tell users apart).
     if (!accessDetails.userId().empty())
         options.push_back("userid=" + accessDetails.userId());
+
+    if (!accessDetails.ownerId().empty())
+        options.push_back("ownerid=" + accessDetails.ownerId());
 #endif
 
     const RequestDetails fullRequestDetails(accessDetails.wopiSrc(), options, /*compat=*/std::string());

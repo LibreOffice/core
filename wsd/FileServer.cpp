@@ -2013,22 +2013,24 @@ FileServerRequestHandler::ResourceAccessDetails FileServerRequestHandler::prepro
     LOG_TRC("Sent file: " << relPath << ": " << preprocess);
 
     std::string userId;
+    std::string ownerId;
 #if ENABLE_DEBUG
     // The built-in test wopi server uses a fixed access token, so it cannot tell
     // users apart from the token alone. Carry an explicit &userid through to the
     // proactive CheckFileInfo (and thus the session's public URI) so per-user
-    // settings stay isolated when debugging multi-user scenarios.
+    // settings stay isolated when debugging multi-user scenarios. An explicit
+    // &ownerid goes along too, so that the proactive CheckFileInfo names the
+    // same owner as the session's own.
     for (const auto& param : params)
     {
         if (param.first == "userid")
-        {
             userId = param.second;
-            break;
-        }
+        else if (param.first == "ownerid")
+            ownerId = param.second;
     }
 #endif
 
-    return ResourceAccessDetails(std::move(wopiSrc), urv[ACCESS_TOKEN], urv[NO_AUTH_HEADER], urv[PERMISSION], urv[DEBUG_WOPI_CONFIG_ID], std::move(userId));
+    return ResourceAccessDetails(std::move(wopiSrc), urv[ACCESS_TOKEN], urv[NO_AUTH_HEADER], urv[PERMISSION], urv[DEBUG_WOPI_CONFIG_ID], std::move(userId), std::move(ownerId));
 }
 
 void FileServerRequestHandler::preprocessWelcomeFile(const HTTPRequest& request,

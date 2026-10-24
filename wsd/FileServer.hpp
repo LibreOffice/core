@@ -103,13 +103,15 @@ public:
         ResourceAccessDetails(std::string wopiSrc, std::string accessToken,
                               std::string noAuthHeader,
                               std::string permission, std::string wopiConfigId,
-                              std::string userId = std::string())
+                              std::string userId = std::string(),
+                              std::string ownerId = std::string())
             : _wopiSrc(std::move(wopiSrc))
             , _accessToken(std::move(accessToken))
             , _noAuthHeader(std::move(noAuthHeader))
             , _permission(std::move(permission))
             , _wopiConfigId(std::move(wopiConfigId))
             , _userId(std::move(userId))
+            , _ownerId(std::move(ownerId))
         {
         }
 
@@ -126,6 +128,9 @@ public:
         // real host, but the built-in wopi debugging server uses a fixed token,
         // so an explicit userid is carried through to distinguish users.
         const std::string& userId() const { return _userId; }
+        // only used in debugging mode: the built-in wopi debugging server makes
+        // this user the owner of the document instead of its default owner.
+        const std::string& ownerId() const { return _ownerId; }
 
     private:
         std::string _wopiSrc;
@@ -134,6 +139,7 @@ public:
         std::string _permission;
         std::string _wopiConfigId;
         std::string _userId;
+        std::string _ownerId;
     };
 
 private:
