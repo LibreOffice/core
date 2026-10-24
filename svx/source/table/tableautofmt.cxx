@@ -460,8 +460,9 @@ OUString SvxAutoFormat::MapUIToProgName(std::u16string_view rUIName)
 void SvxAutoFormat::ResetParent(std::u16string_view rName)
 {
     OUString sParent;
-    if (size())
-        sParent = GetData(0)->GetName();
+    const OUString sDefaultStyle = SvxResId(RID_SVXSTR_TBLAFMT_DEFAULT_STYLE);
+    if (FindAutoFormat(sDefaultStyle))
+        sParent = sDefaultStyle;
 
     for (size_t i = 0; i < size(); i++)
     {
