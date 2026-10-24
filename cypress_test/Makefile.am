@@ -478,9 +478,12 @@ clean-local:
 # Used on jenkins to run all the tests in parallel as much as possible.
 # Using $(PID_FILE) as dependency to start coolwsd.
 # trap KILL_COMMAND on EXIT so a failed sub-make still kills coolwsd.
+# The lighthouse specs share the lanes too. They are listed first because
+# they hold some of the longest specs.
 check-desktop-mobile-multi: @JAILS_PATH@ @CACHE_PATH@ $(NODE_BINS)
 	trap '$(KILL_COMMAND) || true' EXIT; \
 	$(MAKE) SUITE_ONLY=1 \
+		$(LIGHTHOUSE_TEST_FILES_DONE) \
 		$(DESKTOP_TEST_FILES_DONE) \
 		$(MOBILE_TEST_FILES_DONE) \
 		$(MULTIUSER_TEST_FILES_DONE)
