@@ -18,6 +18,8 @@ namespace cool {
 			// the map is still on its way.
 			if (app.map && app.map._debug) return app.map._debug.vectorOn;
 
+			// A page without document parameters, such as a unit test, uses tiles.
+			if (!window.coolParams) return false;
 			return window.coolParams.get('vector') === 'true';
 		}
 	}

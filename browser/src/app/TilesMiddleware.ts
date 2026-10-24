@@ -76,6 +76,10 @@ class RenderManager {
 		RenderManager.ensureInstance().markThumbnailStale();
 	}
 
+	static markVisualsReady(): void {
+		RenderManager.ensureInstance().markVisualsReady();
+	}
+
 	static updateOverlayMessages(): void {
 		RenderManager.ensureInstance().updateOverlayMessages();
 	}
@@ -170,6 +174,14 @@ class RenderManager {
 
 	static discardAllCache(): void {
 		RenderManager.ensureInstance().discardAllCache();
+	}
+
+	static discardTiles(): void {
+		RenderManager.ensureInstance().discardTiles();
+	}
+
+	static tileCount(): number {
+		return RenderManager.ensureInstance().tileCount();
 	}
 
 	static isValidTile(coords: TileCoordData): boolean {

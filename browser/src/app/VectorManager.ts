@@ -780,16 +780,14 @@ class VectorManager extends RenderManagerBase {
 		// A client that holds the page says at which version, and in which
 		// version space, so the answer is the step from there rather than
 		// the whole page.
-		const since =
-			held?.version !== undefined && held.epoch !== undefined
-				? '&since=' + String(held.version) + '&epoch=' + String(held.epoch)
-				: '';
+		const holds = held?.version !== undefined && held.epoch !== undefined;
 		app.socket.sendMessage(
-			'commandvalues command=.uno:VectorPrimitives?partid=' +
-				partId +
-				'&mode=' +
-				String(mode) +
-				since,
+			cool.vectorPrimitivesRequest({
+				partId: partId,
+				mode: mode,
+				epoch: holds ? held?.epoch : undefined,
+				since: holds ? held?.version : undefined,
+			}),
 		);
 	}
 

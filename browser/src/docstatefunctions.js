@@ -15,7 +15,7 @@
  * This file is meant to be used for setting and getting the document states.
  */
 
-/* global app _ cool */
+/* global app _ cool RenderManager */
 
 window.addEventListener('load', function () {
 	app.calc.cellCursorRectangle = new cool.SimpleRectangle(0, 0, 0, 0);
@@ -256,6 +256,11 @@ app.showAsyncDownloadError = function (response, initialMsg) {
 		}
 	};
 	reader.readAsText(response);
+};
+
+// The tiles the browser holds, for the tests.
+app.tile.count = function () {
+	return RenderManager.tileCount();
 };
 
 app.calc.isRTL = function () {

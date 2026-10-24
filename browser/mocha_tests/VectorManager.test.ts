@@ -361,26 +361,18 @@ describe('VectorManager', function () {
 	// Runs the steps with the socket and the map recording what the manager
 	// sends to the server and tells the rest of the client.
 	function recording(steps: () => void): { sent: string[]; fired: string[] } {
-		const sent: string[] = [];
 		const fired: string[] = [];
-		const socket: any = (app as any).socket;
-		const originalSendMessage = socket.sendMessage;
 		const originalMap = (app as any).map;
-		socket.sendMessage = function (message: string) {
-			sent.push(message);
-		};
 		(app as any).map = {
 			fire: function (name: string) {
 				fired.push(name);
 			},
 		};
 		try {
-			steps();
+			return { sent: SocketRecorder.during(steps), fired: fired };
 		} finally {
-			socket.sendMessage = originalSendMessage;
 			(app as any).map = originalMap;
 		}
-		return { sent: sent, fired: fired };
 	}
 
 	// A response for slide i, version 5 of epoch 100.
@@ -552,13 +544,7 @@ describe('VectorManager', function () {
 	// the full request for the page stays the one in flight.
 	it('keeps the request for a page open when a delta for it arrives first', function () {
 		const manager = new VectorManager();
-		const sent: string[] = [];
-		const socket: any = (app as any).socket;
-		const originalSendMessage = socket.sendMessage;
-		socket.sendMessage = function (message: string) {
-			sent.push(message);
-		};
-		try {
+		const sent = SocketRecorder.during(() => {
 			manager.requestPartById('M0', cool.VectorMode.MasterPages);
 			manager.handleVectorPrimitivesDelta({
 				mode: cool.VectorMode.MasterPages,
@@ -569,9 +555,7 @@ describe('VectorManager', function () {
 				objects: [],
 			});
 			manager.requestPartById('M0', cool.VectorMode.MasterPages);
-		} finally {
-			socket.sendMessage = originalSendMessage;
-		}
+		});
 
 		nodeassert.strictEqual(sent.length, 1);
 	});
@@ -1155,10 +1139,7 @@ describe('VectorManager', function () {
 	// A slide that names a master it does not have yet is not drawable, and
 	// the master is asked for. It becomes drawable once the master arrives.
 	it('waits for the master a page names before drawing it', function () {
-		const sent: string[] = [];
-		(app as any).socket.sendMessage = function (message: string) {
-			sent.push(message);
-		};
+		const recorder = new SocketRecorder();
 		const manager = new VectorManager();
 		manager.handleVectorPrimitivesResponse({
 			partId: 'S2',
@@ -1180,7 +1161,7 @@ describe('VectorManager', function () {
 			false,
 		);
 		nodeassert.ok(
-			sent.some(
+			recorder.sent.some(
 				(message) =>
 					message.indexOf('.uno:VectorPrimitives?partid=M1&mode=1') >= 0,
 			),
@@ -1199,7 +1180,7 @@ describe('VectorManager', function () {
 			manager.isPartDrawable(2, cool.VectorMode.Slides),
 			true,
 		);
-		(app as any).socket.sendMessage = function () {};
+		recorder.restore();
 	});
 
 	// The engine reports the layers a view hides as a state change. The
@@ -1256,8 +1237,7 @@ describe('VectorManager', function () {
 	// A text portion names its font face by id. The manager asks the
 	// engine for that font so it can be loaded and used for an exact match.
 	it('requests the font a text portion names', function () {
-		const sent: string[] = [];
-		(app as any).socket.sendMessage = (message: string) => sent.push(message);
+		const recorder = new SocketRecorder();
 
 		const manager = new VectorManager();
 		manager.handleVectorPrimitivesResponse({
@@ -1272,9 +1252,9 @@ describe('VectorManager', function () {
 			],
 		});
 
-		(app as any).socket.sendMessage = function () {};
+		recorder.restore();
 		nodeassert.ok(
-			sent.some(
+			recorder.sent.some(
 				(message) => message.indexOf('.uno:VectorRenderingFont?id=1092a') >= 0,
 			),
 			'a font request carries the portion font id',
@@ -1284,8 +1264,7 @@ describe('VectorManager', function () {
 	// Discarding the whole cache forgets every part, so the next use
 	// starts a fresh fetch.
 	it('drops all cached parts when the cache is discarded', function () {
-		const sent: string[] = [];
-		(app as any).socket.sendMessage = (message: string) => sent.push(message);
+		const recorder = new SocketRecorder();
 
 		const manager = new VectorManager();
 		manager.handleVectorPrimitivesResponse({
@@ -1300,13 +1279,13 @@ describe('VectorManager', function () {
 			undefined,
 		);
 		nodeassert.ok(
-			sent.some(
+			recorder.sent.some(
 				(message) =>
 					message.indexOf('.uno:VectorPrimitives?partid=S0&mode=0') >= 0,
 			),
 			'the dropped part is fetched afresh',
 		);
-		(app as any).socket.sendMessage = function () {};
+		recorder.restore();
 	});
 
 	// A graphics-memory reclaim drops the cached parts and tells the
@@ -1360,10 +1339,7 @@ describe('VectorManager', function () {
 	// A master page and the slide at the same index are cached apart, so
 	// the slide is still requested after the master page arrives.
 	it('does not let one mode satisfy a request for the other', function () {
-		const sent: string[] = [];
-		(app as any).socket.sendMessage = function (message: string) {
-			sent.push(message);
-		};
+		const recorder = new SocketRecorder();
 
 		const manager = new VectorManager();
 		manager.handleVectorPrimitivesResponse({
@@ -1378,31 +1354,32 @@ describe('VectorManager', function () {
 			undefined,
 		);
 		nodeassert.ok(
-			sent.some(
+			recorder.sent.some(
 				(message) =>
 					message.indexOf('.uno:VectorPrimitives?partid=S0&mode=0') >= 0,
 			),
 			'the slide at the same index is fetched on its own',
 		);
 
-		(app as any).socket.sendMessage = function () {};
+		recorder.restore();
 	});
 
 	// A part the document does not hold is answered with the header alone.
 	// The request is closed, and the page is not asked for again until the
 	// page list is replaced, which is when the answer could differ.
 	it('asks again for a missing part once the page list is replaced', function () {
-		const sent: string[] = [];
-		(app as any).socket.sendMessage = function (message: string) {
-			sent.push(message);
-		};
+		const recorder = new SocketRecorder();
 
 		const manager = new VectorManager();
 		nodeassert.strictEqual(
 			manager.requestPartById('M4', cool.VectorMode.MasterPages),
 			undefined,
 		);
-		nodeassert.strictEqual(sent.length, 1, 'the part is asked for once');
+		nodeassert.strictEqual(
+			recorder.sent.length,
+			1,
+			'the part is asked for once',
+		);
 
 		// The engine answers that it holds no such page.
 		manager.handleVectorPrimitivesResponse({
@@ -1417,7 +1394,7 @@ describe('VectorManager', function () {
 			undefined,
 		);
 		nodeassert.strictEqual(
-			sent.length,
+			recorder.sent.length,
 			1,
 			'a page the document lacks was asked again',
 		);
@@ -1426,9 +1403,13 @@ describe('VectorManager', function () {
 			manager.requestPartById('M4', cool.VectorMode.MasterPages),
 			undefined,
 		);
-		nodeassert.strictEqual(sent.length, 2, 'the part is asked for again');
+		nodeassert.strictEqual(
+			recorder.sent.length,
+			2,
+			'the part is asked for again',
+		);
 
-		(app as any).socket.sendMessage = function () {};
+		recorder.restore();
 	});
 
 	// Master view marks out each placeholder with the name of its area. The
@@ -1521,10 +1502,7 @@ describe('VectorManager', function () {
 	// its index and nothing else: the page list names the page at the new
 	// index and the cache answers for it without asking the engine again.
 	it('keeps a cached page when its index moves', function () {
-		const sent: string[] = [];
-		(app as any).socket.sendMessage = function (message: string) {
-			sent.push(message);
-		};
+		const recorder = new SocketRecorder();
 		const originalImpress = (app as any).impress;
 		try {
 			const manager = new VectorManager();
@@ -1548,7 +1526,11 @@ describe('VectorManager', function () {
 			nodeassert.ok(moved, 'the page is still cached at its new index');
 			nodeassert.strictEqual(moved.version, 3);
 			nodeassert.deepStrictEqual(moved.order, [11]);
-			nodeassert.strictEqual(sent.length, 0, 'nothing was asked for again');
+			nodeassert.strictEqual(
+				recorder.sent.length,
+				0,
+				'nothing was asked for again',
+			);
 
 			// The new slide at the old index is another page, asked for by its id.
 			nodeassert.strictEqual(
@@ -1556,7 +1538,7 @@ describe('VectorManager', function () {
 				undefined,
 			);
 			nodeassert.ok(
-				sent.some(
+				recorder.sent.some(
 					(message) =>
 						message.indexOf('.uno:VectorPrimitives?partid=S9&mode=0') >= 0,
 				),
@@ -1564,7 +1546,7 @@ describe('VectorManager', function () {
 			);
 		} finally {
 			(app as any).impress = originalImpress;
-			(app as any).socket.sendMessage = function () {};
+			recorder.restore();
 		}
 	});
 
@@ -1818,17 +1800,9 @@ describe('VectorManager', function () {
 			manager.handleVectorPrimitivesResponse(held);
 			manager.revalidateCachedParts();
 
-			const sent: string[] = [];
-			const socket: any = (app as any).socket;
-			const originalSendMessage = socket.sendMessage;
-			socket.sendMessage = function (message: string) {
-				sent.push(message);
-			};
-			try {
-				manager.requestThumbnail(0, 0, cool.VectorMode.Slides, 100, 100);
-			} finally {
-				socket.sendMessage = originalSendMessage;
-			}
+			const sent = SocketRecorder.during(() =>
+				manager.requestThumbnail(0, 0, cool.VectorMode.Slides, 100, 100),
+			);
 
 			nodeassert.strictEqual(drawn.length, 1);
 			nodeassert.strictEqual(sent.length, 1);
@@ -2133,11 +2107,10 @@ describe('VectorManager', function () {
 		// asks for the whole part, and its answer replaces the predicted text.
 		it('replaces the predicted text with the whole part when the server put the caret elsewhere', function () {
 			const manager = afterTypingA();
-			const sent: string[] = [];
-			(app as any).socket.sendMessage = (message: string) => sent.push(message);
+			const recorder = new SocketRecorder();
 			manager.keepPredictedCaret(caretUpdate(11, 2));
-			(app as any).socket.sendMessage = function () {};
-			nodeassert.deepStrictEqual(sent, [
+			recorder.restore();
+			nodeassert.deepStrictEqual(recorder.sent, [
 				'commandvalues command=.uno:VectorPrimitives?partid=S0&mode=' +
 					String(cool.VectorMode.Slides),
 			]);
@@ -2194,8 +2167,7 @@ describe('VectorManager', function () {
 		// for the whole part again.
 		it('asks for the whole part when a replayed edit no longer fits', function () {
 			const manager = afterTypingA();
-			const sent: string[] = [];
-			(app as any).socket.sendMessage = (message: string) => sent.push(message);
+			const recorder = new SocketRecorder();
 			// The server's text box has no paragraph 0, where the edit was typed.
 			const moved = textBox('Hi');
 			moved.primitives[0].children[0].paragraph = 1;
@@ -2206,8 +2178,8 @@ describe('VectorManager', function () {
 				order: [5],
 				objects: [moved],
 			});
-			(app as any).socket.sendMessage = function () {};
-			nodeassert.deepStrictEqual(sent, [
+			recorder.restore();
+			nodeassert.deepStrictEqual(recorder.sent, [
 				'commandvalues command=.uno:VectorPrimitives?partid=S0&mode=' +
 					String(cool.VectorMode.Slides),
 			]);
@@ -2354,8 +2326,8 @@ describe('VectorManager', function () {
 		});
 
 		describe('caret moved here', function () {
+			let recorder: SocketRecorder;
 			let sent: string[];
-			let savedSend: any;
 			let savedTimerRegistry: any;
 			// The selection rectangles drawn here, as [x, y, width, height], one entry
 			// per draw.
@@ -2369,10 +2341,8 @@ describe('VectorManager', function () {
 					? [rectangle.x1, rectangle.y1, rectangle.width, rectangle.height]
 					: null;
 			beforeEach(function () {
-				sent = [];
-				savedSend = (app as any).socket.sendMessage;
-				(app as any).socket.sendMessage = (message: string) =>
-					sent.push(message);
+				recorder = new SocketRecorder();
+				sent = recorder.sent;
 				savedTimerRegistry = (app as any).timerRegistry;
 				(app as any).timerRegistry = new TimerRegistry();
 				drawn = [];
@@ -2390,7 +2360,7 @@ describe('VectorManager', function () {
 			});
 			afterEach(function () {
 				LocalCaret.forget();
-				(app as any).socket.sendMessage = savedSend;
+				recorder.restore();
 				(app as any).timerRegistry = savedTimerRegistry;
 				(TextSelections as any).active = false;
 				TextSelections.setStartRectangle = savedSetStartRectangle;

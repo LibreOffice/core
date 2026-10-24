@@ -60,6 +60,24 @@ interface AutomatedTaskSet {
 	[name: string]: AutomatedTaskFn;
 }
 
+/// Vector data counted apart: document content, font files and images.
+type VectorDataKind = 'content' | 'font' | 'graphics';
+
+/// Frames of vector data, with sizes in compressed bytes.
+interface VectorFrameCount {
+	frames: number;
+	compressed: number;
+	smallest: number;
+	largest: number;
+}
+
+/// One kind of vector data: all frames, JSON bytes, and the pushed deltas.
+interface VectorDataCount {
+	all: VectorFrameCount;
+	json: number;
+	pushed: VectorFrameCount;
+}
+
 class DebugManager {
 	private _map: MapInterface;
 	private _docLayer: DocLayerInterface | null;
@@ -90,6 +108,9 @@ class DebugManager {
 	private _tileDataTotalUpdates: number;
 	private _tileDataTotalDeltas: number;
 	private _tileDataTotalInvalidates: number;
+
+	// Vector data received since the document loaded, by kind.
+	private _vectorData: Map<VectorDataKind, VectorDataCount> = new Map();
 
 	public pingOn: boolean;
 	private _pingQueue: number[];
@@ -278,6 +299,9 @@ class DebugManager {
 		while the document is open, so they are added and removed with it instead.
 	*/
 	private static updateVectorSections(): void {
+		// A spreadsheet has a vector section of its own.
+		cool.CalcVectorContentSection.update();
+
 		const wanted = RenderManager.isVectorRendering();
 		const present = app.sectionContainer.doesSectionExist(
 			app.CSections.VectorContent.name,
@@ -433,7 +457,8 @@ class DebugManager {
 
 		// A document drawn from vector primitives has no tiles, so the switches that watch or
 		// steer the tiles are left out of its panel.
-		const tilesDrawn = !RenderManager.isVectorRendering();
+		const tilesDrawn =
+			!RenderManager.isVectorRendering() && !CalcVectorManager.isActive();
 
 		this._addDebugTool({
 			name: 'Data Overlay',
@@ -454,13 +479,13 @@ class DebugManager {
 			},
 		});
 
-		// The vector rendering is a Draw and Impress thing: the engine sends the primitives for
-		// those documents only, and switching it in a text document or a spreadsheet would drop
-		// every tile for nothing.
+		// The engine sends vector primitives for Draw, Impress and spreadsheets only. The tools
+		// for the objects of a page are for Draw and Impress.
 		const docType = self._docLayer._docType;
 		const vectorDocument = docType === 'presentation' || docType === 'drawing';
+		const vectorSpreadsheet = docType === 'spreadsheet';
 
-		if (vectorDocument)
+		if (vectorDocument || vectorSpreadsheet)
 			this._addDebugTool({
 				name: 'Vector',
 				category: 'Display',
@@ -468,6 +493,8 @@ class DebugManager {
 				keepOnClose: true,
 				onAdd: function () {
 					self.vectorOn = true;
+					// The content held may have changed while drawing from tiles, so ask again.
+					if (vectorSpreadsheet) CalcVectorManager.instance().markAllStale();
 					RenderManager.reinitialize(self._docLayer._docType);
 					DebugManager.updateVectorSections();
 					GraphicSelection.drawingSwitched();
@@ -481,8 +508,7 @@ class DebugManager {
 					DebugManager.updateVectorSections();
 					GraphicSelection.drawingSwitched();
 
-					// The engine and the kit took note that this view draws from the objects when
-					// it first asked for them; they are told it draws from tiles again.
+					// Tell the engine, the kit and the server that this view draws from tiles again.
 					if (!RenderManager.isVectorRendering())
 						app.socket.sendMessage('commandvalues command=.uno:DrawFromTiles');
 
@@ -1722,6 +1748,81 @@ class DebugManager {
 				Math.round((100.0 * loads) / (loads + updates + deltas)) +
 				'%',
 		);
+	}
+
+	/// Count a frame of vector data and show the totals in the data overlay.
+	public vectorDataAdd(
+		kind: VectorDataKind,
+		compressed: number,
+		json: number,
+		pushed: boolean,
+	): void {
+		const frames = (): VectorFrameCount => ({
+			frames: 0,
+			compressed: 0,
+			smallest: Number.MAX_SAFE_INTEGER,
+			largest: 0,
+		});
+		const add = (into: VectorFrameCount): void => {
+			into.frames++;
+			into.compressed += compressed;
+			into.smallest = Math.min(into.smallest, compressed);
+			into.largest = Math.max(into.largest, compressed);
+		};
+		let count = this._vectorData.get(kind);
+		if (!count) {
+			count = { all: frames(), json: 0, pushed: frames() };
+			this._vectorData.set(kind, count);
+		}
+		add(count.all);
+		count.json += json;
+		if (pushed) add(count.pushed);
+		if (!this.overlayOn) return;
+
+		const bytes = DebugManager._formatBytes;
+		const sizes = (held: VectorFrameCount): string =>
+			bytes(held.compressed) +
+			', smallest ' +
+			bytes(held.smallest) +
+			', largest ' +
+			bytes(held.largest);
+		const names: Array<[VectorDataKind, string]> = [
+			['content', 'Vector content'],
+			['font', 'Vector fonts'],
+			['graphics', 'Vector graphics'],
+		];
+		const lines: string[] = [];
+		for (const [name, label] of names) {
+			const held = this._vectorData.get(name);
+			if (!held) continue;
+			const ratio =
+				held.all.compressed > 0
+					? (held.json / held.all.compressed).toFixed(1)
+					: '-';
+			lines.push(
+				label +
+					': ' +
+					held.all.frames +
+					' frames, ' +
+					sizes(held.all) +
+					', JSON ' +
+					bytes(held.json) +
+					' (' +
+					ratio +
+					':1)',
+			);
+			if (held.pushed.frames)
+				lines.push(
+					'  pushed deltas: ' + held.pushed.frames + ', ' + sizes(held.pushed),
+				);
+		}
+		this.setOverlayMessage('top-vectorData', lines.join('\n'));
+	}
+
+	private static _formatBytes(bytes: number): string {
+		if (bytes < 1024) return bytes + ' B';
+		if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+		return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
 	}
 
 	public tileDataAddMessage(): void {

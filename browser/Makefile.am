@@ -466,6 +466,7 @@ COOL_JS_LST =\
 	src/app/VectorResourceTracker.ts \
 	src/app/VectorManager.ts \
 	src/app/ImageDecoderPolyfill.ts \
+	src/app/CalcVectorManager.ts \
 	src/app/GifFrameSource.ts \
 	src/app/AnimatedGifManager.ts \
 	src/app/TilesMiddleware.ts \
@@ -618,7 +619,11 @@ COOL_JS_LST =\
 	src/canvas/vector/VectorPartGuid.ts \
 	src/canvas/vector/VectorPrimitivesData.ts \
 	src/canvas/vector/VectorPrimitivesResponse.ts \
+	src/canvas/vector/VectorPrimitivesRequest.ts \
 	src/canvas/vector/VectorContentSection.ts \
+	src/canvas/vector/calc/CalcVectorData.ts \
+	src/canvas/vector/calc/CalcBlockPlacement.ts \
+	src/canvas/vector/calc/CalcVectorContentSection.ts \
 	src/canvas/sections/AutoFillBaseSection.ts \
 	src/canvas/sections/CellFillMarkerSection.ts \
 	src/canvas/sections/ImpressSelectionRectangle.ts \

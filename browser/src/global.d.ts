@@ -206,6 +206,8 @@ interface AppInterface {
 		filterPopupCell: any; // The cell a filter popup belongs to: { popupId, column, row }.
 		isRTL(): boolean;
 		isSelectedPartSheetView(): boolean;
+		/// Holds the cells drawn from vector primitives, once a view draws from them.
+		vectorManager: null | CalcVectorManager;
 	};
 	impress: {
 		partList: any; // Info for parts.
@@ -305,6 +307,8 @@ interface AppInterface {
 	};
 	tile: {
 		size: null | cool.SimplePoint;
+		/// The tiles held in the browser.
+		count(): number;
 	};
 	exportFormats: Array<ExportFormat>;
 	getExportFormats: (docType: string) => Array<ExportFormat>;

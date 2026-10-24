@@ -13,7 +13,7 @@
  * Calc tile layer is used to display a spreadsheet document
  */
 
-/* global app RenderManager cool CellRangeMarkerSection FocusCellSection SplitterLinesSection */
+/* global app RenderManager cool CellRangeMarkerSection FocusCellSection SplitterLinesSection CalcVectorManager */
 
 window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 	options: {
@@ -1160,6 +1160,23 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		var values = JSON.parse(textMsg.substring(jsonIdx));
 		if (!values) {
 			return;
+		}
+
+		// A vector-drawn sheet receives its content, fonts and images here.
+		if (values.docType === 'spreadsheet' &&
+			(values.type === 'vectorprimitives' || values.type === 'vectorprimitivesdelta')) {
+			CalcVectorManager.instance().handleVectorPrimitives(values);
+			return;
+		}
+		if (CalcVectorManager.isActive()) {
+			if (values.type === 'vectorrenderinggraphics') {
+				CalcVectorManager.instance().handleVectorRenderingGraphics(values);
+				return;
+			}
+			if (values.type === 'vectorrenderingfont') {
+				CalcVectorManager.instance().handleVectorRenderingFont(values);
+				return;
+			}
 		}
 
 		var comment;

@@ -70,6 +70,65 @@ describe('BitmapTileManager tile memory', function () {
 		return Promise.resolve();
 	}
 
+	it('drops every tile it holds when asked to', async function () {
+		const one = decodedTile(0, 0);
+		const two = decodedTile(256, 1);
+		tileManager.discardTiles();
+		assert.strictEqual(tileManager.tiles.size, 0);
+		assert.ok(one.bitmap.closed);
+		assert.ok(two.bitmap.closed);
+	});
+
+	it('keeps no tile that comes while a spreadsheet draws from vectors', function () {
+		// A tile still on its way when the view switched to vectors is acknowledged and dropped.
+		const savedMap = app.map;
+		const savedParse = (app.socket as any).parseServerCmd;
+		(app as any).map = {
+			_docLayer: { _docType: 'spreadsheet' },
+			_debug: { vectorOn: true, tileDataOn: false },
+		};
+		// The tile message as the socket parses it.
+		(app.socket as any).parseServerCmd = () => ({
+			nviewid: 0,
+			part: '0',
+			x: 0,
+			y: 0,
+			tileWidth: 3840,
+			tileHeight: 3840,
+			wireId: 5,
+			zoom: 10,
+		});
+		try {
+			tileManager.onTileMsg('tile: wid=5', {
+				rawData: new Uint8Array(8),
+				isKeyframe: true,
+			});
+		} finally {
+			(app as any).map = savedMap;
+			(app.socket as any).parseServerCmd = savedParse;
+		}
+		assert.strictEqual(tileManager.tiles.size, 0);
+		assert.deepStrictEqual(tileManager.queuedProcessed, [5]);
+	});
+
+	it('fetches nothing ahead of or around the view while a spreadsheet draws from vectors', function () {
+		// The pre-fetchers would create tile records for the tiles they want, with the
+		// request for them suppressed, so neither starts.
+		const savedMap = app.map;
+		(app as any).map = {
+			_docLayer: { _docType: 'spreadsheet' },
+			_debug: { vectorOn: true, tileDataOn: false },
+		};
+		try {
+			tileManager.initPreFetchAdjacentTiles();
+			tileManager.resetPreFetching(true);
+		} finally {
+			(app as any).map = savedMap;
+		}
+		assert.strictEqual(tileManager._adjacentTilePreFetcher, undefined);
+		assert.strictEqual(tileManager._preFetchIdle, undefined);
+	});
+
 	it('tells the workers once when the document loses focus', async function () {
 		const one = decodedTile(0, 5000);
 		const two = decodedTile(256, 5000);

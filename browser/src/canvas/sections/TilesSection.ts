@@ -599,6 +599,10 @@ export class TilesSection extends CanvasSectionObject {
 		this.drawPageBackgrounds(ctx);
 		this.context.translate(this.myTopLeft[0], this.myTopLeft[1]);
 
+		// A spreadsheet drawn from vector primitives draws its cells in a section of its own.
+		if (CalcVectorManager.isActive())
+			return;
+
 		var doneTiles = new Set();
 		this.forEachTileInView(zoom, part, mode, ctx, function (tile: any, coords: TileCoordData): boolean {
 
@@ -907,6 +911,51 @@ export class TilesSection extends CanvasSectionObject {
 		}
 	}
 
+	// The last frame of a spreadsheet drawn from vector primitives, taken when a zoom starts.
+	// The zoom frames are drawn scaled from it: the tiles held are not drawn in vector mode and
+	// show the sheet as it was before the switch.
+	private _vectorZoomSnapshot: HTMLCanvasElement | undefined = undefined;
+
+	/// Keep the frame the canvas shows for the zoom frames, when the sheet is drawn from vectors.
+	public captureVectorZoomSnapshot(): void {
+		this._vectorZoomSnapshot = undefined;
+		if (!CalcVectorManager.isActive()) return;
+		const snapshot = document.createElement('canvas');
+		snapshot.width = this.size[0];
+		snapshot.height = this.size[1];
+		const context = snapshot.getContext('2d');
+		if (!context) return;
+		context.drawImage(
+			this.context.canvas,
+			this.myTopLeft[0], this.myTopLeft[1], this.size[0], this.size[1],
+			0, 0, this.size[0], this.size[1]);
+		this._vectorZoomSnapshot = snapshot;
+	}
+
+	public dropVectorZoomSnapshot(): void {
+		this._vectorZoomSnapshot = undefined;
+	}
+
+	// Draw the zoom frame of a pane from the snapshot, scaled and placed the way a tile is. The
+	// snapshot shows the pane's bounds at the pane's place on the canvas.
+	private _drawVectorZoomFrame(paneBounds: cool.Bounds, docRange: cool.Bounds, destPos: cool.Point, scale: number): void {
+		const snapshot = this._vectorZoomSnapshot;
+		if (!snapshot) return;
+		const crop = new cool.Bounds(
+			new cool.Point(Math.max(docRange.min.x, paneBounds.min.x), Math.max(docRange.min.y, paneBounds.min.y)),
+			new cool.Point(Math.min(docRange.max.x, paneBounds.max.x), Math.min(docRange.max.y, paneBounds.max.y)));
+		const cropWidth = crop.max.x - crop.min.x;
+		const cropHeight = crop.max.y - crop.min.y;
+		if (cropWidth <= 0 || cropHeight <= 0) return;
+		const source = crop.min.subtract(paneBounds.min).add(destPos);
+		const paneOffset = crop.min.subtract(docRange.min.subtract(destPos));
+		this.context.drawImage(
+			snapshot,
+			source.x, source.y, cropWidth, cropHeight,
+			Math.floor(paneOffset.x * scale) + 0.5, Math.floor(paneOffset.y * scale) + 0.5,
+			Math.floor(cropWidth * scale) + 1.5, Math.floor(cropHeight * scale) + 1.5);
+	}
+
 	// Called by tsManager to draw a zoom animation frame.
 	// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 	public drawZoomFrame(): void {
@@ -1005,6 +1054,12 @@ export class TilesSection extends CanvasSectionObject {
 				freeDocRange = docRange;
 			if (tsManager._calcGridSection) {
 				tsManager._calcGridSection.onDrawArea(docRange, docRange.min.subtract(destPos), this.context);
+			}
+			// A spreadsheet drawn from vector primitives shows its last frame scaled, since the
+			// tiles held are not drawn in vector mode and can be out of date.
+			if (CalcVectorManager.isActive()) {
+				this._drawVectorZoomFrame(paneBounds, docRange, destPos, scale);
+				continue;
 			}
 			var canvasContext = this.context;
 

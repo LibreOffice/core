@@ -30,6 +30,7 @@
 /// <reference path="./helper/canvasContainerSetup.ts" />
 /// <reference path="./helper/matchMediaMock.ts" />
 /// <reference path="./helper/fakeClock.ts" />
+/// <reference path="./helper/SocketRecorder.ts" />
 /// <reference path="./helper/rectUtil.ts" />
 /// <reference path="./helper/Events.ts"/>
 /// <reference path="./helper/util.ts"/>
@@ -87,6 +88,9 @@
 /// <reference path="./Plural.test.ts" />
 /// <reference path="./VectorManager.test.ts" />
 /// <reference path="./MessageParser.test.ts" />
+/// <reference path="./CalcBlockUpdate.test.ts" />
+/// <reference path="./CalcBlockPlacement.test.ts" />
+/// <reference path="./CalcVectorManager.test.ts" />
 /// <reference path="./ChangeOutbox.test.ts" />
 /// <reference path="./RenderGeometrySection.test.ts" />
 /// <reference path="./DocDispatcherExtensions.test.ts" />

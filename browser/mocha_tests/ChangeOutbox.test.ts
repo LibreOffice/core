@@ -10,17 +10,16 @@
  */
 
 describe('ChangeOutbox typed text', function () {
+	let recorder: SocketRecorder;
 	let sent: string[];
-	let savedSend: any;
 	let savedInstance: any;
 	let savedOuterSequence: number;
 	let manager: VectorManager;
 
 	// Empties the outbox and has it listen to a fresh manager.
 	beforeEach(function () {
-		sent = [];
-		savedSend = (app as any).socket.sendMessage;
-		(app as any).socket.sendMessage = (message: string) => sent.push(message);
+		recorder = new SocketRecorder();
+		sent = recorder.sent;
 		savedInstance = (RenderManager as any)._instance;
 		manager = new VectorManager();
 		(RenderManager as any)._instance = manager;
@@ -33,7 +32,7 @@ describe('ChangeOutbox typed text', function () {
 		(ChangeOutbox as any).listening = false;
 	});
 	afterEach(function () {
-		(app as any).socket.sendMessage = savedSend;
+		recorder.restore();
 		(RenderManager as any)._instance = savedInstance;
 		app.file.inputSequence = savedOuterSequence;
 		cool.InputSequence.forget();

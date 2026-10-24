@@ -667,6 +667,10 @@ namespace cool {
 				this._fontLoaded,
 			);
 			context.font = VectorPrimitiveRenderer.cssFont(primitive, family);
+			// The anchor is the start of the run on its baseline. The context is
+			// shared with sections that set their own alignment and baseline.
+			context.textAlign = 'left';
+			context.textBaseline = 'alphabetic';
 			// A matrix that only scales by the font size moves the
 			// anchor and nothing else, so it skips the transform.
 			const transformed =
@@ -958,9 +962,10 @@ namespace cool {
 
 		// Browser-measured widths by font and text. Every frame redraws the
 		// same runs, so each width is measured once. The cache is cleared when
-		// it holds more entries than a page shows.
+		// it holds more entries than a page shows. A sheet full of numbers
+		// shows thousands of different ones.
 		private _measuredWidths: Map<string, number> = new Map();
-		private static readonly _MEASURED_WIDTHS_LIMIT = 4096;
+		private static readonly _MEASURED_WIDTHS_LIMIT = 32768;
 
 		private _measuredWidth(
 			context: CanvasRenderingContext2D,

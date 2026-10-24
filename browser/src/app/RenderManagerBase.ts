@@ -71,6 +71,11 @@ abstract class RenderManagerBase {
 		previous.afterVisualsReadyTasks = [];
 	}
 
+	/// Content to show arrived from outside the tiles. Run the waiting tasks.
+	markVisualsReady(): void {
+		if (!this.visualsReady) this.setVisualsReady();
+	}
+
 	protected setVisualsReady(): void {
 		this.visualsReady = true;
 		while (this.afterVisualsReadyTasks.length > 0) {
@@ -111,6 +116,13 @@ abstract class RenderManagerBase {
 	reclaimGraphicsMemory(): void {}
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	discardAllCache(): void {}
+	/// The tiles held.
+	tileCount(): number {
+		return 0;
+	}
+	/// Drop every tile held, keeping the rest of what the manager holds.
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	discardTiles(): void {}
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	markThumbnailStale(): void {}
 

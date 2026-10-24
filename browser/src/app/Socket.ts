@@ -3051,6 +3051,16 @@ class Socket {
 		} catch (error) {
 			// Leave the detail empty.
 		}
+		this._map._debug?.vectorDataAdd(
+			type === 'vectorrenderingfont'
+				? 'font'
+				: type === 'vectorrenderinggraphics'
+					? 'graphics'
+					: 'content',
+			compressed.length,
+			json.length,
+			pushed,
+		);
 		window.app.console.log(
 			'zstd' +
 				type +

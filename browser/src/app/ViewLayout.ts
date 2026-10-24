@@ -499,6 +499,13 @@ class ViewLayoutBase {
 		// The base twips->px each zoom frame scales from (see
 		// TilesSection.drawZoomFrame) so vector sections scale with the tiles.
 		painter._zoomBaseTwipsToPixels = app.twipsToPixels;
+		// A spreadsheet drawn from vector primitives scales the frame the canvas shows now, which
+		// its tiles held do not show.
+		const tiles: any = app.sectionContainer.getSectionWithName(
+			app.CSections.Tiles.name,
+		);
+		if (tiles && tiles.captureVectorZoomSnapshot)
+			tiles.captureVectorZoomSnapshot();
 
 		// Hide the cursor and selection handles for the duration of the animation.
 		if (docLayer._cursorMarker && app.file.textCursor.visible)
@@ -514,9 +521,6 @@ class ViewLayoutBase {
 		// twips->px it started from and the effective (animated) one.
 		// drawZoomFrame derives its bitmap ratio from these; stepZoom updates
 		// the effective value each frame.
-		const tiles: any = app.sectionContainer.getSectionWithName(
-			app.CSections.Tiles.name,
-		);
 		if (tiles) {
 			tiles.sectionProperties.zoomBaseTwipsToPixels = app.twipsToPixels;
 			tiles.sectionProperties.effectiveTwipsToPixels = app.twipsToPixels;
@@ -550,7 +554,10 @@ class ViewLayoutBase {
 		const tiles: any = app.sectionContainer.getSectionWithName(
 			app.CSections.Tiles.name,
 		);
-		if (tiles) tiles.sectionProperties.effectiveTwipsToPixels = undefined;
+		if (tiles) {
+			tiles.sectionProperties.effectiveTwipsToPixels = undefined;
+			if (tiles.dropVectorZoomSnapshot) tiles.dropVectorZoomSnapshot();
+		}
 
 		app.sectionContainer.setInZoomAnimation(false);
 

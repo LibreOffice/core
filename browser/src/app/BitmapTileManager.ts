@@ -1004,6 +1004,9 @@ class BitmapTileManager extends RenderManagerBase {
 	public initPreFetchAdjacentTiles() {
 		if (!this.checkDocLayer()) return;
 
+		// A spreadsheet drawn from vector primitives holds no tiles to fetch ahead.
+		if (CalcVectorManager.isActive()) return;
+
 		if (this._adjacentTilePreFetcher) return;
 
 		this._adjacentTilePreFetcher = setTimeout(() => {
@@ -1093,6 +1096,9 @@ class BitmapTileManager extends RenderManagerBase {
 
 	private sendTileCombineRequest(tileCombineQueue: Array<TileCoordData>) {
 		if (tileCombineQueue.length <= 0) return;
+
+		// A spreadsheet drawn from vector primitives shows no tiles.
+		if (CalcVectorManager.isActive()) return;
 
 		// Sort into buckets of consistent part & mode. The key is a string:
 		// part identifiers can be page GUIDs, which do not fit into
@@ -1542,6 +1548,9 @@ class BitmapTileManager extends RenderManagerBase {
 
 		if (resetBorder) this._borders = undefined;
 
+		// A spreadsheet drawn from vector primitives holds no tiles to fetch around the view.
+		if (CalcVectorManager.isActive()) return;
+
 		var interval = 250;
 		var idleTime = 750;
 		this._preFetchPart = this._docLayer.getSelectedPart();
@@ -1844,6 +1853,13 @@ class BitmapTileManager extends RenderManagerBase {
 			return;
 		}
 
+		// A spreadsheet drawn from vector primitives draws no tile, so one that still comes is
+		// acknowledged and not kept.
+		if (CalcVectorManager.isActive()) {
+			this.queueAcknowledgement(tileMsgObj);
+			return;
+		}
+
 		const coords = this.tileMsgToCoords(tileMsgObj);
 		let tile = this.get(coords);
 
@@ -1940,6 +1956,10 @@ class BitmapTileManager extends RenderManagerBase {
 	}
 
 	public reclaimGraphicsMemory() {
+		// A spreadsheet drawn from vector primitives holds canvases of its own.
+		if (CalcVectorManager.isActive())
+			CalcVectorManager.instance().reclaimGraphicsMemory();
+
 		for (const [key, tile] of this.tiles.entries()) {
 			if (tile.distanceFromView === 0) this.dehydratedCurrentTiles.push(key);
 			this.reclaimTileBitmapMemory(tile);
@@ -2024,8 +2044,21 @@ class BitmapTileManager extends RenderManagerBase {
 		this.notifyTileStateChanged();
 	}
 
+	public tileCount(): number {
+		return this.tiles.size;
+	}
+
+	/// Drop every tile held. A spreadsheet drawn from vector primitives draws none of them, and
+	/// they show the sheet as it was when they came.
+	public discardTiles() {
+		this.removeAllTiles();
+	}
+
 	public discardAllCache() {
 		this.stopIdleTrim();
+		// A spreadsheet drawn from vector primitives holds its content there.
+		if (CalcVectorManager.isActive()) CalcVectorManager.instance().clearAll();
+
 		this.updateAllTileDistances();
 		this.garbageCollect(true);
 		this.reclaimGraphicsMemory();
@@ -2321,6 +2354,9 @@ class BitmapTileManager extends RenderManagerBase {
 		currentCoordList: TileCoordData[],
 		sendTileCombine = true,
 	): TileCoordData[] {
+		// A spreadsheet drawn from vector primitives holds no tiles.
+		if (CalcVectorManager.isActive()) return [];
+
 		const tileCombineQueue = [];
 		for (var i = 0; i < currentCoordList.length; i++) {
 			let tile = this.get(currentCoordList[i]);
@@ -2353,6 +2389,8 @@ class BitmapTileManager extends RenderManagerBase {
 	// with distanceFromView === 0. The refresh keeps that scan to the tiles that
 	// are really in view, so drawing resumes as soon as they arrive.
 	public requestVisibleTiles(currentCoordList: TileCoordData[]): void {
+		// A spreadsheet drawn from vector primitives holds no tiles to measure.
+		if (CalcVectorManager.isActive()) return;
 		this.updateAllTileDistances();
 		this.beginTransaction();
 		this.checkRequestTiles(currentCoordList);
@@ -2729,11 +2767,17 @@ class BitmapTileManager extends RenderManagerBase {
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	public partListChanged(): void {}
 
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	public revalidateCachedParts(): void {}
+	/// Changes may have been missed while away, so ask again for what is held.
+	public revalidateCachedParts(): void {
+		if (CalcVectorManager.isActive())
+			CalcVectorManager.instance().markAllStale();
+	}
 
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	public forgetRequestsInFlight(): void {}
+	/// Answers to requests sent before a reconnect never come.
+	public forgetRequestsInFlight(): void {
+		if (CalcVectorManager.isActive())
+			CalcVectorManager.instance().markAllStale();
+	}
 
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	public clearCachedPart(_partId: cool.VectorPartGuid): void {}
