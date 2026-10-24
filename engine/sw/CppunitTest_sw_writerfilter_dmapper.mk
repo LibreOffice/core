@@ -46,6 +46,7 @@ $(eval $(call gb_CppunitTest_use_libraries,sw_writerfilter_dmapper, \
     utl \
     tl \
     vcl \
+    sfx \
     svl \
     sw \
     swqahelper \
