@@ -729,6 +729,15 @@ bool SwTableAutoFormatTable::InsertAutoFormat(const SvxAutoFormatData* pFormat)
     return true;
 }
 
+void SwTableAutoFormatTable::InsertOrReplaceAutoFormat(const SwTableAutoFormat& rFormat)
+{
+    SwTableAutoFormat* pExistingFormat = FindAutoFormat(rFormat.SvxAutoFormatData::GetName());
+    if (pExistingFormat)
+        *pExistingFormat = rFormat;
+    else
+        InsertAutoFormat(&rFormat);
+}
+
 SwTableAutoFormat* SwTableAutoFormatTable::FindAutoFormat(const OUString& rName) const
 {
     for (const auto& rFormat : m_pImpl->m_AutoFormats)

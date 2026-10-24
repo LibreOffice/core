@@ -191,6 +191,7 @@ public:
     SwBoxAutoFormat* GetDefaultField() override { return new SwBoxAutoFormat; }
     SwTableAutoFormat* FindAutoFormat(const TableStyleName& rName) const;
     std::unique_ptr<SwTableAutoFormat> ReleaseAutoFormat(const TableStyleName& rName);
+    void InsertOrReplaceAutoFormat(const SwTableAutoFormat& rFormat);
 };
 
 class SwCellStyleDescriptor

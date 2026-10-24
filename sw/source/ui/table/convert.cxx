@@ -196,8 +196,7 @@ SwConvertTableDlg::SwConvertTableDlg(SwView& rView, bool bToTable)
         SwTableAutoFormatTable& rTableStyles = rView.GetWrtShell().GetDoc()->GetTableStyles();
         for (size_t i = 0; i < rTableStyles.size(); ++i)
         {
-            m_xTableTable->ReleaseAutoFormat(rTableStyles[i].GetName());
-            m_xTableTable->AddAutoFormat(rTableStyles[i]);
+            m_xTableTable->InsertOrReplaceAutoFormat(rTableStyles[i]);
         }
     }
 
