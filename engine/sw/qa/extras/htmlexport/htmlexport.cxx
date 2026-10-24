@@ -25,7 +25,9 @@
 #include <comphelper/kit.hxx>
 #include <comphelper/propertysequence.hxx>
 #include <comphelper/scopeguard.hxx>
+#include <osl/file.hxx>
 #include <sot/storage.hxx>
+#include <tools/hostfilter.hxx>
 #include <vcl/svapp.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 #include <comphelper/processfactory.hxx>
@@ -529,6 +531,38 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfOleData)
     saveAndReload(TestFilter::HTML_WRITER);
     verify();
 }
+
+// HostFilter::setAllowedExtRefPaths takes colon-separated paths, which do not fit Windows paths.
+#ifndef _WIN32
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfOleDataOutsideAllowedPaths)
+{
+    comphelper::ScopeGuard g([]() { HostFilter::resetAllowedExtRefPaths(); });
+    setImportFilterOptions(u"xhtmlns=reqif-xhtml"_ustr);
+    setImportFilterName(TestFilter::HTML_WRITER);
+
+    // An object whose data file is outside the allowed paths is not imported.
+    OUString aTempDirURL;
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, osl::FileBase::getTempDirURL(aTempDirURL));
+    OUString aTempDir;
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None,
+                         osl::FileBase::getSystemPathFromFileURL(aTempDirURL, aTempDir));
+    HostFilter::setAllowedExtRefPaths(aTempDir.toUtf8().getStr());
+    createSwDoc("reqif-ole-data.xhtml");
+    uno::Reference<text::XTextEmbeddedObjectsSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xObjects(xSupplier->getEmbeddedObjects(),
+                                                     uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(0), xObjects->getCount());
+
+    // The same object is imported when its data file is inside the allowed paths.
+    OUString aDataFile = createFilePath(u"reqif-ole-data.xhtml");
+    OUString aDataDir = aDataFile.copy(0, aDataFile.lastIndexOf('/'));
+    HostFilter::setAllowedExtRefPaths(aDataDir.toUtf8().getStr());
+    createSwDoc("reqif-ole-data.xhtml");
+    xSupplier.set(mxComponent, uno::UNO_QUERY);
+    xObjects.set(xSupplier->getEmbeddedObjects(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(static_cast<sal_Int32>(1), xObjects->getCount());
+}
+#endif
 
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testReqIfOleImg)
 {
