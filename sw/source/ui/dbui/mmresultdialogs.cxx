@@ -563,7 +563,7 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
     std::shared_ptr<SwMailMergeConfigItem> xConfigItem = pView->GetMailMergeConfigItem();
     assert(xConfigItem);
 
-    const sal_uInt32 nDocumentCount = xConfigItem->GetMergedDocumentCount();
+    const sal_uInt32 nDocumentCount = xConfigItem->GetMergedDocumentCount(/* bWithoutExcludedRecords */false);
     sal_uInt32 nBegin = 0;
     sal_uInt32 nEnd = nDocumentCount;
 
@@ -582,6 +582,9 @@ IMPL_LINK_NOARG(SwMMResultSaveDialog, SaveOutputHdl_Impl, weld::Button&, void)
 
     SwView* pTargetView = xConfigItem->GetTargetView();
     assert(pTargetView);
+
+    nEnd = xConfigItem->GetMergedDocumentCount();
+
 
     OUString sFilter;
     OUString sPath = SwMailMergeHelper::CallSaveAsDialog(m_xDialog.get(), sFilter);
@@ -799,7 +802,7 @@ IMPL_LINK_NOARG(SwMMResultPrintDialog, PrintHdl_Impl, weld::Button&, void)
     std::shared_ptr<SwMailMergeConfigItem> xConfigItem = pView->GetMailMergeConfigItem();
     assert(xConfigItem);
 
-    const sal_uInt32 nDocumentCount = xConfigItem->GetMergedDocumentCount();
+    const sal_uInt32 nDocumentCount = xConfigItem->GetMergedDocumentCount(/* bWithoutExcludedRecords */false);
     sal_uInt32 nBegin = 0;
     sal_uInt32 nEnd = nDocumentCount;
 
@@ -818,6 +821,8 @@ IMPL_LINK_NOARG(SwMMResultPrintDialog, PrintHdl_Impl, weld::Button&, void)
 
     SwView* pTargetView = xConfigItem->GetTargetView();
     assert(pTargetView);
+
+    nEnd = xConfigItem->GetMergedDocumentCount();
 
     // If we skip autoinserted blanks, then the page numbers used in the print range string
     // refer to the non-blank pages as they appear in the document (see tdf#89708).
@@ -918,7 +923,7 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
     std::shared_ptr<SwMailMergeConfigItem> xConfigItem = pView->GetMailMergeConfigItem();
     assert(xConfigItem);
 
-    const sal_uInt32 nDocumentCount = xConfigItem->GetMergedDocumentCount();
+    const sal_uInt32 nDocumentCount = xConfigItem->GetMergedDocumentCount(/* bWithoutExcludedRecords */false);
     sal_uInt32 nBegin = 0;
     sal_uInt32 nEnd = nDocumentCount;
 
@@ -934,6 +939,8 @@ IMPL_LINK_NOARG(SwMMResultEmailDialog, SendDocumentsHdl_Impl, weld::Button&, voi
 
     if (!xConfigItem->GetTargetView())
         SwDBManager::PerformMailMerge(pView);
+
+    nEnd = xConfigItem->GetMergedDocumentCount();
 
     //get the composed document
     SwView* pTargetView = xConfigItem->GetTargetView();

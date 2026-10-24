@@ -1539,7 +1539,7 @@ SwDocMergeInfo& SwMailMergeConfigItem::GetDocumentMergeInfo(sal_uInt32 nDocument
 }
 
 
-sal_uInt32 SwMailMergeConfigItem::GetMergedDocumentCount()
+sal_uInt32 SwMailMergeConfigItem::GetMergedDocumentCount(bool bWithoutExcludedRecords)
 {
     if(m_pTargetView)
         return m_pImpl->m_aMergeInfos.size();
@@ -1549,7 +1549,8 @@ sal_uInt32 SwMailMergeConfigItem::GetMergedDocumentCount()
         MoveResultSet(-1);
         sal_Int32 nRet = GetResultSetPosition();
         MoveResultSet( nRestore );
-        nRet -= m_aExcludedRecords.size();
+        if (bWithoutExcludedRecords)
+            nRet -= m_aExcludedRecords.size();
         return nRet >= 0 ? nRet : 0;
     }
 }
