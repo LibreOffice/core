@@ -148,9 +148,9 @@ bool ScTableLink::Refresh(const OUString& rNewFile, const OUString& rNewFilter,
     OUString aNewUrl = ScGlobal::GetAbsDocName(rNewFile, &m_rDocSh);
     bool bNewUrlName = aFileName != aNewUrl;
 
-    if (HostFilter::isFileUrlForbidden(aNewUrl))
+    if (INetURLObject(aNewUrl).IsExoticProtocol() || HostFilter::isFileUrlForbidden(aNewUrl))
     {
-        SAL_WARN("sc.ui", "ScTableLink::Refresh: blocked file path: \"" << aNewUrl << "\"");
+        SAL_WARN("sc.ui", "ScTableLink::Refresh: blocked url: \"" << aNewUrl << "\"");
         return false;
     }
 
