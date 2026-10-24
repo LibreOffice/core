@@ -12,9 +12,14 @@ describe(['tagdesktop'], 'Sidebar tests', function() {
 
 	it('Sidebar visual test', function() {
 		cy.viewport(1000,660);
-		cy.wait(500); // wait to make fully rendered
+		cy.getFrameWindow().then(function(win) {
+			return helper.processToIdle(win);
+		});
 		cy.cGet('#sidebar-dock-wrapper').scrollTo(0,0,{ ensureScrollable: false });
-		cy.wait(500); // wait for animations
+		cy.getFrameWindow().then(function(win) {
+			helper.processToIdle(win);
+			helper.waitForOnDemandRenders(win);
+		});
 		cy.cGet('#sidebar-dock-wrapper').compareSnapshot('sidebar_writer', 0.07);
 	});
 
