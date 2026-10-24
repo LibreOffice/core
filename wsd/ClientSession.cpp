@@ -1909,6 +1909,11 @@ bool ClientSession::_handleInput(const char *buffer, int length)
                     LOG_WRN("Dropping script command because macro execution is disabled");
                     return true;
                 }
+                if (isReadOnly())
+                {
+                    LOG_WRN("Dropping script command from a read-only session");
+                    return true;
+                }
             }
             else if (!tokens.startsWith(1, ".uno:"))
             {
