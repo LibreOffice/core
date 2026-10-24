@@ -89,9 +89,13 @@ describe(['tagdesktop'], 'Scroll through document, modify heading', function() {
 		// Type into whatever currently has focus (not directly into the input)
 		// so that focus being stolen mid-typing is detectable.
 		cy.cGet('body').type('Feedback');
-		// Give a delayed focus steal, if any, time to happen: the regression fired
-		// once the Outline tree processed the typed text, not on the first keystroke.
-		cy.wait(1000);
+		// The regression fired once the Outline tree processed the typed text, not on the
+		// first keystroke. That update comes from core and the deferred focus timer, so both
+		// have run by the time the idle round trip and the timer wait return.
+		cy.getFrameWindow().then(function(win) {
+			helper.processToIdle(win);
+			helper.waitForTimers(win, 'navigatorstealfocus');
+		});
 
 		// Focus must remain in the search input and the whole word present.
 		helper.assertFocus('id', 'navigator-search-input');
