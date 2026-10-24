@@ -33,7 +33,6 @@
 #include <editeng/emphasismarkitem.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <editeng/forbiddenruleitem.hxx>
-#include <editeng/frmdiritem.hxx>
 #include <editeng/justifyitem.hxx>
 #include <svx/rotmodit.hxx>
 #include <editeng/udlnitem.hxx>
@@ -74,8 +73,8 @@
 #include <scopetools.hxx>
 #include <tabvwsh.hxx>
 #include <dbdata.hxx>
+#include <CellTextAlignment.hxx>
 
-#include <com/sun/star/i18n/DirectionProperty.hpp>
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/string.hxx>
 
@@ -291,13 +290,6 @@ bool lcl_GetBoolValue(const ScPatternAttr& rPattern, sal_uInt16 nWhich, const Sf
     return lcl_GetValue<SfxBoolItem, bool>(rPattern, nWhich, pCondSet);
 }
 
-}
-
-static bool lcl_isNumberFormatText(const ScDocument* pDoc, SCCOL nCellX, SCROW nCellY, SCTAB mnTab )
-{
-    sal_uInt32 nCurrentNumberFormat = pDoc->GetNumberFormat( nCellX, nCellY, mnTab );
-    SvNumberFormatter* pNumberFormatter = pDoc->GetFormatTable();
-    return pNumberFormatter->GetType( nCurrentNumberFormat ) == SvNumFormatType::TEXT;
 }
 
 void ScDrawStringsVars::SetPattern( const ScPatternAttr* pNew, const SfxItemSet* pSet, const SfxItemSet* pTSet, const ScRefCellValue& rCell, SvtScriptType nScript )
@@ -1412,80 +1404,6 @@ void ScOutputData::GetOutputArea( SCCOL nX, SCSIZE nArrY, tools::Long nPosX, too
     rParam.maClipRect.Normalize();
 }
 
-namespace {
-
-bool beginsWithRTLCharacter(const OUString& rStr)
-{
-    if (rStr.isEmpty())
-        return false;
-
-    switch (ScGlobal::getCharClass().getCharacterDirection(rStr, 0))
-    {
-        case i18n::DirectionProperty_RIGHT_TO_LEFT:
-        case i18n::DirectionProperty_RIGHT_TO_LEFT_ARABIC:
-        case i18n::DirectionProperty_RIGHT_TO_LEFT_EMBEDDING:
-        case i18n::DirectionProperty_RIGHT_TO_LEFT_OVERRIDE:
-            return true;
-        default:
-            ;
-    }
-
-    return false;
-}
-
-}
-
-/** Get left, right or centered alignment from RTL context.
-
-    Does not return standard, block or repeat, for these the contextual left or
-    right alignment is returned.
- */
-static SvxCellHorJustify getAlignmentFromContext( SvxCellHorJustify eInHorJust,
-        bool bCellIsValue, bool bCellIsCallable, const OUString& rText,
-        const ScPatternAttr& rPattern, const SfxItemSet* pCondSet,
-        const ScDocument* pDoc, SCTAB mnTab, const bool  bNumberFormatIsText )
-{
-    SvxCellHorJustify eHorJustContext = eInHorJust;
-    bool bUseWritingDirection = false;
-    if (eInHorJust == SvxCellHorJustify::Standard)
-    {
-        // fdo#32530: Default alignment depends on value vs
-        // string, and the direction of the 1st letter.
-        if (beginsWithRTLCharacter( rText)) //If language is RTL
-        {
-            if (bCellIsValue)
-               eHorJustContext = bNumberFormatIsText ? SvxCellHorJustify::Right : SvxCellHorJustify::Left;
-            else
-                eHorJustContext = SvxCellHorJustify::Right;
-        }
-        else if (bCellIsValue) //If language is not RTL
-            eHorJustContext = bNumberFormatIsText ? SvxCellHorJustify::Left : SvxCellHorJustify::Right;
-        else if (bCellIsCallable)
-            eHorJustContext = SvxCellHorJustify::Center;
-        else
-            bUseWritingDirection = true;
-    }
-
-    if (bUseWritingDirection ||
-            eInHorJust == SvxCellHorJustify::Block || eInHorJust == SvxCellHorJustify::Repeat)
-    {
-        SvxFrameDirection nDirection = lcl_GetValue<SvxFrameDirectionItem, SvxFrameDirection>(rPattern, ATTR_WRITINGDIR, pCondSet);
-        if (nDirection == SvxFrameDirection::Horizontal_LR_TB || nDirection == SvxFrameDirection::Vertical_LR_TB)
-            eHorJustContext = SvxCellHorJustify::Left;
-        else if (nDirection == SvxFrameDirection::Environment)
-        {
-            SAL_WARN_IF( !pDoc, "sc.ui", "getAlignmentFromContext - pDoc==NULL");
-            // fdo#73588: The content of the cell must also
-            // begin with a RTL character to be right
-            // aligned; otherwise, it should be left aligned.
-            eHorJustContext = (pDoc && pDoc->IsLayoutRTL(mnTab) && (beginsWithRTLCharacter( rText))) ? SvxCellHorJustify::Right : SvxCellHorJustify::Left;
-        }
-        else
-            eHorJustContext = SvxCellHorJustify::Right;
-    }
-    return eHorJustContext;
-}
-
 /// what a database range's labels head, where this position holds one of them
 static vcl::pdf::PDFWriter::StructAttributeValue
 lcl_GetLabelScope(const ScDocument& rDoc, SCTAB nTab, SCCOL nCol, SCROW nRow)
@@ -1863,9 +1781,9 @@ void ScOutputData::LayoutStringsImpl(bool const bPixelToLogic, RowInfo* const pT
             bCellIsCallable = pFCell->IsCallable();
         }
 
-        const bool bNumberFormatIsText = lcl_isNumberFormatText( mpDoc, nCellX, nCellY, mnTab );
-        eOutHorJust = getAlignmentFromContext( aVars.GetHorJust(), bCellIsValue, bCellIsCallable,
-                aVars.GetString(), *pPattern, pCondSet, mpDoc, mnTab, bNumberFormatIsText );
+        const bool bNumberFormatIsText = sc::isNumberFormatText( *mpDoc, nCellX, nCellY, mnTab );
+        eOutHorJust = sc::getAlignmentFromContext( aVars.GetHorJust(), bCellIsValue, bCellIsCallable,
+                aVars.GetString(), *pPattern, pCondSet, *mpDoc, mnTab, bNumberFormatIsText );
 
         bool bBreak = ( aVars.GetLineBreak() || aVars.GetHorJust() == SvxCellHorJustify::Block );
         // #i111387# #o11817313# tdf#121040 disable automatic line breaks for all number formats
@@ -4694,9 +4612,9 @@ void ScOutputData::DrawEdit(bool bPixelToLogic)
                         OUString aStr = mpDoc->GetString(nCellX, nCellY, mnTab);
 
                         DrawEditParam aParam(pPattern, pCondSet, pTableSet, lcl_SafeIsValue(aCell));
-                        const bool bNumberFormatIsText = lcl_isNumberFormatText( mpDoc, nCellX, nCellY, mnTab );
-                        aParam.meHorJustContext = getAlignmentFromContext( aParam.meHorJustAttr,
-                                aParam.mbCellIsValue, false, aStr, *pPattern, pCondSet, mpDoc, mnTab,
+                        const bool bNumberFormatIsText = sc::isNumberFormatText( *mpDoc, nCellX, nCellY, mnTab );
+                        aParam.meHorJustContext = sc::getAlignmentFromContext( aParam.meHorJustAttr,
+                                aParam.mbCellIsValue, false, aStr, *pPattern, pCondSet, *mpDoc, mnTab,
                                 bNumberFormatIsText);
                         aParam.meHorJustResult = (aParam.meHorJustAttr == SvxCellHorJustify::Block) ?
                                 SvxCellHorJustify::Block : aParam.meHorJustContext;

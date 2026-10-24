@@ -769,6 +769,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/operation/UpdatePivotTableOperation \
     sc/source/ui/pagedlg/areasdlg \
     sc/source/ui/pagedlg/tphfedit \
+    sc/source/ui/primitive/CellTextAlignment \
     sc/source/ui/sidebar/AlignmentPropertyPanel \
     sc/source/ui/sidebar/CellLineStyleControl \
     sc/source/ui/sidebar/CellAppearancePropertyPanel \
