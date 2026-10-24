@@ -769,8 +769,12 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
     sc/source/ui/operation/UpdatePivotTableOperation \
     sc/source/ui/pagedlg/areasdlg \
     sc/source/ui/pagedlg/tphfedit \
+    sc/source/ui/primitive/CellMarkPrimitive2D \
     sc/source/ui/primitive/CellTextAlignment \
     sc/source/ui/primitive/CellTextFit \
+    sc/source/ui/primitive/CellTextPrimitive2D \
+    sc/source/ui/primitive/GridCoverPrimitive2D \
+    sc/source/ui/primitive/SparklinePrimitive2D \
     sc/source/ui/sidebar/AlignmentPropertyPanel \
     sc/source/ui/sidebar/CellLineStyleControl \
     sc/source/ui/sidebar/CellAppearancePropertyPanel \

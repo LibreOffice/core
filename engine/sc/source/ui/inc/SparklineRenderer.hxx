@@ -14,7 +14,17 @@
 
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/range/b2drange.hxx>
+#include <drawinglayer/attribute/lineattribute.hxx>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <drawinglayer/primitive2d/maskprimitive2d.hxx>
+#include <drawinglayer/primitive2d/PolygonStrokePrimitive2D.hxx>
+#include <drawinglayer/primitive2d/PolyPolygonColorPrimitive2D.hxx>
+#include <drawinglayer/processor2d/baseprocessor2d.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
+#include <vcl/outdev.hxx>
 
 #include <Sparkline.hxx>
 #include <SparklineGroup.hxx>
@@ -231,13 +241,16 @@ public:
     }
 };
 
-/** Render a provided sparkline into the input rectangle */
+/** Render a sparkline into the rectangle, as primitives in the units of the rectangle. The
+    one-pixel sizes give one device pixel in those units, and the scale grows the line widths and
+    the markers with the zoom.
+ */
 class SparklineRenderer
 {
 private:
     ScDocument& mrDocument;
-    tools::Long mnOneX;
-    tools::Long mnOneY;
+    double mfOneX;
+    double mfOneY;
 
     double mfScaleX;
     double mfScaleY;
@@ -246,16 +259,31 @@ private:
                       Color const& rColor)
     {
         auto& rMarker = rMarkers.emplace_back();
-        const double nHalfSizeX = mnOneX * 2 * mfScaleX;
-        const double nHalfSizeY = mnOneY * 2 * mfScaleY;
+        const double nHalfSizeX = mfOneX * 2 * mfScaleX;
+        const double nHalfSizeY = mfOneY * 2 * mfScaleY;
         basegfx::B2DRectangle aRectangle(std::round(x - nHalfSizeX), std::round(y - nHalfSizeY),
                                          std::round(x + nHalfSizeX), std::round(y + nHalfSizeY));
         rMarker.maPolygon = basegfx::utils::createPolygonFromRect(aRectangle);
         rMarker.maColor = rColor;
     }
 
-    void drawLine(vcl::RenderContext& rRenderContext, tools::Rectangle const& rRectangle,
-                  SparklineValues const& rSparklineValues,
+    static drawinglayer::primitive2d::Primitive2DReference
+    createLine(basegfx::B2DPolygon const& rPolygon, Color const& rColor, double fWidth,
+               basegfx::B2DLineJoin eJoin = basegfx::B2DLineJoin::Round)
+    {
+        return new drawinglayer::primitive2d::PolygonStrokePrimitive2D(
+            rPolygon, drawinglayer::attribute::LineAttribute(rColor.getBColor(), fWidth, eJoin));
+    }
+
+    static drawinglayer::primitive2d::Primitive2DReference
+    createFill(basegfx::B2DPolygon const& rPolygon, Color const& rColor)
+    {
+        return new drawinglayer::primitive2d::PolyPolygonColorPrimitive2D(
+            basegfx::B2DPolyPolygon(rPolygon), rColor.getBColor());
+    }
+
+    void drawLine(drawinglayer::primitive2d::Primitive2DContainer& rTarget,
+                  basegfx::B2DRange const& rRectangle, SparklineValues const& rSparklineValues,
                   sc::SparklineAttributes const& rAttributes)
     {
         double nMax = rSparklineValues.mfMaximum;
@@ -294,8 +322,8 @@ private:
                 double nValue = rSparklineValue.maValue;
 
                 double nP = (nValue - nMin) / nDelta;
-                double x = rRectangle.GetWidth() * (xStep / numberOfSteps);
-                double y = rRectangle.GetHeight() - rRectangle.GetHeight() * nP;
+                double x = rRectangle.getWidth() * (xStep / numberOfSteps);
+                double y = rRectangle.getHeight() - rRectangle.getHeight() * nP;
 
                 aPolygon.append({ x, y });
 
@@ -330,7 +358,7 @@ private:
         }
 
         basegfx::B2DHomMatrix aMatrix;
-        aMatrix.translate(rRectangle.Left(), rRectangle.Top());
+        aMatrix.translate(rRectangle.getMinX(), rRectangle.getMinY());
 
         if (rAttributes.shouldDisplayXAxis())
         {
@@ -339,75 +367,55 @@ private:
             if (nZero >= 0) // if nZero < 0, the axis is not visible
             {
                 double x1 = 0.0;
-                double x2 = double(rRectangle.GetWidth());
-                double y = rRectangle.GetHeight() - rRectangle.GetHeight() * nZero;
+                double x2 = rRectangle.getWidth();
+                double y = rRectangle.getHeight() - rRectangle.getHeight() * nZero;
 
                 basegfx::B2DPolygon aAxisPolygon;
                 aAxisPolygon.append({ x1, y });
                 aAxisPolygon.append({ x2, y });
+                aAxisPolygon.transform(aMatrix);
 
-                rRenderContext.SetLineColor(rAttributes.getColorAxis().getFinalColor());
-                rRenderContext.DrawPolyLineDirect(aMatrix, aAxisPolygon, 0.2 * mfScaleX);
+                rTarget.push_back(createLine(aAxisPolygon,
+                                             rAttributes.getColorAxis().getFinalColor(),
+                                             0.2 * mfScaleX * mfOneX));
             }
         }
 
-        rRenderContext.SetLineColor(rAttributes.getColorSeries().getFinalColor());
-
         for (auto& rPolygon : aPolygons)
         {
-            rRenderContext.DrawPolyLineDirect(aMatrix, rPolygon,
-                                              rAttributes.getLineWeight() * mfScaleX, 0.0, nullptr,
-                                              basegfx::B2DLineJoin::Round);
+            if (rPolygon.count() == 0)
+                continue;
+            rPolygon.transform(aMatrix);
+            rTarget.push_back(createLine(rPolygon, rAttributes.getColorSeries().getFinalColor(),
+                                         rAttributes.getLineWeight() * mfScaleX * mfOneX));
         }
 
         for (auto& rMarker : aMarkers)
         {
-            rRenderContext.SetLineColor(rMarker.maColor);
-            rRenderContext.SetFillColor(rMarker.maColor);
             auto& rPolygon = rMarker.maPolygon;
             rPolygon.transform(aMatrix);
-            rRenderContext.DrawPolygon(rPolygon);
+            rTarget.push_back(createFill(rPolygon, rMarker.maColor));
         }
     }
 
-    static void setFillAndLineColor(vcl::RenderContext& rRenderContext,
-                                    sc::SparklineAttributes const& rAttributes, double nValue,
-                                    size_t nValueIndex, SparklineValues const& rSparklineValues)
+    static Color getColumnColor(sc::SparklineAttributes const& rAttributes, double nValue,
+                                size_t nValueIndex, SparklineValues const& rSparklineValues)
     {
         if (rAttributes.isFirst() && nValueIndex == rSparklineValues.mnFirstIndex)
-        {
-            rRenderContext.SetLineColor(rAttributes.getColorFirst().getFinalColor());
-            rRenderContext.SetFillColor(rAttributes.getColorFirst().getFinalColor());
-        }
-        else if (rAttributes.isLast() && nValueIndex == rSparklineValues.mnLastIndex)
-        {
-            rRenderContext.SetLineColor(rAttributes.getColorLast().getFinalColor());
-            rRenderContext.SetFillColor(rAttributes.getColorLast().getFinalColor());
-        }
-        else if (rAttributes.isHigh() && nValue == rSparklineValues.mfMaximum)
-        {
-            rRenderContext.SetLineColor(rAttributes.getColorHigh().getFinalColor());
-            rRenderContext.SetFillColor(rAttributes.getColorHigh().getFinalColor());
-        }
-        else if (rAttributes.isLow() && nValue == rSparklineValues.mfMinimum)
-        {
-            rRenderContext.SetLineColor(rAttributes.getColorLow().getFinalColor());
-            rRenderContext.SetFillColor(rAttributes.getColorLow().getFinalColor());
-        }
-        else if (rAttributes.isNegative() && nValue < 0.0)
-        {
-            rRenderContext.SetLineColor(rAttributes.getColorNegative().getFinalColor());
-            rRenderContext.SetFillColor(rAttributes.getColorNegative().getFinalColor());
-        }
-        else
-        {
-            rRenderContext.SetLineColor(rAttributes.getColorSeries().getFinalColor());
-            rRenderContext.SetFillColor(rAttributes.getColorSeries().getFinalColor());
-        }
+            return rAttributes.getColorFirst().getFinalColor();
+        if (rAttributes.isLast() && nValueIndex == rSparklineValues.mnLastIndex)
+            return rAttributes.getColorLast().getFinalColor();
+        if (rAttributes.isHigh() && nValue == rSparklineValues.mfMaximum)
+            return rAttributes.getColorHigh().getFinalColor();
+        if (rAttributes.isLow() && nValue == rSparklineValues.mfMinimum)
+            return rAttributes.getColorLow().getFinalColor();
+        if (rAttributes.isNegative() && nValue < 0.0)
+            return rAttributes.getColorNegative().getFinalColor();
+        return rAttributes.getColorSeries().getFinalColor();
     }
 
-    void drawColumn(vcl::RenderContext& rRenderContext, tools::Rectangle const& rRectangle,
-                    SparklineValues const& rSparklineValues,
+    void drawColumn(drawinglayer::primitive2d::Primitive2DContainer& rTarget,
+                    basegfx::B2DRange const& rRectangle, SparklineValues const& rSparklineValues,
                     sc::SparklineAttributes const& rAttributes)
     {
         double nMax = rSparklineValues.mfMaximum;
@@ -428,35 +436,37 @@ private:
 
         basegfx::B2DPolygon aPolygon;
         basegfx::B2DHomMatrix aMatrix;
-        aMatrix.translate(rRectangle.Left(), rRectangle.Top());
+        aMatrix.translate(rRectangle.getMinX(), rRectangle.getMinY());
 
         double xStep = 0;
         double numberOfSteps = rValueList.size();
 
-        double nColumnSize = rRectangle.GetWidth() / numberOfSteps;
+        double nColumnSize = rRectangle.getWidth() / numberOfSteps;
         nColumnSize = nColumnSize - (nColumnSize * 0.3);
 
         double nZero = (0 - nMin) / nDelta;
         double nZeroPosition = 0.0;
         if (nZero >= 0)
         {
-            nZeroPosition = rRectangle.GetHeight() - rRectangle.GetHeight() * nZero;
+            nZeroPosition = rRectangle.getHeight() - rRectangle.getHeight() * nZero;
 
             if (rAttributes.shouldDisplayXAxis())
             {
                 double x1 = 0.0;
-                double x2 = double(rRectangle.GetWidth());
+                double x2 = rRectangle.getWidth();
 
                 basegfx::B2DPolygon aAxisPolygon;
                 aAxisPolygon.append({ x1, nZeroPosition });
                 aAxisPolygon.append({ x2, nZeroPosition });
+                aAxisPolygon.transform(aMatrix);
 
-                rRenderContext.SetLineColor(rAttributes.getColorAxis().getFinalColor());
-                rRenderContext.DrawPolyLineDirect(aMatrix, aAxisPolygon, 0.2 * mfScaleX);
+                rTarget.push_back(createLine(aAxisPolygon,
+                                             rAttributes.getColorAxis().getFinalColor(),
+                                             0.2 * mfScaleX * mfOneX));
             }
         }
         else
-            nZeroPosition = rRectangle.GetHeight();
+            nZeroPosition = rRectangle.getHeight();
 
         size_t nValueIndex = 0;
 
@@ -466,18 +476,16 @@ private:
 
             if (nValue != 0.0)
             {
-                setFillAndLineColor(rRenderContext, rAttributes, nValue, nValueIndex,
-                                    rSparklineValues);
-
                 double nP = (nValue - nMin) / nDelta;
-                double x = rRectangle.GetWidth() * (xStep / numberOfSteps);
-                double y = rRectangle.GetHeight() - rRectangle.GetHeight() * nP;
+                double x = rRectangle.getWidth() * (xStep / numberOfSteps);
+                double y = rRectangle.getHeight() - rRectangle.getHeight() * nP;
 
                 basegfx::B2DRectangle aRectangle(x, y, x + nColumnSize, nZeroPosition);
                 aPolygon = basegfx::utils::createPolygonFromRect(aRectangle);
 
                 aPolygon.transform(aMatrix);
-                rRenderContext.DrawPolygon(aPolygon);
+                rTarget.push_back(createFill(
+                    aPolygon, getColumnColor(rAttributes, nValue, nValueIndex, rSparklineValues)));
             }
             xStep++;
             nValueIndex++;
@@ -493,36 +501,36 @@ private:
 public:
     SparklineRenderer(ScDocument& rDocument)
         : mrDocument(rDocument)
-        , mnOneX(1)
-        , mnOneY(1)
+        , mfOneX(1.0)
+        , mfOneY(1.0)
         , mfScaleX(1.0)
         , mfScaleY(1.0)
     {
     }
 
-    void render(std::shared_ptr<sc::Sparkline> const& pSparkline,
-                vcl::RenderContext& rRenderContext, tools::Rectangle const& rRectangle,
-                tools::Long nOneX, tools::Long nOneY, double fScaleX, double fScaleY)
+    /// The primitives of the sparkline in rRectangle, clipped to it, with a six pixel free border.
+    drawinglayer::primitive2d::Primitive2DContainer
+    createPrimitives(std::shared_ptr<sc::Sparkline> const& pSparkline,
+                     basegfx::B2DRange const& rRectangle, double fOneX, double fOneY,
+                     double fScaleX, double fScaleY)
     {
-        auto popIt = rRenderContext.ScopedPush();
-
-        rRenderContext.SetAntialiasing(AntialiasingFlags::Enable);
-        rRenderContext.SetClipRegion(vcl::Region(rRectangle));
-
-        tools::Rectangle aOutputRectangle(rRectangle);
-        aOutputRectangle.shrink(6); // provide border
-
-        mnOneX = nOneX;
-        mnOneY = nOneY;
+        mfOneX = fOneX;
+        mfOneY = fOneY;
         mfScaleX = fScaleX;
         mfScaleY = fScaleY;
 
         auto const& rRangeList = pSparkline->getInputRange();
 
         if (rRangeList.empty())
-        {
-            return;
-        }
+            return drawinglayer::primitive2d::Primitive2DContainer();
+
+        // A border of six pixels is kept free inside the rectangle.
+        const double fBorder = 6 * fOneX;
+        if (rRectangle.getWidth() <= 2 * fBorder || rRectangle.getHeight() <= 2 * fBorder)
+            return drawinglayer::primitive2d::Primitive2DContainer();
+        const basegfx::B2DRange aOutputRectangle(
+            rRectangle.getMinX() + fBorder, rRectangle.getMinY() + fBorder,
+            rRectangle.getMaxX() - fBorder, rRectangle.getMaxY() - fBorder);
 
         auto pSparklineGroup = pSparkline->getSparklineGroup();
         auto const& rAttributes = pSparklineGroup->getAttributes();
@@ -562,22 +570,56 @@ public:
         if (rAttributes.isRightToLeft())
             aSparklineValues.reverse();
 
+        drawinglayer::primitive2d::Primitive2DContainer aContent;
         if (rAttributes.getType() == sc::SparklineType::Column)
         {
-            drawColumn(rRenderContext, aOutputRectangle, aSparklineValues,
+            drawColumn(aContent, aOutputRectangle, aSparklineValues,
                        pSparklineGroup->getAttributes());
         }
         else if (rAttributes.getType() == sc::SparklineType::Stacked)
         {
             aSparklineValues.convertToStacked();
-            drawColumn(rRenderContext, aOutputRectangle, aSparklineValues,
+            drawColumn(aContent, aOutputRectangle, aSparklineValues,
                        pSparklineGroup->getAttributes());
         }
         else if (rAttributes.getType() == sc::SparklineType::Line)
         {
-            drawLine(rRenderContext, aOutputRectangle, aSparklineValues,
+            drawLine(aContent, aOutputRectangle, aSparklineValues,
                      pSparklineGroup->getAttributes());
         }
+
+        if (aContent.empty())
+            return drawinglayer::primitive2d::Primitive2DContainer();
+
+        drawinglayer::primitive2d::Primitive2DContainer aClipped{
+            new drawinglayer::primitive2d::MaskPrimitive2D(
+                basegfx::B2DPolyPolygon(basegfx::utils::createPolygonFromRect(rRectangle)),
+                std::move(aContent))
+        };
+        return aClipped;
+    }
+
+    void render(std::shared_ptr<sc::Sparkline> const& pSparkline,
+                vcl::RenderContext& rRenderContext, tools::Rectangle const& rRectangle,
+                tools::Long nOneX, tools::Long nOneY, double fScaleX, double fScaleY)
+    {
+        const basegfx::B2DRange aRange(rRectangle.Left(), rRectangle.Top(),
+                                       rRectangle.Left() + rRectangle.GetWidth(),
+                                       rRectangle.Top() + rRectangle.GetHeight());
+        drawinglayer::primitive2d::Primitive2DContainer aPrimitives
+            = createPrimitives(pSparkline, aRange, nOneX, nOneY, fScaleX, fScaleY);
+        if (aPrimitives.empty())
+            return;
+
+        auto popIt = rRenderContext.ScopedPush();
+        rRenderContext.SetAntialiasing(AntialiasingFlags::Enable);
+
+        drawinglayer::geometry::ViewInformation2D aViewInformation;
+        aViewInformation.setViewTransformation(rRenderContext.GetViewTransformation());
+        std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
+            drawinglayer::processor2d::createProcessor2DFromOutputDevice(rRenderContext,
+                                                                         aViewInformation));
+        pProcessor->process(aPrimitives);
     }
 };
 }
