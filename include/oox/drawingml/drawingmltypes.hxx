@@ -30,11 +30,14 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/TabAlign.hpp>
 #include <com/sun/star/uno/Reference.hxx>
+#include <basegfx/numeric/ftools.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <docmodel/theme/FormatScheme.hxx>
 #include <oox/dllapi.h>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
+#include <svx/svdtrans.hxx>
+#include <tools/degree.hxx>
 
 namespace com::sun::star {
     namespace drawing { struct Hatch; }
@@ -175,6 +178,15 @@ inline OString calcRotationValue(sal_Int32 nRotation)
     }
     nRotation *= -600;
     return OString::number(nRotation);
+}
+
+/**
+ * Converts a drawingML rotation, in 60000ths of a degree clockwise,
+ * to a RotateAngle value : 100ths of a degree, counter-clockwise,
+ * rounded to the nearest 100th and normalized to 0..35999. */
+inline Degree100 MSORotateAngleToAPIAngle(sal_Int32 nMSORotationAngle)
+{
+    return NormAngle36000(-Degree100(basegfx::fround(nMSORotationAngle / 600.0)));
 }
 
 /** Converts the passed 32-bit integer value from 1/100 mm to EMUs. */

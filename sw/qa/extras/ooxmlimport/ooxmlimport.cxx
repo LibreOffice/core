@@ -1225,10 +1225,15 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo75722dml)
 
     // a slight difference regarding vml file is tolerated due to rounding errors
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3720), aPos.X);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(-397), aPos.Y);
+    // The exact top is -225.3 twips (-397.4). Writer rotates the shape while its internal
+    // rectangle is still one twip too small, so it turns around a center that is one twip off,
+    // and the top ends at -226 twips (-399).
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-399), aPos.Y);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(5457), aSize.Width);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(3447), aSize.Height);
-    CPPUNIT_ASSERT_EQUAL(sal_Int64(3128), nRot);
+    // The file has rot="-1877111", which is nearer to 31.29 degrees than to 31.28.
+    // (-1877111/60000 = -31.2852 degrees ccw, 31.2852 cw)
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(3129), nRot);
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testUnbalancedColumnsCompat)
