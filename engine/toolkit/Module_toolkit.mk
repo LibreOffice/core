@@ -31,4 +31,8 @@ $(eval $(call gb_Module_add_check_targets,toolkit,\
 ))
 endif
 
+$(eval $(call gb_Module_add_check_targets,toolkit,\
+    CppunitTest_toolkit_complex \
+))
+
 # vim: set noet sw=4 ts=4:
