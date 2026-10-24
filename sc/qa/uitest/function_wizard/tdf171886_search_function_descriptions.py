@@ -16,7 +16,7 @@ class tdf171886(UITestCase):
             with self.ui_test.execute_modeless_dialog_through_command(".uno:FunctionDialog") as xDialog:
                 xFunctions = xDialog.getChild("function")
 
-                # Select the All category and search for "k-th"
+                # Select the "All" category and search for "k-th"
                 select_pos(xDialog.getChild("category"), "2")
                 type_text(xDialog.getChild("search"), "k-th")
                 # Category "Text" with function "T" is shown
@@ -25,7 +25,7 @@ class tdf171886(UITestCase):
                 # Search also in the descriptions of the functions
                 xSearchOptions = xDialog.getChild("searchoptions")
                 xSearchOptions.executeAction("OPENFROMLIST", mkPropertyValues({"POS": "1"}))
-                # In addtion, category "Statistical" with functions "LARGE" and "SMALL" are shown
+                # In addition, category "Statistical" with functions "LARGE" and "SMALL" are shown
                 self.assertEqual("5", get_state_as_dict(xFunctions)["Children"])
 
                 # Disable the search in the descriptions of the functions again
