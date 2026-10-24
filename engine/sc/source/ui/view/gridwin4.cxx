@@ -33,6 +33,7 @@
 #include <sfx2/printer.hxx>
 #include <vcl/cursor.hxx>
 #include <vcl/settings.hxx>
+#include <o3tl/string_view.hxx>
 #include <o3tl/unit_conversion.hxx>
 #include <osl/diagnose.h>
 #include <tools/UnitConversion.hxx>
@@ -44,6 +45,11 @@
 #include <sfx2/kit/componenthelpers.hxx>
 #include <officecfg/Office/Calc.hxx>
 
+#include <basegfx/matrix/b2dhommatrixtools.hxx>
+#include <drawinglayer/geometry/viewinformation2d.hxx>
+#include <drawinglayer/primitive2d/transformprimitive2d.hxx>
+#include <drawinglayer/processor2d/baseprocessor2d.hxx>
+#include <drawinglayer/processor2d/processor2dtools.hxx>
 #include <svx/svdview.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/sdrpagewindow.hxx>
@@ -58,6 +64,8 @@
 #include <viewdata.hxx>
 #include <output.hxx>
 #include <document.hxx>
+#include <CellGeometry.hxx>
+#include <CellPrimitiveBuilder.hxx>
 #include <dociter.hxx>
 #include <attrib.hxx>
 #include <patattr.hxx>
@@ -190,6 +198,47 @@ static void lcl_DrawOneFrame( vcl::RenderContext* pDev, const tools::Rectangle& 
     pDev->SetLineColor( COL_BLACK );
     pDev->DrawRect( aInner );
     pDev->DrawRect( aOuter );
+}
+
+namespace
+{
+/// The paint steps of a tile that the cell primitive builder draws in place of ScOutputData.
+struct PrimitiveTileSteps
+{
+    bool mbBackground = false;
+    bool mbBorders = false;
+    bool mbSparklines = false;
+    bool mbText = false;
+
+    bool any() const { return mbBackground || mbBorders || mbSparklines || mbText; }
+};
+
+/// SC_PRIMITIVE_TILES lists the steps, comma separated: background, borders, sparklines, text, all.
+/// The variable is read for each tile, so a change of it applies to the next tile painted.
+PrimitiveTileSteps primitiveTileSteps()
+{
+    PrimitiveTileSteps aRead;
+    const char* pValue = getenv("SC_PRIMITIVE_TILES");
+    if (!pValue)
+        return aRead;
+
+    std::string_view aValue(pValue);
+    sal_Int32 nIndex = 0;
+    do
+    {
+        const std::string_view aStep = o3tl::trim(o3tl::getToken(aValue, 0, ',', nIndex));
+        const bool bAll = aStep == "all";
+        if (bAll || aStep == "background")
+            aRead.mbBackground = true;
+        if (bAll || aStep == "borders")
+            aRead.mbBorders = true;
+        if (bAll || aStep == "sparklines")
+            aRead.mbSparklines = true;
+        if (bAll || aStep == "text")
+            aRead.mbText = true;
+    } while (nIndex >= 0);
+    return aRead;
+}
 }
 
 static void lcl_DrawScenarioFrames( OutputDevice* pDev, ScViewData& rViewData, ScSplitPos eWhich,
@@ -918,6 +967,61 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
     aOutputData.DrawDocumentBackground();
 
+    // Tile painting can take single steps from the cell primitive builder, which rounds twips to
+    // whole tile pixels to line up with ScOutputData. Right-to-left sheets keep ScOutputData,
+    // because the tile bitmap is mirrored after painting.
+    const PrimitiveTileSteps aPrimitiveSteps
+        = bIsTiledRendering && !bLayoutRTL ? primitiveTileSteps() : PrimitiveTileSteps();
+    sc::CellPrimitiveLayers aPrimitiveLayers;
+    if (aPrimitiveSteps.any())
+    {
+        const sc::CellGeometry aGeometry(rDoc, nViewTab, nX1, nY1, aOutputData.mnPPTX,
+                                         aOutputData.mnPPTY);
+        sc::CellPrimitiveSettings aSettings;
+        aSettings.mbShowFormulas = aOutputData.mbShowFormulas;
+        aSettings.mbShowNullValues = aOutputData.mbShowNullValues;
+        // ScOutputData keeps the marks and buttons, except the clip marks from the text layout.
+        aSettings.mbFormulaMarks = false;
+        aSettings.mbFormulaErrorMarks = false;
+        aSettings.mbButtons = false;
+        aSettings.mbClipMarks = aPrimitiveSteps.mbText && aOutputData.mbMarkClipped;
+        aSettings.mbTextFromOutside = true;
+        aSettings.mfPixelSize = 1.0 / aOutputData.mnPPTX;
+        aSettings.maDocumentColor = rColorCfg.GetColorValue(svtools::DOCCOLOR).nColor;
+        aSettings.maFontColor = rColorCfg.GetColorValue(svtools::FONTCOLOR).nColor;
+        aSettings.maClipMarkColor = rColorCfg.GetColorValue(svtools::CALCTEXTOVERFLOW).nColor;
+        if (aOutputData.mbEditMode)
+            aSettings.moSkipCell
+                = ScAddress(aOutputData.mnEditCol, aOutputData.mnEditRow, nViewTab);
+        sc::CellPrimitiveBuilder aBuilder(rDoc, nViewTab, aGeometry, std::move(aSettings));
+        aPrimitiveLayers = aBuilder.build(nX1, nY1, nX2, nY2);
+    }
+
+    // Draw a builder layer in tile pixels. The shift matches ScOutputData, which draws borders on
+    // the pixel before the first pixel of a cell and fills from the pixel above it.
+    auto drawPrimitives = [&](const drawinglayer::primitive2d::Primitive2DContainer& rPrimitives,
+                              double fShiftX, double fShiftY)
+    {
+        if (rPrimitives.empty())
+            return;
+
+        const MapMode aOldMode(pContentDev->GetMapMode());
+        pContentDev->SetMapMode(MapMode(MapUnit::MapPixel));
+        const drawinglayer::primitive2d::Primitive2DContainer aPlaced{
+            new drawinglayer::primitive2d::TransformPrimitive2D(
+                basegfx::utils::createScaleTranslateB2DHomMatrix(
+                    aOutputData.mnPPTX, aOutputData.mnPPTY, nScrX + fShiftX, nScrY + fShiftY),
+                drawinglayer::primitive2d::Primitive2DContainer(rPrimitives))
+        };
+        drawinglayer::geometry::ViewInformation2D aViewInformation;
+        aViewInformation.setViewTransformation(pContentDev->GetViewTransformation());
+        std::unique_ptr<drawinglayer::processor2d::BaseProcessor2D> pProcessor(
+            drawinglayer::processor2d::createProcessor2DFromOutputDevice(*pContentDev,
+                                                                         aViewInformation));
+        pProcessor->process(aPlaced);
+        pContentDev->SetMapMode(aOldMode);
+    };
+
     if (bGridFirst && (bGrid || bPage))
     {
         // Draw lines in background color cover over Kit client grid lines in merged cell areas if bNoBackgroundAndGrid is set.
@@ -927,7 +1031,10 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
             aOutputData.DrawGrid(*pContentDev, bGrid, bPage);
     }
 
-    aOutputData.DrawBackground(*pContentDev);
+    if (aPrimitiveSteps.mbBackground)
+        drawPrimitives(aPrimitiveLayers.maBackground, 0.0, -1.0);
+    else
+        aOutputData.DrawBackground(*pContentDev);
 
     if (!bGridFirst && (bGrid || bPage) && !bNoBackgroundAndGrid)
         aOutputData.DrawGrid(*pContentDev, bGrid, bPage);
@@ -960,10 +1067,18 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     if (bIsTiledRendering)
         pContentDev->SetMapMode(MapMode(MapUnit::MapPixel));
 
-    aOutputData.DrawShadow();
-    aOutputData.DrawFrame(*pContentDev);
+    if (aPrimitiveSteps.mbBorders)
+        drawPrimitives(aPrimitiveLayers.maBorders, -1.0, -1.0);
+    else
+    {
+        aOutputData.DrawShadow();
+        aOutputData.DrawFrame(*pContentDev);
+    }
 
-    aOutputData.DrawSparklines(*pContentDev);
+    if (aPrimitiveSteps.mbSparklines)
+        drawPrimitives(aPrimitiveLayers.maExtras, 0.0, 0.0);
+    else
+        aOutputData.DrawSparklines(*pContentDev);
 
     if ( rOpts.GetOption(sc::ViewOption::FORMULAS_MARKS) )
         aOutputData.DrawFormulaMarks(*pContentDev);
@@ -977,9 +1092,14 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
     // (DataPilot buttons contain labels in UI font)
 
     pContentDev->SetMapMode(mrViewData.GetLogicMode(eWhich));
-    if ( bLogicText )
-        aOutputData.DrawStrings(true);      // in logic MapMode if bLogicText is set
-    aOutputData.DrawEdit(true);
+    if (aPrimitiveSteps.mbText)
+        drawPrimitives(aPrimitiveLayers.maText, 0.0, 0.0);
+    else
+    {
+        if ( bLogicText )
+            aOutputData.DrawStrings(true);      // in logic MapMode if bLogicText is set
+        aOutputData.DrawEdit(true);
+    }
 
     // the buttons are painted in absolute coordinates
     if (bIsTiledRendering)
@@ -1003,7 +1123,10 @@ void ScGridWindow::DrawContent(OutputDevice &rDevice, const ScTableInfo& rTableI
 
     pContentDev->SetMapMode(MapMode(MapUnit::MapPixel));
 
-    aOutputData.DrawClipMarks();
+    if (aPrimitiveSteps.mbText)
+        drawPrimitives(aPrimitiveLayers.maMarks, 0.0, 0.0);
+    else
+        aOutputData.DrawClipMarks();
 
     // In any case, Scenario / ChangeTracking must happen after DrawGrid, also for !bGridFirst
 
