@@ -90,6 +90,13 @@
 #include <vcl/ITiledRenderable.hxx>
 #include <svx/ColorSets.hxx>
 #include <svx/svxids.hrc>
+#include <svx/svdobj.hxx>
+#include <svx/svdpage.hxx>
+#include <svx/svdpagv.hxx>
+#include <svx/svdsob.hxx>
+#include <svx/svdview.hxx>
+#include <basegfx/matrix/b2dhommatrix.hxx>
+#include <basegfx/polygon/b2dpolypolygon.hxx>
 
 #include <cppunit/TestAssert.h>
 #include <vcl/BitmapTools.hxx>
@@ -320,6 +327,8 @@ public:
     void testNotebookbarAfterViewClosedEarly();
     void testGetInsertableFileWildcards();
     void testInsertFiles();
+    void testObjectCommandsLeaveAReadOnlyViewAlone();
+    void testObjectCommandsKeepTheObjectsProtection();
 
     CPPUNIT_TEST_SUITE(DesktopKitTest);
     CPPUNIT_TEST(testGetStyles);
@@ -442,6 +451,8 @@ public:
     CPPUNIT_TEST(testNotebookbarAfterViewClosedEarly);
     CPPUNIT_TEST(testGetInsertableFileWildcards);
     CPPUNIT_TEST(testInsertFiles);
+    CPPUNIT_TEST(testObjectCommandsLeaveAReadOnlyViewAlone);
+    CPPUNIT_TEST(testObjectCommandsKeepTheObjectsProtection);
     CPPUNIT_TEST_SUITE_END();
 
     OString m_aTextSelection;
@@ -6038,6 +6049,93 @@ void DesktopKitTest::testNotebookbarAfterViewClosedEarly()
     CPPUNIT_ASSERT_MESSAGE("a later view gets its notebookbar", aView3.m_nNotebookbarMessages > 0);
     CPPUNIT_ASSERT_MESSAGE("the later view's notebookbar has its own item windows",
                            aView3.m_bNotebookbarHasOwnFontNameBox);
+}
+
+namespace
+{
+// The mapping of an object in the form setObjectTransform takes, in twips, moved along the page by
+// fDeltaX and with its width multiplied by fTimesWider.
+OString mappingOf(const SdrObject& rObject, double fDeltaX, double fTimesWider)
+{
+    basegfx::B2DHomMatrix aMapping;
+    basegfx::B2DPolyPolygon aOutline;
+    rObject.TRGetBaseGeometry(aMapping, aOutline);
+    const double fToTwips(o3tl::convert(1.0, o3tl::Length::mm100, o3tl::Length::twip));
+    return OString::number(rObject.GetUniqueID()) + ","
+           + OString::number(aMapping.get(0, 0) * fTimesWider * fToTwips) + ","
+           + OString::number(aMapping.get(1, 0) * fTimesWider * fToTwips) + ","
+           + OString::number(aMapping.get(0, 1) * fToTwips) + ","
+           + OString::number(aMapping.get(1, 1) * fToTwips) + ","
+           + OString::number(aMapping.get(0, 2) * fToTwips + fDeltaX) + ","
+           + OString::number(aMapping.get(1, 2) * fToTwips);
+}
+
+// The first object of the page the current view shows.
+SdrObject* firstObjectOfThePage(SdrPageView*& rpPageView)
+{
+    SfxViewShell* pViewShell = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pViewShell);
+    SdrView* pView = pViewShell->GetDrawView();
+    CPPUNIT_ASSERT(pView);
+    rpPageView = pView->GetSdrPageView();
+    CPPUNIT_ASSERT(rpPageView);
+    SdrObject* pObject = rpPageView->GetPage()->GetObj(0);
+    CPPUNIT_ASSERT(pObject);
+    return pObject;
+}
+}
+
+void DesktopKitTest::testObjectCommandsLeaveAReadOnlyViewAlone()
+{
+    COKitDocumentImpl* pDocument = loadDoc("2slides.odp");
+    pDocument->initializeForRendering("{}");
+    SdrPageView* pPageView = nullptr;
+    SdrObject* pObject = firstObjectOfThePage(pPageView);
+    const tools::Rectangle aWas(pObject->GetSnapRect());
+    const OString aMoved(mappingOf(*pObject, 1000.0, 1.0));
+
+    // A view that cannot edit leaves the object where it is.
+    KitHelper::setViewReadOnly(pDocument->getView(), true);
+    pDocument->setObjectTransform(aMoved.getStr(), "move");
+    CPPUNIT_ASSERT_EQUAL(aWas, pObject->GetSnapRect());
+
+    // The same mapping moves the object once the view edits again.
+    KitHelper::setViewReadOnly(pDocument->getView(), false);
+    pDocument->setObjectTransform(aMoved.getStr(), "move");
+    CPPUNIT_ASSERT(pObject->GetSnapRect().Left() > aWas.Left());
+}
+
+void DesktopKitTest::testObjectCommandsKeepTheObjectsProtection()
+{
+    COKitDocumentImpl* pDocument = loadDoc("2slides.odp");
+    pDocument->initializeForRendering("{}");
+    SdrPageView* pPageView = nullptr;
+    SdrObject* pObject = firstObjectOfThePage(pPageView);
+    const tools::Rectangle aWas(pObject->GetSnapRect());
+
+    // An object whose place is held fast stays where it is.
+    pObject->SetMoveProtect(true);
+    pDocument->setObjectTransform(mappingOf(*pObject, 1000.0, 1.0).getStr(), "move");
+    CPPUNIT_ASSERT_EQUAL(aWas, pObject->GetSnapRect());
+    pObject->SetMoveProtect(false);
+
+    // An object whose size is held fast keeps its size.
+    pObject->SetResizeProtect(true);
+    pDocument->setObjectTransform(mappingOf(*pObject, 0.0, 2.0).getStr(), "scale");
+    CPPUNIT_ASSERT_EQUAL(aWas, pObject->GetSnapRect());
+    pObject->SetResizeProtect(false);
+
+    // An object on a layer the view has locked is left as it is, as a press on it would.
+    SdrLayerIDSet aLocked;
+    aLocked.Set(pObject->GetLayer());
+    pPageView->SetLockedLayers(aLocked);
+    pDocument->setObjectTransform(mappingOf(*pObject, 1000.0, 1.0).getStr(), "move");
+    CPPUNIT_ASSERT_EQUAL(aWas, pObject->GetSnapRect());
+    pPageView->SetLockedLayers(SdrLayerIDSet());
+
+    // With nothing holding it, the same mapping makes the object wider.
+    pDocument->setObjectTransform(mappingOf(*pObject, 0.0, 2.0).getStr(), "scale");
+    CPPUNIT_ASSERT(pObject->GetSnapRect().GetWidth() > aWas.GetWidth());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(DesktopKitTest);

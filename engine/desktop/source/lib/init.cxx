@@ -6859,6 +6859,20 @@ static void lcl_makeTheCurveRunThatWay(basegfx::B2DPolygon& rPolygon, sal_uInt32
 }
 
 /*
+    Whether a command that names an object reaches it from this view, as a press on it would: the
+    object is one the view can mark, so one on a locked or a hidden layer, or held against being
+    marked, is left as it is. Sets the message for a command that does not reach it.
+*/
+static bool lcl_viewReaches(const SdrPageView& rPageView, const SdrObject& rObject)
+{
+    if (rPageView.IsObjMarkable(&rObject))
+        return true;
+
+    SetLastExceptionMsg(u"The object is not one this view changes"_ustr);
+    return false;
+}
+
+/*
     Moves points of the path an object is drawn along. A client that draws the document from the
     objects it holds edits the path it was given and says what moved, so a path of many thousand
     points travels neither way and nothing that was not touched can change.
@@ -6876,6 +6890,9 @@ void COKitDocumentImpl::setObjectPoints(unsigned long long nObjectId,
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
+    if (SfxViewShell::IsCurrentKitViewReadOnly())
+        return;
+
     SfxViewShell* pViewShell = SfxViewShell::Current();
     SdrView* pView = pViewShell ? pViewShell->GetDrawView() : nullptr;
     SdrPageView* pPageView = pView ? pView->GetSdrPageView() : nullptr;
@@ -6892,6 +6909,16 @@ void COKitDocumentImpl::setObjectPoints(unsigned long long nObjectId,
     if (!pPathObject)
     {
         SetLastExceptionMsg(u"No object of that id is drawn along a path"_ustr);
+        return;
+    }
+
+    if (!lcl_viewReaches(*pPageView, *pPathObject))
+        return;
+
+    // A point moved changes the path's size, which the office's own view holds to the same rule.
+    if (pPathObject->IsResizeProtect())
+    {
+        SetLastExceptionMsg(u"The object is held against being changed"_ustr);
         return;
     }
 
@@ -7074,6 +7101,9 @@ void COKitDocumentImpl::setObjectGluePoint(unsigned long long nObjectId, int nAt
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
+    if (SfxViewShell::IsCurrentKitViewReadOnly())
+        return;
+
     SfxViewShell* pViewShell = SfxViewShell::Current();
     SdrView* pView = pViewShell ? pViewShell->GetDrawView() : nullptr;
     SdrPageView* pPageView = pView ? pView->GetSdrPageView() : nullptr;
@@ -7086,6 +7116,8 @@ void COKitDocumentImpl::setObjectGluePoint(unsigned long long nObjectId, int nAt
     }
 
     SdrObject* pObject = pPage->FindObjectByUniqueID(nObjectId);
+    if (pObject && !lcl_viewReaches(*pPageView, *pObject))
+        return;
     SdrGluePointList* pGluePoints = pObject ? pObject->ForceGluePointList() : nullptr;
 
     if (!pGluePoints || nAt < 0 || nAt >= static_cast<int>(pGluePoints->GetCount()))
@@ -7145,6 +7177,9 @@ void COKitDocumentImpl::setObjectTransform(const char* pMappings,
 
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
+
+    if (SfxViewShell::IsCurrentKitViewReadOnly())
+        return;
 
     SfxViewShell* pViewShell = SfxViewShell::Current();
     SdrView* pView = pViewShell ? pViewShell->GetDrawView() : nullptr;
@@ -7284,7 +7319,11 @@ void COKitDocumentImpl::setObjectTransform(const char* pMappings,
 
         SdrObject* pObject = pAdded;
         if (!pObject && bWholeMapping)
+        {
             pObject = pPage->FindObjectByUniqueID(aId.toUInt64());
+            if (pObject && !lcl_viewReaches(*pPageView, *pObject))
+                continue;
+        }
         if (pObject && bCopy)
         {
             // an object without a copy, a connector tied to what is copied for one, is laid out
@@ -7314,13 +7353,14 @@ void COKitDocumentImpl::setObjectTransform(const char* pMappings,
         basegfx::B2DHomMatrix aReached(lcl_turnTheShearOver(aWanted));
 
         /*
-            What the object allows is asked before anything is done to it: a turn where it says
-            it cannot be turned, a mirror where it cannot be turned over, and a resize with two
-            different factors where it allows a resize in ratio only, are refused. Its place held
-            fast holds the turn and the mirror fast too, and its size held fast the shear, as the
-            office's own view has it, but for a scale past the other side, see below. The client
-            keeps to the same rules while a drag runs, so a mapping refused here is one that was
-            not meant.
+            What the object allows is asked before anything is done to it, as the office's own
+            view asks before a drag: a move where its place is held fast, a resize where its size
+            is held fast or where it allows none, a resize with two different factors where it
+            allows a resize in ratio only, a turn or a mirror where it says it cannot be turned or
+            its place is held fast, and a shear where it cannot be sheared or its size is held
+            fast, are refused, but for a scale past the other side, see below. The client keeps
+            to the same rules while a drag runs, so a mapping refused here is one that was not
+            meant.
         */
         {
             SdrObjTransformInfoRec aAllows;
@@ -7328,13 +7368,14 @@ void COKitDocumentImpl::setObjectTransform(const char* pMappings,
 
             basegfx::B2DTuple aScaleWas;
             basegfx::B2DTuple aScaleBecomes;
-            basegfx::B2DTuple aTranslate;
+            basegfx::B2DTuple aTranslateWas;
+            basegfx::B2DTuple aTranslateBecomes;
             double fRotateWas(0.0);
             double fRotateBecomes(0.0);
             double fShearWas(0.0);
             double fShearBecomes(0.0);
-            aOfTheObject.decompose(aScaleWas, aTranslate, fRotateWas, fShearWas);
-            aReached.decompose(aScaleBecomes, aTranslate, fRotateBecomes, fShearBecomes);
+            aOfTheObject.decompose(aScaleWas, aTranslateWas, fRotateWas, fShearWas);
+            aReached.decompose(aScaleBecomes, aTranslateBecomes, fRotateBecomes, fShearBecomes);
 
             bool bTurns(!basegfx::fTools::equal(
                 basegfx::normalizeToRange(fRotateWas, 2.0 * M_PI),
@@ -7363,8 +7404,45 @@ void COKitDocumentImpl::setObjectTransform(const char* pMappings,
                 bTurns = false;
                 bTurnsOver = false;
                 bShears = false;
+                aReached.decompose(aScaleBecomes, aTranslateBecomes, fRotateBecomes, fShearBecomes);
             }
 
+            // The size counts without its sign, since a mirror turns a factor over without
+            // changing the size.
+            const double fAcrossWas(std::abs(aScaleWas.getX()));
+            const double fDownWas(std::abs(aScaleWas.getY()));
+            const double fAcrossBecomes(std::abs(aScaleBecomes.getX()));
+            const double fDownBecomes(std::abs(aScaleBecomes.getY()));
+            const bool bResizes(!basegfx::fTools::equal(fAcrossWas, fAcrossBecomes, 0.5)
+                                || !basegfx::fTools::equal(fDownWas, fDownBecomes, 0.5));
+            // A resize in ratio keeps the two factors the same, where the size allows it.
+            const bool bResizesInRatio(
+                bResizes
+                && (basegfx::fTools::equalZero(fAcrossWas) || basegfx::fTools::equalZero(fDownWas)
+                    || basegfx::fTools::equal(fAcrossBecomes / fAcrossWas,
+                                              fDownBecomes / fDownWas, 0.001)));
+            const bool bMoves(
+                !basegfx::fTools::equal(aTranslateWas.getX(), aTranslateBecomes.getX(), 0.5)
+                || !basegfx::fTools::equal(aTranslateWas.getY(), aTranslateBecomes.getY(), 0.5));
+
+            // A resize moves the corner the object is placed by as well, so only a mapping that
+            // moves the object and changes nothing else counts as a move here, as the office's
+            // own view lets a resize move the corner of an object whose place is held fast.
+            if (bMoves && !bResizes && !bTurns && !bShears
+                && (!aAllows.bMoveAllowed || bPlaceHeldFast))
+            {
+                SetLastExceptionMsg(u"The object cannot be moved"_ustr);
+                SAL_WARN("sd", "setobjecttransform left the object alone: it cannot be moved");
+                continue;
+            }
+            if (bResizes
+                && (bSizeHeldFast || !aAllows.bResizePropAllowed
+                    || (!bResizesInRatio && !aAllows.bResizeFreeAllowed)))
+            {
+                SetLastExceptionMsg(u"The object cannot be resized"_ustr);
+                SAL_WARN("sd", "setobjecttransform left the object alone: it cannot be resized");
+                continue;
+            }
             if (bTurns && (!aAllows.bRotateFreeAllowed || bPlaceHeldFast))
             {
                 SetLastExceptionMsg(u"The object cannot be turned"_ustr);
@@ -7576,6 +7654,9 @@ void COKitDocumentImpl::setObjectControlPoint(unsigned long long nObjectId,
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
+    if (SfxViewShell::IsCurrentKitViewReadOnly())
+        return;
+
     SfxViewShell* pViewShell = SfxViewShell::Current();
     SdrView* pView = pViewShell ? pViewShell->GetDrawView() : nullptr;
     SdrPageView* pPageView = pView ? pView->GetSdrPageView() : nullptr;
@@ -7593,6 +7674,17 @@ void COKitDocumentImpl::setObjectControlPoint(unsigned long long nObjectId,
     if (!pShape || nAt < 0)
     {
         SetLastExceptionMsg(u"No object of that id is a shape with points to shape it by"_ustr);
+        return;
+    }
+
+    if (!lcl_viewReaches(*pPageView, *pShape))
+        return;
+
+    // A point moved reshapes the object, which the office's own view holds to the same rule as a
+    // resize.
+    if (pShape->IsResizeProtect())
+    {
+        SetLastExceptionMsg(u"The object is held against being changed"_ustr);
         return;
     }
 
@@ -7628,6 +7720,9 @@ void COKitDocumentImpl::cropObject(unsigned long long nObjectId, int nUpperLeftX
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
+    if (SfxViewShell::IsCurrentKitViewReadOnly())
+        return;
+
     SfxViewShell* pViewShell = SfxViewShell::Current();
     SdrView* pView = pViewShell ? pViewShell->GetDrawView() : nullptr;
     SdrPageView* pPageView = pView ? pView->GetSdrPageView() : nullptr;
@@ -7646,6 +7741,9 @@ void COKitDocumentImpl::cropObject(unsigned long long nObjectId, int nUpperLeftX
         SetLastExceptionMsg(u"No picture of that id is on the page"_ustr);
         return;
     }
+
+    if (!lcl_viewReaches(*pPageView, *pPicture))
+        return;
 
     if (pPicture->IsResizeProtect())
     {
@@ -7703,6 +7801,9 @@ void COKitDocumentImpl::setObjectHandle(unsigned long long nObjectId, int nKind,
     SolarMutexGuard aGuard;
     SetLastExceptionMsg();
 
+    if (SfxViewShell::IsCurrentKitViewReadOnly())
+        return;
+
     SfxViewShell* pViewShell = SfxViewShell::Current();
     SdrView* pView = pViewShell ? pViewShell->GetDrawView() : nullptr;
     SdrPageView* pPageView = pView ? pView->GetSdrPageView() : nullptr;
@@ -7721,6 +7822,12 @@ void COKitDocumentImpl::setObjectHandle(unsigned long long nObjectId, int nKind,
     {
         SetLastExceptionMsg(u"No object of that id is on the page"_ustr);
         SAL_WARN("sd", "setobjecthandle did nothing: no object of that id");
+        return;
+    }
+
+    if (!lcl_viewReaches(*pPageView, *pObject))
+    {
+        SAL_WARN("sd", "setobjecthandle did nothing: the object is not one this view changes");
         return;
     }
 
