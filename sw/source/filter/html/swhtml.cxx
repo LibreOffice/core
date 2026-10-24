@@ -2122,8 +2122,16 @@ void SwHTMLParser::NextToken( HtmlTokenId nToken )
 
     case HtmlTokenId::AREA:
         if( m_pImageMap )
+        {
+            const size_t nAreas = m_pImageMap->GetIMapObjectCount();
             ParseAreaOptions( m_pImageMap, m_sBaseURL, SvMacroItemId::OnMouseOver,
                                          SvMacroItemId::OnMouseOut );
+            if (m_pImageMap->GetIMapObjectCount() > nAreas
+                && !m_pImageMap->GetIMapObject(nAreas)->GetMacroTable().empty())
+            {
+                NotifyMacroEventRead();
+            }
+        }
         break;
 
     case HtmlTokenId::FRAMESET_ON:
