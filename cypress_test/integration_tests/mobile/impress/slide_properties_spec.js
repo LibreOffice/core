@@ -169,10 +169,6 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Changing slide properties.'
 
 		previewShouldBeFullWhite(false);
 
-		// Need to wait between background changes
-		// https://github.com/CollaboraOnline/online/issues/8096
-		cy.wait(2000);
-
 		// Remove fill
 		cy.cGet('#fillstyle').click();
 		cy.cGet('#fillstyle').contains('None').click();
@@ -193,10 +189,6 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Changing slide properties.'
 		cy.cGet('#masterslide').contains('Colored').click();
 
 		previewShouldBeFullWhite(false);
-
-		// Need to wait between background changes
-		// https://github.com/CollaboraOnline/online/issues/8096
-		cy.wait(2000);
 
 		cy.cGet('input#displaymasterbackground').should('have.prop', 'checked', true);
 		cy.cGet('input#displaymasterbackground').click();
