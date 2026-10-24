@@ -743,7 +743,12 @@ void ScTransferObj::InitDocShell(bool bLimitToPageSize)
     for (SCROW nRow = nStartY; nRow <= nEndY; ++nRow)
     {
         if ( m_pDoc->RowHidden(nRow, nSrcTab) )
+        {
             rDestDoc.ShowRow( nRow, 0, false );
+            // tdf#55870 - keep filtered state of the source to retain correct function calculation
+            if (m_pDoc->RowFiltered(nRow, nSrcTab))
+                rDestDoc.SetRowFiltered(nRow, nRow, 0, true);
+        }
         else
         {
             rDestDoc.SetRowHeight( nRow, 0, m_pDoc->GetOriginalHeight( nRow, nSrcTab ) );

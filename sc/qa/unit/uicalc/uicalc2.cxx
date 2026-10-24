@@ -23,8 +23,10 @@
 #include <vcl/gdimtf.hxx>
 #include <vcl/keycodes.hxx>
 #include <vcl/metaact.hxx>
+#include <vcl/mtfxmldump.hxx>
 #include <vcl/print.hxx>
 #include <vcl/scheduler.hxx>
+#include <vcl/transfer.hxx>
 #include <stlsheet.hxx>
 
 #include <comphelper/processfactory.hxx>
@@ -2796,6 +2798,50 @@ CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf171366)
     // - Expected: row1..row37 row38..row74 row75..row100
     // - Actual  : row1..row37 row57..row100 empty
     CPPUNIT_ASSERT_EQUAL(aFromPageStyle, aFromDialog);
+}
+
+CPPUNIT_TEST_FIXTURE(ScUiCalcTest2, testTdf55870_CopyFilteredSubtotalAsMetafile)
+{
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+
+    pDoc->SetValue(ScAddress(0, 0, 0), 1.0);
+    pDoc->SetValue(ScAddress(0, 1, 0), 2.0);
+    pDoc->SetValue(ScAddress(0, 2, 0), 4.0);
+    pDoc->SetValue(ScAddress(0, 3, 0), 8.0);
+
+    // Second row is filtered and hidden, whereas the third row is hidden only
+    pDoc->SetRowFiltered(1, 1, 0, true);
+    pDoc->SetRowHidden(1, 1, 0, true);
+    pDoc->SetRowHidden(2, 2, 0, true);
+
+    pDoc->SetString(ScAddress(0, 4, 0), u"=SUBTOTAL(9;A1:A4)"_ustr);
+    pDoc->SetString(ScAddress(0, 5, 0), u"=SUBTOTAL(109;A1:A4)"_ustr);
+    CPPUNIT_ASSERT_EQUAL(13.0, pDoc->GetValue(ScAddress(0, 4, 0)));
+    CPPUNIT_ASSERT_EQUAL(9.0, pDoc->GetValue(ScAddress(0, 5, 0)));
+
+    // Copy the cells and get them as GDI metafile like paste special
+    goToCell(u"A1:A6"_ustr);
+    ScModelObj* pModelObj = comphelper::getFromUnoTunnel<ScModelObj>(mxComponent);
+    TransferableDataHelper aDataHelper(pModelObj->getSelection());
+    GDIMetaFile aMetaFile;
+    CPPUNIT_ASSERT(aDataHelper.GetGDIMetaFile(SotClipboardFormatId::GDIMETAFILE, aMetaFile));
+
+    MetafileXmlDump aDumper;
+    aDumper.filterAllActionTypes();
+    aDumper.filterActionType(MetaActionType::TEXTARRAY, false);
+    xmlDocUniquePtr pXmlDoc = dumpAndParse(aDumper, aMetaFile);
+    CPPUNIT_ASSERT(pXmlDoc);
+
+    // Without the fix in place, this test would have failed with
+    // - Expected: 1
+    // - Actual  : 0
+    // i.e. SUBTOTAL(9) included the filtered row and showed 1+2+4+8=15 instead of 1+4+8=13
+    assertXPath(pXmlDoc, "//textarray[text='13']", 1);
+    assertXPath(pXmlDoc, "//textarray[text='15']", 0);
+
+    // SUBTOTAL(109) ignores hidden rows and shows 1+8=9
+    assertXPath(pXmlDoc, "//textarray[text='9']", 1);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
