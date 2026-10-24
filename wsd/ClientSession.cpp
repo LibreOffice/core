@@ -4719,7 +4719,8 @@ bool ClientSession::handleSaveAs(const std::shared_ptr<Message>& payload,
             http::Response response(http::StatusCode::OK);
             FileServerRequestHandler::hstsHeaders(response);
             if (!fileName.empty())
-                response.set("Content-Disposition", "attachment; filename=\"" + fileName + '"');
+                response.set("Content-Disposition",
+                             FileServerRequestHandler::attachmentDisposition(fileName));
             response.setContentType("application/octet-stream");
 
             if (!saveAsSocket)

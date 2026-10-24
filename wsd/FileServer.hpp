@@ -285,6 +285,9 @@ public:
         }
     }
 
+    /// A Content-Disposition value that offers the file for download under fileName.
+    static std::string attachmentDisposition(const std::string& fileName);
+
     void dumpState(std::ostream& os);
 
 private:

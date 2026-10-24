@@ -2835,7 +2835,8 @@ bool ClientRequestDispatcher::handlePostRequest(const RequestDetails& requestDet
             // actually show it.
             response.setContentType(std::string(ContentType::fromFileName(fileName)));
             if (serveAsAttachment)
-                response.set("Content-Disposition", "attachment; filename=\"" + fileName + '"');
+                response.set("Content-Disposition",
+                             FileServerRequestHandler::attachmentDisposition(fileName));
 
             if (COOLWSD::WASMEnabled)
             {

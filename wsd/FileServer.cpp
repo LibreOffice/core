@@ -831,6 +831,20 @@ bool FileServerRequestHandler::handleRequest(const HTTPRequest& request,
     return true;
 }
 
+std::string FileServerRequestHandler::attachmentDisposition(const std::string& fileName)
+{
+    // The name is an RFC 9110 quoted-string, where a backslash escapes the next character.
+    std::string result = "attachment; filename=\"";
+    for (const char c : fileName)
+    {
+        if (c == '"' || c == '\\')
+            result += '\\';
+        result += c;
+    }
+    result += '"';
+    return result;
+}
+
 void FileServerRequestHandler::sendError(http::StatusCode errorCode,
                                          const std::string& requestPath,
                                          const std::shared_ptr<StreamSocket>& socket,

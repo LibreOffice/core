@@ -45,6 +45,7 @@ class FileServeTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testCSPMergeNewlines);
     CPPUNIT_TEST(testCSPKeepsOutBadSources);
     CPPUNIT_TEST(testSettingsUploadFileId);
+    CPPUNIT_TEST(testAttachmentNameKeepsQuotes);
     CPPUNIT_TEST_SUITE_END();
 
     void testUIDefaults();
@@ -56,6 +57,7 @@ class FileServeTests : public CPPUNIT_NS::TestFixture
     void testCSPMergeNewlines();
     void testCSPKeepsOutBadSources();
     void testSettingsUploadFileId();
+    void testAttachmentNameKeepsQuotes();
 
     void preProcessedFileSubstitution(const std::string_view testname,
                                       const Util::UnorderedStringMap<std::string>& variables);
@@ -683,6 +685,17 @@ void FileServeTests::testSettingsUploadFileId()
     LOK_ASSERT(!FileServerRequestHandler::buildSettingsUploadFileId(
         "/settings/userconfig/spif/", "", fileId));
     LOK_ASSERT_EQUAL_STR("sentinel", fileId);
+}
+
+void FileServeTests::testAttachmentNameKeepsQuotes()
+{
+    constexpr std::string_view testname = __func__;
+
+    LOK_ASSERT_EQUAL_STR("attachment; filename=\"report.pdf\"",
+                         FileServerRequestHandler::attachmentDisposition("report.pdf"));
+
+    LOK_ASSERT_EQUAL_STR("attachment; filename=\"a\\\"b\\\\c.odt\"",
+                         FileServerRequestHandler::attachmentDisposition("a\"b\\c.odt"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(FileServeTests);
