@@ -624,7 +624,9 @@ bool ScPivotLayoutDialog::IsDataElement(SCCOL nColumn)
 
 bool ScPivotLayoutDialog::IsCalculatedElement(SCCOL nColumn)
 {
-    return maPivotParameters.maLabelArray[nColumn]->mbCalculatedField;
+    // tdf#174093 - a data element cannot be a calculated field
+    return nColumn != PIVOT_DATA_FIELD
+           && maPivotParameters.maLabelArray[nColumn]->mbCalculatedField;
 }
 
 ScDPLabelData& ScPivotLayoutDialog::GetLabelData(SCCOL nColumn)
