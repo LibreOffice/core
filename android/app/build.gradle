@@ -28,7 +28,12 @@ android {
         resValue "string", "vendor", "${coVendor}"
         resValue "string", "info_url", "${coInfoURL}"
         resValue "string", "version_hash", "${coVersionHash}"
-        resValue "string", "image_draw_header", "@drawable/drawer_header"
+        // copyBrandFiles copies the branded header only at execution time, check its source
+        if (coHasBranding == "true" && file("${coBrandingDir}/android/drawable/drawer_header${coBrandingSuffix}.png").exists()) {
+            resValue "string", "image_draw_header", "@drawable/drawer_header${coBrandingSuffix}"
+        } else {
+            resValue "string", "image_draw_header", "@drawable/drawer_header"
+        }
         manifestPlaceholders = [ appIcon: "${coLauncherIcon}" ]
         buildConfigField "boolean", "APP_HAS_BRANDING", "${coHasBranding}"
     }
@@ -58,10 +63,6 @@ android {
             debuggable true
         }
         release {
-            if (file("src/main/res/drawable/drawer_header${coBrandingSuffix}.png").exists()) {
-                resValue "string", "image_draw_header", "@drawable/drawer_header${coBrandingSuffix}"
-            }
-
             optimization {
                 enable true
             }
