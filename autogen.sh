@@ -50,7 +50,7 @@ sub sanity_checks($)
        $autoconf    => "autoconf is required",
        $aclocal     => "$aclocal is required",
       );
-    if ($ENV{WSL_DISTRO_NAME} && $ENV{PATH} =~ /mingw64/) {
+    if ($ENV{WSL_DISTRO_NAME} && $ENV{PATH} =~ /mingw64|ucrt64/) {
         # for wsl-as-helper build we only need the m4 macros like for macOS
         delete $required{'pkg-config'};
     }
@@ -169,7 +169,7 @@ my $aclocal_flags = $ENV{ACLOCAL_FLAGS};
 
 $aclocal_flags .= " -I $src_path/m4";
 # the m4/mac directory provides the pkg-config macros used in configure
-$aclocal_flags .= " -I $src_path/m4/mac" if ($system eq 'Darwin' || ($ENV{WSL_DISTRO_NAME} && $ENV{PATH} =~ /mingw64/));
+$aclocal_flags .= " -I $src_path/m4/mac" if ($system eq 'Darwin' || ($ENV{WSL_DISTRO_NAME} && $ENV{PATH} =~ /mingw64|ucrt64/));
 
 $ENV{AUTOMAKE_EXTRA_FLAGS} = '--warnings=no-portability' if (!($system eq 'Darwin'));
 
@@ -183,8 +183,8 @@ if ($src_path ne $build_path)
         chomp $src_path_win;
     }
     # wsl-as-helper method: autogen.sh/configure runs within a wsl-container (WSL_DISTRO_NAME)
-    # and build is run from within git-bash (that adds .../Git/mingw64/bin to PATH)
-    if ($ENV{WSL_DISTRO_NAME} && $ENV{PATH} =~ /mingw64/) {
+    # and build is run from within git-bash (that adds .../Git/mingw64/bin or .../Git/ucrt64/bin to PATH)
+    if ($ENV{WSL_DISTRO_NAME} && $ENV{PATH} =~ /mingw64|ucrt64/) {
         $src_path_win=`wslpath -m $src_path`;
         chomp $src_path_win;
     }
