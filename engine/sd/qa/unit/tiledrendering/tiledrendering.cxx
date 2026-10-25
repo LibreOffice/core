@@ -4672,6 +4672,40 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfoVideoLoop)
     CPPUNIT_ASSERT(!rVideo.get<bool>("mute"));
 }
 
+static const boost::property_tree::ptree* findCommandNode(const boost::property_tree::ptree& rNode)
+{
+    if (rNode.get<std::string>("nodeName", "") == "Command")
+        return &rNode;
+    auto aChildren = rNode.find("children");
+    if (aChildren == rNode.not_found())
+        return nullptr;
+    for (const auto& rChild : aChildren->second)
+    {
+        if (const boost::property_tree::ptree* pCommand = findCommandNode(rChild.second))
+            return pCommand;
+    }
+    return nullptr;
+}
+
+// A video set to start automatically has a play command in the slide's animations, aimed at
+// that video.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfoVideoPlayCommand)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("video-loop.pptx");
+    Scheduler::ProcessEventsToIdle();
+
+    boost::property_tree::ptree aTree;
+    readJSON(aTree, pXImpressDocument->getPresentationInfo());
+
+    const boost::property_tree::ptree& rSlide = child_at(aTree, "slides", 0);
+    const boost::property_tree::ptree* pCommand
+        = findCommandNode(rSlide.get_child("animations").get_child("root"));
+    CPPUNIT_ASSERT(pCommand);
+    CPPUNIT_ASSERT_EQUAL(std::string("Play"), pCommand->get<std::string>("command"));
+    CPPUNIT_ASSERT_EQUAL(child_at(rSlide, "videos", 0).get<std::string>("hash"),
+                         pCommand->get<std::string>("targetElement"));
+}
+
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testA11yPresentationInfo)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("PresentationInfoTest.odp");

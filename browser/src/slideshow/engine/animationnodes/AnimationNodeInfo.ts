@@ -89,6 +89,11 @@ interface TransitionFilterNodeInfo extends AnimateNodeInfo {
 	transitionFadeColor?: string;
 }
 
+interface CommandNodeInfo extends BaseNodeInfo {
+	targetElement?: string;
+	command?: string;
+}
+
 type AnimationNodeInfo =
 	| ContainerNodeInfo
 	| IterateNodeInfo
@@ -96,4 +101,5 @@ type AnimationNodeInfo =
 	| AnimateMotionNodeInfo
 	| AnimateColorNodeInfo
 	| AnimateTransformNodeInfo
-	| TransitionFilterNodeInfo;
+	| TransitionFilterNodeInfo
+	| CommandNodeInfo;

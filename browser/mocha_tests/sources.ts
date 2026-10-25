@@ -427,6 +427,7 @@
 /// <reference path="../src/slideshow/engine/animationnodes/BaseNode.ts" />
 /// <reference path="../src/slideshow/engine/animationnodes/AnimationBaseNode.ts" />
 /// <reference path="../src/slideshow/engine/animationnodes/AnimationColorNode.ts" />
+/// <reference path="../src/slideshow/engine/animationnodes/AnimationCommandNode.ts" />
 /// <reference path="../src/slideshow/engine/animationnodes/AnimationNodeInfo.ts" />
 /// <reference path="../src/slideshow/engine/animationnodes/AnimationPathMotionNode.ts" />
 /// <reference path="../src/slideshow/engine/animationnodes/AnimationSetNode.ts" />

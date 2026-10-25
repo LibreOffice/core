@@ -170,8 +170,12 @@ function createAnimationNode(
 			window.app.console.log('createAnimationNode: Audio not implemented');
 			return null;
 		case AnimationNodeType.Command:
-			window.app.console.log('createAnimationNode: Command not implemented');
-			return null;
+			aCreatedNode = new AnimationCommandNode(
+				aNodeInfo,
+				aParentNode,
+				aNodeContext,
+			);
+			break;
 		default:
 			window.app.console.log(
 				'createAnimationNode: invalid Animation Node Type: ' +
@@ -212,6 +216,11 @@ function createChildNode(
 	const aChildNode = createAnimationNode(aNodeInfo, aParentNode, aNodeContext);
 
 	if (!aChildNode) {
+		// The slideshow plays no audio node, so one is left out and its siblings still run.
+		if (getAnimationNodeType(aNodeInfo) === AnimationNodeType.Audio) {
+			window.app.console.log('createChildNode: audio node skipped');
+			return true;
+		}
 		window.app.console.log('createChildNode: child node creation failed');
 		return false;
 	} else {

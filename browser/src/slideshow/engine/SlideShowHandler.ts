@@ -973,6 +973,13 @@ class SlideShowHandler {
 		}
 	}
 
+	getVideoRenderer(
+		slideHash: string,
+		videoInfo: VideoInfo,
+	): AnimatedContentRenderer {
+		return this.slideCompositor.getVideoRenderer(slideHash, videoInfo);
+	}
+
 	cleanLeavingSlideStatus(nOldSlide: number, bSkipSlideTransition: boolean) {
 		const aMetaDoc = this.theMetaPres;
 		if (nOldSlide !== undefined) {

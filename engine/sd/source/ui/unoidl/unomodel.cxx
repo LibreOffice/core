@@ -50,9 +50,11 @@
 #include <com/sun/star/animations/XAnimateMotion.hpp>
 #include <com/sun/star/animations/XAnimateColor.hpp>
 #include <com/sun/star/animations/XAnimateTransform.hpp>
+#include <com/sun/star/animations/XCommand.hpp>
 #include <com/sun/star/animations/XIterateContainer.hpp>
 #include <com/sun/star/animations/XTimeContainer.hpp>
 #include <com/sun/star/animations/XTransitionFilter.hpp>
+#include <com/sun/star/presentation/EffectCommands.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
 #include <com/sun/star/presentation/EffectPresetClass.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
@@ -543,6 +545,15 @@ constexpr auto constAnimationNodeTypeToString = mapEnumToString<sal_Int16>({
     { AnimationNodeType::TRANSITIONFILTER, "TransitionFilter" },
 });
 
+constexpr auto constCommandToString = mapEnumToString<sal_Int16>({
+    { EffectCommands::CUSTOM, "Custom" },
+    { EffectCommands::VERB, "Verb" },
+    { EffectCommands::PLAY, "Play" },
+    { EffectCommands::TOGGLEPAUSE, "TogglePause" },
+    { EffectCommands::STOP, "Stop" },
+    { EffectCommands::STOPAUDIO, "StopAudio" },
+});
+
 constexpr auto constFillToString = mapEnumToString<sal_Int16>({
     { AnimationFill::DEFAULT, "Default" },
     { AnimationFill::REMOVE, "Remove" },
@@ -696,6 +707,7 @@ private:
     void exportContainer(const Reference<XTimeContainer>& xContainer);
 
     void exportAnimate(const Reference<XAnimate>& xAnimate);
+    void exportCommand(const Reference<XCommand>& xCommand);
 
     void convertValue(XMLTokenEnum eAttributeName, OStringBuffer& sTmp, const Any& rValue) const;
     void convertTiming(OStringBuffer& sTmp, const Any& rValue);
@@ -1172,7 +1184,8 @@ void AnimationsExporter::exportNodeImpl(const Reference<XAnimationNode>& xNode)
             break;
             case AnimationNodeType::COMMAND:
             {
-                SAL_WARN("sd", "AnimationsExporter::exportNode(): Command Node not supported.");
+                Reference<XCommand> xCommand(xNode, UNO_QUERY_THROW);
+                exportCommand(xCommand);
             }
             break;
             default:
@@ -1501,6 +1514,16 @@ void AnimationsExporter::exportContainer(const Reference<XTimeContainer>& xConta
     {
         TOOLS_WARN_EXCEPTION("sd", "unomodel: AnimationsExporter");
     }
+}
+
+void AnimationsExporter::exportCommand(const Reference<XCommand>& xCommand)
+{
+    OStringBuffer sTmp;
+    anim::convertTarget(sTmp, xCommand->getTarget());
+    mrWriter.put("targetElement", sTmp.makeStringAndClear());
+
+    convertEnum(sTmp, xCommand->getCommand(), constCommandToString);
+    mrWriter.put("command", sTmp.makeStringAndClear());
 }
 
 void AnimationsExporter::exportAnimate(const Reference<XAnimate>& xAnimate)
@@ -7609,6 +7632,9 @@ std::string SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                             auto const& rRectangle = pMediaObject->GetLogicRect();
                             auto aRectangle = o3tl::convert(rRectangle, o3tl::Length::mm100, o3tl::Length::twip);
                             aJsonWriter.put("id", pMediaObject->GetUniqueID());
+                            OStringBuffer aHash;
+                            anim::convertTarget(aHash, Any(pMediaObject->getUnoShape()));
+                            aJsonWriter.put("hash", aHash.makeStringAndClear());
                             aJsonWriter.put("url", pMediaObject->getTempURL());
                             const avmedia::MediaItem& rMediaItem = pMediaObject->getMediaProperties();
                             aJsonWriter.put("loop", rMediaItem.isLoop());

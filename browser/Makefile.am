@@ -963,6 +963,7 @@ COOL_JS_LST =\
     src/slideshow/engine/animationnodes/BaseNode.ts \
     src/slideshow/engine/animationnodes/AnimationBaseNode.ts \
     src/slideshow/engine/animationnodes/AnimationColorNode.ts \
+    src/slideshow/engine/animationnodes/AnimationCommandNode.ts \
     src/slideshow/engine/animationnodes/AnimationNodeInfo.ts \
     src/slideshow/engine/animationnodes/AnimationPathMotionNode.ts \
     src/slideshow/engine/animationnodes/AnimationSetNode.ts \
