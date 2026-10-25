@@ -33,6 +33,7 @@ public:
     void testMultiplePaths();
     void testEncodedFileUrl();
     void testParentDirectorySegments();
+    void testUrl();
 
     CPPUNIT_TEST_SUITE(TestHostFilter);
     CPPUNIT_TEST(testEmptyAllowlist);
@@ -43,6 +44,7 @@ public:
     CPPUNIT_TEST(testMultiplePaths);
     CPPUNIT_TEST(testEncodedFileUrl);
     CPPUNIT_TEST(testParentDirectorySegments);
+    CPPUNIT_TEST(testUrl);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -125,6 +127,24 @@ void TestHostFilter::testParentDirectorySegments()
     CPPUNIT_ASSERT(HostFilter::isFileUrlForbidden(u"file:///tmp/docs/../other/sheet.ods"_ustr));
     // .. segments that stay within the allowed directory are permitted
     CPPUNIT_ASSERT(!HostFilter::isFileUrlForbidden(u"file:///tmp/docs/sub/../sheet.ods"_ustr));
+    HostFilter::resetAllowedExtRefPaths();
+}
+
+void TestHostFilter::testUrl()
+{
+    // nothing configured: only an exotic protocol is forbidden
+    CPPUNIT_ASSERT(!HostFilter::isUrlForbidden(u"https://evil.example/doc.ods"_ustr));
+    CPPUNIT_ASSERT(!HostFilter::isUrlForbidden(u"file:///tmp/doc.ods"_ustr));
+    CPPUNIT_ASSERT(HostFilter::isUrlForbidden(u"macro:///Standard.Module1.Main"_ustr));
+
+    HostFilter::setAllowedHostsRegex("localhost");
+    CPPUNIT_ASSERT(!HostFilter::isUrlForbidden(u"https://localhost/doc.ods"_ustr));
+    CPPUNIT_ASSERT(HostFilter::isUrlForbidden(u"https://evil.example/doc.ods"_ustr));
+    HostFilter::setAllowedHostsRegex("");
+
+    HostFilter::setAllowedExtRefPaths("/tmp/docs");
+    CPPUNIT_ASSERT(!HostFilter::isUrlForbidden(u"file:///tmp/docs/sheet.ods"_ustr));
+    CPPUNIT_ASSERT(HostFilter::isUrlForbidden(u"file:///tmp/other/sheet.ods"_ustr));
     HostFilter::resetAllowedExtRefPaths();
 }
 

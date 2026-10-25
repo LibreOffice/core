@@ -45,6 +45,10 @@ public:
     /// directory registered with setAllowedExtRefPaths. Non-file URLs
     /// are always allowed.
     static bool isFileUrlForbidden(const OUString& rFileUrl);
+
+    /// Return true when rUrl has an exotic protocol, a host that isForbidden, or is a file URL
+    /// that isFileUrlForbidden.
+    static bool isUrlForbidden(const OUString& rUrl);
 };
 
 #endif

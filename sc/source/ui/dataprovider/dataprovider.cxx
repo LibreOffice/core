@@ -18,7 +18,6 @@
 #include <tools/stream.hxx>
 #include <comphelper/processfactory.hxx>
 #include <tools/hostfilter.hxx>
-#include <tools/urlobj.hxx>
 
 #include "htmldataprovider.hxx"
 #include "xmldataprovider.hxx"
@@ -38,21 +37,9 @@ namespace sc {
 
 std::unique_ptr<SvStream> DataProvider::FetchStreamFromURL(const OUString& rURL, OStringBuffer& rBuffer)
 {
-    INetURLObject aURLObject(rURL);
-    if (aURLObject.IsExoticProtocol())
+    if (HostFilter::isUrlForbidden(rURL))
     {
-        SAL_WARN("sc.ui", "DataProvider::FetchStreamFromURL: blocked exotic protocol: \"" << rURL << "\"");
-        return nullptr;
-    }
-
-    if (HostFilter::isForbidden(aURLObject.GetHost()))
-    {
-        SAL_WARN("sc.ui", "DataProvider::FetchStreamFromURL: blocked host: \"" << rURL << "\"");
-    }
-
-    if (HostFilter::isFileUrlForbidden(rURL))
-    {
-        SAL_WARN("sc.ui", "DataProvider::FetchStreamFromURL: blocked file path: \"" << rURL << "\"");
+        SAL_WARN("sc.ui", "DataProvider::FetchStreamFromURL: blocked url: \"" << rURL << "\"");
         return nullptr;
     }
 
