@@ -11,6 +11,8 @@
 
 #include <test/JsonTestTools.hxx>
 #include <tools/JsonPath.hxx>
+
+#include <VectorPrimitivesJson.hxx>
 #include <tools/json_writer.hxx>
 #include <tools/color.hxx>
 #include <tools/degree.hxx>
@@ -236,21 +238,18 @@ protected:
         return true;
     }
 
-    /// The entry of the given kind in the objects array, or nothing when the response carries
-    /// none. An entry is named by its kind, while a primitive inside one is named by its type.
-    static std::optional<tools::JsonPath> findEntryOfKind(const tools::JsonPath& rJson,
-                                                          std::string_view sKind)
+    /// True when the order of the given response names the id.
+    static bool orderNames(const tools::JsonPath& rJson, sal_Int64 nId)
     {
-        const OString aWanted(sKind);
-        const size_t nCount = rJson.getSize("/objects").value_or(0);
+        const size_t nCount = rJson.getSize("/order").value_or(0);
         for (size_t nIndex = 0; nIndex < nCount; ++nIndex)
         {
-            const auto oEntry = rJson.at(rtl::Concat2View(
-                "/objects/" + OString::number(sal_Int32(nIndex))));
-            if (oEntry && oEntry->getString("kind").value_or(OString()) == aWanted)
-                return oEntry;
+            if (rJson.getInt(rtl::Concat2View("/order/" + OString::number(sal_Int32(nIndex))))
+                    .value_or(0)
+                == nId)
+                return true;
         }
-        return std::nullopt;
+        return false;
     }
 
     /// True when the objects array of the given response carries the id.
@@ -372,24 +371,6 @@ protected:
                                                 EE_PARA_LRSPACE));
         }
         pPage->NbcInsertObject(pText.get());
-    }
-
-    /// Depth-first search for a text portion node whose text contains rText,
-    /// anywhere under rNode.
-    static std::optional<tools::JsonPath> findTextPortionUnder(const tools::JsonPath& rNode,
-                                                               const OString& rText)
-    {
-        const OString sType = rNode.getString("type").value_or(OString());
-        if ((sType == "textSimplePortion" || sType == "textDecoratedPortion")
-            && rNode.getString("text").value_or(OString()).indexOf(rText) >= 0)
-            return rNode;
-        for (const auto& rChild : rNode.tree())
-        {
-            auto oFound = findTextPortionUnder(rNode.sub(rChild.second), rText);
-            if (oFound)
-                return oFound;
-        }
-        return std::nullopt;
     }
 
     /// The first text portion in the last vector JSON whose text contains
@@ -919,16 +900,7 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testEmptyTextEditKeepsItsEntry)
     const auto oFullEntry = findEntryOfKind(aFull, "texteditoverlay");
     CPPUNIT_ASSERT_MESSAGE("the delta since before the edit carries no entry for it",
                            oFullEntry.has_value());
-    bool bOrdered = false;
-    const size_t nOrderCount = aFull.getSize("/order").value_or(0);
-    for (size_t nIndex = 0; nIndex < nOrderCount; ++nIndex)
-    {
-        if (aFull.getInt(rtl::Concat2View("/order/" + OString::number(sal_Int32(nIndex))))
-                .value_or(0)
-            == nEntryId)
-            bOrdered = true;
-    }
-    CPPUNIT_ASSERT_MESSAGE("the order does not name the entry", bOrdered);
+    CPPUNIT_ASSERT_MESSAGE("the order does not name the entry", orderNames(aFull, nEntryId));
 }
 
 CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTypingMovesThePartVersionAtOnce)
@@ -2706,6 +2678,116 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPolygonHairline)
     assertJsonPath(*oHairline, "type", "polygonHairline");
     assertJsonPathExists(*oHairline, "color");
     assertJsonPathExists(*oHairline, "path");
+}
+
+// The order moves when an object changes its place in the stack, and the push that follows
+// carries the new order the way a pull does. A push after that finds nothing moved.
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testPushCarriesOrderOnZOrderChange)
+{
+    createBlankDoc();
+    addRectangle(tools::Rectangle(Point(1000, 1000), Size(3000, 2000)), Color(0x4472c4), COL_BLACK);
+    addRectangle(tools::Rectangle(Point(2000, 2000), Size(3000, 2000)), Color(0xc00000), COL_BLACK);
+    SdrObject* pLower = page(1)->GetObj(0);
+    SdrObject* pUpper = page(1)->GetObj(1);
+
+    // The first pull is what marks the model as drawn from.
+    const sal_Int64 nVersion
+        = getVectorPrimitives(u"testZOrderPushFull").getInt("/version").value_or(-1);
+
+    page(1)->SetObjectOrdNum(0, 1);
+
+    auto oDelta = pushVectorPrimitivesDelta();
+    CPPUNIT_ASSERT(oDelta.has_value());
+    assertJsonPath(*oDelta, "/type", "vectorprimitivesdelta");
+    assertJsonPath(*oDelta, "/from", nVersion);
+    CPPUNIT_ASSERT_GREATER(nVersion, oDelta->getInt("/version").value_or(-1));
+    // The page entry first, then the two in their new order.
+    CPPUNIT_ASSERT_EQUAL(size_t(3), oDelta->getSize("/order").value_or(0));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(pUpper->GetUniqueID()), oDelta->getInt("/order/1").value_or(-1));
+    CPPUNIT_ASSERT_EQUAL(sal_Int64(pLower->GetUniqueID()), oDelta->getInt("/order/2").value_or(-1));
+
+    auto oAgain = pushVectorPrimitivesDelta();
+    CPPUNIT_ASSERT(oAgain.has_value());
+    CPPUNIT_ASSERT(!oAgain->has("/type"));
+}
+
+// The order names the entry of a running edit for as long as the edit runs. Ending the edit
+// takes the entry out of the order, and the object comes again with the text the edit left it.
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testEndingTheEditDropsItsEntry)
+{
+    createBlankDoc();
+    addTextBox(tools::Rectangle(Point(1000, 1000), Size(6000, 3000)), u"Ended"_ustr);
+    SdrObject* pObject = page(1)->GetObj(0);
+
+    // The first pull is what marks the model as drawn from.
+    const sal_Int64 nBase
+        = getVectorPrimitives(u"testEditEndBase").getInt("/version").value_or(-1);
+
+    SdrView* pView = getSdDocShell()->GetViewShell()->GetView();
+    CPPUNIT_ASSERT(pView);
+    CPPUNIT_ASSERT(pView->SdrBeginTextEdit(pObject));
+    pView->GetTextEditOutlinerView()->GetEditView().InsertText(u"X"_ustr);
+
+    // Since before the edit began, so the order the edit added its entry to travels.
+    auto aDuring = getVectorPrimitives(u"testEditEndDuring", nBase);
+    const sal_Int64 nDuring = aDuring.getInt("/version").value_or(-1);
+    const sal_Int64 nEntryId = -2 - sal_Int64(SfxViewShell::Current()->GetViewShellId().get());
+    CPPUNIT_ASSERT_MESSAGE("the order does not name the running edit",
+                           orderNames(aDuring, nEntryId));
+
+    pView->SdrEndTextEdit();
+
+    auto aDelta = getVectorPrimitives(u"testEditEndDelta", nDuring);
+    assertJsonPath(aDelta, "/type", "vectorprimitivesdelta");
+    CPPUNIT_ASSERT_GREATER(nDuring, aDelta.getInt("/version").value_or(-1));
+    CPPUNIT_ASSERT_MESSAGE("the delta carries no order", aDelta.has("/order"));
+    CPPUNIT_ASSERT_MESSAGE("the order still names the ended edit", !orderNames(aDelta, nEntryId));
+    CPPUNIT_ASSERT(!findEntryOfKind(aDelta, "texteditoverlay").has_value());
+
+    const auto oObject = findEntryOfObject(aDelta, pObject->GetUniqueID());
+    CPPUNIT_ASSERT_MESSAGE("the object does not come again", oObject.has_value());
+    CPPUNIT_ASSERT(!oObject->getBool("textEdit").has_value());
+    CPPUNIT_ASSERT_MESSAGE("the object came back without the typed text",
+                           findTextPortionUnder(*oObject, "X"_ostr).has_value());
+}
+
+// A master is a part of its own, named by its id. Another master put in front of it and taken
+// away again changes nothing about it or about the slide that uses it, so a client that holds
+// either part is sent nothing.
+CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testOtherMastersComingAndGoingMoveNothing)
+{
+    createBlankDoc();
+    createMasterPlaceholders();
+    const OString aMasterId = firstPartId(1);
+    const OString aMasterRequest = ".uno:VectorPrimitives?partid=" + aMasterId + "&mode=1";
+
+    auto oMaster = requestVectorPrimitives(aMasterRequest);
+    CPPUNIT_ASSERT(oMaster.has_value());
+    const sal_Int64 nMasterVersion = oMaster->getInt("/version").value_or(-1);
+    const OString aMasterSince
+        = aMasterRequest + "&since=" + OString::number(nMasterVersion)
+          + "&epoch=" + OString::number(oMaster->getInt("/epoch").value_or(-1));
+    const sal_Int64 nSlideVersion
+        = getVectorPrimitives(u"testMastersComeAndGoSlide").getInt("/version").value_or(-1);
+
+    uno::Reference<drawing::XMasterPagesSupplier> xSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<drawing::XDrawPages> xMasters = xSupplier->getMasterPages();
+    uno::Reference<drawing::XDrawPage> xNewMaster = xMasters->insertNewByIndex(0);
+    // The held master keeps its id.
+    CPPUNIT_ASSERT(firstPartId(1) != aMasterId);
+
+    auto oInserted = requestVectorPrimitives(aMasterSince);
+    CPPUNIT_ASSERT(oInserted.has_value());
+    assertNothingMoved(*oInserted, nMasterVersion);
+    assertNothingMoved(getVectorPrimitives(u"testMastersComeSlide", nSlideVersion), nSlideVersion);
+
+    xMasters->remove(xNewMaster);
+    CPPUNIT_ASSERT_EQUAL(aMasterId, firstPartId(1));
+
+    auto oRemoved = requestVectorPrimitives(aMasterSince);
+    CPPUNIT_ASSERT(oRemoved.has_value());
+    assertNothingMoved(*oRemoved, nMasterVersion);
+    assertNothingMoved(getVectorPrimitives(u"testMastersGoSlide", nSlideVersion), nSlideVersion);
 }
 
 } // namespace

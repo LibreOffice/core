@@ -8,6 +8,7 @@
  */
 
 #include <sdtiledrenderingtest.hxx>
+#include <VectorPrimitivesJson.hxx>
 
 #include <app.hrc>
 #include <test/helper/transferable.hxx>
@@ -101,6 +102,8 @@
 #include <vcl/outdev.hxx>
 #include <vcl/svapp.hxx>
 #include <com/sun/star/text/GraphicCrop.hpp>
+#include <rtl/strbuf.hxx>
+#include <sfx2/kit/callback.hxx>
 #include <sfx2/kit/helper.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/scopeguard.hxx>
@@ -7948,6 +7951,143 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testCanvasSlideUndoStepsAreSeparate)
     CPPUNIT_ASSERT_EQUAL(nObjectCount, pSlide->GetObjCount());
     CPPUNIT_ASSERT(pDocument->HasCanvasPage());
     CPPUNIT_ASSERT_EQUAL(size_t(1), pUndoManager->GetUndoActionCount());
+}
+
+namespace
+{
+/// The view shell of the kit view that is current. Activating a view connects it to the
+/// document shell.
+sd::ViewShell* currentViewShell(SdXImpressDocument& rDocument)
+{
+    sd::ViewShell* pViewShell = rDocument.GetDocShell()->GetViewShell();
+    CPPUNIT_ASSERT(pViewShell);
+    return pViewShell;
+}
+
+/// Records the parts a view is told have changed, each with the mode of its page list.
+class PartChangeRecorder : public CoKitCallbackInterface
+{
+public:
+    std::vector<std::pair<OString, int>> maChanged;
+
+    void viewCallback(COKitCallbackType, const OString&) override {}
+    void viewCallbackWithViewId(COKitCallbackType, const OString&, int) override {}
+    void viewInvalidateTilesCallback(const tools::Rectangle*, int, int) override {}
+    void viewUpdatedCallback(COKitCallbackType) override {}
+    void viewUpdatedCallbackPerViewId(COKitCallbackType, int, int) override {}
+    void viewVectorPartChanged(const OString& rPartId, int nMode) override
+    {
+        maChanged.emplace_back(rPartId, nMode);
+    }
+    void viewAddPendingInvalidateTiles() override {}
+    void dumpState(OStringBuffer&) override {}
+};
+}
+
+// Two views can edit at once, each in an object of its own on the same slide. The slide then
+// carries an entry for each running edit, named by the view that runs it, and each entry
+// carries what that view typed.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testTwoViewsEditingCarryTheirOwnEntries)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("2slides.odp");
+    const int nView1 = KitHelper::getCurrentView();
+    SdTestViewCallback aView1;
+    sd::ViewShell* pViewShell1 = currentViewShell(*pXImpressDocument);
+    SdPage* pSlide = pViewShell1->GetActualPage();
+    SdrObject* pTitle = pSlide->GetObj(0);
+    SdrObject* pSubtitle = pSlide->GetObj(1);
+
+    KitHelper::createView();
+    pXImpressDocument->initializeForTiledRendering({});
+    const int nView2 = KitHelper::getCurrentView();
+    SdTestViewCallback aView2;
+    sd::ViewShell* pViewShell2 = currentViewShell(*pXImpressDocument);
+    CPPUNIT_ASSERT(pViewShell1 != pViewShell2);
+
+    KitHelper::setView(nView1);
+    CPPUNIT_ASSERT(pViewShell1->GetView()->SdrBeginTextEdit(pTitle));
+    pViewShell1->GetView()->GetTextEditOutlinerView()->GetEditView().InsertText(u"One"_ustr);
+
+    KitHelper::setView(nView2);
+    CPPUNIT_ASSERT(pViewShell2->GetView()->SdrBeginTextEdit(pSubtitle));
+    pViewShell2->GetView()->GetTextEditOutlinerView()->GetEditView().InsertText(u"Two"_ustr);
+
+    const OString aJson = vectorPrimitivesOf(pXImpressDocument, pSlide);
+    const auto oJson = tools::JsonPath::parse(std::string_view(aJson.getStr(), aJson.getLength()));
+    CPPUNIT_ASSERT(oJson.has_value());
+
+    const std::vector<tools::JsonPath> aEntries = entriesOfKind(*oJson, "texteditoverlay");
+    CPPUNIT_ASSERT_EQUAL(size_t(2), aEntries.size());
+    for (const tools::JsonPath& rEntry : aEntries)
+    {
+        const sal_Int64 nViewId = rEntry.getInt("viewId").value_or(-1);
+        CPPUNIT_ASSERT(nViewId == nView1 || nViewId == nView2);
+        CPPUNIT_ASSERT_EQUAL(sal_Int64(-2 - nViewId), rEntry.getInt("id").value_or(0));
+        const SdrObject* pEdited = nViewId == nView1 ? pTitle : pSubtitle;
+        CPPUNIT_ASSERT_EQUAL(sal_Int64(pEdited->GetUniqueID()),
+                             rEntry.getInt("parent").value_or(-1));
+        CPPUNIT_ASSERT(
+            findTextPortionUnder(rEntry, nViewId == nView1 ? "One"_ostr : "Two"_ostr).has_value());
+        CPPUNIT_ASSERT(
+            !findTextPortionUnder(rEntry, nViewId == nView1 ? "Two"_ostr : "One"_ostr).has_value());
+    }
+
+    pViewShell2->GetView()->SdrEndTextEdit();
+    KitHelper::setView(nView1);
+    pViewShell1->GetView()->SdrEndTextEdit();
+}
+
+// A keystroke in a running edit tells every view of the document that the slide changed, as
+// soon as it lands. The model follows later, after a pause in the typing, which is too slow
+// for a reader that draws the text from the model.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testKeystrokeTellsEveryViewThePartChanged)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("dummy.odp");
+    const int nView1 = KitHelper::getCurrentView();
+    SfxViewShell* pShell1 = SfxViewShell::Current();
+    sd::ViewShell* pViewShell1 = currentViewShell(*pXImpressDocument);
+    SdPage* pSlide = pViewShell1->GetActualPage();
+    SdrObject* pObject = pSlide->GetObj(0);
+
+    KitHelper::createView();
+    pXImpressDocument->initializeForTiledRendering({});
+    SfxViewShell* pShell2 = SfxViewShell::Current();
+    CPPUNIT_ASSERT(pShell1 != pShell2);
+
+    PartChangeRecorder aRecorder1;
+    PartChangeRecorder aRecorder2;
+    pShell1->setCOKitViewCallback(&aRecorder1);
+    pShell2->setCOKitViewCallback(&aRecorder2);
+    comphelper::ScopeGuard aUnsetCallbacks(
+        [pShell1, pShell2]
+        {
+            pShell1->setCOKitViewCallback(nullptr);
+            pShell2->setCOKitViewCallback(nullptr);
+        });
+
+    // The first pull is what marks the model as drawn from.
+    vectorPrimitivesOf(pXImpressDocument, pSlide);
+
+    KitHelper::setView(nView1);
+    CPPUNIT_ASSERT(pViewShell1->GetView()->SdrBeginTextEdit(pObject));
+    aRecorder1.maChanged.clear();
+    aRecorder2.maChanged.clear();
+
+    pViewShell1->GetView()->GetTextEditOutlinerView()->GetEditView().InsertText(u"x"_ustr);
+
+    const std::pair<OString, int> aExpected(pSlide->GetGuid().getString(), 0);
+    for (const PartChangeRecorder* pRecorder : { &aRecorder1, &aRecorder2 })
+    {
+        CPPUNIT_ASSERT_MESSAGE("a view was not told of the keystroke",
+                               !pRecorder->maChanged.empty());
+        for (const auto& rChanged : pRecorder->maChanged)
+        {
+            CPPUNIT_ASSERT_EQUAL(aExpected.first, rChanged.first);
+            CPPUNIT_ASSERT_EQUAL(aExpected.second, rChanged.second);
+        }
+    }
+
+    pViewShell1->GetView()->SdrEndTextEdit();
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
