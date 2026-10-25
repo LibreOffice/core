@@ -2057,7 +2057,7 @@ class BitmapTileManager extends RenderManagerBase {
 	public discardAllCache() {
 		this.stopIdleTrim();
 		// A spreadsheet drawn from vector primitives holds its content there.
-		if (CalcVectorManager.isActive()) CalcVectorManager.instance().clearAll();
+		if (CalcVectorManager.isActive()) CalcVectorManager.instance().discardAll();
 
 		this.updateAllTileDistances();
 		this.garbageCollect(true);
@@ -2594,23 +2594,28 @@ class BitmapTileManager extends RenderManagerBase {
 	// The engine places the objects of a sheet in print twips.
 	public toEngine(message: string): string {
 		if (!CalcVectorManager.isActive()) return message;
+		CalcVectorManager.instance().noteInput(message);
 		return CalcVectorManager.instance().messageInPrintTwips(message);
 	}
 
-	public predictTextInsert(_text: string): boolean {
-		return false;
+	public predictTextInsert(text: string): boolean {
+		if (!CalcVectorManager.isActive()) return false;
+		return CalcVectorManager.instance().predictTextInsert(text);
 	}
 
-	public predictTextDelete(_before: number, _after: number): boolean {
-		return false;
+	public predictTextDelete(before: number, after: number): boolean {
+		if (!CalcVectorManager.isActive()) return false;
+		return CalcVectorManager.instance().predictTextDelete(before, after);
 	}
 
-	public keepPredictedCaret(_update: cool.CaretUpdate): boolean {
-		return false;
+	public keepPredictedCaret(update: cool.CaretUpdate): boolean {
+		if (!CalcVectorManager.isActive()) return false;
+		return CalcVectorManager.instance().keepPredictedCaret(update);
 	}
 
 	public canPredictAtCaret(): boolean {
-		return false;
+		if (!CalcVectorManager.isActive()) return false;
+		return CalcVectorManager.instance().canPredictAtCaret();
 	}
 
 	public moveCaretByCharacter(_step: -1 | 1, _extend?: boolean): boolean {

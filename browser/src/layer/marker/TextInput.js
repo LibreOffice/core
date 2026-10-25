@@ -1123,7 +1123,7 @@ window.L.TextInput = window.L.Layer.extend({
 		this._fancyLog('send-text-to-coolwsd', text);
 
 		// Predict the text. Its ticket takes the next number, so send it right after.
-		if (RenderManager.isVectorRendering() && cool.canPredictText(text)) {
+		if (cool.canPredictText(text)) {
 			RenderManager.predictTextInsert(text);
 		}
 
@@ -1477,8 +1477,7 @@ window.L.TextInput = window.L.Layer.extend({
 		}
 
 		// Predict the deletion. Its ticket takes the next number, so send it right after.
-		if (RenderManager.isVectorRendering())
-			RenderManager.predictTextDelete(before, after);
+		RenderManager.predictTextDelete(before, after);
 
 		this._followMyCursor();
 

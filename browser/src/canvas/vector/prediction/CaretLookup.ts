@@ -22,6 +22,14 @@ namespace cool {
 		atEnd?: boolean;
 	}
 
+	/// A field of a caret message, a string or a number, as a number. Undefined if empty.
+	export function numberInMessage(value: unknown): number | undefined {
+		if (value === undefined || value === null) return undefined;
+		if (typeof value === 'string' && value.trim() === '') return undefined;
+		const number = Number(value);
+		return isNaN(number) ? undefined : number;
+	}
+
 	// True when the caret's height overlaps the run's line.
 	export function onLine(
 		run: TextRun,

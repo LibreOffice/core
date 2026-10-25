@@ -1108,7 +1108,7 @@ namespace cool {
 			twipsPerPixel: number,
 		): void {
 			const context = this.context;
-			for (const edit of sheet.textEdits) {
+			for (const edit of CalcVectorManager.instance().textEditsOf(sheet)) {
 				if (edit.parent !== undefined) {
 					const placing = CalcVectorManager.instance().objectPlacingOf(
 						sheet.part,

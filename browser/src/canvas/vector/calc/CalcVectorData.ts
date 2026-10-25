@@ -187,6 +187,8 @@ namespace cool {
 		textEdits?: CalcTextEdit[];
 		/// The font attributes that the cell text of the answer names by id.
 		textStyles?: { [id: string]: CalcTextStyle };
+		/// The newest input message of this view that the answer includes.
+		inputSequence?: number;
 	}
 
 	/// What the client holds of one sheet in one mode.
@@ -357,6 +359,42 @@ namespace cool {
 			// The objects follow in the answer. A whole block names all of its own.
 			objects: new Set(base ? base.objects : []),
 		};
+	}
+
+	/// The block without the stored text of the given cells, which views edit: the edit is drawn
+	/// over such a cell instead, and its stored text would show where the edit does not reach.
+	/// The parts of other rows stay shared.
+	export function calcBlockWithoutCellText(
+		block: CalcBlockEntry,
+		cells: Array<{ column: number; row: number }>,
+	): CalcBlockEntry {
+		const rows = new Map(block.rows);
+		for (const cell of cells) {
+			const part = rows.get(cell.row);
+			const text = part?.content.layers?.text;
+			if (!part || !text) continue;
+			const kept = text.filter((primitive) => {
+				const fields = primitive as unknown as {
+					type?: string;
+					column?: number;
+					row?: number;
+				};
+				return !(
+					fields.type === 'calcCellText' &&
+					fields.column === cell.column &&
+					fields.row === cell.row
+				);
+			});
+			if (kept.length === text.length) continue;
+			rows.set(cell.row, {
+				version: part.version,
+				content: {
+					...part.content,
+					layers: { ...part.content.layers, text: kept },
+				},
+			});
+		}
+		return { ...block, rows };
 	}
 
 	/// A strip of rows that draw text, sparklines or marks, and its painted area.

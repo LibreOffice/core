@@ -55,21 +55,24 @@ class CalcVectorManager {
 		return CalcVectorManager._instance;
 	}
 
-	private _bitmaps = new VectorResourceTracker<number, HTMLImageElement>(
-		(checksum) =>
-			'commandvalues command=.uno:VectorRenderingGraphics?checksum=' +
-			String(checksum),
-	);
+	// The images and fonts the content names, each owned by the blocks, drawing objects and
+	// text edits that name it.
+	private _resources = new VectorResourceLoader(() => {
+		this._resourceVersion++;
+		this._fireChanged([]);
+	});
 
-	// Loaded font faces by font id, registered as family "vecfont-<id>".
-	private _fonts = new VectorResourceTracker<string, FontFace>(
-		(fontId) => 'commandvalues command=.uno:VectorRenderingFont?id=' + fontId,
+	// The typing of this view in its cell edit, measured like the renderer.
+	private _typing = new cool.CalcTyping(
+		new cool.TextMeasurer(
+			cool.canvasTextMeasure((fontId) => this._resources.fonts.has(fontId)),
+		),
 	);
 
 	readonly renderer: cool.VectorPrimitiveRenderer =
 		new cool.VectorPrimitiveRenderer(
-			(checksum) => this._bitmaps.get(checksum),
-			(fontId) => this._fonts.has(fontId),
+			(checksum) => this._resources.image(checksum),
+			(fontId) => this._resources.fonts.has(fontId),
 		);
 
 	// Font attributes of cell text by id. An id is stable within an epoch.
@@ -133,6 +136,9 @@ class CalcVectorManager {
 			source: cool.CalcBlockEntry<cool.CalcCellRect>;
 			count: number;
 			pixel: number;
+			/// The block placed whole, and as shown without the cells that views edit.
+			whole: cool.CalcBlockEntry;
+			edited: string;
 			placed: cool.CalcBlockEntry;
 		}
 	> = new Map();
@@ -157,9 +163,14 @@ class CalcVectorManager {
 		if (index >= 0) this._reclaimListeners.splice(index, 1);
 	}
 
-	/// Release graphics memory. What is still needed is drawn again when shown.
+	/// Release graphics memory: the decoded images and what the renderer keeps between draws.
+	/// What is still needed is asked for and drawn again when shown. The fonts stay registered,
+	/// since they are few and small.
 	reclaimGraphicsMemory(): void {
 		for (const listener of this._reclaimListeners) listener();
+		this._resources.dropImages();
+		this.renderer.releaseScratchCanvases();
+		this.renderer.releaseColorChangedImages();
 	}
 
 	offChanged(callback: (answered?: number[]) => void): void {
@@ -192,6 +203,146 @@ class CalcVectorManager {
 
 	isDrawnElsewhere(objectId: number): boolean {
 		return this._drawnElsewhere.has(objectId);
+	}
+
+	/// The text edits of the sheet, with the unanswered typing of this view.
+	textEditsOf(sheet: cool.CalcSheetData): cool.CalcTextEdit[] {
+		return this._typing.editsOf(sheet.part, sheet.textEdits);
+	}
+
+	/// True when a keystroke at the caret can show before the engine answers.
+	canPredictAtCaret(): boolean {
+		const context = this._typingContext();
+		if (!context) return false;
+		return this._typing.canTypeAt(
+			context.edits,
+			context.viewId,
+			context.origin,
+			context.caret,
+		);
+	}
+
+	/// Show typed text in the cell edit before the engine answers, replacing a selection in the
+	/// paragraph of the caret. True when it shows.
+	predictTextInsert(text: string): boolean {
+		return this._type((selected) => cool.typedChange(text, selected));
+	}
+
+	/// Delete before characters left of the caret and after characters right of it in the cell edit
+	/// of this view. True when it shows.
+	predictTextDelete(before: number, after: number): boolean {
+		if (before <= 0 && after <= 0) return false;
+		return this._type((selected) =>
+			cool.deletedChange(before, after, selected),
+		);
+	}
+
+	/// After an input that ends the cell edit or moves its caret, drop the typing and predict
+	/// nothing until the engine reports the caret again.
+	noteInput(message: string): void {
+		if (!cool.calcInputMovesEdit(message)) return;
+		const wasTyping = this._typing.isTyping();
+		this._typing.holdUntilCaret();
+		if (wasTyping) this._fireChanged([]);
+	}
+
+	/// True when the caret update is older than the newest typing. A caret replayed for a geometry
+	/// change predates the typing, so the typed caret is placed again with the current geometry.
+	keepPredictedCaret(update: cool.CaretUpdate): boolean {
+		const docLayer = app.map && app.map._docLayer;
+		if (docLayer?._isReplayingMessages && this._typing.isTyping()) {
+			const context = this._typingContext();
+			const typed = context
+				? this._typing.caretAfterTyping(context.viewId, context.origin)
+				: null;
+			if (typed) {
+				this._showTypedCaret(typed);
+				return true;
+			}
+		}
+		const wasTyping = this._typing.isTyping();
+		const kept = this._typing.keepsCaret(update);
+		// A dropped typing leaves the edits of the engine to draw.
+		if (wasTyping && !this._typing.isTyping()) this._fireChanged([]);
+		return kept;
+	}
+
+	private _type(
+		build: (selected: cool.SelectedAround | null) => cool.PredictedChange,
+	): boolean {
+		const context = this._typingContext();
+		if (!context) return false;
+		const caret = context.caret;
+		const typed = this._typing.type(
+			context.part,
+			context.edits,
+			context.viewId,
+			context.origin,
+			caret,
+			// The ticket takes the number of the input message sent next.
+			cool.InputSequence.ticketForTheNextMessage(),
+			build,
+		);
+		if (!typed) return false;
+		if (caret.selected || caret.anchor) {
+			// The selection is gone with the text it covered.
+			app.file.textCursor.anchor = null;
+			if (caret.selected)
+				(
+					app.map._docLayer as unknown as cool.CanvasTileLayerInterface
+				).showTextSelection([]);
+		}
+		this._showTypedCaret(typed);
+		this._fireChanged([]);
+		return true;
+	}
+
+	private _showTypedCaret(typed: cool.CalcTypedCaret): void {
+		app.file.textCursor.logical = typed.logical;
+		cool.showCaret(typed.geometry);
+	}
+
+	/// What typing in a cell edit needs, or null when no cell edit caret shows.
+	private _typingContext(): {
+		part: number;
+		edits: cool.CalcTextEdit[];
+		viewId: number;
+		origin: cool.CalcCellOrigin;
+		caret: cool.CalcCaret;
+	} | null {
+		const docLayer = app.map && app.map._docLayer;
+		const cursor = app.file.textCursor;
+		if (!docLayer || !cursor || !cursor.visible || !cursor.rectangle)
+			return null;
+		// Typing in the formula bar shows in the bar.
+		if (app.map.calcInputBarHasFocus()) return null;
+		const part: number = docLayer._selectedPart;
+		const viewId: number | undefined = docLayer._viewId;
+		const geometry: cool.SheetGeometry | undefined = docLayer.sheetGeometry;
+		if (viewId === undefined || !geometry || geometry.getPart() !== part)
+			return null;
+		const sheet = this.getSheet(part, CalcVectorManager.contentMode);
+		if (!sheet) return null;
+		return {
+			part,
+			edits: sheet.textEdits,
+			viewId,
+			origin: (column: number, row: number) => {
+				const x = geometry
+					.getColumnsGeometry()
+					.getElementDataAny(column, 'tiletwips');
+				const y = geometry
+					.getRowsGeometry()
+					.getElementDataAny(row, 'tiletwips');
+				return x && y ? new cool.Point(x.startpos, y.startpos) : undefined;
+			},
+			caret: {
+				rectangle: cursor.rectangle,
+				logical: cursor.logical ?? null,
+				anchor: cursor.anchor ?? null,
+				selected: TextSelections.isActive(),
+			},
+		};
 	}
 
 	/// Draw the given objects of a view of objects through the matrix.
@@ -313,8 +464,8 @@ class CalcVectorManager {
 		return sheet && sheet.complete ? sheet : undefined;
 	}
 
-	/// The block placed at the view zoom, in tile twips from its first cell. Undefined while the
-	/// geometry of its sheet is not known.
+	/// The block placed at the view zoom, in tile twips from its first cell, without the stored
+	/// text of the cells that views edit. Undefined while the geometry of its sheet is not known.
 	placedBlock(
 		sheet: cool.CalcSheetData,
 		block: cool.CalcBlockEntry<cool.CalcCellRect>,
@@ -332,23 +483,59 @@ class CalcVectorManager {
 			'/' +
 			cool.calcBlockKey(block.blockRow, block.blockColumn);
 		const pixel = app.tile.size.x / RenderManager.tileSize;
+		const editedCells = this._editedCellsIn(sheet, block);
+		const edited = editedCells
+			.map((cell) => String(cell.column) + ':' + String(cell.row))
+			.join(',');
 		const held = this._placedBlocks.get(key);
-		if (
+		const placedAsHeld =
 			held &&
 			held.source === block &&
 			held.count === this._geometryCount &&
-			held.pixel === pixel
-		)
-			return held.placed;
-		const placed = cool.calcPlacedBlock(block, geometry, pixel);
-		if (!placed) return undefined;
+			held.pixel === pixel;
+		if (held && placedAsHeld && held.edited === edited) return held.placed;
+		const whole =
+			held && placedAsHeld
+				? held.whole
+				: cool.calcPlacedBlock(block, geometry, pixel);
+		if (!whole) return undefined;
+		// A new block is drawn again, text rasters too, so only a block with an edit changes.
+		const placed = editedCells.length
+			? cool.calcBlockWithoutCellText(whole, editedCells)
+			: whole;
 		this._placedBlocks.set(key, {
 			source: block,
 			count: this._geometryCount,
 			pixel,
+			whole,
+			edited,
 			placed,
 		});
 		return placed;
+	}
+
+	/// The cells of the block that views edit, whose edits are drawn over them.
+	private _editedCellsIn(
+		sheet: cool.CalcSheetData,
+		block: cool.CalcBlockEntry<cool.CalcCellRect>,
+	): Array<{ column: number; row: number }> {
+		const cells: Array<{ column: number; row: number }> = [];
+		for (const edit of this.textEditsOf(sheet)) {
+			if (
+				edit.parent !== undefined ||
+				edit.column === undefined ||
+				edit.row === undefined
+			)
+				continue;
+			if (
+				edit.column >= block.startColumn &&
+				edit.column <= block.endColumn &&
+				edit.row >= block.startRow &&
+				edit.row <= block.endRow
+			)
+				cells.push({ column: edit.column, row: edit.row });
+		}
+		return cells;
 	}
 
 	// Forget the placed blocks of a sheet, or of one block of it.
@@ -610,7 +797,7 @@ class CalcVectorManager {
 			sheet.blocks.delete(key);
 			this._forgetPlaced(sheetKey, key);
 			sheet.staleBlocks.delete(key);
-			this._releaseOwner(CalcVectorManager._resourceOwner(sheetKey, key));
+			this._resources.release(CalcVectorManager._resourceOwner(sheetKey, key));
 			// The objects of the block go with it, and come back when it is asked for.
 			for (const id of Array.from(block.objects))
 				this._dropObject(sheet, sheetKey, id, dropped);
@@ -621,10 +808,14 @@ class CalcVectorManager {
 
 	private _dropSheet(sheetKey: string, sheet: cool.CalcSheetData): void {
 		for (const key of sheet.blocks.keys())
-			this._releaseOwner(CalcVectorManager._resourceOwner(sheetKey, key));
+			this._resources.release(CalcVectorManager._resourceOwner(sheetKey, key));
 		for (const id of sheet.objects.keys())
-			this._releaseOwner(CalcVectorManager._resourceOwner(sheetKey, 'o' + id));
-		this._releaseOwner(CalcVectorManager._resourceOwner(sheetKey, 'edits'));
+			this._resources.release(
+				CalcVectorManager._resourceOwner(sheetKey, 'o' + id),
+			);
+		this._resources.release(
+			CalcVectorManager._resourceOwner(sheetKey, 'edits'),
+		);
 		this._sheets.delete(sheetKey);
 		this._forgetPlaced(sheetKey);
 		this._sheetRequested.delete(sheetKey);
@@ -678,8 +869,16 @@ class CalcVectorManager {
 		this._staleFrom.set(sheetKey, this._nextRequestId);
 	}
 
+	/// Forget all content and the fonts and images it named, and take the fonts off the
+	/// document.
+	discardAll(): void {
+		this.clearAll();
+		this._resources.discard();
+	}
+
 	/// Forget all content, keeping the fonts and images that are loaded.
 	clearAll(): void {
+		this._typing.forget();
 		this._textStyles.clear();
 		this._sheets.clear();
 		this._placedBlocks.clear();
@@ -692,9 +891,7 @@ class CalcVectorManager {
 		this._sheetRequested.clear();
 		this._staleFrom.clear();
 		this._sheetsBehind.clear();
-		this._owners.clear();
-		this._bitmaps.forgetAllParts();
-		this._fonts.forgetAllParts();
+		this._resources.forgetOwners();
 		this._fireChanged();
 	}
 
@@ -749,8 +946,6 @@ class CalcVectorManager {
 		for (const [id, style] of Object.entries(values.textStyles ?? {}))
 			this._textStyles.set(Number(id), style);
 
-		const checksums = new Set<number>();
-		const fontIds = new Set<string>();
 		// The drawing objects that the answer replaced or removed.
 		const answered: number[] = [];
 		// The version of the sheet that the answer brings what is held up to.
@@ -778,15 +973,13 @@ class CalcVectorManager {
 			}
 			sheet.blocks.set(key, block);
 			if (clearsStale) sheet.staleBlocks.delete(key);
-			this._collectResources(
+			this._resources.replace(
 				CalcVectorManager._resourceOwner(sheetKey, key),
 				(walker) => {
 					const layers = block.content.layers;
 					for (const layer of Object.values(layers))
 						if (layer) walker.walkPrimitives(layer as cool.Primitive[]);
 				},
-				checksums,
-				fontIds,
 			);
 
 			// The objects travel with the block holding their anchor cell. A whole block names all
@@ -802,11 +995,9 @@ class CalcVectorManager {
 				if (heldObject && heldObject.version >= object.version) continue;
 				sheet.objects.set(object.id, object);
 				answered.push(object.id);
-				this._collectResources(
+				this._resources.replace(
 					CalcVectorManager._resourceOwner(sheetKey, 'o' + object.id),
 					(walker) => walker.walkPrimitives(object.content.primitives),
-					checksums,
-					fontIds,
 				);
 			}
 			for (const id of entry.removed ?? []) this._leaveBlock(block, id);
@@ -875,18 +1066,14 @@ class CalcVectorManager {
 		const textEdits = values.textEdits;
 		if (textEdits) {
 			sheet.textEdits = textEdits;
-			this._collectResources(
+			this._answerTyping(part, textEdits, values.inputSequence);
+			this._resources.replace(
 				CalcVectorManager._resourceOwner(sheetKey, 'edits'),
 				(walker) => {
 					for (const edit of textEdits) walker.walkPrimitives(edit.primitives);
 				},
-				checksums,
-				fontIds,
 			);
 		}
-
-		this._bitmaps.requestMissing(checksums);
-		this._fonts.requestMissing(fontIds);
 
 		if (!this._visualsReported && sheet.blocks.size > 0) {
 			this._visualsReported = true;
@@ -926,89 +1113,44 @@ class CalcVectorManager {
 	): void {
 		for (const block of sheet.blocks.values()) block.objects.delete(id);
 		if (sheet.objects.delete(id)) answered.push(id);
-		this._releaseOwner(CalcVectorManager._resourceOwner(sheetKey, 'o' + id));
+		this._resources.release(
+			CalcVectorManager._resourceOwner(sheetKey, 'o' + id),
+		);
 	}
 
-	// The owner name carries a counter, so new content takes its images
-	// before the old content releases them, and a shared image stays.
-	private _owners: Map<string, string> = new Map();
-	private _nextOwner = 1;
-
-	private _releaseOwner(base: string): void {
-		const owner = this._owners.get(base);
-		if (owner === undefined) return;
-		this._owners.delete(base);
-		this._bitmaps.releasePart(owner);
-		this._fonts.forgetPart(owner);
-	}
-
-	private _collectResources(
-		base: string,
-		walk: (walker: cool.VectorResourceWalker) => void,
-		checksums: Set<number>,
-		fontIds: Set<string>,
+	// Apply again the typing that the engine edits do not include yet, and place the caret where
+	// the typing leaves it.
+	private _answerTyping(
+		part: number,
+		edits: cool.CalcTextEdit[],
+		inputSequence: number | undefined,
 	): void {
-		const ownChecksums = new Set<number>();
-		const ownFontIds = new Set<string>();
-		walk(new cool.VectorResourceWalker(ownChecksums, ownFontIds));
-		const owner = base + '@' + String(this._nextOwner++);
-		this._bitmaps.indexForPart(owner, ownChecksums);
-		this._fonts.indexForPart(owner, ownFontIds);
-		this._releaseOwner(base);
-		this._owners.set(base, owner);
-		for (const checksum of ownChecksums) checksums.add(checksum);
-		for (const fontId of ownFontIds) fontIds.add(fontId);
+		if (!this._typing.isTyping(part)) return;
+		const context = this._typingContext();
+		// Typing without a caret in the sheet does not show.
+		if (!context || context.part !== part) {
+			this._typing.forget();
+			return;
+		}
+		const typed = this._typing.answered(
+			part,
+			edits,
+			inputSequence,
+			context.viewId,
+			context.origin,
+		);
+		if (typed) this._showTypedCaret(typed);
 	}
 
 	/// Cache a fetched image and draw again, or mark it unavailable.
 	handleVectorRenderingGraphics(
 		values: cool.VectorRenderingGraphicsResponse,
 	): void {
-		if (this._bitmaps.has(values.checksum)) {
-			this._bitmaps.clearInFlight(values.checksum);
-			return;
-		}
-		if (!values.data) {
-			this._bitmaps.setUnavailable(values.checksum);
-			return;
-		}
-		const image = new Image();
-		image.onload = () => {
-			this._bitmaps.setLoaded(values.checksum, image);
-			this._resourceVersion++;
-			this._fireChanged([]);
-		};
-		image.onerror = () => {
-			this._bitmaps.setUnavailable(values.checksum);
-		};
-		image.src = values.data;
+		this._resources.handleImage(values);
 	}
 
 	/// Register a fetched font as a FontFace and draw again once it loads.
 	handleVectorRenderingFont(values: cool.VectorRenderingFontResponse): void {
-		const fontId = values.fontId;
-		if (this._fonts.has(fontId)) {
-			this._fonts.clearInFlight(fontId);
-			return;
-		}
-		if (!values.data) {
-			this._fonts.setUnavailable(fontId);
-			return;
-		}
-		const binary = window.atob(values.data);
-		const bytes = new Uint8Array(binary.length);
-		for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-		const face = new FontFace('vecfont-' + fontId, bytes.buffer);
-		face
-			.load()
-			.then(() => {
-				(document as unknown as { fonts: Set<FontFace> }).fonts.add(face);
-				this._fonts.setLoaded(fontId, face);
-				this._resourceVersion++;
-				this._fireChanged([]);
-			})
-			.catch(() => {
-				this._fonts.setUnavailable(fontId);
-			});
+		this._resources.handleFont(values);
 	}
 }

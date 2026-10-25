@@ -111,6 +111,7 @@
 /// <reference path="./prediction/TextEdit.test.ts" />
 /// <reference path="./prediction/ParagraphWrap.test.ts" />
 /// <reference path="./prediction/CaretMove.test.ts" />
+/// <reference path="./CalcTyping.test.ts" />
 /// <reference path="./VectorColors.test.ts" />
 /// <reference path="./MochaHarness.test.ts" />
 /// <reference path="./AIChatSidebar.test.ts" />

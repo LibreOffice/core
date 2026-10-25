@@ -95,6 +95,9 @@ interface DocLayerInterface {
 	_savedScrollPos?: cool.SimpleRectangle;
 	// True while that saved offset still needs to be re-applied to the view.
 	_restoringViewScroll?: boolean;
+	// True while the stored messages in print twips are handled again, for example after the
+	// sheet geometry changed.
+	_isReplayingMessages: boolean;
 	scrollToPos(pos: InternPointLike): void;
 	// Scrolls the view by the offset the point holds.
 	scrollByPoint(offset: cool.SimplePoint): void;

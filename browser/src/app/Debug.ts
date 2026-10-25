@@ -549,7 +549,7 @@ class DebugManager {
 
 		// Predicted edits change the vector cache, so the caret that shows
 		// them is a Vector tool.
-		if (vectorDocument)
+		if (vectorDocument || vectorSpreadsheet)
 			this._addDebugTool({
 				name: 'Predicted caret',
 				category: 'Display',

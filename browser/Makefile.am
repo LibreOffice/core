@@ -464,6 +464,7 @@ COOL_JS_LST =\
 	src/app/RenderManagerBase.ts \
 	src/app/BitmapTileManager.ts \
 	src/app/VectorResourceTracker.ts \
+	src/app/VectorResourceLoader.ts \
 	src/app/VectorManager.ts \
 	src/app/ImageDecoderPolyfill.ts \
 	src/app/CalcVectorManager.ts \
@@ -608,6 +609,7 @@ COOL_JS_LST =\
 	src/canvas/vector/prediction/CaretLookup.ts \
 	src/canvas/vector/prediction/ParagraphWrap.ts \
 	src/canvas/vector/prediction/TextEdit.ts \
+	src/canvas/vector/prediction/UnansweredEdits.ts \
 	src/canvas/vector/prediction/CaretMove.ts \
 	src/canvas/vector/VectorPrimitiveRenderer.ts \
 	src/canvas/vector/VectorHitTest.ts \
@@ -623,6 +625,7 @@ COOL_JS_LST =\
 	src/canvas/vector/VectorChanges.ts \
 	src/canvas/vector/VectorContentSection.ts \
 	src/canvas/vector/calc/CalcVectorData.ts \
+	src/canvas/vector/calc/CalcTyping.ts \
 	src/canvas/vector/calc/CalcObjectView.ts \
 	src/canvas/vector/calc/CalcBlockPlacement.ts \
 	src/canvas/vector/calc/CalcVectorContentSection.ts \

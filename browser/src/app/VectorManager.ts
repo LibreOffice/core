@@ -20,23 +20,11 @@
  * a vector-rendered document has no bitmap tile grid.
  */
 
-/// The code points deleted before and after the caret, and the text then inserted there.
-interface PredictedChange {
-	text?: string;
-	deleteBefore?: number;
-	deleteAfter?: number;
-}
-
 /// A predicted edit the server has not acknowledged yet.
-interface PredictedTextEdit extends PredictedChange {
-	/// The ticket of the edit's input message.
-	ticket: cool.InputTicket;
+interface PredictedTextEdit extends cool.UnansweredEdit {
 	partId: cool.VectorPartGuid;
 	/// The id of the edited entry.
 	objectId: number;
-	/// The caret before and after the edit.
-	caretBefore: cool.LogicalCaret;
-	caretAfter: cool.LogicalCaret;
 }
 
 /// The cached tree and caret that a predicted edit works on.
@@ -89,12 +77,20 @@ class VectorManager extends RenderManagerBase {
 	// until the page list is replaced.
 	private _missingParts: Set<cool.VectorPartGuid> = new Set();
 
-	// Decoded bitmap images keyed by their checksum.
-	private _bitmaps = new VectorResourceTracker<number, HTMLImageElement>(
-		(checksum) =>
-			'commandvalues command=.uno:VectorRenderingGraphics?checksum=' +
-			String(checksum),
+	// The bitmaps and fonts the parts name. Each part is an owner under its id, and keeps what
+	// it named until it leaves the cache.
+	private _resources = new VectorResourceLoader(
+		(partIds) => {
+			this._redrawPartsUsing(partIds);
+			// A decoded bitmap or a loaded font changes nothing at the engine, so no
+			// object is answered.
+			this._fireChanged([]);
+		},
+		(checksum) => this._standIns.delete(checksum),
 	);
+
+	// Decoded bitmap images keyed by their checksum.
+	private _bitmaps = this._resources.images;
 
 	/*
 		Bitmaps drawn in place of one that is not decoded yet, by its checksum: the bitmap the
@@ -106,9 +102,7 @@ class VectorManager extends RenderManagerBase {
 
 	// Loaded font faces keyed by font id, registered on document.fonts
 	// under the family name "vecfont-<id>".
-	private _fonts = new VectorResourceTracker<string, FontFace>(
-		(fontId) => 'commandvalues command=.uno:VectorRenderingFont?id=' + fontId,
-	);
+	private _fonts = this._resources.fonts;
 
 	// Size and part of every preview that has been rendered. A redraw
 	// triggered by a decoded bitmap reuses these so the re-fired
@@ -768,21 +762,6 @@ class VectorManager extends RenderManagerBase {
 		);
 	}
 
-	/// Collect the bitmap checksums and font ids the walk visits,
-	/// remember the part uses them and request the missing ones.
-	private _collectResources(
-		partId: cool.VectorPartGuid,
-		walk: (walker: cool.VectorResourceWalker) => void,
-	): void {
-		const checksums = new Set<number>();
-		const fontIds = new Set<string>();
-		walk(new cool.VectorResourceWalker(checksums, fontIds));
-		this._bitmaps.indexForPart(partId, checksums);
-		this._bitmaps.requestMissing(checksums);
-		this._fonts.indexForPart(partId, fontIds);
-		this._fonts.requestMissing(fontIds);
-	}
-
 	/// Handle a vector primitives response.
 	handleVectorPrimitivesResponse(values: cool.VectorPrimitivesResponse): void {
 		const mode =
@@ -849,7 +828,7 @@ class VectorManager extends RenderManagerBase {
 		this._cache.set(partId, data);
 		this._staleParts.delete(partId);
 
-		this._collectResources(partId, (walker) => {
+		this._resources.add(partId, (walker) => {
 			walker.walkObjects(received);
 		});
 
@@ -998,7 +977,7 @@ class VectorManager extends RenderManagerBase {
 
 		cached.version = values.version;
 
-		this._collectResources(partId, (walker) => {
+		this._resources.add(partId, (walker) => {
 			walker.walkObjects(carried);
 		});
 
@@ -1061,35 +1040,10 @@ class VectorManager extends RenderManagerBase {
 		}
 	}
 
-	// Shared off-screen 2d context for measuring text, created on first use.
-	private static _measureContext: CanvasRenderingContext2D | null = null;
-
-	private static measureContext(): CanvasRenderingContext2D | null {
-		if (!VectorManager._measureContext) {
-			const canvas = document.createElement('canvas');
-			const context = canvas.getContext('2d');
-			// The prediction measures text one code point at a time and sums the widths. With
-			// kerning off the sum equals the width of the whole string, where the browser
-			// supports the setting.
-			if (context && 'fontKerning' in context) context.fontKerning = 'none';
-			VectorManager._measureContext = context;
-		}
-		return VectorManager._measureContext;
-	}
-
 	// The width of a string as the renderer draws the run, so predicted widths
-	// match the screen. Every width is zero without a 2d context.
+	// match the screen.
 	protected _textMeasure(): cool.TextRunMeasure {
-		return (run, text) => {
-			const context = VectorManager.measureContext();
-			if (!context) return 0;
-			const family = cool.VectorPrimitiveRenderer.resolveFontFamily(
-				run,
-				(fontId) => this._fonts.has(fontId),
-			);
-			context.font = cool.VectorPrimitiveRenderer.cssFont(run, family);
-			return context.measureText(text).width;
-		};
+		return cool.canvasTextMeasure((fontId) => this._fonts.has(fontId));
 	}
 
 	// The measurer over that width, created on first use.
@@ -1207,11 +1161,7 @@ class VectorManager extends RenderManagerBase {
 	/// replaces a selection in the caret's paragraph, as in the engine. True when the tree
 	/// changed.
 	predictTextInsert(text: string): boolean {
-		return this._predictEdit((selected) =>
-			selected
-				? { text, deleteBefore: selected.before, deleteAfter: selected.after }
-				: { text },
-		);
+		return this._predictEdit((selected) => cool.typedChange(text, selected));
 	}
 
 	/// Delete before characters left of the caret and after characters right of it in the
@@ -1219,17 +1169,9 @@ class VectorManager extends RenderManagerBase {
 	/// engine. True when the tree changed.
 	predictTextDelete(before: number, after: number): boolean {
 		if (before <= 0 && after <= 0) return false;
-		return this._predictEdit((selected) => {
-			if (selected) {
-				// The engine takes one key to delete the selection, whichever kind
-				// comes first.
-				if (before > 0) before--;
-				else after--;
-				before += selected.before;
-				after += selected.after;
-			}
-			return { deleteBefore: before, deleteAfter: after };
-		});
+		return this._predictEdit((selected) =>
+			cool.deletedChange(before, after, selected),
+		);
 	}
 
 	/*
@@ -1552,9 +1494,7 @@ class VectorManager extends RenderManagerBase {
 	// points selected before and after the caret in its paragraph, or null without a selection,
 	// and returns the change to apply.
 	private _predictEdit(
-		build: (
-			selected: { before: number; after: number } | null,
-		) => PredictedChange,
+		build: (selected: cool.SelectedAround | null) => cool.PredictedChange,
 	): boolean {
 		// The engine learns of a caret moved here before the edit, so the edit's number is
 		// the one after it.
@@ -1564,10 +1504,8 @@ class VectorManager extends RenderManagerBase {
 		const position = this._lookUpCaret(target);
 		if (!position) return false;
 		const anchor = this._selectionAnchorInParagraph();
-		const selected = anchor
-			? VectorManager._selectedAt(position, anchor)
-			: null;
-		const applied = VectorManager._applyChange(
+		const selected = anchor ? cool.selectedAround(position, anchor) : null;
+		const applied = cool.applyPredictedChange(
 			target.tree,
 			position,
 			target.logical,
@@ -1599,76 +1537,6 @@ class VectorManager extends RenderManagerBase {
 		return true;
 	}
 
-	// Apply a change at the position in the tree: the deletion, then the insertion at the caret
-	// looked up again, as the deletion leaves the position stale. Returns how far the caret
-	// index and x moved, the position after the change, and the change applied, without the
-	// text when the insertion could not be predicted. Null when nothing changed.
-	private static _applyChange(
-		tree: cool.PredictionTree,
-		position: cool.CaretPosition,
-		logical: cool.LogicalCaret | null,
-		change: PredictedChange,
-	): {
-		indexShift: number;
-		caretShift: number;
-		position: cool.CaretPosition;
-		change: PredictedChange;
-	} | null {
-		const deleteBefore = change.deleteBefore ?? 0;
-		const deleteAfter = change.deleteAfter ?? 0;
-		let indexShift = 0;
-		let caretShift = 0;
-		let deleted = false;
-		if (deleteBefore > 0 || deleteAfter > 0) {
-			const result = position.delete(deleteBefore, deleteAfter);
-			if (result.removed === 0) return null;
-			deleted = true;
-			indexShift = -result.removedBefore;
-			caretShift = result.caretShift;
-		}
-		const deletion = {
-			indexShift,
-			caretShift,
-			position,
-			change: { deleteBefore, deleteAfter },
-		};
-		const text = change.text;
-		if (text === undefined) return deleted ? deletion : null;
-		if (deleted) {
-			const objectId = position.objectId;
-			if (objectId === undefined || !logical) return deletion;
-			const after = tree.caretIn(objectId, {
-				paragraph: logical.paragraph,
-				index: Math.max(0, logical.index + indexShift),
-			});
-			if (!after) return deletion;
-			position = after;
-		}
-		const inserted = position.insert(text);
-		if (!(inserted.advance > 0)) return deleted ? deletion : null;
-		return {
-			indexShift: indexShift + text.length,
-			caretShift: caretShift + inserted.caretShift,
-			position,
-			change: deleted ? { text, deleteBefore, deleteAfter } : { text },
-		};
-	}
-
-	// The code points selected before and after the caret, up to the anchor.
-	private static _selectedAt(
-		position: cool.CaretPosition,
-		anchor: cool.LogicalCaret,
-	): { before: number; after: number } {
-		const text = position.run.text;
-		const caret = position.run.start + position.offset;
-		const count = (from: number, to: number) =>
-			[...text.slice(from, to)].length;
-		return {
-			before: anchor.index < caret ? count(anchor.index, caret) : 0,
-			after: anchor.index > caret ? count(caret, anchor.index) : 0,
-		};
-	}
-
 	// Place the caret at its logical position in the edited tree, so it follows
 	// text a re-wrap moved to another line, and redraw it. Without a logical
 	// position, slide it along its line by the edit's width. target.caret is
@@ -1691,27 +1559,17 @@ class VectorManager extends RenderManagerBase {
 	}
 
 	private _setCaretRectangle(geometry: cool.CaretGeometry): void {
-		app.file.textCursor.rectangle = new cool.SimpleRectangle(
-			geometry.x,
-			geometry.top,
-			0,
-			geometry.height,
-		);
-		(this._docLayer as any)._onUpdateCursor();
+		cool.showCaret(geometry);
 	}
 
-	// The pending edits, oldest first.
-	private _pendingEdits: PredictedTextEdit[] = [];
+	// The edits typed here that the engine has not answered, of every part.
+	private _typedEdits = new cool.UnansweredEdits<PredictedTextEdit>();
 
-	private _hasPendingEdits(partId: cool.VectorPartGuid): boolean {
-		return this._pendingEdits.some((edit) => edit.partId === partId);
-	}
-
-	private _dropEdits(partId: cool.VectorPartGuid | null): void {
-		this._pendingEdits =
-			partId === null
-				? []
-				: this._pendingEdits.filter((edit) => edit.partId !== partId);
+	// The edits of the part.
+	private static _ofPart(
+		partId: cool.VectorPartGuid,
+	): (edit: PredictedTextEdit) => boolean {
+		return (edit) => edit.partId === partId;
 	}
 
 	// Drop the part's edits and ask for the whole part again, as the cached tree
@@ -1719,7 +1577,7 @@ class VectorManager extends RenderManagerBase {
 	// where a delta replaces only those the server changed. The cached tree
 	// stays drawn until the response arrives.
 	private _abandonEdits(partId: cool.VectorPartGuid): void {
-		this._dropEdits(partId);
+		this._typedEdits.forget(VectorManager._ofPart(partId));
 		const data = this._cache.get(partId);
 		if (!data) return;
 		this._inFlightParts.add(partId);
@@ -1733,11 +1591,11 @@ class VectorManager extends RenderManagerBase {
 		position: cool.CaretPosition,
 		caretBefore: cool.LogicalCaret,
 		caretAfter: cool.LogicalCaret,
-		change: PredictedChange,
+		change: cool.PredictedChange,
 	): void {
 		const objectId = position.objectId;
 		if (objectId === undefined) return;
-		this._pendingEdits.push({
+		this._typedEdits.record({
 			ticket: cool.InputSequence.ticketForTheNextMessage(),
 			partId,
 			objectId,
@@ -1756,33 +1614,22 @@ class VectorManager extends RenderManagerBase {
 		inputSequence: number | undefined,
 		replaced?: number[],
 	): void {
-		if (!this._hasPendingEdits(partId)) return;
-		this._pendingEdits = this._pendingEdits.filter(
-			(edit) =>
-				edit.partId !== partId ||
-				(inputSequence !== undefined && !edit.ticket.appliedBy(inputSequence)),
-		);
-		const remaining = this._pendingEdits.filter(
-			(edit) => edit.partId === partId,
-		);
+		const ofPart = VectorManager._ofPart(partId);
+		if (!this._typedEdits.has(ofPart)) return;
+		const remaining = this._typedEdits.answered(inputSequence, ofPart);
 		const toReplay = replaced
 			? remaining.filter((edit) => replaced.includes(edit.objectId))
 			: remaining;
 		if (!toReplay.length) return;
 		const data = this._cache.get(partId);
 		if (!data) {
-			this._dropEdits(partId);
+			this._typedEdits.forget(ofPart);
 			return;
 		}
-		let treeChanged = false;
-		for (const edit of toReplay) {
-			if (!this._replayEdit(data, edit)) {
-				this._abandonEdits(partId);
-				treeChanged = false;
-				break;
-			}
-			treeChanged = true;
-		}
+		const treeChanged = cool.UnansweredEdits.applyAgain(toReplay, (edit) =>
+			this._replayEdit(data, edit),
+		);
+		if (!treeChanged) this._abandonEdits(partId);
 		if (treeChanged) {
 			// The newest edit set the caret, replayed or not, unless the caret moved
 			// here after it.
@@ -1791,7 +1638,7 @@ class VectorManager extends RenderManagerBase {
 			const caret =
 				moved &&
 				moved.caret.partId === partId &&
-				moved.sequence > VectorManager._sentAs(newest)
+				moved.sequence > cool.UnansweredEdits.sentAs(newest)
 					? { entryId: moved.caret.entryId, logical: moved.caret.logical }
 					: { entryId: newest.objectId, logical: newest.caretAfter };
 			const geometry = this._treeOf(data)
@@ -1817,7 +1664,7 @@ class VectorManager extends RenderManagerBase {
 		);
 		if (!position) return false;
 		return (
-			VectorManager._applyChange(
+			cool.applyPredictedChange(
 				this._treeOf(data),
 				position,
 				edit.caretBefore,
@@ -1836,40 +1683,25 @@ class VectorManager extends RenderManagerBase {
 		if (LocalCaret.isAhead(update)) return true;
 		const partId = this._selectedPartId();
 		if (partId === undefined) return false;
-		const pending = this._pendingEdits.filter((edit) => edit.partId === partId);
-		if (!pending.length) return false;
-		const inputSequence = VectorManager._numberOf(update.inputSequence);
-		if (inputSequence === undefined) return false;
-		const newest = pending[pending.length - 1];
-		if (!newest.ticket.appliedBy(inputSequence)) return true;
-		// A caret moved here after the newest edit is where the engine's caret answers
-		// from.
-		const expected =
-			moved &&
-			moved.caret.partId === partId &&
-			moved.sequence > VectorManager._sentAs(newest)
-				? moved.caret.logical
-				: newest.caretAfter;
-		const paragraph = VectorManager._numberOf(update.paragraph);
-		const index = VectorManager._numberOf(update.index);
-		const objectId = VectorManager._numberOf(update.object);
-		// A running edit's entry keeps its id across objects, so compare with
-		// the edited object.
-		const otherObject =
-			objectId !== undefined &&
-			objectId !== this._editedObjectOf(partId, newest.objectId);
-		const elsewhere =
-			paragraph !== undefined &&
-			index !== undefined &&
-			(paragraph !== expected.paragraph || index !== expected.index);
-		if (otherObject || elsewhere) this._abandonEdits(partId);
-		return false;
-	}
-
-	// The number of the edit's message. An edit whose message has no number yet is older than
-	// every caret moved after it, told or not, so it sorts below any number.
-	private static _sentAs(edit: PredictedTextEdit): number {
-		return edit.ticket.sentAs() ?? -Infinity;
+		const verdict = this._typedEdits.verdictOn(
+			update,
+			// A running edit's entry keeps its id across objects, so compare with the
+			// edited object.
+			(objectId, newest) =>
+				objectId === this._editedObjectOf(partId, newest.objectId),
+			VectorManager._ofPart(partId),
+			// A caret moved here after the newest edit is where the engine's caret
+			// answers from.
+			(newest) =>
+				moved &&
+				moved.caret.partId === partId &&
+				moved.sequence > cool.UnansweredEdits.sentAs(newest)
+					? moved.caret.logical
+					: newest.caretAfter,
+		);
+		if (verdict === cool.CaretUpdateVerdict.Elsewhere)
+			this._abandonEdits(partId);
+		return verdict === cool.CaretUpdateVerdict.Older;
 	}
 
 	// The edited object: a running edit entry's parent, or the entry itself.
@@ -1883,67 +1715,13 @@ class VectorManager extends RenderManagerBase {
 			: objectId;
 	}
 
-	// A message string as a number, or undefined when missing or empty.
-	private static _numberOf(value: unknown): number | undefined {
-		if (value === undefined || value === null) return undefined;
-		if (typeof value === 'string' && value.trim() === '') return undefined;
-		const number = Number(value);
-		return isNaN(number) ? undefined : number;
-	}
-
 	/// Handle a fetched bitmap: cache it and re-render the previews
 	/// that use it. Data that is missing or fails to decode marks
 	/// the checksum as unavailable.
 	handleVectorRenderingGraphicsResponse(
 		values: cool.VectorRenderingGraphicsResponse,
 	): void {
-		window.app.console.log(
-			'vectorrenderinggraphics pulled payload: ' +
-				(values.data ? values.data.length : 0) +
-				' base64 bytes, checksum=' +
-				values.checksum,
-		);
-		if (this._bitmaps.has(values.checksum)) {
-			this._bitmaps.clearInFlight(values.checksum);
-			return;
-		}
-		if (!values.data) {
-			this._markBitmapUnavailable(
-				values.checksum,
-				'the engine reported: ' + (values.error || 'no image data'),
-			);
-			return;
-		}
-		const image = new Image();
-		// Add to the cache only on a successful decode. Clear
-		// the in-flight mark on either outcome.
-		image.onload = () => {
-			this._bitmaps.setLoaded(values.checksum, image);
-			this._standIns.delete(values.checksum);
-			this._redrawPartsUsing(this._bitmaps.partsFor(values.checksum));
-			// A decoded bitmap changes nothing at the engine, so no object is answered.
-			this._fireChanged([]);
-		};
-		image.onerror = () => {
-			this._markBitmapUnavailable(
-				values.checksum,
-				'its image data failed to decode',
-			);
-		};
-		image.src = values.data;
-	}
-
-	/// Record a checksum no usable image could be obtained for, so
-	/// it is not requested again, and log the reason.
-	private _markBitmapUnavailable(checksum: number, reason: string): void {
-		this._standIns.delete(checksum);
-		window.app.console.warn(
-			'VectorRenderingGraphics: bitmap ' +
-				String(checksum) +
-				' is unavailable: ' +
-				reason,
-		);
-		this._bitmaps.setUnavailable(checksum);
+		this._resources.handleImage(values);
 	}
 
 	// whether the previews shown are to be drawn again for pictures that loaded just now
@@ -1989,45 +1767,11 @@ class VectorManager extends RenderManagerBase {
 	}
 
 	/// Handle a fetched font: register it as a FontFace under a synthetic
-	/// family name and re-render the parts that use it. The face is added
-	/// to the document only after it loads, so a failed decode leaves the
-	/// renderer on the family-name fallback.
+	/// family name and re-render the parts that use it.
 	handleVectorRenderingFontResponse(
 		values: cool.VectorRenderingFontResponse,
 	): void {
-		const fontId = values.fontId;
-		if (this._fonts.has(fontId)) {
-			this._fonts.clearInFlight(fontId);
-			return;
-		}
-		if (!values.data) {
-			// The engine does not hold the id.
-			this._fonts.setUnavailable(fontId);
-			return;
-		}
-		const face = new FontFace(
-			'vecfont-' + fontId,
-			this._decodeFontData(values.data),
-		);
-		face
-			.load()
-			.then(() => {
-				(document as unknown as { fonts: Set<FontFace> }).fonts.add(face);
-				this._fonts.setLoaded(fontId, face);
-				this._redrawPartsUsing(this._fonts.partsFor(fontId));
-				// A loaded font changes nothing at the engine, so no object is answered.
-				this._fireChanged([]);
-			})
-			.catch(() => {
-				this._fonts.setUnavailable(fontId);
-			});
-	}
-
-	private _decodeFontData(base64: string): ArrayBuffer {
-		const binary = window.atob(base64);
-		const bytes = new Uint8Array(binary.length);
-		for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-		return bytes.buffer;
+		this._resources.handleFont(values);
 	}
 
 	/// The page list on screen has been replaced, so an index may name
@@ -2079,8 +1823,7 @@ class VectorManager extends RenderManagerBase {
 		this._inFlightParts.clear();
 		this._revalidating.clear();
 		this._revalidationsWaiting = [];
-		this._bitmaps.forgetAllParts();
-		this._fonts.forgetAllParts();
+		this._resources.forgetOwners();
 		this._fireChanged();
 	}
 
@@ -2089,7 +1832,8 @@ class VectorManager extends RenderManagerBase {
 	/// fonts stay registered, since they are few and small. The predicted
 	/// edits stay pending.
 	reclaimGraphicsMemory(): void {
-		this._bitmaps.clear();
+		this._resources.dropImages();
+		this._resources.forgetOwners();
 		this._cache.clear();
 		this._staleParts.clear();
 		this._inFlightParts.clear();
@@ -2105,14 +1849,11 @@ class VectorManager extends RenderManagerBase {
 		this._staleParts.clear();
 		this._inFlightParts.clear();
 		this._pendingPreviews.clear();
-		this._dropEdits(null);
-		this._bitmaps.clear();
+		this._typedEdits.forget();
+		this._resources.discard();
 		this._renderedPreviews.clear();
 		this._renderer.releaseScratchCanvases();
 		this._renderer.releaseColorChangedImages();
-		for (const face of this._fonts.values())
-			(document as unknown as { fonts: Set<FontFace> }).fonts.delete(face);
-		this._fonts.clear();
 		this._fireChanged();
 	}
 

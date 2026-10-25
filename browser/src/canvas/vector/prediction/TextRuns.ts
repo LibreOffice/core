@@ -51,6 +51,27 @@ namespace cool {
 		delete decorated.decorationsInTextColor;
 	}
 
+	// Shared off-screen 2d context for measuring text, created on first use.
+	let measureContext: CanvasRenderingContext2D | null | undefined;
+
+	/// The width of a string as the renderer draws the run, in a loaded font or the fallback
+	/// family. Zero without a 2d context.
+	export function canvasTextMeasure(hasFont: FontLoadedLookup): TextRunMeasure {
+		return (run, text) => {
+			if (measureContext === undefined) {
+				const canvas = document.createElement('canvas');
+				measureContext = canvas.getContext('2d');
+				// Widths are summed per code point. Without kerning the sum matches the whole.
+				if (measureContext && 'fontKerning' in measureContext)
+					measureContext.fontKerning = 'none';
+			}
+			if (!measureContext) return 0;
+			const family = VectorPrimitiveRenderer.resolveFontFamily(run, hasFont);
+			measureContext.font = VectorPrimitiveRenderer.cssFont(run, family);
+			return measureContext.measureText(text).width;
+		};
+	}
+
 	/// Measures text in a run's font and scales it to the server's measure. Widths are sums of
 	/// single code points, so the parts of a text add up to the whole. Kerning is lost, and the
 	/// server's layout restores it.

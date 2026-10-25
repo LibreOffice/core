@@ -34,6 +34,21 @@ namespace cool {
 		caretShift: number;
 	}
 
+	/// The code points deleted before and after the caret, and the text then inserted there.
+	export interface PredictedChange {
+		text?: string;
+		deleteBefore?: number;
+		deleteAfter?: number;
+	}
+
+	/// A change applied to a tree. The caret shift is in slide twips.
+	export interface AppliedChange {
+		indexShift: number;
+		caretShift: number;
+		position: CaretPosition;
+		change: PredictedChange;
+	}
+
 	/// The UTF-16 units removed, those before the caret, and the caret move in slide twips.
 	export interface PredictedDeletion {
 		removed: number;
@@ -284,5 +299,100 @@ namespace cool {
 			for (const run of this.rightward) run.shift(delta - leftShare);
 			return leftShare;
 		}
+	}
+
+	/// The code points selected before and after the caret in its paragraph.
+	export interface SelectedAround {
+		before: number;
+		after: number;
+	}
+
+	/// Typed text, which replaces a selection in the caret's paragraph, as in the engine.
+	export function typedChange(
+		text: string,
+		selected: SelectedAround | null,
+	): PredictedChange {
+		return selected
+			? { text, deleteBefore: selected.before, deleteAfter: selected.after }
+			: { text };
+	}
+
+	/// A deletion around the caret that takes the selection in its paragraph, like the engine.
+	export function deletedChange(
+		before: number,
+		after: number,
+		selected: SelectedAround | null,
+	): PredictedChange {
+		if (selected) {
+			// The engine takes one key to delete the selection, whichever kind comes first.
+			if (before > 0) before--;
+			else after--;
+			before += selected.before;
+			after += selected.after;
+		}
+		return { deleteBefore: before, deleteAfter: after };
+	}
+
+	/// Applies the deletion, then the insertion at the caret looked up again after it. The
+	/// result has no text when the insertion was not predicted. Null when nothing changed.
+	export function applyPredictedChange(
+		tree: PredictionTree,
+		position: CaretPosition,
+		logical: LogicalCaret | null,
+		change: PredictedChange,
+	): AppliedChange | null {
+		const deleteBefore = change.deleteBefore ?? 0;
+		const deleteAfter = change.deleteAfter ?? 0;
+		let indexShift = 0;
+		let caretShift = 0;
+		let deleted = false;
+		if (deleteBefore > 0 || deleteAfter > 0) {
+			const result = position.delete(deleteBefore, deleteAfter);
+			if (result.removed === 0) return null;
+			deleted = true;
+			indexShift = -result.removedBefore;
+			caretShift = result.caretShift;
+		}
+		const deletion = {
+			indexShift,
+			caretShift,
+			position,
+			change: { deleteBefore, deleteAfter },
+		};
+		const text = change.text;
+		if (text === undefined) return deleted ? deletion : null;
+		if (deleted) {
+			const objectId = position.objectId;
+			if (objectId === undefined || !logical) return deletion;
+			const after = tree.caretIn(objectId, {
+				paragraph: logical.paragraph,
+				index: Math.max(0, logical.index + indexShift),
+			});
+			if (!after) return deletion;
+			position = after;
+		}
+		const inserted = position.insert(text);
+		if (!(inserted.advance > 0)) return deleted ? deletion : null;
+		return {
+			indexShift: indexShift + text.length,
+			caretShift: caretShift + inserted.caretShift,
+			position,
+			change: deleted ? { text, deleteBefore, deleteAfter } : { text },
+		};
+	}
+
+	/// The code points selected before and after the caret, up to the anchor.
+	export function selectedAround(
+		position: CaretPosition,
+		anchor: LogicalCaret,
+	): SelectedAround {
+		const text = position.run.text;
+		const caret = position.run.start + position.offset;
+		const count = (from: number, to: number) =>
+			[...text.slice(from, to)].length;
+		return {
+			before: anchor.index < caret ? count(anchor.index, caret) : 0,
+			after: anchor.index > caret ? count(caret, anchor.index) : 0,
+		};
 	}
 }

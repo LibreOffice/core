@@ -20,5 +20,7 @@ namespace cool {
 		/// Draws the selected text from its rectangles, each as [x, y, width, height] in
 		/// twips, or removes the selection when there are none.
 		showTextSelection(rawRectangles: number[][]): void;
+		/// Shows the text cursor at the rectangle that app.file.textCursor holds.
+		_onUpdateCursor(): void;
 	}
 }

@@ -309,6 +309,69 @@ describe('calcApplyTextStyles', function () {
 	});
 });
 
+describe('calcBlockWithoutCellText', function () {
+	function cellText(column: number, row: number): cool.Primitive {
+		return { type: 'calcCellText', column, row } as unknown as cool.Primitive;
+	}
+
+	function block(): cool.CalcBlockEntry {
+		const part = (row: number): cool.CalcBlockPart => ({
+			version: 1,
+			content: {
+				layers: {
+					background: [{ type: 'group' } as cool.Primitive],
+					text: [cellText(2, row), cellText(3, row)],
+				},
+			},
+		});
+		return {
+			kind: 'cells',
+			blockRow: 0,
+			blockColumn: 0,
+			startRow: 0,
+			startColumn: 0,
+			endRow: 63,
+			endColumn: 15,
+			version: 1,
+			current: 1,
+			borders: undefined,
+			rows: new Map([
+				[4, part(4)],
+				[5, part(5)],
+			]),
+			objects: new Set(),
+			content: { bounds: { x: 0, y: 0, width: 1, height: 1 }, layers: {} },
+		};
+	}
+
+	function columnsOfText(part: cool.CalcBlockPart | undefined): number[] {
+		return (part?.content.layers?.text ?? []).map(
+			(primitive) => (primitive as unknown as { column: number }).column,
+		);
+	}
+
+	it('leaves out the stored text of an edited cell only', function () {
+		const held = block();
+		const shown = cool.calcBlockWithoutCellText(held, [{ column: 3, row: 4 }]);
+
+		nodeassert.deepStrictEqual(columnsOfText(shown.rows.get(4)), [2]);
+		nodeassert.deepStrictEqual(columnsOfText(shown.rows.get(5)), [2, 3]);
+		// The rest of the row stays, and the other rows are shared.
+		nodeassert.strictEqual(
+			shown.rows.get(4)?.content.layers?.background,
+			held.rows.get(4)?.content.layers?.background,
+		);
+		nodeassert.strictEqual(shown.rows.get(5), held.rows.get(5));
+	});
+
+	it('leaves the block it starts from as it is', function () {
+		const held = block();
+		cool.calcBlockWithoutCellText(held, [{ column: 3, row: 4 }]);
+
+		nodeassert.deepStrictEqual(columnsOfText(held.rows.get(4)), [2, 3]);
+	});
+});
+
 describe('calcTextStrips', function () {
 	function part(name: string, y: number, layers?: cool.CalcBlockLayers) {
 		return {

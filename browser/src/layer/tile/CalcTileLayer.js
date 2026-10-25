@@ -1165,6 +1165,7 @@ window.L.CalcTileLayer = window.L.CanvasTileLayer.extend({
 		// A vector-drawn sheet receives its content, fonts and images here.
 		if (values.docType === 'spreadsheet' &&
 			(values.type === 'vectorprimitives' || values.type === 'vectorprimitivesdelta')) {
+			this._readInputSequence(textMsg, values);
 			CalcVectorManager.instance().handleVectorPrimitives(values);
 			return;
 		}

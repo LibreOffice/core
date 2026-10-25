@@ -65,6 +65,22 @@ class VectorResourceTracker<K, V> {
 		}
 	}
 
+	/// Make the ids all that the part uses. The part lets go of the ids it no longer uses, and
+	/// with dropUnused a value that nothing uses any more goes. An id the part uses before and
+	/// after keeps its value.
+	replacePart(
+		partId: cool.VectorPartGuid,
+		ids: Set<K>,
+		dropUnused: boolean,
+	): void {
+		for (const [id, parts] of Array.from(this._idToParts.entries())) {
+			if (ids.has(id) || !parts.delete(partId) || parts.size > 0) continue;
+			this._idToParts.delete(id);
+			if (dropUnused) this._cache.delete(id);
+		}
+		this.indexForPart(partId, ids);
+	}
+
 	/// Forget that the part uses anything, keeping the values.
 	forgetPart(partId: cool.VectorPartGuid): void {
 		for (const [id, parts] of Array.from(this._idToParts.entries())) {
@@ -104,6 +120,13 @@ class VectorResourceTracker<K, V> {
 
 	clearInFlight(id: K): void {
 		this._inFlight.delete(id);
+	}
+
+	/// Drop the loaded values, keeping which parts use which id. A dropped id is requested
+	/// again as any missing one.
+	dropValues(): void {
+		this._cache.clear();
+		this._inFlight.clear();
 	}
 
 	clear(): void {
