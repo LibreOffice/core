@@ -1,4 +1,4 @@
-/* global describe it cy before Cypress require expect */
+/* global describe it cy Cypress require expect */
 
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
@@ -15,10 +15,9 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Table operations', { testI
 		notebookbar: true,
 		caretToDocumentStart: true,
 		viewport: [1280, 800],
-	});
-
-	before(function() {
-		desktopHelper.selectZoomLevel('70', false);
+		setup: function() {
+			desktopHelper.selectZoomLevel('70', false);
+		},
 	});
 
 	function selectFullTable() {

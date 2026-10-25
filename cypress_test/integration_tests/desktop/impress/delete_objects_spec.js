@@ -1,18 +1,18 @@
-/* global describe it cy require before beforeEach expect Cypress */
+/* global describe it cy require beforeEach expect Cypress */
 
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
 
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Delete Objects', { testIsolation: false }, function() {
 
-	desktopHelper.shareDocumentAcrossTests('impress/delete_objects.odp');
+	desktopHelper.shareDocumentAcrossTests('impress/delete_objects.odp', {
+		setup: function() {
+			desktopHelper.switchUIToCompact();
 
-	before(function() {
-		desktopHelper.switchUIToCompact();
-
-		cy.getFrameWindow().then(function(win) {
-			helper.processToIdle(win);
-		});
+			cy.getFrameWindow().then(function(win) {
+				helper.processToIdle(win);
+			});
+		},
 	});
 
 	beforeEach(function() {

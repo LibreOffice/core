@@ -1,4 +1,4 @@
-/* global describe it cy before beforeEach require Cypress */
+/* global describe it cy beforeEach require Cypress */
 
 var helper = require('../../common/helper');
 var impressHelper = require('../../common/impress_helper');
@@ -8,18 +8,18 @@ describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Top toolbar tests.', { tes
 
 	// No viewport is set here: this spec drives the compact toolbar, whose items move
 	// into the overflow when the window size changes.
-	desktopHelper.shareDocumentAcrossTests('impress/top_toolbar.odp');
+	desktopHelper.shareDocumentAcrossTests('impress/top_toolbar.odp', {
+		// Both of these hold for the whole file. Hiding the sidebar in particular is a
+		// toggle that starts from "it is showing", so it happens once.
+		setup: function() {
+			desktopHelper.switchUIToCompact();
 
-	// Both of these hold for the whole file. Hiding the sidebar in particular is a
-	// toggle that starts from "it is showing", so it happens once.
-	before(function() {
-		desktopHelper.switchUIToCompact();
-
-		if (Cypress.env('INTEGRATION') === 'nextcloud') {
-			desktopHelper.hideSidebar();
-		} else {
-			desktopHelper.hideSidebarImpress();
-		}
+			if (Cypress.env('INTEGRATION') === 'nextcloud') {
+				desktopHelper.hideSidebar();
+			} else {
+				desktopHelper.hideSidebarImpress();
+			}
+		},
 	});
 
 	beforeEach(function() {

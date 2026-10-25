@@ -1,4 +1,4 @@
-/* global describe it cy before beforeEach expect require */
+/* global describe it cy beforeEach expect require */
 
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
@@ -6,11 +6,11 @@ var calcHelper = require('../../common/calc_helper');
 
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Scroll through document', { testIsolation: false }, function() {
 
-	desktopHelper.shareDocumentAcrossTests('calc/scrolling.ods');
-
-	// Switching to the compact toolbar holds for the whole file.
-	before(function() {
-		desktopHelper.switchUIToCompact();
+	desktopHelper.shareDocumentAcrossTests('calc/scrolling.ods', {
+		// Switching to the compact toolbar holds for the whole file.
+		setup: function() {
+			desktopHelper.switchUIToCompact();
+		},
 	});
 
 	beforeEach(function() {

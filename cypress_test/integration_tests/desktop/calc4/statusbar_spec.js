@@ -1,4 +1,4 @@
-/* global describe it cy before require Cypress */
+/* global describe it cy require Cypress */
 
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
@@ -6,21 +6,21 @@ var calcHelper = require('../../common/calc_helper');
 
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Statusbar tests.', { testIsolation: false }, function() {
 
-	desktopHelper.shareDocumentAcrossTests('calc/statusbar.ods');
+	desktopHelper.shareDocumentAcrossTests('calc/statusbar.ods', {
+		// The document opens at 100 percent with the cursor on A3. The tests below
+		// change both, so this says what the document arrives as.
+		setup: function() {
+			if (Cypress.env('INTEGRATION') === 'nextcloud') {
+				desktopHelper.showStatusBarIfHidden();
+			}
 
-	// The document opens at 100 percent with the cursor on A3. The tests below
-	// change both, so this says what the document arrives as.
-	before(function() {
-		if (Cypress.env('INTEGRATION') === 'nextcloud') {
-			desktopHelper.showStatusBarIfHidden();
-		}
+			desktopHelper.shouldHaveZoomLevel('100');
+			cy.cGet(helper.addressInputSelector).should('have.value', 'A3');
 
-		desktopHelper.shouldHaveZoomLevel('100');
-		cy.cGet(helper.addressInputSelector).should('have.value', 'A3');
-
-		cy.getFrameWindow().then(function(win) {
-			helper.processToIdle(win);
-		});
+			cy.getFrameWindow().then(function(win) {
+				helper.processToIdle(win);
+			});
+		},
 	});
 
 	it('Selected sheet.', function() {

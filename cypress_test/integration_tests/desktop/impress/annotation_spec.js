@@ -1,4 +1,4 @@
-/* global describe it cy require before beforeEach expect Cypress */
+/* global describe it cy require beforeEach expect Cypress */
 
 var desktopHelper = require('../../common/desktop_helper');
 var helper = require('../../common/helper');
@@ -11,12 +11,11 @@ describe(['tagdesktop'], 'Annotation Tests', { testIsolation: false }, function(
 	desktopHelper.shareDocumentAcrossTests('impress/comment_switching.odp', {
 		notebookbar: true,
 		viewport: [1500, 600],
-	});
-
-	// The zoom is a view setting, so undo leaves it alone and one call covers every
-	// test.
-	before(function() {
-		desktopHelper.selectZoomLevel('50', false);
+		// The zoom is a view setting, so undo leaves it alone and one call covers every
+		// test.
+		setup: function() {
+			desktopHelper.selectZoomLevel('50', false);
+		},
 	});
 
 	beforeEach(function() {

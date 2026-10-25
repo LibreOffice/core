@@ -1,4 +1,4 @@
-/* global describe it cy before beforeEach require expect */
+/* global describe it cy beforeEach require expect */
 
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
@@ -6,14 +6,14 @@ var writerHelper = require('../../common/writer_helper');
 
 describe(['tagdesktop', 'tagnextcloud', 'tagproxy'], 'Searching via quickfind in navigation panel', { testIsolation: false }, function() {
 
-    desktopHelper.shareDocumentAcrossTests('writer/search_bar.odt');
-
-    // The panel is opened once and stays open, and the tests below search in
-    // it. Closing it between tests leaves the client flag and core's own
-    // navigator state to catch up with each other, and whether the panel takes
-    // the focus when it opens depends on both.
-    before(function() {
-        writerHelper.openQuickFind();
+    desktopHelper.shareDocumentAcrossTests('writer/search_bar.odt', {
+        // The panel is opened once and stays open, and the tests below search in
+        // it. Closing it between tests leaves the client flag and core's own
+        // navigator state to catch up with each other, and whether the panel takes
+        // the focus when it opens depends on both.
+        setup: function() {
+            writerHelper.openQuickFind();
+        },
     });
 
     it('Search existing word.', function() {

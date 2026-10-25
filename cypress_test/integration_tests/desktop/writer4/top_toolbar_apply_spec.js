@@ -1,4 +1,4 @@
-/* global describe it cy before beforeEach require Cypress */
+/* global describe it cy beforeEach require Cypress */
 
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
@@ -9,15 +9,11 @@ describe(['tagdesktop'], 'Top toolbar apply tests.', { testIsolation: false }, f
 	desktopHelper.shareDocumentAcrossTests('writer/top_toolbar.odt', {
 		notebookbar: true,
 		viewport: [1920, 1080],
-	});
-
-	before(function() {
-		if (Cypress.env('INTEGRATION') === 'nextcloud') {
-			desktopHelper.showSidebar();
-		}
-		cy.getFrameWindow().then((win) => {
-			this.win = win;
-		})
+		setup: function() {
+			if (Cypress.env('INTEGRATION') === 'nextcloud') {
+				desktopHelper.showSidebar();
+			}
+		},
 	});
 
 	beforeEach(function() {

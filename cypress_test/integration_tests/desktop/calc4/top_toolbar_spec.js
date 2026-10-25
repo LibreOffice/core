@@ -1,4 +1,4 @@
-/* global describe it cy before beforeEach require expect */
+/* global describe it cy beforeEach require expect */
 
 var helper = require('../../common/helper');
 var desktopHelper = require('../../common/desktop_helper');
@@ -6,10 +6,10 @@ var calcHelper = require('../../common/calc_helper');
 
 describe(['tagdesktop'], 'Top toolbar tests.', { testIsolation: false }, function() {
 
-	desktopHelper.shareDocumentAcrossTests('calc/top_toolbar.ods');
-
-	before(function() {
-		desktopHelper.switchUIToCompact();
+	desktopHelper.shareDocumentAcrossTests('calc/top_toolbar.ods', {
+		setup: function() {
+			desktopHelper.switchUIToCompact();
+		},
 	});
 
 	beforeEach(function() {
