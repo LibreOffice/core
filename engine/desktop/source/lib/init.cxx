@@ -3258,6 +3258,8 @@ COKitTranslateResult COKitImpl::translateDocument(const char* pInputPath, const 
             return COKitTranslateResult::TRANSLATED;
         case desktop::l10n::TranslateResult::CopiedUntranslated:
             return COKitTranslateResult::COPIED_UNTRANSLATED;
+        case desktop::l10n::TranslateResult::ReadOnly:
+            return COKitTranslateResult::READ_ONLY;
         default:
             SetLastExceptionMsg(u"translateDocument: failed"_ustr);
             return COKitTranslateResult::FAILED;

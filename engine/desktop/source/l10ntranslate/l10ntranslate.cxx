@@ -79,6 +79,9 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS(argc, argv)
         case desktop::l10n::TranslateResult::CopiedUntranslated:
             puts("copied untranslated");
             return 0;
+        case desktop::l10n::TranslateResult::ReadOnly:
+            fprintf(stderr, "l10ntranslate: %s is read-only\n", argv[1]);
+            return 1;
         case desktop::l10n::TranslateResult::Error:
             break;
     }

@@ -33,6 +33,9 @@ enum class TranslateResult
     Translated, ///< l10n stream present and the requested language matched
     /// no stream (byte copy); no locale match or unreadable stream (markers stripped)
     CopiedUntranslated,
+    /// in place only: the file needs a rewrite but its location cannot be
+    /// written (a read-only install); it is left exactly as it is
+    ReadOnly,
     /// the file could not be read, parsed as a package, rewritten, or written back
     Error,
 };
@@ -51,6 +54,8 @@ enum class TranslateResult
       checking follows the translation.
     - No locale match, an empty rBcp47Language, or a stream that cannot be
       read: only the markers are stripped.
+    - In place, with a rewrite needed but the file's directory not
+      writable: the file is left as it is and reported as ReadOnly.
     - Translated before and edited since: the file is left exactly as it is
       and reported as CopiedUntranslated, because the change is the user's
       own work.

@@ -2493,15 +2493,24 @@ std::shared_ptr<COKitDocument> Document::load(const std::shared_ptr<ChildSession
         const char* url = loadUri.c_str();
 
 #if defined(QTAPP) || defined(MACOS) || defined(_WIN32)
-        // In-place translation of a document carrying an "l10n" stream
-        // (the intro templates); a no-op for ordinary documents.  With no
-        // language the markers still come off, so the text reads plainly.
-        // Every app build that ships the intro documents needs this: the
-        // stream's keys carry no "_", so the import-time mapper in xmloff
-        // cannot translate them.
-        if (loKitPtr &&
-            loKitPtr->translateDocument(url, url, lang.c_str()) == COKitTranslateResult::FAILED)
-            LOG_WRN("translateDocument failed for " << uriAnonym << "; opening as-is");
+        // In-place translation of a document carrying an "l10n" stream; a
+        // no-op for ordinary documents.  With no language the markers still
+        // come off, so the text reads plainly.  Every app build that ships
+        // the intro documents needs this: their stream's keys carry no "_",
+        // so the import-time mapper in xmloff cannot translate them.  The
+        // intro templates are opened from a writable copy in the documents
+        // folder.  A bundled document in a read-only install (the welcome
+        // slideshow under /app in the flatpak) cannot be rewritten and is
+        // reported as READ_ONLY; its stream still has "_"-keyed strings, so
+        // the import-time mapper translates it instead.
+        if (loKitPtr)
+        {
+            const COKitTranslateResult result = loKitPtr->translateDocument(url, url, lang.c_str());
+            if (result == COKitTranslateResult::FAILED)
+                LOG_WRN("translateDocument failed for " << uriAnonym << "; opening as-is");
+            else if (result == COKitTranslateResult::READ_ONLY)
+                LOG_DBG("translateDocument: " << uriAnonym << " is read-only; opening as-is");
+        }
 #endif // defined(QTAPP) || defined(MACOS) || defined(_WIN32)
 
         LOG_DBG("Calling lokit::documentLoad(" << anonymizeUrl(url) << ", \"" << options << "\")");

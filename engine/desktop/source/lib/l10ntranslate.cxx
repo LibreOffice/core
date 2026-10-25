@@ -81,14 +81,23 @@ bool readFile(const OUString& rPathOrUrl, std::vector<sal_uInt8>& rBytes)
     return true;
 }
 
-bool writeFile(const OUString& rPathOrUrl, const void* pData, sal_uInt64 nSize)
+bool writeFile(const OUString& rPathOrUrl, const void* pData, sal_uInt64 nSize,
+               bool* pReadOnly = nullptr)
 {
     const OUString aURL = toFileURL(rPathOrUrl);
     const OUString aTmpURL = aURL + ".l10ntmp";
     osl::File::remove(aTmpURL);
     osl::File aFile(aTmpURL);
-    if (aFile.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Create) != osl::FileBase::E_None)
+    const osl::FileBase::RC eOpen = aFile.open(osl_File_OpenFlag_Write | osl_File_OpenFlag_Create);
+    if (eOpen != osl::FileBase::E_None)
+    {
+        // the directory refuses new files: a read-only file system or a
+        // location the user has no write access to
+        if (pReadOnly)
+            *pReadOnly = eOpen == osl::FileBase::E_ROFS || eOpen == osl::FileBase::E_ACCES
+                         || eOpen == osl::FileBase::E_PERM;
         return false;
+    }
     sal_uInt64 nWritten = 0;
     if (nSize != 0
         && (aFile.write(pData, nSize, nWritten) != osl::FileBase::E_None || nWritten != nSize))
@@ -1558,8 +1567,15 @@ TranslateResult translateDocument(const OUString& rInputPathOrUrl, const OUStrin
     }
     if (bInPlace && aOut == aArchive.aBytes)
         return eResult; // already in this language: leave the file untouched
-    if (!writeFile(rOutputPathOrUrl, aOut.data(), aOut.size()))
+    bool bReadOnly = false;
+    if (!writeFile(rOutputPathOrUrl, aOut.data(), aOut.size(), &bReadOnly))
     {
+        if (bInPlace && bReadOnly)
+        {
+            SAL_INFO("desktop.lib", "l10n: " << rOutputPathOrUrl
+                                             << " is read-only, leaving it untranslated");
+            return TranslateResult::ReadOnly;
+        }
         SAL_WARN("desktop.lib", "l10n: cannot write " << rOutputPathOrUrl);
         return TranslateResult::Error;
     }

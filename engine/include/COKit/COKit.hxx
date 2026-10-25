@@ -220,7 +220,10 @@ enum class COKitTranslateResult
     /// the l10n stream was found and the requested language matched
     TRANSLATED = 0,
     /// no l10n stream (byte copy), or no locale match (markers stripped)
-    COPIED_UNTRANSLATED = 1
+    COPIED_UNTRANSLATED = 1,
+    /// in place only: the file needs a rewrite but cannot be written, it is
+    /// left as it is
+    READ_ONLY = 2
 };
 
 /** Optional features of COKit, in particular callbacks that block
@@ -1952,7 +1955,9 @@ struct COKit
      * may be the same file: the rewrite is then in place (atomic, skipped
      * when nothing would change), and a file carrying its
      * "l10n_template.xml" copies re-translates on every call until the
-     * first save drops them.
+     * first save drops them.  An in-place rewrite of a file whose location
+     * cannot be written (a read-only install) leaves the file alone and
+     * returns READ_ONLY.
      *
      * @param pInputPath input file, system path or file URL
      * @param pOutputPath output file, overwritten if it exists

@@ -18,6 +18,9 @@
 #include <com/sun/star/text/XText.hpp>
 
 #include <osl/file.hxx>
+#ifndef _WIN32
+#include <unistd.h>
+#endif
 #include <rtl/string.hxx>
 #include <test/unoapi_test.hxx>
 
@@ -70,6 +73,7 @@ public:
     void testEditedFileIsLeftAlone();
     void testBrokenTemplateFallsBackToMember();
     void testNoStreamByteIdentical();
+    void testReadOnlyInPlace();
     void testZipFidelity();
     void testLoadTranslatedSmoke();
 
@@ -94,6 +98,7 @@ public:
     CPPUNIT_TEST(testEditedFileIsLeftAlone);
     CPPUNIT_TEST(testBrokenTemplateFallsBackToMember);
     CPPUNIT_TEST(testNoStreamByteIdentical);
+    CPPUNIT_TEST(testReadOnlyInPlace);
     CPPUNIT_TEST(testZipFidelity);
     CPPUNIT_TEST(testLoadTranslatedSmoke);
     CPPUNIT_TEST_SUITE_END();
@@ -1183,6 +1188,44 @@ void L10nTranslateTest::testNoStreamByteIdentical()
 
     osl::File::remove(aIn);
     osl::File::remove(aOut);
+}
+
+void L10nTranslateTest::testReadOnlyInPlace()
+{
+#ifndef _WIN32
+    // root writes regardless of the permission bits
+    if (geteuid() == 0)
+        return;
+
+    // a bundled document in a read-only install: the in-place rewrite
+    // cannot create its temporary file next to it
+    const OUString aDir = tempFileUrl("readonly");
+    const OUString aFile = aDir + "/doc.ods";
+    osl::Directory::create(aDir);
+    CPPUNIT_ASSERT(zip::writeArchive(aFile, makeFixtureEntries(true)));
+    std::vector<zip::Entry> aBefore;
+    CPPUNIT_ASSERT(zip::readArchive(aFile, aBefore));
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None,
+                         osl::File::setAttributes(aDir, osl_File_Attribute_OwnRead
+                                                            | osl_File_Attribute_OwnExe));
+
+    const TranslateResult eResult = translateDocument(aFile, aFile, u"de-DE"_ustr);
+
+    osl::File::setAttributes(aDir, osl_File_Attribute_OwnRead | osl_File_Attribute_OwnWrite
+                                       | osl_File_Attribute_OwnExe);
+    CPPUNIT_ASSERT_EQUAL(static_cast<int>(TranslateResult::ReadOnly), static_cast<int>(eResult));
+
+    // the file is left exactly as it was
+    std::vector<zip::Entry> aAfter;
+    CPPUNIT_ASSERT(zip::readArchive(aFile, aAfter));
+    CPPUNIT_ASSERT_EQUAL(aBefore.size(), aAfter.size());
+    for (size_t i = 0; i < aBefore.size(); ++i)
+        CPPUNIT_ASSERT_MESSAGE(aBefore[i].aName.getStr(),
+                               bytesEqual(aBefore[i].aRawData, aAfter[i].aRawData));
+
+    osl::File::remove(aFile);
+    osl::Directory::remove(aDir);
+#endif
 }
 
 void L10nTranslateTest::testZipFidelity()
