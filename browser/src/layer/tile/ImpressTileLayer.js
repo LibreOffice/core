@@ -95,8 +95,7 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 			app.impress.notesMode = newContext === 'NotesPage';
 			// The handout page just turned on or off, so the View Notes menu and
 			// the status bar Notes button need their active state refreshed.
-			if (app.map.notesPanel)
-				app.map.notesPanel.refreshState();
+			if (app.map.notesPanel) app.map.notesPanel.refreshState();
 		}
 
 		if (
@@ -338,8 +337,9 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 			// Need this check else dialog loses focus
 			return;
 
-		let commentSection =  app.sectionContainer
-			.getSectionWithName(app.CSections.CommentList.name);
+		let commentSection = app.sectionContainer.getSectionWithName(
+			app.CSections.CommentList.name,
+		);
 		if (commentSection) {
 			commentSection.onPartChange();
 		}
@@ -702,7 +702,8 @@ window.L.ImpressTileLayer = window.L.CanvasTileLayer.extend({
 				app.impress.partList = Object.assign([], statusJSON.parts);
 				// A pick of a slide that is gone gets no confirmation, so it is dropped.
 				this._pendingPartPicks = this._pendingPartPicks.filter(
-					(part) => this.getIndexFromPart(part, statusJSON.parts) >= 0);
+					(part) => this.getIndexFromPart(part, statusJSON.parts) >= 0,
+				);
 				var refreshAnnotation = this._documentInfo !== textMsg;
 
 				this._documentInfo = textMsg;
