@@ -326,8 +326,14 @@ namespace cool {
 
 				case BackgroundColorPrimitive.type: {
 					if (walk.textOnly) return undefined;
-					// The background covers the whole object it belongs to.
-					const whole = VectorHitTest.pathOfRange(range);
+					// The range is in the coordinates the walk was asked in, the point in those
+					// of the children, so the range comes down through the inverse of the walk.
+					const down = walk.matrix.invert();
+					if (!down) return undefined;
+					const whole = VectorHitTest.pathThrough(
+						VectorHitTest.pathOfRange(range),
+						down,
+					);
 					return VectorHitTest.fillResult(
 						walk,
 						VectorHitTest.hitFill(whole, position),
