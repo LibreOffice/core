@@ -47,6 +47,7 @@
 #include <basegfx/utils/gradienttools.hxx>
 
 #include <numeric>
+#include <optional>
 #include <string_view>
 #include <set>
 
@@ -2339,6 +2340,8 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
 
     Degree100 nRotation;
     Degree100 nCameraRotation;
+    // The rotation from the imported file in 1/60000 deg (more precise than RotateAngle)
+    std::optional<sal_Int32> oMSORotation;
     awt::Point aPos = rXShape->getPosition();
     awt::Size aSize = rXShape->getSize();
 
@@ -2416,6 +2419,12 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
         {
             uno::Sequence<beans::PropertyValue> aGrabBagProps;
             xPropertySet->getPropertyValue(UNO_NAME_MISC_OBJ_INTEROPGRABBAG) >>= aGrabBagProps;
+            auto pMSORotation = std::find_if(
+                std::cbegin(aGrabBagProps), std::cend(aGrabBagProps),
+                [](const PropertyValue& rProp) { return rProp.Name == "mso-rotation-angle"; });
+            sal_Int32 nMSORotation = 0;
+            if (pMSORotation != std::cend(aGrabBagProps) && (pMSORotation->Value >>= nMSORotation))
+                oMSORotation = nMSORotation;
             auto p3DEffectProps = std::find_if(
                 std::cbegin(aGrabBagProps), std::cend(aGrabBagProps),
                 [](const PropertyValue& rProp) { return rProp.Name == "3DEffectProperties"; });
@@ -2426,18 +2435,10 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
                 // We have imported a scene3d.
                 if (rXShape->getShapeType() == "com.sun.star.drawing.CustomShape")
                 {
-                    auto pMSORotation
-                        = std::find_if(std::cbegin(aGrabBagProps), std::cend(aGrabBagProps),
-                                       [](const PropertyValue& rProp) {
-                                           return rProp.Name == "mso-rotation-angle";
-                                       });
-                    sal_Int32 nMSORotation = 0;
-                    if (pMSORotation != std::cend(aGrabBagProps))
-                        pMSORotation->Value >>= nMSORotation;
                     WriteTransformation(
                         rXShape,
                         tools::Rectangle(Point(aPos.X, aPos.Y), Size(aSize.Width, aSize.Height)),
-                        nXmlNamespace, bFlipHWrite, bFlipVWrite, nMSORotation);
+                        nXmlNamespace, bFlipHWrite, bFlipVWrite, oMSORotation.value_or(0));
                     return;
                 }
                 if (rXShape->getShapeType() == "com.sun.star.drawing.GraphicObjectShape")
@@ -2470,8 +2471,15 @@ void DrawingML::WriteShapeTransformation( const Reference< XShape >& rXShape, sa
     if(bFlipH != bFlipV)
         nRotation = 36000_deg100 - nRotation;
 
+    sal_Int32 nOOXRotation = ExportRotateClockwisify(nRotation + nCameraRotation);
+    // When the imported angle rounds to the angle that is about to be written, write
+    // the imported angle, so an unchanged shape keeps the full precision of the file
+    if (oMSORotation && nCameraRotation == 0_deg100
+        && NormAngle36000(nRotation) == MSORotateAngleToAPIAngle(*oMSORotation))
+        nOOXRotation = *oMSORotation;
+
     WriteTransformation(rXShape, tools::Rectangle(Point(aPos.X, aPos.Y), Size(aSize.Width, aSize.Height)), nXmlNamespace,
-            bFlipHWrite, bFlipVWrite, ExportRotateClockwisify(nRotation + nCameraRotation), IsGroupShape( rXShape ));
+            bFlipHWrite, bFlipVWrite, nOOXRotation, IsGroupShape( rXShape ));
 }
 
 static OUString lcl_GetTarget(const css::uno::Reference<css::frame::XModel>& xModel, std::u16string_view rURL)
