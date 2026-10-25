@@ -43,6 +43,7 @@ std::vector<char> bodyOf(const std::vector<char>& frame)
 class UnitVectorPrimitives : public UnitWSD
 {
     TestResult testDeltaReachesEverySessionHoldingThePart();
+    TestResult testMousePointerIsSentOnlyWhenWanted();
 
 public:
     UnitVectorPrimitives();
@@ -117,6 +118,56 @@ UnitBase::TestResult UnitVectorPrimitives::testDeltaReachesEverySessionHoldingTh
         helpers::getResponseMessage(tiles, "zstdvectorprimitivesdelta:", testname, 2s);
     LOK_ASSERT_MESSAGE("a session drawing from tiles got a delta", toTiles.empty());
 
+    // Each view flushes the invalidation of the same slide, but the change is one delta. The
+    // view that flushes after it finds the slide unchanged since the push and writes no frame.
+    const std::vector<char> again =
+        helpers::getResponseMessage(editor, "zstdvectorprimitivesdelta:", testname, 2s);
+    LOK_ASSERT_MESSAGE("one change brought a second delta", again.empty());
+
+    socketPoll->joinThread();
+    return TestResult::Ok;
+}
+
+// A session that draws the slide from the geometry it holds works out the pointer itself and
+// asks for no mousepointer frames. Asking for them again brings them back.
+UnitBase::TestResult UnitVectorPrimitives::testMousePointerIsSentOnlyWhenWanted()
+{
+    std::string documentPath;
+    std::string documentURL;
+    helpers::getDocumentPathAndURL("hello.odp", documentPath, documentURL, testname);
+    std::shared_ptr<SocketPoll> socketPoll = std::make_shared<SocketPoll>("MousePointerPoll");
+    socketPoll->startThread();
+
+    std::shared_ptr<http::WebSocketSession> session = helpers::loadDocAndGetSession(
+        socketPoll, Poco::URI(helpers::getTestServerURI()), documentURL, testname);
+
+    // The title of the first slide spans 1.4cm to 26.6cm across and 0.8cm to 4.3cm down, and
+    // the slide is 21cm high, so one point is in the title and the other is below the subtitle.
+    const std::string overTitle = "mouse type=move x=7937 y=1467 count=1 buttons=0 modifier=0";
+    const std::string belowAll = "mouse type=move x=7937 y=10772 count=1 buttons=0 modifier=0";
+
+    // Frames are wanted by default. Loading reports the default pointer, and over the text of
+    // the title the pointer becomes the text pointer.
+    helpers::sendTextFrame(session, overTitle, testname);
+    std::string overText;
+    for (int frames = 0; frames < 3 && overText != "mousepointer: text"; ++frames)
+        overText = helpers::getResponseString(session, "mousepointer:", testname);
+    LOK_ASSERT_EQUAL(std::string("mousepointer: text"), overText);
+
+    // Pointer frames are turned off, and leaving the object brings none.
+    helpers::sendTextFrame(session, "reportmousepointer wanted=false", testname);
+    helpers::sendTextFrame(session, belowAll, testname);
+    const std::string whileOff =
+        helpers::getResponseString(session, "mousepointer:", testname, 2s);
+    LOK_ASSERT_MESSAGE("a pointer frame came while they were not wanted", whileOff.empty());
+
+    // Turned on again, the next move reports the pointer that the client last missed.
+    helpers::sendTextFrame(session, "reportmousepointer wanted=true", testname);
+    helpers::sendTextFrame(session, belowAll, testname);
+    const std::string whenOn =
+        helpers::getResponseString(session, "mousepointer:", testname);
+    LOK_ASSERT_EQUAL(std::string("mousepointer: default"), whenOn);
+
     socketPoll->joinThread();
     return TestResult::Ok;
 }
@@ -124,6 +175,10 @@ UnitBase::TestResult UnitVectorPrimitives::testDeltaReachesEverySessionHoldingTh
 void UnitVectorPrimitives::invokeWSDTest()
 {
     UnitBase::TestResult result = testDeltaReachesEverySessionHoldingThePart();
+    if (result != TestResult::Ok)
+        exitTest(result);
+
+    result = testMousePointerIsSentOnlyWhenWanted();
     if (result != TestResult::Ok)
         exitTest(result);
 
