@@ -801,9 +801,10 @@ setobjectpoints id=<id> changes=<changes>
 
 reportmousepointer wanted=<wanted>
 
-    <wanted> is 'true' or 'false'. Says whether this client wants to be told the mouse pointer the
-    document asks for. A client that works out the pointer from the geometry it holds says 'false'
-    and is sent none until it says 'true' again.
+    <wanted> is 'true' or 'false'. Says whether this view wants to be told the mouse pointer the
+    document asks for. A client that works out the pointer from the geometry it holds says 'false'.
+    The choice belongs to the view in the kit, so a reconnect that makes a new view is sent the
+    pointer again until that view says 'false'.
 
 useractive
 
