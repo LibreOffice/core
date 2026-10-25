@@ -33,6 +33,7 @@
 #include <com/sun/star/animations/XTransitionFilter.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <com/sun/star/animations/Event.hpp>
+#include <com/sun/star/animations/Timing.hpp>
 #include <com/sun/star/animations/EventTrigger.hpp>
 #include <com/sun/star/frame/XModel.hpp>
 #include <com/sun/star/io/WrongFormatException.hpp>
@@ -55,6 +56,22 @@ using namespace ::com::sun::star::animations;
 using namespace ::com::sun::star::presentation;
 
 namespace {
+
+// A PPTX media node holds the loop and mute settings of the media shape it plays.
+void lcl_applyMediaShapeSettings(const Reference<XAudio>& xAudio, const Any& rMute)
+{
+    Reference<XPropertySet> xShape(xAudio->getSource(), UNO_QUERY);
+    if (!xShape.is() || !xShape->getPropertySetInfo()->hasPropertyByName(u"Loop"_ustr))
+        return;
+
+    Timing eRepeat;
+    if ((xAudio->getRepeatCount() >>= eRepeat) && eRepeat == Timing_INDEFINITE)
+        xShape->setPropertyValue(u"Loop"_ustr, Any(true));
+
+    bool bMute = false;
+    if ((rMute >>= bMute) && bMute)
+        xShape->setPropertyValue(u"Mute"_ustr, Any(true));
+}
 
 void lcl_setAncestorSubItem( const Reference<XAnimationNode>& xParent, sal_Int16 nSubItem )
 {
@@ -351,6 +368,8 @@ namespace oox::ppt {
                             xAudio->setNarration(bBool);
                         }
                         break;
+                    case NP_MUTE:
+                        break;
                     case NP_TARGET:
 
                         if (xParent.is() && xParent->getType() == AnimationNodeType::ITERATE)
@@ -604,6 +623,9 @@ namespace oox::ppt {
                     }
                 }
             }
+
+            if (xAudio.is())
+                lcl_applyMediaShapeSettings(xAudio, maNodeProperties[NP_MUTE]);
 
             if (xAnimate.is() && xAnimate->getValues().getLength() != xAnimate->getKeyTimes().getLength())
                 throw css::io::WrongFormatException();
