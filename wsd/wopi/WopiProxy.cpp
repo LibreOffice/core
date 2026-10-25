@@ -291,7 +291,7 @@ void WopiProxy::transfer(const std::shared_ptr<TerminatingPoll>& poll, const std
 
             std::ostringstream oss;
             oss << "WOPI::GetFile " << (failed ? "failed" : "returned") << " for URI [" << uriAnonym
-                << "]: " << httpResponse->statusLine().statusCode() << ' '
+                << "]: " << static_cast<int>(httpResponse->statusLine().statusCode()) << ' '
                 << httpResponse->statusLine().reasonPhrase()
                 << ". Headers: " << httpResponse->header()
                 << (failed ? "\tBody: [" + COOLProtocol::getAbbreviatedMessage(wopiResponse) + ']'

@@ -525,7 +525,7 @@ protected:
         {
             TST_LOG_SAFE("FakeWOPIHost: Response to CheckFileInfo "
                     << Poco::URI(request.getURI()).getPath()
-                    << httpResponse->statusLine().statusCode() << ' '
+                    << static_cast<int>(httpResponse->statusLine().statusCode()) << ' '
                     << httpResponse->statusLine().reasonPhrase());
         }
 
@@ -558,7 +558,7 @@ protected:
         {
             TST_LOG_SAFE("FakeWOPIHost: Response to GetFile "
                     << Poco::URI(request.getURI()).getPath()
-                    << httpResponse->statusLine().statusCode() << ' '
+                    << static_cast<int>(httpResponse->statusLine().statusCode()) << ' '
                     << httpResponse->statusLine().reasonPhrase());
         }
 
@@ -620,7 +620,9 @@ protected:
                     {
                         TST_LOG_SAFE("FakeWOPIHost: "
                                      << op << " operation on [" << uriReq.getPath()
-                                     << "]: " << response->statusLine().statusCode() << ' '
+                                     << "]: "
+                                     << static_cast<int>(response->statusLine().statusCode())
+                                     << ' '
                                      << response->statusLine().reasonPhrase());
                         socket->sendAndShutdown(*response);
                     }
@@ -730,7 +732,8 @@ protected:
         if (response)
         {
             TST_LOG_SAFE("FakeWOPIHost: Response to POST "
-                         << uriReq.getPath() << ": " << response->statusLine().statusCode() << ' '
+                         << uriReq.getPath() << ": "
+                         << static_cast<int>(response->statusLine().statusCode()) << ' '
                          << response->statusLine().reasonPhrase());
             socket->sendAndShutdown(*response);
         }

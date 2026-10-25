@@ -4123,7 +4123,7 @@ void COOLWSD::processFetchUpdate(const std::shared_ptr<SocketPoll>& poll)
             }
             else
                 LOG_WRN("Failed to update the infobar. Got: "
-                        << httpResponse->statusLine().statusCode() << ' '
+                        << static_cast<int>(httpResponse->statusLine().statusCode()) << ' '
                         << httpResponse->statusLine().reasonPhrase());
         });
 

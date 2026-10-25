@@ -1109,7 +1109,7 @@ WopiStorage::handleUploadToStorageResponse(const WopiUploadDetails& details,
 
             LOG_INF(wopiLog << " uploaded " << details.size << " bytes in " << _wopiSaveDuration
                             << " from [" << details.filePathAnonym << "] -> [" << details.uriAnonym
-                            << "]: " << details.httpResponseCode << ' '
+                            << "]: " << static_cast<int>(details.httpResponseCode) << ' '
                             << details.httpResponseReason << ": " << responseString);
         }
 
@@ -1220,15 +1220,16 @@ WopiStorage::handleUploadToStorageResponse(const WopiUploadDetails& details,
                 else
                 {
                     std::ostringstream oss;
-                    oss << details.httpResponseCode << ' ' << details.httpResponseReason;
+                    oss << static_cast<int>(details.httpResponseCode) << ' '
+                        << details.httpResponseReason;
                     responseString = oss.str();
                 }
             }
             else
             {
                 std::ostringstream oss;
-                oss << details.httpResponseCode << ' ' << details.httpResponseReason << " - "
-                    << responseString;
+                oss << static_cast<int>(details.httpResponseCode) << ' '
+                    << details.httpResponseReason << " - " << responseString;
                 responseString = oss.str();
             }
 

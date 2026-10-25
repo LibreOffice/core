@@ -98,7 +98,8 @@ bool CheckFileInfo::checkFileInfo(int redirectLimit)
         if (Log::isEnabled(failed ? Log::Level::ERR : Log::Level::TRC))
         {
             std::ostringstream oss;
-            oss << "WOPI::CheckFileInfo returned " << httpResponse->statusLine().statusCode() << ' '
+            oss << "WOPI::CheckFileInfo returned "
+                << static_cast<int>(httpResponse->statusLine().statusCode()) << ' '
                 << httpResponse->statusLine().reasonPhrase() << " for URI [" << uriAnonym
                 << "]. Headers: " << httpResponse->header();
 
