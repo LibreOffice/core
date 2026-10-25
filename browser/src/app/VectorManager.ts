@@ -71,6 +71,18 @@ class VectorManager extends RenderManagerBase {
 	// cache, and its next draw asks for what changed since the version held.
 	private _staleParts: Set<cool.VectorPartGuid> = new Set();
 
+	// The most stale pages that ask for what changed at a time. A client back from being
+	// away draws every cached page in view at once, and the engine compares every object
+	// of a page it answers, so the pages ask a few at a time.
+	private static readonly revalidationsAtATime = 2;
+
+	// Stale pages drawn while as many were asking as may at a time, in the order they
+	// were drawn. Each asks once an answer lands.
+	private _revalidationsWaiting: cool.VectorPartGuid[] = [];
+
+	// Stale pages that asked for what changed and wait for the answer.
+	private _revalidating: Set<cool.VectorPartGuid> = new Set();
+
 	// Pages the document said it does not hold. Asking again is pointless
 	// until the page list is replaced.
 	private _missingParts: Set<cool.VectorPartGuid> = new Set();
@@ -230,10 +242,36 @@ class VectorManager extends RenderManagerBase {
 	/// twice.
 	private _revalidateIfStale(held: cool.VectorPrimitivesData): void {
 		const partId = held.partId;
-		if (!this._staleParts.delete(partId) || this._inFlightParts.has(partId))
+		if (!this._staleParts.has(partId) || this._inFlightParts.has(partId))
 			return;
+		if (this._revalidating.size >= VectorManager.revalidationsAtATime) {
+			if (!this._revalidationsWaiting.includes(partId))
+				this._revalidationsWaiting.push(partId);
+			return;
+		}
+		this._staleParts.delete(partId);
 		this._inFlightParts.add(partId);
+		this._revalidating.add(partId);
 		this._sendVectorPrimitivesRequest(partId, held.mode, held);
+	}
+
+	/// An answer for a page that asked what changed lets the next page waiting to ask do
+	/// so. A waiting page that is no longer stale, no longer cached, or already has a request
+	/// out, is passed over. The request out brings the current page.
+	private _revalidationAnswered(partId: cool.VectorPartGuid): void {
+		if (!this._revalidating.delete(partId)) return;
+		while (this._revalidationsWaiting.length > 0) {
+			const next = this._revalidationsWaiting.shift();
+			const held = next === undefined ? undefined : this._cache.get(next);
+			if (
+				held &&
+				this._staleParts.has(held.partId) &&
+				!this._inFlightParts.has(held.partId)
+			) {
+				this._revalidateIfStale(held);
+				return;
+			}
+		}
 	}
 
 	/// Send for a page unless a request for it is already out.
@@ -770,6 +808,7 @@ class VectorManager extends RenderManagerBase {
 		const partId = values.partId;
 		if (partId === undefined) return;
 		this._inFlightParts.delete(partId);
+		this._revalidationAnswered(partId);
 
 		// A response with no objects names a part the document does not
 		// hold. It happens while the page list is catching up with a mode
@@ -880,6 +919,7 @@ class VectorManager extends RenderManagerBase {
 		// A delta is also what answers a request that said which version the
 		// client holds, and only a client that holds the page says that.
 		this._inFlightParts.delete(partId);
+		this._revalidationAnswered(partId);
 
 		// A delta from another epoch counts its versions from another start, so
 		// it says nothing about what is cached and the part is fetched whole.
@@ -2001,6 +2041,8 @@ class VectorManager extends RenderManagerBase {
 	/// answer, so the next draw or revalidation asks for the page again.
 	forgetRequestsInFlight(): void {
 		this._inFlightParts.clear();
+		this._revalidating.clear();
+		this._revalidationsWaiting = [];
 	}
 
 	/// Drop cached data for a page and any in-flight state, and the bitmaps
@@ -2009,6 +2051,7 @@ class VectorManager extends RenderManagerBase {
 		this._cache.delete(partId);
 		this._staleParts.delete(partId);
 		this._inFlightParts.delete(partId);
+		this._revalidationAnswered(partId);
 		this._bitmaps.releasePart(partId);
 		this._fonts.forgetPart(partId);
 		this._fireChanged();
@@ -2022,6 +2065,8 @@ class VectorManager extends RenderManagerBase {
 		this._cache.clear();
 		this._staleParts.clear();
 		this._inFlightParts.clear();
+		this._revalidating.clear();
+		this._revalidationsWaiting = [];
 		this._bitmaps.forgetAllParts();
 		this._fonts.forgetAllParts();
 		this._fireChanged();

@@ -456,6 +456,81 @@ describe('VectorManager', function () {
 		);
 	});
 
+	// Coming back with many pages in view asks for them a few at a time, in the order they
+	// were drawn, and the next one asks when an answer lands.
+	it('asks what changed on the pages drawn after being away a few at a time', function () {
+		const manager = new VectorManager();
+		for (let i = 0; i < 5; i++)
+			manager.handleVectorPrimitivesResponse(cachedSlide(i));
+
+		const { sent } = recording(() => {
+			manager.revalidateCachedParts();
+			for (let i = 0; i < 5; i++)
+				manager.requestPart(i, cool.VectorMode.Slides);
+			// A second draw of a waiting page does not ask twice.
+			manager.requestPart(3, cool.VectorMode.Slides);
+		});
+		nodeassert.deepStrictEqual(
+			sent.map((message) => message.match(/partid=(S\d)/)?.[1]),
+			['S0', 'S1'],
+		);
+
+		// The header alone answers the first page, so the next waiting page asks.
+		const more = recording(() => {
+			manager.handleVectorPrimitivesDelta({
+				partId: 'S0',
+				epoch: 100,
+				from: 5,
+				version: 5,
+				objects: [],
+			});
+		});
+		nodeassert.deepStrictEqual(
+			more.sent.map((message) => message.match(/partid=(S\d)/)?.[1]),
+			['S2'],
+		);
+
+		// A whole page answers the second, and a page that arrived whole meanwhile is
+		// passed over for the one after it.
+		const fresh = cachedSlide(3);
+		fresh.version = 6;
+		manager.handleVectorPrimitivesResponse(fresh);
+		const last = recording(() => {
+			manager.handleVectorPrimitivesResponse(cachedSlide(1));
+		});
+		nodeassert.deepStrictEqual(
+			last.sent.map((message) => message.match(/partid=(S\d)/)?.[1]),
+			['S4'],
+		);
+	});
+
+	// The requests of a dropped connection get no answer, so the pages that asked and the
+	// ones waiting their turn are forgotten with them. The reconnect marks every page stale
+	// again, and the pages drawn then ask afresh, up to the few at a time.
+	it('lets the pages ask again after the connection dropped', function () {
+		const manager = new VectorManager();
+		for (let i = 0; i < 3; i++)
+			manager.handleVectorPrimitivesResponse(cachedSlide(i));
+
+		recording(() => {
+			manager.revalidateCachedParts();
+			for (let i = 0; i < 3; i++)
+				manager.requestPart(i, cool.VectorMode.Slides);
+		});
+		manager.forgetRequestsInFlight();
+
+		const { sent } = recording(() => {
+			manager.revalidateCachedParts();
+			manager.requestPart(2, cool.VectorMode.Slides);
+			manager.requestPart(0, cool.VectorMode.Slides);
+			manager.requestPart(1, cool.VectorMode.Slides);
+		});
+		nodeassert.deepStrictEqual(
+			sent.map((message) => message.match(/partid=(S\d)/)?.[1]),
+			['S2', 'S0'],
+		);
+	});
+
 	// A page that arrives whole after being away is current, so drawing it asks
 	// for nothing.
 	it('asks nothing for a page that arrived whole after being away', function () {
@@ -1996,6 +2071,45 @@ describe('VectorManager', function () {
 				objects: [textBox('Hi')],
 			});
 			nodeassert.strictEqual(textOf(manager), 'Hi');
+		});
+
+		// A page waiting its turn to ask what changed can ask for the whole page meanwhile,
+		// when the server puts the caret elsewhere. That request brings the current page, so
+		// an answer lets the page after it ask instead.
+		it('lets the next waiting page ask when the waiting ones already asked for the whole page', function () {
+			const manager = new TestManager();
+			for (let i = 0; i < 5; i++)
+				manager.handleVectorPrimitivesResponse({
+					partId: 'S' + String(i),
+					version: 1,
+					objects: [textBox('Hi')],
+				});
+			const sent: string[] = [];
+			(app as any).socket.sendMessage = (message: string) => sent.push(message);
+			(app as any).map.fire = function () {};
+			manager.revalidateCachedParts();
+			for (let i = 0; i < 5; i++)
+				manager.requestPart(i, cool.VectorMode.Slides);
+
+			// Text typed on S2 and on S3, and a caret the server puts elsewhere on each.
+			for (const part of [2, 3]) {
+				(app as any).map._docLayer._selectedPart = part;
+				nodeassert.ok(manager.predictTextInsert('a'));
+				app.file.inputSequence++;
+				manager.keepPredictedCaret(caretUpdate(app.file.inputSequence, 2));
+			}
+
+			for (const part of [0, 1])
+				manager.handleVectorPrimitivesResponse({
+					partId: 'S' + String(part),
+					version: 2,
+					objects: [textBox('Hi')],
+				});
+			(app as any).socket.sendMessage = function () {};
+			nodeassert.deepStrictEqual(
+				sent.map((message) => message.match(/partid=(S\d)/)?.[1]),
+				['S0', 'S1', 'S2', 'S3', 'S4'],
+			);
 		});
 
 		// When a predicted edit no longer fits the server's text, the client asks
