@@ -528,7 +528,7 @@ public:
 private:
     void postForceModifiedCommand(bool modified);
 
-#if !MOBILEAPP
+#if !defined(MACOSAPP) && !defined(QTAPP) && !defined(_WIN32)
     /// The file picker the engine calls: asks the browser of the view that is current for a
     /// file. The browser's answer comes back as a filepickerresult message.
     static void pickFile(const char* title, const COKitFilePickerFilter* filters, size_t count,

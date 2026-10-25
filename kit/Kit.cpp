@@ -886,9 +886,11 @@ Document::Document(const std::shared_ptr<COKit>& loKit, const std::string& jailI
 #if !MOBILEAPP
     assert(singletonDocument == nullptr);
     singletonDocument = this;
+#endif
 
     // The browser is this document's file picker: a dialog that needs a file asks the browser
     // of the view that is current, and the uploaded file comes back as a URL in the jail.
+#if !defined(MACOSAPP) && !defined(QTAPP) && !defined(_WIN32)
     static COKitFilePickerProvider filePickerProvider{};
     filePickerProvider.pick = pickFile;
     _loKit->installFilePickerProvider(&filePickerProvider);
@@ -2086,15 +2088,46 @@ std::shared_ptr<ChildSession> Document::findSessionByViewId(int viewId)
     return nullptr;
 }
 
+#if !defined(MACOSAPP) && !defined(QTAPP) && !defined(_WIN32)
+/// The document and session of the engine's current view. View ids are unique across the
+/// documents of a process, so all of them are searched.
+static std::pair<Document*, std::shared_ptr<ChildSession>> findDocumentOfCurrentView()
+{
+    std::vector<Document*> documents;
 #if !MOBILEAPP
+    if (singletonDocument)
+        documents.push_back(singletonDocument);
+#elif DOCS_SHARE_PROCESS
+    {
+        std::unique_lock<std::mutex> lock(KitSocketPoll::KSPollsMutex);
+        for (const auto& weakPoll : KitSocketPoll::KSPolls)
+        {
+            const std::shared_ptr<KitSocketPoll> poll = weakPoll.lock();
+            if (poll && poll->getDocument())
+                documents.push_back(poll->getDocument().get());
+        }
+    }
+#else
+    if (KitSocketPoll::getMainPoll() && KitSocketPoll::getMainPoll()->getDocument())
+        documents.push_back(KitSocketPoll::getMainPoll()->getDocument().get());
+#endif
+
+    for (Document* document : documents)
+    {
+        if (!document->isLoaded())
+            continue;
+        const int viewId = document->getLOKitDocument()->getView();
+        if (std::shared_ptr<ChildSession> session = document->findSessionByViewId(viewId))
+            return { document, std::move(session) };
+    }
+
+    return { nullptr, nullptr };
+}
+
 void Document::pickFile(const char* title, const COKitFilePickerFilter* filters, size_t count,
                         void (*picked)(void* context, const char* url), void* context)
 {
-    Document* document = singletonDocument;
-    std::shared_ptr<ChildSession> session;
-    if (document && document->_loKitDocument)
-        session = document->findSessionByViewId(document->_loKitDocument->getView());
-
+    const auto [document, session] = findDocumentOfCurrentView();
     if (!session)
     {
         LOG_WRN("No session for the current view to ask for a file; the pick is cancelled");
@@ -2121,7 +2154,7 @@ void Document::pickFile(const char* title, const COKitFilePickerFilter* filters,
     LOG_DBG("Asking view [" << session->getViewId() << "] for a file, pick id [" << id << ']');
     session->sendTextFrame(oss.str());
 }
-#endif // !MOBILEAPP
+#endif // !MACOSAPP && !QTAPP && !_WIN32
 
 void Document::completeFilePick(unsigned id, const std::string& url)
 {
