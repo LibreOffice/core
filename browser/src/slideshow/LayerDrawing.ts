@@ -113,6 +113,10 @@ class LayerDrawing {
 	private videos = new SlideVideos();
 	// The ids of the videos that were drawn with their layer in the current composition.
 	private videosDrawnWithLayer: Set<number> = new Set();
+	// The videos of the master page that masterVideosHash names. They keep playing while the
+	// slides that are shown share that master page.
+	private masterVideosHash: string = null;
+	private masterVideoRenderers: Array<AnimatedContentRenderer> = [];
 	private gifRenderers: Map<string, Array<AnimatedContentRenderer>> = new Map();
 	private isTransitionActive: boolean = false;
 	private queuedLayers: any[] = [];
@@ -153,6 +157,7 @@ class LayerDrawing {
 		this.nextRequestedSlideHash = null;
 		this.nextPrefetchedSlideHash = null;
 		this.videos.deleteResources();
+		this.deleteMasterVideosResources();
 		this.deleteGifsResources();
 		this.layerRenderer.dispose();
 		this.compressedSlideCache.clear();
@@ -235,6 +240,50 @@ class LayerDrawing {
 			)
 		)
 			this.videosDrawnWithLayer.add(videoId);
+	}
+
+	// A video on the master page is a background, which starts when the first slide with that
+	// master page is shown and plays on through the slides after it with the same master page.
+	private handleMasterVideos(slideHash: string) {
+		const slideInfo = this.getSlideInfo(slideHash);
+		const masterVideos = slideInfo.masterVideos || [];
+		const masterHash = masterVideos.length > 0 ? slideInfo.masterPage : null;
+		if (masterHash === this.masterVideosHash) return;
+
+		this.deleteMasterVideosResources();
+		this.masterVideosHash = masterHash;
+		const slideShowPresenter = app.map.slideShowPresenter;
+		const metaPresentation = slideShowPresenter._metaPresentation;
+		for (let i = 0; i < masterVideos.length; ++i) {
+			const videoRenderer = makeVideoRenderer(
+				masterHash + i,
+				this.layerRenderer.getRenderContext(),
+				slideShowPresenter._slideRenderer,
+			);
+			videoRenderer.prepare(
+				masterVideos[i],
+				metaPresentation.docWidth,
+				metaPresentation.docHeight,
+			);
+			videoRenderer.load();
+			videoRenderer.play();
+			this.masterVideoRenderers.push(videoRenderer);
+		}
+	}
+
+	private deleteMasterVideosResources() {
+		for (const videoRenderer of this.masterVideoRenderers)
+			videoRenderer.deleteResources();
+		this.masterVideoRenderers = [];
+		this.masterVideosHash = null;
+	}
+
+	private drawMasterVideoWithLayer(videoId: number) {
+		for (const videoRenderer of this.masterVideoRenderers) {
+			if (videoRenderer.infoId !== videoId) continue;
+			videoRenderer.render();
+			this.videosDrawnWithLayer.add(videoId);
+		}
 	}
 
 	public pauseVideos(slideHash: string) {
@@ -641,6 +690,7 @@ class LayerDrawing {
 			type: info.type,
 			content: info.content,
 			isField: info.isField,
+			videoId: info.videoId,
 		};
 		if (info.type === 'bitmap') {
 			if (!this.checkAndAttachImageData(layerEntry.content as ImageInfo, img))
@@ -739,6 +789,11 @@ class LayerDrawing {
 	private drawMasterPageLayer(layer: LayerEntry, slideHash: string) {
 		if (layer.type === 'bitmap') {
 			this.drawBitmap(layer.content as ImageInfo);
+			if (
+				layer.videoId &&
+				this.getSlideInfo(slideHash).masterPage === this.masterVideosHash
+			)
+				this.drawMasterVideoWithLayer(layer.videoId);
 		} else if (layer.type === 'placeholder') {
 			const placeholder = layer.content as PlaceholderInfo;
 			const slideTextFields = this.slideTextFieldsMap.get(slideHash);
@@ -1015,6 +1070,7 @@ class LayerDrawing {
 			this.onSlideLayerMsg(layer);
 		}
 
+		this.handleMasterVideos(slideHash);
 		this.videos.enterSlide(
 			slideHash,
 			this.getSlideInfo(slideHash),

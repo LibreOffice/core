@@ -3567,10 +3567,12 @@ bool ClientSession::handlePresentationInfo(const std::shared_ptr<Message>& paylo
                 for (size_t slideIndex = 0; slideIndex < slides->size(); slideIndex++)
                 {
                     Poco::JSON::Object::Ptr slide = slides->getObject(slideIndex);
-                    Poco::JSON::Array::Ptr videos = slide->getArray("videos");
-
-                    if (!videos.isNull() && videos->size() > 0)
+                    for (const char* videoListName : { "videos", "masterVideos" })
                     {
+                        Poco::JSON::Array::Ptr videos = slide->getArray(videoListName);
+                        if (videos.isNull())
+                            continue;
+
                         for (size_t videoIndex = 0; videoIndex < videos->size(); videoIndex++)
                         {
                             Poco::JSON::Object::Ptr video = videos->getObject(videoIndex);

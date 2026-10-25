@@ -83,6 +83,7 @@
 #include <svx/svdpagv.hxx>
 #include <SlideshowLayerRenderer.hxx>
 #include <sdpage.hxx>
+#include <svx/svdomedia.hxx>
 #include <unomodel.hxx>
 #include <drawdoc.hxx>
 #include <PreviewEditMode.hxx>
@@ -5335,6 +5336,52 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowLayerOfVideo)
         readJSON(aLayer, aJson);
         if (aLayer.get<std::string>("videoId", "") == aVideoId)
             ++nVideoLayers;
+    }
+    CPPUNIT_ASSERT_EQUAL(1, nVideoLayers);
+}
+
+// A video on the master page is listed apart from the videos of the slide, and the master page
+// layer of its shape names it.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testSlideshowMasterPageVideo)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("SlideRenderingTest.odp");
+    sd::ViewShell* pViewShell = pXImpressDocument->GetDocShell()->GetViewShell();
+    SdrPage& rMasterPage = pViewShell->GetActualPage()->TRG_GetMasterPage();
+    rtl::Reference<SdrMediaObj> xVideo(
+        new SdrMediaObj(rMasterPage.getSdrModelFromSdrPage(), tools::Rectangle(0, 0, 2000, 2000)));
+    rMasterPage.InsertObject(xVideo.get(), 0);
+    Scheduler::ProcessEventsToIdle();
+
+    boost::property_tree::ptree aInfo;
+    readJSON(aInfo, pXImpressDocument->getPresentationInfo());
+    const boost::property_tree::ptree& rSlide = child_at(aInfo, "slides", 0);
+    CPPUNIT_ASSERT(rSlide.get_child("videos").empty());
+    const std::string aVideoId = child_at(rSlide, "masterVideos", 0).get<std::string>("id");
+
+    sal_Int32 nViewWidth = 2000;
+    sal_Int32 nViewHeight = 2000;
+    CPPUNIT_ASSERT(pXImpressDocument->createSlideRenderer(
+        OString(GetSlideHash(pXImpressDocument, 0)), 0, nViewWidth, nViewHeight, true, true));
+
+    int nVideoLayers = 0;
+    bool bDone = false;
+    while (!bDone)
+    {
+        std::vector<sal_uInt8> aBuffer(nViewWidth * nViewHeight * 4);
+        bool bIsBitmapLayer = false;
+        double fScale = 1.0;
+        std::string aJson;
+        bDone = pXImpressDocument->renderNextSlideLayer(aBuffer.data(), bIsBitmapLayer, fScale,
+                                                        aJson);
+        if (aJson.empty())
+            continue;
+        boost::property_tree::ptree aLayer;
+        readJSON(aLayer, aJson);
+        if (aLayer.get<std::string>("videoId", "") == aVideoId)
+        {
+            CPPUNIT_ASSERT_EQUAL(std::string("MasterPage"), aLayer.get<std::string>("group"));
+            ++nVideoLayers;
+        }
     }
     CPPUNIT_ASSERT_EQUAL(1, nVideoLayers);
 }

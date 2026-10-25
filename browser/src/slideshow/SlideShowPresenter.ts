@@ -92,6 +92,7 @@ interface SlideInfo {
 	masterPage: string;
 	masterPageObjectsVisibility: boolean;
 	videos: Array<VideoInfo>;
+	masterVideos?: Array<VideoInfo>;
 	gifs?: Array<GifInfo>;
 	interactions: Array<Interaction>;
 	transitionDuration: number;

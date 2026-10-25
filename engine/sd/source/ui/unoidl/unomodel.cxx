@@ -7413,6 +7413,35 @@ OUString SdXImpressDocument::getOrCreateClickSoundUrl(const SdrObject& rObject,
     return aTempFileUrl;
 }
 
+namespace
+{
+void writeVideos(::tools::JsonWriter& rJsonWriter, SdrPage& rPage, std::string_view aName)
+{
+    auto aVideoList = rJsonWriter.startArray(aName);
+    SdrObjListIter aIterator(&rPage, SdrIterMode::DeepWithGroups);
+    while (aIterator.IsMore())
+    {
+        auto* pObject = aIterator.Next();
+        if (pObject->GetObjIdentifier() == SdrObjKind::Media)
+        {
+            auto aVideosNode = rJsonWriter.startStruct();
+            auto* pMediaObject = static_cast<SdrMediaObj*>(pObject);
+            auto const& rRectangle = pMediaObject->GetLogicRect();
+            auto aRectangle = o3tl::convert(rRectangle, o3tl::Length::mm100, o3tl::Length::twip);
+            rJsonWriter.put("id", pMediaObject->GetUniqueID());
+            rJsonWriter.put("url", pMediaObject->getTempURL());
+            const avmedia::MediaItem& rMediaItem = pMediaObject->getMediaProperties();
+            rJsonWriter.put("loop", rMediaItem.isLoop());
+            rJsonWriter.put("mute", rMediaItem.isMute());
+            rJsonWriter.put("x", aRectangle.Left());
+            rJsonWriter.put("y", aRectangle.Top());
+            rJsonWriter.put("width", aRectangle.GetWidth());
+            rJsonWriter.put("height", aRectangle.GetHeight());
+        }
+    }
+}
+}
+
 std::string SdXImpressDocument::getPresentationInfo(bool bAllyState) const
 {
     ::tools::JsonWriter aJsonWriter;
@@ -7549,6 +7578,7 @@ std::string SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                 }
 
                 SdMasterPage* pMasterPage = nullptr;
+                SdrPage* pVisibleMasterPage = nullptr;
                 SdDrawPage* pMasterPageTarget(dynamic_cast<SdDrawPage*>(pSlide));
                 if (pMasterPageTarget)
                 {
@@ -7561,6 +7591,8 @@ std::string SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                         bool bBackgroundObjectsVisibility = true; // default visible
                         pSlide->getPropertyValue(u"IsBackgroundObjectsVisible"_ustr) >>= bBackgroundObjectsVisibility;
                         aJsonWriter.put("masterPageObjectsVisibility", bBackgroundObjectsVisibility);
+                        if (bBackgroundObjectsVisibility)
+                            pVisibleMasterPage = pMasterPage->GetSdrPage();
                     }
                 }
 
@@ -7580,30 +7612,9 @@ std::string SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                     }
                 }
 
-                {
-                    auto aVideoList = aJsonWriter.startArray("videos");
-                    SdrObjListIter aIterator(pPage, SdrIterMode::DeepWithGroups);
-                    while (aIterator.IsMore())
-                    {
-                        auto* pObject = aIterator.Next();
-                        if (pObject->GetObjIdentifier() == SdrObjKind::Media)
-                        {
-                            auto aVideosNode = aJsonWriter.startStruct();
-                            auto* pMediaObject = static_cast<SdrMediaObj*>(pObject);
-                            auto const& rRectangle = pMediaObject->GetLogicRect();
-                            auto aRectangle = o3tl::convert(rRectangle, o3tl::Length::mm100, o3tl::Length::twip);
-                            aJsonWriter.put("id", pMediaObject->GetUniqueID());
-                            aJsonWriter.put("url", pMediaObject->getTempURL());
-                            const avmedia::MediaItem& rMediaItem = pMediaObject->getMediaProperties();
-                            aJsonWriter.put("loop", rMediaItem.isLoop());
-                            aJsonWriter.put("mute", rMediaItem.isMute());
-                            aJsonWriter.put("x", aRectangle.Left());
-                            aJsonWriter.put("y", aRectangle.Top());
-                            aJsonWriter.put("width", aRectangle.GetWidth());
-                            aJsonWriter.put("height", aRectangle.GetHeight());
-                        }
-                    }
-                }
+                writeVideos(aJsonWriter, *pPage, "videos");
+                if (pVisibleMasterPage)
+                    writeVideos(aJsonWriter, *pVisibleMasterPage, "masterVideos");
 
                 {
                     auto aGifList = aJsonWriter.startArray("gifs");
