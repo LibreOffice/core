@@ -201,6 +201,7 @@ public:
     void testTranslationProviders();
     void testAutoCorrectListFromHost();
     void testUserSettingsPersistedCallback();
+    void testUserSettingsPersistedOnlyForOwnerView();
     void testAutoCorrectDialogToggleColumns();
     void testAutoCorrectDialogOnlyOnce();
     void testCommentAuthorFromSession();
@@ -307,6 +308,7 @@ public:
     CPPUNIT_TEST(testTranslationProviders);
     CPPUNIT_TEST(testAutoCorrectListFromHost);
     CPPUNIT_TEST(testUserSettingsPersistedCallback);
+    CPPUNIT_TEST(testUserSettingsPersistedOnlyForOwnerView);
     CPPUNIT_TEST(testAutoCorrectDialogToggleColumns);
     CPPUNIT_TEST(testAutoCorrectDialogOnlyOnce);
     CPPUNIT_TEST(testCommentAuthorFromSession);
@@ -3879,14 +3881,18 @@ void DesktopKitTest::testUserSettingsPersistedCallback()
     aOffice.registerCallback(&GlobalCallbackRecorder::callback, &aRecorder);
     utl::TempFileNamed aTempDir(nullptr, /*bDirectory=*/true);
     aTempDir.EnableKillingFile();
-    comphelper::COKit::setUserSettingsPersistenceAvailable(true);
     comphelper::COKit::setUserConfigDir(aTempDir.GetURL());
     COKitDocumentImpl* pDocument = loadDoc("blank_text.odt");
+    // As the kit's main loop does, which the views are known by.
+    KitHelper::registerViewCallbacks();
+    pDocument->setViewOption("userpersistence", "true");
     const bool bAutoFormat = SvxAutoCorrCfg::Get().IsAutoFormatByInput();
     comphelper::ScopeGuard aRestore([&aOffice, bAutoFormat] {
         SvxAutoCorrCfg::Get().SetAutoFormatByInput(bAutoFormat);
         SvxAutoCorrCfg::Get().Commit();
         comphelper::COKit::setUserConfigDir(OUString());
+        comphelper::COKit::setViewSetter(nullptr);
+        comphelper::COKit::setViewGetter(nullptr);
         aOffice.registerCallback(nullptr, nullptr);
     });
 
@@ -3906,6 +3912,62 @@ void DesktopKitTest::testUserSettingsPersistedCallback()
     CPPUNIT_ASSERT(std::find(aRecorder.m_aTypes.begin(), aRecorder.m_aTypes.end(),
                              COKitCallbackType::USER_SETTINGS_PERSISTED)
                    != aRecorder.m_aTypes.end());
+}
+
+void DesktopKitTest::testUserSettingsPersistedOnlyForOwnerView()
+{
+    // Given a document whose configuration is the user's of its first view, and a
+    // second view of another user:
+    COKitImpl aOffice;
+    GlobalCallbackRecorder aRecorder;
+    aOffice.registerCallback(&GlobalCallbackRecorder::callback, &aRecorder);
+    utl::TempFileNamed aTempDir(nullptr, /*bDirectory=*/true);
+    aTempDir.EnableKillingFile();
+    comphelper::COKit::setUserConfigDir(aTempDir.GetURL());
+    COKitDocumentImpl* pDocument = loadDoc("blank_text.odt");
+    // As the kit's main loop does, which the views are known by.
+    KitHelper::registerViewCallbacks();
+    const int nOwnerView = pDocument->getView();
+    pDocument->setViewOption("userpersistence", "true");
+    const int nOtherView = pDocument->createView();
+    pDocument->setView(nOtherView);
+    pDocument->setViewOption("userpersistence", "false");
+    const bool bAutoFormat = SvxAutoCorrCfg::Get().IsAutoFormatByInput();
+    comphelper::ScopeGuard aRestore([&aOffice, bAutoFormat] {
+        SvxAutoCorrCfg::Get().SetAutoFormatByInput(bAutoFormat);
+        SvxAutoCorrCfg::Get().Commit();
+        comphelper::COKit::setUserConfigDir(OUString());
+        comphelper::COKit::setViewSetter(nullptr);
+        comphelper::COKit::setViewGetter(nullptr);
+        aOffice.registerCallback(nullptr, nullptr);
+    });
+    const OUString aXcu = aTempDir.GetURL() + "/xcu/registrymodifications.xcu";
+    osl::DirectoryItem aItem;
+
+    // When the other user toggles AutoCorrect While Typing:
+    pDocument->postUnoCommand(".uno:OnlineAutoFormat", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the change applies, but it is not saved into the owner's settings:
+    CPPUNIT_ASSERT_EQUAL(!bAutoFormat, SvxAutoCorrCfg::Get().IsAutoFormatByInput());
+    // Without the accompanying fix in place, this test would have failed, as
+    // persistence was one flag for the whole kit, set by whoever joined last.
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_NOENT, osl::DirectoryItem::get(aXcu, aItem));
+    CPPUNIT_ASSERT_EQUAL(std::ptrdiff_t(0),
+                         std::count(aRecorder.m_aTypes.begin(), aRecorder.m_aTypes.end(),
+                                    COKitCallbackType::USER_SETTINGS_PERSISTED));
+
+    // And when the owner toggles it, while the other user is still there:
+    pDocument->setView(nOwnerView);
+    pDocument->postUnoCommand(".uno:OnlineAutoFormat", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the owner's change is saved:
+    CPPUNIT_ASSERT_EQUAL(bAutoFormat, SvxAutoCorrCfg::Get().IsAutoFormatByInput());
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, osl::DirectoryItem::get(aXcu, aItem));
+    CPPUNIT_ASSERT_EQUAL(std::ptrdiff_t(1),
+                         std::count(aRecorder.m_aTypes.begin(), aRecorder.m_aTypes.end(),
+                                    COKitCallbackType::USER_SETTINGS_PERSISTED));
 }
 
 namespace

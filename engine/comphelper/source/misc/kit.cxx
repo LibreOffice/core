@@ -9,7 +9,6 @@
 
 #include <comphelper/kit.hxx>
 
-#include <atomic>
 #include <map>
 #include <mutex>
 #include <set>
@@ -44,10 +43,9 @@ static bool g_bActive(false);
 
 static bool g_bForkedChild(false);
 
-// Default true so non-COOL paths keep existing behaviour.
-// TODO(per-view): process-wide; last attach wins in mixed-session kits.
-// Move to per-SfxViewShell when more settings join this signal.
-static std::atomic<bool> g_bUserSettingsPersistenceAvailable(true);
+// The views whose changes to the per-user settings are to outlive the kit.
+static std::mutex g_aUserSettingsPersistenceMutex;
+static std::set<int> g_aUserSettingsPersistenceViews;
 
 static std::mutex g_aUserConfigDirMutex;
 static OUString g_aUserConfigDir;
@@ -183,14 +181,23 @@ bool isForkedChild()
     return g_bForkedChild;
 }
 
-void setUserSettingsPersistenceAvailable(bool bAvailable)
+void setUserSettingsPersistenceAvailable(int nViewId, bool bAvailable)
 {
-    g_bUserSettingsPersistenceAvailable.store(bAvailable, std::memory_order_relaxed);
+    std::lock_guard<std::mutex> aGuard(g_aUserSettingsPersistenceMutex);
+    if (bAvailable)
+        g_aUserSettingsPersistenceViews.insert(nViewId);
+    else
+        g_aUserSettingsPersistenceViews.erase(nViewId);
 }
 
 bool isUserSettingsPersistenceAvailable()
 {
-    return g_bUserSettingsPersistenceAvailable.load(std::memory_order_relaxed);
+    if (!isActive())
+        return true;
+
+    const int nViewId = getView();
+    std::lock_guard<std::mutex> aGuard(g_aUserSettingsPersistenceMutex);
+    return g_aUserSettingsPersistenceViews.contains(nViewId);
 }
 
 void setUserConfigDir(const OUString& rUrl)

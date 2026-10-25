@@ -604,10 +604,15 @@ bool ChildSession::_handleInput(const char *buffer, int length)
     {
         if (tokens.size() >= 2)
         {
-            // tokens[] returns by value; pin to a local before c_str() so
-            // the string survives any future async lifetime extension.
-            const std::string value = tokens[1];
-            getLOKit()->setOption("userpersistence", value.c_str());
+            // It belongs to the view, which is normally created later and
+            // picks it up then (see Document::load).
+            setUserSettingsPersistenceAvailable(tokens.equals(1, "true"));
+            if (_isDocLoaded && getLOKitDocument())
+            {
+                getLOKitDocument()->setView(_viewId);
+                getLOKitDocument()->setViewOption(
+                    "userpersistence", isUserSettingsPersistenceAvailable() ? "true" : "false");
+            }
         }
     }
     else if (!_isDocLoaded)

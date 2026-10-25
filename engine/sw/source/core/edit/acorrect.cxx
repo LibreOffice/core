@@ -33,6 +33,7 @@
 #include <viscrs.hxx>
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
+#include <comphelper/kit.hxx>
 #include <osl/diagnose.h>
 #include <svl/numformat.hxx>
 
@@ -645,10 +646,16 @@ void SwAutoCorrExceptWord::CheckChar( const SwPosition& rPos, sal_Unicode cChr )
         SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
 
         // then add to the list:
+        bool bAdded = false;
         if (ACFlags::CapitalStartWord & m_nFlags)
-            pACorr->AddWordStartException(m_sWord, m_eLanguage);
+            bAdded = pACorr->AddWordStartException(m_sWord, m_eLanguage);
         else if (ACFlags::CapitalStartSentence & m_nFlags)
-            pACorr->AddCplSttException(m_sWord, m_eLanguage);
+            bAdded = pACorr->AddCplSttException(m_sWord, m_eLanguage);
+
+        // The list file changed in the user profile; the host takes it along
+        // with the settings, if they are this user's to save.
+        if (bAdded)
+            comphelper::COKit::persistUserSettings();
     }
 }
 

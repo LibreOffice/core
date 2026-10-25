@@ -619,7 +619,10 @@ public:
 #if !MOBILEAPP
     void syncBrowserSettings(const std::string& userId, const std::string& json);
 
-    void uploadPresetsToWopiHost();
+    /// Upload the changed files of the user's settings. bPersisted: the kit has
+    /// just saved the user's settings from a view of theirs, which is the only
+    /// time the AutoCorrect lists go up (see getRoundTripPresetGroups).
+    void uploadPresetsToWopiHost(bool bPersisted = false);
 #endif
 
     void alertAllUsers(const std::string& cmd, const std::string& kind,
@@ -2133,6 +2136,8 @@ private:
     std::string _userConfigId;
     /// Where this document's configuration was read from, so it can be read again.
     std::string _userSettingsUri;
+    /// The user that configuration belongs to, the only one whose views save into it.
+    std::string _userSettingsUserId;
 
     std::shared_ptr<ChildProcess> _childProcess;
 

@@ -27,6 +27,7 @@
 
 #include <Poco/Net/HTTPRequest.h>
 #include <atomic>
+#include <chrono>
 #include <csignal>
 #include <ctime>
 #include <filesystem>
@@ -974,15 +975,221 @@ public:
     }
 };
 
+/// Everyone on a document shares the configuration of the user who opened it, but only that
+/// user saves into it. Another user's change applies to the document, yet nothing goes up for
+/// it, neither when they make it nor when they leave; the owner's next change takes the shared
+/// lists along, as the owner then sees them in the dialog.
+class UnitAutocorrOtherUser : public WopiTestServer
+{
+    using Base = WopiTestServer;
+
+    STATE_ENUM(Phase, Load, WaitFirstView, SecondView, WaitSecondView, OtherToggles,
+               WaitOtherToggled, WaitOtherLeft, OwnerToggles, WaitUpload, Done)
+    _phase;
+
+    std::string _jailConfigPath;
+    std::chrono::steady_clock::time_point _otherLeft;
+    bool _listUploaded = false;
+    bool _registryUploaded = false;
+
+public:
+    UnitAutocorrOtherUser()
+        : Base("UnitAutocorrOtherUser")
+        , _phase(Phase::Load)
+    {
+    }
+
+    /// The access token names the user, so the two views are two people, each
+    /// with a settings store of their own.
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& request,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        const std::string user
+            = UnitSecondUserPresets::userOf(Poco::URI(request.getURI()), "access_token");
+        fileInfo->set("UserId", user);
+        fileInfo->set("UserFriendlyName", user);
+
+        Poco::JSON::Object::Ptr userSettings = new Poco::JSON::Object();
+        std::string uri = helpers::getTestServerURI() + "/wopi/settings/userconfig.json?user="
+                          + user + "&testname=UnitAutocorrOtherUser";
+        userSettings->set("uri", Util::trim(uri));
+        userSettings->set("stamp", user);
+        fileInfo->set("UserSettings", userSettings);
+    }
+
+    bool handleHttpGetRequest(const Poco::Net::HTTPRequest& request,
+                              const std::shared_ptr<StreamSocket>& socket) override
+    {
+        const Poco::URI uriReq(request.getURI());
+        const std::string path = uriReq.getPath();
+        if (path == "/wopi/settings/userconfig.json")
+        {
+            std::string assetUri = helpers::getTestServerURI()
+                                   + "/wopi/settings/userconfig/autocorr/"
+                                   + std::string(AutocorrFileName)
+                                   + "?testname=UnitAutocorrOtherUser";
+            Util::trim(assetUri);
+            const std::string json = "{\"kind\":\"user\",\"autocorr\":[{\"uri\":\"" + assetUri
+                                     + "\",\"stamp\":\"s1\"}]}";
+            http::Response httpResponse(http::StatusCode::OK);
+            httpResponse.setBody(json, "application/json; charset=utf-8");
+            socket->sendAndShutdown(httpResponse);
+            return true;
+        }
+
+        if (path.ends_with(AutocorrFileName))
+        {
+            http::Response httpResponse(http::StatusCode::OK);
+            httpResponse.setBody("host-list", "application/octet-stream");
+            socket->sendAndShutdown(httpResponse);
+            return true;
+        }
+
+        return Base::handleHttpGetRequest(request, socket);
+    }
+
+    bool handleHttpPostRequest(const Poco::Net::HTTPRequest& request, std::istream& message,
+                               const std::shared_ptr<StreamSocket>& socket) override
+    {
+        const std::string fileId = presetUploadFileId(request);
+        if (fileId.empty())
+            return Base::handleHttpPostRequest(request, message, socket);
+
+        const std::string body(std::istreambuf_iterator<char>(message), {});
+        TST_LOG("Preset upload of [" << fileId << "] in phase " << name(_phase));
+        http::Response httpResponse(http::StatusCode::OK);
+        socket->sendAndShutdown(httpResponse);
+
+        if (fileId != AutocorrFileId && fileId != RegistryFileId)
+            return true;
+
+        // Without the accompanying fix in place, this test would have failed, as
+        // the other user's change went up into the owner's store.
+        LOK_ASSERT_STATE(_phase, Phase::WaitUpload);
+        if (fileId == AutocorrFileId)
+        {
+            LOK_ASSERT_EQUAL_MESSAGE("the list as the owner sees it should go up",
+                                     std::string("other-list"), body);
+            _listUploaded = true;
+        }
+        else
+            _registryUploaded = true;
+
+        if (_listUploaded && _registryUploaded)
+        {
+            TRANSITION_STATE(_phase, Phase::Done);
+            passTest("only the owner's change reached the owner's settings");
+        }
+        return true;
+    }
+
+    void onDocBrokerViewLoaded(const std::string&,
+                               const std::shared_ptr<ClientSession>& session) override
+    {
+        if (_phase == Phase::WaitFirstView)
+        {
+            LOK_ASSERT_MESSAGE("the owner's view should save the settings",
+                               session->isUserSettingsPersistenceAvailable());
+            _jailConfigPath = jailConfigPath(session);
+            LOK_ASSERT_MESSAGE("the session should have a document", !_jailConfigPath.empty());
+            TRANSITION_STATE(_phase, Phase::SecondView);
+            return;
+        }
+
+        LOK_ASSERT_STATE(_phase, Phase::WaitSecondView);
+        LOK_ASSERT_MESSAGE("the other user's view should not save the settings",
+                           !session->isUserSettingsPersistenceAvailable());
+        TRANSITION_STATE(_phase, Phase::OtherToggles);
+    }
+
+    /// The toggle is done once its new state is reported.
+    bool onFilterSendWebSocketMessage(std::string_view data, const WSOpCode /*code*/,
+                                      const bool /*flush*/, int& /*unitReturn*/) override
+    {
+        if (_phase == Phase::WaitOtherToggled
+            && data.starts_with("statechanged: .uno:OnlineAutoFormat=false"))
+        {
+            TRANSITION_STATE(_phase, Phase::WaitOtherLeft);
+            // The other user leaves; their connection is at index 0.
+            deleteSocketAt(0);
+        }
+        return false;
+    }
+
+    void onDocBrokerRemoveSession(const std::string&,
+                                  const std::shared_ptr<ClientSession>&) override
+    {
+        if (_phase != Phase::WaitOtherLeft)
+            return;
+
+        _otherLeft = std::chrono::steady_clock::now();
+        TRANSITION_STATE(_phase, Phase::OwnerToggles);
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitFirstView);
+                initWebsocket("/wopi/files/0?access_token=first");
+                WSD_CMD_BY_CONNECTION_INDEX(0, "load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::SecondView:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitSecondView);
+                // initWebsocket puts the new connection at index 0.
+                initWebsocket("/wopi/files/0?access_token=second");
+                WSD_CMD_BY_CONNECTION_INDEX(0, "load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::OtherToggles:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitOtherToggled);
+                // The other user changes the shared list and an option.
+                {
+                    std::ofstream file(_jailConfigPath + "autocorr/"
+                                           + std::string(AutocorrFileName),
+                                       std::ios::trunc);
+                    file << "other-list";
+                }
+                WSD_CMD_BY_CONNECTION_INDEX(0, "uno .uno:OnlineAutoFormat");
+                break;
+            }
+            case Phase::OwnerToggles:
+            {
+                // Give an upload on the other user's leaving the time to arrive
+                // while the owner has done nothing yet.
+                if (std::chrono::steady_clock::now() - _otherLeft < std::chrono::seconds(2))
+                    break;
+
+                TRANSITION_STATE(_phase, Phase::WaitUpload);
+                WSD_CMD_BY_CONNECTION_INDEX(1, "uno .uno:OnlineAutoFormat");
+                break;
+            }
+            case Phase::WaitFirstView:
+            case Phase::WaitSecondView:
+            case Phase::WaitOtherToggled:
+            case Phase::WaitOtherLeft:
+            case Phase::WaitUpload:
+            case Phase::Done:
+                break;
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase*[8]{ new UnitEarlyDocDeath(),
+    return new UnitBase*[9]{ new UnitEarlyDocDeath(),
                              new UnitSpifPreset(),
                              new UnitSecondUserPresets(),
                              new UnitLoneUserReloadsPresets(),
                              new UnitNoUserSettingsNoUpload(),
                              new UnitWordbookLiveUpload(),
                              new UnitAutocorrRoundTrip(),
+                             new UnitAutocorrOtherUser(),
                              nullptr };
 }
 

@@ -5854,14 +5854,6 @@ void COKitImpl::setOption(const char *pOption, const char* pValue)
         const OUString aPresetsUrl(pValue, strlen(pValue), RTL_TEXTENCODING_UTF8);
         addSharedPresetPaths(aPresetsUrl);
     }
-    else if (strcmp(pOption, "userpersistence") == 0)
-    {
-        // Wire contract: exactly "true" or "false"; anything else (including
-        // null) is treated as false - never promise persistence without an
-        // explicit opt-in.
-        const bool bAvailable = pValue && strcmp(pValue, "true") == 0;
-        comphelper::COKit::setUserSettingsPersistenceAvailable(bAvailable);
-    }
 #ifdef LINUX
     else if (strcmp(pOption, "addfont") == 0)
     {
@@ -7640,6 +7632,15 @@ void COKitDocumentImpl::setViewOption(const char* pOption, const char* pValue)
         if (SfxViewShell* pViewShell = SfxViewShell::Current())
             pViewShell->setCallbackWanted(COKitCallbackType::MOUSE_POINTER,
                                           getUString(pValue) != "off");
+    }
+    else if (sOption == "userpersistence")
+    {
+        // Wire contract: exactly "true" or "false"; anything else (including
+        // null) is treated as false - never promise persistence without an
+        // explicit opt-in.
+        const bool bAvailable = pValue && strcmp(pValue, "true") == 0;
+        comphelper::COKit::setUserSettingsPersistenceAvailable(KitHelper::getCurrentView(),
+                                                               bAvailable);
     }
     else if (sOption == "zoom")
     {
@@ -9522,6 +9523,7 @@ void COKitDocumentImpl::destroyView(int nId)
 #endif
 
     KitHelper::destroyView(nId);
+    comphelper::COKit::setUserSettingsPersistenceAvailable(nId, false);
 
     vcl::kit::numberOfViewsChanged(KitHelper::getViewsCount(mnDocumentId));
 }

@@ -2714,6 +2714,11 @@ std::shared_ptr<COKitDocument> Document::load(const std::shared_ptr<ChildSession
     if (_hasPasswordToModify && !session->isDocPasswordToModifyEntered())
         _loKitDocument->setViewReadOnly(viewId, true);
 
+    // Whether what this view changes in the user's settings is saved for them.
+    _loKitDocument->setView(viewId);
+    _loKitDocument->setViewOption("userpersistence",
+                                  session->isUserSettingsPersistenceAvailable() ? "true" : "false");
+
     // viewId's monotonically increase, and CallbackDescriptors are never freed.
     _viewIdToCallbackDescr.emplace(viewId,
                                    std::unique_ptr<CallbackDescriptor>(new CallbackDescriptor({ this, viewId })));

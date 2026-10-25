@@ -80,10 +80,13 @@ COMPHELPER_DLLPUBLIC bool isActive();
 /// eg. file-system resources with its parent process?
 COMPHELPER_DLLPUBLIC bool isForkedChild();
 
-/// True when per-user settings written by the engine will outlive the kit
-/// (host has a WOPI UserSettingsUri). False for anonymous/batch sessions.
-/// Defaults to true so non-COOL paths keep their existing behaviour.
-COMPHELPER_DLLPUBLIC void setUserSettingsPersistenceAvailable(bool bAvailable);
+/// Whether what a view changes in the per-user settings is to outlive the kit:
+/// the host keeps settings for its user, and the configuration the kit runs
+/// with is that user's. All views share the one configuration, so a change
+/// made in another user's view still takes effect, but it is not saved into
+/// the settings of the user who owns them. Off for a view until set.
+COMPHELPER_DLLPUBLIC void setUserSettingsPersistenceAvailable(int nViewId, bool bAvailable);
+/// Asks about the current view; always true outside the kit.
 COMPHELPER_DLLPUBLIC bool isUserSettingsPersistenceAvailable();
 
 /// Directory URL (file://...) of the per-user config tree; empty when unknown.
@@ -92,7 +95,8 @@ COMPHELPER_DLLPUBLIC OUString getUserConfigDir();
 
 /// Write the configuration changes made so far into the per-user config tree,
 /// so that they outlive the kit. A no-op, returning false, when the kit is not
-/// active, the host gave us nowhere to write, or nothing round-trips anyway.
+/// active, the current view may not save them (see
+/// isUserSettingsPersistenceAvailable), or the host gave us nowhere to write.
 /// Call it once a dialog that changes persistent settings is accepted; files
 /// the dialog wrote into the user profile itself (the AutoCorrect lists) are
 /// announced to the host along with the configuration.

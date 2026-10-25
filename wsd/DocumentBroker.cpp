@@ -2026,12 +2026,19 @@ DocumentBroker::updateSessionWithWopiInfo(const std::shared_ptr<ClientSession>& 
         Poco::File(Poco::Path(userExtensionsDir, "extensions")).createDirectories();
 
         _userSettingsUri = userSettingsUri;
+        _userSettingsUserId = userId;
         asyncInstallPresets(session, _userConfigId, userSettingsUri, jailPresetsPath,
                             {{"extensions", userExtensionsDir.toString()}});
         session->setUserPresetsApplied(true);
     }
 
-    session->setUserSettingsPersistenceAvailable(!userSettingsUri.empty());
+    // The document runs with one configuration, that of the user who opened it.
+    // Everyone on it shares that, but only that user's views may save a change
+    // into it: another user's change would otherwise end up in settings that are
+    // not theirs, and theirs are not the ones in force here anyway.
+    session->setUserSettingsPersistenceAvailable(!userSettingsUri.empty()
+                                                 && !_userSettingsUri.empty()
+                                                 && userId == _userSettingsUserId);
 
     // Pass the ownership to the client session.
     session->setWopiFileInfo(std::move(wopiFileInfo));
@@ -2274,6 +2281,10 @@ struct RoundTripPresetGroup
     // When set, only files whose name ends with this go up; anything else the
     // engine leaves in the directory stays in the jail.
     std::string requiredSuffix{};
+    // Upload only when the kit says the user's settings were saved from a view
+    // of theirs, not on session teardown: the files change whichever user
+    // changes them, as everyone on the document shares them.
+    bool onlyWhenPersisted = false;
 };
 
 const std::vector<RoundTripPresetGroup>& getRoundTripPresetGroups()
@@ -2287,7 +2298,8 @@ const std::vector<RoundTripPresetGroup>& getRoundTripPresetGroups()
         // The AutoCorrect Replace and Exception lists, acor_<lang>.dat. The
         // engine creates a user file on the first change to a language's
         // list, so a new one is uploaded too.
-        { "autocorr", false, /*scrubXcu=*/false, /*requiredSuffix=*/".dat" },
+        { "autocorr", false, /*scrubXcu=*/false, /*requiredSuffix=*/".dat",
+          /*onlyWhenPersisted=*/true },
     };
     return sGroups;
 }
@@ -6145,7 +6157,7 @@ Poco::URI DocumentBroker::getPresetUploadBaseUrl(const Poco::URI& uriObject)
     return result;
 }
 
-void DocumentBroker::uploadPresetsToWopiHost()
+void DocumentBroker::uploadPresetsToWopiHost(bool bPersisted)
 {
     // Only to a host that has settings for the user, as it told in CheckFileInfo.
     if (_userSettingsUri.empty())
@@ -6176,6 +6188,9 @@ void DocumentBroker::uploadPresetsToWopiHost()
 
     for (const RoundTripPresetGroup& group : getRoundTripPresetGroups())
     {
+        if (group.onlyWhenPersisted && !bPersisted)
+            continue;
+
         std::string searchDir = jailPresetsPath;
         searchDir.append(group.name);
         const auto fileNames = FileUtil::getDirEntries(searchDir);
@@ -6527,7 +6542,7 @@ bool DocumentBroker::handleInput(const std::shared_ptr<Message>& message)
             // A dialog such as AutoCorrect Options wrote the per-user settings out. Upload
             // them now, so that a crash of the kit or another document of the same user
             // opened before this one is closed does not miss them.
-            uploadPresetsToWopiHost();
+            uploadPresetsToWopiHost(/*bPersisted=*/true);
 #endif
         }
         else if (Util::isDebugEnabled() && message->firstTokenMatches("unitresult:"))
