@@ -8,6 +8,7 @@
  */
 
 #include <tools/hostfilter.hxx>
+#include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 #include <sal/log.hxx>
 #include <charconv>
@@ -278,6 +279,13 @@ bool HostFilter::isFileUrlForbidden(const OUString& rFileUrl)
     }
 
     return true;
+}
+
+bool HostFilter::isUrlForbidden(const OUString& rUrl)
+{
+    INetURLObject aURLObject(rUrl);
+    return aURLObject.IsExoticProtocol() || isForbidden(aURLObject.GetHost())
+           || isFileUrlForbidden(rUrl);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab cinoptions=b1,g0,N-s cinkeys+=0=break: */

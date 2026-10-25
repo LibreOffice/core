@@ -80,7 +80,6 @@
 #include <vcl/weld.hxx>
 #include <tools/XmlWriter.hxx>
 #include <tools/hostfilter.hxx>
-#include <tools/urlobj.hxx>
 
 #include <vector>
 #include <memory>
@@ -3513,9 +3512,7 @@ bool ScDPCollection::IsForbiddenUrlDataSource(const OUString& rDBName)
     if (IsRegisteredDatabase(rDBName))
         return false;
 
-    INetURLObject aURLObject(rDBName);
-    return aURLObject.IsExoticProtocol() || HostFilter::isForbidden(aURLObject.GetHost())
-           || HostFilter::isFileUrlForbidden(rDBName);
+    return HostFilter::isUrlForbidden(rDBName);
 }
 
 bool ScDPCollection::DBCaches::hasCache(sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand) const

@@ -37,6 +37,7 @@ public:
     void testHostNetworks();
     void testHostNetworksOnly();
     void testHostNetworksInvalid();
+    void testUrl();
 
     CPPUNIT_TEST_SUITE(TestHostFilter);
     CPPUNIT_TEST(testEmptyAllowlist);
@@ -51,6 +52,7 @@ public:
     CPPUNIT_TEST(testHostNetworks);
     CPPUNIT_TEST(testHostNetworksOnly);
     CPPUNIT_TEST(testHostNetworksInvalid);
+    CPPUNIT_TEST(testUrl);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -233,6 +235,24 @@ void TestHostFilter::testHostNetworksInvalid()
     CPPUNIT_ASSERT(HostFilter::isForbidden(u"example.com"_ustr));
 
     HostFilter::setAllowedHosts("");
+}
+
+void TestHostFilter::testUrl()
+{
+    // nothing configured: only an exotic protocol is forbidden
+    CPPUNIT_ASSERT(!HostFilter::isUrlForbidden(u"https://evil.example/doc.ods"_ustr));
+    CPPUNIT_ASSERT(!HostFilter::isUrlForbidden(u"file:///tmp/doc.ods"_ustr));
+    CPPUNIT_ASSERT(HostFilter::isUrlForbidden(u"macro:///Standard.Module1.Main"_ustr));
+
+    HostFilter::setAllowedHosts("localhost");
+    CPPUNIT_ASSERT(!HostFilter::isUrlForbidden(u"https://localhost/doc.ods"_ustr));
+    CPPUNIT_ASSERT(HostFilter::isUrlForbidden(u"https://evil.example/doc.ods"_ustr));
+    HostFilter::setAllowedHosts("");
+
+    HostFilter::setAllowedExtRefPaths("/tmp/docs");
+    CPPUNIT_ASSERT(!HostFilter::isUrlForbidden(u"file:///tmp/docs/sheet.ods"_ustr));
+    CPPUNIT_ASSERT(HostFilter::isUrlForbidden(u"file:///tmp/other/sheet.ods"_ustr));
+    HostFilter::resetAllowedExtRefPaths();
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TestHostFilter);
