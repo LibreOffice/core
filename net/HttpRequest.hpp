@@ -1660,13 +1660,13 @@ inline std::ostream& operator<<(std::ostream& os, const http::Header& header)
 
 inline std::ostream& operator<<(std::ostream& os, const http::StatusCode& statusCode)
 {
-    os << static_cast<int>(statusCode) << " (" << getReasonPhraseForCode(statusCode) << ')';
+    os << static_cast<int>(statusCode) << ' ' << getReasonPhraseForCode(statusCode);
     return os;
 }
 
 inline std::ostringstream& operator<<(std::ostringstream& os, const http::StatusCode& statusCode)
 {
-    os << static_cast<int>(statusCode) << " (" << getReasonPhraseForCode(statusCode) << ')';
+    os << static_cast<int>(statusCode) << ' ' << getReasonPhraseForCode(statusCode);
     return os;
 }
 
