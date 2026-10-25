@@ -118,10 +118,14 @@ window.L.Map.FileInserter = window.L.Handler.extend({
 	_answerFilePicker: function (requestId, name) {
 		if (requestId === null || requestId === undefined)
 			return;
-		if (requestId === this._filePickerRequestId)
-			this._filePickerRequestId = null;
+		this._forgetFilePicker(requestId);
 		app.socket.sendMessage('filepickerresult id=' + requestId +
 			(name ? ' name=' + encodeURIComponent(name) : ''));
+	},
+
+	_forgetFilePicker: function (requestId) {
+		if (requestId === this._filePickerRequestId)
+			this._filePickerRequestId = null;
 	},
 
 	_onInsertGraphic: function (e) {
@@ -313,6 +317,15 @@ window.L.Map.FileInserter = window.L.Handler.extend({
 					window.postMobileMessage('insertfile name=' + name + ' type=' + type +
 										       ' data=' + window.btoa(strBytes) +
 										       ' width=' + size.width + ' height=' + size.height);
+				} else if (type === 'filepicker') {
+					// The app cannot upload, so the file itself answers the
+					// engine's request.
+					if (filePickerRequestId === null || filePickerRequestId === undefined)
+						return;
+					window.postMobileMessage('insertfile name=' + encodeURIComponent(name) +
+										       ' type=' + type + ' data=' + window.btoa(strBytes) +
+										       ' id=' + filePickerRequestId);
+					fileInserter._forgetFilePicker(filePickerRequestId);
 				} else {
 					window.postMobileMessage('insertfile name=' + name + ' type=' + type +
 										       ' data=' + window.btoa(strBytes));
@@ -320,6 +333,7 @@ window.L.Map.FileInserter = window.L.Handler.extend({
 			};
 			reader.onerror = function(e) {
 				window.postMobileError('Error when reading file: ' + e);
+				fileInserter._answerFilePicker(filePickerRequestId, null);
 			};
 			reader.onprogress = function(e) {
 				window.postMobileDebug('FileReader progress: ' + Math.round(e.loaded*100 / e.total) + '%');

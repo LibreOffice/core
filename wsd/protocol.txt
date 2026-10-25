@@ -214,6 +214,17 @@ insertfile name=<name> type=<type>
                                       host the same way. The core downloads a URL on any other
                                       host itself, including another WOPI host.
 
+    In the mobile apps the message carries the file itself as data=<base64>
+    after the type, since the app cannot upload. There it also takes:
+
+        type = 'filepicker': Answers the 'filepicker:' request whose id is given
+                             as id=<n> after the data, the way 'filepickerresult'
+                             does on the server. <name> is URL-encoded and has the
+                             shape "<number>-<file name>", and the engine gets the
+                             file under its own file name. A name of another shape,
+                             or a file that cannot be written, gets an error and
+                             ends the request with no file.
+
 selectbackground name=<name>
 
     Inserts a graphic file with the name <name> into the document as background.

@@ -2819,6 +2819,7 @@ bool ChildSession::insertFile(const StringVector& tokens)
     std::string name, type, data;
     int multimedia_width = 0;
     int multimedia_height = 0;
+    int filePickId = 0;
 
     if (!Util::isMobileApp())
     {
@@ -2855,6 +2856,12 @@ bool ChildSession::insertFile(const StringVector& tokens)
                 sendTextFrameAndLogError("error: cmd=insertfile kind=syntax");
                 return false;
             }
+        } else if (type == "filepicker") {
+            if (tokens.size() != 5 || !getTokenInteger(tokens[4], "id", filePickId) ||
+                filePickId < 0) {
+                sendTextFrameAndLogError("error: cmd=insertfile kind=syntax");
+                return false;
+            }
         } else if (tokens.size() != 4) {
             sendTextFrameAndLogError("error: cmd=insertfile kind=syntax");
             return false;
@@ -2864,6 +2871,43 @@ bool ChildSession::insertFile(const StringVector& tokens)
     SigUtil::addActivity(getId(), "insertFile " + type);
 
     LOG_TRC("InsertFile with arguments: " << type << ": " << (data.empty() ? name : std::string("binary data")));
+
+    if (type == "filepicker" && Util::isMobileApp())
+    {
+        // The name is URL-encoded and "<number>-<file name>" like an upload on the server.
+        std::string uploadName;
+        try
+        {
+            URI::decode(name, uploadName);
+        }
+        catch (const Poco::SyntaxException&)
+        {
+        }
+
+        std::string url;
+        const std::string fileName = pickedFileName(uploadName);
+        if (fileName.empty())
+            sendTextFrameAndLogError("error: cmd=insertfile kind=syntax");
+        else
+        {
+            const std::string directory = FileUtil::createRandomTmpDir();
+            // The temp root comes back when the directory could not be made.
+            if (directory != FileUtil::getSysTempDirectoryPath())
+            {
+                std::string binaryData;
+                macaron::Base64::Decode(data, binaryData);
+                url = writeFileToJail(directory + '/' + fileName, binaryData.data(),
+                                      binaryData.size());
+            }
+
+            if (url.empty())
+                sendTextFrameAndLogError("error: cmd=insertfile kind=failure");
+        }
+
+        getLOKitDocument()->setView(_viewId);
+        _docManager->completeFilePick(static_cast<unsigned>(filePickId), url);
+        return !url.empty();
+    }
 
     if (type == "graphic" ||
         type == "graphicurl" ||
