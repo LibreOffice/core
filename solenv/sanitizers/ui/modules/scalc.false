@@ -45,6 +45,8 @@ sc/uiconfig/scalc/ui/goalseekdlg.ui://GtkButton[@id='varbutton'] button-no-label
 sc/uiconfig/scalc/ui/namerangesdialog.ui://GtkButton[@id='rbassign'] button-no-label
 sc/uiconfig/scalc/ui/namerangesdialog.ui://GtkButton[@id='rbassign2'] button-no-label
 sc/uiconfig/scalc/ui/managenamesdialog.ui://GtkButton[@id='assign'] button-no-label
+// ToolbarUnoDispatcher supplies the command label and tooltip at runtime.
+sc/uiconfig/scalc/ui/navigatorpanel.ui://GtkToolButton[@id='selectdata-button'] button-no-label
 sc/uiconfig/scalc/ui/movingaveragedialog.ui://GtkButton[@id='input-range-button'] button-no-label
 sc/uiconfig/scalc/ui/movingaveragedialog.ui://GtkButton[@id='output-range-button'] button-no-label
 sc/uiconfig/scalc/ui/multipleoperationsdialog.ui://GtkButton[@id='formulasref'] button-no-label

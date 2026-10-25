@@ -19,6 +19,7 @@
 
 #pragma once
 
+#include <optional>
 #include <vector>
 #include <vcl/idle.hxx>
 #include <svl/lstner.hxx>
@@ -29,7 +30,6 @@
 #include <vcl/weld/SpinButton.hxx>
 #include <vcl/weld/TextView.hxx>
 #include <vcl/weld/Toolbar.hxx>
-#include <rangeutl.hxx>
 #include "content.hxx"
 
 class SfxPoolItem;
@@ -37,6 +37,7 @@ class ScTabViewShell;
 class ScViewData;
 class ScNavigatorControllerItem;
 class ScNavigatorSettings;
+class ToolbarUnoDispatcher;
 namespace weld { class ComboBox; }
 
 #define SC_DROPMODE_URL         0
@@ -100,6 +101,8 @@ private:
 
     std::unique_ptr<weld::SpinButton> m_xEdCol;
     std::unique_ptr<weld::SpinButton> m_xEdRow;
+    std::unique_ptr<weld::Toolbar> m_xSelectDataToolbar;
+    std::unique_ptr<ToolbarUnoDispatcher> m_xSelectDataDispatch;
     std::unique_ptr<weld::Toolbar> m_xTbxCmd1;
     std::unique_ptr<weld::Toolbar> m_xTbxCmd2;
     std::unique_ptr<ScContentTree> m_xLbEntries;
@@ -116,8 +119,6 @@ private:
     OUString m_aStrActive;
     OUString m_aStrNotActive;
     OUString m_aStrActiveWin;
-
-    std::optional<ScArea> moMarkArea;
 
     NavListMode m_eListMode;
     sal_uInt16 m_nDropMode;
@@ -167,8 +168,6 @@ private:
     void    SetDropMode(sal_uInt16 nNew);
     sal_uInt16 GetDropMode() const { return m_nDropMode; }
 
-    void    MarkDataArea    ();
-    void    UnmarkDataArea  ();
     void    StartOfDataArea ();
     void    EndOfDataArea   ();
 

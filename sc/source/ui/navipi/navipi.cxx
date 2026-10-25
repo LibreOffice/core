@@ -24,6 +24,7 @@
 #include <sfx2/dispatch.hxx>
 #include <sfx2/event.hxx>
 #include <sfx2/navigat.hxx>
+#include <sfx2/weldutils.hxx>
 #include <svl/stritem.hxx>
 #include <unotools/charclass.hxx>
 
@@ -31,7 +32,6 @@
 #include <tabvwsh.hxx>
 #include <docsh.hxx>
 #include <document.hxx>
-#include <rangeutl.hxx>
 #include <sc.hrc>
 #include <strings.hrc>
 #include <bitmaps.hlst>
@@ -198,9 +198,7 @@ IMPL_LINK(ScNavigatorDlg, ToolBoxSelectHdl, const OUString&, rSelId, void)
         m_xTbxCmd2->set_menu_item_active(u"dragmode"_ustr, !m_xTbxCmd2->get_menu_item_active(u"dragmode"_ustr));
     else
     {
-        if (rSelId == "datarange")
-            MarkDataArea();
-        else if (rSelId == "start")
+        if (rSelId == "start")
             StartOfDataArea();
         else if (rSelId == "end")
             EndOfDataArea();
@@ -302,6 +300,7 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings& rBindings, weld::Widget* pParent,
     , m_rBindings(rBindings)
     , m_xEdCol(m_xBuilder->weld_spin_button(u"column"_ustr))
     , m_xEdRow(m_xBuilder->weld_spin_button(u"row"_ustr))
+    , m_xSelectDataToolbar(m_xBuilder->weld_toolbar(u"selectdata"_ustr))
     , m_xTbxCmd1(m_xBuilder->weld_toolbar(u"toolbox1"_ustr))
     , m_xTbxCmd2(m_xBuilder->weld_toolbar(u"toolbox2"_ustr))
     , m_xLbEntries(new ScContentTree(m_xBuilder->weld_tree_view(u"contentbox"_ustr), this))
@@ -319,6 +318,12 @@ ScNavigatorDlg::ScNavigatorDlg(SfxBindings& rBindings, weld::Widget* pParent,
     , m_nCurRow(0)
     , m_nCurTab(0)
 {
+    // Use a command ID for the dispatcher without binding a native GTK action.
+    m_xSelectDataToolbar->set_item_ident(0, u".uno:SelectData"_ustr);
+    m_xSelectDataDispatch = std::make_unique<ToolbarUnoDispatcher>(
+        *m_xSelectDataToolbar, *m_xBuilder, rBindings.GetActiveFrame());
+    m_xSelectDataToolbar->set_item_help_id(u".uno:SelectData"_ustr, u".uno:SelectData"_ustr);
+
     UpdateInitShow();
 
     UpdateSheetLimits();
@@ -431,13 +436,14 @@ ScNavigatorDlg::~ScNavigatorDlg()
 
     for (auto & p : mvBoundItems)
         p.reset();
-    moMarkArea.reset();
 
     EndListening( *(SfxGetpApp()) );
     EndListening(m_rBindings);
 
     m_xEdCol.reset();
     m_xEdRow.reset();
+    m_xSelectDataDispatch.reset();
+    m_xSelectDataToolbar.reset();
     m_xTbxCmd1.reset();
     m_xTbxCmd2.reset();
     m_xDragModeMenu.reset();
@@ -778,9 +784,6 @@ void ScNavigatorDlg::SetListMode(NavListMode eMode)
             pNav->SetOutputSizePixel(aNewSize);
         }
     }
-
-    if (moMarkArea)
-        UnmarkDataArea();
 }
 
 void ScNavigatorDlg::ShowList(bool bShow)
@@ -845,40 +848,8 @@ void ScNavigatorDlg::GetDocNames( const OUString* pManualSel )
     m_xLbDocuments->set_active_text(aSelEntry);
 }
 
-void ScNavigatorDlg::MarkDataArea()
-{
-    ScTabViewShell* pViewSh = GetTabViewShell();
-
-    if ( !pViewSh )
-        return;
-
-    if ( !moMarkArea )
-        moMarkArea.emplace();
-
-    pViewSh->MarkDataArea();
-    const ScRange& aMarkRange = pViewSh->GetViewData().GetMarkData().GetMarkArea();
-    moMarkArea->nColStart = aMarkRange.aStart.Col();
-    moMarkArea->nRowStart = aMarkRange.aStart.Row();
-    moMarkArea->nColEnd = aMarkRange.aEnd.Col();
-    moMarkArea->nRowEnd = aMarkRange.aEnd.Row();
-    moMarkArea->nTab = aMarkRange.aStart.Tab();
-}
-
-void ScNavigatorDlg::UnmarkDataArea()
-{
-    ScTabViewShell* pViewSh = GetTabViewShell();
-
-    if ( pViewSh )
-    {
-        pViewSh->Unmark();
-        moMarkArea.reset();
-    }
-}
-
 void ScNavigatorDlg::StartOfDataArea()
 {
-    //  pMarkArea evaluate ???
-
     if (ScViewData* pData = GetViewData())
     {
         ScMarkData& rMark = pData->GetMarkData();
@@ -894,8 +865,6 @@ void ScNavigatorDlg::StartOfDataArea()
 
 void ScNavigatorDlg::EndOfDataArea()
 {
-    //  pMarkArea evaluate ???
-
     if (ScViewData* pData = GetViewData())
     {
         ScMarkData& rMark = pData->GetMarkData();

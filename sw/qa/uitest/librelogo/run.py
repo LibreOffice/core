@@ -344,7 +344,9 @@ x 3 ; draw only a few levels
             dialogMessages = []
             while xIsAlive.invoke((), (), ())[0]:
                 xCurrentTopWindow = self.xUITest.getTopFocusWindow()
-                if get_state_as_dict(xCurrentTopWindow)['WindowType'] == '130':
+                state = get_state_as_dict(xCurrentTopWindow)
+                # Wait for execute(): the message box can exist before its text is set.
+                if state['WindowType'] == '130' and state['Modal'] == 'true':
                     # save every dialog message to return them
                     dialogMessages.append(xLastDialogMessage.invoke((), (), ())[0])
                     xDialogOk = xCurrentTopWindow.getChild('ok')

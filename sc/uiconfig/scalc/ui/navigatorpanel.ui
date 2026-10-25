@@ -174,69 +174,88 @@
               </packing>
             </child>
             <child>
-              <object class="GtkToolbar" id="toolbox1">
+              <object class="GtkBox" id="dataareatoolbars">
                 <property name="visible">True</property>
-                <property name="can-focus">True</property>
-                <property name="toolbar-style">icons</property>
-                <property name="show-arrow">False</property>
-                <property name="icon_size">2</property>
+                <property name="can-focus">False</property>
+                <property name="spacing">0</property>
                 <child>
-                  <object class="GtkToolButton" id="datarange">
+                  <object class="GtkToolbar" id="selectdata">
                     <property name="visible">True</property>
-                    <property name="tooltip-text" translatable="yes" context="navigatorpanel|datarange|tooltip_text">Data Range</property>
-                    <property name="icon-name">sc/res/na03.png</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="datarange-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|datarange">Specifies the current data range denoted by the position of the cell cursor.</property>
+                    <property name="can-focus">True</property>
+                    <property name="toolbar-style">icons</property>
+                    <property name="show-arrow">False</property>
+                    <property name="icon_size">2</property>
+                    <child>
+                      <object class="GtkToolButton" id="selectdata-button">
+                        <property name="visible">True</property>
                       </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">False</property>
+                      </packing>
                     </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">0</property>
                   </packing>
                 </child>
                 <child>
-                  <object class="GtkToolButton" id="start">
+                  <object class="GtkToolbar" id="toolbox1">
                     <property name="visible">True</property>
-                    <property name="tooltip-text" translatable="yes" context="navigatorpanel|start|tooltip_text">Start</property>
-                    <property name="icon-name">sc/res/na05.png</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="start-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|start">Moves to the cell at the beginning of the current data range, which you can highlight using the Data Range button.</property>
+                    <property name="can-focus">True</property>
+                    <property name="toolbar-style">icons</property>
+                    <property name="show-arrow">False</property>
+                    <property name="icon_size">2</property>
+                    <child>
+                      <object class="GtkToolButton" id="start">
+                        <property name="visible">True</property>
+                        <property name="tooltip-text" translatable="yes" context="navigatorpanel|start|tooltip_text">Start of Data Area</property>
+                        <property name="icon-name">sc/res/na05.png</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="start-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|start">Moves to the first cell of the selected data area. Use Select Data Area to select the data area surrounding the current cell.</property>
+                          </object>
+                        </child>
                       </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToolButton" id="end">
+                        <property name="visible">True</property>
+                        <property name="tooltip-text" translatable="yes" context="navigatorpanel|end|tooltip_text">End of Data Area</property>
+                        <property name="icon-name">sc/res/na06.png</property>
+                        <child internal-child="accessible">
+                          <object class="AtkObject" id="end-atkobject">
+                            <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|end">Moves to the last cell of the selected data area. Use Select Data Area to select the data area surrounding the current cell.</property>
+                          </object>
+                        </child>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">False</property>
+                      </packing>
+                    </child>
+                    <child>
+                      <object class="GtkToggleToolButton" id="contents">
+                        <property name="visible">True</property>
+                        <property name="tooltip-text" translatable="yes" context="navigatorpanel|contents|tooltip_text">Contents</property>
+                        <property name="icon-name">sc/res/na011.png</property>
+                      </object>
+                      <packing>
+                        <property name="expand">False</property>
+                        <property name="homogeneous">False</property>
+                      </packing>
                     </child>
                   </object>
                   <packing>
                     <property name="expand">False</property>
-                    <property name="homogeneous">False</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkToolButton" id="end">
-                    <property name="visible">True</property>
-                    <property name="tooltip-text" translatable="yes" context="navigatorpanel|end|tooltip_text">End</property>
-                    <property name="icon-name">sc/res/na06.png</property>
-                    <child internal-child="accessible">
-                      <object class="AtkObject" id="end-atkobject">
-                        <property name="AtkObject::accessible-description" translatable="yes" context="navigatorpanel|extended_tip|end">Moves to the cell at the end of the current data range, which you can highlight using the Data Range button.</property>
-                      </object>
-                    </child>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">False</property>
-                  </packing>
-                </child>
-                <child>
-                  <object class="GtkToggleToolButton" id="contents">
-                    <property name="visible">True</property>
-                    <property name="tooltip-text" translatable="yes" context="navigatorpanel|contents|tooltip_text">Contents</property>
-                    <property name="icon-name">sc/res/na011.png</property>
-                  </object>
-                  <packing>
-                    <property name="expand">False</property>
-                    <property name="homogeneous">False</property>
+                    <property name="fill">True</property>
+                    <property name="position">1</property>
                   </packing>
                 </child>
               </object>

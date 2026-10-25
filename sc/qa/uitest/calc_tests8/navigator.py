@@ -14,6 +14,45 @@ from uitest.uihelper.calc import enter_text_to_cell
 
 class navigator(UITestCase):
 
+    def test_tdf173461(self):
+        with self.ui_test.create_doc_in_start_center("calc"):
+            xCalcDoc = self.xUITest.getTopFocusWindow()
+            xGridWin = xCalcDoc.getChild("grid_window")
+            for column in "BCD":
+                for row in range(2, 5):
+                    enter_text_to_cell(xGridWin, f"{column}{row}", "1")
+            xGridWin.executeAction("SELECT", mkPropertyValues({"CELL": "C3"}))
+
+            self.xUITest.executeCommand(".uno:Sidebar")
+            xGridWin.executeAction("SIDEBAR", mkPropertyValues({"PANEL": "ScNavigatorPanel"}))
+            xNavigatorPanel = xCalcDoc.getChild("NavigatorPanel")
+            xSelectData = xNavigatorPanel.getChild("selectdata")
+            expected_area = "Sheet1.B2:Sheet1.D4"
+
+            xSelectData.executeAction("CLICK", mkPropertyValues({"POS": "0"}))
+            self.ui_test.wait_until_property_is_updated(xGridWin, "MarkedArea", expected_area)
+            self.assertEqual(get_state_as_dict(xSelectData)["CurrSelectedItemCommand"],
+                             ".uno:SelectData")
+            self.assertEqual(get_state_as_dict(xSelectData)["CurrSelectedItemText"],
+                             "Select Data Area")
+
+            xSelectData.executeAction("CLICK", mkPropertyValues({"POS": "0"}))
+            self.assertEqual(get_state_as_dict(xGridWin)["MarkedArea"], expected_area)
+
+            xToolbar = xNavigatorPanel.getChild("toolbox1")
+            for position, coordinate in (("0", "1"), ("1", "3")):
+                xToolbar.executeAction("CLICK", mkPropertyValues({"POS": position}))
+                self.ui_test.wait_until_property_is_updated(xGridWin, "CurrentRow", coordinate)
+                self.assertEqual(get_state_as_dict(xGridWin)["CurrentColumn"], coordinate)
+                self.assertEqual(get_state_as_dict(xGridWin)["MarkedArea"], expected_area)
+
+            xModes = xNavigatorPanel.getChild("toolbox2")
+            for _ in range(2):
+                xModes.executeAction("CLICK", mkPropertyValues({"POS": "1"}))
+                self.assertEqual(get_state_as_dict(xGridWin)["MarkedArea"], expected_area)
+
+            self.xUITest.executeCommand(".uno:Sidebar")
+
     def test_rename_sheet(self):
         with self.ui_test.load_file(get_url_for_data_file("navigator.ods")):
             xCalcDoc = self.xUITest.getTopFocusWindow()
