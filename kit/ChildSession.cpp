@@ -76,6 +76,7 @@
 #include <climits>
 #include <fstream>
 #include <cctype>
+#include <cstdio>
 #include <iomanip>
 #include <sstream>
 #include <string>
@@ -2795,6 +2796,24 @@ bool ChildSession::insertPastedGif(const char* data, int size)
     return true;
 }
 
+namespace
+{
+/// The file name of a picked upload "<number>-<file name>", or empty for any other shape.
+std::string pickedFileName(const std::string& uploadName)
+{
+    const std::size_t dash = uploadName.find('-');
+    if (dash == std::string::npos || dash == 0 || dash + 1 >= uploadName.size() ||
+        !std::all_of(uploadName.begin(), uploadName.begin() + dash,
+                     [](unsigned char c) { return std::isdigit(c) != 0; }))
+        return std::string();
+
+    const std::string fileName = uploadName.substr(dash + 1);
+    if (fileName == "." || fileName == ".." || fileName.find('/') != std::string::npos)
+        return std::string();
+    return fileName;
+}
+}
+
 bool ChildSession::insertFile(const StringVector& tokens)
 {
     std::string name, type, data;
@@ -3887,26 +3906,67 @@ bool ChildSession::contentControlEvent(const StringVector& tokens)
 
 bool ChildSession::filePickerResult(const StringVector& tokens)
 {
-    // filepickerresult id=<n> [name=<name>]: the file the browser uploaded for the pick with
-    // request id <n>, or no name when the user cancelled.
+    // filepickerresult id=<n> [name=<name>]: the URL-encoded name of the file the browser
+    // uploaded for the pick with request id <n>, or no name when the user cancelled.
     int id = 0;
     std::string name;
     const bool wellFormed = (tokens.size() == 2 || tokens.size() == 3) &&
                             getTokenInteger(tokens[1], "id", id) && id >= 0 &&
                             (tokens.size() == 2 || getTokenString(tokens[2], "name", name));
-    if (!wellFormed || name.find('/') != std::string::npos)
+    if (!wellFormed)
     {
         sendTextFrameAndLogError("error: cmd=filepickerresult kind=syntax");
         return false;
     }
 
+    bool answered = true;
     std::string url;
     if (!name.empty())
-        url = "file://" + getJailDocRoot() + "insertfile/" + name;
+    {
+        std::string uploadName;
+        try
+        {
+            URI::decode(name, uploadName);
+        }
+        catch (const Poco::SyntaxException&)
+        {
+            // uploadName stays empty and fails the shape check.
+        }
+
+        const std::string fileName = pickedFileName(uploadName);
+        if (fileName.empty())
+        {
+            answered = false;
+            sendTextFrameAndLogError("error: cmd=filepickerresult kind=syntax");
+        }
+        else
+        {
+            const std::string uploaded = getJailDocRoot() + "insertfile/" + uploadName;
+            const std::string directory = FileUtil::createRandomTmpDir();
+            // The temp root comes back when the directory could not be made.
+            if (directory == FileUtil::getSysTempDirectoryPath())
+                answered = false;
+            else
+            {
+                const std::string path = directory + '/' + fileName;
+                if (std::rename(uploaded.c_str(), path.c_str()) == 0)
+                    url = Poco::URI(Poco::Path(path)).toString();
+                else
+                {
+                    answered = false;
+                    LOG_WRN_SYS("Failed to move the picked file [" << uploadName << "] to ["
+                                                                   << path << ']');
+                }
+            }
+
+            if (!answered)
+                sendTextFrameAndLogError("error: cmd=filepickerresult kind=failure");
+        }
+    }
 
     getLOKitDocument()->setView(_viewId);
     _docManager->completeFilePick(static_cast<unsigned>(id), url);
-    return true;
+    return answered;
 }
 
 bool ChildSession::renderSearchResult(const char* buffer, int length, const StringVector& /*tokens*/)

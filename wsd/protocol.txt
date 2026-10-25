@@ -221,9 +221,12 @@ selectbackground name=<name>
 filepickerresult id=<n> [name=<name>]
 
     Answers the 'filepicker:' request with id <n>. <name> is the name of a
-    file previously uploaded using the insertfile POST, and the engine gets
-    it as a file URL inside the jail. Without a name, the user cancelled and
-    the request ends with no file.
+    file previously uploaded using the insertfile POST, URL-encoded here and
+    plain in the upload form. It has the shape "<number>-<file name>", and
+    the engine gets the file as a file URL inside the jail, in a directory of
+    its own under its own file name. Without a name, the user cancelled and
+    the request ends with no file. A name of another shape, or a file that
+    cannot be moved, gets an error and also ends the request with no file.
 
 slideimport insert file=<staged name> [source=<source name>] [slides=<i0,i1,...>]
                    [at=<S>] [keepdesign=<0|1>] [link=<0|1>] [time=<source time>]

@@ -98,12 +98,14 @@ window.L.Map.FileInserter = window.L.Handler.extend({
 			return;
 		}
 
+		// A number in front keeps the upload name unique.
+		const name = Date.now() + '-' + file.name;
 		if (!this._childId) {
 			app.socket.sendMessage('getchildid');
-			this._toFilePicker[Date.now()] = file;
+			this._toFilePicker[name] = file;
 		}
 		else {
-			this._sendFile(Date.now(), file, 'filepicker');
+			this._sendFile(name, file, 'filepicker');
 		}
 	},
 
@@ -118,7 +120,8 @@ window.L.Map.FileInserter = window.L.Handler.extend({
 			return;
 		if (requestId === this._filePickerRequestId)
 			this._filePickerRequestId = null;
-		app.socket.sendMessage('filepickerresult id=' + requestId + (name ? ' name=' + name : ''));
+		app.socket.sendMessage('filepickerresult id=' + requestId +
+			(name ? ' name=' + encodeURIComponent(name) : ''));
 	},
 
 	_onInsertGraphic: function (e) {
