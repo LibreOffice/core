@@ -593,6 +593,7 @@ void handlePresetRequest(const std::string& kind, const std::string& etagString,
     Poco::JSON::Array::Ptr configDictionaries = new Poco::JSON::Array();
     Poco::JSON::Array::Ptr configXcu = new Poco::JSON::Array();
     Poco::JSON::Array::Ptr configTemplate = new Poco::JSON::Array();
+    Poco::JSON::Array::Ptr configAutocorr = new Poco::JSON::Array();
 
     UnitWSD* const unitWsd = UnitWSD::isUnitTesting() ? &UnitWSD::get() : nullptr;
     for (const auto& item : items)
@@ -641,11 +642,14 @@ void handlePresetRequest(const std::string& kind, const std::string& etagString,
             configXcu->add(configEntry);
         else if (item.first == "template")
             configTemplate->add(configEntry);
+        else if (item.first == "autocorr")
+            configAutocorr->add(configEntry);
     }
     configInfo->set("autotext", configAutoTexts);
     configInfo->set("wordbook", configDictionaries);
     configInfo->set("xcu", configXcu);
     configInfo->set("template", configTemplate);
+    configInfo->set("autocorr", configAutocorr);
 
     if (serveBrowserSetttings)
     {
@@ -760,6 +764,8 @@ std::vector<asset> getAssetVec(PresetType type, const std::string& userId)
                 assetVec.push_back(asset("xcu", filePath));
             else if (ext == "otp")
                 assetVec.push_back(asset("template", filePath));
+            else if (ext == "dat")
+                assetVec.push_back(asset("autocorr", filePath));
             LOG_TRC("Found preset file[" << filePath << ']');
         }
     };

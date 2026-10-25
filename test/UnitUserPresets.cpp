@@ -806,14 +806,183 @@ public:
     }
 };
 
+namespace
+{
+/// The name of the AutoCorrect list the host keeps for the user.
+constexpr std::string_view AutocorrFileName = "acor_en-US.dat";
+
+/// The fileId under which the host receives that list.
+constexpr std::string_view AutocorrFileId = "/settings/userconfig/autocorr/acor_en-US.dat";
+
+/// The fileId under which the host receives the configuration the engine wrote.
+constexpr std::string_view RegistryFileId = "/settings/userconfig/xcu/registrymodifications.xcu";
+} // namespace
+
+/// The AutoCorrect Replace and Exception lists round-trip like the other user settings: the
+/// host's list is installed into the jail where the engine looks for it, and once an AutoCorrect
+/// setting changes, the list and the configuration go back to the host while the document is
+/// still open. Toggling AutoCorrect While Typing stands in for the dialog, both persist the
+/// same way; the test writes the list into the jail itself, as a change in the dialog would.
+class UnitAutocorrRoundTrip : public WopiTestServer
+{
+    using Base = WopiTestServer;
+
+    STATE_ENUM(Phase, Load, WaitLoad, Toggle, WaitUpload, Done) _phase;
+
+    std::string _jailConfigPath;
+    bool _listUploaded = false;
+    bool _registryUploaded = false;
+
+public:
+    UnitAutocorrRoundTrip()
+        : Base("UnitAutocorrRoundTrip")
+        , _phase(Phase::Load)
+    {
+    }
+
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& /*request*/,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        Poco::JSON::Object::Ptr userSettings = new Poco::JSON::Object();
+        std::string uri = helpers::getTestServerURI()
+                          + "/wopi/settings/userconfig.json?testname=UnitAutocorrRoundTrip";
+        userSettings->set("uri", Util::trim(uri));
+        userSettings->set("stamp", "autocorrstamp");
+        fileInfo->set("UserSettings", userSettings);
+    }
+
+    bool handleHttpGetRequest(const Poco::Net::HTTPRequest& request,
+                              const std::shared_ptr<StreamSocket>& socket) override
+    {
+        const Poco::URI uriReq(request.getURI());
+        const std::string path = uriReq.getPath();
+        if (path == "/wopi/settings/userconfig.json")
+        {
+            std::string assetUri = helpers::getTestServerURI()
+                                   + "/wopi/settings/userconfig/autocorr/"
+                                   + std::string(AutocorrFileName)
+                                   + "?testname=UnitAutocorrRoundTrip";
+            Util::trim(assetUri);
+            const std::string json = "{\"kind\":\"user\",\"autocorr\":[{\"uri\":\"" + assetUri
+                                     + "\",\"stamp\":\"s1\"}]}";
+            TST_LOG("Serving userconfig.json: " << json);
+            http::Response httpResponse(http::StatusCode::OK);
+            httpResponse.setBody(json, "application/json; charset=utf-8");
+            socket->sendAndShutdown(httpResponse);
+            return true;
+        }
+
+        if (path.ends_with(AutocorrFileName))
+        {
+            TST_LOG("Serving the AutoCorrect list: " << path);
+            http::Response httpResponse(http::StatusCode::OK);
+            httpResponse.setBody("host-list", "application/octet-stream");
+            socket->sendAndShutdown(httpResponse);
+            return true;
+        }
+
+        return Base::handleHttpGetRequest(request, socket);
+    }
+
+    bool handleHttpPostRequest(const Poco::Net::HTTPRequest& request, std::istream& message,
+                               const std::shared_ptr<StreamSocket>& socket) override
+    {
+        const std::string fileId = presetUploadFileId(request);
+        if (fileId.empty())
+            return Base::handleHttpPostRequest(request, message, socket);
+
+        const std::string body(std::istreambuf_iterator<char>(message), {});
+        TST_LOG("Preset upload of [" << fileId << "]: " << body.size() << " bytes");
+        http::Response httpResponse(http::StatusCode::OK);
+        socket->sendAndShutdown(httpResponse);
+
+        LOK_ASSERT_MESSAGE("only the lists of the AutoCorrect directory should go up",
+                           fileId.find("scratch.tmp") == std::string::npos);
+
+        if (fileId == AutocorrFileId)
+        {
+            LOK_ASSERT_STATE(_phase, Phase::WaitUpload);
+            LOK_ASSERT_EQUAL_MESSAGE("the changed list should go up", std::string("changed-list"),
+                                     body);
+            _listUploaded = true;
+        }
+        else if (fileId == RegistryFileId)
+        {
+            LOK_ASSERT_STATE(_phase, Phase::WaitUpload);
+            LOK_ASSERT_MESSAGE("the uploaded configuration should hold the AutoCorrect change",
+                               body.find("/org.openoffice.Office.Writer/AutoFunction")
+                                   != std::string::npos);
+            _registryUploaded = true;
+        }
+
+        if (_listUploaded && _registryUploaded)
+        {
+            TRANSITION_STATE(_phase, Phase::Done);
+            passTest("the AutoCorrect settings reached the host while the document is open");
+        }
+        return true;
+    }
+
+    void onDocBrokerViewLoaded(const std::string&,
+                               const std::shared_ptr<ClientSession>& session) override
+    {
+        LOK_ASSERT_STATE(_phase, Phase::WaitLoad);
+        _jailConfigPath = jailConfigPath(session);
+        LOK_ASSERT_MESSAGE("the session should have a document", !_jailConfigPath.empty());
+
+        // The host's list is where the engine looks for the user's lists.
+        std::ifstream file(_jailConfigPath + "autocorr/" + std::string(AutocorrFileName));
+        const std::string content(std::istreambuf_iterator<char>(file), {});
+        LOK_ASSERT_EQUAL_MESSAGE("the host's AutoCorrect list should be in the jail",
+                                 std::string("host-list"), content);
+        TRANSITION_STATE(_phase, Phase::Toggle);
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitLoad);
+                initWebsocket("/wopi/files/0?access_token=anything");
+                WSD_CMD_BY_CONNECTION_INDEX(0, "load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::Toggle:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitUpload);
+                {
+                    std::ofstream file(_jailConfigPath + "autocorr/"
+                                           + std::string(AutocorrFileName),
+                                       std::ios::trunc);
+                    file << "changed-list";
+                }
+                // Something the engine leaves beside the lists stays in the jail.
+                {
+                    std::ofstream file(_jailConfigPath + "autocorr/scratch.tmp", std::ios::trunc);
+                    file << "scratch";
+                }
+                WSD_CMD_BY_CONNECTION_INDEX(0, "uno .uno:OnlineAutoFormat");
+                break;
+            }
+            case Phase::WaitLoad:
+            case Phase::WaitUpload:
+            case Phase::Done:
+                break;
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase*[7]{ new UnitEarlyDocDeath(),
+    return new UnitBase*[8]{ new UnitEarlyDocDeath(),
                              new UnitSpifPreset(),
                              new UnitSecondUserPresets(),
                              new UnitLoneUserReloadsPresets(),
                              new UnitNoUserSettingsNoUpload(),
                              new UnitWordbookLiveUpload(),
+                             new UnitAutocorrRoundTrip(),
                              nullptr };
 }
 

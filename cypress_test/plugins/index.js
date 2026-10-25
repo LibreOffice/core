@@ -19,6 +19,7 @@ function plugin(on, config) {
 		writeUserSetting: tasks.writeUserSetting,
 		writeUserViewSetting: tasks.writeUserViewSetting,
 		removeUserViewSetting: tasks.removeUserViewSetting,
+		removeUserPresets: tasks.removeUserPresets,
 		lighthouse: lighthouse(),
 	});
 

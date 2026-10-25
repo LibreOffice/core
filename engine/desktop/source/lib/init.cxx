@@ -5780,6 +5780,13 @@ static void updateConfig(const OUString& rConfigPath)
         {
             reInitDictionaryList();
         }
+        else if (sFileName == "autocorr")
+        {
+            // The host's acor_<lang>.dat files land in the user AutoCorrect
+            // directory. Forget which languages had a user file, so that a list
+            // looked up before they arrived is read again from them.
+            SvxAutoCorrCfg::Get().ReloadPaths();
+        }
     }
 }
 

@@ -65,6 +65,7 @@
 #include <officecfg/Office/Linguistic.hxx>
 #include <editeng/acorrcfg.hxx>
 #include <editeng/svxacorr.hxx>
+#include <unotools/pathoptions.hxx>
 #include <cairo.h>
 #include <config_fonts.h>
 #include <config_mpl.h>
@@ -198,6 +199,7 @@ public:
     void testCommandResult();
     void testWriterComments();
     void testTranslationProviders();
+    void testAutoCorrectListFromHost();
     void testUserSettingsPersistedCallback();
     void testAutoCorrectDialogToggleColumns();
     void testAutoCorrectDialogOnlyOnce();
@@ -303,6 +305,7 @@ public:
     CPPUNIT_TEST(testCommandResult);
     CPPUNIT_TEST(testWriterComments);
     CPPUNIT_TEST(testTranslationProviders);
+    CPPUNIT_TEST(testAutoCorrectListFromHost);
     CPPUNIT_TEST(testUserSettingsPersistedCallback);
     CPPUNIT_TEST(testAutoCorrectDialogToggleColumns);
     CPPUNIT_TEST(testAutoCorrectDialogOnlyOnce);
@@ -3807,6 +3810,18 @@ void DesktopKitTest::testCalcValidityDropdownInReadonlyMode()
 
 namespace
 {
+/// Types the text into the document and lets it be processed.
+void typeText(COKitDocumentImpl* pDocument, std::u16string_view aText)
+{
+    for (sal_Unicode cChar : aText)
+    {
+        int nKey = cChar == ' ' ? css::awt::Key::SPACE : 0;
+        pDocument->postKeyEvent(COKitKeyEventType::DOWN, cChar, nKey);
+        pDocument->postKeyEvent(COKitKeyEventType::UP, cChar, nKey);
+    }
+    Scheduler::ProcessEventsToIdle();
+}
+
 /// Collects the global callbacks the kit sends.
 struct GlobalCallbackRecorder
 {
@@ -3817,6 +3832,43 @@ struct GlobalCallbackRecorder
         static_cast<GlobalCallbackRecorder*>(pData)->m_aTypes.push_back(eType);
     }
 };
+}
+
+void DesktopKitTest::testAutoCorrectListFromHost()
+{
+    // Given a document in which a word has been typed, so that the AutoCorrect
+    // list of its language has been looked up while the user had none:
+    COKitImpl aOffice;
+    COKitDocumentImpl* pDocument = loadDoc("blank_text.odt");
+    SvtPathOptions aPathOpt;
+    const OUString aUserDir = aPathOpt.GetAutoCorrectPath().getToken(1, ';');
+    const OUString aUserFile = aUserDir + "/acor_en-US.dat";
+    comphelper::ScopeGuard aRemoveList([&aUserFile] {
+        osl::File::remove(aUserFile);
+        SvxAutoCorrCfg::Get().ReloadPaths();
+        comphelper::COKit::setUserConfigDir(OUString());
+    });
+    typeText(pDocument, u"zzqx ");
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), xTextDocument->getText()->getString().indexOf("quartz"));
+
+    // When the host's list, with a replacement of the user's own, arrives in the
+    // user AutoCorrect directory, and the kit is told to apply the user's settings:
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None,
+                         osl::File::copy(createFileURL(u"acor_zzqx.dat"), aUserFile));
+    INetURLObject aConfigDir(aUserDir);
+    aConfigDir.removeSegment();
+    aOffice.setOption("addconfig",
+                      aConfigDir.GetMainURL(INetURLObject::DecodeMechanism::NONE).toUtf8().getStr());
+
+    // Then the word typed next is replaced from the host's list. The first one
+    // may have been capitalized as the start of a sentence, so look at the end:
+    typeText(pDocument, u"zzqx ");
+    const OUString aText = xTextDocument->getText()->getString();
+    // Without the accompanying fix in place, this test would have failed, as
+    // the second word stayed zzqx: the language kept the list it had looked up
+    // before the user's arrived.
+    CPPUNIT_ASSERT_MESSAGE(aText.toUtf8().getStr(), aText.endsWith(" quartz "));
 }
 
 void DesktopKitTest::testUserSettingsPersistedCallback()

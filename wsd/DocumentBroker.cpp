@@ -2271,6 +2271,9 @@ struct RoundTripPresetGroup
     // Scrub each file in this group to the allowed officecfg node subset
     // before upload (see scrubXcuForUpload). Only meaningful for xcu.
     bool scrubXcu = false;
+    // When set, only files whose name ends with this go up; anything else the
+    // engine leaves in the directory stays in the jail.
+    std::string requiredSuffix{};
 };
 
 const std::vector<RoundTripPresetGroup>& getRoundTripPresetGroups()
@@ -2281,6 +2284,10 @@ const std::vector<RoundTripPresetGroup>& getRoundTripPresetGroups()
         // upload-all keeps the kit-written registrymodifications.xcu; scrubXcu
         // trims it to the allowed nodes.
         { "xcu", false, /*scrubXcu=*/true },
+        // The AutoCorrect Replace and Exception lists, acor_<lang>.dat. The
+        // engine creates a user file on the first change to a language's
+        // list, so a new one is uploaded too.
+        { "autocorr", false, /*scrubXcu=*/false, /*requiredSuffix=*/".dat" },
     };
     return sGroups;
 }
@@ -2419,6 +2426,7 @@ void PresetsInstallTask::install(const Poco::JSON::Object::Ptr& settings,
             addGroup(settings, "wordbook", presets);
             addGroup(settings, "viewsetting", presets);
             addGroup(settings, "xcu", presets);
+            addGroup(settings, "autocorr", presets);
             addGroup(settings, "template", presets);
             addGroup(settings, "themes", presets);
             addGroup(settings, "extensions", presets);
@@ -6188,6 +6196,8 @@ void DocumentBroker::uploadPresetsToWopiHost()
             else if (it != _presetTimestamp.end())
                 skipUpload = (currentTimestamp <= it->second);
             else if (group.onlyKnownOrStandardDic && fileName != "standard.dic")
+                skipUpload = true;
+            if (!group.requiredSuffix.empty() && !fileName.ends_with(group.requiredSuffix))
                 skipUpload = true;
 
             if (skipUpload)

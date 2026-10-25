@@ -93,8 +93,23 @@ function removeUserViewSetting(args) {
 	});
 }
 
+// Drops everything the dev WOPI server keeps for the user, so that a test
+// which checks what the host receives starts from an empty store.
+function removeUserPresets(args) {
+	return new Promise(function(resolve, reject) {
+		// The default user shares its location with every other test.
+		if (!args.userId || String(args.userId) === 'test') {
+			reject(new Error('removeUserPresets needs a user of its own'));
+			return;
+		}
+		fs.rmSync(userPresetDir(args.userId), { recursive: true, force: true });
+		resolve('removed the presets of u-' + args.userId);
+	});
+}
+
 module.exports.copyFile = copyFile;
 module.exports.getSelectors = getSelectors;
 module.exports.writeUserSetting = writeUserSetting;
 module.exports.writeUserViewSetting = writeUserViewSetting;
 module.exports.removeUserViewSetting = removeUserViewSetting;
+module.exports.removeUserPresets = removeUserPresets;
