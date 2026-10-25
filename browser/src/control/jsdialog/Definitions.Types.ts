@@ -578,6 +578,8 @@ interface TreeColumnJSON {
 	collapsedimage?: string;
 	expandedimage?: string;
 	editable?: boolean;
+	toggle?: boolean; // checkbox in a column of its own, checked or not
+	togglecolumn?: number; // the column the core knows that checkbox by
 }
 
 interface TreeEntryJSON {

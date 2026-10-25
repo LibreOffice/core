@@ -86,6 +86,19 @@ static void lcl_DumpEntryAndSiblings(tools::JsonWriter& rJsonWriter,
                             rJsonWriter.put("customEntryRenderer", true);
                     }
                 }
+                else if (rItem.GetType() == SvLBoxItemType::Button && !(bCheckButtons && i == 0))
+                {
+                    // A toggle in a column of its own, not the row's check
+                    // button, which is the first item and goes into "state".
+                    // "togglecolumn" is the column the weld::TreeView calls
+                    // it, which the client sends back when it is clicked.
+                    const SvLBoxButton& rButton = static_cast<const SvLBoxButton&>(rItem);
+                    tools::JsonWriter::ScopedJsonWriterNode<'}'> aColumn
+                        = rJsonWriter.startStruct();
+                    rJsonWriter.put("toggle", rButton.IsStateChecked());
+                    rJsonWriter.put("togglecolumn",
+                                    static_cast<sal_Int32>(i) - (bCheckButtons ? 2 : 1));
+                }
                 else if (rItem.GetType() == SvLBoxItemType::ContextBmp)
                 {
                     const SvLBoxContextBmp* pBmpItem = dynamic_cast<const SvLBoxContextBmp*>(&rItem);

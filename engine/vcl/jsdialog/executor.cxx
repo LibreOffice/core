@@ -641,8 +641,12 @@ bool ExecuteAction(const OUString& nWindowId, const OUString& rWidget, const Str
 
                     sal_Int32 nRow = o3tl::toInt32(aMap[u"row"_ustr]);
                     bool bValue = aMap[u"value"_ustr] == "true";
+                    // A toggle in a column of its own names that column; without
+                    // one it is the row's check button.
+                    StringMap::const_iterator itCol = aMap.find(u"col"_ustr);
+                    sal_Int32 nCol = itCol != aMap.end() ? o3tl::toInt32(itCol->second) : -1;
 
-                    pTreeView->set_toggle(nRow, bValue ? TRISTATE_TRUE : TRISTATE_FALSE);
+                    pTreeView->set_toggle(nRow, bValue ? TRISTATE_TRUE : TRISTATE_FALSE, nCol);
 
                     return true;
                 }

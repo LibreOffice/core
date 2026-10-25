@@ -1227,6 +1227,23 @@ body button:not(.ui-corner-all):not(.button):not(.button-primary):not(.unobutton
 	/* grid-column: '1 / ' + (this._columns + 1) - set inside JS */
 }
 
+/* A heading over a column of checkboxes has to line up with them */
+.ui-treeview.ui-treeview-toggle-columns > .ui-treeview-headers {
+	grid-template-columns: subgrid;
+}
+
+.ui-treeview-toggle-columns .ui-treeview-toggle-column {
+	text-align: center;
+	padding-inline: var(--spacing-s);
+}
+
+/* Even when it is the first cell of the row, which is otherwise as narrow
+   as its content */
+.ui-treeview-toggle-columns .ui-treeview-entry > div.ui-treeview-toggle-column {
+	width: 100%;
+	justify-content: center;
+}
+
 /* ChartDataDialog uses subgrid so headers align with data columns */
 #ChartDataDialog .ui-treeview-headers {
 	grid-template-columns: subgrid;

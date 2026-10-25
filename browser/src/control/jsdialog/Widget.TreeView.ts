@@ -78,6 +78,7 @@ class TreeViewControl {
 	_gridModeCache: boolean | undefined;
 	_hasState: boolean;
 	_hasIcon: boolean;
+	_toggleColumns: Set<number> = new Set<number>();
 	_isNavigator: boolean;
 	_singleClickActivate: boolean;
 	_filterTimer: ReturnType<typeof setTimeout>;
@@ -177,6 +178,16 @@ class TreeViewControl {
 		return false;
 	}
 
+	// The columns in which rows have a checkbox of its own (see createToggleCell).
+	static getToggleColumns(data: TreeWidgetJSON): Set<number> {
+		const columns = new Set<number>();
+		for (const entry of data.entries || [])
+			(entry.columns || []).forEach((column: TreeColumnJSON, index: number) => {
+				if (column.toggle !== undefined) columns.add(index);
+			});
+		return columns;
+	}
+
 	findEntryWithRow(
 		entries: Array<TreeEntryJSON>,
 		row: number | string,
@@ -239,6 +250,57 @@ class TreeViewControl {
 
 		if (entry.state === true) checkbox.checked = true;
 		else checkbox.checked = false;
+
+		return checkbox;
+	}
+
+	// A checkbox in a column of its own, as when a row has more than one, each
+	// under a header of its own. The row's own check button is the one in
+	// createCheckbox.
+	createToggleCell(
+		parent: HTMLElement,
+		treeViewData: TreeWidgetJSON,
+		entry: TreeEntryJSON,
+		index: string,
+		builder: JSBuilder,
+	) {
+		const column = entry.columns[parseInt(index)];
+		const checkbox = window.L.DomUtil.create(
+			'input',
+			builder.options.cssClass + ' ui-treeview-checkbox',
+			parent,
+		) as HTMLInputElement;
+		checkbox.id = `${treeViewData.id}-checkbox-${entry.row}-${column.togglecolumn}`;
+		checkbox.type = 'checkbox';
+		checkbox.tabIndex = -1;
+		checkbox.checked = column.toggle === true;
+
+		// The headers are over the last columns when there are fewer of them
+		// (see fillHeaders).
+		const headers = treeViewData.headers;
+		const header = headers
+			? headers[parseInt(index) - (this._columns - headers.length)]
+			: undefined;
+		// The entry's own text can be the blank that stands in for a missing
+		// checkbox, so name the row after its first cell with text in it.
+		const textColumn = entry.columns.find(
+			(cell: TreeColumnJSON) =>
+				typeof cell.text === 'string' && cell.text !== '',
+		);
+		const rowText = textColumn ? textColumn.text : entry.text;
+		const label = header && header.text ? header.text + ' ' + rowText : rowText;
+		if (label) checkbox.setAttribute('aria-label', label);
+
+		checkbox.addEventListener('change', () => {
+			column.toggle = checkbox.checked;
+			builder.callback(
+				'treeview',
+				'change',
+				treeViewData,
+				{ row: entry.row, col: column.togglecolumn, value: checkbox.checked },
+				builder,
+			);
+		});
 
 		return checkbox;
 	}
@@ -938,6 +1000,9 @@ class TreeViewControl {
 				window.L.DomUtil.addClass(td, 'ui-treeview-icon-column');
 				window.L.DomUtil.addClass(span, 'ui-treeview-expandable-with-icon');
 				this.createExpandableIconCell(text, entry, index, builder);
+			} else if (entry.columns[index].toggle !== undefined) {
+				window.L.DomUtil.addClass(td, 'ui-treeview-toggle-column');
+				this.createToggleCell(text, treeViewData, entry, index, builder);
 			} else if (
 				entry.columns[index].link &&
 				!this.isSeparator(entry.columns[index])
@@ -2523,6 +2588,12 @@ class TreeViewControl {
 
 		for (const index in headers) {
 			this.fillHeader(headers[index], builder, data, parseInt(index));
+			const column = parseInt(index) + this._columns - headers.length;
+			if (this._toggleColumns.has(column))
+				window.L.DomUtil.addClass(
+					this._thead.lastChild,
+					'ui-treeview-toggle-column',
+				);
 
 			if (headers[index].sortable === false) continue;
 
@@ -2834,6 +2905,7 @@ class TreeViewControl {
 		this._columns = TreeViewControl.countColumns(data);
 		this._hasState = TreeViewControl.hasState(data);
 		this._hasIcon = TreeViewControl.hasIcon(data);
+		this._toggleColumns = TreeViewControl.getToggleColumns(data);
 		this._isNavigator = this.isNavigator(data);
 		this._singleClickActivate = TreeViewControl.isSingleClickActivate(data);
 		this._containerRole =
@@ -2867,6 +2939,16 @@ class TreeViewControl {
 		this._container.setAttribute('role', this._containerRole);
 		if (this._isRealTree && (!data.headers || data.headers.length === 0))
 			window.L.DomUtil.addClass(this._container, 'ui-treeview-tree');
+		// A column of checkboxes is as wide as a checkbox or its header, and
+		// each header sits over its column.
+		if (this._toggleColumns.size) {
+			window.L.DomUtil.addClass(this._container, 'ui-treeview-toggle-columns');
+			const tracks = [];
+			if (this._hasState) tracks.push('auto');
+			for (let index = 0; index < this._columns; index++)
+				tracks.push(this._toggleColumns.has(index) ? 'min-content' : 'auto');
+			this._container.style.gridTemplateColumns = tracks.join(' ');
+		}
 
 		this.preprocessColumnData(data.entries);
 		this.fillHeaders(data, data.headers, builder);
