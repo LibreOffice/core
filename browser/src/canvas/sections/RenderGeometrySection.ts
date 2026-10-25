@@ -1008,7 +1008,7 @@ class RenderGeometrySection extends CanvasSectionObject {
 
 	/*
 		Strokes, for every object of that part, the box it paints into and the rectangle of its
-		own mapping, each in the object's own colour. The page entry is left out where asked.
+		own mapping, each in the object's own color. The page entry is left out where asked.
 	*/
 	private strokeFramesOf(
 		data: cool.VectorPrimitivesData,

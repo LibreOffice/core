@@ -675,7 +675,7 @@ class CropHandles extends HandleGroup {
 		grown: number,
 	): string {
 		const color = HandleLook.blended(
-			HandleLook.colourOfTheKind.framing,
+			HandleLook.colorOfTheKind.framing,
 			-HandleLook.cropMarkShade,
 		);
 		const place = ObjectHandles.placeOfKind(handle.kind.substring(4));
@@ -1830,7 +1830,7 @@ class TiePointHandles extends HandleGroup {
 
 		return held?.keepsItsDistance
 			? HandleLook.tiePointKeepingItsDistance
-			: HandleLook.colourOfTheKind.tiePoint;
+			: HandleLook.colorOfTheKind.tiePoint;
 	}
 
 	/*

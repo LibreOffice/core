@@ -16,7 +16,7 @@
  * renderer. It exposes thumbnail rendering (requestThumbnail) and per-part
  * access with change notification (requestPart, renderInto, onVectorChanged)
  * over one shared cache, so each part is fetched and decoded only once. The
- * bitmap-grid behaviour stays as the no-ops inherited from RenderManagerBase:
+ * bitmap-grid behavior stays as the no-ops inherited from RenderManagerBase:
  * a vector-rendered document has no bitmap tile grid.
  */
 

@@ -294,9 +294,9 @@ abstract class SelectionSection extends CanvasSectionObject {
 		this.context.arcTo(-width, height, -width, -height, corner);
 		this.context.arcTo(-width, -height, width, -height, corner);
 		this.context.closePath();
-		this.context.fillStyle = HandleLook.colourOfTheKind.turning;
+		this.context.fillStyle = HandleLook.colorOfTheKind.turning;
 		this.context.strokeStyle = SelectionSection.underTheMouse(
-			HandleLook.colourOfTheKind.turning,
+			HandleLook.colorOfTheKind.turning,
 		);
 		this.context.lineWidth = 2 * app.dpiScale;
 		this.context.fill();
@@ -1305,7 +1305,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 			HandleLook.reachOfASurround(),
 		);
 
-		const color = HandleLook.colourOfTheSurround[kind];
+		const color = HandleLook.colorOfTheSurround[kind];
 		const lighter = HandleLook.blended(color, HandleLook.surroundBlend);
 		const darker = HandleLook.blended(color, -HandleLook.surroundBlend);
 
@@ -1634,7 +1634,7 @@ abstract class SelectionSection extends CanvasSectionObject {
 					: this.context.moveTo(corner.vX, corner.vY),
 			);
 			this.context.closePath();
-			this.context.fillStyle = HandleLook.colourOfTheKind.turning;
+			this.context.fillStyle = HandleLook.colorOfTheKind.turning;
 			this.context.strokeStyle = HandleLook.outlineColour;
 			this.context.fill();
 			this.context.stroke();

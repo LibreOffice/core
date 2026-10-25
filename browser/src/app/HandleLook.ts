@@ -74,7 +74,7 @@ class HandleLook {
 	};
 
 	/// What each kind is filled with.
-	public static readonly colourOfTheKind: { [kind in HandleKind]: string } = {
+	public static readonly colorOfTheKind: { [kind in HandleKind]: string } = {
 		framing: '#FFFFFF',
 		turning: '#FFFFFF',
 		shaping: '#FFFF00',
@@ -104,7 +104,7 @@ class HandleLook {
 		with are all worked out from that one color, lighter on one side and darker on the
 		other, so a band is changed by changing a single value.
 	*/
-	public static colourOfTheSurround: {
+	public static colorOfTheSurround: {
 		[kind in SurroundKind]: string;
 	} = {
 		group: '#CFE0F4',
@@ -275,7 +275,7 @@ class HandleLook {
 		);
 		context.closePath();
 
-		return HandleLook.colourOfTheKind.turning;
+		return HandleLook.colorOfTheKind.turning;
 	}
 
 	public static lay(
@@ -300,6 +300,6 @@ class HandleLook {
 		} else
 			context.rect(at.vX - across * 0.5, at.vY - across * 0.5, across, across);
 
-		return HandleLook.colourOfTheKind[kind];
+		return HandleLook.colorOfTheKind[kind];
 	}
 }
