@@ -19,6 +19,7 @@ abstract class SlideRenderer {
 	protected _canvas: HTMLCanvasElement;
 	protected _renderedSlideIndex: number = undefined;
 	protected _requestAnimationFrameId: number = null;
+	private readonly renderFrameHandler = this.renderFrame.bind(this);
 	private _activeLayers: Set<string> = new Set();
 	private _playingVideos: Set<string> = new Set();
 	private _playingGifs: Set<string> = new Set();
@@ -30,9 +31,19 @@ abstract class SlideRenderer {
 	// Schedule on the window that owns the canvas. The slideshow can run in its
 	// own window while the document window is hidden behind it, and a hidden
 	// window's animation frames are paused, which would stop the slide drawing.
-	protected requestFrame(callback: FrameRequestCallback): number {
+	// At most one frame is pending, so the slide is drawn once per frame however
+	// many animations and videos ask for it.
+	protected requestRender(): void {
+		if (this._requestAnimationFrameId !== null) return;
 		const canvasWindow = this._canvas?.ownerDocument?.defaultView;
-		return (canvasWindow || window).requestAnimationFrame(callback);
+		this._requestAnimationFrameId = (
+			canvasWindow || window
+		).requestAnimationFrame(this.renderFrameHandler);
+	}
+
+	private renderFrame(): void {
+		this._requestAnimationFrameId = null;
+		this.render();
 	}
 
 	public isDisposed() {
@@ -64,7 +75,7 @@ abstract class SlideRenderer {
 		this._activeLayers.clear();
 		this._renderedSlideIndex = slideInfo.indexInSlideShow;
 		this._slideTexture = currentSlideTexture;
-		this.requestFrame(this.render.bind(this));
+		this.requestRender();
 	}
 
 	public abstract createTexture(
@@ -81,11 +92,8 @@ abstract class SlideRenderer {
 	}
 
 	public notifyAnimationStarted(sId: string) {
-		const isAnyLayerActive = this.isAnyLayerActive();
 		this._activeLayers.add(sId);
-		if (!isAnyLayerActive) {
-			this._requestAnimationFrameId = this.requestFrame(this.render.bind(this));
-		}
+		this.requestRender();
 	}
 
 	public notifyAnimationEnded(sId: string) {
@@ -97,11 +105,8 @@ abstract class SlideRenderer {
 	}
 
 	public notifyVideoStarted(sId: string) {
-		const isAnyVideoAlreadyPlaying = this.isAnyVideoPlaying;
 		this._playingVideos.add(sId);
-		if (!isAnyVideoAlreadyPlaying) {
-			this._requestAnimationFrameId = this.requestFrame(this.render.bind(this));
-		}
+		this.requestRender();
 	}
 
 	public notifyVideoEnded(sId: string) {
@@ -113,11 +118,8 @@ abstract class SlideRenderer {
 	}
 
 	public notifyGifStarted(sId: string) {
-		const wasAnyAnimationPlaying = this.isAnyAnimationPlaying();
 		this._playingGifs.add(sId);
-		if (!wasAnyAnimationPlaying) {
-			this._requestAnimationFrameId = this.requestFrame(this.render.bind(this));
-		}
+		this.requestRender();
 	}
 
 	public notifyGifEnded(sId: string) {
@@ -179,7 +181,7 @@ class SlideRenderer2d extends SlideRenderer {
 		canvas2dCtx.setTransform(1, 0, 0, 1, 0, 0);
 
 		if (this.isAnyAnimationPlaying()) {
-			this._requestAnimationFrameId = this.requestFrame(this.render.bind(this));
+			this.requestRender();
 		}
 	}
 }
@@ -330,7 +332,6 @@ class SlideRendererGl extends SlideRenderer {
 		gl.bindVertexArray(this._vao);
 		gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
-		if (this.isAnyAnimationPlaying())
-			this._requestAnimationFrameId = this.requestFrame(this.render.bind(this));
+		if (this.isAnyAnimationPlaying()) this.requestRender();
 	}
 }
