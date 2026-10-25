@@ -784,9 +784,25 @@ CPPUNIT_TEST_FIXTURE(Test, testFdo73247)
     save(TestFilter::DOCX);
     xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
 
-    // The file has rot="1969698", 32.8283 degrees, which is saved as 32.83 degrees.
+    // The unchanged shape keeps the angle of the file, which is finer than 1/100 degree
     assertXPath(pXmlDoc, "/w:document/w:body/w:p[2]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:xfrm",
-                "rot", u"1969800");
+                "rot", u"1969698");
+}
+
+CPPUNIT_TEST_FIXTURE(Test, testChangedShapeRotationIsSaved)
+{
+    // A shape rotated after loading is saved with its new angle, not with the angle of the file
+    createSwDoc("fdo73247.docx");
+    // rot="1969698" in the file loads as 32717, so this is the smallest possible change
+    uno::Reference<beans::XPropertySet> xShape(getShape(1), uno::UNO_QUERY);
+    xShape->setPropertyValue(u"RotateAngle"_ustr, uno::Any(sal_Int32(32716)));
+
+    save(TestFilter::DOCX);
+    xmlDocUniquePtr pXmlDoc = parseExport(u"word/document.xml"_ustr);
+    assertXPath(pXmlDoc,
+                "/w:document/w:body/w:p[2]/w:r[1]/mc:AlternateContent/mc:Choice/w:drawing/"
+                "wp:anchor/a:graphic/a:graphicData/wps:wsp/wps:spPr/a:xfrm",
+                "rot", u"1970400");
 }
 
 CPPUNIT_TEST_FIXTURE(Test, testFdo70942)
