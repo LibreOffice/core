@@ -271,12 +271,16 @@ class LayerDrawing {
 		}
 	}
 
-	public playVideos(slideHash: string) {
-		const videoRenderers = this.videoRenderers.get(slideHash);
-		if (!videoRenderers) return;
+	// Play the videos of the slide that no command in the slide's animations starts or stops.
+	public playVideosWithoutCommands(slideHash: string) {
+		const slideInfo = this.getSlideInfo(slideHash);
+		const commandTargets = new Set<string>();
+		if (slideInfo.animations)
+			collectCommandTargets(slideInfo.animations.root, commandTargets);
 
-		for (const videoRenderer of videoRenderers) {
-			videoRenderer.play();
+		for (const videoInfo of slideInfo.videos) {
+			if (commandTargets.has(videoInfo.hash)) continue;
+			this.getVideoRenderer(slideHash, videoInfo)?.play();
 		}
 	}
 
@@ -1052,11 +1056,11 @@ class LayerDrawing {
 		this.handleVideos(slideHash);
 		if (this.videoRenderers.has(slideHash)) {
 			this.loadVideos(slideHash);
-			// In our own Qt and macOS shells start playback on slide entry.
-			// A plain browser cannot guarantee sound without a user gesture,
-			// so there the video waits for a click.
+			// In our own Qt and macOS shells a video that no command controls starts
+			// playback on slide entry. A plain browser cannot guarantee sound without
+			// a user gesture, so there the video waits for a click.
 			if (window.ThisIsTheQtApp || window.ThisIsTheMacOSApp) {
-				this.playVideos(slideHash);
+				this.playVideosWithoutCommands(slideHash);
 			}
 		}
 

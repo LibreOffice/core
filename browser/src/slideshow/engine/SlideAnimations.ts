@@ -36,6 +36,20 @@ function getNodeChildren(aNode: ContainerNodeInfo): Array<AnimationNodeInfo> {
 	return aNode.children || [];
 }
 
+// Collect the hashes of the shapes that a command node somewhere under aNodeInfo acts on.
+function collectCommandTargets(
+	aNodeInfo: AnimationNodeInfo,
+	aTargets: Set<string>,
+) {
+	if (getAnimationNodeType(aNodeInfo) === AnimationNodeType.Command) {
+		const sTarget = (aNodeInfo as CommandNodeInfo).targetElement;
+		if (sTarget) aTargets.add(sTarget);
+	}
+	for (const aChild of getNodeChildren(aNodeInfo)) {
+		collectCommandTargets(aChild, aTargets);
+	}
+}
+
 function isAttributeSupported(aNodeInfo: AnimateNodeInfo) {
 	if (!aNodeInfo.attributeName) {
 		console.error('slideshow: missing attributeName');
