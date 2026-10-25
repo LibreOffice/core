@@ -3275,6 +3275,16 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testSvgWithDataPictureHasNoLink)
     CPPUNIT_ASSERT(pDoc->GetLinkManager()->GetLinks().empty());
 }
 
+// A PPTX video that repeats without end and is muted in the slideshow timing loops and is muted
+// as a shape too.
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testPptxVideoLoopMute)
+{
+    createSdImpressDoc("pptx/video-loop-mute.pptx");
+    uno::Reference<beans::XPropertySet> xVideo(getShapeFromPage(0, 0));
+    CPPUNIT_ASSERT(xVideo->getPropertyValue(u"Loop"_ustr).get<bool>());
+    CPPUNIT_ASSERT(xVideo->getPropertyValue(u"Mute"_ustr).get<bool>());
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -152,6 +152,7 @@ namespace oox::ppt {
                 , mbIsNarration( false )
                 , mbFullScrn( false )
                 , mbHideDuringShow(false)
+                , mbMute(false)
             {
                 AttributeList attribs( xAttribs );
 
@@ -182,6 +183,7 @@ namespace oox::ppt {
                 else if (aElement == PPT_TOKEN(cMediaNode))
                 {
                     mpNode->getNodeProperties()[NP_HIDEDURINGSHOW] <<= mbHideDuringShow;
+                    mpNode->getNodeProperties()[NP_MUTE] <<= mbMute;
                 }
             }
 
@@ -195,6 +197,7 @@ namespace oox::ppt {
                     return new TimeTargetElementContext( *this, mpNode->getTarget() );
                 case PPT_TOKEN(cMediaNode):
                     mbHideDuringShow = !rAttribs.getBool(XML_showWhenStopped, true);
+                    mbMute = rAttribs.getBool(XML_mute, false);
                     break;
                 default:
                     break;
@@ -207,6 +210,7 @@ namespace oox::ppt {
         bool mbIsNarration;
         bool mbFullScrn;
         bool mbHideDuringShow;
+        bool mbMute;
     };
 
     /** CT_TLSetBehavior
