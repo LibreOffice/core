@@ -26,8 +26,11 @@ describe(['tagdesktop'], 'Writer headings that share their text', { testIsolatio
 		});
 		cy.cGet('#readable-content').should('have.text', 'Top of the document.');
 
-		cy.then(function () {
-			const same = win.app.map._textInput._headings.filter(function (heading) {
+		// The headings are asked for once the caret's paragraph is known, so they can still be on
+		// their way here.
+		cy.wrap(null).should(function () {
+			const headings = win.app.map._textInput._headings || [];
+			const same = headings.filter(function (heading) {
 				return heading.text === 'Notes';
 			});
 			expect(same.map(function (heading) { return heading.target; }), 'the targets of the two headings')
