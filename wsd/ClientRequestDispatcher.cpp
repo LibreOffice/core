@@ -1730,10 +1730,7 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
 
         // Bad request.
         // NOTE: Check _wsState to choose between HTTP response or WebSocket (app-level) error.
-        http::Response httpResponse(http::StatusCode::BadRequest);
-        httpResponse.setContentLength(0);
-        socket->sendAndShutdown(httpResponse);
-        socket->ignoreInput();
+        HttpHelper::sendErrorAndShutdown(http::StatusCode::BadRequest, socket);
         return MessageResult::Ignore;
     }
 
@@ -2533,10 +2530,7 @@ bool ClientRequestDispatcher::handleMediaRequest(const Poco::Net::HTTPRequest& r
             LOG_ERR_S("Unknown DocBroker with docKey [" << docKey << "] referenced in WOPISrc ["
                                                         << WOPISrc << "] in media request");
 
-            http::Response httpResponse(http::StatusCode::BadRequest);
-            httpResponse.setContentLength(0);
-            socket->sendAndShutdown(httpResponse);
-            socket->ignoreInput();
+            HttpHelper::sendErrorAndShutdown(http::StatusCode::BadRequest, socket);
             return true;
         }
 
@@ -2668,10 +2662,7 @@ bool ClientRequestDispatcher::handlePostRequest(const RequestDetails& requestDet
                     strcasecmp(pdfVer.c_str(), "PDF-2.0"))
                 {
                     LOG_ERR("Wrong PDF type: " << pdfVer << ". Conversion aborted.");
-                    http::Response httpResponse(http::StatusCode::BadRequest);
-                    httpResponse.setContentLength(0);
-                    socket->sendAndShutdown(httpResponse);
-                    socket->ignoreInput();
+                    HttpHelper::sendErrorAndShutdown(http::StatusCode::BadRequest, socket);
                     return true;
                 }
                 options += ",PDFVer=" + pdfVer + "PDFVEREND";
@@ -2719,10 +2710,7 @@ bool ClientRequestDispatcher::handlePostRequest(const RequestDetails& requestDet
         else
         {
             LOG_INF("Missing parameters for conversion request.");
-            http::Response httpResponse(http::StatusCode::BadRequest);
-            httpResponse.setContentLength(0);
-            socket->sendAndShutdown(httpResponse);
-            socket->ignoreInput();
+            HttpHelper::sendErrorAndShutdown(http::StatusCode::BadRequest, socket);
             return true;
         }
         return false;
