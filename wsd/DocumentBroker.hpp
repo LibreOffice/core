@@ -624,6 +624,9 @@ public:
     /// time the dictionaries and the AutoCorrect lists go up (see
     /// getRoundTripPresetGroups).
     void uploadPresetsToWopiHost(bool bPersisted = false);
+
+    /// Upload the user's settings saved by the kit, if they wait to go up.
+    void flushUserConfigUpload();
 #endif
 
     void alertAllUsers(const std::string& cmd, const std::string& kind,
@@ -2292,6 +2295,12 @@ private:
     /// a host that is still writing our bytes time to finish. Default-constructed
     /// (the clock's epoch) when there is nothing to wait for.
     std::chrono::steady_clock::time_point _checkFileInfoNotBefore;
+
+    /// When the user's settings, saved by the kit, are to go up: a moment after
+    /// the first save of a series, so that a quick series, such as words added
+    /// one after the other, goes up once. Default-constructed when nothing is
+    /// waiting.
+    std::chrono::steady_clock::time_point _userConfigUploadDue;
 
     /// True for file that COOLWSD::IsViewFileExtension return true.
     /// These files, such as PDF, don't have a reliable ModifiedStatus.

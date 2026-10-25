@@ -1199,9 +1199,103 @@ public:
     }
 };
 
+/// The owner saves their settings and leaves at once, so the kit can tell wsd only after the last
+/// session is gone. The settings still go up, rather than wait for an upload that the document,
+/// going away, would never make.
+class UnitUserConfigAfterLeaving : public WopiTestServer
+{
+    using Base = WopiTestServer;
+
+    STATE_ENUM(Phase, Load, WaitLoad, ToggleAndLeave, WaitUpload, Done) _phase;
+
+public:
+    UnitUserConfigAfterLeaving()
+        : Base("UnitUserConfigAfterLeaving")
+        , _phase(Phase::Load)
+    {
+    }
+
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& /*request*/,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        Poco::JSON::Object::Ptr userSettings = new Poco::JSON::Object();
+        std::string uri = helpers::getTestServerURI()
+                          + "/wopi/settings/userconfig.json?testname=UnitUserConfigAfterLeaving";
+        userSettings->set("uri", Util::trim(uri));
+        userSettings->set("stamp", "leavingstamp");
+        fileInfo->set("UserSettings", userSettings);
+    }
+
+    bool handleHttpGetRequest(const Poco::Net::HTTPRequest& request,
+                              const std::shared_ptr<StreamSocket>& socket) override
+    {
+        if (Poco::URI(request.getURI()).getPath() == "/wopi/settings/userconfig.json")
+        {
+            http::Response httpResponse(http::StatusCode::OK);
+            httpResponse.setBody("{\"kind\":\"user\"}", "application/json; charset=utf-8");
+            socket->sendAndShutdown(httpResponse);
+            return true;
+        }
+        return Base::handleHttpGetRequest(request, socket);
+    }
+
+    bool handleHttpPostRequest(const Poco::Net::HTTPRequest& request, std::istream& message,
+                               const std::shared_ptr<StreamSocket>& socket) override
+    {
+        const std::string fileId = presetUploadFileId(request);
+        if (fileId.empty())
+            return Base::handleHttpPostRequest(request, message, socket);
+
+        const std::string body(std::istreambuf_iterator<char>(message), {});
+        http::Response httpResponse(http::StatusCode::OK);
+        socket->sendAndShutdown(httpResponse);
+
+        if (fileId == RegistryFileId && _phase == Phase::WaitUpload)
+        {
+            TRANSITION_STATE(_phase, Phase::Done);
+            passTest("the settings went up although the owner had left");
+        }
+        return true;
+    }
+
+    void onDocBrokerViewLoaded(const std::string&, const std::shared_ptr<ClientSession>&) override
+    {
+        LOK_ASSERT_STATE(_phase, Phase::WaitLoad);
+        TRANSITION_STATE(_phase, Phase::ToggleAndLeave);
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitLoad);
+                initWebsocket("/wopi/files/0?access_token=anything");
+                WSD_CMD_BY_CONNECTION_INDEX(0, "load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::ToggleAndLeave:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitUpload);
+                // Without the accompanying fix in place, this test would have
+                // failed when the kit told wsd after the session was gone: the
+                // upload was put off, and the document went away first.
+                WSD_CMD_BY_CONNECTION_INDEX(0, "uno .uno:OnlineAutoFormat");
+                deleteSocketAt(0);
+                break;
+            }
+            case Phase::WaitLoad:
+            case Phase::WaitUpload:
+            case Phase::Done:
+                break;
+        }
+    }
+};
+
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase*[9]{ new UnitEarlyDocDeath(),
+    return new UnitBase*[10]{ new UnitEarlyDocDeath(),
                              new UnitSpifPreset(),
                              new UnitSecondUserPresets(),
                              new UnitLoneUserReloadsPresets(),
@@ -1209,6 +1303,7 @@ UnitBase** unit_create_wsd_multi(void)
                              new UnitWordbookLiveUpload(),
                              new UnitAutocorrRoundTrip(),
                              new UnitAutocorrOtherUser(),
+                             new UnitUserConfigAfterLeaving(),
                              nullptr };
 }
 

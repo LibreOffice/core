@@ -531,6 +531,7 @@ void DocumentBroker::pollThread()
         capPollTimeout(_checkFileInfoNotBefore);
 #if !MOBILEAPP
         capPollTimeout(nextAccessCheck());
+        capPollTimeout(_userConfigUploadDue);
 #endif
         if (_lockCtx)
             capPollTimeout(_lockCtx->nextRefresh());
@@ -577,6 +578,10 @@ void DocumentBroker::pollThread()
         const auto now = std::chrono::steady_clock::now();
 
 #if !MOBILEAPP
+        if (_userConfigUploadDue != std::chrono::steady_clock::time_point() &&
+            now >= _userConfigUploadDue)
+            flushUserConfigUpload();
+
         // A parked session that nobody claimed goes the way a closed one does. This runs before the
         // branches that skip to the next pass, as a passed deadline keeps the poll from sleeping.
         for (const auto& it : _sessions)
@@ -929,6 +934,12 @@ void DocumentBroker::pollThread()
         }
 #endif
     }
+
+#if !MOBILEAPP
+    // The user's settings saved since the last session left would be lost with
+    // the document otherwise.
+    flushUserConfigUpload();
+#endif
 
     LOG_INF("Finished polling doc ["
             << _docKey << "]. stop: " << _stop << ", continuePolling: " << _poll->continuePolling()
@@ -2278,6 +2289,9 @@ PresetsInstallTask::PresetsInstallTask(const std::shared_ptr<SocketPoll>& poll,
 // created or edited and is worth preserving.
 namespace
 {
+/// How long saves of the user's settings are collected before they go up.
+constexpr std::chrono::seconds UserConfigUploadDelay(2);
+
 struct RoundTripPresetGroup
 {
     std::string name;
@@ -5372,8 +5386,13 @@ std::size_t DocumentBroker::removeSession(const std::shared_ptr<ClientSession>& 
         {
             try
             {
-                /// make sure to upload preset to WOPIHost
-                uploadPresetsToWopiHost();
+                /// make sure to upload preset to WOPIHost, with the user's
+                /// settings that wait to go up, if any, as the broker may be
+                /// gone by then
+                const bool bPersisted
+                    = _userConfigUploadDue != std::chrono::steady_clock::time_point();
+                _userConfigUploadDue = std::chrono::steady_clock::time_point();
+                uploadPresetsToWopiHost(bPersisted);
             }
             catch (const std::exception& exc)
             {
@@ -6145,6 +6164,23 @@ Poco::URI DocumentBroker::getPresetUploadBaseUrl(const Poco::URI& uriObject)
     return result;
 }
 
+void DocumentBroker::flushUserConfigUpload()
+{
+    if (_userConfigUploadDue == std::chrono::steady_clock::time_point())
+        return;
+
+    _userConfigUploadDue = std::chrono::steady_clock::time_point();
+    try
+    {
+        uploadPresetsToWopiHost(/*bPersisted=*/true);
+    }
+    catch (const std::exception& exc)
+    {
+        LOG_WRN("Failed to upload the user's settings for docKey [" << _docKey
+                                                                   << "]: " << exc.what());
+    }
+}
+
 void DocumentBroker::uploadPresetsToWopiHost(bool bPersisted)
 {
     // Only to a host that has settings for the user, as it told in CheckFileInfo.
@@ -6519,11 +6555,16 @@ bool DocumentBroker::handleInput(const std::shared_ptr<Message>& message)
         {
 #if !MOBILEAPP
             // A dialog such as AutoCorrect Options, or a word added to a dictionary, wrote
-            // the per-user settings out. Upload them now, so that a crash of the kit or
-            // another document of the same user opened before this one is closed does not
-            // miss them, and the Custom Dictionaries settings panel (which reads the WOPI
-            // host's copy, not the jail's live one) shows a new word without a reopen.
-            uploadPresetsToWopiHost(/*bPersisted=*/true);
+            // the per-user settings out. Upload them shortly, not at session teardown, so
+            // that a crash of the kit or another document of the same user opened before
+            // this one is closed does not miss them, and the Custom Dictionaries settings
+            // panel (which reads the WOPI host's copy, not the jail's live one) shows a new
+            // word without a reopen. Saves in quick succession go up together.
+            if (_userConfigUploadDue == std::chrono::steady_clock::time_point())
+                _userConfigUploadDue = std::chrono::steady_clock::now() + UserConfigUploadDelay;
+            // With no session left, the document may go before the wait is over.
+            if (_sessions.empty())
+                flushUserConfigUpload();
 #endif
         }
         else if (Util::isDebugEnabled() && message->firstTokenMatches("unitresult:"))
