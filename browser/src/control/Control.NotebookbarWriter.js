@@ -2402,7 +2402,7 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 				'type': 'overflowgroup',
 				'id': 'review-AutoCorrect',
 				'name': _UNO('.uno:AutoFormatMenu', 'text'),
-				'icon': 'lc_autocorrectdlg.svg',
+				'icon': 'lc_onlineautoformat.svg',
 				'accessibility': { focusBack: false, combination: 'AW', de: null },
 				'children' : [
 					{
