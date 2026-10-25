@@ -36,28 +36,29 @@ namespace framework{
 class OReadImagesDocumentHandler final : public ::cppu::WeakImplHelper< css::xml::sax::XDocumentHandler >
 {
     public:
-        enum Image_XML_Entry
+        enum class ImageXMLEntry
         {
-            IMG_ELEMENT_IMAGECONTAINER,
-            IMG_ELEMENT_IMAGES,
-            IMG_ELEMENT_ENTRY,
-            IMG_ELEMENT_EXTERNALIMAGES,
-            IMG_ELEMENT_EXTERNALENTRY,
-            IMG_ATTRIBUTE_HREF,
-            IMG_ATTRIBUTE_MASKCOLOR,
-            IMG_ATTRIBUTE_COMMAND,
-            IMG_ATTRIBUTE_BITMAPINDEX,
-            IMG_ATTRIBUTE_MASKURL,
-            IMG_ATTRIBUTE_MASKMODE,
-            IMG_ATTRIBUTE_HIGHCONTRASTURL,
-            IMG_ATTRIBUTE_HIGHCONTRASTMASKURL,
-            IMG_XML_ENTRY_COUNT
+            ElementImageContainer,
+            ElementImages,
+            ElementEntry,
+            ElementExternalImages,
+            ElementExternalEntry,
+            AttributeHref,
+            AttributeMaskColor,
+            AttributeCommand,
+            AttributeBitmapIndex,
+            AttributeMaskUrl,
+            AttributeMaskMode,
+            AttributeHighContrastUrl,
+            AttributeHighContrastMaskUrl,
+            LAST = AttributeHighContrastMaskUrl
         };
 
-        enum Image_XML_Namespace
+        enum class ImageXMLNamespace
         {
-            IMG_NS_IMAGE,
-            IMG_NS_XLINK
+            Image,
+            XLink,
+            LAST = XLink
         };
 
         OReadImagesDocumentHandler( ImageItemDescriptorList& aItems );
@@ -90,7 +91,7 @@ class OReadImagesDocumentHandler final : public ::cppu::WeakImplHelper< css::xml
         bool                                                m_bImageContainerStartFound;
         bool                                                m_bImageContainerEndFound;
         bool                                                m_bImagesStartFound;
-        std::unordered_map< OUString, Image_XML_Entry >     m_aImageMap;
+        std::unordered_map< OUString, ImageXMLEntry >       m_aImageMap;
         ImageItemDescriptorList&                            m_rImageList;
         css::uno::Reference< css::xml::sax::XLocator >      m_xLocator;
 };

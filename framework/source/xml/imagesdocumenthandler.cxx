@@ -23,91 +23,75 @@
 #include <com/sun/star/xml/sax/SAXException.hpp>
 
 #include <rtl/ref.hxx>
-#include <rtl/ustrbuf.hxx>
+
+#include <o3tl/enumarray.hxx>
+#include <o3tl/enumrange.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::xml::sax;
-
-#define ELEMENT_IMAGECONTAINER      "imagescontainer"
-#define ELEMENT_IMAGES              "images"
-#define ELEMENT_ENTRY               "entry"
-#define ELEMENT_EXTERNALIMAGES      "externalimages"
-#define ELEMENT_EXTERNALENTRY       "externalentry"
 
 constexpr OUString ELEMENT_NS_IMAGESCONTAINER = u"image:imagescontainer"_ustr;
 constexpr OUString ELEMENT_NS_IMAGES = u"image:images"_ustr;
 constexpr OUString ELEMENT_NS_ENTRY = u"image:entry"_ustr;
 
-#define ATTRIBUTE_HREF                  "href"
-#define ATTRIBUTE_MASKCOLOR             "maskcolor"
-#define ATTRIBUTE_COMMAND               "command"
-#define ATTRIBUTE_BITMAPINDEX           "bitmap-index"
-#define ATTRIBUTE_MASKURL               "maskurl"
-#define ATTRIBUTE_MASKMODE              "maskmode"
-#define ATTRIBUTE_HIGHCONTRASTURL       "highcontrasturl"
-#define ATTRIBUTE_HIGHCONTRASTMASKURL   "highcontrastmaskurl"
-
-constexpr OUStringLiteral ATTRIBUTE_XMLNS_IMAGE = u"xmlns:image";
-constexpr OUStringLiteral ATTRIBUTE_XMLNS_XLINK = u"xmlns:xlink";
+constexpr OUString ATTRIBUTE_XMLNS_IMAGE = u"xmlns:image"_ustr;
+constexpr OUString ATTRIBUTE_XMLNS_XLINK = u"xmlns:xlink"_ustr;
 
 constexpr OUString ATTRIBUTE_XLINK_HREF = u"xlink:href"_ustr;
-constexpr OUStringLiteral ATTRIBUTE_XLINK_TYPE = u"xlink:type";
-constexpr OUStringLiteral ATTRIBUTE_XLINK_TYPE_VALUE = u"simple";
+constexpr OUString ATTRIBUTE_XLINK_TYPE = u"xlink:type"_ustr;
+constexpr OUString ATTRIBUTE_XLINK_TYPE_VALUE = u"simple"_ustr;
 
 constexpr OUString XMLNS_IMAGE = u"http://openoffice.org/2001/image"_ustr;
 constexpr OUString XMLNS_XLINK = u"http://www.w3.org/1999/xlink"_ustr;
-constexpr OUStringLiteral XMLNS_IMAGE_PREFIX = u"image:";
+constexpr OUString XMLNS_IMAGE_PREFIX = u"image:"_ustr;
 
-constexpr OUStringLiteral XMLNS_FILTER_SEPARATOR = u"^";
+constexpr OUString XMLNS_FILTER_SEPARATOR = u"^"_ustr;
 
-constexpr OUStringLiteral IMAGES_DOCTYPE = u"<!DOCTYPE image:imagecontainer PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"image.dtd\">";
+constexpr OUString IMAGES_DOCTYPE
+    = u"<!DOCTYPE image:imagecontainer PUBLIC \"-//OpenOffice.org//DTD OfficeDocument 1.0//EN\" \"image.dtd\">"_ustr;
 
 namespace framework
 {
 
 namespace {
+using ImageXMLNamespace = OReadImagesDocumentHandler::ImageXMLNamespace;
+using ImageXMLEntry = OReadImagesDocumentHandler::ImageXMLEntry;
 
 struct ImageXMLEntryProperty
 {
-    OReadImagesDocumentHandler::Image_XML_Namespace nNamespace;
-    char                                            aEntryName[20];
+    ImageXMLNamespace nNamespace;
+    OUString aEntryName;
 };
 
 }
 
-ImageXMLEntryProperty const ImagesEntries[OReadImagesDocumentHandler::IMG_XML_ENTRY_COUNT] =
-{
-    { OReadImagesDocumentHandler::IMG_NS_IMAGE, ELEMENT_IMAGECONTAINER          },
-    { OReadImagesDocumentHandler::IMG_NS_IMAGE, ELEMENT_IMAGES                  },
-    { OReadImagesDocumentHandler::IMG_NS_IMAGE, ELEMENT_ENTRY                   },
-    { OReadImagesDocumentHandler::IMG_NS_IMAGE, ELEMENT_EXTERNALIMAGES          },
-    { OReadImagesDocumentHandler::IMG_NS_IMAGE, ELEMENT_EXTERNALENTRY           },
-    { OReadImagesDocumentHandler::IMG_NS_XLINK, ATTRIBUTE_HREF                  },
-    { OReadImagesDocumentHandler::IMG_NS_IMAGE, ATTRIBUTE_MASKCOLOR             },
-    { OReadImagesDocumentHandler::IMG_NS_IMAGE, ATTRIBUTE_COMMAND               },
-    { OReadImagesDocumentHandler::IMG_NS_IMAGE, ATTRIBUTE_BITMAPINDEX           },
-    { OReadImagesDocumentHandler::IMG_NS_IMAGE, ATTRIBUTE_MASKURL               },
-    { OReadImagesDocumentHandler::IMG_NS_IMAGE, ATTRIBUTE_MASKMODE              },
-    { OReadImagesDocumentHandler::IMG_NS_IMAGE, ATTRIBUTE_HIGHCONTRASTURL       },
-    { OReadImagesDocumentHandler::IMG_NS_IMAGE, ATTRIBUTE_HIGHCONTRASTMASKURL   }
-};
+constexpr o3tl::enumarray<ImageXMLEntry, ImageXMLEntryProperty> ImagesEntries
+    = { ImageXMLEntryProperty{ ImageXMLNamespace::Image, u"imagescontainer"_ustr },
+        ImageXMLEntryProperty{ ImageXMLNamespace::Image, u"images"_ustr },
+        ImageXMLEntryProperty{ ImageXMLNamespace::Image, u"entry"_ustr },
+        ImageXMLEntryProperty{ ImageXMLNamespace::Image, u"externalimages"_ustr },
+        ImageXMLEntryProperty{ ImageXMLNamespace::Image, u"externalentry"_ustr },
+        ImageXMLEntryProperty{ ImageXMLNamespace::XLink, u"href"_ustr },
+        ImageXMLEntryProperty{ ImageXMLNamespace::Image, u"maskcolor"_ustr },
+        ImageXMLEntryProperty{ ImageXMLNamespace::Image, u"command"_ustr },
+        ImageXMLEntryProperty{ ImageXMLNamespace::Image, u"bitmap-index"_ustr },
+        ImageXMLEntryProperty{ ImageXMLNamespace::Image, u"maskurl"_ustr },
+        ImageXMLEntryProperty{ ImageXMLNamespace::Image, u"maskmode"_ustr },
+        ImageXMLEntryProperty{ ImageXMLNamespace::Image, u"highcontrasturl"_ustr },
+        ImageXMLEntryProperty{ ImageXMLNamespace::Image, u"highcontrastmaskurl"_ustr } };
 
 OReadImagesDocumentHandler::OReadImagesDocumentHandler( ImageItemDescriptorList& rItems ) :
     m_rImageList( rItems )
 {
     // create hash map to speed up lookup
-    for ( int i = 0; i < IMG_XML_ENTRY_COUNT; i++ )
+    for (ImageXMLEntry e : o3tl::enumrange<ImageXMLEntry>())
     {
-        OUStringBuffer temp( 20 );
+        const auto& rProp = ImagesEntries[e];
 
-        if ( ImagesEntries[i].nNamespace == IMG_NS_IMAGE )
-            temp.append( XMLNS_IMAGE );
-        else
-            temp.append( XMLNS_XLINK );
+        const OUString& rNsURL
+            = rProp.nNamespace == ImageXMLNamespace::Image ? XMLNS_IMAGE : XMLNS_XLINK;
 
-        temp.append( XMLNS_FILTER_SEPARATOR );
-        temp.appendAscii( ImagesEntries[i].aEntryName );
-        m_aImageMap.emplace( temp.makeStringAndClear(), static_cast<Image_XML_Entry>(i) );
+        m_aImageMap.emplace(rNsURL + XMLNS_FILTER_SEPARATOR + rProp.aEntryName, e);
     }
 
     // reset states
@@ -143,7 +127,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
 
     switch ( pImageEntry->second )
     {
-        case IMG_ELEMENT_IMAGECONTAINER:
+        case ImageXMLEntry::ElementImageContainer:
         {
             // image:imagecontainer element (container element for all further image elements)
             if ( m_bImageContainerStartFound )
@@ -156,7 +140,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
         }
         break;
 
-        case IMG_ELEMENT_IMAGES:
+        case ImageXMLEntry::ElementImages:
         {
             if ( !m_bImageContainerStartFound )
             {
@@ -174,7 +158,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
         }
         break;
 
-        case IMG_ELEMENT_ENTRY:
+        case ImageXMLEntry::ElementEntry:
         {
             // Check that image:entry is embedded into image:images!
             if ( !m_bImagesStartFound )
@@ -194,7 +178,7 @@ void SAL_CALL OReadImagesDocumentHandler::startElement(
                 {
                     switch ( pImageEntry->second )
                     {
-                        case IMG_ATTRIBUTE_COMMAND:
+                        case ImageXMLEntry::AttributeCommand:
                         {
                             aItem.aCommandURL  = xAttribs->getValueByIndex( n );
                         }
@@ -230,13 +214,13 @@ void SAL_CALL OReadImagesDocumentHandler::endElement(const OUString& aName)
 
     switch ( pImageEntry->second )
     {
-        case IMG_ELEMENT_IMAGECONTAINER:
+        case ImageXMLEntry::ElementImageContainer:
         {
             m_bImageContainerEndFound = true;
         }
         break;
 
-        case IMG_ELEMENT_IMAGES:
+        case ImageXMLEntry::ElementImages:
         {
             m_bImagesStartFound = false;
         }
@@ -351,10 +335,12 @@ void OWriteImagesDocumentHandler::WriteImage( const ImageItemDescriptor* pImage 
 {
     rtl::Reference<::comphelper::AttributeList> pList = new ::comphelper::AttributeList;
 
-    pList->AddAttribute(m_aXMLImageNS + ATTRIBUTE_BITMAPINDEX, OUString::number(pImage->nIndex));
+    pList->AddAttribute(m_aXMLImageNS
+                            + ImagesEntries[ImageXMLEntry::AttributeBitmapIndex].aEntryName,
+                        OUString::number(pImage->nIndex));
 
-    pList->AddAttribute( m_aXMLImageNS + ATTRIBUTE_COMMAND,
-                         pImage->aCommandURL );
+    pList->AddAttribute(m_aXMLImageNS + ImagesEntries[ImageXMLEntry::AttributeCommand].aEntryName,
+                        pImage->aCommandURL);
 
     m_xWriteDocumentHandler->startElement( ELEMENT_NS_ENTRY, pList );
     m_xWriteDocumentHandler->ignorableWhitespace( OUString() );
