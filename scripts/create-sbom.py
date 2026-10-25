@@ -144,7 +144,7 @@ def get_sha512(abspath):
 
 def extract_version_from_filename(filename):
     filename = re.sub(r"\.(tar\.gz|tar\.xz|tar\.bz2|zip)$", "", filename)
-    # poco-1.15.3-all: the "-all" flavor suffix is not part of the version
+    # poco-1.15.4-all: the "-all" flavor suffix is not part of the version
     filename = re.sub(r"-all$", "", filename)
     match = re.search(r"\d+(?:\.\d+)+(?:-[\w\.]+)*", filename)
     if match:

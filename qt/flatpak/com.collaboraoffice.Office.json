@@ -422,11 +422,11 @@
           "dest-filename": "pdfium-8073.tar.bz2"
         },
         {
-          "url": "https://gerrit.collaboraoffice.com/src/poco-1.15.3-all.tar.bz2",
-          "sha256": "562a1ba1a6db4665f81091c35e997b73f87e1b45e2ab2854cd720d2349518abc",
+          "url": "https://gerrit.collaboraoffice.com/src/poco-1.15.4-all.tar.bz2",
+          "sha256": "d92e9e6711957a6b4415d4ffe0df5470b229bfa123334865c3b6a065030cd3a8",
           "type": "file",
           "dest": "engine/external/tarballs",
-          "dest-filename": "poco-1.15.3-all.tar.bz2"
+          "dest-filename": "poco-1.15.4-all.tar.bz2"
         },
         {
           "url": "https://gerrit.collaboraoffice.com/src/afdko-5.0.1.tar.gz",

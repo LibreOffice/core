@@ -172,7 +172,7 @@ migrated to the engine workdir:
   then COOL), so the engine build dir is visible and POCO is found via
   `--with-lo-builddir=$(pwd)/engine` -- no `/app/core` staging. The flatpak
   build sandbox has **no network**, so (like every other engine tarball)
-  `poco-1.15.3-all.tar.bz2` is declared as a pre-fetched `file` source
+  `poco-1.15.4-all.tar.bz2` is declared as a pre-fetched `file` source
   (`dest: engine/external/tarballs`); flatpak-builder downloads it before the
   offline build.
 + **wasm** (`wasm/README*`): the example commands already pass

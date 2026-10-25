@@ -18,7 +18,7 @@ DISTFILES=	${DISTNAME}${EXTRACT_SUFX} \
 		collabora-office-brand-${BRAND_VERSION}.tar.gz:brand \
 		${ENGINE_SRC_TARBALLS:S/$/:src/} \
 		f543e6e2d7275557a839a164941c0a86e5f2c3f2a0042bfc434c88c6dde9e140-opens___.ttf:extern \
-		poco-1.15.3-all.tar.bz2:poco
+		poco-1.15.4-all.tar.bz2:poco
 DIST_SUBDIR=	collabora-office
 EXTRACT_ONLY=	${DISTNAME}${EXTRACT_SUFX} \
 		collabora-office-brand-${BRAND_VERSION}.tar.gz

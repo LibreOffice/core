@@ -614,54 +614,48 @@
       "id": "CVE-2026-89156",
       "description": "pcre2: PCRE2 before 10.48 has a pcre2_match out-of-bounds read after a JIT fallback when an attacker can provide invalid UTF data",
       "analysis": {
-        "state": "not_affected",
-        "detail": "pcre2 is built through Poco with SUPPORT_JIT undefined (dependencies/pcre2/src/pcre2_config.h) and no sljit backend is compiled: libPocoFoundation.a defines 0 sljit symbols, so pcre2_jit_compile_8 and pcre2_jit_match_8 are the PCRE2_ERROR_JIT_BADOPTION stubs. A JIT fallback cannot occur where no JIT exists. Poco 1.15.4 (2026-09-22) bundles pcre2 10.48 and is the clean fix; engine/download.lst still has poco-1.15.3-all, whose dependencies/pcre2 is 10.47.",
-        "justification": "code_not_present"
+        "state": "resolved",
+        "detail": "Fixed in pcre2 10.48. pcre2 is built from the copy bundled in Poco (dependencies/pcre2), and this image ships Poco 1.15.4, which bundles pcre2 10.48."
       }
     },
     {
       "id": "CVE-2026-89157",
       "description": "pcre2: PCRE2 before 10.48, on 32-bit platforms, has a pcre2_pattern_convert out-of-bounds write when an attacker can provide a large pattern",
       "analysis": {
-        "state": "not_affected",
-        "detail": "pcre2 is reached only through Poco's RegularExpression - no engine or wsd source calls pcre2 directly. pcre2_pattern_convert_8 is compiled into libPocoFoundation.a but no object in it references the symbol, and Poco exposes no pattern conversion API. The flaw additionally needs a 32-bit platform. Poco 1.15.4 (2026-09-22) bundles pcre2 10.48 and is the clean fix; engine/download.lst still has poco-1.15.3-all, whose dependencies/pcre2 is 10.47.",
-        "justification": "code_not_reachable"
+        "state": "resolved",
+        "detail": "Fixed in pcre2 10.48. pcre2 is built from the copy bundled in Poco (dependencies/pcre2), and this image ships Poco 1.15.4, which bundles pcre2 10.48."
       }
     },
     {
       "id": "CVE-2026-89158",
       "description": "pcre2: PCRE2 before 10.48, on 32-bit platforms, has a pcre2_compile_32 integer overflow and resultant out-of-bounds write",
       "analysis": {
-        "state": "not_affected",
-        "detail": "Only the 8-bit code unit library is built: Poco's pcre2_config.h defines PCRE2_CODE_UNIT_WIDTH 8 and SUPPORT_PCRE2_8, leaving SUPPORT_PCRE2_16 and SUPPORT_PCRE2_32 undefined. libPocoFoundation.a defines no _32 symbol at all, so there is no pcre2_compile_32 to overflow. Poco 1.15.4 (2026-09-22) bundles pcre2 10.48 and is the clean fix; engine/download.lst still has poco-1.15.3-all, whose dependencies/pcre2 is 10.47.",
-        "justification": "code_not_present"
+        "state": "resolved",
+        "detail": "Fixed in pcre2 10.48. pcre2 is built from the copy bundled in Poco (dependencies/pcre2), and this image ships Poco 1.15.4, which bundles pcre2 10.48."
       }
     },
     {
       "id": "CVE-2026-89160",
       "description": "pcre2: PCRE2 before 10.48 has a pcre2_match out-of-bounds read during the PCRE2_MATCH_INVALID_UTF matching of an invalid UTF subject",
       "analysis": {
-        "state": "not_affected",
-        "detail": "pcre2 is reached only through Poco's RegularExpression - no engine or wsd source calls pcre2 directly. The flaw needs PCRE2_MATCH_INVALID_UTF, which Poco never sets - RegularExpression.cpp adds only PCRE2_UTF|PCRE2_UCP at compile time and PCRE2_NO_UTF_CHECK at match time, and Poco's RE_* option set has no equivalent to expose. Poco 1.15.4 (2026-09-22) bundles pcre2 10.48 and is the clean fix; engine/download.lst still has poco-1.15.3-all, whose dependencies/pcre2 is 10.47.",
-        "justification": "code_not_reachable"
+        "state": "resolved",
+        "detail": "Fixed in pcre2 10.48. pcre2 is built from the copy bundled in Poco (dependencies/pcre2), and this image ships Poco 1.15.4, which bundles pcre2 10.48."
       }
     },
     {
       "id": "CVE-2026-89161",
       "description": "pcre2: In PCRE2 before 10.48, pcre2_jit_match mishandles a previously copied subject being passed in as a context",
       "analysis": {
-        "state": "not_affected",
-        "detail": "pcre2 is built through Poco with SUPPORT_JIT undefined (dependencies/pcre2/src/pcre2_config.h) and no sljit backend is compiled: libPocoFoundation.a defines 0 sljit symbols, so pcre2_jit_compile_8 and pcre2_jit_match_8 are the PCRE2_ERROR_JIT_BADOPTION stubs. pcre2_jit_match cannot mishandle a subject it never matches. Poco 1.15.4 (2026-09-22) bundles pcre2 10.48 and is the clean fix; engine/download.lst still has poco-1.15.3-all, whose dependencies/pcre2 is 10.47.",
-        "justification": "code_not_present"
+        "state": "resolved",
+        "detail": "Fixed in pcre2 10.48. pcre2 is built from the copy bundled in Poco (dependencies/pcre2), and this image ships Poco 1.15.4, which bundles pcre2 10.48."
       }
     },
     {
       "id": "CVE-2026-89162",
       "description": "pcre2: In PCRE2 before 10.48, pcre2_serialize_encode might disclose two bytes to an adversary, typically in a situation where the access available to the adversary is\u2026",
       "analysis": {
-        "state": "not_affected",
-        "detail": "pcre2 is reached only through Poco's RegularExpression - no engine or wsd source calls pcre2 directly. pcre2_serialize_encode_8 is compiled into libPocoFoundation.a but no object in it references the symbol; Poco never serializes compiled patterns. Poco 1.15.4 (2026-09-22) bundles pcre2 10.48 and is the clean fix; engine/download.lst still has poco-1.15.3-all, whose dependencies/pcre2 is 10.47.",
-        "justification": "code_not_reachable"
+        "state": "resolved",
+        "detail": "Fixed in pcre2 10.48. pcre2 is built from the copy bundled in Poco (dependencies/pcre2), and this image ships Poco 1.15.4, which bundles pcre2 10.48."
       }
     },
     {

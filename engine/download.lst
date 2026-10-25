@@ -558,8 +558,8 @@ PAGEMAKER_TARBALL := libpagemaker-0.0.4.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-POCO_SHA256SUM := 562a1ba1a6db4665f81091c35e997b73f87e1b45e2ab2854cd720d2349518abc
-POCO_TARBALL := poco-1.15.3-all.tar.bz2
+POCO_SHA256SUM := d92e9e6711957a6b4415d4ffe0df5470b229bfa123334865c3b6a065030cd3a8
+POCO_TARBALL := poco-1.15.4-all.tar.bz2
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
