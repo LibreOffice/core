@@ -890,11 +890,16 @@ function closeAnyOpenDialogs() {
 //   need a particular size; left alone when this is not given
 // options.caretToDocumentStart: true to put the caret back at the start of the
 //   document before each test, for tests that count cursor movements from there
+// options.setup: function that prepares the loaded document for the whole file,
+//   such as a zoom level or a toolbar mode, run after each load
 //
 // Tests that share a document run in file order, and each one starts from the
 // state the previous ones left in the parts that undo does not reach: the user
 // interface, the caret, and the scroll position. A test that needs a control in
 // its untouched state belongs before the tests that change it.
+//
+// A retried test starts on an empty page, so it loads the document again and
+// runs options.setup on it.
 function shareDocumentAcrossTests(filePath, options) {
 	var settings = options || {};
 
@@ -904,16 +909,28 @@ function shareDocumentAcrossTests(filePath, options) {
 		}
 	}
 
-	before(function() {
+	function loadDocument() {
 		setViewport();
 		helper.setupAndLoadDocument(filePath);
 
 		if (settings.notebookbar) {
 			switchUIToNotebookbar();
 		}
+
+		if (settings.setup) {
+			settings.setup();
+		}
+	}
+
+	before(function() {
+		loadDocument();
 	});
 
 	beforeEach(function() {
+		if (this.currentTest._currentRetry > 0) {
+			loadDocument();
+		}
+
 		// Cypress restores the configured viewport before every test, so the
 		// size the tests were written for is set again here.
 		setViewport();
