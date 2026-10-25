@@ -76,6 +76,13 @@ abstract class AnimatedContentRenderInfo {
 		this.play();
 	}
 
+	// A click the viewer made on the content in this window. Returns true when the click played
+	// or paused the content.
+	public handleUserClick(event?: Event): boolean {
+		this.handleClick();
+		return true;
+	}
+
 	public handleClick(): void {
 		// Content ignores clicks.
 	}
@@ -164,6 +171,10 @@ abstract class AnimatedContentRenderer {
 
 	public playFrom(seconds: number): void {
 		if (this.info) this.info.playFrom(seconds);
+	}
+
+	public handleUserClick(event?: Event): boolean {
+		return this.info ? this.info.handleUserClick(event) : false;
 	}
 
 	public handleClick(): void {

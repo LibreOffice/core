@@ -17,6 +17,11 @@ class VideoRenderInfo extends AnimatedContentRenderInfo {
 	public videoElement: HTMLVideoElement;
 	public playing: boolean;
 	public ended: boolean;
+	// True while the video plays muted only because the browser refused to start it with sound.
+	private mutedToStart = false;
+	private readonly restoreSoundHandler = this.restoreSound.bind(this);
+	// The click or key press that last gave the sound back.
+	private soundRestoringEvent: Event = null;
 
 	private sId: string;
 	private slideRenderer: SlideRenderer;
@@ -74,7 +79,34 @@ class VideoRenderInfo extends AnimatedContentRenderInfo {
 
 	public play(reset: boolean = true): void {
 		if (reset) this.videoElement.currentTime = 0;
-		this.videoElement.play();
+		this.videoElement.play().catch(this.onPlayRefused.bind(this));
+	}
+
+	// A browser starts a video with sound only after the viewer has clicked or pressed a key in
+	// the page, so play muted for now and give the sound back at the next click or key press.
+	private onPlayRefused(error: DOMException): void {
+		// Playing muted is the only fallback, so a refusal of a muted video ends here.
+		if (error.name !== 'NotAllowedError' || this.videoElement.muted) {
+			app.console.debug('VideoRenderInfo.play: ' + error.message);
+			return;
+		}
+		this.mutedToStart = true;
+		this.videoElement.muted = true;
+		const canvasWindow = this.slideRenderer.canvasWindow;
+		// Capture, because the slideshow stops its clicks and keys from bubbling.
+		canvasWindow.addEventListener('click', this.restoreSoundHandler, true);
+		canvasWindow.addEventListener('keydown', this.restoreSoundHandler, true);
+		this.videoElement.play().catch(this.onPlayRefused.bind(this));
+	}
+
+	private restoreSound(event?: Event): void {
+		const canvasWindow = this.slideRenderer.canvasWindow;
+		canvasWindow.removeEventListener('click', this.restoreSoundHandler, true);
+		canvasWindow.removeEventListener('keydown', this.restoreSoundHandler, true);
+		if (!this.mutedToStart) return;
+		this.mutedToStart = false;
+		this.videoElement.muted = false;
+		this.soundRestoringEvent = event || null;
 	}
 
 	public pause(): void {
@@ -89,7 +121,17 @@ class VideoRenderInfo extends AnimatedContentRenderInfo {
 
 	public playFrom(seconds: number): void {
 		this.videoElement.currentTime = seconds;
-		this.videoElement.play();
+		this.videoElement.play().catch(this.onPlayRefused.bind(this));
+	}
+
+	public handleUserClick(event?: Event): boolean {
+		const restoresSound =
+			this.mutedToStart || (!!event && event === this.soundRestoringEvent);
+		if (this.mutedToStart) this.restoreSound(event);
+		// The click that gives the sound back leaves a playing video playing.
+		if (restoresSound && this.playing) return false;
+		this.handleClick();
+		return true;
 	}
 
 	public handleClick(): void {
@@ -107,6 +149,7 @@ class VideoRenderInfo extends AnimatedContentRenderInfo {
 		this.pause();
 		this.videoElement.removeAttribute('src');
 		this.videoElement.load();
+		this.restoreSound();
 		super.deleteResources(context);
 	}
 }

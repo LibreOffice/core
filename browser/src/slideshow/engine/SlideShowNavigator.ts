@@ -565,19 +565,19 @@ class SlideShowNavigator {
 				hitTest(videoInfo, x, y),
 			);
 			if (videoInfo) {
-				this.presenter.sendSlideShowFollowMessage(
-					'followvideo ' +
-						JSON.stringify({
-							currentSlide: this.currentSlide,
-							videoInfoId: videoInfo.id,
-						}),
-				);
-
 				const video = this.presenter.getVideoRenderer(
 					slideInfo.hash,
 					videoInfo,
 				);
-				video.handleClick();
+				if (video.handleUserClick(aEvent)) {
+					this.presenter.sendSlideShowFollowMessage(
+						'followvideo ' +
+							JSON.stringify({
+								currentSlide: this.currentSlide,
+								videoInfoId: videoInfo.id,
+							}),
+					);
+				}
 			} else {
 				this.dispatchEffect();
 			}

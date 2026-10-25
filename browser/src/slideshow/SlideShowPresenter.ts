@@ -344,7 +344,7 @@ class SlideShowPresenter {
 					clickedVideo,
 				);
 				if (videoRenderer) {
-					videoRenderer.handleClick();
+					videoRenderer.handleUserClick();
 					return;
 				}
 			}
