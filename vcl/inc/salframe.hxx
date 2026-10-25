@@ -231,7 +231,7 @@ public:
     // get current modifier, button mask and mouse position
     struct SalPointerState
     {
-        sal_Int32 mnState;
+        sal_Int32 mnState = 0;
         Point     maPos;      // in frame coordinates
     };
 

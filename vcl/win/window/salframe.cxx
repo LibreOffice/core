@@ -2936,7 +2936,6 @@ void WinSalFrame::FlashWindow() const
 SalFrame::SalPointerState WinSalFrame::GetPointerState()
 {
     SalPointerState aState;
-    aState.mnState = 0;
 
     if ( GetKeyState( VK_LBUTTON ) & 0x8000 )
         aState.mnState |= MOUSE_LEFT;

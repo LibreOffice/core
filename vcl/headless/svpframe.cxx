@@ -512,7 +512,6 @@ const SystemEnvData& SvpSalFrame::GetSystemData() const
 SalFrame::SalPointerState SvpSalFrame::GetPointerState()
 {
     SalPointerState aState;
-    aState.mnState = 0;
     return aState;
 }
 

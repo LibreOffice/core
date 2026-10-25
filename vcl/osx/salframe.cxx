@@ -1986,7 +1986,6 @@ SalFrame::SalPointerState AquaSalFrame::GetPointerState()
     OSX_RUNINMAIN_UNION(GetPointerState(), state)
 
     SalPointerState state;
-    state.mnState = 0;
 
     // get position
     NSPoint aPt = [mpNSWindow mouseLocationOutsideOfEventStream];
