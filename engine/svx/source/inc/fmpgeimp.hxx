@@ -24,10 +24,10 @@
 #include <com/sun/star/form/XFormComponent.hpp>
 #include <com/sun/star/form/XForm.hpp>
 #include <com/sun/star/form/XForms.hpp>
-#include <com/sun/star/container/XMap.hpp>
 
 #include <tools/link.hxx>
-#include <cppuhelper/weakref.hxx>
+#include <comphelper/unomap.hxx>
+#include <unotools/weakref.hxx>
 
 #include <svx/svxdllapi.h>
 
@@ -44,7 +44,7 @@ class FmFormPageImpl final
 {
     cpo::uno::Reference< css::form::XForm >               xCurrentForm;
     cpo::uno::Reference< css::form::XForms >              m_xForms;
-    cpo::uno::WeakReference< css::container::XMap >       m_aControlShapeMap;
+    unotools::WeakReference< comphelper::ControlModelToControlShapeMap > m_aControlShapeMap;
 
     FmFormPage&     m_rPage;
     Link<FmFormPageImpl&,void>  m_aFormsCreationHdl;
@@ -112,7 +112,7 @@ public:
 
     /** returns an object mapping from control models to drawing shapes.
     */
-    UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) cpo::uno::Reference< css::container::XMap > getControlToShapeMap();
+    UNLESS_MERGELIBS(SVXCORE_DLLPUBLIC) rtl::Reference< comphelper::ControlModelToControlShapeMap > getControlToShapeMap();
 
 private:
     /** validates whether <member>xCurrentForm</member> is still valid and to be used
@@ -130,7 +130,7 @@ private:
     */
     bool    validateCurForm();
 
-    cpo::uno::Reference< css::container::XMap >
+    rtl::Reference< comphelper::ControlModelToControlShapeMap >
         impl_createControlShapeMap_nothrow();
 
     FmFormPageImpl( const FmFormPageImpl& ) = delete;

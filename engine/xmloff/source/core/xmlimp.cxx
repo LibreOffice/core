@@ -87,10 +87,10 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/io/XTextInputStream2.hpp>
 #include <com/sun/star/io/TextInputStream.hpp>
-#include <com/sun/star/container/XMap.hpp>
 #include <cppuhelper/compbase.hxx>
 #include <i18nlangtag/languagetag.hxx>
 #include <comphelper/kit.hxx>
+#include <comphelper/unomap.hxx>
 #include <com/sun/star/lang/XLocalizable.hpp>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
 
@@ -475,167 +475,106 @@ void SvXMLImport::InitCtor_()
     }
 }
 
-namespace {
+namespace
+{
 
-    class L10nMapper : public cppu::WeakImplHelper<css::container::XMap>
+    rtl::Reference<comphelper::StringToStringMap> load(const uno::Reference<css::embed::XStorage> &xStorage)
     {
-        std::unordered_map<OUString, OUString> maMap;
+        try {
+            OUString streamName = u"l10n"_ustr;
+            if (xStorage && xStorage->hasByName(streamName) && xStorage->isStreamElement(streamName))
+            {
+                auto xIn = xStorage->openStreamElement(streamName, css::embed::ElementModes::READ|css::embed::ElementModes::NOCREATE);
+                if (!xIn)
+                    return nullptr;
 
-        L10nMapper() { }
-        virtual ~L10nMapper() override {}
+                auto xInStrm = uno::Reference<css::io::XInputStream>(xIn, UNO_QUERY_THROW);
 
-    public:
-        static cpo::uno::Reference< XMap > load(const uno::Reference<css::embed::XStorage> &xStorage)
-        {
-            try {
-                OUString streamName = u"l10n"_ustr;
-                if (xStorage && xStorage->hasByName(streamName) && xStorage->isStreamElement(streamName))
+                rtl::Reference<comphelper::StringToStringMap> pMap = new comphelper::StringToStringMap();
+
+                auto xContext = comphelper::getProcessComponentContext();
+
+                Reference< XTextInputStream2 > xTextStrm;
+                xTextStrm = css::io::TextInputStream::create(xContext);
+                xTextStrm->setInputStream(xInStrm);
+                xTextStrm->setEncoding(u"utf8"_ustr);
+
+                ::std::vector<OUString> aLocales;
+                if (comphelper::COKit::isActive())
                 {
-                    auto xIn = xStorage->openStreamElement(streamName, css::embed::ElementModes::READ|css::embed::ElementModes::NOCREATE);
-                    if (!xIn)
-                        return cpo::uno::Reference< XMap >();
-
-                    auto xInStrm = uno::Reference<css::io::XInputStream>(xIn, UNO_QUERY_THROW);
-
-                    rtl::Reference< L10nMapper > pMap = new L10nMapper();
-
-                    auto xContext = comphelper::getProcessComponentContext();
-
-                    Reference< XTextInputStream2 > xTextStrm;
-                    xTextStrm = css::io::TextInputStream::create(xContext);
-                    xTextStrm->setInputStream(xInStrm);
-                    xTextStrm->setEncoding(u"utf8"_ustr);
-
-                    ::std::vector<OUString> aLocales;
-                    if (comphelper::COKit::isActive())
-                    {
-                        LanguageTag aL10nLang = comphelper::COKit::getLoadLanguageTag();
-                        if (aL10nLang.getLanguageType() == LANGUAGE_NONE)
-                            aL10nLang = comphelper::COKit::getLanguageTag();
-                        aLocales = aL10nLang.getFallbackStrings(true);
-                    }
-                    else
-                        aLocales = LanguageTag(cpo::uno::Reference< css::lang::XLocalizable >(
-                                                   css::configuration::theDefaultProvider::get(xContext),
-                                                   cpo::uno::UNO_QUERY_THROW)->getLocale()).getFallbackStrings(true);
-                    OUString aLocale; // cached best locale match
-
-                    // Format is <opt-prefix|string>\nlocale\t<translated-string>\n<repeat>\n\n
-                    OUString aKeyString;
-                    size_t nLine = 0;
-                    while (!xTextStrm->isEOF())
-                    {
-                        OUString aStr = xTextStrm->readLine();
-                        nLine++;
-                        if (aStr.getLength() < 1 || aStr[0] == '#')
-                        {
-                            aKeyString = u""_ustr;
-                            continue;
-                        }
-
-                        // Read ',' separated locale list at the start
-                        if (aLocale.isEmpty())
-                        {
-                            auto aFileLocales = comphelper::string::split(aStr, ',');
-
-                            // find and cache the best match
-                            for (const auto &f : aFileLocales)
-                            {
-                                for (const auto &i : aLocales)
-                                {
-                                    if (f == i)
-                                    {
-                                        aLocale = f + u"\t"_ustr;
-                                        break;
-                                    }
-                                }
-                                if (!aLocale.isEmpty())
-                                    break;
-                            }
-                        }
-                        if (aLocale.isEmpty())
-                            ; // Do nothing, we don't have a matching translation
-                        else if (aKeyString.isEmpty())
-                            aKeyString = aStr;
-                        else
-                        {
-                            if (aStr.startsWith(aLocale))
-                            {
-                                auto aValues = comphelper::string::split(aStr, '\t');
-                                if (aValues.size() > 1)
-                                    pMap->maMap[aKeyString] = aValues[1];
-                                else
-                                    pMap->maMap[aKeyString] = OUString::Concat(u"invalid line "_ustr) + OUString::number(nLine);
-                            }
-                        }
-                    }
-
-                    xTextStrm->closeInput();
-
-                    auto xMap = cpo::uno::Reference< XMap >(pMap);
-
-                    return xMap;
+                    LanguageTag aL10nLang = comphelper::COKit::getLoadLanguageTag();
+                    if (aL10nLang.getLanguageType() == LANGUAGE_NONE)
+                        aL10nLang = comphelper::COKit::getLanguageTag();
+                    aLocales = aL10nLang.getFallbackStrings(true);
                 }
+                else
+                    aLocales = LanguageTag(cpo::uno::Reference< css::lang::XLocalizable >(
+                                               css::configuration::theDefaultProvider::get(xContext),
+                                               cpo::uno::UNO_QUERY_THROW)->getLocale()).getFallbackStrings(true);
+                OUString aLocale; // cached best locale match
+
+                // Format is <opt-prefix|string>\nlocale\t<translated-string>\n<repeat>\n\n
+                OUString aKeyString;
+                size_t nLine = 0;
+                while (!xTextStrm->isEOF())
+                {
+                    OUString aStr = xTextStrm->readLine();
+                    nLine++;
+                    if (aStr.getLength() < 1 || aStr[0] == '#')
+                    {
+                        aKeyString = u""_ustr;
+                        continue;
+                    }
+
+                    // Read ',' separated locale list at the start
+                    if (aLocale.isEmpty())
+                    {
+                        auto aFileLocales = comphelper::string::split(aStr, ',');
+
+                        // find and cache the best match
+                        for (const auto &f : aFileLocales)
+                        {
+                            for (const auto &i : aLocales)
+                            {
+                                if (f == i)
+                                {
+                                    aLocale = f + u"\t"_ustr;
+                                    break;
+                                }
+                            }
+                            if (!aLocale.isEmpty())
+                                break;
+                        }
+                    }
+                    if (aLocale.isEmpty())
+                        ; // Do nothing, we don't have a matching translation
+                    else if (aKeyString.isEmpty())
+                        aKeyString = aStr;
+                    else
+                    {
+                        if (aStr.startsWith(aLocale))
+                        {
+                            auto aValues = comphelper::string::split(aStr, '\t');
+                            if (aValues.size() > 1)
+                                (*pMap)[aKeyString] = aValues[1];
+                            else
+                                (*pMap)[aKeyString] = OUString::Concat(u"invalid line "_ustr) + OUString::number(nLine);
+                        }
+                    }
+                }
+
+                xTextStrm->closeInput();
+
+                return pMap;
             }
-            catch (Exception const&)
-            {
-                DBG_UNHANDLED_EXCEPTION("xmloff.core", "exception getting BuildId");
-            }
-            return cpo::uno::Reference< XMap >();
         }
+        catch (Exception const&)
+        {
+            DBG_UNHANDLED_EXCEPTION("xmloff.core", "exception getting BuildId");
+        }
+        return nullptr;
+    }
 
-        // XMap
-        virtual Type getKeyType() override   { return cppu::UnoType<OUString>::get(); };
-        virtual Type getValueType() override { return cppu::UnoType<OUString>::get(); };
-        virtual void clear() override { maMap.clear(); }
-        virtual bool containsKey( const Any& ) override
-        {
-            throw cpo::uno::RuntimeException(u"not implemented"_ustr);
-        }
-        virtual bool containsValue( const Any& ) override
-        {
-            throw cpo::uno::RuntimeException(u"not implemented"_ustr);
-        }
-
-        static OUString cleanDomain(const OUString &str)
-        {
-            sal_Int32 idx = str.indexOf('_');
-            if (idx > -1)
-                return str.copy(idx+1);
-            else
-                return str;
-        }
-
-        virtual Any get( const Any& key ) override
-        {
-            auto it = maMap.find(key.get<OUString>());
-            if (it == maMap.end())
-            {
-                SAL_WARN("xmloff", "Key '" << key << "' with no translation");
-                return cpo::uno::Any(cleanDomain(key.get<OUString>()));
-            }
-            else
-                return cpo::uno::Any(it->second);
-        }
-        virtual Any put( const Any&, const Any& ) override
-        {
-            throw cpo::uno::RuntimeException(u"not implemented"_ustr);
-        }
-        virtual Any remove( const Any& ) override
-        {
-            throw cpo::uno::RuntimeException(u"not implemented"_ustr);
-        }
-
-        // XElementAccess (base)
-        virtual Type getElementType() override
-        {
-            throw cpo::uno::RuntimeException(u"not implemented"_ustr);
-        }
-        virtual bool hasElements() override
-        {
-            return !maMap.empty();
-        }
-};
 }
 
 SvXMLImport::SvXMLImport(
@@ -1268,10 +1207,10 @@ void SvXMLImport::initialize( const cpo::uno::Sequence< cpo::uno::Any >& aArgume
 
     uno::Reference<lang::XInitialization> const xInit(mxParser, uno::UNO_QUERY_THROW);
 
-    cpo::uno::Reference< XMap > xMap = L10nMapper::load(GetSourceStorage());
+    auto xMap = load(GetSourceStorage());
     cpo::uno::Sequence< cpo::uno::Any > args{
         cpo::uno::Any(u"IgnoreMissingNSDecl"_ustr),
-        cpo::uno::Any(xMap) };
+        cpo::uno::Any(uno::Reference<XInterface>(static_cast<cppu::OWeakObject*>(xMap.get()))) };
     xInit->initialize(args);
 }
 

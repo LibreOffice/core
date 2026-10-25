@@ -221,7 +221,6 @@ int main()
     line("com_sun_star_comp_SequenceInputStreamService");
     line("com_sun_star_comp_SequenceOutputStreamService");
     line("com_sun_star_comp_util_OfficeInstallationDirectories");
-    line("org_openoffice_comp_comphelper_EnumerableMap");
     // configmgr/source/configmgr.component
     line("com_sun_star_comp_configuration_ConfigurationProvider_get_implementation");
     line("com_sun_star_comp_configuration_ConfigurationRegistry_get_implementation");

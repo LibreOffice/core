@@ -28,7 +28,6 @@
 #include <com/sun/star/inspection/XObjectInspectorUI.hpp>
 #include <com/sun/star/awt/XControlModel.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
-#include <com/sun/star/container/XMap.hpp>
 #include <com/sun/star/inspection/XNumericControl.hpp>
 #include <com/sun/star/util/MeasureUnit.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
@@ -43,6 +42,7 @@
 #include <cppuhelper/interfacecontainer.hxx>
 #include <comphelper/interfacecontainer2.hxx>
 #include <comphelper/componentbase.hxx>
+#include <comphelper/unomap.hxx>
 #include <rtl/ref.hxx>
 #include <utility>
 #include <comphelper/diagnose_ex.hxx>
@@ -64,7 +64,6 @@ namespace pcr
     using ::com::sun::star::beans::Property;
     using ::com::sun::star::awt::XControlModel;
     using ::com::sun::star::drawing::XControlShape;
-    using ::com::sun::star::container::XMap;
     using ::com::sun::star::inspection::LineDescriptor;
     using ::com::sun::star::inspection::XPropertyControlFactory;
     using ::com::sun::star::lang::NullPointerException;
@@ -303,10 +302,12 @@ namespace pcr
                 Reference< XGridColumnFactory > xCheckGrid( xCompChild->getParent(), UNO_QUERY );
                 if ( !xCheckGrid.is() )
                 {
-                    Reference< XMap > xControlMap;
                     Any any = m_xContext->getValueByName( u"ControlShapeAccess"_ustr );
-                    any >>= xControlMap;
-                    m_xAssociatedShape.set( xControlMap->get( Any( xControlModel ) ), UNO_QUERY_THROW );
+                    Reference< XInterface > xControlMapTmp;
+                    any >>= xControlMapTmp;
+                    rtl::Reference< comphelper::ControlModelToControlShapeMap > xControlMap
+                        = &dynamic_cast<comphelper::ControlModelToControlShapeMap&>(*xControlMapTmp);
+                    m_xAssociatedShape = xControlMap->find( xControlModel )->second;
                     m_xShapeProperties.set( m_xAssociatedShape, UNO_QUERY_THROW );
                 }
             }

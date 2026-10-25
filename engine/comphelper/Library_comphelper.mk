@@ -71,9 +71,9 @@ $(eval $(call gb_Library_add_exception_objects,comphelper,\
     comphelper/source/container/container \
     comphelper/source/container/interfacecontainer2 \
     comphelper/source/container/embeddedobjectcontainer \
-    comphelper/source/container/enumerablemap \
     comphelper/source/container/enumhelper \
     comphelper/source/container/namecontainer \
+    comphelper/source/container/unomap \
     comphelper/source/crypto/Crypto \
     $(if $(filter NSS,$(TLS)), comphelper/source/crypto/Crypto_NSS) \
     $(if $(filter OPENSSL,$(TLS)), comphelper/source/crypto/Crypto_OpenSSL) \

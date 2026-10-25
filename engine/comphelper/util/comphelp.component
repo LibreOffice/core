@@ -63,8 +63,4 @@
     <service name="com.sun.star.util.OfficeInstallationDirectories"/>
     <singleton name="com.sun.star.util.theOfficeInstallationDirectories"/>
   </implementation>
-  <implementation name="org.openoffice.comp.comphelper.EnumerableMap"
-      constructor="org_openoffice_comp_comphelper_EnumerableMap">
-    <service name="com.sun.star.container.EnumerableMap"/>
-  </implementation>
 </component>

@@ -443,7 +443,7 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
     Reference< XWindow > xParentWindow(m_xDialog->GetXWindow());
 
     // the mapping from control models to control shapes
-    Reference< XMap > xControlMap;
+    rtl::Reference< comphelper::ControlModelToControlShapeMap > xControlMap;
     FmFormPage* pFormPage = _pFormShell ? _pFormShell->GetCurPage() : nullptr;
     if ( pFormPage )
         xControlMap = pFormPage->GetImpl().getControlToShapeMap();
@@ -456,7 +456,7 @@ void FmPropBrw::impl_createPropertyBrowser_throw( FmFormShell* _pFormShell )
         ::cppu::ContextEntry_Init( u"ContextDocument"_ustr, Any( xDocument ) ),
         ::cppu::ContextEntry_Init( u"DialogParentWindow"_ustr, Any( xParentWindow ) ),
         ::cppu::ContextEntry_Init( u"ControlContext"_ustr, Any( Reference<awt::XControlContainer>(xControlContext) ) ),
-        ::cppu::ContextEntry_Init( u"ControlShapeAccess"_ustr, Any( xControlMap ) )
+        ::cppu::ContextEntry_Init( u"ControlShapeAccess"_ustr, Any( uno::Reference<XInterface>(static_cast<cppu::OWeakObject*>(xControlMap.get())) ) )
     };
     m_xInspectorContext.set(
         ::cppu::createComponentContext( aHandlerContextInfo, SAL_N_ELEMENTS( aHandlerContextInfo ),

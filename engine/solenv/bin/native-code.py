@@ -98,7 +98,6 @@ core_constructor_list = [
     "com_sun_star_comp_SequenceInputStreamService",
     "com_sun_star_comp_SequenceOutputStreamService",
     "com_sun_star_comp_util_OfficeInstallationDirectories",
-    "org_openoffice_comp_comphelper_EnumerableMap",
 # configmgr/source/configmgr.component
     "com_sun_star_comp_configuration_ConfigurationProvider_get_implementation",
     "com_sun_star_comp_configuration_ConfigurationRegistry_get_implementation",

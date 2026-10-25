@@ -26,10 +26,10 @@
 #include <com/sun/star/lang/DisposedException.hpp>
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <cpo/uno/XComponentContext.hpp>
-#include <com/sun/star/container/XMap.hpp>
 #include <com/sun/star/xml/sax/FastToken.hpp>
 #include <com/sun/star/xml/sax/SAXParseException.hpp>
 #include <com/sun/star/xml/sax/XFastContextHandler.hpp>
+#include <comphelper/unomap.hxx>
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/supportsservice.hxx>
 #include <cppuhelper/exc_hlp.hxx>
@@ -274,7 +274,7 @@ public:
     void produce( bool bForceFlush = false );
     bool m_bIgnoreMissingNSDecl;
     bool m_bDisableThreadedParser;
-    cpo::uno::Reference<css::container::XMap> mxMap; /// _ prefix string mapper for translation
+    rtl::Reference<comphelper::StringToStringMap> mxMap; /// _ prefix string mapper for translation
 
 private:
     bool consume(EventList&);
@@ -1366,7 +1366,15 @@ void FastSaxParserImpl::sendPendingCharacters()
     OUString sChars( pendingCharacters.data(), pendingCharacters.size(), RTL_TEXTENCODING_UTF8 );
 
     if (mxMap && !sChars.isEmpty() && sChars[0] == '_')
-        mxMap->get(cpo::uno::Any(sChars)) >>= sChars;
+    {
+        if (auto it = mxMap->find(sChars); it != mxMap->end())
+            sChars = it->second;
+        else
+        {
+            SAL_WARN("sax", "no translation for " << sChars);
+            sChars = sChars.copy(1);
+        }
+    }
 
     if (rEntity.mbEnableThreads)
     {
@@ -1485,7 +1493,11 @@ FastSaxParser::initialize(cpo::uno::Sequence< cpo::uno::Any > const& rArguments)
     }
 
     if (rArguments.size() > 1)
-        rArguments[1] >>= mpImpl->mxMap;
+    {
+        Reference<XInterface> xTmp(rArguments[1], UNO_QUERY);
+        if (xTmp)
+            mpImpl->mxMap = &dynamic_cast<comphelper::StringToStringMap&>(*xTmp);
+    }
 }
 
 void FastSaxParser::parseStream( const xml::sax::InputSource& aInputSource )

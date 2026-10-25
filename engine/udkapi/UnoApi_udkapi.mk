@@ -83,9 +83,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,com/sun/star/connection,\
 	Acceptor \
 	Connector \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,com/sun/star/container,\
-	EnumerableMap \
-))
 $(eval $(call gb_UnoApi_add_idlfiles_nohdl,udkapi,com/sun/star/io,\
 	Pipe \
 	SequenceInputStream \
@@ -231,7 +228,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/container,\
 	XContainerQuery \
 	XContentEnumerationAccess \
 	XElementAccess \
-	XEnumerableMap \
 	XEnumeration \
 	XEnumerationAccess \
 	XHierarchicalName \
@@ -247,7 +243,6 @@ $(eval $(call gb_UnoApi_add_idlfiles,udkapi,com/sun/star/container,\
 	XIndexAccess \
 	XIndexContainer \
 	XIndexReplace \
-	XMap \
 	XNameAccess \
 	XNameContainer \
 	XNameReplace \

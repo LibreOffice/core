@@ -31,7 +31,6 @@
 
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
-#include <com/sun/star/container/EnumerableMap.hpp>
 #include <com/sun/star/drawing/XControlShape.hpp>
 #include <com/sun/star/form/Forms.hpp>
 #include <com/sun/star/form/FormComponentType.hpp>
@@ -56,8 +55,6 @@ using namespace ::com::sun::star::container;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::form;
 using ::com::sun::star::awt::XControlModel;
-using ::com::sun::star::container::XMap;
-using ::com::sun::star::container::EnumerableMap;
 using ::com::sun::star::drawing::XControlShape;
 using namespace ::svxform;
 using namespace ::dbtools;
@@ -220,21 +217,21 @@ void FmFormPageImpl::initFrom( FmFormPageImpl& i_foreignImpl )
 }
 
 
-Reference< XMap > FmFormPageImpl::getControlToShapeMap()
+rtl::Reference< comphelper::ControlModelToControlShapeMap > FmFormPageImpl::getControlToShapeMap()
 {
-    Reference< XMap > xControlShapeMap( m_aControlShapeMap.get(), UNO_QUERY );
+    rtl::Reference< comphelper::ControlModelToControlShapeMap > xControlShapeMap( m_aControlShapeMap.get() );
     if ( xControlShapeMap.is() )
         return xControlShapeMap;
 
     xControlShapeMap = impl_createControlShapeMap_nothrow();
-    m_aControlShapeMap = xControlShapeMap;
+    m_aControlShapeMap = xControlShapeMap.get();
     return xControlShapeMap;
 }
 
 
 namespace
 {
-    void lcl_insertFormObject_throw( const FmFormObj& _object, const Reference< XMap >& _map )
+    void lcl_insertFormObject_throw( const FmFormObj& _object, const rtl::Reference< comphelper::ControlModelToControlShapeMap >& _map )
     {
         // the control model
         const Reference< XControlModel >& xControlModel = _object.GetUnoControlModel();
@@ -247,10 +244,10 @@ namespace
         if ( !xControlShape.is() )
             return;
 
-        _map->put( Any( xControlModel ), Any( xControlShape ) );
+        (*_map)[ xControlModel ] = xControlShape;
     }
 
-    void lcl_removeFormObject_throw( const FmFormObj& _object, const Reference< XMap >& _map )
+    void lcl_removeFormObject_throw( const FmFormObj& _object, const Reference< comphelper::ControlModelToControlShapeMap >& _map )
     {
         // the control model
         const Reference< XControlModel >& xControlModel = _object.GetUnoControlModel();
@@ -260,24 +257,23 @@ namespace
             return;
         }
 
-        Any aOldAssignment = _map->remove( Any( xControlModel ) );
+        auto it = _map->find( xControlModel );
+        Reference< XControlShape > aOldAssignment = it->second;
+        _map->erase( it );
         OSL_ENSURE(
-            aOldAssignment == Any( Reference< XControlShape >( const_cast< FmFormObj& >( _object ).getUnoShape(), UNO_QUERY ) ),
+            aOldAssignment == Reference< XControlShape >( const_cast< FmFormObj& >( _object ).getUnoShape(), UNO_QUERY ),
                 "lcl_removeFormObject: map was inconsistent!" );
     }
 }
 
 
-Reference< XMap > FmFormPageImpl::impl_createControlShapeMap_nothrow()
+rtl::Reference< comphelper::ControlModelToControlShapeMap > FmFormPageImpl::impl_createControlShapeMap_nothrow()
 {
-    Reference< XMap > xMap;
+    rtl::Reference< comphelper::ControlModelToControlShapeMap > xMap;
 
     try
     {
-        xMap = EnumerableMap::create( comphelper::getProcessComponentContext(),
-            ::cppu::UnoType< XControlModel >::get(),
-            ::cppu::UnoType< XControlShape >::get()
-        );
+        xMap = new comphelper::ControlModelToControlShapeMap();
 
         SdrObjListIter aPageIter( &m_rPage );
         while ( aPageIter.IsMore() )
@@ -659,7 +655,7 @@ OUString FmFormPageImpl::setUniqueName(const Reference< XFormComponent > & xForm
 
 void FmFormPageImpl::formModelAssigned( const FmFormObj& _object )
 {
-    Reference< XMap > xControlShapeMap( m_aControlShapeMap.get(), UNO_QUERY );
+    rtl::Reference< comphelper::ControlModelToControlShapeMap > xControlShapeMap( m_aControlShapeMap.get() );
     if ( !xControlShapeMap.is() )
         // our map does not exist -> not interested in this event
         return;
@@ -678,7 +674,7 @@ void FmFormPageImpl::formModelAssigned( const FmFormObj& _object )
 
 void FmFormPageImpl::formObjectInserted( const FmFormObj& _object )
 {
-    Reference< XMap > xControlShapeMap( m_aControlShapeMap.get(), UNO_QUERY );
+    rtl::Reference< comphelper::ControlModelToControlShapeMap > xControlShapeMap( m_aControlShapeMap.get() );
     if ( !xControlShapeMap.is() )
         // our map does not exist -> not interested in this event
         return;
@@ -696,7 +692,7 @@ void FmFormPageImpl::formObjectInserted( const FmFormObj& _object )
 
 void FmFormPageImpl::formObjectRemoved( const FmFormObj& _object )
 {
-    Reference< XMap > xControlShapeMap( m_aControlShapeMap.get(), UNO_QUERY );
+    rtl::Reference< comphelper::ControlModelToControlShapeMap > xControlShapeMap( m_aControlShapeMap.get() );
     if ( !xControlShapeMap.is() )
         // our map does not exist -> not interested in this event
         return;
