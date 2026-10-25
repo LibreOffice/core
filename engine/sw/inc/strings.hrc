@@ -1595,6 +1595,9 @@
 #define STR_BULLETS_SET_AS_DEFAULT_NEEDS_SIGN_IN_TOOLTIP \
     NC_("STR_BULLETS_SET_AS_DEFAULT_NEEDS_SIGN_IN_TOOLTIP", \
         "Sign in to save this as your default for future documents.")
+#define STR_BULLETS_SET_AS_DEFAULT_NO_OWNER_TOOLTIP \
+    NC_("STR_BULLETS_SET_AS_DEFAULT_NO_OWNER_TOOLTIP", \
+        "A default cannot be saved in this document.")
 #define STR_BULLETS_SET_AS_DEFAULT_OTHER_USER_TOOLTIP \
     NC_("STR_BULLETS_SET_AS_DEFAULT_OTHER_USER_TOOLTIP", \
         "This document runs with the settings of the user who opened it first, so only they can save a default here.")

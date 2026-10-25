@@ -4303,6 +4303,18 @@ void DesktopKitTest::testAutoCorrectSettingsOnlyForOwner()
     CPPUNIT_ASSERT_EQUAL(sal_uInt64(0), getAutoCorrectDialogId(aView.m_aJSDialogPayloads));
     CPPUNIT_ASSERT(
         hasPayloadWith(aView.m_aJSDialogPayloads, "Sign in to change the AutoCorrect settings"));
+
+    // And anyone on a document that runs with nobody's settings is told that
+    // they cannot be changed in it:
+    // Without the accompanying fix in place, this test would have failed, as such
+    // a user was told to sign in, or that the settings were someone else's.
+    aView.m_aJSDialogPayloads.clear();
+    pDocument->setViewOption("userpersistence", "noowner");
+    pDocument->postUnoCommand(".uno:AutoCorrectDlg", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(0), getAutoCorrectDialogId(aView.m_aJSDialogPayloads));
+    CPPUNIT_ASSERT(hasPayloadWith(aView.m_aJSDialogPayloads,
+                                  "The AutoCorrect settings cannot be changed in this document"));
 }
 
 void DesktopKitTest::testAutoCorrectDialogToggleColumns()

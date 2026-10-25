@@ -43,13 +43,11 @@ static bool g_bActive(false);
 
 static bool g_bForkedChild(false);
 
-// The views of the user who owns the per-user settings, and whether there has
-// been one.
+// How the users of the views stand to the per-user settings, and whether one of
+// them has been the owner.
 static std::mutex g_aUserSettingsPersistenceMutex;
-static std::set<int> g_aUserSettingsOwnerViews;
+static std::map<int, UserSettingsRole> g_aUserSettingsRoles;
 static bool g_bUserSettingsPersistenceAvailable = false;
-// The views whose user's settings are not the ones the kit runs with.
-static std::set<int> g_aUserSettingsOfAnotherUserViews;
 
 static std::mutex g_aUserConfigDirMutex;
 static OUString g_aUserConfigDir;
@@ -185,26 +183,31 @@ bool isForkedChild()
     return g_bForkedChild;
 }
 
-void setUserSettingsOwner(int nViewId, bool bOwner)
+void setUserSettingsRole(int nViewId, UserSettingsRole eRole)
 {
     std::lock_guard<std::mutex> aGuard(g_aUserSettingsPersistenceMutex);
-    if (bOwner)
-    {
-        g_aUserSettingsOwnerViews.insert(nViewId);
-        g_bUserSettingsPersistenceAvailable = true;
-    }
+    if (eRole == UserSettingsRole::Guest)
+        g_aUserSettingsRoles.erase(nViewId);
     else
-        g_aUserSettingsOwnerViews.erase(nViewId);
+        g_aUserSettingsRoles[nViewId] = eRole;
+    if (eRole == UserSettingsRole::Owner)
+        g_bUserSettingsPersistenceAvailable = true;
+}
+
+UserSettingsRole getUserSettingsRole()
+{
+    if (!isActive())
+        return UserSettingsRole::Owner;
+
+    const int nViewId = getView();
+    std::lock_guard<std::mutex> aGuard(g_aUserSettingsPersistenceMutex);
+    std::map<int, UserSettingsRole>::const_iterator it = g_aUserSettingsRoles.find(nViewId);
+    return it == g_aUserSettingsRoles.end() ? UserSettingsRole::Guest : it->second;
 }
 
 bool isUserSettingsOwner()
 {
-    if (!isActive())
-        return true;
-
-    const int nViewId = getView();
-    std::lock_guard<std::mutex> aGuard(g_aUserSettingsPersistenceMutex);
-    return g_aUserSettingsOwnerViews.contains(nViewId);
+    return getUserSettingsRole() == UserSettingsRole::Owner;
 }
 
 bool isUserSettingsPersistenceAvailable()
@@ -214,25 +217,6 @@ bool isUserSettingsPersistenceAvailable()
 
     std::lock_guard<std::mutex> aGuard(g_aUserSettingsPersistenceMutex);
     return g_bUserSettingsPersistenceAvailable;
-}
-
-void setUserSettingsOfAnotherUser(int nViewId, bool bOfAnotherUser)
-{
-    std::lock_guard<std::mutex> aGuard(g_aUserSettingsPersistenceMutex);
-    if (bOfAnotherUser)
-        g_aUserSettingsOfAnotherUserViews.insert(nViewId);
-    else
-        g_aUserSettingsOfAnotherUserViews.erase(nViewId);
-}
-
-bool areUserSettingsOfAnotherUser()
-{
-    if (!isActive())
-        return false;
-
-    const int nViewId = getView();
-    std::lock_guard<std::mutex> aGuard(g_aUserSettingsPersistenceMutex);
-    return g_aUserSettingsOfAnotherUserViews.contains(nViewId);
 }
 
 void setUserConfigDir(const OUString& rUrl)

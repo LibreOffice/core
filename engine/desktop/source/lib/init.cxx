@@ -7636,14 +7636,20 @@ void COKitDocumentImpl::setViewOption(const char* pOption, const char* pValue)
     }
     else if (sOption == "userpersistence")
     {
-        // Wire contract: "true", "otheruser" (the user has settings, but the
-        // document runs with another user's) or "false"; anything else
-        // (including null) is treated as false - never promise persistence
-        // without an explicit opt-in.
-        const int nView = KitHelper::getCurrentView();
-        comphelper::COKit::setUserSettingsOwner(nView, pValue && strcmp(pValue, "true") == 0);
-        comphelper::COKit::setUserSettingsOfAnotherUser(nView,
-                                                        pValue && strcmp(pValue, "otheruser") == 0);
+        // Wire contract: "true" (the owner), "otheruser" (the user has settings,
+        // but the document runs with another user's), "noowner" (the document
+        // runs with nobody's) or "false" (a guest); anything else (including
+        // null) is treated as false - never promise persistence without an
+        // explicit opt-in.
+        const std::string_view aValue = pValue ? pValue : "";
+        comphelper::COKit::UserSettingsRole eRole = comphelper::COKit::UserSettingsRole::Guest;
+        if (aValue == "true")
+            eRole = comphelper::COKit::UserSettingsRole::Owner;
+        else if (aValue == "otheruser")
+            eRole = comphelper::COKit::UserSettingsRole::OtherUser;
+        else if (aValue == "noowner")
+            eRole = comphelper::COKit::UserSettingsRole::NoOwner;
+        comphelper::COKit::setUserSettingsRole(KitHelper::getCurrentView(), eRole);
     }
     else if (sOption == "zoom")
     {
@@ -9526,8 +9532,7 @@ void COKitDocumentImpl::destroyView(int nId)
 #endif
 
     KitHelper::destroyView(nId);
-    comphelper::COKit::setUserSettingsOwner(nId, false);
-    comphelper::COKit::setUserSettingsOfAnotherUser(nId, false);
+    comphelper::COKit::setUserSettingsRole(nId, comphelper::COKit::UserSettingsRole::Guest);
 
     vcl::kit::numberOfViewsChanged(KitHelper::getViewsCount(mnDocumentId));
 }

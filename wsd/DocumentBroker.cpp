@@ -2050,12 +2050,20 @@ DocumentBroker::updateSessionWithWopiInfo(const std::shared_ptr<ClientSession>& 
     // only that user's views may change it: another user's change would
     // otherwise end up in settings that are not theirs, and theirs are not the
     // ones in force here anyway.
-    const bool bOwner = !userSettingsUri.empty() && !_userConfigId.empty()
-                        && _userConfigId
-                               == "user-" + userId + "-" + Cache::getConfigId(userSettingsUri);
-    session->setUserSettingsOwner(bOwner);
-    // Unlike a guest, such a user can change their settings, just not here.
-    session->setUserSettingsOfAnotherUser(!userSettingsUri.empty() && !bOwner);
+    // Nobody's were installed when the first user had none, or the host keeps
+    // none for anyone.
+    if (_userConfigId.empty())
+        session->setUserSettingsRole(Session::UserSettingsRole::NoOwner);
+    else if (!userSettingsUri.empty()
+             && _userConfigId == "user-" + userId + "-" + Cache::getConfigId(userSettingsUri))
+        session->setUserSettingsRole(Session::UserSettingsRole::Owner);
+    else if (!userSettingsUri.empty())
+    {
+        // Unlike a guest, such a user can change their settings, just not here.
+        session->setUserSettingsRole(Session::UserSettingsRole::OtherUser);
+    }
+    else
+        session->setUserSettingsRole(Session::UserSettingsRole::Guest);
 
     // Pass the ownership to the client session.
     session->setWopiFileInfo(std::move(wopiFileInfo));
@@ -5215,7 +5223,7 @@ std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& ses
         // That profile outlives the app, so what the engine's own dialogs
         // write into it (AutoCorrect Options, Set as Default in Bullets and
         // Numbering) is kept too.
-        session->setUserSettingsOwner(true);
+        session->setUserSettingsRole(Session::UserSettingsRole::Owner);
 #endif
 
         // Sent unconditionally - anonymous sessions explicitly say "false"

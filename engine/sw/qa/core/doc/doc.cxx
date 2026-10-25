@@ -436,7 +436,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testAutoCorrectSettingsPersist)
     osl::Directory::create(aDirUrl + "/xcu");
 
     comphelper::COKit::setActive(true);
-    comphelper::COKit::setUserSettingsOwner(comphelper::COKit::getView(), true);
+    comphelper::COKit::setUserSettingsRole(comphelper::COKit::getView(),
+                                           comphelper::COKit::UserSettingsRole::Owner);
     comphelper::COKit::setUserConfigDir(aDirUrl);
 
     // When changing an AutoCorrect setting the way the dialog does:
@@ -448,7 +449,8 @@ CPPUNIT_TEST_FIXTURE(SwCoreDocTest, testAutoCorrectSettingsPersist)
         rCfg.SetModified();
         rCfg.Commit();
         comphelper::COKit::setUserConfigDir(OUString());
-        comphelper::COKit::setUserSettingsOwner(comphelper::COKit::getView(), false);
+        comphelper::COKit::setUserSettingsRole(comphelper::COKit::getView(),
+                                               comphelper::COKit::UserSettingsRole::Guest);
         comphelper::COKit::setActive(false);
     });
     rFlags.bAutoCmpltCollectWords = !bOrig;

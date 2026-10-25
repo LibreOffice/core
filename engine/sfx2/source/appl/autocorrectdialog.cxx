@@ -59,14 +59,24 @@ bool isViewAlive(ViewShellId nViewShellId)
 
 bool AutoCorrectDialog::MayChangeSettings(weld::Window* pParent)
 {
-    if (comphelper::COKit::isUserSettingsOwner())
-        return true;
+    TranslateId pReason = STR_AUTOCORRECT_SETTINGS_NEED_SIGN_IN;
+    switch (comphelper::COKit::getUserSettingsRole())
+    {
+        case comphelper::COKit::UserSettingsRole::Owner:
+            return true;
+        case comphelper::COKit::UserSettingsRole::OtherUser:
+            pReason = STR_AUTOCORRECT_SETTINGS_OF_ANOTHER_USER;
+            break;
+        case comphelper::COKit::UserSettingsRole::NoOwner:
+            pReason = STR_AUTOCORRECT_SETTINGS_NO_OWNER;
+            break;
+        case comphelper::COKit::UserSettingsRole::Guest:
+            pReason = STR_AUTOCORRECT_SETTINGS_NEED_SIGN_IN;
+            break;
+    }
 
     std::shared_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(
-        pParent, VclMessageType::Info, VclButtonsType::Ok,
-        SfxResId(comphelper::COKit::areUserSettingsOfAnotherUser()
-                     ? STR_AUTOCORRECT_SETTINGS_OF_ANOTHER_USER
-                     : STR_AUTOCORRECT_SETTINGS_NEED_SIGN_IN)));
+        pParent, VclMessageType::Info, VclButtonsType::Ok, SfxResId(pReason)));
     xInfoBox->runAsync(xInfoBox, [](sal_Int32) {});
     return false;
 }

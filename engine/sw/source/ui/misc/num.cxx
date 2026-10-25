@@ -886,13 +886,16 @@ SwSvxNumBulletTabDialog::SwSvxNumBulletTabDialog(weld::Window* pParent,
     // Anonymous COOL sessions, and the views of another user than the one who
     // owns the settings the document runs with, may not change those.
     // Disable rather than silently no-op.
-    if (!comphelper::COKit::isUserSettingsOwner())
+    const comphelper::COKit::UserSettingsRole eRole = comphelper::COKit::getUserSettingsRole();
+    if (eRole != comphelper::COKit::UserSettingsRole::Owner)
     {
         m_xSetDefaultBtn->set_sensitive(false);
-        m_xSetDefaultBtn->set_tooltip_text(
-            SwResId(comphelper::COKit::areUserSettingsOfAnotherUser()
-                        ? STR_BULLETS_SET_AS_DEFAULT_OTHER_USER_TOOLTIP
-                        : STR_BULLETS_SET_AS_DEFAULT_NEEDS_SIGN_IN_TOOLTIP));
+        TranslateId pReason = STR_BULLETS_SET_AS_DEFAULT_NEEDS_SIGN_IN_TOOLTIP;
+        if (eRole == comphelper::COKit::UserSettingsRole::OtherUser)
+            pReason = STR_BULLETS_SET_AS_DEFAULT_OTHER_USER_TOOLTIP;
+        else if (eRole == comphelper::COKit::UserSettingsRole::NoOwner)
+            pReason = STR_BULLETS_SET_AS_DEFAULT_NO_OWNER_TOOLTIP;
+        m_xSetDefaultBtn->set_tooltip_text(SwResId(pReason));
     }
     AddTabPage(u"bullets"_ustr, TabResId(RID_TAB_UNOORDERED.aLabel), RID_SVXPAGE_PICK_BULLET,
                RID_M + RID_TAB_UNOORDERED.sIconName);

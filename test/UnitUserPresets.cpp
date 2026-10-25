@@ -1199,6 +1199,91 @@ public:
     }
 };
 
+/// A document opened first by a user without settings runs with nobody's, so nobody may change
+/// them: neither that user nor one with settings of their own who joins later, and both are told
+/// so, rather than to sign in or that the settings are someone else's.
+class UnitNoSettingsOwner : public WopiTestServer
+{
+    using Base = WopiTestServer;
+
+    STATE_ENUM(Phase, Load, WaitFirstView, SecondView, WaitSecondView, Done) _phase;
+
+    int _installs = 0;
+
+public:
+    UnitNoSettingsOwner()
+        : Base("UnitNoSettingsOwner")
+        , _phase(Phase::Load)
+    {
+    }
+
+    /// The access token names the user; only "member" has settings.
+    void configCheckFileInfo(const Poco::Net::HTTPRequest& request,
+                             Poco::JSON::Object::Ptr& fileInfo) override
+    {
+        const std::string user
+            = UnitSecondUserPresets::userOf(Poco::URI(request.getURI()), "access_token");
+        fileInfo->set("UserId", user);
+        fileInfo->set("UserFriendlyName", user);
+        if (user != "member")
+            return;
+
+        Poco::JSON::Object::Ptr userSettings = new Poco::JSON::Object();
+        std::string uri = helpers::getTestServerURI()
+                          + "/wopi/settings/userconfig.json?testname=UnitNoSettingsOwner";
+        userSettings->set("uri", Util::trim(uri));
+        userSettings->set("stamp", user);
+        fileInfo->set("UserSettings", userSettings);
+    }
+
+    void onDocBrokerPresetsInstallStart() override { ++_installs; }
+
+    void onDocBrokerViewLoaded(const std::string&,
+                               const std::shared_ptr<ClientSession>& session) override
+    {
+        // Without the accompanying fix in place, this test would have failed, as
+        // the guest was told to sign in, and the member it was someone else's.
+        LOK_ASSERT_EQUAL(std::string("noowner"), session->getUserPersistenceState());
+
+        if (_phase == Phase::WaitFirstView)
+        {
+            TRANSITION_STATE(_phase, Phase::SecondView);
+            return;
+        }
+
+        LOK_ASSERT_STATE(_phase, Phase::WaitSecondView);
+        LOK_ASSERT_EQUAL_MESSAGE("nobody's settings should be installed", 0, _installs);
+        TRANSITION_STATE(_phase, Phase::Done);
+        passTest("the document runs with nobody's settings, and everyone is told so");
+    }
+
+    void invokeWSDTest() override
+    {
+        switch (_phase)
+        {
+            case Phase::Load:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitFirstView);
+                initWebsocket("/wopi/files/0?access_token=guest");
+                WSD_CMD_BY_CONNECTION_INDEX(0, "load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::SecondView:
+            {
+                TRANSITION_STATE(_phase, Phase::WaitSecondView);
+                // initWebsocket puts the new connection at index 0.
+                initWebsocket("/wopi/files/0?access_token=member");
+                WSD_CMD_BY_CONNECTION_INDEX(0, "load url=" + getWopiSrc());
+                break;
+            }
+            case Phase::WaitFirstView:
+            case Phase::WaitSecondView:
+            case Phase::Done:
+                break;
+        }
+    }
+};
+
 /// The owner saves their settings and leaves at once, so the kit can tell wsd only after the last
 /// session is gone. The settings still go up, rather than wait for an upload that the document,
 /// going away, would never make.
@@ -1295,7 +1380,7 @@ public:
 
 UnitBase** unit_create_wsd_multi(void)
 {
-    return new UnitBase*[10]{ new UnitEarlyDocDeath(),
+    return new UnitBase*[11]{ new UnitEarlyDocDeath(),
                              new UnitSpifPreset(),
                              new UnitSecondUserPresets(),
                              new UnitLoneUserReloadsPresets(),
@@ -1303,6 +1388,7 @@ UnitBase** unit_create_wsd_multi(void)
                              new UnitWordbookLiveUpload(),
                              new UnitAutocorrRoundTrip(),
                              new UnitAutocorrOtherUser(),
+                             new UnitNoSettingsOwner(),
                              new UnitUserConfigAfterLeaving(),
                              nullptr };
 }

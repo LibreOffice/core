@@ -80,25 +80,33 @@ COMPHELPER_DLLPUBLIC bool isActive();
 /// eg. file-system resources with its parent process?
 COMPHELPER_DLLPUBLIC bool isForkedChild();
 
-/// Whether the user of a view owns the per-user settings the kit runs with: the
-/// host keeps settings for them, and the configuration, the AutoCorrect lists
-/// and the dictionaries are theirs. All views share those, and only the owner's
-/// may change them; changes made anywhere else would end up in the owner's
-/// settings. Off for a view until set.
-COMPHELPER_DLLPUBLIC void setUserSettingsOwner(int nViewId, bool bOwner);
-/// Asks about the current view; always true outside the kit.
+/// How the user of a view stands to the per-user settings the kit runs with:
+/// the configuration, the AutoCorrect lists and the dictionaries, which all
+/// views share. Only the owner may change them; changes made anywhere else
+/// would end up in the owner's settings.
+enum class UserSettingsRole
+{
+    /// The user has no settings of their own, as a guest.
+    Guest,
+    /// The host keeps settings for the user, and those are the kit's.
+    Owner,
+    /// The user has settings of their own, but the kit runs with another user's.
+    OtherUser,
+    /// The kit runs with nobody's settings, so nobody may change them.
+    NoOwner
+};
+
+/// A view is a guest's until set.
+COMPHELPER_DLLPUBLIC void setUserSettingsRole(int nViewId, UserSettingsRole eRole);
+/// Asks about the current view; always the owner outside the kit.
+COMPHELPER_DLLPUBLIC UserSettingsRole getUserSettingsRole();
+/// Whether the current view's user is the owner (see getUserSettingsRole).
 COMPHELPER_DLLPUBLIC bool isUserSettingsOwner();
 /// Whether the per-user settings the kit runs with outlive it: some view has
-/// been the owner's (see setUserSettingsOwner). As only the owner changes them,
+/// been the owner's (see setUserSettingsRole). As only the owner changes them,
 /// whatever writes them, from whichever view and also once the owner's views
 /// are gone, writes the owner's. Always true outside the kit.
 COMPHELPER_DLLPUBLIC bool isUserSettingsPersistenceAvailable();
-/// Whether the user of a view has settings of their own, but the document runs
-/// with another user's, so that what the view changes is not saved for them.
-/// Tells them apart from a user who has no settings at all, as a guest.
-COMPHELPER_DLLPUBLIC void setUserSettingsOfAnotherUser(int nViewId, bool bOfAnotherUser);
-/// Asks about the current view; always false outside the kit.
-COMPHELPER_DLLPUBLIC bool areUserSettingsOfAnotherUser();
 
 /// Directory URL (file://...) of the per-user config tree; empty when unknown.
 COMPHELPER_DLLPUBLIC void setUserConfigDir(const OUString& rUrl);

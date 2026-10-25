@@ -222,28 +222,51 @@ public:
 
     void setIsAdminUser(const std::optional<bool> isAdminUser) { _isAdminUser = isAdminUser; }
 
-    /// True when the user owns the settings the document runs with: the host
-    /// keeps settings for them, and theirs are the ones installed. Only they may
-    /// change those. Anonymous sessions: false.
-    void setUserSettingsOwner(bool bOwner) { _userSettingsOwner = bOwner; }
-
-    bool isUserSettingsOwner() const { return _userSettingsOwner; }
-
-    /// True when the user has settings of their own, but the document runs
-    /// with another user's, which they may not change.
-    void setUserSettingsOfAnotherUser(bool bOfAnotherUser)
+    /// How the user stands to the settings the document runs with, which only
+    /// the owner may change.
+    enum class UserSettingsRole
     {
-        _userSettingsOfAnotherUser = bOfAnotherUser;
-    }
+        /// No settings of their own, as an anonymous session.
+        Guest,
+        /// The host keeps settings for them, and theirs are the ones installed.
+        Owner,
+        /// Settings of their own, but the document runs with another user's.
+        OtherUser,
+        /// The document runs with nobody's settings.
+        NoOwner
+    };
 
-    bool areUserSettingsOfAnotherUser() const { return _userSettingsOfAnotherUser; }
+    void setUserSettingsRole(UserSettingsRole eRole) { _userSettingsRole = eRole; }
 
-    /// The two above as the kit's "userpersistence" option takes them.
+    bool isUserSettingsOwner() const { return _userSettingsRole == UserSettingsRole::Owner; }
+
+    /// The role as the kit's "userpersistence" option takes it.
     std::string getUserPersistenceState() const
     {
-        if (_userSettingsOwner)
-            return "true";
-        return _userSettingsOfAnotherUser ? "otheruser" : "false";
+        switch (_userSettingsRole)
+        {
+            case UserSettingsRole::Owner:
+                return "true";
+            case UserSettingsRole::OtherUser:
+                return "otheruser";
+            case UserSettingsRole::NoOwner:
+                return "noowner";
+            case UserSettingsRole::Guest:
+                break;
+        }
+        return "false";
+    }
+
+    /// The other way round, for what the kit is told.
+    static UserSettingsRole userSettingsRoleFromState(std::string_view state)
+    {
+        if (state == "true")
+            return UserSettingsRole::Owner;
+        if (state == "otheruser")
+            return UserSettingsRole::OtherUser;
+        if (state == "noowner")
+            return UserSettingsRole::NoOwner;
+        return UserSettingsRole::Guest;
     }
 
     /// True when the configuration this document is running with is this
@@ -540,8 +563,7 @@ protected:
 
     /// Defaults false: batch/convert brokers that skip
     /// updateSessionWithWopiInfo inherit a safe "no persistence" answer.
-    bool _userSettingsOwner = false;
-    bool _userSettingsOfAnotherUser = false;
+    UserSettingsRole _userSettingsRole = UserSettingsRole::Guest;
     bool _userPresetsApplied = false;
 
     /// True if we have been disconnected.
