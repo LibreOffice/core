@@ -3952,7 +3952,10 @@ void SalInstanceTreeView::bulk_insert_for_each(
         if (!pFixedWidths)
             continue;
 
-        size_t nFixedWidths = std::min(pFixedWidths->size(), aVclIter.iter->ItemCount());
+        // func may have left some columns of the row empty, without an item
+        const size_t nItems = aVclIter.iter->ItemCount();
+        const size_t nFixedWidths
+            = nItems > nExtraCols ? std::min(pFixedWidths->size(), nItems - nExtraCols) : 0;
         for (size_t j = 0; j < nFixedWidths; ++j)
         {
             SvLBoxItem& rItem = aVclIter.iter->GetItem(j + nExtraCols);
