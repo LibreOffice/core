@@ -70,17 +70,39 @@ class SlideVideos {
 		}
 	}
 
-	/// Draw the videos of the slide. lookOf gives how an animation draws
-	/// the video of a shape id, undefined for the video as it comes.
+	/// Draw the videos of the slide, except the ids in drawnIds. lookOf gives
+	/// how an animation draws the video of a shape id, undefined for the video
+	/// as it comes.
 	public render(
 		slideHash: string,
 		lookOf?: (shapeId: number) => AnimatedContentLook | undefined,
+		drawnIds?: Set<number>,
 	): void {
 		const videoRenderers = this.renderers.get(slideHash);
 		if (!videoRenderers) return;
 
-		for (const videoRenderer of videoRenderers)
+		for (const videoRenderer of videoRenderers) {
+			if (drawnIds?.has(videoRenderer.infoId)) continue;
 			videoRenderer.render(lookOf?.(videoRenderer.infoId));
+		}
+	}
+
+	/// Draw the one video of the slide with this id. Returns false when the
+	/// slide has no such video.
+	public renderVideo(
+		slideHash: string,
+		videoId: number,
+		look?: AnimatedContentLook,
+	): boolean {
+		const videoRenderers = this.renderers.get(slideHash);
+		if (!videoRenderers) return false;
+
+		for (const videoRenderer of videoRenderers) {
+			if (videoRenderer.infoId !== videoId) continue;
+			videoRenderer.render(look);
+			return true;
+		}
+		return false;
 	}
 
 	public pause(slideHash: string): void {

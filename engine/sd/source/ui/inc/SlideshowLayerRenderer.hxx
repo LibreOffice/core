@@ -97,6 +97,8 @@ struct RenderPass
     sal_Int32 mnParagraph = -1;
     bool mbPlaceholder = false;
     OUString maFieldType;
+    // The pass holds one media shape, whose video plays at this place in the stacking order.
+    bool mbVideo = false;
 
     Color maFontColor = COL_AUTO;
 

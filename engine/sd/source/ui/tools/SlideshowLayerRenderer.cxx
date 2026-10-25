@@ -15,6 +15,7 @@
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>
+#include <svx/svdomedia.hxx>
 #include <svx/svdoutl.hxx>
 #include <svx/svdpagv.hxx>
 #include <svx/sdr/primitive2d/svx_primitivetypes2d.hxx>
@@ -40,6 +41,7 @@
 #include <com/sun/star/animations/XAnimationNode.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
+#include <com/sun/star/presentation/EffectPresetClass.hpp>
 #include <com/sun/star/presentation/ParagraphTarget.hpp>
 
 #include <drawinglayer/primitive2d/Primitive2DContainer.hxx>
@@ -609,6 +611,17 @@ public:
                 closeRenderPass();
             }
         }
+        // A video in an animated group is drawn with its group.
+        else if (pObject->GetObjIdentifier() == SdrObjKind::Media
+                 && !getAnimatedAncestor(pObject))
+        {
+            closeRenderPass();
+            mpCurrentRenderPass->maObjectsAndParagraphs.emplace(pObject, std::deque<sal_Int32>());
+            mpCurrentRenderPass->meStage = eCurrentStage;
+            mpCurrentRenderPass->mpObject = pObject;
+            mpCurrentRenderPass->mbVideo = true;
+            closeRenderPass();
+        }
         else
         {
             // The animated group the object is part of, or nullptr when the object is not
@@ -727,6 +740,10 @@ SlideshowLayerRenderer::SlideshowLayerRenderer(SdrPage& rPage, const OString& rS
 
 void SlideshowLayerRenderer::resolveEffect(CustomAnimationEffectPtr const& rEffect)
 {
+    // A media effect plays, pauses or stops a video, and draws nothing of its own.
+    if (rEffect->getPresetClass() == presentation::EffectPresetClass::MEDIACALL)
+        return;
+
     SdrObject* pObject = nullptr;
     sal_Int32 nParagraph = -1;
     uno::Reference<drawing::XShape> xShape;
@@ -1066,6 +1083,8 @@ void SlideshowLayerRenderer::writeJSON(std::string& rJsonMsg, RenderPass const& 
         else
         {
             aJsonWriter.put("type", "bitmap");
+            if (rRenderPass.mbVideo)
+                aJsonWriter.put("videoId", pObject->GetUniqueID());
             writeContentNode(aJsonWriter);
         }
     }

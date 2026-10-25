@@ -73,12 +73,16 @@ interface LayerInfo {
 	type?: 'bitmap' | 'placeholder' | 'animated';
 	content: LayerContentType;
 	isField?: boolean;
+	// The id of the video that the media shape in this layer plays.
+	videoId?: number;
 }
 
 interface LayerEntry {
 	type: 'bitmap' | 'placeholder' | 'animated';
 	content: LayerContentType;
 	isField?: boolean;
+	// The id of the video that the media shape in this layer plays.
+	videoId?: number;
 }
 
 class LayerDrawing {
@@ -107,6 +111,8 @@ class LayerDrawing {
 	private onSlideRenderingCompleteCallback: VoidFunction = null;
 	private layerRenderer: LayerRenderer;
 	private videos = new SlideVideos();
+	// The ids of the videos that were drawn with their layer in the current composition.
+	private videosDrawnWithLayer: Set<number> = new Set();
 	private gifRenderers: Map<string, Array<AnimatedContentRenderer>> = new Map();
 	private isTransitionActive: boolean = false;
 	private queuedLayers: any[] = [];
@@ -207,14 +213,28 @@ class LayerDrawing {
 	public composeLayers(slideHash: string): void {
 		if (this.isDisposed()) return;
 
+		this.videosDrawnWithLayer.clear();
 		this.drawBackground(slideHash);
 		this.drawMasterPage(slideHash);
 		this.drawTextField(slideHash);
 		this.drawDrawPage(slideHash);
-		this.videos.render(slideHash, (shapeId) =>
-			this.videoLook(slideHash, shapeId),
+		this.videos.render(
+			slideHash,
+			(shapeId) => this.videoLook(slideHash, shapeId),
+			this.videosDrawnWithLayer,
 		);
 		this.drawGifs(slideHash);
+	}
+
+	private drawVideoWithLayer(slideHash: string, videoId: number) {
+		if (
+			this.videos.renderVideo(
+				slideHash,
+				videoId,
+				this.videoLook(slideHash, videoId),
+			)
+		)
+			this.videosDrawnWithLayer.add(videoId);
 	}
 
 	public pauseVideos(slideHash: string) {
@@ -644,6 +664,7 @@ class LayerDrawing {
 		const layerEntry: LayerEntry = {
 			type: info.type,
 			content: info.content,
+			videoId: info.videoId,
 		};
 		if (info.type === 'bitmap') {
 			if (!this.checkAndAttachImageData(layerEntry.content as ImageInfo, img))
@@ -798,6 +819,7 @@ class LayerDrawing {
 	private drawDrawPageLayer(slideHash: string, layer: LayerEntry) {
 		if (layer.type === 'bitmap') {
 			this.drawBitmap(layer.content as ImageInfo);
+			if (layer.videoId) this.drawVideoWithLayer(slideHash, layer.videoId);
 		} else if (layer.type === 'animated') {
 			const content = layer.content as AnimatedShapeInfo;
 			if (content.type === 'bitmap') {
