@@ -7635,12 +7635,15 @@ void COKitDocumentImpl::setViewOption(const char* pOption, const char* pValue)
     }
     else if (sOption == "userpersistence")
     {
-        // Wire contract: exactly "true" or "false"; anything else (including
-        // null) is treated as false - never promise persistence without an
-        // explicit opt-in.
-        const bool bAvailable = pValue && strcmp(pValue, "true") == 0;
-        comphelper::COKit::setUserSettingsPersistenceAvailable(KitHelper::getCurrentView(),
-                                                               bAvailable);
+        // Wire contract: "true", "otheruser" (the user has settings, but the
+        // document runs with another user's) or "false"; anything else
+        // (including null) is treated as false - never promise persistence
+        // without an explicit opt-in.
+        const int nView = KitHelper::getCurrentView();
+        comphelper::COKit::setUserSettingsPersistenceAvailable(
+            nView, pValue && strcmp(pValue, "true") == 0);
+        comphelper::COKit::setUserSettingsOfAnotherUser(nView,
+                                                        pValue && strcmp(pValue, "otheruser") == 0);
     }
     else if (sOption == "zoom")
     {
@@ -9524,6 +9527,7 @@ void COKitDocumentImpl::destroyView(int nId)
 
     KitHelper::destroyView(nId);
     comphelper::COKit::setUserSettingsPersistenceAvailable(nId, false);
+    comphelper::COKit::setUserSettingsOfAnotherUser(nId, false);
 
     vcl::kit::numberOfViewsChanged(KitHelper::getViewsCount(mnDocumentId));
 }

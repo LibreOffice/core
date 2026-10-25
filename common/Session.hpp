@@ -234,6 +234,23 @@ public:
         return _userSettingsPersistenceAvailable;
     }
 
+    /// True when the user has settings of their own, but the document runs
+    /// with another user's, so what they change is not saved for them.
+    void setUserSettingsOfAnotherUser(bool bOfAnotherUser)
+    {
+        _userSettingsOfAnotherUser = bOfAnotherUser;
+    }
+
+    bool areUserSettingsOfAnotherUser() const { return _userSettingsOfAnotherUser; }
+
+    /// The two above as the kit's "userpersistence" option takes them.
+    std::string getUserPersistenceState() const
+    {
+        if (_userSettingsPersistenceAvailable)
+            return "true";
+        return _userSettingsOfAnotherUser ? "otheruser" : "false";
+    }
+
     /// True when the configuration this document is running with is this
     /// user's own. One document is one kit and one configuration, installed
     /// for the session that opened it, so a later joiner's settings are saved
@@ -529,6 +546,7 @@ protected:
     /// Defaults false: batch/convert brokers that skip
     /// updateSessionWithWopiInfo inherit a safe "no persistence" answer.
     bool _userSettingsPersistenceAvailable = false;
+    bool _userSettingsOfAnotherUser = false;
     bool _userPresetsApplied = false;
 
     /// True if we have been disconnected.

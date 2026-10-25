@@ -46,6 +46,8 @@ static bool g_bForkedChild(false);
 // The views whose changes to the per-user settings are to outlive the kit.
 static std::mutex g_aUserSettingsPersistenceMutex;
 static std::set<int> g_aUserSettingsPersistenceViews;
+// The views whose user's settings are not the ones the kit runs with.
+static std::set<int> g_aUserSettingsOfAnotherUserViews;
 
 static std::mutex g_aUserConfigDirMutex;
 static OUString g_aUserConfigDir;
@@ -198,6 +200,25 @@ bool isUserSettingsPersistenceAvailable()
     const int nViewId = getView();
     std::lock_guard<std::mutex> aGuard(g_aUserSettingsPersistenceMutex);
     return g_aUserSettingsPersistenceViews.contains(nViewId);
+}
+
+void setUserSettingsOfAnotherUser(int nViewId, bool bOfAnotherUser)
+{
+    std::lock_guard<std::mutex> aGuard(g_aUserSettingsPersistenceMutex);
+    if (bOfAnotherUser)
+        g_aUserSettingsOfAnotherUserViews.insert(nViewId);
+    else
+        g_aUserSettingsOfAnotherUserViews.erase(nViewId);
+}
+
+bool areUserSettingsOfAnotherUser()
+{
+    if (!isActive())
+        return false;
+
+    const int nViewId = getView();
+    std::lock_guard<std::mutex> aGuard(g_aUserSettingsPersistenceMutex);
+    return g_aUserSettingsOfAnotherUserViews.contains(nViewId);
 }
 
 void setUserConfigDir(const OUString& rUrl)

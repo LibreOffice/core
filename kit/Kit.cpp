@@ -2716,8 +2716,7 @@ std::shared_ptr<COKitDocument> Document::load(const std::shared_ptr<ChildSession
 
     // Whether what this view changes in the user's settings is saved for them.
     _loKitDocument->setView(viewId);
-    _loKitDocument->setViewOption("userpersistence",
-                                  session->isUserSettingsPersistenceAvailable() ? "true" : "false");
+    _loKitDocument->setViewOption("userpersistence", session->getUserPersistenceState().c_str());
 
     // viewId's monotonically increase, and CallbackDescriptors are never freed.
     _viewIdToCallbackDescr.emplace(viewId,

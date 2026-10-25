@@ -2036,9 +2036,11 @@ DocumentBroker::updateSessionWithWopiInfo(const std::shared_ptr<ClientSession>& 
     // Everyone on it shares that, but only that user's views may save a change
     // into it: another user's change would otherwise end up in settings that are
     // not theirs, and theirs are not the ones in force here anyway.
-    session->setUserSettingsPersistenceAvailable(!userSettingsUri.empty()
-                                                 && !_userSettingsUri.empty()
-                                                 && userId == _userSettingsUserId);
+    const bool bOwner = !userSettingsUri.empty() && !_userSettingsUri.empty()
+                        && userId == _userSettingsUserId;
+    session->setUserSettingsPersistenceAvailable(bOwner);
+    // Unlike a guest, such a user can save their settings, just not here.
+    session->setUserSettingsOfAnotherUser(!userSettingsUri.empty() && !bOwner);
 
     // Pass the ownership to the client session.
     session->setWopiFileInfo(std::move(wopiFileInfo));
@@ -5218,9 +5220,7 @@ std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& ses
 
         // Sent unconditionally - anonymous sessions explicitly say "false"
         // rather than relying on signal absence.
-        forwardToChild(session,
-                       std::string("userpersistence ") +
-                           (session->isUserSettingsPersistenceAvailable() ? "true" : "false"));
+        forwardToChild(session, "userpersistence " + session->getUserPersistenceState());
 
         // Both configIds are pre-encoded so they match the on-disk sharedpresets/<configId>/
         // directory names; loadExtensions queries each preset/<configId>/extensions/ index in turn:

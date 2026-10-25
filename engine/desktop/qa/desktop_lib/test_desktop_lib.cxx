@@ -207,6 +207,7 @@ public:
     void testUserSettingsPersistedCallback();
     void testUserSettingsPersistedOnlyForOwnerView();
     void testDictionaryStoredOnlyForOwnerView();
+    void testSetAsDefaultTooltipForOtherUser();
     void testAutoCorrectDialogToggleColumns();
     void testAutoCorrectDialogOnlyOnce();
     void testCommentAuthorFromSession();
@@ -315,6 +316,7 @@ public:
     CPPUNIT_TEST(testUserSettingsPersistedCallback);
     CPPUNIT_TEST(testUserSettingsPersistedOnlyForOwnerView);
     CPPUNIT_TEST(testDictionaryStoredOnlyForOwnerView);
+    CPPUNIT_TEST(testSetAsDefaultTooltipForOtherUser);
     CPPUNIT_TEST(testAutoCorrectDialogToggleColumns);
     CPPUNIT_TEST(testAutoCorrectDialogOnlyOnce);
     CPPUNIT_TEST(testCommentAuthorFromSession);
@@ -4094,6 +4096,68 @@ int getToggle(const std::vector<std::string>& rPayloads, int nRow, int nColumn)
     }
     return -1;
 }
+}
+
+void DesktopKitTest::testSetAsDefaultTooltipForOtherUser()
+{
+    // Given a document whose configuration is the user's of its first view, and a
+    // second view of another user, who has settings of their own:
+    COKitDocumentImpl* pDocument = loadDoc("blank_text.odt");
+    pDocument->initializeForRendering("{}");
+    // As the kit's main loop does, which the views are known by.
+    KitHelper::registerViewCallbacks();
+    comphelper::ScopeGuard aRestore([] {
+        comphelper::COKit::setViewSetter(nullptr);
+        comphelper::COKit::setViewGetter(nullptr);
+    });
+    pDocument->setViewOption("userpersistence", "true");
+    const int nOtherView = pDocument->createView();
+    pDocument->setView(nOtherView);
+    pDocument->initializeForRendering("{}");
+    pDocument->setViewOption("userpersistence", "otheruser");
+    ViewCallback aView(pDocument);
+    Scheduler::ProcessEventsToIdle();
+
+    // When that user opens Bullets and Numbering:
+    pDocument->postUnoCommand(".uno:BulletsAndNumberingDialog", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then Set as My Default is off, and says why, which is not that they have to
+    // sign in:
+    const boost::property_tree::ptree* pButton = nullptr;
+    boost::property_tree::ptree aTree;
+    sal_uInt64 nDialogId = 0;
+    for (const std::string& rPayload : aView.m_aJSDialogPayloads)
+    {
+        std::stringstream aStream(rPayload);
+        boost::property_tree::read_json(aStream, aTree);
+        pButton = findWidget(aTree, "setdefault", "enabled");
+        if (pButton)
+        {
+            // The dialog is named by its first id, and its window is the number of
+            // another one.
+            for (const std::pair<const std::string, boost::property_tree::ptree>& rPair : aTree)
+            {
+                if (rPair.first != "id")
+                    continue;
+                if (sal_uInt64 nId = std::strtoull(rPair.second.get_value<std::string>().c_str(), nullptr, 10))
+                    nDialogId = nId;
+            }
+            break;
+        }
+    }
+    CPPUNIT_ASSERT(pButton);
+    CPPUNIT_ASSERT(nDialogId != 0);
+    CPPUNIT_ASSERT_EQUAL(std::string("false"), pButton->get<std::string>("enabled"));
+    // Without the accompanying fix in place, this test would have failed, as the
+    // tooltip asked a signed-in user to sign in.
+    CPPUNIT_ASSERT_EQUAL(std::string("This document runs with the settings of the user who "
+                                     "opened it first, so only they can save a default here."),
+                         pButton->get<std::string>("tooltip"));
+
+    pDocument->sendDialogEvent(
+        nDialogId, "{\"id\":\"cancel\", \"cmd\": \"click\", \"type\": \"pushbutton\"}");
+    Scheduler::ProcessEventsToIdle();
 }
 
 namespace

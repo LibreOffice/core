@@ -1096,6 +1096,7 @@ public:
         {
             LOK_ASSERT_MESSAGE("the owner's view should save the settings",
                                session->isUserSettingsPersistenceAvailable());
+            LOK_ASSERT_EQUAL(std::string("true"), session->getUserPersistenceState());
             _jailConfigPath = jailConfigPath(session);
             LOK_ASSERT_MESSAGE("the session should have a document", !_jailConfigPath.empty());
             TRANSITION_STATE(_phase, Phase::SecondView);
@@ -1105,6 +1106,8 @@ public:
         LOK_ASSERT_STATE(_phase, Phase::WaitSecondView);
         LOK_ASSERT_MESSAGE("the other user's view should not save the settings",
                            !session->isUserSettingsPersistenceAvailable());
+        // Not as a guest, though, which the dialogs tell them apart by.
+        LOK_ASSERT_EQUAL(std::string("otheruser"), session->getUserPersistenceState());
         TRANSITION_STATE(_phase, Phase::OtherToggles);
     }
 

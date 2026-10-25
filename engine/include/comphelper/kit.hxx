@@ -88,6 +88,12 @@ COMPHELPER_DLLPUBLIC bool isForkedChild();
 COMPHELPER_DLLPUBLIC void setUserSettingsPersistenceAvailable(int nViewId, bool bAvailable);
 /// Asks about the current view; always true outside the kit.
 COMPHELPER_DLLPUBLIC bool isUserSettingsPersistenceAvailable();
+/// Whether the user of a view has settings of their own, but the document runs
+/// with another user's, so that what the view changes is not saved for them.
+/// Tells them apart from a user who has no settings at all, as a guest.
+COMPHELPER_DLLPUBLIC void setUserSettingsOfAnotherUser(int nViewId, bool bOfAnotherUser);
+/// Asks about the current view; always false outside the kit.
+COMPHELPER_DLLPUBLIC bool areUserSettingsOfAnotherUser();
 
 /// Directory URL (file://...) of the per-user config tree; empty when unknown.
 COMPHELPER_DLLPUBLIC void setUserConfigDir(const OUString& rUrl);
