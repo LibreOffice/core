@@ -2010,7 +2010,10 @@ DocumentBroker::updateSessionWithWopiInfo(const std::shared_ptr<ClientSession>& 
     }
 
     std::string userSettingsUri = wopiFileInfo->getUserSettingsUri();
-    if (_sessions.empty() && !userSettingsUri.empty())
+    // Once per document: the kit keeps the configuration it was given, also
+    // through a moment without sessions, so a later first session must not
+    // install another user's on top of it.
+    if (_sessions.empty() && _userConfigId.empty() && !userSettingsUri.empty())
     {
         std::string jailPresetsPath = FileUtil::buildLocalPathToJail(COOLWSD::EnableMountNamespaces,
                                                                      getJailRoot(),
@@ -2026,20 +2029,21 @@ DocumentBroker::updateSessionWithWopiInfo(const std::shared_ptr<ClientSession>& 
         Poco::File(Poco::Path(userExtensionsDir, "extensions")).createDirectories();
 
         _userSettingsUri = userSettingsUri;
-        _userSettingsUserId = userId;
         asyncInstallPresets(session, _userConfigId, userSettingsUri, jailPresetsPath,
                             {{"extensions", userExtensionsDir.toString()}});
         session->setUserPresetsApplied(true);
     }
 
-    // The document runs with one configuration, that of the user who opened it.
-    // Everyone on it shares that, but only that user's views may save a change
-    // into it: another user's change would otherwise end up in settings that are
-    // not theirs, and theirs are not the ones in force here anyway.
-    const bool bOwner = !userSettingsUri.empty() && !_userSettingsUri.empty()
-                        && userId == _userSettingsUserId;
-    session->setUserSettingsPersistenceAvailable(bOwner);
-    // Unlike a guest, such a user can save their settings, just not here.
+    // The document runs with one configuration, that of the user who opened it,
+    // the same user from the same settings host. Everyone on it shares that, but
+    // only that user's views may change it: another user's change would
+    // otherwise end up in settings that are not theirs, and theirs are not the
+    // ones in force here anyway.
+    const bool bOwner = !userSettingsUri.empty() && !_userConfigId.empty()
+                        && _userConfigId
+                               == "user-" + userId + "-" + Cache::getConfigId(userSettingsUri);
+    session->setUserSettingsOwner(bOwner);
+    // Unlike a guest, such a user can change their settings, just not here.
     session->setUserSettingsOfAnotherUser(!userSettingsUri.empty() && !bOwner);
 
     // Pass the ownership to the client session.
@@ -2311,44 +2315,26 @@ const std::vector<RoundTripPresetGroup>& getRoundTripPresetGroups()
 // Scrub the kit-written registrymodifications.xcu to these roots before upload;
 // anything outside the list is dropped.
 //
-// !!! KEEP IN SYNC with aAllowedSubset in engine/desktop/source/lib/init.cxx
-// (the apply side; this is the upload side). No shared symbol exists across
-// the kit<->wsd boundary, so edits here need the mirror edit there.
+// These are what the engine saves for the user itself, with
+// comphelper::COKit::persistUserSettings(), where only the owner of the
+// settings can change them. The file holds the whole of the kit's
+// configuration, which every view shares, so anything else in it, such as the
+// grid or print options changed by whoever is on the document, must not go
+// into the owner's settings. The settings dialog keeps those in a file of its
+// own (documentView.xcu), which the kit never writes.
+//
+// A subset of aAllowedSubset in engine/desktop/source/lib/init.cxx (the apply
+// side). No shared symbol exists across the kit<->wsd boundary, so a root the
+// engine starts to save needs the edit here too.
 const std::vector<std::string>& getUploadableXcuPaths()
 {
     static const std::vector<std::string> sPaths = {
-        "/org.openoffice.Office.Calc/Grid",
-        "/org.openoffice.Office.Calc/Print",
-        "/org.openoffice.Office.Calc/Content/Display/ObjectGraphic",
-        "/org.openoffice.Office.Calc/Content/Display/FormulaMark",
-
-        "/org.openoffice.Office.Draw/Grid",
-        "/org.openoffice.Office.Draw/Print",
-
-        "/org.openoffice.Office.Impress/Grid",
-        "/org.openoffice.Office.Impress/Print",
-
-        "/org.openoffice.Office.Writer/Grid",
-        "/org.openoffice.Office.Writer/Print",
-        "/org.openoffice.Office.Writer/Content/Display/GraphicObject",
-        "/org.openoffice.Office.Writer/Content/Display/ShowBoundaries",
-        "/org.openoffice.Office.Writer/Content/NonprintingCharacter",
-
+        // AutoCorrect Options, and AutoCorrect While Typing.
         "/org.openoffice.Office.Common/AutoCorrect",
         "/org.openoffice.Office.Writer/AutoFunction",
 
+        // Set as My Default in Bullets and Numbering.
         "/org.openoffice.Office.Common/BulletsNumbering",
-        "/org.openoffice.Office.Common/I18N/CTL",
-
-        // Only the sentence-checking subtree: its siblings
-        // GrammarChecking/LanguageTool, GrammarChecking/Duden and
-        // GrammarChecking/Grammalecte hold the servers, accounts and API
-        // keys of the remote checkers, which must not round-trip to the
-        // host. The same goes for the whole Translation subtree, with the
-        // servers and keys of the translation providers. The kit applies
-        // them from the user's own xcu, where the server allows it, but
-        // never sends them back.
-        "/org.openoffice.Office.Linguistic/GrammarChecking/SentenceChecking",
     };
     return sPaths;
 }
@@ -5215,7 +5201,7 @@ std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& ses
         // That profile outlives the app, so what the engine's own dialogs
         // write into it (AutoCorrect Options, Set as Default in Bullets and
         // Numbering) is kept too.
-        session->setUserSettingsPersistenceAvailable(true);
+        session->setUserSettingsOwner(true);
 #endif
 
         // Sent unconditionally - anonymous sessions explicitly say "false"

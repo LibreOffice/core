@@ -5719,10 +5719,11 @@ static void updateConfig(const OUString& rConfigPath)
                 // Filter xcu to a subset of options to allow (apply side of
                 // the COOL officecfg round-trip).
                 //
-                // !!! KEEP IN SYNC with getUploadableXcuPaths() in online's
-                // wsd/DocumentBroker.cpp (the upload side). No shared symbol
-                // exists across the kit<->wsd boundary, so edits here need
-                // the mirror edit there.
+                // getUploadableXcuPaths() in online's wsd/DocumentBroker.cpp
+                // (the upload side) lists the part of these that the engine
+                // saves itself, which goes back to the host. No shared symbol
+                // exists across the kit<->wsd boundary, so a root the engine
+                // starts to save needs the edit there too.
                 std::vector<OUString> aAllowedSubset{
                     u"/org.openoffice.Office.Calc/Grid"_ustr,
                     u"/org.openoffice.Office.Calc/Print"_ustr,
@@ -7640,8 +7641,7 @@ void COKitDocumentImpl::setViewOption(const char* pOption, const char* pValue)
         // (including null) is treated as false - never promise persistence
         // without an explicit opt-in.
         const int nView = KitHelper::getCurrentView();
-        comphelper::COKit::setUserSettingsPersistenceAvailable(
-            nView, pValue && strcmp(pValue, "true") == 0);
+        comphelper::COKit::setUserSettingsOwner(nView, pValue && strcmp(pValue, "true") == 0);
         comphelper::COKit::setUserSettingsOfAnotherUser(nView,
                                                         pValue && strcmp(pValue, "otheruser") == 0);
     }
@@ -9526,7 +9526,7 @@ void COKitDocumentImpl::destroyView(int nId)
 #endif
 
     KitHelper::destroyView(nId);
-    comphelper::COKit::setUserSettingsPersistenceAvailable(nId, false);
+    comphelper::COKit::setUserSettingsOwner(nId, false);
     comphelper::COKit::setUserSettingsOfAnotherUser(nId, false);
 
     vcl::kit::numberOfViewsChanged(KitHelper::getViewsCount(mnDocumentId));

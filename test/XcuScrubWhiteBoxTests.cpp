@@ -85,8 +85,12 @@ void XcuScrubWhiteBoxTests::testIsAllowedXcuPath()
     // An allowed root matches itself and anything below it.
     LOK_ASSERT(isAllowedXcuPath("/org.openoffice.Office.Common/BulletsNumbering"));
     LOK_ASSERT(isAllowedXcuPath("/org.openoffice.Office.Common/BulletsNumbering/Format"));
-    LOK_ASSERT(isAllowedXcuPath("/org.openoffice.Office.Writer/Grid"));
-    LOK_ASSERT(isAllowedXcuPath("/org.openoffice.Office.Common/I18N/CTL"));
+
+    // What the settings dialog keeps in a file of its own does not go up from
+    // the kit's, where anyone on the document may have changed it.
+    LOK_ASSERT(!isAllowedXcuPath("/org.openoffice.Office.Writer/Grid"));
+    LOK_ASSERT(!isAllowedXcuPath("/org.openoffice.Office.Writer/Content/NonprintingCharacter"));
+    LOK_ASSERT(!isAllowedXcuPath("/org.openoffice.Office.Common/I18N/CTL"));
 
     // The match stops at a path-segment boundary, so a longer sibling name is
     // not let through.
@@ -95,9 +99,9 @@ void XcuScrubWhiteBoxTests::testIsAllowedXcuPath()
     // An ancestor of an allowed root is not itself allowed.
     LOK_ASSERT(!isAllowedXcuPath("/org.openoffice.Office.Common"));
 
-    // The sentence checker options go up; the remote checkers' servers,
-    // accounts and keys beside them never do.
-    LOK_ASSERT(isAllowedXcuPath("/org.openoffice.Office.Linguistic/GrammarChecking/SentenceChecking/en"));
+    // Neither do the sentence checker options, nor the remote checkers'
+    // servers, accounts and keys beside them.
+    LOK_ASSERT(!isAllowedXcuPath("/org.openoffice.Office.Linguistic/GrammarChecking/SentenceChecking/en"));
     LOK_ASSERT(!isAllowedXcuPath("/org.openoffice.Office.Linguistic/GrammarChecking/LanguageTool"));
     LOK_ASSERT(!isAllowedXcuPath("/org.openoffice.Office.Linguistic/GrammarChecking/Duden"));
     LOK_ASSERT(!isAllowedXcuPath("/org.openoffice.Office.Linguistic/GrammarChecking/Duden/Style"));
@@ -129,20 +133,21 @@ void XcuScrubWhiteBoxTests::testScrubKeepsAllowedDropsTheRest()
                  xcuItem("/org.openoffice.Office.Linguistic/GrammarChecking/LanguageTool") +
                  xcuItem("/org.openoffice.Office.Linguistic/GrammarChecking/Duden/Style") +
                  xcuItem("/org.openoffice.Office.Linguistic/GrammarChecking/Grammalecte/Options") +
-                 xcuItem("/org.openoffice.Office.Writer/Grid"));
+                 xcuItem("/org.openoffice.Office.Writer/Grid") +
+                 xcuItem("/org.openoffice.Office.Common/AutoCorrect"));
 
     const std::string scrubbed = scrubXcuForUpload(raw);
     LOK_ASSERT(!scrubbed.empty());
     FileUtil::OwnedFile scrubbedCleanup(scrubbed);
 
     // Only the two allowed items survive, in their original order; the
-    // remote checker settings between them are dropped. The
+    // remote checker settings and the grid between them are dropped. The
     // BulletsNumbering item surviving also proves the oor:path attribute is
     // read back through Poco's namespace-aware DOM, not dropped.
     const std::vector<std::string> kept = itemPaths(scrubbed);
     LOK_ASSERT_EQUAL(static_cast<std::size_t>(2), kept.size());
     LOK_ASSERT_EQUAL(std::string("/org.openoffice.Office.Common/BulletsNumbering"), kept[0]);
-    LOK_ASSERT_EQUAL(std::string("/org.openoffice.Office.Writer/Grid"), kept[1]);
+    LOK_ASSERT_EQUAL(std::string("/org.openoffice.Office.Common/AutoCorrect"), kept[1]);
 }
 
 void XcuScrubWhiteBoxTests::testScrubDropsEverythingReturnsEmpty()

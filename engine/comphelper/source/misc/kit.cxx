@@ -43,9 +43,11 @@ static bool g_bActive(false);
 
 static bool g_bForkedChild(false);
 
-// The views whose changes to the per-user settings are to outlive the kit.
+// The views of the user who owns the per-user settings, and whether there has
+// been one.
 static std::mutex g_aUserSettingsPersistenceMutex;
-static std::set<int> g_aUserSettingsPersistenceViews;
+static std::set<int> g_aUserSettingsOwnerViews;
+static bool g_bUserSettingsPersistenceAvailable = false;
 // The views whose user's settings are not the ones the kit runs with.
 static std::set<int> g_aUserSettingsOfAnotherUserViews;
 
@@ -183,13 +185,26 @@ bool isForkedChild()
     return g_bForkedChild;
 }
 
-void setUserSettingsPersistenceAvailable(int nViewId, bool bAvailable)
+void setUserSettingsOwner(int nViewId, bool bOwner)
 {
     std::lock_guard<std::mutex> aGuard(g_aUserSettingsPersistenceMutex);
-    if (bAvailable)
-        g_aUserSettingsPersistenceViews.insert(nViewId);
+    if (bOwner)
+    {
+        g_aUserSettingsOwnerViews.insert(nViewId);
+        g_bUserSettingsPersistenceAvailable = true;
+    }
     else
-        g_aUserSettingsPersistenceViews.erase(nViewId);
+        g_aUserSettingsOwnerViews.erase(nViewId);
+}
+
+bool isUserSettingsOwner()
+{
+    if (!isActive())
+        return true;
+
+    const int nViewId = getView();
+    std::lock_guard<std::mutex> aGuard(g_aUserSettingsPersistenceMutex);
+    return g_aUserSettingsOwnerViews.contains(nViewId);
 }
 
 bool isUserSettingsPersistenceAvailable()
@@ -197,9 +212,8 @@ bool isUserSettingsPersistenceAvailable()
     if (!isActive())
         return true;
 
-    const int nViewId = getView();
     std::lock_guard<std::mutex> aGuard(g_aUserSettingsPersistenceMutex);
-    return g_aUserSettingsPersistenceViews.contains(nViewId);
+    return g_bUserSettingsPersistenceAvailable;
 }
 
 void setUserSettingsOfAnotherUser(int nViewId, bool bOfAnotherUser)

@@ -13,6 +13,7 @@
 #include <optional>
 #include <utility>
 
+#include <comphelper/kit.hxx>
 #include <sfx2/sfxresid.hxx>
 #include <sfx2/strings.hrc>
 #include <sfx2/viewsh.hxx>
@@ -56,8 +57,25 @@ bool isViewAlive(ViewShellId nViewShellId)
 }
 }
 
+bool AutoCorrectDialog::MayChangeSettings(weld::Window* pParent)
+{
+    if (comphelper::COKit::isUserSettingsOwner())
+        return true;
+
+    std::shared_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(
+        pParent, VclMessageType::Info, VclButtonsType::Ok,
+        SfxResId(comphelper::COKit::areUserSettingsOfAnotherUser()
+                     ? STR_AUTOCORRECT_SETTINGS_OF_ANOTHER_USER
+                     : STR_AUTOCORRECT_SETTINGS_NEED_SIGN_IN)));
+    xInfoBox->runAsync(xInfoBox, [](sal_Int32) {});
+    return false;
+}
+
 bool AutoCorrectDialog::MayOpen(weld::Window* pParent)
 {
+    if (!MayChangeSettings(pParent))
+        return false;
+
     std::optional<OpenDialog>* pOpenDialog = getOpenDialog();
     if (!pOpenDialog || !*pOpenDialog)
         return true;

@@ -975,9 +975,8 @@ public:
 };
 
 /// Everyone on a document shares the configuration of the user who opened it, but only that
-/// user saves into it. Another user's change applies to the document, yet nothing goes up for
-/// it, neither when they make it nor when they leave; the owner's next change takes the shared
-/// lists and dictionaries along, as the owner then has them too.
+/// user may change it: another user's attempt is refused with a message. The lists and
+/// dictionaries go up only with the owner's saved change, not when anyone leaves.
 class UnitAutocorrOtherUser : public WopiTestServer
 {
     using Base = WopiTestServer;
@@ -1079,7 +1078,16 @@ public:
             _wordbookUploaded = true;
         }
         else
+        {
+            // The owner turned While Typing off. Without the accompanying fix in
+            // place, this test would have failed, as the other user had turned it
+            // off already, and the owner's toggle turned it back on.
+            LOK_ASSERT_MESSAGE("only the owner's change should be in the settings",
+                               body.find("ByInput\"><prop oor:name=\"Enable\" oor:op=\"fuse\">"
+                                         "<value>false")
+                                   != std::string::npos);
             _registryUploaded = true;
+        }
 
         if (_listUploaded && _registryUploaded && _wordbookUploaded)
         {
@@ -1094,8 +1102,8 @@ public:
     {
         if (_phase == Phase::WaitFirstView)
         {
-            LOK_ASSERT_MESSAGE("the owner's view should save the settings",
-                               session->isUserSettingsPersistenceAvailable());
+            LOK_ASSERT_MESSAGE("the owner's view should change the settings",
+                               session->isUserSettingsOwner());
             LOK_ASSERT_EQUAL(std::string("true"), session->getUserPersistenceState());
             _jailConfigPath = jailConfigPath(session);
             LOK_ASSERT_MESSAGE("the session should have a document", !_jailConfigPath.empty());
@@ -1104,8 +1112,8 @@ public:
         }
 
         LOK_ASSERT_STATE(_phase, Phase::WaitSecondView);
-        LOK_ASSERT_MESSAGE("the other user's view should not save the settings",
-                           !session->isUserSettingsPersistenceAvailable());
+        LOK_ASSERT_MESSAGE("the other user's view should not change the settings",
+                           !session->isUserSettingsOwner());
         // Not as a guest, though, which the dialogs tell them apart by.
         LOK_ASSERT_EQUAL(std::string("otheruser"), session->getUserPersistenceState());
         TRANSITION_STATE(_phase, Phase::OtherToggles);
@@ -1116,7 +1124,7 @@ public:
                                       const bool /*flush*/, int& /*unitReturn*/) override
     {
         if (_phase == Phase::WaitOtherToggled
-            && data.starts_with("statechanged: .uno:OnlineAutoFormat=false"))
+            && data.find("only they can change them") != std::string_view::npos)
         {
             TRANSITION_STATE(_phase, Phase::WaitOtherLeft);
             // The other user leaves; their connection is at index 0.
@@ -1157,7 +1165,8 @@ public:
             case Phase::OtherToggles:
             {
                 TRANSITION_STATE(_phase, Phase::WaitOtherToggled);
-                // The other user changes the shared list, the dictionary and an option.
+                // The shared list and dictionary change in the jail, and the other
+                // user tries to change an option.
                 {
                     std::ofstream file(_jailConfigPath + "autocorr/"
                                            + std::string(AutocorrFileName),

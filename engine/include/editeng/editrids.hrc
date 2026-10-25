@@ -333,6 +333,7 @@
 #define RID_SVXSTR_DIC_ERR_UNKNOWN              NC_("RID_SVXSTR_DIC_ERR_UNKNOWN", "Word cannot be added to dictionary\ndue to unknown reason.")
 #define RID_SVXSTR_DIC_ERR_FULL                 NC_("RID_SVXSTR_DIC_ERR_FULL", "The dictionary is already full.")
 #define RID_SVXSTR_DIC_ERR_READONLY             NC_("RID_SVXSTR_DIC_ERR_READONLY", "The dictionary is read-only.")
+#define RID_SVXSTR_DIC_ERR_NOT_OWNER            NC_("RID_SVXSTR_DIC_ERR_NOT_OWNER", "Only the user whose settings this document runs with can change the dictionaries here.")
 
 #define RID_OUTLUNDO_DEPTH                      NC_("RID_OUTLUNDO_DEPTH", "Indent")
 #define RID_OUTLUNDO_EXPAND                     NC_("RID_OUTLUNDO_EXPAND", "Show subpoints")

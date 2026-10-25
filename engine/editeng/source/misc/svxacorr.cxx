@@ -43,6 +43,7 @@
 #include <com/sun/star/i18n/OrdinalSuffix.hpp>
 #include <unotools/localedatawrapper.hxx>
 #include <unotools/transliterationwrapper.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <comphelper/storagehelper.hxx>
@@ -2540,6 +2541,9 @@ SvStringsISortDtor* SvxAutoCorrectLanguageLists::GetCplSttExceptList()
 
 bool SvxAutoCorrectLanguageLists::AddToCplSttExceptList(const OUString& rNew)
 {
+    if (!comphelper::COKit::isUserSettingsOwner())
+        return false;
+
     bool bRet = false;
     if( !rNew.isEmpty() && GetCplSttExceptList()->insert( rNew ).second )
     {
@@ -2560,6 +2564,9 @@ bool SvxAutoCorrectLanguageLists::AddToCplSttExceptList(const OUString& rNew)
 
 bool SvxAutoCorrectLanguageLists::AddToWordStartExceptList(const OUString& rNew)
 {
+    if (!comphelper::COKit::isUserSettingsOwner())
+        return false;
+
     bool bRet = false;
     if( !rNew.isEmpty() && GetWordStartExceptList()->insert( rNew ).second )
     {
@@ -2813,6 +2820,12 @@ bool SvxAutoCorrectLanguageLists::MakeBlocklist_Imp( SotStorage& rStg )
 
 bool SvxAutoCorrectLanguageLists::MakeCombinedChanges( std::vector<SvxAutocorrWord>& aNewEntries, std::vector<SvxAutocorrWord>& aDeleteEntries )
 {
+    // The lists in the kit are the user's who owns the settings it runs with
+    // (see comphelper::COKit::getUserSettingsRole), and nobody else changes
+    // them, whichever way they would.
+    if (!comphelper::COKit::isUserSettingsOwner())
+        return false;
+
     // First get the current list!
     GetAutocorrWordList();
 
@@ -2882,6 +2895,9 @@ bool SvxAutoCorrectLanguageLists::MakeCombinedChanges( std::vector<SvxAutocorrWo
 
 bool SvxAutoCorrectLanguageLists::PutText( const OUString& rShort, const OUString& rLong )
 {
+    if (!comphelper::COKit::isUserSettingsOwner())
+        return false;
+
     // First get the current list!
     GetAutocorrWordList();
 
@@ -2927,6 +2943,9 @@ bool SvxAutoCorrectLanguageLists::PutText( const OUString& rShort, const OUStrin
 void SvxAutoCorrectLanguageLists::PutText( const OUString& rShort,
                                                SfxObjectShell& rShell )
 {
+    if (!comphelper::COKit::isUserSettingsOwner())
+        return;
+
     // First get the current list!
     GetAutocorrWordList();
 

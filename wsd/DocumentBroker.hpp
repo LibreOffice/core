@@ -2137,8 +2137,6 @@ private:
     std::string _userConfigId;
     /// Where this document's configuration was read from, so it can be read again.
     std::string _userSettingsUri;
-    /// The user that configuration belongs to, the only one whose views save into it.
-    std::string _userSettingsUserId;
 
     std::shared_ptr<ChildProcess> _childProcess;
 

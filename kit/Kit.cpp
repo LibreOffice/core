@@ -2714,7 +2714,7 @@ std::shared_ptr<COKitDocument> Document::load(const std::shared_ptr<ChildSession
     if (_hasPasswordToModify && !session->isDocPasswordToModifyEntered())
         _loKitDocument->setViewReadOnly(viewId, true);
 
-    // Whether what this view changes in the user's settings is saved for them.
+    // Whether the user of this view owns the settings the kit runs with.
     _loKitDocument->setView(viewId);
     _loKitDocument->setViewOption("userpersistence", session->getUserPersistenceState().c_str());
 

@@ -108,7 +108,7 @@ inline SvxAlternativeSpelling::SvxAlternativeSpelling() :
 EDITENG_DLLPUBLIC SvxAlternativeSpelling SvxGetAltSpelling(
         const cpo::uno::Reference< css::linguistic2::XHyphenatedWord > & rHyphWord );
 
-EDITENG_DLLPUBLIC short SvxDicError(weld::Window *pParent, linguistic::DictionaryError nError);
+EDITENG_DLLPUBLIC void SvxDicError(weld::Window *pParent, linguistic::DictionaryError nError);
 
 
 #endif

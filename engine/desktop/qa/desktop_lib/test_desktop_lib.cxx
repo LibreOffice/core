@@ -35,6 +35,8 @@
 #include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/linguistic2/DictionaryList.hpp>
 #include <com/sun/star/linguistic2/DictionaryType.hpp>
+#include <editeng/unolingu.hxx>
+#include <linguistic/misc.hxx>
 #include <com/sun/star/util/XCloseable.hpp>
 
 #include <vcl/remoteclipboard.hxx>
@@ -210,6 +212,7 @@ public:
     void testSetAsDefaultTooltipForOtherUser();
     void testAutoCorrectDialogToggleColumns();
     void testAutoCorrectDialogOnlyOnce();
+    void testAutoCorrectSettingsOnlyForOwner();
     void testCommentAuthorFromSession();
     void testCommentAuthorAnonymous();
     void testSheetOperations();
@@ -319,6 +322,7 @@ public:
     CPPUNIT_TEST(testSetAsDefaultTooltipForOtherUser);
     CPPUNIT_TEST(testAutoCorrectDialogToggleColumns);
     CPPUNIT_TEST(testAutoCorrectDialogOnlyOnce);
+    CPPUNIT_TEST(testAutoCorrectSettingsOnlyForOwner);
     CPPUNIT_TEST(testCommentAuthorFromSession);
     CPPUNIT_TEST(testCommentAuthorAnonymous);
     CPPUNIT_TEST(testSheetOperations);
@@ -3956,10 +3960,10 @@ void DesktopKitTest::testUserSettingsPersistedOnlyForOwnerView()
     pDocument->postUnoCommand(".uno:OnlineAutoFormat", nullptr, false);
     Scheduler::ProcessEventsToIdle();
 
-    // Then the change applies, but it is not saved into the owner's settings:
-    CPPUNIT_ASSERT_EQUAL(!bAutoFormat, SvxAutoCorrCfg::Get().IsAutoFormatByInput());
+    // Then it is refused, as the setting is the owner's, and nothing is saved:
     // Without the accompanying fix in place, this test would have failed, as
-    // persistence was one flag for the whole kit, set by whoever joined last.
+    // anyone's change applied, and went into the owner's settings once saved.
+    CPPUNIT_ASSERT_EQUAL(bAutoFormat, SvxAutoCorrCfg::Get().IsAutoFormatByInput());
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_NOENT, osl::DirectoryItem::get(aXcu, aItem));
     CPPUNIT_ASSERT_EQUAL(std::ptrdiff_t(0),
                          std::count(aRecorder.m_aTypes.begin(), aRecorder.m_aTypes.end(),
@@ -3970,8 +3974,8 @@ void DesktopKitTest::testUserSettingsPersistedOnlyForOwnerView()
     pDocument->postUnoCommand(".uno:OnlineAutoFormat", nullptr, false);
     Scheduler::ProcessEventsToIdle();
 
-    // Then the owner's change is saved:
-    CPPUNIT_ASSERT_EQUAL(bAutoFormat, SvxAutoCorrCfg::Get().IsAutoFormatByInput());
+    // Then the owner's change applies and is saved:
+    CPPUNIT_ASSERT_EQUAL(!bAutoFormat, SvxAutoCorrCfg::Get().IsAutoFormatByInput());
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, osl::DirectoryItem::get(aXcu, aItem));
     CPPUNIT_ASSERT_EQUAL(std::ptrdiff_t(1),
                          std::count(aRecorder.m_aTypes.begin(), aRecorder.m_aTypes.end(),
@@ -4011,34 +4015,49 @@ void DesktopKitTest::testDictionaryStoredOnlyForOwnerView()
         u"zzqx.dic"_ustr, lang::Locale(), linguistic2::DictionaryType_POSITIVE, aDicUrl);
     uno::Reference<frame::XStorable> xStorable(xDic, uno::UNO_QUERY_THROW);
 
-    // When the other user adds a word, which stores the dictionary:
-    CPPUNIT_ASSERT(xDic->add(u"Plorkvane"_ustr, false, OUString()));
+    // When the other user adds a word to it, and the dictionary is stored:
+    const linguistic::DictionaryError eAdded
+        = linguistic::AddEntryToDic(xDic, u"Plorkvane"_ustr, false, OUString());
     xStorable->store();
 
-    // Then the dictionary is written, but the host is not told to take it into the
-    // owner's settings:
-    osl::DirectoryItem aItem;
-    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, osl::DirectoryItem::get(aDicUrl, aItem));
+    // Then the word is refused, neither added to the owner's dictionary nor to
+    // the Ignore All list all views share, and nothing is saved:
+    // Without the accompanying fix in place, this test would have failed, as the
+    // word went into the owner's dictionary, to be saved with it.
+    CPPUNIT_ASSERT_EQUAL(linguistic::DictionaryError::NOT_OWNER, eAdded);
+    CPPUNIT_ASSERT(!xDic->getEntry(u"Plorkvane"_ustr).is());
+    CPPUNIT_ASSERT(!LinguMgr::GetIgnoreAllList()->getEntry(u"Plorkvane"_ustr).is());
+    // Not by a direct add either:
+    CPPUNIT_ASSERT(!xDic->add(u"Plorkvane"_ustr, false, OUString()));
     CPPUNIT_ASSERT_EQUAL(std::ptrdiff_t(0),
                          std::count(aRecorder.m_aTypes.begin(), aRecorder.m_aTypes.end(),
                                     COKitCallbackType::USER_SETTINGS_PERSISTED));
 
     // And when the owner adds one:
     pDocument->setView(nOwnerView);
-    CPPUNIT_ASSERT(xDic->add(u"Quorbel"_ustr, false, OUString()));
+    CPPUNIT_ASSERT_EQUAL(linguistic::DictionaryError::NONE,
+                         linguistic::AddEntryToDic(xDic, u"Quorbel"_ustr, false, OUString()));
+    CPPUNIT_ASSERT(xDic->getEntry(u"Quorbel"_ustr).is());
     xStorable->store();
 
+    // And the other user may not remove it:
+    pDocument->setView(nOtherView);
+    CPPUNIT_ASSERT(!xDic->remove(u"Quorbel"_ustr));
+    CPPUNIT_ASSERT(xDic->getEntry(u"Quorbel"_ustr).is());
+    pDocument->setView(nOwnerView);
+
     // Then the host is told to take it, while the document is open:
-    // Without the accompanying fix in place, this test would have failed, as only
-    // the kit told the host, after a word added from the spelling context menu,
-    // whichever user added it.
+    osl::DirectoryItem aItem;
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, osl::DirectoryItem::get(aDicUrl, aItem));
     CPPUNIT_ASSERT_EQUAL(std::ptrdiff_t(1),
                          std::count(aRecorder.m_aTypes.begin(), aRecorder.m_aTypes.end(),
                                     COKitCallbackType::USER_SETTINGS_PERSISTED));
 
-    // And the same when the dictionary is stored as it is turned off:
+    // And the same when the dictionary is stored as it is turned off, also from
+    // another view, as only the owner changes it:
     xDic->setActive(true);
     CPPUNIT_ASSERT(xDic->add(u"Zibbet"_ustr, false, OUString()));
+    pDocument->setView(nOtherView);
     xDic->setActive(false);
     CPPUNIT_ASSERT_EQUAL(std::ptrdiff_t(2),
                          std::count(aRecorder.m_aTypes.begin(), aRecorder.m_aTypes.end(),
@@ -4202,6 +4221,9 @@ void DesktopKitTest::testAutoCorrectDialogOnlyOnce()
             // Given a document with AutoCorrect Options open:
             COKitDocumentImpl* pDocument = loadDoc(pName);
             pDocument->initializeForRendering("{}");
+            // The view of the user who owns the settings, which may change them.
+            KitHelper::registerViewCallbacks();
+            pDocument->setViewOption("userpersistence", "true");
             ViewCallback aView(pDocument);
             Scheduler::ProcessEventsToIdle();
             pDocument->postUnoCommand(".uno:AutoCorrectDlg", nullptr, false);
@@ -4235,16 +4257,66 @@ void DesktopKitTest::testAutoCorrectDialogOnlyOnce()
             pDocument->sendDialogEvent(
                 nSecondDialog, "{\"id\":\"cancel\", \"cmd\": \"click\", \"type\": \"pushbutton\"}");
             Scheduler::ProcessEventsToIdle();
+            comphelper::COKit::setViewSetter(nullptr);
+            comphelper::COKit::setViewGetter(nullptr);
         }
         closeDoc();
     }
 }
 
-void DesktopKitTest::testAutoCorrectDialogToggleColumns()
+void DesktopKitTest::testAutoCorrectSettingsOnlyForOwner()
 {
-    // Given a Writer document in the kit:
+    // Given a Writer document in the kit, in the view of another user than the
+    // one who owns the settings it runs with:
     COKitDocumentImpl* pDocument = loadDoc("blank_text.odt");
     pDocument->initializeForRendering("{}");
+    KitHelper::registerViewCallbacks();
+    comphelper::ScopeGuard aRestore([] {
+        comphelper::COKit::setViewSetter(nullptr);
+        comphelper::COKit::setViewGetter(nullptr);
+    });
+    pDocument->setViewOption("userpersistence", "otheruser");
+    ViewCallback aView(pDocument);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then nothing changes the lists of the owner, whichever way it would:
+    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
+    CPPUNIT_ASSERT(!pAutoCorrect->AddCplSttException(u"Zzqx"_ustr, LANGUAGE_ENGLISH_US));
+    CPPUNIT_ASSERT(!pAutoCorrect->FindInCplSttExceptList(LANGUAGE_ENGLISH_US, u"Zzqx"_ustr));
+    CPPUNIT_ASSERT(!pAutoCorrect->PutText(u"zzqx"_ustr, u"quartz"_ustr, LANGUAGE_ENGLISH_US));
+
+    // When AutoCorrect Options is asked for:
+    pDocument->postUnoCommand(".uno:AutoCorrectDlg", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then it does not open, and the user is told why:
+    // Without the accompanying fix in place, this test would have failed, as
+    // anyone could change the owner's AutoCorrect settings.
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(0), getAutoCorrectDialogId(aView.m_aJSDialogPayloads));
+    CPPUNIT_ASSERT(hasPayloadWith(aView.m_aJSDialogPayloads, "only they can change them"));
+
+    // And a guest is told to sign in:
+    aView.m_aJSDialogPayloads.clear();
+    pDocument->setViewOption("userpersistence", "false");
+    pDocument->postUnoCommand(".uno:AutoCorrectDlg", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(sal_uInt64(0), getAutoCorrectDialogId(aView.m_aJSDialogPayloads));
+    CPPUNIT_ASSERT(
+        hasPayloadWith(aView.m_aJSDialogPayloads, "Sign in to change the AutoCorrect settings"));
+}
+
+void DesktopKitTest::testAutoCorrectDialogToggleColumns()
+{
+    // Given a Writer document in the kit, in the view of the user who owns its
+    // settings:
+    COKitDocumentImpl* pDocument = loadDoc("blank_text.odt");
+    pDocument->initializeForRendering("{}");
+    KitHelper::registerViewCallbacks();
+    comphelper::ScopeGuard aRestoreView([] {
+        comphelper::COKit::setViewSetter(nullptr);
+        comphelper::COKit::setViewGetter(nullptr);
+    });
+    pDocument->setViewOption("userpersistence", "true");
     ViewCallback aView(pDocument);
     Scheduler::ProcessEventsToIdle();
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();

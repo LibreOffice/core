@@ -697,9 +697,8 @@ SvxAlternativeSpelling SvxGetAltSpelling(
 }
 
 
-short SvxDicError(weld::Window *pParent, linguistic::DictionaryError nError)
+void SvxDicError(weld::Window *pParent, linguistic::DictionaryError nError)
 {
-    short nRes = 0;
     if (linguistic::DictionaryError::NONE != nError)
     {
         TranslateId pRid;
@@ -707,17 +706,17 @@ short SvxDicError(weld::Window *pParent, linguistic::DictionaryError nError)
         {
             case linguistic::DictionaryError::FULL     : pRid = RID_SVXSTR_DIC_ERR_FULL;  break;
             case linguistic::DictionaryError::READONLY : pRid = RID_SVXSTR_DIC_ERR_READONLY;  break;
+            case linguistic::DictionaryError::NOT_OWNER : pRid = RID_SVXSTR_DIC_ERR_NOT_OWNER;  break;
             default:
                 pRid = RID_SVXSTR_DIC_ERR_UNKNOWN;
                 SAL_WARN("editeng", "unexpected case");
         }
-        std::unique_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pParent,
+        // Asynchronous, as the kit cannot block its main loop on a dialog.
+        std::shared_ptr<weld::MessageDialog> xInfoBox(Application::CreateMessageDialog(pParent,
                                                       VclMessageType::Info, VclButtonsType::Ok,
                                                       EditResId(pRid)));
-        nRes = xInfoBox->run();
-
+        xInfoBox->runAsync(xInfoBox, [](sal_Int32) {});
     }
-    return nRes;
 }
 
 

@@ -860,7 +860,7 @@ bool DictionaryNeo::addEntry(
 
     bool bRes = false;
 
-    if (!bIsReadonly)
+    if (isChangeAllowed())
     {
         if (bNeedEntries)
             loadEntries( aMainURL );
@@ -878,7 +878,7 @@ bool
 
     bool bRes = false;
 
-    if (!bIsReadonly)
+    if (isChangeAllowed())
     {
         uno::Reference< XDictionaryEntry > xEntry =
                 new DicEntry( rWord, bIsNegative, rRplcText );
@@ -894,7 +894,7 @@ bool DictionaryNeo::remove( const OUString& aWord )
 
     bool bRemoved = false;
 
-    if (!bIsReadonly)
+    if (isChangeAllowed())
     {
         if (bNeedEntries)
             loadEntries( aMainURL );
@@ -946,7 +946,7 @@ void DictionaryNeo::clear(  )
 {
     MutexGuard  aGuard( GetLinguMutex() );
 
-    if (!bIsReadonly && !aEntries.empty())
+    if (isChangeAllowed() && !aEntries.empty())
     {
         // release all references to old entries
         aEntries.clear();
@@ -1004,6 +1004,13 @@ bool DictionaryNeo::isReadonly()
     MutexGuard  aGuard( GetLinguMutex() );
 
     return bIsReadonly;
+}
+
+bool DictionaryNeo::isChangeAllowed() const
+{
+    // One kept on disk is part of the settings the kit runs with, and only
+    // their owner changes those.
+    return !bIsReadonly && (aMainURL.isEmpty() || comphelper::COKit::isUserSettingsOwner());
 }
 
 bool DictionaryNeo::store_Impl()

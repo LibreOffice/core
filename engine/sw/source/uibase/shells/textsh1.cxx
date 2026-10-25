@@ -40,6 +40,7 @@
 #include <svl/stritem.hxx>
 #include <sfx2/htmlmode.hxx>
 #include <svl/whiter.hxx>
+#include <sfx2/autocorrectdialog.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/namedcolor.hxx>
 #include <sfx2/viewfrm.hxx>
@@ -1459,6 +1460,14 @@ void SwTextShell::Execute(SfxRequest &rReq)
             bool bSet = pItem ? static_cast<const SfxBoolItem*>(pItem)->GetValue() : !rACfg.IsAutoFormatByInput();
             if( bSet != rACfg.IsAutoFormatByInput() )
             {
+                // A setting of the user who owns the ones the kit runs with.
+                if (!sfx2::AutoCorrectDialog::MayChangeSettings(GetView().GetFrameWeld()))
+                {
+                    // Tell the view again how it is, as it may show it changed.
+                    GetView().GetViewFrame().GetBindings().Invalidate( nSlot );
+                    break;
+                }
+
                 rACfg.SetAutoFormatByInput( bSet );
                 rACfg.Commit();
                 // The kit keeps the configuration in memory only.

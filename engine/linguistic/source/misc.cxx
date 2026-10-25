@@ -35,6 +35,7 @@
 #include <com/sun/star/ucb/XCommandEnvironment.hpp>
 #include <cpo/uno/Sequence.hxx>
 #include <cpo/uno/Reference.h>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/sequence.hxx>
 #include <unotools/charclass.hxx>
@@ -342,6 +343,12 @@ DictionaryError AddEntryToDic(
 {
     if (!rxDic.is())
         return DictionaryError::NOT_EXISTS;
+
+    // The dictionaries kept on disk are the user's who owns the settings the
+    // kit runs with, and only they change them.
+    uno::Reference< frame::XStorable > xKept( rxDic, UNO_QUERY );
+    if (xKept.is() && xKept->hasLocation() && !comphelper::COKit::isUserSettingsOwner())
+        return DictionaryError::NOT_OWNER;
 
     OUString aTmp( rWord );
     if (bStripDot)

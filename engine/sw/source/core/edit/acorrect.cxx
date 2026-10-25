@@ -34,6 +34,7 @@
 #include <com/sun/star/linguistic2/XHyphenator.hpp>
 #include <com/sun/star/linguistic2/XHyphenatedWord.hpp>
 #include <comphelper/kit.hxx>
+#include <vcl/svapp.hxx>
 #include <osl/diagnose.h>
 #include <svl/numformat.hxx>
 
@@ -636,12 +637,22 @@ LanguageType SwAutoCorrDoc::GetLanguage( sal_Int32 nPos ) const
     return eRet;
 }
 
+static void lcl_PersistUserSettings(void*, void*)
+{
+    comphelper::COKit::persistUserSettings();
+}
+
 void SwAutoCorrExceptWord::CheckChar( const SwPosition& rPos, sal_Unicode cChr )
 {
     // test only if this is an improvement.
     // If yes, then add the word to the list.
     if (m_cChar == cChr && rPos.GetNodeIndex() == m_nNode && rPos.GetContentIndex() == m_nContent)
     {
+        // The lists are the user's who owns the settings the kit runs with, so
+        // nothing is learned for anyone else.
+        if (!comphelper::COKit::isUserSettingsOwner())
+            return;
+
         // get the current autocorrection:
         SvxAutoCorrect* pACorr = SvxAutoCorrCfg::Get().GetAutoCorrect();
 
@@ -653,9 +664,10 @@ void SwAutoCorrExceptWord::CheckChar( const SwPosition& rPos, sal_Unicode cChr )
             bAdded = pACorr->AddCplSttException(m_sWord, m_eLanguage);
 
         // The list file changed in the user profile; the host takes it along
-        // with the settings, if they are this user's to save.
+        // with the settings. Not while the key that undid the correction is
+        // still being handled, as that writes out the configuration.
         if (bAdded)
-            comphelper::COKit::persistUserSettings();
+            Application::PostUserEvent(LINK_NONMEMBER(nullptr, lcl_PersistUserSettings));
     }
 }
 

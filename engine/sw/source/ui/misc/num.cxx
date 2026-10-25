@@ -883,10 +883,10 @@ SwSvxNumBulletTabDialog::SwSvxNumBulletTabDialog(weld::Window* pParent,
     weld::Button& pCancelButton = GetCancelButton();
     pCancelButton.connect_clicked(LINK(this, SwSvxNumBulletTabDialog, CancelHdl));
     m_xSetDefaultBtn->connect_clicked(LINK(this, SwSvxNumBulletTabDialog, SetDefaultHdl));
-    // Anonymous COOL sessions, and the views of another user than the one whose
-    // settings the document runs with: commit() works but nothing round-trips
-    // for them. Disable rather than silently no-op.
-    if (!comphelper::COKit::isUserSettingsPersistenceAvailable())
+    // Anonymous COOL sessions, and the views of another user than the one who
+    // owns the settings the document runs with, may not change those.
+    // Disable rather than silently no-op.
+    if (!comphelper::COKit::isUserSettingsOwner())
     {
         m_xSetDefaultBtn->set_sensitive(false);
         m_xSetDefaultBtn->set_tooltip_text(

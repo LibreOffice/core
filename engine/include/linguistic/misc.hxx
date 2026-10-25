@@ -61,7 +61,10 @@ class HyphenatedWord;
 // AddEntryToDic return values
 enum class DictionaryError
 {
-    NONE, FULL, READONLY, UNKNOWN, NOT_EXISTS
+    NONE, FULL, READONLY, UNKNOWN, NOT_EXISTS,
+    // In the kit: the user does not own the settings it runs with, which the
+    // dictionaries kept on disk are part of.
+    NOT_OWNER
 };
 
 // values assigned to capitalization types

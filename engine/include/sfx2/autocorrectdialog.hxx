@@ -33,7 +33,14 @@ namespace sfx2
 class SFX2_DLLPUBLIC AutoCorrectDialog
 {
 public:
-    /// Whether a new dialog may open now. While one is open in a view that is
+    /// Whether the current view may change the AutoCorrect settings, which are
+    /// the user's who owns the settings the kit runs with (see
+    /// comphelper::COKit::isUserSettingsOwner). When not, tells the user why,
+    /// with pParent as the parent of the message, and returns false.
+    static bool MayChangeSettings(weld::Window* pParent);
+
+    /// Whether a new dialog may open now: the view may change the settings, and
+    /// there is no dialog open already. While one is open in a view that is
     /// still there, tells the user so, with pParent as the parent of the
     /// message, and returns false. One whose view went away without closing it,
     /// so that its callback will not run, is given up: what it took is put

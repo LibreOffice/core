@@ -606,7 +606,7 @@ bool ChildSession::_handleInput(const char *buffer, int length)
         {
             // It belongs to the view, which is normally created later and
             // picks it up then (see Document::load).
-            setUserSettingsPersistenceAvailable(tokens.equals(1, "true"));
+            setUserSettingsOwner(tokens.equals(1, "true"));
             setUserSettingsOfAnotherUser(tokens.equals(1, "otheruser"));
             if (_isDocLoaded && getLOKitDocument())
             {

@@ -80,13 +80,18 @@ COMPHELPER_DLLPUBLIC bool isActive();
 /// eg. file-system resources with its parent process?
 COMPHELPER_DLLPUBLIC bool isForkedChild();
 
-/// Whether what a view changes in the per-user settings is to outlive the kit:
-/// the host keeps settings for its user, and the configuration the kit runs
-/// with is that user's. All views share the one configuration, so a change
-/// made in another user's view still takes effect, but it is not saved into
-/// the settings of the user who owns them. Off for a view until set.
-COMPHELPER_DLLPUBLIC void setUserSettingsPersistenceAvailable(int nViewId, bool bAvailable);
+/// Whether the user of a view owns the per-user settings the kit runs with: the
+/// host keeps settings for them, and the configuration, the AutoCorrect lists
+/// and the dictionaries are theirs. All views share those, and only the owner's
+/// may change them; changes made anywhere else would end up in the owner's
+/// settings. Off for a view until set.
+COMPHELPER_DLLPUBLIC void setUserSettingsOwner(int nViewId, bool bOwner);
 /// Asks about the current view; always true outside the kit.
+COMPHELPER_DLLPUBLIC bool isUserSettingsOwner();
+/// Whether the per-user settings the kit runs with outlive it: some view has
+/// been the owner's (see setUserSettingsOwner). As only the owner changes them,
+/// whatever writes them, from whichever view and also once the owner's views
+/// are gone, writes the owner's. Always true outside the kit.
 COMPHELPER_DLLPUBLIC bool isUserSettingsPersistenceAvailable();
 /// Whether the user of a view has settings of their own, but the document runs
 /// with another user's, so that what the view changes is not saved for them.
@@ -101,7 +106,7 @@ COMPHELPER_DLLPUBLIC OUString getUserConfigDir();
 
 /// Write the configuration changes made so far into the per-user config tree,
 /// so that they outlive the kit. A no-op, returning false, when the kit is not
-/// active, the current view may not save them (see
+/// active, the settings do not outlive it (see
 /// isUserSettingsPersistenceAvailable), or the host gave us nowhere to write.
 /// Call it once a dialog that changes persistent settings is accepted; files
 /// the engine wrote into the user profile itself (the AutoCorrect lists, the

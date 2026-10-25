@@ -65,6 +65,8 @@ class DictionaryNeo :
     // Saves the entries if modified, to be called with the lingu mutex held.
     // True when they were saved.
     bool                        store_Impl();
+    // Whether an entry may be added or removed now.
+    bool                        isChangeAllowed() const;
     static int                  cmpDicEntry(std::u16string_view rWord1,
                                         std::u16string_view rWord2,
                                         bool bSimilarOnly = false);

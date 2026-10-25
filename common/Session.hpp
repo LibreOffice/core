@@ -222,20 +222,15 @@ public:
 
     void setIsAdminUser(const std::optional<bool> isAdminUser) { _isAdminUser = isAdminUser; }
 
-    /// True when the host has a WOPI UserSettingsUri for this user.
-    /// Anonymous sessions: false.
-    void setUserSettingsPersistenceAvailable(bool bAvailable)
-    {
-        _userSettingsPersistenceAvailable = bAvailable;
-    }
+    /// True when the user owns the settings the document runs with: the host
+    /// keeps settings for them, and theirs are the ones installed. Only they may
+    /// change those. Anonymous sessions: false.
+    void setUserSettingsOwner(bool bOwner) { _userSettingsOwner = bOwner; }
 
-    bool isUserSettingsPersistenceAvailable() const
-    {
-        return _userSettingsPersistenceAvailable;
-    }
+    bool isUserSettingsOwner() const { return _userSettingsOwner; }
 
     /// True when the user has settings of their own, but the document runs
-    /// with another user's, so what they change is not saved for them.
+    /// with another user's, which they may not change.
     void setUserSettingsOfAnotherUser(bool bOfAnotherUser)
     {
         _userSettingsOfAnotherUser = bOfAnotherUser;
@@ -246,7 +241,7 @@ public:
     /// The two above as the kit's "userpersistence" option takes them.
     std::string getUserPersistenceState() const
     {
-        if (_userSettingsPersistenceAvailable)
+        if (_userSettingsOwner)
             return "true";
         return _userSettingsOfAnotherUser ? "otheruser" : "false";
     }
@@ -545,7 +540,7 @@ protected:
 
     /// Defaults false: batch/convert brokers that skip
     /// updateSessionWithWopiInfo inherit a safe "no persistence" answer.
-    bool _userSettingsPersistenceAvailable = false;
+    bool _userSettingsOwner = false;
     bool _userSettingsOfAnotherUser = false;
     bool _userPresetsApplied = false;
 
