@@ -2263,7 +2263,8 @@ PresetsInstallTask::PresetsInstallTask(const std::shared_ptr<SocketPoll>& poll,
 }
 
 // Preset groups whose files we round-trip back to the host on document
-// close. The first element is the preset directory name (matching the
+// close, or, those marked onlyWhenPersisted, when the kit saved the user's
+// settings from a view of theirs (userconfigchanged:). The first element is the preset directory name (matching the
 // addGroup() name and the engine's $(userurl)/<group> directory); the
 // second flag means "only upload files we already saw at install time,
 // plus 'standard.dic' as a one-off exception". Themes have no such
@@ -2290,7 +2291,8 @@ struct RoundTripPresetGroup
 const std::vector<RoundTripPresetGroup>& getRoundTripPresetGroups()
 {
     static const std::vector<RoundTripPresetGroup> sGroups = {
-        { "wordbook", true },
+        { "wordbook", true, /*scrubXcu=*/false, /*requiredSuffix=*/"",
+          /*onlyWhenPersisted=*/true },
         { "themes", false },
         // upload-all keeps the kit-written registrymodifications.xcu; scrubXcu
         // trims it to the allowed nodes.
@@ -6527,21 +6529,14 @@ bool DocumentBroker::handleInput(const std::shared_ptr<Message>& message)
         {
             clearCaches();
         }
-        else if (message->firstTokenMatches("wordbookchanged:"))
-        {
-#if !MOBILEAPP
-            // Push the wordbook to the WOPI host now rather than at session teardown, so a
-            // word added to a dictionary shows up in the Custom Dictionaries settings panel
-            // (which reads the WOPI host's copy, not the jail's live one) without a reopen.
-            uploadPresetsToWopiHost();
-#endif
-        }
         else if (message->firstTokenMatches("userconfigchanged:"))
         {
 #if !MOBILEAPP
-            // A dialog such as AutoCorrect Options wrote the per-user settings out. Upload
-            // them now, so that a crash of the kit or another document of the same user
-            // opened before this one is closed does not miss them.
+            // A dialog such as AutoCorrect Options, or a word added to a dictionary, wrote
+            // the per-user settings out. Upload them now, so that a crash of the kit or
+            // another document of the same user opened before this one is closed does not
+            // miss them, and the Custom Dictionaries settings panel (which reads the WOPI
+            // host's copy, not the jail's live one) shows a new word without a reopen.
             uploadPresetsToWopiHost(/*bPersisted=*/true);
 #endif
         }

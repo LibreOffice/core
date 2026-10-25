@@ -98,8 +98,8 @@ COMPHELPER_DLLPUBLIC OUString getUserConfigDir();
 /// active, the current view may not save them (see
 /// isUserSettingsPersistenceAvailable), or the host gave us nowhere to write.
 /// Call it once a dialog that changes persistent settings is accepted; files
-/// the dialog wrote into the user profile itself (the AutoCorrect lists) are
-/// announced to the host along with the configuration.
+/// the engine wrote into the user profile itself (the AutoCorrect lists, the
+/// user's dictionaries) are announced to the host along with the configuration.
 COMPHELPER_DLLPUBLIC bool persistUserSettings();
 
 /// Directory URL (file://...) of the read-only, admin-provisioned shared presets

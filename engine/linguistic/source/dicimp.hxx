@@ -62,6 +62,9 @@ class DictionaryNeo :
 
     ErrCode                     loadEntries(const OUString &rMainURL);
     ErrCode                     saveEntries(const OUString &rMainURL);
+    // Saves the entries if modified, to be called with the lingu mutex held.
+    // True when they were saved.
+    bool                        store_Impl();
     static int                  cmpDicEntry(std::u16string_view rWord1,
                                         std::u16string_view rWord2,
                                         bool bSimilarOnly = false);

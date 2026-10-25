@@ -31,6 +31,10 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <boost/property_tree/json_parser.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
+#include <com/sun/star/lang/Locale.hpp>
+#include <com/sun/star/linguistic2/DictionaryList.hpp>
+#include <com/sun/star/linguistic2/DictionaryType.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 
 #include <vcl/remoteclipboard.hxx>
@@ -202,6 +206,7 @@ public:
     void testAutoCorrectListFromHost();
     void testUserSettingsPersistedCallback();
     void testUserSettingsPersistedOnlyForOwnerView();
+    void testDictionaryStoredOnlyForOwnerView();
     void testAutoCorrectDialogToggleColumns();
     void testAutoCorrectDialogOnlyOnce();
     void testCommentAuthorFromSession();
@@ -309,6 +314,7 @@ public:
     CPPUNIT_TEST(testAutoCorrectListFromHost);
     CPPUNIT_TEST(testUserSettingsPersistedCallback);
     CPPUNIT_TEST(testUserSettingsPersistedOnlyForOwnerView);
+    CPPUNIT_TEST(testDictionaryStoredOnlyForOwnerView);
     CPPUNIT_TEST(testAutoCorrectDialogToggleColumns);
     CPPUNIT_TEST(testAutoCorrectDialogOnlyOnce);
     CPPUNIT_TEST(testCommentAuthorFromSession);
@@ -3966,6 +3972,73 @@ void DesktopKitTest::testUserSettingsPersistedOnlyForOwnerView()
     CPPUNIT_ASSERT_EQUAL(bAutoFormat, SvxAutoCorrCfg::Get().IsAutoFormatByInput());
     CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, osl::DirectoryItem::get(aXcu, aItem));
     CPPUNIT_ASSERT_EQUAL(std::ptrdiff_t(1),
+                         std::count(aRecorder.m_aTypes.begin(), aRecorder.m_aTypes.end(),
+                                    COKitCallbackType::USER_SETTINGS_PERSISTED));
+}
+
+void DesktopKitTest::testDictionaryStoredOnlyForOwnerView()
+{
+    // Given a user dictionary, a document whose configuration is the user's of its
+    // first view, and a second view of another user:
+    COKitImpl aOffice;
+    GlobalCallbackRecorder aRecorder;
+    aOffice.registerCallback(&GlobalCallbackRecorder::callback, &aRecorder);
+    utl::TempFileNamed aTempDir(nullptr, /*bDirectory=*/true);
+    aTempDir.EnableKillingFile();
+    comphelper::COKit::setUserConfigDir(aTempDir.GetURL());
+    COKitDocumentImpl* pDocument = loadDoc("blank_text.odt");
+    // As the kit's main loop does, which the views are known by.
+    KitHelper::registerViewCallbacks();
+    const int nOwnerView = pDocument->getView();
+    pDocument->setViewOption("userpersistence", "true");
+    const int nOtherView = pDocument->createView();
+    pDocument->setView(nOtherView);
+    pDocument->setViewOption("userpersistence", "false");
+    // Dictionaries are writable only where the user's own are.
+    const OUString aDicUrl = SvtPathOptions().SubstituteVariable(u"$(user)/wordbook/zzqx.dic"_ustr);
+    comphelper::ScopeGuard aRestore([&aOffice, &aDicUrl] {
+        osl::File::remove(aDicUrl);
+        comphelper::COKit::setUserConfigDir(OUString());
+        comphelper::COKit::setViewSetter(nullptr);
+        comphelper::COKit::setViewGetter(nullptr);
+        aOffice.registerCallback(nullptr, nullptr);
+    });
+    uno::Reference<linguistic2::XSearchableDictionaryList> xDicList
+        = linguistic2::DictionaryList::create(comphelper::getProcessComponentContext());
+    uno::Reference<linguistic2::XDictionary> xDic = xDicList->createDictionary(
+        u"zzqx.dic"_ustr, lang::Locale(), linguistic2::DictionaryType_POSITIVE, aDicUrl);
+    uno::Reference<frame::XStorable> xStorable(xDic, uno::UNO_QUERY_THROW);
+
+    // When the other user adds a word, which stores the dictionary:
+    CPPUNIT_ASSERT(xDic->add(u"Plorkvane"_ustr, false, OUString()));
+    xStorable->store();
+
+    // Then the dictionary is written, but the host is not told to take it into the
+    // owner's settings:
+    osl::DirectoryItem aItem;
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None, osl::DirectoryItem::get(aDicUrl, aItem));
+    CPPUNIT_ASSERT_EQUAL(std::ptrdiff_t(0),
+                         std::count(aRecorder.m_aTypes.begin(), aRecorder.m_aTypes.end(),
+                                    COKitCallbackType::USER_SETTINGS_PERSISTED));
+
+    // And when the owner adds one:
+    pDocument->setView(nOwnerView);
+    CPPUNIT_ASSERT(xDic->add(u"Quorbel"_ustr, false, OUString()));
+    xStorable->store();
+
+    // Then the host is told to take it, while the document is open:
+    // Without the accompanying fix in place, this test would have failed, as only
+    // the kit told the host, after a word added from the spelling context menu,
+    // whichever user added it.
+    CPPUNIT_ASSERT_EQUAL(std::ptrdiff_t(1),
+                         std::count(aRecorder.m_aTypes.begin(), aRecorder.m_aTypes.end(),
+                                    COKitCallbackType::USER_SETTINGS_PERSISTED));
+
+    // And the same when the dictionary is stored as it is turned off:
+    xDic->setActive(true);
+    CPPUNIT_ASSERT(xDic->add(u"Zibbet"_ustr, false, OUString()));
+    xDic->setActive(false);
+    CPPUNIT_ASSERT_EQUAL(std::ptrdiff_t(2),
                          std::count(aRecorder.m_aTypes.begin(), aRecorder.m_aTypes.end(),
                                     COKitCallbackType::USER_SETTINGS_PERSISTED));
 }

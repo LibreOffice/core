@@ -29,6 +29,7 @@
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
 #include <tools/urlobj.hxx>
+#include <comphelper/kit.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/sequence.hxx>
@@ -756,7 +757,7 @@ DictionaryType DictionaryNeo::getDictionaryType(  )
 
 void DictionaryNeo::setActive( bool bActivate )
 {
-    MutexGuard  aGuard( GetLinguMutex() );
+    osl::ClearableMutexGuard aGuard( GetLinguMutex() );
 
     if (bIsActive == bool(bActivate))
         return;
@@ -766,6 +767,7 @@ void DictionaryNeo::setActive( bool bActivate )
             DictionaryEventFlags::ACTIVATE_DIC : DictionaryEventFlags::DEACTIVATE_DIC;
 
     // remove entries from memory if dictionary is deactivated
+    bool bSaved = false;
     if (!bIsActive)
     {
         bool bIsEmpty = aEntries.empty();
@@ -773,7 +775,7 @@ void DictionaryNeo::setActive( bool bActivate )
         // save entries first if necessary
         if (bIsModified && hasLocation() && !isReadonly())
         {
-            store();
+            bSaved = store_Impl();
 
             aEntries.clear();
             bNeedEntries = !bIsEmpty;
@@ -783,6 +785,11 @@ void DictionaryNeo::setActive( bool bActivate )
     }
 
     launchEvent(nEvent, nullptr);
+    aGuard.clear();
+
+    // As in store(), once the mutex is released.
+    if (bSaved)
+        comphelper::COKit::persistUserSettings();
 }
 
 bool DictionaryNeo::isActive(  )
@@ -999,15 +1006,31 @@ bool DictionaryNeo::isReadonly()
     return bIsReadonly;
 }
 
-void DictionaryNeo::store()
+bool DictionaryNeo::store_Impl()
 {
-    MutexGuard  aGuard( GetLinguMutex() );
-
     if (bIsModified && hasLocation() && !isReadonly())
     {
         if (!saveEntries( aMainURL ))
+        {
             bIsModified = false;
+            return true;
+        }
     }
+    return false;
+}
+
+void DictionaryNeo::store()
+{
+    osl::ClearableMutexGuard aGuard( GetLinguMutex() );
+    const bool bSaved = store_Impl();
+    aGuard.clear();
+
+    // A dictionary of the user changed in their profile: the host takes it
+    // along with the settings, if they are the current view's user's to save.
+    // Not with the mutex held, as that writes the configuration and calls the
+    // kit.
+    if (bSaved)
+        comphelper::COKit::persistUserSettings();
 }
 
 void DictionaryNeo::storeAsURL(

@@ -663,9 +663,6 @@ namespace
 /// The fileId under which the host receives the user dictionary.
 constexpr std::string_view WordbookFileId = "/settings/userconfig/wordbook/standard.dic";
 
-/// The command the spelling context menu sends, with the dictionary named in the query.
-constexpr auto AddToWordbookCommand = "uno .uno:AddToWordbook?Wordbook:string=standard.dic";
-
 /// The fileId of a preset upload, or an empty string for any other request.
 std::string presetUploadFileId(const Poco::Net::HTTPRequest& request)
 {
@@ -694,7 +691,7 @@ std::string jailConfigPath(const std::shared_ptr<ClientSession>& session)
 
 /// Writes the user dictionary in the jail with the given words, in the format the engine
 /// stores it in. The engine adds a word only once its background spell check has marked it,
-/// so the tests write the dictionary themselves and send the command to report the change.
+/// so the tests write the dictionary themselves.
 void writeJailWordbook(const std::string& configPath, const std::vector<std::string>& words)
 {
     const std::string directory = configPath + "wordbook";
@@ -708,6 +705,8 @@ void writeJailWordbook(const std::string& configPath, const std::vector<std::str
 
 /// A word added to the user dictionary reaches the host while the document is still open. The
 /// settings dialog reads the dictionary from the host, so it shows the word without a reopen.
+/// The engine saves the user's settings when it stores a dictionary; toggling AutoCorrect While
+/// Typing stands in for that, both are announced the same way.
 class UnitWordbookLiveUpload : public WopiTestServer
 {
     using Base = WopiTestServer;
@@ -796,7 +795,7 @@ public:
             {
                 TRANSITION_STATE(_phase, Phase::WaitUpload);
                 writeJailWordbook(_jailConfigPath, { "Plorkvane" });
-                WSD_CMD_BY_CONNECTION_INDEX(0, AddToWordbookCommand);
+                WSD_CMD_BY_CONNECTION_INDEX(0, "uno .uno:OnlineAutoFormat");
                 break;
             }
             case Phase::WaitLoad:
@@ -978,7 +977,7 @@ public:
 /// Everyone on a document shares the configuration of the user who opened it, but only that
 /// user saves into it. Another user's change applies to the document, yet nothing goes up for
 /// it, neither when they make it nor when they leave; the owner's next change takes the shared
-/// lists along, as the owner then sees them in the dialog.
+/// lists and dictionaries along, as the owner then has them too.
 class UnitAutocorrOtherUser : public WopiTestServer
 {
     using Base = WopiTestServer;
@@ -991,6 +990,7 @@ class UnitAutocorrOtherUser : public WopiTestServer
     std::chrono::steady_clock::time_point _otherLeft;
     bool _listUploaded = false;
     bool _registryUploaded = false;
+    bool _wordbookUploaded = false;
 
 public:
     UnitAutocorrOtherUser()
@@ -1060,7 +1060,7 @@ public:
         http::Response httpResponse(http::StatusCode::OK);
         socket->sendAndShutdown(httpResponse);
 
-        if (fileId != AutocorrFileId && fileId != RegistryFileId)
+        if (fileId != AutocorrFileId && fileId != RegistryFileId && fileId != WordbookFileId)
             return true;
 
         // Without the accompanying fix in place, this test would have failed, as
@@ -1072,10 +1072,16 @@ public:
                                      std::string("other-list"), body);
             _listUploaded = true;
         }
+        else if (fileId == WordbookFileId)
+        {
+            LOK_ASSERT_MESSAGE("the dictionary as the owner has it should go up",
+                               body.find("Otherword") != std::string::npos);
+            _wordbookUploaded = true;
+        }
         else
             _registryUploaded = true;
 
-        if (_listUploaded && _registryUploaded)
+        if (_listUploaded && _registryUploaded && _wordbookUploaded)
         {
             TRANSITION_STATE(_phase, Phase::Done);
             passTest("only the owner's change reached the owner's settings");
@@ -1148,13 +1154,14 @@ public:
             case Phase::OtherToggles:
             {
                 TRANSITION_STATE(_phase, Phase::WaitOtherToggled);
-                // The other user changes the shared list and an option.
+                // The other user changes the shared list, the dictionary and an option.
                 {
                     std::ofstream file(_jailConfigPath + "autocorr/"
                                            + std::string(AutocorrFileName),
                                        std::ios::trunc);
                     file << "other-list";
                 }
+                writeJailWordbook(_jailConfigPath, { "Otherword" });
                 WSD_CMD_BY_CONNECTION_INDEX(0, "uno .uno:OnlineAutoFormat");
                 break;
             }

@@ -5767,12 +5767,6 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
             }
         }
 
-        // The command name keeps the query that names the dictionary.
-        if (!commandName.isEmpty() && commandName.toString().starts_with(".uno:AddToWordbook"))
-        {
-            _docManager->sendTextFrame("wordbookchanged:");
-        }
-
         if (!commandName.isEmpty() &&
             commandName.toString() == ".uno:TransformDocumentStructure")
         {

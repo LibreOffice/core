@@ -621,7 +621,8 @@ public:
 
     /// Upload the changed files of the user's settings. bPersisted: the kit has
     /// just saved the user's settings from a view of theirs, which is the only
-    /// time the AutoCorrect lists go up (see getRoundTripPresetGroups).
+    /// time the dictionaries and the AutoCorrect lists go up (see
+    /// getRoundTripPresetGroups).
     void uploadPresetsToWopiHost(bool bPersisted = false);
 #endif
 
