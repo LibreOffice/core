@@ -2311,6 +2311,9 @@ const std::vector<std::string>& getUploadableXcuPaths()
         "/org.openoffice.Office.Writer/Content/Display/ShowBoundaries",
         "/org.openoffice.Office.Writer/Content/NonprintingCharacter",
 
+        "/org.openoffice.Office.Common/AutoCorrect",
+        "/org.openoffice.Office.Writer/AutoFunction",
+
         "/org.openoffice.Office.Common/BulletsNumbering",
         "/org.openoffice.Office.Common/I18N/CTL",
 
@@ -5184,6 +5187,11 @@ std::size_t DocumentBroker::addSession(const std::shared_ptr<ClientSession>& ses
         // the dialog writes. Send the message once a view is there to carry it.
         if (count == 1)
             installUserPresets();
+
+        // That profile outlives the app, so what the engine's own dialogs
+        // write into it (AutoCorrect Options, Set as Default in Bullets and
+        // Numbering) is kept too.
+        session->setUserSettingsPersistenceAvailable(true);
 #endif
 
         // Sent unconditionally - anonymous sessions explicitly say "false"
@@ -6500,6 +6508,15 @@ bool DocumentBroker::handleInput(const std::shared_ptr<Message>& message)
             // Push the wordbook to the WOPI host now rather than at session teardown, so a
             // word added to a dictionary shows up in the Custom Dictionaries settings panel
             // (which reads the WOPI host's copy, not the jail's live one) without a reopen.
+            uploadPresetsToWopiHost();
+#endif
+        }
+        else if (message->firstTokenMatches("userconfigchanged:"))
+        {
+#if !MOBILEAPP
+            // A dialog such as AutoCorrect Options wrote the per-user settings out. Upload
+            // them now, so that a crash of the kit or another document of the same user
+            // opened before this one is closed does not miss them.
             uploadPresetsToWopiHost();
 #endif
         }
@@ -8664,11 +8681,17 @@ bool DocumentBroker::installUserPresets()
         return false;
 
     // Nothing is staged: an app has no jail, and the engine reads the
-    // configuration out of the profile the dialog wrote it to.
-    if (!Poco::File(Desktop::getUserConfigRoot()).exists())
+    // configuration out of the profile the dialog wrote it to. Create it when
+    // there is none yet, as the engine also writes its own settings there and
+    // learns where from this message.
+    try
     {
-        LOG_TRC("installUserPresets: no configuration at "
-                << Desktop::getUserConfigRoot().toString());
+        Poco::File(Desktop::getUserConfigRoot()).createDirectories();
+    }
+    catch (const Poco::Exception& exc)
+    {
+        LOG_WRN("installUserPresets: cannot create "
+                << Desktop::getUserConfigRoot().toString() << ": " << exc.displayText());
         return false;
     }
 

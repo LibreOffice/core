@@ -1461,6 +1461,8 @@ void SwTextShell::Execute(SfxRequest &rReq)
             {
                 rACfg.SetAutoFormatByInput( bSet );
                 rACfg.Commit();
+                // The kit keeps the configuration in memory only.
+                comphelper::COKit::persistUserSettings();
                 GetView().GetViewFrame().GetBindings().Invalidate( nSlot );
                 if ( !pItem )
                     rReq.AppendItem( SfxBoolItem( GetPool().GetWhichIDFromSlotID(nSlot), bSet ) );

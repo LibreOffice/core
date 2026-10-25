@@ -106,6 +106,7 @@ $(eval $(call gb_Library_add_exception_objects,sfx,\
     sfx2/source/appl/appreg \
     sfx2/source/appl/appserv \
     sfx2/source/appl/appuno \
+    sfx2/source/appl/autocorrectdialog \
     sfx2/source/appl/childwin \
     sfx2/source/appl/fileobj \
     sfx2/source/appl/flatpak \

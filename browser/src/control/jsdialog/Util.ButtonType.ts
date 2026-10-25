@@ -87,6 +87,7 @@ function getDialogButtons() {
 		'.uno:AcceptTrackedChanges',
 		'.uno:AddTheme',
 		'.uno:AnimationEffects',
+		'.uno:AutoCorrectDlg',
 		'.uno:ChangeAlignment',
 		'.uno:ChangeDistance',
 		'.uno:ChangeFont',

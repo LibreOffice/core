@@ -79,6 +79,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include <sfx2/app.hxx>
+#include <sfx2/autocorrectdialog.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/bindings.hxx>
@@ -1685,8 +1686,30 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
             if ( pSet && pSet->GetItemState( SID_AUTO_CORRECT_DLG, false, &pItem ) == SfxItemState::SET )
                 aSet.Put( *pItem );
 
-            ScopedVclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateAutoCorrTabDialog(rReq.GetFrameWeld(), &aSet));
-            pDlg->Execute();
+            if (!sfx2::AutoCorrectDialog::MayOpen(rReq.GetFrameWeld()))
+                break;
+
+            // Asynchronous: the kit cannot block its main loop on a dialog, and
+            // a synchronous one is refused there with "This dialog is non-async".
+            VclPtr<SfxAbstractTabDialog> pDlg(pFact->CreateAutoCorrTabDialog(rReq.GetFrameWeld(), &aSet));
+            const sal_uInt32 nGeneration = sfx2::AutoCorrectDialog::Opened(pDlg, {});
+            const bool bStarted = pDlg->StartExecuteAsync([pDlg, nGeneration](sal_Int32 nResult) {
+                if (sfx2::AutoCorrectDialog::Closed(nGeneration) && nResult == RET_OK)
+                {
+                    // The pages have committed into the configuration, which the
+                    // kit holds in memory only. Write it out so that the settings
+                    // outlive the session. The Replace and Exception lists are
+                    // files in the user profile already; the host is told to
+                    // take those along.
+                    comphelper::COKit::persistUserSettings();
+                }
+                pDlg->disposeOnce();
+            });
+            if (!bStarted)
+            {
+                sfx2::AutoCorrectDialog::Closed(nGeneration);
+                pDlg->disposeOnce();
+            }
 
             break;
         }
@@ -1767,9 +1790,6 @@ void SfxApplication::OfaState_Impl(SfxItemSet &rSet)
         rSet.DisableItem( FN_BUSINESS_CARD );
         rSet.DisableItem( FN_XFORMS_INIT );
     }
-    if ( comphelper::COKit::isActive() )
-        rSet.DisableItem( SID_AUTO_CORRECT_DLG );
-
     if (SvtSecurityOptions::IsMacroDisabled())
     {
         rSet.DisableItem(SID_RUNMACRO);

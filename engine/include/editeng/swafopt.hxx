@@ -67,6 +67,11 @@ class SortedAutoCompleteStrings
 public:
     SortedAutoCompleteStrings(): owning_(true) {}
 
+    // Moving hands the ownership over, so that a copy made for a dialog can be
+    // kept alive past the call that made it - an asynchronous dialog outlives it.
+    SortedAutoCompleteStrings(SortedAutoCompleteStrings && other) noexcept:
+        sorted_vector(std::move(other)), owning_(other.owning_) { other.owning_ = false; }
+
     ~SortedAutoCompleteStrings() { if (owning_) DeleteAndDestroyAll(); }
 
     SortedAutoCompleteStrings createNonOwningCopy() const { return *this; }

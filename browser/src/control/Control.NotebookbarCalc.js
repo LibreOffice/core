@@ -2742,6 +2742,13 @@ window.L.Control.NotebookbarCalc = window.L.Control.NotebookbarWriter.extend({
 						],
 						'vertical': 'true'
 					},
+					{
+						'id': 'review-autocorrect-dialog',
+						'type': 'bigtoolitem',
+						'text': _UNO('.uno:AutoCorrectDlg', 'spreadsheet'),
+						'command': '.uno:AutoCorrectDlg',
+						'accessibility': { focusBack: false, combination: 'AO', de: null }
+					},
 				]
 			},
 			{ type: 'separator', id: 'review-hyphenate-break', orientation: 'vertical' },

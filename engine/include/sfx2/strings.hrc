@@ -349,6 +349,7 @@
 #define STR_QUERY_CLR_UNAVAILABLE_DOCS_TITLE    NC_("STR_QUERY_CLR_UNAVAILABLE_DOCS_TITLE", "Clear Unavailable Documents")
 #define STR_QUERY_CLR_UNAVAILABLE_DOCS_TEXT     NC_("STR_QUERY_CLR_UNAVAILABLE_DOCS_TEXT", "This action is irreversible.")
 #define STR_QUERY_CLR_UNAVAILABLE_DOCS_QUESTION NC_("STR_QUERY_CLR_UNAVAILABLE_DOCS_QUESTION", "Do you want to clear all unavailable Documents?")
+#define STR_AUTOCORRECT_DIALOG_ALREADY_OPEN     NC_("STR_AUTOCORRECT_DIALOG_ALREADY_OPEN", "AutoCorrect Options is open already, possibly for someone else editing this document. Try again once it is closed.")
 #endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

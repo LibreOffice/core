@@ -20,6 +20,7 @@ $(eval $(call gb_CppunitTest_use_libraries,desktop_lib, \
 	comphelper \
 	cppu \
 	cppuhelper \
+	editeng \
 	i18nlangtag \
 	sal \
 	sc \

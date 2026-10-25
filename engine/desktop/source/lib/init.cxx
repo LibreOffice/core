@@ -2671,6 +2671,7 @@ COKitImpl::~COKitImpl()
     SAL_INFO("kit", "COKitImpl dtor");
 
     comphelper::COKit::setStatusIndicatorCallback(nullptr, nullptr);
+    comphelper::COKit::setUserSettingsPersistedCallback(nullptr, nullptr);
     uno::Reference <frame::XDesktop> xDesktop = frame::Desktop::create ( ::comphelper::getProcessComponentContext() );
     // FIXME: the terminate() call here is a no-op because it detects
     // that COKit::isActive() and then returns early!
@@ -3688,6 +3689,14 @@ void COKitImpl::setForkedChild(bool bIsChild)
         Application::UpdateMainThread();
 }
 
+static void lo_user_settings_persisted_callback(void* data)
+{
+    COKitImpl* pLib = static_cast<COKitImpl*>(data);
+
+    if (pLib->mpCallback)
+        pLib->mpCallback(COKitCallbackType::USER_SETTINGS_PERSISTED, nullptr, pLib->mpCallbackData);
+}
+
 void COKitImpl::registerCallback(COKitCallback pCallback, void* pData)
 {
     SolarMutexGuard aGuard;
@@ -3699,6 +3708,14 @@ void COKitImpl::registerCallback(COKitCallback pCallback, void* pData)
 
     pApp->m_pCallback = mpCallback = pCallback;
     pApp->m_pCallbackData = mpCallbackData = pData;
+
+    // The settings dialogs announce through this callback that they wrote
+    // the per-user settings out.
+    if (pCallback)
+        comphelper::COKit::setUserSettingsPersistedCallback(lo_user_settings_persisted_callback,
+                                                             this);
+    else
+        comphelper::COKit::setUserSettingsPersistedCallback(nullptr, nullptr);
 }
 
 static SfxObjectShell* getSfxObjectShell(COKitDocument* pThis)
@@ -5669,6 +5686,11 @@ static void updateConfig(const OUString& rConfigPath)
 
             auto xUpdate(css::configuration::Update::get(comphelper::getProcessComponentContext()));
 
+            // registrymodifications.xcu is what the engine wrote out of its own
+            // configuration, so it also carries a copy of what the other files
+            // set. Apply it first, so that a file the settings dialog wrote later
+            // wins over that copy; the rest go in name order.
+            std::vector<std::pair<OUString, OUString>> aXcuFiles;
             osl::DirectoryItem xcu;
             while (aXCURootDir.getNextItem(xcu) == ::osl::File::E_None)
             {
@@ -5678,8 +5700,22 @@ static void updateConfig(const OUString& rConfigPath)
                     SAL_WARN("kit", "Failed to get xcu item info");
                     continue;
                 }
+                aXcuFiles.emplace_back(xcustat.getFileName(), xcustat.getFileURL());
+            }
+            std::sort(aXcuFiles.begin(), aXcuFiles.end(),
+                      [](const std::pair<OUString, OUString>& rLeft,
+                         const std::pair<OUString, OUString>& rRight)
+                      {
+                          const bool bLeftEngine = rLeft.first == "registrymodifications.xcu";
+                          const bool bRightEngine = rRight.first == "registrymodifications.xcu";
+                          if (bLeftEngine != bRightEngine)
+                              return bLeftEngine;
+                          return rLeft.first < rRight.first;
+                      });
 
-                SAL_INFO("kit", "Installing XCU Item: " << xcustat.getFileName());
+            for (const std::pair<OUString, OUString>& rXcuFile : aXcuFiles)
+            {
+                SAL_INFO("kit", "Installing XCU Item: " << rXcuFile.first);
                 // Filter xcu to a subset of options to allow (apply side of
                 // the COOL officecfg round-trip).
                 //
@@ -5704,6 +5740,8 @@ static void updateConfig(const OUString& rConfigPath)
                     u"/org.openoffice.Office.Writer/Content/Display/GraphicObject"_ustr,
                     u"/org.openoffice.Office.Writer/Content/Display/ShowBoundaries"_ustr,
                     u"/org.openoffice.Office.Writer/Content/NonprintingCharacter"_ustr,
+                    u"/org.openoffice.Office.Common/AutoCorrect"_ustr,
+                    u"/org.openoffice.Office.Writer/AutoFunction"_ustr,
                     u"/org.openoffice.Office.Common/BulletsNumbering"_ustr,
                     u"/org.openoffice.Office.Common/I18N/CTL"_ustr,
 
@@ -5734,7 +5772,7 @@ static void updateConfig(const OUString& rConfigPath)
                     aAllowedSubset.push_back(u"/org.openoffice.Office.Linguistic/Translation/Deepl"_ustr);
                 if (desktop::translation::allowsUserSettings("LIBRETRANSLATE"))
                     aAllowedSubset.push_back(u"/org.openoffice.Office.Linguistic/Translation/LibreTranslate"_ustr);
-                xUpdate->insertModificationXcuFile(xcustat.getFileURL(),
+                xUpdate->insertModificationXcuFile(rXcuFile.second,
                                                    comphelper::containerToSequence(aAllowedSubset), {});
             }
         }

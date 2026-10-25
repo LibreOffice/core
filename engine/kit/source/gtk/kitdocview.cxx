@@ -1529,6 +1529,7 @@ callback (gpointer pData)
     case COKitCallbackType::PRESENTATION_INFO:
     case COKitCallbackType::SLIDE_LINKS_CHANGED:
     case COKitCallbackType::REDLINE_RECORDING_FOR_ALL_VIEWS:
+    case COKitCallbackType::USER_SETTINGS_PERSISTED:
     {
         // TODO: Implement me
         break;

@@ -2150,6 +2150,13 @@ window.L.Control.NotebookbarImpress = window.L.Control.NotebookbarWriter.extend(
 				],
 				'vertical': 'true'
 			},
+			{
+				'id': 'review-autocorrect-dialog',
+				'type': 'bigtoolitem',
+				'text': _UNO('.uno:AutoCorrectDlg', 'presentation'),
+				'command': '.uno:AutoCorrectDlg',
+				'accessibility': { focusBack: false, combination: 'AO', de: null }
+			},
 			{ type: 'separator', id: 'review-hyphenation-break', orientation: 'vertical' },
 			{
 				'type': 'overflowgroup',

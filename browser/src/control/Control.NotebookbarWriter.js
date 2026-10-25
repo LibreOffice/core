@@ -2420,6 +2420,18 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 									}
 								]
 							},
+							{
+								'type': 'toolbox',
+								'children': [
+									{
+										'id': 'review-autocorrect-dialog',
+										'type': 'toolitem',
+										'text': _UNO('.uno:AutoCorrectDlg', 'text'),
+										'command': '.uno:AutoCorrectDlg',
+										'accessibility': { focusBack: false, combination: 'AO', de: null },
+									}
+								]
+							},
 						],
 						'vertical': 'true'
 					},

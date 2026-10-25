@@ -83,6 +83,10 @@ public:
 
 class OfaSwAutoFmtOptionsPage : public SfxTabPage
 {
+    // Lives as long as the page; the sub-dialogs, which run asynchronously,
+    // check by it that the page is still there when they return.
+    std::shared_ptr<bool> m_xAlive = std::make_shared<bool>(true);
+
     OUString        sDeleteEmptyPara;
     OUString        sUseReplaceTbl;
     OUString        sCapitalStartWord;
@@ -274,6 +278,10 @@ public:
 class OfaQuoteTabPage : public SfxTabPage
 {
 private:
+    // Lives as long as the page; the character dialog, which runs
+    // asynchronously, checks by it that the page is still there when it returns.
+    std::shared_ptr<bool> m_xAlive = std::make_shared<bool>(true);
+
     OUString        sNonBrkSpace;
     OUString        sOrdinal;
     OUString        sTransliterateRTL;

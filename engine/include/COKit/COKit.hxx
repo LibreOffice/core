@@ -1329,7 +1329,18 @@ enum class COKitCallbackType
      * id of the view that turned the recording on, for example
      * { "viewId": "1" }.
      */
-    REDLINE_RECORDING_FOR_ALL_VIEWS = 78
+    REDLINE_RECORDING_FOR_ALL_VIEWS = 78,
+
+    /**
+     * The per-user settings were written into the per-user config tree.
+     *
+     * Sent through the global callback after a dialog that changes settings
+     * which outlive the session, such as AutoCorrect Options, was accepted
+     * and the configuration was written out. The host can take the files
+     * from the per-user config tree now instead of waiting for the end of
+     * the session. The payload is empty.
+     */
+    USER_SETTINGS_PERSISTED = 79
 };
 
 enum class COKitKeyEventType
@@ -1513,6 +1524,8 @@ static inline const char* kitCallbackTypeToString(COKitCallbackType eType)
         return "KIT_CALLBACK_SLIDE_LINKS_CHANGED";
     case COKitCallbackType::REDLINE_RECORDING_FOR_ALL_VIEWS:
         return "KIT_CALLBACK_REDLINE_RECORDING_FOR_ALL_VIEWS";
+    case COKitCallbackType::USER_SETTINGS_PERSISTED:
+        return "KIT_CALLBACK_USER_SETTINGS_PERSISTED";
     }
 
     assert(!"Unknown COKitCallbackType type.");

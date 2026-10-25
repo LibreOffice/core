@@ -1013,8 +1013,6 @@ void SwDocShell::GetState(SfxItemSet& rSet)
         }
         break;
         case SID_AUTO_CORRECT_DLG:
-            if ( comphelper::COKit::isActive() )
-                rSet.DisableItem( SID_AUTO_CORRECT_DLG );
         break;
         case SID_SOURCEVIEW:
         {

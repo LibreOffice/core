@@ -10,6 +10,7 @@
 #include <config_crypto.h>
 #include <config_features.h>
 #include <config_oox.h>
+#include <algorithm>
 #include <cstdlib>
 #include <memory>
 #include <string_view>
@@ -62,6 +63,8 @@
 #include <comphelper/scopeguard.hxx>
 #include <comphelper/configuration.hxx>
 #include <officecfg/Office/Linguistic.hxx>
+#include <editeng/acorrcfg.hxx>
+#include <editeng/svxacorr.hxx>
 #include <cairo.h>
 #include <config_fonts.h>
 #include <config_mpl.h>
@@ -195,6 +198,9 @@ public:
     void testCommandResult();
     void testWriterComments();
     void testTranslationProviders();
+    void testUserSettingsPersistedCallback();
+    void testAutoCorrectDialogToggleColumns();
+    void testAutoCorrectDialogOnlyOnce();
     void testCommentAuthorFromSession();
     void testCommentAuthorAnonymous();
     void testSheetOperations();
@@ -297,6 +303,9 @@ public:
     CPPUNIT_TEST(testCommandResult);
     CPPUNIT_TEST(testWriterComments);
     CPPUNIT_TEST(testTranslationProviders);
+    CPPUNIT_TEST(testUserSettingsPersistedCallback);
+    CPPUNIT_TEST(testAutoCorrectDialogToggleColumns);
+    CPPUNIT_TEST(testAutoCorrectDialogOnlyOnce);
     CPPUNIT_TEST(testCommentAuthorFromSession);
     CPPUNIT_TEST(testCommentAuthorAnonymous);
     CPPUNIT_TEST(testSheetOperations);
@@ -2541,6 +2550,7 @@ class ViewCallback
 public:
     OString m_aCellFormula;
     boost::property_tree::ptree m_JSONDialog;
+    std::vector<std::string> m_aJSDialogPayloads;
     int m_nTableSelectionCount;
     int m_nColorPaletteCallbackCount = 0;
     bool m_bEmptyTableSelection;
@@ -2674,6 +2684,7 @@ public:
         break;
         case COKitCallbackType::JSDIALOG:
         {
+            m_aJSDialogPayloads.emplace_back(pPayload);
             m_JSONDialog.clear();
             std::stringstream aStream(pPayload);
             boost::property_tree::read_json(aStream, m_JSONDialog);
@@ -3792,6 +3803,266 @@ void DesktopKitTest::testCalcValidityDropdownInReadonlyMode()
 
     // Dropdown should not open in readonly mode.
     CPPUNIT_ASSERT_EQUAL(true, aView.m_JSONDialog.empty());
+}
+
+namespace
+{
+/// Collects the global callbacks the kit sends.
+struct GlobalCallbackRecorder
+{
+    std::vector<COKitCallbackType> m_aTypes;
+
+    static void callback(COKitCallbackType eType, const char* /*pPayload*/, void* pData)
+    {
+        static_cast<GlobalCallbackRecorder*>(pData)->m_aTypes.push_back(eType);
+    }
+};
+}
+
+void DesktopKitTest::testUserSettingsPersistedCallback()
+{
+    // Given a kit whose user settings outlive it, written into a per-user tree:
+    COKitImpl aOffice;
+    GlobalCallbackRecorder aRecorder;
+    aOffice.registerCallback(&GlobalCallbackRecorder::callback, &aRecorder);
+    utl::TempFileNamed aTempDir(nullptr, /*bDirectory=*/true);
+    aTempDir.EnableKillingFile();
+    comphelper::COKit::setUserSettingsPersistenceAvailable(true);
+    comphelper::COKit::setUserConfigDir(aTempDir.GetURL());
+    COKitDocumentImpl* pDocument = loadDoc("blank_text.odt");
+    const bool bAutoFormat = SvxAutoCorrCfg::Get().IsAutoFormatByInput();
+    comphelper::ScopeGuard aRestore([&aOffice, bAutoFormat] {
+        SvxAutoCorrCfg::Get().SetAutoFormatByInput(bAutoFormat);
+        SvxAutoCorrCfg::Get().Commit();
+        comphelper::COKit::setUserConfigDir(OUString());
+        aOffice.registerCallback(nullptr, nullptr);
+    });
+
+    // When AutoCorrect While Typing is toggled:
+    pDocument->postUnoCommand(".uno:OnlineAutoFormat", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the setting is written into the per-user tree, and the host is told
+    // to take it from there:
+    CPPUNIT_ASSERT_EQUAL(!bAutoFormat, SvxAutoCorrCfg::Get().IsAutoFormatByInput());
+    osl::DirectoryItem aItem;
+    // Without the accompanying fix in place, this test would have failed, as
+    // the setting stayed in the kit's memory and nothing was written.
+    CPPUNIT_ASSERT_EQUAL(osl::FileBase::E_None,
+                         osl::DirectoryItem::get(
+                             aTempDir.GetURL() + "/xcu/registrymodifications.xcu", aItem));
+    CPPUNIT_ASSERT(std::find(aRecorder.m_aTypes.begin(), aRecorder.m_aTypes.end(),
+                             COKitCallbackType::USER_SETTINGS_PERSISTED)
+                   != aRecorder.m_aTypes.end());
+}
+
+namespace
+{
+/// The first node, depth first, whose "id" is rId and which has a child named rChild.
+const boost::property_tree::ptree* findWidget(const boost::property_tree::ptree& rTree,
+                                              const std::string& rId, const std::string& rChild)
+{
+    boost::property_tree::ptree::const_assoc_iterator itId = rTree.find("id");
+    if (itId != rTree.not_found() && itId->second.get_value<std::string>() == rId
+        && rTree.find(rChild) != rTree.not_found())
+        return &rTree;
+    for (const std::pair<const std::string, boost::property_tree::ptree>& rChildNode : rTree)
+    {
+        if (const boost::property_tree::ptree* pFound = findWidget(rChildNode.second, rId, rChild))
+            return pFound;
+    }
+    return nullptr;
+}
+
+/// The checkbox of the row in the column the core calls nColumn, from the latest
+/// message of the dialog that has toggle columns in it: 1 when it is checked, 0
+/// when it is not, and -1 when there is none.
+int getToggle(const std::vector<std::string>& rPayloads, int nRow, int nColumn)
+{
+    for (std::vector<std::string>::const_reverse_iterator it = rPayloads.rbegin();
+         it != rPayloads.rend(); ++it)
+    {
+        if (it->find("togglecolumn") == std::string::npos)
+            continue;
+        boost::property_tree::ptree aTree;
+        std::stringstream aStream(*it);
+        boost::property_tree::read_json(aStream, aTree);
+        const boost::property_tree::ptree* pList = findWidget(aTree, "list", "headers");
+        if (!pList)
+            continue;
+        int nEntry = 0;
+        for (const std::pair<const std::string, boost::property_tree::ptree>& rEntry :
+             pList->get_child("entries"))
+        {
+            if (nEntry++ != nRow)
+                continue;
+            for (const std::pair<const std::string, boost::property_tree::ptree>& rColumn :
+                 rEntry.second.get_child("columns"))
+            {
+                if (rColumn.second.get<int>("togglecolumn", -1) == nColumn)
+                    return rColumn.second.get<bool>("toggle") ? 1 : 0;
+            }
+        }
+        return -1;
+    }
+    return -1;
+}
+}
+
+namespace
+{
+/// The id of the latest AutoCorrect Options dialog among the payloads, 0 when there is none.
+sal_uInt64 getAutoCorrectDialogId(const std::vector<std::string>& rPayloads)
+{
+    sal_uInt64 nDialogId = 0;
+    for (const std::string& rPayload : rPayloads)
+    {
+        boost::property_tree::ptree aTree;
+        std::stringstream aStream(rPayload);
+        boost::property_tree::read_json(aStream, aTree);
+        if (!findWidget(aTree, "tabcontrol", "tabs"))
+            continue;
+        for (const std::pair<const std::string, boost::property_tree::ptree>& rPair : aTree)
+        {
+            if (rPair.first != "id")
+                continue;
+            if (sal_uInt64 nId = std::strtoull(rPair.second.get_value<std::string>().c_str(), nullptr, 10))
+                nDialogId = nId;
+        }
+    }
+    return nDialogId;
+}
+
+bool hasPayloadWith(const std::vector<std::string>& rPayloads, std::string_view rText)
+{
+    return std::any_of(rPayloads.begin(), rPayloads.end(), [rText](const std::string& rPayload) {
+        return rPayload.find(rText) != std::string::npos;
+    });
+}
+}
+
+void DesktopKitTest::testAutoCorrectDialogOnlyOnce()
+{
+    // Writer opens AutoCorrect Options on its own, Calc and Impress through the
+    // application, so both ways have to keep to one dialog at a time.
+    for (const char* pName : { "blank_text.odt", "empty.ods" })
+    {
+        {
+            // Given a document with AutoCorrect Options open:
+            COKitDocumentImpl* pDocument = loadDoc(pName);
+            pDocument->initializeForRendering("{}");
+            ViewCallback aView(pDocument);
+            Scheduler::ProcessEventsToIdle();
+            pDocument->postUnoCommand(".uno:AutoCorrectDlg", nullptr, false);
+            Scheduler::ProcessEventsToIdle();
+            const sal_uInt64 nFirstDialog = getAutoCorrectDialogId(aView.m_aJSDialogPayloads);
+            CPPUNIT_ASSERT_MESSAGE(pName, nFirstDialog != 0);
+
+            // When it is asked for again, as another view of the kit could:
+            aView.m_aJSDialogPayloads.clear();
+            pDocument->postUnoCommand(".uno:AutoCorrectDlg", nullptr, false);
+            Scheduler::ProcessEventsToIdle();
+
+            // Then the answer is that the dialog is open already, instead of a second
+            // one, which would overwrite what the first one changes, or more:
+            // Without the accompanying fix in place, this test would have failed, as a
+            // second dialog opened.
+            CPPUNIT_ASSERT_EQUAL_MESSAGE(pName, sal_uInt64(0),
+                                         getAutoCorrectDialogId(aView.m_aJSDialogPayloads));
+            CPPUNIT_ASSERT_MESSAGE(
+                pName, hasPayloadWith(aView.m_aJSDialogPayloads, "AutoCorrect Options is open already"));
+
+            // And once the first one is closed, it opens again:
+            pDocument->sendDialogEvent(
+                nFirstDialog, "{\"id\":\"cancel\", \"cmd\": \"click\", \"type\": \"pushbutton\"}");
+            Scheduler::ProcessEventsToIdle();
+            aView.m_aJSDialogPayloads.clear();
+            pDocument->postUnoCommand(".uno:AutoCorrectDlg", nullptr, false);
+            Scheduler::ProcessEventsToIdle();
+            const sal_uInt64 nSecondDialog = getAutoCorrectDialogId(aView.m_aJSDialogPayloads);
+            CPPUNIT_ASSERT_MESSAGE(pName, nSecondDialog != 0);
+            pDocument->sendDialogEvent(
+                nSecondDialog, "{\"id\":\"cancel\", \"cmd\": \"click\", \"type\": \"pushbutton\"}");
+            Scheduler::ProcessEventsToIdle();
+        }
+        closeDoc();
+    }
+}
+
+void DesktopKitTest::testAutoCorrectDialogToggleColumns()
+{
+    // Given a Writer document in the kit:
+    COKitDocumentImpl* pDocument = loadDoc("blank_text.odt");
+    pDocument->initializeForRendering("{}");
+    ViewCallback aView(pDocument);
+    Scheduler::ProcessEventsToIdle();
+    SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
+    const bool bCapitalStartSentence = pAutoCorrect->IsAutoCorrFlag(ACFlags::CapitalStartSentence);
+    comphelper::ScopeGuard aRestore([pAutoCorrect, bCapitalStartSentence] {
+        pAutoCorrect->SetAutoCorrFlag(ACFlags::CapitalStartSentence, bCapitalStartSentence);
+        SvxAutoCorrCfg::Get().SetModified();
+        SvxAutoCorrCfg::Get().Commit();
+    });
+    pAutoCorrect->SetAutoCorrFlag(ACFlags::CapitalStartSentence, true);
+
+    // When the AutoCorrect Options dialog is opened, on its Options page:
+    pDocument->postUnoCommand(".uno:AutoCorrectDlg", nullptr, false);
+    Scheduler::ProcessEventsToIdle();
+    sal_uInt64 nDialogId = 0;
+    int nApplyPage = -1;
+    for (const std::string& rPayload : aView.m_aJSDialogPayloads)
+    {
+        boost::property_tree::ptree aTree;
+        std::stringstream aStream(rPayload);
+        boost::property_tree::read_json(aStream, aTree);
+        const boost::property_tree::ptree* pTabs = findWidget(aTree, "tabcontrol", "tabs");
+        if (!pTabs)
+            continue;
+        for (const std::pair<const std::string, boost::property_tree::ptree>& rPair : aTree)
+        {
+            if (rPair.first != "id")
+                continue;
+            if (sal_uInt64 nId = std::strtoull(rPair.second.get_value<std::string>().c_str(), nullptr, 10))
+                nDialogId = nId;
+        }
+        int nTab = 0;
+        for (const std::pair<const std::string, boost::property_tree::ptree>& rTab :
+             pTabs->get_child("tabs"))
+        {
+            // A vertical tab control names its tabs by their text.
+            if (rTab.second.get<std::string>("text") == "Options")
+                nApplyPage = nTab;
+            ++nTab;
+        }
+    }
+    // Without the accompanying fix in place, the dialog was disabled in the kit.
+    CPPUNIT_ASSERT(nDialogId != 0);
+    CPPUNIT_ASSERT(nApplyPage != -1);
+    pDocument->sendDialogEvent(nDialogId,
+                               OString("{\"id\":\"tabcontrol\", \"cmd\": \"selecttab\", \"data\": \""
+                                       + OString::number(nApplyPage)
+                                       + "\", \"type\": \"tabcontrol\"}")
+                                   .getStr());
+    Scheduler::ProcessEventsToIdle();
+
+    // Then "Capitalize first letter of every sentence", row 2, has a checkbox
+    // for each column, [M] and [T]:
+    // Without the accompanying fix in place, no checkbox of a column of its own
+    // was sent, so neither could be seen or changed.
+    CPPUNIT_ASSERT_EQUAL(1, getToggle(aView.m_aJSDialogPayloads, 2, 1));
+    CPPUNIT_ASSERT(getToggle(aView.m_aJSDialogPayloads, 2, 0) != -1);
+
+    // And unticking the [T] one, While Typing, and accepting the dialog turns
+    // the option off for typing:
+    pDocument->sendDialogEvent(
+        nDialogId, "{\"id\":\"list\", \"cmd\": \"change\", \"data\": "
+                   "\"{\\\"row\\\": 2, \\\"col\\\": 1, \\\"value\\\": false}\", \"type\": \"treeview\"}");
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT_EQUAL(0, getToggle(aView.m_aJSDialogPayloads, 2, 1));
+    pDocument->sendDialogEvent(nDialogId,
+                               "{\"id\":\"ok\", \"cmd\": \"click\", \"data\": \"undefined\", \"type\": \"pushbutton\"}");
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(!pAutoCorrect->IsAutoCorrFlag(ACFlags::CapitalStartSentence));
 }
 
 void DesktopKitTest::testPropertySettingOnFormulaBar()

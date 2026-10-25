@@ -51,6 +51,9 @@
                 <property name="hexpand">True</property>
                 <property name="activates-default">True</property>
                 <property name="truncate-multiline">True</property>
+                <accessibility>
+                  <relation type="labelled-by" target="label1"/>
+                </accessibility>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="abbrev-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="acorexceptpage|extended_tip|abbrev">Type an abbreviation followed by a period, and then click New. This prevents automatic capitalization of the first letter of the word that comes after the period at the end of the abbreviation.</property>
@@ -207,6 +210,9 @@
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
+            <accessibility>
+              <relation type="label-for" target="abbrev"/>
+            </accessibility>
           </object>
         </child>
       </object>
@@ -242,6 +248,9 @@
                 <property name="hexpand">True</property>
                 <property name="activates-default">True</property>
                 <property name="truncate-multiline">True</property>
+                <accessibility>
+                  <relation type="labelled-by" target="label2"/>
+                </accessibility>
                 <child internal-child="accessible">
                   <object class="AtkObject" id="double-atkobject">
                     <property name="AtkObject::accessible-description" translatable="yes" context="acorexceptpage|extended_tip|double">Type the word or abbreviation that starts with two capital letters or a small initial that you do not want automatically changed to one initial capital. For example, enter PC to prevent a change from PC to Pc, or enter eBook to prevent a change to Ebook.</property>
@@ -398,6 +407,9 @@
             <attributes>
               <attribute name="weight" value="bold"/>
             </attributes>
+            <accessibility>
+              <relation type="label-for" target="double"/>
+            </accessibility>
           </object>
         </child>
       </object>

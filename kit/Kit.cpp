@@ -1289,6 +1289,13 @@ void Document::trimAfterInactivity()
     LOG_TRC("Document::GlobalCallback " << kitCallbackTypeToString(eType) <<
             " [" << payload << "].");
 
+    if (eType == COKitCallbackType::USER_SETTINGS_PERSISTED)
+    {
+        // A dialog wrote the per-user settings out; let wsd upload them now.
+        self->sendTextFrame("userconfigchanged:");
+        return;
+    }
+
     if (eType == COKitCallbackType::DOCUMENT_PASSWORD_TO_MODIFY ||
         eType == COKitCallbackType::DOCUMENT_PASSWORD)
     {

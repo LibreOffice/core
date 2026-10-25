@@ -667,15 +667,20 @@ IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, EditHdl, weld::Button&, void)
     int nSelEntryPos = m_xCheckLB->get_selected_index();
     if (nSelEntryPos == REPLACE_BULLETS || nSelEntryPos == APPLY_NUMBERING)
     {
-        SvxCharacterMap aMapDlg(GetFrameWeld(), nullptr, nullptr);
+        std::shared_ptr<SvxCharacterMap> xMapDlg(
+            std::make_shared<SvxCharacterMap>(GetFrameWeld(), nullptr, nullptr));
         ImpUserData* pUserData = weld::fromId<ImpUserData*>(m_xCheckLB->get_id(nSelEntryPos));
-        aMapDlg.SetCharFont(*pUserData->pFont);
-        aMapDlg.SetChar( (*pUserData->pString)[0] );
-        if (RET_OK == aMapDlg.run())
+        xMapDlg->SetCharFont(*pUserData->pFont);
+        xMapDlg->SetChar( (*pUserData->pString)[0] );
+        weld::DialogController::runAsync(xMapDlg,
+            [this, xMapDlg, pUserData, nSelEntryPos,
+             xAlive = std::weak_ptr<bool>(m_xAlive)](sal_Int32 nResult)
         {
-            const vcl::Font& aFont(aMapDlg.GetCharFont());
+            if (nResult != RET_OK || xAlive.expired())
+                return;
+            const vcl::Font& aFont(xMapDlg->GetCharFont());
             *pUserData->pFont = aFont;
-            sal_UCS4 aChar = aMapDlg.GetChar();
+            sal_UCS4 aChar = xMapDlg->GetChar();
             // using the UCS4 constructor
             OUString aOUStr( &aChar, 1 );
             *pUserData->pString = aOUStr;
@@ -683,19 +688,23 @@ IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, EditHdl, weld::Button&, void)
                 m_xCheckLB->set_text(nSelEntryPos, sNum.replaceFirst("%1", aOUStr), 2);
             else
                 m_xCheckLB->set_text(nSelEntryPos, sBullet.replaceFirst("%1", aOUStr), 2);
-        }
+        });
     }
     else if( MERGE_SINGLE_LINE_PARA == nSelEntryPos )
     {
         // dialog for per cent settings
-        OfaAutoFmtPrcntSet aDlg(GetFrameWeld());
-        aDlg.GetPrcntFld().set_value(nPercent, FieldUnit::PERCENT);
-        if (aDlg.run() == RET_OK)
+        std::shared_ptr<OfaAutoFmtPrcntSet> xDlg(
+            std::make_shared<OfaAutoFmtPrcntSet>(GetFrameWeld()));
+        xDlg->GetPrcntFld().set_value(nPercent, FieldUnit::PERCENT);
+        weld::DialogController::runAsync(xDlg,
+            [this, xDlg, nSelEntryPos, xAlive = std::weak_ptr<bool>(m_xAlive)](sal_Int32 nResult)
         {
-            nPercent = static_cast<sal_uInt16>(aDlg.GetPrcntFld().get_value(FieldUnit::PERCENT));
+            if (nResult != RET_OK || xAlive.expired())
+                return;
+            nPercent = static_cast<sal_uInt16>(xDlg->GetPrcntFld().get_value(FieldUnit::PERCENT));
             sMargin = unicode::formatPercent(nPercent, Application::GetSettings().GetUILanguageTag());
             m_xCheckLB->set_text(nSelEntryPos, sRightMargin.replaceFirst("%1", sMargin), 2);
-        }
+        });
     }
 }
 
@@ -1828,10 +1837,11 @@ IMPL_LINK(OfaQuoteTabPage, QuoteHdl, weld::Button&, rBtn, void)
     else if (&rBtn == m_xDblEndQuotePB.get())
         nMode = DBL_END;
     // start character selection dialog
-    SvxCharacterMap aMap(GetFrameWeld(), nullptr, nullptr);
-    aMap.SetCharFont( OutputDevice::GetDefaultFont(DefaultFontType::LATIN_TEXT,
+    std::shared_ptr<SvxCharacterMap> xMap(
+        std::make_shared<SvxCharacterMap>(GetFrameWeld(), nullptr, nullptr));
+    xMap->SetCharFont( OutputDevice::GetDefaultFont(DefaultFontType::LATIN_TEXT,
                         LANGUAGE_ENGLISH_US, GetDefaultFontFlags::OnlyOne ));
-    aMap.set_title(nMode < SGL_END ? CuiResId(RID_CUISTR_STARTQUOTE)  : CuiResId(RID_CUISTR_ENDQUOTE));
+    xMap->set_title(nMode < SGL_END ? CuiResId(RID_CUISTR_STARTQUOTE)  : CuiResId(RID_CUISTR_ENDQUOTE));
     sal_UCS4 cDlg;
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
     LanguageType eLang = Application::GetSettings().GetLanguageTag().getLanguageType();
@@ -1863,31 +1873,35 @@ IMPL_LINK(OfaQuoteTabPage, QuoteHdl, weld::Button&, rBtn, void)
             break;
 
     }
-    aMap.SetChar(  cDlg );
-    aMap.DisableFontSelection();
-    if (aMap.run() != RET_OK)
-        return;
-
-    sal_UCS4 cNewChar = aMap.GetChar();
-    switch( nMode )
+    xMap->SetChar(  cDlg );
+    xMap->DisableFontSelection();
+    weld::DialogController::runAsync(xMap,
+        [this, xMap, nMode, xAlive = std::weak_ptr<bool>(m_xAlive)](sal_Int32 nResult)
     {
-        case SGL_START:
-            cSglStartQuote = cNewChar;
-            m_xSglStartExFT->set_label(ChangeStringExt_Impl(cNewChar));
-        break;
-        case SGL_END:
-            cSglEndQuote = cNewChar;
-            m_xSglEndExFT->set_label(ChangeStringExt_Impl(cNewChar));
-        break;
-        case DBL_START:
-            cStartQuote = cNewChar;
-            m_xDblStartExFT->set_label(ChangeStringExt_Impl(cNewChar));
-        break;
-        case DBL_END:
-            cEndQuote = cNewChar;
-            m_xDblEndExFT->set_label(ChangeStringExt_Impl(cNewChar));
-        break;
-    }
+        if (nResult != RET_OK || xAlive.expired())
+            return;
+
+        sal_UCS4 cNewChar = xMap->GetChar();
+        switch( nMode )
+        {
+            case SGL_START:
+                cSglStartQuote = cNewChar;
+                m_xSglStartExFT->set_label(ChangeStringExt_Impl(cNewChar));
+            break;
+            case SGL_END:
+                cSglEndQuote = cNewChar;
+                m_xSglEndExFT->set_label(ChangeStringExt_Impl(cNewChar));
+            break;
+            case DBL_START:
+                cStartQuote = cNewChar;
+                m_xDblStartExFT->set_label(ChangeStringExt_Impl(cNewChar));
+            break;
+            case DBL_END:
+                cEndQuote = cNewChar;
+                m_xDblEndExFT->set_label(ChangeStringExt_Impl(cNewChar));
+            break;
+        }
+    });
 }
 
 IMPL_LINK(OfaQuoteTabPage, StdQuoteHdl, weld::Button&, rBtn, void)

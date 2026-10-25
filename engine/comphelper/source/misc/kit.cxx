@@ -15,6 +15,10 @@
 #include <set>
 
 #include <com/sun/star/awt/Rectangle.hpp>
+#include <com/sun/star/configuration/Update.hpp>
+
+#include <comphelper/processfactory.hxx>
+#include <comphelper/diagnose_ex.hxx>
 
 #include <osl/process.h>
 #include <osl/time.h>
@@ -199,6 +203,46 @@ OUString getUserConfigDir()
 {
     std::lock_guard<std::mutex> aGuard(g_aUserConfigDirMutex);
     return g_aUserConfigDir;
+}
+
+static void (*pUserSettingsPersistedCallback)(void* data)(nullptr);
+static void* pUserSettingsPersistedCallbackData(nullptr);
+
+void setUserSettingsPersistedCallback(void (*callback)(void* data), void* data)
+{
+    pUserSettingsPersistedCallback = callback;
+    pUserSettingsPersistedCallbackData = data;
+}
+
+bool persistUserSettings()
+{
+    if (!isActive() || !isUserSettingsPersistenceAvailable())
+        return false;
+
+    OUString aConfigDir = getUserConfigDir();
+    if (aConfigDir.isEmpty())
+    {
+        SAL_WARN("comphelper", "No user config dir; cannot persist settings");
+        return false;
+    }
+
+    if (!aConfigDir.endsWith("/"))
+        aConfigDir += "/";
+
+    try
+    {
+        css::configuration::Update::get(getProcessComponentContext())
+            ->writeModifications(aConfigDir + "xcu/registrymodifications.xcu");
+    }
+    catch (const cpo::uno::Exception&)
+    {
+        TOOLS_WARN_EXCEPTION("comphelper", "failed to persist user settings");
+        return false;
+    }
+
+    if (pUserSettingsPersistedCallback)
+        pUserSettingsPersistedCallback(pUserSettingsPersistedCallbackData);
+    return true;
 }
 
 void setSharedPresetsDir(const OUString& rUrl)

@@ -5907,6 +5907,7 @@ void ChildSession::loKitCallback(const COKitCallbackType type, const std::string
     case COKitCallbackType::DOCUMENT_PASSWORD:
     case COKitCallbackType::DOCUMENT_PASSWORD_TO_MODIFY:
     case COKitCallbackType::DOCUMENT_PASSWORD_RESET:
+    case COKitCallbackType::USER_SETTINGS_PERSISTED:
         // these are not handled here.
         break;
     case COKitCallbackType::CELL_SELECTION_AREA:

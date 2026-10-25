@@ -442,7 +442,8 @@ class Menubar extends window.L.Control {
 				{uno: '.uno:SidebarDeck.A11yCheckDeck'},
 				{type: 'separator'},
 				{name: _UNO('.uno:AutoFormatMenu', 'text'), type: 'menu', menu: [
-					{uno: '.uno:OnlineAutoFormat'}]},
+					{uno: '.uno:OnlineAutoFormat'},
+					{uno: '.uno:AutoCorrectDlg'}]},
 				{type: 'separator'},
 				{uno: '.uno:ChapterNumberingDialog'},
 				{uno: '.uno:LineNumberingDialog'},
@@ -661,6 +662,7 @@ class Menubar extends window.L.Control {
 				{uno: '.uno:SpellOnline'},
 				{name: _UNO('.uno:LanguageMenu'), type: 'menu', menu: [
 					{name: _('None (Do not check spelling)'), id: 'nonelanguage', uno: '.uno:LanguageStatus?Language:string=Default_LANGUAGE_NONE'}]},
+				{uno: '.uno:AutoCorrectDlg'},
 				{name: _('Clean Up'), unoid: '.uno:PresentationCleanup', id: 'cleanupdeck', type: 'action'},
 				{type: 'separator'},
 				{name: _UNO('.uno:RunMacro'), id: 'runmacro', uno: '.uno:RunMacro'}
@@ -834,7 +836,8 @@ class Menubar extends window.L.Control {
 				{uno: '.uno:SpellDialog'},
 				{uno: '.uno:SpellOnline'},
 				{name: _UNO('.uno:LanguageMenu'), type: 'menu', menu: [
-					{name: _('None (Do not check spelling)'), id: 'nonelanguage', uno: '.uno:LanguageStatus?Language:string=Default_LANGUAGE_NONE'}]}
+					{name: _('None (Do not check spelling)'), id: 'nonelanguage', uno: '.uno:LanguageStatus?Language:string=Default_LANGUAGE_NONE'}]},
+				{uno: '.uno:AutoCorrectDlg'}
 			]},
 			{name: _('Extensions'), id: 'extensions-menu', type: 'menu', menu: []},
 			{name: _UNO('.uno:HelpMenu', 'presentation'), id: 'help', type: 'menu', accessibility: {combination: 'MY'}, menu: [
@@ -1158,6 +1161,7 @@ class Menubar extends window.L.Control {
 				{uno: '.uno:SpellOnline'},
 				{name: _UNO('.uno:LanguageMenu'), type: 'menu', menu: [
 					{name: _('None (Do not check spelling)'), id: 'nonelanguage', uno: '.uno:LanguageStatus?Language:string=Default_LANGUAGE_NONE'}]},
+				{uno: '.uno:AutoCorrectDlg'},
 				{uno: '.uno:GoalSeekDialog'},
 				{uno: '.uno:Protect'},
 				{type: 'separator'},

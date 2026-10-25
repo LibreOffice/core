@@ -153,6 +153,5 @@ cui/uiconfig/ui/twolinespage.ui://GtkLabel[@id='label29'] orphan-label
 cui/uiconfig/ui/twolinespage.ui://GtkLabel[@id='label30'] orphan-label
 cui/uiconfig/ui/twolinespage.ui://GtkTreeView[@id='startbracket'] no-labelled-by
 cui/uiconfig/ui/twolinespage.ui://GtkTreeView[@id='endbracket'] no-labelled-by
-cui/uiconfig/ui/wordcompletionpage.ui://GtkSpinButton[@id='maxentries'] duplicate-mnemonic
 cui/uiconfig/ui/wordcompletionpage.ui://GtkLabel[@id='wordcompletion'] orphan-label
 cui/uiconfig/ui/wordcompletionpage.ui://GtkLabel[@id='collectedwords'] orphan-label

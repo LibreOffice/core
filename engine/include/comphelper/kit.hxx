@@ -62,6 +62,11 @@ COMPHELPER_DLLPUBLIC void setStatusIndicatorCallback(
     void (*callback)(void* data, statusIndicatorCallbackType type, int percent, const char* pText),
     void* data);
 
+/// Called after persistUserSettings() wrote the per-user config tree, so that
+/// the host can pick up the files from there while the document is open.
+COMPHELPER_DLLPUBLIC void setUserSettingsPersistedCallback(void (*callback)(void* data),
+                                                           void* data);
+
 // Functions that can be called from arbitrary places in LibreOffice.
 
 // Check whether the code is running as invoked through COKit.
@@ -84,6 +89,14 @@ COMPHELPER_DLLPUBLIC bool isUserSettingsPersistenceAvailable();
 /// Directory URL (file://...) of the per-user config tree; empty when unknown.
 COMPHELPER_DLLPUBLIC void setUserConfigDir(const OUString& rUrl);
 COMPHELPER_DLLPUBLIC OUString getUserConfigDir();
+
+/// Write the configuration changes made so far into the per-user config tree,
+/// so that they outlive the kit. A no-op, returning false, when the kit is not
+/// active, the host gave us nowhere to write, or nothing round-trips anyway.
+/// Call it once a dialog that changes persistent settings is accepted; files
+/// the dialog wrote into the user profile itself (the AutoCorrect lists) are
+/// announced to the host along with the configuration.
+COMPHELPER_DLLPUBLIC bool persistUserSettings();
 
 /// Directory URL (file://...) of the read-only, admin-provisioned shared presets
 /// tree; empty when the client did not provide one. Recorded from

@@ -61,9 +61,15 @@ constexpr auto MobileDialogList
 constexpr auto CuiDialogList
     = frozen::make_unordered_set<std::u16string_view>({
         // cui
+        { u"cui/ui/acorexceptpage.ui" },
+        { u"cui/ui/acoroptionspage.ui" },
+        { u"cui/ui/acorreplacepage.ui" },
+        { u"cui/ui/applyautofmtpage.ui" },
+        { u"cui/ui/applylocalizedpage.ui" },
         { u"cui/ui/areatabpage.ui" },
         { u"cui/ui/areadialog.ui" },
         { u"cui/ui/asiantypography.ui" },
+        { u"cui/ui/autocorrectdialog.ui" },
         { u"cui/ui/borderareatransparencydialog.ui" },
         { u"cui/ui/borderbackgrounddialog.ui" },
         { u"cui/ui/borderpage.ui" },
@@ -117,6 +123,7 @@ constexpr auto CuiDialogList
         { u"cui/ui/password.ui" },
         { u"cui/ui/pastespecial.ui" },
         { u"cui/ui/patterntabpage.ui" },
+        { u"cui/ui/percentdialog.ui" },
         { u"cui/ui/pickbulletpage.ui" },
         { u"cui/ui/pickgraphicpage.ui" },
         { u"cui/ui/picknumberingpage.ui" },
@@ -143,6 +150,7 @@ constexpr auto CuiDialogList
         { u"cui/ui/transparencytabpage.ui" },
         { u"cui/ui/twolinespage.ui" },
         { u"cui/ui/widgettestdialog.ui" },
+        { u"cui/ui/wordcompletionpage.ui" },
         { u"cui/ui/qrcodegen.ui" }
     });
 
@@ -996,6 +1004,15 @@ std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUStrin
                 {
                     continue;
                 }
+                // AutoCorrect Options shows its Writer Options and Word
+                // Completion pages only in writer, and the percent dialog
+                // opens from that Options page.
+                if (entry == u"cui/ui/applyautofmtpage.ui" ||
+                    entry == u"cui/ui/percentdialog.ui" ||
+                    entry == u"cui/ui/wordcompletionpage.ui")
+                {
+                    continue;
+                }
             }
 
             if (docType == COKitDocumentType::SPREADSHEET)
@@ -1017,6 +1034,9 @@ std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUStrin
                 // Not supported in Writer
                 if (entry == u"cui/ui/borderbackgrounddialog.ui" ||
                     entry == u"cui/ui/newtabledialog.ui")
+                    continue;
+                // Writer's AutoCorrect Options has its own Options page instead.
+                if (entry == u"cui/ui/acoroptionspage.ui")
                     continue;
             }
 

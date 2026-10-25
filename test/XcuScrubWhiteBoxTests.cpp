@@ -104,6 +104,13 @@ void XcuScrubWhiteBoxTests::testIsAllowedXcuPath()
     LOK_ASSERT(!isAllowedXcuPath("/org.openoffice.Office.Linguistic/GrammarChecking/Grammalecte"));
     LOK_ASSERT(!isAllowedXcuPath("/org.openoffice.Office.Linguistic/GrammarChecking/Grammalecte/Options"));
 
+    // What the AutoCorrect Options dialog changes goes up: the options common
+    // to all modules and the Writer ones, Word Completion included.
+    LOK_ASSERT(isAllowedXcuPath("/org.openoffice.Office.Common/AutoCorrect"));
+    LOK_ASSERT(isAllowedXcuPath("/org.openoffice.Office.Common/AutoCorrect/Exceptions"));
+    LOK_ASSERT(isAllowedXcuPath("/org.openoffice.Office.Writer/AutoFunction/Format/ByInput"));
+    LOK_ASSERT(isAllowedXcuPath("/org.openoffice.Office.Writer/AutoFunction/Completion"));
+
     // Unrelated roots and the empty string are rejected.
     LOK_ASSERT(!isAllowedXcuPath("/org.openoffice.Office.Recovery/RecoveryList"));
     LOK_ASSERT(!isAllowedXcuPath(""));

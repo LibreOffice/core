@@ -159,7 +159,7 @@
                     <property name="can_focus">False</property>
                     <property name="label" translatable="yes" context="wordcompletionpage|label2">Mi_n. word length:</property>
                     <property name="use_underline">True</property>
-                    <property name="mnemonic_widget">maxentries</property>
+                    <property name="mnemonic_widget">minwordlen</property>
                     <property name="xalign">0</property>
                   </object>
                   <packing>

@@ -330,6 +330,14 @@ function traverseTabs(getContainer, win, level, command, isNested = false) {
 							} else if (command == '.uno:FontDialog' && tabId == 'font') {
 								cy.cGet('#btnWestFeatures-button').click();
 								handleDialog(win, level + 1);
+							} else if (command == '.uno:AutoCorrectDlg' && tabId == 'applypage') {
+								// Writer's Options page edits the minimum length of
+								// paragraphs to combine in a dialog of its own.
+								getActiveDialog(level)
+									.find('.ui-treeview-entry:contains("Combine single line paragraphs")')
+									.scrollIntoView().click();
+								cy.cGet('#edit-button:visible').should('be.enabled').click();
+								handleDialog(win, level + 1);
 							} else if ((command == '.uno:PageDialog' || command == '.uno:PageFormatDialog') && (tabId == 'header' || tabId == 'footer')) {
 								// enable the header/footer to make the More... button sensitive
 								const toggleId = tabId == 'header' ? '#checkHeaderOn-input' : '#checkFooterOn-input';
@@ -499,6 +507,7 @@ const allCommonDialogs = [
 	// before any other dialog dirties the doc keeps that prompt out of the way.
 	'.uno:Signature',
 	'.uno:AcceptTrackedChanges',
+	'.uno:AutoCorrectDlg',
 	{ command: '.uno:ExportToPDF', args: { SynchronMode: { type: 'boolean', value: false } } },
 	'.uno:FontworkGalleryFloater',
 	'.uno:GotoPage',
