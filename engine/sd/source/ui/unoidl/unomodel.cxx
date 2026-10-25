@@ -2385,8 +2385,8 @@ bool SdXImpressDocument::recordVectorPaintOrder(const SdrPage& rPage,
                                                 const std::vector<sal_uInt64>& rOrder)
 {
     VectorPartState& rState = maVectorParts[vectorPartKeyOf(rPage)];
-    const bool bMoved = rState.maPaintOrder.has_value() && *rState.maPaintOrder != rOrder;
-    rState.maPaintOrder = rOrder;
+    const bool bMoved = rState.moPaintOrder.has_value() && *rState.moPaintOrder != rOrder;
+    rState.moPaintOrder = rOrder;
     if (bMoved)
     {
         ++rState.mnVersion;
@@ -3187,12 +3187,12 @@ private:
 
     void setupProcessor(tools::JsonWriter& rWriter, SdPage* pPage)
     {
-        maProcessor.emplace(rWriter);
-        maProcessor->setScaleFactor(constTwipConversionFactor);
-        mpModel->getVectorResources().attachTo(*maProcessor);
+        moProcessor.emplace(rWriter);
+        moProcessor->setScaleFactor(constTwipConversionFactor);
+        mpModel->getVectorResources().attachTo(*moProcessor);
 
         maViewInformation = viewInformationFor(pPage);
-        maProcessor->setViewInformation2D(maViewInformation);
+        moProcessor->setViewInformation2D(maViewInformation);
     }
 
     /// The entry that stands for the page itself. It is drawn first and holds what lies
@@ -3258,7 +3258,7 @@ private:
         }
         auto aPrimArray = rWriter.startArray("primitives");
         if (!rContent.empty())
-            maProcessor->decomposeAndWrite(rContent);
+            moProcessor->decomposeAndWrite(rContent);
     }
 
     /// What the page entry carries behind the objects, built once per write: the page's own
@@ -3928,7 +3928,7 @@ private:
             rWriter.put("masterContent", true);
         }
 
-        svx::vector::writeEntryGeometry(rWriter, rContent, *maProcessor);
+        svx::vector::writeEntryGeometry(rWriter, rContent, *moProcessor);
     }
 
     /// An entry that stands for something other than an object on the page, named by a kind
@@ -3948,7 +3948,7 @@ private:
         if (rContent.moLayer)
             rWriter.put("layer", *rContent.moLayer);
 
-        svx::vector::writeEntryGeometry(rWriter, rContent, *maProcessor);
+        svx::vector::writeEntryGeometry(rWriter, rContent, *moProcessor);
     }
 
     SdDrawDocument* mpDocument;
@@ -3960,7 +3960,7 @@ private:
     bool mbResolved = false;
     SdPage* mpPage = nullptr;
     drawinglayer::geometry::ViewInformation2D maViewInformation;
-    std::optional<drawinglayer::Primitive2dJsonProcessor> maProcessor;
+    std::optional<drawinglayer::Primitive2dJsonProcessor> moProcessor;
     /// The content of the text edit entry of each editing view, by view id, for this write.
     std::unordered_map<sal_Int32, SdXImpressDocument::VectorObjectContent> maTextEditContent;
     /// The content built for an object in this write, by object id.

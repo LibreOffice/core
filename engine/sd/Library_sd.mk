@@ -485,9 +485,9 @@ $(eval $(call gb_Library_add_exception_objects,sd,\
 	sd/source/ui/view/outlnvs2 \
 	sd/source/ui/view/outlnvsh \
 	sd/source/ui/view/outlview \
+	sd/source/ui/view/PlaceholderDecoration \
 	sd/source/ui/view/presvish \
 	sd/source/ui/view/sdruler \
-	sd/source/ui/view/PlaceholderDecoration \
 	sd/source/ui/view/sdview \
 	sd/source/ui/view/sdview2 \
 	sd/source/ui/view/sdview3 \

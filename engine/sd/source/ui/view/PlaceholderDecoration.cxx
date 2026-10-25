@@ -1,4 +1,4 @@
-/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4; fill-column: 100 -*- */
 /*
  * Copyright the Collabora Office contributors.
  *
@@ -230,8 +230,8 @@ createPlaceholderDecoration(SdrObject& rObject, bool bSubContentProcessing)
                 // the extra text and vice versa
                 const double fHorDist(125);
                 const double fVerDist(125);
-                const double fPosX((aTranslate.getX() + aScale.getX()) - fTextWidth - fHorDist);
-                const double fPosY((SDRTEXTVERTADJUST_BOTTOM == eTVA)
+                const double fPositionX((aTranslate.getX() + aScale.getX()) - fTextWidth - fHorDist);
+                const double fPositionY((SDRTEXTVERTADJUST_BOTTOM == eTVA)
                                        ? aTranslate.getY() - fVerDist + fTextHeight
                                        : (aTranslate.getY() + aScale.getY()) - fVerDist);
 
@@ -249,7 +249,7 @@ createPlaceholderDecoration(SdrObject& rObject, bool bSubContentProcessing)
                 const basegfx::B2DHomMatrix aTextMatrix(
                     basegfx::utils::createScaleShearXRotateTranslateB2DHomMatrix(
                         aTextSizeAttribute.getX(), aTextSizeAttribute.getY(), fShearX, fRotate,
-                        fPosX, fPosY));
+                        fPositionX, fPositionY));
 
                 // create DXTextArray (can be empty one)
                 ::std::vector<double> aDXArray{};

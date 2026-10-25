@@ -253,7 +253,7 @@ public:
         std::unordered_set<sal_uInt64> maDirtyObjects;
         /// The ids of the painted objects in the order they were last written, without the page
         /// entry. Nothing before the part was first written.
-        std::optional<std::vector<sal_uInt64>> maPaintOrder;
+        std::optional<std::vector<sal_uInt64>> moPaintOrder;
     };
 
 private:

@@ -558,11 +558,11 @@ std::vector<basegfx::B2DRange> createTextEditSelectionRanges(const OutlinerView&
 
     std::vector<basegfx::B2DRange> aLogicRanges;
     aLogicRanges.reserve(aLogicRects.size());
-    for (const auto& aRect : aLogicRects)
+    for (const auto& rRect : aLogicRects)
     {
-        aLogicRanges.emplace_back(aRect.Left() - rGrowBy.Width(), aRect.Top() - rGrowBy.Height(),
-                                  aRect.Right() + rGrowBy.Width(),
-                                  aRect.Bottom() + rGrowBy.Height());
+        aLogicRanges.emplace_back(rRect.Left() - rGrowBy.Width(), rRect.Top() - rGrowBy.Height(),
+                                  rRect.Right() + rGrowBy.Width(),
+                                  rRect.Bottom() + rGrowBy.Height());
     }
 
     return aLogicRanges;

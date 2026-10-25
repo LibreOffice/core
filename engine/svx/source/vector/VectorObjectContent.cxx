@@ -1481,14 +1481,14 @@ void writeEntryGeometry(tools::JsonWriter& rWriter, const ObjectContent& rConten
 
     // In the order a canvas takes it: x' = a * x + c * y + e and y' = b * x + d * y + f.
     {
-        const basegfx::B2DHomMatrix& aTransformation = rContent.maTransformation;
+        const basegfx::B2DHomMatrix& rTransformation = rContent.maTransformation;
         auto aTransformArray = rWriter.startArray("transform");
-        rWriter.putSimpleValue(aTransformation.get(0, 0));
-        rWriter.putSimpleValue(aTransformation.get(1, 0));
-        rWriter.putSimpleValue(aTransformation.get(0, 1));
-        rWriter.putSimpleValue(aTransformation.get(1, 1));
-        rWriter.putSimpleValue(aTransformation.get(0, 2));
-        rWriter.putSimpleValue(aTransformation.get(1, 2));
+        rWriter.putSimpleValue(rTransformation.get(0, 0));
+        rWriter.putSimpleValue(rTransformation.get(1, 0));
+        rWriter.putSimpleValue(rTransformation.get(0, 1));
+        rWriter.putSimpleValue(rTransformation.get(1, 1));
+        rWriter.putSimpleValue(rTransformation.get(0, 2));
+        rWriter.putSimpleValue(rTransformation.get(1, 2));
     }
 
     {

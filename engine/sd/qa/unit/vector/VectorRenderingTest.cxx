@@ -928,7 +928,7 @@ CPPUNIT_TEST_FIXTURE(VectorRenderingTest, testTypingMovesThePartVersionAtOnce)
         = getVectorPrimitives(u"testTypingAfterKey").getInt("/version").value_or(-1);
 
     // A model change follows a pause in the typing, and by then the text has
-    // already travelled, so it adds nothing.
+    // already traveled, so it adds nothing.
     auto aSettled = getVectorPrimitives(u"testTypingSettled", nAfter);
     assertNothingMoved(aSettled, nAfter);
 
