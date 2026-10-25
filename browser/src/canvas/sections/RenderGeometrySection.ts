@@ -223,7 +223,7 @@ class RenderGeometrySection extends CanvasSectionObject {
 			app.CSections.RenderGeometry.name,
 		) as RenderGeometrySection | undefined;
 		if (!section) return;
-		const mouse: number[] = section.containerObject.getMousePosition();
+		const mouse = section.containerObject.getMousePosition();
 		const hit = mouse ? section.hitObject(mouse) : undefined;
 		const key = hit ? String(hit.id) + ':' + hit.hit.kind : '';
 		if (key === RenderGeometrySection._drawnHitKey) return;
@@ -1074,7 +1074,7 @@ class RenderGeometrySection extends CanvasSectionObject {
 		xDiff: number,
 		yDiff: number,
 	): void {
-		const mouse: number[] = this.containerObject.getMousePosition();
+		const mouse = this.containerObject.getMousePosition();
 		const hit = mouse ? this.hitObject(mouse) : undefined;
 		RenderGeometrySection._drawnHitKey = hit
 			? String(hit.id) + ':' + hit.hit.kind
@@ -1141,7 +1141,7 @@ class RenderGeometrySection extends CanvasSectionObject {
 		xDiff: number,
 		yDiff: number,
 	): void {
-		const mouse: number[] = this.containerObject.getMousePosition();
+		const mouse = this.containerObject.getMousePosition();
 		const hit = mouse ? this.hitObject(mouse) : undefined;
 		if (!hit) return;
 

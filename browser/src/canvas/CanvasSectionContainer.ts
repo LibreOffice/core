@@ -295,7 +295,7 @@ class CanvasSectionContainer {
 
 	// Where the mouse was last seen, in the coordinates of this container, or null while it has not
 	// been seen at all.
-	public getMousePosition (): Array<number> {
+	public getMousePosition (): Array<number> | null {
 		return this.mousePosition;
 	}
 
