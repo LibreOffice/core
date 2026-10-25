@@ -4532,9 +4532,8 @@ ClientSession::handleOpenDocKitToClientMessage(const std::shared_ptr<Message>& p
 
             if (error)
             {
-                http::Response httpResponse(http::StatusCode::InternalServerError);
-                httpResponse.setContentLength(0);
-                saveAsSocket->sendAndShutdown(httpResponse);
+                HttpHelper::sendErrorAndShutdown(http::StatusCode::InternalServerError,
+                                                 saveAsSocket);
             }
         }
 

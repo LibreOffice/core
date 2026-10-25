@@ -2867,9 +2867,7 @@ bool ClientRequestDispatcher::handlePostRequest(const RequestDetails& requestDet
             else
                 LOG_ERR("Download with id [" << downloadId << "] not found.");
 
-            http::Response httpResponse(http::StatusCode::NotFound);
-            httpResponse.setContentLength(0);
-            socket->sendAndShutdown(httpResponse);
+            HttpHelper::sendErrorAndShutdown(http::StatusCode::NotFound, socket);
             return true;
         }
         return false;

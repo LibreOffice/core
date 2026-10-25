@@ -21,6 +21,7 @@
 #include <common/StringVector.hpp>
 #include <common/Unit.hpp>
 #include <common/Util.hpp>
+#include <net/HttpHelper.hpp>
 #include <net/HttpRequest.hpp>
 #include <net/ServerSocket.hpp>
 #include <net/Socket.hpp>
@@ -93,8 +94,7 @@ private:
         catch (const std::exception& exc)
         {
             LOG_ERR("FakeWOPIHost: cannot parse request header: " << exc.what());
-            http::Response response(http::StatusCode::BadRequest);
-            socket->sendAndShutdown(response);
+            HttpHelper::sendErrorAndShutdown(http::StatusCode::BadRequest, socket);
             return;
         }
 
@@ -109,8 +109,7 @@ private:
 
         if (!handled)
         {
-            http::Response response(http::StatusCode::NotFound);
-            socket->sendAndShutdown(response);
+            HttpHelper::sendErrorAndShutdown(http::StatusCode::NotFound, socket);
         }
     }
 

@@ -17,6 +17,7 @@
 #pragma once
 
 #include <common/NumUtil.hpp>
+#include <net/HttpHelper.hpp>
 #include <net/HttpRequest.hpp>
 
 #include <algorithm>
@@ -277,9 +278,7 @@ private:
             }
 
             LOG_DBG("Has no data to send back");
-            http::Response httpResponse(http::StatusCode::BadRequest);
-            httpResponse.setContentLength(0);
-            socket->sendAndShutdown(httpResponse);
+            HttpHelper::sendErrorAndShutdown(http::StatusCode::BadRequest, socket);
         }
         else
         {

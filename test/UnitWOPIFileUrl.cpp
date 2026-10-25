@@ -128,8 +128,7 @@ public:
                 const std::string filename = std::string(TDOC) + InvalidFilename;
                 TST_LOG("FakeWOPIHost: Request, WOPI::GetFile returning 404 for: " << filename);
 
-                http::Response httpResponse(http::StatusCode::NotFound);
-                socket->sendAndShutdown(httpResponse);
+                HttpHelper::sendErrorAndShutdown(http::StatusCode::NotFound, socket);
 
                 return true;
             }
