@@ -2243,9 +2243,10 @@ void PSWriter::ImplWriteLineInfo( double fLWidth, double fMLimit,
     }
     if ( eJoinType == SvtGraphicStroke::joinMiter )
     {
-        if ( fMiterLimit != fMLimit )
+        const double fValidMiterLimit = std::max(1.0, fMLimit);
+        if ( fMiterLimit != fValidMiterLimit )
         {
-            fMiterLimit = fMLimit;
+            fMiterLimit = fValidMiterLimit;
             ImplWriteDouble( fMiterLimit );
             ImplWriteLine( "ml", PS_SPACE );
         }
