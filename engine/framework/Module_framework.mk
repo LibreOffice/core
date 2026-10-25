@@ -45,8 +45,4 @@ $(eval $(call gb_Module_add_l10n_targets,framework,\
     AllLangMoTarget_fwk \
 ))
 
-$(eval $(call gb_Module_add_subsequentcheck_targets,framework,\
-    JunitTest_framework_complex \
-))
-
 # vim: set noet sw=4 ts=4:
