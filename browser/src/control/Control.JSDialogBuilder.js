@@ -2090,6 +2090,11 @@ window.L.Control.JSDialogBuilder = window.L.Control.extend({
 		const plainId = this._removeMenuId(id);
 		// prefer the modelId first which is unique within single component, DOM id might be changed due to conflict
 		let control = container.querySelector('[modelId=\'' + plainId + '\']');
+		// A tab of a vertical tab control has the id of its page, which a widget
+		// on a page can share: the Replace page of AutoCorrect has a Replace
+		// button. Actions are for widgets, so prefer the one that is not a tab.
+		if (!control)
+			control = container.querySelector('[id=\'' + plainId + '\']:not(.ui-tab)');
 		if (!control)
 			control = container.querySelector('[id=\'' + plainId + '\']');
 		return control;
