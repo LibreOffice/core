@@ -2128,8 +2128,12 @@ bool ClientRequestDispatcher::handleClipboardRequest(const Poco::Net::HTTPReques
                   << serverId << "] vs. [" << Util::getProcessIdentifier() << "] with tag [" << tag
                   << "] on request to URL: " << request.getURI());
 
-        // we got the wrong request.
-        HttpHelper::sendErrorAndShutdown(http::StatusCode::BadRequest, socket, "wrong server, this is likely an issue with your reverse proxy configuration, See https://sdk.collaboraonline.com/docs/installation/Proxy_settings.html");
+        // Report that this is an incorrect instance.
+        HttpHelper::sendErrorAndShutdown(
+            http::StatusCode::BadRequest, socket,
+            "wrong server (expected: " + Util::getProcessIdentifier() + ", requested: " + serverId +
+                "), this is likely an issue with your reverse proxy configuration, See "
+                "https://sdk.collaboraonline.com/docs/installation/Proxy_settings.html");
         return true;
     }
 
@@ -2498,13 +2502,15 @@ bool ClientRequestDispatcher::handleMediaRequest(const Poco::Net::HTTPRequest& r
     {
         LOG_ERR_S("Cluster configuration error: mis-matching serverid ["
                   << serverId << "] vs. [" << Util::getProcessIdentifier()
-                  << "] on media request with tag [" << tag << ']');
+                  << "] on media request with tag [" << tag
+                  << "] on request to URL: " << request.getURI());
 
-        // we got the wrong request.
-        http::Response httpResponse(http::StatusCode::BadRequest);
-        httpResponse.setContentLength(0);
-        socket->sendAndShutdown(httpResponse);
-        socket->ignoreInput();
+        // Report that this is an incorrect instance.
+        HttpHelper::sendErrorAndShutdown(
+            http::StatusCode::BadRequest, socket,
+            "wrong server (expected: " + Util::getProcessIdentifier() + ", requested: " + serverId +
+                "), this is likely an issue with your reverse proxy configuration, See "
+                "https://sdk.collaboraonline.com/docs/installation/Proxy_settings.html");
         return true;
     }
 
