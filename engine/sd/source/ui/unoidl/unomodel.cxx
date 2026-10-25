@@ -7609,6 +7609,9 @@ std::string SdXImpressDocument::getPresentationInfo(bool bAllyState) const
                             auto aRectangle = o3tl::convert(rRectangle, o3tl::Length::mm100, o3tl::Length::twip);
                             aJsonWriter.put("id", pMediaObject->GetUniqueID());
                             aJsonWriter.put("url", pMediaObject->getTempURL());
+                            const avmedia::MediaItem& rMediaItem = pMediaObject->getMediaProperties();
+                            aJsonWriter.put("loop", rMediaItem.isLoop());
+                            aJsonWriter.put("mute", rMediaItem.isMute());
                             aJsonWriter.put("x", aRectangle.Left());
                             aJsonWriter.put("y", aRectangle.Top());
                             aJsonWriter.put("width", aRectangle.GetWidth());

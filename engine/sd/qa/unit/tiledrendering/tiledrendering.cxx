@@ -4658,6 +4658,20 @@ CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfoNotesHtml)
     CPPUNIT_ASSERT(nOuterItem < nOuterListEnd);
 }
 
+// A video that loops in the document also loops in the slideshow, and keeps its sound.
+CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testPresentationInfoVideoLoop)
+{
+    SdXImpressDocument* pXImpressDocument = createDoc("video-loop.pptx");
+    Scheduler::ProcessEventsToIdle();
+
+    boost::property_tree::ptree aTree;
+    readJSON(aTree, pXImpressDocument->getPresentationInfo());
+
+    const boost::property_tree::ptree& rVideo = child_at(child_at(aTree, "slides", 0), "videos", 0);
+    CPPUNIT_ASSERT(rVideo.get<bool>("loop"));
+    CPPUNIT_ASSERT(!rVideo.get<bool>("mute"));
+}
+
 CPPUNIT_TEST_FIXTURE(SdTiledRenderingTest, testA11yPresentationInfo)
 {
     SdXImpressDocument* pXImpressDocument = createDoc("PresentationInfoTest.odp");

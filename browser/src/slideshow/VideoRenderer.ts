@@ -21,13 +21,19 @@ class VideoRenderInfo extends AnimatedContentRenderInfo {
 	private sId: string;
 	private slideRenderer: SlideRenderer;
 
-	public setup(sId: string, slideRenderer: SlideRenderer, url: string): void {
+	public setup(
+		sId: string,
+		slideRenderer: SlideRenderer,
+		videoInfo: VideoInfo,
+	): void {
 		this.sId = sId;
 		this.slideRenderer = slideRenderer;
 
 		const video = document.createElement('video');
 		video.playsInline = true;
 		video.crossOrigin = 'anonymous';
+		video.loop = videoInfo.loop;
+		video.muted = videoInfo.mute;
 
 		video.addEventListener(
 			'playing',
@@ -58,7 +64,7 @@ class VideoRenderInfo extends AnimatedContentRenderInfo {
 			true,
 		);
 
-		video.src = url;
+		video.src = videoInfo.url;
 		this.videoElement = video;
 	}
 
@@ -99,7 +105,7 @@ class VideoRenderer2d extends AnimatedContentRenderer2d {
 		docHeight: number,
 	): void {
 		const video = new VideoRenderInfo();
-		video.setup(this.sId, this._slideRenderer, videoInfo.url);
+		video.setup(this.sId, this._slideRenderer, videoInfo);
 		video.pos2d = this.getDocumentPositions(
 			videoInfo.x,
 			videoInfo.y,
@@ -129,7 +135,7 @@ class VideoRendererGl extends AnimatedContentRendererGl {
 
 	public prepare(videoInfo: VideoInfo, docWidth: number, docHeight: number) {
 		const video = new VideoRenderInfo();
-		video.setup(this.sId, this._slideRenderer, videoInfo.url);
+		video.setup(this.sId, this._slideRenderer, videoInfo);
 		video.replaceTexture(this._context, this.initTexture());
 		video.replaceVao(
 			this._context,

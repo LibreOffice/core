@@ -20,6 +20,8 @@ declare var SlideShow: any;
 interface VideoInfo {
 	id: number;
 	url: string;
+	loop: boolean;
+	mute: boolean;
 	x: number;
 	y: number;
 	width: number;
