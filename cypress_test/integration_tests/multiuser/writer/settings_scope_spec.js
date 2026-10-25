@@ -28,9 +28,11 @@ describe(['tagmultiuser'], 'A joining user is told the document uses other setti
 
 	// The note sits in the document settings, so wait for those to be built
 	// rather than for the dialog frame, which is there before its contents.
+	// Opening the dialog waits for the engine first, and an error on the way
+	// fails the test with its own message.
 	function openSettings() {
 		cy.getFrameWindow().then(function(win) {
-			win.app.map.settings.showSettingsDialog('xcu-section');
+			return win.app.map.settings.showSettingsDialog('xcu-section');
 		});
 		cy.cGet('.iframe-settings-wrap').should('be.visible');
 		settingsIframeBody().find('#xcu-editor').should('exist');
