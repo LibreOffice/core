@@ -186,6 +186,11 @@ describe(['tagdesktop'], 'Long Writer comment threads', function() {
 		cy.then(() => {
 			return helper.processToIdle(this.win);
 		});
+		// A later layout, such as the one after a redraw, leaves the reply in view.
+		cy.then(() => {
+			commentSection(this.win).update();
+			return helper.processToIdle(this.win);
+		});
 		cy.cGet('#document-container').then((container) => {
 			var view = container[0].getBoundingClientRect();
 			pageBox().contains('.cool-annotation', 'a new reply').should(function (card) {

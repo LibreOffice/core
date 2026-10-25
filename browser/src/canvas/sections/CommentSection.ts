@@ -462,6 +462,16 @@ export class Comment extends CanvasSectionObject {
 			top = this.containerPosY;
 		}
 
+		// A card in a page's box is positioned by the box, relative to the box. The box
+		// stacks the cards the same way as the layout, so the card lands where it is asked.
+		if (this.sectionProperties.container.parentElement?.classList.contains('cool-annotation-page-scroller')) {
+			this.containerPosX = left;
+			this.containerPosY = top;
+			this.canvasContainerBounds = canvasContainerBounds;
+			this.renderedPosY = top;
+			return this.renderedPosY;
+		}
+
 		// A selected or edited card is held inside the view by the clamp below, so where it
 		// ends up depends on how tall it is. Its text is capped after the layout places it,
 		// which changes that height while the layout asks for the same place. So the height
@@ -520,10 +530,6 @@ export class Comment extends CanvasSectionObject {
 				top = canvasContainerBounds.top + margin;
 			}
 		}
-
-		// A card in a page's box is positioned by the box, relative to the box.
-		if (this.sectionProperties.container.parentElement?.classList.contains('cool-annotation-page-scroller'))
-			return this.renderedPosY;
 
 		let maxHeight = '';
 		if (this.sectionProperties.commentListSection.isShownBig(this)) {
