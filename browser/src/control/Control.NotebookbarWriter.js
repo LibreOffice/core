@@ -2417,12 +2417,26 @@ window.L.Control.NotebookbarWriter = window.L.Control.Notebookbar.extend({
 										'text': _UNO('.uno:OnlineAutoFormat', 'text'),
 										'command': '.uno:OnlineAutoFormat',
 										'accessibility': { focusBack: true, combination: 'AW', de: null },
+									},
+									{
+										'id': 'review-autoformat-apply',
+										'type': 'toolitem',
+										'text': _UNO('.uno:AutoFormatApply', 'text'),
+										'command': '.uno:AutoFormatApply',
+										'accessibility': { focusBack: true, combination: 'AY', de: null },
 									}
 								]
 							},
 							{
 								'type': 'toolbox',
 								'children': [
+									{
+										'id': 'review-autoformat-redline-apply',
+										'type': 'toolitem',
+										'text': _UNO('.uno:AutoFormatRedlineApply', 'text'),
+										'command': '.uno:AutoFormatRedlineApply',
+										'accessibility': { focusBack: false, combination: 'AD', de: null },
+									},
 									{
 										'id': 'review-autocorrect-dialog',
 										'type': 'toolitem',

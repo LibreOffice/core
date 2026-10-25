@@ -630,6 +630,8 @@ class LOUtil {
 			spellcheckignoreall: 'spelling',
 			spellonline: 'autospellcheck-on',
 			onlineautoformat: 'autocorrectdlg',
+			autoformatapply: 'autoformat',
+			autoformatredlineapply: 'trackchanges',
 			deleterowbreak: 'delbreakmenu',
 			alignmentpropertypanel: 'alignvcenter',
 			cellvertcenter: 'alignvcenter',

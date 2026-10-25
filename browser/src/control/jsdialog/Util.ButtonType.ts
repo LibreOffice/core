@@ -88,6 +88,7 @@ function getDialogButtons() {
 		'.uno:AddTheme',
 		'.uno:AnimationEffects',
 		'.uno:AutoCorrectDlg',
+		'.uno:AutoFormatRedlineApply',
 		'.uno:ChangeAlignment',
 		'.uno:ChangeDistance',
 		'.uno:ChangeFont',

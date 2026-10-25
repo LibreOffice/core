@@ -91,4 +91,38 @@ describe(['tagdesktop'], 'AutoCorrect settings.', function() {
 		capitalizeSentenceWhileTyping().should('not.be.checked');
 		autoCorrectWindow().find('#cancel button').click();
 	});
+
+	// Text typed with AutoCorrect While Typing off, which the [M] options are
+	// then applied to on demand. Capitalize first letter of every sentence is
+	// one of them by default.
+	function typeWithoutAutoCorrect() {
+		cy.viewport(1920, 1080);
+		cy.cGet('#Review-tab-label').click();
+		desktopHelper.getNbIcon('OnlineAutoFormat', 'Review').click();
+		ceHelper.type('hello. world');
+		ceHelper.checkPlainContent('hello. world');
+	}
+
+	it('Apply corrects the text on demand.', function() {
+		typeWithoutAutoCorrect();
+
+		desktopHelper.getNbIcon('AutoFormatApply', 'Review').click();
+
+		ceHelper.checkPlainContent('Hello. World');
+	});
+
+	it('Apply and Edit Changes lets the corrections be reviewed.', function() {
+		typeWithoutAutoCorrect();
+
+		desktopHelper.getNbIcon('AutoFormatRedlineApply', 'Review').click();
+
+		// The corrections are tracked changes to accept or reject.
+		const dialog = '[id^="AcceptRejectChangesDialog"]';
+		cy.cGet(dialog).should('be.visible');
+		cy.cGet(dialog).find('#acceptall button').click();
+		cy.cGet(dialog).find('#close button').click();
+		cy.cGet(dialog).should('not.exist');
+
+		ceHelper.checkPlainContent('Hello. World');
+	});
 });

@@ -443,6 +443,9 @@ class Menubar extends window.L.Control {
 				{type: 'separator'},
 				{name: _UNO('.uno:AutoFormatMenu', 'text'), type: 'menu', menu: [
 					{uno: '.uno:OnlineAutoFormat'},
+					{uno: '.uno:AutoFormatApply'},
+					{uno: '.uno:AutoFormatRedlineApply'},
+					{type: 'separator'},
 					{uno: '.uno:AutoCorrectDlg'}]},
 				{type: 'separator'},
 				{uno: '.uno:ChapterNumberingDialog'},
