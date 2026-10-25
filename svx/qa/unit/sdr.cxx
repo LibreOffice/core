@@ -33,8 +33,11 @@
 #include <svx/svdoashp.hxx>
 #include <svx/svdomedia.hxx>
 #include <svx/svdpage.hxx>
+#include <svx/svdview.hxx>
 #include <svx/unopage.hxx>
+#include <vcl/scheduler.hxx>
 #include <vcl/virdev.hxx>
+#include <vcl/wrkwin.hxx>
 #include <sdr/contact/objectcontactofobjlistpainter.hxx>
 
 using namespace ::com::sun::star;
@@ -329,6 +332,40 @@ CPPUNIT_TEST_FIXTURE(SdrTest, testMediaLinkPickedByUserIsFetched)
     CPPUNIT_ASSERT(pMedia->getSnapshot().is());
 }
 #endif
+
+CPPUNIT_TEST_FIXTURE(SdrTest, testMediaSettingsKeptWithoutPlayer)
+{
+    // The media file does not exist, so no player can play it.
+    loadFromFile(u"media-link.fodp");
+    uno::Reference<drawing::XDrawPagesSupplier> xDrawPagesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<drawing::XDrawPage> xDrawPage(xDrawPagesSupplier->getDrawPages()->getByIndex(0),
+                                                 uno::UNO_QUERY);
+    auto* pSvxDrawPage = dynamic_cast<SvxDrawPage*>(xDrawPage.get());
+    CPPUNIT_ASSERT(pSvxDrawPage);
+    SdrPage* pSdrPage = pSvxDrawPage->GetSdrPage();
+    auto* pMedia = dynamic_cast<SdrMediaObj*>(pSdrPage->GetObj(0));
+    CPPUNIT_ASSERT(pMedia);
+    pMedia->setLinkAllowed(true);
+    uno::Reference<beans::XPropertySet> xShape(xDrawPage->getByIndex(0), uno::UNO_QUERY);
+    xShape->setPropertyValue(u"Loop"_ustr, uno::Any(true));
+    xShape->setPropertyValue(u"Mute"_ustr, uno::Any(true));
+
+    // Painting the page into a window gives the shape a media window.
+    VclPtrInstance<WorkWindow> pWindow(nullptr, WB_STDWORK);
+    pWindow->SetOutputSizePixel(Size(500, 500));
+    pWindow->Show();
+    SdrView aView(pSdrPage->getSdrModelFromSdrPage(), pWindow->GetOutDev());
+    aView.ShowSdrPage(pSdrPage);
+    aView.CompleteRedraw(pWindow->GetOutDev(), vcl::Region(pMedia->GetCurrentBoundRect()));
+    Scheduler::ProcessEventsToIdle();
+
+    // Without the fix in place, this test would have failed, as the media window without a
+    // player reported loop and mute as off, and the shape took that over.
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"Loop"_ustr).get<bool>());
+    CPPUNIT_ASSERT(xShape->getPropertyValue(u"Mute"_ustr).get<bool>());
+    aView.HideSdrPage();
+    pWindow.disposeAndClear();
+}
 
 CPPUNIT_TEST_FIXTURE(SdrTest, test3DRotatedText)
 {

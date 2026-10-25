@@ -318,10 +318,15 @@ void MediaWindowImpl::updateMediaItem( MediaItem& rItem ) const
 
     rItem.setDuration( getDuration() );
     rItem.setTime( getMediaTime() );
-    rItem.setLoop( mxPlayer.is() && mxPlayer->isPlaybackLoop() );
-    rItem.setMute( mxPlayer.is() && mxPlayer->isMute() );
-    rItem.setVolumeDB( mxPlayer.is() ? mxPlayer->getVolumeDB() : 0 );
-    rItem.setZoom( mxPlayerWindow.is() ? mxPlayerWindow->getZoomLevel() : media::ZoomLevel_NOT_AVAILABLE );
+    // Only a player knows the playback settings, so the item reports them only when there is one.
+    if (mxPlayer.is())
+    {
+        rItem.setLoop(mxPlayer->isPlaybackLoop());
+        rItem.setMute(mxPlayer->isMute());
+        rItem.setVolumeDB(mxPlayer->getVolumeDB());
+    }
+    if (mxPlayerWindow.is())
+        rItem.setZoom(mxPlayerWindow->getZoomLevel());
     rItem.setFallbackURL( getFallbackURL() );
     rItem.setURL( getURL(), mTempFileURL, maReferer );
 }
