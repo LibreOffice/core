@@ -1259,6 +1259,8 @@ struct TableCellText
     sal_Int32 nRowSpan;
     sal_Int32 nColSpan;
     OUString sText;
+    uno::Reference<accessibility::XAccessible> xCell;
+    std::vector<uno::Reference<accessibility::XAccessibleContext>> aParagraphs;
 };
 
 struct TableRowText
@@ -1274,6 +1276,7 @@ struct TableWindow
     std::vector<TableRowText> aRows;
     std::vector<uno::Reference<accessibility::XAccessibleContext>> aParagraphs;
     uno::Reference<accessibility::XAccessibleContext> xTable;
+    uno::Reference<accessibility::XAccessible> xCaretCell;
 };
 
 // A table in the cell is given as its cells' text, one cell per line.
@@ -1366,18 +1369,51 @@ void collectTableWindow(const uno::Reference<css::accessibility::XAccessibleText
                 if (xTable->getAccessibleRow(nIndex) != nRow
                     || xTable->getAccessibleColumn(nIndex) != nCol)
                     continue;
-                aRow.aCells.push_back(
-                    { nCol, xTable->getAccessibleRowExtentAt(nRow, nCol),
-                      xTable->getAccessibleColumnExtentAt(nRow, nCol),
-                      getCellText(xTable->getAccessibleCellAt(nRow, nCol), rTable.aParagraphs) });
+                const uno::Reference<accessibility::XAccessible> xCell
+                    = xTable->getAccessibleCellAt(nRow, nCol);
+                std::vector<uno::Reference<accessibility::XAccessibleContext>> aCellParagraphs;
+                OUString sText = getCellText(xCell, aCellParagraphs);
+                rTable.aParagraphs.insert(rTable.aParagraphs.end(), aCellParagraphs.begin(),
+                                          aCellParagraphs.end());
+                aRow.aCells.push_back({ nCol, xTable->getAccessibleRowExtentAt(nRow, nCol),
+                                        xTable->getAccessibleColumnExtentAt(nRow, nCol),
+                                        std::move(sText), xCell, std::move(aCellParagraphs) });
             }
             rTable.aRows.push_back(std::move(aRow));
         }
+        rTable.xCaretCell = xContext->getAccessibleParent();
     }
     catch (const lang::IndexOutOfBoundsException&)
     {
         rTable = TableWindow();
     }
+}
+
+// Typing in the cell collected last changes only that cell, unless it gained a paragraph.
+bool refreshCaretCell(const uno::Reference<css::accessibility::XAccessibleText>& xAccText,
+                      TableWindow& rTable)
+{
+    uno::Reference<accessibility::XAccessibleContext> xContext(xAccText, uno::UNO_QUERY);
+    if (!xContext.is() || !rTable.xCaretCell.is()
+        || xContext->getAccessibleParent() != rTable.xCaretCell)
+        return false;
+
+    for (TableRowText& rRow : rTable.aRows)
+    {
+        for (TableCellText& rCell : rRow.aCells)
+        {
+            if (rCell.xCell != rTable.xCaretCell)
+                continue;
+
+            std::vector<uno::Reference<accessibility::XAccessibleContext>> aParagraphs;
+            OUString sText = getCellText(rCell.xCell, aParagraphs);
+            if (aParagraphs != rCell.aParagraphs)
+                return false;
+            rCell.sText = std::move(sText);
+            return true;
+        }
+    }
+    return false;
 }
 
 // A deleted paragraph outlives its frame, and Writer reads its markup through
@@ -1882,10 +1918,12 @@ void KitDocumentFocusListener::collectContextWindow(
     const uno::Reference<css::accessibility::XAccessibleText>& xAccText) const
 {
     m_aList = ListWindow();
-    m_aTable = TableWindow();
-    if (isText(m_nDocumentType))
+    if (!isText(m_nDocumentType))
+        m_aTable = TableWindow();
+    else
     {
-        collectTableWindow(xAccText, TABLE_ROW_WINDOW, m_aTable);
+        if (!refreshCaretCell(xAccText, m_aTable))
+            collectTableWindow(xAccText, TABLE_ROW_WINDOW, m_aTable);
         if (m_aTable.aRows.empty())
             collectListWindow(xAccText, LIST_ITEM_WINDOW, m_aList);
     }
@@ -2485,6 +2523,9 @@ void KitDocumentFocusListener::onFocusedParagraphInWriterTable(
     m_xLastTable = xTable;
     if (!updateParagraphInfo(xAccText, false, "STATE_CHANGED: FOCUSED"))
         collectAndAttachContextWindow(xAccText);
+    // a table fetched from its parent comes with no CHILD event, so nothing attached to it yet
+    if (uno::Reference<accessibility::XAccessible> xAccTable{ m_aTable.xTable, uno::UNO_QUERY })
+        attachRecursive(xAccTable);
     notifyFocusedCellChanged(nOutCount, aInList, nRow, nCol, nRowSpan, nColSpan);
 }
 

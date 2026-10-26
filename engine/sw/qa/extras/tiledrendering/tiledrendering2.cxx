@@ -2012,6 +2012,48 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yContextParagraphInCell)
     }
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yContextTableTyping)
+{
+    // Given the cursor in the first cell of a table:
+    createDoc("a11y-table-typing.fodt");
+    SwTestViewCallback aView;
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+    pWrtShell->Down(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+    auto aCellTexts = [&aView]() {
+        std::string aTexts;
+        for (const auto& rRow : aView.m_aA11yFocusedParagraph.get_child("table.rows"))
+            for (const auto& rCell : rRow.second.get_child("cells"))
+                aTexts += rCell.second.get<std::string>("text") + "|";
+        return aTexts;
+    };
+
+    // When typing in that cell:
+    pWrtShell->Insert(u"X"_ustr);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the table given has that cell's new text, and the others as they were:
+    CPPUNIT_ASSERT_EQUAL(std::string("XOne|Two|Three|Four|"), aCellTexts());
+
+    // And when the cell gains a paragraph:
+    pWrtShell->SplitNode();
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the table given has both:
+    CPPUNIT_ASSERT_EQUAL(std::string("X\nOne|Two|Three|Four|"), aCellTexts());
+
+    // And when a row is added below, the caret staying in the cell, and typing there:
+    pWrtShell->InsertRow(1, /*bBehind=*/true);
+    Scheduler::ProcessEventsToIdle();
+    pWrtShell->Insert(u"Y"_ustr);
+    Scheduler::ProcessEventsToIdle();
+
+    // Then the table given has that row too:
+    CPPUNIT_ASSERT_EQUAL(3, aView.m_aA11yFocusedParagraph.get<int>("table.rowCount"));
+    CPPUNIT_ASSERT_EQUAL(std::string("X\nYOne|Two|||Three|Four|"), aCellTexts());
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphLinks)
 {
     // Given a short hyperlink, then one wrapping over two lines:
