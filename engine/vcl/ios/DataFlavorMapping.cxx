@@ -37,7 +37,7 @@
 
 #include <premac.h>
 #include <UIKit/UIKit.h>
-#include <MobileCoreServices/MobileCoreServices.h>
+#include <UniformTypeIdentifiers/UniformTypeIdentifiers.h>
 #include <postmac.h>
 
 using namespace css::datatransfer;
@@ -75,12 +75,12 @@ NSString* OUStringToNSString(const OUString& ustring)
     return [NSString stringWithCString:utf8Str.getStr() encoding:NSUTF8StringEncoding];
 }
 
-NSString* PBTYPE_UTF8PLAINTEXT = (__bridge NSString*)kUTTypeUTF8PlainText;
-NSString* PBTYPE_RTF = (__bridge NSString*)kUTTypeRTF;
-NSString* PBTYPE_PNG = (__bridge NSString*)kUTTypePNG;
-NSString* PBTYPE_JPEG = (__bridge NSString*)kUTTypeJPEG;
-NSString* PBTYPE_HTML = (__bridge NSString*)kUTTypeHTML;
-NSString* PBTYPE_PDF = (__bridge NSString*)kUTTypePDF;
+NSString* PBTYPE_UTF8PLAINTEXT = UTTypeUTF8PlainText.identifier;
+NSString* PBTYPE_RTF = UTTypeRTF.identifier;
+NSString* PBTYPE_PNG = UTTypePNG.identifier;
+NSString* PBTYPE_JPEG = UTTypeJPEG.identifier;
+NSString* PBTYPE_HTML = UTTypeHTML.identifier;
+NSString* PBTYPE_PDF = UTTypePDF.identifier;
 
 const char* FLAVOR_SESX
     = "application/x-openoffice-embed-source-xml;windows_formatname=\"Star Embed Source (XML)\"";

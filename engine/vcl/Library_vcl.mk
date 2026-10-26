@@ -793,6 +793,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
 ))
 $(eval $(call gb_Library_use_system_darwin_frameworks,vcl,\
     UIKit \
+    UniformTypeIdentifiers \
     CoreFoundation \
 ))
 endif
