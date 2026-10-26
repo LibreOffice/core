@@ -593,8 +593,8 @@ LIBTIFF_TARBALL := tiff-4.7.2.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-PYTHON_SHA256SUM := e02d9ac21cebda6e46435369744a92c65cc7cd8669697694122cf97ffacd1e53
-PYTHON_TARBALL := Python-3.14.9.tar.xz
+PYTHON_SHA256SUM := de414a57119abef52784d8993e341d53aed635fc2b05c2607d9f98a2c5b72032
+PYTHON_TARBALL := Python-3.14.10.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
