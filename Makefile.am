@@ -34,6 +34,7 @@ autogen_input_goals = $(filter-out %clean %clean-am am--depfiles,$(or $(MAKECMDG
 include $(top_builddir)/autogen-input.mk
 
 $(top_builddir)/autogen-input.mk: $(if $(autogen_input_goals),$(wildcard $(top_builddir)/autogen.input))
+	$(if $<,@echo 'Running autogen.py again because autogen.input changed since its last run')
 	$(if $<,$(PYTHON) $(abs_top_srcdir)/autogen.py)
 	@echo '# Marks the autogen.input that the build tree was configured from.' > $@
 

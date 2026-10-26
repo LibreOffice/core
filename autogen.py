@@ -17,6 +17,9 @@ import subprocess
 import sys
 
 def main():
+    if len(sys.argv) > 1:
+        sys.exit("autogen.py takes no arguments. Put the options into autogen.input, or pass them "
+                 "to autogen.sh instead.")
     cmdline = [sys.argv[0].replace(".py", ".sh")]
     with open("autogen.input") as stream:
         for line in stream.readlines():
