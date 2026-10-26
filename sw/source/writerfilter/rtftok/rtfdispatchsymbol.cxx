@@ -467,20 +467,34 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             }
 
             auto const nCells{ m_TopLevelTableRow.getCells() }; // replayRowBuffer clears it!
-            replayRowBuffer(m_aTableBufferStack.back(), m_TopLevelTableRow.cellSprms,
-                            m_TopLevelTableRow.cellAttributes, nCells);
+            // A row in shape text that started inside a table buffer waits in that buffer, so it
+            // is replayed after the start of its shape.
+            RTFBuffer_t* const pOuterBuffer = m_aShapeTextTableStates.empty()
+                                                  ? nullptr
+                                                  : m_aShapeTextTableStates.back().pOuterBuffer;
+            if (pOuterBuffer)
+                bufferTableRow(*pOuterBuffer, m_TopLevelTableRow.cellSprms,
+                               m_TopLevelTableRow.cellAttributes, nCells,
+                               m_TopLevelTableRow.nCurrentCellX, m_TopLevelTableRow.nTRLeft);
+            else
+                replayRowBuffer(m_aTableBufferStack.back(), m_TopLevelTableRow.cellSprms,
+                                m_TopLevelTableRow.cellAttributes, nCells);
 
             // The scope of the table cell defaults is one row.
             m_aDefaultState.getTableCellSprms().clear();
             m_aStates.top().getTableCellSprms() = m_aDefaultState.getTableCellSprms();
             m_aStates.top().getTableCellAttributes() = m_aDefaultState.getTableCellAttributes();
 
-            writerfilter::Reference<Properties>::Pointer_t paraProperties;
-            writerfilter::Reference<Properties>::Pointer_t frameProperties;
-            writerfilter::Reference<Properties>::Pointer_t rowProperties;
-            prepareProperties(m_aStates.top(), paraProperties, frameProperties, rowProperties,
-                              nCells, m_TopLevelTableRow.nCurrentCellX, m_TopLevelTableRow.nTRLeft);
-            sendProperties(paraProperties, frameProperties, rowProperties);
+            if (!pOuterBuffer)
+            {
+                writerfilter::Reference<Properties>::Pointer_t paraProperties;
+                writerfilter::Reference<Properties>::Pointer_t frameProperties;
+                writerfilter::Reference<Properties>::Pointer_t rowProperties;
+                prepareProperties(m_aStates.top(), paraProperties, frameProperties, rowProperties,
+                                  nCells, m_TopLevelTableRow.nCurrentCellX,
+                                  m_TopLevelTableRow.nTRLeft);
+                sendProperties(paraProperties, frameProperties, rowProperties);
+            }
 
             m_bNeedPap = true;
             m_bNeedFinalPar = true;
@@ -493,7 +507,7 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
             {
                 if (m_aStates[i].getCurrentBuffer() == &m_aTableBufferStack.back())
                 {
-                    m_aStates[i].setCurrentBuffer(nullptr);
+                    m_aStates[i].setCurrentBuffer(pOuterBuffer);
                 }
             }
 
