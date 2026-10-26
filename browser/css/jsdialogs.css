@@ -2923,7 +2923,7 @@ img.ui-combobox-value-preview {
 
 .arrowbackground {
 	box-sizing: border-box;
-	width: 16px;
+	width: var(--btn-arrow-size);
 	height: 100%;
 	display: flex;
 	align-items: center;

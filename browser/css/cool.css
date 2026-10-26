@@ -23,6 +23,8 @@
 	--btn-size-s: 20px;
 	--btn-img-size-s: calc(var(--btn-size-s) - var(--btn-padding) * 2);
 
+	--btn-arrow-size: 16px; /*dropdown arrow*/
+
 	--border-radius-s: 2px;
 	--border-radius: 4px; /* buttons, widgets, dialog windows */
 	--border-radius-pill: 999px; /* chips and other fully round shapes */

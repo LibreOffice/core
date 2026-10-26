@@ -625,6 +625,10 @@ label.notebookbar.ui-checkbox-label {
 /* File Tab */
 
 /* Home tab */
+[data-doctype='text'] #home-clipboard .unotoolbutton.unoCut,
+[data-doctype='text'] #home-insert-content .unoInsertPagebreak {
+	margin-inline-end: var(--btn-arrow-size);
+}
 .notebookbar.ui-combobox * {
 	line-height: 22px;
 }
