@@ -277,6 +277,7 @@ public:
     bool                    HasChildWindow_Impl(sal_uInt16);
     bool                    KnowsChildWindow_Impl(sal_uInt16);
     void                    ShowChildWindow_Impl(sal_uInt16, bool bVisible, bool bSetFocus);
+    SfxChildWin_Impl*       GetChildWin_Impl(sal_uInt16 nId);
     void                    SetChildWindow_Impl(sal_uInt16, bool bOn, bool bSetFocus);
     SfxChildWindow*         GetChildWindow_Impl(sal_uInt16);
     void                    InitializeChild_Impl(SfxChildWin_Impl*);
