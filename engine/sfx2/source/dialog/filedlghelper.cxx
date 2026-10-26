@@ -55,6 +55,7 @@
 #include <com/sun/star/util/RevisionTag.hpp>
 #include <comphelper/fileurl.hxx>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/sequenceashashmap.hxx>
 #include <comphelper/string.hxx>
 #include <comphelper/types.hxx>
@@ -2564,8 +2565,13 @@ void FileDialogHelper::StartExecuteModal( const Link<FileDialogHelper*,void>& rE
                 if (xAlive.expired())
                     return;
 
-                // Another view can have become current while the picker was open. The
-                // closed handler runs on the view that opened the dialog.
+                // Switch to the view that asked for the file, and switch back when done.
+                comphelper::ScopeGuard aRestoreView(
+                    [nSavedView = KitHelper::getCurrentView()]
+                    {
+                        if (nSavedView >= 0 && KitHelper::getCurrentView() != nSavedView)
+                            KitHelper::setView(nSavedView);
+                    });
                 if (nView >= 0 && KitHelper::getCurrentView() != nView)
                     KitHelper::setView(nView);
 

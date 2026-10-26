@@ -15,6 +15,7 @@
 #include <comphelper/dispatchcommand.hxx>
 #include <comphelper/kit.hxx>
 #include <comphelper/propertyvalue.hxx>
+#include <comphelper/scopeguard.hxx>
 #include <comphelper/sequence.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <sfx2/docfilt.hxx>
@@ -119,8 +120,13 @@ bool requestAndRedispatch(const OUString& rCommand, const OUString& rArgument,
              if (!roUrl)
                  return;
 
-             // Another view can have become current while the picker was open; the
-             // command belongs to the view that asked for the file.
+             // Switch to the view that asked for the file, and switch back when done.
+             comphelper::ScopeGuard aRestoreView(
+                 [nSavedView = KitHelper::getCurrentView()]
+                 {
+                     if (nSavedView >= 0 && KitHelper::getCurrentView() != nSavedView)
+                         KitHelper::setView(nSavedView);
+                 });
              if (nView >= 0 && KitHelper::getCurrentView() != nView)
                  KitHelper::setView(nView);
 
