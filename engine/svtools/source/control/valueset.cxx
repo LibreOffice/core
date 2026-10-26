@@ -22,6 +22,7 @@
 #include <o3tl/safeint.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
+#include <comphelper/kit.hxx>
 #include <tools/debug.hxx>
 #include <vcl/bitmap.hxx>
 #include <vcl/canvastools.hxx>
@@ -755,6 +756,12 @@ void ValueSet::SelectItem( sal_uInt16 nItemId )
         }
         Invalidate();
     }
+    else if (comphelper::COKit::isActive())
+    {
+        // the client holds a picture of the value set from when it was built, a selection set
+        // before it is shown has to reach that picture too
+        Invalidate();
+    }
 
     if( !ImplHasAccessibleListeners() )
         return;
@@ -1146,7 +1153,8 @@ void ValueSet::Format(vcl::RenderContext const & rRenderContext)
 
 void ValueSet::ImplDrawSelect(vcl::RenderContext& rRenderContext)
 {
-    if (!IsReallyVisible())
+    // the client gets the pictures of all tabs of a dialog, also of the ones not shown here
+    if (!IsReallyVisible() && !comphelper::COKit::isActive())
         return;
 
     const bool bFocus = HasFocus();
