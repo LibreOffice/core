@@ -2542,7 +2542,9 @@ public:
 void RtfAttributeOutput::OutputFlyFrame_Impl(const ww8::Frame& rFrame, const Point& /*rNdTopLeft*/)
 {
     const SwFrameFormat& rFrameFormat = rFrame.GetFrameFormat();
-    if (rFrameFormat.GetFlySplit().GetValue())
+    // Inside a table cell, the frame's table is written as a text frame, which keeps its own table
+    // depth.
+    if (rFrameFormat.GetFlySplit().GetValue() && m_nTableDepth == 0)
     {
         // The frame can split: this was originally from a floating table, write it back as
         // such.
