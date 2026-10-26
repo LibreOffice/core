@@ -495,41 +495,6 @@ void assertErrorReply(const std::shared_ptr<http::WebSocketSession>& ws, const s
     LOK_ASSERT_EQUAL("error: cmd=" + expectedCommand + " kind=" + expectedKind + named, error);
 }
 
-std::string getChildId(const std::shared_ptr<http::WebSocketSession>& socket,
-                       const std::string& testname)
-{
-    sendTextFrame(socket, "getchildid", testname);
-    const std::string response = getResponseString(socket, "getchildid:", testname);
-    std::string childId;
-    LOK_ASSERT_MESSAGE("did not receive the child id",
-                       COOLProtocol::getTokenStringFromMessage(response, "id", childId));
-    LOK_ASSERT_MESSAGE("empty child id", !childId.empty());
-    return childId;
-}
-
-http::StatusCode postToInsertFile(const std::string& documentURL, const std::string& childId,
-                                  const std::string& name, const std::string& content)
-{
-    // documentURL is "cool/<encoded document URI>/ws"; the upload goes to
-    // the sibling insertfile endpoint of the same document.
-    std::string path = '/' + documentURL;
-    path.replace(path.rfind("/ws"), 3, "/insertfile");
-
-    auto httpSession = http::Session::create(getTestServerURI());
-    http::Request request(std::move(path), http::Request::VERB_POST);
-    MultipartFormBody form;
-    form.addField("name", name);
-    form.addField("childid", childId);
-    form.addStringPart("file", content, "application/octet-stream", name);
-    form.applyTo(request);
-
-    const std::shared_ptr<const http::Response> response = httpSession->syncRequest(request);
-    if (!response || response->state() == http::Response::State::Timeout)
-        throw Poco::TimeoutException("no response from the insertfile endpoint");
-
-    return response->statusCode();
-}
-
 bool getProgressWithIdValue(const std::string_view msg, const std::string_view idValue)
 {
     static constexpr std::string_view prefix = "progress:";

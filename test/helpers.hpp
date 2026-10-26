@@ -223,15 +223,6 @@ void assertErrorReply(const std::shared_ptr<http::WebSocketSession>& ws, const s
                       const std::string& expectedCommand, const std::string& expectedKind,
                       const std::string& testname, const std::string& named = std::string());
 
-/// The id of the child process the session's document is served by.
-std::string getChildId(const std::shared_ptr<http::WebSocketSession>& socket,
-                       const std::string& testname);
-
-/// Stage a file for the document of documentURL over the insertfile endpoint,
-/// under the given name, and return the response status code.
-http::StatusCode postToInsertFile(const std::string& documentURL, const std::string& childId,
-                                  const std::string& name, const std::string& content);
-
 bool getProgressWithIdValue(const std::string_view msg, const std::string_view idValue);
 
 bool isDocumentLoaded(

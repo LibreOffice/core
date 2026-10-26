@@ -28,8 +28,13 @@
 
 #include <Poco/JSON/Array.h>
 #include <Poco/JSON/Object.h>
+#include <Poco/File.h>
+#include <Poco/Path.h>
 #include <Poco/URI.h>
 
+#include <chrono>
+#include <fstream>
+#include <future>
 #include <memory>
 #include <mutex>
 #include <string>
@@ -63,16 +68,49 @@ class UnitSlideLink : public UnitWSD
                                              documentURL, testname);
     }
 
-    /// Stages a ten-slide presentation in the jail under the given name. An insert takes the
-    /// file it names, so every insert is staged for.
+    /// Stages a ten-slide presentation in the jail of the loaded document under the given name.
+    /// An insert takes the file it names, so every insert is staged for.
     void stageSource(const std::shared_ptr<http::WebSocketSession>& socket,
-                     const std::string& documentURL, const std::string& stagedName)
+                     const std::string& stagedName)
     {
-        const std::string childId = helpers::getChildId(socket, testname);
-        LOK_ASSERT_EQUAL(
-            http::StatusCode::OK,
-            helpers::postToInsertFile(documentURL, childId, stagedName,
-                                      helpers::readFileAsString("slide-link-source.odp")));
+        // The kit answers getchildid in turn, so the answer comes after the kit is done with
+        // the file staged before, and after every message sent earlier on the socket.
+        helpers::sendTextFrame(socket, "getchildid", testname);
+        helpers::getResponseString(socket, "getchildid:", testname);
+
+        std::shared_ptr<ClientSession> session;
+        {
+            std::lock_guard<std::mutex> lock(_sessionMutex);
+            session = _session.lock();
+        }
+        LOK_ASSERT_MESSAGE("no session to stage [" + stagedName + "] for", session);
+
+        const std::shared_ptr<DocumentBroker> docBroker = session->getDocumentBroker();
+        LOK_ASSERT_MESSAGE("the session has no document broker", docBroker);
+
+        const std::string content = helpers::readFileAsString("slide-link-source.odp");
+        auto staged = std::make_shared<std::promise<bool>>();
+        docBroker->addCallback(
+            [docBroker, stagedName, content, staged]()
+            {
+                const std::string stagedPath = docBroker->jailStagingPath(stagedName);
+                if (stagedPath.empty())
+                {
+                    staged->set_value(false);
+                    return;
+                }
+
+                Poco::File(Poco::Path(stagedPath).parent()).createDirectories();
+                std::ofstream file(stagedPath, std::ios::binary);
+                file << content;
+                file.close();
+                staged->set_value(static_cast<bool>(file));
+            });
+
+        std::future<bool> result = staged->get_future();
+        LOK_ASSERT_MESSAGE("staging [" + stagedName + "] timed out",
+                           result.wait_for(std::chrono::seconds(10)) == std::future_status::ready);
+        LOK_ASSERT_MESSAGE("failed to stage [" + stagedName + ']', result.get());
     }
 
     /// The insert command for the staged file, naming the source document the pages record.
@@ -182,7 +220,7 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkList()
         socketPoll->startThread();
 
         std::shared_ptr<http::WebSocketSession> socket = load(socketPoll, documentURL);
-        stageSource(socket, documentURL, "source.odp");
+        stageSource(socket, "source.odp");
 
         LOK_ASSERT_EQUAL(static_cast<std::size_t>(0), getLinks(socket)->size());
 
@@ -213,14 +251,14 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkList()
 
         // A plain copy of the same slides is no link, so the list still holds
         // the two linked pages alone.
-        stageSource(socket, documentURL, "source.odp");
+        stageSource(socket, "source.odp");
         helpers::sendTextFrame(socket, insertCommand("slides=0,1 keepdesign=0 link=0"), testname);
         helpers::getResponseString(socket, "slideimport:", testname);
         getParts(getLinks(socket)->getObject(0), 2);
 
         // An insert that names the position a slide holds in the source links the page to that
         // position, which is what a source keeping no slide identifiers can be matched by later.
-        stageSource(socket, documentURL, "source.odp");
+        stageSource(socket, "source.odp");
         helpers::sendTextFrame(
             socket, insertCommand("slides=2 at=0 keepdesign=0 link=1 sourcepositions=3"), testname);
         helpers::getResponseString(socket, "slideimport:", testname);
@@ -233,7 +271,7 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkList()
 
         // An insert that names no slides takes every page of the staged file, and reports how
         // many pages it added.
-        stageSource(socket, documentURL, "source.odp");
+        stageSource(socket, "source.odp");
         helpers::sendTextFrame(socket, insertCommand("at=0 keepdesign=0 link=0"), testname);
         const std::string wholeReply = helpers::getResponseString(socket, "slideimport:", testname);
         Poco::JSON::Object::Ptr wholeObject = helpers::parseJsonReply(wholeReply, "slideimport:");
@@ -241,7 +279,7 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkList()
         LOK_ASSERT_EQUAL(10, wholeObject->getValue<int>("count"));
 
         // A source is a persistent link the storage resolves.
-        stageSource(socket, documentURL, "source.odp");
+        stageSource(socket, "source.odp");
         helpers::sendTextFrame(socket,
                                insertCommand("slides=0 at=0 keepdesign=0 link=1", /*named=*/false) +
                                    " source=https%3A%2F%2Fstorage.example%2Ffiles%2F42",
@@ -279,7 +317,7 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkSection()
         socketPoll->startThread();
 
         std::shared_ptr<http::WebSocketSession> socket = load(socketPoll, documentURL);
-        stageSource(socket, documentURL, "source.odp");
+        stageSource(socket, "source.odp");
 
         // Slides inserted with the section of the source they make up go in as a linked section.
         helpers::sendTextFrame(
@@ -316,7 +354,7 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkSection()
         const std::string sectionId = section->getValue<std::string>("section");
         const std::string encodedSectionId =
             "%7B" + sectionId.substr(1, sectionId.size() - 2) + "%7D";
-        stageSource(socket, documentURL, "staged.odp");
+        stageSource(socket, "staged.odp");
         sendAsWsd(std::string("slidelink update source=") + EncodedSourceName +
                   " file=staged.odp time=2021-06-06T10:00:00Z section=" + encodedSectionId +
                   " sectionname=Opening%20slides%2C%20revised");
@@ -338,7 +376,7 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkSection()
         LOK_ASSERT_EQUAL(10, updateObject->getValue<int>("count"));
 
         // A section that is not linked has no source section to follow.
-        stageSource(socket, documentURL, "staged.odp");
+        stageSource(socket, "staged.odp");
         const std::string otherSection = "%7B00000000-0000-4000-8000-000000000000%7D";
         assertErrorAsWsd(socket,
                          std::string("slidelink update source=") + EncodedSourceName +
@@ -393,7 +431,7 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkRefresh()
         socketPoll->startThread();
 
         std::shared_ptr<http::WebSocketSession> socket = load(socketPoll, documentURL);
-        stageSource(socket, documentURL, "source.odp");
+        stageSource(socket, "source.odp");
 
         helpers::sendTextFrame(socket, insertCommand("slides=0,1 at=0 keepdesign=0 link=1"),
                                testname);
@@ -403,7 +441,7 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkRefresh()
 
         // An update that names one page reads that page alone: it holds a new
         // part afterwards and the other page of the source keeps the one it has.
-        stageSource(socket, documentURL, "one.odp");
+        stageSource(socket, "one.odp");
         sendAsWsd(std::string("slidelink update source=") + EncodedSourceName +
                   " file=one.odp part=" + insertedParts[1]);
         const std::string oneListReply =
@@ -419,7 +457,7 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkRefresh()
 
         // A page that is not linked to the source is refreshed from nothing, and
         // the staged file goes with the answer.
-        stageSource(socket, documentURL, "none.odp");
+        stageSource(socket, "none.odp");
         assertErrorAsWsd(socket,
                          std::string("slidelink update source=") + EncodedSourceName +
                              " file=none.odp part=999999",
@@ -428,7 +466,7 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkRefresh()
         // wsd stages the slides of the source as a file of the jail and has the
         // kit read the pages of that source from it. The staged name holds a
         // space, so the encoding of the name is exercised as well.
-        stageSource(socket, documentURL, "Q3 staged.odp");
+        stageSource(socket, "Q3 staged.odp");
 
         sendAsWsd(std::string("slidelink update source=") + EncodedSourceName +
                   " file=Q3%20staged.odp");
@@ -481,7 +519,7 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkBreak()
         socketPoll->startThread();
 
         std::shared_ptr<http::WebSocketSession> socket = load(socketPoll, documentURL);
-        stageSource(socket, documentURL, "source.odp");
+        stageSource(socket, "source.odp");
 
         helpers::sendTextFrame(socket, insertCommand("slides=0,1 at=0 keepdesign=0 link=1"),
                                testname);
@@ -541,7 +579,7 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkErrors()
         socketPoll->startThread();
 
         std::shared_ptr<http::WebSocketSession> socket = load(socketPoll, documentURL);
-        stageSource(socket, documentURL, "source.odp");
+        stageSource(socket, "source.odp");
 
         helpers::assertErrorReply(socket,
                                   insertCommand("slides=0", /*named=*/false) +
@@ -590,7 +628,7 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkErrors()
 
         // A file is staged for one insert, and an insert the document cannot make sense of
         // takes it all the same, so the insert that follows reaches nothing.
-        stageSource(socket, documentURL, "source.odp");
+        stageSource(socket, "source.odp");
         helpers::assertErrorReply(socket, insertCommand("slides=0 bogus=1"),
                                   "slideimport", "syntax", testname);
         helpers::assertErrorReply(socket, insertCommand("slides=0"),
@@ -609,7 +647,7 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkErrors()
         // A source no page of the document is linked to is a different matter
         // from a file the kit could not read, so this update gets a staged
         // file of its own.
-        stageSource(socket, documentURL, "staged.odp");
+        stageSource(socket, "staged.odp");
         assertErrorAsWsd(socket, "slidelink update source=Other%20deck.odp file=staged.odp",
                          "notlinked", " source=Other%20deck.odp");
 
@@ -624,14 +662,14 @@ UnitBase::TestResult UnitSlideLink::testSlideLinkErrors()
 
         // A source holding a control character is refused, and the file staged for that
         // refresh goes with it: the refresh that follows reaches nothing.
-        stageSource(socket, documentURL, "staged.odp");
+        stageSource(socket, "staged.odp");
         assertErrorAsWsd(socket, "slidelink update source=deck%01.odp file=staged.odp",
                          "syntax", " source=deck%01.odp");
 
         // A refresh records the time it names on the pages it reads, so a time of that shape is
         // refused the same way, and the file staged for it goes with the refresh it was staged
         // for.
-        stageSource(socket, documentURL, "staged.odp");
+        stageSource(socket, "staged.odp");
         assertErrorAsWsd(socket, std::string("slidelink update source=") + EncodedSourceName +
                                      " file=staged.odp time=2021-05-05T10%3A00%3A00Z%01",
                          "syntax", std::string(" source=") + EncodedSourceName);
@@ -691,7 +729,7 @@ UnitBase::TestResult UnitSlideLink::testReadOnly()
         socketPoll->startThread();
 
         std::shared_ptr<http::WebSocketSession> socket = load(socketPoll, readOnlyURL);
-        stageSource(socket, readOnlyURL, "staged.odp");
+        stageSource(socket, "staged.odp");
 
         // A readonly view reads the links its document holds...
         LOK_ASSERT_EQUAL(static_cast<std::size_t>(0), getLinks(socket)->size());
