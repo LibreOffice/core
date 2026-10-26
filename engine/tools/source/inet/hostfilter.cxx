@@ -284,7 +284,9 @@ bool HostFilter::isFileUrlForbidden(const OUString& rFileUrl)
 bool HostFilter::isUrlForbidden(const OUString& rUrl)
 {
     INetURLObject aURLObject(rUrl);
-    return aURLObject.IsExoticProtocol() || isForbidden(aURLObject.GetHost())
+    // A file URL is decided by the allowed paths alone.
+    return aURLObject.IsExoticProtocol()
+           || (aURLObject.GetProtocol() != INetProtocol::File && isForbidden(aURLObject.GetHost()))
            || isFileUrlForbidden(rUrl);
 }
 
