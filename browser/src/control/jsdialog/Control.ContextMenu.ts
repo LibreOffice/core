@@ -181,11 +181,12 @@ class ContextMenuControl extends JSControl {
 		Util.ensureValue(app.activeDocument.mouseControl);
 		const container = document.getElementById('canvas-container');
 		Util.ensureValue(container);
-		// The menu of an editengine widget opens at its caret.
+		// The menu of an editengine widget opens at the mouse when the mouse opened it, and at the
+		// caret otherwise.
 		// A keyboard-opened menu is placed at the caret or active cell, falling
 		// back to the mouse when there is no visible cursor.
 		const position =
-			(this._editEngine && this._getEditEngineCaretPosition(container)) ||
+			(this._editEngine && this._getEditEngineMenuPosition(container)) ||
 			(keyboardInvoked &&
 				app.activeDocument.mouseControl.getCursorCanvasPosition()) ||
 			app.activeDocument.mouseControl.getMouseCanvasPosition();
@@ -276,10 +277,15 @@ class ContextMenuControl extends JSControl {
 		);
 	}
 
-	// The bottom left of the caret in the editengine widget, relative to the container.
-	private _getEditEngineCaretPosition(
+	// The point of the last mouse press in the editengine widget, or the bottom left of its caret
+	// when a key was pressed after it, relative to the container.
+	private _getEditEngineMenuPosition(
 		container: HTMLElement,
 	): PositionInterface | null {
+		const origin = container.getBoundingClientRect();
+		const mouse = (this._editEngine as any)?.editEngineMousePoint;
+		if (mouse) return { x: mouse.x - origin.left, y: mouse.y - origin.top };
+
 		const selection = window.getSelection();
 		if (!selection || selection.rangeCount === 0) return null;
 
@@ -291,7 +297,6 @@ class ContextMenuControl extends JSControl {
 			const line = node instanceof Element ? node : node.parentElement;
 			if (line) caret = line.getBoundingClientRect();
 		}
-		const origin = container.getBoundingClientRect();
 		return { x: caret.left - origin.left, y: caret.bottom - origin.top };
 	}
 

@@ -42,6 +42,9 @@ interface EditEngineContainer extends HTMLElement {
 	onEditEngineMenu?: (open: boolean) => void;
 	// True while a context menu for this widget is open. The menu holds the focus then.
 	editEngineMenuOpen?: boolean;
+	// The point of the last mouse press in viewport pixels, or undefined when a key was pressed
+	// after it.
+	editEngineMousePoint?: { x: number; y: number };
 	// The selection the engine last reported or was last told about. A pointer gesture that lands
 	// on the same caret is not reported twice. Held on the element so it goes away when the widget
 	// does.
@@ -377,9 +380,10 @@ function editEngineUpdateClipboardState(container: EditEngineContainer): void {
 }
 
 function editEngineAttachHandlers(container: EditEngineContainer): void {
-	container.addEventListener('keydown', (e: KeyboardEvent) =>
-		editEngineOnKeyDown(container, e),
-	);
+	container.addEventListener('keydown', (e: KeyboardEvent) => {
+		container.editEngineMousePoint = undefined;
+		editEngineOnKeyDown(container, e);
+	});
 
 	container.addEventListener('beforeinput', (e: Event) =>
 		editEngineOnBeforeInput(container, e as InputEvent),
@@ -434,7 +438,8 @@ function editEngineAttachHandlers(container: EditEngineContainer): void {
 	// released, because a drag that selects text can finish outside the widget. A click inside a
 	// selection collapses it only after the mouseup has been handled, so the selection is read in a
 	// later task.
-	container.addEventListener('mousedown', () =>
+	container.addEventListener('mousedown', (e: MouseEvent) => {
+		container.editEngineMousePoint = { x: e.clientX, y: e.clientY };
 		window.addEventListener(
 			'mouseup',
 			() =>
@@ -442,8 +447,8 @@ function editEngineAttachHandlers(container: EditEngineContainer): void {
 					editEngineSendSelection(container),
 				),
 			{ once: true },
-		),
-	);
+		);
+	});
 
 	// The engine builds the menu for the caret, so the caret the right click placed goes first.
 	container.addEventListener('contextmenu', (e: MouseEvent) => {

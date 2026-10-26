@@ -567,6 +567,35 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 		});
 	});
 
+	it('a right click on text selected over several lines opens the menu at the click', function () {
+		var editEngine = '#notespanel-container .ui-editengine';
+		var paragraph = editEngine + ' .ui-editengine-paragraph';
+
+		openNotesPane();
+		cy.cGet(editEngine).click();
+		cy.cGet(editEngine).type('One{enter}Two');
+		cy.cGet(paragraph).should('have.length', 2);
+
+		cy.getFrameWindow().then(function (win) {
+			win.app.map.sendUnoCommand('.uno:SelectAll');
+			helper.processToIdle(win);
+		});
+
+		// The middle of the second line, away from the left edge of the pane.
+		var clickX;
+		cy.cGet(paragraph).last().then(function (element) {
+			var rect = element[0].getBoundingClientRect();
+			clickX = rect.left + rect.width / 2;
+		});
+		cy.cGet(paragraph).last().rightclick();
+		helper.getContextMenuItem('Cut').should('be.visible');
+
+		cy.cGet('#canvas-context-menupos').should(function (anchor) {
+			var left = anchor[0].getBoundingClientRect().left;
+			expect(left).to.be.closeTo(clickX, 2);
+		});
+	});
+
 	// Bold applies to the notes text while the notes have the focus, and the Bold button shows
 	// the attribute at the caret as the caret moves between a bold and a plain word.
 	it('the Bold button follows the caret in the notes', function () {
