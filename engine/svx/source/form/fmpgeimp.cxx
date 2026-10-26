@@ -258,6 +258,8 @@ namespace
         }
 
         auto it = _map->find( xControlModel );
+        if ( it == _map->end() )
+            return;
         Reference< XControlShape > aOldAssignment = it->second;
         _map->erase( it );
         OSL_ENSURE(

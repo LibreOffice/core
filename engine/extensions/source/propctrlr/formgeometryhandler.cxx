@@ -305,9 +305,13 @@ namespace pcr
                     Any any = m_xContext->getValueByName( u"ControlShapeAccess"_ustr );
                     Reference< XInterface > xControlMapTmp;
                     any >>= xControlMapTmp;
-                    rtl::Reference< comphelper::ControlModelToControlShapeMap > xControlMap
-                        = &dynamic_cast<comphelper::ControlModelToControlShapeMap&>(*xControlMapTmp);
-                    m_xAssociatedShape = xControlMap->find( xControlModel )->second;
+                    auto pControlMap = dynamic_cast<comphelper::ControlModelToControlShapeMap*>(xControlMapTmp.get());
+                    if ( !pControlMap )
+                        return;
+                    auto it = pControlMap->find( xControlModel );
+                    if ( it == pControlMap->end() )
+                        return;
+                    m_xAssociatedShape = it->second;
                     m_xShapeProperties.set( m_xAssociatedShape, UNO_QUERY_THROW );
                 }
             }
