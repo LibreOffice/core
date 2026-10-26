@@ -20,14 +20,41 @@
 
 namespace sc
 {
+
+bool CellRangeMarkerOptions::operator==(const CellRangeMarkerOptions&) const = default;
+
 void notifyCellRangeMarker(const ScViewData& rViewData, const CellRangeMarkerOptions& rOptions)
 {
     if (!comphelper::COKit::isActive())
         return;
 
     ScTabViewShell* pViewShell = rViewData.GetViewShell();
-    if (!pViewShell)
+    ScTabView* pView = rViewData.GetView();
+    if (!pViewShell || !pView)
         return;
+
+    {
+        // Avoid sending duplicated messages that are identical to what the
+        // client currently has. If the marker is not displayed it's not stored
+        // here.
+        auto& rShownMarkers = pView->GetKitCellRangeMarkers();
+        auto it = rShownMarkers.find(rOptions.aName);
+        if (rOptions.aCellRanges.empty())
+        {
+            if (it == rShownMarkers.end())
+                return;
+
+            rShownMarkers.erase(it);
+        }
+        else
+        {
+            if (it != rShownMarkers.end() && it->second == rOptions)
+                // skip the duplicate
+                return;
+
+            rShownMarkers.insert_or_assign(rOptions.aName, rOptions);
+        }
+    }
 
     tools::JsonWriter aWriter;
     aWriter.put("commandName", "CellRangeMarker");

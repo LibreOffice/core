@@ -490,6 +490,9 @@ void ScTabViewShell::afterCallbackRegistered()
     // common tasks
     SfxViewShell::afterCallbackRegistered();
 
+    // Markers sent before the callback was registered never reached the client.
+    GetKitCellRangeMarkers().clear();
+
     UpdateInputHandler(true, false);
 
     ScInputHandler* pHdl = mpInputHandler ? mpInputHandler.get() : ScModule::get()->GetInputHdl();

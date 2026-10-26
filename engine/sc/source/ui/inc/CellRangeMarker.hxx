@@ -35,10 +35,13 @@ struct CellRangeMarkerOptions
     bool bDashed = false;
     double fFillOpacity = 0.0;
     OString aHandleCommand;
+
+    bool operator==(const CellRangeMarkerOptions&) const;
 };
 
 /** Send a marker to the client. It replaces the ranges under its name, and none clears the
-    kind. The ranges are cell indexes, not pixels.
+    kind. The ranges are cell indexes, not pixels. Nothing is sent when the client already shows
+    the marker as given, or has nothing to clear.
  */
 void notifyCellRangeMarker(const ScViewData& rViewData, const CellRangeMarkerOptions& rOptions);
 

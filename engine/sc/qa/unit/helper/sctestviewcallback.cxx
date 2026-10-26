@@ -334,6 +334,8 @@ void ScTestViewCallback::callbackImpl(COKitCallbackType eType, const char* pPayl
             }
 
             m_aStateChanges[aCommandName] = aTree;
+            if (aCommandName == "CellRangeMarker")
+                m_aCellRangeMarkers.push_back(aTree);
         }
         break;
         case COKitCallbackType::JSDIALOG:

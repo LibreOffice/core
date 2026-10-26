@@ -7061,7 +7061,8 @@ void ScGridWindow::DeleteDatabaseOverlay()
 {
     maDBExpandHandles.clear();
     mpOODatabase.reset();
-    if (comphelper::COKit::isActive()) // clear the client's markers
+    // Clear the client's markers, unless the window is going away with its view.
+    if (comphelper::COKit::isActive() && !isDisposed())
         notifyTableRangeMarkers(mrViewData, {}, mrViewData.GetTabNumber());
 }
 

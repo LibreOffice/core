@@ -21,6 +21,7 @@
 #include <sal/config.h>
 
 #include <array>
+#include <map>
 #include <memory>
 #include <svtools/scrolladaptor.hxx>
 #include <svx/sdr/overlay/overlayobjectlist.hxx>
@@ -30,6 +31,7 @@
 #include "viewutil.hxx"
 #include "select.hxx"
 #include "gridwin.hxx"
+#include "CellRangeMarker.hxx"
 
 class ScDrawView;
 class ScEditEngineDefaulter;
@@ -126,6 +128,10 @@ private:
 
     std::unique_ptr<ScDrawView> pDrawView;
     sdr::overlay::OverlayObjectList maTextEditOverlayGroup;
+
+    /// The cell range markers currently shown in the client. It lives here, with the grid
+    /// windows that send them, so it is still around when they are disposed.
+    std::map<OString, sc::CellRangeMarkerOptions> maKitCellRangeMarkers;
 
     Size                aFrameSize;             // passed on as for DoResize
     Point               aBorderPos;
@@ -297,6 +303,8 @@ public:
 
                     ScTabView( vcl::Window* pParent, ScDocShell& rDocSh, ScTabViewShell* pViewShell );
                     ~ScTabView();
+
+    std::map<OString, sc::CellRangeMarkerOptions>& GetKitCellRangeMarkers() { return maKitCellRangeMarkers; }
 
     enum SplitMethod { SC_SPLIT_METHOD_COL, SC_SPLIT_METHOD_ROW, SC_SPLIT_METHOD_CURSOR };
 

@@ -84,6 +84,8 @@ public:
     std::vector<OString> m_aMousePointers;
     OString m_ShapeSelection;
     std::map<std::string, boost::property_tree::ptree> m_aStateChanges;
+    /// Every CellRangeMarker state change the view received, oldest first.
+    std::vector<boost::property_tree::ptree> m_aCellRangeMarkers;
     std::string decimalSeparator;
     TestKitCallbackWrapper m_callbackWrapper;
 
