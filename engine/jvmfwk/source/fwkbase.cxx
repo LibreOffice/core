@@ -136,7 +136,7 @@ VersionInfo VendorSettings::getVersionInformation(std::u16string_view sVendor) c
         return {
             {},
 #if defined MACOSX && defined __aarch64__
-            "17",
+            u"17"_ustr,
 #else
             u"1.8.0"_ustr,
 #endif

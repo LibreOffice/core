@@ -1128,7 +1128,7 @@ void addJavaInfosDirScan(
     // Ignore all but Oracle's JDK as loading Apple's Java and Oracle's JRE
     // will cause macOS's JavaVM framework to display a dialog and invoke
     // exit() when loaded via JNI on macOS 10.10
-    Directory aDir("file:///Library/Java/JavaVirtualMachines");
+    Directory aDir(u"file:///Library/Java/JavaVirtualMachines"_ustr);
     if (aDir.open() == File::E_None)
     {
         DirectoryItem aItem;
