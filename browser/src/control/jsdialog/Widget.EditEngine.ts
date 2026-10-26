@@ -214,6 +214,29 @@ function editEngineHighlightSelection(
 	else highlights.delete(EDITENGINE_MENU_HIGHLIGHT);
 }
 
+/// Scrolls the widget by the least distance that shows the end of the selection, where the caret
+/// is.
+function editEngineScrollCaretIntoView(container: HTMLElement): void {
+	const selection = window.getSelection();
+	if (!selection || selection.rangeCount === 0 || !selection.focusNode) return;
+
+	const caret = document.createRange();
+	caret.setStart(selection.focusNode, selection.focusOffset);
+	let rect = caret.getBoundingClientRect();
+	// A caret in an empty paragraph has no box, so the paragraph gives the line.
+	if (!rect.height) {
+		const node = selection.focusNode;
+		const line = node instanceof Element ? node : node.parentElement;
+		if (!line) return;
+		rect = line.getBoundingClientRect();
+	}
+
+	const view = container.getBoundingClientRect();
+	if (rect.top < view.top) container.scrollTop -= view.top - rect.top;
+	else if (rect.bottom > view.bottom)
+		container.scrollTop += rect.bottom - view.bottom;
+}
+
 /// Drops the document selection when it lies in the container.
 function editEngineDropSelection(container: HTMLElement): void {
 	const selection = window.getSelection();
@@ -622,6 +645,8 @@ function editEngineUpdateInPlace(
 	// document across the update, so the caret can be placed at once with no wait for a frame.
 	if (document.activeElement === container) {
 		editEngineApplySelection(container, selection);
+		// Placing the selection from code does not scroll, so the view follows the caret here.
+		editEngineScrollCaretIntoView(container);
 		return;
 	}
 

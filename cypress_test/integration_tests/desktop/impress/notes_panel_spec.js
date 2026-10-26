@@ -401,6 +401,26 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 
 	// The notes are plain paragraphs, so Ctrl+Enter starts the next paragraph at the same level, as
 	// Enter does.
+	it('the notes scroll to keep the caret in view while new lines are typed', function () {
+		var editEngine = '#notespanel-container .ui-editengine';
+		var paragraph = editEngine + ' .ui-editengine-paragraph';
+
+		openNotesPane();
+		cy.cGet(editEngine).click();
+		for (var i = 1; i <= 15; i++)
+			cy.cGet(editEngine).type('Line ' + i + '{enter}');
+		cy.cGet(paragraph).should('have.length.at.least', 16);
+
+		cy.cGet(editEngine).should(function (editor) {
+			expect(editor[0].scrollHeight).to.be.greaterThan(editor[0].clientHeight);
+			var view = editor[0].getBoundingClientRect();
+			var paragraphs = editor[0].querySelectorAll('.ui-editengine-paragraph');
+			var last = paragraphs[paragraphs.length - 1].getBoundingClientRect();
+			expect(last.top).to.be.at.least(view.top);
+			expect(last.bottom).to.be.at.most(view.bottom + 1);
+		});
+	});
+
 	it('Ctrl+Enter starts a new paragraph at the same level', function () {
 		openNotesPane();
 
