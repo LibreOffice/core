@@ -315,6 +315,11 @@
               <item translatable="yes" context="calloutpage|linetypes">Angled Line</item>
               <item translatable="yes" context="calloutpage|linetypes">Angled Connector Line</item>
             </items>
+            <child internal-child="accessible">
+              <object class="AtkObject" id="linetypes-atkobject">
+                <property name="AtkObject::accessible-name" translatable="yes" context="calloutpage|linetypes-atkobject">Line types</property>
+              </object>
+            </child>
           </object>
           <packing>
             <property name="left_attach">1</property>

@@ -380,6 +380,25 @@ describe(['taglighthouse'], 'Accessibility Impress Dialog Tests', { testIsolatio
         helper.typeIntoDocument('{esc}');
     });
 
+    it('Callout dialog', function () {
+        // a legacy callout is created with its text edit running; ending an edit without text
+        // deletes it, so it gets a word before Escape leaves it selected
+        cy.then(() => {
+            win.app.map.sendUnoCommand('.uno:DrawCaption');
+        });
+        cy.cGet('#test-div-shapeHandlesSection').should('exist');
+        helper.typeIntoDocument('Callout{esc}');
+        cy.cGet('#test-div-shapeHandlesSection').should('exist');
+
+        // Position and Size opens the callout dialog for a legacy callout
+        cy.then(() => {
+            win.app.map.sendUnoCommand('.uno:TransformDialog');
+        });
+        a11yHelper.handleDialog(win, 1, '.uno:TransformDialog');
+
+        helper.typeIntoDocument('{esc}');
+    });
+
     it('Interaction dialog', function () {
         cy.then(() => {
             win.app.map.sendUnoCommand('.uno:BasicShapes.octagon');

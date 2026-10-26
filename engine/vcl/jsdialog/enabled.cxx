@@ -68,6 +68,8 @@ constexpr auto CuiDialogList
         { u"cui/ui/borderbackgrounddialog.ui" },
         { u"cui/ui/borderpage.ui" },
         { u"cui/ui/bulletandposition.ui" },
+        { u"cui/ui/calloutdialog.ui" },
+        { u"cui/ui/calloutpage.ui" },
         { u"cui/ui/cellalignment.ui" },
         { u"cui/ui/charnamepage.ui" },
         { u"cui/ui/colorpage.ui" },
@@ -1016,12 +1018,15 @@ std::vector<OUString> completeCommonDialogList(const o3tl::sorted_vector<OUStrin
                     continue;
             }
 
-            // The dimension line dialog opens from a selected dimension line. The Impress run
-            // draws one for it, the Writer and Calc runs do not.
+            // The dimension line dialog opens from a selected dimension line, the callout dialog
+            // from Position and Size on a selected legacy callout. The Impress run draws one of
+            // each for them, the Writer and Calc runs do not.
             if (docType == COKitDocumentType::TEXT || docType == COKitDocumentType::SPREADSHEET)
             {
                 if (entry == u"cui/ui/dimensionlinesdialog.ui" ||
-                    entry == u"cui/ui/dimensionlinestabpage.ui")
+                    entry == u"cui/ui/dimensionlinestabpage.ui" ||
+                    entry == u"cui/ui/calloutdialog.ui" ||
+                    entry == u"cui/ui/calloutpage.ui")
                 {
                     continue;
                 }
