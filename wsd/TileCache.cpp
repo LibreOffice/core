@@ -450,7 +450,7 @@ bool TileCache::invalidateTiles(const std::string& part, int mode, int x, int y,
 
     for (auto it = _cache.begin(); it != _cache.end();)
     {
-        if (intersectsTile(it->first, part, mode, x, y, width, height, canonicalViewId))
+        if (intersectsTile(it->first, part, mode, x, y, width, height))
         {
             // FIXME: only want to keep as invalid keyframes in the view area(s)
             it->second->invalidate();
@@ -568,7 +568,7 @@ std::string TileCache::cacheFileName(const TileDesc& tile)
     return oss.str();
 }
 
-bool TileCache::intersectsTile(const TileDesc &tileDesc, const std::string& part, int mode, int x, int y, int width, int height, CanonicalViewId canonicalViewId)
+bool TileCache::intersectsTile(const TileDesc &tileDesc, const std::string& part, int mode, int x, int y, int width, int height)
 {
     if (part != "-1" && tileDesc.getPart() != part)
         return false;
@@ -576,8 +576,10 @@ bool TileCache::intersectsTile(const TileDesc &tileDesc, const std::string& part
     if (mode != tileDesc.getEditMode())
         return false;
 
-    if (canonicalViewId != tileDesc.getCanonicalViewId())
-        return false;
+    // The canonical view id is deliberately not compared here. Views whose settings differ, such
+    // as formatting marks shown or hidden, render the same document content under different
+    // canonical view ids, so the cache holds one tile per id at the same position. A content change
+    // affects every one of those renderings, so the invalidation has to reach the tiles of all.
 
     const int left = std::max(x, tileDesc.getTilePosX());
     const int right = std::min(x + width, tileDesc.getTilePosX() + tileDesc.getTileWidth());

@@ -351,7 +351,7 @@ private:
 
     /// Extract location from fileName, and check if it intersects with [x, y, width, height].
     static bool intersectsTile(const TileDesc &tileDesc, const std::string& part, int mode, int x, int y,
-                               int width, int height, CanonicalViewId canonicalViewId);
+                               int width, int height);
 
     Tile saveDataToCache(const TileDesc& desc, const char* data, size_t size);
     void saveDataToStreamCache(StreamType type, const std::string& fileName, const char* data,

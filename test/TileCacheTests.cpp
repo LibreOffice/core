@@ -18,6 +18,7 @@
 #include <common/Common.hpp>
 #include <common/HexUtil.hpp>
 #include <common/Png.hpp>
+#include <common/ProcUtil.hpp>
 #include <common/Protocol.hpp>
 #include <common/Unit.hpp>
 #include <common/Util.hpp>
@@ -90,6 +91,7 @@ class TileCacheTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testTileInvalidateWriter);
     CPPUNIT_TEST(testTileInvalidateWriterPage);
     CPPUNIT_TEST(testTileInvalidateCalc);
+    CPPUNIT_TEST(testTileInvalidateCanonicalViewId);
     // temporarily disable
     //CPPUNIT_TEST(testTileInvalidatePartCalc);
     //CPPUNIT_TEST(testTileInvalidatePartImpress);
@@ -128,6 +130,7 @@ class TileCacheTests : public CPPUNIT_NS::TestFixture
     void testTileInvalidateWriterPage();
     void testWriterAnyKey();
     void testTileInvalidateCalc();
+    void testTileInvalidateCanonicalViewId();
     void testTileInvalidatePartCalc();
     void testTileInvalidatePartImpress();
     void testTileRequestByInvalidation();
@@ -221,6 +224,58 @@ void TileCacheTests::testDesc()
     TileDescCacheCompareEq pred;
     LOK_ASSERT_MESSAGE("TileDesc versions do match", descA.getVersion() != descB.getVersion());
     LOK_ASSERT_MESSAGE("TileDesc should match, ignoring unimportant fields", pred(descA, descB));
+}
+
+void TileCacheTests::testTileInvalidateCanonicalViewId()
+{
+    constexpr std::string_view testname = __func__;
+
+    // A text document renders the same content for every view. Two views whose settings differ,
+    // for example formatting marks shown in one and hidden in the other, are given different
+    // canonical view ids, so the cache holds a separate tile for each one at the same position.
+    // When the content changes, the invalidation arrives tagged with the canonical view id of the
+    // view that reported it. The tile the other view holds at that position shows the same text, so
+    // it has to be invalidated as well. Otherwise it stays valid in the cache, and a session that
+    // reuses that canonical view id afterwards, such as one that joins the document after the
+    // change, is handed the stale tile.
+
+    const std::chrono::system_clock::time_point now = std::chrono::system_clock::now();
+    TileCache cache("file:///tmp/tcache_canonical_test.odt", now, /*dontCache=*/false);
+    cache.setThreadOwner(ProcUtil::getThreadId());
+
+    const CanonicalViewId idA = static_cast<CanonicalViewId>(1000);
+    const CanonicalViewId idB = static_cast<CanonicalViewId>(1001);
+
+    const auto tileAt = [](CanonicalViewId id, TileWireId wid) -> TileDesc
+    {
+        TileDesc desc(id, "0", 0, 256, 256, /*tilePosX=*/0, /*tilePosY=*/0,
+                      /*tileWidth=*/3840, /*tileHeight=*/3840, /*ver=*/-1, /*imgSize=*/0,
+                      /*id=*/-1);
+        desc.setWireId(wid);
+        return desc;
+    };
+
+    // Cache one keyframe for each view id at the same position. A keyframe payload begins with 'Z'.
+    const char keyframe[] = { 'Z', 0x01, 0x02, 0x03, 0x04 };
+    const TileDesc descA = tileAt(idA, 1);
+    const TileDesc descB = tileAt(idB, 1);
+    cache.saveTileAndNotify(descA, keyframe, sizeof keyframe);
+    cache.saveTileAndNotify(descB, keyframe, sizeof keyframe);
+
+    LOK_ASSERT_MESSAGE("first view's tile is cached and valid",
+                       cache.lookupTile(descA) && cache.lookupTile(descA)->isValid());
+    LOK_ASSERT_MESSAGE("second view's tile is cached and valid",
+                       cache.lookupTile(descB) && cache.lookupTile(descB)->isValid());
+
+    // A content change covering that position is reported by the first view.
+    cache.invalidateTiles("invalidatetiles: part=0 x=0 y=0 width=3840 height=3840 wid=0", idA);
+
+    const Tile afterA = cache.lookupTile(descA);
+    LOK_ASSERT_MESSAGE("the reporting view's tile is invalidated", !afterA || !afterA->isValid());
+
+    const Tile afterB = cache.lookupTile(descB);
+    LOK_ASSERT_MESSAGE("the other view's tile for the same content must be invalidated too",
+                       !afterB || !afterB->isValid());
 }
 
 void TileCacheTests::testSimple()
