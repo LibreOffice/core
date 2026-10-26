@@ -1836,6 +1836,43 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateKeepsFootnotes)
                          getProperty<lang::Locale>(xNoteParagraph, u"CharLocale"_ustr).Language);
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateSelectionKeepsFootnoteLanguage)
+{
+    std::unique_ptr<test::MockHttpServer> pMockServer = createMockTranslateServer();
+    CPPUNIT_ASSERT(pMockServer->start());
+    comphelper::ScopeGuard<std::function<void()>> aResetConfig
+        = setTranslationService(u"http://127.0.0.1:18099/v2/translate"_ustr);
+
+    // Given a paragraph with a footnote at its end, and its first word selected:
+    createSwDoc();
+    SwWrtShell* const pWrtSh = getSwDocShell()->GetWrtShell();
+    pWrtSh->Insert(u"Hello World"_ustr);
+    pWrtSh->InsertFootnote(u""_ustr);
+    pWrtSh->Insert(u"Note text"_ustr);
+    pWrtSh->SttEndDoc(true);
+    pWrtSh->Right(SwCursorSkipMode::Chars, /*bSelect=*/true, 5, /*bBasicCall=*/false);
+    uno::Reference<text::XFootnotesSupplier> xSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xNote(xSupplier->getFootnotes()->getByIndex(0),
+                                                        uno::UNO_QUERY_THROW);
+    std::function<OUString()> noteLanguage = [this, &xNote]() {
+        return getProperty<lang::Locale>(xNote->createEnumeration()->nextElement(),
+                                         u"CharLocale"_ustr)
+            .Language;
+    };
+    const OUString aNoteLanguage = noteLanguage();
+    CPPUNIT_ASSERT(aNoteLanguage != u"de");
+
+    // When translating the selection to German:
+    bool bCancel = false;
+    CPPUNIT_ASSERT(SwTranslateHelper::TranslateDocumentCancellable(*pWrtSh, "DE"_ostr, bCancel));
+
+    // Then only the selected word was translated, and the footnote outside the selection keeps
+    // its language: every footnote of the paragraph used to get the language of the
+    // translation.
+    CPPUNIT_ASSERT(getParagraph(1)->getString().startsWith("TRANSLATED-TEXT World"));
+    CPPUNIT_ASSERT_EQUAL(aNoteLanguage, noteLanguage());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateKeepsFields)
 {
     // The mock returns the markup it was sent, as the translation services do.

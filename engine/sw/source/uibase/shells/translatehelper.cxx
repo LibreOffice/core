@@ -264,22 +264,26 @@ void SetLanguageOfRange(SwWrtShell& rWrtSh, SwNodeOffset nStartNode, sal_Int32 n
         aPaM, SvxLanguageItem(eLanguage, nWhich));
 }
 
-/// Sets eLanguage on the text of the footnotes of the nodes nFirstNode to nLastNode: their
-/// text came with the paragraph's translation, but lives in a section of its own.
-void SetLanguageOfFootnotes(SwWrtShell& rWrtSh, SwNodeOffset nFirstNode, SwNodeOffset nLastNode,
-                            LanguageType eLanguage)
+/// Sets eLanguage on the text of the footnotes in the same range as SetLanguageOfRange: their
+/// text came with the translation, but lives in a section of its own.
+void SetLanguageOfFootnotes(SwWrtShell& rWrtSh, SwNodeOffset nStartNode, sal_Int32 nStartContent,
+                            SwNodeOffset nEndNode, sal_Int32 nCharsAfter, LanguageType eLanguage)
 {
     const SwNodes& rNodes = rWrtSh.GetNodes();
-    for (SwNodeOffset n = nFirstNode; n <= nLastNode && n < rNodes.Count(); ++n)
+    for (SwNodeOffset n = nStartNode; n <= nEndNode && n < rNodes.Count(); ++n)
     {
         const SwTextNode* pTextNode = rNodes[n]->GetTextNode();
         if (!pTextNode || !pTextNode->HasHints())
             continue;
+        // the part of the node that the translation replaced
+        const sal_Int32 nFrom = n == nStartNode ? nStartContent : 0;
+        const sal_Int32 nTo = n == nEndNode ? pTextNode->Len() - nCharsAfter : pTextNode->Len();
         const SwpHints& rHints = pTextNode->GetSwpHints();
         for (size_t i = 0; i < rHints.Count(); ++i)
         {
             const SwTextAttr* pHint = rHints.Get(i);
-            if (pHint->Which() != RES_TXTATR_FTN)
+            if (pHint->Which() != RES_TXTATR_FTN || pHint->GetStart() < nFrom
+                || pHint->GetStart() >= nTo)
                 continue;
             const SwNodeIndex* pStart = static_cast<const SwTextFootnote*>(pHint)->GetStartNode();
             if (!pStart)
@@ -618,7 +622,8 @@ bool TranslateRanges(SwWrtShell& rWrtSh, const TranslateFunc& rTranslate,
                         {
                             SetLanguageOfRange(rWrtSh, nFirstPasted, nStartContent, nLastPasted,
                                                nCharsAfter, eTargetLanguage);
-                            SetLanguageOfFootnotes(rWrtSh, nFirstPasted, nLastPasted, eTargetLanguage);
+                            SetLanguageOfFootnotes(rWrtSh, nFirstPasted, nStartContent, nLastPasted,
+                                                   nCharsAfter, eTargetLanguage);
                         }
                         if (!aSpanningMarks.empty())
                         {
