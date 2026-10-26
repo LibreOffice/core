@@ -128,6 +128,11 @@ describe(['tagdesktop'], 'Writer table given to the reader', { testIsolation: fa
 		});
 	});
 
+	function toFirstCell() {
+		move('{ctrl}{home}{ctrl}{home}{downarrow}');
+		editing(ROWS[0][0]);
+	}
+
 	it('inside a nested table the reader is given that table', function () {
 		move('{downarrow}{downarrow}');
 		editing('Pears');
@@ -141,6 +146,39 @@ describe(['tagdesktop'], 'Writer table given to the reader', { testIsolation: fa
 				expect(tables[0], 'the rows of the nested table').to.deep.equal(SIZES);
 			});
 		});
+	});
+
+	function rowsWithFirstCell(text) {
+		const rows = ROWS.map(function (row) {
+			return row.slice();
+		});
+		rows[0][0] = text;
+		return rows;
+	}
+
+	function expectRows(rows) {
+		cy.cGet('#a11y-context-table').should('contain.text', rows[0][0].split(' ')[0]);
+		cy.then(function () {
+			return tableRows().then(function (tables) {
+				expect(tables, 'one table').to.have.length(1);
+				expect(tables[0], 'its rows').to.deep.equal(rows);
+			});
+		});
+	}
+
+	it('typing in a cell changes that cell, and only it, for the reader', function () {
+		toFirstCell();
+		move('X');
+		editing('X' + ROWS[0][0]);
+		expectRows(rowsWithFirstCell('X' + ROWS[0][0]));
+
+		move('{enter}');
+		editing(ROWS[0][0]);
+		expectRows(rowsWithFirstCell('X ' + ROWS[0][0]));
+
+		move('{backspace}{backspace}');
+		editing(ROWS[0][0]);
+		expectRows(ROWS);
 	});
 
 	it('leaving the table takes it away from the reader', function () {
