@@ -1,62 +1,55 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
 /*
  * This file is part of the Collabora Office project.
  *
  * This Source Code Form is subject to the terms of the Mozilla Public
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/.
- *
- * This file incorporates work covered by the following license notice:
- *
- *   Licensed to the Apache Software Foundation (ASF) under one or more
- *   contributor license agreements. See the NOTICE file distributed
- *   with this work for additional information regarding copyright
- *   ownership. The ASF licenses this file to you under the Apache
- *   License, Version 2.0 (the "License"); you may not use this file
- *   except in compliance with the License. You may obtain a copy of
- *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
+#pragma once
 
-package complex.sfx2.undo;
-
-import org.openoffice.test.tools.OfficeDocument;
+//import org.openoffice.test.tools.OfficeDocument;
 
 /**
  * wrapper around an OfficeDocument, for running a standardized test procedure (related do Undo functionality)
  * on the document.
  *
  */
-public interface DocumentTest
+class DocumentTest
 {
+public:
+    virtual ~DocumentTest();
+
     /**
      * returns a human-readable description for the document/type which the tests operates on
      */
-    public String getDocumentDescription();
+    virtual OUString getDocumentDescription() = 0;
 
     /**
      * initializes the document to a state where the subsequent tests can be ran
      */
-    public void initializeDocument() throws cpo.uno.Exception;
+    virtual void initializeDocument() = 0;
 
     /**
      * closes the document which the test is based on
      */
-    public void closeDocument();
+    virtual void closeDocument() = 0;
 
     /**
      * does a simple modification to the document, which results in one Undo action being auto-generated
      * by the OOo implementation
      */
-    public void doSingleModification() throws cpo.uno.Exception;
+    virtual void doSingleModification() = 0;
 
     /**
      * verifies the document is in the same state as after {@link #initializeDocument}
      */
-    public void verifyInitialDocumentState() throws cpo.uno.Exception;
+    virtual void verifyInitialDocumentState() = 0;
 
     /**
      * verifies the document is in the state as expected after {@link #doSingleModification}
      */
-    public void verifySingleModificationDocumentState() throws cpo.uno.Exception;
+    virtual void verifySingleModificationDocumentState() = 0;
 
     /**
      * does multiple modifications do the document, which would normally result in multiple Undo actions.
@@ -68,10 +61,7 @@ public interface DocumentTest
      *  the number of modifications done to the document. The caller assumes (and asserts) that the number
      *  of actions on the Undo stack equals this number.
      */
-    public int doMultipleModifications() throws cpo.uno.Exception;
+    virtual int doMultipleModifications() = 0;
+};
 
-    /**
-     * returns the document which the test operates on
-     */
-    public OfficeDocument   getDocument();
-}
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */

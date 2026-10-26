@@ -32,22 +32,12 @@ $(eval $(call gb_JunitTest_use_jars,sfx2_complex,\
 
 $(eval $(call gb_JunitTest_add_sourcefiles,sfx2_complex,\
     sfx2/qa/complex/sfx2/GlobalEventBroadcaster \
-    sfx2/qa/complex/sfx2/UndoManager \
     sfx2/qa/complex/sfx2/DocumentEvents \
     sfx2/qa/complex/sfx2/tools/WriterHelper \
-    sfx2/qa/complex/sfx2/undo/CalcDocumentTest \
-    sfx2/qa/complex/sfx2/undo/ChartDocumentTest \
-    sfx2/qa/complex/sfx2/undo/DocumentTest \
-    sfx2/qa/complex/sfx2/undo/DocumentTestBase \
-    sfx2/qa/complex/sfx2/undo/DrawDocumentTest \
-    sfx2/qa/complex/sfx2/undo/DrawingOrPresentationDocumentTest \
-    sfx2/qa/complex/sfx2/undo/ImpressDocumentTest \
-    sfx2/qa/complex/sfx2/undo/WriterDocumentTest \
 ))
 
 $(eval $(call gb_JunitTest_add_classes,sfx2_complex,\
     complex.sfx2.DocumentEvents \
-    complex.sfx2.UndoManager \
 ))
 # fd#35663 fails currently:
 #    complex.sfx2.UndoManager \
