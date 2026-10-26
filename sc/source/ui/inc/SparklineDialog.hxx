@@ -35,7 +35,7 @@ private:
     ScDocument& mrDocument;
 
     ScRange maInputRange;
-    ScRange maOutputRange;
+    ScRange maOutputRange = ScRange(ScAddress::INITIALIZE_INVALID);
 
     formula::RefEdit* mpActiveEdit;
     bool mbDialogLostFocus;
