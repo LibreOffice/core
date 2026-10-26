@@ -133,7 +133,12 @@ public:
     /// Moves the expiry of the session one ttl past now.
     void touch(std::chrono::steady_clock::time_point now) { _expiresAt = now + _ttl; }
 
-    bool isExpired(std::chrono::steady_clock::time_point now) const { return now >= _expiresAt; }
+    /// Whether the ttl passed. A session with requests waiting, or one that is filling the
+    /// cache, stays until they are answered or reach their deadline.
+    bool isExpired(std::chrono::steady_clock::time_point now) const
+    {
+        return now >= _expiresAt && !_fillingCache && !hasPendingRequests();
+    }
 
     /// The earliest moment something is due: the expiry of the session or the deadline of a
     /// pending request.
@@ -182,6 +187,9 @@ private:
         /// Whether the tile was asked for. False while the presentation information the
         /// request needs has not arrived.
         bool sent = false;
+        /// Whether the session asked for the picture itself, to fill the cache. Such a request
+        /// has no socket.
+        bool forCache = false;
     };
 
     /// Sends a client command to the view, as a browser would.
@@ -199,6 +207,13 @@ private:
     /// lists, and answers the ones it does not list.
     void sendPendingContentRequests();
 
+    /// Asks for the picture of every slide, once, so the cache gets the whole document.
+    void startFillingCache();
+
+    /// Stores the index and the pictures in the cache once every slide has its picture, and
+    /// makes the tag of this session a name for the stored entry.
+    void storeInCacheWhenComplete();
+
     /// Marks the session Failed and answers every pending request with the given status.
     void fail(http::StatusCode status, const std::string& reason);
 
@@ -208,8 +223,11 @@ private:
     static void answerError(const std::shared_ptr<StreamSocket>& socket, http::StatusCode status,
                             const std::string& reason);
 
-    std::string buildIndexJson() const;
-    std::string buildContentUrl(const std::string& guid) const;
+    /// The index without the parts that belong to one answer: the shape the cache stores.
+    Poco::JSON::Object::Ptr buildIndex() const;
+
+    /// The document URI without its query, which names the document in the picture URLs.
+    Poco::URI documentUri() const;
 
     /// The seconds left before the session expires, zero when it already has.
     long remainingTtlSeconds() const;
@@ -225,6 +243,8 @@ private:
 
     std::shared_ptr<PreviewProtocolHandler> _handler;
     std::shared_ptr<ClientSession> _clientSession;
+    /// The broker the view belongs to, which says whether the document has unsaved changes.
+    std::weak_ptr<DocumentBroker> _docBroker;
 
     State _state;
     std::chrono::steady_clock::time_point _expiresAt;
@@ -242,6 +262,13 @@ private:
     /// The content requests in flight, by tile id.
     std::map<int, ContentRequest> _contentRequests;
     int _nextContentId;
+
+    /// Whether the session is collecting the picture of every slide for the cache.
+    bool _fillingCache;
+    /// Whether the cache got the pictures of this session.
+    bool _storedInCache;
+    /// The pictures collected for the cache, by slide GUID.
+    std::map<std::string, std::string> _cachePictures;
 };
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

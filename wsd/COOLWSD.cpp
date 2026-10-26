@@ -73,6 +73,10 @@
 #include <wsd/ClientRequestDispatcher.hpp>
 #include <wsd/CollabBroker.hpp>
 #include <wsd/DocumentBroker.hpp>
+#include <wsd/PreviewCache.hpp>
+#if !MOBILEAPP
+#include <wsd/PreviewSession.hpp>
+#endif
 #include <wsd/RemoteDocumentBroker.hpp>
 #include <wsd/PlatformDesktop.hpp>
 #include <wsd/PlatformMobile.hpp>
@@ -2474,6 +2478,23 @@ void COOLWSD::innerInitialize(Poco::Util::Application& self)
             if (FileUtil::Stat(path).exists())
                 Cache::initialize(path);
         }
+
+#if !MOBILEAPP
+        // The slide previews are kept beside the cached config files, in a directory of their
+        // own that only coolwsd reaches: the cache is outside the child roots. Without a cache
+        // path, or with the cache switched off, nothing is cached.
+        const std::string previewPath =
+            path.empty() || !ConfigUtil::getConfigValue<bool>("preview_cache[@enable]", true)
+                ? std::string()
+                : Poco::Path(path, Cache::PreviewsDirName).toString();
+        PreviewCache::initialize(
+            previewPath,
+            ConfigUtil::getConfigValue<std::size_t>("preview_cache.limit_dir_size_mb", 1024) *
+                1024 * 1024,
+            std::chrono::minutes(
+                ConfigUtil::getConfigValue<int>("preview_cache.expiry_min", 1440)),
+            PreviewSession::TagTtl);
+#endif // !MOBILEAPP
     }
 
     NumPreSpawnedChildren = ConfigUtil::getConfigValue<int>(conf, "num_prespawn_children", 1);
@@ -4214,6 +4235,10 @@ void COOLWSDServer::dumpState(std::ostream& os) const
     {
         os << "\nFetchHttpSession: null\n";
     }
+
+#if !MOBILEAPP
+    PreviewCache::dumpState(os);
+#endif // !MOBILEAPP
 
     os << "\nServer poll:\n";
     _acceptPoll.dumpState(os);

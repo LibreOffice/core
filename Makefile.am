@@ -271,6 +271,7 @@ coolwsd_sources = \
                   wsd/HealthCheck.cpp \
                   wsd/HostUtil.cpp \
                   wsd/ProofKey.cpp \
+                  wsd/PreviewCache.cpp \
                   wsd/PreviewSession.cpp \
                   wsd/ProxyProtocol.cpp \
                   wsd/ProxyRequestHandler.cpp \
@@ -378,6 +379,7 @@ wsd_headers = \
               wsd/PresetsInstall.hpp \
               wsd/Process.hpp \
               wsd/ProofKey.hpp \
+              wsd/PreviewCache.hpp \
               wsd/PreviewSession.hpp \
               wsd/ProxyProtocol.hpp \
               wsd/ProxyRequestHandler.hpp \

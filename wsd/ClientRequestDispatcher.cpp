@@ -58,6 +58,7 @@
 #include <wsd/CollabBroker.hpp>
 #include <wsd/CollabFileProxy.hpp>
 #include <wsd/CollabSocketHandler.hpp>
+#include <wsd/PreviewCache.hpp>
 #include <wsd/PreviewSession.hpp>
 #include <wsd/SharedSettings.hpp>
 #include <wsd/Storage.hpp>
@@ -2362,6 +2363,36 @@ bool ClientRequestDispatcher::handlePreviewIndexRequest(const Poco::Net::HTTPReq
 
         const Poco::URI documentUri = checkFileInfo.url();
         const std::string docKey = RequestDetails::getDocKey(documentUri);
+        std::unique_ptr<WopiStorage::WOPIFileInfo> fileInfo =
+            checkFileInfo.wopiFileInfo(documentUri);
+
+        // The cache holds the previews of this version of the file, so the file is not opened.
+        Poco::JSON::Object::Ptr cached =
+            fileInfo ? PreviewCache::lookup(docKey, fileInfo->getLastModifiedServerTimeString(),
+                                            fileInfo->getSize())
+                     : nullptr;
+        if (cached)
+        {
+            // The storage names the file now, which a rename may have changed.
+            if (Poco::JSON::Object::Ptr file = cached->getObject("file"))
+                file->set("name", fileInfo->getFilename());
+
+            const std::string tag = PreviewSession::generateTag();
+            PreviewCache::registerTag(tag, docKey);
+
+            Poco::URI document(documentUri);
+            document.setQueryParameters(Poco::URI::QueryParameters());
+            const long ttl = PreviewSession::TagTtl.count();
+
+            http::Response response(http::StatusCode::OK);
+            response.add("X-Content-Type-Options", "nosniff");
+            response.set("Cache-Control", "no-store");
+            response.setBody(PreviewCache::buildAnswer(cached, tag, ttl, document),
+                             "application/json");
+            requestSocket->sendAndShutdown(response);
+            return;
+        }
+
         const SharedSettings sharedSettings(checkFileInfo.wopiInfo());
 
         auto [docBroker, error] =
@@ -2376,8 +2407,8 @@ bool ClientRequestDispatcher::handlePreviewIndexRequest(const Poco::Net::HTTPReq
             return;
         }
 
-        auto wopiFileInfo = std::make_shared<std::unique_ptr<WopiStorage::WOPIFileInfo>>(
-            checkFileInfo.wopiFileInfo(documentUri));
+        auto wopiFileInfo =
+            std::make_shared<std::unique_ptr<WopiStorage::WOPIFileInfo>>(std::move(fileInfo));
 
         // The document's own thread opens the view and answers on the moved socket.
         docBroker->setupTransfer(
@@ -2470,6 +2501,33 @@ bool ClientRequestDispatcher::handlePreviewContentRequest(
         LOG_ERR_S("Preview content request without a slide query parameter");
         HttpHelper::sendErrorAndShutdown(http::StatusCode::BadRequest, socket, "missing slide");
         return true;
+    }
+
+    // A tag the cache handed out, or one a preview session made a name for its cached
+    // pictures, is answered from the disk, whether its document is open or not.
+    std::string png;
+    switch (PreviewCache::readPicture(tag, guid, png))
+    {
+        case PreviewCache::Lookup::Found:
+        {
+            http::Response response(http::StatusCode::OK);
+            response.add("X-Content-Type-Options", "nosniff");
+            response.set("Cache-Control", "private, max-age=" +
+                                              std::to_string(
+                                                  PreviewCache::remainingTtlSeconds(tag)));
+            response.setBody(std::move(png), "image/png");
+            socket->sendAndShutdown(response);
+            return true;
+        }
+        case PreviewCache::Lookup::UnknownSlide:
+            HttpHelper::sendErrorAndShutdown(http::StatusCode::NotFound, socket, "no such slide");
+            return true;
+        case PreviewCache::Lookup::Missing:
+            HttpHelper::sendErrorAndShutdown(http::StatusCode::Gone, socket,
+                                             "the cached previews are gone");
+            return true;
+        case PreviewCache::Lookup::UnknownTag:
+            break;
     }
 
     const std::string docKey = RequestDetails::getDocKey(wopiSrc);

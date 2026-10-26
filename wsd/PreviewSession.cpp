@@ -25,6 +25,7 @@
 #include <wsd/ClientSession.hpp>
 #include <wsd/DocumentBroker.hpp>
 #include <wsd/Exceptions.hpp>
+#include <wsd/PreviewCache.hpp>
 #include <wsd/RequestDetails.hpp>
 
 #include <Poco/JSON/Array.h>
@@ -100,6 +101,8 @@ PreviewSession::PreviewSession(std::string tag, Poco::URI uriPublic, std::string
     , _docHeight(0)
     , _infoRequested(false)
     , _nextContentId(ContentIdBase)
+    , _fillingCache(false)
+    , _storedInCache(false)
 {
 }
 
@@ -119,6 +122,7 @@ void PreviewSession::attach(DocumentBroker& docBroker, const std::string& id,
 
     try
     {
+        _docBroker = docBroker.shared_from_this();
         _handler = std::make_shared<PreviewProtocolHandler>(weak_from_this());
         _clientSession = docBroker.createNewClientSession(_handler, id, _uriPublic,
                                                           /*isReadOnly=*/true,
@@ -258,6 +262,22 @@ void PreviewSession::checkTimers(const std::chrono::steady_clock::time_point now
 
     for (auto it = _contentRequests.begin(); it != _contentRequests.end();)
     {
+        // A picture the session asked for itself has no socket, and waits for its deadline.
+        if (it->second.forCache)
+        {
+            if (now >= it->second.deadline)
+            {
+                LOG_WRN("Preview [" << _tag << "] gave up filling the cache: slide ["
+                                    << it->second.guid << "] did not answer in time");
+                _fillingCache = false;
+                it = _contentRequests.erase(it);
+                continue;
+            }
+
+            ++it;
+            continue;
+        }
+
         const std::shared_ptr<StreamSocket> socket = it->second.socket.lock();
         if (!socket || !socket->isOpen())
         {
@@ -384,7 +404,85 @@ void PreviewSession::onPresentationInfo(const std::string_view frame)
             answerIndex(socket);
     }
 
+    startFillingCache();
     sendPendingContentRequests();
+}
+
+void PreviewSession::startFillingCache()
+{
+    // The storage's LastModifiedTime is what a cached entry is checked against, so a storage
+    // that reports none gets nothing cached.
+    if (_fillingCache || _storedInCache || _lastModifiedTime.empty() || !_presentationInfo ||
+        !PreviewCache::isEnabled())
+        return;
+
+    Poco::JSON::Array::Ptr slides = _presentationInfo->getArray("slides");
+    if (!slides)
+        return;
+
+    _fillingCache = true;
+    _cachePictures.clear();
+    const auto deadline = std::chrono::steady_clock::now() + _timeout;
+    for (std::size_t i = 0; i < slides->size(); ++i)
+    {
+        Poco::JSON::Object::Ptr slide = slides->getObject(i);
+        const std::string guid =
+            slide ? slide->optValue<std::string>("part", std::string()) : std::string();
+        if (guid.empty())
+            continue;
+
+        _contentRequests.emplace(_nextContentId++,
+                                 ContentRequest{ std::weak_ptr<StreamSocket>(), guid, deadline,
+                                                 /*sent=*/false, /*forCache=*/true });
+    }
+
+    LOG_DBG("Preview [" << _tag << "] renders " << slides->size()
+                        << " slides to fill the cache");
+}
+
+void PreviewSession::storeInCacheWhenComplete()
+{
+    if (!_fillingCache || _cachePictures.size() < _slidesByGuid.size())
+        return;
+
+    _fillingCache = false;
+
+    // The pictures show the document as it is loaded, and the entry is checked against the
+    // version in the storage, so pictures with unsaved changes stay out of the cache.
+    const std::shared_ptr<DocumentBroker> docBroker = _docBroker.lock();
+    if (!docBroker || docBroker->isModified())
+    {
+        LOG_DBG("Preview [" << _tag << "] does not cache pictures of a modified document");
+        _cachePictures.clear();
+        return;
+    }
+
+    const Poco::JSON::Object::Ptr index = buildIndex();
+    std::vector<std::string> pictures;
+    if (Poco::JSON::Array::Ptr slides = index->getArray("slides"))
+    {
+        for (std::size_t i = 0; i < slides->size(); ++i)
+        {
+            Poco::JSON::Object::Ptr slide = slides->getObject(i);
+            const auto it = _cachePictures.find(
+                slide ? slide->optValue<std::string>("part", std::string()) : std::string());
+            if (it == _cachePictures.end())
+            {
+                LOG_WRN("Preview [" << _tag << "] has no picture of slide " << i
+                                    << ", nothing is cached");
+                _cachePictures.clear();
+                return;
+            }
+
+            pictures.push_back(it->second);
+        }
+    }
+
+    PreviewCache::store(docBroker->getDocKey(), _lastModifiedTime, _fileSize, index, pictures);
+    // The tag has one life, counted from its last use, whichever of the two answers it.
+    PreviewCache::registerTag(_tag, docBroker->getDocKey(), _expiresAt);
+    _storedInCache = true;
+    _cachePictures.clear();
 }
 
 void PreviewSession::sendPendingContentRequests()
@@ -454,20 +552,23 @@ void PreviewSession::onTile(const StringVector& tokens, const std::string_view f
     }
 
     const std::shared_ptr<StreamSocket> socket = it->second.socket.lock();
+    const bool forCache = it->second.forCache;
     _contentRequests.erase(it);
-    if (!socket)
-        return;
-
-    if (gone)
-    {
-        answerError(socket, http::StatusCode::NotFound, "the slide is gone");
-        return;
-    }
 
     const std::size_t newline = frame.find('\n');
-    if (newline == std::string_view::npos || newline + 1 >= frame.size())
+    if (gone || newline == std::string_view::npos || newline + 1 >= frame.size())
     {
-        answerError(socket, http::StatusCode::BadGateway, "the slide picture is empty");
+        // The cache gets the whole document or nothing.
+        if (forCache)
+        {
+            LOG_WRN("Preview [" << _tag << "] gave up filling the cache: slide [" << part
+                                << "] has no picture");
+            _fillingCache = false;
+        }
+
+        if (socket)
+            answerError(socket, gone ? http::StatusCode::NotFound : http::StatusCode::BadGateway,
+                        gone ? "the slide is gone" : "the slide picture is empty");
         return;
     }
 
@@ -481,7 +582,15 @@ void PreviewSession::onTile(const StringVector& tokens, const std::string_view f
     if (payload.starts_with(PngSignatureTail))
         png.push_back('\x89');
     png.append(payload);
-    answerContent(socket, png);
+
+    if (_fillingCache)
+    {
+        _cachePictures[part] = png;
+        storeInCacheWhenComplete();
+    }
+
+    if (socket)
+        answerContent(socket, png);
 }
 
 void PreviewSession::onError(const StringVector& tokens)
@@ -551,7 +660,9 @@ void PreviewSession::answerIndex(const std::shared_ptr<StreamSocket>& socket)
     http::Response response(http::StatusCode::OK);
     response.add("X-Content-Type-Options", "nosniff");
     response.set("Cache-Control", "no-store");
-    response.setBody(buildIndexJson(), "application/json");
+    response.setBody(PreviewCache::buildAnswer(buildIndex(), _tag, remainingTtlSeconds(),
+                                               documentUri()),
+                     "application/json");
     socket->sendAndShutdown(response);
 }
 
@@ -575,30 +686,16 @@ long PreviewSession::remainingTtlSeconds() const
     return std::chrono::duration_cast<std::chrono::seconds>(_expiresAt - now).count();
 }
 
-std::string PreviewSession::buildContentUrl(const std::string& guid) const
+Poco::URI PreviewSession::documentUri() const
 {
     Poco::URI wopiSrc(_uriPublic);
     wopiSrc.setQueryParameters(Poco::URI::QueryParameters());
-
-    // The tag is hexadecimal, so it goes into the path as it is.
-    std::string url = "/cool/preview/" + _tag +
-                      "/content?WOPISrc=" + Uri::encode(wopiSrc.toString()) +
-                      "&ServerId=" + Util::getProcessIdentifier() + "&slide=" + Uri::encode(guid);
-    if (!COOLWSD::RouteToken.empty())
-        url += "&RouteToken=" + COOLWSD::RouteToken;
-    return url;
+    return wopiSrc;
 }
 
-std::string PreviewSession::buildIndexJson() const
+Poco::JSON::Object::Ptr PreviewSession::buildIndex() const
 {
-    const long ttl = remainingTtlSeconds();
-    const auto expiresAt = std::chrono::system_clock::now() + std::chrono::seconds(ttl);
-
     Poco::JSON::Object::Ptr root = new Poco::JSON::Object();
-    root->set("version", 1);
-    root->set("tag", _tag);
-    root->set("expiresAt", Util::getIso8601FracformatTime(expiresAt));
-    root->set("ttlSecs", ttl);
 
     Poco::JSON::Object::Ptr file = new Poco::JSON::Object();
     file->set("name", _fileName);
@@ -644,7 +741,6 @@ std::string PreviewSession::buildIndexJson() const
                              width > 0 ? static_cast<int>(std::lround(
                                              static_cast<double>(PreviewWidth) * height / width))
                                        : 0);
-                preview->set("url", buildContentUrl(guid));
                 slide->set("preview", preview);
 
                 slides->add(slide);
@@ -656,10 +752,7 @@ std::string PreviewSession::buildIndexJson() const
     root->set("file", file);
     root->set("sections", sections);
     root->set("slides", slides);
-
-    std::ostringstream oss;
-    root->stringify(oss);
-    return oss.str();
+    return root;
 }
 
 void PreviewSession::dumpState(std::ostream& os) const
@@ -682,6 +775,10 @@ void PreviewSession::dumpState(std::ostream& os) const
     os << "\n      indexRequests: " << _indexRequests.size();
     os << "\n      contentRequests: " << _contentRequests.size();
     os << "\n      nextContentId: " << _nextContentId;
+    os << "\n      broker: " << (_docBroker.expired() ? "none" : "live");
+    os << "\n      fillingCache: " << _fillingCache;
+    os << "\n      storedInCache: " << _storedInCache;
+    os << "\n      cachePictures: " << _cachePictures.size();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

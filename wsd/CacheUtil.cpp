@@ -201,6 +201,9 @@ void Cache::clearOutdatedConfigs()
     auto names = FileUtil::getDirEntries(CachePath);
     for (const auto& name : names)
     {
+        if (name == PreviewsDirName)
+            continue;
+
         Poco::Path rootPath(CachePath, name);
         rootPath.makeDirectory();
 

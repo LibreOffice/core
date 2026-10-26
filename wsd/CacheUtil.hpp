@@ -36,6 +36,10 @@ struct CacheQuery
 class Cache
 {
 public:
+    /// The directory in the cache that holds the slide previews. It is not a config cache
+    /// entry, and it keeps its own expiry.
+    static constexpr const char* PreviewsDirName = "previews";
+
     static void initialize(const std::string& path);
 
     static std::string getConfigId(const std::string& uri);

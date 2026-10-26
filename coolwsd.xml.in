@@ -437,6 +437,11 @@
         <expiry_min desc="Time in mins after disuse at which cache files will be deleted." type="int" default="3000">1000</expiry_min>
     </cache_files>
 
+    <preview_cache desc="Slide previews of presentations, kept in the previews directory of cache_files.path, so a presentation that is not open shows its slides without being loaded." default="true" enable="true">
+        <limit_dir_size_mb desc="Maximum size of the previews directory, in MBs. On exceeding the specified limit, the previews used least recently are deleted." type="uint" default="1024">1024</limit_dir_size_mb>
+        <expiry_min desc="Time in mins after their last use at which the previews of a presentation are deleted. 0 keeps them until the size limit deletes them." type="uint" default="1440">1440</expiry_min>
+    </preview_cache>
+
     <extra_export_formats desc="Enable various extra export formats for additional compatibility. Note that disabling options here *only* disables them visually: these are all 'safe' to export, it might just be undesirable to show them, so you can't disable exporting these server-side">
         <impress_swf desc="Enable exporting Adobe flash .swf files from presentations" type="bool" default="false">false</impress_swf>
         <impress_bmp desc="Enable exporting .bmp bitmap files from presentation slides" type="bool" default="false">false</impress_bmp>
