@@ -1010,13 +1010,15 @@ DECLARE_OOXMLEXPORT_TEST(testTdf144563, "tdf144563.docx")
 #if !defined(_WIN32)
 CPPUNIT_TEST_FIXTURE(Test, testTdf146955)
 {
-    createSwDoc("tdf146955.odt");
+    // The frame is anchored to a page with no text, so the DOCX export puts it into the table of
+    // contents, before the paragraph with the footnote.
+    createSwDoc("tdf146955.fodt");
 
     saveAndReload(TestFilter::DOCX);
-    // import of a (broken?) DOCX export with dozens of frames raised a SAX exception,
-    // when the code tried to access to a non-existent footnote
+    // import of that DOCX raised a SAX exception, when the code tried to access a non-existent
+    // footnote
     uno::Reference<text::XFootnotesSupplier> xNotes(mxComponent, uno::UNO_QUERY);
-    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xNotes->getFootnotes()->getCount());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), xNotes->getFootnotes()->getCount());
 }
 #endif
 
