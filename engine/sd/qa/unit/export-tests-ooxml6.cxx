@@ -39,6 +39,7 @@
 
 #include <com/sun/star/awt/FontFamily.hpp>
 #include <com/sun/star/awt/FontPitch.hpp>
+#include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -766,6 +767,32 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testParagraphKeepsItsRightIndent)
     // the right edge of its frame when it was read back.
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPath(pXmlDoc, "//p:sp/p:txBody/a:p/a:pPr", "marR", u"914400");
+}
+
+// Text that stands upright stays upright where the level it belongs to leans.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testUprightTextStaysUpright)
+{
+    // Given a shape that follows an outline level whose text leans, holding one paragraph that
+    // leans with the level and one that stands upright on its own:
+    createSdImpressDoc("pptx/upright-run-in-a-leaning-level.pptx");
+
+    saveAndReload(TestFilter::PPTX);
+
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
+    uno::Reference<beans::XPropertySet> xLeaning(
+        getRunFromParagraph(0, getParagraphFromShape(0, xShape)), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_ITALIC,
+                         xLeaning->getPropertyValue(u"CharPosture"_ustr).get<awt::FontSlant>());
+
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 0
+    // - Actual  : 2
+    // i.e. the saved file said nothing of the upright paragraph, which then took the lean that
+    // the level gives every paragraph following it.
+    uno::Reference<beans::XPropertySet> xUpright(
+        getRunFromParagraph(0, getParagraphFromShape(1, xShape)), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(awt::FontSlant_NONE,
+                         xUpright->getPropertyValue(u"CharPosture"_ustr).get<awt::FontSlant>());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

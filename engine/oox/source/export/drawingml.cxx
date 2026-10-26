@@ -2603,7 +2603,7 @@ void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int3
     OUString usLanguage;
     bool bComplex = (rRunInput.nScriptType ==  css::i18n::ScriptType::COMPLEX);
     const char* bold = "0";
-    const char* italic = nullptr;
+    const char* italic = "0";
     const char* underline = nullptr;
     const char* strikeout = nullptr;
     const char* cap = nullptr;
