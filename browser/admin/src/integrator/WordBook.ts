@@ -456,6 +456,14 @@ class WordBook {
 	async wordbookValidation(uploadPath: string, file: File) {
 		try {
 			const content = await this.readFileAsText(file);
+			if (this.isSpellingDictionary(content)) {
+				window.alert(
+					_(
+						'This file is a spelling dictionary, not a wordbook. Upload a list of words with one word per line.',
+					),
+				);
+				return;
+			}
 			let dicWords: string[];
 			try {
 				dicWords = this.parseWords(content);
@@ -497,6 +505,13 @@ class WordBook {
 			reader.onerror = () => reject(reader.error);
 			reader.readAsText(file);
 		});
+	}
+
+	// A Hunspell spelling dictionary starts with a line holding only its word count, while a
+	// wordbook starts with a header or directly with its first word.
+	private isSpellingDictionary(content: string): boolean {
+		const firstLine = content.split(/\r?\n/, 1)[0].trim();
+		return /^\d+$/.test(firstLine);
 	}
 
 	private parseWords(content: string): string[] {
