@@ -2703,11 +2703,21 @@ cpo::uno::Reference<scriptinterop::XParagraph> TextImpl::asParagraph() {
     return new ParagraphImpl(model_, parent_, content_);
 }
 
+// The element that holds the paragraphs of a text, which is the body for the body text and the
+// table cell for the text of a table cell, and null for any other text (like a header or a frame):
+cpo::uno::Reference<scriptinterop::XElement> containerOf(
+    std::shared_ptr<Model> const & model, cpo::uno::Reference<css::text::XText> const & text);
+
+// A paragraph, with the element that holds it as its parent:
+cpo::uno::Reference<scriptinterop::XParagraph> paragraphOf(
+    std::shared_ptr<Model> const & model,
+    cpo::uno::Reference<css::text::XTextContent> const & paragraph);
+
 cpo::uno::Reference<scriptinterop::XParagraph> PositionedImageImpl::getParagraph() {
     if (getPageAnchor().IsPresent) {
         throw cpo::uno::RuntimeException(u"getParagraph: the image is anchored to a page"_ustr);
     }
-    return new ParagraphImpl(model_, nullptr, paragraph_);
+    return paragraphOf(model_, paragraph_);
 }
 
 class TableCellImpl: public ElementImpl<scriptinterop::XTableCell>, public ContentsContainer {
@@ -3224,8 +3234,7 @@ public:
             throw cpo::uno::RuntimeException(
                 u"getElement: this range element is not inside a paragraph"_ustr);
         }
-        cpo::uno::Reference<scriptinterop::XParagraph> const paragraph(
-            new ParagraphImpl(model_, nullptr, paragraph_));
+        auto const paragraph = paragraphOf(model_, paragraph_);
         // Same as in GAS, the element of a partial range element is the Text that the offsets
         // count in:
         return isPartial() ? paragraph->getChild(0) : paragraph;
@@ -3354,7 +3363,7 @@ public:
             throw cpo::uno::RuntimeException(
                 u"getElement: the image is not anchored in a paragraph"_ustr);
         }
-        return new InlineImageImpl(new ParagraphImpl(model_, nullptr, para), image_);
+        return new InlineImageImpl(paragraphOf(model_, para), image_);
     }
 
     sal_Int32 getEndOffsetInclusive() override { return -1; }
@@ -3433,7 +3442,7 @@ public:
             throw cpo::uno::RuntimeException(
                 u"getElement: the cursor is not inside a paragraph"_ustr);
         }
-        return new ParagraphImpl(model_, nullptr, para);
+        return paragraphOf(model_, para);
     }
 
     OUString getLocale() override { return bcp47(u"CharLocale"_ustr); }
@@ -3450,7 +3459,8 @@ public:
             throw cpo::uno::RuntimeException(
                 u"getSurroundingText: the cursor is not inside a paragraph"_ustr);
         }
-        return new TextImpl(model_, nullptr, para, scriptinterop::ElementType_TEXT);
+        return new TextImpl(
+            model_, paragraphOf(model_, para), para, scriptinterop::ElementType_TEXT);
     }
 
     sal_Int32 getSurroundingTextOffset() override { return paragraphOffset(); }
@@ -3466,7 +3476,13 @@ public:
         }
         auto const graphic = createGraphicFromBlob(model_, blob);
         host->insertTextContent(c->getStart(), graphic, false);
-        return {true, new InlineImageImpl(nullptr, graphic)};
+        auto const para = findContainingParagraph(graphic->getAnchor());
+        return {
+            true,
+            new InlineImageImpl(
+                para.is()
+                    ? paragraphOf(model_, para) : cpo::uno::Reference<scriptinterop::XParagraph>(),
+                graphic)};
     }
 
     void insertText(OUString const & text) override {
@@ -4160,6 +4176,40 @@ cpo::uno::Reference<scriptinterop::XElement> tableParentOf(
         }
     }
     return {};
+}
+
+cpo::uno::Reference<scriptinterop::XElement> containerOf(
+    std::shared_ptr<Model> const & model, cpo::uno::Reference<css::text::XText> const & text)
+{
+    cpo::uno::Reference<css::text::XText> const bodyText(
+        cpo::uno::Reference<css::text::XTextDocument>(model->uno(), cpo::uno::UNO_QUERY_THROW)
+            ->getText());
+    if (text == bodyText) {
+        return new BodyImpl(model, bodyText);
+    }
+    cpo::uno::Reference<css::lang::XServiceInfo> const info(text, cpo::uno::UNO_QUERY);
+    if (!(info.is() && info->supportsService(u"com.sun.star.text.CellProperties"_ustr))) {
+        return {};
+    }
+    auto const table = tableOf(model, text);
+    if (!table.is()) {
+        return {};
+    }
+    auto const cells = cellsNamed(model, table, {cellNameOf(text)});
+    return cells.empty() ? nullptr : cells.front();
+}
+
+cpo::uno::Reference<scriptinterop::XParagraph> paragraphOf(
+    std::shared_ptr<Model> const & model,
+    cpo::uno::Reference<css::text::XTextContent> const & paragraph)
+{
+    return new ParagraphImpl(
+        model,
+        containerOf(
+            model,
+            cpo::uno::Reference<css::text::XTextRange>(paragraph, cpo::uno::UNO_QUERY_THROW)
+                ->getText()),
+        paragraph);
 }
 
 cpo::uno::Reference<scriptinterop::XSelection> RangeBuilderImpl::build() {

@@ -83,6 +83,27 @@ function test() {
     console.assert(outer[0].getElement().getText() === lead + 'N1\nN2\n');
     console.assert(outer[1].getElement().getText() === 'B1');
 
+    // The partly selected text of a table cell has the cell's paragraph, the cell, its row, its
+    // table and the body as its ancestors:
+    const partial = doc.setSelection(
+        doc.newRange().addElement(empty.getRow(0).getCell(1).editAsText(), 0, 0).build())
+        .getSelection().getRangeElements();
+    console.assert(partial.length === 1);
+    const text = partial[0].getElement();
+    console.assert(text.getType() === DocumentApp.ElementType.TEXT);
+    console.assert(text.getParent().getType() === DocumentApp.ElementType.PARAGRAPH);
+    console.assert(
+        text.getParent().getParent().getType() === DocumentApp.ElementType.TABLE_CELL);
+    console.assert(
+        text.getParent().getParent().getParent().getType()
+            === DocumentApp.ElementType.TABLE_ROW);
+    console.assert(
+        text.getParent().getParent().getParent().getParent().getType()
+            === DocumentApp.ElementType.TABLE);
+    console.assert(
+        text.getParent().getParent().getParent().getParent().getParent().getType()
+            === DocumentApp.ElementType.BODY_SECTION);
+
     // A selected cell of the table nested in cell A1 of child 5 has the nested table, the cell A1
     // and the table of child 5 among its ancestors:
     const innerTable = cell.getChild(globalThis.cool ? 0 : 1);
