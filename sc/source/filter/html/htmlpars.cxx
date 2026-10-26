@@ -568,8 +568,9 @@ void ScHTMLLayoutParser::SkipLocked( ScEEParseEntry* pE, bool bJoin )
             if ( rR.Intersects( aRange ) )
             {
                 SCCOL nTmp(0);
+                // tdf#168166 - use column span to calculate end column of shifted cells
                 bFail = o3tl::checked_add<SCCOL>(rR.aEnd.Col(), 1, pE->nCol) ||
-                        o3tl::checked_add<SCCOL>(pE->nCol, pE->nRowOverlap - 1, nTmp);
+                        o3tl::checked_add<SCCOL>(pE->nCol, pE->nColOverlap - 1, nTmp);
                 if ( bFail || pE->nCol > mrDoc.MaxCol() || nTmp > mrDoc.MaxCol() )
                     bBadCol = true;
                 else

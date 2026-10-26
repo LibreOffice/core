@@ -260,6 +260,49 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf132770_inserted_text)
     CPPUNIT_ASSERT_EQUAL(FontLineStyle::LINESTYLE_SINGLE, rUnderlineItem.GetLineStyle());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testTdf168166_rowspan_colspan)
+{
+    // Paste a table containing rowspan and colspan:
+    //
+    //   <tr><td rowspan="2">A</td><td>B</td></tr>
+    //   <tr><td rowspan="3" colspan="2">C</td><td>D</td></tr>
+    //
+    //   +---+---+
+    //   | A | B |
+    //   |   +---+---+---+
+    //   |   |   C   | D |
+    //   +---+       +---+
+    //       |       |
+    //       |       |
+    //       +-------+
+    //
+    // Without the fix in place, C locked one column per row instead of one per column:
+    //
+    //   +---+---+
+    //   | A | B |
+    //   |   +---+---+---+---+
+    //   |   |   C   |   | D |
+    //   +---+       +---+---+
+    //       |       |
+    //       |       |
+    //       +-------+
+    createScDoc();
+    ScDocument* pDoc = getScDoc();
+    ScAddress aCellPos(/*nColP=*/0, /*nRowP=*/0, /*nTabP=*/0);
+    ScImportExport aImporter(*pDoc, aCellPos);
+    SvFileStream aFile(createFileURL(u"tdf168166_rowspan_colspan.html"), StreamMode::READ);
+    SvMemoryStream aMemory;
+    aMemory.WriteStream(aFile);
+    aMemory.Seek(0);
+    CPPUNIT_ASSERT(aImporter.ImportStream(aMemory, OUString(), SotClipboardFormatId::HTML));
+
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: D
+    // - Actual  :
+    // i.e. an empty column exists between column C and D
+    CPPUNIT_ASSERT_EQUAL(u"D"_ustr, pDoc->GetString(/*col=*/3, /*row=*/1, /*tab=*/0));
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testCopyText)
 {
     // Given a document with 01 in A1:
