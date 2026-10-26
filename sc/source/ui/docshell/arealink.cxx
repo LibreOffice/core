@@ -47,7 +47,6 @@
 #include <scabstdlg.hxx>
 #include <clipparam.hxx>
 #include <tools/hostfilter.hxx>
-#include <tools/urlobj.hxx>
 
 
 ScAreaLink::ScAreaLink( ScDocShell& rShell, OUString aFile,
@@ -235,7 +234,7 @@ bool ScAreaLink::Refresh( const OUString& rNewFile, const OUString& rNewFilter,
     OUString aNewUrl( ScGlobal::GetAbsDocName( rNewFile, &m_rDocSh ) );
     bool bNewUrlName = (aNewUrl != aFileName);
 
-    if (INetURLObject(aNewUrl).IsExoticProtocol() || HostFilter::isFileUrlForbidden(aNewUrl))
+    if (HostFilter::isUrlForbidden(aNewUrl))
     {
         SAL_WARN("sc.ui", "ScAreaLink::Refresh: blocked url: \"" << aNewUrl << "\"");
         return false;
