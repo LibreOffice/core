@@ -882,6 +882,14 @@ void SAL_CALL Connection::documentEventOccured( const DocumentEvent& Event )
     if (!m_bIsEmbedded)
         return;
 
+    // The document is stored to another location (Save a Copy, or a recovery file): the copy
+    // gets the committed data, and the open transaction stays open.
+    if (Event.EventName == "OnSaveTo")
+    {
+        storeDatabase();
+        return;
+    }
+
     if (Event.EventName != "OnSave" && Event.EventName != "OnSaveAs")
         return;
 

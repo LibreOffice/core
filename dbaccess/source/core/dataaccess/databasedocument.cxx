@@ -30,6 +30,8 @@
 
 #include <officecfg/Office/Common.hxx>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
+#include <com/sun/star/document/DocumentEvent.hpp>
+#include <com/sun/star/document/XDocumentEventListener.hpp>
 #include <com/sun/star/document/XExporter.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XImporter.hpp>
@@ -561,6 +563,60 @@ namespace
     }
 }
 
+namespace
+{
+    bool lcl_storesEmbeddedDataOnSave( const ODatabaseModelImpl& i_rModel )
+    {
+        return i_rModel.isEmbeddedDatabase() && i_rModel.m_sConnectURL != "sdbc:embedded:hsqldb";
+    }
+
+    class RootCommitSuspension
+    {
+        ODatabaseModelImpl& m_rModel;
+        const bool          m_bSuspended;
+
+    public:
+        explicit RootCommitSuspension( ODatabaseModelImpl& i_rModel )
+            : m_rModel( i_rModel )
+            , m_bSuspended( lcl_storesEmbeddedDataOnSave( i_rModel ) )
+        {
+            if ( m_bSuspended )
+                m_rModel.suspendCommitPropagation();
+        }
+
+        ~RootCommitSuspension()
+        {
+            if ( m_bSuspended )
+                m_rModel.resumeCommitPropagation();
+        }
+
+        bool isActive() const { return m_bSuspended; }
+    };
+
+    void lcl_notifyEmbeddedConnections_nothrow( const Reference< XInterface >& i_rxDocument,
+        const OWeakConnectionArray& i_rConnections, const OUString& i_rTargetLocation )
+    {
+        const DocumentEvent aEvent( i_rxDocument, u"OnSaveTo"_ustr, nullptr,
+                                    Any( i_rTargetLocation ) );
+
+        for ( const auto& rConnection : i_rConnections )
+        {
+            Reference< XDocumentEventListener > xListener( rConnection.get(), UNO_QUERY );
+            if ( !xListener.is() )
+                continue;
+
+            try
+            {
+                xListener->documentEventOccured( aEvent );
+            }
+            catch( const Exception& )
+            {
+                DBG_UNHANDLED_EXCEPTION("dbaccess");
+            }
+        }
+    }
+}
+
 sal_Bool SAL_CALL ODatabaseDocument::wasModifiedSinceLastSave()
 {
     DocumentGuard aGuard(*this, DocumentGuard::DefaultMethod);
@@ -572,6 +628,14 @@ sal_Bool SAL_CALL ODatabaseDocument::wasModifiedSinceLastSave()
     // However, the API definition explicitly allows to be that sloppy ...
 
     if ( isModified() )
+        return true;
+
+    // Changing the data of an embedded engine like Firebird does not mark the document as
+    // modified, its data is written when the document is saved or the connection is closed.
+    // Whether there is data a recovery file would miss is not known, so assume it while connected.
+    if ( lcl_storesEmbeddedDataOnSave( *m_pImpl )
+        && std::ranges::any_of( m_pImpl->m_aConnections, []( const auto& rConnection )
+            { return rConnection.get().is(); } ) )
         return true;
 
     // auto recovery is an "UI feature", it is to restore the UI the user knows. Thus,
@@ -600,6 +664,18 @@ void SAL_CALL ODatabaseDocument::storeToRecoveryFile( const OUString& i_TargetLo
 
     try
     {
+        RootCommitSuspension aSuspension( *m_pImpl );
+        if ( aSuspension.isActive() )
+        {
+            // a copy, the listeners may change the list
+            const OWeakConnectionArray aConnections( m_pImpl->m_aConnections );
+
+            // like storeToURL with its OnSaveTo, don't call the listeners with our mutex locked
+            aGuard.clear();
+            lcl_notifyEmbeddedConnections_nothrow( *this, aConnections, i_TargetLocation );
+            aGuard.reset();
+        }
+
         // create a storage for the target location
         Reference< XStorage > xTargetStorage( impl_createStorageFor_throw( i_TargetLocation ) );
 
@@ -1247,6 +1323,7 @@ void SAL_CALL ODatabaseDocument::storeToURL( const OUString& _rURL, const Sequen
         Sequence<PropertyValue> aMediaDescriptor(lcl_appendFileNameToDescriptor(aArguments, _rURL));
 
         // store to this storage
+        RootCommitSuspension aSuspension( *m_pImpl );
         impl_storeToStorage_throw( xTargetStorage, aMediaDescriptor, aGuard );
     }
     catch( const Exception& )

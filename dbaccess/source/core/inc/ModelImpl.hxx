@@ -264,6 +264,12 @@ public:
     */
     bool        commitEmbeddedStorage( bool _bPreventRootCommits = false );
 
+    /** prevents committing the embedded storage from also committing the root storage, until
+        resumeCommitPropagation is called
+    */
+    void        suspendCommitPropagation();
+    void        resumeCommitPropagation();
+
     /// commits all sub storages
     void commitStorages();
 

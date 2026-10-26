@@ -12,6 +12,10 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
+#include <com/sun/star/document/XDocumentRecovery.hpp>
+#include <com/sun/star/embed/ElementModes.hpp>
+#include <com/sun/star/embed/XStorage.hpp>
+#include <com/sun/star/frame/XStorable.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/sdb/CommandType.hpp>
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
@@ -22,15 +26,19 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 #include <com/sun/star/sdbc/XParameters.hpp>
 #include <com/sun/star/sdbc/XPreparedStatement.hpp>
+#include <com/sun/star/sdbc/SQLException.hpp>
 #include <com/sun/star/sdbc/XResultSet.hpp>
 #include <com/sun/star/sdbc/XRowSet.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
 #include <com/sun/star/sdbc/XStatement.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <comphelper/processfactory.hxx>
+#include <comphelper/storagehelper.hxx>
 #include <connectivity/predicateinput.hxx>
+#include <unotools/tempfile.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::sdb;
@@ -54,6 +62,13 @@ public:
     void testTdf96372_DerivedTableColumns();
     void testTdf96372_DerivedTableAutoFilter();
     void testTdf58586_JoinWithDerivedTable();
+    void testRecoveryFileAfterSave();
+    void testRecoveryFileWithUnsavedData();
+    void testRecoveryFileKeepsOriginal();
+    void testSaveACopyWithUnsavedData();
+    void testSaveACopyKeepsOriginal();
+    void testUnsavedDataNeedsRecovery();
+    void testDataAfterRecoveryFileSavedOnClose();
 
     CPPUNIT_TEST_SUITE(FirebirdTest);
     CPPUNIT_TEST(testEmptyDBConnection);
@@ -69,7 +84,25 @@ public:
     CPPUNIT_TEST(testTdf96372_DerivedTableColumns);
     CPPUNIT_TEST(testTdf96372_DerivedTableAutoFilter);
     CPPUNIT_TEST(testTdf58586_JoinWithDerivedTable);
+    CPPUNIT_TEST(testRecoveryFileAfterSave);
+    CPPUNIT_TEST(testRecoveryFileWithUnsavedData);
+    CPPUNIT_TEST(testRecoveryFileKeepsOriginal);
+    CPPUNIT_TEST(testSaveACopyWithUnsavedData);
+    CPPUNIT_TEST(testSaveACopyKeepsOriginal);
+    CPPUNIT_TEST(testUnsavedDataNeedsRecovery);
+    CPPUNIT_TEST(testDataAfterRecoveryFileSavedOnClose);
     CPPUNIT_TEST_SUITE_END();
+
+private:
+    enum class StoredCopy
+    {
+        RecoveryFile,
+        SaveACopy
+    };
+    static void storeCopy(const uno::Reference<XOfficeDatabaseDocument>& xDocument,
+                          const OUString& rURL, StoredCopy eCopy);
+    void checkStoredCopy(bool bSaveBefore, StoredCopy eCopy);
+    void checkCopyKeepsOriginal(StoredCopy eCopy);
 };
 
 /**
@@ -686,6 +719,193 @@ void FirebirdTest::testTdf58586_JoinWithDerivedTable()
     const OUString sFiltered = lcl_autoFilter(xConnection, sQuery, u"LastID"_ustr, 5);
     CPPUNIT_ASSERT_EQUAL_MESSAGE(sFiltered.toUtf8().getStr(), sal_Int32(1),
                                  lcl_countRows(xConnection, sFiltered));
+}
+
+void FirebirdTest::storeCopy(const uno::Reference<XOfficeDatabaseDocument>& xDocument,
+                            const OUString& rURL, StoredCopy eCopy)
+{
+    if (eCopy == StoredCopy::RecoveryFile)
+    {
+        uno::Reference<document::XDocumentRecovery> xRecovery(xDocument, UNO_QUERY_THROW);
+        xRecovery->storeToRecoveryFile(rURL, {});
+    }
+    else
+    {
+        uno::Reference<frame::XStorable> xStorable(xDocument, UNO_QUERY_THROW);
+        xStorable->storeToURL(rURL, {});
+    }
+}
+
+namespace
+{
+/// Create the table RECOVERED with the rows 1 to nRows, and commit.
+void lcl_createRecoveredTable(const uno::Reference<XConnection>& xConnection, sal_Int32 nRows)
+{
+    uno::Reference<XStatement> xStmt = xConnection->createStatement();
+    xStmt->execute(u"CREATE TABLE \"RECOVERED\" (\"ID\" INTEGER NOT NULL PRIMARY KEY)"_ustr);
+    for (sal_Int32 i = 1; i <= nRows; ++i)
+        xStmt->execute("INSERT INTO \"RECOVERED\" VALUES(" + OUString::number(i) + ")");
+    xConnection->commit();
+}
+
+/// The number of rows in the table RECOVERED, or -1 if there is no such table.
+sal_Int32 lcl_countRecoveredRows(const uno::Reference<XConnection>& xConnection)
+{
+    try
+    {
+        uno::Reference<XStatement> xStmt = xConnection->createStatement();
+        uno::Reference<XResultSet> xRS
+            = xStmt->executeQuery(u"SELECT COUNT(*) FROM \"RECOVERED\""_ustr);
+        uno::Reference<XRow> xRow(xRS, UNO_QUERY_THROW);
+        CPPUNIT_ASSERT(xRS->next());
+        return xRow->getInt(1);
+    }
+    catch (const SQLException&)
+    {
+        return -1;
+    }
+}
+}
+
+/**
+ * Write rows into an embedded Firebird database, store a copy of the document
+ * (a recovery file, or Save a Copy), then load that copy and check that the
+ * rows are in it.
+ */
+void FirebirdTest::checkStoredCopy(bool bSaveBefore, StoredCopy eCopy)
+{
+    createTempCopy(u"firebird_empty.odb");
+    uno::Reference<XOfficeDatabaseDocument> xDocument = getDocumentForUrl(maTempFile.GetURL());
+    uno::Reference<XConnection> xConnection = getConnectionForDocument(xDocument);
+    lcl_createRecoveredTable(xConnection, 2);
+
+    if (bSaveBefore)
+    {
+        uno::Reference<frame::XStorable> xStorable(xDocument, UNO_QUERY_THROW);
+        xStorable->store();
+    }
+
+    utl::TempFileNamed aCopyFile;
+    aCopyFile.EnableKillingFile();
+    storeCopy(xDocument, aCopyFile.GetURL(), eCopy);
+
+    // Close the original document, so that only the copy is left to read from
+    xConnection.clear();
+    xDocument.clear();
+    uno::Reference<util::XCloseable> xCloseable(mxComponent, UNO_QUERY_THROW);
+    xCloseable->close(false);
+    mxComponent.clear();
+
+    uno::Reference<XOfficeDatabaseDocument> xCopy = getDocumentForUrl(aCopyFile.GetURL());
+    uno::Reference<XConnection> xCopyConnection = getConnectionForDocument(xCopy);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows found in the stored copy", sal_Int32(2),
+                                 lcl_countRecoveredRows(xCopyConnection));
+}
+
+/**
+ * Control case: the data was saved before autorecovery ran, so the recovery
+ * file must contain it.
+ */
+void FirebirdTest::testRecoveryFileAfterSave() { checkStoredCopy(true, StoredCopy::RecoveryFile); }
+
+/**
+ * The data was not saved before autorecovery ran. The recovery file should
+ * still contain it, since recovering from a crash is what it is for.
+ */
+void FirebirdTest::testRecoveryFileWithUnsavedData()
+{
+    checkStoredCopy(false, StoredCopy::RecoveryFile);
+}
+
+/**
+ * Storing a copy (a recovery file, or Save a Copy) must not write the unsaved
+ * data into the document file itself: the user did not save.
+ */
+void FirebirdTest::checkCopyKeepsOriginal(StoredCopy eCopy)
+{
+    createTempCopy(u"firebird_empty.odb");
+    uno::Reference<XOfficeDatabaseDocument> xDocument = getDocumentForUrl(maTempFile.GetURL());
+    uno::Reference<XConnection> xConnection = getConnectionForDocument(xDocument);
+    lcl_createRecoveredTable(xConnection, 1);
+
+    utl::TempFileNamed aCopyFile;
+    aCopyFile.EnableKillingFile();
+    storeCopy(xDocument, aCopyFile.GetURL(), eCopy);
+
+    // firebird_empty.odb has no database/firebird.fbk; it appears only if the data was written
+    uno::Reference<embed::XStorage> xOriginal = comphelper::OStorageHelper::GetStorageFromURL(
+        maTempFile.GetURL(), embed::ElementModes::READ);
+    bool bWritten = xOriginal->hasByName(u"database"_ustr)
+                    && xOriginal->openStorageElement(u"database"_ustr, embed::ElementModes::READ)
+                           ->hasByName(u"firebird.fbk"_ustr);
+    CPPUNIT_ASSERT_MESSAGE("unsaved data written into the document file", !bWritten);
+}
+
+void FirebirdTest::testRecoveryFileKeepsOriginal()
+{
+    checkCopyKeepsOriginal(StoredCopy::RecoveryFile);
+}
+
+/**
+ * File - Save a Copy writes the document as it is now to another file, so the
+ * copy should contain the data entered since the last save.
+ */
+void FirebirdTest::testSaveACopyWithUnsavedData() { checkStoredCopy(false, StoredCopy::SaveACopy); }
+
+void FirebirdTest::testSaveACopyKeepsOriginal() { checkCopyKeepsOriginal(StoredCopy::SaveACopy); }
+
+/**
+ * Autorecovery only saves documents which report changes. Entering data into
+ * an embedded Firebird database does not mark the document as modified (no
+ * Save prompt for data, which is written on close), but autorecovery must
+ * still save it.
+ */
+void FirebirdTest::testUnsavedDataNeedsRecovery()
+{
+    createTempCopy(u"firebird_empty.odb");
+    uno::Reference<XOfficeDatabaseDocument> xDocument = getDocumentForUrl(maTempFile.GetURL());
+    uno::Reference<XConnection> xConnection = getConnectionForDocument(xDocument);
+    lcl_createRecoveredTable(xConnection, 1);
+
+    uno::Reference<util::XModifiable> xModifiable(xDocument, UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("document marked as modified by data changes",
+                           !xModifiable->isModified());
+    uno::Reference<document::XDocumentRecovery> xRecovery(xDocument, UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_MESSAGE("autorecovery would skip the unsaved data",
+                           xRecovery->wasModifiedSinceLastSave());
+}
+
+/**
+ * A recovery save leaves the document file as it is (see
+ * testRecoveryFileKeepsOriginal). The data, including what was entered after
+ * the recovery save, must still be written when the document is closed.
+ */
+void FirebirdTest::testDataAfterRecoveryFileSavedOnClose()
+{
+    createTempCopy(u"firebird_empty.odb");
+    uno::Reference<XOfficeDatabaseDocument> xDocument = getDocumentForUrl(maTempFile.GetURL());
+    uno::Reference<XConnection> xConnection = getConnectionForDocument(xDocument);
+    lcl_createRecoveredTable(xConnection, 1);
+
+    utl::TempFileNamed aRecoveryFile;
+    aRecoveryFile.EnableKillingFile();
+    storeCopy(xDocument, aRecoveryFile.GetURL(), StoredCopy::RecoveryFile);
+
+    uno::Reference<XStatement> xStmt = xConnection->createStatement();
+    xStmt->execute(u"INSERT INTO \"RECOVERED\" VALUES(2)"_ustr);
+    xConnection->commit();
+
+    // Close without saving, as the user does (tdf#117118 writes the data on close)
+    xStmt.clear();
+    xConnection.clear();
+    xDocument.clear();
+    uno::Reference<util::XCloseable> xCloseable(mxComponent, UNO_QUERY_THROW);
+    xCloseable->close(false);
+    mxComponent.clear();
+
+    uno::Reference<XOfficeDatabaseDocument> xReopened = getDocumentForUrl(maTempFile.GetURL());
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("rows found in the document file after close", sal_Int32(2),
+                                 lcl_countRecoveredRows(getConnectionForDocument(xReopened)));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(FirebirdTest);

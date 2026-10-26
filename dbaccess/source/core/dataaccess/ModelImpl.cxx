@@ -132,6 +132,10 @@ public:
     /// commits the dedicated "database" storage
     bool commitEmbeddedStorage( bool _bPreventRootCommits );
 
+    /// prevents committing the "database" storage from also committing the root storage
+    void suspendCommitPropagation() { impl_suspendCommitPropagation(); }
+    void resumeCommitPropagation() { impl_resumeCommitPropagation(); }
+
 private:
     /** opens the sub storage with the given name, in the given mode
     */
@@ -830,6 +834,16 @@ Reference< XDocumentSubStorageSupplier > ODatabaseModelImpl::getDocumentSubStora
 bool ODatabaseModelImpl::commitEmbeddedStorage( bool _bPreventRootCommits )
 {
     return getDocumentStorageAccess()->commitEmbeddedStorage( _bPreventRootCommits );
+}
+
+void ODatabaseModelImpl::suspendCommitPropagation()
+{
+    getDocumentStorageAccess()->suspendCommitPropagation();
+}
+
+void ODatabaseModelImpl::resumeCommitPropagation()
+{
+    getDocumentStorageAccess()->resumeCommitPropagation();
 }
 
 bool ODatabaseModelImpl::commitStorageIfWriteable_ignoreErrors( const Reference< XStorage >& _rxStorage )
