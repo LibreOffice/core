@@ -399,6 +399,7 @@ RTFError RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
                                 Buf_t(RTFBufferTypes::StartShape, pValue, nullptr));
                         }
                     }
+                    startShapeTextTableState();
                 }
             }
             break;

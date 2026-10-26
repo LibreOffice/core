@@ -1978,6 +1978,44 @@ void RTFDocumentImpl::bufferTableRow(RTFBuffer_t& rOuterBuffer,
     rOuterBuffer.emplace_back(RTFBufferTypes::NestRow, RTFValue::Pointer_t(), pBuffer);
 }
 
+void RTFDocumentImpl::swapShapeTextTableState(ShapeTextTableState& rState)
+{
+    // Swapping a deque keeps its elements in place, so the parser states that point into the
+    // outer table buffers stay valid.
+    std::swap(m_aTableBufferStack, rState.aTableBufferStack);
+    std::swap(m_TopLevelTableRow, rState.aTopLevelTableRow);
+    std::swap(m_PreviousTopLevelTableRow, rState.aPreviousTopLevelTableRow);
+    std::swap(m_BackupTopLevelTableRow, rState.aBackupTopLevelTableRow);
+    std::swap(m_aBackupTableRowSprms, rState.aBackupTableRowSprms);
+    std::swap(m_aBackupTableRowAttributes, rState.aBackupTableRowAttributes);
+    std::swap(m_aDefaultState.getTableCellSprms(), rState.aDefaultTableCellSprms);
+    std::swap(m_nNestedCells, rState.nNestedCells);
+    std::swap(m_aNestedTableCellsSprms, rState.aNestedTableCellsSprms);
+    std::swap(m_aNestedTableCellsAttributes, rState.aNestedTableCellsAttributes);
+    std::swap(m_nNestedTRLeft, rState.nNestedTRLeft);
+    std::swap(m_nNestedCurrentCellX, rState.nNestedCurrentCellX);
+}
+
+void RTFDocumentImpl::startShapeTextTableState()
+{
+    RTFBuffer_t* pCurrentBuffer = m_aStates.top().getCurrentBuffer();
+    if (!pCurrentBuffer)
+        return;
+    ShapeTextTableState& rState = m_aShapeTextTableStates.emplace_back();
+    rState.pOuterBuffer = pCurrentBuffer;
+    rState.nStateDepth = m_aStates.size();
+    swapShapeTextTableState(rState);
+}
+
+void RTFDocumentImpl::endShapeTextTableState()
+{
+    if (m_aShapeTextTableStates.empty()
+        || m_aStates.size() >= m_aShapeTextTableStates.back().nStateDepth)
+        return;
+    swapShapeTextTableState(m_aShapeTextTableStates.back());
+    m_aShapeTextTableStates.pop_back();
+}
+
 void RTFDocumentImpl::sendBufferEntry(Buf_t aTuple)
 {
     if (std::get<0>(aTuple) == RTFBufferTypes::Props
@@ -3943,6 +3981,7 @@ RTFError RTFDocumentImpl::popState()
     }
 
     m_aStates.pop();
+    endShapeTextTableState();
 
     m_pTokenizer->popGroup();
 
