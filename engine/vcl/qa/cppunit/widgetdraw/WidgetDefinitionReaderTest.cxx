@@ -28,13 +28,21 @@ private:
         return m_directories.getURLFromSrc(u"/vcl/qa/cppunit/widgetdraw/data/"_ustr) + sFileName;
     }
 
+    OUString getThemeUrl(std::u16string_view sThemeName)
+    {
+        return m_directories.getURLFromSrc(u"/vcl/uiconfig/theme_definitions/"_ustr) + sThemeName
+               + "/";
+    }
+
 public:
     void testRead();
     void testReadSettings();
+    void testReadInstalledThemes();
 
     CPPUNIT_TEST_SUITE(WidgetDefinitionReaderTest);
     CPPUNIT_TEST(testRead);
     CPPUNIT_TEST(testReadSettings);
+    CPPUNIT_TEST(testReadInstalledThemes);
     CPPUNIT_TEST_SUITE_END();
 };
 
@@ -122,6 +130,19 @@ void WidgetDefinitionReaderTest::testRead()
                               ImplControlValue(ButtonValue::Off));
         CPPUNIT_ASSERT_EQUAL(size_t(1), aStates.size());
         CPPUNIT_ASSERT_EQUAL(size_t(1), aStates[0]->mpWidgetDrawActions.size());
+    }
+}
+
+void WidgetDefinitionReaderTest::testReadInstalledThemes()
+{
+    static constexpr std::u16string_view aThemeNames[] = { u"collabora", u"ios" };
+    for (const std::u16string_view& sThemeName : aThemeNames)
+    {
+        const OUString sThemeUrl = getThemeUrl(sThemeName);
+        vcl::WidgetDefinition aDefinition;
+        vcl::WidgetDefinitionReader aReader(sThemeUrl + "definition.xml", sThemeUrl);
+        CPPUNIT_ASSERT(aReader.read(aDefinition));
+        CPPUNIT_ASSERT(aDefinition.getDefinition(ControlType::Pushbutton, ControlPart::Entire));
     }
 }
 

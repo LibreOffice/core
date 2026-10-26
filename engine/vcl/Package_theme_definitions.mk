@@ -10,6 +10,56 @@
 $(eval $(call gb_Package_Package,vcl_theme_definitions,$(SRCDIR)/vcl/uiconfig/theme_definitions))
 
 $(eval $(call gb_Package_add_files_with_dir,vcl_theme_definitions,$(LIBO_SHARE_FOLDER)/theme_definitions,\
+	collabora/definition.xml \
+	collabora/arrow-down.svg \
+	collabora/arrow-up.svg \
+	collabora/checkbox-off-disabled.svg \
+	collabora/checkbox-off-pressed.svg \
+	collabora/checkbox-off.svg \
+	collabora/checkbox-on-disabled.svg \
+	collabora/checkbox-on-pressed.svg \
+	collabora/checkbox-on.svg \
+	collabora/combobox-button-disabled.svg \
+	collabora/combobox-button.svg \
+	collabora/combobox-default-focus.svg \
+	collabora/combobox-default-rollover.svg \
+	collabora/combobox-disabled.svg \
+	collabora/combobox.svg \
+	collabora/common-rect-disabled.svg \
+	collabora/common-rect-focus-slim.svg \
+	collabora/common-rect-focus.svg \
+	collabora/common-rect.svg \
+	collabora/pushbutton-action-default.svg \
+	collabora/pushbutton-action-disabled.svg \
+	collabora/pushbutton-action-pressed.svg \
+	collabora/pushbutton-action-rollover.svg \
+	collabora/pushbutton-default.svg \
+	collabora/pushbutton-disabled.svg \
+	collabora/pushbutton-focus-rectangle.svg \
+	collabora/pushbutton-rollover.svg \
+	collabora/radio-off-disabled.svg \
+	collabora/radio-off-pressed.svg \
+	collabora/radio-off.svg \
+	collabora/radio-on-disabled.svg \
+	collabora/radio-on-pressed.svg \
+	collabora/radio-on.svg \
+	collabora/scrollbar-horizontal.svg \
+	collabora/scrollbar-vertical.svg \
+	collabora/slider-button-disabled.svg \
+	collabora/slider-button.svg \
+	collabora/spinbox-default-focus.svg \
+	collabora/spinbox-default-rollover.svg \
+	collabora/spinbox-default.svg \
+	collabora/spinbox-left-disabled.svg \
+	collabora/spinbox-left-pressed.svg \
+	collabora/spinbox-left.svg \
+	collabora/spinbox-right-disabled.svg \
+	collabora/spinbox-right-pressed.svg \
+	collabora/spinbox-right.svg \
+	collabora/tabitem-rollover.svg \
+	collabora/tabitem-selected.svg \
+	collabora/toolbar-button-enabled-on.svg \
+	collabora/toolbar-button-enabled-rollover.svg \
 	ios/definition.xml \
 	ios/switch-off.svg \
 	ios/switch-off-disabled.svg \

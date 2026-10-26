@@ -77,20 +77,26 @@ std::shared_ptr<WidgetDefinition> getWidgetDefinition(OUString const& rDefinitio
     return std::shared_ptr<WidgetDefinition>();
 }
 
-std::shared_ptr<WidgetDefinition> const&
-getWidgetDefinitionForTheme(std::u16string_view rThemenName)
+// The first theme found: "online", the one a branding installs, then the theme that comes with
+// the installation.
+std::shared_ptr<WidgetDefinition> const& getThemeWidgetDefinition()
 {
-    static std::shared_ptr<WidgetDefinition> spDefinition;
-    static bool bAlreadyChecked = false;
-    if (!bAlreadyChecked)
-    {
-        bAlreadyChecked = true;
-        OUString sSharedDefinitionBasePath = lcl_getThemeDefinitionPath();
-        OUString sThemeFolder = sSharedDefinitionBasePath + rThemenName + "/";
-        OUString sThemeDefinitionFile = sThemeFolder + "definition.xml";
-        if (lcl_directoryExists(sThemeFolder) && lcl_fileExists(sThemeDefinitionFile))
-            spDefinition = getWidgetDefinition(sThemeDefinitionFile, sThemeFolder);
-    }
+    static const std::shared_ptr<WidgetDefinition> spDefinition = []() {
+#ifdef IOS
+        static constexpr std::u16string_view aThemeNames[] = { u"online", u"ios" };
+#else
+        static constexpr std::u16string_view aThemeNames[] = { u"online", u"collabora" };
+#endif
+        const OUString sSharedDefinitionBasePath = lcl_getThemeDefinitionPath();
+        for (const std::u16string_view& sThemeName : aThemeNames)
+        {
+            OUString sThemeFolder = sSharedDefinitionBasePath + sThemeName + "/";
+            OUString sThemeDefinitionFile = sThemeFolder + "definition.xml";
+            if (lcl_directoryExists(sThemeFolder) && lcl_fileExists(sThemeDefinitionFile))
+                return getWidgetDefinition(sThemeDefinitionFile, sThemeFolder);
+        }
+        return std::shared_ptr<WidgetDefinition>();
+    }();
     return spDefinition;
 }
 
@@ -118,11 +124,7 @@ FileDefinitionWidgetDraw::FileDefinitionWidgetDraw(SalGraphics& rGraphics)
     : m_rGraphics(rGraphics)
     , m_bIsActive(false)
 {
-    m_pWidgetDefinition = getWidgetDefinitionForTheme(u"online");
-#ifdef IOS
-    if (!m_pWidgetDefinition)
-        m_pWidgetDefinition = getWidgetDefinitionForTheme(u"ios");
-#endif
+    m_pWidgetDefinition = getThemeWidgetDefinition();
 
     if (!m_pWidgetDefinition)
         return;
