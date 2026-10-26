@@ -114,6 +114,14 @@ static SdPage* GetCurrentPage( sd::ViewShell const * pViewSh, EditFieldInfo cons
         if(pOutliner)
         {
             pPage = dynamic_cast< SdPage* >(const_cast< SdrPage* >(pOutliner->getVisualizedPage()));
+
+            // Text read or written with nothing on screen names no page it is shown on. The
+            // page is then the one the text stands on.
+            if (!pPage)
+            {
+                if (const SdrTextObj* pTextObj = pOutliner->GetTextObj())
+                    pPage = dynamic_cast<SdPage*>(pTextObj->getSdrPageFromSdrObject());
+            }
         }
 
         // The path using GetPaintingPageView() and GetCurrentPaintingDisplayInfo()

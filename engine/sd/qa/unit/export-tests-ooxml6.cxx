@@ -816,6 +816,20 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testRunKeepsBothOfItsLanguages)
     CPPUNIT_ASSERT_EQUAL(u"ja"_ustr, aEastern.Language);
 }
 
+// A notes page states the number of the slide it belongs to.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testNotesPageStatesItsSlideNumber)
+{
+    // Given a presentation whose notes pages number themselves:
+    createSdImpressDoc("pptx/tdf104788.pptx");
+
+    save(TestFilter::PPTX);
+
+    // Without the fix in place, a save with nothing on screen found no page for the number, and
+    // the text the program shows in its place went to the file instead.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/notesSlides/notesSlide3.xml"_ustr);
+    assertXPathContent(pXmlDoc, "//a:fld[@type='slidenum']/a:t", u"3");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
