@@ -1283,6 +1283,17 @@ label.notebookbar.ui-checkbox-label {
 	box-shadow: 0 6px 18px var(--color-box-shadow-light);
 }
 
+/* Set on the overlay of the context menu while the pointer is over the
+   context toolbar, so the overlay does not take the clicks meant for the
+   toolbar. The menu inside the overlay still gets the pointer. */
+.jsdialog-overlay.context-toolbar-passthrough {
+	pointer-events: none;
+}
+
+.jsdialog-overlay.context-toolbar-passthrough > * {
+	pointer-events: auto;
+}
+
 #context-toolbar.hidden {
 	display: none;
 	opacity: 0;

@@ -54,6 +54,17 @@ class ContextToolbar extends JSDialogComponent {
 			document.body,
 		);
 		window.L.DomUtil.addClass(this.container, 'notebookbar horizontal hidden');
+		// the toolbar stays usable while the context menu is open, close the
+		// menu once the toolbar is used, like a click anywhere else would
+		this.container.addEventListener('pointerdown', () => {
+			if (this.getContextMenuOverlay()) this.map.fire('closepopups');
+		});
+		// the pointer left the toolbar, the overlay takes the clicks again
+		this.container.addEventListener('pointerleave', () => {
+			this.getContextMenuOverlay()?.classList.remove(
+				'context-toolbar-passthrough',
+			);
+		});
 	}
 
 	showContextToolbar(): void {
@@ -95,6 +106,7 @@ class ContextToolbar extends JSDialogComponent {
 			}
 
 			document.addEventListener('pointermove', this.pointerMove);
+			document.addEventListener('pointermove', this.overlayPointerMove);
 			this.changeOpacity(1);
 			this.showHideToolbar(true);
 		});
@@ -102,6 +114,7 @@ class ContextToolbar extends JSDialogComponent {
 
 	hideContextToolbar(): void {
 		document.removeEventListener('pointermove', this.pointerMove);
+		document.removeEventListener('pointermove', this.overlayPointerMove);
 
 		if (this.pendingTask)
 			app.layoutingService.cancelLayoutingTask(this.pendingTask);
@@ -361,6 +374,7 @@ class ContextToolbar extends JSDialogComponent {
 	// reads that list once, the first time the toolbar is shown.
 	private _forceRebuild(): void {
 		document.removeEventListener('pointermove', this.pointerMove);
+		document.removeEventListener('pointermove', this.overlayPointerMove);
 		document.getElementById('context-toolbar')?.remove();
 		this.setupContainer(undefined);
 		this.initialized = false;
@@ -461,7 +475,34 @@ class ContextToolbar extends JSDialogComponent {
 		return Math.max(0, 1 - distance / this.disappearingBoundary);
 	}
 
+	// the overlay of the context menu exists only while the menu is open
+	private getContextMenuOverlay(): HTMLElement | null {
+		return document.getElementById('jsd-context-menu-dropdown-overlay');
+	}
+
+	// The context menu sits inside an overlay that catches clicks on the whole
+	// page, so no z-index puts the toolbar above the overlay but below the menu.
+	// While the pointer is over the toolbar, let it pass through the overlay
+	// instead. The menu still gets the pointer where the two overlap.
+	overlayPointerMove = (e: PointerEvent): void => {
+		const overlay = this.getContextMenuOverlay();
+		if (!overlay || e.target !== overlay) return;
+
+		const clientRect: DOMRect = this.container.getBoundingClientRect();
+		if (
+			clientRect.left <= e.clientX &&
+			e.clientX <= clientRect.right &&
+			clientRect.top <= e.clientY &&
+			e.clientY <= clientRect.bottom
+		)
+			overlay.classList.add('context-toolbar-passthrough');
+	};
+
 	pointerMove = (e: PointerEvent): void => {
+		// keep the toolbar as it is while the pointer travels to the
+		// context menu, the fade resumes once the menu is closed
+		if (this.getContextMenuOverlay()) return;
+
 		app.layoutingService.appendLayoutingTask(() => {
 			const opacity: number = this.calculateOpacity(e);
 
