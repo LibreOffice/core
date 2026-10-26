@@ -43,6 +43,7 @@
 #include <IDocumentMarkAccess.hxx>
 #include <IDocumentUndoRedo.hxx>
 #include <IMark.hxx>
+#include <fmtrfmrk.hxx>
 #include <hintids.hxx>
 #include <pagedesc.hxx>
 #include <fmthdft.hxx>
@@ -238,6 +239,26 @@ struct TranslateRange
 {
     SwPosition aStart;
     SwPosition aEnd;
+};
+
+/// A part of a paragraph translated on its own: the text from nFrom to nTo, of which
+/// nStart to nEnd is sent, without the blanks at its ends.
+struct TranslatePiece
+{
+    sal_Int32 nFrom;
+    sal_Int32 nTo;
+    sal_Int32 nStart;
+    sal_Int32 nEnd;
+};
+
+/// A bookmark or reference mark over the text sent and perhaps the blanks around it: where it
+/// starts, and how far it reaches beyond the end of the text sent.
+struct SpanningMark
+{
+    sw::mark::MarkBase* pBookmark;
+    SwMarkName aRefMarkName;
+    sal_Int32 nStart;
+    sal_Int32 nTail;
 };
 
 /// Sets eLanguage on the text from nStartContent in node nStartNode up to nCharsAfter
@@ -499,7 +520,7 @@ bool TranslateRanges(SwWrtShell& rWrtSh, const TranslateFunc& rTranslate,
                 // A text frame anchored as a character stays where it is: the
                 // text is translated in the pieces between such frames, the
                 // last piece first, so the earlier ones keep their positions.
-                std::vector<std::pair<sal_Int32, sal_Int32>> aPieces;
+                std::vector<TranslatePiece> aPieces;
                 {
                     const sal_Int32 nFrom = cursor->Start()->GetContentIndex();
                     const sal_Int32 nTo = cursor->End()->GetContentIndex();
@@ -515,31 +536,32 @@ bool TranslateRanges(SwWrtShell& rWrtSh, const TranslateFunc& rTranslate,
                             if (nAt < nFrom || nAt >= nTo)
                                 continue;
                             if (nAt > nPieceStart)
-                                aPieces.emplace_back(nPieceStart, nAt);
+                                aPieces.push_back({ nPieceStart, nAt, nPieceStart, nAt });
                             nPieceStart = nAt + 1;
                         }
                     }
                     if (nTo > nPieceStart)
-                        aPieces.emplace_back(nPieceStart, nTo);
+                        aPieces.push_back({ nPieceStart, nTo, nPieceStart, nTo });
                     // The blanks at the ends of a piece stay as they are: the
                     // round trip through HTML would drop a leading one.
                     const OUString& rText = pNode->GetTextNode()->GetText();
-                    for (std::pair<sal_Int32, sal_Int32>& rPiece : aPieces)
+                    for (TranslatePiece& rPiece : aPieces)
                     {
-                        while (rPiece.first < rPiece.second && rText[rPiece.first] == ' ')
-                            ++rPiece.first;
-                        while (rPiece.second > rPiece.first && rText[rPiece.second - 1] == ' ')
-                            --rPiece.second;
+                        while (rPiece.nStart < rPiece.nEnd && rText[rPiece.nStart] == ' ')
+                            ++rPiece.nStart;
+                        while (rPiece.nEnd > rPiece.nStart && rText[rPiece.nEnd - 1] == ' ')
+                            --rPiece.nEnd;
                     }
-                    std::erase_if(aPieces, [](const std::pair<sal_Int32, sal_Int32>& rPiece) {
-                        return rPiece.first >= rPiece.second;
+                    std::erase_if(aPieces, [](const TranslatePiece& rPiece) {
+                        return rPiece.nStart >= rPiece.nEnd;
                     });
                 }
                 for (size_t nPiece = aPieces.size(); nPiece > 0 && !bStop; --nPiece)
                 {
-                    cursor->GetPoint()->nContent = aPieces[nPiece - 1].first;
+                    const TranslatePiece& rPiece = aPieces[nPiece - 1];
+                    cursor->GetPoint()->nContent = rPiece.nStart;
                     cursor->SetMark();
-                    cursor->GetMark()->nContent = aPieces[nPiece - 1].second;
+                    cursor->GetMark()->nContent = rPiece.nEnd;
 
                     const auto aOut = SwTranslateHelper::ExportPaMToHTML(cursor.get());
                     OString aError;
@@ -553,17 +575,50 @@ bool TranslateRanges(SwWrtShell& rWrtSh, const TranslateFunc& rTranslate,
                         const SwNodeOffset nNodesAfter = pNodes.Count() - n;
                         const sal_Int32 nCharsAfter
                             = pNode->GetTextNode()->Len() - cursor->End()->GetContentIndex();
-                        // The bookmarks that span the text being replaced: the
-                        // paste leaves them empty, and a reference to one of them
-                        // would show nothing.
-                        std::vector<sw::mark::MarkBase*> aSpanningMarks;
+                        // The bookmarks that span the text being replaced, with or
+                        // without the blanks around it: the paste leaves them empty
+                        // or on a blank, and a reference to one of them would show
+                        // nothing of the text.
+                        std::vector<SpanningMark> aSpanningMarks;
+                        std::function<bool(const SwNode&, sal_Int32, const SwNode&, sal_Int32)>
+                            spansPiece = [pNode, &rPiece](const SwNode& rStartNode, sal_Int32 nStart,
+                                                          const SwNode& rEndNode, sal_Int32 nEnd) {
+                                return &rStartNode == pNode && &rEndNode == pNode
+                                       && rPiece.nFrom <= nStart && nStart <= rPiece.nStart
+                                       && rPiece.nEnd <= nEnd && nEnd <= rPiece.nTo;
+                            };
                         IDocumentMarkAccess& rMarks = *rWrtSh.GetDoc()->getIDocumentMarkAccess();
                         for (auto it = rMarks.getBookmarksBegin(); it != rMarks.getBookmarksEnd(); ++it)
                         {
                             sw::mark::MarkBase* pMark = *it;
-                            if (pMark->IsExpanded() && pMark->GetMarkStart() == *cursor->Start()
-                                && pMark->GetMarkEnd() == *cursor->End())
-                                aSpanningMarks.push_back(pMark);
+                            const SwPosition& rMarkStart = pMark->GetMarkStart();
+                            const SwPosition& rMarkEnd = pMark->GetMarkEnd();
+                            if (pMark->IsExpanded()
+                                && spansPiece(rMarkStart.GetNode(), rMarkStart.GetContentIndex(),
+                                              rMarkEnd.GetNode(), rMarkEnd.GetContentIndex()))
+                                aSpanningMarks.push_back({ pMark, SwMarkName(),
+                                                           rMarkStart.GetContentIndex(),
+                                                           rMarkEnd.GetContentIndex() - rPiece.nEnd });
+                        }
+                        // The same for the reference marks that reach into the blanks:
+                        // the paste leaves such a mark on a blank, and the mark of the
+                        // translation is not made, as the name is taken. One over the
+                        // text alone goes with it and is made again from the HTML.
+                        if (const SwpHints* pHints = pNode->GetTextNode()->GetpSwpHints())
+                        {
+                            for (size_t i = 0; i < pHints->Count(); ++i)
+                            {
+                                const SwTextAttr* pHint = pHints->Get(i);
+                                if (pHint->Which() != RES_TXTATR_REFMARK || !pHint->End())
+                                    continue;
+                                const sal_Int32 nMarkStart = pHint->GetStart();
+                                const sal_Int32 nMarkEnd = *pHint->End();
+                                if ((nMarkStart < rPiece.nStart || nMarkEnd > rPiece.nEnd)
+                                    && spansPiece(*pNode, nMarkStart, *pNode, nMarkEnd))
+                                    aSpanningMarks.push_back({ nullptr,
+                                                               pHint->GetRefMark().GetRefName(),
+                                                               nMarkStart, nMarkEnd - rPiece.nEnd });
+                            }
                         }
                         SwTextFormatColl* pColl = pNode->GetTextNode()->GetTextColl();
                         std::optional<SwAttrSet> oNodeAttrs;
@@ -625,18 +680,27 @@ bool TranslateRanges(SwWrtShell& rWrtSh, const TranslateFunc& rTranslate,
                             SetLanguageOfFootnotes(rWrtSh, nFirstPasted, nStartContent, nLastPasted,
                                                    nCharsAfter, eTargetLanguage);
                         }
-                        if (!aSpanningMarks.empty())
+                        SwTextNode* pFirstNode = pNodes[nFirstPasted]->GetTextNode();
+                        SwTextNode* pLastNode = pNodes[nLastPasted]->GetTextNode();
+                        const sal_Int32 nEndContent = pLastNode ? pLastNode->Len() - nCharsAfter : -1;
+                        for (const SpanningMark& rSpanning : aSpanningMarks)
                         {
-                            SwTextNode* pLastNode = pNodes[nLastPasted]->GetTextNode();
-                            const sal_Int32 nEndContent
-                                = pLastNode ? pLastNode->Len() - nCharsAfter : 0;
-                            if (pLastNode && nEndContent >= 0)
+                            if (!pFirstNode || nEndContent < 0
+                                || rSpanning.nStart > pFirstNode->Len()
+                                || nEndContent + rSpanning.nTail > pLastNode->Len())
+                                continue;
+                            // the translation, and the blanks the mark had around it
+                            const SwPaM aTranslated(*pFirstNode, rSpanning.nStart, *pLastNode,
+                                                    nEndContent + rSpanning.nTail);
+                            if (rSpanning.pBookmark)
                             {
-                                const SwPaM aTranslated(*pNodes[nFirstPasted], nStartContent,
-                                                        *pLastNode, nEndContent);
-                                for (sw::mark::MarkBase* pMark : aSpanningMarks)
-                                    rMarks.repositionMark(pMark, aTranslated);
+                                rMarks.repositionMark(rSpanning.pBookmark, aTranslated);
+                                continue;
                             }
+                            if (const SwFormatRefMark* pLeft = rDoc.GetRefMark(rSpanning.aRefMarkName))
+                                rDoc.DeleteFormatRefMark(pLeft);
+                            rDoc.getIDocumentContentOperations().InsertPoolItem(
+                                aTranslated, SwFormatRefMark(rSpanning.aRefMarkName));
                         }
                         rWrtSh.EndUndo(SwUndoId::PASTE_CLIPBOARD);
                         // Continue after the pasted translation, however many

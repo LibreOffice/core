@@ -13,6 +13,7 @@
 #include <vcl/scheduler.hxx>
 #include <vcl/TypeSerializer.hxx>
 #include <com/sun/star/awt/FontWeight.hpp>
+#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/text/XFootnotesSupplier.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/drawing/GraphicExportFilter.hpp>
@@ -2183,6 +2184,96 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateFrameAtCharacter)
                          getProperty<text::TextContentAnchorType>(xFrame, u"AnchorType"_ustr));
     CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
     CPPUNIT_ASSERT_EQUAL(u"Body text more text"_ustr, getParagraph(1)->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateBookmarkOverHeadingWithBlank)
+{
+    // The mock returns the markup it was sent, as the translation services do.
+    std::unique_ptr<test::MockHttpServer> pMockServer = createMockTranslateServer(false, true);
+    CPPUNIT_ASSERT(pMockServer->start());
+    comphelper::ScopeGuard<std::function<void()>> aResetConfig
+        = setTranslationService(u"http://127.0.0.1:18099/v2/translate"_ustr);
+
+    // Given a paragraph ending in a blank, with a bookmark over all of its text:
+    createSwDoc();
+    SwWrtShell* const pWrtSh = getSwDocShell()->GetWrtShell();
+    pWrtSh->Insert(u"What to plant first "_ustr);
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xBody = xTextDocument->getText();
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextContent> xBookmark(
+        xFactory->createInstance(u"com.sun.star.text.Bookmark"_ustr), uno::UNO_QUERY);
+    uno::Reference<container::XNamed>(xBookmark, uno::UNO_QUERY_THROW)->setName(u"plant"_ustr);
+    uno::Reference<text::XTextCursor> xCursor = xBody->createTextCursor();
+    xCursor->gotoStart(false);
+    xCursor->gotoEnd(true);
+    xBody->insertTextContent(xCursor, xBookmark, true);
+    CPPUNIT_ASSERT_EQUAL(u"What to plant first "_ustr, xBookmark->getAnchor()->getString());
+    pWrtSh->SttEndDoc(true);
+
+    // When translating the whole document:
+    bool bCancel = false;
+    CPPUNIT_ASSERT(SwTranslateHelper::TranslateDocumentCancellable(*pWrtSh, "DE"_ostr, bCancel));
+
+    // Then the bookmark still spans the text of the paragraph: it used to end up on the blank,
+    // which is not translated.
+    uno::Reference<text::XBookmarksSupplier> xBookmarks(mxComponent, uno::UNO_QUERY);
+    xBookmark.set(xBookmarks->getBookmarks()->getByName(u"plant"_ustr), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"What to plant first "_ustr, xBookmark->getAnchor()->getString());
+}
+
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateMarksOverBlanks)
+{
+    // The mock returns the markup it was sent, as the translation services do.
+    std::unique_ptr<test::MockHttpServer> pMockServer = createMockTranslateServer(false, true);
+    CPPUNIT_ASSERT(pMockServer->start());
+    comphelper::ScopeGuard<std::function<void()>> aResetConfig
+        = setTranslationService(u"http://127.0.0.1:18099/v2/translate"_ustr);
+
+    // Given two paragraphs that start and end in a blank, a bookmark over all of the first and
+    // a reference mark over all of the second:
+    createSwDoc();
+    SwWrtShell* const pWrtSh = getSwDocShell()->GetWrtShell();
+    pWrtSh->Insert(u" What to plant first "_ustr);
+    pWrtSh->SplitNode();
+    pWrtSh->Insert(u" Water daily "_ustr);
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    std::function<void(const OUString&, const OUString&, int)> addMark
+        = [this, &xFactory](const OUString& rService, const OUString& rName, int nParagraph) {
+              uno::Reference<text::XTextContent> xMark(xFactory->createInstance(rService),
+                                                       uno::UNO_QUERY);
+              uno::Reference<container::XNamed>(xMark, uno::UNO_QUERY_THROW)->setName(rName);
+              uno::Reference<text::XTextRange> xParagraph = getParagraph(nParagraph);
+              uno::Reference<text::XTextCursor> xCursor
+                  = xParagraph->getText()->createTextCursorByRange(xParagraph);
+              xParagraph->getText()->insertTextContent(xCursor, xMark, true);
+          };
+    addMark(u"com.sun.star.text.Bookmark"_ustr, u"plant"_ustr, 1);
+    addMark(u"com.sun.star.text.ReferenceMark"_ustr, u"tip"_ustr, 2);
+    uno::Reference<text::XBookmarksSupplier> xBookmarks(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XReferenceMarksSupplier> xReferenceMarks(mxComponent, uno::UNO_QUERY);
+    std::function<OUString()> bookmarkText = [&xBookmarks]() {
+        uno::Reference<text::XTextContent> xMark(
+            xBookmarks->getBookmarks()->getByName(u"plant"_ustr), uno::UNO_QUERY);
+        return xMark->getAnchor()->getString();
+    };
+    std::function<OUString()> referenceMarkText = [&xReferenceMarks]() {
+        uno::Reference<text::XTextContent> xMark(
+            xReferenceMarks->getReferenceMarks()->getByName(u"tip"_ustr), uno::UNO_QUERY);
+        return xMark->getAnchor()->getString();
+    };
+    CPPUNIT_ASSERT_EQUAL(u" What to plant first "_ustr, bookmarkText());
+    CPPUNIT_ASSERT_EQUAL(u" Water daily "_ustr, referenceMarkText());
+    pWrtSh->SttEndDoc(true);
+
+    // When translating the whole document:
+    bool bCancel = false;
+    CPPUNIT_ASSERT(SwTranslateHelper::TranslateDocumentCancellable(*pWrtSh, "DE"_ostr, bCancel));
+
+    // Then both marks still span all of their paragraph, the blanks that are not translated
+    // included:
+    CPPUNIT_ASSERT_EQUAL(u" What to plant first "_ustr, bookmarkText());
+    CPPUNIT_ASSERT_EQUAL(u" Water daily "_ustr, referenceMarkText());
 }
 
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateKeepsSpaceAfterField)
