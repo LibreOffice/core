@@ -387,8 +387,8 @@ HARFBUZZ_TARBALL := harfbuzz-14.3.0.tar.xz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
-HUNSPELL_SHA256SUM := 66ec82a577395fe9d471504267e6dd04615c76517c61af7c6b9c19e5e34e73c8
-HUNSPELL_TARBALL := hunspell-1.7.4.tar.gz
+HUNSPELL_SHA256SUM := 9c650ace31d4d8cc1da925a9507c3de1d50f1a54857af2f72429f517d5d53467
+HUNSPELL_TARBALL := hunspell-1.7.6.tar.gz
 # three static lines
 # so that git cherry-pick
 # will not run into conflicts
