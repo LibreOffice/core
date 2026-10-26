@@ -380,6 +380,23 @@ sal_Int32 DrawingML::GetFontPitchFamily(const cpo::uno::Reference<beans::XProper
     return TextFont::makePitchFamily(nFontPitch, nFontFamily);
 }
 
+void DrawingML::WriteFontElement(sal_Int32 nElement, const OUString& rTypeface,
+                                 const cpo::uno::Reference<beans::XPropertySet>& rXPropSet,
+                                 const OUString& rPitchName, const OUString& rFamilyName)
+{
+    OUString aTypeface(rTypeface);
+    if (!mbEmbedFonts || EmbeddedFontsManager::isCommonFont(aTypeface))
+    {
+        OUString aSubstName(GetSubsFontName(aTypeface, SubsFontFlags::ONLYONE | SubsFontFlags::MS));
+        if (!aSubstName.isEmpty())
+            aTypeface = aSubstName;
+    }
+
+    sal_Int32 nPitchFamily = GetFontPitchFamily(rXPropSet, rPitchName, rFamilyName);
+    mpFS->singleElementNS(XML_a, nElement, XML_typeface, aTypeface, XML_pitchFamily,
+                          sax_fastparser::UseIf(OString::number(nPitchFamily), nPitchFamily != 0));
+}
+
 namespace
 {
 /// Gets hexa value of color on string format.
@@ -2952,51 +2969,32 @@ void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int3
     if (GetProperty(xCharAttrSource, u"CharFontName"_ustr))
     {
         OUString usTypeface;
-
         mAny >>= usTypeface;
-
-        if (!mbEmbedFonts || EmbeddedFontsManager::isCommonFont(usTypeface))
-        {
-            OUString aSubstName( GetSubsFontName( usTypeface, SubsFontFlags::ONLYONE | SubsFontFlags::MS ) );
-            if (!aSubstName.isEmpty())
-                usTypeface = aSubstName;
-        }
-
-        sal_Int32 nPitchFamily
-            = GetFontPitchFamily(rXPropSet, u"CharFontPitch"_ustr, u"CharFontFamily"_ustr);
-        mpFS->singleElementNS( XML_a, XML_latin,
-                               XML_typeface, usTypeface,
-                               XML_pitchFamily,
-                               sax_fastparser::UseIf(OString::number(nPitchFamily),
-                                                     nPitchFamily != 0) );
+        WriteFontElement(XML_latin, usTypeface, rXPropSet, u"CharFontPitch"_ustr,
+                         u"CharFontFamily"_ustr);
     }
 
-    // the Asian and complex fonts of a Fontwork are the shape's as well
-    if (bFontwork
-            ? GetProperty(xCharAttrSource,
-                          bComplex ? u"CharFontNameComplex"_ustr : u"CharFontNameAsian"_ustr)
-            : (rRunInput.bCheckDirect
-               && GetDirectProperty(rXPropSet, rXPropState,
-                                    bComplex ? u"CharFontNameComplex"_ustr
-                                             : u"CharFontNameAsian"_ustr)))
+    // A text holds an eastern and a complex font of its own beside the western one, and the
+    // format states each of the three in its own element. The eastern and the complex font of
+    // a Fontwork are the shape's as well.
+    if (bFontwork ? GetProperty(xCharAttrSource, u"CharFontNameAsian"_ustr)
+                  : (rRunInput.bCheckDirect
+                     && GetDirectProperty(rXPropSet, rXPropState, u"CharFontNameAsian"_ustr)))
     {
         OUString usTypeface;
-
         mAny >>= usTypeface;
-        if (!mbEmbedFonts || EmbeddedFontsManager::isCommonFont(usTypeface))
-        {
-            OUString aSubstName( GetSubsFontName( usTypeface, SubsFontFlags::ONLYONE | SubsFontFlags::MS ) );
-            if (!aSubstName.isEmpty())
-                usTypeface = aSubstName;
-        }
-        sal_Int32 nPitchFamily = GetFontPitchFamily(
-            rXPropSet, bComplex ? u"CharFontPitchComplex"_ustr : u"CharFontPitchAsian"_ustr,
-            bComplex ? u"CharFontFamilyComplex"_ustr : u"CharFontFamilyAsian"_ustr);
-        mpFS->singleElementNS( XML_a, bComplex ? XML_cs : XML_ea,
-                               XML_typeface, usTypeface,
-                               XML_pitchFamily,
-                               sax_fastparser::UseIf(OString::number(nPitchFamily),
-                                                     nPitchFamily != 0) );
+        WriteFontElement(XML_ea, usTypeface, rXPropSet, u"CharFontPitchAsian"_ustr,
+                         u"CharFontFamilyAsian"_ustr);
+    }
+
+    if (bFontwork ? GetProperty(xCharAttrSource, u"CharFontNameComplex"_ustr)
+                  : (rRunInput.bCheckDirect
+                     && GetDirectProperty(rXPropSet, rXPropState, u"CharFontNameComplex"_ustr)))
+    {
+        OUString usTypeface;
+        mAny >>= usTypeface;
+        WriteFontElement(XML_cs, usTypeface, rXPropSet, u"CharFontPitchComplex"_ustr,
+                         u"CharFontFamilyComplex"_ustr);
     }
 
     if (rRunInput.bIsField)

@@ -353,6 +353,11 @@ protected:
         in, taking the two named properties. It is zero where the text holds neither. */
     sal_Int32 GetFontPitchFamily(const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet,
                                  const OUString& rPitchName, const OUString& rFamilyName);
+    /** Writes one font of a text as the named element, giving it the typeface along with the
+        pitch and the family taken from the two named properties. */
+    void WriteFontElement(sal_Int32 nElement, const OUString& rTypeface,
+                          const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet,
+                          const OUString& rPitchName, const OUString& rFamilyName);
     OUString GetFieldValue( const cpo::uno::Reference< css::text::XTextRange >& rRun, bool& bIsURLField );
     /** Gets OOXML datetime field type from LO Date format
 

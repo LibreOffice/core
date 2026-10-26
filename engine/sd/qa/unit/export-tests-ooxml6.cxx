@@ -725,6 +725,17 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testFontKeepsItsPitchAndFamily)
                          xEastern->getPropertyValue(u"CharFontPitchAsian"_ustr).get<sal_Int16>());
     CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::FontFamily::ROMAN),
                          xEastern->getPropertyValue(u"CharFontFamilyAsian"_ustr).get<sal_Int16>());
+
+    // The fourth paragraph is western text carrying a complex font, which is kept along with its
+    // own classification.
+    uno::Reference<beans::XPropertySet> xComplex(
+        getRunFromParagraph(0, getParagraphFromShape(3, xShape)), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(u"Mangal"_ustr,
+                         xComplex->getPropertyValue(u"CharFontNameComplex"_ustr).get<OUString>());
+    CPPUNIT_ASSERT_EQUAL(awt::FontPitch::VARIABLE,
+                         xComplex->getPropertyValue(u"CharFontPitchComplex"_ustr).get<sal_Int16>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::FontFamily::ROMAN),
+                         xComplex->getPropertyValue(u"CharFontFamilyComplex"_ustr).get<sal_Int16>());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
