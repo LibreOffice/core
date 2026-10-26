@@ -1971,6 +1971,18 @@ void RTFDocumentImpl::bufferOrSend(RTFBufferTypes eType, RTFValue::Pointer_t con
         sendBufferEntry(Buf_t(eType, pValue, nullptr));
 }
 
+void RTFDocumentImpl::bufferTableRow(RTFBuffer_t& rOuterBuffer,
+                                     std::deque<RTFSprms> const& rCellsSprms,
+                                     std::deque<RTFSprms> const& rCellsAttributes, int nCells,
+                                     int nCurrentCellX, int nTRLeft)
+{
+    tools::SvRef<TableRowBuffer> const pBuffer(
+        new TableRowBuffer(m_aTableBufferStack.back(), rCellsSprms, rCellsAttributes, nCells));
+    prepareProperties(m_aStates.top(), pBuffer->GetParaProperties(), pBuffer->GetFrameProperties(),
+                      pBuffer->GetRowProperties(), nCells, nCurrentCellX, nTRLeft);
+    rOuterBuffer.emplace_back(RTFBufferTypes::NestRow, RTFValue::Pointer_t(), pBuffer);
+}
+
 void RTFDocumentImpl::sendBufferEntry(Buf_t aTuple)
 {
     if (std::get<0>(aTuple) == RTFBufferTypes::Props

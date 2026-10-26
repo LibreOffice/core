@@ -296,18 +296,14 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         break;
         case RTFKeyword::NESTROW:
         {
-            tools::SvRef<TableRowBuffer> const pBuffer(
-                new TableRowBuffer(m_aTableBufferStack.back(), m_aNestedTableCellsSprms,
-                                   m_aNestedTableCellsAttributes, m_nNestedCells));
-            prepareProperties(m_aStates.top(), pBuffer->GetParaProperties(),
-                              pBuffer->GetFrameProperties(), pBuffer->GetRowProperties(),
-                              m_nNestedCells, m_nNestedCurrentCellX, m_nNestedTRLeft);
-
             if (m_aTableBufferStack.size() == 1 || !m_aStates.top().getCurrentBuffer())
             {
                 throw io::WrongFormatException(
                     u"mismatch between \\itap and number of \\nestrow"_ustr, nullptr);
             }
+            bufferTableRow(m_aTableBufferStack[m_aTableBufferStack.size() - 2],
+                           m_aNestedTableCellsSprms, m_aNestedTableCellsAttributes, m_nNestedCells,
+                           m_nNestedCurrentCellX, m_nNestedTRLeft);
             assert(m_aStates.top().getCurrentBuffer() == &m_aTableBufferStack.back());
             // note: there may be several states pointing to table buffer!
             for (std::size_t i = 0; i < m_aStates.size(); ++i)
@@ -319,8 +315,6 @@ RTFError RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 }
             }
             m_aTableBufferStack.pop_back();
-            m_aTableBufferStack.back().emplace_back(
-                Buf_t(RTFBufferTypes::NestRow, RTFValue::Pointer_t(), pBuffer));
 
             m_aNestedTableCellsSprms.clear();
             m_aNestedTableCellsAttributes.clear();
