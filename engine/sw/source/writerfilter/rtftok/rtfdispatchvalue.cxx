@@ -406,7 +406,8 @@ bool RTFDocumentImpl::dispatchTableValue(RTFKeyword nKeyword, int nParam)
                 (Destination::NESTEDTABLEPROPERTIES == m_aStates.top().getDestination())
                     ? m_nNestedCurrentCellX
                     : m_TopLevelTableRow.nCurrentCellX);
-            int nCellWidth = nParam - rCurrentCellX;
+            const int nCellWidth = static_cast<int>(std::clamp<sal_Int64>(
+                sal_Int64(nParam) - rCurrentCellX, SAL_MIN_INT32, SAL_MAX_INT32));
             rCurrentCellX = nParam;
             auto pXValue = new RTFValue(nCellWidth);
             m_aStates.top().getTableRowSprms().set(NS_ooxml::LN_CT_TblGridBase_gridCol, pXValue,
