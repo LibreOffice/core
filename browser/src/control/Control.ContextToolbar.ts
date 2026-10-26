@@ -30,6 +30,7 @@ class ContextToolbar extends JSDialogComponent {
 		this.setupContainer(undefined);
 		this.registerMessageHandlers();
 		app.events.on('updatepermission', this.onUpdatePermission);
+		this.map.on('dropdownopen', this.onDropdownOpen, this);
 	}
 
 	onUpdatePermission = (): void => {
@@ -473,6 +474,25 @@ class ContextToolbar extends JSDialogComponent {
 		const distance = Math.hypot(xDistance, yDistance);
 
 		return Math.max(0, 1 - distance / this.disappearingBoundary);
+	}
+
+	// a dropdown opened elsewhere, e.g. from the notebookbar, takes over from the
+	// toolbar, but its own dropdowns and the context menu should keep it open
+	onDropdownOpen(e: {
+		id: string;
+		popupParent: string | HTMLElement | null;
+	}): void {
+		if (!this.pendingTask && this.container.classList.contains('hidden'))
+			return;
+		if (e.id === ContextMenuControl.menuID) return;
+
+		const parent =
+			typeof e.popupParent === 'string'
+				? document.getElementById(e.popupParent)
+				: e.popupParent;
+		if (parent && this.container.contains(parent)) return;
+
+		this.hideContextToolbar();
 	}
 
 	// the overlay of the context menu exists only while the menu is open

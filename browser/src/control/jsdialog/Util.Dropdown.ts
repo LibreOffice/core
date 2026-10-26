@@ -400,6 +400,10 @@ JSDialog.OpenDropdown = function (
 	};
 	if (!isSubmenu) {
 		window.L.Map.THIS.fire('closepopups'); // close popups if a dropdown menu is opened
+		window.L.Map.THIS.fire('dropdownopen', {
+			id: id,
+			popupParent: popupParent,
+		});
 	}
 	window.L.Map.THIS.fire('jsdialog', {
 		data: json,

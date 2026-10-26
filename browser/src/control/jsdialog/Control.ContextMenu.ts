@@ -45,7 +45,8 @@ interface MenuCfg {
 class ContextMenuControl extends JSControl {
 	private _prevMousePos: PositionInterface | null = null;
 	private _currMousePos: PositionInterface | null = null;
-	private _menuID: string = 'jsd-context-menu';
+	public static readonly menuID: string = 'jsd-context-menu';
+	private _menuID: string = ContextMenuControl.menuID;
 	private _menuPosID: string = 'canvas-context-menupos';
 	private _menuPosEl: HTMLElement | null = null;
 	private _autoFillContextMenu: boolean = false;
