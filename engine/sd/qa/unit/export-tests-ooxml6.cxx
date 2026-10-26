@@ -754,6 +754,20 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testParagraphStatesItsHangingPunctuatio
     assertXPath(pXmlDoc, "//p:sp/p:txBody/a:p[2]/a:pPr", "hangingPunct", u"1");
 }
 
+// A paragraph keeps the room it holds its text away from the right edge in.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testParagraphKeepsItsRightIndent)
+{
+    // Given a paragraph held half an inch away from the left edge and an inch from the right:
+    createSdImpressDoc("pptx/paragraph-right-indent.pptx");
+
+    save(TestFilter::PPTX);
+
+    // Without the fix in place, the saved file stated the left side alone, so the text reached
+    // the right edge of its frame when it was read back.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//p:sp/p:txBody/a:p/a:pPr", "marR", u"914400");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -3763,10 +3763,13 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
     }
 
     sal_Int32 nParaLeftMargin = 0;
+    sal_Int32 nParaRightMargin = 0;
     sal_Int32 nParaFirstLineIndent = 0;
 
     if (GetProperty(rXPropSet, u"ParaLeftMargin"_ustr))
         mAny >>= nParaLeftMargin;
+    if (GetProperty(rXPropSet, u"ParaRightMargin"_ustr))
+        mAny >>= nParaRightMargin;
     if (GetProperty(rXPropSet, u"ParaFirstLineIndent"_ustr))
         mAny >>= nParaFirstLineIndent;
 
@@ -3808,6 +3811,8 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
         nParaLeftMargin = 0;
     if (nLeftMargin > nMaxMarginVal)
         nLeftMargin = 0;
+    if (nParaRightMargin > nMaxMarginVal)
+        nParaRightMargin = 0;
 
     // A paragraph with a left margin of its own writes that margin, otherwise marL and indent
     // come from the numbering rule of its level, which is where the indent of a bulleted level
@@ -3815,6 +3820,7 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
     if (nParaLeftMargin)
         mpFS->startElementNS( XML_a, nElement,
                            XML_marL, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nParaLeftMargin)), nParaLeftMargin > 0),
+                           XML_marR, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nParaRightMargin)), nParaRightMargin > 0),
                            XML_lvl, sax_fastparser::UseIf(OString::number(nOutLevel), nOutLevel > 0),
                            XML_indent, sax_fastparser::UseIf(OString::number((bForceZeroIndent && nParaFirstLineIndent == 0) ? 0 : oox::drawingml::convertHmmToEmu(nParaFirstLineIndent)), (bForceZeroIndent || nParaFirstLineIndent != 0)),
                            XML_algn, GetAlignment( nAlignment, mbPlaceholder ),
@@ -3827,6 +3833,7 @@ bool DrawingML::WriteParagraphProperties(const Reference<XTextContent>& rParagra
         // marL from the level in the list styles, and this paragraph is not indented by its level.
         mpFS->startElementNS( XML_a, nElement,
                            XML_marL, sax_fastparser::UseIf(OString::number(nLeftMargin > 0 ? oox::drawingml::convertHmmToEmu(nLeftMargin) : 0), nLeftMargin > 0 || bForceZeroIndent),
+                           XML_marR, sax_fastparser::UseIf(OString::number(oox::drawingml::convertHmmToEmu(nParaRightMargin)), nParaRightMargin > 0),
                            XML_lvl, sax_fastparser::UseIf(OString::number(nOutLevel), nOutLevel > 0),
                            XML_indent, sax_fastparser::UseIf(OString::number(!bForceZeroIndent ? oox::drawingml::convertHmmToEmu(nLineIndentation) : 0), (bForceZeroIndent || ( nLineIndentation != 0))),
                            XML_algn, GetAlignment( nAlignment, mbPlaceholder ),
