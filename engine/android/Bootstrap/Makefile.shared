@@ -62,7 +62,7 @@ $(OBJLOCAL)/liblo-native-code.so : native-code.cxx $(ALL_STATIC_LIBS)
 
 $(SODEST)/liblo-native-code.so : $(OBJLOCAL)/liblo-native-code.so
 	mkdir -p $(SODEST)
-	$(STRIP) -o $(SODEST)/liblo-native-code.so $(OBJLOCAL)/liblo-native-code.so
+	$(STRIP) $(if $(ENABLE_DEBUG),--strip-debug) -o $(SODEST)/liblo-native-code.so $(OBJLOCAL)/liblo-native-code.so
 	#to keep some symbols, eg.: $(STRIP) -o $(SODEST)/liblo-native-code.so $(OBJLOCAL)/liblo-native-code.so -w -K 'Java*'
 
 $(SODEST)/nss-libraries :

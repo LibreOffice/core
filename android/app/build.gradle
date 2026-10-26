@@ -106,6 +106,12 @@ dependencies {
     }
 }
 
+androidComponents {
+    onVariants(selector().withBuildType("debug")) { variant ->
+        variant.packaging.jniLibs.keepDebugSymbols.add("**/*.so")
+    }
+}
+
 tasks.register('copyBrandFiles', Copy) {
     from "${coBrandingDir}/android"
     into "src/main/res"
