@@ -134,9 +134,16 @@ namespace cool {
 			const h = this.context.canvas.height;
 			this._ensureOffscreen(w, h);
 
+			// Inside an entered group the rest of the page is drawn ghosted, so entering and
+			// leaving draw it anew.
+			const place = Interaction.placeOf(GraphicSelection.selectedObjectIDs);
+			const entered = place.kind === 'page' ? undefined : place.group;
+
 			// The objects drawn elsewhere are left out of the page, so the drawing is made again
 			// when they change.
 			const renderKey =
+				String(entered) +
+				':' +
 				RenderManager.drawnElsewhereVersion() +
 				':' +
 				cached.partId +
@@ -157,6 +164,7 @@ namespace cool {
 				this._offscreenCtx.scale(scale, scale);
 				RenderManager.renderInto(this._offscreenCtx, cached, {
 					editView: true,
+					ghostedOutside: entered,
 				});
 				// The view edits the page, so it marks out the placeholders.
 				RenderManager.renderPlaceholderAids(this._offscreenCtx, cached);

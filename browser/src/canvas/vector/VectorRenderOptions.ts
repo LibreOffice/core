@@ -14,5 +14,8 @@ namespace cool {
 	export interface VectorRenderOptions {
 		/// True when the render is the editable view of the document.
 		editView?: boolean;
+		/// The group that is entered: its objects are drawn as they are, every other object of
+		/// the page is drawn ghosted, mixed half way to white. Absent where no group is entered.
+		ghostedOutside?: number;
 	}
 }
