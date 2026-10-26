@@ -2443,6 +2443,9 @@ void RtfAttributeOutput::writeTextFrame(const ww8::Frame& rFrame, bool bTextBox)
         m_rExport.m_pTableInfo = std::make_shared<ww8::WW8TableInfo>();
         std::unique_ptr<SwWriteTable> pTableWrt(std::move(m_pTableWrt));
         sal_uInt32 nTableDepth = m_nTableDepth;
+        OStringBuffer aRowDefs = std::exchange(m_aRowDefs, {});
+        std::vector<OString> aTables = std::exchange(m_aTables, {});
+        OStringBuffer aAfterRuns = std::exchange(m_aAfterRuns, {});
 
         m_nTableDepth = 0;
         /*
@@ -2479,6 +2482,9 @@ void RtfAttributeOutput::writeTextFrame(const ww8::Frame& rFrame, bool bTextBox)
         m_rExport.m_pTableInfo = std::move(pTableInfoOrig);
         m_pTableWrt = std::move(pTableWrt);
         m_nTableDepth = nTableDepth;
+        m_aRowDefs = std::move(aRowDefs);
+        m_aTables = std::move(aTables);
+        m_aAfterRuns = std::move(aAfterRuns);
     }
 
     m_rExport.m_pParentFrame = nullptr;

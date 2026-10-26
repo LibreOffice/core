@@ -1422,6 +1422,32 @@ CPPUNIT_TEST_FIXTURE(Test, testTableStyleLiveExport)
     CPPUNIT_ASSERT_EQUAL(COL_WHITE, getProperty<Color>(getRun(xParagraph, 1), u"CharColor"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testShapeTableInNestedCellRTFExport)
+{
+    // Given a text box in a nested table cell, the text box holding a table and a paragraph:
+    createSwDoc("shape-table-in-nested-cell.rtf");
+
+    // When saving to RTF and loading it back:
+    saveAndReload(TestFilter::RTF);
+
+    // Then the outer table, the nested table and the text box's table are all still there:
+    uno::Reference<text::XTextTablesSupplier> xSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xTables(xSupplier->getTextTables(),
+                                                    uno::UNO_QUERY_THROW);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 3
+    // - Actual  : 1
+    // i.e. the text box's table took over the row of the nested table around it.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(3), xTables->getCount());
+    uno::Reference<text::XText> xShapeText(getShape(1), uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextTable> xShapeTable(getParagraphOrTable(1, xShapeText),
+                                                 uno::UNO_QUERY_THROW);
+    uno::Reference<text::XTextRange> xCell(xShapeTable->getCellByName(u"A1"_ustr),
+                                           uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(u"inner"_ustr, xCell->getString());
+    CPPUNIT_ASSERT_EQUAL(u"after"_ustr, getParagraphOfText(2, xShapeText)->getString());
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
