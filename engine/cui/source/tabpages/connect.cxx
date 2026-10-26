@@ -43,7 +43,8 @@ const WhichRangesContainer SvxConnectionPage::pRanges(
 |*
 \************************************************************************/
 SvxConnectionDialog::SvxConnectionDialog(weld::Window* pParent, const SfxItemSet& rInAttrs, const SdrView* pSdrView)
-    : SfxSingleTabDialogController(pParent, &rInAttrs)
+    : SfxSingleTabDialogController(pParent, &rInAttrs, u"cui/ui/connectordialog.ui"_ustr,
+                                   u"ConnectorDialog"_ustr)
 {
     auto xPage = std::make_unique<SvxConnectionPage>(get_content_area(), this, rInAttrs);
 

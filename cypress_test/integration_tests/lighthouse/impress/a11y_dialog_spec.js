@@ -399,6 +399,20 @@ describe(['taglighthouse'], 'Accessibility Impress Dialog Tests', { testIsolatio
         helper.typeIntoDocument('{esc}');
     });
 
+    it('Connector dialog', function () {
+        cy.then(() => {
+            win.app.map.sendUnoCommand('.uno:Connector');
+        });
+        cy.cGet('#test-div-shapeHandlesSection').should('exist');
+
+        cy.then(() => {
+            win.app.map.sendUnoCommand('.uno:ConnectorAttributes');
+        });
+        a11yHelper.handleDialog(win, 1, '.uno:ConnectorAttributes');
+
+        helper.typeIntoDocument('{esc}');
+    });
+
     it('Interaction dialog', function () {
         cy.then(() => {
             win.app.map.sendUnoCommand('.uno:BasicShapes.octagon');

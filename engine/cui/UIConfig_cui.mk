@@ -43,6 +43,7 @@ $(eval $(call gb_UIConfig_add_uifiles,cui,\
 	cui/uiconfig/ui/colorpage \
 	cui/uiconfig/ui/colorpickerdialog \
 	cui/uiconfig/ui/comment \
+	cui/uiconfig/ui/connectordialog \
 	cui/uiconfig/ui/connectortabpage \
 	cui/uiconfig/ui/croppage \
 	cui/uiconfig/ui/cuiimapdlg \
