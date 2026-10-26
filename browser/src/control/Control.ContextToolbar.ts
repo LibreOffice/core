@@ -444,38 +444,21 @@ class ContextToolbar extends JSDialogComponent {
 	calculateOpacity(e: PointerEvent): number {
 		const clientRect: DOMRect = this.container.getBoundingClientRect();
 
-		// hover over toolbar
-		if (
-			clientRect.left < e.clientX &&
-			e.clientX < clientRect.right &&
-			clientRect.top < e.clientY &&
-			e.clientY < clientRect.bottom
-		) {
-			return 1;
-		}
+		// distance from the pointer to the nearest point of the toolbar,
+		// zero when hovering over it, so the fade is the same in every direction
+		const xDistance = Math.max(
+			clientRect.left - e.clientX,
+			0,
+			e.clientX - clientRect.right,
+		);
+		const yDistance = Math.max(
+			clientRect.top - e.clientY,
+			0,
+			e.clientY - clientRect.bottom,
+		);
+		const distance = Math.hypot(xDistance, yDistance);
 
-		const minX = clientRect.left - this.disappearingBoundary;
-		const maxX = clientRect.right + this.disappearingBoundary;
-		const minY = clientRect.top - this.disappearingBoundary;
-		const maxY = clientRect.bottom + this.disappearingBoundary;
-
-		let xDistance: number = 0;
-		// left of toolbar
-		if (minX < e.clientX && e.clientX < clientRect.left)
-			xDistance = e.clientX - minX;
-		// right of toolbar
-		else if (clientRect.right < e.clientX && e.clientX < maxX)
-			xDistance = maxX - e.clientX;
-
-		let yDistance: number = 0;
-		// top of toolbar
-		if (minY < e.clientY && e.clientY < clientRect.top)
-			yDistance = e.clientY - minY;
-		// bottom of toolbar
-		else if (clientRect.bottom < e.clientY && e.clientY < maxY)
-			yDistance = maxY - e.clientY;
-
-		return (xDistance + yDistance) / (2 * this.disappearingBoundary);
+		return Math.max(0, 1 - distance / this.disappearingBoundary);
 	}
 
 	pointerMove = (e: PointerEvent): void => {
