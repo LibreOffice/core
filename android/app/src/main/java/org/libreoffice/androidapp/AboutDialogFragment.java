@@ -83,7 +83,7 @@ public class AboutDialogFragment extends DialogFragment {
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         int brandIcon = this.getResources().getIdentifier("ic_launcher_brand", "drawable",
                 this.getActivity().getPackageName());
-        builder .setIcon(BuildConfig.APP_HAS_BRANDING? brandIcon: R.drawable.lo_icon)
+        builder .setIcon(BuildConfig.APP_HAS_BRANDING? brandIcon: R.drawable.ic_launcher_foreground)
                 .setTitle(R.string.app_name)
                 .setView(messageView)
                 .setNegativeButton(R.string.about_license, new DialogInterface.OnClickListener() {
