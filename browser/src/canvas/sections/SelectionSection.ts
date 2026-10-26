@@ -2685,7 +2685,11 @@ abstract class SelectionSection extends CanvasSectionObject {
 		if (!mappings.length) return;
 
 		app.socket.sendMessage(
-			'setobjecttransform to=' + mappings.join(';') + ' as=' + what,
+			'setobjecttransform to=' +
+				mappings.join(';') +
+				' as=' +
+				what +
+				(SelectionSection.withCopy ? '+copy' : ''),
 		);
 	}
 
@@ -3020,9 +3024,26 @@ abstract class SelectionSection extends CanvasSectionObject {
 		this.stopPropagating();
 		e.stopPropagation();
 
-		this.interaction.finish(this.inTheDocument(point), e);
-		this.endTheInteraction(true);
+		/*
+			Ctrl held as the button goes up copies what a move or a scale changes, as in the
+			office; a turn and a slant take Ctrl for their snap. The objects themselves stay
+			where they are, the copies come with the engine's answer.
+		*/
+		SelectionSection.withCopy =
+			e.ctrlKey &&
+			(this.interaction instanceof MovingInteraction ||
+				(this.interaction instanceof ScalingInteraction &&
+					!this.interaction.isACrop()));
+		try {
+			this.interaction.finish(this.inTheDocument(point), e);
+		} finally {
+			this.endTheInteraction(!SelectionSection.withCopy);
+			SelectionSection.withCopy = false;
+		}
 	}
+
+	/// Whether the change being sent goes to copies of the objects rather than the objects.
+	private static withCopy: boolean = false;
 
 	/*
 		A press that was not a drag. It is handed to the engine as a press of its own, a moment

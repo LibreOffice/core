@@ -286,6 +286,7 @@
 #include "kittranslation.hxx"
 #include "kitcommand.hxx"
 #include <officecfg/Office/Common.hxx>
+#include <officecfg/Office/Draw.hxx>
 #include <officecfg/Office/Impress.hxx>
 #include <officecfg/Office/Linguistic.hxx>
 #include <officecfg/Office/UI/ToolbarMode.hxx>
@@ -6926,7 +6927,14 @@ void COKitDocumentImpl::setObjectTransform(const char* pMappings,
         return;
     }
 
-    const OString aWhat(pWhat ? pWhat : "");
+    // a drag that ended with Ctrl held is named "<kind>+copy": the objects are copied first and
+    // the copies are changed, as the office's drag with copy does
+    // only where the option "copy when moving" of Impress or Draw is on, as in the office
+    OString aWhat(pWhat ? pWhat : "");
+    const bool bCopy(aWhat.endsWith("+copy"_ostr, &aWhat)
+                     && (getDocumentType() == COKitDocumentType::DRAWING
+                             ? officecfg::Office::Draw::Misc::CopyWhileMoving::get()
+                             : officecfg::Office::Impress::Misc::CopyWhileMoving::get()));
     const TranslateId aStep(aWhat == "turn"    ? STR_DragMethRotate
                             : aWhat == "scale" ? STR_DragMethResize
                             : aWhat == "shear" ? STR_DragMethShear
@@ -6938,6 +6946,51 @@ void COKitDocumentImpl::setObjectTransform(const char* pMappings,
 
     SdrModel* pModel = nullptr;
     bool bBegun = false;
+
+    /*
+        The objects marked are the ones the client has selected. They are copied the way the office
+        copies them, connectors tied to them included, and the copies come marked in the same order
+        as the objects they copy. Each object is paired with its copy, the members of a group with
+        the members of the copy, so that the mapping named for an object goes to its copy.
+    */
+    std::unordered_map<const SdrObject*, SdrObject*> aCopyOf;
+    if (bCopy)
+    {
+        const SdrMarkList& rMarked(pView->GetMarkedObjectList());
+        rMarked.ForceSort();
+        std::vector<SdrObject*> aOriginals;
+        for (size_t nMark = 0; nMark < rMarked.GetMarkCount(); ++nMark)
+            aOriginals.push_back(rMarked.GetMark(nMark)->GetMarkedSdrObj());
+
+        if (aOriginals.empty())
+        {
+            SetLastExceptionMsg(u"Nothing is marked to copy"_ustr);
+            return;
+        }
+
+        pModel = &aOriginals.front()->getSdrModelFromSdrObject();
+        pModel->BegUndo(SvxResId(aStep) + " " + SvxResId(STR_EditWithCopy));
+        bBegun = true;
+
+        pView->CopyMarkedObj();
+
+        const SdrMarkList& rCopies(pView->GetMarkedObjectList());
+        rCopies.ForceSort();
+        const auto pairUp = [&aCopyOf](const auto& rSelf, const SdrObject* pFrom, SdrObject* pTo) -> void
+        {
+            aCopyOf[pFrom] = pTo;
+            const SdrObjList* pFromList(pFrom->GetSubList());
+            const SdrObjList* pToList(pTo->GetSubList());
+            if (!pFromList || !pToList)
+                return;
+            const size_t nCount(std::min(pFromList->GetObjCount(), pToList->GetObjCount()));
+            for (size_t nAt = 0; nAt < nCount; ++nAt)
+                rSelf(rSelf, pFromList->GetObj(nAt), pToList->GetObj(nAt));
+        };
+        const size_t nPairs(std::min(aOriginals.size(), rCopies.GetMarkCount()));
+        for (size_t nAt = 0; nAt < nPairs; ++nAt)
+            pairUp(pairUp, aOriginals[nAt], rCopies.GetMark(nAt)->GetMarkedSdrObj());
+    }
 
     const OString aAll(pMappings ? pMappings : "");
     for (sal_Int32 nAt = 0; nAt >= 0;)
@@ -6963,6 +7016,13 @@ void COKitDocumentImpl::setObjectTransform(const char* pMappings,
         }
 
         SdrObject* pObject = bWholeMapping ? pPage->FindObjectByUniqueID(aId.toUInt64()) : nullptr;
+        if (pObject && bCopy)
+        {
+            // an object without a copy, a connector tied to what is copied for one, is laid out
+            // by the copies it is tied to
+            const auto aCopy(aCopyOf.find(pObject));
+            pObject = aCopy == aCopyOf.end() ? nullptr : aCopy->second;
+        }
         if (!pObject)
             continue;
 
