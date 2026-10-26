@@ -100,8 +100,8 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
     if (bRet)
     {
         rPropMap.setProperty( PROP_CharFontNameAsian, aFontName);
-        rPropMap.setProperty( PROP_CharFontPitchAsian, nFontFamily);
-        rPropMap.setProperty( PROP_CharFontFamilyAsian, nFontPitch);
+        rPropMap.setProperty( PROP_CharFontPitchAsian, nFontPitch);
+        rPropMap.setProperty( PROP_CharFontFamilyAsian, nFontFamily);
     }
 
     bRet = maComplexFont.getFontData( aFontName, nFontPitch, nFontFamily, nullptr, rFilter );

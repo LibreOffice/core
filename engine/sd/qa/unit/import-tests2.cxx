@@ -70,6 +70,8 @@
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/awt/FontFamily.hpp>
+#include <com/sun/star/awt/FontPitch.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
@@ -3305,6 +3307,21 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testFlushFirstLineKeepsAutomaticTabStops)
     CPPUNIT_ASSERT(xHanging->getPropertyValue(u"ParaTabStops"_ustr) >>= aHangingStops);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aHangingStops.getLength());
     CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aHangingStops[0].Position);
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testEasternFontKeepsItsPitchAndFamily)
+{
+    createSdImpressDoc("pptx/font-pitch-family.pptx");
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
+
+    // The eastern font of the third paragraph is of a fixed pitch and of the roman family, and
+    // each of the two reads back as what it is.
+    uno::Reference<beans::XPropertySet> xRun(
+        getRunFromParagraph(0, getParagraphFromShape(2, xShape)), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(awt::FontPitch::FIXED,
+                         xRun->getPropertyValue(u"CharFontPitchAsian"_ustr).get<sal_Int16>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::FontFamily::ROMAN),
+                         xRun->getPropertyValue(u"CharFontFamilyAsian"_ustr).get<sal_Int16>());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
