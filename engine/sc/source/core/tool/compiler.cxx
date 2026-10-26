@@ -3098,14 +3098,21 @@ bool ScCompiler::ParseOpCode( const OUString& rName, bool bInArray )
         aName = rName.copy(7);
     // Functions added to OOXML after its first edition carry the _xlfn. prefix, but some producers
     // write them without it. A bare name that is called like a function and is known only with
-    // the prefix resolves as the prefixed one.
+    // the prefix resolves as the prefixed one. Some, such as FILTER and SORT, carry _xlfn._xlws.
     if (mxSymbols->isOOXML() && !aName.startsWithIgnoreAsciiCase(u"_xlfn.")
         && mxSymbols->getHashMap().find(aName) == mxSymbols->getHashMap().end()
         && lcl_ParenthesisFollows(aFormula.getStr() + nSrcPos))
     {
-        OUString aPrefixedName(u"_XLFN." + aName.toAsciiUpperCase());
-        if (mxSymbols->getHashMap().find(aPrefixedName) != mxSymbols->getHashMap().end())
-            aName = aPrefixedName;
+        const OUString aUpperName(aName.toAsciiUpperCase());
+        for (std::u16string_view aPrefix : { u"_XLFN.", u"_XLFN._XLWS." })
+        {
+            OUString aPrefixedName(OUString::Concat(aPrefix) + aUpperName);
+            if (mxSymbols->getHashMap().find(aPrefixedName) != mxSymbols->getHashMap().end())
+            {
+                aName = aPrefixedName;
+                break;
+            }
+        }
     }
     OpCodeHashMap::const_iterator iLook( mxSymbols->getHashMap().find( aName));
     bool bFound = (iLook != mxSymbols->getHashMap().end());
