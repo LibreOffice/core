@@ -840,6 +840,10 @@ private:
     /// Resolves a footnote, endnote or annotation substream, or buffers that until the buffer is
     /// replayed.
     void bufferOrResolveSubstream(std::size_t nPos, Id nId, OUString const& rCustomMark);
+    /// Adds the row in the innermost table buffer to rOuterBuffer, to be replayed with it.
+    void bufferTableRow(RTFBuffer_t& rOuterBuffer, std::deque<RTFSprms> const& rCellsSprms,
+                        std::deque<RTFSprms> const& rCellsAttributes, int nCells, int nCurrentCellX,
+                        int nTRLeft);
     /// If we have some unicode or hex characters to send.
     void checkUnicode(bool bUnicode, bool bHex);
     /// If we need a final section break at the end of the document.
