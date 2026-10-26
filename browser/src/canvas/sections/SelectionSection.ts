@@ -44,9 +44,9 @@ abstract class SelectionSection extends CanvasSectionObject {
 
 	/*
 		Space, Return or 0 on a handle the keyboard is on. On the handle above the selection, 0
-		brings the turn or the slant back to nought, and Space and Return switch between turning
-		and shearing, where both are offered, as a click on it does. Other handles take no such
-		key.
+		brings the angle of its mode back to nought, the turn or the slant, and once that is
+		nought the other one. Space and Return switch between turning and shearing, where both are
+		offered, as a click on it does. Other handles take no such key.
 	*/
 	private pressTheHandle(
 		handle: SelectionHandle,
@@ -55,6 +55,22 @@ abstract class SelectionSection extends CanvasSectionObject {
 		if (handle.kind !== SelectionSection.turningKind) return false;
 
 		if (event.key === '0') {
+			const shearing = this.handleMode() === 'shear';
+			const ownIsNought = shearing
+				? !this.anglesOf('slant').any
+				: !this.anglesOf('turn').any && !this.aLineStandsAslant();
+			if (ownIsNought) {
+				const other = shearing ? 'turn' : 'slant';
+				if (
+					(other === 'turn'
+						? this.anglesOf('turn').any || this.aLineStandsAslant()
+						: this.anglesOf('slant').any) &&
+					this.takeTheAnglesAway(other)
+				)
+					this.redraw();
+				return true;
+			}
+
 			const group = this.groupOf(handle);
 			if (group instanceof TurningHandle) group.backToNought(handle);
 			return true;
@@ -1772,22 +1788,24 @@ abstract class SelectionSection extends CanvasSectionObject {
 	}
 
 	/*
-		Takes the turns away by the 0 key, the 0 of the row of digits or of the number pad: every
-		turn where some object is turned, otherwise every slant where some object is slanted. A 0
-		that finds neither is left alone and goes on as any other key. Answers whether the key was
-		used.
+		Takes the angles away by the 0 key, the 0 of the row of digits or of the number pad, while
+		the keyboard is not on the handle above the selection: every slant where some object is
+		slanted first, since a slant is the one more often made by mistake, and with the next 0
+		every turn. A 0 that finds neither is left alone and goes on as any other key. Answers
+		whether the key was used.
 	*/
 	public resetByKey(event: KeyboardEvent): boolean {
 		if (event.code !== 'Digit0' && event.code !== 'Numpad0') return false;
 		if (event.shiftKey || event.ctrlKey || event.altKey || event.metaKey)
 			return false;
 
-		if (
+		const turned = () =>
 			(this.anglesOf('turn').any || this.aLineStandsAslant()) &&
-			this.takeTheAnglesAway('turn')
-		)
-			return true;
-		return this.anglesOf('slant').any && this.takeTheAnglesAway('slant');
+			this.takeTheAnglesAway('turn');
+		const slanted = () =>
+			this.anglesOf('slant').any && this.takeTheAnglesAway('slant');
+
+		return slanted() || turned();
 	}
 
 	/*
