@@ -14978,7 +14978,7 @@ if test "$need_meson" = "yes"; then
                     # the internal meson if the external meson's version is
                     # too old
                     if test $_os = Darwin; then
-                        if $MACOSX_SDK_VERSION -ge 260000; then
+                        if test $MACOSX_SDK_VERSION -ge 260000; then
                           _meson_minver=1.8.3
                         fi
                     fi
@@ -14992,7 +14992,7 @@ if test "$need_meson" = "yes"; then
                     else
                         AC_MSG_RESULT([yes])
                         AC_MSG_CHECKING([min version of meson required])
-                        AC_MSG_RESULT([$meson_minver])
+                        AC_MSG_RESULT([$_meson_minver])
                     fi
                 else
                     AC_MSG_RESULT([no])
