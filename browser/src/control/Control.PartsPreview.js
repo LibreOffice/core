@@ -1988,12 +1988,6 @@ window.L.Control.PartsPreview = window.L.Control.extend({
 				window.L.DomUtil.addClass(wrapper, 'parts-preview-grid');
 			else
 				window.L.DomUtil.removeClass(wrapper, 'parts-preview-grid');
-			// The wrapper shows and hides through its inline display value, so
-			// the layout change writes that same value: 'flex' stacks the
-			// slide list and the toolbar as a column for the grid, 'block' is
-			// the plain flow of the strip. A hidden wrapper stays hidden.
-			if (wrapper.style.display !== 'none')
-				wrapper.style.display = enabled ? 'flex' : 'block';
 		}
 
 		var listSize = window.mode.isDesktop() ? 180 : (window.mode.isTablet() ? 120 : 60);

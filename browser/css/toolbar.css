@@ -212,11 +212,9 @@
 	box-shadow: inset 0px 0px 0px 10px var(--color-background-dark), 0px 0px 0px 2px var(--color-background-dark), 4px 0px 0px 1px var(--color-background-lighter), -4px 0px 0px 1px #fff, 0px 0px 0px 5px var(--color-background-lighter);
 }
 #presentation-toolbar {
-	bottom: 0;
 	background-color: var(--color-background-lighter);
 	text-align: center;
-	position: absolute;
-	z-index: 500;
+	flex-shrink: 0;
 	width: 100%;
 	padding-bottom: 0px;
 	margin-top: -1px;

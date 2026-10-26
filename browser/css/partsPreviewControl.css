@@ -3,9 +3,15 @@
 	overflow-x: hidden;
 	overflow-y: visible;
 	background: var(--color-background-lighter);
-	max-height: 95%;
+	flex: 1;
+	min-height: 0;
 	scrollbar-color: var(--scrollbar-color);
 	scrollbar-width: var(--scrollbar-width);
+}
+
+/* The slide list takes the height left above the slide toolbar. */
+#presentation-controls-wrapper {
+	flex-direction: column;
 }
 
 #sidebar-panel {
@@ -378,15 +384,6 @@
 	font-weight: 600;
 }
 
-/* While the navigation sidebar is maximized the wrapper is a flex column:
- * the scrolling slide grid above, the slide toolbar in its own row at the
- * bottom. The flex display itself is an inline style on the wrapper,
- * written together with this class, because the wrapper's visibility is
- * inline-managed too and a class rule cannot win against that. */
-.parts-preview-grid {
-	flex-direction: column;
-}
-
 /* Grid layout for the slide navigator's list while the panels are
  * maximized. The slides flow into as many columns as the wide panel fits;
  * the section headers take a whole row of their own. The grid takes the
@@ -404,23 +401,12 @@
 	white-space: normal;
 	overflow-x: visible;
 	overflow-y: auto;
-	flex: 1;
-	min-height: 0;
-	max-height: none;
 }
 
 /* The slide import pane lays its slides out in the same grid whatever the
  * panel width; the wide panel only takes wider columns. */
 .parts-preview-grid .slide-import-list {
 	grid-template-columns: repeat(auto-fill, minmax(min(180px, 100%), 1fr));
-}
-
-/* Out of the grid the toolbar flows at the end of the column rather than
- * pinning to the wrapper's bottom edge over the slides. It keeps its full
- * height so the grid scrolls above it. */
-.parts-preview-grid #presentation-toolbar {
-	position: static;
-	flex-shrink: 0;
 }
 
 /* The toolbar row is as wide as the whole document area here. Keep the slide

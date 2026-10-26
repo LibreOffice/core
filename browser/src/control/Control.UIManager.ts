@@ -993,7 +993,9 @@ class UIManager extends window.L.Control {
 		if (this.map.isPresentationOrDrawing()) {
 			// remove unused elements
 			window.L.DomUtil.remove(window.L.DomUtil.get('spreadsheet-toolbar'));
-			$('#presentation-controls-wrapper').show();
+			// Phones show the slide list alone. Elsewhere the slide toolbar sits under it.
+			$('#presentation-controls-wrapper').css('display',
+				window.mode.isSmallScreenDevice() ? 'block' : 'flex');
 			this.initializeRuler();
 			this.map.slideShowPresenter = new SlideShow.SlideShowPresenter(this.map, window.enableAccessibility);
 			this.map.presenterConsole = new SlideShow.PresenterConsole(this.map, this.map.slideShowPresenter);

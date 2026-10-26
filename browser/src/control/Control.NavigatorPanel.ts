@@ -476,7 +476,7 @@ class NavigatorPanel extends SidebarBase {
 		// Toggle visibility based on tabId
 		if (tabId === 'tab-slide-sorter') {
 			// todo: must be a better way to handle this
-			this.presentationControlsWrapper.style.display = 'block';
+			this.presentationControlsWrapper.style.display = 'flex';
 			this.navigatorDockWrapper.style.display = 'none';
 			this.quickFindWrapper.style.display = 'none';
 		} else if (tabId === 'tab-navigator') {

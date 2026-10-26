@@ -291,6 +291,11 @@ body > #formulabar-row {
 	max-width: initial;
 }
 
+/* Phones show the slide list without the slide toolbar, as a plain block. */
+#slide-sorter {
+	max-height: 95%;
+}
+
 /* Show sidebar beyond 768px only */
 #sidebar-dock-wrapper, #navigator-dock-wrapper {
 	display: none !important;
