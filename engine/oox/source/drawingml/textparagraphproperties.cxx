@@ -528,9 +528,12 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
     if ( noFirstLineIndentation )
     {
         aPropSet.setProperty( PROP_ParaFirstLineIndent, *noFirstLineIndentation );
-        if( bPushDefaultValues )
+        // A first line that starts away from the rest of the paragraph is laid out by the
+        // distance it states, so the paragraph holds a stop of its own at the start of the text
+        // and the application works out none. A first line that starts where the others do moves
+        // nothing and leaves the stops it would work out standing.
+        if( bPushDefaultValues && *noFirstLineIndentation != 0 )
         {
-            // Reset TabStops - these would be auto calculated by Impress
             TabStop aTabStop;
             aTabStop.Position = 0;
             Sequence< TabStop > aSeq { aTabStop };

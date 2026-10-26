@@ -70,6 +70,7 @@
 #include <com/sun/star/chart2/XCoordinateSystemContainer.hpp>
 #include <com/sun/star/chart2/XChartTypeContainer.hpp>
 #include <com/sun/star/style/ParagraphAdjust.hpp>
+#include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/text/GraphicCrop.hpp>
@@ -3283,6 +3284,27 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testPptxVideoLoopMute)
     uno::Reference<beans::XPropertySet> xVideo(getShapeFromPage(0, 0));
     CPPUNIT_ASSERT(xVideo->getPropertyValue(u"Loop"_ustr).get<bool>());
     CPPUNIT_ASSERT(xVideo->getPropertyValue(u"Mute"_ustr).get<bool>());
+}
+
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testFlushFirstLineKeepsAutomaticTabStops)
+{
+    createSdImpressDoc("pptx/first-line-indent-tab-stops.pptx");
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
+
+    // The first line of the first paragraph starts where the rest of it does, so the paragraph
+    // holds no tab stop of its own and the application works its stops out.
+    uno::Reference<beans::XPropertySet> xFlush(getParagraphFromShape(0, xShape), uno::UNO_QUERY);
+    uno::Sequence<style::TabStop> aFlushStops;
+    CPPUNIT_ASSERT(xFlush->getPropertyValue(u"ParaTabStops"_ustr) >>= aFlushStops);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aFlushStops.getLength());
+
+    // The first line of the second paragraph hangs out to the left, so the paragraph holds a stop
+    // at the start of the text that the rest of the lines begin at.
+    uno::Reference<beans::XPropertySet> xHanging(getParagraphFromShape(1, xShape), uno::UNO_QUERY);
+    uno::Sequence<style::TabStop> aHangingStops;
+    CPPUNIT_ASSERT(xHanging->getPropertyValue(u"ParaTabStops"_ustr) >>= aHangingStops);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), aHangingStops.getLength());
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(0), aHangingStops[0].Position);
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();
