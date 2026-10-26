@@ -700,7 +700,6 @@ bool DictionaryNeo::addEntry_Impl(const uno::Reference< XDictionaryEntry >& xDic
 
             // insert new entry at specified position
             aEntries.insert(aEntries.begin() + nPos, xDicEntry);
-            SAL_WARN_IF(!isSorted(), "linguistic", "dictionary entries unsorted");
 
             bIsModified = true;
             bRes = true;
