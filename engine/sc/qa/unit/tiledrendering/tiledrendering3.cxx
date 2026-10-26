@@ -667,6 +667,28 @@ CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testAutoInputStringBlock)
     CPPUNIT_ASSERT_EQUAL_MESSAGE("A11 should autocomplete", u"XYZ"_ustr, pDoc->GetString(aA11));
 }
 
+CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testDuplicateSheetKeepsCellInputOnOriginal)
+{
+    ScModelObj* pModelObj = createDoc("empty.ods");
+    CPPUNIT_ASSERT(pModelObj);
+    ScTabViewShell* pView = dynamic_cast<ScTabViewShell*>(SfxViewShell::Current());
+    CPPUNIT_ASSERT(pView);
+    ScDocument* pDoc = pModelObj->GetDocument();
+
+    // Type into C15 and leave the cell in edit mode.
+    typeCharsInCell("Hello", 2, 14, pView, pModelObj, false, false);
+    ScViewData& rViewData = pView->GetViewData();
+    CPPUNIT_ASSERT(rViewData.HasEditView(rViewData.GetActivePart()));
+
+    dispatchCommand(mxComponent, u".uno:DuplicateSheet"_ustr, {});
+    Scheduler::ProcessEventsToIdle();
+
+    // The typed text is on the original sheet and on its copy.
+    CPPUNIT_ASSERT_EQUAL(SCTAB(2), pDoc->GetTableCount());
+    CPPUNIT_ASSERT_EQUAL(u"Hello"_ustr, pDoc->GetString(ScAddress(2, 14, 0)));
+    CPPUNIT_ASSERT_EQUAL(u"Hello"_ustr, pDoc->GetString(ScAddress(2, 14, 1)));
+}
+
 CPPUNIT_TEST_FIXTURE(ScTiledRenderingTest, testAutoInputExactMatch)
 {
     ScModelObj* pModelObj = createDoc("empty.ods");

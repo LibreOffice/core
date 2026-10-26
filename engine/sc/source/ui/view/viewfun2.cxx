@@ -65,6 +65,7 @@
 #include <patattr.hxx>
 #include <printfun.hxx>
 #include <refundo.hxx>
+#include <scmod.hxx>
 #include <table.hxx>
 #include <tablink.hxx>
 #include <tabvwsh.hxx>
@@ -2939,6 +2940,11 @@ void ScViewFunc::MoveTable(sal_uInt16 nDestDocNo, SCTAB nDestTab, bool bCopy,
                            const OUString* pNewTabName, bool bContextMenu,
                            SCTAB nContextMenuSourceTab)
 {
+    // Commit the cell input in progress first, so it stays on the sheet it was typed into.
+    ScModule* pScMod = ScModule::get();
+    if (!pScMod->IsFormulaMode())
+        pScMod->InputEnterHandler();
+
     ScDocument& rDoc       = GetViewData().GetDocument();
     ScDocShell* pDocShell  = GetViewData().GetDocShell();
     ScDocShell* pDestShell = nullptr;
