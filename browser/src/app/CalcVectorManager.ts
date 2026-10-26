@@ -106,13 +106,21 @@ class CalcVectorManager {
 	// only blocks still in view are asked for.
 	private _queue: { part: number; mode: number; keys: string[] } | null = null;
 
-	private _changeListeners: (() => void)[] = [];
+	private _changeListeners = new cool.VectorChangeListeners();
 	// Callbacks that release graphics memory held for drawing the content.
 	private _reclaimListeners: (() => void)[] = [];
+
+	// Objects drawn outside the sheet, such as the selection during a drag.
+	private _drawnElsewhere = new cool.DrawnElsewhere();
 	// Counts up each time a font or an image the content names has loaded.
 	private _resourceVersion = 0;
 	private _visualsReported = false;
 
+	// The drawing objects of each sheet in tile twips, keyed by part.
+	private _objectViews: Map<number, cool.CalcObjectView> = new Map();
+	// Counts changes of content and geometry. Older object views get rebuilt.
+	private _changeCount = 0;
+	private _viewCounts: Map<number, number> = new Map();
 	private _listensToGeometry = false;
 	// Counts up on every change of the sheet geometry, the zoom among them.
 	private _geometryCount = 0;
@@ -133,8 +141,10 @@ class CalcVectorManager {
 	/// column or a row that changes size moves the content after it without sending it again.
 	static readonly contentMode = -1;
 
-	onChanged(callback: () => void): void {
-		this._changeListeners.push(callback);
+	/// Call back on every change of what is held, with the ids of the drawing objects replaced or
+	/// removed. Undefined means anything may have changed.
+	onChanged(callback: (answered?: number[]) => void): void {
+		this._changeListeners.add(callback);
 	}
 
 	/// Call back to release graphics memory, such as when the document is hidden.
@@ -152,13 +162,27 @@ class CalcVectorManager {
 		for (const listener of this._reclaimListeners) listener();
 	}
 
-	offChanged(callback: () => void): void {
-		const index = this._changeListeners.indexOf(callback);
-		if (index >= 0) this._changeListeners.splice(index, 1);
+	offChanged(callback: (answered?: number[]) => void): void {
+		this._changeListeners.remove(callback);
 	}
 
-	private _fireChanged(): void {
-		for (const listener of this._changeListeners) listener();
+	private _fireChanged(answered?: number[]): void {
+		this._changeCount++;
+		this._changeListeners.fire(answered);
+	}
+
+	/// Draw again the objects the client changed, such as after a drag.
+	changedHere(): void {
+		this._fireChanged([]);
+	}
+
+	/// Leave out of the sheet the objects that something else draws.
+	drawnElsewhere(objectIds: number[]): void {
+		this._drawnElsewhere.set(objectIds);
+	}
+
+	drawnElsewhereVersion(): number {
+		return this._drawnElsewhere.version();
 	}
 
 	/// Counts up each time a font or image that the content names has loaded.
@@ -166,12 +190,127 @@ class CalcVectorManager {
 		return this._resourceVersion;
 	}
 
+	isDrawnElsewhere(objectId: number): boolean {
+		return this._drawnElsewhere.has(objectId);
+	}
+
+	/// Draw the given objects of a view of objects through the matrix.
+	renderObjectsWith(
+		context: CanvasRenderingContext2D,
+		data: cool.VectorPrimitivesData,
+		objectIds: number[],
+		matrix: cool.Matrix2D,
+	): void {
+		this.renderer.setEditViewContentVisible(true);
+		this.renderer.renderObjectsMoved(context, data.objects, objectIds, matrix);
+	}
+
+	renderPrimitives(
+		context: CanvasRenderingContext2D,
+		primitives: cool.Primitive[],
+	): void {
+		this.renderer.setEditViewContentVisible(true);
+		for (const primitive of primitives)
+			this.renderer.renderPrimitive(context, primitive);
+	}
+
+	/// A message that changes drawing objects, with its positions converted from tile twips to
+	/// print twips. Other messages come back unchanged.
+	messageInPrintTwips(message: string): string {
+		if (!cool.calcMessageHasPositions(message)) return message;
+		const docLayer = app.map && app.map._docLayer;
+		if (!docLayer) return message;
+		const part: number = docLayer._selectedPart;
+		const view = this._objectView(part);
+		const geometry: cool.SheetGeometry | undefined = docLayer.sheetGeometry;
+		if (!view || !geometry) return message;
+		const objects = view.data.objects;
+		const outermostOf = (id: number): number => {
+			const seen = new Set<number>([id]);
+			let top = id;
+			for (;;) {
+				const parent = objects.get(top)?.parent;
+				if (!parent || seen.has(parent) || !objects.has(parent)) return top;
+				seen.add(parent);
+				top = parent;
+			}
+		};
+		// A group holds other objects and draws nothing of its own.
+		const groups = new Set<number>();
+		for (const object of objects.values())
+			if (object.parent) groups.add(object.parent);
+		return cool.calcMessageInPrintTwips(message, {
+			placingOf: (id: number) => view.placingOf(id),
+			outermostOf,
+			membersOf: (outermost: number) =>
+				Array.from(objects.keys()).filter(
+					(id) => !groups.has(id) && outermostOf(id) === outermost,
+				),
+			placingAt: (id: number, point: cool.Point) => {
+				const print = geometry.getPrintTwipsPointFromTile(point);
+				const scale = view.placingOf(id) ?? cool.calcIdentityPlacing;
+				return {
+					scaleX: scale.scaleX,
+					scaleY: scale.scaleY,
+					moveX: point.x - scale.scaleX * print.x,
+					moveY: point.y - scale.scaleY * print.y,
+				};
+			},
+		});
+	}
+
+	/// The drawing objects of a sheet in tile twips, placed by the shown geometry. Undefined until
+	/// they arrive, or while the geometry is still that of the previous sheet.
+	objectsOf(part: number): cool.VectorPrimitivesData | undefined {
+		const view = this._objectView(part);
+		return view ? view.data : undefined;
+	}
+
+	/// The placing of the object from print twips of the sheet to tile twips, if held.
+	objectPlacingOf(
+		part: number,
+		id: number,
+	): cool.CalcObjectPlacing | undefined {
+		const view = this._objectView(part);
+		return view ? view.placingOf(id) : undefined;
+	}
+
+	private _objectView(part: number): cool.CalcObjectView | undefined {
+		const docLayer = app.map && app.map._docLayer;
+		const geometry: cool.SheetGeometry | undefined = docLayer
+			? docLayer.sheetGeometry
+			: undefined;
+		if (!geometry || geometry.getPart() !== part) return undefined;
+		const sheet = this._sheetWithObjects(part);
+		if (!sheet) return undefined;
+
+		this._listenToGeometry();
+
+		let view = this._objectViews.get(part);
+		if (!view) {
+			view = new cool.CalcObjectView(part);
+			this._objectViews.set(part, view);
+		}
+		if (this._viewCounts.get(part) !== this._changeCount) {
+			view.update(sheet, geometry);
+			this._viewCounts.set(part, this._changeCount);
+		}
+		return view;
+	}
+
 	private _listenToGeometry(): void {
 		if (this._listensToGeometry) return;
 		this._listensToGeometry = true;
 		app.map.on('sheetgeometrychanged', () => {
+			this._changeCount++;
 			this._geometryCount++;
 		});
+	}
+
+	/// The sheet whose drawing objects are shown, once it arrived whole.
+	private _sheetWithObjects(part: number): cool.CalcSheetData | undefined {
+		const sheet = this.getSheet(part, CalcVectorManager.contentMode);
+		return sheet && sheet.complete ? sheet : undefined;
 	}
 
 	/// The block placed at the view zoom, in tile twips from its first cell. Undefined while the
@@ -395,7 +534,7 @@ class CalcVectorManager {
 	// Drawing again asks anew for the blocks of the timed out requests.
 	private _retireExpired(): void {
 		this._expiryTimer = undefined;
-		if (this._expireRequests()) this._fireChanged();
+		if (this._expireRequests()) this._fireChanged([]);
 		this._sendQueued();
 		this._armExpiry();
 	}
@@ -465,6 +604,7 @@ class CalcVectorManager {
 		}
 
 		if (sheet.blocks.size <= CalcVectorManager.maxBlocks) return;
+		const dropped: number[] = [];
 		for (const [key, block] of Array.from(sheet.blocks.entries())) {
 			if (keep.has(key)) continue;
 			sheet.blocks.delete(key);
@@ -473,9 +613,10 @@ class CalcVectorManager {
 			this._releaseOwner(CalcVectorManager._resourceOwner(sheetKey, key));
 			// The objects of the block go with it, and come back when it is asked for.
 			for (const id of Array.from(block.objects))
-				this._dropObject(sheet, sheetKey, id);
+				this._dropObject(sheet, sheetKey, id, dropped);
 			if (sheet.blocks.size <= CalcVectorManager.maxBlocks / 2) break;
 		}
+		if (dropped.length) this._fireChanged(dropped);
 	}
 
 	private _dropSheet(sheetKey: string, sheet: cool.CalcSheetData): void {
@@ -513,7 +654,7 @@ class CalcVectorManager {
 		this._disarmExpiry();
 		this._queue = null;
 		this._sheetRequested.clear();
-		this._fireChanged();
+		this._fireChanged([]);
 	}
 
 	/// Mark one sheet as possibly behind, to ask again with the versions held.
@@ -524,7 +665,7 @@ class CalcVectorManager {
 			// The next request asks again for the drawing objects and settings of the sheet.
 			this._sheetsBehind.add(sheetKey);
 		}
-		this._fireChanged();
+		this._fireChanged([]);
 	}
 
 	// Mark the blocks held and the blocks asked for as stale. The answers to the requests
@@ -542,6 +683,8 @@ class CalcVectorManager {
 		this._textStyles.clear();
 		this._sheets.clear();
 		this._placedBlocks.clear();
+		this._objectViews.clear();
+		this._viewCounts.clear();
 		this._inFlight.clear();
 		this._requests.clear();
 		this._disarmExpiry();
@@ -608,6 +751,8 @@ class CalcVectorManager {
 
 		const checksums = new Set<number>();
 		const fontIds = new Set<string>();
+		// The drawing objects that the answer replaced or removed.
+		const answered: number[] = [];
 		// The version of the sheet that the answer brings what is held up to.
 		const current = values.version ?? 0;
 		// The blocks whose update builds on parts that are not held.
@@ -656,6 +801,7 @@ class CalcVectorManager {
 				const heldObject = sheet.objects.get(object.id);
 				if (heldObject && heldObject.version >= object.version) continue;
 				sheet.objects.set(object.id, object);
+				answered.push(object.id);
 				this._collectResources(
 					CalcVectorManager._resourceOwner(sheetKey, 'o' + object.id),
 					(walker) => walker.walkPrimitives(object.content.primitives),
@@ -723,7 +869,7 @@ class CalcVectorManager {
 			// An object the order no longer names is gone.
 			const named = new Set(values.drawOrder);
 			for (const id of Array.from(sheet.objects.keys()))
-				if (!named.has(id)) this._dropObject(sheet, sheetKey, id);
+				if (!named.has(id)) this._dropObject(sheet, sheetKey, id, answered);
 		}
 
 		const textEdits = values.textEdits;
@@ -746,7 +892,7 @@ class CalcVectorManager {
 			this._visualsReported = true;
 			RenderManager.markVisualsReady();
 		}
-		this._fireChanged();
+		this._fireChanged(answered);
 
 		// An answer frees a place for the next block waiting.
 		if (request) this._sendQueued();
@@ -770,14 +916,16 @@ class CalcVectorManager {
 		return false;
 	}
 
-	/// Forget an object, and the block it was held from.
+	/// Forget an object, and the block it was held from. An object that is gone is answered, so the
+	/// views drawing it hear of it.
 	private _dropObject(
 		sheet: cool.CalcSheetData,
 		sheetKey: string,
 		id: number,
+		answered: number[],
 	): void {
 		for (const block of sheet.blocks.values()) block.objects.delete(id);
-		sheet.objects.delete(id);
+		if (sheet.objects.delete(id)) answered.push(id);
 		this._releaseOwner(CalcVectorManager._resourceOwner(sheetKey, 'o' + id));
 	}
 
@@ -828,7 +976,7 @@ class CalcVectorManager {
 		image.onload = () => {
 			this._bitmaps.setLoaded(values.checksum, image);
 			this._resourceVersion++;
-			this._fireChanged();
+			this._fireChanged([]);
 		};
 		image.onerror = () => {
 			this._bitmaps.setUnavailable(values.checksum);
@@ -857,7 +1005,7 @@ class CalcVectorManager {
 				(document as unknown as { fonts: Set<FontFace> }).fonts.add(face);
 				this._fonts.setLoaded(fontId, face);
 				this._resourceVersion++;
-				this._fireChanged();
+				this._fireChanged([]);
 			})
 			.catch(() => {
 				this._fonts.setUnavailable(fontId);

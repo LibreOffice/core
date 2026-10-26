@@ -81,7 +81,7 @@ class GraphicSelection {
 		rectangle, since that is all there is.
 	*/
 	public static hasActiveSelection() {
-		if (RenderManager.isVectorRendering())
+		if (RenderManager.drawsFromObjects())
 			return this.selectedObjectIDs.length > 0;
 
 		return this.rectangle !== null;
@@ -97,7 +97,7 @@ class GraphicSelection {
 	/// The file name ending of the picture what is selected holds, or nothing where it holds
 	/// none. Asked the same two ways.
 	public static graphicExtension(): string | undefined {
-		if (RenderManager.isVectorRendering())
+		if (RenderManager.drawsFromObjects())
 			return this.theOneSelected()?.graphicExtension || undefined;
 
 		return this.extraInfo?.graphicExtension || undefined;
@@ -114,7 +114,7 @@ class GraphicSelection {
 	/// Whether the crop switch is the client's to take: it is while the client draws the
 	/// selection itself.
 	public static takesTheCropSwitch(): boolean {
-		return RenderManager.isVectorRendering();
+		return RenderManager.drawsFromObjects();
 	}
 
 	public static toggleCropping(): void {
@@ -136,7 +136,7 @@ class GraphicSelection {
 	/// Whether the document is being signed, in which case what is selected may be moved and
 	/// resized although the document is read-only. Asked the same two ways.
 	public static isBeingSigned(): boolean {
-		if (RenderManager.isVectorRendering())
+		if (RenderManager.drawsFromObjects())
 			return this.theOneSelected()?.signing === true;
 
 		return this.extraInfo?.isSignature === true;
@@ -200,7 +200,7 @@ class GraphicSelection {
 	*/
 	public static givesTheState(commandName: string): boolean {
 		if (!Interaction.statesGivenHere.includes(commandName)) return false;
-		if (RenderManager.isVectorRendering()) return true;
+		if (RenderManager.drawsFromObjects()) return true;
 
 		delete GraphicSelection.statesGiven[commandName];
 		return false;
@@ -212,7 +212,7 @@ class GraphicSelection {
 		is told.
 	*/
 	public static tellTheStates(): void {
-		if (!RenderManager.isVectorRendering()) return;
+		if (!RenderManager.drawsFromObjects()) return;
 
 		// The states are worked out from the selected objects, so they wait until every one of
 		// them is there: an update of the objects may take one away for a moment.
@@ -253,7 +253,7 @@ class GraphicSelection {
 		that is not goes to the engine.
 	*/
 	public static takesTheCommand(command: string): boolean {
-		if (!RenderManager.isVectorRendering()) return false;
+		if (!RenderManager.drawsFromObjects()) return false;
 		if (command === '.uno:EnterGroup') return Interaction.context().enterKey();
 		if (command === '.uno:LeaveGroup') return Interaction.context().leaveKey();
 		if (command === '.uno:FormatUngroup')
@@ -272,7 +272,7 @@ class GraphicSelection {
 		// Nothing selected by asking for it is where one meant to be; nothing is to follow.
 		this.rememberWhereItStands(objectIds);
 		if (!objectIds.length) this.stoodAt = null;
-		if (RenderManager.isVectorRendering()) this.noteTheAsk(objectIds);
+		if (RenderManager.drawsFromObjects()) this.noteTheAsk(objectIds);
 		app.socket.sendMessage('selectobjects ids=' + objectIds.join(','));
 		this.tellTheStates();
 	}
@@ -314,7 +314,7 @@ class GraphicSelection {
 		elsewhere, by an undo, a command or another user, and leaves none waiting.
 	*/
 	private static outdatedReport(objectIds: number[]): boolean {
-		if (!RenderManager.isVectorRendering()) return false;
+		if (!RenderManager.drawsFromObjects()) return false;
 
 		const at = this.askedFor.findIndex((asked: number[]) =>
 			this.sameObjects(asked, objectIds),
@@ -345,7 +345,7 @@ class GraphicSelection {
 
 	/// Notes where a selection with something in it stands, in a view that draws from objects.
 	private static rememberWhereItStands(objectIds: number[]): void {
-		if (!objectIds.length || !RenderManager.isVectorRendering()) return;
+		if (!objectIds.length || !RenderManager.drawsFromObjects()) return;
 
 		this.stoodAt = {
 			selected: objectIds.slice(),
@@ -368,7 +368,7 @@ class GraphicSelection {
 	*/
 	private static followDeletions(): void {
 		const stoodAt = this.stoodAt;
-		if (!stoodAt || !RenderManager.isVectorRendering()) return;
+		if (!stoodAt || !RenderManager.drawsFromObjects()) return;
 
 		// The objects of the page are dropped from memory at times, when the window loses the
 		// focus among others, and fetched again; while they are away they say nothing about what
@@ -407,7 +407,7 @@ class GraphicSelection {
 
 	/// The engine was asked to enter the selected group; the context says what is selected then.
 	public static takeTheFirstOfTheGroup(): void {
-		if (!RenderManager.isVectorRendering()) return;
+		if (!RenderManager.drawsFromObjects()) return;
 		Interaction.context().groupEntered();
 	}
 
@@ -437,7 +437,7 @@ class GraphicSelection {
 		// engine on purpose and waits for what comes of it.
 		const asItIs = this.nextReportAsItIs;
 		this.nextReportAsItIs = false;
-		if (RenderManager.isVectorRendering() && !asItIs) {
+		if (RenderManager.drawsFromObjects() && !asItIs) {
 			const wanted = Interaction.context().enteredBy(objectIds);
 			if (
 				wanted.length !== objectIds.length ||
@@ -464,7 +464,7 @@ class GraphicSelection {
 		since a drag does not snap to itself.
 	*/
 	public static snapRectangles(): number[][] {
-		if (RenderManager.isVectorRendering()) {
+		if (RenderManager.drawsFromObjects()) {
 			// The boxes the client holds are twips already, where the ones the engine sends are
 			// hundredths of a millimetre and are corrected on their way in.
 			const scale = app.twipsToPixels;
@@ -620,6 +620,7 @@ class GraphicSelection {
 		if (this.textIsBeingEdited()) return false;
 
 		if (!this.hasActiveSelection()) {
+			// With nothing selected, on a sheet the arrow keys and Tab belong to the cells.
 			if (!RenderManager.isVectorRendering()) return false;
 			const way = GraphicSelection.theWayOf[event.key];
 			if (way) {
@@ -664,7 +665,7 @@ class GraphicSelection {
 		return ChangeOutbox.byAKey(event, () => {
 			if (GraphicSelection.travel()?.keyboard(event)) return true;
 
-			if (!RenderManager.isVectorRendering()) return false;
+			if (!RenderManager.drawsFromObjects()) return false;
 
 			if (event.key === 'Escape') return Interaction.context().escape();
 			if (this.travelByKey(event)) return true;
@@ -721,7 +722,7 @@ class GraphicSelection {
 	/// The object this view edits the text of, in a view that draws from the objects: the one its
 	/// text edit entry belongs to. Nothing while it edits none.
 	private static objectUnderTextEdit(): number | undefined {
-		if (!RenderManager.isVectorRendering()) return undefined;
+		if (!RenderManager.drawsFromObjects()) return undefined;
 
 		const data = RenderGeometrySection.currentPart();
 		const ownViewId = (
@@ -803,7 +804,7 @@ class GraphicSelection {
 		>();
 		const section = this.selectionSection;
 
-		if (RenderManager.isVectorRendering() && section) {
+		if (RenderManager.drawsFromObjects() && section) {
 			for (const objectId of section.bandsWithButtons()) {
 				const band = section.bandBox(objectId);
 				if (!band) continue;
@@ -970,7 +971,7 @@ class GraphicSelection {
 		// a part of it selected inside it has the handles the part allows.
 		const place = Interaction.placeOf(objectIds);
 		const wanted =
-			RenderManager.isVectorRendering() &&
+			RenderManager.drawsFromObjects() &&
 			objectIds.length &&
 			(place.kind !== 'inPlace' ||
 				(objectIds.length === 1 && objectIds[0] !== place.object))
@@ -1204,7 +1205,7 @@ class GraphicSelection {
 	static onEmbeddedVideoContent(textMsg: string) {
 		var videoDesc = JSON.parse(textMsg);
 
-		if (RenderManager.isVectorRendering()) {
+		if (RenderManager.drawsFromObjects()) {
 			this.showThePlayer(videoDesc);
 			return;
 		}
@@ -1654,7 +1655,7 @@ class GraphicSelection {
 
 			// Where the client draws the selection itself, the sections that draw it from the
 			// message are not built at all. The selection section is all there is.
-			if (RenderManager.isVectorRendering()) {
+			if (RenderManager.drawsFromObjects()) {
 				GraphicSelection.updateSelectionSection();
 				this.selectionSection?.setShowSection(editMode);
 				app.sectionContainer.requestReDraw();
@@ -1754,7 +1755,7 @@ class GraphicSelection {
 
 	private static checkDiagramData() {
 		// A view that draws from the objects has the buttons beside the bands instead.
-		if (RenderManager.isVectorRendering()) {
+		if (RenderManager.drawsFromObjects()) {
 			GraphicSelection.updateGroupButtons();
 			return;
 		}
@@ -2031,7 +2032,7 @@ class GraphicSelection {
 				to crash on iOS.
 			*/
 			if (
-				!RenderManager.isVectorRendering() &&
+				!RenderManager.drawsFromObjects() &&
 				!window.ThisIsTheiOSApp &&
 				this.extraInfo.isDraggable &&
 				!this.extraInfo.svg
@@ -2046,7 +2047,7 @@ class GraphicSelection {
 				still in a case where the object then stays off screen, so a view that draws from
 				objects reads them differently.
 			*/
-			const drawsFromObjects = RenderManager.isVectorRendering();
+			const drawsFromObjects = RenderManager.drawsFromObjects();
 
 			/*
 				In the other view a jump waits while a selection is complex, which is about a

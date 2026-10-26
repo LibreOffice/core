@@ -114,10 +114,14 @@ namespace cool {
 		objects: Set<number>;
 	}
 
-	/// Back-layer objects draw under the cells, front and internal ones over.
+	/// The layer is 'back' for an object under the cells, and 'front' or 'internal' for one over.
+	/// Every position is in twips from the top-left corner of the anchor cell, which members of a
+	/// group share with the group.
 	export type CalcDrawingContent = Omit<SlideObject, 'layer'> & {
 		layer: 'back' | 'front' | 'internal';
 		primitives: Primitive[];
+		anchorColumn: number;
+		anchorRow: number;
 	};
 
 	/// A block that holds objects, with the cells all of them paint over.

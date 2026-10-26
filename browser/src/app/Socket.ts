@@ -227,6 +227,8 @@ class Socket {
 		// objects go to the engine at its pace through the outbox, which sends its text
 		// ahead of a message that follows it.
 		if (typeof msg === 'string') {
+			// The positions of objects go in the unit the engine places them in.
+			msg = RenderManager.toEngine(msg);
 			if (ChangeOutbox.take(msg)) return;
 			msg = ChangeOutbox.sendAhead(msg);
 		}

@@ -41,7 +41,7 @@ class HandleScaling {
 		let keep =
 			event !== undefined &&
 			event.shiftKey &&
-			(RenderManager.isVectorRendering() || event.ctrlKey);
+			(RenderManager.drawsFromObjects() || event.ctrlKey);
 
 		const context = app.map.context?.context;
 		if (context === 'Graphic' || context === 'Media') keep = !keep;

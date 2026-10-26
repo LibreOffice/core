@@ -119,17 +119,15 @@ class VectorManager extends RenderManagerBase {
 	// Callbacks fired when cached vector data changes: a part's
 	// primitive tree arrived, a deferred bitmap decoded, or the cache
 	// was cleared.
-	private _changeListeners: VectorChangeListener[] = [];
+	private _changeListeners = new cool.VectorChangeListeners();
 
 	// Ids of the layers this view does not show. Objects on them are
 	// kept in the cache and skipped when drawing.
 	private _hiddenLayers: Set<number> = new Set();
 
-	/// The objects left out of the drawing of a part because they are drawn elsewhere, by id.
-	private _drawnElsewhere: Set<number> = new Set();
-	/// Counts up each time the objects left out of the drawing change, so a drawing kept from
-	/// before can be told apart from one that matches them.
-	private _drawnElsewhereVersion: number = 0;
+	/// The objects left out of the drawing of a part because they are drawn elsewhere. Its
+	/// version tells a drawing kept from before apart from one that matches them.
+	private _drawnElsewhere = new cool.DrawnElsewhere();
 
 	// The Impress or Draw doc layer, read lazily so the manager can be
 	// created before the layer is registered on the map.
@@ -157,7 +155,7 @@ class VectorManager extends RenderManagerBase {
 		changed, as when a whole part arrives.
 	*/
 	onVectorChanged(callback: VectorChangeListener): void {
-		this._changeListeners.push(callback);
+		this._changeListeners.add(callback);
 	}
 
 	/// The view draws the part that is now selected, from the cache when it holds it, at once
@@ -168,14 +166,11 @@ class VectorManager extends RenderManagerBase {
 
 	/// Forget a callback registered with onVectorChanged.
 	offVectorChanged(callback: () => void): void {
-		this._changeListeners = this._changeListeners.filter(
-			(listener) => listener !== callback,
-		);
+		this._changeListeners.remove(callback);
 	}
 
 	private _fireChanged(answered?: number[], inputSequence?: number): void {
-		for (const callback of this._changeListeners)
-			callback(answered, inputSequence);
+		this._changeListeners.fire(answered, inputSequence);
 	}
 
 	/*
@@ -317,17 +312,11 @@ class VectorManager extends RenderManagerBase {
 	/// The objects to leave out of the drawing of a part from now on, since they are drawn
 	/// elsewhere. An empty list leaves nothing out.
 	drawnElsewhere(objectIds: number[]): void {
-		const next = new Set(objectIds);
-		const same =
-			next.size === this._drawnElsewhere.size &&
-			objectIds.every((id) => this._drawnElsewhere.has(id));
-		if (same) return;
-		this._drawnElsewhere = next;
-		this._drawnElsewhereVersion++;
+		this._drawnElsewhere.set(objectIds);
 	}
 
 	drawnElsewhereVersion(): number {
-		return this._drawnElsewhereVersion;
+		return this._drawnElsewhere.version();
 	}
 
 	/// The page rectangle carried by the entry that stands for the page, or
@@ -611,19 +600,7 @@ class VectorManager extends RenderManagerBase {
 		this._renderer.setEditViewContentVisible(true);
 		this._renderer.setAuthoredColors(false);
 		this._setUpColors(data);
-
-		for (const id of objectIds) {
-			const object = data.objects.get(id);
-			if (!object?.primitives) continue;
-
-			// the tail of a caption keeps its end, so it is laid out anew rather than carried
-			this._renderer.renderPrimitive(context, {
-				type: cool.TransformPrimitive.type,
-				matrix: matrix.toArray(),
-				children:
-					cool.CaptionTail.changedBy(object, matrix) ?? object.primitives,
-			} as cool.TransformPrimitive);
-		}
+		this._renderer.renderObjectsMoved(context, data.objects, objectIds, matrix);
 	}
 
 	/// Draw the master that a page names under it, in the master's order. A

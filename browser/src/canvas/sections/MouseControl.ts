@@ -276,7 +276,15 @@ class MouseControl extends CanvasSectionObject {
 			the pointer it is set from them and the engine is not asked. The answer arrives with the
 			mouse event.
 		*/
-		if (RenderGeometrySection.answersPointer()) {
+		// On a sheet the cells set their own pointer, except over an object.
+		const overTheCells = (): boolean =>
+			app.map._docLayer._docType === 'spreadsheet' &&
+			RenderGeometrySection.objectIdAt(
+				this.currentPosition.x,
+				this.currentPosition.y,
+			) === undefined;
+		if (RenderGeometrySection.answersPointer() && !overTheCells()) {
+			this.context.canvas.classList.remove('spreadsheet-cursor');
 			const pointer = RenderGeometrySection.pointerAt(
 				this.currentPosition.x,
 				this.currentPosition.y,

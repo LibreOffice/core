@@ -19,6 +19,8 @@
 /* global app */
 
 namespace cool {
+	type DrawingLayer = 'back' | 'front' | 'internal';
+
 	/// Where a pane draws. The bounds and the offset are in core pixels.
 	interface PaneFrame {
 		bounds: cool.Bounds;
@@ -404,6 +406,8 @@ namespace cool {
 			);
 			context.clip();
 
+			if (sheet) this._drawObjects(pane, sheet, ['back'], twipsPerPixel);
+
 			// Blocks are taller than the view, so only parts in the pane are drawn.
 			const view = {
 				left: bounds.min.x - pane.offset.x,
@@ -498,6 +502,7 @@ namespace cool {
 			this._evictRasters();
 
 			if (sheet) {
+				this._drawObjects(pane, sheet, ['front', 'internal'], twipsPerPixel);
 				this._drawTextEdits(pane, sheet, twipsPerPixel);
 			}
 
@@ -1051,8 +1056,52 @@ namespace cool {
 			context.restore();
 		}
 
-		/// Draw the text that views edit in place. The text of a cell is drawn
-		/// on the background of the edited cells.
+		/// Draw the objects of the given layers in order, placed in tile twips.
+		private _drawObjects(
+			pane: PaneFrame,
+			sheet: cool.CalcSheetData,
+			layers: DrawingLayer[],
+			twipsPerPixel: number,
+		): void {
+			const manager = CalcVectorManager.instance();
+			const view = manager.objectsOf(sheet.part);
+			if (!view) return;
+			const layerIds = layers.map((layer) => cool.calcLayerId(layer));
+			for (const id of view.order) {
+				const object = view.objects.get(id);
+				if (!object || !object.primitives) continue;
+				if (layerIds.indexOf(object.layer ?? 0) < 0) continue;
+				// While a drag shows an object where it goes, the selection draws it.
+				if (manager.isDrawnElsewhere(id)) continue;
+				this._drawInTileTwips(
+					pane,
+					cool.calcIdentityPlacing,
+					object.primitives,
+					twipsPerPixel,
+				);
+			}
+		}
+
+		/// Draw primitives taken through the placing into tile twips.
+		private _drawInTileTwips(
+			pane: PaneFrame,
+			placing: cool.CalcObjectPlacing,
+			primitives: Primitive[],
+			twipsPerPixel: number,
+		): void {
+			const renderer = CalcVectorManager.instance().renderer;
+			const context = this.context;
+			context.save();
+			context.translate(-pane.offset.x, -pane.offset.y);
+			context.scale(1 / twipsPerPixel, 1 / twipsPerPixel);
+			context.translate(placing.moveX, placing.moveY);
+			context.scale(placing.scaleX, placing.scaleY);
+			for (const primitive of primitives)
+				renderer.renderPrimitive(context, primitive);
+			context.restore();
+		}
+
+		/// Draw the text that views edit in place.
 		private _drawTextEdits(
 			pane: PaneFrame,
 			sheet: cool.CalcSheetData,
@@ -1060,6 +1109,20 @@ namespace cool {
 		): void {
 			const context = this.context;
 			for (const edit of sheet.textEdits) {
+				if (edit.parent !== undefined) {
+					const placing = CalcVectorManager.instance().objectPlacingOf(
+						sheet.part,
+						edit.parent,
+					);
+					if (placing)
+						this._drawInTileTwips(
+							pane,
+							placing,
+							edit.primitives,
+							twipsPerPixel,
+						);
+					continue;
+				}
 				if (edit.column === undefined || edit.row === undefined) continue;
 				const start = this._cellOrigin(pane, edit.column, edit.row);
 				const end = this._cellOrigin(

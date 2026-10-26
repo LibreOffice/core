@@ -682,7 +682,7 @@ class ShapeHandlesSection extends CanvasSectionObject {
 	showSVG() {
 		// A view that draws from objects shows what a drag would do by drawing the objects
 		// themselves, so the picture the engine renders stays away.
-		if (RenderManager.isVectorRendering()) return;
+		if (RenderManager.drawsFromObjects()) return;
 
 		if (this.sectionProperties.svg)
 			this.sectionProperties.svg.style.display = '';
@@ -921,7 +921,7 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		while it runs they are all made as they always were.
 	*/
 	private handleGetsItsOwnSection(kind: string): boolean {
-		if (!RenderManager.isVectorRendering()) return true;
+		if (!RenderManager.drawsFromObjects()) return true;
 		if (GraphicSelection.extraInfo?.isCropMode) return true;
 
 		return kind === '16';
@@ -1253,7 +1253,7 @@ class ShapeHandlesSection extends CanvasSectionObject {
 			// A view that draws from objects carries the selection in the section that draws the
 			// handles, which works the move out itself. Cropping an image still runs here.
 			if (
-				RenderManager.isVectorRendering() &&
+				RenderManager.drawsFromObjects() &&
 				GraphicSelection.extraInfo?.isCropMode !== true
 			)
 				return;
@@ -1332,7 +1332,7 @@ class ShapeHandlesSection extends CanvasSectionObject {
 		// handles, so a drag that lands here does nothing at all. Cropping an image still runs
 		// here, and so does everything while the document is drawn from tiles.
 		if (
-			RenderManager.isVectorRendering() &&
+			RenderManager.drawsFromObjects() &&
 			GraphicSelection.extraInfo?.isCropMode !== true
 		)
 			return;
@@ -1462,7 +1462,7 @@ class ShapeHandlesSection extends CanvasSectionObject {
 	public onDraw() {
 		// A view that draws from objects draws the line around the selection in the section that
 		// draws its handles, where it follows everything that is done to the selection.
-		if (!RenderManager.isVectorRendering()) this.drawSelectionFrame();
+		if (!RenderManager.drawsFromObjects()) this.drawSelectionFrame();
 		this.drawShapeDragPreview();
 		if (!this.showSection || !this.isVisible)
 			this.hideSVG();

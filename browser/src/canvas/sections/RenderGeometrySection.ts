@@ -1607,13 +1607,13 @@ class RenderGeometrySection extends CanvasSectionObject {
 
 	/*
 		Whether the objects answer for the mouse pointer here, instead of the engine being asked
-		what lies under the mouse. They do whenever the document is drawn from vector primitives
-		and one page is on screen, which is when the section is there to ask and knows which page
-		the mouse is over. The file based view stacks every page, and the engine answers there.
+		what lies under the mouse. They do when the client holds the drawing objects and one page
+		is on screen, so the section knows which page the mouse is over. The file based view
+		stacks every page, and the engine answers there.
 	*/
 	public static answersPointer(): boolean {
 		return (
-			RenderManager.isVectorRendering() &&
+			RenderManager.drawsFromObjects() &&
 			!app.file.fileBasedView &&
 			app.sectionContainer?.doesSectionExist(
 				app.CSections.RenderGeometry.name,

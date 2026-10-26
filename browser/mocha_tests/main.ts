@@ -88,6 +88,7 @@
 /// <reference path="./Plural.test.ts" />
 /// <reference path="./VectorManager.test.ts" />
 /// <reference path="./MessageParser.test.ts" />
+/// <reference path="./CalcObjectView.test.ts" />
 /// <reference path="./CalcBlockUpdate.test.ts" />
 /// <reference path="./CalcBlockPlacement.test.ts" />
 /// <reference path="./CalcVectorManager.test.ts" />

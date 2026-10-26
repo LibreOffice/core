@@ -226,6 +226,17 @@ abstract class RenderManagerBase {
 	// -- vector rendering --
 	abstract isVectorRendering(): boolean;
 
+	/// Whether the client holds the drawing objects and selects, hit tests
+	/// and moves them itself.
+	drawsFromObjects(): boolean {
+		return this.isVectorRendering();
+	}
+
+	/// The message with object positions in the engine's placement.
+	toEngine(message: string): string {
+		return message;
+	}
+
 	abstract predictTextInsert(text: string): boolean;
 
 	abstract predictTextDelete(before: number, after: number): boolean;

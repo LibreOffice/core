@@ -197,6 +197,25 @@ namespace cool {
 			return color;
 		}
 
+		/// Draws the objects named, each moved by the matrix. The tail of a caption keeps
+		/// its end, so it is laid out anew rather than moved.
+		renderObjectsMoved(
+			context: CanvasRenderingContext2D,
+			objects: Map<number, SlideObject>,
+			objectIds: number[],
+			matrix: Matrix2D,
+		): void {
+			for (const id of objectIds) {
+				const object = objects.get(id);
+				if (!object?.primitives) continue;
+				this.renderPrimitive(context, {
+					type: TransformPrimitive.type,
+					matrix: matrix.toArray(),
+					children: CaptionTail.changedBy(object, matrix) ?? object.primitives,
+				} as TransformPrimitive);
+			}
+		}
+
 		renderPrimitive(
 			context: CanvasRenderingContext2D,
 			primitive: Primitive,

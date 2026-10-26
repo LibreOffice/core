@@ -9859,9 +9859,12 @@ std::string COKitDocumentImpl::getCommandValues(const char* pCommand)
             if (it != mpCallbackFlushHandlers.end() && it->second)
                 it->second->setVectorRendering(nRequestedMode);
 
-            // Such a view draws the page from the objects it holds, which decides among other
-            // things how the handles of a selection of several objects are laid out.
-            pViewShell->setDrawsFromObjects(true);
+            // Draw, Impress and Calc views draw drawing objects from the objects they hold, which
+            // among other things lays out the handles of a selection of several objects.
+            const COKitDocumentType eType = getDocumentType();
+            if (eType == COKitDocumentType::PRESENTATION || eType == COKitDocumentType::DRAWING
+                || eType == COKitDocumentType::SPREADSHEET)
+                pViewShell->setDrawsFromObjects(true);
 
             // A view that draws from primitives paints no bitmap tiles, so the request for the
             // primitives is its first content.

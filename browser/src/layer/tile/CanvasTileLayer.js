@@ -359,11 +359,12 @@ window.L.CanvasTileLayer = window.L.Layer.extend({
 
 		// Add the vector main-view section for Impress and Draw when vector
 		// rendering is enabled. The tile grid stays empty in this mode.
-		if (RenderManager.isVectorRendering()) {
+		if (RenderManager.isVectorRendering())
 			app.sectionContainer.addSection(new cool.VectorContentSection());
 
-			// The geometry the client holds answers what lies under the mouse, so
-			// the pointer is worked out here and the engine is told not to send it.
+		// The geometry the client holds answers what lies under the mouse, so
+		// the pointer is worked out here and the engine is told not to send it.
+		if (RenderManager.drawsFromObjects()) {
 			app.sectionContainer.addSection(new RenderGeometrySection());
 			RenderGeometrySection.requestPointerFromServer(false);
 		}

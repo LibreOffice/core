@@ -2586,6 +2586,17 @@ class BitmapTileManager extends RenderManagerBase {
 		return false;
 	}
 
+	// The client selects and moves the objects of a vector-drawn sheet itself.
+	public drawsFromObjects(): boolean {
+		return CalcVectorManager.isActive();
+	}
+
+	// The engine places the objects of a sheet in print twips.
+	public toEngine(message: string): string {
+		if (!CalcVectorManager.isActive()) return message;
+		return CalcVectorManager.instance().messageInPrintTwips(message);
+	}
+
 	public predictTextInsert(_text: string): boolean {
 		return false;
 	}
@@ -2661,11 +2672,13 @@ class BitmapTileManager extends RenderManagerBase {
 		// eslint-disable-next-line @typescript-eslint/no-empty-function
 	): void {}
 
+	// The objects of a sheet are the same in every mode.
 	public requestPart(
-		_part: number,
+		part: number,
 		_mode: number,
 	): cool.VectorPrimitivesData | undefined {
-		return undefined;
+		if (!CalcVectorManager.isActive()) return undefined;
+		return CalcVectorManager.instance().objectsOf(part);
 	}
 
 	public partIdAt(
@@ -2683,19 +2696,28 @@ class BitmapTileManager extends RenderManagerBase {
 	): void {}
 
 	public renderObjectsWith(
-		_context: CanvasRenderingContext2D,
-		_data: cool.VectorPrimitivesData,
-		_objectIds: number[],
-		_matrix: cool.Matrix2D,
-		// eslint-disable-next-line @typescript-eslint/no-empty-function
-	): void {}
+		context: CanvasRenderingContext2D,
+		data: cool.VectorPrimitivesData,
+		objectIds: number[],
+		matrix: cool.Matrix2D,
+	): void {
+		if (!CalcVectorManager.isActive()) return;
+		CalcVectorManager.instance().renderObjectsWith(
+			context,
+			data,
+			objectIds,
+			matrix,
+		);
+	}
 
 	public renderPrimitives(
-		_context: CanvasRenderingContext2D,
+		context: CanvasRenderingContext2D,
 		_data: cool.VectorPrimitivesData,
-		_primitives: cool.Primitive[],
-		// eslint-disable-next-line @typescript-eslint/no-empty-function
-	): void {}
+		primitives: cool.Primitive[],
+	): void {
+		if (!CalcVectorManager.isActive()) return;
+		CalcVectorManager.instance().renderPrimitives(context, primitives);
+	}
 
 	public renderPlaceholderAids(
 		_context: CanvasRenderingContext2D,
@@ -2706,11 +2728,14 @@ class BitmapTileManager extends RenderManagerBase {
 	// eslint-disable-next-line @typescript-eslint/no-empty-function
 	public setHiddenLayers(_layers: unknown): void {}
 
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	public drawnElsewhere(_objectIds: number[]): void {}
+	public drawnElsewhere(objectIds: number[]): void {
+		if (!CalcVectorManager.isActive()) return;
+		CalcVectorManager.instance().drawnElsewhere(objectIds);
+	}
 
 	public drawnElsewhereVersion(): number {
-		return 0;
+		if (!CalcVectorManager.isActive()) return 0;
+		return CalcVectorManager.instance().drawnElsewhereVersion();
 	}
 
 	public isPartDrawable(_part: number, _mode: number): boolean {
@@ -2731,18 +2756,28 @@ class BitmapTileManager extends RenderManagerBase {
 		return false;
 	}
 
-	public isLayerVisible(_layer: number): boolean {
-		return true;
+	// On a sheet only objects on the front layer take the pointer and keys.
+	// Back layer objects need the selection mode of the drawing toolbar, and
+	// the internal layer holds comment captions, which the comments handle.
+	public isLayerVisible(layer: number): boolean {
+		if (!CalcVectorManager.isActive()) return true;
+		return layer === cool.calcLayerId('front');
 	}
 
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	public onVectorChanged(_callback: VectorChangeListener): void {}
+	public onVectorChanged(callback: VectorChangeListener): void {
+		if (!CalcVectorManager.isActive()) return;
+		CalcVectorManager.instance().onChanged(callback);
+	}
 
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	public offVectorChanged(_callback: () => void): void {}
+	// A listener added while vector rendering was on is removed after it is switched off too.
+	public offVectorChanged(callback: () => void): void {
+		CalcVectorManager.instance().offChanged(callback);
+	}
 
-	// eslint-disable-next-line @typescript-eslint/no-empty-function
-	public changedHere(): void {}
+	public changedHere(): void {
+		if (!CalcVectorManager.isActive()) return;
+		CalcVectorManager.instance().changedHere();
+	}
 
 	public handleVectorPrimitivesResponse(
 		_values: cool.VectorPrimitivesResponse,

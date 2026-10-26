@@ -256,6 +256,14 @@ class RenderManager {
 		return RenderManager.ensureInstance().isVectorRendering();
 	}
 
+	static drawsFromObjects(): boolean {
+		return RenderManager.ensureInstance().drawsFromObjects();
+	}
+
+	static toEngine(message: string): string {
+		return RenderManager.ensureInstance().toEngine(message);
+	}
+
 	static predictTextInsert(text: string): boolean {
 		return RenderManager.ensureInstance().predictTextInsert(text);
 	}

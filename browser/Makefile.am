@@ -620,8 +620,10 @@ COOL_JS_LST =\
 	src/canvas/vector/VectorPrimitivesData.ts \
 	src/canvas/vector/VectorPrimitivesResponse.ts \
 	src/canvas/vector/VectorPrimitivesRequest.ts \
+	src/canvas/vector/VectorChanges.ts \
 	src/canvas/vector/VectorContentSection.ts \
 	src/canvas/vector/calc/CalcVectorData.ts \
+	src/canvas/vector/calc/CalcObjectView.ts \
 	src/canvas/vector/calc/CalcBlockPlacement.ts \
 	src/canvas/vector/calc/CalcVectorContentSection.ts \
 	src/canvas/sections/AutoFillBaseSection.ts \

@@ -54,7 +54,8 @@ abstract class ClassicContext implements InteractionContext {
 		selection at all, which is how the engine is told to drop the one it holds.
 
 		Not taken here: a modifier other than Shift or Ctrl, or a press that meets nothing while
-		nothing is selected.
+		nothing is selected or on a sheet. On a sheet the cells take that press, and moving the
+		cell cursor drops the selection of objects.
 	*/
 	public press(hit: number | undefined, modifier: number): boolean {
 		const extending =
@@ -69,7 +70,11 @@ abstract class ClassicContext implements InteractionContext {
 			hit === undefined
 				? undefined
 				: RenderGeometrySection.outermostOf(hit, this.groupStoodIn);
-		if (objectId === undefined && !GraphicSelection.selectedObjectIDs.length)
+		if (
+			objectId === undefined &&
+			(!GraphicSelection.selectedObjectIDs.length ||
+				app.map.getDocType() === 'spreadsheet')
+		)
 			return false;
 
 		GraphicSelection.selectObjects(

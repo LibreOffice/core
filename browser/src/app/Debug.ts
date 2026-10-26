@@ -302,19 +302,25 @@ class DebugManager {
 		// A spreadsheet has a vector section of its own.
 		cool.CalcVectorContentSection.update();
 
+		// The drawing objects of a vector-drawn sheet answer what lies under the mouse.
+		const objectsWanted = RenderManager.drawsFromObjects();
+		const objectsPresent = app.sectionContainer.doesSectionExist(
+			app.CSections.RenderGeometry.name,
+		);
+		if (objectsWanted && !objectsPresent)
+			app.sectionContainer.addSection(new RenderGeometrySection());
+		else if (!objectsWanted && objectsPresent)
+			app.sectionContainer.removeSection(app.CSections.RenderGeometry.name);
+
 		const wanted = RenderManager.isVectorRendering();
 		const present = app.sectionContainer.doesSectionExist(
 			app.CSections.VectorContent.name,
 		);
 		if (wanted === present) return;
 
-		if (wanted) {
+		if (wanted)
 			app.sectionContainer.addSection(new cool.VectorContentSection());
-			app.sectionContainer.addSection(new RenderGeometrySection());
-		} else {
-			app.sectionContainer.removeSection(app.CSections.VectorContent.name);
-			app.sectionContainer.removeSection(app.CSections.RenderGeometry.name);
-		}
+		else app.sectionContainer.removeSection(app.CSections.VectorContent.name);
 
 		// The objects the client holds answer what lies under the mouse while they are there,
 		// so the engine is asked for the pointer only while they are not.
