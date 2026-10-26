@@ -738,6 +738,22 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testFontKeepsItsPitchAndFamily)
                          xComplex->getPropertyValue(u"CharFontFamilyComplex"_ustr).get<sal_Int16>());
 }
 
+// A paragraph states whether it hangs its punctuation, whichever way round it is.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testParagraphStatesItsHangingPunctuation)
+{
+    // Given one paragraph that keeps its punctuation inside the margin and one that hangs it:
+    createSdImpressDoc("pptx/hanging-punctuation.pptx");
+
+    save(TestFilter::PPTX);
+
+    // Without the fix in place, the first paragraph said nothing, and a paragraph that says
+    // nothing hangs its punctuation, so the state of the first one was read back as the state of
+    // the second.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//p:sp/p:txBody/a:p[1]/a:pPr", "hangingPunct", u"0");
+    assertXPath(pXmlDoc, "//p:sp/p:txBody/a:p[2]/a:pPr", "hangingPunct", u"1");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
