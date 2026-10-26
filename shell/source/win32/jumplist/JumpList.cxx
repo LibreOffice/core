@@ -87,6 +87,17 @@ JumpListImpl::JumpListImpl(const Reference<XComponentContext>& xContext)
 {
 }
 
+class ScopedPropVariant
+{
+public:
+    PROPVARIANT value;
+
+    ScopedPropVariant() { PropVariantInit(&value); }
+    ~ScopedPropVariant() { PropVariantClear(&value); }
+    ScopedPropVariant(const ScopedPropVariant&) = delete;
+    ScopedPropVariant& operator=(const ScopedPropVariant&) = delete;
+};
+
 // Determines if the provided IShellLinkItem is listed in the array of items that the user has removed
 bool lcl_isItemInArray(COMReference<IShellLinkW> pShellLinkItem,
                        COMReference<IObjectArray> poaRemoved)
@@ -100,15 +111,17 @@ bool lcl_isItemInArray(COMReference<IShellLinkW> pShellLinkItem,
         if (!SUCCEEDED(poaRemoved->GetAt(i, IID_PPV_ARGS(&pShellLinkItemCompare))))
             continue;
 
-        PROPVARIANT propvar;
+        ScopedPropVariant propvarTitle;
         auto pps(pShellLinkItem.QueryInterface<IPropertyStore>(COM_QUERY_THROW()));
-        ThrowIfFailed(pps->GetValue(PKEY_Title, &propvar), "GetValue failed.");
-        OUString title(o3tl::toU(PropVariantToStringWithDefault(propvar, L"")));
+        ThrowIfFailed(pps->GetValue(PKEY_Title, &propvarTitle.value), "GetValue failed.");
+        OUString title(o3tl::toU(PropVariantToStringWithDefault(propvarTitle.value, L"")));
 
+        ScopedPropVariant propvarTitleCompare;
         auto ppsCompare(pShellLinkItemCompare.QueryInterface<IPropertyStore>(COM_QUERY_THROW()));
-        ThrowIfFailed(ppsCompare->GetValue(PKEY_Title, &propvar), "GetValue failed.");
-        OUString titleCompare(o3tl::toU(PropVariantToStringWithDefault(propvar, L"")));
-        PropVariantClear(&propvar);
+        ThrowIfFailed(ppsCompare->GetValue(PKEY_Title, &propvarTitleCompare.value),
+                      "GetValue failed.");
+        OUString titleCompare(
+            o3tl::toU(PropVariantToStringWithDefault(propvarTitleCompare.value, L"")));
 
         if (title == titleCompare)
             return true;
@@ -190,16 +203,14 @@ void SAL_CALL JumpListImpl::appendCategory(const OUString& sCategory,
                 {
                     auto pps(pShellLinkItem.QueryInterface<IPropertyStore>(COM_QUERY_THROW()));
 
-                    PROPVARIANT propvar;
+                    ScopedPropVariant propvar;
                     ThrowIfFailed(
-                        InitPropVariantFromString(o3tl::toW(item.name.getStr()), &propvar),
+                        InitPropVariantFromString(o3tl::toW(item.name.getStr()), &propvar.value),
                         "InitPropVariantFromString failed.");
 
-                    ThrowIfFailed(pps->SetValue(PKEY_Title, propvar), "SetValue failed.");
+                    ThrowIfFailed(pps->SetValue(PKEY_Title, propvar.value), "SetValue failed.");
 
                     ThrowIfFailed(pps->Commit(), "Commit failed.");
-
-                    PropVariantClear(&propvar);
                 }
                 ThrowIfFailed(
                     pShellLinkItem->SetDescription(o3tl::toW(item.description.getStr())),
@@ -288,16 +299,14 @@ void SAL_CALL JumpListImpl::addTasks(const Sequence<JumpListItem>& aJumpListItem
                 {
                     auto pps(pShellLinkItem.QueryInterface<IPropertyStore>(COM_QUERY_THROW()));
 
-                    PROPVARIANT propvar;
+                    ScopedPropVariant propvar;
                     ThrowIfFailed(
-                        InitPropVariantFromString(o3tl::toW(item.name.getStr()), &propvar),
+                        InitPropVariantFromString(o3tl::toW(item.name.getStr()), &propvar.value),
                         "InitPropVariantFromString failed.");
 
-                    ThrowIfFailed(pps->SetValue(PKEY_Title, propvar), "SetValue failed.");
+                    ThrowIfFailed(pps->SetValue(PKEY_Title, propvar.value), "SetValue failed.");
 
                     ThrowIfFailed(pps->Commit(), "Commit failed.");
-
-                    PropVariantClear(&propvar);
                 }
                 ThrowIfFailed(
                     pShellLinkItem->SetDescription(o3tl::toW(item.description.getStr())),
@@ -469,15 +478,17 @@ Sequence<JumpListItem> SAL_CALL JumpListImpl::getRemovedItems(const OUString& sA
                 {
                     auto propertyStore(
                         pShellLinkItem.QueryInterface<IPropertyStore>(COM_QUERY_THROW()));
-                    PROPVARIANT propvar;
-                    ThrowIfFailed(propertyStore->GetValue(PKEY_Title, &propvar),
+                    ScopedPropVariant propvarTitle;
+                    ThrowIfFailed(propertyStore->GetValue(PKEY_Title, &propvarTitle.value),
                                   "GetValue failed.");
-                    item.name = o3tl::toU(PropVariantToStringWithDefault(propvar, L""));
+                    item.name = o3tl::toU(PropVariantToStringWithDefault(propvarTitle.value, L""));
 
-                    ThrowIfFailed(propertyStore->GetValue(PKEY_Link_Arguments, &propvar),
-                                  "GetValue failed.");
-                    item.arguments = o3tl::toU(PropVariantToStringWithDefault(propvar, L""));
-                    PropVariantClear(&propvar);
+                    ScopedPropVariant propvarArguments;
+                    ThrowIfFailed(
+                        propertyStore->GetValue(PKEY_Link_Arguments, &propvarArguments.value),
+                        "GetValue failed.");
+                    item.arguments
+                        = o3tl::toU(PropVariantToStringWithDefault(propvarArguments.value, L""));
 
                     wchar_t itemDesc[EXTENDED_MAX_PATH];
                     ThrowIfFailed(pShellLinkItem->GetDescription(
