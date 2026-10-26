@@ -3261,13 +3261,17 @@ void DrawingML::WriteRun( const Reference< XTextRange >& rRun,
 
     if (sText == "\n")
     {
-        // Empty run? Do not forget to write the font size in case of pptx:
+        // A line break carries a size of its own, which is how tall the blank line it makes is.
         if ((GetDocumentType() == DOCUMENT_PPTX) && (nFontSize != -1))
         {
             mpFS->startElementNS(XML_a, XML_br);
             mpFS->singleElementNS(XML_a, XML_rPr, XML_sz,
                                   OString::number(nFontSize * 100));
             mpFS->endElementNS(XML_a, XML_br);
+            // The size a paragraph states for its end is the one the text ends in, and a break
+            // at the end of a paragraph is the last of that text.
+            rnCharHeight = static_cast<sal_Int32>(nFontSize * 100);
+            rbOverridingCharHeight = true;
         }
         else
             mpFS->singleElementNS(XML_a, XML_br);

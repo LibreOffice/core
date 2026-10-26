@@ -670,6 +670,24 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testTextDistancesSurviveASave)
                          xShape->getPropertyValue(u"TextLowerDistance"_ustr).get<sal_Int32>());
 }
 
+// A paragraph that ends in a line break states that break's size for its end.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testParagraphEndsInTheSizeOfItsLastBreak)
+{
+    // Given a paragraph of text at 12 point that ends in a line break at 28 point:
+    createSdImpressDoc("pptx/line-break-size.pptx");
+
+    save(TestFilter::PPTX);
+
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 2800
+    // - Actual  : 1200
+    // i.e. the paragraph gave its end the size of the text instead of the size of the break,
+    // and the blank line the break makes came back short.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//p:sp/p:txBody/a:p/a:br/a:rPr", "sz", u"2800");
+    assertXPath(pXmlDoc, "//p:sp/p:txBody/a:p/a:endParaRPr", "sz", u"2800");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
