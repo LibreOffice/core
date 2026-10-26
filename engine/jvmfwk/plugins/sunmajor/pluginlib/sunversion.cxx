@@ -17,6 +17,9 @@
  *   the License at http://www.apache.org/licenses/LICENSE-2.0 .
  */
 
+#include <algorithm>
+#include <cstddef>
+#include <vector>
 
 #include "sunversion.hxx"
 #include <osl/thread.h>
@@ -25,6 +28,13 @@
 #include <string.h>
 namespace jfw_plugin  { //stoc_javadetect
 
+namespace {
+
+int getVersionPart(std::vector<int> const & parts, std::size_t index) {
+    return index < parts.size() ? parts[index] : 0;
+}
+
+}
 
 SunVersion::SunVersion(std::u16string_view usVer):
     m_nUpdateSpecial(0), m_preRelease(Rel_NONE)
@@ -113,7 +123,7 @@ bool SunVersion::init(const char *szVersion)
     }
     if (pCur >= pEnd)
         return true;
-    //We have now 1.4.1. This can be followed by _01 (or a fourth segment .1), -beta, etc.
+    //We have now 1.4.1. This can be followed by _01 (or a fourth or further segment), -beta, etc.
     // _01 (update) According to docu must not be followed by any other
     //characters, but on Solaris 9 we have a 1.4.1_01a!!
     if (* (pCur - 1) == '_' || *(pCur - 1) == '.')
@@ -136,6 +146,15 @@ bool SunVersion::init(const char *szVersion)
                     if (pCur == pEnd)
                     {
                         break;
+                    }
+                    if (*pCur == '.' && *(pLast - 1) == '.' && pCur != pLast
+                        && rtl::isAsciiDigit(static_cast<unsigned char>(pCur[1])))
+                    {
+                        m_arVersionParts.push_back(0);
+                        ++nPart;
+                        ++pCur;
+                        pLast = pCur;
+                        continue;
                     }
                     if (*pCur == 'a' && (pCur + 1) == pEnd)
                     {
@@ -245,14 +264,15 @@ bool SunVersion::operator > (const SunVersion& ver) const
         return false;
 
     //compare major.minor.maintenance
-    for( int i= 0; i < 4; i ++)
+    auto const n = std::max(m_arVersionParts.size(), ver.m_arVersionParts.size());
+    for( std::size_t i= 0; i < n; i ++)
     {
         // 1.4 > 1.3
-        if(m_arVersionParts[i] > ver.m_arVersionParts[i])
+        if(getVersionPart(m_arVersionParts, i) > getVersionPart(ver.m_arVersionParts, i))
         {
             return true;
         }
-        else if (m_arVersionParts[i] < ver.m_arVersionParts[i])
+        else if (getVersionPart(m_arVersionParts, i) < getVersionPart(ver.m_arVersionParts, i))
         {
             return false;
         }
@@ -285,9 +305,10 @@ bool SunVersion::operator < (const SunVersion& ver) const
 bool SunVersion::operator == (const SunVersion& ver) const
 {
     bool bRet= true;
-    for(int i= 0; i < 4; i++)
+    auto const n = std::max(m_arVersionParts.size(), ver.m_arVersionParts.size());
+    for(std::size_t i= 0; i < n; i++)
     {
-        if( m_arVersionParts[i] != ver.m_arVersionParts[i])
+        if( getVersionPart(m_arVersionParts, i) != getVersionPart(ver.m_arVersionParts, i))
         {
             bRet= false;
             break;

@@ -23,6 +23,7 @@
 #include <sal/config.h>
 
 #include <string_view>
+#include <vector>
 
 namespace jfw_plugin
 {
@@ -74,8 +75,8 @@ class SunVersion final
 #endif
     };
 
-    //contains major,minor,micro,update
-    int m_arVersionParts[4] = {};
+    //contains major,minor,micro,update, followed by any further dot-separated numbers
+    std::vector<int> m_arVersionParts = std::vector<int>(4);
     // The update can be followed by a char, e.g. 1.4.1_01a
     char m_nUpdateSpecial;
 
