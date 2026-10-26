@@ -3324,6 +3324,25 @@ CPPUNIT_TEST_FIXTURE(SdImportTest2, testEasternFontKeepsItsPitchAndFamily)
                          xRun->getPropertyValue(u"CharFontFamilyAsian"_ustr).get<sal_Int16>());
 }
 
+CPPUNIT_TEST_FIXTURE(SdImportTest2, testOwnLuminanceReplacesTheInheritedOne)
+{
+    createSdImpressDoc("pptx/theme-color-luminance.pptx");
+
+    // The shape takes a placeholder whose text is black at a quarter of the full luminance, and
+    // states black at half of it for itself, so its text is the half the shape asks for rather
+    // than half of the quarter it would stand at otherwise.
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
+    uno::Reference<beans::XPropertySet> xRun(
+        getRunFromParagraph(0, getParagraphFromShape(0, xShape)), uno::UNO_QUERY_THROW);
+    // Without the fix in place, this test would have failed with:
+    // - Expected: rgba[808080ff]
+    // - Actual  : rgba[9f9f9fff]
+    // i.e. the half was taken of the quarter the placeholder stands at.
+    Color nCharColor;
+    xRun->getPropertyValue(u"CharColor"_ustr) >>= nCharColor;
+    CPPUNIT_ASSERT_EQUAL(Color(0x808080), nCharColor);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

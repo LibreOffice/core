@@ -78,6 +78,13 @@ ColorValueContext::ColorValueContext(ContextHandler2Helper const & rParent, Colo
 
 void ColorValueContext::onStartElement( const AttributeList& rAttribs )
 {
+    // A colour element states a whole colour, the base it starts from along with the changes made
+    // to it, so it begins from what it names and from none of the changes the target held before.
+    if (mpColor)
+        mpColor->clearTransformations();
+    if (mpComplexColor)
+        mpComplexColor->clearTransformations();
+
     switch( getCurrentElement() )
     {
         case A_TOKEN(scrgbClr):
