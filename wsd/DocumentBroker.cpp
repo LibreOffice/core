@@ -58,6 +58,9 @@
 #include <wsd/ProxyProtocol.hpp>
 #include <wsd/QuarantineUtil.hpp>
 #include <wsd/RemoteDocumentBroker.hpp>
+#if !MOBILEAPP
+#include <wsd/SpecialBrokers.hpp>
+#endif
 #include <wsd/Storage.hpp>
 #include <wsd/TileCache.hpp>
 #include <wsd/Unzip.hpp>
@@ -6472,6 +6475,78 @@ std::string DocumentBroker::stageExportedSlides(const std::string_view answer)
     LOG_DBG("Staged " << size << " bytes of pages a source of [" << _docKey << "] wrote as ["
                       << stagedName << ']');
     return stagedName;
+}
+
+std::string DocumentBroker::stageUpload(const std::string& credential,
+                                        const std::string& uploadedPath)
+{
+    ASSERT_CORRECT_THREAD();
+
+    std::shared_ptr<ClientSession> session;
+    for (const auto& it : _sessions)
+    {
+        const std::shared_ptr<ClientSession>& candidate = it.second;
+        if (candidate->getAuthorization().matchesCredential(credential) && candidate->isLive() &&
+            !candidate->isParked() && !candidate->isReadOnly())
+        {
+            session = candidate;
+            break;
+        }
+    }
+
+    if (!session)
+    {
+        LOG_ERR("Refused an upload to [" << _docKey << "] that no live view able to edit made");
+        return std::string();
+    }
+
+    // The name is "<number>-<file name>": a fresh number of wsd's own, then the cleaned name the
+    // file was uploaded under.
+    const uint64_t number =
+        (static_cast<uint64_t>(Util::rng::getNext()) << 32) | Util::rng::getNext();
+    const std::string stagedName =
+        std::to_string(number) + '-' + Poco::Path(uploadedPath).getFileName();
+    const std::string stagedPath = jailStagingPath(stagedName);
+    if (stagedPath.empty())
+        return std::string();
+
+    try
+    {
+        Poco::File(Poco::Path(stagedPath).parent()).createDirectories();
+        Poco::File(uploadedPath).moveTo(stagedPath);
+    }
+    catch (const Poco::Exception& exc)
+    {
+        LOG_ERR("Failed to stage an upload to [" << _docKey << "]: " << exc.displayText());
+        return std::string();
+    }
+
+    LOG_DBG("Staged an upload of session [" << session->getId() << "] to [" << _docKey
+                                            << "] as [" << stagedName << ']');
+    return stagedName;
+}
+
+void DocumentBroker::handleUploadRequest(const std::shared_ptr<Socket>& socket,
+                                         const std::string& credential,
+                                         const std::string& uploadedPath)
+{
+    assertCorrectThread();
+
+    auto streamSocket = std::static_pointer_cast<StreamSocket>(socket);
+
+    const std::string stagedName = stageUpload(credential, uploadedPath);
+    StatelessBatchBroker::removeFile(uploadedPath);
+    if (stagedName.empty())
+    {
+        HttpHelper::sendErrorAndShutdown(http::StatusCode::Forbidden, streamSocket);
+        return;
+    }
+
+    // The body is the name to give the insert command for this file.
+    http::Response httpResponse(http::StatusCode::OK);
+    FileServerRequestHandler::hstsHeaders(httpResponse);
+    httpResponse.setBody(stagedName, "text/plain");
+    streamSocket->sendAndShutdown(httpResponse);
 }
 
 #endif // !MOBILEAPP

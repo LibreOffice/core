@@ -223,6 +223,14 @@ void assertErrorReply(const std::shared_ptr<http::WebSocketSession>& ws, const s
                       const std::string& expectedCommand, const std::string& expectedKind,
                       const std::string& testname, const std::string& named = std::string());
 
+/// Upload a file for the document of documentURL over the insertfile endpoint, with the
+/// credential in the form field of the given name, and return the response. The body of an
+/// accepted upload is the staged name.
+std::shared_ptr<const http::Response> postToInsertFile(const std::string& documentURL,
+                                                       const std::string& credentialField,
+                                                       const std::string& credential,
+                                                       const std::string& content);
+
 bool getProgressWithIdValue(const std::string_view msg, const std::string_view idValue);
 
 bool isDocumentLoaded(

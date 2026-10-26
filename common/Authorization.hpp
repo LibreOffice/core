@@ -114,6 +114,13 @@ public:
         return _type == Type::Token && !_data.empty() && _data == accessToken;
     }
 
+    /// Returns true iff this holds a non-empty access_token or access_header equal to the given
+    /// one, also while it is expired or being refreshed.
+    bool matchesCredential(const std::string& credential) const
+    {
+        return _credentialType != Type::None && !_data.empty() && _data == credential;
+    }
+
     /// Returns true if the timeout has elapsed without a refresh.
     bool isTokenRefreshTimedOut(
         const std::chrono::steady_clock::time_point now = std::chrono::steady_clock::now()) const

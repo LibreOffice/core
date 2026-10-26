@@ -352,19 +352,21 @@ window.L.Map.FileInserter = window.L.Handler.extend({
 				if (xmlHttp.readyState === 4) {
 					map.hideBusy();
 					if (xmlHttp.status === 200) {
+						// The server names the file it staged.
+						var stagedName = xmlHttp.responseText;
 						var sectionName = app.CSections.ContentControl.name;
 						var section;
 						if (sectionContainer.doesSectionExist(sectionName)) {
 							section = sectionContainer.getSectionWithName(sectionName);
 						}
 						if (section && section.sectionProperties.picturePicker && type === 'graphic') {
-							socket.sendMessage('contentcontrolevent type=picture' + ' name=' + name);
+							socket.sendMessage('contentcontrolevent type=picture' + ' name=' + stagedName);
 						} else if (type === 'filepicker') {
-							fileInserter._answerFilePicker(filePickerRequestId, name);
+							fileInserter._answerFilePicker(filePickerRequestId, stagedName);
 						} else if (type === 'multimedia') {
-							socket.sendMessage('insertfile name=' + name + ' type=' + type + ' width=' + size.width + ' height=' + size.height);
+							socket.sendMessage('insertfile name=' + stagedName + ' type=' + type + ' width=' + size.width + ' height=' + size.height);
 						} else {
-							socket.sendMessage('insertfile name=' + name + ' type=' + type);
+							socket.sendMessage('insertfile name=' + stagedName + ' type=' + type);
 						}
 					}
 					else if (xmlHttp.status === 404) {
@@ -384,8 +386,11 @@ window.L.Map.FileInserter = window.L.Handler.extend({
 			};
 			xmlHttp.open('POST', url, true);
 			var formData = new FormData();
-			formData.append('name', name);
-			formData.append('childid', this._childId);
+			var docParams = this._map.options.docParams;
+			if (docParams.access_token)
+				formData.append('access_token', docParams.access_token);
+			else if (docParams.access_header)
+				formData.append('access_header', docParams.access_header);
 			if (file.filename && file.url) {
 				formData.append('url', file.url);
 				formData.append('filename', file.filename);

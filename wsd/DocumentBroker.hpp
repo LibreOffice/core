@@ -499,6 +499,17 @@ public:
     /// when there is no such file in this document's jail. An unjailed kit names real paths,
     /// which are then under the jail root.
     std::string findFileInJail(std::string kitPath) const;
+
+    /// Moves an uploaded file into the staging area of this document's jail for the view whose
+    /// access_token or access_header is the given credential. Returns the name it was staged
+    /// under, which is empty when no live view that can edit holds that credential, or when the
+    /// file could not be staged.
+    std::string stageUpload(const std::string& credential, const std::string& uploadedPath);
+
+    /// Stages the uploaded file for the view that holds the credential and answers on the socket
+    /// with the staged name, or with 403 when the file was not staged.
+    void handleUploadRequest(const std::shared_ptr<Socket>& socket, const std::string& credential,
+                             const std::string& uploadedPath);
 #endif
 
     /// Loads and adds a new session. Returns the new number of sessions.

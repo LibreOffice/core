@@ -2761,11 +2761,11 @@ bool ClientRequestDispatcher::handlePostRequest(const RequestDetails& requestDet
         ConvertToPartHandler handler;
         Poco::Net::HTMLForm form(request, message, handler);
 
-        if (form.has("childid") && form.has("name"))
+        // The view uploading is the one whose access_token or access_header the form carries.
+        const std::string credential =
+            form.get("access_token", form.get("access_header", std::string()));
+        if (!credential.empty() && handler.getFilenames().size() == 1)
         {
-            const std::string formChildid(form.get("childid"));
-            const std::string formName(form.get("name"));
-
             // Validate the docKey
             const std::string decodedUri = requestDetails.getDocumentURI();
             const std::string docKey = RequestDetails::getDocKey(decodedUri);
@@ -2773,49 +2773,22 @@ bool ClientRequestDispatcher::handlePostRequest(const RequestDetails& requestDet
             std::unique_lock<std::mutex> docBrokersLock(DocBrokersMutex);
             auto docBrokerIt = DocBrokers.find(docKey);
 
-            // Maybe just free the client from sending childid in form ?
-            if (docBrokerIt == DocBrokers.end() || docBrokerIt->second->getJailId() != formChildid)
+            if (docBrokerIt == DocBrokers.end() || !docBrokerIt->second->isAlive())
             {
-                throw BadRequestException("DocKey [" + docKey + "] or childid [" + formChildid +
-                                          "] is invalid.");
+                throw BadRequestException("DocKey [" + docKey + "] is invalid.");
             }
+            std::shared_ptr<DocumentBroker> docBroker = docBrokerIt->second;
             docBrokersLock.unlock();
 
-            // protect against attempts to inject something funny here
-            if (formChildid.find('/') == std::string::npos &&
-                formName.find('/') == std::string::npos)
-            {
-                const std::string dirPath = FileUtil::buildLocalPathToJail(
-                    COOLWSD::EnableMountNamespaces, COOLWSD::ChildRoot + formChildid,
-                    JAILED_DOCUMENT_ROOT + std::string("insertfile"));
-                const std::string fileName = dirPath + '/' + form.get("name");
-                LOG_INF("Perform insertfile: " << formChildid << ", " << formName
-                                               << ", filename: " << fileName);
-                Poco::File(dirPath).createDirectories();
-                std::string filename;
-                const std::map<std::string, std::string>& filenames = handler.getFilenames();
-                if (!filenames.empty())
-                {
-                    // Expect a single parameter, don't care about the name.
-                    auto it = filenames.begin();
-                    filename = it->second;
-                }
-                Poco::File(filename).moveTo(fileName);
+            const std::string filename = handler.getFilenames().begin()->second;
+            handler.takeFiles();
 
-                // Cleanup the directory after moving.
-                const std::string dir = Poco::Path(filename).parent().toString();
-                if (FileUtil::isEmptyDirectory(dir))
-                    FileUtil::removeFile(dir);
-
-                handler.takeFiles();
-
-                http::Response httpResponse(http::StatusCode::OK);
-                FileServerRequestHandler::hstsHeaders(httpResponse);
-                httpResponse.setContentLength(0);
-                socket->sendAndShutdown(httpResponse);
-                socket->ignoreInput();
-                return true;
-            }
+            // Do things in the right thread.
+            docBroker->setupTransfer(
+                disposition,
+                [docBroker, credential, filename](const std::shared_ptr<Socket>& moveSocket)
+                { docBroker->handleUploadRequest(moveSocket, credential, filename); });
+            return false; // async
         }
     }
     else if (requestDetails.equals(2, "download"))
