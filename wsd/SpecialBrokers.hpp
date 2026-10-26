@@ -170,6 +170,17 @@ private:
                           const std::string& encodedFrom) override;
 };
 
+/// Create the broker for one stateless request. requestType is one of convert-to,
+/// extract-link-targets, extract-document-structure, transform-document-structure and
+/// get-thumbnail, and the result is null for any other value. The other arguments are those
+/// of the broker's constructor, and a broker takes only the ones its request type reads.
+std::shared_ptr<ConvertToBroker>
+getConvertToBrokerImplementation(const std::string& requestType, const std::string& fromPath,
+                                 const Poco::URI& uriPublic, const std::string& docKey,
+                                 const std::string& format, const std::string& options,
+                                 const std::string& lang, const std::string& target,
+                                 const std::string& filter, const std::string& transformJSON);
+
 class RenderSearchResultBroker final : public StatelessBatchBroker
 {
     std::shared_ptr<std::vector<char>> _searchResultContent;

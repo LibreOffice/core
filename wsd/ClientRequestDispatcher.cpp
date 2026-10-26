@@ -417,40 +417,6 @@ public:
 
 }
 
-/// Constructs ConvertToBroker implementation based on request type
-static std::shared_ptr<ConvertToBroker>
-getConvertToBrokerImplementation(const std::string& requestType, const std::string& fromPath,
-                                 const Poco::URI& uriPublic, const std::string& docKey,
-                                 const std::string& format, const std::string& options,
-                                 const std::string& lang, const std::string& target,
-                                 const std::string& filter, const std::string& transformJSON)
-{
-    if (requestType == "convert-to")
-        return std::make_shared<ConvertToBroker>(fromPath, uriPublic, docKey, format, options,
-                                                 lang);
-
-    if (requestType == "extract-link-targets")
-        return std::make_shared<ExtractLinkTargetsBroker>(fromPath, uriPublic, docKey, lang);
-
-    if (requestType == "extract-document-structure")
-        return std::make_shared<ExtractDocumentStructureBroker>(fromPath, uriPublic, docKey, lang,
-                                                                filter);
-    if (requestType == "transform-document-structure")
-    {
-        if (format.empty())
-            return std::make_shared<TransformDocumentStructureBroker>(
-                fromPath, uriPublic, docKey, Poco::Path(fromPath).getExtension(), lang,
-                transformJSON);
-        return std::make_shared<TransformDocumentStructureBroker>(fromPath, uriPublic, docKey,
-                                                                  format, lang, transformJSON);
-    }
-
-    if (requestType == "get-thumbnail")
-        return std::make_shared<GetThumbnailBroker>(fromPath, uriPublic, docKey, lang, target);
-
-    return nullptr;
-}
-
 namespace {
 
 class ConvertToAddressResolver : public std::enable_shared_from_this<ConvertToAddressResolver>
