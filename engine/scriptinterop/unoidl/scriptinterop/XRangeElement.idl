@@ -12,9 +12,9 @@
 module scriptinterop {
 
 // One selection segment, consistent with GAS's Selection.getRangeElements() model.  The element is
-// the Text of the paragraph that a partial text segment lives in, the paragraph that is selected
-// as a whole, or the inline image that is selected on its own.  Offsets are character positions
-// within that Text, and are -1 for a segment that is not partial:
+// the Text of the paragraph that a partial text segment lives in, the paragraph or table cell that
+// is selected as a whole, or the inline image that is selected on its own.  Offsets are character
+// positions within that Text, and are -1 for a segment that is not partial:
 interface XRangeElement: XBase {
     XElement getElement();
 

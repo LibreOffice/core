@@ -68,8 +68,8 @@ function kitApply(ops) {
 		const doc = DocumentApp.getActiveDocument();
 		let position = doc.getCursor();
 		const selection = doc.getSelection();
-		// While a shape, a frame, a positioned image or table cells are selected instead of text,
-		// the drawing goes at the start of the document:
+		// While a shape, a frame or a positioned image is selected instead of text, the drawing goes
+		// at the start of the document:
 		if (!position && !selection) {
 			const body = doc.getBody();
 			let first = body.getChild(0);
@@ -84,8 +84,15 @@ function kitApply(ops) {
 				const parent = element.getParent();
 				position = doc.newPosition(parent, parent.getChildIndex(element));
 			} else {
+				// A selected table cell can start with a nested table, whose first cell then holds
+				// the position:
+				let target = element;
+				while (target.getType() === DocumentApp.ElementType.TABLE_CELL
+					&& target.getChild(0).getType() === DocumentApp.ElementType.TABLE) {
+					target = target.getChild(0).getRow(0).getCell(0);
+				}
 				position = doc.newPosition(
-					element,
+					target,
 					first.isPartial() ? first.getStartOffset() : 0,
 				);
 			}
@@ -136,7 +143,14 @@ function kitDocumentLanguage() {
 			const parent = element.getParent();
 			cursor = doc.newPosition(parent, parent.getChildIndex(element));
 		} else {
-			cursor = doc.newPosition(element, first.isPartial() ? first.getStartOffset() : 0);
+			// A selected table cell can start with a nested table, whose first cell then holds the
+			// position:
+			let target = element;
+			while (target.getType() === DocumentApp.ElementType.TABLE_CELL
+				&& target.getChild(0).getType() === DocumentApp.ElementType.TABLE) {
+				target = target.getChild(0).getRow(0).getCell(0);
+			}
+			cursor = doc.newPosition(target, first.isPartial() ? first.getStartOffset() : 0);
 		}
 	}
 	for (const getter of ['getLocale', 'getLocaleAsian', 'getLocaleComplex']) {

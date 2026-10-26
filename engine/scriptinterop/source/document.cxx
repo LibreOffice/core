@@ -17,6 +17,7 @@
 #include <map>
 #include <memory>
 #include <optional>
+#include <set>
 #include <string_view>
 #include <utility>
 #include <vector>
@@ -72,6 +73,8 @@
 #include <com/sun/star/text/XTextRange.hpp>
 #include <com/sun/star/text/XTextRangeCompare.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
+#include <com/sun/star/text/XTextTableCursor.hpp>
+#include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextViewCursor.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 #include <com/sun/star/util/XModifyBroadcaster.hpp>
@@ -721,10 +724,19 @@ public:
         if (!element.is()) {
             throw cpo::uno::RuntimeException(u"addElement: the element must not be null"_ustr);
         }
-        // A Writer selection is either text or a single object, so an inline image can only be the
-        // only element of a range:
-        if (image_.is() || element->getType() == scriptinterop::ElementType_INLINE_IMAGE) {
+        // A Writer selection is either text, table cells or a single object, so table cells can
+        // only be combined with other table cells:
+        if (element->getType() == scriptinterop::ElementType_TABLE_CELL) {
             if (image_.is() || cursor_.is()) {
+                throw cpo::uno::RuntimeException(
+                    u"addElement: table cells can only be combined with other table cells"_ustr);
+            }
+            cells_.emplace_back(element, cpo::uno::UNO_QUERY_THROW);
+            return this;
+        }
+        // ...and an inline image can only be the only element of a range:
+        if (image_.is() || element->getType() == scriptinterop::ElementType_INLINE_IMAGE) {
+            if (image_.is() || cursor_.is() || !cells_.empty()) {
                 throw cpo::uno::RuntimeException(
                     u"addElement: an inline image can only be the only element of a range"_ustr);
             }
@@ -787,6 +799,10 @@ private:
         if (!start.is() || !end.is()) {
             throw cpo::uno::RuntimeException(u"the element covers no text"_ustr);
         }
+        if (!cells_.empty()) {
+            throw cpo::uno::RuntimeException(
+                u"table cells can only be combined with other table cells"_ustr);
+        }
         if (!cursor_.is()) {
             auto const host = start->getText();
             if (!host.is()) {
@@ -803,6 +819,7 @@ private:
     std::shared_ptr<Model> model_;
     cpo::uno::Reference<css::text::XTextCursor> cursor_;
     cpo::uno::Reference<css::text::XTextContent> image_;
+    std::vector<cpo::uno::Reference<scriptinterop::XTableCell>> cells_;
 };
 
 OUString elementTypeName(scriptinterop::ElementType type) {
@@ -3381,17 +3398,6 @@ private:
     cpo::uno::Reference<css::text::XTextContent> image_;
 };
 
-cpo::uno::Reference<scriptinterop::XSelection> RangeBuilderImpl::build() {
-    if (image_.is()) {
-        return new ImageSelectionImpl(model_, image_);
-    }
-    if (!cursor_.is()) {
-        throw cpo::uno::RuntimeException(
-            u"build: add at least one element or element range first"_ustr);
-    }
-    return new SelectionImpl(model_, new SingleRangeIndex(cursor_));
-}
-
 cpo::uno::Reference<css::text::XTextViewCursor> viewCursorOf(
     std::shared_ptr<Model> const & model)
 {
@@ -3963,6 +3969,249 @@ private:
     cpo::uno::Reference<css::text::XText> text_;
 };
 
+// An element that is selected as a whole, such as a table cell:
+class WholeElementRangeElementImpl: public cppu::WeakImplHelper<scriptinterop::XRangeElement> {
+public:
+    explicit WholeElementRangeElementImpl(
+        cpo::uno::Reference<scriptinterop::XElement> const & element):
+        element_(element) {}
+
+    cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return element_->getuno(); }
+
+    cpo::uno::Reference<scriptinterop::XElement> getElement() override { return element_; }
+
+    sal_Int32 getEndOffsetInclusive() override { return -1; }
+
+    sal_Int32 getStartOffset() override { return -1; }
+
+    bool isPartial() override { return false; }
+
+private:
+    cpo::uno::Reference<scriptinterop::XElement> element_;
+};
+
+// Selected table cells, each a whole range element of its own, in the order of the rows and of the
+// cells in each row (as in GAS, which also brings a range of table cells into that order).  The UNO
+// object is the cell range that the cells make up, and null when they do not make up a whole cell
+// range:
+class CellSelectionImpl: public cppu::WeakImplHelper<scriptinterop::XSelection> {
+public:
+    CellSelectionImpl(
+        cpo::uno::Reference<cpo::uno::XInterface> const & uno,
+        std::vector<cpo::uno::Reference<scriptinterop::XTableCell>> && cells):
+        uno_(uno), cells_(std::move(cells)) {}
+
+    cpo::uno::Reference<cpo::uno::XInterface> getuno() override { return uno_; }
+
+    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XRangeElement>> getRangeElements()
+        override
+    {
+        cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XRangeElement>> elements(
+            cells_.size());
+        std::transform(
+            cells_.begin(), cells_.end(), elements.getArray(),
+            [](auto const & cell) -> cpo::uno::Reference<scriptinterop::XRangeElement> {
+                return new WholeElementRangeElementImpl(cell);
+            });
+        return elements;
+    }
+
+    cpo::uno::Sequence<cpo::uno::Reference<scriptinterop::XRangeElement>> getSelectedElements()
+        override
+    { return getRangeElements(); }
+
+    OUString getText() override {
+        OUStringBuffer buf;
+        for (auto const & cell: cells_) {
+            if (!buf.isEmpty()) {
+                buf.append('\n');
+            }
+            buf.append(cell->getText());
+        }
+        return buf.makeStringAndClear();
+    }
+
+    void replace(OUString const & newText) override {
+        for (auto const & cell: cells_) {
+            cpo::uno::Reference<css::text::XText>(cell->getuno(), cpo::uno::UNO_QUERY_THROW)
+                ->setString(newText);
+        }
+    }
+
+private:
+    cpo::uno::Reference<cpo::uno::XInterface> uno_;
+    std::vector<cpo::uno::Reference<scriptinterop::XTableCell>> cells_;
+};
+
+// Writer names a table cell after its position, like "B2":
+OUString cellNameOf(cpo::uno::Reference<cpo::uno::XInterface> const & cell) {
+    OUString name;
+    cpo::uno::Reference<css::beans::XPropertySet>(cell, cpo::uno::UNO_QUERY_THROW)
+        ->getPropertyValue(u"CellName"_ustr) >>= name;
+    return name;
+}
+
+// The text table that a table cell is in, which is the one of the document's text tables that has
+// that very cell under its name (as a text cursor in the cell can be in a table nested in the cell):
+cpo::uno::Reference<css::text::XTextTable> tableOf(
+    std::shared_ptr<Model> const & model, cpo::uno::Reference<css::text::XText> const & cell)
+{
+    auto const name = cellNameOf(cell);
+    cpo::uno::Reference<css::container::XIndexAccess> const tables(
+        cpo::uno::Reference<css::text::XTextTablesSupplier>(
+            model->uno(), cpo::uno::UNO_QUERY_THROW)->getTextTables(),
+        cpo::uno::UNO_QUERY_THROW);
+    auto const n = tables->getCount();
+    for (sal_Int32 i = 0; i != n; ++i) {
+        cpo::uno::Reference<css::text::XTextTable> const table(
+            tables->getByIndex(i), cpo::uno::UNO_QUERY_THROW);
+        if (table->getCellByName(name) == cell) {
+            return table;
+        }
+    }
+    return {};
+}
+
+// The names of the cells of a cell range:
+std::set<OUString> cellNamesOf(cpo::uno::Reference<css::table::XCellRange> const & range) {
+    std::set<OUString> names;
+    for (sal_Int32 row = 0;; ++row) {
+        sal_Int32 column = 0;
+        for (;; ++column) {
+            cpo::uno::Reference<css::table::XCell> cell;
+            try {
+                cell = range->getCellByPosition(column, row);
+            } catch (css::lang::IndexOutOfBoundsException const &) {
+                break;
+            }
+            if (!cell.is()) {
+                break;
+            }
+            names.insert(cellNameOf(cell));
+        }
+        if (column == 0) {
+            break;
+        }
+    }
+    return names;
+}
+
+// The element that holds a text table, which is the body for a table in the body text and the table
+// cell for a table nested in a cell, and null for a table elsewhere (like in a header):
+cpo::uno::Reference<scriptinterop::XElement> tableParentOf(
+    std::shared_ptr<Model> const & model, cpo::uno::Reference<css::text::XTextTable> const & table);
+
+// The cells of a text table that have the given names, in the order of the rows and of the cells in
+// each row:
+std::vector<cpo::uno::Reference<scriptinterop::XTableCell>> cellsNamed(
+    std::shared_ptr<Model> const & model, cpo::uno::Reference<css::text::XTextTable> const & table,
+    std::set<OUString> const & names)
+{
+    cpo::uno::Reference<scriptinterop::XTable> const tableElement(
+        new TableImpl(model, tableParentOf(model, table), table));
+    std::vector<cpo::uno::Reference<scriptinterop::XTableCell>> cells;
+    auto const rows = tableElement->getNumRows();
+    for (sal_Int32 i = 0; i != rows; ++i) {
+        auto const row = tableElement->getRow(i);
+        if (!row.IsPresent) {
+            continue;
+        }
+        auto const n = row.Value->getNumCells();
+        for (sal_Int32 j = 0; j != n; ++j) {
+            auto const cell = row.Value->getCell(j);
+            if (cell.IsPresent && names.contains(cellNameOf(cell.Value->getuno()))) {
+                cells.push_back(cell.Value);
+            }
+        }
+    }
+    return cells;
+}
+
+cpo::uno::Reference<scriptinterop::XElement> tableParentOf(
+    std::shared_ptr<Model> const & model, cpo::uno::Reference<css::text::XTextTable> const & table)
+{
+    rtl::Reference<BodyImpl> const body(new BodyImpl(
+        model,
+        cpo::uno::Reference<css::text::XTextDocument>(model->uno(), cpo::uno::UNO_QUERY_THROW)
+            ->getText()));
+    auto const & bodyContents = body->contents();
+    if (std::find(bodyContents.begin(), bodyContents.end(), table) != bodyContents.end()) {
+        return body;
+    }
+    cpo::uno::Reference<css::container::XIndexAccess> const tables(
+        cpo::uno::Reference<css::text::XTextTablesSupplier>(
+            model->uno(), cpo::uno::UNO_QUERY_THROW)->getTextTables(),
+        cpo::uno::UNO_QUERY_THROW);
+    auto const n = tables->getCount();
+    for (sal_Int32 i = 0; i != n; ++i) {
+        cpo::uno::Reference<css::text::XTextTable> const outer(
+            tables->getByIndex(i), cpo::uno::UNO_QUERY_THROW);
+        for (auto const & name: outer->getCellNames()) {
+            auto const contents = cpo::uno::Reference<css::container::XEnumerationAccess>(
+                outer->getCellByName(name), cpo::uno::UNO_QUERY_THROW)->createEnumeration();
+            while (contents->hasMoreElements()) {
+                if (cpo::uno::Reference<cpo::uno::XInterface>(
+                        contents->nextElement(), cpo::uno::UNO_QUERY) == table)
+                {
+                    auto const cells = cellsNamed(model, outer, {name});
+                    return cells.empty() ? nullptr : cells.front();
+                }
+            }
+        }
+    }
+    return {};
+}
+
+cpo::uno::Reference<scriptinterop::XSelection> RangeBuilderImpl::build() {
+    if (image_.is()) {
+        return new ImageSelectionImpl(model_, image_);
+    }
+    // The cells are selected in the order of the rows and of the cells in each row, and Writer can
+    // select them as a cell range only when they are all the cells of the range from the first to
+    // the last of them:
+    if (!cells_.empty()) {
+        auto const table = tableOf(model_, cpo::uno::Reference<css::text::XText>(
+            cells_.front()->getuno(), cpo::uno::UNO_QUERY_THROW));
+        if (!table.is()) {
+            throw cpo::uno::RuntimeException(u"build: the table cell is not part of a table"_ustr);
+        }
+        // A cell is in the same table when the table has that very cell under the cell's name:
+        std::set<OUString> names;
+        for (auto const & cell: cells_) {
+            auto const name = cellNameOf(cell->getuno());
+            if (name.isEmpty()) {
+                throw cpo::uno::RuntimeException(
+                    u"build: the table cell is not part of a table"_ustr);
+            }
+            if (table->getCellByName(name) != cell->getuno()) {
+                throw cpo::uno::RuntimeException(
+                    u"build: the table cells of a range must all be in the same table"_ustr);
+            }
+            names.insert(name);
+        }
+        auto cells = cellsNamed(model_, table, names);
+        if (cells.empty()) {
+            throw cpo::uno::RuntimeException(
+                u"build: the table cells are not in the rows of their table"_ustr);
+        }
+        // Writer has no cell ranges of a table with split cells, whose cells it cannot select
+        // then:
+        cpo::uno::Reference<css::table::XCellRange> range;
+        try {
+            range = cpo::uno::Reference<css::table::XCellRange>(
+                table, cpo::uno::UNO_QUERY_THROW)->getCellRangeByName(
+                    cellNameOf(cells.front()->getuno()) + ":" + cellNameOf(cells.back()->getuno()));
+        } catch (cpo::uno::RuntimeException const &) {}
+        return new CellSelectionImpl(
+            range.is() && cellNamesOf(range) == names ? range : nullptr, std::move(cells));
+    }
+    if (!cursor_.is()) {
+        throw cpo::uno::RuntimeException(
+            u"build: add at least one element or element range first"_ustr);
+    }
+    return new SelectionImpl(model_, new SingleRangeIndex(cursor_));
+}
+
 class DocumentImpl : public cppu::WeakImplHelper<scriptinterop::XDocument>
 {
 public:
@@ -3995,6 +4244,43 @@ public:
                 true,
                 cpo::uno::Reference<scriptinterop::XSelection>(new ImageSelectionImpl(model_,
                     cpo::uno::Reference<css::text::XTextContent>(info, cpo::uno::UNO_QUERY_THROW)))};
+        }
+        // Selected table cells are a collection of whole cells of the table that the table cursor
+        // is in:
+        if (info.is() && info->supportsService(u"com.sun.star.text.TextTableCursor"_ustr)) {
+            cpo::uno::Reference<css::text::XTextTable> table;
+            cpo::uno::Reference<css::beans::XPropertySet>(info, cpo::uno::UNO_QUERY_THROW)
+                ->getPropertyValue(u"TextTable"_ustr) >>= table;
+            if (!table.is()) {
+                return {false, {}};
+            }
+            // The range name of a single selected cell is just the name of that cell:
+            auto rangeName = cpo::uno::Reference<css::text::XTextTableCursor>(
+                info, cpo::uno::UNO_QUERY_THROW)->getRangeName();
+            if (rangeName.isEmpty()) {
+                return {false, {}};
+            }
+            if (rangeName.indexOf(':') == -1) {
+                rangeName += ":" + rangeName;
+            }
+            // Writer has no cell ranges of a table with split cells, whose selected cells give no
+            // selection then:
+            cpo::uno::Reference<css::table::XCellRange> range;
+            try {
+                range = cpo::uno::Reference<css::table::XCellRange>(
+                    table, cpo::uno::UNO_QUERY_THROW)->getCellRangeByName(rangeName);
+            } catch (cpo::uno::RuntimeException const &) {}
+            if (!range.is()) {
+                return {false, {}};
+            }
+            auto cells = cellsNamed(model_, table, cellNamesOf(range));
+            if (cells.empty()) {
+                return {false, {}};
+            }
+            return {
+                true,
+                cpo::uno::Reference<scriptinterop::XSelection>(
+                    new CellSelectionImpl(range, std::move(cells)))};
         }
         // Selected shapes are a collection of shapes, and the text in them is not selected text of
         // the document:
@@ -4134,6 +4420,11 @@ public:
     {
         if (!selection.is()) {
             throw cpo::uno::RuntimeException(u"setSelection: the selection must not be null"_ustr);
+        }
+        if (!selection->getuno().is()) {
+            throw cpo::uno::RuntimeException(
+                u"setSelection: Writer can only select table cells that make up a whole cell"
+                " range"_ustr);
         }
         cpo::uno::Reference<css::view::XSelectionSupplier> const sup(
             model_->uno()->getCurrentController(), cpo::uno::UNO_QUERY_THROW);

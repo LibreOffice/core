@@ -653,13 +653,17 @@ function test() {
         console.assert(doc.getCursor() === null);
         console.assert(doc.getSelection() === null);
         graphic.dispose();
-        // While table cells are selected, there is no cursor (the selection itself is not checked,
-        // as selected table cells are not yet mapped to range elements):
+        // While table cells are selected, there is no cursor, and the selection is the selected
+        // cells:
         const table = model.createInstance('com.sun.star.text.TextTable');
         table.initialize(1, 2);
         model.getText().insertTextContent(model.getText().getEnd(), table, false);
         controller.select(table.getCellRangeByName('A1:B1'));
         console.assert(doc.getCursor() === null);
+        const cells = doc.getSelection().getRangeElements();
+        console.assert(cells.length === 2);
+        console.assert(cells[0].getElement().getType() === DocumentApp.ElementType.TABLE_CELL);
+        console.assert(cells[1].getElement().getType() === DocumentApp.ElementType.TABLE_CELL);
         table.dispose();
         console.assert(doc.setCursor(doc.newPosition(para5, 1)).getCursor() !== null);
     }

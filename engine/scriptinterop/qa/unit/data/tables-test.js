@@ -47,6 +47,61 @@ function test() {
         body.getText() === 'Before\n\nB1\n\n\nBetween\nMerged\nB1\n\nB2\nBetween\n' + lead
             + 'N1\nN2\n\nB1\nAfter');
 
+    // With cells A1 to B2 of child 1 selected, in any order, the selection is each of these cells
+    // as a whole, row by row, and there is no cursor:
+    const doc = DocumentApp.getActiveDocument();
+    doc.setSelection(
+        doc.newRange().addElement(empty.getRow(1).getCell(1))
+            .addElement(empty.getRow(0).getCell(0)).addElement(empty.getRow(1).getCell(0))
+            .addElement(empty.getRow(0).getCell(1)).build());
+    const cells = doc.getSelection().getRangeElements();
+    console.assert(cells.length === 4);
+    for (const range of cells) {
+        console.assert(range.getElement().getType() === DocumentApp.ElementType.TABLE_CELL);
+        console.assert(range.isPartial() === false);
+        console.assert(range.getStartOffset() === -1);
+        console.assert(range.getEndOffsetInclusive() === -1);
+    }
+    console.assert(cells.map(range => range.getElement().getText()).join('|') === '|B1||');
+    console.assert(
+        cells[1].getElement().getParent().getType() === DocumentApp.ElementType.TABLE_ROW);
+    console.assert(doc.getCursor() === null);
+    // A single cell is selected as that whole cell, too:
+    const single = doc.setSelection(doc.newRange().addElement(empty.getRow(0).getCell(1)).build())
+        .getSelection().getRangeElements();
+    console.assert(single.length === 1);
+    console.assert(single[0].getElement().getType() === DocumentApp.ElementType.TABLE_CELL);
+    console.assert(single[0].getElement().getText() === 'B1');
+    console.assert(single[0].isPartial() === false);
+    console.assert(doc.getCursor() === null);
+    // The cells of a table whose cell A1 starts with a nested table are selected as such, too:
+    const outer = doc.setSelection(
+        doc.newRange().addElement(nested.getRow(0).getCell(0))
+            .addElement(nested.getRow(0).getCell(1)).build())
+        .getSelection().getRangeElements();
+    console.assert(outer.length === 2);
+    console.assert(outer[0].getElement().getText() === lead + 'N1\nN2\n');
+    console.assert(outer[1].getElement().getText() === 'B1');
+
+    // A selected cell of the table nested in cell A1 of child 5 has the nested table, the cell A1
+    // and the table of child 5 among its ancestors:
+    const innerTable = cell.getChild(globalThis.cool ? 0 : 1);
+    const inner = doc.setSelection(
+        doc.newRange().addElement(innerTable.getRow(0).getCell(0)).build())
+        .getSelection().getRangeElements()[0].getElement();
+    console.assert(inner.getType() === DocumentApp.ElementType.TABLE_CELL);
+    console.assert(inner.getText() === 'N1');
+    console.assert(inner.getParent().getParent().getType() === DocumentApp.ElementType.TABLE);
+    console.assert(
+        inner.getParent().getParent().getParent().getType()
+            === DocumentApp.ElementType.TABLE_CELL);
+    console.assert(
+        inner.getParent().getParent().getParent().getParent().getParent().getType()
+            === DocumentApp.ElementType.TABLE);
+    console.assert(
+        inner.getParent().getParent().getParent().getParent().getParent().getParent().getType()
+            === DocumentApp.ElementType.BODY_SECTION);
+
     // A table cell that has already been read sees the changes made since through another object
     // for the same cell, here clearing it, which leaves one empty paragraph:
     console.assert(cell.getNumChildren() > 1);
