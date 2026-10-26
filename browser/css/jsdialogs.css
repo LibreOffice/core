@@ -4372,6 +4372,15 @@ kbd,
 	background: rgba(var(--doc-type), 0.25);
 }
 
+/* The selection of the editor while its context menu has the focus. It has the fill of the
+   selection above. */
+/* stylelint does not know the ::highlight pseudo yet. */
+/* stylelint-disable selector-pseudo-element-no-unknown */
+::highlight(editengine-menu-selection) {
+	background: rgba(var(--doc-type), 0.25);
+}
+/* stylelint-enable selector-pseudo-element-no-unknown -- turn the check back on */
+
 .ui-editengine .ui-editengine-paragraph {
 	min-height: 1.4em;
 	/* Each paragraph keeps the height of its text when the text is taller than the editor, and the

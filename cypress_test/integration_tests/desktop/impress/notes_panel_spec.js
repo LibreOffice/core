@@ -530,6 +530,43 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 		cy.cGet(paragraph).should('have.text', 'X');
 	});
 
+	it('the selected notes text stays marked while its context menu is open', function () {
+		var editEngine = '#notespanel-container .ui-editengine';
+		var paragraph = editEngine + ' .ui-editengine-paragraph';
+
+		// The marked text, or null when nothing is marked.
+		function markedText(win) {
+			var highlight = win.CSS.highlights.get('editengine-menu-selection');
+			if (!highlight) return null;
+			return Array.from(highlight.keys()).map(String).join('');
+		}
+
+		openNotesPane();
+		cy.cGet(editEngine).click();
+		cy.cGet(editEngine).type('Demo');
+		cy.cGet(paragraph).should('have.text', 'Demo');
+
+		cy.getFrameWindow().then(function (win) {
+			win.app.map.sendUnoCommand('.uno:SelectAll');
+			helper.processToIdle(win);
+		});
+
+		cy.cGet(editEngine).rightclick();
+		helper.getContextMenuItem('Cut').should('be.visible');
+		cy.getFrameWindow().then(function (win) {
+			helper.processToIdle(win);
+		});
+		cy.getFrameWindow().should(function (win) {
+			expect(markedText(win)).to.equal('Demo');
+		});
+
+		cy.cGet('#jsd-context-menu-dropdown-overlay').click();
+		cy.cGet('#jsd-context-menu-dropdown-overlay').should('not.exist');
+		cy.getFrameWindow().should(function (win) {
+			expect(markedText(win)).to.equal(null);
+		});
+	});
+
 	// Bold applies to the notes text while the notes have the focus, and the Bold button shows
 	// the attribute at the caret as the caret moves between a bold and a plain word.
 	it('the Bold button follows the caret in the notes', function () {

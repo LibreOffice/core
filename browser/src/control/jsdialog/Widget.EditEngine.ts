@@ -38,6 +38,10 @@ interface EditEngineContainer extends HTMLElement {
 	builder: JSBuilder;
 	editEngineHandlersAttached?: boolean;
 	onEditEngineUpdate?: (data: EditEngineWidgetJSON) => void;
+	// Takes true when a context menu for this widget opens and false when it closes.
+	onEditEngineMenu?: (open: boolean) => void;
+	// True while a context menu for this widget is open. The menu holds the focus then.
+	editEngineMenuOpen?: boolean;
 	// The selection the engine last reported or was last told about. A pointer gesture that lands
 	// on the same caret is not reported twice. Held on the element so it goes away when the widget
 	// does.
@@ -47,6 +51,9 @@ interface EditEngineContainer extends HTMLElement {
 }
 
 const EDITENGINE_PARAGRAPH_CLASS = 'ui-editengine-paragraph';
+
+/// The name of the highlight that marks the selection while a context menu holds the focus.
+const EDITENGINE_MENU_HIGHLIGHT = 'editengine-menu-selection';
 
 /// One outline level indents by this much.
 const EDITENGINE_DEPTH_INDENT_PX = 24;
@@ -144,8 +151,24 @@ function editEngineApplySelection(
 	// another field.
 	if (document.activeElement !== container) return;
 
+	const range = editEngineSelectionRange(container, selection);
+	if (!range) return;
+
+	JSDialog.ContentEditable.setCaretRange(
+		range.startContainer,
+		range.startOffset,
+		range.endContainer,
+		range.endOffset,
+	);
+}
+
+/// The DOM range that covers the selection, or null when the widget has no paragraphs.
+function editEngineSelectionRange(
+	container: HTMLElement,
+	selection: EditEngineSelection,
+): Range | null {
 	const paragraphs = editEngineParagraphElements(container);
-	if (!paragraphs.length) return;
+	if (!paragraphs.length) return null;
 
 	const clampPara = (para: number): number =>
 		Math.max(0, Math.min(para, paragraphs.length - 1));
@@ -158,12 +181,34 @@ function editEngineApplySelection(
 		paragraphs[clampPara(selection.endPara)],
 		selection.endIndex,
 	);
-	JSDialog.ContentEditable.setCaretRange(
-		startNode,
-		startOffset,
-		endNode,
-		endOffset,
-	);
+
+	const range = document.createRange();
+	try {
+		range.setStart(startNode, startOffset);
+		range.setEnd(endNode, endOffset);
+	} catch {
+		return null;
+	}
+	return range;
+}
+
+/// Marks the selection with a highlight, which shows without the focus and without a document
+/// selection, or removes the mark when the selection is null. Browsers without the CSS Custom
+/// Highlight API show no mark.
+function editEngineHighlightSelection(
+	container: HTMLElement,
+	selection: EditEngineSelection | null,
+): void {
+	const highlights = (window.CSS as any)?.highlights;
+	const Highlight = (window as any).Highlight;
+	if (!highlights || !Highlight) return;
+
+	const range = selection
+		? editEngineSelectionRange(container, selection)
+		: null;
+	if (range && !range.collapsed)
+		highlights.set(EDITENGINE_MENU_HIGHLIGHT, new Highlight(range));
+	else highlights.delete(EDITENGINE_MENU_HIGHLIGHT);
 }
 
 /// Drops the document selection when it lies in the container.
@@ -345,6 +390,8 @@ function editEngineAttachHandlers(container: EditEngineContainer): void {
 	// The widget shows no selection while it lacks the focus, so the engine's selection comes
 	// back with the focus. A click that gives the focus places its own caret after this.
 	container.addEventListener('focus', () => {
+		// With the focus, the document selection shows the selection, so the highlight goes.
+		editEngineHighlightSelection(container, null);
 		if (container.editEngineLastSelection)
 			editEngineApplySelection(container, container.editEngineLastSelection);
 		editEngineSendAction(container, 'focus', {});
@@ -561,6 +608,11 @@ function editEngineUpdateInPlace(
 	};
 	container.editEngineLastSelection = selection;
 
+	// An open context menu acts on the selection, so the selection stays marked while the menu is
+	// open. The menu can open while the widget still has the focus.
+	if (container.editEngineMenuOpen)
+		editEngineHighlightSelection(container, selection);
+
 	// The engine owns the caret, so its selection is applied as given. The container stays in the
 	// document across the update, so the caret can be placed at once with no wait for a frame.
 	if (document.activeElement === container) {
@@ -609,6 +661,16 @@ function _editEngineControl(
 
 	container.onEditEngineUpdate = (updateData: EditEngineWidgetJSON) =>
 		editEngineUpdateInPlace(container, updateData);
+
+	container.onEditEngineMenu = (open: boolean) => {
+		container.editEngineMenuOpen = open;
+		// The menu takes the focus, so the selection the engine last reported is marked as it
+		// opens.
+		editEngineHighlightSelection(
+			container,
+			open ? container.editEngineLastSelection || null : null,
+		);
+	};
 
 	// The engine owns the caret. Whatever it says is where the caret goes, with no local guess
 	// about where a keystroke will have moved it.

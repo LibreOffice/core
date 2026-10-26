@@ -200,6 +200,9 @@ class ContextMenuControl extends JSControl {
 		menuPosEl.style.zIndex = '1500';
 		menuPosEl.style.left = position.x + 'px';
 		menuPosEl.style.top = position.y + 'px';
+		// An editengine widget is told when its menu opens and when it closes.
+		const onEditEngineMenu = (this._editEngine as any)?.onEditEngineMenu;
+		(menuPosEl as any)._onDropDown = onEditEngineMenu || null;
 		const entries = this._getMenuEntries(contextMenu);
 		const callback = (
 			objectType: string,
