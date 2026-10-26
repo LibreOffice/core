@@ -24,6 +24,8 @@
 #include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 
+#include <memory>
+
 namespace sd {
 
 
@@ -46,24 +48,34 @@ rtl::Reference<FuPoor> FuConnectionDlg::Create( ViewShell& rViewSh, ::sd::Window
 
 void FuConnectionDlg::DoExecute( SfxRequest& rReq )
 {
-    SfxItemSet aNewAttr( mrDoc.GetPool() );
-    mpView->GetAttributes( aNewAttr );
-
-    const SfxItemSet* pArgs = rReq.GetArgs();
-
-    if( !pArgs )
+    if (const SfxItemSet* pArgs = rReq.GetArgs())
     {
-        SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
-        ScopedVclPtr<SfxAbstractDialog> pDlg(pFact->CreateSfxDialog(rReq.GetFrameWeld(), aNewAttr, mpView, RID_SVXPAGE_CONNECTION));
-
-        if( pDlg->Execute() == RET_OK )
-        {
-            rReq.Done( *pDlg->GetOutputItemSet() );
-            pArgs = rReq.GetArgs();
-        }
-    }
-    if( pArgs )
         mpView->SetAttributes( *pArgs );
+        return;
+    }
+
+    // The dialog reads the attributes from the set while it runs, so the set lives as long as the
+    // dialog does.
+    auto xNewAttr = std::make_shared<SfxItemSet>(mrDoc.GetPool());
+    mpView->GetAttributes( *xNewAttr );
+
+    SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+    VclPtr<SfxAbstractDialog> pDlg(
+        pFact->CreateSfxDialog(rReq.GetFrameWeld(), *xNewAttr, mpView, RID_SVXPAGE_CONNECTION));
+
+    auto xRequest = std::make_shared<SfxRequest>(rReq);
+    rtl::Reference<FuConnectionDlg> xThis(this); // the function is needed until the dialog ends
+    pDlg->StartExecuteAsync(
+        [pDlg, xNewAttr, xRequest = std::move(xRequest),
+         xThis = std::move(xThis)](sal_Int32 nResult)
+        {
+            if (nResult == RET_OK)
+            {
+                xRequest->Done(*pDlg->GetOutputItemSet());
+                xThis->mpView->SetAttributes(*xRequest->GetArgs());
+            }
+            pDlg->disposeOnce();
+        });
 }
 
 } // end of namespace sd
