@@ -676,7 +676,7 @@ bool ScDocument::LinkExternalTab( SCTAB& rTab, const OUString& aDocTab,
     // stays empty.
     std::optional<ScDocumentLoader> oLoader;
     if (mpShell && mpShell->GetEmbeddedObjectContainer().getUserAllowsLinkUpdate()
-        && !HostFilter::isFileUrlForbidden(aFileName))
+        && !HostFilter::isUrlForbidden(aFileName))
         oLoader.emplace(aFileName, aFilterName, aOptions, nLinkCnt + 1);
     ScDocument* pSrcDoc = (oLoader && !oLoader->IsError()) ? oLoader->GetDocument() : nullptr;
 
