@@ -1125,8 +1125,10 @@ void RtfAttributeOutput::TableDefinition(
     TableHeight(pTableTextNodeInfoInner);
     TableCanSplit(pTableTextNodeInfoInner);
 
-    // Write table positioning properties in case this is a floating table.
-    TablePositioning(pTable->GetTableNode()->GetFlyFormat());
+    // Write table positioning properties in case this is a floating table. Tables nested in it
+    // are not positioned.
+    if (pTableTextNodeInfoInner->getDepth() == 1)
+        TablePositioning(pTable->GetTableNode()->GetFlyFormat());
 
     // Cell margins
     const SvxBoxItem& rBox = pFormat->GetBox();

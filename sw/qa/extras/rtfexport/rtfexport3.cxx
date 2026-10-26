@@ -921,6 +921,45 @@ CPPUNIT_TEST_FIXTURE(Test, testFloattableOverlapNeverRTFExport)
     CPPUNIT_ASSERT(!pFly->GetAttrSet().GetWrapInfluenceOnObjPos().GetAllowOverlap());
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testFloattableNestedTableRTFExport)
+{
+    // Given a floating table with a table nested in its cell:
+    {
+        createSwDoc();
+        SwDoc* pDoc = getSwDoc();
+        SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+        pWrtShell->Insert2(u"before table"_ustr);
+        SwInsertTableOptions aTableOptions(SwInsertTableFlags::DefaultBorder, 0);
+        pWrtShell->InsertTable(aTableOptions, /*nRows=*/1, /*nCols=*/1);
+        pWrtShell->MoveTable(GotoPrevTable, fnTableStart);
+        pWrtShell->SelAll();
+        SwFlyFrameAttrMgr aMgr(true, pWrtShell, Frmmgr_Type::TEXT, nullptr);
+        pWrtShell->StartAllAction();
+        aMgr.InsertFlyFrame(RndStdIds::FLY_AT_PARA, aMgr.GetPos(), aMgr.GetSize());
+        pWrtShell->EndAllAction();
+        sw::SpzFrameFormat* pFly = (*pDoc->GetSpzFrameFormats())[0];
+        SwAttrSet aSet(pFly->GetAttrSet());
+        aSet.Put(SwFormatFlySplit(true));
+        pDoc->SetAttr(aSet, *pFly);
+        pWrtShell->GotoTable(UIName(u"Table1"_ustr));
+        pWrtShell->InsertTable(aTableOptions, /*nRows=*/1, /*nCols=*/1);
+    }
+
+    // When saving to RTF and loading it back:
+    saveAndReload(TestFilter::RTF);
+
+    // Then the nested table is still there, in the floating table's cell:
+    uno::Reference<text::XTextTablesSupplier> xSupplier(mxComponent, uno::UNO_QUERY_THROW);
+    uno::Reference<container::XIndexAccess> xTables(xSupplier->getTextTables(),
+                                                    uno::UNO_QUERY_THROW);
+    // Without the accompanying fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 1
+    // i.e. the nested table was written with the floating table's position and was lost on import.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xTables->getCount());
+    CPPUNIT_ASSERT_EQUAL(static_cast<size_t>(1), getSwDoc()->GetSpzFrameFormats()->size());
+}
+
 CPPUNIT_TEST_FIXTURE(Test, testTdf158409)
 {
     auto verify = [this]() {
