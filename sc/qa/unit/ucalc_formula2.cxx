@@ -417,6 +417,14 @@ CPPUNIT_TEST_FIXTURE(TestFormula2, testOOXMLFunctionWithoutPrefix)
                        formula::FormulaGrammar::GRAM_OOXML);
     CPPUNIT_ASSERT_EQUAL(-4.0, m_pDoc->GetValue(ScAddress(0, 2, 0)));
 
+    // FILTER and SORT carry _xlfn._xlws. and resolve when written bare too.
+    m_pDoc->SetFormula(ScAddress(2, 0, 0), u"=SORT({3;1;2})"_ustr,
+                       formula::FormulaGrammar::GRAM_OOXML);
+    CPPUNIT_ASSERT_EQUAL(1.0, m_pDoc->GetValue(ScAddress(2, 0, 0)));
+    m_pDoc->SetFormula(ScAddress(3, 0, 0), u"=FILTER({1;2;3},{1;2;3}>2)"_ustr,
+                       formula::FormulaGrammar::GRAM_OOXML);
+    CPPUNIT_ASSERT_EQUAL(3.0, m_pDoc->GetValue(ScAddress(3, 0, 0)));
+
     // A defined name that matches a function name, used without a call, still resolves to the
     // name.
     m_pDoc->SetString(ScAddress(1, 0, 0), u"7"_ustr);
