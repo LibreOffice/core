@@ -1645,23 +1645,43 @@ int StreamSocket::readIncomingData()
     else
     {
         LOG_TRC("readIncomingData #" << getFD());
-        ssize_t available = fakeSocketAvailableDataLength(getFD());
-        if (available == -1)
-            len = -1;
-        else if (available == 0)
-            len = 0;
-        else
+        // The fake socket holds records and gives one record per read, so read until it is
+        // empty, like the loop above does for a real socket. A record from a real socket is a
+        // WebSocket message with its own length header, but a fake socket record has none, so
+        // each one gets its length in front of it. The result is the number of bytes read, -1
+        // with errno when the first read found nothing, and 0 when one side has shut down.
+        std::vector<char> buf;
+        for (;;)
         {
-            std::vector<char> buf(available);
-            len = readData(buf.data(), available);
-            assert(len == available);
-            notifyBytesRcvd(len);
-            // It might happen that several messages need to be buffered if they arrive quicker
-            // than we can handle them. In the non-MOBILEAPP case they are WebSocket messages so
-            // they already contain a header indicating their length. Not so in the MOBILEAPP
-            // case, so prefix them with a length header.
-            _inBuffer.append(reinterpret_cast<const char*>(&len), sizeof(ssize_t));
-            _inBuffer.append(buf.data(), len);
+            const ssize_t available = fakeSocketAvailableDataLength(getFD());
+            if (available <= 0)
+            {
+                if (len == 0)
+                    len = available;
+                break;
+            }
+
+            buf.resize(available);
+            const ssize_t read = readData(buf.data(), available);
+            if (read != available)
+            {
+                // Our side is shut down, so the read returns 0 and the record stays in the
+                // fake socket.
+                if (len == 0)
+                    len = read;
+                break;
+            }
+
+            notifyBytesRcvd(read);
+            _inBuffer.append(reinterpret_cast<const char*>(&read), sizeof(ssize_t));
+            _inBuffer.append(buf.data(), read);
+            len += read;
+
+            // A socket that is not a WebSocket yet is still in its handshake, and the handshake
+            // is one record, so stop here and leave the records behind it in the fake socket
+            // until the next poll.
+            if (!isWebSocket())
+                break;
         }
     }
 
