@@ -57,8 +57,10 @@ One-time setup for the Google side:
      1. Open the script URL printed by the first run.
      2. Click the gear icon in the left rail ("Project Settings").
      3. Under "Google Cloud Platform (GCP) Project" click "Change
-        project" and enter your project NUMBER (not id -- find it at
-        the top of  https://console.cloud.google.com/home/dashboard?project=PROJECT_ID  ).
+        project" and enter the project number that the first run
+        prints (not the project id).  It is the digits before the
+        first "-" of the client_id in client.json, as an OAuth client
+        id starts with the number of the project that owns it.
      4. "Set project".  This pairing sticks with the script, so this
         step is one-time-per-cache-lifetime rather than per-run.
 
@@ -102,6 +104,12 @@ def load_state(state_file):
 
 def save_state(state_file, s):
     state_file.write_text(json.dumps(s, indent=2))
+
+
+def gcp_project_number(state_dir):
+    """The number of the GCP project that owns the OAuth client, which starts its client id."""
+    client = json.loads((state_dir / "client.json").read_text())
+    return next(iter(client.values()))["client_id"].split("-", 1)[0]
 
 
 # The fixture of a Doc test is RTF and the fixture of a presentation test is PPTX.  Each entry
@@ -288,8 +296,9 @@ def main():
         print("Script:       https://script.google.com/d/" + script_id + "/edit")
         print()
         print(
-            "Now pair the script's GCP project once (see step 2 in the"
-            " header of this script), then rerun."
+            "Now pair the script with GCP project number "
+            + gcp_project_number(args.state_dir)
+            + " once (see step 2 in the header of this script), then rerun."
         )
         return 2
 
