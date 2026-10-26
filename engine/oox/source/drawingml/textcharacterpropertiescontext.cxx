@@ -59,6 +59,7 @@ TextCharacterPropertiesContext::TextCharacterPropertiesContext(
     }
     if ( rAttribs.hasAttribute( XML_altLang ))
     {
+        mrTextCharacterProperties.moAltLang = rAttribs.getString( XML_altLang );
         --nVisualTokenAmount; // Not a visual attribute
     }
     if ( rAttribs.hasAttribute( XML_sz ) )
@@ -92,7 +93,6 @@ TextCharacterPropertiesContext::TextCharacterPropertiesContext(
 
     /* TODO / unhandled so far:
        A_TOKEN( kern )
-       XML_altLang
        A_TOKEN( kumimoji )
        A_TOKEN( spc )
        A_TOKEN( normalizeH )

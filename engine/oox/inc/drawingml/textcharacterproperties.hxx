@@ -47,6 +47,7 @@ struct TextCharacterProperties
     model::ComplexColor maUnderlineColor;
     model::ComplexColor maHighlightColor;
     std::optional< OUString > moLang;
+    std::optional< OUString > moAltLang;
     std::optional< sal_Int32 > moHeight;
     /// If a font scale has to be applied manually to moHeight.
     std::optional< double > moFontScale;

@@ -795,6 +795,27 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testUprightTextStaysUpright)
                          xUpright->getPropertyValue(u"CharPosture"_ustr).get<awt::FontSlant>());
 }
 
+// A run keeps both of the languages it names.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testRunKeepsBothOfItsLanguages)
+{
+    // Given a run naming English for the text it holds and Japanese beside it:
+    createSdImpressDoc("pptx/two-languages.pptx");
+
+    saveAndReload(TestFilter::PPTX);
+
+    // Without the fix in place, the saved file named the English alone, so the eastern language
+    // came back as the one the program falls back to.
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
+    uno::Reference<beans::XPropertySet> xRun(
+        getRunFromParagraph(0, getParagraphFromShape(0, xShape)), uno::UNO_QUERY_THROW);
+    lang::Locale aWestern;
+    xRun->getPropertyValue(u"CharLocale"_ustr) >>= aWestern;
+    CPPUNIT_ASSERT_EQUAL(u"en"_ustr, aWestern.Language);
+    lang::Locale aEastern;
+    xRun->getPropertyValue(u"CharLocaleAsian"_ustr) >>= aEastern;
+    CPPUNIT_ASSERT_EQUAL(u"ja"_ustr, aEastern.Language);
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

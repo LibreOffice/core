@@ -59,6 +59,7 @@ void TextCharacterProperties::assignUsed( const TextCharacterProperties& rSource
     maUnderlineColor.assignIfUsed( rSourceProps.maUnderlineColor );
     maUnderlineOOXColor.assignIfUsed( rSourceProps.maUnderlineOOXColor );
     assignIfUsed( moLang, rSourceProps.moLang );
+    assignIfUsed( moAltLang, rSourceProps.moAltLang );
     assignIfUsed( moHeight, rSourceProps.moHeight );
     assignIfUsed( moFontScale, rSourceProps.moFontScale);
     assignIfUsed( moSpacing, rSourceProps.moSpacing );
@@ -164,9 +165,9 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
         }
     }
 
-    if( moLang.has_value() && !moLang.value().isEmpty() )
+    auto setLanguage = [&rPropMap](const OUString& rName)
     {
-        LanguageTag aTag(moLang.value());
+        LanguageTag aTag(rName);
         lang::Locale aLocale(aTag.getLocale());
         switch(MsLangId::getScriptType(aTag.getLanguageType()))
         {
@@ -177,7 +178,15 @@ void TextCharacterProperties::pushToPropMap( PropertyMap& rPropMap, const XmlFil
             case css::i18n::ScriptType::COMPLEX:
                 rPropMap.setProperty( PROP_CharLocaleComplex, aLocale);break;
         }
-    }
+    };
+
+    // Each of the two languages a run names is taken for the script that language belongs to.
+    // The alternate one goes first, so a run naming one script twice keeps the language it
+    // gives its own text.
+    if( moAltLang.has_value() && !moAltLang.value().isEmpty() )
+        setLanguage( moAltLang.value() );
+    if( moLang.has_value() && !moLang.value().isEmpty() )
+        setLanguage( moLang.value() );
 
     if( moHeight.has_value() )
     {

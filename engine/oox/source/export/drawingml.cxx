@@ -45,6 +45,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
 #include <i18nlangtag/languagetag.hxx>
+#include <i18nlangtag/mslangid.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/range/b2drange.hxx>
 #include <basegfx/utils/gradienttools.hxx>
@@ -2740,24 +2741,47 @@ void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int3
         }
     }
 
-    bool bLang = false;
-    switch (rRunInput.nScriptType)
+    // A run names the language of the script its own text is written in, and beside it one of
+    // the two languages left. A language the program falls back to for a script of its own is
+    // not one the document states, so the second name passes over such a language.
+    OUString usAltLanguage;
     {
-        case css::i18n::ScriptType::ASIAN:
-            bLang = GetProperty(rXPropSet, u"CharLocaleAsian"_ustr); break;
-        case css::i18n::ScriptType::COMPLEX:
-            bLang = GetProperty(rXPropSet, u"CharLocaleComplex"_ustr); break;
-        default:
-            bLang = GetProperty(rXPropSet, u"CharLocale"_ustr); break;
-    }
-
-    if (bLang)
-    {
-        css::lang::Locale aLocale;
-        mAny >>= aLocale;
-        LanguageTag aLanguageTag( aLocale);
-        if (!aLanguageTag.isSystemLocale())
-            usLanguage = aLanguageTag.getBcp47MS();
+        const struct
+        {
+            sal_Int16 nScript;
+            OUString aProperty;
+        } aLanguages[]
+            = { { css::i18n::ScriptType::LATIN, u"CharLocale"_ustr },
+                { css::i18n::ScriptType::ASIAN, u"CharLocaleAsian"_ustr },
+                { css::i18n::ScriptType::COMPLEX, u"CharLocaleComplex"_ustr } };
+        const sal_Int16 nOwnScript
+            = (rRunInput.nScriptType == css::i18n::ScriptType::ASIAN
+               || rRunInput.nScriptType == css::i18n::ScriptType::COMPLEX)
+                  ? rRunInput.nScriptType
+                  : sal_Int16(css::i18n::ScriptType::LATIN);
+        for (auto const& rLanguage : aLanguages)
+        {
+            if (!GetProperty(rXPropSet, rLanguage.aProperty))
+                continue;
+            css::lang::Locale aLocale;
+            mAny >>= aLocale;
+            const LanguageTag aLanguageTag(aLocale);
+            if (aLanguageTag.isSystemLocale())
+                continue;
+            if (rLanguage.nScript == nOwnScript)
+            {
+                usLanguage = aLanguageTag.getBcp47MS();
+                continue;
+            }
+            if (!usAltLanguage.isEmpty())
+                continue;
+            if (rLanguage.nScript != css::i18n::ScriptType::LATIN
+                && aLanguageTag.getLanguageType()
+                       == MsLangId::resolveSystemLanguageByScriptType(LANGUAGE_SYSTEM,
+                                                                      rLanguage.nScript))
+                continue;
+            usAltLanguage = aLanguageTag.getBcp47MS();
+        }
     }
 
     if (rRunInput.bCheckDirect && GetDirectProperty(rXPropSet, rXPropState, u"CharEscapement"_ustr))
@@ -2806,14 +2830,19 @@ void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int3
     // The data model of a Diagram defines the language, also holds no paragraph properties
     if (isDiagramModelTextExport())
     {
-        mpFS->singleElementNS(XML_a, nElement, XML_lang,
-                              sax_fastparser::UseIf(usLanguage, !usLanguage.isEmpty()));
+        mpFS->singleElementNS(
+            XML_a, nElement, XML_lang,
+            sax_fastparser::UseIf(usLanguage, !usLanguage.isEmpty()), XML_altLang,
+            sax_fastparser::UseIf(usAltLanguage, !usAltLanguage.isEmpty()));
         return;
     }
 
     mpFS->startElementNS( XML_a, nElement,
                           XML_lang, sax_fastparser::UseIf(usLanguage, !usLanguage.isEmpty()
                                                                          && !rRunInput.bIsLevelDefault),
+                          XML_altLang, sax_fastparser::UseIf(usAltLanguage,
+                                                             !usAltLanguage.isEmpty()
+                                                                 && !rRunInput.bIsLevelDefault),
                           XML_sz, OString::number(nSize),
                           XML_b, bold,
                           XML_i, italic,
