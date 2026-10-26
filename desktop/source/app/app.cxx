@@ -29,8 +29,10 @@
 
 #include <sal/config.h>
 
+#if HAVE_FEATURE_UI && !ENABLE_WASM_STRIP_SPLASH
 #include <splash/splash.hxx>
 #include <splash/unxsplash.hxx>
+#endif
 
 #include <cstdlib>
 #include <iostream>
@@ -2510,7 +2512,7 @@ void Desktop::HandleAppEvent( const ApplicationEvent& rAppEvent )
 
 void Desktop::OpenSplashScreen()
 {
-#if !ENABLE_WASM_STRIP_SPLASH
+#if HAVE_FEATURE_UI && !ENABLE_WASM_STRIP_SPLASH
     const CommandLineArgs &rCmdLine = GetCommandLineArgs();
     // Show intro only if this is normal start (e.g. no server, no quickstart, no printing )
     if ( !(!rCmdLine.IsInvisible() &&
