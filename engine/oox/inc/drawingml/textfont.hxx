@@ -57,6 +57,10 @@ public:
 
     static void resolvePitch(sal_Int32 nOoxPitch, sal_Int16& rnFontPitch, sal_Int16& rnFontFamily);
 
+    /** Returns the pitch and the family of a font as the one number the format states them in,
+        which is zero where the font is of neither a known pitch nor a known family. */
+    static sal_Int32 makePitchFamily(sal_Int16 nFontPitch, sal_Int16 nFontFamily);
+
 private:
     bool                implGetFontData(
                             OUString& rFontName,

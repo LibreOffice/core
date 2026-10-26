@@ -33,6 +33,7 @@
 #include <drawingml/fillproperties.hxx>
 #include <drawingml/fontworkhelpers.hxx>
 #include <drawingml/textparagraph.hxx>
+#include <drawingml/textfont.hxx>
 #include <oox/token/namespaces.hxx>
 #include <oox/token/properties.hxx>
 #include <oox/token/relationship.hxx>
@@ -59,6 +60,8 @@
 
 #include <com/sun/star/awt/CharSet.hpp>
 #include <com/sun/star/awt/FontDescriptor.hpp>
+#include <com/sun/star/awt/FontFamily.hpp>
+#include <com/sun/star/awt/FontPitch.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/FontStrikeout.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
@@ -363,6 +366,18 @@ bool DrawingML::GetDirectProperty(
     PropertyState state;
     return GetPropertyAndState(rXPropSet, rXPropState, aName, state)
            && state == beans::PropertyState_DIRECT_VALUE;
+}
+
+sal_Int32 DrawingML::GetFontPitchFamily(const cpo::uno::Reference<beans::XPropertySet>& rXPropSet,
+                                        const OUString& rPitchName, const OUString& rFamilyName)
+{
+    sal_Int16 nFontPitch = awt::FontPitch::DONTKNOW;
+    if (GetProperty(rXPropSet, rPitchName))
+        mAny >>= nFontPitch;
+    sal_Int16 nFontFamily = awt::FontFamily::DONTKNOW;
+    if (GetProperty(rXPropSet, rFamilyName))
+        mAny >>= nFontFamily;
+    return TextFont::makePitchFamily(nFontPitch, nFontFamily);
 }
 
 namespace
@@ -2936,8 +2951,6 @@ void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int3
 
     if (GetProperty(xCharAttrSource, u"CharFontName"_ustr))
     {
-        const char* const pitch = nullptr;
-        const char* const charset = nullptr;
         OUString usTypeface;
 
         mAny >>= usTypeface;
@@ -2949,10 +2962,13 @@ void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int3
                 usTypeface = aSubstName;
         }
 
+        sal_Int32 nPitchFamily
+            = GetFontPitchFamily(rXPropSet, u"CharFontPitch"_ustr, u"CharFontFamily"_ustr);
         mpFS->singleElementNS( XML_a, XML_latin,
                                XML_typeface, usTypeface,
-                               XML_pitchFamily, pitch,
-                               XML_charset, charset );
+                               XML_pitchFamily,
+                               sax_fastparser::UseIf(OString::number(nPitchFamily),
+                                                     nPitchFamily != 0) );
     }
 
     // the Asian and complex fonts of a Fontwork are the shape's as well
@@ -2964,8 +2980,6 @@ void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int3
                                     bComplex ? u"CharFontNameComplex"_ustr
                                              : u"CharFontNameAsian"_ustr)))
     {
-        const char* const pitch = nullptr;
-        const char* const charset = nullptr;
         OUString usTypeface;
 
         mAny >>= usTypeface;
@@ -2975,10 +2989,14 @@ void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int3
             if (!aSubstName.isEmpty())
                 usTypeface = aSubstName;
         }
+        sal_Int32 nPitchFamily = GetFontPitchFamily(
+            rXPropSet, bComplex ? u"CharFontPitchComplex"_ustr : u"CharFontPitchAsian"_ustr,
+            bComplex ? u"CharFontFamilyComplex"_ustr : u"CharFontFamilyAsian"_ustr);
         mpFS->singleElementNS( XML_a, bComplex ? XML_cs : XML_ea,
                                XML_typeface, usTypeface,
-                               XML_pitchFamily, pitch,
-                               XML_charset, charset );
+                               XML_pitchFamily,
+                               sax_fastparser::UseIf(OString::number(nPitchFamily),
+                                                     nPitchFamily != 0) );
     }
 
     if (rRunInput.bIsField)

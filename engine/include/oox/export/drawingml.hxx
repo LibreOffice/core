@@ -349,6 +349,10 @@ protected:
     bool GetDirectProperty(const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet,
                            const cpo::uno::Reference<css::beans::XPropertyState>& rXPropState,
                            const OUString& aName);
+    /** Returns the pitch and the family a text holds, as the one number the format states them
+        in, taking the two named properties. It is zero where the text holds neither. */
+    sal_Int32 GetFontPitchFamily(const cpo::uno::Reference<css::beans::XPropertySet>& rXPropSet,
+                                 const OUString& rPitchName, const OUString& rFamilyName);
     OUString GetFieldValue( const cpo::uno::Reference< css::text::XTextRange >& rRun, bool& bIsURLField );
     /** Gets OOXML datetime field type from LO Date format
 

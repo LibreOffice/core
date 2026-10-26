@@ -37,6 +37,8 @@
 #include <vcl/themecolors.hxx>
 #include <xmloff/autolayout.hxx>
 
+#include <com/sun/star/awt/FontFamily.hpp>
+#include <com/sun/star/awt/FontPitch.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/drawing/EnhancedCustomShapeParameterPair.hpp>
 #include <com/sun/star/drawing/FillStyle.hpp>
@@ -686,6 +688,43 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testParagraphEndsInTheSizeOfItsLastBrea
     xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
     assertXPath(pXmlDoc, "//p:sp/p:txBody/a:p/a:br/a:rPr", "sz", u"2800");
     assertXPath(pXmlDoc, "//p:sp/p:txBody/a:p/a:endParaRPr", "sz", u"2800");
+}
+
+// A font keeps the pitch and the family it is classified by across a round trip.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testFontKeepsItsPitchAndFamily)
+{
+    // Given one paragraph in a fixed pitch font of the modern family and one in a variable pitch
+    // font of the swiss family:
+    createSdImpressDoc("pptx/font-pitch-family.pptx");
+
+    saveAndReload(TestFilter::PPTX);
+
+    // Without the fix in place, this test would have failed with:
+    // - Expected: 2
+    // - Actual  : 0
+    // i.e. the saved file stated no classification at all and both fonts came back unknown.
+    uno::Reference<beans::XPropertySet> xShape(getShapeFromPage(0, 0));
+    uno::Reference<beans::XPropertySet> xFixed(
+        getRunFromParagraph(0, getParagraphFromShape(0, xShape)), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(awt::FontPitch::FIXED,
+                         xFixed->getPropertyValue(u"CharFontPitch"_ustr).get<sal_Int16>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::FontFamily::MODERN),
+                         xFixed->getPropertyValue(u"CharFontFamily"_ustr).get<sal_Int16>());
+
+    uno::Reference<beans::XPropertySet> xVariable(
+        getRunFromParagraph(0, getParagraphFromShape(1, xShape)), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(awt::FontPitch::VARIABLE,
+                         xVariable->getPropertyValue(u"CharFontPitch"_ustr).get<sal_Int16>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::FontFamily::SWISS),
+                         xVariable->getPropertyValue(u"CharFontFamily"_ustr).get<sal_Int16>());
+
+    // The eastern font of the third paragraph keeps its own classification the same way.
+    uno::Reference<beans::XPropertySet> xEastern(
+        getRunFromParagraph(0, getParagraphFromShape(2, xShape)), uno::UNO_QUERY_THROW);
+    CPPUNIT_ASSERT_EQUAL(awt::FontPitch::FIXED,
+                         xEastern->getPropertyValue(u"CharFontPitchAsian"_ustr).get<sal_Int16>());
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(awt::FontFamily::ROMAN),
+                         xEastern->getPropertyValue(u"CharFontFamilyAsian"_ustr).get<sal_Int16>());
 }
 
 CPPUNIT_PLUGIN_IMPLEMENT();

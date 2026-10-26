@@ -46,6 +46,31 @@ sal_Int16 lclGetFontFamily( sal_Int32 nOoxValue )
     return STATIC_ARRAY_SELECT( spnFontFamily, nOoxValue, DONTKNOW );
 }
 
+sal_Int32 lclGetOoxFontPitch( sal_Int16 nFontPitch )
+{
+    using namespace ::com::sun::star::awt::FontPitch;
+    switch( nFontPitch )
+    {
+        case FIXED: return 1;
+        case VARIABLE: return 2;
+        default: return 0;
+    }
+}
+
+sal_Int32 lclGetOoxFontFamily( sal_Int16 nFontFamily )
+{
+    using namespace ::com::sun::star::awt::FontFamily;
+    switch( nFontFamily )
+    {
+        case ROMAN: return 1;
+        case SWISS: return 2;
+        case MODERN: return 3;
+        case SCRIPT: return 4;
+        case DECORATIVE: return 5;
+        default: return 0;
+    }
+}
+
 } // namespace
 
 TextFont::TextFont() :
@@ -105,6 +130,11 @@ void TextFont::resolvePitch(sal_Int32 nOoxPitchFamily, sal_Int16& rnFontPitch, s
 {
     rnFontPitch = lclGetFontPitch(extractValue<sal_Int16>(nOoxPitchFamily, 0, 4));
     rnFontFamily = lclGetFontFamily(extractValue<sal_Int16>(nOoxPitchFamily, 4, 4));
+}
+
+sal_Int32 TextFont::makePitchFamily(sal_Int16 nFontPitch, sal_Int16 nFontFamily)
+{
+    return (lclGetOoxFontFamily(nFontFamily) << 4) | lclGetOoxFontPitch(nFontPitch);
 }
 
 
