@@ -19,6 +19,9 @@
 #include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextTable.hpp>
 #include <com/sun/star/text/XTextEmbeddedObjectsSupplier.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
+#include <com/sun/star/text/XTextDocument.hpp>
+#include <com/sun/star/text/XTextFrame.hpp>
 #include <com/sun/star/packages/zip/ZipFileAccess.hpp>
 
 #include <svtools/rtfkeywd.hxx>
@@ -183,6 +186,38 @@ CPPUNIT_TEST_FIXTURE(HtmlExportTest, testExportOfImagesWithSkipImagesEnabled)
 
     assertXPath(pDoc, "/html/body", 1);
     assertXPath(pDoc, "/html/body/p/img", 0);
+}
+
+CPPUNIT_TEST_FIXTURE(HtmlExportTest, testSkipFrames)
+{
+    // Given a picture anchored as a character and a text frame anchored to a character:
+    createSwDoc("textAndImage.docx");
+    uno::Reference<beans::XPropertySet>(getShape(1), uno::UNO_QUERY_THROW)
+        ->setPropertyValue(u"AnchorType"_ustr, uno::Any(text::TextContentAnchorType_AS_CHARACTER));
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xBody = xTextDocument->getText();
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextFrame> xFrame(
+        xFactory->createInstance(u"com.sun.star.text.TextFrame"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet>(xFrame, uno::UNO_QUERY_THROW)
+        ->setPropertyValue(u"AnchorType"_ustr, uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+    xBody->insertTextContent(xBody->getEnd(), xFrame, false);
+    xFrame->getText()->setString(u"At character"_ustr);
+
+    // When exporting to HTML without frames:
+    setFilterOptions(u"SkipFrames"_ustr);
+    save(TestFilter::HTML_WRITER);
+
+    // Then neither the picture nor the frame is there:
+    SvFileStream aStream(maTempFile.GetURL(), StreamMode::READ);
+    OStringBuffer aBuffer;
+    OString aLine;
+    while (aStream.ReadLine(aLine))
+        aBuffer.append(aLine);
+    const OString aHtml = aBuffer.makeStringAndClear();
+    CPPUNIT_ASSERT(aHtml.indexOf("<body") != -1);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aHtml.indexOf("<img"));
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), aHtml.indexOf("At character"));
 }
 
 CPPUNIT_TEST_FIXTURE(HtmlExportTest, testSkipHeaderFooterOmitsHeaderFooterContent)

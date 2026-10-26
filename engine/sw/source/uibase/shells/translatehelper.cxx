@@ -80,7 +80,10 @@ OString ExportPaMToHTML(SwPaM* pCursor)
     SolarMutexGuard gMutex;
     OString aResult;
     WriterRef xWrt;
-    GetHTMLWriter(u"NoLineLimit,SkipHeaderFooter,SkipHeaderFooterContent,NoPrettyPrint", OUString(), xWrt);
+    // The frames anchored in the text are translated as ranges of their own and
+    // stay where they are: pasted from the HTML, each would be there twice.
+    GetHTMLWriter(u"NoLineLimit,SkipHeaderFooter,SkipHeaderFooterContent,SkipFrames,NoPrettyPrint",
+                  OUString(), xWrt);
     if (pCursor != nullptr)
     {
         SvMemoryStream aMemoryStream;

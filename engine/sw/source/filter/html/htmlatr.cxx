@@ -3066,6 +3066,9 @@ static SwHTMLWriter& OutHTML_SwUnderline( SwHTMLWriter& rWrt, const SfxPoolItem&
 
 static SwHTMLWriter& OutHTML_SwFlyCnt( SwHTMLWriter& rWrt, const SfxPoolItem& rHt )
 {
+    if( rWrt.mbSkipFrames )
+        return rWrt;
+
     const SwFormatFlyCnt& rFlyCnt = static_cast<const SwFormatFlyCnt&>(rHt);
 
     const SwFrameFormat& rFormat = *rFlyCnt.GetFrameFormat();

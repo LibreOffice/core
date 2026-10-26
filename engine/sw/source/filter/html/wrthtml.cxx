@@ -152,6 +152,7 @@ SwHTMLWriter::SwHTMLWriter( const OUString& rBaseURL, std::u16string_view rFilte
     , m_bPreserveForm( false )
     , m_bCfgNetscape4( false )
     , mbSkipImages(false)
+    , mbSkipFrames(false)
     , mbSkipHeaderFooter(false)
     , mbSkipHeaderFooterContent(false)
     , mbEmbedImages(false)
@@ -228,6 +229,10 @@ void SwHTMLWriter::SetupFilterOptions(std::u16string_view rFilterOptions)
         {
             aStoreMap[u"XHTML"_ustr] <<= true;
         }
+        else if (rOption == "SkipFrames")
+        {
+            aStoreMap[u"SkipFrames"_ustr] <<= true;
+        }
         else if (OUString aNamespace; rOption.startsWith("xhtmlns=", &aNamespace))
         {
             aStoreMap[u"XhtmlNs"_ustr] <<= aNamespace;
@@ -294,6 +299,14 @@ void SwHTMLWriter::SetupFilterFromPropertyValues(
         bool bVal{};
         it->second >>= bVal;
         mbSkipImages = bVal;
+    }
+
+    it = aStoreMap.find(u"SkipFrames"_ustr);
+    if (it != aStoreMap.end())
+    {
+        bool bVal{};
+        it->second >>= bVal;
+        mbSkipFrames = bVal;
     }
 
     it = aStoreMap.find(u"SkipHeaderFooter"_ustr);

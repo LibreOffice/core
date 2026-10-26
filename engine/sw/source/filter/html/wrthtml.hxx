@@ -406,6 +406,8 @@ public:
     bool m_bCfgNetscape4 : 1;         // Netscape4 hacks
 
     bool mbSkipImages : 1;
+    /// If the frames, pictures and drawing objects anchored in the text are left out.
+    bool mbSkipFrames : 1;
     /// If HTML header and footer should be written as well, or just the content itself.
     bool mbSkipHeaderFooter : 1;
     /// If the Writer document page header/footer content should be written.

@@ -290,6 +290,10 @@ SwHTMLFrameType SwHTMLWriter::GuessFrameType( const SwFrameFormat& rFrameFormat,
 
 void SwHTMLWriter::CollectFlyFrames()
 {
+    // Only the text is written, none of the frames anchored in it.
+    if (mbSkipFrames)
+        return;
+
     SwPosFlyFrames aFlyPos(
         m_pDoc->GetAllFlyFormats(m_bWriteAll ? nullptr : m_pCurrentPam.get(),
                 /*bDrawAlso=*/true, /*bAsCharAlso=*/true));

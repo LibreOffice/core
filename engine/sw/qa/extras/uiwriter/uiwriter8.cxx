@@ -2102,6 +2102,52 @@ CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateFrameAsCharacter)
                          getProperty<text::TextContentAnchorType>(xFrame, u"AnchorType"_ustr));
 }
 
+CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateFrameAtCharacter)
+{
+    // The mock returns the markup it was sent, as the translation services do.
+    std::unique_ptr<test::MockHttpServer> pMockServer = createMockTranslateServer(false, true);
+    CPPUNIT_ASSERT(pMockServer->start());
+    comphelper::ScopeGuard<std::function<void()>> aResetConfig
+        = setTranslationService(u"http://127.0.0.1:18099/v2/translate"_ustr);
+
+    // Given a paragraph with a text frame anchored to a character in the middle of its text:
+    createSwDoc();
+    SwWrtShell* const pWrtSh = getSwDocShell()->GetWrtShell();
+    pWrtSh->Insert(u"Body text"_ustr);
+    uno::Reference<lang::XMultiServiceFactory> xFactory(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextFrame> xFrame(
+        xFactory->createInstance(u"com.sun.star.text.TextFrame"_ustr), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xFrameProperties(xFrame, uno::UNO_QUERY);
+    xFrameProperties->setPropertyValue(u"AnchorType"_ustr,
+                                       uno::Any(text::TextContentAnchorType_AT_CHARACTER));
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XText> xBody = xTextDocument->getText();
+    xBody->insertTextContent(xBody->getEnd(), xFrame, false);
+    xFrame->getText()->setString(u"Frame text"_ustr);
+    xFrame.clear();
+    pWrtSh->SttEndDoc(false);
+    pWrtSh->Insert(u" more text"_ustr);
+    pWrtSh->SttEndDoc(true);
+    uno::Reference<text::XTextFramesSupplier> xFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xFrames(xFramesSupplier->getTextFrames(),
+                                                    uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xFrames->getCount());
+
+    // When translating the whole document:
+    bool bCancel = false;
+    CPPUNIT_ASSERT(SwTranslateHelper::TranslateDocumentCancellable(*pWrtSh, "DE"_ostr, bCancel));
+
+    // Then the paragraph still has its one frame, anchored in it: the frame was kept, and the
+    // HTML of the paragraph's text made a copy of it.
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xFrames->getCount());
+    xFrame.set(xFrames->getByIndex(0), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(u"Frame text"_ustr, xFrame->getText()->getString());
+    CPPUNIT_ASSERT_EQUAL(text::TextContentAnchorType_AT_CHARACTER,
+                         getProperty<text::TextContentAnchorType>(xFrame, u"AnchorType"_ustr));
+    CPPUNIT_ASSERT_EQUAL(1, getParagraphs());
+    CPPUNIT_ASSERT_EQUAL(u"Body text more text"_ustr, getParagraph(1)->getString());
+}
+
 CPPUNIT_TEST_FIXTURE(SwUiWriterTest8, testTranslateKeepsSpaceAfterField)
 {
     // The mock returns the markup it was sent, as the translation services do.
