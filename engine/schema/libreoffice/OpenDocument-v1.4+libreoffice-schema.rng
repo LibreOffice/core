@@ -68,6 +68,12 @@ xmlns:coext="urn:com:collaboraoffice:names:experimental:office:xmlns:coext:1.0"
 
     <rng:define name="style-graphic-properties-attlist">
       <rng:interleave>
+        <!-- https://issues.oasis-open.org/browse/OFFICE-4142 -->
+        <rng:optional>
+          <rng:attribute name="draw:decorative">
+            <rng:ref name="boolean"/>
+          </rng:attribute>
+        </rng:optional>
         <rng:optional>
           <rng:attribute name="draw:stroke">
             <rng:choice>

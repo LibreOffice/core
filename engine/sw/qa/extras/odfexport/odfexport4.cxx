@@ -1975,6 +1975,20 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf173709HyperlinkTitle)
     assertXPath(pXmlDoc, "(//text:a)[2]", "name", u"anchor1");
 }
 
+CPPUNIT_TEST_FIXTURE(Test, testDecorativeODF14)
+{
+    // a text frame whose graphic style has the ODF 1.4 draw:decorative="true"
+    createSwDoc("decorative-odf14.fodt");
+    CPPUNIT_ASSERT(getProperty<bool>(getShape(1), u"Decorative"_ustr));
+
+    saveAndReload(TestFilter::ODT);
+    CPPUNIT_ASSERT(getProperty<bool>(getShape(1), u"Decorative"_ustr));
+    // Without the fix only loext:decorative was written for a text frame
+    auto pXmlDoc = parseExport(u"content.xml"_ustr);
+    assertXPath(pXmlDoc, "//style:graphic-properties[@draw:decorative='true']", 1);
+    assertXPath(pXmlDoc, "//style:graphic-properties[@loext:decorative='true']", 1);
+}
+
 } // end of anonymous namespace
 CPPUNIT_PLUGIN_IMPLEMENT();
 
