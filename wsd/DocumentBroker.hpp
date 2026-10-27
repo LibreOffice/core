@@ -1120,6 +1120,10 @@ private:
     /// Returns true iff the document on disk is newer than the one in Storage.
     bool isStorageOutdated() const;
 
+    /// Returns true iff the file Core saved to has a modified time other than that of the file last
+    /// uploaded, so Core wrote a new version of the document.
+    bool isSavedFileNew() const;
+
     /// Returns true iff the file to upload is the one the host last refused with 428.
     bool isRefusedUpload() const;
 

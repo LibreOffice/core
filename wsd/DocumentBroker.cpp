@@ -3459,6 +3459,19 @@ bool DocumentBroker::isStorageOutdated() const
     return currentModifiedTime != lastModifiedTime;
 }
 
+bool DocumentBroker::isSavedFileNew() const
+{
+    if (!_storage)
+        return false;
+
+    // On a mobile app the engine writes the user's own file. Otherwise the kit renames the file it
+    // wrote for upload, and the rename keeps the modified time.
+    const FileUtil::Stat st(Util::isMobileApp() ? _storage->getRootFilePath()
+                                                : _storage->getRootFilePathToUpload());
+    return st.exists() &&
+           st.modifiedTimepoint() != _storageManager.getLastUploadedFileModifiedLocalTime();
+}
+
 bool DocumentBroker::isNextSaveAutosave() const
 {
     return _nextStorageAttrs.isAutosave();
@@ -3470,8 +3483,16 @@ void DocumentBroker::handleSaveResponse(const std::shared_ptr<ClientSession>& se
     ASSERT_CORRECT_THREAD();
 
     const SaveResult::Result saveResult = SaveResult::parse(json);
-    const bool wroteNewVersion = saveResult.outcome == SaveResult::Outcome::Saved;
+    bool wroteNewVersion = saveResult.outcome == SaveResult::Outcome::Saved;
     const bool upToDate = saveResult.outcome != SaveResult::Outcome::Failed;
+    if (saveResult.outcome == SaveResult::Outcome::Unknown)
+    {
+        // Core ran the save without saying whether it wrote the document, so the file tells: a new
+        // version has a modified time other than that of the file last uploaded.
+        wroteNewVersion = isSavedFileNew();
+        LOG_DBG("Save result from Core has no outcome, and the file on disk is "
+                << (wroteNewVersion ? "" : "not ") << "a new version");
+    }
 
     // wasModified is only set when LOKit saves the document.
     // If the document was modified before saving, it would

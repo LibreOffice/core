@@ -23,6 +23,7 @@
 #include <common/Message.hpp>
 #include <common/Protocol.hpp>
 #include <common/RegexUtil.hpp>
+#include <common/SaveResult.hpp>
 #include <common/StateEnum.hpp>
 #include <common/ThreadPool.hpp>
 #include <common/Util.hpp>
@@ -84,6 +85,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     CPPUNIT_TEST(testThreadPool);
     CPPUNIT_TEST(testLogCaptureCaller);
     CPPUNIT_TEST(testIsIso8601);
+    CPPUNIT_TEST(testSaveResult);
     CPPUNIT_TEST_SUITE_END();
 
     void testCOOLProtocolFunctions();
@@ -117,6 +119,7 @@ class WhiteBoxTests : public CPPUNIT_NS::TestFixture
     void testThreadPool();
     void testLogCaptureCaller();
     void testIsIso8601();
+    void testSaveResult();
 
     size_t waitForThreads(size_t count);
 };
@@ -1378,6 +1381,32 @@ void WhiteBoxTests::testIsIso8601()
     // offset without a fraction) are rejected.
     LOK_ASSERT(!Util::isIso8601("2021-03-04T05:06:07Z"));
     LOK_ASSERT(!Util::isIso8601("2021-03-04T05:06:07+01:00"));
+}
+
+void WhiteBoxTests::testSaveResult()
+{
+    constexpr std::string_view testname = __func__;
+
+    const auto parse = [testname](const std::string& json)
+    {
+        Poco::JSON::Object::Ptr object;
+        LOK_ASSERT(JsonUtil::parseJSON(json, object));
+        return SaveResult::parse(object);
+    };
+
+    LOK_ASSERT_EQUAL(SaveResult::Outcome::Saved,
+                     parse(R"({ "commandName": ".uno:Save", "success": true })").outcome);
+    LOK_ASSERT_EQUAL(
+        SaveResult::Outcome::Unmodified,
+        parse(R"({ "commandName": ".uno:Save", "success": false, )"
+              R"("result": { "type": "string", "value": "unmodified" } })")
+            .outcome);
+    LOK_ASSERT_EQUAL(SaveResult::Outcome::Failed,
+                     parse(R"({ "commandName": ".uno:Save", "success": false })").outcome);
+
+    // An answer that does not say whether the save worked is a save with an unknown outcome.
+    LOK_ASSERT_EQUAL(SaveResult::Outcome::Unknown,
+                     parse(R"({ "commandName": ".uno:Save" })").outcome);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WhiteBoxTests);

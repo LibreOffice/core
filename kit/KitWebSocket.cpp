@@ -487,6 +487,13 @@ void BgSaveParentWebSocketHandler::handleBgSaveResult(Poco::JSON::Object::Ptr& o
             LOG_DBG("Failed to save, not synthesizing modified state");
             _document->disableBgSave("on failed save");
             break;
+
+        case SaveResult::Outcome::Unknown:
+            // The save ran, but may not have written the document, so the document stays modified
+            // and a later save writes it for sure. Saving in the background goes on.
+            _document->updateModifiedOnFailedBgSave();
+            LOG_DBG("Background save did not say whether it wrote the document");
+            break;
     }
     _saveCompleted = true;
 }

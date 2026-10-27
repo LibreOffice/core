@@ -28,7 +28,8 @@ namespace SaveResult
 STATE_ENUM(Outcome,
            Saved, ///< Core wrote a new version of the document.
            Unmodified, ///< Core wrote nothing, the document carried no changes.
-           Failed); ///< Core tried to write the document and could not.
+           Failed, ///< Core could not write the document.
+           Unknown); ///< Core ran the save, and did not say whether it wrote the document.
 
 /// A .uno:Save answer, parsed once.
 struct Result
@@ -51,7 +52,11 @@ inline Result parse(const Poco::JSON::Object::Ptr& json)
             parsed.text = resultObject->get("value").toString();
     }
 
-    if (json->get("success").toString() == "true")
+    // Core leaves the success field out when the dispatch that ran the save could not tell how it
+    // went.
+    if (!json->has("success"))
+        parsed.outcome = Outcome::Unknown;
+    else if (json->get("success").toString() == "true")
         parsed.outcome = Outcome::Saved;
     else if (parsed.text == "unmodified")
         parsed.outcome = Outcome::Unmodified;
