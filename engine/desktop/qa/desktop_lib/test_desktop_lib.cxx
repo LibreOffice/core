@@ -40,6 +40,7 @@
 #include <linguistic/misc.hxx>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterception.hpp>
+#include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProviderInterceptor.hpp>
 #include <cpo/uno/RuntimeException.hpp>
 #include <cppuhelper/implbase.hxx>
@@ -103,6 +104,20 @@
 using namespace com::sun::star;
 using namespace ::cpo;
 using namespace desktop;
+
+namespace
+{
+/// The dispatch that a save goes to.
+enum class SaveDispatch
+{
+    /// Finding the dispatch throws.
+    Throwing,
+    /// No dispatch is found.
+    Missing,
+    /// The dispatch runs nothing, and cannot tell how the command went.
+    Silent
+};
+}
 
 static COKitDocumentType getDocumentTypeFromName(std::string_view name)
 {
@@ -179,7 +194,7 @@ public:
     void callbackImpl(COKitCallbackType eType, const char* pPayload);
     boost::property_tree::ptree postSaveAndReadResult(COKitDocumentImpl* pDocument,
                                                       const char* pArguments);
-    void checkSaveFailsWithResult(bool bThrow);
+    boost::property_tree::ptree saveWithDispatch(SaveDispatch eDispatch);
 
     void testGetStyles();
     void testGetFonts();
@@ -212,6 +227,7 @@ public:
     void testCommandResult();
     void testSaveDispatchThrows();
     void testSaveDispatchMissing();
+    void testSaveDispatchSilent();
     void testWriterComments();
     void testTranslationProviders();
     void testAutoCorrectListFromHost();
@@ -331,6 +347,7 @@ public:
     CPPUNIT_TEST(testCommandResult);
     CPPUNIT_TEST(testSaveDispatchThrows);
     CPPUNIT_TEST(testSaveDispatchMissing);
+    CPPUNIT_TEST(testSaveDispatchSilent);
     CPPUNIT_TEST(testWriterComments);
     CPPUNIT_TEST(testTranslationProviders);
     CPPUNIT_TEST(testAutoCorrectListFromHost);
@@ -794,11 +811,13 @@ boost::property_tree::ptree DesktopKitTest::postSaveAndReadResult(COKitDocumentI
                                                                    const char* pArguments)
 {
     TimeValue aTimeValue = { 5, 0 };
+    m_aCommandResult.clear();
     m_aCommandResultCondition.reset();
     pDocument->postUnoCommand(".uno:Save", pArguments, true);
     Scheduler::ProcessEventsToIdle();
-    m_aCommandResultCondition.wait(aTimeValue);
+    CPPUNIT_ASSERT_EQUAL(osl::Condition::result_ok, m_aCommandResultCondition.wait(aTimeValue));
 
+    CPPUNIT_ASSERT(!m_aCommandResult.isEmpty());
     boost::property_tree::ptree aTree;
     std::stringstream aStream((std::string(m_aCommandResult)));
     boost::property_tree::read_json(aStream, aTree);
@@ -1401,17 +1420,31 @@ void DesktopKitTest::testCommandResult()
 
 namespace
 {
-/// Intercepts .uno:Save, to throw as dispatching it when m_bThrow is true, or to find no dispatch
-/// for it otherwise.
-class FailingSaveInterceptor : public cppu::WeakImplHelper<frame::XDispatchProviderInterceptor>
+/// A dispatch that runs nothing, and cannot tell how a command went.
+class SilentDispatch : public cppu::WeakImplHelper<frame::XDispatch>
+{
+public:
+    void dispatch(const util::URL&, const cpo::uno::Sequence<beans::PropertyValue>&) override {}
+    void addStatusListener(const uno::Reference<frame::XStatusListener>&,
+                           const util::URL&) override
+    {
+    }
+    void removeStatusListener(const uno::Reference<frame::XStatusListener>&,
+                              const util::URL&) override
+    {
+    }
+};
+
+/// Intercepts .uno:Save, to send it to the dispatch that m_eDispatch names.
+class SaveInterceptor : public cppu::WeakImplHelper<frame::XDispatchProviderInterceptor>
 {
     uno::Reference<frame::XDispatchProvider> m_xMaster;
     uno::Reference<frame::XDispatchProvider> m_xSlave;
-    const bool m_bThrow;
+    const SaveDispatch m_eDispatch;
 
 public:
-    explicit FailingSaveInterceptor(bool bThrow)
-        : m_bThrow(bThrow)
+    explicit SaveInterceptor(SaveDispatch eDispatch)
+        : m_eDispatch(eDispatch)
     {
     }
 
@@ -1438,8 +1471,10 @@ public:
     {
         if (rURL.Complete == ".uno:Save")
         {
-            if (m_bThrow)
+            if (m_eDispatch == SaveDispatch::Throwing)
                 throw cpo::uno::RuntimeException(u"Simulated failure dispatching the save"_ustr);
+            if (m_eDispatch == SaveDispatch::Silent)
+                return new SilentDispatch;
             return {};
         }
         return m_xSlave->queryDispatch(rURL, rTargetFrameName, nSearchFlags);
@@ -1453,43 +1488,46 @@ public:
 };
 }
 
-void DesktopKitTest::checkSaveFailsWithResult(bool bThrow)
+boost::property_tree::ptree DesktopKitTest::saveWithDispatch(SaveDispatch eDispatch)
 {
     COKitDocumentImpl* pDocument = loadDoc("blank_text.odt");
     pDocument->registerCallback(&DesktopKitTest::callback, this);
     uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
     uno::Reference<frame::XDispatchProviderInterception> xRegistration(
         xModel->getCurrentController()->getFrame(), uno::UNO_QUERY);
-    rtl::Reference xInterceptor(new FailingSaveInterceptor(bThrow));
+    rtl::Reference xInterceptor(new SaveInterceptor(eDispatch));
     xRegistration->registerDispatchProviderInterceptor(xInterceptor);
 
-    m_aCommandResultCondition.reset();
-    pDocument->postUnoCommand(".uno:Save", nullptr, true);
-    Scheduler::ProcessEventsToIdle();
-    TimeValue aTimeValue = { 2, 0 }; // 2 seconds max
-    m_aCommandResultCondition.wait(aTimeValue);
+    boost::property_tree::ptree aTree = postSaveAndReadResult(pDocument, nullptr);
     xRegistration->releaseDispatchProviderInterceptor(xInterceptor);
 
-    CPPUNIT_ASSERT(!m_aCommandResult.isEmpty());
-    boost::property_tree::ptree aTree;
-    std::stringstream aStream((std::string(m_aCommandResult)));
-    boost::property_tree::read_json(aStream, aTree);
     CPPUNIT_ASSERT_EQUAL(std::string(".uno:Save"), aTree.get_child("commandName").get_value<std::string>());
-    CPPUNIT_ASSERT_EQUAL(false, aTree.get_child("success").get_value<bool>());
+    return aTree;
 }
 
 void DesktopKitTest::testSaveDispatchThrows()
 {
     // Given a document where dispatching the save throws, when saving, then the save gives a
     // failed result at once.
-    checkSaveFailsWithResult(/*bThrow=*/true);
+    boost::property_tree::ptree aTree = saveWithDispatch(SaveDispatch::Throwing);
+    CPPUNIT_ASSERT_EQUAL(false, aTree.get_child("success").get_value<bool>());
 }
 
 void DesktopKitTest::testSaveDispatchMissing()
 {
     // Given a document where no dispatch is found for the save, when saving, then the save gives
     // a failed result at once.
-    checkSaveFailsWithResult(/*bThrow=*/false);
+    boost::property_tree::ptree aTree = saveWithDispatch(SaveDispatch::Missing);
+    CPPUNIT_ASSERT_EQUAL(false, aTree.get_child("success").get_value<bool>());
+}
+
+void DesktopKitTest::testSaveDispatchSilent()
+{
+    // A save through a dispatch that cannot tell how it went still gives a result.
+    boost::property_tree::ptree aTree = saveWithDispatch(SaveDispatch::Silent);
+
+    // The result does not say whether the save succeeded.
+    CPPUNIT_ASSERT(!aTree.get_child_optional("success"));
 }
 
 void DesktopKitTest::testWriterComments()

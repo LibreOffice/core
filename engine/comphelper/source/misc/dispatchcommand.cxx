@@ -21,6 +21,8 @@
 #include <comphelper/processfactory.hxx>
 
 #include <com/sun/star/frame/Desktop.hpp>
+#include <com/sun/star/frame/DispatchResultEvent.hpp>
+#include <com/sun/star/frame/DispatchResultState.hpp>
 #include <com/sun/star/frame/XDispatch.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
 #include <com/sun/star/frame/XNotifyingDispatch.hpp>
@@ -62,6 +64,16 @@ bool dispatchCommand(const OUString& rCommand,
     }
 
     xDisp->dispatch(aCommandURL, rArguments);
+
+    // This dispatch cannot tell how the command went, so the listener is told that the command
+    // ran, with an unknown outcome.
+    if (xListener.is())
+    {
+        frame::DispatchResultEvent aEvent;
+        aEvent.Source = xDisp;
+        aEvent.State = frame::DispatchResultState::DONTKNOW;
+        xListener->dispatchFinished(aEvent);
+    }
 
     return true;
 }
