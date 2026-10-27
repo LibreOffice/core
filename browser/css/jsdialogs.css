@@ -4846,6 +4846,11 @@ kbd,
 	color: #cc0000;
 }
 
+/* Theme Color Edit: keep color labels on one line */
+#ThemeColorEditDialog .static-label {
+	white-space: nowrap;
+}
+
 #sheets-buttons-toolbox #sheetlist.menubutton:hover {
 	border: 1px solid var(--color-btn-border);
 	background-color: var(--color-background-tabs-group);
