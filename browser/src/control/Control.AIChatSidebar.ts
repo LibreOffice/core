@@ -3896,16 +3896,11 @@ namespace cool {
 			const cell = depChain.cell;
 			let context = _('I have a formula error in my spreadsheet.') + '\n\n';
 			context +=
-				_('Cell') +
-				' ' +
-				cell.address +
-				' (' +
-				_('Sheet') +
-				': ' +
-				cell.sheet +
-				') ' +
-				_('contains') +
-				':\n';
+				// TRANSLATORS: Sent to the AI model. {0} is a cell address such as
+				// TRANSLATORS: B5, {1} the name of its sheet
+				_('Cell {0} (Sheet: {1}) contains:')
+					.replace('{0}', cell.address)
+					.replace('{1}', cell.sheet) + '\n';
 			// The model writes formulas in the English grammar, so it reads them in that
 			// grammar too.
 			context += '  ' + _('Formula') + ': ' + cell.englishFormula + '\n';
@@ -3918,12 +3913,12 @@ namespace cool {
 			}
 
 			context +=
-				_('Please diagnose why this formula produces the') +
-				' ' +
-				cell.error +
-				' ' +
-				_('error.') +
-				' ';
+				// TRANSLATORS: Sent to the AI model. {0} is a Calc error code such
+				// TRANSLATORS: as #DIV/0!
+				_('Please diagnose why this formula produces the {0} error.').replace(
+					'{0}',
+					cell.error,
+				) + ' ';
 			context += _('Explain the root cause and suggest how to fix it.');
 			context +=
 				' ' +
