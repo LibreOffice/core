@@ -17,7 +17,7 @@
  * text area itself.
  */
 
-/* global app _ _n cool */
+/* global app _ _n cool UNOKey */
 
 window.L.A11yTextInput = window.L.TextInput.extend({
 	initialize: function() {
@@ -998,7 +998,12 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 		let target = paragraph;
 		if (paragraph.tagName === 'TD' && (ev.key === 'ArrowDown' || ev.key === 'ArrowUp')) {
 			const down = ev.key === 'ArrowDown';
-			target = this._cellBeside(paragraph, down)
+			const beside = this._cellBeside(paragraph, down);
+			if (!beside && this._rowPastGivenRows(paragraph, down)) {
+				this._moveFromCell(paragraph, down);
+				return;
+			}
+			target = beside
 				|| (down ? this._contextAfter.firstElementChild : this._contextBefore.lastElementChild) || paragraph;
 		} else if (ev.key === 'ArrowDown' || ev.key === 'ArrowUp') {
 			const down = ev.key === 'ArrowDown';
@@ -1041,6 +1046,24 @@ window.L.A11yTextInput = window.L.TextInput.extend({
 				return beside;
 		}
 		return null;
+	},
+
+	// Whether the row above or below the cell is in the table but not among the rows given.
+	_rowPastGivenRows: function(cell, down) {
+		const row = cell.parentNode;
+		const table = row.closest('table');
+		const index = parseInt(row.getAttribute('aria-rowindex'));
+		const next = down ? index + cell.rowSpan : index - 1;
+		return next >= 1 && next <= parseInt(table.getAttribute('aria-rowcount'))
+			&& !table.querySelector('tr[aria-rowindex="' + next + '"]');
+	},
+
+	// Writer moves the caret a line at a time, so start from the cell's line next to that row.
+	_moveFromCell: function(cell, down) {
+		this._jumpToCell(cell, down);
+		const key = down ? UNOKey.DOWN : UNOKey.UP;
+		this._map._docLayer.postKeyboardEvent('input', 0, key);
+		this._map._docLayer.postKeyboardEvent('up', 0, key);
 	},
 
 	_jumpToContext: function(element) {
