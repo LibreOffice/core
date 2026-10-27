@@ -565,6 +565,16 @@ function test() {
     console.assert(inBody.getElement().asText().getText() === 'bXar');
     console.assert(inBody.getStartOffset() === 0);
     console.assert(body.findText('bXa', inBody) === null);
+    // A child text has no text before it to merge with:
+    {
+        let message = null;
+        try {
+            withImage.getChild(2).merge();
+        } catch (e) {
+            message = e.message;
+        }
+        console.assert(message === 'Element must be preceded by an element of the same type.');
+    }
     // A range over the image is split into the image and the parts of the texts around it:
     const overImage = doc.newRange().addElement(withImage.editAsText(), 1, 4).build()
         .getRangeElements();
@@ -1019,4 +1029,14 @@ function test() {
 
     docProps.deleteAllProperties();
     console.assert(docProps.getKeys().length === 0);
+
+    // The text of a paragraph merges with the paragraph before it:
+    body.appendParagraph('Mer');
+    const merged = body.appendParagraph('ged').editAsText().merge();
+    console.assert(merged.getText() === 'Merged');
+    console.assert(body.getChild(body.getNumChildren() - 1).getText() === 'Merged');
+    body.appendParagraph('');
+    const intoEmpty = body.appendParagraph('Tail').editAsText().merge();
+    console.assert(intoEmpty.getText() === 'Tail');
+    console.assert(body.getChild(body.getNumChildren() - 1).getText() === 'Tail');
 }

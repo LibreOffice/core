@@ -1134,6 +1134,11 @@ public:
 
     scriptinterop::ElementType getType() override { return reportedType_; }
 
+    // As in GAS, a text merges with the element of the same type before it, which a child text
+    // never has (as only an inline image separates two runs of a paragraph), and which for the text
+    // of a paragraph (as made with editAsText) is the paragraph before it:
+    cpo::uno::Reference<scriptinterop::XText> merge() override;
+
     // For a child text, the name of the inline image before its run of the paragraph's text, which
     // is empty for the first run:
     std::optional<OUString> const & run() const { return run_; }
@@ -1838,6 +1843,10 @@ public:
     css::beans::Optional<bool> isUnderline(sal_Int32 offset) override {
         auto const [text, inner] = at(offset);
         return text->isUnderline(inner);
+    }
+
+    cpo::uno::Reference<scriptinterop::XText> merge() override {
+        throw notYetImplemented(u"merge");
     }
 
     cpo::uno::Reference<scriptinterop::XElement> removeFromParent() override {
@@ -3427,6 +3436,22 @@ cpo::uno::Reference<css::text::XTextContent> findContainingParagraph(
         }
     }
     return {};
+}
+
+cpo::uno::Reference<scriptinterop::XText> TextImpl::merge() {
+    auto const previous = getPreviousSibling();
+    if (!previous.IsPresent || previous.Value->getType() != getType()) {
+        throw cpo::uno::RuntimeException(
+            u"Element must be preceded by an element of the same type."_ustr);
+    }
+    cpo::uno::Reference<css::text::XTextRange> const before(
+        previous.Value->getuno(), cpo::uno::UNO_QUERY_THROW);
+    auto const cursor = before->getText()->createTextCursorByRange(before->getEnd());
+    cursor->gotoRange(wholeRange()->getStart(), true);
+    cursor->setString(OUString());
+    // Writer keeps the second paragraph when the first one is empty, so the merged text is that of
+    // the paragraph that holds the place where the two were joined:
+    return paragraphOf(model_, findContainingParagraph(cursor))->asText();
 }
 
 class RangeElementImpl: public cppu::WeakImplHelper<scriptinterop::XRangeElement> {

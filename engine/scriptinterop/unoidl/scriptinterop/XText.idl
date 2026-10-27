@@ -47,6 +47,8 @@ interface XText: XElement {
 
     com::sun::star::beans::Optional<boolean> isUnderline([in] long offset);
 
+    XText merge();
+
     [overload setBold] XText setBold([in] com::sun::star::beans::Optional<boolean> value);
 
     [overload setBold] XText setBoldRange(
