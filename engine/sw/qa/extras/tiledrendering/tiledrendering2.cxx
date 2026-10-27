@@ -2251,6 +2251,46 @@ CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yFocusedParagraphLinks)
                          aLink.get<std::string>("url"));
 }
 
+CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11yContextRowsPastTableWindow)
+{
+    // Given the cursor in the middle of a table with more rows than are given to the reader:
+    SwXTextDocument* pXTextDocument = createDoc();
+    SwTestViewCallback aView;
+    SwWrtShell* pWrtShell = getSwDocShell()->GetWrtShell();
+    pWrtShell->Insert(u"Before the table."_ustr);
+    pWrtShell->SplitNode();
+    pWrtShell->InsertTable(SwInsertTableOptions(SwInsertTableFlags::DefaultBorder, 0), 120, 1);
+    pWrtShell->SttEndDoc(/*bStt=*/true);
+    pWrtShell->Down(/*bSelect=*/false);
+    for (int i = 1; i <= 120; ++i)
+    {
+        pWrtShell->Insert("Row " + OUString::number(i));
+        pWrtShell->GoNextCell(/*bAppendLine=*/false);
+    }
+    for (int i = 0; i < 60; ++i)
+        pWrtShell->Up(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+    const SwRect& rCaret = pWrtShell->GetCharRect();
+    pXTextDocument->setClientVisibleArea(
+        tools::Rectangle(0, rCaret.Top() - 7000, 12240, rCaret.Top() + 8840));
+
+    // When the reader is given the paragraphs around it:
+    pWrtShell->GetSfxViewShell()->SetKitAccessibilityState(true);
+    pWrtShell->Up(/*bSelect=*/false);
+    Scheduler::ProcessEventsToIdle();
+    CPPUNIT_ASSERT(aView.m_aA11yFocusedCell.get_child_optional("paragraph.table.rows"));
+
+    // Then none of them is a cell of the table, given or not:
+    for (const char* pRegion : { "paragraph.before", "paragraph.after" })
+    {
+        if (auto oParagraphs = aView.m_aA11yFocusedCell.get_child_optional(pRegion))
+        {
+            for (const auto& rParagraph : *oParagraphs)
+                CPPUNIT_ASSERT(!rParagraph.second.get_value<std::string>().starts_with("Row "));
+        }
+    }
+}
+
 CPPUNIT_TEST_FIXTURE(SwTiledRenderingTest, testA11ySplitTableWithRowAcrossPages)
 {
     // Given a table whose second row is split across two pages:

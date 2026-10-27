@@ -1209,11 +1209,21 @@ void appendPiece(ContextParagraph& rParagraph, ContextParagraph&& rPiece)
 
 // A paragraph of a cell covered by a merged one has the table for its parent, which does not list
 // it among its children.
+// A paragraph is skipped with its cell, and with every cell of a table skipped as a whole.
 bool isSkipped(const uno::Reference<accessibility::XAccessibleContext>& xContext,
                const std::vector<uno::Reference<accessibility::XAccessibleContext>>& rSkip)
 {
-    return std::ranges::find(rSkip, xContext) != rSkip.end()
-           || std::ranges::find(rSkip, getParentContext(xContext)) != rSkip.end();
+    for (uno::Reference<accessibility::XAccessibleContext> xAncestor = xContext; xAncestor.is();
+         xAncestor = getParentContext(xAncestor))
+    {
+        if (std::ranges::find(rSkip, xAncestor) != rSkip.end())
+            return true;
+        const sal_Int16 nRole = xAncestor->getAccessibleRole();
+        if (xAncestor != xContext && nRole != accessibility::AccessibleRole::TABLE_CELL
+            && nRole != accessibility::AccessibleRole::TABLE)
+            return false;
+    }
+    return false;
 }
 
 void walkParagraphFlow(const SfxViewShell* pViewShell,
