@@ -34,7 +34,11 @@ android {
         } else {
             resValue "string", "image_draw_header", "@drawable/drawer_header"
         }
-        manifestPlaceholders = [ appIcon: "${coLauncherIcon}" ]
+        if (coHasBranding == "true" && file("${coBrandingDir}/android/mipmap-anydpi-v26/ic_launcher${coBrandingSuffix}.xml").exists()) {
+            manifestPlaceholders = [ appIcon: "${coLauncherIcon}" ]
+        } else {
+            manifestPlaceholders = [ appIcon: "@mipmap/ic_launcher" ]
+        }
         buildConfigField "boolean", "APP_HAS_BRANDING", "${coHasBranding}"
     }
 
