@@ -122,7 +122,7 @@
 	box-sizing: border-box;
 	width: 24px;
 	height: 24px;
-	border: 2px solid var(--color-background-lighter);
+	border: 2px solid var(--color-primary-dark);
 	border-radius: var(--border-radius-pill);
 	background: var(--color-primary-dark);
 	color: var(--color-primary-text);
