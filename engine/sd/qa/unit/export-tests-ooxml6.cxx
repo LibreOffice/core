@@ -830,6 +830,21 @@ CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testNotesPageStatesItsSlideNumber)
     assertXPathContent(pXmlDoc, "//a:fld[@type='slidenum']/a:t", u"3");
 }
 
+// A line break keeps the look of the text it breaks.
+CPPUNIT_TEST_FIXTURE(SdOOXMLExportTest6, testLineBreakKeepsItsFormatting)
+{
+    // Given a paragraph broken in two by a break of its own language and weight:
+    createSdImpressDoc("pptx/formatted-line-break.pptx");
+
+    save(TestFilter::PPTX);
+
+    // Without the fix in place, the saved break stated its size and nothing else, so the
+    // language and the weight it stood in were gone.
+    xmlDocUniquePtr pXmlDoc = parseExport(u"ppt/slides/slide1.xml"_ustr);
+    assertXPath(pXmlDoc, "//a:p/a:br/a:rPr", "lang", u"en-ZA");
+    assertXPath(pXmlDoc, "//a:p/a:br/a:rPr", "b", u"1");
+}
+
 CPPUNIT_PLUGIN_IMPLEMENT();
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

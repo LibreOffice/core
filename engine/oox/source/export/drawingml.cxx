@@ -2931,10 +2931,11 @@ void DrawingML::WriteRunProperties(const Reference<XPropertySet>& rRun, sal_Int3
                     WriteSolidFill(color, nTransparency);
                 }
             }
-            // An automatic colour is the colour the shape holding the text asks for, and the
-            // shapes that take a level of a list style each ask for their own, so the level
-            // states none and every one of them resolves it again.
-            else if (GetDocumentType() == DOCUMENT_PPTX && !rRunInput.bIsLevelDefault)
+            // An automatic colour is the colour the shape holding the text asks for. The
+            // shapes that take a level of a list style each ask for their own, and a line
+            // break shows no text at all, so both of those leave the colour for the reader.
+            else if (GetDocumentType() == DOCUMENT_PPTX && !rRunInput.bIsLevelDefault
+                     && !rRunInput.bIsLineBreak)
             {
                 // Resolve COL_AUTO for PPTX since MS Powerpoint doesn't have automatic colors.
                 bool bIsTextBackgroundDark = mbIsBackgroundDark;
@@ -3307,17 +3308,24 @@ void DrawingML::WriteRun( const Reference< XTextRange >& rRun,
 
     if (sText == "\n")
     {
-        // A line break carries a size of its own, which is how tall the blank line it makes is.
+        // A line break carries the look of the text it breaks, down to how tall the blank line
+        // it makes is, so it is written with the same properties as any other run.
         if ((GetDocumentType() == DOCUMENT_PPTX) && (nFontSize != -1))
         {
             mpFS->startElementNS(XML_a, XML_br);
-            mpFS->singleElementNS(XML_a, XML_rPr, XML_sz,
-                                  OString::number(nFontSize * 100));
+
+            WriteRunInput aInput;
+            aInput.bCheckDirect = true;
+            aInput.bIsLineBreak = true;
+            aInput.nScriptType = GetScriptType(sText);
+            aInput.xShapePropSet = rXShapePropSet;
+            aInput.bOverridingCharHeight = rbOverridingCharHeight;
+            aInput.nCharHeight = rnCharHeight;
+            WriteRunProperties(rXPropSet, XML_rPr, aInput);
+            rbOverridingCharHeight = aInput.bOverridingCharHeight;
+            rnCharHeight = aInput.nCharHeight;
+
             mpFS->endElementNS(XML_a, XML_br);
-            // The size a paragraph states for its end is the one the text ends in, and a break
-            // at the end of a paragraph is the last of that text.
-            rnCharHeight = static_cast<sal_Int32>(nFontSize * 100);
-            rbOverridingCharHeight = true;
         }
         else
             mpFS->singleElementNS(XML_a, XML_br);

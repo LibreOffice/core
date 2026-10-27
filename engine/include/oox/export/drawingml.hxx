@@ -296,6 +296,9 @@ struct WriteRunInput
     /// Set while the default of a list style level is written. The default is taken from the
     /// first run of a paragraph, and a few of that run's properties belong to the run alone.
     bool bIsLevelDefault = false;
+    /// Set for the run that holds a line break. Such a run carries the look of the text around
+    /// it and shows none of that text itself.
+    bool bIsLineBreak = false;
     cpo::uno::Reference<css::beans::XPropertySet> xShapePropSet;
 };
 
