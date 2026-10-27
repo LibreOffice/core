@@ -3305,7 +3305,7 @@ static void ImplPDFExportShapeInteraction( const uno::Reference< drawing::XShape
             }
         }
     }
-    else
+    // a group has its own click action too
     {
         uno::Reference< beans::XPropertySet > xShapePropSet( xShape, uno::UNO_QUERY );
         if( xShapePropSet.is() )
