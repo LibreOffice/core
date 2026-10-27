@@ -114,6 +114,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/core/graphichelper \
     svx/source/core/extendedprimitive2dxmldump \
     svx/source/customshapes/EnhancedCustomShape2d \
+    svx/source/customshapes/EnhancedCustomShapeFormulas \
     svx/source/customshapes/EnhancedCustomShapeFunctionParser \
     svx/source/customshapes/EnhancedCustomShapeGeometry \
     svx/source/customshapes/EnhancedCustomShapeTypeNames \
