@@ -21,9 +21,6 @@
 
 #include <vector>
 
-#ifdef DBG_ANIM_LOG
-#include <stdio.h>
-#endif
 #include <rtl/ustring.hxx>
 
 class SvStream;
