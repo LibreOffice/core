@@ -3,8 +3,9 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-23 00:15+0200\n"
-"PO-Revision-Date: 2026-10-21 13:49+0000\n"
-"Last-Translator: Mr-Update <mr-update@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-10-23 06:44+0000\n"
+"Last-Translator: Ettore Atalan <atalanttore@users.noreply.hosted.weblate.org>"
+"\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collabora-online/"
 "help/de/>\n"
 "Language: de\n"
@@ -12,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Translate Toolkit 3.18.1\n"
+"X-Generator: Weblate 2026.11.dev0\n"
 
 #: html/cool-help.html%2Bdiv.h1:10-5
 msgid "Keyboard Shortcuts"
@@ -1805,12 +1806,17 @@ msgstr ""
 msgid ""
 "If the document is locked by another application, it stays in view mode."
 msgstr ""
+"Wenn das Dokument von einer anderen Anwendung gesperrt ist, bleibt es im "
+"Anzeigemodus."
 
 #: html/cool-help.html%2Bdiv.div.div.p:456-7
 msgid ""
 "To save the document in a different format use <span class=\"ui\">Save As</"
 "span> on the <span class=\"ui\">File</span> tab."
 msgstr ""
+"Um das Dokument in einem anderen Format zu speichern, verwenden Sie <span "
+"class=\"ui\">Speichern unter</span> in der Registerkarte <span class=\"ui\">"
+"Datei</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.p:461-7
 msgid ""
@@ -1818,12 +1824,18 @@ msgid ""
 "to be saved right away you can use <span class=\"ui\">Save</span> on the "
 "<span class=\"ui\">File</span> tab."
 msgstr ""
+"Dokumente werden in regelmäßigen Abständen automatisch gespeichert, aber "
+"wenn Sie möchten, dass ein Dokument sofort gespeichert wird, können Sie "
+"<span class=\"ui\">Speichern</span> in der Registerkarte <span class=\"ui\">"
+"Datei</span> verwenden."
 
 #: html/cool-help.html%2Bdiv.div.div.p:467-7
 msgid ""
 "To print the document, use <span class=\"ui\">Print</span> on the <span "
 "class=\"ui\">File</span> tab."
 msgstr ""
+"Um das Dokument zu drucken, verwenden Sie <span class=\"ui\">Drucken</span> "
+"in der Registerkarte <span class=\"ui\">Datei</span>."
 
 #: html/cool-help.html%2Bdiv.div.p:479-5
 msgid ""
@@ -1855,6 +1867,10 @@ msgid ""
 "content that comes from outside the document, but context menus can be used "
 "for cut and copy."
 msgstr ""
+"Aus Sicherheitsgründen müssen Sie zum Einfügen von Inhalten, die nicht aus "
+"dem Dokument selbst stammen, die Tastenkombination <kbd>Strg</kbd><span "
+"class=\"kbd--plus\" aria-hidden=\"true\">+</span><kbd>V</kbd> verwenden, "
+"aber zum Ausschneiden und Kopieren können Sie die Kontextmenüs verwenden."
 
 #: html/cool-help.html%2Bdiv.div.div.p:484-5
 msgid ""
@@ -1919,7 +1935,7 @@ msgstr ""
 
 #: html/cool-help.html%2Bdiv.div.div.h4:495-5
 msgid "Idle document"
-msgstr ""
+msgstr "Inaktives Dokument"
 
 #: html/cool-help.html%2Bdiv.div.div.p:496-5
 msgid ""
@@ -2835,12 +2851,16 @@ msgid ""
 "Text documents: Microsoft formats DOC, DOCX, RTF. OpenDocument Format ODT. "
 "Plain text TXT and Markdown MD"
 msgstr ""
+"Textdokumente: Microsoft-Formate DOC, DOCX, RTF. OpenDocument-Format ODT. "
+"Reiner Text TXT und Markdown MD"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:699-7
 msgid ""
 "Spreadsheets: Microsoft formats XLS, XLSX, OpenDocument Format ODS. Comma "
 "separated values CSV"
 msgstr ""
+"Tabellenkalkulationen: Microsoft-Formate XLS, XLSX, OpenDocument-Format ODS. "
+"Kommagetrennte Werte CSV"
 
 #: html/cool-help.html%2Bdiv.div.div.ul.li:700-7
 msgid "Presentations: Microsoft formats PPT, PPTX, OpenDocument Format ODP"

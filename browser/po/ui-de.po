@@ -12,11 +12,12 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-23 00:15+0200\n"
-"PO-Revision-Date: 2026-10-22 21:09+0000\n"
-"Last-Translator: Mr-Update <mr-update@users.noreply.hosted.weblate.org>\n"
+"PO-Revision-Date: 2026-10-24 04:08+0000\n"
+"Last-Translator: Ettore Atalan <atalanttore@users.noreply.hosted.weblate.org>"
+"\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/de/>\n"
-"Language: \n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -448,6 +449,8 @@ msgstr ""
 #: src/control/Control.ServerAuditDialog.ts:107
 msgid "No WOPI host configured: trusting the first host that connected"
 msgstr ""
+"Es ist kein WOPI-Host konfiguriert: Der erste Host, der eine Verbindung "
+"hergestellt hat, wird als vertrauenswürdig eingestuft"
 
 #: admin/src/AdminSocketServerAudit.js:55
 #: src/control/Control.ServerAuditDialog.ts:122
@@ -1337,11 +1340,13 @@ msgid ""
 "Checkers that run on a server. The text of the document is sent there to be "
 "checked."
 msgstr ""
+"Prüfprogramme, die auf einem Server laufen. Der Text des Dokuments wird zur "
+"Überprüfung an diesen Server gesendet."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4726
 #: admin/src/integrator/AdminIntegratorSettings.ts:5066
 msgid "Enabled"
-msgstr ""
+msgstr "Aktiviert"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4738
 #: admin/src/integrator/AdminIntegratorSettings.ts:5103
@@ -1350,7 +1355,6 @@ msgid "Server URL"
 msgstr "Server-URL"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4750
-#, fuzzy
 msgid "Username"
 msgstr "Benutzername"
 
@@ -1361,7 +1365,7 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4780
 msgid "Enabled on this server for: {0}"
-msgstr ""
+msgstr "Auf diesem Server aktiviert für: {0}"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4795
 msgid "Checking level"
@@ -1369,43 +1373,43 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4798
 msgid "Single words"
-msgstr ""
+msgstr "Einzelne Wörter"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4799
 msgid "Spelling"
-msgstr ""
+msgstr "Rechtschreibung"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4800
 msgid "Spelling and grammar"
-msgstr ""
+msgstr "Rechtschreibung und Grammatik"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4810
 msgid "German spelling"
-msgstr ""
+msgstr "Deutsche Rechtschreibung"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4812
 msgid "Duden recommendation"
-msgstr ""
+msgstr "Empfehlung des Duden"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4813
 msgid "Conservative"
-msgstr ""
+msgstr "Konservativ"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4814
 msgid "Progressive"
-msgstr ""
+msgstr "Progressiv"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4815
 msgid "Tolerant"
-msgstr ""
+msgstr "Tolerant"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4816
 msgid "Press agencies"
-msgstr ""
+msgstr "Presseagenturen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4826
 msgid "Explanations"
-msgstr ""
+msgstr "Erläuterungen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4829
 #: src/control/Control.AIChatSidebar.ts:154
@@ -1413,68 +1417,68 @@ msgid "Short"
 msgstr "Kurz"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4830
-#, fuzzy
 msgid "Long"
-msgstr "Protokoll"
+msgstr "Ausführlich"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4831
 msgid "Long, with an example"
-msgstr ""
+msgstr "Ausführlich, mit einem Beispiel"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4841
 msgid "Correction profiles"
-msgstr ""
+msgstr "Korrekturprofile"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4851
 msgid "Dictionaries"
-msgstr ""
+msgstr "Wörterbücher"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4858
 msgid "Foreign words with a German equivalent"
-msgstr ""
+msgstr "Fremdwörter mit einem deutschen Äquivalent"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4859
 msgid "Archaic words"
-msgstr ""
+msgstr "Veraltete Wörter"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4860
 msgid "Regional words"
-msgstr ""
+msgstr "Regionale Wörter"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4861
 msgid "Colloquial and vulgar words"
-msgstr ""
+msgstr "Umgangssprachliche und vulgäre Wörter"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4862
 msgid "Filler words"
-msgstr ""
+msgstr "Wörter filtern"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4863
 msgid "Offensive wording"
-msgstr ""
+msgstr "Anstößige Wortwahl"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4864
 msgid "Gender-inclusive wording"
-msgstr ""
+msgstr "Geschlechtergerechte Wortwahl"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4865
 msgid "Complex sentences"
-msgstr ""
+msgstr "Komplexe Sätze"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:4887
 msgid "Style checks (German only)"
-msgstr ""
+msgstr "Stilprüfungen (nur Deutsch)"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5011
-#, fuzzy
 msgid "Translation"
-msgstr "Übergang"
+msgstr "Übersetzung"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5015
 msgid ""
 "Machine translation of the document text with the Translate command. The "
 "text is sent to the provider to be translated."
 msgstr ""
+"Maschinelle Übersetzung des Dokumenttextes mit dem Übersetzen-Befehl. Der "
+"Text wird zur Übersetzung an den Anbieter gesendet."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5028
 msgid "The first one that is set up"
@@ -1482,31 +1486,31 @@ msgstr ""
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5081
 msgid "API URL"
-msgstr ""
+msgstr "API-URL"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5090
 msgid "Authentication key"
-msgstr ""
+msgstr "Authentifizierungsschlüssel"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5132
 msgid "Set up on this server."
-msgstr ""
+msgstr "Auf diesem Server einrichten."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5133
 msgid "Enabled on this server, but not set up."
-msgstr ""
+msgstr "Auf diesem Server aktiviert, aber nicht eingerichtet."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5190
 msgid "Use the default settings"
-msgstr ""
+msgstr "Standardeinstellungen verwenden"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5191
 msgid "Use the settings set on the server"
-msgstr ""
+msgstr "Die auf dem Server festgelegten Einstellungen verwenden"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5199
 msgid "Your own settings are dropped when you save."
-msgstr ""
+msgstr "Ihre eigenen Einstellungen gehen beim Speichern verloren."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:5253
 #: admin/src/integrator/AdminIntegratorSettings.ts:5914
@@ -1953,6 +1957,8 @@ msgstr "Vorstellung in Navigator"
 #: src/canvas/sections/CommentSection.ts:1691
 msgid "Press Ctrl + Enter to post, or %1 to discard"
 msgstr ""
+"Drücken Sie Strg + Eingabetaste, um den Beitrag zu veröffentlichen, oder %1, "
+"um ihn zu verwerfen"
 
 #: src/canvas/sections/CommentSection.ts:1720
 #: src/canvas/sections/CommentSection.ts:1725
@@ -2005,7 +2011,7 @@ msgstr "Link entfernen"
 
 #: src/canvas/sections/GroupButtonSection.ts:66
 msgid "Edit Diagram"
-msgstr ""
+msgstr "Diagramm bearbeiten"
 
 #: src/canvas/sections/FormFieldButton.ts:106
 msgid "Unfold"
@@ -2191,23 +2197,24 @@ msgstr "Neue Konversation"
 
 #: src/control/Control.AIChatSidebar.ts:730
 msgid "What would you like to do with this spreadsheet?"
-msgstr ""
+msgstr "Was möchten Sie mit dieser Tabellenkalkulation machen?"
 
 #: src/control/Control.AIChatSidebar.ts:732
 msgid "What would you like to do with this presentation?"
-msgstr ""
+msgstr "Was möchten Sie mit dieser Präsentation machen?"
 
 #: src/control/Control.AIChatSidebar.ts:734
 msgid "What would you like to do with this drawing?"
-msgstr ""
+msgstr "Was möchten Sie mit dieser Zeichnung machen?"
 
 #: src/control/Control.AIChatSidebar.ts:736
 msgid "What would you like to do with this document?"
-msgstr ""
+msgstr "Was möchten Sie mit diesem Dokument machen?"
 
 #: src/control/Control.AIChatSidebar.ts:753
 msgid "Select some content first to work on just that part."
 msgstr ""
+"Wählen Sie zunächst einen Inhalt aus, um nur an diesem Teil zu arbeiten."
 
 #: src/control/Control.AIChatSidebar.ts:775
 #: src/control/Control.AIChatSidebar.ts:2218
@@ -3778,6 +3785,8 @@ msgstr "Willkommen bei Collabora Online"
 #: src/control/onboarding/OnboardingSteps.ts:27
 msgid "This short tour points out the parts of the screen you will use most."
 msgstr ""
+"Diese kurze Führung zeigt Ihnen die Bereiche des Bildschirms, die Sie am "
+"häufigsten nutzen werden."
 
 #: src/control/onboarding/OnboardingSteps.ts:32
 msgid "The document name"
@@ -3787,6 +3796,8 @@ msgstr "Der Dokumentname"
 msgid ""
 "Select the name to rename the document. Every change is saved as you work."
 msgstr ""
+"Wählen Sie den Namen zum Umbenennen des Dokuments aus. Jede Änderung wird "
+"während Sie arbeiten gespeichert."
 
 #: src/control/onboarding/OnboardingSteps.ts:41
 msgid "The tabs"
@@ -3804,7 +3815,7 @@ msgstr "Die Menüs"
 
 #: src/control/onboarding/OnboardingSteps.ts:51
 msgid "Every command of the editor is in one of these menus."
-msgstr ""
+msgstr "Jeder Befehl des Editors befindet sich in einem dieser Menüs."
 
 #: src/control/onboarding/OnboardingSteps.ts:57
 msgid "The tools"
@@ -3821,6 +3832,8 @@ msgstr "Die Symbolleiste"
 #: src/control/onboarding/OnboardingSteps.ts:65
 msgid "The buttons you need most often sit here, under the menus."
 msgstr ""
+"Die Schaltflächen, die Sie am häufigsten benötigen, befinden sich hier unter "
+"den Menüs."
 
 #: src/control/onboarding/OnboardingSteps.ts:71
 msgid "The formula bar"
@@ -3831,6 +3844,8 @@ msgid ""
 "The contents of the selected cell appear here. Type an equals sign to start "
 "a formula."
 msgstr ""
+"Hier wird der Inhalt der ausgewählten Zelle angezeigt. Geben Sie ein "
+"Gleichheitszeichen ein, um eine Formel zu beginnen."
 
 #: src/control/onboarding/OnboardingSteps.ts:80
 msgid "The slide panel"
@@ -3841,6 +3856,8 @@ msgid ""
 "Every slide or page of the document is listed here. Select one to work on "
 "it."
 msgstr ""
+"Hier sind alle Folien oder Seiten des Dokuments aufgelistet. Wählen Sie eine "
+"aus, um daran zu arbeiten."
 
 #: src/control/onboarding/OnboardingSteps.ts:90
 msgid "The sidebar"
@@ -3851,6 +3868,8 @@ msgid ""
 "The sidebar holds the settings for whatever you have selected, such as "
 "text, a shape or a cell."
 msgstr ""
+"In der Seitenleiste werden die Einstellungen für das, was Sie ausgewählt "
+"haben, angezeigt, beispielsweise für Text, eine Form oder eine Zelle."
 
 #: src/control/onboarding/OnboardingSteps.ts:99
 msgid "The people in the document"
@@ -3876,7 +3895,7 @@ msgstr "Sie sind bereit zum Arbeiten"
 
 #: src/control/onboarding/OnboardingSteps.ts:120
 msgid "You can walk through this tour again from the Help menu."
-msgstr ""
+msgstr "Sie können diese Tour über das Hilfe-Menü noch einmal durchgehen."
 
 #: src/control/onboarding/Control.OnboardingTour.ts:245
 #: src/slideshow/engine/SlideShowHandler.ts:116
@@ -5801,7 +5820,7 @@ msgstr "Funktion einfügen"
 
 #: src/control/Control.NotebookbarCalc.js:2151
 msgid "Function Library"
-msgstr "Funktions-Bibliothek"
+msgstr "Funktionsbibliothek"
 
 #: src/control/Control.NotebookbarCalc.js:2165
 msgid "AutoSum"
@@ -6176,11 +6195,11 @@ msgstr "Vorschau der Seite %1"
 
 #: src/control/Control.PartsPreview.js:967
 msgid "preview of page %1, %3 is missing"
-msgstr ""
+msgstr "Vorschau von Seite %1, %3 fehlt"
 
 #: src/control/Control.PartsPreview.js:968
 msgid "Slide %1, %3 is missing"
-msgstr ""
+msgstr "Folie %1, %3 fehlt"
 
 #: src/control/Control.PartsPreview.js:972
 #, fuzzy
@@ -6189,31 +6208,31 @@ msgstr "Vorschau von Seite %1, verlinkt mit %2 in %3"
 
 #: src/control/Control.PartsPreview.js:973
 msgid "Slide %1, not found in %3"
-msgstr ""
+msgstr "Folie %1, nicht gefunden in %3"
 
 #: src/control/Control.PartsPreview.js:977
 msgid "preview of page %1, no access to %3"
-msgstr ""
+msgstr "Vorschau von Seite %1, kein Zugriff auf %3"
 
 #: src/control/Control.PartsPreview.js:978
 msgid "Slide %1, no access to %3"
-msgstr ""
+msgstr "Folie %1, kein Zugriff auf %3"
 
 #: src/control/Control.PartsPreview.js:982
 msgid "preview of page %1, could not open %3"
-msgstr ""
+msgstr "Vorschau von Seite %1, %3 konnte nicht geöffnet werden"
 
 #: src/control/Control.PartsPreview.js:983
 msgid "Slide %1, could not open %3"
-msgstr ""
+msgstr "Folie %1, %3 konnte nicht geöffnet werden"
 
 #: src/control/Control.PartsPreview.js:988
 msgid "preview of page %1, %2 changed in %3"
-msgstr ""
+msgstr "Vorschau von Seite %1, %2 in %3 geändert"
 
 #: src/control/Control.PartsPreview.js:989
 msgid "Slide %1, %2 changed in %3"
-msgstr ""
+msgstr "Folie %1, %2 in %3 geändert"
 
 #: src/control/Control.PartsPreview.js:992
 #, fuzzy
@@ -6222,15 +6241,15 @@ msgstr "Vorschau von Seite %1, verlinkt mit %2"
 
 #: src/control/Control.PartsPreview.js:993
 msgid "Slide %1, changed in %3"
-msgstr ""
+msgstr "Folie %1, in %3 geändert"
 
 #: src/control/Control.PartsPreview.js:997
 msgid "preview of page %1, %3 is disconnected"
-msgstr ""
+msgstr "Vorschau von Seite %1, %3 ist getrennt"
 
 #: src/control/Control.PartsPreview.js:998
 msgid "Slide %1, %3 is disconnected"
-msgstr ""
+msgstr "Folie %1, %3 ist getrennt"
 
 #: src/control/Control.PartsPreview.js:1002
 msgid "preview of page %1, linked to %2 in %3"
@@ -6315,7 +6334,7 @@ msgstr "{0} geändert"
 
 #: src/control/Control.SlideImportPane.tsx:693
 msgid "Disconnected"
-msgstr ""
+msgstr "Getrennt"
 
 #: src/control/Control.SlideImportPane.tsx:694
 #: src/control/Control.SlideLinkToolbar.tsx:115
@@ -6334,19 +6353,23 @@ msgstr "Folien werden gelesen ..."
 
 #: src/control/Control.SlideImportPane.tsx:742
 msgid "Looking for the file..."
-msgstr ""
+msgstr "Die Datei wird gesucht ..."
 
 #: src/control/Control.SlideImportPane.tsx:745
 msgid ""
 "The slides are in this presentation. You do not have permission to open the "
 "file they came from."
 msgstr ""
+"Die Folien befinden sich in dieser Präsentation. Sie haben keine "
+"Berechtigung, die Datei zu öffnen, aus der sie stammen."
 
 #: src/control/Control.SlideImportPane.tsx:749
 msgid ""
 "The slides are in this presentation. Looking for the file they came from "
 "did not work this time."
 msgstr ""
+"Die Folien befinden sich in dieser Präsentation. Die Suche nach der Datei, "
+"aus der sie stammen, hat diesmal nicht funktioniert."
 
 #: src/control/Control.SlideImportPane.tsx:752
 msgid ""
@@ -6695,7 +6718,7 @@ msgstr "Sicherheitsfilterung für Systemaufrufe aktiviert"
 
 #: src/control/Control.ServerAuditDialog.ts:112
 msgid "The trusted WOPI hosts are configured"
-msgstr ""
+msgstr "Die vertrauenswürdigen WOPI-Hosts sind konfiguriert"
 
 #: src/control/Control.ServerAuditDialog.ts:128
 msgid "Hardware resources are sufficient for optimal performance"
@@ -6955,7 +6978,7 @@ msgstr "Dokument in %1 ms neu berechnet"
 
 #: src/control/Control.TopToolbar.js:121 src/control/Control.TopToolbar.js:125
 msgid "Show Menu Bar"
-msgstr ""
+msgstr "Menüleiste anzeigen"
 
 #: src/control/Control.TopToolbar.js:180
 msgid "Active Sheet"
@@ -7547,7 +7570,7 @@ msgstr "Bearbeitungsmodus"
 
 #: src/control/PermissionMode.ts:273
 msgid "Review Mode"
-msgstr ""
+msgstr "Überprüfungsmodus"
 
 #: src/control/PermissionMode.ts:291 src/control/PermissionMode.ts:471
 #: src/control/PermissionMode.ts:477 src/control/PermissionMode.ts:483
@@ -7564,7 +7587,7 @@ msgstr "Bild auf Server speichern"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:399
 msgid "Fit slide to view"
-msgstr ""
+msgstr "Bild an die Ansicht anpassen"
 
 #: src/control/jsdialog/Control.ContextMenu.ts:499
 msgid "Paste Special"
@@ -8422,7 +8445,7 @@ msgstr "Die KI ist nicht konfiguriert, wenden Sie sich an Ihren Administrator"
 
 #: src/docdispatcher.ts:1000
 msgid "Delete section"
-msgstr ""
+msgstr "Abschnitt löschen"
 
 #: src/docdispatcher.ts:1007
 msgid "Delete slides"
@@ -8727,11 +8750,11 @@ msgstr "Folie"
 
 #: src/layer/marker/A11yTextInput.js:265
 msgid "Comment by {0}: {1}"
-msgstr ""
+msgstr "Kommentar von {0}: {1}"
 
 #: src/layer/marker/A11yTextInput.js:379
 msgid "Heading level {0}"
-msgstr ""
+msgstr "Überschriftenebene {0}"
 
 #: src/layer/marker/A11yTextInput.js:1071
 msgid "Out of table"
@@ -8802,11 +8825,11 @@ msgstr ""
 
 #: src/layer/marker/TextInput.js:511
 msgid "Combo box"
-msgstr ""
+msgstr "Kombinationsfeld"
 
 #: src/layer/marker/TextInput.js:515
 msgid "Content control"
-msgstr ""
+msgstr "Inhaltskontrolle"
 
 #: src/layer/marker/TextInput.js:528
 #, fuzzy
@@ -9071,7 +9094,7 @@ msgstr "Der Präsentationsmodus wurde für dieses Dokument deaktiviert"
 
 #: src/map/handler/Map.StateChanges.js:204
 msgid "Editing slide %1 - click outside or press Esc to finish"
-msgstr ""
+msgstr "Folie %1 bearbeiten – außerhalb klicken oder Esc zum Beenden drücken"
 
 #: src/map/handler/Map.VersionBar.js:50
 msgid "Your Collabora Online server needs updating. Version {0} is available."
@@ -9276,11 +9299,11 @@ msgstr "Erweiterungsbefehl fehlgeschlagen: %1"
 
 #: src/control/Control.Extension.ts:2060
 msgid "Yes"
-msgstr ""
+msgstr "Ja"
 
 #: src/control/Control.Extension.ts:2061
 msgid "No"
-msgstr ""
+msgstr "Nein"
 
 #: templates/templates.js:6 templates/templates.js:10
 msgid "Business Letter"
