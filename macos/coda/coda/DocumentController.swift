@@ -324,11 +324,12 @@ final class DocumentController: NSDocumentController {
     }
 
     /**
-     * Opens the bundled welcome file (welcome/welcome-slideshow.odp).
+     * Opens the bundled welcome file (welcome/welcome-slideshow.odp). automatic is the first
+     * start or an update, as opposed to Help > Latest Updates.
      */
-    func openWelcome() {
-        guard COWrapper.isWelcomeEnabled() else {
-            COWrapper.LOG_TRC("The welcome slideshow is off in the configuration")
+    func openWelcome(automatic: Bool) {
+        guard !automatic || COWrapper.autoStartsWelcome() else {
+            COWrapper.LOG_TRC("A debug build does not start the welcome slideshow by itself")
             return
         }
 

@@ -418,8 +418,8 @@ class ViewController: NSViewController, WKScriptMessageHandlerWithReply, WKNavig
                     */
                     return (nil, nil)
                 }
-                else if body == "WELCOME" {
-                    (NSDocumentController.shared as? DocumentController)?.openWelcome()
+                else if body == "WELCOME" || body == "WELCOME auto" {
+                    (NSDocumentController.shared as? DocumentController)?.openWelcome(automatic: body != "WELCOME")
                     return (nil, nil)
                 }
                 else if body == "LICENSE" {

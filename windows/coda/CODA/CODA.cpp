@@ -65,7 +65,6 @@
 #include <common/AIHttpTransport.hpp>
 #include <common/Clipboard.hpp>
 #include <common/Common.hpp>
-#include <common/ConfigUtil.hpp>
 #include <common/JsonUtil.hpp>
 #include <common/LangUtil.hpp>
 #include <common/Protocol.hpp>
@@ -745,12 +744,13 @@ static void do_hullo_handling_things(DocumentTab& data)
     fakeSocketWriteQueue(data.fakeClientFd, message.c_str(), message.size());
 }
 
-static void do_welcome_handling_things(DocumentTab& data)
+// automatic: the first start or an update ("WELCOME auto"), as opposed to Help > Latest
+// Updates ("WELCOME").
+static void do_welcome_handling_things(DocumentTab& data, [[maybe_unused]] bool automatic)
 {
 #if ENABLE_DEBUG
-    // A debug build shows the slideshow only when the configuration turns the welcome screen
-    // on.
-    if (!ConfigUtil::getBool("welcome.enable", false))
+    // A debug build opens the slideshow only from the menu.
+    if (automatic)
         return;
 #endif
 
@@ -5467,9 +5467,9 @@ static void processMessage(DocumentTab& data, wil::unique_cotaskmem_string& mess
 
             do_hullo_handling_things(data);
         }
-        else if (s == L"WELCOME")
+        else if (s == L"WELCOME" || s == L"WELCOME auto")
         {
-            do_welcome_handling_things(data);
+            do_welcome_handling_things(data, s != L"WELCOME");
         }
         else if (s == L"FILEDRAGENTER")
         {

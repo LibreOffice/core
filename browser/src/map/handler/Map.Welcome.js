@@ -53,7 +53,7 @@ window.L.Map.Welcome = window.L.Handler.extend({
 		if (!this.isGuest() && window.autoShowWelcome && this.shouldWelcome()) {
 			this.showWelcomeDialog();
 		} else if (this.shouldWelcomeWithSlideshow()) {
-			this.showWelcomeSlideshow();
+			this.showWelcomeSlideshow(true);
 		}
 	},
 
@@ -99,11 +99,13 @@ window.L.Map.Welcome = window.L.Handler.extend({
 		return false;
 	},
 
-	showWelcomeSlideshow: function() {
+	// automatic: the first start or an update, as opposed to Help > Latest Updates. The desktop
+	// apps start the slideshow by themselves only in release builds.
+	showWelcomeSlideshow: function(automatic) {
 		if (window.coolParams.get('welcome') === 'true')
 			return;
 
-		app.socket.sendMessage('WELCOME');
+		app.socket.sendMessage(automatic ? 'WELCOME auto' : 'WELCOME');
 		window.prefs.set('WSDWelcomeVersion', app.socket.WSDServer.Version);
 	},
 

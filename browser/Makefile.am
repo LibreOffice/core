@@ -1209,8 +1209,8 @@ if APP_HAS_BRANDING
 	@echo
 	@echo "JS, HTML and CSS has been updated ($(DIST_FOLDER))."
 endif
-# The welcome slideshow of the desktop apps, translated like the introductory documents. The
-# apps show it in release builds, and in debug builds when the welcome.enable setting is true.
+# The welcome slideshow of the desktop apps, translated like the introductory documents. A
+# debug build opens it only from Help > Latest Updates.
 	@if test "$(ENABLE_QTAPP)" = true || test "$(ENABLE_MACOSAPP)" = true || test "$(ENABLE_WINDOWSAPP)" = true ; then \
 		echo "Generating the localized welcome slideshow"; \
 		mkdir -p $(DIST_FOLDER)/welcome && \

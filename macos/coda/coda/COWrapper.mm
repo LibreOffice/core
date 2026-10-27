@@ -28,7 +28,6 @@
 #include <cstring>
 #include <set>
 #include <common/Clipboard.hpp>
-#include <common/ConfigUtil.hpp>
 #include <common/LangUtil.hpp>
 #include <common/AIHttpTransport.hpp>
 #include <common/SettingsStorage.hpp>
@@ -799,9 +798,10 @@ static std::atomic<int> appDocIdCounter(1);
     return LangUtil::isRtlLanguage(std::string([language UTF8String]));
 }
 
-+ (bool)isWelcomeEnabled {
+// A debug build opens the welcome slideshow only from Help > Latest Updates.
++ (bool)autoStartsWelcome {
 #if ENABLE_DEBUG
-    return ConfigUtil::getBool("welcome.enable", false);
+    return false;
 #else
     return true;
 #endif

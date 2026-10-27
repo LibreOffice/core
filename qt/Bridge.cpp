@@ -20,7 +20,6 @@
 #include <qt/DocumentOperations.hpp>
 #include <wsd/DocumentBroker.hpp>
 #include <net/FakeSocket.hpp>
-#include <common/ConfigUtil.hpp>
 #include <common/FileUtil.hpp>
 #include <common/Log.hpp>
 #include <common/MobileApp.hpp>
@@ -834,10 +833,10 @@ QVariant Bridge::cool(const QString& messageStr)
     }
     else if (tokens.equals(0, "WELCOME"))
     {
+        // "WELCOME auto" is the first start or an update, "WELCOME" is Help > Latest Updates.
 #if ENABLE_DEBUG
-        // A debug build shows the slideshow only when the configuration turns the welcome
-        // screen on.
-        const bool welcomeEnabled = ConfigUtil::getBool("welcome.enable", false);
+        // A debug build opens the slideshow only from the menu.
+        const bool welcomeEnabled = !(tokens.size() > 1 && tokens.equals(1, "auto"));
 #else
         const bool welcomeEnabled = true;
 #endif
@@ -845,7 +844,7 @@ QVariant Bridge::cool(const QString& messageStr)
         struct stat st;
         if (!welcomeEnabled)
         {
-            LOG_TRC_NOFILE("The welcome slideshow is off in the configuration");
+            LOG_TRC_NOFILE("A debug build does not start the welcome slideshow by itself");
         }
         else if (FileUtil::getStatOfFile(welcomePath, st) == 0)
         {

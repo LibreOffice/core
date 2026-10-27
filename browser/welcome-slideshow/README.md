@@ -4,8 +4,8 @@ The slideshow that Collabora Office shows at the first start and after an
 update, and from Help > Latest Updates. Every desktop app build bundles it as
 `welcome/welcome-slideshow.odp`, translated at build time from `po/` with the
 introdocs tooling (`../introdocs/create_l10n_intro_docs.py`). `welcome.svg` is
-shown while the slideshow loads. Debug builds show it only with the
-`welcome.enable` setting.
+shown while the slideshow loads. A debug build does not start it by itself,
+only from Help > Latest Updates.
 
 The translations are maintained on Weblate (project collabora-online,
 component welcome-presentation).
