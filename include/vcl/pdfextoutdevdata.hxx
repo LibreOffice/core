@@ -97,6 +97,8 @@ class VCL_DLLPUBLIC PDFExtOutDevData final : public ExtOutDevData
     std::vector<OUString> maChapterNames;
     // map from annotation SdrObject to annotation index
     ::std::map<SdrObject const*, ::std::vector<sal_Int32>> m_ScreenAnnotations;
+    // map from SdrObject to the ids of the links on it
+    ::std::map<SdrObject const*, ::std::vector<sal_Int32>> m_LinkAnnotations;
 
     SwEnhancedPDFState * m_pSwPDFState = nullptr;
     ScEnhancedPDFState * m_pScPDFState = nullptr;
@@ -274,17 +276,23 @@ public:
     @param rAltText
     Alt text for the link
 
+    @param pObj
+    the SdrObject the link is on, if any, to tag the link with it
+
     @returns
     the link id (to be used in SetLinkDest, SetLinkURL) or
     -1 if page id does not exist
     */
-    sal_Int32 CreateLink(const tools::Rectangle& rRect, OUString const& rAltText, sal_Int32 nPageNr = -1);
+    sal_Int32 CreateLink(const tools::Rectangle& rRect, OUString const& rAltText, sal_Int32 nPageNr = -1, SdrObject const* pObj = nullptr);
 
     /// Create a Screen annotation.
     sal_Int32 CreateScreen(const tools::Rectangle& rRect, OUString const& rAltText, OUString const& rMimeType, sal_Int32 nPageNr, SdrObject const* pObj);
 
     /// Get back the annotations created for one SdrObject.
     ::std::vector<sal_Int32> const& GetScreenAnnotIds(SdrObject const* pObj) const;
+
+    /// Get back the links created for one SdrObject, or nullptr if there are none.
+    ::std::vector<sal_Int32> const* GetLinkAnnotIds(SdrObject const* pObj) const;
 
     /** Set the destination for a link
         <p>will change a URL type link to a dest link if necessary</p>
