@@ -52,6 +52,7 @@
 #include <cppuhelper/implbase.hxx>
 #include <cppuhelper/weak.hxx>
 #include <cppuhelper/exc_hlp.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <rtl/ustring.hxx>
 #include <sal/types.h>
 #include <ucbhelper/content.hxx>
@@ -311,6 +312,54 @@ DescriptionInfoset getDescriptionInfoset(std::u16string_view sExtensionFolderURL
             nullptr, anyEx );
     }
     return DescriptionInfoset(context, root);
+}
+
+namespace {
+
+bool isWhiteSpaceOrControl(sal_uInt32 c)
+{
+    return c <= 0x20 || (c >= 0x7F && c <= 0xA0) || c == 0x1680 || (c >= 0x2000 && c <= 0x200A)
+        || c == 0x2028 || c == 0x2029 || c == 0x202F || c == 0x205F || c == 0x3000;
+}
+
+bool isBidiControl(sal_uInt32 c)
+{
+    return (c >= 0x202A && c <= 0x202E) || (c >= 0x2066 && c <= 0x2069);
+}
+
+OUString getPlainDisplayName(std::u16string_view rName)
+{
+    constexpr sal_Int32 nMaxLength = 75;
+    OUStringBuffer aPlain(static_cast<sal_Int32>(rName.size()));
+    sal_Int32 nLength = 0;
+    bool bSpace = false;
+    for (sal_Int32 i = 0; i < static_cast<sal_Int32>(rName.size());)
+    {
+        sal_uInt32 c = o3tl::iterateCodePoints(rName, &i);
+        if (isBidiControl(c))
+            continue;
+        if (isWhiteSpaceOrControl(c))
+        {
+            bSpace = nLength > 0;
+            continue;
+        }
+        if (nLength + (bSpace ? 2 : 1) > nMaxLength)
+        {
+            aPlain.append("...");
+            break;
+        }
+        if (bSpace)
+        {
+            aPlain.append(' ');
+            ++nLength;
+            bSpace = false;
+        }
+        aPlain.appendUtf32(c);
+        ++nLength;
+    }
+    return aPlain.makeStringAndClear();
+}
+
 }
 
 DescriptionInfoset::DescriptionInfoset(
@@ -621,7 +670,7 @@ OUString DescriptionInfoset::getLocalizedDisplayName() const
             // ignore
         }
         if (xtext.is())
-            return xtext->getNodeValue();
+            return getPlainDisplayName(xtext->getNodeValue());
     }
     return OUString();
 }
