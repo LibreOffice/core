@@ -3012,6 +3012,8 @@ else
     AC_MSG_RESULT([no])
 fi
 
+IOSAPP_ICON_NAME=$with_iosapp_appicon
+
 AS_IF([test "$ENABLE_IOSAPP" = "true"],
       [
        if test `uname -s` = "Darwin"; then
@@ -3065,30 +3067,33 @@ AS_IF([test "$ENABLE_IOSAPP" = "true"],
           fi
           ln -s "$LOBUILDDIR/workdir/CustomTarget/ios/resources/icudt${ICU_MAJOR}l.dat" ICU.dat
 
-          # Sadly Xcode doesn't like it if AppIcon.appiconset is a
-          # symlink, so make it a directory of symlinks to the actual png
-          # and json files.
+          AC_MSG_CHECKING([for iOS app icon])
           rm -rf ios/Mobile/Assets.xcassets/AppIcon.appiconset
           rm -rf ios/Mobile/AppIcon.icon
-          if test -n "$with_iosapp_appicon"; then
-             if test "${with_iosapp_appicon%%".icon"}" != "$with_iosapp_appicon"; then
-                # .icon files are even stricter - they can't contain symlinks so we need to copy the directory over
-                # luckily the format is such that we don't have to copy lots of different sizes of icon at least
-                cp -r "$with_iosapp_appicon" ios/Mobile/AppIcon.icon
-             else
-                mkdir ios/Mobile/Assets.xcassets/AppIcon.appiconset
-                ln -s "$with_iosapp_appicon"/* ios/Mobile/Assets.xcassets/AppIcon.appiconset
-                IOSAPP_EXCLUDED_SOURCE_FILE_NAMES="$IOSAPP_EXCLUDED_SOURCE_FILE_NAMES AppIcon.icon"
-             fi
-          else
+          if test "${with_iosapp_appicon%%".appiconset"}" != "$with_iosapp_appicon"; then
+             # Sadly Xcode doesn't like it if AppIcon.appiconset is a
+             # symlink, so make it a directory of symlinks to the actual png
+             # and json files.
              mkdir ios/Mobile/Assets.xcassets/AppIcon.appiconset
-             ln -s ios/Mobile/Assets.xcassets/Empty.appiconset/* ios/Mobile/Assets.xcassets/AppIcon.appiconset
+             ln -s "$with_iosapp_appicon"/* ios/Mobile/Assets.xcassets/AppIcon.appiconset
              IOSAPP_EXCLUDED_SOURCE_FILE_NAMES="$IOSAPP_EXCLUDED_SOURCE_FILE_NAMES AppIcon.icon"
+             IOSAPP_ICON_NAME="AppIcon"
+             AC_MSG_RESULT([appiconset $with_iosapp_appicon to copy])
+          elif test "${with_iosapp_appicon%%".icon"}" != "$with_iosapp_appicon"; then
+             # .icon files are even stricter - they can't contain symlinks so we need to copy the directory over
+             # luckily the format is such that we don't have to copy lots of different sizes of icon at least
+             cp -r "$with_iosapp_appicon" ios/Mobile/AppIcon.icon
+             IOSAPP_ICON_NAME="AppIcon"
+             AC_MSG_RESULT([icon $with_iosapp_appicon to copy])
+          else
+             AC_MSG_RESULT([${with_iosapp_appicon:-default} embedded icon])
           fi
        fi
       ],
       [
       ])
+
+AC_SUBST(IOSAPP_ICON_NAME)
 
 AC_OUTPUT
 

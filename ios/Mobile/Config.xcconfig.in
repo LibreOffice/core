@@ -17,6 +17,10 @@ APP_PACKAGE_NAME = @APP_PACKAGE_NAME@
 // extension has to declare the same CFBundleShortVersionString as its containing app.
 APP_BUNDLE_SHORT_VERSION = @IOSAPP_BUNDLE_SHORT_VERSION@
 
+// The name of the AppIcon to use. Normally either AppIcon for an external icon or AppIcon_somename
+// for one of our in-tree icons
+APP_ICON_NAME = @IOSAPP_ICON_NAME@
+
 // Any files to leave out of the build. Used, say, to exclude a missing .icon file so the build
 // does not fail when using an .appiconset
 EXCLUDED_SOURCE_FILE_NAMES = @IOSAPP_EXCLUDED_SOURCE_FILE_NAMES@

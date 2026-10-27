@@ -96,6 +96,10 @@
 		BEDCC84E2452F82800FB02BD /* MobileApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = BEDCC84C2452F82800FB02BD /* MobileApp.cpp */; };
 		BEDCC8992456FFAD00FB02BD /* SceneDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = BEDCC8982456FFAC00FB02BD /* SceneDelegate.mm */; };
 		BEFB1EE121C29CC70081D757 /* L10n.mm in Sources */ = {isa = PBXBuildFile; fileRef = BEFB1EE021C29CC70081D757 /* L10n.mm */; };
+		C74FE3C73090A8D900643C6B /* AppIcon_snapshot.icon in Resources */ = {isa = PBXBuildFile; fileRef = C74FE3C63090A8D900643C6B /* AppIcon_snapshot.icon */; };
+		C74FE3C83090A8D900643C6B /* AppIcon_release.icon in Resources */ = {isa = PBXBuildFile; fileRef = C74FE3C53090A8D900643C6B /* AppIcon_release.icon */; };
+		C74FE3C93090A8D900643C6B /* AppIcon_snapshot.icon in Resources */ = {isa = PBXBuildFile; fileRef = C74FE3C63090A8D900643C6B /* AppIcon_snapshot.icon */; };
+		C74FE3CA3090A8D900643C6B /* AppIcon_release.icon in Resources */ = {isa = PBXBuildFile; fileRef = C74FE3C53090A8D900643C6B /* AppIcon_release.icon */; };
 		C75AA5C1308B9E6400ED15D4 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = C75AA5C0308B9E6400ED15D4 /* AppIcon.icon */; };
 		C75AA5C2308B9E6400ED15D4 /* AppIcon.icon in Resources */ = {isa = PBXBuildFile; fileRef = C75AA5C0308B9E6400ED15D4 /* AppIcon.icon */; };
 		C75AA5C4308B9EA500ED15D4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C75AA5C3308B9EA500ED15D4 /* Assets.xcassets */; };
@@ -1533,6 +1537,8 @@
 		BEFB1EE021C29CC70081D757 /* L10n.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = L10n.mm; sourceTree = "<group>"; };
 		C4F52A830C61CCDD874F0E92 /* ProcUtil.hpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.h; path = ProcUtil.hpp; sourceTree = "<group>"; };
 		C73BEA612E8429C4009E12D3 /* MobileUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MobileUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C74FE3C53090A8D900643C6B /* AppIcon_release.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon_release.icon; sourceTree = "<group>"; };
+		C74FE3C63090A8D900643C6B /* AppIcon_snapshot.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon_snapshot.icon; sourceTree = "<group>"; };
 		C75AA5C0308B9E6400ED15D4 /* AppIcon.icon */ = {isa = PBXFileReference; lastKnownFileType = folder.iconcomposer.icon; path = AppIcon.icon; sourceTree = "<group>"; };
 		C75AA5C3308B9EA500ED15D4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		C78C8ED32E9001F00011B574 /* data */ = {isa = PBXFileReference; lastKnownFileType = folder; name = data; path = ../test/data; sourceTree = "<group>"; };
@@ -2777,6 +2783,8 @@
 				C7C0F1A02F5B00010000A001 /* Config.xcconfig */,
 				BE8D773E2136762600AC58EA /* Info.plist */,
 				BE8D773F2136762600AC58EA /* main.m */,
+				C74FE3C53090A8D900643C6B /* AppIcon_release.icon */,
+				C74FE3C63090A8D900643C6B /* AppIcon_snapshot.icon */,
 			);
 			path = Mobile;
 			sourceTree = "<group>";
@@ -3798,6 +3806,8 @@
 				BE8D85CE214055F3009F1860 /* oovbaapi.rdb in Resources */,
 				BE00F8A721396585001CE2D4 /* cool-help.html in Resources */,
 				BE8D773D2136762600AC58EA /* LaunchScreen.storyboard in Resources */,
+				C74FE3C93090A8D900643C6B /* AppIcon_snapshot.icon in Resources */,
+				C74FE3CA3090A8D900643C6B /* AppIcon_release.icon in Resources */,
 				BE00F8A121396585001CE2D4 /* bundle.css in Resources */,
 				BE8D85CF214055F3009F1860 /* udkapi.rdb in Resources */,
 				BE18C7DE226DE09A001AD27E /* Branding in Resources */,
@@ -3831,6 +3841,8 @@
 			files = (
 				C75AA5C4308B9EA500ED15D4 /* Assets.xcassets in Resources */,
 				C75AA5C2308B9E6400ED15D4 /* AppIcon.icon in Resources */,
+				C74FE3C73090A8D900643C6B /* AppIcon_snapshot.icon in Resources */,
+				C74FE3C83090A8D900643C6B /* AppIcon_release.icon in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -4095,7 +4107,7 @@
 		BE8D77442136762600AC58EA /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "$(APP_ICON_NAME:default=AppIcon_snapshot)";
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CODE_SIGN_ENTITLEMENTS = Mobile/Mobile.entitlements;
 				CODE_SIGN_STYLE = Automatic;
@@ -4162,7 +4174,7 @@
 		BE8D77452136762600AC58EA /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "$(APP_ICON_NAME:default=AppIcon_release)";
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CODE_SIGN_ENTITLEMENTS = Mobile/Mobile.entitlements;
 				CODE_SIGN_STYLE = Automatic;
@@ -4292,7 +4304,7 @@
 		C7CA440F2F430DCC0087DA36 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "$(APP_ICON_NAME:default=AppIcon_snapshot)";
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_STANDALONE_ICON_BEHAVIOR = all;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -4339,7 +4351,7 @@
 		C7CA44102F430DCC0087DA36 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_APPICON_NAME = "$(APP_ICON_NAME:default=AppIcon_release)";
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
 				ASSETCATALOG_COMPILER_STANDALONE_ICON_BEHAVIOR = all;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
