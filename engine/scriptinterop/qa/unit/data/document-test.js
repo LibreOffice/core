@@ -602,6 +602,37 @@ function test() {
     const notBold = body.appendParagraph('abcd').editAsText();
     notBold.setBold(0, 1, false);
     console.assert(JSON.stringify(notBold.getTextAttributeIndices()) === '[0,2]');
+    // Formatting a part of a child text that runs past its end is an error:
+    {
+        let message = null;
+        try {
+            withImage.getChild(0).setBold(0, 5, true);
+        } catch (e) {
+            message = e.message;
+        }
+        console.assert(message === 'Index (5) must be less than the content length (3).');
+    }
+    {
+        let threw = false;
+        try {
+            withImage.getChild(0).insertText(4, 'Y');
+        } catch (e) {
+            threw = true;
+        }
+        console.assert(threw);
+    }
+    // Reading an attribute at an offset past the end of a child text is an error too:
+    {
+        let message = null;
+        try {
+            withImage.getChild(0).isBold(3);
+        } catch (e) {
+            message = e.message;
+        }
+        console.assert(message === 'Index (3) must be less than the content length (3).');
+    }
+    console.assert(throws(() => withImage.getChild(0).getFontFamily(100)));
+    console.assert(throws(() => withImage.getChild(0).getLinkUrl(-1)));
     // A range over the image is split into the image and the parts of the texts around it:
     const overImage = doc.newRange().addElement(withImage.editAsText(), 1, 4).build()
         .getRangeElements();
@@ -1094,4 +1125,10 @@ function test() {
         console.assert(
             cool.getActiveUnoModel().getCurrentController().getSelection().getCount() === 1);
     }
+
+    // The text of the body has attributes at the line end after an empty paragraph:
+    body.appendParagraph('');
+    body.appendParagraph('z');
+    console.assert(!throws(() => bodyText.isBold(bodyText.getText().length - 2)));
+    console.assert(!throws(() => bodyText.getForegroundColor(bodyText.getText().length - 2)));
 }

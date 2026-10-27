@@ -212,6 +212,23 @@ function test() {
     console.assert(childText[0].getElement().getType() === DocumentApp.ElementType.TEXT);
     console.assert(childText[0].isPartial());
     console.assert(childText[0].getEndOffsetInclusive() === 5);
+    // A part of a text that runs past the end of that text cannot be added:
+    let pastEnd = false;
+    try {
+        doc.newRange().addElement(body.getChild(0).editAsText(), 0, 100).build();
+    } catch (e) {
+        pastEnd = true;
+    }
+    console.assert(pastEnd);
+    // An empty text has no part to add:
+    let emptyPart = false;
+    try {
+        doc.newRange().addElement(empty.getRow(0).getCell(0).getChild(0).editAsText(), 0, 0)
+            .build();
+    } catch (e) {
+        emptyPart = true;
+    }
+    console.assert(emptyPart);
     // The text of a table and of a row stands for that element:
     if (globalThis.cool) {
         const tableText = doc.newRange().addElement(empty.editAsText()).build().getRangeElements();

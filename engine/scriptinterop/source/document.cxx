@@ -831,10 +831,12 @@ public:
             throw cpo::uno::RuntimeException(
                 u"addElementRange: the text must not be null"_ustr);
         }
-        if (startOffset < 0 || endOffsetInclusive < startOffset) {
+        if (startOffset < 0 || endOffsetInclusive < startOffset
+            || endOffsetInclusive >= text->getText().getLength())
+        {
             throw cpo::uno::RuntimeException(
-                "addElementRange: expected 0 <= startOffset <= endOffsetInclusive, got startOffset="
-                + OUString::number(startOffset) + ", endOffsetInclusive="
+                "addElementRange: expected 0 <= startOffset <= endOffsetInclusive < length, got"
+                " startOffset=" + OUString::number(startOffset) + ", endOffsetInclusive="
                 + OUString::number(endOffsetInclusive));
         }
         auto const para = textRangeOf(text);
@@ -1059,7 +1061,6 @@ public:
     }
 
     css::beans::Optional<OUString> getForegroundColorAt(sal_Int32 offset) override {
-        checkOffset(offset);
         auto const color = colorOn(runAt(offset));
         if (!color) {
             return {false, {}};
@@ -1149,10 +1150,17 @@ public:
                 "insertText: expected a non-negative offset, got " + OUString::number(offset));
         }
         auto const whole = wholeRange();
+        auto const length = textOf(whole).getLength();
+        if (offset > length) {
+            throw cpo::uno::RuntimeException(
+                "Index (" + OUString::number(offset)
+                + ") must be less than or equal to the content length (" + OUString::number(length)
+                + ").");
+        }
         auto const host = whole->getText();
         auto const cursor = host->createTextCursorByRange(whole->getStart());
         goRight(cursor, offset, false);
-        if (offset < textOf(whole).getLength()) {
+        if (offset < length) {
             skipAnchors(cursor);
         }
         host->insertString(cursor, text, false);
@@ -1409,6 +1417,11 @@ private:
     }
 
     cpo::uno::Reference<css::text::XTextRange> runAt(sal_Int32 offset) {
+        // Unlike in GAS, offset 0 of an empty text is valid, as the line end of an empty paragraph
+        // has attributes too:
+        if (offset != 0 || !getText().isEmpty()) {
+            checkOffset(offset);
+        }
         auto const runs = this->runs();
         if (runs.empty()) {
             throw cpo::uno::RuntimeException(u"the text has no content at this offset"_ustr);
@@ -1468,6 +1481,7 @@ private:
                 + OUString::number(startOffset) + ", endOffsetInclusive="
                 + OUString::number(endOffsetInclusive));
         }
+        checkOffset(endOffsetInclusive);
         auto const whole = wholeRange();
         auto const cursor = whole->getText()->createTextCursorByRange(whole->getStart());
         goRight(cursor, startOffset, false);
