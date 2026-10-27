@@ -32,9 +32,14 @@ describe('CleanupSidebar', function () {
 			assert.equal(formatByteSize(1024 * 1024 - 1), '1024 KB');
 		});
 
-		it('gives a megabyte figure one decimal place with a period', function () {
-			assert.equal(formatByteSize(1024 * 1024), '1.0 MB');
-			assert.equal(formatByteSize(1024 * 1024 * 2.25), '2.3 MB');
+		it('gives a megabyte figure one decimal place', function () {
+			assert.equal(formatByteSize(1024 * 1024, 'en-US'), '1.0 MB');
+			assert.equal(formatByteSize(1024 * 1024 * 2.25, 'en-US'), '2.3 MB');
+		});
+
+		it('writes the decimal separator of the locale', function () {
+			assert.equal(formatByteSize(1024 * 1024 * 2.25, 'fr-FR'), '2,3 MB');
+			assert.equal(formatByteSize(1024 * 1024 * 2.25, 'de-DE'), '2,3 MB');
 		});
 	});
 

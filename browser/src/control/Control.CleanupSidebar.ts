@@ -448,10 +448,15 @@ function newCleanupPanelState(): CleanupPanelState {
 	};
 }
 
+/// The language the UI is shown in, as LocaleService reads it.
+function uiLocale(): string {
+	const fromURL = app.UI && app.UI.language ? app.UI.language.fromURL : '';
+	return fromURL || window.L.Browser.lang;
+}
+
 /// Says how many bytes a figure stands for: whole bytes under a kilobyte, whole kilobytes
-/// under a megabyte, and megabytes to one decimal place with a period, whatever the
-/// language of the reader.
-function formatByteSize(bytes: number): string {
+/// under a megabyte, and megabytes to one decimal place in the number format of locale.
+function formatByteSize(bytes: number, locale: string = uiLocale()): string {
 	const oneKilobyte = 1024;
 	const oneMegabyte = 1024 * 1024;
 
@@ -469,7 +474,10 @@ function formatByteSize(bytes: number): string {
 	}
 
 	const tenths = Math.floor((bytes * 10 + oneMegabyte / 2) / oneMegabyte);
-	const megabytes = String(Math.floor(tenths / 10)) + '.' + String(tenths % 10);
+	const megabytes = (tenths / 10).toLocaleString(locale, {
+		minimumFractionDigits: 1,
+		maximumFractionDigits: 1,
+	});
 	return _('%1 MB').replace('%1', megabytes);
 }
 
