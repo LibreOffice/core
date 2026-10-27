@@ -3,9 +3,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-23 00:15+0200\n"
-"PO-Revision-Date: 2026-10-23 06:44+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@users.noreply.hosted.weblate.org>"
-"\n"
+"PO-Revision-Date: 2026-10-24 20:21+0000\n"
+"Last-Translator: Mr-Update <mr-update@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collabora-online/"
 "help/de/>\n"
 "Language: de\n"
@@ -226,7 +225,7 @@ msgstr "Absatzformatierung"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:51-76
 msgid "Align Center"
-msgstr "Zentriert"
+msgstr "Zentriert ausrichten"
 
 #: html/cool-help.html%2Bdiv.div.div.table.tr.td:52-64
 msgid "Align Left"
@@ -3008,17 +3007,16 @@ msgstr ""
 "aus meinem Textdokument entfernen?"
 
 #: html/cool-help.html%2Bdiv.div.div.p:739-5
-#, fuzzy
 msgid ""
 "The <span class=\"blue\">¶</span> symbol is a formatting mark. It is used "
 "to help text alignment and editing and is not printed. To toggle it in the "
 "document display, choose <span class=\"ui\">View</span> → <span "
 "class=\"ui\">Formatting Marks</span>."
 msgstr ""
-"Das Symbol <span class=\"blue\">¶</span> ist eine Formatierungsmarke. Es "
-"dient zur Unterstützung der Textausrichtung und -bearbeitung und wird nicht "
-"gedruckt. Um es in der Dokumentanzeige umzuschalten, wählen Sie <span "
-"class=\"ui\">Ansicht</span> → <span class=\"ui\">Formatierungszeichen</span>."
+"Das Symbol <span class=\"blue\">¶</span> ist ein Formatierungszeichen. Es "
+"dient der Ausrichtung und Bearbeitung von Text und wird nicht gedruckt. Um "
+"es in der Dokumentanzeige umzuschalten, wählen Sie <span class=\"ui\">"
+"Ansicht</span> → <span class=\"ui\">Formatierungszeichen</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:746-5
 msgid "How do I get a word count of my document?"
@@ -3162,7 +3160,6 @@ msgstr ""
 "ändert."
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:776-5
-#, fuzzy
 msgid ""
 "To display or hide track changes choose <span class=\"ui\">Review</span> → "
 "<span class=\"ui\">View Changes</span> → <span class=\"ui\">Show</span>. "
@@ -3170,7 +3167,7 @@ msgid ""
 "changes and may inadvertently leave unwanted text available in the document."
 msgstr ""
 "Um Änderungen anzuzeigen oder auszublenden, wählen Sie <span class=\"ui\">"
-"Bearbeiten</span> → <span class=\"ui\">Änderungen</span> → <span "
+"Überprüfen</span> → <span class=\"ui\">Änderungen anzeigen</span> → <span "
 "class=\"ui\">Anzeigen</span>. Beachten Sie, dass bei aktivierter, aber "
 "ausgeblendeter Änderungsverfolgung Änderungen weiterhin protokolliert werden "
 "und möglicherweise unbeabsichtigt unerwünschter Text im Dokument verbleibt."
@@ -3434,7 +3431,6 @@ msgid "What is “Clear Direct Formatting” icon?"
 msgstr "Was ist das Symbol „Direkte Formatierung löschen“?"
 
 #: html/cool-help.html%2Bdiv.div.div.div.p:854-5
-#, fuzzy
 msgid ""
 "Direct formatting is formatting applied directly to the selected contents "
 "of a paragraph or a spreadsheet cell, and overlaps its assigned style "
@@ -3444,11 +3440,10 @@ msgid ""
 msgstr ""
 "Direkte Formatierung ist eine Formatierung, die direkt auf den ausgewählten "
 "Inhalt eines Absatzes oder einer Tabellenzelle angewendet wird und die "
-"zugewiesene Formatierung der Vorlage überdeckt. Um die Formatierung auf die "
-"Vorlageneinstellungen zurückzusetzen, markieren Sie den Text oder die "
-"Tabellenzelle und wählen Sie <span class=\"ui\">Format</span> → <span "
-"class=\"ui\">Direkte Formatierung löschen</span> oder verwenden Sie die "
-"Schaltfläche in der Symbolleiste."
+"zugewiesene Formatierung der Vorlage überschreibt. Um die Formatierung auf "
+"die Vorlageneinstellungen zurückzusetzen, markieren Sie den Text oder die "
+"Tabellenzelle und wählen Sie <span class=\"ui\">Start</span> → <span "
+"class=\"ui\">Direkte Formatierung löschen</span>."
 
 #: html/cool-help.html%2Bdiv.div.div.div.h4:857-5
 msgid "How do I rename a sheet?"

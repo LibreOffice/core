@@ -12,9 +12,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2026-10-23 00:15+0200\n"
-"PO-Revision-Date: 2026-10-24 04:08+0000\n"
-"Last-Translator: Ettore Atalan <atalanttore@users.noreply.hosted.weblate.org>"
-"\n"
+"PO-Revision-Date: 2026-10-24 20:21+0000\n"
+"Last-Translator: Mr-Update <mr-update@users.noreply.hosted.weblate.org>\n"
 "Language-Team: German <https://hosted.weblate.org/projects/collabora-online/"
 "collabora-ui/de/>\n"
 "Language: de\n"
@@ -526,13 +525,12 @@ msgid "API key lacks permissions"
 msgstr "Dem API-Schlüssel fehlen Berechtigungen"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:711
-#, fuzzy
 msgid ""
 "This AI host is not in the server's allowed AI host list "
 "(ai.allowed_hosts). Ask your administrator to permit it."
 msgstr ""
-"Dieser KI-Host ist nicht in der Liste der zugelassenen Hosts des Servers "
-"(lok_allow.host) enthalten. Bitten Sie Ihren Administrator, ihn zuzulassen."
+"Dieser KI-Host ist nicht in der Liste der zugelassenen KI-Hosts des Servers "
+"(ai.allowed.host) enthalten. Bitten Sie Ihren Administrator, ihn zuzulassen."
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:713
 #: src/control/Control.AIChatSidebar.ts:2183
@@ -726,7 +724,7 @@ msgstr "Umbrüche erzwingen"
 #: src/control/Control.Menubar.ts:878 src/control/Control.TopToolbar.js:181
 #: src/control/jsdialog/Definitions.Menu.ts:1605
 msgid "All Sheets"
-msgstr "Alle Seiten"
+msgstr "Alle Blätter"
 
 #: admin/src/integrator/AdminIntegratorSettings.ts:837
 msgid "Content"
@@ -6152,9 +6150,8 @@ msgid "Switch to Editing"
 msgstr "In den Bearbeitungsmodus wechseln"
 
 #: src/control/Control.HyperlinkWizard.ts:67
-#, fuzzy
 msgid "Link"
-msgstr "Linie"
+msgstr "Link"
 
 #: src/control/Control.PartsPreview.js:456
 msgid "Show everyone on this slide"
@@ -6202,9 +6199,8 @@ msgid "Slide %1, %3 is missing"
 msgstr "Folie %1, %3 fehlt"
 
 #: src/control/Control.PartsPreview.js:972
-#, fuzzy
 msgid "preview of page %1, not found in %3"
-msgstr "Vorschau von Seite %1, verlinkt mit %2 in %3"
+msgstr "Vorschau der Seite %1, nicht gefunden in %3"
 
 #: src/control/Control.PartsPreview.js:973
 msgid "Slide %1, not found in %3"
@@ -6235,9 +6231,8 @@ msgid "Slide %1, %2 changed in %3"
 msgstr "Folie %1, %2 in %3 geändert"
 
 #: src/control/Control.PartsPreview.js:992
-#, fuzzy
 msgid "preview of page %1, changed in %3"
-msgstr "Vorschau von Seite %1, verlinkt mit %2"
+msgstr "Vorschau der Seite %1, geändert am %3"
 
 #: src/control/Control.PartsPreview.js:993
 msgid "Slide %1, changed in %3"
@@ -6682,7 +6677,7 @@ msgstr "An Raster maximieren"
 
 #: src/control/Control.PaneExpander.ts:115
 msgid "Exit grid"
-msgstr ""
+msgstr "Raster verlassen"
 
 #: src/control/Control.PaneSplitter.tsx:70
 msgid "Resize panels"
@@ -8221,7 +8216,7 @@ msgstr "Neuer Tabellenstil ..."
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:119
 msgid "Clear Style"
-msgstr ""
+msgstr "Stil löschen"
 
 #: src/control/jsdialog/Widget.NotebookbarIconView.ts:145
 msgid "Open Styles Sidebar"
@@ -8815,7 +8810,6 @@ msgid "{0} deleted"
 msgstr "{0} gelöscht"
 
 #: src/layer/marker/TextInput.js:489
-#, fuzzy
 msgid "Placeholder"
 msgstr "Platzhalter"
 
@@ -8832,9 +8826,8 @@ msgid "Content control"
 msgstr "Inhaltskontrolle"
 
 #: src/layer/marker/TextInput.js:528
-#, fuzzy
 msgid "Object"
-msgstr "Objekte"
+msgstr "Objekt"
 
 #: src/layer/marker/TextInput.js:530
 msgid "Frame"
