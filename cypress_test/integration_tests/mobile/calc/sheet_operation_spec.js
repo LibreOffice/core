@@ -34,6 +34,34 @@ describe(['tagmobile', 'tagnextcloud', 'tagproxy'], 'Sheet Operation', function 
 		cy.cGet('#spreadsheet-tab1').should('have.text', 'Sheet1');
 	});
 
+	it('Releasing a long press does not choose the entry under the finger', function () {
+		calcHelper.assertNumberofSheets(1);
+
+		var eventOptions = {
+			force: true,
+			button: 0,
+			pointerType: 'touch'
+		};
+
+		cy.cGet('.spreadsheet-tab.spreadsheet-tab-selected')
+			.trigger('pointerdown', eventOptions)
+			.wait(1000)
+			.trigger('pointerup', eventOptions);
+
+		// The click the browser sends for the release.
+		cy.cGet('body').contains('.ui-header.level-0.mobile-wizard.ui-widget', 'Insert sheet after this')
+			.click();
+
+		cy.cGet('#mobile-wizard').should('be.visible');
+		calcHelper.assertNumberofSheets(1);
+
+		cy.cGet('body').contains('.ui-header.level-0.mobile-wizard.ui-widget', 'Insert sheet after this')
+			.trigger('touchstart', { force: true, touches: [{ pageX: 0, pageY: 0 }] })
+			.click();
+
+		calcHelper.assertNumberofSheets(2);
+	});
+
 	it('Insert sheet after', function () {
 		calcHelper.assertNumberofSheets(1);
 

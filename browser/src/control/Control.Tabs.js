@@ -287,6 +287,19 @@ window.L.Control.Tabs = window.L.Control.extend({
 											};
 											window.addEventListener('touchend', cancelRelease, true);
 											window.addEventListener('touchcancel', cancelRelease, true);
+											// Some browsers still send the click of the long press after a
+											// cancelled touchend. Drop the first click until the next touchstart.
+											const swallowClick = function (clickEvent) {
+												clickEvent.stopPropagation();
+												clickEvent.preventDefault();
+												disarmSwallowClick();
+											};
+											const disarmSwallowClick = function () {
+												window.removeEventListener('click', swallowClick, true);
+												window.removeEventListener('touchstart', disarmSwallowClick, true);
+											};
+											window.addEventListener('click', swallowClick, true);
+											window.addEventListener('touchstart', disarmSwallowClick, { capture: true, passive: true });
 										}
 										if (window.mode.isSmallScreenDevice()) {
 											window.contextMenuWizard = true;
