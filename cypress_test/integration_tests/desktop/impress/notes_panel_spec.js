@@ -824,4 +824,34 @@ describe(['tagdesktop'], 'Impress speaker notes pane', function () {
 		cy.realType('show');
 		cy.cGet(paragraph).should('have.text', 'show');
 	});
+
+	// The context menu of the notes offers Cut and Copy only when some text is selected.
+	it('the context menu offers Cut and Copy only for selected text', function () {
+		var editEngine = '#notespanel-container .ui-editengine';
+		var paragraph = editEngine + ' .ui-editengine-paragraph';
+
+		openNotesPane();
+		cy.cGet(editEngine).click();
+		cy.cGet(editEngine).type('Remember the demo');
+		cy.cGet(paragraph).should('have.text', 'Remember the demo');
+		cy.getFrameWindow().then((win) => { helper.processToIdle(win); });
+
+		// The right click places the caret in the text and selects nothing.
+		cy.cGet(paragraph).realClick({ button: 'right', x: 30, y: 10 });
+		helper.getContextMenuItem('Paste').should('be.visible');
+		helper.getContextMenuItemList().should('not.contain.text', 'Cut');
+		helper.getContextMenuItemList().should('not.contain.text', 'Copy');
+
+		cy.realPress('Escape');
+		cy.cGet('#jsd-context-menu-dropdown-overlay').should('not.exist');
+		cy.cGet(editEngine).should('have.focus');
+
+		// A right click on selected text keeps the selection. The whole line is selected, so the
+		// right click lands well inside the selection, away from its edge.
+		cy.cGet(editEngine).type('{end}{shift}{home}');
+		cy.getFrameWindow().then((win) => { helper.processToIdle(win); });
+		cy.cGet(paragraph).realClick({ button: 'right', x: 30, y: 10 });
+		helper.getContextMenuItem('Cut').should('be.visible');
+		helper.getContextMenuItem('Copy').should('be.visible');
+	});
 });

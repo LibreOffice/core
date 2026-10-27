@@ -60,6 +60,7 @@ public:
 
     void ExecCtrl(SfxRequest& rReq);
     void GetCtrlState(SfxItemSet& rSet);
+    void GetMenuState(SfxItemSet& rSet);
     void GetAttrState(SfxItemSet& rSet);
     void GetState(SfxItemSet& rSet);
     void GetCharState(SfxItemSet& rSet);

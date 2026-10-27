@@ -486,6 +486,25 @@ void NotesPanelViewShell::GetCtrlState(SfxItemSet& rSet)
     }
 }
 
+void NotesPanelViewShell::GetMenuState(SfxItemSet& rSet)
+{
+    ViewShell::GetMenuState(rSet);
+
+    if (SfxItemState::DEFAULT != rSet.GetItemState(SID_CUT)
+        && SfxItemState::DEFAULT != rSet.GetItemState(SID_COPY))
+        return;
+
+    // Cut and Copy need selected text in the notes, and Cut also needs notes that can be edited.
+    OutlinerView* pOutlinerView = mpNotesPanelView->GetOutlinerView();
+    if (!pOutlinerView->HasSelection() || GetObjectShell()->isContentExtractionLocked())
+    {
+        rSet.DisableItem(SID_CUT);
+        rSet.DisableItem(SID_COPY);
+    }
+    else if (pOutlinerView->IsReadOnly())
+        rSet.DisableItem(SID_CUT);
+}
+
 void NotesPanelViewShell::GetAttrState(SfxItemSet& rSet)
 {
     SfxWhichIter aIter(rSet);
