@@ -9485,15 +9485,19 @@ void DrawingML::WriteDiagram(const cpo::uno::Reference<css::drawing::XShape>& rX
             uno::Reference<xml::dom::XNodeList> nodeList = dataDom->getElementsByTagNameNS(
                 u"http://schemas.microsoft.com/office/drawing/2008/diagram"_ustr, u"dataModelExt"_ustr);
 
-            // There must be one element only so get it
-            uno::Reference<xml::dom::XNode> node = nodeList->item(0);
+            // there is one element at most, a data part without it has no reference to update
+            const uno::Reference<xml::dom::XNode> node(
+                nodeList->getLength() > 0 ? nodeList->item(0) : uno::Reference<xml::dom::XNode>());
+            if (node.is())
+            {
+                // Get the list of attributes of the node
+                uno::Reference<xml::dom::XNamedNodeMap> nodeMap = node->getAttributes();
 
-            // Get the list of attributes of the node
-            uno::Reference<xml::dom::XNamedNodeMap> nodeMap = node->getAttributes();
-
-            // Get the node with the relId attribute and set its new value
-            uno::Reference<xml::dom::XNode> relIdNode = nodeMap->getNamedItem(u"relId"_ustr);
-            relIdNode->setNodeValue(drawingRelId);
+                // Get the node with the relId attribute and set its new value
+                uno::Reference<xml::dom::XNode> relIdNode = nodeMap->getNamedItem(u"relId"_ustr);
+                if (relIdNode.is())
+                    relIdNode->setNodeValue(drawingRelId);
+            }
         }
 
         // write originally imported & untouched data file
