@@ -347,6 +347,19 @@ public:
                     '.', aGroups, ',', true);
         CPPUNIT_ASSERT_EQUAL( u"1,000"_ustr, aRes);
 
+        fVal = 1e20;
+        aRes = rtl::math::doubleToUString( fVal,
+                    rtl_math_StringFormat_F,
+                    -15,    // round before decimals
+                    '.', true);
+        CPPUNIT_ASSERT_EQUAL( u"100000000000000000000"_ustr, aRes);
+
+        aRes = rtl::math::doubleToUString( fVal,
+                    rtl_math_StringFormat_F,
+                    -15,    // round before decimals
+                    '.', aGroups, ',', true);
+        CPPUNIT_ASSERT_EQUAL( u"10,00,00,00,00,00,00,00,00,000"_ustr, aRes);
+
         // Check non-ASCII separators: Arabic decimal separator U+066B, thousand separator U+066C
         fVal = 123456.78;
         aRes = rtl::math::doubleToUString( fVal,
