@@ -4316,7 +4316,6 @@ bool ChildSession::filePickerResult(const StringVector& tokens)
         }
     }
 
-    getLOKitDocument()->setView(_viewId);
     _docManager->completeFilePick(static_cast<unsigned>(id), url);
     return answered;
 }
