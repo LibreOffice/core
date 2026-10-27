@@ -1004,8 +1004,6 @@ DECLARE_OOXMLEXPORT_TEST(testTdf144563, "tdf144563.docx")
     }
 }
 
-// broken test document?
-#if !defined(_WIN32)
 CPPUNIT_TEST_FIXTURE(Test, testTdf146955)
 {
     // The frame is anchored to a page with no text, so the DOCX export puts it into the table of
@@ -1018,7 +1016,6 @@ CPPUNIT_TEST_FIXTURE(Test, testTdf146955)
     uno::Reference<text::XFootnotesSupplier> xNotes(mxComponent, uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xNotes->getFootnotes()->getCount());
 }
-#endif
 
 CPPUNIT_TEST_FIXTURE(Test, testTdf144668)
 {
