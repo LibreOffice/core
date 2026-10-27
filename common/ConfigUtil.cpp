@@ -226,7 +226,6 @@ const Util::UnorderedStringMap<std::string> DefAppConfig = {
     { "remote_asset_config.url", "" },
     { "remote_config.remote_url", "" },
     { "remote_font_config.url", "" },
-    // { "remote_links.chain_secret", "" }, // Not set: these defaults go to every kit.
     { "remote_links.enable", "false" },
     { "remote_links.max_chain_depth", "3" },
     { "remote_links.max_links_per_document", "0" },
@@ -508,7 +507,6 @@ std::string getLoggableConfig(const Poco::Util::AbstractConfiguration& config)
                 pair.first == "admin_console.secure_password" ||
                 pair.first == "languagetool.api_key" || pair.first == "duden.api_key" ||
                 pair.first == "deepl.auth_key" || pair.first == "libretranslate.api_key" ||
-                pair.first == "remote_links.chain_secret" ||
                 pair.first == "ai.api_key" || pair.first == "ai.image_api_key" ||
                 pair.first == "logging.anonymize.anonymization_salt" || pair.first == "support_key")
             {

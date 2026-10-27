@@ -1173,26 +1173,6 @@ ClientRequestDispatcher::MessageResult ClientRequestDispatcher::handleMessage(Po
         RequestDetails requestDetails(request, COOLWSD::ServiceRoot);
         // LOG_TRC("Request details " << requestDetails.toString());
 
-#if !MOBILEAPP
-        // A headless connection that a RemoteDocumentBroker made provides the secret.
-        if (const std::string secret =
-                request.get(std::string(RemoteDocumentBroker::ChainSecretHeader), std::string());
-            !secret.empty())
-        {
-            if (secret != RemoteDocumentBroker::getChainSecret())
-            {
-                // The URI carries the access token of the document, so it is not logged.
-                LOG_WRN("Refusing a request that carried a remote document secret which does "
-                        "not match this node's");
-                HttpHelper::sendErrorAndShutdown(http::StatusCode::Forbidden, socket,
-                                                 "invalid remote document secret");
-                return MessageResult::Ignore;
-            }
-
-            requestDetails.setRemoteDocument(true);
-        }
-#endif // !MOBILEAPP
-
         // Config & security ...
         if (requestDetails.isProxy())
         {

@@ -851,7 +851,7 @@ private:
     /// If Session is for convert-to
     bool _isConvertTo;
 
-    /// Whether this session is the headless connection
+    /// True for a headless connection, one whose load named a connection chain.
     bool _isRemoteDocumentConnection;
 
     /// True after a reconnect, until the browser's next load has refreshed the view.

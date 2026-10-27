@@ -84,14 +84,6 @@ void ConfigUtilTests::testDefaultsMatchXml()
         const std::string documented = xml->getString(defaultKey);
         const auto it = defaults.find(key);
 
-        if (key == "remote_links.chain_secret")
-        {
-            // Kept out: COOLWSD passes the defaults' keys to the kits in their environment.
-            LOK_ASSERT_MESSAGE_SILENT("The chain secret must not be in the defaults",
-                                      it == defaults.end());
-            continue;
-        }
-
         if (key == "logging.anonymize.anonymize_user_data")
         {
             // Kept out so the fallback applies.

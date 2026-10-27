@@ -516,8 +516,8 @@ void RemoteLinks::handleSubscribe(DocumentBroker& docBroker, const std::string& 
     {
         LOG_ERR("Remote document subscribe by view ["
                 << tag
-                << "] rejected: no server URL to dial through; set remote_links.server_url "
-                   "or server_name in the configuration");
+                << "] rejected: no server URL to dial through; set server_name in the "
+                   "configuration");
         sendError(docBroker, tag, persistentLink, "noserver");
         return;
     }

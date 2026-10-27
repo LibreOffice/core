@@ -98,11 +98,6 @@ bool HeadlessClientSession::connect(const std::string& uri, SocketPoll& poll)
     LOG_DBG("RemoteDoc: connecting to " << host << ':' << port);
 
     http::Request request(std::move(pathAndQuery));
-
-    // The secret marks as a connection only RemoteDocumentBroker could made
-    request.add(std::string(RemoteDocumentBroker::ChainSecretHeader),
-                RemoteDocumentBroker::getChainSecret());
-
     return wsRequest(request, host, port, secure, poll);
 }
 
@@ -608,7 +603,9 @@ std::string RemoteDocumentBroker::getServerUrl()
 {
     static const std::string serverUrl = []() -> std::string
     {
-        const bool secure = ConfigUtil::isSslEnabled();
+        // The public address is secure when this server serves TLS itself or a proxy in front
+        // of it terminates TLS, as it is for the URLs the browser is given.
+        const bool secure = ConfigUtil::isSslEnabled() || ConfigUtil::isSSLTermination();
 
         std::string url =
             ConfigUtil::getConfigValue<std::string>("remote_links.server_url", "");
@@ -647,26 +644,6 @@ std::string RemoteDocumentBroker::getServerUrl()
     }();
 
     return serverUrl;
-}
-
-const std::string& RemoteDocumentBroker::getChainSecret()
-{
-    constexpr std::size_t GeneratedSecretLengthBytes = 32;
-
-    static const std::string secret = []() -> std::string
-    {
-        std::string configured =
-            ConfigUtil::getConfigValue<std::string>("remote_links.chain_secret", "");
-        if (!configured.empty())
-            return configured;
-
-        LOG_WRN("RemoteDoc: no remote_links.chain_secret is configured, so a connection "
-                "chain is accepted only from this process. Set one, the same on every node, to "
-                "let the nodes of a cluster refuse the connection cycles they form together");
-        return Util::rng::getHexString(GeneratedSecretLengthBytes);
-    }();
-
-    return secret;
 }
 
 void RemoteDocumentBroker::subscribeAsync(RemoteDocumentRequest request)

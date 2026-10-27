@@ -1881,17 +1881,14 @@ public:
     }
 };
 
-/// A headless connection carries the secret of the server that made it, and
-/// names the documents already on the chain it was made for. Verifies that a
-/// request carrying a secret which is not this server's is refused outright,
-/// that a connection carrying the secret and naming no chain is refused, and
-/// that the same connection naming one loads the document.
-class UnitRemoteDocumentNoChain : public WopiTestServer
+/// A headless connection names the documents already on the chain it was made for. Verifies
+/// that a connection naming a chain loads the document.
+class UnitRemoteDocumentChain : public WopiTestServer
 {
     STATE_ENUM(Phase, Load, WaitLoadStatus, Connecting, Done) _phase;
 
-    /// Carries the two connections below, so that waiting for their answers
-    /// leaves coolwsd's main thread free to fork the kit one of them loads in.
+    /// Carries the connection below, so that waiting for its answer leaves coolwsd's main
+    /// thread free to fork the kit it loads in.
     std::thread _connectThread;
 
     std::string fileWopiSrc(int fileId) const
@@ -1899,24 +1896,9 @@ class UnitRemoteDocumentNoChain : public WopiTestServer
         return getWopiHostURI() + "/wopi/files/" + std::to_string(fileId);
     }
 
-    /// The status a request carrying the given secret is answered with. The
-    /// request itself is one every server answers, so the status is the answer
-    /// to the secret alone.
-    unsigned statusWithSecret(const std::string& secret)
-    {
-        http::Request request("/hosting/discovery");
-        request.add(std::string(RemoteDocumentBroker::ChainSecretHeader), secret);
-
-        auto session = http::Session::create(helpers::getTestServerURI());
-        session->setTimeout(std::chrono::seconds(10));
-        const std::shared_ptr<const http::Response> response = session->syncRequest(request);
-        return response ? static_cast<unsigned>(response->statusLine().statusCode()) : 0;
-    }
-
-    /// Loads the given document over a connection carrying the secret of a
-    /// headless one, with the given options after the url. Returns the answer
-    /// to the load: a status: for a document that loaded, an error: for a load
-    /// that was refused, and an empty string when neither arrived.
+    /// Loads the given document over a connection of its own, with the given options after
+    /// the url. Returns the answer to the load: a status: for a document that loaded, an
+    /// error: for a load that was refused, and an empty string when neither arrived.
     std::string loadOverHeadlessConnection(const std::string& wopiSrc,
                                            const std::string& loadOptions)
     {
@@ -1928,11 +1910,7 @@ class UnitRemoteDocumentNoChain : public WopiTestServer
         if (!session)
             return std::string();
 
-        // The secret this server holds is the one it gives every headless
-        // connection of its own, so the connection is taken for one of them.
         http::Request request("/cool/" + encodedWopiSrc + "/ws");
-        request.add(std::string(RemoteDocumentBroker::ChainSecretHeader),
-                    RemoteDocumentBroker::getChainSecret());
         session->asyncRequest(request, socketPoll());
 
         helpers::sendTextFrame(session, "load url=" + encodedWopiSrc + loadOptions,
@@ -1945,13 +1923,13 @@ class UnitRemoteDocumentNoChain : public WopiTestServer
     }
 
 public:
-    UnitRemoteDocumentNoChain()
-        : WopiTestServer("UnitRemoteDocumentNoChain")
+    UnitRemoteDocumentChain()
+        : WopiTestServer("UnitRemoteDocumentChain")
         , _phase(Phase::Load)
     {
     }
 
-    ~UnitRemoteDocumentNoChain()
+    ~UnitRemoteDocumentChain()
     {
         if (_connectThread.joinable())
             _connectThread.join();
@@ -1977,57 +1955,17 @@ public:
         TST_LOG("onDocumentLoaded: [" << message << ']');
 
         // The source document loading over the second connection below also
-        // lands here; only the first client drives the connections.
+        // lands here; only the first client drives the connection.
         if (_phase != Phase::WaitLoadStatus)
             return true;
 
         TRANSITION_STATE(_phase, Phase::Connecting);
 
         // An assertion failure throws, which would leave this thread through
-        // no catch of its own, so each answer is reported instead.
+        // no catch of its own, so the answer is reported instead.
         _connectThread = std::thread(
             [this]
             {
-                static constexpr std::string_view Refusal = "error: cmd=load kind=syntax";
-
-                // A secret that is not this server's
-                const unsigned wrongSecret = statusWithSecret("notthesecretofthisserver");
-                if (wrongSecret != static_cast<unsigned>(http::StatusCode::Forbidden))
-                {
-                    failTest("A request carrying a secret that is not this server's must be "
-                             "refused with " +
-                             std::to_string(static_cast<unsigned>(http::StatusCode::Forbidden)) +
-                             ", got " + std::to_string(wrongSecret));
-                    return;
-                }
-
-                // The same request carrying this server's own secret is answered.
-                const unsigned rightSecret =
-                    statusWithSecret(RemoteDocumentBroker::getChainSecret());
-                if (rightSecret != static_cast<unsigned>(http::StatusCode::OK))
-                {
-                    failTest("A request carrying this server's secret must be answered with " +
-                             std::to_string(static_cast<unsigned>(http::StatusCode::OK)) +
-                             ", got " + std::to_string(rightSecret));
-                    return;
-                }
-
-                // The chain is the whole record the source has of what reads
-                // it, and the only thing a link of its own back to the other
-                // end is refused by, so a connection naming none is refused.
-                // Each connection reads a document of its own, so that the
-                // refused one leaves no document unloading in the way of the
-                // load below.
-                const std::string refused =
-                    loadOverHeadlessConnection(fileWopiSrc(2), std::string());
-                if (refused != Refusal)
-                {
-                    failTest("A headless connection naming no chain must be answered with [" +
-                             std::string(Refusal) + "], got [" + refused + ']');
-                    return;
-                }
-
-                // The same connection naming a chain loads the document.
                 const std::string loaded = loadOverHeadlessConnection(
                     fileWopiSrc(3), " remotechain=" + Uri::encode(fileWopiSrc(4)));
                 if (!loaded.starts_with("status:"))
@@ -2038,8 +1976,7 @@ public:
                 }
 
                 TRANSITION_STATE(_phase, Phase::Done);
-                passTest("A wrong secret is refused, a headless connection naming no chain is "
-                         "refused, and one naming a chain loads");
+                passTest("A headless connection naming a chain loads");
             });
 
         return true;
@@ -2811,7 +2748,7 @@ UnitBase** unit_create_wsd_multi(void)
                               new UnitRemoteDocumentCommand(), new UnitRemoteDocumentMissing(),
                               new UnitRemoteDocumentRetry(), new UnitRemoteDocumentIsolation(),
                               new UnitRemoteDocumentSaved(),
-                              new UnitRemoteDocumentNoChain(), new UnitLinkPostPersistentLink(),
+                              new UnitRemoteDocumentChain(), new UnitLinkPostPersistentLink(),
                               new UnitLinkAccessResolve(), new UnitLinkAccessNotFound(),
                               new UnitLinkAccessPerView(), nullptr };
 }
