@@ -19,16 +19,20 @@
 
 #include <splash/unxsplash.hxx>
 
-#include <stdio.h>
 #include <osl/process.h>
 #include <cppuhelper/supportsservice.hxx>
 #include <sal/log.hxx>
+
+#include <optional>
+#include <stdio.h>
 
 namespace desktop
 {
 UnxSplashScreen::UnxSplashScreen()
     : m_pOutFd(nullptr)
 {
+    std::optional<sal_uInt32> nPipeFd;
+    OUString aPipeNum;
     for (sal_uInt32 i = 0; i < osl_getCommandArgCount(); i++)
     {
         OUString aArg;
@@ -36,12 +40,17 @@ UnxSplashScreen::UnxSplashScreen()
         OUString aNum;
         if (aArg.startsWithIgnoreAsciiCase("--splash-pipe=", &aNum))
         {
-            auto fd = aNum.toUInt32();
-            m_pOutFd = fdopen(fd, "w");
-            SAL_INFO("desktop.splash",
-                     "Got argument '--splash-pipe=" << fd << " ('" << aNum << "') ("
-                                                    << static_cast<void*>(m_pOutFd) << ")");
+            aPipeNum = aNum;
+            nPipeFd = aNum.toUInt32();
         }
+    }
+
+    if (nPipeFd.has_value())
+    {
+        m_pOutFd = fdopen(*nPipeFd, "w");
+        SAL_INFO("desktop.splash",
+                 "Got argument '--splash-pipe=" << *nPipeFd << " ('" << aPipeNum << "') ("
+                                                << static_cast<void*>(m_pOutFd) << ")");
     }
 }
 
